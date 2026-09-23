@@ -3,7 +3,8 @@
 This is the story of building an [Archipelago](https://archipelago.gg) randomizer for a game that never
 had one, step by step, in the order it happened. It's meant for anyone curious about the process, or
 thinking of doing the same for another game. It describes **how** we worked, not how Bug Fables works
-inside. The game facts live in `MEASURED.md`.
+inside. The game facts live in `MEASURED.md`, and how a game talks to Archipelago in general is explained
+in [apimplementation.md](apimplementation.md).
 
 An Archipelago randomizer is two programs:
 
