@@ -14,6 +14,7 @@ namespace BugFablesAP
         internal static ManualLogSource Log;
 
         private ConfigEntry<bool> grantProbeEnabled;
+        private ConfigEntry<bool> textProbeEnabled;
         private GrantProbe grantProbe;
 
         private void Awake()
@@ -22,7 +23,14 @@ namespace BugFablesAP
             grantProbeEnabled = Config.Bind("Debug", "GrantProbe", false,
                 "Dev only. Logs every key item added to the inventory and every flag that flips, with the map, "
                 + "to measure how locations can be identified. Off by default.");
-            Log.LogInfo($"{Name} {Version} loaded. GrantProbe={grantProbeEnabled.Value}");
+            textProbeEnabled = Config.Bind("Debug", "TextProbe", false,
+                "Dev only. Logs every dialogue script that carries an item command, with the map and calling NPC. "
+                + "Off by default.");
+            if (textProbeEnabled.Value)
+            {
+                TextProbe.Enable(Log, Guid);
+            }
+            Log.LogInfo($"{Name} {Version} loaded. GrantProbe={grantProbeEnabled.Value} TextProbe={textProbeEnabled.Value}");
         }
 
         private bool devReloadChecked;
@@ -72,6 +80,7 @@ namespace BugFablesAP
 
         private void OnDestroy()
         {
+            TextProbe.Disable();
             // ScriptEngine destroys the old instance on reload. Say so, so a reload shows up in the log.
             Log?.LogInfo($"{Name} {Version} unloaded.");
         }
