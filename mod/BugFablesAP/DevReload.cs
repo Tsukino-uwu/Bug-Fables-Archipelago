@@ -7,8 +7,9 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Dev only. ScriptEngine's FileSystemWatcher never fires in this game: its handler logs
-    // "File <name> changed" and that line never appeared after a redeploy (2026-09-24, BepInEx/LogOutput.log).
+    // Dev only. ScriptEngine's FileSystemWatcher can't work in this game: the Mono it ships throws
+    // NotImplementedException from `new FileSystemWatcher(path)`, inside ScriptEngine.Awake (2026-09-24, with
+    // BepInEx's WriteUnityLog on). So the watcher option has to stay off.
     // So this polls our own DLL in BepInEx/scripts once a second. When it changes, it sets ScriptEngine's own
     // `shouldReload` flag, and ScriptEngine's Update performs the reload exactly as its watcher would.
     //

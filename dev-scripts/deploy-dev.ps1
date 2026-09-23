@@ -33,7 +33,9 @@ $cfg = Join-Path $GameDir 'BepInEx\config\com.bepis.bepinex.scriptengine.cfg'
     '## Written by bug_fables_ap dev-scripts\deploy-dev.ps1. Dev only.',
     '',
     '[AutoReload]',
-    'EnableFileSystemWatcher = true',
+    '## Off: the Mono in this game throws NotImplementedException from new FileSystemWatcher (2026-09-24),',
+    '## which aborts ScriptEngine.Awake. DevReload in the plugin polls instead.',
+    'EnableFileSystemWatcher = false',
     '## Seconds after the last file change before reloading, so the DLL and pdb land together.',
     'AutoReloadDelay = 2',
     'DumpAssemblies = false',
@@ -47,4 +49,4 @@ $cfg = Join-Path $GameDir 'BepInEx\config\com.bepis.bepinex.scriptengine.cfg'
 
 $dll = Get-Item (Join-Path $scripts 'BugFablesAP.dll')
 $hash = (Get-FileHash $dll.FullName -Algorithm SHA256).Hash.Substring(0, 12)
-Write-Output "deployed BugFablesAP.dll ($($dll.Length) bytes, sha256 $hash...) to BepInEx\scripts; ScriptEngine watcher on"
+Write-Output "deployed BugFablesAP.dll ($($dll.Length) bytes, sha256 $hash...) to BepInEx\scripts; DevReload will pick it up"
