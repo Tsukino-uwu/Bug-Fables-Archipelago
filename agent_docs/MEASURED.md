@@ -113,6 +113,9 @@ throttled to changes.
 - **An event-placed pickup:** a Mushroom (id 13) on `SnakemouthDoorRoom`. Its script had **no flag of its
   own** and ended `|event,5|`, and `flag[13]` flipped on the same map just before (frame 18327). So some
   world items belong to a story event and are recorded by that event's flag, not by a pickup flag.
+  **The user, on screen (2026-09-24):** picking it up drops the party through a trapdoor, which stays open
+  afterwards, so the item can't appear again. That's consistent with a one-time location identified by the
+  event's flag.
 - **Loose berries (money pickups) leave no flag.** `CheckItem` takes its `ismoney` path (anim states 6, 7 and
   186), and no flag flipped when the user picked one up. They can't be recovered from the save, which is fine:
   they're out of scope.
