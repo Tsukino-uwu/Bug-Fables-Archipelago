@@ -108,6 +108,11 @@ throttled to changes.
   `regionalflag,13`, so it respawns. `regionalflag[5]` flipped there too, with no item script. Both maps are
   in area `BugariaOutskirts`, so regional flags carry across the maps of one area and are wiped only on an
   area change.
+- **The regional wipe, observed live:** on entering area `Snakemouth` (`SnakemouthBridgeRoom`, frame 10869),
+  `regionalflag` 5, 7 and 13 all went True -> False in the same frame, as `UpdateArea` predicts.
+- **An event-placed pickup:** a Mushroom (id 13) on `SnakemouthDoorRoom`. Its script had **no flag of its
+  own** and ended `|event,5|`, and `flag[13]` flipped on the same map just before (frame 18327). So some
+  world items belong to a story event and are recorded by that event's flag, not by a pickup flag.
 - **Loose berries (money pickups) leave no flag.** `CheckItem` takes its `ismoney` path (anim states 6, 7 and
   186), and no flag flipped when the user picked one up. They can't be recovered from the save, which is fine:
   they're out of scope.
