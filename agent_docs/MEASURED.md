@@ -86,6 +86,13 @@ throttled to changes.
     is shown, not consumed. The user saw a gate open.
   - **`flag[26]` and `flag[92]`** flipped earlier on the same map, *before* the permit was shown (the user
     confirmed they hadn't used it yet), so they belong to something else there.
+- **An NPC reward, first TextProbe capture:** on `NearSnakemouth`, the reward script ended
+  `|giveitem,-1,10,6|`: type -1 (money), amount 10, over entity 6. The 4th argument is the entity the item
+  sprite shows above (`id3` in `Giveitem`). `caller=none`, so an event started it. **`flag[17]` flipped
+  right after** on the same map. Same shape as the permit: a grant plus a completion flag.
+- **Loose berries (money pickups) leave no flag.** `CheckItem` takes its `ismoney` path (anim states 6, 7 and
+  186), and no flag flipped when the user picked one up. They can't be recovered from the save, which is fine:
+  they're out of scope.
 - **A working model for locations:** a story-event grant is a location identified by its event number and
   the flag it sets. A world pickup is identified by its object's `activationflag` or `regionalflag`. A gate
   in the logic is "has item X", when the game shows the item rather than consuming it (true for the
