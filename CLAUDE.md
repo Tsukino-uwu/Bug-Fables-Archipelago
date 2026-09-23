@@ -11,13 +11,14 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
 
 ## What never changes
 
-- **`agent_docs/documentation.md` NEVER goes stale** (the user, 2026-09-24: a step-by-step guide that misses
-  steps is worthless). It is the user-facing story of how this mod and apworld were made: easy to read AND
-  to browse, one section per step, process only, no game facts. Status, next steps, known issues and the
-  step index sit at the top; nothing a reader needs is buried deep in the file (the user, 2026-09-24). **A step is not done until it is written there, in the same
-  commit**: a new capability, a tool or method adopted, a dead end and what it taught. `.githooks/commit-msg`
-  refuses a commit touching `mod/`, `apworld/` or `dev-scripts/` without it, unless the message carries a
-  line `docs: no process change` (a typo or rename, never a step). Re-read the whole file when a session starts.
+- **The two process guides NEVER go stale** (the user, 2026-09-24: a step-by-step guide that misses steps
+  is worthless). `agent_docs/documentation.md` is how the MOD was made; `agent_docs/apimplementation.md` is
+  the Archipelago side (apworld, server, connecting, items, checks), built step by step, plus a stable
+  explainer. Both user-facing: easy to read AND browse, process only, no game facts, status, next steps,
+  known issues and the index at the top, nothing buried. **A step is not done until it is written in the
+  right one, in the same commit.** `.githooks/commit-msg` refuses a commit touching `mod/`, `apworld/` or
+  `dev-scripts/` without either, unless the message has a line `docs: no process change` (a typo, never a
+  step). Re-read both when a session starts.
 - **Items are remote only.** A pickup grants nothing locally; it sends its check. Every item, the player's
   own included, arrives from the server. There is no local-items mode (decided 2026-09-24).
 - **Never corrupt a save.** The mod writes game state only through the game's own functions (its give-item

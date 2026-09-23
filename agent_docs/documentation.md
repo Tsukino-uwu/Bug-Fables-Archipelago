@@ -1,36 +1,23 @@
-# How this Archipelago mod is being made
+# How the Bug Fables mod is being made
 
-This is the story of building an [Archipelago](https://archipelago.gg) randomizer for a game that never
-had one, step by step, in the order it happened. It's meant for anyone curious about the process, or
-thinking of doing the same for another game. It describes **how** we worked, not how Bug Fables works
-inside. The game facts live in `MEASURED.md`, and how a game talks to Archipelago in general is explained
-in [apimplementation.md](apimplementation.md).
+This is the story of building the **game side** of an [Archipelago](https://archipelago.gg) randomizer
+for Bug Fables: the mod that runs inside the game, step by step, in the order it happened. It's meant for
+anyone curious about the process, or thinking of doing the same for another game.
 
-An Archipelago randomizer is two programs:
-
-- **The apworld**: Python that runs inside Archipelago's generator. It says which items and locations
-  exist and what each area needs, and the generator uses that to decide where every item goes.
-- **The client**: code inside the game (here, a mod). It tells the server when you've found something,
-  and gives you the items the server sends.
-
-The two never talk directly. The server sits in between.
+- **The Archipelago side** (the apworld, seeds, the server, connecting, items and checks) has its own
+  guide: [apimplementation.md](apimplementation.md).
+- **Facts about how Bug Fables works inside** live in `MEASURED.md`.
 
 ## Where it stands
 
-**Done so far:** the mod loads, reloads itself while the game runs, watches the game, and logs in to an
-Archipelago server. A tiny apworld generates seeds.
+**Done so far:** the mod loads through BepInEx, reloads itself while the game runs, watches the game with
+read-only probes, and has a full list of where key items come from.
 
 **Next:**
 
-1. **Receive an item:** the server sends a key item and it appears in the game's inventory.
-2. **Send a check:** finding a location tells the server instead of giving the item.
-3. **Survive a reload:** saving and loading never hands out items twice.
-4. **Grow the world** chapter by chapter, as the game is played.
-
-**Known issues:**
-
-- The server warns that our connection isn't compressed. Everything works today; it's a thing to fix
-  before the server stops accepting uncompressed clients.
+1. **Give an item the game's own way**, when the server sends one.
+2. **Spot a location being done** (the flag the game sets) and report it, instead of giving the item.
+3. **Keep the received-item count in the save**, so loading never hands items out twice.
 
 ## The steps
 
@@ -41,15 +28,14 @@ Archipelago server. A tiny apworld generates seeds.
 5. [Make changes load without restarting the game](#5-make-changes-load-without-restarting-the-game)
 6. [Watch the game while you play ("probing")](#6-watch-the-game-while-you-play-probing)
 7. [List everything, without playing everything](#7-list-everything-without-playing-everything)
-8. [Write a first, tiny apworld](#8-write-a-first-tiny-apworld)
-9. [Connect the mod to a real server](#9-connect-the-mod-to-a-real-server)
 
 ## Keeping this guide honest
 
 A step-by-step guide is only useful if no step is missing, so the project enforces it: any commit that
-changes the mod, the apworld or the dev scripts is refused unless it also updates this file (or says,
-explicitly, that nothing about the process changed). That check is a small git hook, `.githooks/commit-msg`.
-Each new step also gets a line in the index above, and "Where it stands" is updated with it.
+changes the mod, the apworld or the dev scripts is refused unless it also updates this file or
+[apimplementation.md](apimplementation.md) (or says, explicitly, that nothing about the process changed).
+That check is a small git hook, `.githooks/commit-msg`. Each new step also gets a line in the index above,
+and "Where it stands" is updated with it.
 
 ---
 
@@ -120,24 +106,3 @@ which is why things are measured, not just read.
 Playing the whole game to find every item would take days, so we also asked the running game directly:
 a one-off dump loaded every map's dialogue data and kept only the item and flag commands. Together with
 the code, that gave a full list of where key items come from, raw material for the apworld.
-
-## 8. Write a first, tiny apworld
-
-The apworld started deliberately tiny: two early locations, one key item (the Explorer Permit), the gate
-it opens, and "open that gate" as a temporary goal. Items and locations live in simple JSON files, so
-growing the world is mostly adding data.
-
-We wrote **tests**, including one that proves the gate really needs the permit. To make sure that test
-could fail, we removed the rule on purpose, watched the test fail, and put the rule back. Archipelago's
-own test suite passes for it too.
-
-## 9. Connect the mod to a real server
-
-We generated a seed with the tiny world, started a local Archipelago server, and had the mod log in from
-inside the running game, using the official .NET client library (Archipelago.MultiClient.Net).
-
-The first try timed out. The server's own log showed what happened: the library first tried a secure
-connection, which the plain local server rejected. Giving the address as `ws://…` fixed it, and the mod
-logged in. This also proved the game's runtime can run the client library, which had been an open risk.
-
-**Lesson:** when two programs talk, read the logs on *both* ends.

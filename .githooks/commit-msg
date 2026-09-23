@@ -1,6 +1,7 @@
 #!/bin/sh
-# agent_docs/documentation.md must never go stale (CLAUDE.md, "What never changes").
-# A commit that changes the mod, the apworld or the dev scripts has to update it too, unless the commit
+# The two process guides must never go stale (CLAUDE.md, "What never changes"): agent_docs/documentation.md
+# (how the mod was made) and agent_docs/apimplementation.md (the Archipelago side). A commit that changes the
+# mod, the apworld or the dev scripts has to update at least one of them, unless the commit
 # message says, on a line of its own, that the change doesn't alter the process:
 #   docs: no process change
 
@@ -10,7 +11,7 @@ staged=$(git diff --cached --name-only)
 touches_work=$(printf '%s\n' "$staged" | grep -E '^(mod|apworld|dev-scripts)/' | head -1)
 [ -z "$touches_work" ] && exit 0
 
-if printf '%s\n' "$staged" | grep -qx 'agent_docs/documentation.md'; then
+if printf '%s\n' "$staged" | grep -qxE 'agent_docs/(documentation|apimplementation)\.md'; then
     exit 0
 fi
 
@@ -18,7 +19,7 @@ if grep -qx 'docs: no process change' "$msg_file"; then
     exit 0
 fi
 
-echo "commit-msg: this commit changes mod/, apworld/ or dev-scripts/ but not agent_docs/documentation.md." >&2
-echo "  Add the step to documentation.md, or, only if nothing about the process changed," >&2
-echo "  add the line 'docs: no process change' to the commit message." >&2
+echo "commit-msg: this commit changes mod/, apworld/ or dev-scripts/ but neither process guide." >&2
+echo "  Add the step to documentation.md (the mod) or apimplementation.md (the Archipelago side), or, only if" >&2
+echo "  nothing about the process changed, add the line 'docs: no process change' to the message." >&2
 exit 1

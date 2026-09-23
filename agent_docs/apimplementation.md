@@ -1,13 +1,39 @@
-# How a game talks to Archipelago
+# The Archipelago side: how it works, and how it was built
 
-A plain-language explainer of how a game (or a mod for one) connects to an Archipelago server, sends what
-the player finds, and receives items. It doesn't change much as the project grows; for the story of what
-we did and when, see [documentation.md](documentation.md).
+This is the Archipelago half of the Bug Fables randomizer: the apworld, seeds, the server, and how the mod
+connects, sends what the player finds and receives items. It has two parts: **how we built it**, step by
+step, and **how it works**, a plain explainer of how any game talks to Archipelago. The game side (the mod
+itself, probing the game) has its own guide: [documentation.md](documentation.md).
 
-Everything here follows Archipelago's own [network protocol doc](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md)
+The explainer follows Archipelago's own [network protocol doc](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md)
 (read at version 0.6.7). Where this file and that doc disagree, that doc is right.
 
-**Contents**
+## Where it stands
+
+**Done so far:** a tiny apworld that generates seeds and passes its tests, a local server, and the mod
+logging in to it from the running game.
+
+**Next:**
+
+1. **Receive an item:** the server sends a key item and the mod gives it in the game.
+2. **Send a check:** finishing a location tells the server.
+3. **Survive a reload:** the received-item count lives in the save.
+4. **Goal:** send "goal reached" when the player finishes.
+5. **Compressed connection** (see known issues).
+
+**Known issues:**
+
+- The server warns that our connection isn't compressed. Everything works today; it's a thing to fix
+  before the server stops accepting uncompressed clients.
+
+## Contents
+
+**How we built it**
+
+1. [Build step 1: a first, tiny apworld](#build-step-1-a-first-tiny-apworld)
+2. [Build step 2: connect the mod to a real server](#build-step-2-connect-the-mod-to-a-real-server)
+
+**How it works**
 
 1. [The big picture](#1-the-big-picture)
 2. [Opening the connection](#2-opening-the-connection)
@@ -21,6 +47,38 @@ Everything here follows Archipelago's own [network protocol doc](https://github.
 10. [Things that go wrong quietly](#10-things-that-go-wrong-quietly)
 
 ---
+
+# How we built it
+
+## Build step 1: a first, tiny apworld
+
+The apworld started deliberately tiny: two early locations, one key item (the Explorer Permit), the gate
+it opens, and "open that gate" as a temporary goal. Items and locations live in simple JSON files, so
+growing the world is mostly adding data. It follows the layout of `worlds/apquest`, Archipelago's own
+teaching example, and writes its rules with Archipelago's Rule Builder.
+
+We wrote **tests**, including one that proves the gate really needs the permit. To make sure that test
+could fail, we removed the rule on purpose, watched the test fail, and put the rule back. Archipelago's
+own test suite passes for it too.
+
+To try it, the world folder is linked into a local copy of Archipelago (run from source), and seeds are
+generated with `Generate.py`.
+
+## Build step 2: connect the mod to a real server
+
+We generated a seed with the tiny world, started a local Archipelago server (`MultiServer.py`), and had the
+mod log in from inside the running game, using the official .NET client library
+(Archipelago.MultiClient.Net).
+
+The first try timed out. The server's own log showed what happened: the library first tried a secure
+connection, which the plain local server rejected. Giving the address as `ws://…` fixed it, and the mod
+logged in. This also proved the game's runtime can run the client library, which had been an open risk.
+
+**Lesson:** when two programs talk, read the logs on *both* ends.
+
+---
+
+# How it works
 
 ## 1. The big picture
 
