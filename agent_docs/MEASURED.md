@@ -29,9 +29,11 @@ Read from code only; nothing observed running yet.
 - **The inventory is `MainManager.instance.items`, a `List<int>[]` of length 3** (`MainManager.cs:2217`,
   allocated at `:3426`). Grants add to `items[0]` (ordinary items) and `items[1]` (key items). What
   `items[2]` holds is not measured yet.
-- **Items and key items share one id space: the `MainManager.Items` enum, 0 to 187** (`MainManager.cs:1002`).
+- **Items and key items share one id space: the `MainManager.Items` enum, `None` = -1 then 0 to 186** (`MainManager.cs:1002`).
   An item is a key item because it was added to `items[1]`, not because of its id. Examples of names:
-  `ExplorerPermit` 28, `FlowerKey` 55, `DesertKey` 93, `YinKey` 106, `YangKey` 107, `SandCastleBossKey` 116.
+  `ExplorerPermit` 27, `FlowerKey` 54, `DesertKey` 92, `YinKey` 105, `YangKey` 106, `SandCastleBossKey` 115
+  (the enum starts at `None = -1`, so `CrunchyLeaf` is 0; a first reading listed these one too high,
+  and the probe's live cast, 27 = ExplorerPermit, caught it on 2026-09-24).
   The full key-item list is not yet measured.
 - **Names and descriptions come from game data**: `itemdata[0, id, …]`, loaded from the `Data/ItemData` and
   `Data/Dialogues<lang>/Items` text assets (`MainManager.cs:3431`). They're read at runtime and never copied
@@ -54,6 +56,23 @@ Read from code only; nothing observed running yet.
 - **Open question for location identity:** most key-item grants live in the dialogue text assets, not the
   code. A hook on the three commands catches every grant, but naming *which* location fired needs context:
   the calling NPC, the map, and the flag set in the same text. That's the next thing to measure.
+
+## Observed in the running game (2026-09-24, GrantProbe, a new game played by the user)
+
+Instrument: `mod/BugFablesAP/GrantProbe.cs`, which is read-only, logged to `BepInEx/LogOutput.log`, and
+throttled to changes.
+
+- **At the file select**, before any map (`map=none`): `flag[691]`, `flag[694]` and `flag[715]` go
+  False -> True. This happened in both sessions, so it looks like title or settings state, not story.
+- **The first key item: `id=27 (ExplorerPermit)` added to `items[1]` at frame 13844**, on
+  `BugariaOutskirtsOutsideCity/BugariaOutskirts`, with `inevent=True` and `message=True`. It came during an
+  event's dialogue.
+- **`flag[15]` went False -> True at frame 16679 on the same map**, about 47 s later, and no other flag
+  changed in between. So the event that grants the item sets flag 15 as it wraps up. **A candidate location
+  identity: "the event whose completion flag is 15".** Whether flag 15 belongs to this grant alone, and
+  whether the Giveitem call sits in that event's dialogue text, still has to be confirmed.
+- **Starting a new game did not replace `flags` or `items[1]`.** The probe re-baselines when either
+  array is replaced, and it didn't. Loading a saved game hasn't been observed yet.
 
 ## Key items: to measure
 
