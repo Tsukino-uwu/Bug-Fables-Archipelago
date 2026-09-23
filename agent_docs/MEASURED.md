@@ -75,6 +75,21 @@ throttled to changes.
   is the one `NPCControl.CheckItem` sets the first time a medal is picked up (`|flag,31,true|` when
   `animid == 2`), so the user's "first item" was probably a medal. GrantProbe doesn't watch `badges`, so no
   item line appeared. 32 and 30 are unexplained so far.
+- **Story events are numbered coroutines in `EventControl`** (`private IEnumerator Event<N>()`). They run their
+  dialogue from the current map's `MainManager.map.dialogues[]` text table and **set their flags in code**:
+  - **`Event16` (`EventControl.cs:3538`) is the Explorer Permit's event.** It ends with
+    `MainManager.instance.flags[15] = true`, which matches the live flag 15 that followed the grant. The
+    permit itself arrives through one of its dialogue lines. Which line carries the `giveitem` is for
+    TextProbe to show; that probe wasn't running in that session.
+  - **`Event17` (`:3824`) is the gate the permit opens.** It sets `flags[28] = true`. Observed live: when the
+    user showed the permit (frame 21527), `flag[28]` flipped, **and the permit stayed in `items[1]`**. It
+    is shown, not consumed. The user saw a gate open.
+  - **`flag[26]` and `flag[92]`** flipped earlier on the same map, *before* the permit was shown (the user
+    confirmed they hadn't used it yet), so they belong to something else there.
+- **A working model for locations:** a story-event grant is a location identified by its event number and
+  the flag it sets. A world pickup is identified by its object's `activationflag` or `regionalflag`. A gate
+  in the logic is "has item X", when the game shows the item rather than consuming it (true for the
+  permit's gate).
 - **Saves live in the game folder as `save<slot>.dat`**, numbered from 0, with `save<slot>backup.dat` written
   at the same moment. The user's slot 3 save is `save2.dat` (29,264 bytes, 01:11). These are the user's
   files; nothing we build ever touches them directly.
