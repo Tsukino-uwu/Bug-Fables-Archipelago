@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    The Bug Fables Archipelago BepInEx 5 plugin.
+
+    It compiles against the user's own game assembly through HintPath, with Private=false, so nothing
+    from the game is copied into the build output. Set BugFablesDir when the game is installed
+    somewhere other than Steam's default library:
+      dotnet build -p:BugFablesDir="D:\Games\Bug Fables"
+  -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <AssemblyName>BugFablesAP</AssemblyName>
+    <RootNamespace>BugFablesAP</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!--
+      A Windows ("full") pdb, not the SDK's portable default. ScriptEngine reads the plugin through
+      Mono.Cecil with symbols and can't read a portable pdb, so the plugin would silently never load
+      (measured in the author's other project, 2026-08-28).
+    -->
+    <DebugType>full</DebugType>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <BugFablesDir Condition="'$(BugFablesDir)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Bug Fables</BugFablesDir>
+    <GameManaged>$(BugFablesDir)\Bug Fables_Data\Managed</GameManaged>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Core" Version="5.4.*" />
+    <!-- Pinned to the game's measured Unity version, 2018.4.12 (agent_docs/MEASURED.md). -->
+    <PackageReference Include="UnityEngine.Modules" Version="2018.4.12" IncludeAssets="compile" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(GameManaged)\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+</Project>
