@@ -12,8 +12,9 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
 ## What never changes
 
 - **`agent_docs/documentation.md` NEVER goes stale** (the user, 2026-09-24: a step-by-step guide that misses
-  steps is worthless). It is the user-facing story of how this mod and apworld were made: easy to read, one
-  section per step, process only, no game facts. **A step is not done until it is written there, in the same
+  steps is worthless). It is the user-facing story of how this mod and apworld were made: easy to read AND
+  to browse, one section per step, process only, no game facts. Status, next steps, known issues and the
+  step index sit at the top; nothing a reader needs is buried deep in the file (the user, 2026-09-24). **A step is not done until it is written there, in the same
   commit**: a new capability, a tool or method adopted, a dead end and what it taught. `.githooks/commit-msg`
   refuses a commit touching `mod/`, `apworld/` or `dev-scripts/` without it, unless the message carries a
   line `docs: no process change` (a typo or rename, never a step). Re-read the whole file when a session starts.
