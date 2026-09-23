@@ -25,8 +25,19 @@ namespace BugFablesAP
             Log.LogInfo($"{Name} {Version} loaded. GrantProbe={grantProbeEnabled.Value}");
         }
 
+        private bool devReloadChecked;
+        private DevReload devReload;
+
         private void Update()
         {
+            // Looked up on the first frame rather than in Awake, so ScriptEngine's own object exists by then.
+            if (!devReloadChecked)
+            {
+                devReloadChecked = true;
+                devReload = DevReload.TryCreate(Log);
+            }
+            devReload?.Tick();
+
             if (!grantProbeEnabled.Value)
             {
                 return;

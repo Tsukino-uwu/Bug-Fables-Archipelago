@@ -28,6 +28,24 @@ Newest last. What was tried, what happened, what the user said.
   `LoadOnStart = false`, `ReloadKey = F6`, `QuietMode = false`, `IncludeSubdirectories = false`. Those are
   the defaults, so hot reload still needs the watcher turned on and a `BepInEx/scripts/` folder, which
   doesn't exist yet.
-- **Next:** the first launch with BepInEx. It should create `BepInEx/LogOutput.log` and `BepInEx/config/`,
+- **The first in-game session of the plugin** (the agent launched the game, the user played a new game
+  until quitting without saving):
+  - **ScriptEngine loaded the plugin at startup** (`LoadOnStart`). The log shows
+    `Loading bugfables.archipelago`, `Reloaded all plugins!` and our `loaded. GrantProbe=True`.
+  - **ScriptEngine's FileSystemWatcher never fires in this game:** its handler's `File <name> changed` line
+    never appeared after a redeploy. **F6 didn't reload either**, pressed in the focused window during play.
+    Both are unexplained. `DevReload.cs` now polls our DLL and sets ScriptEngine's `shouldReload`; it's
+    untested in the game so far.
+  - **The log was a false lead:** it stopped at 00:56:53, which looked like a buffer. BepInEx flushes its
+    disk log every 2 s (`DiskLogListener`, read with ilspycmd), and on close one more line appeared at frame
+    25478 (about 58 fps since launch). So the plugin ran the whole time. **The probe's safety check at the
+    top returned early silently through the entire session.** It now logs why it's waiting each time the
+    reason changes. Which check it was is the next measurement.
+  - **Focus:** the game has its own pause-when-unfocused option (`MainManager.pauseonfocus` drives
+    `Application.runInBackground`, `MainManager.cs:16737`; set in `PauseMenu.cs:1626`). Use that rather
+    than the mod overriding it.
+  - **The user asked for spoiler-free chat:** the docs and the apworld hold everything, but chat refers to
+    late content by id or chapter only. They haven't finished the game.
+- **Earlier next step:** the first launch with BepInEx. It should create `BepInEx/LogOutput.log` and `BepInEx/config/`,
   proving the loader runs in this game. Then decide how to identify locations (the open question in
   `MEASURED.md`).

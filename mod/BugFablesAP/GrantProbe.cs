@@ -18,6 +18,11 @@ namespace BugFablesAP
         private readonly Dictionary<int, int> keyItemCounts = new Dictionary<int, int>();
         private bool primed;
         private int frame;
+        // Loading a save allocates new arrays of the same length (MainManager.cs:17274), so a length check
+        // alone would report a whole save load as flag flips. Watch the array identity instead.
+        private string lastBlocked = "";
+        private bool[] flagsRef;
+        private List<int> keyItemsRef;
 
         internal GrantProbe(ManualLogSource log)
         {
@@ -28,14 +33,33 @@ namespace BugFablesAP
         {
             frame++;
             MainManager mm = MainManager.instance;
-            if (mm == null || mm.flags == null || mm.items == null || mm.items.Length < 2 || mm.items[1] == null)
+            string blocked = mm == null ? "MainManager.instance is null"
+                : mm.flags == null ? "flags is null"
+                : mm.items == null ? "items is null"
+                : mm.items.Length < 2 ? $"items has {mm.items.Length} lists"
+                : mm.items[1] == null ? "items[1] is null"
+                : null;
+            // A silent early return hid a whole play session once (2026-09-24). Say why, each time it changes.
+            if (blocked != lastBlocked)
+            {
+                log.LogInfo($"[probe] frame {frame} {(blocked == null ? "reading the game" : "waiting: " + blocked)} map={Where()}");
+                lastBlocked = blocked;
+            }
+            if (blocked != null)
             {
                 primed = false;
                 return;
             }
 
+            if (primed && (!ReferenceEquals(mm.flags, flagsRef) || !ReferenceEquals(mm.items[1], keyItemsRef)))
+            {
+                primed = false;
+            }
+
             if (!primed)
             {
+                flagsRef = mm.flags;
+                keyItemsRef = mm.items[1];
                 // A new save or a load replaces the arrays: take a baseline silently, never report it as flips.
                 flags = (bool[])mm.flags.Clone();
                 regional = mm.regionalflags == null ? new bool[0] : (bool[])mm.regionalflags.Clone();
@@ -48,6 +72,7 @@ namespace BugFablesAP
 
             if (mm.flags.Length != flags.Length)
             {
+                log.LogInfo($"[probe] frame {frame} flags length {flags.Length} -> {mm.flags.Length}; re-baselining");
                 primed = false;
                 return;
             }
