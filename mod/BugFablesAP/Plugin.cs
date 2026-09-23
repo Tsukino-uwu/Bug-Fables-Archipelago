@@ -28,7 +28,28 @@ namespace BugFablesAP
         private bool devReloadChecked;
         private DevReload devReload;
 
+        private string lastError;
+
         private void Update()
+        {
+            // An exception thrown from Update goes to Unity's log, which this game doesn't write and BepInEx
+            // doesn't copy by default. So catch and log it here, once per distinct message.
+            try
+            {
+                Tick();
+            }
+            catch (System.Exception e)
+            {
+                string text = e.ToString();
+                if (text != lastError)
+                {
+                    lastError = text;
+                    Log.LogError($"Update threw: {text}");
+                }
+            }
+        }
+
+        private void Tick()
         {
             // Looked up on the first frame rather than in Awake, so ScriptEngine's own object exists by then.
             if (!devReloadChecked)
