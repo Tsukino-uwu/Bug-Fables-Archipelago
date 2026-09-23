@@ -96,6 +96,35 @@ throttled to changes.
 - **Starting a new game did not replace `flags` or `items[1]`.** The probe re-baselines when either
   array is replaced, and it didn't. Loading a saved game hasn't been observed yet.
 
+## Key-item grant sources, raw (2026-09-24) — SPOILERS for the whole game
+
+Two instruments, both read-only. **Code:** `giveitem,1,<id>` literals and `items[1].Add(...)` in the
+decompiled `EventControl.cs`/`BattleControl.cs`, each with its enclosing `Event<N>`. **Data:** `ScriptDump`
+(`mod/BugFablesAP/ScriptDump.cs`), which loads every map's dialogue table in the running game and keeps only
+the command tokens: 179 item lines from all 246 maps, 30 of them `giveitem,1`. Ids are `MainManager.Items`
+ordinals. **Raw material, not locations yet:** some ids are granted more than once (83, 84 and 52 especially),
+so each grant has to be judged as a one-time location, a repeatable, or a quest hand-off before it goes into
+the apworld. World pickups of key items (`animid == 1` objects in map entity data) are **not** in either list.
+
+**Code** (`EventControl.cs` line, event: id)
+3687 Event16: 27 · 5149/5172 Event28: 83, 83 · 5525 Event31: 52 · 5714 Event32: 24 · 8756/8781 Event55: 83, 92 ·
+10264 Event65: 63 · 10315 Event66: 60 · 13131 Event83: 84 · 15084 Event90: 100 · 17337 Event101: 95 ·
+17517 Event103: 52 · 17875 Event106: a variable (`num`) · 18220/18503/18730 Event109: 105, 106, 113 ·
+19958 Event117: `Add(116)` · 22631/22635 Event134: `Add(94)`, `Add(flagvar[56])` · 23360 Event139: 119 ·
+25716–25821 Event155: 83, 84, 4, 5, 83, 84 · 26555 Event160: 52 · 27109 Event162: 143 · 28944 Event172: 52 ·
+29073 Event173: 52 · 29828 Event175: 52 · 32375 Event195: 52 · 32604–32744 Event197: `Add` of 135, 131, 132,
+133, 137, 136, 134 and a menu choice · 37342 Event222: 83 · 37555 Event223: 84 ·
+`BattleControl.cs:11029` (no event): `Add(flagvar[56])`
+
+**Data** (map, dialogue line: id [flags set on the same line])
+AntTunnels 8: 37 · BugariaMainPlaza 82: 142 [flag 442] · BugariaCommercial 92/112/143: 110 ×3 ·
+BugariaOutskirtsOutsideCity 114: 149 [flag 480], 128: 167 · BugariaTheater 7: 25 · BugariaResidential 26: 93,
+31: 52, 82: 176 [flag 630] · UndergroundBar 78: 138 · AntPalace2 14: 41, 71: 109 · GoldenSettlement2 45: 55,
+67/77: 56 ×2, 139: 140 [flag 444] · DefiantRoot1 24: 89 [event, flags 157 and 150], 28: 89 [flag 150] ·
+DefiantRootWell 3: 111 [flag 239] · DefiantRoot3 126: 83, 163: 141 [flag 443] · GoldenSettlement3 46: 52
+[flag 603] · BeehiveMainArea 48: 99 [flag 251], 54: 94 [flag 252] · BeehiveBalcony 21: 54 ·
+DesertRoachVillage 1: 105 · TermiteIndustrial 31: 139, 46: 145
+
 ## Key items: to measure
 
 For the first version, measure and record:

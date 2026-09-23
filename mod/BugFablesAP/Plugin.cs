@@ -15,6 +15,8 @@ namespace BugFablesAP
 
         private ConfigEntry<bool> grantProbeEnabled;
         private ConfigEntry<bool> textProbeEnabled;
+        private ConfigEntry<bool> scriptDumpEnabled;
+        private bool scriptDumpDone;
         private GrantProbe grantProbe;
 
         private void Awake()
@@ -26,6 +28,9 @@ namespace BugFablesAP
             textProbeEnabled = Config.Bind("Debug", "TextProbe", false,
                 "Dev only. Logs every dialogue script that carries an item command, with the map and calling NPC. "
                 + "Off by default.");
+            scriptDumpEnabled = Config.Bind("Debug", "ScriptDump", false,
+                "Dev only. Once per launch, writes the item and flag command tokens of every map's dialogue lines to "
+                + "BepInEx/bugfablesap-scriptdump.tsv. Off by default.");
             if (textProbeEnabled.Value)
             {
                 TextProbe.Enable(Log, Guid);
@@ -66,6 +71,11 @@ namespace BugFablesAP
                 devReload = DevReload.TryCreate(Log);
             }
             devReload?.Tick();
+
+            if (scriptDumpEnabled.Value && !scriptDumpDone)
+            {
+                scriptDumpDone = ScriptDump.TryRun(Log);
+            }
 
             if (!grantProbeEnabled.Value)
             {
