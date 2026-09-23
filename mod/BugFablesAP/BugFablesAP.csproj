@@ -21,6 +21,8 @@
     -->
     <DebugType>full</DebugType>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <!-- Copy Archipelago.MultiClient.Net and its Newtonsoft.Json into the output: the game ships neither. -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <BugFablesDir Condition="'$(BugFablesDir)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Bug Fables</BugFablesDir>
     <GameManaged>$(BugFablesDir)\Bug Fables_Data\Managed</GameManaged>
   </PropertyGroup>
@@ -29,6 +31,9 @@
     <PackageReference Include="BepInEx.Core" Version="5.4.*" />
     <!-- Pinned to the game's measured Unity version, 2018.4.12 (agent_docs/MEASURED.md). -->
     <PackageReference Include="UnityEngine.Modules" Version="2018.4.12" IncludeAssets="compile" />
+    <!-- netstandard2.0 build: it uses the runtime's ClientWebSocket. Its net35/net40 builds bundle
+         websocket-sharp instead, which is the fallback if this game's Mono can't run ClientWebSocket. -->
+    <PackageReference Include="Archipelago.MultiClient.Net" Version="6.7.1" />
   </ItemGroup>
 
   <ItemGroup>

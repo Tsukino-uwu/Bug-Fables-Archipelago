@@ -27,6 +27,18 @@ New-Item -ItemType Directory -Force $scripts | Out-Null
 foreach ($f in 'BugFablesAP.dll', 'BugFablesAP.pdb') {
     Copy-Item (Join-Path $out $f) (Join-Path $scripts $f) -Force
 }
+# Libraries go to BepInEx\plugins, not scripts: ScriptEngine loads every DLL in scripts again on each reload,
+# and two copies of Newtonsoft.Json in one process is a type-identity trap. Copied only when changed.
+$plugins = Join-Path $GameDir 'BepInEx\plugins'
+foreach ($lib in 'Archipelago.MultiClient.Net.dll', 'Newtonsoft.Json.dll') {
+    $src = Join-Path $out $lib
+    $dst = Join-Path $plugins $lib
+    if (-not (Test-Path $src)) { throw "$lib is missing from the build output" }
+    if (-not (Test-Path $dst) -or (Get-FileHash $src).Hash -ne (Get-FileHash $dst).Hash) {
+        Copy-Item $src $dst -Force
+        Write-Output "copied $lib to BepInEx\plugins (loaded at game start; a running game resolves it on first use)"
+    }
+}
 # Copy-Item keeps the source's timestamp, and an unchanged build doesn't rewrite the DLL, so a redeploy
 # looked like no change to DevReload (2026-09-24). Stamp the DLL last, after the pdb is in place.
 (Get-Item (Join-Path $scripts 'BugFablesAP.dll')).LastWriteTimeUtc = [DateTime]::UtcNow

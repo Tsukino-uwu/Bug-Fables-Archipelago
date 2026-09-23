@@ -16,6 +16,12 @@ namespace BugFablesAP
         private ConfigEntry<bool> grantProbeEnabled;
         private ConfigEntry<bool> textProbeEnabled;
         private ConfigEntry<bool> scriptDumpEnabled;
+        private ConfigEntry<string> server;
+        private ConfigEntry<string> slot;
+        private ConfigEntry<string> password;
+        private ConfigEntry<bool> connectOnStart;
+        private ApConnection connection;
+        private bool connectRequested;
         private bool scriptDumpDone;
         private GrantProbe grantProbe;
 
@@ -35,6 +41,12 @@ namespace BugFablesAP
             {
                 TextProbe.Enable(Log, Guid);
             }
+            server = Config.Bind("Connection", "Server", "localhost:38281", "Archipelago server address and port.");
+            slot = Config.Bind("Connection", "Slot", "", "Your slot name in the room.");
+            password = Config.Bind("Connection", "Password", "", "The room password, if it has one.");
+            connectOnStart = Config.Bind("Connection", "ConnectOnStart", false,
+                "Connect as soon as the game starts. Needs a slot name.");
+            connection = new ApConnection(Log);
             Log.LogInfo($"{Name} {Version} loaded. GrantProbe={grantProbeEnabled.Value} TextProbe={textProbeEnabled.Value}");
         }
 
@@ -72,6 +84,20 @@ namespace BugFablesAP
             }
             devReload?.Tick();
 
+            if (connectOnStart.Value && !connectRequested)
+            {
+                connectRequested = true;
+                if (string.IsNullOrEmpty(slot.Value))
+                {
+                    Log.LogWarning("[ap] ConnectOnStart is on but no Slot is set; not connecting.");
+                }
+                else
+                {
+                    connection.Connect(server.Value, slot.Value, password.Value);
+                }
+            }
+            connection.Tick();
+
             if (scriptDumpEnabled.Value && !scriptDumpDone)
             {
                 scriptDumpDone = ScriptDump.TryRun(Log);
@@ -91,6 +117,8 @@ namespace BugFablesAP
         private void OnDestroy()
         {
             TextProbe.Disable();
+            // A hot reload must not leave the old instance's socket open next to the new one.
+            connection?.Disconnect();
             // ScriptEngine destroys the old instance on reload. Say so, so a reload shows up in the log.
             Log?.LogInfo($"{Name} {Version} unloaded.");
         }

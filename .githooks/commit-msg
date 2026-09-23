@@ -1,0 +1,24 @@
+#!/bin/sh
+# agent_docs/documentation.md must never go stale (CLAUDE.md, "What never changes").
+# A commit that changes the mod, the apworld or the dev scripts has to update it too, unless the commit
+# message says, on a line of its own, that the change doesn't alter the process:
+#   docs: no process change
+
+msg_file="$1"
+staged=$(git diff --cached --name-only)
+
+touches_work=$(printf '%s\n' "$staged" | grep -E '^(mod|apworld|dev-scripts)/' | head -1)
+[ -z "$touches_work" ] && exit 0
+
+if printf '%s\n' "$staged" | grep -qx 'agent_docs/documentation.md'; then
+    exit 0
+fi
+
+if grep -qx 'docs: no process change' "$msg_file"; then
+    exit 0
+fi
+
+echo "commit-msg: this commit changes mod/, apworld/ or dev-scripts/ but not agent_docs/documentation.md." >&2
+echo "  Add the step to documentation.md, or, only if nothing about the process changed," >&2
+echo "  add the line 'docs: no process change' to the commit message." >&2
+exit 1

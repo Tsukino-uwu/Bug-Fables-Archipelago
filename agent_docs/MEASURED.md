@@ -15,9 +15,13 @@ confirms on screen.
 - **BepInEx 5.4.23.5 loads in this game.** Measured 2026-09-24 from `BepInEx/LogOutput.log` after the user
   launched the game once: `Running under Unity v2018.4.12.5889476`, `CLR runtime version: 4.0.30319.17020`,
   `System platform: Bits64, Windows`, `Chainloader startup complete`, `Loading [Script Engine 11.1]`.
-- **`Supports SRE: False`** (the same log): System.Reflection.Emit isn't available. Any library that
-  generates code at runtime has to fall back without it. Whether MultiClient.Net and its JSON library do
-  is an **open risk**, to be settled by the first connect.
+- **`Supports SRE: False`** (the same log): System.Reflection.Emit isn't available. **Closed 2026-09-24:**
+  Archipelago.MultiClient.Net 6.7.1 (netstandard2.0 build, runtime `ClientWebSocket`) and its bundled
+  Newtonsoft.Json logged in from the running game and read `slot_data`. From BepInEx/plugins, the libraries
+  resolved into the hot-reloaded plugin without a restart.
+- **Connecting needs an explicit `ws://`** for a local, unencrypted server. With a bare `localhost:38281` the
+  server logged `connection rejected (400 Bad Request)` before a plain connection opened, and the login hit
+  its timeout. `ws://127.0.0.1:38281` logged in at once (2026-09-24).
 - **Unobfuscated names appear in the assembly's strings** (not yet in decompiled source): `MainManager`,
   `EventControl`, `KeyItem`, `GetItem`, `flags`, `Medal`, `MedalCheck`, `CrystalBerry`, `PlayerControl`,
   `PlayerData`. These are where to look first, not facts about what they do.
