@@ -116,6 +116,10 @@ throttled to changes.
   **The user, on screen (2026-09-24):** picking it up drops the party through a trapdoor, which stays open
   afterwards, so the item can't appear again. That's consistent with a one-time location identified by the
   event's flag.
+- **After the trapdoor and the third party member joining** (the user's report), `flag[14]` flipped on
+  `SnakemouthDoorRoom` (frame 24876) and `flag[27]` on `SnakemouthFallRoom` (frame 38710). No item was
+  involved, so joining is story flags only. **Open for the logic:** party members bring field abilities that
+  gate areas, so the apworld will need abilities as requirements (fixed, or shuffled).
 - **Loose berries (money pickups) leave no flag.** `CheckItem` takes its `ismoney` path (anim states 6, 7 and
   186), and no flag flipped when the user picked one up. They can't be recovered from the save, which is fine:
   they're out of scope.
