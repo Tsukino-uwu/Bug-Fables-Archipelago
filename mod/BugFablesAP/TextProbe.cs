@@ -63,7 +63,15 @@ namespace BugFablesAP
             string where = map == null ? "none" : $"{map.mapid}/{map.areaid}";
             string who = caller == null ? "none" : caller.name;
             string shown = text.Length > 800 ? text.Substring(0, 800) + "…(" + text.Length + " chars)" : text;
-            log.LogInfo($"[text] map={where} caller={who} script={shown}");
+            // World pickups pass the item id as "var,0": it's in flagvar[0], set by NPCControl.CheckItem before
+            // SetText is called.
+            string var0 = "";
+            if (text.IndexOf(",var,0", StringComparison.Ordinal) >= 0 && MainManager.instance?.flagvar != null)
+            {
+                int id = MainManager.instance.flagvar[0];
+                var0 = $" flagvar[0]={id} ({(MainManager.Items)id})";
+            }
+            log.LogInfo($"[text] map={where} caller={who}{var0} script={shown}");
         }
     }
 }

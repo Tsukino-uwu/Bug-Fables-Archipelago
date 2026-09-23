@@ -90,6 +90,14 @@ throttled to changes.
   `|giveitem,-1,10,6|`: type -1 (money), amount 10, over entity 6. The 4th argument is the entity the item
   sprite shows above (`id3` in `Giveitem`). `caller=none`, so an event started it. **`flag[17]` flipped
   right after** on the same map. Same shape as the permit: a grant plus a completion flag.
+- **A ground pickup, captured:** `|regionalflag,7,true||additemtoss,0,var,0|` on `NearSnakemouth`, with
+  `caller=tempitem` (the pickup object). It was an ordinary item (type 0), with the id in `flagvar[0]`; later
+  captures log that id. GrantProbe logged `regionalflag[7] False -> True` at frame 17763.
+- **Regional flags are wiped on every area change.** `MainManager.UpdateArea` sets
+  `instance.regionalflags = new bool[100]` (`MainManager.cs:4082`). So a pickup guarded by a
+  `regionalflag` **comes back** after the player leaves the area. It repeats, **so it is not a location.**
+  Only a pickup guarded by a global `activationflag` (`flags[]`) is a one-time find that can be a location.
+  Both are set in `CheckItem`'s text, which is how to tell them apart.
 - **Loose berries (money pickups) leave no flag.** `CheckItem` takes its `ismoney` path (anim states 6, 7 and
   186), and no flag flipped when the user picked one up. They can't be recovered from the save, which is fine:
   they're out of scope.
