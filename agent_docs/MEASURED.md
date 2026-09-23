@@ -71,6 +71,13 @@ throttled to changes.
   changed in between. So the event that grants the item sets flag 15 as it wraps up. **A candidate location
   identity: "the event whose completion flag is 15".** Whether flag 15 belongs to this grant alone, and
   whether the Giveitem call sits in that event's dialogue text, still has to be confirmed.
+- **Then `flag[31]` (frame 18896), `flag[32]` (19202) and `flag[30]` (19979)**, all on the same map. Flag 31
+  is the one `NPCControl.CheckItem` sets the first time a medal is picked up (`|flag,31,true|` when
+  `animid == 2`), so the user's "first item" was probably a medal. GrantProbe doesn't watch `badges`, so no
+  item line appeared. 32 and 30 are unexplained so far.
+- **Saves live in the game folder as `save<slot>.dat`**, numbered from 0, with `save<slot>backup.dat` written
+  at the same moment. The user's slot 3 save is `save2.dat` (29,264 bytes, 01:11). These are the user's
+  files; nothing we build ever touches them directly.
 - **Starting a new game did not replace `flags` or `items[1]`.** The probe re-baselines when either
   array is replaced, and it didn't. Loading a saved game hasn't been observed yet.
 
