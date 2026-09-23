@@ -1,0 +1,13 @@
+{
+  "_comment": "Locations. id is added to LOCATION_ID_BASE and never reused. source says how the game marks it done: an EventControl event plus the global flag it sets (see agent_docs/MEASURED.md). The client sends a check when that flag becomes true.",
+  "locations": [
+    {"name": "Outskirts: Explorer Permit", "id": 1, "region": "Bugaria Outskirts", "source": {"event": 16, "flag": 15}},
+    {"name": "Outskirts: Favor Reward", "id": 2, "region": "Bugaria Outskirts", "source": {"flag": 17}}
+  ],
+  "regions": [
+    {"name": "Menu", "exits": [{"to": "Bugaria Outskirts"}]},
+    {"name": "Bugaria Outskirts", "exits": [{"to": "Past the Outskirts Gate", "requires": ["Explorer Permit"]}]},
+    {"name": "Past the Outskirts Gate", "exits": []}
+  ],
+  "goal": {"name": "Open the Outskirts Gate", "region": "Past the Outskirts Gate", "source": {"event": 17, "flag": 28}}
+}
