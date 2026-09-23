@@ -57,7 +57,7 @@ Newest last. What was tried, what happened, what the user said.
 - **A game freeze explained (the user, 2026-09-24):** clicking inside the BepInEx console, even while
   dragging the window, starts a Windows QuickEdit selection. The game then waits on its next console write
   until Enter or Esc. The user turned QuickEdit off in the console's Properties. The same cause explains
-an earlier freeze seen in another BepInEx game.
-- **Earlier next step:** the first launch with BepInEx. It should create `BepInEx/LogOutput.log` and `BepInEx/config/`,
-  proving the loader runs in this game. Then decide how to identify locations (the open question in
-  `MEASURED.md`).
+  an earlier freeze seen in another BepInEx game.
+- **Next:** read the TextProbe output from the user's play: which dialogue script carries each item
+  command, and whether a key item's grant and its completion flag (15 for the first one) sit in the same
+  script. That decides how locations are identified.
