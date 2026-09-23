@@ -20,7 +20,9 @@ namespace BugFablesAP
         internal static void Enable(ManualLogSource logger, string guid)
         {
             log = logger;
-            harmony = new Harmony(guid + ".textprobe");
+            // A distinct id per load: UnpatchSelf removes every patch with its id, so if the old instance's
+            // OnDestroy ever ran after the new one's Awake, a shared id would strip the new patch too.
+            harmony = new Harmony(guid + ".textprobe." + DateTime.UtcNow.Ticks);
             var target = AccessTools.Method(typeof(MainManager), "SetText", new[]
             {
                 typeof(string), typeof(int), typeof(float?), typeof(bool), typeof(bool),

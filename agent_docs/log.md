@@ -46,6 +46,14 @@ Newest last. What was tried, what happened, what the user said.
     than the mod overriding it.
   - **The user asked for spoiler-free chat:** the docs and the apworld hold everything, but chat refers to
     late content by id or chapter only. They haven't finished the game.
+- **The hot-reload loop works (the third launch, 01:13):** the Unity log is copied into BepInEx's
+  (`WriteUnityLog = true` in the dev config) and the console is on. That showed ScriptEngine's
+  `new FileSystemWatcher` throwing `NotImplementedException` in this game's Mono, which aborts
+  `ScriptEngine.Awake` and explains why F6 did nothing. The watcher is now off, and the plugin's
+  `DevReload` polls the DLL instead. **Redeploying with the game running now reloads with no input:**
+  `Unloading old plugin instances` → `Reloaded all plugins!` → our `unloaded` / `loaded`. The deploy
+  script stamps the DLL's time, because `Copy-Item` keeps the source's and an unchanged build looked like
+  no change.
 - **Earlier next step:** the first launch with BepInEx. It should create `BepInEx/LogOutput.log` and `BepInEx/config/`,
   proving the loader runs in this game. Then decide how to identify locations (the open question in
   `MEASURED.md`).

@@ -27,6 +27,9 @@ New-Item -ItemType Directory -Force $scripts | Out-Null
 foreach ($f in 'BugFablesAP.dll', 'BugFablesAP.pdb') {
     Copy-Item (Join-Path $out $f) (Join-Path $scripts $f) -Force
 }
+# Copy-Item keeps the source's timestamp, and an unchanged build doesn't rewrite the DLL, so a redeploy
+# looked like no change to DevReload (2026-09-24). Stamp the DLL last, after the pdb is in place.
+(Get-Item (Join-Path $scripts 'BugFablesAP.dll')).LastWriteTimeUtc = [DateTime]::UtcNow
 
 $cfg = Join-Path $GameDir 'BepInEx\config\com.bepis.bepinex.scriptengine.cfg'
 @(
