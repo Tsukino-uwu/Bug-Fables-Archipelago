@@ -1,0 +1,21 @@
+# The game's own files never enter the repo: its assemblies, anything decompiled from them, its assets.
+*.dll
+*.pdb
+decompiled/
+lib/
+
+# Build output
+bin/
+obj/
+*.user
+.vs/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Logs and scratch
+*.log
+logs/
+scratch/

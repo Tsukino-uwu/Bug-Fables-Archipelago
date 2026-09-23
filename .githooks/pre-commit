@@ -1,0 +1,24 @@
+#!/bin/sh
+# Refuses a commit that adds a home path or this machine's user or computer name to a tracked file.
+# The names come from the environment at commit time, so they never have to be written down here.
+
+# The hook itself is excluded: it has to spell out the patterns it looks for.
+added=$(git diff --cached -U0 --no-color -- . ':(exclude).githooks' | grep '^+' | grep -v '^+++')
+[ -z "$added" ] && exit 0
+
+fail=0
+check() {
+    if printf '%s\n' "$added" | grep -i -F -q -- "$1"; then
+        echo "pre-commit: staged changes contain $2. Genericize it (\"your Bug Fables install\")." >&2
+        fail=1
+    fi
+}
+
+check 'C:\Users\' 'a Windows home path'
+check '/c/Users/' 'a Windows home path'
+check '/home/' 'a home path'
+[ -n "$USERNAME" ] && check "$USERNAME" 'your user name'
+[ -n "$USER" ] && [ "$USER" != "$USERNAME" ] && check "$USER" 'your user name'
+[ -n "$COMPUTERNAME" ] && check "$COMPUTERNAME" 'this machine name'
+
+exit $fail
