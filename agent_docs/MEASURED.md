@@ -98,6 +98,16 @@ throttled to changes.
   `regionalflag` **comes back** after the player leaves the area. It repeats, **so it is not a location.**
   Only a pickup guarded by a global `activationflag` (`flags[]`) is a one-time find that can be a location.
   Both are set in `CheckItem`'s text, which is how to tell them apart.
+- **A crystal berry, captured:** on `OutsideSnakemouth`, the script ran `|additemtoss,3,var,0||flag,108,true|…`
+  with `caller=CrystalBerry` and `flagvar[0]=-1`. **`crystalbflag[0]` flipped** (frame 6299), set in code by
+  `CheckItem` (`crystalbflags[data[0]] = true`), then `flag[108]` flipped: the one-time first-crystal-berry
+  tutorial (`!flags[108] && animid == 3` in `CheckItem`, like flag 31 for the first medal). **A crystal
+  berry's location identity is its `crystalbflags` index**: permanent, saved, and re-readable on connect.
+  `flag[22]` flipped earlier on the same map with no item script, so it belongs to something else.
+- **A second ground pickup:** a Crunchy Leaf (id 0) on `BugariaOutskirtsSnakemouthCorridor2` with
+  `regionalflag,13`, so it respawns. `regionalflag[5]` flipped there too, with no item script. Both maps are
+  in area `BugariaOutskirts`, so regional flags carry across the maps of one area and are wiped only on an
+  area change.
 - **Loose berries (money pickups) leave no flag.** `CheckItem` takes its `ismoney` path (anim states 6, 7 and
   186), and no flag flipped when the user picked one up. They can't be recovered from the save, which is fine:
   they're out of scope.
