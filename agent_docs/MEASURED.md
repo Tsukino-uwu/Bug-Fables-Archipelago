@@ -12,7 +12,12 @@ confirms on screen.
 - **x64:** `UnityCrashHandler64.exe`.
 - **The game's own `version.txt` says `1.2`.**
 - **`Managed\` ships `netstandard.dll`**, so a `netstandard2.0` plugin should load. Not yet tested.
-- **No BepInEx installed** as of this date.
+- **BepInEx 5.4.23.5 loads in this game.** Measured 2026-09-24 from `BepInEx/LogOutput.log` after the user
+  launched the game once: `Running under Unity v2018.4.12.5889476`, `CLR runtime version: 4.0.30319.17020`,
+  `System platform: Bits64, Windows`, `Chainloader startup complete`, `Loading [Script Engine 11.1]`.
+- **`Supports SRE: False`** (the same log): System.Reflection.Emit isn't available. Any library that
+  generates code at runtime has to fall back without it. Whether MultiClient.Net and its JSON library do
+  is an **open risk**, to be settled by the first connect.
 - **Unobfuscated names appear in the assembly's strings** (not yet in decompiled source): `MainManager`,
   `EventControl`, `KeyItem`, `GetItem`, `flags`, `Medal`, `MedalCheck`, `CrystalBerry`, `PlayerControl`,
   `PlayerData`. These are where to look first, not facts about what they do.

@@ -19,11 +19,15 @@ Newest last. What was tried, what happened, what the user said.
   Bug Fables install. Nothing was overwritten; the install had no BepInEx before. To undo, remove
   `BepInEx/`, `winhttp.dll`, `doorstop_config.ini`, `.doorstop_version` and `changelog.txt` from the game
   folder. **The game keeps its save (`save0.dat`) in the same folder**, and nothing we do may touch it.
-- **Carried over from the author's other project, to confirm here:** ScriptEngine r11.1 config sections
-  `[General]` (`LoadOnStart`, `ReloadKey` = F6, `QuietMode`, `IncludeSubdirectories`, `DumpAssemblies`)
-  and `[AutoReload]` (`EnableFileSystemWatcher`, off by default; `AutoReloadDelay`). Those names were read out
-  of `ScriptEngine.dll`. ScriptEngine also **refuses a plugin in `BepInEx/scripts/` with no `.pdb` beside
-  it**, and the failure is silent.
+- **Carried over from the author's other project:** ScriptEngine **refuses a plugin in `BepInEx/scripts/`
+  with no `.pdb` beside it**, and the failure is silent. Not yet confirmed here. The config keys are
+  confirmed here (below).
+- **The user launched and closed the game once.** BepInEx's log (`BepInEx/LogOutput.log`) shows it working;
+  the lines are in `MEASURED.md`. The generated `com.bepis.bepinex.scriptengine.cfg` has `[AutoReload]`
+  `EnableFileSystemWatcher = false`, `AutoReloadDelay = 3`, `DumpAssemblies = false`, and `[General]`
+  `LoadOnStart = false`, `ReloadKey = F6`, `QuietMode = false`, `IncludeSubdirectories = false`. Those are
+  the defaults, so hot reload still needs the watcher turned on and a `BepInEx/scripts/` folder, which
+  doesn't exist yet.
 - **Next:** the first launch with BepInEx. It should create `BepInEx/LogOutput.log` and `BepInEx/config/`,
   proving the loader runs in this game. Then decide how to identify locations (the open question in
   `MEASURED.md`).
