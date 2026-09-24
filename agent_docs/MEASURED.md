@@ -435,6 +435,32 @@ The output stays in the BepInEx folder.
   (EntityDump).
 - **So a prize's location identity is "its slot reached 3"**, the same whichever way it was obtained.
 
+## Chapters (2026-09-24, code read and EntityDump) — SPOILERS: map names
+
+- **Chapter ends** are the artifact flags, set by: 41 `Event26`, 88 `Event73`, 299 `Event99`, 345 `Event118`,
+  347 `Event142`, 346 `Event194`, 555 `Event200`/`Event203`. **Title cards** run in Events 16, 45, 74, 105,
+  120, 142 and 194.
+- **Hypothesis, not yet seen in game:** story events are numbered in story order, since both lists rise with
+  the chapters. `dev-scripts/gate-table.py` uses it: an event below 16 is prologue, 16-44 chapter 1, 45-73
+  chapter 2, 74-104 chapter 3, 105-119 chapter 4, 120-141 chapter 5, 142-193 chapter 6, 194 on chapter 7.
+  Side events added late carry high numbers, so the rule errs toward a later chapter, the safe direction.
+- **Ability flags, confirmed as reads in `PlayerControl.cs`:** 11 (beemerang, with `!flags[41]`), 699
+  (horn dash), 39 (heavy dash: its absence changes the dash), 171 (big icicle), 19 (hover), 18 (dig), 20
+  (bubble shield).
+- **59 doors to other maps have required or hiding flags, on 22 flags.** Setters: 11 Events 0/1/109,
+  18 `Event109`, 20 `Event95`, 41 `Event26`, 67 `Event45`, 85 `Event52`, 86 `Event58`, 107 `Event60`,
+  160 `Event84`, 169 `Event87`, 211 `Event98`, 226 and 239 dialogue only, 280 `Event112`, 299 `Event99`,
+  348 `Event120`, 359 `Event137`, 370 `Event140`, 384 `Event149`, 449 `Event166`, 555 `Event200`/`Event203`,
+  568 `Event194`.
+  - **Doors that need an ability flag:** `HideoutEntrance` → `HideoutStairsRoom` (18, dig);
+    `GoldenHillsPath3` → `ChomperCave1` (20, bubble shield); `HideoutGarden` → `DefiantRootWell` and
+    `HideoutStairsRoom` → `HideoutEntrance` (11, beemerang, which `Event109` takes away and gives back).
+  - **Doors hidden by a later flag:** the Golden Settlement day/night set (85, 86), `BeehiveOutside` →
+    `BeehiveScannerRoom` (160), `BarrenLandsCD` → `BarrenLandsEntrance` (384), `WaspKingdomOutside` →
+    `WaspKingdom1` (370). Each still to judge: an alternate version of the map, or a place that closes.
+- **Not in this table:** gates that aren't doors (objects only an ability passes, characters that block a
+  path), and `CheckIfCanExist` on non-door entities.
+
 ## Quests: to measure (when quests come into scope)
 
 - **The pause menu's quest list groups quests by chapter and shows done / not done** (the user,

@@ -55,6 +55,7 @@ seed's (the mod guide, step 9).
 5. [Build step 5: a compressed connection](#build-step-5-a-compressed-connection)
 6. [Build step 6: sending checks](#build-step-6-sending-checks)
 7. [Build step 7: receiving items](#build-step-7-receiving-items)
+8. [Build step 8: logic from the game's own gates (in progress)](#build-step-8-logic-from-the-games-own-gates-in-progress)
 
 **How it works**
 
@@ -359,6 +360,35 @@ item comes once per seed, and the count in the save keeps it that way.
 The slot survey was `VarDump.cs`.*
 
 ---
+
+## Build step 8: logic from the game's own gates (in progress)
+
+The logic has to tell the truth about every gate in the game, and the game has hundreds of maps. Instead of
+playing through and noting each blocked path, we read the gates out of the game's own data.
+
+1. **Every entity, with its flags.** The mod's `EntityDump` (the mod guide, step 7) lists every entity on
+   every map, including each door to another map, the map it leads to, the flags it needs to exist and the
+   flags that hide it.
+2. **Who sets each flag.** Each flag's setters come from the decompiled code (`flags[N] = true`, and the
+   event it sits in). A few are set only by dialogue lines.
+3. **Which chapter that is.** Story events are numbered in story order: the chapter-end events and the
+   chapter title cards both rise with the chapters. So an event's number places it in a chapter
+   (`MEASURED.md`, "Chapters"; to confirm in game).
+4. **The join.** `dev-scripts/gate-table.py` combines the three into one table: each gated door, its flags,
+   and the chapter each flag belongs to. 59 doors turned out to depend on only 22 flags.
+
+What it showed, for the design:
+
+- **Some doors need an ability's flag** (dig, bubble shield). So a received ability item has to turn on the
+  game's own flag, which every door and move already checks, rather than the mod faking the ability.
+- **Some doors vanish later in the story.** Logic can only say "reachable from here on", never "until
+  chapter N", so each of those is judged by hand: an alternate version of the same map (day and night), or
+  a place that really closes, whose locations then need another way in or must not be locations.
+
+Still to do: the other kinds of gates (objects only an ability passes, blocking characters), the region
+graph built from all of it, and the tests.
+
+*Code: `dev-scripts/gate-table.py`; the dump in `mod/BugFablesAP/EntityDump.cs`.*
 
 # How it works
 
