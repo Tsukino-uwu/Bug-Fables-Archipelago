@@ -24,9 +24,10 @@ seed's (the mod guide, step 9).
    **Hard Mode boss prize medals** (23, `MEASURED.md`) are always shuffled, with no option: every boss pays
    its prize as if Hard Mode were on, whatever the player's setting, so a prize can never be skipped and its
    location is simply "beat this boss". The mod does that by widening the Hard Mode test inside the game's
-   own `AddPrizeMedal`, never by writing the prize slot itself. **Hard Mode itself becomes an on/off
-   setting in the Archipelago panel**, which decides it instead of whether the Hard Mode medal (Artis's,
-   #11) is equipped; logic never needs Hard Mode (the user, 2026-09-24).
+   own `AddPrizeMedal`, never by writing the prize slot itself. **The Archipelago panel gets a Hard
+   Mode setting that only adds a way in:** Hard Mode is on when the setting is on, *or* the Hard Mode medal
+   (Artis's, #11) is equipped, *or* the save was started with the HARDEST code, as the game already does. The
+   mod never writes the save for it. Logic never needs Hard Mode (the user, 2026-09-24).
 2. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
 3. **An open-world option later,** researched one chapter at a time.
@@ -102,8 +103,8 @@ Archipelago's `custom_worlds` folder.
   spot at the Bugaria theater isn't a location yet, so the game still hands that copy out there.
 - **Which class each item gets** (the user, 2026-09-24): every field ability is *progression*. A key item is
   *progression* when any rule in the logic uses it, even for a single location; a key item nothing uses is
-  *useful*. Every medal is *useful*, except the Hard Mode medal (#11), which is *filler*: the Archipelago
-  panel's Hard Mode setting replaces its effect. A test will check both directions: an item a rule uses is
+  *useful*. Every medal is *useful*, except the Hard Mode medal (#11), which is *filler*: it only makes
+  fights harder, and the Archipelago panel can do the same. A test will check both directions: an item a rule uses is
   progression, and a progression item is used by some rule.
 - **Logic lives on regions and locations, never on items.** An item doesn't say what it unlocks. A region's
   exits say what they need (the gate out of the Outskirts needs the Explorer Permit), and every location
