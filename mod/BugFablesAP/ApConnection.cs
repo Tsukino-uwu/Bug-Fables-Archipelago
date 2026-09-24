@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Net.WebSockets;
+using System.Reflection;
 using System.Threading;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
@@ -21,7 +23,13 @@ namespace BugFablesAP
         private readonly object gate = new object();
         private readonly Queue<string> messages = new Queue<string>();
         private ArchipelagoSession session;
-        private bool busy;
+        private volatile bool busy;
+        // Each attempt gets a number. An attempt that outlives its deadline is abandoned: the number moves on, and
+        // whatever the old worker reports later is thrown away.
+        private int attemptNumber;
+        private DateTime attemptStartedUtc;
+        private ArchipelagoSession attemptSession;
+        private const double AttemptDeadlineSeconds = 12;
         private volatile string status = "Not connected.";
 
         // A one-line summary for the Archipelago panel: the last thing that happened.
@@ -54,6 +62,24 @@ namespace BugFablesAP
 
         internal void Watchdog(DateTime nowUtc)
         {
+            // TryConnectAndLogin bounds the socket connect at 4 s, but its login step waits on SendPacket with no
+            // timeout (ArchipelagoSession.LoginAsync -> BaseArchipelagoSocketHelper.SendMultiplePackets(...).Wait(),
+            // MultiClient.Net 6.7.1). An attempt stuck there kept `busy` set and stopped every retry (2026-09-24).
+            if (busy && (nowUtc - attemptStartedUtc).TotalSeconds > AttemptDeadlineSeconds)
+            {
+                ArchipelagoSession stuck;
+                lock (gate)
+                {
+                    attemptNumber++;
+                    stuck = attemptSession;
+                    attemptSession = null;
+                    busy = false;
+                }
+                Post("[ap] connect attempt gave no answer in " + AttemptDeadlineSeconds + " s; abandoned it");
+                KillSocket(stuck);
+                ScheduleRetry("No answer from the server.");
+                return;
+            }
             ArchipelagoSession s = session;
             if (s == null)
             {
@@ -95,14 +121,7 @@ namespace BugFablesAP
                 return;
             }
             session = null;
-            try
-            {
-                s.Socket.DisconnectAsync();
-            }
-            catch
-            {
-                // already gone
-            }
+            KillSocket(s);
             Post("[ap] connection lost: " + reason);
             ScheduleRetry("Connection lost.");
         }
@@ -139,17 +158,46 @@ namespace BugFablesAP
             Disconnect();
             log.LogInfo($"[ap] connecting to {server} as '{slot}'");
             status = $"Connecting to {server} as {slot}...";
-            var worker = new Thread(() => ConnectOnWorker(server, slot, password)) { IsBackground = true };
+            int number;
+            lock (gate)
+            {
+                number = ++attemptNumber;
+                attemptStartedUtc = DateTime.UtcNow;
+            }
+            var worker = new Thread(() => ConnectOnWorker(number, server, slot, password)) { IsBackground = true };
             worker.Start();
         }
 
-        private void ConnectOnWorker(string server, string slot, string password)
+        private bool IsCurrent(int number)
+        {
+            lock (gate)
+            {
+                return number == attemptNumber;
+            }
+        }
+
+        private void ConnectOnWorker(int number, string server, string slot, string password)
         {
             try
             {
                 ArchipelagoSession attempt = ArchipelagoSessionFactory.CreateSession(server);
+                lock (gate)
+                {
+                    if (number == attemptNumber)
+                    {
+                        attemptSession = attempt;
+                    }
+                }
                 LoginResult result = attempt.TryConnectAndLogin(
                     Game, slot, ItemsHandlingFlags.AllItems, password: string.IsNullOrEmpty(password) ? null : password);
+
+                if (!IsCurrent(number))
+                {
+                    // Abandoned at its deadline (Watchdog) or replaced: close whatever it opened, report nothing else.
+                    KillSocket(attempt);
+                    Post("[ap] an abandoned connect attempt finished late (" + result?.GetType().Name + "); ignored");
+                    return;
+                }
 
                 if (result is LoginSuccessful ok)
                 {
@@ -190,6 +238,10 @@ namespace BugFablesAP
                     Post($"[ap] login returned an unexpected result type: {result?.GetType().FullName ?? "null"}");
                 }
             }
+            catch (Exception e) when (!IsCurrent(number))
+            {
+                Post("[ap] an abandoned connect attempt threw late: " + e.GetBaseException().Message);
+            }
             catch (Exception e)
             {
                 // The first connect is also the measurement of whether this game's Mono can run the client
@@ -199,7 +251,14 @@ namespace BugFablesAP
             }
             finally
             {
-                busy = false;
+                lock (gate)
+                {
+                    if (number == attemptNumber)
+                    {
+                        busy = false;
+                        attemptSession = null;
+                    }
+                }
             }
         }
 
@@ -227,15 +286,50 @@ namespace BugFablesAP
         {
             ArchipelagoSession closing = session;
             session = null; // first, so the SocketClosed handler knows this close was on purpose
+            KillSocket(closing);
+            failures = 0;
+        }
+
+        // MultiClient.Net's receive loop is `while (Socket.State == Open)`, catching and reporting every error
+        // (BaseArchipelagoSocketHelper.PollingLoop, 6.7.1). This game's Mono ManagedWebSocket throws
+        // ConnectionClosedPrematurely from ReceiveAsync without leaving the Open state when the server vanishes
+        // (System.dll, ManagedWebSocket.ReceiveAsyncPrivate), so the loop spun forever: measured 2026-09-24 as five
+        // thread-pool threads at ~75% of a core each and memory growing ~2.5 MB/s after a server drop.
+        // ClientWebSocket.Abort() moves the state to Aborted (ManagedWebSocket's abort registration), which ends
+        // both library loops; the socket field is internal, hence reflection. DisconnectAsync alone doesn't: its
+        // close frame fails on a dead stream and leaves the state as it was.
+        private void KillSocket(ArchipelagoSession s)
+        {
+            if (s == null)
+            {
+                return;
+            }
             try
             {
-                closing?.Socket.DisconnectAsync();
+                object helper = s.Socket;
+                FieldInfo field = null;
+                for (Type t = helper.GetType(); t != null && field == null; t = t.BaseType)
+                {
+                    field = t.GetField("Socket", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public
+                        | BindingFlags.DeclaredOnly);
+                }
+                if (!(field?.GetValue(helper) is WebSocket socket))
+                {
+                    Post("[ap] could not reach the web socket to close it (field "
+                        + (field == null ? "missing" : "not a WebSocket") + ")");
+                    return;
+                }
+                WebSocketState before = socket.State;
+                socket.Abort();
+                // The send loop waits in BlockingCollection.Take(); one more packet wakes it, it sees the socket is
+                // no longer open and ends. The packet itself is never sent.
+                s.Socket.SendPacketAsync(new GetPacket { Keys = new[] { "_read_race_mode" } });
+                Post($"[ap] socket closed: {before} -> {socket.State}");
             }
             catch (Exception e)
             {
-                log.LogWarning("[ap] disconnect threw: " + e.Message);
+                Post("[ap] closing the socket threw: " + e.GetBaseException().Message);
             }
-            failures = 0;
         }
     }
 }

@@ -112,6 +112,16 @@ while connected, the mod asks the server something tiny every 5 seconds (the doc
 Tested against a local server: a wrong slot was refused and left alone; with the server stopped the mod kept
 retrying, and when the server came back it connected by itself.
 
+**A dropped connection must be closed by force.** Stopping the server while connected made the game lag and
+eat memory (2026-09-24: five threads spinning, memory growing about 2.5 MB a second). The client library
+keeps reading "while the socket is open", and in this game's version of .NET a dead socket still reports
+itself open, so the read failed and retried forever. Asking the library to disconnect politely doesn't help,
+because the goodbye can't reach a dead server. The mod now aborts the socket itself whenever a connection
+is lost or replaced, which ends the loop. It also gives every connect attempt 12 seconds: the library's
+login step can wait forever, and a stuck attempt had stopped all further retries. **Not yet confirmed in
+the game:** stop the server while connected, then check that the log shows `socket closed: Open -> Aborted`
+and the game stays smooth.
+
 ---
 
 # How it works
@@ -235,3 +245,5 @@ matter first:
 - Treating "the socket is open" as "we're in a seed": after a disconnect, rules must stay in force.
 - Not saving the received-item count: every reload hands out every item again.
 - An uncompressed connection works today, but the server warns that one day it may not.
+- A lost connection that is only "disconnected" politely can keep a reading loop spinning in the background.
+  The game just gets slower and uses more memory, with no error. Abort the socket.

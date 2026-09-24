@@ -87,3 +87,18 @@ Newest last. What was tried, what happened, what the user said.
 - **Earlier next:** read the TextProbe output from the user's play: which dialogue script carries each item
   command, and whether a key item's grant and its completion flag (15 for the first one) sit in the same
   script. That decides how locations are identified.
+- **Lag and a memory leak after a server drop, 2026-09-24 (04:45):** the user said the game felt laggy and
+  asked whether it was the probes. Measured with the game running: 3.7 cores busy, private memory 3.2 GB and
+  growing about 2.5 MB/s, 95 threads. Five thread-pool threads started together at 04:28:01–02 (when the
+  server was stopped while connected) were each spinning at about 75% of a core. The game's own threads were
+  normal, and the probes run on the game thread, so **the probes were not the cause.** GrantProbe allocates a
+  little garbage each frame, but it doesn't leak. Cause, read from MultiClient.Net 6.7.1 and the game's
+  `System.dll` with ilspycmd: the library's `PollingLoop` loops `while (State == Open)`. Mono's
+  `ManagedWebSocket.ReceiveAsyncPrivate` throws `ConnectionClosedPrematurely` without leaving `Open`, and our
+  `DisconnectAsync` couldn't close a dead stream. The log also showed a second bug: the connect attempt after
+  that never reported back (`LoginAsync` → `SendPacket(...).Wait()` has no timeout), so retries stopped.
+  Fix: abort the `ClientWebSocket` by reflection on every loss or replace, and give each attempt a 12 s
+  deadline. Built; **not yet confirmed in the game.** The old spinning threads belong to the previous load,
+  and a hot reload can't reach them, so the game must restart once.
+  The watchdog test from the entry above half-happened: the drop was caught by the socket error, not by the
+  15 s silence.
