@@ -343,3 +343,9 @@ Newest last. What was tried, what happened, what the user said.
   `warp SnakemouthLake @MothEvent` (ArgumentOutOfRange: it expects Leif already following from the spider fight,
   flags 14/27). Leif's joining is a chain; a file that skipped part of it can't enter the middle. The untried
   combination: a fresh file played through the chain normally. Added `warp <map> @<name>`.
+- **Chapter 1 played through by the user** (2026-09-24): the first boss (Event26, via its `MaskEvent` trigger)
+  set flag 41 and wrote prize slot 0 as a normal-difficulty clear. The user saved at the end of chapter 1.
+- **A warp sent without asking** (after "saved here", which meant a checkpoint) walked the user through
+  `eetlblocker1 - Duplicate` on `BugariaOutskirtsOutsideCity`, which starts **Event12**; it threw in `GetEntity`
+  mid-transfer. That confirms eetlblocker1 is a scripted blocker (req 41, hidden by 67), backing the east-Outskirts
+  hypothesis. The user: no warps unless asked; they play to places themselves.
