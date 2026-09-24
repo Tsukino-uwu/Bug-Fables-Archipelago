@@ -271,13 +271,13 @@ namespace BugFablesAP
         {
             switch (r)
             {
-                case Address: return "The room's address. Pasting archipelago.gg:12345 fills in the port too.";
+                case Address: return "The room's address, for example archipelago.gg.";
                 case PortRow: return "The room's port, e.g. 38281.";
-                case SlotRow: return "Your slot name in the room.";
-                case PasswordRow: return "Only if the room has one.";
-                case DifficultyRow: return "Hard: as if the Hard Mode medal were on. Hardest: as if HARDEST.";
-                case DetectorRow: return "On: as if the Detector medal were equipped, to find hidden items.";
-                case ModeRow: return "Randomizer saves in their own folder; normal saves are never touched.";
+                case SlotRow: return "Your player slot name.";
+                case PasswordRow: return "The room's password, if it has one.";
+                case DifficultyRow: return "Only affects how tough enemies are, never items or locations.";
+                case DetectorRow: return "Always has the Detector medal's effect: hidden items are easier to find.";
+                case ModeRow: return "Turns Archipelago on or off. While on, normal saves are never touched.";
                 default: return "";
             }
         }
@@ -438,7 +438,8 @@ namespace BugFablesAP
             Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
 
             // What the highlighted row does, one line, the way the game's settings screen explains its rows (the
-            // user, 2026-09-24: "Detector" alone doesn't say it means the medal). Then the connection's state.
+            // user, 2026-09-24: "Detector" alone doesn't say it means the medal; the wording is the user's). Then the
+            // connection's state.
             Text("|center||size,0.5|" + Describe(row), 0f, -2.4f);
             Text("|center||size,0.5|" + Safe(shownStatus), 0f, -3.0f);
             leaf.transform.localPosition = new Vector3(LabelX + LeafOffset, RowY[row] + LeafRise, 0f);
