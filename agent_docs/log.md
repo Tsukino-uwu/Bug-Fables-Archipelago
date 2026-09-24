@@ -192,3 +192,5 @@ Newest last. What was tried, what happened, what the user said.
   **Next:** the chat feed (bottom-left, on by default, switch in the panel), then the in-game text client; the
   Archipelago icon for other games' items (read its licence first); the favor reward's money `giveitem` isn't
   swapped yet (the transpiler covers items and medals only).
+- **Decided at the very end (2026-09-24):** full bag and storage: keep giving key items, and hold only the ordinary
+  items that don't fit (the user chose the recommendation). Not built yet; first thing next session.

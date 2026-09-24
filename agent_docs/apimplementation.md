@@ -272,6 +272,9 @@ or map change). Never during a battle, because retrying a lost battle restores t
 
 **Where items go:** key items to key items, ordinary items to the bag, then storage when the bag is full. If
 both are full, the item waits until there's room (items are given strictly in order, so the count stays right).
+**Decided by the user (2026-09-24), not yet built:** a full bag must never block progress. Key items keep
+arriving, and only the ordinary items that don't fit are held until there's room. That needs a count that
+can skip past a held item.
 The same operations the game's own code uses put them there.
 
 **Status: works (2026-09-24).** The server already held the Explorer Permit and the G-Bug Ranger Plushie from
