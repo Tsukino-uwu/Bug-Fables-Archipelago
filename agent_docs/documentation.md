@@ -37,6 +37,10 @@ server, and items from the server arrive in the game once each.
    All three of its effects ask one question, `BadgeIsEquipped(2)` (objects `NPCControl.cs:1344`, discoveries
    `MapControl.cs:408`, music `MusicSpinner.cs:54`), and Hard is the same question for medal #11, so one patch
    on `BadgeIsEquipped` serves both rows. It changes no save data and no logic.
+   **Built (2026-09-24), not yet seen on screen:** the panel has eight rows now (spaced tighter so the status
+   line still fits). Difficulty offers Normal and Hard so far, Hardest once it's settled. `MedalAssist.cs`
+   answers "equipped" for medal 11 (Hard) or 2 (Detector) on party-wide checks, on randomizer saves only. The
+   medals menu equips from the medal list itself, never through that check, so it's unaffected.
 
 ## The steps
 

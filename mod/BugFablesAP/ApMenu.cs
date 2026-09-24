@@ -9,14 +9,20 @@ namespace BugFablesAP
     // The Archipelago panel, opened from "Archipelago" on the main menu. It's drawn with the game's own box and
     // font (MainManager.Create9Box / SetText) and takes real typing, so an address can be typed or pasted.
     //
-    // Rows: Address, Port, Slot, Password, Archipelago mod, Back. It connects on its own (Plugin.AutoConnect). Up/down move; confirm (C / Enter) edits
+    // Rows: Address, Port, Slot, Password, Archipelago mod, Difficulty, Detector, Back. It connects on its own (Plugin.AutoConnect). Up/down move; confirm (C / Enter) edits
     // a text row or presses a button; cancel (X / Escape) closes. While a row is being edited, the keyboard
     // types into it: Backspace deletes, Ctrl+V pastes, Ctrl+C copies the row, Enter keeps, Escape reverts.
     // The title screen's own input is suspended while the panel is open (StartMenu.canselect), so the game's
     // key letters (C, X, Z, V) can be typed.
     internal sealed class ApMenu : MonoBehaviour
     {
-        private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, BackRow = 5, Rows = 6;
+        private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, DifficultyRow = 5, DetectorRow = 6,
+            BackRow = 7, Rows = 8;
+
+        // The Difficulty and Detector rows' settings (Plugin). Hardest joins the list once it's built.
+        internal static readonly string[] Difficulties = { "Normal", "Hard" };
+        internal static ConfigEntry<string> Difficulty;
+        internal static ConfigEntry<bool> Detector;
 
         internal static ApMenu Open;
 
@@ -144,7 +150,8 @@ namespace BugFablesAP
         private const string TextSort = "|sort,10|";
         // Row heights inside the orange box, top to bottom; labels on the left, values on the right, as in the
         // settings screen.
-        private static readonly float[] RowY = { 2.6f, 1.75f, 0.9f, 0.05f, -0.8f, -1.65f };
+        // Eight rows at 0.7 apart (six were 0.85 apart), so the status line still fits inside the box.
+        private static readonly float[] RowY = { 2.6f, 1.9f, 1.2f, 0.5f, -0.2f, -0.9f, -1.6f, -2.3f };
         // Matched to the game's Settings screen from the user's side-by-side screenshots (2026-09-24): there the
         // labels start ~88 px in from the vine border, with the leaf's tip ~15 px before them. Two earlier nudges
         // misread a cropped screenshot (-6.3 touched the vine); -5.15 puts the labels at Settings' distance.
@@ -220,10 +227,10 @@ namespace BugFablesAP
                 MainManager.PlayScrollSound();
                 Redraw();
             }
-            else if (row == ModeRow && (MainManager.GetKey(2, hold: false) || MainManager.GetKey(3, hold: false)))
+            else if (IsChoice(row) && (MainManager.GetKey(2, hold: false) || MainManager.GetKey(3, hold: false)))
             {
                 MainManager.PlayScrollSound();
-                MenuToggle.SetMode(owner, !mode.Value);
+                Step(row, MainManager.GetKey(3, hold: false) ? 1 : -1);
                 Redraw();
             }
             else if (MainManager.GetKey(5, hold: false) || Input.GetKeyDown(KeyCode.Escape))
@@ -248,13 +255,37 @@ namespace BugFablesAP
                         Redraw();
                         break;
                     case ModeRow:
-                        MenuToggle.SetMode(owner, !mode.Value);
+                    case DifficultyRow:
+                    case DetectorRow:
+                        Step(row, 1);
                         Redraw();
                         break;
                     case BackRow:
                         Close();
                         break;
                 }
+            }
+        }
+
+        private static bool IsChoice(int r) => r == ModeRow || r == DifficultyRow || r == DetectorRow;
+
+        // Left/right (or confirm) on a choice row: the next or previous value.
+        private void Step(int r, int by)
+        {
+            if (r == ModeRow)
+            {
+                MenuToggle.SetMode(owner, !mode.Value);
+            }
+            else if (r == DifficultyRow && Difficulty != null)
+            {
+                int at = Array.IndexOf(Difficulties, Difficulty.Value);
+                Difficulty.Value = Difficulties[((at < 0 ? 0 : at) + by + Difficulties.Length) % Difficulties.Length];
+                log.LogInfo("[apmenu] Difficulty: " + Difficulty.Value);
+            }
+            else if (r == DetectorRow && Detector != null)
+            {
+                Detector.Value = !Detector.Value;
+                log.LogInfo("[apmenu] Detector: " + (Detector.Value ? "On" : "Off"));
             }
         }
 
@@ -378,17 +409,24 @@ namespace BugFablesAP
             Row(PasswordRow, "Password", pw);
             Row(BackRow, "Back", null);
 
-            // The mode row, like a settings value: left and right arrows around it.
-            Label(ModeRow, "Archipelago mod");
+            // The choice rows, like a settings value: left and right arrows around the value.
             arrows = new GameObject("arrows").transform;
             arrows.parent = box;
             arrows.localPosition = Vector3.zero;
-            new GameObject("left").AddComponent<ButtonSprite>().SetUp(2, -1, "", new Vector3(0.7f, RowY[ModeRow] + 0.25f), Vector3.one * 0.5f, ButtonSort, arrows);
-            new GameObject("right").AddComponent<ButtonSprite>().SetUp(3, -1, "", new Vector3(4.5f, RowY[ModeRow] + 0.25f), Vector3.one * 0.5f, ButtonSort, arrows);
-            Text("|center||size,0.7|" + (mode.Value ? "ENABLED" : "DISABLED"), 2.6f, RowY[ModeRow]);
+            Choice(ModeRow, "Archipelago mod", mode.Value ? "ENABLED" : "DISABLED");
+            Choice(DifficultyRow, "Difficulty", (Difficulty?.Value ?? "Normal").ToUpperInvariant());
+            Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
 
             Text("|center||size,0.5|" + Safe(shownStatus), 0f, -3.0f);
             leaf.transform.localPosition = new Vector3(LabelX + LeafOffset, RowY[row] + LeafRise, 0f);
+        }
+
+        private void Choice(int r, string label, string value)
+        {
+            Label(r, label);
+            new GameObject("left").AddComponent<ButtonSprite>().SetUp(2, -1, "", new Vector3(0.7f, RowY[r] + 0.25f), Vector3.one * 0.5f, ButtonSort, arrows);
+            new GameObject("right").AddComponent<ButtonSprite>().SetUp(3, -1, "", new Vector3(4.5f, RowY[r] + 0.25f), Vector3.one * 0.5f, ButtonSort, arrows);
+            Text("|center||size,0.7|" + value, 2.6f, RowY[r]);
         }
 
         private void Label(int r, string label)

@@ -40,6 +40,8 @@ namespace BugFablesAP
         private ConfigEntry<string> saveDiff;
         private ConfigEntry<bool> adoptSeed;
         private ConfigEntry<bool> devConsole;
+        private ConfigEntry<string> difficulty;
+        private ConfigEntry<bool> detector;
         private ConfigEntry<string> devCommandFile;
         private ConfigEntry<int> giveMoney;
         private bool saveDiffDone;
@@ -112,6 +114,16 @@ namespace BugFablesAP
             SaveRedirect.On = randomizerEnabled.Value;
             SaveRedirect.Enable(Log, Guid);
             ItemSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
+            // The panel's Difficulty and Detector rows (the user, 2026-09-24): defaults Normal and On.
+            difficulty = Config.Bind("Archipelago", "Difficulty", "Normal", new ConfigDescription(
+                "Normal leaves it to the game; Hard acts as if the Hard Mode medal were equipped. Boss prize medals are "
+                + "paid out either way. Switch it in the Archipelago panel.", new AcceptableValueList<string>(ApMenu.Difficulties)));
+            detector = Config.Bind("Archipelago", "Detector", true,
+                "On acts as if the Detector medal were equipped, to help find items. Off leaves it to the medal. "
+                + "Switch it in the Archipelago panel.");
+            ApMenu.Difficulty = difficulty;
+            ApMenu.Detector = detector;
+            MedalAssist.Enable(Log, Guid, () => randomizerEnabled.Value, () => difficulty.Value == "Hard", () => detector.Value);
             MenuToggle.Enable(Log, Guid, randomizerEnabled, server, port, slot, password,
                 () => { },
                 () => connection.Status);
@@ -276,6 +288,7 @@ namespace BugFablesAP
             connection?.Disconnect();
             WebSocketCompression.Disable();
             ItemSwap.Disable();
+            MedalAssist.Disable();
             // ScriptEngine destroys the old instance on reload. Say so, so a reload shows up in the log.
             Log?.LogInfo($"{Name} {Version} unloaded.");
         }
