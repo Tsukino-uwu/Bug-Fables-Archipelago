@@ -349,3 +349,7 @@ Newest last. What was tried, what happened, what the user said.
   `eetlblocker1 - Duplicate` on `BugariaOutskirtsOutsideCity`, which starts **Event12**; it threw in `GetEntity`
   mid-transfer. That confirms eetlblocker1 is a scripted blocker (req 41, hidden by 67), backing the east-Outskirts
   hypothesis. The user: no warps unless asked; they play to places themselves.
+- **Medals matched to the wiki** (2026-09-24; the user pasted the wiki's Medal page, facts only): every medal's
+  source found in the entity dump, ScriptDump or code (floor, dialogue gifts, code gifts, the two shops' pools by
+  story event), in `MEASURED.md`. All five chapter 1 medals are locations already; Mighty Pebble waits for the
+  Hearty Breakfast's source. Next: chapter 2's city medals, each checked on screen first.

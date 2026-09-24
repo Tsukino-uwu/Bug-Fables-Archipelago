@@ -21,7 +21,7 @@ read for facts and write our own.
 
 | Source | Licence | Checked | How it's used |
 |---|---|---|---|
-| Bug Fables wiki (bugfables.fandom.com), the Crystal Berry page | CC BY-SA ("Community content is available under CC-BY-SA unless otherwise noted", on the page) | 2026-09-24; the user pasted the page, since the site blocks automated readers | Leads only: which chapter and what each berry needs. Facts are restated in our own words and checked against the game data or on screen; no wiki text is copied into the repo. |
+| Bug Fables wiki (bugfables.fandom.com), the Crystal Berry and Medal pages | CC BY-SA ("Community content is available under CC-BY-SA unless otherwise noted", on the page) | 2026-09-24; the user pasted the page, since the site blocks automated readers | Leads only: which chapter and what each berry needs. Facts are restated in our own words and checked against the game data or on screen; no wiki text is copied into the repo. |
 
 ## The game
 

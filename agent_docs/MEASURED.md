@@ -578,6 +578,44 @@ Ancient Mask). **Later:** #3 behind Chuck's house needs a large boulder smashed 
 #32 in the bridge room needs Vi's fly (hover) over two pillars and the beemerang on a vine (chapter 6), as the user
 guessed. The wiki is a lead, not proof: each entry is checked against the data or on screen before it's logic.
 
+## All medals by source (2026-09-24, entity dump, ScriptDump, code read, matched to the Bug Fables wiki)
+
+91 medal kinds (ids 0-90, `badgedata`); the wiki counts 120 copies in all. Where each comes from in the data:
+
+- **On the floor (23, each with its own global flag):** HP Plus 0 on SnakemouthLake (flag 23), BugariaOutskirtsEast1
+  (137, behind the waterfall; wiki: needs the beemerang) and DesertBadlands (413); Poison Defender 9
+  SnakemouthUndergrondDoor (60); Poison Resistance 7 SnakemouthMushroomPit (42); Bug Me Not! 18 BugariaResidential
+  (59); Charge Up 52 BugariaMainPlaza (230; wiki: the locked house, key bought at the Hive); Super Block+ 19
+  GoldenHillsCableCar (534); Life Cast 72 GoldenPathTunnel and GoldenPathTunnel2 (one flag, 462: one medal, two
+  spots); Back Support 36 GoldenHillsDungeonLeftCrankHalf (121); Fortify 39 DefiantRoot2 (149); Meditation 56
+  DesertBadgeAlcove (262); Strong Start 23 DesertBeforeGH (415); Tardigrade Shield 51 DesertRockFormation (343);
+  Shock Trooper 34 FactoryStorageMaze (220); Frostbite 46 SandCastleSlidePuzzle (285); Antlion Jaws 63 StreamMountain3
+  (418); Berserker 8 ChomperCaves2 (338); Eternal Venom 27 Swamplands7 (355); Extra Freeze 59
+  UpperSnekPressurePlateRoom (522); Status Mirror 75 GiantLairDeadLands2 (611); Royal Calling 80 AntPalaceWarRoom
+  (717, requires 555: postgame). A TP Plus in TestRoom (no flag) is the debug room's, not a location.
+- **Dialogue gifts (`giveitem,2` in map dialogue):** Hard Mode 11 (Artis, BugariaOutskirtsOutsideCity line 44); Sleep
+  Resistance 12 (BugariaMainPlaza line 33; line 35 takes key item 24 and sets flag 52); Favorite One 20
+  (BugariaResidential line 45, takes key item 117); Weak Stomach 24 (GoldenSettlement2 lines 69/80, flag 102); Heavy
+  Sleeper 47 (GoldenSettlement2 158); Crazy Prepared 71 (BugariaPier 46, flag 481); HP Core 64 (DefiantRoot1 79,
+  flag 396; BarrenLandsBeefly 10); Reflection 61 (DefiantRoot1 106, DefiantRoot3 190); First Plating 77 (DefiantRoot3
+  144); A.D.B.P. Enhancer 28 (HoneycombsLab 5, flag 352); Power Exchange 49 (HoneyFactoryWorkerRooms 24); Heal Plus
+  74 (FishingVillage 14); TP Plus 1 (TermiteMainPlaza 56, flag 627).
+- **Code gifts (`giveitem,2` built in `EventControl`):** Mighty Pebble 13 (`:5855`, Chuck's quest); Spy Specs 17 and
+  Detector 2 (`:14024-14065`, B.O.S.S., flags 164/165); Mightier Pebble 29 (`:18821`); Prayer 62 (`:25648`); Freeze
+  Resistance 33 (`:26535`, flag 430) and Seedling Affinity 78 (`:26575`, flag 477); TP Plus 1 (`:35843`); the Hard
+  Mode prizes (`:5747`, see above). Quest-board rewards not yet read (see "Quests: to measure").
+- **Shops (`badgeshops[0]` is Merab's, `[1]` Shades's, for crystal berries):** new game (`MainManager.cs:4010`)
+  Merab 0, 1, 7, 12, 30, 86, 84, 87, 88, 81 and Shades 19, 6, 9, 43, 42 (both open later in the story); Event73
+  (chapter 2's end) Merab +21, 22, 48; Event99 (chapter 3's end) Merab +33, 56, 74, Shades +0, 49; Event118
+  (chapter 4's end) Shades +76; Event120 (chapter 5's start) Merab +45, 1, Shades +44, 6, 50; Event142 (chapter 6's
+  start) Merab +86, 62, 41, Shades +57, 35. We Owe Ya! 85 joins Merab's once a helper is unlocked
+  (`MapControl.HelperMedalCheck`, flag 716). Termacade, the bomb shop and the caravan prizes are separate sellers.
+- **Chapter 1 per the wiki, matched:** HP Plus (lake pillar), Poison Defender (underground door room), Poison
+  Resistance (mushroom pit), Hard Mode (Artis) and Quick Flea (the first boss's prize). **All five are locations
+  already.** Mighty Pebble (Chuck) waits for the source of a Hearty Breakfast. Next in story order: chapter 2's floor
+  medals and dialogue gifts around the city (Bug Me Not!, Sleep Resistance, Favorite One) and the waterfall HP Plus,
+  each checked on screen first.
+
 ## Quests: to measure (when quests come into scope)
 
 - **The pause menu's quest list groups quests by chapter and shows done / not done** (the user,
