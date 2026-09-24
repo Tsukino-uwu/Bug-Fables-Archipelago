@@ -361,8 +361,9 @@ changes, so the swap holds. Another game's item keeps the vanilla look until the
 Ranger Plushie, and picking it up showed the Plushie too.
 
 **Story pickups have no flag of their own** (2026-09-24): a pickup the story makes appear and hides for good (the
-trapdoor Mushroom) carries no "taken" flag, so the mod knows it by its entity name on its map instead
-(`IsPickup`). Built, not yet seen in game.
+trapdoor Mushroom) carries no "taken" flag. A first try knew it by its entity name, but the new event log
+(`[event]` lines, from the dev console) showed the scene creates its own copy (`tempitem`), so the mod knows it by
+the story event picking it up starts instead (`IsPickup`). Built, not yet seen in game.
 
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
 `Recolour` and `FirstMedalSeen` do the swapping; `PickupPrefix`, `FindPickup` and `TickGround` handle pickups); the

@@ -345,10 +345,15 @@ namespace BugFablesAP
             }
         }
 
-        // This pickup's own flag or, for a story pickup (no flag of its own), its entity name on this map.
+        // This pickup's own flag or, for a story pickup (no flag of its own), the story event it starts (data[1],
+        // NPCControl.CheckItem's |event| chain). Matching by entity name missed the scene's own copy (2026-09-24).
         private static bool IsPickup(ApConnection.Pickup pickup, NPCControl npc)
         {
-            return pickup.Entity != null ? npc.name == pickup.Entity : npc.activationflag >= 0 && npc.activationflag == pickup.Flag;
+            if (pickup.Event >= 0)
+            {
+                return npc.data != null && npc.data.Length > 1 && npc.data[1] == pickup.Event;
+            }
+            return npc.activationflag >= 0 && npc.activationflag == pickup.Flag;
         }
 
         private static long FindPickup(NPCControl caller)

@@ -475,9 +475,11 @@ game needs a save where Leif joined through the story, since a warped file witho
 **Story pickups** (the user, 2026-09-24): some pickups have no "taken" flag of their own; the story makes them
 appear and hides them for good (the trapdoor Mushroom in the Snakemouth door room exists between flags 13 and 14,
 and taking it starts Event5, which sets 14). The rule: a pickup is a location if, once taken, a story flag hides
-it for good; items that come back are not. A story pickup is known by its entity name on its map (`pickup.entity`,
-sent in `slot_data`), its check is the flag its event sets, and `source.event` records that event, so an option
-that skips it can leave the location out (test `TestStoryPickup`). For a future story strip or open world, the
+it for good; items that come back are not. A story pickup is known by **the story event picking it up starts**
+(`source.event`, sent in `slot_data`; the pickup's `data[1]`), not by its entity name: the play-through log showed
+the scene creating its own copy, `tempitem`, while the map's `MushroomItem` only appears on a later visit, and both
+start Event5. Its check is the flag that event sets, and an option that skips the event can leave the location
+out (test `TestStoryPickup`). For a future story strip or open world, the
 mod could force such a pickup to exist (like the doors kept open) and send its check on pickup, making it
 independent of the story.
 **Optional categories** (the user, 2026-09-24): a location can carry a `category`; its yaml option decides whether

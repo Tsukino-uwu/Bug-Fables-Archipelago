@@ -244,9 +244,10 @@ namespace BugFablesAP
         {
             internal string Map;
             internal int Flag;
-            // A story pickup has no activationflag of its own (its story event hides it for good): it's known by its
-            // entity name on the map instead. Null for ordinary pickups.
-            internal string Entity;
+            // A story pickup has no activationflag of its own (its story event hides it for good): it's known by the
+            // story event picking it up starts (its data[1]), the same whether the scene created it (Event4's
+            // "tempitem") or the map did on a later visit ("MushroomItem"). -1 for ordinary pickups.
+            internal int Event = -1;
         }
 
         private static Dictionary<long, Pickup> ReadLocationPickups(Dictionary<string, object> slotData)
@@ -262,7 +263,7 @@ namespace BugFablesAP
                 {
                     Map = entry.Value.Value<string>("map"),
                     Flag = entry.Value.Value<int>("flag"),
-                    Entity = entry.Value.Value<string>("entity"),
+                    Event = entry.Value.Value<int?>("event") ?? -1,
                 };
             }
             return result;

@@ -220,14 +220,14 @@ class TestQuestsOnByDefault(BugFablesTestBase):
 
 
 class TestStoryPickup(BugFablesTestBase):
-    # A story pickup has no flag of its own: the client knows it only by its entity name. Without the name in
-    # slot_data, the vanilla item would be handed out and the seed's item lost.
-    def test_story_pickup_known_by_entity_name(self) -> None:
+    # A story pickup has no flag of its own: the client knows it by the story event picking it up starts. Without it
+    # in slot_data, the vanilla item would be handed out and the seed's item lost.
+    def test_story_pickup_known_by_its_event(self) -> None:
         pickups = self.world.fill_slot_data()["location_pickups"]
         trapdoor = str(self.world.location_name_to_id["Snakemouth Den: Door Room, Trapdoor"])
-        self.assertEqual(pickups[trapdoor], {"map": "SnakemouthDoorRoom", "flag": 14, "entity": "MushroomItem"})
+        self.assertEqual(pickups[trapdoor], {"map": "SnakemouthDoorRoom", "flag": 14, "event": 5})
 
-    def test_ordinary_pickups_have_no_entity_name(self) -> None:
+    def test_ordinary_pickups_have_no_event(self) -> None:
         pickups = self.world.fill_slot_data()["location_pickups"]
         medal = str(self.world.location_name_to_id["Snakemouth Den: Underground Door Room"])
-        self.assertNotIn("entity", pickups[medal])
+        self.assertNotIn("event", pickups[medal])

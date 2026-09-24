@@ -161,8 +161,8 @@ class BugFablesWorld(World):
             # the client can keep the vanilla item out when it's picked up.
             "location_pickups": {
                 str(LOCATION_NAME_TO_ID[loc["name"]]): {"map": loc["source"]["pickup"]["map"], "flag": loc["source"]["flag"],
-                                                       **({"entity": loc["source"]["pickup"]["entity"]}
-                                                          if "entity" in loc["source"]["pickup"] else {})}
+                                                       **({"event": loc["source"]["event"]}
+                                                          if loc["source"]["pickup"].get("story") else {})}
                 for loc in self.included_locations
                 if "pickup" in loc["source"]
             },
