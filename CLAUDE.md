@@ -19,6 +19,10 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
   right one, in the same commit.** `.githooks/commit-msg` refuses a commit touching `mod/`, `apworld/` or
   `dev-scripts/` without either, unless the message has a line `docs: no process change` (a typo, never a
   step). Re-read both when a session starts.
+- **The root `README.md` never goes stale either.** Its "Status" line and "How it works" must agree with the
+  guides' "Where it stands" and with the code. A commit that changes either one updates the README in the
+  same commit. Check all three against each other when a session starts, and fact-check the README against
+  the code, never against an older doc.
 - **Items are remote only.** A pickup grants nothing locally; it sends its check. Every item, the player's
   own included, arrives from the server. There is no local-items mode (decided 2026-09-24).
 - **Never corrupt a save.** The mod writes game state only through the game's own functions (its give-item
