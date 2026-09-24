@@ -99,6 +99,25 @@ namespace BugFablesAP
                     (finished ?? (finished = new List<long>())).Add(entry.Key);
                 }
             }
+            // Crystal berry locations: done when their index in crystalbflags is set (the pickup sets it).
+            Dictionary<long, int> berries = connection.LocationBerries;
+            if (berries != null && mm.crystalbflags != null)
+            {
+                foreach (KeyValuePair<long, int> entry in berries)
+                {
+                    if (handled.Contains(entry.Key) || entry.Value < 0 || entry.Value >= mm.crystalbflags.Length || !mm.crystalbflags[entry.Value])
+                    {
+                        continue;
+                    }
+                    handled.Add(entry.Key);
+                    if (session.Locations.AllLocationsChecked.Contains(entry.Key))
+                    {
+                        continue;
+                    }
+                    log.LogInfo($"[check] location {entry.Key} is done (crystal berry {entry.Value} taken) on {Where()}: sending");
+                    (finished ?? (finished = new List<long>())).Add(entry.Key);
+                }
+            }
             if (finished != null)
             {
                 connection.SendChecks(session, finished.ToArray());

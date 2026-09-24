@@ -150,6 +150,9 @@ class BugFablesWorld(World):
             "artifacts_required": self.artifacts_required,
             "location_flags": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["flag"] for loc in self.included_locations
                                if "flag" in loc["source"]},
+            # Crystal berry locations, done when their crystalbflags index is set ({location id: index}).
+            "location_berries": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["berry"]
+                                 for loc in self.included_locations if "berry" in loc["source"]},
             # Locations marked done by a number slot reaching a value instead of a flag (a boss prize handed over:
             # its prize slot reaching 3).
             "location_vars": {str(LOCATION_NAME_TO_ID[loc["name"]]): {"var": loc["source"]["var"],
@@ -165,9 +168,11 @@ class BugFablesWorld(World):
             # Which locations are items lying in the world, known by their map and their own activationflag, so
             # the client can keep the vanilla item out when it's picked up.
             "location_pickups": {
-                str(LOCATION_NAME_TO_ID[loc["name"]]): {"map": loc["source"]["pickup"]["map"], "flag": loc["source"]["flag"],
+                str(LOCATION_NAME_TO_ID[loc["name"]]): {"map": loc["source"]["pickup"]["map"], "flag": loc["source"].get("flag", -1),
                                                        **({"event": loc["source"]["event"]}
-                                                          if loc["source"]["pickup"].get("story") else {})}
+                                                          if loc["source"]["pickup"].get("story") else {}),
+                                                       **({"berry": loc["source"]["berry"]}
+                                                          if "berry" in loc["source"] else {})}
                 for loc in self.included_locations
                 if "pickup" in loc["source"]
             },

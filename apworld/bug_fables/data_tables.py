@@ -42,10 +42,13 @@ MEDAL_ID_OFFSET = 1_000
 # Berries (money) are handed out by the same giveitem, type -1; as items their game_id is the amount.
 MONEY_KIND = 3
 MONEY_ID_OFFSET = 2_000
+# Crystal berries: a counted currency, one item (game_id 0); each berry spot is known by its crystalbflags index.
+CRYSTAL_KIND = 4
+CRYSTAL_ID_OFFSET = 3_000
 
 
 def item_id(item: dict[str, Any]) -> int:
-    offset = {MEDAL_KIND: MEDAL_ID_OFFSET, MONEY_KIND: MONEY_ID_OFFSET}.get(item["kind"], 0)
+    offset = {MEDAL_KIND: MEDAL_ID_OFFSET, MONEY_KIND: MONEY_ID_OFFSET, CRYSTAL_KIND: CRYSTAL_ID_OFFSET}.get(item["kind"], 0)
     return ITEM_ID_BASE + offset + item["game_id"]
 
 
@@ -63,9 +66,13 @@ def vanilla_item(location: dict[str, Any]) -> str | None:
     source = location["source"].get("give") or location["source"].get("pickup")
     if source is None:
         return None
-    kind = MONEY_KIND if source["type"] == -1 else source["type"]
+    if source["type"] == 3:
+        # A crystal berry spot: its item is always the one Crystal Berry item (its own index is only its identity).
+        kind, game_id = CRYSTAL_KIND, 0
+    else:
+        kind, game_id = (MONEY_KIND if source["type"] == -1 else source["type"]), source["item"]
     for item in ITEMS:
-        if item["kind"] == kind and item["game_id"] == source["item"]:
+        if item["kind"] == kind and item["game_id"] == game_id:
             return item["name"]
     return None
 

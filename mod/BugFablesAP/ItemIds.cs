@@ -12,10 +12,14 @@ namespace BugFablesAP
         // Berries (money): handed out by the same giveitem as items, type -1; as an item, the game id is the amount.
         internal const int MoneyOffset = 2_000;
         internal const int MoneyKind = 3;
+        // Crystal berries: a counted currency (flagvar[14], the crystal berry shop's counter); one item, game id 0.
+        internal const int CrystalOffset = 3_000;
+        internal const int CrystalKind = 4;
 
         internal static int GameId(long itemId, int kind)
         {
-            return (int)(itemId - Base - (kind == MedalKind ? MedalOffset : kind == MoneyKind ? MoneyOffset : 0));
+            int offset = kind == MedalKind ? MedalOffset : kind == MoneyKind ? MoneyOffset : kind == CrystalKind ? CrystalOffset : 0;
+            return (int)(itemId - Base - offset);
         }
 
         // The berry sprite the game's own giveitem shows for an amount (MainManager.cs:11506).

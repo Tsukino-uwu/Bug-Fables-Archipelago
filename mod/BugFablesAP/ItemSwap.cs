@@ -48,6 +48,25 @@ namespace BugFablesAP
         private static bool swapped;
         private static FieldInfo descWindowField;
 
+        // NPCControl.CheckItem's first-berry tutorial (NPCControl.cs:5700), dropped for a swapped berry like the medal one.
+        private const string FirstBerryTutorial = "|flag,108,true||tail,null||center,true||destroydescbox||goto,-88,break,end|";
+
+        // A crystal berry is drawn as a spinning 3D model, not its sprite (NPCControl.cs:946): to show the seed's item,
+        // hide the model and show the sprite.
+        private static void ShowAsSprite(EntityControl entity, Sprite sprite)
+        {
+            if (entity == null || sprite == null || entity.sprite == null)
+            {
+                return;
+            }
+            if (entity.model != null)
+            {
+                entity.model.gameObject.SetActive(false);
+            }
+            entity.sprite.enabled = true;
+            entity.sprite.sprite = sprite;
+        }
+
         // NPCControl.CheckItem's first-medal tutorial, put after the add (NPCControl.cs:5673).
         private const string FirstMedalTutorial = "|flag,31,true||tail,null||center,true||destroydescbox||goto,-32,break,end|";
 
@@ -223,8 +242,11 @@ namespace BugFablesAP
                 int gameId = ItemIds.GameId(info.ItemId, kind);
                 bool medal = kind == ItemIds.MedalKind;
                 bool money = kind == ItemIds.MoneyKind;
-                sprite = money ? ItemIds.BerrySprite(gameId) : MainManager.GetItemSprite(medal, gameId);
-                name = money ? gameId + " Berries" : medal ? MainManager.GetBadgeName(gameId) : MainManager.itemdata[0, gameId, 0];
+                bool crystal = kind == ItemIds.CrystalKind;
+                // A crystal berry: the game's own name for it and its berry icon (NPCControl.cs:5657, :4201).
+                sprite = crystal ? MainManager.guisprites[83] : money ? ItemIds.BerrySprite(gameId) : MainManager.GetItemSprite(medal, gameId);
+                name = crystal ? MainManager.menutext[112] : money ? gameId + " Berries"
+                    : medal ? MainManager.GetBadgeName(gameId) : MainManager.itemdata[0, gameId, 0];
                 if (info.Player.Slot != connection.OwnSlot)
                 {
                     name = info.Player.Name + "'s " + name;
@@ -261,7 +283,7 @@ namespace BugFablesAP
             }
             int kind = caller.entity.animid;
             string add = "|additemtoss," + kind + ",var,0|";
-            if (kind < 0 || kind > 2 || !text.Contains(add))
+            if (kind < 0 || kind > 3 || !text.Contains(add))
             {
                 return;
             }
@@ -292,6 +314,14 @@ namespace BugFablesAP
             }
             ShowOwnDescription(caller, info);
             text = text.Replace(add, "|additemtoss,3,var,0|");
+            if (kind == 3)
+            {
+                // A crystal berry's pickup code already marked it taken (the check; it also keeps the berry gone) and
+                // raised the count (NPCControl.cs:5656-5658) before this text: undo the count, keep the mark.
+                MainManager.instance.flagvar[14]--;
+                text = text.Replace(FirstBerryTutorial + "|break|", "").Replace(FirstBerryTutorial, "");
+                ShowAsSprite(caller.entity, sprite);
+            }
             // A swapped medal wasn't given, so the first-medal tutorial mustn't run (it would also set flag 31).
             text = text.Replace(FirstMedalTutorial + "|break|", "").Replace(FirstMedalTutorial, "");
             log.LogInfo($"[swap] location {at}: pickup (kind {kind}, id {caller.entity.animstate}, flag {caller.activationflag}) "
@@ -338,6 +368,11 @@ namespace BugFablesAP
                     {
                         continue;
                     }
+                    if (entity.animid == 3)
+                    {
+                        ShowAsSprite(entity, sprite);
+                        continue;
+                    }
                     entity.sprite.sprite = sprite;
                     if (entity.spritetransform != null)
                     {
@@ -351,6 +386,10 @@ namespace BugFablesAP
         // NPCControl.CheckItem's |event| chain). Matching by entity name missed the scene's own copy (2026-09-24).
         private static bool IsPickup(ApConnection.Pickup pickup, NPCControl npc)
         {
+            if (pickup.Berry >= 0)
+            {
+                return npc.entity != null && npc.entity.animid == 3 && npc.data != null && npc.data.Length > 0 && npc.data[0] == pickup.Berry;
+            }
             if (pickup.Event >= 0)
             {
                 return npc.data != null && npc.data.Length > 1 && npc.data[1] == pickup.Event;
@@ -458,7 +497,7 @@ namespace BugFablesAP
         // type 2 reads badgedata, anything else itemdata). Another game's item, or one not scouted yet, gets none.
         private static void ShowOwnDescription(NPCControl caller, ScoutedItemInfo info)
         {
-            if (info == null || !IsOurs(info) || KindOf(info) == ItemIds.MoneyKind)
+            if (info == null || !IsOurs(info) || KindOf(info) == ItemIds.MoneyKind || KindOf(info) == ItemIds.CrystalKind)
             {
                 return; // berries have no description box, as in the game's own money giveitem
             }

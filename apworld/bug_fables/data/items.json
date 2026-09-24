@@ -1,5 +1,5 @@
 {
-  "_comment": "Items this world can place. game_id is the MainManager.Items ordinal (enum starts at None = -1), and kind is where it goes: 0 = ordinary items, 1 = key items, 2 = medals (then game_id is the medal id, MainManager.BadgeTypes), 3 = berries (money; game_id is the amount). The Archipelago id is ITEM_ID_BASE + game_id, plus MEDAL_ID_OFFSET for a medal (medal ids overlap item ids) or MONEY_ID_OFFSET for berries. padding marks the filler used to fill leftover locations, in any number; every other item is in the pool once. Measured facts are in agent_docs/MEASURED.md.",
+  "_comment": "Items this world can place. game_id is the MainManager.Items ordinal (enum starts at None = -1), and kind is where it goes: 0 = ordinary items, 1 = key items, 2 = medals (then game_id is the medal id, MainManager.BadgeTypes), 3 = berries (money; game_id is the amount), 4 = crystal berries (one item, game_id 0; the count is the currency; filler until the crystal berry shop is in the seed, then progression, since they buy locations there: the user, 2026-09-24). The Archipelago id is ITEM_ID_BASE + game_id, plus MEDAL_ID_OFFSET for a medal (medal ids overlap item ids) or MONEY_ID_OFFSET for berries. padding marks the filler used to fill leftover locations, in any number; every other item is in the pool once. Measured facts are in agent_docs/MEASURED.md.",
   "items": [
     {"name": "Explorer Permit", "game_id": 27, "kind": 1, "classification": "progression"},
     {"name": "G-Bug Ranger Plushie", "game_id": 25, "kind": 1, "classification": "useful"},
@@ -16,6 +16,7 @@
     {"name": "Mistake", "game_id": 8, "kind": 0, "classification": "filler"},
     {"name": "Quest Book", "game_id": 93, "kind": 1, "classification": "progression"},
     {"name": "30 Berries", "game_id": 30, "kind": 3, "classification": "filler"},
-    {"name": "15 Berries", "game_id": 15, "kind": 3, "classification": "filler"}
+    {"name": "15 Berries", "game_id": 15, "kind": 3, "classification": "filler"},
+    {"name": "Crystal Berry", "game_id": 0, "kind": 4, "classification": "filler"}
   ]
 }

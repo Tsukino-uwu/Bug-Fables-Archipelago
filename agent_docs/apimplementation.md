@@ -10,7 +10,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 
 ## Where it stands
 
-**Done so far:** a small apworld (17 locations, 16 items) that generates seeds and passes its tests, with the
+**Done so far:** a small apworld (18 locations, 17 items) that generates seeds and passes its tests, with the
 goal "collect N artifacts"; the mod connecting on its own, compressed, to a local server or a hosted room on
 archipelago.gg, retrying when the server is unreachable or drops; sending checks (build step 6); receiving
 items, with the count kept in the save (build step 7); and the game's own item at a location swapped for the
@@ -134,9 +134,11 @@ Archipelago's `custom_worlds` folder.
   the Hard Mode medal, is a real item and goes in once (2026-09-24; test `TestMedals`). The G-Bug Ranger Plushie
   (a key item) joined as *useful* on 2026-09-24, so a test could put it on Artis's medal. Its own vanilla
   spot at the Bugaria theater isn't a location yet, so the game still hands that copy out there.
-- **Which class each item gets** (the user, 2026-09-24): every field ability is *progression*. A key item is
-  *progression* when any rule in the logic uses it, even for a single location; a key item nothing uses is
-  *useful*. Every medal is *useful*, except the Hard Mode medal (#11), which is *filler*: it only makes
+- **Which class each item gets** (the user, 2026-09-24): "if an item can unlock even one other location, even if
+  only sometimes, it has to be progression." Every field ability is *progression*; a key item is *progression*
+  when any rule in the logic uses it, even for a single location; one nothing uses is *useful*. Crystal berries
+  buy medals at the crystal berry shop, so they become progression in the same change that puts that shop in
+  the seed (test `TestClassifications` enforces both directions). Every medal is *useful*, except the Hard Mode medal (#11), which is *filler*: it only makes
   fights harder, and the Archipelago panel can do the same. A test will check both directions: an item a rule uses is
   progression, and a progression item is used by some rule.
 - **Logic lives on regions and locations, never on items.** An item doesn't say what it unlocks. A region's
@@ -516,6 +518,12 @@ are locations and are sent together. In the mod, receiving berries uses the game
 999); at a berry location the command is turned, just before it runs, into a hand-over the item swap already
 handles (`BerryPrefix`). **The pool is now exactly the included locations' vanilla items** plus padding: an item
 whose vanilla spot isn't a location (the Plushie at the theater) stays with the game (test `TestBerries`).
+**Crystal berries** (the user, 2026-09-24: the first thing you pick up): a counted currency (`flagvar[14]`, the
+crystal berry shop's counter), 50 berry spots each known by its `crystalbflags` index. A berry location's check is
+that index (`location_berries`), the pickup is recognised by it (`data[0]`), and all of them hold the one item
+*Crystal Berry* (kind 4). The mod undoes the count the pickup code already raised, keeps the berry's "taken" mark,
+shows the seed's item (a berry is a 3D model, so the model is hidden for a sprite), and drops the first-berry
+tutorial; receiving one raises the count. First location: berry #0 outside the cave (test `TestCrystalBerries`).
 **Optional categories** (the user, 2026-09-24): a location can carry a `category`; its yaml option decides whether
 the seed includes it. *Shuffle Quests* (on by default) covers quest-board and side-quest rewards; one-off NPC gifts
 will have their own toggle. With a category off, its locations aren't created, their vanilla items stay out of the

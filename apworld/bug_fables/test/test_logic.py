@@ -50,11 +50,11 @@ class TestSlotData(BugFablesTestBase):
     # could never be sent; a flag that isn't the location's own would send the wrong check.
     def test_every_location_has_its_flag(self) -> None:
         data = self.world.fill_slot_data()
-        flags, variables = data["location_flags"], data["location_vars"]
+        flags, variables, berries = data["location_flags"], data["location_vars"], data["location_berries"]
         ids = {str(loc.address) for loc in self.multiworld.get_locations(self.player) if loc.address is not None}
-        # Each location is watched one way or the other, never both, never neither.
-        self.assertEqual(set(flags) | set(variables), ids)
-        self.assertFalse(set(flags) & set(variables))
+        # Each location is watched exactly one way: a flag, a number slot, or a crystal berry's index.
+        self.assertEqual(set(flags) | set(variables) | set(berries), ids)
+        self.assertEqual(len(flags) + len(variables) + len(berries), len(ids))
         self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Maki and Eetl's Gift"])], 15)
         self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Artis's Gift"])], 32)
 
@@ -95,6 +95,8 @@ class TestPickups(BugFablesTestBase):
     def test_pickup_flag_is_its_location_flag(self) -> None:
         data = self.world.fill_slot_data()
         for location, pickup in data["location_pickups"].items():
+            if "berry" in pickup:
+                continue  # a crystal berry is known by its index, not a flag
             self.assertEqual(data["location_flags"][location], pickup["flag"])
 
 
@@ -369,3 +371,20 @@ class TestBerries(BugFablesTestBase):
         self.assertEqual(self.world.item_name_to_id["30 Berries"], ITEM_ID_BASE + MONEY_ID_OFFSET + 30)
         kinds = self.world.fill_slot_data()["item_kinds"]
         self.assertEqual(kinds[str(self.world.item_name_to_id["30 Berries"])], 3)
+
+
+class TestCrystalBerries(BugFablesTestBase):
+    # A crystal berry spot is known by its index, not a flag; the client needs it both to recognise the pickup and to
+    # see the check done. Its vanilla item is the one Crystal Berry item.
+    def test_berry_zero_known_by_its_index(self) -> None:
+        data = self.world.fill_slot_data()
+        berry = str(self.world.location_name_to_id["Outskirts: Snakemouth Den Entrance"])
+        self.assertEqual(data["location_berries"][berry], 0)
+        self.assertEqual(data["location_pickups"][berry]["berry"], 0)
+        pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        self.assertIn("Crystal Berry", pool)
+
+    def test_berry_zero_needs_the_permit(self) -> None:
+        self.assertFalse(self.can_reach_location("Outskirts: Snakemouth Den Entrance"))
+        self.collect_by_name("Explorer Permit")
+        self.assertTrue(self.can_reach_location("Outskirts: Snakemouth Den Entrance"))

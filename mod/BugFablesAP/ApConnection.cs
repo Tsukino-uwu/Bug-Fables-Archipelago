@@ -248,6 +248,8 @@ namespace BugFablesAP
             // story event picking it up starts (its data[1]), the same whether the scene created it (Event4's
             // "tempitem") or the map did on a later visit ("MushroomItem"). -1 for ordinary pickups.
             internal int Event = -1;
+            // A crystal berry is known by its index (crystalbflags), in data[0] at pickup. -1 for other pickups.
+            internal int Berry = -1;
         }
 
         private static Dictionary<long, Pickup> ReadLocationPickups(Dictionary<string, object> slotData)
@@ -264,6 +266,7 @@ namespace BugFablesAP
                     Map = entry.Value.Value<string>("map"),
                     Flag = entry.Value.Value<int>("flag"),
                     Event = entry.Value.Value<int?>("event") ?? -1,
+                    Berry = entry.Value.Value<int?>("berry") ?? -1,
                 };
             }
             return result;
@@ -282,6 +285,20 @@ namespace BugFablesAP
             }
             return map.Properties().ToDictionary(p => long.Parse(p.Name),
                 p => new[] { p.Value.Value<int>("var"), p.Value.Value<int>("at_least") });
+        }
+
+        // slot_data's location_berries: crystal berry locations, done when their crystalbflags index is set
+        // ({location id: index}). Null when not sent.
+        internal Dictionary<long, int> LocationBerries => locationBerries;
+        private volatile Dictionary<long, int> locationBerries;
+
+        private static Dictionary<long, int> ReadLocationBerries(Dictionary<string, object> slotData)
+        {
+            if (slotData == null || !slotData.TryGetValue("location_berries", out object raw) || !(raw is JObject map))
+            {
+                return null;
+            }
+            return map.Properties().ToDictionary(p => long.Parse(p.Name), p => p.Value.Value<int>());
         }
 
         // slot_data's kept_open: blockers the story puts up for a while that the seed keeps out of the way, so an area
@@ -441,11 +458,13 @@ namespace BugFablesAP
                     locationPickups = ReadLocationPickups(ok.SlotData);
                     keptOpen = ReadKeptOpen(ok.SlotData);
                     locationVars = ReadLocationVars(ok.SlotData);
+                    locationBerries = ReadLocationBerries(ok.SlotData);
                     ownSlot = ok.Slot;
                     itemKinds = ReadItemKinds(ok.SlotData);
                     scouts = null;
                     // Every location this slot has: gifts and pickups alike show what's really there.
-                    Scout(attempt, (locationFlags?.Keys ?? Enumerable.Empty<long>()).Concat(locationVars?.Keys ?? Enumerable.Empty<long>()).ToList());
+                    Scout(attempt, (locationFlags?.Keys ?? Enumerable.Empty<long>()).Concat(locationVars?.Keys ?? Enumerable.Empty<long>())
+                        .Concat(locationBerries?.Keys ?? Enumerable.Empty<long>()).ToList());
                     attempt.Locations.CheckedLocationsUpdated += ids =>
                         Post("[check] now checked on the server: " + string.Join(", ", ids.Select(id => id.ToString()).ToArray()));
                     attempt.Socket.PacketReceived += packet => Heard();

@@ -138,6 +138,12 @@ namespace BugFablesAP
                 mm.items[1].Add(gameId);
                 return "added to key items";
             }
+            if (kind == ItemIds.CrystalKind)
+            {
+                // The count the game raises when a crystal berry is picked up (NPCControl.cs:5658), the shop's currency.
+                mm.flagvar[14]++;
+                return $"added a crystal berry (count now {mm.flagvar[14]})";
+            }
             if (kind == ItemIds.MoneyKind)
             {
                 // The game's own money reward: added, capped at 999, the counter shown (MainManager.cs:11534).
