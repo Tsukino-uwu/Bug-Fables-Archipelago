@@ -60,7 +60,9 @@ class BugFablesWorld(World):
     artifacts_required: int = 1
 
     _items_by_name = {item["name"]: item for item in ITEMS}
-    _filler = [item["name"] for item in ITEMS if item["classification"] == "filler"]
+    # Only padding fills leftover locations, in any number; a filler that isn't padding (the Hard Mode medal) is
+    # a real item, in the pool once.
+    _padding = [item["name"] for item in ITEMS if item.get("padding")]
 
     def generate_early(self) -> None:
         wanted = self.options.artifacts_required.value
@@ -101,10 +103,8 @@ class BugFablesWorld(World):
         return BugFablesItem(name, _CLASSIFICATIONS[data["classification"]], ITEM_NAME_TO_ID[name], self.player)
 
     def create_items(self) -> None:
-        # One of every item that isn't filler, then filler for the locations left.
-        pool: list[Item] = [
-            self.create_item(item["name"]) for item in ITEMS if item["classification"] != "filler"
-        ]
+        # One of every item that isn't padding, then padding for the locations left.
+        pool: list[Item] = [self.create_item(item["name"]) for item in ITEMS if not item.get("padding")]
         unfilled = len(self.multiworld.get_unfilled_locations(self.player))
         pool += [self.create_filler() for _ in range(unfilled - len(pool))]
         self.multiworld.itempool += pool
@@ -113,7 +113,7 @@ class BugFablesWorld(World):
         self.set_completion_rule(Has("Artifact", count=self.artifacts_required))
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(self._filler)
+        return self.random.choice(self._padding)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         # The world version lets the client refuse a mismatched build. The client sends the goal once the
@@ -138,7 +138,7 @@ class BugFablesWorld(World):
                 for loc in LOCATIONS
                 if "pickup" in loc["source"]
             },
-            # The inventory list each of this world's items belongs to (0 item, 1 key item), so the client can
-            # show a found Bug Fables item the way the game shows that kind.
+            # Where each of this world's items goes (0 item, 1 key item, 2 medal), so the client gives it the right
+            # way, shows a found one the way the game shows that kind, and knows a medal's id is offset.
             "item_kinds": {str(ITEM_NAME_TO_ID[item["name"]]): item["kind"] for item in ITEMS},
         }

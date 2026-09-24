@@ -34,10 +34,19 @@ LOCATIONS: list[dict[str, Any]] = _LOCATION_DATA["locations"]
 REGIONS: list[dict[str, Any]] = _LOCATION_DATA["regions"]
 ARTIFACTS: list[dict[str, Any]] = _LOCATION_DATA["artifacts"]
 
-ITEM_NAME_TO_ID: dict[str, int] = {item["name"]: ITEM_ID_BASE + item["game_id"] for item in ITEMS}
+# Medal ids (MainManager.BadgeTypes) overlap item ids (MainManager.Items), so medals get their own range.
+MEDAL_KIND = 2
+MEDAL_ID_OFFSET = 1_000
+
+
+def item_id(item: dict[str, Any]) -> int:
+    return ITEM_ID_BASE + (MEDAL_ID_OFFSET if item["kind"] == MEDAL_KIND else 0) + item["game_id"]
+
+
+ITEM_NAME_TO_ID: dict[str, int] = {item["name"]: item_id(item) for item in ITEMS}
 LOCATION_NAME_TO_ID: dict[str, int] = {loc["name"]: LOCATION_ID_BASE + loc["id"] for loc in LOCATIONS}
 
 if len(set(ITEM_NAME_TO_ID.values())) != len(ITEMS):
-    raise ValueError("bug_fables: two items share a game_id")
+    raise ValueError("bug_fables: two items share an id (same kind and game_id)")
 if len(set(LOCATION_NAME_TO_ID.values())) != len(LOCATIONS):
     raise ValueError("bug_fables: two locations share an id")

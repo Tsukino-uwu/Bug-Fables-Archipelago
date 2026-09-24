@@ -21,7 +21,6 @@ namespace BugFablesAP
     {
         internal const int CountSlot = 60;
         internal const int SeedSlot = 5;
-        private const long ItemIdBase = 7_710_000;
 
         private readonly ManualLogSource log;
         private readonly ApConnection connection;
@@ -111,20 +110,26 @@ namespace BugFablesAP
         // Returns what happened, or null when the item must wait.
         private string Give(MainManager mm, ItemInfo item)
         {
-            if (item.ItemGame != ApConnection.Game || item.ItemId < ItemIdBase)
+            if (item.ItemGame != ApConnection.Game || item.ItemId < ItemIds.Base)
             {
                 return "not a Bug Fables item, skipped";
             }
-            int gameId = (int)(item.ItemId - ItemIdBase);
             int kind = -1;
             if (connection.ItemKinds == null || !connection.ItemKinds.TryGetValue(item.ItemId, out kind))
             {
                 return "unknown to this world's item list, skipped";
             }
-            if (kind == 1)
+            int gameId = ItemIds.GameId(item.ItemId, kind);
+            if (kind == ItemIds.KeyItemKind)
             {
                 mm.items[1].Add(gameId);
                 return "added to key items";
+            }
+            if (kind == ItemIds.MedalKind)
+            {
+                // The game's own medal add: unequipped, like any medal found (MainManager.cs:16974).
+                MainManager.AddBadge(gameId);
+                return "added to medals";
             }
             if (mm.items[0].Count < mm.maxitems)
             {

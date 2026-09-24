@@ -93,3 +93,21 @@ class TestPickups(BugFablesTestBase):
         data = self.world.fill_slot_data()
         for location, pickup in data["location_pickups"].items():
             self.assertEqual(data["location_flags"][location], pickup["flag"])
+
+
+class TestMedals(BugFablesTestBase):
+    # Medal ids overlap item ids in the game, so an id collision would give the wrong thing.
+    def test_medals_have_their_own_ids(self) -> None:
+        from ..data_tables import ITEM_ID_BASE, MEDAL_ID_OFFSET
+        self.assertEqual(self.world.item_name_to_id["Poison Defender"], ITEM_ID_BASE + MEDAL_ID_OFFSET + 9)
+        self.assertEqual(self.world.item_name_to_id["Hard Mode"], ITEM_ID_BASE + MEDAL_ID_OFFSET + 11)
+        kinds = self.world.fill_slot_data()["item_kinds"]
+        self.assertEqual(kinds[str(self.world.item_name_to_id["Poison Defender"])], 2)
+
+    def test_filler_that_isnt_padding_is_in_the_pool_once(self) -> None:
+        # The Hard Mode medal is filler, but a real item: exactly one copy, never used to pad the pool.
+        pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        self.assertEqual(pool.count("Hard Mode"), 1)
+        self.assertEqual(pool.count("Poison Defender"), 1)
+        padding = {self.world.get_filler_item_name() for _ in range(50)}
+        self.assertEqual(padding, {"Crunchy Leaf"})

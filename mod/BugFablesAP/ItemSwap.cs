@@ -30,8 +30,6 @@ namespace BugFablesAP
     // nothing is patched and the log says so: the patch never guesses.
     internal static class ItemSwap
     {
-        // Archipelago item ids are this plus the game's item id (apworld data_tables.py, ITEM_ID_BASE).
-        private const long ItemIdBase = 7_710_000;
         private const string TutorialText = "|tail,null||destroydescbox||blank||boxstyle,4|";
 
         private static ManualLogSource log;
@@ -144,11 +142,7 @@ namespace BugFablesAP
                 caller.CreateDescWindow(type, id);
                 return;
             }
-            ScoutedItemInfo info = Scouted();
-            if (info != null && IsOurs(info))
-            {
-                caller.CreateDescWindow(0, (int)(info.ItemId - ItemIdBase));
-            }
+            ShowOwnDescription(caller, Scouted());
             // Another game's item, or not scouted: no description. The game closes the box with a null check
             // (NPCControl.DestroyDescWindow), so a missing one is safe.
         }
@@ -224,17 +218,19 @@ namespace BugFablesAP
             }
             else if (IsOurs(info))
             {
-                int gameId = (int)(info.ItemId - ItemIdBase);
-                sprite = MainManager.GetItemSprite(false, gameId);
-                name = MainManager.itemdata[0, gameId, 0];
+                int kind = KindOf(info);
+                int gameId = ItemIds.GameId(info.ItemId, kind);
+                bool medal = kind == ItemIds.MedalKind;
+                sprite = MainManager.GetItemSprite(medal, gameId);
+                name = medal ? MainManager.GetBadgeName(gameId) : MainManager.itemdata[0, gameId, 0];
                 if (info.Player.Slot != connection.OwnSlot)
                 {
                     name = info.Player.Name + "'s " + name;
                 }
-                // The game's own starburst colours (the Giveitem switch): key item, item.
-                int kind = 0;
-                connection.ItemKinds?.TryGetValue(info.ItemId, out kind);
-                color = kind == 1 ? new Color(1f, 0.3f, 0.4f) : new Color(0f, 0.7f, 0.7f);
+                // The game's own starburst colours (the Giveitem switch, NPCControl.CheckItem): medal, key item, item.
+                color = medal ? new Color(1f, 0.5f, 0f)
+                    : kind == ItemIds.KeyItemKind ? new Color(1f, 0.3f, 0.4f)
+                    : new Color(0f, 0.7f, 0.7f);
             }
             else
             {
@@ -292,10 +288,7 @@ namespace BugFablesAP
                 UnityEngine.Object.Destroy(box.gameObject);
                 descWindowField.SetValue(caller, null);
             }
-            if (info != null && IsOurs(info))
-            {
-                caller.CreateDescWindow(0, (int)(info.ItemId - ItemIdBase));
-            }
+            ShowOwnDescription(caller, info);
             text = text.Replace(add, "|additemtoss,3,var,0|");
             // A swapped medal wasn't given, so the first-medal tutorial mustn't run (it would also set flag 31).
             text = text.Replace(FirstMedalTutorial + "|break|", "").Replace(FirstMedalTutorial, "");
@@ -362,6 +355,26 @@ namespace BugFablesAP
             log.LogWarning("[swap] the item-get's starburst wasn't found; its colour stays the game's");
         }
 
+        private static int KindOf(ScoutedItemInfo info)
+        {
+            int kind = 0;
+            connection.ItemKinds?.TryGetValue(info.ItemId, out kind);
+            return kind;
+        }
+
+        // A Bug Fables item gets its own description box, the medal kind for a medal (NPCControl.CreateDescWindow:
+        // type 2 reads badgedata, anything else itemdata). Another game's item, or one not scouted yet, gets none.
+        private static void ShowOwnDescription(NPCControl caller, ScoutedItemInfo info)
+        {
+            if (info == null || !IsOurs(info))
+            {
+                return;
+            }
+            int kind = KindOf(info);
+            bool medal = kind == ItemIds.MedalKind;
+            caller.CreateDescWindow(medal ? 2 : 0, ItemIds.GameId(info.ItemId, kind));
+        }
+
         private static ScoutedItemInfo Scouted()
         {
             ScoutedItemInfo info = null;
@@ -371,7 +384,7 @@ namespace BugFablesAP
 
         private static bool IsOurs(ScoutedItemInfo info)
         {
-            return info.ItemGame == ApConnection.Game && info.ItemId >= ItemIdBase;
+            return info.ItemGame == ApConnection.Game && info.ItemId >= ItemIds.Base;
         }
 
         private static Color Hex(int rgb)

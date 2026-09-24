@@ -1,8 +1,10 @@
 {
-  "_comment": "Items this world can place. game_id is the MainManager.Items ordinal (enum starts at None = -1), and kind is the inventory list it goes to: 1 = key items, 0 = ordinary items. The Archipelago id is ITEM_ID_BASE + game_id. Measured facts are in agent_docs/MEASURED.md.",
+  "_comment": "Items this world can place. game_id is the MainManager.Items ordinal (enum starts at None = -1), and kind is where it goes: 0 = ordinary items, 1 = key items, 2 = medals (then game_id is the medal id, MainManager.BadgeTypes). The Archipelago id is ITEM_ID_BASE + game_id, plus MEDAL_ID_OFFSET for a medal, since medal ids overlap item ids. padding marks the filler used to fill leftover locations, in any number; every other item is in the pool once. Measured facts are in agent_docs/MEASURED.md.",
   "items": [
     {"name": "Explorer Permit", "game_id": 27, "kind": 1, "classification": "progression"},
     {"name": "G-Bug Ranger Plushie", "game_id": 25, "kind": 1, "classification": "useful"},
-    {"name": "Crunchy Leaf", "game_id": 0, "kind": 0, "classification": "filler"}
+    {"name": "Crunchy Leaf", "game_id": 0, "kind": 0, "classification": "filler", "padding": true},
+    {"name": "Poison Defender", "game_id": 9, "kind": 2, "classification": "useful"},
+    {"name": "Hard Mode", "game_id": 11, "kind": 2, "classification": "filler"}
   ]
 }

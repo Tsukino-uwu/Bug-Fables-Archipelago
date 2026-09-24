@@ -103,7 +103,9 @@ Archipelago's `custom_worlds` folder.
   location). *Useful*: especially good to have; never placed on an excluded location. *Filler*: can be
   ignored; the only kind an excluded location gets. *Trap*: detrimental to receive; a yaml option may swap
   filler for traps.
-- **The pool holds one of every item that isn't filler, then filler for the rest.** The G-Bug Ranger Plushie
+- **The pool holds one of every item, then padding for the rest.** *Padding* is a mark in `items.json` for
+  the filler that may fill leftover locations in any number (a Crunchy Leaf). A filler item without it, like
+  the Hard Mode medal, is a real item and goes in once (2026-09-24; test `TestMedals`). The G-Bug Ranger Plushie
   (a key item) joined as *useful* on 2026-09-24, so a test could put it on Artis's medal. Its own vanilla
   spot at the Bugaria theater isn't a location yet, so the game still hands that copy out there.
 - **Which class each item gets** (the user, 2026-09-24): every field ability is *progression*. A key item is
@@ -342,6 +344,11 @@ uses a slot the game already saves but never uses. Finding one took a measuremen
 
 **Only when it's safe, one item per frame:** only while the player is free (no battle, dialogue, cutscene, pause
 or map change). Never during a battle, because retrying a lost battle restores the count but not key items.
+
+**Medals** (2026-09-24, built, not yet tested in game) go in through the game's own `MainManager.AddBadge`,
+unequipped, like any medal found. The game numbers medals separately from items, and the two ranges overlap,
+so a medal's Archipelago id is offset by 1000 (`data_tables.py`, `item_id`; the mod's `ItemIds.cs`), and
+`item_kinds` marks it kind 2.
 
 **Where items go:** key items to key items, ordinary items to the bag, then storage when the bag is full. If
 both are full, the item waits until there's room (items are given strictly in order, so the count stays right).
