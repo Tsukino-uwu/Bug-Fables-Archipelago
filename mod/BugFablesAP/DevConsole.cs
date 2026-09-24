@@ -71,6 +71,19 @@ namespace BugFablesAP
                 return;
             }
             harmony.Patch(damage, prefix: new HarmonyLib.HarmonyMethod(typeof(DevConsole), nameof(OneHit)));
+            // Every story event that starts, with what started it and where (the user, 2026-09-24: log what happens
+            // while playing through Leif's joining). EventControl.StartEvent(id, caller) starts them all (:74).
+            var start = HarmonyLib.AccessTools.Method(typeof(EventControl), nameof(EventControl.StartEvent), new[] { typeof(int), typeof(NPCControl) });
+            if (start != null)
+            {
+                harmony.Patch(start, prefix: new HarmonyLib.HarmonyMethod(typeof(DevConsole), nameof(LogEvent)));
+            }
+        }
+
+        private static void LogEvent(int id, NPCControl caller)
+        {
+            log.LogInfo($"[event] Event{id} starts on {MainManager.map?.mapid.ToString() ?? "?"}, started by "
+                + (caller != null ? $"{caller.name} ({caller.objecttype})" : "the map or code"));
         }
 
         // Dev only (the user, 2026-09-24: fights are tedious to test through): while on, every hit on an enemy is at
