@@ -48,6 +48,9 @@ The plugin reads its config when it loads, so a hot reload also picks up a chang
    player file, and generate with `--plando "bosses, items, connections, texts"`. The checkout's default
    `plando_options` leave items out, and then the block is ignored without a word (2026-09-24). Pass `--spoiler 2`
    and read the spoiler's "Locations" to confirm the placement.
+   A new test seed normally needs a new file (each save is tied to its seed). To keep a test file instead, set
+   `AdoptSeed = true` under `[Debug]` (`copy-dev.ps1 -DebugOn AdoptSeed`): the save moves to the new seed and
+   replays its items. Test files only.
 3. Host it: `python MultiServer.py <out>/AP_<seed>.zip --port 38281`.
 4. In the game's Archipelago panel (or the config): address `ws://127.0.0.1`, port `38281`, slot `BugTester`.
    The mod connects by itself. Read both logs: the mod's in `BepInEx/LogOutput.log` (`[ap]`, `[ws]`,

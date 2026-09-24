@@ -341,6 +341,13 @@ uses a slot the game already saves but never uses. Finding one took a measuremen
   code, that left **number slot 60 used by nothing**, and text slot 5 as well (`MEASURED.md`).
 - So slot 60 holds the count, and text slot 5 holds **the seed's name**. That ties each save to its seed: a
   save from another seed neither receives items nor sends checks. That closes the gap left open in step 6.
+  **Why it's needed** (the user asked, 2026-09-24): it's the seed that counts, not the address, so the same
+  room hosted elsewhere is fine. But the count only means something within one seed, since items can be owned
+  more than once and "give what's missing" can't be told from the bag. A save from another seed would skip or
+  double items, and its old flags would send checks this seed never had.
+- **For test files only, `AdoptSeed`** (Debug, off by default; the user, 2026-09-24): a save tied to another
+  seed is re-tied to the connected one with its count back to 0, so a new test seed doesn't mean replaying the
+  opening. The old seed's items and flags stay in the save, which is why it's never for a real game.
 
 **Only when it's safe, one item per frame:** only while the player is free (no battle, dialogue, cutscene, pause
 or map change). Never during a battle, because retrying a lost battle restores the count but not key items.

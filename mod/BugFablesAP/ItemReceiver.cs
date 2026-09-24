@@ -51,8 +51,21 @@ namespace BugFablesAP
                 log.LogInfo($"[recv] this save is now tied to seed {seed} (received count {mm.flagvar[CountSlot]})");
                 return true;
             }
+            if (bound != seed && AdoptOtherSeed != null && AdoptOtherSeed())
+            {
+                // Dev only (Debug.AdoptSeed): a test file moves to a new test seed without replaying the opening. The
+                // count goes back to 0 so the new seed replays every item; the old seed's items and flags stay.
+                log.LogWarning($"[recv] AdoptSeed: this save belonged to seed {bound}; now tied to {seed}, received count "
+                    + $"{mm.flagvar[CountSlot]} -> 0. The old seed's items and flags stay in it: a test file only.");
+                mm.flagstring[SeedSlot] = seed;
+                mm.flagvar[CountSlot] = 0;
+                return true;
+            }
             return bound == seed;
         }
+
+        // Dev only: whether a save tied to another seed may be re-tied to the connected one (Plugin, Debug.AdoptSeed).
+        internal static System.Func<bool> AdoptOtherSeed;
 
         internal void Tick(bool randomizerOn)
         {

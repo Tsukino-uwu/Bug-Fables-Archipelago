@@ -38,6 +38,7 @@ namespace BugFablesAP
         private bool entityDumpDone;
         private bool mapDumpDone;
         private ConfigEntry<string> saveDiff;
+        private ConfigEntry<bool> adoptSeed;
         private ConfigEntry<int> giveMoney;
         private bool saveDiffDone;
         private GrantProbe grantProbe;
@@ -53,6 +54,11 @@ namespace BugFablesAP
                 + "Off by default.");
             giveMoney = Config.Bind("Debug", "GiveMoney", 0,
                 "Dev only. Berries to add once (the game caps at 999), then this resets to 0.");
+            adoptSeed = Config.Bind("Debug", "AdoptSeed", false,
+                "Dev only. A save tied to another seed is re-tied to the connected one, its received count back to 0 "
+                + "so the new seed replays every item. The old seed's items and flags stay in the save: test files only, "
+                + "never a real game. Off by default.");
+            ItemReceiver.AdoptOtherSeed = () => adoptSeed.Value;
             saveDiff = Config.Bind("Debug", "SaveDiff", "",
                 "Dev only. Two save file names separated by |, e.g. 'save2backup.dat|save2.dat'. Once per load, logs "
                 + "what changed between them (read-only). Empty = off.");
