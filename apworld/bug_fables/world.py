@@ -132,10 +132,13 @@ class BugFablesWorld(World):
         self.multiworld.itempool += pool
 
     def set_rules(self) -> None:
-        # A location needing more than its region says so in its own requires list.
+        # A location or story event needing more than its region says so in its own requires list.
         for loc in self.included_locations:
             if loc.get("requires"):
                 self.set_rule(self.get_location(loc["name"]), HasAll(*loc["requires"]))
+        for event in STORY_EVENTS:
+            if event.get("requires"):
+                self.set_rule(self.get_location(event["name"]), HasAll(*event["requires"]))
         self.set_completion_rule(Has("Artifact", count=self.artifacts_required))
 
     def get_filler_item_name(self) -> str:

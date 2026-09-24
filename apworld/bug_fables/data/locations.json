@@ -13,22 +13,27 @@
     {"name": "Snakemouth Den: Door Room, Trapdoor", "id": 11, "region": "Snakemouth Den", "source": {"event": 5, "flag": 14, "pickup": {"map": "SnakemouthDoorRoom", "type": 0, "item": 13, "story": true}}},
     {"name": "Outskirts: Golden Path, Grass", "id": 12, "region": "Golden Path", "source": {"flag": 74, "pickup": {"map": "BOGoldenPath", "type": 0, "item": 2}}, "_comment": "Cut grass that drops an item copies its own one-time flag onto the drop (NPCControl.cs:5981-5983), so it's an ordinary pickup location. Item seen by the user in play (2026-09-24)."},
     {"name": "Outskirts: Artis's Prize for Snakemouth Den", "id": 13, "region": "Bugaria Outskirts", "requires": ["Snakemouth Den Cleared"], "source": {"event": 33, "var": 13, "at_least": 3, "give": {"map": "BugariaOutskirtsOutsideCity", "type": 2, "item": 5}}, "_comment": "The first boss's prize (prize slot 0: flagvar[13], medal 5). The mod pays every prize as if Hard Mode were on, so it waits at Artis; his Event33 hands it over and sets the slot to 3 (MEASURED.md, Hard Mode boss prize medals)."},
-    {"name": "Outskirts: Ladybug Siblings' House", "id": 14, "region": "Bugaria Outskirts", "requires": ["Snakemouth Den Cleared"], "source": {"flag": 679, "pickup": {"map": "BugariaOutskirtsOutsideCity", "type": 0, "item": 8}}, "_comment": "Indoors (inside 1, entity LadybugMistake); found by the user after the first boss (2026-09-24). The door (DoorLadybug) and the item carry no gate flags, but the user remembers the house locked earlier: requires the first boss until checked on an earlier save (logic may be stricter than the game, never looser)."}
+    {"name": "Outskirts: Ladybug Siblings' House", "id": 14, "region": "Bugaria Outskirts", "requires": ["Snakemouth Den Cleared"], "source": {"flag": 679, "pickup": {"map": "BugariaOutskirtsOutsideCity", "type": 0, "item": 8}}, "_comment": "Indoors (inside 1, entity LadybugMistake); found by the user after the first boss (2026-09-24). The door (DoorLadybug) and the item carry no gate flags, but the user remembers the house locked earlier: requires the first boss until checked on an earlier save (logic may be stricter than the game, never looser)."},
+    {"name": "Ant Palace: Library, Bookshelf", "id": 15, "region": "Ant Palace", "source": {"flag": 71, "pickup": {"map": "AntPalaceLibrary", "type": 1, "item": 52}}, "_comment": "A Lore Book hidden behind a bookshelf (the user, 2026-09-24; flag 71 in the play-through log)."}
   ],
   "regions": [
     {"name": "Menu", "exits": [{"to": "Bugaria Outskirts"}]},
-    {"name": "Bugaria Outskirts", "exits": [{"to": "Past the Outskirts Gate", "requires": ["Explorer Permit"]}, {"to": "Golden Path", "requires": ["Snakemouth Den Cleared"]}]},
+    {"name": "Bugaria Outskirts", "exits": [{"to": "Past the Outskirts Gate", "requires": ["Explorer Permit"]}, {"to": "Golden Path", "requires": ["Snakemouth Den Cleared"]}, {"to": "Bugaria City", "requires": ["City Opened"]}]},
     {"name": "Past the Outskirts Gate", "exits": [{"to": "Snakemouth Den"}]},
     {"name": "Snakemouth Den", "exits": [{"to": "Snakemouth Den Underground", "requires": ["Leif"]}]},
     {"name": "Snakemouth Den Underground", "exits": [], "_comment": "Every Snakemouth room with water droplets, or reached only through one (from the dump's doors: MushroomPit, UndergrondDoor, Underground*, TreasureRoom, Empty). Leif freezes the droplets (the user, 2026-09-24)."},
-    {"name": "Golden Path", "exits": [], "_comment": "BOGoldenPath: its door from outside the city requires flag 41, the first boss (gate table)."}
+    {"name": "Golden Path", "exits": [], "_comment": "BOGoldenPath: its door from outside the city requires flag 41, the first boss (gate table)."},
+    {"name": "Bugaria City", "exits": [{"to": "Ant Palace", "requires": ["Chapter 2 Started"]}], "_comment": "BugariaMainPlaza and AntPalace1: the door in from outside the city requires flag 107 (gate table)."},
+    {"name": "Ant Palace", "exits": [], "_comment": "The Ant Palace's rooms (library, war room, tunnels) and the city districts: their doors require flag 67 (gate table)."}
   ],
   "artifacts": [
     {"number": 1, "name": "Artifact 1", "region": "Snakemouth Den Underground", "source": {"event": 26, "flag": 41}}
   ],
   "story_events": [
     {"name": "Leif Joins", "item": "Leif", "region": "Snakemouth Den", "source": {"event": 14, "flag": 16}, "_comment": "Leif joins the party at the Snakemouth Den lake (the MothEvent trigger starts Event14, which sets flag 16; MEASURED.md). The lake is reachable without passing any room with water droplets, so Leif comes before everything that needs him."},
-    {"name": "First Boss Beaten", "item": "Snakemouth Den Cleared", "region": "Snakemouth Den Underground", "source": {"event": 26, "flag": 41}, "_comment": "The first boss, in the treasure room (Event26 sets flag 41). After it, a ladybug girl outside the city starts the lost-kid quest (her flag 54); the kid then waits at the lake (MEASURED.md)."}
+    {"name": "First Boss Beaten", "item": "Snakemouth Den Cleared", "region": "Snakemouth Den Underground", "source": {"event": 26, "flag": 41}, "_comment": "The first boss, in the treasure room (Event26 sets flag 41). After it, a ladybug girl outside the city starts the lost-kid quest (her flag 54); the kid then waits at the lake (MEASURED.md)."},
+    {"name": "Entering the City", "item": "City Opened", "region": "Bugaria Outskirts", "requires": ["Snakemouth Den Cleared"], "source": {"event": 60, "flag": 107}, "_comment": "Event60, started by the DoorBugaria trigger outside the city (hidden by 107); after the first boss, with Eetl."},
+    {"name": "Chapter 2 Start", "item": "Chapter 2 Started", "region": "Bugaria City", "source": {"event": 45, "flag": 67}, "_comment": "Event45, the AntPalace1 Chapter1StartEvent trigger (hidden by 67): chapter 2's title card."}
   ],
   "kept_open": [
     {"map": "BugariaOutskirtsOutsideCity", "entity": "eetlblocker1 - Duplicate", "_comment": "Eetl turns the party back (Event12, which only walks the player and sets no flags) from the first boss (flag 41) until chapter 2 starts (flag 67), blocking the way back to Snakemouth Den (the user, 2026-09-24). Kept out of the way so the den's locations never close."}

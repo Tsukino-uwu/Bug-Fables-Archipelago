@@ -210,8 +210,11 @@ class TestQuestsOff(BugFablesTestBase):
     def test_quest_locations_left_out(self) -> None:
         names = {loc.name for loc in self.multiworld.get_locations(self.player)}
         self.assertNotIn("Snakemouth Den: Lake, Ladybug Kid's Reward", names)
+        # The quest's Lore Book is out; Lore Books from other (non-quest) locations stay, one each.
+        from ..data_tables import vanilla_item
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
-        self.assertNotIn("Lore Book", pool)
+        expected = sum(1 for loc in self.world.included_locations if vanilla_item(loc) == "Lore Book")
+        self.assertEqual(pool.count("Lore Book"), expected)
         gives = self.world.fill_slot_data()["location_gives"]
         self.assertNotIn(str(self.world.location_name_to_id["Snakemouth Den: Lake, Ladybug Kid's Reward"]), gives)
 
@@ -273,3 +276,31 @@ class TestBossPrize(BugFablesTestBase):
         state.collect(BugFablesItem("Snakemouth Den Cleared", ItemClassification.progression, None, self.player),
                       prevent_sweep=True)
         self.assertTrue(location.can_reach(state))
+
+
+class TestChapterTwo(BugFablesTestBase):
+    # The Ant Palace library is behind two story steps: the city opens after the first boss (flag 107), and the
+    # palace rooms after chapter 2 starts (flag 67). Without them, fill could put the permit in the library.
+    def test_library_needs_the_city_and_chapter_two(self) -> None:
+        from BaseClasses import CollectionState, ItemClassification
+        from ..world import BugFablesItem
+
+        def event(name: str) -> BugFablesItem:
+            return BugFablesItem(name, ItemClassification.progression, None, self.player)
+
+        library = self.world.get_location("Ant Palace: Library, Bookshelf")
+        state = CollectionState(self.multiworld)
+        state.collect(event("City Opened"), prevent_sweep=True)
+        self.assertFalse(library.can_reach(state))
+        state.collect(event("Chapter 2 Started"), prevent_sweep=True)
+        self.assertTrue(library.can_reach(state))
+
+    def test_the_city_opens_only_after_the_first_boss(self) -> None:
+        from BaseClasses import CollectionState, ItemClassification
+        from ..world import BugFablesItem
+        city = self.world.get_location("Entering the City")
+        state = CollectionState(self.multiworld)
+        self.assertFalse(city.can_reach(state))
+        state.collect(BugFablesItem("Snakemouth Den Cleared", ItemClassification.progression, None, self.player),
+                      prevent_sweep=True)
+        self.assertTrue(city.can_reach(state))

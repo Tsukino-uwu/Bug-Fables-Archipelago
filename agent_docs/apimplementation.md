@@ -10,7 +10,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 
 ## Where it stands
 
-**Done so far:** a small apworld (13 locations, 13 items) that generates seeds and passes its tests, with the
+**Done so far:** a small apworld (14 locations, 13 items) that generates seeds and passes its tests, with the
 goal "collect N artifacts"; the mod connecting on its own, compressed, to a local server or a hosted room on
 archipelago.gg, retrying when the server is unreachable or drops; sending checks (build step 6); receiving
 items, with the count kept in the save (build step 7); and the game's own item at a location swapped for the
@@ -497,6 +497,11 @@ start Event5. Its check is the flag that event sets, and an option that skips th
 out (test `TestStoryPickup`). For a future story strip or open world, the
 mod could force such a pickup to exist (like the doors kept open) and send its check on pickup, making it
 independent of the story.
+**Into chapter 2** (the user's play-through, 2026-09-24): two more story events, each a region gate from the gate
+table. *City Opened* (Event60, flag 107, after the first boss) opens the door from outside the city into *Bugaria
+City*; *Chapter 2 Started* (Event45 at the Ant Palace, flag 67) opens the palace rooms and city districts (*Ant
+Palace*). Story events can have their own `requires` now (the city needs the first boss). First location there: a
+Lore Book behind the library bookshelf (test `TestChapterTwo`, which fails without the gate).
 **Optional categories** (the user, 2026-09-24): a location can carry a `category`; its yaml option decides whether
 the seed includes it. *Shuffle Quests* (on by default) covers quest-board and side-quest rewards; one-off NPC gifts
 will have their own toggle. With a category off, its locations aren't created, their vanilla items stay out of the
