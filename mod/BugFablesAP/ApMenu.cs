@@ -9,20 +9,20 @@ namespace BugFablesAP
     // The Archipelago panel, opened from "Archipelago" on the main menu. It's drawn with the game's own box and
     // font (MainManager.Create9Box / SetText) and takes real typing, so an address can be typed or pasted.
     //
-    // Rows: Address, Slot, Password, Archipelago mode, Connect, Back. Up/down move; confirm (C / Enter) edits
+    // Rows: Address, Port, Slot, Password, Archipelago mode, Connect, Back. Up/down move; confirm (C / Enter) edits
     // a text row or presses a button; cancel (X / Escape) closes. While a row is being edited, the keyboard
     // types into it: Backspace deletes, Ctrl+V pastes, Ctrl+C copies the row, Enter keeps, Escape reverts.
     // The title screen's own input is suspended while the panel is open (StartMenu.canselect), so the game's
     // key letters (C, X, Z, V) can be typed.
     internal sealed class ApMenu : MonoBehaviour
     {
-        private const int Address = 0, SlotRow = 1, PasswordRow = 2, ModeRow = 3, ConnectRow = 4, BackRow = 5, Rows = 6;
+        private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, ConnectRow = 5, BackRow = 6, Rows = 7;
 
         internal static ApMenu Open;
 
         private static ManualLogSource log;
         private StartMenu owner;
-        private ConfigEntry<string> server, slot, password;
+        private ConfigEntry<string> server, port, slot, password;
         private ConfigEntry<bool> mode;
         private Action connect;
         private Func<string> status;
@@ -40,7 +40,7 @@ namespace BugFablesAP
         private int settleFrames;
         private string shownStatus;
 
-        internal static void Show(ManualLogSource logger, StartMenu owner, ConfigEntry<string> server, ConfigEntry<string> slot,
+        internal static void Show(ManualLogSource logger, StartMenu owner, ConfigEntry<string> server, ConfigEntry<string> port, ConfigEntry<string> slot,
             ConfigEntry<string> password, ConfigEntry<bool> mode, Action connect, Func<string> status)
         {
             if (Open != null)
@@ -52,6 +52,7 @@ namespace BugFablesAP
             ApMenu menu = go.AddComponent<ApMenu>();
             menu.owner = owner;
             menu.server = server;
+            menu.port = port;
             menu.slot = slot;
             menu.password = password;
             menu.mode = mode;
@@ -137,7 +138,7 @@ namespace BugFablesAP
         private const string TextSort = "|sort,10|";
         // Row heights inside the orange box, top to bottom; labels on the left, values on the right, as in the
         // settings screen.
-        private static readonly float[] RowY = { 2.55f, 1.65f, 0.75f, -0.15f, -1.05f, -1.95f };
+        private static readonly float[] RowY = { 2.7f, 1.9f, 1.1f, 0.3f, -0.5f, -1.3f, -2.1f };
         private const float LabelX = -5.9f;
         private const float ValueX = -1.9f;
 
@@ -223,6 +224,7 @@ namespace BugFablesAP
                 switch (row)
                 {
                     case Address:
+                    case PortRow:
                     case SlotRow:
                     case PasswordRow:
                         editing = true;
@@ -251,7 +253,22 @@ namespace BugFablesAP
             bool ctrl = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
             if (ctrl && Input.GetKeyDown(KeyCode.V))
             {
-                edited += Clean(GUIUtility.systemCopyBuffer);
+                string pasted = Clean(GUIUtility.systemCopyBuffer);
+                if (row == PortRow)
+                {
+                    pasted = new string(Array.FindAll(pasted.ToCharArray(), char.IsDigit));
+                }
+                else if (row == Address)
+                {
+                    // A room page shows "archipelago.gg:63560": paste it whole and the port goes to its own row.
+                    var m = System.Text.RegularExpressions.Regex.Match(pasted, @"^(.+):(\d{1,5})$");
+                    if (m.Success)
+                    {
+                        pasted = m.Groups[1].Value;
+                        port.Value = m.Groups[2].Value;
+                    }
+                }
+                edited += pasted;
                 Redraw();
                 return;
             }
@@ -282,7 +299,7 @@ namespace BugFablesAP
                         changed = true;
                     }
                 }
-                else if (c >= ' ' && !ctrl && edited.Length < 64)
+                else if (c >= ' ' && !ctrl && edited.Length < 64 && (row != PortRow || char.IsDigit(c)))
                 {
                     edited += c;
                     changed = true;
@@ -306,7 +323,7 @@ namespace BugFablesAP
             Redraw();
         }
 
-        private ConfigEntry<string> Field(int r) => r == Address ? server : r == SlotRow ? slot : password;
+        private ConfigEntry<string> Field(int r) => r == Address ? server : r == PortRow ? port : r == SlotRow ? slot : password;
 
         private static string Clean(string s)
         {
@@ -338,6 +355,7 @@ namespace BugFablesAP
             shownStatus = status();
             string pw = editing && row == PasswordRow ? edited : new string('*', password.Value.Length);
             Row(Address, "Address", editing && row == Address ? edited : server.Value);
+            Row(PortRow, "Port", editing && row == PortRow ? edited : port.Value);
             Row(SlotRow, "Slot", editing && row == SlotRow ? edited : slot.Value);
             Row(PasswordRow, "Password", pw);
             Row(ConnectRow, "Connect", null);

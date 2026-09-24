@@ -18,18 +18,19 @@ namespace BugFablesAP
 
         private static ManualLogSource log;
         private static ConfigEntry<bool> mode;
-        private static ConfigEntry<string> server, slot, password;
+        private static ConfigEntry<string> server, port, slot, password;
         private static Action connect;
         private static Func<string> status;
         private static Harmony harmony;
 
         internal static void Enable(ManualLogSource logger, string guid, ConfigEntry<bool> randomizerEnabled,
-            ConfigEntry<string> serverEntry, ConfigEntry<string> slotEntry, ConfigEntry<string> passwordEntry,
+            ConfigEntry<string> serverEntry, ConfigEntry<string> portEntry, ConfigEntry<string> slotEntry, ConfigEntry<string> passwordEntry,
             Action connectAction, Func<string> statusText)
         {
             log = logger;
             mode = randomizerEnabled;
             server = serverEntry;
+            port = portEntry;
             slot = slotEntry;
             password = passwordEntry;
             connect = connectAction;
@@ -131,7 +132,7 @@ namespace BugFablesAP
                 {
                     return;
                 }
-                ApMenu.Show(log, __instance, server, slot, password, mode, connect, status);
+                ApMenu.Show(log, __instance, server, port, slot, password, mode, connect, status);
             }
             catch (Exception e)
             {

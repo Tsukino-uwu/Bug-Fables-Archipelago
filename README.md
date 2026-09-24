@@ -36,8 +36,10 @@ You need your own copy of the game. Nothing from the game is included in this re
 
 On the game's main menu, choose **Archipelago**. The panel has:
 
-- **Address**: the room's address and port, e.g. `archipelago.gg:38281`. A server on your own computer needs
-  `ws://` in front: `ws://127.0.0.1:38281`.
+- **Address**: `archipelago.gg` by default, which is right for rooms hosted there. A server on your own
+  computer needs `ws://` in front: `ws://127.0.0.1`.
+- **Port**: the room's port, e.g. `38281`; usually the only thing to change. Pasting a whole
+  `archipelago.gg:38281` into Address fills in the port too.
 - **Slot**: your slot name in the room.
 - **Password**: only if the room has one; leave it empty otherwise.
 - **Archipelago mode**: On keeps randomizer saves in their own folder, apart from your normal saves.

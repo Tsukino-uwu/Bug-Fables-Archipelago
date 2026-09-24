@@ -17,6 +17,7 @@ namespace BugFablesAP
         private ConfigEntry<bool> textProbeEnabled;
         private ConfigEntry<bool> scriptDumpEnabled;
         private ConfigEntry<string> server;
+        private ConfigEntry<string> port;
         private ConfigEntry<string> slot;
         private ConfigEntry<string> password;
         private ConfigEntry<bool> connectOnStart;
@@ -50,11 +51,13 @@ namespace BugFablesAP
             {
                 TextProbe.Enable(Log, Guid);
             }
-            // The default is a local server. It needs the ws:// prefix: a bare "localhost:38281" timed out
-            // against a local server on 2026-09-24, and ws://127.0.0.1:38281 logged in.
-            server = Config.Bind("Connection", "Server", "ws://127.0.0.1:38281",
-                "Archipelago server address and port, e.g. archipelago.gg:38281 for a hosted room, or "
-                + "ws://127.0.0.1:38281 for a server on this computer.");
+            // Address and port are separate so a player usually edits only the port (the user, 2026-09-24).
+            // A server on this computer needs the ws:// prefix: a bare "localhost:38281" timed out on
+            // 2026-09-24, and ws://127.0.0.1:38281 logged in.
+            server = Config.Bind("Connection", "Address", "archipelago.gg",
+                "The Archipelago server's address: archipelago.gg for a hosted room, or ws://127.0.0.1 for a server "
+                + "on this computer.");
+            port = Config.Bind("Connection", "Port", "", "The room's port, e.g. 38281. Rooms on archipelago.gg show it.");
             slot = Config.Bind("Connection", "Slot", "", "Your slot name in the room.");
             password = Config.Bind("Connection", "Password", "", "The room password, if it has one.");
             connectOnStart = Config.Bind("Connection", "ConnectOnStart", false,
@@ -66,10 +69,18 @@ namespace BugFablesAP
                 + "saves. Switch it with 'Archipelago: On/Off' on the main menu.");
             SaveRedirect.On = randomizerEnabled.Value;
             SaveRedirect.Enable(Log, Guid);
-            MenuToggle.Enable(Log, Guid, randomizerEnabled, server, slot, password,
-                () => connection.Connect(server.Value, slot.Value, password.Value),
+            MenuToggle.Enable(Log, Guid, randomizerEnabled, server, port, slot, password,
+                () => connection.Connect(Target(), slot.Value, password.Value),
                 () => connection.Status);
             Log.LogInfo($"{Name} {Version} loaded. GrantProbe={grantProbeEnabled.Value} TextProbe={textProbeEnabled.Value}");
+        }
+
+        // "address:port", or the address alone when no port is set (it may carry one already).
+        private string Target()
+        {
+            string address = server.Value.Trim().TrimEnd('/');
+            string p = port.Value.Trim();
+            return p.Length == 0 ? address : address + ":" + p;
         }
 
         private bool devReloadChecked;
@@ -115,7 +126,7 @@ namespace BugFablesAP
                 }
                 else
                 {
-                    connection.Connect(server.Value, slot.Value, password.Value);
+                    connection.Connect(Target(), slot.Value, password.Value);
                 }
             }
             connection.Tick();
