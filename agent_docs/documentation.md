@@ -157,6 +157,17 @@ the code, that gave a full list of where key items come from, raw material for t
 
 *Code: `ScriptDump.cs` (`TryRun`).*
 
+**A second dump for what lies on the ground, and what gates it.** Items lying in the world aren't in any
+dialogue. They are *entities*, rows in each map's entity table, which the game parses in
+`MapControl.CreateEntities`. Each row also carries two lists of story flags: those the entity needs before it
+appears (`requires`) and those that hide it (`limit`). Every pickup, door and blocker is gated by those two
+lists, so the dump gives both what each pickup is and much of what the logic has to know about it. The
+parser puts every count at a fixed position followed by a fixed-size block, so the dump reads fields at the
+same positions the parser does. A second file names every item and medal id. Both files stay in the BepInEx
+folder; the facts drawn from them go into `MEASURED.md`.
+
+*Code: `EntityDump.cs` (`TryRun`), switched on by `EntityDump` in the config's Debug section.*
+
 ## 8. An Archipelago menu inside the game
 
 Players need to type a room address, a slot name and maybe a password, so the mod adds **"Archipelago"** to the

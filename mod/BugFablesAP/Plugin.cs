@@ -17,6 +17,7 @@ namespace BugFablesAP
         private ConfigEntry<bool> grantProbeEnabled;
         private ConfigEntry<bool> textProbeEnabled;
         private ConfigEntry<bool> scriptDumpEnabled;
+        private ConfigEntry<bool> entityDumpEnabled;
         private ConfigEntry<bool> varDumpEnabled;
         private bool varDumpDone;
         private ConfigEntry<string> server;
@@ -33,6 +34,7 @@ namespace BugFablesAP
         private string lastAttempt;
         private bool wasEnabled;
         private bool scriptDumpDone;
+        private bool entityDumpDone;
         private ConfigEntry<string> saveDiff;
         private ConfigEntry<int> giveMoney;
         private bool saveDiffDone;
@@ -55,6 +57,9 @@ namespace BugFablesAP
             scriptDumpEnabled = Config.Bind("Debug", "ScriptDump", false,
                 "Dev only. Once per launch, writes the item and flag command tokens of every map's dialogue lines to "
                 + "BepInEx/bugfablesap-scriptdump.tsv. Off by default.");
+            entityDumpEnabled = Config.Bind("Debug", "EntityDump", false,
+                "Dev only. Once per launch, writes every map's entities (type, item, required and hiding flags) to "
+                + "BepInEx/bugfablesap-entitydump.tsv, and item and medal names to bugfablesap-names.tsv. Off by default.");
             varDumpEnabled = Config.Bind("Debug", "VarDump", false,
                 "Dev only. Once per load, writes every flagvar/flagstring slot the game's text uses to "
                 + "BepInEx/bugfablesap-vardump.tsv. Off by default.");
@@ -209,6 +214,11 @@ namespace BugFablesAP
             if (scriptDumpEnabled.Value && !scriptDumpDone)
             {
                 scriptDumpDone = ScriptDump.TryRun(Log);
+            }
+
+            if (entityDumpEnabled.Value && !entityDumpDone)
+            {
+                entityDumpDone = EntityDump.TryRun(Log);
             }
 
             if (!grantProbeEnabled.Value)
