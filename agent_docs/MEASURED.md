@@ -450,6 +450,11 @@ The output stays in the BepInEx folder.
   the chapters. `dev-scripts/gate-table.py` uses it: an event below 16 is prologue, 16-44 chapter 1, 45-73
   chapter 2, 74-104 chapter 3, 105-119 chapter 4, 120-141 chapter 5, 142-193 chapter 6, 194 on chapter 7.
   Side events added late carry high numbers, so the rule errs toward a later chapter, the safe direction.
+- **The party's basic moves** (the user, 2026-09-24, matching `PlayerControl.cs`): Vi (bee) throws the
+  beemerang, which hits and grabs at range (flag 11, on from the start; Event109 takes it away in the bandit
+  hideout and gives it back); Kabbu (beetle) uses the horn, a knock-up and melee hit that also cuts grass (always
+  on); Leif (moth) freezes, droplets included (always on, once he has joined at the Snakemouth lake). Vi and
+  Kabbu are in the party from a new game, so while the party is vanilla only Leif gates anything.
 - **Ability flags, confirmed as reads in `PlayerControl.cs`:** 11 (beemerang, with `!flags[41]`), 699
   (horn dash), 39 (heavy dash: its absence changes the dash), 171 (big icicle), 19 (hover), 18 (dig), 20
   (bubble shield).
