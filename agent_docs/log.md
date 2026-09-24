@@ -353,3 +353,7 @@ Newest last. What was tried, what happened, what the user said.
   source found in the entity dump, ScriptDump or code (floor, dialogue gifts, code gifts, the two shops' pools by
   story event), in `MEASURED.md`. All five chapter 1 medals are locations already; Mighty Pebble waits for the
   Hearty Breakfast's source. Next: chapter 2's city medals, each checked on screen first.
+- **The file select waits for the first login** (2026-09-24; the user chose "require a connection" over a copy of
+  the seed on disk). First test showed nothing held back: I had run copy-dev without stage-dev, so the game still
+  had the old build (copy-dev copies what stage-dev staged). Staged and copied, the guard held both a save and a
+  new game back; its one-line notice ran over the save slots, so it became a popup box over a dimmer.

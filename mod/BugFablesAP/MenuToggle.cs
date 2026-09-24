@@ -49,6 +49,7 @@ namespace BugFablesAP
         internal static void Disable()
         {
             ApMenu.Open?.CloseNow();
+            ClosePopup();
             harmony?.UnpatchSelf();
             harmony = null;
         }
@@ -165,36 +166,102 @@ namespace BugFablesAP
         // its locations, and every pickup would give its vanilla item (the user, 2026-09-24: require a connection).
         // On the file select (menuid 2, submenu 0), choosing one of the three files (option 0-2) with the confirm
         // key is StartMenu.Update's load or new-game branch (StartMenu.cs:512-535, Event22 or Event8). With the mod
-        // on and no seed yet, that press gets the game's buzzer and a line saying why, and the game never sees it.
-        private static Transform notice;
+        // on and no seed yet, that press gets the game's buzzer and a popup saying why, and the game never sees it.
+        // While the popup is up the file select is frozen under it; confirm or cancel closes it.
+        private static Transform popup, popupStatus;
+        private static string shownPopupStatus;
+        private static int popupFrame;
+
+        // Over the save slots: their boxes sort at -20 to -60 and their text at 10 (StartMenu.ShowSaves).
+        private const int PopupDimSort = 50, PopupBoxSort = 60, PopupTextSort = 70;
 
         private static bool HoldBackFile(int menuid, int submenu, float cd, bool canselect)
         {
+            if (popup != null)
+            {
+                TickPopup();
+                return true;
+            }
             if (!mode.Value || seedKnown() || menuid != 2 || submenu != 0 || cd > 0f || !canselect
                 || MainManager.pausemenu != null || MainManager.instance.option >= Option || !MainManager.GetKey(4, hold: false))
             {
                 return false;
             }
             MainManager.PlayBuzzer();
-            ShowNotice("|center||size,0.6|Connect to Archipelago first (the Archipelago panel on the main menu). " + status());
+            ShowPopup();
             log.LogInfo("[menu] held back file " + MainManager.instance.option + ": the seed isn't known yet (no login this run)");
             return true;
         }
 
-        // One line at the top of the screen, on the GUI camera like the panel (ApMenu), gone after four seconds.
-        private static void ShowNotice(string text)
+        // A dimmer over the whole screen, then the game's orange box (type 1) in the middle with the reason, the
+        // connection's live state and an OK button hint. Hangs off the GUI camera at (0, 0, 10) like the panel (ApMenu).
+        private static void ShowPopup()
         {
-            if (notice != null)
+            popup = new GameObject("apnotconnected").transform;
+            popup.parent = MainManager.GUICamera.transform;
+            popup.localPosition = new Vector3(0f, 0f, 10f);
+            popup.localEulerAngles = Vector3.zero;
+            popup.gameObject.layer = 5;
+            var pixel = new Texture2D(1, 1);
+            pixel.SetPixel(0, 0, Color.black);
+            pixel.Apply();
+            SpriteRenderer dim = new GameObject("Dimmer").AddComponent<SpriteRenderer>();
+            dim.sprite = Sprite.Create(pixel, new Rect(0f, 0f, 1f, 1f), new Vector2(0.5f, 0.5f));
+            dim.color = new Color(0f, 0f, 0f, 0.6f);
+            dim.transform.parent = popup;
+            dim.transform.localPosition = Vector3.zero;
+            dim.transform.localEulerAngles = Vector3.zero;
+            dim.transform.localScale = new Vector3(3000f, 3000f, 1f);
+            dim.gameObject.layer = 5;
+            dim.sortingOrder = PopupDimSort;
+            Transform box = MainManager.Create9Box(new Vector3(0f, 0f, 10f), new Vector2(12f, 4.75f), 1, PopupBoxSort, Color.white, false);
+            box.parent = popup;
+            box.localPosition = Vector3.zero;
+            string sort = "|sort," + PopupTextSort + "|";
+            MainManager.instance.StartCoroutine(MainManager.SetText(sort + "|center||size,0.8|Not connected to Archipelago", new Vector3(0f, 1.45f, 0f), box));
+            MainManager.instance.StartCoroutine(MainManager.SetText(sort + "|center||size,0.6|Connect in the Archipelago panel on the main menu,", new Vector3(0f, 0.6f, 0f), box));
+            MainManager.instance.StartCoroutine(MainManager.SetText(sort + "|center||size,0.6|then choose your file again.", new Vector3(0f, 0.05f, 0f), box));
+            popupStatus = new GameObject("status").transform;
+            popupStatus.parent = box;
+            popupStatus.localPosition = Vector3.zero;
+            shownPopupStatus = null;
+            new GameObject("okbutton").AddComponent<ButtonSprite>().SetUp(4, -1, "OK", new Vector3(-0.6f, -1.6f), Vector3.one * 0.5f, PopupTextSort, box);
+            popupFrame = Time.frameCount;
+            DrawPopupStatus();
+        }
+
+        private static void DrawPopupStatus()
+        {
+            string s = status() ?? "";
+            if (s == shownPopupStatus || popupStatus == null)
             {
-                UnityEngine.Object.Destroy(notice.gameObject);
+                return;
             }
-            notice = new GameObject("apnotice").transform;
-            notice.parent = MainManager.GUICamera.transform;
-            notice.localPosition = new Vector3(0f, 4.2f, 10f);
-            notice.localEulerAngles = Vector3.zero;
-            notice.gameObject.layer = 5;
-            MainManager.instance.StartCoroutine(MainManager.SetText("|sort,20|" + text, Vector3.zero, notice));
-            UnityEngine.Object.Destroy(notice.gameObject, 4f);
+            shownPopupStatus = s;
+            MainManager.DestroyText(popupStatus);
+            MainManager.instance.StartCoroutine(MainManager.SetText("|sort," + PopupTextSort + "||center||size,0.5|" + s.Replace("|", "/"),
+                new Vector3(0f, -0.75f, 0f), popupStatus));
+        }
+
+        private static void TickPopup()
+        {
+            DrawPopupStatus();
+            // The press that opened it is still "down" this frame.
+            if (Time.frameCount > popupFrame && (MainManager.GetKey(4, hold: false) || MainManager.GetKey(5, hold: false)))
+            {
+                MainManager.PlaySound("Confirm", -1);
+                ClosePopup();
+            }
+        }
+
+        private static void ClosePopup()
+        {
+            if (popup != null)
+            {
+                UnityEngine.Object.Destroy(popup.gameObject);
+            }
+            popup = null;
+            popupStatus = null;
         }
 
         // The game places the cursor at y = -option - 0.25 each frame; move it to the tighter spacing.
