@@ -434,7 +434,14 @@ namespace BugFablesAP
             }
             MainManager.roomtransition = false;
             pendingMap = -1;
-            return "ran the game's end-of-event cleanup; inevent=" + MainManager.instance.inevent + ", minipause=" + MainManager.instance.minipause;
+            // A cutscene that died half-way also leaves what it took: the camera pinned away from the player, the
+            // map's camera limits removed, the music faded out (Event31 did all three, 2026-09-24: camera stuck, no
+            // music). The game's own resets for each: ResetCamera (MainManager.cs:7398), MapControl.RestoreLimit
+            // (MapControl.cs:1432), ChangeMusic() (the map's own music, MainManager.cs:4873).
+            MainManager.ResetCamera(true);
+            MainManager.map?.RestoreLimit(false);
+            MainManager.ChangeMusic();
+            return "ran the game's end-of-event cleanup and camera, limit and music resets; inevent=" + MainManager.instance.inevent + ", minipause=" + MainManager.instance.minipause;
         }
 
         // Once the target map is up and the transfer is over, stand by the entity with the wanted flag, or else by
