@@ -46,8 +46,12 @@
     <Reference Include="websocket-sharp">
       <HintPath>$(PkgArchipelago_MultiClient_Net)\lib\net40\websocket-sharp.dll</HintPath>
     </Reference>
+    <!-- Newtonsoft.Json from the netstandard2.0 folder, not net40: the net40 build compiles code at runtime
+         (DynamicMethod), which this game's Mono can't do ("Supports SRE: False"). It threw
+         PlatformNotSupportedException on the server's first message (2026-09-24). Both builds are
+         Newtonsoft.Json 11.0.0.0, unsigned, so the net40 client library binds to this one. -->
     <Reference Include="Newtonsoft.Json">
-      <HintPath>$(PkgArchipelago_MultiClient_Net)\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(PkgArchipelago_MultiClient_Net)\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
 

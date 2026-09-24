@@ -203,6 +203,23 @@ namespace BugFablesAP
                         attemptSession = attempt;
                     }
                 }
+                // A login that times out says only "Connection timed out." Log what the socket reported on the way,
+                // once per attempt and message.
+                var seen = new HashSet<string>();
+                attempt.Socket.ErrorReceived += (e, message) =>
+                {
+                    string line = (e?.GetType().Name ?? "no exception") + ": " + (e?.GetBaseException().Message ?? message);
+                    bool first;
+                    lock (seen)
+                    {
+                        first = seen.Add(line);
+                    }
+                    if (first && ReferenceEquals(session, null))
+                    {
+                        // The whole exception, stack included: the message alone didn't say where it came from.
+                        Post("[ap] socket error while connecting: " + line + "\n" + e);
+                    }
+                };
                 LoginResult result = attempt.TryConnectAndLogin(
                     Game, slot, ItemsHandlingFlags.AllItems, password: string.IsNullOrEmpty(password) ? null : password);
 

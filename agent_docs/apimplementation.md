@@ -19,12 +19,13 @@ artifacts"; a local server; and the mod connecting to it on its own, retrying wh
 2. **Send a check:** finishing a location tells the server.
 3. **Survive a reload:** the received-item count lives in the save.
 4. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
-5. **Compressed connection:** built (build step 5), not yet tested in the game.
+5. **Compressed connection:** works against a local server (build step 5). A hosted room (`wss://`) is still
+   to test.
 
 **Known issues:**
 
-- The server warns that our connection isn't compressed. The fix is built (build step 5) but not yet
-  tested in the game.
+- Not yet tried against a hosted room on archipelago.gg (encrypted `wss://`), since the switch to
+  websocket-sharp in build step 5.
 
 ## Contents
 
@@ -169,9 +170,20 @@ ignore.
 **6. Prove it on both ends.** The mod logs the compression it agreed with the server, read back from the
 socket itself (`[ap] compression: permessage-deflate; ...`). The server stops posting its warning.
 
-**Status:** built, not yet run in the game. Still to test: connecting to a local server, the drop and
-reconnect test, and a hosted room on archipelago.gg (encrypted `wss://`). This old .NET may not handle the
-TLS 1.3 setting the library asks for.
+**7. The first run failed, and not because of compression.** The handshake passed, the server logged the
+connection, and then the login timed out without a word. The library reports socket errors only through an
+event we hadn't been listening to yet during the connect, so the mod now logs them there too, with the
+full stack. That showed `PlatformNotSupportedException` from **Newtonsoft.Json**, the JSON library. Its net40
+build compiles small pieces of code at runtime, and this game's .NET can't; the BepInEx log says so at every
+start (`Supports SRE: False`). The message had already been decompressed correctly by then. The fix is to
+ship the net40 client library with the **netstandard2.0** Newtonsoft.Json. Both are the same version, so they
+fit together. Lesson: when you swap one library build, every library that comes with it is swapped too.
+
+**Status (2026-09-24, local server):** it works. The mod logs in compressed, the server's warning is gone,
+switching the mod off closes the connection cleanly, stopping the server is caught and leaves the game at
+normal CPU and flat memory, and the mod reconnects by itself, compressed, when the server comes back. A
+`Compression` setting in the config turns it off if it ever misbehaves. **Still to test:** a hosted room on
+archipelago.gg (encrypted `wss://`). This old .NET may not handle the TLS 1.3 setting the library asks for.
 
 ---
 

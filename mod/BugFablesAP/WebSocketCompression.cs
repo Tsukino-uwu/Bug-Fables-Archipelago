@@ -24,12 +24,15 @@ namespace BugFablesAP
         private const string ServerWindow = "server_max_window_bits";
 
         private static Action<string> report;
+        private static Func<bool> wanted;
         private static Harmony harmony;
 
-        // `post` must be safe to call from any thread: both patches run on connection threads.
-        internal static void Enable(string guid, Action<string> post)
+        // `post` must be safe to call from any thread: both patches run on connection threads. `on` is read at
+        // each new socket, so the setting applies from the next connect.
+        internal static void Enable(string guid, Action<string> post, Func<bool> on)
         {
             report = post;
+            wanted = on;
             var create = AccessTools.Method(typeof(ArchipelagoSocketHelper), "CreateWebSocket");
             var validate = AccessTools.Method(typeof(WebSocket), "validateSecWebSocketExtensionsServerHeader");
             if (create == null || validate == null)
@@ -60,7 +63,12 @@ namespace BugFablesAP
             // websocket-sharp writes its own errors to the console only; a refused handshake would say nothing in
             // BepInEx's log file. Route them to ours.
             __result.Log.Output = (data, file) => report?.Invoke("[ws] " + data.Level + ": " + data.Message);
-            __result.Compression = CompressionMethod.Deflate;
+            bool on = wanted == null || wanted();
+            if (on)
+            {
+                __result.Compression = CompressionMethod.Deflate;
+            }
+            report?.Invoke("[ws] new socket, compression " + (on ? "requested" : "off (setting)"));
         }
 
         private static void BeforeValidate(ref string value)

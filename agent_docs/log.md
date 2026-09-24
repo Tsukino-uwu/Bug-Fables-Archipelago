@@ -112,3 +112,19 @@ Newest last. What was tried, what happened, what the user said.
   It retried with backoff (`could not reach the server`, no stuck attempt). The server was restarted at
   04:58:13 and the mod logged in by itself at 04:58:19. Across the retries: 64 threads, memory flat at about
   793 MB. The user saw it retrying on screen ("its trying to reconnect").
+- **Compression, 2026-09-24 (05:00–05:13):** the user wanted it even though it's optional, "as an example of
+  how it's done". Research first. The game's Mono `ClientWebSocket` has no permessage-deflate. MultiClient.Net's
+  net40 build runs on websocket-sharp, which has it but never turns it on. Upstream issue #141 warned, and
+  both codebases confirmed, that websocket-sharp refuses MultiServer's `server_max_window_bits=11`. Built:
+  net40 references, a Harmony postfix to switch compression on, a prefix to strip that parameter, and sends
+  and closes moved off the game thread (websocket-sharp pings before every send). **First run:** the
+  handshake passed but the login timed out silently. With socket errors logged during the connect, it was
+  `PlatformNotSupportedException` in the net40 Newtonsoft.Json's `DynamicMethod` (no Reflection.Emit in this
+  Mono). Fixed by shipping the netstandard2.0 Newtonsoft.Json (same 11.0.0.0 identity). **Second run:**
+  logged in compressed (read back from `WebSocket.Extensions`), no server warning. Switching the mod off
+  closed cleanly. Server stopped: `connection lost` via "connection reset by peer", ~20% of a core, flat
+  memory, 65–66 threads. Server back: reconnected compressed in 9 s. **Still open:** archipelago.gg over
+  `wss://` (TLS 1.3 flag on old Mono).
+  The user also reported that backing out of Start Game or Settings puts the leaf on Start Game, while backing
+  out of Archipelago keeps it on Archipelago. The game's `SetMenuText` resets `option = 0`
+  (`StartMenu.cs:319`); our panel doesn't call it. Asked which the user wants.

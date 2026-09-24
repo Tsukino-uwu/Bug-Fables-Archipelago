@@ -54,4 +54,7 @@ its docs or source to settle; don't assume it.
 | An option deciding whether a location id EXISTS | The build knows ids the seed doesn't, and scouting them hits the disconnect above |
 | An access rule silently attached to nothing | A valid-looking seed where the gate doesn't exist. Check the spoiler's playthrough spheres |
 | Only `DisconnectAsync` on a dead MultiClient.Net socket (this game's Mono, 2026-09-24) | `State` stays `Open`, so the library's receive loop spins: lag and ~2.5 MB/s of memory, no error. Abort the `ClientWebSocket` |
+| websocket-sharp compression switched on as it stands (MultiClient.Net 6.7.1 net40) | Every handshake refused: MultiServer always answers `server_max_window_bits=11`. Strip it before websocket-sharp's check (upstream #141) |
+| MultiClient.Net's net40 Newtonsoft.Json in a Mono without Reflection.Emit (`Supports SRE: False`) | Login times out silently; the socket's error event shows `PlatformNotSupportedException` in `DynamicMethod`. Ship the netstandard2.0 Newtonsoft.Json |
+| Sending on the game thread with websocket-sharp | Every send pings first and waits for the pong, up to 5 s: stutter, or a freeze while the server is gone |
 | `TryConnectAndLogin` trusted to time out (MultiClient.Net 6.7.1) | Its login step waits on `SendPacket` with no timeout; one stuck attempt stops every retry. Give each attempt a deadline |

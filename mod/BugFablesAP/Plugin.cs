@@ -21,6 +21,7 @@ namespace BugFablesAP
         private ConfigEntry<string> port;
         private ConfigEntry<string> slot;
         private ConfigEntry<string> password;
+        private ConfigEntry<bool> compression;
         private ConfigEntry<bool> randomizerEnabled;
         private ApConnection connection;
         // The details last tried automatically: new details connect at once; the same details only retry after an
@@ -64,7 +65,10 @@ namespace BugFablesAP
             slot = Config.Bind("Connection", "Slot", "", "Your slot name in the room.");
             password = Config.Bind("Connection", "Password", "", "The room password, if it has one.");
             connection = new ApConnection(Log);
-            WebSocketCompression.Enable(Guid, connection.Post);
+            compression = Config.Bind("Connection", "Compression", true,
+                "Compress the connection (permessage-deflate), as the Archipelago server asks. Turn off only if "
+                + "connecting fails with it on.");
+            WebSocketCompression.Enable(Guid, connection.Post, () => compression.Value);
 
             randomizerEnabled = Config.Bind("Archipelago", "RandomizerEnabled", false,
                 "Archipelago mod enabled: the game uses its own saves in the 'archipelago' folder, apart from your normal "
