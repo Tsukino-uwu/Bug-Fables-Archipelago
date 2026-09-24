@@ -61,13 +61,19 @@ A few decisions made first, because they shape everything after:
 - **"Remote items" only.** Picking something up never gives it to you directly. It tells the server,
   and every item, even your own, comes back from the server. That's simpler to build, a lost save can get
   everything back, and two people can share one slot. The cost: with the server down, nothing arrives.
-- **What the player sees** (the user, 2026-09-24). Finding a location in your own game, whether it's a
-  pickup or an NPC handing something over, shows **what's really there**: a Bug Fables item (yours, or
-  another Bug Fables player's in the same room) with the game's own sprite, and any other game's item as the
-  **Archipelago icon**. Items arriving from the server, another player's finds included, come in **quietly**:
-  no popup that stops play, just a small text notice in the **bottom-left corner** saying what arrived, with an
-  **on/off switch in the Archipelago panel**. (To know what's at a location before it's found, the mod asks the server first, a "scout",
-  without creating hints: `create_as_hint` 0, see `client-requirements.md`.)
+- **What the player sees** (the user, 2026-09-24):
+  - **At your own find** (a pickup, or an NPC handing something over), the game shows **what's really
+    there**: a Bug Fables item (yours, or another Bug Fables player's in the same room) with the game's own
+    sprite, and any other game's item as the **Archipelago icon**. To know what's there before it's found,
+    the mod asks the server first, a "scout", without creating hints (`create_as_hint` 0, see
+    `client-requirements.md`).
+  - **A small Archipelago chat feed in the bottom-left corner.** It never stops play. It shows the items you
+    send and receive, in Archipelago's own wording ("Player1 found their Hammer (Location)", "Player1 sent
+    Hammer to Player2 (Location)"), and players connecting and disconnecting. It's **on by default**, with an
+    on/off switch in the Archipelago panel. Items arriving from the server show up only there, never as a
+    popup.
+  - **Item names are coloured the way Archipelago's clients colour them** (`NetUtils.py`): progression plum
+    `#AF99EF`, useful slateblue `#6D8BE8`, trap salmon `#FA8072`, filler cyan `#00EEEE`.
 - **Read what others already solved.** We read the TEVI randomizer (another Unity mod), Pokémon Emerald's
   apworld, Archipelago's own docs, and notes from an earlier Archipelago project, all for ideas only,
   with each one's licence checked first.

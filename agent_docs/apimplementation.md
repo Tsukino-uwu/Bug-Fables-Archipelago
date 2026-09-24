@@ -77,6 +77,17 @@ Don't write those fields by hand. A hand-zipped copy made the generator warn "In
 file ... will stop working with Archipelago 0.7.0" (2026-09-24). The built copy goes in the installed
 Archipelago's `custom_worlds` folder.
 
+**Rules the world follows** (the user, 2026-09-24, matching Archipelago's own definitions in
+`BaseClasses.py`, `ItemClassification`):
+
+- **Items are classified the Archipelago way.** *Progression*: anything logic depends on (it unlocks a
+  location). *Useful*: especially good to have; never placed on an excluded location. *Filler*: can be
+  ignored; the only kind an excluded location gets. *Trap*: detrimental to receive; a yaml option may swap
+  filler for traps.
+- **Logic lives on regions and locations, never on items.** An item doesn't say what it unlocks. A region's
+  exits say what they need (the gate out of the Outskirts needs the Explorer Permit), and every location
+  belongs to a region. A location needing something more than its region adds that to itself.
+
 ## Build step 2: connect the mod to a real server
 
 We generated a seed with the tiny world, started a local Archipelago server (`MultiServer.py`), and had the
