@@ -398,9 +398,17 @@ type, its electric triggers, and its auto-start events (story steps the map itse
 bubble shield's maps from data. Hover has no object at all; pits (`Hole` hazards) are only candidates.
 Obstacles for moves that are never shuffled (Kabbu's horn on grass, Vi's beemerang on switches) aren't gates.
 
-Still to do: characters that block a path, the region graph built from all of it, and the tests.
+**Where each story step starts.** `dev-scripts/event-triggers.py` looks in every place the game starts an
+event: talking to an entity, trigger objects, dig spots, pickups, locked doors, dialogue lines, a map's own
+auto-start list and literal calls in code. It found the start of all but one of the gate events. Two
+surprises: one gate is a locked door that needs a key item (so a key item gates a whole area), and dig
+spots bury items, which are locations the floor-pickup count had missed, each needing dig.
 
-*Code: `dev-scripts/gate-table.py`; the dump in `mod/BugFablesAP/EntityDump.cs`.*
+Still to do: the one event not found, characters that block a path, the region graph built from all of
+it, and the tests.
+
+*Code: `dev-scripts/gate-table.py`, `dev-scripts/event-triggers.py`; the dumps in `mod/BugFablesAP/EntityDump.cs`,
+`MapDump.cs` and `ScriptDump.cs`.*
 
 # How it works
 

@@ -461,6 +461,47 @@ The output stays in the BepInEx folder.
 - **Not in this table:** gates that aren't doors (objects only an ability passes, characters that block a
   path), and `CheckIfCanExist` on non-door entities.
 
+## What starts the gate events (2026-09-24, EntityDump, ScriptDump with event lines, MapDump) — SPOILERS
+
+`dev-scripts/event-triggers.py` looks in every place an event can start. **How events start:**
+- talking to or touching an entity whose `eventid` is the event (`NPCControl.cs:4358`);
+- an `EventTrigger` object, `data[0]` (`NPCControl.cs:5525`);
+- a dig spot with `data[0] >= 2`, `data[1]` (`:5530`);
+- a pickup chain, `data[1]` (`MainManager.cs:12543`);
+- a locked door's `dialogues[1].y` once the right key is used (`EventControl.cs:9606`);
+- a dialogue line's `|event,N|`;
+- a map's `autoevent` (only 5 maps have any, e.g. `HoneycombsLab` 175:80, `Swamplands5` 383:147);
+- a literal `StartEvent(N)` in code.
+
+**The gate events:**
+- **26** is started by the `SnakemouthTreasureRoom/MaskEvent` trigger. **45** by `AntPalace1/Chapter1StartEvent`.
+- **52** and **58** by dialogue on `GoldenSettlement1` (lines 20, and 123/124).
+- **60** by the `BugariaOutskirtsOutsideCity/DoorBugaria - Duplicate` trigger (hidden by 107).
+- **84** by triggers on `BeehiveScannerRoom`. **87** by a trigger on `BeehiveMainArea`, which needs flags
+  167, 168 and 173.
+- **98** by a trigger on `FactoryProcessingMalbee`. **99** by dialogue on `HoneyFactoryCore` line 6.
+- **109** by triggers on `HideoutEntrance`/`HideoutCell`, and dialogue on `DesertRoachVillage` line 3.
+- **112 is a key-item gate:** the locked door `DesertSandCastle/keycheck` starts it once its key is used,
+  setting 280, which opens the door to `SandCastleEntrance`.
+- **120** by a trigger on `BugariaCastleAttack`. **137** by one on `SwamplandsBoss`. **140** by ones on
+  `WaspKingdomThrone`/`WaspKingdomQueen`.
+- **149** by talking to the gates on `TermiteOutside`/`TermiteMainPlaza`, and a trigger on `TermiteOutside`.
+- **166** by a trigger on `FarGrasslandsWizard`, and dialogue on `WizardTowerAttic` line 14.
+- **194** by triggers on `RubberPrisonGiantLairBridge`/`GiantLairEntrance`.
+- **200** by `Swamplands7/archertop` and a trigger on `GiantLairSaplingPlains`. **203** is called from
+  `Event200`.
+- **Not found:** Events 0 and 1 (the prologue: flag 11, the beemerang, is on from the start) and **Event95**
+  (flag 20, the bubble shield). 95 has no data trigger, no dialogue line and no literal call; still to find.
+
+**Dig spots bury things** (`NPCControl.cs:5396-5420`): `data[0]` 0 = an item (kind `data[1]`, id `data[2]`,
+with its own `activationflag`), 1 = a crystal berry (index `data[1]`), 2 or more = an event (`data[1]`).
+Outside `TestRoom`: 14 ordinary items, 4 key items, 12 berries and 1 event; 15 buried items have a one-time
+flag. **Buried items are locations the floor-pickup count missed, and every one of them needs dig.**
+
+**Hazards (MapDump):** `WalkableSpike`, what the bubble shield crosses, is on 12 maps (e.g. `GoldenHillsPath3`,
+the desert maps, `SandCastleRockRoom`, `FarGrasslands4`, `RubberPrisonSpikeRoom`). `Hole` hazards (pits) are
+on many maps from the first dungeon on, so a pit doesn't mean hover.
+
 ## Quests: to measure (when quests come into scope)
 
 - **The pause menu's quest list groups quests by chapter and shows done / not done** (the user,

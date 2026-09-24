@@ -297,3 +297,15 @@ Newest last. What was tried, what happened, what the user said.
 - Hard Mode: two levels (medal, HARDEST); the user chose a panel setting Off / Hard / Hardest, prize medals
   always paid out and always shuffled, the Hard Mode medal filler, other medals useful, abilities and every
   key item a rule uses progression.
+
+## 2026-09-24: what starts the gate events; MapDump
+
+- MapDump (map prefabs, not instantiated) and ScriptDump (now with event lines) run in the game: 246 prefabs,
+  315 lines. Game started and closed by the agent with the user's yes; dumps off again.
+- `copy-dev.ps1` bug: `-DebugOn A,B` through `powershell -File` arrived as one string and wrote a key named
+  "MapDump,ScriptDump". Restored from the script's own backup, fixed to split on commas, rerun clean.
+- `dev-scripts/event-triggers.py`: triggers found for every gate event except Event95 (bubble shield) and the
+  prologue. Event112 is a key-item locked door. Dig spots bury 18 items (15 one-time), all needing dig.
+- The user: the bubble shield crosses hazards and pushes enemies (matches the code: `WalkableSpike`). Hover
+  isn't known to the user yet. Decided: story steps after an ability's vanilla point require it; side
+  locations only where confirmed, else the per-map default.
