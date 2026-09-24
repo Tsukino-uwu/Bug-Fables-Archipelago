@@ -155,3 +155,10 @@ Newest last. What was tried, what happened, what the user said.
   mod guide's design list): the Archipelago icon or the real Bug Fables sprite at own finds; a bottom-left
   chat feed (sends, receives, joins and leaves), on by default and switchable in the panel, later a real text
   client; Archipelago's item colours; logic on regions and locations only.
+- **Item swap, 2026-09-24:** the transpiler on `MainManager.SetText`'s `Giveitem` installed first time. The
+  user's test with the permit plando'd onto Artis's medal: "You got the Explorer Permit!" with its sprite; the
+  user confirmed on screen no medal and no second key item; the check was sent. Leftovers from the screenshot:
+  the medal's description box, the orange (medal) starburst, and the first-medal tutorial (the user: "yee").
+  All three are now patched too (`CreateDescWindow` and the `flags[31]` read as extra stand-ins, recolouring
+  after the add), with `item_kinds` in slot_data. Installed; not yet seen on screen. The user asked for the Doll
+  next; the id is being confirmed (25 is `GBugRangerPlushie`, 57 is `MothivaDoll`, from the IL).

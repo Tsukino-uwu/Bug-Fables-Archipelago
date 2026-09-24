@@ -210,7 +210,7 @@ throttled to changes.
   consumes it once; the received-item count in the save keeps a reload from giving it back.
 - **`flag[349]` toggles on and off** at the `BugariaCommercial` shops (frames 31742–32369): temporary shop
   screen state, not progress. `flag[180]` flipped there too.
-- **A key item from a conversation:** `KEYITEM +1 id=25` (the doll) on `BugariaTheater` (frame 719,
+- **A key item from a conversation:** `KEYITEM +1 id=25` on `BugariaTheater` (`GBugRangerPlushie`: the enum literal in the IL is 25, checked 2026-09-24; an earlier note called it "the doll", and `MothivaDoll` is 57) (frame 719,
   `message=True`), then `flag[58]` when the user confirmed the dialogue (frame 2157). The dump predicted it
   (`BugariaTheater` line 7 → `giveitem,1,25`). **Location: flag 58.**
 - **A multi-step quest, measured step by step:** the quest book (id 93) was handed over with `flag[241]`, then

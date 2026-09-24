@@ -191,6 +191,19 @@ namespace BugFablesAP
         internal Dictionary<long, Give> LocationGives => locationGives;
         private volatile Dictionary<long, Give> locationGives;
 
+        // slot_data's item_kinds: which inventory list each Bug Fables item belongs to ({item id: 0 item, 1 key item}).
+        internal Dictionary<long, int> ItemKinds => itemKinds;
+        private volatile Dictionary<long, int> itemKinds;
+
+        private static Dictionary<long, int> ReadItemKinds(Dictionary<string, object> slotData)
+        {
+            if (slotData == null || !slotData.TryGetValue("item_kinds", out object raw) || !(raw is JObject map))
+            {
+                return null;
+            }
+            return map.Properties().ToDictionary(p => long.Parse(p.Name), p => p.Value.Value<int>());
+        }
+
         // This player's slot number, from the last login (kept after a drop, like the tables above).
         internal int OwnSlot => ownSlot;
         private volatile int ownSlot = -1;
@@ -356,6 +369,7 @@ namespace BugFablesAP
                     locationFlags = ReadLocationFlags(ok.SlotData);
                     locationGives = ReadLocationGives(ok.SlotData);
                     ownSlot = ok.Slot;
+                    itemKinds = ReadItemKinds(ok.SlotData);
                     scouts = null;
                     Scout(attempt, locationGives);
                     attempt.Locations.CheckedLocationsUpdated += ids =>

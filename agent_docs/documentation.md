@@ -196,5 +196,10 @@ shows what the seed actually put there.**
 can safely be changed. A misread from earlier also surfaced here: the numbers after an item in `giveitem`
 had been taken as "who holds it up", and are really "which line of dialogue comes next".
 
-**Test:** a seed with the Explorer Permit placed on Artis's medal (Archipelago's item plando). Talking to Artis
-should show the permit, and no medal should be added.
+**Tested by the user (2026-09-24):** a seed with the Explorer Permit placed on Artis's medal (Archipelago's
+item plando). Talking to Artis showed "You got the Explorer Permit!" with the permit's sprite, and on screen
+no medal was added and no second permit appeared. Three leftovers of the medal were visible, so the patch
+grew to cover them: **the description box** (the game opens it just before the sprite, now with the real
+item's description, or none for another game's item), **the starburst colour** behind the sprite (now the
+real item's kind, or its Archipelago colour for another game's item), and **the first-medal tutorial** that
+followed. That one is skipped, because no medal was given, and flag 31 stays unset for the real first medal.

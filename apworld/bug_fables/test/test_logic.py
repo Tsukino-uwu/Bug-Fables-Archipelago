@@ -62,3 +62,8 @@ class TestSlotData(BugFablesTestBase):
         self.assertEqual(medal, {"map": "BugariaOutskirtsOutsideCity", "type": 2, "item": 11})
         permit = gives[str(self.world.location_name_to_id["Outskirts: Explorer Permit"])]
         self.assertEqual(permit, {"map": "BugariaOutskirtsOutsideCity", "type": 1, "item": 27})
+
+    def test_item_kinds_cover_every_item(self) -> None:
+        kinds = self.world.fill_slot_data()["item_kinds"]
+        self.assertEqual(set(kinds), {str(i) for i in self.world.item_name_to_id.values()})
+        self.assertEqual(kinds[str(self.world.item_name_to_id["Explorer Permit"])], 1)
