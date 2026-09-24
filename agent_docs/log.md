@@ -73,6 +73,17 @@ Newest last. What was tried, what happened, what the user said.
     as a small tag to its right, placed by measuring the screenshot (1 unit ≈ 69 px at 1280×720).
   **Reach first next time:** the game's own screen code for positions and draw orders, and a screenshot per
   change.
-- **Next:** read the TextProbe output from the user's play: which dialogue script carries each item
+- **Connecting, 2026-09-24 (late):** an Archipelago panel on the main menu (address and port separate,
+  archipelago.gg by default; typing, paste and copy; the gamepad works). The mod connects by itself while the
+  Archipelago mod is enabled. Refusals wait; an unreachable or dropped server retries with backoff. Measured:
+  killing the local server wasn't noticed by the idle socket, so a watchdog now pings `_read_race_mode` every
+  5 s and calls the connection lost after 15 s of silence. **Tested:** the refusal path (InvalidSlot) and the
+  unreachable path (server stopped, retries, then connected by itself when it came back). **Not yet tested:**
+  the watchdog noticing a server killed *while connected*. Stop the server with the mod connected and look for
+  `[ap] connection lost` within about 15 s.
+- **The user ended the session here** to continue in a new chat.
+- **Next:** the watchdog test above, then receiving items (the mod gives a received key item the game's own
+  way, at a safe moment), then sending checks.
+- **Earlier next:** read the TextProbe output from the user's play: which dialogue script carries each item
   command, and whether a key item's grant and its completion flag (15 for the first one) sit in the same
   script. That decides how locations are identified.

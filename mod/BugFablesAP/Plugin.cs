@@ -168,6 +168,7 @@ namespace BugFablesAP
             devReload?.Tick();
 
             AutoConnect();
+            connection.Watchdog(DateTime.UtcNow);
             connection.Tick();
 
             DevCheats.Tick(Log, giveMoney);

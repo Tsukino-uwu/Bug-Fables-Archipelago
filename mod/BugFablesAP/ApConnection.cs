@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
+using Archipelago.MultiClient.Net.Packets;
 using BepInEx.Logging;
 
 namespace BugFablesAP
@@ -42,6 +43,69 @@ namespace BugFablesAP
         }
 
         internal bool ShouldRetry(DateTime nowUtc) => !busy && !refused && session == null && failures > 0 && nowUtc >= nextRetryUtc;
+
+        // A dead server isn't noticed by an idle socket (2026-09-24: the local server was killed and nothing was
+        // reported). So while connected, ask the server something tiny every few seconds, and treat a long
+        // silence, a failed send or a socket error as a lost connection. `_read_race_mode` is a documented
+        // read-only key (network protocol.md, "Get"); any packet from the server counts as a sign of life.
+        private const double PingSeconds = 5, SilenceSeconds = 15;
+        private long lastHeardTicks;
+        private DateTime lastPingUtc;
+
+        internal void Watchdog(DateTime nowUtc)
+        {
+            ArchipelagoSession s = session;
+            if (s == null)
+            {
+                return;
+            }
+            if (!s.Socket.Connected)
+            {
+                MarkLost(s, "the socket closed");
+                return;
+            }
+            if ((nowUtc - new DateTime(Interlocked.Read(ref lastHeardTicks), DateTimeKind.Utc)).TotalSeconds > SilenceSeconds)
+            {
+                MarkLost(s, "no reply from the server for " + SilenceSeconds + " s");
+                return;
+            }
+            if ((nowUtc - lastPingUtc).TotalSeconds >= PingSeconds)
+            {
+                lastPingUtc = nowUtc;
+                try
+                {
+                    s.Socket.SendPacketAsync(new GetPacket { Keys = new[] { "_read_race_mode" } });
+                }
+                catch (Exception e)
+                {
+                    MarkLost(s, "sending failed: " + e.GetBaseException().Message);
+                }
+            }
+        }
+
+        private void Heard()
+        {
+            Interlocked.Exchange(ref lastHeardTicks, DateTime.UtcNow.Ticks);
+        }
+
+        private void MarkLost(ArchipelagoSession s, string reason)
+        {
+            if (!ReferenceEquals(session, s))
+            {
+                return;
+            }
+            session = null;
+            try
+            {
+                s.Socket.DisconnectAsync();
+            }
+            catch
+            {
+                // already gone
+            }
+            Post("[ap] connection lost: " + reason);
+            ScheduleRetry("Connection lost.");
+        }
 
         private void ScheduleRetry(string why)
         {
@@ -93,17 +157,12 @@ namespace BugFablesAP
                     failures = 0;
                     refused = false;
                     status = $"Connected as {slot}.";
-                    attempt.Socket.SocketClosed += reason =>
-                    {
-                        // Only this session dropping counts; Disconnect() clears `session` first.
-                        if (!ReferenceEquals(session, attempt))
-                        {
-                            return;
-                        }
-                        session = null;
-                        Post("[ap] connection lost: " + reason);
-                        ScheduleRetry("Connection lost.");
-                    };
+                    Heard();
+                    lastPingUtc = DateTime.UtcNow;
+                    // Only this session dropping counts; Disconnect() clears `session` first.
+                    attempt.Socket.PacketReceived += packet => Heard();
+                    attempt.Socket.SocketClosed += reason => MarkLost(attempt, "closed: " + reason);
+                    attempt.Socket.ErrorReceived += (e, message) => MarkLost(attempt, "socket error: " + message);
                     string version = ok.SlotData != null && ok.SlotData.TryGetValue("world_version", out object v) ? v?.ToString() : "missing";
                     Post($"[ap] logged in: slot {ok.Slot}, team {ok.Team}, world_version {version}, "
                         + $"{attempt.Items.AllItemsReceived.Count} items received so far, "

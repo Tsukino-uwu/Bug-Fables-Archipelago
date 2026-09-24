@@ -11,7 +11,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 ## Where it stands
 
 **Done so far:** a tiny apworld that generates seeds and passes its tests, with the goal "collect N
-artifacts"; a local server; and the mod logging in to it from the running game.
+artifacts"; a local server; and the mod connecting to it on its own, retrying when the server is unreachable.
 
 **Next:**
 
@@ -33,6 +33,7 @@ artifacts"; a local server; and the mod logging in to it from the running game.
 1. [Build step 1: a first, tiny apworld](#build-step-1-a-first-tiny-apworld)
 2. [Build step 2: connect the mod to a real server](#build-step-2-connect-the-mod-to-a-real-server)
 3. [Build step 3: the goal, counted in artifacts](#build-step-3-the-goal-counted-in-artifacts)
+4. [Build step 4: connecting on its own, and staying connected](#build-step-4-connecting-on-its-own-and-staying-connected)
 
 **How it works**
 
@@ -94,6 +95,22 @@ and so does the permit gate: remove the permit rule and two tests fail.
 One rule came out of this for every later option: **every seed can be completed from wherever it starts.**
 Whatever an area or the goal needs is written into the logic, and the mod never hands things out to patch
 a gap.
+
+## Build step 4: connecting on its own, and staying connected
+
+Players enter the room's address, port and slot in an Archipelago panel on the main menu. While the
+Archipelago mod is enabled and those are filled in, **the mod connects by itself**, with no Connect button.
+Failures are sorted into two kinds, using the refusal codes the client library reports:
+
+- **Refused** (a wrong slot or password): the reason is shown, and nothing is retried until a detail changes.
+- **Unreachable, or the connection dropped**: it retries on its own, waiting 2, 4, 8, 15, then 30 seconds.
+
+A dropped server turned out to be invisible: an idle connection doesn't notice the other side is gone. So
+while connected, the mod asks the server something tiny every 5 seconds (the documented read-only value
+`_read_race_mode`), and treats 15 seconds of silence, a failed send or a socket error as a lost connection.
+
+Tested against a local server: a wrong slot was refused and left alone; with the server stopped the mod kept
+retrying, and when the server came back it connected by itself.
 
 ---
 
