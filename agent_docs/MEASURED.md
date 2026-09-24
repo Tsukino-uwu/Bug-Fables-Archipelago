@@ -596,7 +596,12 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   a room's switch also opens a small gate back toward the big-door room, between the two. In
   `SnakemouthUndergroundRightB` (the user's screenshot, 2026-09-24): the switch is the pentagon crystal on a
   pedestal at the top left of the room; hitting it lowers a pillar barrier beside it, the way back to the big-door
-  room. The left and right
+  room. **The switches in the data** (event log and EntityDump, 2026-09-24): each switch room has a `Big Switch`
+  (`data` 1 23) that starts **Event23**, which sets the switch's own `activationflag` (`EventControl.cs`, Event23:
+  `flags[call.activationflag] = true`): **flag 33** in `SnakemouthUndergroundLeftB`, **flag 34** in
+  `SnakemouthUndergroundRightB`. On `SnakemouthUndergrondDoor`, the `DoorEvent` trigger requires **both 33 and 34**
+  and is hidden by **35**, presumably the middle door opened (not yet seen). The log confirmed Event23 started by
+  RightB's Big Switch when the user hit it. The left and right
   switches can be done in either order; both are needed to open the middle door, which leads on to the first boss.
   The Crunchy Leaf behind the pillar needs nothing once you're in its room (the user).
 
