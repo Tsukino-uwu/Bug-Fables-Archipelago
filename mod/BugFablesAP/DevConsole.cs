@@ -92,19 +92,26 @@ namespace BugFablesAP
         // own test is the target's "Player" tag (BattleControl.cs:7295). Off by default, toggled with "onehit".
         private static bool oneHit;
 
-        // infjump: the jump button in mid-air jumps again, through the game's own EntityControl.Jump (the height and
-        // sound of a normal jump, EntityControl.cs:4598, PlayerControl.DoJump). The game's own jump only fires on the
-        // ground (PlayerControl.cs:372), so the two never both act on one press. Off by default.
+        // infjump: each press of the jump button in mid-air jumps again, through the game's own EntityControl.Jump
+        // (the height and sound of a normal jump, EntityControl.cs:4598, PlayerControl.DoJump). The game's own jump
+        // only fires on the ground (PlayerControl.cs:372), so the two never both act on one press. Off by default.
         private static bool infJump;
 
         private static void TickInfJump()
         {
-            if (!infJump || open || MainManager.player == null || MainManager.player.entity == null || !MainManager.FreePlayer())
+            if (!infJump || open || MainManager.player == null || MainManager.player.entity == null || !MainManager.GetKey(4, hold: false))
             {
                 return;
             }
             EntityControl e = MainManager.player.entity;
-            if (!e.onground && e.jumpcooldown <= 0f && MainManager.GetKey(4, hold: false))
+            bool free = MainManager.FreePlayer();
+            // Not the game's jumpcooldown: a jump sets it to 30 frames, longer than the whole jump, so it never ran out in
+            // mid-air (the log, 2026-09-24). A press is one frame, so each press jumps once anyway.
+            bool jumps = free && !e.onground;
+            // Say what the guard decided on every press (CLAUDE.md, "Log what a guard decided").
+            log.LogInfo($"[dev] infjump: press, free {free}, onground {e.onground}, cooldown {e.jumpcooldown:0.0}, "
+                + $"velocity y {e.rigid.velocity.y:0.0} -> {(jumps ? "jump" : "no jump")}");
+            if (jumps)
             {
                 e.Jump();
                 e.PlaySoundSimple("Jump");
