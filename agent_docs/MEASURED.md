@@ -204,11 +204,15 @@ throttled to changes.
   `BugariaResidential` 31, `GoldenSettlement3` 46), so Lore Books are a repeated collectible: in the apworld,
   an item with several copies, and any rule needing them counts copies. The library also added quest **27** to
   the taken list with `flag[70]` (frame 9985), then `flag[579]`.
-- **A tiered milestone reward (the user's read, confirmed in code):** 20 berries in `AntPalaceLibrary` via
-  `|giveitem,-1,20,-11|` (`caller=none`). `Event156` (`EventControl.cs:25843`) pays per tier `thisdecimal`:
-  either an item (`GiveItem(itemtype[i], rewards[i])`) plus that tier's flag (`flags[rewardflags[i]] = true`,
-  `:26181`), or `10 × (i + 1)` berries (`:26186`); 20 berries matches the second tier. **Item tiers are one-time
-  locations, identified by their `rewardflags`.** What `Event156` counts isn't read yet.
+- **Journal rewards (partly measured; the first reading was wrong).** 20 berries in `AntPalaceLibrary`
+  (`|giveitem,-1,20,-11|`, `caller=none`); the NPC spoke of 5 discoveries both times (the user). **Which code pays
+  it is NOT found.** `Event156`'s `10 × (thisdecimal + 1)` payout (`EventControl.cs:26186`, item tiers with
+  `rewardflags` 503–506, 673) was first taken for it, but it sits in a hologram minigame; the link is unproven.
+  **Measured:** the journal is `librarystuff`, 5 rows (`MainManager.Library`: Discovery, Bestiary, Recipes,
+  Logbook, Map). Completing Discovery / Bestiary / Recipes unlocks Logbook entries 10 / 9 / 8, and nearly
+  finishing the Logbook sets `flag[63]` (`MainManager.cs:4294–4371`, counts via `HowManyTrue(GetLibraryBools(n))`
+  against `librarylimit[n]`). The library's dialogue also takes Lore Books (`removeitem,1,52`, line 7) and has
+  crystal berry 25 (`giveitem,3,25`, line 27).
 - **A second crystal berry:** on `SnakemouthLake`, `crystalbflag[1]` flipped (frame 111883), with no
   tutorial flag this time. The script was `|additemtoss,3,var,0|` with `caller=tempitem`, and `flagvar[0]`
   read 1 (HoneyDrop), **a stale value left from an earlier pickup**. `flagvar[0]` means nothing for crystal
