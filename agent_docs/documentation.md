@@ -45,7 +45,9 @@ server, and items from the server arrive in the game once each.
 A step-by-step guide is only useful if no step is missing, so the project enforces it: any commit that
 changes the mod, the apworld or the dev scripts is refused unless it also updates this file or
 [apimplementation.md](apimplementation.md) (or says, explicitly, that nothing about the process changed).
-That check is a small git hook, `.githooks/commit-msg`. Each new step also gets a line in the index above,
+That check is a small git hook, `.githooks/commit-msg` (its neighbour `.githooks/pre-commit` refuses
+personal paths and names). Each step below ends with a short *Code:* line naming the files and methods to
+read. Each new step also gets a line in the index above,
 and "Where it stands" is updated with it.
 
 ---
@@ -99,6 +101,9 @@ needs to hook in.
 Unity games don't load mods by themselves, so we installed **BepInEx 5**, the usual mod loader for
 Unity games. One launch of the game confirmed it worked, and showed its log file.
 
+*Code: `mod/BugFablesAP/Plugin.cs` (`Plugin`, a BepInEx plugin: `Awake` sets everything up, `Tick` runs
+every frame); the project file is `BugFablesAP.csproj`.*
+
 ## 5. Make changes load without restarting the game
 
 Restarting the game for every change is slow, so before any real feature we set up **hot reload**:
@@ -109,6 +114,9 @@ runtime doesn't have, and it failed silently. Turning on more logging showed the
 small: the mod checks its own file once a second and asks for a reload when it changes.
 
 **Lesson:** when something silently does nothing, make the invisible errors visible before guessing.
+
+*Code: `DevReload.cs` (`TryCreate`, `Tick`); `dev-scripts/deploy-dev.ps1` builds the mod and copies it into
+the game.*
 
 ## 6. Watch the game while you play ("probing")
 
@@ -131,11 +139,17 @@ When something left no trace in the log at all, we compared two of the user's sa
 and one from after. The mod decodes both inside the game, using the game's own routine (so the game's key
 never leaves it), and lists which values changed. It's read-only and never writes a save.
 
+*Code: `GrantProbe.cs` (key items and flags), `TextProbe.cs` (item scripts, read as the game's
+`MainManager.SetText` runs them), `SaveDiff.cs` (the two-save comparison). All off by default, switched on
+in the Debug section of the config.*
+
 ## 7. List everything, without playing everything
 
 Playing the whole game to find every item would take days, so we also asked the running game directly:
 a one-off dump loaded every map's dialogue data and kept only the item and flag commands. Together with
 the code, that gave a full list of where key items come from, raw material for the apworld.
+
+*Code: `ScriptDump.cs` (`TryRun`).*
 
 ## 8. An Archipelago menu inside the game
 
@@ -171,8 +185,9 @@ Several things went wrong on the way, each found on screen by the user:
   menu cursor a `SpriteBounce` component when it creates it; the panel's leaf now gets the same one.
 - **No sound opening or closing the panel**, where Start Game and Settings have one (the user noticed). The
   game plays "Confirm" for every main-menu choice before acting on it, and our entry takes the press first,
-  so it skipped the sound. The mod now plays the same "Confirm" on opening, and "Cancel" on backing out, the
-  sound the game uses leaving the file select.
+  so it skipped the sound. The mod now plays the same "Confirm" on opening, and "Cancel" when backing out with
+  the cancel button, the sound the game uses leaving the file select. Choosing the panel's "Back" line plays
+  "Confirm", like any other menu choice.
 
 **Lesson:** when adding to a game's own screen, find every time the game rebuilds that screen, and everything
 else that keeps running while another screen is on top of it.
@@ -182,6 +197,10 @@ from the game's own pieces, read from how the pause menu builds it: the same ora
 above it with the game's button hints, the game's leaf cursor, labels on the left and values on the right, and
 arrows around the On/Off value.
 
+*Code: `MenuToggle.cs` (the menu entry: `BeforeSetMenuText` and `AfterSetMenuText` around the game's rebuild,
+`AfterUpdate` for the cursor, `SetMode` for the switch); `ApMenu.cs` (the panel: `Build`, `Redraw`,
+`Navigate`, `TypeInto` for typing, `Close`); `SaveRedirect.cs` (the separate save folder, patching the
+game's five save-file functions in `InputIO`).*
 
 ## 9. Keep the game's own item, show the seed's
 
@@ -200,8 +219,12 @@ shows what the seed actually put there.**
   every other item the game gives is left alone.
 - **Knowing what's there:** at each login the mod asks the server what's at its locations (a "scout", without
   creating hints) and keeps the answer.
-- **Safety:** the patch looks for each of those calls exactly once, in that order. If the game's code ever
-  differs, it installs nothing and says so in the log, instead of patching the wrong spot.
+- **Safety:** before changing anything, the patch checks the shape it expects. It needs exactly one sprite
+  call, one description-box call before it, one inventory add for items and one for medals between the
+  sprite and the item sound, and one read of the first-medal flag after the sound. If the game's code ever
+  differs, it installs nothing and says so in the log, instead of patching the wrong spot. (The name
+  and the starburst aren't among the rewritten calls: the name is swapped in the text the box reads, and the
+  starburst is found on screen and recoloured.)
 
 **Lesson:** reading the game's source told us *what* happens; reading its compiled code told us *where* it
 can safely be changed. A misread from earlier also surfaced here: the numbers after an item in `giveitem`
@@ -216,3 +239,6 @@ real item's kind, or its Archipelago colour for another game's item), and **the 
 followed. That one is skipped, because no medal was given, and flag 31 stays unset for the real first medal.
 The user then confirmed all three on screen with the G-Bug Ranger Plushie placed there instead: its sprite,
 its description and the key-item colour, with no tutorial.
+
+*Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
+`Recolour` and `FirstMedalSeen` do the swapping); the scout is `ApConnection.Scout`.*

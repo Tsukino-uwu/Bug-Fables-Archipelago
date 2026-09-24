@@ -194,3 +194,23 @@ Newest last. What was tried, what happened, what the user said.
   swapped yet (the transpiler covers items and medals only).
 - **Decided at the very end (2026-09-24):** full bag and storage: keep giving key items, and hold only the ordinary
   items that don't fit (the user chose the recommendation). Not built yet; first thing next session.
+
+## 2026-09-24: code pointers in both guides, checked against the code
+
+- **Asked by the user:** point each step of both guides at the code behind it, without bloating them; for
+  build step 5, name the private patch targets, the shipped versions and the links, and check the claim
+  that every send pings.
+- **Done:** a short *Code:* line (files and methods, no line numbers) at the end of each step of both guides.
+- **The ping claim was imprecise.** Checked in the net40 DLLs (decompiled to stdout, nothing kept):
+  websocket-sharp's `Send` doesn't ping. MultiClient.Net's `ArchipelagoSocketHelper` checks
+  `webSocket.IsAlive` before every send, and `IsAlive` pings and waits up to the client socket's 5 s.
+  The conclusion (never send on the game thread) stands.
+- **Other fixes found on the way:** #141 is a pull request, not an issue. The mod's default address is
+  `archipelago.gg`, not `ws://127.0.0.1:38281`. The handshake log reads `[ap] connected over ..., compression:
+  ...`. The websocket-sharp layer closes a lost socket with `Close()`, no longer an abort. The panel's "Back"
+  line plays Confirm; only the cancel button plays Cancel. ItemSwap's safety check was worded more strictly
+  than the code.
+- **Versions read:** MultiClient.Net 6.7.1, websocket-sharp 1.0.2.34775, Newtonsoft.Json 11.0.1
+  (netstandard2.0), same in the package and the build output.
+- **Left for the user:** two stale code comments, `ApConnection.cs` (names `BaseArchipelagoSocketHelper`,
+  which the net40 build doesn't have) and `world.py` `fill_slot_data` (says the client sends the goal).

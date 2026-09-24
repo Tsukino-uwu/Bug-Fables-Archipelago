@@ -93,6 +93,10 @@ Archipelago's `custom_worlds` folder.
   exits say what they need (the gate out of the Outskirts needs the Explorer Permit), and every location
   belongs to a region. A location needing something more than its region adds that to itself.
 
+*Code: `apworld/bug_fables/world.py` (`BugFablesWorld`: `create_regions`, `create_items`), the data in
+`data/items.json` and `data/locations.json` (read by `data_tables.py`), tests in `test/test_logic.py`
+(`TestPermitGate`).*
+
 ## Build step 2: connect the mod to a real server
 
 We generated a seed with the tiny world, started a local Archipelago server (`MultiServer.py`), and had the
@@ -103,8 +107,11 @@ The first try timed out. The server's own log showed what happened: the library 
 connection, which the plain local server rejected. Giving the address as `ws://…` fixed it, and the mod
 logged in. This also proved the game's runtime can run the client library, which had been an open risk.
 
-**Lesson:** when two programs talk, read the logs on *both* ends. The mod's default address became
-`ws://127.0.0.1:38281` for the same reason, so a local setup works out of the box.
+**Lesson:** when two programs talk, read the logs on *both* ends. For the same reason, a server on your own
+computer is entered as `ws://127.0.0.1` with port `38281`. (The mod's default address is now
+`archipelago.gg`, for hosted rooms.)
+
+*Code: `mod/BugFablesAP/ApConnection.cs` (`ConnectOnWorker`); the address settings in `Plugin.cs` (`Awake`).*
 
 ## Build step 3: the goal, counted in artifacts
 
@@ -122,6 +129,9 @@ and so does the permit gate: remove the permit rule and two tests fail.
 One rule came out of this for every later option: **every seed can be completed from wherever it starts.**
 Whatever an area or the goal needs is written into the logic, and the mod never hands things out to patch
 a gap.
+
+*Code: `apworld/bug_fables/options.py` (`ArtifactsRequired`), `world.py` (`generate_early` lowers the
+number, `create_regions` adds the artifact events), test `TestArtifactsCapped`.*
 
 ## Build step 4: connecting on its own, and staying connected
 
@@ -149,7 +159,12 @@ login step can wait forever, and a stuck attempt had stopped all further retries
 (2026-09-24): stopping the server while connected logged `socket closed: Open -> Aborted`. The game's CPU fell
 back instead of climbing, its thread count went down, and its memory stayed flat. The user's on-screen check
 that the game stays smooth is still to come. When the server came back, the mod reconnected by itself
-within about 6 seconds.
+within about 6 seconds. (Since build step 5 the socket is a different library's, and the mod closes it with
+that library's own close call instead. See step 5, point 5.)
+
+*Code: `Plugin.cs` (`AutoConnect`); `ApConnection.cs`: `ConnectOnWorker` (refused or retry),
+`RetrySeconds` and `ScheduleRetry` (the waits), `Watchdog` (the 5-second ping, 15 seconds of silence, the
+12-second connect deadline), `MarkLost` and `KillSocket` (closing a lost socket).*
 
 ## Build step 5: a compressed connection
 
@@ -157,18 +172,23 @@ The Archipelago server tells every client that doesn't compress its traffic: *"y
 compressed websocket connections! It may stop working in the future."* It's only a warning today, so this
 step is optional. We did it anyway, as a worked example. Here's how it goes, in the order we found things out.
 
+**Versions we ship** (read from the project file and the DLLs, 2026-09-24): Archipelago.MultiClient.Net 6.7.1
+(its net40 build), websocket-sharp 1.0.2.34775 (the copy bundled in that package's net40 folder), and
+Newtonsoft.Json 11.0.1 (the netstandard2.0 copy bundled in the same package; see point 7).
+
 **1. Find out what "compressed" means here.** Websockets have a standard compression add-on called
 *permessage-deflate*. The client offers it when it connects, and the server accepts or declines. The
 server's code shows it looks only for that add-on, and it's set up with one extra setting,
-`server_max_window_bits=11`.
+`server_max_window_bits=11` ([`MultiServer.py`, tag 0.6.7](https://github.com/ArchipelagoMW/Archipelago/blob/0.6.7/MultiServer.py#L57-L58)).
 
 **2. Check what the client library can do.** The library comes in several builds, one per kind of .NET. The
 build we'd used runs on .NET's own websocket, and the version of .NET inside this game has no compression
 at all. The library's older builds (net35, net40) run on a different websocket library, **websocket-sharp**,
 which does support compression, but nothing in Archipelago's library turns it on.
 
-**3. Look for someone who tried first.** The library's issue tracker has an open issue (#141) doing exactly
-this. It warns that websocket-sharp **refuses the server's answer when it includes `server_max_window_bits`**.
+**3. Look for someone who tried first.** The library has an open pull request,
+[#141](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net/pull/141), doing exactly this. It warns
+that websocket-sharp **refuses the server's answer when it includes `server_max_window_bits`**.
 We confirmed that in both codebases. websocket-sharp accepts only two named settings in the answer, and the
 server always adds the window setting. So just switching compression on would make every connection fail.
 That setting only limits how the *server* compresses, and any decompressor can read it, so it's safe to
@@ -184,16 +204,33 @@ ignore.
 - A second patch removes `server_max_window_bits` from the server's answer before websocket-sharp checks it.
   Every other setting is still checked as before.
 
+Both patched methods are **private**: `ArchipelagoSocketHelper.CreateWebSocket` in the client library, and
+`WebSocket.validateSecWebSocketExtensionsServerHeader` in websocket-sharp. Private methods can be renamed or
+changed by any library update without warning. If either one can't be found, the mod installs neither patch
+and logs `[ws] compression left off: ... not found`; the connection then works uncompressed. A changed
+method that keeps its name would not be caught that way, so re-test compression after updating either
+library.
+
+*Code: `mod/BugFablesAP/BugFablesAP.csproj` (the net40 references); `WebSocketCompression.cs` (`Enable`, the
+patches `AfterCreate` and `BeforeValidate`).*
+
 **5. Mind what the new layer changes.** Swapping the websocket library is not free:
 
-- In websocket-sharp, every send first pings the server and **waits for the answer, up to 5 seconds**. So
-  the mod never sends from the game's own thread. Otherwise the game would stutter on every send and freeze
-  when the server is gone.
+- Before every send, the client library's net40 build checks that the connection is alive
+  (`webSocket.IsAlive` in `ArchipelagoSocketHelper`). In websocket-sharp, that check sends a ping and
+  **waits for the answer, up to 5 seconds** (a client socket's wait time). websocket-sharp's own send doesn't
+  ping; the check before it does. So the mod never sends from the game's own thread. Otherwise the game would
+  stutter on every send and freeze when the server is gone.
 - Closing a lost connection works differently too, so the socket fix from step 4 was redone for the new
-  layer, and its drop test runs again.
+  layer, and its drop test runs again. The mod now closes the socket with websocket-sharp's `Close`, which
+  waits up to 5 seconds for the server's reply, so that happens off the game's thread too.
+
+*Code: `ApConnection.cs`: sends run on background threads in `Watchdog` (the keepalive), `SendChecks`,
+`Scout` and `Connect`; closing is `KillSocket`.*
 
 **6. Prove it on both ends.** The mod logs the compression it agreed with the server, read back from the
-socket itself (`[ap] compression: permessage-deflate; ...`). The server stops posting its warning.
+socket itself (`[ap] connected over ws, compression: permessage-deflate; ...`, in
+`ApConnection.ConnectOnWorker`). The server stops posting its warning.
 
 **7. The first run failed, and not because of compression.** The handshake passed, the server logged the
 connection, and then the login timed out without a word. The library reports socket errors only through an
@@ -207,7 +244,8 @@ fit together. Lesson: when you swap one library build, every library that comes 
 **Status (2026-09-24, local server):** it works. The mod logs in compressed, the server's warning is gone,
 switching the mod off closes the connection cleanly, stopping the server is caught and leaves the game at
 normal CPU and flat memory, and the mod reconnects by itself, compressed, when the server comes back. A
-`Compression` setting in the config turns it off if it ever misbehaves. **A hosted room on archipelago.gg
+`Compression` setting in the config (section `Connection`, on by default, defined in `Plugin.Awake`) turns it
+off if it ever misbehaves. **A hosted room on archipelago.gg
 works too (2026-09-24):** with a bare `archipelago.gg` address, the mod connected over `wss` (encrypted),
 compressed, and the room's log showed no warning. The TLS worry didn't come true. The mod now logs which kind
 of connection it made (`connected over wss, compression: ...`), because a bare address tries `wss://` first
@@ -238,6 +276,9 @@ done (flag N set): sending`, `[check] sent ...`, and `[check] now checked on the
 **Tests:** the apworld checks that every location has its flag in `slot_data` (the permit's is 15, the
 medal's 32), and that the world version is written in one place only (the manifest). Both fail without the
 change. The world version went to 0.2.0.
+
+*Code: `apworld/bug_fables/world.py` (`fill_slot_data`), test `TestSlotData`; in the mod,
+`LocationChecks.cs` (`Tick`) and `ApConnection.cs` (`ReadLocationFlags`, `SendChecks`).*
 
 **Not yet:** the game still hands out its own item at the location, the medal here. Replacing that with the
 server's item is the next step. A save from another seed would have sent its finished locations here; build step 7 ties each save to its
@@ -281,6 +322,10 @@ The same operations the game's own code uses put them there.
 the swap test. On loading, the save tied itself to the seed, and both arrived in key items as soon as the
 player was free (the user saw them). Talking to Artis again showed the plushie but gave no second one: each
 item comes once per seed, and the count in the save keeps it that way.
+
+*Code: `mod/BugFablesAP/ItemReceiver.cs`: `CountSlot` and `SeedSlot` (the two save slots),
+`SaveMatchesSeed`, `Tick` (one item per frame), `Busy` (is the player free), `Give` (where each item goes).
+The slot survey was `VarDump.cs`.*
 
 ---
 
@@ -389,9 +434,11 @@ Those are the parts that make each game's client different.
 
 ## 9. How this mod does it
 
-- The login call can take several seconds, so it runs **off the game's own thread**, and the result is
-  passed back to the game thread through a queue. The game never freezes on connect.
-- Connection settings (address, slot, password) live in the mod's BepInEx config file.
+- The login call can take several seconds, so it runs **off the game's own thread**
+  (`ApConnection.Connect`). The result is handed back to the game thread through fields the game reads each
+  frame, and log lines through a queue (`Post`, `Tick`). The game never freezes on connect.
+- Connection settings (address, port, slot, password, compression) and the Archipelago mod switch live in
+  the mod's BepInEx config file (`Plugin.Awake`).
 - The client library and its JSON library sit in `BepInEx/plugins`, loaded once, and the mod itself
   reloads on its own during development.
 
@@ -407,4 +454,4 @@ matter first:
 - An uncompressed connection works today, but the server warns that one day it may not. Turning compression
   on in websocket-sharp without accepting `server_max_window_bits` breaks every connection (build step 5).
 - A lost connection that is only "disconnected" politely can keep a reading loop spinning in the background.
-  The game just gets slower and uses more memory, with no error. Abort the socket.
+  The game just gets slower and uses more memory, with no error. Close the socket itself (build step 4).
