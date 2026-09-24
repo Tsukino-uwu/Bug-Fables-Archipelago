@@ -416,7 +416,9 @@ The output stays in the BepInEx folder.
 - **The ladybug siblings are Leby (the sister) and Dib (the lost kid at the lake)** (the user, 2026-09-24).
 - **Crystal berries around Snakemouth** (2026-09-24, dev warps with the user): #2 in the underground door room is
   reachable in chapter 1 from the room's upper-left entrance with nothing, from below only with Leif (a droplet);
-  #32 (`VinedItem`, bridge room) sits up on the vines and only exists after the first boss (requires flag 41).
+  #32 (`VinedItem`, bridge room) sits up on the vines at the far side and only exists after the first boss
+  (requires flag 41). The user: not reachable in chapter 1; very likely needs **hover** to get onto the
+  platforms/pillars, then the beemerang to grab it (hover not yet confirmed). Waits until hover is in the logic.
 - **Houses outside the city** (`BugariaOutskirtsOutsideCity`, 2026-09-24): the ladybug siblings' house
   (`DoorLadybug`, inside 1) has no gate flags; the user found its Mistake (flag 679) after the first boss and
   remembers it locked earlier (to check on an earlier save). The other house (`doormadeleine`, inside 2, with a
