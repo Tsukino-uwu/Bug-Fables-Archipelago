@@ -300,7 +300,9 @@ logs in, so a save played before that would hand out vanilla items. How it was b
 3. "Logged in" is a flag the connection sets when `slot_data` arrives. It stays set after a drop, so the rules stay
    in force offline once the seed is known.
 
-*Not yet seen on screen (2026-09-24).*
+*Seen on screen by the user (2026-09-24): with the server down, a save and a new game were both held back with
+the popup (keyboard and gamepad hints); once the server was back and the mod logged in on its own, the same save
+loaded normally.*
 
 The user then asked for it to feel like the game's settings screen, so the mod rebuilds that screen's look
 from the game's own pieces, read from how the pause menu builds it: the same orange box, the controls box

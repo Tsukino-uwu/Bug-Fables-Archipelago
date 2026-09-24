@@ -357,3 +357,5 @@ Newest last. What was tried, what happened, what the user said.
   the seed on disk). First test showed nothing held back: I had run copy-dev without stage-dev, so the game still
   had the old build (copy-dev copies what stage-dev staged). Staged and copied, the guard held both a save and a
   new game back; its one-line notice ran over the save slots, so it became a popup box over a dimmer.
+- **Confirmed by the user:** the popup (moved up over the slots, OK and Close hints) held the save back with the
+  server down; after the server came back and the mod logged in by itself, the save loaded.
