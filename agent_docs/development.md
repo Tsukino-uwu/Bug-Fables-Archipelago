@@ -36,7 +36,11 @@ The build and the copy into the game are separate steps. The build never writes 
    closed: a running game holds the libraries open.
 
 The plugin reads its config when it loads, so a hot reload also picks up a changed
-`BepInEx/config/bugfables.archipelago.cfg`.
+`BepInEx/config/bugfables.archipelago.cfg`. **But the running plugin rewrites the whole file whenever one of its
+settings changes** (a panel choice, a one-shot dev setting resetting itself), with the values it holds in
+memory. An edit made while the game runs can be undone before the next reload (2026-09-24: `EntityDump = true`
+came back `false` after a panel change). So change a setting and reload in one go: restage, then
+`copy-dev.ps1 -DebugOn ...`.
 
 ## A local server to test against
 
