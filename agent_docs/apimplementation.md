@@ -121,10 +121,12 @@ Archipelago's `custom_worlds` folder.
 - **A location is named after where it is, never after what it gives** (the user, 2026-09-24). Once items
   are shuffled, a hint like "your Hover is at Outskirts: Explorer Permit" points at the wrong thing. The
   form is `<Area>: <Room>, <Spot>` (the user, 2026-09-24): the game's own area name; a short room name from a
-  landmark, left out for a one-map area; and what you'd *see* at the spot, like `Snakemouth Den: Bridge Room, On
-  Top of a Pillar`. Gifts are `<Area>: <Who>'s Gift` or `<Who>'s Reward`, like `Outskirts: Maki and Eetl's Gift`.
-  Never the item, the flag or a mechanic (a "Beemerang" in a name goes stale once abilities are shuffled), Title
-  Case, and one wording per kind of spot everywhere. The test
+  landmark, left out for a one-map area; and the spot as **just a landmark**, a noun of one to three words with
+  no articles or verbs, like `Snakemouth Den: Bridge Room, Pillar` ("Ledge", "Chest", "Waterfall"; a qualifier
+  like "Top of Pillar" only when a room needs telling apart). Not a sentence and not a hint at how to get it
+  ("On Top of a Pillar", "Under a Rock" are too much). Gifts are `<Area>: <Who>'s Gift` or `<Who>'s Reward`,
+  like `Outskirts: Maki and Eetl's Gift`. Never the item, the flag or a mechanic ("Beemerang" goes stale once
+  abilities are shuffled), Title Case, one word per kind of landmark everywhere. The test
   `TestLocationNames` fails if a location's name contains its own vanilla item's name. Renaming a location
   never changes its id or flag.
 
