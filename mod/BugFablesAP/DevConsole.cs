@@ -242,10 +242,37 @@ namespace BugFablesAP
             pendingMap = (int)map;
             pendingFlag = flag;
             pendingSince = Time.realtimeSinceStartup;
-            // The door warp: the game's own map transfer. Position zero, then FinishWarp moves the party to a
-            // known spot on the new map (a map's origin can be inside a wall).
-            MainManager.instance.StartCoroutine(MainManager.TransferMap((int)map, Vector3.zero));
+            // The door warp: the game's own map transfer, straight to the entity's start position when the map's
+            // entity table has it, so the party arrives there in one step (the user, 2026-09-24: a warp to the origin
+            // and then a hop to the item looked like two warps). Otherwise the origin, and FinishWarp moves the party
+            // to a known spot (a map's origin can be inside a wall).
+            Vector3? at = flag >= 0 ? StartPosition(map, flag) : null;
+            MainManager.instance.StartCoroutine(MainManager.TransferMap((int)map, at.HasValue ? at.Value + Beside : Vector3.zero));
             return "warping to " + map + skipped;
+        }
+
+        // Beside the entity, not on it: standing on a pickup would take it before you look. 1.5 was one step away,
+        // and the user took it on arrival (2026-09-24).
+        private static readonly Vector3 Beside = new Vector3(2.5f, 0.5f, 0f);
+
+        // An entity's start position, read from the map's entity table as MapControl.CreateEntities does: fields 6-8
+        // are its start position, field 194 its activationflag (MapControl.cs:1477-1640, EntityDump).
+        private static Vector3? StartPosition(MainManager.Maps map, int flag)
+        {
+            TextAsset data = Resources.Load<TextAsset>("Data/EntityData/" + (int)map);
+            if (data == null)
+            {
+                return null;
+            }
+            foreach (string line in data.ToString().Split('\n'))
+            {
+                string[] f = line.Split('}');
+                if (f.Length > 194 && f[194].Trim() == flag.ToString())
+                {
+                    return new Vector3(Convert.ToSingle(f[6]), Convert.ToSingle(f[7]), Convert.ToSingle(f[8]));
+                }
+            }
+            return null;
         }
 
         // A map's auto-start cutscenes (MapControl.autoevent, (flag, event)) run on arrival while their flag is off
@@ -292,8 +319,18 @@ namespace BugFablesAP
 
         // Once the target map is up and the transfer is over, stand by the entity with the wanted flag, or else by
         // the first save point or door on the map.
+        private static float unlockAt = -1f;
+
         private static void FinishWarp()
         {
+            if (unlockAt > 0f && Time.realtimeSinceStartup >= unlockAt)
+            {
+                unlockAt = -1f;
+                if (MainManager.player != null && !open)
+                {
+                    MainManager.player.lockkeys = false;
+                }
+            }
             if (pendingMap < 0)
             {
                 return;
@@ -322,8 +359,21 @@ namespace BugFablesAP
             }
             if (target != null)
             {
-                // Beside it, not on it: standing on a pickup would take it before you look.
-                MainManager.player.transform.position = target.transform.position + new Vector3(1.5f, 0.5f, 0f);
+                // Already there when the warp went straight to it; else move beside it now. The pickup's own touch
+                // cooldown (which CheckItem waits out, NPCControl.cs:5608; counted down each frame, :2802) holds it
+                // about 1.5 s either way.
+                if (Vector3.Distance(MainManager.player.transform.position, target.transform.position) > 4f)
+                {
+                    MainManager.player.transform.position = target.transform.position + Beside;
+                }
+                if (target.objecttype == NPCControl.ObjectTypes.Item)
+                {
+                    target.touchcooldown = 90f;
+                }
+                // And no walking for a second after arriving, so a key still held doesn't carry you into something
+                // (the user, 2026-09-24).
+                MainManager.player.lockkeys = true;
+                unlockAt = Time.realtimeSinceStartup + 1f;
                 MainManager.TeleportFollowers(true);
             }
             lastResult = "arrived on " + map.mapid + ", " + where;

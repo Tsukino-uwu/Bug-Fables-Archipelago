@@ -75,6 +75,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `flag <n> [on|off]`: show or set a story flag.
 - `unstick`: runs the game's own end-of-cutscene cleanup, when a cutscene died and left you frozen.
 
+`loc` and `warp <map> <flag>` go straight to the entity's start position, read from the map's entity table,
+and land a couple of steps from it; the pickup can't be taken for about 1.5 s and you can't walk for 1 s after
+arriving (the user, 2026-09-24: one step away was too close, and the old origin-then-hop looked like two warps).
 `loc` and `warp` mark the target map's auto-start cutscenes as seen before arriving: one played out of the
 story's order crashed and froze the game (2026-09-24). A test file only.
 
