@@ -161,6 +161,13 @@ throttled to changes.
   entity 16), and `crystalbflag[5]` flipped (frame 46414). **Found or given, a crystal berry's identity is its
   `crystalbflags` index, and a `giveitem,3,<n>` names that index directly**, so the full berry list can come
   from the dialogue dump plus the code.
+- **The second key item: `id=41 (Map)`** added to `items[1]` on `AntPalace2` (frame 52686, during an event).
+  It matches the dialogue dump's `AntPalace2` line 14 → `giveitem,1,41`, so the dump named it before it happened.
+  **`flag[67]` followed (frame 54157), set at the end of `Event45`** (`EventControl.cs:7181`, flag at `:7505`):
+  the Map's location is Event45 / flag 67, the same shape as the permit. `flag[68]` (frame 55406, on
+  `AntPalace1`) is `Event46` (`:7511`), the next story step; the user saw it as walking out of the throne room.
+  **TextProbe logged nothing for this grant**: the event seems to pass `SetText` a reference to the map's
+  dialogue line, not the text, so the probe never sees the `giveitem`. The dump and GrantProbe covered it.
 - **A second crystal berry:** on `SnakemouthLake`, `crystalbflag[1]` flipped (frame 111883), with no
   tutorial flag this time. The script was `|additemtoss,3,var,0|` with `caller=tempitem`, and `flagvar[0]`
   read 1 (HoneyDrop), **a stale value left from an earlier pickup**. `flagvar[0]` means nothing for crystal
