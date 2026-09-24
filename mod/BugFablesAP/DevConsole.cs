@@ -20,7 +20,6 @@ namespace BugFablesAP
     //   unstick                 run the game's end-of-event cleanup, when a cutscene died and left you frozen
     //   nudge <x> <y> <z>       shift the party by that much on this map
     //   onehit                  toggle: every hit on an enemy does at least 99 (off by default)
-    //   party                   Leif joins, as the game's own Event14 does it
     internal static class DevConsole
     {
         private const long LocationIdBase = 7_720_000;
@@ -252,7 +251,6 @@ namespace BugFablesAP
                     case "unstick": return Unstick();
                     case "nudge": return Nudge(parts);
                     case "items": return Items();
-                    case "party": return Party();
                     case "onehit": oneHit = !oneHit; return "onehit " + (oneHit ? "on: every hit on an enemy does at least 99" : "off");
                     default: return "unknown command: " + parts[0];
                 }
@@ -572,34 +570,6 @@ namespace BugFablesAP
                     + $"hidden {npc.entity.iskill} active {npc.gameObject.activeInHierarchy} {distance:0.0} away at {npc.transform.position}");
             }
             return $"{n} pickups on {map.mapid} (listed in the log); entity data read from {map.readdatafromothermap}";
-        }
-
-        // Leif joins, exactly as the game's own Event14 does it (EventControl.cs:3462-3464): the full party, then his
-        // joined flag 16. Warps skip his joining at the lake, and cutscenes that move all three (Event31, Event21)
-        // crashed on the missing Leif (2026-09-24).
-        private static string Party()
-        {
-            if (MainManager.player == null || MainManager.instance.inbattle)
-            {
-                return "not now: no player, or in battle";
-            }
-            bool full = MainManager.instance.playerdata.Length >= 3;
-            if (full && MainManager.instance.playerdata.All(p => p.entity != null))
-            {
-                return "the party already has three";
-            }
-            if (!full)
-            {
-                MainManager.ChangeParty(new[] { 0, 1, 2 }, fromscratch: true, destroyoldentity: false);
-                MainManager.instance.flags[16] = true;
-            }
-            // In Event14 Leif's character already stands in the scene and ChangeParty reuses it; here there is none,
-            // and the game's per-tick RefreshPlayer threw on the missing one (2026-09-24). SetPlayers(positions) builds
-            // every party member's character, as loading a save does (MainManager.cs:9416).
-            Vector3 at = MainManager.player.transform.position;
-            MainManager.SetPlayers(new[] { at, at, at });
-            MainManager.TeleportFollowers(true);
-            return "party is now Vi, Kabbu, Leif (flag 16 on), characters rebuilt";
         }
 
         private static string Flag(string[] parts)

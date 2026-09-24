@@ -331,3 +331,10 @@ Newest last. What was tried, what happened, what the user said.
   with the user: rows reordered, no Back row, a description line, the settings screen's arrows and change sound.
   Dev warps: one step to the entity's start position, pickup cooldown, 1 s freeze. Rule added: vanilla stays
   vanilla (every effect only while Archipelago is enabled).
+- **Adding Leif mid-game doesn't work** (2026-09-24, two attempts, then stopped): `ChangeParty({0,1,2})` outside
+  Event14 left Leif without a character (Event14 reuses the moth already in the scene), so `RefreshPlayer` threw
+  every tick; adding `SetPlayers(positions)` then threw itself and left the party broken (stuck camera). The user
+  reloaded. The `party` dev command was removed. Cutscenes that move all three (Event31, Event21) crash on a file
+  where Leif never joined: test such events on a file where he joined through the story.
+- **Decided (the user):** vanilla story now; an "open start" yaml option next (skip prologue/tutorial, optional
+  Leif from the start via the new-game party); no full story strip.
