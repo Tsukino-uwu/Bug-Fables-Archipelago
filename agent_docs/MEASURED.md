@@ -204,6 +204,11 @@ throttled to changes.
   `BugariaResidential` 31, `GoldenSettlement3` 46), so Lore Books are a repeated collectible: in the apworld,
   an item with several copies, and any rule needing them counts copies. The library also added quest **27** to
   the taken list with `flag[70]` (frame 9985), then `flag[579]`.
+- **A tiered milestone reward (the user's read, confirmed in code):** 20 berries in `AntPalaceLibrary` via
+  `|giveitem,-1,20,-11|` (`caller=none`). `Event156` (`EventControl.cs:25843`) pays per tier `thisdecimal`:
+  either an item (`GiveItem(itemtype[i], rewards[i])`) plus that tier's flag (`flags[rewardflags[i]] = true`,
+  `:26181`), or `10 × (i + 1)` berries (`:26186`); 20 berries matches the second tier. **Item tiers are one-time
+  locations, identified by their `rewardflags`.** What `Event156` counts isn't read yet.
 - **A second crystal berry:** on `SnakemouthLake`, `crystalbflag[1]` flipped (frame 111883), with no
   tutorial flag this time. The script was `|additemtoss,3,var,0|` with `caller=tempitem`, and `flagvar[0]`
   read 1 (HoneyDrop), **a stale value left from an earlier pickup**. `flagvar[0]` means nothing for crystal
