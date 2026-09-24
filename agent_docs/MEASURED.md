@@ -173,6 +173,10 @@ throttled to changes.
   they pay for and use the inn, not otherwise. So it's a repeatable reward spawned on the spot, recorded
   nowhere, and **not a location**. Three kinds of world pickup so far: a global flag (one-time, can be a
   location), a regional flag (respawns, not one), and no flag (repeatable, not one).
+- **A key item lying in the world, with a global flag:** on `BugariaResidential`, `caller=badbook`, the script
+  `|flag,621,true||additemtoss,1,var,0|` (type 1, key item), and `KEYITEM +1 id=174` plus `flag[621]` in the
+  same frame (17532). The first grant all three probes caught together. **A clean key-item location: flag
+  621.** Also `flag[43]` flipped (frame 14950): the flag `Event27` sets, the event after the first boss.
 - **A second crystal berry:** on `SnakemouthLake`, `crystalbflag[1]` flipped (frame 111883), with no
   tutorial flag this time. The script was `|additemtoss,3,var,0|` with `caller=tempitem`, and `flagvar[0]`
   read 1 (HoneyDrop), **a stale value left from an earlier pickup**. `flagvar[0]` means nothing for crystal
