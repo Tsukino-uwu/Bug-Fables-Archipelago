@@ -93,6 +93,13 @@ throttled to changes.
     separate moments:** the `giveitem` is in the dialogue, and flag 15 is set in code when `Event16` ends.
     The local grant happened because sending checks doesn't exist yet. Log kept only in that session's
     scratchpad.
+- **The first medal, captured (2026-09-24, same run):** Artis's dialogue (`caller=ShwEmArtys`) on
+  `BugariaOutskirtsOutsideCity/BugariaOutskirts` ends `|giveitem,2,11,45|`: type 2 medal, id 11, shown over
+  entity 45. An NPC talk started it, not an event. Right after, `flag[31]` flipped (frame 40171), then `flag[32]`
+  (40278, about 107 frames later). **`flag[30]` flipped before this talk** (frame 38697), so it isn't part of
+  the medal. In the first run it came after 31 and 32, so 30 belongs to something else nearby. Flag 31 fits
+  "first medal ever" (see above). **Flag 32 is the candidate for "Artis's medal given"**, which is unconfirmed.
+  GrantProbe doesn't watch `badges`, so no item line appeared.
   - **`Event17` (`:3824`) is the gate the permit opens.** It sets `flags[28] = true`. Observed live: when the
     user showed the permit (frame 21527), `flag[28]` flipped, **and the permit stayed in `items[1]`**. It
     is shown, not consumed. The user saw a gate open.
