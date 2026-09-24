@@ -524,6 +524,8 @@ that index (`location_berries`), the pickup is recognised by it (`data[0]`), and
 *Crystal Berry* (kind 4). The mod undoes the count the pickup code already raised, keeps the berry's "taken" mark,
 shows the seed's item (a berry is a 3D model, so the model is hidden for a sprite), and drops the first-berry
 tutorial; receiving one raises the count. First location: berry #0 outside the cave (test `TestCrystalBerries`).
+They're a yaml category, *Shuffle Crystal Berries*, on by default (the user: some are obscure, like quests; test
+`TestCrystalBerriesOff`).
 **Optional categories** (the user, 2026-09-24): a location can carry a `category`; its yaml option decides whether
 the seed includes it. *Shuffle Quests* (on by default) covers quest-board and side-quest rewards; one-off NPC gifts
 will have their own toggle. With a category off, its locations aren't created, their vanilla items stay out of the

@@ -12,8 +12,10 @@ chapters to come.
 ## Options
 
 - **Artifacts Required** (1 to 7): the goal, see below.
-- **Shuffle Quests** (on by default): quest rewards, from the quest board and from side quests, are locations.
-  Turned off, quests give their usual rewards.
+- **Shuffle Quests** (on by default): quest rewards, from the quest board and from side quests, are locations,
+  and so are the items a quest hands you on the way. Turned off, quests stay as in the game.
+- **Shuffle Crystal Berries** (on by default): crystal berry spots are locations and crystal berries are items.
+  Some are well hidden. Turned off, they stay where they are and the crystal berry shop works as usual.
 
 ## What is the goal?
 

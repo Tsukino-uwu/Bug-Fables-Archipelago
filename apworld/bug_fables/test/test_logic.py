@@ -388,3 +388,16 @@ class TestCrystalBerries(BugFablesTestBase):
         self.assertFalse(self.can_reach_location("Outskirts: Snakemouth Den Entrance"))
         self.collect_by_name("Explorer Permit")
         self.assertTrue(self.can_reach_location("Outskirts: Snakemouth Den Entrance"))
+
+
+class TestCrystalBerriesOff(BugFablesTestBase):
+    # With crystal berries off their spots aren't locations, the item stays out of the pool, and the client isn't
+    # told about them, so the game hands them out as usual.
+    options = {"shuffle_crystal_berries": False}
+
+    def test_berries_left_out(self) -> None:
+        names = {loc.name for loc in self.multiworld.get_locations(self.player)}
+        self.assertNotIn("Outskirts: Snakemouth Den Entrance", names)
+        pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        self.assertNotIn("Crystal Berry", pool)
+        self.assertEqual(self.world.fill_slot_data()["location_berries"], {})

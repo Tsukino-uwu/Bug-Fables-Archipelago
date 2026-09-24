@@ -82,6 +82,8 @@ class BugFablesWorld(World):
     def _category_on(self, category: str | None) -> bool:
         if category == "quest":
             return bool(self.options.shuffle_quests.value)
+        if category == "crystal_berry":
+            return bool(self.options.shuffle_crystal_berries.value)
         return True
 
     def create_regions(self) -> None:

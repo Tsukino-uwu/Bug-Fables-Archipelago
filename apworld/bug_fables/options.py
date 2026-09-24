@@ -27,7 +27,18 @@ class ShuffleQuests(DefaultOnToggle):
     display_name = "Shuffle Quests"
 
 
+class ShuffleCrystalBerries(DefaultOnToggle):
+    """
+    Crystal berry spots are locations, and the berries are items. Some are well hidden.
+
+    Turned off, crystal berries stay where they are and the crystal berry shop works as usual.
+    """
+
+    display_name = "Shuffle Crystal Berries"
+
+
 @dataclass
 class BugFablesOptions(PerGameCommonOptions):
     artifacts_required: ArtifactsRequired
     shuffle_quests: ShuffleQuests
+    shuffle_crystal_berries: ShuffleCrystalBerries
