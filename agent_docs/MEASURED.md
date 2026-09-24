@@ -182,6 +182,13 @@ throttled to changes.
   has it (`BugariaResidential` line 26 → `giveitem,1,93`). This item exists to be delivered to finish the quest,
   **so if it's shuffled, that quest's completion must require it in the logic.** The hand-off itself is a
   location (flag 241).
+- **A key item that is CONSUMED:** delivering the Bad Book (id 174) in `AntPalaceLibrary`: `flag[618]` flipped
+  (frame 35577), then `KEYITEM -1 id=174` (36206). The item left `items[1]`, unlike the permit, which is only
+  shown. The 35-berry reward went through `money`, which TextProbe filters out. **So the delivery is a
+  location (flag 618) that requires the Bad Book.** With remote items, the server sends it once and the game
+  consumes it once; the received-item count in the save keeps a reload from giving it back.
+- **`flag[349]` toggles on and off** at the `BugariaCommercial` shops (frames 31742–32369): temporary shop
+  screen state, not progress. `flag[180]` flipped there too.
 - **A second crystal berry:** on `SnakemouthLake`, `crystalbflag[1]` flipped (frame 111883), with no
   tutorial flag this time. The script was `|additemtoss,3,var,0|` with `caller=tempitem`, and `flagvar[0]`
   read 1 (HoneyDrop), **a stale value left from an earlier pickup**. `flagvar[0]` means nothing for crystal
