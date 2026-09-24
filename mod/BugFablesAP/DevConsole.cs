@@ -38,6 +38,43 @@ namespace BugFablesAP
             connection = conn;
         }
 
+        // Dev only (Debug.DevCommandFile): a text file the console also reads, so a developer outside the game can run
+        // commands while the tester watches. Checked twice a second; its lines are queued and the file emptied.
+        // Commands run one at a time, the next only once a warp has arrived.
+        internal static string CommandFile;
+        private static readonly Queue<string> queued = new Queue<string>();
+        private static float lastPoll;
+
+        private static void PollFile()
+        {
+            if (string.IsNullOrEmpty(CommandFile) || Time.realtimeSinceStartup - lastPoll < 0.5f)
+            {
+                return;
+            }
+            lastPoll = Time.realtimeSinceStartup;
+            try
+            {
+                if (!System.IO.File.Exists(CommandFile))
+                {
+                    return;
+                }
+                string[] lines = System.IO.File.ReadAllLines(CommandFile);
+                if (lines.Length == 0)
+                {
+                    return;
+                }
+                System.IO.File.WriteAllText(CommandFile, "");
+                foreach (string l in lines.Select(x => x.Trim()).Where(x => x.Length > 0 && !x.StartsWith("#")))
+                {
+                    queued.Enqueue(l);
+                }
+            }
+            catch (Exception e)
+            {
+                log.LogWarning("[dev] command file: " + e.Message);
+            }
+        }
+
         internal static void Tick(bool enabled)
         {
             if (!enabled)
@@ -49,6 +86,14 @@ namespace BugFablesAP
                 return;
             }
             FinishWarp();
+            PollFile();
+            if (queued.Count > 0 && pendingMap < 0 && !open)
+            {
+                string command = queued.Dequeue();
+                lastResult = Run(command);
+                shownAt = Time.realtimeSinceStartup;
+                log.LogInfo($"[dev] (file) {command} -> {lastResult}");
+            }
             if (Input.GetKeyDown(KeyCode.F9))
             {
                 if (open)

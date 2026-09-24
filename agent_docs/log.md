@@ -309,3 +309,17 @@ Newest last. What was tried, what happened, what the user said.
 - The user: the bubble shield crosses hazards and pushes enemies (matches the code: `WalkableSpike`). Hover
   isn't known to the user yet. Decided: story steps after an ability's vanilla point require it; side
   locations only where confirmed, else the per-map default.
+
+## 2026-09-24: first pickup test; dev console; a logic bug found by it
+
+- **Test seed** (plando, `--plando "bosses, items, connections, texts"`): the local server and the game started by
+  the agent (the user's yes). Artis's gift showed "Hard Mode Medal" with the orange starburst and the medal's
+  description (the user's screenshot), the check was sent, and **Hard Mode arrived in the medals menu** (the user,
+  on screen): receiving medals works.
+- The user asked for dev tools: `DevConsole` (F9: loc, warp, spawn, flag), then "just use it for me":
+  `DevCommandFile`, a file the console reads, written by the agent; `copy-dev.ps1 -DebugSet Key=Value`.
+- `loc 4` put the party inside a house that opens later (the user): the Outskirts pickup (flag 686) was
+  **wrongly in logic from the start**. Location 4 retired. EntityDump now writes `insideid`; indoor pickups are
+  gated by their inside's door. The console can't yet enter an inside.
+- The user asked why saves are tied to seeds; answered (the count only means something within a seed), and
+  `AdoptSeed` added for test files.

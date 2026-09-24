@@ -79,9 +79,7 @@ class TestPickups(BugFablesTestBase):
     # the vanilla item at that spot; a wrong flag would swap an unrelated pickup.
     def test_pickups_are_in_slot_data(self) -> None:
         pickups = self.world.fill_slot_data()["location_pickups"]
-        ground = str(self.world.location_name_to_id["Outskirts: Ground Pickup Outside the City"])
         medal = str(self.world.location_name_to_id["Snakemouth Den: Underground Door Room"])
-        self.assertEqual(pickups[ground], {"map": "BugariaOutskirtsOutsideCity", "flag": 686})
         self.assertEqual(pickups[medal], {"map": "SnakemouthUndergrondDoor", "flag": 60})
 
     def test_pickups_are_not_gives(self) -> None:

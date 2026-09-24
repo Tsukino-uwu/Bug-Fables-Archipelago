@@ -407,6 +407,12 @@ The output stays in the BepInEx folder.
   the only floor missables. No floor key item or medal is missable.
 - **Required flags (`requires`):** only 10 pickups have any (4 key items, 1 medal, 4 items, 1 berry). Most
   pickups are gated by the map they lie on, not by a flag of their own.
+- **Indoor pickups (the user, on screen, 2026-09-24):** the pickup with flag 686 on
+  `BugariaOutskirtsOutsideCity` is inside a building (an *inside*) that isn't open in chapter 1, next to a
+  second item; seen after the dev console's `loc` put the party by it. It couldn't be picked up, since the warp
+  hadn't entered the inside the way its door does. **An entity's `insideid` (field 178, `MapControl.cs:1609`)
+  says which inside it's in; -1 is outdoors.** EntityDump now writes it. An indoor pickup is gated by its
+  inside's door (`DoorSameMap`), not only by its map.
 - **Doors:** 567 `DoorOtherMap` entities, 59 of them with required or hiding flags. Those are the map graph
   and its story gates, for the regions.
 - **Not in this dump:** the one key item and one medal without an `activationflag` still need judging.

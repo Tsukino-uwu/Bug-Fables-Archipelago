@@ -147,6 +147,16 @@ game's own dig-spot function, and show or set a flag. Before building it we chec
 room: it has debug helpers, but they run unknown old scripts and can't put you by a location. See
 `development.md` for the commands.
 
+The user then asked the agent to drive it, so the console also reads a **command file** (`DevCommandFile`):
+each line written there runs as if typed. The agent writes the file in its own scratch folder, never in the
+game's, and reads the answers in the log (`[dev]` lines). `copy-dev.ps1 -DebugSet DevCommandFile=<path>` sets
+it.
+
+**It found a logic bug on its first run.** `loc` put the party by a pickup the apworld had as open from the
+start, and the user saw it was inside a house that opens later in the story. The entity dump hadn't kept which
+*inside* (a building's interior) an entity belongs to. It does now, and that location was retired. The
+console can't enter an inside yet: it stands you by the item, but only the door's own step lets you pick it up.
+
 *Code: `DevConsole.cs`.*
 
 ## 6. Watch the game while you play ("probing")

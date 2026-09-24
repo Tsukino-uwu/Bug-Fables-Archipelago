@@ -40,6 +40,7 @@ namespace BugFablesAP
         private ConfigEntry<string> saveDiff;
         private ConfigEntry<bool> adoptSeed;
         private ConfigEntry<bool> devConsole;
+        private ConfigEntry<string> devCommandFile;
         private ConfigEntry<int> giveMoney;
         private bool saveDiffDone;
         private GrantProbe grantProbe;
@@ -64,6 +65,10 @@ namespace BugFablesAP
                 "Dev only. F9 opens a command line: loc <n> (go to a pickup location), warp <map> [flag], "
                 + "spawn <item|key|medal> <id> [flag], flag <n> [on|off]. Can put a save in states the story never "
                 + "makes: test files only. Off by default.");
+            devCommandFile = Config.Bind("Debug", "DevCommandFile", "",
+                "Dev only, with DevConsole. A text file the console also reads: each line is run as a typed command, "
+                + "then the file is emptied. Lets a developer outside the game drive a test. Empty = off.");
+            DevConsole.CommandFile = devCommandFile.Value;
             saveDiff = Config.Bind("Debug", "SaveDiff", "",
                 "Dev only. Two save file names separated by |, e.g. 'save2backup.dat|save2.dat'. Once per load, logs "
                 + "what changed between them (read-only). Empty = off.");

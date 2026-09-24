@@ -2,7 +2,7 @@
 # config. Every file it replaces is backed up first, so each run can be undone. Dev only.
 #
 #   powershell -ExecutionPolicy Bypass -File dev-scripts\copy-dev.ps1 [-GameDir "D:\Games\Bug Fables"]
-#       [-DebugOn EntityDump,ScriptDump] [-DebugOff GrantProbe]
+#       [-DebugOn EntityDump,ScriptDump] [-DebugOff GrantProbe] [-DebugSet DevCommandFile=C:\path\cmds.txt]
 #   powershell -ExecutionPolicy Bypass -File dev-scripts\copy-dev.ps1 -Restore <backup folder name>
 #
 # What it writes in the game, and nothing else:
@@ -18,6 +18,8 @@ param(
     [string]$GameDir = 'C:\Program Files (x86)\Steam\steamapps\common\Bug Fables',
     [string[]]$DebugOn = @(),
     [string[]]$DebugOff = @(),
+    # Text settings, as Key=Value (e.g. DevCommandFile=C:\path\cmds.txt). One per -DebugSet; not comma-split.
+    [string[]]$DebugSet = @(),
     [string]$Restore = ''
 )
 $ErrorActionPreference = 'Stop'
@@ -75,13 +77,18 @@ $hash = (Get-FileHash (Join-Path $scripts 'BugFablesAP.dll') -Algorithm SHA256).
 Write-Output "copied BugFablesAP.dll (sha256 $hash...) into BepInEx\scripts; DevReload will pick it up"
 
 # Debug settings: set only the named keys inside [Debug], adding a key the file doesn't have yet.
-if ($DebugOn.Count -gt 0 -or $DebugOff.Count -gt 0) {
+if ($DebugOn.Count -gt 0 -or $DebugOff.Count -gt 0 -or $DebugSet.Count -gt 0) {
     $cfg = Join-Path $GameDir $targets['bugfables.archipelago.cfg']
     if (-not (Test-Path $cfg)) { throw "no $cfg yet: start the game once with the mod so BepInEx writes it" }
     Backup 'bugfables.archipelago.cfg'
     $want = [ordered]@{}
     foreach ($k in $DebugOn) { $want[$k] = 'true' }
     foreach ($k in $DebugOff) { $want[$k] = 'false' }
+    foreach ($pair in $DebugSet) {
+        $at = $pair.IndexOf('=')
+        if ($at -lt 1) { throw "-DebugSet wants Key=Value, got '$pair'" }
+        $want[$pair.Substring(0, $at).Trim()] = $pair.Substring($at + 1).Trim()
+    }
     $lines = [System.Collections.Generic.List[string]](Get-Content $cfg)
     $start = $lines.IndexOf('[Debug]')
     if ($start -lt 0) { throw "no [Debug] section in $cfg" }

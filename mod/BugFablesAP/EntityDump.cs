@@ -22,6 +22,10 @@ namespace BugFablesAP
     {
         private const int RequiresCount = 38, LimitCount = 49, DataCount = 60, DialogueCount = 102;
         private const int RegionalFlag = 190, ActivationFlag = 194;
+        // Which inside (a building's interior on the same map) the entity belongs to; -1 outdoors. An indoor pickup
+        // is reached through that inside's door, whose own flags gate it (found 2026-09-24: a pickup the apworld had
+        // outdoors was in a house that opens later).
+        private const int InsideId = 178;
 
         // Returns true once it has run (successfully or not), so the caller stops asking.
         internal static bool TryRun(ManualLogSource log)
@@ -39,7 +43,7 @@ namespace BugFablesAP
         {
             string outPath = Path.Combine(Paths.BepInExRootPath, "bugfablesap-entitydump.tsv");
             var sb = new StringBuilder();
-            sb.AppendLine("map\tindex\tname\tentitytype\tobjecttype\tinteract\tanimid\teventid\trequires\tlimit\tdata\tdialogues\tregionalflag\tactivationflag");
+            sb.AppendLine("map\tindex\tname\tentitytype\tobjecttype\tinteract\tanimid\teventid\trequires\tlimit\tdata\tdialogues\tregionalflag\tactivationflag\tinsideid");
             int maps = 0, rows = 0, bad = 0;
             foreach (MainManager.Maps map in Enum.GetValues(typeof(MainManager.Maps)))
             {
@@ -66,7 +70,8 @@ namespace BugFablesAP
                           .Append(List(f, LimitCount, 1)).Append('\t')
                           .Append(List(f, DataCount, 1)).Append('\t')
                           .Append(List(f, DialogueCount, 3)).Append('\t')
-                          .Append(f[RegionalFlag]).Append('\t').Append(f[ActivationFlag].Trim()).AppendLine();
+                          .Append(f[RegionalFlag]).Append('\t').Append(f[ActivationFlag].Trim()).Append('\t')
+                          .Append(f[InsideId].Trim()).AppendLine();
                         rows++;
                     }
                     catch (Exception e)

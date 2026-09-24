@@ -418,6 +418,11 @@ auto-start list and literal calls in code. It found the start of all but one of 
 surprises: one gate is a locked door that needs a key item (so a key item gates a whole area), and dig
 spots bury items, which are locations the floor-pickup count had missed, each needing dig.
 
+**Indoor pickups are behind a door** (found on screen, 2026-09-24). A pickup the logic had open from the start
+turned out to be inside a house that opens later, and the dump hadn't kept which building interior an entity
+is in. It does now (`insideid`). An indoor pickup's region is behind its building's door and that door's
+flags, never just its map. The wrongly placed location was retired: its id is never reused.
+
 Still to do: the one event not found, characters that block a path, the region graph built from all of
 it, and the tests.
 
