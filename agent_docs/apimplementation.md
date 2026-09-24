@@ -11,7 +11,8 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 ## Where it stands
 
 **Done so far:** a tiny apworld that generates seeds and passes its tests, with the goal "collect N
-artifacts"; a local server; and the mod connecting to it on its own, retrying when the server is unreachable.
+artifacts"; and the mod connecting on its own, compressed, to a local server or a hosted room on
+archipelago.gg, retrying when the server is unreachable or drops.
 
 **Next:**
 
@@ -19,13 +20,14 @@ artifacts"; a local server; and the mod connecting to it on its own, retrying wh
 2. **Send a check:** finishing a location tells the server.
 3. **Survive a reload:** the received-item count lives in the save.
 4. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
-5. **Compressed connection:** works against a local server (build step 5). A hosted room (`wss://`) is still
-   to test.
+5. **Package the apworld with "Build APWorlds":** a hand-zipped copy lacks the manifest fields Archipelago
+   0.7.0 will require (see known issues).
 
 **Known issues:**
 
-- Not yet tried against a hosted room on archipelago.gg (encrypted `wss://`), since the switch to
-  websocket-sharp in build step 5.
+- The generator warns "Invalid or missing manifest file for bug_fables.apworld. This apworld will stop
+  working with Archipelago 0.7.0." The copy in `custom_worlds` was zipped by hand, and a packaged manifest
+  needs the `version` and `compatible_version` fields that the "Build APWorlds" component adds.
 
 ## Contents
 
@@ -182,8 +184,11 @@ fit together. Lesson: when you swap one library build, every library that comes 
 **Status (2026-09-24, local server):** it works. The mod logs in compressed, the server's warning is gone,
 switching the mod off closes the connection cleanly, stopping the server is caught and leaves the game at
 normal CPU and flat memory, and the mod reconnects by itself, compressed, when the server comes back. A
-`Compression` setting in the config turns it off if it ever misbehaves. **Still to test:** a hosted room on
-archipelago.gg (encrypted `wss://`). This old .NET may not handle the TLS 1.3 setting the library asks for.
+`Compression` setting in the config turns it off if it ever misbehaves. **A hosted room on archipelago.gg
+works too (2026-09-24):** with a bare `archipelago.gg` address, the mod connected over `wss` (encrypted),
+compressed, and the room's log showed no warning. The TLS worry didn't come true. The mod now logs which kind
+of connection it made (`connected over wss, compression: ...`), because a bare address tries `wss://` first
+and falls back to `ws://` without saying which one worked.
 
 ---
 

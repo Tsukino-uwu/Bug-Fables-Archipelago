@@ -128,3 +128,11 @@ Newest last. What was tried, what happened, what the user said.
   The user also reported that backing out of Start Game or Settings puts the leaf on Start Game, while backing
   out of Archipelago keeps it on Archipelago. The game's `SetMenuText` resets `option = 0`
   (`StartMenu.cs:319`); our panel doesn't call it. Asked which the user wants.
+- **A hosted room, 2026-09-24 (05:17):** the user generated a seed with the installed Archipelago (slot
+  `Player1`), uploaded it to archipelago.gg (port 52073), and set the panel on screen. The old slot `BugTester`
+  was refused (`InvalidSlot`, the room log and ours agree); after the slot changed, the mod logged in by itself.
+  With a bare `archipelago.gg` address it connected **over wss, compressed** (logged from the socket's own
+  `Url` and `Extensions` after a hot reload). The room log showed no compression warning. The user saw
+  "Connected as Player1." on screen. The TLS 1.3 worry didn't come true. The local server was stopped.
+  The generator warned that our hand-zipped apworld lacks manifest fields (`compatible_version`), which will
+  break with 0.7.0: package it with "Build APWorlds" (asked the user first, since it runs in the checkout).

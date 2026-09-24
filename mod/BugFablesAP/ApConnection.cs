@@ -248,8 +248,12 @@ namespace BugFablesAP
                         + $"{attempt.Items.AllItemsReceived.Count} items received so far, "
                         + $"{attempt.Locations.AllLocationsChecked.Count} of {attempt.Locations.AllLocations.Count} locations checked");
                     // Read back what the handshake settled, from the socket itself.
-                    string extensions = WebSocketOf(attempt)?.Extensions;
-                    Post("[ap] compression: " + (string.IsNullOrEmpty(extensions) ? "none" : extensions));
+                    // A bare address tries wss:// first and falls back to ws:// (ArchipelagoSocketHelper), so which
+                    // one connected is only known from the socket.
+                    WebSocket socket = WebSocketOf(attempt);
+                    string extensions = socket?.Extensions;
+                    Post("[ap] connected over " + (socket?.Url?.Scheme ?? "unknown") + ", compression: "
+                        + (string.IsNullOrEmpty(extensions) ? "none" : extensions));
                 }
                 else if (result is LoginFailure failed)
                 {
