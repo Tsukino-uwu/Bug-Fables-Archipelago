@@ -141,3 +141,8 @@ Newest last. What was tried, what happened, what the user said.
   manifest carrying `compatible_version: 7` and `version: 7`. The user's hand-zipped copy (same hash as the one
   in `custom_worlds`) sits untracked in `apworld/`; `*.apworld` is now gitignored. The menu leaf now returns to
   Start Game on closing the panel (the user's choice), hot-reloaded but not yet checked on screen.
+- **Menu polish, confirmed on screen by the user (2026-09-24):** closing the Archipelago panel puts the leaf on
+  Start Game, and opening and closing play the game's Confirm and Cancel. The user: "I think its just like the
+  other in game menu's now". Both came from the user noticing a difference from Start Game and Settings. The
+  game's code gave the exact behaviour to copy (`option = 0` in `SetMenuText`, `PlaySound("Cancel", 10)`
+  leaving the file select).
