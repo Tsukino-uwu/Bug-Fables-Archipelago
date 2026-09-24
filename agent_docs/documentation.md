@@ -73,7 +73,9 @@ A few decisions made first, because they shape everything after:
     send and receive, in Archipelago's own wording ("Player1 found their Hammer (Location)", "Player1 sent
     Hammer to Player2 (Location)"), and players connecting and disconnecting. It's **on by default**, with an
     on/off switch in the Archipelago panel. Items arriving from the server show up only there, never as a
-    popup.
+    popup. **Later, it becomes a real text client** (the user, 2026-09-24): a key opens a text line over
+    the feed, so server commands like `!hint` work in game. The game's controls pause while typing, and the
+    server's replies show in the feed.
   - **Item names are coloured the way Archipelago's clients colour them** (`NetUtils.py`): progression plum
     `#AF99EF`, useful slateblue `#6D8BE8`, trap salmon `#FA8072`, filler cyan `#00EEEE`.
 - **Read what others already solved.** We read the TEVI randomizer (another Unity mod), Pokémon Emerald's
