@@ -332,6 +332,15 @@ DefiantRootWell 3: 111 [flag 239] · DefiantRoot3 126: 83, 163: 141 [flag 443] �
 [flag 603] · BeehiveMainArea 48: 99 [flag 251], 54: 94 [flag 252] · BeehiveBalcony 21: 54 ·
 DesertRoachVillage 1: 105 · TermiteIndustrial 31: 139, 46: 145
 
+## Quests: to measure (when quests come into scope)
+
+- **The pause menu's quest list groups quests by chapter and shows done / not done** (the user,
+  2026-09-24). In the logic, a quest is reachable only once its chapter is.
+- **Where that lives:** `boardquestdata` merges `Data/Dialogues<lang>/BoardQuests` (text columns) with
+  `Data/BoardData` (numeric columns) per quest id (`MainManager.cs:3496`). Which column is the chapter, the
+  taken-flag (`[id, 3]` is used as one, `:13906`) and the reward isn't read yet. Plan: an in-game dump of
+  `boardquestdata`'s numeric columns, like ScriptDump, instead of tracing it through the code.
+
 ## Key items: to measure
 
 For the first version, measure and record:
