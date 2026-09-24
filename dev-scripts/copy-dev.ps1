@@ -21,6 +21,10 @@ param(
     [string]$Restore = ''
 )
 $ErrorActionPreference = 'Stop'
+# Through `powershell -File`, "-DebugOn A,B" arrives as one string "A,B", not two: split it (2026-09-24,
+# that wrote a key literally named "MapDump,ScriptDump").
+$DebugOn = @($DebugOn | ForEach-Object { $_ -split ',' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+$DebugOff = @($DebugOff | ForEach-Object { $_ -split ',' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
 $repo = Split-Path -Parent $PSScriptRoot
 $stage = Join-Path $repo 'stage'
 $backupRoot = Join-Path $stage 'backup'

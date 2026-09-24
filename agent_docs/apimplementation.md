@@ -391,6 +391,11 @@ level geometry, with no object at all. Decided (the user, 2026-09-24): **a cauti
 on screen.** Every location on a map with an ability's obstacle needs that ability. Each gate the user
 confirms, or rules out, in game adds or loosens a rule, and hover and bubble-shield rules come only from those
 checks. Cautious logic never makes a seed impossible; it only makes placement less random until it's refined.
+**Some of it is readable after all.** The bubble shield walks across one kind of hazard, `WalkableSpike`
+(the game switches that hazard's collision off while the shield is up), and hazards are components on each
+map's prefab. So `MapDump` in the mod reads every map prefab without instantiating it: its hazards by
+type, its electric triggers, and its auto-start events (story steps the map itself starts). That gives the
+bubble shield's maps from data. Hover has no object at all; pits (`Hole` hazards) are only candidates.
 Obstacles for moves that are never shuffled (Kabbu's horn on grass, Vi's beemerang on switches) aren't gates.
 
 Still to do: characters that block a path, the region graph built from all of it, and the tests.
