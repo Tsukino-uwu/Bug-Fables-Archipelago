@@ -100,6 +100,11 @@ Archipelago's `custom_worlds` folder.
 - **The pool holds one of every item that isn't filler, then filler for the rest.** The G-Bug Ranger Plushie
   (a key item) joined as *useful* on 2026-09-24, so a test could put it on Artis's medal. Its own vanilla
   spot at the Bugaria theater isn't a location yet, so the game still hands that copy out there.
+- **Which class each item gets** (the user, 2026-09-24): every field ability is *progression*. A key item is
+  *progression* when any rule in the logic uses it, even for a single location; a key item nothing uses is
+  *useful*. Every medal is *useful*, except the Hard Mode medal (#11), which is *filler*: the Archipelago
+  panel's Hard Mode setting replaces its effect. A test will check both directions: an item a rule uses is
+  progression, and a progression item is used by some rule.
 - **Logic lives on regions and locations, never on items.** An item doesn't say what it unlocks. A region's
   exits say what they need (the gate out of the Outskirts needs the Explorer Permit), and every location
   belongs to a region. A location needing something more than its region adds that to itself.
