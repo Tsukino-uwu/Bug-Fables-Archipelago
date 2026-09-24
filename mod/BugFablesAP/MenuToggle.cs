@@ -56,12 +56,12 @@ namespace BugFablesAP
         // a centred "Archipelago (Enabled)" ran under the leaf (the user's screenshot, 2026-09-24).
         private const string Label = "|center|Archipelago";
         private static string StateTag => "|size,0.55|" + (mode.Value ? "(Enabled)" : "(Disabled)");
-        private const float StateTagX = 2.45f;
+        private const float StateTagX = 1.75f;
 
         private static void DrawLabel(Transform line)
         {
             MainManager.instance.StartCoroutine(MainManager.SetText(Label, new Vector3(0f, 0f, 10f), line));
-            MainManager.instance.StartCoroutine(MainManager.SetText(StateTag, new Vector3(StateTagX, 0.05f, 10f), line));
+            MainManager.instance.StartCoroutine(MainManager.SetText(StateTag, new Vector3(StateTagX, 0.22f, 10f), line));
         }
 
         // The game calls SetMenuText again whenever it returns to the main menu, and its own loop indexes a
