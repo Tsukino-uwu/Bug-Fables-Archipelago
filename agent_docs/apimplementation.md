@@ -28,10 +28,11 @@ seed's (the mod guide, step 9).
    row, "Difficulty: Normal / Hard / Hardest",** that only adds a way in: *Hard* acts as if the Hard Mode medal
    (Artis's, #11) were equipped, *Hardest* as if the save had been started with the HARDEST code (the game's
    two levels, `MEASURED.md`). Equipping the medal or typing the code still works as the game made it, and
-   the prize medals are paid out on every setting. Logic never needs either (the user, 2026-09-24). To
-   measure before building *Hardest*: its extras read flag 614 directly in about 35 places, so the likely
-   way is setting that flag through the game while the panel says *Hardest*, without ever clearing a code
-   the player typed (the game keeps that separately, in `flagstring[10]`).
+   the prize medals are paid out on every setting. Logic never needs either (the user, 2026-09-24). For
+   *Hardest*: its extras read flag 614 directly in about 35 places, so it means setting that flag. **Measured
+   2026-09-24: the game keeps no other record of a typed code.** `flagstring[10]` is only the typing buffer,
+   emptied as soon as the code is accepted (`EventControl.cs:2450-2455`), so flag 614 is the code's only trace,
+   and the mod needs its own way to tell the panel's 614 from a typed one (still to decide).
 2. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
 3. **An open-world option later,** researched one chapter at a time.
