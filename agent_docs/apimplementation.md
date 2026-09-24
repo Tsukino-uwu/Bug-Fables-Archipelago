@@ -36,7 +36,14 @@ seed's (the mod guide, step 9).
    switchable, the save stays clean; the mod guide's design list, item 6).
 2. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
-3. **An open-world option later,** researched one chapter at a time.
+3. **An open-world option later,** researched one chapter at a time. Regions stay whole areas for now; one
+   region per map (doors from the dump) comes before random start or open world (the user, 2026-09-24).
+   **Areas and doors that close later are kept open** (the user, 2026-09-24), as Pokémon Emerald keeps Mirage
+   Island visible: the mod makes the game's `CheckIfCanExist` answer "exists" for a list of doors and blockers
+   sent in `slot_data`, decided at generation, with no save writes. Each is checked in game first; where forcing
+   one open breaks the story state, its locations are left out instead. Day/night map pairs are made reachable
+   both ways (like Emerald's Shoal Cave tides). One-way drops stay as they are: the logic handles one-way
+   connections.
 4. **A full bag:** key items keep arriving, only ordinary items wait.
 5. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
 
