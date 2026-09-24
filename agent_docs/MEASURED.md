@@ -419,6 +419,8 @@ The output stays in the BepInEx folder.
   #32 (`VinedItem`, bridge room) sits up on the vines at the far side and only exists after the first boss
   (requires flag 41). The user: not reachable in chapter 1; very likely needs **hover** to get onto the
   platforms/pillars, then the beemerang to grab it (hover not yet confirmed). Waits until hover is in the logic.
+  #3 (`ChucksAbode`) lies behind the house, out of reach in normal play (the user, 2026-09-24, after the first
+  boss); what opens the way (a quest, an ability) is unknown. Not a location until that's found.
 - **Houses outside the city** (`BugariaOutskirtsOutsideCity`, 2026-09-24): the ladybug siblings' house
   (`DoorLadybug`, inside 1) has no gate flags; the user found its Mistake (flag 679) after the first boss and
   remembers it locked earlier (to check on an earlier save). The other house (`doormadeleine`, inside 2, with a
