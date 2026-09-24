@@ -20,6 +20,7 @@ namespace BugFablesAP
     //   unstick                 run the game's end-of-event cleanup, when a cutscene died and left you frozen
     //   nudge <x> <y> <z>       shift the party by that much on this map
     //   onehit                  toggle: every hit on an enemy does at least 99 (off by default)
+    //   infjump                 toggle: jump again in mid-air, to reach high places (off by default)
     internal static class DevConsole
     {
         private const long LocationIdBase = 7_720_000;
@@ -91,6 +92,25 @@ namespace BugFablesAP
         // own test is the target's "Player" tag (BattleControl.cs:7295). Off by default, toggled with "onehit".
         private static bool oneHit;
 
+        // infjump: the jump button in mid-air jumps again, through the game's own EntityControl.Jump (the height and
+        // sound of a normal jump, EntityControl.cs:4598, PlayerControl.DoJump). The game's own jump only fires on the
+        // ground (PlayerControl.cs:372), so the two never both act on one press. Off by default.
+        private static bool infJump;
+
+        private static void TickInfJump()
+        {
+            if (!infJump || open || MainManager.player == null || MainManager.player.entity == null || !MainManager.FreePlayer())
+            {
+                return;
+            }
+            EntityControl e = MainManager.player.entity;
+            if (!e.onground && e.jumpcooldown <= 0f && MainManager.GetKey(4, hold: false))
+            {
+                e.Jump();
+                e.PlaySoundSimple("Jump");
+            }
+        }
+
         private static void OneHit(ref MainManager.BattleData target, ref int damageammount)
         {
             if (oneHit && target.battleentity != null && !target.battleentity.CompareTag("Player"))
@@ -160,6 +180,7 @@ namespace BugFablesAP
             }
             FinishWarp();
             PollFile();
+            TickInfJump();
             // A queued warp waits until the player is free (no dialogue, cutscene or menu), instead of failing with
             // "not now" while the tester is busy (2026-09-24).
             bool warpWaits = queued.Count > 0 && (queued.Peek().StartsWith("loc") || queued.Peek().StartsWith("warp"))
@@ -264,6 +285,7 @@ namespace BugFablesAP
                     case "unstick": return Unstick();
                     case "nudge": return Nudge(parts);
                     case "items": return Items();
+                    case "infjump": infJump = !infJump; return "infjump " + (infJump ? "on: press jump in mid-air to jump again" : "off");
                     case "onehit": oneHit = !oneHit; return "onehit " + (oneHit ? "on: every hit on an enemy does at least 99" : "off");
                     default: return "unknown command: " + parts[0];
                 }
