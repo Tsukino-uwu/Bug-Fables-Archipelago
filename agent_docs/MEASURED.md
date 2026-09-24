@@ -177,6 +177,11 @@ throttled to changes.
   `|flag,621,true||additemtoss,1,var,0|` (type 1, key item), and `KEYITEM +1 id=174` plus `flag[621]` in the
   same frame (17532). The first grant all three probes caught together. **A clean key-item location: flag
   621.** Also `flag[43]` flipped (frame 14950): the flag `Event27` sets, the event after the first boss.
+- **A quest hand-off key item:** during a taken quest, a character on `BugariaResidential` gave
+  `KEYITEM +1 id=93 (QuestBook)` (frame 19312), and `flag[241]` followed as the talk ended (20022). The dump
+  has it (`BugariaResidential` line 26 → `giveitem,1,93`). This item exists to be delivered to finish the quest,
+  **so if it's shuffled, that quest's completion must require it in the logic.** The hand-off itself is a
+  location (flag 241).
 - **A second crystal berry:** on `SnakemouthLake`, `crystalbflag[1]` flipped (frame 111883), with no
   tutorial flag this time. The script was `|additemtoss,3,var,0|` with `caller=tempitem`, and `flagvar[0]`
   read 1 (HoneyDrop), **a stale value left from an earlier pickup**. `flagvar[0]` means nothing for crystal
