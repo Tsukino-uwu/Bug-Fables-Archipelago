@@ -122,7 +122,12 @@ never writes to the game install. After each build, copy
 (the client libraries and ScriptEngine's config) once, with the game closed, and again only when the script
 says the libraries changed.
 
-*Code: `DevReload.cs` (`TryCreate`, `Tick`); `dev-scripts/stage-dev.ps1`.*
+**The copy keeps a backup.** `dev-scripts/copy-dev.ps1` does that copy, and can switch Debug settings in the
+mod's config in the same run. Before replacing anything it copies the old file to `stage/backup/`, and
+`-Restore` puts it back. It exists because an agent's copy into the game was refused twice as irreversible
+(2026-09-24): a copy that can be undone is the safe kind.
+
+*Code: `DevReload.cs` (`TryCreate`, `Tick`); `dev-scripts/stage-dev.ps1`, `dev-scripts/copy-dev.ps1`.*
 
 ## 6. Watch the game while you play ("probing")
 

@@ -20,9 +20,18 @@ The build and the copy into the game are separate steps. The build never writes 
      (`BepInEx/config`).
 2. **First time only, with the game closed:** install BepInEx 5 and ScriptEngine (from BepInEx.Debug) in the
    game, then copy `stage/setup/BepInEx` onto the game folder.
-3. **After every build:** copy `stage/every-build/BepInEx` onto the game folder. The game can be running:
-   the plugin notices its DLL changed and ScriptEngine reloads it within a few seconds
+3. **After every build:** `powershell -ExecutionPolicy Bypass -File dev-scripts\copy-dev.ps1` copies the
+   staged plugin into the game (or copy `stage/every-build/BepInEx` onto the game folder by hand). The game can
+   be running: the plugin notices its DLL changed and ScriptEngine reloads it within a few seconds
    (`DevReload: BugFablesAP.dll changed` then `Reloaded all plugins!` in `BepInEx/LogOutput.log`).
+   - `-DebugOn EntityDump,ScriptDump` / `-DebugOff GrantProbe` switch Debug settings in the mod's config
+     in the same run, and read the result back.
+   - Every file it replaces (the plugin, the config) is first copied to `stage/backup/<time>/`;
+     `-Restore <time>` puts it back. It writes nothing else in the game: the libraries and ScriptEngine's
+     config stay the once-per-setup copy of step 2.
+   - **Why a script with backups** (2026-09-24): Claude Code's auto mode refused, as irreversible, both a
+     deploy script that rewrote configs and libraries in the game and an ad-hoc `cp` plus in-place `sed`.
+     MeshGhost, which never hit this, only ever replaces its own rebuildable DLL through one named script.
 4. If the script says **the libraries differ from the game's**, copy `stage/setup/BepInEx` again with the game
    closed: a running game holds the libraries open.
 

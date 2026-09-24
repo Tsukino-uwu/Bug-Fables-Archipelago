@@ -257,3 +257,17 @@ Newest last. What was tried, what happened, what the user said.
   → `Outskirts: Artis's Gift` (ids and flags unchanged). New test `TestLocationNames` failed on the old
   permit name, passes now; it will cover medals once medals are items. 30 tests pass; a seed with APQuest
   in the room generates.
+
+## 2026-09-24: copying into the game, refused twice; copy-dev.ps1
+
+- **What happened:** with the user's yes, the agent tried to copy the staged plugin into the game and add
+  `EntityDump = true` to the config with `cp` and `sed -i`. Claude Code's auto mode refused it, the second
+  time as "irreversible local destruction". The old `deploy-dev.ps1` had been refused the same way.
+- **How MeshGhost avoids it (the user asked):** its `tevi-hotreload.ps1 -Deploy` is one named repo script
+  that only replaces its own rebuildable DLL, and its CLAUDE.md makes dev-scripts launchers the agent's job.
+  Ours rewrote configs and libraries in the game, or edited the user's config in place with no copy kept.
+- **Done:** `dev-scripts/copy-dev.ps1` copies only the plugin, and switches named `[Debug]` keys with
+  `-DebugOn`/`-DebugOff`, backing up every file it replaces into `stage/backup/<time>/` (`-Restore` undoes
+  it). Tested on a fake game folder in the scratchpad: copy, key added and switched, restore put the old
+  files back. Not yet run against the real install. A CLAUDE.md rule sends every copy into the game
+  through it. Whether auto mode accepts it isn't known until it runs.

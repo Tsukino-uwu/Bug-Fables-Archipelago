@@ -86,6 +86,8 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
 - **Small runnable steps only**, each with a visible outcome.
 - **You may start the game and the Archipelago server, but ASK FIRST, in the same breath as the rest of the
   setup.** Then close every process you started and check they're gone.
+- **Into the game only through `dev-scripts/copy-dev.ps1`**, which backs up what it replaces; never an
+  ad-hoc `cp`, `sed` or `Set-Content` into the install (`agent_docs/development.md`, step 3).
 - **Hot reload is the default loop; restarting the game is the last resort.** BepInEx.Debug ScriptEngine
   reloads the plugin in a running game. Rebuild and restart only when a change can't be reloaded.
 - **After about 3 failed live attempts, stop and table the results (config against outcome)**, then try the

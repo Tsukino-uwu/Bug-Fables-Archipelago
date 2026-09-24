@@ -23,5 +23,5 @@ scratch/
 # Packaged worlds are build output: make them with "Build APWorlds" in the Archipelago checkout, never commit them.
 *.apworld
 
-# Dev builds staged by dev-scripts/stage-dev.ps1, copied into the game by hand.
+# Dev builds staged by dev-scripts/stage-dev.ps1 and copied in by copy-dev.ps1, with its backups (stage/backup).
 stage/
