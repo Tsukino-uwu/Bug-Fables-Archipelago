@@ -131,6 +131,13 @@ class BugFablesWorld(World):
                 for loc in LOCATIONS
                 if "give" in loc["source"]
             },
+            # Which locations are items lying in the world, known by their map and their own activationflag, so
+            # the client can keep the vanilla item out when it's picked up.
+            "location_pickups": {
+                str(LOCATION_NAME_TO_ID[loc["name"]]): {"map": loc["source"]["pickup"]["map"], "flag": loc["source"]["flag"]}
+                for loc in LOCATIONS
+                if "pickup" in loc["source"]
+            },
             # The inventory list each of this world's items belongs to (0 item, 1 key item), so the client can
             # show a found Bug Fables item the way the game shows that kind.
             "item_kinds": {str(ITEM_NAME_TO_ID[item["name"]]): item["kind"] for item in ITEMS},

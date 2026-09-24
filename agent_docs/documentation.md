@@ -265,5 +265,26 @@ followed. That one is skipped, because no medal was given, and flag 31 stays uns
 The user then confirmed all three on screen with the G-Bug Ranger Plushie placed there instead: its sprite,
 its description and the key-item colour, with no tutorial.
 
+**Items lying in the world take another road.** Picking one up doesn't go through `giveitem`. The pickup's own
+code sets up the item-get (the name, the sprite held overhead, the starburst, the description box), then starts
+a text that ends by marking the pickup taken, `|flag,<its flag>,true|`, and adding it, `|additemtoss,<kind>,…|`.
+Two facts made this one easy:
+
+- **Each pickup already carries a unique flag**, set when it's taken (the entity dump showed every one-time
+  pickup has one). That flag is the location's, so the mod knows a pickup by its map and flag. Items buried in
+  dig spots pop out as the same kind of pickup, with the flag copied over, so they're covered too.
+- **The add command has a kind that adds nothing.** Kind 3, the crystal berry's, adds to no list but closes
+  the box and ends the text exactly like the others.
+
+So the mod looks at that text just before it starts. When the pickup is a location, it shows the real item
+(name, sprite, starburst, description) and turns the add into kind 3. The flag command stays, so the game
+still marks the pickup taken and the check is sent. A medal's first-medal tutorial is dropped, as for gifts.
+The list of pickup locations comes from the seed (`location_pickups` in `slot_data`), and every location is
+now scouted at login, not only the gifts.
+
+**Not yet tested in game.** The first two pickup locations, an item on the Outskirts and a medal in Snakemouth
+Den, are for that test.
+
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
-`Recolour` and `FirstMedalSeen` do the swapping); the scout is `ApConnection.Scout`.*
+`Recolour` and `FirstMedalSeen` do the swapping; `PickupPrefix` and `FindPickup` handle pickups); the
+scout is `ApConnection.Scout`.*

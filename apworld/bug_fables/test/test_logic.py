@@ -72,3 +72,24 @@ class TestSlotData(BugFablesTestBase):
         kinds = self.world.fill_slot_data()["item_kinds"]
         self.assertEqual(set(kinds), {str(i) for i in self.world.item_name_to_id.values()})
         self.assertEqual(kinds[str(self.world.item_name_to_id["Explorer Permit"])], 1)
+
+
+class TestPickups(BugFablesTestBase):
+    # The client knows a pickup location only by its map and its own activationflag. A missing entry would give
+    # the vanilla item at that spot; a wrong flag would swap an unrelated pickup.
+    def test_pickups_are_in_slot_data(self) -> None:
+        pickups = self.world.fill_slot_data()["location_pickups"]
+        ground = str(self.world.location_name_to_id["Outskirts: Ground Pickup Outside the City"])
+        medal = str(self.world.location_name_to_id["Snakemouth Den: Underground Door Room"])
+        self.assertEqual(pickups[ground], {"map": "BugariaOutskirtsOutsideCity", "flag": 686})
+        self.assertEqual(pickups[medal], {"map": "SnakemouthUndergrondDoor", "flag": 60})
+
+    def test_pickups_are_not_gives(self) -> None:
+        # A location is one or the other: the client would otherwise try to swap it twice.
+        data = self.world.fill_slot_data()
+        self.assertFalse(set(data["location_pickups"]) & set(data["location_gives"]))
+
+    def test_pickup_flag_is_its_location_flag(self) -> None:
+        data = self.world.fill_slot_data()
+        for location, pickup in data["location_pickups"].items():
+            self.assertEqual(data["location_flags"][location], pickup["flag"])

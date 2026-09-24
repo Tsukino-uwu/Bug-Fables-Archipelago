@@ -234,14 +234,44 @@ namespace BugFablesAP
             return result;
         }
 
+        // slot_data's location_pickups: locations that are items lying in the world (or buried), each known by the
+        // pickup's own activationflag on its map ({location id: {map, flag}}). ItemSwap's pickup prefix keeps their
+        // vanilla item out. Null when the world didn't send it.
+        internal Dictionary<long, Pickup> LocationPickups => locationPickups;
+        private volatile Dictionary<long, Pickup> locationPickups;
+
+        internal sealed class Pickup
+        {
+            internal string Map;
+            internal int Flag;
+        }
+
+        private static Dictionary<long, Pickup> ReadLocationPickups(Dictionary<string, object> slotData)
+        {
+            if (slotData == null || !slotData.TryGetValue("location_pickups", out object raw) || !(raw is JObject map))
+            {
+                return null;
+            }
+            var result = new Dictionary<long, Pickup>();
+            foreach (JProperty entry in map.Properties())
+            {
+                result[long.Parse(entry.Name)] = new Pickup
+                {
+                    Map = entry.Value.Value<string>("map"),
+                    Flag = entry.Value.Value<int>("flag"),
+                };
+            }
+            return result;
+        }
+
         // What the seed put at each of this slot's locations, asked once per login without creating hints
         // (HintCreationPolicy.None: a hint-creating scout would announce the seed). Null until it arrives.
         internal Dictionary<long, ScoutedItemInfo> Scouts => scouts;
         private volatile Dictionary<long, ScoutedItemInfo> scouts;
 
-        private void Scout(ArchipelagoSession s, Dictionary<long, Give> gives)
+        private void Scout(ArchipelagoSession s, ICollection<long> locations)
         {
-            if (gives == null || gives.Count == 0)
+            if (locations == null || locations.Count == 0)
             {
                 return;
             }
@@ -249,7 +279,7 @@ namespace BugFablesAP
             {
                 try
                 {
-                    var task = s.Locations.ScoutLocationsAsync(HintCreationPolicy.None, gives.Keys.ToArray());
+                    var task = s.Locations.ScoutLocationsAsync(HintCreationPolicy.None, locations.ToArray());
                     if (!task.Wait(TimeSpan.FromSeconds(10)))
                     {
                         Post("[swap] scouting gave no answer in 10 s; finds will show a plain Archipelago item");
@@ -368,10 +398,12 @@ namespace BugFablesAP
                     // Only this session dropping counts; Disconnect() clears `session` first.
                     locationFlags = ReadLocationFlags(ok.SlotData);
                     locationGives = ReadLocationGives(ok.SlotData);
+                    locationPickups = ReadLocationPickups(ok.SlotData);
                     ownSlot = ok.Slot;
                     itemKinds = ReadItemKinds(ok.SlotData);
                     scouts = null;
-                    Scout(attempt, locationGives);
+                    // Every location this slot has: gifts and pickups alike show what's really there.
+                    Scout(attempt, locationFlags?.Keys);
                     attempt.Locations.CheckedLocationsUpdated += ids =>
                         Post("[check] now checked on the server: " + string.Join(", ", ids.Select(id => id.ToString()).ToArray()));
                     attempt.Socket.PacketReceived += packet => Heard();

@@ -10,7 +10,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 
 ## Where it stands
 
-**Done so far:** a tiny apworld (3 locations, 3 items) that generates seeds and passes its tests, with the
+**Done so far:** a tiny apworld (5 locations, 3 items) that generates seeds and passes its tests, with the
 goal "collect N artifacts"; the mod connecting on its own, compressed, to a local server or a hosted room on
 archipelago.gg, retrying when the server is unreachable or drops; sending checks (build step 6); receiving
 items, with the count kept in the save (build step 7); and the game's own item at a location swapped for the
@@ -493,8 +493,16 @@ Nothing else marks a slot as finished.
 ## 7. Settings from the seed: slot_data
 
 The apworld can hand the client a small dictionary, **slot_data**, which arrives inside Connected. It's the
-only way a setting chosen at generation (an option, a version number) reaches the game. This mod puts the
-world's version in it, so a mismatched mod and apworld can be caught.
+only way a setting chosen at generation (an option, a version number) reaches the game. This world puts in:
+
+- `world_version`, so a mismatched mod and apworld can be caught;
+- `artifacts_required`, the goal;
+- `location_flags`, the game flag that marks each location done;
+- `location_gives`, the `giveitem` that hands out a gift location's vanilla item;
+- `location_pickups`, the map and flag of each location that is an item lying in the world;
+- `item_kinds`, which inventory list each of its items goes to.
+
+The mod does nothing from its own knowledge of the game's locations: every table it acts on comes from here.
 
 ## 8. Use a library
 

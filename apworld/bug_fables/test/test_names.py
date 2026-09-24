@@ -7,7 +7,7 @@ class TestLocationNames(BugFablesTestBase):
     # "your Hover is at Outskirts: Explorer Permit" points the player at the wrong thing.
     def test_no_location_is_named_after_its_vanilla_item(self) -> None:
         for location in LOCATIONS:
-            give = location["source"].get("give")
+            give = location["source"].get("give") or location["source"].get("pickup")
             if give is None:
                 continue
             for item in ITEMS:

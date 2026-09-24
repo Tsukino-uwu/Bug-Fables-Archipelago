@@ -48,6 +48,10 @@ namespace BugFablesAP
         private static Sprite shownSprite;
         private static Color? shownColor;
         private static bool swapped;
+        private static FieldInfo descWindowField;
+
+        // NPCControl.CheckItem's first-medal tutorial, put after the add (NPCControl.cs:5673).
+        private const string FirstMedalTutorial = "|flag,31,true||tail,null||center,true||destroydescbox||goto,-32,break,end|";
 
         internal static void Enable(ManualLogSource logger, string guid, ApConnection conn, Func<bool> on)
         {
@@ -67,6 +71,11 @@ namespace BugFablesAP
             }
             harmony = new Harmony(guid + ".swap." + DateTime.UtcNow.Ticks);
             harmony.Patch(moveNext, transpiler: new HarmonyMethod(typeof(ItemSwap), nameof(Transpile)));
+            // Items lying in the world (and buried ones, which pop out as the same kind of entity) don't use
+            // |giveitem|: NPCControl.CheckItem sets up the item-get itself, then hands SetText a text ending in
+            // |flag,<activationflag>,true||additemtoss,<kind>,var,0|. A prefix sees that text before it runs.
+            descWindowField = AccessTools.Field(typeof(NPCControl), "descwindow");
+            harmony.Patch(setText, prefix: new HarmonyMethod(typeof(ItemSwap), nameof(PickupPrefix)));
         }
 
         internal static void Disable()
@@ -195,37 +204,122 @@ namespace BugFablesAP
             {
                 return;
             }
-            ScoutedItemInfo info = Scouted();
+            ScoutedItemInfo info = Describe(location, out shownName, out shownSprite, out shownColor);
+            log.LogInfo($"[swap] location {location}: giveitem {(badge ? "medal" : "item")} {id} on {MapName()} is a location; showing '{shownName}'"
+                + (info == null ? " (not scouted yet)" : ""));
+        }
+
+        // What's really at a location: the name for the "You got" box, our own sprite when it's a Bug Fables item,
+        // and the starburst colour. Returns the scout, or null when it hasn't arrived.
+        private static ScoutedItemInfo Describe(long at, out string name, out Sprite sprite, out Color? color)
+        {
+            name = null;
+            sprite = null;
+            color = null;
+            ScoutedItemInfo info = null;
+            connection.Scouts?.TryGetValue(at, out info);
             if (info == null)
             {
-                shownName = "an Archipelago item";
+                name = "an Archipelago item";
             }
             else if (IsOurs(info))
             {
                 int gameId = (int)(info.ItemId - ItemIdBase);
-                shownSprite = MainManager.GetItemSprite(false, gameId);
-                shownName = MainManager.itemdata[0, gameId, 0];
+                sprite = MainManager.GetItemSprite(false, gameId);
+                name = MainManager.itemdata[0, gameId, 0];
                 if (info.Player.Slot != connection.OwnSlot)
                 {
-                    shownName = info.Player.Name + "'s " + shownName;
+                    name = info.Player.Name + "'s " + name;
                 }
                 // The game's own starburst colours (the Giveitem switch): key item, item.
                 int kind = 0;
                 connection.ItemKinds?.TryGetValue(info.ItemId, out kind);
-                shownColor = kind == 1 ? new Color(1f, 0.3f, 0.4f) : new Color(0f, 0.7f, 0.7f);
+                color = kind == 1 ? new Color(1f, 0.3f, 0.4f) : new Color(0f, 0.7f, 0.7f);
             }
             else
             {
                 // Another game's item. The Archipelago icon replaces this sprite once it's in the mod; the colour is
                 // Archipelago's for its classification (NetUtils.py): progression, useful, trap, filler.
-                shownName = info.Player.Name + "'s " + info.ItemDisplayName;
-                shownColor = (info.Flags & ItemFlags.Advancement) != 0 ? Hex(0xAF99EF)
+                name = info.Player.Name + "'s " + info.ItemDisplayName;
+                color = (info.Flags & ItemFlags.Advancement) != 0 ? Hex(0xAF99EF)
                     : (info.Flags & ItemFlags.NeverExclude) != 0 ? Hex(0x6D8BE8)
                     : (info.Flags & ItemFlags.Trap) != 0 ? Hex(0xFA8072)
                     : Hex(0x00EEEE);
             }
-            log.LogInfo($"[swap] location {location}: giveitem {(badge ? "medal" : "item")} {id} on {MapName()} is a location; showing '{shownName}'"
-                + (info == null ? " (not scouted yet)" : ""));
+            return info;
+        }
+
+        // Prefix on MainManager.SetText (10 arguments). Acts only on the item-get NPCControl.CheckItem starts for a
+        // pickup that is one of this seed's locations: it shows what's really there, and turns the add into
+        // |additemtoss,3,...|, the game's crystal-berry kind, which adds nothing to any list but closes the
+        // description box and ends the text exactly as the item's own kind would (MainManager.cs:12517-12532).
+        // The |flag,<activationflag>,true| before it is untouched, so the game still marks the pickup taken and
+        // LocationChecks sends the check.
+        public static void PickupPrefix(ref string text, NPCControl caller)
+        {
+            if (caller == null || caller.objecttype != NPCControl.ObjectTypes.Item || text == null || caller.entity == null)
+            {
+                return;
+            }
+            int kind = caller.entity.animid;
+            string add = "|additemtoss," + kind + ",var,0|";
+            if (kind < 0 || kind > 2 || !text.Contains(add))
+            {
+                return;
+            }
+            long at = FindPickup(caller.activationflag);
+            if (at < 0)
+            {
+                return;
+            }
+            ScoutedItemInfo info = Describe(at, out string name, out Sprite sprite, out Color? color);
+            MainManager.instance.flagstring[0] = name;
+            SpriteRenderer held = caller.entity.sprite;
+            if (sprite != null && held != null)
+            {
+                held.sprite = sprite;
+            }
+            Transform back = held == null ? null : held.transform.Find("back");
+            SpriteRenderer backRenderer = back == null ? null : back.GetComponent<SpriteRenderer>();
+            if (color.HasValue && backRenderer != null)
+            {
+                backRenderer.material.color = color.Value;
+            }
+            // The vanilla description box is already up: replace it at once (DestroyDescWindow would shrink it out
+            // over half a second while the new one grows).
+            if (descWindowField != null && descWindowField.GetValue(caller) is DialogueAnim box && box != null)
+            {
+                UnityEngine.Object.Destroy(box.gameObject);
+                descWindowField.SetValue(caller, null);
+            }
+            if (info != null && IsOurs(info))
+            {
+                caller.CreateDescWindow(0, (int)(info.ItemId - ItemIdBase));
+            }
+            text = text.Replace(add, "|additemtoss,3,var,0|");
+            // A swapped medal wasn't given, so the first-medal tutorial mustn't run (it would also set flag 31).
+            text = text.Replace(FirstMedalTutorial + "|break|", "").Replace(FirstMedalTutorial, "");
+            log.LogInfo($"[swap] location {at}: pickup (kind {kind}, id {caller.entity.animstate}, flag {caller.activationflag}) "
+                + $"on {MapName()} is a location; showing '{name}'" + (info == null ? " (not scouted yet)" : ""));
+        }
+
+        private static long FindPickup(int flag)
+        {
+            Dictionary<long, ApConnection.Pickup> pickups = connection.LocationPickups;
+            string map = MapName();
+            // A dropped connection keeps the rules in force: the tables stay from the last login.
+            if (flag < 0 || !randomizerOn() || pickups == null || map == null)
+            {
+                return -1;
+            }
+            foreach (KeyValuePair<long, ApConnection.Pickup> entry in pickups)
+            {
+                if (entry.Value.Flag == flag && entry.Value.Map == map)
+                {
+                    return entry.Key;
+                }
+            }
+            return -1;
         }
 
         // The Add stand-ins: at a location, keep the vanilla item out, name what's really there in the "You got" box
