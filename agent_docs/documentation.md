@@ -30,6 +30,11 @@ server, and items from the server arrive in the game once each.
 6. **A row "Difficulty: Normal / Hard / Hardest" in the Archipelago panel** (the user, 2026-09-24). Hard and
    Hardest add the game's two Hard Mode levels; Normal leaves it to the game (the medal equipped, or the
    HARDEST code). Boss prize medals are paid out on every setting (apimplementation.md, "Where it stands").
+7. **A row "Detector: On / Off" in the Archipelago panel** (the user, 2026-09-24), a help for finding items.
+   On acts as if the Detector medal (#2) were equipped; Off leaves it to the game (the medal equipped or not).
+   All three of its effects ask one question, `BadgeIsEquipped(2)` (objects `NPCControl.cs:1344`, discoveries
+   `MapControl.cs:408`, music `MusicSpinner.cs:54`), and Hard is the same question for medal #11, so one patch
+   on `BadgeIsEquipped` serves both rows. It changes no save data and no logic.
 
 ## The steps
 
