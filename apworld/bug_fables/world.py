@@ -8,7 +8,7 @@ from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
 from rule_builder.rules import Has, HasAll
 from worlds.AutoWorld import WebWorld, World
 
-from .data_tables import ARTIFACTS, ITEM_NAME_TO_ID, ITEMS, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, WORLD_VERSION
+from .data_tables import ARTIFACTS, ITEM_NAME_TO_ID, ITEMS, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, WORLD_VERSION, vanilla_item
 from .options import BugFablesOptions
 
 GAME = "Bug Fables"
@@ -103,8 +103,17 @@ class BugFablesWorld(World):
         return BugFablesItem(name, _CLASSIFICATIONS[data["classification"]], ITEM_NAME_TO_ID[name], self.player)
 
     def create_items(self) -> None:
-        # One of every item that isn't padding, then padding for the locations left.
-        pool: list[Item] = [self.create_item(item["name"]) for item in ITEMS if not item.get("padding")]
+        # Each location's own vanilla item (so an item found at two spots is in the pool twice), then one of every
+        # other item that isn't padding, then padding for the locations left.
+        pool: list[Item] = []
+        from_locations: set[str] = set()
+        for loc in LOCATIONS:
+            name = vanilla_item(loc)
+            if name is not None:
+                pool.append(self.create_item(name))
+                from_locations.add(name)
+        pool += [self.create_item(item["name"]) for item in ITEMS
+                 if not item.get("padding") and item["name"] not in from_locations]
         unfilled = len(self.multiworld.get_unfilled_locations(self.player))
         pool += [self.create_filler() for _ in range(unfilled - len(pool))]
         self.multiworld.itempool += pool

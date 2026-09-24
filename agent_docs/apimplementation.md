@@ -10,7 +10,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 
 ## Where it stands
 
-**Done so far:** a tiny apworld (4 locations, 5 items) that generates seeds and passes its tests, with the
+**Done so far:** a small apworld (6 locations, 7 items) that generates seeds and passes its tests, with the
 goal "collect N artifacts"; the mod connecting on its own, compressed, to a local server or a hosted room on
 archipelago.gg, retrying when the server is unreachable or drops; sending checks (build step 6); receiving
 items, with the count kept in the save (build step 7); and the game's own item at a location swapped for the
@@ -105,7 +105,9 @@ Archipelago's `custom_worlds` folder.
   location). *Useful*: especially good to have; never placed on an excluded location. *Filler*: can be
   ignored; the only kind an excluded location gets. *Trap*: detrimental to receive; a yaml option may swap
   filler for traps.
-- **The pool holds one of every item, then padding for the rest.** *Padding* is a mark in `items.json` for
+- **The pool is each location's own vanilla item** (2026-09-24, once two locations held an HP Plus medal), then
+  one of every other item, then padding for the rest (test `TestPool`, which also fails if a location's vanilla
+  item is missing from `items.json`). *Padding* is a mark in `items.json` for
   the filler that may fill leftover locations in any number (a Crunchy Leaf). A filler item without it, like
   the Hard Mode medal, is a real item and goes in once (2026-09-24; test `TestMedals`). The G-Bug Ranger Plushie
   (a key item) joined as *useful* on 2026-09-24, so a test could put it on Artis's medal. Its own vanilla
@@ -431,6 +433,14 @@ spots bury items, which are locations the floor-pickup count had missed, each ne
 turned out to be inside a house that opens later, and the dump hadn't kept which building interior an entity
 is in. It does now (`insideid`). An indoor pickup's region is behind its building's door and that door's
 flags, never just its map. The wrongly placed location was retired: its id is never reused.
+
+**Checking locations with the user, in game.** The data lists every pickup on a map, but not whether chapter 1
+can reach it. So the dev console warps the user next to each candidate, and the user says whether it's reachable
+and names its landmark (verdicts, 2026-09-24): the Snakemouth bridge room and lake pickups are reachable with
+Vi's beemerang; the two in the mushroom pit need Leif, to freeze the water droplets; the top of Snakemouth and
+the east Outskirts map are closed in chapter 1. The Snakemouth top's door has no story flag, so an ability or the
+level itself blocks it. The east map's door has none either; an invisible blocker outside the city, there from
+the first boss until chapter 2 starts (flag 67), is the likely reason, still to test.
 
 Still to do: the one event not found, characters that block a path, the region graph built from all of
 it, and the tests.

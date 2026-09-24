@@ -4,7 +4,9 @@
     {"name": "Outskirts: Maki and Eetl's Gift", "id": 1, "region": "Bugaria Outskirts", "source": {"event": 16, "flag": 15, "give": {"map": "BugariaOutskirtsOutsideCity", "type": 1, "item": 27}}},
     {"name": "Outskirts: Favor Reward", "id": 2, "region": "Bugaria Outskirts", "source": {"flag": 17}},
     {"name": "Outskirts: Artis's Gift", "id": 3, "region": "Bugaria Outskirts", "source": {"npc": "ShwEmArtys", "flag": 32, "give": {"map": "BugariaOutskirtsOutsideCity", "type": 2, "item": 11}}},
-    {"name": "Snakemouth Den: Underground Door Room", "id": 5, "region": "Snakemouth Den", "source": {"flag": 60, "pickup": {"map": "SnakemouthUndergrondDoor", "type": 2, "item": 9}}}
+    {"name": "Snakemouth Den: Underground Door Room", "id": 5, "region": "Snakemouth Den", "source": {"flag": 60, "pickup": {"map": "SnakemouthUndergrondDoor", "type": 2, "item": 9}}},
+    {"name": "Snakemouth Den: Bridge Room, Pillar", "id": 6, "region": "Snakemouth Den", "source": {"flag": 651, "pickup": {"map": "SnakemouthBridgeRoom", "type": 0, "item": 13}}},
+    {"name": "Snakemouth Den: Lake, Pillar", "id": 7, "region": "Snakemouth Den", "source": {"flag": 23, "pickup": {"map": "SnakemouthLake", "type": 2, "item": 0}}}
   ],
   "regions": [
     {"name": "Menu", "exits": [{"to": "Bugaria Outskirts"}]},

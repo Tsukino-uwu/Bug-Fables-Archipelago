@@ -109,3 +109,22 @@ class TestMedals(BugFablesTestBase):
         self.assertEqual(pool.count("Poison Defender"), 1)
         padding = {self.world.get_filler_item_name() for _ in range(50)}
         self.assertEqual(padding, {"Crunchy Leaf"})
+
+
+class TestPool(BugFablesTestBase):
+    # The pool is each location's own vanilla item, so an item found at two spots is in it twice. A location whose
+    # vanilla item isn't in items.json would silently lose that item from the game.
+    def test_every_location_item_is_known(self) -> None:
+        from ..data_tables import LOCATIONS, vanilla_item
+        for loc in LOCATIONS:
+            if "give" in loc["source"] or "pickup" in loc["source"]:
+                with self.subTest(location=loc["name"]):
+                    self.assertIsNotNone(vanilla_item(loc))
+
+    def test_each_location_puts_its_item_in_the_pool(self) -> None:
+        from ..data_tables import LOCATIONS, vanilla_item
+        pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        for name in {vanilla_item(loc) for loc in LOCATIONS} - {None}:
+            expected = sum(1 for loc in LOCATIONS if vanilla_item(loc) == name)
+            with self.subTest(item=name):
+                self.assertGreaterEqual(pool.count(name), expected)

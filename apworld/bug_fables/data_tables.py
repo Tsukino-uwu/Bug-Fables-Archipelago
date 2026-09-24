@@ -50,3 +50,15 @@ if len(set(ITEM_NAME_TO_ID.values())) != len(ITEMS):
     raise ValueError("bug_fables: two items share an id (same kind and game_id)")
 if len(set(LOCATION_NAME_TO_ID.values())) != len(LOCATIONS):
     raise ValueError("bug_fables: two locations share an id")
+
+
+def vanilla_item(location: dict[str, Any]) -> str | None:
+    """The name of the item the game hands out at a location (its give or pickup), or None (money, or unknown)."""
+    source = location["source"].get("give") or location["source"].get("pickup")
+    if source is None:
+        return None
+    for item in ITEMS:
+        if item["kind"] == source["type"] and item["game_id"] == source["item"]:
+            return item["name"]
+    return None
+

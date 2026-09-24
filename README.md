@@ -10,7 +10,7 @@ field abilities shuffled as items and logic that follows the story's chapter ord
 ## How it will work
 
 - **The apworld** (`apworld/bug_fables/`) tells the generator which items and locations exist and which key
-  items gate which areas. Today it covers four early locations.
+  items gate which areas. Today it covers six early locations.
 - **The mod** (`mod/`) runs inside the game. Finishing a location sends a check to the server, and every
   item, including your own, arrives from the server and is given to you through the game's own item
   system. Because items are remote only, a new save can recover everything the server has sent.

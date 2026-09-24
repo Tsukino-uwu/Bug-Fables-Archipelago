@@ -5,6 +5,8 @@
     {"name": "G-Bug Ranger Plushie", "game_id": 25, "kind": 1, "classification": "useful"},
     {"name": "Crunchy Leaf", "game_id": 0, "kind": 0, "classification": "filler", "padding": true},
     {"name": "Poison Defender", "game_id": 9, "kind": 2, "classification": "useful"},
-    {"name": "Hard Mode", "game_id": 11, "kind": 2, "classification": "filler"}
+    {"name": "Hard Mode", "game_id": 11, "kind": 2, "classification": "filler"},
+    {"name": "Mushroom", "game_id": 13, "kind": 0, "classification": "filler"},
+    {"name": "HP Plus", "game_id": 0, "kind": 2, "classification": "useful"}
   ]
 }
