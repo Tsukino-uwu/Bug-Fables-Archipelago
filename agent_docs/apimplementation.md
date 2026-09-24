@@ -385,8 +385,15 @@ What it showed, for the design:
   chapter N", so each of those is judged by hand: an alternate version of the same map (day and night), or
   a place that really closes, whose locations then need another way in or must not be locations.
 
-Still to do: the other kinds of gates (objects only an ability passes, blocking characters), the region
-graph built from all of it, and the tests.
+**Gates the data can't see.** The dump shows that a map has a dig spot or a breakable rock and a pickup, but
+not whether the one blocks the way to the other; and hover gaps and hazards for the bubble shield are just
+level geometry, with no object at all. Decided (the user, 2026-09-24): **a cautious default, then checks
+on screen.** Every location on a map with an ability's obstacle needs that ability. Each gate the user
+confirms, or rules out, in game adds or loosens a rule, and hover and bubble-shield rules come only from those
+checks. Cautious logic never makes a seed impossible; it only makes placement less random until it's refined.
+Obstacles for moves that are never shuffled (Kabbu's horn on grass, Vi's beemerang on switches) aren't gates.
+
+Still to do: characters that block a path, the region graph built from all of it, and the tests.
 
 *Code: `dev-scripts/gate-table.py`; the dump in `mod/BugFablesAP/EntityDump.cs`.*
 

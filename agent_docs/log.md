@@ -285,3 +285,15 @@ Newest last. What was tried, what happened, what the user said.
   started by the agent (the user's yes), dump written within seconds of the main menu, game closed and
   checked gone, `EntityDump` switched back off the same way. Results in `MEASURED.md`, "World pickups and
   their gates": no floor key item or medal is missable; only 5 ordinary items are.
+
+## 2026-09-24: step 3, the chapter table and the gated doors
+
+- `dev-scripts/gate-table.py` joins EntityDump's doors with the code's flag setters: 59 gated doors on 22
+  flags (`MEASURED.md`, "Chapters"). Hypothesis recorded: event numbers follow story order.
+- Found: some doors need an ability's flag, so a received ability must turn on the game's own flag. Some
+  doors vanish later; each still to judge.
+- Ability obstacles (dig spots, breakable rocks) can't be tied to pickups from data; hover and bubble-shield
+  gates have no object at all. **The user chose:** a cautious per-map default, refined by checks on screen.
+- Hard Mode: two levels (medal, HARDEST); the user chose a panel setting Off / Hard / Hardest, prize medals
+  always paid out and always shuffled, the Hard Mode medal filler, other medals useful, abilities and every
+  key item a rule uses progression.
