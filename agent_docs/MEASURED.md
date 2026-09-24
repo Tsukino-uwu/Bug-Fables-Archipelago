@@ -578,6 +578,18 @@ Ancient Mask). **Later:** #3 behind Chuck's house needs a large boulder smashed 
 #32 in the bridge room needs Vi's fly (hover) over two pillars and the beemerang on a vine (chapter 6), as the user
 guessed. The wiki is a lead, not proof: each entry is checked against the data or on screen before it's logic.
 
+## What the Explorer Permit opens (2026-09-24, code read and ScriptDump; the wiki lists four uses)
+
+- **The Outskirts gate:** `BugariaOutskirtsOutsideCity` line 31 asks for a key item, line 33 starts `Event17`
+  (flag 28). Already the logic's gate.
+- **A Rubber Prison door, confirmed in code:** `Event59` (the shared locked-door routine, `EventControl.cs:9575-9600`)
+  compares the shown key item with a list indexed by the door's `dialogues[0].y`; index 16 is 27, the permit. The
+  only `LockedDoor` with index 16 is `PrisonDoor` on `RubberPrisonCheckpointCorridor` (its flag 538).
+- **B.O.S.S. and the Cave of Trials, not yet confirmed:** both maps have a key-item prompt (`HBsLab` line 50,
+  `CaveOfTrials` line 11). Which item they accept is decided by a dialogue command ScriptDump doesn't keep, so the
+  permit there is the wiki's word only. Until measured, every B.O.S.S. and Cave of Trials location requires the
+  permit: cautious, never wrong.
+
 ## All medals by source (2026-09-24, entity dump, ScriptDump, code read, matched to the Bug Fables wiki)
 
 91 medal kinds (ids 0-90, `badgedata`); the wiki counts 120 copies in all. Where each comes from in the data:
