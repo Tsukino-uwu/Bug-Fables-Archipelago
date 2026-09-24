@@ -28,6 +28,8 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
 - **Randomizer saves are separate files** (decided 2026-09-24). With the randomizer on (a main-menu toggle),
   the game reads and writes its own save files in a separate folder. Normal saves and Steam Cloud's copies
   are never written. This must exist before the mod grants its first item.
+- **An item that can unlock even one location, at any point, is progression. No ifs or maybes** (the user,
+  2026-09-24): even if it only sometimes does, even if not always. `TestClassifications` enforces it.
 - **Vanilla stays vanilla** (the user, 2026-09-24). Everything the mod does, every panel setting (Difficulty,
   Detector, any future one) included, applies only while Archipelago is enabled. Gate each new effect on it.
 - **Never corrupt a save.** The mod writes game state only through the game's own functions (its give-item

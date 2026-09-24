@@ -134,8 +134,8 @@ Archipelago's `custom_worlds` folder.
   the Hard Mode medal, is a real item and goes in once (2026-09-24; test `TestMedals`). The G-Bug Ranger Plushie
   (a key item) joined as *useful* on 2026-09-24, so a test could put it on Artis's medal. Its own vanilla
   spot at the Bugaria theater isn't a location yet, so the game still hands that copy out there.
-- **Which class each item gets** (the user, 2026-09-24): "if an item can unlock even one other location, even if
-  only sometimes, it has to be progression." Every field ability is *progression*; a key item is *progression*
+- **Which class each item gets** (the user, 2026-09-24): **if an item can unlock even one location, at any point,
+  even if only sometimes or not always, it is progression. No ifs or maybes.** Every field ability is *progression*; a key item is *progression*
   when any rule in the logic uses it, even for a single location; one nothing uses is *useful*. Crystal berries
   buy medals at the crystal berry shop, so they become progression in the same change that puts that shop in
   the seed (test `TestClassifications` enforces both directions). Every medal is *useful*, except the Hard Mode medal (#11), which is *filler*: it only makes
