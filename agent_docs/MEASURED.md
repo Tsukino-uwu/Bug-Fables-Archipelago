@@ -168,6 +168,11 @@ throttled to changes.
   `AntPalace1`) is `Event46` (`:7511`), the next story step; the user saw it as walking out of the throne room.
   **TextProbe logged nothing for this grant**: the event seems to pass `SetText` a reference to the map's
   dialogue line, not the text, so the probe never sees the `giveitem`. The dump and GrantProbe covered it.
+- **A pickup with no flag at all: the inn's item.** A Honey Drop (id 1) with `caller=Fixedtempitem` and the
+  script `|additemtoss,0,var,0|`: no global flag, no regional flag. **The user, on screen:** it appears when
+  they pay for and use the inn, not otherwise. So it's a repeatable reward spawned on the spot, recorded
+  nowhere, and **not a location**. Three kinds of world pickup so far: a global flag (one-time, can be a
+  location), a regional flag (respawns, not one), and no flag (repeatable, not one).
 - **A second crystal berry:** on `SnakemouthLake`, `crystalbflag[1]` flipped (frame 111883), with no
   tutorial flag this time. The script was `|additemtoss,3,var,0|` with `caller=tempitem`, and `flagvar[0]`
   read 1 (HoneyDrop), **a stale value left from an earlier pickup**. `flagvar[0]` means nothing for crystal
