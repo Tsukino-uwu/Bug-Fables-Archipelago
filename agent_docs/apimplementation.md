@@ -556,6 +556,15 @@ the seed includes it. *Shuffle Quests* (on by default) covers quest-board and si
 will have their own toggle. With a category off, its locations aren't created, their vanilla items stay out of the
 pool, and they're left out of `slot_data`, so the client never swaps them and the game hands them out as usual
 (tests `TestQuestsOff`, `TestQuestsOnByDefault`).
+**Mapping connections, one-way included** (the user, 2026-09-25: for room-level regions and a later entrance
+rando). An entrance shuffle can only pair a two-way door with another two-way door; a one-way link marked two-way
+can strand the player. So every connection is recorded with its direction. How:
+1. `dev-scripts/door-graph.py <entitydump> [map prefix]` lists every door between maps, its gating flags, and the
+   doors on the target map that lead back ("NONE": a one-way candidate).
+2. Play decides the rest, since the dump can't see inside a map: a drop off a ledge, a barrier opened from one
+   side, a door whose other side can't be climbed back to. The user's findings go into `MEASURED.md` as they're
+   seen (the first: Snakemouth's switch-room ledges, paired doors that are one-way in play).
+3. When rooms become regions, the table plus those notes become the region graph, each exit one-way or two-way.
 **The general rule** (the user, 2026-09-24): if reaching something uses an ability, the logic requires that
 ability. Leif is in effect the freeze ability. Some droplet rooms are optional, so this is stricter than the game,
 which is the safe direction: never impossible, only less random.

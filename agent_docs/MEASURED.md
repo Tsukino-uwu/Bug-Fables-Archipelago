@@ -607,6 +607,20 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   switches can be done in either order; both are needed to open the middle door, which leads on to the first boss.
   The Crunchy Leaf behind the pillar needs nothing once you're in its room (the user).
 
+## The door graph (2026-09-25, `dev-scripts/door-graph.py` on the EntityDump)
+
+- **567 doors between maps; 15 have no door leading back.** A door sends the party to the map in its `data[0]`
+  (`NPCControl` trigger -> `MainManager.TransferMap(data[0], vectordata...)`).
+- **Snakemouth Den: 31 doors, all paired except `SnakemouthEmpty`'s `WarpOut`** (to the door room): that map is
+  entered some other way (an event, not seen yet).
+- **Paired on paper, one-way in play:** the big-door room's `WarpRightUp` <-> `SnakemouthUndergroundRightB`'s
+  `DoorMainRoom`. Leaving Right B puts the party on the ledge above the big-door room; the user dropped down and
+  can't climb back to `WarpRightUp` (see "Respawning pickups, seen in play"). The left side has the same shape
+  (`WarpLeftUp` <-> `SnakemouthUndergroundLeftB`), where the Mushroom spot and crystal berry #2 are (upper left).
+  So the dump gives the doors, and play decides which way each can be crossed.
+- **Story-gated doors:** the door room -> fall room door (`LoadZoneFallRoom`) requires flag 41 (the first boss); in
+  the story the fall room is first reached by the trapdoor (Event5), which is no door at all.
+
 ## What the Explorer Permit opens (2026-09-24, code read and ScriptDump; the wiki lists four uses)
 
 - **The Outskirts gate:** `BugariaOutskirtsOutsideCity` line 31 asks for a key item, line 33 starts `Event17`
