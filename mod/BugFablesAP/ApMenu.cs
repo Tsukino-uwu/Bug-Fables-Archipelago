@@ -275,7 +275,7 @@ namespace BugFablesAP
                 case PortRow: return "The room's port, e.g. 38281.";
                 case SlotRow: return "Your player slot name.";
                 case PasswordRow: return "The room's password, if it has one.";
-                case DifficultyRow: return "Only affects how tough enemies are, never items or locations.";
+                case DifficultyRow: return "Only affects how tough enemies are; every check stays the same.";
                 case DetectorRow: return "Acts like the Detector medal is always equipped, to find hidden items.";
                 case ModeRow: return "Turns Archipelago on or off. While on, normal saves are never touched.";
                 default: return "";
