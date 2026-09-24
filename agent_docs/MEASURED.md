@@ -417,7 +417,7 @@ The output stays in the BepInEx folder.
   (`DoorLadybug`, inside 1) has no gate flags; the user found its Mistake (flag 679) after the first boss and
   remembers it locked earlier (to check on an earlier save). The other house (`doormadeleine`, inside 2, with a
   Lore Book and Burly Tea) needs flag 390, set by dialogue on `Swamplands8` line 4; a `lockeddoor` character
-  stands there until then.
+  stands there until then. Confirmed by the user after the first boss: that house is locked, with a pop-up saying so.
 - **Doors:** 567 `DoorOtherMap` entities, 59 of them with required or hiding flags. Those are the map graph
   and its story gates, for the regions.
 - **Not in this dump:** the one key item and one medal without an `activationflag` still need judging.
