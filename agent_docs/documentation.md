@@ -346,7 +346,8 @@ came back from the server into key items; flag 31 never flipped, so no first-med
 A few times a second the mod gives each pickup location on the current map the sprite of what's really there,
 placed the way the game places an item's sprite. The game redraws an item's sprite only when its item id
 changes, so the swap holds. Another game's item keeps the vanilla look until the Archipelago icon is in the mod.
-Built; not yet seen on screen.
+**Confirmed by the user (2026-09-24, screenshots):** the Snakemouth medal pickup lay on the ground as the G-Bug
+Ranger Plushie, and picking it up showed the Plushie too.
 
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
 `Recolour` and `FirstMedalSeen` do the swapping; `PickupPrefix`, `FindPickup` and `TickGround` handle pickups); the

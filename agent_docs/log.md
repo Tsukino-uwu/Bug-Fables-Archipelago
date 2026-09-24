@@ -327,3 +327,7 @@ Newest last. What was tried, what happened, what the user said.
   out, flag 60, check sent, Plushie received into key items, no tutorial. The warp there first froze the game
   (Event21, an auto-start cutscene out of order, threw); `unstick` fixed it, and warps now skip auto-starts.
   The user: on the ground the pickup still looks like its vanilla medal. Asked about a cyan star in the corner.
+- **Ground sprite confirmed** (the user, screenshots): the pickup lay on the ground as the Plushie. Panel reworked
+  with the user: rows reordered, no Back row, a description line, the settings screen's arrows and change sound.
+  Dev warps: one step to the entity's start position, pickup cooldown, 1 s freeze. Rule added: vanilla stays
+  vanilla (every effect only while Archipelago is enabled).
