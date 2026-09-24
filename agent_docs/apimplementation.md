@@ -547,7 +547,10 @@ its vanilla item each time it comes back (so it stays useful locally). How it wo
    pickup is made again. Nothing is lost and nothing is doubled.
 Tests: `TestRespawningPickups` (the client gets the regional flag and no flag entry; the vanilla item is in the
 pool; the logic's region) and `TestSlotData` (every location watched exactly one way). First three: chapter 1's
-Snakemouth underground (a Honey Drop, a Mushroom and a Crunchy Leaf; names to come from the user on screen).
+Snakemouth underground (a Honey Drop, a Mushroom and a Crunchy Leaf). **Seen in play by the user (2026-09-24):**
+each first pickup showed the seed's item and sent its check, and after an area change the Honey Drop came back
+and gave a real Honey Drop with no check. Two are named from the user's description (*Underground Door Room,
+Pillar*; *Underground Bridge Room, Behind Pillar*, hidden from the camera); the Mushroom's landmark is still to come.
 **Optional categories** (the user, 2026-09-24): a location can carry a `category`; its yaml option decides whether
 the seed includes it. *Shuffle Quests* (on by default) covers quest-board and side-quest rewards; one-off NPC gifts
 will have their own toggle. With a category off, its locations aren't created, their vanilla items stay out of the

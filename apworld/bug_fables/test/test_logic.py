@@ -411,7 +411,7 @@ class TestRespawningPickups(BugFablesTestBase):
     # vanilla item every time; with a flag entry it would wait for a flag the game never sets.
     def test_known_by_regional_flag(self) -> None:
         data = self.world.fill_slot_data()
-        spot = str(self.world.location_name_to_id["Snakemouth Den: Underground Right Room, Floor"])
+        spot = str(self.world.location_name_to_id["Snakemouth Den: Underground Bridge Room, Behind Pillar"])
         self.assertEqual(data["location_pickups"][spot], {"map": "SnakemouthUndergroundRightB", "flag": -1, "regional": 28})
         self.assertNotIn(spot, data["location_flags"])
 
@@ -420,6 +420,6 @@ class TestRespawningPickups(BugFablesTestBase):
         self.assertIn("Honey Drop", pool)
 
     def test_needs_the_underground(self) -> None:
-        self.assertFalse(self.can_reach_location("Snakemouth Den: Underground Right Room, Floor"))
+        self.assertFalse(self.can_reach_location("Snakemouth Den: Underground Bridge Room, Behind Pillar"))
         self.collect_by_name(["Explorer Permit", "Leif"])
-        self.assertTrue(self.can_reach_location("Snakemouth Den: Underground Right Room, Floor"))
+        self.assertTrue(self.can_reach_location("Snakemouth Den: Underground Bridge Room, Behind Pillar"))

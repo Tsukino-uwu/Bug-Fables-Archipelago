@@ -359,3 +359,9 @@ Newest last. What was tried, what happened, what the user said.
   new game back; its one-line notice ran over the save slots, so it became a popup box over a dimmer.
 - **Confirmed by the user:** the popup (moved up over the slots, OK and Close hints) held the save back with the
   server down; after the server came back and the mod logged in by itself, the save loaded.
+- **Respawning pickups confirmed in play** (2026-09-24): the first pickup showed the seed's item and sent its check;
+  after an area change the Honey Drop came back and gave a real Honey Drop with no check. The Crunchy Leaf couldn't
+  be found by warps (an enemy by the landing spot, and the item hidden behind a pillar); `items` gave its position
+  and `nudge` put the user on it. Added `infjump` (the user asked); the first version never fired in mid-air,
+  because the game's 30-frame jump cooldown outlasts a jump (seen from the new per-press log), so it no longer
+  checks that. Names from the user: "Underground Door Room, Pillar" and "Underground Bridge Room, Behind Pillar".

@@ -578,6 +578,20 @@ Ancient Mask). **Later:** #3 behind Chuck's house needs a large boulder smashed 
 #32 in the bridge room needs Vi's fly (hover) over two pillars and the beemerang on a vine (chapter 6), as the user
 guessed. The wiki is a lead, not proof: each entry is checked against the data or on screen before it's logic.
 
+## Respawning pickups, seen in play (2026-09-24, the user, with the dev log)
+
+- **The respawn cycle works as designed:** on `SnakemouthUndergrondDoor`, the Honey Drop (regional flag 24) and
+  the Mushroom (29) each showed the seed's item and sent their check on the first pickup (server confirmed
+  7720022, 7720023). After a trip outside (area change to the Outskirts; the probe logged `regionalflag[29]`
+  True -> False), both were back, and the Honey Drop gave a real Honey Drop with no check (`check already done:
+  vanilla item`). The Crunchy Leaf on `SnakemouthUndergroundRightB` (28) showed Mushroom Gummies and sent 7720024.
+- **Where they are:** the Honey Drop sits on top of a pillar, reached with Leif's ice. The Mushroom is reached with
+  nothing from the room's left side, with ice from the bottom or right, like crystal berry #2. The Crunchy Leaf is
+  behind a pillar, out of sight: from the room's bottom-middle entrance, walk right and behind it.
+- **Many items may be hidden behind walls or pillars** (the user): the camera never shows them. The dev console's
+  `items` lists every pickup with its position, and `nudge` moves the party by an exact amount.
+- **Flag 281** (in all three pickups' hiding flags) read False in play.
+
 ## What the Explorer Permit opens (2026-09-24, code read and ScriptDump; the wiki lists four uses)
 
 - **The Outskirts gate:** `BugariaOutskirtsOutsideCity` line 31 asks for a key item, line 33 starts `Event17`
