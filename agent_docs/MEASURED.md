@@ -248,6 +248,10 @@ throttled to changes.
   (`boardquestdata[id, 3]`, `:13906`). **Which list is which is not measured yet.** After the user took
   several quests: `[0]` = 8,9,10,21,23; `[1]` = 12,1,2,4,33,49,56; `[2]` = 11,0. GrantProbe logs every
   change, so finishing one quest will show it.
+- **Taking quests set a burst of flags:** 3, 64, 44, 50, 240, 479, 617 on `BugariaMainPlaza` (frames
+  60502–61679; the user saw them), consistent with each taken quest setting its `boardquestdata[id, 3]` flag.
+  **Hypothesis, unmeasured:** `boardquests[1]` (7 ids) holds the taken quests. Those flags mark "taken", not
+  "done"; finishing one will show which list completion moves an id to, and what the reward sets.
 
 ## Key-item grant sources, raw (2026-09-24) — SPOILERS for the whole game
 
