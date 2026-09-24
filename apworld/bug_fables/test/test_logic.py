@@ -159,3 +159,25 @@ class TestLeif(BugFablesTestBase):
         self.collect_by_name("Explorer Permit")
         self.assertTrue(self.can_reach_location("Leif Joins"))
         self.assertTrue(self.can_reach_location("Snakemouth Den: Underground Door Room"))
+
+
+class TestInRoomRules(BugFablesTestBase):
+    # What a spot needs once you're in its room is written on the location itself, even when the region already
+    # implies it, so entrance rando can change how a room is reached without losing it (the user, 2026-09-24).
+    def test_gummies_need_leif_in_the_room(self) -> None:
+        from BaseClasses import CollectionState, ItemClassification
+        from ..world import BugFablesItem
+        location = self.world.get_location("Snakemouth Den: Mushroom Pit, Droplets")
+        region = location.parent_region
+        state = CollectionState(self.multiworld)
+        state.collect(self.world.create_item("Explorer Permit"), prevent_sweep=True)
+        # Pretend the room was reached another way: the location's own rule must still ask for Leif.
+        self.assertFalse(location.access_rule(state))
+        state.collect(BugFablesItem("Leif", ItemClassification.progression, None, self.player), prevent_sweep=True)
+        self.assertTrue(location.access_rule(state))
+        self.assertEqual(region.name, "Snakemouth Den Underground")
+
+    def test_pit_medal_needs_nothing_in_the_room(self) -> None:
+        from BaseClasses import CollectionState
+        location = self.world.get_location("Snakemouth Den: Mushroom Pit, Floor")
+        self.assertTrue(location.access_rule(CollectionState(self.multiworld)))

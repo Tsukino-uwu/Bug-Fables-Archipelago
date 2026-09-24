@@ -10,7 +10,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 
 ## Where it stands
 
-**Done so far:** a small apworld (6 locations, 7 items) that generates seeds and passes its tests, with the
+**Done so far:** a small apworld (8 locations, 9 items) that generates seeds and passes its tests, with the
 goal "collect N artifacts"; the mod connecting on its own, compressed, to a local server or a hosted room on
 archipelago.gg, retrying when the server is unreachable or drops; sending checks (build step 6); receiving
 items, with the count kept in the save (build step 7); and the game's own item at a location swapped for the
@@ -457,6 +457,12 @@ is *Snakemouth Den Underground*, whose entrance needs the story event *Leif*. Le
 flag 16), which is on the open side, so the logic can't go in circles. The first boss's treasure room is
 underground, so Artifact 1 needs Leif too. Story events like this one live in `locations.json` under
 `story_events`; a location can also list extra `requires` of its own. Tests `TestLeif` fail without the rule.
+**Three kinds of rule, kept apart** (the user, 2026-09-24, with entrance rando in mind): what it takes to *reach*
+a room (on the connections into it), what a spot needs *once you're in the room* (on the location, e.g. the
+mushroom pit's Gummies need Leif's ice while its medal needs nothing), and what it takes to *cross* a room from
+one door to another (a connection through it; a room split by an obstacle becomes two regions). The in-room
+rule is written even when the region already implies it, so a different way into the room can't lose it (test
+`TestInRoomRules`).
 **The general rule** (the user, 2026-09-24): if reaching something uses an ability, the logic requires that
 ability. Leif is in effect the freeze ability. Some droplet rooms are optional, so this is stricter than the game,
 which is the safe direction: never impossible, only less random.
