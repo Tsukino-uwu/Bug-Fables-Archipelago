@@ -329,3 +329,24 @@ class TestMidQuestItemQuestsOff(BugFablesTestBase):
     def test_quest_book_not_in_pool(self) -> None:
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         self.assertNotIn("Quest Book", pool)
+
+
+class TestClassifications(BugFablesTestBase):
+    # An item is progression exactly when a rule needs it, even for one check (the user, 2026-09-24). Too few and
+    # fill can lock an item behind itself; too many and it skews placement and playthroughs.
+    def test_items_rules_use_are_progression_and_only_those(self) -> None:
+        from ..data_tables import ITEMS, LOCATIONS, REGIONS, STORY_EVENTS
+        used: set[str] = set()
+        for region in REGIONS:
+            for exit_data in region["exits"]:
+                used.update(exit_data.get("requires", []))
+        for spot in LOCATIONS + STORY_EVENTS:
+            used.update(spot.get("requires", []))
+        event_items = {event["item"] for event in STORY_EVENTS} | {"Artifact"}
+        real_items_used = used - event_items
+        for item in ITEMS:
+            with self.subTest(item=item["name"]):
+                if item["name"] in real_items_used:
+                    self.assertEqual(item["classification"], "progression")
+                else:
+                    self.assertNotEqual(item["classification"], "progression")
