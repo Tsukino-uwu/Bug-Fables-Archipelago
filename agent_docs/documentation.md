@@ -62,8 +62,11 @@ A few decisions made first, because they shape everything after:
   and every item, even your own, comes back from the server. That's simpler to build, a lost save can get
   everything back, and two people can share one slot. The cost: with the server down, nothing arrives.
 - **What the player sees** (the user, 2026-09-24). Finding a location in your own game, whether it's a
-  pickup or an NPC handing something over, shows the **Archipelago icon** in place of the game's item.
-  Items arriving from the server, another player's finds included, come in **quietly**, with no popup.
+  pickup or an NPC handing something over, shows **what's really there**: a Bug Fables item (yours, or
+  another Bug Fables player's in the same room) with the game's own sprite, and any other game's item as the
+  **Archipelago icon**. Items arriving from the server, another player's finds included, come in **quietly**,
+  with no popup. (To know what's at a location before it's found, the mod asks the server first, a "scout",
+  without creating hints: `create_as_hint` 0, see `client-requirements.md`.)
 - **Read what others already solved.** We read the TEVI randomizer (another Unity mod), Pokémon Emerald's
   apworld, Archipelago's own docs, and notes from an earlier Archipelago project, all for ideas only,
   with each one's licence checked first.
