@@ -38,9 +38,15 @@ server, and items from the server arrive in the game once each.
    `MapControl.cs:408`, music `MusicSpinner.cs:54`), and Hard is the same question for medal #11, so one patch
    on `BadgeIsEquipped` serves both rows. It changes no save data and no logic.
    **Built (2026-09-24), not yet seen on screen:** the panel has eight rows now (spaced tighter so the status
-   line still fits). Difficulty offers Normal and Hard so far, Hardest once it's settled. `MedalAssist.cs`
+   line still fits). Difficulty offers Normal, Hard and Hardest. `MedalAssist.cs`
    answers "equipped" for medal 11 (Hard) or 2 (Detector) on party-wide checks, on randomizer saves only. The
    medals menu equips from the medal list itself, never through that check, so it's unaffected.
+   **Hardest** (the user chose: switchable, the save stays clean): its extras read the save's HARDEST flag (614)
+   directly, and the game keeps no other trace of a typed code. So the mod turns 614 on in play and remembers
+   that it did; each time the game saves, the flag is cleared just for the write and put back after, and
+   switching down clears only a 614 the mod set. Loading a save or starting a new one forgets the mark, since
+   those flags are the save's own. If any of the three hooks (save, load, new game) is missing, Hardest does
+   nothing rather than risk a save.
 
 ## The steps
 

@@ -19,8 +19,8 @@ namespace BugFablesAP
         private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, DifficultyRow = 5, DetectorRow = 6,
             BackRow = 7, Rows = 8;
 
-        // The Difficulty and Detector rows' settings (Plugin). Hardest joins the list once it's built.
-        internal static readonly string[] Difficulties = { "Normal", "Hard" };
+        // The Difficulty and Detector rows' settings (Plugin, MedalAssist).
+        internal static readonly string[] Difficulties = { "Normal", "Hard", "Hardest" };
         internal static ConfigEntry<string> Difficulty;
         internal static ConfigEntry<bool> Detector;
 

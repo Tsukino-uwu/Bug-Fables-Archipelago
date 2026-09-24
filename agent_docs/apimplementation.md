@@ -32,7 +32,8 @@ seed's (the mod guide, step 9).
    *Hardest*: its extras read flag 614 directly in about 35 places, so it means setting that flag. **Measured
    2026-09-24: the game keeps no other record of a typed code.** `flagstring[10]` is only the typing buffer,
    emptied as soon as the code is accepted (`EventControl.cs:2450-2455`), so flag 614 is the code's only trace,
-   and the mod needs its own way to tell the panel's 614 from a typed one (still to decide).
+   so the mod marks a 614 it set itself, and keeps it out of every save (the user chose, 2026-09-24:
+   switchable, the save stays clean; the mod guide's design list, item 6).
 2. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
 3. **An open-world option later,** researched one chapter at a time.

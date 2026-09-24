@@ -116,14 +116,16 @@ namespace BugFablesAP
             ItemSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             // The panel's Difficulty and Detector rows (the user, 2026-09-24): defaults Normal and On.
             difficulty = Config.Bind("Archipelago", "Difficulty", "Normal", new ConfigDescription(
-                "Normal leaves it to the game; Hard acts as if the Hard Mode medal were equipped. Boss prize medals are "
-                + "paid out either way. Switch it in the Archipelago panel.", new AcceptableValueList<string>(ApMenu.Difficulties)));
+                "Normal leaves it to the game; Hard acts as if the Hard Mode medal were equipped; Hardest as if the save had "
+                + "the HARDEST code, never written into the save. Boss prize medals are paid out on every setting. "
+                + "Switch it in the Archipelago panel.", new AcceptableValueList<string>(ApMenu.Difficulties)));
             detector = Config.Bind("Archipelago", "Detector", true,
                 "On acts as if the Detector medal were equipped, to help find items. Off leaves it to the medal. "
                 + "Switch it in the Archipelago panel.");
             ApMenu.Difficulty = difficulty;
             ApMenu.Detector = detector;
-            MedalAssist.Enable(Log, Guid, () => randomizerEnabled.Value, () => difficulty.Value == "Hard", () => detector.Value);
+            MedalAssist.Enable(Log, Guid, () => randomizerEnabled.Value, () => difficulty.Value == "Hard",
+                () => difficulty.Value == "Hardest", () => detector.Value);
             MenuToggle.Enable(Log, Guid, randomizerEnabled, server, port, slot, password,
                 () => { },
                 () => connection.Status);
@@ -227,6 +229,7 @@ namespace BugFablesAP
             checks.Tick(randomizerEnabled.Value);
             receiver.Tick(randomizerEnabled.Value);
             ItemSwap.TickGround();
+            MedalAssist.Tick();
 
             DevCheats.Tick(Log, giveMoney);
             DevConsole.Tick(devConsole.Value);
