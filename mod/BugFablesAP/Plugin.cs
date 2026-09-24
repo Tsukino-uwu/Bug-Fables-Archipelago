@@ -17,6 +17,8 @@ namespace BugFablesAP
         private ConfigEntry<bool> grantProbeEnabled;
         private ConfigEntry<bool> textProbeEnabled;
         private ConfigEntry<bool> scriptDumpEnabled;
+        private ConfigEntry<bool> varDumpEnabled;
+        private bool varDumpDone;
         private ConfigEntry<string> server;
         private ConfigEntry<string> port;
         private ConfigEntry<string> slot;
@@ -52,6 +54,9 @@ namespace BugFablesAP
             scriptDumpEnabled = Config.Bind("Debug", "ScriptDump", false,
                 "Dev only. Once per launch, writes the item and flag command tokens of every map's dialogue lines to "
                 + "BepInEx/bugfablesap-scriptdump.tsv. Off by default.");
+            varDumpEnabled = Config.Bind("Debug", "VarDump", false,
+                "Dev only. Once per load, writes every flagvar/flagstring slot the game's text uses to "
+                + "BepInEx/bugfablesap-vardump.tsv. Off by default.");
             if (textProbeEnabled.Value)
             {
                 TextProbe.Enable(Log, Guid);
@@ -190,6 +195,12 @@ namespace BugFablesAP
                 {
                     SaveDiff.Run(Log, pair[0].Trim(), pair[1].Trim());
                 }
+            }
+
+            if (varDumpEnabled.Value && !varDumpDone && MainManager.instance != null && MainManager.instance.prizeflags != null)
+            {
+                varDumpDone = true;
+                VarDump.Run(Log);
             }
 
             if (scriptDumpEnabled.Value && !scriptDumpDone)

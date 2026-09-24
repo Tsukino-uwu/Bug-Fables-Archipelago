@@ -297,6 +297,28 @@ throttled to changes.
   so the game never writes a normal save's file. Whether Steam also syncs the randomizer folder only decides
   whether those saves roam between PCs.
 
+## Free save slots for the mod (2026-09-24)
+
+`MainManager.SaveFile` (`MainManager.cs:6900`) writes, among much else, all of `flags` (bool[750]),
+**`flagstring` (string[15])** and **`flagvar` (int[70])** (sizes from `MainManager.cs:3604-3611`). One unused
+slot of each can hold the mod's own state in the game's own save, with no new format.
+
+- **The code's uses** (grep of the decompiled source): `flagvar` 0-6, 9-17, 22-24, 26-29, 32, 35, 37-43, 47, 50,
+  53-56, 62, 66-68, plus the prize table `prizeflags` = 13, 17-21, 25, 30, 31, 33, 34, 36, 44-46, 48, 51, 52, 57,
+  61, 63-65 (`MainManager.cs:3401`, the same live in the game). `flagstring` 0-4, 6-14, and `flagstring[listtype]`
+  with `listtype` 9, 10 (letter prompts), 14 or 16.
+- **The text's uses** (`VarDump`, every TextAsset under Resources, 2,437 assets, 239 distinct slot tokens):
+  `flagvar` 49 (`addvar,49`), 58 (`checkvar,58`, `setvar,add,58`) and 59 (`checkvar,59`) are used. 7 and 8
+  appear only as values or line numbers (`define` is a text macro, not a slot). **60 appears nowhere.** 69
+  appears only as a line argument of `numberprompt`, whose slot is always 0. `string,N` uses `flagstring` 0-4, 9
+  and 10.
+- **Chosen:** **`flagvar[60]`** for the received-item count, and **`flagstring[5]`** for the seed's name.
+- **A battle retry rolls `flagvar` back:** `BattleControl` snapshots `flags`, `flagvar` and `items[0]` at battle
+  start (`BattleControl.cs:614-624`) and restores them on retry (`SetFlags`, `:3443`), but not key items. So
+  the mod must never give an item during a battle. Then the count and the inventory stay consistent.
+- **Correction:** `flagstring` IS saved. The item swap's use of `flagstring[0]` is harmless, because the
+  game writes that slot itself for every item-get.
+
 ## The main menu (2026-09-24, decompiled `StartMenu.cs`)
 
 - **Three fixed options.** `selections = new Transform[3]` in `Intro` (`StartMenu.cs:117`). `SetMenuText`
