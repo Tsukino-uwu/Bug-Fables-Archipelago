@@ -37,8 +37,10 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
 - **Every seed can be completed from wherever it starts** (the user, 2026-09-24). Whatever an area or goal
   needs (key items, party members, abilities) is a rule in the logic, never something the mod hands out to
   patch a gap. That holds for a random start or open-world option too.
-- **Game logic and apworld logic move together.** A gate in the game and its rule in the apworld are the same
-  fact written twice. If the game is stricter, seeds can't be finished. If it's looser, the logic is decorative.
+- **The game is NEVER stricter than the logic** (the user, 2026-09-24, as in their earlier project). Archipelago
+  proves a seed completable only by the logic, so a gate it doesn't know about (a story flag, an ability
+  check) breaks a "proven" seed silently. Every gate found goes into the apworld; one that can't be modelled
+  is opened by the mod. The logic may be more cautious than the game, never less.
 
 ## Who verifies what
 
