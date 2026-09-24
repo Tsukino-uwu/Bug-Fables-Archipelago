@@ -611,8 +611,12 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
 
 - **567 doors between maps; 15 have no door leading back.** A door sends the party to the map in its `data[0]`
   (`NPCControl` trigger -> `MainManager.TransferMap(data[0], vectordata...)`).
-- **Snakemouth Den: 31 doors, all paired except `SnakemouthEmpty`'s `WarpOut`** (to the door room): that map is
-  entered some other way (an event, not seen yet).
+- **Snakemouth Den: 31 doors, all paired except `SnakemouthEmpty`'s `WarpOut`** (to the door room).
+  `SnakemouthEmpty` holds nothing but that exit and no door leads in: an unused room, left out of the graph (the
+  user, warped there 2026-09-25; walking out led to the door room).
+- **The door room's `DoorLoadZone` leads to Upper Snakemouth (`UpperSnekEntrance`) and requires only flag 41** in
+  the data. The user, on a file past the first boss (chapter 2 started), walked through into the later area
+  (2026-09-25). What keeps it shut before chapter 5 in normal play, if anything, is still to find.
 - **Paired on paper, one-way in play:** the big-door room's `WarpRightUp` <-> `SnakemouthUndergroundRightB`'s
   `DoorMainRoom`. Leaving Right B puts the party on the ledge above the big-door room; the user dropped down and
   can't climb back to `WarpRightUp` (see "Respawning pickups, seen in play"). The left side has the same shape
