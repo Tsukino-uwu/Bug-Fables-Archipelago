@@ -21,6 +21,9 @@ namespace BugFablesAP
     internal static class EntityDump
     {
         private const int RequiresCount = 38, LimitCount = 49, DataCount = 60, DialogueCount = 102;
+        // vectordata: a count, then that many (x, y, z). Grass that drops an item picks one entry at random and drops
+        // item x (NPCControl.cs:5976-5983), so this is the grass's item list.
+        private const int VectorCount = 71;
         private const int RegionalFlag = 190, ActivationFlag = 194;
         // Which inside (a building's interior on the same map) the entity belongs to; -1 outdoors. An indoor pickup
         // is reached through that inside's door, whose own flags gate it (found 2026-09-24: a pickup the apworld had
@@ -71,7 +74,8 @@ namespace BugFablesAP
                           .Append(List(f, DataCount, 1)).Append('\t')
                           .Append(List(f, DialogueCount, 3)).Append('\t')
                           .Append(f[RegionalFlag]).Append('\t').Append(f[ActivationFlag].Trim()).Append('\t')
-                          .Append(f[InsideId].Trim()).AppendLine();
+                          .Append(f[InsideId].Trim()).Append('	')
+                          .Append(List(f, VectorCount, 3)).AppendLine();
                         rows++;
                     }
                     catch (Exception e)

@@ -231,3 +231,16 @@ class TestStoryPickup(BugFablesTestBase):
         pickups = self.world.fill_slot_data()["location_pickups"]
         medal = str(self.world.location_name_to_id["Snakemouth Den: Underground Door Room"])
         self.assertNotIn("event", pickups[medal])
+
+
+class TestGoldenPath(BugFablesTestBase):
+    # The Golden Path's door opens with the first boss (flag 41). Without the rule, fill could put the permit there.
+    def test_golden_path_needs_the_first_boss(self) -> None:
+        from BaseClasses import CollectionState, ItemClassification
+        from ..world import BugFablesItem
+        location = self.world.get_location("Outskirts: Golden Path, Grass")
+        state = CollectionState(self.multiworld)
+        self.assertFalse(location.can_reach(state))
+        state.collect(BugFablesItem("Snakemouth Den Cleared", ItemClassification.progression, None, self.player),
+                      prevent_sweep=True)
+        self.assertTrue(location.can_reach(state))

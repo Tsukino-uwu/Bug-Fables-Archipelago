@@ -10,14 +10,16 @@
     {"name": "Snakemouth Den: Mushroom Pit, Floor", "id": 8, "region": "Snakemouth Den Underground", "source": {"flag": 42, "pickup": {"map": "SnakemouthMushroomPit", "type": 2, "item": 7}}},
     {"name": "Snakemouth Den: Mushroom Pit, Droplets", "id": 9, "region": "Snakemouth Den Underground", "requires": ["Leif"], "source": {"flag": 724, "pickup": {"map": "SnakemouthMushroomPit", "type": 0, "item": 144}}},
     {"name": "Snakemouth Den: Lake, Ladybug Kid's Reward", "id": 10, "region": "Snakemouth Den", "requires": ["Leif", "Snakemouth Den Cleared"], "source": {"event": 31, "flag": 55, "give": {"map": "SnakemouthLake", "type": 1, "item": 52}}, "category": "quest"},
-    {"name": "Snakemouth Den: Door Room, Trapdoor", "id": 11, "region": "Snakemouth Den", "source": {"event": 5, "flag": 14, "pickup": {"map": "SnakemouthDoorRoom", "type": 0, "item": 13, "story": true}}}
+    {"name": "Snakemouth Den: Door Room, Trapdoor", "id": 11, "region": "Snakemouth Den", "source": {"event": 5, "flag": 14, "pickup": {"map": "SnakemouthDoorRoom", "type": 0, "item": 13, "story": true}}},
+    {"name": "Outskirts: Golden Path, Grass", "id": 12, "region": "Golden Path", "source": {"flag": 74, "pickup": {"map": "BOGoldenPath", "type": 0, "item": 2}}, "_comment": "Cut grass that drops an item copies its own one-time flag onto the drop (NPCControl.cs:5981-5983), so it's an ordinary pickup location. Item seen by the user in play (2026-09-24)."}
   ],
   "regions": [
     {"name": "Menu", "exits": [{"to": "Bugaria Outskirts"}]},
-    {"name": "Bugaria Outskirts", "exits": [{"to": "Past the Outskirts Gate", "requires": ["Explorer Permit"]}]},
+    {"name": "Bugaria Outskirts", "exits": [{"to": "Past the Outskirts Gate", "requires": ["Explorer Permit"]}, {"to": "Golden Path", "requires": ["Snakemouth Den Cleared"]}]},
     {"name": "Past the Outskirts Gate", "exits": [{"to": "Snakemouth Den"}]},
     {"name": "Snakemouth Den", "exits": [{"to": "Snakemouth Den Underground", "requires": ["Leif"]}]},
-    {"name": "Snakemouth Den Underground", "exits": [], "_comment": "Every Snakemouth room with water droplets, or reached only through one (from the dump's doors: MushroomPit, UndergrondDoor, Underground*, TreasureRoom, Empty). Leif freezes the droplets (the user, 2026-09-24)."}
+    {"name": "Snakemouth Den Underground", "exits": [], "_comment": "Every Snakemouth room with water droplets, or reached only through one (from the dump's doors: MushroomPit, UndergrondDoor, Underground*, TreasureRoom, Empty). Leif freezes the droplets (the user, 2026-09-24)."},
+    {"name": "Golden Path", "exits": [], "_comment": "BOGoldenPath: its door from outside the city requires flag 41, the first boss (gate table)."}
   ],
   "artifacts": [
     {"number": 1, "name": "Artifact 1", "region": "Snakemouth Den Underground", "source": {"event": 26, "flag": 41}}
