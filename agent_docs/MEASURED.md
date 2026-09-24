@@ -215,8 +215,10 @@ throttled to changes.
   crystal berry 25 (`giveitem,3,25`, line 27).
 - **Turning in a Lore Book** (the user, `AntPalaceLibrary`): `KEYITEM -1 id=52` (frame 40180), **no global flag and
   no item script**. On screen, the book was placed on a shelf and became readable. So placed books are
-  recorded outside the global flags (probably a counter or a list); a save diff after the next save will show
-  where.
+  recorded outside the global flags. **Measured in code: a counter, `flagvar[15]`.** The dialogue command
+  `Librarybook` (`MainManager.cs:11032`) does `flagvar[15]++` and refreshes `LibraryShelf`, which draws that many
+  books left to right, 14 per row, then a second row (`LibraryShelf.cs`, `breakpoint = 14`). Only the count is
+  kept, not which book, so Lore Books are interchangeable and any milestone is count-based.
 - **A second crystal berry:** on `SnakemouthLake`, `crystalbflag[1]` flipped (frame 111883), with no
   tutorial flag this time. The script was `|additemtoss,3,var,0|` with `caller=tempitem`, and `flagvar[0]`
   read 1 (HoneyDrop), **a stale value left from an earlier pickup**. `flagvar[0]` means nothing for crystal
