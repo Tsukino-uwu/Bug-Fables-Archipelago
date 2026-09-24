@@ -316,8 +316,11 @@ still marks the pickup taken and the check is sent. A medal's first-medal tutori
 The list of pickup locations comes from the seed (`location_pickups` in `slot_data`), and every location is
 now scouted at login, not only the gifts.
 
-**Not yet tested in game.** The first two pickup locations, an item on the Outskirts and a medal in Snakemouth
-Den, are for that test.
+**Tested by the user (2026-09-24):** a medal pickup in Snakemouth Den with the G-Bug Ranger Plushie placed on
+it (plando). On screen: "You found a Bug Ranger Plushie!", its sprite held up, its description, the key-item
+starburst. The log: the medal kept out, the game set the pickup's flag, the check was sent, and the Plushie
+came back from the server into key items; flag 31 never flipped, so no first-medal tutorial. **Not yet done:**
+on the ground, before it's picked up, the pickup still looks like its vanilla item.
 
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
 `Recolour` and `FirstMedalSeen` do the swapping; `PickupPrefix` and `FindPickup` handle pickups); the

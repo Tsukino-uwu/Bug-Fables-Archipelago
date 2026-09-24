@@ -352,7 +352,8 @@ uses a slot the game already saves but never uses. Finding one took a measuremen
 **Only when it's safe, one item per frame:** only while the player is free (no battle, dialogue, cutscene, pause
 or map change). Never during a battle, because retrying a lost battle restores the count but not key items.
 
-**Medals** (2026-09-24, built, not yet tested in game) go in through the game's own `MainManager.AddBadge`,
+**Medals** (2026-09-24; tested: Hard Mode, sent from Artis's location, arrived in the medals menu, the user on
+screen) go in through the game's own `MainManager.AddBadge`,
 unequipped, like any medal found. The game numbers medals separately from items, and the two ranges overlap,
 so a medal's Archipelago id is offset by 1000 (`data_tables.py`, `item_id`; the mod's `ItemIds.cs`), and
 `item_kinds` marks it kind 2.

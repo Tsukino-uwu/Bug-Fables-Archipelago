@@ -323,3 +323,7 @@ Newest last. What was tried, what happened, what the user said.
   gated by their inside's door. The console can't yet enter an inside.
 - The user asked why saves are tied to seeds; answered (the count only means something within a seed), and
   `AdoptSeed` added for test files.
+- **Pickup swap confirmed** (the user, screenshot): Snakemouth medal pickup showed the Plushie; the log shows kept
+  out, flag 60, check sent, Plushie received into key items, no tutorial. The warp there first froze the game
+  (Event21, an auto-start cutscene out of order, threw); `unstick` fixed it, and warps now skip auto-starts.
+  The user: on the ground the pickup still looks like its vanilla medal. Asked about a cyan star in the corner.
