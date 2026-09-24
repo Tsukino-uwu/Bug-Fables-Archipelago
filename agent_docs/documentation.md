@@ -123,7 +123,7 @@ but it takes real typing: the game itself never reads typed text (its name scree
 mod reads the keyboard itself. Backspace, Ctrl+V to paste and Ctrl+C to copy all work. The same panel switches
 **the Archipelago mod** (enabled or disabled), which keeps randomizer saves in their own folder so normal saves are never touched.
 
-Three things went wrong on the way, each found on screen by the user:
+Several things went wrong on the way, each found on screen by the user:
 
 - **A fourth menu line landed on top of the credits.** Fixed by spacing the four lines a little tighter and
   moving the game's cursor to match.
