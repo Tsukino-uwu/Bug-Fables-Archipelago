@@ -77,7 +77,13 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `spawn <item|key|medal> <id> [flag]`: drop a pickup next to you. With a pickup location's flag, on that
   location's map, it is that location.
 - `flag <n> [on|off]`: show or set a story flag.
-- `unstick`: runs the game's own end-of-cutscene cleanup, when a cutscene died and left you frozen.
+- `unstick`: runs the game's own end-of-cutscene cleanup, when a cutscene died and left you frozen, and ends a
+  map transfer stuck walking to a spot it can't reach.
+- `nudge <x> <y> <z>`: shift the party by that much on the current map.
+- `items`: list every pickup that exists on the current map right now (kind, id, flag, distance), in the log.
+
+While a warp is in flight and for 1.5 s after it lands, touching a pickup does nothing (a warp lands on the
+item's own spot); step off and back on to take it.
 
 `loc` and `warp <map> <flag>` go straight to the entity's start position, read from the map's entity table,
 and land a couple of steps from it; the pickup can't be taken for about 1.5 s and you can't walk for 1 s after

@@ -18,6 +18,7 @@ namespace BugFablesAP
     //   spawn <item|key|medal> <id> [flag]   drop a pickup next to you; with a location's flag, it is that location
     //   flag <n> [on|off]       show or set flags[n]
     //   unstick                 run the game's end-of-event cleanup, when a cutscene died and left you frozen
+    //   nudge <x> <y> <z>       shift the party by that much on this map
     internal static class DevConsole
     {
         private const long LocationIdBase = 7_720_000;
@@ -37,6 +38,37 @@ namespace BugFablesAP
         {
             log = logger;
             connection = conn;
+        }
+
+        // While a warp is in flight and for 1.5 s after arriving, touching a pickup does nothing: a warp lands on the
+        // item's own spot, and a guard set after the map loaded lost the race (2026-09-24, the east Outskirts HP
+        // Plus was taken on arrival). The touch starts in NPCControl.OnTriggerEnter (NPCControl.cs:4516); this skips
+        // it for items only. The touch is an Enter, so step off and back on to take the item afterwards.
+        private static HarmonyLib.Harmony harmony;
+        private static float blockUntil = -1f;
+
+        internal static void EnableGuard(string guid)
+        {
+            var enter = HarmonyLib.AccessTools.Method(typeof(NPCControl), "OnTriggerEnter");
+            if (enter == null)
+            {
+                log.LogWarning("[dev] NPCControl.OnTriggerEnter not found: warps can't hold off pickups");
+                return;
+            }
+            harmony = new HarmonyLib.Harmony(guid + ".devguard." + DateTime.UtcNow.Ticks);
+            harmony.Patch(enter, prefix: new HarmonyLib.HarmonyMethod(typeof(DevConsole), nameof(HoldPickups)));
+        }
+
+        internal static void DisableGuard()
+        {
+            harmony?.UnpatchSelf();
+            harmony = null;
+        }
+
+        private static bool HoldPickups(NPCControl __instance)
+        {
+            bool holding = pendingMap >= 0 || Time.realtimeSinceStartup < blockUntil;
+            return !(holding && __instance.objecttype == NPCControl.ObjectTypes.Item);
         }
 
         // Dev only (Debug.DevCommandFile): a text file the console also reads, so a developer outside the game can run
@@ -190,6 +222,8 @@ namespace BugFablesAP
                     case "spawn": return Spawn(parts);
                     case "flag": return Flag(parts);
                     case "unstick": return Unstick();
+                    case "nudge": return Nudge(parts);
+                    case "items": return Items();
                     default: return "unknown command: " + parts[0];
                 }
             }
@@ -439,6 +473,7 @@ namespace BugFablesAP
                 // (the user, 2026-09-24).
                 MainManager.player.lockkeys = true;
                 unlockAt = Time.realtimeSinceStartup + 1f;
+                blockUntil = Time.realtimeSinceStartup + 1.5f;
                 MainManager.TeleportFollowers(true);
             }
             lastResult = "arrived on " + map.mapid + ", " + where;
@@ -468,6 +503,45 @@ namespace BugFablesAP
                 MainManager.instance.flags[flag] = false;
             }
             return $"spawned {parts[1]} {id}" + (flag >= 0 ? $" with flag {flag}" : "") + " next to you";
+        }
+
+        // Shifts the party by (x, y, z) on this map, e.g. off a pillar onto the bank (the user, 2026-09-24).
+        private static string Nudge(string[] parts)
+        {
+            if (parts.Length < 3 || MainManager.player == null)
+            {
+                return "nudge <x> <y> <z>";
+            }
+            float x = float.Parse(parts[1], System.Globalization.CultureInfo.InvariantCulture);
+            float y = float.Parse(parts[2], System.Globalization.CultureInfo.InvariantCulture);
+            float z = parts.Length > 3 ? float.Parse(parts[3], System.Globalization.CultureInfo.InvariantCulture) : 0f;
+            MainManager.player.transform.position += new Vector3(x, y, z);
+            MainManager.TeleportFollowers(true);
+            return "moved to " + MainManager.player.transform.position;
+        }
+
+        // Every pickup that exists on the current map right now (the map's own entities, not the dump): kind, id,
+        // activationflag, whether the game hides it, and its distance. Written to the log, since it can be long.
+        private static string Items()
+        {
+            MapControl map = MainManager.map;
+            if (map == null || MainManager.player == null)
+            {
+                return "not now: no map";
+            }
+            int n = 0;
+            foreach (NPCControl npc in map.GetComponentsInChildren<NPCControl>(true))
+            {
+                if (npc.objecttype != NPCControl.ObjectTypes.Item || npc.entity == null)
+                {
+                    continue;
+                }
+                n++;
+                float distance = Vector3.Distance(npc.transform.position, MainManager.player.transform.position);
+                log.LogInfo($"[dev] item on {map.mapid}: {npc.name} kind {npc.entity.animid} id {npc.entity.animstate} flag {npc.activationflag} "
+                    + $"hidden {npc.entity.iskill} active {npc.gameObject.activeInHierarchy} {distance:0.0} away at {npc.transform.position}");
+            }
+            return $"{n} pickups on {map.mapid} (listed in the log); entity data read from {map.readdatafromothermap}";
         }
 
         private static string Flag(string[] parts)

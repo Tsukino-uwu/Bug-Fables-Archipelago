@@ -71,6 +71,10 @@ namespace BugFablesAP
                 "Dev only, with DevConsole. A text file the console also reads: each line is run as a typed command, "
                 + "then the file is emptied. Lets a developer outside the game drive a test. Empty = off.");
             DevConsole.CommandFile = devCommandFile.Value;
+            if (devConsole.Value)
+            {
+                DevConsole.EnableGuard(Guid);
+            }
             saveDiff = Config.Bind("Debug", "SaveDiff", "",
                 "Dev only. Two save file names separated by |, e.g. 'save2backup.dat|save2.dat'. Once per load, logs "
                 + "what changed between them (read-only). Empty = off.");
@@ -284,6 +288,7 @@ namespace BugFablesAP
         private void OnDestroy()
         {
             DevConsole.Tick(false);
+            DevConsole.DisableGuard();
             TextProbe.Disable();
             MenuToggle.Disable();
             SaveRedirect.Disable();
