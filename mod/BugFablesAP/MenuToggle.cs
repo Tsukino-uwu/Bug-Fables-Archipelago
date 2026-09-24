@@ -143,7 +143,9 @@ namespace BugFablesAP
         // The game places the cursor at y = -option - 0.25 each frame; move it to the tighter spacing.
         private static void AfterUpdate(int ___menuid)
         {
-            if (___menuid != 1 || MainManager.instance?.cursor == null)
+            // The title screen keeps updating under the game's own Settings screen, and there the cursor is
+            // Settings' cursor: moving it broke that screen (the user, 2026-09-24). Only touch the main menu's own.
+            if (___menuid != 1 || MainManager.instance?.cursor == null || MainManager.pausemenu != null || ApMenu.Open != null)
             {
                 return;
             }
