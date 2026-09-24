@@ -8,7 +8,7 @@ from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
 from rule_builder.rules import Has, HasAll
 from worlds.AutoWorld import WebWorld, World
 
-from .data_tables import ARTIFACTS, ITEM_NAME_TO_ID, ITEMS, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS
+from .data_tables import ARTIFACTS, ITEM_NAME_TO_ID, ITEMS, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, WORLD_VERSION
 from .options import BugFablesOptions
 
 GAME = "Bug Fables"
@@ -117,4 +117,10 @@ class BugFablesWorld(World):
     def fill_slot_data(self) -> Mapping[str, Any]:
         # The world version lets the client refuse a mismatched build. The client sends the goal once the
         # game's own artifact count (its 7 artifact flags) reaches artifacts_required.
-        return {"world_version": "0.1.0", "artifacts_required": self.artifacts_required}
+        # location_flags tells the client which game flag marks each location done ({location id: flag}), so
+        # it only ever watches what this generator placed. JSON object keys are strings.
+        return {
+            "world_version": WORLD_VERSION,
+            "artifacts_required": self.artifacts_required,
+            "location_flags": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["flag"] for loc in LOCATIONS},
+        }

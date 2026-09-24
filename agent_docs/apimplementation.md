@@ -17,7 +17,7 @@ archipelago.gg, retrying when the server is unreachable or drops.
 **Next:**
 
 1. **Receive an item:** the server sends a key item and the mod gives it in the game.
-2. **Send a check:** finishing a location tells the server.
+2. **Send a check:** built (build step 6), testing with Artis's medal from a save.
 3. **Survive a reload:** the received-item count lives in the save.
 4. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
 
@@ -36,6 +36,7 @@ archipelago.gg, retrying when the server is unreachable or drops.
 3. [Build step 3: the goal, counted in artifacts](#build-step-3-the-goal-counted-in-artifacts)
 4. [Build step 4: connecting on its own, and staying connected](#build-step-4-connecting-on-its-own-and-staying-connected)
 5. [Build step 5: a compressed connection](#build-step-5-a-compressed-connection)
+6. [Build step 6: sending checks](#build-step-6-sending-checks)
 
 **How it works**
 
@@ -195,6 +196,38 @@ works too (2026-09-24):** with a bare `archipelago.gg` address, the mod connecte
 compressed, and the room's log showed no warning. The TLS worry didn't come true. The mod now logs which kind
 of connection it made (`connected over wss, compression: ...`), because a bare address tries `wss://` first
 and falls back to `ws://` without saying which one worked.
+
+## Build step 6: sending checks
+
+Sending checks came before receiving items because it's easier to test: the user can reload a save and
+redo the same find as often as needed. The test location is Artis's medal, the first medal in the game,
+right after the Explorer Permit. It was added to the apworld as a third location for exactly that reason.
+
+**How the mod knows a location is done.** The game already remembers every finished event with a *flag* in
+the save. The probes showed which flag belongs to which location (`MEASURED.md`). So:
+
+- The apworld's `locations.json` lists each location with its flag. The apworld sends that list to the mod
+  in `slot_data` as `location_flags`. The generator stays the only source of truth: the mod only watches the
+  flags of locations the seed actually has.
+- Every frame, while a randomizer save is being played, the mod reads those few flags. When one becomes true,
+  it sends that location's check. It only reads flags; it never changes them.
+
+**Offline play needs no extra queue.** The flags are saved with the game, so a location finished while the
+server is down is found again at the next login and sent then. Within a session, the client library keeps
+every check the server hasn't confirmed and sends it again with the next one.
+
+**What the log shows:** `[check] watching ...` (which locations and flags), then `[check] location ... is
+done (flag N set): sending`, `[check] sent ...`, and `[check] now checked on the server: ...`.
+
+**Tests:** the apworld checks that every location has its flag in `slot_data` (the permit's is 15, the
+medal's 32), and that the world version is written in one place only (the manifest). Both fail without the
+change. The world version went to 0.2.0.
+
+**Not yet:** the game still hands out its own item at the location, the medal here. Replacing that with the
+server's item is the next step. A save isn't tied to its seed yet either, so a save from another seed would
+send its finished locations to this one. Planned: the save will carry the seed with the received-item count.
+
+**Status:** built and connected (2026-09-24). The user's test from a save is next.
 
 ---
 

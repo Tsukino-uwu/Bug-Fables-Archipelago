@@ -24,6 +24,7 @@ namespace BugFablesAP
         private ConfigEntry<bool> compression;
         private ConfigEntry<bool> randomizerEnabled;
         private ApConnection connection;
+        private LocationChecks checks;
         // The details last tried automatically: new details connect at once; the same details only retry after an
         // unreachable server or a dropped connection (ApConnection.ShouldRetry).
         private string lastAttempt;
@@ -69,6 +70,7 @@ namespace BugFablesAP
                 "Compress the connection (permessage-deflate), as the Archipelago server asks. Turn off only if "
                 + "connecting fails with it on.");
             WebSocketCompression.Enable(Guid, connection.Post, () => compression.Value);
+            checks = new LocationChecks(Log, connection);
 
             randomizerEnabled = Config.Bind("Archipelago", "RandomizerEnabled", false,
                 "Archipelago mod enabled: the game uses its own saves in the 'archipelago' folder, apart from your normal "
@@ -175,6 +177,7 @@ namespace BugFablesAP
             AutoConnect();
             connection.Watchdog(DateTime.UtcNow);
             connection.Tick();
+            checks.Tick(randomizerEnabled.Value);
 
             DevCheats.Tick(Log, giveMoney);
 

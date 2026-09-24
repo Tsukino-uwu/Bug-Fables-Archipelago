@@ -1,17 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Packets;
 using BepInEx.Logging;
+using Newtonsoft.Json.Linq;
 using WebSocketSharp;
 
 namespace BugFablesAP
 {
-    // The connection to the Archipelago server. Step 1 of the build: connect, log in, report what the server
-    // said. No items are granted and no checks are sent yet.
+    // The connection to the Archipelago server: connect, log in, stay connected, and send the checks that
+    // LocationChecks finds. No items are granted yet.
     //
     // TryConnectAndLogin blocks for up to 5 s (MultiClient.Net's own docs), so it runs on a worker thread and
     // its outcome is handed to the game thread through a queue. Nothing here touches game state.
@@ -161,6 +163,48 @@ namespace BugFablesAP
 
         internal bool Connected => session != null && session.Socket.Connected;
 
+        // The logged-in session, or null. Read on the game thread by LocationChecks.
+        internal ArchipelagoSession Session => session;
+
+        // slot_data's location_flags: which game flag marks each location done ({location id: flag}). Set at each
+        // login; null when the world didn't send it.
+        internal Dictionary<long, int> LocationFlags => locationFlags;
+        private volatile Dictionary<long, int> locationFlags;
+
+        private static Dictionary<long, int> ReadLocationFlags(Dictionary<string, object> slotData)
+        {
+            if (slotData == null || !slotData.TryGetValue("location_flags", out object raw) || !(raw is JObject map))
+            {
+                return null;
+            }
+            var result = new Dictionary<long, int>();
+            foreach (JProperty entry in map.Properties())
+            {
+                result[long.Parse(entry.Name)] = entry.Value.Value<int>();
+            }
+            return result;
+        }
+
+        // Send finished locations from a worker thread (on this build every send pings first and waits). The
+        // library keeps every check the server hasn't confirmed and resends them with the next send
+        // (LocationCheckHelper, 6.7.1); checks made offline are found again in the save's flags at the next login.
+        internal void SendChecks(ArchipelagoSession s, long[] ids)
+        {
+            ThreadPool.QueueUserWorkItem(_ =>
+            {
+                try
+                {
+                    s.Locations.CompleteLocationChecksAsync(ids).Wait();
+                    Post("[check] sent " + string.Join(", ", ids));
+                }
+                catch (Exception e)
+                {
+                    Post("[check] sending " + string.Join(", ", ids) + " failed: " + e.GetBaseException().Message
+                        + " (sent again after the next login)");
+                }
+            });
+        }
+
         internal void Connect(string server, string slot, string password)
         {
             if (busy)
@@ -240,6 +284,9 @@ namespace BugFablesAP
                     Heard();
                     lastPingUtc = DateTime.UtcNow;
                     // Only this session dropping counts; Disconnect() clears `session` first.
+                    locationFlags = ReadLocationFlags(ok.SlotData);
+                    attempt.Locations.CheckedLocationsUpdated += ids =>
+                        Post("[check] now checked on the server: " + string.Join(", ", ids.Select(id => id.ToString()).ToArray()));
                     attempt.Socket.PacketReceived += packet => Heard();
                     attempt.Socket.SocketClosed += reason => MarkLost(attempt, "closed: " + reason);
                     attempt.Socket.ErrorReceived += (e, message) => MarkLost(attempt, "socket error: " + message);

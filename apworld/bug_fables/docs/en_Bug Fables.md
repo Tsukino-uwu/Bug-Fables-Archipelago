@@ -5,7 +5,8 @@
 Key items are shuffled across the multiworld. Picking up a key item in your game sends a check. Every item,
 your own included, arrives from the server and is given to you through the game's own item system.
 
-This is an early version: only a handful of early-game locations exist so far.
+This is an early version: only a handful of early-game locations exist so far (the Explorer Permit, a favor
+reward, and the first medal, from Artis).
 
 ## What is the goal?
 

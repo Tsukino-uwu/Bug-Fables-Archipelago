@@ -12,6 +12,13 @@ ITEM_ID_BASE = 7_710_000
 LOCATION_ID_BASE = 7_720_000
 
 
+def _load_manifest() -> dict[str, Any]:
+    raw = pkgutil.get_data(__name__, "archipelago.json")
+    if raw is None:
+        raise FileNotFoundError("bug_fables: archipelago.json is missing from the world package")
+    return json.loads(raw.decode("utf-8"))
+
+
 def _load(name: str) -> dict[str, Any]:
     raw = pkgutil.get_data(__name__, f"data/{name}")
     if raw is None:
@@ -19,6 +26,8 @@ def _load(name: str) -> dict[str, Any]:
     return json.loads(raw.decode("utf-8"))
 
 
+# The one place the world's version is written: slot_data reports it to the client, and the manifest carries it.
+WORLD_VERSION: str = _load_manifest()["world_version"]
 ITEMS: list[dict[str, Any]] = _load("items.json")["items"]
 _LOCATION_DATA = _load("locations.json")
 LOCATIONS: list[dict[str, Any]] = _LOCATION_DATA["locations"]

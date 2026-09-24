@@ -17,6 +17,7 @@ class TestPermitGate(BugFablesTestBase):
     def test_outskirts_locations_open_from_the_start(self) -> None:
         self.assertTrue(self.can_reach_location("Outskirts: Explorer Permit"))
         self.assertTrue(self.can_reach_location("Outskirts: Favor Reward"))
+        self.assertTrue(self.can_reach_location("Outskirts: Artis's Medal"))
 
     def test_pool_matches_locations(self) -> None:
         pool = [item for item in self.multiworld.itempool if item.player == self.player]
@@ -35,3 +36,20 @@ class TestArtifactsCapped(BugFablesTestBase):
     def test_still_beatable(self) -> None:
         self.collect_by_name("Explorer Permit")
         self.assertBeatable(True)
+
+
+class TestSlotData(BugFablesTestBase):
+    # The client watches exactly the flags in location_flags and sends those checks. A location missing here
+    # could never be sent; a flag that isn't the location's own would send the wrong check.
+    def test_every_location_has_its_flag(self) -> None:
+        flags = self.world.fill_slot_data()["location_flags"]
+        ids = {str(loc.address) for loc in self.multiworld.get_locations(self.player) if loc.address is not None}
+        self.assertEqual(set(flags), ids)
+        self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Explorer Permit"])], 15)
+        self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Artis's Medal"])], 32)
+
+    def test_world_version_is_the_manifest_one(self) -> None:
+        import json
+        import pkgutil
+        manifest = json.loads(pkgutil.get_data("worlds.bug_fables", "archipelago.json").decode("utf-8"))
+        self.assertEqual(self.world.fill_slot_data()["world_version"], manifest["world_version"])
