@@ -21,6 +21,7 @@ namespace BugFablesAP
         // Loading a save allocates new arrays of the same length (MainManager.cs:17274), so a length check
         // alone would report a whole save load as flag flips. Watch the array identity instead.
         private string lastBlocked = "";
+        private string[] quests;
         private bool[] flagsRef;
         private List<int> keyItemsRef;
 
@@ -65,6 +66,15 @@ namespace BugFablesAP
                 regional = mm.regionalflags == null ? new bool[0] : (bool[])mm.regionalflags.Clone();
                 crystal = mm.crystalbflags == null ? new bool[0] : (bool[])mm.crystalbflags.Clone();
                 CountKeyItems(mm.items[1], keyItemCounts);
+                quests = null;
+                if (mm.boardquests != null)
+                {
+                    for (int q = 0; q < mm.boardquests.Length; q++)
+                    {
+                        string list = mm.boardquests[q] == null ? "null" : string.Join(",", mm.boardquests[q]);
+                        log.LogInfo($"[probe] baseline boardquests[{q}] = [{list}]");
+                    }
+                }
                 primed = true;
                 log.LogInfo($"[probe] baseline at frame {frame}: map={Where()} keyitems={mm.items[1].Count}");
                 return;
@@ -111,6 +121,25 @@ namespace BugFablesAP
             foreach (KeyValuePair<int, int> entry in now)
             {
                 keyItemCounts[entry.Key] = entry.Value;
+            }
+
+            // Quest board: MainManager.boardquests is 3 lists of quest ids (MainManager.cs:2219); which list means
+            // what is what this measures. Log any list whose contents changed.
+            if (mm.boardquests != null)
+            {
+                if (quests == null || quests.Length != mm.boardquests.Length)
+                {
+                    quests = new string[mm.boardquests.Length];
+                }
+                for (int q = 0; q < mm.boardquests.Length; q++)
+                {
+                    string list = mm.boardquests[q] == null ? "null" : string.Join(",", mm.boardquests[q]);
+                    if (quests[q] != null && quests[q] != list)
+                    {
+                        log.LogInfo($"[probe] frame {frame} boardquests[{q}] [{quests[q]}] -> [{list}] map={Where()}");
+                    }
+                    quests[q] = list;
+                }
             }
         }
 
