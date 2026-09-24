@@ -102,3 +102,9 @@ Newest last. What was tried, what happened, what the user said.
   and a hot reload can't reach them, so the game must restart once.
   The watchdog test from the entry above half-happened: the drop was caught by the socket error, not by the
   15 s silence.
+- **The socket fix, measured in the game (04:55):** restarted, deployed, fresh seed, local server. The mod
+  logged in on its own. Before the drop: 107% of a core, 69 threads, 737 MB. After the server was stopped:
+  `socket closed: Open -> Aborted`, `connection lost: socket error ...`. Then 26% of a core (menu), 65 threads,
+  memory flat around 720–790 MB with a save loaded. Before the fix it was 5 spinning threads and +2.5 MB/s. No retry
+  followed, correctly: the user switched the Archipelago mod off right after and loaded a normal save.
+  **Still open:** the user's on-screen check that the game stays smooth, and the retry after a drop on this build.

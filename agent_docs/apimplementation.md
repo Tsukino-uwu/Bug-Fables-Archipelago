@@ -118,9 +118,10 @@ keeps reading "while the socket is open", and in this game's version of .NET a d
 itself open, so the read failed and retried forever. Asking the library to disconnect politely doesn't help,
 because the goodbye can't reach a dead server. The mod now aborts the socket itself whenever a connection
 is lost or replaced, which ends the loop. It also gives every connect attempt 12 seconds: the library's
-login step can wait forever, and a stuck attempt had stopped all further retries. **Not yet confirmed in
-the game:** stop the server while connected, then check that the log shows `socket closed: Open -> Aborted`
-and the game stays smooth.
+login step can wait forever, and a stuck attempt had stopped all further retries. Measured after the fix
+(2026-09-24): stopping the server while connected logged `socket closed: Open -> Aborted`. The game's CPU fell
+back instead of climbing, its thread count went down, and its memory stayed flat. The user's on-screen check
+that the game stays smooth is still to come.
 
 ---
 
