@@ -16,7 +16,7 @@ archipelago.gg, retrying when the server is unreachable or drops.
 
 **Next:**
 
-1. **Receive an item:** the server sends a key item and the mod gives it in the game.
+1. **Receive an item:** works for key items and ordinary items (build step 7). Still to see: a full-bag case.
 2. **Stop the game's own item at a location**, and show what's really there (see the mod guide's design
    list). Sending checks works (build step 6).
 3. **Survive a reload:** the received-item count lives in the save.
@@ -274,8 +274,10 @@ or map change). Never during a battle, because retrying a lost battle restores t
 both are full, the item waits until there's room (items are given strictly in order, so the count stays right).
 The same operations the game's own code uses put them there.
 
-**Status:** built (2026-09-24). The test: the server already holds the Explorer Permit and the G-Bug Ranger
-Plushie from the swap test, so both should arrive.
+**Status: works (2026-09-24).** The server already held the Explorer Permit and the G-Bug Ranger Plushie from
+the swap test. On loading, the save tied itself to the seed, and both arrived in key items as soon as the
+player was free (the user saw them). Talking to Artis again showed the plushie but gave no second one: each
+item comes once per seed, and the count in the save keeps it that way.
 
 ---
 

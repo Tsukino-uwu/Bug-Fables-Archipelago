@@ -171,3 +171,9 @@ Newest last. What was tried, what happened, what the user said.
 - **Confirmed on screen by the user (2026-09-24):** the plushie swap looks correct: "You got the Bug Ranger
   Plushie!" with its sprite, the key-item red starburst, and the plushie's own description (screenshot). No
   medal, and no plushie in the inventory (receiving isn't built yet). All three leftovers are fixed.
+- **Receiving items works, 2026-09-24:** hot-reloaded into the running game. The save tied itself to seed
+  07998467655663366223 (count 0) and received, once the player was free, the Explorer Permit and the G-Bug
+  Ranger Plushie into key items (the user saw them; the save also kept a vanilla permit from before the swap
+  existed, so two permits). Talking to Artis again on a reloaded pre-Artis save showed the plushie but gave no
+  second one. That's correct: the server sends each location's item once per seed, and that location was
+  already done. The full sequence (check, then arrival) needs a fresh seed.
