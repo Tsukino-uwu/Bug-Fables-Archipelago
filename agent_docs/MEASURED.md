@@ -635,7 +635,10 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   the story the fall room is first reached by the trapdoor (Event5), which is no door at all. The way back
   (`SnakemouthFallRoom`'s `LoadingZoneDoorRoom`) requires 41 too. **So before the first boss the trapdoor is a
   one-way drop** into the fall room, and after it the rooms are joined both ways (the user remembers it as one-way;
-  from the data, 2026-09-25; to double-check on screen).
+  from the data, 2026-09-25). **Confirmed after the boss** (the user, 2026-09-25): a green bounce mushroom leads back
+  up. It's `SnakemouthFallRoom`'s `JumpShroom`, which requires 41, next to the door back (requires 41); before the
+  boss the room has a `blocker` instead (Event12, hidden by 41). So the trapdoor is one-way until flag 41, two-way
+  after: a connection whose direction depends on a story flag.
 
 ## What the Explorer Permit opens (2026-09-24, code read and ScriptDump; the wiki lists four uses)
 
