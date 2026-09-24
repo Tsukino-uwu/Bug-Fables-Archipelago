@@ -213,6 +213,10 @@ throttled to changes.
   finishing the Logbook sets `flag[63]` (`MainManager.cs:4294–4371`, counts via `HowManyTrue(GetLibraryBools(n))`
   against `librarylimit[n]`). The library's dialogue also takes Lore Books (`removeitem,1,52`, line 7) and has
   crystal berry 25 (`giveitem,3,25`, line 27).
+- **Turning in a Lore Book** (the user, `AntPalaceLibrary`): `KEYITEM -1 id=52` (frame 40180), **no global flag and
+  no item script**. On screen, the book was placed on a shelf and became readable. So placed books are
+  recorded outside the global flags (probably a counter or a list); a save diff after the next save will show
+  where.
 - **A second crystal berry:** on `SnakemouthLake`, `crystalbflag[1]` flipped (frame 111883), with no
   tutorial flag this time. The script was `|additemtoss,3,var,0|` with `caller=tempitem`, and `flagvar[0]`
   read 1 (HoneyDrop), **a stale value left from an earlier pickup**. `flagvar[0]` means nothing for crystal
