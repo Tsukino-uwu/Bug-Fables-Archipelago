@@ -41,7 +41,11 @@ namespace BugFablesAP
             {
                 TextProbe.Enable(Log, Guid);
             }
-            server = Config.Bind("Connection", "Server", "localhost:38281", "Archipelago server address and port.");
+            // The default is a local server. It needs the ws:// prefix: a bare "localhost:38281" timed out
+            // against a local server on 2026-09-24, and ws://127.0.0.1:38281 logged in.
+            server = Config.Bind("Connection", "Server", "ws://127.0.0.1:38281",
+                "Archipelago server address and port, e.g. archipelago.gg:38281 for a hosted room, or "
+                + "ws://127.0.0.1:38281 for a server on this computer.");
             slot = Config.Bind("Connection", "Slot", "", "Your slot name in the room.");
             password = Config.Bind("Connection", "Password", "", "The room password, if it has one.");
             connectOnStart = Config.Bind("Connection", "ConnectOnStart", false,

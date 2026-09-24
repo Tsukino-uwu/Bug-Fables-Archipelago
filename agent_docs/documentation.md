@@ -15,9 +15,11 @@ read-only probes, and has a full list of where key items come from.
 
 **Next:**
 
-1. **Give an item the game's own way**, when the server sends one.
-2. **Spot a location being done** (the flag the game sets) and report it, instead of giving the item.
-3. **Keep the received-item count in the save**, so loading never hands items out twice.
+1. **Keep randomizer saves separate**, with an on/off toggle on the main menu, so normal saves (and Steam
+   Cloud) are never touched. This comes before anything is given to the player.
+2. **Give an item the game's own way**, when the server sends one.
+3. **Spot a location being done** (the flag the game sets) and report it, instead of giving the item.
+4. **Keep the received-item count in the save**, so loading never hands items out twice.
 
 ## The steps
 

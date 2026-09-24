@@ -74,7 +74,8 @@ The first try timed out. The server's own log showed what happened: the library 
 connection, which the plain local server rejected. Giving the address as `ws://…` fixed it, and the mod
 logged in. This also proved the game's runtime can run the client library, which had been an open risk.
 
-**Lesson:** when two programs talk, read the logs on *both* ends.
+**Lesson:** when two programs talk, read the logs on *both* ends. The mod's default address became
+`ws://127.0.0.1:38281` for the same reason, so a local setup works out of the box.
 
 ---
 

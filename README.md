@@ -17,6 +17,47 @@ items only.
 
 You need your own copy of the game. Nothing from the game is included in this repo.
 
+## Requirements
+
+- *Bug Fables: The Everlasting Sapling* on PC
+- [BepInEx 5.4](https://github.com/BepInEx/BepInEx/releases) (the `win_x64` download)
+- An Archipelago room (Archipelago 0.6.7)
+
+## Install
+
+**Coming with the first release. There's nothing to install and play yet.** The steps will be:
+
+1. Extract BepInEx into your Bug Fables folder, so `winhttp.dll` sits next to `Bug Fables.exe`.
+2. Start the game once, so BepInEx creates its folders, then close it.
+3. Extract the release into `BepInEx/plugins`.
+4. Set your connection (below) and start the game.
+
+## Connecting
+
+Connection settings live in `BepInEx/config/bugfables.archipelago.cfg`, which the mod creates on its first
+run:
+
+| Setting | What to put |
+|---|---|
+| `Server` | The room's address and port, e.g. `archipelago.gg:38281`. A server on your own computer needs `ws://` in front: `ws://127.0.0.1:38281` (the default). |
+| `Slot` | Your slot name in the room |
+| `Password` | The room password, if it has one |
+| `ConnectOnStart` | `true` to connect when the game starts |
+
+## Building from source
+
+For developers. You need the .NET SDK and your own copy of the game; the build compiles against the game's
+`Assembly-CSharp.dll` from your install and never copies it into the repo.
+
+- **The mod:** `dotnet build mod/BugFablesAP/BugFablesAP.csproj`. If the game isn't in Steam's default
+  library, add `-p:BugFablesDir="D:\path\to\Bug Fables"`.
+- **Trying it in the running game:** `dev-scripts/deploy-dev.ps1` builds the mod and copies it where BepInEx's
+  ScriptEngine (from BepInEx.Debug) reloads it without restarting the game.
+- **The apworld:** link `apworld/bug_fables` into `worlds/` of an [Archipelago](https://github.com/ArchipelagoMW/Archipelago)
+  source checkout, then run its tests with `python -m pytest worlds/bug_fables/test`. Set
+  `SKIP_REQUIREMENTS_UPDATE=1` to stop Archipelago's scripts from prompting to install other games'
+  packages.
+
 ## Documentation
 
 - **[How the mod was made](agent_docs/documentation.md)**: the game side, step by step. Finding out the
