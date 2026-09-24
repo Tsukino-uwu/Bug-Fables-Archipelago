@@ -88,7 +88,12 @@ namespace BugFablesAP
             }
             FinishWarp();
             PollFile();
-            if (queued.Count > 0 && pendingMap < 0 && !open)
+            // A queued warp waits until the player is free (no dialogue, cutscene or menu), instead of failing with
+            // "not now" while the tester is busy (2026-09-24).
+            bool warpWaits = queued.Count > 0 && (queued.Peek().StartsWith("loc") || queued.Peek().StartsWith("warp"))
+                && (MainManager.player == null || MainManager.instance.inevent || MainManager.instance.message
+                    || MainManager.instance.minipause || MainManager.instance.pause);
+            if (queued.Count > 0 && pendingMap < 0 && !open && !warpWaits)
             {
                 string command = queued.Dequeue();
                 lastResult = Run(command);
@@ -255,6 +260,29 @@ namespace BugFablesAP
         // and the user took it on arrival (2026-09-24).
         private static readonly Vector3 Beside = new Vector3(2.5f, 0.5f, 0f);
 
+        // A spot beside the entity with room for the party: no solid collider where the player would stand, and ground
+        // below. Tries four sides at 2.5, then 1.5; falls back to the entity's own spot (its touch cooldown keeps a
+        // pickup from being taken on arrival).
+        private static Vector3 ClearSpot(Vector3 at)
+        {
+            Vector3[] sides = { Vector3.right, Vector3.left, Vector3.forward, Vector3.back };
+            foreach (float distance in new[] { 2.5f, 1.5f })
+            {
+                foreach (Vector3 side in sides)
+                {
+                    Vector3 spot = at + side * distance + Vector3.up * 0.5f;
+                    bool blocked = Physics.OverlapSphere(spot + Vector3.up * 0.5f, 0.45f, ~0, QueryTriggerInteraction.Ignore)
+                        .Any(c => MainManager.player == null || !c.transform.IsChildOf(MainManager.player.transform.root));
+                    bool ground = Physics.Raycast(spot + Vector3.up, Vector3.down, 4f, ~0, QueryTriggerInteraction.Ignore);
+                    if (!blocked && ground)
+                    {
+                        return spot;
+                    }
+                }
+            }
+            return at + Vector3.up * 0.5f;
+        }
+
         // An entity's start position, read from the map's entity table as MapControl.CreateEntities does: fields 6-8
         // are its start position, field 194 its activationflag (MapControl.cs:1477-1640, EntityDump).
         private static Vector3? StartPosition(MainManager.Maps map, int flag)
@@ -362,10 +390,9 @@ namespace BugFablesAP
                 // Already there when the warp went straight to it; else move beside it now. The pickup's own touch
                 // cooldown (which CheckItem waits out, NPCControl.cs:5608; counted down each frame, :2802) holds it
                 // about 1.5 s either way.
-                if (Vector3.Distance(MainManager.player.transform.position, target.transform.position) > 4f)
-                {
-                    MainManager.player.transform.position = target.transform.position + Beside;
-                }
+                // A fixed side can be inside a wall (the user, 2026-09-24, SnakemouthLake): stand on the first side
+                // with room, then the item itself.
+                MainManager.player.transform.position = ClearSpot(target.transform.position);
                 if (target.objecttype == NPCControl.ObjectTypes.Item)
                 {
                     target.touchcooldown = 90f;

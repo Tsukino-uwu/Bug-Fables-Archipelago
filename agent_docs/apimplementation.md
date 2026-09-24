@@ -120,7 +120,11 @@ Archipelago's `custom_worlds` folder.
   belongs to a region. A location needing something more than its region adds that to itself.
 - **A location is named after where it is, never after what it gives** (the user, 2026-09-24). Once items
   are shuffled, a hint like "your Hover is at Outskirts: Explorer Permit" points at the wrong thing. The
-  form is `<Area>: <where or who>`, like `Outskirts: Maki and Eetl's Gift`. The test
+  form is `<Area>: <Room>, <Spot>` (the user, 2026-09-24): the game's own area name; a short room name from a
+  landmark, left out for a one-map area; and what you'd *see* at the spot, like `Snakemouth Den: Bridge Room, On
+  Top of a Pillar`. Gifts are `<Area>: <Who>'s Gift` or `<Who>'s Reward`, like `Outskirts: Maki and Eetl's Gift`.
+  Never the item, the flag or a mechanic (a "Beemerang" in a name goes stale once abilities are shuffled), Title
+  Case, and one wording per kind of spot everywhere. The test
   `TestLocationNames` fails if a location's name contains its own vanilla item's name. Renaming a location
   never changes its id or flag.
 
