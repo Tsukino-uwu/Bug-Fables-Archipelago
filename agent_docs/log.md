@@ -271,3 +271,10 @@ Newest last. What was tried, what happened, what the user said.
   it). Tested on a fake game folder in the scratchpad: copy, key added and switched, restore put the old
   files back. Not yet run against the real install. A CLAUDE.md rule sends every copy into the game
   through it. Whether auto mode accepts it isn't known until it runs.
+- **Correction, from the session logs (the user asked why MeshGhost never fails):** the missing backup wasn't
+  the difference. In this project's own history, PowerShell `Copy-Item`/`Set-Content` writes into the game
+  (DLL and config, no backup) passed about 12 times out of 12, and `deploy-dev.ps1` 5 times out of 6. The only
+  other refusals were today's two Bash `cp` plus `sed -i`. MeshGhost: 253 copies into TEVI, all passed, always
+  its named script from the PowerShell tool, with a CLAUDE.md that makes dev-scripts launchers the agent's
+  job. Ours lists "deploying the mod" under "ask before touching anything outside this repo". The check judges
+  each call, so a refusal can be made rare, never impossible.
