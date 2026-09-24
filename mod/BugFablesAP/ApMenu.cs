@@ -28,6 +28,9 @@ namespace BugFablesAP
         private Func<string> status;
 
         private Transform box;
+        private Transform help;
+        private SpriteRenderer leaf;
+        private Transform arrows;
         private Transform textRoot;
         private int row;
         private bool editing;
@@ -63,12 +66,28 @@ namespace BugFablesAP
             // Hide the title screen under the panel (the menu text, the logo, the cursor), as the game does for the
             // file select, and draw the panel in front: its first draw sat behind the logo (the user, 2026-09-24).
             SetTitleVisible(false);
-            box = MainManager.Create9Box(new Vector3(0f, 0f, 10f), new Vector2(13f, 7.5f), 0, BoxSort, Color.white, false);
+            // The same two boxes as the game's settings screen (PauseMenu window 4, PauseMenu.cs:2707): the orange
+            // leafy box (type 1) and the controls box above it (type 4), with the game's own button hints.
+            box = MainManager.Create9Box(new Vector3(0f, -1f, 10f), new Vector2(13.5f, 7.25f), 1, BoxSort, Color.white, false);
             box.parent = owner.transform;
-            box.localPosition = new Vector3(0f, 0.2f, 0f);
+            box.localPosition = new Vector3(0f, -1f, 0f);
+            help = MainManager.Create9Box(new Vector3(0f, 3.75f, 10f), new Vector2(12.5f, 2f), 4, BoxSort, Color.white, false);
+            help.parent = owner.transform;
+            help.localPosition = new Vector3(0f, 3.75f, 0f);
+            new GameObject("confirmbutton").AddComponent<ButtonSprite>().SetUp(4, -1, "Select / Edit", new Vector3(-4.5f, 0.25f), Vector3.one * 0.5f, ButtonSort, help);
+            new GameObject("cancelbutton").AddComponent<ButtonSprite>().SetUp(5, -1, "Back", new Vector3(0.5f, 0.25f), Vector3.one * 0.5f, ButtonSort, help);
+            new GameObject("enterbutton").AddComponent<ButtonSprite>().SetUp(9, -1, "Done typing", new Vector3(-4.5f, -0.5f), Vector3.one * 0.5f, ButtonSort, help);
+            MainManager.instance.StartCoroutine(MainManager.SetText(TextSort + "|size,0.55|Ctrl+V paste   Ctrl+C copy", new Vector3(0.5f, -0.45f, 0f), help));
             textRoot = new GameObject("text").transform;
             textRoot.parent = box;
             textRoot.localPosition = Vector3.zero;
+            leaf = new GameObject("leaf").AddComponent<SpriteRenderer>();
+            leaf.sprite = MainManager.cursorsprite[0];
+            leaf.sortingOrder = CursorSort;
+            leaf.gameObject.layer = 5;
+            leaf.transform.parent = box;
+            leaf.transform.localEulerAngles = Vector3.zero;
+            leaf.transform.localScale = Vector3.one;
             settleFrames = 10; // the press that opened the panel must not also act inside it
             Redraw();
             log.LogInfo("[apmenu] opened");
@@ -83,6 +102,10 @@ namespace BugFablesAP
             {
                 Destroy(box.gameObject);
             }
+            if (help != null)
+            {
+                Destroy(help.gameObject);
+            }
             SetTitleVisible(true);
             Traverse.Create(owner).Field("canselect").SetValue(true);
             Traverse.Create(owner).Field("cd").SetValue(10f);
@@ -93,7 +116,14 @@ namespace BugFablesAP
         }
 
         private const int BoxSort = 100;
+        private const int ButtonSort = 115;
+        private const int CursorSort = 130;
         private const string TextSort = "|sort,110|";
+        // Row heights inside the orange box, top to bottom; labels on the left, values on the right, as in the
+        // settings screen.
+        private static readonly float[] RowY = { 2.55f, 1.65f, 0.75f, -0.15f, -1.05f, -1.95f };
+        private const float LabelX = -5.9f;
+        private const float ValueX = -1.9f;
 
         private void SetTitleVisible(bool visible)
         {
@@ -155,6 +185,12 @@ namespace BugFablesAP
             {
                 row = (row + 1) % Rows;
                 MainManager.PlayScrollSound();
+                Redraw();
+            }
+            else if (row == ModeRow && (MainManager.GetKey(2, hold: false) || MainManager.GetKey(3, hold: false)))
+            {
+                MainManager.PlayScrollSound();
+                MenuToggle.SetMode(owner, !mode.Value);
                 Redraw();
             }
             else if (MainManager.GetKey(5, hold: false) || Input.GetKeyDown(KeyCode.Escape))
@@ -275,31 +311,52 @@ namespace BugFablesAP
         private void Redraw()
         {
             MainManager.DestroyText(textRoot);
+            if (arrows != null)
+            {
+                Destroy(arrows.gameObject);
+            }
             shownStatus = status();
-            MainManager.instance.StartCoroutine(MainManager.SetText(TextSort + "|center||size,0.9|Archipelago", new Vector3(0f, 3f, 0f), textRoot));
             string pw = editing && row == PasswordRow ? edited : new string('*', password.Value.Length);
-            Line(Row(Address, "Address", editing && row == Address ? edited : server.Value), 2f);
-            Line(Row(SlotRow, "Slot", editing && row == SlotRow ? edited : slot.Value), 1.2f);
-            Line(Row(PasswordRow, "Password", pw), 0.4f);
-            Line(Row(ModeRow, "Archipelago mode", mode.Value ? "On" : "Off"), -0.6f);
-            Line(Row(ConnectRow, "Connect", ""), -1.4f);
-            Line(Row(BackRow, "Back", ""), -2.2f);
-            MainManager.instance.StartCoroutine(MainManager.SetText(TextSort + "|center||size,0.55|" + Safe(shownStatus), new Vector3(0f, -3.1f, 0f), textRoot));
+            Row(Address, "Address", editing && row == Address ? edited : server.Value);
+            Row(SlotRow, "Slot", editing && row == SlotRow ? edited : slot.Value);
+            Row(PasswordRow, "Password", pw);
+            Row(ConnectRow, "Connect", null);
+            Row(BackRow, "Back", null);
+
+            // The mode row, like a settings value: left and right arrows around it.
+            Label(ModeRow, "Archipelago mode");
+            arrows = new GameObject("arrows").transform;
+            arrows.parent = box;
+            arrows.localPosition = Vector3.zero;
+            new GameObject("left").AddComponent<ButtonSprite>().SetUp(2, -1, "", new Vector3(0.1f, RowY[ModeRow] + 0.25f), Vector3.one * 0.5f, ButtonSort, arrows);
+            new GameObject("right").AddComponent<ButtonSprite>().SetUp(3, -1, "", new Vector3(5.1f, RowY[ModeRow] + 0.25f), Vector3.one * 0.5f, ButtonSort, arrows);
+            Text("|center||size,0.8|" + (mode.Value ? "ON" : "OFF"), 2.6f, RowY[ModeRow]);
+
+            Text("|center||size,0.5|" + Safe(shownStatus), 0f, -3.0f);
+            leaf.transform.localPosition = new Vector3(LabelX - 0.9f, RowY[row] + 0.3f, 0f);
         }
 
-        private string Row(int r, string label, string value)
+        private void Label(int r, string label)
         {
-            // Game text colours (MainManager.textcolors): 1 red, 3 blue. Editing = red, selected = blue.
-            string marker = r == row ? (editing ? "|color,1|" : "|color,3|") : "";
-            string caret = editing && r == row ? "_" : "";
-            string shown = value.Length == 0 && !(editing && r == row) && r <= PasswordRow ? "(empty)" : Safe(value);
-            string sep = r <= ModeRow ? ": " : "";
-            return "|size,0.7|" + marker + label + sep + shown + caret;
+            string colour = editing && r == row ? "|color,1|" : "";
+            Text("|size,0.8|" + colour + label, LabelX, RowY[r]);
         }
 
-        private void Line(string text, float y)
+        private void Row(int r, string label, string value)
         {
-            MainManager.instance.StartCoroutine(MainManager.SetText(TextSort + text, new Vector3(-5.8f, y, 0f), textRoot));
+            Label(r, label);
+            if (value == null)
+            {
+                return;
+            }
+            bool typing = editing && r == row;
+            string shown = value.Length == 0 && !typing ? "|color,5|(empty)" : Safe(value);
+            Text("|size,0.65|" + (typing ? "|color,1|" : "") + shown + (typing ? "_" : ""), ValueX, RowY[r]);
+        }
+
+        private void Text(string text, float x, float y)
+        {
+            MainManager.instance.StartCoroutine(MainManager.SetText(TextSort + text, new Vector3(x, y, 0f), textRoot));
         }
     }
 }

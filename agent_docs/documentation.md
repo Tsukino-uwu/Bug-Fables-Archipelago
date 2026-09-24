@@ -136,3 +136,8 @@ Three things went wrong on the way, each found on screen by the user:
 **Lesson:** when adding to a game's own screen, find every time the game rebuilds that screen, not just the
 first.
 
+The user then asked for it to feel like the game's settings screen, so the mod rebuilds that screen's look
+from the game's own pieces, read from how the pause menu builds it: the same orange box, the controls box
+above it with the game's button hints, the game's leaf cursor, labels on the left and values on the right, and
+arrows around the On/Off value.
+
