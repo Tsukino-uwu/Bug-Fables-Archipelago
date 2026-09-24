@@ -9,7 +9,7 @@ namespace BugFablesAP
     // The Archipelago panel, opened from "Archipelago" on the main menu. It's drawn with the game's own box and
     // font (MainManager.Create9Box / SetText) and takes real typing, so an address can be typed or pasted.
     //
-    // Rows: Address, Port, Slot, Password, Archipelago mode, Connect, Back. Up/down move; confirm (C / Enter) edits
+    // Rows: Address, Port, Slot, Password, Archipelago mod, Connect, Back. Up/down move; confirm (C / Enter) edits
     // a text row or presses a button; cancel (X / Escape) closes. While a row is being edited, the keyboard
     // types into it: Backspace deletes, Ctrl+V pastes, Ctrl+C copies the row, Enter keeps, Escape reverts.
     // The title screen's own input is suspended while the panel is open (StartMenu.canselect), so the game's
@@ -370,13 +370,13 @@ namespace BugFablesAP
             Row(BackRow, "Back", null);
 
             // The mode row, like a settings value: left and right arrows around it.
-            Label(ModeRow, "Archipelago mode");
+            Label(ModeRow, "Archipelago mod");
             arrows = new GameObject("arrows").transform;
             arrows.parent = box;
             arrows.localPosition = Vector3.zero;
             new GameObject("left").AddComponent<ButtonSprite>().SetUp(2, -1, "", new Vector3(0.7f, RowY[ModeRow] + 0.25f), Vector3.one * 0.5f, ButtonSort, arrows);
             new GameObject("right").AddComponent<ButtonSprite>().SetUp(3, -1, "", new Vector3(4.5f, RowY[ModeRow] + 0.25f), Vector3.one * 0.5f, ButtonSort, arrows);
-            Text("|center||size,0.8|" + (mode.Value ? "ON" : "OFF"), 2.6f, RowY[ModeRow]);
+            Text("|center||size,0.7|" + (mode.Value ? "ENABLED" : "DISABLED"), 2.6f, RowY[ModeRow]);
 
             Text("|center||size,0.5|" + Safe(shownStatus), 0f, -3.0f);
             leaf.transform.localPosition = new Vector3(LabelX - 0.7f, RowY[row] + 0.3f, 0f);

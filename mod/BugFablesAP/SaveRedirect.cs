@@ -9,7 +9,7 @@ using UnityEngine;
 namespace BugFablesAP
 {
     // Keeps randomizer saves apart from normal ones (CLAUDE.md, "Randomizer saves are separate files").
-    // With Archipelago mode on, every save file the game touches lives in the "archipelago" folder, never
+    // With the Archipelago mod enabled, every save file the game touches lives in the "archipelago" folder, never
     // in the game folder where normal saves (and Steam Cloud's copies) are.
     //
     // Measured 2026-09-24 (agent_docs/MEASURED.md, "Save files"): every access to a save goes through
@@ -37,7 +37,7 @@ namespace BugFablesAP
             PatchPath(io, "CreateFile", nameof(RewriteFirstPath));
             harmony.Patch(AccessTools.Method(io, "SaveExists"), prefix: new HarmonyMethod(typeof(SaveRedirect), nameof(SaveExistsPrefix)));
             harmony.Patch(AccessTools.Method(io, "Save"), prefix: new HarmonyMethod(typeof(SaveRedirect), nameof(SavePrefix)));
-            log.LogInfo($"[saves] redirect installed; Archipelago mode is {(On ? "ON" : "off")}");
+            log.LogInfo($"[saves] redirect installed; Archipelago mod {(On ? "enabled" : "disabled")}");
         }
 
         internal static void Disable()

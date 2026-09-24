@@ -16,7 +16,7 @@ for connecting, and randomizer saves are kept in their own folder.
 
 **Next:**
 
-1. **Test separate randomizer saves on screen**: save a game with Archipelago mode on, check the normal saves
+1. **Test separate randomizer saves on screen**: save a game with the Archipelago mod enabled, check the normal saves
    are untouched. The redirect covers all five places the game touches a save file.
 2. **Give an item the game's own way**, when the server sends one.
 3. **Spot a location being done** (the flag the game sets) and report it, instead of giving the item.
@@ -121,7 +121,7 @@ Players need to type a room address, a slot name and maybe a password, so the mo
 game's main menu. It opens a panel drawn with the game's own box and font, so it looks like part of the game,
 but it takes real typing: the game itself never reads typed text (its name screen is a letter grid), so the
 mod reads the keyboard itself. Backspace, Ctrl+V to paste and Ctrl+C to copy all work. The same panel switches
-**Archipelago mode**, which keeps randomizer saves in their own folder so normal saves are never touched.
+**the Archipelago mod** (enabled or disabled), which keeps randomizer saves in their own folder so normal saves are never touched.
 
 Three things went wrong on the way, each found on screen by the user:
 

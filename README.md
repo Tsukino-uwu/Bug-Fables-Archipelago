@@ -42,7 +42,8 @@ On the game's main menu, choose **Archipelago**. The panel has:
   `archipelago.gg:38281` into Address fills in the port too.
 - **Slot**: your slot name in the room.
 - **Password**: only if the room has one; leave it empty otherwise.
-- **Archipelago mode**: On keeps randomizer saves in their own folder, apart from your normal saves.
+- **Archipelago mod**: Enabled keeps randomizer saves in their own folder, apart from your normal saves.
+  The main menu shows it as "Archipelago (Enabled)" or "(Disabled)".
 - **Connect**, and a line showing the result.
 
 Select a row and press confirm to type into it: Backspace deletes, **Ctrl+V pastes**, Ctrl+C copies, Enter

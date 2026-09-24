@@ -65,8 +65,8 @@ namespace BugFablesAP
             connection = new ApConnection(Log);
 
             randomizerEnabled = Config.Bind("Archipelago", "RandomizerEnabled", false,
-                "Archipelago mode: the game uses its own saves in the 'archipelago' folder, apart from your normal "
-                + "saves. Switch it with 'Archipelago: On/Off' on the main menu.");
+                "Archipelago mod enabled: the game uses its own saves in the 'archipelago' folder, apart from your normal "
+                + "saves. Switch it in the Archipelago panel on the main menu.");
             SaveRedirect.On = randomizerEnabled.Value;
             SaveRedirect.Enable(Log, Guid);
             MenuToggle.Enable(Log, Guid, randomizerEnabled, server, port, slot, password,

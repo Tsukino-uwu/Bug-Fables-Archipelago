@@ -51,7 +51,7 @@ namespace BugFablesAP
             harmony = null;
         }
 
-        private static string Label => "Archipelago" + (mode.Value ? " (On)" : " (Off)");
+        private static string Label => "Archipelago" + (mode.Value ? " (Enabled)" : " (Disabled)");
 
         // The game calls SetMenuText again whenever it returns to the main menu, and its own loop indexes a
         // three-label array by selections.Length. With our fourth entry still in the list that read past the end
@@ -109,7 +109,7 @@ namespace BugFablesAP
             }
         }
 
-        // Called by the panel's "Archipelago mode" row.
+        // Called by the panel's "Archipelago mod" row.
         internal static void SetMode(StartMenu menu, bool on)
         {
             SaveRedirect.On = on;
@@ -117,7 +117,7 @@ namespace BugFablesAP
             // Show the other mode's saves: the file select reads slot summaries through ReadFile.
             AccessTools.Method(typeof(StartMenu), "ReloadData").Invoke(menu, null);
             RefreshLabel(menu);
-            log.LogInfo($"[menu] Archipelago mode {(on ? "ON: saves in the archipelago folder" : "off: normal saves")}");
+            log.LogInfo($"[menu] Archipelago mod {(on ? "enabled: saves in the archipelago folder" : "disabled: normal saves")}");
         }
 
         private static void BeforeUpdate(StartMenu __instance, int ___menuid, float ___cd, bool ___canselect)
