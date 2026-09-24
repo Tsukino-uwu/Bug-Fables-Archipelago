@@ -450,6 +450,14 @@ The output stays in the BepInEx folder.
   the chapters. `dev-scripts/gate-table.py` uses it: an event below 16 is prologue, 16-44 chapter 1, 45-73
   chapter 2, 74-104 chapter 3, 105-119 chapter 4, 120-141 chapter 5, 142-193 chapter 6, 194 on chapter 7.
   Side events added late carry high numbers, so the rule errs toward a later chapter, the safe direction.
+- **Leif's joining chain, played through by the user with the event log on** (2026-09-24): Event4 on
+  `SnakemouthDoorRoom` (the trapdoor, started by the map: a rock-and-pressure-plate puzzle's AND gate; flag 13) →
+  Event5, started by picking up the Mushroom the trapdoor scene creates (`tempitem`, data {0,5,1}; flag 14; the
+  first spider fight, scripted so damage can't win it) → Event6, the `SnakemouthFallRoom` trigger (flag 27: Leif
+  follows, not yet in the party) → Event18 on `SnakemouthLake`, a switch (flag 29) → Event14, the lake's
+  `MothEvent` trigger (flag 16: Leif joins the party; then flag 24). The user confirmed him a full member: in the
+  pause menu and usable in battle. Each step expects the one before: a file that skipped part of the chain
+  crashes entering its middle.
 - **The party's basic moves** (the user, 2026-09-24, matching `PlayerControl.cs`): Vi (bee) throws the
   beemerang, which hits and grabs at range (flag 11, on from the start; Event109 takes it away in the bandit
   hideout and gives it back); Kabbu (beetle) uses the horn, a knock-up and melee hit that also cuts grass (always
