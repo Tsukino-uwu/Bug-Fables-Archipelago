@@ -14,7 +14,8 @@
     {"name": "Outskirts: Golden Path, Grass", "id": 12, "region": "Golden Path", "source": {"flag": 74, "pickup": {"map": "BOGoldenPath", "type": 0, "item": 2}}, "_comment": "Cut grass that drops an item copies its own one-time flag onto the drop (NPCControl.cs:5981-5983), so it's an ordinary pickup location. Item seen by the user in play (2026-09-24)."},
     {"name": "Outskirts: Artis's Prize for Snakemouth Den", "id": 13, "region": "Bugaria Outskirts", "requires": ["Snakemouth Den Cleared"], "source": {"event": 33, "var": 13, "at_least": 3, "give": {"map": "BugariaOutskirtsOutsideCity", "type": 2, "item": 5}}, "_comment": "The first boss's prize (prize slot 0: flagvar[13], medal 5). The mod pays every prize as if Hard Mode were on, so it waits at Artis; his Event33 hands it over and sets the slot to 3 (MEASURED.md, Hard Mode boss prize medals)."},
     {"name": "Outskirts: Ladybug Siblings' House", "id": 14, "region": "Bugaria Outskirts", "requires": ["Snakemouth Den Cleared"], "source": {"flag": 679, "pickup": {"map": "BugariaOutskirtsOutsideCity", "type": 0, "item": 8}}, "_comment": "Indoors (inside 1, entity LadybugMistake); found by the user after the first boss (2026-09-24). The door (DoorLadybug) and the item carry no gate flags, but the user remembers the house locked earlier: requires the first boss until checked on an earlier save (logic may be stricter than the game, never looser)."},
-    {"name": "Ant Palace: Library, Bookshelf", "id": 15, "region": "Ant Palace", "source": {"flag": 71, "pickup": {"map": "AntPalaceLibrary", "type": 1, "item": 52}}, "_comment": "A Lore Book hidden behind a bookshelf (the user, 2026-09-24; flag 71 in the play-through log)."}
+    {"name": "Ant Palace: Library, Bookshelf", "id": 15, "region": "Bugaria Inner City", "source": {"flag": 71, "pickup": {"map": "AntPalaceLibrary", "type": 1, "item": 52}}, "_comment": "A Lore Book hidden behind a bookshelf (the user, 2026-09-24; flag 71 in the play-through log)."},
+    {"name": "Bugaria City: Residential District, Old Book Delivery", "id": 16, "region": "Bugaria Inner City", "category": "quest", "source": {"flag": 243, "give": {"map": "BugariaResidential", "type": 1, "item": 52}}, "_comment": "Board quest 33: take it at the quest board, get the old book (Quest Book, item 93) in the residential district, deliver it (flag 242, the book is used up), return, and a cicada gives a Lore Book (flag 243). Played through by the user, 2026-09-24. The Quest Book stays vanilla for now."}
   ],
   "regions": [
     {"name": "Menu", "exits": [{"to": "Bugaria Outskirts"}]},
@@ -23,8 +24,8 @@
     {"name": "Snakemouth Den", "exits": [{"to": "Snakemouth Den Underground", "requires": ["Leif"]}]},
     {"name": "Snakemouth Den Underground", "exits": [], "_comment": "Every Snakemouth room with water droplets, or reached only through one (from the dump's doors: MushroomPit, UndergrondDoor, Underground*, TreasureRoom, Empty). Leif freezes the droplets (the user, 2026-09-24)."},
     {"name": "Golden Path", "exits": [], "_comment": "BOGoldenPath: its door from outside the city requires flag 41, the first boss (gate table)."},
-    {"name": "Bugaria City", "exits": [{"to": "Ant Palace", "requires": ["Chapter 2 Started"]}], "_comment": "BugariaMainPlaza and AntPalace1: the door in from outside the city requires flag 107 (gate table)."},
-    {"name": "Ant Palace", "exits": [], "_comment": "The Ant Palace's rooms (library, war room, tunnels) and the city districts: their doors require flag 67 (gate table)."}
+    {"name": "Bugaria City", "exits": [{"to": "Bugaria Inner City", "requires": ["Chapter 2 Started"]}], "_comment": "BugariaMainPlaza and AntPalace1: the door in from outside the city requires flag 107 (gate table)."},
+    {"name": "Bugaria Inner City", "exits": [], "_comment": "The Ant Palace's rooms (library, war room, tunnels) and the city districts (commercial, residential, theater): their doors require flag 67 (gate table)."}
   ],
   "artifacts": [
     {"number": 1, "name": "Artifact 1", "region": "Snakemouth Den Underground", "source": {"event": 26, "flag": 41}}
