@@ -21,7 +21,7 @@ server.
    are untouched. The redirect covers all five places the game touches a save file.
 2. **Give an item the game's own way**, when the server sends one.
 3. **Spot a location being done** (the flag the game sets) and report it: works (apimplementation.md, build
-   step 6). Stopping the game's own item there is built (step 9) and waiting on the user's test.
+   step 6). The game's own item there is kept out, and the seed's item shown instead (step 9).
 4. **Keep the received-item count in the save**, so loading never hands items out twice.
 
 ## The steps
@@ -203,3 +203,5 @@ grew to cover them: **the description box** (the game opens it just before the s
 item's description, or none for another game's item), **the starburst colour** behind the sprite (now the
 real item's kind, or its Archipelago colour for another game's item), and **the first-medal tutorial** that
 followed. That one is skipped, because no medal was given, and flag 31 stays unset for the real first medal.
+The user then confirmed all three on screen with the G-Bug Ranger Plushie placed there instead: its sprite,
+its description and the key-item colour, with no tutorial.

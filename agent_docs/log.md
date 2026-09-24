@@ -168,3 +168,6 @@ Newest last. What was tried, what happened, what the user said.
   `flag[31]` flip this time (the tutorial was skipped, unlike the permit run). The server logged the plushie sent
   to BugTester. The user saw nothing in the inventory, which is correct: receiving isn't built. Visuals (description,
   starburst colour, no tutorial) are asked, not yet confirmed.
+- **Confirmed on screen by the user (2026-09-24):** the plushie swap looks correct: "You got the Bug Ranger
+  Plushie!" with its sprite, the key-item red starburst, and the plushie's own description (screenshot). No
+  medal, and no plushie in the inventory (receiving isn't built yet). All three leftovers are fixed.
