@@ -64,10 +64,9 @@ namespace BugFablesAP
             // BepInEx's log file. Route them to ours.
             __result.Log.Output = (data, file) => report?.Invoke("[ws] " + data.Level + ": " + data.Message);
             bool on = wanted == null || wanted();
-            if (on)
-            {
-                __result.Compression = CompressionMethod.Deflate;
-            }
+            // Set both ways: a library that turns compression on by itself (upstream PR #141 does) must still obey
+            // the setting.
+            __result.Compression = on ? CompressionMethod.Deflate : CompressionMethod.None;
             report?.Invoke("[ws] new socket, compression " + (on ? "requested" : "off (setting)"));
         }
 

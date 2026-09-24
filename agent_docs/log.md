@@ -214,3 +214,8 @@ Newest last. What was tried, what happened, what the user said.
   (netstandard2.0), same in the package and the build output.
 - **Left for the user:** two stale code comments, `ApConnection.cs` (names `BaseArchipelagoSocketHelper`,
   which the net40 build doesn't have) and `world.py` `fill_slot_data` (says the client sends the goal).
+- **PR #141 read (its diff and the fork's `WebSocket.cs`, 2026-09-06):** it would not break our compression.
+  The fork keeps `validateSecWebSocketExtensionsServerHeader` and accepts `server_max_window_bits` 8 to 15, and
+  the library would set `Deflate` itself. The one thing it would break is our `Compression = false`, which
+  only ever set compression on. Fixed: `AfterCreate` now sets `Deflate` or `None` explicitly (the user said
+  yes). Build passes; not deployed or tested in game.

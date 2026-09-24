@@ -245,7 +245,8 @@ fit together. Lesson: when you swap one library build, every library that comes 
 switching the mod off closes the connection cleanly, stopping the server is caught and leaves the game at
 normal CPU and flat memory, and the mod reconnects by itself, compressed, when the server comes back. A
 `Compression` setting in the config (section `Connection`, on by default, defined in `Plugin.Awake`) turns it
-off if it ever misbehaves. **A hosted room on archipelago.gg
+off if it ever misbehaves. The mod sets compression explicitly both ways, on or off, so the setting still
+works if a library update starts turning compression on by itself (pull request #141 would). **A hosted room on archipelago.gg
 works too (2026-09-24):** with a bare `archipelago.gg` address, the mod connected over `wss` (encrypted),
 compressed, and the room's log showed no warning. The TLS worry didn't come true. The mod now logs which kind
 of connection it made (`connected over wss, compression: ...`), because a bare address tries `wss://` first
