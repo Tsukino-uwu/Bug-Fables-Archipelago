@@ -219,3 +219,14 @@ Newest last. What was tried, what happened, what the user said.
   the library would set `Deflate` itself. The one thing it would break is our `Compression = false`, which
   only ever set compression on. Fixed: `AfterCreate` now sets `Deflate` or `None` explicitly (the user said
   yes). Build passes; not deployed or tested in game.
+
+## 2026-09-24: build, then copy (stage-dev.ps1)
+
+- **Why:** Claude Code's auto-mode check refused `deploy-dev.ps1`, because it overwrote files in the game
+  install. The user chose to split build from copy: the build stages into the repo, and the copy into the
+  game is its own step, done afterwards as needed.
+- **Done:** `deploy-dev.ps1` became `stage-dev.ps1`. It writes `stage/every-build/BepInEx/scripts` (the DLL
+  and pdb, stamped) and `stage/setup/BepInEx` (libraries and ScriptEngine's config), and only reads the game
+  install (the build reference, and comparing the libraries). `stage/` is gitignored.
+- **First run:** staged DLL sha256 `DB5957D63A12…`, libraries equal to the game's. Copying the two
+  every-build files into the game's `BepInEx/scripts` worked, and the copy's hash matched.

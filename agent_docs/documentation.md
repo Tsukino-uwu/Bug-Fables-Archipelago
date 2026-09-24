@@ -115,8 +115,14 @@ small: the mod checks its own file once a second and asks for a reload when it c
 
 **Lesson:** when something silently does nothing, make the invisible errors visible before guessing.
 
-*Code: `DevReload.cs` (`TryCreate`, `Tick`); `dev-scripts/deploy-dev.ps1` builds the mod and copies it into
-the game.*
+**Build, then copy.** `dev-scripts/stage-dev.ps1` builds the mod and stages it inside the repo, in `stage/`,
+laid out like the game folder. Copying it into the game is a separate step (the user, 2026-09-24): the build
+never writes to the game install. After each build, copy
+`stage/every-build/BepInEx` onto the game folder, and the running game reloads it. Copy `stage/setup/BepInEx`
+(the client libraries and ScriptEngine's config) once, with the game closed, and again only when the script
+says the libraries changed.
+
+*Code: `DevReload.cs` (`TryCreate`, `Tick`); `dev-scripts/stage-dev.ps1`.*
 
 ## 6. Watch the game while you play ("probing")
 
