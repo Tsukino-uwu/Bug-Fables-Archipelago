@@ -467,7 +467,7 @@ namespace BugFablesAP
             }
         }
 
-        private const float ArrowLeftX = 0.9f, ArrowRightX = 4.3f, ArrowRise = 0.25f, ArrowScale = 0.75f;
+        private const float ArrowLeftX = 0.9f, ArrowRightX = 4.3f, ArrowRise = 0.05f, ArrowScale = 0.75f;
 
         private void Choice(int r, string label, string value)
         {
