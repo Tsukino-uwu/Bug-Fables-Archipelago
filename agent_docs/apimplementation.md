@@ -46,8 +46,16 @@ seed's (the mod guide, step 9).
    tutorial, optionally with Leif from the start (the new-game party `{0, 1}`, `MainManager.cs:3591`, becoming
    `{0, 1, 2}`; early cutscenes are written for two, so tested on a fresh file). A full story strip, as the Metroid
    Fusion randomizer does, isn't the plan: here every cutscene also changes the world through flags.
-   **An open-world option later,** researched one chapter at a time. Regions stay whole areas for now; one
-   region per map (doors from the dump) comes before random start or open world (the user, 2026-09-24).
+   **Open world is the default, not an option** (the user, 2026-09-25: nobody picks a linear game in
+   Archipelago). The target: the world open as if the story were done, nothing collected, the ending gated by the
+   artifact count. **Built one gate at a time, never by forcing chapters done** (decided 2026-09-25): "chapter done"
+   is the artifact flag the goal counts, and a finished world is hundreds of story flags, many of which remove
+   locations (bosses beaten, characters gone, quests closed, cutscene gifts skipped). So each gate (a blocker, a
+   door, a guard, a story flag) is opened by the seed on its own, tested on screen, and known to the logic; key
+   items and abilities become the real gates (the Peculiar Gem for Upper Snakemouth); story events and bosses stay
+   as locations. The goal stays "collect N artifacts". The ending's gate is researched without spoiling it for the
+   user, who hasn't finished the game. Regions stay whole areas for now; one region per map (doors from the dump,
+   `dev-scripts/door-graph.py`) comes as the gates open (the user, 2026-09-24).
    **Areas and doors that close later are kept open** (the user, 2026-09-24), as Pokémon Emerald keeps Mirage
    Island visible: the mod makes the game's `CheckIfCanExist` answer "exists" for a list of doors and blockers
    sent in `slot_data`, decided at generation, with no save writes. Each is checked in game first; where forcing

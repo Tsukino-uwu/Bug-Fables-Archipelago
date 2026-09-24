@@ -365,3 +365,7 @@ Newest last. What was tried, what happened, what the user said.
   and `nudge` put the user on it. Added `infjump` (the user asked); the first version never fired in mid-air,
   because the game's 30-frame jump cooldown outlasts a jump (seen from the new per-press log), so it no longer
   checks that. Names from the user: "Underground Door Room, Pillar" and "Underground Bridge Room, Behind Pillar".
+- **Open world is the default** (the user, 2026-09-25). Asked whether to force every chapter done and gate the ending
+  by artifacts: no, because chapter done is the artifact flag and a finished world removes locations; instead the
+  same target (open as if finished, nothing collected, artifacts as the goal) is reached one gate at a time. The
+  user hasn't finished the game: endgame facts stay out of chat, in MEASURED's spoiler sections.
