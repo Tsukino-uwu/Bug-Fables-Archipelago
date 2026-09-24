@@ -112,6 +112,8 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
 
 - **`agent_docs/client-requirements.md` is the checklist:** Archipelago's hard requirements for a client and
   a world, plus the known failure modes. Tick an item only with its evidence and date.
+- **A location is named after where it is, never after what it gives** (`apimplementation.md`, build
+  step 1; enforced by `TestLocationNames`).
 - **`agent_docs/MEASURED.md`** holds game facts: class, method, field and flag, each with its evidence and
   date. What a source says but we haven't measured waits in its last section.
 - **When the user confirms a fix, write down HOW it was found** (wrong theories, the measurement that

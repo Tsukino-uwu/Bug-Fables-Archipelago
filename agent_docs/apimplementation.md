@@ -10,17 +10,22 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 
 ## Where it stands
 
-**Done so far:** a tiny apworld that generates seeds and passes its tests, with the goal "collect N
-artifacts"; and the mod connecting on its own, compressed, to a local server or a hosted room on
-archipelago.gg, retrying when the server is unreachable or drops.
+**Done so far:** a tiny apworld (3 locations, 3 items) that generates seeds and passes its tests, with the
+goal "collect N artifacts"; the mod connecting on its own, compressed, to a local server or a hosted room on
+archipelago.gg, retrying when the server is unreachable or drops; sending checks (build step 6); receiving
+items, with the count kept in the save (build step 7); and the game's own item at a location swapped for the
+seed's (the mod guide, step 9).
 
-**Next:**
+**Next** (decided by the user, 2026-09-24):
 
-1. **Receive an item:** works for key items and ordinary items (build step 7). Still to see: a full-bag case.
-2. **Stop the game's own item at a location**, and show what's really there (see the mod guide's design
-   list). Sending checks works (build step 6).
-3. **Survive a reload:** the received-item count lives in the save.
-4. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
+1. **Every key item and medal in the pool,** on logic that follows the vanilla story order: one region
+   per chapter, entered once the chapter before is finished and the story's own keys and abilities are
+   in hand. Medal gifts and medal shops each get a yaml on/off toggle.
+2. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
+   Party members stay where the story puts them.
+3. **An open-world option later,** researched one chapter at a time.
+4. **A full bag:** key items keep arriving, only ordinary items wait.
+5. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
 
 **Known issues:**
 
@@ -92,6 +97,11 @@ Archipelago's `custom_worlds` folder.
 - **Logic lives on regions and locations, never on items.** An item doesn't say what it unlocks. A region's
   exits say what they need (the gate out of the Outskirts needs the Explorer Permit), and every location
   belongs to a region. A location needing something more than its region adds that to itself.
+- **A location is named after where it is, never after what it gives** (the user, 2026-09-24). Once items
+  are shuffled, a hint like "your Hover is at Outskirts: Explorer Permit" points at the wrong thing. The
+  form is `<Area>: <where or who>`, like `Outskirts: Maki and Eetl's Gift`. The test
+  `TestLocationNames` fails if a location's name contains its own vanilla item's name. Renaming a location
+  never changes its id or flag.
 
 *Code: `apworld/bug_fables/world.py` (`BugFablesWorld`: `create_regions`, `create_items`), the data in
 `data/items.json` and `data/locations.json` (read by `data_tables.py`), tests in `test/test_logic.py`
@@ -292,7 +302,8 @@ seed, which closed that.
 permit. On loading, the mod sent the permit's location at once (flag 15 was already set: the save acted as
 the outbox). Talking to Artis sent the medal's location (flag 32). For both, the mod logged `sending`, the
 server's confirmation and `sent`, and the server logged `BugTester sent ... (Outskirts: Explorer Permit)` and
-`(Outskirts: Artis's Medal)`.
+`(Outskirts: Artis's Medal)`. (Those two were later renamed `Outskirts: Maki and Eetl's Gift` and
+`Outskirts: Artis's Gift`; same ids and flags.)
 
 ## Build step 7: receiving items
 

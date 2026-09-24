@@ -240,3 +240,20 @@ Newest last. What was tried, what happened, what the user said.
 - **The user asked** that developer instructions leave the user-facing root README: they moved to
   `agent_docs/development.md` (build, stage and copy, a local test server, the apworld's tests), with a
   one-line pointer left in the README.
+
+## 2026-09-24: the plan for more items, and locations named by place
+
+- **The user asked** whether every key item and medal can go in without knowing every situation, and how
+  logic handles party members, abilities and chapters, wanting an open, metroidvania-like world.
+- **Research (decompiled code, read-only):** there is no chapter value, only story flags gated through
+  `CheckIfCanExist`; each field ability is one flag read in `PlayerControl` (hover 19, dig 18, horn dash 699,
+  heavy dash 39, big icicle 171, bubble shield 20); floor pickups carry their own required/forbidden flags in
+  entity data. Not yet in `MEASURED.md`: they go there with the entity dump (plan step 2), after measuring.
+- **Decided (the user):** grow the pool first, on logic in the vanilla chapter order; abilities shuffled as
+  items; medals from floors, gifts and shops, with yaml toggles for gifts and shops; party members vanilla;
+  open world later, one chapter at a time.
+- **The user pointed out** that a location named after its vanilla item misleads once items are shuffled.
+  Renamed `Outskirts: Explorer Permit` → `Outskirts: Maki and Eetl's Gift` and `Outskirts: Artis's Medal`
+  → `Outskirts: Artis's Gift` (ids and flags unchanged). New test `TestLocationNames` failed on the old
+  permit name, passes now; it will cover medals once medals are items. 30 tests pass; a seed with APQuest
+  in the room generates.

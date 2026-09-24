@@ -15,9 +15,9 @@ class TestPermitGate(BugFablesTestBase):
         self.assertBeatable(True)
 
     def test_outskirts_locations_open_from_the_start(self) -> None:
-        self.assertTrue(self.can_reach_location("Outskirts: Explorer Permit"))
+        self.assertTrue(self.can_reach_location("Outskirts: Maki and Eetl's Gift"))
         self.assertTrue(self.can_reach_location("Outskirts: Favor Reward"))
-        self.assertTrue(self.can_reach_location("Outskirts: Artis's Medal"))
+        self.assertTrue(self.can_reach_location("Outskirts: Artis's Gift"))
 
     def test_every_non_filler_item_is_in_the_pool(self) -> None:
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
@@ -50,8 +50,8 @@ class TestSlotData(BugFablesTestBase):
         flags = self.world.fill_slot_data()["location_flags"]
         ids = {str(loc.address) for loc in self.multiworld.get_locations(self.player) if loc.address is not None}
         self.assertEqual(set(flags), ids)
-        self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Explorer Permit"])], 15)
-        self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Artis's Medal"])], 32)
+        self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Maki and Eetl's Gift"])], 15)
+        self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Artis's Gift"])], 32)
 
     def test_world_version_is_the_manifest_one(self) -> None:
         import json
@@ -63,9 +63,9 @@ class TestSlotData(BugFablesTestBase):
         # The client suppresses exactly the giveitem named here. A wrong one would let the vanilla item through,
         # or swallow an unrelated grant on the same map.
         gives = self.world.fill_slot_data()["location_gives"]
-        medal = gives[str(self.world.location_name_to_id["Outskirts: Artis's Medal"])]
+        medal = gives[str(self.world.location_name_to_id["Outskirts: Artis's Gift"])]
         self.assertEqual(medal, {"map": "BugariaOutskirtsOutsideCity", "type": 2, "item": 11})
-        permit = gives[str(self.world.location_name_to_id["Outskirts: Explorer Permit"])]
+        permit = gives[str(self.world.location_name_to_id["Outskirts: Maki and Eetl's Gift"])]
         self.assertEqual(permit, {"map": "BugariaOutskirtsOutsideCity", "type": 1, "item": 27})
 
     def test_item_kinds_cover_every_item(self) -> None:
