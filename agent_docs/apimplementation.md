@@ -24,10 +24,14 @@ seed's (the mod guide, step 9).
    **Hard Mode boss prize medals** (23, `MEASURED.md`) are always shuffled, with no option: every boss pays
    its prize as if Hard Mode were on, whatever the player's setting, so a prize can never be skipped and its
    location is simply "beat this boss". The mod does that by widening the Hard Mode test inside the game's
-   own `AddPrizeMedal`, never by writing the prize slot itself. **The Archipelago panel gets a Hard
-   Mode setting that only adds a way in:** Hard Mode is on when the setting is on, *or* the Hard Mode medal
-   (Artis's, #11) is equipped, *or* the save was started with the HARDEST code, as the game already does. The
-   mod never writes the save for it. Logic never needs Hard Mode (the user, 2026-09-24).
+   own `AddPrizeMedal`, never by writing the prize slot itself. **The Archipelago panel gets a
+   difficulty setting, Off / Hard / Hardest,** that only adds a way in: *Hard* acts as if the Hard Mode medal
+   (Artis's, #11) were equipped, *Hardest* as if the save had been started with the HARDEST code (the game's
+   two levels, `MEASURED.md`). Equipping the medal or typing the code still works as the game made it, and
+   the prize medals are paid out on every setting. Logic never needs either (the user, 2026-09-24). To
+   measure before building *Hardest*: its extras read flag 614 directly in about 35 places, so the likely
+   way is setting that flag through the game while the panel says *Hardest*, without ever clearing a code
+   the player typed (the game keeps that separately, in `flagstring[10]`).
 2. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
 3. **An open-world option later,** researched one chapter at a time.
