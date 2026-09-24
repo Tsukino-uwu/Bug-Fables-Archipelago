@@ -619,7 +619,10 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   (`WarpLeftUp` <-> `SnakemouthUndergroundLeftB`), where the Mushroom spot and crystal berry #2 are (upper left).
   So the dump gives the doors, and play decides which way each can be crossed.
 - **Story-gated doors:** the door room -> fall room door (`LoadZoneFallRoom`) requires flag 41 (the first boss); in
-  the story the fall room is first reached by the trapdoor (Event5), which is no door at all.
+  the story the fall room is first reached by the trapdoor (Event5), which is no door at all. The way back
+  (`SnakemouthFallRoom`'s `LoadingZoneDoorRoom`) requires 41 too. **So before the first boss the trapdoor is a
+  one-way drop** into the fall room, and after it the rooms are joined both ways (the user remembers it as one-way;
+  from the data, 2026-09-25; to double-check on screen).
 
 ## What the Explorer Permit opens (2026-09-24, code read and ScriptDump; the wiki lists four uses)
 
