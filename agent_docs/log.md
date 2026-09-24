@@ -278,3 +278,10 @@ Newest last. What was tried, what happened, what the user said.
   its named script from the PowerShell tool, with a CLAUDE.md that makes dev-scripts launchers the agent's
   job. Ours lists "deploying the mod" under "ask before touching anything outside this repo". The check judges
   each call, so a refusal can be made rare, never impossible.
+
+## 2026-09-24: EntityDump run
+
+- `copy-dev.ps1 -DebugOn EntityDump` from the PowerShell tool passed (after the CLAUDE.md change). Game
+  started by the agent (the user's yes), dump written within seconds of the main menu, game closed and
+  checked gone, `EntityDump` switched back off the same way. Results in `MEASURED.md`, "World pickups and
+  their gates": no floor key item or medal is missable; only 5 ordinary items are.

@@ -391,6 +391,27 @@ DefiantRootWell 3: 111 [flag 239] · DefiantRoot3 126: 83, 163: 141 [flag 443] �
 [flag 603] · BeehiveMainArea 48: 99 [flag 251], 54: 94 [flag 252] · BeehiveBalcony 21: 54 ·
 DesertRoachVillage 1: 105 · TermiteIndustrial 31: 139, 46: 145
 
+## World pickups and their gates (2026-09-24, EntityDump)
+
+`EntityDump` (`mod/BugFablesAP/EntityDump.cs`) read every map's entity table in the running game, at the
+same field positions as `MapControl.CreateEntities` (`MapControl.cs:1446-1640`): **4072 entities from all
+246 maps, none unreadable**; names for **187 items and 91 medals** (`itemdata[0,id,0]`, `badgedata[id,0]`).
+The output stays in the BepInEx folder.
+
+- **Floor pickups** (`objecttype == Item`; `data[0]` is the kind, `animid` the id): 55 key items, 24 medals,
+  43 ordinary items, 21 crystal berries.
+- **One-time:** 54 of 55 key items, 23 of 24 medals and 30 ordinary items have an `activationflag`, set when
+  picked up (`NPCControl.cs:5714`). Berries are tracked by `crystalbflags` instead (1 has a flag too).
+- **Hiding flags (`limit`):** every one-time pickup lists its own `activationflag` there, which is how it
+  stays gone once collected. **Only 5 pickups, all ordinary items, are also hidden by some other flag**:
+  the only floor missables. No floor key item or medal is missable.
+- **Required flags (`requires`):** only 10 pickups have any (4 key items, 1 medal, 4 items, 1 berry). Most
+  pickups are gated by the map they lie on, not by a flag of their own.
+- **Doors:** 567 `DoorOtherMap` entities, 59 of them with required or hiding flags. Those are the map graph
+  and its story gates, for the regions.
+- **Not in this dump:** the one key item and one medal without an `activationflag` still need judging.
+  Items given by NPCs and events are in the `ScriptDump` and code lists above.
+
 ## Quests: to measure (when quests come into scope)
 
 - **The pause menu's quest list groups quests by chapter and shows done / not done** (the user,
