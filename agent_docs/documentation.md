@@ -231,7 +231,10 @@ Its rows, top to bottom (the user's order, 2026-09-24): Address, Port, Slot, Pas
 **Archipelago** (the mod on/off, just "Archipelago"). No Back row: cancel backs out, as the hint box says.
 Under them, one line explains the highlighted row (the user, 2026-09-24: "Detector" alone didn't say it means
 the medal), then the connection's state. The game's text colour 5 draws light blue here, not grey, and a long
-coloured line looked tilted, so both lines are plain black.
+coloured line looked tilted, so both lines are plain black. The choice rows use the settings screen's own
+pieces: its arrow sprite on either side of the value, made once when the panel opens (button prompts rebuilt
+on every cursor move replayed their pop-in, so they seemed to shift), and its value-change sound, `Confirm0`
+on channel 10, instead of the cursor's scroll sound (the user, 2026-09-24).
 
 Several things went wrong on the way, each found on screen by the user:
 

@@ -230,7 +230,6 @@ namespace BugFablesAP
             }
             else if (IsChoice(row) && (MainManager.GetKey(2, hold: false) || MainManager.GetKey(3, hold: false)))
             {
-                MainManager.PlayScrollSound();
                 Step(row, MainManager.GetKey(3, hold: false) ? 1 : -1);
                 Redraw();
             }
@@ -242,7 +241,10 @@ namespace BugFablesAP
             }
             else if (MainManager.GetKey(4, hold: false) || Input.GetKeyDown(KeyCode.Return))
             {
-                MainManager.PlaySound("Confirm", -1);
+                if (!IsChoice(row))
+                {
+                    MainManager.PlaySound("Confirm", -1);
+                }
                 switch (row)
                 {
                     case Address:
@@ -280,11 +282,21 @@ namespace BugFablesAP
             }
         }
 
+        // The settings screen's sound for changing a value (PauseMenu.SettingsToggleSound, PauseMenu.cs:233): Confirm0
+        // on channel 10, at the sound volume. The main menu has no pause menu to read the volume from, so it's the
+        // game's own global one (the user, 2026-09-24: the scroll sound didn't match).
+        private static void ChangeSound()
+        {
+            MainManager.PlaySound(Resources.Load<AudioClip>("Audio/Sounds/Confirm0"), 10, 1f, 1f);
+            MainManager.sounds[10].volume = MainManager.pausemenu != null ? MainManager.pausemenu.svolume : MainManager.soundvolume;
+        }
+
         private static bool IsChoice(int r) => r == ModeRow || r == DifficultyRow || r == DetectorRow;
 
         // Left/right (or confirm) on a choice row: the next or previous value.
         private void Step(int r, int by)
         {
+            ChangeSound();
             if (r == ModeRow)
             {
                 MenuToggle.SetMode(owner, !mode.Value);
@@ -410,9 +422,9 @@ namespace BugFablesAP
         private void Redraw()
         {
             MainManager.DestroyText(textRoot);
-            if (arrows != null)
+            if (arrows == null)
             {
-                Destroy(arrows.gameObject);
+                BuildArrows();
             }
             shownStatus = status();
             string pw = editing && row == PasswordRow ? edited : new string('*', password.Value.Length);
@@ -421,10 +433,6 @@ namespace BugFablesAP
             Row(SlotRow, "Slot", editing && row == SlotRow ? edited : slot.Value);
             Row(PasswordRow, "Password", pw);
 
-            // The choice rows, like a settings value: left and right arrows around the value.
-            arrows = new GameObject("arrows").transform;
-            arrows.parent = box;
-            arrows.localPosition = Vector3.zero;
             Choice(ModeRow, "Archipelago", mode.Value ? "ENABLED" : "DISABLED");
             Choice(DifficultyRow, "Difficulty", (Difficulty?.Value ?? "Normal").ToUpperInvariant());
             Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
@@ -436,11 +444,33 @@ namespace BugFablesAP
             leaf.transform.localPosition = new Vector3(LabelX + LeafOffset, RowY[row] + LeafRise, 0f);
         }
 
+        // The choice rows' arrows, made once: the settings screen's own, the plain arrow sprite (guisprites[1])
+        // turned -90 and +90 degrees on either side of the value (MainManager.cs:15905-15917). Button prompts
+        // rebuilt on every redraw played their pop-in each time the cursor moved (the user, 2026-09-24).
+        private void BuildArrows()
+        {
+            arrows = new GameObject("arrows").transform;
+            arrows.parent = box;
+            arrows.localPosition = Vector3.zero;
+            arrows.localEulerAngles = Vector3.zero;
+            foreach (int r in new[] { DifficultyRow, DetectorRow, ModeRow })
+            {
+                for (int side = 0; side < 2; side++)
+                {
+                    GameObject arrow = MainManager.NewUIObject("arrow" + r + side, arrows,
+                        new Vector3(side == 0 ? ArrowLeftX : ArrowRightX, RowY[r] + ArrowRise), Vector3.one * ArrowScale,
+                        MainManager.guisprites[1], ButtonSort);
+                    arrow.transform.localEulerAngles = new Vector3(0f, 0f, side == 0 ? -90f : 90f);
+                    arrow.layer = 5;
+                }
+            }
+        }
+
+        private const float ArrowLeftX = 0.9f, ArrowRightX = 4.3f, ArrowRise = 0.25f, ArrowScale = 0.75f;
+
         private void Choice(int r, string label, string value)
         {
             Label(r, label);
-            new GameObject("left").AddComponent<ButtonSprite>().SetUp(2, -1, "", new Vector3(0.7f, RowY[r] + 0.25f), Vector3.one * 0.5f, ButtonSort, arrows);
-            new GameObject("right").AddComponent<ButtonSprite>().SetUp(3, -1, "", new Vector3(4.5f, RowY[r] + 0.25f), Vector3.one * 0.5f, ButtonSort, arrows);
             Text("|center||size,0.7|" + value, 2.6f, RowY[r]);
         }
 
