@@ -39,6 +39,7 @@ namespace BugFablesAP
         private bool mapDumpDone;
         private ConfigEntry<string> saveDiff;
         private ConfigEntry<bool> adoptSeed;
+        private ConfigEntry<bool> devConsole;
         private ConfigEntry<int> giveMoney;
         private bool saveDiffDone;
         private GrantProbe grantProbe;
@@ -59,6 +60,10 @@ namespace BugFablesAP
                 + "so the new seed replays every item. The old seed's items and flags stay in the save: test files only, "
                 + "never a real game. Off by default.");
             ItemReceiver.AdoptOtherSeed = () => adoptSeed.Value;
+            devConsole = Config.Bind("Debug", "DevConsole", false,
+                "Dev only. F9 opens a command line: loc <n> (go to a pickup location), warp <map> [flag], "
+                + "spawn <item|key|medal> <id> [flag], flag <n> [on|off]. Can put a save in states the story never "
+                + "makes: test files only. Off by default.");
             saveDiff = Config.Bind("Debug", "SaveDiff", "",
                 "Dev only. Two save file names separated by |, e.g. 'save2backup.dat|save2.dat'. Once per load, logs "
                 + "what changed between them (read-only). Empty = off.");
@@ -94,6 +99,7 @@ namespace BugFablesAP
             WebSocketCompression.Enable(Guid, connection.Post, () => compression.Value);
             checks = new LocationChecks(Log, connection);
             receiver = new ItemReceiver(Log, connection);
+            DevConsole.Init(Log, connection);
 
             randomizerEnabled = Config.Bind("Archipelago", "RandomizerEnabled", false,
                 "Archipelago mod enabled: the game uses its own saves in the 'archipelago' folder, apart from your normal "
@@ -205,6 +211,7 @@ namespace BugFablesAP
             receiver.Tick(randomizerEnabled.Value);
 
             DevCheats.Tick(Log, giveMoney);
+            DevConsole.Tick(devConsole.Value);
 
             if (!saveDiffDone && !string.IsNullOrEmpty(saveDiff.Value))
             {
@@ -248,8 +255,14 @@ namespace BugFablesAP
             grantProbe.Tick();
         }
 
+        private void OnGUI()
+        {
+            DevConsole.Draw(devConsole != null && devConsole.Value);
+        }
+
         private void OnDestroy()
         {
+            DevConsole.Tick(false);
             TextProbe.Disable();
             MenuToggle.Disable();
             SaveRedirect.Disable();

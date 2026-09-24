@@ -139,6 +139,16 @@ mod's config in the same run. Before replacing anything it copies the old file t
 
 *Code: `DevReload.cs` (`TryCreate`, `Tick`); `dev-scripts/stage-dev.ps1`, `dev-scripts/copy-dev.ps1`.*
 
+**Getting to a spot without playing there.** Testing a location shouldn't mean playing the story up to it
+(the user, 2026-09-24). A dev console, off by default, on F9, warps to a map with the game's own door warp and
+then stands the party next to the entity with a given flag. So `loc 5` goes straight to location 5's pickup,
+because the seed already says which map and flag that is. It can also drop a pickup next to you with the
+game's own dig-spot function, and show or set a flag. Before building it we checked the game's leftover test
+room: it has debug helpers, but they run unknown old scripts and can't put you by a location. See
+`development.md` for the commands.
+
+*Code: `DevConsole.cs`.*
+
 ## 6. Watch the game while you play ("probing")
 
 Reading code tells you what *can* happen. Watching the game tells you what *does*. We added small,

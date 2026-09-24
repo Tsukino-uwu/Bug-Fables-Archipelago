@@ -60,3 +60,19 @@ The plugin reads its config when it loads, so a hot reload also picks up a chang
 
 With the world linked as above, run `python -m pytest worlds/bug_fables/test` in the Archipelago checkout. Set
 `SKIP_REQUIREMENTS_UPDATE=1` to stop Archipelago's scripts from prompting to install other games' packages.
+
+## Dev console (test files only)
+
+Set `DevConsole = true` under `[Debug]` (`copy-dev.ps1 -DebugOn DevConsole`). In game, **F9** opens a command
+line at the bottom of the screen; Enter runs, Escape closes. The player is frozen while it's open.
+
+- `loc <n>`: go to pickup location n (the apworld's id, e.g. `loc 5`) and stand next to it. If it was taken,
+  its flag is cleared first so it's back.
+- `warp <map> [flag]`: go to a map by `MainManager.Maps` name or number (`warp TestRoom` included); with a flag,
+  stand next to the entity that has it, else by a save point or door.
+- `spawn <item|key|medal> <id> [flag]`: drop a pickup next to you. With a pickup location's flag, on that
+  location's map, it is that location.
+- `flag <n> [on|off]`: show or set a story flag.
+
+It uses the game's own warp and pickup functions, but it can put a save in states the story never makes.
+
