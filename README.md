@@ -15,6 +15,14 @@ the game plus an apworld for the Archipelago generator.
 
 You need your own copy of the game. Nothing from the game is included in this repo.
 
+## Documentation
+
+- **[How the mod was made](agent_docs/documentation.md)**: the game side, step by step. Finding out the
+  game could be modded, the mod loader, reloading while the game runs, and watching the game to learn
+  how it hands out items.
+- **[Archipelago implementation](agent_docs/apimplementation.md)**: the Archipelago side. How the apworld
+  and the server connection were built, and how a game talks to Archipelago in general.
+
 ## License
 
 MIT, see `LICENSE`.
