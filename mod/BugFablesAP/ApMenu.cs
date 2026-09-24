@@ -277,13 +277,18 @@ namespace BugFablesAP
                 GUIUtility.systemCopyBuffer = edited;
                 return;
             }
-            if (Input.GetKeyDown(KeyCode.Escape))
+            // The gamepad's own confirm and cancel buttons end editing too (the user: stuck until Enter).
+            // InputIO.GetKeyDown(id, joy: true) reads only the gamepad binding, so typing the keyboard's C or X
+            // (the game's keyboard confirm and cancel) still just types.
+            bool padCancel = InputIOManager.InputIO.GetKeyDown(5, true);
+            bool padConfirm = InputIOManager.InputIO.GetKeyDown(4, true);
+            if (Input.GetKeyDown(KeyCode.Escape) || padCancel)
             {
                 edited = before;
                 FinishEdit(keep: false);
                 return;
             }
-            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || padConfirm)
             {
                 FinishEdit(keep: true);
                 return;
