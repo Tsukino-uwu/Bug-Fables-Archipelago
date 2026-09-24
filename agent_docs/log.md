@@ -162,3 +162,9 @@ Newest last. What was tried, what happened, what the user said.
   All three are now patched too (`CreateDescWindow` and the `flags[31]` read as extra stand-ins, recolouring
   after the add), with `item_kinds` in slot_data. Installed; not yet seen on screen. The user asked for the Doll
   next; the id is being confirmed (25 is `GBugRangerPlushie`, 57 is `MothivaDoll`, from the IL).
+- **The swap with the plushie, 2026-09-24:** the user asked for "the Doll", meaning the G-Bug Ranger Plushie
+  (key item 25, from the IL; `MothivaDoll` is 57). Added to the apworld as useful and plando'd onto Artis's
+  medal. The log showed `showing 'Bug Ranger Plushie'` (the game's own name), `kept medal 11 out`, and no
+  `flag[31]` flip this time (the tutorial was skipped, unlike the permit run). The server logged the plushie sent
+  to BugTester. The user saw nothing in the inventory, which is correct: receiving isn't built. Visuals (description,
+  starburst colour, no tutorial) are asked, not yet confirmed.
