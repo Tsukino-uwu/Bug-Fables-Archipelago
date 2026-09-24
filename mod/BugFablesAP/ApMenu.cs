@@ -110,6 +110,9 @@ namespace BugFablesAP
             leaf.transform.parent = box;
             leaf.transform.localEulerAngles = Vector3.zero;
             leaf.transform.localScale = Vector3.one;
+            // The game's own menu cursor wiggles through this, set up the same way (MainManager.cs:14822). It
+            // animates the scale only, so it doesn't fight the per-row position (SpriteBounce.FixedUpdate).
+            leaf.gameObject.AddComponent<SpriteBounce>().MessageBounce();
             settleFrames = 10; // the press that opened the panel must not also act inside it
             Redraw();
             log.LogInfo("[apmenu] opened");

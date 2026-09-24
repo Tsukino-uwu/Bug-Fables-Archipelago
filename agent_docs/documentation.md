@@ -167,6 +167,8 @@ Several things went wrong on the way, each found on screen by the user:
   worked was the user's **side-by-side screenshots** of both screens: Settings starts its labels ~88 px in from
   the vine, with the leaf's tip right before them, so the labels moved to that distance with the leaf beside them.
   **Lesson:** compare against the real thing in one view, not against a number read off another picture.
+- **The leaf didn't wiggle** like the game's (the user noticed once it sat beside its label). The game gives its
+  menu cursor a `SpriteBounce` component when it creates it; the panel's leaf now gets the same one.
 - **No sound opening or closing the panel**, where Start Game and Settings have one (the user noticed). The
   game plays "Confirm" for every main-menu choice before acting on it, and our entry takes the press first,
   so it skipped the sound. The mod now plays the same "Confirm" on opening, and "Cancel" on backing out, the
