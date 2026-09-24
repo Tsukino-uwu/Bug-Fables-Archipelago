@@ -51,10 +51,12 @@ class TestSlotData(BugFablesTestBase):
     def test_every_location_has_its_flag(self) -> None:
         data = self.world.fill_slot_data()
         flags, variables, berries = data["location_flags"], data["location_vars"], data["location_berries"]
+        respawns = {loc for loc, pickup in data["location_pickups"].items() if "regional" in pickup}
         ids = {str(loc.address) for loc in self.multiworld.get_locations(self.player) if loc.address is not None}
-        # Each location is watched exactly one way: a flag, a number slot, or a crystal berry's index.
-        self.assertEqual(set(flags) | set(variables) | set(berries), ids)
-        self.assertEqual(len(flags) + len(variables) + len(berries), len(ids))
+        # Each location is watched exactly one way: a flag, a number slot, a crystal berry's index, or (a respawning
+        # pickup) the pickup itself.
+        self.assertEqual(set(flags) | set(variables) | set(berries) | respawns, ids)
+        self.assertEqual(len(flags) + len(variables) + len(berries) + len(respawns), len(ids))
         self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Maki and Eetl's Gift"])], 15)
         self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Artis's Gift"])], 32)
 
@@ -95,8 +97,8 @@ class TestPickups(BugFablesTestBase):
     def test_pickup_flag_is_its_location_flag(self) -> None:
         data = self.world.fill_slot_data()
         for location, pickup in data["location_pickups"].items():
-            if "berry" in pickup:
-                continue  # a crystal berry is known by its index, not a flag
+            if "berry" in pickup or "regional" in pickup:
+                continue  # a crystal berry is known by its index, a respawning pickup by its regional flag
             self.assertEqual(data["location_flags"][location], pickup["flag"])
 
 
@@ -401,3 +403,23 @@ class TestCrystalBerriesOff(BugFablesTestBase):
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         self.assertNotIn("Crystal Berry", pool)
         self.assertEqual(self.world.fill_slot_data()["location_berries"], {})
+
+
+class TestRespawningPickups(BugFablesTestBase):
+    # A respawning pickup has no flag of its own: the client knows it by its map and regional flag, and sends the
+    # check itself at the first pickup. Without "regional" it would never recognise the pickup and hand out the
+    # vanilla item every time; with a flag entry it would wait for a flag the game never sets.
+    def test_known_by_regional_flag(self) -> None:
+        data = self.world.fill_slot_data()
+        spot = str(self.world.location_name_to_id["Snakemouth Den: Underground Right Room, Floor"])
+        self.assertEqual(data["location_pickups"][spot], {"map": "SnakemouthUndergroundRightB", "flag": -1, "regional": 28})
+        self.assertNotIn(spot, data["location_flags"])
+
+    def test_vanilla_item_in_pool(self) -> None:
+        pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        self.assertIn("Honey Drop", pool)
+
+    def test_needs_the_underground(self) -> None:
+        self.assertFalse(self.can_reach_location("Snakemouth Den: Underground Right Room, Floor"))
+        self.collect_by_name(["Explorer Permit", "Leif"])
+        self.assertTrue(self.can_reach_location("Snakemouth Den: Underground Right Room, Floor"))

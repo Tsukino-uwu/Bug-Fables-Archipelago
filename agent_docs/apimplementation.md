@@ -10,7 +10,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 
 ## Where it stands
 
-**Done so far:** a small apworld (20 locations, 17 items) that generates seeds and passes its tests, with the
+**Done so far:** a small apworld (23 locations, 18 items) that generates seeds and passes its tests, with the
 goal "collect N artifacts"; the mod connecting on its own, compressed, to a local server or a hosted room on
 archipelago.gg, retrying when the server is unreachable or drops; sending checks (build step 6); receiving
 items, with the count kept in the save (build step 7); and the game's own item at a location swapped for the
@@ -532,6 +532,22 @@ shows the seed's item (a berry is a 3D model, so the model is hidden for a sprit
 tutorial; receiving one raises the count. First location: berry #0 outside the cave (test `TestCrystalBerries`).
 They're a yaml category, *Shuffle Crystal Berries*, on by default (the user: some are obscure, like quests; test
 `TestCrystalBerriesOff`).
+**Respawning pickups** (the user, 2026-09-24, always shuffled, no option): some floor items have no flag of their
+own, only a *regional* flag the game wipes on every area change, so they come back. They're locations too: the
+first pickup sends the check and gives nothing, and once the check is done the spot is the game's own again, with
+its vanilla item each time it comes back (so it stays useful locally). How it works:
+1. The apworld marks such a location with `source.regional`, its regional flag, and `slot_data` sends it inside
+   `location_pickups` (`"regional": N`, flag -1). The client recognises the pickup by map plus regional flag.
+2. The game sets nothing that stays in the save, so the check can't be read back later like a flag. The mod sends
+   it from the pickup itself: `ItemSwap`'s pickup prefix queues it, and `LocationChecks` sends the queue each tick
+   while connected.
+3. "Done" is the server's checked list from the last login, its updates, and the checks queued here. A pickup made
+   while the connection is down waits in the queue, tagged with its save's seed, and is sent after the next login
+   to that seed. The queue is only memory: if the game closes first, the spot shows the seed's item again and the
+   pickup is made again. Nothing is lost and nothing is doubled.
+Tests: `TestRespawningPickups` (the client gets the regional flag and no flag entry; the vanilla item is in the
+pool; the logic's region) and `TestSlotData` (every location watched exactly one way). First three: chapter 1's
+Snakemouth underground (a Honey Drop, a Mushroom and a Crunchy Leaf; names to come from the user on screen).
 **Optional categories** (the user, 2026-09-24): a location can carry a `category`; its yaml option decides whether
 the seed includes it. *Shuffle Quests* (on by default) covers quest-board and side-quest rewards; one-off NPC gifts
 will have their own toggle. With a category off, its locations aren't created, their vanilla items stay out of the

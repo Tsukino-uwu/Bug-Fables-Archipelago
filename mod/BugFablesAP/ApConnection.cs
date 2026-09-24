@@ -256,6 +256,9 @@ namespace BugFablesAP
             internal int Event = -1;
             // A crystal berry is known by its index (crystalbflags), in data[0] at pickup. -1 for other pickups.
             internal int Berry = -1;
+            // A respawning pickup has no flag of its own, only a regional flag the game wipes on every area change
+            // (NPCControl.CheckItem writes |regionalflag,N,true| before the add). -1 for other pickups.
+            internal int Regional = -1;
         }
 
         private static Dictionary<long, Pickup> ReadLocationPickups(Dictionary<string, object> slotData)
@@ -273,6 +276,7 @@ namespace BugFablesAP
                     Flag = entry.Value.Value<int>("flag"),
                     Event = entry.Value.Value<int?>("event") ?? -1,
                     Berry = entry.Value.Value<int?>("berry") ?? -1,
+                    Regional = entry.Value.Value<int?>("regional") ?? -1,
                 };
             }
             return result;
@@ -325,6 +329,63 @@ namespace BugFablesAP
                 return null;
             }
             return list.Select(e => new Blocker { Map = e.Value<string>("map"), Entity = e.Value<string>("entity") }).ToList();
+        }
+
+        // Respawning pickups (the user, 2026-09-24): the first pickup sends the check and gives nothing, later ones are
+        // the game's own again. Nothing in the save marks them, so the mod keeps what's done: the server's checked list
+        // from the last login, its updates, and the checks picked up here. A pickup made while the connection is down
+        // waits in the outbox, tagged with its save's seed, and LocationChecks sends it once a session for that seed
+        // is up. Only memory: if the game closes first, the spot shows the seed's item again next time and the pickup
+        // is simply made again. Game thread and connection threads, hence the lock.
+        private readonly object doneLock = new object();
+        private readonly HashSet<long> done = new HashSet<long>();
+        private readonly Dictionary<long, string> respawnOutbox = new Dictionary<long, string>();
+
+        internal bool IsDone(long location)
+        {
+            lock (doneLock)
+            {
+                return done.Contains(location);
+            }
+        }
+
+        internal void QueueRespawnCheck(long location, string seed)
+        {
+            lock (doneLock)
+            {
+                done.Add(location);
+                respawnOutbox[location] = seed;
+            }
+        }
+
+        // The outbox's checks for this seed, taken out to send; a stale seed's are dropped.
+        internal long[] TakeRespawnChecks(string seed)
+        {
+            lock (doneLock)
+            {
+                long[] ids = respawnOutbox.Where(e => e.Value == seed).Select(e => e.Key).ToArray();
+                respawnOutbox.Clear();
+                return ids;
+            }
+        }
+
+        private void ResetDone(ArchipelagoSession s)
+        {
+            string seed = s.RoomState.Seed;
+            lock (doneLock)
+            {
+                done.Clear();
+                done.UnionWith(s.Locations.AllLocationsChecked);
+                done.UnionWith(respawnOutbox.Where(e => e.Value == seed).Select(e => e.Key));
+            }
+        }
+
+        private void MarkDone(IEnumerable<long> ids)
+        {
+            lock (doneLock)
+            {
+                done.UnionWith(ids);
+            }
         }
 
         // What the seed put at each of this slot's locations, asked once per login without creating hints
@@ -469,11 +530,16 @@ namespace BugFablesAP
                     itemKinds = ReadItemKinds(ok.SlotData);
                     seedKnown = true;
                     scouts = null;
+                    ResetDone(attempt);
                     // Every location this slot has: gifts and pickups alike show what's really there.
                     Scout(attempt, (locationFlags?.Keys ?? Enumerable.Empty<long>()).Concat(locationVars?.Keys ?? Enumerable.Empty<long>())
-                        .Concat(locationBerries?.Keys ?? Enumerable.Empty<long>()).ToList());
+                        .Concat(locationBerries?.Keys ?? Enumerable.Empty<long>())
+                        .Concat(locationPickups?.Keys ?? Enumerable.Empty<long>()).Distinct().ToList());
                     attempt.Locations.CheckedLocationsUpdated += ids =>
+                    {
+                        MarkDone(ids);
                         Post("[check] now checked on the server: " + string.Join(", ", ids.Select(id => id.ToString()).ToArray()));
+                    };
                     attempt.Socket.PacketReceived += packet => Heard();
                     attempt.Socket.SocketClosed += reason => MarkLost(attempt, "closed: " + reason);
                     attempt.Socket.ErrorReceived += (e, message) => MarkLost(attempt, "socket error: " + message);

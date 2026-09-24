@@ -290,6 +290,11 @@ namespace BugFablesAP
             {
                 return $"location {id} isn't a pickup in this seed (or not connected yet)";
             }
+            if (pickup.Flag < 0)
+            {
+                // A crystal berry or a respawning pickup has no flag to find it by.
+                return $"location {id} has no flag of its own: use warp {pickup.Map} @<entity name>";
+            }
             MainManager.Maps map = (MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), pickup.Map);
             if (MainManager.instance.flags[pickup.Flag])
             {

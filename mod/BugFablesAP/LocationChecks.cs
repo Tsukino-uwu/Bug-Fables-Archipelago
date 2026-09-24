@@ -118,6 +118,12 @@ namespace BugFablesAP
                     (finished ?? (finished = new List<long>())).Add(entry.Key);
                 }
             }
+            // Respawning pickups: sent by the pickup itself (ItemSwap), queued here for the seed this save belongs to.
+            foreach (long id in connection.TakeRespawnChecks(session.RoomState.Seed))
+            {
+                log.LogInfo($"[check] location {id} is done (respawning pickup taken) on {Where()}: sending");
+                (finished ?? (finished = new List<long>())).Add(id);
+            }
             if (finished != null)
             {
                 connection.SendChecks(session, finished.ToArray());

@@ -7,6 +7,7 @@
     {"name": "Poison Defender", "game_id": 9, "kind": 2, "classification": "useful"},
     {"name": "Hard Mode", "game_id": 11, "kind": 2, "classification": "filler"},
     {"name": "Mushroom", "game_id": 13, "kind": 0, "classification": "filler"},
+    {"name": "Honey Drop", "game_id": 1, "kind": 0, "classification": "filler"},
     {"name": "HP Plus", "game_id": 0, "kind": 2, "classification": "useful"},
     {"name": "Poison Resistance", "game_id": 7, "kind": 2, "classification": "useful"},
     {"name": "Mushroom Gummies", "game_id": 144, "kind": 0, "classification": "filler"},

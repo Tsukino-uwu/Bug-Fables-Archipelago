@@ -174,7 +174,12 @@ class BugFablesWorld(World):
                                                        **({"event": loc["source"]["event"]}
                                                           if loc["source"]["pickup"].get("story") else {}),
                                                        **({"berry": loc["source"]["berry"]}
-                                                          if "berry" in loc["source"] else {})}
+                                                          if "berry" in loc["source"] else {}),
+                                                       # A respawning pickup: no flag of its own, only a regional
+                                                       # flag the game wipes on every area change. The client sends
+                                                       # its check at the first pickup and leaves it vanilla after.
+                                                       **({"regional": loc["source"]["regional"]}
+                                                          if "regional" in loc["source"] else {})}
                 for loc in self.included_locations
                 if "pickup" in loc["source"]
             },

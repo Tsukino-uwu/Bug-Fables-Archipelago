@@ -24,7 +24,8 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
   same commit. Check all three against each other when a session starts, and fact-check the README against
   the code, never against an older doc.
 - **Items are remote only.** A pickup grants nothing locally; it sends its check. Every item, the player's
-  own included, arrives from the server. There is no local-items mode (decided 2026-09-24).
+  own included, arrives from the server. No local-items mode (decided 2026-09-24). One named exception: a
+  respawning pickup whose check is done is the game's own again (`apimplementation.md`, build step 8).
 - **Randomizer saves are separate files** (decided 2026-09-24). With the randomizer on (a main-menu toggle),
   the game reads and writes its own save files in a separate folder. Normal saves and Steam Cloud's copies
   are never written. This must exist before the mod grants its first item.

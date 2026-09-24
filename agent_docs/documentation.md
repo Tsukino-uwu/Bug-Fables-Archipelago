@@ -391,6 +391,14 @@ trapdoor Mushroom) carries no "taken" flag. A first try knew it by its entity na
 (`[event]` lines, from the dev console) showed the scene creates its own copy (`tempitem`), so the mod knows it by
 the story event picking it up starts instead (`IsPickup`). Built, not yet seen in game.
 
+**Respawning pickups send their own check** (2026-09-24): a floor item hidden only by a regional flag comes back
+after every area change, and nothing in the save marks it taken. So the pickup prefix recognises it by map plus
+regional flag (the game writes `|regionalflag,N,true|` into the pickup's own text), queues the check itself
+(`ApConnection.QueueRespawnCheck`, sent by `LocationChecks`), and swaps the item as usual. Once the check is done
+(the server's list, its updates, or queued here), the prefix and the ground sprites leave the pickup alone, so it
+gives its vanilla item. The dev console's `loc` refuses a location with no flag (a berry or a respawning pickup) and
+points to `warp <map> @<entity>`. Built, not yet seen in game.
+
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
 `Recolour` and `FirstMedalSeen` do the swapping; `PickupPrefix`, `FindPickup` and `TickGround` handle pickups); the
 scout is `ApConnection.Scout`.*

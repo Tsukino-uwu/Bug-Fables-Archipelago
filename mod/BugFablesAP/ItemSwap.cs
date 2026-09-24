@@ -292,6 +292,18 @@ namespace BugFablesAP
             {
                 return;
             }
+            bool respawning = connection.LocationPickups[at].Regional >= 0;
+            if (respawning)
+            {
+                // Once its check is done, a respawning pickup is the game's own again (the user, 2026-09-24).
+                if (connection.IsDone(at))
+                {
+                    log.LogInfo($"[swap] location {at}: respawning pickup on {MapName()}, check already done: vanilla item");
+                    return;
+                }
+                // Its check goes out now: the game marks nothing that LocationChecks could read later.
+                connection.QueueRespawnCheck(at, MainManager.instance.flagstring[ItemReceiver.SeedSlot]);
+            }
             ScoutedItemInfo info = Describe(at, out string name, out Sprite sprite, out Color? color);
             MainManager.instance.flagstring[0] = name;
             SpriteRenderer held = caller.entity.sprite;
@@ -350,7 +362,8 @@ namespace BugFablesAP
             NPCControl[] entities = null;
             foreach (KeyValuePair<long, ApConnection.Pickup> entry in pickups)
             {
-                if (entry.Value.Map != mapName)
+                // A respawning pickup whose check is done shows its own item again.
+                if (entry.Value.Map != mapName || (entry.Value.Regional >= 0 && connection.IsDone(entry.Key)))
                 {
                     continue;
                 }
@@ -389,6 +402,10 @@ namespace BugFablesAP
             if (pickup.Berry >= 0)
             {
                 return npc.entity != null && npc.entity.animid == 3 && npc.data != null && npc.data.Length > 0 && npc.data[0] == pickup.Berry;
+            }
+            if (pickup.Regional >= 0)
+            {
+                return npc.activationflag <= 0 && npc.regionalflag == pickup.Regional;
             }
             if (pickup.Event >= 0)
             {
