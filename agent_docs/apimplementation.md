@@ -17,7 +17,8 @@ archipelago.gg, retrying when the server is unreachable or drops.
 **Next:**
 
 1. **Receive an item:** the server sends a key item and the mod gives it in the game.
-2. **Send a check:** built (build step 6), testing with Artis's medal from a save.
+2. **Stop the game's own item at a location**, and show what's really there (see the mod guide's design
+   list). Sending checks works (build step 6).
 3. **Survive a reload:** the received-item count lives in the save.
 4. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
 
@@ -238,7 +239,11 @@ change. The world version went to 0.2.0.
 server's item is the next step. A save isn't tied to its seed yet either, so a save from another seed would
 send its finished locations to this one. Planned: the save will carry the seed with the received-item count.
 
-**Status:** built and connected (2026-09-24). The user's test from a save is next.
+**Status: works (2026-09-24, local server).** The user loaded a save from before Artis, already past the
+permit. On loading, the mod sent the permit's location at once (flag 15 was already set: the save acted as
+the outbox). Talking to Artis sent the medal's location (flag 32). For both, the mod logged `sending`, the
+server's confirmation and `sent`, and the server logged `BugTester sent ... (Outskirts: Explorer Permit)` and
+`(Outskirts: Artis's Medal)`.
 
 ---
 

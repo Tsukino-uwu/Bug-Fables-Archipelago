@@ -146,3 +146,12 @@ Newest last. What was tried, what happened, what the user said.
   other in game menu's now". Both came from the user noticing a difference from Start Game and Settings. The
   game's code gave the exact behaviour to copy (`option = 0` in `SetMenuText`, `PlaySound("Cancel", 10)`
   leaving the file select).
+- **Sending checks works, 2026-09-24:** the user wanted the medal, "the easiest for me to test", so Artis's
+  medal became location 3 (apworld 0.2.0, `location_flags` in slot_data). Config back to local, and a new seed
+  with 3 locations on a local server. The user loaded a save from before Artis: the permit's location (flag 15,
+  already set) was sent on load, and talking to Artis sent location 7720003 (flag 32). Both were confirmed by the
+  server (`CheckedLocationsUpdated`) and in the server log. That confirms flag 32 as Artis's medal. The vanilla
+  medal was still given locally, as expected. Design decisions from the user in the same stretch (recorded in the
+  mod guide's design list): the Archipelago icon or the real Bug Fables sprite at own finds; a bottom-left
+  chat feed (sends, receives, joins and leaves), on by default and switchable in the panel, later a real text
+  client; Archipelago's item colours; logic on regions and locations only.

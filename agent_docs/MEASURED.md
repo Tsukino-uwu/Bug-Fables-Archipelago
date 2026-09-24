@@ -98,7 +98,9 @@ throttled to changes.
   entity 45. An NPC talk started it, not an event. Right after, `flag[31]` flipped (frame 40171), then `flag[32]`
   (40278, about 107 frames later). **`flag[30]` flipped before this talk** (frame 38697), so it isn't part of
   the medal. In the first run it came after 31 and 32, so 30 belongs to something else nearby. Flag 31 fits
-  "first medal ever" (see above). **Flag 32 is the candidate for "Artis's medal given"**, which is unconfirmed.
+  "first medal ever" (see above). **Flag 32 is Artis's medal:** confirmed 2026-09-24 by reloading a save from before him and talking to him
+  again. Flag 31 flipped (frame 2279), then flag 32 (2419), the same order as both first runs, and the mod sent
+  location 7720003 from flag 32.
   GrantProbe doesn't watch `badges`, so no item line appeared.
   - **`Event17` (`:3824`) is the gate the permit opens.** It sets `flags[28] = true`. Observed live: when the
     user showed the permit (frame 21527), `flag[28]` flipped, **and the permit stayed in `items[1]`**. It

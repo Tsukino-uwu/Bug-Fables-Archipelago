@@ -20,8 +20,8 @@ server.
 1. **Test separate randomizer saves on screen**: save a game with the Archipelago mod enabled, check the normal saves
    are untouched. The redirect covers all five places the game touches a save file.
 2. **Give an item the game's own way**, when the server sends one.
-3. **Spot a location being done** (the flag the game sets) and report it: the reporting is built (see
-   apimplementation.md, build step 6) and waiting on the user's test; stopping the game's own item comes next.
+3. **Spot a location being done** (the flag the game sets) and report it: works (apimplementation.md, build
+   step 6). Stopping the game's own item there comes next.
 4. **Keep the received-item count in the save**, so loading never hands items out twice.
 
 ## The steps
