@@ -313,7 +313,8 @@ namespace BugFablesAP
             // not mid-warp (the user, 2026-09-24: Leif's joining trigger at the lake).
             if (parts.Length > 2 && parts[2].StartsWith("@"))
             {
-                pendingName = parts[2].Substring(1);
+                // The rest of the line: entity names can have spaces ("Crystal Berry").
+                pendingName = string.Join(" ", parts.Skip(2).ToArray()).Substring(1);
                 return StartWarp(map, -1) + " (to " + pendingName + ")";
             }
             int flag = parts.Length > 2 ? int.Parse(parts[2]) : -1;
