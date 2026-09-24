@@ -19,6 +19,7 @@ namespace BugFablesAP
     //   flag <n> [on|off]       show or set flags[n]
     //   unstick                 run the game's end-of-event cleanup, when a cutscene died and left you frozen
     //   nudge <x> <y> <z>       shift the party by that much on this map
+    //   onehit                  toggle: every hit on an enemy does at least 99 (off by default)
     internal static class DevConsole
     {
         private const long LocationIdBase = 7_720_000;
@@ -57,6 +58,32 @@ namespace BugFablesAP
             }
             harmony = new HarmonyLib.Harmony(guid + ".devguard." + DateTime.UtcNow.Ticks);
             harmony.Patch(enter, prefix: new HarmonyLib.HarmonyMethod(typeof(DevConsole), nameof(HoldPickups)));
+            // onehit: the damage every hit ends in, BattleControl.DoDamage(attacker, ref target, amount, property,
+            // overrides, block) (BattleControl.cs:7283); the other overloads lead there.
+            var damage = HarmonyLib.AccessTools.Method(typeof(BattleControl), "DoDamage", new[]
+            {
+                typeof(MainManager.BattleData?), typeof(MainManager.BattleData).MakeByRefType(), typeof(int),
+                typeof(BattleControl.AttackProperty?), HarmonyLib.AccessTools.Inner(typeof(BattleControl), "DamageOverride").MakeArrayType(), typeof(bool),
+            });
+            if (damage == null)
+            {
+                log.LogWarning("[dev] BattleControl.DoDamage not found: onehit does nothing");
+                return;
+            }
+            harmony.Patch(damage, prefix: new HarmonyLib.HarmonyMethod(typeof(DevConsole), nameof(OneHit)));
+        }
+
+        // Dev only (the user, 2026-09-24: fights are tedious to test through): while on, every hit on an enemy is at
+        // least 99 before the game's own defence and the rest of the calculation. The party is untouched; the game's
+        // own test is the target's "Player" tag (BattleControl.cs:7295). Off by default, toggled with "onehit".
+        private static bool oneHit;
+
+        private static void OneHit(ref MainManager.BattleData target, ref int damageammount)
+        {
+            if (oneHit && target.battleentity != null && !target.battleentity.CompareTag("Player"))
+            {
+                damageammount = Math.Max(damageammount, 99);
+            }
         }
 
         internal static void DisableGuard()
@@ -224,6 +251,7 @@ namespace BugFablesAP
                     case "unstick": return Unstick();
                     case "nudge": return Nudge(parts);
                     case "items": return Items();
+                    case "onehit": oneHit = !oneHit; return "onehit " + (oneHit ? "on: every hit on an enemy does at least 99" : "off");
                     default: return "unknown command: " + parts[0];
                 }
             }

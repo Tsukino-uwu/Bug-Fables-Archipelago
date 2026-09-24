@@ -81,6 +81,7 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   map transfer stuck walking to a spot it can't reach.
 - `nudge <x> <y> <z>`: shift the party by that much on the current map.
 - `items`: list every pickup that exists on the current map right now (kind, id, flag, distance), in the log.
+- `onehit`: toggles a test boost: every hit on an enemy does at least 99 (before defence). Off by default.
 
 While a warp is in flight and for 1.5 s after it lands, touching a pickup does nothing (a warp lands on the
 item's own spot); step off and back on to take it.
