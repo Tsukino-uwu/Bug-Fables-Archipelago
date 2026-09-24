@@ -17,6 +17,12 @@ read for facts and write our own.
 | [ILSpy](https://github.com/icsharpcode/ILSpy) (`ilspycmd`) | MIT | Recorded 2026-08-12 in the author's other project; re-read before first use | Decompiles the user's own `Assembly-CSharp.dll` into gitignored `decompiled/` to read names. The output is never committed |
 | [Tevi_Randomizer](https://github.com/BlackSoulKnight/Tevi_Randomizer) | MIT (`LICENSE`, "Copyright (c) 2024 BlackSoulKnight") | 2026-09-24, the file in a fresh clone (last commit 2026-07-01) | Read for its approach to Archipelago in a Unity Mono BepInEx mod. No code copied. See `references.md` |
 
+## Reference sites (facts only)
+
+| Source | Licence | Checked | How it's used |
+|---|---|---|---|
+| Bug Fables wiki (bugfables.fandom.com), the Crystal Berry page | CC BY-SA ("Community content is available under CC-BY-SA unless otherwise noted", on the page) | 2026-09-24; the user pasted the page, since the site blocks automated readers | Leads only: which chapter and what each berry needs. Facts are restated in our own words and checked against the game data or on screen; no wiki text is copied into the repo. |
+
 ## The game
 
 *Bug Fables: The Everlasting Sapling* is the user's own Steam copy. Its assemblies, decompiled output, assets

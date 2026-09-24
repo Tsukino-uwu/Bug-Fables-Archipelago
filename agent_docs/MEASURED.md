@@ -556,6 +556,28 @@ on many maps from the first dungeon on, so a pit doesn't mean hover.
 - **A delivery quest's reward is a Lore Book**: on `BugariaResidential` a cicada ("Oh, you delivered it!") gave
   `giveitem` of item 52, then flag 243 (quest 33 done; see "Key items" above for flags 241-243).
 
+## All crystal berries (2026-09-24, entity dump and ScriptDump, matched to the Bug Fables wiki)
+
+**41 of the 50 are placed by data** (ground pickups: index in `data[3]`; dig spots with `data[0] = 1`: index in
+`data[1]`; cut grass with `data[1] > -1`; dialogue `giveitem,3,N`). The other 9 (#11, 13, 19, 38, 43-47) come from
+code with computed values (discovery rewards and quest rewards, per the wiki). By index: #0 OutsideSnakemouth
+(ground), #1 SnakemouthLake (grass), #2 SnakemouthUndergrondDoor, #3 ChucksAbode, #4 GoldenSettlement2, #5
+AntPalace2 (gift, dialogue line 15), #6 BOGoldenPath (dig), #7 GoldenSettlement2 (dig), #8 GoldenHillsCableCar, #9
+GoldenHillsDungeonLeftMain, #10 BugariaPier, #12 AntPalace2 (gift, line 48), #14 DesertCaravanMap (dig), #15
+DefiantRoot1 and a code gift, #16 FactoryProcessingPuzzle3, #17 FactoryStorageMaze, #18 code gift, #20 HideoutRightA
+(dig), #21 DesertRoachVillage (dig), #22 GoldenSettlementEntrance (dig), #23 SandCastleBasement, #24
+SandCastleRockRoom, #25 AntPalaceLibrary (gift, line 27), #26 FarGrasslands2, #27 Swamplands5 (dig), #28 TermitePier,
+#29 BugariaMainPlaza (dig), #30 BugariaOutskirtsOutsideCity (dig), #31 FarGrasslands1 (dig), #32 SnakemouthBridgeRoom
+(requires flag 41), #33 TermiteRoyalChamber, #34 AntMinesBreakRoom (dig), #35 BeehiveMainArea (gift, line 64), #36
+MetalIsland1, #37 WizardTowerBasement, #39 code gift, #40 GoldenPitcher2, #41 FishingVillage (gift, line 11), #42
+UpperSnekPressurePlateRoom, #48 GiantLairFridgeInside, #49 GiantLairDeadLands1 (dig).
+
+**Chapter 1 per the wiki, matched:** #0 (behind a bush outside the cave), #1 (cut the bush by the sign, lake room's far
+left), #2 (behind the large mushroom; the user: upper-left entrance free, from below Leif), #5 (the Queen, for the
+Ancient Mask). **Later:** #3 behind Chuck's house needs a large boulder smashed (chapter 5; heavy dash, to confirm);
+#32 in the bridge room needs Vi's fly (hover) over two pillars and the beemerang on a vine (chapter 6), as the user
+guessed. The wiki is a lead, not proof: each entry is checked against the data or on screen before it's logic.
+
 ## Quests: to measure (when quests come into scope)
 
 - **The pause menu's quest list groups quests by chapter and shows done / not done** (the user,
