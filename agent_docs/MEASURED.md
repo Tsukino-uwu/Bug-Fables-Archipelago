@@ -593,7 +593,10 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
 - **Flag 281** (in all three pickups' hiding flags) read False in play.
 - **The underground's door layout** (the user, 2026-09-24), for room-level regions later: the big-door room has a
   switch room on each side (`SnakemouthUndergroundRightB` is one, with its switches and rotating bridge). Hitting
-  a room's switch also opens a small gate back toward the big-door room, between the two. The left and right
+  a room's switch also opens a small gate back toward the big-door room, between the two. In
+  `SnakemouthUndergroundRightB` (the user's screenshot, 2026-09-24): the switch is the pentagon crystal on a
+  pedestal at the top left of the room; hitting it lowers a pillar barrier beside it, the way back to the big-door
+  room. The left and right
   switches can be done in either order; both are needed to open the middle door, which leads on to the first boss.
   The Crunchy Leaf behind the pillar needs nothing once you're in its room (the user).
 
