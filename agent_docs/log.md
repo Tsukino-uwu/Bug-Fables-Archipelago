@@ -230,3 +230,13 @@ Newest last. What was tried, what happened, what the user said.
   install (the build reference, and comparing the libraries). `stage/` is gitignored.
 - **First run:** staged DLL sha256 `DB5957D63A12…`, libraries equal to the game's. Copying the two
   every-build files into the game's `BepInEx/scripts` worked, and the copy's hash matched.
+- **The Compression setting, tested (15:08, local server, throwaway seed, game started and closed by the
+  agent with the user's yes):** `Compression = true` logged `[ws] new socket, compression requested`, the
+  header stripped to the two named settings, `connected over ws, compression: permessage-deflate; ...`, and
+  no warning from the server. Set to `false` in the config and hot-reloaded by copying the staged DLL again:
+  `compression off (setting)`, `connected over ws, compression: none`, and the server posted "your client
+  does not support compressed websocket connections". The config was set back to `true`; the game and the
+  server were closed and checked gone. Log evidence only; nothing here needed the screen.
+- **The user asked** that developer instructions leave the user-facing root README: they moved to
+  `agent_docs/development.md` (build, stage and copy, a local test server, the apworld's tests), with a
+  one-line pointer left in the README.

@@ -57,19 +57,8 @@ keeps it, Escape undoes. The same settings are saved in `BepInEx/config/bugfable
 
 ## Building from source
 
-For developers. You need the .NET SDK and your own copy of the game; the build compiles against the game's
-`Assembly-CSharp.dll` from your install and never copies it into the repo.
-
-- **The mod:** `dotnet build mod/BugFablesAP/BugFablesAP.csproj`. If the game isn't in Steam's default
-  library, add `-p:BugFablesDir="D:\path\to\Bug Fables"`.
-- **Trying it in the running game:** `dev-scripts/stage-dev.ps1` builds the mod and stages it in `stage/`,
-  laid out like the game folder; it never writes to the game. Copy `stage/every-build/BepInEx` onto the game
-  folder and BepInEx's ScriptEngine (from BepInEx.Debug) reloads it without restarting the game. Copy
-  `stage/setup/BepInEx` once (the client libraries and ScriptEngine's config), with the game closed.
-- **The apworld:** link `apworld/bug_fables` into `worlds/` of an [Archipelago](https://github.com/ArchipelagoMW/Archipelago)
-  source checkout, then run its tests with `python -m pytest worlds/bug_fables/test`. Set
-  `SKIP_REQUIREMENTS_UPDATE=1` to stop Archipelago's scripts from prompting to install other games'
-  packages.
+For developers: building the mod, trying it in the running game, a local test server and the apworld's
+tests are in [agent_docs/development.md](agent_docs/development.md).
 
 ## Documentation
 
