@@ -124,6 +124,9 @@ namespace BugFablesAP
             Traverse.Create(owner).Field("canselect").SetValue(true);
             Traverse.Create(owner).Field("cd").SetValue(10f);
             MenuToggle.RefreshLabel(owner);
+            // Back on "Start Game", as the game does when leaving its own screens: SetMenuText ends with
+            // option = 0 (StartMenu.cs:319). The user chose this over staying on "Archipelago" (2026-09-24).
+            MainManager.instance.option = 0;
             Open = null;
             Destroy(gameObject);
             log.LogInfo("[apmenu] closed");

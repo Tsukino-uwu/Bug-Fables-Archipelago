@@ -136,6 +136,10 @@ Three things went wrong on the way, each found on screen by the user:
 - **The game's own Settings screen broke**: its leaf cursor no longer lined up. The title screen keeps running
   underneath Settings, and our fix for the main menu's spacing kept moving whatever cursor was active, which
   there was the Settings one. Fixed by only touching the cursor while the main menu itself is showing.
+- **Backing out left the leaf on "Archipelago"**, while backing out of Start Game or Settings puts it on
+  Start Game (the user noticed). The game rebuilds its menu on the way back, and the rebuild resets the
+  cursor to the top. Our panel doesn't rebuild the menu, so it now resets the cursor itself, as the user chose
+  to match the game.
 
 **Lesson:** when adding to a game's own screen, find every time the game rebuilds that screen, and everything
 else that keeps running while another screen is on top of it.
