@@ -108,3 +108,7 @@ Newest last. What was tried, what happened, what the user said.
   memory flat around 720–790 MB with a save loaded. Before the fix it was 5 spinning threads and +2.5 MB/s. No retry
   followed, correctly: the user switched the Archipelago mod off right after and loaded a normal save.
   **Still open:** the user's on-screen check that the game stays smooth, and the retry after a drop on this build.
+- **Retry after a drop, on the fixed build (04:58):** the user switched the mod back on with the server down.
+  It retried with backoff (`could not reach the server`, no stuck attempt). The server was restarted at
+  04:58:13 and the mod logged in by itself at 04:58:19. Across the retries: 64 threads, memory flat at about
+  793 MB. The user saw it retrying on screen ("its trying to reconnect").
