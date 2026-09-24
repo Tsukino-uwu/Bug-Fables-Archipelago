@@ -30,7 +30,7 @@ foreach ($f in 'BugFablesAP.dll', 'BugFablesAP.pdb') {
 # Libraries go to BepInEx\plugins, not scripts: ScriptEngine loads every DLL in scripts again on each reload,
 # and two copies of Newtonsoft.Json in one process is a type-identity trap. Copied only when changed.
 $plugins = Join-Path $GameDir 'BepInEx\plugins'
-foreach ($lib in 'Archipelago.MultiClient.Net.dll', 'Newtonsoft.Json.dll') {
+foreach ($lib in 'Archipelago.MultiClient.Net.dll', 'websocket-sharp.dll', 'Newtonsoft.Json.dll') {
     $src = Join-Path $out $lib
     $dst = Join-Path $plugins $lib
     if (-not (Test-Path $src)) { throw "$lib is missing from the build output" }

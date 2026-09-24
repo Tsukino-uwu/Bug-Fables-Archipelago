@@ -19,12 +19,12 @@ artifacts"; a local server; and the mod connecting to it on its own, retrying wh
 2. **Send a check:** finishing a location tells the server.
 3. **Survive a reload:** the received-item count lives in the save.
 4. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
-5. **Compressed connection** (see known issues).
+5. **Compressed connection:** built (build step 5), not yet tested in the game.
 
 **Known issues:**
 
-- The server warns that our connection isn't compressed. Everything works today; it's a thing to fix
-  before the server stops accepting uncompressed clients.
+- The server warns that our connection isn't compressed. The fix is built (build step 5) but not yet
+  tested in the game.
 
 ## Contents
 
@@ -34,6 +34,7 @@ artifacts"; a local server; and the mod connecting to it on its own, retrying wh
 2. [Build step 2: connect the mod to a real server](#build-step-2-connect-the-mod-to-a-real-server)
 3. [Build step 3: the goal, counted in artifacts](#build-step-3-the-goal-counted-in-artifacts)
 4. [Build step 4: connecting on its own, and staying connected](#build-step-4-connecting-on-its-own-and-staying-connected)
+5. [Build step 5: a compressed connection](#build-step-5-a-compressed-connection)
 
 **How it works**
 
@@ -121,7 +122,56 @@ is lost or replaced, which ends the loop. It also gives every connect attempt 12
 login step can wait forever, and a stuck attempt had stopped all further retries. Measured after the fix
 (2026-09-24): stopping the server while connected logged `socket closed: Open -> Aborted`. The game's CPU fell
 back instead of climbing, its thread count went down, and its memory stayed flat. The user's on-screen check
-that the game stays smooth is still to come.
+that the game stays smooth is still to come. When the server came back, the mod reconnected by itself
+within about 6 seconds.
+
+## Build step 5: a compressed connection
+
+The Archipelago server tells every client that doesn't compress its traffic: *"your client does not support
+compressed websocket connections! It may stop working in the future."* It's only a warning today, so this
+step is optional. We did it anyway, as a worked example. Here's how it goes, in the order we found things out.
+
+**1. Find out what "compressed" means here.** Websockets have a standard compression add-on called
+*permessage-deflate*. The client offers it when it connects, and the server accepts or declines. The
+server's code shows it looks only for that add-on, and it's set up with one extra setting,
+`server_max_window_bits=11`.
+
+**2. Check what the client library can do.** The library comes in several builds, one per kind of .NET. The
+build we'd used runs on .NET's own websocket, and the version of .NET inside this game has no compression
+at all. The library's older builds (net35, net40) run on a different websocket library, **websocket-sharp**,
+which does support compression, but nothing in Archipelago's library turns it on.
+
+**3. Look for someone who tried first.** The library's issue tracker has an open issue (#141) doing exactly
+this. It warns that websocket-sharp **refuses the server's answer when it includes `server_max_window_bits`**.
+We confirmed that in both codebases. websocket-sharp accepts only two named settings in the answer, and the
+server always adds the window setting. So just switching compression on would make every connection fail.
+That setting only limits how the *server* compresses, and any decompressor can read it, so it's safe to
+ignore.
+
+**4. The change, in three parts:**
+
+- Build against the library's **net40 build** instead of letting NuGet pick. The project file points at
+  those DLLs by hand, and the mod ships websocket-sharp next to it.
+- A **Harmony patch** on the private library method that creates the websocket switches compression on in
+  the moment between creating the socket and connecting it. It also routes websocket-sharp's own error
+  messages into our log, since otherwise they go only to the console.
+- A second patch removes `server_max_window_bits` from the server's answer before websocket-sharp checks it.
+  Every other setting is still checked as before.
+
+**5. Mind what the new layer changes.** Swapping the websocket library is not free:
+
+- In websocket-sharp, every send first pings the server and **waits for the answer, up to 5 seconds**. So
+  the mod never sends from the game's own thread. Otherwise the game would stutter on every send and freeze
+  when the server is gone.
+- Closing a lost connection works differently too, so the socket fix from step 4 was redone for the new
+  layer, and its drop test runs again.
+
+**6. Prove it on both ends.** The mod logs the compression it agreed with the server, read back from the
+socket itself (`[ap] compression: permessage-deflate; ...`). The server stops posting its warning.
+
+**Status:** built, not yet run in the game. Still to test: connecting to a local server, the drop and
+reconnect test, and a hosted room on archipelago.gg (encrypted `wss://`). This old .NET may not handle the
+TLS 1.3 setting the library asks for.
 
 ---
 
@@ -245,6 +295,7 @@ matter first:
 - The wrong game name, or a missing `ws://` for a local server, and the login fails or times out.
 - Treating "the socket is open" as "we're in a seed": after a disconnect, rules must stay in force.
 - Not saving the received-item count: every reload hands out every item again.
-- An uncompressed connection works today, but the server warns that one day it may not.
+- An uncompressed connection works today, but the server warns that one day it may not. Turning compression
+  on in websocket-sharp without accepting `server_max_window_bits` breaks every connection (build step 5).
 - A lost connection that is only "disconnected" politely can keep a reading loop spinning in the background.
   The game just gets slower and uses more memory, with no error. Abort the socket.

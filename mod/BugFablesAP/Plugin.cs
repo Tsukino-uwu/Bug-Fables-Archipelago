@@ -64,6 +64,7 @@ namespace BugFablesAP
             slot = Config.Bind("Connection", "Slot", "", "Your slot name in the room.");
             password = Config.Bind("Connection", "Password", "", "The room password, if it has one.");
             connection = new ApConnection(Log);
+            WebSocketCompression.Enable(Guid, connection.Post);
 
             randomizerEnabled = Config.Bind("Archipelago", "RandomizerEnabled", false,
                 "Archipelago mod enabled: the game uses its own saves in the 'archipelago' folder, apart from your normal "
@@ -206,6 +207,7 @@ namespace BugFablesAP
             SaveRedirect.Disable();
             // A hot reload must not leave the old instance's socket open next to the new one.
             connection?.Disconnect();
+            WebSocketCompression.Disable();
             // ScriptEngine destroys the old instance on reload. Say so, so a reload shows up in the log.
             Log?.LogInfo($"{Name} {Version} unloaded.");
         }

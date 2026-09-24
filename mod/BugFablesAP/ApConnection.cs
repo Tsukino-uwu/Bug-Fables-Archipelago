@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Net.WebSockets;
 using System.Reflection;
 using System.Threading;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Packets;
 using BepInEx.Logging;
+using WebSocketSharp;
 
 namespace BugFablesAP
 {
@@ -15,6 +15,10 @@ namespace BugFablesAP
     //
     // TryConnectAndLogin blocks for up to 5 s (MultiClient.Net's own docs), so it runs on a worker thread and
     // its outcome is handed to the game thread through a queue. Nothing here touches game state.
+    //
+    // It runs on MultiClient.Net's net40 build, over websocket-sharp, so the connection can be compressed
+    // (WebSocketCompression). On that build every send first pings and waits for the pong: never send on the
+    // game thread.
     internal sealed class ApConnection
     {
         internal const string Game = "Bug Fables";
@@ -95,19 +99,30 @@ namespace BugFablesAP
                 MarkLost(s, "no reply from the server for " + SilenceSeconds + " s");
                 return;
             }
-            if ((nowUtc - lastPingUtc).TotalSeconds >= PingSeconds)
+            if ((nowUtc - lastPingUtc).TotalSeconds >= PingSeconds && Interlocked.CompareExchange(ref pingInFlight, 1, 0) == 0)
             {
                 lastPingUtc = nowUtc;
-                try
+                // Never send on the game thread: websocket-sharp's IsAlive, which every MultiClient.Net send checks
+                // first, sends a ping and blocks until the pong arrives, up to 5 s (WebSocket.ping, WaitTime).
+                ThreadPool.QueueUserWorkItem(_ =>
                 {
-                    s.Socket.SendPacketAsync(new GetPacket { Keys = new[] { "_read_race_mode" } });
-                }
-                catch (Exception e)
-                {
-                    MarkLost(s, "sending failed: " + e.GetBaseException().Message);
-                }
+                    try
+                    {
+                        s.Socket.SendPacketAsync(new GetPacket { Keys = new[] { "_read_race_mode" } }).Wait();
+                    }
+                    catch (Exception e)
+                    {
+                        MarkLost(s, "sending failed: " + e.GetBaseException().Message);
+                    }
+                    finally
+                    {
+                        Interlocked.Exchange(ref pingInFlight, 0);
+                    }
+                });
             }
         }
+
+        private int pingInFlight;
 
         private void Heard()
         {
@@ -116,11 +131,11 @@ namespace BugFablesAP
 
         private void MarkLost(ArchipelagoSession s, string reason)
         {
-            if (!ReferenceEquals(session, s))
+            // Called from the game thread and from connection threads: only the first caller for a session acts.
+            if (s == null || !ReferenceEquals(Interlocked.CompareExchange(ref session, null, s), s))
             {
                 return;
             }
-            session = null;
             KillSocket(s);
             Post("[ap] connection lost: " + reason);
             ScheduleRetry("Connection lost.");
@@ -215,6 +230,9 @@ namespace BugFablesAP
                     Post($"[ap] logged in: slot {ok.Slot}, team {ok.Team}, world_version {version}, "
                         + $"{attempt.Items.AllItemsReceived.Count} items received so far, "
                         + $"{attempt.Locations.AllLocationsChecked.Count} of {attempt.Locations.AllLocations.Count} locations checked");
+                    // Read back what the handshake settled, from the socket itself.
+                    string extensions = WebSocketOf(attempt)?.Extensions;
+                    Post("[ap] compression: " + (string.IsNullOrEmpty(extensions) ? "none" : extensions));
                 }
                 else if (result is LoginFailure failed)
                 {
@@ -245,7 +263,7 @@ namespace BugFablesAP
             catch (Exception e)
             {
                 // The first connect is also the measurement of whether this game's Mono can run the client
-                // library at all (ClientWebSocket, no System.Reflection.Emit), so report the whole exception.
+                // library at all (websocket-sharp, no System.Reflection.Emit), so report the whole exception.
                 Post("[ap] connect threw: " + e);
                 ScheduleRetry("Could not connect: " + e.GetBaseException().Message + ".");
             }
@@ -262,7 +280,7 @@ namespace BugFablesAP
             }
         }
 
-        private void Post(string message)
+        internal void Post(string message)
         {
             lock (gate)
             {
@@ -284,52 +302,51 @@ namespace BugFablesAP
 
         internal void Disconnect()
         {
-            ArchipelagoSession closing = session;
-            session = null; // first, so the SocketClosed handler knows this close was on purpose
+            // First, so the SocketClosed handler knows this close was on purpose.
+            ArchipelagoSession closing = Interlocked.Exchange(ref session, null);
             KillSocket(closing);
             failures = 0;
         }
 
-        // MultiClient.Net's receive loop is `while (Socket.State == Open)`, catching and reporting every error
-        // (BaseArchipelagoSocketHelper.PollingLoop, 6.7.1). This game's Mono ManagedWebSocket throws
-        // ConnectionClosedPrematurely from ReceiveAsync without leaving the Open state when the server vanishes
-        // (System.dll, ManagedWebSocket.ReceiveAsyncPrivate), so the loop spun forever: measured 2026-09-24 as five
-        // thread-pool threads at ~75% of a core each and memory growing ~2.5 MB/s after a server drop.
-        // ClientWebSocket.Abort() moves the state to Aborted (ManagedWebSocket's abort registration), which ends
-        // both library loops; the socket field is internal, hence reflection. DisconnectAsync alone doesn't: its
-        // close frame fails on a dead stream and leaves the state as it was.
+        // The websocket-sharp socket inside MultiClient.Net's net40 helper (an internal field, hence reflection).
+        private static WebSocket WebSocketOf(ArchipelagoSession s)
+        {
+            FieldInfo field = s?.Socket?.GetType().GetField("webSocket", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            return field?.GetValue(s.Socket) as WebSocket;
+        }
+
+        // Close a session's socket for good, on a worker thread: websocket-sharp's Close sends a close frame and waits
+        // up to 5 s for the answer (WaitTime), which a dead server never sends. Closing releases the TCP stream, which
+        // also ends websocket-sharp's receive thread if the server vanished without a word.
+        // History: on the netstandard2.0 build (Mono's ClientWebSocket) a lost socket stayed "Open" and the library's
+        // receive loop spun forever, measured 2026-09-24 as five threads at ~75% of a core and memory growing
+        // ~2.5 MB/s. Switching to the net40 build (websocket-sharp, for compression) replaced that layer; the same
+        // drop test is re-run on it (agent_docs/apimplementation.md, build step 5).
         private void KillSocket(ArchipelagoSession s)
         {
             if (s == null)
             {
                 return;
             }
-            try
+            ThreadPool.QueueUserWorkItem(_ =>
             {
-                object helper = s.Socket;
-                FieldInfo field = null;
-                for (Type t = helper.GetType(); t != null && field == null; t = t.BaseType)
+                try
                 {
-                    field = t.GetField("Socket", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public
-                        | BindingFlags.DeclaredOnly);
+                    WebSocket socket = WebSocketOf(s);
+                    if (socket == null)
+                    {
+                        Post("[ap] could not reach the web socket to close it (field 'webSocket' missing)");
+                        return;
+                    }
+                    WebSocketState before = socket.ReadyState;
+                    socket.Close();
+                    Post($"[ap] socket closed: {before} -> {socket.ReadyState}");
                 }
-                if (!(field?.GetValue(helper) is WebSocket socket))
+                catch (Exception e)
                 {
-                    Post("[ap] could not reach the web socket to close it (field "
-                        + (field == null ? "missing" : "not a WebSocket") + ")");
-                    return;
+                    Post("[ap] closing the socket threw: " + e.GetBaseException().Message);
                 }
-                WebSocketState before = socket.State;
-                socket.Abort();
-                // The send loop waits in BlockingCollection.Take(); one more packet wakes it, it sees the socket is
-                // no longer open and ends. The packet itself is never sent.
-                s.Socket.SendPacketAsync(new GetPacket { Keys = new[] { "_read_race_mode" } });
-                Post($"[ap] socket closed: {before} -> {socket.State}");
-            }
-            catch (Exception e)
-            {
-                Post("[ap] closing the socket threw: " + e.GetBaseException().Message);
-            }
+            });
         }
     }
 }

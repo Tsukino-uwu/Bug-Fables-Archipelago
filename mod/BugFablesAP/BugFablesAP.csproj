@@ -21,7 +21,8 @@
     -->
     <DebugType>full</DebugType>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <!-- Copy Archipelago.MultiClient.Net and its Newtonsoft.Json into the output: the game ships neither. -->
+    <!-- Archipelago.MultiClient.Net, websocket-sharp and Newtonsoft.Json are copied into the output by their
+         references below: the game ships none of them. -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <BugFablesDir Condition="'$(BugFablesDir)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Bug Fables</BugFablesDir>
     <GameManaged>$(BugFablesDir)\Bug Fables_Data\Managed</GameManaged>
@@ -31,9 +32,23 @@
     <PackageReference Include="BepInEx.Core" Version="5.4.*" />
     <!-- Pinned to the game's measured Unity version, 2018.4.12 (agent_docs/MEASURED.md). -->
     <PackageReference Include="UnityEngine.Modules" Version="2018.4.12" IncludeAssets="compile" />
-    <!-- netstandard2.0 build: it uses the runtime's ClientWebSocket. Its net35/net40 builds bundle
-         websocket-sharp instead, which is the fallback if this game's Mono can't run ClientWebSocket. -->
-    <PackageReference Include="Archipelago.MultiClient.Net" Version="6.7.1" />
+    <!-- The package is only downloaded here; its net40 build is referenced by hand below. NuGet would pick
+         the netstandard2.0 build, which runs on the runtime's ClientWebSocket: this game's Mono version of that
+         can't compress (no permessage-deflate). The net40 build runs on the bundled websocket-sharp, which can
+         (agent_docs/apimplementation.md, build step 5). -->
+    <PackageReference Include="Archipelago.MultiClient.Net" Version="6.7.1" ExcludeAssets="all" GeneratePathProperty="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Archipelago.MultiClient.Net">
+      <HintPath>$(PkgArchipelago_MultiClient_Net)\lib\net40\Archipelago.MultiClient.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="websocket-sharp">
+      <HintPath>$(PkgArchipelago_MultiClient_Net)\lib\net40\websocket-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(PkgArchipelago_MultiClient_Net)\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

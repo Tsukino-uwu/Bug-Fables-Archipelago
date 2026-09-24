@@ -85,6 +85,14 @@ throttled to changes.
     `MainManager.instance.flags[15] = true`, which matches the live flag 15 that followed the grant. The
     permit itself arrives through one of its dialogue lines. Which line carries the `giveitem` is for
     TextProbe to show; that probe wasn't running in that session.
+    **Settled 2026-09-24, second new game (TextProbe and GrantProbe both on, Archipelago mod enabled):** the
+    permit comes from Maki and Eetl's dialogue line on `BugariaOutskirtsOutsideCity/BugariaOutskirts`, which
+    ends `|giveitem,1,27,13|` (type 1 key item, id 27, shown over entity 13), with `caller=none`. GrantProbe
+    logged `KEYITEM +1 id=27` at frame 31685, and `flag[15]` False -> True at frame 34349. That's the same
+    order and about the same gap (~2,660 frames) as the first run. **So the grant and flag 15 happen at
+    separate moments:** the `giveitem` is in the dialogue, and flag 15 is set in code when `Event16` ends.
+    The local grant happened because sending checks doesn't exist yet. Log kept only in that session's
+    scratchpad.
   - **`Event17` (`:3824`) is the gate the permit opens.** It sets `flags[28] = true`. Observed live: when the
     user showed the permit (frame 21527), `flag[28]` flipped, **and the permit stayed in `items[1]`**. It
     is shown, not consumed. The user saw a gate open.
