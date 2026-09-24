@@ -277,11 +277,14 @@ namespace BugFablesAP
                 GUIUtility.systemCopyBuffer = edited;
                 return;
             }
-            // The gamepad's own confirm and cancel buttons end editing too (the user: stuck until Enter).
-            // InputIO.GetKeyDown(id, joy: true) reads only the gamepad binding, so typing the keyboard's C or X
-            // (the game's keyboard confirm and cancel) still just types.
-            bool padCancel = InputIOManager.InputIO.GetKeyDown(5, true);
-            bool padConfirm = InputIOManager.InputIO.GetKeyDown(4, true);
+            // The gamepad's own confirm and cancel end editing too (the user: stuck until Enter). They're read the
+            // way MainManager.GetKey does for a gamepad: action 4 (confirm) is joykeys[0], action 5 (cancel) is
+            // joykeys[1] (MainManager.cs, GetKey's default branch), and joykeys are raw buttons (InputIO.cs:571).
+            // A first try used joykeys[4]/[5], which are Start and Back. Only the pad is read here, so typing the
+            // keyboard's C or X (the game's keyboard confirm and cancel) still just types.
+            bool pad = MainManager.usejoystick > 0;
+            bool padConfirm = pad && InputIOManager.InputIO.GetKeyDown(0, true);
+            bool padCancel = pad && InputIOManager.InputIO.GetKeyDown(1, true);
             if (Input.GetKeyDown(KeyCode.Escape) || padCancel)
             {
                 edited = before;
