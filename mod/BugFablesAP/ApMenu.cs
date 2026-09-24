@@ -267,6 +267,21 @@ namespace BugFablesAP
             }
         }
 
+        private static string Describe(int r)
+        {
+            switch (r)
+            {
+                case Address: return "The room's address. Pasting archipelago.gg:12345 fills in the port too.";
+                case PortRow: return "The room's port, e.g. 38281.";
+                case SlotRow: return "Your slot name in the room.";
+                case PasswordRow: return "Only if the room has one.";
+                case DifficultyRow: return "Hard: as if the Hard Mode medal were on. Hardest: as if HARDEST.";
+                case DetectorRow: return "On: as if the Detector medal were equipped, to find hidden items.";
+                case ModeRow: return "Randomizer saves in their own folder; normal saves are never touched.";
+                default: return "Back to the main menu.";
+            }
+        }
+
         private static bool IsChoice(int r) => r == ModeRow || r == DifficultyRow || r == DetectorRow;
 
         // Left/right (or confirm) on a choice row: the next or previous value.
@@ -417,7 +432,10 @@ namespace BugFablesAP
             Choice(DifficultyRow, "Difficulty", (Difficulty?.Value ?? "Normal").ToUpperInvariant());
             Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
 
-            Text("|center||size,0.5|" + Safe(shownStatus), 0f, -3.0f);
+            // What the highlighted row does, one line, the way the game's settings screen explains its rows (the
+            // user, 2026-09-24: "Detector" alone doesn't say it means the medal). Then the connection's state.
+            Text("|center||size,0.45||color,5|" + Describe(row), 0f, -2.95f);
+            Text("|center||size,0.5|" + Safe(shownStatus), 0f, -3.35f);
             leaf.transform.localPosition = new Vector3(LabelX + LeafOffset, RowY[row] + LeafRise, 0f);
         }
 
