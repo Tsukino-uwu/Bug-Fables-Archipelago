@@ -51,7 +51,7 @@ namespace BugFablesAP
             harmony = null;
         }
 
-        private static string Label => "Archipelago" + (mode.Value ? " (On)" : "");
+        private static string Label => "Archipelago" + (mode.Value ? " (On)" : " (Off)");
 
         // The game calls SetMenuText again whenever it returns to the main menu, and its own loop indexes a
         // three-label array by selections.Length. With our fourth entry still in the list that read past the end
