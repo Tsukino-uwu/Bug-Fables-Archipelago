@@ -17,6 +17,7 @@ namespace BugFablesAP
     //                           whose activationflag it is
     //   spawn <item|key|medal> <id> [flag]   drop a pickup next to you; with a location's flag, it is that location
     //   flag <n> [on|off]       show or set flags[n]
+    //   unstick                 run the game's end-of-event cleanup, when a cutscene died and left you frozen
     internal static class DevConsole
     {
         private const long LocationIdBase = 7_720_000;
@@ -183,6 +184,7 @@ namespace BugFablesAP
                     case "warp": return Warp(parts);
                     case "spawn": return Spawn(parts);
                     case "flag": return Flag(parts);
+                    case "unstick": return Unstick();
                     default: return "unknown command: " + parts[0];
                 }
             }
@@ -236,13 +238,56 @@ namespace BugFablesAP
             {
                 return "not now: no player, or an event or dialogue is running";
             }
+            string skipped = SkipAutoEvents(map);
             pendingMap = (int)map;
             pendingFlag = flag;
             pendingSince = Time.realtimeSinceStartup;
             // The door warp: the game's own map transfer. Position zero, then FinishWarp moves the party to a
             // known spot on the new map (a map's origin can be inside a wall).
             MainManager.instance.StartCoroutine(MainManager.TransferMap((int)map, Vector3.zero));
-            return "warping to " + map;
+            return "warping to " + map + skipped;
+        }
+
+        // A map's auto-start cutscenes (MapControl.autoevent, (flag, event)) run on arrival while their flag is off
+        // (MapControl.cs:874-883). Arriving by warp, out of the story's order, one crashed and left the game stuck
+        // "in an event" (2026-09-24, Event21 on SnakemouthUndergrondDoor). So a warp marks them seen first, as the map
+        // itself does once they've run: skipping the cutscene, which is what a dev warp wants.
+        private static string SkipAutoEvents(MainManager.Maps map)
+        {
+            GameObject prefab = Resources.Load<GameObject>("Prefabs/Maps/" + map);
+            MapControl control = prefab == null ? null : prefab.GetComponent<MapControl>();
+            if (control == null || control.autoevent == null || control.autoevent.Length == 0)
+            {
+                return "";
+            }
+            var skipped = new List<string>();
+            foreach (Vector2 pair in control.autoevent)
+            {
+                int flag = (int)pair.x;
+                if (!MainManager.instance.flags[flag])
+                {
+                    MainManager.instance.flags[flag] = true;
+                    skipped.Add($"event {(int)pair.y} (flag {flag})");
+                }
+            }
+            return skipped.Count == 0 ? "" : "; skipped its auto-start " + string.Join(", ", skipped.ToArray());
+        }
+
+        // Gets the player moving again after a cutscene died half-way: the game's own end-of-event cleanup
+        // (EventControl.EndEvent, private), which clears inevent and minipause and resets the player.
+        private static string Unstick()
+        {
+            System.Reflection.MethodInfo end = HarmonyLib.AccessTools.Method(typeof(EventControl), "EndEvent", new[] { typeof(bool) });
+            if (end == null)
+            {
+                return "EventControl.EndEvent not found";
+            }
+            end.Invoke(null, new object[] { false });
+            if (MainManager.player != null)
+            {
+                MainManager.player.lockkeys = false;
+            }
+            return "ran the game's end-of-event cleanup; inevent=" + MainManager.instance.inevent + ", minipause=" + MainManager.instance.minipause;
         }
 
         // Once the target map is up and the transfer is over, stand by the entity with the wanted flag, or else by

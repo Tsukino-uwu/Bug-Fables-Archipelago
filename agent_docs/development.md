@@ -73,6 +73,10 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `spawn <item|key|medal> <id> [flag]`: drop a pickup next to you. With a pickup location's flag, on that
   location's map, it is that location.
 - `flag <n> [on|off]`: show or set a story flag.
+- `unstick`: runs the game's own end-of-cutscene cleanup, when a cutscene died and left you frozen.
+
+`loc` and `warp` mark the target map's auto-start cutscenes as seen before arriving: one played out of the
+story's order crashed and froze the game (2026-09-24). A test file only.
 
 It uses the game's own warp and pickup functions, but it can put a save in states the story never makes.
 

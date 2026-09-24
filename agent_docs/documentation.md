@@ -157,6 +157,13 @@ start, and the user saw it was inside a house that opens later in the story. The
 *inside* (a building's interior) an entity belongs to. It does now, and that location was retired. The
 console can't enter an inside yet: it stands you by the item, but only the door's own step lets you pick it up.
 
+**And on its second run it froze the game.** The target room starts a cutscene by itself the first time you
+walk in (a map's auto-start list, which the map dump had shown). Arriving by warp, out of the story's order,
+the cutscene crashed half-way, and the game stayed "in a cutscene", so the player couldn't move. The fixes:
+warps now mark the target map's auto-start cutscenes as seen before arriving, and an `unstick` command runs
+the game's own end-of-cutscene cleanup. The log showed the cause straight away (the game's exception, with the
+event's name), which is why catching the game's own errors in the log was worth setting up.
+
 *Code: `DevConsole.cs`.*
 
 ## 6. Watch the game while you play ("probing")
