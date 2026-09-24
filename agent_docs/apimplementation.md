@@ -36,7 +36,11 @@ seed's (the mod guide, step 9).
    switchable, the save stays clean; the mod guide's design list, item 6).
 2. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
-3. **An open-world option later,** researched one chapter at a time. Regions stay whole areas for now; one
+3. **An "open start" yaml option next** (the user, 2026-09-24), after chapter 1's locations: skip the prologue and
+   tutorial, optionally with Leif from the start (the new-game party `{0, 1}`, `MainManager.cs:3591`, becoming
+   `{0, 1, 2}`; early cutscenes are written for two, so tested on a fresh file). A full story strip, as the Metroid
+   Fusion randomizer does, isn't the plan: here every cutscene also changes the world through flags.
+   **An open-world option later,** researched one chapter at a time. Regions stay whole areas for now; one
    region per map (doors from the dump) comes before random start or open world (the user, 2026-09-24).
    **Areas and doors that close later are kept open** (the user, 2026-09-24), as Pokémon Emerald keeps Mirage
    Island visible: the mod makes the game's `CheckIfCanExist` answer "exists" for a list of doors and blockers
