@@ -192,6 +192,11 @@ throttled to changes.
 - **A key item from a conversation:** `KEYITEM +1 id=25` (the doll) on `BugariaTheater` (frame 719,
   `message=True`), then `flag[58]` when the user confirmed the dialogue (frame 2157). The dump predicted it
   (`BugariaTheater` line 7 → `giveitem,1,25`). **Location: flag 58.**
+- **A multi-step quest, measured step by step:** the quest book (id 93) was handed over with `flag[241]`, then
+  delivered in `AntPalaceLibrary` with `flag[242]` and `KEYITEM -1 id=93` in the same frame (9030). The quest was
+  still not done (the user; its id hadn't reached `boardquests[2]`). So one quest can be several locations,
+  chained in the logic: the delivery needs the book, and completion needs the delivery. The `0` placeholder in
+  `boardquests[0]` comes and goes on map changes (frames 5855, 7865), so it's a list refresh, not a quest.
 - **A second crystal berry:** on `SnakemouthLake`, `crystalbflag[1]` flipped (frame 111883), with no
   tutorial flag this time. The script was `|additemtoss,3,var,0|` with `caller=tempitem`, and `flagvar[0]`
   read 1 (HoneyDrop), **a stale value left from an earlier pickup**. `flagvar[0]` means nothing for crystal
