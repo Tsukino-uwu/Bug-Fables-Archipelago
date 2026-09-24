@@ -1,3 +1,4 @@
+using System;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
@@ -22,7 +23,8 @@ namespace BugFablesAP
         private ConfigEntry<string> password;
         private ConfigEntry<bool> randomizerEnabled;
         private ApConnection connection;
-        // The details last tried automatically; a failure isn't retried until something changes or Reconnect.
+        // The details last tried automatically: new details connect at once; the same details only retry after an
+        // unreachable server or a dropped connection (ApConnection.ShouldRetry).
         private string lastAttempt;
         private bool wasEnabled;
         private bool scriptDumpDone;
@@ -69,14 +71,14 @@ namespace BugFablesAP
             SaveRedirect.On = randomizerEnabled.Value;
             SaveRedirect.Enable(Log, Guid);
             MenuToggle.Enable(Log, Guid, randomizerEnabled, server, port, slot, password,
-                Reconnect,
+                () => { },
                 () => connection.Status);
             Log.LogInfo($"{Name} {Version} loaded. GrantProbe={grantProbeEnabled.Value} TextProbe={textProbeEnabled.Value}");
         }
 
         // While the Archipelago mod is enabled and the details are filled in, connect on its own (the user,
-        // 2026-09-24: less friction than a Connect button). Each set of details is tried once; after a failure
-        // it waits for a change or Reconnect instead of retrying in a loop. Disabling disconnects.
+        // 2026-09-24: less friction than a Connect button). A refusal waits for the details to change; an
+        // unreachable server or a dropped connection retries on its own (ApConnection). Disabling disconnects.
         private void AutoConnect()
         {
             bool enabled = randomizerEnabled.Value;
@@ -99,9 +101,18 @@ namespace BugFablesAP
                 return;
             }
             string key = Target() + "|" + slot.Value + "|" + password.Value;
-            if (key != lastAttempt && !connection.Busy)
+            if (key != lastAttempt)
             {
+                if (connection.Busy)
+                {
+                    return; // try the new details once the running attempt ends
+                }
                 lastAttempt = key;
+                connection.ResetForNewDetails();
+                connection.Connect(Target(), slot.Value, password.Value);
+            }
+            else if (connection.ShouldRetry(DateTime.UtcNow))
+            {
                 connection.Connect(Target(), slot.Value, password.Value);
             }
         }
@@ -112,17 +123,6 @@ namespace BugFablesAP
             bool hasPort = port.Value.Trim().Length > 0
                 || System.Text.RegularExpressions.Regex.IsMatch(address, @":\d{1,5}$");
             return address.Length > 0 && hasPort && slot.Value.Trim().Length > 0;
-        }
-
-        // The panel's Reconnect row: forget the last attempt, so the next frame tries again.
-        private void Reconnect()
-        {
-            if (!randomizerEnabled.Value)
-            {
-                connection.SetStatus("Enable the Archipelago mod first.");
-                return;
-            }
-            lastAttempt = null;
         }
 
         // "address:port", or the address alone when no port is set (it may carry one already).

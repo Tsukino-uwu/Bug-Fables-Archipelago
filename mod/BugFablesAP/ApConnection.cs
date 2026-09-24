@@ -27,6 +27,30 @@ namespace BugFablesAP
         internal string Status => status;
         internal bool Busy => busy;
 
+        // Refused (wrong slot, password, game...) waits for the details to change. Unreachable or dropped retries
+        // on its own with a growing wait (AP's hard requirement: reconnect when the connection is lost).
+        private static readonly int[] RetrySeconds = { 2, 4, 8, 15, 30 };
+        private volatile bool refused;
+        private int failures;
+        private DateTime nextRetryUtc;
+
+        // New details: start over, connect at once.
+        internal void ResetForNewDetails()
+        {
+            refused = false;
+            failures = 0;
+        }
+
+        internal bool ShouldRetry(DateTime nowUtc) => !busy && !refused && session == null && failures > 0 && nowUtc >= nextRetryUtc;
+
+        private void ScheduleRetry(string why)
+        {
+            failures++;
+            int wait = RetrySeconds[Math.Min(failures, RetrySeconds.Length) - 1];
+            nextRetryUtc = DateTime.UtcNow.AddSeconds(wait);
+            status = why + " Retrying in " + wait + " s.";
+        }
+
         internal void SetStatus(string text)
         {
             status = text;
@@ -66,7 +90,20 @@ namespace BugFablesAP
                 if (result is LoginSuccessful ok)
                 {
                     session = attempt;
+                    failures = 0;
+                    refused = false;
                     status = $"Connected as {slot}.";
+                    attempt.Socket.SocketClosed += reason =>
+                    {
+                        // Only this session dropping counts; Disconnect() clears `session` first.
+                        if (!ReferenceEquals(session, attempt))
+                        {
+                            return;
+                        }
+                        session = null;
+                        Post("[ap] connection lost: " + reason);
+                        ScheduleRetry("Connection lost.");
+                    };
                     string version = ok.SlotData != null && ok.SlotData.TryGetValue("world_version", out object v) ? v?.ToString() : "missing";
                     Post($"[ap] logged in: slot {ok.Slot}, team {ok.Team}, world_version {version}, "
                         + $"{attempt.Items.AllItemsReceived.Count} items received so far, "
@@ -74,8 +111,20 @@ namespace BugFablesAP
                 }
                 else if (result is LoginFailure failed)
                 {
-                    status = "Refused: " + string.Join("; ", failed.Errors);
-                    Post("[ap] login refused: " + string.Join("; ", failed.Errors));
+                    string why = string.Join("; ", failed.Errors);
+                    if (failed.ErrorCodes != null && failed.ErrorCodes.Length > 0)
+                    {
+                        // The server answered and said no: retrying the same details cannot help.
+                        refused = true;
+                        status = "Refused: " + why;
+                        Post("[ap] login refused: " + why + " (" + string.Join(", ", failed.ErrorCodes) + ")");
+                    }
+                    else
+                    {
+                        // No answer from a server (unreachable, timed out): worth retrying.
+                        Post("[ap] could not reach the server: " + why);
+                        ScheduleRetry("Could not reach the server.");
+                    }
                 }
                 else
                 {
@@ -86,8 +135,8 @@ namespace BugFablesAP
             {
                 // The first connect is also the measurement of whether this game's Mono can run the client
                 // library at all (ClientWebSocket, no System.Reflection.Emit), so report the whole exception.
-                status = "Could not connect: " + e.GetBaseException().Message;
                 Post("[ap] connect threw: " + e);
+                ScheduleRetry("Could not connect: " + e.GetBaseException().Message + ".");
             }
             finally
             {
@@ -117,15 +166,17 @@ namespace BugFablesAP
 
         internal void Disconnect()
         {
+            ArchipelagoSession closing = session;
+            session = null; // first, so the SocketClosed handler knows this close was on purpose
             try
             {
-                session?.Socket.DisconnectAsync();
+                closing?.Socket.DisconnectAsync();
             }
             catch (Exception e)
             {
                 log.LogWarning("[ap] disconnect threw: " + e.Message);
             }
-            session = null;
+            failures = 0;
         }
     }
 }

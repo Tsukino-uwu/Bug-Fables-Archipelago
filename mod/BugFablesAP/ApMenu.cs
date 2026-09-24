@@ -9,14 +9,14 @@ namespace BugFablesAP
     // The Archipelago panel, opened from "Archipelago" on the main menu. It's drawn with the game's own box and
     // font (MainManager.Create9Box / SetText) and takes real typing, so an address can be typed or pasted.
     //
-    // Rows: Address, Port, Slot, Password, Archipelago mod, Connect, Back. Up/down move; confirm (C / Enter) edits
+    // Rows: Address, Port, Slot, Password, Archipelago mod, Back. It connects on its own (Plugin.AutoConnect). Up/down move; confirm (C / Enter) edits
     // a text row or presses a button; cancel (X / Escape) closes. While a row is being edited, the keyboard
     // types into it: Backspace deletes, Ctrl+V pastes, Ctrl+C copies the row, Enter keeps, Escape reverts.
     // The title screen's own input is suspended while the panel is open (StartMenu.canselect), so the game's
     // key letters (C, X, Z, V) can be typed.
     internal sealed class ApMenu : MonoBehaviour
     {
-        private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, ConnectRow = 5, BackRow = 6, Rows = 7;
+        private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, BackRow = 5, Rows = 6;
 
         internal static ApMenu Open;
 
@@ -138,7 +138,7 @@ namespace BugFablesAP
         private const string TextSort = "|sort,10|";
         // Row heights inside the orange box, top to bottom; labels on the left, values on the right, as in the
         // settings screen.
-        private static readonly float[] RowY = { 2.7f, 1.9f, 1.1f, 0.3f, -0.5f, -1.3f, -2.1f };
+        private static readonly float[] RowY = { 2.6f, 1.75f, 0.9f, 0.05f, -0.8f, -1.65f };
         private const float LabelX = -5.9f;
         private const float ValueX = -1.9f;
 
@@ -235,10 +235,6 @@ namespace BugFablesAP
                         break;
                     case ModeRow:
                         MenuToggle.SetMode(owner, !mode.Value);
-                        Redraw();
-                        break;
-                    case ConnectRow:
-                        connect();
                         Redraw();
                         break;
                     case BackRow:
@@ -366,7 +362,6 @@ namespace BugFablesAP
             Row(PortRow, "Port", editing && row == PortRow ? edited : port.Value);
             Row(SlotRow, "Slot", editing && row == SlotRow ? edited : slot.Value);
             Row(PasswordRow, "Password", pw);
-            Row(ConnectRow, "Reconnect", null);
             Row(BackRow, "Back", null);
 
             // The mode row, like a settings value: left and right arrows around it.

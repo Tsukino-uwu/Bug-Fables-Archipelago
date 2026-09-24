@@ -44,11 +44,13 @@ On the game's main menu, choose **Archipelago**. The panel has:
 - **Password**: only if the room has one; leave it empty otherwise.
 - **Archipelago mod**: Enabled keeps randomizer saves in their own folder, apart from your normal saves.
   The main menu shows it as "Archipelago (Enabled)" or "(Disabled)".
-- **Reconnect**, and a line showing the result.
+- **Back**, and a line showing the connection's state.
 
 **While the Archipelago mod is enabled and the address, port and slot are filled in, the mod connects on its
-own**: when the game starts, when you enable it, and after you change a detail. If a connection fails it
-doesn't keep retrying; fix the details or press Reconnect. Disabling it disconnects.
+own**: when the game starts, when you enable it, and after you change a detail. If the room refuses (a wrong
+slot or password), the reason is shown until you change it. If the server can't be reached, or the
+connection drops mid-game, it keeps retrying on its own, waiting a bit longer each time. Disabling it
+disconnects.
 
 Select a row and press confirm to type into it: Backspace deletes, **Ctrl+V pastes**, Ctrl+C copies, Enter
 keeps it, Escape undoes. The same settings are saved in `BepInEx/config/bugfables.archipelago.cfg`.
