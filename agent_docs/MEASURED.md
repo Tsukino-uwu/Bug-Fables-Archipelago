@@ -115,6 +115,10 @@ throttled to changes.
   flag is never wiped, **so a medal pickup is a one-time location**, identified by its flag, once medals are
   in scope. That confirms the rule from the other side: ordinary items use regional flags and respawn,
   medals use global flags and don't.
+- **A two-part door, no item involved:** `flag[33]` on `SnakemouthUndergroundLeftB` (frame 25491), then
+  `flag[34]` on `SnakemouthUndergroundRightB` (38629), then `flag[35]` on `SnakemouthUndergrondDoor`
+  (39302). **The user, on screen:** they did the left side, then the right, and the door opened. So in the
+  logic that door is "both sides done", with no key item.
 - **A second crystal berry:** on `SnakemouthLake`, `crystalbflag[1]` flipped (frame 111883), with no
   tutorial flag this time. The script was `|additemtoss,3,var,0|` with `caller=tempitem`, and `flagvar[0]`
   read 1 (HoneyDrop), **a stale value left from an earlier pickup**. `flagvar[0]` means nothing for crystal
