@@ -296,6 +296,55 @@ namespace BugFablesAP
                 + $"on {MapName()} is a location; showing '{name}'" + (info == null ? " (not scouted yet)" : ""));
         }
 
+        // Pickups that are locations show the seed's item on the ground too, before they're touched (the user,
+        // 2026-09-24: the ground still showed the vanilla medal). Four times a second, for this map's pickup
+        // locations, the ground entity gets the Bug Fables sprite of what's really there, placed the way
+        // EntityControl.UpdateItem places one (EntityControl.cs:3238-3241). The game only redraws an item's sprite
+        // when its id changes (UpdateSprite, :4051), so it holds; this pass re-applies it if anything resets it.
+        // Another game's item keeps the vanilla sprite until the Archipelago icon is in the mod.
+        internal static void TickGround()
+        {
+            if (Time.frameCount % 15 != 0 || connection == null || !randomizerOn())
+            {
+                return;
+            }
+            Dictionary<long, ApConnection.Pickup> pickups = connection.LocationPickups;
+            MapControl map = MainManager.map;
+            if (pickups == null || map == null)
+            {
+                return;
+            }
+            string mapName = map.mapid.ToString();
+            NPCControl[] entities = null;
+            foreach (KeyValuePair<long, ApConnection.Pickup> entry in pickups)
+            {
+                if (entry.Value.Map != mapName)
+                {
+                    continue;
+                }
+                Describe(entry.Key, out _, out Sprite sprite, out _);
+                if (sprite == null)
+                {
+                    continue;
+                }
+                entities = entities ?? map.GetComponentsInChildren<NPCControl>(true);
+                foreach (NPCControl npc in entities)
+                {
+                    EntityControl entity = npc.entity;
+                    if (npc.objecttype != NPCControl.ObjectTypes.Item || npc.activationflag != entry.Value.Flag
+                        || entity == null || entity.sprite == null || entity.sprite.sprite == sprite)
+                    {
+                        continue;
+                    }
+                    entity.sprite.sprite = sprite;
+                    if (entity.spritetransform != null)
+                    {
+                        entity.spritetransform.localPosition = new Vector2(0f, sprite.bounds.extents.y);
+                    }
+                }
+            }
+        }
+
         private static long FindPickup(int flag)
         {
             Dictionary<long, ApConnection.Pickup> pickups = connection.LocationPickups;

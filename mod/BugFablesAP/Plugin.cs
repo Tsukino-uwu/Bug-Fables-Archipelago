@@ -214,6 +214,7 @@ namespace BugFablesAP
             connection.Tick();
             checks.Tick(randomizerEnabled.Value);
             receiver.Tick(randomizerEnabled.Value);
+            ItemSwap.TickGround();
 
             DevCheats.Tick(Log, giveMoney);
             DevConsole.Tick(devConsole.Value);
