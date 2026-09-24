@@ -125,8 +125,16 @@ throttled to changes.
   `caller=Item - Duplicate`, script `|flag,724,true||additemtoss,0,var,0|`, with no regional flag. **So one-time
   pickups are not only medals: the kind of flag decides, not the kind of item.**
 - **Regional flags are also cleared without an area change:** `regionalflag[16]` (set by the second medal)
-  went True -> False on the same map at frame 52352. `MapControl.cs:639` clears regional flags too, probably
-  on map load; not read yet. The medal is unaffected, since its global flag 42 holds.
+  went True -> False on the same map at frame 52352. The medal is unaffected, since its global flag 42
+  holds. **Some maps wipe every regional flag when they load:** `MapControl.cs:635` does it for
+  `SnakemouthTreasureRoom`, and the probe saw four regional flags clear on entering that room (frame 56878).
+- **`items[2]` is storage:** `maxstorage - items[2].Count` (`MainManager.cs:5655`, `:13050`).
+- **The first boss:** `Event26` (`EventControl.cs:4342`) starts the battle (`StartBattle`, enemy id 13) and
+  sets `flags[41]` at its end. It grants no item. `flag[41]` flipped at frame 119806 in
+  `SnakemouthTreasureRoom`. **"Beat the first boss" is flag 41.**
+- **The treasure after the boss** (the user picked it up, 2026-09-24): no key item, no item script and no flag
+  logged at the pickup. The next event, `Event27` (`:4980`), sets `flags[43]`; how the treasure is recorded is
+  still to be measured.
 - **A two-part door, no item involved:** `flag[33]` on `SnakemouthUndergroundLeftB` (frame 25491), then
   `flag[34]` on `SnakemouthUndergroundRightB` (38629), then `flag[35]` on `SnakemouthUndergrondDoor`
   (39302). **The user, on screen:** they did the left side, then the right, and the door opened. So in the
