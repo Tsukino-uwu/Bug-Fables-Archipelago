@@ -51,7 +51,18 @@ namespace BugFablesAP
             harmony = null;
         }
 
-        private static string Label => "Archipelago" + (mode.Value ? " (Enabled)" : " (Disabled)");
+        // "Archipelago" is centred like the other three entries, about as wide as "Start Game", so the game's
+        // leaf cursor (a fixed column per language) stays clear of it. The state is a smaller tag to its right:
+        // a centred "Archipelago (Enabled)" ran under the leaf (the user's screenshot, 2026-09-24).
+        private const string Label = "|center|Archipelago";
+        private static string StateTag => "|size,0.55|" + (mode.Value ? "(Enabled)" : "(Disabled)");
+        private const float StateTagX = 2.45f;
+
+        private static void DrawLabel(Transform line)
+        {
+            MainManager.instance.StartCoroutine(MainManager.SetText(Label, new Vector3(0f, 0f, 10f), line));
+            MainManager.instance.StartCoroutine(MainManager.SetText(StateTag, new Vector3(StateTagX, 0.05f, 10f), line));
+        }
 
         // The game calls SetMenuText again whenever it returns to the main menu, and its own loop indexes a
         // three-label array by selections.Length. With our fourth entry still in the list that read past the end
@@ -90,7 +101,7 @@ namespace BugFablesAP
                 {
                     selections[i].localPosition = new Vector3(0f, -0.5f - i * Spacing, 0f);
                 }
-                MainManager.instance.StartCoroutine(MainManager.SetText("|center|" + Label, new Vector3(0f, 0f, 10f), line));
+                DrawLabel(line);
                 MainManager.instance.maxoptions = selections.Length;
             }
             catch (Exception e)
@@ -105,7 +116,7 @@ namespace BugFablesAP
             if (line != null)
             {
                 MainManager.DestroyText(line);
-                MainManager.instance.StartCoroutine(MainManager.SetText("|center|" + Label, new Vector3(0f, 0f, 10f), line));
+                DrawLabel(line);
             }
         }
 
