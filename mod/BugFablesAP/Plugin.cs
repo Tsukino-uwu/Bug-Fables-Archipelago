@@ -25,6 +25,7 @@ namespace BugFablesAP
         private bool connectRequested;
         private bool scriptDumpDone;
         private ConfigEntry<string> saveDiff;
+        private ConfigEntry<int> giveMoney;
         private bool saveDiffDone;
         private GrantProbe grantProbe;
 
@@ -37,6 +38,8 @@ namespace BugFablesAP
             textProbeEnabled = Config.Bind("Debug", "TextProbe", false,
                 "Dev only. Logs every dialogue script that carries an item command, with the map and calling NPC. "
                 + "Off by default.");
+            giveMoney = Config.Bind("Debug", "GiveMoney", 0,
+                "Dev only. Berries to add once (the game caps at 999), then this resets to 0.");
             saveDiff = Config.Bind("Debug", "SaveDiff", "",
                 "Dev only. Two save file names separated by |, e.g. 'save2backup.dat|save2.dat'. Once per load, logs "
                 + "what changed between them (read-only). Empty = off.");
@@ -114,6 +117,8 @@ namespace BugFablesAP
                 }
             }
             connection.Tick();
+
+            DevCheats.Tick(Log, giveMoney);
 
             if (!saveDiffDone && !string.IsNullOrEmpty(saveDiff.Value))
             {
