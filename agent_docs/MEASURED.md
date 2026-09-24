@@ -115,6 +115,12 @@ throttled to changes.
   flag is never wiped, **so a medal pickup is a one-time location**, identified by its flag, once medals are
   in scope. That confirms the rule from the other side: ordinary items use regional flags and respawn,
   medals use global flags and don't.
+- **A second medal, with BOTH kinds of flag:** on `SnakemouthMushroomPit`, `caller=PoisonResistance`, the
+  script was `|flag,42,true||regionalflag,16,true||additemtoss,2,var,0|`, and `flag[42]` and
+  `regionalflag[16]` flipped in the same frame (47273). The spawn check (`MainManager.cs:7783`) hides an
+  object while its flags *or* its regional flag are set, and the global flag is never wiped. **The rule,
+  refined: a pickup with a global flag is one-time even if it also has a regional one, and the global flag
+  is its location identity.** Not yet checked on screen that it stays gone.
 - **A two-part door, no item involved:** `flag[33]` on `SnakemouthUndergroundLeftB` (frame 25491), then
   `flag[34]` on `SnakemouthUndergroundRightB` (38629), then `flag[35]` on `SnakemouthUndergrondDoor`
   (39302). **The user, on screen:** they did the left side, then the right, and the door opened. So in the
