@@ -147,6 +147,8 @@ namespace BugFablesAP
         // misread a cropped screenshot (-6.3 touched the vine); -5.15 puts the labels at Settings' distance.
         private const float LabelX = -5.15f;
         private const float LeafOffset = -0.1f;
+        // Settings points the leaf's tip at the middle of the label; ours sat ~10 px high (the user's close-ups).
+        private const float LeafRise = 0.15f;
         private const float ValueX = -1.9f;
 
         private void SetTitleVisible(bool visible)
@@ -383,7 +385,7 @@ namespace BugFablesAP
             Text("|center||size,0.7|" + (mode.Value ? "ENABLED" : "DISABLED"), 2.6f, RowY[ModeRow]);
 
             Text("|center||size,0.5|" + Safe(shownStatus), 0f, -3.0f);
-            leaf.transform.localPosition = new Vector3(LabelX + LeafOffset, RowY[row] + 0.3f, 0f);
+            leaf.transform.localPosition = new Vector3(LabelX + LeafOffset, RowY[row] + LeafRise, 0f);
         }
 
         private void Label(int r, string label)
