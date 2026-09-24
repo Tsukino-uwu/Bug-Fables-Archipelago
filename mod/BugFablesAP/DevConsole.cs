@@ -260,10 +260,9 @@ namespace BugFablesAP
         // and the user took it on arrival (2026-09-24).
         private static readonly Vector3 Beside = new Vector3(2.5f, 0.5f, 0f);
 
-        // A spot beside the entity with room for the party: no solid collider where the player would stand, and ground
-        // below. Tries four sides at 2.5, then 1.5; falls back to the entity's own spot (its touch cooldown keeps a
-        // pickup from being taken on arrival).
-        private static Vector3 ClearSpot(Vector3 at)
+        // A spot beside the entity with room for the party: no solid collider where the player would stand, and safe
+        // ground below (not a hazard). Tries four sides at 2.5, then 1.5; null when none is safe.
+        private static Vector3? ClearSpot(Vector3 at)
         {
             Vector3[] sides = { Vector3.right, Vector3.left, Vector3.forward, Vector3.back };
             foreach (float distance in new[] { 2.5f, 1.5f })
@@ -273,14 +272,17 @@ namespace BugFablesAP
                     Vector3 spot = at + side * distance + Vector3.up * 0.5f;
                     bool blocked = Physics.OverlapSphere(spot + Vector3.up * 0.5f, 0.45f, ~0, QueryTriggerInteraction.Ignore)
                         .Any(c => MainManager.player == null || !c.transform.IsChildOf(MainManager.player.transform.root));
-                    bool ground = Physics.Raycast(spot + Vector3.up, Vector3.down, 4f, ~0, QueryTriggerInteraction.Ignore);
+                    // Ground, and not a hazard: water counted as ground and put the party in the lake (the user,
+                    // 2026-09-24). Hazards (water, spikes, pits) carry the game's Hazards component.
+                    bool ground = Physics.Raycast(spot + Vector3.up, Vector3.down, out RaycastHit hit, 4f, ~0, QueryTriggerInteraction.Collide)
+                        && hit.collider.GetComponentInParent<Hazards>() == null && !hit.collider.isTrigger;
                     if (!blocked && ground)
                     {
                         return spot;
                     }
                 }
             }
-            return at + Vector3.up * 0.5f;
+            return null;
         }
 
         // An entity's start position, read from the map's entity table as MapControl.CreateEntities does: fields 6-8
@@ -387,12 +389,26 @@ namespace BugFablesAP
             }
             if (target != null)
             {
-                // Already there when the warp went straight to it; else move beside it now. The pickup's own touch
-                // cooldown (which CheckItem waits out, NPCControl.cs:5608; counted down each frame, :2802) holds it
-                // about 1.5 s either way.
-                // A fixed side can be inside a wall (the user, 2026-09-24, SnakemouthLake): stand on the first side
-                // with room, then the item itself.
-                MainManager.player.transform.position = ClearSpot(target.transform.position);
+                // A fixed side put the party in walls and in the lake (the user, 2026-09-24, SnakemouthLake): stand on
+                // the first side with room and safe ground; if there is none, at the map's save point (standable by
+                // design) and say where the item is from there. The pickup's own touch cooldown (which CheckItem
+                // waits out, NPCControl.cs:5608; counted down each frame, :2802) holds it about 1.5 s.
+                Vector3? spot = ClearSpot(target.transform.position);
+                if (!spot.HasValue)
+                {
+                    NPCControl save = entities.FirstOrDefault(e => e.objecttype == NPCControl.ObjectTypes.SavePoint);
+                    if (save != null && save != target)
+                    {
+                        Vector3 offset = target.transform.position - save.transform.position;
+                        where += $"; no safe spot beside it, so at the save point (the item is {offset.x:+0.0;-0.0} across, "
+                            + $"{offset.z:+0.0;-0.0} deep, {offset.y:+0.0;-0.0} up from here)";
+                        spot = save.transform.position + Vector3.up * 0.5f;
+                    }
+                }
+                if (spot.HasValue)
+                {
+                    MainManager.player.transform.position = spot.Value;
+                }
                 if (target.objecttype == NPCControl.ObjectTypes.Item)
                 {
                     target.touchcooldown = 90f;
