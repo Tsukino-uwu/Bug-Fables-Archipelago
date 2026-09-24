@@ -156,6 +156,11 @@ throttled to changes.
   `flag[34]` on `SnakemouthUndergroundRightB` (38629), then `flag[35]` on `SnakemouthUndergrondDoor`
   (39302). **The user, on screen:** they did the left side, then the right, and the door opened. So in the
   logic that door is "both sides done", with no key item.
+- **A crystal berry given by a character** (for handing over the first artifact, the user's report): on
+  `AntPalace2`, `caller=none`, the script was `…|giveitem,3,5,16,-4|` (type 3 crystal berry, berry **5**, over
+  entity 16), and `crystalbflag[5]` flipped (frame 46414). **Found or given, a crystal berry's identity is its
+  `crystalbflags` index, and a `giveitem,3,<n>` names that index directly**, so the full berry list can come
+  from the dialogue dump plus the code.
 - **A second crystal berry:** on `SnakemouthLake`, `crystalbflag[1]` flipped (frame 111883), with no
   tutorial flag this time. The script was `|additemtoss,3,var,0|` with `caller=tempitem`, and `flagvar[0]`
   read 1 (HoneyDrop), **a stale value left from an earlier pickup**. `flagvar[0]` means nothing for crystal
