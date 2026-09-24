@@ -142,6 +142,13 @@ throttled to changes.
     on entering an area (`MainManager.cs:4083`).
 
   **So the treasure is a story moment, and flag 41 carries it.**
+- **The artifacts are a count of story flags, not items** (the user saw the first one in the pause menu and
+  on the save file, 2026-09-24). `MainManager.SaveProgressIcons()` counts the set flags among
+  **41, 88, 299, 345, 347, 346, 555**, one artifact each (7 in all, `StartMenu.psprite` has 7 icons). The pause
+  menu draws that many (`PauseMenu.cs:2398`). The save stores the count as `LoadData.progression`
+  (`MainManager.cs:17167`, field 15 of its line), and the file select draws that many icons
+  (`StartMenu.cs:789`). **Having an artifact = its flag being set**: usable as checks, or as a "collect N"
+  goal.
 - **The save file's layout, as far as seen:** 18 lines, where line 6 is the three item lists joined by `@`,
   line 10 is `librarystuff` (5 rows), line 11 the 750 `flags`, and line 14 the 100 `regionalflags`. Other
   lines changed with ordinary play (position, stats, counters) and aren't identified yet.
