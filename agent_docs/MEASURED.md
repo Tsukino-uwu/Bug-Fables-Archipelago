@@ -236,6 +236,19 @@ throttled to changes.
   4th line drawn (our own text, not a `menutext` id), and `option == 3` handled in `Update`'s `menuid == 1`
   branch. None of it has been tried yet.
 
+## The quest board (2026-09-24)
+
+- **Flags 1 and 2 are board UI state, not quest progress.** `flag[2]` is set by `OpenQuestBoard`
+  (`MainManager.cs:17827`) and cleared by `ChangeBoardQuest` when a new quest arrives (`:17953`): a "seen"
+  marker. `flag[1]` isn't set in code (a dialogue script sets it, likely the board's first-time talk). Both
+  flipped on `BugariaMainPlaza` (frames 58894 and 59211).
+- **Quests are `MainManager.instance.boardquests`, 3 lists of quest ids** (`MainManager.cs:2219`, allocated
+  `:3576`; the `BoardQuests` enum at `:535`; data from `Data/Dialogues<lang>/BoardQuests`). `ChangeBoardQuest`
+  moves an id into a list (`:17945`), and taking a quest can also set a flag named in its data
+  (`boardquestdata[id, 3]`, `:13906`). **Which list is which is not measured yet.** After the user took
+  several quests: `[0]` = 8,9,10,21,23; `[1]` = 12,1,2,4,33,49,56; `[2]` = 11,0. GrantProbe logs every
+  change, so finishing one quest will show it.
+
 ## Key-item grant sources, raw (2026-09-24) — SPOILERS for the whole game
 
 Two instruments, both read-only. **Code:** `giveitem,1,<id>` literals and `items[1].Add(...)` in the
