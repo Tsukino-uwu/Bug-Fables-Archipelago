@@ -180,3 +180,15 @@ Newest last. What was tried, what happened, what the user said.
 - **Separate saves, checked on disk (2026-09-24):** the user pointed out that normal saves are only reachable with the
   mod disabled. The file times back it up: normal `save2.dat` 03:42 and `save0.dat` 2023, both before this
   session's first launch (03:53), while `archipelago\save0.dat` was written at 05:06 with the mod enabled.
+- **Panel polish, confirmed on screen (2026-09-24):** the leaf placed like the Settings screen and wiggling like
+  the game's cursor ("yee it works now"). The first two placement nudges came from single cropped screenshots and
+  went wrong; the user's side-by-side screenshots of both screens settled it. Vertical alignment came from
+  close-ups. The wiggle is the game's own `SpriteBounce.MessageBounce`, which the panel's leaf never had.
+- **The user ended the session here (2026-09-24).** State: connecting (compressed, ws and wss), sending checks,
+  the item swap at locations, and receiving items all work and were confirmed on screen. The apworld is 0.2.0 with
+  3 locations (permit, favor reward, Artis's medal) and the plushie as a useful item.
+  **Open decision for the user:** when the bag and storage are both full, wait (current) or keep giving key items
+  and hold only ordinary ones (recommended).
+  **Next:** the chat feed (bottom-left, on by default, switch in the panel), then the in-game text client; the
+  Archipelago icon for other games' items (read its licence first); the favor reward's money `giveitem` isn't
+  swapped yet (the transpiler covers items and medals only).
