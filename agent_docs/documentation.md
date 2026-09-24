@@ -27,8 +27,8 @@ server, and items from the server arrive in the game once each.
 4. **Keep the received-item count in the save**, so loading never hands items out twice: works, in a save slot
    the game never uses (`MEASURED.md`, "Free save slots for the mod").
 5. **The chat feed**, then the in-game text client (see the design list in step 2).
-6. **A difficulty setting in the Archipelago panel: Off / Hard / Hardest** (the user, 2026-09-24). Hard and
-   Hardest add the game's two Hard Mode levels; Off leaves it to the game (the medal equipped, or the
+6. **A row "Difficulty: Normal / Hard / Hardest" in the Archipelago panel** (the user, 2026-09-24). Hard and
+   Hardest add the game's two Hard Mode levels; Normal leaves it to the game (the medal equipped, or the
    HARDEST code). Boss prize medals are paid out on every setting (apimplementation.md, "Where it stands").
 
 ## The steps

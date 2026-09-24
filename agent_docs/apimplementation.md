@@ -25,7 +25,7 @@ seed's (the mod guide, step 9).
    its prize as if Hard Mode were on, whatever the player's setting, so a prize can never be skipped and its
    location is simply "beat this boss". The mod does that by widening the Hard Mode test inside the game's
    own `AddPrizeMedal`, never by writing the prize slot itself. **The Archipelago panel gets a
-   difficulty setting, Off / Hard / Hardest,** that only adds a way in: *Hard* acts as if the Hard Mode medal
+   row, "Difficulty: Normal / Hard / Hardest",** that only adds a way in: *Hard* acts as if the Hard Mode medal
    (Artis's, #11) were equipped, *Hardest* as if the save had been started with the HARDEST code (the game's
    two levels, `MEASURED.md`). Equipping the medal or typing the code still works as the game made it, and
    the prize medals are paid out on every setting. Logic never needs either (the user, 2026-09-24). To
