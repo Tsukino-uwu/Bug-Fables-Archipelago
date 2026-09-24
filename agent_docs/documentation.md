@@ -133,8 +133,12 @@ Three things went wrong on the way, each found on screen by the user:
   code only knows three entries; our extra fourth one made it read past the end of its list. Fixed by handing
   the game back its three entries before it rebuilds, and adding ours again afterwards.
 
-**Lesson:** when adding to a game's own screen, find every time the game rebuilds that screen, not just the
-first.
+- **The game's own Settings screen broke**: its leaf cursor no longer lined up. The title screen keeps running
+  underneath Settings, and our fix for the main menu's spacing kept moving whatever cursor was active, which
+  there was the Settings one. Fixed by only touching the cursor while the main menu itself is showing.
+
+**Lesson:** when adding to a game's own screen, find every time the game rebuilds that screen, and everything
+else that keeps running while another screen is on top of it.
 
 The user then asked for it to feel like the game's settings screen, so the mod rebuilds that screen's look
 from the game's own pieces, read from how the pause menu builds it: the same orange box, the controls box
