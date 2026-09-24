@@ -162,11 +162,11 @@ Several things went wrong on the way, each found on screen by the user:
   Start Game (the user noticed). The game rebuilds its menu on the way back, and the rebuild resets the
   cursor to the top. Our panel doesn't rebuild the menu, so it now resets the cursor itself, as the user chose
   to match the game.
-- **The leaf sat far left of the labels**, next to the game's Settings screen (the user's two screenshots). Both
-  screens use the same box, so the pixels compare directly: Settings starts its labels closer to the box edge and
-  keeps the leaf right up against them. The labels moved 0.4 left and the leaf 0.6 closer. That put "Address"
-  on the vine border (the next screenshot), so the labels went back 0.25: screenshots cropped at different sizes
-  only give a rough scale, so each nudge gets a fresh screenshot.
+- **The leaf sat far left of the labels**, next to the game's Settings screen. The first two nudges were
+  measured from single cropped screenshots and went the wrong way ("Address" ended up on the vine border). What
+  worked was the user's **side-by-side screenshots** of both screens: Settings starts its labels ~88 px in from
+  the vine, with the leaf's tip right before them, so the labels moved to that distance with the leaf beside them.
+  **Lesson:** compare against the real thing in one view, not against a number read off another picture.
 - **No sound opening or closing the panel**, where Start Game and Settings have one (the user noticed). The
   game plays "Confirm" for every main-menu choice before acting on it, and our entry takes the press first,
   so it skipped the sound. The mod now plays the same "Confirm" on opening, and "Cancel" on backing out, the

@@ -142,11 +142,10 @@ namespace BugFablesAP
         // Row heights inside the orange box, top to bottom; labels on the left, values on the right, as in the
         // settings screen.
         private static readonly float[] RowY = { 2.6f, 1.75f, 0.9f, 0.05f, -0.8f, -1.65f };
-        // Matched to the game's Settings screen from the user's screenshots (2026-09-24, 1280x720, ~69 px a unit):
-        // there the labels start ~28 px inside the box and the leaf's tip sits ~15 px before a label; ours were
-        // ~55 px and ~58 px. So the labels moved 0.4 left and the leaf 0.6 closer to them. At -6.3 "Address"
-        // touched the vine border (the user's next screenshot), so the labels went back 0.25 right.
-        private const float LabelX = -6.05f;
+        // Matched to the game's Settings screen from the user's side-by-side screenshots (2026-09-24): there the
+        // labels start ~88 px in from the vine border, with the leaf's tip ~15 px before them. Two earlier nudges
+        // misread a cropped screenshot (-6.3 touched the vine); -5.15 puts the labels at Settings' distance.
+        private const float LabelX = -5.15f;
         private const float LeafOffset = -0.1f;
         private const float ValueX = -1.9f;
 
