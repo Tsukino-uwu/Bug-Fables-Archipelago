@@ -142,7 +142,11 @@ namespace BugFablesAP
         // Row heights inside the orange box, top to bottom; labels on the left, values on the right, as in the
         // settings screen.
         private static readonly float[] RowY = { 2.6f, 1.75f, 0.9f, 0.05f, -0.8f, -1.65f };
-        private const float LabelX = -5.9f;
+        // Matched to the game's Settings screen from the user's screenshots (2026-09-24, 1280x720, ~69 px a unit):
+        // there the labels start ~28 px inside the box and the leaf's tip sits ~15 px before a label; ours were
+        // ~55 px and ~58 px. So the labels moved 0.4 left and the leaf 0.6 closer to them.
+        private const float LabelX = -6.3f;
+        private const float LeafOffset = -0.1f;
         private const float ValueX = -1.9f;
 
         private void SetTitleVisible(bool visible)
@@ -379,7 +383,7 @@ namespace BugFablesAP
             Text("|center||size,0.7|" + (mode.Value ? "ENABLED" : "DISABLED"), 2.6f, RowY[ModeRow]);
 
             Text("|center||size,0.5|" + Safe(shownStatus), 0f, -3.0f);
-            leaf.transform.localPosition = new Vector3(LabelX - 0.7f, RowY[row] + 0.3f, 0f);
+            leaf.transform.localPosition = new Vector3(LabelX + LeafOffset, RowY[row] + 0.3f, 0f);
         }
 
         private void Label(int r, string label)

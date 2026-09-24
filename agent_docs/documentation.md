@@ -162,6 +162,9 @@ Several things went wrong on the way, each found on screen by the user:
   Start Game (the user noticed). The game rebuilds its menu on the way back, and the rebuild resets the
   cursor to the top. Our panel doesn't rebuild the menu, so it now resets the cursor itself, as the user chose
   to match the game.
+- **The leaf sat far left of the labels**, next to the game's Settings screen (the user's two screenshots). Both
+  screens use the same box, so the pixels compare directly: Settings starts its labels closer to the box edge and
+  keeps the leaf right up against them. The labels moved 0.4 left and the leaf 0.6 closer.
 - **No sound opening or closing the panel**, where Start Game and Settings have one (the user noticed). The
   game plays "Confirm" for every main-menu choice before acting on it, and our entry takes the press first,
   so it skipped the sound. The mod now plays the same "Confirm" on opening, and "Cancel" on backing out, the
