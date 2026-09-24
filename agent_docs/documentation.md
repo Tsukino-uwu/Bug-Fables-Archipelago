@@ -31,6 +31,9 @@ server, and items from the server arrive in the game once each.
    Hardest add the game's two Hard Mode levels; Normal leaves it to the game (the medal equipped, or the
    HARDEST code). **Default: Normal.** Boss prize medals are paid out on every setting (apimplementation.md,
    "Where it stands").
+   **Every panel setting applies only while Archipelago is enabled** (the user, 2026-09-24): vanilla saves play
+   exactly as vanilla. Difficulty, Detector and every item swap check the switch; a Hardest flag the mod set is
+   cleared the moment it's switched off.
 7. **A row "Detector: On / Off" in the Archipelago panel** (the user, 2026-09-24), a help for finding items.
    On acts as if the Detector medal (#2) were equipped; Off leaves it to the game (the medal equipped or not).
    **Default: On.**

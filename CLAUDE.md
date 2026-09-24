@@ -28,6 +28,8 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
 - **Randomizer saves are separate files** (decided 2026-09-24). With the randomizer on (a main-menu toggle),
   the game reads and writes its own save files in a separate folder. Normal saves and Steam Cloud's copies
   are never written. This must exist before the mod grants its first item.
+- **Vanilla stays vanilla** (the user, 2026-09-24). Everything the mod does, every panel setting (Difficulty,
+  Detector, any future one) included, applies only while Archipelago is enabled. Gate each new effect on it.
 - **Never corrupt a save.** The mod writes game state only through the game's own functions (its give-item
   path, its flag setters). No raw writes into save data, and no new save format.
 - **The received-item count lives in the save**, next to the items it produced. A fresh save starts at 0 and
