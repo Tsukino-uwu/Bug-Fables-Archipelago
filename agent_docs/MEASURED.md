@@ -413,6 +413,11 @@ The output stays in the BepInEx folder.
   hadn't entered the inside the way its door does. **An entity's `insideid` (field 178, `MapControl.cs:1609`)
   says which inside it's in; -1 is outdoors.** EntityDump now writes it. An indoor pickup is gated by its
   inside's door (`DoorSameMap`), not only by its map.
+- **Houses outside the city** (`BugariaOutskirtsOutsideCity`, 2026-09-24): the ladybug siblings' house
+  (`DoorLadybug`, inside 1) has no gate flags; the user found its Mistake (flag 679) after the first boss and
+  remembers it locked earlier (to check on an earlier save). The other house (`doormadeleine`, inside 2, with a
+  Lore Book and Burly Tea) needs flag 390, set by dialogue on `Swamplands8` line 4; a `lockeddoor` character
+  stands there until then.
 - **Doors:** 567 `DoorOtherMap` entities, 59 of them with required or hiding flags. Those are the map graph
   and its story gates, for the regions.
 - **Not in this dump:** the one key item and one medal without an `activationflag` still need judging.
