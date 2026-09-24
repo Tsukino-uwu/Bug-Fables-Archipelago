@@ -244,3 +244,11 @@ class TestGoldenPath(BugFablesTestBase):
         state.collect(BugFablesItem("Snakemouth Den Cleared", ItemClassification.progression, None, self.player),
                       prevent_sweep=True)
         self.assertTrue(location.can_reach(state))
+
+
+class TestKeptOpen(BugFablesTestBase):
+    # Eetl's blocker closes the way back to Snakemouth Den after the first boss; the logic assumes the den stays
+    # reachable, so the client must be told to keep it out of the way.
+    def test_eetls_blocker_is_kept_open(self) -> None:
+        kept = self.world.fill_slot_data()["kept_open"]
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "eetlblocker1 - Duplicate"}, kept)

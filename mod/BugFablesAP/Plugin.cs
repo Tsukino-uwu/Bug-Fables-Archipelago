@@ -118,6 +118,7 @@ namespace BugFablesAP
             SaveRedirect.On = randomizerEnabled.Value;
             SaveRedirect.Enable(Log, Guid);
             ItemSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
+            KeptOpen.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             // The panel's Difficulty and Detector rows (the user, 2026-09-24): defaults Normal and On.
             difficulty = Config.Bind("Archipelago", "Difficulty", "Normal", new ConfigDescription(
                 "Normal leaves it to the game; Hard acts as if the Hard Mode medal were equipped; Hardest as if the save had "
@@ -297,6 +298,7 @@ namespace BugFablesAP
             WebSocketCompression.Disable();
             ItemSwap.Disable();
             MedalAssist.Disable();
+            KeptOpen.Disable();
             // ScriptEngine destroys the old instance on reload. Say so, so a reload shows up in the log.
             Log?.LogInfo($"{Name} {Version} unloaded.");
         }

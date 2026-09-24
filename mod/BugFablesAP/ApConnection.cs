@@ -269,6 +269,26 @@ namespace BugFablesAP
             return result;
         }
 
+        // slot_data's kept_open: blockers the story puts up for a while that the seed keeps out of the way, so an area
+        // with locations never closes ([{map, entity}], KeptOpen). Null when the world didn't send it.
+        internal List<Blocker> KeptOpen => keptOpen;
+        private volatile List<Blocker> keptOpen;
+
+        internal sealed class Blocker
+        {
+            internal string Map;
+            internal string Entity;
+        }
+
+        private static List<Blocker> ReadKeptOpen(Dictionary<string, object> slotData)
+        {
+            if (slotData == null || !slotData.TryGetValue("kept_open", out object raw) || !(raw is JArray list))
+            {
+                return null;
+            }
+            return list.Select(e => new Blocker { Map = e.Value<string>("map"), Entity = e.Value<string>("entity") }).ToList();
+        }
+
         // What the seed put at each of this slot's locations, asked once per login without creating hints
         // (HintCreationPolicy.None: a hint-creating scout would announce the seed). Null until it arrives.
         internal Dictionary<long, ScoutedItemInfo> Scouts => scouts;
@@ -404,6 +424,7 @@ namespace BugFablesAP
                     locationFlags = ReadLocationFlags(ok.SlotData);
                     locationGives = ReadLocationGives(ok.SlotData);
                     locationPickups = ReadLocationPickups(ok.SlotData);
+                    keptOpen = ReadKeptOpen(ok.SlotData);
                     ownSlot = ok.Slot;
                     itemKinds = ReadItemKinds(ok.SlotData);
                     scouts = null;

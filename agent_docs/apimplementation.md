@@ -45,7 +45,12 @@ seed's (the mod guide, step 9).
    **Areas and doors that close later are kept open** (the user, 2026-09-24), as Pokémon Emerald keeps Mirage
    Island visible: the mod makes the game's `CheckIfCanExist` answer "exists" for a list of doors and blockers
    sent in `slot_data`, decided at generation, with no save writes. Each is checked in game first; where forcing
-   one open breaks the story state, its locations are left out instead. Day/night map pairs are made reachable
+   one open breaks the story state, its locations are left out instead. **First case, built 2026-09-24:** after the
+   first boss, Eetl turns you back outside the city (`eetlblocker1 - Duplicate`, Event12, until chapter 2's flag
+   67), closing the way back to Snakemouth Den (the user). Event12 only walks the player and sets no flags, so it's
+   safe to remove. `locations.json` lists it under `kept_open`, `slot_data` carries it, and the mod's `KeptOpen`
+   gives that entity a marker `limit` array after the map creates it, which its prefix on `CheckIfCanExist`
+   answers with "hide" (test `TestKeptOpen`). Not yet seen in game. Day/night map pairs are made reachable
    both ways (like Emerald's Shoal Cave tides). One-way drops stay as they are: the logic handles one-way
    connections.
 4. **A full bag:** key items keep arriving, only ordinary items wait.
