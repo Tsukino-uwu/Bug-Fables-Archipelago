@@ -58,6 +58,21 @@ Newest last. What was tried, what happened, what the user said.
   dragging the window, starts a Windows QuickEdit selection. The game then waits on its next console write
   until Enter or Esc. The user turned QuickEdit off in the console's Properties. The same cause explains
   an earlier freeze seen in another BepInEx game.
+- **The main menu and the Archipelago panel, confirmed on screen by the user (2026-09-24).** How it got there,
+  all from the user's screenshots:
+  - A fourth line overlapped the credits: tightened the spacing and moved the cursor to match.
+  - The panel was drawn behind the logo: hid the title screen, then rebuilt the panel from the Settings
+    screen's own pieces, hung off the GUI camera like PauseMenu, with its dimmer.
+  - Backing out crashed (`SetMenuText` indexes three labels): hand the game back three entries before each
+    rebuild.
+  - The Settings leaf broke (the title screen keeps updating under it): touch the cursor only while the main
+    menu itself shows.
+  - The gamepad couldn't leave a text field: `joykeys` are raw buttons, so A/B are `joykeys[0]/[1]`, not
+    `[4]/[5]` (the user saw Start work).
+  - A long centred "Archipelago (Enabled)" ran under the leaf: "Archipelago" centred like the others, the state
+    as a small tag to its right, placed by measuring the screenshot (1 unit ≈ 69 px at 1280×720).
+  **Reach first next time:** the game's own screen code for positions and draw orders, and a screenshot per
+  change.
 - **Next:** read the TextProbe output from the user's play: which dialogue script carries each item
   command, and whether a key item's grant and its completion flag (15 for the first one) sit in the same
   script. That decides how locations are identified.
