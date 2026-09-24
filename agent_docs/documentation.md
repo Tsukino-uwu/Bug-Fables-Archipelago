@@ -360,6 +360,11 @@ changes, so the swap holds. Another game's item keeps the vanilla look until the
 **Confirmed by the user (2026-09-24, screenshots):** the Snakemouth medal pickup lay on the ground as the G-Bug
 Ranger Plushie, and picking it up showed the Plushie too.
 
+**Berries** (2026-09-24): the game's berry reward is the same `giveitem` command, but its money branch never reaches
+the calls the swap replaces. So at a berry location the mod rewrites the command, just before the text runs, into
+a hand-over of an ordinary item it then swaps as usual (`BerryPrefix`), and received berries go through the game's
+own money reward. The berry sprite follows the game's own choice by amount. Built, not yet seen in game.
+
 **Story pickups have no flag of their own** (2026-09-24): a pickup the story makes appear and hides for good (the
 trapdoor Mushroom) carries no "taken" flag. A first try knew it by its entity name, but the new event log
 (`[event]` lines, from the dev console) showed the scene creates its own copy (`tempitem`), so the mod knows it by

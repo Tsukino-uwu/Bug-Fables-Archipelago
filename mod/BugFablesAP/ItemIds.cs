@@ -9,10 +9,19 @@ namespace BugFablesAP
         internal const int MedalOffset = 1_000;
         internal const int KeyItemKind = 1;
         internal const int MedalKind = 2;
+        // Berries (money): handed out by the same giveitem as items, type -1; as an item, the game id is the amount.
+        internal const int MoneyOffset = 2_000;
+        internal const int MoneyKind = 3;
 
         internal static int GameId(long itemId, int kind)
         {
-            return (int)(itemId - Base - (kind == MedalKind ? MedalOffset : 0));
+            return (int)(itemId - Base - (kind == MedalKind ? MedalOffset : kind == MoneyKind ? MoneyOffset : 0));
+        }
+
+        // The berry sprite the game's own giveitem shows for an amount (MainManager.cs:11506).
+        internal static UnityEngine.Sprite BerrySprite(int amount)
+        {
+            return MainManager.itemsprites[0, amount >= 20 ? 186 : amount < 5 ? 6 : 7];
         }
     }
 }

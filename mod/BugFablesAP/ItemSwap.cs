@@ -74,6 +74,7 @@ namespace BugFablesAP
             // |flag,<activationflag>,true||additemtoss,<kind>,var,0|. A prefix sees that text before it runs.
             descWindowField = AccessTools.Field(typeof(NPCControl), "descwindow");
             harmony.Patch(setText, prefix: new HarmonyMethod(typeof(ItemSwap), nameof(PickupPrefix)));
+            harmony.Patch(setText, prefix: new HarmonyMethod(typeof(ItemSwap), nameof(BerryPrefix)));
         }
 
         internal static void Disable()
@@ -221,8 +222,9 @@ namespace BugFablesAP
                 int kind = KindOf(info);
                 int gameId = ItemIds.GameId(info.ItemId, kind);
                 bool medal = kind == ItemIds.MedalKind;
-                sprite = MainManager.GetItemSprite(medal, gameId);
-                name = medal ? MainManager.GetBadgeName(gameId) : MainManager.itemdata[0, gameId, 0];
+                bool money = kind == ItemIds.MoneyKind;
+                sprite = money ? ItemIds.BerrySprite(gameId) : MainManager.GetItemSprite(medal, gameId);
+                name = money ? gameId + " Berries" : medal ? MainManager.GetBadgeName(gameId) : MainManager.itemdata[0, gameId, 0];
                 if (info.Player.Slot != connection.OwnSlot)
                 {
                     name = info.Player.Name + "'s " + name;
@@ -356,6 +358,36 @@ namespace BugFablesAP
             return npc.activationflag >= 0 && npc.activationflag == pickup.Flag;
         }
 
+        // Berry rewards: |giveitem,-1,<amount>,...| is the same command as an item's, but its money branch never
+        // reaches the calls the Giveitem stand-ins replace. So at a berry location the text is turned, just before it
+        // runs, into a hand-over of item 0 (Crunchy Leaf) marked as that location; the stand-ins then show what's really
+        // there and keep the Crunchy Leaf out, as for any gift. The line's other commands are untouched.
+        private static long pendingBerries = -1;
+
+        public static void BerryPrefix(ref string text)
+        {
+            Dictionary<long, ApConnection.Give> gives = connection?.LocationGives;
+            string map = MapName();
+            if (text == null || gives == null || map == null || randomizerOn == null || !randomizerOn() || !text.Contains("|giveitem,-1,"))
+            {
+                return;
+            }
+            foreach (KeyValuePair<long, ApConnection.Give> entry in gives)
+            {
+                ApConnection.Give give = entry.Value;
+                string token = "|giveitem,-1," + give.Item + ",";
+                int at = text.IndexOf(token, StringComparison.Ordinal);
+                if (give.Type != -1 || give.Map != map || at < 0)
+                {
+                    continue;
+                }
+                text = text.Substring(0, at) + "|giveitem,0,0," + text.Substring(at + token.Length);
+                pendingBerries = entry.Key;
+                log.LogInfo($"[swap] location {entry.Key}: berry reward ({give.Item}) on {map} turned into a hand-over to swap");
+                return;
+            }
+        }
+
         private static long FindPickup(NPCControl caller)
         {
             Dictionary<long, ApConnection.Pickup> pickups = connection.LocationPickups;
@@ -426,9 +458,9 @@ namespace BugFablesAP
         // type 2 reads badgedata, anything else itemdata). Another game's item, or one not scouted yet, gets none.
         private static void ShowOwnDescription(NPCControl caller, ScoutedItemInfo info)
         {
-            if (info == null || !IsOurs(info))
+            if (info == null || !IsOurs(info) || KindOf(info) == ItemIds.MoneyKind)
             {
-                return;
+                return; // berries have no description box, as in the game's own money giveitem
             }
             int kind = KindOf(info);
             bool medal = kind == ItemIds.MedalKind;
@@ -460,6 +492,13 @@ namespace BugFablesAP
             if (!randomizerOn() || gives == null || map == null)
             {
                 return -1;
+            }
+            // A berry reward turned into a hand-over of item 0 (BerryPrefix) is that location's.
+            if (pendingBerries >= 0 && !badge && id == 0)
+            {
+                long berries = pendingBerries;
+                pendingBerries = -1;
+                return berries;
             }
             foreach (KeyValuePair<long, ApConnection.Give> entry in gives)
             {

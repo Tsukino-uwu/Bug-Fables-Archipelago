@@ -138,6 +138,13 @@ namespace BugFablesAP
                 mm.items[1].Add(gameId);
                 return "added to key items";
             }
+            if (kind == ItemIds.MoneyKind)
+            {
+                // The game's own money reward: added, capped at 999, the counter shown (MainManager.cs:11534).
+                mm.showmoney = 1f;
+                mm.money = UnityEngine.Mathf.Clamp(mm.money + gameId, 0, 999);
+                return $"added {gameId} berries (now {mm.money})";
+            }
             if (kind == ItemIds.MedalKind)
             {
                 // The game's own medal add: unequipped, like any medal found (MainManager.cs:16974).

@@ -39,10 +39,14 @@ KEPT_OPEN: list[dict[str, Any]] = _LOCATION_DATA.get("kept_open", [])
 # Medal ids (MainManager.BadgeTypes) overlap item ids (MainManager.Items), so medals get their own range.
 MEDAL_KIND = 2
 MEDAL_ID_OFFSET = 1_000
+# Berries (money) are handed out by the same giveitem, type -1; as items their game_id is the amount.
+MONEY_KIND = 3
+MONEY_ID_OFFSET = 2_000
 
 
 def item_id(item: dict[str, Any]) -> int:
-    return ITEM_ID_BASE + (MEDAL_ID_OFFSET if item["kind"] == MEDAL_KIND else 0) + item["game_id"]
+    offset = {MEDAL_KIND: MEDAL_ID_OFFSET, MONEY_KIND: MONEY_ID_OFFSET}.get(item["kind"], 0)
+    return ITEM_ID_BASE + offset + item["game_id"]
 
 
 ITEM_NAME_TO_ID: dict[str, int] = {item["name"]: item_id(item) for item in ITEMS}
@@ -55,12 +59,13 @@ if len(set(LOCATION_NAME_TO_ID.values())) != len(LOCATIONS):
 
 
 def vanilla_item(location: dict[str, Any]) -> str | None:
-    """The name of the item the game hands out at a location (its give or pickup), or None (money, or unknown)."""
+    """The name of the item the game hands out at a location (its give or pickup; berries as "N Berries"), or None."""
     source = location["source"].get("give") or location["source"].get("pickup")
     if source is None:
         return None
+    kind = MONEY_KIND if source["type"] == -1 else source["type"]
     for item in ITEMS:
-        if item["kind"] == source["type"] and item["game_id"] == source["item"]:
+        if item["kind"] == kind and item["game_id"] == source["item"]:
             return item["name"]
     return None
 

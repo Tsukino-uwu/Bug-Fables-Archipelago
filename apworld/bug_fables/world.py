@@ -118,15 +118,11 @@ class BugFablesWorld(World):
         return BugFablesItem(name, _CLASSIFICATIONS[data["classification"]], ITEM_NAME_TO_ID[name], self.player)
 
     def create_items(self) -> None:
-        # Each location's own vanilla item (so an item found at two spots is in the pool twice), then one of every
-        # other item that isn't padding, then padding for the locations left.
-        # An item whose vanilla spot is a location this seed leaves out (quests off) stays out too: the game hands
-        # it out there as usual.
+        # Exactly the included locations' own vanilla items (an item found at two spots is in the pool twice), then
+        # padding for any location without one. An item whose vanilla spot isn't a location in this seed (quests
+        # off, or not added yet) isn't in the pool: the game hands it out there as usual.
         pool: list[Item] = [self.create_item(name) for name in
                             (vanilla_item(loc) for loc in self.included_locations) if name is not None]
-        has_a_location = {vanilla_item(loc) for loc in LOCATIONS} - {None}
-        pool += [self.create_item(item["name"]) for item in ITEMS
-                 if not item.get("padding") and item["name"] not in has_a_location]
         unfilled = len(self.multiworld.get_unfilled_locations(self.player))
         pool += [self.create_filler() for _ in range(unfilled - len(pool))]
         self.multiworld.itempool += pool

@@ -19,10 +19,12 @@ class TestPermitGate(BugFablesTestBase):
         self.assertTrue(self.can_reach_location("Outskirts: Favor Reward"))
         self.assertTrue(self.can_reach_location("Outskirts: Artis's Gift"))
 
-    def test_every_non_filler_item_is_in_the_pool(self) -> None:
+    def test_pool_is_the_locations_items(self) -> None:
+        # The permit's vanilla spot is a location, so it's in the pool; the plushie's (the theater) isn't yet, so
+        # the game hands it out there and it stays out of the pool.
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         self.assertIn("Explorer Permit", pool)
-        self.assertIn("G-Bug Ranger Plushie", pool)
+        self.assertNotIn("G-Bug Ranger Plushie", pool)
 
     def test_pool_matches_locations(self) -> None:
         pool = [item for item in self.multiworld.itempool if item.player == self.player]
@@ -350,3 +352,20 @@ class TestClassifications(BugFablesTestBase):
                     self.assertEqual(item["classification"], "progression")
                 else:
                     self.assertNotEqual(item["classification"], "progression")
+
+
+class TestBerries(BugFablesTestBase):
+    # Berry rewards are locations and berries are items (the user, 2026-09-24): each berry reward puts its own
+    # amount in the pool, so a seed holds as much money as the game gives out.
+    def test_favor_reward_puts_its_berries_in_the_pool(self) -> None:
+        pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        self.assertIn("30 Berries", pool)
+        gives = self.world.fill_slot_data()["location_gives"]
+        favor = str(self.world.location_name_to_id["Outskirts: Favor Reward"])
+        self.assertEqual(gives[favor], {"map": "BugariaOutskirtsOutsideCity", "type": -1, "item": 30})
+
+    def test_berries_have_their_own_ids(self) -> None:
+        from ..data_tables import ITEM_ID_BASE, MONEY_ID_OFFSET
+        self.assertEqual(self.world.item_name_to_id["30 Berries"], ITEM_ID_BASE + MONEY_ID_OFFSET + 30)
+        kinds = self.world.fill_slot_data()["item_kinds"]
+        self.assertEqual(kinds[str(self.world.item_name_to_id["30 Berries"])], 3)

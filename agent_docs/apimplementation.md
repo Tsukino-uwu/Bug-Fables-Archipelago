@@ -10,7 +10,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 
 ## Where it stands
 
-**Done so far:** a small apworld (16 locations, 14 items) that generates seeds and passes its tests, with the
+**Done so far:** a small apworld (17 locations, 16 items) that generates seeds and passes its tests, with the
 goal "collect N artifacts"; the mod connecting on its own, compressed, to a local server or a hosted room on
 archipelago.gg, retrying when the server is unreachable or drops; sending checks (build step 6); receiving
 items, with the count kept in the save (build step 7); and the game's own item at a location swapped for the
@@ -509,6 +509,13 @@ Lore Book (category quest; the user played it through). **Mid-quest items are sh
 reward (*Old Book Delivery Reward*, flag 243) requires it (test `TestMidQuestItem`). With Shuffle Quests off the
 whole quest stays vanilla together. Still to see in game: that the recipient accepts a Quest Book received from
 the server.
+**Berries are shuffled like items** (the user, 2026-09-24): a berry reward is the same `giveitem` as an item, type
+-1, so it's a location, and its amount goes into the pool as an item such as *30 Berries* (kind 3, its own id range;
+filler). Two checks can share one flag: the delivery quest pays 15 berries and a Lore Book at flag 243, so both
+are locations and are sent together. In the mod, receiving berries uses the game's own money reward (capped at
+999); at a berry location the command is turned, just before it runs, into a hand-over the item swap already
+handles (`BerryPrefix`). **The pool is now exactly the included locations' vanilla items** plus padding: an item
+whose vanilla spot isn't a location (the Plushie at the theater) stays with the game (test `TestBerries`).
 **Optional categories** (the user, 2026-09-24): a location can carry a `category`; its yaml option decides whether
 the seed includes it. *Shuffle Quests* (on by default) covers quest-board and side-quest rewards; one-off NPC gifts
 will have their own toggle. With a category off, its locations aren't created, their vanilla items stay out of the

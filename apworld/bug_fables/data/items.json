@@ -1,5 +1,5 @@
 {
-  "_comment": "Items this world can place. game_id is the MainManager.Items ordinal (enum starts at None = -1), and kind is where it goes: 0 = ordinary items, 1 = key items, 2 = medals (then game_id is the medal id, MainManager.BadgeTypes). The Archipelago id is ITEM_ID_BASE + game_id, plus MEDAL_ID_OFFSET for a medal, since medal ids overlap item ids. padding marks the filler used to fill leftover locations, in any number; every other item is in the pool once. Measured facts are in agent_docs/MEASURED.md.",
+  "_comment": "Items this world can place. game_id is the MainManager.Items ordinal (enum starts at None = -1), and kind is where it goes: 0 = ordinary items, 1 = key items, 2 = medals (then game_id is the medal id, MainManager.BadgeTypes), 3 = berries (money; game_id is the amount). The Archipelago id is ITEM_ID_BASE + game_id, plus MEDAL_ID_OFFSET for a medal (medal ids overlap item ids) or MONEY_ID_OFFSET for berries. padding marks the filler used to fill leftover locations, in any number; every other item is in the pool once. Measured facts are in agent_docs/MEASURED.md.",
   "items": [
     {"name": "Explorer Permit", "game_id": 27, "kind": 1, "classification": "progression"},
     {"name": "G-Bug Ranger Plushie", "game_id": 25, "kind": 1, "classification": "useful"},
@@ -14,6 +14,8 @@
     {"name": "Spicy Berry", "game_id": 2, "kind": 0, "classification": "filler"},
     {"name": "Quick Flea", "game_id": 5, "kind": 2, "classification": "useful"},
     {"name": "Mistake", "game_id": 8, "kind": 0, "classification": "filler"},
-    {"name": "Quest Book", "game_id": 93, "kind": 1, "classification": "progression"}
+    {"name": "Quest Book", "game_id": 93, "kind": 1, "classification": "progression"},
+    {"name": "30 Berries", "game_id": 30, "kind": 3, "classification": "filler"},
+    {"name": "15 Berries", "game_id": 15, "kind": 3, "classification": "filler"}
   ]
 }
