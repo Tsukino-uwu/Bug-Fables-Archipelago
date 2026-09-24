@@ -66,7 +66,9 @@ namespace BugFablesAP
                 + "saves. Switch it with 'Archipelago: On/Off' on the main menu.");
             SaveRedirect.On = randomizerEnabled.Value;
             SaveRedirect.Enable(Log, Guid);
-            MenuToggle.Enable(Log, Guid, randomizerEnabled);
+            MenuToggle.Enable(Log, Guid, randomizerEnabled, server, slot, password,
+                () => connection.Connect(server.Value, slot.Value, password.Value),
+                () => connection.Status);
             Log.LogInfo($"{Name} {Version} loaded. GrantProbe={grantProbeEnabled.Value} TextProbe={textProbeEnabled.Value}");
         }
 

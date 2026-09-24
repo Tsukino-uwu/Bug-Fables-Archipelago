@@ -11,14 +11,13 @@ anyone curious about the process, or thinking of doing the same for another game
 ## Where it stands
 
 **Done so far:** the mod loads through BepInEx, reloads itself while the game runs, watches the game with
-read-only probes, and has a full list of where key items come from.
+read-only probes, and has a full list of where key items come from. The main menu has an Archipelago panel
+for connecting, and randomizer saves are kept in their own folder.
 
 **Next:**
 
-1. **Keep randomizer saves separate**, with an on/off toggle on the main menu, so normal saves (and Steam
-   Cloud) are never touched. This comes before anything is given to the player. *Built 2026-09-24, being
-   tested in the game:* the game's save code was read to find every place a save file is touched (five
-   methods), and the mod redirects those to an `archipelago` folder while the toggle is on.
+1. **Test separate randomizer saves on screen**: save a game with Archipelago mode on, check the normal saves
+   are untouched. The redirect covers all five places the game touches a save file.
 2. **Give an item the game's own way**, when the server sends one.
 3. **Spot a location being done** (the flag the game sets) and report it, instead of giving the item.
 4. **Keep the received-item count in the save**, so loading never hands items out twice.
@@ -32,6 +31,7 @@ read-only probes, and has a full list of where key items come from.
 5. [Make changes load without restarting the game](#5-make-changes-load-without-restarting-the-game)
 6. [Watch the game while you play ("probing")](#6-watch-the-game-while-you-play-probing)
 7. [List everything, without playing everything](#7-list-everything-without-playing-everything)
+8. [An Archipelago menu inside the game](#8-an-archipelago-menu-inside-the-game)
 
 ## Keeping this guide honest
 
@@ -114,3 +114,25 @@ never leaves it), and lists which values changed. It's read-only and never write
 Playing the whole game to find every item would take days, so we also asked the running game directly:
 a one-off dump loaded every map's dialogue data and kept only the item and flag commands. Together with
 the code, that gave a full list of where key items come from, raw material for the apworld.
+
+## 8. An Archipelago menu inside the game
+
+Players need to type a room address, a slot name and maybe a password, so the mod adds **"Archipelago"** to the
+game's main menu. It opens a panel drawn with the game's own box and font, so it looks like part of the game,
+but it takes real typing: the game itself never reads typed text (its name screen is a letter grid), so the
+mod reads the keyboard itself. Backspace, Ctrl+V to paste and Ctrl+C to copy all work. The same panel switches
+**Archipelago mode**, which keeps randomizer saves in their own folder so normal saves are never touched.
+
+Three things went wrong on the way, each found on screen by the user:
+
+- **A fourth menu line landed on top of the credits.** Fixed by spacing the four lines a little tighter and
+  moving the game's cursor to match.
+- **The panel was drawn behind the logo**, with the main menu showing through it. Fixed by drawing it in front
+  and hiding the title screen while it's open, as the game does for its own file select.
+- **Backing out crashed the menu.** The game rebuilds its main menu every time you return to it, and its own
+  code only knows three entries; our extra fourth one made it read past the end of its list. Fixed by handing
+  the game back its three entries before it rebuilds, and adding ours again afterwards.
+
+**Lesson:** when adding to a game's own screen, find every time the game rebuilds that screen, not just the
+first.
+

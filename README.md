@@ -34,15 +34,17 @@ You need your own copy of the game. Nothing from the game is included in this re
 
 ## Connecting
 
-Connection settings live in `BepInEx/config/bugfables.archipelago.cfg`, which the mod creates on its first
-run:
+On the game's main menu, choose **Archipelago**. The panel has:
 
-| Setting | What to put |
-|---|---|
-| `Server` | The room's address and port, e.g. `archipelago.gg:38281`. A server on your own computer needs `ws://` in front: `ws://127.0.0.1:38281` (the default). |
-| `Slot` | Your slot name in the room |
-| `Password` | The room password, if it has one |
-| `ConnectOnStart` | `true` to connect when the game starts |
+- **Address**: the room's address and port, e.g. `archipelago.gg:38281`. A server on your own computer needs
+  `ws://` in front: `ws://127.0.0.1:38281`.
+- **Slot**: your slot name in the room.
+- **Password**: only if the room has one; leave it empty otherwise.
+- **Archipelago mode**: On keeps randomizer saves in their own folder, apart from your normal saves.
+- **Connect**, and a line showing the result.
+
+Select a row and press confirm to type into it: Backspace deletes, **Ctrl+V pastes**, Ctrl+C copies, Enter
+keeps it, Escape undoes. The same settings are saved in `BepInEx/config/bugfables.archipelago.cfg`.
 
 ## Building from source
 
