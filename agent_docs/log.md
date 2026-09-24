@@ -338,3 +338,8 @@ Newest last. What was tried, what happened, what the user said.
   where Leif never joined: test such events on a file where he joined through the story.
 - **Decided (the user):** vanilla story now; an "open start" yaml option next (skip prologue/tutorial, optional
   Leif from the start via the new-game party); no full story strip.
+- **Getting Leif onto a warped test file, three attempts, then stopped** (2026-09-24): ChangeParty (no
+  character, RefreshPlayer threw each tick); plus SetPlayers (threw, camera stuck); the game's own Event14 via
+  `warp SnakemouthLake @MothEvent` (ArgumentOutOfRange: it expects Leif already following from the spider fight,
+  flags 14/27). Leif's joining is a chain; a file that skipped part of it can't enter the middle. The untried
+  combination: a fresh file played through the chain normally. Added `warp <map> @<name>`.

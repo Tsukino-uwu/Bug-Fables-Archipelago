@@ -13,8 +13,8 @@ namespace BugFablesAP
     //
     //   loc <n>                 go to location n's map and stand by its pickup (n = the apworld's location id,
     //                           e.g. 5, or the full 77200xx); a taken pickup's flag is cleared first so it's back
-    //   warp <map> [flag]       go to a map (MainManager.Maps name or number); with a flag, stand by the entity
-    //                           whose activationflag it is
+    //   warp <map> [flag|@name] go to a map (MainManager.Maps name or number); with a flag, stand by the entity
+    //                           whose activationflag it is; with @name, beside the entity of that name
     //   spawn <item|key|medal> <id> [flag]   drop a pickup next to you; with a location's flag, it is that location
     //   flag <n> [on|off]       show or set flags[n]
     //   unstick                 run the game's end-of-event cleanup, when a cutscene died and left you frozen
@@ -295,9 +295,19 @@ namespace BugFablesAP
             MainManager.Maps map = int.TryParse(parts[1], out int number)
                 ? (MainManager.Maps)number
                 : (MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), parts[1], true);
+            // warp <map> @<name>: stand beside the entity with that name (a trigger has no flag of its own). Arrives at
+            // the map's own spot first and steps beside it after the transition, so a trigger starts when you walk in,
+            // not mid-warp (the user, 2026-09-24: Leif's joining trigger at the lake).
+            if (parts.Length > 2 && parts[2].StartsWith("@"))
+            {
+                pendingName = parts[2].Substring(1);
+                return StartWarp(map, -1) + " (to " + pendingName + ")";
+            }
             int flag = parts.Length > 2 ? int.Parse(parts[2]) : -1;
             return StartWarp(map, flag);
         }
+
+        private static string pendingName;
 
         private static string StartWarp(MainManager.Maps map, int flag)
         {
@@ -463,8 +473,14 @@ namespace BugFablesAP
                 return;
             }
             List<NPCControl> entities = map.GetComponentsInChildren<NPCControl>(true).ToList();
-            NPCControl target = pendingFlag >= 0 ? entities.FirstOrDefault(e => e.activationflag == pendingFlag) : null;
-            string where = target != null ? "by the entity with flag " + pendingFlag : null;
+            NPCControl target = pendingName != null ? entities.FirstOrDefault(e => e.name == pendingName)
+                : pendingFlag >= 0 ? entities.FirstOrDefault(e => e.activationflag == pendingFlag) : null;
+            string where = target != null ? "by " + (pendingName ?? "the entity with flag " + pendingFlag) : null;
+            if (pendingName != null && target == null)
+            {
+                where = $"(nothing named {pendingName} here)";
+            }
+            pendingName = null;
             if (target == null)
             {
                 target = entities.FirstOrDefault(e => e.objecttype == NPCControl.ObjectTypes.SavePoint)
