@@ -177,6 +177,14 @@ warps now mark the target map's auto-start cutscenes as seen before arriving, an
 the game's own end-of-cutscene cleanup. The log showed the cause straight away (the game's exception, with the
 event's name), which is why catching the game's own errors in the log was worth setting up.
 
+**Warping onto water taught one more thing.** The game's own map transfer ends by *walking* the party to its
+target spot and waits for that walk to finish. A target beside the item turned out to be over the lake, so the
+walk never finished, the transition never ended, and the game kept respawning the party there (the user
+restarted the game to get out). So a warp now aims at the item's own spot, which is standable since the item
+rests on it, guards the item from being taken the moment the map exists, and only after the transition steps
+to a side with room and safe ground (no wall, no water, spikes or pits), else to the save point. `unstick` also
+ends a stuck walk now.
+
 *Code: `DevConsole.cs`.*
 
 ## 6. Watch the game while you play ("probing")

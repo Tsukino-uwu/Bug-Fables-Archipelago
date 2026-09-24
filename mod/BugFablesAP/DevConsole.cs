@@ -247,18 +247,18 @@ namespace BugFablesAP
             pendingMap = (int)map;
             pendingFlag = flag;
             pendingSince = Time.realtimeSinceStartup;
-            // The door warp: the game's own map transfer, straight to the entity's start position when the map's
-            // entity table has it, so the party arrives there in one step (the user, 2026-09-24: a warp to the origin
-            // and then a hop to the item looked like two warps). Otherwise the origin, and FinishWarp moves the party
-            // to a known spot (a map's origin can be inside a wall).
+            // The door warp: the game's own map transfer, to the entity's own start position when the map's entity
+            // table has it (the user, 2026-09-24: origin-then-hop looked like two warps). The entity's own spot, not
+            // a spot beside it: TransferMap ends by WALKING the party to its target and waits for that walk
+            // (MainManager.cs:17610-17624), so a target over water never arrived, the transition never ended, and
+            // the game kept respawning the party there (SnakemouthLake). An item rests on standable ground. FinishWarp
+            // guards the item as soon as the map exists, and steps aside once the transition is over.
             Vector3? at = flag >= 0 ? StartPosition(map, flag) : null;
-            MainManager.instance.StartCoroutine(MainManager.TransferMap((int)map, at.HasValue ? at.Value + Beside : Vector3.zero));
+            guarded = false;
+            MainManager.instance.StartCoroutine(MainManager.TransferMap((int)map, at.HasValue ? at.Value + Vector3.up * 0.5f : Vector3.zero));
             return "warping to " + map + skipped;
         }
 
-        // Beside the entity, not on it: standing on a pickup would take it before you look. 1.5 was one step away,
-        // and the user took it on arrival (2026-09-24).
-        private static readonly Vector3 Beside = new Vector3(2.5f, 0.5f, 0f);
 
         // A spot beside the entity with room for the party: no solid collider where the player would stand, and safe
         // ground below (not a hazard). Tries four sides at 2.5, then 1.5; null when none is safe.
@@ -343,13 +343,19 @@ namespace BugFablesAP
             if (MainManager.player != null)
             {
                 MainManager.player.lockkeys = false;
+                // A map transfer stuck walking to an unreachable target (see StartWarp): stop the walk and the
+                // transition it holds open.
+                MainManager.player.entity?.StopForceMove();
             }
+            MainManager.roomtransition = false;
+            pendingMap = -1;
             return "ran the game's end-of-event cleanup; inevent=" + MainManager.instance.inevent + ", minipause=" + MainManager.instance.minipause;
         }
 
         // Once the target map is up and the transfer is over, stand by the entity with the wanted flag, or else by
         // the first save point or door on the map.
         private static float unlockAt = -1f;
+        private static bool guarded;
 
         private static void FinishWarp()
         {
@@ -373,8 +379,24 @@ namespace BugFablesAP
                 return;
             }
             MapControl map = MainManager.map;
-            if (map == null || (int)map.mapid != pendingMap || MainManager.roomtransition || MainManager.instance.intransition
-                || MainManager.player == null)
+            if (map == null || (int)map.mapid != pendingMap || MainManager.player == null)
+            {
+                return;
+            }
+            // As soon as the map exists, even mid-transition: the party lands on the item's own spot, so keep it from
+            // being taken until the step aside below (touchcooldown, which CheckItem waits out, NPCControl.cs:5608).
+            if (!guarded && pendingFlag >= 0)
+            {
+                foreach (NPCControl npc in map.GetComponentsInChildren<NPCControl>(true))
+                {
+                    if (npc.activationflag == pendingFlag && npc.objecttype == NPCControl.ObjectTypes.Item)
+                    {
+                        npc.touchcooldown = 240f;
+                        guarded = true;
+                    }
+                }
+            }
+            if (MainManager.roomtransition || MainManager.instance.intransition)
             {
                 return;
             }
@@ -411,7 +433,7 @@ namespace BugFablesAP
                 }
                 if (target.objecttype == NPCControl.ObjectTypes.Item)
                 {
-                    target.touchcooldown = 90f;
+                    target.touchcooldown = Mathf.Max(target.touchcooldown, 90f);
                 }
                 // And no walking for a second after arriving, so a key still held doesn't carry you into something
                 // (the user, 2026-09-24).
