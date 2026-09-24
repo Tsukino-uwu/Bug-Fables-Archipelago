@@ -216,7 +216,9 @@ namespace BugFablesAP
             dim.sortingOrder = PopupDimSort;
             Transform box = MainManager.Create9Box(new Vector3(0f, 0f, 10f), new Vector2(12f, 4.75f), 1, PopupBoxSort, Color.white, false);
             box.parent = popup;
-            box.localPosition = Vector3.zero;
+            // Over the three save slots rather than the screen's middle (the user's screenshot, 2026-09-24): the slots
+            // sit above the Copy / Delete row, about 0.9 units higher.
+            box.localPosition = new Vector3(0f, 0.9f, 0f);
             string sort = "|sort," + PopupTextSort + "|";
             MainManager.instance.StartCoroutine(MainManager.SetText(sort + "|center||size,0.8|Not connected to Archipelago", new Vector3(0f, 1.45f, 0f), box));
             MainManager.instance.StartCoroutine(MainManager.SetText(sort + "|center||size,0.6|Connect in the Archipelago panel on the main menu,", new Vector3(0f, 0.6f, 0f), box));
@@ -225,7 +227,10 @@ namespace BugFablesAP
             popupStatus.parent = box;
             popupStatus.localPosition = Vector3.zero;
             shownPopupStatus = null;
-            new GameObject("okbutton").AddComponent<ButtonSprite>().SetUp(4, -1, "OK", new Vector3(-0.6f, -1.6f), Vector3.one * 0.5f, PopupTextSort, box);
+            // Both closing buttons, confirm and cancel (B on a gamepad; the user, 2026-09-24). ButtonSprite draws its
+            // label with no sort of its own, which put it behind the box: the label carries the sort itself.
+            new GameObject("okbutton").AddComponent<ButtonSprite>().SetUp(4, -1, sort + "OK", new Vector3(-2.4f, -1.6f), Vector3.one * 0.5f, PopupTextSort, box);
+            new GameObject("closebutton").AddComponent<ButtonSprite>().SetUp(5, -1, sort + "Close", new Vector3(0.6f, -1.6f), Vector3.one * 0.5f, PopupTextSort, box);
             popupFrame = Time.frameCount;
             DrawPopupStatus();
         }
