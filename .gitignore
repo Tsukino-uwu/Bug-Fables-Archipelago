@@ -19,3 +19,6 @@ __pycache__/
 *.log
 logs/
 scratch/
+
+# Packaged worlds are build output: make them with "Build APWorlds" in the Archipelago checkout, never commit them.
+*.apworld

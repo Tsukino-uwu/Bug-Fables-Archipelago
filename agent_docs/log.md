@@ -136,3 +136,8 @@ Newest last. What was tried, what happened, what the user said.
   "Connected as Player1." on screen. The TLS 1.3 worry didn't come true. The local server was stopped.
   The generator warned that our hand-zipped apworld lacks manifest fields (`compatible_version`), which will
   break with 0.7.0: package it with "Build APWorlds" (asked the user first, since it runs in the checkout).
+- **Packaging, 2026-09-24 (05:22):** with the user's OK, ran `Launcher.py "Build APWorlds" -- "Bug Fables"` in
+  the Archipelago checkout. `build/apworlds/bug_fables.apworld` came out with 11 files (no `__pycache__`) and a
+  manifest carrying `compatible_version: 7` and `version: 7`. The user's hand-zipped copy (same hash as the one
+  in `custom_worlds`) sits untracked in `apworld/`; `*.apworld` is now gitignored. The menu leaf now returns to
+  Start Game on closing the panel (the user's choice), hot-reloaded but not yet checked on screen.

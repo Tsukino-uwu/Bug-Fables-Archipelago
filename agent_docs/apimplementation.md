@@ -20,14 +20,12 @@ archipelago.gg, retrying when the server is unreachable or drops.
 2. **Send a check:** finishing a location tells the server.
 3. **Survive a reload:** the received-item count lives in the save.
 4. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
-5. **Package the apworld with "Build APWorlds":** a hand-zipped copy lacks the manifest fields Archipelago
-   0.7.0 will require (see known issues).
 
 **Known issues:**
 
-- The generator warns "Invalid or missing manifest file for bug_fables.apworld. This apworld will stop
-  working with Archipelago 0.7.0." The copy in `custom_worlds` was zipped by hand, and a packaged manifest
-  needs the `version` and `compatible_version` fields that the "Build APWorlds" component adds.
+- The generator's manifest warning ("will stop working with Archipelago 0.7.0") came from a hand-zipped
+  apworld. The properly packaged file (build step 1) fixes it once it replaces the copy in the installed
+  Archipelago's `custom_worlds`.
 
 ## Contents
 
@@ -69,6 +67,14 @@ own test suite passes for it too.
 
 To try it, the world folder is linked into a local copy of Archipelago (run from source), and seeds are
 generated with `Generate.py`.
+
+**Packaging it as a `.apworld` file** (to generate with an installed Archipelago, or to share): run the
+"Build APWorlds" component from the Archipelago checkout, for this world only:
+`python Launcher.py "Build APWorlds" -- "Bug Fables"`. It writes `build/apworlds/bug_fables.apworld`, leaves
+out `__pycache__`, and adds two fields to the file's `archipelago.json`, `version` and `compatible_version`.
+Don't write those fields by hand. A hand-zipped copy made the generator warn "Invalid or missing manifest
+file ... will stop working with Archipelago 0.7.0" (2026-09-24). The built copy goes in the installed
+Archipelago's `custom_worlds` folder.
 
 ## Build step 2: connect the mod to a real server
 
