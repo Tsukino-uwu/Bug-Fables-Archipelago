@@ -17,8 +17,10 @@ server, and items from the server arrive in the game once each.
 
 **Next:**
 
-1. **Test separate randomizer saves on screen**: save a game with the Archipelago mod enabled, check the normal saves
-   are untouched. The redirect covers all five places the game touches a save file.
+1. **Separate randomizer saves:** done. Through a whole session played with the Archipelago mod enabled, the game
+   saved only into the `archipelago` folder (last write 05:06), and the normal save files kept their earlier
+   times (03:42 and 2023), checked on disk on 2026-09-24. The redirect covers all five places the game touches
+   a save file, and normal saves are only reachable with the mod disabled.
 2. **Give an item the game's own way**, when the server sends one: works (apimplementation.md, build step 7).
 3. **Spot a location being done** (the flag the game sets) and report it: works (apimplementation.md, build
    step 6). The game's own item there is kept out, and the seed's item shown instead (step 9).

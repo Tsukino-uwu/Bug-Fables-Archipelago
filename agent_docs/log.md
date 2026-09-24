@@ -177,3 +177,6 @@ Newest last. What was tried, what happened, what the user said.
   existed, so two permits). Talking to Artis again on a reloaded pre-Artis save showed the plushie but gave no
   second one. That's correct: the server sends each location's item once per seed, and that location was
   already done. The full sequence (check, then arrival) needs a fresh seed.
+- **Separate saves, checked on disk (2026-09-24):** the user pointed out that normal saves are only reachable with the
+  mod disabled. The file times back it up: normal `save2.dat` 03:42 and `save0.dat` 2023, both before this
+  session's first launch (03:53), while `archipelago\save0.dat` was written at 05:06 with the mod enabled.
