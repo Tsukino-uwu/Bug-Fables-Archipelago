@@ -144,8 +144,9 @@ namespace BugFablesAP
         private static readonly float[] RowY = { 2.6f, 1.75f, 0.9f, 0.05f, -0.8f, -1.65f };
         // Matched to the game's Settings screen from the user's screenshots (2026-09-24, 1280x720, ~69 px a unit):
         // there the labels start ~28 px inside the box and the leaf's tip sits ~15 px before a label; ours were
-        // ~55 px and ~58 px. So the labels moved 0.4 left and the leaf 0.6 closer to them.
-        private const float LabelX = -6.3f;
+        // ~55 px and ~58 px. So the labels moved 0.4 left and the leaf 0.6 closer to them. At -6.3 "Address"
+        // touched the vine border (the user's next screenshot), so the labels went back 0.25 right.
+        private const float LabelX = -6.05f;
         private const float LeafOffset = -0.1f;
         private const float ValueX = -1.9f;
 

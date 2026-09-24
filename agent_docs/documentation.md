@@ -164,7 +164,9 @@ Several things went wrong on the way, each found on screen by the user:
   to match the game.
 - **The leaf sat far left of the labels**, next to the game's Settings screen (the user's two screenshots). Both
   screens use the same box, so the pixels compare directly: Settings starts its labels closer to the box edge and
-  keeps the leaf right up against them. The labels moved 0.4 left and the leaf 0.6 closer.
+  keeps the leaf right up against them. The labels moved 0.4 left and the leaf 0.6 closer. That put "Address"
+  on the vine border (the next screenshot), so the labels went back 0.25: screenshots cropped at different sizes
+  only give a rough scale, so each nudge gets a fresh screenshot.
 - **No sound opening or closing the panel**, where Start Game and Settings have one (the user noticed). The
   game plays "Confirm" for every main-menu choice before acting on it, and our entry takes the press first,
   so it skipped the sound. The mod now plays the same "Confirm" on opening, and "Cancel" on backing out, the
