@@ -304,3 +304,28 @@ class TestChapterTwo(BugFablesTestBase):
         state.collect(BugFablesItem("Snakemouth Den Cleared", ItemClassification.progression, None, self.player),
                       prevent_sweep=True)
         self.assertTrue(city.can_reach(state))
+
+
+class TestMidQuestItem(BugFablesTestBase):
+    # Mid-quest items are shuffled (the user, 2026-09-24): the old book can be anywhere, so the delivery's reward
+    # needs it. Without the rule, the reward could hold something needed to reach the book.
+    def test_reward_needs_the_quest_book(self) -> None:
+        from BaseClasses import CollectionState, ItemClassification
+        from ..world import BugFablesItem
+        reward = self.world.get_location("Bugaria City: Residential District, Old Book Delivery Reward")
+        state = CollectionState(self.multiworld)
+        for name in ("City Opened", "Chapter 2 Started"):
+            state.collect(BugFablesItem(name, ItemClassification.progression, None, self.player), prevent_sweep=True)
+        self.assertFalse(reward.can_reach(state))
+        state.collect(self.world.create_item("Quest Book"), prevent_sweep=True)
+        self.assertTrue(reward.can_reach(state))
+
+
+class TestMidQuestItemQuestsOff(BugFablesTestBase):
+    # With quests off the whole quest stays vanilla: its start and reward aren't locations, and the old book stays
+    # out of the pool (the game hands it out as usual).
+    options = {"shuffle_quests": False}
+
+    def test_quest_book_not_in_pool(self) -> None:
+        pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        self.assertNotIn("Quest Book", pool)
