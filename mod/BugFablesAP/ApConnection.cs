@@ -25,6 +25,12 @@ namespace BugFablesAP
 
         // A one-line summary for the Archipelago panel: the last thing that happened.
         internal string Status => status;
+        internal bool Busy => busy;
+
+        internal void SetStatus(string text)
+        {
+            status = text;
+        }
 
         internal ApConnection(ManualLogSource log)
         {

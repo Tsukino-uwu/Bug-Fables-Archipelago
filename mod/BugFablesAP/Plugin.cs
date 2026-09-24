@@ -20,10 +20,11 @@ namespace BugFablesAP
         private ConfigEntry<string> port;
         private ConfigEntry<string> slot;
         private ConfigEntry<string> password;
-        private ConfigEntry<bool> connectOnStart;
         private ConfigEntry<bool> randomizerEnabled;
         private ApConnection connection;
-        private bool connectRequested;
+        // The details last tried automatically; a failure isn't retried until something changes or Reconnect.
+        private string lastAttempt;
+        private bool wasEnabled;
         private bool scriptDumpDone;
         private ConfigEntry<string> saveDiff;
         private ConfigEntry<int> giveMoney;
@@ -60,8 +61,6 @@ namespace BugFablesAP
             port = Config.Bind("Connection", "Port", "", "The room's port, e.g. 38281. Rooms on archipelago.gg show it.");
             slot = Config.Bind("Connection", "Slot", "", "Your slot name in the room.");
             password = Config.Bind("Connection", "Password", "", "The room password, if it has one.");
-            connectOnStart = Config.Bind("Connection", "ConnectOnStart", false,
-                "Connect as soon as the game starts. Needs a slot name.");
             connection = new ApConnection(Log);
 
             randomizerEnabled = Config.Bind("Archipelago", "RandomizerEnabled", false,
@@ -70,9 +69,60 @@ namespace BugFablesAP
             SaveRedirect.On = randomizerEnabled.Value;
             SaveRedirect.Enable(Log, Guid);
             MenuToggle.Enable(Log, Guid, randomizerEnabled, server, port, slot, password,
-                () => connection.Connect(Target(), slot.Value, password.Value),
+                Reconnect,
                 () => connection.Status);
             Log.LogInfo($"{Name} {Version} loaded. GrantProbe={grantProbeEnabled.Value} TextProbe={textProbeEnabled.Value}");
+        }
+
+        // While the Archipelago mod is enabled and the details are filled in, connect on its own (the user,
+        // 2026-09-24: less friction than a Connect button). Each set of details is tried once; after a failure
+        // it waits for a change or Reconnect instead of retrying in a loop. Disabling disconnects.
+        private void AutoConnect()
+        {
+            bool enabled = randomizerEnabled.Value;
+            if (!enabled)
+            {
+                if (wasEnabled)
+                {
+                    connection.Disconnect();
+                    connection.SetStatus("Archipelago mod disabled.");
+                    lastAttempt = null;
+                }
+                wasEnabled = false;
+                return;
+            }
+            wasEnabled = true;
+            if (!DetailsFilled())
+            {
+                connection.SetStatus("Fill in the address, port and slot to connect.");
+                lastAttempt = null;
+                return;
+            }
+            string key = Target() + "|" + slot.Value + "|" + password.Value;
+            if (key != lastAttempt && !connection.Busy)
+            {
+                lastAttempt = key;
+                connection.Connect(Target(), slot.Value, password.Value);
+            }
+        }
+
+        private bool DetailsFilled()
+        {
+            string address = server.Value.Trim();
+            bool hasPort = port.Value.Trim().Length > 0
+                || System.Text.RegularExpressions.Regex.IsMatch(address, @":\d{1,5}$");
+            return address.Length > 0 && hasPort && slot.Value.Trim().Length > 0;
+        }
+
+        // The panel's Reconnect row: forget the last attempt, so the next frame tries again.
+        private void Reconnect()
+        {
+            if (!randomizerEnabled.Value)
+            {
+                connection.SetStatus("Enable the Archipelago mod first.");
+                return;
+            }
+            lastAttempt = null;
         }
 
         // "address:port", or the address alone when no port is set (it may carry one already).
@@ -117,18 +167,7 @@ namespace BugFablesAP
             }
             devReload?.Tick();
 
-            if (connectOnStart.Value && !connectRequested)
-            {
-                connectRequested = true;
-                if (string.IsNullOrEmpty(slot.Value))
-                {
-                    Log.LogWarning("[ap] ConnectOnStart is on but no Slot is set; not connecting.");
-                }
-                else
-                {
-                    connection.Connect(Target(), slot.Value, password.Value);
-                }
-            }
+            AutoConnect();
             connection.Tick();
 
             DevCheats.Tick(Log, giveMoney);

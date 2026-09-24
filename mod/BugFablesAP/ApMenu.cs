@@ -366,7 +366,7 @@ namespace BugFablesAP
             Row(PortRow, "Port", editing && row == PortRow ? edited : port.Value);
             Row(SlotRow, "Slot", editing && row == SlotRow ? edited : slot.Value);
             Row(PasswordRow, "Password", pw);
-            Row(ConnectRow, "Connect", null);
+            Row(ConnectRow, "Reconnect", null);
             Row(BackRow, "Back", null);
 
             // The mode row, like a settings value: left and right arrows around it.
