@@ -108,6 +108,13 @@ throttled to changes.
   tutorial (`!flags[108] && animid == 3` in `CheckItem`, like flag 31 for the first medal). **A crystal
   berry's location identity is its `crystalbflags` index**: permanent, saved, and re-readable on connect.
   `flag[22]` flipped earlier on the same map with no item script, so it belongs to something else.
+- **A medal on the ground, the first pickup with a GLOBAL flag:** on `SnakemouthUndergrondDoor` (the
+  game's own spelling), `|flag,60,true||additemtoss,2,var,0|` with `caller=PoisonDefender` (the object is
+  named after the medal) and `flagvar[0]=9`, the medal's id in the medal (badge) list. TextProbe's name
+  label casts to `MainManager.Items`, which is wrong for medals, so "CookedLeaf" there means nothing. A global
+  flag is never wiped, **so a medal pickup is a one-time location**, identified by its flag, once medals are
+  in scope. That confirms the rule from the other side: ordinary items use regional flags and respawn,
+  medals use global flags and don't.
 - **A second crystal berry:** on `SnakemouthLake`, `crystalbflag[1]` flipped (frame 111883), with no
   tutorial flag this time. The script was `|additemtoss,3,var,0|` with `caller=tempitem`, and `flagvar[0]`
   read 1 (HoneyDrop), **a stale value left from an earlier pickup**. `flagvar[0]` means nothing for crystal
