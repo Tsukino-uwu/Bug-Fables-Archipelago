@@ -309,6 +309,16 @@ throttled to changes.
   `[1]` = taken, `[0]` = most likely open on the board.** A quest's location identity is "its id is in
   `boardquests[2]`": saved, permanent, re-readable on connect. The reward left no TextProbe line.
 
+## Input (2026-09-24)
+
+- **Game actions:** `MainManager.GetKey(id, hold)`. The keyboard defaults are `InputIO.keys`: 0 up, 1 down, 2 left,
+  3 right, 4 confirm (C), 5 cancel (X), 6 Z, 7 V, 8 Escape, 9 Return (`InputIO.cs:444`).
+- **Gamepad:** `InputIO.joykeys` are **raw buttons, not actions**: `[0]` Button0, `[1]` Button1, `[2]` Button2,
+  `[3]` Button3, `[4]` Button7 (Start), `[5]` Button6 (Back) (`InputIO.cs:571–576`). With `usejoystick > 0`,
+  `GetKey` maps action 4 (confirm) to `joykeys[0]`, 5 (cancel) to `[1]`, 6 to `[2]`, 7 to `[3]`, 8 to `[4]` and
+  9 to `[5]`. A first read of `joykeys[4]/[5]` as confirm/cancel was wrong; the user saw Start act as "done".
+- **The game never reads typed text** (no `Input.inputString` anywhere); its name entry is a letter grid.
+
 ## Key-item grant sources, raw (2026-09-24) — SPOILERS for the whole game
 
 Two instruments, both read-only. **Code:** `giveitem,1,<id>` literals and `items[1].Add(...)` in the
