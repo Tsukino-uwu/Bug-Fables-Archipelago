@@ -121,6 +121,12 @@ throttled to changes.
   object while its flags *or* its regional flag are set, and the global flag is never wiped. **The rule,
   refined: a pickup with a global flag is one-time even if it also has a regional one, and the global flag
   is its location identity.** Not yet checked on screen that it stays gone.
+- **An ordinary item with a global flag:** a Mushroom Candy (id 144) on `SnakemouthMushroomPit`,
+  `caller=Item - Duplicate`, script `|flag,724,true||additemtoss,0,var,0|`, with no regional flag. **So one-time
+  pickups are not only medals: the kind of flag decides, not the kind of item.**
+- **Regional flags are also cleared without an area change:** `regionalflag[16]` (set by the second medal)
+  went True -> False on the same map at frame 52352. `MapControl.cs:639` clears regional flags too, probably
+  on map load; not read yet. The medal is unaffected, since its global flag 42 holds.
 - **A two-part door, no item involved:** `flag[33]` on `SnakemouthUndergroundLeftB` (frame 25491), then
   `flag[34]` on `SnakemouthUndergroundRightB` (38629), then `flag[35]` on `SnakemouthUndergrondDoor`
   (39302). **The user, on screen:** they did the left side, then the right, and the door opened. So in the
