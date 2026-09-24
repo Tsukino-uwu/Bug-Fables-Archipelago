@@ -58,6 +58,11 @@ slot or password), the reason is shown until you change it. If the server can't 
 connection drops mid-game, it keeps retrying on its own, waiting a bit longer each time. Disabling it
 disconnects.
 
+**A randomizer save needs one connection each time the game starts.** Until the mod has logged in once, it
+doesn't know the seed, so choosing a file (or a new game) on the file select plays a buzzer and says to connect
+first. After that, a dropped connection doesn't stop play: pickups still hold the seed's items, and their
+checks are sent when the connection comes back.
+
 Select a row and press confirm to type into it: Backspace deletes, **Ctrl+V pastes**, Ctrl+C copies, Enter
 keeps it, Escape undoes. The same settings are saved in `BepInEx/config/bugfables.archipelago.cfg`.
 

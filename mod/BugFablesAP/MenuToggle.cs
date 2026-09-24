@@ -21,11 +21,12 @@ namespace BugFablesAP
         private static ConfigEntry<string> server, port, slot, password;
         private static Action connect;
         private static Func<string> status;
+        private static Func<bool> seedKnown;
         private static Harmony harmony;
 
         internal static void Enable(ManualLogSource logger, string guid, ConfigEntry<bool> randomizerEnabled,
             ConfigEntry<string> serverEntry, ConfigEntry<string> portEntry, ConfigEntry<string> slotEntry, ConfigEntry<string> passwordEntry,
-            Action connectAction, Func<string> statusText)
+            Action connectAction, Func<string> statusText, Func<bool> seedIsKnown)
         {
             log = logger;
             mode = randomizerEnabled;
@@ -35,6 +36,7 @@ namespace BugFablesAP
             password = passwordEntry;
             connect = connectAction;
             status = statusText;
+            seedKnown = seedIsKnown;
             harmony = new Harmony(guid + ".menu." + DateTime.UtcNow.Ticks);
             harmony.Patch(AccessTools.Method(typeof(StartMenu), "SetMenuText"),
                 prefix: new HarmonyMethod(typeof(MenuToggle), nameof(BeforeSetMenuText)),
@@ -131,17 +133,21 @@ namespace BugFablesAP
             log.LogInfo($"[menu] Archipelago mod {(on ? "enabled: saves in the archipelago folder" : "disabled: normal saves")}");
         }
 
-        private static void BeforeUpdate(StartMenu __instance, int ___menuid, float ___cd, bool ___canselect)
+        private static bool BeforeUpdate(StartMenu __instance, int ___menuid, int ___submenu, float ___cd, bool ___canselect)
         {
             try
             {
+                if (HoldBackFile(___menuid, ___submenu, ___cd, ___canselect))
+                {
+                    return false;
+                }
                 if (ApMenu.Open != null || ___menuid != 1 || ___cd > 0f || !___canselect || MainManager.pausemenu != null)
                 {
-                    return;
+                    return true;
                 }
                 if (MainManager.instance.option != Option || !MainManager.GetKey(4, hold: false))
                 {
-                    return;
+                    return true;
                 }
                 // The game plays this for every main-menu choice before acting on it (StartMenu.Update, menuid 1);
                 // our entry takes the press before the game's code runs, so it plays it itself.
@@ -152,6 +158,43 @@ namespace BugFablesAP
             {
                 log.LogError("[menu] opening the panel failed: " + e);
             }
+            return true;
+        }
+
+        // A randomizer save, or a new game, needs the seed: before the first login this run the mod knows none of
+        // its locations, and every pickup would give its vanilla item (the user, 2026-09-24: require a connection).
+        // On the file select (menuid 2, submenu 0), choosing one of the three files (option 0-2) with the confirm
+        // key is StartMenu.Update's load or new-game branch (StartMenu.cs:512-535, Event22 or Event8). With the mod
+        // on and no seed yet, that press gets the game's buzzer and a line saying why, and the game never sees it.
+        private static Transform notice;
+
+        private static bool HoldBackFile(int menuid, int submenu, float cd, bool canselect)
+        {
+            if (!mode.Value || seedKnown() || menuid != 2 || submenu != 0 || cd > 0f || !canselect
+                || MainManager.pausemenu != null || MainManager.instance.option >= Option || !MainManager.GetKey(4, hold: false))
+            {
+                return false;
+            }
+            MainManager.PlayBuzzer();
+            ShowNotice("|center||size,0.6|Connect to Archipelago first (the Archipelago panel on the main menu). " + status());
+            log.LogInfo("[menu] held back file " + MainManager.instance.option + ": the seed isn't known yet (no login this run)");
+            return true;
+        }
+
+        // One line at the top of the screen, on the GUI camera like the panel (ApMenu), gone after four seconds.
+        private static void ShowNotice(string text)
+        {
+            if (notice != null)
+            {
+                UnityEngine.Object.Destroy(notice.gameObject);
+            }
+            notice = new GameObject("apnotice").transform;
+            notice.parent = MainManager.GUICamera.transform;
+            notice.localPosition = new Vector3(0f, 4.2f, 10f);
+            notice.localEulerAngles = Vector3.zero;
+            notice.gameObject.layer = 5;
+            MainManager.instance.StartCoroutine(MainManager.SetText("|sort,20|" + text, Vector3.zero, notice));
+            UnityEngine.Object.Destroy(notice.gameObject, 4f);
         }
 
         // The game places the cursor at y = -option - 0.25 each frame; move it to the tighter spacing.

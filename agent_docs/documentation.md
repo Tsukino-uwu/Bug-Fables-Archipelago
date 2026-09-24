@@ -283,6 +283,22 @@ Several things went wrong on the way, each found on screen by the user:
 **Lesson:** when adding to a game's own screen, find every time the game rebuilds that screen, and everything
 else that keeps running while another screen is on top of it.
 
+**The file select waits for the first login** (the user, 2026-09-24, choosing this over keeping a copy of the
+seed on disk, which would spoil every location to anyone opening the file). The mod learns the seed only when it
+logs in, so a save played before that would hand out vanilla items. How it was built:
+
+1. Find where the file select acts on a file: `StartMenu.Update`, when the file-select screen is up
+   (`menuid` 2, `submenu` 0), the cursor is on one of the three files and confirm is pressed. That branch loads
+   the save (Event22) or starts a new game (Event8).
+2. A prefix on `StartMenu.Update` checks the same conditions first. With the Archipelago mod enabled and no login
+   yet this run, it plays the game's buzzer (`PlayBuzzer`), puts a line at the top of the screen for four
+   seconds ("Connect to Archipelago first", plus the connection's state), and skips the game's `Update` for that
+   frame, so the game never sees the press.
+3. "Logged in" is a flag the connection sets when `slot_data` arrives. It stays set after a drop, so the rules stay
+   in force offline once the seed is known.
+
+*Not yet seen on screen (2026-09-24).*
+
 The user then asked for it to feel like the game's settings screen, so the mod rebuilds that screen's look
 from the game's own pieces, read from how the pause menu builds it: the same orange box, the controls box
 above it with the game's button hints, the game's leaf cursor, labels on the left and values on the right, and

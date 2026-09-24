@@ -339,7 +339,10 @@ the save. The probes showed which flag belongs to which location (`MEASURED.md`)
   it sends that location's check. It only reads flags; it never changes them.
 
 **Offline play needs no extra queue.** The flags are saved with the game, so a location finished while the
-server is down is found again at the next login and sent then. Within a session, the client library keeps
+server is down is found again at the next login and sent then. **But the seed must be known first:** the mod
+keeps no copy of `slot_data` on disk, so until the first login of a game run it can't tell a location from any
+other pickup. The file select therefore refuses randomizer files until then (the user, 2026-09-24;
+`documentation.md`, step 8). A drop after that login keeps everything in force. Within a session, the client library keeps
 every check the server hasn't confirmed and sends it again with the next one.
 
 **What the log shows:** `[check] watching ...` (which locations and flags), then `[check] location ... is

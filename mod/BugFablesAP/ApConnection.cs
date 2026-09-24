@@ -167,6 +167,12 @@ namespace BugFablesAP
         // The logged-in session, or null. Read on the game thread by LocationChecks.
         internal ArchipelagoSession Session => session;
 
+        // True once a login this run has brought the seed's tables (slot_data). They stay after a drop, so a dropped
+        // connection keeps the rules in force; before the first login nothing is known, and the file select holds
+        // randomizer saves back (MenuToggle): the mod keeps no copy of the seed on disk (the user, 2026-09-24).
+        internal bool SeedKnown => seedKnown;
+        private volatile bool seedKnown;
+
         // slot_data's location_flags: which game flag marks each location done ({location id: flag}). Set at each
         // login; null when the world didn't send it.
         internal Dictionary<long, int> LocationFlags => locationFlags;
@@ -461,6 +467,7 @@ namespace BugFablesAP
                     locationBerries = ReadLocationBerries(ok.SlotData);
                     ownSlot = ok.Slot;
                     itemKinds = ReadItemKinds(ok.SlotData);
+                    seedKnown = true;
                     scouts = null;
                     // Every location this slot has: gifts and pickups alike show what's really there.
                     Scout(attempt, (locationFlags?.Keys ?? Enumerable.Empty<long>()).Concat(locationVars?.Keys ?? Enumerable.Empty<long>())
