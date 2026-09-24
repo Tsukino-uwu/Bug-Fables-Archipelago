@@ -416,6 +416,11 @@ The output stays in the BepInEx folder.
 
 - **Hard Mode is on** when medal 11 is equipped (`BadgeIsEquipped(11)`, Artis's medal) or flag 614 is set
   (the new-game code, `EventControl.cs:2432-2554`).
+- **Two levels, not one** (code read, 2026-09-24): nearly every check is `BadgeIsEquipped(11) || flags[614]`,
+  so the medal and the HARDEST code share the Hard Mode effects. The code adds more on top, only with flag
+  614: enemy HP x1.15 more and +1 defence after flag 300 (`PauseMenu.cs:2001-2002`, the enemy info shown),
+  and more in `MainManager.cs:6273` and `PauseMenu.cs:1819/2452`. The one check needing both
+  (`EntityControl.cs:3645`) is cosmetic, a model swap, not difficulty.
 - **23 prize slots:** `prizeflags` (flagvar indices), `prizeids` (the medal) and `prizeenemyids` (the enemy),
   parallel arrays of 23 (`MainManager.cs:3401-3418`). One slot's enemy is -1 (no single enemy).
 - **Beating the boss writes the slot** (`AddPrizeMedal(id)`, `MainManager.cs:3981`; called from 23 story
