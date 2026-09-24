@@ -271,12 +271,12 @@ namespace BugFablesAP
         {
             switch (r)
             {
-                case Address: return "The room's address, for example archipelago.gg.";
+                case Address: return "The server the room is hosted on, e.g. archipelago.gg.";
                 case PortRow: return "The room's port, e.g. 38281.";
                 case SlotRow: return "Your player slot name.";
                 case PasswordRow: return "The room's password, if it has one.";
                 case DifficultyRow: return "Only affects how tough enemies are, never items or locations.";
-                case DetectorRow: return "Always has the Detector medal's effect: hidden items are easier to find.";
+                case DetectorRow: return "Acts like the Detector medal is always equipped, to find hidden items.";
                 case ModeRow: return "Turns Archipelago on or off. While on, normal saves are never touched.";
                 default: return "";
             }
