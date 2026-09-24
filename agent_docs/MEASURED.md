@@ -616,7 +616,16 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   user, warped there 2026-09-25; walking out led to the door room).
 - **The door room's `DoorLoadZone` leads to Upper Snakemouth (`UpperSnekEntrance`) and requires only flag 41** in
   the data. The user, on a file past the first boss (chapter 2 started), walked through into the later area
-  (2026-09-25). What keeps it shut before chapter 5 in normal play, if anything, is still to find.
+  (2026-09-25). **What really gates it** (the user, 2026-09-25): in normal play the way back to the cave is
+  closed after the first boss (Eetl's blocker outside the city until flag 67; from 67 a `guard` and a `sign` on
+  `NearSnakemouth`, which no flag removes; whether the guard physically blocks is still to see). **And past the
+  door, a slot needs a key item even with the door open:** `UpperSnekEntrance`'s `slot` is a `LockedDoor`
+  (hidden by 517) whose `dialogues[0].y` is 11, and Event59's key list at index 11 is **key item 116, the Peculiar
+  Gem** (`SnakemouthKey`; names dump), given in code by **Event117** (`EventControl.cs:19958`, chapter 4 by the
+  event-number rule). The user saw the slot refuse them (Event59 twice in the log). So Upper Snakemouth's locations
+  need the Peculiar Gem: a key-item rule once key items are shuffled. Its other locked doors (Event59 list):
+  `keycard1`/`keycard2` on `UpperSnekMiddleRoom` index 12 (item 160, the Lab Card), and the gear slots on
+  `UpperSnekBeforeBoss` indices 13-15 (items 157-159; 157 is the Small Gear).
 - **Paired on paper, one-way in play:** the big-door room's `WarpRightUp` <-> `SnakemouthUndergroundRightB`'s
   `DoorMainRoom`. Leaving Right B puts the party on the ledge above the big-door room; the user dropped down and
   can't climb back to `WarpRightUp` (see "Respawning pickups, seen in play"). The left side has the same shape
