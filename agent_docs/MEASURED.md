@@ -432,8 +432,10 @@ The output stays in the BepInEx folder.
 - **Beating the boss writes the slot** (`AddPrizeMedal(id)`, `MainManager.cs:3981`; called from 23 story
   events): **1** with Hard Mode on (and `flags[56]`, "a prize waits"), **2** without. `flagvar[55]` counts.
 - **Value 1:** `Event33` hands every waiting prize over with `giveitem,2,<medal>` from an NPC
-  (`EventControl.cs:5724-5752`), then sets the slot to **3**. What starts `Event33` isn't found yet (it
-  isn't an entity's `eventid`; likely a dialogue line gated on flag 56).
+  (`EventControl.cs:5724-5752`), then sets the slot to **3**. **Event33 is started by talking to Artis**
+  (`ShwEmArtys`, outside the city; seen in the event log, 2026-09-24).
+- **Seen in play (the user, 2026-09-24):** the first boss beaten on Normal wrote its slot as missed; talking to Artis
+  then gave nothing, and the caravan (open after flag 41) offered a medal, which fits the missed prize for sale.
 - **Value 2 is not lost:** a caravan medal seller (`Interaction.CaravanBadge`, `NPCControl.CaravanMedalSet`,
   `NPCControl.cs:1462`) offers the missed ones one at a time, in random order (`PrizeBadges(caravan: true)`),
   and buying one sets its slot to **3** (`Setprize`, `MainManager.cs:11090-11121`). `CaravanBadge`
