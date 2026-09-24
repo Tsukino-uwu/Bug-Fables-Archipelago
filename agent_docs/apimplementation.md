@@ -470,8 +470,10 @@ rule is written even when the region already implies it, so a different way into
 **A quest reward from the code** (2026-09-24): the lost ladybug kid at the lake gives a Lore Book once you've
 beaten his monsters (Event31: `giveitem,1,52`, then flag 55, the check). He only appears after the first boss,
 which is a story event of its own (*Snakemouth Den Cleared*, flag 41), and his cutscene moves all three party
-members, so the location requires Leif and that event (test `TestLostKid`). Added from the code; testing it in
-game needs a save where Leif joined through the story, since a warped file without him crashes the cutscene.
+members, so the location requires Leif and that event (test `TestLostKid`). Added from the code. The cutscene
+also expects the kid's sister, the ladybug girl, to be following you (`FindEntity` of her character type): after
+the first boss you talk to her outside the city and she comes along. Faked flags crashed it twice (no Leif, then
+no sister), so it gets tested when a file reaches the first boss by play.
 **Story pickups** (the user, 2026-09-24): some pickups have no "taken" flag of their own; the story makes them
 appear and hides them for good (the trapdoor Mushroom in the Snakemouth door room exists between flags 13 and 14,
 and taking it starts Event5, which sets 14). The rule: a pickup is a location if, once taken, a story flag hides
