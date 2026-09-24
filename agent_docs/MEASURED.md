@@ -162,6 +162,17 @@ throttled to changes.
   so the game never writes a normal save's file. Whether Steam also syncs the randomizer folder only decides
   whether those saves roam between PCs.
 
+## The main menu (2026-09-24, decompiled `StartMenu.cs`)
+
+- **Three fixed options.** `selections = new Transform[3]` in `Intro` (`StartMenu.cs:117`). `SetMenuText`
+  (`:301`) draws them from `menutext` ids `{123, 13, 124}`, one line each at `y = -0.5 - i`, then sets
+  `MainManager.instance.maxoptions = selections.Length` and `menuid = 1`.
+- **Choosing an option** is handled in `Update` (`:357`) under `menuid == 1`, branching on
+  `MainManager.instance.option == 0 / 1 / 2`.
+- **So a fourth "Archipelago: On/Off" entry needs:** `selections` enlarged to 4 before `SetMenuText` runs, a
+  4th line drawn (our own text, not a `menutext` id), and `option == 3` handled in `Update`'s `menuid == 1`
+  branch. None of it has been tried yet.
+
 ## Key-item grant sources, raw (2026-09-24) — SPOILERS for the whole game
 
 Two instruments, both read-only. **Code:** `giveitem,1,<id>` literals and `items[1].Add(...)` in the
