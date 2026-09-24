@@ -197,6 +197,13 @@ throttled to changes.
   still not done (the user; its id hadn't reached `boardquests[2]`). So one quest can be several locations,
   chained in the logic: the delivery needs the book, and completion needs the delivery. The `0` placeholder in
   `boardquests[0]` comes and goes on map changes (frames 5855, 7865), so it's a list refresh, not a quest.
+- **The multi-step quest completed:** quest **33** moved `boardquests[1]` → `[2]` with `flag[243]` in the same
+  frame (12545). Chain: 241 (book given) → 242 (delivered, book consumed) → 243 plus the done list. Rewards:
+  `giveitem,-1,15,31` (15 berries, caught by TextProbe since it's a `giveitem`) and `KEYITEM +1 id=52 (LoreBook)`.
+  **Id 52 is granted many times** (code: Events 31, 103, 160, 172, 173, 175, 195; the dump:
+  `BugariaResidential` 31, `GoldenSettlement3` 46), so Lore Books are a repeated collectible: in the apworld,
+  an item with several copies, and any rule needing them counts copies. The library also added quest **27** to
+  the taken list with `flag[70]` (frame 9985), then `flag[579]`.
 - **A second crystal berry:** on `SnakemouthLake`, `crystalbflag[1]` flipped (frame 111883), with no
   tutorial flag this time. The script was `|additemtoss,3,var,0|` with `caller=tempitem`, and `flagvar[0]`
   read 1 (HoneyDrop), **a stale value left from an earlier pickup**. `flagvar[0]` means nothing for crystal
