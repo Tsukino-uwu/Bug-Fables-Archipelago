@@ -81,13 +81,14 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
   means keep going until it works. If blocked, name the blocker and the next measurement.
 - **Commit freely, straight to `main`; never create a branch. Push only when told to, in that message.**
   A past yes is not a standing one.
-- **Ask before touching anything outside this repo.** That includes the game install (BepInEx, deploying
-  the mod) and the Archipelago checkout.
+- **Ask before touching anything outside this repo:** the game install (BepInEx and its setup) and the
+  Archipelago checkout. One standing exception, below: copying the plugin in with `copy-dev.ps1`.
 - **Small runnable steps only**, each with a visible outcome.
 - **You may start the game and the Archipelago server, but ASK FIRST, in the same breath as the rest of the
   setup.** Then close every process you started and check they're gone.
-- **Into the game only through `dev-scripts/copy-dev.ps1`**, which backs up what it replaces; never an
-  ad-hoc `cp`, `sed` or `Set-Content` into the install (`agent_docs/development.md`, step 3).
+- **Copying the plugin into the game is yours, no asking** (the user, 2026-09-24, as in MeshGhost): only
+  through `dev-scripts/copy-dev.ps1` (plugin plus `-DebugOn`/`-DebugOff`, with backups), always called from
+  the PowerShell tool; never an ad-hoc `cp`, `sed` or `Set-Content` into the install (`development.md`, step 3).
 - **Hot reload is the default loop; restarting the game is the last resort.** BepInEx.Debug ScriptEngine
   reloads the plugin in a running game. Rebuild and restart only when a change can't be reloaded.
 - **After about 3 failed live attempts, stop and table the results (config against outcome)**, then try the
