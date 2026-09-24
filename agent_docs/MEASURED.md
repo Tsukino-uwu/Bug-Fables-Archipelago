@@ -250,13 +250,18 @@ throttled to changes.
 - **Quests are `MainManager.instance.boardquests`, 3 lists of quest ids** (`MainManager.cs:2219`, allocated
   `:3576`; the `BoardQuests` enum at `:535`; data from `Data/Dialogues<lang>/BoardQuests`). `ChangeBoardQuest`
   moves an id into a list (`:17945`), and taking a quest can also set a flag named in its data
-  (`boardquestdata[id, 3]`, `:13906`). **Which list is which is not measured yet.** After the user took
+  (`boardquestdata[id, 3]`, `:13906`). After the user took
   several quests: `[0]` = 8,9,10,21,23; `[1]` = 12,1,2,4,33,49,56; `[2]` = 11,0. GrantProbe logs every
   change, so finishing one quest will show it.
 - **Taking quests set a burst of flags:** 3, 64, 44, 50, 240, 479, 617 on `BugariaMainPlaza` (frames
   60502–61679; the user saw them), consistent with each taken quest setting its `boardquestdata[id, 3]` flag.
   **Hypothesis, unmeasured:** `boardquests[1]` (7 ids) holds the taken quests. Those flags mark "taken", not
   "done"; finishing one will show which list completion moves an id to, and what the reward sets.
+- **Quest completion measured** (the user completed a quest, 2026-09-24): at frame 9844, quest **1** moved
+  from `boardquests[1]` (`12,1,2,4,33,49,56` → `12,2,4,33,49,56`) to `boardquests[2]` (`11,0` → `11,1`, the `0`
+  placeholder dropped as `ChangeBoardQuest` does), and `flag[5]` flipped in the same frame. **So `[2]` = done,
+  `[1]` = taken, `[0]` = most likely open on the board.** A quest's location identity is "its id is in
+  `boardquests[2]`": saved, permanent, re-readable on connect. The reward left no TextProbe line.
 
 ## Key-item grant sources, raw (2026-09-24) — SPOILERS for the whole game
 
