@@ -219,6 +219,8 @@ namespace BugFablesAP
             }
             else if (MainManager.GetKey(5, hold: false) || Input.GetKeyDown(KeyCode.Escape))
             {
+                // The sound the game plays backing out of the file select (StartMenu.cs:619).
+                MainManager.PlaySound("Cancel", 10);
                 Close();
             }
             else if (MainManager.GetKey(4, hold: false) || Input.GetKeyDown(KeyCode.Return))

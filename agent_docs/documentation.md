@@ -140,6 +140,10 @@ Three things went wrong on the way, each found on screen by the user:
   Start Game (the user noticed). The game rebuilds its menu on the way back, and the rebuild resets the
   cursor to the top. Our panel doesn't rebuild the menu, so it now resets the cursor itself, as the user chose
   to match the game.
+- **No sound opening or closing the panel**, where Start Game and Settings have one (the user noticed). The
+  game plays "Confirm" for every main-menu choice before acting on it, and our entry takes the press first,
+  so it skipped the sound. The mod now plays the same "Confirm" on opening, and "Cancel" on backing out, the
+  sound the game uses leaving the file select.
 
 **Lesson:** when adding to a game's own screen, find every time the game rebuilds that screen, and everything
 else that keeps running while another screen is on top of it.

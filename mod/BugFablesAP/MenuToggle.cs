@@ -143,6 +143,9 @@ namespace BugFablesAP
                 {
                     return;
                 }
+                // The game plays this for every main-menu choice before acting on it (StartMenu.Update, menuid 1);
+                // our entry takes the press before the game's code runs, so it plays it itself.
+                MainManager.PlaySound("Confirm", -1);
                 ApMenu.Show(log, __instance, server, port, slot, password, mode, connect, status);
             }
             catch (Exception e)
