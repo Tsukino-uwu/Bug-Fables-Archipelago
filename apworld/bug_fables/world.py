@@ -75,6 +75,14 @@ class BugFablesWorld(World):
                 self.player, self.player_name, wanted, available, available,
             )
         self.artifacts_required = min(wanted, available)
+        # The locations this seed has: a category whose option is off (quests) isn't part of it, and the game hands
+        # those out as usual (the client only acts on what slot_data lists).
+        self.included_locations = [loc for loc in LOCATIONS if self._category_on(loc.get("category"))]
+
+    def _category_on(self, category: str | None) -> bool:
+        if category == "quest":
+            return bool(self.options.shuffle_quests.value)
+        return True
 
     def create_regions(self) -> None:
         regions = {data["name"]: Region(data["name"], self.player, self.multiworld) for data in REGIONS}
@@ -86,7 +94,7 @@ class BugFablesWorld(World):
                 rule = HasAll(*requires) if requires else None
                 self.create_entrance(regions[data["name"]], regions[exit_data["to"]], rule)
 
-        for loc in LOCATIONS:
+        for loc in self.included_locations:
             region = regions[loc["region"]]
             region.locations.append(
                 BugFablesLocation(self.player, loc["name"], LOCATION_NAME_TO_ID[loc["name"]], region)
@@ -112,22 +120,20 @@ class BugFablesWorld(World):
     def create_items(self) -> None:
         # Each location's own vanilla item (so an item found at two spots is in the pool twice), then one of every
         # other item that isn't padding, then padding for the locations left.
-        pool: list[Item] = []
-        from_locations: set[str] = set()
-        for loc in LOCATIONS:
-            name = vanilla_item(loc)
-            if name is not None:
-                pool.append(self.create_item(name))
-                from_locations.add(name)
+        # An item whose vanilla spot is a location this seed leaves out (quests off) stays out too: the game hands
+        # it out there as usual.
+        pool: list[Item] = [self.create_item(name) for name in
+                            (vanilla_item(loc) for loc in self.included_locations) if name is not None]
+        has_a_location = {vanilla_item(loc) for loc in LOCATIONS} - {None}
         pool += [self.create_item(item["name"]) for item in ITEMS
-                 if not item.get("padding") and item["name"] not in from_locations]
+                 if not item.get("padding") and item["name"] not in has_a_location]
         unfilled = len(self.multiworld.get_unfilled_locations(self.player))
         pool += [self.create_filler() for _ in range(unfilled - len(pool))]
         self.multiworld.itempool += pool
 
     def set_rules(self) -> None:
         # A location needing more than its region says so in its own requires list.
-        for loc in LOCATIONS:
+        for loc in self.included_locations:
             if loc.get("requires"):
                 self.set_rule(self.get_location(loc["name"]), HasAll(*loc["requires"]))
         self.set_completion_rule(Has("Artifact", count=self.artifacts_required))
@@ -143,19 +149,19 @@ class BugFablesWorld(World):
         return {
             "world_version": WORLD_VERSION,
             "artifacts_required": self.artifacts_required,
-            "location_flags": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["flag"] for loc in LOCATIONS},
+            "location_flags": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["flag"] for loc in self.included_locations},
             # Which |giveitem| hands out each location's vanilla item, so the client can keep it out of the
             # inventory and show the seed's item instead. Locations without a known one are left out.
             "location_gives": {
                 str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["give"]
-                for loc in LOCATIONS
+                for loc in self.included_locations
                 if "give" in loc["source"]
             },
             # Which locations are items lying in the world, known by their map and their own activationflag, so
             # the client can keep the vanilla item out when it's picked up.
             "location_pickups": {
                 str(LOCATION_NAME_TO_ID[loc["name"]]): {"map": loc["source"]["pickup"]["map"], "flag": loc["source"]["flag"]}
-                for loc in LOCATIONS
+                for loc in self.included_locations
                 if "pickup" in loc["source"]
             },
             # Where each of this world's items goes (0 item, 1 key item, 2 medal), so the client gives it the right

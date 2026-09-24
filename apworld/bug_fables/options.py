@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import PerGameCommonOptions, Range
+from Options import DefaultOnToggle, PerGameCommonOptions, Range
 
 
 class ArtifactsRequired(Range):
@@ -17,6 +17,17 @@ class ArtifactsRequired(Range):
     default = 1
 
 
+class ShuffleQuests(DefaultOnToggle):
+    """
+    Quest rewards are locations: quests from the quest board, and side quests such as helping a lost kid.
+
+    Turned off, quests give their usual rewards and aren't part of the seed.
+    """
+
+    display_name = "Shuffle Quests"
+
+
 @dataclass
 class BugFablesOptions(PerGameCommonOptions):
     artifacts_required: ArtifactsRequired
+    shuffle_quests: ShuffleQuests

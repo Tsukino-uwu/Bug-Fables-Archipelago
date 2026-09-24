@@ -472,6 +472,11 @@ beaten his monsters (Event31: `giveitem,1,52`, then flag 55, the check). He only
 which is a story event of its own (*Snakemouth Den Cleared*, flag 41), and his cutscene moves all three party
 members, so the location requires Leif and that event (test `TestLostKid`). Added from the code; testing it in
 game needs a save where Leif joined through the story, since a warped file without him crashes the cutscene.
+**Optional categories** (the user, 2026-09-24): a location can carry a `category`; its yaml option decides whether
+the seed includes it. *Shuffle Quests* (on by default) covers quest-board and side-quest rewards; one-off NPC gifts
+will have their own toggle. With a category off, its locations aren't created, their vanilla items stay out of the
+pool, and they're left out of `slot_data`, so the client never swaps them and the game hands them out as usual
+(tests `TestQuestsOff`, `TestQuestsOnByDefault`).
 **The general rule** (the user, 2026-09-24): if reaching something uses an ability, the logic requires that
 ability. Leif is in effect the freeze ability. Some droplet rooms are optional, so this is stricter than the game,
 which is the safe direction: never impossible, only less random.

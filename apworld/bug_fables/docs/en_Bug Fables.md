@@ -2,11 +2,18 @@
 
 ## What does randomization do to this game?
 
-Key items are shuffled across the multiworld. Picking up a key item in your game sends a check. Every item,
-your own included, arrives from the server and is given to you through the game's own item system.
+Key items, medals and other items are shuffled across the multiworld. Picking one up, being handed one, or
+finishing a quest sends a check instead, and the item lying there shows what the seed put in its place. Every
+item, your own included, arrives from the server and is given to you through the game's own item system.
 
-This is an early version: only a handful of early-game locations exist so far (the Explorer Permit, a favor
-reward, and the first medal, from Artis).
+This is an early version: it covers the start of the game (the Bugaria Outskirts and Snakemouth Den), with more
+chapters to come.
+
+## Options
+
+- **Artifacts Required** (1 to 7): the goal, see below.
+- **Shuffle Quests** (on by default): quest rewards, from the quest board and from side quests, are locations.
+  Turned off, quests give their usual rewards.
 
 ## What is the goal?
 

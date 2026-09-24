@@ -197,3 +197,23 @@ class TestLostKid(BugFablesTestBase):
         state.collect(BugFablesItem("Snakemouth Den Cleared", ItemClassification.progression, None, self.player),
                       prevent_sweep=True)
         self.assertTrue(location.can_reach(state))
+
+
+class TestQuestsOff(BugFablesTestBase):
+    # With quests off, a quest's reward isn't a location and its item isn't in the pool: the game hands it out as
+    # usual. Were it still in slot_data, the client would swap the reward for something the seed never placed.
+    options = {"shuffle_quests": False}
+
+    def test_quest_locations_left_out(self) -> None:
+        names = {loc.name for loc in self.multiworld.get_locations(self.player)}
+        self.assertNotIn("Snakemouth Den: Lake, Ladybug Kid's Reward", names)
+        pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        self.assertNotIn("Lore Book", pool)
+        gives = self.world.fill_slot_data()["location_gives"]
+        self.assertNotIn(str(self.world.location_name_to_id["Snakemouth Den: Lake, Ladybug Kid's Reward"]), gives)
+
+
+class TestQuestsOnByDefault(BugFablesTestBase):
+    def test_quest_location_included(self) -> None:
+        names = {loc.name for loc in self.multiworld.get_locations(self.player)}
+        self.assertIn("Snakemouth Den: Lake, Ladybug Kid's Reward", names)
