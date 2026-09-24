@@ -639,6 +639,13 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   up. It's `SnakemouthFallRoom`'s `JumpShroom`, which requires 41, next to the door back (requires 41); before the
   boss the room has a `blocker` instead (Event12, hidden by 41). So the trapdoor is one-way until flag 41, two-way
   after: a connection whose direction depends on a story flag.
+- **Scenery switched by flags** (2026-09-25, the map dump's new `bugfablesap-mapflags.tsv`: `ConditionChecker`
+  hides or moves an object by its own `requires`/`limit`, `FlagAnimation` plays an animation by flags; 328 such
+  objects in all maps). In `SnakemouthDoorRoom` the big door's closed halves (`Base/Door`, `Door (1)`) and the
+  trapdoor models are hidden from **flag 14** (the trapdoor fall), and the open halves (`Door (2)`, `Door (3)`) shown
+  from 14. So the door looks open from 14, while its load zone (`DoorLoadZone`) waits for 41. On
+  `UpperSnekEntrance`, the round door (`Base/CircleDoor`) is hidden and the Gem shown in the slot from **517**.
+  In `SnakemouthUndergrondDoor` the middle door's models switch at **35**; the switch rooms' `Gate`s at 33 / 34.
 
 ## What the Explorer Permit opens (2026-09-24, code read and ScriptDump; the wiki lists four uses)
 

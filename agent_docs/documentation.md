@@ -234,6 +234,12 @@ folder; the facts drawn from them go into `MEASURED.md`.
 
 *Code: `EntityDump.cs` (`TryRun`), switched on by `EntityDump` in the config's Debug section.*
 
+
+**Scenery switched by flags** (2026-09-25): a door can be two things, a load-zone entity and a model in the map's
+scenery that opens by a flag of its own. The scenery isn't an entity, so the entity dump can't see it. The map dump
+now also lists every `ConditionChecker` (hidden or moved by flags) and `FlagAnimation` (animated by flags) in each
+map prefab, into `bugfablesap-mapflags.tsv`, read from the prefab without instantiating it.
+
 ## 8. An Archipelago menu inside the game
 
 Players need to type a room address, a slot name and maybe a password, so the mod adds **"Archipelago"** to the

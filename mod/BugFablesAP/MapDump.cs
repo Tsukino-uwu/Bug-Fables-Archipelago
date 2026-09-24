@@ -16,6 +16,9 @@ namespace BugFablesAP
     //   - Hazards components by type (Hazards.cs:8). WalkableSpike is what the bubble shield walks over
     //     (Hazards.cs:207); Hole is a candidate for hover.
     //   - GlowTrigger components (GlowTrigger.cs): electric, which the bubble shield also blocks (:189).
+    //   - Scenery switched by story flags, into bugfablesap-mapflags.tsv: ConditionChecker (hidden, or moved to
+    //     activepos, by requires/limit flags, ConditionChecker.cs) and FlagAnimation (plays anims[i] while flags[i]
+    //     is set, FlagAnimation.cs). A door's model can be one of these, apart from its load zone entity.
     // Nothing is instantiated, so no Awake/Start runs. Output goes to the BepInEx folder, not the repo.
     internal static class MapDump
     {
@@ -28,6 +31,8 @@ namespace BugFablesAP
             string outPath = Path.Combine(Paths.BepInExRootPath, "bugfablesap-mapdump.tsv");
             var sb = new StringBuilder();
             sb.AppendLine("map\tautoevents(flag:event)\thazards(type:count)\tglowtriggers");
+            var flagged = new StringBuilder();
+            flagged.AppendLine("map\tcomponent\tobject\trequires\tlimit\tdetail");
             int maps = 0, missing = 0;
             foreach (MainManager.Maps map in Enum.GetValues(typeof(MainManager.Maps)))
             {
@@ -49,14 +54,43 @@ namespace BugFablesAP
                     hazards[key] = hazards.TryGetValue(key, out int n) ? n + 1 : 1;
                 }
                 int glow = prefab.GetComponentsInChildren<GlowTrigger>(true).Length;
+                foreach (ConditionChecker c in prefab.GetComponentsInChildren<ConditionChecker>(true))
+                {
+                    flagged.Append(map).Append("\tConditionChecker\t").Append(PathOf(c.transform, prefab.transform)).Append('\t')
+                        .Append(Join(c.requires)).Append('\t').Append(Join(c.limit)).Append('\t')
+                        .Append("region " + c.regionID + (c.activepos.magnitude > 0.1f ? ", moves to " + c.activepos : ", hides")
+                            + (c.dontdelete ? ", dontdelete" : "") + (c.spriteflagchange > -1 ? ", sprite on flag " + c.spriteflagchange : ""))
+                        .AppendLine();
+                }
+                foreach (FlagAnimation f in prefab.GetComponentsInChildren<FlagAnimation>(true))
+                {
+                    flagged.Append(map).Append("\tFlagAnimation\t").Append(PathOf(f.transform, prefab.transform)).Append("\t\t\t")
+                        .Append(f.flags == null ? "" : string.Join(" ", f.flags.Select((flag, i) =>
+                            flag + ":" + (f.anims != null && i < f.anims.Length ? f.anims[i] : "?")).ToArray()))
+                        .AppendLine();
+                }
                 sb.Append(map).Append('\t').Append(autos).Append('\t')
                   .Append(string.Join(" ", hazards.Select(kv => kv.Key + ":" + kv.Value).ToArray())).Append('\t')
                   .Append(glow).AppendLine();
             }
             File.WriteAllText(outPath, sb.ToString());
+            File.WriteAllText(Path.Combine(Paths.BepInExRootPath, "bugfablesap-mapflags.tsv"), flagged.ToString());
             Resources.UnloadUnusedAssets();
             log.LogInfo($"[dump] {maps} map prefabs read ({missing} with no prefab) -> {outPath}");
             return true;
+        }
+
+        private static string Join(int[] values) => values == null ? "" : string.Join(" ", values.Where(v => v != -1).Select(v => v.ToString()).ToArray());
+
+        private static string PathOf(Transform t, Transform root)
+        {
+            var parts = new List<string>();
+            for (Transform at = t; at != null && at != root; at = at.parent)
+            {
+                parts.Add(at.name);
+            }
+            parts.Reverse();
+            return string.Join("/", parts.ToArray());
         }
     }
 }
