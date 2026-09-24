@@ -13,16 +13,18 @@ anyone curious about the process, or thinking of doing the same for another game
 **Done so far:** the mod loads through BepInEx, reloads itself while the game runs, watches the game with
 read-only probes, and has a full list of where key items come from. The main menu has an Archipelago panel
 for connecting, randomizer saves are kept in their own folder, and finished locations are reported to the
-server.
+server, and items from the server arrive in the game once each.
 
 **Next:**
 
 1. **Test separate randomizer saves on screen**: save a game with the Archipelago mod enabled, check the normal saves
    are untouched. The redirect covers all five places the game touches a save file.
-2. **Give an item the game's own way**, when the server sends one.
+2. **Give an item the game's own way**, when the server sends one: works (apimplementation.md, build step 7).
 3. **Spot a location being done** (the flag the game sets) and report it: works (apimplementation.md, build
    step 6). The game's own item there is kept out, and the seed's item shown instead (step 9).
-4. **Keep the received-item count in the save**, so loading never hands items out twice.
+4. **Keep the received-item count in the save**, so loading never hands items out twice: works, in a save slot
+   the game never uses (`MEASURED.md`, "Free save slots for the mod").
+5. **The chat feed**, then the in-game text client (see the design list in step 2).
 
 ## The steps
 
