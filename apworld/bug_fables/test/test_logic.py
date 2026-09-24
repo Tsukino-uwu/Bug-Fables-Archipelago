@@ -47,9 +47,12 @@ class TestSlotData(BugFablesTestBase):
     # The client watches exactly the flags in location_flags and sends those checks. A location missing here
     # could never be sent; a flag that isn't the location's own would send the wrong check.
     def test_every_location_has_its_flag(self) -> None:
-        flags = self.world.fill_slot_data()["location_flags"]
+        data = self.world.fill_slot_data()
+        flags, variables = data["location_flags"], data["location_vars"]
         ids = {str(loc.address) for loc in self.multiworld.get_locations(self.player) if loc.address is not None}
-        self.assertEqual(set(flags), ids)
+        # Each location is watched one way or the other, never both, never neither.
+        self.assertEqual(set(flags) | set(variables), ids)
+        self.assertFalse(set(flags) & set(variables))
         self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Maki and Eetl's Gift"])], 15)
         self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Artis's Gift"])], 32)
 
@@ -252,3 +255,21 @@ class TestKeptOpen(BugFablesTestBase):
     def test_eetls_blocker_is_kept_open(self) -> None:
         kept = self.world.fill_slot_data()["kept_open"]
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "eetlblocker1 - Duplicate"}, kept)
+
+
+class TestBossPrize(BugFablesTestBase):
+    # The first boss's prize is handed over by Artis; the client knows it's done when its prize slot reaches 3.
+    def test_prize_watched_by_its_slot(self) -> None:
+        variables = self.world.fill_slot_data()["location_vars"]
+        prize = str(self.world.location_name_to_id["Outskirts: Artis's Prize for Snakemouth Den"])
+        self.assertEqual(variables[prize], {"var": 13, "at_least": 3})
+
+    def test_prize_needs_the_boss(self) -> None:
+        from BaseClasses import CollectionState, ItemClassification
+        from ..world import BugFablesItem
+        location = self.world.get_location("Outskirts: Artis's Prize for Snakemouth Den")
+        state = CollectionState(self.multiworld)
+        self.assertFalse(location.can_reach(state))
+        state.collect(BugFablesItem("Snakemouth Den Cleared", ItemClassification.progression, None, self.player),
+                      prevent_sweep=True)
+        self.assertTrue(location.can_reach(state))

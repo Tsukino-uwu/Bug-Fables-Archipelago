@@ -11,6 +11,7 @@
     {"name": "Poison Resistance", "game_id": 7, "kind": 2, "classification": "useful"},
     {"name": "Mushroom Gummies", "game_id": 144, "kind": 0, "classification": "filler"},
     {"name": "Lore Book", "game_id": 52, "kind": 1, "classification": "useful"},
-    {"name": "Spicy Berry", "game_id": 2, "kind": 0, "classification": "filler"}
+    {"name": "Spicy Berry", "game_id": 2, "kind": 0, "classification": "filler"},
+    {"name": "Quick Flea", "game_id": 5, "kind": 2, "classification": "useful"}
   ]
 }

@@ -269,6 +269,21 @@ namespace BugFablesAP
             return result;
         }
 
+        // slot_data's location_vars: locations marked done by a number slot reaching a value, not a flag
+        // ({location id: {var, at_least}}; a boss prize handed over is its prize slot reaching 3). Null when not sent.
+        internal Dictionary<long, int[]> LocationVars => locationVars;
+        private volatile Dictionary<long, int[]> locationVars;
+
+        private static Dictionary<long, int[]> ReadLocationVars(Dictionary<string, object> slotData)
+        {
+            if (slotData == null || !slotData.TryGetValue("location_vars", out object raw) || !(raw is JObject map))
+            {
+                return null;
+            }
+            return map.Properties().ToDictionary(p => long.Parse(p.Name),
+                p => new[] { p.Value.Value<int>("var"), p.Value.Value<int>("at_least") });
+        }
+
         // slot_data's kept_open: blockers the story puts up for a while that the seed keeps out of the way, so an area
         // with locations never closes ([{map, entity}], KeptOpen). Null when the world didn't send it.
         internal List<Blocker> KeptOpen => keptOpen;
@@ -425,11 +440,12 @@ namespace BugFablesAP
                     locationGives = ReadLocationGives(ok.SlotData);
                     locationPickups = ReadLocationPickups(ok.SlotData);
                     keptOpen = ReadKeptOpen(ok.SlotData);
+                    locationVars = ReadLocationVars(ok.SlotData);
                     ownSlot = ok.Slot;
                     itemKinds = ReadItemKinds(ok.SlotData);
                     scouts = null;
                     // Every location this slot has: gifts and pickups alike show what's really there.
-                    Scout(attempt, locationFlags?.Keys);
+                    Scout(attempt, (locationFlags?.Keys ?? Enumerable.Empty<long>()).Concat(locationVars?.Keys ?? Enumerable.Empty<long>()).ToList());
                     attempt.Locations.CheckedLocationsUpdated += ids =>
                         Post("[check] now checked on the server: " + string.Join(", ", ids.Select(id => id.ToString()).ToArray()));
                     attempt.Socket.PacketReceived += packet => Heard();

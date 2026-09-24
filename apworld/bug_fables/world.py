@@ -149,7 +149,13 @@ class BugFablesWorld(World):
         return {
             "world_version": WORLD_VERSION,
             "artifacts_required": self.artifacts_required,
-            "location_flags": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["flag"] for loc in self.included_locations},
+            "location_flags": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["flag"] for loc in self.included_locations
+                               if "flag" in loc["source"]},
+            # Locations marked done by a number slot reaching a value instead of a flag (a boss prize handed over:
+            # its prize slot reaching 3).
+            "location_vars": {str(LOCATION_NAME_TO_ID[loc["name"]]): {"var": loc["source"]["var"],
+                                                                       "at_least": loc["source"]["at_least"]}
+                              for loc in self.included_locations if "var" in loc["source"]},
             # Which |giveitem| hands out each location's vanilla item, so the client can keep it out of the
             # inventory and show the seed's item instead. Locations without a known one are left out.
             "location_gives": {

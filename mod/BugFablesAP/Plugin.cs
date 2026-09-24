@@ -235,6 +235,7 @@ namespace BugFablesAP
             receiver.Tick(randomizerEnabled.Value);
             ItemSwap.TickGround();
             MedalAssist.Tick();
+            MedalAssist.PayPrizes();
 
             DevCheats.Tick(Log, giveMoney);
             DevConsole.Tick(devConsole.Value);

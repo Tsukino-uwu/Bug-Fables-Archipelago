@@ -79,6 +79,26 @@ namespace BugFablesAP
                 log.LogInfo($"[check] location {entry.Key} is done (flag {entry.Value} set) on {Where()}: sending");
                 (finished ?? (finished = new List<long>())).Add(entry.Key);
             }
+            // Locations marked by a number slot reaching a value (a boss prize handed over: its slot reaching 3).
+            Dictionary<long, int[]> vars = connection.LocationVars;
+            if (vars != null && mm.flagvar != null)
+            {
+                foreach (KeyValuePair<long, int[]> entry in vars)
+                {
+                    int slot = entry.Value[0];
+                    if (handled.Contains(entry.Key) || slot < 0 || slot >= mm.flagvar.Length || mm.flagvar[slot] < entry.Value[1])
+                    {
+                        continue;
+                    }
+                    handled.Add(entry.Key);
+                    if (session.Locations.AllLocationsChecked.Contains(entry.Key))
+                    {
+                        continue;
+                    }
+                    log.LogInfo($"[check] location {entry.Key} is done (flagvar[{slot}] = {mm.flagvar[slot]}) on {Where()}: sending");
+                    (finished ?? (finished = new List<long>())).Add(entry.Key);
+                }
+            }
             if (finished != null)
             {
                 connection.SendChecks(session, finished.ToArray());

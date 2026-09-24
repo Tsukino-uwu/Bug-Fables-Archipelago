@@ -10,7 +10,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 
 ## Where it stands
 
-**Done so far:** a small apworld (11 locations, 11 items) that generates seeds and passes its tests, with the
+**Done so far:** a small apworld (12 locations, 12 items) that generates seeds and passes its tests, with the
 goal "collect N artifacts"; the mod connecting on its own, compressed, to a local server or a hosted room on
 archipelago.gg, retrying when the server is unreachable or drops; sending checks (build step 6); receiving
 items, with the count kept in the save (build step 7); and the game's own item at a location swapped for the
@@ -21,6 +21,12 @@ seed's (the mod guide, step 9).
 1. **Every key item and medal in the pool,** on logic that follows the vanilla story order: one region
    per chapter, entered once the chapter before is finished and the story's own keys and abilities are
    in hand. Medal gifts and medal shops each get a yaml on/off toggle.
+   **Built 2026-09-24 (not yet seen in game):** each tick outside battles and events, a prize slot reading "missed"
+   (2) is paid through the game's own `AddPrizeMedal(slot)` with Hard Mode answered "yes" for that call, because
+   most bosses test Hard Mode in their own event and write 2 directly. Artis's `Event33` then hands the prize over
+   with a `giveitem` the swap handles, and the location is done when the slot reaches 3 (`location_vars`, a number
+   slot instead of a flag). First location: *Outskirts: Artis's Prize for Snakemouth Den* (Quick Flea, which the
+   user saw for sale at the caravan and bought after a Normal kill: the missed-prize path, confirmed on screen).
    **Hard Mode boss prize medals** (23, `MEASURED.md`) are always shuffled, with no option: every boss pays
    its prize as if Hard Mode were on, whatever the player's setting, so a prize can never be skipped and its
    location is simply "beat this boss". The mod does that by widening the Hard Mode test inside the game's

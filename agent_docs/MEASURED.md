@@ -435,7 +435,10 @@ The output stays in the BepInEx folder.
   (`EventControl.cs:5724-5752`), then sets the slot to **3**. **Event33 is started by talking to Artis**
   (`ShwEmArtys`, outside the city; seen in the event log, 2026-09-24).
 - **Seen in play (the user, 2026-09-24):** the first boss beaten on Normal wrote its slot as missed; talking to Artis
-  then gave nothing, and the caravan (open after flag 41) offered a medal, which fits the missed prize for sale.
+  then gave nothing, and the caravan (open after flag 41) offered a medal: **Quick Flea, medal 5 = `prizeids[0]`**,
+  which the user bought. Confirmed: a missed prize is sold at the caravan. Event26 writes a Normal kill's slot
+  directly (`flagvar[13] = 2`, `EventControl.cs:4962`), not through `AddPrizeMedal`; eight boss events test Hard
+  Mode themselves like this.
 - **Value 2 is not lost:** a caravan medal seller (`Interaction.CaravanBadge`, `NPCControl.CaravanMedalSet`,
   `NPCControl.cs:1462`) offers the missed ones one at a time, in random order (`PrizeBadges(caravan: true)`),
   and buying one sets its slot to **3** (`Setprize`, `MainManager.cs:11090-11121`). `CaravanBadge`

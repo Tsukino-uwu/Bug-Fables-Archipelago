@@ -135,13 +135,49 @@ namespace BugFablesAP
             forced = false;
         }
 
+        // Boss prize medals are always paid out as if Hard Mode were on (the user, 2026-09-24), so a prize can never be
+        // skipped and its location is "beat this boss". Most bosses test Hard Mode in their own event and, when it's
+        // off, write their prize slot as missed (2) directly (e.g. Event26: flagvar[13] = 2; eight events do this);
+        // others go through AddPrizeMedal. So each tick, a slot reading 2 is paid properly by the game's own
+        // AddPrizeMedal(slot) with Hard Mode answered "yes" for that call: it writes 1 (earned), sets flag 56 (a prize
+        // waits at Artis, whose Event33 hands it over) and counts it (flagvar[55]), as the Hard Mode path does
+        // (MainManager.cs:3981). Never in battle (a retry rolls flagvar back) or in an event.
+        private static bool payingPrize;
+
+        internal static void PayPrizes()
+        {
+            MainManager mm = MainManager.instance;
+            if (active == null || !active() || mm == null || mm.flagvar == null || mm.prizeflags == null || MainManager.map == null
+                || mm.inbattle || MainManager.battle != null || mm.inevent)
+            {
+                return;
+            }
+            for (int i = 0; i < mm.prizeflags.Length; i++)
+            {
+                if (mm.flagvar[mm.prizeflags[i]] != 2)
+                {
+                    continue;
+                }
+                payingPrize = true;
+                try
+                {
+                    MainManager.AddPrizeMedal(i);
+                }
+                finally
+                {
+                    payingPrize = false;
+                }
+                log.LogInfo($"[medals] prize {i} (flagvar[{mm.prizeflags[i]}]) was missed; paid as Hard Mode, now {mm.flagvar[mm.prizeflags[i]]}: waiting at Artis");
+            }
+        }
+
         private static void Postfix(int id, int playerid, ref bool __result)
         {
             if (__result || playerid != -1 || active == null || !active())
             {
                 return;
             }
-            if ((id == HardModeMedal && hard()) || (id == DetectorMedal && detector()))
+            if ((id == HardModeMedal && (hard() || payingPrize)) || (id == DetectorMedal && detector()))
             {
                 __result = true;
             }
