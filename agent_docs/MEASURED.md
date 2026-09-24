@@ -108,6 +108,10 @@ throttled to changes.
   tutorial (`!flags[108] && animid == 3` in `CheckItem`, like flag 31 for the first medal). **A crystal
   berry's location identity is its `crystalbflags` index**: permanent, saved, and re-readable on connect.
   `flag[22]` flipped earlier on the same map with no item script, so it belongs to something else.
+- **A second crystal berry:** on `SnakemouthLake`, `crystalbflag[1]` flipped (frame 111883), with no
+  tutorial flag this time. The script was `|additemtoss,3,var,0|` with `caller=tempitem`, and `flagvar[0]`
+  read 1 (HoneyDrop), **a stale value left from an earlier pickup**. `flagvar[0]` means nothing for crystal
+  berries; their `crystalbflags` index is their identity. `flag[25]` flipped earlier on that map, unrelated.
 - **A second ground pickup:** a Crunchy Leaf (id 0) on `BugariaOutskirtsSnakemouthCorridor2` with
   `regionalflag,13`, so it respawns. `regionalflag[5]` flipped there too, with no item script. Both maps are
   in area `BugariaOutskirts`, so regional flags carry across the maps of one area and are wiped only on an
@@ -136,6 +140,27 @@ throttled to changes.
   files; nothing we build ever touches them directly.
 - **Starting a new game did not replace `flags` or `items[1]`.** The probe re-baselines when either
   array is replaced, and it didn't. Loading a saved game hasn't been observed yet.
+
+## Save files (2026-09-24, decompiled `InputIOManager/InputIO.cs`)
+
+- **Saves are relative paths in the game folder**, the working directory: `save<N>.dat`, where N is the
+  slot starting at 0.
+- **`InputIO.Save` (`InputIO.cs:510`)** calls `File.*` directly, not through the wrappers. It writes
+  `save<N>t.dat`, deletes `save<N>backup.dat`, moves `save<N>.dat` to `save<N>backup.dat`, then moves the temp
+  file to `save<N>.dat`. The content is `Encrypt(MainManager.SaveFile(savepos))`. Called from
+  `MainManager.cs:17413`.
+- **The wrappers take a path:** `ReadFile` (`:416`), `DeleteFile` (`:425`), `CreateFile` (`:457`), and
+  `SaveExists(int id)` (`:249`, `File.Exists("save"+id+".dat")`).
+- **Every other site that builds a save name:** load at `MainManager.cs:17034/17040` (`ReadFile`), copy at
+  `StartMenu.cs:685` (`CreateFile` + `ReadFile`, prefix `text = ""`), delete at `StartMenu.cs:705`
+  (`DeleteFile`), and the existence check at `BattleControl.cs:3554` (`SaveExists`).
+- **So a complete redirect** rewrites `save<N>[t|backup].dat` in the four wrappers and replaces `Save`'s file
+  handling. Everything else goes through those.
+- **Steam Cloud:** the game folder has `steam_autocloud.vdf` (holding only an account id, which never goes
+  into the repo). That marks Steam **Auto-Cloud**, whose file patterns are configured on Steam's side and
+  can't be read locally. It doesn't affect safety: randomizer saves use different names in another folder,
+  so the game never writes a normal save's file. Whether Steam also syncs the randomizer folder only decides
+  whether those saves roam between PCs.
 
 ## Key-item grant sources, raw (2026-09-24) — SPOILERS for the whole game
 
