@@ -146,6 +146,12 @@ namespace BugFablesAP
             {
                 return;
             }
+            // Closing the game's Settings from the title resets maxoptions to 3 (PauseMenu.cs:1811), which would
+            // leave "Archipelago" unreachable until the menu is rebuilt.
+            if (MainManager.instance.maxoptions == Option)
+            {
+                MainManager.instance.maxoptions = Option + 1;
+            }
             Transform cursor = MainManager.instance.cursor.transform;
             Vector3 p = cursor.localPosition;
             cursor.localPosition = new Vector3(p.x, -MainManager.instance.option * Spacing - 0.25f, p.z);

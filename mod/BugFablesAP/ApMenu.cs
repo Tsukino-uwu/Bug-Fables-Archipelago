@@ -30,6 +30,7 @@ namespace BugFablesAP
         private Transform box;
         private Transform help;
         private SpriteRenderer leaf;
+        private SpriteRenderer dimmer;
         private Transform arrows;
         private Transform textRoot;
         private int row;
@@ -68,11 +69,31 @@ namespace BugFablesAP
             SetTitleVisible(false);
             // The same two boxes as the game's settings screen (PauseMenu window 4, PauseMenu.cs:2707): the orange
             // leafy box (type 1) and the controls box above it (type 4), with the game's own button hints.
+            // Hang off the GUI camera at (0, 0, 10) as PauseMenu does (PauseMenu.cs:143). Under the title screen's
+            // own object (at y = -1) everything sat one unit low (the user's screenshot, 2026-09-24).
+            transform.parent = MainManager.GUICamera.transform;
+            transform.localPosition = new Vector3(0f, 0f, 10f);
+            transform.localEulerAngles = Vector3.zero;
+            gameObject.layer = 5;
+            // PauseMenu's dimmer: a black square stretched over the screen, faded to half (PauseMenu.cs:146-157,
+            // 229). On the settings screen it's what hides the title screen's white haze.
+            var pixel = new Texture2D(1, 1);
+            pixel.SetPixel(0, 0, Color.black);
+            pixel.Apply();
+            dimmer = new GameObject("Dimmer").AddComponent<SpriteRenderer>();
+            dimmer.sprite = Sprite.Create(pixel, new Rect(0f, 0f, 1f, 1f), new Vector2(0.5f, 0.5f));
+            dimmer.color = Color.clear;
+            dimmer.transform.parent = transform;
+            dimmer.transform.localPosition = Vector3.zero;
+            dimmer.transform.localEulerAngles = Vector3.zero;
+            dimmer.transform.localScale = new Vector3(3000f, 3000f, 1f);
+            dimmer.gameObject.layer = 5;
+            dimmer.sortingOrder = -100;
             box = MainManager.Create9Box(new Vector3(0f, -1f, 10f), new Vector2(13.5f, 7.25f), 1, BoxSort, Color.white, false);
-            box.parent = owner.transform;
+            box.parent = transform;
             box.localPosition = new Vector3(0f, -1f, 0f);
-            help = MainManager.Create9Box(new Vector3(0f, 3.75f, 10f), new Vector2(12.5f, 2f), 4, BoxSort, Color.white, false);
-            help.parent = owner.transform;
+            help = MainManager.Create9Box(new Vector3(0f, 3.75f, 10f), new Vector2(12.5f, 2f), 4, HelpSort, Color.white, false);
+            help.parent = transform;
             help.localPosition = new Vector3(0f, 3.75f, 0f);
             new GameObject("confirmbutton").AddComponent<ButtonSprite>().SetUp(4, -1, "Select / Edit", new Vector3(-4.5f, 0.25f), Vector3.one * 0.5f, ButtonSort, help);
             new GameObject("cancelbutton").AddComponent<ButtonSprite>().SetUp(5, -1, "Back", new Vector3(0.5f, 0.25f), Vector3.one * 0.5f, ButtonSort, help);
@@ -98,14 +119,6 @@ namespace BugFablesAP
 
         private void Close()
         {
-            if (box != null)
-            {
-                Destroy(box.gameObject);
-            }
-            if (help != null)
-            {
-                Destroy(help.gameObject);
-            }
             SetTitleVisible(true);
             Traverse.Create(owner).Field("canselect").SetValue(true);
             Traverse.Create(owner).Field("cd").SetValue(10f);
@@ -115,10 +128,13 @@ namespace BugFablesAP
             log.LogInfo("[apmenu] closed");
         }
 
-        private const int BoxSort = 100;
-        private const int ButtonSort = 115;
-        private const int CursorSort = 130;
-        private const string TextSort = "|sort,110|";
+        // The settings screen's own draw orders (PauseMenu.cs:2707-2712): box -20, controls box -10, hints 5.
+        // Higher values drew the panel over its own button labels (the user's screenshot, 2026-09-24).
+        private const int BoxSort = -20;
+        private const int HelpSort = -10;
+        private const int ButtonSort = 5;
+        private const int CursorSort = 20;
+        private const string TextSort = "|sort,10|";
         // Row heights inside the orange box, top to bottom; labels on the left, values on the right, as in the
         // settings screen.
         private static readonly float[] RowY = { 2.55f, 1.65f, 0.75f, -0.15f, -1.05f, -1.95f };
@@ -147,6 +163,10 @@ namespace BugFablesAP
         {
             try
             {
+                if (dimmer != null)
+                {
+                    dimmer.color = Color.Lerp(dimmer.color, new Color(1f, 1f, 1f, 0.5f), 0.15f);
+                }
                 if (settleFrames > 0)
                 {
                     settleFrames--;
@@ -328,12 +348,12 @@ namespace BugFablesAP
             arrows = new GameObject("arrows").transform;
             arrows.parent = box;
             arrows.localPosition = Vector3.zero;
-            new GameObject("left").AddComponent<ButtonSprite>().SetUp(2, -1, "", new Vector3(0.1f, RowY[ModeRow] + 0.25f), Vector3.one * 0.5f, ButtonSort, arrows);
-            new GameObject("right").AddComponent<ButtonSprite>().SetUp(3, -1, "", new Vector3(5.1f, RowY[ModeRow] + 0.25f), Vector3.one * 0.5f, ButtonSort, arrows);
+            new GameObject("left").AddComponent<ButtonSprite>().SetUp(2, -1, "", new Vector3(0.7f, RowY[ModeRow] + 0.25f), Vector3.one * 0.5f, ButtonSort, arrows);
+            new GameObject("right").AddComponent<ButtonSprite>().SetUp(3, -1, "", new Vector3(4.5f, RowY[ModeRow] + 0.25f), Vector3.one * 0.5f, ButtonSort, arrows);
             Text("|center||size,0.8|" + (mode.Value ? "ON" : "OFF"), 2.6f, RowY[ModeRow]);
 
             Text("|center||size,0.5|" + Safe(shownStatus), 0f, -3.0f);
-            leaf.transform.localPosition = new Vector3(LabelX - 0.9f, RowY[row] + 0.3f, 0f);
+            leaf.transform.localPosition = new Vector3(LabelX - 0.7f, RowY[row] + 0.3f, 0f);
         }
 
         private void Label(int r, string label)
