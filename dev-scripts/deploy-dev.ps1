@@ -41,7 +41,17 @@ foreach ($lib in 'Archipelago.MultiClient.Net.dll', 'Newtonsoft.Json.dll') {
 }
 # Copy-Item keeps the source's timestamp, and an unchanged build doesn't rewrite the DLL, so a redeploy
 # looked like no change to DevReload (2026-09-24). Stamp the DLL last, after the pdb is in place.
-(Get-Item (Join-Path $scripts 'BugFablesAP.dll')).LastWriteTimeUtc = [DateTime]::UtcNow
+# The running game may be reading the DLL at that instant (seen 2026-09-24: "being used by another
+# process"), so retry briefly.
+for ($try = 1; $try -le 10; $try++) {
+    try {
+        (Get-Item (Join-Path $scripts 'BugFablesAP.dll')).LastWriteTimeUtc = [DateTime]::UtcNow
+        break
+    } catch {
+        if ($try -eq 10) { throw }
+        Start-Sleep -Milliseconds 300
+    }
+}
 
 $cfg = Join-Path $GameDir 'BepInEx\config\com.bepis.bepinex.scriptengine.cfg'
 @(

@@ -132,9 +132,19 @@ throttled to changes.
 - **The first boss:** `Event26` (`EventControl.cs:4342`) starts the battle (`StartBattle`, enemy id 13) and
   sets `flags[41]` at its end. It grants no item. `flag[41]` flipped at frame 119806 in
   `SnakemouthTreasureRoom`. **"Beat the first boss" is flag 41.**
-- **The treasure after the boss** (the user picked it up, 2026-09-24): no key item, no item script and no flag
-  logged at the pickup. The next event, `Event27` (`:4980`), sets `flags[43]`; how the treasure is recorded is
-  still to be measured.
+- **The treasure after the boss leaves no trace of its own** (the user picked it up, 2026-09-24). Nothing was
+  logged at the pickup. `SaveDiff` of the user's save before the boss (`save2backup.dat`, 02:37) against after
+  the treasure (`save2.dat`, 02:55), decoded in-game with `InputIO.Encrypt`, found:
+  - line 11 (the 750 global flags): only `[41]` changed;
+  - line 6 (the items, `items[0]@items[1]@items[2]`): the key items are still just `27`;
+  - line 14 (regional flags): the treasure room's wipe;
+  - line 10 (a 5-row true/false table): only `[4,0]`. That's `librarystuff[4, area]`, which `UpdateArea` sets
+    on entering an area (`MainManager.cs:4083`).
+
+  **So the treasure is a story moment, and flag 41 carries it.**
+- **The save file's layout, as far as seen:** 18 lines, where line 6 is the three item lists joined by `@`,
+  line 10 is `librarystuff` (5 rows), line 11 the 750 `flags`, and line 14 the 100 `regionalflags`. Other
+  lines changed with ordinary play (position, stats, counters) and aren't identified yet.
 - **A two-part door, no item involved:** `flag[33]` on `SnakemouthUndergroundLeftB` (frame 25491), then
   `flag[34]` on `SnakemouthUndergroundRightB` (38629), then `flag[35]` on `SnakemouthUndergrondDoor`
   (39302). **The user, on screen:** they did the left side, then the right, and the door opened. So in the

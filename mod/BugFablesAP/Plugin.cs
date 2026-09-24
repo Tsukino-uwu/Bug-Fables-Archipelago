@@ -24,6 +24,8 @@ namespace BugFablesAP
         private ApConnection connection;
         private bool connectRequested;
         private bool scriptDumpDone;
+        private ConfigEntry<string> saveDiff;
+        private bool saveDiffDone;
         private GrantProbe grantProbe;
 
         private void Awake()
@@ -35,6 +37,9 @@ namespace BugFablesAP
             textProbeEnabled = Config.Bind("Debug", "TextProbe", false,
                 "Dev only. Logs every dialogue script that carries an item command, with the map and calling NPC. "
                 + "Off by default.");
+            saveDiff = Config.Bind("Debug", "SaveDiff", "",
+                "Dev only. Two save file names separated by |, e.g. 'save2backup.dat|save2.dat'. Once per load, logs "
+                + "what changed between them (read-only). Empty = off.");
             scriptDumpEnabled = Config.Bind("Debug", "ScriptDump", false,
                 "Dev only. Once per launch, writes the item and flag command tokens of every map's dialogue lines to "
                 + "BepInEx/bugfablesap-scriptdump.tsv. Off by default.");
@@ -109,6 +114,16 @@ namespace BugFablesAP
                 }
             }
             connection.Tick();
+
+            if (!saveDiffDone && !string.IsNullOrEmpty(saveDiff.Value))
+            {
+                saveDiffDone = true;
+                string[] pair = saveDiff.Value.Split('|');
+                if (pair.Length == 2)
+                {
+                    SaveDiff.Run(Log, pair[0].Trim(), pair[1].Trim());
+                }
+            }
 
             if (scriptDumpEnabled.Value && !scriptDumpDone)
             {

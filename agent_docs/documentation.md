@@ -105,6 +105,10 @@ can.
 **Lesson:** the live log caught a mistake in our reading of the code (every item number was off by one),
 which is why things are measured, not just read.
 
+When something left no trace in the log at all, we compared two of the user's saves instead: one from before
+and one from after. The mod decodes both inside the game, using the game's own routine (so the game's key
+never leaves it), and lists which values changed. It's read-only and never writes a save.
+
 ## 7. List everything, without playing everything
 
 Playing the whole game to find every item would take days, so we also asked the running game directly:
