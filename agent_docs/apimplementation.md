@@ -450,6 +450,9 @@ is *Snakemouth Den Underground*, whose entrance needs the story event *Leif*. Le
 flag 16), which is on the open side, so the logic can't go in circles. The first boss's treasure room is
 underground, so Artifact 1 needs Leif too. Story events like this one live in `locations.json` under
 `story_events`; a location can also list extra `requires` of its own. Tests `TestLeif` fail without the rule.
+**The general rule** (the user, 2026-09-24): if reaching something uses an ability, the logic requires that
+ability. Leif is in effect the freeze ability. Some droplet rooms are optional, so this is stricter than the game,
+which is the safe direction: never impossible, only less random.
 
 Still to do: the one event not found, characters that block a path, the region graph built from all of
 it, and the tests.
