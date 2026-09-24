@@ -9,14 +9,14 @@ namespace BugFablesAP
     // The Archipelago panel, opened from "Archipelago" on the main menu. It's drawn with the game's own box and
     // font (MainManager.Create9Box / SetText) and takes real typing, so an address can be typed or pasted.
     //
-    // Rows: Address, Port, Slot, Password, Archipelago mod, Difficulty, Detector, Back. It connects on its own (Plugin.AutoConnect). Up/down move; confirm (C / Enter) edits
+    // Rows: Address, Port, Slot, Password, Difficulty, Detector, Archipelago (the mod on/off), Back. It connects on its own (Plugin.AutoConnect). Up/down move; confirm (C / Enter) edits
     // a text row or presses a button; cancel (X / Escape) closes. While a row is being edited, the keyboard
     // types into it: Backspace deletes, Ctrl+V pastes, Ctrl+C copies the row, Enter keeps, Escape reverts.
     // The title screen's own input is suspended while the panel is open (StartMenu.canselect), so the game's
     // key letters (C, X, Z, V) can be typed.
     internal sealed class ApMenu : MonoBehaviour
     {
-        private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, DifficultyRow = 5, DetectorRow = 6,
+        private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, DifficultyRow = 4, DetectorRow = 5, ModeRow = 6,
             BackRow = 7, Rows = 8;
 
         // The Difficulty and Detector rows' settings (Plugin, MedalAssist).
@@ -413,7 +413,7 @@ namespace BugFablesAP
             arrows = new GameObject("arrows").transform;
             arrows.parent = box;
             arrows.localPosition = Vector3.zero;
-            Choice(ModeRow, "Archipelago mod", mode.Value ? "ENABLED" : "DISABLED");
+            Choice(ModeRow, "Archipelago", mode.Value ? "ENABLED" : "DISABLED");
             Choice(DifficultyRow, "Difficulty", (Difficulty?.Value ?? "Normal").ToUpperInvariant());
             Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
 

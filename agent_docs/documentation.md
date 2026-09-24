@@ -227,6 +227,8 @@ game's main menu. It opens a panel drawn with the game's own box and font, so it
 but it takes real typing: the game itself never reads typed text (its name screen is a letter grid), so the
 mod reads the keyboard itself. Backspace, Ctrl+V to paste and Ctrl+C to copy all work. The same panel switches
 **the Archipelago mod** (enabled or disabled), which keeps randomizer saves in their own folder so normal saves are never touched.
+Its rows, top to bottom (the user's order, 2026-09-24): Address, Port, Slot, Password, Difficulty, Detector,
+**Archipelago** (the mod on/off, just "Archipelago"), Back.
 
 Several things went wrong on the way, each found on screen by the user:
 

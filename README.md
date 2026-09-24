@@ -42,7 +42,12 @@ On the game's main menu, choose **Archipelago**. The panel has:
   `archipelago.gg:38281` into Address fills in the port too.
 - **Slot**: your slot name in the room.
 - **Password**: only if the room has one; leave it empty otherwise.
-- **Archipelago mod**: Enabled keeps randomizer saves in their own folder, apart from your normal saves.
+- **Difficulty**: Normal (the default) leaves it to the game. Hard plays as if the Hard Mode medal were
+  equipped, Hardest as if the save had the HARDEST code, without writing it into the save. Boss prize medals
+  are handed out on every setting.
+- **Detector**: On (the default) acts as if the Detector medal were equipped, to help find items. Off leaves
+  it to the medal.
+- **Archipelago**: Enabled keeps randomizer saves in their own folder, apart from your normal saves.
   The main menu shows it as "Archipelago (Enabled)" or "(Disabled)".
 - **Back**, and a line showing the connection's state.
 
