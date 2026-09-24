@@ -602,7 +602,8 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   `SnakemouthUndergroundRightB`. On `SnakemouthUndergrondDoor`, the `DoorEvent` trigger requires **both 33 and 34**
   and is hidden by **35**, presumably the middle door opened (not yet seen). The log confirmed Event23 started by
   RightB's Big Switch when the user hit it. Past the lowered barrier, the path leads back and **drops down into the big-door room** (the user): a
-  one-way way back, for the room-level graph. The left and right
+  one-way way back, for the room-level graph. The ledge above the drop can't be climbed to from the big-door
+  room: it's reached only from the switch room, through the lowered barrier (the user). The left and right
   switches can be done in either order; both are needed to open the middle door, which leads on to the first boss.
   The Crunchy Leaf behind the pillar needs nothing once you're in its room (the user).
 
