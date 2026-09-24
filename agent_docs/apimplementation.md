@@ -21,6 +21,12 @@ seed's (the mod guide, step 9).
 1. **Every key item and medal in the pool,** on logic that follows the vanilla story order: one region
    per chapter, entered once the chapter before is finished and the story's own keys and abilities are
    in hand. Medal gifts and medal shops each get a yaml on/off toggle.
+   **Hard Mode boss prize medals** (23, `MEASURED.md`) get their own toggle, `shuffle_boss_prize_medals`,
+   off by default. Turning it on also forces the Hard Mode reward: every boss pays its prize as if Hard
+   Mode were on, equipped or not, so a prize can never be skipped and its location is simply "beat this
+   boss". The mod does that by widening the Hard Mode test inside the game's own `AddPrizeMedal`, from
+   `slot_data`, never by writing the prize slot itself. The Hard Mode medal (Artis's) stays shuffled:
+   logic never needs Hard Mode (the user, 2026-09-24).
 2. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
 3. **An open-world option later,** researched one chapter at a time.
