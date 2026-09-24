@@ -85,6 +85,9 @@ Archipelago's `custom_worlds` folder.
   location). *Useful*: especially good to have; never placed on an excluded location. *Filler*: can be
   ignored; the only kind an excluded location gets. *Trap*: detrimental to receive; a yaml option may swap
   filler for traps.
+- **The pool holds one of every item that isn't filler, then filler for the rest.** The G-Bug Ranger Plushie
+  (a key item) joined as *useful* on 2026-09-24, so a test could put it on Artis's medal. Its own vanilla
+  spot at the Bugaria theater isn't a location yet, so the game still hands that copy out there.
 - **Logic lives on regions and locations, never on items.** An item doesn't say what it unlocks. A region's
   exits say what they need (the gate out of the Outskirts needs the Explorer Permit), and every location
   belongs to a region. A location needing something more than its region adds that to itself.

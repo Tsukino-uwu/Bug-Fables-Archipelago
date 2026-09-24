@@ -19,6 +19,11 @@ class TestPermitGate(BugFablesTestBase):
         self.assertTrue(self.can_reach_location("Outskirts: Favor Reward"))
         self.assertTrue(self.can_reach_location("Outskirts: Artis's Medal"))
 
+    def test_every_non_filler_item_is_in_the_pool(self) -> None:
+        pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        self.assertIn("Explorer Permit", pool)
+        self.assertIn("G-Bug Ranger Plushie", pool)
+
     def test_pool_matches_locations(self) -> None:
         pool = [item for item in self.multiworld.itempool if item.player == self.player]
         locations = [loc for loc in self.multiworld.get_locations(self.player) if loc.address is not None]

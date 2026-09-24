@@ -101,8 +101,9 @@ class BugFablesWorld(World):
         return BugFablesItem(name, _CLASSIFICATIONS[data["classification"]], ITEM_NAME_TO_ID[name], self.player)
 
     def create_items(self) -> None:
+        # One of every item that isn't filler, then filler for the locations left.
         pool: list[Item] = [
-            self.create_item(item["name"]) for item in ITEMS if item["classification"] == "progression"
+            self.create_item(item["name"]) for item in ITEMS if item["classification"] != "filler"
         ]
         unfilled = len(self.multiworld.get_unfilled_locations(self.player))
         pool += [self.create_filler() for _ in range(unfilled - len(pool))]
