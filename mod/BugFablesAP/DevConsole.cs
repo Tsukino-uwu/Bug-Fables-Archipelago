@@ -517,19 +517,13 @@ namespace BugFablesAP
                 Vector3? spot = ClearSpot(target.transform.position);
                 if (!spot.HasValue)
                 {
-                    NPCControl save = entities.FirstOrDefault(e => e.objecttype == NPCControl.ObjectTypes.SavePoint);
-                    if (save != null && save != target)
-                    {
-                        Vector3 offset = target.transform.position - save.transform.position;
-                        where += $"; no safe spot beside it, so at the save point (the item is {offset.x:+0.0;-0.0} across, "
-                            + $"{offset.z:+0.0;-0.0} deep, {offset.y:+0.0;-0.0} up from here)";
-                        spot = save.transform.position + Vector3.up * 0.5f;
-                    }
+                    // No safe side (the lake's pillar, the bridge room's vines, 2026-09-24): stand on the entity's own
+                    // spot, which it rests on, so the tester sees where it is (the user: land by the item, never just
+                    // somewhere on the map); pickups are held off right after a warp.
+                    spot = target.transform.position + Vector3.up * 0.5f;
+                    where += "; no safe spot beside it, so on its own spot";
                 }
-                if (spot.HasValue)
-                {
-                    MainManager.player.transform.position = spot.Value;
-                }
+                MainManager.player.transform.position = spot.Value;
                 if (target.objecttype == NPCControl.ObjectTypes.Item)
                 {
                     target.touchcooldown = Mathf.Max(target.touchcooldown, 90f);

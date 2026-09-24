@@ -414,6 +414,9 @@ The output stays in the BepInEx folder.
   says which inside it's in; -1 is outdoors.** EntityDump now writes it. An indoor pickup is gated by its
   inside's door (`DoorSameMap`), not only by its map.
 - **The ladybug siblings are Leby (the sister) and Dib (the lost kid at the lake)** (the user, 2026-09-24).
+- **Crystal berries around Snakemouth** (2026-09-24, dev warps with the user): #2 in the underground door room is
+  reachable in chapter 1 from the room's upper-left entrance with nothing, from below only with Leif (a droplet);
+  #32 (`VinedItem`, bridge room) sits up on the vines and only exists after the first boss (requires flag 41).
 - **Houses outside the city** (`BugariaOutskirtsOutsideCity`, 2026-09-24): the ladybug siblings' house
   (`DoorLadybug`, inside 1) has no gate flags; the user found its Mistake (flag 679) after the first boss and
   remembers it locked earlier (to check on an earlier save). The other house (`doormadeleine`, inside 2, with a
