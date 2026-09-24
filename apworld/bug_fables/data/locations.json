@@ -8,7 +8,8 @@
     {"name": "Snakemouth Den: Bridge Room, Pillar", "id": 6, "region": "Snakemouth Den", "source": {"flag": 651, "pickup": {"map": "SnakemouthBridgeRoom", "type": 0, "item": 13}}},
     {"name": "Snakemouth Den: Lake, Pillar", "id": 7, "region": "Snakemouth Den", "source": {"flag": 23, "pickup": {"map": "SnakemouthLake", "type": 2, "item": 0}}},
     {"name": "Snakemouth Den: Mushroom Pit, Floor", "id": 8, "region": "Snakemouth Den Underground", "source": {"flag": 42, "pickup": {"map": "SnakemouthMushroomPit", "type": 2, "item": 7}}},
-    {"name": "Snakemouth Den: Mushroom Pit, Droplets", "id": 9, "region": "Snakemouth Den Underground", "requires": ["Leif"], "source": {"flag": 724, "pickup": {"map": "SnakemouthMushroomPit", "type": 0, "item": 144}}}
+    {"name": "Snakemouth Den: Mushroom Pit, Droplets", "id": 9, "region": "Snakemouth Den Underground", "requires": ["Leif"], "source": {"flag": 724, "pickup": {"map": "SnakemouthMushroomPit", "type": 0, "item": 144}}},
+    {"name": "Snakemouth Den: Lake, Ladybug Kid's Reward", "id": 10, "region": "Snakemouth Den", "requires": ["Leif", "Snakemouth Den Cleared"], "source": {"event": 31, "flag": 55, "give": {"map": "SnakemouthLake", "type": 1, "item": 52}}}
   ],
   "regions": [
     {"name": "Menu", "exits": [{"to": "Bugaria Outskirts"}]},
@@ -21,6 +22,7 @@
     {"number": 1, "name": "Artifact 1", "region": "Snakemouth Den Underground", "source": {"event": 26, "flag": 41}}
   ],
   "story_events": [
-    {"name": "Leif Joins", "item": "Leif", "region": "Snakemouth Den", "source": {"event": 14, "flag": 16}, "_comment": "Leif joins the party at the Snakemouth Den lake (the MothEvent trigger starts Event14, which sets flag 16; MEASURED.md). The lake is reachable without passing any room with water droplets, so Leif comes before everything that needs him."}
+    {"name": "Leif Joins", "item": "Leif", "region": "Snakemouth Den", "source": {"event": 14, "flag": 16}, "_comment": "Leif joins the party at the Snakemouth Den lake (the MothEvent trigger starts Event14, which sets flag 16; MEASURED.md). The lake is reachable without passing any room with water droplets, so Leif comes before everything that needs him."},
+    {"name": "First Boss Beaten", "item": "Snakemouth Den Cleared", "region": "Snakemouth Den Underground", "source": {"event": 26, "flag": 41}, "_comment": "The first boss, in the treasure room (Event26 sets flag 41). After it, a ladybug girl outside the city starts the lost-kid quest (her flag 54); the kid then waits at the lake (MEASURED.md)."}
   ]
 }

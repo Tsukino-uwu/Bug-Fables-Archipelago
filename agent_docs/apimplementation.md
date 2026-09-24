@@ -10,7 +10,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 
 ## Where it stands
 
-**Done so far:** a small apworld (8 locations, 9 items) that generates seeds and passes its tests, with the
+**Done so far:** a small apworld (9 locations, 10 items) that generates seeds and passes its tests, with the
 goal "collect N artifacts"; the mod connecting on its own, compressed, to a local server or a hosted room on
 archipelago.gg, retrying when the server is unreachable or drops; sending checks (build step 6); receiving
 items, with the count kept in the save (build step 7); and the game's own item at a location swapped for the
@@ -467,6 +467,11 @@ mushroom pit's Gummies need Leif's ice while its medal needs nothing), and what 
 one door to another (a connection through it; a room split by an obstacle becomes two regions). The in-room
 rule is written even when the region already implies it, so a different way into the room can't lose it (test
 `TestInRoomRules`).
+**A quest reward from the code** (2026-09-24): the lost ladybug kid at the lake gives a Lore Book once you've
+beaten his monsters (Event31: `giveitem,1,52`, then flag 55, the check). He only appears after the first boss,
+which is a story event of its own (*Snakemouth Den Cleared*, flag 41), and his cutscene moves all three party
+members, so the location requires Leif and that event (test `TestLostKid`). Added from the code; testing it in
+game needs a save where Leif joined through the story, since a warped file without him crashes the cutscene.
 **The general rule** (the user, 2026-09-24): if reaching something uses an ability, the logic requires that
 ability. Leif is in effect the freeze ability. Some droplet rooms are optional, so this is stricter than the game,
 which is the safe direction: never impossible, only less random.

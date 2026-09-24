@@ -181,3 +181,19 @@ class TestInRoomRules(BugFablesTestBase):
         from BaseClasses import CollectionState
         location = self.world.get_location("Snakemouth Den: Mushroom Pit, Floor")
         self.assertTrue(location.access_rule(CollectionState(self.multiworld)))
+
+
+class TestLostKid(BugFablesTestBase):
+    # The lost kid at the lake only appears after the first boss, and his cutscene moves all three party members, so
+    # it needs Leif (EventControl.Event31). Without the rule, fill could put progression there that isn't reachable.
+    def test_reward_needs_the_first_boss_and_leif(self) -> None:
+        from BaseClasses import CollectionState, ItemClassification
+        from ..world import BugFablesItem
+        location = self.world.get_location("Snakemouth Den: Lake, Ladybug Kid's Reward")
+        state = CollectionState(self.multiworld)
+        state.collect(self.world.create_item("Explorer Permit"), prevent_sweep=True)
+        state.collect(BugFablesItem("Leif", ItemClassification.progression, None, self.player), prevent_sweep=True)
+        self.assertFalse(location.can_reach(state))
+        state.collect(BugFablesItem("Snakemouth Den Cleared", ItemClassification.progression, None, self.player),
+                      prevent_sweep=True)
+        self.assertTrue(location.can_reach(state))
