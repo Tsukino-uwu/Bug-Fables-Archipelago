@@ -31,8 +31,8 @@ confirms on screen.
 Read from code only; nothing observed running yet.
 
 - **The inventory is `MainManager.instance.items`, a `List<int>[]` of length 3** (`MainManager.cs:2217`,
-  allocated at `:3426`). Grants add to `items[0]` (ordinary items) and `items[1]` (key items). What
-  `items[2]` holds is not measured yet.
+  allocated at `:3426`). Grants add to `items[0]` (ordinary items) and `items[1]` (key items).
+  `items[2]` is storage (see "Observed in the running game").
 - **Items and key items share one id space: the `MainManager.Items` enum, `None` = -1 then 0 to 186** (`MainManager.cs:1002`).
   An item is a key item because it was added to `items[1]`, not because of its id. Examples of names:
   `ExplorerPermit` 27, `FlowerKey` 54, `DesertKey` 92, `YinKey` 105, `YangKey` 106, `SandCastleBossKey` 115
