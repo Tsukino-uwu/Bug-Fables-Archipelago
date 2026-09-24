@@ -8,7 +8,7 @@ from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
 from rule_builder.rules import Has, HasAll
 from worlds.AutoWorld import WebWorld, World
 
-from .data_tables import (ARTIFACTS, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, STORY_EVENTS,
+from .data_tables import (ARTIFACTS, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN, KEPT_PRESENT, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, STORY_EVENTS,
                           WORLD_VERSION, vanilla_item)
 from .options import BugFablesOptions
 
@@ -186,6 +186,8 @@ class BugFablesWorld(World):
             # Blockers the story puts up for a while that the client keeps out of the way, so an area with locations
             # never closes (the logic assumes it stays reachable).
             "kept_open": [{"map": b["map"], "entity": b["entity"]} for b in KEPT_OPEN],
+            # Ways the story only makes later (a door, a bounce mushroom) that the client makes exist from the start.
+            "kept_present": [{"map": e["map"], "entity": e["entity"]} for e in KEPT_PRESENT],
             # Where each of this world's items goes (0 item, 1 key item, 2 medal), so the client gives it the right
             # way, shows a found one the way the game shows that kind, and knows a medal's id is offset.
             "item_kinds": {str(ITEM_NAME_TO_ID[item["name"]]): item["kind"] for item in ITEMS},

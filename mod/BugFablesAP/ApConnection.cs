@@ -316,15 +316,20 @@ namespace BugFablesAP
         internal List<Blocker> KeptOpen => keptOpen;
         private volatile List<Blocker> keptOpen;
 
+        // slot_data's kept_present: ways the story only makes later (a door, a bounce mushroom) that the seed makes
+        // exist from the start ([{map, entity}], KeptOpen). Null when the world didn't send it.
+        internal List<Blocker> KeptPresent => keptPresent;
+        private volatile List<Blocker> keptPresent;
+
         internal sealed class Blocker
         {
             internal string Map;
             internal string Entity;
         }
 
-        private static List<Blocker> ReadKeptOpen(Dictionary<string, object> slotData)
+        private static List<Blocker> ReadKeptOpen(Dictionary<string, object> slotData, string key = "kept_open")
         {
-            if (slotData == null || !slotData.TryGetValue("kept_open", out object raw) || !(raw is JArray list))
+            if (slotData == null || !slotData.TryGetValue(key, out object raw) || !(raw is JArray list))
             {
                 return null;
             }
@@ -524,6 +529,7 @@ namespace BugFablesAP
                     locationGives = ReadLocationGives(ok.SlotData);
                     locationPickups = ReadLocationPickups(ok.SlotData);
                     keptOpen = ReadKeptOpen(ok.SlotData);
+                    keptPresent = ReadKeptOpen(ok.SlotData, "kept_present");
                     locationVars = ReadLocationVars(ok.SlotData);
                     locationBerries = ReadLocationBerries(ok.SlotData);
                     ownSlot = ok.Slot;

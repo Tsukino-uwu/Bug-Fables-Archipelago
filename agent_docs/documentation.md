@@ -240,6 +240,13 @@ scenery that opens by a flag of its own. The scenery isn't an entity, so the ent
 now also lists every `ConditionChecker` (hidden or moved by flags) and `FlagAnimation` (animated by flags) in each
 map prefab, into `bugfablesap-mapflags.tsv`, read from the prefab without instantiating it.
 
+**Making an entity exist early** (2026-09-25): entities whose flags aren't met still exist in the map, switched
+off. Doors are switched on and off every other frame (`MapControl`, by distance, while `CheckIfCanExist` says
+"exists"); other objects only once, in their own `Start` (`NPCControl.cs:438`). So `KeptOpen` marks the entity
+straight after `CreateEntities`, before `Start`, with a `requires` array of its own that its prefix on
+`CheckIfCanExist` answers with "exists", the mirror of how a kept-open blocker gets a `limit` answered "hide".
+Built, not yet seen in game.
+
 ## 8. An Archipelago menu inside the game
 
 Players need to type a room address, a slot name and maybe a password, so the mod adds **"Archipelago"** to the

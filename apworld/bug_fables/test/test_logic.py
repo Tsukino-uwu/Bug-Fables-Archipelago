@@ -423,3 +423,17 @@ class TestRespawningPickups(BugFablesTestBase):
         self.assertFalse(self.can_reach_location("Snakemouth Den: Underground Bridge Room, Behind Pillar"))
         self.collect_by_name(["Explorer Permit", "Leif"])
         self.assertTrue(self.can_reach_location("Snakemouth Den: Underground Bridge Room, Behind Pillar"))
+
+
+class TestKeptPresent(BugFablesTestBase):
+    # The trapdoor into the fall room must never be a dead end, and the big door to Upper Snakemouth stays open (the
+    # Peculiar Gem slot behind it is the real gate). Without these entries the client leaves them to the story (flag
+    # 41), and the chapter 1 blocker in the fall room still turns the party back.
+    def test_ways_back_are_present(self) -> None:
+        present = self.world.fill_slot_data()["kept_present"]
+        self.assertIn({"map": "SnakemouthFallRoom", "entity": "JumpShroom"}, present)
+        self.assertIn({"map": "SnakemouthFallRoom", "entity": "LoadingZoneDoorRoom"}, present)
+        self.assertIn({"map": "SnakemouthDoorRoom", "entity": "DoorLoadZone"}, present)
+
+    def test_fall_room_blocker_is_kept_open(self) -> None:
+        self.assertIn({"map": "SnakemouthFallRoom", "entity": "blocker"}, self.world.fill_slot_data()["kept_open"])

@@ -564,6 +564,16 @@ the seed includes it. *Shuffle Quests* (on by default) covers quest-board and si
 will have their own toggle. With a category off, its locations aren't created, their vanilla items stay out of the
 pool, and they're left out of `slot_data`, so the client never swaps them and the game hands them out as usual
 (tests `TestQuestsOff`, `TestQuestsOnByDefault`).
+**Keeping ways present** (the user, 2026-09-25: no dead end in chapter 1, and the Gem opens chapter 5 whenever
+it's found). The reverse of kept open: `locations.json` lists under `kept_present` entities the story only makes
+later, `slot_data` carries them, and the mod's `KeptOpen` gives each a marker `requires` array right after the map
+creates its entities, which its `CheckIfCanExist` prefix answers with "exists". First three: Snakemouth's big door
+to Upper Snakemouth (its model already looks open from the trapdoor fall, flag 14, per the map dump; the Peculiar
+Gem slot behind it is the real gate), and the fall room's bounce mushroom and door back up (from the first boss in
+vanilla). The fall room's chapter 1 blocker joins `kept_open`. The ordinary door down into the fall room is left
+alone: before the trapdoor event it would skip that event, where Leif's joining starts. Tests `TestKeptPresent`.
+**Built 2026-09-25, not yet seen in game;** it needs a fresh file played through chapter 1, to see that the spider
+fight and Leif's joining still play out with the way back up open.
 **Mapping connections, one-way included** (the user, 2026-09-25: for room-level regions and a later entrance
 rando). An entrance shuffle can only pair a two-way door with another two-way door; a one-way link marked two-way
 can strand the player. So every connection is recorded with its direction. How:

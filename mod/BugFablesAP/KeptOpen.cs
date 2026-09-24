@@ -23,6 +23,10 @@ namespace BugFablesAP
         private static Func<bool> randomizerOn;
         private static Harmony harmony;
         private static readonly HashSet<int[]> markers = new HashSet<int[]>();
+        // The other way round (slot_data's kept_present): an entity the story only makes later gets a marker
+        // `requires` array, and a check made with it answers "exists" (the user, 2026-09-25: no dead end in chapter 1,
+        // open world by default). Set before the entity's own Start (NPCControl.cs:438), which would switch it off.
+        private static readonly HashSet<int[]> presentMarkers = new HashSet<int[]>();
 
         internal static void Enable(ManualLogSource logger, string guid, ApConnection conn, Func<bool> on)
         {
@@ -71,13 +75,32 @@ namespace BugFablesAP
                     log.LogInfo($"[open] {map}: {npc.name} kept out of the way (the seed keeps this area open)");
                 }
             }
+            foreach (ApConnection.Blocker way in (connection.KeptPresent ?? new List<ApConnection.Blocker>()).Where(b => b.Map == map))
+            {
+                foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true).Where(n => n.name == way.Entity))
+                {
+                    var marker = new[] { -1 };
+                    presentMarkers.Add(marker);
+                    npc.requires = marker;
+                    if (npc.entity != null)
+                    {
+                        npc.entity.iskill = false;
+                    }
+                    log.LogInfo($"[open] {map}: {npc.name} made present (the seed keeps this way open)");
+                }
+            }
         }
 
-        private static bool BeforeCheck(int[] limit, ref bool __result)
+        private static bool BeforeCheck(int[] requires, int[] limit, ref bool __result)
         {
             if (limit != null && markers.Contains(limit))
             {
                 __result = true;
+                return false;
+            }
+            if (requires != null && presentMarkers.Contains(requires))
+            {
+                __result = false;
                 return false;
             }
             return true;

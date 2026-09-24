@@ -369,3 +369,30 @@ Newest last. What was tried, what happened, what the user said.
   by artifacts: no, because chapter done is the artifact flag and a finished world removes locations; instead the
   same target (open as if finished, nothing collected, artifacts as the goal) is reached one gate at a time. The
   user hasn't finished the game: endgame facts stay out of chat, in MEASURED's spoiler sections.
+
+## 2026-09-25: what this session taught us (summary, the user closing the chat)
+
+- **Wiki pages are leads, the data decides.** The user pasted the wiki's crystal berry and medal pages (facts only,
+  CC BY-SA row in licensing.md); every entry was matched to the entity dump, ScriptDump or code. All chapter 1
+  medals were already locations. Next by story order: chapter 2's city medals.
+- **Naming:** "by the <thing>" when a room has several of a landmark (the user). A berry inside a bush is "Bush".
+- **Explorer Permit** also opens a Rubber Prison door (code); B.O.S.S. and the Cave of Trials are the wiki's word.
+- **Respawning pickups** are locations with no option: first pickup sends the check, later ones are vanilla. Seen
+  working in play. The mod keeps what's done in memory (server list plus a queue tagged with the save's seed).
+- **Require a connection:** the file select holds randomizer files back until the first login of the run, with a
+  popup over the save slots (seen on screen). My slip: copy-dev without stage-dev copies the old build.
+- **Dev tools:** `infjump` (the game's 30-frame jump cooldown outlasts a jump, so the cheat ignores it); `items`
+  plus `nudge` find hidden pickups exactly (items are often hidden behind pillars or walls, the user).
+- **Doors:** door-graph.py (567 doors, 15 with no way back). Only play shows direction: Snakemouth's switch-room
+  ledges are paired doors that are one-way in play; the trapdoor is one-way until the first boss, then a bounce
+  mushroom makes it two-way. `SnakemouthEmpty` looks unused. The underground switches are Event23 (flags 33, 34),
+  the middle door needs both (35 after).
+- **Gates are layered:** Upper Snakemouth sits behind the pitfall room's big door (load zone at 41, model open at
+  14, found with the map dump's new flag-scenery list), the route back (Eetl's blocker, then a guard), and a slot
+  needing the Peculiar Gem (key item 116, Event117). The Gem becomes a clean key-item rule once key items shuffle.
+- **Decided: open world is the default,** reached one gate at a time (never by forcing chapters done, which would
+  win the goal and delete locations); artifacts stay the goal; endgame facts kept from the user (not finished the
+  game).
+- **Built, not yet seen:** `kept_present` (big door, bounce mushroom, door back up) and the fall room blocker kept
+  open. Test on a fresh file through chapter 1 (Leif's chain). Also pending: the Mushroom spot's landmark name,
+  AdoptSeed is still on in the user's config, MapDump too.
