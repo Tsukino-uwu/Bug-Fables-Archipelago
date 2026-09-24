@@ -8,7 +8,8 @@ from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
 from rule_builder.rules import Has, HasAll
 from worlds.AutoWorld import WebWorld, World
 
-from .data_tables import ARTIFACTS, ITEM_NAME_TO_ID, ITEMS, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, WORLD_VERSION, vanilla_item
+from .data_tables import (ARTIFACTS, ITEM_NAME_TO_ID, ITEMS, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, STORY_EVENTS,
+                          WORLD_VERSION, vanilla_item)
 from .options import BugFablesOptions
 
 GAME = "Bug Fables"
@@ -91,6 +92,12 @@ class BugFablesWorld(World):
                 BugFablesLocation(self.player, loc["name"], LOCATION_NAME_TO_ID[loc["name"]], region)
             )
 
+        # Story steps other rules need (Leif joining), each an event in the region where it happens.
+        for event in STORY_EVENTS:
+            regions[event["region"]].add_event(
+                event["name"], event["item"], location_type=BugFablesLocation, item_type=BugFablesItem
+            )
+
         # One event per artifact, in the region where the game grants it. The game counts artifacts from flags
         # (MEASURED.md, SaveProgressIcons), so these hold no real item: they exist so fill can prove the goal.
         for artifact in ARTIFACTS:
@@ -119,6 +126,10 @@ class BugFablesWorld(World):
         self.multiworld.itempool += pool
 
     def set_rules(self) -> None:
+        # A location needing more than its region says so in its own requires list.
+        for loc in LOCATIONS:
+            if loc.get("requires"):
+                self.set_rule(self.get_location(loc["name"]), HasAll(*loc["requires"]))
         self.set_completion_rule(Has("Artifact", count=self.artifacts_required))
 
     def get_filler_item_name(self) -> str:

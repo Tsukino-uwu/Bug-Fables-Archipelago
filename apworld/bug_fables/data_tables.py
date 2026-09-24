@@ -33,6 +33,7 @@ _LOCATION_DATA = _load("locations.json")
 LOCATIONS: list[dict[str, Any]] = _LOCATION_DATA["locations"]
 REGIONS: list[dict[str, Any]] = _LOCATION_DATA["regions"]
 ARTIFACTS: list[dict[str, Any]] = _LOCATION_DATA["artifacts"]
+STORY_EVENTS: list[dict[str, Any]] = _LOCATION_DATA.get("story_events", [])
 
 # Medal ids (MainManager.BadgeTypes) overlap item ids (MainManager.Items), so medals get their own range.
 MEDAL_KIND = 2

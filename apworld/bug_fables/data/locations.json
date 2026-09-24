@@ -1,10 +1,10 @@
 {
-  "_comment": "Locations. id is added to LOCATION_ID_BASE and never reused (retired: 4, a pickup found inside a building that opens later, 2026-09-24). source says how the game marks it done: an EventControl event plus the global flag it sets (see agent_docs/MEASURED.md). The client sends a check when that flag becomes true. source.give, where known, is the |giveitem,type,item,...| that hands out the vanilla item on that map (type 0 item, 1 key item, 2 medal): the client keeps it out of the inventory and shows the seed's item instead. source.pickup is an item lying in the world (or buried in a dig spot): its flag is the pickup's own activationflag (agent_docs/MEASURED.md, \"World pickups\"), type is the item kind (0 item, 1 key item, 2 medal) and item its id; the client knows it by map and flag. Artifacts are events (no id): the game counts 7 artifact flags, and the goal is having enough of them.",
+  "_comment": "Locations. id is added to LOCATION_ID_BASE and never reused (retired: 4, a pickup found inside a building that opens later, 2026-09-24). source says how the game marks it done: an EventControl event plus the global flag it sets (see agent_docs/MEASURED.md). The client sends a check when that flag becomes true. source.give, where known, is the |giveitem,type,item,...| that hands out the vanilla item on that map (type 0 item, 1 key item, 2 medal): the client keeps it out of the inventory and shows the seed's item instead. source.pickup is an item lying in the world (or buried in a dig spot): its flag is the pickup's own activationflag (agent_docs/MEASURED.md, \"World pickups\"), type is the item kind (0 item, 1 key item, 2 medal) and item its id; the client knows it by map and flag. Artifacts are events (no id): the game counts 7 artifact flags, and the goal is having enough of them. A location's requires lists event or item names it needs beyond its region. story_events are logic-only events (no id): a story step, placed in the region where it happens, whose item other rules require.",
   "locations": [
     {"name": "Outskirts: Maki and Eetl's Gift", "id": 1, "region": "Bugaria Outskirts", "source": {"event": 16, "flag": 15, "give": {"map": "BugariaOutskirtsOutsideCity", "type": 1, "item": 27}}},
     {"name": "Outskirts: Favor Reward", "id": 2, "region": "Bugaria Outskirts", "source": {"flag": 17}},
     {"name": "Outskirts: Artis's Gift", "id": 3, "region": "Bugaria Outskirts", "source": {"npc": "ShwEmArtys", "flag": 32, "give": {"map": "BugariaOutskirtsOutsideCity", "type": 2, "item": 11}}},
-    {"name": "Snakemouth Den: Underground Door Room", "id": 5, "region": "Snakemouth Den", "source": {"flag": 60, "pickup": {"map": "SnakemouthUndergrondDoor", "type": 2, "item": 9}}},
+    {"name": "Snakemouth Den: Underground Door Room", "id": 5, "region": "Snakemouth Den Underground", "source": {"flag": 60, "pickup": {"map": "SnakemouthUndergrondDoor", "type": 2, "item": 9}}},
     {"name": "Snakemouth Den: Bridge Room, Pillar", "id": 6, "region": "Snakemouth Den", "source": {"flag": 651, "pickup": {"map": "SnakemouthBridgeRoom", "type": 0, "item": 13}}},
     {"name": "Snakemouth Den: Lake, Pillar", "id": 7, "region": "Snakemouth Den", "source": {"flag": 23, "pickup": {"map": "SnakemouthLake", "type": 2, "item": 0}}}
   ],
@@ -12,9 +12,13 @@
     {"name": "Menu", "exits": [{"to": "Bugaria Outskirts"}]},
     {"name": "Bugaria Outskirts", "exits": [{"to": "Past the Outskirts Gate", "requires": ["Explorer Permit"]}]},
     {"name": "Past the Outskirts Gate", "exits": [{"to": "Snakemouth Den"}]},
-    {"name": "Snakemouth Den", "exits": []}
+    {"name": "Snakemouth Den", "exits": [{"to": "Snakemouth Den Underground", "requires": ["Leif"]}]},
+    {"name": "Snakemouth Den Underground", "exits": [], "_comment": "Every Snakemouth room with water droplets, or reached only through one (from the dump's doors: MushroomPit, UndergrondDoor, Underground*, TreasureRoom, Empty). Leif freezes the droplets (the user, 2026-09-24)."}
   ],
   "artifacts": [
-    {"number": 1, "name": "Artifact 1", "region": "Snakemouth Den", "source": {"event": 26, "flag": 41}}
+    {"number": 1, "name": "Artifact 1", "region": "Snakemouth Den Underground", "source": {"event": 26, "flag": 41}}
+  ],
+  "story_events": [
+    {"name": "Leif Joins", "item": "Leif", "region": "Snakemouth Den", "source": {"event": 14, "flag": 16}, "_comment": "Leif joins the party at the Snakemouth Den lake (the MothEvent trigger starts Event14, which sets flag 16; MEASURED.md). The lake is reachable without passing any room with water droplets, so Leif comes before everything that needs him."}
   ]
 }

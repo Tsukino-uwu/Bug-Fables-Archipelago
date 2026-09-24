@@ -128,3 +128,34 @@ class TestPool(BugFablesTestBase):
             expected = sum(1 for loc in LOCATIONS if vanilla_item(loc) == name)
             with self.subTest(item=name):
                 self.assertGreaterEqual(pool.count(name), expected)
+
+
+class TestLeif(BugFablesTestBase):
+    # Rooms with water droplets need Leif to freeze them (the user, 2026-09-24). Without the rule, fill could put
+    # something there that the player can't reach before Leif joins.
+    def test_droplet_room_needs_leif(self) -> None:
+        from BaseClasses import CollectionState, ItemClassification
+        from ..world import BugFablesItem
+        location = self.world.get_location("Snakemouth Den: Underground Door Room")
+        state = CollectionState(self.multiworld)
+        state.collect(self.world.create_item("Explorer Permit"), prevent_sweep=True)
+        self.assertFalse(location.can_reach(state))
+        state.collect(BugFablesItem("Leif", ItemClassification.progression, None, self.player), prevent_sweep=True)
+        self.assertTrue(location.can_reach(state))
+
+    def test_first_artifact_needs_leif(self) -> None:
+        # The first boss is in the treasure room, reached only through rooms with droplets.
+        from BaseClasses import CollectionState, ItemClassification
+        from ..world import BugFablesItem
+        artifact = self.world.get_location("Artifact 1")
+        state = CollectionState(self.multiworld)
+        state.collect(self.world.create_item("Explorer Permit"), prevent_sweep=True)
+        self.assertFalse(artifact.can_reach(state))
+        state.collect(BugFablesItem("Leif", ItemClassification.progression, None, self.player), prevent_sweep=True)
+        self.assertTrue(artifact.can_reach(state))
+
+    def test_leif_joins_before_the_droplet_rooms(self) -> None:
+        # Leif's event is reachable with only what the Snakemouth Den needs, so the seed stays completable.
+        self.collect_by_name("Explorer Permit")
+        self.assertTrue(self.can_reach_location("Leif Joins"))
+        self.assertTrue(self.can_reach_location("Snakemouth Den: Underground Door Room"))
