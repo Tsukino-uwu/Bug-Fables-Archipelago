@@ -128,6 +128,9 @@ throttled to changes.
   `SnakemouthDoorRoom` (frame 24876) and `flag[27]` on `SnakemouthFallRoom` (frame 38710). No item was
   involved, so joining is story flags only. **Open for the logic:** party members bring field abilities that
   gate areas, so the apworld will need abilities as requirements (fixed, or shuffled).
+- **The third party member joining for good** (the user's report): `flag[29]`, `flag[16]` and `flag[24]` on
+  `SnakemouthLake` (frames 117036–119390). The earlier `flag[27]` in `SnakemouthFallRoom` was likely the
+  first meeting.
 - **Loose berries (money pickups) leave no flag.** `CheckItem` takes its `ismoney` path (anim states 6, 7 and
   186), and no flag flipped when the user picked one up. They can't be recovered from the save, which is fine:
   they're out of scope.

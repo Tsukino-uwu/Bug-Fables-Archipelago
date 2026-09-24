@@ -20,6 +20,7 @@ namespace BugFablesAP
         private ConfigEntry<string> slot;
         private ConfigEntry<string> password;
         private ConfigEntry<bool> connectOnStart;
+        private ConfigEntry<bool> randomizerEnabled;
         private ApConnection connection;
         private bool connectRequested;
         private bool scriptDumpDone;
@@ -51,6 +52,13 @@ namespace BugFablesAP
             connectOnStart = Config.Bind("Connection", "ConnectOnStart", false,
                 "Connect as soon as the game starts. Needs a slot name.");
             connection = new ApConnection(Log);
+
+            randomizerEnabled = Config.Bind("Archipelago", "RandomizerEnabled", false,
+                "Archipelago mode: the game uses its own saves in the 'archipelago' folder, apart from your normal "
+                + "saves. Switch it with 'Archipelago: On/Off' on the main menu.");
+            SaveRedirect.On = randomizerEnabled.Value;
+            SaveRedirect.Enable(Log, Guid);
+            MenuToggle.Enable(Log, Guid, randomizerEnabled);
             Log.LogInfo($"{Name} {Version} loaded. GrantProbe={grantProbeEnabled.Value} TextProbe={textProbeEnabled.Value}");
         }
 
@@ -121,6 +129,8 @@ namespace BugFablesAP
         private void OnDestroy()
         {
             TextProbe.Disable();
+            MenuToggle.Disable();
+            SaveRedirect.Disable();
             // A hot reload must not leave the old instance's socket open next to the new one.
             connection?.Disconnect();
             // ScriptEngine destroys the old instance on reload. Say so, so a reload shows up in the log.

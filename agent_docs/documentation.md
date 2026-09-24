@@ -16,7 +16,9 @@ read-only probes, and has a full list of where key items come from.
 **Next:**
 
 1. **Keep randomizer saves separate**, with an on/off toggle on the main menu, so normal saves (and Steam
-   Cloud) are never touched. This comes before anything is given to the player.
+   Cloud) are never touched. This comes before anything is given to the player. *Built 2026-09-24, being
+   tested in the game:* the game's save code was read to find every place a save file is touched (five
+   methods), and the mod redirects those to an `archipelago` folder while the toggle is on.
 2. **Give an item the game's own way**, when the server sends one.
 3. **Spot a location being done** (the flag the game sets) and report it, instead of giving the item.
 4. **Keep the received-item count in the save**, so loading never hands items out twice.
