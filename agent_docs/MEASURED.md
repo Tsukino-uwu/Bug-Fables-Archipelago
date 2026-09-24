@@ -539,6 +539,16 @@ flag. **Buried items are locations the floor-pickup count missed, and every one 
 the desert maps, `SandCastleRockRoom`, `FarGrasslands4`, `RubberPrisonSpikeRoom`). `Hole` hazards (pits) are
 on many maps from the first dungeon on, so a pit doesn't mean hover.
 
+## Lore Books at the library (2026-09-24, the user's play-through)
+
+- **Placing Lore Books uses them up and gives only reading**: two placed at once logged `KEYITEM -1 id=52` twice
+  on `AntPalaceLibrary`, then the user could choose which to read; no item came back (Event189 ran there first,
+  started by `LibrayantDiscovery`). The count, `flagvar[15]`, is used only by the shelf's display
+  (`LibraryShelf.cs:27`) and the reading list (`MainManager.cs:15372`), and by no game text (VarDump). **No count
+  reward: the Lore Book is useful, not progression.**
+- **A delivery quest's reward is a Lore Book**: on `BugariaResidential` a cicada ("Oh, you delivered it!") gave
+  `giveitem` of item 52, then flag 243 (quest 33 done; see "Key items" above for flags 241-243).
+
 ## Quests: to measure (when quests come into scope)
 
 - **The pause menu's quest list groups quests by chapter and shows done / not done** (the user,
