@@ -412,6 +412,24 @@ The output stays in the BepInEx folder.
 - **Not in this dump:** the one key item and one medal without an `activationflag` still need judging.
   Items given by NPCs and events are in the `ScriptDump` and code lists above.
 
+## Hard Mode boss prize medals (2026-09-24, code read; not seen in game)
+
+- **Hard Mode is on** when medal 11 is equipped (`BadgeIsEquipped(11)`, Artis's medal) or flag 614 is set
+  (the new-game code, `EventControl.cs:2432-2554`).
+- **23 prize slots:** `prizeflags` (flagvar indices), `prizeids` (the medal) and `prizeenemyids` (the enemy),
+  parallel arrays of 23 (`MainManager.cs:3401-3418`). One slot's enemy is -1 (no single enemy).
+- **Beating the boss writes the slot** (`AddPrizeMedal(id)`, `MainManager.cs:3981`; called from 23 story
+  events): **1** with Hard Mode on (and `flags[56]`, "a prize waits"), **2** without. `flagvar[55]` counts.
+- **Value 1:** `Event33` hands every waiting prize over with `giveitem,2,<medal>` from an NPC
+  (`EventControl.cs:5724-5752`), then sets the slot to **3**. What starts `Event33` isn't found yet (it
+  isn't an entity's `eventid`; likely a dialogue line gated on flag 56).
+- **Value 2 is not lost:** a caravan medal seller (`Interaction.CaravanBadge`, `NPCControl.CaravanMedalSet`,
+  `NPCControl.cs:1462`) offers the missed ones one at a time, in random order (`PrizeBadges(caravan: true)`),
+  and buying one sets its slot to **3** (`Setprize`, `MainManager.cs:11090-11121`). `CaravanBadge`
+  entities are on `BugariaOutskirtsOutsideCity`, `DesertDRSouthEntrance` and three "Duplicate" copies
+  (EntityDump).
+- **So a prize's location identity is "its slot reached 3"**, the same whichever way it was obtained.
+
 ## Quests: to measure (when quests come into scope)
 
 - **The pause menu's quest list groups quests by chapter and shows done / not done** (the user,
