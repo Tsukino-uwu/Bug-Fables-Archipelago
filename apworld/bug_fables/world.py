@@ -160,7 +160,9 @@ class BugFablesWorld(World):
             # Which locations are items lying in the world, known by their map and their own activationflag, so
             # the client can keep the vanilla item out when it's picked up.
             "location_pickups": {
-                str(LOCATION_NAME_TO_ID[loc["name"]]): {"map": loc["source"]["pickup"]["map"], "flag": loc["source"]["flag"]}
+                str(LOCATION_NAME_TO_ID[loc["name"]]): {"map": loc["source"]["pickup"]["map"], "flag": loc["source"]["flag"],
+                                                       **({"entity": loc["source"]["pickup"]["entity"]}
+                                                          if "entity" in loc["source"]["pickup"] else {})}
                 for loc in self.included_locations
                 if "pickup" in loc["source"]
             },

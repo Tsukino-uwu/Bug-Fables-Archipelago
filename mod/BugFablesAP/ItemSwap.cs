@@ -263,7 +263,7 @@ namespace BugFablesAP
             {
                 return;
             }
-            long at = FindPickup(caller.activationflag);
+            long at = FindPickup(caller);
             if (at < 0)
             {
                 return;
@@ -331,7 +331,7 @@ namespace BugFablesAP
                 foreach (NPCControl npc in entities)
                 {
                     EntityControl entity = npc.entity;
-                    if (npc.objecttype != NPCControl.ObjectTypes.Item || npc.activationflag != entry.Value.Flag
+                    if (npc.objecttype != NPCControl.ObjectTypes.Item || !IsPickup(entry.Value, npc)
                         || entity == null || entity.sprite == null || entity.sprite.sprite == sprite)
                     {
                         continue;
@@ -345,18 +345,24 @@ namespace BugFablesAP
             }
         }
 
-        private static long FindPickup(int flag)
+        // This pickup's own flag or, for a story pickup (no flag of its own), its entity name on this map.
+        private static bool IsPickup(ApConnection.Pickup pickup, NPCControl npc)
+        {
+            return pickup.Entity != null ? npc.name == pickup.Entity : npc.activationflag >= 0 && npc.activationflag == pickup.Flag;
+        }
+
+        private static long FindPickup(NPCControl caller)
         {
             Dictionary<long, ApConnection.Pickup> pickups = connection.LocationPickups;
             string map = MapName();
             // A dropped connection keeps the rules in force: the tables stay from the last login.
-            if (flag < 0 || !randomizerOn() || pickups == null || map == null)
+            if (!randomizerOn() || pickups == null || map == null)
             {
                 return -1;
             }
             foreach (KeyValuePair<long, ApConnection.Pickup> entry in pickups)
             {
-                if (entry.Value.Flag == flag && entry.Value.Map == map)
+                if (entry.Value.Map == map && IsPickup(entry.Value, caller))
                 {
                     return entry.Key;
                 }

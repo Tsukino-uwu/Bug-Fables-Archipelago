@@ -217,3 +217,17 @@ class TestQuestsOnByDefault(BugFablesTestBase):
     def test_quest_location_included(self) -> None:
         names = {loc.name for loc in self.multiworld.get_locations(self.player)}
         self.assertIn("Snakemouth Den: Lake, Ladybug Kid's Reward", names)
+
+
+class TestStoryPickup(BugFablesTestBase):
+    # A story pickup has no flag of its own: the client knows it only by its entity name. Without the name in
+    # slot_data, the vanilla item would be handed out and the seed's item lost.
+    def test_story_pickup_known_by_entity_name(self) -> None:
+        pickups = self.world.fill_slot_data()["location_pickups"]
+        trapdoor = str(self.world.location_name_to_id["Snakemouth Den: Door Room, Trapdoor"])
+        self.assertEqual(pickups[trapdoor], {"map": "SnakemouthDoorRoom", "flag": 14, "entity": "MushroomItem"})
+
+    def test_ordinary_pickups_have_no_entity_name(self) -> None:
+        pickups = self.world.fill_slot_data()["location_pickups"]
+        medal = str(self.world.location_name_to_id["Snakemouth Den: Underground Door Room"])
+        self.assertNotIn("entity", pickups[medal])

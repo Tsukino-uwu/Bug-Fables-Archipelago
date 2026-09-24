@@ -360,6 +360,10 @@ changes, so the swap holds. Another game's item keeps the vanilla look until the
 **Confirmed by the user (2026-09-24, screenshots):** the Snakemouth medal pickup lay on the ground as the G-Bug
 Ranger Plushie, and picking it up showed the Plushie too.
 
+**Story pickups have no flag of their own** (2026-09-24): a pickup the story makes appear and hides for good (the
+trapdoor Mushroom) carries no "taken" flag, so the mod knows it by its entity name on its map instead
+(`IsPickup`). Built, not yet seen in game.
+
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
 `Recolour` and `FirstMedalSeen` do the swapping; `PickupPrefix`, `FindPickup` and `TickGround` handle pickups); the
 scout is `ApConnection.Scout`.*

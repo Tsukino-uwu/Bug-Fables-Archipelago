@@ -10,7 +10,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 
 ## Where it stands
 
-**Done so far:** a small apworld (9 locations, 10 items) that generates seeds and passes its tests, with the
+**Done so far:** a small apworld (10 locations, 10 items) that generates seeds and passes its tests, with the
 goal "collect N artifacts"; the mod connecting on its own, compressed, to a local server or a hosted room on
 archipelago.gg, retrying when the server is unreachable or drops; sending checks (build step 6); receiving
 items, with the count kept in the save (build step 7); and the game's own item at a location swapped for the
@@ -472,6 +472,14 @@ beaten his monsters (Event31: `giveitem,1,52`, then flag 55, the check). He only
 which is a story event of its own (*Snakemouth Den Cleared*, flag 41), and his cutscene moves all three party
 members, so the location requires Leif and that event (test `TestLostKid`). Added from the code; testing it in
 game needs a save where Leif joined through the story, since a warped file without him crashes the cutscene.
+**Story pickups** (the user, 2026-09-24): some pickups have no "taken" flag of their own; the story makes them
+appear and hides them for good (the trapdoor Mushroom in the Snakemouth door room exists between flags 13 and 14,
+and taking it starts Event5, which sets 14). The rule: a pickup is a location if, once taken, a story flag hides
+it for good; items that come back are not. A story pickup is known by its entity name on its map (`pickup.entity`,
+sent in `slot_data`), its check is the flag its event sets, and `source.event` records that event, so an option
+that skips it can leave the location out (test `TestStoryPickup`). For a future story strip or open world, the
+mod could force such a pickup to exist (like the doors kept open) and send its check on pickup, making it
+independent of the story.
 **Optional categories** (the user, 2026-09-24): a location can carry a `category`; its yaml option decides whether
 the seed includes it. *Shuffle Quests* (on by default) covers quest-board and side-quest rewards; one-off NPC gifts
 will have their own toggle. With a category off, its locations aren't created, their vanilla items stay out of the
