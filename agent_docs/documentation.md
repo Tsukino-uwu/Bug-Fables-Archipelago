@@ -228,8 +228,10 @@ but it takes real typing: the game itself never reads typed text (its name scree
 mod reads the keyboard itself. Backspace, Ctrl+V to paste and Ctrl+C to copy all work. The same panel switches
 **the Archipelago mod** (enabled or disabled), which keeps randomizer saves in their own folder so normal saves are never touched.
 Its rows, top to bottom (the user's order, 2026-09-24): Address, Port, Slot, Password, Difficulty, Detector,
-**Archipelago** (the mod on/off, just "Archipelago"), Back. Under them, one grey line explains the highlighted
-row (the user, 2026-09-24: "Detector" alone didn't say it means the medal), then the connection's state.
+**Archipelago** (the mod on/off, just "Archipelago"). No Back row: cancel backs out, as the hint box says.
+Under them, one line explains the highlighted row (the user, 2026-09-24: "Detector" alone didn't say it means
+the medal), then the connection's state. The game's text colour 5 draws light blue here, not grey, and a long
+coloured line looked tilted, so both lines are plain black.
 
 Several things went wrong on the way, each found on screen by the user:
 

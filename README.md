@@ -49,7 +49,8 @@ On the game's main menu, choose **Archipelago**. The panel has:
   it to the medal.
 - **Archipelago**: Enabled keeps randomizer saves in their own folder, apart from your normal saves.
   The main menu shows it as "Archipelago (Enabled)" or "(Disabled)".
-- **Back**, and a line showing the connection's state.
+- Under the rows, a line explaining the highlighted one, and a line showing the connection's state. Cancel
+  (X, or B on a gamepad) backs out of the panel.
 
 **While the Archipelago mod is enabled and the address, port and slot are filled in, the mod connects on its
 own**: when the game starts, when you enable it, and after you change a detail. If the room refuses (a wrong

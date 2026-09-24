@@ -9,7 +9,7 @@ namespace BugFablesAP
     // The Archipelago panel, opened from "Archipelago" on the main menu. It's drawn with the game's own box and
     // font (MainManager.Create9Box / SetText) and takes real typing, so an address can be typed or pasted.
     //
-    // Rows: Address, Port, Slot, Password, Difficulty, Detector, Archipelago (the mod on/off), Back. It connects on its own (Plugin.AutoConnect). Up/down move; confirm (C / Enter) edits
+    // Rows: Address, Port, Slot, Password, Difficulty, Detector, Archipelago (the mod on/off); cancel backs out. It connects on its own (Plugin.AutoConnect). Up/down move; confirm (C / Enter) edits
     // a text row or presses a button; cancel (X / Escape) closes. While a row is being edited, the keyboard
     // types into it: Backspace deletes, Ctrl+V pastes, Ctrl+C copies the row, Enter keeps, Escape reverts.
     // The title screen's own input is suspended while the panel is open (StartMenu.canselect), so the game's
@@ -17,7 +17,7 @@ namespace BugFablesAP
     internal sealed class ApMenu : MonoBehaviour
     {
         private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, DifficultyRow = 4, DetectorRow = 5, ModeRow = 6,
-            BackRow = 7, Rows = 8;
+            Rows = 7;
 
         // The Difficulty and Detector rows' settings (Plugin, MedalAssist).
         internal static readonly string[] Difficulties = { "Normal", "Hard", "Hardest" };
@@ -150,8 +150,9 @@ namespace BugFablesAP
         private const string TextSort = "|sort,10|";
         // Row heights inside the orange box, top to bottom; labels on the left, values on the right, as in the
         // settings screen.
-        // Eight rows at 0.7 apart (six were 0.85 apart), so the status line still fits inside the box.
-        private static readonly float[] RowY = { 2.6f, 1.9f, 1.2f, 0.5f, -0.2f, -0.9f, -1.6f, -2.3f };
+        // Seven rows at 0.7 apart, with room below for the description and status lines. No Back row: cancel
+        // (X / B) backs out, as the hint box above says (the user, 2026-09-24).
+        private static readonly float[] RowY = { 2.6f, 1.9f, 1.2f, 0.5f, -0.2f, -0.9f, -1.6f };
         // Matched to the game's Settings screen from the user's side-by-side screenshots (2026-09-24): there the
         // labels start ~88 px in from the vine border, with the leaf's tip ~15 px before them. Two earlier nudges
         // misread a cropped screenshot (-6.3 touched the vine); -5.15 puts the labels at Settings' distance.
@@ -260,9 +261,6 @@ namespace BugFablesAP
                         Step(row, 1);
                         Redraw();
                         break;
-                    case BackRow:
-                        Close();
-                        break;
                 }
             }
         }
@@ -278,7 +276,7 @@ namespace BugFablesAP
                 case DifficultyRow: return "Hard: as if the Hard Mode medal were on. Hardest: as if HARDEST.";
                 case DetectorRow: return "On: as if the Detector medal were equipped, to find hidden items.";
                 case ModeRow: return "Randomizer saves in their own folder; normal saves are never touched.";
-                default: return "Back to the main menu.";
+                default: return "";
             }
         }
 
@@ -422,7 +420,6 @@ namespace BugFablesAP
             Row(PortRow, "Port", editing && row == PortRow ? edited : port.Value);
             Row(SlotRow, "Slot", editing && row == SlotRow ? edited : slot.Value);
             Row(PasswordRow, "Password", pw);
-            Row(BackRow, "Back", null);
 
             // The choice rows, like a settings value: left and right arrows around the value.
             arrows = new GameObject("arrows").transform;
@@ -434,8 +431,8 @@ namespace BugFablesAP
 
             // What the highlighted row does, one line, the way the game's settings screen explains its rows (the
             // user, 2026-09-24: "Detector" alone doesn't say it means the medal). Then the connection's state.
-            Text("|center||size,0.45||color,5|" + Describe(row), 0f, -2.95f);
-            Text("|center||size,0.5|" + Safe(shownStatus), 0f, -3.35f);
+            Text("|center||size,0.5|" + Describe(row), 0f, -2.4f);
+            Text("|center||size,0.5|" + Safe(shownStatus), 0f, -3.0f);
             leaf.transform.localPosition = new Vector3(LabelX + LeafOffset, RowY[row] + LeafRise, 0f);
         }
 
