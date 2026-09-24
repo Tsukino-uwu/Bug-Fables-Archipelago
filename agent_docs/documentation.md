@@ -31,6 +31,9 @@ server, and items from the server arrive in the game once each.
    Hardest add the game's two Hard Mode levels; Normal leaves it to the game (the medal equipped, or the
    HARDEST code). **Default: Normal.** Boss prize medals are paid out on every setting (apimplementation.md,
    "Where it stands").
+   **What belongs in the panel** (the user, 2026-09-24): only on/off preferences that never change what's where
+   (Difficulty, Detector, later DeathLink, which only adds a tag to the connection). Anything that decides the
+   seed (entrance rando, shuffles, goals) is a player-file (yaml) option, applied from `slot_data`.
    **Every panel setting applies only while Archipelago is enabled** (the user, 2026-09-24): vanilla saves play
    exactly as vanilla. Difficulty, Detector and every item swap check the switch; a Hardest flag the mod set is
    cleared the moment it's switched off.
