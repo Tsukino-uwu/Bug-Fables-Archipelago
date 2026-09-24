@@ -469,6 +469,13 @@ The output stays in the BepInEx folder.
   - **Doors hidden by a later flag:** the Golden Settlement day/night set (85, 86), `BeehiveOutside` →
     `BeehiveScannerRoom` (160), `BarrenLandsCD` → `BarrenLandsEntrance` (384), `WaspKingdomOutside` →
     `WaspKingdom1` (370). Each still to judge: an alternate version of the map, or a place that closes.
+- **Snakemouth Den's doors by direction** (2026-09-24, EntityDump; each side of a door is its own entity):
+  most are matched pairs. `SnakemouthDoorRoom` ↔ `SnakemouthFallRoom` exists both ways but only after flag 41
+  (the first boss); in chapter 1 the way down is the trapdoor drop (flag 13), which is no door entity, so it
+  is one-way until then. `SnakemouthEmpty` → `SnakemouthDoorRoom` and `UpperSnekEntrance` →
+  `UpperSnekTransition` have no door back. The user saw a door block the way back into a room while its
+  pickups were reachable from either side (2026-09-24). **Room-level regions need drops and scripted moves as
+  connections of their own**, found from events, not doors.
 - **Not in this table:** gates that aren't doors (objects only an ability passes, characters that block a
   path), and `CheckIfCanExist` on non-door entities.
 
