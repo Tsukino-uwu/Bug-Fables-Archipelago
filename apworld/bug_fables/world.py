@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from collections.abc import Mapping
 from typing import Any
 
@@ -7,7 +8,8 @@ from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
 from rule_builder.rules import Has, HasAll
 from worlds.AutoWorld import WebWorld, World
 
-from .data_tables import GOAL, ITEM_NAME_TO_ID, ITEMS, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS
+from .data_tables import ARTIFACTS, ITEM_NAME_TO_ID, ITEMS, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS
+from .options import BugFablesOptions
 
 GAME = "Bug Fables"
 _CLASSIFICATIONS = {
@@ -51,9 +53,25 @@ class BugFablesWorld(World):
     item_name_to_id = ITEM_NAME_TO_ID
     location_name_to_id = LOCATION_NAME_TO_ID
     origin_region_name = "Menu"
+    options_dataclass = BugFablesOptions
+    options: BugFablesOptions
+
+    # The goal: at least this many artifacts. Set in generate_early, capped at what this world includes.
+    artifacts_required: int = 1
 
     _items_by_name = {item["name"]: item for item in ITEMS}
     _filler = [item["name"] for item in ITEMS if item["classification"] == "filler"]
+
+    def generate_early(self) -> None:
+        wanted = self.options.artifacts_required.value
+        available = len(ARTIFACTS)
+        if wanted > available:
+            logging.warning(
+                "Bug Fables: player %s (%s) asked for %d artifacts, but this version of the world includes %d; "
+                "the goal is lowered to %d.",
+                self.player, self.player_name, wanted, available, available,
+            )
+        self.artifacts_required = min(wanted, available)
 
     def create_regions(self) -> None:
         regions = {data["name"]: Region(data["name"], self.player, self.multiworld) for data in REGIONS}
@@ -71,8 +89,12 @@ class BugFablesWorld(World):
                 BugFablesLocation(self.player, loc["name"], LOCATION_NAME_TO_ID[loc["name"]], region)
             )
 
-        goal_region = regions[GOAL["region"]]
-        goal_region.add_event(GOAL["name"], "Victory", location_type=BugFablesLocation, item_type=BugFablesItem)
+        # One event per artifact, in the region where the game grants it. The game counts artifacts from flags
+        # (MEASURED.md, SaveProgressIcons), so these hold no real item: they exist so fill can prove the goal.
+        for artifact in ARTIFACTS:
+            regions[artifact["region"]].add_event(
+                artifact["name"], "Artifact", location_type=BugFablesLocation, item_type=BugFablesItem
+            )
 
     def create_item(self, name: str) -> BugFablesItem:
         data = self._items_by_name[name]
@@ -87,11 +109,12 @@ class BugFablesWorld(World):
         self.multiworld.itempool += pool
 
     def set_rules(self) -> None:
-        self.set_completion_rule(Has("Victory"))
+        self.set_completion_rule(Has("Artifact", count=self.artifacts_required))
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(self._filler)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
-        # The client needs no options yet. Sending the world version lets it refuse a mismatched build.
-        return {"world_version": "0.1.0"}
+        # The world version lets the client refuse a mismatched build. The client sends the goal once the
+        # game's own artifact count (its 7 artifact flags) reaches artifacts_required.
+        return {"world_version": "0.1.0", "artifacts_required": self.artifacts_required}

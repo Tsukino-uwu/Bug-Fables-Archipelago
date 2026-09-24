@@ -34,6 +34,9 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
   the server replays everything. That makes lost-save recovery work.
 - **"In a seed" and "connected" are different states.** A dropped socket keeps randomizer rules in force:
   checks queue, and no pickup falls back to its vanilla item.
+- **Every seed can be completed from wherever it starts** (the user, 2026-09-24). Whatever an area or goal
+  needs (key items, party members, abilities) is a rule in the logic, never something the mod hands out to
+  patch a gap. That holds for a random start or open-world option too.
 - **Game logic and apworld logic move together.** A gate in the game and its rule in the apworld are the same
   fact written twice. If the game is stricter, seeds can't be finished. If it's looser, the logic is decorative.
 

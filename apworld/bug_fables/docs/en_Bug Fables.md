@@ -9,4 +9,5 @@ This is an early version: only a handful of early-game locations exist so far.
 
 ## What is the goal?
 
-For now, opening the gate in Bugaria Outskirts. A real goal comes once more of the game is covered.
+Collect a number of artifacts (the option *Artifacts Required*, 1 to 7). The game has 7 artifacts, one per
+chapter milestone. This early version includes only the first, so the goal is capped at 1 for now.

@@ -10,15 +10,15 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 
 ## Where it stands
 
-**Done so far:** a tiny apworld that generates seeds and passes its tests, a local server, and the mod
-logging in to it from the running game.
+**Done so far:** a tiny apworld that generates seeds and passes its tests, with the goal "collect N
+artifacts"; a local server; and the mod logging in to it from the running game.
 
 **Next:**
 
 1. **Receive an item:** the server sends a key item and the mod gives it in the game.
 2. **Send a check:** finishing a location tells the server.
 3. **Survive a reload:** the received-item count lives in the save.
-4. **Goal:** send "goal reached" when the player finishes.
+4. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
 5. **Compressed connection** (see known issues).
 
 **Known issues:**
@@ -32,6 +32,7 @@ logging in to it from the running game.
 
 1. [Build step 1: a first, tiny apworld](#build-step-1-a-first-tiny-apworld)
 2. [Build step 2: connect the mod to a real server](#build-step-2-connect-the-mod-to-a-real-server)
+3. [Build step 3: the goal, counted in artifacts](#build-step-3-the-goal-counted-in-artifacts)
 
 **How it works**
 
@@ -76,6 +77,23 @@ logged in. This also proved the game's runtime can run the client library, which
 
 **Lesson:** when two programs talk, read the logs on *both* ends. The mod's default address became
 `ws://127.0.0.1:38281` for the same reason, so a local setup works out of the box.
+
+## Build step 3: the goal, counted in artifacts
+
+The game shows up to 7 artifacts on the pause menu and on each save file. Reading how it draws them showed
+they aren't items at all: the game counts how many of 7 story milestones you've reached. That makes a good
+goal. It's cheap for the mod to check, it's real progress, and **"any N of 7"** doesn't care about order, so
+it keeps working with options like a random start.
+
+The apworld has an option, *Artifacts Required* (1 to 7). Each artifact is an **event** in the region where
+the game grants it, and the goal is "have N of them". An event holds no real item; it exists so the
+generator can prove the goal is reachable. The world only includes the first artifact so far, so a request
+for more is lowered, with a warning, instead of producing a seed that can't be won. That rule has a test,
+and so does the permit gate: remove the permit rule and two tests fail.
+
+One rule came out of this for every later option: **every seed can be completed from wherever it starts.**
+Whatever an area or the goal needs is written into the logic, and the mod never hands things out to patch
+a gap.
 
 ---
 

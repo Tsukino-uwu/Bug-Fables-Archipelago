@@ -23,7 +23,7 @@ ITEMS: list[dict[str, Any]] = _load("items.json")["items"]
 _LOCATION_DATA = _load("locations.json")
 LOCATIONS: list[dict[str, Any]] = _LOCATION_DATA["locations"]
 REGIONS: list[dict[str, Any]] = _LOCATION_DATA["regions"]
-GOAL: dict[str, Any] = _LOCATION_DATA["goal"]
+ARTIFACTS: list[dict[str, Any]] = _LOCATION_DATA["artifacts"]
 
 ITEM_NAME_TO_ID: dict[str, int] = {item["name"]: ITEM_ID_BASE + item["game_id"] for item in ITEMS}
 LOCATION_NAME_TO_ID: dict[str, int] = {loc["name"]: LOCATION_ID_BASE + loc["id"] for loc in LOCATIONS}
