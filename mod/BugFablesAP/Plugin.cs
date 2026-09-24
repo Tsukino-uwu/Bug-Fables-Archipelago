@@ -77,6 +77,7 @@ namespace BugFablesAP
                 + "saves. Switch it in the Archipelago panel on the main menu.");
             SaveRedirect.On = randomizerEnabled.Value;
             SaveRedirect.Enable(Log, Guid);
+            ItemSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             MenuToggle.Enable(Log, Guid, randomizerEnabled, server, port, slot, password,
                 () => { },
                 () => connection.Status);
@@ -215,6 +216,7 @@ namespace BugFablesAP
             // A hot reload must not leave the old instance's socket open next to the new one.
             connection?.Disconnect();
             WebSocketCompression.Disable();
+            ItemSwap.Disable();
             // ScriptEngine destroys the old instance on reload. Say so, so a reload shows up in the log.
             Log?.LogInfo($"{Name} {Version} unloaded.");
         }

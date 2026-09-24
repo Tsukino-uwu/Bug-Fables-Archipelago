@@ -44,7 +44,11 @@ Read from code only; nothing observed running yet.
   into the repo.
 - **Grants go through commands in the dialogue text processor**, `MainManager.SetText`
   (`MainManager.cs:10626`). There are three:
-  - **`Giveitem`** (`:11457`): `|giveitem,<type>,<id or var,n>,…|`. The type is -1 money, 0 item, 1 key item,
+  - **`Giveitem`** (`:11457`): `|giveitem,<type>,<id or var,n>,<redirect>[,<entity>]|`. **Corrected
+    2026-09-24:** the third number is `redirect`, the dialogue line to continue with afterwards
+    (`GetDialogueText(redirect)`), and the optional fourth is the entity the item sprite rises over. Earlier
+    entries read the third number as an entity, which was wrong. With `flags[681]` set, every medal but #11
+    becomes `GetRandomMedal()`. The item name goes to `flagstring[0]` for the "You got" box (`menutext[106]`). The type is -1 money, 0 item, 1 key item,
     2 medal (`badges`), or 3 crystal berry (`crystalbflags`). Adds with `items[type].Add(id)` when the type
     is below 2.
   - **`Additemtoss`** (`:12517`): world pickups. `NPCControl.CheckItem` (`NPCControl.cs:5588`) builds
@@ -87,15 +91,15 @@ throttled to changes.
     TextProbe to show; that probe wasn't running in that session.
     **Settled 2026-09-24, second new game (TextProbe and GrantProbe both on, Archipelago mod enabled):** the
     permit comes from Maki and Eetl's dialogue line on `BugariaOutskirtsOutsideCity/BugariaOutskirts`, which
-    ends `|giveitem,1,27,13|` (type 1 key item, id 27, shown over entity 13), with `caller=none`. GrantProbe
+    ends `|giveitem,1,27,13|` (type 1 key item, id 27, then dialogue line 13), with `caller=none`. GrantProbe
     logged `KEYITEM +1 id=27` at frame 31685, and `flag[15]` False -> True at frame 34349. That's the same
     order and about the same gap (~2,660 frames) as the first run. **So the grant and flag 15 happen at
     separate moments:** the `giveitem` is in the dialogue, and flag 15 is set in code when `Event16` ends.
     The local grant happened because sending checks doesn't exist yet. Log kept only in that session's
     scratchpad.
 - **The first medal, captured (2026-09-24, same run):** Artis's dialogue (`caller=ShwEmArtys`) on
-  `BugariaOutskirtsOutsideCity/BugariaOutskirts` ends `|giveitem,2,11,45|`: type 2 medal, id 11, shown over
-  entity 45. An NPC talk started it, not an event. Right after, `flag[31]` flipped (frame 40171), then `flag[32]`
+  `BugariaOutskirtsOutsideCity/BugariaOutskirts` ends `|giveitem,2,11,45|`: type 2 medal, id 11, then dialogue
+  line 45. An NPC talk started it, not an event. Right after, `flag[31]` flipped (frame 40171), then `flag[32]`
   (40278, about 107 frames later). **`flag[30]` flipped before this talk** (frame 38697), so it isn't part of
   the medal. In the first run it came after 31 and 32, so 30 belongs to something else nearby. Flag 31 fits
   "first medal ever" (see above). **Flag 32 is Artis's medal:** confirmed 2026-09-24 by reloading a save from before him and talking to him

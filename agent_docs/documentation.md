@@ -21,7 +21,7 @@ server.
    are untouched. The redirect covers all five places the game touches a save file.
 2. **Give an item the game's own way**, when the server sends one.
 3. **Spot a location being done** (the flag the game sets) and report it: works (apimplementation.md, build
-   step 6). Stopping the game's own item there comes next.
+   step 6). Stopping the game's own item there is built (step 9) and waiting on the user's test.
 4. **Keep the received-item count in the save**, so loading never hands items out twice.
 
 ## The steps
@@ -34,6 +34,7 @@ server.
 6. [Watch the game while you play ("probing")](#6-watch-the-game-while-you-play-probing)
 7. [List everything, without playing everything](#7-list-everything-without-playing-everything)
 8. [An Archipelago menu inside the game](#8-an-archipelago-menu-inside-the-game)
+9. [Keep the game's own item, show the seed's](#9-keep-the-games-own-item-show-the-seeds)
 
 ## Keeping this guide honest
 
@@ -170,3 +171,30 @@ from the game's own pieces, read from how the pause menu builds it: the same ora
 above it with the game's button hints, the game's leaf cursor, labels on the left and values on the right, and
 arrows around the On/Off value.
 
+
+## 9. Keep the game's own item, show the seed's
+
+With items remote only, finding a location must not give you the game's item there. The game still has to
+mark the location done, though, because that flag is how the check gets sent. So the mod leaves the scene
+alone and changes just two things inside it: **the item never reaches your inventory, and the item-get
+shows what the seed actually put there.**
+
+- **Where to change it:** every item the game hands out in dialogue goes through one command, `giveitem`,
+  inside one very long routine. Reading its compiled code (the IL, the instructions the game really runs)
+  showed a fixed order: pick the item's sprite, write its name, add it to the inventory, play the item sound.
+  The mod rewrites just those calls with a Harmony *transpiler*. It swaps the sprite for the real item's,
+  skips the inventory add, and puts the real name in the "You got" box.
+- **Knowing it's a location:** the apworld records, for each location, the `giveitem` that hands out its
+  vanilla item (map, kind, item number), and sends that in `slot_data`. Only an exact match is swapped;
+  every other item the game gives is left alone.
+- **Knowing what's there:** at each login the mod asks the server what's at its locations (a "scout", without
+  creating hints) and keeps the answer.
+- **Safety:** the patch looks for each of those calls exactly once, in that order. If the game's code ever
+  differs, it installs nothing and says so in the log, instead of patching the wrong spot.
+
+**Lesson:** reading the game's source told us *what* happens; reading its compiled code told us *where* it
+can safely be changed. A misread from earlier also surfaced here: the numbers after an item in `giveitem`
+had been taken as "who holds it up", and are really "which line of dialogue comes next".
+
+**Test:** a seed with the Explorer Permit placed on Artis's medal (Archipelago's item plando). Talking to Artis
+should show the permit, and no medal should be added.

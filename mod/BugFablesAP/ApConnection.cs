@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
+using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
 using BepInEx.Logging;
 using Newtonsoft.Json.Linq;
@@ -185,6 +186,74 @@ namespace BugFablesAP
             return result;
         }
 
+        // slot_data's location_gives: the |giveitem| that hands out each location's vanilla item. ItemSwap keeps
+        // that item out of the inventory. Null when the world didn't send it.
+        internal Dictionary<long, Give> LocationGives => locationGives;
+        private volatile Dictionary<long, Give> locationGives;
+
+        // This player's slot number, from the last login (kept after a drop, like the tables above).
+        internal int OwnSlot => ownSlot;
+        private volatile int ownSlot = -1;
+
+        internal sealed class Give
+        {
+            internal string Map;
+            internal int Type;
+            internal int Item;
+        }
+
+        private static Dictionary<long, Give> ReadLocationGives(Dictionary<string, object> slotData)
+        {
+            if (slotData == null || !slotData.TryGetValue("location_gives", out object raw) || !(raw is JObject map))
+            {
+                return null;
+            }
+            var result = new Dictionary<long, Give>();
+            foreach (JProperty entry in map.Properties())
+            {
+                result[long.Parse(entry.Name)] = new Give
+                {
+                    Map = entry.Value.Value<string>("map"),
+                    Type = entry.Value.Value<int>("type"),
+                    Item = entry.Value.Value<int>("item"),
+                };
+            }
+            return result;
+        }
+
+        // What the seed put at each of this slot's locations, asked once per login without creating hints
+        // (HintCreationPolicy.None: a hint-creating scout would announce the seed). Null until it arrives.
+        internal Dictionary<long, ScoutedItemInfo> Scouts => scouts;
+        private volatile Dictionary<long, ScoutedItemInfo> scouts;
+
+        private void Scout(ArchipelagoSession s, Dictionary<long, Give> gives)
+        {
+            if (gives == null || gives.Count == 0)
+            {
+                return;
+            }
+            ThreadPool.QueueUserWorkItem(_ =>
+            {
+                try
+                {
+                    var task = s.Locations.ScoutLocationsAsync(HintCreationPolicy.None, gives.Keys.ToArray());
+                    if (!task.Wait(TimeSpan.FromSeconds(10)))
+                    {
+                        Post("[swap] scouting gave no answer in 10 s; finds will show a plain Archipelago item");
+                        return;
+                    }
+                    scouts = task.Result;
+                    Post("[swap] scouted " + string.Join(", ", task.Result.Values
+                        .Select(i => i.LocationId + " = " + i.ItemDisplayName + " (" + i.ItemGame + ", for " + i.Player.Name + ")")
+                        .ToArray()));
+                }
+                catch (Exception e)
+                {
+                    Post("[swap] scouting failed: " + e.GetBaseException().Message);
+                }
+            });
+        }
+
         // Send finished locations from a worker thread (on this build every send pings first and waits). The
         // library keeps every check the server hasn't confirmed and resends them with the next send
         // (LocationCheckHelper, 6.7.1); checks made offline are found again in the save's flags at the next login.
@@ -285,6 +354,10 @@ namespace BugFablesAP
                     lastPingUtc = DateTime.UtcNow;
                     // Only this session dropping counts; Disconnect() clears `session` first.
                     locationFlags = ReadLocationFlags(ok.SlotData);
+                    locationGives = ReadLocationGives(ok.SlotData);
+                    ownSlot = ok.Slot;
+                    scouts = null;
+                    Scout(attempt, locationGives);
                     attempt.Locations.CheckedLocationsUpdated += ids =>
                         Post("[check] now checked on the server: " + string.Join(", ", ids.Select(id => id.ToString()).ToArray()));
                     attempt.Socket.PacketReceived += packet => Heard();

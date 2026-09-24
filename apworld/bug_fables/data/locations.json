@@ -1,9 +1,9 @@
 {
-  "_comment": "Locations. id is added to LOCATION_ID_BASE and never reused. source says how the game marks it done: an EventControl event plus the global flag it sets (see agent_docs/MEASURED.md). The client sends a check when that flag becomes true. Artifacts are events (no id): the game counts 7 artifact flags, and the goal is having enough of them.",
+  "_comment": "Locations. id is added to LOCATION_ID_BASE and never reused. source says how the game marks it done: an EventControl event plus the global flag it sets (see agent_docs/MEASURED.md). The client sends a check when that flag becomes true. source.give, where known, is the |giveitem,type,item,...| that hands out the vanilla item on that map (type 0 item, 1 key item, 2 medal): the client keeps it out of the inventory and shows the seed's item instead. Artifacts are events (no id): the game counts 7 artifact flags, and the goal is having enough of them.",
   "locations": [
-    {"name": "Outskirts: Explorer Permit", "id": 1, "region": "Bugaria Outskirts", "source": {"event": 16, "flag": 15}},
+    {"name": "Outskirts: Explorer Permit", "id": 1, "region": "Bugaria Outskirts", "source": {"event": 16, "flag": 15, "give": {"map": "BugariaOutskirtsOutsideCity", "type": 1, "item": 27}}},
     {"name": "Outskirts: Favor Reward", "id": 2, "region": "Bugaria Outskirts", "source": {"flag": 17}},
-    {"name": "Outskirts: Artis's Medal", "id": 3, "region": "Bugaria Outskirts", "source": {"npc": "ShwEmArtys", "flag": 32}}
+    {"name": "Outskirts: Artis's Medal", "id": 3, "region": "Bugaria Outskirts", "source": {"npc": "ShwEmArtys", "flag": 32, "give": {"map": "BugariaOutskirtsOutsideCity", "type": 2, "item": 11}}}
   ],
   "regions": [
     {"name": "Menu", "exits": [{"to": "Bugaria Outskirts"}]},

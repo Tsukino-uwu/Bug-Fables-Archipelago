@@ -123,4 +123,11 @@ class BugFablesWorld(World):
             "world_version": WORLD_VERSION,
             "artifacts_required": self.artifacts_required,
             "location_flags": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["flag"] for loc in LOCATIONS},
+            # Which |giveitem| hands out each location's vanilla item, so the client can keep it out of the
+            # inventory and show the seed's item instead. Locations without a known one are left out.
+            "location_gives": {
+                str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["give"]
+                for loc in LOCATIONS
+                if "give" in loc["source"]
+            },
         }

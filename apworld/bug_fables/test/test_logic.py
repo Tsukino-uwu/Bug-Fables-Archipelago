@@ -53,3 +53,12 @@ class TestSlotData(BugFablesTestBase):
         import pkgutil
         manifest = json.loads(pkgutil.get_data("worlds.bug_fables", "archipelago.json").decode("utf-8"))
         self.assertEqual(self.world.fill_slot_data()["world_version"], manifest["world_version"])
+
+    def test_gives_name_the_vanilla_item(self) -> None:
+        # The client suppresses exactly the giveitem named here. A wrong one would let the vanilla item through,
+        # or swallow an unrelated grant on the same map.
+        gives = self.world.fill_slot_data()["location_gives"]
+        medal = gives[str(self.world.location_name_to_id["Outskirts: Artis's Medal"])]
+        self.assertEqual(medal, {"map": "BugariaOutskirtsOutsideCity", "type": 2, "item": 11})
+        permit = gives[str(self.world.location_name_to_id["Outskirts: Explorer Permit"])]
+        self.assertEqual(permit, {"map": "BugariaOutskirtsOutsideCity", "type": 1, "item": 27})
