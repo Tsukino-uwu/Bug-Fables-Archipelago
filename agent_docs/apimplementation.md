@@ -149,7 +149,9 @@ Archipelago's `custom_worlds` folder.
   no articles or verbs, like `Snakemouth Den: Bridge Room, Pillar` ("Ledge", "Chest", "Waterfall"; a qualifier
   like "Top of Pillar" only when a room needs telling apart). Not a sentence and not a hint at how to get it
   ("On Top of a Pillar", "Under a Rock" are too much). Gifts are `<Area>: <Who>'s Gift` or `<Who>'s Reward`,
-  like `Outskirts: Maki and Eetl's Gift`. Never the item, the flag or a mechanic ("Beemerang" goes stale once
+  like `Outskirts: Maki and Eetl's Gift`. A character's name only when players will remember it (main and
+  recurring ones); a minor one is described instead ("Ladybug Kid's Reward", "Ladybug Siblings' House", for
+  Leby and Dib) (the user, 2026-09-24). Never the item, the flag or a mechanic ("Beemerang" goes stale once
   abilities are shuffled), Title Case, one word per kind of landmark everywhere. The test
   `TestLocationNames` fails if a location's name contains its own vanilla item's name. Renaming a location
   never changes its id or flag.
