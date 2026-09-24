@@ -14,8 +14,7 @@ namespace BugFablesAP
     //
     // Game thread, every frame. The cost is a handful of bool reads.
     //
-    // Known gap: a save isn't tied to a seed yet. Loading one seed's save while connected to another sends that
-    // save's finished locations to the other seed. The received-item count in the save will carry the seed.
+    // A save is tied to its seed (ItemReceiver, flagstring[5]): a save from another seed sends nothing here.
     internal sealed class LocationChecks
     {
         private readonly ManualLogSource log;
@@ -41,6 +40,7 @@ namespace BugFablesAP
                 : flagsById == null ? "slot_data has no location_flags"
                 : mm == null || mm.flags == null ? "no game state"
                 : MainManager.map == null ? "no save in play"
+                : ItemReceiver.SaveMatchesSeed(connection, log) == false ? "this save belongs to another seed"
                 : null;
             // Say what the guard decided, each time it changes, so a silent non-send can't hide.
             string state = waiting == null

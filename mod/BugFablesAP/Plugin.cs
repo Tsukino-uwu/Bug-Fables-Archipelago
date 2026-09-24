@@ -27,6 +27,7 @@ namespace BugFablesAP
         private ConfigEntry<bool> randomizerEnabled;
         private ApConnection connection;
         private LocationChecks checks;
+        private ItemReceiver receiver;
         // The details last tried automatically: new details connect at once; the same details only retry after an
         // unreachable server or a dropped connection (ApConnection.ShouldRetry).
         private string lastAttempt;
@@ -76,6 +77,7 @@ namespace BugFablesAP
                 + "connecting fails with it on.");
             WebSocketCompression.Enable(Guid, connection.Post, () => compression.Value);
             checks = new LocationChecks(Log, connection);
+            receiver = new ItemReceiver(Log, connection);
 
             randomizerEnabled = Config.Bind("Archipelago", "RandomizerEnabled", false,
                 "Archipelago mod enabled: the game uses its own saves in the 'archipelago' folder, apart from your normal "
@@ -184,6 +186,7 @@ namespace BugFablesAP
             connection.Watchdog(DateTime.UtcNow);
             connection.Tick();
             checks.Tick(randomizerEnabled.Value);
+            receiver.Tick(randomizerEnabled.Value);
 
             DevCheats.Tick(Log, giveMoney);
 

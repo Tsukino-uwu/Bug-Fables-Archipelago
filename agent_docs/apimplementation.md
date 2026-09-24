@@ -38,6 +38,7 @@ archipelago.gg, retrying when the server is unreachable or drops.
 4. [Build step 4: connecting on its own, and staying connected](#build-step-4-connecting-on-its-own-and-staying-connected)
 5. [Build step 5: a compressed connection](#build-step-5-a-compressed-connection)
 6. [Build step 6: sending checks](#build-step-6-sending-checks)
+7. [Build step 7: receiving items](#build-step-7-receiving-items)
 
 **How it works**
 
@@ -239,14 +240,42 @@ medal's 32), and that the world version is written in one place only (the manife
 change. The world version went to 0.2.0.
 
 **Not yet:** the game still hands out its own item at the location, the medal here. Replacing that with the
-server's item is the next step. A save isn't tied to its seed yet either, so a save from another seed would
-send its finished locations to this one. Planned: the save will carry the seed with the received-item count.
+server's item is the next step. A save from another seed would have sent its finished locations here; build step 7 ties each save to its
+seed, which closed that.
 
 **Status: works (2026-09-24, local server).** The user loaded a save from before Artis, already past the
 permit. On loading, the mod sent the permit's location at once (flag 15 was already set: the save acted as
 the outbox). Talking to Artis sent the medal's location (flag 32). For both, the mod logged `sending`, the
 server's confirmation and `sent`, and the server logged `BugTester sent ... (Outskirts: Explorer Permit)` and
 `(Outskirts: Artis's Medal)`.
+
+## Build step 7: receiving items
+
+Every item comes from the server, the player's own included. The server keeps a numbered list of everything
+it has sent to a slot, and replays the whole list at every login. The client's job is to give each item
+**exactly once**.
+
+**The count lives in the save.** The mod keeps "how many of the server's items this save already has" in the
+game's own save, so saving, loading and starting over all stay correct. A new save starts at 0 and gets
+everything; an older save gets exactly what it's missing. The rules forbid a new save format, so the mod
+uses a slot the game already saves but never uses. Finding one took a measurement:
+
+- The game saves two small arrays of numbers and text for its scripts (`flagvar`, 70 numbers, and
+  `flagstring`, 15 texts). Its code uses most slots, and its dialogue scripts can use any slot by number.
+- A one-off dump from the running game listed every slot any of its 2,437 text files touches. Together with the
+  code, that left **number slot 60 used by nothing**, and text slot 5 as well (`MEASURED.md`).
+- So slot 60 holds the count, and text slot 5 holds **the seed's name**. That ties each save to its seed: a
+  save from another seed neither receives items nor sends checks. That closes the gap left open in step 6.
+
+**Only when it's safe, one item per frame:** only while the player is free (no battle, dialogue, cutscene, pause
+or map change). Never during a battle, because retrying a lost battle restores the count but not key items.
+
+**Where items go:** key items to key items, ordinary items to the bag, then storage when the bag is full. If
+both are full, the item waits until there's room (items are given strictly in order, so the count stays right).
+The same operations the game's own code uses put them there.
+
+**Status:** built (2026-09-24). The test: the server already holds the Explorer Permit and the G-Bug Ranger
+Plushie from the swap test, so both should arrive.
 
 ---
 
