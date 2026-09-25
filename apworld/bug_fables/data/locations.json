@@ -52,5 +52,11 @@
     {"map": "SnakemouthDoorRoom", "entity": "DoorLoadZone", "_comment": "The big door to Upper Snakemouth; the game makes it from the first boss (requires 41), though the door's model looks open from flag 14 (the trapdoor). Kept present: Upper Snakemouth stays locked by the Peculiar Gem slot right behind it, so this only lets the Gem open chapter 5's dungeon whenever it's found (the user, 2026-09-25)."},
     {"map": "SnakemouthFallRoom", "entity": "JumpShroom", "_comment": "The bounce mushroom back up to the pitfall room; the game makes it from the first boss (requires 41). Kept present so the trapdoor is never a dead end (the user, 2026-09-25)."},
     {"map": "SnakemouthFallRoom", "entity": "LoadingZoneDoorRoom", "_comment": "The door back up to the pitfall room, at the top of the bounce mushroom (requires 41). Kept present with it."}
+  ],
+  "scenery_hidden": [
+    {"map": "BugariaOutskirtsOutsideCity", "entity": "Base/BlockingRocks", "_comment": "The rock pile that cuts the Outskirts off until the first boss (a ConditionChecker hidden from flag 41; MapDump's flag-scenery list). It closes the way to the ladybug siblings' house, the town door and the bottom-right exit (the user, 2026-09-25). Removed from the start: the house has no gate of its own, the exit's load zone still waits for 41 (LoadZoneGoldenPath), and the town's first-entry scene is held (held_until)."}
+  ],
+  "held_until": [
+    {"map": "BugariaOutskirtsOutsideCity", "entity": "DoorBugaria - Duplicate", "flag": 41, "_comment": "The town's first-entry scene (an EventTrigger starting Event60, which loads the main plaza and sets flag 107; EventControl.cs:9770). It has no gate of its own; the rocks kept it out of reach until the first boss. With the rocks gone it waits for flag 41, as before: the city is written for chapter 2 (the user chose not to open the town yet, 2026-09-25)."}
   ]
 }

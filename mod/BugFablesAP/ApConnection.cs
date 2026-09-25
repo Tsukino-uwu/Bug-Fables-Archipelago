@@ -321,10 +321,22 @@ namespace BugFablesAP
         internal List<Blocker> KeptPresent => keptPresent;
         private volatile List<Blocker> keptPresent;
 
+        // slot_data's scenery_hidden: map scenery the story removes later (the Outskirts rocks) that the seed removes from
+        // the start ([{map, entity}], entity being the object's path inside the map, as MapDump writes it).
+        internal List<Blocker> SceneryHidden => sceneryHidden;
+        private volatile List<Blocker> sceneryHidden;
+
+        // slot_data's held_until: an entity with no gate of its own that the seed keeps away until a story flag
+        // ([{map, entity, flag}]): the town's first-entry scene, reachable once the rocks are gone, waits for the first
+        // boss as it did behind them.
+        internal List<Blocker> HeldUntil => heldUntil;
+        private volatile List<Blocker> heldUntil;
+
         internal sealed class Blocker
         {
             internal string Map;
             internal string Entity;
+            internal int Flag = -1;
         }
 
         private static List<Blocker> ReadKeptOpen(Dictionary<string, object> slotData, string key = "kept_open")
@@ -333,7 +345,12 @@ namespace BugFablesAP
             {
                 return null;
             }
-            return list.Select(e => new Blocker { Map = e.Value<string>("map"), Entity = e.Value<string>("entity") }).ToList();
+            return list.Select(e => new Blocker
+            {
+                Map = e.Value<string>("map"),
+                Entity = e.Value<string>("entity"),
+                Flag = e["flag"] != null ? e.Value<int>("flag") : -1,
+            }).ToList();
         }
 
         // Respawning pickups (the user, 2026-09-24): the first pickup sends the check and gives nothing, later ones are
@@ -530,6 +547,8 @@ namespace BugFablesAP
                     locationPickups = ReadLocationPickups(ok.SlotData);
                     keptOpen = ReadKeptOpen(ok.SlotData);
                     keptPresent = ReadKeptOpen(ok.SlotData, "kept_present");
+                    sceneryHidden = ReadKeptOpen(ok.SlotData, "scenery_hidden");
+                    heldUntil = ReadKeptOpen(ok.SlotData, "held_until");
                     locationVars = ReadLocationVars(ok.SlotData);
                     locationBerries = ReadLocationBerries(ok.SlotData);
                     ownSlot = ok.Slot;

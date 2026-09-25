@@ -449,3 +449,16 @@ class TestKeptPresent(BugFablesTestBase):
 
     def test_fall_room_blocker_is_kept_open(self) -> None:
         self.assertIn({"map": "SnakemouthFallRoom", "entity": "blocker"}, self.world.fill_slot_data()["kept_open"])
+
+
+class TestOutskirtsRocks(BugFablesTestBase):
+    # The rocks that cut the Outskirts off until the first boss are removed from the start, and the town's first-entry
+    # scene they used to guard waits for the first boss instead (the user, 2026-09-25: rocks and house now, town later).
+    # Without the hold, removing the rocks would let the chapter 2 city scene start in chapter 1.
+    def test_rocks_are_removed(self) -> None:
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "Base/BlockingRocks"},
+                      self.world.fill_slot_data()["scenery_hidden"])
+
+    def test_town_scene_waits_for_the_first_boss(self) -> None:
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "DoorBugaria - Duplicate", "flag": 41},
+                      self.world.fill_slot_data()["held_until"])

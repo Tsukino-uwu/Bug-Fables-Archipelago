@@ -578,6 +578,19 @@ vanilla). The fall room's chapter 1 blocker joins `kept_open`. The ordinary door
 alone: before the trapdoor event it would skip that event, where Leif's joining starts. Tests `TestKeptPresent`.
 **Built 2026-09-25, not yet seen in game;** it needs a fresh file played through chapter 1, to see that the spider
 fight and Leif's joining still play out with the way back up open.
+**The Outskirts rocks** (the user, 2026-09-25: before chapter 1 is done, a rock pile cuts the Outskirts off, so
+only the way to chapter 1 is left). Everything that changes on that map at the end of chapter 1 is flag 41, read
+from the entity dump and the map dump's flag-scenery list: the rocks (`Base/BlockingRocks`, scenery hidden from
+41), the Golden Path exit (needs 41), NPCs swapping. The rocks guard three things: the ladybug siblings' house (no
+gate of its own), the bottom-right exit (whose load zone still needs 41, so it stays a dead end) and the town
+door. The town door's first visit is a trigger with no gate of its own either (Event60: the first-entry scene
+into the city, which sets flag 107), and the city is written for chapter 2. So two new `slot_data` lists:
+`scenery_hidden` (map plus the object's path in the map; the mod's prefix on `ConditionChecker.Start` gives it a
+marker `limit`, which the existing check answers with "hide") and `held_until` (map, entity, flag; the mod adds the
+flag to the entity's own `requires`, so the game keeps the trigger away until the first boss and brings it back
+after). The user chose rocks and house now, the town as a later gate of its own. **The house's logic stays
+cautious** (it still needs the first boss) until the user has walked in with the rocks gone. Tests
+`TestOutskirtsRocks`. **Built 2026-09-25, not yet seen in game.**
 **Mapping connections, one-way included** (the user, 2026-09-25: for room-level regions and a later entrance
 rando). An entrance shuffle can only pair a two-way door with another two-way door; a one-way link marked two-way
 can strand the player. So every connection is recorded with its direction. How:
