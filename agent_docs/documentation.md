@@ -646,7 +646,8 @@ that build, right after the keeper is read, and only if the keeper exists by the
 marker came too late. While a map builds, the mod now remembers the entity just made (every one starts as
 `CreateNewEntity(name)`), and a check made with that entity's own `requires` array answers "exists" when it's listed.
 Scenery (a `ConditionChecker`) gets the mirror of the rocks' treatment: a marker `requires` before its `Start`, which
-answers "exists" (`scenery_present`, the caravan's stall). Built, not yet seen.
+answers "exists" (`scenery_present`, the caravan's stall). Seen (the user, 2026-09-25): the stall and Crickerly with
+her three slots, the seed's items in them, each first purchase a check, then her own items.
 
 **The reshuffle choice first** (the user, 2026-09-25: faster to reset a shelf). A shopkeeper's greeting ends in a
 `prompt` whose choices are listed as N targets then N texts (`MainManager.cs:12213-12222`); the reshuffle is the one with
