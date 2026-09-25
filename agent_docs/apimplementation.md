@@ -161,6 +161,11 @@ coupled, off by default) shuffles 508 doors with every area kept reachable; a ge
    6. **Found while roaming:** a shuffled door reaches areas the seed has no locations in yet, whose items are the
       game's own (the user picked up the desert's Strong Start medal, flag 415). The Placeholders plan (every spot a
       location, unchecked ones filler-only) closes that.
+   7. **A trap found while roaming (the user, 2026-09-25):** in the bandit hideout's garden (`HideoutGarden`) a guard
+      (`burglar`) caught the party, which starts the game's own caught scene (Event108, the log) and puts the party in
+      `HideoutCell`, whose one door leads to the central room. Getting out of the cell needs, the user thinks, Leif's
+      ice; without Leif it's a dead end (the Warp button is the way out). So the hideout's garden needs Leif in the
+      logic once the logic follows the doors, and a guard catching you is a transfer that isn't a door.
 2. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
    **Also wanted (the user, 2026-09-25): the basic moves as items**, a yaml option apart from the abilities: Vi's
