@@ -640,6 +640,6 @@ purchases, and two copies of one medal can't be told apart in a list of medal id
    (both TP Plus copies and both Ambusher copies separately), the guard in step 5 firing every time; after saving,
    the title screen and loading, exactly the 4 unbought copies stayed, reshuffles included. One flash fixed after: a
    rebuilt shelf showed the game's own medal sprites for a moment (the swap ran every 15 frames; now every frame for a
-   second after a rebuild).
+   second after a rebuild; seen gone, the user, 2026-09-25).
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page), `ShopSwap.cs`.*
