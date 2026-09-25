@@ -514,7 +514,8 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    slides you play Kabbu alone inside the starting building, and one scene, Event16, stands between you and the door
    (its trigger, entity 9, is hidden by flag 15). It holds Maki's talk, Vi joining, the tutorial battle, the Explorer
    Permit (location 1) and Kina's and Eetl's talk: an item, a battle and a party change, so no flag list could skip it.
-   So the scene never starts, and on the next free frame the mod leaves what its end leaves (`EventControl.cs:3598-3822`),
+   So the scene never starts: as soon as the player is free on that map with flag 15 unset (not only at the trigger,
+   which the user stood clear of, taking it for the scene), the mod leaves what its end leaves (`EventControl.cs:3598-3822`),
    through the game's own calls: `ChangeParty({0, 1})` and `SetPlayers` (the `addleif` method), the tutorial's Crunchy
    Leaf, Vi's stand-in and the `blockingbox` destroyed, the exit (entity 2) active again with the default camera, flag 15
    and quest 11 on the board. Flag 15 sends location 1's check, and a hold-up shows the seed's item. The logic needs no
