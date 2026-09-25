@@ -519,7 +519,13 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    through the game's own calls: `ChangeParty({0, 1})` and `SetPlayers` (the `addleif` method), the tutorial's Crunchy
    Leaf, Vi's stand-in and the `blockingbox` destroyed, the exit (entity 2) active again with the default camera, flag 15
    and quest 11 on the board. Flag 15 sends location 1's check, and a hold-up shows the seed's item. The logic needs no
-   change: Vi is in the party either way, and location 1 was already reachable from the start. Built, not yet seen.
+   change: Vi is in the party either way, and location 1 was already reachable from the start.
+   **First tries (2026-09-25):** (1) the opening waited for its trigger, and the user stood clear of it, taking it for
+   the scene; now it runs as soon as the player is free. (2) The trigger then stayed in the room (flag 15 hides it only
+   on a map load), the scene started anyway, since the block only covered "flag 15 unset", and crashed looking for Vi's
+   stand-in the mod had removed (freed with `unstick`). Now Event16 is refused on that map whenever the skip is on, and
+   the trigger is hidden. (3) The talk after the slides is still Event8, which only the slides' speed-up covered; that
+   part (talk and party moves, no prompt) is now fast-forwarded too.
    **The rule since (the user, 2026-09-25):** a scene that gives an item may be skipped *as long as the item can still
    be received*, and fewer cutscenes are preferred, as an option at least. So a skip now has to keep every check the
    scene holds (sent by the mod, or moved to something the player still does). Next candidate, the user's idea: the
