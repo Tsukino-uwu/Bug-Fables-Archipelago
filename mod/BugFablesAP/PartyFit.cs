@@ -103,8 +103,44 @@ namespace BugFablesAP
         private static bool InScene() =>
             randomizerOn != null && randomizerOn() && Talking && MainManager.player != null;
 
+        // The leader acts a missing member's part (the user, 2026-09-25: Leif walking up to the grass, picking up the
+        // mushroom and falling like Kabbu, rather than standing idle beside invisible stand-ins). Once per scene or
+        // conversation, at its first stand-in: if the story's leader (the first member of the party it last asked for) isn't
+        // in the party, the real leader plays that member; every other missing member stays an invisible stand-in. Chosen
+        // once, since a scene can change the party partway (the spider fight's does). Animations play by number, so the
+        // leader shows his own animation for the role's (the field action is 100 for everyone: Leif's ice for Kabbu's horn).
+        private static EntityControl actor;
+        private static int actorRole = -1; // -1 not chosen yet this scene, -2 nobody acts
+
+        private static void ChooseActor()
+        {
+            if (actorRole != -1)
+            {
+                return;
+            }
+            MainManager mm = MainManager.instance;
+            int[] story = PartyMembers.LastStoryParty;
+            int lead = story != null && story.Length > 0 ? story[0] : -1;
+            EntityControl leader = mm.playerdata != null && mm.playerdata.Length > 0 ? mm.playerdata[0].entity : null;
+            if (lead >= 0 && lead <= 2 && leader != null && !mm.playerdata.Any(p => p.trueid == lead))
+            {
+                actorRole = lead;
+                actor = leader;
+                log.LogInfo($"[party] Event{MainManager.lastevent}: the leader ({leader.name}, member {mm.playerdata[0].trueid}) acts member {lead}'s part");
+            }
+            else
+            {
+                actorRole = -2;
+            }
+        }
+
         private static EntityControl StandIn(int member)
         {
+            ChooseActor();
+            if (member == actorRole && actor != null)
+            {
+                return actor;
+            }
             if (standIns[member] == null)
             {
                 standIns[member] = EntityControl.CreateNewEntity("apstandin" + member, member, MainManager.player.transform.position);
@@ -168,10 +204,18 @@ namespace BugFablesAP
             {
                 return;
             }
+            ChooseActor();
             var full = new EntityControl[3];
             for (int member = 0; member < 3; member++)
             {
-                full[member] = __result.FirstOrDefault(e => e != null && e.animid == member) ?? StandIn(member);
+                EntityControl found = __result.FirstOrDefault(e => e != null && e.animid == member);
+                // The acting leader fills the role's slot; his own gets an invisible stand-in, so a scene moving "each
+                // member" never moves the player twice.
+                if (found != null && found == actor && member != actorRole)
+                {
+                    found = null;
+                }
+                full[member] = found ?? StandIn(member);
             }
             __result = full;
         }
@@ -182,10 +226,12 @@ namespace BugFablesAP
             {
                 return;
             }
+            ChooseActor();
             var longer = __result.ToList();
             for (int member = 0; member < 3 && longer.Count < 3; member++)
             {
-                if (!__result.Any(e => e != null && e.animid == member))
+                // The acting leader is already first in the party's own list.
+                if (!__result.Any(e => e != null && e.animid == member) && member != actorRole)
                 {
                     longer.Add(StandIn(member));
                 }
@@ -240,6 +286,8 @@ namespace BugFablesAP
 
         private static void ClearStandIns()
         {
+            actor = null;
+            actorRole = -1;
             for (int member = 0; member < standIns.Length; member++)
             {
                 if (standIns[member] != null)
@@ -253,7 +301,7 @@ namespace BugFablesAP
         // Each frame: stand-ins stay invisible and solid-free while the scene runs, and go when it ends.
         internal static void Tick()
         {
-            if (!standIns.Any(e => e != null))
+            if (!standIns.Any(e => e != null) && actorRole == -1)
             {
                 return;
             }

@@ -628,6 +628,15 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    ending. The log: the fall placed at (12.7, 6.5, 0.3); Leif taken off the follower list; the scene's end moved the
    party to stand-in Vi's spot (-44, 0, 1.2); the story's Leif ("Moth") removed as a copy; the stray player removed.
    (14) and (15) seen with it.
+   (16) **The leader acts the story leader's part** (the user's wish, `apimplementation.md`): at a scene's or talk's
+   first stand-in, if the story's leader isn't in the party, the real leader plays that member (walks, faces, is placed
+   where they would be) and only other missing members stay invisible; chosen once per scene; in a party list by member
+   the leader's own slot gets an invisible stand-in so he's never moved twice. Not yet seen.
+   (17) **Leif's joining scene skipped when Leif is already in the party** (the user, 2026-09-25): Event14 at the lake
+   takes its Leif from the follower list (`map.tempfollowers[0]`, `EventControl.cs:3339`), empty since (15), and threw
+   `ArgumentOutOfRange` at its start (predicted from the code a moment before the user reached it; freed with
+   `unstick`). A prefix on `EventControl.StartEvent` doesn't start it and leaves what it leaves: flag 16, the regional
+   flag of the creature it removes (entity 5) with the creature gone, Leif off the follower list. Not yet seen.
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,

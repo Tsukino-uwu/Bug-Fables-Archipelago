@@ -44,6 +44,15 @@ namespace BugFablesAP
             // Last, so the opening skip's own prefix (QualityOfLife, which refuses Event8's Kabbu-alone call) sees the
             // story's ids as they are.
             harmony.Patch(changeParty, prefix: new HarmonyMethod(typeof(PartyMembers), nameof(BeforeChangeParty)) { priority = Priority.Last });
+            MethodInfo startEvent = AccessTools.Method(typeof(EventControl), nameof(EventControl.StartEvent), new[] { typeof(int), typeof(NPCControl) });
+            if (startEvent != null)
+            {
+                harmony.Patch(startEvent, prefix: new HarmonyMethod(typeof(PartyMembers), nameof(BeforeStartEvent)));
+            }
+            else
+            {
+                log.LogError("[members] EventControl.StartEvent not found: a joining scene for a member already in the party plays and may crash.");
+            }
             log.LogInfo($"[members] installed on MainManager.ChangeParty (starting member {StartMember})");
         }
 
@@ -84,6 +93,32 @@ namespace BugFablesAP
             log.LogInfo($"[members] the story asked for party {string.Join(",", ids.Select(i => i.ToString()).ToArray())}; "
                 + $"allowed {string.Join(",", kept.Select(i => i.ToString()).ToArray())} (event {MainManager.lastevent})");
             ids = kept;
+        }
+
+        // Leif's joining scene (Event14, the lake) when Leif is already in the party (the user, 2026-09-25, Leif alone): it
+        // takes its Leif from the follower list (map.tempfollowers[0], EventControl.cs:3339), which Leif isn't on, and threw
+        // ArgumentOutOfRange at its start. Its point, Leif joining, is moot, and its fight (two of enemy 1, no escape) needs
+        // something that hits enemies in the air, in chapter 1 only Vi's beemerang (the user). So it doesn't start; the mod
+        // leaves what it leaves: flag 16 (Leif joined, set before the fight), the regional flag of the creature it removes
+        // (entity 5, EventControl.cs:3501-3502) with that creature gone, and Leif off the follower list.
+        private static bool BeforeStartEvent(int id)
+        {
+            MainManager mm = MainManager.instance;
+            if (id != 14 || !Active || mm.playerdata == null || !mm.playerdata.Any(p => p.trueid == 2))
+            {
+                return true;
+            }
+            mm.flags[16] = true;
+            EntityControl creature = MainManager.GetEntity(5);
+            if (creature != null && creature.npcdata != null && creature.npcdata.regionalflag >= 0)
+            {
+                mm.regionalflags[creature.npcdata.regionalflag] = true;
+                creature.gameObject.SetActive(false);
+            }
+            mm.extrafollowers?.RemoveAll(f => f == 2);
+            log.LogInfo($"[members] Leif's joining scene (Event14) skipped: Leif is already in the party; flag 16 set, "
+                + (creature != null ? $"entity 5 ({creature.name}) removed" : "no entity 5"));
+            return false;
         }
 
         // A party member can't also be a story follower (the user, 2026-09-25: three Leifs after the spider fight). The

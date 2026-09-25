@@ -494,7 +494,10 @@ The output stays in the BepInEx folder.
   the user; and `SnakemouthDoorRoom`, from the bridge side, is a chain of horn steps (the user): cut grass to reach a
   trampoline, knock a rock down onto a vine, then push two rocks onto switches, which starts the trapdoor scene (its
   starter, `MushroomItem`, requires flag 13, presumably the switches' flag: not measured). Coming up from the trapdoor
-  without the horn is presumably one-way for the same reason (the user's reading, not tried) (the user, Leif alone, 2026-09-25; the room's Tattle tutorial, Event2, ran with stand-ins and
+  without the horn is presumably one-way for the same reason (the user's reading, not tried); and **the lake's fight** (Leif's joining scene, Event14 on `SnakemouthLake`: `ChangeParty({0, 1, 2})`, flag 16,
+  then a battle with two of enemy 1 that can't be fled, `EventControl.cs:3462-3466`) needs something that hits enemies
+  in the air, in chapter 1 only Vi's beemerang: a hard gate on Vi (the user, 2026-09-25; whether Kabbu or Leif learn
+  such a move later is unknown) (the user, Leif alone, 2026-09-25; the room's Tattle tutorial, Event2, ran with stand-ins and
   finished, flag 10, and its hint, Event0, is skipped by Skip cutscenes), the user with
   Leif alone, 2026-09-25, the map from the Detector's log); Leif (moth) freezes, droplets included (always on, once he has joined at the Snakemouth lake). Vi and
   Kabbu are in the party from a new game, so while the party is vanilla only Leif gates anything.
