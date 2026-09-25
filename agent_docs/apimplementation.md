@@ -224,7 +224,8 @@ Archipelago's `custom_worlds` folder.
   form is `<Area>: <Room>, <Spot>` (the user, 2026-09-24): the game's own area name; a short room name from a
   landmark, left out for a one-map area; and the spot as **just a landmark**, a noun of one to three words with
   no articles or verbs, like `Snakemouth Den: Bridge Room, Pillar` ("Ledge", "Chest", "Waterfall"; a qualifier
-  like "Top of Pillar" only when a room needs telling apart). Not a sentence and not a hint at how to get it
+  like "Top of Pillar" only when a room needs telling apart; two rooftops became "Rooftop" and "Fountain Rooftop",
+  not "On Top of the House by the Fountain", which the user found too descriptive, 2026-09-25). Not a sentence and not a hint at how to get it
   ("On Top of a Pillar", "Under a Rock" are too much). **When a room has more than one of that landmark, add
   `by the <Thing>`** after it, naming something a player can see next to it: `Snakemouth Den: Lake, Bush by the
   Sign` (the user, 2026-09-24: this is how to tell apart which bush, rock or pillar). It says where the spot is,
