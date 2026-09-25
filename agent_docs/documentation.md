@@ -659,6 +659,8 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    chapter 1, and `BattleControl.DoAction`/`EventDialogue`, to confirm they check the party's size), `tempfollowers[..]`
    (11 events; they read story companions, and break only for a removed party member, so far only Event14, now skipped),
    `partyorder` (Events 6, 54, 138) and `GetExtraFollower` (Event223).
+   **Seen (the user, 2026-09-25):** the droplet scene replayed to its end with no crash, and the log shows (16) at work in
+   it and in the switch scene (Event23): "the leader (Player 0, member 2) acts member 0's part".
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,
