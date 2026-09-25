@@ -114,6 +114,15 @@ namespace BugFablesAP
             {
                 return;
             }
+            // Except toward the real player: PartyMover walks every party member, stand-ins included, to the player
+            // (EventControl PartyMover), who with one member isn't in the scene at all (left where the map put him). The
+            // trapdoor's end then placed Leif on stand-in Vi's spot, by then teleported to Leif: far left instead of the
+            // landing spot (the user, 2026-09-25). A stand-in doesn't follow the real party; it stays where the scene put it.
+            if (MainManager.player != null && Vector3.Distance(pos, MainManager.player.transform.position) < 2f)
+            {
+                __instance.forcemove = false;
+                return;
+            }
             __instance.transform.position = pos;
             __instance.forcemove = false;
         }
@@ -249,6 +258,12 @@ namespace BugFablesAP
         private static void BeforeSetPlayers(ref Vector3[] newentitypos)
         {
             int party = MainManager.instance?.playerdata?.Length ?? 0;
+            if (newentitypos != null && standIns.Any(e => e != null) && randomizerOn())
+            {
+                log.LogInfo($"[party] Event{MainManager.lastevent} places the party at {string.Join(" ", newentitypos.Select(v => v.ToString()).ToArray())}; "
+                    + $"stand-ins at {string.Join(" ", standIns.Where(e => e != null).Select(e => e.name + " " + e.transform.position).ToArray())}; "
+                    + $"player at {(MainManager.player != null ? MainManager.player.transform.position.ToString() : "none")}");
+            }
             if (newentitypos == null || newentitypos.Length == 0 || newentitypos.Length >= party || !randomizerOn())
             {
                 return;

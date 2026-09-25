@@ -587,7 +587,12 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    landed "down/left at a rock" instead of on the mushroom. Its end places member m on the m-th scene character's spot
    (`EventControl.cs:1476-1484`), so Leif took stand-in Vi's; a stand-in had its collision switched off but not its
    gravity, so it would sink through the floor. Stand-ins are now kinematic, without gravity. The likely cause, not
-   measured; not yet seen.
+   measured. **Wrong** (the user: now all the way left). Read in the code instead: just before placing, the scene runs
+   `PartyMover`, which walks every party member, stand-ins included, to `MainManager.player`, and with one member the
+   player (Leif) isn't in the scene: he stood where the fall room put him on loading, far left. (10)'s instant arrival
+   then put stand-in Vi on him, and the end put Leif on her spot. So a stand-in sent toward the real player stays where
+   the scene last put it, and the positions the scene hands `SetPlayers` are logged, with the stand-ins' and the
+   player's. Not yet seen.
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,

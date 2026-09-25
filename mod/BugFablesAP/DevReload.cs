@@ -61,6 +61,8 @@ namespace BugFablesAP
             return null;
         }
 
+        private bool waitingReported;
+
         internal void Tick()
         {
             if (requested)
@@ -76,6 +78,18 @@ namespace BugFablesAP
             DateTime now = File.Exists(dllPath) ? File.GetLastWriteTimeUtc(dllPath) : lastWrite;
             if (now != lastWrite)
             {
+                // Not in the middle of a scene, a conversation or a battle: a reload there orphaned the stand-ins the old
+                // plugin had made for a running scene (the spider fight's, 2026-09-25). Wait for a free moment.
+                MainManager mm = MainManager.instance;
+                if (mm != null && (mm.inevent || mm.message || MainManager.battle != null))
+                {
+                    if (!waitingReported)
+                    {
+                        waitingReported = true;
+                        log.LogInfo("DevReload: BugFablesAP.dll changed; waiting for the scene, talk or battle to end.");
+                    }
+                    return;
+                }
                 requested = true;
                 shouldReload.SetValue(scriptEngine, true);
                 log.LogInfo("DevReload: BugFablesAP.dll changed; asked ScriptEngine to reload.");
