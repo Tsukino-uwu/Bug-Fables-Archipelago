@@ -21,6 +21,15 @@ seed's (the mod guide, step 9).
 1. **Every key item and medal in the pool,** on logic that follows the vanilla story order: one region
    per chapter, entered once the chapter before is finished and the story's own keys and abilities are
    in hand. Medal gifts and medal shops each get a yaml on/off toggle.
+   **Medal shops (the user, 2026-09-25), being built.** Each medal a shop stocks is a location; the shelf shows the
+   seed's item, buying runs the shopkeeper's `giveitem` (swapped as for a gift), and the check is the medal leaving the
+   stock (`badgeshops[shop]`), which the save keeps. A done location shows as sold, so a reloaded save never charges
+   twice. A *Shop prices: Normal / Half / Free* row (default Normal) scales the price columns. Merab's (berries) first:
+   berries can always be earned, so no lockout. **Shades's shop takes crystal berries, a consumable** (the user's
+   concern: consumable keys, lockout, savescumming): crystal berries are spent nowhere else, so every Shades location
+   requires enough crystal berries to buy **everything** Shades sells, at Normal prices. Then no purchase order can lock
+   a player out. Crystal berries become progression. Savescumming gains nothing: each stocked medal is its own location,
+   fixed at generation, and a done check stays done.
    **Built 2026-09-24 (not yet seen in game):** each tick outside battles and events, a prize slot reading "missed"
    (2) is paid through the game's own `AddPrizeMedal(slot)` with Hard Mode answered "yes" for that call, because
    most bosses test Hard Mode in their own event and write 2 directly. Artis's `Event33` then hands the prize over
