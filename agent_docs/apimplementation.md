@@ -56,7 +56,7 @@ be wrong.
 3. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
    The basic moves and party members as items (*Starting Party Member*): see build step 13.
-4. **Open world, one gate at a time** (the default; an "open start" option planned): see build step 9.
+4. **Open world, one gate at a time** (always on, never an option; the user, 2026-09-26): see build step 9.
 5. **To test later (the user, 2026-09-25): a two-player room.** The user's slot plus a second one the agent drives,
    sending items while the user plays, to see items from another player arrive live: the hold-up on *All* and
    *Progression*, silence for a replay after a new save or reconnect, and the multiworld names ("X's item").
@@ -113,6 +113,11 @@ be wrong.
 17. **Berry multiplier, a panel setting** (the user, 2026-09-26): *Berry Multiplier* on the Quality of life page, 1x
    to 5x, default 1x, the same opt-in. Only the berries picked up in the world (lying there or dropped after a fight), never a
    check's reward from the server. Only while Archipelago is enabled.
+18. **Random start, a yaml option** (the user, 2026-09-26): *Starting Location*, `off / towns / random`, off by
+   default. Off is the vanilla start. `towns` starts in one of the towns. `random` starts anywhere, even in the middle
+   of a dungeon. Chosen at generation and sent in `slot_data`, never at runtime. The logic starts from that room, so
+   every seed is still completable from it: `random` needs the room-by-room logic that the entrance randomizer also
+   waits for (build step 12). Its own build step when built.
 
 **Known issues:**
 
@@ -603,10 +608,12 @@ by the seed on its own, from lists in `slot_data` decided at generation, tested 
 This step is those lists (`kept_open`, `kept_present`, `held_until`, `present_from` and the rest) and each gate
 opened with them.
 
-**An "open start" yaml option next** (the user, 2026-09-24), after chapter 1's locations: skip the prologue and
-tutorial, optionally with Leif from the start (the new-game party `{0, 1}`, `MainManager.cs:3591`, becoming
+**The open start is not an option: every seed starts open** (the user, 2026-09-26: building everything twice, for a
+linear and an open game, isn't worth it; open, metroidvania-like games work best in Archipelago). This replaces the
+"open start" yaml option planned on 2026-09-24 (skip the prologue and tutorial, optionally with Leif from the start (the new-game party `{0, 1}`, `MainManager.cs:3591`, becoming
 `{0, 1, 2}`; early cutscenes are written for two, so tested on a fresh file). A full story strip, as the Metroid
-Fusion randomizer does, isn't the plan: here every cutscene also changes the world through flags.
+Fusion randomizer does, isn't the plan: here every cutscene also changes the world through flags.) Leif from the
+start is now *Starting Party Member* (build step 13).
 **Open world is the default, not an option** (the user, 2026-09-25: nobody picks a linear game in
 Archipelago). The target: the world open as if the story were done, nothing collected, the ending gated by the
 artifact count. **Built one gate at a time, never by forcing chapters done** (decided 2026-09-25): "chapter done"
@@ -761,7 +768,7 @@ region. **Next, the starting house's board from the start:** it waits for chapte
 caretaker, an Eetl in the house whose line takes the quest; whether to keep him present early or have the mod play
 that line is decided after reading it in game. *Code: `QuestBoards.cs`.*
 
-**Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion fallback and statue, Madeleine's house, and the bar with its quest board seen by the user (2026-09-25); every board listing bounties (built 2026-09-25), Eetl's blocker, the inn, the boat's hold and chapter 2's held scenes not yet seen; an "open start" option planned.
+**Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion fallback and statue, Madeleine's house, and the bar with its quest board seen by the user (2026-09-25); every board listing bounties (built 2026-09-25), Eetl's blocker, the inn, the boat's hold and chapter 2's held scenes not yet seen; the open start is always on, not an option (the user, 2026-09-26).
 
 ---
 
@@ -1080,7 +1087,7 @@ state the game already knows. The jump is its own method, `DoJump`, called from 
 (`PlayerControl.cs:372-392`), so it can be refused without touching talk. **The logic is the cost:** every spot that
 needs a move (a ledge, a beemerang switch, grass, water to freeze) becomes a rule, seen room by room, and the start
 must have checks that need none of them.
-**Later idea, a yaml option (the user, 2026-09-25): party members as items.** Start with one random member and
+**Later idea, a yaml option (the user, 2026-09-25; off by default, confirmed 2026-09-26): party members as items.** Start with one random member and
 find the other two, each its own item, on top of the abilities. **Its shape (the user, 2026-09-25, later):** *Starting
 Party Member: Off / Vi / Kabbu / Leif / Random*; Off is the story's party, otherwise the game starts with that one
 member and the other two are items. Prompted by the stand-ins for missing members in scenes, which make one-member play

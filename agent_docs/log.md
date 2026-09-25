@@ -625,3 +625,9 @@ Newest last. What was tried, what happened, what the user said.
     berries off means not dealing with them.
   - My idea of berry-spot events, which would keep her shop shuffled, was dropped.
   - Both yaml texts are to say so when her shop is built (build step 11).
+- **The open start is always on, never an option** (the user). Building a linear game and an open one would be all
+  the work twice, and open, metroidvania-like games work best in Archipelago. This replaces the "open start" yaml
+  option planned on 2026-09-24.
+- **Random start** (the user): *Starting Location* `off / towns / random`, off by default. `random` can start
+  anywhere, even mid-dungeon. It is Next 18 and waits on the room-by-room logic.
+- **Starting Party Member** is confirmed off by default: members join where the story has them (build step 13).
