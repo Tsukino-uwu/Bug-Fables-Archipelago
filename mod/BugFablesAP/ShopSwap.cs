@@ -352,6 +352,7 @@ namespace BugFablesAP
             {
                 return;
             }
+            Settle();
             foreach (NPCControl npc in map.GetComponentsInChildren<NPCControl>(true))
             {
                 long at = LocationOf(npc);
@@ -364,6 +365,37 @@ namespace BugFablesAP
                 {
                     npc.entity.sprite.sprite = sprite;
                 }
+            }
+        }
+
+        // Purchases are permanent (the user, 2026-09-25: buy, reload, and the berries come back while the check stays). The
+        // save's bits are what this save paid for; a copy the server has checked with no bit here was bought in another
+        // save (an earlier one reloaded, or another file of the slot). So it's charged here, at today's price, as the game's
+        // own money command takes berries (clamped to 0-999, MainManager.cs:12580-12590), and its bit set: paid. Only
+        // Merab's (berries, shop 0); Shades's crystal berries will be counted exactly when her shop becomes locations.
+        // Outside events, dialogue and battles, and only on a save tied to the connected seed.
+        private static void Settle()
+        {
+            MainManager mm = MainManager.instance;
+            if (mm?.flagvar == null || MainManager.player == null || mm.inevent || mm.message || MainManager.battle != null
+                || connection.Session == null || ItemReceiver.SaveMatchesSeed(connection, log) != true)
+            {
+                return;
+            }
+            const int shop = 0;
+            List<KeyValuePair<long, int>> copies = Copies(shop);
+            for (int i = 0; i < copies.Count && i < 31; i++)
+            {
+                if (Bought(shop, i) || !connection.IsDone(copies[i].Key))
+                {
+                    continue;
+                }
+                int.TryParse(MainManager.badgedata[copies[i].Value, 5], out int price);
+                int had = mm.money;
+                mm.money = Mathf.Clamp(mm.money - price, 0, 999);
+                mm.flagvar[BoughtSlot[shop]] |= 1 << i;
+                log.LogInfo($"[shop] copy {i + 1} of shop {shop} (location {copies[i].Key}) was bought in another save: charged {price} "
+                    + $"berries here ({had} -> {mm.money}{(had < price ? ", not enough, the rest forgiven" : "")}); save's bits now {mm.flagvar[BoughtSlot[shop]]}");
             }
         }
 
