@@ -262,6 +262,7 @@ namespace BugFablesAP
             KeptOpen.Tick();
             HoldUps.Tick();
             ShopSwap.Tick();
+            PartyFit.Tick();
 
             DevCheats.Tick(Log, giveMoney);
             DevConsole.Tick(devConsole.Value);

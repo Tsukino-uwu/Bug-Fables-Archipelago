@@ -554,6 +554,14 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    positions the game's parser uses, and hands those spots to `TransferMap`.
    **Seen (the user, 2026-09-25): "looks perfect"**: a new file goes from the main menu straight to the town's gate
    from the Outskirts, with Vi and Kabbu and the first check's item, no slides, talk, fight or building on the way.
+   **Scenes with a member missing get a stand-in** (the user, 2026-09-25: make scenes work with one or two members;
+   the barkeeper's first talk, Event83, crashed twice on `p[2]` with Vi and Kabbu). Scenes take the party as a list and
+   use fixed slots (about 110 lookups). While a scene runs, `GetPartyEntities` returns three: each missing member is
+   an invisible, collision-free stand-in with that member's `animid`, made the way the game makes scene characters,
+   in the member's own slot (id order) or after the party, and removed when the scene ends. Outside scenes nothing
+   changes, and no scene tests a member with `GetEntity(-6) != null` (grep). Limits: a scene that changes the party, or
+   needs a member's ability, still needs the member (a logic rule, as for the boat); some scenes will look odd, and each
+   one that used a stand-in is logged, to skip or hold back one by one. Built, not yet seen.
    **The rule since (the user, 2026-09-25):** a scene that gives an item may be skipped *as long as the item can still
    be received*, and fewer cutscenes are preferred, as an option at least. So a skip now has to keep every check the
    scene holds (sent by the mod, or moved to something the player still does). Next candidate, the user's idea: the

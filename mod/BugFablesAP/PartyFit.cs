@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reflection;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -39,13 +40,126 @@ namespace BugFablesAP
             {
                 log.LogError("[party] MainManager.GetEntity(int) not found: a missing companion will still crash lines and scenes.");
             }
-            log.LogInfo("[party] installed on MainManager.SetPlayers" + (getEntity != null ? " and GetEntity" : ""));
+            MethodInfo byId = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetPartyEntities), new[] { typeof(bool) });
+            MethodInfo plain = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetPartyEntities), Type.EmptyTypes);
+            if (byId != null && plain != null)
+            {
+                harmony.Patch(byId, postfix: new HarmonyMethod(typeof(PartyFit), nameof(AfterPartyById)));
+                harmony.Patch(plain, postfix: new HarmonyMethod(typeof(PartyFit), nameof(AfterParty)));
+            }
+            else
+            {
+                log.LogError("[party] MainManager.GetPartyEntities not found: scenes written for three still crash with two.");
+            }
+            log.LogInfo("[party] installed on MainManager.SetPlayers" + (getEntity != null ? ", GetEntity" : "") + (byId != null ? " and GetPartyEntities" : ""));
         }
 
         internal static void Disable()
         {
             harmony?.UnpatchSelf();
             harmony = null;
+            ClearStandIns();
+        }
+
+        // Stand-ins (the user, 2026-09-25: make scenes work with one or two members). A scene takes the party as a list and
+        // uses fixed slots, p[0] to p[2] (about 110 lookups; the barkeeper's first talk, Event83, crashed on p[2] with Vi
+        // and Kabbu, EventControl.cs:13055-13058). While a scene runs, the list is padded to three with an invisible
+        // stand-in for each missing member, made as the game makes scene characters (EntityControl.CreateNewEntity, with
+        // that member's animid: Vi 0, Kabbu 1, Leif 2) at the leader's feet, hidden and without collision, and removed
+        // when the scene ends. By id order (Vi, Kabbu, Leif; GetPartyEntities(true), MainManager.cs:9483-9503) the stand-in
+        // takes the missing member's own slot; otherwise it is added after the party. Outside scenes nothing changes, so
+        // nothing can take a stand-in for a member who has joined. Each scene that used one is logged once.
+        private static readonly EntityControl[] standIns = new EntityControl[3];
+        private static readonly System.Collections.Generic.HashSet<string> standInReported = new System.Collections.Generic.HashSet<string>();
+
+        private static bool InScene() =>
+            randomizerOn != null && randomizerOn() && MainManager.instance != null && MainManager.instance.inevent && MainManager.player != null;
+
+        private static EntityControl StandIn(int member)
+        {
+            if (standIns[member] == null)
+            {
+                standIns[member] = EntityControl.CreateNewEntity("apstandin" + member, member, MainManager.player.transform.position);
+                string where = (MainManager.map != null ? MainManager.map.mapid.ToString() : "no map") + " Event" + MainManager.lastevent + " member " + member;
+                if (standInReported.Add(where))
+                {
+                    log.LogWarning($"[party] a scene asked for party member {member} (0 Vi, 1 Kabbu, 2 Leif), not in the party: an invisible stand-in ({where})");
+                }
+            }
+            return standIns[member];
+        }
+
+        private static void AfterPartyById(bool idorder, ref EntityControl[] __result)
+        {
+            if (!idorder || __result == null || __result.Length >= 3 || !InScene())
+            {
+                return;
+            }
+            var full = new EntityControl[3];
+            for (int member = 0; member < 3; member++)
+            {
+                full[member] = __result.FirstOrDefault(e => e != null && e.animid == member) ?? StandIn(member);
+            }
+            __result = full;
+        }
+
+        private static void AfterParty(ref EntityControl[] __result)
+        {
+            if (__result == null || __result.Length >= 3 || !InScene())
+            {
+                return;
+            }
+            var longer = __result.ToList();
+            for (int member = 0; member < 3 && longer.Count < 3; member++)
+            {
+                if (!__result.Any(e => e != null && e.animid == member))
+                {
+                    longer.Add(StandIn(member));
+                }
+            }
+            __result = longer.ToArray();
+        }
+
+        private static void ClearStandIns()
+        {
+            for (int member = 0; member < standIns.Length; member++)
+            {
+                if (standIns[member] != null)
+                {
+                    UnityEngine.Object.Destroy(standIns[member].gameObject);
+                }
+                standIns[member] = null;
+            }
+        }
+
+        // Each frame: stand-ins stay invisible and solid-free while the scene runs, and go when it ends.
+        internal static void Tick()
+        {
+            if (!standIns.Any(e => e != null))
+            {
+                return;
+            }
+            if (MainManager.instance == null || !MainManager.instance.inevent)
+            {
+                ClearStandIns();
+                log.LogInfo("[party] scene over: stand-ins removed");
+                return;
+            }
+            foreach (EntityControl e in standIns)
+            {
+                if (e == null)
+                {
+                    continue;
+                }
+                foreach (Renderer r in e.GetComponentsInChildren<Renderer>(true))
+                {
+                    r.enabled = false;
+                }
+                foreach (Collider c in e.GetComponentsInChildren<Collider>(true))
+                {
+                    c.enabled = false;
+                }
+            }
         }
 
         // The town open from the start (the user, 2026-09-25) reaches lines and scenes written for after chapter 1, when a
