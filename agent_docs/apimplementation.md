@@ -37,7 +37,17 @@ seed's (the mod guide, step 9).
    appearing. The same holds for Merab's later additions when they become locations. Crystal berries become progression. **Also wanted (the user,
    2026-09-25): Shades's counter showing 3 or 4 medals** instead of 2. The slot count is the shopkeeper's `data` length and
    each slot's place its `vectordata` entry (`NPCControl.cs:1530-1534`), so longer arrays with new counter positions,
-   set before the shelf is built; positions to settle on screen. Built with her shop. **Reloads refund currency** (the user
+   set before the shelf is built; positions to settle on screen. Built with her shop.
+   **Full stock from the start for both medal shops, duplicates as their own locations** (the user, 2026-09-25: "a 2nd
+   copy is a 2nd check", like the delivery quest's two checks on one flag). The story adds some medals twice (Merab: TP
+   Plus 1 and Ambusher 86; Shades: medal 6), so each copy is a location: Merab 22 (20 medals, two doubled), Shades 13
+   (costing exactly 50). **The mod owns each shop's stock:** the shelf is the full list minus the copies whose checks are
+   done. Buying removes a copy as the game does; one copy fewer than expected marks the next undone copy done. A reloaded
+   save with extra copies, or the story adding stock, is trimmed back to the list (a done location shows as sold). An
+   offline purchase stays in the save's stock and its check goes out on reconnecting.
+   **Item shops** (endless consumables, the user): the first purchase of each item in each shop is a check that shows
+   and gives the seed's item, then the shop sells its own item again, like respawning pickups, so restocking still works.
+   Their own yaml toggle, *Shuffle Item Shops*, default on, apart from *Shuffle Medal Shops*. Built after the medal shops. **Reloads refund currency** (the user
    caught this: buy, reload, keep the check and the berries), so purchases are made **permanent like checks**: spending
    is tallied on the server (per-slot storage), each save brought in line on load (crystal berries exactly: received
    minus spent; ordinary berries: the save's own paid record against the server's tally, the higher wins), and a
