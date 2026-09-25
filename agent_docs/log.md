@@ -420,3 +420,36 @@ Newest last. What was tried, what happened, what the user said.
 - **The user wants me to run console commands for them** (memory updated); warps only when asked.
 - Pending: the town door hold to Leif instead of the first boss (asked, not answered); the Warp's landing spot; the
   fall-room test in Snakemouth.
+
+## 2026-09-25 (end of session): open town, shops, party rehearsal (the user closing the chat)
+
+- **Open world, one gate at a time, seen on screen:** the town (its arrival scene removed, the real door kept; Event60
+  needs a companion who joins after the first boss, so the scene goes rather than the town waiting), the plaza's
+  blockers, exits and a chapter 2 wall, the bar (the entrance's line repointed from story flag 135 to a flag every new
+  game sets; 135 has many other effects), the town and Outskirts quest boards, Madeleine's house (door kept, lock and
+  locked-door check removed; the owner stays away). Lesson: an area closed "until chapter N" is closed by several things
+  at once; list everything tied to that flag first. Chapter 2's palace scene stays held for its companion (flag 114).
+- **A missing companion falls back to the party's leader** (the user chose it over closing the town): lines in the
+  city ask for him; the lookup answers with the leader and logs each place.
+- **The fall room was a one-way trap** until the door back down was made present from the trapdoor (flag 14): the user
+  went up before the spider fight and was cut off from Leif. Lesson: keeping one direction open means checking the
+  other. Then the spider fight, its discovery and hold-up, and Leif's joining all played out (seen).
+- **Leif-early rehearsal** (dev `addleif`, which works: `ChangeParty` with `fromscratch`, then `SetPlayers`): the Tattle
+  tutorial plays; the trapdoor scene indexes its own two-member list and breaks. Parked with a design: extra members
+  step out of two-person scenes; scenes missing a needed member wait (scenes find members by character, not position).
+- **Hold-ups:** discoveries show their item; items from other players per *Item animation* (default All once bursts
+  got fast with B held; a summary box was tried and dropped); replays after a new save or reconnect stay silent; no
+  empty box after (the follow-up is `|end|`); the queue waits for half a second free.
+- **Shops:** Merab's medal shop as locations works end to end (shelf sprites, name swap, check from the stock, item
+  back); shelves show 5 (Merab) and 4 spread wider (Shades) after several tries the user judged; *Shop prices* row;
+  *Shop Contents* yaml (default No Progression, since shops soak up good items, as in Tevi). **Crystal berries:** spent
+  only at Shades, whose whole stock costs exactly 50; a tiered logic rule was proposed and was wrong (the user asked what
+  happens when the stock grows); decided: every Shades item needs all 50, full stock from the start, purchases
+  permanent (the user caught that reloads refund currency). Duplicate stock copies are separate locations; item shops'
+  first purchases will be checks, then vanilla.
+- **Dev tools added:** `unstick` also lifts fades, frees parked party bodies, closes a dead dialogue and removes a
+  leftover speech box (found with `gui` after two misses); `tree`, `gui`, `script`, `prices`, `pos`, `holdup`,
+  `addleif`; OneHit and InfJump are saved settings, on in the dev install. My slips: scripted edits mangled escapes
+  several times (edit by hand instead); a wait loop missed a log line written before it started.
+- **Next:** Merab's full stock (22 with duplicates, the mod owning the stock), Shades on the same system (13, all 50),
+  permanent purchases, item shops and the caravan; map fast travel; a two-player test; the Warp's landing spot.

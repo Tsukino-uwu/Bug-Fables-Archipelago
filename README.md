@@ -11,7 +11,8 @@ abilities shuffled as items.
 ## How it will work
 
 - **The apworld** (`apworld/bug_fables/`) tells the generator which items and locations exist and which key
-  items gate which areas. Today it covers 25 early locations, 30 with the opt-in *Shuffle Discoveries*. Each
+  items gate which areas. Today it covers 39 locations (the Outskirts, Snakemouth Den, the open parts of the town and Merab's medal shop),
+  44 with the opt-in *Shuffle Discoveries*. Each
   yaml toggle that adds checks says how many in its description.
 - **The mod** (`mod/`) runs inside the game. Finishing a location sends a check to the server, and every
   item, including your own, arrives from the server and is given to you through the game's own item
@@ -55,8 +56,9 @@ On the game's main menu, choose **Archipelago**. The panel has:
   (dialogue is instant, and holding skip races through it), **Skip intro** (a new game's story slides pass by on
   their own), **Free boat** (the boat to Metal Island costs nothing), **Warp button** (a fifth pause-menu button that
   takes you back to where the game began, after a Yes / No), **Skip cutscenes** (scenes that give nothing are skipped
-  or pass by fast) and **Item animation** (which items from other players are shown held up: All, the default,
-  Progression or Off; your own finds always are; holding B speeds a burst of them up). Cancel goes back.
+  or pass by fast), **Item animation** (which items from other players are shown held up: All, the default,
+  Progression or Off; your own finds always are; holding B speeds a burst of them up) and **Shop prices** (Normal,
+  Half or Free; default Normal). Cancel goes back.
 - Under the rows, a line explaining the highlighted one, and a line showing the connection's state. Cancel
   (X, or B on a gamepad) backs out of the panel.
 

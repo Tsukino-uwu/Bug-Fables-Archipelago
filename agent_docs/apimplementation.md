@@ -10,11 +10,13 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 
 ## Where it stands
 
-**Done so far:** a small apworld (23 locations, 18 items) that generates seeds and passes its tests, with the
-goal "collect N artifacts"; the mod connecting on its own, compressed, to a local server or a hosted room on
+**Done so far:** an apworld (44 locations, 39 by default; 30 items) that generates seeds and passes its tests, with
+the goal "collect N artifacts"; the mod connecting on its own, compressed, to a local server or a hosted room on
 archipelago.gg, retrying when the server is unreachable or drops; sending checks (build step 6); receiving
-items, with the count kept in the save (build step 7); and the game's own item at a location swapped for the
-seed's (the mod guide, step 9).
+items, with the count kept in the save (build step 7); the game's own item at a location swapped for the
+seed's (the mod guide, step 9); and, as of 2026-09-25, the world opening one gate at a time (the Outskirts rocks,
+Snakemouth's fall room both ways, the town, its districts, the bar, Madeleine's house), journal discoveries and
+Merab's medal shop as locations, and a Quality of life page (build step 8 and the mod guide, step 10).
 
 **Next** (decided by the user, 2026-09-24):
 
