@@ -219,7 +219,10 @@ coupled, off by default) shuffles 508 doors with every area kept reachable; a ge
    leader plays the story's leader (the first member of the party the story expects); only other missing members stay
    invisible stand-ins; in a party list by member (Vi, Kabbu, Leif) the leader's own slot then gets an invisible
    stand-in, so a scene moving "each member" never moves the player twice (why this was set aside at first).
-   Animations play by number, so the leader shows his own animation with that number. To build after the current
+   Animations play by number, so the leader shows his own animation with that number: the field action is
+   `animstate` 100 for everyone (Vi's throw and Kabbu's horn, `PlayerControl.cs:1029`, `:1076`), so Leif acting Kabbu's
+   horn swing casts his ice (wanted, the user: "Kabbu using the horn, Leif using ice"). States a character lacks show
+   as `Animator.GotoState: State could not be found`; the mod logs the number and maps it to the closest one. To build after the current
    replay of the trapdoor and the spider fight, then replay the same scenes to compare. Opt-in only: fighting with one or two changes
    the game a lot. Open questions: the story may need all three after chapter 1, and adding a member outside the
    story's own event hasn't worked yet (log.md, 2026-09-24: `ChangeParty` left Leif without a character).
