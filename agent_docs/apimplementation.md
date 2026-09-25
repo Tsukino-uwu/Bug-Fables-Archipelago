@@ -27,10 +27,14 @@ seed's (the mod guide, step 9).
    twice. A *Shop prices: Normal / Half / Free* row (default Normal) scales the price columns. Merab's (berries) first:
    berries can always be earned, so no lockout. **Shades's shop takes crystal berries, a consumable** (the user's
    concern: consumable keys, lockout, savescumming): crystal berries are spent nowhere else (measured), and her stock
-   arrives in tiers whose Normal prices add up to 18, 25, 27, 40 and 50, exactly every berry in the game. **Rule:** a
-   Shades location requires the running total of crystal berries up to its tier. Safe in any purchase order: an item
-   can't be bought before its tier exists, so whatever was spent went on tiers already open, and "collected ≥ running
-   total" covers everything on the shelf. Crystal berries become progression. **Reloads refund currency** (the user
+   arrives in tiers whose Normal prices add up to 18, 25, 27, 40 and 50, exactly every berry in the game. **A tiered
+   rule (each item needs its tier's running total) was proposed and is wrong** (the user asked what happens when the
+   stock grows): with a later tier already on the shelf, berries spent there starve an earlier tier, and a rule that
+   raised the need once a later tier opens would not be monotonic, which Archipelago's fill doesn't allow. **Decided
+   (the user, 2026-09-25): every Shades location requires all 50 crystal berries, and her full stock (all 13) is on the
+   shelf from a new game.** The first stops spending order from locking anything out; the second stops a story event
+   that never runs (as the open world skips or bypasses scenes) from leaving a tier's medals, and their checks, never
+   appearing. The same holds for Merab's later additions when they become locations. Crystal berries become progression. **Reloads refund currency** (the user
    caught this: buy, reload, keep the check and the berries), so purchases are made **permanent like checks**: spending
    is tallied on the server (per-slot storage), each save brought in line on load (crystal berries exactly: received
    minus spent; ordinary berries: the save's own paid record against the server's tally, the higher wins), and a
