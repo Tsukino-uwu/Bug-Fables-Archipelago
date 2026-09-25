@@ -29,7 +29,7 @@ class TestPermitGate(BugFablesTestBase):
         self.assertEqual(reachable, {"Outskirts: Maki and Eetl's Gift", "Outskirts: Artis's Gift",
                                      "Outskirts: Ladybug Siblings' House", "Outskirts: East Road, Stone",
                                      "Outskirts: Pier", "Bugaria City: Residential District, Rooftop",
-                                     "Outskirts: Madeleine's House, Floor", "Outskirts: Madeleine's House, Shelf"}
+                                     "Outskirts: Madeleine's House, Table Right", "Outskirts: Madeleine's House, Table Left"}
                          | {f"Bugaria City: Commercial District, Medal Shop {n}" for n in range(1, 11)})
 
     def test_reward_near_snakemouth_needs_the_permit(self) -> None:

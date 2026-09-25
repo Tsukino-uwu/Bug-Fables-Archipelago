@@ -300,6 +300,26 @@ namespace BugFablesAP
                     case "items": return Items();
                     case "tree": return Tree();
                     case "script": return Script(parts);
+                    case "pos":
+                    {
+                        // An entity's start position from its map's entity table (Data/EntityData/<map id>, fields 6-8, as
+                        // MapControl.cs:1661 reads them): pos <map> <index>... (2026-09-25: which of two items is on the left).
+                        if (parts.Length < 3 || !Enum.TryParse(parts[1], true, out MainManager.Maps posMap))
+                        {
+                            return "pos <map> <entity index>...";
+                        }
+                        TextAsset table = Resources.Load<TextAsset>("Data/EntityData/" + (int)posMap);
+                        string[] rows = table == null ? new string[0] : table.ToString().Split('\n');
+                        var posLog = new System.Text.StringBuilder("[dev] pos " + posMap + ":");
+                        foreach (string indexText in parts.Skip(2))
+                        {
+                            int index = int.Parse(indexText);
+                            string[] f = index < rows.Length ? rows[index].Split('}') : new string[0];
+                            posLog.Append(" #").Append(index).Append(f.Length > 8 ? $"=({f[6]}, {f[7]}, {f[8]})" : "=?");
+                        }
+                        log.LogInfo(posLog.ToString());
+                        return "pos logged";
+                    }
                     case "prices":
                         // Medal prices from the game's medal table: berries (column 5) and crystal berries (column 7),
                         // for the ids given (2026-09-25: the sum of Shades's stock, for the crystal berry rule).
