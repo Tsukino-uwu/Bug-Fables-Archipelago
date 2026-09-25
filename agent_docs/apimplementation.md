@@ -593,7 +593,8 @@ after). The user chose rocks and house now, the town as a later gate of its own.
 **Seen by the user (2026-09-25), chapter 1 file:** the rocks were gone, the user walked into the house (the ladybug
 siblings, who come with flag 41, weren't there) and took its item: the seed's Crystal Berry, check sent from flag 679.
 So the house now needs nothing. With the rocks gone the east road opened too; there the user knocked a stone with
-Kabbu's horn and found a Drowsy Cake (flag 735), now a location (*Outskirts: East Road, Stone*). The miners working
+Kabbu's horn and found a Drowsy Cake (flag 735), now a location (*Outskirts: East Road, Stone*), and picked
+up crystal berry #10 at the pier with no abilities (*Outskirts: Pier*). The miners working
 at the rocks (gone from 41 in the game) mine nothing now, so they join `kept_open`. The test
 `test_only_what_play_showed_before_the_gate` pins the four locations reachable before the permit. Still to see: the
 town door doing nothing before the first boss.
