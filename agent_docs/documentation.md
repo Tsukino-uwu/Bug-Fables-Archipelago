@@ -467,7 +467,13 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    `IconAnim` is handed exactly the four icons and indexes them by option, so the fifth option ran off the end (the
    user: "got a lot of errors"); a prefix now hands it five, and the game animates the fifth like the others. On Yes
    (No is preselected), the menu closes the game's way (`PrepareExit`) and the game's own `TransferMap` takes the
-   party to the Outskirts, beside the save point where a new game begins. Built, not yet seen.
+   party to the Outskirts, beside the save point where a new game begins. **The icon** (the user: "look at how the
+   other menu buttons do things, and do the same"): a tinted Settings icon with the map item on top looked wrong, so
+   a new dev dump, `SpriteDump`, saved the game's GUI sheets and a table of `guisprites` indexes (into the BepInEx
+   folder, never the repo), and a contact sheet of them showed a round icon in the same style, `guisprites[34]`
+   (a blue map). The button is now made exactly like the other four: one sprite, no tint, no overlay. A plugin
+   reload with the menu open had left the old icon behind the new one; unloading now removes it. Title "Warp" (the
+   user). Not yet seen.
 5. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
    read in full before anything is skipped.
 

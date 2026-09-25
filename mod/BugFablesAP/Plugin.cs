@@ -20,6 +20,8 @@ namespace BugFablesAP
         private ConfigEntry<bool> entityDumpEnabled;
         private ConfigEntry<bool> mapDumpEnabled;
         private ConfigEntry<bool> varDumpEnabled;
+        private ConfigEntry<bool> spriteDumpEnabled;
+        private bool spriteDumpDone;
         private bool varDumpDone;
         private ConfigEntry<string> server;
         private ConfigEntry<string> port;
@@ -87,6 +89,9 @@ namespace BugFablesAP
             mapDumpEnabled = Config.Bind("Debug", "MapDump", false,
                 "Dev only. Once per launch, writes every map prefab's auto-start events, hazards and electric triggers to "
                 + "BepInEx/bugfablesap-mapdump.tsv. Off by default.");
+            spriteDumpEnabled = Config.Bind("Debug", "SpriteDump", false,
+                "Dev only. Once per load, saves the game's GUI sprite sheets as PNGs and a table of guisprites indexes to "
+                + "the BepInEx folder, to pick art for the mod's own UI. Off by default.");
             varDumpEnabled = Config.Bind("Debug", "VarDump", false,
                 "Dev only. Once per load, writes every flagvar/flagstring slot the game's text uses to "
                 + "BepInEx/bugfablesap-vardump.tsv. Off by default.");
@@ -269,6 +274,11 @@ namespace BugFablesAP
             if (entityDumpEnabled.Value && !entityDumpDone)
             {
                 entityDumpDone = EntityDump.TryRun(Log);
+            }
+
+            if (spriteDumpEnabled.Value && !spriteDumpDone)
+            {
+                spriteDumpDone = SpriteDump.TryRun(Log);
             }
 
             if (mapDumpEnabled.Value && !mapDumpDone)

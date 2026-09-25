@@ -28,6 +28,7 @@ namespace BugFablesAP
         private static readonly MethodInfo prepareExit = AccessTools.Method(typeof(PauseMenu), "PrepareExit");
 
         private const int Button = 4;
+        private const int IconSprite = 34;
         // Where a new game begins: the Outskirts (Event8 loads map 16, EventControl.cs:2636), by its save point: entity 1
         // (SaveTutorial) before the first boss, entity 22 (SaveAfterTutorial) from flag 41 (the entity dump).
         private const MainManager.Maps StartMap = MainManager.Maps.BugariaOutskirtsOutsideCity;
@@ -66,6 +67,15 @@ namespace BugFablesAP
         {
             harmony?.UnpatchSelf();
             harmony = null;
+            // A hot reload with the pause menu open left the old icon behind the new one (the user's screenshot,
+            // 2026-09-25): take this instance's icon and box with it.
+            CloseConfirm();
+            if (icon != null)
+            {
+                UnityEngine.Object.Destroy(icon.gameObject);
+                icon = null;
+            }
+            builtFor = null;
         }
 
         private static bool BeforeUpdate(PauseMenu __instance)
@@ -117,15 +127,12 @@ namespace BugFablesAP
             {
                 sprites[13 + n].transform.localPosition = new Vector3(-4f + 2f * n, 3f);
             }
-            // The Settings icon's circle, tinted, with the map icon over it (the pause menu's own map button sprite,
-            // itemsprites[0, 41], PauseMenu.cs:2444).
+            // Made the way BuildWindow makes the other four (NewUIObject under the same box, one complete round sprite
+            // from the GUI sheet, PauseMenu.cs:2493-2497), so the game's IconAnim outlines and wiggles it like them. The
+            // sprite: guisprites[34], the round blue map icon in the same style (picked from SpriteDump's sheet,
+            // 2026-09-25; a tinted Settings icon with the map item on top looked wrong to the user).
             icon = MainManager.NewUIObject("menuicon" + Button, sprites[16].transform.parent, new Vector3(4f, 3f), Vector3.one,
-                MainManager.guisprites[77]).GetComponent<SpriteRenderer>();
-            icon.color = new Color(0.55f, 0.8f, 1f);
-            icon.sortingOrder = sprites[16].sortingOrder;
-            SpriteRenderer mark = MainManager.NewUIObject("warpmark", icon.transform, Vector3.zero, Vector3.one * 0.6f,
-                MainManager.itemsprites[0, 41]).GetComponent<SpriteRenderer>();
-            mark.sortingOrder = icon.sortingOrder + 1;
+                MainManager.guisprites[IconSprite]).GetComponent<SpriteRenderer>();
             sprites[13 + Button] = icon;
             maxField.SetValue(menu, 5);
         }
@@ -142,7 +149,7 @@ namespace BugFablesAP
             MainManager.DestroyText(labels);
             __instance.StartCoroutine(MainManager.SetText("|single|Go back to where the game started.", 0, 99999f, false, false,
                 new Vector3(-5f, 0.1f), Vector3.zero, Vector2.one, labels, null));
-            __instance.StartCoroutine(MainManager.SetText("|center||single|Warp to Start", 0, 99999f, false, false,
+            __instance.StartCoroutine(MainManager.SetText("|center||single|Warp", 0, 99999f, false, false,
                 new Vector3(0f, 7.5f), Vector3.zero, Vector2.one, labels, null));
         }
 
