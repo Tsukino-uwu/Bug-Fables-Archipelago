@@ -265,9 +265,10 @@ namespace BugFablesAP
                         // A visual test: reloads the current map with every ordinary map enemy looking like one enemy.
                         if (parts.Length < 2 || (parts[1] != "off" && !int.TryParse(parts[1], out _)))
                         {
-                            return "enemylook <enemy id|off>";
+                            return "enemylook <enemy id|off> [move]";
                         }
                         EnemyShuffle.LookTest = parts[1] == "off" ? -1 : int.Parse(parts[1]);
+                        EnemyShuffle.MoveTest = parts.Length > 2 && parts[2] == "move";
                         return StartWarp(MainManager.map.mapid, -1) + $" (enemy look {parts[1]})";
                     case "enemyfight":
                         // A test: every map fight starts with these enemy ids.

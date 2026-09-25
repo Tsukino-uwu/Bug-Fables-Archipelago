@@ -52,6 +52,7 @@ namespace BugFablesAP
                 return;
             }
             int anim = Convert.ToInt32(MainManager.enemydata[LookTest, 0]);
+            string[] donor = MoveTest ? Donor(LookTest) : null;
             int changed = 0, puzzles = 0;
             foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true))
             {
@@ -66,10 +67,82 @@ namespace BugFablesAP
                     continue;
                 }
                 npc.entity.animid = anim;
+                if (donor != null)
+                {
+                    MoveLike(npc, donor);
+                }
                 changed++;
             }
             log.LogInfo($"[enemies] look test on {__instance.mapid}: {changed} map enemies now look like enemy {LookTest} "
-                + $"(anim {anim}); {puzzles} puzzle enemies kept");
+                + $"(anim {anim}){(MoveTest ? donor != null ? $", moving like {donorFrom}" : ", no map enemy of it found to move like" : "")}; "
+                + $"{puzzles} puzzle enemies kept");
+        }
+
+        // Dev only: with the look test, also copy the movement of a map enemy whose fight starts with that enemy.
+        internal static bool MoveTest;
+
+        // An entity row's layout, as MapControl.CreateEntities reads it.
+        private const int BattleIdsAt = 166;
+        private static int donorFor = -1;
+        private static string[] donorRow;
+        private static string donorFrom;
+
+        private static string[] Donor(int enemy)
+        {
+            if (donorFor == enemy)
+            {
+                return donorRow;
+            }
+            donorFor = enemy;
+            donorRow = null;
+            donorFrom = null;
+            foreach (MainManager.Maps map in Enum.GetValues(typeof(MainManager.Maps)))
+            {
+                if (map == MainManager.Maps.TestRoom)
+                {
+                    continue;
+                }
+                UnityEngine.TextAsset data = UnityEngine.Resources.Load<UnityEngine.TextAsset>("Data/EntityData/" + (int)map);
+                if (data == null)
+                {
+                    continue;
+                }
+                string[] lines = data.ToString().Split('\n');
+                for (int i = 0; i < lines.Length - 1; i++)
+                {
+                    string[] f = lines[i].Split('}');
+                    if (f.Length > BattleIdsAt + 1 && f[0] == "Enemy" && f[BattleIdsAt].Trim() != "0"
+                        && int.TryParse(f[BattleIdsAt + 1].Trim(), out int first) && first == enemy)
+                    {
+                        donorRow = f;
+                        donorFrom = map + ":" + i;
+                        return donorRow;
+                    }
+                }
+            }
+            return null;
+        }
+
+        // The movement fields of a map row (MapControl.CreateEntities: behaviours, collider, speeds, radii, timers).
+        private static void MoveLike(NPCControl npc, string[] f)
+        {
+            npc.behaviors = new[]
+            {
+                (NPCControl.ActionBehaviors)Enum.Parse(typeof(NPCControl.ActionBehaviors), f[2]),
+                (NPCControl.ActionBehaviors)Enum.Parse(typeof(NPCControl.ActionBehaviors), f[3]),
+            };
+            EntityControl e = npc.entity;
+            e.ccol.height = Convert.ToSingle(f[11]) / 2f;
+            npc.colliderheight = Convert.ToSingle(f[11]);
+            e.ccol.radius = Convert.ToSingle(f[12]);
+            npc.radius = Convert.ToSingle(f[13]);
+            npc.timer = Convert.ToSingle(f[14]);
+            e.speed = Convert.ToSingle(f[15]);
+            npc.actionfrequency = new[] { Convert.ToSingle(f[16]), Convert.ToSingle(f[17]) };
+            npc.speedmultiplier = Convert.ToSingle(f[18]);
+            npc.radiuslimit = Convert.ToSingle(f[19]);
+            npc.wanderradius = Convert.ToSingle(f[20]);
+            npc.teleportradius = Convert.ToSingle(f[21]);
         }
 
         internal static void Disable()

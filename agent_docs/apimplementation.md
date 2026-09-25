@@ -1248,6 +1248,14 @@ original's is there for fun ("looks fun when something does something else than 
 (Spuder burrowed like the Underling). Whether bosses can move around the map on their own at all is unknown; they
 never do in vanilla. To measure before the real look step.
 
+**The movement, fixed in the test (2026-09-26, seen by the user):** a map enemy's movement is its map row's
+behaviours (fields 2-3), collider (11-12), radii and timers (13-21) (`MapControl.cs:1475-1497`); hovering comes from
+the look itself (`CheckSpecialID` raises a flier to its minimum height). `enemylook <id> move` finds a **donor**: the
+first map row, any map, whose fight starts with that enemy, and copies its movement fields onto the enemy before its
+`Start`. With the Flying Seedling (donor `NearSnakemouth:7`) the Outskirts enemies walked around as they should,
+not burrowing like the Underlings they replaced (the user). A boss has no map row, so a boss look has no donor: its
+movement is still to decide. In the real step, the seed can pick each donor at generation.
+
 **Next:**
 - see the shuffled fights in the game;
 - then bosses: each scripted fight read one by one, keyed by its event and its original ids;

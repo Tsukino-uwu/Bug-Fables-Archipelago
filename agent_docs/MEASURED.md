@@ -1078,6 +1078,11 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   there as they are. The pause menu's bestiary page works out HP and defence from the raw `enemydata` row plus the
   Hard/HARDEST bonuses, not from `GetEnemyData` (`PauseMenu.cs:1993-2004`), and shows times seen and defeated.
   Attack is shown nowhere. Whether the Spy text itself names numbers is game data, not checked.
+- **"Invalid Layer Index '-1'"** (2026-09-26, the log): always paired with `Animator.GotoState: State could not be
+  found`. Unity's warning when a character is asked for an animation state its controller lacks (layer -1 = any).
+  Harmless: nothing plays. Seen in clusters of 18-21 during the map look tests, where a boss look kept the Underling's
+  map AI and was asked for its dig animations; also from a lone Leif acting other members' parts (build step 13).
+  Whether vanilla shows it too: not checked (a run with the mod disabled would tell).
 - **Which fights can be fled:** every map fight (`NPCControl.StartBattle`, `canescape: true`). Almost every scripted
   fight can't be (`canescape: false`); the exceptions are Event30, Event42, the rematch machine (Event85), Event156,
   Event207 and Event224 (the list above).
