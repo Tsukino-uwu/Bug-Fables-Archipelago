@@ -16,6 +16,7 @@ namespace BugFablesAP
     {
         internal static ConfigEntry<bool> FastText;
         internal static ConfigEntry<bool> SkipIntro;
+        internal static ConfigEntry<bool> TurboSkip;
 
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
@@ -38,6 +39,8 @@ namespace BugFablesAP
                 + "skip), but still requires a button press to proceed. Lines the game marks unskippable stay as they are.");
             SkipIntro = config.Bind("QualityOfLife", "SkipIntro", true,
                 "A new game's four story slides pass by on their own, fast. The rest of the opening plays as normal.");
+            TurboSkip = config.Bind("QualityOfLife", "TurboSkip", true,
+                "Holding the skip button moves through dialogue boxes much faster than the game's own hold.");
         }
 
         internal static void Tick()
@@ -71,17 +74,30 @@ namespace BugFablesAP
                 log.LogInfo("[qol] intro slides over: normal speed");
             }
 
-            if (on && FastText.Value && TextTyping(mm))
+            bool skippable = on && Skippable(mm);
+            if (skippable && FastText.Value && !mm.waitinput)
             {
                 mm.skiptext = true;
             }
+            // Holding the skip button advances a box, then waits out inputcooldown (16 after a box, 10 when a new
+            // dialogue opens; MainManager.cs:5147, :10738), counted down one per frame (:7298). With the text already
+            // instant that wait is all that's left (the user, 2026-09-25: holding didn't feel faster), so while it's
+            // held the wait is cut short. The game's own hold branch still does the advancing.
+            if (skippable && TurboSkip.Value && MainManager.GetKey(5, hold: true) && mm.inputcooldown > TurboCooldown)
+            {
+                mm.inputcooldown = TurboCooldown;
+            }
         }
+
+        // Frames between boxes while the skip button is held with Turbo skip on: the game's own 4 while a box is
+        // still typing (MainManager.cs:5151), instead of 16 between boxes.
+        private const float TurboCooldown = 4f;
 
         // The same conditions under which holding the skip button works (MainManager.cs:5125-5140): a dialogue box
         // is open, not a prompt or list, not marked |noskip|, and on the newest line rather than one looked back at.
-        private static bool TextTyping(MainManager mm)
+        private static bool Skippable(MainManager mm)
         {
-            if (!mm.message || mm.prompt || mm.itemlist != null || mm.inlist || MainManager.noskip || mm.waitinput)
+            if (!mm.message || mm.prompt || mm.itemlist != null || mm.inlist || MainManager.noskip)
             {
                 return false;
             }
