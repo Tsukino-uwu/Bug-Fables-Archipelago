@@ -644,8 +644,8 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    the spider, when Leif first starts to follow"): once the spider scene is over (flag 27, not yet 16), Leif joins for
    real, flag 16 goes on, and the story's follower Leif is removed with his follower entry. The logic is unchanged: *Leif
    Joins* is in the same region (*Snakemouth Den*) as the lake. With one starting member, only once Leif is allowed
-   (received). On loading, the user's Leif-alone file got flag 16 ("Leif was already in the party"). With a two-member
-   start, not yet seen.
+   (received). On loading, the user's Leif-alone file got flag 16 ("Leif was already in the party"); **seen (the user):**
+   the lake walked past with no scene. With a two-member start, not yet seen.
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,
