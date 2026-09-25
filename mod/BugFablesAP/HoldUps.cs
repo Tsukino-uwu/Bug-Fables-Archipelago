@@ -16,6 +16,10 @@ namespace BugFablesAP
         private static readonly Queue<Action> waiting = new Queue<Action>();
         // Frames to let a started hold-up open its text before the next may start.
         private static int settle;
+        // Free frames in a row before one plays: a chain of scenes and fights (the spider fights: scene, fight, scene,
+        // fight, scene) can leave a free frame between two links (the user, 2026-09-25), and a hold-up there would cut in.
+        private const int FreeFor = 30;
+        private static int freeFrames;
 
         internal static void Init(ManualLogSource logger, Func<bool> on)
         {
@@ -45,8 +49,14 @@ namespace BugFablesAP
             MainManager mm = MainManager.instance;
             if (waiting.Count == 0 || mm == null || randomizerOn == null || !randomizerOn() || ItemReceiver.Busy(mm) != null)
             {
+                freeFrames = 0;
                 return;
             }
+            if (++freeFrames < FreeFor)
+            {
+                return;
+            }
+            freeFrames = 0;
             waiting.Dequeue()();
             settle = 30;
         }

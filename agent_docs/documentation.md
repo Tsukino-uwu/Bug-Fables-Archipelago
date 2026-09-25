@@ -516,7 +516,8 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    TestPlayer") waited for a cutscene to end, then played; the item probe saw nothing added. The box read "You got a
    Explorer Permit": `giveitem` always uses the game's default article (`menutext[125]`), while a picked-up item uses
    its own (`itemdata[0, id, 3]`, a medal's `badgedata[id, 6]`, `NPCControl.cs:5670-5690`). Hold-ups and location swaps
-   now set the item's own article. Not yet seen.
+   now set the item's own article. Not yet seen. A hold-up now waits for half a second of free time in a row, not one free
+   frame: a chain of scenes and fights (the spider fights) can leave a free frame between links (the user's point).
 7. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
    read in full before anything is skipped.
 
