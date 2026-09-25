@@ -298,6 +298,12 @@ class TestKeptOpen(BugFablesTestBase):
         for entity in ("StatueDesc", "InnPortrait"):
             self.assertIn({"map": "BugariaMainPlaza", "entity": entity}, slot["kept_present"])
 
+    def test_follower_swap_waits_for_the_first_follower(self) -> None:
+        # The bridge scene swaps the follower from after the first boss for Maki; crossed first, it would leave that
+        # follower stuck for good (the user, 2026-09-25).
+        held = self.world.fill_slot_data()["held_until"]
+        self.assertIn({"map": "AntBridge", "entity": "makiautoevent", "flag": 114}, held)
+
     def test_inn_open_before_the_briefing(self) -> None:
         # Before flag 67 the innkeeper hands the talk to the follower ("We mustn't keep the Queen waiting.").
         flags = self.world.fill_slot_data()["dialogue_flags"]

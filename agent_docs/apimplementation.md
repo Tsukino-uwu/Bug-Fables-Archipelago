@@ -235,6 +235,14 @@ coupled, off by default) shuffles 508 doors with every area kept reachable; a ge
    `TestKeptOpen.test_inn_open_before_the_briefing`; seeds solo and with APQuest. Not yet seen. Also found: the stay
    costs a fixed 9 berries, "3 berries a bug" written for three (`checkmoney,9` then `money,-9`, line 2), whatever the
    party's size.
+   **Chapter 2's three opening scenes held in story order** (the user, 2026-09-25: "it's the only place the follower is
+   removed and changed to another"): after the first boss a follower joins outside the city (Event63: follower 30, flag
+   114); the palace bridge swaps them for Maki (Event44: removes 30, adds Maki, flag 66), the only place follower 30
+   leaves; the briefing (Event45) uses Maki and clears the list. In the game the town opens only after chapter 1, so the
+   bridge always comes after the boss. With the town open from the start the bridge could come first: Maki early, and
+   follower 30 never leaving. The bridge's trigger (`makiautoevent`) is now held until 114, like the briefing's already
+   was (`held_until`). Test `TestKeptOpen.test_follower_swap_waits_for_the_first_follower`. Not seen (the user's file is
+   past it).
    **Decided (the user, 2026-09-25): the members present act out the missing ones' parts** in scenes, where they would
    be and what they would do, instead of standing idle beside invisible stand-ins ("looks more fun"). Plan: the real
    leader plays the story's leader (the first member of the party the story expects); only other missing members stay
