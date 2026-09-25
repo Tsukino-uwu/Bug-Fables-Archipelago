@@ -293,6 +293,7 @@ namespace BugFablesAP
                     case "unstick": return Unstick();
                     case "nudge": return Nudge(parts);
                     case "items": return Items();
+                    case "tree": return Tree();
                     case "infjump": infJump = !infJump; return "infjump " + (infJump ? "on: press jump in mid-air to jump again" : "off");
                     case "onehit": oneHit = !oneHit; return "onehit " + (oneHit ? "on: every hit on an enemy does at least 99" : "off");
                     default: return "unknown command: " + parts[0];
@@ -639,6 +640,54 @@ namespace BugFablesAP
 
         // Every pickup that exists on the current map right now (the map's own entities, not the dump): kind, id,
         // activationflag, whether the game hides it, and its distance. Written to the log, since it can be long.
+        // Logs the nearest pickup's whole object tree (the entity's root down): each object's path, whether it's active,
+        // and what draws it, to see what a scene or the swap really leaves on screen (2026-09-25: a crystal berry model
+        // kept showing over the seed's item after two guessed fixes).
+        private static string Tree()
+        {
+            if (MainManager.map == null || MainManager.player == null)
+            {
+                return "tree: no map or player";
+            }
+            Vector3 me = MainManager.player.transform.position;
+            NPCControl nearest = MainManager.map.GetComponentsInChildren<NPCControl>(true)
+                .Where(n => n.objecttype == NPCControl.ObjectTypes.Item && n.entity != null)
+                .OrderBy(n => (n.entity.transform.position - me).sqrMagnitude).FirstOrDefault();
+            if (nearest == null)
+            {
+                return "tree: no pickup on this map";
+            }
+            EntityControl e = nearest.entity;
+            var sb = new System.Text.StringBuilder();
+            sb.Append($"[dev] tree of {nearest.name} (animid {e.animid}, model {(e.model != null ? e.model.name : "none")}, spin {e.spin}, "
+                + $"sprite {(e.sprite != null && e.sprite.sprite != null ? e.sprite.sprite.name : "none")}):");
+            Walk(e.transform, e.transform, sb);
+            log.LogInfo(sb.ToString());
+            return "tree of " + nearest.name + " logged";
+        }
+
+        private static void Walk(Transform t, Transform root, System.Text.StringBuilder sb)
+        {
+            Renderer r = t.GetComponent<Renderer>();
+            sb.Append("\n  ").Append(new string(' ', Depth(t, root) * 2)).Append(t.name)
+              .Append(t.gameObject.activeSelf ? "" : " [inactive]")
+              .Append(r != null ? $" <{r.GetType().Name}{(r.enabled ? "" : " disabled")}>" : "");
+            foreach (Transform child in t)
+            {
+                Walk(child, root, sb);
+            }
+        }
+
+        private static int Depth(Transform t, Transform root)
+        {
+            int d = 0;
+            for (Transform at = t; at != null && at != root; at = at.parent)
+            {
+                d++;
+            }
+            return d;
+        }
+
         private static string Items()
         {
             MapControl map = MainManager.map;

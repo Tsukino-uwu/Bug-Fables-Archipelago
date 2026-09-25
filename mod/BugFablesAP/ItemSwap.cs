@@ -59,19 +59,19 @@ namespace BugFablesAP
             {
                 return;
             }
-            if (entity.model != null)
-            {
-                entity.model.gameObject.SetActive(false);
-            }
-            // A crystal berry spot gets its berry model twice: from its animation setup (EntityControl.cs:2414-2415) and
-            // again from the pickup setup (NPCControl.cs:948), and entity.model only keeps the second, so the first stayed
-            // on top of the item (the user's screenshot, 2026-09-25). AddModel hangs every model under the sprite's
-            // transform (EntityControl.cs:2684): hide all of them.
+            // The berry model hangs under the sprite (AddModel, EntityControl.cs:2684), and every frame the game makes that
+            // first child active exactly when the sprite is enabled (EntityControl.cs:2781-2786). Showing the item needs the
+            // sprite enabled, so switching the model's object off never held: two tries failed (the user, 2026-09-25) until
+            // the dev console's tree and that line showed why. The game only toggles the object, never its renderers, so
+            // the renderers are what the swap switches off.
             if (entity.spritetransform != null)
             {
-                foreach (Transform child in entity.spritetransform)
+                foreach (Renderer r in entity.spritetransform.GetComponentsInChildren<Renderer>(true))
                 {
-                    child.gameObject.SetActive(false);
+                    if (r != entity.sprite && r.enabled)
+                    {
+                        r.enabled = false;
+                    }
                 }
             }
             entity.sprite.enabled = true;
@@ -398,13 +398,20 @@ namespace BugFablesAP
                 {
                     EntityControl entity = npc.entity;
                     if (npc.objecttype != NPCControl.ObjectTypes.Item || !IsPickup(entry.Value, npc)
-                        || entity == null || entity.sprite == null || entity.sprite.sprite == sprite)
+                        || entity == null || entity.sprite == null)
                     {
                         continue;
                     }
+                    // A crystal berry spot every time, not only when its sprite differs: the game shows its berry model
+                    // again after the swap has hidden it, and a skip on "sprite already right" left the berry on top of
+                    // the item for good (the dev console's tree, 2026-09-25: sprite items0_8 set, the one model active).
                     if (entity.animid == 3)
                     {
                         ShowAsSprite(entity, sprite);
+                        continue;
+                    }
+                    if (entity.sprite.sprite == sprite)
+                    {
                         continue;
                     }
                     entity.sprite.sprite = sprite;

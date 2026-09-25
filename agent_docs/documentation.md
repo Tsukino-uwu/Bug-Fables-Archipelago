@@ -420,9 +420,13 @@ points to `warp <map> @<entity>`. Built, not yet seen in game.
 its sprite centred on the ground and the entity spinning (`NPCControl.cs:937-952`). Showing the seed's item there as
 a flat sprite left it half in the ground (the user's screenshot of the berry outside the cave). The swap now lifts the
 sprite by half its height, as the game does for items, stops the spin and squares the sprite to the camera. The user
-then saw it still, but the berry model still stood on top: the spot gets its model **twice** (the animation setup,
-`EntityControl.cs:2414-2415`, and the pickup setup, `NPCControl.cs:948`), and `entity.model` only keeps the second.
-Both hang under the sprite's transform, so the swap now hides every child there. Not yet seen.
+then saw it still, but the berry model still stood on top, and a second guess (that the model is added twice) failed
+the same way. So, measure instead of a third guess: a new dev console command, `tree`, logs the nearest pickup's
+whole object tree (each object, active or not, and its renderers, on or off). It showed one berry model, active, with
+the item sprite set. The reason is one line in the game: every frame, the first child of the sprite (the model) is
+made active exactly when the sprite is enabled (`EntityControl.cs:2781-2786`), and showing the item needs the
+sprite enabled. The game toggles the object, never its renderers, so the swap now switches off the model's
+renderers, on every pass. `tree` then showed both berry renderers disabled with the item sprite on.
 
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
 `Recolour` and `FirstMedalSeen` do the swapping; `PickupPrefix`, `FindPickup` and `TickGround` handle pickups); the

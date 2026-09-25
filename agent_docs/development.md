@@ -83,6 +83,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   cleanup alone didn't clear (2026-09-25; the user saw the screen come back).
 - `nudge <x> <y> <z>`: shift the party by that much on the current map.
 - `items`: list every pickup that exists on the current map right now (kind, id, flag, distance), in the log.
+- `tree`: log the nearest pickup's whole object tree: each object, whether it's active, and its renderers, on or
+  off. Settles what's really on screen when a visual fix doesn't take.
 - `onehit`: toggles a test boost: every hit on an enemy does at least 99 (before defence). Off by default.
 - `infjump`: toggles jumping again in mid-air (each press of the jump button), to reach high places while testing. Off by default.
 
