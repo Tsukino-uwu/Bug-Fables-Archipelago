@@ -18,7 +18,8 @@ seed's (the mod guide, step 9); and, as of 2026-09-25, the world opening one gat
 Snakemouth's fall room both ways, the town, its districts, the bar, Madeleine's house), journal discoveries and
 Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026-09-25), Madame Butterfly's item shop (seen 2026-09-25), the caravan from the start with its three items (seen 2026-09-25), and a Quality of life page (build step 8 and the mod guide, step 10). An experimental entrance randomizer (a yaml option,
 coupled, off by default) shuffles 508 doors with every area kept reachable; a generated pair was seen working both ways
-(2026-09-25).
+(2026-09-25). The Detector beeps for any check left in a room (seen), and a one-member party (a dev setting, the start of
+the *Starting Party Member* plan) plays through chapter 1 into chapter 2 (seen, 2026-09-25).
 
 **Next** (decided by the user, 2026-09-24):
 

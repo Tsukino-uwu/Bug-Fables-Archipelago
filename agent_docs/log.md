@@ -489,3 +489,46 @@ Newest last. What was tried, what happened, what the user said.
 - **Next:** see the shuffled door on screen; pair both directions (a door's way back found by position, which needs
   EntityDump to write positions); the generator shuffling doors (coupled first); Placeholders for every spot; Shades's
   shop once all 50 crystal berries are locations.
+
+## 2026-09-25 (evening): doors both ways and shuffled, the Detector for every check, one party member (the user closing the chat)
+
+- **Entrance randomizer.** A rewritten door now keeps its own walk-in (`data[4]`) and takes the other door's arrival
+  camera and jump (read in `TransferMap`). EntityDump writes positions; `door-graph.py` pairs each door with the door the
+  party arrives next to (3D distance, doors told apart by entity index, story variants as one door): 531 of 567 pair both
+  ways, the rest listed in `MEASURED.md` to check in play. Seen: one door, then a hand-made coupled swap both ways. The
+  generator's option *Entrance Randomizer (experimental)* shuffles 508 doors, growing the world from one area so none is
+  stranded (a plain random pairing stranded areas in 20 of 20 seeds; tests). Seen: a generated pair both ways, offline
+  too, and a seed full of desert rooms (checked: that seed was the most desert-heavy of 300; the shuffle is fair).
+  Transfers that aren't doors listed (ScriptDump's transfer column, `event-transfers.py`); decided (the user): chosen
+  entrances shuffle like doors later, forced sends (the hideout's guards, which need dig to leave) stay and become
+  one-way logic.
+- **The Detector for every check** (the user): the medal's own "!" and beep when a room still holds any check (items,
+  gifts, quest rewards, shops, discoveries), quiet when done; the game's own hidden-item checks off in a seed. Seen.
+- **Pickups in houses flashed their own item on the way in:** a timing guess failed; measured instead (the game redraws
+  them in `EntityControl.UpdateItem`); a postfix there fixed it. Seen.
+- **One starting member (dev `TestStartMember`, Leif), played through chapter 1 and into chapter 2.** The intro skip had
+  always left the party under the house (hidden by the test start's warp); the camera took five tries, settled by the new
+  console command `cam` (it followed a character destroyed at the frame's end). Then, one by one: stand-ins in
+  conversations (Artis), arriving at once, weightless, never following the real player (`PartyMover`), with a physics
+  body when made, hidden in `LateUpdate`; a scene's end handing over to the real party; no duplicate Leif (the story
+  follower, then a stray player character left by `SetPlayers()`, found with the new `who`); Leif's lake scene always
+  skipped and Leif joining right after the spider instead (the user); position lookups beyond the party. The user
+  asked to stop finding these one crash at a time: `party-access.py` lists all 29 ways the code reaches for a party
+  member, what's covered and what's open (direct `playerdata[1]`/`[2]` in six later scenes and two battle routines).
+  The leader acts the story leader's part until the story has him, then plays himself (the user). Gates found: Kabbu's
+  horn for the way into Snakemouth and its puzzles, Vi for the bridge from the near side and the lake fight's air
+  enemies; switches take any attack; a blocked walk-in ends in the game's own teleport.
+- **Chapter 2 opened a little more:** the plaza's statue and inn portrait discoveries and the inn from the start; the
+  follower swap on the palace bridge and the briefing held in story order (boss, follower, swap, briefing), whatever the
+  way in (the user).
+- **Planned (the user):** basic moves (beemerang, horn, freeze) and jump as items; Starting Party Member (Off / Vi /
+  Kabbu / Leif / Random), the two joining moments as the two locations; enemy scaling still to decide.
+- **Licensing:** an author's wishes count as much as their licence (the user); nothing from conversations goes into
+  the repo.
+- **My slips:** scripted edits mangled escapes twice more; a reload landed mid-scene (the reload guard followed); two
+  wrong guesses (gravity, `RefreshInsides`) before measuring.
+- **Dev install state at the end:** `TestStartMember = 2`, `TestStart` empty, `TestDoors` empty, `InfJump` and `OneHit` on,
+  `DevCommandFile` in this session's scratchpad (point it at the next one), AdoptSeed on; the server was hosting a solo
+  seed from the scratchpad.
+- **Next:** the scan's open list before those scenes come up; the Starting Party Member option in the apworld; Placeholders
+  for every spot; a two-member start to see Leif join after the spider.
