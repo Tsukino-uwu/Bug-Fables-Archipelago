@@ -642,7 +642,8 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    right once the story has Leif ("wrong to force one member to do the others' part"). So: **a leader the story's party
    already holds plays himself** (Vi from the opening, flag 15; Kabbu always; Leif from flag 16); he acts the lead only
    in scenes whose party doesn't have him (chapter 1 before Leif joins). And after a scene remakes the party characters,
-   the new leader takes the acting part on again (for chapter 1 scenes that change maps). Not yet seen.
+   the new leader takes the acting part on again (for chapter 1 scenes that change maps). **Seen (the user,
+   2026-09-25):** the briefing replayed with Leif playing himself, "working as intended".
    The briefing's hold moved from 114 to 66 (the bridge swap; the user: a shuffled door or a random start inside the
    palace could reach it with no follower or the wrong one), `apimplementation.md`.
    (17) **Leif's joining scene skipped when Leif is already in the party** (the user, 2026-09-25): Event14 at the lake
