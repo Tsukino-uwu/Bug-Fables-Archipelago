@@ -28,7 +28,7 @@ class TestPermitGate(BugFablesTestBase):
                      if loc.address is not None}
         self.assertEqual(reachable, {"Outskirts: Maki and Eetl's Gift", "Outskirts: Artis's Gift",
                                      "Outskirts: Ladybug Siblings' House", "Outskirts: East Road, Stone",
-                                     "Outskirts: Pier", "Bugaria City: Residential District, Past the Grass"})
+                                     "Outskirts: Pier", "Bugaria City: Residential District, On Top of the House"})
 
     def test_reward_near_snakemouth_needs_the_permit(self) -> None:
         self.assertFalse(self.can_reach_location("Outskirts: Near Snakemouth Den, Reward"))
