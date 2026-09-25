@@ -568,7 +568,8 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    Kabbu showed for a moment and the camera was odd outside until then: the opening swaps the party only once the
    fade-in is over. Moving the swap into the scene's end, before the game's `EndEvent`, crashed it (`FixEntities`,
    a NullReferenceException, a black screen; freed with `unstick`). Now the scene ends as before behind the black
-   screen, and on the next frame the party is swapped, placed and the camera set, then the fade-in starts. Not yet seen.
+   screen, and on the next frame the party is swapped, placed and the camera set, then the fade-in starts. **Seen (the
+   user, 2026-09-25):** Leif alone from the first frame, in the room, the camera right inside, outside and after the gift.
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,
