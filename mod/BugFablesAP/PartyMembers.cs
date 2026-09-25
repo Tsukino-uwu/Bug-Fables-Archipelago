@@ -113,6 +113,43 @@ namespace BugFablesAP
             {
                 return true;
             }
+            bool joined = JoinLeif(mm);
+            mm.flags[16] = true;
+            EntityControl creature = MainManager.GetEntity(5);
+            if (creature != null && creature.npcdata != null && creature.npcdata.regionalflag >= 0)
+            {
+                mm.regionalflags[creature.npcdata.regionalflag] = true;
+                creature.gameObject.SetActive(false);
+            }
+            mm.extrafollowers?.RemoveAll(f => f == 2);
+            log.LogInfo($"[members] Leif's joining scene (Event14) skipped: " + (joined ? "Leif joined the party" : "Leif not added (already in, or not allowed)") + "; flag 16 set, "
+                + (creature != null ? $"entity 5 ({creature.name}) removed" : "no entity 5"));
+            return false;
+        }
+
+        // Leif joins the party for real, where the story has him start following (the user, 2026-09-25: with the lake scene
+        // skipped, "it could just happen after the spider, when Leif first starts to follow"). The spider scene's end sets
+        // flag 27 and makes the room's Leif a follower (EventControl.cs:2278-2291); Leif Joins (flag 16) is in the same logic
+        // region as the lake, so the logic is unchanged. Once that scene is over: Leif into the party (as the lake scene's
+        // ChangeParty({0, 1, 2}) would, then SetPlayers), flag 16, and the story's follower Leif gone with its entry. With
+        // one starting member only once Leif is allowed (received); otherwise he's an item still to find.
+        private static void TickLeifJoins(MainManager mm)
+        {
+            if (randomizerOn == null || !randomizerOn() || MainManager.map == null || mm.flags == null || !mm.flags[27] || mm.flags[16]
+                || mm.inevent || mm.message || MainManager.battle != null || MainManager.player == null || mm.playerdata == null
+                || (StartMember >= 0 && !Allowed(2)))
+            {
+                return;
+            }
+            bool joined = JoinLeif(mm);
+            mm.flags[16] = true;
+            log.LogInfo("[members] after the spider scene: " + (joined ? "Leif joined the party" : "Leif was already in the party") + "; flag 16 set");
+        }
+
+        // Leif into the party where it stands, and every story copy of him gone (the follower entry and characters drawn as
+        // Leif that aren't the party's). Returns whether he joined now.
+        private static bool JoinLeif(MainManager mm)
+        {
             bool joined = false;
             if (!mm.playerdata.Any(p => p.trueid == 2) && MainManager.player != null)
             {
@@ -130,17 +167,18 @@ namespace BugFablesAP
                 }
                 joined = mm.playerdata.Any(p => p.trueid == 2);
             }
-            mm.flags[16] = true;
-            EntityControl creature = MainManager.GetEntity(5);
-            if (creature != null && creature.npcdata != null && creature.npcdata.regionalflag >= 0)
+            if (mm.playerdata.Any(p => p.trueid == 2))
             {
-                mm.regionalflags[creature.npcdata.regionalflag] = true;
-                creature.gameObject.SetActive(false);
+                mm.extrafollowers?.RemoveAll(f => f == 2);
+                foreach (EntityControl copy in UnityEngine.Object.FindObjectsOfType<EntityControl>()
+                    .Where(e => e.animid == 2 && !e.playerentity && !mm.playerdata.Any(p => p.entity == e) && (e.tempfollower || e.following != null)).ToList())
+                {
+                    MainManager.map.tempfollowers?.Remove(copy);
+                    UnityEngine.Object.Destroy(copy.gameObject);
+                    log.LogInfo($"[members] a story copy of Leif ({copy.name}) removed: he's in the party");
+                }
             }
-            mm.extrafollowers?.RemoveAll(f => f == 2);
-            log.LogInfo($"[members] Leif's joining scene (Event14) skipped: " + (joined ? "Leif joined the party" : "Leif not added (already in, or not allowed)") + "; flag 16 set, "
-                + (creature != null ? $"entity 5 ({creature.name}) removed" : "no entity 5"));
-            return false;
+            return joined;
         }
 
         // A party member can't also be a story follower (the user, 2026-09-25: three Leifs after the spider fight). The
@@ -151,6 +189,11 @@ namespace BugFablesAP
         internal static void Tick()
         {
             MainManager mm = MainManager.instance;
+            if (mm == null)
+            {
+                return;
+            }
+            TickLeifJoins(mm);
             if (!Active || mm.extrafollowers == null || mm.playerdata == null)
             {
                 return;

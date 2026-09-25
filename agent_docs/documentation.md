@@ -640,7 +640,12 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    with Archipelago on (the user: "it's not a check"): it's no location, only the logic's *Leif Joins* event at the lake
    (flag 16), and without its fight the lake no longer quietly needs Vi. When Leif isn't in the party yet, he joins right
    there, as the scene's own `ChangeParty({0, 1, 2})` would have him (then `SetPlayers`, the camera on the leader); with
-   one starting member the guard still decides whether he may. Not yet seen.
+   one starting member the guard still decides whether he may. **Moved earlier** (the user: "it could just happen after
+   the spider, when Leif first starts to follow"): once the spider scene is over (flag 27, not yet 16), Leif joins for
+   real, flag 16 goes on, and the story's follower Leif is removed with his follower entry. The logic is unchanged: *Leif
+   Joins* is in the same region (*Snakemouth Den*) as the lake. With one starting member, only once Leif is allowed
+   (received). On loading, the user's Leif-alone file got flag 16 ("Leif was already in the party"). With a two-member
+   start, not yet seen.
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,
