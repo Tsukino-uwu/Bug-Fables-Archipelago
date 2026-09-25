@@ -51,7 +51,19 @@ namespace BugFablesAP
             {
                 log.LogError("[party] MainManager.GetPartyEntities not found: scenes written for three still crash with two.");
             }
-            log.LogInfo("[party] installed on MainManager.SetPlayers" + (getEntity != null ? ", GetEntity" : "") + (byId != null ? " and GetPartyEntities" : ""));
+            // Every MoveTowards overload ends in this one (EntityControl.cs:4911-4960).
+            MethodInfo moveTowards = AccessTools.Method(typeof(EntityControl), nameof(EntityControl.MoveTowards),
+                new[] { typeof(Vector3), typeof(float), typeof(int), typeof(int), typeof(bool) });
+            if (moveTowards != null)
+            {
+                harmony.Patch(moveTowards, postfix: new HarmonyMethod(typeof(PartyFit), nameof(AfterMoveTowards)));
+            }
+            else
+            {
+                log.LogError("[party] EntityControl.MoveTowards not found: a scene waiting for a stand-in to walk somewhere waits for good.");
+            }
+            log.LogInfo("[party] installed on MainManager.SetPlayers" + (getEntity != null ? ", GetEntity" : "") + (byId != null ? ", GetPartyEntities" : "")
+                + (moveTowards != null ? " and MoveTowards" : ""));
         }
 
         internal static void Disable()
@@ -91,6 +103,19 @@ namespace BugFablesAP
                 }
             }
             return standIns[member];
+        }
+
+        // A scene walking a stand-in somewhere, then waiting until it arrives (Event10, the horn tutorial: while
+        // (entities[0].forcemove), EventControl.cs:2935): a stand-in has no collision and never got there, so the scene
+        // stood still (the user, 2026-09-25, Leif alone). A stand-in arrives at once.
+        private static void AfterMoveTowards(EntityControl __instance, Vector3 pos)
+        {
+            if (__instance == null || !standIns.Contains(__instance))
+            {
+                return;
+            }
+            __instance.transform.position = pos;
+            __instance.forcemove = false;
         }
 
         private static void AfterPartyById(bool idorder, ref EntityControl[] __result)

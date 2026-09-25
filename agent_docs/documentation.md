@@ -575,7 +575,13 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    `:18418-18440`). The stand-ins only answered while a scene ran (`inevent`), and a talk isn't one, so the lookup came
    back empty and `SetText` threw a NullReferenceException at the end of the talk. They now answer while a scene or a
    conversation runs (`inevent` or `message`) and go when both are over. Kept that narrow on purpose: an invisible
-   member around all the time could be counted as real by battles, followers or menus. Not yet seen.
+   member around all the time could be counted as real by battles, followers or menus. **Seen (the user):** Artis's talk
+   played to the end and the permit's check went out (the crashed one had left a dead dialogue: `unstick`).
+   (10) **A stand-in arrives at once** (the user, 2026-09-25): the horn tutorial (Event10, near Snakemouth) walks Vi to a
+   spot and waits until she's there (`while (entities[0].forcemove)`, `EventControl.cs:2935`); the stand-in, without
+   collision, never arrived, and the scene never reached its first line. Every `MoveTowards` overload ends in the
+   five-argument one (`EntityControl.cs:4911-4960`); a postfix puts a stand-in straight on the spot and ends the walk.
+   The scene's cut itself is done by the scene (`CutGrass()` after the action button), not by Kabbu. Not yet seen.
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,
