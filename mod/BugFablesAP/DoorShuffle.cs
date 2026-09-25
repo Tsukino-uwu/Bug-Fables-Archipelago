@@ -16,7 +16,9 @@ namespace BugFablesAP
     // and its vectordata from [1] on are replaced by the other door's, read from that door's own map's entity table
     // (Data/EntityData/<map>, fields split by '}', at the positions MapControl.CreateEntities reads, MapControl.cs:1540-1566:
     // the data count at 60, the vectordata count at 71) and its names table (Data/EntityData/Names/<map>names, one name
-    // per entity, MapControl.cs:1454). Its own vectordata[0], the walk into it on this side, stays. The list comes from
+    // per entity, MapControl.cs:1454). What belongs to this side stays: vectordata[0], the walk into it, and data[4], set
+    // to 1 when there is no walk (a hole, a ladder). data[1..3] (the camera on arrival) and the arrival jump (the door
+    // entity's emoticonoffset.x, field 175, read by TransferMap) come from the other door. The list comes from
     // slot_data (door_targets); a dev setting (Debug.TestDoors) can add pairs by hand.
     internal static class DoorShuffle
     {
@@ -99,24 +101,38 @@ namespace BugFablesAP
                     log.LogWarning($"[doors] {map}: no door {t.Door} to rewrite");
                     continue;
                 }
-                if (!Read(t.LikeMap, t.LikeDoor, out int[] data, out Vector3[] vectors) || data.Length == 0 || vectors.Length < 3)
+                if (!Read(t.LikeMap, t.LikeDoor, out int[] data, out Vector3[] vectors, out float jump) || data.Length == 0 || vectors.Length < 3)
                 {
                     log.LogWarning($"[doors] {map}: {t.Door} kept as it is ({t.LikeMap}/{t.LikeDoor} not readable as a door)");
                     continue;
                 }
+                // data[4] == 1 means the party doesn't walk into this door (a hole, a ladder: TransferMap skips the
+                // walk to vectordata[0]), so it belongs to this side and stays, like vectordata[0].
+                int ownWalk = door.data != null && door.data.Length > 4 ? door.data[4] : 0;
                 var own = door.vectordata != null && door.vectordata.Length > 0 ? door.vectordata[0] : vectors[0];
+                if (data.Length > 4 || ownWalk != 0)
+                {
+                    Array.Resize(ref data, Math.Max(data.Length, 5));
+                    data[4] = ownWalk;
+                }
                 door.data = data;
                 door.vectordata = (Vector3[])vectors.Clone();
                 door.vectordata[0] = own;
-                log.LogInfo($"[doors] {map}: {t.Door} now leads where {t.LikeMap}/{t.LikeDoor} leads (map {(MainManager.Maps)data[0]}, appear {vectors[1]})");
+                // The jump on arrival is read from the door walked into (TransferMap: caller.entity.emoticonoffset.x).
+                if (door.entity != null)
+                {
+                    door.entity.emoticonoffset = new Vector3(jump, door.entity.emoticonoffset.y, door.entity.emoticonoffset.z);
+                }
+                log.LogInfo($"[doors] {map}: {t.Door} now leads where {t.LikeMap}/{t.LikeDoor} leads (map {(MainManager.Maps)data[0]}, appear {vectors[1]}, jump {jump}, own walk {ownWalk})");
             }
         }
 
         // A door's data and vectordata from its map's entity table, found by name.
-        private static bool Read(string mapName, string doorName, out int[] data, out Vector3[] vectors)
+        private static bool Read(string mapName, string doorName, out int[] data, out Vector3[] vectors, out float jump)
         {
             data = new int[0];
             vectors = new Vector3[0];
+            jump = 0f;
             MainManager.Maps map;
             try
             {
@@ -157,6 +173,7 @@ namespace BugFablesAP
                 {
                     vectors[k] = new Vector3(Parse(f[72 + k * 3]), Parse(f[73 + k * 3]), Parse(f[74 + k * 3]));
                 }
+                jump = f.Length > 175 ? Parse(f[175]) : 0f;
                 return true;
             }
             return false;

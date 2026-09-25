@@ -657,6 +657,20 @@ own map's entity table and names table (`Data/EntityData/Names/<map>names`); A's
 come from `slot_data` (`door_targets`) or, for a test, the dev setting `TestDoors`. First test: the Outskirts' east exit
 leading where the plaza's door to the Commercial District leads. Built, not yet seen.
 
+**What a door carries, side by side** (2026-09-25, reading the rest of `TransferMap`, `MainManager.cs:17467-17620`). A
+door's `data` is more than its target: `[1..3]` switch the camera's offset, angle and limits on arrival (from
+`vectordata[3..6]`), and `[4] == 1` means the party isn't walked into the door first (nine doors: holes, wells, ladders,
+the fall room's). The arrival jump is read off the door's own entity, `emoticonoffset.x` (entity table field 175). So a
+rewritten door takes the target, the camera and the jump from the other door, and keeps its own `[4]` and `vectordata[0]`:
+whatever happens on the side you leave stays, whatever happens on the side you arrive at comes along.
+
+**Pairing each door with its way back** (2026-09-25). Two maps can be joined by several doors, so "the door on the
+other map that leads back" can be more than one. The one that belongs to a door is the one the party arrives next to:
+the door on the target map whose start position is nearest (on the ground plane) to where the door places the party,
+`vectordata[1]`. EntityDump now writes each entity's start position (fields 6-8) and the jump (field 175), and
+`dev-scripts/door-graph.py` pairs every door that way, marking pairs that don't point at each other ("not mutual"). The
+coupled entrance randomizer needs those pairs: going through a shuffled door and turning round must bring you back.
+
 **The reshuffle choice first** (the user, 2026-09-25: faster to reset a shelf). A shopkeeper's greeting ends in a
 `prompt` whose choices are listed as N targets then N texts (`MainManager.cs:12213-12222`); the reshuffle is the one with
 target `-199` and text `-195` (Shades's line 1, Merab's line 34, read with the console's `script`). With Archipelago on,

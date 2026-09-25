@@ -29,6 +29,10 @@ namespace BugFablesAP
         // is reached through that inside's door, whose own flags gate it (found 2026-09-24: a pickup the apworld had
         // outdoors was in a house that opens later).
         private const int InsideId = 178;
+        // Where the entity starts (fields 6-8, MapControl.cs:1661) and its emoticonoffset's x (fields 175-177,
+        // MapControl.cs:1629), which for a door is the jump on arrival (MainManager.TransferMap reads the door's
+        // entity.emoticonoffset.x). Positions pair a door with its way back (dev-scripts/door-graph.py).
+        private const int Position = 6, EmoticonOffset = 175;
 
         // Returns true once it has run (successfully or not), so the caller stops asking.
         internal static bool TryRun(ManualLogSource log)
@@ -46,7 +50,7 @@ namespace BugFablesAP
         {
             string outPath = Path.Combine(Paths.BepInExRootPath, "bugfablesap-entitydump.tsv");
             var sb = new StringBuilder();
-            sb.AppendLine("map\tindex\tname\tentitytype\tobjecttype\tinteract\tanimid\teventid\trequires\tlimit\tdata\tdialogues\tregionalflag\tactivationflag\tinsideid");
+            sb.AppendLine("map\tindex\tname\tentitytype\tobjecttype\tinteract\tanimid\teventid\trequires\tlimit\tdata\tdialogues\tregionalflag\tactivationflag\tinsideid\tvectordata\tposition\tjump");
             int maps = 0, rows = 0, bad = 0;
             foreach (MainManager.Maps map in Enum.GetValues(typeof(MainManager.Maps)))
             {
@@ -74,8 +78,10 @@ namespace BugFablesAP
                           .Append(List(f, DataCount, 1)).Append('\t')
                           .Append(List(f, DialogueCount, 3)).Append('\t')
                           .Append(f[RegionalFlag]).Append('\t').Append(f[ActivationFlag].Trim()).Append('\t')
-                          .Append(f[InsideId].Trim()).Append('	')
-                          .Append(List(f, VectorCount, 3)).AppendLine();
+                          .Append(f[InsideId].Trim()).Append('\t')
+                          .Append(List(f, VectorCount, 3)).Append('\t')
+                          .Append(f[Position].Trim()).Append(':').Append(f[Position + 1].Trim()).Append(':').Append(f[Position + 2].Trim()).Append('\t')
+                          .Append(f[EmoticonOffset].Trim()).AppendLine();
                         rows++;
                     }
                     catch (Exception e)
