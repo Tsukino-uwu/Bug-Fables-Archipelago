@@ -82,6 +82,10 @@ be wrong.
    walking to the town or the bar. Every board shows the same list (`MEASURED.md`, "The quest board"), so it adds no
    quests, only a shorter way. Every board lists bounties too (built, build step 9); next, the house's board from
    the start.
+13. **Bounties as locations, a yaml toggle** (the user, 2026-09-25): *Shuffle Bounties*, its own category, off by
+   default (five hard optional bosses; progression shouldn't sit behind them unless the player asks). Today they are
+   not locations and pay their vanilla rewards. First, measure what each bounty pays and when (on the spot or on
+   reporting back); then the logic for reaching each boss. Its own build step when built.
 
 **Known issues:**
 
