@@ -502,7 +502,10 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    flags don't cover (the game runs it at 8 times speed with its lines answered, as for the intro slides: the rope,
    Event1, which plays the bridge's Fall animation and fixes it fallen before setting flags 7 and 11; setting the flags
    alone would leave the bridge standing until the room reloads). Never a scene that gives an item, sends a check,
-   changes the party or starts a battle. Built, not yet seen.
+   changes the party or starts a battle. **First skip froze the player** (the user at the bridge, 2026-09-25): a trigger
+   freezes the player (`minipause`) before starting its scene (`NPCControl.cs:5512-5525`), and the scene's own
+   `EndEvent` unfreezes. A skipped scene never ends, so the skip now calls the game's `EndEvent()` itself, which is all
+   resets (`EventControl.cs:146-187`). Not yet seen.
 6. **Item animation** (the user, 2026-09-25): a discovery showed nothing of what it found, and items from other
    players arrive silently. Your own finds always get the hold-up (pickups already did; a discovery recorded in play
    now does too); the row, *Item animation: All / Progression / Off* decides which items from other players do

@@ -56,6 +56,7 @@ namespace BugFablesAP
         private static readonly System.Text.RegularExpressions.Regex MoneyToken =
             new System.Text.RegularExpressions.Regex(@"\|(checkmoney|money),[^|]*\|", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
         private static Harmony harmony;
+        private static readonly MethodInfo endEvent = AccessTools.Method(typeof(EventControl), "EndEvent", Type.EmptyTypes);
 
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
@@ -122,7 +123,12 @@ namespace BugFablesAP
             {
                 MainManager.instance.flags[flag] = true;
             }
-            log.LogInfo($"[qol] skipped Event{id} on {scene.Map}: set flags {string.Join(", ", scene.Flags.Select(f => f.ToString()).ToArray())}");
+            // Whatever starts a scene may have frozen the player first (a trigger sets minipause, NPCControl.cs:5512-5525),
+            // and the scene's own end undoes it. A skipped scene never ends, which froze the user at the bridge
+            // (2026-09-25): so end it the game's way, EndEvent(), all resets (EventControl.cs:146-187).
+            endEvent?.Invoke(null, null);
+            log.LogInfo($"[qol] skipped Event{id} on {scene.Map}: set flags {string.Join(", ", scene.Flags.Select(f => f.ToString()).ToArray())}, "
+                + (endEvent != null ? "ended it the game's way" : "EndEvent NOT found: the player may stay frozen"));
             return false;
         }
 
