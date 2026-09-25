@@ -596,8 +596,15 @@ So the house now needs nothing. With the rocks gone the east road opened too; th
 Kabbu's horn and found a Drowsy Cake (flag 735), now a location (*Outskirts: East Road, Stone*), and picked
 up crystal berry #10 at the pier with no abilities (*Outskirts: Pier*). The miners working
 at the rocks (gone from 41 in the game) mine nothing now, so they join `kept_open`. The test
-`test_only_what_play_showed_before_the_gate` pins the four locations reachable before the permit. Still to see: the
-town door doing nothing before the first boss.
+`test_only_what_play_showed_before_the_gate` pins the locations reachable before the permit (five, with the pier's
+crystal berry). Still to see: the town door doing nothing before the first boss.
+**The boat to Metal Island crashed with two in the party** (2026-09-25). With the rocks gone the user reached the
+pier on a chapter 1 file, paid the fare, and the boat scene (Event107) threw IndexOutOfRange: it seats three party
+members (`p[0..2]`, `EventControl.cs:17944-17946`), and in the game the pier is behind the rocks until the first
+boss, so Leif is always there. Opening a gate means checking every scene behind it for what the story guaranteed.
+The sailor joins `held_until`, waiting for Leif (flag 16); the user chose Leif over the first boss, because a party
+rule suits a random start later, when party members may be items and this becomes a party-size check. Metal Island's
+checks will need Leif in logic when they're added. Built, not yet seen.
 **Mapping connections, one-way included** (the user, 2026-09-25: for room-level regions and a later entrance
 rando). An entrance shuffle can only pair a two-way door with another two-way door; a one-way link marked two-way
 can strand the player. So every connection is recorded with its direction. How:

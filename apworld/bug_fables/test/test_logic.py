@@ -465,3 +465,9 @@ class TestOutskirtsRocks(BugFablesTestBase):
     def test_town_scene_waits_for_the_first_boss(self) -> None:
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "DoorBugaria - Duplicate", "flag": 41},
                       self.world.fill_slot_data()["held_until"])
+
+    def test_boat_waits_for_leif(self) -> None:
+        # The boat scene seats three; with the rocks gone a two-member party reached it and the scene threw (the user,
+        # 2026-09-25). The sailor waits for Leif's joining flag.
+        self.assertIn({"map": "BugariaPier", "entity": "boatsailor", "flag": 16},
+                      self.world.fill_slot_data()["held_until"])

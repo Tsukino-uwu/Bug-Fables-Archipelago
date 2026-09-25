@@ -9,13 +9,23 @@ using UnityEngine;
 namespace BugFablesAP
 {
     // The panel's "Quality of life" page (the user, 2026-09-25: a sub-menu of on/off rows that speed the game up and
-    // make it smoother). The rows so far only change how fast things play out, never what the game gives or where: no
-    // flag, item or party is touched here. Like every panel setting, nothing happens while the Archipelago mod is
-    // disabled. Every row is on by default (the user, 2026-09-25).
+    // make it smoother). The rows never change what the game gives or where: no flag, item or party is touched here.
+    // Free boat waives a fare the player could always earn by battling, so the logic never counts on it. Like every
+    // panel setting, nothing happens while the Archipelago mod is disabled. Every row is on by default (the user,
+    // 2026-09-25).
     internal static class QualityOfLife
     {
         internal static ConfigEntry<bool> FastText;
         internal static ConfigEntry<bool> SkipIntro;
+        internal static ConfigEntry<bool> FreeBoat;
+
+        // The Metal Island boat's fares: the pier sailor's lines 16 (300 berries) and 19 (90), each
+        // |checkmoney,N,20||money,-N| (ScriptDump's money column, 2026-09-25). The trip back charges nothing.
+        private const string BoatMap = "BugariaPier";
+        private static readonly int[] FareLines = { 16, 19 };
+        private static readonly System.Text.RegularExpressions.Regex MoneyToken =
+            new System.Text.RegularExpressions.Regex(@"\|(checkmoney|money),[^|]*\|", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        private static Harmony harmony;
 
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
@@ -39,6 +49,33 @@ namespace BugFablesAP
                 + "much faster than the game's own hold. Lines the game marks unskippable stay as they are.");
             SkipIntro = config.Bind("QualityOfLife", "SkipIntro", true,
                 "A new game's four story slides pass by on their own, fast. The rest of the opening plays as normal.");
+            FreeBoat = config.Bind("QualityOfLife", "FreeBoat", true,
+                "The boat to Metal Island costs nothing (the user, 2026-09-25: no farming berries in Archipelago).");
+            // A fare line is fetched inside the running dialogue (a prompt's answer jumps to it), not through a new SetText,
+            // so the line itself is changed as the game reads it (MainManager.GetDialogueText, MainManager.cs:10169).
+            MethodInfo getLine = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetDialogueText), new[] { typeof(int) });
+            if (getLine == null)
+            {
+                log.LogError("[qol] MainManager.GetDialogueText(int) not found: Free boat does nothing, the fare stays.");
+                return;
+            }
+            harmony = new Harmony(Plugin.Guid + ".qol." + DateTime.UtcNow.Ticks);
+            harmony.Patch(getLine, postfix: new HarmonyMethod(typeof(QualityOfLife), nameof(AfterGetLine)));
+        }
+
+        private static void AfterGetLine(int id, ref string __result)
+        {
+            if (__result == null || Array.IndexOf(FareLines, id) < 0 || MainManager.map == null
+                || MainManager.map.mapid.ToString() != BoatMap || !randomizerOn() || !FreeBoat.Value)
+            {
+                return;
+            }
+            string free = MoneyToken.Replace(__result, "");
+            if (free != __result)
+            {
+                __result = free;
+                log.LogInfo($"[qol] boat fare waived (pier line {id})");
+            }
         }
 
         internal static void Tick()
@@ -115,6 +152,8 @@ namespace BugFablesAP
         // A hot reload mid-intro must not leave the game fast.
         internal static void Disable()
         {
+            harmony?.UnpatchSelf();
+            harmony = null;
             if (speeding)
             {
                 speeding = false;

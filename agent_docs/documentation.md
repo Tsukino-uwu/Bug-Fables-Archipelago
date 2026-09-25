@@ -452,7 +452,14 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    line's wait and runs the game at 8 times speed. The game's own end-of-event resets the speed, and the mod does
    too once the backdrop is gone. **Confirmed by the user (2026-09-25):** on a new file the slides "skipped past
    really fast on its own"; the log shows `[qol] intro slides: passing them by`, then `over: normal speed`.
-3. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
+3. **Free boat** (the user, 2026-09-25: nobody should have to farm berries in Archipelago). The Metal Island boat
+   costs 300 berries (90 in a later state). The fare isn't in the boat scene but in the sailor's dialogue lines, so
+   ScriptDump got a money column (`checkmoney`, `money`), which found both fares on the pier, lines 16 and 19, each
+   `|checkmoney,N,20||money,-N|`, and a free trip back. The line a prompt jumps to is read inside the running
+   dialogue through `MainManager.GetDialogueText(id)`, not through a new `SetText`, so a postfix there drops the two
+   money commands from those two lines. It changes no reachability: with it off, the fare can always be earned in
+   battle. Built, not yet seen.
+4. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
    read in full before anything is skipped.
 
 The panel got an eighth row, "Quality of life", which opens a second page in the same box; cancel comes back.
