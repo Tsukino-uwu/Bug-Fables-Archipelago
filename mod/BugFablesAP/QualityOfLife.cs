@@ -143,6 +143,46 @@ namespace BugFablesAP
         internal static string TestStart;
         private static bool startPending;
 
+        // A black screen from the end of the slides until the player stands at the start (the user, 2026-09-25: the talk
+        // after the slides showed, sped up, and the building before the test start's warp). Event8 loads the building and
+        // plays its talk there, and the opening and a warp can only follow it, so they are hidden instead: the same kind
+        // of backdrop as the slides' (MainManager.NewSolidColor on the GUI camera, EventControl.cs:2653-2657), drawn above
+        // everything. Never more than CoverLimit seconds.
+        private static SpriteRenderer cover;
+        private static float coverSince;
+        private const float CoverLimit = 20f;
+
+        private static void TickCover(MainManager mm, bool on)
+        {
+            string map = MainManager.map == null ? null : MainManager.map.mapid.ToString();
+            if (cover == null && on && SkipCutscenes.Value && MainManager.GUICamera != null && map == OpeningMap && !mm.flags[15]
+                && MainManager.lastevent == 8 && mm.inevent && MainManager.GUICamera.transform.Find("back") == null)
+            {
+                cover = MainManager.NewSolidColor("apcover", Color.black, 0.01f, new Vector3(0f, 0f, 1f), new Vector2(0.5f, 0.5f));
+                cover.transform.parent = MainManager.GUICamera.transform;
+                cover.transform.localEulerAngles = Vector3.zero;
+                cover.transform.localPosition = new Vector3(0f, 0f, 1f);
+                cover.gameObject.layer = 5;
+                cover.sortingOrder = 1000;
+                coverSince = Time.realtimeSinceStartup;
+                log.LogInfo("[qol] the slides are over: black screen until the start");
+                return;
+            }
+            if (cover == null)
+            {
+                return;
+            }
+            bool atStart = !openingPending && !startPending && mm.flags[15] && MainManager.player != null && !mm.inevent
+                && (string.IsNullOrEmpty(TestStart) || string.Equals(map, TestStart, StringComparison.OrdinalIgnoreCase));
+            bool tooLong = Time.realtimeSinceStartup - coverSince > CoverLimit;
+            if (atStart || tooLong || !on)
+            {
+                UnityEngine.Object.Destroy(cover.gameObject);
+                cover = null;
+                log.LogInfo(atStart ? $"[qol] at the start ({map}): black screen off" : $"[qol] black screen off after {CoverLimit}s (the start never came)");
+            }
+        }
+
         private static void RunOpening()
         {
             MainManager mm = MainManager.instance;
@@ -299,6 +339,7 @@ namespace BugFablesAP
                     log.LogError($"[qol] opening failed: {e}");
                 }
             }
+            TickCover(mm, on);
             // The test start, once the opening's hold-up is over and the player is free again.
             if (startPending && MainManager.player != null && !mm.inevent && !mm.message && !mm.minipause && MainManager.battle == null)
             {
@@ -380,6 +421,11 @@ namespace BugFablesAP
         {
             harmony?.UnpatchSelf();
             harmony = null;
+            if (cover != null)
+            {
+                UnityEngine.Object.Destroy(cover.gameObject);
+                cover = null;
+            }
             if (speeding)
             {
                 speeding = false;

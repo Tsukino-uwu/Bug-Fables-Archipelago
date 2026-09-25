@@ -526,6 +526,10 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    stand-in the mod had removed (freed with `unstick`). Now Event16 is refused on that map whenever the skip is on, and
    the trigger is hidden. (3) The talk after the slides is still Event8, which only the slides' speed-up covered; that
    part (talk and party moves, no prompt) is now fast-forwarded too.
+   (4) Still seen: the building and the sped-up talk, since Event8 loads the building and plays there, and the opening
+   (or a test start's warp, `TestStart`, which worked: the party arrived in the plaza by its save point) can only follow
+   it. So a black screen, the same kind of backdrop as the slides', stays up from the end of the slides until the player
+   stands at the start, free; never longer than 20 seconds.
    **The rule since (the user, 2026-09-25):** a scene that gives an item may be skipped *as long as the item can still
    be received*, and fewer cutscenes are preferred, as an option at least. So a skip now has to keep every check the
    scene holds (sent by the mod, or moved to something the player still does). Next candidate, the user's idea: the
