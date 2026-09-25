@@ -559,7 +559,9 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    use fixed slots (about 110 lookups). While a scene runs, `GetPartyEntities` returns three: each missing member is
    an invisible, collision-free stand-in with that member's `animid`, made the way the game makes scene characters,
    in the member's own slot (id order) or after the party, and removed when the scene ends. Outside scenes nothing
-   changes, and no scene tests a member with `GetEntity(-6) != null` (grep). Limits: a scene that changes the party, or
+   changes, and no scene tests a member with `GetEntity(-6) != null` (grep). A member asked for by name during a scene
+   (`GetEntity(-4)` to `(-6)`) gets the same stand-in. The user asked why not the leader, as for followers: a scene
+   moves every member at once, so the leader would be pulled to two spots and play another character's animations. Limits: a scene that changes the party, or
    needs a member's ability, still needs the member (a logic rule, as for the boat); some scenes will look odd, and each
    one that used a stand-in is logged, to skip or hold back one by one. Built, not yet seen.
    **The rule since (the user, 2026-09-25):** a scene that gives an item may be skipped *as long as the item can still

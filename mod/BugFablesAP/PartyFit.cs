@@ -171,6 +171,19 @@ namespace BugFablesAP
 
         private static bool BeforeGetEntity(int id, ref EntityControl __result)
         {
+            // A member asked for by name (-4 Vi, -5 Kabbu, -6 Leif, MainManager.cs:18538-18570) while a scene runs, and
+            // not in the party: the stand-in answers, as in GetPartyEntities (no code tests these for null, grep).
+            if (id <= -4 && id >= -6 && InScene())
+            {
+                int member = -4 - id;
+                MainManager party = MainManager.instance;
+                if (party.playerdata != null && !party.playerdata.Any(p => p.entity != null && p.entity.animid == member))
+                {
+                    __result = StandIn(member);
+                    return false;
+                }
+                return true;
+            }
             if (id < 1000 || randomizerOn == null || !randomizerOn())
             {
                 return true;
