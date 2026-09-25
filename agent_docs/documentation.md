@@ -602,6 +602,13 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    per-frame hiding ran before the scene's step and the character's own updates, which could switch a sprite back on
    for a frame. A postfix on `EntityControl.LateUpdate` (`EntityControl.cs:3672`) hides a stand-in after both, just
    before drawing. First reload with the guard: it waited for the running scene. Not yet seen.
+   (14) **A scene's end hands over to the real party** (the user, 2026-09-25: after the spider fight's end, Leif stood to
+   the right instead of where the scene leaves the party). The end of Event6 (`EventControl.cs:2272-2289`) walks Vi and
+   Kabbu to the spot and never the player, whom it takes to be one of them, and sets the fall room's character to follow
+   Kabbu (`entities[2].following = entities[1]`, then `extrafollowers.Add(2)`). Now, before the stand-ins go: if the
+   story's leader (the first member of the party the story last asked for, remembered by the member guard before it
+   filters) was a stand-in, the real party moves to where it was left; anyone following a stand-in follows the real
+   party's last member. Both logged. Not yet seen.
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,

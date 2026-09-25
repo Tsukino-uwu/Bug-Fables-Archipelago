@@ -193,6 +193,43 @@ namespace BugFablesAP
             __result = longer.ToArray();
         }
 
+        // A scene that ends with stand-ins treated them as the party (the spider fight's end, Event6, EventControl.cs:
+        // 2272-2289, the user, 2026-09-25): it walked Vi and Kabbu to where the player should stand, never the real player,
+        // and made the fall room's character follow Kabbu (entities[2].following = entities[1]). Before the stand-ins go:
+        // if the story's leader (the first member of the party it last asked for) was a stand-in, the real party moves to
+        // where it was left; anyone following a stand-in follows the real party's last member instead.
+        private static void HandOver()
+        {
+            MainManager mm = MainManager.instance;
+            if (mm == null || mm.playerdata == null || mm.playerdata.Length == 0 || mm.playerdata[0].entity == null)
+            {
+                return;
+            }
+            int[] story = PartyMembers.LastStoryParty;
+            int lead = story != null && story.Length > 0 ? story[0] : -1;
+            if (lead >= 0 && lead < standIns.Length && standIns[lead] != null && !mm.playerdata.Any(p => p.trueid == lead))
+            {
+                Vector3 spot = standIns[lead].transform.position;
+                for (int i = 0; i < mm.playerdata.Length; i++)
+                {
+                    if (mm.playerdata[i].entity != null)
+                    {
+                        mm.playerdata[i].entity.transform.position = spot + new Vector3(-0.6f * i, 0f, 0.1f * i);
+                    }
+                }
+                log.LogInfo($"[party] Event{MainManager.lastevent} over: the story's leader ({lead}) was a stand-in; the party moved to where it was left, {spot}");
+            }
+            EntityControl last = mm.playerdata[mm.playerdata.Length - 1].entity;
+            foreach (EntityControl e in UnityEngine.Object.FindObjectsOfType<EntityControl>())
+            {
+                if (e.following != null && standIns.Contains(e.following) && !standIns.Contains(e))
+                {
+                    e.following = last;
+                    log.LogInfo($"[party] {e.name} followed a stand-in; now follows {last.name}");
+                }
+            }
+        }
+
         private static void ClearStandIns()
         {
             for (int member = 0; member < standIns.Length; member++)
@@ -214,6 +251,7 @@ namespace BugFablesAP
             }
             if (!Talking)
             {
+                HandOver();
                 ClearStandIns();
                 log.LogInfo("[party] scene or conversation over: stand-ins removed");
                 return;

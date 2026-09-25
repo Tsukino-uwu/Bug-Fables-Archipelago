@@ -53,12 +53,17 @@ namespace BugFablesAP
             harmony = null;
         }
 
+        // The party the story last asked for, before the guard: its first member is who the story thinks leads, which
+        // PartyFit uses when a scene played that member with a stand-in.
+        internal static int[] LastStoryParty;
+
         private static void BeforeChangeParty(ref int[] ids)
         {
             if (!Active || ids == null)
             {
                 return;
             }
+            LastStoryParty = (int[])ids.Clone();
             int[] kept = ids.Where(Allowed).ToArray();
             if (kept.Length == ids.Length)
             {
