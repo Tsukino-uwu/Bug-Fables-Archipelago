@@ -1165,7 +1165,10 @@ location, only the fights move.
   user wants it to match its fight ("it would feel weird to run into a seedling and then fight an octopus"), which
   is its own later piece of work.
 - **The party rule:** only fights that can't be fled are limited to enemies the party guaranteed at that point can
-  hit. Map fights can always be fled, so they shuffle freely. If enemy checks come, map fights count too.
+  hit. Map fights can always be fled, so they shuffle freely. If enemy checks come, map fights count too. **Only the
+  base attack counts** (the user, 2026-09-26): skills cost TP, which can run out, and items are used up, so the logic
+  never relies on them; the free base attack is always there. Skills can still win a fight the logic rules out,
+  which is allowed (more cautious than the game, never less).
 
 **Measured first** (`MEASURED.md`, "Battles, for enemy shuffle"), so the design rests on the game's code:
 1. Every fight goes through one function, `BattleControl.StartBattle`. A map enemy passes itself as `calledfrom`.
