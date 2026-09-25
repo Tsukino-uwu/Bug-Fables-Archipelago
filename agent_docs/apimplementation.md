@@ -715,6 +715,13 @@ in the open town: the Bad Book (key item 174, flag 621) outdoors in the resident
 horn before chapter 2 (the user, 2026-09-25): a location in the *Bugaria City* region, open from the start. Then the
 Bug Me Not! medal (flag 59), also outdoors in the residential district, which needed Leif's ice: the same region,
 requiring Leif (test `TestTownMedal`).
+**The bar and the quest boards** (the user, 2026-09-25). The way down to the underground bar (Shades's crystal-berry
+shop, and a bounty board with no gate) is a spot examined on the Commercial map whose last line, the way down, needs
+flag 135. That flag also brings story characters and a scene (Event79) to the district, a battle helper and more, so
+it isn't set: a new `slot_data` list, `dialogue_flags` (map, entity, flag, to), repoints that one line to flag 691,
+which the new-game scene always sets. An entity picks the last line whose flag is set (`NPCControl.cs:4320-4326`), so
+the way down is always taken. The town's and the Outskirts' quest boards (requires 67) join `kept_present`; each quest
+still needs checking before the logic counts on it. Tests `TestBarAndBoards`. Not yet seen.
 **The boat to Metal Island crashed with two in the party** (2026-09-25). With the rocks gone the user reached the
 pier on a chapter 1 file, paid the fare, and the boat scene (Event107) threw IndexOutOfRange: it seats three party
 members (`p[0..2]`, `EventControl.cs:17944-17946`), and in the game the pier is behind the rocks until the first

@@ -8,7 +8,7 @@ from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
 from rule_builder.rules import Has, HasAll
 from worlds.AutoWorld import WebWorld, World
 
-from .data_tables import (ARTIFACTS, ITEM_NAME_TO_ID, ITEMS, HELD_UNTIL, KEPT_OPEN, PRESENT_FROM, KEPT_PRESENT, SCENERY_HIDDEN, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, STORY_EVENTS,
+from .data_tables import (ARTIFACTS, ITEM_NAME_TO_ID, ITEMS, DIALOGUE_FLAGS, HELD_UNTIL, KEPT_OPEN, PRESENT_FROM, KEPT_PRESENT, SCENERY_HIDDEN, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, STORY_EVENTS,
                           WORLD_VERSION, vanilla_item)
 from .options import BugFablesOptions
 
@@ -202,6 +202,9 @@ class BugFablesWorld(World):
             # Ways the story makes at a late flag that the client makes at an earlier one (the door back down to the fall
             # room from the trapdoor on, not the first boss).
             "present_from": [{"map": e["map"], "entity": e["entity"], "flag": e["flag"]} for e in PRESENT_FROM],
+            # An entity's dialogue line repointed to another flag (the bar entrance's way down answers to a flag every new
+            # game sets, instead of a story flag with other effects).
+            "dialogue_flags": [{"map": e["map"], "entity": e["entity"], "flag": e["flag"], "to": e["to"]} for e in DIALOGUE_FLAGS],
             # Where each of this world's items goes (0 item, 1 key item, 2 medal), so the client gives it the right
             # way, shows a found one the way the game shows that kind, and knows a medal's id is offset.
             "item_kinds": {str(ITEM_NAME_TO_ID[item["name"]]): item["kind"] for item in ITEMS},

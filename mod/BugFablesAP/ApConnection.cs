@@ -347,6 +347,20 @@ namespace BugFablesAP
         internal List<Blocker> PresentFrom => presentFrom;
         private volatile List<Blocker> presentFrom;
 
+        // slot_data's dialogue_flags: one of an entity's dialogue lines chosen by another flag ([{map, entity, flag, to}]):
+        // the bar entrance's line for flag 135 (the way down) answers to flag 691, set on every new game, so the bar is
+        // open from the start without flag 135's other effects.
+        internal List<DialogueFlag> DialogueFlags => dialogueFlags;
+        private volatile List<DialogueFlag> dialogueFlags;
+
+        internal sealed class DialogueFlag
+        {
+            internal string Map;
+            internal string Entity;
+            internal int From;
+            internal int To;
+        }
+
         internal sealed class Blocker
         {
             internal string Map;
@@ -565,6 +579,10 @@ namespace BugFablesAP
                     sceneryHidden = ReadKeptOpen(ok.SlotData, "scenery_hidden");
                     heldUntil = ReadKeptOpen(ok.SlotData, "held_until");
                     presentFrom = ReadKeptOpen(ok.SlotData, "present_from");
+                    dialogueFlags = ok.SlotData != null && ok.SlotData.TryGetValue("dialogue_flags", out object df) && df is JArray dfl
+                        ? dfl.Select(e => new DialogueFlag { Map = e.Value<string>("map"), Entity = e.Value<string>("entity"),
+                            From = e.Value<int>("flag"), To = e.Value<int>("to") }).ToList()
+                        : null;
                     locationVars = ReadLocationVars(ok.SlotData);
                     locationBerries = ReadLocationBerries(ok.SlotData);
                     locationDiscoveries = ReadLocationBerries(ok.SlotData, "location_discoveries");

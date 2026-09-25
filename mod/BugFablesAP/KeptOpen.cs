@@ -154,6 +154,22 @@ namespace BugFablesAP
                     log.LogInfo($"[open] {map}: {npc.name} present from flag {from.Flag} ({(now ? "set: present" : "not set yet")})");
                 }
             }
+            // dialogue_flags: an entity picks the last of its lines whose flag is set (NPCControl.cs:4320-4326); one entry's
+            // flag is repointed, so that line answers to another flag.
+            foreach (ApConnection.DialogueFlag swap in (connection.DialogueFlags ?? new List<ApConnection.DialogueFlag>()).Where(b => b.Map == map))
+            {
+                foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true).Where(n => n.name == swap.Entity && n.dialogues != null))
+                {
+                    for (int d = 0; d < npc.dialogues.Length; d++)
+                    {
+                        if ((int)npc.dialogues[d].x == swap.From)
+                        {
+                            npc.dialogues[d].x = swap.To;
+                            log.LogInfo($"[open] {map}: {npc.name}'s line {(int)npc.dialogues[d].y} now answers to flag {swap.To} instead of {swap.From}");
+                        }
+                    }
+                }
+            }
             // held_until: a real story flag as the entity's requires, so the game's own check keeps it away until then
             // and brings it back after. Only added to: an entity that already needs something keeps that too.
             foreach (ApConnection.Blocker held in (connection.HeldUntil ?? new List<ApConnection.Blocker>()).Where(b => b.Map == map && b.Flag >= 0))

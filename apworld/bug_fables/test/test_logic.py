@@ -532,3 +532,16 @@ class TestTownMedal(BugFablesTestBase):
         self.assertFalse(self.can_reach_location(name))
         self.collect_by_name(["Explorer Permit", "Leif"])
         self.assertTrue(self.can_reach_location(name))
+
+
+class TestBarAndBoards(BugFablesTestBase):
+    # The bar (Shades's shop, a bounty board) and the town and Outskirts quest boards are open from the start (the user,
+    # 2026-09-25). The bar's entrance line answers to flag 691, set on every new game, not the story's flag 135.
+    def test_bar_entrance_repointed(self) -> None:
+        self.assertIn({"map": "BugariaCommercial", "entity": "HideoutEntrance", "flag": 135, "to": 691},
+                      self.world.fill_slot_data()["dialogue_flags"])
+
+    def test_quest_boards_present(self) -> None:
+        present = self.world.fill_slot_data()["kept_present"]
+        self.assertIn({"map": "BugariaMainPlaza", "entity": "QuestBoard"}, present)
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "QuestBoard"}, present)
