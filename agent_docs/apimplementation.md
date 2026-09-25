@@ -867,7 +867,7 @@ that never runs (as the open world skips or bypasses scenes) from leaving a tier
 appearing. The same holds for Merab's later additions when they become locations. Crystal berries become progression. **Also wanted (the user,
 2026-09-25): Shades's counter showing 3 or 4 medals** instead of 2. The slot count is the shopkeeper's `data` length and
 each slot's place its `vectordata` entry (`NPCControl.cs:1530-1534`), so longer arrays with new counter positions,
-set before the shelf is built; positions to settle on screen. Built with her shop.
+set before the shelf is built. Built: 4 on her counter (the mod guide, step 12).
 **Full stock from the start for both medal shops, duplicates as their own locations** (the user, 2026-09-25: "a 2nd
 copy is a 2nd check", like the delivery quest's two checks on one flag). The story adds some medals twice (Merab: TP
 Plus 1 and Ambusher 86; Shades: medal 6), so each copy is a location: Merab 22 (20 medals, two doubled), Shades 13
