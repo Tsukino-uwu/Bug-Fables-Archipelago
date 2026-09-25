@@ -135,7 +135,7 @@ namespace BugFablesAP
                 return;
             }
             ItemSwap.DescribeOurs(item.ItemId, kind, out string name, out UnityEngine.Sprite sprite, out UnityEngine.Color? color);
-            HoldUps.Received(name + " from " + item.Player.Name, sprite, color);
+            HoldUps.Received(name + " from " + item.Player.Name, sprite, color, ItemSwap.ArticleOf(item.ItemId, kind));
         }
 
         // Returns what happened, or null when the item must wait.

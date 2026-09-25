@@ -303,7 +303,7 @@ namespace BugFablesAP
                         // A test of the hold-up for an item from another player: the Explorer Permit (key item 27), queued
                         // the way the receiver queues one, display only.
                         ItemSwap.DescribeOurs(ItemIds.Base + 27, ItemIds.KeyItemKind, out string name, out Sprite sprite, out Color? color);
-                        HoldUps.Received(name + " from TestPlayer", sprite, color);
+                        HoldUps.Received(name + " from TestPlayer", sprite, color, ItemSwap.ArticleOf(ItemIds.Base + 27, ItemIds.KeyItemKind));
                         return "holdup queued: " + name + " from TestPlayer";
                     case "infjump":
                         if (InfJumpSetting == null)

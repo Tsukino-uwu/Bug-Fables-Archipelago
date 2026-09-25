@@ -513,7 +513,10 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    same free moment the receiver waits for (no battle, scene, dialogue, menu or map change), one at a time; the item
    itself is always given by the receiver, never by the hold-up. A discovery already recorded when the save loads
    shows nothing. **Seen (2026-09-25):** a test hold-up from the new console command `holdup` ("Explorer Permit from
-   TestPlayer") waited for a cutscene to end, then played; the item probe saw nothing added.
+   TestPlayer") waited for a cutscene to end, then played; the item probe saw nothing added. The box read "You got a
+   Explorer Permit": `giveitem` always uses the game's default article (`menutext[125]`), while a picked-up item uses
+   its own (`itemdata[0, id, 3]`, a medal's `badgedata[id, 6]`, `NPCControl.cs:5670-5690`). Hold-ups and location swaps
+   now set the item's own article. Not yet seen.
 7. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
    read in full before anything is skipped.
 

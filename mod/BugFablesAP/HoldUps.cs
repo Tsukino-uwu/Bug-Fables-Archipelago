@@ -29,9 +29,9 @@ namespace BugFablesAP
             log.LogInfo($"[show] queued the hold-up for {what}");
         }
 
-        internal static void Received(string name, Sprite sprite, Color? color)
+        internal static void Received(string name, Sprite sprite, Color? color, string article)
         {
-            waiting.Enqueue(() => ItemSwap.ShowHeldUp(name, sprite, color));
+            waiting.Enqueue(() => ItemSwap.ShowHeldUp(name, sprite, color, article));
             log.LogInfo($"[show] queued the hold-up for {name}");
         }
 

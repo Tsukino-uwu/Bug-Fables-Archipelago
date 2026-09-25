@@ -50,6 +50,10 @@ namespace BugFablesAP
         private static string shownName;
         private static Sprite shownSprite;
         private static Color? shownColor;
+        // "a"/"an" before the shown name: the game picks it per item when one is picked up (NPCControl.cs:5670-5690);
+        // Giveitem always uses its default (menutext[125]), which read "a Explorer Permit" on a hold-up (the user).
+        private static string shownArticle;
+        private static string pendingArticle;
         private static bool swapped;
         private static FieldInfo descWindowField;
 
@@ -240,12 +244,14 @@ namespace BugFablesAP
             shownSprite = null;
             shownColor = null;
             shownName = null;
+            shownArticle = null;
             if (location == -1 && pendingName != null && !badge && id == StandIn)
             {
                 location = DisplayOnly;
                 shownName = pendingName;
                 shownSprite = pendingSprite;
                 shownColor = pendingColor;
+                shownArticle = pendingArticle;
                 pendingName = null;
                 return;
             }
@@ -274,6 +280,7 @@ namespace BugFablesAP
             else if (IsOurs(info))
             {
                 DescribeOurs(info.ItemId, KindOf(info), out name, out sprite, out color);
+                shownArticle = ArticleOf(info.ItemId, KindOf(info));
                 if (info.Player.Slot != connection.OwnSlot)
                 {
                     name = info.Player.Name + "'s " + name;
@@ -319,6 +326,24 @@ namespace BugFablesAP
         private const int StandIn = 0;
         internal const int EmptyLine = -90000;
 
+        // The article the game uses for one of this world's items when it's picked up: an item's or key item's
+        // itemdata[0, id, 3], a medal's badgedata[id, 6] (NPCControl.cs:5670-5690). Null for berries and crystal berries,
+        // which keep the game's default.
+        internal static string ArticleOf(long itemId, int kind)
+        {
+            int gameId = ItemIds.GameId(itemId, kind);
+            try
+            {
+                return kind == ItemIds.MedalKind ? MainManager.badgedata[gameId, 6]
+                    : kind == ItemIds.MoneyKind || kind == ItemIds.CrystalKind ? null
+                    : MainManager.itemdata[0, gameId, 3];
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return null;
+            }
+        }
+
         // What a location of this world holds (a discovery just recorded): shown as that location's own find.
         internal static void ShowFoundAt(long at)
         {
@@ -327,8 +352,9 @@ namespace BugFablesAP
         }
 
         // A given look, nothing else: an item already received.
-        internal static void ShowHeldUp(string name, Sprite sprite, Color? color)
+        internal static void ShowHeldUp(string name, Sprite sprite, Color? color, string article)
         {
+            pendingArticle = article;
             pendingName = name;
             pendingSprite = sprite;
             pendingColor = color;
@@ -550,6 +576,10 @@ namespace BugFablesAP
                 return false;
             }
             MainManager.instance.flagstring[0] = shownName;
+            if (shownArticle != null)
+            {
+                MainManager.instance.flagstring[1] = shownArticle;
+            }
             if (shownColor.HasValue)
             {
                 Recolour(shownColor.Value);
