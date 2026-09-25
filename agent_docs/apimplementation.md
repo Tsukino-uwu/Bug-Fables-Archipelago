@@ -175,6 +175,11 @@ coupled, off by default) shuffles 508 doors with every area kept reachable; a ge
       become one-way connections in the logic, which must make sure you can leave where they put you; some happen only
       at some story points, and some can strand you. **The Warp button and fast travel stay outside the logic.** First
       step: list every such transfer from the data (the script dump and `event-triggers.py`), map, trigger and target.
+      **Listed (2026-09-25):** ScriptDump gained a column of the moving commands on each dialogue line (7 lines,
+      all `|warp|` or `|loadmap|`), and `dev-scripts/event-transfers.py` lists each event method's `LoadMap` calls and
+      targets from the decompiled code (88 calls in 63 events); `event-triggers.py` on those events says what starts
+      each. It found the bar's hatch (Event61) and the hideout cell (Events 108/109) at once (`MEASURED.md`,
+      "Transfers that aren't doors"). Next: sort them into chosen and forced, reading each event.
 2. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
    **Also wanted (the user, 2026-09-25): the basic moves as items**, a yaml option apart from the abilities: Vi's

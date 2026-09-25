@@ -32,6 +32,13 @@ namespace BugFablesAP
         {
             "checkmoney", "money", "setvar", "checkvar"
         };
+        // Commands that move the party to another map from a dialogue line (MainManager.cs:13262-13280): transfer and
+        // warp take a map id (or varN) and an optional position; loadmap reloads a map. Added 2026-09-25 to list every
+        // transfer that isn't a door (entrances like the bar's hatch, and places a scene sends you).
+        private static readonly HashSet<string> TransferCommands = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "transfer", "warp", "loadmap"
+        };
 
         // Returns true once it has run (successfully or not), so the caller stops asking.
         internal static bool TryRun(ManualLogSource log)
@@ -42,7 +49,7 @@ namespace BugFablesAP
             }
             string outPath = Path.Combine(Paths.BepInExRootPath, "bugfablesap-scriptdump.tsv");
             var sb = new StringBuilder();
-            sb.AppendLine("map\tline\titem_commands\tflag_commands\tmoney_commands");
+            sb.AppendLine("map\tline\titem_commands\tflag_commands\tmoney_commands\ttransfer_commands");
             int maps = 0, missing = 0, lines = 0;
             foreach (MainManager.Maps map in Enum.GetValues(typeof(MainManager.Maps)))
             {
@@ -59,6 +66,7 @@ namespace BugFablesAP
                     var items = new List<string>();
                     var flags = new List<string>();
                     var money = new List<string>();
+                    var transfers = new List<string>();
                     foreach (Match m in Token.Matches(rows[i]))
                     {
                         string cmd = m.Groups[1].Value;
@@ -75,20 +83,25 @@ namespace BugFablesAP
                         {
                             money.Add(tokenText);
                         }
+                        else if (TransferCommands.Contains(cmd))
+                        {
+                            transfers.Add(tokenText);
+                        }
                     }
                     // Lines that start an event are kept too: they're where story steps begin.
-                    if (items.Count > 0 || money.Count > 0 || flags.Exists(t => t.StartsWith("event,") || t.StartsWith("discovery,")))
+                    if (items.Count > 0 || money.Count > 0 || transfers.Count > 0 || flags.Exists(t => t.StartsWith("event,") || t.StartsWith("discovery,")))
                     {
                         lines++;
                         sb.Append(map).Append('\t').Append(i).Append('\t')
                           .Append(string.Join(" ", items.ToArray())).Append('\t')
                           .Append(string.Join(" ", flags.ToArray())).Append('\t')
-                          .Append(string.Join(" ", money.ToArray())).AppendLine();
+                          .Append(string.Join(" ", money.ToArray())).Append('\t')
+                          .Append(string.Join(" ", transfers.ToArray())).AppendLine();
                     }
                 }
             }
             File.WriteAllText(outPath, sb.ToString());
-            log.LogInfo($"[dump] {lines} item, money or event lines from {maps} maps ({missing} maps with no dialogue table) -> {outPath}");
+            log.LogInfo($"[dump] {lines} item, money, transfer or event lines from {maps} maps ({missing} maps with no dialogue table) -> {outPath}");
             return true;
         }
     }

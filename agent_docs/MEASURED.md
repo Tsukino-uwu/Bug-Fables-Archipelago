@@ -673,6 +673,19 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   "wrong way"?) and those leading into their own map; `SandCastleBasement` <-> `SandCastleMainRoom`'s basement doors
   (no door within 10 units of the arrival).
 
+## Transfers that aren't doors (2026-09-25, ScriptDump's transfer column, `dev-scripts/event-transfers.py`)
+
+- **Dialogue lines:** 7 lines move the party with `|warp,<map>[,x,y,z]|` or `|loadmap|` (`MainManager.cs:13262-13280`):
+  `BOLostSandsEntrance` 10, `DefiantRoot2` 38, `FarGrasslandsOutsideCave` 3, `Swamplands8` 4 and 7, `TermiteMainPlaza`
+  65, `BarrenLandsPinkSpider` 18. None uses `|transfer|`.
+- **Story events:** 88 `LoadMap` calls in 63 of `EventControl`'s event methods; 20-odd reload the current map. What
+  starts each: `event-triggers.py` on the listed events. Among them: **Event61, the bar's hatch** (to `UndergroundBar`,
+  started by `BugariaCommercial` line 32, the hatch examined); **Events 108 and 109, to `HideoutCell`** (108 is the
+  garden guards catching the party, the user's trip); **Event153, the boat** (seven harbours); **Event68**, three map
+  pairs chosen by an `entrance` flag (elevators, to read); Event196, a destination from a list chosen in a menu.
+- Not yet sorted into "chosen by the player" and "the game sends you" (the decision: `apimplementation.md`, Next,
+  the entrance randomizer's step 8).
+
 ## What the Explorer Permit opens (2026-09-24, code read and ScriptDump; the wiki lists four uses)
 
 - **The Outskirts gate:** `BugariaOutskirtsOutsideCity` line 31 asks for a key item, line 33 starts `Event17`
