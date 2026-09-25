@@ -50,7 +50,8 @@ On the game's main menu, choose **Archipelago**. The panel has:
   equipped, Hardest as if the save had the HARDEST code, without writing it into the save. Boss prize medals
   are handed out on every setting.
 - **Detector**: On (the default) acts as if the Detector medal were equipped, to help find items. Off leaves
-  it to the medal.
+  it to the medal. With the Archipelago mod enabled, the Detector (row or medal) also beeps on entering a room that
+  still has a check of any kind: an item on the ground, a gift or quest reward, a shop, a discovery.
 - **Archipelago**: Enabled keeps randomizer saves in their own folder, apart from your normal saves.
   The main menu shows it as "Archipelago (Enabled)" or "(Disabled)".
 - **Quality of life**: opens a second page of settings that speed up the game, all on by default: **Fast text**
