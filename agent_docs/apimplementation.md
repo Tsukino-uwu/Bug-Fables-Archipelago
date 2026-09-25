@@ -350,11 +350,15 @@ the *Starting Party Member* plan) plays through chapter 1 into chapter 2 (seen, 
    connections.
 4. **A full bag:** key items keep arriving, only ordinary items wait.
 5. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
-6. **Licence notices ship with the release** (the user, 2026-09-25). A player download will carry
-   `Archipelago.MultiClient.Net.dll`, `websocket-sharp.dll` and `Newtonsoft.Json.dll`, and their MIT licences
-   require each notice to go with them. There is no release packaging yet: `dev-scripts/stage-dev.ps1` stages
-   the DLLs for development only, without notices (checked 2026-09-25). Whatever builds the release zip puts
-   each licence file next to its DLL.
+6. **A release: three separate downloads** (the user, 2026-09-25). There is no release packaging yet;
+   `dev-scripts/stage-dev.ps1` stages for development only (checked 2026-09-25).
+   - **The mod:** a zip with the folder structure already made, so it drops into the game's root folder next
+     to the game's exe. Only the files the mod needs to work: `BugFablesAP.dll`, `Archipelago.MultiClient.Net.dll`,
+     `websocket-sharp.dll` and `Newtonsoft.Json.dll`, **with each library's licence notice next to it** (all three
+     are MIT, which requires it). BepInEx itself is not bundled: the player installs it first. Whether a subfolder
+     under `BepInEx/plugins` works is to be checked in BepInEx's source before choosing the layout.
+   - **The apworld:** `bug_fables.apworld`, packaged with the "Build APWorlds" launcher component (build step 1).
+   - **A yaml:** a player options file to start from.
 
 **Known issues:**
 
