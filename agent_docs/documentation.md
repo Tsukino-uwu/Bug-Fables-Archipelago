@@ -56,6 +56,10 @@ server, and items from the server arrive in the game once each.
 8. **A "Quality of life" page in the Archipelago panel** (the user, 2026-09-25): on/off rows that speed the game
    up and make it smoother: skips first, others later (a pause-menu warp back to the seed's start, say). Skip
    intro and Fast text (with a faster hold-to-skip) are confirmed on screen; battle tutorials next (step 10).
+   **Planned (the user, 2026-09-25): map fast travel**, apart from the Warp to Start button. On the pause menu's map
+   (window 6, which lists areas), pick an area you've been to and confirm (Yes / No) to travel to its save point
+   through the game's own map transfer. The game already records visited areas (`librarystuff[4, area]`, set by
+   `MainManager.UpdateArea`). Its own Quality of life row; the logic never counts on it, like the warp.
 
 ## The steps
 
