@@ -28,6 +28,7 @@ confirms on screen.
 - [What the Explorer Permit opens](#what-the-explorer-permit-opens-2026-09-24-code-read-and-scriptdump-the-wiki-lists-four-uses)
 - [All medals by source](#all-medals-by-source-2026-09-24-entity-dump-scriptdump-code-read-matched-to-the-bug-fables-wiki)
 - [What the mod's code relies on](#what-the-mods-code-relies-on-code-read-2026-09-24-and-2026-09-25-moved-here-from-code-comments-2026-09-25)
+- [Battles, for enemy shuffle — SPOILERS: boss ids](#battles-for-enemy-shuffle-2026-09-26-code-read-nothing-seen-in-game--spoilers-boss-ids)
 - [Quests: to measure](#quests-to-measure-when-quests-come-into-scope)
 - [Key items: to measure](#key-items-to-measure)
 
@@ -996,6 +997,51 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 - `SnakemouthFallRoom`'s `JumpShroom` (the bounce mushroom up to the pitfall room) requires 41 like `LoadingZoneDoorRoom` (kept_present). Used by `data/locations.json`.
 - The palace's own blockers `makiblocker1` and `makiblocker2` stay in place: the story goes on there (kept_open MM). Used by `data/locations.json`.
 - The Outskirts rocks' removal leaves `LoadZoneGoldenPath` still waiting for flag 41 on its own (scenery_hidden Base/BlockingRocks). Used by `data/locations.json`.
+
+## Battles, for enemy shuffle (2026-09-26, code read; nothing seen in game) — SPOILERS: boss ids
+
+- **One entry point:** every fight goes through `BattleControl.StartBattle(int[] enemyids, int stageid, int adv,
+  string music, NPCControl calledfrom, bool canescape)` (`BattleControl.cs:718`). A map enemy passes itself as
+  `calledfrom` with its `battleids` (`NPCControl.cs:5947`, `canescape: true`). A story fight passes `calledfrom:
+  null` with a literal id array from its event. The game's own random swap (`EnemyCheck`, `:703-716`) runs only for
+  map fights (`calledfrom == null || calledfrom.eventid <= 0`), then `StartData` snapshots the ids for a retry.
+- **The running event's id** is `MainManager.lastevent`: set first thing in `EventControl.StartEvent`, -1 in
+  `EndEvent` (`EventControl.cs:76`, `:177`).
+- **Scripted fights: 69 `StartBattle` calls in `EventControl.cs`** (listed with `grep -n "StartBattle("`). One event
+  can start several (Event40 three, Event163 four, Event200 two, Event124 five bounties), so a scripted fight is
+  identified by **its event and its original id array**, not the event alone. Event173 starts `{23, 51}` twice
+  (the same fight both times).
+- **A boss's reward doesn't depend on the enemy beaten.** The event waits `while (MainManager.battle != null)`, then
+  sets its flags and pays its prize by slot (`AddPrizeMedal(id)` or the `addprize` dialogue command,
+  `MainManager.cs:3981`, `:13751`). `prizeenemyids` is read only for the name in Artis's line
+  (`EventControl.cs:5739-5745`): with a swapped boss, Artis names the vanilla one (cosmetic).
+- **The game's own boss lists** (`EventControl.cs:24-42`): `bosslist` {2, 24, 46, 54, 69, 95, 41, 36, 35, 50, 55,
+  77, 98, 96, 90, 91, 92, -2}, `minibosslist` {21, 42, 40, 49, 31, 51, 34, 97, 85, 72, -1}, `minibosscard` (22 ids,
+  used for the card game and the bestiary). Used by the rematch machine below and by `GetRandomEnemy` (`:64-71`),
+  which excludes them and `excludeids`.
+- **The rematch machine (Event85) is the game's proof that each listed boss works as its own fight**
+  (`EventControl.cs:13598-13935`). Every boss in those lists starts from the same event, on **stage 16** (a neutral
+  stage, not the boss's own), with `canescape: true`. Its only per-boss setup is a switch: the id group (2 → {13};
+  41 → {20, 20, 41}; 72 → {27, 26, 72}; -1 → {3, 15}; -2 → {113, 114, 115}; 23/51 and 85/86 as pairs) and the music,
+  plus one flag reset for the first boss (`flagvar[11] = 0`, `flags[37] = false`). It runs with `flags[162]`
+  (hologram mode), which changes only the look, EXP and fleeing money (`BattleControl.cs:974`, `:6487`, `:30333`,
+  `:30411`; `MainManager.cs:6294`), not any enemy's actions.
+- **Events that reach into the running fight** (a swap there needs care):
+  - Event137 (id 69) adds `SurviveWith10` to `enemydata[0]` (`EventControl.cs:23137`). Only enemy 69's own action
+    removes it (`BattleControl.cs:18361-18470`), so another enemy in that slot could never die. **Not swappable.**
+  - Event182 (id 96) freezes `playerdata[2]` with `EventStop` and calls `SetLastTurns()` (`:30665-30671`), a
+    scripted fight. **Not swappable until read.**
+  - Event40 (three fights) and Event224 reach into the stage (`battlemap.transform.GetChild(...)`, `:6313`,
+    `:37599`); keeping the event's own stage keeps that safe.
+  - Event3 and Event6 (tutorial fights) move entities into the stage and set `tempdata` / `disablespy`.
+  - Event173 calls `StartData({23, 51}, ...)` itself (`:29004`, `:29251`), overwriting the retry snapshot.
+  - Events that test `battleresult` for a scripted loss or a retry: 30, 40, 90, 120, 156, 163, 192, 207, 210, 224.
+- **Code tied to an enemy's id** (from the survey, not each read): `eventondeath` (column 26) sends a defeat into
+  `EventDialogue` (`BattleControl.cs:1972`, `:30719-30731`); setup by id at `:976+` (VenusBoss's extra entity,
+  fixed positions for BeeBoss, SandWyrmTail, Pitcher); `GetEnemyData` swaps some ids' data (`MainManager.cs:
+  6157-6191`); `NPCControl.StartBattle` forces "Battle3" music for ids 25-28 (`NPCControl.cs:5932`).
+- **Still to measure:** each scripted event's fight, one by one (safe to swap in, safe to swap out); what a map
+  enemy's `battleids` hold across the EntityDump (group sizes); which enemies a one-member party can't hit.
 
 ## Quests: to measure (when quests come into scope)
 

@@ -92,6 +92,21 @@ be wrong.
    default (five hard optional bosses; progression shouldn't sit behind them unless the player asks). Today they are
    not locations and pay their vanilla rewards. First, measure what each bounty pays and when (on the spot or on
    reporting back); then the logic for reaching each boss. Its own build step when built.
+14. **Enemy shuffle, a yaml option** (the user, 2026-09-26): *Enemy Shuffle*, `off / enemies_only / bosses_only /
+   both / chaos`, off by default. It changes who you fight at each place, fixed by the seed, never at runtime;
+   `both` swaps enemies with enemies and bosses with bosses, `chaos` puts them in one pool. Each enemy on each map
+   gets its own encounter. A boss's reward stays with its place: Snakemouth Den pays Snakemouth Den's prize,
+   whatever boss was there. Separate from enemy checks (build step 10). First the fight only; the enemy seen on
+   the map matching its fight is a later step (the user wants it). First, measure which bosses can be swapped at
+   all (code tied to a boss), and which enemies a small party can't hit (Starting Party Member). The logic never
+   puts a fight where the party it guarantees can't win it. Its own build step when built.
+15. **Enemy scaling, a panel setting** (the user, 2026-09-26): *Enemy Scaling* on the Quality of life page (Next 10),
+   `off / party_level / chapter / artifacts`, on by default (`party_level`), up and down. A panel row, not the yaml:
+   it ties to no check, so the player can change it from the main menu if the game feels too easy or too hard.
+   Enemy shuffle stays in the yaml so a slot plays the same for anyone on it. Scaling balances an area met earlier or
+   later than vanilla would (open world, the entrance randomizer) and is not a challenge setting: Normal / Hard /
+   Hardest stays on top of the scaled numbers. Each enemy needs a home level (where it first appears), from a real
+   source. Only while Archipelago is enabled. Its own build step when built.
 
 **Known issues:**
 

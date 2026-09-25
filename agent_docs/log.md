@@ -588,3 +588,26 @@ Newest last. What was tried, what happened, what the user said.
   quests open from the start, still done by hand, each with its own logic). Also: every board lists every quest in a
   seed (built, not yet seen), bounties as a toggle off by default (Next 13), the old book's library step as a logic
   event (the user described the chain), and step events follow their quest's category.
+
+## 2026-09-26: enemy shuffle and enemy scaling designed
+
+- **Decided by the user:**
+  - *Enemy Shuffle* is a yaml option, `off / enemies_only / bosses_only / both / chaos`, off by default. It is in
+    the yaml so a slot plays the same for anyone on it. Each map enemy gets its own encounter. A boss's reward
+    stays with its place.
+  - `chaos` puts bosses and ordinary enemies in one pool. On the name: I first offered `all` / `mixed`, and the
+    user found them vague. The user then picked the option whose description said `chaos`, but I had labelled it
+    `any_fight_any_enemy`, used the label, and got it wrong twice before asking plainly. Lesson: an option's label
+    and its description must name the same thing.
+  - The fight is shuffled first. The enemy seen on the map matching its fight comes later (the user wants it).
+  - *Enemy Scaling* is a panel row on the Quality of life page, not the yaml, on by default (`party_level`), up
+    and down. It ties to no check, so the player changes it from the main menu. Normal / Hard / Hardest stays on
+    top as the challenge setting. At first I planned it as a yaml option; the user moved it.
+  - Written as Next 14 and 15.
+- **Measured (code read, MEASURED.md "Battles, for enemy shuffle"):**
+  - A boss's prize and story flags don't depend on the enemy beaten; `prizeenemyids` only names the boss in
+    Artis's line.
+  - The rematch machine (Event85) fights every boss in the game's `bosslist` / `minibosslist` on one neutral
+    stage, so those bosses work outside their story event.
+  - Two story fights change the boss after it starts (Event137 and Event182), so they can't be swapped yet.
+  - A scripted fight is keyed by its event and its original id array: one event can start several fights.
