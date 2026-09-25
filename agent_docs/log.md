@@ -582,3 +582,9 @@ Newest last. What was tried, what happened, what the user said.
   CLAUDE.md's test for an own step (a yaml option or panel setting, a new kind of location, or a change to how the
   game plays in a seed), and `.githooks/doc-coverage.py` in pre-commit. Its first run found `location_shops`,
   `RandomizerEnabled` and six Debug settings written up nowhere; development.md now has every Debug setting in one table.
+- **Quests measured in game** (the user gave permission to start the game): `QuestDump` ran at the title screen,
+  the game was closed after (nothing left running), and the dump switched off again. 63 quests; no accept flag does
+  more than its own quest, so all quests open on the board from a new file is safe for the save (the user's plan:
+  quests open from the start, still done by hand, each with its own logic). Also: every board lists every quest in a
+  seed (built, not yet seen), bounties as a toggle off by default (Next 13), the old book's library step as a logic
+  event (the user described the chain), and step events follow their quest's category.

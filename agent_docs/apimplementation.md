@@ -83,7 +83,11 @@ be wrong.
    quests, only a shorter way. Every board lists bounties too (built, build step 9); next, the house's board from
    the start. **Decided (the user, 2026-09-25): every quest on the board from a new file**, the quests themselves
    still to do, each with its own logic (reaching its NPC, what it needs), so quests can be done along the way. First
-   the `QuestDump` (a Debug setting): whether any quest's unlock conditions or accept flag do more than the quest.
+   the `QuestDump` (a Debug setting). **Dumped 2026-09-25** (`MEASURED.md`, "Every board quest, dumped"): no quest's
+   accept flag does anything outside its own quest, so opening them all is safe for the save; the unlock conditions
+   are story flags and visited areas, which the mod would skip by adding every quest to the open list on a new file
+   (six are added only by a dialogue, not by the table). Each quest's logic (its NPC's map, which the table lists, and
+   any items) is still to write, per quest, before its locations exist.
 13. **Bounties as locations, a yaml toggle** (the user, 2026-09-25): *Shuffle Bounties*, its own category, off by
    default (five hard optional bosses; progression shouldn't sit behind them unless the player asks). Today they are
    not locations and pay their vanilla rewards. First, measure what each bounty pays and when (on the spot or on

@@ -416,8 +416,73 @@ slot of each can hold the mod's own state in the game's own save, with no new fo
   on a board (11-17 the chapter entries, 26 Leif, 30 Bee), so 54 board quests, 5 of them the bar's bounties. A quest
   joins the open list when its row in the `Data/QuestChecks` table is met (flags, or a visited area as a negative
   number, `MainManager.CheckQuests`, `:4027`), or by a dialogue command (`|addquest|`, `|addboard|`, `:13715`,
-  `:13839`). **Not yet read:** that table, and each quest's `boardquestdata` row (the flag taking it sets): both are
-  text assets, to dump once in game before deciding whether all quests can be open, or taken, from the start.
+  `:13839`).
+- **Every board quest, dumped** (2026-09-25, `QuestDump` in the running game, joined with EntityDump and the code).
+  `BoardData` column 3 is the flag taking the quest sets (none for the bounties and a few others, whose NPCs check the
+  quest lists instead); column 5 is its difficulty, 1 to 3. The unlock is its `QuestChecks` row (negative: a visited
+  area; 0: never automatic, a dialogue adds it). **No accept flag does anything outside its own quest:** most are read
+  only by the quest's NPCs; the code's five (131, 186, 187, 197, 423) are the quest's own state, checked while it runs
+  (the chefs' dish checks, `EventControl.cs:574-597`) and cleared when it ends. Maps are where an entity requires,
+  hides on or talks by that flag.
+
+  | Id | Quest | Accept flag | Unlock | Maps using the flag |
+  |---|---|---|---|---|
+  | 1 | InnQuest | 3 | area 1 visited | BugariaMainPlaza, FactoryProcessingPump |
+  | 2 | ChuckQuest | 44 | area 1 visited | ChucksAbode |
+  | 3 | TheaterQuest | 47 | flags 130 | BugariaTheater |
+  | 4 | ToyQuest | 50 | area 1 visited | BugariaMainPlaza |
+  | 5 | LadybugQuest | 53 | flags 348 | BugariaOutskirtsOutsideCity |
+  | 6 | UndergroundBar | 131 | flags 130 | BugariaCommercial, RubberPrisonGiantLairBridge |
+  | 7 | CableCar | 182 | flags 76 | GoldenHillsCableCar, GoldenHillsPath2 |
+  | 8 | SeedlingKing | none | area 1 visited | - |
+  | 9 | FalseMonarch | none | area 1 visited | - |
+  | 10 | MotherChomper | none | area 1 visited | - |
+  | 18 | Crisbee | 187 | area 10 visited | - |
+  | 19 | Kut | 186 | area 10 visited | - |
+  | 20 | Fry | 197 | flags 191 + 192 | BugariaCommercial |
+  | 21 | Sandwyrm | none | area 1 visited | - |
+  | 22 | Butomo | 320 | flags 18 | DefiantRoot3 |
+  | 23 | PeacockSpider | 146 | area 1 visited | - |
+  | 24 | Tanjerin | 272 | flags 18 + 139 | GoldenSettlement3 |
+  | 25 | ZaspDoll | 188 | flags 298 | DefiantRoot3 |
+  | 26 | Leif | none | a dialogue adds it | - |
+  | 27 | LibraryantRed | none | a dialogue adds it | - |
+  | 28 | Madeleine1 | 190 | flags 299 | GoldenHillsDungeonEntrance |
+  | 29 | Venus | 184 | flags 191 + 192 + 278 | GoldenSettlement1 |
+  | 30 | Bee | none | a dialogue adds it | - |
+  | 31 | PowerPlant | 226 | flags 225 | GoldenSettlement2 |
+  | 32 | CardGame | none | a dialogue adds it | - |
+  | 33 | CicadaBook | 240 | area 1 visited | BugariaResidential |
+  | 34 | Vivi | 256 | area 10 visited | AntTunnels, AntMinesBreakRoom |
+  | 35 | MenderQuest | 324 | flags 348 | HoneyFactoryEntrance, HoneyFactoryWorkerRooms, FactoryProcessingMalbee |
+  | 36 | Kali | 265 | flags 18 | DefiantRoot3 |
+  | 37 | Isau | 266 | flags 19 | DefiantRoot1 |
+  | 38 | Bomby | 307 | flags 86 | BugariaResidential |
+  | 39 | Madeleine2 | 375 | flags 200 + 347 | FGOutsideSwamplands |
+  | 40 | GenEri | 423 | flags 300 + 18 | BugariaCommercial, RubberPrisonGiantLairBridge |
+  | 41 | Mun | 422 | flags 345 + 427 | BugariaResidential |
+  | 42 | BanditHunt | 424 | flags 300 | DefiantRoot3 |
+  | 43 | ArtBee | 425 | flags 384 | BeehiveMainArea |
+  | 44 | TermiteLunch | 426 | flags 409 | TermiteIndustrial |
+  | 45 | Alex | 428 | flags 379 | BugariaResidential |
+  | 46 | Mayor | 556 | flags 276 + 348 | DefiantRoot1 |
+  | 47 | SeedlingHunt | 473 | flags 409 | TermiteIndustrial |
+  | 48 | Layna | 464 | flags 409 | TermiteIndustrial |
+  | 49 | Eetl | 479 | area 1 visited | BugariaOutskirtsOutsideCity |
+  | 50 | Farmer | 482 | flags 86 | GoldenSettlement2 |
+  | 51 | RizSis | 510 | a dialogue adds it | FishingVillage |
+  | 52 | Wizard | none | a dialogue adds it | - |
+  | 53 | Eremi | 570 | flags 300 | DefiantRoot1 |
+  | 54 | MoleCricket | none | a dialogue adds it | - |
+  | 55 | Maki | 607 | flags 555 | AntBridge |
+  | 56 | BadBook | 617 | area 1 visited | AntPalaceLibrary |
+  | 57 | WaspTwins | 637 | flags 347 | MetalIsland1 |
+  | 58 | BlacksmithGuy | 634 | flags 39 | DefiantRoot3 |
+  | 59 | WorkerTermite | 624 | flags 409 | TermiteMainPlaza |
+  | 60 | Beetle | none | a dialogue adds it | - |
+  | 61 | Rebecca | 700 | flags 555 + 454 + 136 | AntPalaceWarRoom |
+  | 62 | Roach | 702 | flags 555 | WaspKingdomThrone |
+  | 63 | StratosDelilah | 705 | flags 555 + 612 + 231 | UndergroundBar |
 
 ## Input (2026-09-24)
 
