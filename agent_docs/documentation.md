@@ -552,6 +552,8 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,
    `NPCControl.cs:5461`), and it lies on the map left behind, so the mod reads it from that map's entity table at the
    positions the game's parser uses, and hands those spots to `TransferMap`.
+   **Seen (the user, 2026-09-25): "looks perfect"**: a new file goes from the main menu straight to the town's gate
+   from the Outskirts, with Vi and Kabbu and the first check's item, no slides, talk, fight or building on the way.
    **The rule since (the user, 2026-09-25):** a scene that gives an item may be skipped *as long as the item can still
    be received*, and fewer cutscenes are preferred, as an option at least. So a skip now has to keep every check the
    scene holds (sent by the mod, or moved to something the player still does). Next candidate, the user's idea: the
