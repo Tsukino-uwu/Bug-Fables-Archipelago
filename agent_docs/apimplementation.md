@@ -115,8 +115,11 @@ be wrong.
    starburst. One icon per trap, so the player knows what's coming. The user's examples: the Mistake medal poisons
    the party at the start of the next fight; a crystal berry (or something icy) freezes the player in an ice block
    for 1-3 seconds. Each trap: only with Archipelago on, never a soft-lock (a freeze always ends, even in a scene),
-   nothing written to the save the game wouldn't write, never in logic. First measure how the game applies poison at
-   a fight's start and its own freeze on the map. A yaml option (how many traps), so its own build step when built.
+   nothing written to the save the game wouldn't write, never in logic. The game's own effects to reuse (code read
+   2026-09-26, not yet measured): fight conditions (`MainManager.BattleCondition`: Poison, Freeze, Numb, Sleep,
+   Inked, Sticky and more), map hazards (`Hazards.cs`, three `HazardAction` kinds, likely the knockback), falling
+   off a map (put back at `lastpos`, `PlayerControl.cs:688-691`), and ice (`EntityControl.inice`, set by ice maps).
+   First measure how each is applied. A yaml option (how many traps), so its own build step when built.
 
 **Known issues:**
 
