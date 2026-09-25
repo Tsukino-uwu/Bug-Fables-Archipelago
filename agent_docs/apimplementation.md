@@ -134,6 +134,16 @@ Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026
    destination, seen on screen), then every door, then the room-by-room logic that removes the experimental label.
 2. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
+   **Also wanted (the user, 2026-09-25): the basic moves as items**, a yaml option apart from the abilities: Vi's
+   beemerang, Kabbu's horn, Leif's freeze, and jumping, each unusable until its item arrives. Proposed: *Shuffle Basic
+   Moves* (the three field moves) and *Shuffle Jump* (its own toggle: it gates the most), both off by default. **The mod
+   side is small** (code read, 2026-09-25): the three moves are one method, `PlayerControl.DoActionTap`
+   (`PlayerControl.cs:1008`), switching on the leader's `animid` (0 Vi, 1 Kabbu, 2 Leif), so a prefix can refuse the move;
+   the game itself takes the beemerang away in the bandit hideout (flag 11, `case 0` checks it), so Vi without it is a
+   state the game already knows. The jump is its own method, `DoJump`, called from the button it shares with talking
+   (`PlayerControl.cs:372-392`), so it can be refused without touching talk. **The logic is the cost:** every spot that
+   needs a move (a ledge, a beemerang switch, grass, water to freeze) becomes a rule, seen room by room, and the start
+   must have checks that need none of them.
    **Later idea, a yaml option (the user, 2026-09-25): party members as items.** Start with one random member and
    find the other two, each its own item, on top of the abilities. Opt-in only: fighting with one or two changes
    the game a lot. Open questions: the story may need all three after chapter 1, and adding a member outside the
