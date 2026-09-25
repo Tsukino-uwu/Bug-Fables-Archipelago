@@ -380,6 +380,20 @@ namespace BugFablesAP
                         log.LogInfo(guiLog.ToString());
                         return "gui logged";
                     case "addleif": return AddLeif();
+                    case "who":
+                    {
+                        // Every character drawn as a party member (animid 0 Vi, 1 Kabbu, 2 Leif): what it is and what it
+                        // follows (2026-09-25: a second Leif copying the player's moves with Leif the one member).
+                        var whoLog = new System.Text.StringBuilder("[dev] who:");
+                        foreach (EntityControl e in UnityEngine.Object.FindObjectsOfType<EntityControl>().Where(e => e.animid >= 0 && e.animid <= 2))
+                        {
+                            whoLog.Append($"\n  {e.name} animid {e.animid} at {e.transform.position}, parent {(e.transform.parent != null ? e.transform.parent.name : "none")}, "
+                                + $"tag {e.tag}, following {(e.following != null ? e.following.name : "none")}, tempfollower {e.tempfollower}, "
+                                + $"playerentity {e.playerentity}, npcdata {(e.npcdata != null ? e.npcdata.name : "none")}, active {e.gameObject.activeInHierarchy}");
+                        }
+                        log.LogInfo(whoLog.ToString());
+                        return "who logged";
+                    }
                     case "cam":
                     {
                         // What the camera follows and why (2026-09-25: broken outside the starting house with one member).

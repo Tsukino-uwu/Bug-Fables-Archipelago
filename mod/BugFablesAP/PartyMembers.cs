@@ -98,6 +98,7 @@ namespace BugFablesAP
             {
                 return;
             }
+            RemoveStrayPlayers(mm);
             foreach (int id in mm.playerdata.Select(p => p.trueid).ToArray())
             {
                 if (!mm.extrafollowers.Contains(id))
@@ -116,6 +117,37 @@ namespace BugFablesAP
                     }
                 }
                 log.LogInfo($"[members] the story made member {id} a follower while in the party: taken off the follower list, {removed} follower copy removed");
+            }
+        }
+
+        // Only one character carries the player's controls (the user, 2026-09-25: a second Leif copying every move). The
+        // spider fight's scene calls ChangeParty({0, 1}) then the no-argument SetPlayers() (EventControl.cs:1711-1712), which
+        // makes new player characters without removing the old ones (MainManager.SetPlayers()); in the story the old ones
+        // are the scene's own actors, but with one member those are stand-ins, and the old Leif stayed, controls and all
+        // (the console's who: two "Player 0", both playerentity, tag Player). Outside scenes, twice a second, any other
+        // character with a PlayerControl than the leader's goes.
+        private static float nextSweep;
+
+        private static void RemoveStrayPlayers(MainManager mm)
+        {
+            if (mm.inevent || mm.message || MainManager.battle != null || Time.realtimeSinceStartup < nextSweep)
+            {
+                return;
+            }
+            nextSweep = Time.realtimeSinceStartup + 0.5f;
+            EntityControl leader = mm.playerdata.Length > 0 ? mm.playerdata[0].entity : null;
+            if (leader == null)
+            {
+                return;
+            }
+            foreach (PlayerControl control in UnityEngine.Object.FindObjectsOfType<PlayerControl>())
+            {
+                EntityControl stray = control.GetComponent<EntityControl>();
+                if (stray != null && stray != leader && !mm.playerdata.Any(p => p.entity == stray))
+                {
+                    log.LogInfo($"[members] a stray player character ({stray.name} at {stray.transform.position}, animid {stray.animid}) removed; the leader is {leader.name}");
+                    UnityEngine.Object.Destroy(stray.gameObject);
+                }
             }
         }
 
