@@ -40,6 +40,9 @@ namespace BugFablesAP
         // Dev only (console `enemylook`): every ordinary map enemy looks like this enemy id; -1 off.
         internal static int LookTest = -1;
 
+        // Dev only (console `enemyfight`): every map fight is this list of enemy ids; null off.
+        internal static int[] FightTest;
+
         // After the map builds its entities and before their Start, which sets up the model from animid.
         private static void AfterCreate(MapControl __instance)
         {
@@ -77,6 +80,13 @@ namespace BugFablesAP
 
         private static void BeforeBattle(ref int[] enemyids, NPCControl calledfrom)
         {
+            if (FightTest != null && calledfrom != null && calledfrom.entitytype == NPCControl.NPCType.Enemy
+                && randomizerOn != null && randomizerOn())
+            {
+                log.LogInfo($"[enemies] fight test: {string.Join(" ", enemyids)} -> {string.Join(" ", FightTest)}");
+                enemyids = (int[])FightTest.Clone();
+                return;
+            }
             Dictionary<string, int[]> swaps = connection?.EnemySwaps;
             if (calledfrom == null || calledfrom.entitytype != NPCControl.NPCType.Enemy || swaps == null || swaps.Count == 0
                 || randomizerOn == null || !randomizerOn() || MainManager.map == null)

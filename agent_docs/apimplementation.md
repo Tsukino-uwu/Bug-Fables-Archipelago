@@ -1235,6 +1235,12 @@ set (the enemy table's column 0, the same value the rematch machine uses). With 
 `BugariaOutskirtsEast1`, the three map enemies looked like the spider; the fight was still the seed's. **The movement
 stays the original's**: it comes from the map enemy's own row in the map data, so Spuder burrowed like the Underling
 it replaced. So the real step copies an enemy's movement from a map where it appears naturally, not only its look.
+**A boss from a map enemy, look and fight (2026-09-26, seen by the user):** with `enemylook 46` and
+`enemyfight 46 9 0` (a second dev command: every map fight starts with those ids), the Outskirts enemies looked like
+the Bee Boss, and touching one started a fight with the Bee Boss, a Seedling and a Cordyceps Ant. So a boss can be
+shown and fought from a map enemy, which `chaos` needs. **Decided (the user): the map model is the strongest enemy in
+its fight**, so the player knows what they're walking into: a boss if the fight has one, else the highest base HP
+(the enemy table dump). Fixed data, so the seed decides it and sends it with each fight.
 **Wanted (the user):** a Quality of life row, *Enemy movement: their own / the original's*, default their own; the
 original's is there for fun ("looks fun when something does something else than the model is supposed to").
 

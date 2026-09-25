@@ -269,6 +269,14 @@ namespace BugFablesAP
                         }
                         EnemyShuffle.LookTest = parts[1] == "off" ? -1 : int.Parse(parts[1]);
                         return StartWarp(MainManager.map.mapid, -1) + $" (enemy look {parts[1]})";
+                    case "enemyfight":
+                        // A test: every map fight starts with these enemy ids.
+                        if (parts.Length < 2)
+                        {
+                            return "enemyfight <enemy id> [id...] | off";
+                        }
+                        EnemyShuffle.FightTest = parts[1] == "off" ? null : parts.Skip(1).Select(int.Parse).ToArray();
+                        return parts[1] == "off" ? "map fights back to the seed's" : "map fights now: " + string.Join(" ", parts.Skip(1).ToArray());
                     case "nudge": return Nudge(parts);
                     case "items": return Items();
                     case "tree": return Tree();

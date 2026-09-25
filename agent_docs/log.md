@@ -664,3 +664,6 @@ Newest last. What was tried, what happened, what the user said.
   `BugariaOutskirtsEast1` with its three enemies as Spuder. The user saw the spider on the map, and the fight was
   still the seed's. The movement stayed the Underling's (it burrowed), because movement comes from the map data,
   not the look. The user liked it: a Quality of life row for the original's movement, default the enemy's own.
+- **A boss from a map enemy** (the user asked, as a test). `enemylook 46` and `enemyfight 46 9 0` showed the Bee Boss
+  on the map and started a fight with the Bee Boss, a Seedling and a Cordyceps Ant. The user confirmed both.
+  Decided: the map model is the fight's strongest enemy (a boss first, else the highest base HP).
