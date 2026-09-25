@@ -133,6 +133,7 @@ namespace BugFablesAP
         private const int OpeningEvent = 16;
         private const long OpeningLocation = 7_720_001; // Outskirts: Maki and Eetl's Gift (apworld id 1)
         private static bool openingPending;
+        private static bool openingFailed; // one try per session: a failure is logged, never retried every frame
 
         private static void RunOpening()
         {
@@ -260,10 +261,26 @@ namespace BugFablesAP
                 return;
             }
             bool on = randomizerOn();
-            if (openingPending && MainManager.player != null && !mm.inevent && !mm.message && MainManager.battle == null)
+            // Not only when its trigger is walked into: as soon as the player is free on the map with flag 15 unset (the user,
+            // 2026-09-25, stood by Maki waiting, the trigger looking like the scene's start). Also covers a file saved there.
+            if (on && SkipCutscenes.Value && !openingPending && !openingFailed && MainManager.map != null && MainManager.map.mapid.ToString() == OpeningMap
+                && !mm.flags[15] && mm.flags[691])
+            {
+                openingPending = true;
+                log.LogInfo("[qol] the opening is due (flag 15 unset on the starting map): doing it on the next free frame");
+            }
+            if (openingPending && MainManager.player != null && !mm.inevent && !mm.message && !mm.minipause && MainManager.battle == null)
             {
                 openingPending = false;
-                RunOpening();
+                try
+                {
+                    RunOpening();
+                }
+                catch (Exception e)
+                {
+                    openingFailed = true;
+                    log.LogError($"[qol] opening failed: {e}");
+                }
             }
             bool slides = on && ((SkipIntro.Value && InIntroSlides()) || InFastScene());
             if (slides)
