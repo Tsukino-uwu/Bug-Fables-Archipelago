@@ -553,7 +553,9 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    test start, whose warp moved it away. The opening now stands the party where the scene would have. Seen (the user):
    right spot, but the fade-in first showed the spawn point, then a jump: the opening runs a few frames after the scene's
    end, and the fade-in starts at that end. So the scene's end (the mod's) moves the party there and snaps the camera
-   before the fade-in. Not yet seen.
+   before the fade-in. Seen with only the first half loaded (the user): the right spot, then a snap back once the opening
+   ran, since it waits for the fade-in to end and the player can walk during it. So the opening no longer places anyone:
+   it uses where the player stands. Not yet seen.
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,
