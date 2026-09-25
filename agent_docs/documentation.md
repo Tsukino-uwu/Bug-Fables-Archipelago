@@ -556,6 +556,10 @@ item entity on the counter (`NPCControl.SetBadgeShop`), looking at one opens its
 shopkeeper's dialogue, whose script checks the money, pays, removes the medal from the stock and gives it
 (`giveitem`). So: the shelf shows the seed's item's sprite; while the description box and the buy prompt are built,
 the medal table briefly holds the seed item's name and description; the `giveitem` is swapped like a gift; and the
-check is the medal leaving the shop's stock, which the save keeps (no "bought" flag exists). Built, not yet seen.
+check is the medal leaving the shop's stock, which the save keeps (no "bought" flag exists). **Seen (the user,
+2026-09-25):** Merab's shelf showed the seed's items (two books, a leaf, a mushroom); buying the Mushroom Gummies at
+medal 12's slot held them up, kept Sleep Resistance out, sent *Medal Shop 4* when medal 12 left her stock, and the
+server's Mushroom Gummies arrived. On joining the seed, two medals bought earlier (before shops were locations) sent
+their checks from the stock alone.
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page), `ShopSwap.cs`.*
