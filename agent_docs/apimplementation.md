@@ -46,6 +46,8 @@ seed's (the mod guide, step 9).
    find the other two, each its own item, on top of the abilities. Opt-in only: fighting with one or two changes
    the game a lot. Open questions: the story may need all three after chapter 1, and adding a member outside the
    story's own event hasn't worked yet (log.md, 2026-09-24: `ChangeParty` left Leif without a character).
+   Scenes that need a particular member must then become rules: the horn tutorial near Snakemouth (Event10, a
+   location) can't be finished without Kabbu's horn (the user, 2026-09-25).
    **Journal locations, each its own yaml option (the user, 2026-09-25).** The journal is `librarystuff[type, n]`,
    set through `MainManager.UpdateJounal`, so a check can be "this entry became true", with no item to swap.
    *Shuffle Discoveries* comes first (the simplest). **Built 2026-09-25**, opt-in (off by default): a location
