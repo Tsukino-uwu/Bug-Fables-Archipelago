@@ -8,9 +8,10 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // The panel's "Quality of life" page (the user, 2026-09-25: a sub-menu of on/off helper rows). The rows so far only
-    // change how fast things play out, never what the game gives or where: no flag, item or party is touched here. Like every panel setting, nothing happens while the Archipelago mod is disabled. Every row is on by
-    // default (the user, 2026-09-25).
+    // The panel's "Quality of life" page (the user, 2026-09-25: a sub-menu of on/off rows that speed the game up and
+    // make it smoother). The rows so far only change how fast things play out, never what the game gives or where: no
+    // flag, item or party is touched here. Like every panel setting, nothing happens while the Archipelago mod is
+    // disabled. Every row is on by default (the user, 2026-09-25).
     internal static class QualityOfLife
     {
         internal static ConfigEntry<bool> FastText;
