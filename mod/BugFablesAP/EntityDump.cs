@@ -20,6 +20,8 @@ namespace BugFablesAP
         private const int InsideId = 178;
         // Fields 175-177: emoticonoffset, whose x on a door is the jump on arrival.
         private const int Position = 6, EmoticonOffset = 175;
+        // An enemy's encounter: a count, then up to four enemy ids.
+        private const int BattleIds = 166;
 
         internal static bool TryRun(ManualLogSource log)
         {
@@ -36,7 +38,7 @@ namespace BugFablesAP
         {
             string outPath = Path.Combine(Paths.BepInExRootPath, "bugfablesap-entitydump.tsv");
             var sb = new StringBuilder();
-            sb.AppendLine("map\tindex\tname\tentitytype\tobjecttype\tinteract\tanimid\teventid\trequires\tlimit\tdata\tdialogues\tregionalflag\tactivationflag\tinsideid\tvectordata\tposition\tjump");
+            sb.AppendLine("map\tindex\tname\tentitytype\tobjecttype\tinteract\tanimid\teventid\trequires\tlimit\tdata\tdialogues\tregionalflag\tactivationflag\tinsideid\tvectordata\tposition\tjump\tbattleids");
             int maps = 0, rows = 0, bad = 0;
             foreach (MainManager.Maps map in Enum.GetValues(typeof(MainManager.Maps)))
             {
@@ -67,7 +69,8 @@ namespace BugFablesAP
                           .Append(f[InsideId].Trim()).Append('\t')
                           .Append(List(f, VectorCount, 3)).Append('\t')
                           .Append(f[Position].Trim()).Append(':').Append(f[Position + 1].Trim()).Append(':').Append(f[Position + 2].Trim()).Append('\t')
-                          .Append(f[EmoticonOffset].Trim()).AppendLine();
+                          .Append(f[EmoticonOffset].Trim()).Append('\t')
+                          .Append(List(f, BattleIds, 1)).AppendLine();
                         rows++;
                     }
                     catch (Exception e)

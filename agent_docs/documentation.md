@@ -211,6 +211,10 @@ folder; the facts drawn from them go into `MEASURED.md`.
 
 *Code: `EntityDump.cs` (`TryRun`), switched on by `EntityDump` in the config's Debug section.*
 
+**Each enemy's encounter, for enemy shuffle** (2026-09-26): a map enemy's fight is the list of enemy ids in its
+entity row (`battleids`: a count, then up to four ids), which the dump didn't write. It now writes it as a last
+column, `battleids`, so the scripts that read columns by name are unchanged. Built, not yet run.
+
 
 **Scenery switched by flags** (2026-09-25): a door can be two things, a load-zone entity and a model in the map's
 scenery that opens by a flag of its own. The scenery isn't an entity, so the entity dump can't see it. The map dump
