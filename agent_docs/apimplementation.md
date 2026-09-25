@@ -127,7 +127,13 @@ be wrong.
    ordinary map fights change size. A boss or special fight is one unit of several slots (the Sand Wyrm's head and
    tail, Mother Chomper with two Fly Traps, the Wasp General's squad, Zasp and Mothiva, Cenn and Pisci, Stratos and
    Delilah, Maki's team; the rematch machine's switch lists them) and always moves whole, as the shuffle already
-   moves whole id lists. Built after enemy scaling, so a bigger group stays fair. Its own build step when built.
+   moves whole id lists; a fight is never two bosses, nor a boss mixed with ordinary enemies. Built after enemy
+   scaling, so a bigger group stays fair. **First measure every summoner with a full field** (code read 2026-09-26:
+   24 `SummonEnemy` calls; body parts such as the Sand Wyrm's tail 99, the Everlasting King's tablets and keys
+   101-103, the Zombie Roach's 59/60, Pisci's 100, the Pitcher's vines 104; bosses calling helpers; ordinary summoners
+   such as Burglar, Wasp Healer, the Leafbugs, Bloatshroom, Chomper Brute, Primal Weevil). Some check the count first,
+   others place at fixed spots or search for space; a full field could fail the summon quietly or hang the fight.
+   Its own build step when built.
 
 **Known issues:**
 
