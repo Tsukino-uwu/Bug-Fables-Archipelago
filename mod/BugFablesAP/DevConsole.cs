@@ -90,8 +90,11 @@ namespace BugFablesAP
 
         // Dev only (the user, 2026-09-24: fights are tedious to test through): while on, every hit on an enemy is at
         // least 99 before the game's own defence and the rest of the calculation. The party is untouched; the game's
-        // own test is the target's "Player" tag (BattleControl.cs:7295). Off by default, toggled with "onehit".
-        private static bool oneHit;
+        // own test is the target's "Player" tag (BattleControl.cs:7295). Kept in the config ([Debug] OneHit, off in the
+        // code) so it survives reloads (the user, 2026-09-25: fights kept coming with the cheat gone after a reload);
+        // "onehit" flips the setting.
+        internal static BepInEx.Configuration.ConfigEntry<bool> OneHitSetting;
+        private static bool oneHit => OneHitSetting != null && OneHitSetting.Value;
 
         // infjump: each press of the jump button in mid-air jumps again, through the game's own EntityControl.Jump
         // (the height and sound of a normal jump, EntityControl.cs:4598, PlayerControl.DoJump). The game's own jump
@@ -295,7 +298,13 @@ namespace BugFablesAP
                     case "items": return Items();
                     case "tree": return Tree();
                     case "infjump": infJump = !infJump; return "infjump " + (infJump ? "on: press jump in mid-air to jump again" : "off");
-                    case "onehit": oneHit = !oneHit; return "onehit " + (oneHit ? "on: every hit on an enemy does at least 99" : "off");
+                    case "onehit":
+                        if (OneHitSetting == null)
+                        {
+                            return "onehit: no setting";
+                        }
+                        OneHitSetting.Value = !OneHitSetting.Value;
+                        return "onehit " + (oneHit ? "on: every hit on an enemy does at least 99" : "off");
                     default: return "unknown command: " + parts[0];
                 }
             }
