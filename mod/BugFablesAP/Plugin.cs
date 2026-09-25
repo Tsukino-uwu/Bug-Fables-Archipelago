@@ -81,8 +81,9 @@ namespace BugFablesAP
             DevConsole.CommandFile = devCommandFile.Value;
             // Dev only: a stand-in for a random start (the user, 2026-09-25), until the seed chooses one.
             QualityOfLife.TestStart = Config.Bind("Debug", "TestStart", "",
-                "Dev only. A map name (MainManager.Maps, e.g. BugariaMainPlaza): a new file's opening ends with a warp there, "
-                + "a stand-in for a random start. Empty = off.").Value;
+                "Dev only. A map name (MainManager.Maps), optionally @ the map you arrive from, e.g. "
+                + "BugariaMainPlaza@BugariaOutskirtsOutsideCity: a new file starts there, arriving through that map's door into "
+                + "it (without @, the first door found). A stand-in for a random start. Empty = off.").Value;
             if (devConsole.Value)
             {
                 DevConsole.EnableGuard(Guid);

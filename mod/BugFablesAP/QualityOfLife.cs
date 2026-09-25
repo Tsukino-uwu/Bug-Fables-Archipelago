@@ -156,10 +156,58 @@ namespace BugFablesAP
         private static float heldSince;
 
         private static bool TestStartSet => !string.IsNullOrEmpty(TestStart);
+        // "Map" or "Map@FromMap": the start map, and optionally the map whose door into it the party arrives through.
+        private static string StartMapName => TestStart.Split('@')[0].Trim();
 
         // Where the opening runs: the start map (a test start's, else the starting building's).
         private static bool AtStart(string map) =>
-            map != null && (TestStartSet ? string.Equals(map, TestStart, StringComparison.OrdinalIgnoreCase) : map == OpeningMap);
+            map != null && (TestStartSet ? string.Equals(map, StartMapName, StringComparison.OrdinalIgnoreCase) : map == OpeningMap);
+
+        // Arriving as if through a door (the user, 2026-09-25: position zero put the party at the plaza's origin, behind
+        // its statue). A door holds its target: data[0] the map, vectordata[1] where the party appears, vectordata[2]
+        // where it then walks (NPCControl.cs:5461). The door lies on the map left behind, so it's read from that map's
+        // entity table (Data/EntityData/<map>, fields split by '}'), at the positions MapControl.CreateEntities reads
+        // (MapControl.cs:1540-1566, as EntityDump): the data count at 60, the vectordata count at 71, each followed by
+        // its values (vectors as x, y, z). Null when no door leads there.
+        private static Vector3[] DoorInto(MainManager.Maps target, string fromMap)
+        {
+            foreach (MainManager.Maps map in Enum.GetValues(typeof(MainManager.Maps)))
+            {
+                if (fromMap != null && !string.Equals(map.ToString(), fromMap, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+                TextAsset table = Resources.Load<TextAsset>("Data/EntityData/" + (int)map);
+                if (table == null)
+                {
+                    continue;
+                }
+                string[] lines = table.ToString().Split('\n');
+                for (int i = 0; i < lines.Length - 1; i++)
+                {
+                    string[] f = lines[i].Split('}');
+                    if (f.Length < 81 || f[1].Trim() != "DoorOtherMap" || f[60].Trim() == "0" || f[61].Trim() != ((int)target).ToString())
+                    {
+                        continue;
+                    }
+                    int count = int.Parse(f[71].Trim());
+                    if (count < 3)
+                    {
+                        continue;
+                    }
+                    var v = new Vector3[count];
+                    for (int k = 0; k < count; k++)
+                    {
+                        v[k] = new Vector3(float.Parse(f[72 + k * 3].Trim(), System.Globalization.CultureInfo.InvariantCulture),
+                            float.Parse(f[73 + k * 3].Trim(), System.Globalization.CultureInfo.InvariantCulture),
+                            float.Parse(f[74 + k * 3].Trim(), System.Globalization.CultureInfo.InvariantCulture));
+                    }
+                    log.LogInfo($"[qol] test start: arriving through {map}'s door (entity {i}): appear at {v[1]}, walk to {v[2]}");
+                    return v;
+                }
+            }
+            return null;
+        }
 
         // Event8's talk after the slides, cut (the user, 2026-09-25: hiding it "looks dumb"; skip it and warp before any
         // dialogue). Its first step after the slides' backdrop is destroyed is ChangeParty({1}, fromscratch, keep the old
@@ -429,8 +477,18 @@ namespace BugFablesAP
                 {
                     // The game's own map transfer to where the map puts an arriving party; not the console's warp, which
                     // then stepped beside the save point, a second move (the user, 2026-09-25).
-                    var start = (MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), TestStart, true);
-                    MainManager.instance.StartCoroutine(MainManager.TransferMap((int)start, Vector3.zero));
+                    var start = (MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), StartMapName, true);
+                    string[] parts = TestStart.Split('@');
+                    Vector3[] door = DoorInto(start, parts.Length > 1 ? parts[1].Trim() : null);
+                    if (door != null)
+                    {
+                        MainManager.instance.StartCoroutine(MainManager.TransferMap((int)start, MainManager.player.transform.position, door[1], door[2]));
+                    }
+                    else
+                    {
+                        MainManager.instance.StartCoroutine(MainManager.TransferMap((int)start, Vector3.zero));
+                        log.LogWarning($"[qol] test start: no door leads into {start}; arriving at its origin");
+                    }
                     log.LogInfo($"[qol] test start (Debug.TestStart): transferring to {start}");
                 }
                 catch (Exception e)
