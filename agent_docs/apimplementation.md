@@ -154,6 +154,13 @@ coupled, off by default) shuffles 508 doors with every area kept reachable; a ge
       pair both ways:** the town gate led into the desert (`DesertBeforeGH`, the log: rewritten like `DesertSouthern`'s
       left exit), and the exit there back to the start in front of the gate. The logic still assumes the vanilla doors
       (the named allowance).
+   5. **A dropped connection leaves the doors as the seed has them** (code: `door_targets` arrive with slot_data at login
+      and are never cleared by a drop; each map's doors are rewritten from memory as it loads). **Seen (the user,
+      2026-09-25):** with the server stopped, the town gate to the desert and back several times (15 rewrites in the log
+      while offline); on restarting the server the mod logged back in by itself.
+   6. **Found while roaming:** a shuffled door reaches areas the seed has no locations in yet, whose items are the
+      game's own (the user picked up the desert's Strong Start medal, flag 415). The Placeholders plan (every spot a
+      location, unchecked ones filler-only) closes that.
 2. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
    **Also wanted (the user, 2026-09-25): the basic moves as items**, a yaml option apart from the abilities: Vi's

@@ -482,7 +482,8 @@ The output stays in the BepInEx folder.
 - **The party's basic moves** (the user, 2026-09-24, matching `PlayerControl.cs`): Vi (bee) throws the
   beemerang, which hits and grabs at range (flag 11, on from the start; Event109 takes it away in the bandit
   hideout and gives it back); Kabbu (beetle) uses the horn, a knock-up and melee hit that also cuts grass (always
-  on; the way down to Shades's shop has grass only the horn clears, the user, 2026-09-25); Leif (moth) freezes, droplets included (always on, once he has joined at the Snakemouth lake). Vi and
+  on; the way down to Shades's shop has grass only the horn clears, and so does the Strong Start medal's spot in
+  `DesertBeforeGH`, flag 415, the user, 2026-09-25); Leif (moth) freezes, droplets included (always on, once he has joined at the Snakemouth lake). Vi and
   Kabbu are in the party from a new game, so while the party is vanilla only Leif gates anything.
 - **Ability flags, confirmed as reads in `PlayerControl.cs`:** 11 (beemerang, with `!flags[41]`), 699
   (horn dash), 39 (heavy dash: its absence changes the dash), 171 (big icicle), 19 (hover), 18 (dig), 20
