@@ -16,8 +16,20 @@ class TestPermitGate(BugFablesTestBase):
 
     def test_outskirts_locations_open_from_the_start(self) -> None:
         self.assertTrue(self.can_reach_location("Outskirts: Maki and Eetl's Gift"))
-        self.assertTrue(self.can_reach_location("Outskirts: Favor Reward"))
         self.assertTrue(self.can_reach_location("Outskirts: Artis's Gift"))
+
+    def test_only_two_locations_before_the_gate(self) -> None:
+        # Before the permit, the game offers exactly Maki and Eetl's gift and Artis's gift (the user, 2026-09-25). A
+        # third spot claimed open here (the 10-berry reward near Snakemouth, which is past the gate) let a seed put the
+        # permit behind its own gate: the user's impossible seed.
+        reachable = {loc.name for loc in self.multiworld.get_reachable_locations(self.multiworld.state, self.player)
+                     if loc.address is not None}
+        self.assertEqual(reachable, {"Outskirts: Maki and Eetl's Gift", "Outskirts: Artis's Gift"})
+
+    def test_reward_near_snakemouth_needs_the_permit(self) -> None:
+        self.assertFalse(self.can_reach_location("Outskirts: Near Snakemouth Den, Reward"))
+        self.collect_by_name("Explorer Permit")
+        self.assertTrue(self.can_reach_location("Outskirts: Near Snakemouth Den, Reward"))
 
     def test_pool_is_the_locations_items(self) -> None:
         # The permit's vanilla spot is a location, so it's in the pool; the plushie's (the theater) isn't yet, so
@@ -361,18 +373,18 @@ class TestClassifications(BugFablesTestBase):
 class TestBerries(BugFablesTestBase):
     # Berry rewards are locations and berries are items (the user, 2026-09-24): each berry reward puts its own
     # amount in the pool, so a seed holds as much money as the game gives out.
-    def test_favor_reward_puts_its_berries_in_the_pool(self) -> None:
+    def test_reward_near_snakemouth_puts_its_berries_in_the_pool(self) -> None:
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
-        self.assertIn("30 Berries", pool)
+        self.assertIn("10 Berries", pool)
         gives = self.world.fill_slot_data()["location_gives"]
-        favor = str(self.world.location_name_to_id["Outskirts: Favor Reward"])
-        self.assertEqual(gives[favor], {"map": "BugariaOutskirtsOutsideCity", "type": -1, "item": 30})
+        reward = str(self.world.location_name_to_id["Outskirts: Near Snakemouth Den, Reward"])
+        self.assertEqual(gives[reward], {"map": "NearSnakemouth", "type": -1, "item": 10})
 
     def test_berries_have_their_own_ids(self) -> None:
         from ..data_tables import ITEM_ID_BASE, MONEY_ID_OFFSET
-        self.assertEqual(self.world.item_name_to_id["30 Berries"], ITEM_ID_BASE + MONEY_ID_OFFSET + 30)
+        self.assertEqual(self.world.item_name_to_id["10 Berries"], ITEM_ID_BASE + MONEY_ID_OFFSET + 10)
         kinds = self.world.fill_slot_data()["item_kinds"]
-        self.assertEqual(kinds[str(self.world.item_name_to_id["30 Berries"])], 3)
+        self.assertEqual(kinds[str(self.world.item_name_to_id["10 Berries"])], 3)
 
 
 class TestCrystalBerries(BugFablesTestBase):

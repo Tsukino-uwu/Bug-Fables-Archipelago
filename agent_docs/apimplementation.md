@@ -530,7 +530,7 @@ reward (*Old Book Delivery Reward*, flag 243) requires it (test `TestMidQuestIte
 whole quest stays vanilla together. Still to see in game: that the recipient accepts a Quest Book received from
 the server.
 **Berries are shuffled like items** (the user, 2026-09-24): a berry reward is the same `giveitem` as an item, type
--1, so it's a location, and its amount goes into the pool as an item such as *30 Berries* (kind 3, its own id range;
+-1, so it's a location, and its amount goes into the pool as an item such as *10 Berries* (kind 3, its own id range;
 filler). Two checks can share one flag: the delivery quest pays 15 berries and a Lore Book at flag 243, so both
 are locations and are sent together. In the mod, receiving berries uses the game's own money reward (capped at
 999); at a berry location the command is turned, just before it runs, into a hand-over the item swap already
@@ -590,6 +590,16 @@ can strand the player. So every connection is recorded with its direction. How:
 **The general rule** (the user, 2026-09-24): if reaching something uses an ability, the logic requires that
 ability. Leif is in effect the freeze ability. Some droplet rooms are optional, so this is stricter than the game,
 which is the safe direction: never impossible, only less random.
+
+**An impossible seed, and what it taught** (2026-09-25). The user stood in the Outskirts with nothing left to
+reach: the seed had put the Explorer Permit on *Outskirts: Favor Reward*, which the logic thought was open from
+the start. Its entry mixed two sources. Its check (flag 17) is set by a scene on `NearSnakemouth`, past the permit
+gate (Event10, 10 berries, written in the event's code), while its "30 berries on the Outskirts" came from a
+ScriptDump line that belongs to an unrelated NPC who appears only much later. So a location's flag, its give and
+its region must all be traced to **the same scene**, and a give written in an event's code won't show up in the
+ScriptDump at all. The fix moved it past the gate as *Outskirts: Near Snakemouth Den, Reward* with its real give,
+and the test `test_only_two_locations_before_the_gate` now pins what the user knows from play: before the permit,
+only Maki and Eetl's gift and Artis's gift are reachable. It fails on the old data.
 
 Still to do: the one event not found, characters that block a path, the region graph built from all of
 it, and the tests.
