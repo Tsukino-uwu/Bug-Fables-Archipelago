@@ -350,6 +350,11 @@ the *Starting Party Member* plan) plays through chapter 1 into chapter 2 (seen, 
    connections.
 4. **A full bag:** key items keep arriving, only ordinary items wait.
 5. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
+6. **Licence notices ship with the release** (the user, 2026-09-25). A player download will carry
+   `Archipelago.MultiClient.Net.dll`, `websocket-sharp.dll` and `Newtonsoft.Json.dll`, and their MIT licences
+   require each notice to go with them. There is no release packaging yet: `dev-scripts/stage-dev.ps1` stages
+   the DLLs for development only, without notices (checked 2026-09-25). Whatever builds the release zip puts
+   each licence file next to its DLL.
 
 **Known issues:**
 
