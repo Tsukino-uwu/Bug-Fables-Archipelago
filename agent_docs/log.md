@@ -561,3 +561,11 @@ Newest last. What was tried, what happened, what the user said.
 - **My slip:** in answering, I first called the mod's safety "stricter than many mods" from the rules alone,
   without reading the code; the user asked whether that was fact or guess, and the check turned up the rule/code
   mismatch above.
+- **Later the same night** (the user agreed to both): the save rule reworded to what the game and the mod do; the
+  berry total counts berries received in a seed (`CrystalBerryTotal.cs`, `flagvar[69]`, the last free slot), built,
+  not yet seen in game. The data files' notes trimmed (34 KB to 9 KB, data identical); the open items they held are
+  Known issues now, among them a Kabbu/horn rule owed once party members become items. The user asked whether notes
+  are findable now that they aren't in the code: not well enough, so `code-map.md` (every source file, linked to its
+  doc sections), a contents list for MEASURED.md, and a CLAUDE.md line to look a file up there first. The map's
+  gaps: `HoldUps.cs`, `PartyMembers.cs`, the test files and `DevCheats.cs` are never named in the docs, and the two
+  guides' big sections ("Where it stands", documentation step 10) have no subheadings to link to.
