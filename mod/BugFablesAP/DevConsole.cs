@@ -380,6 +380,20 @@ namespace BugFablesAP
                         log.LogInfo(guiLog.ToString());
                         return "gui logged";
                     case "addleif": return AddLeif();
+                    case "cam":
+                    {
+                        // What the camera follows and why (2026-09-25: broken outside the starting house with one member).
+                        MainManager m = MainManager.instance;
+                        Transform target = m.camtarget;
+                        string targetName = target == null ? (ReferenceEquals(target, null) ? "none" : "DESTROYED") : target.name;
+                        string camLog = $"[dev] cam: target {targetName}, player {(MainManager.player != null ? MainManager.player.name + " at " + MainManager.player.transform.position : "none")}, "
+                            + $"camera at {MainManager.MainCamera.transform.position}, camtargetpos {m.camtargetpos}, offset {m.camoffset}, offset2 {m.camoffset2}, "
+                            + $"angle {m.camangleoffset}, speed {m.camspeed}, insideid {m.insideid}, limits {MainManager.map?.camlimitpos} / {MainManager.map?.camlimitneg}, "
+                            + $"party {string.Join(",", m.playerdata.Select(p => p.trueid + (p.entity != null ? ":" + p.entity.name : ":no entity")).ToArray())}, "
+                            + $"inevent {m.inevent}, minipause {m.minipause}";
+                        log.LogInfo(camLog);
+                        return "cam logged";
+                    }
                     case "addmember":
                         // Stands in for receiving a party member as an item (0 Vi, 1 Kabbu, 2 Leif), with TestStartMember.
                         return parts.Length > 1 && int.TryParse(parts[1], out int member) && member >= 0 && member <= 2

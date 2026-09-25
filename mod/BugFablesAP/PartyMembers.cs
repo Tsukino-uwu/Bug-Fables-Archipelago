@@ -25,7 +25,8 @@ namespace BugFablesAP
         // Members received (dev: the console's addmember). Later from the server's items.
         internal static readonly HashSet<int> Received = new HashSet<int>();
 
-        internal static bool Active => StartMember >= 0 && randomizerOn != null && randomizerOn();
+        // Only with a map loaded: the title screen sets up a party of its own (seen 2026-09-25: the guard rewrote it there).
+        internal static bool Active => StartMember >= 0 && randomizerOn != null && randomizerOn() && MainManager.map != null;
 
         internal static bool Allowed(int id) => id == StartMember || Received.Contains(id);
 
