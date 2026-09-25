@@ -63,6 +63,17 @@ namespace BugFablesAP
             {
                 entity.model.gameObject.SetActive(false);
             }
+            // A crystal berry spot gets its berry model twice: from its animation setup (EntityControl.cs:2414-2415) and
+            // again from the pickup setup (NPCControl.cs:948), and entity.model only keeps the second, so the first stayed
+            // on top of the item (the user's screenshot, 2026-09-25). AddModel hangs every model under the sprite's
+            // transform (EntityControl.cs:2684): hide all of them.
+            if (entity.spritetransform != null)
+            {
+                foreach (Transform child in entity.spritetransform)
+                {
+                    child.gameObject.SetActive(false);
+                }
+            }
             entity.sprite.enabled = true;
             entity.sprite.sprite = sprite;
             // A crystal berry spot is set up for its 3D model: its sprite centred on the ground and the whole entity
