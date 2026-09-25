@@ -53,7 +53,10 @@ On the game's main menu, choose **Archipelago**. The panel has:
   The main menu shows it as "Archipelago (Enabled)" or "(Disabled)".
 - **Quality of life**: opens a second page of settings that speed up the game, all on by default: **Fast text**
   (dialogue is instant, and holding skip races through it), **Skip intro** (a new game's story slides pass by on
-  their own) and **Free boat** (the boat to Metal Island costs nothing). Cancel goes back.
+  their own), **Free boat** (the boat to Metal Island costs nothing), **Warp button** (a fifth pause-menu button that
+  takes you back to where the game began, after a Yes / No), **Skip cutscenes** (scenes that give nothing are skipped
+  or pass by fast) and **Item animation** (which items from other players are shown held up: Progression, All or
+  Off; your own finds always are). Cancel goes back.
 - Under the rows, a line explaining the highlighted one, and a line showing the connection's state. Cancel
   (X, or B on a gamepad) backs out of the panel.
 
