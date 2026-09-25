@@ -860,6 +860,7 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 - A hot reload during a scene, conversation or battle orphaned the stand-ins the old plugin made for a running scene (the spider fight, 2026-09-25), so DevReload waits for a free moment. Used by `DevReload.cs`.
 - World pickups pass the item id to SetText as `var,0`: NPCControl.CheckItem puts it in `flagvar[0]` first. Used by `TextProbe.cs`.
 - The plugin is built with a Windows ("full") pdb: ScriptEngine reads the plugin through Mono.Cecil with symbols and can't read a portable pdb, so the plugin would silently never load (measured in the author's other project, 2026-08-28). Used by `BugFablesAP.csproj`.
+- A dig spot (DigSpot) starts an event only when data[0] >= 2; data[0] = 0 buries an item, 1 a crystal berry (NPCControl.cs:5396-5420). Used by `dev-scripts/event-triggers.py`.
 
 ## Quests: to measure (when quests come into scope)
 

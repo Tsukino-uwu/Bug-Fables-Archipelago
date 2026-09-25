@@ -6,7 +6,7 @@ from ..doors import arrivals, shuffle_coupled
 
 
 def _reachable_maps(connections, fixed, targets) -> tuple[set[str], set[str]]:
-    """(maps reached from one map through doors and fixed links, every map in the table)."""
+    """(maps reached from one map, every map in the table)."""
     links: dict[str, set[str]] = {}
     for (m, _), (to, _) in arrivals(connections, targets).items():
         links.setdefault(m, set()).add(to)
@@ -55,8 +55,7 @@ class TestDoorsCoupled(BugFablesTestBase):
 
 
 class TestDoorShuffleConnects(BugFablesTestBase):
-    # A hub with dead ends: paired at random, two dead ends joined to each other are cut off from the rest. The shuffle
-    # must never do that, whatever the seed.
+    # Two dead ends paired with each other would be cut off; the shuffle must never do that.
     def test_dead_ends_never_stranded(self) -> None:
         connections = []
         for n in range(6):
@@ -69,7 +68,7 @@ class TestDoorShuffleConnects(BugFablesTestBase):
             self.assertEqual(maps - reached, set(), f"seed {seed}")
 
     def test_fixed_links_join_areas(self) -> None:
-        # Room0 and Room1 are joined by a fixed door, so they're one area with two doors: never counted as dead ends.
+        # Room0 and Room1 share a fixed link, so they're one area with two doors, not two dead ends.
         connections = [{"a": {"map": "Hub", "door": f"to{n}"}, "b": {"map": f"Room{n}", "door": "out"}} for n in range(4)]
         for seed in range(100):
             targets = shuffle_coupled(connections, [["Room0", "Room1"]], Random(seed))

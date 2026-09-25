@@ -119,8 +119,7 @@ def category_count(category: str) -> int:
     return sum(1 for location in LOCATIONS if location.get("category") == category)
 
 
-# Each toggle that adds locations says how many (the user, 2026-09-25: so people know what they're getting into),
-# counted from the data so the number never goes stale.
+# Counted from the data so the numbers players see never go stale.
 ShuffleQuests.__doc__ = ShuffleQuests.__doc__.replace("{count}", str(category_count("quest")))
 ShuffleCrystalBerries.__doc__ = ShuffleCrystalBerries.__doc__.replace("{count}", str(category_count("crystal_berry")))
 ShuffleDiscoveries.__doc__ = ShuffleDiscoveries.__doc__.replace("{count}", str(category_count("discovery")))

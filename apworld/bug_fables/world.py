@@ -14,7 +14,6 @@ from .doors import shuffle_coupled
 from .options import BugFablesOptions, EntranceRandomizer, ShopContents
 
 GAME = "Bug Fables"
-# Location categories Shop Contents applies to: medal shops and item shops.
 SHOP_CATEGORIES = ("shop", "item_shop")
 _CLASSIFICATIONS = {
     "progression": ItemClassification.progression,
@@ -60,12 +59,10 @@ class BugFablesWorld(World):
     options_dataclass = BugFablesOptions
     options: BugFablesOptions
 
-    # The goal: at least this many artifacts. Set in generate_early, capped at what this world includes.
     artifacts_required: int = 1
 
     _items_by_name = {item["name"]: item for item in ITEMS}
-    # Only padding fills leftover locations, in any number; a filler that isn't padding (the Hard Mode medal) is
-    # a real item, in the pool once.
+    # Only padding fills leftover slots; a non-padding filler (the Hard Mode medal) is in the pool once.
     _padding = [item["name"] for item in ITEMS if item.get("padding")]
 
     def generate_early(self) -> None:
@@ -78,11 +75,8 @@ class BugFablesWorld(World):
                 self.player, self.player_name, wanted, available, available,
             )
         self.artifacts_required = min(wanted, available)
-        # The locations this seed has: a category whose option is off (quests) isn't part of it, and the game hands
-        # those out as usual (the client only acts on what slot_data lists).
         self.included_locations = [loc for loc in LOCATIONS if self._category_on(loc.get("category"))]
-        # The entrance randomizer (experimental): which doors lead where another door leads, decided here, sent in
-        # slot_data (door_targets); the client never decides a door itself.
+        # Doors are decided here and sent in slot_data; the client never decides a door itself.
         self.door_targets = []
         if self.options.entrance_randomizer == EntranceRandomizer.option_coupled:
             self.door_targets = shuffle_coupled(DOORS["connections"], DOORS["fixed"], self.random)
@@ -116,14 +110,12 @@ class BugFablesWorld(World):
                 BugFablesLocation(self.player, loc["name"], LOCATION_NAME_TO_ID[loc["name"]], region)
             )
 
-        # Story steps other rules need (Leif joining), each an event in the region where it happens.
         for event in STORY_EVENTS:
             regions[event["region"]].add_event(
                 event["name"], event["item"], location_type=BugFablesLocation, item_type=BugFablesItem
             )
 
-        # One event per artifact, in the region where the game grants it. The game counts artifacts from flags
-        # (MEASURED.md, SaveProgressIcons), so these hold no real item: they exist so fill can prove the goal.
+        # The game counts artifacts from flags, so these events hold no real item: they let fill prove the goal.
         for artifact in ARTIFACTS:
             regions[artifact["region"]].add_event(
                 artifact["name"], "Artifact", location_type=BugFablesLocation, item_type=BugFablesItem
@@ -134,9 +126,7 @@ class BugFablesWorld(World):
         return BugFablesItem(name, _CLASSIFICATIONS[data["classification"]], ITEM_NAME_TO_ID[name], self.player)
 
     def create_items(self) -> None:
-        # Exactly the included locations' own vanilla items (an item found at two spots is in the pool twice), then
-        # padding for any location without one. An item whose vanilla spot isn't a location in this seed (quests
-        # off, or not added yet) isn't in the pool: the game hands it out there as usual.
+        # The included locations' vanilla items (duplicates kept), then padding; an item whose spot is off stays vanilla.
         pool: list[Item] = [self.create_item(name) for name in
                             (vanilla_item(loc) for loc in self.included_locations) if name is not None]
         unfilled = len(self.multiworld.get_unfilled_locations(self.player))
@@ -144,9 +134,6 @@ class BugFablesWorld(World):
         self.multiworld.itempool += pool
 
     def set_rules(self) -> None:
-        # What shop locations may hold (the user, 2026-09-25: shops are many easy checks in one place and can soak up the
-        # important items, as in Tevi). Filler Only uses Archipelago's excluded type (no progression, no useful);
-        # No Progression refuses progression items from any game.
         for loc in self.included_locations:
             if loc.get("category") not in SHOP_CATEGORIES:
                 continue
@@ -155,7 +142,6 @@ class BugFablesWorld(World):
                 location.progress_type = LocationProgressType.EXCLUDED
             elif self.options.shop_contents == ShopContents.option_no_progression:
                 location.item_rule = lambda item: not item.advancement
-        # A location or story event needing more than its region says so in its own requires list.
         for loc in self.included_locations:
             if loc.get("requires"):
                 self.set_rule(self.get_location(loc["name"]), HasAll(*loc["requires"]))
@@ -165,10 +151,7 @@ class BugFablesWorld(World):
         self.set_completion_rule(Has("Artifact", count=self.artifacts_required))
 
     def pre_fill(self) -> None:
-        # Filler Only when the room can't hold it (the user, 2026-09-25: fall back with a warning). An excluded spot takes
-        # only an item that is neither progression nor useful, from any game (Fill.py, distribute_items_restrictive), so a
-        # room with fewer of those than excluded spots fails to generate: a solo seed has 17 filler items for Merab's 22
-        # copies. Then this world's shops take No Progression instead, which every seed can hold.
+        # A room with fewer excludable items than excluded spots fails to generate, so Filler Only falls back.
         if self.options.shop_contents != ShopContents.option_filler_only:
             return
         shops = [self.get_location(loc["name"]) for loc in self.included_locations if loc.get("category") in SHOP_CATEGORIES]
@@ -190,79 +173,51 @@ class BugFablesWorld(World):
         return self.random.choice(self._padding)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
-        # The world version lets the client refuse a mismatched build. The client sends the goal once the
-        # game's own artifact count (its 7 artifact flags) reaches artifacts_required.
-        # location_flags tells the client which game flag marks each location done ({location id: flag}), so
-        # it only ever watches what this generator placed. JSON object keys are strings.
+        # The client acts only on what is listed here. JSON object keys are strings.
         return {
             "world_version": WORLD_VERSION,
             "artifacts_required": self.artifacts_required,
             "location_flags": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["flag"] for loc in self.included_locations
                                if "flag" in loc["source"]},
-            # Crystal berry locations, done when their crystalbflags index is set ({location id: index}).
             "location_berries": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["berry"]
                                  for loc in self.included_locations if "berry" in loc["source"]},
-            # Journal discovery locations, done when librarystuff[0, n] is set ({location id: n}).
             "location_discoveries": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["discovery"]
                                      for loc in self.included_locations if "discovery" in loc["source"]},
-            # Shop stock locations, one per copy a shop ever stocks (a shop's copies are its locations in id order); the client
-            # marks a copy done in the save when it is bought ({location id: {shop, medal}}).
+            # One location per copy a shop ever stocks; a shop's copies are its locations in id order.
             "location_shops": {str(LOCATION_NAME_TO_ID[loc["name"]]): {"shop": loc["source"]["shop"], "medal": loc["source"]["medal"]}
                                for loc in self.included_locations if "shop" in loc["source"]},
-            # Item shop locations: the first purchase of an item in a shop ({location id: {map, keeper, item}}); the keeper is
-            # the shopkeeper's entity name, the item its stock entry. After the check, the shop sells its own item again.
             "location_item_shops": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["item_shop"]
                                     for loc in self.included_locations if "item_shop" in loc["source"]},
-            # Locations marked done by a number slot reaching a value instead of a flag (a boss prize handed over:
-            # its prize slot reaching 3).
+            # Done when a number slot reaches a value, not a flag (a boss prize handed over).
             "location_vars": {str(LOCATION_NAME_TO_ID[loc["name"]]): {"var": loc["source"]["var"],
                                                                        "at_least": loc["source"]["at_least"]}
                               for loc in self.included_locations if "var" in loc["source"]},
-            # Which |giveitem| hands out each location's vanilla item, so the client can keep it out of the
-            # inventory and show the seed's item instead. Locations without a known one are left out.
             "location_gives": {
                 str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["give"]
                 for loc in self.included_locations
                 if "give" in loc["source"]
             },
-            # Which locations are items lying in the world, known by their map and their own activationflag, so
-            # the client can keep the vanilla item out when it's picked up.
             "location_pickups": {
                 str(LOCATION_NAME_TO_ID[loc["name"]]): {"map": loc["source"]["pickup"]["map"], "flag": loc["source"].get("flag", -1),
                                                        **({"event": loc["source"]["event"]}
                                                           if loc["source"]["pickup"].get("story") else {}),
                                                        **({"berry": loc["source"]["berry"]}
                                                           if "berry" in loc["source"] else {}),
-                                                       # A respawning pickup: no flag of its own, only a regional
-                                                       # flag the game wipes on every area change. The client sends
-                                                       # its check at the first pickup and leaves it vanilla after.
+                                                       # A respawning pickup: its regional flag is wiped on area change.
                                                        **({"regional": loc["source"]["regional"]}
                                                           if "regional" in loc["source"] else {})}
                 for loc in self.included_locations
                 if "pickup" in loc["source"]
             },
-            # Blockers the story puts up for a while that the client keeps out of the way, so an area with locations
-            # never closes (the logic assumes it stays reachable).
+            # Story blockers the client keeps away, so an area the logic counts as reachable never closes.
             "kept_open": [{"map": b["map"], "entity": b["entity"]} for b in KEPT_OPEN],
-            # Ways the story only makes later (a door, a bounce mushroom) that the client makes exist from the start.
             "kept_present": [{"map": e["map"], "entity": e["entity"]} for e in KEPT_PRESENT],
-            # Map scenery the story removes later (the Outskirts rocks) that the client removes from the start; entity
-            # is the object's path inside the map.
             "scenery_hidden": [{"map": e["map"], "entity": e["entity"]} for e in SCENERY_HIDDEN],
-            # Scenery the story shows later that the seed shows from the start (the caravan's stall), by its path in the map.
             "scenery_present": [{"map": e["map"], "entity": e["entity"]} for e in SCENERY_PRESENT],
-            # Entities with no gate of their own that the client keeps away until a story flag (the town's first-entry
-            # scene, reachable once the rocks are gone).
             "held_until": [{"map": e["map"], "entity": e["entity"], "flag": e["flag"]} for e in HELD_UNTIL],
-            # Ways the story makes at a late flag that the client makes at an earlier one (the door back down to the fall
-            # room from the trapdoor on, not the first boss).
             "present_from": [{"map": e["map"], "entity": e["entity"], "flag": e["flag"]} for e in PRESENT_FROM],
-            # An entity's dialogue line repointed to another flag (the bar entrance's way down answers to a flag every new
-            # game sets, instead of a story flag with other effects).
             "dialogue_flags": [{"map": e["map"], "entity": e["entity"], "flag": e["flag"], "to": e["to"]} for e in DIALOGUE_FLAGS],
-            # Where each of this world's items goes (0 item, 1 key item, 2 medal), so the client gives it the right
-            # way, shows a found one the way the game shows that kind, and knows a medal's id is offset.
-            # Doors the entrance randomizer rewrites: each leads where like_door (on like_map) leads. Empty when it's off.
             "door_targets": self.door_targets,
+            # 0 item, 1 key item, 2 medal.
             "item_kinds": {str(ITEM_NAME_TO_ID[item["name"]]): item["kind"] for item in ITEMS},
         }

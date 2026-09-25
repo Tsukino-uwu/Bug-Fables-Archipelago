@@ -1,12 +1,6 @@
-"""Dev-only: every way the game's code reaches for a party member or a follower, from the decompiled code.
-
-A scene written for Vi, Kabbu and Leif looks them up in many ways; with a smaller party each one is a place that can find
-nothing. This lists each way, how often it's used, and in which methods (events by number), so each can be covered once
-instead of found one crash at a time (the user, 2026-09-25).
+"""Dev-only: every way the game's code reaches for a party member or follower, with counts and the methods using it.
 
     python dev-scripts/party-access.py [<decompiled folder>] [--where <pattern name>]
-
-Reads only; the game's code never leaves your machine.
 """
 import collections
 import re
@@ -15,7 +9,6 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 
-# (name, regex, what it means). Order matters only for the printout.
 PATTERNS = [
     ("GetEntity(-1) leader", r"GetEntity\(-1\)", "the first party member by position"),
     ("GetEntity(-2) 2nd", r"GetEntity\(-2\)", "the second party member by position"),

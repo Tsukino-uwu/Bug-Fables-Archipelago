@@ -1,16 +1,6 @@
-"""The entrance randomizer's coupled shuffle (experimental: the logic doesn't follow the doors yet).
+"""The entrance randomizer's coupled shuffle.
 
-The door table (data/doors.json, made by dev-scripts/door-graph.py --export) lists connections (a, b): going through a
-arrives next to b, and through b next to a. A shuffled seed joins the same doors in new pairs (x, y). The client rewrites
-a door to "lead where another door leads" (its door_targets), so x joined to y is: x leads where y's old partner led
-(which arrives next to y), and y leads where x's old partner led. Doors left in their vanilla pair aren't sent.
-
-A random pairing would strand areas: two dead-end rooms joined to each other are cut off from everything. So the
-shuffle grows the world from one area outwards. Maps already joined by doors that stay fixed count as one area. Each
-step takes an open door in the reached part and joins it to a door of an area not reached yet, taking an area with
-more doors whenever the reached part is down to its last open door. Once every area is reached, the open doors that
-are left are paired at random. Every map with a shuffled door is then reachable from every other, as far as doors go
-(ledges and story gates inside a map are the logic's work, still to do).
+It grows the world outwards from one area, since a random pairing strands dead-end rooms joined to each other.
 """
 from __future__ import annotations
 
@@ -29,7 +19,7 @@ def _partners(connections: list[dict[str, Any]]) -> dict[Door, Door]:
 
 
 def _areas(maps: set[str], fixed: list[list[str]]) -> dict[str, str]:
-    """Each map's area: maps joined by fixed doors share one (union-find, the area named by one of its maps)."""
+    """Each map's area: maps joined by fixed doors share one."""
     parent = {m: m for m in maps}
 
     def find(m: str) -> str:
@@ -46,6 +36,7 @@ def _areas(maps: set[str], fixed: list[list[str]]) -> dict[str, str]:
 
 
 def shuffle_coupled(connections: list[dict[str, Any]], fixed: list[list[str]], random: Random) -> list[dict[str, str]]:
+    """Doors paired anew, as door_targets: each door leads where its new partner's old partner led."""
     partner = _partners(connections)
     doors = sorted(partner)
     area = _areas({m for m, _ in doors}, fixed)

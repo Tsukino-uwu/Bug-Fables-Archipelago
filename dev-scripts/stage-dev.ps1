@@ -1,17 +1,6 @@
-# Builds the plugin and stages it inside the repo, in stage\, laid out like the game folder. Nothing here
-# writes to the game install: copying the staged files in is a separate step.
-#
-#   powershell -ExecutionPolicy Bypass -File dev-scripts\stage-dev.ps1 [-GameDir "D:\Games\Bug Fables"]
-#
-# stage\every-build\BepInEx\  the plugin (DLL and pdb, for BepInEx\scripts). Copy this BepInEx folder onto the
-#                             game folder after each build, with the game running or not: ScriptEngine
-#                             hot-reloads it (DevReload notices the DLL's new timestamp).
-# stage\setup\BepInEx\        the client libraries (for BepInEx\plugins) and ScriptEngine's config. Copy it
-#                             once, and again only when the script says the libraries changed, with the game
-#                             closed: a running game holds the libraries open.
-#
-# The game install is only read: the build compiles against its Assembly-CSharp.dll, and the libraries are
-# compared with the ones already there.
+# Builds the plugin and stages it in stage\ (every-build: the plugin; setup: libraries and ScriptEngine's config).
+# Only reads the game install.
+#   powershell -ExecutionPolicy Bypass -File dev-scripts\stage-dev.ps1 [-GameDir <dir>]
 param(
     [string]$GameDir = 'C:\Program Files (x86)\Steam\steamapps\common\Bug Fables'
 )
@@ -26,16 +15,14 @@ if ($LASTEXITCODE -ne 0) { throw "build failed ($LASTEXITCODE)" }
 
 $scripts = Join-Path $stage 'every-build\BepInEx\scripts'
 New-Item -ItemType Directory -Force $scripts | Out-Null
-# The pdb has to travel with the DLL: ScriptEngine refuses a plugin without one, silently.
+# ScriptEngine silently refuses a plugin without its pdb.
 foreach ($f in 'BugFablesAP.dll', 'BugFablesAP.pdb') {
     Copy-Item (Join-Path $out $f) (Join-Path $scripts $f) -Force
 }
-# Copy-Item keeps the source's timestamp, and an unchanged build doesn't rewrite the DLL, so a restage would
-# look like no change to DevReload (2026-09-24). Stamp the staged DLL; copying it into the game keeps the stamp.
+# An unchanged build keeps its old write time, which DevReload would read as no change.
 (Get-Item (Join-Path $scripts 'BugFablesAP.dll')).LastWriteTimeUtc = [DateTime]::UtcNow
 
-# Libraries go to BepInEx\plugins, not scripts: ScriptEngine loads every DLL in scripts again on each reload,
-# and two copies of Newtonsoft.Json in one process is a type-identity trap.
+# Not scripts: ScriptEngine reloads every DLL there, and two Newtonsoft.Json copies break type identity.
 $plugins = Join-Path $stage 'setup\BepInEx\plugins'
 New-Item -ItemType Directory -Force $plugins | Out-Null
 $changed = @()
@@ -49,9 +36,7 @@ foreach ($lib in 'Archipelago.MultiClient.Net.dll', 'websocket-sharp.dll', 'Newt
     }
 }
 
-# ScriptEngine's config, so a changed DLL reloads by itself. The key names are the ones ScriptEngine r11.1
-# generated in this game (agent_docs/log.md, 2026-09-24); its defaults are manual-only (watcher off,
-# LoadOnStart off).
+# ScriptEngine's defaults are manual-only; this config makes a changed DLL reload by itself.
 $config = Join-Path $stage 'setup\BepInEx\config'
 New-Item -ItemType Directory -Force $config | Out-Null
 @(

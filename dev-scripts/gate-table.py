@@ -1,16 +1,8 @@
-"""Dev-only: which story flags gate which doors, and which event sets each flag.
+"""Dev-only: each flag-gated door (from map, to map, required, hiding), each flag tagged with the chapter that sets it.
 
-Joins EntityDump's output (every map's entities) with the decompiled game code (who sets each flag), and prints
-one row per door to another map that has required or hiding flags:
-
-    from map, to map, required flags, hiding flags
-
-Each flag is followed by the chapter of the event(s) that set it, in brackets, by the event-number rule in
-agent_docs/MEASURED.md ("Chapters"): P = prologue, 1-7 = chapter, dlg = set only by dialogue (not in code).
+Tags: P = prologue, 1-7 = chapter, dlg = set only by dialogue.
 
     python dev-scripts/gate-table.py <bugfablesap-entitydump.tsv> [<decompiled folder>]
-
-Reads only; the game's code and data never leave your machine.
 """
 import collections
 import csv
@@ -18,7 +10,7 @@ import re
 import sys
 from pathlib import Path
 
-# Chapter title-card events (MEASURED.md): an event numbered below the first is prologue, and so on.
+# Chapter title-card events: an event numbered below the first is prologue, and so on.
 CHAPTER_STARTS = [(16, "P"), (45, "1"), (74, "2"), (105, "3"), (120, "4"), (142, "5"), (194, "6")]
 CODE_FILES = ["EventControl.cs", "MainManager.cs", "BattleControl.cs", "NPCControl.cs", "PlayerControl.cs",
               "MapControl.cs"]

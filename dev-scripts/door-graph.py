@@ -1,29 +1,10 @@
-"""Dev-only: the map-to-map door graph, with the doors that have no way back marked, and each door paired with its way back.
+"""Dev-only: every door between maps from an EntityDump, with its way back ("pair"); --export writes data/doors.json.
 
-Reads EntityDump's output (every map's entities). A door to another map (`DoorOtherMap`) sends the party to the map
-in its data[0], placing it at vectordata[1] (NPCControl.OnTriggerEnter -> MainManager.TransferMap(data[0], vectordata[0],
-vectordata[1], vectordata[2])). One row per door:
-
-    from map, door entity, to map, required flags, hiding flags, back, pair, distance
-
-"back" lists the doors on the target map that lead back to this map. "NONE" means no door leads back: a one-way
-candidate, or a way back that isn't a door (an event, a drop, a fall). "pair" is the one of those the party arrives
-next to: the door whose position is nearest to where this door places the party, with that distance (in 3D: Rubber
-Prison's pier stacks doors floor above floor). Nothing nearer than FAR is no pair: Barren Lands' "return" zones put
-the party 25-75 units from any door. A pair is "mutual" when the back door's own pair is this door or a variant of it:
-doors on one map within SAME of each other are one door in different story states (Golden Settlement's day and night
-copies, flags 85/86, the night one leading to the night map). The entrance randomizer's coupled mode needs the pairs
-mutual. Pairing needs a dump with the position column (EntityDump from 2026-09-25 on).
-
-The dump can't see connections inside a map (ledges, drops, switch barriers) or transfers started by events; those come
-from play and go into agent_docs/MEASURED.md.
+One row per door: from map, door entity, to map, required flags, hiding flags, back, pair, distance.
+"back" NONE means no door leads back; a pair is "mutual" when each door is the other's pair.
 
     python dev-scripts/door-graph.py <bugfablesap-entitydump.tsv> [<map name prefix>] [<decompiled folder>]
     python dev-scripts/door-graph.py <bugfablesap-entitydump.tsv> --export apworld/bug_fables/data/doors.json
-
---export writes the entrance randomizer's door table (see export() for what goes in and what stays fixed).
-
-Reads only; the game's code and data never leave your machine.
 """
 import collections
 import csv
@@ -37,7 +18,6 @@ HERE = Path(__file__).resolve().parent
 
 
 def map_names(decompiled: Path) -> list[str]:
-    # The same enum reader as gate-table.py (MainManager.Maps, in order).
     spec = importlib.util.spec_from_file_location("gate_table", HERE / "gate-table.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -55,8 +35,8 @@ def point(field: str | None) -> tuple[float, float, float] | None:
     return x, y, z
 
 
-FAR = 10.0
-SAME = 1.0
+FAR = 10.0  # no door nearer the arrival point than this: no pair
+SAME = 1.0  # doors on one map this close are one door in different story states
 
 
 def distance(a: tuple[float, float, float], b: tuple[float, float, float]) -> float:
@@ -69,8 +49,7 @@ def same_door(a: dict, b: dict) -> bool:
 
 
 def pair_doors(doors: list[dict]) -> dict[tuple[str, int], tuple[dict, float]]:
-    """(map, entity index) -> (back door on the target map, distance from the arrival point to it). By index, not
-    name: a map can hold two doors of one name, swapped by story flags (WaspKingdomOutside's loadzoneinside)."""
+    """(map, entity index) -> (back door, distance); by index, since a map can hold two doors of one name."""
     leading_to = collections.defaultdict(list)  # (from, to) -> doors
     for d in doors:
         leading_to[(d["map"], d["to"])].append(d)
@@ -90,12 +69,7 @@ def pair_doors(doors: list[dict]) -> dict[tuple[str, int], tuple[dict, float]]:
 
 
 def export(doors: list[dict], pairs: dict, out: Path) -> None:
-    """The entrance randomizer's door table: every door that pairs mutually with its way back, as connections (a, b):
-    going through a arrives next to b, and through b next to a. The mod finds a door by its map and name, so a door
-    stays fixed (out of the shuffle) when its name isn't unique on its map, when it has a story variant at the same
-    spot (it would need rewriting together with its variants, and a night variant leads to the night map), or when it
-    leads into its own map. Its pair then stays fixed too. Every other door between maps is listed in "fixed" as
-    (from map, to map), so the generator can count the maps it already joins."""
+    """The door table: mutual pairs as connections; a door the mod can't find by map and name stays in "fixed"."""
     by_key = {(d["map"], d["index"]): d for d in doors}
     name_count = collections.Counter((d["map"], d["name"]) for d in doors)
 

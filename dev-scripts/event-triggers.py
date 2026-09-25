@@ -2,16 +2,7 @@
 
     python dev-scripts/event-triggers.py <entitydump.tsv> <scriptdump.tsv> <mapdump.tsv> <event> [<event> ...]
 
-Looks in:
-- entities whose eventid is the event (talking to an NPC, touching an object);
-- EventTrigger objects (data[0]), dig spots and pickups (data[1]), as NPCControl starts them
-  (NPCControl.cs:5525, :5531, and the pickup chain in MainManager.cs:12543);
-- dialogue lines with |event,N| (ScriptDump);
-- map auto-start events (MapDump, MapControl.autoevent);
-- literal StartEvent(N) calls in the code.
-- a locked door's dialogues[1].y, the event it starts once the right key is used (EventControl.cs:9606).
-
-Reads only; the game's code and data never leave your machine.
+Looks in entity eventids, triggers, dig spots, pickups, locked doors, |event,N| lines, map autoevents and StartEvent(N).
 """
 import collections
 import csv
@@ -38,8 +29,7 @@ def main() -> None:
             found[int(r["eventid"])].append(f"talk/touch {r['map']}/{r['name']} {gate}")
         data = [int(x) for x in r["data"].split()] if r["data"] else []
         slot = DATA_SLOT.get(r["objecttype"])
-        # A dig spot starts an event only when data[0] >= 2; 0 buries an item, 1 a crystal berry
-        # (NPCControl.cs:5396-5420).
+        # A dig spot starts an event only when data[0] >= 2; 0 buries an item, 1 a crystal berry.
         if r["objecttype"] == "DigSpot" and (not data or data[0] < 2):
             slot = None
         if slot is not None and len(data) > slot and data[slot] > 0:

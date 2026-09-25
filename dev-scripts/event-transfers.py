@@ -1,17 +1,6 @@
-"""Dev-only: every map change a story event makes, from the decompiled code.
-
-Doors aren't the only way between maps: an event can call MainManager.LoadMap(id) and place the party itself (the bar's
-hatch, a boat, a guard catching you). This lists, per event method in EventControl.cs, each LoadMap call and its target:
-
-    event, line, target map
-
-LoadMap() with no argument reloads the current map; an argument that isn't a plain number or a Maps name is printed as
-it stands (a variable, worked out by reading the code). Then run event-triggers.py on the events listed to see what
-starts each one.
+"""Dev-only: each LoadMap call in a story event, as event, line, target map (a non-constant target printed as is).
 
     python dev-scripts/event-transfers.py [<decompiled folder>]
-
-Reads only; the game's code never leaves your machine.
 """
 import importlib.util
 import re

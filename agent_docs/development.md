@@ -36,6 +36,21 @@ The build and the copy into the game are separate steps. The build never writes 
    - **Why a script with backups** (2026-09-24): Claude Code's auto mode refused, as irreversible, both a
      deploy script that rewrote configs and libraries in the game and an ad-hoc `cp` plus in-place `sed`.
      MeshGhost, which never hit this, only ever replaces its own rebuildable DLL through one named script.
+   - **Why the scripts do what they do** (seen 2026-09-24):
+     - The DLL and its `.pdb` always travel together: ScriptEngine silently refuses a plugin without its pdb.
+     - The client libraries go to `BepInEx/plugins`, never `scripts`: ScriptEngine reloads every DLL in
+       `scripts`, and two copies of Newtonsoft.Json in one process break type identity.
+     - The staged DLL is stamped with the current time too: an unchanged build keeps its old time, which
+       DevReload reads as no change.
+     - `-DebugOn A,B` through `powershell -File` arrives as the single string "A,B" (it once wrote a key named
+       "MapDump,ScriptDump"), so the script splits on commas.
+     - The running game can be reading the DLL at the moment of the copy, so the copy is retried (10 times,
+       300 ms apart).
+     - The config is written as UTF-8 without a BOM, as BepInEx writes it (Windows PowerShell's `Set-Content`
+       adds one).
+     - ScriptEngine's own config turns its file watcher off: this game's Mono throws
+       `NotImplementedException` from `new FileSystemWatcher`, which aborts `ScriptEngine.Awake`. DevReload
+       polls instead.
 4. If the script says **the libraries differ from the game's**, copy `stage/setup/BepInEx` again with the game
    closed: a running game holds the libraries open.
 

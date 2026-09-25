@@ -1,7 +1,4 @@
-"""Item and location tables, read from data/*.json.
-
-pkgutil.get_data rather than open(): inside a packaged .apworld (a zip) there is no file path to open.
-"""
+"""Item and location tables, read with pkgutil: a packaged .apworld is a zip with no file paths to open()."""
 from __future__ import annotations
 
 import json
@@ -26,7 +23,6 @@ def _load(name: str) -> dict[str, Any]:
     return json.loads(raw.decode("utf-8"))
 
 
-# The one place the world's version is written: slot_data reports it to the client, and the manifest carries it.
 WORLD_VERSION: str = _load_manifest()["world_version"]
 ITEMS: list[dict[str, Any]] = _load("items.json")["items"]
 _LOCATION_DATA = _load("locations.json")
@@ -41,16 +37,15 @@ SCENERY_PRESENT: list[dict[str, Any]] = _LOCATION_DATA.get("scenery_present", []
 HELD_UNTIL: list[dict[str, Any]] = _LOCATION_DATA.get("held_until", [])
 PRESENT_FROM: list[dict[str, Any]] = _LOCATION_DATA.get("present_from", [])
 DIALOGUE_FLAGS: list[dict[str, Any]] = _LOCATION_DATA.get("dialogue_flags", [])
-# The entrance randomizer's door table: connections (a, b) that pair both ways, and the map links left fixed.
 DOORS: dict[str, Any] = _load("doors.json")
 
-# Medal ids (MainManager.BadgeTypes) overlap item ids (MainManager.Items), so medals get their own range.
+# Medal ids overlap item ids, so medals get their own range.
 MEDAL_KIND = 2
 MEDAL_ID_OFFSET = 1_000
-# Berries (money) are handed out by the same giveitem, type -1; as items their game_id is the amount.
+# Money: giveitem type -1; game_id is the amount.
 MONEY_KIND = 3
 MONEY_ID_OFFSET = 2_000
-# Crystal berries: a counted currency, one item (game_id 0); each berry spot is known by its crystalbflags index.
+# Crystal berries: one counted item (game_id 0).
 CRYSTAL_KIND = 4
 CRYSTAL_ID_OFFSET = 3_000
 
@@ -70,15 +65,13 @@ if len(set(LOCATION_NAME_TO_ID.values())) != len(LOCATIONS):
 
 
 def vanilla_item(location: dict[str, Any]) -> str | None:
-    """The name of the item the game hands out at a location (its give or pickup; berries as "N Berries"), or None."""
+    """The name of the item the game hands out at a location, or None."""
     source = location["source"].get("give") or location["source"].get("pickup")
     if source is None and "item_shop" in location["source"]:
-        # An item shop slot: its item is an ordinary item (kind 0), the shop's stock entry.
         source = {"type": 0, "item": location["source"]["item_shop"]["item"]}
     if source is None:
         return None
     if source["type"] == 3:
-        # A crystal berry spot: its item is always the one Crystal Berry item (its own index is only its identity).
         kind, game_id = CRYSTAL_KIND, 0
     else:
         kind, game_id = (MONEY_KIND if source["type"] == -1 else source["type"]), source["item"]

@@ -3,8 +3,7 @@ from . import BugFablesTestBase
 
 class TestPermitGate(BugFablesTestBase):
     def test_first_artifact_needs_the_permit(self) -> None:
-        # The gate is the Explorer Permit's whole purpose: if this passes with no items,
-        # the rule is attached to nothing and fill could put the permit behind its own gate.
+        # With no items the permit's gate must hold, or fill could put the permit behind it.
         self.assertFalse(self.can_reach_location("Artifact 1"))
         self.collect_by_name("Explorer Permit")
         self.assertTrue(self.can_reach_location("Artifact 1"))
@@ -19,11 +18,7 @@ class TestPermitGate(BugFablesTestBase):
         self.assertTrue(self.can_reach_location("Outskirts: Artis's Gift"))
 
     def test_only_what_play_showed_before_the_gate(self) -> None:
-        # Before the permit, the user reached exactly these (2026-09-25): Maki and Eetl's gift and Artis's gift, then,
-        # with the seed's rocks removed, the ladybug siblings' house, the stone on the east road and the pier's crystal
-        # berry, and, with the town open from the start, the Bad Book in the residential district. A spot claimed open
-        # here that isn't (the 10-berry reward near Snakemouth, past the gate) let a seed put
-        # the permit behind its own gate: the user's impossible seed.
+        # Exactly what play reached before the permit; a wrong spot here let a seed lock the permit behind itself.
         reachable = {loc.name for loc in self.multiworld.get_reachable_locations(self.multiworld.state, self.player)
                      if loc.address is not None}
         self.assertEqual(reachable, {"Outskirts: Maki and Eetl's Gift", "Outskirts: Artis's Gift",
@@ -40,8 +35,7 @@ class TestPermitGate(BugFablesTestBase):
         self.assertTrue(self.can_reach_location("Outskirts: Near Snakemouth Den, Reward"))
 
     def test_pool_is_the_locations_items(self) -> None:
-        # The permit's vanilla spot is a location, so it's in the pool; the plushie's (the theater) isn't yet, so
-        # the game hands it out there and it stays out of the pool.
+        # An item whose vanilla spot isn't a location yet stays out of the pool.
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         self.assertIn("Explorer Permit", pool)
         self.assertNotIn("G-Bug Ranger Plushie", pool)
@@ -66,8 +60,7 @@ class TestArtifactsCapped(BugFablesTestBase):
 
 
 class TestSlotData(BugFablesTestBase):
-    # The client watches exactly the flags in location_flags and sends those checks. A location missing here
-    # could never be sent; a flag that isn't the location's own would send the wrong check.
+    # A missing location could never be sent; a wrong flag would send the wrong check.
     def test_every_location_has_its_flag(self) -> None:
         data = self.world.fill_slot_data()
         flags, variables, berries = data["location_flags"], data["location_vars"], data["location_berries"]
@@ -76,8 +69,6 @@ class TestSlotData(BugFablesTestBase):
         item_shops = data["location_item_shops"]
         respawns = {loc for loc, pickup in data["location_pickups"].items() if "regional" in pickup}
         ids = {str(loc.address) for loc in self.multiworld.get_locations(self.player) if loc.address is not None}
-        # Each location is watched exactly one way: a flag, a number slot, a crystal berry's index, a journal
-        # discovery, a shop copy, an item shop's first purchase, or (a respawning pickup) the pickup itself.
         self.assertEqual(set(flags) | set(variables) | set(berries) | set(discoveries) | set(shops) | set(item_shops) | respawns, ids)
         self.assertEqual(len(flags) + len(variables) + len(berries) + len(discoveries) + len(shops) + len(item_shops) + len(respawns),
                          len(ids))
@@ -91,8 +82,7 @@ class TestSlotData(BugFablesTestBase):
         self.assertEqual(self.world.fill_slot_data()["world_version"], manifest["world_version"])
 
     def test_gives_name_the_vanilla_item(self) -> None:
-        # The client suppresses exactly the giveitem named here. A wrong one would let the vanilla item through,
-        # or swallow an unrelated grant on the same map.
+        # A wrong giveitem would let the vanilla item through or swallow an unrelated grant.
         gives = self.world.fill_slot_data()["location_gives"]
         medal = gives[str(self.world.location_name_to_id["Outskirts: Artis's Gift"])]
         self.assertEqual(medal, {"map": "BugariaOutskirtsOutsideCity", "type": 2, "item": 11})
@@ -106,15 +96,13 @@ class TestSlotData(BugFablesTestBase):
 
 
 class TestPickups(BugFablesTestBase):
-    # The client knows a pickup location only by its map and its own activationflag. A missing entry would give
-    # the vanilla item at that spot; a wrong flag would swap an unrelated pickup.
+    # A missing pickup entry gives the vanilla item; a wrong flag swaps an unrelated pickup.
     def test_pickups_are_in_slot_data(self) -> None:
         pickups = self.world.fill_slot_data()["location_pickups"]
         medal = str(self.world.location_name_to_id["Snakemouth Den: Underground Door Room"])
         self.assertEqual(pickups[medal], {"map": "SnakemouthUndergrondDoor", "flag": 60})
 
     def test_pickups_are_not_gives(self) -> None:
-        # A location is one or the other: the client would otherwise try to swap it twice.
         data = self.world.fill_slot_data()
         self.assertFalse(set(data["location_pickups"]) & set(data["location_gives"]))
 
@@ -136,7 +124,6 @@ class TestMedals(BugFablesTestBase):
         self.assertEqual(kinds[str(self.world.item_name_to_id["Poison Defender"])], 2)
 
     def test_filler_that_isnt_padding_is_in_the_pool_once(self) -> None:
-        # The Hard Mode medal is filler, but a real item: exactly one copy, never used to pad the pool.
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         self.assertEqual(pool.count("Hard Mode"), 1)
         self.assertEqual(pool.count("Poison Defender"), 1)
@@ -145,8 +132,7 @@ class TestMedals(BugFablesTestBase):
 
 
 class TestPool(BugFablesTestBase):
-    # The pool is each location's own vanilla item, so an item found at two spots is in it twice. A location whose
-    # vanilla item isn't in items.json would silently lose that item from the game.
+    # An item at two spots is in the pool twice; one missing from items.json would be lost.
     def test_every_location_item_is_known(self) -> None:
         from ..data_tables import LOCATIONS, vanilla_item
         for loc in LOCATIONS:
@@ -164,8 +150,7 @@ class TestPool(BugFablesTestBase):
 
 
 class TestLeif(BugFablesTestBase):
-    # Rooms with water droplets need Leif to freeze them (the user, 2026-09-24). Without the rule, fill could put
-    # something there that the player can't reach before Leif joins.
+    # Rooms with water droplets need Leif to freeze them.
     def test_droplet_room_needs_leif(self) -> None:
         from BaseClasses import CollectionState, ItemClassification
         from ..world import BugFablesItem
@@ -177,7 +162,6 @@ class TestLeif(BugFablesTestBase):
         self.assertTrue(location.can_reach(state))
 
     def test_first_artifact_needs_leif(self) -> None:
-        # The first boss is in the treasure room, reached only through rooms with droplets.
         from BaseClasses import CollectionState, ItemClassification
         from ..world import BugFablesItem
         artifact = self.world.get_location("Artifact 1")
@@ -188,15 +172,13 @@ class TestLeif(BugFablesTestBase):
         self.assertTrue(artifact.can_reach(state))
 
     def test_leif_joins_before_the_droplet_rooms(self) -> None:
-        # Leif's event is reachable with only what the Snakemouth Den needs, so the seed stays completable.
         self.collect_by_name("Explorer Permit")
         self.assertTrue(self.can_reach_location("Leif Joins"))
         self.assertTrue(self.can_reach_location("Snakemouth Den: Underground Door Room"))
 
 
 class TestInRoomRules(BugFablesTestBase):
-    # What a spot needs once you're in its room is written on the location itself, even when the region already
-    # implies it, so entrance rando can change how a room is reached without losing it (the user, 2026-09-24).
+    # A spot's own needs are written on the location, so entrance rando can't lose them.
     def test_gummies_need_leif_in_the_room(self) -> None:
         from BaseClasses import CollectionState, ItemClassification
         from ..world import BugFablesItem
@@ -204,7 +186,6 @@ class TestInRoomRules(BugFablesTestBase):
         region = location.parent_region
         state = CollectionState(self.multiworld)
         state.collect(self.world.create_item("Explorer Permit"), prevent_sweep=True)
-        # Pretend the room was reached another way: the location's own rule must still ask for Leif.
         self.assertFalse(location.access_rule(state))
         state.collect(BugFablesItem("Leif", ItemClassification.progression, None, self.player), prevent_sweep=True)
         self.assertTrue(location.access_rule(state))
@@ -217,8 +198,7 @@ class TestInRoomRules(BugFablesTestBase):
 
 
 class TestLostKid(BugFablesTestBase):
-    # The lost kid at the lake only appears after the first boss, and his cutscene moves all three party members, so
-    # it needs Leif (EventControl.Event31). Without the rule, fill could put progression there that isn't reachable.
+    # The lost kid appears after the first boss and his cutscene moves all three party members, so he needs Leif.
     def test_reward_needs_the_first_boss_and_leif(self) -> None:
         from BaseClasses import CollectionState, ItemClassification
         from ..world import BugFablesItem
@@ -233,14 +213,12 @@ class TestLostKid(BugFablesTestBase):
 
 
 class TestQuestsOff(BugFablesTestBase):
-    # With quests off, a quest's reward isn't a location and its item isn't in the pool: the game hands it out as
-    # usual. Were it still in slot_data, the client would swap the reward for something the seed never placed.
+    # With quests off, a quest reward must stay out of slot_data, or the client would swap it.
     options = {"shuffle_quests": False}
 
     def test_quest_locations_left_out(self) -> None:
         names = {loc.name for loc in self.multiworld.get_locations(self.player)}
         self.assertNotIn("Snakemouth Den: Lake, Ladybug Kid's Reward", names)
-        # The quest's Lore Book is out; Lore Books from other (non-quest) locations stay, one each.
         from ..data_tables import vanilla_item
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         expected = sum(1 for loc in self.world.included_locations if vanilla_item(loc) == "Lore Book")
@@ -256,8 +234,7 @@ class TestQuestsOnByDefault(BugFablesTestBase):
 
 
 class TestStoryPickup(BugFablesTestBase):
-    # A story pickup has no flag of its own: the client knows it by the story event picking it up starts. Without it
-    # in slot_data, the vanilla item would be handed out and the seed's item lost.
+    # A story pickup has no flag: the client knows it by the event it starts.
     def test_story_pickup_known_by_its_event(self) -> None:
         pickups = self.world.fill_slot_data()["location_pickups"]
         trapdoor = str(self.world.location_name_to_id["Snakemouth Den: Door Room, Trapdoor"])
@@ -270,7 +247,7 @@ class TestStoryPickup(BugFablesTestBase):
 
 
 class TestGoldenPath(BugFablesTestBase):
-    # The Golden Path's door opens with the first boss (flag 41). Without the rule, fill could put the permit there.
+    # The Golden Path's door opens with the first boss (flag 41).
     def test_golden_path_needs_the_first_boss(self) -> None:
         from BaseClasses import CollectionState, ItemClassification
         from ..world import BugFablesItem
@@ -283,15 +260,13 @@ class TestGoldenPath(BugFablesTestBase):
 
 
 class TestKeptOpen(BugFablesTestBase):
-    # Eetl's blocker closes the way back to Snakemouth Den after the first boss; the logic assumes the den stays
-    # reachable, so the client must be told to keep it out of the way.
+    # The logic assumes Snakemouth Den stays reachable, so Eetl's blocker must be kept away.
     def test_eetls_blocker_is_kept_open(self) -> None:
         kept = self.world.fill_slot_data()["kept_open"]
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "eetlblocker1 - Duplicate"}, kept)
 
     def test_plaza_discoveries_open_before_the_briefing(self) -> None:
-        # The statue and the inn portrait exist only from chapter 2's briefing (flag 67); before it, a stand-in in
-        # front of each turns the player away (the user, 2026-09-25).
+        # The statue and inn portrait exist only from flag 67; before it a stand-in turns the player away.
         slot = self.world.fill_slot_data()
         for entity in ("Discovery Pre Briefing", "Discovery Pre Briefing - Duplicate"):
             self.assertIn({"map": "BugariaMainPlaza", "entity": entity}, slot["kept_open"])
@@ -299,21 +274,18 @@ class TestKeptOpen(BugFablesTestBase):
             self.assertIn({"map": "BugariaMainPlaza", "entity": entity}, slot["kept_present"])
 
     def test_follower_swap_waits_for_the_first_follower(self) -> None:
-        # The bridge scene swaps the follower from after the first boss for Maki; crossed first, it would leave that
-        # follower stuck for good (the user, 2026-09-25).
+        # Crossed first, the bridge scene would leave the follower from after the first boss stuck for good.
         held = self.world.fill_slot_data()["held_until"]
         self.assertIn({"map": "AntBridge", "entity": "makiautoevent", "flag": 114}, held)
-        # The briefing needs Maki, so it waits for the swap itself, whatever door led into the palace.
         self.assertIn({"map": "AntPalace1", "entity": "Chapter1StartEvent", "flag": 66}, held)
 
     def test_inn_open_before_the_briefing(self) -> None:
-        # Before flag 67 the innkeeper hands the talk to the follower ("We mustn't keep the Queen waiting.").
         flags = self.world.fill_slot_data()["dialogue_flags"]
         self.assertIn({"map": "BugariaMainPlaza", "entity": "Innkeeper", "flag": 67, "to": 691}, flags)
 
 
 class TestBossPrize(BugFablesTestBase):
-    # The first boss's prize is handed over by Artis; the client knows it's done when its prize slot reaches 3.
+    # The first boss's prize is done when its prize slot reaches 3.
     def test_prize_watched_by_its_slot(self) -> None:
         variables = self.world.fill_slot_data()["location_vars"]
         prize = str(self.world.location_name_to_id["Outskirts: Artis's Prize for Snakemouth Den"])
@@ -331,8 +303,7 @@ class TestBossPrize(BugFablesTestBase):
 
 
 class TestChapterTwo(BugFablesTestBase):
-    # The Ant Palace library is behind chapter 2's start (flag 67), whose palace scene needs the companion who joins
-    # after the first boss. The city itself is open from the start (the user, 2026-09-25).
+    # The library needs flag 67, whose palace scene needs the companion who joins after the first boss.
     def test_library_needs_the_city_and_chapter_two(self) -> None:
         from BaseClasses import CollectionState, ItemClassification
         from ..world import BugFablesItem
@@ -362,8 +333,7 @@ class TestChapterTwo(BugFablesTestBase):
 
 
 class TestMidQuestItem(BugFablesTestBase):
-    # Mid-quest items are shuffled (the user, 2026-09-24): the old book can be anywhere, so the delivery's reward
-    # needs it. Without the rule, the reward could hold something needed to reach the book.
+    # Mid-quest items are shuffled, so the delivery's reward needs the old book.
     def test_reward_needs_the_quest_book(self) -> None:
         from BaseClasses import CollectionState, ItemClassification
         from ..world import BugFablesItem
@@ -377,8 +347,7 @@ class TestMidQuestItem(BugFablesTestBase):
 
 
 class TestMidQuestItemQuestsOff(BugFablesTestBase):
-    # With quests off the whole quest stays vanilla: its start and reward aren't locations, and the old book stays
-    # out of the pool (the game hands it out as usual).
+    # With quests off the whole quest stays vanilla.
     options = {"shuffle_quests": False}
 
     def test_quest_book_not_in_pool(self) -> None:
@@ -387,8 +356,7 @@ class TestMidQuestItemQuestsOff(BugFablesTestBase):
 
 
 class TestClassifications(BugFablesTestBase):
-    # An item is progression exactly when a rule needs it, even for one check (the user, 2026-09-24). Too few and
-    # fill can lock an item behind itself; too many and it skews placement and playthroughs.
+    # Progression exactly when a rule needs it: too few locks items behind themselves, too many skews fill.
     def test_items_rules_use_are_progression_and_only_those(self) -> None:
         from ..data_tables import ITEMS, LOCATIONS, REGIONS, STORY_EVENTS
         used: set[str] = set()
@@ -408,8 +376,7 @@ class TestClassifications(BugFablesTestBase):
 
 
 class TestBerries(BugFablesTestBase):
-    # Berry rewards are locations and berries are items (the user, 2026-09-24): each berry reward puts its own
-    # amount in the pool, so a seed holds as much money as the game gives out.
+    # Each berry reward puts its own amount in the pool.
     def test_reward_near_snakemouth_puts_its_berries_in_the_pool(self) -> None:
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         self.assertIn("10 Berries", pool)
@@ -425,8 +392,7 @@ class TestBerries(BugFablesTestBase):
 
 
 class TestCrystalBerries(BugFablesTestBase):
-    # A crystal berry spot is known by its index, not a flag; the client needs it both to recognise the pickup and to
-    # see the check done. Its vanilla item is the one Crystal Berry item.
+    # A crystal berry spot is known by its index, not a flag; its item is the one Crystal Berry item.
     def test_berry_zero_known_by_its_index(self) -> None:
         data = self.world.fill_slot_data()
         berry = str(self.world.location_name_to_id["Outskirts: Snakemouth Den Entrance"])
@@ -442,8 +408,7 @@ class TestCrystalBerries(BugFablesTestBase):
 
 
 class TestCrystalBerriesOff(BugFablesTestBase):
-    # With crystal berries off their spots aren't locations, the item stays out of the pool, and the client isn't
-    # told about them, so the game hands them out as usual.
+    # With crystal berries off, the game hands them out as usual.
     options = {"shuffle_crystal_berries": False}
 
     def test_berries_left_out(self) -> None:
@@ -455,9 +420,7 @@ class TestCrystalBerriesOff(BugFablesTestBase):
 
 
 class TestRespawningPickups(BugFablesTestBase):
-    # A respawning pickup has no flag of its own: the client knows it by its map and regional flag, and sends the
-    # check itself at the first pickup. Without "regional" it would never recognise the pickup and hand out the
-    # vanilla item every time; with a flag entry it would wait for a flag the game never sets.
+    # A respawning pickup has no flag: without "regional" the client would never recognise it.
     def test_known_by_regional_flag(self) -> None:
         data = self.world.fill_slot_data()
         spot = str(self.world.location_name_to_id["Snakemouth Den: Underground Bridge Room, Behind Pillar"])
@@ -475,9 +438,7 @@ class TestRespawningPickups(BugFablesTestBase):
 
 
 class TestKeptPresent(BugFablesTestBase):
-    # The trapdoor into the fall room must never be a dead end, and the big door to Upper Snakemouth stays open (the
-    # Peculiar Gem slot behind it is the real gate). Without these entries the client leaves them to the story (flag
-    # 41), and the chapter 1 blocker in the fall room still turns the party back.
+    # The trapdoor must never be a dead end; the Peculiar Gem slot, not the big door, is the real gate.
     def test_ways_back_are_present(self) -> None:
         present = self.world.fill_slot_data()["kept_present"]
         self.assertIn({"map": "SnakemouthFallRoom", "entity": "JumpShroom"}, present)
@@ -485,8 +446,7 @@ class TestKeptPresent(BugFablesTestBase):
         self.assertIn({"map": "SnakemouthDoorRoom", "entity": "DoorLoadZone"}, present)
 
     def test_way_back_down_from_the_trapdoor(self) -> None:
-        # Going up the kept mushroom before the spider fight left no way back down (the user, 2026-09-25): the door room's
-        # door to the fall room exists from the trapdoor (flag 14), not from the first boss.
+        # The door back down exists from the trapdoor (flag 14), or the kept mushroom strands the party.
         self.assertIn({"map": "SnakemouthDoorRoom", "entity": "LoadZoneFallRoom", "flag": 14},
                       self.world.fill_slot_data()["present_from"])
 
@@ -495,24 +455,18 @@ class TestKeptPresent(BugFablesTestBase):
 
 
 class TestOutskirtsRocks(BugFablesTestBase):
-    # The rocks that cut the Outskirts off until the first boss are removed from the start, and the town's first-entry
-    # scene they used to guard waits for the first boss instead (the user, 2026-09-25: rocks and house now, town later).
-    # Without the hold, removing the rocks would let the chapter 2 city scene start in chapter 1.
+    # The Outskirts rocks go from the start, so the town's first-entry scene must wait for the first boss.
     def test_rocks_are_removed(self) -> None:
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "Base/BlockingRocks"},
                       self.world.fill_slot_data()["scenery_hidden"])
 
     def test_town_open_from_the_start(self) -> None:
-        # The arrival scene (Event60) is removed and the real door kept, so the city is a plain door from the start (the
-        # user, 2026-09-25); the palace scene that starts chapter 2 waits for the companion who joins after the boss.
         data = self.world.fill_slot_data()
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "DoorBugaria - Duplicate"}, data["kept_open"])
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "DoorBugaria"}, data["kept_present"])
-        # Held until the bridge swap (66), which itself waits for the follower after the first boss (114).
         self.assertIn({"map": "AntPalace1", "entity": "Chapter1StartEvent", "flag": 66}, data["held_until"])
 
     def test_plaza_blockers_removed(self) -> None:
-        # The plaza's three blockers kept the party in the plaza until chapter 2 (the user, 2026-09-25: open the town).
         kept = self.world.fill_slot_data()["kept_open"]
         for entity in ("MM", "blockereetl2", "blockereetl2 - Duplicate"):
             with self.subTest(entity=entity):
@@ -524,8 +478,7 @@ class TestOutskirtsRocks(BugFablesTestBase):
         self.assertIn({"map": "BugariaMainPlaza", "entity": "Cube"}, data["scenery_hidden"])
 
     def test_boat_waits_for_leif(self) -> None:
-        # The boat scene seats three; with the rocks gone a two-member party reached it and the scene threw (the user,
-        # 2026-09-25). The sailor waits for Leif's joining flag.
+        # The boat scene seats three, so the sailor waits for Leif.
         self.assertIn({"map": "BugariaPier", "entity": "boatsailor", "flag": 16},
                       self.world.fill_slot_data()["held_until"])
 
@@ -542,7 +495,6 @@ class TestDiscoveriesOn(BugFablesTestBase):
     options = {"shuffle_discoveries": True}
 
     def test_pier_statue_is_discovery_49(self) -> None:
-        # The statue's line runs |discovery,49| (ScriptDump, 2026-09-25); the check is that journal entry.
         pier = str(self.world.location_name_to_id["Outskirts: Pier, Statue"])
         self.assertEqual(self.world.fill_slot_data()["location_discoveries"][pier], 49)
 
@@ -556,7 +508,7 @@ class TestDiscoveriesOn(BugFablesTestBase):
 
 
 class TestTownMedal(BugFablesTestBase):
-    # The Bug Me Not! medal in the residential district needs Leif's ice (the user, 2026-09-25); the town itself is open.
+    # The Bug Me Not! medal needs Leif's ice; the town itself is open.
     def test_needs_leif(self) -> None:
         name = "Bugaria City: Residential District, Fountain Rooftop"
         self.assertFalse(self.can_reach_location(name))
@@ -565,8 +517,7 @@ class TestTownMedal(BugFablesTestBase):
 
 
 class TestBarAndBoards(BugFablesTestBase):
-    # The bar (Shades's shop, a bounty board) and the town and Outskirts quest boards are open from the start (the user,
-    # 2026-09-25). The bar's entrance line answers to flag 691, set on every new game, not the story's flag 135.
+    # The bar's entrance line answers to flag 691, set on every new game, instead of story flag 135.
     def test_bar_entrance_repointed(self) -> None:
         self.assertIn({"map": "BugariaCommercial", "entity": "HideoutEntrance", "flag": 135, "to": 691},
                       self.world.fill_slot_data()["dialogue_flags"])
@@ -578,8 +529,7 @@ class TestBarAndBoards(BugFablesTestBase):
 
 
 class TestMedalShop(BugFablesTestBase):
-    # Merab's full stock is locations from the start (the user, 2026-09-25), open from the start (the town is), each known
-    # by its shop and medal: 22 copies, TP Plus and Ambusher twice ("a 2nd copy is a 2nd check").
+    # Merab's full stock is 22 locations, one per copy (TP Plus and Ambusher twice).
     def test_stock_in_slot_data(self) -> None:
         data = self.world.fill_slot_data()
         first = str(self.world.location_name_to_id["Bugaria City: Commercial District, Medal Shop 1"])
@@ -588,8 +538,7 @@ class TestMedalShop(BugFablesTestBase):
         self.assertEqual(len(data["location_shops"]), 22)
 
     def test_full_stock_with_duplicates(self) -> None:
-        # The stock the story builds up, in order (MainManager.cs:4010, then Event73, Event99, Event120, Event142 and the
-        # helper medal), read back from the locations in id order: the mod treats a shop's copies in that order.
+        # The stock in the order the story builds it: the mod treats a shop's copies in location id order.
         shops = self.world.fill_slot_data()["location_shops"]
         medals = [shops[key]["medal"] for key in sorted(shops, key=int) if shops[key]["shop"] == 0]
         self.assertEqual(medals, [0, 1, 7, 12, 30, 86, 84, 87, 88, 81, 21, 22, 48, 33, 56, 74, 45, 1, 86, 62, 41, 85])
@@ -602,9 +551,7 @@ class TestMedalShop(BugFablesTestBase):
 
 
 class TestItemShop(BugFablesTestBase):
-    # Madame Butterfly's five stock entries are locations (the user, 2026-09-25: the first purchase of each item in each
-    # shop), known by map, shopkeeper and item; each puts its own item in the pool. No give entry: the client must never
-    # swap an unrelated giveitem of the same item on that map.
+    # The first purchase of each item shop entry; no give entry, so no unrelated giveitem of that item is swapped.
     def test_slot_data(self) -> None:
         data = self.world.fill_slot_data()
         shops = {k: e for k, e in data["location_item_shops"].items() if e["keeper"] == "ButterflyShopkeeper"}
@@ -625,8 +572,7 @@ class TestItemShop(BugFablesTestBase):
 
 
 class TestCaravan(BugFablesTestBase):
-    # The caravan is there from the start (the user, 2026-09-25): its keeper present (so its shop slots are built), its
-    # stall shown, the Crickerly who stands there before it kept away; its three items are item shop locations.
+    # The caravan is there from the start: keeper present (so its shop slots are built), stall shown.
     def test_caravan_open(self) -> None:
         data = self.world.fill_slot_data()
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "Crickerly2"}, data["kept_present"])
@@ -636,11 +582,9 @@ class TestCaravan(BugFablesTestBase):
         self.assertEqual(sorted(e["item"] for e in caravan), [2, 3, 11])
 
     def test_no_rock_lines(self) -> None:
-        # The Outskirts lines about the rocks (the user, 2026-09-25): the waiting moth goes, the husband welcomes.
         data = self.world.fill_slot_data()
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "FuzzyMoth"}, data["kept_open"])
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "CHusband", "flag": 41, "to": 691}, data["dialogue_flags"])
-        # The ladybug siblings are there from the start too (the user: the map shouldn't feel empty).
         for sibling in ("LaydbugGirl", "LaydbugBoy"):
             self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": sibling}, data["kept_present"])
 
@@ -663,7 +607,7 @@ class TestMedalShopsOff(BugFablesTestBase):
 
 
 class TestShopContentsDefault(BugFablesTestBase):
-    # By default shops refuse progression items (the user, 2026-09-25: shops soak up the good items, as in Tevi).
+    # By default shops refuse progression items.
     def test_shop_refuses_progression(self) -> None:
         shop = self.world.get_location("Bugaria City: Commercial District, Medal Shop 1")
         self.assertFalse(shop.item_rule(self.world.create_item("Explorer Permit")))
@@ -677,8 +621,7 @@ class TestShopContentsDefault(BugFablesTestBase):
 
 
 class TestShopContentsFillerOnly(BugFablesTestBase):
-    # With discoveries on, a solo seed has exactly enough filler (17 items and 5 padding) for Merab's 22 copies
-    # (2026-09-25), so Filler Only holds.
+    # With discoveries on, a solo seed has exactly enough filler for Merab's 22 copies.
     options = {"shop_contents": "filler_only", "shuffle_discoveries": True}
 
     def test_shops_excluded(self) -> None:
@@ -688,9 +631,7 @@ class TestShopContentsFillerOnly(BugFablesTestBase):
 
 
 class TestShopContentsFillerOnlyFallsBack(BugFablesTestBase):
-    # A solo seed without discoveries has 17 filler items for 22 excluded shop spots (2026-09-25), which Archipelago's
-    # fill can't place. The shops take No Progression instead, with a warning (the user, 2026-09-25), and the seed
-    # generates (the default test_fill, which failed before the fallback).
+    # A solo seed without discoveries is short of filler: shops fall back to No Progression and still generate.
     options = {"shop_contents": "filler_only"}
 
     def test_shops_fall_back_to_no_progression(self) -> None:
@@ -710,7 +651,7 @@ class TestShopContentsAnything(BugFablesTestBase):
 
 
 class TestMadeleinesHouse(BugFablesTestBase):
-    # The house is open from the start (the user, 2026-09-25): door kept, lock and locked-door check removed.
+    # The house is open from the start: door kept, lock and locked-door check removed.
     def test_house_opened(self) -> None:
         data = self.world.fill_slot_data()
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "doormadeleine"}, data["kept_present"])
