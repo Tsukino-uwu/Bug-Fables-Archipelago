@@ -13,6 +13,8 @@ from .data_tables import (ARTIFACTS, ITEM_NAME_TO_ID, ITEMS, DIALOGUE_FLAGS, HEL
 from .options import BugFablesOptions, ShopContents
 
 GAME = "Bug Fables"
+# Location categories Shop Contents applies to: medal shops and item shops.
+SHOP_CATEGORIES = ("shop", "item_shop")
 _CLASSIFICATIONS = {
     "progression": ItemClassification.progression,
     "useful": ItemClassification.useful,
@@ -88,6 +90,8 @@ class BugFablesWorld(World):
             return bool(self.options.shuffle_discoveries.value)
         if category == "shop":
             return bool(self.options.shuffle_medal_shops.value)
+        if category == "item_shop":
+            return bool(self.options.shuffle_item_shops.value)
         return True
 
     def create_regions(self) -> None:
@@ -138,7 +142,7 @@ class BugFablesWorld(World):
         # important items, as in Tevi). Filler Only uses Archipelago's excluded type (no progression, no useful);
         # No Progression refuses progression items from any game.
         for loc in self.included_locations:
-            if loc.get("category") != "shop":
+            if loc.get("category") not in SHOP_CATEGORIES:
                 continue
             location = self.get_location(loc["name"])
             if self.options.shop_contents == ShopContents.option_filler_only:
@@ -161,7 +165,7 @@ class BugFablesWorld(World):
         # copies. Then this world's shops take No Progression instead, which every seed can hold.
         if self.options.shop_contents != ShopContents.option_filler_only:
             return
-        shops = [self.get_location(loc["name"]) for loc in self.included_locations if loc.get("category") == "shop"]
+        shops = [self.get_location(loc["name"]) for loc in self.included_locations if loc.get("category") in SHOP_CATEGORIES]
         excludable = sum(1 for item in self.multiworld.itempool if item.excludable)
         excluded = sum(1 for location in self.multiworld.get_unfilled_locations()
                        if location.progress_type == LocationProgressType.EXCLUDED)
@@ -199,6 +203,10 @@ class BugFablesWorld(World):
             # marks a copy done in the save when it is bought ({location id: {shop, medal}}).
             "location_shops": {str(LOCATION_NAME_TO_ID[loc["name"]]): {"shop": loc["source"]["shop"], "medal": loc["source"]["medal"]}
                                for loc in self.included_locations if "shop" in loc["source"]},
+            # Item shop locations: the first purchase of an item in a shop ({location id: {map, keeper, item}}); the keeper is
+            # the shopkeeper's entity name, the item its stock entry. After the check, the shop sells its own item again.
+            "location_item_shops": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["item_shop"]
+                                    for loc in self.included_locations if "item_shop" in loc["source"]},
             # Locations marked done by a number slot reaching a value instead of a flag (a boss prize handed over:
             # its prize slot reaching 3).
             "location_vars": {str(LOCATION_NAME_TO_ID[loc["name"]]): {"var": loc["source"]["var"],

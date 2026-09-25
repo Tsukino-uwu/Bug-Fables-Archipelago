@@ -312,6 +312,18 @@ namespace BugFablesAP
         internal Dictionary<long, int[]> LocationShops => locationShops;
         private volatile Dictionary<long, int[]> locationShops;
 
+        // slot_data's location_item_shops: an item shop's first purchase of an item ({location id: {map, keeper, item}};
+        // Shuffle Item Shops, 2026-09-25). Null when not sent.
+        internal sealed class ItemShopSlot
+        {
+            internal string Map;
+            internal string Keeper;
+            internal int Item;
+        }
+
+        internal Dictionary<long, ItemShopSlot> LocationItemShops => locationItemShops;
+        private volatile Dictionary<long, ItemShopSlot> locationItemShops;
+
         private static Dictionary<long, int> ReadLocationBerries(Dictionary<string, object> slotData, string key = "location_berries")
         {
             if (slotData == null || !slotData.TryGetValue(key, out object raw) || !(raw is JObject map))
@@ -593,6 +605,14 @@ namespace BugFablesAP
                     locationDiscoveries = ReadLocationBerries(ok.SlotData, "location_discoveries");
                     locationShops = ok.SlotData != null && ok.SlotData.TryGetValue("location_shops", out object ls) && ls is JObject lso
                         ? lso.Properties().ToDictionary(p => long.Parse(p.Name), p => new[] { p.Value.Value<int>("shop"), p.Value.Value<int>("medal") })
+                        : null;
+                    locationItemShops = ok.SlotData != null && ok.SlotData.TryGetValue("location_item_shops", out object lis) && lis is JObject liso
+                        ? liso.Properties().ToDictionary(p => long.Parse(p.Name), p => new ItemShopSlot
+                        {
+                            Map = p.Value.Value<string>("map"),
+                            Keeper = p.Value.Value<string>("keeper"),
+                            Item = p.Value.Value<int>("item"),
+                        })
                         : null;
                     ownSlot = ok.Slot;
                     itemKinds = ReadItemKinds(ok.SlotData);

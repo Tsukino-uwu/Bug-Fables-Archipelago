@@ -40,6 +40,8 @@
     {"name": "Status Relay", "game_id": 45, "kind": 2, "classification": "useful"},
     {"name": "Prayer", "game_id": 62, "kind": 2, "classification": "useful"},
     {"name": "Sleepy Needles", "game_id": 41, "kind": 2, "classification": "useful"},
-    {"name": "We Owe Ya!", "game_id": 85, "kind": 2, "classification": "useful"}
+    {"name": "We Owe Ya!", "game_id": 85, "kind": 2, "classification": "useful"},
+    {"name": "Aphid Egg", "game_id": 17, "kind": 0, "classification": "filler"},
+    {"name": "Danger Shroom", "game_id": 26, "kind": 0, "classification": "filler"}
   ]
 }

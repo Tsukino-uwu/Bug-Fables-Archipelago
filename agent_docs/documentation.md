@@ -628,6 +628,15 @@ shopkeeper's `data` length and each slot sits at `vectordata[j]`, so both are le
 once per shopkeeper: the game rebuilds the shelf on the same shopkeeper after a purchase, and a second stretch drifted
 it right. Seen: 5 on Merab's counter (screenshot, 2026-09-25).
 
+**Item shops** (the user, 2026-09-25: the first purchase of each item in each shop is a check, then the shop's own
+item again). An item shop isn't a shelf the shopkeeper builds: the map makes one `Fixedshop<n>` slot per entry of the
+shopkeeper's `data` (`MapControl.cs:1715-1745`), and the buy line pays and then adds the item with `additem`, silently,
+with no item-get box to swap (`BugariaCommercial` line 16). So the slot shows the seed's item (sprite, name and
+description, as for medals, from `itemdata[0, id, 0]` and `[.., 2]`); when the buy line is read (`GetDialogueText`) its
+`additem` is taken out, so nothing local is given; once the dialogue is over, berries down by the price mean it was
+bought, and the check goes out through the respawning pickups' queue with a hold-up. Nothing in the save marks it,
+as for respawning pickups. After the check, the slot is the shop's own item again. Built, not yet seen.
+
 **The reshuffle choice first** (the user, 2026-09-25: faster to reset a shelf). A shopkeeper's greeting ends in a
 `prompt` whose choices are listed as N targets then N texts (`MainManager.cs:12213-12222`); the reshuffle is the one with
 target `-199` and text `-195` (Shades's line 1, Merab's line 34, read with the console's `script`). With Archipelago on,

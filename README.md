@@ -11,8 +11,8 @@ abilities shuffled as items.
 ## How it will work
 
 - **The apworld** (`apworld/bug_fables/`) tells the generator which items and locations exist and which key
-  items gate which areas. Today it covers 51 locations (the Outskirts, Snakemouth Den, the open parts of the town and Merab's medal shop,
-  her full stock of 22 from the start), 56 with the opt-in *Shuffle Discoveries*. Each
+  items gate which areas. Today it covers 56 locations (the Outskirts, Snakemouth Den, the open parts of the town, Merab's medal shop with her
+  full stock of 22 from the start, and Madame Butterfly's item shop), 61 with the opt-in *Shuffle Discoveries*. Each
   yaml toggle that adds checks says how many in its description.
 - **The mod** (`mod/`) runs inside the game. Finishing a location sends a check to the server, and every
   item, including your own, arrives from the server and is given to you through the game's own item

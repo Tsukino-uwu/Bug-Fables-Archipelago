@@ -10,13 +10,13 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 
 ## Where it stands
 
-**Done so far:** an apworld (56 locations, 51 by default; 40 items) that generates seeds and passes its tests, with
+**Done so far:** an apworld (61 locations, 56 by default; 42 items) that generates seeds and passes its tests, with
 the goal "collect N artifacts"; the mod connecting on its own, compressed, to a local server or a hosted room on
 archipelago.gg, retrying when the server is unreachable or drops; sending checks (build step 6); receiving
 items, with the count kept in the save (build step 7); the game's own item at a location swapped for the
 seed's (the mod guide, step 9); and, as of 2026-09-25, the world opening one gate at a time (the Outskirts rocks,
 Snakemouth's fall room both ways, the town, its districts, the bar, Madeleine's house), journal discoveries and
-Merab's medal shop as locations (her full stock of 22 from a new game, built 2026-09-25, not yet seen), and a Quality of life page (build step 8 and the mod guide, step 10).
+Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026-09-25), Madame Butterfly's item shop (built, not yet seen), and a Quality of life page (build step 8 and the mod guide, step 10).
 
 **Next** (decided by the user, 2026-09-24):
 
@@ -55,6 +55,12 @@ Merab's medal shop as locations (her full stock of 22 from a new game, built 202
    **Item shops** (endless consumables, the user): the first purchase of each item in each shop is a check that shows
    and gives the seed's item, then the shop sells its own item again, like respawning pickups, so restocking still works.
    Their own yaml toggle, *Shuffle Item Shops*, default on, apart from *Shuffle Medal Shops*. Built after the medal shops.
+   **Built for Madame Butterfly's shop (2026-09-25, not yet seen):** five locations (*Item Shop 1* to *5*, ids 58-62), one
+   per stock entry, known by map, shopkeeper and item (`location_item_shops`); each puts its own item in the pool, with
+   no `give` entry, so an unrelated `giveitem` of the same item on that map is never swapped. *Shop Contents* covers
+   them too. The buy line adds the item with `additem` (no item-get box), so the mod takes that command out when the line
+   is read and treats berries paid as the purchase; the check goes out through the respawning pickups' queue. Tests
+   `TestItemShop*`. The other shops (the caravan first) follow the same data.
    **Shop Contents** (the user, 2026-09-25: shops are many easy checks in one place and soak up the good items, as in
    Tevi): a yaml choice, *Anything*, *No Progression* (default) or *Filler Only*. No Progression is an `item_rule` on each
    shop location refusing progression items from any game; Filler Only is Archipelago's excluded type (no progression,

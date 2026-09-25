@@ -69,6 +69,9 @@ if len(set(LOCATION_NAME_TO_ID.values())) != len(LOCATIONS):
 def vanilla_item(location: dict[str, Any]) -> str | None:
     """The name of the item the game hands out at a location (its give or pickup; berries as "N Berries"), or None."""
     source = location["source"].get("give") or location["source"].get("pickup")
+    if source is None and "item_shop" in location["source"]:
+        # An item shop slot: its item is an ordinary item (kind 0), the shop's stock entry.
+        source = {"type": 0, "item": location["source"]["item_shop"]["item"]}
     if source is None:
         return None
     if source["type"] == 3:

@@ -66,6 +66,19 @@ class ShuffleMedalShops(DefaultOnToggle):
     display_name = "Shuffle Medal Shops"
 
 
+class ShuffleItemShops(DefaultOnToggle):
+    """
+    The first purchase of each item in an item shop is a location: the shelf shows what's really there, and buying it
+    sends the check. After that, the shop sells its own item again, as often as you like.
+
+    Turned off, item shops sell their own items as usual.
+
+    Checks added in this version: {count}.
+    """
+
+    display_name = "Shuffle Item Shops"
+
+
 class ShopContents(Choice):
     """
     What shop locations may hold, when shops are shuffled. Shops put many easy checks in one place, which can soak up
@@ -95,6 +108,7 @@ ShuffleQuests.__doc__ = ShuffleQuests.__doc__.replace("{count}", str(category_co
 ShuffleCrystalBerries.__doc__ = ShuffleCrystalBerries.__doc__.replace("{count}", str(category_count("crystal_berry")))
 ShuffleDiscoveries.__doc__ = ShuffleDiscoveries.__doc__.replace("{count}", str(category_count("discovery")))
 ShuffleMedalShops.__doc__ = ShuffleMedalShops.__doc__.replace("{count}", str(category_count("shop")))
+ShuffleItemShops.__doc__ = ShuffleItemShops.__doc__.replace("{count}", str(category_count("item_shop")))
 
 
 @dataclass
@@ -104,4 +118,5 @@ class BugFablesOptions(PerGameCommonOptions):
     shuffle_crystal_berries: ShuffleCrystalBerries
     shuffle_discoveries: ShuffleDiscoveries
     shuffle_medal_shops: ShuffleMedalShops
+    shuffle_item_shops: ShuffleItemShops
     shop_contents: ShopContents

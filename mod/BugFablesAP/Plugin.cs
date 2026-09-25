@@ -151,6 +151,7 @@ namespace BugFablesAP
             HoldUps.Init(Log, () => randomizerEnabled.Value);
             PartyFit.Enable(Log, Guid, () => randomizerEnabled.Value);
             ShopSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
+            ItemShops.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             WarpButton.Enable(Log, Guid, () => randomizerEnabled.Value && QualityOfLife.WarpButton.Value);
             MenuToggle.Enable(Log, Guid, randomizerEnabled, server, port, slot, password,
                 () => { },
@@ -262,6 +263,7 @@ namespace BugFablesAP
             KeptOpen.Tick();
             HoldUps.Tick();
             ShopSwap.Tick();
+            ItemShops.Tick();
             PartyFit.Tick();
 
             DevCheats.Tick(Log, giveMoney);
@@ -337,6 +339,7 @@ namespace BugFablesAP
             HoldUps.Clear();
             PartyFit.Disable();
             ShopSwap.Disable();
+            ItemShops.Disable();
             // ScriptEngine destroys the old instance on reload. Say so, so a reload shows up in the log.
             Log?.LogInfo($"{Name} {Version} unloaded.");
         }

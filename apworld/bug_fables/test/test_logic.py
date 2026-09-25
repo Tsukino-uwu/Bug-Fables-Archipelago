@@ -30,7 +30,8 @@ class TestPermitGate(BugFablesTestBase):
                                      "Outskirts: Ladybug Siblings' House", "Outskirts: East Road, Stone",
                                      "Outskirts: Pier", "Bugaria City: Residential District, Rooftop",
                                      "Outskirts: Madeleine's House, Table Right", "Outskirts: Madeleine's House, Table Left"}
-                         | {f"Bugaria City: Commercial District, Medal Shop {n}" for n in range(1, 23)})
+                         | {f"Bugaria City: Commercial District, Medal Shop {n}" for n in range(1, 23)}
+                         | {f"Bugaria City: Commercial District, Item Shop {n}" for n in range(1, 6)})
 
     def test_reward_near_snakemouth_needs_the_permit(self) -> None:
         self.assertFalse(self.can_reach_location("Outskirts: Near Snakemouth Den, Reward"))
@@ -71,12 +72,14 @@ class TestSlotData(BugFablesTestBase):
         flags, variables, berries = data["location_flags"], data["location_vars"], data["location_berries"]
         discoveries = data["location_discoveries"]
         shops = data["location_shops"]
+        item_shops = data["location_item_shops"]
         respawns = {loc for loc, pickup in data["location_pickups"].items() if "regional" in pickup}
         ids = {str(loc.address) for loc in self.multiworld.get_locations(self.player) if loc.address is not None}
         # Each location is watched exactly one way: a flag, a number slot, a crystal berry's index, a journal
-        # discovery, or (a respawning pickup) the pickup itself.
-        self.assertEqual(set(flags) | set(variables) | set(berries) | set(discoveries) | set(shops) | respawns, ids)
-        self.assertEqual(len(flags) + len(variables) + len(berries) + len(discoveries) + len(shops) + len(respawns), len(ids))
+        # discovery, a shop copy, an item shop's first purchase, or (a respawning pickup) the pickup itself.
+        self.assertEqual(set(flags) | set(variables) | set(berries) | set(discoveries) | set(shops) | set(item_shops) | respawns, ids)
+        self.assertEqual(len(flags) + len(variables) + len(berries) + len(discoveries) + len(shops) + len(item_shops) + len(respawns),
+                         len(ids))
         self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Maki and Eetl's Gift"])], 15)
         self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Artis's Gift"])], 32)
 
@@ -572,6 +575,36 @@ class TestMedalShop(BugFablesTestBase):
         self.assertEqual(names.count("TP Plus"), 2)
         self.assertEqual(names.count("Ambusher"), 2)
         self.assertEqual(names.count("We Owe Ya!"), 1)
+
+
+class TestItemShop(BugFablesTestBase):
+    # Madame Butterfly's five stock entries are locations (the user, 2026-09-25: the first purchase of each item in each
+    # shop), known by map, shopkeeper and item; each puts its own item in the pool. No give entry: the client must never
+    # swap an unrelated giveitem of the same item on that map.
+    def test_slot_data(self) -> None:
+        data = self.world.fill_slot_data()
+        shops = data["location_item_shops"]
+        self.assertEqual(sorted(entry["item"] for entry in shops.values()), [0, 1, 13, 17, 26])
+        self.assertTrue(all(entry == {"map": "BugariaCommercial", "keeper": "ButterflyShopkeeper", "item": entry["item"]}
+                            for entry in shops.values()))
+        for key in shops:
+            self.assertNotIn(key, data["location_gives"])
+
+    def test_items_in_pool(self) -> None:
+        names = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        self.assertIn("Aphid Egg", names)
+        self.assertIn("Danger Shroom", names)
+
+    def test_shop_contents_applies(self) -> None:
+        shop = self.world.get_location("Bugaria City: Commercial District, Item Shop 1")
+        self.assertFalse(shop.item_rule(self.world.create_item("Explorer Permit")))
+
+
+class TestItemShopsOff(BugFablesTestBase):
+    options = {"shuffle_item_shops": False}
+
+    def test_no_item_shop_locations(self) -> None:
+        self.assertEqual(self.world.fill_slot_data()["location_item_shops"], {})
 
 
 class TestMedalShopsOff(BugFablesTestBase):
