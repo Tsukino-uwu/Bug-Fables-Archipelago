@@ -89,8 +89,10 @@ namespace BugFablesAP
             SpriteRenderer[] sprites = (SpriteRenderer[])spritesField.GetValue(__instance);
             if (!ReferenceEquals(builtFor, __instance) || icon == null)
             {
-                // Window 0 builds over a few frames; add the button once its fourth icon is there.
-                if (sprites == null || sprites[16] == null)
+                // Window 0 builds over a few frames; add the button once its fourth icon is there. Coming back from another
+                // page, the sprites array is briefly that page's shorter one (8 to 12 long, PauseMenu.cs:2235-2678): the
+                // check threw IndexOutOfRange every frame (the user, 2026-09-25). Window 0's is 19 long (:2404).
+                if (sprites == null || sprites.Length <= 13 + Button || sprites[16] == null)
                 {
                     return true;
                 }

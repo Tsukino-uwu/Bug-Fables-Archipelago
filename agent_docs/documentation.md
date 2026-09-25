@@ -474,7 +474,11 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    (a blue map). The button is now made exactly like the other four: one sprite, no tint, no overlay. A plugin
    reload with the menu open had left the old icon behind the new one; unloading now removes it. Title "Warp" (the
    user). **Seen by the user (2026-09-25, screenshot):** five matching icons, "Warp" above them, the description line,
-   and the Yes / No box with No preselected ("this looks good"). The warp itself is still to see.
+   and the Yes / No box with No preselected ("this looks good"). The warp itself is still to see. **A second
+   IndexOutOfRange, the mod's own this time:** coming back to the main page from another, the menu briefly still holds
+   that page's shorter sprite array (8 to 12 long; window 0's is 19), and the button's per-frame check read slot 16 of
+   it. It now checks the length first. Lesson: a prefix on a menu's `Update` sees every page's state, not just the one
+   it was written for.
    **The logic never counts on the warp** (the user, 2026-09-25): it's fast travel and a way out when stuck, but a
    seed must not assume players teleport out, so every one-way drop still needs a real way back in the logic.
 5. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
