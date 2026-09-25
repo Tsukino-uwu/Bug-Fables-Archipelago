@@ -547,6 +547,10 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    building, since the same entity numbers are other things on other maps.
    Seen (the user, 2026-09-25): the spawn in the town looks right; only the building's music played briefly, so with a
    test start the scene's end no longer starts it.
+   (8) **Without a test start, the party stood under the house** (the user, 2026-09-25: "the weird broken location" seen
+   briefly before (7)'s fix). Event8 places the party only after its slides (Kabbu 2.5 left of entity 4,
+   `EventControl.cs:2770`), so cut before them the party kept a new game's raw spawn point; every test since (6) had a
+   test start, whose warp moved it away. The opening now stands the party where the scene would have. Not yet seen.
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,

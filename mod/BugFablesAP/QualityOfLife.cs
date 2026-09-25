@@ -348,6 +348,14 @@ namespace BugFablesAP
         {
             MainManager mm = MainManager.instance;
             Vector3 at = MainManager.player.transform.position;
+            // Event8 places the party only after its slides: Kabbu 2.5 to the left of entity 4 (EventControl.cs:2770). Cut
+            // before the slides, the party stood where a new game spawns it, under the house (the user, 2026-09-25, seen
+            // once the test start's warp no longer moved it away). So stand where the scene would have put it.
+            EntityControl four = MainManager.map.mapid.ToString() == OpeningMap ? MainManager.GetEntity(4) : null;
+            if (four != null)
+            {
+                at = four.transform.position + Vector3.left * 2.5f;
+            }
             MainManager.ChangeParty(new[] { 0, 1 }, true, true);
             mm.items[0].Add(0);
             foreach (string name in new[] { "Beee", "blockingbox" })
