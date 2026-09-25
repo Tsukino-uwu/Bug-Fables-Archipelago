@@ -685,9 +685,16 @@ removing the miners on the Outskirts right after a reload.
 scene lines up Vi, Kabbu and Leif by character (`GetEntity(-4)`, `-5`, `-6`), so the hold moved to Leif's flag 16 for
 one seed. With Leif added, the scene loaded the plaza and threw `ArgumentOutOfRange`: its fourth entry is
 `GetEntity(1000)`, the map's first temporary follower, a companion who joins in Event63, the scene outside the city after
-the first boss, which also sets flag 114 (`EventControl.cs:10034-10035`). So the city's first scene sits at the end of
-the chapter 1 chain, and the hold is flag 114, exactly when the scene has everything. Faking the companion isn't worth
-it. The city's checks keep needing the first boss in logic.
+the first boss, which also sets flag 114 (`EventControl.cs:10034-10035`). Held until 114 for one seed, but that is
+the first boss in practice, and the user wants the town open from the start ("especially if we are trying to make
+this game openworld"). The arrival scene gives no check and its only effect is flag 107, which nothing but the city
+doors reads (entity dump, map dump, ScriptDump). So **the scene is removed** (`kept_open`) and **the real door kept
+present** (`kept_present`): the town is a plain door from the start, no companion needed. The plaza has no scene of
+its own, and its blockers keep the party in it until chapter 2 starts. That start (Event45, the palace) lines up the
+same companion, so its trigger is held until 114 (`held_until`), and in logic *Chapter 2 Start* now requires the
+first boss explicitly, while the city region needs nothing and the *Entering the City* story event is gone. Tests
+`test_town_open_from_the_start`, `test_the_city_is_open_from_the_start`, `test_chapter_two_needs_the_first_boss`.
+Not yet seen.
 **The boat to Metal Island crashed with two in the party** (2026-09-25). With the rocks gone the user reached the
 pier on a chapter 1 file, paid the fare, and the boat scene (Event107) threw IndexOutOfRange: it seats three party
 members (`p[0..2]`, `EventControl.cs:17944-17946`), and in the game the pier is behind the rocks until the first

@@ -301,8 +301,8 @@ class TestBossPrize(BugFablesTestBase):
 
 
 class TestChapterTwo(BugFablesTestBase):
-    # The Ant Palace library is behind two story steps: the city opens after the first boss (flag 107), and the
-    # palace rooms after chapter 2 starts (flag 67). Without them, fill could put the permit in the library.
+    # The Ant Palace library is behind chapter 2's start (flag 67), whose palace scene needs the companion who joins
+    # after the first boss. The city itself is open from the start (the user, 2026-09-25).
     def test_library_needs_the_city_and_chapter_two(self) -> None:
         from BaseClasses import CollectionState, ItemClassification
         from ..world import BugFablesItem
@@ -312,20 +312,23 @@ class TestChapterTwo(BugFablesTestBase):
 
         library = self.world.get_location("Ant Palace: Library, Bookshelf")
         state = CollectionState(self.multiworld)
-        state.collect(event("City Opened"), prevent_sweep=True)
         self.assertFalse(library.can_reach(state))
         state.collect(event("Chapter 2 Started"), prevent_sweep=True)
         self.assertTrue(library.can_reach(state))
 
-    def test_the_city_opens_only_after_the_first_boss(self) -> None:
+    def test_the_city_is_open_from_the_start(self) -> None:
+        from BaseClasses import CollectionState
+        self.assertTrue(self.multiworld.get_region("Bugaria City", self.player).can_reach(CollectionState(self.multiworld)))
+
+    def test_chapter_two_needs_the_first_boss(self) -> None:
         from BaseClasses import CollectionState, ItemClassification
         from ..world import BugFablesItem
-        city = self.world.get_location("Entering the City")
+        start = self.world.get_location("Chapter 2 Start")
         state = CollectionState(self.multiworld)
-        self.assertFalse(city.can_reach(state))
+        self.assertFalse(start.can_reach(state))
         state.collect(BugFablesItem("Snakemouth Den Cleared", ItemClassification.progression, None, self.player),
                       prevent_sweep=True)
-        self.assertTrue(city.can_reach(state))
+        self.assertTrue(start.can_reach(state))
 
 
 class TestMidQuestItem(BugFablesTestBase):
@@ -336,7 +339,7 @@ class TestMidQuestItem(BugFablesTestBase):
         from ..world import BugFablesItem
         reward = self.world.get_location("Bugaria City: Residential District, Old Book Delivery Reward")
         state = CollectionState(self.multiworld)
-        for name in ("City Opened", "Chapter 2 Started"):
+        for name in ("Chapter 2 Started",):
             state.collect(BugFablesItem(name, ItemClassification.progression, None, self.player), prevent_sweep=True)
         self.assertFalse(reward.can_reach(state))
         state.collect(self.world.create_item("Quest Book"), prevent_sweep=True)
@@ -469,9 +472,13 @@ class TestOutskirtsRocks(BugFablesTestBase):
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "Base/BlockingRocks"},
                       self.world.fill_slot_data()["scenery_hidden"])
 
-    def test_town_scene_waits_for_its_companion(self) -> None:
-        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "DoorBugaria - Duplicate", "flag": 114},
-                      self.world.fill_slot_data()["held_until"])
+    def test_town_open_from_the_start(self) -> None:
+        # The arrival scene (Event60) is removed and the real door kept, so the city is a plain door from the start (the
+        # user, 2026-09-25); the palace scene that starts chapter 2 waits for the companion who joins after the boss.
+        data = self.world.fill_slot_data()
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "DoorBugaria - Duplicate"}, data["kept_open"])
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "DoorBugaria"}, data["kept_present"])
+        self.assertIn({"map": "AntPalace1", "entity": "Chapter1StartEvent", "flag": 114}, data["held_until"])
 
     def test_boat_waits_for_leif(self) -> None:
         # The boat scene seats three; with the rocks gone a two-member party reached it and the scene threw (the user,
