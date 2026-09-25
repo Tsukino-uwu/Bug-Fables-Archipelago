@@ -311,7 +311,7 @@ namespace BugFablesAP
             {
                 switch (r)
                 {
-                    case FastTextRow: return "Dialogue appears at once. Each box still waits for your press.";
+                    case FastTextRow: return "Dialogue text is instant, but still requires a button press to proceed.";
                     case SkipIntroRow: return "A new game's story slides pass by on their own, fast.";
                     default: return "";
                 }

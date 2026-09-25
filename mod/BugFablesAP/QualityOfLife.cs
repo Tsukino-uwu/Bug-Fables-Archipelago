@@ -34,8 +34,8 @@ namespace BugFablesAP
             log = logger;
             randomizerOn = on;
             FastText = config.Bind("QualityOfLife", "FastText", true,
-                "Dialogue appears at once instead of letter by letter, as if the skip button were held (the game's own "
-                + "skip). Each box still waits for a press, and lines the game marks unskippable stay as they are.");
+                "Dialogue text is instant instead of letter by letter, as if the skip button were held (the game's own "
+                + "skip), but still requires a button press to proceed. Lines the game marks unskippable stay as they are.");
             SkipIntro = config.Bind("QualityOfLife", "SkipIntro", true,
                 "A new game's four story slides pass by on their own, fast. The rest of the opening plays as normal.");
         }
