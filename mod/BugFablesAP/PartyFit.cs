@@ -368,6 +368,15 @@ namespace BugFablesAP
                     __result = StandIn(member);
                     return false;
                 }
+                // The acting leader asked for by his own name: cast twice, he'd follow whichever order came last. The
+                // briefing (Event45) sends "Vi" up to the Queen and "Leif" back, and Leif stayed back (the user,
+                // 2026-09-25). His own part goes to an invisible stand-in; he plays only the lead's.
+                ChooseActor();
+                if (actor != null && actorRole != member && actor.animid == member)
+                {
+                    __result = StandIn(member);
+                    return false;
+                }
                 return true;
             }
             // The second and third member by position (-2, -3; MainManager.cs:18526-18537) with a smaller party: the droplet

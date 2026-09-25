@@ -633,7 +633,11 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    where they would be) and only other missing members stay invisible; chosen once per scene; in a party list by member
    the leader's own slot gets an invisible stand-in so he's never moved twice. **Seen (the user, 2026-09-25):** Leif
    acting the story leader's part in the scenes ("doing the funny animation things"), the user's screenshot of the
-   treasure room scene with Leif speaking the party's line.
+   treasure room scene with Leif speaking the party's line. **Then cast twice** (the user, 2026-09-25: Leif didn't move in the
+   briefing, where Kabbu and Leif stand back while Vi gives the artifact to the Queen): Event45 asks for Vi, Kabbu and
+   Leif by name; Leif acted Vi but the request for Leif still found him, so he followed whichever order came last and
+   stayed back. Now a by-name request for the acting leader's own member gets an invisible stand-in, as his slot in a
+   party list already did. Not yet seen.
    (17) **Leif's joining scene skipped when Leif is already in the party** (the user, 2026-09-25): Event14 at the lake
    takes its Leif from the follower list (`map.tempfollowers[0]`, `EventControl.cs:3339`), empty since (15), and threw
    `ArgumentOutOfRange` at its start (predicted from the code a moment before the user reached it; freed with
