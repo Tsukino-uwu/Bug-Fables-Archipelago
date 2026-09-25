@@ -980,6 +980,12 @@ checks meet it because (1) crystal berries buy nothing but her stock, (2) the st
 always obtainable and never taken away, (4) purchases are permanent. Every berry spent buys one of her items, so what's
 left always costs what's left to collect. **Shades's shop is only shuffled when the seed holds all 50 crystal
 berries**; otherwise it stays vanilla. Merab's has no such risk: ordinary berries are renewable from battles.
+**Confirmed (the user, 2026-09-26):** a player who turns crystal berries off doesn't want to deal with them, so
+Shades's shop is then not a location at all: nothing from the seed goes there (no progression, useful or filler),
+and she sells her own medals. No berry-spot events keep her shop shuffled (proposed and dropped: they would make that
+player collect every berry). When her shop is built, both yaml texts say so: *Shuffle Medal Shops* that Shades's
+shop joins only with *Shuffle Crystal Berries* on, and *Shuffle Crystal Berries* that turning it off leaves her
+shop vanilla.
 
 **Status:** in progress: Merab's medal shop (her full stock of 22 from a new game, seen 2026-09-25; the mod guide, step 12), Madame Butterfly's item shop and the caravan seen by the user (2026-09-25); Shades's shop not built (it waits for all 50 crystal berries as locations); the other item shops to follow.
 

@@ -620,3 +620,8 @@ Newest last. What was tried, what happened, what the user said.
   - 327 map enemies, each with its encounter.
   - No boss appears on a map.
   - 20 are respawning puzzle enemies: an enemy's `eventid` is a respawn timer, not an event.
+- **Shades's shop with crystal berries off** (the user asked how its logic works). It isn't built yet.
+  - By the rule from 2026-09-25 it stays vanilla, with nothing from the seed in it. The user confirmed: turning
+    berries off means not dealing with them.
+  - My idea of berry-spot events, which would keep her shop shuffled, was dropped.
+  - Both yaml texts are to say so when her shop is built (build step 11).
