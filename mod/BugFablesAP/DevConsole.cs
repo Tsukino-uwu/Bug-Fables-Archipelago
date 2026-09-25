@@ -299,6 +299,22 @@ namespace BugFablesAP
                     case "nudge": return Nudge(parts);
                     case "items": return Items();
                     case "tree": return Tree();
+                    case "gui":
+                        // Everything under the GUI camera, two levels down: what's really on screen when a box or text is
+                        // stuck (2026-09-25: a speech box stayed after two cleanup tries).
+                        if (MainManager.GUICamera == null)
+                        {
+                            return "gui: no GUI camera";
+                        }
+                        var guiLog = new System.Text.StringBuilder("[dev] gui:");
+                        foreach (Transform top in MainManager.GUICamera.transform)
+                        {
+                            Renderer tr = top.GetComponent<Renderer>();
+                            guiLog.Append("\n  ").Append(top.name).Append(top.gameObject.activeSelf ? "" : " [inactive]")
+                                .Append(tr != null ? " <" + tr.GetType().Name + ">" : "").Append(" children ").Append(top.childCount);
+                        }
+                        log.LogInfo(guiLog.ToString());
+                        return "gui logged";
                     case "addleif": return AddLeif();
                     case "holdup":
                         // A test of the hold-up for an item from another player: the Explorer Permit (key item 27), queued
@@ -563,6 +579,21 @@ namespace BugFablesAP
                 }
                 UnityEngine.Object.Destroy(MainManager.maintextbox, 1f);
             }
+            // The stuck box wasn't the one maintextbox pointed at: the gui command showed a "Textbox(Clone)" under the GUI
+            // camera (the Textbox prefab, MainManager.cs:10781) after dialogue had ended (2026-09-25). With no dialogue
+            // running, any such box left there is an orphan.
+            int boxes = 0;
+            if (MainManager.GUICamera != null)
+            {
+                foreach (Transform child in MainManager.GUICamera.transform)
+                {
+                    if (child.name == "Textbox(Clone)")
+                    {
+                        UnityEngine.Object.Destroy(child.gameObject);
+                        boxes++;
+                    }
+                }
+            }
             if (MainManager.player != null && MainManager.player.entity != null && MainManager.player.entity.rigid != null)
             {
                 MainManager.player.entity.rigid.constraints = RigidbodyConstraints.FreezeRotation;
@@ -575,6 +606,7 @@ namespace BugFablesAP
             }
             return "ran the game's end-of-event cleanup and camera, limit and music resets; inevent=" + MainManager.instance.inevent
                 + ", minipause=" + MainManager.instance.minipause + (talking ? "; closed a dead dialogue" : "")
+                + (boxes > 0 ? $"; removed {boxes} leftover speech box(es)" : "")
                 + $"; freed {freed} party member(s); "
                 + (black ? "faded the screen back in" : "no fade left on screen");
         }

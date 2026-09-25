@@ -83,7 +83,10 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   cleanup alone didn't clear (2026-09-25; the user saw the screen come back).
   It also resets the party's bodies (gravity, physics, forced animation), and closes a dialogue that died mid-line:
   the game kept thinking a box was open (`message`) after a city NPC's line threw, which froze the player until
-  `unstick` did what the game's own dialogue end does (2026-09-25).
+  `unstick` did what the game's own dialogue end does (2026-09-25). The speech box itself stayed on screen after two tries (removing the text's
+  holder, then `maintextbox`); the new `gui` command showed a `Textbox(Clone)` under the GUI camera that
+  `maintextbox` no longer pointed at, so `unstick` now removes any such box once dialogue has ended.
+- `gui`: log what hangs under the GUI camera (name, active, renderer, children), to find what's really stuck on screen.
 - `nudge <x> <y> <z>`: shift the party by that much on the current map.
 - `items`: list every pickup that exists on the current map right now (kind, id, flag, distance), in the log.
 - `tree`: log the nearest pickup's whole object tree: each object, whether it's active, and its renderers, on or
