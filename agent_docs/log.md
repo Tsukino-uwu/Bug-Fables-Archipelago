@@ -660,3 +660,7 @@ Newest last. What was tried, what happened, what the user said.
 - **Enemy shuffle seen in game** (the user's screenshot). On `BugariaOutskirtsEast1`, the Underling + Flying
   Seedling map enemy started a Flying Seedling + Seedling fight, matching the seed and the `[enemies]` log line.
   The first live test worked on the first try.
+- **The map look, first test** (the user asked to swap a map's enemies to a boss). `enemylook 2` reloaded
+  `BugariaOutskirtsEast1` with its three enemies as Spuder. The user saw the spider on the map, and the fight was
+  still the seed's. The movement stayed the Underling's (it burrowed), because movement comes from the map data,
+  not the look. The user liked it: a Quality of life row for the original's movement, default the enemy's own.

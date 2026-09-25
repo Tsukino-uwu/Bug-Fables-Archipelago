@@ -1227,6 +1227,17 @@ location, only the fights move.
    - most fights move;
    - the same seed gives the same fights.
 
+**The map look, first test (2026-09-26, seen by the user):** a dev console command, `enemylook <enemy id|off>`,
+reloads the current map with every ordinary map enemy looking like one enemy. The mod sets each map enemy's
+`animid` right after `MapControl.CreateEntities` and before the entity's own `Start`, which builds the model from
+it, so the enemy sets itself up as the new character, the way the game would. The look takes that enemy's animation
+set (the enemy table's column 0, the same value the rematch machine uses). With Spuder (enemy 2) on
+`BugariaOutskirtsEast1`, the three map enemies looked like the spider; the fight was still the seed's. **The movement
+stays the original's**: it comes from the map enemy's own row in the map data, so Spuder burrowed like the Underling
+it replaced. So the real step copies an enemy's movement from a map where it appears naturally, not only its look.
+**Wanted (the user):** a Quality of life row, *Enemy movement: their own / the original's*, default their own; the
+original's is there for fun ("looks fun when something does something else than the model is supposed to").
+
 **Next:**
 - see the shuffled fights in the game;
 - then bosses: each scripted fight read one by one, keyed by its event and its original ids;

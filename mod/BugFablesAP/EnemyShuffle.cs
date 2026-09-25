@@ -28,6 +28,45 @@ namespace BugFablesAP
             harmony = new Harmony(guid + ".enemies." + DateTime.UtcNow.Ticks);
             harmony.Patch(method, prefix: new HarmonyMethod(typeof(EnemyShuffle), nameof(BeforeBattle)));
             log.LogInfo("[enemies] installed on BattleControl.StartBattle");
+            var create = AccessTools.Method(typeof(MapControl), "CreateEntities");
+            if (create == null)
+            {
+                log.LogWarning("[enemies] MapControl.CreateEntities wasn't found; the dev look test does nothing.");
+                return;
+            }
+            harmony.Patch(create, postfix: new HarmonyMethod(typeof(EnemyShuffle), nameof(AfterCreate)));
+        }
+
+        // Dev only (console `enemylook`): every ordinary map enemy looks like this enemy id; -1 off.
+        internal static int LookTest = -1;
+
+        // After the map builds its entities and before their Start, which sets up the model from animid.
+        private static void AfterCreate(MapControl __instance)
+        {
+            if (LookTest < 0 || randomizerOn == null || !randomizerOn() || MainManager.enemydata == null
+                || LookTest >= MainManager.enemydata.GetLength(0))
+            {
+                return;
+            }
+            int anim = Convert.ToInt32(MainManager.enemydata[LookTest, 0]);
+            int changed = 0, puzzles = 0;
+            foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true))
+            {
+                if (npc.entitytype != NPCControl.NPCType.Enemy || npc.entity == null)
+                {
+                    continue;
+                }
+                // A respawning puzzle enemy keeps its own look.
+                if (npc.eventid > 0)
+                {
+                    puzzles++;
+                    continue;
+                }
+                npc.entity.animid = anim;
+                changed++;
+            }
+            log.LogInfo($"[enemies] look test on {__instance.mapid}: {changed} map enemies now look like enemy {LookTest} "
+                + $"(anim {anim}); {puzzles} puzzle enemies kept");
         }
 
         internal static void Disable()

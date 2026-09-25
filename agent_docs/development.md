@@ -96,6 +96,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `spawn <item|key|medal> <id> [flag]`: drop a pickup next to you. With a pickup location's flag, on that
   location's map, it is that location.
 - `flag <n> [on|off]`: show or set a story flag.
+- `enemylook <enemy id|off>`: reloads the current map with every ordinary map enemy looking like that enemy (a
+  visual test for enemy shuffle's map look; the fights stay the seed's). Puzzle enemies keep their own look.
 - `unstick`: runs the game's own end-of-cutscene cleanup, when a cutscene died and left you frozen, and ends a
   map transfer stuck walking to a spot it can't reach. It also takes the party off anything a scene parked it on
   and lifts a leftover fade: the boat scene crashed mid-fade and left a black screen with music playing, which the
