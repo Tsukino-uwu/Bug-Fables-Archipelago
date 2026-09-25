@@ -422,6 +422,14 @@ will swap in its own line for that one box and put 106 back after. **Wording (th
 QuestTester's Sword!"**; the player's own items keep the game's "You got ...". First step:
 log text 106 in the running game to see its placeholder syntax, not guess it.
 
+**Planned (the user, 2026-09-26): another game's item shows its type before you take it.** On the ground and on a
+shop shelf, another game's item still shows the vanilla item's sprite today, which reads as the vanilla item. It
+will show an Archipelago icon on a backdrop in its type's colour (Archipelago's: progression plum, useful blue,
+trap salmon, filler cyan), the same colours the starburst already uses at pickup. It's a Quality of life row, on
+by default, for players who'd rather be surprised. Bug Fables items that belong to another Bug Fables player keep
+their real sprite, and the owner's name is in the text. Before adding the icon: which image file, and whether
+it's fine in a public repo forever (Archipelago's licence row covers its code; check the image).
+
 **Status:** works for gifts, pickups and their ground sprites, and respawning pickups seen by the user (2026-09-24, `MEASURED.md`), and crystal berry spots (2026-09-25); berry rewards and story pickups built, not yet seen in game.
 
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,

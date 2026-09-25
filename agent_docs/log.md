@@ -654,3 +654,6 @@ Newest last. What was tried, what happened, what the user said.
     it was theirs.
   - Planned: "You found QuestTester's Sword!" (the user's wording) for other players' items (the mod guide, step 9).
   - The room was restarted fresh so the user could look again.
+- **Item looks** (the user): another game's item will show an Archipelago icon on its type's colour, on the ground
+  and on shelves, before pickup. It's a Quality of life row, on by default. Other Bug Fables players' items keep
+  their real sprite. The starburst colour at pickup already works this way.
