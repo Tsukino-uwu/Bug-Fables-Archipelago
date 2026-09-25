@@ -164,7 +164,8 @@ Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026
    any check it gives, like the boat. First step when this is picked up: list chapter 1's scenes by the characters they
    use, from the code.
    Scenes that need a particular member must then become rules: the horn tutorial near Snakemouth (Event10, a
-   location) can't be finished without Kabbu's horn (the user, 2026-09-25).
+   location) can't be finished without Kabbu's horn (the user, 2026-09-25). So does the way down to Shades's shop:
+   grass on the way there has to be cut with the horn (the user, 2026-09-25), so her locations will need Kabbu.
    **Journal locations, each its own yaml option (the user, 2026-09-25).** The journal is `librarystuff[type, n]`,
    set through `MainManager.UpdateJounal`, so a check can be "this entry became true", with no item to swap.
    *Shuffle Discoveries* comes first (the simplest). **Built 2026-09-25**, opt-in (off by default): a location
