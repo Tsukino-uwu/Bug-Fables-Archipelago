@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import DefaultOnToggle, PerGameCommonOptions, Range
+from Options import DefaultOnToggle, PerGameCommonOptions, Range, Toggle
 
 from .data_tables import LOCATIONS
 
@@ -43,6 +43,17 @@ class ShuffleCrystalBerries(DefaultOnToggle):
     display_name = "Shuffle Crystal Berries"
 
 
+class ShuffleDiscoveries(Toggle):
+    """
+    Journal discoveries are locations: recording a discovery (examining a statue, a hidden spot, arriving somewhere
+    new) sends a check. They give no item of their own. Off by default.
+
+    Checks added in this version: {count}.
+    """
+
+    display_name = "Shuffle Discoveries"
+
+
 def category_count(category: str) -> int:
     """How many locations an option's category adds, straight from the location data."""
     return sum(1 for location in LOCATIONS if location.get("category") == category)
@@ -52,6 +63,7 @@ def category_count(category: str) -> int:
 # counted from the data so the number never goes stale.
 ShuffleQuests.__doc__ = ShuffleQuests.__doc__.replace("{count}", str(category_count("quest")))
 ShuffleCrystalBerries.__doc__ = ShuffleCrystalBerries.__doc__.replace("{count}", str(category_count("crystal_berry")))
+ShuffleDiscoveries.__doc__ = ShuffleDiscoveries.__doc__.replace("{count}", str(category_count("discovery")))
 
 
 @dataclass
@@ -59,3 +71,4 @@ class BugFablesOptions(PerGameCommonOptions):
     artifacts_required: ArtifactsRequired
     shuffle_quests: ShuffleQuests
     shuffle_crystal_berries: ShuffleCrystalBerries
+    shuffle_discoveries: ShuffleDiscoveries

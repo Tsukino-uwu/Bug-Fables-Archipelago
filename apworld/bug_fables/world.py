@@ -84,6 +84,8 @@ class BugFablesWorld(World):
             return bool(self.options.shuffle_quests.value)
         if category == "crystal_berry":
             return bool(self.options.shuffle_crystal_berries.value)
+        if category == "discovery":
+            return bool(self.options.shuffle_discoveries.value)
         return True
 
     def create_regions(self) -> None:
@@ -155,6 +157,9 @@ class BugFablesWorld(World):
             # Crystal berry locations, done when their crystalbflags index is set ({location id: index}).
             "location_berries": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["berry"]
                                  for loc in self.included_locations if "berry" in loc["source"]},
+            # Journal discovery locations, done when librarystuff[0, n] is set ({location id: n}).
+            "location_discoveries": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["discovery"]
+                                     for loc in self.included_locations if "discovery" in loc["source"]},
             # Locations marked done by a number slot reaching a value instead of a flag (a boss prize handed over:
             # its prize slot reaching 3).
             "location_vars": {str(LOCATION_NAME_TO_ID[loc["name"]]): {"var": loc["source"]["var"],

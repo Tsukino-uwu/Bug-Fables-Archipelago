@@ -118,6 +118,26 @@ namespace BugFablesAP
                     (finished ?? (finished = new List<long>())).Add(entry.Key);
                 }
             }
+            // Journal discoveries: done when librarystuff[0, n] is set (MainManager.UpdateJounal, MainManager.cs:14742).
+            Dictionary<long, int> discoveries = connection.LocationDiscoveries;
+            bool[,] journal = mm.librarystuff;
+            if (discoveries != null && journal != null)
+            {
+                foreach (KeyValuePair<long, int> entry in discoveries)
+                {
+                    if (handled.Contains(entry.Key) || entry.Value < 0 || entry.Value >= journal.GetLength(1) || !journal[0, entry.Value])
+                    {
+                        continue;
+                    }
+                    handled.Add(entry.Key);
+                    if (session.Locations.AllLocationsChecked.Contains(entry.Key))
+                    {
+                        continue;
+                    }
+                    log.LogInfo($"[check] location {entry.Key} is done (discovery {entry.Value} recorded) on {Where()}: sending");
+                    (finished ?? (finished = new List<long>())).Add(entry.Key);
+                }
+            }
             // Respawning pickups: sent by the pickup itself (ItemSwap), queued here for the seed this save belongs to.
             foreach (long id in connection.TakeRespawnChecks(session.RoomState.Seed))
             {

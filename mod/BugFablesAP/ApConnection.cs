@@ -302,9 +302,14 @@ namespace BugFablesAP
         internal Dictionary<long, int> LocationBerries => locationBerries;
         private volatile Dictionary<long, int> locationBerries;
 
-        private static Dictionary<long, int> ReadLocationBerries(Dictionary<string, object> slotData)
+        // slot_data's location_discoveries: journal discovery locations, done when librarystuff[0, n] is set
+        // ({location id: n}; Shuffle Discoveries, 2026-09-25). Null when not sent.
+        internal Dictionary<long, int> LocationDiscoveries => locationDiscoveries;
+        private volatile Dictionary<long, int> locationDiscoveries;
+
+        private static Dictionary<long, int> ReadLocationBerries(Dictionary<string, object> slotData, string key = "location_berries")
         {
-            if (slotData == null || !slotData.TryGetValue("location_berries", out object raw) || !(raw is JObject map))
+            if (slotData == null || !slotData.TryGetValue(key, out object raw) || !(raw is JObject map))
             {
                 return null;
             }
@@ -551,6 +556,7 @@ namespace BugFablesAP
                     heldUntil = ReadKeptOpen(ok.SlotData, "held_until");
                     locationVars = ReadLocationVars(ok.SlotData);
                     locationBerries = ReadLocationBerries(ok.SlotData);
+                    locationDiscoveries = ReadLocationBerries(ok.SlotData, "location_discoveries");
                     ownSlot = ok.Slot;
                     itemKinds = ReadItemKinds(ok.SlotData);
                     seedKnown = true;
@@ -559,6 +565,7 @@ namespace BugFablesAP
                     // Every location this slot has: gifts and pickups alike show what's really there.
                     Scout(attempt, (locationFlags?.Keys ?? Enumerable.Empty<long>()).Concat(locationVars?.Keys ?? Enumerable.Empty<long>())
                         .Concat(locationBerries?.Keys ?? Enumerable.Empty<long>())
+                        .Concat(locationDiscoveries?.Keys ?? Enumerable.Empty<long>())
                         .Concat(locationPickups?.Keys ?? Enumerable.Empty<long>()).Distinct().ToList());
                     attempt.Locations.CheckedLocationsUpdated += ids =>
                     {

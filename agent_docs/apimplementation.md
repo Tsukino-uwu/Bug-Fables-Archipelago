@@ -48,7 +48,16 @@ seed's (the mod guide, step 9).
    story's own event hasn't worked yet (log.md, 2026-09-24: `ChangeParty` left Leif without a character).
    **Journal locations, each its own yaml option (the user, 2026-09-25).** The journal is `librarystuff[type, n]`,
    set through `MainManager.UpdateJounal`, so a check can be "this entry became true", with no item to swap.
-   *Shuffle Discoveries* comes first (the simplest; started 2026-09-25). **Parked:** *Shuffle Bestiary* (an entry
+   *Shuffle Discoveries* comes first (the simplest). **Built 2026-09-25**, opt-in (off by default): a location
+   source `discovery: n`, sent as `slot_data`'s `location_discoveries`, and the mod's `LocationChecks` sends the
+   check when `librarystuff[0, n]` turns true. No item to swap: a discovery gives none, so its pool slot is padding.
+   Where each discovery is came from four sources: `|discovery,N|` in map dialogue (ScriptDump), about 37
+   `UpdateJounal` calls in events (which event sets which), a few set from story flags in code, and each map's own
+   list (`MapControl.discoveryids`, MapDump). The five in regions the logic already has are locations: the pier
+   statue (49), the arrival outside Snakemouth (0, Event11), the spider fight (1, Event6), the bridge room's hidden
+   spot (2, Event13) and the Underground Door Room's grass (3, Event27). **First check seen:** the user had examined
+   the pier statue before the option existed; joining the new seed, the mod found discovery 49 recorded and sent
+   *Outskirts: Pier, Statue*. Tests `TestDiscoveriesOn`, `TestDiscoveriesOffByDefault`. **Parked:** *Shuffle Bestiary* (an entry
    comes only from Spy in battle or from Event65's catch-up NPC, who sells entries for enemies already fought, 19
    berries, 49 for bosses, except the 23 in `excludeids`, which are the missable ones; seeing an enemy on the map
    records nothing) and *Shuffle Recipes* (each needs its ingredients, which the seed may shuffle, so it waits

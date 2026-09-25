@@ -66,12 +66,13 @@ class TestSlotData(BugFablesTestBase):
     def test_every_location_has_its_flag(self) -> None:
         data = self.world.fill_slot_data()
         flags, variables, berries = data["location_flags"], data["location_vars"], data["location_berries"]
+        discoveries = data["location_discoveries"]
         respawns = {loc for loc, pickup in data["location_pickups"].items() if "regional" in pickup}
         ids = {str(loc.address) for loc in self.multiworld.get_locations(self.player) if loc.address is not None}
-        # Each location is watched exactly one way: a flag, a number slot, a crystal berry's index, or (a respawning
-        # pickup) the pickup itself.
-        self.assertEqual(set(flags) | set(variables) | set(berries) | respawns, ids)
-        self.assertEqual(len(flags) + len(variables) + len(berries) + len(respawns), len(ids))
+        # Each location is watched exactly one way: a flag, a number slot, a crystal berry's index, a journal
+        # discovery, or (a respawning pickup) the pickup itself.
+        self.assertEqual(set(flags) | set(variables) | set(berries) | set(discoveries) | respawns, ids)
+        self.assertEqual(len(flags) + len(variables) + len(berries) + len(discoveries) + len(respawns), len(ids))
         self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Maki and Eetl's Gift"])], 15)
         self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Artis's Gift"])], 32)
 
@@ -471,3 +472,28 @@ class TestOutskirtsRocks(BugFablesTestBase):
         # 2026-09-25). The sailor waits for Leif's joining flag.
         self.assertIn({"map": "BugariaPier", "entity": "boatsailor", "flag": 16},
                       self.world.fill_slot_data()["held_until"])
+
+
+class TestDiscoveriesOffByDefault(BugFablesTestBase):
+    # Shuffle Discoveries is opt-in: by default no discovery is a location and the client watches none.
+    def test_no_discovery_locations(self) -> None:
+        names = {loc.name for loc in self.multiworld.get_locations(self.player)}
+        self.assertNotIn("Outskirts: Pier, Statue", names)
+        self.assertEqual(self.world.fill_slot_data()["location_discoveries"], {})
+
+
+class TestDiscoveriesOn(BugFablesTestBase):
+    options = {"shuffle_discoveries": True}
+
+    def test_pier_statue_is_discovery_49(self) -> None:
+        # The statue's line runs |discovery,49| (ScriptDump, 2026-09-25); the check is that journal entry.
+        pier = str(self.world.location_name_to_id["Outskirts: Pier, Statue"])
+        self.assertEqual(self.world.fill_slot_data()["location_discoveries"][pier], 49)
+
+    def test_pier_statue_open_from_the_start(self) -> None:
+        self.assertTrue(self.can_reach_location("Outskirts: Pier, Statue"))
+
+    def test_snakemouth_arrival_needs_the_permit(self) -> None:
+        self.assertFalse(self.can_reach_location("Outskirts: Snakemouth Den Entrance, Arrival"))
+        self.collect_by_name("Explorer Permit")
+        self.assertTrue(self.can_reach_location("Outskirts: Snakemouth Den Entrance, Arrival"))
