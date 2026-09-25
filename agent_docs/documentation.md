@@ -416,6 +416,12 @@ regional flag (the game writes `|regionalflag,N,true|` into the pickup's own tex
 gives its vanilla item. The dev console's `loc` refuses a location with no flag (a berry or a respawning pickup) and
 points to `warp <map> @<entity>`. Built, not yet seen in game.
 
+**A crystal berry spot showing another item** (2026-09-25): the game sets such a spot up for its 3D berry model, with
+its sprite centred on the ground and the entity spinning (`NPCControl.cs:937-952`). Showing the seed's item there as
+a flat sprite left it half in the ground (the user's screenshot of the berry outside the cave). The swap now lifts the
+sprite by half its height, as the game does for items, stops the spin and squares the sprite to the camera. Not yet
+seen.
+
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
 `Recolour` and `FirstMedalSeen` do the swapping; `PickupPrefix`, `FindPickup` and `TickGround` handle pickups); the
 scout is `ApConnection.Scout`.*

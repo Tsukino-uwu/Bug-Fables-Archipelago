@@ -65,6 +65,16 @@ namespace BugFablesAP
             }
             entity.sprite.enabled = true;
             entity.sprite.sprite = sprite;
+            // A crystal berry spot is set up for its 3D model: its sprite centred on the ground and the whole entity
+            // spinning (NPCControl.cs:945-949). As a flat item sprite it sat half in the ground (the user's screenshot,
+            // 2026-09-25): lift it by half its height, as the game does for items (EntityControl.cs:3241), and stop the spin.
+            if (entity.spritetransform != null)
+            {
+                entity.spritetransform.localPosition = new Vector2(0f, sprite.bounds.extents.y);
+                // The spin turns the sprite itself (EntityControl.cs:3943-3945), so it may have stopped edge-on.
+                entity.spritetransform.localEulerAngles = Vector3.zero;
+            }
+            entity.spin = Vector3.zero;
         }
 
         // NPCControl.CheckItem's first-medal tutorial, put after the add (NPCControl.cs:5673).
