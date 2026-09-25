@@ -397,6 +397,13 @@ namespace BugFablesAP
             // exit hands the camera back to the player only for insides that centre on themselves (MapControl.cs:1373), so
             // outside the camera followed nothing (the user, 2026-09-25, Leif alone).
             MainManager.ResetCamera();
+            // ResetCamera aims at MainManager.player, which in this frame can still be the old leader: Unity destroys an
+            // object only at the end of the frame, so the camera followed a character about to vanish (the console's cam,
+            // 2026-09-25: target DESTROYED, the leader Player 0 fine). Aim at the new leader's character itself.
+            if (mm.playerdata.Length > 0 && mm.playerdata[0].entity != null)
+            {
+                mm.camtarget = mm.playerdata[0].entity.transform;
+            }
             // The building's own entities, only when the opening runs there: elsewhere these numbers are other things.
             bool inBuilding = MainManager.map.mapid.ToString() == OpeningMap;
             EntityControl exit = inBuilding ? MainManager.GetEntity(2) : null;
