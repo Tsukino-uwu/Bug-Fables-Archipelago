@@ -713,7 +713,7 @@ follower 30 never leaving. The bridge's trigger (`makiautoevent`) is now held un
 was (`held_until`). Test `TestKeptOpen.test_follower_swap_waits_for_the_first_follower`. Not seen (the user's file is
 past it).
 
-**Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion fallback and statue, and Madeleine's house seen by the user (2026-09-25); Eetl's blocker, the bar and quest boards, the inn, the boat's hold and chapter 2's held scenes not yet seen; an "open start" option planned.
+**Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion fallback and statue, Madeleine's house, and the bar with its quest board seen by the user (2026-09-25); Eetl's blocker, the inn, the boat's hold and chapter 2's held scenes not yet seen; an "open start" option planned.
 
 ---
 

@@ -405,7 +405,7 @@ sprite enabled. The game toggles the object, never its renderers, so the swap no
 renderers, on every pass. `tree` then showed both berry renderers disabled with the item sprite on. **Confirmed by
 the user (2026-09-25, screenshot):** the seed's Mistake standing on the ground outside the cave, no berry, no spin.
 
-**Status:** works for gifts, pickups and their ground sprites, seen by the user (2026-09-24), and crystal berry spots (2026-09-25); berry rewards, story pickups and respawning pickups built, not yet seen in game.
+**Status:** works for gifts, pickups and their ground sprites, and respawning pickups seen by the user (2026-09-24, `MEASURED.md`), and crystal berry spots (2026-09-25); berry rewards and story pickups built, not yet seen in game.
 
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
 `Recolour` and `FirstMedalSeen` do the swapping; `PickupPrefix`, `FindPickup` and `TickGround` handle pickups); the
