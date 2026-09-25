@@ -706,6 +706,16 @@ arriving, and only the ordinary items that don't fit are held until there's room
 can skip past a held item.
 The same operations the game's own code uses put them there.
 
+**Crystal berries** (the user, 2026-09-25) raise the game's berry counter, the one the pause menu shows and
+Shades's shop spends. The game also keeps a *total found*, which it counts from the berry spots picked up; a
+text command shows it, and 50 unlocks a logbook entry. In a seed, spots and berries are different things: a
+spot sends a check, and the berry comes from the server. So the mod keeps **berries received** in number slot
+69 (the last one found unused, `MEASURED.md`), and in a seed the total is that count plus berries picked up at
+spots that aren't locations in this seed (all of them when the seed doesn't shuffle berries). Received berries
+replay with everything else, so a fresh save rebuilds the count. A save that received berries before this
+change counts only the berries it receives afterwards (test files only). **Status: built, not yet seen in game.**
+Which dialogue shows the total isn't known yet; the mod logs each time the game asks for it (`[berries]`).
+
 **Status: works (2026-09-24).** The server already held the Explorer Permit and the G-Bug Ranger Plushie from
 the swap test. On loading, the save tied itself to the seed, and both arrived in key items as soon as the
 player was free (the user saw them). Talking to Artis again showed the plushie but gave no second one: each
@@ -713,7 +723,7 @@ item comes once per seed, and the count in the save keeps it that way.
 
 *Code: `mod/BugFablesAP/ItemReceiver.cs`: `CountSlot` and `SeedSlot` (the two save slots),
 `SaveMatchesSeed`, `Tick` (one item per frame), `Busy` (is the player free), `Give` (where each item goes).
-The slot survey was `VarDump.cs`.*
+`CrystalBerryTotal.cs`: the berries-received slot and the total. The slot survey was `VarDump.cs`.*
 
 ---
 

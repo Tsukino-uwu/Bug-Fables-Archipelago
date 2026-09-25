@@ -331,6 +331,8 @@ slot of each can hold the mod's own state in the game's own save, with no new fo
 - **Chosen (2026-09-25):** **`flagvar[7]`** and **`[8]`** for the bits of the copies bought from Merab's and
   Shades's medal shops (a copy per bit, in location id order). Both free by the same two scans; `flagvar[69]` is the
   last one left.
+- **Chosen (2026-09-25):** **`flagvar[69]`**, that last one, for the crystal berries received (`CrystalBerryTotal.cs`).
+  No `flagvar` slot is left free by the two scans.
 - **A battle retry rolls `flagvar` back:** `BattleControl` snapshots `flags`, `flagvar` and `items[0]` at battle
   start (`BattleControl.cs:614-624`) and restores them on retry (`SetFlags`, `:3443`), but not key items. So
   the mod must never give an item during a battle. Then the count and the inventory stay consistent.
