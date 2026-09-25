@@ -46,6 +46,11 @@ seed's (the mod guide, step 9).
    find the other two, each its own item, on top of the abilities. Opt-in only: fighting with one or two changes
    the game a lot. Open questions: the story may need all three after chapter 1, and adding a member outside the
    story's own event hasn't worked yet (log.md, 2026-09-24: `ChangeParty` left Leif without a character).
+   **Solved 2026-09-25:** without `fromscratch`, `ChangeParty`'s copy loop never runs (`for m < 0`,
+   `MainManager.cs:3805`), so the party list came out empty. `ChangeParty({0, 1, 2}, fromscratch: true)` rebuilds all
+   members (stats from defaults, then the stat bonuses reapplied), and `SetPlayers(positions)` makes their characters.
+   The user saw Leif join the party and fight on a file where he'd never joined (dev command `addleif`). Next measured:
+   the trapdoor, the spider fight and Leif's own joining scene with him already there.
    Scenes that need a particular member must then become rules: the horn tutorial near Snakemouth (Event10, a
    location) can't be finished without Kabbu's horn (the user, 2026-09-25).
    **Journal locations, each its own yaml option (the user, 2026-09-25).** The journal is `librarystuff[type, n]`,

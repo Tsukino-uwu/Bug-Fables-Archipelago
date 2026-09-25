@@ -299,6 +299,7 @@ namespace BugFablesAP
                     case "nudge": return Nudge(parts);
                     case "items": return Items();
                     case "tree": return Tree();
+                    case "addleif": return AddLeif();
                     case "holdup":
                         // A test of the hold-up for an item from another player: the Explorer Permit (key item 27), queued
                         // the way the receiver queues one, display only.
@@ -666,6 +667,35 @@ namespace BugFablesAP
         // Logs the nearest pickup's whole object tree (the entity's root down): each object's path, whether it's active,
         // and what draws it, to see what a scene or the swap really leaves on screen (2026-09-25: a crystal berry model
         // kept showing over the seed's item after two guessed fixes).
+        // Dev test (the user, 2026-09-25: rehearse an open start with Leif in the party before the trapdoor). The game adds a
+        // member with ChangeParty; without fromscratch its copy loop never runs (for m < 0, MainManager.cs:3805) and the
+        // party list comes out empty, which is why the 2026-09-24 try left Leif without a character. With fromscratch
+        // every member is rebuilt from its defaults and the stat bonuses reapplied (ApplyStatBonus). ChangeParty only
+        // reuses characters that exist, so SetPlayers(positions) (MainManager.cs:9416) then makes all three where the
+        // party stands. Memory only until the game saves.
+        private static string AddLeif()
+        {
+            MainManager mm = MainManager.instance;
+            if (MainManager.player == null || mm.inevent || mm.message || MainManager.battle != null)
+            {
+                return "addleif: not now (no player, or an event, dialogue or battle)";
+            }
+            if (mm.playerdata.Any(p => p.trueid == 2))
+            {
+                return "addleif: Leif is already in the party";
+            }
+            Vector3 at = MainManager.player.transform.position;
+            MainManager.ChangeParty(new[] { 0, 1, 2 }, true, true);
+            var spots = new Vector3[mm.playerdata.Length];
+            for (int i = 0; i < spots.Length; i++)
+            {
+                spots[i] = at + new Vector3(-0.6f * i, 0f, 0.1f * i);
+            }
+            MainManager.SetPlayers(spots);
+            return "addleif: party now " + string.Join(", ", mm.playerdata.Select(p => p.trueid.ToString()).ToArray())
+                + $"; characters {mm.playerdata.Count(p => p.entity != null)} of {mm.playerdata.Length}";
+        }
+
         private static string Tree()
         {
             if (MainManager.map == null || MainManager.player == null)

@@ -85,6 +85,10 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `items`: list every pickup that exists on the current map right now (kind, id, flag, distance), in the log.
 - `tree`: log the nearest pickup's whole object tree: each object, whether it's active, and its renderers, on or
   off. Settles what's really on screen when a visual fix doesn't take.
+- `addleif`: add Leif to the party on a file where he hasn't joined (test files, never saved). `ChangeParty({0, 1, 2},
+  fromscratch: true)` rebuilds the party list, then `SetPlayers` makes all three characters where the party stands.
+  The 2026-09-24 try failed because without `fromscratch` the game's copy loop never runs (`for m < 0`) and the list
+  comes out empty. First run (2026-09-25): three members, three characters, no errors.
 - `holdup`: queue a test hold-up (the Explorer Permit "from TestPlayer"), display only, the way an item from another
   player is shown.
 - `onehit`: flips a test boost: every hit on an enemy does at least 99 (before defence). It's the `[Debug]` setting
