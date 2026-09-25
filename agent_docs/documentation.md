@@ -473,7 +473,10 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    folder, never the repo), and a contact sheet of them showed a round icon in the same style, `guisprites[34]`
    (a blue map). The button is now made exactly like the other four: one sprite, no tint, no overlay. A plugin
    reload with the menu open had left the old icon behind the new one; unloading now removes it. Title "Warp" (the
-   user). Not yet seen.
+   user). **Seen by the user (2026-09-25, screenshot):** five matching icons, "Warp" above them, the description line,
+   and the Yes / No box with No preselected ("this looks good"). The warp itself is still to see.
+   **The logic never counts on the warp** (the user, 2026-09-25): it's fast travel and a way out when stuck, but a
+   seed must not assume players teleport out, so every one-way drop still needs a real way back in the logic.
 5. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
    read in full before anything is skipped.
 
