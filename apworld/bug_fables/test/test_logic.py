@@ -28,7 +28,8 @@ class TestPermitGate(BugFablesTestBase):
                      if loc.address is not None}
         self.assertEqual(reachable, {"Outskirts: Maki and Eetl's Gift", "Outskirts: Artis's Gift",
                                      "Outskirts: Ladybug Siblings' House", "Outskirts: East Road, Stone",
-                                     "Outskirts: Pier", "Bugaria City: Residential District, Rooftop"}
+                                     "Outskirts: Pier", "Bugaria City: Residential District, Rooftop",
+                                     "Outskirts: Madeleine's House, Floor", "Outskirts: Madeleine's House, Shelf"}
                          | {f"Bugaria City: Commercial District, Medal Shop {n}" for n in range(1, 11)})
 
     def test_reward_near_snakemouth_needs_the_permit(self) -> None:
@@ -595,3 +596,12 @@ class TestShopContentsAnything(BugFablesTestBase):
     def test_shop_takes_progression(self) -> None:
         shop = self.world.get_location("Bugaria City: Commercial District, Medal Shop 1")
         self.assertTrue(shop.item_rule(self.world.create_item("Explorer Permit")))
+
+
+class TestMadeleinesHouse(BugFablesTestBase):
+    # The house is open from the start (the user, 2026-09-25): door kept, lock and locked-door check removed.
+    def test_house_opened(self) -> None:
+        data = self.world.fill_slot_data()
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "doormadeleine"}, data["kept_present"])
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "lockeddoor"}, data["kept_open"])
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "Base/lock (1)"}, data["scenery_hidden"])

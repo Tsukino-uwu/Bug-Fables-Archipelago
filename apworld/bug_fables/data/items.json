@@ -16,6 +16,7 @@
     {"name": "Quick Flea", "game_id": 5, "kind": 2, "classification": "useful"},
     {"name": "Mistake", "game_id": 8, "kind": 0, "classification": "filler"},
     {"name": "Drowsy Cake", "game_id": 147, "kind": 0, "classification": "filler"},
+    {"name": "Burly Tea", "game_id": 81, "kind": 0, "classification": "filler"},
     {"name": "Bad Book", "game_id": 174, "kind": 1, "classification": "useful"},
     {"name": "Bug Me Not!", "game_id": 18, "kind": 2, "classification": "useful"},
     {"name": "TP Plus", "game_id": 1, "kind": 2, "classification": "useful"},

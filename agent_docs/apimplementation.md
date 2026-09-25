@@ -767,6 +767,12 @@ it isn't set: a new `slot_data` list, `dialogue_flags` (map, entity, flag, to), 
 which the new-game scene always sets. An entity picks the last line whose flag is set (`NPCControl.cs:4320-4326`), so
 the way down is always taken. The town's and the Outskirts' quest boards (requires 67) join `kept_present`; each quest
 still needs checking before the logic counts on it. Tests `TestBarAndBoards`. Not yet seen.
+**Madeleine's house on the Outskirts, open from the start** (the user, 2026-09-25). Everything tied to it is flag 390,
+set by one conversation in a later area: a locked-door check (`lockeddoor`, until 390, now `kept_open`), the real door
+(`doormadeleine`, from 390, `kept_present`) and a lock (`Base/lock (1)`, `scenery_hidden`). Inside, only her and her
+butler need 390, so they stay away and none of her story starts early; the rest is two plain pickups, a Burly Tea
+(flag 686, the retired location 4, back under id 44) and a Lore Book (flag 392, id 45), both reachable from the start.
+Test `TestMadeleinesHouse`. Not yet seen.
 **The boat to Metal Island crashed with two in the party** (2026-09-25). With the rocks gone the user reached the
 pier on a chapter 1 file, paid the fare, and the boat scene (Event107) threw IndexOutOfRange: it seats three party
 members (`p[0..2]`, `EventControl.cs:17944-17946`), and in the game the pier is behind the rocks until the first
