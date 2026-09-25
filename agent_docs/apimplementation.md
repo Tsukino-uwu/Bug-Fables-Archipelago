@@ -705,7 +705,11 @@ shows the companion asked for on `BugariaMainPlaza` outside any scene and the le
 `blockereetl2` and its duplicate, Event12, until flag 67) kept the party in the plaza. No city map has a scene that
 starts on its own, and every other city scene trigger needs flag 67 or later (entity dump, map dump), so they join
 `kept_open` and the districts can be walked early. The palace's own blockers stay (the story goes on there). The
-districts' checks keep requiring chapter 2 in logic until they're seen working. Test `test_plaza_blockers_removed`.
+districts' checks keep requiring chapter 2 in logic until they're seen working. Test `test_plaza_blockers_removed`. With the
+blockers gone the exits still did nothing (the user): the plaza's doors to Commercial, Residential and the theater
+require flag 67 themselves, and a `Cube` in the plaza hides at 67. The three doors join `kept_present` and the cube
+`scenery_hidden`. Lesson: an area closed "until chapter N" is closed by several things at once (blockers, doors,
+scenery); list every entity and scenery piece gated by that flag before opening it.
 **The boat to Metal Island crashed with two in the party** (2026-09-25). With the rocks gone the user reached the
 pier on a chapter 1 file, paid the fare, and the boat scene (Event107) threw IndexOutOfRange: it seats three party
 members (`p[0..2]`, `EventControl.cs:17944-17946`), and in the game the pier is behind the rocks until the first

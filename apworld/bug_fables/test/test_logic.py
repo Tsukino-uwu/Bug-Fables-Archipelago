@@ -486,6 +486,11 @@ class TestOutskirtsRocks(BugFablesTestBase):
         for entity in ("MM", "blockereetl2", "blockereetl2 - Duplicate"):
             with self.subTest(entity=entity):
                 self.assertIn({"map": "BugariaMainPlaza", "entity": entity}, kept)
+        data = self.world.fill_slot_data()
+        for entity in ("LoadingZoneCommercial", "LoadingZoneResidential", "loadingzone theater"):
+            with self.subTest(entity=entity):
+                self.assertIn({"map": "BugariaMainPlaza", "entity": entity}, data["kept_present"])
+        self.assertIn({"map": "BugariaMainPlaza", "entity": "Cube"}, data["scenery_hidden"])
 
     def test_boat_waits_for_leif(self) -> None:
         # The boat scene seats three; with the rocks gone a two-member party reached it and the scene threw (the user,
