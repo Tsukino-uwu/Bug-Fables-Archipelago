@@ -128,11 +128,12 @@ be wrong.
    tail, Mother Chomper with two Fly Traps, the Wasp General's squad, Zasp and Mothiva, Cenn and Pisci, Stratos and
    Delilah, Maki's team; the rematch machine's switch lists them) and always moves whole, as the shuffle already
    moves whole id lists; a fight is never two bosses, nor a boss mixed with ordinary enemies. Built after enemy
-   scaling, so a bigger group stays fair. **First measure every summoner with a full field** (code read 2026-09-26:
-   24 `SummonEnemy` calls; body parts such as the Sand Wyrm's tail 99, the Everlasting King's tablets and keys
-   101-103, the Zombie Roach's 59/60, Pisci's 100, the Pitcher's vines 104; bosses calling helpers; ordinary summoners
-   such as Burglar, Wasp Healer, the Leafbugs, Bloatshroom, Chomper Brute, Primal Weevil). Some check the count first,
-   others place at fixed spots or search for space; a full field could fail the summon quietly or hang the fight.
+   scaling, so a bigger group stays fair. **Summoners mostly guard themselves** (code read 2026-09-26, 24 `SummonEnemy` calls): the ordinary ones only summon
+   when alone or nearly (Burglar, Wasp Healer, Leafbug Archer, Bloatshroom, Chomper Brute alone; Leafbug Ninja under
+   3), bosses too (Bee Boss and Mother Chomper alone; Pitcher and Seedling King under 3; Midge Broodmother with a free
+   spot). Only boss-internal parts have no count check (Venus's plants, Pisci's add, the Sand Wyrm's tail, the
+   Everlasting King's tablets), and boss units move whole. So a bigger ordinary group mostly just stops a summoner
+   summoning, as the game itself does. Still a guard before building: each branch read, and one full-field fight.
    Its own build step when built.
 
 **Known issues:**
