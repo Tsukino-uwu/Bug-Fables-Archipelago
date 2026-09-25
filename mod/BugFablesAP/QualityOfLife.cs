@@ -25,6 +25,9 @@ namespace BugFablesAP
         // Default All (the user, once bursts were fast with the skip button held: fun and noticeable, not tedious).
         internal static readonly string[] ItemAnimations = { "All", "Progression", "Off" };
         internal static ConfigEntry<string> ItemAnimation;
+        // Shop prices (the user, 2026-09-25): Normal by default, Half or Free on request. The logic never counts on them.
+        internal static readonly string[] ShopPriceValues = { "Normal", "Half", "Free" };
+        internal static ConfigEntry<string> ShopPrices;
 
         // Skip cutscenes (the user, 2026-09-25: scenes and fluff that give no checks). Each scene is read in full first
         // (EventControl.EventN): one that only moves the camera and the party, talks, and sets flags is skipped by
@@ -88,6 +91,9 @@ namespace BugFablesAP
                 "Which items received from other players are shown held up, as when you find one: Progression (items that "
                 + "unlock something), All, or Off. They always arrive either way; your own finds are always shown.",
                 new AcceptableValueList<string>(ItemAnimations)));
+            ShopPrices = config.Bind("QualityOfLife", "ShopPrices", "Normal", new ConfigDescription(
+                "Medal shop prices, in berries and crystal berries: Normal, Half or Free.",
+                new AcceptableValueList<string>(ShopPriceValues)));
             WarpButton = config.Bind("QualityOfLife", "WarpButton", true,
                 "A fifth button in the pause menu, Warp to Start, takes the party back to where the game began (after a "
                 + "Yes / No box). Not shown in battle.");

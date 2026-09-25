@@ -157,6 +157,28 @@ namespace BugFablesAP
                     (finished ?? (finished = new List<long>())).Add(entry.Key);
                 }
             }
+            // Shop stock: done when the medal has left that shop's stock (the buy line's removebadgeshop,
+            // MainManager.cs:13805-13825), which the save keeps. No per-medal "bought" flag exists.
+            Dictionary<long, int[]> shops = connection.LocationShops;
+            if (shops != null && mm.badgeshops != null && MainManager.map != null)
+            {
+                foreach (KeyValuePair<long, int[]> entry in shops)
+                {
+                    int shop = entry.Value[0];
+                    if (handled.Contains(entry.Key) || shop < 0 || shop >= mm.badgeshops.Length || mm.badgeshops[shop] == null
+                        || mm.badgeshops[shop].Contains(entry.Value[1]))
+                    {
+                        continue;
+                    }
+                    handled.Add(entry.Key);
+                    if (session.Locations.AllLocationsChecked.Contains(entry.Key))
+                    {
+                        continue;
+                    }
+                    log.LogInfo($"[check] location {entry.Key} is done (medal {entry.Value[1]} gone from shop {shop}'s stock) on {Where()}: sending");
+                    (finished ?? (finished = new List<long>())).Add(entry.Key);
+                }
+            }
             // Respawning pickups: sent by the pickup itself (ItemSwap), queued here for the seed this save belongs to.
             foreach (long id in connection.TakeRespawnChecks(session.RoomState.Seed))
             {

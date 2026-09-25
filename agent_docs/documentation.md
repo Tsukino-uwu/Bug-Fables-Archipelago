@@ -543,9 +543,19 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    (`ApConnection.ReceivedAtLogin`) are held up: a new save catching up, or a reconnect, is silent; items arriving
    during play are shown. Items sent while the player was offline come in silently too (the user accepted that). Not yet
    seen with a second player.
-7. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
+7. **Shop prices** (the user, 2026-09-25: Normal by default, Half or Free). The medal table's price columns (5 for
+   berries, 7 for crystal berries) are scaled in memory, from a kept copy, and put back when the row is Normal or the
+   mod is off. The logic never counts on it.
+8. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
    read in full before anything is skipped.
 
 The panel got an eighth row, "Quality of life", which opens a second page in the same box; cancel comes back.
 
-*Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page).*
+**Medal shops as locations** (the user, 2026-09-25). A medal shop turned out not to be a menu: each shelf slot is an
+item entity on the counter (`NPCControl.SetBadgeShop`), looking at one opens its description box, and buying runs the
+shopkeeper's dialogue, whose script checks the money, pays, removes the medal from the stock and gives it
+(`giveitem`). So: the shelf shows the seed's item's sprite; while the description box and the buy prompt are built,
+the medal table briefly holds the seed item's name and description; the `giveitem` is swapped like a gift; and the
+check is the medal leaving the shop's stock, which the save keeps (no "bought" flag exists). Built, not yet seen.
+
+*Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page), `ShopSwap.cs`.*

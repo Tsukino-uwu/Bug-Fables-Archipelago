@@ -307,6 +307,11 @@ namespace BugFablesAP
         internal Dictionary<long, int> LocationDiscoveries => locationDiscoveries;
         private volatile Dictionary<long, int> locationDiscoveries;
 
+        // slot_data's location_shops: shop stock locations, done when the medal leaves that shop's stock
+        // ({location id: [shop, medal]}; Shuffle Medal Shops, 2026-09-25). Null when not sent.
+        internal Dictionary<long, int[]> LocationShops => locationShops;
+        private volatile Dictionary<long, int[]> locationShops;
+
         private static Dictionary<long, int> ReadLocationBerries(Dictionary<string, object> slotData, string key = "location_berries")
         {
             if (slotData == null || !slotData.TryGetValue(key, out object raw) || !(raw is JObject map))
@@ -586,6 +591,9 @@ namespace BugFablesAP
                     locationVars = ReadLocationVars(ok.SlotData);
                     locationBerries = ReadLocationBerries(ok.SlotData);
                     locationDiscoveries = ReadLocationBerries(ok.SlotData, "location_discoveries");
+                    locationShops = ok.SlotData != null && ok.SlotData.TryGetValue("location_shops", out object ls) && ls is JObject lso
+                        ? lso.Properties().ToDictionary(p => long.Parse(p.Name), p => new[] { p.Value.Value<int>("shop"), p.Value.Value<int>("medal") })
+                        : null;
                     ownSlot = ok.Slot;
                     itemKinds = ReadItemKinds(ok.SlotData);
                     seedKnown = true;
@@ -595,6 +603,7 @@ namespace BugFablesAP
                     Scout(attempt, (locationFlags?.Keys ?? Enumerable.Empty<long>()).Concat(locationVars?.Keys ?? Enumerable.Empty<long>())
                         .Concat(locationBerries?.Keys ?? Enumerable.Empty<long>())
                         .Concat(locationDiscoveries?.Keys ?? Enumerable.Empty<long>())
+                        .Concat(locationShops?.Keys ?? Enumerable.Empty<long>())
                         .Concat(locationPickups?.Keys ?? Enumerable.Empty<long>()).Distinct().ToList());
                     attempt.Locations.CheckedLocationsUpdated += ids =>
                     {

@@ -299,6 +299,37 @@ namespace BugFablesAP
             return info;
         }
 
+        // What a location holds, for a display outside Giveitem (a shop's shelf): name, sprite and a description line. One
+        // of this world's items gets the game's own description; another game's item says whose it is.
+        internal static void LookOf(long at, out string name, out Sprite sprite, out string description)
+        {
+            ScoutedItemInfo info = Describe(at, out name, out sprite, out _);
+            description = "An Archipelago item.";
+            if (info == null)
+            {
+                return;
+            }
+            if (IsOurs(info))
+            {
+                int kind = KindOf(info);
+                int gameId = ItemIds.GameId(info.ItemId, kind);
+                try
+                {
+                    description = kind == ItemIds.MedalKind ? MainManager.badgedata[gameId, 1]
+                        : kind == ItemIds.MoneyKind ? gameId + " berries."
+                        : kind == ItemIds.CrystalKind ? MainManager.menutext[112] + "."
+                        : MainManager.itemdata[0, gameId, 1];
+                }
+                catch (IndexOutOfRangeException)
+                {
+                }
+            }
+            else
+            {
+                description = $"An item for {info.Player.Name} ({info.ItemGame}).";
+            }
+        }
+
         // The game's own look for one of this world's items: its sprite, name and starburst colour.
         internal static void DescribeOurs(long itemId, int kind, out string name, out Sprite sprite, out Color? color)
         {

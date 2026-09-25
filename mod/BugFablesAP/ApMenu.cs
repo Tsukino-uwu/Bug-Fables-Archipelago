@@ -21,7 +21,7 @@ namespace BugFablesAP
             QolRow = 7, Rows = 8;
         // The Quality of life page's rows (the user, 2026-09-25: a sub-menu inside the panel). Cancel goes back to the
         // first page, on the Quality of life row.
-        private const int FastTextRow = 0, SkipIntroRow = 1, FreeBoatRow = 2, WarpRow = 3, CutscenesRow = 4, AnimationRow = 5, QolRows = 6;
+        private const int FastTextRow = 0, SkipIntroRow = 1, FreeBoatRow = 2, WarpRow = 3, CutscenesRow = 4, AnimationRow = 5, PricesRow = 6, QolRows = 7;
         private bool qolPage;
 
         // The Difficulty and Detector rows' settings (Plugin, MedalAssist).
@@ -317,6 +317,7 @@ namespace BugFablesAP
                     case WarpRow: return "Adds a Warp to Start button to the pause menu.";
                     case CutscenesRow: return "Skips scenes that give nothing, or plays them fast.";
                     case AnimationRow: return "Which items from other players are shown held up.";
+                    case PricesRow: return "What medal shops charge.";
                     default: return "";
                 }
             }
@@ -349,7 +350,14 @@ namespace BugFablesAP
         private void Step(int r, int by)
         {
             ChangeSound();
-            if (qolPage && r == AnimationRow && QualityOfLife.ItemAnimation != null)
+            if (qolPage && r == PricesRow && QualityOfLife.ShopPrices != null)
+            {
+                string[] prices = QualityOfLife.ShopPriceValues;
+                int at = Array.IndexOf(prices, QualityOfLife.ShopPrices.Value);
+                QualityOfLife.ShopPrices.Value = prices[((at < 0 ? 0 : at) + by + prices.Length) % prices.Length];
+                log.LogInfo("[apmenu] ShopPrices: " + QualityOfLife.ShopPrices.Value);
+            }
+            else if (qolPage && r == AnimationRow && QualityOfLife.ItemAnimation != null)
             {
                 string[] values = QualityOfLife.ItemAnimations;
                 int at = Array.IndexOf(values, QualityOfLife.ItemAnimation.Value);
@@ -513,6 +521,7 @@ namespace BugFablesAP
                 Choice(WarpRow, "Warp button", OnOff(QualityOfLife.WarpButton));
                 Choice(CutscenesRow, "Skip cutscenes", OnOff(QualityOfLife.SkipCutscenes));
                 Choice(AnimationRow, "Item animation", (QualityOfLife.ItemAnimation?.Value ?? "All").ToUpperInvariant());
+                Choice(PricesRow, "Shop prices", (QualityOfLife.ShopPrices?.Value ?? "Normal").ToUpperInvariant());
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Quality of life. Cancel goes back.", 0f, StatusY);
                 leaf.transform.localPosition = new Vector3(LabelX + LeafOffset, RowY[row] + LeafRise, 0f);
@@ -546,7 +555,7 @@ namespace BugFablesAP
             arrows.parent = box;
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
-            foreach (int r in qolPage ? new[] { FastTextRow, SkipIntroRow, FreeBoatRow, WarpRow, CutscenesRow, AnimationRow } : new[] { DifficultyRow, DetectorRow, ModeRow })
+            foreach (int r in qolPage ? new[] { FastTextRow, SkipIntroRow, FreeBoatRow, WarpRow, CutscenesRow, AnimationRow, PricesRow } : new[] { DifficultyRow, DetectorRow, ModeRow })
             {
                 for (int side = 0; side < 2; side++)
                 {
