@@ -16,7 +16,7 @@ archipelago.gg, retrying when the server is unreachable or drops; sending checks
 items, with the count kept in the save (build step 7); the game's own item at a location swapped for the
 seed's (the mod guide, step 9); and, as of 2026-09-25, the world opening one gate at a time (the Outskirts rocks,
 Snakemouth's fall room both ways, the town, its districts, the bar, Madeleine's house), journal discoveries and
-Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026-09-25), Madame Butterfly's item shop (built, not yet seen), and a Quality of life page (build step 8 and the mod guide, step 10).
+Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026-09-25), Madame Butterfly's item shop (seen 2026-09-25), and a Quality of life page (build step 8 and the mod guide, step 10).
 
 **Next** (decided by the user, 2026-09-24):
 
@@ -55,7 +55,7 @@ Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026
    **Item shops** (endless consumables, the user): the first purchase of each item in each shop is a check that shows
    and gives the seed's item, then the shop sells its own item again, like respawning pickups, so restocking still works.
    Their own yaml toggle, *Shuffle Item Shops*, default on, apart from *Shuffle Medal Shops*. Built after the medal shops.
-   **Built for Madame Butterfly's shop (2026-09-25, not yet seen):** five locations (*Item Shop 1* to *5*, ids 58-62), one
+   **Built for Madame Butterfly's shop (2026-09-25, seen working):** five locations (*Item Shop 1* to *5*, ids 58-62), one
    per stock entry, known by map, shopkeeper and item (`location_item_shops`); each puts its own item in the pool, with
    no `give` entry, so an unrelated `giveitem` of the same item on that map is never swapped. *Shop Contents* covers
    them too. The buy line adds the item with `additem` (no item-get box), so the mod takes that command out when the line

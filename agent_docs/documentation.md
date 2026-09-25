@@ -635,7 +635,10 @@ with no item-get box to swap (`BugariaCommercial` line 16). So the slot shows th
 description, as for medals, from `itemdata[0, id, 0]` and `[.., 2]`); when the buy line is read (`GetDialogueText`) its
 `additem` is taken out, so nothing local is given; once the dialogue is over, berries down by the price mean it was
 bought, and the check goes out through the respawning pickups' queue with a hold-up. Nothing in the save marks it,
-as for respawning pickups. After the check, the slot is the shop's own item again. Built, not yet seen.
+as for respawning pickups. After the check, the slot is the shop's own item again. **Seen (the user, 2026-09-25):**
+the first try showed the shop's own items and a hold-up of "an Archipelago item", since the item shop locations were
+never scouted (the scout list is built table by table); after adding them, the shelf showed the seed's medals, each
+purchase held up the seed's item and sent its check, and the bought slots became the shop's own items again.
 
 **The reshuffle choice first** (the user, 2026-09-25: faster to reset a shelf). A shopkeeper's greeting ends in a
 `prompt` whose choices are listed as N targets then N texts (`MainManager.cs:12213-12222`); the reshuffle is the one with
