@@ -78,6 +78,9 @@ be wrong.
    (window 6, which lists areas), pick an area you've been to and confirm (Yes / No) to travel to its save point
    through the game's own map transfer. The game already records visited areas (`librarystuff[4, area]`, set by
    `MainManager.UpdateArea`). Its own Quality of life row; the logic never counts on it, like the warp.
+12. **A quest board in the starting house** (the user, 2026-09-25): the quests every board lists, taken without
+   walking to the town or the bar. Every board shows the same list (`MEASURED.md`, "The quest board"), so it adds no
+   quests, only a shorter way; quest locations' logic then needs the house instead of the town. Design questions open.
 
 **Known issues:**
 

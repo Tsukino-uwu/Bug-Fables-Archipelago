@@ -398,6 +398,14 @@ slot of each can hold the mod's own state in the game's own save, with no new fo
   placeholder dropped as `ChangeBoardQuest` does), and `flag[5]` flipped in the same frame. **So `[2]` = done,
   `[1]` = taken, `[0]` = most likely open on the board.** A quest's location identity is "its id is in
   `boardquests[2]`": saved, permanent, re-readable on connect. The reward left no TextProbe line.
+- **Every board shows one shared list** (2026-09-25, code read). `OpenQuestBoard(caretaker, caller)`
+  (`MainManager.cs:17823`) lists `boardquests[0]` whatever board called it, so the town's board and the bar's show
+  the same quests. A board is an entity with `Interaction.QuestBoard` (`NPCControl.cs:4435`): `data[0]` its
+  caretaker (an entity on the same map), `data[1]` the caretaker's dialogue line played on taking a quest,
+  `data[2]` a flag the board waits for (else the caretaker just talks). Opening copes with no caretaker or caller
+  (null checks); taking a quest needs `boardcaller`: it plays `|questprompt|` + that line (`:5683-5694`), whose
+  `|activateselectedquest|` moves the quest to taken and sets its `boardquestdata[id, 3]` flag (`:13899-13910`).
+  The story adds quests to the list (`ChangeBoardQuest(id, 0)`).
 
 ## Input (2026-09-24)
 
