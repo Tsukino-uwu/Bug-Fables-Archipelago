@@ -22,7 +22,8 @@ namespace BugFablesAP
         internal static ConfigEntry<bool> WarpButton;
         internal static ConfigEntry<bool> SkipCutscenes;
         // Items from other players: which ones get the hold-up animation (the user, 2026-09-25). Your own finds always do.
-        internal static readonly string[] ItemAnimations = { "Progression", "All", "Off" };
+        // Default All (the user, once bursts were fast with the skip button held: fun and noticeable, not tedious).
+        internal static readonly string[] ItemAnimations = { "All", "Progression", "Off" };
         internal static ConfigEntry<string> ItemAnimation;
 
         // Skip cutscenes (the user, 2026-09-25: scenes and fluff that give no checks). Each scene is read in full first
@@ -82,7 +83,7 @@ namespace BugFablesAP
                 "The boat to Metal Island costs nothing (the user, 2026-09-25: no farming berries in Archipelago).");
             SkipCutscenes = config.Bind("QualityOfLife", "SkipCutscenes", true,
                 "Scenes that give nothing are skipped or pass by fast (a list that grows scene by scene).");
-            ItemAnimation = config.Bind("QualityOfLife", "ItemAnimation", "Progression", new ConfigDescription(
+            ItemAnimation = config.Bind("QualityOfLife", "ItemAnimation", "All", new ConfigDescription(
                 "Which items received from other players are shown held up, as when you find one: Progression (items that "
                 + "unlock something), All, or Off. They always arrive either way; your own finds are always shown.",
                 new AcceptableValueList<string>(ItemAnimations)));

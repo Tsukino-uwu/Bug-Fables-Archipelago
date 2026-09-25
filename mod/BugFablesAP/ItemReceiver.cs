@@ -126,7 +126,7 @@ namespace BugFablesAP
         // your own finds already showed theirs when you made them. Display only: it was just given above.
         private void ShowIfWanted(ItemInfo item)
         {
-            string setting = QualityOfLife.ItemAnimation?.Value ?? "Progression";
+            string setting = QualityOfLife.ItemAnimation?.Value ?? "All";
             bool fromOther = item.Player.Slot != connection.OwnSlot;
             bool progression = (item.Flags & ItemFlags.Advancement) != 0;
             if (!fromOther || setting == "Off" || (setting == "Progression" && !progression)

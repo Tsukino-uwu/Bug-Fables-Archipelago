@@ -505,8 +505,8 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    changes the party or starts a battle. Built, not yet seen.
 6. **Item animation** (the user, 2026-09-25): a discovery showed nothing of what it found, and items from other
    players arrive silently. Your own finds always get the hold-up (pickups already did; a discovery recorded in play
-   now does too); the row, *Item animation: Progression / All / Off* (default Progression), decides which items from
-   other players do. The hold-up is the game's own `giveitem`, run on a key item stand-in (an ordinary item's
+   now does too); the row, *Item animation: All / Progression / Off* decides which items from other players do
+   (default All: the user's choice once bursts were fast with the skip button held). The hold-up is the game's own `giveitem`, run on a key item stand-in (an ordinary item's
    `giveitem` does nothing when the bag is full, `MainManager.cs:11499`), held up by the leader; the item swap shows
    the chosen item and keeps the stand-in out, as for a location's gift, in a new display-only mode. The follow-up line
    `giveitem` always shows is an empty one the mod answers for a reserved number. Hold-ups wait in a queue for the
