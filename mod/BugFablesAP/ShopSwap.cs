@@ -45,6 +45,11 @@ namespace BugFablesAP
             var after = new HarmonyMethod(typeof(ShopSwap), nameof(AfterShow));
             harmony.Patch(desc, prefix: before, postfix: after);
             harmony.Patch(interact, prefix: before, postfix: after);
+            MethodInfo shelf = AccessTools.Method(typeof(NPCControl), nameof(NPCControl.SetBadgeShop), new[] { typeof(bool) });
+            if (shelf != null)
+            {
+                harmony.Patch(shelf, prefix: new HarmonyMethod(typeof(ShopSwap), nameof(BeforeShelf)));
+            }
             log.LogInfo("[shop] installed on NPCControl.CreateDescWindow and Interact");
         }
 
@@ -53,6 +58,34 @@ namespace BugFablesAP
             harmony?.UnpatchSelf();
             harmony = null;
             SetPrices("Normal");
+        }
+
+        // Shades's counter shows 4 medals instead of 2 (the user, 2026-09-25: a QoL thing, the two sat far apart). The shelf
+        // has one slot per entry of the shopkeeper's data, each at vectordata[j] (NPCControl.cs:1531-1534); before it's
+        // built, her two spots become four, evenly from the first to the last.
+        private const int ShadesShop = 1;
+        private const int ShadesSlots = 4;
+
+        private static void BeforeShelf(NPCControl __instance)
+        {
+            if (randomizerOn == null || !randomizerOn() || __instance.interacttype == NPCControl.Interaction.CaravanBadge
+                || __instance.dialogues == null || __instance.dialogues.Length < 10 || (int)__instance.dialogues[9].x != ShadesShop
+                || __instance.data == null || __instance.data.Length != 2 || __instance.vectordata == null || __instance.vectordata.Length < 2)
+            {
+                return;
+            }
+            Vector3 first = __instance.vectordata[0];
+            Vector3 last = __instance.vectordata[1];
+            var spots = new Vector3[ShadesSlots];
+            var data = new int[ShadesSlots];
+            for (int j = 0; j < ShadesSlots; j++)
+            {
+                spots[j] = Vector3.Lerp(first, last, j / (float)(ShadesSlots - 1));
+                data[j] = __instance.data[Math.Min(j, __instance.data.Length - 1)];
+            }
+            __instance.vectordata = spots;
+            __instance.data = data;
+            log.LogInfo($"[shop] Shades's counter: {ShadesSlots} slots");
         }
 
         // The location a shop slot stands for, or -1.
