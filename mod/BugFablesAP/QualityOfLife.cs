@@ -51,6 +51,11 @@ namespace BugFablesAP
             // and 11 (EventControl.cs:334-407). The bridge's end state is set by the scene itself, not by its flags, so
             // it's fast-forwarded.
             new Scene { Map = "SnakemouthBridgeRoom", Event = 1, Flags = null },
+            // The new game's scene after its slides (the user, 2026-09-25: still a cutscene after the slides): inside the
+            // starting building, talk and party moves only, Kabbu alone (ChangeParty({1})), then EndEvent
+            // (EventControl.cs:2660-2866; no prompt, battle or item). Fast-forwarded so it ends as the game ends it. The
+            // new-game code menu earlier in Event8 runs before this map loads, so the map check keeps it out.
+            new Scene { Map = "BugariaOutskirtsOutsideCity", Event = 8, Flags = null },
         };
 
         // The Metal Island boat's fares: the pier sailor's lines 16 (300 berries) and 19 (90), each
@@ -171,6 +176,11 @@ namespace BugFablesAP
             {
                 eleven.animstate = 0;
             }
+            EntityControl trigger = MainManager.GetEntity(9);
+            if (trigger != null && trigger.name == "EventTrigger")
+            {
+                trigger.gameObject.SetActive(false); // gone as on a reload with flag 15 (its limit)
+            }
             mm.flags[15] = true;
             mm.boardquests[1].Insert(0, 11);
             HoldUps.FoundAt(OpeningLocation, "the opening's gift (location 1)");
@@ -182,11 +192,14 @@ namespace BugFablesAP
         private static bool BeforeStartEvent(int id)
         {
             if (id == OpeningEvent && SkipCutscenes.Value && randomizerOn() && MainManager.map != null
-                && MainManager.map.mapid.ToString() == OpeningMap && !MainManager.instance.flags[15])
+                && MainManager.map.mapid.ToString() == OpeningMap)
             {
-                openingPending = true;
+                // Also once the opening is done: its trigger stays in the room until the map reloads (limit 15 is read on
+                // load), and the scene run after the mod's opening crashed looking for Vi's stand-in (2026-09-25).
+                openingPending = !MainManager.instance.flags[15];
                 endEvent?.Invoke(null, null);
-                log.LogInfo("[qol] Event16 (the opening) skipped: the mod does what it leaves behind on the next free frame");
+                log.LogInfo(openingPending ? "[qol] Event16 (the opening) skipped: the mod does what it leaves behind on the next free frame"
+                    : "[qol] Event16 (the opening) refused: already done");
                 return false;
             }
             Scene scene = SceneFor(id);
