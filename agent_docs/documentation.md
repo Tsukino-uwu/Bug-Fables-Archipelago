@@ -592,7 +592,8 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    player (Leif) isn't in the scene: he stood where the fall room put him on loading, far left. (10)'s instant arrival
    then put stand-in Vi on him, and the end put Leif on her spot. So a stand-in sent toward the real player stays where
    the scene last put it, and the positions the scene hands `SetPlayers` are logged, with the stand-ins' and the
-   player's. Not yet seen.
+   player's. **Seen (the user, 2026-09-25):** Leif landed at the right spot; the log: placed at (12.7, 6.5, 0.3), stand-in
+   Vi's landing point, with the player at (-21.9, 0, 0) before.
    (12) **A stand-in has its physics body at once** (the user, 2026-09-25): the spider fight's lead-in (Event6) made a
    stand-in `Jump()` in the frame it was made, and `Jump`'s `Unfix` needs the body (`rigid`), which a new character only
    gets in its `Start`, a frame later (`EntityControl.cs:524-528`): NullReferenceException, the scene dead (`unstick`).
