@@ -70,10 +70,13 @@ Merab's medal shop as locations (her full stock of 22 from a new game, built 202
    is tallied on the server (per-slot storage), each save brought in line on load (crystal berries exactly: received
    minus spent; ordinary berries: the save's own paid record against the server's tally, the higher wins), and a
    purchase made offline is recorded in the save and queued.
-   **Built for Merab's (2026-09-25, not yet seen):** no server tally needed. The save's bits (a bit per copy) are its paid
+   **Built for Merab's (2026-09-25):** no server tally needed. The save's bits (a bit per copy) are its paid
    record, and the server's checked list says what was bought anywhere. A copy the server has checked with no bit in
    the save was bought in another save, so on a save tied to the seed, outside events, the mod charges its price here
-   (clamped at 0, the rest forgiven) and sets its bit. Crystal berries (Shades's) still want the exact count. A done location shows as sold. **Nothing requires a shop
+   (clamped at 0, the rest forgiven) and sets its bit. Crystal berries (Shades's) still want the exact count.
+   **Seen in the log (2026-09-25):** the user loaded a save with 0 berries that had bought nothing, while the server held
+   all 22 copies' checks: each was charged (0 -> 0, forgiven) and marked paid. Forgiving can't be farmed: a save only
+   ever ends with fewer berries. A save that has berries losing exactly the prices isn't seen yet (same code path). A done location shows as sold. **Nothing requires a shop
    bought out** (the user asked): the sold-out flags (587 Merab's, 588 Shades's, set in `MainManager.cs:14283-14291`) only
    change dialogue (an NPC's line 159 on the Commercial map; Shades's greeting, `checktrue,588,92`). A check that ever
    depends on a bought-out shop would need the full total, 50, still safe; a seed holding fewer than 50 crystal berries
