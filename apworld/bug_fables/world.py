@@ -4,13 +4,13 @@ import logging
 from collections.abc import Mapping
 from typing import Any
 
-from BaseClasses import Item, ItemClassification, Location, Region, Tutorial
+from BaseClasses import Item, ItemClassification, Location, LocationProgressType, Region, Tutorial
 from rule_builder.rules import Has, HasAll
 from worlds.AutoWorld import WebWorld, World
 
 from .data_tables import (ARTIFACTS, ITEM_NAME_TO_ID, ITEMS, DIALOGUE_FLAGS, HELD_UNTIL, KEPT_OPEN, PRESENT_FROM, KEPT_PRESENT, SCENERY_HIDDEN, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, STORY_EVENTS,
                           WORLD_VERSION, vanilla_item)
-from .options import BugFablesOptions
+from .options import BugFablesOptions, ShopContents
 
 GAME = "Bug Fables"
 _CLASSIFICATIONS = {
@@ -134,6 +134,17 @@ class BugFablesWorld(World):
         self.multiworld.itempool += pool
 
     def set_rules(self) -> None:
+        # What shop locations may hold (the user, 2026-09-25: shops are many easy checks in one place and can soak up the
+        # important items, as in Tevi). Filler Only uses Archipelago's excluded type (no progression, no useful);
+        # No Progression refuses progression items from any game.
+        for loc in self.included_locations:
+            if loc.get("category") != "shop":
+                continue
+            location = self.get_location(loc["name"])
+            if self.options.shop_contents == ShopContents.option_filler_only:
+                location.progress_type = LocationProgressType.EXCLUDED
+            elif self.options.shop_contents == ShopContents.option_no_progression:
+                location.item_rule = lambda item: not item.advancement
         # A location or story event needing more than its region says so in its own requires list.
         for loc in self.included_locations:
             if loc.get("requires"):

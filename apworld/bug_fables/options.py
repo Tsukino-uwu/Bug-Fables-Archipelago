@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import DefaultOnToggle, PerGameCommonOptions, Range, Toggle
+from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle
 
 from .data_tables import LOCATIONS
 
@@ -66,6 +66,23 @@ class ShuffleMedalShops(DefaultOnToggle):
     display_name = "Shuffle Medal Shops"
 
 
+class ShopContents(Choice):
+    """
+    What shop locations may hold, when shops are shuffled. Shops put many easy checks in one place, which can soak up
+    the important items; this keeps them spread over the world.
+
+    Anything: any item, progression included.
+    No Progression: useful and filler items only; everything that unlocks something is out in the world.
+    Filler Only: small items only.
+    """
+
+    display_name = "Shop Contents"
+    option_anything = 0
+    option_no_progression = 1
+    option_filler_only = 2
+    default = 1
+
+
 def category_count(category: str) -> int:
     """How many locations an option's category adds, straight from the location data."""
     return sum(1 for location in LOCATIONS if location.get("category") == category)
@@ -86,3 +103,4 @@ class BugFablesOptions(PerGameCommonOptions):
     shuffle_crystal_berries: ShuffleCrystalBerries
     shuffle_discoveries: ShuffleDiscoveries
     shuffle_medal_shops: ShuffleMedalShops
+    shop_contents: ShopContents

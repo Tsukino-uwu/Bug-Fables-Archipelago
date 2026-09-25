@@ -47,7 +47,12 @@ seed's (the mod guide, step 9).
    offline purchase stays in the save's stock and its check goes out on reconnecting.
    **Item shops** (endless consumables, the user): the first purchase of each item in each shop is a check that shows
    and gives the seed's item, then the shop sells its own item again, like respawning pickups, so restocking still works.
-   Their own yaml toggle, *Shuffle Item Shops*, default on, apart from *Shuffle Medal Shops*. Built after the medal shops. **Reloads refund currency** (the user
+   Their own yaml toggle, *Shuffle Item Shops*, default on, apart from *Shuffle Medal Shops*. Built after the medal shops.
+   **Shop Contents** (the user, 2026-09-25: shops are many easy checks in one place and soak up the good items, as in
+   Tevi): a yaml choice, *Anything*, *No Progression* (default) or *Filler Only*. No Progression is an `item_rule` on each
+   shop location refusing progression items from any game; Filler Only is Archipelago's excluded type (no progression,
+   no useful, `BaseClasses.py:1502`). 36 seeds (solo, with a second game, with discoveries) all generated. Tests
+   `TestShopContents*`. **The caravan is there from the start** (the user), built with the item shops. **Reloads refund currency** (the user
    caught this: buy, reload, keep the check and the berries), so purchases are made **permanent like checks**: spending
    is tallied on the server (per-slot storage), each save brought in line on load (crystal berries exactly: received
    minus spent; ordinary berries: the save's own paid record against the server's tally, the higher wins), and a

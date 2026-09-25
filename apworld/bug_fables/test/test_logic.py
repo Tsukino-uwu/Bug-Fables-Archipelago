@@ -564,3 +564,34 @@ class TestMedalShopsOff(BugFablesTestBase):
 
     def test_no_shop_locations(self) -> None:
         self.assertEqual(self.world.fill_slot_data()["location_shops"], {})
+
+
+class TestShopContentsDefault(BugFablesTestBase):
+    # By default shops refuse progression items (the user, 2026-09-25: shops soak up the good items, as in Tevi).
+    def test_shop_refuses_progression(self) -> None:
+        shop = self.world.get_location("Bugaria City: Commercial District, Medal Shop 1")
+        self.assertFalse(shop.item_rule(self.world.create_item("Explorer Permit")))
+        self.assertTrue(shop.item_rule(self.world.create_item("TP Plus")))
+
+    def test_no_progression_placed_in_shops(self) -> None:
+        for location in self.multiworld.get_locations(self.player):
+            if "Medal Shop" in location.name and location.item is not None:
+                with self.subTest(location=location.name):
+                    self.assertFalse(location.item.advancement)
+
+
+class TestShopContentsFillerOnly(BugFablesTestBase):
+    options = {"shop_contents": "filler_only"}
+
+    def test_shops_excluded(self) -> None:
+        from BaseClasses import LocationProgressType
+        shop = self.world.get_location("Bugaria City: Commercial District, Medal Shop 1")
+        self.assertEqual(shop.progress_type, LocationProgressType.EXCLUDED)
+
+
+class TestShopContentsAnything(BugFablesTestBase):
+    options = {"shop_contents": "anything"}
+
+    def test_shop_takes_progression(self) -> None:
+        shop = self.world.get_location("Bugaria City: Commercial District, Medal Shop 1")
+        self.assertTrue(shop.item_rule(self.world.create_item("Explorer Permit")))
