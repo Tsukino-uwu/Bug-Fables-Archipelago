@@ -459,7 +459,16 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    dialogue through `MainManager.GetDialogueText(id)`, not through a new `SetText`, so a postfix there drops the two
    money commands from those two lines. It changes no reachability: with it off, the fare can always be earned in
    battle. Built, not yet seen.
-4. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
+4. **Warp button** (the user, 2026-09-25: a fifth pause-menu button, "warp to start", with a yes/no before it
+   acts). The pause menu's row is window 0: `maxoptions` icons (4, or 2 in battle, so the button never shows there),
+   made as `sprites[13 + n]`; confirm opens window `option + 1`, and the labels are `menutext[10 + option]` and
+   `[50 + option]`. So the mod respaces the four icons, adds a fifth, raises `maxoptions` to 5, catches confirm on it
+   before the game would open a "window 5", and writes its own labels. **First try threw every frame:** the game's
+   `IconAnim` is handed exactly the four icons and indexes them by option, so the fifth option ran off the end (the
+   user: "got a lot of errors"); a prefix now hands it five, and the game animates the fifth like the others. On Yes
+   (No is preselected), the menu closes the game's way (`PrepareExit`) and the game's own `TransferMap` takes the
+   party to the Outskirts, beside the save point where a new game begins. Built, not yet seen.
+5. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
    read in full before anything is skipped.
 
 The panel got an eighth row, "Quality of life", which opens a second page in the same box; cancel comes back.

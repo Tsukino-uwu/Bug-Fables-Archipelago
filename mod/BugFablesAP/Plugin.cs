@@ -132,6 +132,7 @@ namespace BugFablesAP
             MedalAssist.Enable(Log, Guid, () => randomizerEnabled.Value, () => difficulty.Value == "Hard",
                 () => difficulty.Value == "Hardest", () => detector.Value);
             QualityOfLife.Enable(Log, Config, () => randomizerEnabled.Value);
+            WarpButton.Enable(Log, Guid, () => randomizerEnabled.Value && QualityOfLife.WarpButton.Value);
             MenuToggle.Enable(Log, Guid, randomizerEnabled, server, port, slot, password,
                 () => { },
                 () => connection.Status,
@@ -305,6 +306,7 @@ namespace BugFablesAP
             MedalAssist.Disable();
             KeptOpen.Disable();
             QualityOfLife.Disable();
+            WarpButton.Disable();
             // ScriptEngine destroys the old instance on reload. Say so, so a reload shows up in the log.
             Log?.LogInfo($"{Name} {Version} unloaded.");
         }

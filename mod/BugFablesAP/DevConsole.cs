@@ -383,7 +383,7 @@ namespace BugFablesAP
 
         // A spot beside the entity with room for the party: no solid collider where the player would stand, and safe
         // ground below (not a hazard). Tries four sides at 2.5, then 1.5; null when none is safe.
-        private static Vector3? ClearSpot(Vector3 at)
+        internal static Vector3? ClearSpot(Vector3 at)
         {
             Vector3[] sides = { Vector3.right, Vector3.left, Vector3.forward, Vector3.back };
             foreach (float distance in new[] { 2.5f, 1.5f })

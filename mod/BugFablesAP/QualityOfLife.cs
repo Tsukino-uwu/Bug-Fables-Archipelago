@@ -18,6 +18,7 @@ namespace BugFablesAP
         internal static ConfigEntry<bool> FastText;
         internal static ConfigEntry<bool> SkipIntro;
         internal static ConfigEntry<bool> FreeBoat;
+        internal static ConfigEntry<bool> WarpButton;
 
         // The Metal Island boat's fares: the pier sailor's lines 16 (300 berries) and 19 (90), each
         // |checkmoney,N,20||money,-N| (ScriptDump's money column, 2026-09-25). The trip back charges nothing.
@@ -51,6 +52,9 @@ namespace BugFablesAP
                 "A new game's four story slides pass by on their own, fast. The rest of the opening plays as normal.");
             FreeBoat = config.Bind("QualityOfLife", "FreeBoat", true,
                 "The boat to Metal Island costs nothing (the user, 2026-09-25: no farming berries in Archipelago).");
+            WarpButton = config.Bind("QualityOfLife", "WarpButton", true,
+                "A fifth button in the pause menu, Warp to Start, takes the party back to where the game began (after a "
+                + "Yes / No box). Not shown in battle.");
             // A fare line is fetched inside the running dialogue (a prompt's answer jumps to it), not through a new SetText,
             // so the line itself is changed as the game reads it (MainManager.GetDialogueText, MainManager.cs:10169).
             MethodInfo getLine = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetDialogueText), new[] { typeof(int) });
