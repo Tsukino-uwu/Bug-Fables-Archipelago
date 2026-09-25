@@ -581,7 +581,13 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    spot and waits until she's there (`while (entities[0].forcemove)`, `EventControl.cs:2935`); the stand-in, without
    collision, never arrived, and the scene never reached its first line. Every `MoveTowards` overload ends in the
    five-argument one (`EntityControl.cs:4911-4960`); a postfix puts a stand-in straight on the spot and ends the walk.
-   The scene's cut itself is done by the scene (`CutGrass()` after the action button), not by Kabbu. Not yet seen.
+   The scene's cut itself is done by the scene (`CutGrass()` after the action button), not by Kabbu. **Seen (the user):**
+   the tutorial played through and its reward was sent.
+   (11) **Stand-ins stay where they're put** (the user, 2026-09-25): the trapdoor scene ran with stand-ins, but Leif
+   landed "down/left at a rock" instead of on the mushroom. Its end places member m on the m-th scene character's spot
+   (`EventControl.cs:1476-1484`), so Leif took stand-in Vi's; a stand-in had its collision switched off but not its
+   gravity, so it would sink through the floor. Stand-ins are now kinematic, without gravity. The likely cause, not
+   measured; not yet seen.
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,

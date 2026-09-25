@@ -188,6 +188,19 @@ namespace BugFablesAP
                 {
                     c.enabled = false;
                 }
+                // Without collision a stand-in fell through the floor, and a scene that then places a real member on its spot
+                // (the trapdoor's end puts member m at the m-th scene character's position, EventControl.cs:1476-1484) put
+                // Leif where it had sunk to (the user, 2026-09-25: "down/left at a rock" instead of on the mushroom). So a
+                // stand-in stays exactly where the scene puts it.
+                if (e.rigid != null)
+                {
+                    if (!e.rigid.isKinematic)
+                    {
+                        e.rigid.velocity = Vector3.zero;
+                    }
+                    e.rigid.useGravity = false;
+                    e.rigid.isKinematic = true;
+                }
             }
         }
 
