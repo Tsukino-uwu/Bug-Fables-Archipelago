@@ -82,12 +82,8 @@ namespace BugFablesAP
                 return;
             }
             EntityControl e = MainManager.player.entity;
-            bool free = MainManager.FreePlayer();
             // Not jumpcooldown: it outlasts the whole jump, so it never runs out in mid-air.
-            bool jumps = free && !e.onground;
-            log.LogInfo($"[dev] infjump: press, free {free}, onground {e.onground}, cooldown {e.jumpcooldown:0.0}, "
-                + $"velocity y {e.rigid.velocity.y:0.0} -> {(jumps ? "jump" : "no jump")}");
-            if (jumps)
+            if (MainManager.FreePlayer() && !e.onground)
             {
                 e.Jump();
                 e.PlaySoundSimple("Jump");

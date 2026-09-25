@@ -35,6 +35,40 @@ namespace BugFablesAP
             }
             harmony = new Harmony(guid + ".anim." + DateTime.UtcNow.Ticks);
             harmony.Patch(setAnim, transpiler: new HarmonyMethod(typeof(AnimGuard), nameof(Transpile)));
+            // The game's direct anim.Play("name") calls (battles, events, menus) all end in this overload.
+            var play = AccessTools.Method(typeof(Animator), nameof(Animator.Play), new[] { typeof(string), typeof(int), typeof(float) });
+            if (play == null)
+            {
+                log.LogWarning("[anim] Animator.Play(string, int, float) wasn't found; direct plays aren't guarded.");
+                return;
+            }
+            harmony.Patch(play, prefix: new HarmonyMethod(typeof(AnimGuard), nameof(BeforePlay)));
+            log.LogInfo("[anim] installed on Animator.Play(string, int, float)");
+        }
+
+        // False skips a play of a state the animator lacks on the asked layer (or on any, for -1).
+        private static bool BeforePlay(Animator __instance, string stateName, int layer)
+        {
+            if (randomizerOn == null || !randomizerOn() || __instance == null || __instance.layerCount == 0)
+            {
+                return true;
+            }
+            int hash = Animator.StringToHash(stateName);
+            bool found = layer >= 0 && layer < __instance.layerCount ? __instance.HasState(layer, hash) : HasStateOnAnyLayer(__instance, hash);
+            if (!found)
+            {
+                Report(__instance, stateName);
+            }
+            return found;
+        }
+
+        private static void Report(Animator anim, string state)
+        {
+            string controller = anim.runtimeAnimatorController != null ? anim.runtimeAnimatorController.name : "none";
+            if (reported.Add(controller + "/" + state))
+            {
+                log.LogInfo($"[anim] {anim.gameObject.name} ({controller}) has no state '{state}'; skipped (the game would warn and play nothing)");
+            }
         }
 
         internal static void Disable()
@@ -90,11 +124,7 @@ namespace BugFablesAP
                 anim.CrossFadeInFixedTime(state, duration);
                 return;
             }
-            string controller = anim.runtimeAnimatorController != null ? anim.runtimeAnimatorController.name : "none";
-            if (reported.Add(controller + "/" + state))
-            {
-                log.LogInfo($"[anim] {anim.gameObject.name} ({controller}) has no state '{state}'; skipped (the game would warn and play nothing)");
-            }
+            Report(anim, state);
         }
     }
 }

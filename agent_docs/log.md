@@ -674,3 +674,7 @@ Newest last. What was tried, what happened, what the user said.
   - Tested with the noisy case: a Bee Boss look with Underling movement. The count stayed at 68 and one `[anim]`
     line appeared.
   - Each boss's map movement will be picked per boss by testing (the user).
+- **More log hygiene** (the user).
+  - `AnimGuard` now also guards `Animator.Play(string, int, float)`, which every direct `anim.Play("name")` in the
+    game ends in.
+  - The infinite-jump cheat no longer logs every press. The user: "just noise/spam".

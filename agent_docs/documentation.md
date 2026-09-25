@@ -761,7 +761,10 @@ swaps those two calls for a check: a state found on any layer plays as before; a
 game did anyway) and logged once per controller (`[anim] BeeBoss(Clone) (BeeBoss) has no state 'Walk'`), which is
 also the list for mapping a missing animation to the closest one later. Only while Archipelago is enabled. **Tested
 (2026-09-26):** with a Bee Boss look walking like an Underling, the count stayed at 68 and one `[anim]` line appeared
-instead. Other paths (named `anim.Play` calls in the game) aren't guarded yet; the log tells if one still warns.
+instead. **The game's direct `anim.Play("name")` calls** (about 30: battles, events, the map, menus) all end in
+Unity's `Animator.Play(string, int, float)`, so a prefix there gives them the same check (the asked layer, or any
+layer for -1), installed and logged at load. A layer warning that still shows comes from another path; the log names
+it.
 
 **Status:** works with Leif alone, seen by the user through chapter 1 into chapter 2 (2026-09-25); items 5 and 6, and Leif joining after the spider with a two-member start, not yet seen; the direct lookups in item 12 still open.
 
