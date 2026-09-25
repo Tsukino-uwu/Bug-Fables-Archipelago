@@ -362,6 +362,14 @@ the *Starting Party Member* plan) plays through chapter 1 into chapter 2 (seen, 
 
 **Known issues:**
 
+- **A Kabbu / horn rule is owed** once party members or the basic horn become items (Starting Party Member).
+  Kabbu and his horn are always there today, so these locations have no rule for them: 2 (the horn tutorial,
+  which soft-locks without the horn), 21 (a berry in a bush), 25 (under a stone), 31 (a grass discovery) and 32
+  (past grass). Without the rule, a seed could be impossible.
+- **Crystal berry #2 (location 20)** sits in the Underground region, which needs Leif, though the room's
+  upper-left entrance needs nothing. More cautious than the game, so safe; room-level regions would split it.
+- **Landmark names** for locations 2, 22, 23, 24, 25 and 30 are still to come from the user.
+
 - The generator's manifest warning ("will stop working with Archipelago 0.7.0") came from a hand-zipped
   apworld. The properly packaged file (build step 1) fixes it once it replaces the copy in the installed
   Archipelago's `custom_worlds`.
