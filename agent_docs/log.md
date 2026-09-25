@@ -571,3 +571,14 @@ Newest last. What was tried, what happened, what the user said.
   doc sections), a contents list for MEASURED.md, and a CLAUDE.md line to look a file up there first. The map's
   gaps: `HoldUps.cs`, `PartyMembers.cs`, the test files and `DevCheats.cs` are never named in the docs, and the two
   guides' big sections ("Where it stands", documentation step 10) have no subheadings to link to.
+- **Comment review, second pass:** three agents read every remaining comment against its code. 14 no longer matched
+  the code after the first trim (among them the world's description on the site, which said only key items are
+  shuffled), 9 sat on the wrong line; all fixed, code identical. The library's resend of unconfirmed checks was
+  traced to its source (v6.7.1).
+- **The guides restructured** (the user asked why shops and the entrance randomizer had no steps of their own:
+  they had been written into whatever section was open). apimplementation.md build steps 9-13 and documentation.md
+  steps 11-16 now hold them, text moved and checked line by line. The user added the fake party members/followers
+  as a main point. To keep it from happening again (the user: too vague to judge alone, and not every small step):
+  CLAUDE.md's test for an own step (a yaml option or panel setting, a new kind of location, or a change to how the
+  game plays in a seed), and `.githooks/doc-coverage.py` in pre-commit. Its first run found `location_shops`,
+  `RandomizerEnabled` and six Debug settings written up nowhere; development.md now has every Debug setting in one table.
