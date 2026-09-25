@@ -681,6 +681,10 @@ plugin reload or a seed change, a map loaded before the login is built as vanill
 back until they left and re-entered. `KeptOpen.Tick` now applies a newly arrived set of lists to the current map (the
 same marks as at map load, and the scenery hidden the way `ConditionChecker.Start` hides it); the log shows it
 removing the miners on the Outskirts right after a reload.
+**The town waits for Leif, not the first boss** (the user, 2026-09-25: try the city with Leif). Its first-entry scene
+lines up Vi, Kabbu and Leif by character (`GetEntity(-4)`, `-5`, `-6`) and moves each (`EventControl.cs:9796-9805`), so it
+needs three, like the boat; the `held_until` flag became 16. The city's checks keep needing the first boss in logic
+until the city is seen working in chapter 1.
 **The boat to Metal Island crashed with two in the party** (2026-09-25). With the rocks gone the user reached the
 pier on a chapter 1 file, paid the fare, and the boat scene (Event107) threw IndexOutOfRange: it seats three party
 members (`p[0..2]`, `EventControl.cs:17944-17946`), and in the game the pier is behind the rocks until the first
