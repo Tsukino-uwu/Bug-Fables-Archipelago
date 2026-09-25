@@ -1244,6 +1244,10 @@ its fight**, so the player knows what they're walking into: a boss if the fight 
 **Wanted (the user):** a Quality of life row, *Enemy movement: their own / the original's*, default their own; the
 original's is there for fun ("looks fun when something does something else than the model is supposed to").
 
+**To fix later (the user, 2026-09-26): the map movement.** A swapped look keeps the original enemy's movement
+(Spuder burrowed like the Underling). Whether bosses can move around the map on their own at all is unknown; they
+never do in vanilla. To measure before the real look step.
+
 **Next:**
 - see the shuffled fights in the game;
 - then bosses: each scripted fight read one by one, keyed by its event and its original ids;
