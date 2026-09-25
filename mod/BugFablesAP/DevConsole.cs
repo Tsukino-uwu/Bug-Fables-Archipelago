@@ -531,6 +531,31 @@ namespace BugFablesAP
                 member.animstate = 0;
                 member.StopForceMove();
             }
+            // A dialogue that died mid-line leaves the game thinking a box is open (message), which keeps the player frozen
+            // (2026-09-25: a city NPC's line threw on a missing companion). What the game's own dialogue end does
+            // (MainManager.cs:14185-14204): message and the waits off, the box shrunk and removed.
+            MainManager mmd = MainManager.instance;
+            bool talking = mmd.message || mmd.waitinput || mmd.prompt;
+            mmd.message = false;
+            mmd.waitinput = false;
+            mmd.prompt = false;
+            mmd.inlist = false;
+            mmd.minipause = false;
+            mmd.overridefollower = false;
+            System.Reflection.FieldInfo boxField = HarmonyLib.AccessTools.Field(typeof(MainManager), "textbox");
+            if (boxField != null && boxField.GetValue(boxField.IsStatic ? null : mmd) is Transform box && box != null)
+            {
+                DialogueAnim anim = box.GetComponent<DialogueAnim>();
+                if (anim != null)
+                {
+                    anim.shrink = true;
+                }
+                UnityEngine.Object.Destroy(box.gameObject, 1f);
+            }
+            if (MainManager.player != null && MainManager.player.entity != null && MainManager.player.entity.rigid != null)
+            {
+                MainManager.player.entity.rigid.constraints = RigidbodyConstraints.FreezeRotation;
+            }
             bool black = MainManager.instance.transitionobj != null && MainManager.instance.transitionobj.Length > 0
                 && MainManager.instance.transitionobj[0] != null;
             if (black)
@@ -538,7 +563,8 @@ namespace BugFablesAP
                 MainManager.PlayTransition(1, 0, 0.1f, Color.black);
             }
             return "ran the game's end-of-event cleanup and camera, limit and music resets; inevent=" + MainManager.instance.inevent
-                + ", minipause=" + MainManager.instance.minipause + $"; freed {freed} party member(s); "
+                + ", minipause=" + MainManager.instance.minipause + (talking ? "; closed a dead dialogue" : "")
+                + $"; freed {freed} party member(s); "
                 + (black ? "faded the screen back in" : "no fade left on screen");
         }
 

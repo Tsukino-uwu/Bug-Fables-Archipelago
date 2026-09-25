@@ -81,6 +81,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   map transfer stuck walking to a spot it can't reach. It also takes the party off anything a scene parked it on
   and lifts a leftover fade: the boat scene crashed mid-fade and left a black screen with music playing, which the
   cleanup alone didn't clear (2026-09-25; the user saw the screen come back).
+  It also resets the party's bodies (gravity, physics, forced animation), and closes a dialogue that died mid-line:
+  the game kept thinking a box was open (`message`) after a city NPC's line threw, which froze the player until
+  `unstick` did what the game's own dialogue end does (2026-09-25).
 - `nudge <x> <y> <z>`: shift the party by that much on the current map.
 - `items`: list every pickup that exists on the current map right now (kind, id, flag, distance), in the log.
 - `tree`: log the nearest pickup's whole object tree: each object, whether it's active, and its renderers, on or
