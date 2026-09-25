@@ -8,9 +8,10 @@ from BaseClasses import Item, ItemClassification, Location, LocationProgressType
 from rule_builder.rules import Has, HasAll
 from worlds.AutoWorld import WebWorld, World
 
-from .data_tables import (ARTIFACTS, ITEM_NAME_TO_ID, ITEMS, DIALOGUE_FLAGS, HELD_UNTIL, KEPT_OPEN, PRESENT_FROM, KEPT_PRESENT, SCENERY_HIDDEN, SCENERY_PRESENT, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, STORY_EVENTS,
+from .data_tables import (ARTIFACTS, DOORS, ITEM_NAME_TO_ID, ITEMS, DIALOGUE_FLAGS, HELD_UNTIL, KEPT_OPEN, PRESENT_FROM, KEPT_PRESENT, SCENERY_HIDDEN, SCENERY_PRESENT, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, STORY_EVENTS,
                           WORLD_VERSION, vanilla_item)
-from .options import BugFablesOptions, ShopContents
+from .doors import shuffle_coupled
+from .options import BugFablesOptions, EntranceRandomizer, ShopContents
 
 GAME = "Bug Fables"
 # Location categories Shop Contents applies to: medal shops and item shops.
@@ -80,6 +81,11 @@ class BugFablesWorld(World):
         # The locations this seed has: a category whose option is off (quests) isn't part of it, and the game hands
         # those out as usual (the client only acts on what slot_data lists).
         self.included_locations = [loc for loc in LOCATIONS if self._category_on(loc.get("category"))]
+        # The entrance randomizer (experimental): which doors lead where another door leads, decided here, sent in
+        # slot_data (door_targets); the client never decides a door itself.
+        self.door_targets = []
+        if self.options.entrance_randomizer == EntranceRandomizer.option_coupled:
+            self.door_targets = shuffle_coupled(DOORS["connections"], DOORS["fixed"], self.random)
 
     def _category_on(self, category: str | None) -> bool:
         if category == "quest":
@@ -256,5 +262,7 @@ class BugFablesWorld(World):
             "dialogue_flags": [{"map": e["map"], "entity": e["entity"], "flag": e["flag"], "to": e["to"]} for e in DIALOGUE_FLAGS],
             # Where each of this world's items goes (0 item, 1 key item, 2 medal), so the client gives it the right
             # way, shows a found one the way the game shows that kind, and knows a medal's id is offset.
+            # Doors the entrance randomizer rewrites: each leads where like_door (on like_map) leads. Empty when it's off.
+            "door_targets": self.door_targets,
             "item_kinds": {str(ITEM_NAME_TO_ID[item["name"]]): item["kind"] for item in ITEMS},
         }

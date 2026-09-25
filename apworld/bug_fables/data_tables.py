@@ -41,6 +41,8 @@ SCENERY_PRESENT: list[dict[str, Any]] = _LOCATION_DATA.get("scenery_present", []
 HELD_UNTIL: list[dict[str, Any]] = _LOCATION_DATA.get("held_until", [])
 PRESENT_FROM: list[dict[str, Any]] = _LOCATION_DATA.get("present_from", [])
 DIALOGUE_FLAGS: list[dict[str, Any]] = _LOCATION_DATA.get("dialogue_flags", [])
+# The entrance randomizer's door table: connections (a, b) that pair both ways, and the map links left fixed.
+DOORS: dict[str, Any] = _load("doors.json")
 
 # Medal ids (MainManager.BadgeTypes) overlap item ids (MainManager.Items), so medals get their own range.
 MEDAL_KIND = 2

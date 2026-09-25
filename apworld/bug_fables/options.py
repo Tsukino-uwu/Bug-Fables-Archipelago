@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle
 
-from .data_tables import LOCATIONS
+from .data_tables import DOORS, LOCATIONS
 
 
 class ArtifactsRequired(Range):
@@ -97,6 +97,23 @@ class ShopContents(Choice):
     default = 1
 
 
+class EntranceRandomizer(Choice):
+    """
+    EXPERIMENTAL. Doors between areas lead somewhere else. Coupled: a door and its way back stay a pair, so turning
+    round takes you back where you came from. Every area stays reachable through doors.
+
+    The logic doesn't follow the doors yet: items are placed as if the doors were where the game has them, so a seed
+    with this on may not be finishable (the pause menu's Warp button gets you out of a dead end). Off by default.
+
+    Doors in this version: {count}.
+    """
+
+    display_name = "Entrance Randomizer (experimental)"
+    option_off = 0
+    option_coupled = 1
+    default = 0
+
+
 def category_count(category: str) -> int:
     """How many locations an option's category adds, straight from the location data."""
     return sum(1 for location in LOCATIONS if location.get("category") == category)
@@ -109,6 +126,7 @@ ShuffleCrystalBerries.__doc__ = ShuffleCrystalBerries.__doc__.replace("{count}",
 ShuffleDiscoveries.__doc__ = ShuffleDiscoveries.__doc__.replace("{count}", str(category_count("discovery")))
 ShuffleMedalShops.__doc__ = ShuffleMedalShops.__doc__.replace("{count}", str(category_count("shop")))
 ShuffleItemShops.__doc__ = ShuffleItemShops.__doc__.replace("{count}", str(category_count("item_shop")))
+EntranceRandomizer.__doc__ = EntranceRandomizer.__doc__.replace("{count}", str(2 * len(DOORS["connections"])))
 
 
 @dataclass
@@ -120,3 +138,4 @@ class BugFablesOptions(PerGameCommonOptions):
     shuffle_medal_shops: ShuffleMedalShops
     shuffle_item_shops: ShuffleItemShops
     shop_contents: ShopContents
+    entrance_randomizer: EntranceRandomizer

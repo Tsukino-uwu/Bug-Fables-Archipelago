@@ -16,7 +16,9 @@ archipelago.gg, retrying when the server is unreachable or drops; sending checks
 items, with the count kept in the save (build step 7); the game's own item at a location swapped for the
 seed's (the mod guide, step 9); and, as of 2026-09-25, the world opening one gate at a time (the Outskirts rocks,
 Snakemouth's fall room both ways, the town, its districts, the bar, Madeleine's house), journal discoveries and
-Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026-09-25), Madame Butterfly's item shop (seen 2026-09-25), the caravan from the start with its three items (seen 2026-09-25), and a Quality of life page (build step 8 and the mod guide, step 10).
+Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026-09-25), Madame Butterfly's item shop (seen 2026-09-25), the caravan from the start with its three items (seen 2026-09-25), and a Quality of life page (build step 8 and the mod guide, step 10). An experimental entrance randomizer (a yaml option,
+coupled, off by default) shuffles 508 doors with every area kept reachable; a hand-made swap was seen working both ways
+(2026-09-25), a generated one not yet.
 
 **Next** (decided by the user, 2026-09-24):
 
@@ -132,6 +134,24 @@ Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026
    impossible", while that option is on; *Warp to start* gets the player out of a dead end). Coupled (a door and its way
    back stay a pair) by default, decoupled as a choice. Order: a proof of concept (the mod rewriting a door's
    destination, seen on screen), then every door, then the room-by-room logic that removes the experimental label.
+   **The proof of concept, seen (the user, 2026-09-25):** one door, then a coupled swap of two connections both ways
+   (the mod guide, step 10). **Every door, built (2026-09-25):** the yaml option *Entrance Randomizer (experimental)*,
+   *Off* (default) or *Coupled*; decoupled later. How it was built:
+   1. **A door table** (`data/doors.json`), exported by `dev-scripts/door-graph.py --export` from EntityDump: every
+      door paired with its way back (the door the party arrives next to), 254 connections, 508 doors. Doors stay
+      fixed when the mod couldn't tell them apart by name, when they have a story variant at the same spot, or when they
+      lead into their own map; the table lists the map links those make.
+   2. **The shuffle** (`doors.py`), in `generate_early`, with the world's own random: the same doors joined in new
+      pairs, x with y meaning x leads where y's old partner led (so you arrive next to y) and y where x's old partner
+      led. Sent as `door_targets`, which the mod already applies.
+   3. **Every area stays reachable.** A plain random pairing strands areas: two dead-end rooms joined to each other are
+      cut off. Measured: stranded in 20 of 20 seeds on the real table. So the shuffle grows the world outwards from one
+      area (maps joined by fixed doors count as one): an open door of the reached part is joined to a door of an area
+      not reached yet, taking an area with more doors whenever only one open door is left; the doors left at the end
+      are paired at random. Tests `TestDoors*`: every way back leads back, every map is reachable, and a hub with dead
+      ends is never stranded over 300 seeds (a plain random pairing strands 266 of them).
+   4. Six seeds generated with it on, three solo and three with APQuest. **Not yet seen in game.** The logic still
+      assumes the vanilla doors (the named allowance).
 2. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
    **Also wanted (the user, 2026-09-25): the basic moves as items**, a yaml option apart from the abilities: Vi's
