@@ -524,8 +524,10 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    game's `|end|`, which skips that wait. Confirmed by the user the same day: no empty box.
    **Bursts** (the user queued 50 to see what *All* feels like when a multiworld sends many at once: about a minute of
    boxes). Only the first of a burst waits for the settled half second; the rest follow as soon as the previous box
-   closes, and past three items from other players the rest of the burst collapses into one "...and N more items from
-   other players!" box (the user chose both). Own finds are never collapsed. Not yet seen.
+   closes. A summary box ("...and N more items from other players!") past three was tried and dropped: it felt off to
+   the user, so every item gets its own box. Instead, **holding the skip button runs the game at 4 times speed while one
+   of the mod's hold-ups is on screen**, since the item-get's own pauses are fixed waits that fast text doesn't shorten;
+   only a speed-up the hold-up made is undone. Not yet seen.
 7. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
    read in full before anything is skipped.
 

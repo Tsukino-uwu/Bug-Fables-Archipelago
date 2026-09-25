@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using BepInEx.Logging;
 using UnityEngine;
 
@@ -12,14 +11,14 @@ namespace BugFablesAP
     // change) and play one at a time. Display only: the item itself is given by the receiver, never here.
     //
     // Bursts (the user tried 50 in a row at "All": about a minute of boxes): only the first waits for a settled moment,
-    // the rest follow as soon as the previous box closes, and past BurstShown items from other players the rest of the
-    // burst collapses into one "...and N more" box. Your own finds are never collapsed.
+    // the rest follow as soon as the previous box closes, every item still gets its own box (a "...and N more" summary
+    // felt off to the user), and holding the skip button runs the game faster while the mod's hold-up is on screen, so
+    // the item-get's fixed pauses (WaitForSeconds in Giveitem) pass quickly too.
     internal static class HoldUps
     {
         private sealed class Entry
         {
             internal Action Show;
-            internal bool FromOther;
         }
 
         private static ManualLogSource log;
@@ -32,10 +31,12 @@ namespace BugFablesAP
         // there would cut in. Within a burst, the next follows after NextFor.
         private const int FreeFor = 30;
         private const int NextFor = 3;
-        private const int BurstShown = 3;
         private static int freeFrames;
         private static bool inBurst;
-        private static int shownFromOthers;
+        // Frames since the mod's last hold-up started, while its box may still be up; and whether this sped the game up.
+        private static bool showing;
+        private static bool speeding;
+        private const float HoldSpeed = 4f;
 
         internal static void Init(ManualLogSource logger, Func<bool> on)
         {
@@ -45,18 +46,19 @@ namespace BugFablesAP
 
         internal static void FoundAt(long location, string what)
         {
-            waiting.Add(new Entry { Show = () => ItemSwap.ShowFoundAt(location), FromOther = false });
+            waiting.Add(new Entry { Show = () => ItemSwap.ShowFoundAt(location) });
             log.LogInfo($"[show] queued the hold-up for {what}");
         }
 
         internal static void Received(string name, Sprite sprite, Color? color, string article)
         {
-            waiting.Add(new Entry { Show = () => ItemSwap.ShowHeldUp(name, sprite, color, article), FromOther = true });
+            waiting.Add(new Entry { Show = () => ItemSwap.ShowHeldUp(name, sprite, color, article) });
             log.LogInfo($"[show] queued the hold-up for {name}");
         }
 
         internal static void Tick()
         {
+            Speed();
             if (settle > 0)
             {
                 settle--;
@@ -67,11 +69,14 @@ namespace BugFablesAP
             if (waiting.Count == 0 || busy || randomizerOn == null || !randomizerOn())
             {
                 freeFrames = 0;
-                if (waiting.Count == 0 && !busy)
+                if (!busy)
                 {
-                    // The burst is over once the queue is empty and the last box has closed.
-                    inBurst = false;
-                    shownFromOthers = 0;
+                    showing = false;
+                    if (waiting.Count == 0)
+                    {
+                        // The burst is over once the queue is empty and the last box has closed.
+                        inBurst = false;
+                    }
                 }
                 return;
             }
@@ -82,29 +87,38 @@ namespace BugFablesAP
             freeFrames = 0;
             inBurst = true;
             settle = 5;
+            showing = true;
             Entry next = waiting[0];
-            if (next.FromOther && shownFromOthers >= BurstShown)
-            {
-                // The rest of the burst's items from other players in one box; own finds stay queued.
-                int rest = waiting.Count(e => e.FromOther);
-                waiting.RemoveAll(e => e.FromOther);
-                log.LogInfo($"[show] {rest} more items from other players shown in one box");
-                mm.StartCoroutine(MainManager.SetText($"|center|...and {rest} more item{(rest == 1 ? "" : "s")} from other players!",
-                    dialogue: true, Vector3.zero, null, null));
-                return;
-            }
             waiting.RemoveAt(0);
-            if (next.FromOther)
-            {
-                shownFromOthers++;
-            }
             next.Show();
+        }
+
+        // While the mod's own hold-up is on screen and the skip button is held, the game runs faster; otherwise normal.
+        // Only a speed this set is undone, so a scene the game or the mod speeds up itself is left alone.
+        private static void Speed()
+        {
+            bool want = showing && MainManager.instance != null && MainManager.instance.message && MainManager.GetKey(5, hold: true);
+            if (want && !speeding)
+            {
+                speeding = true;
+                Time.timeScale = HoldSpeed;
+            }
+            else if (!want && speeding)
+            {
+                speeding = false;
+                Time.timeScale = 1f;
+            }
         }
 
         // A reload or a new seed: nothing carries over (the items themselves are already given).
         internal static void Clear()
         {
             waiting.Clear();
+            if (speeding)
+            {
+                speeding = false;
+                Time.timeScale = 1f;
+            }
         }
     }
 }

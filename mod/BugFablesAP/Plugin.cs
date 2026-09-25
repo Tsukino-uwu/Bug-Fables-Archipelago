@@ -325,6 +325,7 @@ namespace BugFablesAP
             KeptOpen.Disable();
             QualityOfLife.Disable();
             WarpButton.Disable();
+            HoldUps.Clear();
             // ScriptEngine destroys the old instance on reload. Say so, so a reload shows up in the log.
             Log?.LogInfo($"{Name} {Version} unloaded.");
         }
