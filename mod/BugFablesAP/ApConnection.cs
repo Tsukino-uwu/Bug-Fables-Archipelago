@@ -265,6 +265,10 @@ namespace BugFablesAP
                 p => new[] { p.Value.Value<int>("var"), p.Value.Value<int>("at_least") });
         }
 
+        // {"map:entity index": enemy ids}: the fight a map enemy starts instead of its own (Enemy Shuffle).
+        internal Dictionary<string, int[]> EnemySwaps => enemySwaps;
+        private volatile Dictionary<string, int[]> enemySwaps;
+
         internal Dictionary<long, int> LocationBerries => locationBerries;
         private volatile Dictionary<long, int> locationBerries;
 
@@ -563,6 +567,9 @@ namespace BugFablesAP
                             LikeMap = e.Value<string>("like_map"),
                             LikeDoor = e.Value<string>("like_door"),
                         }).ToList()
+                        : null;
+                    enemySwaps = ok.SlotData != null && ok.SlotData.TryGetValue("enemy_swaps", out object es) && es is JObject eso
+                        ? eso.Properties().ToDictionary(p => p.Name, p => p.Value.ToObject<int[]>())
                         : null;
                     ownSlot = ok.Slot;
                     itemKinds = ReadItemKinds(ok.SlotData);

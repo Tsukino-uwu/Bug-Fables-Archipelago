@@ -38,6 +38,8 @@ HELD_UNTIL: list[dict[str, Any]] = _LOCATION_DATA.get("held_until", [])
 PRESENT_FROM: list[dict[str, Any]] = _LOCATION_DATA.get("present_from", [])
 DIALOGUE_FLAGS: list[dict[str, Any]] = _LOCATION_DATA.get("dialogue_flags", [])
 DOORS: dict[str, Any] = _load("doors.json")
+# Every map enemy (map, entity index) and the enemy ids its fight starts with.
+ENCOUNTERS: list[dict[str, Any]] = _load("enemies.json")["encounters"]
 
 # Medal ids overlap item ids, so medals get their own range.
 MEDAL_KIND = 2

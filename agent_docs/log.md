@@ -641,3 +641,11 @@ Newest last. What was tried, what happened, what the user said.
   - The party rule for fights that can't be fled: no fliers without Vi, no Sandworm without Leif.
 - **Scaling and the bestiary** (the user asked): Spy in a fight shows the live numbers, but the bestiary page reads the
   raw table. The user chose to show the scaled numbers there (Next 15).
+- **Enemy shuffle, `enemies_only`, built.**
+  - The pieces: `enemy-table.py` exports the 325 map fights to `data/enemies.json`. The option offers `off` and
+    `enemies_only`. `shuffle_encounters` shuffles within fight size, and the result goes out as `slot_data`
+    `enemy_swaps`. `EnemyShuffle.cs` is a `StartBattle` prefix that hands the game a copy of the seed's fight,
+    because the game's own `EnemyCheck` writes into the array.
+  - 255 tests pass. It is its own build step (14).
+  - A slip: a Python edit script opened `ApConnection.cs` for writing and emptied it. It was restored from git at
+    once (no uncommitted changes lost). Edits to existing files go through the Edit tool.

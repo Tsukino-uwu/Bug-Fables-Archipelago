@@ -25,6 +25,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 11. [Build step 11: shops](#build-step-11-shops)
 12. [Build step 12: the entrance randomizer (experimental)](#build-step-12-the-entrance-randomizer-experimental)
 13. [Build step 13: party members and moves as items (in progress)](#build-step-13-party-members-and-moves-as-items-in-progress)
+14. [Build step 14: enemy shuffle (in progress)](#build-step-14-enemy-shuffle-in-progress)
 
 **How it works**
 
@@ -92,18 +93,8 @@ be wrong.
    default (five hard optional bosses; progression shouldn't sit behind them unless the player asks). Today they are
    not locations and pay their vanilla rewards. First, measure what each bounty pays and when (on the spot or on
    reporting back); then the logic for reaching each boss. Its own build step when built.
-14. **Enemy shuffle, a yaml option** (the user, 2026-09-26): *Enemy Shuffle*, `off / enemies_only / bosses_only /
-   both / chaos`, off by default. It changes who you fight at each place, fixed by the seed, never at runtime;
-   `both` swaps enemies with enemies and bosses with bosses, `chaos` puts them in one pool. Each enemy on each map
-   gets its own encounter. A boss's reward stays with its place: Snakemouth Den pays Snakemouth Den's prize,
-   whatever boss was there. Separate from enemy checks (build step 10). First the fight only; the enemy seen on
-   the map matching its fight is a later step (the user wants it). First, measure which bosses can be swapped at
-   all (code tied to a boss), and which enemies a small party can't hit (Starting Party Member). **Decided (the
-   user, 2026-09-26): only fights that can't be fled are limited by the party.** A boss or story fight only gets an
-   enemy the party guaranteed at that point can hit; map fights can always be fled, so they shuffle freely. If enemy
-   checks come (build step 10), map fights count too, since their checks would then be required. The base attacks
-   decide it, skills learned later don't: Vi alone hits fliers, Leif alone hits burrowed enemies, Kabbu only the
-   front enemy on the ground (`MEASURED.md`, "Who can hit what"). Its own build step when built.
+14. **Enemy shuffle** (the user, 2026-09-26): `enemies_only` built; bosses, `both`, `chaos` and the map look next.
+   See build step 14.
 15. **Enemy scaling, a panel setting** (the user, 2026-09-26): on by default, balancing an area met earlier or later
    than vanilla would. A mod-side setting with no logic, so its design and status live in the mod guide, step 17.
 16. **EXP multiplier, a panel setting** (the user, 2026-09-26): *EXP Multiplier* on the Quality of life page, 1x to
@@ -1158,6 +1149,63 @@ arrived at once (the user, 2026-09-25; the mod guide, step 11, item 3). The way 
 grass on the way there has to be cut with the horn (the user, 2026-09-25), so her locations will need Kabbu.
 
 **Status:** in progress: a rehearsal only (dev `TestStartMember`), a one-member party (Leif) seen through chapter 1 into chapter 2 (the user, 2026-09-25); the yaml options (*Starting Party Member*, basic moves, jump, field abilities) not built.
+
+## Build step 14: enemy shuffle (in progress)
+
+A yaml option that changes who you fight at each place. It is not enemy checks (build step 10): nothing here is a
+location, only the fights move.
+
+**Decided (the user, 2026-09-26):**
+- *Enemy Shuffle*, `off / enemies_only / bosses_only / both / chaos`, **off by default**. `both` swaps enemies with
+  enemies and bosses with bosses; `chaos` puts them in one pool. It is in the yaml, not the panel, so a slot plays
+  the same for anyone on it.
+- **Each enemy on each map gets its own fight**, fixed by the seed and sent in `slot_data`, never decided at runtime.
+- **A boss's reward stays with its place:** Snakemouth Den pays Snakemouth Den's prize, whatever boss was there.
+- **The fight first, the look later:** the enemy walking around the map still looks like the original for now. The
+  user wants it to match its fight ("it would feel weird to run into a seedling and then fight an octopus"), which
+  is its own later piece of work.
+- **The party rule:** only fights that can't be fled are limited to enemies the party guaranteed at that point can
+  hit. Map fights can always be fled, so they shuffle freely. If enemy checks come, map fights count too.
+
+**Measured first** (`MEASURED.md`, "Battles, for enemy shuffle"), so the design rests on the game's code:
+1. Every fight goes through one function, `BattleControl.StartBattle`. A map enemy passes itself as `calledfrom`.
+2. A boss's prize and story flags come from the event after any win, never from the enemy beaten.
+3. The game's own rematch machine fights every listed boss on one neutral stage, which is the evidence that bosses
+   can be fought outside their story event. Two story fights change their boss once it has started, so they can't
+   be swapped yet.
+4. The entity dump got a `battleids` column and the enemy table its own file (the mod guide, step 7). That gave
+   327 map enemies on 124 maps, fights of 1 to 4 enemies, no boss on any map, and each enemy's start position (air,
+   ground, underground).
+
+**Built for `enemies_only` (2026-09-26):**
+1. **The data:** `dev-scripts/enemy-table.py --export` writes `data/enemies.json` from the dump: each map enemy
+   (map, entity index) and its fight, 325 of them (TestRoom left out). Generated, never edited by hand.
+2. **The option:** `enemy_shuffle` (`options.py`), with only `off` and `enemies_only` for now. The other three come
+   when their parts are built. An option value that does nothing would mislead.
+3. **The shuffle:** in `generate_early`, `shuffle_encounters` groups the fights by size and shuffles each group
+   with the seed's random. A lone enemy stays a lone enemy, and every fight still happens exactly once, somewhere
+   else. The result goes out as `slot_data` `enemy_swaps`: `{"map:entity index": [enemy ids]}`.
+4. **The mod:** `EnemyShuffle.cs` puts a prefix on `BattleControl.StartBattle`. When a map enemy starts a fight, it
+   looks up `map:entity index` (the entity's own `mapid` is its row in the map's table, the same index the dump
+   writes) and hands the game a copy of the seed's fight. It must be a copy because the game's own `EnemyCheck`
+   rewrites the array it's given. It only acts with Archipelago enabled and a seed known, and logs what it decided
+   for every map fight.
+5. **Tests** (`test/test_enemies.py`):
+   - off gives no swaps;
+   - `enemies_only` lists every map enemy;
+   - sizes are kept;
+   - every fight happens exactly once;
+   - most fights move;
+   - the same seed gives the same fights.
+
+**Next:**
+- see the shuffled fights in the game;
+- then bosses: each scripted fight read one by one, keyed by its event and its original ids;
+- then `both` and `chaos`;
+- then the map look.
+
+**Status:** in progress: `enemies_only` built (2026-09-26), the apworld tests pass, not yet seen in game; bosses,
+`both`, `chaos` and the map look to come.
 
 # How it works
 

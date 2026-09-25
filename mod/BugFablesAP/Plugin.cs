@@ -142,6 +142,7 @@ namespace BugFablesAP
             SaveRedirect.Enable(Log, Guid);
             ItemSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             KeptOpen.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
+            EnemyShuffle.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             difficulty = Config.Bind("Archipelago", "Difficulty", "Normal", new ConfigDescription(
                 "Normal leaves it to the game; Hard acts as if the Hard Mode medal were equipped; Hardest as if the save had "
                 + "the HARDEST code, never written into the save. Boss prize medals are paid out on every setting. "
@@ -348,6 +349,7 @@ namespace BugFablesAP
             ItemSwap.Disable();
             MedalAssist.Disable();
             KeptOpen.Disable();
+            EnemyShuffle.Disable();
             QualityOfLife.Disable();
             WarpButton.Disable();
             HoldUps.Clear();

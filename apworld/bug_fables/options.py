@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle
 
-from .data_tables import DOORS, LOCATIONS
+from .data_tables import DOORS, ENCOUNTERS, LOCATIONS
 
 
 class ArtifactsRequired(Range):
@@ -114,6 +114,24 @@ class EntranceRandomizer(Choice):
     default = 0
 
 
+class EnemyShuffle(Choice):
+    """
+    Changes which enemies you fight at each place, fixed by the seed. Each enemy on each map gets another fight of
+    the same size: a lone enemy stays a lone enemy, a group of three stays three. The enemy you see walking around
+    still looks like the original one for now; the fight is the shuffled one.
+
+    Off: every fight is the game's own.
+    Enemies Only: ordinary enemies on maps are shuffled among themselves. Bosses stay where they are.
+
+    Bosses (Bosses Only, Both, Chaos) come in a later version. Map fights shuffled in this version: {count}.
+    """
+
+    display_name = "Enemy Shuffle"
+    option_off = 0
+    option_enemies_only = 1
+    default = 0
+
+
 def category_count(category: str) -> int:
     """How many locations an option's category adds, straight from the location data."""
     return sum(1 for location in LOCATIONS if location.get("category") == category)
@@ -126,6 +144,7 @@ ShuffleDiscoveries.__doc__ = ShuffleDiscoveries.__doc__.replace("{count}", str(c
 ShuffleMedalShops.__doc__ = ShuffleMedalShops.__doc__.replace("{count}", str(category_count("shop")))
 ShuffleItemShops.__doc__ = ShuffleItemShops.__doc__.replace("{count}", str(category_count("item_shop")))
 EntranceRandomizer.__doc__ = EntranceRandomizer.__doc__.replace("{count}", str(2 * len(DOORS["connections"])))
+EnemyShuffle.__doc__ = EnemyShuffle.__doc__.replace("{count}", str(len(ENCOUNTERS)))
 
 
 @dataclass
@@ -138,3 +157,4 @@ class BugFablesOptions(PerGameCommonOptions):
     shuffle_item_shops: ShuffleItemShops
     shop_contents: ShopContents
     entrance_randomizer: EntranceRandomizer
+    enemy_shuffle: EnemyShuffle

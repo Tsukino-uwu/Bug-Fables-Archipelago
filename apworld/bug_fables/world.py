@@ -8,10 +8,10 @@ from BaseClasses import Item, ItemClassification, Location, LocationProgressType
 from rule_builder.rules import Has, HasAll
 from worlds.AutoWorld import WebWorld, World
 
-from .data_tables import (ARTIFACTS, DOORS, ITEM_NAME_TO_ID, ITEMS, DIALOGUE_FLAGS, HELD_UNTIL, KEPT_OPEN, PRESENT_FROM, KEPT_PRESENT, SCENERY_HIDDEN, SCENERY_PRESENT, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, STORY_EVENTS,
+from .data_tables import (ARTIFACTS, DOORS, ENCOUNTERS, ITEM_NAME_TO_ID, ITEMS, DIALOGUE_FLAGS, HELD_UNTIL, KEPT_OPEN, PRESENT_FROM, KEPT_PRESENT, SCENERY_HIDDEN, SCENERY_PRESENT, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, STORY_EVENTS,
                           WORLD_VERSION, vanilla_item)
 from .doors import shuffle_coupled
-from .options import BugFablesOptions, EntranceRandomizer, ShopContents
+from .options import BugFablesOptions, EnemyShuffle, EntranceRandomizer, ShopContents
 
 GAME = "Bug Fables"
 SHOP_CATEGORIES = ("shop", "item_shop")
@@ -21,6 +21,20 @@ _CLASSIFICATIONS = {
     "filler": ItemClassification.filler,
     "trap": ItemClassification.trap,
 }
+
+
+def shuffle_encounters(encounters: list[dict[str, Any]], random) -> dict[str, list[int]]:
+    """Each map enemy gets another map enemy's fight of the same size, so every fight still happens somewhere."""
+    by_size: dict[int, list[dict[str, Any]]] = {}
+    for encounter in encounters:
+        by_size.setdefault(len(encounter["ids"]), []).append(encounter)
+    swaps = {}
+    for group in by_size.values():
+        fights = [list(encounter["ids"]) for encounter in group]
+        random.shuffle(fights)
+        for encounter, fight in zip(group, fights):
+            swaps[f'{encounter["map"]}:{encounter["entity"]}'] = fight
+    return swaps
 
 
 class BugFablesItem(Item):
@@ -82,6 +96,10 @@ class BugFablesWorld(World):
         self.door_targets = []
         if self.options.entrance_randomizer == EntranceRandomizer.option_coupled:
             self.door_targets = shuffle_coupled(DOORS["connections"], DOORS["fixed"], self.random)
+        # Like doors, fights are decided here; the client only replays the list.
+        self.enemy_swaps = {}
+        if self.options.enemy_shuffle == EnemyShuffle.option_enemies_only:
+            self.enemy_swaps = shuffle_encounters(ENCOUNTERS, self.random)
 
     def _category_on(self, category: str | None) -> bool:
         if category == "quest":
@@ -220,6 +238,8 @@ class BugFablesWorld(World):
             "present_from": [{"map": e["map"], "entity": e["entity"], "flag": e["flag"]} for e in PRESENT_FROM],
             "dialogue_flags": [{"map": e["map"], "entity": e["entity"], "flag": e["flag"], "to": e["to"]} for e in DIALOGUE_FLAGS],
             "door_targets": self.door_targets,
+            # {"map:entity": [enemy ids]}: the fight a map enemy starts instead of its own.
+            "enemy_swaps": self.enemy_swaps,
             # 0 item, 1 key item, 2 medal, 3 berries, 4 crystal berry.
             "item_kinds": {str(ITEM_NAME_TO_ID[item["name"]]): item["kind"] for item in ITEMS},
         }
