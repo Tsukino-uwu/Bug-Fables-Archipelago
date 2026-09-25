@@ -144,6 +144,7 @@ namespace BugFablesAP
                 () => difficulty.Value == "Hardest", () => detector.Value);
             QualityOfLife.Enable(Log, Config, () => randomizerEnabled.Value);
             HoldUps.Init(Log, () => randomizerEnabled.Value);
+            PartyFit.Enable(Log, Guid, () => randomizerEnabled.Value);
             WarpButton.Enable(Log, Guid, () => randomizerEnabled.Value && QualityOfLife.WarpButton.Value);
             MenuToggle.Enable(Log, Guid, randomizerEnabled, server, port, slot, password,
                 () => { },
@@ -326,6 +327,7 @@ namespace BugFablesAP
             QualityOfLife.Disable();
             WarpButton.Disable();
             HoldUps.Clear();
+            PartyFit.Disable();
             // ScriptEngine destroys the old instance on reload. Say so, so a reload shows up in the log.
             Log?.LogInfo($"{Name} {Version} unloaded.");
         }

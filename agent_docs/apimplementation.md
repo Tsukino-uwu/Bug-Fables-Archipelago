@@ -56,6 +56,11 @@ seed's (the mod guide, step 9).
    ended, which looked odd (the user). Scenes switch normal following off (`overridefollower`) and move only who they
    name. Cosmetic fix for the open start: during a scene, a member the scene never moves walks along behind the one
    ahead of him.
+   **The trapdoor scene broke with three** (2026-09-25): Event5 recreates the party with `SetPlayers(positions)` and a
+   list of two positions, and `SetPlayers` indexes it for every member: IndexOutOfRange, the scene stopped halfway, the
+   user stuck in the fall room (freed with `unstick`). The mod's `PartyFit` now lengthens a short position list before
+   the game uses it (each extra member a step behind the last listed one), which covers every scene that places the
+   party this way. Not yet seen.
    Scenes that need a particular member must then become rules: the horn tutorial near Snakemouth (Event10, a
    location) can't be finished without Kabbu's horn (the user, 2026-09-25).
    **Journal locations, each its own yaml option (the user, 2026-09-25).** The journal is `librarystuff[type, n]`,
