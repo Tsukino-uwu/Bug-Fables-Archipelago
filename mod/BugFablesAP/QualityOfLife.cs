@@ -143,15 +143,16 @@ namespace BugFablesAP
         }
 
         // A hold-up's Giveitem shows its follow-up line (GetDialogueText(redirect), MainManager.cs:11592); the mod's own
-        // hold-ups ask for ItemSwap.EmptyLine, answered here with nothing, so the box just closes. Any other number is
-        // the game's (a negative one reads commondialogue, MainManager.cs:10186).
+        // hold-ups ask for ItemSwap.EmptyLine, answered here with the game's |end| (sets end, which skips the final wait
+        // for a press, MainManager.cs:11909-11910, :14171). An empty answer left an empty box waiting (the user,
+        // 2026-09-25). Any other number is the game's (a negative one reads commondialogue, MainManager.cs:10186).
         private static bool BeforeGetLine(int id, ref string __result)
         {
             if (id != ItemSwap.EmptyLine)
             {
                 return true;
             }
-            __result = "";
+            __result = "|end|";
             return false;
         }
 

@@ -518,6 +518,10 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    its own (`itemdata[0, id, 3]`, a medal's `badgedata[id, 6]`, `NPCControl.cs:5670-5690`). Hold-ups and location swaps
    now set the item's own article. Not yet seen. A hold-up now waits for half a second of free time in a row, not one free
    frame: a chain of scenes and fights (the spider fights) can leave a free frame between links (the user's point).
+   **Seen (2026-09-25):** three queued test hold-ups waited through the spider fights' chain, then played one after
+   another, reading "You got the Explorer Permit from TestPlayer!" (the game's own article for it). Each was followed
+   by an empty box: an empty follow-up line is still shown as a box waiting for a press. The follow-up is now the
+   game's `|end|`, which skips that wait.
 7. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
    read in full before anything is skipped.
 
