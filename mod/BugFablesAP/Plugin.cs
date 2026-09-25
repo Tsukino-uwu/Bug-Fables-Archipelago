@@ -131,6 +131,7 @@ namespace BugFablesAP
             ApMenu.Detector = detector;
             MedalAssist.Enable(Log, Guid, () => randomizerEnabled.Value, () => difficulty.Value == "Hard",
                 () => difficulty.Value == "Hardest", () => detector.Value);
+            QualityOfLife.Enable(Log, Config, () => randomizerEnabled.Value);
             MenuToggle.Enable(Log, Guid, randomizerEnabled, server, port, slot, password,
                 () => { },
                 () => connection.Status,
@@ -237,6 +238,7 @@ namespace BugFablesAP
             ItemSwap.TickGround();
             MedalAssist.Tick();
             MedalAssist.PayPrizes();
+            QualityOfLife.Tick();
 
             DevCheats.Tick(Log, giveMoney);
             DevConsole.Tick(devConsole.Value);
@@ -301,6 +303,7 @@ namespace BugFablesAP
             ItemSwap.Disable();
             MedalAssist.Disable();
             KeptOpen.Disable();
+            QualityOfLife.Disable();
             // ScriptEngine destroys the old instance on reload. Say so, so a reload shows up in the log.
             Log?.LogInfo($"{Name} {Version} unloaded.");
         }

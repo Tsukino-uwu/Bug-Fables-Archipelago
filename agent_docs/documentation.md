@@ -53,6 +53,8 @@ server, and items from the server arrive in the game once each.
    switching down clears only a 614 the mod set. Loading a save or starting a new one forgets the mark, since
    those flags are the save's own. If any of the three hooks (save, load, new game) is missing, Hardest does
    nothing rather than risk a save.
+8. **A "Quality of life" page in the Archipelago panel** (the user, 2026-09-25): on/off speed-ups that change
+   nothing you find. Fast text and Skip intro are built, not yet seen; battle tutorials next (step 10).
 
 ## The steps
 
@@ -65,6 +67,7 @@ server, and items from the server arrive in the game once each.
 7. [List everything, without playing everything](#7-list-everything-without-playing-everything)
 8. [An Archipelago menu inside the game](#8-an-archipelago-menu-inside-the-game)
 9. [Keep the game's own item, show the seed's](#9-keep-the-games-own-item-show-the-seeds)
+10. [Speed-ups: the Quality of life page](#10-speed-ups-the-quality-of-life-page)
 
 ## Keeping this guide honest
 
@@ -415,3 +418,32 @@ points to `warp <map> @<entity>`. Built, not yet seen in game.
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
 `Recolour` and `FirstMedalSeen` do the swapping; `PickupPrefix`, `FindPickup` and `TickGround` handle pickups); the
 scout is `ApConnection.Scout`.*
+
+## 10. Speed-ups: the Quality of life page
+
+The user asked for a way to skip the intro, the tutorials and other slow parts, as a sub-menu of on/off rows
+(2026-09-25). The first job was finding out what a "skip" can safely do, so a search through the decompiled game
+came before any code. Two findings shaped everything:
+
+- **The game has no cutscene skip**, only its own text fast-forward: holding cancel sets `skiptext`, which drops the
+  wait between letters and the `|wait|` pauses, unless a line is marked `|noskip|`.
+- **Cutscenes change the world, not just the screen.** One scene hands over the Explorer Permit and a Crunchy Leaf,
+  others change the party, load maps or make objects that a later scene uses. So "replace a scene with its end
+  flags" would lose items and checks. Skips are built in layers instead, the safest first, and each row must leave
+  the game exactly as playing it would. Anything that changes what's reachable is a yaml option, never a panel row.
+
+The rows, all Off by default and active only while the Archipelago mod is enabled:
+
+1. **Fast text.** Each frame a dialogue box is typing, the mod sets the game's own `skiptext`, under the same
+   conditions holding the button needs (a box open, no prompt or list, not `|noskip|`, on the newest line). Each box
+   still waits for a press. Built, not yet seen.
+2. **Skip intro.** The four story slides at the start of a new game run inside the new-game event, so they can't be
+   cut out. While they're on screen (the event is running and its black backdrop exists), the mod answers each
+   line's wait and runs the game at 8 times speed. The game's own end-of-event resets the speed, and the mod does
+   too once the backdrop is gone. Built, not yet seen.
+3. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
+   read in full before anything is skipped.
+
+The panel got an eighth row, "Quality of life", which opens a second page in the same box; cancel comes back.
+
+*Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page).*

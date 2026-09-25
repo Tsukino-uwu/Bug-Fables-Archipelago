@@ -9,7 +9,8 @@ namespace BugFablesAP
     // The Archipelago panel, opened from "Archipelago" on the main menu. It's drawn with the game's own box and
     // font (MainManager.Create9Box / SetText) and takes real typing, so an address can be typed or pasted.
     //
-    // Rows: Address, Port, Slot, Password, Difficulty, Detector, Archipelago (the mod on/off); cancel backs out. It connects on its own (Plugin.AutoConnect). Up/down move; confirm (C / Enter) edits
+    // Rows: Address, Port, Slot, Password, Difficulty, Detector, Archipelago (the mod on/off), Quality of life (a second
+    // page of on/off rows, QualityOfLife); cancel backs out. It connects on its own (Plugin.AutoConnect). Up/down move; confirm (C / Enter) edits
     // a text row or presses a button; cancel (X / Escape) closes. While a row is being edited, the keyboard
     // types into it: Backspace deletes, Ctrl+V pastes, Ctrl+C copies the row, Enter keeps, Escape reverts.
     // The title screen's own input is suspended while the panel is open (StartMenu.canselect), so the game's
@@ -17,7 +18,11 @@ namespace BugFablesAP
     internal sealed class ApMenu : MonoBehaviour
     {
         private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, DifficultyRow = 4, DetectorRow = 5, ModeRow = 6,
-            Rows = 7;
+            QolRow = 7, Rows = 8;
+        // The Quality of life page's rows (the user, 2026-09-25: a sub-menu inside the panel). Cancel goes back to the
+        // first page, on the Quality of life row.
+        private const int FastTextRow = 0, SkipIntroRow = 1, QolRows = 2;
+        private bool qolPage;
 
         // The Difficulty and Detector rows' settings (Plugin, MedalAssist).
         internal static readonly string[] Difficulties = { "Normal", "Hard", "Hardest" };
@@ -150,9 +155,11 @@ namespace BugFablesAP
         private const string TextSort = "|sort,10|";
         // Row heights inside the orange box, top to bottom; labels on the left, values on the right, as in the
         // settings screen.
-        // Seven rows at 0.7 apart, with room below for the description and status lines. No Back row: cancel
-        // (X / B) backs out, as the hint box above says (the user, 2026-09-24).
-        private static readonly float[] RowY = { 2.6f, 1.9f, 1.2f, 0.5f, -0.2f, -0.9f, -1.6f };
+        // Eight rows at 0.65 apart (seven at 0.7 until the Quality of life row, 2026-09-25), with room below for the
+        // description and status lines. No Back row: cancel (X / B) backs out, as the hint box above says (the user,
+        // 2026-09-24).
+        private static readonly float[] RowY = { 2.65f, 2.0f, 1.35f, 0.7f, 0.05f, -0.6f, -1.25f, -1.9f };
+        private const float DescribeY = -2.55f, StatusY = -3.1f;
         // Matched to the game's Settings screen from the user's side-by-side screenshots (2026-09-24): there the
         // labels start ~88 px in from the vine border, with the leaf's tip ~15 px before them. Two earlier nudges
         // misread a cropped screenshot (-6.3 touched the vine); -5.15 puts the labels at Settings' distance.
@@ -216,15 +223,16 @@ namespace BugFablesAP
 
         private void Navigate()
         {
+            int rows = qolPage ? QolRows : Rows;
             if (MainManager.GetKey(0, hold: false))
             {
-                row = (row + Rows - 1) % Rows;
+                row = (row + rows - 1) % rows;
                 MainManager.PlayScrollSound();
                 Redraw();
             }
             else if (MainManager.GetKey(1, hold: false))
             {
-                row = (row + 1) % Rows;
+                row = (row + 1) % rows;
                 MainManager.PlayScrollSound();
                 Redraw();
             }
@@ -237,7 +245,19 @@ namespace BugFablesAP
             {
                 // The sound the game plays backing out of the file select (StartMenu.cs:619).
                 MainManager.PlaySound("Cancel", 10);
-                Close();
+                if (qolPage)
+                {
+                    SwitchPage(qol: false, QolRow);
+                }
+                else
+                {
+                    Close();
+                }
+            }
+            else if (qolPage && (MainManager.GetKey(4, hold: false) || Input.GetKeyDown(KeyCode.Return)))
+            {
+                Step(row, 1);
+                Redraw();
             }
             else if (MainManager.GetKey(4, hold: false) || Input.GetKeyDown(KeyCode.Return))
             {
@@ -263,12 +283,39 @@ namespace BugFablesAP
                         Step(row, 1);
                         Redraw();
                         break;
+                    case QolRow:
+                        SwitchPage(qol: true, 0);
+                        break;
                 }
             }
         }
 
-        private static string Describe(int r)
+        private void SwitchPage(bool qol, int at)
         {
+            qolPage = qol;
+            row = at;
+            // The arrows sit by the choice rows, which differ per page.
+            if (arrows != null)
+            {
+                Destroy(arrows.gameObject);
+                arrows = null;
+            }
+            settleFrames = 2;
+            Redraw();
+            log.LogInfo("[apmenu] " + (qol ? "Quality of life page" : "first page"));
+        }
+
+        private string Describe(int r)
+        {
+            if (qolPage)
+            {
+                switch (r)
+                {
+                    case FastTextRow: return "Dialogue appears at once. Each box still waits for your press.";
+                    case SkipIntroRow: return "A new game's story slides pass by on their own, fast.";
+                    default: return "";
+                }
+            }
             switch (r)
             {
                 case Address: return "The server the room is hosted on, e.g. archipelago.gg.";
@@ -278,6 +325,7 @@ namespace BugFablesAP
                 case DifficultyRow: return "Only affects how tough enemies are; every check stays the same.";
                 case DetectorRow: return "Acts like the Detector medal is always equipped, to find hidden items.";
                 case ModeRow: return "Turns Archipelago on or off. While on, normal saves are never touched.";
+                case QolRow: return "Speed-ups that change nothing you find. Confirm to open.";
                 default: return "";
             }
         }
@@ -291,13 +339,22 @@ namespace BugFablesAP
             MainManager.sounds[10].volume = MainManager.pausemenu != null ? MainManager.pausemenu.svolume : MainManager.soundvolume;
         }
 
-        private static bool IsChoice(int r) => r == ModeRow || r == DifficultyRow || r == DetectorRow;
+        private bool IsChoice(int r) => qolPage || r == ModeRow || r == DifficultyRow || r == DetectorRow;
 
         // Left/right (or confirm) on a choice row: the next or previous value.
         private void Step(int r, int by)
         {
             ChangeSound();
-            if (r == ModeRow)
+            if (qolPage)
+            {
+                ConfigEntry<bool> setting = QolSetting(r);
+                if (setting != null)
+                {
+                    setting.Value = !setting.Value;
+                    log.LogInfo("[apmenu] " + setting.Definition.Key + ": " + (setting.Value ? "On" : "Off"));
+                }
+            }
+            else if (r == ModeRow)
             {
                 MenuToggle.SetMode(owner, !mode.Value);
             }
@@ -313,6 +370,11 @@ namespace BugFablesAP
                 log.LogInfo("[apmenu] Detector: " + (Detector.Value ? "On" : "Off"));
             }
         }
+
+        private static ConfigEntry<bool> QolSetting(int r) =>
+            r == FastTextRow ? QualityOfLife.FastText : r == SkipIntroRow ? QualityOfLife.SkipIntro : null;
+
+        private static string OnOff(ConfigEntry<bool> setting) => setting != null && setting.Value ? "ON" : "OFF";
 
         private void TypeInto()
         {
@@ -427,6 +489,15 @@ namespace BugFablesAP
                 BuildArrows();
             }
             shownStatus = status();
+            if (qolPage)
+            {
+                Choice(FastTextRow, "Fast text", OnOff(QualityOfLife.FastText));
+                Choice(SkipIntroRow, "Skip intro", OnOff(QualityOfLife.SkipIntro));
+                Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
+                Text("|center||size,0.5|Quality of life. Cancel goes back.", 0f, StatusY);
+                leaf.transform.localPosition = new Vector3(LabelX + LeafOffset, RowY[row] + LeafRise, 0f);
+                return;
+            }
             string pw = editing && row == PasswordRow ? edited : new string('*', password.Value.Length);
             Row(Address, "Address", editing && row == Address ? edited : server.Value);
             Row(PortRow, "Port", editing && row == PortRow ? edited : port.Value);
@@ -436,12 +507,13 @@ namespace BugFablesAP
             Choice(ModeRow, "Archipelago", mode.Value ? "ENABLED" : "DISABLED");
             Choice(DifficultyRow, "Difficulty", (Difficulty?.Value ?? "Normal").ToUpperInvariant());
             Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
+            Label(QolRow, "Quality of life");
 
             // What the highlighted row does, one line, the way the game's settings screen explains its rows (the
             // user, 2026-09-24: "Detector" alone doesn't say it means the medal; the wording is the user's). Then the
             // connection's state.
-            Text("|center||size,0.5|" + Describe(row), 0f, -2.4f);
-            Text("|center||size,0.5|" + Safe(shownStatus), 0f, -3.0f);
+            Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
+            Text("|center||size,0.5|" + Safe(shownStatus), 0f, StatusY);
             leaf.transform.localPosition = new Vector3(LabelX + LeafOffset, RowY[row] + LeafRise, 0f);
         }
 
@@ -454,7 +526,7 @@ namespace BugFablesAP
             arrows.parent = box;
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
-            foreach (int r in new[] { DifficultyRow, DetectorRow, ModeRow })
+            foreach (int r in qolPage ? new[] { FastTextRow, SkipIntroRow } : new[] { DifficultyRow, DetectorRow, ModeRow })
             {
                 for (int side = 0; side < 2; side++)
                 {
