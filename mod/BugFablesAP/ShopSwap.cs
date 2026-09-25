@@ -8,26 +8,8 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Medal shops (the user, 2026-09-25). A medal shop is a counter of item entities: each slot is an NPCControl with
-    // interacttype Shop, animid 2 (medal) and animstate the medal id, made by the shopkeeper's SetBadgeShop from
-    // avaliablebadgepool (NPCControl.cs:1504-1580); the shopkeeper's dialogues[9].x is the badgeshops index. Looking at a
-    // slot opens CreateDescWindow(shop), which reads the medal's name and description from badgedata[id, 0] and [id, 1]
-    // (NPCControl.cs:4183-4228); interacting copies the name into the buy prompt's text and the price into flagvar[1]
-    // (NPCControl.Interact, :4360-4372), and the shopkeeper's buy line gives the medal with giveitem, which ItemSwap swaps
-    // as for a gift (the location's give). So for a slot whose medal is a location: the shelf shows the seed's item's
-    // sprite, and while those two methods run the medal's name and description read as the seed's item.
-    //
-    // Shop prices (a Quality of life row: Normal, Half, Free) scale the medal table's price columns in memory, 5 for
-    // berries and 7 for crystal berries (MainManager.cs:3474-3488), and put them back when the setting or the mod is off.
-    //
-    // Full stock from the start (the user, 2026-09-25). Every copy a shop will ever stock is a location, a medal the story
-    // adds twice being two ("a 2nd copy is a 2nd check"). A shop's copies are its locations in id order. The mod owns the
-    // stock: whenever the game rebuilds its shelf pool (UpdateShops, on every map start and after each purchase,
-    // MainManager.cs:4087, MapControl.cs:343, NPCControl.cs:1528), badgeshops[shop] is first set to the copies not yet
-    // done, as the game's own shoppool command writes it (MainManager.cs:11638-11657); what the story adds is trimmed there.
-    // Which copies were bought is a bit per copy in the save, flagvar[7] for Merab's and [8] for Shades's (both unused by
-    // the game's code and text, MEASURED.md), set when the swapped giveitem of a purchase runs; a copy is done once its
-    // bit is set or the server has its check. So an offline purchase is kept by the save and sent on reconnecting.
+    // Medal shops: shelf slots whose medal is a location show and name the seed's item, prices scale with the QoL row,
+    // and the stock is every copy not yet done (bits per copy in flagvar[7]/[8], so an offline purchase is kept).
     internal static class ShopSwap
     {
         private static ManualLogSource log;
@@ -78,20 +60,13 @@ namespace BugFablesAP
             SetPrices("Normal");
         }
 
-        // More medals on show at once (the user, 2026-09-25: a QoL thing): Merab's shelf 5 instead of 3 (a 6th past her last
-        // spot was hard to reach), Shades's 4 instead of 2, spread wider than her two spots (1.35) (6 between them packed
-        // them too close; 6 with one past each end, then back to 4 "a tiny bit" further apart, the user). The shelf has one
-        // slot per entry of the shopkeeper's data, each at vectordata[j] (NPCControl.cs:1531-1534); before it's built, the
-        // spots are laid out evenly around the middle of her first and last spot: {shop: (slots, spread)}, spread 1 filling
-        // exactly from her first spot to her last, more reaching past them.
+        // {shop: (slots, spread)}: spots laid out evenly around the middle of the shopkeeper's first and last spot.
         private static readonly Dictionary<int, float[]> ShelfSlots = new Dictionary<int, float[]> { { 0, new[] { 5f, 1f } }, { 1, new[] { 4f, 1.35f } } };
 
-        // Shopkeepers already stretched: the game rebuilds the shelf on the same shopkeeper after a purchase (SetBadgeShop
-        // with refresh), and stretching the stretched spots again drifted the shelf right (a 6th slot appeared).
+        // The game rebuilds the shelf on the same shopkeeper after a purchase; stretching twice drifts it.
         private static readonly HashSet<NPCControl> stretched = new HashSet<NPCControl>();
 
-        // A rebuilt shelf's slots appear with the game's own medal sprites, and the swap below ran every 15 frames, so the
-        // vanilla medals flashed on every reshuffle (the user, 2026-09-25). For a second after a rebuild, every frame.
+        // Swap every frame for a second after a rebuild, or the vanilla medal sprites flash.
         private static float shelfBuiltAt = -10f;
 
         private static void AfterShelf()
@@ -133,13 +108,12 @@ namespace BugFablesAP
             log.LogInfo($"[shop] shop {(int)__instance.dialogues[9].x}'s shelf: {slots} slots instead of {shown}");
         }
 
-        // The save's bought-copy bits, one flagvar slot per shop (badgeshops index).
+        // One flagvar slot per shop for the bought-copy bits (unused by the game).
         internal static readonly int[] BoughtSlot = { 7, 8 };
 
         private static readonly AccessTools.FieldRef<NPCControl, EntityControl[]> ShelfItems =
             AccessTools.FieldRefAccess<NPCControl, EntityControl[]>("shopitems");
 
-        // The copy whose buy prompt the player last opened (the slot's Interact), so the purchase is that slot's copy.
         private static long pendingCopy = -1;
 
         // A shop's copies, in location id order: (location, medal).
@@ -165,7 +139,6 @@ namespace BugFablesAP
             return Bought(shop, index) || connection.IsDone(location);
         }
 
-        // Whether the save marks this shop location bought (LocationChecks sends it from here).
         internal static bool BoughtInSave(long location)
         {
             Dictionary<long, int[]> shops = connection?.LocationShops;
@@ -177,7 +150,6 @@ namespace BugFablesAP
             return index >= 0 && Bought(at[0], index);
         }
 
-        // The k-th copy of this medal in this shop not yet done, or -1.
         private static long UndoneCopy(int shop, int medal, int k)
         {
             List<KeyValuePair<long, int>> copies = Copies(shop);
@@ -191,9 +163,8 @@ namespace BugFablesAP
             return -1;
         }
 
-        // A purchase: the giveitem of a shop location's medal is running (ItemSwap.FindLocation). The copy bought is the
-        // slot's the player chose, else the first not yet done; its bit is set in the save and it becomes the swap's
-        // location. With every copy done (a stale shelf), the first copy's location still swaps: nothing local is given.
+        // A purchase: the chosen slot's copy, else the first not yet done. With every copy done (a stale shelf), the
+        // location still swaps, so nothing local is given.
         internal static long Buy(long location)
         {
             Dictionary<long, int[]> shops = connection?.LocationShops;
@@ -226,8 +197,6 @@ namespace BugFablesAP
             return chosen;
         }
 
-        // The game is rebuilding a shop's shelf pool from badgeshops: make each shop with locations hold exactly its copies
-        // not yet done.
         private static void BeforeUpdateShops()
         {
             MainManager mm = MainManager.instance;
@@ -236,9 +205,7 @@ namespace BugFablesAP
             {
                 return;
             }
-            // A purchase in flight: the buy line's kill,caller rebuilds the shelf after removebadgeshop but before its
-            // giveitem (Shades's line 3, MEASURED.md; MainManager.cs:12800-12812), so the copy's bit isn't set yet. The
-            // game's own removal stands until the next rebuild, by which time the bit is set.
+            // The buy line's kill,caller rebuilds the shelf before its giveitem sets the bit; leave the game's removal alone.
             if (mm.message && pendingCopy >= 0)
             {
                 log.LogInfo($"[shop] shelf rebuilt during a purchase (location {pendingCopy}): stock left as the game has it");
@@ -262,8 +229,7 @@ namespace BugFablesAP
             }
         }
 
-        // The location a shop slot stands for, or -1: among the shelf's live slots of the same medal, the k-th stands
-        // for that medal's k-th copy not yet done.
+        // Among the shelf's live slots of the same medal, the k-th stands for that medal's k-th copy not yet done.
         private static long LocationOf(NPCControl npc)
         {
             if (connection?.LocationShops == null || npc == null || npc.interacttype != NPCControl.Interaction.Shop || npc.entity == null
@@ -318,8 +284,6 @@ namespace BugFablesAP
             MainManager.badgedata[medal, 1] = description ?? __state.Description;
         }
 
-        // Interacting with a slot opens its buy prompt: the same swap as for the description box, and the slot's copy is
-        // the one a purchase in this dialogue buys.
         private static void BeforeInteract(NPCControl __instance, out Saved __state)
         {
             BeforeShow(__instance, out __state);
@@ -368,12 +332,8 @@ namespace BugFablesAP
             }
         }
 
-        // Purchases are permanent (the user, 2026-09-25: buy, reload, and the berries come back while the check stays). The
-        // save's bits are what this save paid for; a copy the server has checked with no bit here was bought in another
-        // save (an earlier one reloaded, or another file of the slot). So it's charged here, at today's price, as the game's
-        // own money command takes berries (clamped to 0-999, MainManager.cs:12580-12590), and its bit set: paid. Only
-        // Merab's (berries, shop 0); Shades's crystal berries will be counted exactly when her shop becomes locations.
-        // Outside events, dialogue and battles, and only on a save tied to the connected seed.
+        // A copy the server has checked with no bit in this save was bought in another save: charge it here, so reloads
+        // can't refund berries. Merab's shop only (berries).
         private static void Settle()
         {
             MainManager mm = MainManager.instance;
@@ -399,7 +359,7 @@ namespace BugFablesAP
             }
         }
 
-        // Normal, Half or Free, applied to the medal table's price columns; the originals are kept to put back.
+        // Columns 5 (berries) and 7 (crystal berries) are the medal table's prices.
         private static void SetPrices(string setting)
         {
             string[,] table = MainManager.badgedata;

@@ -8,18 +8,12 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Keeps randomizer saves apart from normal ones (CLAUDE.md, "Randomizer saves are separate files").
-    // With the Archipelago mod enabled, every save file the game touches lives in the "archipelago" folder, never
-    // in the game folder where normal saves (and Steam Cloud's copies) are.
-    //
-    // Measured 2026-09-24 (agent_docs/MEASURED.md, "Save files"): every access to a save goes through
-    // InputIO. ReadFile, CreateFile and DeleteFile take the path; SaveExists(id) builds it; Save() calls File.*
-    // on its own. So those five are patched, and nothing else needs to be. With the mode off, all five behave
-    // exactly as the game wrote them.
+    // With the randomizer on, every save file lives in the "archipelago" folder, never beside normal saves.
+    // Every save access goes through these five InputIO methods; Save() calls File.* itself.
     internal static class SaveRedirect
     {
         internal const string Folder = "archipelago";
-        // save0.dat, save0backup.dat, save0t.dat, the only names the game gives its save files.
+        // The only names the game gives its save files.
         private static readonly Regex SaveName = new Regex(@"^save\d+(backup|t)?\.dat$", RegexOptions.IgnoreCase);
 
         private static ManualLogSource log;
@@ -66,7 +60,6 @@ namespace BugFablesAP
             return Path.Combine(Folder, path);
         }
 
-        // ReadFile(string path), DeleteFile(string path), CreateFile(string path, string content).
         private static void RewriteFirstPath(ref string path)
         {
             path = Redirect(path);
@@ -82,9 +75,7 @@ namespace BugFablesAP
             return false;
         }
 
-        // InputIO.Save writes its files itself. With the mode on, the same safe sequence is done here, in the
-        // randomizer folder: write a temp file, keep the previous save as the backup, then move the temp file
-        // into place. The content comes from the game's own serializer and encryption.
+        // Mirrors InputIO.Save's temp file, backup, move sequence, in the randomizer folder.
         private static bool SavePrefix(Vector3? savepos, ref bool __result)
         {
             if (!On)

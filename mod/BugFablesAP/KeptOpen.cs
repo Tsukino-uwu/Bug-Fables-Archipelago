@@ -6,16 +6,8 @@ using HarmonyLib;
 
 namespace BugFablesAP
 {
-    // Areas that close later are kept open (the user, 2026-09-24, as Pokémon Emerald keeps Mirage Island visible): the
-    // logic assumes a place stays reachable, so a blocker the story puts up for a while must not lock the player out
-    // of locations behind it. The seed lists those blockers in slot_data ("kept_open": map and entity name); nothing
-    // is hard-coded here.
-    //
-    // The game decides whether an entity exists with MainManager.CheckIfCanExist(requires, limit, regionalflag), which
-    // returns "hide" (MainManager.cs:7762), called when a map loads, by the entity itself (NPCControl.cs:438) and every
-    // other frame (MapControl.cs:920). It isn't told which entity it's asking about, but each entity's limit array is
-    // its own. So after a map creates its entities, a listed blocker gets a marker array of its own, and any check made
-    // with that array answers "hide". No save data is written; with the Archipelago mod disabled nothing is touched.
+    // Keeps story blockers out of the way (and brings later entities in) for the lists in slot_data. CheckIfCanExist
+    // isn't told which entity asks, but each entity's limit/requires array is its own, so a marker array identifies it.
     internal static class KeptOpen
     {
         private static ManualLogSource log;
@@ -23,9 +15,7 @@ namespace BugFablesAP
         private static Func<bool> randomizerOn;
         private static Harmony harmony;
         private static readonly HashSet<int[]> markers = new HashSet<int[]>();
-        // The other way round (slot_data's kept_present): an entity the story only makes later gets a marker
-        // `requires` array, and a check made with it answers "exists" (the user, 2026-09-25: no dead end in chapter 1,
-        // open world by default). Set before the entity's own Start (NPCControl.cs:438), which would switch it off.
+        // Marker `requires` arrays answering "exists"; set before the entity's own Start, which would switch it off.
         private static readonly HashSet<int[]> presentMarkers = new HashSet<int[]>();
 
         internal static void Enable(ManualLogSource logger, string guid, ApConnection conn, Func<bool> on)
@@ -61,9 +51,7 @@ namespace BugFablesAP
             log.LogInfo($"[open] installed on MapControl.CreateEntities and MainManager.CheckIfCanExist{(scenery != null ? " and ConditionChecker.Start" : "")}");
         }
 
-        // The lists arrive with slot_data at login. A map loaded before that (the first map after a plugin reload or a
-        // seed change, before the login) was built as vanilla: the user saw the Outskirts rocks back (2026-09-25).
-        // So when a new set of lists arrives, it's applied to the map already loaded as well.
+        // A map loaded before slot_data arrived was built as vanilla, so new lists are applied to it too.
         private static object appliedFor;
 
         internal static void Tick()
@@ -84,7 +72,7 @@ namespace BugFablesAP
                     continue;
                 }
                 MarkHidden(scenery, map.mapid.ToString());
-                // What ConditionChecker.Start does to hide an object (ConditionChecker.cs:41-55).
+                // Hides it the way ConditionChecker.Start does.
                 NPCControl data = scenery.GetComponent<NPCControl>();
                 if (data != null && data.entity != null)
                 {
@@ -109,11 +97,8 @@ namespace BugFablesAP
             harmony = null;
         }
 
-        // A shopkeeper kept present needs its shop slots, which the map builds inside CreateEntities, right after reading
-        // that keeper, only if the keeper exists by then (MapControl.cs:1708-1745): the marker set in AfterCreate comes too
-        // late. So while the map builds, the entity just made is remembered (every entity starts as CreateNewEntity(name),
-        // MapControl.cs:1466), and a check made with that entity's own requires array answers "exists" when it's listed.
-        // The caravan (the user, 2026-09-25).
+        // A kept-present shopkeeper must exist while CreateEntities builds its shop slots, before AfterCreate runs;
+        // so the entity just made is remembered and a check with its own requires array answers "exists".
         private static bool creating;
         private static EntityControl lastMade;
         private static string creatingMap;
@@ -191,8 +176,7 @@ namespace BugFablesAP
                     log.LogInfo($"[open] {map}: {npc.name} present from flag {from.Flag} ({(now ? "set: present" : "not set yet")})");
                 }
             }
-            // dialogue_flags: an entity picks the last of its lines whose flag is set (NPCControl.cs:4320-4326); one entry's
-            // flag is repointed, so that line answers to another flag.
+            // dialogue_flags: an entity picks the last line whose flag is set; repoint one line's flag.
             foreach (ApConnection.DialogueFlag swap in (connection.DialogueFlags ?? new List<ApConnection.DialogueFlag>()).Where(b => b.Map == map))
             {
                 foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true).Where(n => n.name == swap.Entity && n.dialogues != null))
@@ -207,8 +191,7 @@ namespace BugFablesAP
                     }
                 }
             }
-            // held_until: a real story flag as the entity's requires, so the game's own check keeps it away until then
-            // and brings it back after. Only added to: an entity that already needs something keeps that too.
+            // held_until: added to the entity's requires (never replacing them), so the game keeps it away until then.
             foreach (ApConnection.Blocker held in (connection.HeldUntil ?? new List<ApConnection.Blocker>()).Where(b => b.Map == map && b.Flag >= 0))
             {
                 foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true).Where(n => n.name == held.Entity))
@@ -229,10 +212,7 @@ namespace BugFablesAP
             }
         }
 
-        // Scenery switched by flags (ConditionChecker, ConditionChecker.cs:37-57) decides at its own Start whether to
-        // hide. A listed object (scenery_hidden: map plus its path inside the map, as MapDump writes it) gets a marker
-        // limit first, so that check answers "hide": the Outskirts rocks, gone from flag 41 in the game, are gone from
-        // the start (the user, 2026-09-25).
+        // scenery_hidden: a marker limit before ConditionChecker.Start, so its own check answers "hide".
         private static void BeforeSceneryStart(ConditionChecker __instance)
         {
             if (randomizerOn != null && randomizerOn() && Listed(__instance))

@@ -6,26 +6,16 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // The Archipelago panel, opened from "Archipelago" on the main menu. It's drawn with the game's own box and
-    // font (MainManager.Create9Box / SetText) and takes real typing, so an address can be typed or pasted.
-    //
-    // Rows: Address, Port, Slot, Password, Difficulty, Detector, Archipelago (the mod on/off), Quality of life (a second
-    // page of on/off rows, QualityOfLife); cancel backs out. It connects on its own (Plugin.AutoConnect). Up/down move; confirm (C / Enter) edits
-    // a text row or presses a button; cancel (X / Escape) closes. While a row is being edited, the keyboard
-    // types into it: Backspace deletes, Ctrl+V pastes, Ctrl+C copies the row, Enter keeps, Escape reverts.
-    // The title screen's own input is suspended while the panel is open (StartMenu.canselect), so the game's
-    // key letters (C, X, Z, V) can be typed.
+    // The Archipelago panel on the main menu, drawn with the game's own box and font, with real typing (paste included).
+    // The title screen's input is suspended while it's open (StartMenu.canselect), so C, X, Z and V can be typed.
     internal sealed class ApMenu : MonoBehaviour
     {
         private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, DifficultyRow = 4, DetectorRow = 5, ModeRow = 6,
             QolRow = 7, Rows = 8;
-        // The Quality of life page's rows (the user, 2026-09-25: a sub-menu inside the panel). Cancel goes back to the
-        // first page, on the Quality of life row.
-        // Skip intro was folded into Skip cutscenes (the user, 2026-09-25).
+        // The Quality of life page; cancel goes back to the first page, on the Quality of life row.
         private const int FastTextRow = 0, FreeBoatRow = 1, WarpRow = 2, CutscenesRow = 3, AnimationRow = 4, PricesRow = 5, QolRows = 6;
         private bool qolPage;
 
-        // The Difficulty and Detector rows' settings (Plugin, MedalAssist).
         internal static readonly string[] Difficulties = { "Normal", "Hard", "Hardest" };
         internal static ConfigEntry<string> Difficulty;
         internal static ConfigEntry<bool> Detector;
@@ -77,19 +67,15 @@ namespace BugFablesAP
         private void Build()
         {
             Traverse.Create(owner).Field("canselect").SetValue(false);
-            // Hide the title screen under the panel (the menu text, the logo, the cursor), as the game does for the
-            // file select, and draw the panel in front: its first draw sat behind the logo (the user, 2026-09-24).
+            // Hide the title screen under the panel, as the game does for the file select.
             SetTitleVisible(false);
-            // The same two boxes as the game's settings screen (PauseMenu window 4, PauseMenu.cs:2707): the orange
-            // leafy box (type 1) and the controls box above it (type 4), with the game's own button hints.
-            // Hang off the GUI camera at (0, 0, 10) as PauseMenu does (PauseMenu.cs:143). Under the title screen's
-            // own object (at y = -1) everything sat one unit low (the user's screenshot, 2026-09-24).
+            // The settings screen's two boxes (leafy type 1, controls type 4), hung off the GUI camera at (0, 0, 10)
+            // as PauseMenu does; under the title screen's object everything sat one unit low.
             transform.parent = MainManager.GUICamera.transform;
             transform.localPosition = new Vector3(0f, 0f, 10f);
             transform.localEulerAngles = Vector3.zero;
             gameObject.layer = 5;
-            // PauseMenu's dimmer: a black square stretched over the screen, faded to half (PauseMenu.cs:146-157,
-            // 229). On the settings screen it's what hides the title screen's white haze.
+            // PauseMenu's dimmer: it hides the title screen's white haze.
             var pixel = new Texture2D(1, 1);
             pixel.SetPixel(0, 0, Color.black);
             pixel.Apply();
@@ -122,8 +108,7 @@ namespace BugFablesAP
             leaf.transform.parent = box;
             leaf.transform.localEulerAngles = Vector3.zero;
             leaf.transform.localScale = Vector3.one;
-            // The game's own menu cursor wiggles through this, set up the same way (MainManager.cs:14822). It
-            // animates the scale only, so it doesn't fight the per-row position (SpriteBounce.FixedUpdate).
+            // The game's own cursor wiggle; it animates the scale only, so it doesn't fight the per-row position.
             leaf.gameObject.AddComponent<SpriteBounce>().MessageBounce();
             settleFrames = 10; // the press that opened the panel must not also act inside it
             Redraw();
@@ -139,34 +124,23 @@ namespace BugFablesAP
             Traverse.Create(owner).Field("canselect").SetValue(true);
             Traverse.Create(owner).Field("cd").SetValue(10f);
             MenuToggle.RefreshLabel(owner);
-            // Back on "Start Game", as the game does when leaving its own screens: SetMenuText ends with
-            // option = 0 (StartMenu.cs:319). The user chose this over staying on "Archipelago" (2026-09-24).
             MainManager.instance.option = 0;
             Open = null;
             Destroy(gameObject);
             log.LogInfo("[apmenu] closed");
         }
 
-        // The settings screen's own draw orders (PauseMenu.cs:2707-2712): box -20, controls box -10, hints 5.
-        // Higher values drew the panel over its own button labels (the user's screenshot, 2026-09-24).
+        // The settings screen's own draw orders; higher values drew the panel over its own button labels.
         private const int BoxSort = -20;
         private const int HelpSort = -10;
         private const int ButtonSort = 5;
         private const int CursorSort = 20;
         private const string TextSort = "|sort,10|";
-        // Row heights inside the orange box, top to bottom; labels on the left, values on the right, as in the
-        // settings screen.
-        // Eight rows at 0.65 apart (seven at 0.7 until the Quality of life row, 2026-09-25), with room below for the
-        // description and status lines. No Back row: cancel (X / B) backs out, as the hint box above says (the user,
-        // 2026-09-24).
         private static readonly float[] RowY = { 2.65f, 2.0f, 1.35f, 0.7f, 0.05f, -0.6f, -1.25f, -1.9f };
         private const float DescribeY = -2.55f, StatusY = -3.1f;
-        // Matched to the game's Settings screen from the user's side-by-side screenshots (2026-09-24): there the
-        // labels start ~88 px in from the vine border, with the leaf's tip ~15 px before them. Two earlier nudges
-        // misread a cropped screenshot (-6.3 touched the vine); -5.15 puts the labels at Settings' distance.
+        // Matched to the game's Settings screen: labels ~88 px in from the vine border.
         private const float LabelX = -5.15f;
         private const float LeafOffset = -0.1f;
-        // Settings points the leaf's tip at the middle of the label; ours sat ~10 px high (the user's close-ups).
         private const float LeafRise = 0.15f;
         private const float ValueX = -1.9f;
 
@@ -244,7 +218,6 @@ namespace BugFablesAP
             }
             else if (MainManager.GetKey(5, hold: false) || Input.GetKeyDown(KeyCode.Escape))
             {
-                // The sound the game plays backing out of the file select (StartMenu.cs:619).
                 MainManager.PlaySound("Cancel", 10);
                 if (qolPage)
                 {
@@ -295,7 +268,6 @@ namespace BugFablesAP
         {
             qolPage = qol;
             row = at;
-            // The arrows sit by the choice rows, which differ per page.
             if (arrows != null)
             {
                 Destroy(arrows.gameObject);
@@ -335,9 +307,7 @@ namespace BugFablesAP
             }
         }
 
-        // The settings screen's sound for changing a value (PauseMenu.SettingsToggleSound, PauseMenu.cs:233): Confirm0
-        // on channel 10, at the sound volume. The main menu has no pause menu to read the volume from, so it's the
-        // game's own global one (the user, 2026-09-24: the scroll sound didn't match).
+        // The settings screen's value-change sound; the main menu has no pause menu, so the global sound volume.
         private static void ChangeSound()
         {
             MainManager.PlaySound(Resources.Load<AudioClip>("Audio/Sounds/Confirm0"), 10, 1f, 1f);
@@ -346,7 +316,6 @@ namespace BugFablesAP
 
         private bool IsChoice(int r) => qolPage || r == ModeRow || r == DifficultyRow || r == DetectorRow;
 
-        // Left/right (or confirm) on a choice row: the next or previous value.
         private void Step(int r, int by)
         {
             ChangeSound();
@@ -428,11 +397,8 @@ namespace BugFablesAP
                 GUIUtility.systemCopyBuffer = edited;
                 return;
             }
-            // The gamepad's own confirm and cancel end editing too (the user: stuck until Enter). They're read the
-            // way MainManager.GetKey does for a gamepad: action 4 (confirm) is joykeys[0], action 5 (cancel) is
-            // joykeys[1] (MainManager.cs, GetKey's default branch), and joykeys are raw buttons (InputIO.cs:571).
-            // A first try used joykeys[4]/[5], which are Start and Back. Only the pad is read here, so typing the
-            // keyboard's C or X (the game's keyboard confirm and cancel) still just types.
+            // The gamepad's confirm/cancel end editing: joykeys are raw buttons, [0] confirm and [1] cancel ([4]/[5] are
+            // Start and Back). Only the pad is read, so the keyboard's C and X still type.
             bool pad = MainManager.usejoystick > 0;
             bool padConfirm = pad && InputIOManager.InputIO.GetKeyDown(0, true);
             bool padCancel = pad && InputIOManager.InputIO.GetKeyDown(1, true);
@@ -536,17 +502,12 @@ namespace BugFablesAP
             Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
             Label(QolRow, "Quality of life");
 
-            // What the highlighted row does, one line, the way the game's settings screen explains its rows (the
-            // user, 2026-09-24: "Detector" alone doesn't say it means the medal; the wording is the user's). Then the
-            // connection's state.
             Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
             Text("|center||size,0.5|" + Safe(shownStatus), 0f, StatusY);
             leaf.transform.localPosition = new Vector3(LabelX + LeafOffset, RowY[row] + LeafRise, 0f);
         }
 
-        // The choice rows' arrows, made once: the settings screen's own, the plain arrow sprite (guisprites[1])
-        // turned -90 and +90 degrees on either side of the value (MainManager.cs:15905-15917). Button prompts
-        // rebuilt on every redraw played their pop-in each time the cursor moved (the user, 2026-09-24).
+        // Made once: prompts rebuilt on every redraw replayed their pop-in each time the cursor moved.
         private void BuildArrows()
         {
             arrows = new GameObject("arrows").transform;
@@ -571,8 +532,7 @@ namespace BugFablesAP
         private void Choice(int r, string label, string value)
         {
             Label(r, label);
-            // Between the arrows (ArrowLeftX to ArrowRightX) there's room for about 8 letters at 0.75 ("DISABLED");
-            // "PROGRESSION" ran over both arrows (the user's screenshot, 2026-09-25), so a longer value shrinks to fit.
+            // About 8 letters fit between the arrows at 0.75; a longer value shrinks to fit.
             float size = value.Length > 8 ? 0.75f * 8f / value.Length : 0.75f;
             Text("|center||size," + size.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + value, 2.6f, RowY[r]);
         }

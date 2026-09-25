@@ -9,31 +9,21 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // The panel's "Quality of life" page (the user, 2026-09-25: a sub-menu of on/off rows that speed the game up and
-    // make it smoother). The rows never change what the game gives or where: no flag, item or party is touched here.
-    // Free boat waives a fare the player could always earn by battling, so the logic never counts on it. Like every
-    // panel setting, nothing happens while the Archipelago mod is disabled. Every row is on by default (the user,
-    // 2026-09-25).
+    // The panel's "Quality of life" page: rows that speed the game up without changing what it gives or where.
+    // The logic never counts on any of them, and nothing happens while the Archipelago mod is disabled.
     internal static class QualityOfLife
     {
         internal static ConfigEntry<bool> FastText;
         internal static ConfigEntry<bool> FreeBoat;
         internal static ConfigEntry<bool> WarpButton;
         internal static ConfigEntry<bool> SkipCutscenes;
-        // Items from other players: which ones get the hold-up animation (the user, 2026-09-25). Your own finds always do.
-        // Default All (the user, once bursts were fast with the skip button held: fun and noticeable, not tedious).
         internal static readonly string[] ItemAnimations = { "All", "Progression", "Off" };
         internal static ConfigEntry<string> ItemAnimation;
-        // Shop prices (the user, 2026-09-25): Normal by default, Half or Free on request. The logic never counts on them.
         internal static readonly string[] ShopPriceValues = { "Normal", "Half", "Free" };
         internal static ConfigEntry<string> ShopPrices;
 
-        // Skip cutscenes (the user, 2026-09-25: scenes and fluff that give no checks). Each scene is read in full first
-        // (EventControl.EventN): one that only moves the camera and the party, talks, and sets flags is skipped by
-        // setting those flags instead of starting it; one that also changes the world is run by the game itself at
-        // speed, its lines answered, so it ends exactly as it would. A scene that gives an item, changes the party or
-        // starts a battle may go too, as long as everything it gives can still be received (the user, 2026-09-25): the
-        // mod then does what the scene leaves behind and keeps its checks (the opening, below).
+        // A scene that only moves, talks and sets flags is skipped by setting its flags; one that also changes the
+        // world is fast-forwarded by the game itself, so it ends exactly as it would.
         private sealed class Scene
         {
             internal string Map;
@@ -44,21 +34,15 @@ namespace BugFablesAP
 
         private static readonly Scene[] Scenes =
         {
-            // The bridge message: party and camera moves, three lines, flag 11 (EventControl.cs:274-333; its lines carry
-            // no commands, ScriptDump). Flag 11 also hides its own trigger (BridgeMessage, limit 11).
+            // The bridge message: moves, three lines, flag 11 (which also hides its trigger).
             new Scene { Map = "SnakemouthBridgeRoom", Event = 0, Flags = new[] { 11 } },
-            // Hitting the rope: moves the rope away, plays the bridge's Fall animation and fixes it fallen, then flags 7
-            // and 11 (EventControl.cs:334-407). The bridge's end state is set by the scene itself, not by its flags, so
-            // it's fast-forwarded.
+            // Hitting the rope: the bridge's fallen state is set by the scene itself, not its flags, so fast-forwarded.
             new Scene { Map = "SnakemouthBridgeRoom", Event = 1, Flags = null },
-            // The barkeeper's first talk (the user, 2026-09-25: it played with Leif's stand-in, naming Leif): camera and party
-            // moves, one line, then flag 158 (EventControl.cs:13052-13080). The same scene later takes bounties and gives
-            // their rewards (the else branch), so it's skipped only while flag 158 is unset.
+            // The barkeeper's first talk; the same scene later handles bounties, so skipped only while 158 is unset.
             new Scene { Map = "UndergroundBar", Event = 83, Flags = new[] { 158 }, OnlyWhileUnset = 158 },
         };
 
-        // The Metal Island boat's fares: the pier sailor's lines 16 (300 berries) and 19 (90), each
-        // |checkmoney,N,20||money,-N| (ScriptDump's money column, 2026-09-25). The trip back charges nothing.
+        // The Metal Island fares: the pier sailor's lines 16 and 19, each |checkmoney,N,20||money,-N|.
         private const string BoatMap = "BugariaPier";
         private static readonly int[] FareLines = { 16, 19 };
         private static readonly System.Text.RegularExpressions.Regex MoneyToken =
@@ -68,14 +52,12 @@ namespace BugFablesAP
 
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
-        // private static in MainManager (MainManager.cs:2749, :2799): the line being shown, and the lines so far.
+        // Private in MainManager: the line being shown, and the lines so far.
         private static readonly FieldInfo currentDialogue = AccessTools.Field(typeof(MainManager), "currentdialogue");
         private static readonly FieldInfo diagString = AccessTools.Field(typeof(MainManager), "diagstring");
         private static bool speeding;
 
-        // Game speed while the intro slides run: their fades are per-frame lerps scaled by Time.smoothDeltaTime
-        // (MainManager.TieFramerate, MainManager.cs:9567), and the game itself speeds up cooking with timeScale 2.5
-        // (MainManager.cs:5546). EndEvent puts it back to 1 (EventControl.cs:184).
+        // The slides' fades are lerps scaled by Time.smoothDeltaTime, so timeScale speeds them; EndEvent resets it.
         private const float IntroSpeed = 8f;
 
         internal static void Enable(ManualLogSource logger, ConfigFile config, Func<bool> on)
@@ -87,7 +69,7 @@ namespace BugFablesAP
                 + "skip), but still requires a button press to proceed. Holding the skip button also moves through boxes "
                 + "much faster than the game's own hold. Lines the game marks unskippable stay as they are.");
             FreeBoat = config.Bind("QualityOfLife", "FreeBoat", true,
-                "The boat to Metal Island costs nothing (the user, 2026-09-25: no farming berries in Archipelago).");
+                "The boat to Metal Island costs nothing.");
             SkipCutscenes = config.Bind("QualityOfLife", "SkipCutscenes", true,
                 "The new game's intro (its story slides, the talk after them, Maki's talk and the tutorial battle) is skipped: "
                 + "Vi joins and the first check is sent. Other scenes you don't need to watch are skipped or pass by fast (a list "
@@ -102,8 +84,7 @@ namespace BugFablesAP
             WarpButton = config.Bind("QualityOfLife", "WarpButton", true,
                 "A fifth button in the pause menu, Warp to Start, takes the party back to where the game began (after a "
                 + "Yes / No box). Not shown in battle.");
-            // A fare line is fetched inside the running dialogue (a prompt's answer jumps to it), not through a new SetText,
-            // so the line itself is changed as the game reads it (MainManager.GetDialogueText, MainManager.cs:10169).
+            // A fare line is fetched inside the running dialogue (a prompt's jump), not through a new SetText.
             MethodInfo getLine = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetDialogueText), new[] { typeof(int) });
             if (getLine == null)
             {
@@ -137,15 +118,8 @@ namespace BugFablesAP
             harmony.Patch(solid, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeSolidColor)));
         }
 
-        // The opening (the user, 2026-09-25: skip the scenes and the fight, "just start playing the game"). After the
-        // slides you play Kabbu alone inside the starting building, and Event16's trigger (entity 9, hidden by flag 15)
-        // stands between you and the door. Event16 (EventControl.cs:3538-3822) is Maki's talk, Vi joining, the tutorial
-        // battle, the Explorer Permit (location 1's giveitem) and Kina's and Eetl's talk. The one scene given an item, a
-        // battle and a party change on purpose: it never starts, and the mod leaves what it leaves behind, the game's
-        // way: Vi and Kabbu in the party (ChangeParty, then SetPlayers), the tutorial's Crunchy Leaf in the bag, Vi's
-        // stand-in (Beee) and the blockingbox gone, the exit (entity 2) back with the default camera, entity 11 at
-        // animstate 0, flag 15 and quest 11 on the board. Flag 15 marks location 1 done, so LocationChecks sends it,
-        // and the hold-up shows the seed's item there. Done on a later frame, outside the trigger that started it.
+        // The opening: Event16 (Maki's talk, Vi joining, the tutorial battle, location 1) never starts; the mod leaves
+        // what it leaves behind, the game's way, on a later frame. Flag 15 marks location 1 done.
         private const string OpeningMap = "BugariaOutskirtsOutsideCity";
         private const int OpeningEvent = 16;
         private const long OpeningLocation = 7_720_001; // Outskirts: Maki and Eetl's Gift (apworld id 1)
@@ -154,8 +128,7 @@ namespace BugFablesAP
         // Dev only ([Debug] TestStart): a map the opening ends with a warp to, a stand-in for a random start.
         internal static string TestStart;
         private static bool startPending;
-        // With a test start, the slides' black backdrop stays up from Event8's cut until the start map has loaded behind the
-        // transfer's own fade (the user, 2026-09-25: the house showed between the scene's end and the warp).
+        // With a test start, the slides' backdrop stays up until the start map has loaded behind the transfer's fade.
         private static GameObject heldBack;
         private static bool transferring;
         private static float heldSince;
@@ -164,16 +137,11 @@ namespace BugFablesAP
         // "Map" or "Map@FromMap": the start map, and optionally the map whose door into it the party arrives through.
         private static string StartMapName => TestStart.Split('@')[0].Trim();
 
-        // Where the opening runs: the start map (a test start's, else the starting building's).
         private static bool AtStart(string map) =>
             map != null && (TestStartSet ? string.Equals(map, StartMapName, StringComparison.OrdinalIgnoreCase) : map == OpeningMap);
 
-        // Arriving as if through a door (the user, 2026-09-25: position zero put the party at the plaza's origin, behind
-        // its statue). A door holds its target: data[0] the map, vectordata[1] where the party appears, vectordata[2]
-        // where it then walks (NPCControl.cs:5461). The door lies on the map left behind, so it's read from that map's
-        // entity table (Data/EntityData/<map>, fields split by '}'), at the positions MapControl.CreateEntities reads
-        // (MapControl.cs:1540-1566, as EntityDump): the data count at 60, the vectordata count at 71, each followed by
-        // its values (vectors as x, y, z). Null when no door leads there.
+        // Arriving as if through a door: data[0] the map, vectordata[1] where the party appears, [2] where it walks.
+        // Read from the entity table of the map left behind; fields split by '}', data count at 60, vectordata at 71.
         private static Vector3[] DoorInto(MainManager.Maps target, string fromMap)
         {
             foreach (MainManager.Maps map in Enum.GetValues(typeof(MainManager.Maps)))
@@ -214,13 +182,8 @@ namespace BugFablesAP
             return null;
         }
 
-        // Event8's talk after the slides, cut (the user, 2026-09-25: hiding it "looks dumb"; skip it and warp before any
-        // dialogue). Its first step after the slides' backdrop is destroyed is ChangeParty({1}, fromscratch, keep the old
-        // entities), Kabbu alone (EventControl.cs:2740-2755); Vi is still in the party then. A prefix refuses that call and
-        // stops the scene (scenes run as StartCoroutine("Event" + id), EventControl.cs:143); the rest of that step still
-        // runs (the HUD hidden, the blockingbox, the exit hidden, two moves) and the scene stops at its next yield. On the
-        // next frame the mod ends it as its own end does (EventControl.cs:2858-2866): HUD back, ResetCamera, the
-        // building's music, EndEvent, and the fade-in the talk would have played. The opening then follows as before.
+        // Event8's talk after the slides is cut: its first step is ChangeParty({1}) (Kabbu alone); refusing it stops the
+        // scene, and the next frame the mod ends it as its own end does.
         private static bool event8Cut;
 
         private static bool BeforeChangeParty(int[] ids, bool fromscratch, bool destroyoldentity)
@@ -238,9 +201,7 @@ namespace BugFablesAP
             return false;
         }
 
-        // With Skip cutscenes (Skip intro folded in, the user, 2026-09-25), the cut comes before the slides (the user, 2026-09-25: still saw them): their first step is
-        // their black backdrop, NewSolidColor("back"), after the building's map has loaded (EventControl.cs:2655). The
-        // scene stops there; the backdrop is made and parented in that same step, and removed with the scene's end.
+        // The cut before the slides: their first step is the black backdrop, NewSolidColor("back").
         private static void BeforeSolidColor(string name)
         {
             MainManager mm = MainManager.instance;
@@ -269,16 +230,10 @@ namespace BugFablesAP
                 UnityEngine.Object.Destroy(back.gameObject);
             }
             mm.hud[0].transform.parent.gameObject.SetActive(true);
-            // Stand the party where Event8 would have, after its slides: Kabbu 2.5 to the left of entity 4
-            // (EventControl.cs:2770). Cut before the slides, the party stood where a new game spawns it, under the house (the
-            // user, 2026-09-25, seen once the test start's warp no longer moved it away). Done here, before the fade-in:
-            // done in RunOpening, the fade-in first showed the spawn point, then a jump.
-            // The party change waits for the next frame, behind the black screen: done before the game's EndEvent, its
-            // FixEntities met a character being replaced (NullReferenceException, a black screen; the user, 2026-09-25).
+            // The party change waits for the next frame, behind the black screen: before EndEvent, FixEntities met a
+            // character being replaced (NullReferenceException).
             MainManager.ResetCamera();
             partyThenFade = !TestStartSet && MainManager.map != null && MainManager.map.mapid.ToString() == OpeningMap;
-            // The building's music only when the game starts there: with a test start it played briefly before the start
-            // map's own (the user, 2026-09-25).
             if (!TestStartSet)
             {
                 MainManager.ChangeMusic(Resources.Load<AudioClip>("Audio/Music/Inside0"));
@@ -298,8 +253,6 @@ namespace BugFablesAP
             log.LogInfo($"[qol] Event8 ended the game's way; inevent={mm.inevent}");
         }
 
-        // The frame after EndEvent8, still black: the opening's party where Event8 would have stood it, the camera on it,
-        // then the fade-in.
         private static bool partyThenFade;
 
         private static void PartyThenFade()
@@ -322,10 +275,7 @@ namespace BugFablesAP
             MainManager.PlayTransition(1, 0, 0.02f, Color.black);
         }
 
-        // Shops' "see more medals" first (the user, 2026-09-25: faster to reshuffle). A shopkeeper's greeting ends in
-        // |prompt,map,Y,N,target1..targetN,text1..textN| (MainManager.cs:12213-12222); the reshuffle is the choice with target
-        // -199 and text -195 (Shades's line 1, Merab's line 34). That choice and its text move to the front, in the map's
-        // dialogue table in memory, once per map load (a reload reads the table afresh), only with Archipelago on.
+        // The reshuffle choice (prompt target -199) moves to the front, in the map's dialogue table, once per map load.
         private static MapControl reorderedMap;
 
         private static void RerollFirst(MapControl map)
@@ -375,10 +325,7 @@ namespace BugFablesAP
             }
         }
 
-        // The opening's party: Vi and Kabbu, the game's way (ChangeParty, then SetPlayers where the party stands), or the one
-        // starting member (PartyMembers takes the others out of the call). Run at Event8's end, before the fade-in, so the
-        // first frame shown already has the right party (the user, 2026-09-25: Vi and Kabbu for a moment, the camera odd
-        // outside until the opening ran), and again by the opening, where it changes nothing.
+        // Vi and Kabbu (or the one starting member) set before the fade-in, so the first frame already has the right party.
         private static void SetOpeningParty(Vector3 at)
         {
             MainManager mm = MainManager.instance;
@@ -389,14 +336,8 @@ namespace BugFablesAP
                 spots[i] = at + new Vector3(-0.6f * i, 0f, 0.1f * i);
             }
             MainManager.SetPlayers(spots);
-            // As Event16 ends (EventControl.cs:3795): the camera follows the new leader. ResetCamera at Event8's end aimed it
-            // at the leader then; with one starting member that character was destroyed by ChangeParty above, and the house's
-            // exit hands the camera back to the player only for insides that centre on themselves (MapControl.cs:1373), so
-            // outside the camera followed nothing (the user, 2026-09-25, Leif alone).
             MainManager.ResetCamera();
-            // ResetCamera aims at MainManager.player, which in this frame can still be the old leader: Unity destroys an
-            // object only at the end of the frame, so the camera followed a character about to vanish (the console's cam,
-            // 2026-09-25: target DESTROYED, the leader Player 0 fine). Aim at the new leader's character itself.
+            // ResetCamera aims at MainManager.player, which may be the old leader Unity destroys only at frame end.
             if (mm.playerdata.Length > 0 && mm.playerdata[0].entity != null)
             {
                 mm.camtarget = mm.playerdata[0].entity.transform;
@@ -406,9 +347,7 @@ namespace BugFablesAP
         private static void RunOpening()
         {
             MainManager mm = MainManager.instance;
-            // Where the player stands: EndEvent8 put the party where Event8 would have, before the fade-in. Placing it here
-            // too snapped the player back, since this runs once the fade-in is over and the player can walk during it
-            // (the user, 2026-09-25).
+            // EndEvent8 already placed the party; placing it here again snapped back a player walking during the fade-in.
             SetOpeningParty(MainManager.player.transform.position);
             mm.items[0].Add(0);
             foreach (string name in new[] { "Beee", "blockingbox" })
@@ -423,7 +362,7 @@ namespace BugFablesAP
                     log.LogInfo($"[qol] opening: no {name} (Event8 cut before making it)");
                 }
             }
-            // The building's own entities, only when the opening runs there: elsewhere these numbers are other things.
+            // The building's own entity numbers, only there: elsewhere they're other things.
             bool inBuilding = MainManager.map.mapid.ToString() == OpeningMap;
             EntityControl exit = inBuilding ? MainManager.GetEntity(2) : null;
             if (exit != null && exit.npcdata != null)
@@ -449,14 +388,12 @@ namespace BugFablesAP
                 + $"characters {mm.playerdata.Count(p => p.entity != null)}, exit {(exit != null ? "active " + exit.gameObject.activeSelf : inBuilding ? "NOT found" : "not here")}, flag 15 {mm.flags[15]}");
         }
 
-        // Every scene starts here (EventControl.cs:74). A listed scene to skip gets its flags and never starts.
         private static bool BeforeStartEvent(int id)
         {
             if (id == OpeningEvent && SkipCutscenes.Value && randomizerOn() && MainManager.map != null
                 && MainManager.map.mapid.ToString() == OpeningMap)
             {
-                // Also once the opening is done: its trigger stays in the room until the map reloads (limit 15 is read on
-                // load), and the scene run after the mod's opening crashed looking for Vi's stand-in (2026-09-25).
+                // Also once done: its trigger stays until the map reloads, and running the scene then crashes.
                 openingPending = !MainManager.instance.flags[15];
                 endEvent?.Invoke(null, null);
                 log.LogInfo(openingPending ? "[qol] Event16 (the opening) skipped: the mod does what it leaves behind on the next free frame"
@@ -473,9 +410,7 @@ namespace BugFablesAP
             {
                 MainManager.instance.flags[flag] = true;
             }
-            // Whatever starts a scene may have frozen the player first (a trigger sets minipause, NPCControl.cs:5512-5525),
-            // and the scene's own end undoes it. A skipped scene never ends, which froze the user at the bridge
-            // (2026-09-25): so end it the game's way, EndEvent(), all resets (EventControl.cs:146-187).
+            // A trigger freezes the player (minipause) and only the scene's end undoes it: end it the game's way.
             endEvent?.Invoke(null, null);
             log.LogInfo($"[qol] skipped Event{id} on {scene.Map}: set flags {string.Join(", ", scene.Flags.Select(f => f.ToString()).ToArray())}, "
                 + (endEvent != null ? "ended it the game's way" : "EndEvent NOT found: the player may stay frozen"));
@@ -488,7 +423,6 @@ namespace BugFablesAP
             return map == null ? null : Scenes.FirstOrDefault(s => s.Event == id && s.Map == map);
         }
 
-        // A listed scene to fast-forward is running now.
         private static bool InFastScene()
         {
             if (!SkipCutscenes.Value || !MainManager.instance.inevent)
@@ -499,10 +433,7 @@ namespace BugFablesAP
             return scene != null && scene.Flags == null;
         }
 
-        // A hold-up's Giveitem shows its follow-up line (GetDialogueText(redirect), MainManager.cs:11592); the mod's own
-        // hold-ups ask for ItemSwap.EmptyLine, answered here with the game's |end| (sets end, which skips the final wait
-        // for a press, MainManager.cs:11909-11910, :14171). An empty answer left an empty box waiting (the user,
-        // 2026-09-25). Any other number is the game's (a negative one reads commondialogue, MainManager.cs:10186).
+        // The mod's hold-ups ask for ItemSwap.EmptyLine as their follow-up: answer |end|, which skips the wait for a press.
         private static bool BeforeGetLine(int id, ref string __result)
         {
             if (id != ItemSwap.EmptyLine)
@@ -536,8 +467,6 @@ namespace BugFablesAP
                 return;
             }
             bool on = randomizerOn();
-            // Not only when its trigger is walked into: as soon as the player is free on the map with flag 15 unset (the user,
-            // 2026-09-25, stood by Maki waiting, the trigger looking like the scene's start). Also covers a file saved there.
             if (on && SkipCutscenes.Value && !openingPending && !openingFailed && MainManager.map != null && MainManager.map.mapid.ToString() == OpeningMap
                 && !mm.flags[15] && mm.flags[691])
             {
@@ -599,15 +528,13 @@ namespace BugFablesAP
                     log.LogError($"[qol] ending Event8 failed: {e}");
                 }
             }
-            // The test start: straight from the cut scene's end, before anything else shows.
             if (startPending && MainManager.player != null && !mm.inevent && !mm.message && MainManager.battle == null)
             {
                 startPending = false;
                 transferring = true;
                 try
                 {
-                    // The game's own map transfer to where the map puts an arriving party; not the console's warp, which
-                    // then stepped beside the save point, a second move (the user, 2026-09-25).
+                    // The game's own transfer to a door's spots; the console's warp steps beside the save point.
                     var start = (MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), StartMapName, true);
                     string[] parts = TestStart.Split('@');
                     Vector3[] door = DoorInto(start, parts.Length > 1 ? parts[1].Trim() : null);
@@ -630,7 +557,7 @@ namespace BugFablesAP
             bool slides = on && ((SkipCutscenes.Value && InIntroSlides()) || InFastScene());
             if (slides)
             {
-                // Each slide's line waits for a press at its end (MainManager.cs:14169-14174); answer it.
+                // Each slide's line waits for a press at its end; answer it.
                 if (mm.message)
                 {
                     mm.waitinput = false;
@@ -655,23 +582,17 @@ namespace BugFablesAP
             {
                 mm.skiptext = true;
             }
-            // Holding the skip button advances a box, then waits out inputcooldown (16 after a box, 10 when a new
-            // dialogue opens; MainManager.cs:5147, :10738), counted down one per frame (:7298). With the text already
-            // instant that wait is all that's left (the user, 2026-09-25: holding didn't feel faster), so while it's
-            // held the wait is cut short, as part of Fast text (the user found it faster and folded it in, 2026-09-25).
-            // The game's own hold branch still does the advancing.
+            // Holding skip waits out inputcooldown (16 frames) between boxes; with instant text that's all that's left,
+            // so it's cut short. The game's own hold branch still does the advancing.
             if (skippable && FastText.Value && MainManager.GetKey(5, hold: true) && mm.inputcooldown > HeldCooldown)
             {
                 mm.inputcooldown = HeldCooldown;
             }
         }
 
-        // Frames between boxes while the skip button is held with Fast text on: the game's own 4 while a box is
-        // still typing (MainManager.cs:5151), instead of 16 between boxes.
+        // The game's own cooldown while a box is still typing.
         private const float HeldCooldown = 4f;
 
-        // The same conditions under which holding the skip button works (MainManager.cs:5125-5140): a dialogue box
-        // is open, not a prompt or list, not marked |noskip|, and on the newest line rather than one looked back at.
         private static bool Skippable(MainManager mm)
         {
             if (!mm.message || mm.prompt || mm.itemlist != null || mm.inlist || MainManager.noskip)
@@ -682,8 +603,7 @@ namespace BugFablesAP
             return lines != null && currentDialogue != null && (int)currentDialogue.GetValue(null) == lines.Count;
         }
 
-        // Event8's slides: a black "back" sprite under the GUI camera, made before the first slide and destroyed
-        // after the last (EventControl.cs:2656-2735).
+        // Event8's slides: a black "back" sprite under the GUI camera, there from the first slide to the last.
         private static bool InIntroSlides()
         {
             return MainManager.lastevent == 8 && MainManager.instance.inevent && MainManager.GUICamera != null

@@ -6,19 +6,8 @@ using WebSocketSharp;
 
 namespace BugFablesAP
 {
-    // Compressed connections (permessage-deflate, RFC 7692). The Archipelago server warns every client that
-    // doesn't compress that it "may stop working in the future" (MultiServer.py, 0.6.7). Two small patches,
-    // because MultiClient.Net 6.7.1 never turns compression on, and websocket-sharp can't accept the server's
-    // answer as it stands (upstream issue ArchipelagoMW/Archipelago.MultiClient.Net#141, 2026-09-06):
-    //
-    // 1. ArchipelagoSocketHelper.CreateWebSocket (private) builds the websocket-sharp socket and connects it
-    //    straight away. A postfix sets Compression = Deflate in between, while the socket still allows it.
-    // 2. websocket-sharp offers "permessage-deflate; server_no_context_takeover; client_no_context_takeover" and
-    //    refuses an answer carrying any other parameter (WebSocket.validateSecWebSocketExtensionsServerHeader).
-    //    The server is set up with server_max_window_bits=11 (MultiServer.py), and Python websockets 13.1 always
-    //    answers with it (permessage_deflate.py, process_request_params). That parameter only limits the window the
-    //    server compresses with; an inflater with the full 15-bit window reads any smaller one (RFC 7692 7.1.2.1).
-    //    So a prefix removes it before the check. Anything else still fails the check as before.
+    // Turns on permessage-deflate: MultiClient.Net never enables it, and websocket-sharp rejects the server's
+    // server_max_window_bits, which is safe to drop (a 15-bit inflater reads any smaller window).
     internal static class WebSocketCompression
     {
         private const string ServerWindow = "server_max_window_bits";
@@ -27,8 +16,7 @@ namespace BugFablesAP
         private static Func<bool> wanted;
         private static Harmony harmony;
 
-        // `post` must be safe to call from any thread: both patches run on connection threads. `on` is read at
-        // each new socket, so the setting applies from the next connect.
+        // `post` must be thread-safe: both patches run on connection threads. `on` is read at each new socket.
         internal static void Enable(string guid, Action<string> post, Func<bool> on)
         {
             report = post;
@@ -60,12 +48,10 @@ namespace BugFablesAP
             {
                 return;
             }
-            // websocket-sharp writes its own errors to the console only; a refused handshake would say nothing in
-            // BepInEx's log file. Route them to ours.
+            // websocket-sharp logs its errors to the console only; route them to BepInEx's log.
             __result.Log.Output = (data, file) => report?.Invoke("[ws] " + data.Level + ": " + data.Message);
             bool on = wanted == null || wanted();
-            // Set both ways: a library that turns compression on by itself (upstream PR #141 does) must still obey
-            // the setting.
+            // Set both ways, so a library that enables compression itself still obeys the setting.
             __result.Compression = on ? CompressionMethod.Deflate : CompressionMethod.None;
             report?.Invoke("[ws] new socket, compression " + (on ? "requested" : "off (setting)"));
         }

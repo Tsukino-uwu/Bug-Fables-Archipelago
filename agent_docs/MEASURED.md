@@ -790,6 +790,25 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   medals and dialogue gifts around the city (Bug Me Not!, Sleep Resistance, Favorite One) and the waterfall HP Plus,
   each checked on screen first.
 
+## What the mod's code relies on (code read 2026-09-24 and 2026-09-25; moved here from code comments 2026-09-25)
+
+Facts the mod's hooks depend on, with their place in the decompiled source. Each names the file that uses it.
+
+### Shops, the Quality of life page, dialogue
+
+- A medal shop slot is an NPCControl with interacttype Shop, whose entity has animid 2 (medal) and animstate = the medal id, made by the shopkeeper's SetBadgeShop from avaliablebadgepool; the shopkeeper's dialogues[9].x is its badgeshops index, and its private field `shopitems` (EntityControl[]) holds the shelf's slot entities (NPCControl.cs:1504-1580). Used by `ShopSwap.cs`.
+- A shop slot's description box, CreateDescWindow(shop), reads the medal's name and description from badgedata[id, 0] and [id, 1]; NPCControl.Interact copies the name into the buy prompt's text and the price into flagvar[1] (NPCControl.cs:4183-4228, 4360-4372). Used by `ShopSwap.cs`.
+- UpdateShops rebuilds the shelf pool from badgeshops on every map start and after each purchase (MainManager.cs:4087, MapControl.cs:343, NPCControl.cs:1528); the game's own shoppool command writes badgeshops (MainManager.cs:11638-11657); the money command clamps to 0-999 (MainManager.cs:12580-12590). Used by `ShopSwap.cs`.
+- Map entity table rows (Data/EntityData/<map id>) are fields split by '}': field 1 the entity type (DoorOtherMap), field 60 the data count followed by the data values (61 = the target map for a door), field 71 the vectordata count followed by x,y,z triples from 72 (MapControl.cs:1540-1566). Used by `QualityOfLife.cs`.
+- MainManager's private static `currentdialogue` and `diagstring` (List<string>) are the line being shown and the lines so far; holding skip only works when they match (on the newest line), a box is open, no prompt/list, not |noskip| (MainManager.cs:2749, :2799, :5125-5140). Used by `QualityOfLife.cs`.
+- The intro slides' fades are per-frame lerps scaled by Time.smoothDeltaTime (MainManager.TieFramerate, MainManager.cs:9567), so Time.timeScale speeds them; the game itself uses timeScale 2.5 for cooking (MainManager.cs:5546), and EndEvent resets timeScale to 1 (EventControl.cs:184). Used by `QualityOfLife.cs`.
+- A hold-up's Giveitem shows its follow-up line via GetDialogueText(redirect) (MainManager.cs:11592); |end| sets `end`, which skips the final wait for a press (MainManager.cs:11909-11910, :14171); a negative id reads commondialogue (MainManager.cs:10186); each slide line waits for a press at its end (MainManager.cs:14169-14174). Used by `QualityOfLife.cs`.
+- Event8 (new game): its first step after the slides is ChangeParty({1}, fromscratch: true, destroyoldentity: false), Kabbu alone (EventControl.cs:2740-2755); its end is HUD back, ResetCamera, the building's music, EndEvent, fade-in (EventControl.cs:2858-2866); after its slides it stands Kabbu 2.5 left of entity 4 (EventControl.cs:2770); the slides' backdrop NewSolidColor("back") is made at EventControl.cs:2655 and lives through 2656-2735. Used by `QualityOfLife.cs`.
+- Event16's end points the camera at the new leader (EventControl.cs:3795); the starting house's exit only hands the camera back to the player for insides that centre on themselves (MapControl.cs:1373). Used by `QualityOfLife.cs`.
+- Bridge scenes: Event0 (bridge message) is party/camera moves, three lines, flag 11, and flag 11 hides its trigger BridgeMessage (limit 11) (EventControl.cs:274-333); Event1 (rope) plays the bridge's Fall animation, fixes it fallen, then flags 7 and 11 (EventControl.cs:334-407); Event83 barkeeper's first talk sets flag 158, and its else branch handles bounties (EventControl.cs:13052-13080). Used by `QualityOfLife.cs`.
+- Shopkeeper prompts are |prompt,map,Y,N,target1..targetN,text1..textN| (MainManager.cs:12213-12222). Used by `QualityOfLife.cs`.
+- Holding skip: inputcooldown is 16 after a box, 10 when a new dialogue opens (MainManager.cs:5147, :10738), 4 while a box is typing (:5151), counted down one per frame (:7298). Used by `QualityOfLife.cs`.
+
 ## Quests: to measure (when quests come into scope)
 
 - **The pause menu's quest list groups quests by chapter and shows done / not done** (the user,

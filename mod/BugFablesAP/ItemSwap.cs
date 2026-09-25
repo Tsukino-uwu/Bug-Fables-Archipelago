@@ -12,22 +12,9 @@ using Color = UnityEngine.Color;
 
 namespace BugFablesAP
 {
-    // Items are remote only: at a location, the game's own item must not reach the inventory, and the item-get
-    // shows what the seed put there instead. The check itself is still sent from the location's flag
-    // (LocationChecks), which the game sets as before.
-    //
-    // Every |giveitem| runs inside one long coroutine, MainManager.SetText (the 10-argument overload), so the
-    // swap is a transpiler on its MoveNext. Measured in the IL on 2026-09-24 (ilspycmd, '<SetText>d__731'), the
-    // Giveitem block runs, in order:
-    //   caller.CreateDescWindow(int, int)   the description box, only when an NPC is involved (once in the method)
-    //   GetItemSprite(bool, int)            the item's sprite (the only call in the method: the anchor)
-    //   the starburst behind the sprite, coloured by item kind
-    //   flagstring[0] = the item's name     read by the "You got" box
-    //   List<int>.Add / List<int[]>.Add     into the inventory (items and key items / medals)
-    //   "ItemGet"                           the sound
-    //   flags[31] read                      whether to follow with the first-medal tutorial, which sets flag 31
-    // Those calls are replaced by the static methods below. If any isn't found exactly once where expected,
-    // nothing is patched and the log says so: the patch never guesses.
+    // At a location, the game's own item never reaches the inventory and the item-get shows the seed's item instead.
+    // Giveitem runs inside SetText's coroutine, so a transpiler replaces its desc box, sprite, adds and flags[31] read;
+    // if any isn't found exactly once, nothing is patched.
     internal static class ItemSwap
     {
         private const string TutorialText = "|tail,null||destroydescbox||blank||boxstyle,4|";
@@ -37,12 +24,10 @@ namespace BugFablesAP
         private static Func<bool> randomizerOn;
         private static Harmony harmony;
 
-        // One Giveitem at a time, on the game thread. Decide() fills these; the stand-ins read them.
         private static bool decided;
         private static bool decidedBadge;
         private static int decidedId;
         private static long location = -1;
-        // A hold-up shown for display only (ShowHeldUp): location is DisplayOnly, nothing is given.
         private const long DisplayOnly = -2;
         private static string pendingName;
         private static Sprite pendingSprite;
@@ -50,29 +35,23 @@ namespace BugFablesAP
         private static string shownName;
         private static Sprite shownSprite;
         private static Color? shownColor;
-        // "a"/"an" before the shown name: the game picks it per item when one is picked up (NPCControl.cs:5670-5690);
-        // Giveitem always uses its default (menutext[125]), which read "a Explorer Permit" on a hold-up (the user).
+        // Giveitem always uses the default article (menutext[125]); a picked-up item has its own.
         private static string shownArticle;
         private static string pendingArticle;
         private static bool swapped;
         private static FieldInfo descWindowField;
 
-        // NPCControl.CheckItem's first-berry tutorial (NPCControl.cs:5700), dropped for a swapped berry like the medal one.
         private const string FirstBerryTutorial = "|flag,108,true||tail,null||center,true||destroydescbox||goto,-88,break,end|";
 
-        // A crystal berry is drawn as a spinning 3D model, not its sprite (NPCControl.cs:946): to show the seed's item,
-        // hide the model and show the sprite.
+        // A crystal berry is drawn as a spinning 3D model, not its sprite: hide the model and show the sprite.
         private static void ShowAsSprite(EntityControl entity, Sprite sprite)
         {
             if (entity == null || sprite == null || entity.sprite == null)
             {
                 return;
             }
-            // The berry model hangs under the sprite (AddModel, EntityControl.cs:2684), and every frame the game makes that
-            // first child active exactly when the sprite is enabled (EntityControl.cs:2781-2786). Showing the item needs the
-            // sprite enabled, so switching the model's object off never held: two tries failed (the user, 2026-09-25) until
-            // the dev console's tree and that line showed why. The game only toggles the object, never its renderers, so
-            // the renderers are what the swap switches off.
+            // The game re-activates the model's object every frame while the sprite is enabled, never its renderers,
+            // so the renderers are what get switched off.
             if (entity.spritetransform != null)
             {
                 foreach (Renderer r in entity.spritetransform.GetComponentsInChildren<Renderer>(true))
@@ -85,19 +64,15 @@ namespace BugFablesAP
             }
             entity.sprite.enabled = true;
             entity.sprite.sprite = sprite;
-            // A crystal berry spot is set up for its 3D model: its sprite centred on the ground and the whole entity
-            // spinning (NPCControl.cs:945-949). As a flat item sprite it sat half in the ground (the user's screenshot,
-            // 2026-09-25): lift it by half its height, as the game does for items (EntityControl.cs:3241), and stop the spin.
+            // Set up for the model: lift the sprite by half its height, as for items, and stop the spin.
             if (entity.spritetransform != null)
             {
                 entity.spritetransform.localPosition = new Vector2(0f, sprite.bounds.extents.y);
-                // The spin turns the sprite itself (EntityControl.cs:3943-3945), so it may have stopped edge-on.
                 entity.spritetransform.localEulerAngles = Vector3.zero;
             }
             entity.spin = Vector3.zero;
         }
 
-        // NPCControl.CheckItem's first-medal tutorial, put after the add (NPCControl.cs:5673).
         private const string FirstMedalTutorial = "|flag,31,true||tail,null||center,true||destroydescbox||goto,-32,break,end|";
 
         internal static void Enable(ManualLogSource logger, string guid, ApConnection conn, Func<bool> on)
@@ -118,9 +93,7 @@ namespace BugFablesAP
             }
             harmony = new Harmony(guid + ".swap." + DateTime.UtcNow.Ticks);
             harmony.Patch(moveNext, transpiler: new HarmonyMethod(typeof(ItemSwap), nameof(Transpile)));
-            // Items lying in the world (and buried ones, which pop out as the same kind of entity) don't use
-            // |giveitem|: NPCControl.CheckItem sets up the item-get itself, then hands SetText a text ending in
-            // |flag,<activationflag>,true||additemtoss,<kind>,var,0|. A prefix sees that text before it runs.
+            // World pickups don't use |giveitem|: CheckItem hands SetText a text ending in |additemtoss,<kind>,var,0|.
             descWindowField = AccessTools.Field(typeof(NPCControl), "descwindow");
             harmony.Patch(setText, prefix: new HarmonyMethod(typeof(ItemSwap), nameof(PickupPrefix)));
             harmony.Patch(setText, prefix: new HarmonyMethod(typeof(ItemSwap), nameof(BerryPrefix)));
@@ -135,11 +108,8 @@ namespace BugFablesAP
             }
         }
 
-        // EntityControl.UpdateItem is where the game draws an item entity's own sprite (EntityControl.cs:3218), whenever its
-        // animation state changes (UpdateSprite, :4049). For a pickup that is a location, the seed's item goes back on in
-        // the same call, so no frame shows the vanilla item, whatever made the game redraw it. Found 2026-09-25 (the user:
-        // Madeleine's table items flashed their own look on the way into her house): going into a house redraws its
-        // pickups through here, before the ground pass came round.
+        // The one place the game redraws an item entity's own sprite: put the seed's item back in the same call, so
+        // no frame shows the vanilla item (houses redraw their pickups on the way in).
         private static void AfterUpdateItem(EntityControl __instance)
         {
             NPCControl npc = __instance.npcdata;
@@ -212,7 +182,7 @@ namespace BugFablesAP
                     + "what was measured; vanilla items would be given at locations.");
                 return code;
             }
-            // Same stack shapes as the originals, so nothing around them changes. Labels stay on the instructions.
+            // Same stack shapes as the originals. Labels stay on the instructions.
             Replace(code[descs[0]], nameof(DescWindow));
             Replace(code[start], nameof(ItemSprite));
             Replace(code[itemAdds[0]], nameof(AddItem));
@@ -234,7 +204,7 @@ namespace BugFablesAP
             instruction.operand = AccessTools.Method(typeof(ItemSwap), method);
         }
 
-        // Stands in for caller.CreateDescWindow(type, id): type is 2 for a medal, 0 for items and key items.
+        // type is 2 for a medal, 0 for items and key items.
         public static void DescWindow(NPCControl caller, int type, int id)
         {
             Decide(type == 2, id);
@@ -244,11 +214,9 @@ namespace BugFablesAP
                 return;
             }
             ShowOwnDescription(caller, Scouted());
-            // Another game's item, or not scouted: no description. The game closes the box with a null check
-            // (NPCControl.DestroyDescWindow), so a missing one is safe.
+            // No description for another game's item: DestroyDescWindow null-checks, so a missing box is safe.
         }
 
-        // Stands in for MainManager.GetItemSprite at the start of a Giveitem.
         public static Sprite ItemSprite(bool badge, int id)
         {
             if (!decided || decidedBadge != badge || decidedId != id)
@@ -275,8 +243,7 @@ namespace BugFablesAP
             }
         }
 
-        // Stands in for reading flags[31] after the item-get. A swapped medal wasn't given, so the first-medal
-        // tutorial mustn't run (it would also set flag 31, and skip the tutorial for the real first medal).
+        // A swapped medal wasn't given: skip the first-medal tutorial, which would also set flag 31.
         public static bool FirstMedalSeen(bool[] flags, int index)
         {
             bool skip = swapped;
@@ -284,7 +251,6 @@ namespace BugFablesAP
             return flags[index] || skip;
         }
 
-        // Is this Giveitem a location's, and what's really there? Game thread.
         private static void Decide(bool badge, int id)
         {
             decided = true;
@@ -315,8 +281,6 @@ namespace BugFablesAP
                 + (info == null ? " (not scouted yet)" : ""));
         }
 
-        // What's really at a location: the name for the "You got" box, our own sprite when it's a Bug Fables item,
-        // and the starburst colour. Returns the scout, or null when it hasn't arrived.
         private static ScoutedItemInfo Describe(long at, out string name, out Sprite sprite, out Color? color)
         {
             name = null;
@@ -339,8 +303,7 @@ namespace BugFablesAP
             }
             else
             {
-                // Another game's item. The Archipelago icon replaces this sprite once it's in the mod; the colour is
-                // Archipelago's for its classification (NetUtils.py): progression, useful, trap, filler.
+                // Archipelago's classification colours (NetUtils.py): progression, useful, trap, filler.
                 name = info.Player.Name + "'s " + info.ItemDisplayName;
                 color = (info.Flags & ItemFlags.Advancement) != 0 ? Hex(0xAF99EF)
                     : (info.Flags & ItemFlags.NeverExclude) != 0 ? Hex(0x6D8BE8)
@@ -350,8 +313,6 @@ namespace BugFablesAP
             return info;
         }
 
-        // What a location holds, for a display outside Giveitem (a shop's shelf): name, sprite and a description line. One
-        // of this world's items gets the game's own description; another game's item says whose it is.
         internal static void LookOf(long at, out string name, out Sprite sprite, out string description)
         {
             ScoutedItemInfo info = Describe(at, out name, out sprite, out _);
@@ -381,7 +342,6 @@ namespace BugFablesAP
             }
         }
 
-        // The game's own look for one of this world's items: its sprite, name and starburst colour.
         internal static void DescribeOurs(long itemId, int kind, out string name, out Sprite sprite, out Color? color)
         {
             {
@@ -389,28 +349,21 @@ namespace BugFablesAP
                 bool medal = kind == ItemIds.MedalKind;
                 bool money = kind == ItemIds.MoneyKind;
                 bool crystal = kind == ItemIds.CrystalKind;
-                // A crystal berry: the game's own name for it and its berry icon (NPCControl.cs:5657, :4201).
                 sprite = crystal ? MainManager.guisprites[83] : money ? ItemIds.BerrySprite(gameId) : MainManager.GetItemSprite(medal, gameId);
                 name = crystal ? MainManager.menutext[112] : money ? gameId + " Berries"
                     : medal ? MainManager.GetBadgeName(gameId) : MainManager.itemdata[0, gameId, 0];
-                // The game's own starburst colours (the Giveitem switch, NPCControl.CheckItem): medal, key item, item.
                 color = medal ? new Color(1f, 0.5f, 0f)
                     : kind == ItemIds.KeyItemKind ? new Color(1f, 0.3f, 0.4f)
                     : new Color(0f, 0.7f, 0.7f);
             }
         }
 
-        // The hold-up without a pickup (the user, 2026-09-25: a discovery should show what it found, and items from other
-        // players as the Item animation setting says). The game's own Giveitem runs on a key item stand-in (key items
-        // have no bag limit; an ordinary item's Giveitem does nothing with a full bag, MainManager.cs:11499), held
-        // up by the leader (entity -1); the stand-ins show the chosen item instead and keep the stand-in out. Its
-        // follow-up line is the empty one QualityOfLife answers for EmptyLine.
+        // A hold-up without a pickup runs Giveitem on a key item stand-in (key items have no bag limit), and the
+        // stand-ins show the chosen item instead. Its follow-up line is the empty one QualityOfLife answers.
         private const int StandIn = 0;
         internal const int EmptyLine = -90000;
 
-        // The article the game uses for one of this world's items when it's picked up: an item's or key item's
-        // itemdata[0, id, 3], a medal's badgedata[id, 6] (NPCControl.cs:5670-5690). Null for berries and crystal berries,
-        // which keep the game's default.
+        // An item's itemdata[0, id, 3], a medal's badgedata[id, 6]; null for berries, which keep the default.
         internal static string ArticleOf(long itemId, int kind)
         {
             int gameId = ItemIds.GameId(itemId, kind);
@@ -426,14 +379,12 @@ namespace BugFablesAP
             }
         }
 
-        // What a location of this world holds (a discovery just recorded): shown as that location's own find.
         internal static void ShowFoundAt(long at)
         {
             pendingBerries = at;
             StartHoldUp();
         }
 
-        // A given look, nothing else: an item already received.
         internal static void ShowHeldUp(string name, Sprite sprite, Color? color, string article)
         {
             pendingArticle = article;
@@ -448,12 +399,8 @@ namespace BugFablesAP
             MainManager.instance.StartCoroutine(MainManager.SetText($"|giveitem,1,{StandIn},{EmptyLine},-1|", dialogue: true, Vector3.zero, null, null));
         }
 
-        // Prefix on MainManager.SetText (10 arguments). Acts only on the item-get NPCControl.CheckItem starts for a
-        // pickup that is one of this seed's locations: it shows what's really there, and turns the add into
-        // |additemtoss,3,...|, the game's crystal-berry kind, which adds nothing to any list but closes the
-        // description box and ends the text exactly as the item's own kind would (MainManager.cs:12517-12532).
-        // The |flag,<activationflag>,true| before it is untouched, so the game still marks the pickup taken and
-        // LocationChecks sends the check.
+        // Turns a location pickup's add into |additemtoss,3,...| (crystal-berry kind: adds nothing, closes the box
+        // the same way); the |flag,...| before it still marks the pickup taken, so the check is sent.
         public static void PickupPrefix(ref string text, NPCControl caller)
         {
             if (caller == null || caller.objecttype != NPCControl.ObjectTypes.Item || text == null || caller.entity == null)
@@ -474,13 +421,13 @@ namespace BugFablesAP
             bool respawning = connection.LocationPickups[at].Regional >= 0;
             if (respawning)
             {
-                // Once its check is done, a respawning pickup is the game's own again (the user, 2026-09-24).
+                // Once its check is done, a respawning pickup is the game's own again.
                 if (connection.IsDone(at))
                 {
                     log.LogInfo($"[swap] location {at}: respawning pickup on {MapName()}, check already done: vanilla item");
                     return;
                 }
-                // Its check goes out now: the game marks nothing that LocationChecks could read later.
+                // The game marks nothing LocationChecks could read later, so its check goes out now.
                 connection.QueueRespawnCheck(at, MainManager.instance.flagstring[ItemReceiver.SeedSlot]);
             }
             ScoutedItemInfo info = Describe(at, out string name, out Sprite sprite, out Color? color);
@@ -496,8 +443,7 @@ namespace BugFablesAP
             {
                 backRenderer.material.color = color.Value;
             }
-            // The vanilla description box is already up: replace it at once (DestroyDescWindow would shrink it out
-            // over half a second while the new one grows).
+            // Replace the vanilla box at once: DestroyDescWindow would shrink it out while the new one grows.
             if (descWindowField != null && descWindowField.GetValue(caller) is DialogueAnim box && box != null)
             {
                 UnityEngine.Object.Destroy(box.gameObject);
@@ -507,24 +453,16 @@ namespace BugFablesAP
             text = text.Replace(add, "|additemtoss,3,var,0|");
             if (kind == 3)
             {
-                // A crystal berry's pickup code already marked it taken (the check; it also keeps the berry gone) and
-                // raised the count (NPCControl.cs:5656-5658) before this text: undo the count, keep the mark.
+                // The berry's pickup code already marked it taken and raised the count: undo the count, keep the mark.
                 MainManager.instance.flagvar[14]--;
                 text = text.Replace(FirstBerryTutorial + "|break|", "").Replace(FirstBerryTutorial, "");
                 ShowAsSprite(caller.entity, sprite);
             }
-            // A swapped medal wasn't given, so the first-medal tutorial mustn't run (it would also set flag 31).
             text = text.Replace(FirstMedalTutorial + "|break|", "").Replace(FirstMedalTutorial, "");
             log.LogInfo($"[swap] location {at}: pickup (kind {kind}, id {caller.entity.animstate}, flag {caller.activationflag}) "
                 + $"on {MapName()} is a location; showing '{name}'" + (info == null ? " (not scouted yet)" : ""));
         }
 
-        // Pickups that are locations show the seed's item on the ground too, before they're touched (the user,
-        // 2026-09-24: the ground still showed the vanilla medal). Four times a second, for this map's pickup
-        // locations, the ground entity gets the Bug Fables sprite of what's really there, placed the way
-        // EntityControl.UpdateItem places one (EntityControl.cs:3238-3241). The game only redraws an item's sprite
-        // when its id changes (UpdateSprite, :4051), so it holds; this pass re-applies it if anything resets it.
-        // Another game's item keeps the vanilla sprite until the Archipelago icon is in the mod.
         internal static void TickGround()
         {
             if (Time.frameCount % 15 != 0 || connection == null || !randomizerOn())
@@ -541,7 +479,6 @@ namespace BugFablesAP
             NPCControl[] entities = null;
             foreach (KeyValuePair<long, ApConnection.Pickup> entry in pickups)
             {
-                // A respawning pickup whose check is done shows its own item again.
                 if (entry.Value.Map != mapName || (entry.Value.Regional >= 0 && connection.IsDone(entry.Key)))
                 {
                     continue;
@@ -560,9 +497,7 @@ namespace BugFablesAP
                     {
                         continue;
                     }
-                    // A crystal berry spot every time, not only when its sprite differs: the game shows its berry model
-                    // again after the swap has hidden it, and a skip on "sprite already right" left the berry on top of
-                    // the item for good (the dev console's tree, 2026-09-25: sprite items0_8 set, the one model active).
+                    // A crystal berry every time: the game shows its model again after it's hidden.
                     if (entity.animid == 3)
                     {
                         ShowAsSprite(entity, sprite);
@@ -581,8 +516,7 @@ namespace BugFablesAP
             }
         }
 
-        // This pickup's own flag or, for a story pickup (no flag of its own), the story event it starts (data[1],
-        // NPCControl.CheckItem's |event| chain). Matching by entity name missed the scene's own copy (2026-09-24).
+        // A story pickup has no flag of its own: match the story event it starts (data[1]), not the entity name.
         private static bool IsPickup(ApConnection.Pickup pickup, NPCControl npc)
         {
             if (pickup.Berry >= 0)
@@ -600,10 +534,8 @@ namespace BugFablesAP
             return npc.activationflag >= 0 && npc.activationflag == pickup.Flag;
         }
 
-        // Berry rewards: |giveitem,-1,<amount>,...| is the same command as an item's, but its money branch never
-        // reaches the calls the Giveitem stand-ins replace. So at a berry location the text is turned, just before it
-        // runs, into a hand-over of item 0 (Crunchy Leaf) marked as that location; the stand-ins then show what's really
-        // there and keep the Crunchy Leaf out, as for any gift. The line's other commands are untouched.
+        // |giveitem,-1,<amount>| (berries) never reaches the stand-ins, so at a berry location it becomes a hand-over
+        // of item 0 marked as that location, which the stand-ins then swap.
         private static long pendingBerries = -1;
 
         public static void BerryPrefix(ref string text)
@@ -634,7 +566,6 @@ namespace BugFablesAP
         {
             Dictionary<long, ApConnection.Pickup> pickups = connection.LocationPickups;
             string map = MapName();
-            // A dropped connection keeps the rules in force: the tables stay from the last login.
             if (!randomizerOn() || pickups == null || map == null)
             {
                 return -1;
@@ -649,8 +580,7 @@ namespace BugFablesAP
             return -1;
         }
 
-        // The Add stand-ins: at a location, keep the vanilla item out, name what's really there in the "You got" box
-        // (it reads flagstring[0], which the game set to the vanilla name just before), and recolour the starburst.
+        // The "You got" box reads flagstring[0], which the game just set to the vanilla name.
         private static bool TakeSwap(string what)
         {
             if (location == -1)
@@ -672,7 +602,7 @@ namespace BugFablesAP
             return true;
         }
 
-        // The starburst is the "back" child of the "tempitem" sprite the Giveitem just made (MainManager.cs, Giveitem).
+        // The starburst is the "back" child of the "tempitem" sprite the Giveitem just made.
         private static void Recolour(Color color)
         {
             Sprite sprite = shownSprite;
@@ -700,8 +630,6 @@ namespace BugFablesAP
             return kind;
         }
 
-        // A Bug Fables item gets its own description box, the medal kind for a medal (NPCControl.CreateDescWindow:
-        // type 2 reads badgedata, anything else itemdata). Another game's item, or one not scouted yet, gets none.
         private static void ShowOwnDescription(NPCControl caller, ScoutedItemInfo info)
         {
             if (info == null || !IsOurs(info) || KindOf(info) == ItemIds.MoneyKind || KindOf(info) == ItemIds.CrystalKind)
@@ -739,7 +667,6 @@ namespace BugFablesAP
             {
                 return -1;
             }
-            // A berry reward turned into a hand-over of item 0 (BerryPrefix) is that location's.
             if (pendingBerries >= 0 && !badge && id == 0)
             {
                 long berries = pendingBerries;
@@ -752,7 +679,6 @@ namespace BugFablesAP
                 bool sameKind = badge ? give.Type == 2 : give.Type == 0 || give.Type == 1;
                 if (sameKind && give.Item == id && give.Map == map)
                 {
-                    // A shop's medal: this is a purchase, and the copy bought is the location (ShopSwap.Buy).
                     return connection.LocationShops != null && connection.LocationShops.ContainsKey(entry.Key) ? ShopSwap.Buy(entry.Key) : entry.Key;
                 }
             }
