@@ -396,3 +396,27 @@ Newest last. What was tried, what happened, what the user said.
 - **Built, not yet seen:** `kept_present` (big door, bounce mushroom, door back up) and the fall room blocker kept
   open. Test on a fresh file through chapter 1 (Leif's chain). Also pending: the Mushroom spot's landmark name,
   AdoptSeed is still on in the user's config, MapDump too.
+
+## 2026-09-25 (later): open world, QoL page, discoveries, warp
+
+- **Crystal berry spot showing the seed's item** (confirmed by the user, screenshot): the berry model stood over the
+  item sprite. Wrong theory 1: the sprite sat in the ground and spun (true, fixed, but not the cause). Wrong theory 2:
+  the model is added twice (the fix hid every child; no change). Then measured instead of guessing: a new console
+  command, `tree`, showed one model, active, with the item sprite set; `EntityControl.cs:2781-2786` makes the
+  sprite's first child active whenever the sprite is enabled, every frame. Switching the model's renderers off holds.
+- **Impossible seed** (the user stood with nothing reachable): *Outskirts: Favor Reward* mixed flag 17 (Event10, past
+  the permit gate) with an unrelated NPC's 30-berry line. Fixed as *Near Snakemouth Den, Reward*; the test of what's
+  reachable before the gate now pins what the user saw in play.
+- **Open world:** the Outskirts rocks removed (ConditionChecker prefix), the town's first scene held (Event60 needs
+  three in the party, like the Metal Island boat, which crashed with two), the boat sailor held until Leif, the lists
+  re-applied to a map already loaded (the rocks came back after a reload). House, east road stone, pier berry are
+  locations reachable from the start (seen).
+- **Quality of life page** (the user's idea): Fast text (with a faster hold), Skip intro, Free boat, Warp button, all
+  on by default. Wording chosen by the user row by row. Warp: a fifth pause button made like the other four
+  (guisprites[34], found with SpriteDump); two IndexOutOfRange bugs (IconAnim's four icons; another page's shorter
+  sprite array). The logic never counts on the warp (the user).
+- **Shuffle Discoveries** (opt-in): five chapter 1 discoveries; the pier statue's check sent from a save. Yaml toggles
+  state their check counts (the user). Bestiary and Recipes parked, with the user's auto-spy and free-entries ideas.
+- **The user wants me to run console commands for them** (memory updated); warps only when asked.
+- Pending: the town door hold to Leif instead of the first boss (asked, not answered); the Warp's landing spot; the
+  fall-room test in Snakemouth.

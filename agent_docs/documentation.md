@@ -426,7 +426,8 @@ whole object tree (each object, active or not, and its renderers, on or off). It
 the item sprite set. The reason is one line in the game: every frame, the first child of the sprite (the model) is
 made active exactly when the sprite is enabled (`EntityControl.cs:2781-2786`), and showing the item needs the
 sprite enabled. The game toggles the object, never its renderers, so the swap now switches off the model's
-renderers, on every pass. `tree` then showed both berry renderers disabled with the item sprite on.
+renderers, on every pass. `tree` then showed both berry renderers disabled with the item sprite on. **Confirmed by
+the user (2026-09-25, screenshot):** the seed's Mistake standing on the ground outside the cave, no berry, no spin.
 
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
 `Recolour` and `FirstMedalSeen` do the swapping; `PickupPrefix`, `FindPickup` and `TickGround` handle pickups); the
