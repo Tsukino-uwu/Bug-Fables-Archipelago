@@ -342,8 +342,21 @@ class TestMidQuestItem(BugFablesTestBase):
         for name in ("Chapter 2 Started",):
             state.collect(BugFablesItem(name, ItemClassification.progression, None, self.player), prevent_sweep=True)
         self.assertFalse(reward.can_reach(state))
-        state.collect(self.world.create_item("Quest Book"), prevent_sweep=True)
+        state.collect(self.world.create_item("Quest Book"), prevent_sweep=False)  # the sweep takes it to the library step
         self.assertTrue(reward.can_reach(state))
+
+
+class TestOldBookChain(BugFablesTestBase):
+    # The reward waits for the library step, not just the book, so a room-level world can't skip the library.
+    def test_reward_needs_the_library_delivery(self) -> None:
+        from BaseClasses import CollectionState, ItemClassification
+        from ..world import BugFablesItem
+        reward = self.world.get_location("Bugaria City: Residential District, Old Book Delivery Reward")
+        state = CollectionState(self.multiworld)
+        for name in ("Chapter 2 Started", "Old Book Delivered"):
+            state.collect(BugFablesItem(name, ItemClassification.progression, None, self.player), prevent_sweep=True)
+        self.assertTrue(reward.can_reach(state))
+        self.assertEqual(self.world.get_location("Old Book Delivered").parent_region.name, "Bugaria Inner City")
 
 
 class TestMidQuestItemQuestsOff(BugFablesTestBase):
@@ -353,6 +366,11 @@ class TestMidQuestItemQuestsOff(BugFablesTestBase):
     def test_quest_book_not_in_pool(self) -> None:
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         self.assertNotIn("Quest Book", pool)
+
+    def test_quest_steps_left_out(self) -> None:
+        # A step event that needs the book would be unreachable without it.
+        with self.assertRaises(KeyError):
+            self.world.get_location("Old Book Delivered")
 
 
 class TestClassifications(BugFablesTestBase):

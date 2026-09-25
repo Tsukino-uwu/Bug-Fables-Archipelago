@@ -531,7 +531,11 @@ Palace*, since renamed *Bugaria Inner City*: it also holds the districts). Story
 Lore Book (category quest; the user played it through). **Mid-quest items are shuffled too** (the user,
 2026-09-24): otherwise a quest's middle stays vanilla. The same cicada hands over the old book (Quest Book, flag
 241), which becomes its own location (*Old Book Delivery Start*); the Quest Book is a progression item, and the
-reward (*Old Book Delivery Reward*, flag 243) requires it (test `TestMidQuestItem`). With Shuffle Quests off the
+reward (*Old Book Delivery Reward*, flag 243) requires it (test `TestMidQuestItem`). **The quest's middle step is its
+own event** (the user, 2026-09-25: book from the cicada, handed to a reader in the palace library, back for both
+rewards): *Old Book Delivered* (flag 242, the library) needs the book, and both rewards need that event (test
+`TestOldBookChain`), so a room-level world can't expect the rewards without the library. A step event carries its
+quest's category and is left out with it (`included_events`), since without the quest's items it couldn't be reached. With Shuffle Quests off the
 whole quest stays vanilla together. Still to see in game: that the recipient accepts a Quest Book received from
 the server.
 **Mapping connections, one-way included** (the user, 2026-09-25: for room-level regions and a later entrance
@@ -1021,7 +1025,7 @@ destination, seen on screen), then every door, then the room-by-room logic that 
    reached). Today a quest is safe because its steps share one big region (the old book's residential house and the
    palace library are both *Bugaria Inner City*) or pass on the way (the lost kid's sister waits outside the city,
    on the way to Snakemouth). With doors shuffled neither holds. The rule before the label comes off: **every quest
-   step in another room is a logic event in that room's region** (the sister following, the library visit), and the
+   step in another room is a logic event in that room's region** (the sister following; the library visit is done, build step 8), and the
    reward requires the whole chain; items handed out mid-quest are already progression (build step 10). Taking the
    quest is a step too, now just "reach any board" (build step 9). Known gap today: the lost kid's reward
    (location 10) doesn't require the sister's step.

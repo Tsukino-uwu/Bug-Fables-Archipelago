@@ -76,6 +76,8 @@ class BugFablesWorld(World):
             )
         self.artifacts_required = min(wanted, available)
         self.included_locations = [loc for loc in LOCATIONS if self._category_on(loc.get("category"))]
+        # A quest's step events follow its category: without the quest's items they couldn't be reached.
+        self.included_events = [event for event in STORY_EVENTS if self._category_on(event.get("category"))]
         # Doors are decided here and sent in slot_data; the client never decides a door itself.
         self.door_targets = []
         if self.options.entrance_randomizer == EntranceRandomizer.option_coupled:
@@ -110,7 +112,7 @@ class BugFablesWorld(World):
                 BugFablesLocation(self.player, loc["name"], LOCATION_NAME_TO_ID[loc["name"]], region)
             )
 
-        for event in STORY_EVENTS:
+        for event in self.included_events:
             regions[event["region"]].add_event(
                 event["name"], event["item"], location_type=BugFablesLocation, item_type=BugFablesItem
             )
@@ -145,7 +147,7 @@ class BugFablesWorld(World):
         for loc in self.included_locations:
             if loc.get("requires"):
                 self.set_rule(self.get_location(loc["name"]), HasAll(*loc["requires"]))
-        for event in STORY_EVENTS:
+        for event in self.included_events:
             if event.get("requires"):
                 self.set_rule(self.get_location(event["name"]), HasAll(*event["requires"]))
         self.set_completion_rule(Has("Artifact", count=self.artifacts_required))
