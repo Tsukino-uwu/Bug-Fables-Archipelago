@@ -5,8 +5,8 @@ using BepInEx.Logging;
 
 namespace BugFablesAP
 {
-    // Sends a location's check when the game marks it done; it only reads game state. The save is the outbox: a location
-    // done offline is found again at the next login. A save from another seed sends nothing.
+    // Sends a location's check when the game marks it done. The save is the outbox: a location done offline is found
+    // again at the next login. A save from another seed sends nothing.
     internal sealed class LocationChecks
     {
         private readonly ManualLogSource log;
@@ -71,7 +71,7 @@ namespace BugFablesAP
                 log.LogInfo($"[check] location {entry.Key} is done (flag {entry.Value} set) on {Where()}: sending");
                 (finished ?? (finished = new List<long>())).Add(entry.Key);
             }
-        // Locations marked by a flagvar slot reaching a value (a boss prize handed over: 3).
+            // Locations marked by a flagvar slot reaching a value (a boss prize handed over: 3).
             Dictionary<long, int[]> vars = connection.LocationVars;
             if (vars != null && mm.flagvar != null)
             {
@@ -114,7 +114,7 @@ namespace BugFablesAP
                 notYetRecordedFor = session;
                 notYetRecorded.Clear();
             }
-        // Journal discoveries: librarystuff[0, n].
+            // Journal discoveries: librarystuff[0, n].
             Dictionary<long, int> discoveries = connection.LocationDiscoveries;
             bool[,] journal = mm.librarystuff;
             if (discoveries != null && journal != null)
@@ -143,7 +143,7 @@ namespace BugFablesAP
                     (finished ?? (finished = new List<long>())).Add(entry.Key);
                 }
             }
-        // Shop stock: the save's bought bit (ShopSwap), since the stock can't tell two copies of a medal apart.
+            // Shop stock: the save's bought bit (ShopSwap), since the stock can't tell two copies of a medal apart.
             Dictionary<long, int[]> shops = connection.LocationShops;
             if (shops != null && MainManager.map != null)
             {
@@ -163,7 +163,7 @@ namespace BugFablesAP
                     (finished ?? (finished = new List<long>())).Add(entry.Key);
                 }
             }
-        // Respawning pickups send their own check (ItemSwap); queued per seed.
+            // Respawning pickups send their own check (ItemSwap); queued per seed.
             foreach (long id in connection.TakeRespawnChecks(session.RoomState.Seed))
             {
                 log.LogInfo($"[check] location {id} is done (respawning pickup taken) on {Where()}: sending");

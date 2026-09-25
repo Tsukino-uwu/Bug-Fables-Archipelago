@@ -118,8 +118,8 @@ namespace BugFablesAP
             harmony.Patch(solid, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeSolidColor)));
         }
 
-        // The opening: Event16 (Maki's talk, Vi joining, the tutorial battle, location 1) never starts; the mod leaves
-        // what it leaves behind, the game's way, on a later frame. Flag 15 marks location 1 done.
+        // The opening: Event16 (Maki's talk, Vi joining, the tutorial battle, location 1) never starts; the mod does
+        // what it would leave behind, the game's way, on a later frame. Flag 15 marks location 1 done.
         private const string OpeningMap = "BugariaOutskirtsOutsideCity";
         private const int OpeningEvent = 16;
         private const long OpeningLocation = 7_720_001; // Outskirts: Maki and Eetl's Gift (apworld id 1)
@@ -230,9 +230,9 @@ namespace BugFablesAP
                 UnityEngine.Object.Destroy(back.gameObject);
             }
             mm.hud[0].transform.parent.gameObject.SetActive(true);
+            MainManager.ResetCamera();
             // The party change waits for the next frame, behind the black screen: before EndEvent, FixEntities met a
             // character being replaced (NullReferenceException).
-            MainManager.ResetCamera();
             partyThenFade = !TestStartSet && MainManager.map != null && MainManager.map.mapid.ToString() == OpeningMap;
             if (!TestStartSet)
             {
@@ -347,7 +347,7 @@ namespace BugFablesAP
         private static void RunOpening()
         {
             MainManager mm = MainManager.instance;
-            // EndEvent8 already placed the party; placing it here again snapped back a player walking during the fade-in.
+            // Where the player already is: placing the party anywhere else snapped back a player walking during the fade-in.
             SetOpeningParty(MainManager.player.transform.position);
             mm.items[0].Add(0);
             foreach (string name in new[] { "Beee", "blockingbox" })

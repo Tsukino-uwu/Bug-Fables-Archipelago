@@ -15,7 +15,7 @@ namespace BugFablesAP
     internal static class VarDump
     {
         private static readonly Regex Token = new Regex(@"\|([a-zA-Z]+)((?:,[^|]*)?)\|");
-        // Commands that take a flagvar or flagstring slot, plus any token with a "var,N" argument.
+        // Commands that take a flagvar or flagstring slot, plus any token whose arguments contain "var".
         private static readonly HashSet<string> SlotCommands = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "setvar", "addvar", "copyvar", "checkvar", "flagvar", "flagvalue", "var", "string", "sstring", "clonestring",

@@ -3,8 +3,8 @@ using BepInEx.Logging;
 
 namespace BugFablesAP
 {
-    // Dev only: logs every key item added and every flip of flags/regionalflags/crystalbflags, with frame and map,
-    // to match a grant to the flag marking its location done. Read-only.
+    // Dev only: logs key items added or removed, quest board changes and every flip of flags/regionalflags/crystalbflags,
+    // with frame and map, to match a grant to the flag marking its location done. Read-only.
     internal sealed class GrantProbe
     {
         private readonly ManualLogSource log;
@@ -14,9 +14,9 @@ namespace BugFablesAP
         private readonly Dictionary<int, int> keyItemCounts = new Dictionary<int, int>();
         private bool primed;
         private int frame;
-        // Loading a save allocates new arrays of the same length: watch array identity, not length.
         private string lastBlocked = "";
         private string[] quests;
+        // Loading a save allocates new arrays of the same length: watch array identity, not length.
         private bool[] flagsRef;
         private List<int> keyItemsRef;
 

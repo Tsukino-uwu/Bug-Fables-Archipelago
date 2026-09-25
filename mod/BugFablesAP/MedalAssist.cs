@@ -59,7 +59,7 @@ namespace BugFablesAP
 
         internal static void Disable()
         {
-                // A hot reload must not leave the panel's 614: the new instance couldn't tell it from the save's.
+            // A hot reload must not leave the panel's 614: the new instance couldn't tell it from the save's.
             if (forced && MainManager.instance?.flags != null)
             {
                 MainManager.instance.flags[HardestFlag] = false;

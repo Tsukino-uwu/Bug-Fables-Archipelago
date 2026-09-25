@@ -93,8 +93,8 @@ namespace BugFablesAP
             }
             harmony = new Harmony(guid + ".swap." + DateTime.UtcNow.Ticks);
             harmony.Patch(moveNext, transpiler: new HarmonyMethod(typeof(ItemSwap), nameof(Transpile)));
-            // World pickups don't use |giveitem|: CheckItem hands SetText a text ending in |additemtoss,<kind>,var,0|.
             descWindowField = AccessTools.Field(typeof(NPCControl), "descwindow");
+            // World pickups don't use |giveitem|: CheckItem hands SetText a text ending in |additemtoss,<kind>,var,0|.
             harmony.Patch(setText, prefix: new HarmonyMethod(typeof(ItemSwap), nameof(PickupPrefix)));
             harmony.Patch(setText, prefix: new HarmonyMethod(typeof(ItemSwap), nameof(BerryPrefix)));
             MethodInfo updateItem = AccessTools.Method(typeof(EntityControl), nameof(EntityControl.UpdateItem));
@@ -213,8 +213,8 @@ namespace BugFablesAP
                 caller.CreateDescWindow(type, id);
                 return;
             }
-            ShowOwnDescription(caller, Scouted());
             // No description for another game's item: DestroyDescWindow null-checks, so a missing box is safe.
+            ShowOwnDescription(caller, Scouted());
         }
 
         public static Sprite ItemSprite(bool badge, int id)
@@ -516,7 +516,6 @@ namespace BugFablesAP
             }
         }
 
-        // A story pickup has no flag of its own: match the story event it starts (data[1]), not the entity name.
         private static bool IsPickup(ApConnection.Pickup pickup, NPCControl npc)
         {
             if (pickup.Berry >= 0)
@@ -529,6 +528,7 @@ namespace BugFablesAP
             }
             if (pickup.Event >= 0)
             {
+                // A story pickup has no flag of its own: match the story event it starts (data[1]), not the entity name.
                 return npc.data != null && npc.data.Length > 1 && npc.data[1] == pickup.Event;
             }
             return npc.activationflag >= 0 && npc.activationflag == pickup.Flag;

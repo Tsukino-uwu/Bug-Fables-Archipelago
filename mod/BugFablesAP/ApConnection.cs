@@ -403,10 +403,10 @@ namespace BugFablesAP
             }
         }
 
-        // HintCreationPolicy.None: a hint-creating scout would announce the seed.
         internal Dictionary<long, ScoutedItemInfo> Scouts => scouts;
         private volatile Dictionary<long, ScoutedItemInfo> scouts;
 
+        // HintCreationPolicy.None: a hint-creating scout would hint every placement in the seed.
         private void Scout(ArchipelagoSession s, ICollection<long> locations)
         {
             if (locations == null || locations.Count == 0)

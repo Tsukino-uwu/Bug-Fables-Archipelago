@@ -870,7 +870,7 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 - A new game begins on the Outskirts: Event8 loads map 16 (EventControl.cs:2636). Used by `WarpButton.cs`.
 - guisprites[34] is a round blue map icon in the pause-menu icon style (from SpriteDump's sheet). Used by `WarpButton.cs`.
 - MultiClient.Net 6.7.1 net40: every send first checks websocket-sharp's IsAlive, which pings and blocks up to 5 s for the pong (WebSocket.ping, WaitTime); websocket-sharp's Close sends a close frame and waits up to 5 s for the answer. Used by `ApConnection.cs`.
-- MultiClient.Net 6.7.1 keeps every location check the server hasn't confirmed and resends them with the next send (LocationCheckHelper). Used by `ApConnection.cs`.
+- MultiClient.Net 6.7.1 keeps every location check the server hasn't confirmed and resends them with the next send: each `LocationChecks` packet is every checked location except `serverConfirmedChecks`, which fills from the server's `Connected` and `RoomUpdate` packets (`Helpers/LocationCheckHelper.cs` at tag v6.7.1, `GetLocationChecksPacket`; read 2026-09-25). Used by `ApConnection.cs`.
 - Scouting with HintCreationPolicy.None creates no hints; a hint-creating scout would announce the seed's placements. Used by `ApConnection.cs`.
 - ArchipelagoSocketHelper tries wss:// first for a bare address and falls back to ws://. Used by `ApConnection.cs`.
 - slot_data location_shops: {location id: {shop, medal}}, one location per copy a medal shop ever stocks, done when the save marks that copy bought (ShopSwap). Used by `ApConnection.cs`.

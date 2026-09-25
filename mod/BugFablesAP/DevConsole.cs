@@ -444,7 +444,7 @@ namespace BugFablesAP
             MainManager.Maps map = int.TryParse(parts[1], out int number)
                 ? (MainManager.Maps)number
                 : (MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), parts[1], true);
-            // @<name>: land at the map's own spot, then step beside it, so a trigger starts on walking in, not mid-warp.
+            // @<name>: land at the map's origin, then step beside the named entity, so a trigger starts on walking in, not mid-warp.
             if (parts.Length > 2 && parts[2].StartsWith("@"))
             {
                 // The rest of the line: entity names can have spaces ("Crystal Berry").

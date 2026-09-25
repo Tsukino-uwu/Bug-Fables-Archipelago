@@ -25,7 +25,7 @@ namespace BugFablesAP
             var validate = AccessTools.Method(typeof(WebSocket), "validateSecWebSocketExtensionsServerHeader");
             if (create == null || validate == null)
             {
-                // A library update renamed one of them. Connect uncompressed rather than not at all.
+                // Connect uncompressed rather than not at all.
                 post("[ws] compression left off: " + (create == null ? "CreateWebSocket" : "validateSecWebSocketExtensionsServerHeader")
                     + " not found");
                 return;

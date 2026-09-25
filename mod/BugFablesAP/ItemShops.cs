@@ -52,7 +52,7 @@ namespace BugFablesAP
             harmony = null;
         }
 
-        // The location this slot's first purchase is while its check isn't done, else -1.
+        // This slot's location while its check isn't done, else -1.
         private static long LocationOf(NPCControl npc)
         {
             Dictionary<long, ApConnection.ItemShopSlot> shops = connection?.LocationItemShops;

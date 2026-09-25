@@ -202,7 +202,7 @@ namespace BugFablesAP
             dim.sortingOrder = PopupDimSort;
             Transform box = MainManager.Create9Box(new Vector3(0f, 0f, 10f), new Vector2(12f, 4.75f), 1, PopupBoxSort, Color.white, false);
             box.parent = popup;
-            // Over the three save slots, about 0.9 units above the screen's middle.
+            // Over the three save slots.
             box.localPosition = new Vector3(0f, 0.9f, 0f);
             string sort = "|sort," + PopupTextSort + "|";
             MainManager.instance.StartCoroutine(MainManager.SetText(sort + "|center||size,0.8|Not connected to Archipelago", new Vector3(0f, 1.45f, 0f), box));

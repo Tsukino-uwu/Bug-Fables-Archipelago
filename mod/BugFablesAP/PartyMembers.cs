@@ -36,7 +36,7 @@ namespace BugFablesAP
                 return;
             }
             harmony = new Harmony(guid + ".members." + DateTime.UtcNow.Ticks);
-        // Last, so QualityOfLife's opening-skip prefix sees the story's ids unchanged.
+            // Last, so QualityOfLife's opening-skip prefix sees the story's ids unchanged.
             harmony.Patch(changeParty, prefix: new HarmonyMethod(typeof(PartyMembers), nameof(BeforeChangeParty)) { priority = Priority.Last });
             MethodInfo startEvent = AccessTools.Method(typeof(EventControl), nameof(EventControl.StartEvent), new[] { typeof(int), typeof(NPCControl) });
             if (startEvent != null)
@@ -73,7 +73,7 @@ namespace BugFablesAP
             }
             if (kept.Length == 0)
             {
-        // The story asked only for members not allowed yet (Kabbu alone after the slides): keep who is here.
+                // The story asked only for members not allowed yet (Kabbu alone after the slides): keep who is here.
                 MainManager mm = MainManager.instance;
                 kept = mm?.playerdata != null && mm.playerdata.Length > 0
                     ? mm.playerdata.Select(p => p.trueid).Where(Allowed).ToArray()

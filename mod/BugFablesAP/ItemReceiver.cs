@@ -74,7 +74,7 @@ namespace BugFablesAP
             int given = matches == true ? mm.flagvar[CountSlot] : -1;
             string state = blocked != null ? "waiting: " + blocked
                 : $"giving: {given} of {received.Count} received";
-        // Log the guard's decision when it changes; busy/free flips often, so all busy reasons compare equal.
+            // Log the guard's decision when it changes; busy/free flips often, so all busy reasons compare equal.
             string key = blocked != null && blocked.StartsWith("busy") ? "busy" : state;
             if (key != lastState)
             {

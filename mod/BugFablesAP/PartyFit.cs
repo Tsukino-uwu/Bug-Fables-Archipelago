@@ -168,7 +168,6 @@ namespace BugFablesAP
             return standIns[member];
         }
 
-        // A scene that waits for a stand-in to arrive would wait for good (no collision): it arrives at once.
         private static void AfterLateUpdate(EntityControl __instance)
         {
             if (__instance == null || !standIns.Contains(__instance))
@@ -181,6 +180,7 @@ namespace BugFablesAP
             }
         }
 
+        // A scene that waits for a stand-in to arrive would wait for good (no collision): it arrives at once.
         private static void AfterMoveTowards(EntityControl __instance, Vector3 pos)
         {
             if (__instance == null || !standIns.Contains(__instance))
