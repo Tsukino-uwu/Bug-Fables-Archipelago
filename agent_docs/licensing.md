@@ -3,7 +3,8 @@
 **Rule: read a project's licence from its own file before reading its source.** A project with no row here
 has not been checked and may not be used. The test for what enters this repo is "fine in a public repo
 forever?", not "does a licence permit it?". So even a permissive licence never lets us copy source: we
-read for facts and write our own.
+read for facts and write our own. **And an author's wishes count as much as their licence** (the user, 2026-09-25):
+when an author objects to their work being used here, we don't use it, even where it's technically allowed.
 
 | Project | Licence | Checked | Use |
 |---|---|---|---|

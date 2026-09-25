@@ -267,8 +267,8 @@ coupled, off by default) shuffles 508 doors with every area kept reachable; a ge
    a check (bosses and one-off fights left out), shown as a guaranteed drop; after that the type's drops are the
    game's own, as with respawning pickups. The game already counts defeats per type in the save
    (`enemyencounter[id, 1]`, raised on each win, `BattleControl.cs:30712`), so the check can be "that count reached
-   1", with no drop to swap. The logic needs, per type, a place where it's always fought. Heard of from a Discord user,
-   who said another Bug Fables randomizer does this: not looked at; its licence goes in `licensing.md` and
+   1", with no drop to swap. The logic needs, per type, a place where it's always fought. Another Bug Fables randomizer
+   reportedly does this: not looked at; its licence goes in `licensing.md` and
    `references.md` is read before borrowing anything from it.
    **Or per placed enemy, "enemy sanity" (the user, 2026-09-25), its own opt-in toggle:** each enemy standing on a
    map (map plus entity index) is its own check on its first defeat, so the same enemy type in another room is
