@@ -98,8 +98,12 @@ be wrong.
    gets its own encounter. A boss's reward stays with its place: Snakemouth Den pays Snakemouth Den's prize,
    whatever boss was there. Separate from enemy checks (build step 10). First the fight only; the enemy seen on
    the map matching its fight is a later step (the user wants it). First, measure which bosses can be swapped at
-   all (code tied to a boss), and which enemies a small party can't hit (Starting Party Member). The logic never
-   puts a fight where the party it guarantees can't win it. Its own build step when built.
+   all (code tied to a boss), and which enemies a small party can't hit (Starting Party Member). **Decided (the
+   user, 2026-09-26): only fights that can't be fled are limited by the party.** A boss or story fight only gets an
+   enemy the party guaranteed at that point can hit; map fights can always be fled, so they shuffle freely. If enemy
+   checks come (build step 10), map fights count too, since their checks would then be required. The base attacks
+   decide it, skills learned later don't: Vi alone hits fliers, Leif alone hits burrowed enemies, Kabbu only the
+   front enemy on the ground (`MEASURED.md`, "Who can hit what"). Its own build step when built.
 15. **Enemy scaling, a panel setting** (the user, 2026-09-26): *Enemy Scaling* on the Quality of life page (Next 10),
    `off / party_level / chapter / artifacts`, on by default (`party_level`), up and down. A panel row, not the yaml:
    it ties to no check, so the player can change it from the main menu if the game feels too easy or too hard.

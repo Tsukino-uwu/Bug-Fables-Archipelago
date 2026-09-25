@@ -1049,6 +1049,21 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   respawns that many frames after its death. 20 map enemies have one, all puzzle enemies (a flower to freeze, a
   pressure plate, a crank). The game's own `EnemyCheck` swap skips them (`calledfrom.eventid <= 0`). Their fight can
   be shuffled; their map model can't be changed without breaking the puzzle.
+- **Who can hit what** (2026-09-26, code read). An enemy starts at the position in its data's column 19
+  (`BattlePosition`: Ground, Flying, OutOfReach, Random, Underground; `MainManager.cs:6198`). During a fight,
+  `RefreshEnemyPos` moves it between Ground and Flying by height (unless `cantfall`, column 29). The base attack's
+  targets come from `SetTargets` (`BattleControl.cs:3091-3107`) and `UndergroundCheck` (`:4784`):
+  - Vi (-1): anything but OutOfReach, and not Underground.
+  - Kabbu (-2): Ground only, and only the front enemy. Underground doesn't count.
+  - Leif (-3): Ground and Underground.
+
+  Thrown items target Ground only (`:4934`). Skills have their own targeting: `skilldata` columns 7 (ground only)
+  and 8 (front only), and columns 4-6 say which members a skill needs (`CanSkill`, `:30472`). Who knows which skill
+  depends on story flags, party level and equipped medals (`MainManager.RefreshSkills`, `:8395`). The tables
+  themselves are game data (`Data/EnemyData`, `Data/SkillData`), not in the code, so not dumped yet.
+- **Which fights can be fled:** every map fight (`NPCControl.StartBattle`, `canescape: true`). Almost every scripted
+  fight can't be (`canescape: false`); the exceptions are Event30, Event42, the rematch machine (Event85), Event156,
+  Event207 and Event224 (the list above).
 - **EXP from a fight** (for the EXP multiplier): each enemy's share is `BattleControl.GetEXP(amount, fixedexp,
   enemy)` (`BattleControl.cs:30844`; 0 at level 27 or with flag 613; +15% on Hard Mode; +50% with medal 42), then
   clamped per enemy to `neededexp` (`:30715`), so one enemy never gives more than the rest of a level. The EXP shown

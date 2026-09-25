@@ -631,3 +631,7 @@ Newest last. What was tried, what happened, what the user said.
 - **Random start** (the user): *Starting Location* `off / towns / random`, off by default. `random` can start
   anywhere, even mid-dungeon. It is Next 18 and waits on the room-by-room logic.
 - **Starting Party Member** is confirmed off by default: members join where the story has them (build step 13).
+- **Enemy shuffle and a small party** (the user): only fights that can't be fled are limited to enemies the
+  guaranteed party can hit. If enemy checks come, map fights count too. The user remembered the base attacks
+  (only Vi hits fliers; Kabbu and Leif hit the ground). The code agrees, and adds that Kabbu hits only the front
+  enemy and only Leif hits burrowed ones.
