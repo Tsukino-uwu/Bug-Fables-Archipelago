@@ -380,6 +380,11 @@ namespace BugFablesAP
                         log.LogInfo(guiLog.ToString());
                         return "gui logged";
                     case "addleif": return AddLeif();
+                    case "addmember":
+                        // Stands in for receiving a party member as an item (0 Vi, 1 Kabbu, 2 Leif), with TestStartMember.
+                        return parts.Length > 1 && int.TryParse(parts[1], out int member) && member >= 0 && member <= 2
+                            ? "addmember: " + PartyMembers.Add(member)
+                            : "addmember <0 Vi | 1 Kabbu | 2 Leif>";
                     case "holdup":
                         // A test of the hold-up for an item from another player: the Explorer Permit (key item 27), queued
                         // the way the receiver queues one, display only.

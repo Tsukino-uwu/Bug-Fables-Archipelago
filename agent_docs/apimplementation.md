@@ -199,7 +199,13 @@ coupled, off by default) shuffles 508 doors with every area kept reachable; a ge
    find the other two, each its own item, on top of the abilities. **Its shape (the user, 2026-09-25, later):** *Starting
    Party Member: Off / Vi / Kabbu / Leif / Random*; Off is the story's party, otherwise the game starts with that one
    member and the other two are items. Prompted by the stand-ins for missing members in scenes, which make one-member play
-   look possible; the story's own joining scenes (Kabbu at the start, Leif at the lake) must then add nobody. Opt-in only: fighting with one or two changes
+   look possible; the story's own joining scenes (Kabbu at the start, Leif at the lake) must then add nobody.
+   **Rehearsal built (2026-09-25), the mod only:** a dev setting `TestStartMember` (0 Vi, 1 Kabbu, 2 Leif) and a prefix
+   on `MainManager.ChangeParty(ids, fromscratch, destroyoldentity)`, which every party change of the story goes through
+   (the two-argument form forwards to it; about 20 calls in `EventControl`, some already one member: Kabbu alone after
+   the slides, Vi alone in one scene). The prefix keeps in `ids` only the starting member and those received (dev:
+   `addmember`), so the opening's Vi-and-Kabbu becomes the one member; it runs last so the opening skip's own prefix sees
+   the story's ids. First test: Leif alone into Snakemouth Den. Not yet seen. Opt-in only: fighting with one or two changes
    the game a lot. Open questions: the story may need all three after chapter 1, and adding a member outside the
    story's own event hasn't worked yet (log.md, 2026-09-24: `ChangeParty` left Leif without a character).
    **Solved 2026-09-25:** without `fromscratch`, `ChangeParty`'s copy loop never runs (`for m < 0`,

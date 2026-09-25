@@ -721,4 +721,17 @@ purchases, and two copies of one medal can't be told apart in a list of medal id
    location pickup's own item, the seed's item goes back on in the same call. **Seen (the user, 2026-09-25):** nothing
    odd going in or out any more. The first guess was taken back out.
 
-*Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page), `ShopSwap.cs`.*
+**The Detector for every check** (the user, 2026-09-25: beep for any kind of check left in the room: shops, quests,
+someone to help, not only hidden items). Read first how the medal works: one second after a map loads, the game asks its
+objects (`NPCControl.CheckHidden`: buried crystal berries, grass hiding one, a dig spot with a medal) and the map
+(`MapControl.CheckDisc`: an unrecorded discovery) whether something is hidden; any yes sets one value,
+`map.hiddenitem = 100`, and the map's update turns that into the "!" over the leader and the beep
+(`MapControl.cs:885-896`). So nothing about the medal needs changing: a postfix on `CheckDisc` (run a second after every
+map load, discoveries or not) sets the same value when one of the seed's locations on this map isn't done. Every location
+type has a map: pickups, gifts (quest rewards included, where the reward is handed over), shop copies and item shops
+from `slot_data`, discoveries from the map's own `discoveryids`. Done means the server has the check, or offline the save
+says so (its flag, crystal berry, journal entry, a shop copy's bought bit). Only while the Detector counts as equipped
+(the medal, or the panel's Detector row). Built, not yet seen.
+
+*Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page), `ShopSwap.cs`,
+`CheckDetector.cs`.*

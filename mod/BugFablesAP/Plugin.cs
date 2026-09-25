@@ -88,6 +88,10 @@ namespace BugFablesAP
                 "Dev only. A map name (MainManager.Maps), optionally @ the map you arrive from, e.g. "
                 + "BugariaMainPlaza@BugariaOutskirtsOutsideCity: a new file starts there, arriving through that map's door into "
                 + "it (without @, the first door found). A stand-in for a random start. Empty = off.").Value;
+            // Dev only: one starting party member (the user, 2026-09-25), a rehearsal before the yaml option.
+            PartyMembers.StartMember = Config.Bind("Debug", "TestStartMember", -1,
+                "Dev only. The one party member a randomizer file has (0 Vi, 1 Kabbu, 2 Leif): the story adds nobody else; "
+                + "the console's addmember adds one. -1 = off.").Value;
             if (devConsole.Value)
             {
                 DevConsole.EnableGuard(Guid);
@@ -154,6 +158,8 @@ namespace BugFablesAP
             QualityOfLife.Enable(Log, Config, () => randomizerEnabled.Value);
             HoldUps.Init(Log, () => randomizerEnabled.Value);
             PartyFit.Enable(Log, Guid, () => randomizerEnabled.Value);
+            PartyMembers.Enable(Log, Guid, () => randomizerEnabled.Value);
+            CheckDetector.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             ShopSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             ItemShops.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             DoorShuffle.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
@@ -343,6 +349,8 @@ namespace BugFablesAP
             WarpButton.Disable();
             HoldUps.Clear();
             PartyFit.Disable();
+            PartyMembers.Disable();
+            CheckDetector.Disable();
             ShopSwap.Disable();
             ItemShops.Disable();
             DoorShuffle.Disable();
