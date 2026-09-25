@@ -624,6 +624,10 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    Leif stayed, controls and all. Now, outside scenes, twice a second, any character with player controls other than
    the leader's is removed (logged). On loading it removed the stray at once; `who` then listed one player. **Seen
    (the user, 2026-09-25):** no extra Leif any more.
+   **The whole sequence replayed (the user, 2026-09-25): "worked perfectly"**, no extra Leif, the right spot after the
+   ending. The log: the fall placed at (12.7, 6.5, 0.3); Leif taken off the follower list; the scene's end moved the
+   party to stand-in Vi's spot (-44, 0, 1.2); the story's Leif ("Moth") removed as a copy; the stray player removed.
+   (14) and (15) seen with it.
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,
