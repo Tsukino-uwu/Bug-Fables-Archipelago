@@ -1073,6 +1073,11 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
     EverlastingKing 91, Acolyte 21, Scarlet 31, Kali 51, Cenn 85 and Pisci 86. The rematch machine runs them too.
   - So for the base attacks: a flier needs Vi, the Sandworm needs Leif, and a Random one needs whichever position it
     takes.
+- **Where enemy stats are shown** (2026-09-26, code read): in a fight, the bar over a spied enemy (or with the scope
+  medal) shows its live `hp`, `maxhp` and defence (`TrueDef`) (`BattleControl.cs:3148-3163`), so changed numbers show
+  there as they are. The pause menu's bestiary page works out HP and defence from the raw `enemydata` row plus the
+  Hard/HARDEST bonuses, not from `GetEnemyData` (`PauseMenu.cs:1993-2004`), and shows times seen and defeated.
+  Attack is shown nowhere. Whether the Spy text itself names numbers is game data, not checked.
 - **Which fights can be fled:** every map fight (`NPCControl.StartBattle`, `canescape: true`). Almost every scripted
   fight can't be (`canescape: false`); the exceptions are Event30, Event42, the rematch machine (Event85), Event156,
   Event207 and Event224 (the list above).

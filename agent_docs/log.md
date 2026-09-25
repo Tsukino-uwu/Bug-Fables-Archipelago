@@ -639,3 +639,5 @@ Newest last. What was tried, what happened, what the user said.
   - 16 enemies start flying (three bosses: BeeBoss, MidgeBroodmother, EverlastingKing), one underground
     (Sandworm) and three at random.
   - The party rule for fights that can't be fled: no fliers without Vi, no Sandworm without Leif.
+- **Scaling and the bestiary** (the user asked): Spy in a fight shows the live numbers, but the bestiary page reads the
+  raw table. The user chose to show the scaled numbers there (Next 15).

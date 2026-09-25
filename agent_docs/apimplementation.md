@@ -110,7 +110,10 @@ be wrong.
    Enemy shuffle stays in the yaml so a slot plays the same for anyone on it. Scaling balances an area met earlier or
    later than vanilla would (open world, the entrance randomizer) and is not a challenge setting: Normal / Hard /
    Hardest stays on top of the scaled numbers. Each enemy needs a home level (where it first appears), from a real
-   source. Only while Archipelago is enabled. Its own build step when built.
+   source. Only while Archipelago is enabled. **The bestiary shows the scaled numbers** (the user, 2026-09-26): the
+   pause menu's enemy page reads the raw table (`MEASURED.md`, "Battles, for enemy shuffle"), so the mod applies the
+   same scaling there, as the enemy would be if met now; Spy in a fight already shows the live numbers. Its own
+   build step when built.
 16. **EXP multiplier, a panel setting** (the user, 2026-09-26): *EXP Multiplier* on the Quality of life page, 1x to
    5x, default 1x: an opt-in for a faster, easier game. Levels still give HP, TP and MP, so it helps even without moves being shuffled. It stacks on
    top of enemy scaling's EXP. No check and no logic depend on it. Only while Archipelago is enabled.
