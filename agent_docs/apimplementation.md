@@ -239,7 +239,10 @@ coupled, off by default) shuffles 508 doors with every area kept reachable; a ge
    removed and changed to another"): after the first boss a follower joins outside the city (Event63: follower 30, flag
    114); the palace bridge swaps them for Maki (Event44: removes 30, adds Maki, flag 66), the only place follower 30
    leaves; the briefing (Event45) uses Maki and clears the list. In the game the town opens only after chapter 1, so the
-   bridge always comes after the boss. With the town open from the start the bridge could come first: Maki early, and
+   bridge always comes after the boss. **The briefing waits for the swap itself** (the user, 2026-09-25: a shuffled door
+   or a random start inside the palace could reach it without the bridge, with no follower or the wrong one): its hold
+   moved from 114 to 66, so first boss, follower, swap, briefing, whatever the way in. No new logic: the bridge is in the
+   town, which *Chapter 2 Start* already needs. With the town open from the start the bridge could come first: Maki early, and
    follower 30 never leaving. The bridge's trigger (`makiautoevent`) is now held until 114, like the briefing's already
    was (`held_until`). Test `TestKeptOpen.test_follower_swap_waits_for_the_first_follower`. Not seen (the user's file is
    past it).

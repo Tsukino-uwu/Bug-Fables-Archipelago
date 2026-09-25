@@ -303,6 +303,8 @@ class TestKeptOpen(BugFablesTestBase):
         # follower stuck for good (the user, 2026-09-25).
         held = self.world.fill_slot_data()["held_until"]
         self.assertIn({"map": "AntBridge", "entity": "makiautoevent", "flag": 114}, held)
+        # The briefing needs Maki, so it waits for the swap itself, whatever door led into the palace.
+        self.assertIn({"map": "AntPalace1", "entity": "Chapter1StartEvent", "flag": 66}, held)
 
     def test_inn_open_before_the_briefing(self) -> None:
         # Before flag 67 the innkeeper hands the talk to the follower ("We mustn't keep the Queen waiting.").
@@ -506,7 +508,8 @@ class TestOutskirtsRocks(BugFablesTestBase):
         data = self.world.fill_slot_data()
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "DoorBugaria - Duplicate"}, data["kept_open"])
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "DoorBugaria"}, data["kept_present"])
-        self.assertIn({"map": "AntPalace1", "entity": "Chapter1StartEvent", "flag": 114}, data["held_until"])
+        # Held until the bridge swap (66), which itself waits for the follower after the first boss (114).
+        self.assertIn({"map": "AntPalace1", "entity": "Chapter1StartEvent", "flag": 66}, data["held_until"])
 
     def test_plaza_blockers_removed(self) -> None:
         # The plaza's three blockers kept the party in the plaza until chapter 2 (the user, 2026-09-25: open the town).

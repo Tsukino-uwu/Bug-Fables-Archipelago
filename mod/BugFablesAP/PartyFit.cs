@@ -112,13 +112,35 @@ namespace BugFablesAP
         private static EntityControl actor;
         private static int actorRole = -1; // -1 not chosen yet this scene, -2 nobody acts
 
+        // Whether the story's party holds this member at this point: Vi from the opening (flag 15), Kabbu always, Leif once
+        // he has joined (flag 16). A leader the story already has plays himself (the user, 2026-09-25: in the briefing
+        // Leif doing Leif's part is right, rather than one member doing another's); he acts the lead only in scenes whose
+        // party doesn't have him yet (chapter 1 before Leif joins).
+        private static bool InStoryParty(int member)
+        {
+            bool[] flags = MainManager.instance.flags;
+            return member == 1 || (member == 0 && flags[15]) || (member == 2 && flags[16]);
+        }
+
         private static void ChooseActor()
         {
+            MainManager mm = MainManager.instance;
+            // A scene that reloads the map partway remakes the party characters (Event45's throne room, LoadMap with
+            // recreateplayers): the actor was the old leader character, now gone; the new leader takes the part on.
+            if (actorRole >= 0 && actor == null && mm.playerdata != null && mm.playerdata.Length > 0 && mm.playerdata[0].entity != null)
+            {
+                actor = mm.playerdata[0].entity;
+                log.LogInfo($"[party] Event{MainManager.lastevent}: the map was remade; {actor.name} acts member {actorRole}'s part again");
+            }
             if (actorRole != -1)
             {
                 return;
             }
-            MainManager mm = MainManager.instance;
+            if (mm.playerdata != null && mm.playerdata.Length > 0 && InStoryParty(mm.playerdata[0].trueid))
+            {
+                actorRole = -2;
+                return;
+            }
             int[] story = PartyMembers.LastStoryParty;
             int lead = story != null && story.Length > 0 ? story[0] : -1;
             // Unknown (a reload forgets it): the first missing member by id, Vi before Kabbu (the droplet scene,
