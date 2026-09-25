@@ -8,9 +8,12 @@ vectordata[1], vectordata[2])). One row per door:
 
 "back" lists the doors on the target map that lead back to this map. "NONE" means no door leads back: a one-way
 candidate, or a way back that isn't a door (an event, a drop, a fall). "pair" is the one of those the party arrives
-next to: the door whose position is nearest (on the ground plane) to where this door places the party, with that
-distance. A pair is "mutual" when the back door's own pair is this door; the entrance randomizer's coupled mode needs
-the pairs mutual. Pairing needs a dump with the position column (EntityDump from 2026-09-25 on).
+next to: the door whose position is nearest to where this door places the party, with that distance (in 3D: Rubber
+Prison's pier stacks doors floor above floor). Nothing nearer than FAR is no pair: Barren Lands' "return" zones put
+the party 25-75 units from any door. A pair is "mutual" when the back door's own pair is this door or a variant of it:
+doors on one map within SAME of each other are one door in different story states (Golden Settlement's day and night
+copies, flags 85/86, the night one leading to the night map). The entrance randomizer's coupled mode needs the pairs
+mutual. Pairing needs a dump with the position column (EntityDump from 2026-09-25 on).
 
 The dump can't see connections inside a map (ledges, drops, switch barriers) or transfers started by events; those come
 from play and go into agent_docs/MEASURED.md.
@@ -48,12 +51,22 @@ def point(field: str | None) -> tuple[float, float, float] | None:
     return x, y, z
 
 
-def ground_distance(a: tuple[float, float, float], b: tuple[float, float, float]) -> float:
-    return math.hypot(a[0] - b[0], a[2] - b[2])
+FAR = 10.0
+SAME = 1.0
 
 
-def pair_doors(doors: list[dict]) -> dict[tuple[str, str], tuple[str, float]]:
-    """(map, door) -> (back door on the target map, distance from the arrival point to it)."""
+def distance(a: tuple[float, float, float], b: tuple[float, float, float]) -> float:
+    return math.dist(a, b)
+
+
+def same_door(a: dict, b: dict) -> bool:
+    return a is b or (a["map"] == b["map"] and a["position"] is not None and b["position"] is not None
+                      and distance(a["position"], b["position"]) < SAME)
+
+
+def pair_doors(doors: list[dict]) -> dict[tuple[str, int], tuple[dict, float]]:
+    """(map, entity index) -> (back door on the target map, distance from the arrival point to it). By index, not
+    name: a map can hold two doors of one name, swapped by story flags (WaspKingdomOutside's loadzoneinside)."""
     leading_to = collections.defaultdict(list)  # (from, to) -> doors
     for d in doors:
         leading_to[(d["map"], d["to"])].append(d)
@@ -66,8 +79,9 @@ def pair_doors(doors: list[dict]) -> dict[tuple[str, str], tuple[str, float]]:
         back = [b for b in leading_to.get((d["to"], d["map"]), []) if b["position"] is not None]
         if not back:
             continue
-        best = min(back, key=lambda b: ground_distance(arrive, b["position"]))
-        pairs[(d["map"], d["name"])] = (best["name"], ground_distance(arrive, best["position"]))
+        best = min(back, key=lambda b: distance(arrive, b["position"]))
+        if distance(arrive, best["position"]) < FAR:
+            pairs[(d["map"], d["index"])] = (best, distance(arrive, best["position"]))
     return pairs
 
 
@@ -83,7 +97,7 @@ def main() -> None:
             continue
         target = int(r["data"].split()[0])
         doors.append({
-            "map": r["map"], "name": r["name"],
+            "map": r["map"], "index": int(r["index"]), "name": r["name"],
             "to": names[target] if 0 <= target < len(names) else f"?{target}",
             "requires": flags(r["requires"]), "limit": flags(r["limit"]),
             "vectordata": r.get("vectordata"), "position": point(r.get("position")),
@@ -99,10 +113,11 @@ def main() -> None:
         if prefix and not (d["map"].startswith(prefix) or d["to"].startswith(prefix)):
             continue
         back = leading_to.get((d["to"], d["map"]))
-        pair = pairs.get((d["map"], d["name"]))
+        pair = pairs.get((d["map"], d["index"]))
         if pair:
-            mutual = pairs.get((d["to"], pair[0]), (None,))[0] == d["name"]
-            paired = (pair[0] + ("" if mutual else " (not mutual)"), f"{pair[1]:.1f}")
+            theirs = pairs.get((d["to"], pair[0]["index"]))
+            mutual = theirs is not None and same_door(theirs[0], d)
+            paired = (pair[0]["name"] + ("" if mutual else " (not mutual)"), f"{pair[1]:.1f}")
         else:
             paired = ("", "")
         rows.append((d["map"], d["name"], d["to"], d["requires"], d["limit"], " | ".join(back) if back else "NONE") + paired)

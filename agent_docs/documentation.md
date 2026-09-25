@@ -668,7 +668,11 @@ whatever happens on the side you leave stays, whatever happens on the side you a
 other map that leads back" can be more than one. The one that belongs to a door is the one the party arrives next to:
 the door on the target map whose start position is nearest (on the ground plane) to where the door places the party,
 `vectordata[1]`. EntityDump now writes each entity's start position (fields 6-8) and the jump (field 175), and
-`dev-scripts/door-graph.py` pairs every door that way, marking pairs that don't point at each other ("not mutual"). The
+`dev-scripts/door-graph.py` pairs every door that way, marking pairs that don't point at each other ("not mutual").
+The first run found three things to fix in the script itself: Rubber Prison's pier stacks doors floor above floor, so
+the distance is 3D; a map can hold two doors of one name, so doors are told apart by entity index; and story variants
+of one door (day and night copies at one spot) count as one. After that, 531 of 567 doors paired both ways; the rest
+are listed in `MEASURED.md` to check in play. The
 coupled entrance randomizer needs those pairs: going through a shuffled door and turning round must bring you back.
 
 **The reshuffle choice first** (the user, 2026-09-25: faster to reset a shelf). A shopkeeper's greeting ends in a

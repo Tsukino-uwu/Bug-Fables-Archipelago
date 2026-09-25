@@ -650,6 +650,27 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   `UpperSnekEntrance`, the round door (`Base/CircleDoor`) is hidden and the Gem shown in the slot from **517**.
   In `SnakemouthUndergrondDoor` the middle door's models switch at **35**; the switch rooms' `Gate`s at 33 / 34.
 
+## Doors paired with their way back (2026-09-25, a new EntityDump with positions, `door-graph.py`)
+
+- **A door's way back is the door the party arrives next to**: on the target map, the door leading back whose start
+  position (entity fields 6-8) is nearest, in 3D, to the arrival point (`vectordata[1]`), within 10 units.
+- **531 of 567 doors pair mutually** (each is the other's pair). **8 pair one way only, 28 don't pair.**
+- **Story variants are one door:** doors on one map within 1 unit of each other (Golden Settlement's day and night
+  copies, flags 85/86; the night one leads to the night map). **Two doors can share a name** on one map
+  (`WaspKingdomOutside`'s `loadzoneinside`, to `WaspKingdom1` hidden by 370, to `WaspKingdomMainHall` from 555), so
+  doors are told apart by entity index.
+- **Door `data`** (`MainManager.TransferMap`, `MainManager.cs:17467-17620`): `[0]` target map; `[1..3]` = 1 switch
+  the camera offset, angle and limits on arrival to `vectordata[3..6]`; `[4]` = 1 skips the walk into the door
+  (9 doors: `SnakemouthDoorRoom`/`SnakemouthFallRoom` fall-room doors, `UndergroundBar`'s exit, `DefiantRoot1`'s well
+  and back, `FarGrasslandsWizard`'s basement, `GiantLairBeforeBoss`/`2`'s ladders). The arrival jump is the door
+  entity's `emoticonoffset.x` (field 175).
+- **To check in play (the user: later, like `SnakemouthEmpty`):** `GoldenSettlement2`'s `Neo`, `beeguard`, `sign`,
+  `sign - Duplicate`, `farmer ant outside` (all lead to `GoldenSettlement1`'s farm door: story blockers that turn you
+  back?); `TermiteIndustrial`'s `NEARloadzoneback` (doors into their own map); `GiantLairBeforeBoss2`'s two ladders
+  down, one ladder up; the Barren Lands `return...` zones (arrival 25-75 units from any door: one-way, a maze's
+  "wrong way"?) and those leading into their own map; `SandCastleBasement` <-> `SandCastleMainRoom`'s basement doors
+  (no door within 10 units of the arrival).
+
 ## What the Explorer Permit opens (2026-09-24, code read and ScriptDump; the wiki lists four uses)
 
 - **The Outskirts gate:** `BugariaOutskirtsOutsideCity` line 31 asks for a key item, line 33 starts `Event17`
