@@ -224,6 +224,14 @@ namespace BugFablesAP
             {
                 if (e.following != null && standIns.Contains(e.following) && !standIns.Contains(e))
                 {
+                    // A character of someone already in the party (the story's Leif after the spider fight, with Leif
+                    // the one member): a copy, so it goes.
+                    if (e.animid >= 0 && e.animid <= 2 && mm.playerdata.Any(p => p.trueid == e.animid))
+                    {
+                        UnityEngine.Object.Destroy(e.gameObject);
+                        log.LogInfo($"[party] {e.name} (member {e.animid}) followed a stand-in but is already in the party: removed");
+                        continue;
+                    }
                     e.following = last;
                     log.LogInfo($"[party] {e.name} followed a stand-in; now follows {last.name}");
                 }

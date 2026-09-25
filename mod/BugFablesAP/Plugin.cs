@@ -276,6 +276,7 @@ namespace BugFablesAP
             ShopSwap.Tick();
             ItemShops.Tick();
             PartyFit.Tick();
+            PartyMembers.Tick();
 
             DevCheats.Tick(Log, giveMoney);
             DevConsole.Tick(devConsole.Value);

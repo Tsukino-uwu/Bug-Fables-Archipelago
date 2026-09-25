@@ -609,6 +609,15 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    story's leader (the first member of the party the story last asked for, remembered by the member guard before it
    filters) was a stand-in, the real party moves to where it was left; anyone following a stand-in follows the real
    party's last member. Both logged. Not yet seen.
+   (15) **A party member isn't also a follower** (the user, 2026-09-25: three Leifs after the spider fight, one standing,
+   one trailing the player). In the story, Leif meets the party after that fight and follows until he joins at the lake:
+   the scene's third character is the room's Leif (entity 1), set to follow Kabbu, and `extrafollowers.Add(2)` (ids are
+   characters: 0 Vi, 1 Kabbu, 2 Leif; removed when he joins, `EventControl.cs:3533`), from which every map load makes a
+   follower (`MapControl.cs:826-829`, `AddFollower`, kept in `map.tempfollowers`). With Leif the one member, that's the
+   player plus two copies. Now the member guard, each frame, takes any party member off `extrafollowers` with their
+   follower copies, and a scene's end removes a party member's character that followed a stand-in. On first load it took
+   Leif off the list but found no copy in `tempfollowers`: the copies were the scene's own character, not made by
+   `AddFollower`. Not yet seen.
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,
