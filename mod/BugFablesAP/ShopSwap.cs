@@ -61,12 +61,12 @@ namespace BugFablesAP
         }
 
         // More medals on show at once (the user, 2026-09-25: a QoL thing): Merab's shelf 5 instead of 3 (a 6th past her last
-        // spot was hard to reach, the user), Shades's 6 instead of 2: 4 across her two spots and one more past each end (hers sat far apart; 6 between them
-        // packed them too close, the user).
-        // The shelf has one slot per entry of the shopkeeper's data, each at vectordata[j] (NPCControl.cs:1531-1534); before
-        // it's built, the spots are laid out evenly: {shop: (slots spanning her first to last spot, extra before the first, extra
-        // after the last)}.
-        private static readonly Dictionary<int, int[]> ShelfSlots = new Dictionary<int, int[]> { { 0, new[] { 5, 0, 0 } }, { 1, new[] { 4, 1, 1 } } };
+        // spot was hard to reach), Shades's 4 instead of 2, spread a little wider than her two spots (6 between them packed
+        // them too close; 6 with one past each end, then back to 4 "a tiny bit" further apart, the user). The shelf has one
+        // slot per entry of the shopkeeper's data, each at vectordata[j] (NPCControl.cs:1531-1534); before it's built, the
+        // spots are laid out evenly around the middle of her first and last spot: {shop: (slots, spread)}, spread 1 filling
+        // exactly from her first spot to her last, more reaching past them.
+        private static readonly Dictionary<int, float[]> ShelfSlots = new Dictionary<int, float[]> { { 0, new[] { 5f, 1f } }, { 1, new[] { 4f, 1.15f } } };
 
         // Shopkeepers already stretched: the game rebuilds the shelf on the same shopkeeper after a purchase (SetBadgeShop
         // with refresh), and stretching the stretched spots again drifted the shelf right (a 6th slot appeared).
@@ -81,21 +81,23 @@ namespace BugFablesAP
             }
             if (randomizerOn == null || !randomizerOn() || __instance.interacttype == NPCControl.Interaction.CaravanBadge
                 || __instance.dialogues == null || __instance.dialogues.Length < 10
-                || !ShelfSlots.TryGetValue((int)__instance.dialogues[9].x, out int[] layout)
-                || __instance.data == null || __instance.data.Length < 2 || __instance.data.Length >= layout[0] + layout[1] + layout[2]
+                || !ShelfSlots.TryGetValue((int)__instance.dialogues[9].x, out float[] layout)
+                || __instance.data == null || __instance.data.Length < 2
                 || __instance.vectordata == null || __instance.vectordata.Length < __instance.data.Length)
             {
                 return;
             }
             int shown = __instance.data.Length;
-            int slots = layout[0] + layout[1] + layout[2];
+            int slots = (int)layout[0];
             Vector3 first = __instance.vectordata[0];
-            Vector3 step = (__instance.vectordata[shown - 1] - first) / (layout[0] - 1);
+            Vector3 last = __instance.vectordata[shown - 1];
+            Vector3 middle = (first + last) / 2f;
+            Vector3 step = (last - first) / (slots - 1) * layout[1];
             var spots = new Vector3[slots];
             var data = new int[slots];
             for (int j = 0; j < slots; j++)
             {
-                spots[j] = first + step * (j - layout[1]);
+                spots[j] = middle + step * (j - (slots - 1) / 2f);
                 data[j] = __instance.data[Math.Min(j, shown - 1)];
             }
             __instance.vectordata = spots;
