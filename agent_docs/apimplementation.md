@@ -73,6 +73,12 @@ seed's (the mod guide, step 9).
    1", with no drop to swap. The logic needs, per type, a place where it's always fought. Heard of from a Discord user,
    who said another Bug Fables randomizer does this: not looked at; its licence goes in `licensing.md` and
    `references.md` is read before borrowing anything from it.
+   **Or per placed enemy, "enemy sanity" (the user, 2026-09-25), its own opt-in toggle:** each enemy standing on a
+   map (map plus entity index) is its own check on its first defeat, so the same enemy type in another room is
+   another check; afterwards it's the game's own again, as with respawning pickups. The entity dump holds 327 placed
+   enemies on 124 maps (some are one spot in different story states, swapped by flags, so fewer real spots). To
+   measure first: how a won battle knows which map enemy started it, and whether the mod has to keep what's done
+   (like respawning pickups, since nothing in the save marks a single map enemy beaten).
 3. **An "open start" yaml option next** (the user, 2026-09-24), after chapter 1's locations: skip the prologue and
    tutorial, optionally with Leif from the start (the new-game party `{0, 1}`, `MainManager.cs:3591`, becoming
    `{0, 1, 2}`; early cutscenes are written for two, so tested on a fresh file). A full story strip, as the Metroid
