@@ -564,7 +564,9 @@ Newest last. What was tried, what happened, what the user said.
 - **Later the same night** (the user agreed to both): the save rule reworded to what the game and the mod do; the
   berry total counts berries received in a seed (`CrystalBerryTotal.cs`, `flagvar[69]`, the last free slot), built,
   not yet seen in game. The data files' notes trimmed (34 KB to 9 KB, data identical); the open items they held are
-  Known issues now, among them a Kabbu/horn rule owed once party members become items. The user asked whether notes
+  Known issues now, among them a Kabbu/horn rule owed once party members become items. Correction by the user: the horn tutorial
+  (location 2) was never a soft-lock; Leif alone passed it once stand-ins were fixed. The old note was stale, and I
+  had copied it into the Known issues without checking it against documentation.md, which had the newer result. The user asked whether notes
   are findable now that they aren't in the code: not well enough, so `code-map.md` (every source file, linked to its
   doc sections), a contents list for MEASURED.md, and a CLAUDE.md line to look a file up there first. The map's
   gaps: `HoldUps.cs`, `PartyMembers.cs`, the test files and `DevCheats.cs` are never named in the docs, and the two

@@ -284,8 +284,9 @@ the *Starting Party Member* plan) plays through chapter 1 into chapter 2 (seen, 
    scene that needs a member who isn't there (only Leif, no Vi) **waits**, held in the game and a rule in the logic for
    any check it gives, like the boat. First step when this is picked up: list chapter 1's scenes by the characters they
    use, from the code.
-   Scenes that need a particular member must then become rules: the horn tutorial near Snakemouth (Event10, a
-   location) can't be finished without Kabbu's horn (the user, 2026-09-25). So does the way down to Shades's shop:
+   Scenes that need a particular member must then become rules. The horn tutorial near Snakemouth (Event10, a
+   location) is not one: the scene cuts the grass itself, and it played through with Leif alone once stand-ins
+   arrived at once (the user, 2026-09-25; the mod guide, step 10, item 10). The way down to Shades's shop is:
    grass on the way there has to be cut with the horn (the user, 2026-09-25), so her locations will need Kabbu.
    **Journal locations, each its own yaml option (the user, 2026-09-25).** The journal is `librarystuff[type, n]`,
    set through `MainManager.UpdateJounal`, so a check can be "this entry became true", with no item to swap.
@@ -363,9 +364,9 @@ the *Starting Party Member* plan) plays through chapter 1 into chapter 2 (seen, 
 **Known issues:**
 
 - **A Kabbu / horn rule is owed** once party members or the basic horn become items (Starting Party Member).
-  Kabbu and his horn are always there today, so these locations have no rule for them: 2 (the horn tutorial,
-  which soft-locks without the horn), 21 (a berry in a bush), 25 (under a stone), 31 (a grass discovery) and 32
-  (past grass). Without the rule, a seed could be impossible.
+  Kabbu and his horn are always there today, so these locations have no rule for them: 21 (a berry in a bush),
+  25 (under a stone), 31 (a grass discovery) and 32 (past grass). Without the rule, a seed could be impossible.
+  Not location 2: the horn tutorial cuts its grass itself and played through with Leif alone (the user, 2026-09-25).
 - **Crystal berry #2 (location 20)** sits in the Underground region, which needs Leif, though the room's
   upper-left entrance needs nothing. More cautious than the game, so safe; room-level regions would split it.
 - **Landmark names** for locations 2, 22, 23, 24, 25 and 30 are still to come from the user.
