@@ -682,7 +682,8 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   starts each: `event-triggers.py` on the listed events. Among them: **Event61, the bar's hatch** (to `UndergroundBar`,
   started by `BugariaCommercial` line 32, the hatch examined); **Events 108 and 109, to `HideoutCell`** (108 is the
   garden guards catching the party, the user's trip; 109 is the story's first capture, which takes the beemerang,
-  flag 11, and in the cell gives dig, flag 18, `EventControl.cs` Event109; leaving the cell needs dig, the user); **Event153, the boat** (seven harbours); **Event68**, three map
+  flag 11, and in the cell gives dig, flag 18, `EventControl.cs` Event109; leaving the cell needs dig, the user; the cell also holds a `Dropplet` with no flags, which the user thinks is
+  cosmetic, not needed to leave: unconfirmed, so the rule is dig only); **Event153, the boat** (seven harbours); **Event68**, three map
   pairs chosen by an `entrance` flag (elevators, to read); Event196, a destination from a list chosen in a menu.
 - Not yet sorted into "chosen by the player" and "the game sends you" (the decision: `apimplementation.md`, Next,
   the entrance randomizer's step 8).
