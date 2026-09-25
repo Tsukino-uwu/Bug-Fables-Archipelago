@@ -646,6 +646,19 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    Joins* is in the same region (*Snakemouth Den*) as the lake. With one starting member, only once Leif is allowed
    (received). On loading, the user's Leif-alone file got flag 16 ("Leif was already in the party"); **seen (the user):**
    the lake walked past with no scene. With a two-member start, not yet seen.
+   (18) **Position lookups beyond the party** (the user, 2026-09-25): the droplet scene (Event21) ends by walking the
+   second and third members by position (`GetEntity(-2)`, `(-3)`, `EventControl.cs:4112-4114`; `MainManager.cs:18526-18537`
+   answer only inside the party) and threw on nothing. In a scene, slot k beyond the party now gets the k-th member in the
+   story's order (the acting role first, then the others by id) as a stand-in. The acting leader also has a fallback
+   when a reload forgot the story's party: the first missing member by id.
+   (19) **Every way the code reaches for a party member, listed** (the user, 2026-09-25: "dump fully what a party member
+   or follower is, so we know everything they could ask for"): `dev-scripts/party-access.py` counts 29 ways across the
+   decompiled code, with the methods and events using each (`--where <way>`). Covered: lookups by position and character,
+   the party as a list, `PartyMover`, `SetPlayers()`, `ChangeParty`, `.following`, `extrafollowers`, the leader. Open,
+   since a direct index can't be intercepted: `playerdata[1]`/`[2]` (Events 52, 122, 130, 137, 138, 182, all past
+   chapter 1, and `BattleControl.DoAction`/`EventDialogue`, to confirm they check the party's size), `tempfollowers[..]`
+   (11 events; they read story companions, and break only for a removed party member, so far only Event14, now skipped),
+   `partyorder` (Events 6, 54, 138) and `GetExtraFollower` (Event223).
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,

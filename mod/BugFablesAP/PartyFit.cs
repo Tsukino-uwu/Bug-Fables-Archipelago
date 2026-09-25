@@ -121,6 +121,12 @@ namespace BugFablesAP
             MainManager mm = MainManager.instance;
             int[] story = PartyMembers.LastStoryParty;
             int lead = story != null && story.Length > 0 ? story[0] : -1;
+            // Unknown (a reload forgets it): the first missing member by id, Vi before Kabbu (the droplet scene,
+            // Event21, ran with no actor after a reload, the user, 2026-09-25).
+            if (lead < 0 && mm.playerdata != null)
+            {
+                lead = Enumerable.Range(0, 3).Where(m => !mm.playerdata.Any(p => p.trueid == m)).DefaultIfEmpty(-1).First();
+            }
             EntityControl leader = mm.playerdata != null && mm.playerdata.Length > 0 ? mm.playerdata[0].entity : null;
             if (lead >= 0 && lead <= 2 && leader != null && !mm.playerdata.Any(p => p.trueid == lead))
             {
@@ -360,6 +366,25 @@ namespace BugFablesAP
                 if (party.playerdata != null && !party.playerdata.Any(p => p.entity != null && p.entity.animid == member))
                 {
                     __result = StandIn(member);
+                    return false;
+                }
+                return true;
+            }
+            // The second and third member by position (-2, -3; MainManager.cs:18526-18537) with a smaller party: the droplet
+            // scene's end walks both to the player (Event21, EventControl.cs:4112-4114) and threw on nothing (the user,
+            // 2026-09-25). While a scene runs, slot k beyond the party answers with the k-th stand-in by member id (the
+            // acting leader already counts as the first).
+            if ((id == -2 || id == -3) && InScene())
+            {
+                MainManager party = MainManager.instance;
+                int slot = -1 - id; // 1 or 2
+                if (party.playerdata != null && party.playerdata.Length <= slot)
+                {
+                    // The story's order: the acting role first (the leader, slot 0), then the others by id.
+                    ChooseActor();
+                    int[] order = (actorRole >= 0 ? new[] { actorRole } : new int[0])
+                        .Concat(Enumerable.Range(0, 3).Where(m => m != actorRole)).ToArray();
+                    __result = StandIn(order[slot]);
                     return false;
                 }
                 return true;
