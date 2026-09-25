@@ -711,5 +711,9 @@ purchases, and two copies of one medal can't be told apart in a list of medal id
    the title screen and loading, exactly the 4 unbought copies stayed, reshuffles included. One flash fixed after: a
    rebuilt shelf showed the game's own medal sprites for a moment (the swap ran every 15 frames; now every frame for a
    second after a rebuild; seen gone, the user, 2026-09-25).
+   **The same flash on the ground, in houses** (the user, 2026-09-25): Madeleine's table items looked right from outside
+   and once inside, but showed their own items for a moment on the way in. A house on the same map is an "inside", and
+   going in switches its entities on (`MapControl.RefreshInsides`), which redraws them; the ground swap only came round
+   every 15 frames. Now it runs right after `RefreshInsides` and every frame for a second. Built, not yet seen.
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page), `ShopSwap.cs`.*

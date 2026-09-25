@@ -124,6 +124,27 @@ namespace BugFablesAP
             descWindowField = AccessTools.Field(typeof(NPCControl), "descwindow");
             harmony.Patch(setText, prefix: new HarmonyMethod(typeof(ItemSwap), nameof(PickupPrefix)));
             harmony.Patch(setText, prefix: new HarmonyMethod(typeof(ItemSwap), nameof(BerryPrefix)));
+            MethodInfo refreshInsides = AccessTools.Method(typeof(MapControl), "RefreshInsides");
+            if (refreshInsides != null)
+            {
+                harmony.Patch(refreshInsides, postfix: new HarmonyMethod(typeof(ItemSwap), nameof(AfterRefreshInsides)));
+            }
+            else
+            {
+                log.LogWarning("[swap] MapControl.RefreshInsides not found: pickups in a house may flash their own item on entering.");
+            }
+        }
+
+        // Going into or out of a house on the same map (an "inside") switches its entities on (MapControl.RefreshInsides,
+        // MapControl.cs:1236), and a pickup switched on is drawn with its own item until the ground swap comes round again
+        // (the user, 2026-09-25: Madeleine's house, the table items flashed their vanilla look on entering). So swap right
+        // after, and every frame for a second, as for a rebuilt shop shelf.
+        private static float insideChangedAt = -10f;
+
+        private static void AfterRefreshInsides()
+        {
+            insideChangedAt = Time.realtimeSinceStartup;
+            TickGround(force: true);
         }
 
         internal static void Disable()
@@ -474,9 +495,10 @@ namespace BugFablesAP
         // EntityControl.UpdateItem places one (EntityControl.cs:3238-3241). The game only redraws an item's sprite
         // when its id changes (UpdateSprite, :4051), so it holds; this pass re-applies it if anything resets it.
         // Another game's item keeps the vanilla sprite until the Archipelago icon is in the mod.
-        internal static void TickGround()
+        internal static void TickGround(bool force = false)
         {
-            if (Time.frameCount % 15 != 0 || connection == null || !randomizerOn())
+            bool burst = Time.realtimeSinceStartup - insideChangedAt < 1f;
+            if ((!force && !burst && Time.frameCount % 15 != 0) || connection == null || !randomizerOn())
             {
                 return;
             }
