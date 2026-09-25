@@ -205,7 +205,11 @@ coupled, off by default) shuffles 508 doors with every area kept reachable; a ge
    (the two-argument form forwards to it; about 20 calls in `EventControl`, some already one member: Kabbu alone after
    the slides, Vi alone in one scene). The prefix keeps in `ids` only the starting member and those received (dev:
    `addmember`), so the opening's Vi-and-Kabbu becomes the one member; it runs last so the opening skip's own prefix sees
-   the story's ids. First test: Leif alone into Snakemouth Den. Not yet seen. Opt-in only: fighting with one or two changes
+   the story's ids. **First test, Leif alone (the user, 2026-09-25):** the start and the camera right after four fixes
+   (the mod guide, step 10, (8)); Artis's talk (lines for Vi and Kabbu, now stand-ins in conversations too) gave the
+   permit; the gate scene played; the grass tutorial (Event10) played once stand-ins arrive at once, its reward sent.
+   **Then a real gate:** the corridor after the tutorial (`BugariaOutskirtsSnakemouthCorridor2`) needs the horn to
+   cross, so Snakemouth Den needs Kabbu (or the horn, once moves are items) in the logic. Opt-in only: fighting with one or two changes
    the game a lot. Open questions: the story may need all three after chapter 1, and adding a member outside the
    story's own event hasn't worked yet (log.md, 2026-09-24: `ChangeParty` left Leif without a character).
    **Solved 2026-09-25:** without `fromscratch`, `ChangeParty`'s copy loop never runs (`for m < 0`,
