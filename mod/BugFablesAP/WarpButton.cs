@@ -36,6 +36,7 @@ namespace BugFablesAP
         private static SpriteRenderer icon;
         private static PauseMenu builtFor;
         private static Transform confirmBox;
+        private static SpriteRenderer leaf;
         private static bool yes;
 
         internal static void Enable(ManualLogSource logger, string guid, Func<bool> enabled)
@@ -165,11 +166,28 @@ namespace BugFablesAP
 
         private static void DrawConfirm(PauseMenu menu)
         {
+            // Yes and No as two words at fixed spots, the chosen one coloured with the game's leaf cursor beside it:
+            // one centred line whose brackets moved made both words shift when switching (the user, 2026-09-25).
             MainManager.DestroyText(confirmBox);
             menu.StartCoroutine(MainManager.SetText("|center||sort,40|Warp to the start?", 0, 99999f, false, false,
                 new Vector3(0f, 0.6f), Vector3.zero, Vector2.one * 0.8f, confirmBox, null));
-            menu.StartCoroutine(MainManager.SetText("|center||sort,40|" + (yes ? "|color,1|> Yes <|color,0|     No" : "Yes     |color,1|> No <"),
-                0, 99999f, false, false, new Vector3(0f, -0.6f), Vector3.zero, Vector2.one * 0.8f, confirmBox, null));
+            menu.StartCoroutine(MainManager.SetText("|center||sort,40|" + (yes ? "|color,1|" : "") + "Yes", 0, 99999f, false, false,
+                new Vector3(-1.5f, -0.6f), Vector3.zero, Vector2.one * 0.8f, confirmBox, null));
+            menu.StartCoroutine(MainManager.SetText("|center||sort,40|" + (yes ? "" : "|color,1|") + "No", 0, 99999f, false, false,
+                new Vector3(1.5f, -0.6f), Vector3.zero, Vector2.one * 0.8f, confirmBox, null));
+            if (leaf == null)
+            {
+                // The game's menu cursor, set up the way it sets up its own (MainManager.cs:14822), as the panel does.
+                leaf = new GameObject("warpleaf").AddComponent<SpriteRenderer>();
+                leaf.sprite = MainManager.cursorsprite[0];
+                leaf.sortingOrder = 41;
+                leaf.gameObject.layer = 5;
+                leaf.transform.parent = confirmBox;
+                leaf.transform.localEulerAngles = Vector3.zero;
+                leaf.transform.localScale = Vector3.one;
+                leaf.gameObject.AddComponent<SpriteBounce>().MessageBounce();
+            }
+            leaf.transform.localPosition = new Vector3(yes ? -2.4f : 0.9f, -0.45f, 0f);
         }
 
         private static void Confirm(PauseMenu menu)
@@ -213,6 +231,7 @@ namespace BugFablesAP
             {
                 UnityEngine.Object.Destroy(confirmBox.gameObject);
                 confirmBox = null;
+                leaf = null;
             }
         }
 
