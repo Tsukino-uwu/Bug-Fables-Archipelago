@@ -528,8 +528,11 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    part (talk and party moves, no prompt) is now fast-forwarded too.
    (4) Still seen: the building and the sped-up talk, since Event8 loads the building and plays there, and the opening
    (or a test start's warp, `TestStart`, which worked: the party arrived in the plaza by its save point) can only follow
-   it. So a black screen, the same kind of backdrop as the slides', stays up from the end of the slides until the player
-   stands at the start, free; never longer than 20 seconds.
+   it. A black screen until the start was tried and dropped (the user: hiding it "looks dumb"). (5) So Event8 is cut
+   right after its slides: its first step after the slides' backdrop goes is `ChangeParty({1})` (Kabbu alone), while Vi
+   is still in the party. A prefix refuses that one call and stops the scene (`StopCoroutine("Event8")`, since scenes
+   run as `StartCoroutine("Event" + id)`); the next frame the mod ends it as its own end does (HUD, camera, the
+   building's music, `EndEvent`, the fade-in), and the opening and any warp follow before a single line of talk.
    **The rule since (the user, 2026-09-25):** a scene that gives an item may be skipped *as long as the item can still
    be received*, and fewer cutscenes are preferred, as an option at least. So a skip now has to keep every check the
    scene holds (sent by the mod, or moved to something the player still does). Next candidate, the user's idea: the

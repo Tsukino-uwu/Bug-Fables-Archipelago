@@ -51,11 +51,6 @@ namespace BugFablesAP
             // and 11 (EventControl.cs:334-407). The bridge's end state is set by the scene itself, not by its flags, so
             // it's fast-forwarded.
             new Scene { Map = "SnakemouthBridgeRoom", Event = 1, Flags = null },
-            // The new game's scene after its slides (the user, 2026-09-25: still a cutscene after the slides): inside the
-            // starting building, talk and party moves only, Kabbu alone (ChangeParty({1})), then EndEvent
-            // (EventControl.cs:2660-2866; no prompt, battle or item). Fast-forwarded so it ends as the game ends it. The
-            // new-game code menu earlier in Event8 runs before this map loads, so the map check keeps it out.
-            new Scene { Map = "BugariaOutskirtsOutsideCity", Event = 8, Flags = null },
         };
 
         // The Metal Island boat's fares: the pier sailor's lines 16 (300 berries) and 19 (90), each
@@ -123,6 +118,13 @@ namespace BugFablesAP
                 return;
             }
             harmony.Patch(startEvent, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeStartEvent)));
+            MethodInfo changeParty = AccessTools.Method(typeof(MainManager), nameof(MainManager.ChangeParty), new[] { typeof(int[]), typeof(bool), typeof(bool) });
+            if (changeParty == null)
+            {
+                log.LogError("[qol] MainManager.ChangeParty(int[], bool, bool) not found: Event8's talk plays.");
+                return;
+            }
+            harmony.Patch(changeParty, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeChangeParty)));
         }
 
         // The opening (the user, 2026-09-25: skip the scenes and the fight, "just start playing the game"). After the
@@ -143,44 +145,45 @@ namespace BugFablesAP
         internal static string TestStart;
         private static bool startPending;
 
-        // A black screen from the end of the slides until the player stands at the start (the user, 2026-09-25: the talk
-        // after the slides showed, sped up, and the building before the test start's warp). Event8 loads the building and
-        // plays its talk there, and the opening and a warp can only follow it, so they are hidden instead: the same kind
-        // of backdrop as the slides' (MainManager.NewSolidColor on the GUI camera, EventControl.cs:2653-2657), drawn above
-        // everything. Never more than CoverLimit seconds.
-        private static SpriteRenderer cover;
-        private static float coverSince;
-        private const float CoverLimit = 20f;
+        // Event8's talk after the slides, cut (the user, 2026-09-25: hiding it "looks dumb"; skip it and warp before any
+        // dialogue). Its first step after the slides' backdrop is destroyed is ChangeParty({1}, fromscratch, keep the old
+        // entities), Kabbu alone (EventControl.cs:2740-2755); Vi is still in the party then. A prefix refuses that call and
+        // stops the scene (scenes run as StartCoroutine("Event" + id), EventControl.cs:143); the rest of that step still
+        // runs (the HUD hidden, the blockingbox, the exit hidden, two moves) and the scene stops at its next yield. On the
+        // next frame the mod ends it as its own end does (EventControl.cs:2858-2866): HUD back, ResetCamera, the
+        // building's music, EndEvent, and the fade-in the talk would have played. The opening then follows as before.
+        private static bool event8Cut;
 
-        private static void TickCover(MainManager mm, bool on)
+        private static bool BeforeChangeParty(int[] ids, bool fromscratch, bool destroyoldentity)
         {
-            string map = MainManager.map == null ? null : MainManager.map.mapid.ToString();
-            if (cover == null && on && SkipCutscenes.Value && MainManager.GUICamera != null && map == OpeningMap && !mm.flags[15]
-                && MainManager.lastevent == 8 && mm.inevent && MainManager.GUICamera.transform.Find("back") == null)
+            MainManager mm = MainManager.instance;
+            if (randomizerOn == null || !randomizerOn() || !SkipCutscenes.Value || mm == null || MainManager.map == null
+                || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap || mm.flags[15]
+                || ids == null || ids.Length != 1 || ids[0] != 1 || !fromscratch || destroyoldentity || MainManager.events == null)
             {
-                cover = MainManager.NewSolidColor("apcover", Color.black, 0.01f, new Vector3(0f, 0f, 1f), new Vector2(0.5f, 0.5f));
-                cover.transform.parent = MainManager.GUICamera.transform;
-                cover.transform.localEulerAngles = Vector3.zero;
-                cover.transform.localPosition = new Vector3(0f, 0f, 1f);
-                cover.gameObject.layer = 5;
-                cover.sortingOrder = 1000;
-                coverSince = Time.realtimeSinceStartup;
-                log.LogInfo("[qol] the slides are over: black screen until the start");
-                return;
+                return true;
             }
-            if (cover == null)
+            MainManager.events.StopCoroutine("Event8");
+            event8Cut = true;
+            log.LogInfo("[qol] Event8's talk after the slides cut: Kabbu-alone party refused, the scene stopped");
+            return false;
+        }
+
+        private static void EndEvent8()
+        {
+            MainManager mm = MainManager.instance;
+            mm.hud[0].transform.parent.gameObject.SetActive(true);
+            MainManager.ResetCamera();
+            MainManager.ChangeMusic(Resources.Load<AudioClip>("Audio/Music/Inside0"));
+            MainManager.music[0].clip = Resources.Load<AudioClip>("Audio/Musics/Field0");
+            MainManager.music[0].volume = 0f;
+            MainManager.music[0].Play();
+            endEvent?.Invoke(null, null);
+            if (string.IsNullOrEmpty(TestStart))
             {
-                return;
+                MainManager.PlayTransition(1, 0, 0.02f, Color.black);
             }
-            bool atStart = !openingPending && !startPending && mm.flags[15] && MainManager.player != null && !mm.inevent
-                && (string.IsNullOrEmpty(TestStart) || string.Equals(map, TestStart, StringComparison.OrdinalIgnoreCase));
-            bool tooLong = Time.realtimeSinceStartup - coverSince > CoverLimit;
-            if (atStart || tooLong || !on)
-            {
-                UnityEngine.Object.Destroy(cover.gameObject);
-                cover = null;
-                log.LogInfo(atStart ? $"[qol] at the start ({map}): black screen off" : $"[qol] black screen off after {CoverLimit}s (the start never came)");
-            }
+            log.LogInfo($"[qol] Event8 ended the game's way; inevent={mm.inevent}");
         }
 
         private static void RunOpening()
@@ -198,7 +201,7 @@ namespace BugFablesAP
                 }
                 else
                 {
-                    log.LogWarning($"[qol] opening: {name} not found");
+                    log.LogInfo($"[qol] opening: no {name} (Event8 cut before making it)");
                 }
             }
             var spots = new Vector3[mm.playerdata.Length];
@@ -339,7 +342,18 @@ namespace BugFablesAP
                     log.LogError($"[qol] opening failed: {e}");
                 }
             }
-            TickCover(mm, on);
+            if (event8Cut && !mm.message)
+            {
+                event8Cut = false;
+                try
+                {
+                    EndEvent8();
+                }
+                catch (Exception e)
+                {
+                    log.LogError($"[qol] ending Event8 failed: {e}");
+                }
+            }
             // The test start, once the opening's hold-up is over and the player is free again.
             if (startPending && MainManager.player != null && !mm.inevent && !mm.message && !mm.minipause && MainManager.battle == null)
             {
@@ -421,11 +435,7 @@ namespace BugFablesAP
         {
             harmony?.UnpatchSelf();
             harmony = null;
-            if (cover != null)
-            {
-                UnityEngine.Object.Destroy(cover.gameObject);
-                cover = null;
-            }
+
             if (speeding)
             {
                 speeding = false;
