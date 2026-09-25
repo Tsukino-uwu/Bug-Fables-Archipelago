@@ -624,6 +624,7 @@ namespace BugFablesAP
                         .Concat(locationBerries?.Keys ?? Enumerable.Empty<long>())
                         .Concat(locationDiscoveries?.Keys ?? Enumerable.Empty<long>())
                         .Concat(locationShops?.Keys ?? Enumerable.Empty<long>())
+                        .Concat(locationItemShops?.Keys ?? Enumerable.Empty<long>())
                         .Concat(locationPickups?.Keys ?? Enumerable.Empty<long>()).Distinct().ToList());
                     attempt.Locations.CheckedLocationsUpdated += ids =>
                     {
