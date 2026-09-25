@@ -66,8 +66,17 @@ namespace BugFablesAP
         // it's built, the spots are laid out evenly: {shop: (slots spanning her first to last spot, slots in all)}.
         private static readonly Dictionary<int, int[]> ShelfSlots = new Dictionary<int, int[]> { { 0, new[] { 5, 5 } }, { 1, new[] { 4, 4 } } };
 
+        // Shopkeepers already stretched: the game rebuilds the shelf on the same shopkeeper after a purchase (SetBadgeShop
+        // with refresh), and stretching the stretched spots again drifted the shelf right (a 6th slot appeared).
+        private static readonly HashSet<NPCControl> stretched = new HashSet<NPCControl>();
+
         private static void BeforeShelf(NPCControl __instance)
         {
+            stretched.RemoveWhere(n => n == null);
+            if (stretched.Contains(__instance))
+            {
+                return;
+            }
             if (randomizerOn == null || !randomizerOn() || __instance.interacttype == NPCControl.Interaction.CaravanBadge
                 || __instance.dialogues == null || __instance.dialogues.Length < 10
                 || !ShelfSlots.TryGetValue((int)__instance.dialogues[9].x, out int[] layout)
@@ -89,6 +98,7 @@ namespace BugFablesAP
             }
             __instance.vectordata = spots;
             __instance.data = data;
+            stretched.Add(__instance);
             log.LogInfo($"[shop] shop {(int)__instance.dialogues[9].x}'s shelf: {slots} slots instead of {shown}");
         }
 
