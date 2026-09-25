@@ -163,9 +163,12 @@ coupled, off by default) shuffles 508 doors with every area kept reachable; a ge
       location, unchecked ones filler-only) closes that.
    7. **A trap found while roaming (the user, 2026-09-25):** in the bandit hideout's garden (`HideoutGarden`) a guard
       (`burglar`) caught the party, which starts the game's own caught scene (Event108, the log) and puts the party in
-      `HideoutCell`, whose one door leads to the central room. Getting out of the cell needs, the user thinks, Leif's
-      ice; without Leif it's a dead end (the Warp button is the way out). So the hideout's garden needs Leif in the
-      logic once the logic follows the doors, and a guard catching you is a transfer that isn't a door.
+      `HideoutCell`, whose one door leads to the central room. **Getting out needs the dig ability** (the user,
+      correcting a first guess of Leif's ice: you dig under the bars in the sand). The code agrees: in the story the
+      cell is where dig is learnt: Event109, the first capture, takes the beemerang (flag 11 off), sends the party to
+      the cell (`LoadMap(100)`) and there sets flag 18, dig; Event108, caught again later, expects you to dig out. So
+      without dig it's a dead end (the Warp button is the way out), and the hideout's garden needs dig in the logic
+      once the logic follows the doors. A guard catching you is a transfer that isn't a door.
    8. **Transfers that aren't doors (decided, the user, 2026-09-25).** The game also moves the party by the dialogue
       script commands `|transfer|` and `|warp|` (`MainManager.cs:13263-13270`) and by story events (about 88 `LoadMap`
       calls in `EventControl`). **Entrances the player chooses** (the bar's hatch, elevators, the boat) are doors in all
