@@ -657,3 +657,6 @@ Newest last. What was tried, what happened, what the user said.
 - **Item looks** (the user): another game's item will show an Archipelago icon on its type's colour, on the ground
   and on shelves, before pickup. It's a Quality of life row, on by default. Other Bug Fables players' items keep
   their real sprite. The starburst colour at pickup already works this way.
+- **Enemy shuffle seen in game** (the user's screenshot). On `BugariaOutskirtsEast1`, the Underling + Flying
+  Seedling map enemy started a Flying Seedling + Seedling fight, matching the seed and the `[enemies]` log line.
+  The first live test worked on the first try.

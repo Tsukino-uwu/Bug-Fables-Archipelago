@@ -1219,7 +1219,9 @@ location, only the fights move.
 - then the map look.
 
 **Status:** in progress: `enemies_only` built (2026-09-26), the apworld tests pass, a seed generated with a second
-game (APQuest) carrying all 325 fights in `slot_data`, not yet seen in game; bosses,
+game (APQuest) carrying all 325 fights in `slot_data`, and **seen by the user** (2026-09-26): on
+`BugariaOutskirtsEast1` an Underling + Flying Seedling map enemy started a Flying Seedling + Seedling fight, as the
+seed and the log (`[enemies] BugariaOutskirtsEast1:4: 30 10 -> 10 9`) said; bosses,
 `both`, `chaos` and the map look to come.
 
 # How it works

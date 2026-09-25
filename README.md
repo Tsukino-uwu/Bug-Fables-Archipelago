@@ -8,7 +8,7 @@ from inside the game, sends checks and receives items. The world is opening up o
 the default: the Outskirts rocks are gone from the start). Next: every item spot in the game in the pool (unchecked
 ones as filler-only placeholders) and field abilities shuffled as items. An experimental entrance randomizer (coupled,
 off by default) is in the apworld; its first shuffled doors work both ways in game. An enemy shuffle (off by default) swaps
-which ordinary enemies you fight on each map; not yet seen in game. Starting with a single party
+which ordinary enemies you fight on each map; its first swapped fight was seen in game. Starting with a single party
 member is being rehearsed (a dev setting for now).
 
 ## How it will work
