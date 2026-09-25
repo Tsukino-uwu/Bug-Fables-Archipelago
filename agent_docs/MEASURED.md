@@ -491,7 +491,10 @@ The output stays in the BepInEx folder.
   far left, x -24, are on the cave side: reachable from the den without the horn, the user), and in `SnakemouthBridgeRoom` the bridge comes down when its rope is hit: from the right only Vi's beemerang reaches
   it; from the left Leif's move hit it (the user), so presumably any member's (Kabbu's horn not tried): crossing from
   the right needs Vi; the room's hidden-spot discovery (discovery 2, location 30) is behind grass only the horn cuts,
-  the user (the user, Leif alone, 2026-09-25; the room's Tattle tutorial, Event2, ran with stand-ins and
+  the user; and `SnakemouthDoorRoom`, from the bridge side, is a chain of horn steps (the user): cut grass to reach a
+  trampoline, knock a rock down onto a vine, then push two rocks onto switches, which starts the trapdoor scene (its
+  starter, `MushroomItem`, requires flag 13, presumably the switches' flag: not measured). Coming up from the trapdoor
+  without the horn is presumably one-way for the same reason (the user's reading, not tried) (the user, Leif alone, 2026-09-25; the room's Tattle tutorial, Event2, ran with stand-ins and
   finished, flag 10, and its hint, Event0, is skipped by Skip cutscenes), the user with
   Leif alone, 2026-09-25, the map from the Detector's log); Leif (moth) freezes, droplets included (always on, once he has joined at the Snakemouth lake). Vi and
   Kabbu are in the party from a new game, so while the party is vanilla only Leif gates anything.
