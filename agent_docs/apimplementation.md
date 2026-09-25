@@ -8,61 +8,6 @@ itself, probing the game) has its own guide: [documentation.md](documentation.md
 The explainer follows Archipelago's own [network protocol doc](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md)
 (read at version 0.6.7). Where this file and that doc disagree, that doc is right.
 
-## Where it stands
-
-**Done so far:** an apworld (64 locations, 59 by default; 44 items) that generates seeds and passes its tests, with
-the goal "collect N artifacts"; the mod connecting on its own, compressed, to a local server or a hosted room on
-archipelago.gg, retrying when the server is unreachable or drops; sending checks (build step 6); receiving
-items, with the count kept in the save (build step 7); the game's own item at a location swapped for the
-seed's (the mod guide, step 9); and, as of 2026-09-25, the world opening one gate at a time (the Outskirts rocks,
-Snakemouth's fall room both ways, the town, its districts, the bar, Madeleine's house), journal discoveries and
-Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026-09-25), Madame Butterfly's item shop (seen 2026-09-25), the caravan from the start with its three items (seen 2026-09-25), and a Quality of life page (build steps 8 to 11 and the mod guide, steps 10 to 12). An experimental entrance randomizer (build step 12; a yaml option,
-coupled, off by default) shuffles 508 doors with every area kept reachable; a generated pair was seen working both ways
-(2026-09-25). The Detector beeps for any check left in a room (seen), and a one-member party (a dev setting, the start of
-the *Starting Party Member* plan) plays through chapter 1 into chapter 2 (seen, 2026-09-25).
-
-**Next** (decided by the user, 2026-09-24):
-
-1. **Every key item and medal in the pool,** on logic that follows the vanilla story order: one region
-   per chapter, entered once the chapter before is finished and the story's own keys and abilities are
-   in hand. Medal gifts and medal shops each get a yaml on/off toggle.
-   Shops (medal shops, item shops, the caravan): see build step 11. Other kinds of location (boss prize medals,
-   placeholders, journal entries, enemy drops): see build step 10.
-2. **Entrance randomizer (experimental):** every door, coupled, built; next, sorting the transfers that aren't doors
-   into chosen and forced, then the room-by-room logic that removes the label. See build step 12.
-3. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
-   Party members stay where the story puts them.
-   The basic moves and party members as items (*Starting Party Member*): see build step 13.
-4. **Open world, one gate at a time** (the default; an "open start" option planned): see build step 9.
-5. **To test later (the user, 2026-09-25): a two-player room.** The user's slot plus a second one the agent drives,
-   sending items while the user plays, to see items from another player arrive live: the hold-up on *All* and
-   *Progression*, silence for a replay after a new save or reconnect, and the multiworld names ("X's item").
-6. **A full bag:** key items keep arriving, only ordinary items wait.
-7. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
-8. **A release: three separate downloads** (the user, 2026-09-25). There is no release packaging yet;
-   `dev-scripts/stage-dev.ps1` stages for development only (checked 2026-09-25).
-   - **The mod:** a zip with the folder structure already made, so it drops into the game's root folder next
-     to the game's exe. Only the files the mod needs to work: `BugFablesAP.dll`, `Archipelago.MultiClient.Net.dll`,
-     `websocket-sharp.dll` and `Newtonsoft.Json.dll`, **with each library's licence notice next to it** (all three
-     are MIT, which requires it). BepInEx itself is not bundled: the player installs it first. Whether a subfolder
-     under `BepInEx/plugins` works is to be checked in BepInEx's source before choosing the layout.
-   - **The apworld:** `bug_fables.apworld`, packaged with the "Build APWorlds" launcher component (build step 1).
-   - **A yaml:** a player options file to start from.
-
-**Known issues:**
-
-- **A Kabbu / horn rule is owed** once party members or the basic horn become items (Starting Party Member).
-  Kabbu and his horn are always there today, so these locations have no rule for them: 21 (a berry in a bush),
-  25 (under a stone), 31 (a grass discovery) and 32 (past grass). Without the rule, a seed could be impossible.
-  Not location 2: the horn tutorial cuts its grass itself and played through with Leif alone (the user, 2026-09-25).
-- **Crystal berry #2 (location 20)** sits in the Underground region, which needs Leif, though the room's
-  upper-left entrance needs nothing. More cautious than the game, so safe; room-level regions would split it.
-- **Landmark names** for locations 2, 22, 23, 24, 25 and 30 are still to come from the user.
-
-- The generator's manifest warning ("will stop working with Archipelago 0.7.0") came from a hand-zipped
-  apworld. The properly packaged file (build step 1) fixes it once it replaces the copy in the installed
-  Archipelago's `custom_worlds`.
-
 ## Contents
 
 **How we built it**
@@ -93,6 +38,60 @@ the *Starting Party Member* plan) plays through chapter 1 into chapter 2 (seen, 
 8. [Use a library](#8-use-a-library)
 9. [How this mod does it](#9-how-this-mod-does-it)
 10. [Things that go wrong quietly](#10-things-that-go-wrong-quietly)
+
+## Where it stands
+
+Each step's own status is its last line (**Status:**). This section holds only what's next and what's known to
+be wrong.
+
+**Next** (decided by the user, 2026-09-24):
+
+1. **Every key item and medal in the pool,** on logic that follows the vanilla story order: one region
+   per chapter, entered once the chapter before is finished and the story's own keys and abilities are
+   in hand. Medal gifts and medal shops each get a yaml on/off toggle.
+   Shops (medal shops, item shops, the caravan): see build step 11. Other kinds of location (boss prize medals,
+   placeholders, journal entries, enemy drops): see build step 10.
+2. **Entrance randomizer (experimental):** every door, coupled, built; next, sorting the transfers that aren't doors
+   into chosen and forced, then the room-by-room logic that removes the label. See build step 12.
+3. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
+   Party members stay where the story puts them.
+   The basic moves and party members as items (*Starting Party Member*): see build step 13.
+4. **Open world, one gate at a time** (the default; an "open start" option planned): see build step 9.
+5. **To test later (the user, 2026-09-25): a two-player room.** The user's slot plus a second one the agent drives,
+   sending items while the user plays, to see items from another player arrive live: the hold-up on *All* and
+   *Progression*, silence for a replay after a new save or reconnect, and the multiworld names ("X's item").
+6. **A full bag:** key items keep arriving, only ordinary items wait.
+7. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
+8. **A release: three separate downloads** (the user, 2026-09-25). There is no release packaging yet;
+   `dev-scripts/stage-dev.ps1` stages for development only (checked 2026-09-25).
+   - **The mod:** a zip with the folder structure already made, so it drops into the game's root folder next
+     to the game's exe. Only the files the mod needs to work: `BugFablesAP.dll`, `Archipelago.MultiClient.Net.dll`,
+     `websocket-sharp.dll` and `Newtonsoft.Json.dll`, **with each library's licence notice next to it** (all three
+     are MIT, which requires it). BepInEx itself is not bundled: the player installs it first. Whether a subfolder
+     under `BepInEx/plugins` works is to be checked in BepInEx's source before choosing the layout.
+   - **The apworld:** `bug_fables.apworld`, packaged with the "Build APWorlds" launcher component (build step 1).
+   - **A yaml:** a player options file to start from.
+9. **The chat feed**, then the in-game text client (see the design list in the mod guide, step 2).
+10. **A "Quality of life" page in the Archipelago panel** (the user, 2026-09-25): on/off rows that speed the game
+   up and make it smoother: skips first, others later. Battle tutorials next (the mod guide, step 10).
+11. **Planned (the user, 2026-09-25): map fast travel**, apart from the Warp to Start button. On the pause menu's map
+   (window 6, which lists areas), pick an area you've been to and confirm (Yes / No) to travel to its save point
+   through the game's own map transfer. The game already records visited areas (`librarystuff[4, area]`, set by
+   `MainManager.UpdateArea`). Its own Quality of life row; the logic never counts on it, like the warp.
+
+**Known issues:**
+
+- **A Kabbu / horn rule is owed** once party members or the basic horn become items (Starting Party Member).
+  Kabbu and his horn are always there today, so these locations have no rule for them: 21 (a berry in a bush),
+  25 (under a stone), 31 (a grass discovery) and 32 (past grass). Without the rule, a seed could be impossible.
+  Not location 2: the horn tutorial cuts its grass itself and played through with Leif alone (the user, 2026-09-25).
+- **Crystal berry #2 (location 20)** sits in the Underground region, which needs Leif, though the room's
+  upper-left entrance needs nothing. More cautious than the game, so safe; room-level regions would split it.
+- **Landmark names** for locations 2, 22, 23, 24, 25 and 30 are still to come from the user.
+
+- The generator's manifest warning ("will stop working with Archipelago 0.7.0") came from a hand-zipped
+  apworld. The properly packaged file (build step 1) fixes it once it replaces the copy in the installed
+  Archipelago's `custom_worlds`.
 
 ---
 
@@ -162,6 +161,8 @@ Archipelago's `custom_worlds` folder.
   `TestLocationNames` fails if a location's name contains its own vanilla item's name. Renaming a location
   never changes its id or flag.
 
+**Status:** done; the world has since grown to 64 locations (59 by default) and 44 items (counted 2026-09-25).
+
 *Code: `apworld/bug_fables/world.py` (`BugFablesWorld`: `create_regions`, `create_items`), the data in
 `data/items.json` and `data/locations.json` (read by `data_tables.py`), tests in `test/test_logic.py`
 (`TestPermitGate`).*
@@ -179,6 +180,8 @@ logged in. This also proved the game's runtime can run the client library, which
 **Lesson:** when two programs talk, read the logs on *both* ends. For the same reason, a server on your own
 computer is entered as `ws://127.0.0.1` with port `38281`. (The mod's default address is now
 `archipelago.gg`, for hosted rooms.)
+
+**Status:** works (2026-09-24, local server; hosted rooms on archipelago.gg since build step 5).
 
 *Code: `mod/BugFablesAP/ApConnection.cs` (`ConnectOnWorker`); the address settings in `Plugin.cs` (`Awake`).*
 
@@ -198,6 +201,8 @@ and so does the permit gate: remove the permit rule and two tests fail.
 One rule came out of this for every later option: **every seed can be completed from wherever it starts.**
 Whatever an area or the goal needs is written into the logic, and the mod never hands things out to patch
 a gap.
+
+**Status:** in progress: the goal is in the apworld, with only the first artifact so far; the mod doesn't count the artifacts or send "goal reached" yet (Next 7).
 
 *Code: `apworld/bug_fables/options.py` (`ArtifactsRequired`), `world.py` (`generate_early` lowers the
 number, `create_regions` adds the artifact events), test `TestArtifactsCapped`.*
@@ -230,6 +235,8 @@ back instead of climbing, its thread count went down, and its memory stayed flat
 that the game stays smooth is still to come. When the server came back, the mod reconnected by itself
 within about 6 seconds. (Since build step 5 the socket is a different library's, and the mod closes it with
 that library's own close call instead. See step 5, point 5.)
+
+**Status:** works: refusal, retry and reconnect tested on a local server, the drop measured (2026-09-24); the user's on-screen check that the game stays smooth is still to come.
 
 *Code: `Plugin.cs` (`AutoConnect`); `ApConnection.cs`: `ConnectOnWorker` (refused or retry),
 `RetrySeconds` and `ScheduleRetry` (the waits), `Watchdog` (the 5-second ping, 15 seconds of silence, the
@@ -310,7 +317,7 @@ start (`Supports SRE: False`). The message had already been decompressed correct
 ship the net40 client library with the **netstandard2.0** Newtonsoft.Json. Both are the same version, so they
 fit together. Lesson: when you swap one library build, every library that comes with it is swapped too.
 
-**Status (2026-09-24, local server):** it works. The mod logs in compressed, the server's warning is gone,
+**Checked (2026-09-24, local server):** it works. The mod logs in compressed, the server's warning is gone,
 switching the mod off closes the connection cleanly, stopping the server is caught and leaves the game at
 normal CPU and flat memory, and the mod reconnects by itself, compressed, when the server comes back. A
 `Compression` setting in the config (section `Connection`, on by default, defined in `Plugin.Awake`) turns it
@@ -323,6 +330,8 @@ works too (2026-09-24):** with a bare `archipelago.gg` address, the mod connecte
 compressed, and the room's log showed no warning. The TLS worry didn't come true. The mod now logs which kind
 of connection it made (`connected over wss, compression: ...`), because a bare address tries `wss://` first
 and falls back to `ws://` without saying which one worked.
+
+**Status:** works (2026-09-24): compressed on a local server and on archipelago.gg, checked on both ends.
 
 ## Build step 6: sending checks
 
@@ -357,15 +366,17 @@ change. The world version went to 0.2.0.
 `LocationChecks.cs` (`Tick`) and `ApConnection.cs` (`ReadLocationFlags`, `SendChecks`).*
 
 **Not yet:** the game still hands out its own item at the location, the medal here. Replacing that with the
-server's item is the next step. A save from another seed would have sent its finished locations here; build step 7 ties each save to its
+server's item is the next step (done since: the mod guide, step 9). A save from another seed would have sent its finished locations here; build step 7 ties each save to its
 seed, which closed that.
 
-**Status: works (2026-09-24, local server).** The user loaded a save from before Artis, already past the
+**Seen working (2026-09-24, local server).** The user loaded a save from before Artis, already past the
 permit. On loading, the mod sent the permit's location at once (flag 15 was already set: the save acted as
 the outbox). Talking to Artis sent the medal's location (flag 32). For both, the mod logged `sending`, the
 server's confirmation and `sent`, and the server logged `BugTester sent ... (Outskirts: Explorer Permit)` and
 `(Outskirts: Artis's Medal)`. (Those two were later renamed `Outskirts: Maki and Eetl's Gift` and
 `Outskirts: Artis's Gift`; same ids and flags.)
+
+**Status:** works, seen by the user (2026-09-24, local server).
 
 ## Build step 7: receiving items
 
@@ -415,13 +426,15 @@ spot sends a check, and the berry comes from the server. So the mod keeps **berr
 69 (the last one found unused, `MEASURED.md`), and in a seed the total is that count plus berries picked up at
 spots that aren't locations in this seed (all of them when the seed doesn't shuffle berries). Received berries
 replay with everything else, so a fresh save rebuilds the count. A save that received berries before this
-change counts only the berries it receives afterwards (test files only). **Status: built, not yet seen in game.**
+change counts only the berries it receives afterwards (test files only). Built, not yet seen in game.
 Which dialogue shows the total isn't known yet; the mod logs each time the game asks for it (`[berries]`).
 
-**Status: works (2026-09-24).** The server already held the Explorer Permit and the G-Bug Ranger Plushie from
+**Seen working (2026-09-24).** The server already held the Explorer Permit and the G-Bug Ranger Plushie from
 the swap test. On loading, the save tied itself to the seed, and both arrived in key items as soon as the
 player was free (the user saw them). Talking to Artis again showed the plushie but gave no second one: each
 item comes once per seed, and the count in the save keeps it that way.
+
+**Status:** works, seen by the user (2026-09-24): items and medals, each once; crystal berries built, not yet seen in game; the full-bag rule not built yet (Next 6).
 
 *Code: `mod/BugFablesAP/ItemReceiver.cs`: `CountSlot` and `SeedSlot` (the two save slots),
 `SaveMatchesSeed`, `Tick` (one item per frame), `Busy` (is the player free), `Give` (where each item goes).
@@ -536,6 +549,8 @@ only Maki and Eetl's gift and Artis's gift are reachable. It fails on the old da
 
 Still to do: the one event not found, characters that block a path, the region graph built from all of
 it, and the tests.
+
+**Status:** in progress: the one event not found, characters that block a path, the region graph and its tests.
 
 *Code: `dev-scripts/gate-table.py`, `dev-scripts/event-triggers.py`; the dumps in `mod/BugFablesAP/EntityDump.cs`,
 `MapDump.cs` and `ScriptDump.cs`.*
@@ -698,6 +713,8 @@ follower 30 never leaving. The bridge's trigger (`makiautoevent`) is now held un
 was (`held_until`). Test `TestKeptOpen.test_follower_swap_waits_for_the_first_follower`. Not seen (the user's file is
 past it).
 
+**Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion fallback and statue, and Madeleine's house seen by the user (2026-09-25); Eetl's blocker, the bar and quest boards, the inn, the boat's hold and chapter 2's held scenes not yet seen; an "open start" option planned.
+
 ---
 
 ## Build step 10: more kinds of location
@@ -824,6 +841,8 @@ enemies on 124 maps (some are one spot in different story states, swapped by fla
 measure first: how a won battle knows which map enemy started it, and whether the mod has to keep what's done
 (like respawning pickups, since nothing in the save marks a single map enemy beaten).
 
+**Status:** in progress: respawning pickups (2026-09-24), the missed-prize path and discoveries (2026-09-25) seen by the user, crystal berry spots too (the mod guide, step 9); berries, the lost kid's reward and the prize payout not yet seen in game; Placeholders planned; bestiary, recipes and enemy checks parked.
+
 ---
 
 ## Build step 11: shops
@@ -856,7 +875,7 @@ Plus 1 and Ambusher 86; Shades: medal 6), so each copy is a location: Merab 22 (
 done. Buying removes a copy as the game does; one copy fewer than expected marks the next undone copy done. A reloaded
 save with extra copies, or the story adding stock, is trimmed back to the list (a done location shows as sold). An
 offline purchase stays in the save's stock and its check goes out on reconnecting.
-**Built for Merab's (2026-09-25, not yet seen in game):** her 12 later copies are locations *Medal Shop 11* to *22*
+**Built for Merab's (2026-09-25; seen since, the mod guide, step 12):** her 12 later copies are locations *Medal Shop 11* to *22*
 (ids 46-57), with 10 new medal items. "One copy fewer than expected" turned out unworkable: a fresh file holds 10 of
 the 22 and would read as 12 purchases. So the save keeps a bit per copy bought (`flagvar[7]`, the mod guide, step 12; slot_data's `location_shops`
 lists each copy's location with its shop and medal),
@@ -913,6 +932,8 @@ checks meet it because (1) crystal berries buy nothing but her stock, (2) the st
 always obtainable and never taken away, (4) purchases are permanent. Every berry spent buys one of her items, so what's
 left always costs what's left to collect. **Shades's shop is only shuffled when the seed holds all 50 crystal
 berries**; otherwise it stays vanilla. Merab's has no such risk: ordinary berries are renewable from battles.
+
+**Status:** in progress: Merab's medal shop (her full stock of 22 from a new game, seen 2026-09-25; the mod guide, step 12), Madame Butterfly's item shop and the caravan seen by the user (2026-09-25); Shades's shop not built (it waits for all 50 crystal berries as locations); the other item shops to follow.
 
 ---
 
@@ -976,6 +997,8 @@ destination, seen on screen), then every door, then the room-by-room logic that 
    targets from the decompiled code (88 calls in 63 events); `event-triggers.py` on those events says what starts
    each. It found the bar's hatch (Event61) and the hideout cell (Events 108/109) at once (`MEASURED.md`,
    "Transfers that aren't doors"). Next: sort them into chosen and forced, reading each event.
+
+**Status:** in progress (experimental): every door, coupled, built, and a generated pair seen both ways, offline too (the user, 2026-09-25); next, sorting the transfers that aren't doors, then the room-by-room logic; decoupled later.
 
 ---
 
@@ -1063,6 +1086,8 @@ Scenes that need a particular member must then become rules. The horn tutorial n
 location) is not one: the scene cuts the grass itself, and it played through with Leif alone once stand-ins
 arrived at once (the user, 2026-09-25; the mod guide, step 11, item 3). The way down to Shades's shop is:
 grass on the way there has to be cut with the horn (the user, 2026-09-25), so her locations will need Kabbu.
+
+**Status:** in progress: a rehearsal only (dev `TestStartMember`), a one-member party (Leif) seen through chapter 1 into chapter 2 (the user, 2026-09-25); the yaml options (*Starting Party Member*, basic moves, jump, field abilities) not built.
 
 # How it works
 

@@ -14,8 +14,9 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
 - **The two process guides NEVER go stale** (the user, 2026-09-24: a step-by-step guide that misses steps
   is worthless). `agent_docs/documentation.md` is how the MOD was made; `agent_docs/apimplementation.md` is
   the Archipelago side (apworld, server, connecting, items, checks), built step by step, plus a stable
-  explainer. Both user-facing: easy to read AND browse, process only, no game facts, status, next steps,
-  known issues and the index at the top, nothing buried. **A step is not done until it is written in the
+  explainer. Both user-facing: easy to read AND browse, process only, no game facts, the index first. Status
+  lives in each step's last line (**Status:**), changed in the same commit as the work, never in a summary; Next and
+  Known issues live once, in apimplementation.md's "Where it stands". **A step is not done until it is written in the
   right one, in the same commit.** `.githooks/commit-msg` refuses a commit touching `mod/`, `apworld/` or
   `dev-scripts/` without either, unless the message has a line `docs: no process change` (a typo, never a
   step). Re-read both when a session starts. **A feature gets its own step** when it adds a yaml option or
@@ -23,7 +24,7 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
   it belongs to. Say so in the commit message. `.githooks/doc-coverage.py` (pre-commit) refuses an option,
   setting, `slot_data` key or source file that no guide or `code-map.md` names.
 - **The root `README.md` never goes stale either.** Its "Status" line and "How it works" must agree with the
-  guides' "Where it stands" and with the code. A commit that changes either one updates the README in the
+  steps' Status lines and with the code. A commit that changes either one updates the README in the
   same commit. Check all three against each other when a session starts, and fact-check the README against
   the code, never against an older doc.
 - **Items are remote only.** A pickup grants nothing locally; it sends its check. Every item, the player's

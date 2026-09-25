@@ -8,33 +8,6 @@ anyone curious about the process, or thinking of doing the same for another game
   guide: [apimplementation.md](apimplementation.md).
 - **Facts about how Bug Fables works inside** live in `MEASURED.md`.
 
-## Where it stands
-
-**Done so far:** the mod loads through BepInEx, reloads itself while the game runs, watches the game with
-read-only probes, and has a full list of where key items come from. The main menu has an Archipelago panel
-for connecting, randomizer saves are kept in their own folder, and finished locations are reported to the
-server, and items from the server arrive in the game once each.
-
-**Next:**
-
-1. **Separate randomizer saves:** done (step 16).
-2. **Give an item the game's own way**, when the server sends one: works (apimplementation.md, build step 7).
-3. **Spot a location being done** (the flag the game sets) and report it: works (apimplementation.md, build
-   step 6). The game's own item there is kept out, and the seed's item shown instead (step 9).
-4. **Keep the received-item count in the save**, so loading never hands items out twice: works, in a save slot
-   the game never uses (`MEASURED.md`, "Free save slots for the mod").
-5. **The chat feed**, then the in-game text client (see the design list in step 2).
-6. **A row "Difficulty: Normal / Hard / Hardest" in the Archipelago panel:** built (2026-09-24), not yet seen on
-   screen (step 15).
-7. **A row "Detector: On / Off" in the Archipelago panel:** built (2026-09-24), not yet seen on screen (step 15).
-8. **A "Quality of life" page in the Archipelago panel** (the user, 2026-09-25): on/off rows that speed the game
-   up and make it smoother: skips first, others later (a pause-menu warp back to the seed's start, say). Skip
-   intro and Fast text (with a faster hold-to-skip) are confirmed on screen; battle tutorials next (step 10).
-   **Planned (the user, 2026-09-25): map fast travel**, apart from the Warp to Start button. On the pause menu's map
-   (window 6, which lists areas), pick an area you've been to and confirm (Yes / No) to travel to its save point
-   through the game's own map transfer. The game already records visited areas (`librarystuff[4, area]`, set by
-   `MainManager.UpdateArea`). Its own Quality of life row; the logic never counts on it, like the warp.
-
 ## The steps
 
 1. [Check whether the game can be modded at all](#1-check-whether-the-game-can-be-modded-at-all)
@@ -54,6 +27,11 @@ server, and items from the server arrive in the game once each.
 15. [Difficulty and the Detector: the panel's two game settings](#15-difficulty-and-the-detector-the-panels-two-game-settings)
 16. [Randomizer saves kept apart from normal saves](#16-randomizer-saves-kept-apart-from-normal-saves)
 
+## Where it stands
+
+Each step's status is its last line (**Status:**), before its *Code:* line. What's next and the known issues
+are in [apimplementation.md, "Where it stands"](apimplementation.md#where-it-stands).
+
 ## Keeping this guide honest
 
 A step-by-step guide is only useful if no step is missing, so the project enforces it: any commit that
@@ -61,8 +39,7 @@ changes the mod, the apworld or the dev scripts is refused unless it also update
 [apimplementation.md](apimplementation.md) (or says, explicitly, that nothing about the process changed).
 That check is a small git hook, `.githooks/commit-msg` (its neighbour `.githooks/pre-commit` refuses
 personal paths and names). Each step below ends with a short *Code:* line naming the files and methods to
-read. Each new step also gets a line in the index above,
-and "Where it stands" is updated with it.
+read, just after its **Status:** line. Each new step also gets a line in the index above.
 
 ---
 
@@ -75,6 +52,8 @@ Bug Fables randomizer.
 
 *How to tell for your own game:* an `Assembly-CSharp.dll` in the game's `_Data/Managed` folder means
 Unity with Mono. A `GameAssembly.dll` means Unity with IL2CPP, which is harder.
+
+**Status:** done.
 
 ## 2. Pick the design before the code
 
@@ -103,6 +82,8 @@ A few decisions made first, because they shape everything after:
   apworld, Archipelago's own docs, and notes from an earlier Archipelago project, all for ideas only,
   with each one's licence checked first.
 
+**Status:** done (decided 2026-09-24); the chat feed and the text client it describes aren't built yet ([apimplementation.md](apimplementation.md#where-it-stands), Next).
+
 ## 3. Read the game's code
 
 We used **ILSpy** to turn the game's `Assembly-CSharp.dll` back into C# source, kept on our own machine
@@ -110,10 +91,14 @@ and never shared. Reading it answered the first big question: *how does this gam
 The answer was a small set of places every item goes through, which is exactly where a randomizer
 needs to hook in.
 
+**Status:** done.
+
 ## 4. Get a mod loader running
 
 Unity games don't load mods by themselves, so we installed **BepInEx 5**, the usual mod loader for
 Unity games. One launch of the game confirmed it worked, and showed its log file.
+
+**Status:** done.
 
 *Code: `mod/BugFablesAP/Plugin.cs` (`Plugin`, a BepInEx plugin: `Awake` sets everything up, `Tick` runs
 every frame); the project file is `BugFablesAP.csproj`.*
@@ -176,6 +161,8 @@ rests on it, guards the item from being taken the moment the map exists, and onl
 to a side with room and safe ground (no wall, no water, spikes or pits), else to the save point. `unstick` also
 ends a stuck walk now.
 
+**Status:** done: hot reload, the build-and-copy scripts and the dev console are in use.
+
 *Code: `DevConsole.cs`.*
 
 ## 6. Watch the game while you play ("probing")
@@ -198,6 +185,8 @@ which is why things are measured, not just read.
 When something left no trace in the log at all, we compared two of the user's saves instead: one from before
 and one from after. The mod decodes both inside the game, using the game's own routine (so the game's key
 never leaves it), and lists which values changed. It's read-only and never writes a save.
+
+**Status:** done: the probes and the two-save comparison are in use, off by default.
 
 *Code: `GrantProbe.cs` (key items and flags), `TextProbe.cs` (item scripts, read as the game's
 `MainManager.SetText` runs them), `SaveDiff.cs` (the two-save comparison). All off by default, switched on
@@ -234,6 +223,8 @@ off. Doors are switched on and off every other frame (`MapControl`, by distance,
 straight after `CreateEntities`, before `Start`, with a `requires` array of its own that its prefix on
 `CheckIfCanExist` answers with "exists", the mirror of how a kept-open blocker gets a `limit` answered "hide".
 Built, not yet seen in game.
+
+**Status:** done: the script, entity and map dumps are in use; making an entity exist early built, not yet seen in game.
 
 ## 8. An Archipelago menu inside the game
 
@@ -309,6 +300,8 @@ The user then asked for it to feel like the game's settings screen, so the mod r
 from the game's own pieces, read from how the pause menu builds it: the same orange box, the controls box
 above it with the game's button hints, the game's leaf cursor, labels on the left and values on the right, and
 arrows around the On/Off value.
+
+**Status:** works, seen by the user (2026-09-24): the menu entry, the panel, and the file select held back until the first login.
 
 *Code: `MenuToggle.cs` (the menu entry: `BeforeSetMenuText` and `AfterSetMenuText` around the game's rebuild,
 `AfterUpdate` for the cursor, `SetMode` for the switch); `ApMenu.cs` (the panel: `Build`, `Redraw`,
@@ -411,6 +404,8 @@ made active exactly when the sprite is enabled (`EntityControl.cs:2781-2786`), a
 sprite enabled. The game toggles the object, never its renderers, so the swap now switches off the model's
 renderers, on every pass. `tree` then showed both berry renderers disabled with the item sprite on. **Confirmed by
 the user (2026-09-25, screenshot):** the seed's Mistake standing on the ground outside the cave, no berry, no spin.
+
+**Status:** works for gifts, pickups and their ground sprites, seen by the user (2026-09-24), and crystal berry spots (2026-09-25); berry rewards, story pickups and respawning pickups built, not yet seen in game.
 
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
 `Recolour` and `FirstMedalSeen` do the swapping; `PickupPrefix`, `FindPickup` and `TickGround` handle pickups); the
@@ -579,6 +574,8 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
 
 The panel got an eighth row, "Quality of life", which opens a second page in the same box; cancel comes back.
 
+**Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen by the user (2026-09-25); Free boat, the bridge skips, the warp itself, Shop prices and silent replays with a second player not yet seen; Skip battle tutorials planned.
+
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page),
 `WarpButton.cs` (the Warp button), `HoldUps.cs` (item animation's hold-ups).*
 
@@ -730,6 +727,8 @@ its flag 158 is unset: the same scene later takes bounties and gives their rewar
    **Seen (the user, 2026-09-25):** the droplet scene replayed to its end with no crash, and the log shows item 9 at work in
    it and in the switch scene (Event23): "the leader (Player 0, member 2) acts member 0's part".
 
+**Status:** works with Leif alone, seen by the user through chapter 1 into chapter 2 (2026-09-25); items 5 and 6, and Leif joining after the spider with a two-member start, not yet seen; the direct lookups in item 12 still open.
+
 *Code: `PartyFit.cs` (the stand-ins and the acting leader), `PartyMembers.cs` (the member guard, followers,
 Leif's joining).*
 
@@ -782,7 +781,7 @@ target `-199` and text `-195` (Shades's line 1, Merab's line 34, read with the c
 that pair moves to the front, in the map's dialogue table in memory, once per map load. Seen (the user, 2026-09-25):
 at Shades's, reshuffling is now a matter of tapping the confirm button.
 
-**Full stock from the start, the mod owning it** (the user, 2026-09-25; built, not yet seen in game). Every medal a
+**Full stock from the start, the mod owning it** (the user, 2026-09-25; built, then seen: see this step's Status). Every medal a
 shop will ever stock is on its shelf from a new game, and a medal the story stocks twice is two locations. That broke
 "the check is the medal leaving the stock" twice over: a fresh file holds 10 of Merab's 22 copies, which looks like 12
 purchases, and two copies of one medal can't be told apart in a list of medal ids. So:
@@ -816,6 +815,8 @@ purchases, and two copies of one medal can't be told apart in a list of medal id
    (logged in its one-second window) never found anything to fix. So the fix is that patch: when the game draws a
    location pickup's own item, the seed's item goes back on in the same call. **Seen (the user, 2026-09-25):** nothing
    odd going in or out any more. The first guess was taken back out.
+
+**Status:** works, seen by the user (2026-09-25): Merab's medal shop with its full stock, the reshuffle choice, Madame Butterfly's item shop, the caravan, and pickups in houses; Shades's shop not yet built as locations.
 
 *Code: `ShopSwap.cs` (medal shops and their stock), `ItemShops.cs` (item shops), `KeptOpen.cs` (the shopkeeper
 and scenery kept present), `QualityOfLife.cs` (the reshuffle choice first), `ItemSwap.cs` (`UpdateItem`, pickups
@@ -857,6 +858,8 @@ of one door (day and night copies at one spot) count as one. After that, 531 of 
 are listed in `MEASURED.md` to check in play. The
 coupled entrance randomizer needs those pairs: going through a shuffled door and turning round must bring you back.
 
+**Status:** works, seen by the user (2026-09-25): a rewritten door, and a coupled swap both ways; the 36 doors that don't pair both ways are still to check in play.
+
 *Code: `DoorShuffle.cs`; `dev-scripts/door-graph.py` (the pairs).*
 
 ## 14. The Detector for every check
@@ -881,6 +884,8 @@ either way), and a music record's `Start`, which sets the value as the map build
 (`MusicSpinner.cs:54-57`), has it cleared right after. Outside a seed, all vanilla. **Seen (the user, 2026-09-25):**
 in the Residential District it beeped for the rooftop item, then, with both items taken, for the quest reward still
 handed out there (location 16, the delivery quest), as intended; quiet in the plaza with none left.
+
+**Status:** works, seen by the user (2026-09-25).
 
 *Code: `CheckDetector.cs`.*
 
@@ -921,6 +926,8 @@ switching down clears only a 614 the mod set. Loading a save or starting a new o
 those flags are the save's own. If any of the three hooks (save, load, new game) is missing, Hardest does
 nothing rather than risk a save.
 
+**Status:** the Detector row's effect seen on screen through step 14 (the Detector beeping for checks left in a room, the user, 2026-09-25); Difficulty (Hard, Hardest) built (2026-09-24), not yet seen on screen.
+
 *Code: `MedalAssist.cs`.*
 
 ## 16. Randomizer saves kept apart from normal saves
@@ -932,5 +939,7 @@ Through a whole session played with the Archipelago mod enabled, the game
 saved only into the `archipelago` folder (last write 05:06), and the normal save files kept their earlier
 times (03:42 and 2023), checked on disk on 2026-09-24. The redirect covers all five places the game touches
 a save file, and normal saves are only reachable with the mod disabled.
+
+**Status:** works, checked on disk (2026-09-24).
 
 *Code: `SaveRedirect.cs` (the separate save folder, patching the game's five save-file functions in `InputIO`).*
