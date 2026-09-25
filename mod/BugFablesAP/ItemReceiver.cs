@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Models;
 using BepInEx.Logging;
@@ -118,6 +119,23 @@ namespace BugFablesAP
             mm.flagvar[CountSlot] = given + 1;
             log.LogInfo($"[recv] item {given + 1} of {received.Count}: {item.ItemDisplayName} from {item.Player.Name} "
                 + $"({item.LocationDisplayName}): {outcome}");
+            ShowIfWanted(item);
+        }
+
+        // An item another player found for you is held up as the Item animation setting says (the user, 2026-09-25);
+        // your own finds already showed theirs when you made them. Display only: it was just given above.
+        private void ShowIfWanted(ItemInfo item)
+        {
+            string setting = QualityOfLife.ItemAnimation?.Value ?? "Progression";
+            bool fromOther = item.Player.Slot != connection.OwnSlot;
+            bool progression = (item.Flags & ItemFlags.Advancement) != 0;
+            if (!fromOther || setting == "Off" || (setting == "Progression" && !progression)
+                || connection.ItemKinds == null || !connection.ItemKinds.TryGetValue(item.ItemId, out int kind))
+            {
+                return;
+            }
+            ItemSwap.DescribeOurs(item.ItemId, kind, out string name, out UnityEngine.Sprite sprite, out UnityEngine.Color? color);
+            HoldUps.Received(name + " from " + item.Player.Name, sprite, color);
         }
 
         // Returns what happened, or null when the item must wait.
@@ -171,7 +189,7 @@ namespace BugFablesAP
         }
 
         // Null when the player is free: on a map, in control, and nothing else on screen.
-        private static string Busy(MainManager mm)
+        internal static string Busy(MainManager mm)
         {
             if (MainManager.player == null) return "busy: no player";
             if (mm.inbattle || MainManager.battle != null) return "busy: battle";

@@ -503,7 +503,18 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    Event1, which plays the bridge's Fall animation and fixes it fallen before setting flags 7 and 11; setting the flags
    alone would leave the bridge standing until the room reloads). Never a scene that gives an item, sends a check,
    changes the party or starts a battle. Built, not yet seen.
-6. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
+6. **Item animation** (the user, 2026-09-25): a discovery showed nothing of what it found, and items from other
+   players arrive silently. Your own finds always get the hold-up (pickups already did; a discovery recorded in play
+   now does too); the row, *Item animation: Progression / All / Off* (default Progression), decides which items from
+   other players do. The hold-up is the game's own `giveitem`, run on a key item stand-in (an ordinary item's
+   `giveitem` does nothing when the bag is full, `MainManager.cs:11499`), held up by the leader; the item swap shows
+   the chosen item and keeps the stand-in out, as for a location's gift, in a new display-only mode. The follow-up line
+   `giveitem` always shows is an empty one the mod answers for a reserved number. Hold-ups wait in a queue for the
+   same free moment the receiver waits for (no battle, scene, dialogue, menu or map change), one at a time; the item
+   itself is always given by the receiver, never by the hold-up. A discovery already recorded when the save loads
+   shows nothing. **Seen (2026-09-25):** a test hold-up from the new console command `holdup` ("Explorer Permit from
+   TestPlayer") waited for a cutscene to end, then played; the item probe saw nothing added.
+7. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
    read in full before anything is skipped.
 
 The panel got an eighth row, "Quality of life", which opens a second page in the same box; cancel comes back.

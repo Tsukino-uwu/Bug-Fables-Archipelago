@@ -140,6 +140,7 @@ namespace BugFablesAP
             MedalAssist.Enable(Log, Guid, () => randomizerEnabled.Value, () => difficulty.Value == "Hard",
                 () => difficulty.Value == "Hardest", () => detector.Value);
             QualityOfLife.Enable(Log, Config, () => randomizerEnabled.Value);
+            HoldUps.Init(Log, () => randomizerEnabled.Value);
             WarpButton.Enable(Log, Guid, () => randomizerEnabled.Value && QualityOfLife.WarpButton.Value);
             MenuToggle.Enable(Log, Guid, randomizerEnabled, server, port, slot, password,
                 () => { },
@@ -249,6 +250,7 @@ namespace BugFablesAP
             MedalAssist.PayPrizes();
             QualityOfLife.Tick();
             KeptOpen.Tick();
+            HoldUps.Tick();
 
             DevCheats.Tick(Log, giveMoney);
             DevConsole.Tick(devConsole.Value);

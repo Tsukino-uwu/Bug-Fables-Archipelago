@@ -297,6 +297,12 @@ namespace BugFablesAP
                     case "nudge": return Nudge(parts);
                     case "items": return Items();
                     case "tree": return Tree();
+                    case "holdup":
+                        // A test of the hold-up for an item from another player: the Explorer Permit (key item 27), queued
+                        // the way the receiver queues one, display only.
+                        ItemSwap.DescribeOurs(ItemIds.Base + 27, ItemIds.KeyItemKind, out string name, out Sprite sprite, out Color? color);
+                        HoldUps.Received(name + " from TestPlayer", sprite, color);
+                        return "holdup queued: " + name + " from TestPlayer";
                     case "infjump": infJump = !infJump; return "infjump " + (infJump ? "on: press jump in mid-air to jump again" : "off");
                     case "onehit":
                         if (OneHitSetting == null)

@@ -21,7 +21,7 @@ namespace BugFablesAP
             QolRow = 7, Rows = 8;
         // The Quality of life page's rows (the user, 2026-09-25: a sub-menu inside the panel). Cancel goes back to the
         // first page, on the Quality of life row.
-        private const int FastTextRow = 0, SkipIntroRow = 1, FreeBoatRow = 2, WarpRow = 3, CutscenesRow = 4, QolRows = 5;
+        private const int FastTextRow = 0, SkipIntroRow = 1, FreeBoatRow = 2, WarpRow = 3, CutscenesRow = 4, AnimationRow = 5, QolRows = 6;
         private bool qolPage;
 
         // The Difficulty and Detector rows' settings (Plugin, MedalAssist).
@@ -316,6 +316,7 @@ namespace BugFablesAP
                     case FreeBoatRow: return "The boat to Metal Island costs nothing.";
                     case WarpRow: return "Adds a Warp to Start button to the pause menu.";
                     case CutscenesRow: return "Skips scenes that give nothing, or plays them fast.";
+                    case AnimationRow: return "Which items from other players are shown held up.";
                     default: return "";
                 }
             }
@@ -348,7 +349,14 @@ namespace BugFablesAP
         private void Step(int r, int by)
         {
             ChangeSound();
-            if (qolPage)
+            if (qolPage && r == AnimationRow && QualityOfLife.ItemAnimation != null)
+            {
+                string[] values = QualityOfLife.ItemAnimations;
+                int at = Array.IndexOf(values, QualityOfLife.ItemAnimation.Value);
+                QualityOfLife.ItemAnimation.Value = values[((at < 0 ? 0 : at) + by + values.Length) % values.Length];
+                log.LogInfo("[apmenu] ItemAnimation: " + QualityOfLife.ItemAnimation.Value);
+            }
+            else if (qolPage)
             {
                 ConfigEntry<bool> setting = QolSetting(r);
                 if (setting != null)
@@ -504,6 +512,7 @@ namespace BugFablesAP
                 Choice(FreeBoatRow, "Free boat", OnOff(QualityOfLife.FreeBoat));
                 Choice(WarpRow, "Warp button", OnOff(QualityOfLife.WarpButton));
                 Choice(CutscenesRow, "Skip cutscenes", OnOff(QualityOfLife.SkipCutscenes));
+                Choice(AnimationRow, "Item animation", (QualityOfLife.ItemAnimation?.Value ?? "Progression").ToUpperInvariant());
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Quality of life. Cancel goes back.", 0f, StatusY);
                 leaf.transform.localPosition = new Vector3(LabelX + LeafOffset, RowY[row] + LeafRise, 0f);
@@ -537,7 +546,7 @@ namespace BugFablesAP
             arrows.parent = box;
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
-            foreach (int r in qolPage ? new[] { FastTextRow, SkipIntroRow, FreeBoatRow, WarpRow, CutscenesRow } : new[] { DifficultyRow, DetectorRow, ModeRow })
+            foreach (int r in qolPage ? new[] { FastTextRow, SkipIntroRow, FreeBoatRow, WarpRow, CutscenesRow, AnimationRow } : new[] { DifficultyRow, DetectorRow, ModeRow })
             {
                 for (int side = 0; side < 2; side++)
                 {

@@ -21,6 +21,9 @@ namespace BugFablesAP
         internal static ConfigEntry<bool> FreeBoat;
         internal static ConfigEntry<bool> WarpButton;
         internal static ConfigEntry<bool> SkipCutscenes;
+        // Items from other players: which ones get the hold-up animation (the user, 2026-09-25). Your own finds always do.
+        internal static readonly string[] ItemAnimations = { "Progression", "All", "Off" };
+        internal static ConfigEntry<string> ItemAnimation;
 
         // Skip cutscenes (the user, 2026-09-25: scenes and fluff that give no checks). Each scene is read in full first
         // (EventControl.EventN): one that only moves the camera and the party, talks, and sets flags is skipped by
@@ -79,6 +82,10 @@ namespace BugFablesAP
                 "The boat to Metal Island costs nothing (the user, 2026-09-25: no farming berries in Archipelago).");
             SkipCutscenes = config.Bind("QualityOfLife", "SkipCutscenes", true,
                 "Scenes that give nothing are skipped or pass by fast (a list that grows scene by scene).");
+            ItemAnimation = config.Bind("QualityOfLife", "ItemAnimation", "Progression", new ConfigDescription(
+                "Which items received from other players are shown held up, as when you find one: Progression (items that "
+                + "unlock something), All, or Off. They always arrive either way; your own finds are always shown.",
+                new AcceptableValueList<string>(ItemAnimations)));
             WarpButton = config.Bind("QualityOfLife", "WarpButton", true,
                 "A fifth button in the pause menu, Warp to Start, takes the party back to where the game began (after a "
                 + "Yes / No box). Not shown in battle.");
@@ -92,6 +99,7 @@ namespace BugFablesAP
             }
             harmony = new Harmony(Plugin.Guid + ".qol." + DateTime.UtcNow.Ticks);
             harmony.Patch(getLine, postfix: new HarmonyMethod(typeof(QualityOfLife), nameof(AfterGetLine)));
+            harmony.Patch(getLine, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeGetLine)));
             MethodInfo startEvent = AccessTools.Method(typeof(EventControl), nameof(EventControl.StartEvent), new[] { typeof(int), typeof(NPCControl) });
             if (startEvent == null)
             {
@@ -132,6 +140,19 @@ namespace BugFablesAP
             }
             Scene scene = SceneFor(MainManager.lastevent);
             return scene != null && scene.Flags == null;
+        }
+
+        // A hold-up's Giveitem shows its follow-up line (GetDialogueText(redirect), MainManager.cs:11592); the mod's own
+        // hold-ups ask for ItemSwap.EmptyLine, answered here with nothing, so the box just closes. Any other number is
+        // the game's (a negative one reads commondialogue, MainManager.cs:10186).
+        private static bool BeforeGetLine(int id, ref string __result)
+        {
+            if (id != ItemSwap.EmptyLine)
+            {
+                return true;
+            }
+            __result = "";
+            return false;
         }
 
         private static void AfterGetLine(int id, ref string __result)

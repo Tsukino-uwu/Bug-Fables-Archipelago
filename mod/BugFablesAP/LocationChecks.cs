@@ -21,6 +21,9 @@ namespace BugFablesAP
         private readonly ApConnection connection;
         private readonly HashSet<long> handled = new HashSet<long>();
         private ArchipelagoSession handledFor;
+        // Discoveries seen unrecorded in this session, so one recorded in play can be told from one recorded before.
+        private readonly HashSet<long> notYetRecorded = new HashSet<long>();
+        private ArchipelagoSession notYetRecordedFor;
         private string lastState;
 
         internal LocationChecks(ManualLogSource log, ApConnection connection)
@@ -118,6 +121,11 @@ namespace BugFablesAP
                     (finished ?? (finished = new List<long>())).Add(entry.Key);
                 }
             }
+            if (!ReferenceEquals(session, notYetRecordedFor))
+            {
+                notYetRecordedFor = session;
+                notYetRecorded.Clear();
+            }
             // Journal discoveries: done when librarystuff[0, n] is set (MainManager.UpdateJounal, MainManager.cs:14742).
             Dictionary<long, int> discoveries = connection.LocationDiscoveries;
             bool[,] journal = mm.librarystuff;
@@ -125,11 +133,22 @@ namespace BugFablesAP
             {
                 foreach (KeyValuePair<long, int> entry in discoveries)
                 {
-                    if (handled.Contains(entry.Key) || entry.Value < 0 || entry.Value >= journal.GetLength(1) || !journal[0, entry.Value])
+                    if (handled.Contains(entry.Key) || entry.Value < 0 || entry.Value >= journal.GetLength(1))
                     {
                         continue;
                     }
+                    if (!journal[0, entry.Value])
+                    {
+                        notYetRecorded.Add(entry.Key);
+                        continue;
+                    }
                     handled.Add(entry.Key);
+                    // Recorded in play, seen unrecorded before: show what it found. One already recorded when the save
+                    // was loaded or the seed joined was found earlier, so no hold-up.
+                    if (notYetRecorded.Remove(entry.Key))
+                    {
+                        HoldUps.FoundAt(entry.Key, "discovery " + entry.Value);
+                    }
                     if (session.Locations.AllLocationsChecked.Contains(entry.Key))
                     {
                         continue;

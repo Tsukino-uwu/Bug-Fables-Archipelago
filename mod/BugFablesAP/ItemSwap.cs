@@ -42,6 +42,11 @@ namespace BugFablesAP
         private static bool decidedBadge;
         private static int decidedId;
         private static long location = -1;
+        // A hold-up shown for display only (ShowHeldUp): location is DisplayOnly, nothing is given.
+        private const long DisplayOnly = -2;
+        private static string pendingName;
+        private static Sprite pendingSprite;
+        private static Color? pendingColor;
         private static string shownName;
         private static Sprite shownSprite;
         private static Color? shownColor;
@@ -196,7 +201,7 @@ namespace BugFablesAP
                 Decide(badge, id); // no NPC: no description box came first
             }
             decided = false; // the next Giveitem decides afresh
-            return location < 0 ? MainManager.GetItemSprite(badge, id) : shownSprite ?? MainManager.GetItemSprite(badge, id);
+            return location == -1 ? MainManager.GetItemSprite(badge, id) : shownSprite ?? MainManager.GetItemSprite(badge, id);
         }
 
         public static void AddItem(List<int> list, int id)
@@ -235,6 +240,15 @@ namespace BugFablesAP
             shownSprite = null;
             shownColor = null;
             shownName = null;
+            if (location == -1 && pendingName != null && !badge && id == StandIn)
+            {
+                location = DisplayOnly;
+                shownName = pendingName;
+                shownSprite = pendingSprite;
+                shownColor = pendingColor;
+                pendingName = null;
+                return;
+            }
             if (location < 0)
             {
                 return;
@@ -259,23 +273,11 @@ namespace BugFablesAP
             }
             else if (IsOurs(info))
             {
-                int kind = KindOf(info);
-                int gameId = ItemIds.GameId(info.ItemId, kind);
-                bool medal = kind == ItemIds.MedalKind;
-                bool money = kind == ItemIds.MoneyKind;
-                bool crystal = kind == ItemIds.CrystalKind;
-                // A crystal berry: the game's own name for it and its berry icon (NPCControl.cs:5657, :4201).
-                sprite = crystal ? MainManager.guisprites[83] : money ? ItemIds.BerrySprite(gameId) : MainManager.GetItemSprite(medal, gameId);
-                name = crystal ? MainManager.menutext[112] : money ? gameId + " Berries"
-                    : medal ? MainManager.GetBadgeName(gameId) : MainManager.itemdata[0, gameId, 0];
+                DescribeOurs(info.ItemId, KindOf(info), out name, out sprite, out color);
                 if (info.Player.Slot != connection.OwnSlot)
                 {
                     name = info.Player.Name + "'s " + name;
                 }
-                // The game's own starburst colours (the Giveitem switch, NPCControl.CheckItem): medal, key item, item.
-                color = medal ? new Color(1f, 0.5f, 0f)
-                    : kind == ItemIds.KeyItemKind ? new Color(1f, 0.3f, 0.4f)
-                    : new Color(0f, 0.7f, 0.7f);
             }
             else
             {
@@ -288,6 +290,54 @@ namespace BugFablesAP
                     : Hex(0x00EEEE);
             }
             return info;
+        }
+
+        // The game's own look for one of this world's items: its sprite, name and starburst colour.
+        internal static void DescribeOurs(long itemId, int kind, out string name, out Sprite sprite, out Color? color)
+        {
+            {
+                int gameId = ItemIds.GameId(itemId, kind);
+                bool medal = kind == ItemIds.MedalKind;
+                bool money = kind == ItemIds.MoneyKind;
+                bool crystal = kind == ItemIds.CrystalKind;
+                // A crystal berry: the game's own name for it and its berry icon (NPCControl.cs:5657, :4201).
+                sprite = crystal ? MainManager.guisprites[83] : money ? ItemIds.BerrySprite(gameId) : MainManager.GetItemSprite(medal, gameId);
+                name = crystal ? MainManager.menutext[112] : money ? gameId + " Berries"
+                    : medal ? MainManager.GetBadgeName(gameId) : MainManager.itemdata[0, gameId, 0];
+                // The game's own starburst colours (the Giveitem switch, NPCControl.CheckItem): medal, key item, item.
+                color = medal ? new Color(1f, 0.5f, 0f)
+                    : kind == ItemIds.KeyItemKind ? new Color(1f, 0.3f, 0.4f)
+                    : new Color(0f, 0.7f, 0.7f);
+            }
+        }
+
+        // The hold-up without a pickup (the user, 2026-09-25: a discovery should show what it found, and items from other
+        // players as the Item animation setting says). The game's own Giveitem runs on a key item stand-in (key items
+        // have no bag limit; an ordinary item's Giveitem does nothing with a full bag, MainManager.cs:11499), held
+        // up by the leader (entity -1); the stand-ins show the chosen item instead and keep the stand-in out. Its
+        // follow-up line is the empty one QualityOfLife answers for EmptyLine.
+        private const int StandIn = 0;
+        internal const int EmptyLine = -90000;
+
+        // What a location of this world holds (a discovery just recorded): shown as that location's own find.
+        internal static void ShowFoundAt(long at)
+        {
+            pendingBerries = at;
+            StartHoldUp();
+        }
+
+        // A given look, nothing else: an item already received.
+        internal static void ShowHeldUp(string name, Sprite sprite, Color? color)
+        {
+            pendingName = name;
+            pendingSprite = sprite;
+            pendingColor = color;
+            StartHoldUp();
+        }
+
+        private static void StartHoldUp()
+        {
+            MainManager.instance.StartCoroutine(MainManager.SetText($"|giveitem,1,{StandIn},{EmptyLine},-1|", dialogue: true, Vector3.zero, null, null));
         }
 
         // Prefix on MainManager.SetText (10 arguments). Acts only on the item-get NPCControl.CheckItem starts for a
@@ -495,7 +545,7 @@ namespace BugFablesAP
         // (it reads flagstring[0], which the game set to the vanilla name just before), and recolour the starburst.
         private static bool TakeSwap(string what)
         {
-            if (location < 0)
+            if (location == -1)
             {
                 return false;
             }
@@ -504,7 +554,7 @@ namespace BugFablesAP
             {
                 Recolour(shownColor.Value);
             }
-            log.LogInfo($"[swap] location {location}: kept {what} out of the inventory");
+            log.LogInfo(location == DisplayOnly ? $"[swap] held up '{shownName}' (display only)" : $"[swap] location {location}: kept {what} out of the inventory");
             location = -1;
             swapped = true;
             return true;
