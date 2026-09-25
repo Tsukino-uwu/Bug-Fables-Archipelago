@@ -412,6 +412,12 @@ slot of each can hold the mod's own state in the game's own save, with no new fo
   and 30 (only the test room shows all). So the starting house's board (`BugariaOutskirtsOutsideCity` entity 26,
   inside 0, waits for flag 67 like the plaza's) lists exactly what the plaza's does. The open list measured on
   2026-09-24, `[0]` = 8,9,10,21,23, was all bounties: the bar showed them and any other board showed nothing.
+- **How many, and how they arrive** (2026-09-25, code read). `BoardQuests` has 63 entries after `None`; 9 never show
+  on a board (11-17 the chapter entries, 26 Leif, 30 Bee), so 54 board quests, 5 of them the bar's bounties. A quest
+  joins the open list when its row in the `Data/QuestChecks` table is met (flags, or a visited area as a negative
+  number, `MainManager.CheckQuests`, `:4027`), or by a dialogue command (`|addquest|`, `|addboard|`, `:13715`,
+  `:13839`). **Not yet read:** that table, and each quest's `boardquestdata` row (the flag taking it sets): both are
+  text assets, to dump once in game before deciding whether all quests can be open, or taken, from the start.
 
 ## Input (2026-09-24)
 
