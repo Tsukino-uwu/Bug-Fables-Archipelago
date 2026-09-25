@@ -60,29 +60,31 @@ namespace BugFablesAP
             SetPrices("Normal");
         }
 
-        // More medals on show at once (the user, 2026-09-25: a QoL thing): Merab's shelf 5 instead of 3, Shades's 4 instead of
-        // 2 (hers sat far apart). The shelf has one slot per entry of the shopkeeper's data, each at vectordata[j]
-        // (NPCControl.cs:1531-1534); before it's built, the spots are spread evenly from the first to the last.
-        private static readonly Dictionary<int, int> ShelfSlots = new Dictionary<int, int> { { 0, 5 }, { 1, 4 } };
+        // More medals on show at once (the user, 2026-09-25: a QoL thing): Merab's shelf 6 instead of 3 (5 across her own first
+        // to last spot, and one more to the right, where the user saw room), Shades's 4 instead of 2 (hers sat far apart).
+        // The shelf has one slot per entry of the shopkeeper's data, each at vectordata[j] (NPCControl.cs:1531-1534); before
+        // it's built, the spots are laid out evenly: {shop: (slots spanning her first to last spot, slots in all)}.
+        private static readonly Dictionary<int, int[]> ShelfSlots = new Dictionary<int, int[]> { { 0, new[] { 5, 6 } }, { 1, new[] { 4, 4 } } };
 
         private static void BeforeShelf(NPCControl __instance)
         {
             if (randomizerOn == null || !randomizerOn() || __instance.interacttype == NPCControl.Interaction.CaravanBadge
                 || __instance.dialogues == null || __instance.dialogues.Length < 10
-                || !ShelfSlots.TryGetValue((int)__instance.dialogues[9].x, out int slots)
-                || __instance.data == null || __instance.data.Length < 2 || __instance.data.Length >= slots
+                || !ShelfSlots.TryGetValue((int)__instance.dialogues[9].x, out int[] layout)
+                || __instance.data == null || __instance.data.Length < 2 || __instance.data.Length >= layout[1]
                 || __instance.vectordata == null || __instance.vectordata.Length < __instance.data.Length)
             {
                 return;
             }
             int shown = __instance.data.Length;
+            int slots = layout[1];
             Vector3 first = __instance.vectordata[0];
-            Vector3 last = __instance.vectordata[shown - 1];
+            Vector3 step = (__instance.vectordata[shown - 1] - first) / (layout[0] - 1);
             var spots = new Vector3[slots];
             var data = new int[slots];
             for (int j = 0; j < slots; j++)
             {
-                spots[j] = Vector3.Lerp(first, last, j / (float)(slots - 1));
+                spots[j] = first + step * j;
                 data[j] = __instance.data[Math.Min(j, shown - 1)];
             }
             __instance.vectordata = spots;
