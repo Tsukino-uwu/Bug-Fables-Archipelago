@@ -1017,6 +1017,15 @@ destination, seen on screen), then every door, then the room-by-room logic that 
    each. It found the bar's hatch (Event61) and the hideout cell (Events 108/109) at once (`MEASURED.md`,
    "Transfers that aren't doors"). Next: sort them into chosen and forced, reading each event.
 
+9. **Quests that cross rooms** (the user, 2026-09-25: a reward mustn't be expected when its middle steps can't be
+   reached). Today a quest is safe because its steps share one big region (the old book's residential house and the
+   palace library are both *Bugaria Inner City*) or pass on the way (the lost kid's sister waits outside the city,
+   on the way to Snakemouth). With doors shuffled neither holds. The rule before the label comes off: **every quest
+   step in another room is a logic event in that room's region** (the sister following, the library visit), and the
+   reward requires the whole chain; items handed out mid-quest are already progression (build step 10). Taking the
+   quest is a step too, now just "reach any board" (build step 9). Known gap today: the lost kid's reward
+   (location 10) doesn't require the sister's step.
+
 **Status:** in progress (experimental): every door, coupled, built, and a generated pair seen both ways, offline too (the user, 2026-09-25); next, sorting the transfers that aren't doors, then the room-by-room logic; decoupled later.
 
 ---
