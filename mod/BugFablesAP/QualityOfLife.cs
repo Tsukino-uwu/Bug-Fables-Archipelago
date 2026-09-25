@@ -149,6 +149,17 @@ namespace BugFablesAP
         // Dev only ([Debug] TestStart): a map the opening ends with a warp to, a stand-in for a random start.
         internal static string TestStart;
         private static bool startPending;
+        // With a test start, the slides' black backdrop stays up from Event8's cut until the start map has loaded behind the
+        // transfer's own fade (the user, 2026-09-25: the house showed between the scene's end and the warp).
+        private static GameObject heldBack;
+        private static bool transferring;
+        private static float heldSince;
+
+        private static bool TestStartSet => !string.IsNullOrEmpty(TestStart);
+
+        // Where the opening runs: the start map (a test start's, else the starting building's).
+        private static bool AtStart(string map) =>
+            map != null && (TestStartSet ? string.Equals(map, TestStart, StringComparison.OrdinalIgnoreCase) : map == OpeningMap);
 
         // Event8's talk after the slides, cut (the user, 2026-09-25: hiding it "looks dumb"; skip it and warp before any
         // dialogue). Its first step after the slides' backdrop is destroyed is ChangeParty({1}, fromscratch, keep the old
@@ -195,7 +206,12 @@ namespace BugFablesAP
         {
             MainManager mm = MainManager.instance;
             Transform back = MainManager.GUICamera == null ? null : MainManager.GUICamera.transform.Find("back");
-            if (back != null)
+            if (back != null && TestStartSet)
+            {
+                heldBack = back.gameObject;
+                heldSince = Time.realtimeSinceStartup;
+            }
+            else if (back != null)
             {
                 UnityEngine.Object.Destroy(back.gameObject);
             }
@@ -206,7 +222,11 @@ namespace BugFablesAP
             MainManager.music[0].volume = 0f;
             MainManager.music[0].Play();
             endEvent?.Invoke(null, null);
-            if (string.IsNullOrEmpty(TestStart))
+            if (TestStartSet)
+            {
+                startPending = true; // at once, still behind the backdrop
+            }
+            else
             {
                 MainManager.PlayTransition(1, 0, 0.02f, Color.black);
             }
@@ -237,19 +257,21 @@ namespace BugFablesAP
                 spots[i] = at + new Vector3(-0.6f * i, 0f, 0.1f * i);
             }
             MainManager.SetPlayers(spots);
-            EntityControl exit = MainManager.GetEntity(2);
+            // The building's own entities, only when the opening runs there: elsewhere these numbers are other things.
+            bool inBuilding = MainManager.map.mapid.ToString() == OpeningMap;
+            EntityControl exit = inBuilding ? MainManager.GetEntity(2) : null;
             if (exit != null && exit.npcdata != null)
             {
                 exit.gameObject.SetActive(true);
                 exit.npcdata.vectordata[4] = MainManager.defaultcamoffset;
                 exit.npcdata.vectordata[5] = MainManager.defaultcamangle;
             }
-            EntityControl eleven = MainManager.GetEntity(11);
+            EntityControl eleven = inBuilding ? MainManager.GetEntity(11) : null;
             if (eleven != null)
             {
                 eleven.animstate = 0;
             }
-            EntityControl trigger = MainManager.GetEntity(9);
+            EntityControl trigger = inBuilding ? MainManager.GetEntity(9) : null;
             if (trigger != null && trigger.name == "EventTrigger")
             {
                 trigger.gameObject.SetActive(false); // gone as on a reload with flag 15 (its limit)
@@ -257,9 +279,8 @@ namespace BugFablesAP
             mm.flags[15] = true;
             mm.boardquests[1].Insert(0, 11);
             HoldUps.FoundAt(OpeningLocation, "the opening's gift (location 1)");
-            startPending = !string.IsNullOrEmpty(TestStart);
-            log.LogInfo($"[qol] opening done without Event16: party {string.Join(", ", mm.playerdata.Select(p => p.trueid.ToString()).ToArray())}, "
-                + $"characters {mm.playerdata.Count(p => p.entity != null)}, exit {(exit != null ? "active " + exit.gameObject.activeSelf : "NOT found")}, flag 15 {mm.flags[15]}");
+            log.LogInfo($"[qol] opening done without Event16 on {MainManager.map.mapid}: party {string.Join(", ", mm.playerdata.Select(p => p.trueid.ToString()).ToArray())}, "
+                + $"characters {mm.playerdata.Count(p => p.entity != null)}, exit {(exit != null ? "active " + exit.gameObject.activeSelf : inBuilding ? "NOT found" : "not here")}, flag 15 {mm.flags[15]}");
         }
 
         // Every scene starts here (EventControl.cs:74). A listed scene to skip gets its flags and never starts.
@@ -354,9 +375,22 @@ namespace BugFablesAP
                 && !mm.flags[15] && mm.flags[691])
             {
                 openingPending = true;
-                log.LogInfo("[qol] the opening is due (flag 15 unset on the starting map): doing it on the next free frame");
+                startPending = TestStartSet && !transferring;
+                log.LogInfo("[qol] the opening is due (flag 15 unset on the starting map): doing it at the start, on a free frame");
             }
-            if (openingPending && MainManager.player != null && !mm.inevent && !mm.message && !mm.minipause && MainManager.battle == null)
+            string here = MainManager.map == null ? null : MainManager.map.mapid.ToString();
+            if (heldBack != null && (here != OpeningMap || Time.realtimeSinceStartup - heldSince > 10f))
+            {
+                UnityEngine.Object.Destroy(heldBack);
+                heldBack = null;
+                log.LogInfo($"[qol] the slides' backdrop removed on {here}");
+            }
+            if (transferring && here != OpeningMap)
+            {
+                transferring = false;
+            }
+            if (openingPending && AtStart(here) && MainManager.player != null && !mm.inevent && !mm.message && !mm.minipause
+                && MainManager.battle == null && !mm.intransition && !MainManager.roomtransition)
             {
                 openingPending = false;
                 try
@@ -381,10 +415,11 @@ namespace BugFablesAP
                     log.LogError($"[qol] ending Event8 failed: {e}");
                 }
             }
-            // The test start, once the opening's hold-up is over and the player is free again.
-            if (startPending && MainManager.player != null && !mm.inevent && !mm.message && !mm.minipause && MainManager.battle == null)
+            // The test start: straight from the cut scene's end, before anything else shows.
+            if (startPending && MainManager.player != null && !mm.inevent && !mm.message && MainManager.battle == null)
             {
                 startPending = false;
+                transferring = true;
                 try
                 {
                     // The game's own map transfer to where the map puts an arriving party; not the console's warp, which
