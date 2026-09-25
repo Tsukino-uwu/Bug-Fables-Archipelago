@@ -13,7 +13,7 @@ namespace BugFablesAP
         private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, DifficultyRow = 4, DetectorRow = 5, ModeRow = 6,
             QolRow = 7, Rows = 8;
         // The Quality of life page; cancel goes back to the first page, on the Quality of life row.
-        private const int FastTextRow = 0, FreeBoatRow = 1, WarpRow = 2, CutscenesRow = 3, AnimationRow = 4, PricesRow = 5, QolRows = 6;
+        private const int FastTextRow = 0, FreeBoatRow = 1, WarpRow = 2, CutscenesRow = 3, AnimationRow = 4, PricesRow = 5, ScalingRow = 6, QolRows = 7;
         private bool qolPage;
 
         internal static readonly string[] Difficulties = { "Normal", "Hard", "Hardest" };
@@ -290,6 +290,7 @@ namespace BugFablesAP
                     case CutscenesRow: return "Skips the intro and scenes you don't need to watch.";
                     case AnimationRow: return "Which items from other players are shown held up.";
                     case PricesRow: return "What medal shops charge.";
+                    case ScalingRow: return "Enemies scaled to your level, your artifacts, or not at all.";
                     default: return "";
                 }
             }
@@ -325,6 +326,13 @@ namespace BugFablesAP
                 int at = Array.IndexOf(prices, QualityOfLife.ShopPrices.Value);
                 QualityOfLife.ShopPrices.Value = prices[((at < 0 ? 0 : at) + by + prices.Length) % prices.Length];
                 log.LogInfo("[apmenu] ShopPrices: " + QualityOfLife.ShopPrices.Value);
+            }
+            else if (qolPage && r == ScalingRow && QualityOfLife.EnemyScaling != null)
+            {
+                string[] modes = EnemyScaling.Modes;
+                int at = Array.IndexOf(modes, QualityOfLife.EnemyScaling.Value);
+                QualityOfLife.EnemyScaling.Value = modes[((at < 0 ? 0 : at) + by + modes.Length) % modes.Length];
+                log.LogInfo("[apmenu] EnemyScaling: " + QualityOfLife.EnemyScaling.Value);
             }
             else if (qolPage && r == AnimationRow && QualityOfLife.ItemAnimation != null)
             {
@@ -367,6 +375,8 @@ namespace BugFablesAP
             : null;
 
         private static string OnOff(ConfigEntry<bool> setting) => setting != null && setting.Value ? "ON" : "OFF";
+
+        private static string ScalingLabel(string value) => value == "PartyLevel" ? "PARTY LEVEL" : value.ToUpperInvariant();
 
         private void TypeInto()
         {
@@ -486,6 +496,7 @@ namespace BugFablesAP
                 Choice(CutscenesRow, "Skip cutscenes", OnOff(QualityOfLife.SkipCutscenes));
                 Choice(AnimationRow, "Item animation", (QualityOfLife.ItemAnimation?.Value ?? "All").ToUpperInvariant());
                 Choice(PricesRow, "Shop prices", (QualityOfLife.ShopPrices?.Value ?? "Normal").ToUpperInvariant());
+                Choice(ScalingRow, "Enemy scaling", ScalingLabel(QualityOfLife.EnemyScaling?.Value ?? "PartyLevel"));
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Quality of life. Cancel goes back.", 0f, StatusY);
                 leaf.transform.localPosition = new Vector3(LabelX + LeafOffset, RowY[row] + LeafRise, 0f);
@@ -514,7 +525,7 @@ namespace BugFablesAP
             arrows.parent = box;
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
-            foreach (int r in qolPage ? new[] { FastTextRow, FreeBoatRow, WarpRow, CutscenesRow, AnimationRow, PricesRow } : new[] { DifficultyRow, DetectorRow, ModeRow })
+            foreach (int r in qolPage ? new[] { FastTextRow, FreeBoatRow, WarpRow, CutscenesRow, AnimationRow, PricesRow, ScalingRow } : new[] { DifficultyRow, DetectorRow, ModeRow })
             {
                 for (int side = 0; side < 2; side++)
                 {

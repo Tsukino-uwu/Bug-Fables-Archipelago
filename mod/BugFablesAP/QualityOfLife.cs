@@ -21,6 +21,7 @@ namespace BugFablesAP
         internal static ConfigEntry<string> ItemAnimation;
         internal static readonly string[] ShopPriceValues = { "Normal", "Half", "Free" };
         internal static ConfigEntry<string> ShopPrices;
+        internal static ConfigEntry<string> EnemyScaling;
 
         // A scene that only moves, talks and sets flags is skipped by setting its flags; one that also changes the
         // world is fast-forwarded by the game itself, so it ends exactly as it would.
@@ -81,6 +82,12 @@ namespace BugFablesAP
             ShopPrices = config.Bind("QualityOfLife", "ShopPrices", "Normal", new ConfigDescription(
                 "Medal shop prices, in berries and crystal berries: Normal, Half or Free.",
                 new AcceptableValueList<string>(ShopPriceValues)));
+            EnemyScaling = config.Bind("QualityOfLife", "EnemyScaling", "PartyLevel", new ConfigDescription(
+                "How tough enemies are, wherever you meet them: PartyLevel scales every enemy to the party's level, so "
+                + "every area plays fair in any order; Artifacts scales them to the artifacts found, as vanilla's "
+                + "difficulty follows the story (levelling ahead makes it easier); Off keeps each enemy's own stats. "
+                + "Difficulty (Hard, Hardest) still applies on top. Never changes a check.",
+                new AcceptableValueList<string>(BugFablesAP.EnemyScaling.Modes)));
             WarpButton = config.Bind("QualityOfLife", "WarpButton", true,
                 "A fifth button in the pause menu, Warp to Start, takes the party back to where the game began (after a "
                 + "Yes / No box). Not shown in battle.");

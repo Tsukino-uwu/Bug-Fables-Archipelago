@@ -678,3 +678,12 @@ Newest last. What was tried, what happened, what the user said.
   - `AnimGuard` now also guards `Animator.Play(string, int, float)`, which every direct `anim.Play("name")` in the
     game ends in.
   - The infinite-jump cheat no longer logs every press. The user: "just noise/spam".
+- **Enemy scaling built** (mod guide, step 17). The user hasn't finished the game, so the calibration comes from the
+  game's data.
+  - Home level is 3 below the level where an enemy's EXP runs out. That fits both the new game and the level cap,
+    and area by area it climbs with the story.
+  - Bosses are placed by the chapter of their story event.
+  - Modes: Off / Party level / Artifacts. `chapter` was dropped because chapter ends are the artifact flags.
+  - The user asked about cheese (a hard area early, level 27 in chapter 1). Party level removes it, and EXP follows
+    through the game's own rule.
+  - Not yet seen in game. The bestiary page is not built.

@@ -991,31 +991,44 @@ and a chapter 1 area met late far too weak. Enemy scaling makes each area about 
 right point in the story. It is a balance setting, not a challenge setting.
 
 **Decided (the user, 2026-09-26):**
-- A row on the panel's Quality of life page, *Enemy Scaling*: `off / party_level / chapter / artifacts`, on by
-  default (`party_level`). It isn't in the yaml: it ties to no check and no logic, so the player can change it
-  from the main menu if the game feels too easy or too hard. Only while Archipelago is enabled (vanilla stays
-  vanilla).
-- It scales **both up and down**.
-- **Normal / Hard / Hardest** (step 15) stays the challenge setting, on top of the scaled numbers.
-- The **bestiary** shows the scaled numbers, as the enemy would be if met now. Spy in a fight already shows the
-  live ones.
+- A row on the panel's Quality of life page, *Enemy scaling*: **Off / Party level / Artifacts**, on by default
+  (Party level). It isn't in the yaml: it ties to no check and no logic, so the player can change it from the main
+  menu. Only while Archipelago is enabled (vanilla stays vanilla).
+  - **Off:** vanilla, each enemy's own stats.
+  - **Party level:** every enemy scaled to the party's level, so every area plays fair in any order. No cheese: a hard
+    area early is scaled down, an easy one late scaled up, and EXP follows (below).
+  - **Artifacts:** scaled to the artifacts found, as vanilla's difficulty follows the story; levelling ahead makes it
+    easier, rushing harder. A `chapter` mode was dropped: the chapter ends *are* the artifact flags, so it would be
+    the same number.
+- Both up and down. **Normal / Hard / Hardest** (step 15) stays the challenge setting, on top.
+- The **bestiary** shows the scaled numbers, as the enemy would be if met now (not built yet). Spy in a fight already
+  shows the live ones.
 
-**How it will work** (planned; the facts are in `MEASURED.md`, "Battles, for enemy shuffle"):
-1. **Each enemy gets a home level:** the party level vanilla expects where it first appears. The level curve per
-   chapter must come from a real source, not memory. The enemy table dump gives each enemy's base HP, defence
-   and EXP.
-2. **The mode gives a target level:**
-   - `party_level`: the party's level.
-   - `chapter`: the level vanilla expects at the story progress reached.
-   - `artifacts`: the artifacts received, mapped to a level.
-3. **When a fight builds an enemy**, a postfix on `MainManager.GetEnemyData` scales it by target against home:
-   - HP and EXP are multiplied, so levelling keeps pace.
-   - Defence is added to, and attack through `hardatk`, the only knob for it. Attack is written per enemy in the
-     battle code, not in the table.
-   - It is applied to the base numbers, before the Hard/Hardest bonuses, so those still stack.
-   - Minimums are clamped, and the ids the game itself leaves alone are left alone.
-4. **The bestiary page** applies the same scaling, because it reads the raw table rather than `GetEnemyData`.
+**Where the numbers come from** (the facts in `MEASURED.md`, "Battles, for enemy shuffle"). The user hasn't finished
+the game, so nothing is from memory; everything is from the game's own data:
+1. **An ordinary enemy's home level comes from its EXP.** The game's EXP rule (`base - (level - 1) * 2.5`) makes each
+   enemy "outgrown" at `base / 2.5 + 1`. Home level is **3 below outgrown**: that fits both ends of the game at once
+   (a new game at level 1 meets enemies outgrown near 4; the last area's enemies are outgrown near 30, the cap is 27).
+   Grouped by area, the home levels climb with the story (Snakemouth ~1, Golden Hills ~6, the desert ~8-9, the
+   factory and hideout ~9-12, the sand castle ~13.6, the grasslands ~15, the swamps ~16.6, Upper Snakemouth ~18.4,
+   the Barren Lands ~20, Rubber Prison ~23.6), so the game's own tuning is the curve.
+2. **A boss's home level comes from its chapter** (the story event that starts its fight; bosses have flat EXP), one
+   level per chapter from that curve: 3, 8, 11, 14, 17, 21, 26 for chapters 1-7. A summoned part takes its boss's.
+   The intro spider (can't be won), tutorial and test fights, and the ids the game itself leaves out of Hard Mode's
+   x1.5 are left alone.
+3. **Artifacts' target:** the level of the areas vanilla opens after that many artifacts: 1, 6, 9, 13, 16, 19, 23, 27.
 
-It scales whatever enemy is fought, so it works with and without enemy shuffle (the Archipelago guide, Next 14).
+**How it works** (built 2026-09-26): `EnemyScaling.cs`, a postfix on `MainManager.GetEnemyData` when a fight builds
+its enemies (`createentity`), after the game has applied Hard/Hardest:
+- **HP** times `(target + 5) / (home + 5)` (and `maxhp`, which the game copies from HP).
+- **Attack** +1 per 4 levels of difference, through `hardatk`, the only knob: attack is written per enemy in the
+  battle code. Held to -3...+6 so a weakened enemy still hits.
+- **Defence** +1 per 6 levels, never below 0; a defence of -1 (shown as "?") is left alone.
+- **EXP** by the game's own rule at the level the enemy is matched to, `GetEXP(base, level - difference)`: in Party
+  level mode that's the enemy's home level, so levelling keeps vanilla's pace. Left alone where the game fixes it
+  (fixed EXP, no EXP, the level cap, hologram fights).
+- Some ids read another row's data (column 25); the row the game read is used.
+- Every scaled enemy is logged (`[scale] Seedling (9): home 1, target 10: hp 4 -> 10, attack +2, ...`).
+All the constants are starting values, tuned by play.
 
-**Status:** planned (the user, 2026-09-26); not built. Next: the home level table and the level curve's source.
+**Status:** built (2026-09-26), not yet seen in game; the bestiary page not built.
