@@ -1254,7 +1254,8 @@ the look itself (`CheckSpecialID` raises a flier to its minimum height). `enemyl
 first map row, any map, whose fight starts with that enemy, and copies its movement fields onto the enemy before its
 `Start`. With the Flying Seedling (donor `NearSnakemouth:7`) the Outskirts enemies walked around as they should,
 not burrowing like the Underlings they replaced (the user). A boss has no map row, so a boss look has no donor: its
-movement is still to decide. In the real step, the seed can pick each donor at generation.
+movement is still to decide: **tested per boss later, whatever looks best** (the user, 2026-09-26). In the real step,
+the seed can pick each donor at generation.
 
 **Next:**
 - see the shuffled fights in the game;

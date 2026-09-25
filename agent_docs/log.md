@@ -667,3 +667,10 @@ Newest last. What was tried, what happened, what the user said.
 - **A boss from a map enemy** (the user asked, as a test). `enemylook 46` and `enemyfight 46 9 0` showed the Bee Boss
   on the map and started a fight with the Bee Boss, a Seedling and a Cordyceps Ant. The user confirmed both.
   Decided: the map model is the fight's strongest enemy (a boss first, else the highest base HP).
+- **The "Invalid Layer Index '-1'" warnings** (the user: don't leave harmless errors lying around).
+  - The cause is a missing animation state, 68 warnings so far this session.
+  - `AnimGuard.cs` checks the state first, in `SetAnim`, which every character's animations go through. It skips a
+    missing state and logs it once.
+  - Tested with the noisy case: a Bee Boss look with Underling movement. The count stayed at 68 and one `[anim]`
+    line appeared.
+  - Each boss's map movement will be picked per boss by testing (the user).

@@ -752,6 +752,17 @@ its flag 158 is unset: the same scene later takes bounties and gives their rewar
    **Seen (the user, 2026-09-25):** the droplet scene replayed to its end with no crash, and the log shows item 9 at work in
    it and in the switch scene (Event23): "the leader (Player 0, member 2) acts member 0's part".
 
+**No warnings for missing animations (the user, 2026-09-26: "dumb to leave bug/errors laying around, even if its
+harmless").** A character asked for a state its controller lacks (a lone Leif acting another member's part, a swapped
+enemy look with another enemy's movement) made Unity warn twice every time ("State could not be found", "Invalid
+Layer Index '-1'"), 68 times in one session, and play nothing. Every character's animation goes through
+`EntityControl.SetAnim`, which calls `Animator.CrossFadeInFixedTime(name, time)` with no layer. `AnimGuard.cs`
+swaps those two calls for a check: a state found on any layer plays as before; a missing one is skipped (what the
+game did anyway) and logged once per controller (`[anim] BeeBoss(Clone) (BeeBoss) has no state 'Walk'`), which is
+also the list for mapping a missing animation to the closest one later. Only while Archipelago is enabled. **Tested
+(2026-09-26):** with a Bee Boss look walking like an Underling, the count stayed at 68 and one `[anim]` line appeared
+instead. Other paths (named `anim.Play` calls in the game) aren't guarded yet; the log tells if one still warns.
+
 **Status:** works with Leif alone, seen by the user through chapter 1 into chapter 2 (2026-09-25); items 5 and 6, and Leif joining after the spider with a two-member start, not yet seen; the direct lookups in item 12 still open.
 
 *Code: `PartyFit.cs` (the stand-ins and the acting leader), `PartyMembers.cs` (the member guard, followers,
