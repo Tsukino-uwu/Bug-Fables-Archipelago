@@ -17,7 +17,6 @@ namespace BugFablesAP
     internal static class QualityOfLife
     {
         internal static ConfigEntry<bool> FastText;
-        internal static ConfigEntry<bool> SkipIntro;
         internal static ConfigEntry<bool> FreeBoat;
         internal static ConfigEntry<bool> WarpButton;
         internal static ConfigEntry<bool> SkipCutscenes;
@@ -82,14 +81,12 @@ namespace BugFablesAP
                 "Dialogue text is instant instead of letter by letter, as if the skip button were held (the game's own "
                 + "skip), but still requires a button press to proceed. Holding the skip button also moves through boxes "
                 + "much faster than the game's own hold. Lines the game marks unskippable stay as they are.");
-            SkipIntro = config.Bind("QualityOfLife", "SkipIntro", true,
-                "A new game's four story slides are skipped (with Skip cutscenes, so is the talk after them).");
             FreeBoat = config.Bind("QualityOfLife", "FreeBoat", true,
                 "The boat to Metal Island costs nothing (the user, 2026-09-25: no farming berries in Archipelago).");
             SkipCutscenes = config.Bind("QualityOfLife", "SkipCutscenes", true,
-                "Scenes that give nothing are skipped or pass by fast (a list that grows scene by scene). The opening after the "
-                + "slides (Maki's talk and the tutorial battle) is skipped too: Vi joins and the first check is sent, and you "
-                + "can walk out of the building.");
+                "The new game's intro (its story slides, the talk after them, Maki's talk and the tutorial battle) is skipped: "
+                + "Vi joins and the first check is sent. Other scenes you don't need to watch are skipped or pass by fast (a list "
+                + "that grows scene by scene).");
             ItemAnimation = config.Bind("QualityOfLife", "ItemAnimation", "All", new ConfigDescription(
                 "Which items received from other players are shown held up, as when you find one: Progression (items that "
                 + "unlock something), All, or Off. They always arrive either way; your own finds are always shown.",
@@ -177,13 +174,13 @@ namespace BugFablesAP
             return false;
         }
 
-        // With Skip intro, the cut comes before the slides (the user, 2026-09-25: still saw them): their first step is
+        // With Skip cutscenes (Skip intro folded in, the user, 2026-09-25), the cut comes before the slides (the user, 2026-09-25: still saw them): their first step is
         // their black backdrop, NewSolidColor("back"), after the building's map has loaded (EventControl.cs:2655). The
         // scene stops there; the backdrop is made and parented in that same step, and removed with the scene's end.
         private static void BeforeSolidColor(string name)
         {
             MainManager mm = MainManager.instance;
-            if (name != "back" || randomizerOn == null || !randomizerOn() || !SkipIntro.Value || mm == null || MainManager.map == null
+            if (name != "back" || randomizerOn == null || !randomizerOn() || !SkipCutscenes.Value || mm == null || MainManager.map == null
                 || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap || mm.flags[15]
                 || MainManager.events == null || event8Cut)
             {
@@ -191,7 +188,7 @@ namespace BugFablesAP
             }
             MainManager.events.StopCoroutine("Event8");
             event8Cut = true;
-            log.LogInfo("[qol] Event8 cut before its slides (Skip intro): the scene stopped");
+            log.LogInfo("[qol] Event8 cut before its slides: the scene stopped");
         }
 
         private static void EndEvent8()
@@ -401,7 +398,7 @@ namespace BugFablesAP
                     log.LogError($"[qol] test start {TestStart} failed: {e.Message}");
                 }
             }
-            bool slides = on && ((SkipIntro.Value && InIntroSlides()) || InFastScene());
+            bool slides = on && ((SkipCutscenes.Value && InIntroSlides()) || InFastScene());
             if (slides)
             {
                 // Each slide's line waits for a press at its end (MainManager.cs:14169-14174); answer it.

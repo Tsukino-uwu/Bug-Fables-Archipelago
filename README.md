@@ -53,10 +53,10 @@ On the game's main menu, choose **Archipelago**. The panel has:
 - **Archipelago**: Enabled keeps randomizer saves in their own folder, apart from your normal saves.
   The main menu shows it as "Archipelago (Enabled)" or "(Disabled)".
 - **Quality of life**: opens a second page of settings that speed up the game, all on by default: **Fast text**
-  (dialogue is instant, and holding skip races through it), **Skip intro** (a new game's story slides pass by on
-  their own), **Free boat** (the boat to Metal Island costs nothing), **Warp button** (a fifth pause-menu button that
-  takes you back to where the game began, after a Yes / No), **Skip cutscenes** (scenes that give nothing are skipped
-  or pass by fast), **Item animation** (which items from other players are shown held up: All, the default,
+  (dialogue is instant, and holding skip races through it), **Free boat** (the boat to Metal Island costs nothing),
+  **Warp button** (a fifth pause-menu button that takes you back to where the game began, after a Yes / No), **Skip
+  cutscenes** (the new game's intro, tutorial battle included, is skipped, Vi joining and the first check sent; other
+  scenes you don't need to watch are skipped or pass by fast), **Item animation** (which items from other players are shown held up: All, the default,
   Progression or Off; your own finds always are; holding B speeds a burst of them up) and **Shop prices** (Normal,
   Half or Free; default Normal). Cancel goes back.
 - Under the rows, a line explaining the highlighted one, and a line showing the connection's state. Cancel

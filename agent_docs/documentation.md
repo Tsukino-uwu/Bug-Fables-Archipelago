@@ -469,6 +469,8 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    line's wait and runs the game at 8 times speed. The game's own end-of-event resets the speed, and the mod does
    too once the backdrop is gone. **Confirmed by the user (2026-09-25):** on a new file the slides "skipped past
    really fast on its own"; the log shows `[qol] intro slides: passing them by`, then `over: normal speed`.
+   **Replaced (2026-09-25):** the slides are now cut out after all (item 5, the opening), and the row was folded into
+   *Skip cutscenes* (the user: "can probably just be bundled"). The speed-up stays as a fallback if the cut misses.
 3. **Free boat** (the user, 2026-09-25: nobody should have to farm berries in Archipelago). The Metal Island boat
    costs 300 berries (90 in a later state). The fare isn't in the boat scene but in the sailor's dialogue lines, so
    ScriptDump got a money column (`checkmoney`, `money`), which found both fares on the pier, lines 16 and 19, each
@@ -536,7 +538,7 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    Seen (the user, 2026-09-25): straight into the town. (6) The slides still showed, and the test start's warp stepped
    to the save crystal afterwards (the console's warp looks for a spot beside a save point). With *Skip intro* on, the
    cut now comes before the slides, at their first step, the backdrop `NewSolidColor("back")` made after the building's
-   map has loaded (`EventControl.cs:2655`); the talk cut stays for *Skip intro* off. The test start uses the game's
+   map has loaded (`EventControl.cs:2655`); the later talk cut stays as a fallback. The test start uses the game's
    `TransferMap` alone.
    **The rule since (the user, 2026-09-25):** a scene that gives an item may be skipped *as long as the item can still
    be received*, and fewer cutscenes are preferred, as an option at least. So a skip now has to keep every check the

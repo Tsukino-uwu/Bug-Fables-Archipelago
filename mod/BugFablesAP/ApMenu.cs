@@ -21,7 +21,8 @@ namespace BugFablesAP
             QolRow = 7, Rows = 8;
         // The Quality of life page's rows (the user, 2026-09-25: a sub-menu inside the panel). Cancel goes back to the
         // first page, on the Quality of life row.
-        private const int FastTextRow = 0, SkipIntroRow = 1, FreeBoatRow = 2, WarpRow = 3, CutscenesRow = 4, AnimationRow = 5, PricesRow = 6, QolRows = 7;
+        // Skip intro was folded into Skip cutscenes (the user, 2026-09-25).
+        private const int FastTextRow = 0, FreeBoatRow = 1, WarpRow = 2, CutscenesRow = 3, AnimationRow = 4, PricesRow = 5, QolRows = 6;
         private bool qolPage;
 
         // The Difficulty and Detector rows' settings (Plugin, MedalAssist).
@@ -312,10 +313,9 @@ namespace BugFablesAP
                 switch (r)
                 {
                     case FastTextRow: return "Dialogue text is instant, but still requires a button press to proceed.";
-                    case SkipIntroRow: return "Skips the story slides at the start of a new game.";
                     case FreeBoatRow: return "The boat to Metal Island costs nothing.";
                     case WarpRow: return "Adds a Warp to Start button to the pause menu.";
-                    case CutscenesRow: return "Skips scenes that give nothing, or plays them fast.";
+                    case CutscenesRow: return "Skips the intro and scenes you don't need to watch.";
                     case AnimationRow: return "Which items from other players are shown held up.";
                     case PricesRow: return "What medal shops charge.";
                     default: return "";
@@ -392,7 +392,6 @@ namespace BugFablesAP
 
         private static ConfigEntry<bool> QolSetting(int r) =>
             r == FastTextRow ? QualityOfLife.FastText
-            : r == SkipIntroRow ? QualityOfLife.SkipIntro
             : r == FreeBoatRow ? QualityOfLife.FreeBoat
             : r == WarpRow ? QualityOfLife.WarpButton
             : r == CutscenesRow ? QualityOfLife.SkipCutscenes
@@ -516,7 +515,6 @@ namespace BugFablesAP
             if (qolPage)
             {
                 Choice(FastTextRow, "Fast text", OnOff(QualityOfLife.FastText));
-                Choice(SkipIntroRow, "Skip intro", OnOff(QualityOfLife.SkipIntro));
                 Choice(FreeBoatRow, "Free boat", OnOff(QualityOfLife.FreeBoat));
                 Choice(WarpRow, "Warp button", OnOff(QualityOfLife.WarpButton));
                 Choice(CutscenesRow, "Skip cutscenes", OnOff(QualityOfLife.SkipCutscenes));
@@ -555,7 +553,7 @@ namespace BugFablesAP
             arrows.parent = box;
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
-            foreach (int r in qolPage ? new[] { FastTextRow, SkipIntroRow, FreeBoatRow, WarpRow, CutscenesRow, AnimationRow, PricesRow } : new[] { DifficultyRow, DetectorRow, ModeRow })
+            foreach (int r in qolPage ? new[] { FastTextRow, FreeBoatRow, WarpRow, CutscenesRow, AnimationRow, PricesRow } : new[] { DifficultyRow, DetectorRow, ModeRow })
             {
                 for (int side = 0; side < 2; side++)
                 {
