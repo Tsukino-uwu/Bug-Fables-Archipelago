@@ -273,24 +273,10 @@ namespace BugFablesAP
             // (EventControl.cs:2770). Cut before the slides, the party stood where a new game spawns it, under the house (the
             // user, 2026-09-25, seen once the test start's warp no longer moved it away). Done here, before the fade-in:
             // done in RunOpening, the fade-in first showed the spawn point, then a jump.
-            EntityControl four = !TestStartSet && MainManager.map != null && MainManager.map.mapid.ToString() == OpeningMap
-                ? MainManager.GetEntity(4) : null;
-            if (four != null && mm.playerdata != null)
-            {
-                Vector3 spot = four.transform.position + Vector3.left * 2.5f;
-                for (int i = 0; i < mm.playerdata.Length; i++)
-                {
-                    if (mm.playerdata[i].entity != null)
-                    {
-                        mm.playerdata[i].entity.transform.position = spot + new Vector3(-0.6f * i, 0f, 0.1f * i);
-                    }
-                }
-            }
+            // The party change waits for the next frame, behind the black screen: done before the game's EndEvent, its
+            // FixEntities met a character being replaced (NullReferenceException, a black screen; the user, 2026-09-25).
             MainManager.ResetCamera();
-            if (four != null && MainManager.player != null)
-            {
-                MainManager.MainCamera.transform.position = MainManager.player.transform.position + mm.camoffset;
-            }
+            partyThenFade = !TestStartSet && MainManager.map != null && MainManager.map.mapid.ToString() == OpeningMap;
             // The building's music only when the game starts there: with a test start it played briefly before the start
             // map's own (the user, 2026-09-25).
             if (!TestStartSet)
@@ -305,11 +291,35 @@ namespace BugFablesAP
             {
                 startPending = true; // at once, still behind the backdrop
             }
-            else
+            else if (!partyThenFade)
             {
                 MainManager.PlayTransition(1, 0, 0.02f, Color.black);
             }
             log.LogInfo($"[qol] Event8 ended the game's way; inevent={mm.inevent}");
+        }
+
+        // The frame after EndEvent8, still black: the opening's party where Event8 would have stood it, the camera on it,
+        // then the fade-in.
+        private static bool partyThenFade;
+
+        private static void PartyThenFade()
+        {
+            partyThenFade = false;
+            MainManager mm = MainManager.instance;
+            EntityControl four = MainManager.GetEntity(4);
+            if (four != null && mm.playerdata != null)
+            {
+                SetOpeningParty(four.transform.position + Vector3.left * 2.5f);
+                if (mm.camtarget != null)
+                {
+                    MainManager.MainCamera.transform.position = mm.camtarget.position + mm.camoffset;
+                }
+            }
+            else
+            {
+                log.LogWarning("[qol] opening: entity 4 not found; the party stays where it is");
+            }
+            MainManager.PlayTransition(1, 0, 0.02f, Color.black);
         }
 
         // Shops' "see more medals" first (the user, 2026-09-25: faster to reshuffle). A shopkeeper's greeting ends in
@@ -365,27 +375,14 @@ namespace BugFablesAP
             }
         }
 
-        private static void RunOpening()
+        // The opening's party: Vi and Kabbu, the game's way (ChangeParty, then SetPlayers where the party stands), or the one
+        // starting member (PartyMembers takes the others out of the call). Run at Event8's end, before the fade-in, so the
+        // first frame shown already has the right party (the user, 2026-09-25: Vi and Kabbu for a moment, the camera odd
+        // outside until the opening ran), and again by the opening, where it changes nothing.
+        private static void SetOpeningParty(Vector3 at)
         {
             MainManager mm = MainManager.instance;
-            // Where the player stands: EndEvent8 put the party where Event8 would have, before the fade-in. Placing it here
-            // too snapped the player back, since this runs once the fade-in is over and the player can walk during it
-            // (the user, 2026-09-25).
-            Vector3 at = MainManager.player.transform.position;
             MainManager.ChangeParty(new[] { 0, 1 }, true, true);
-            mm.items[0].Add(0);
-            foreach (string name in new[] { "Beee", "blockingbox" })
-            {
-                GameObject thing = GameObject.Find(name);
-                if (thing != null)
-                {
-                    UnityEngine.Object.Destroy(thing);
-                }
-                else
-                {
-                    log.LogInfo($"[qol] opening: no {name} (Event8 cut before making it)");
-                }
-            }
             var spots = new Vector3[mm.playerdata.Length];
             for (int i = 0; i < spots.Length; i++)
             {
@@ -403,6 +400,28 @@ namespace BugFablesAP
             if (mm.playerdata.Length > 0 && mm.playerdata[0].entity != null)
             {
                 mm.camtarget = mm.playerdata[0].entity.transform;
+            }
+        }
+
+        private static void RunOpening()
+        {
+            MainManager mm = MainManager.instance;
+            // Where the player stands: EndEvent8 put the party where Event8 would have, before the fade-in. Placing it here
+            // too snapped the player back, since this runs once the fade-in is over and the player can walk during it
+            // (the user, 2026-09-25).
+            SetOpeningParty(MainManager.player.transform.position);
+            mm.items[0].Add(0);
+            foreach (string name in new[] { "Beee", "blockingbox" })
+            {
+                GameObject thing = GameObject.Find(name);
+                if (thing != null)
+                {
+                    UnityEngine.Object.Destroy(thing);
+                }
+                else
+                {
+                    log.LogInfo($"[qol] opening: no {name} (Event8 cut before making it)");
+                }
             }
             // The building's own entities, only when the opening runs there: elsewhere these numbers are other things.
             bool inBuilding = MainManager.map.mapid.ToString() == OpeningMap;
@@ -555,6 +574,18 @@ namespace BugFablesAP
             {
                 reorderedMap = MainManager.map;
                 RerollFirst(MainManager.map);
+            }
+            if (partyThenFade)
+            {
+                try
+                {
+                    PartyThenFade();
+                }
+                catch (Exception e)
+                {
+                    MainManager.PlayTransition(1, 0, 0.02f, Color.black);
+                    log.LogError($"[qol] opening party failed: {e}");
+                }
             }
             if (event8Cut && !mm.message)
             {

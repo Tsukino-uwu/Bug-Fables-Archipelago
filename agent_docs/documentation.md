@@ -564,7 +564,11 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    read `target DESTROYED` with the leader (`Player 0`) fine. Unity destroys an object at the end of the frame, so the
    opening's `ResetCamera`, aiming at `MainManager.player`, still found the old leader's character and followed it as it
    vanished, leaving the camera where it last stood, under the house. The opening now aims the camera at the new
-   leader's character itself (`playerdata[0].entity`). Not yet seen.
+   leader's character itself (`playerdata[0].entity`). Seen (the user): the camera fine from the gift on, but Vi and
+   Kabbu showed for a moment and the camera was odd outside until then: the opening swaps the party only once the
+   fade-in is over. Moving the swap into the scene's end, before the game's `EndEvent`, crashed it (`FixEntities`,
+   a NullReferenceException, a black screen; freed with `unstick`). Now the scene ends as before behind the black
+   screen, and on the next frame the party is swapped, placed and the camera set, then the fade-in starts. Not yet seen.
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,
