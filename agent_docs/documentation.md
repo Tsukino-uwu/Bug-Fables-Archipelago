@@ -631,7 +631,8 @@ it right. Seen: 5 on Merab's counter (screenshot, 2026-09-25).
 **The reshuffle choice first** (the user, 2026-09-25: faster to reset a shelf). A shopkeeper's greeting ends in a
 `prompt` whose choices are listed as N targets then N texts (`MainManager.cs:12213-12222`); the reshuffle is the one with
 target `-199` and text `-195` (Shades's line 1, Merab's line 34, read with the console's `script`). With Archipelago on,
-that pair moves to the front, in the map's dialogue table in memory, once per map load. Built, not yet seen.
+that pair moves to the front, in the map's dialogue table in memory, once per map load. Seen (the user, 2026-09-25):
+at Shades's, reshuffling is now a matter of tapping the confirm button.
 
 **Full stock from the start, the mod owning it** (the user, 2026-09-25; built, not yet seen in game). Every medal a
 shop will ever stock is on its shelf from a new game, and a medal the story stocks twice is two locations. That broke
