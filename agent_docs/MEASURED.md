@@ -648,7 +648,7 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   the data. The user, on a file past the first boss (chapter 2 started), walked through into the later area
   (2026-09-25). **What really gates it** (the user, 2026-09-25): in normal play the way back to the cave is
   closed after the first boss (Eetl's blocker outside the city until flag 67; from 67 a `guard` and a `sign` on
-  `NearSnakemouth`, which no flag removes; whether the guard physically blocks is still to see). **And past the
+  `NearSnakemouth`, which no flag removes; seen closed after the first boss, the user, 2026-09-25, playing Leif alone). **And past the
   door, a slot needs a key item even with the door open:** `UpperSnekEntrance`'s `slot` is a `LockedDoor`
   (hidden by 517) whose `dialogues[0].y` is 11, and Event59's key list at index 11 is **key item 116, the Peculiar
   Gem** (`SnakemouthKey`; names dump), given in code by **Event117** (`EventControl.cs:19958`, chapter 4 by the

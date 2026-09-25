@@ -219,6 +219,10 @@ coupled, off by default) shuffles 508 doors with every area kept reachable; a ge
    puts them; the spider fight's lead-in once stand-ins get their physics body when made; and **the spider fight itself
    with Leif alone** (the user's screenshot: Leif alone against the spider, the battle menu working). In the story that
    fight is Kabbu alone at first, then Vi joins.
+   **The first boss and after, Leif alone (the user, 2026-09-25):** the boss scene (Event26) and the one after the bridge
+   (Event63) played with Leif acting the story leader's part, no error in the log; the follower joined crossing the
+   bridge; the way back to the cave is closed after the boss; what the seed keeps open (the caravan, the ladybug
+   siblings) still works; the NPCs in the starting house moved away as the story has them. Chapter 2 next.
    **Decided (the user, 2026-09-25): the members present act out the missing ones' parts** in scenes, where they would
    be and what they would do, instead of standing idle beside invisible stand-ins ("looks more fun"). Plan: the real
    leader plays the story's leader (the first member of the party the story expects); only other missing members stay
