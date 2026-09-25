@@ -165,7 +165,10 @@ coupled, off by default) shuffles 508 doors with every area kept reachable; a ha
    needs a move (a ledge, a beemerang switch, grass, water to freeze) becomes a rule, seen room by room, and the start
    must have checks that need none of them.
    **Later idea, a yaml option (the user, 2026-09-25): party members as items.** Start with one random member and
-   find the other two, each its own item, on top of the abilities. Opt-in only: fighting with one or two changes
+   find the other two, each its own item, on top of the abilities. **Its shape (the user, 2026-09-25, later):** *Starting
+   Party Member: Off / Vi / Kabbu / Leif / Random*; Off is the story's party, otherwise the game starts with that one
+   member and the other two are items. Prompted by the stand-ins for missing members in scenes, which make one-member play
+   look possible; the story's own joining scenes (Kabbu at the start, Leif at the lake) must then add nobody. Opt-in only: fighting with one or two changes
    the game a lot. Open questions: the story may need all three after chapter 1, and adding a member outside the
    story's own event hasn't worked yet (log.md, 2026-09-24: `ChangeParty` left Leif without a character).
    **Solved 2026-09-25:** without `fromscratch`, `ChangeParty`'s copy loop never runs (`for m < 0`,
