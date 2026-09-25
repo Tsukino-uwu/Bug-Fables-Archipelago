@@ -166,6 +166,15 @@ coupled, off by default) shuffles 508 doors with every area kept reachable; a ge
       `HideoutCell`, whose one door leads to the central room. Getting out of the cell needs, the user thinks, Leif's
       ice; without Leif it's a dead end (the Warp button is the way out). So the hideout's garden needs Leif in the
       logic once the logic follows the doors, and a guard catching you is a transfer that isn't a door.
+   8. **Transfers that aren't doors (decided, the user, 2026-09-25).** The game also moves the party by the dialogue
+      script commands `|transfer|` and `|warp|` (`MainManager.cs:13263-13270`) and by story events (about 88 `LoadMap`
+      calls in `EventControl`). **Entrances the player chooses** (the bar's hatch, elevators, the boat) are doors in all
+      but name: shuffled like doors, coupled with their way back where they have one, behind their own toggle at first.
+      **Places the game sends you** (caught by guards, a fall, a story scene) keep their destination: the scene expects
+      to end there, they have no way back to pair with, and a destination you didn't choose is only confusing. They
+      become one-way connections in the logic, which must make sure you can leave where they put you; some happen only
+      at some story points, and some can strand you. **The Warp button and fast travel stay outside the logic.** First
+      step: list every such transfer from the data (the script dump and `event-triggers.py`), map, trigger and target.
 2. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
    **Also wanted (the user, 2026-09-25): the basic moves as items**, a yaml option apart from the abilities: Vi's
