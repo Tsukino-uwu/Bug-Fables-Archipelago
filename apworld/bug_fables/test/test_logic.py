@@ -289,6 +289,15 @@ class TestKeptOpen(BugFablesTestBase):
         kept = self.world.fill_slot_data()["kept_open"]
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "eetlblocker1 - Duplicate"}, kept)
 
+    def test_plaza_discoveries_open_before_the_briefing(self) -> None:
+        # The statue and the inn portrait exist only from chapter 2's briefing (flag 67); before it, a stand-in in
+        # front of each turns the player away (the user, 2026-09-25).
+        slot = self.world.fill_slot_data()
+        for entity in ("Discovery Pre Briefing", "Discovery Pre Briefing - Duplicate"):
+            self.assertIn({"map": "BugariaMainPlaza", "entity": entity}, slot["kept_open"])
+        for entity in ("StatueDesc", "InnPortrait"):
+            self.assertIn({"map": "BugariaMainPlaza", "entity": entity}, slot["kept_present"])
+
 
 class TestBossPrize(BugFablesTestBase):
     # The first boss's prize is handed over by Artis; the client knows it's done when its prize slot reaches 3.

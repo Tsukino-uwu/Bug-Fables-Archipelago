@@ -223,6 +223,12 @@ coupled, off by default) shuffles 508 doors with every area kept reachable; a ge
    (Event63) played with Leif acting the story leader's part, no error in the log; the follower joined crossing the
    bridge; the way back to the cave is closed after the boss; what the seed keeps open (the caravan, the ladybug
    siblings) still works; the NPCs in the starting house moved away as the story has them. Chapter 2 next.
+   **The plaza's discoveries open from the start** (the user, 2026-09-25): before chapter 2's briefing (flag 67) a
+   stand-in (`Discovery Pre Briefing`, a Check saying "We can check this out later. Let's hurry to the castle.") stands
+   where the plaza statue and the inn portrait will be; the discoveries themselves (`StatueDesc`, Event38, discovery 5;
+   `InnPortrait`, Event37, discovery 4) require 67. Both stand-ins are kept out of the way and both discoveries kept
+   present (`kept_open`, `kept_present`); the two events ask for members by name and set no story flag. Test
+   `TestKeptOpen`. Seeds generated solo and with APQuest; **seen (the user):** the statue can be examined.
    **Decided (the user, 2026-09-25): the members present act out the missing ones' parts** in scenes, where they would
    be and what they would do, instead of standing idle beside invisible stand-ins ("looks more fun"). Plan: the real
    leader plays the story's leader (the first member of the party the story expects); only other missing members stay
