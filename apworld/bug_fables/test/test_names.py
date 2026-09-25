@@ -18,9 +18,11 @@ class TestLocationNames(BugFablesTestBase):
 class TestOptionCounts(BugFablesTestBase):
     # Every toggle that adds locations states how many in its player-visible description.
     def test_toggles_state_their_check_count(self) -> None:
-        from ..options import ShuffleCrystalBerries, ShuffleDiscoveries, ShuffleMedalShops, ShuffleQuests, category_count
+        from ..options import (ShuffleCrystalBerries, ShuffleDiscoveries, ShuffleItemShops, ShuffleMedalShops,
+                               ShuffleQuests, category_count)
         for option, category in ((ShuffleQuests, "quest"), (ShuffleCrystalBerries, "crystal_berry"),
-                                 (ShuffleDiscoveries, "discovery"), (ShuffleMedalShops, "shop")):
+                                 (ShuffleDiscoveries, "discovery"), (ShuffleMedalShops, "shop"),
+                                 (ShuffleItemShops, "item_shop")):
             with self.subTest(option=option.__name__):
                 self.assertGreater(category_count(category), 0)
                 self.assertIn(f"Checks added in this version: {category_count(category)}.", option.__doc__)

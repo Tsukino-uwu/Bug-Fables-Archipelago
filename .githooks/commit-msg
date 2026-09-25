@@ -1,8 +1,6 @@
 #!/bin/sh
-# The two process guides must never go stale (CLAUDE.md, "What never changes"): agent_docs/documentation.md
-# (how the mod was made) and agent_docs/apimplementation.md (the Archipelago side). A commit that changes the
-# mod, the apworld or the dev scripts has to update at least one of them, unless the commit
-# message says, on a line of its own, that the change doesn't alter the process:
+# A commit touching mod/, apworld/ or dev-scripts/ must update a process guide (agent_docs/documentation.md
+# or apimplementation.md), unless its message has this line on its own:
 #   docs: no process change
 
 msg_file="$1"

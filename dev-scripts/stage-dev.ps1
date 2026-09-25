@@ -43,7 +43,7 @@ New-Item -ItemType Directory -Force $config | Out-Null
     '## Written by bug_fables_ap dev-scripts\stage-dev.ps1. Dev only.',
     '',
     '[AutoReload]',
-    '## Off: the Mono in this game throws NotImplementedException from new FileSystemWatcher (2026-09-24),',
+    '## Off: the Mono in this game throws NotImplementedException from new FileSystemWatcher,',
     '## which aborts ScriptEngine.Awake. DevReload in the plugin polls instead.',
     'EnableFileSystemWatcher = false',
     '## Seconds after the last file change before reloading, so the DLL and pdb land together.',

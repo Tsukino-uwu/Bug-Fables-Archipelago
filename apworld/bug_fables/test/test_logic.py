@@ -455,7 +455,7 @@ class TestKeptPresent(BugFablesTestBase):
 
 
 class TestOutskirtsRocks(BugFablesTestBase):
-    # The Outskirts rocks go from the start, so the town's first-entry scene must wait for the first boss.
+    # The Outskirts rocks go from the start, so the town opens without its early scenes (arrival, plaza blockers).
     def test_rocks_are_removed(self) -> None:
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "Base/BlockingRocks"},
                       self.world.fill_slot_data()["scenery_hidden"])
@@ -551,7 +551,7 @@ class TestMedalShop(BugFablesTestBase):
 
 
 class TestItemShop(BugFablesTestBase):
-    # The first purchase of each item shop entry; no give entry, so no unrelated giveitem of that item is swapped.
+    # Item shop checks carry no give entry, so no unrelated giveitem of that item is swapped.
     def test_slot_data(self) -> None:
         data = self.world.fill_slot_data()
         shops = {k: e for k, e in data["location_item_shops"].items() if e["keeper"] == "ButterflyShopkeeper"}
@@ -621,7 +621,7 @@ class TestShopContentsDefault(BugFablesTestBase):
 
 
 class TestShopContentsFillerOnly(BugFablesTestBase):
-    # With discoveries on, a solo seed has exactly enough filler for Merab's 22 copies.
+    # With discoveries on, a solo seed has exactly enough filler for every shop location.
     options = {"shop_contents": "filler_only", "shuffle_discoveries": True}
 
     def test_shops_excluded(self) -> None:

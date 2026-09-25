@@ -48,7 +48,7 @@ class BugFablesWebWorld(WebWorld):
 class BugFablesWorld(World):
     """
     Bug Fables: The Everlasting Sapling is a paper-style RPG about a team of three explorers.
-    Key items are shuffled; every item, your own included, arrives from the server.
+    Items, medals, key items and berries are shuffled; every item, your own included, arrives from the server.
     """
 
     game = GAME
@@ -62,7 +62,7 @@ class BugFablesWorld(World):
     artifacts_required: int = 1
 
     _items_by_name = {item["name"]: item for item in ITEMS}
-    # Only padding fills leftover slots; a non-padding filler (the Hard Mode medal) is in the pool once.
+    # Only padding fills leftover slots; other filler (the Hard Mode medal) enters only as a location's vanilla item.
     _padding = [item["name"] for item in ITEMS if item.get("padding")]
 
     def generate_early(self) -> None:
@@ -218,6 +218,6 @@ class BugFablesWorld(World):
             "present_from": [{"map": e["map"], "entity": e["entity"], "flag": e["flag"]} for e in PRESENT_FROM],
             "dialogue_flags": [{"map": e["map"], "entity": e["entity"], "flag": e["flag"], "to": e["to"]} for e in DIALOGUE_FLAGS],
             "door_targets": self.door_targets,
-            # 0 item, 1 key item, 2 medal.
+            # 0 item, 1 key item, 2 medal, 3 berries, 4 crystal berry.
             "item_kinds": {str(ITEM_NAME_TO_ID[item["name"]]): item["kind"] for item in ITEMS},
         }
