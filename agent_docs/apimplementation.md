@@ -17,8 +17,8 @@ items, with the count kept in the save (build step 7); the game's own item at a 
 seed's (the mod guide, step 9); and, as of 2026-09-25, the world opening one gate at a time (the Outskirts rocks,
 Snakemouth's fall room both ways, the town, its districts, the bar, Madeleine's house), journal discoveries and
 Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026-09-25), Madame Butterfly's item shop (seen 2026-09-25), the caravan from the start with its three items (seen 2026-09-25), and a Quality of life page (build step 8 and the mod guide, step 10). An experimental entrance randomizer (a yaml option,
-coupled, off by default) shuffles 508 doors with every area kept reachable; a hand-made swap was seen working both ways
-(2026-09-25), a generated one not yet.
+coupled, off by default) shuffles 508 doors with every area kept reachable; a generated pair was seen working both ways
+(2026-09-25).
 
 **Next** (decided by the user, 2026-09-24):
 
@@ -150,8 +150,10 @@ coupled, off by default) shuffles 508 doors with every area kept reachable; a ha
       not reached yet, taking an area with more doors whenever only one open door is left; the doors left at the end
       are paired at random. Tests `TestDoors*`: every way back leads back, every map is reachable, and a hub with dead
       ends is never stranded over 300 seeds (a plain random pairing strands 266 of them).
-   4. Six seeds generated with it on, three solo and three with APQuest. **Not yet seen in game.** The logic still
-      assumes the vanilla doors (the named allowance).
+   4. Six seeds generated with it on, three solo and three with APQuest. **Seen (the user, 2026-09-25), one generated
+      pair both ways:** the town gate led into the desert (`DesertBeforeGH`, the log: rewritten like `DesertSouthern`'s
+      left exit), and the exit there back to the start in front of the gate. The logic still assumes the vanilla doors
+      (the named allowance).
 2. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
    **Also wanted (the user, 2026-09-25): the basic moves as items**, a yaml option apart from the abilities: Vi's
