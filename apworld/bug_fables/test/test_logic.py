@@ -31,7 +31,8 @@ class TestPermitGate(BugFablesTestBase):
                                      "Outskirts: Pier", "Bugaria City: Residential District, Rooftop",
                                      "Outskirts: Madeleine's House, Table Right", "Outskirts: Madeleine's House, Table Left"}
                          | {f"Bugaria City: Commercial District, Medal Shop {n}" for n in range(1, 23)}
-                         | {f"Bugaria City: Commercial District, Item Shop {n}" for n in range(1, 6)})
+                         | {f"Bugaria City: Commercial District, Item Shop {n}" for n in range(1, 6)}
+                         | {f"Outskirts: Caravan, Item Shop {n}" for n in range(1, 4)})
 
     def test_reward_near_snakemouth_needs_the_permit(self) -> None:
         self.assertFalse(self.can_reach_location("Outskirts: Near Snakemouth Den, Reward"))
@@ -583,7 +584,7 @@ class TestItemShop(BugFablesTestBase):
     # swap an unrelated giveitem of the same item on that map.
     def test_slot_data(self) -> None:
         data = self.world.fill_slot_data()
-        shops = data["location_item_shops"]
+        shops = {k: e for k, e in data["location_item_shops"].items() if e["keeper"] == "ButterflyShopkeeper"}
         self.assertEqual(sorted(entry["item"] for entry in shops.values()), [0, 1, 13, 17, 26])
         self.assertTrue(all(entry == {"map": "BugariaCommercial", "keeper": "ButterflyShopkeeper", "item": entry["item"]}
                             for entry in shops.values()))
@@ -598,6 +599,27 @@ class TestItemShop(BugFablesTestBase):
     def test_shop_contents_applies(self) -> None:
         shop = self.world.get_location("Bugaria City: Commercial District, Item Shop 1")
         self.assertFalse(shop.item_rule(self.world.create_item("Explorer Permit")))
+
+
+class TestCaravan(BugFablesTestBase):
+    # The caravan is there from the start (the user, 2026-09-25): its keeper present (so its shop slots are built), its
+    # stall shown, the Crickerly who stands there before it kept away; its three items are item shop locations.
+    def test_caravan_open(self) -> None:
+        data = self.world.fill_slot_data()
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "Crickerly2"}, data["kept_present"])
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "Crickerly1"}, data["kept_open"])
+        self.assertEqual(data["scenery_present"], [{"map": "BugariaOutskirtsOutsideCity", "entity": "Base/Stall"}])
+        caravan = [e for e in data["location_item_shops"].values() if e["keeper"] == "Crickerly2"]
+        self.assertEqual(sorted(e["item"] for e in caravan), [2, 3, 11])
+
+    def test_no_rock_lines(self) -> None:
+        # The Outskirts lines about the rocks (the user, 2026-09-25): the waiting moth goes, the husband welcomes.
+        data = self.world.fill_slot_data()
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "FuzzyMoth"}, data["kept_open"])
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "CHusband", "flag": 41, "to": 691}, data["dialogue_flags"])
+
+    def test_reachable_from_the_start(self) -> None:
+        self.assertTrue(self.can_reach_location("Outskirts: Caravan, Item Shop 1"))
 
 
 class TestItemShopsOff(BugFablesTestBase):

@@ -42,7 +42,12 @@ namespace BugFablesAP
                 return;
             }
             harmony = new Harmony(guid + ".open." + DateTime.UtcNow.Ticks);
-            harmony.Patch(create, postfix: new HarmonyMethod(typeof(KeptOpen), nameof(AfterCreate)));
+            harmony.Patch(create, prefix: new HarmonyMethod(typeof(KeptOpen), nameof(BeforeCreate)), postfix: new HarmonyMethod(typeof(KeptOpen), nameof(AfterCreate)));
+            var made = AccessTools.Method(typeof(EntityControl), nameof(EntityControl.CreateNewEntity), new[] { typeof(string) });
+            if (made != null)
+            {
+                harmony.Patch(made, postfix: new HarmonyMethod(typeof(KeptOpen), nameof(AfterNewEntity)));
+            }
             harmony.Patch(check, prefix: new HarmonyMethod(typeof(KeptOpen), nameof(BeforeCheck)));
             var scenery = AccessTools.Method(typeof(ConditionChecker), "Start");
             if (scenery != null)
@@ -104,8 +109,40 @@ namespace BugFablesAP
             harmony = null;
         }
 
+        // A shopkeeper kept present needs its shop slots, which the map builds inside CreateEntities, right after reading
+        // that keeper, only if the keeper exists by then (MapControl.cs:1708-1745): the marker set in AfterCreate comes too
+        // late. So while the map builds, the entity just made is remembered (every entity starts as CreateNewEntity(name),
+        // MapControl.cs:1466), and a check made with that entity's own requires array answers "exists" when it's listed.
+        // The caravan (the user, 2026-09-25).
+        private static bool creating;
+        private static EntityControl lastMade;
+        private static string creatingMap;
+
+        private static void BeforeCreate(MapControl __instance)
+        {
+            creating = true;
+            lastMade = null;
+            creatingMap = __instance.mapid.ToString();
+        }
+
+        private static void AfterNewEntity(EntityControl __result)
+        {
+            if (creating)
+            {
+                lastMade = __result;
+            }
+        }
+
+        private static bool KeptPresentHere(string name)
+        {
+            List<ApConnection.Blocker> present = connection?.KeptPresent;
+            return present != null && creatingMap != null && present.Any(b => b.Map == creatingMap && b.Entity == name);
+        }
+
         private static void AfterCreate(MapControl __instance)
         {
+            creating = false;
+            lastMade = null;
             List<ApConnection.Blocker> blockers = connection?.KeptOpen;
             if (blockers == null || randomizerOn == null || !randomizerOn())
             {
@@ -202,6 +239,20 @@ namespace BugFablesAP
             {
                 MarkHidden(__instance, MainManager.map.mapid.ToString());
             }
+            // scenery_present: the other way round, a marker requires answering "exists" (the caravan's stall).
+            List<ApConnection.Blocker> shown = connection?.SceneryPresent;
+            if (randomizerOn != null && randomizerOn() && shown != null && MainManager.map != null)
+            {
+                string map = MainManager.map.mapid.ToString();
+                string path = PathOf(__instance.transform, MainManager.map.transform);
+                if (shown.Any(b => b.Map == map && b.Entity == path))
+                {
+                    var marker = new[] { -1 };
+                    presentMarkers.Add(marker);
+                    __instance.requires = marker;
+                    log.LogInfo($"[open] {map}: scenery {path} shown (the seed shows it from the start)");
+                }
+            }
         }
 
         private static bool Listed(ConditionChecker scenery)
@@ -237,6 +288,12 @@ namespace BugFablesAP
 
         private static bool BeforeCheck(int[] requires, int[] limit, ref bool __result)
         {
+            if (creating && requires != null && lastMade != null && lastMade.npcdata != null && ReferenceEquals(requires, lastMade.npcdata.requires)
+                && randomizerOn != null && randomizerOn() && KeptPresentHere(lastMade.name))
+            {
+                __result = false;
+                return false;
+            }
             if (limit != null && markers.Contains(limit))
             {
                 __result = true;

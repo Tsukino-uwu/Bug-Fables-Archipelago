@@ -10,13 +10,13 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 
 ## Where it stands
 
-**Done so far:** an apworld (61 locations, 56 by default; 42 items) that generates seeds and passes its tests, with
+**Done so far:** an apworld (64 locations, 59 by default; 44 items) that generates seeds and passes its tests, with
 the goal "collect N artifacts"; the mod connecting on its own, compressed, to a local server or a hosted room on
 archipelago.gg, retrying when the server is unreachable or drops; sending checks (build step 6); receiving
 items, with the count kept in the save (build step 7); the game's own item at a location swapped for the
 seed's (the mod guide, step 9); and, as of 2026-09-25, the world opening one gate at a time (the Outskirts rocks,
 Snakemouth's fall room both ways, the town, its districts, the bar, Madeleine's house), journal discoveries and
-Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026-09-25), Madame Butterfly's item shop (seen 2026-09-25), and a Quality of life page (build step 8 and the mod guide, step 10).
+Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026-09-25), Madame Butterfly's item shop (seen 2026-09-25), the caravan from the start with its three items (built, not yet seen), and a Quality of life page (build step 8 and the mod guide, step 10).
 
 **Next** (decided by the user, 2026-09-24):
 
@@ -60,7 +60,16 @@ Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026
    no `give` entry, so an unrelated `giveitem` of the same item on that map is never swapped. *Shop Contents* covers
    them too. The buy line adds the item with `additem` (no item-get box), so the mod takes that command out when the line
    is read and treats berries paid as the purchase; the check goes out through the respawning pickups' queue. Tests
-   `TestItemShop*`. The other shops (the caravan first) follow the same data.
+   `TestItemShop*`. The other shops follow the same data.
+   **The caravan from the start (2026-09-25, built, not yet seen):** its keeper `Crickerly2` kept present, its stall
+   (`Base/Stall`, scenery) shown through a new `scenery_present` list, and `Crickerly1`, who stands there before it,
+   kept away; its three items (Spicy Berry, Burly Berry, Magic Seed) are *Outskirts: Caravan, Item Shop 1* to *3*
+   (ids 63-65), reachable from the start. Its stock is fixed (the keeper's own data); Crickerly's later stands on other
+   maps are other shops. **Lines about the rocks** (the user): every Outskirts line was searched (`line` dev command):
+   the waiting moth (`FuzzyMoth`, line 76) is kept away, the caravan husband's welcome (line 78) answers to flag 691
+   instead of 41 (line 75 was the rocks), Crickerly1 (line 74) is gone with the caravan. Gen and Eri, Artis and Eetl keep
+   their flag-41 lines: those are after the first boss (the river, Artis's prize, Eetl leading into chapter 2). Test
+   `TestCaravan`.
    **Shop Contents** (the user, 2026-09-25: shops are many easy checks in one place and soak up the good items, as in
    Tevi): a yaml choice, *Anything*, *No Progression* (default) or *Filler Only*. No Progression is an `item_rule` on each
    shop location refusing progression items from any game; Filler Only is Archipelago's excluded type (no progression,

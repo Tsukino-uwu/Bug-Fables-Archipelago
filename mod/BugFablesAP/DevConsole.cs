@@ -330,6 +330,27 @@ namespace BugFablesAP
                         MainManager.instance.money = Mathf.Clamp(MainManager.instance.money + berries, 0, 999);
                         MainManager.instance.showmoney = 1f;
                         return "berries now " + MainManager.instance.money;
+                    case "line":
+                        // Full text of a map's dialogue lines (2026-09-25: which Outskirts lines talk about the rocks),
+                        // from the same table the script command reads.
+                        if (parts.Length < 3)
+                        {
+                            return "line <map> <n> [n...]";
+                        }
+                        TextAsset lineTable = Resources.Load<TextAsset>("Data/Dialogues" + MainManager.languageid + "/Maps/" + parts[1]);
+                        if (lineTable == null)
+                        {
+                            return "line: no dialogue table for " + parts[1];
+                        }
+                        string[] lineRows = lineTable.ToString().Replace("\r\n", "\n").Split('\n');
+                        var lineLog = new System.Text.StringBuilder("[dev] lines of " + parts[1] + ":");
+                        foreach (string n in parts.Skip(2))
+                        {
+                            int at = int.Parse(n);
+                            lineLog.Append("\n  ").Append(at).Append(": ").Append(at < lineRows.Length ? lineRows[at] : "(none)");
+                        }
+                        log.LogInfo(lineLog.ToString());
+                        return "lines logged";
                     case "prices":
                         // Medal prices from the game's medal table: berries (column 5) and crystal berries (column 7),
                         // for the ids given (2026-09-25: the sum of Shades's stock, for the crystal berry rule).

@@ -8,7 +8,7 @@ from BaseClasses import Item, ItemClassification, Location, LocationProgressType
 from rule_builder.rules import Has, HasAll
 from worlds.AutoWorld import WebWorld, World
 
-from .data_tables import (ARTIFACTS, ITEM_NAME_TO_ID, ITEMS, DIALOGUE_FLAGS, HELD_UNTIL, KEPT_OPEN, PRESENT_FROM, KEPT_PRESENT, SCENERY_HIDDEN, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, STORY_EVENTS,
+from .data_tables import (ARTIFACTS, ITEM_NAME_TO_ID, ITEMS, DIALOGUE_FLAGS, HELD_UNTIL, KEPT_OPEN, PRESENT_FROM, KEPT_PRESENT, SCENERY_HIDDEN, SCENERY_PRESENT, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, STORY_EVENTS,
                           WORLD_VERSION, vanilla_item)
 from .options import BugFablesOptions, ShopContents
 
@@ -243,6 +243,8 @@ class BugFablesWorld(World):
             # Map scenery the story removes later (the Outskirts rocks) that the client removes from the start; entity
             # is the object's path inside the map.
             "scenery_hidden": [{"map": e["map"], "entity": e["entity"]} for e in SCENERY_HIDDEN],
+            # Scenery the story shows later that the seed shows from the start (the caravan's stall), by its path in the map.
+            "scenery_present": [{"map": e["map"], "entity": e["entity"]} for e in SCENERY_PRESENT],
             # Entities with no gate of their own that the client keeps away until a story flag (the town's first-entry
             # scene, reachable once the rocks are gone).
             "held_until": [{"map": e["map"], "entity": e["entity"], "flag": e["flag"]} for e in HELD_UNTIL],

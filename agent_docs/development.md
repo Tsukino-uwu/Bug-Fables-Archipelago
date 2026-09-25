@@ -101,6 +101,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   `OneHit` (off in the code), so it survives reloads; `copy-dev.ps1 -DebugOn OneHit` turns it on for a dev install.
 - `infjump`: flips jumping again in mid-air. It's the `[Debug]` setting `InfJump` (off in the code), on in the dev
   install (`copy-dev.ps1 -DebugOn InfJump`), so it survives reloads.
+- `line <map> <n> [n...]`: log the full text of a map's dialogue lines (the same table `script` reads), e.g. to find
+  every line that mentions something (2026-09-25: the Outskirts lines about the rocks).
 - `berries <n>`: add n berries (negative takes them), clamped to 0-999 as the game's own `money` script command does.
   For shop tests.
 - **`TestStart`** (`[Debug]`, not a console command): a map name (`MainManager.Maps`), optionally `@` the map you

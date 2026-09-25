@@ -346,6 +346,10 @@ namespace BugFablesAP
         // slot_data's scenery_hidden: map scenery the story removes later (the Outskirts rocks) that the seed removes from
         // the start ([{map, entity}], entity being the object's path inside the map, as MapDump writes it).
         internal List<Blocker> SceneryHidden => sceneryHidden;
+        // slot_data's scenery_present: scenery the story shows later that the seed shows from the start (the caravan's
+        // stall), by path. Null when not sent.
+        internal List<Blocker> SceneryPresent => sceneryPresent;
+        private volatile List<Blocker> sceneryPresent;
         private volatile List<Blocker> sceneryHidden;
 
         // slot_data's held_until: an entity with no gate of its own that the seed keeps away until a story flag
@@ -594,6 +598,7 @@ namespace BugFablesAP
                     keptOpen = ReadKeptOpen(ok.SlotData);
                     keptPresent = ReadKeptOpen(ok.SlotData, "kept_present");
                     sceneryHidden = ReadKeptOpen(ok.SlotData, "scenery_hidden");
+                    sceneryPresent = ReadKeptOpen(ok.SlotData, "scenery_present");
                     heldUntil = ReadKeptOpen(ok.SlotData, "held_until");
                     presentFrom = ReadKeptOpen(ok.SlotData, "present_from");
                     dialogueFlags = ok.SlotData != null && ok.SlotData.TryGetValue("dialogue_flags", out object df) && df is JArray dfl

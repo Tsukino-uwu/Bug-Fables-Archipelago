@@ -640,6 +640,14 @@ the first try showed the shop's own items and a hold-up of "an Archipelago item"
 never scouted (the scout list is built table by table); after adding them, the shelf showed the seed's medals, each
 purchase held up the seed's item and sent its check, and the bought slots became the shop's own items again.
 
+**A shopkeeper kept present, and scenery shown** (the caravan, the user, 2026-09-25). Making an entity present works
+by a marker on its `requires`, set right after the map builds its entities. A shopkeeper's slots are built *during*
+that build, right after the keeper is read, and only if the keeper exists by then (`MapControl.cs:1708-1745`), so the
+marker came too late. While a map builds, the mod now remembers the entity just made (every one starts as
+`CreateNewEntity(name)`), and a check made with that entity's own `requires` array answers "exists" when it's listed.
+Scenery (a `ConditionChecker`) gets the mirror of the rocks' treatment: a marker `requires` before its `Start`, which
+answers "exists" (`scenery_present`, the caravan's stall). Built, not yet seen.
+
 **The reshuffle choice first** (the user, 2026-09-25: faster to reset a shelf). A shopkeeper's greeting ends in a
 `prompt` whose choices are listed as N targets then N texts (`MainManager.cs:12213-12222`); the reshuffle is the one with
 target `-199` and text `-195` (Shades's line 1, Merab's line 34, read with the console's `script`). With Archipelago on,
