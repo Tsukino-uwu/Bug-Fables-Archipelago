@@ -117,7 +117,8 @@ be wrong.
    default. Off is the vanilla start. `towns` starts in one of the towns. `random` starts anywhere, even in the middle
    of a dungeon. Chosen at generation and sent in `slot_data`, never at runtime. The logic starts from that room, so
    every seed is still completable from it: `random` needs the room-by-room logic that the entrance randomizer also
-   waits for (build step 12). Its own build step when built.
+   waits for (build step 12). Picking one named spot (a given town), as some worlds allow, is a later idea, only if
+   players ask; `towns` and `random` come first (the user, 2026-09-26). Its own build step when built.
 
 **Known issues:**
 
