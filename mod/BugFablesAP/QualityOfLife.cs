@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using BepInEx.Configuration;
 using BepInEx.Logging;
@@ -19,6 +20,30 @@ namespace BugFablesAP
         internal static ConfigEntry<bool> SkipIntro;
         internal static ConfigEntry<bool> FreeBoat;
         internal static ConfigEntry<bool> WarpButton;
+        internal static ConfigEntry<bool> SkipCutscenes;
+
+        // Skip cutscenes (the user, 2026-09-25: scenes and fluff that give no checks). Each scene is read in full first
+        // (EventControl.EventN): one that only moves the camera and the party, talks, and sets flags is skipped by
+        // setting those flags instead of starting it; one that also changes the world is run by the game itself at
+        // speed, its lines answered, so it ends exactly as it would. Never a scene that gives an item, sends a check,
+        // changes the party or starts a battle.
+        private sealed class Scene
+        {
+            internal string Map;
+            internal int Event;
+            internal int[] Flags; // null: fast-forward instead of skipping
+        }
+
+        private static readonly Scene[] Scenes =
+        {
+            // The bridge message: party and camera moves, three lines, flag 11 (EventControl.cs:274-333; its lines carry
+            // no commands, ScriptDump). Flag 11 also hides its own trigger (BridgeMessage, limit 11).
+            new Scene { Map = "SnakemouthBridgeRoom", Event = 0, Flags = new[] { 11 } },
+            // Hitting the rope: moves the rope away, plays the bridge's Fall animation and fixes it fallen, then flags 7
+            // and 11 (EventControl.cs:334-407). The bridge's end state is set by the scene itself, not by its flags, so
+            // it's fast-forwarded.
+            new Scene { Map = "SnakemouthBridgeRoom", Event = 1, Flags = null },
+        };
 
         // The Metal Island boat's fares: the pier sailor's lines 16 (300 berries) and 19 (90), each
         // |checkmoney,N,20||money,-N| (ScriptDump's money column, 2026-09-25). The trip back charges nothing.
@@ -52,6 +77,8 @@ namespace BugFablesAP
                 "A new game's four story slides pass by on their own, fast. The rest of the opening plays as normal.");
             FreeBoat = config.Bind("QualityOfLife", "FreeBoat", true,
                 "The boat to Metal Island costs nothing (the user, 2026-09-25: no farming berries in Archipelago).");
+            SkipCutscenes = config.Bind("QualityOfLife", "SkipCutscenes", true,
+                "Scenes that give nothing are skipped or pass by fast (a list that grows scene by scene).");
             WarpButton = config.Bind("QualityOfLife", "WarpButton", true,
                 "A fifth button in the pause menu, Warp to Start, takes the party back to where the game began (after a "
                 + "Yes / No box). Not shown in battle.");
@@ -65,6 +92,46 @@ namespace BugFablesAP
             }
             harmony = new Harmony(Plugin.Guid + ".qol." + DateTime.UtcNow.Ticks);
             harmony.Patch(getLine, postfix: new HarmonyMethod(typeof(QualityOfLife), nameof(AfterGetLine)));
+            MethodInfo startEvent = AccessTools.Method(typeof(EventControl), nameof(EventControl.StartEvent), new[] { typeof(int), typeof(NPCControl) });
+            if (startEvent == null)
+            {
+                log.LogError("[qol] EventControl.StartEvent(int, NPCControl) not found: Skip cutscenes does nothing.");
+                return;
+            }
+            harmony.Patch(startEvent, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeStartEvent)));
+        }
+
+        // Every scene starts here (EventControl.cs:74). A listed scene to skip gets its flags and never starts.
+        private static bool BeforeStartEvent(int id)
+        {
+            Scene scene = SceneFor(id);
+            if (scene == null || scene.Flags == null || !SkipCutscenes.Value || !randomizerOn())
+            {
+                return true;
+            }
+            foreach (int flag in scene.Flags)
+            {
+                MainManager.instance.flags[flag] = true;
+            }
+            log.LogInfo($"[qol] skipped Event{id} on {scene.Map}: set flags {string.Join(", ", scene.Flags.Select(f => f.ToString()).ToArray())}");
+            return false;
+        }
+
+        private static Scene SceneFor(int id)
+        {
+            string map = MainManager.map == null ? null : MainManager.map.mapid.ToString();
+            return map == null ? null : Scenes.FirstOrDefault(s => s.Event == id && s.Map == map);
+        }
+
+        // A listed scene to fast-forward is running now.
+        private static bool InFastScene()
+        {
+            if (!SkipCutscenes.Value || !MainManager.instance.inevent)
+            {
+                return false;
+            }
+            Scene scene = SceneFor(MainManager.lastevent);
+            return scene != null && scene.Flags == null;
         }
 
         private static void AfterGetLine(int id, ref string __result)
@@ -90,7 +157,7 @@ namespace BugFablesAP
                 return;
             }
             bool on = randomizerOn();
-            bool slides = on && SkipIntro.Value && InIntroSlides();
+            bool slides = on && ((SkipIntro.Value && InIntroSlides()) || InFastScene());
             if (slides)
             {
                 // Each slide's line waits for a press at its end (MainManager.cs:14169-14174); answer it.
@@ -102,7 +169,7 @@ namespace BugFablesAP
                 if (!speeding)
                 {
                     speeding = true;
-                    log.LogInfo("[qol] intro slides: passing them by");
+                    log.LogInfo($"[qol] Event{MainManager.lastevent}: passing it by at speed");
                 }
                 Time.timeScale = IntroSpeed;
             }
@@ -110,7 +177,7 @@ namespace BugFablesAP
             {
                 speeding = false;
                 Time.timeScale = 1f;
-                log.LogInfo("[qol] intro slides over: normal speed");
+                log.LogInfo("[qol] scene over: normal speed");
             }
 
             bool skippable = on && Skippable(mm);

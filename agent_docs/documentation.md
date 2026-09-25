@@ -494,7 +494,16 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    it was written for.
    **The logic never counts on the warp** (the user, 2026-09-25): it's fast travel and a way out when stuck, but a
    seed must not assume players teleport out, so every one-way drop still needs a real way back in the logic.
-5. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
+5. **Skip cutscenes** (the user, 2026-09-25: scenes and fluff that give no checks, starting with the two at the
+   Snakemouth bridge). Every scene starts through `EventControl.StartEvent`, so a prefix there sees each one by its
+   event number and map. Each scene is read in full before it goes on the list, and it gets one of two treatments:
+   *skipped* when it only moves the camera and party, talks and sets flags (the mod sets those flags and the scene
+   never starts: the bridge message, Event0, flag 11), or *fast-forwarded* when it also changes the world in ways its
+   flags don't cover (the game runs it at 8 times speed with its lines answered, as for the intro slides: the rope,
+   Event1, which plays the bridge's Fall animation and fixes it fallen before setting flags 7 and 11; setting the flags
+   alone would leave the bridge standing until the room reloads). Never a scene that gives an item, sends a check,
+   changes the party or starts a battle. Built, not yet seen.
+6. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
    read in full before anything is skipped.
 
 The panel got an eighth row, "Quality of life", which opens a second page in the same box; cancel comes back.
