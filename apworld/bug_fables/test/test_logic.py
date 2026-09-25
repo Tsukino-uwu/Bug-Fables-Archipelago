@@ -469,8 +469,8 @@ class TestOutskirtsRocks(BugFablesTestBase):
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "Base/BlockingRocks"},
                       self.world.fill_slot_data()["scenery_hidden"])
 
-    def test_town_scene_waits_for_leif(self) -> None:
-        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "DoorBugaria - Duplicate", "flag": 16},
+    def test_town_scene_waits_for_its_companion(self) -> None:
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "DoorBugaria - Duplicate", "flag": 114},
                       self.world.fill_slot_data()["held_until"])
 
     def test_boat_waits_for_leif(self) -> None:
