@@ -685,6 +685,10 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   Detector 2 (`:14024-14065`, B.O.S.S., flags 164/165); Mightier Pebble 29 (`:18821`); Prayer 62 (`:25648`); Freeze
   Resistance 33 (`:26535`, flag 430) and Seedling Affinity 78 (`:26575`, flag 477); TP Plus 1 (`:35843`); the Hard
   Mode prizes (`:5747`, see above). Quest-board rewards not yet read (see "Quests: to measure").
+- **The way down to Shades's shop (the underground bar, map 30)** (2026-09-25, entity dump, ScriptDump, code): no door;
+  `HideoutEntrance` on `BugariaCommercial` is examined (Check). Its lines: default 27 (sets flag 8), with flag 8 line
+  30, with flag 135 line 32, which starts Event61, a plain `LoadMap(30)` with no party lookups. Flag 135 is set by a story
+  scene (`EventControl.cs:12698`). The user asked for it set on a test file to reach the shop.
 - **Shops (`badgeshops[0]` is Merab's, `[1]` Shades's, for crystal berries):** new game (`MainManager.cs:4010`)
   Merab 0, 1, 7, 12, 30, 86, 84, 87, 88, 81 and Shades 19, 6, 9, 43, 42 (both open later in the story); Event73
   (chapter 2's end) Merab +21, 22, 48; Event99 (chapter 3's end) Merab +33, 56, 74, Shades +0, 49; Event118
