@@ -101,12 +101,34 @@ namespace BugFablesAP
         // something that hits enemies in the air, in chapter 1 only Vi's beemerang (the user). So it doesn't start; the mod
         // leaves what it leaves: flag 16 (Leif joined, set before the fight), the regional flag of the creature it removes
         // (entity 5, EventControl.cs:3501-3502) with that creature gone, and Leif off the follower list.
+        //
+        // Always skipped with Archipelago on (the user, 2026-09-25: "just always skip it, it's not a check"): it's no location,
+        // only the logic's "Leif Joins" event at the lake, and without its fight the lake no longer quietly needs Vi. When Leif
+        // isn't in the party yet he joins right there, as the scene's ChangeParty({0, 1, 2}) would have him; with one
+        // starting member the guard above still decides whether he may.
         private static bool BeforeStartEvent(int id)
         {
             MainManager mm = MainManager.instance;
-            if (id != 14 || !Active || mm.playerdata == null || !mm.playerdata.Any(p => p.trueid == 2))
+            if (id != 14 || randomizerOn == null || !randomizerOn() || MainManager.map == null || mm.playerdata == null)
             {
                 return true;
+            }
+            bool joined = false;
+            if (!mm.playerdata.Any(p => p.trueid == 2) && MainManager.player != null)
+            {
+                Vector3 at = MainManager.player.transform.position;
+                MainManager.ChangeParty(mm.playerdata.Select(p => p.trueid).Concat(new[] { 2 }).ToArray(), true, true);
+                var spots = new Vector3[mm.playerdata.Length];
+                for (int i = 0; i < spots.Length; i++)
+                {
+                    spots[i] = at + new Vector3(-0.6f * i, 0f, 0.1f * i);
+                }
+                MainManager.SetPlayers(spots);
+                if (mm.playerdata.Length > 0 && mm.playerdata[0].entity != null)
+                {
+                    mm.camtarget = mm.playerdata[0].entity.transform;
+                }
+                joined = mm.playerdata.Any(p => p.trueid == 2);
             }
             mm.flags[16] = true;
             EntityControl creature = MainManager.GetEntity(5);
@@ -116,7 +138,7 @@ namespace BugFablesAP
                 creature.gameObject.SetActive(false);
             }
             mm.extrafollowers?.RemoveAll(f => f == 2);
-            log.LogInfo($"[members] Leif's joining scene (Event14) skipped: Leif is already in the party; flag 16 set, "
+            log.LogInfo($"[members] Leif's joining scene (Event14) skipped: " + (joined ? "Leif joined the party" : "Leif not added (already in, or not allowed)") + "; flag 16 set, "
                 + (creature != null ? $"entity 5 ({creature.name}) removed" : "no entity 5"));
             return false;
         }
