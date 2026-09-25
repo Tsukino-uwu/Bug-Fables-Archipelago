@@ -414,6 +414,13 @@ sprite enabled. The game toggles the object, never its renderers, so the swap no
 renderers, on every pass. `tree` then showed both berry renderers disabled with the item sprite on. **Confirmed by
 the user (2026-09-25, screenshot):** the seed's Mistake standing on the ground outside the cave, no berry, no spin.
 
+**Planned (the user, 2026-09-26): another player's item says it was sent.** Seen in play: Artis's gift held
+another player's Sword and the box read "You got the QuestTester's Sword!", which the user took for their own item.
+The sentence is the game's menu text 106 ("You got ..."; 110 in one branch), with the article (`flagstring[1]`) and
+name (`flagstring[0]`) that the mod already swaps (`MainManager.cs:11490-11564`). For another player's item, the mod
+will swap in its own line for that one box ("You sent Sword to QuestTester!") and put 106 back after. First step:
+log text 106 in the running game to see its placeholder syntax, not guess it.
+
 **Status:** works for gifts, pickups and their ground sprites, and respawning pickups seen by the user (2026-09-24, `MEASURED.md`), and crystal berry spots (2026-09-25); berry rewards and story pickups built, not yet seen in game.
 
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,

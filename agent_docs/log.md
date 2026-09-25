@@ -649,3 +649,8 @@ Newest last. What was tried, what happened, what the user said.
   - 255 tests pass. It is its own build step (14).
   - A slip: a Python edit script opened `ApConnection.cs` for writing and emptied it. It was restored from git at
     once (no uncommitted changes lost). Edits to existing files go through the Edit tool.
+- **Testing enemy shuffle live** (the user said go ahead). The server and game are running with the two-game seed.
+  - Artis's gift held QuestTester's Sword. The box said "You got the QuestTester's Sword!", and the user thought
+    it was theirs.
+  - Planned: a "You sent ... to ..." line for other players' items (the mod guide, step 9).
+  - The room was restarted fresh so the user could look again.
