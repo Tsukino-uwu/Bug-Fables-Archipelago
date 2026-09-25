@@ -68,8 +68,9 @@ Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026
    maps are other shops. **Lines about the rocks** (the user): every Outskirts line was searched (`line` dev command):
    the waiting moth (`FuzzyMoth`, line 76) is kept away, the caravan husband's welcome (line 78) answers to flag 691
    instead of 41 (line 75 was the rocks), Crickerly1 (line 74) is gone with the caravan. Gen and Eri, Artis and Eetl keep
-   their flag-41 lines: those are after the first boss (the river, Artis's prize, Eetl leading into chapter 2). Test
-   `TestCaravan`.
+   their flag-41 lines: those are after the first boss (the river, Artis's prize, Eetl leading into chapter 2). The
+   ladybug siblings (flag 41) are present from the start too, so the map doesn't feel empty (the user); their everyday
+   lines are neutral and their quest lines answer to the quest's own flags. Test `TestCaravan`.
    **Shop Contents** (the user, 2026-09-25: shops are many easy checks in one place and soak up the good items, as in
    Tevi): a yaml choice, *Anything*, *No Progression* (default) or *Filler Only*. No Progression is an `item_rule` on each
    shop location refusing progression items from any game; Filler Only is Archipelago's excluded type (no progression,

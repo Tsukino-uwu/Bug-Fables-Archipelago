@@ -617,6 +617,9 @@ class TestCaravan(BugFablesTestBase):
         data = self.world.fill_slot_data()
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "FuzzyMoth"}, data["kept_open"])
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "CHusband", "flag": 41, "to": 691}, data["dialogue_flags"])
+        # The ladybug siblings are there from the start too (the user: the map shouldn't feel empty).
+        for sibling in ("LaydbugGirl", "LaydbugBoy"):
+            self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": sibling}, data["kept_present"])
 
     def test_reachable_from_the_start(self) -> None:
         self.assertTrue(self.can_reach_location("Outskirts: Caravan, Item Shop 1"))
