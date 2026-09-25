@@ -699,7 +699,8 @@ first boss explicitly, while the city region needs nothing and the *Entering the
 chose a fallback over closing the town again: `PartyFit` answers a follower lookup that finds nobody with the party's
 leader (no crash; the companion's line comes from the leader) and logs each map and id once, so a scene that truly
 needs him can be held back individually. Scenes that read `map.tempfollowers[0]` directly, like the palace's Event45,
-aren't covered and stay held.
+aren't covered and stay held. **Seen (the user, 2026-09-25):** the plaza NPC's conversation played through; the log
+shows the companion asked for on `BugariaMainPlaza` outside any scene and the leader answering.
 **The boat to Metal Island crashed with two in the party** (2026-09-25). With the rocks gone the user reached the
 pier on a chapter 1 file, paid the fare, and the boat scene (Event107) threw IndexOutOfRange: it seats three party
 members (`p[0..2]`, `EventControl.cs:17944-17946`), and in the game the pier is behind the rocks until the first
