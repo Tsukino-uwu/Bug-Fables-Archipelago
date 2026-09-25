@@ -660,7 +660,7 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   hides or moves an object by its own `requires`/`limit`, `FlagAnimation` plays an animation by flags; 328 such
   objects in all maps). In `SnakemouthDoorRoom` the big door's closed halves (`Base/Door`, `Door (1)`) and the
   trapdoor models are hidden from **flag 14** (the trapdoor fall), and the open halves (`Door (2)`, `Door (3)`) shown
-  from 14. So the door looks open from 14, while its load zone (`DoorLoadZone`) waits for 41. On
+  from 14 (seen, the user, 2026-09-25: the trapdoor scene opens the trapdoor and the big door). So the door looks open from 14, while its load zone (`DoorLoadZone`) waits for 41. On
   `UpperSnekEntrance`, the round door (`Base/CircleDoor`) is hidden and the Gem shown in the slot from **517**.
   In `SnakemouthUndergrondDoor` the middle door's models switch at **35**; the switch rooms' `Gate`s at 33 / 34.
 
