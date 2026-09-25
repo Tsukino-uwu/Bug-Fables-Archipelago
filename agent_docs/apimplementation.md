@@ -34,7 +34,11 @@ seed's (the mod guide, step 9).
    caught this: buy, reload, keep the check and the berries), so purchases are made **permanent like checks**: spending
    is tallied on the server (per-slot storage), each save brought in line on load (crystal berries exactly: received
    minus spent; ordinary berries: the save's own paid record against the server's tally, the higher wins), and a
-   purchase made offline is recorded in the save and queued. A done location shows as sold.
+   purchase made offline is recorded in the save and queued. A done location shows as sold. **Nothing requires a shop
+   bought out** (the user asked): the sold-out flags (587 Merab's, 588 Shades's, set in `MainManager.cs:14283-14291`) only
+   change dialogue (an NPC's line 159 on the Commercial map; Shades's greeting, `checktrue,588,92`). A check that ever
+   depends on a bought-out shop would need the full total, 50, still safe; a seed holding fewer than 50 crystal berries
+   leaves the unaffordable tiers out of the pool instead.
    **Built 2026-09-24 (not yet seen in game):** each tick outside battles and events, a prize slot reading "missed"
    (2) is paid through the game's own `AddPrizeMedal(slot)` with Hard Mode answered "yes" for that call, because
    most bosses test Hard Mode in their own event and write 2 directly. Artis's `Event33` then hands the prize over
