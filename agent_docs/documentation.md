@@ -54,8 +54,8 @@ server, and items from the server arrive in the game once each.
    those flags are the save's own. If any of the three hooks (save, load, new game) is missing, Hardest does
    nothing rather than risk a save.
 8. **A "Quality of life" page in the Archipelago panel** (the user, 2026-09-25): on/off rows that speed the game
-   up and make it smoother: skips first, others later (a pause-menu warp back to the seed's start, say). Fast text
-   and Skip intro are built, not yet seen; battle tutorials next (step 10).
+   up and make it smoother: skips first, others later (a pause-menu warp back to the seed's start, say). Skip
+   intro is confirmed on screen, Fast text is built, not yet seen; battle tutorials next (step 10).
 
 ## The steps
 
@@ -445,7 +445,8 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
 2. **Skip intro.** The four story slides at the start of a new game run inside the new-game event, so they can't be
    cut out. While they're on screen (the event is running and its black backdrop exists), the mod answers each
    line's wait and runs the game at 8 times speed. The game's own end-of-event resets the speed, and the mod does
-   too once the backdrop is gone. Built, not yet seen.
+   too once the backdrop is gone. **Confirmed by the user (2026-09-25):** on a new file the slides "skipped past
+   really fast on its own"; the log shows `[qol] intro slides: passing them by`, then `over: normal speed`.
 3. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
    read in full before anything is skipped.
 
