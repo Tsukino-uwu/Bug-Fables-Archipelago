@@ -16,7 +16,7 @@ archipelago.gg, retrying when the server is unreachable or drops; sending checks
 items, with the count kept in the save (build step 7); the game's own item at a location swapped for the
 seed's (the mod guide, step 9); and, as of 2026-09-25, the world opening one gate at a time (the Outskirts rocks,
 Snakemouth's fall room both ways, the town, its districts, the bar, Madeleine's house), journal discoveries and
-Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026-09-25), Madame Butterfly's item shop (seen 2026-09-25), the caravan from the start with its three items (seen 2026-09-25), and a Quality of life page (build step 8 and the mod guide, step 10). An experimental entrance randomizer (a yaml option,
+Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026-09-25), Madame Butterfly's item shop (seen 2026-09-25), the caravan from the start with its three items (seen 2026-09-25), and a Quality of life page (build steps 8 to 11 and the mod guide, steps 10 to 12). An experimental entrance randomizer (build step 12; a yaml option,
 coupled, off by default) shuffles 508 doors with every area kept reachable; a generated pair was seen working both ways
 (2026-09-25). The Detector beeps for any check left in a room (seen), and a one-member party (a dev setting, the start of
 the *Starting Party Member* plan) plays through chapter 1 into chapter 2 (seen, 2026-09-25).
@@ -26,332 +26,20 @@ the *Starting Party Member* plan) plays through chapter 1 into chapter 2 (seen, 
 1. **Every key item and medal in the pool,** on logic that follows the vanilla story order: one region
    per chapter, entered once the chapter before is finished and the story's own keys and abilities are
    in hand. Medal gifts and medal shops each get a yaml on/off toggle.
-   **Medal shops (the user, 2026-09-25), being built.** Each medal a shop stocks is a location; the shelf shows the
-   seed's item, buying runs the shopkeeper's `giveitem` (swapped as for a gift), and the check is the medal leaving the
-   stock (`badgeshops[shop]`), which the save keeps. A done location shows as sold, so a reloaded save never charges
-   twice. A *Shop prices: Normal / Half / Free* row (default Normal) scales the price columns. Merab's (berries) first:
-   berries can always be earned, so no lockout. **Shades's shop takes crystal berries, a consumable** (the user's
-   concern: consumable keys, lockout, savescumming): crystal berries are spent nowhere else (measured), and her stock
-   arrives in tiers whose Normal prices add up to 18, 25, 27, 40 and 50, exactly every berry in the game. **A tiered
-   rule (each item needs its tier's running total) was proposed and is wrong** (the user asked what happens when the
-   stock grows): with a later tier already on the shelf, berries spent there starve an earlier tier, and a rule that
-   raised the need once a later tier opens would not be monotonic, which Archipelago's fill doesn't allow. **Decided
-   (the user, 2026-09-25): every Shades location requires all 50 crystal berries, and her full stock (all 13) is on the
-   shelf from a new game.** The first stops spending order from locking anything out; the second stops a story event
-   that never runs (as the open world skips or bypasses scenes) from leaving a tier's medals, and their checks, never
-   appearing. The same holds for Merab's later additions when they become locations. Crystal berries become progression. **Also wanted (the user,
-   2026-09-25): Shades's counter showing 3 or 4 medals** instead of 2. The slot count is the shopkeeper's `data` length and
-   each slot's place its `vectordata` entry (`NPCControl.cs:1530-1534`), so longer arrays with new counter positions,
-   set before the shelf is built; positions to settle on screen. Built with her shop.
-   **Full stock from the start for both medal shops, duplicates as their own locations** (the user, 2026-09-25: "a 2nd
-   copy is a 2nd check", like the delivery quest's two checks on one flag). The story adds some medals twice (Merab: TP
-   Plus 1 and Ambusher 86; Shades: medal 6), so each copy is a location: Merab 22 (20 medals, two doubled), Shades 13
-   (costing exactly 50). **The mod owns each shop's stock:** the shelf is the full list minus the copies whose checks are
-   done. Buying removes a copy as the game does; one copy fewer than expected marks the next undone copy done. A reloaded
-   save with extra copies, or the story adding stock, is trimmed back to the list (a done location shows as sold). An
-   offline purchase stays in the save's stock and its check goes out on reconnecting.
-   **Built for Merab's (2026-09-25, not yet seen in game):** her 12 later copies are locations *Medal Shop 11* to *22*
-   (ids 46-57), with 10 new medal items. "One copy fewer than expected" turned out unworkable: a fresh file holds 10 of
-   the 22 and would read as 12 purchases. So the save keeps a bit per copy bought (`flagvar[7]`, the mod guide, step 10),
-   set by the purchase's swapped `giveitem`, and the stock is set from those bits and the server's checks. Test
-   `TestMedalShop` pins the 22 copies in story order.
-   **Item shops** (endless consumables, the user): the first purchase of each item in each shop is a check that shows
-   and gives the seed's item, then the shop sells its own item again, like respawning pickups, so restocking still works.
-   Their own yaml toggle, *Shuffle Item Shops*, default on, apart from *Shuffle Medal Shops*. Built after the medal shops.
-   **Built for Madame Butterfly's shop (2026-09-25, seen working):** five locations (*Item Shop 1* to *5*, ids 58-62), one
-   per stock entry, known by map, shopkeeper and item (`location_item_shops`); each puts its own item in the pool, with
-   no `give` entry, so an unrelated `giveitem` of the same item on that map is never swapped. *Shop Contents* covers
-   them too. The buy line adds the item with `additem` (no item-get box), so the mod takes that command out when the line
-   is read and treats berries paid as the purchase; the check goes out through the respawning pickups' queue. Tests
-   `TestItemShop*`. The other shops follow the same data.
-   **The caravan from the start (2026-09-25, seen: the user bought all three, each check sent, then her own items):** its keeper `Crickerly2` kept present, its stall
-   (`Base/Stall`, scenery) shown through a new `scenery_present` list, and `Crickerly1`, who stands there before it,
-   kept away; its three items (Spicy Berry, Burly Berry, Magic Seed) are *Outskirts: Caravan, Item Shop 1* to *3*
-   (ids 63-65), reachable from the start. Its stock is fixed (the keeper's own data); Crickerly's later stands on other
-   maps are other shops. **Lines about the rocks** (the user): every Outskirts line was searched (`line` dev command):
-   the waiting moth (`FuzzyMoth`, line 76) is kept away, the caravan husband's welcome (line 78) answers to flag 691
-   instead of 41 (line 75 was the rocks), Crickerly1 (line 74) is gone with the caravan. Gen and Eri, Artis and Eetl keep
-   their flag-41 lines: those are after the first boss (the river, Artis's prize, Eetl leading into chapter 2). The
-   Seen (the user, 2026-09-25): the moth gone, nobody mentioning the rocks any more. The
-   ladybug siblings (flag 41) are present from the start too, so the map doesn't feel empty (the user); their everyday
-   lines are neutral and their quest lines answer to the quest's own flags. Test `TestCaravan`.
-   **Shop Contents** (the user, 2026-09-25: shops are many easy checks in one place and soak up the good items, as in
-   Tevi): a yaml choice, *Anything*, *No Progression* (default) or *Filler Only*. No Progression is an `item_rule` on each
-   shop location refusing progression items from any game; Filler Only is Archipelago's excluded type (no progression,
-   no useful, `BaseClasses.py:1502`). 36 seeds (solo, with a second game, with discoveries) all generated.
-   **Filler Only falls back when the room can't hold it** (the user, 2026-09-25): an excluded spot takes only an item
-   that is neither progression nor useful, from any game, and with Merab's 22 copies a solo seed has 17 such items, so
-   generation failed. In `pre_fill`, once every world's items exist, the room's excludable items are counted against its
-   excluded spots; if short, this world's shops take No Progression instead, with a warning naming the player. 18 seeds
-   (solo, with APQuest, with discoveries, each Shop Contents) generated; the fallback fired solo and with APQuest (18
-   filler for 22 spots), not with discoveries on (22 for 22). Tests
-   `TestShopContents*`. **The caravan is there from the start** (the user), built with the item shops. **Reloads refund currency** (the user
-   caught this: buy, reload, keep the check and the berries), so purchases are made **permanent like checks**: spending
-   is tallied on the server (per-slot storage), each save brought in line on load (crystal berries exactly: received
-   minus spent; ordinary berries: the save's own paid record against the server's tally, the higher wins), and a
-   purchase made offline is recorded in the save and queued.
-   **Built for Merab's (2026-09-25):** no server tally needed. The save's bits (a bit per copy) are its paid
-   record, and the server's checked list says what was bought anywhere. A copy the server has checked with no bit in
-   the save was bought in another save, so on a save tied to the seed, outside events, the mod charges its price here
-   (clamped at 0, the rest forgiven) and sets its bit. Crystal berries (Shades's) still want the exact count.
-   **Seen in the log (2026-09-25):** the user loaded a save with 0 berries that had bought nothing, while the server held
-   all 22 copies' checks: each was charged (0 -> 0, forgiven) and marked paid. Forgiving can't be farmed: a save only
-   ever ends with fewer berries. A save that has berries losing exactly the prices isn't seen yet (same code path). A done location shows as sold. **Nothing requires a shop
-   bought out** (the user asked): the sold-out flags (587 Merab's, 588 Shades's, set in `MainManager.cs:14283-14291`) only
-   change dialogue (an NPC's line 159 on the Commercial map; Shades's greeting, `checktrue,588,92`). A check that ever
-   depends on a bought-out shop would need the full total, 50, still safe; a seed holding fewer than 50 crystal berries
-   leaves the unaffordable tiers out of the pool instead. **The bar is "no action can make a check unreachable"**, not
-   just "the logic never asks for it" (the user: a consumable that can lock a check away is a broken seed). Shades's
-   checks meet it because (1) crystal berries buy nothing but her stock, (2) the stock costs exactly 50, (3) all 50 are
-   always obtainable and never taken away, (4) purchases are permanent. Every berry spent buys one of her items, so what's
-   left always costs what's left to collect. **Shades's shop is only shuffled when the seed holds all 50 crystal
-   berries**; otherwise it stays vanilla. Merab's has no such risk: ordinary berries are renewable from battles.
-   **Built 2026-09-24 (not yet seen in game):** each tick outside battles and events, a prize slot reading "missed"
-   (2) is paid through the game's own `AddPrizeMedal(slot)` with Hard Mode answered "yes" for that call, because
-   most bosses test Hard Mode in their own event and write 2 directly. Artis's `Event33` then hands the prize over
-   with a `giveitem` the swap handles, and the location is done when the slot reaches 3 (`location_vars`, a number
-   slot instead of a flag). First location: *Outskirts: Artis's Prize for Snakemouth Den* (Quick Flea, which the
-   user saw for sale at the caravan and bought after a Normal kill: the missed-prize path, confirmed on screen).
-   **Hard Mode boss prize medals** (23, `MEASURED.md`) are always shuffled, with no option: every boss pays
-   its prize as if Hard Mode were on, whatever the player's setting, so a prize can never be skipped and its
-   location is simply "beat this boss". The mod does that by widening the Hard Mode test inside the game's
-   own `AddPrizeMedal`, never by writing the prize slot itself. **The Archipelago panel gets a
-   row, "Difficulty: Normal / Hard / Hardest",** that only adds a way in: *Hard* acts as if the Hard Mode medal
-   (Artis's, #11) were equipped, *Hardest* as if the save had been started with the HARDEST code (the game's
-   two levels, `MEASURED.md`). Equipping the medal or typing the code still works as the game made it, and
-   the prize medals are paid out on every setting. Logic never needs either (the user, 2026-09-24). For
-   *Hardest*: its extras read flag 614 directly in about 35 places, so it means setting that flag. **Measured
-   2026-09-24: the game keeps no other record of a typed code.** `flagstring[10]` is only the typing buffer,
-   emptied as soon as the code is accepted (`EventControl.cs:2450-2455`), so flag 614 is the code's only trace,
-   so the mod marks a 614 it set itself, and keeps it out of every save (the user chose, 2026-09-24:
-   switchable, the save stays clean; the mod guide's design list, item 6).
-   **Everything in, placeholders for what isn't checked (the user, 2026-09-25):** every item, medal and other spot in the
-   game is added, so everything is randomized. A spot whose logic and name haven't been checked yet is a *Placeholder*:
-   "Placeholder" in its name, and it holds filler only (Archipelago's excluded type), so no progression item from any
-   game lands where the logic may be wrong. Its own vanilla item still goes into the pool and lands at a checked spot.
-   Each placeholder is promoted to a normal location once its requirements and name are checked, one at a time.
-   **Entrance randomizer (the user, 2026-09-25):** every map-to-map door, as an option labelled *experimental* until
-   every door's logic is done: until then a shuffled seed may be unfinishable (the one exception to "never
-   impossible", while that option is on; *Warp to start* gets the player out of a dead end). Coupled (a door and its way
-   back stay a pair) by default, decoupled as a choice. Order: a proof of concept (the mod rewriting a door's
-   destination, seen on screen), then every door, then the room-by-room logic that removes the experimental label.
-   **The proof of concept, seen (the user, 2026-09-25):** one door, then a coupled swap of two connections both ways
-   (the mod guide, step 10). **Every door, built (2026-09-25):** the yaml option *Entrance Randomizer (experimental)*,
-   *Off* (default) or *Coupled*; decoupled later. How it was built:
-   1. **A door table** (`data/doors.json`), exported by `dev-scripts/door-graph.py --export` from EntityDump: every
-      door paired with its way back (the door the party arrives next to), 254 connections, 508 doors. Doors stay
-      fixed when the mod couldn't tell them apart by name, when they have a story variant at the same spot, or when they
-      lead into their own map; the table lists the map links those make.
-   2. **The shuffle** (`doors.py`), in `generate_early`, with the world's own random: the same doors joined in new
-      pairs, x with y meaning x leads where y's old partner led (so you arrive next to y) and y where x's old partner
-      led. Sent as `door_targets`, which the mod already applies.
-   3. **Every area stays reachable.** A plain random pairing strands areas: two dead-end rooms joined to each other are
-      cut off. Measured: stranded in 20 of 20 seeds on the real table. So the shuffle grows the world outwards from one
-      area (maps joined by fixed doors count as one): an open door of the reached part is joined to a door of an area
-      not reached yet, taking an area with more doors whenever only one open door is left; the doors left at the end
-      are paired at random. Tests `TestDoors*`: every way back leads back, every map is reachable, and a hub with dead
-      ends is never stranded over 300 seeds (a plain random pairing strands 266 of them).
-   4. Six seeds generated with it on, three solo and three with APQuest. **Seen (the user, 2026-09-25), one generated
-      pair both ways:** the town gate led into the desert (`DesertBeforeGH`, the log: rewritten like `DesertSouthern`'s
-      left exit), and the exit there back to the start in front of the gate. The logic still assumes the vanilla doors
-      (the named allowance).
-   5. **A dropped connection leaves the doors as the seed has them** (code: `door_targets` arrive with slot_data at login
-      and are never cleared by a drop; each map's doors are rewritten from memory as it loads). **Seen (the user,
-      2026-09-25):** with the server stopped, the town gate to the desert and back several times (15 rewrites in the log
-      while offline); on restarting the server the mod logged back in by itself.
-   6. **Found while roaming:** a shuffled door reaches areas the seed has no locations in yet, whose items are the
-      game's own (the user picked up the desert's Strong Start medal, flag 415). The Placeholders plan (every spot a
-      location, unchecked ones filler-only) closes that.
-   7. **A trap found while roaming (the user, 2026-09-25):** in the bandit hideout's garden (`HideoutGarden`) a guard
-      (`burglar`) caught the party, which starts the game's own caught scene (Event108, the log) and puts the party in
-      `HideoutCell`, whose one door leads to the central room. **Getting out needs the dig ability** (the user,
-      correcting a first guess of Leif's ice: you dig under the bars in the sand). The code agrees: in the story the
-      cell is where dig is learnt: Event109, the first capture, takes the beemerang (flag 11 off), sends the party to
-      the cell (`LoadMap(100)`) and there sets flag 18, dig; Event108, caught again later, expects you to dig out. So
-      without dig it's a dead end (the Warp button is the way out), and the hideout's garden needs dig in the logic
-      once the logic follows the doors. A guard catching you is a transfer that isn't a door.
-   8. **Transfers that aren't doors (decided, the user, 2026-09-25).** The game also moves the party by the dialogue
-      script commands `|transfer|` and `|warp|` (`MainManager.cs:13263-13270`) and by story events (about 88 `LoadMap`
-      calls in `EventControl`). **Entrances the player chooses** (the bar's hatch, elevators, the boat) are doors in all
-      but name: shuffled like doors, coupled with their way back where they have one, behind their own toggle at first.
-      **Places the game sends you** (caught by guards, a fall, a story scene) keep their destination: the scene expects
-      to end there, they have no way back to pair with, and a destination you didn't choose is only confusing. They
-      become one-way connections in the logic, which must make sure you can leave where they put you; some happen only
-      at some story points, and some can strand you. **The Warp button and fast travel stay outside the logic.** First
-      step: list every such transfer from the data (the script dump and `event-triggers.py`), map, trigger and target.
-      **Listed (2026-09-25):** ScriptDump gained a column of the moving commands on each dialogue line (7 lines,
-      all `|warp|` or `|loadmap|`), and `dev-scripts/event-transfers.py` lists each event method's `LoadMap` calls and
-      targets from the decompiled code (88 calls in 63 events); `event-triggers.py` on those events says what starts
-      each. It found the bar's hatch (Event61) and the hideout cell (Events 108/109) at once (`MEASURED.md`,
-      "Transfers that aren't doors"). Next: sort them into chosen and forced, reading each event.
-2. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
+   Shops (medal shops, item shops, the caravan): see build step 11. Other kinds of location (boss prize medals,
+   placeholders, journal entries, enemy drops): see build step 10.
+2. **Entrance randomizer (experimental):** every door, coupled, built; next, sorting the transfers that aren't doors
+   into chosen and forced, then the room-by-room logic that removes the label. See build step 12.
+3. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
-   **Also wanted (the user, 2026-09-25): the basic moves as items**, a yaml option apart from the abilities: Vi's
-   beemerang, Kabbu's horn, Leif's freeze, and jumping, each unusable until its item arrives. Proposed: *Shuffle Basic
-   Moves* (the three field moves) and *Shuffle Jump* (its own toggle: it gates the most), both off by default. **The mod
-   side is small** (code read, 2026-09-25): the three moves are one method, `PlayerControl.DoActionTap`
-   (`PlayerControl.cs:1008`), switching on the leader's `animid` (0 Vi, 1 Kabbu, 2 Leif), so a prefix can refuse the move;
-   the game itself takes the beemerang away in the bandit hideout (flag 11, `case 0` checks it), so Vi without it is a
-   state the game already knows. The jump is its own method, `DoJump`, called from the button it shares with talking
-   (`PlayerControl.cs:372-392`), so it can be refused without touching talk. **The logic is the cost:** every spot that
-   needs a move (a ledge, a beemerang switch, grass, water to freeze) becomes a rule, seen room by room, and the start
-   must have checks that need none of them.
-   **Later idea, a yaml option (the user, 2026-09-25): party members as items.** Start with one random member and
-   find the other two, each its own item, on top of the abilities. **Its shape (the user, 2026-09-25, later):** *Starting
-   Party Member: Off / Vi / Kabbu / Leif / Random*; Off is the story's party, otherwise the game starts with that one
-   member and the other two are items. Prompted by the stand-ins for missing members in scenes, which make one-member play
-   look possible; the story's own joining scenes (Kabbu at the start, Leif at the lake) must then add nobody.
-   **The two joining moments become the two locations** (the user, 2026-09-25): with the option on, whoever starts, the
-   other two members are items, and the story has exactly two joining moments: Vi's in the opening scene and Leif's right
-   after the spider scene (where the mod now has him join). Both become locations whatever the start (Vi's even when you
-   start as Vi), named after the place, not the member ("Snakemouth Den: Fall Room, After the Spider"), so two items get
-   exactly two spots and no filler has to go. With the option off they're no locations; the members just join.
-   **Rehearsal built (2026-09-25), the mod only:** a dev setting `TestStartMember` (0 Vi, 1 Kabbu, 2 Leif) and a prefix
-   on `MainManager.ChangeParty(ids, fromscratch, destroyoldentity)`, which every party change of the story goes through
-   (the two-argument form forwards to it; about 20 calls in `EventControl`, some already one member: Kabbu alone after
-   the slides, Vi alone in one scene). The prefix keeps in `ids` only the starting member and those received (dev:
-   `addmember`), so the opening's Vi-and-Kabbu becomes the one member; it runs last so the opening skip's own prefix sees
-   the story's ids. **First test, Leif alone (the user, 2026-09-25):** the start and the camera right after four fixes
-   (the mod guide, step 10, (8)); Artis's talk (lines for Vi and Kabbu, now stand-ins in conversations too) gave the
-   permit; the gate scene played; the grass tutorial (Event10) played once stand-ins arrive at once, its reward sent.
-   **Then a real gate:** the corridor after the tutorial (`BugariaOutskirtsSnakemouthCorridor2`) needs the horn to
-   cross, so Snakemouth Den needs Kabbu (or the horn, once moves are items) in the logic.
-   **Further (the user, 2026-09-25):** the trapdoor scene, landing in the right spot once stand-ins stay where a scene
-   puts them; the spider fight's lead-in once stand-ins get their physics body when made; and **the spider fight itself
-   with Leif alone** (the user's screenshot: Leif alone against the spider, the battle menu working). In the story that
-   fight is Kabbu alone at first, then Vi joins.
-   **The first boss and after, Leif alone (the user, 2026-09-25):** the boss scene (Event26) and the one after the bridge
-   (Event63) played with Leif acting the story leader's part, no error in the log; the follower joined crossing the
-   bridge; the way back to the cave is closed after the boss; what the seed keeps open (the caravan, the ladybug
-   siblings) still works; the NPCs in the starting house moved away as the story has them. Chapter 2 next.
-   **The plaza's discoveries open from the start** (the user, 2026-09-25): before chapter 2's briefing (flag 67) a
-   stand-in (`Discovery Pre Briefing`, a Check saying "We can check this out later. Let's hurry to the castle.") stands
-   where the plaza statue and the inn portrait will be; the discoveries themselves (`StatueDesc`, Event38, discovery 5;
-   `InnPortrait`, Event37, discovery 4) require 67. Both stand-ins are kept out of the way and both discoveries kept
-   present (`kept_open`, `kept_present`); the two events ask for members by name and set no story flag. Test
-   `TestKeptOpen`. Seeds generated solo and with APQuest; **seen (the user):** the statue can be examined.
-   **The inn from the start too** (the user, 2026-09-25: couldn't stay while escorted): the innkeeper's default line
-   (53) hands the talk to the follower, "We mustn't keep the Queen waiting."; from flag 67 line 1 offers a stay. The
-   line's flag is repointed to 691 (set by every new game, `dialogue_flags`, as for the bar entrance). Test
-   `TestKeptOpen.test_inn_open_before_the_briefing`; seeds solo and with APQuest. Not yet seen. Also found: the stay
-   costs a fixed 9 berries, "3 berries a bug" written for three (`checkmoney,9` then `money,-9`, line 2), whatever the
-   party's size.
-   **Chapter 2's three opening scenes held in story order** (the user, 2026-09-25: "it's the only place the follower is
-   removed and changed to another"): after the first boss a follower joins outside the city (Event63: follower 30, flag
-   114); the palace bridge swaps them for Maki (Event44: removes 30, adds Maki, flag 66), the only place follower 30
-   leaves; the briefing (Event45) uses Maki and clears the list. In the game the town opens only after chapter 1, so the
-   bridge always comes after the boss. **The briefing waits for the swap itself** (the user, 2026-09-25: a shuffled door
-   or a random start inside the palace could reach it without the bridge, with no follower or the wrong one): its hold
-   moved from 114 to 66, so first boss, follower, swap, briefing, whatever the way in. No new logic: the bridge is in the
-   town, which *Chapter 2 Start* already needs. With the town open from the start the bridge could come first: Maki early, and
-   follower 30 never leaving. The bridge's trigger (`makiautoevent`) is now held until 114, like the briefing's already
-   was (`held_until`). Test `TestKeptOpen.test_follower_swap_waits_for_the_first_follower`. Not seen (the user's file is
-   past it).
-   **Decided (the user, 2026-09-25): the members present act out the missing ones' parts** in scenes, where they would
-   be and what they would do, instead of standing idle beside invisible stand-ins ("looks more fun"). Plan: the real
-   leader plays the story's leader (the first member of the party the story expects); only other missing members stay
-   invisible stand-ins; in a party list by member (Vi, Kabbu, Leif) the leader's own slot then gets an invisible
-   stand-in, so a scene moving "each member" never moves the player twice (why this was set aside at first).
-   Animations play by number, so the leader shows his own animation with that number: the field action is
-   `animstate` 100 for everyone (Vi's throw and Kabbu's horn, `PlayerControl.cs:1029`, `:1076`), so Leif acting Kabbu's
-   horn swing casts his ice (wanted, the user: "Kabbu using the horn, Leif using ice"). States a character lacks show
-   as `Animator.GotoState: State could not be found`; the mod logs the number and maps it to the closest one. To build after the current
-   replay of the trapdoor and the spider fight, then replay the same scenes to compare. Opt-in only: fighting with one or two changes
-   the game a lot. Open questions: the story may need all three after chapter 1, and adding a member outside the
-   story's own event hasn't worked yet (log.md, 2026-09-24: `ChangeParty` left Leif without a character).
-   **Solved 2026-09-25:** without `fromscratch`, `ChangeParty`'s copy loop never runs (`for m < 0`,
-   `MainManager.cs:3805`), so the party list came out empty. `ChangeParty({0, 1, 2}, fromscratch: true)` rebuilds all
-   members (stats from defaults, then the stat bonuses reapplied), and `SetPlayers(positions)` makes their characters.
-   The user saw Leif join the party and fight on a file where he'd never joined (dev command `addleif`). Next measured:
-   the trapdoor, the spider fight and Leif's own joining scene with him already there.
-   **Chapter 1 scenes with Leif added early** (the user, 2026-09-25): Event2 (the Tattle tutorial, bridge room) played
-   fine; it moves only the first two (`GetEntity(-4)`, `(-5)`), so Leif stood still in it and was left behind until it
-   ended, which looked odd (the user). Scenes switch normal following off (`overridefollower`) and move only who they
-   name. Cosmetic fix for the open start: during a scene, a member the scene never moves walks along behind the one
-   ahead of him.
-   **The trapdoor scene broke with three** (2026-09-25): Event5 recreates the party with `SetPlayers(positions)` and a
-   list of two positions, and `SetPlayers` indexes it for every member: IndexOutOfRange, the scene stopped halfway, the
-   user stuck in the fall room (freed with `unstick`). The mod's `PartyFit` now lengthens a short position list before
-   the game uses it (each extra member a step behind the last listed one), which covers every scene that places the
-   party this way. **Retest:** `SetPlayers` then took the lengthened list, but the scene then places each member from
-   **its own** two-long list (`for m < playerdata.Length`, `array[m]`, `EventControl.cs:1476-1484`), which a fix outside
-   the scene can't reach. Stopped there (two fixes on one scene). `unstick` now also resets the party's bodies (gravity,
-   physics, forced animation), which the crash had left as the scene set them.
-   **Parked design (the user, 2026-09-25), for party members as items:** scenes find members by **character**
-   (`GetEntity(-4)` Vi, `(-5)` Kabbu, `(-6)` Leif search the party by `animid`; `-1` to `-3` are positions), so the leader's
-   order never matters. Two rules then: (1) a member a scene doesn't know about (Leif early in chapter 1) **steps out**
-   while it runs and rejoins after (the `addleif` method: `ChangeParty` with `fromscratch`, then `SetPlayers`); (2) a
-   scene that needs a member who isn't there (only Leif, no Vi) **waits**, held in the game and a rule in the logic for
-   any check it gives, like the boat. First step when this is picked up: list chapter 1's scenes by the characters they
-   use, from the code.
-   Scenes that need a particular member must then become rules. The horn tutorial near Snakemouth (Event10, a
-   location) is not one: the scene cuts the grass itself, and it played through with Leif alone once stand-ins
-   arrived at once (the user, 2026-09-25; the mod guide, step 10, item 10). The way down to Shades's shop is:
-   grass on the way there has to be cut with the horn (the user, 2026-09-25), so her locations will need Kabbu.
-   **Journal locations, each its own yaml option (the user, 2026-09-25).** The journal is `librarystuff[type, n]`,
-   set through `MainManager.UpdateJounal`, so a check can be "this entry became true", with no item to swap.
-   *Shuffle Discoveries* comes first (the simplest). **Built 2026-09-25**, opt-in (off by default): a location
-   source `discovery: n`, sent as `slot_data`'s `location_discoveries`, and the mod's `LocationChecks` sends the
-   check when `librarystuff[0, n]` turns true. No item to swap: a discovery gives none, so its pool slot is padding.
-   Where each discovery is came from four sources: `|discovery,N|` in map dialogue (ScriptDump), about 37
-   `UpdateJounal` calls in events (which event sets which), a few set from story flags in code, and each map's own
-   list (`MapControl.discoveryids`, MapDump). The five in regions the logic already has are locations: the pier
-   statue (49), the arrival outside Snakemouth (0, Event11), the spider fight (1, Event6), the bridge room's hidden
-   spot (2, Event13) and the Underground Door Room's grass (3, Event27). **First check seen:** the user had examined
-   the pier statue before the option existed; joining the new seed, the mod found discovery 49 recorded and sent
-   *Outskirts: Pier, Statue*. **First discovery seen live** (2026-09-25): the user examined the bridge room's hidden
-   spot, Event13 recorded discovery 2, and the check went out with the seed's item back. Tests `TestDiscoveriesOn`,
-   `TestDiscoveriesOffByDefault`. **Parked:** *Shuffle Bestiary* (an entry
-   comes only from Spy in battle or from Event65's catch-up NPC, who sells entries for enemies already fought, 19
-   berries, 49 for bosses, except the 23 in `excludeids`, which are the missable ones; seeing an enemy on the map
-   records nothing) and *Shuffle Recipes* (each needs its ingredients, which the seed may shuffle, so it waits
-   until the logic knows where ingredients come from). Two Quality of life rows go with the bestiary (the user):
-   auto-spy (a fought enemy counts as spied) and free entries at the catch-up NPC, perhaps folded with Free boat into
-   one "no NPC costs" row.
-   **To test later (the user, 2026-09-25): a two-player room.** The user's slot plus a second one the agent drives,
+   The basic moves and party members as items (*Starting Party Member*): see build step 13.
+4. **Open world, one gate at a time** (the default; an "open start" option planned): see build step 9.
+5. **To test later (the user, 2026-09-25): a two-player room.** The user's slot plus a second one the agent drives,
    sending items while the user plays, to see items from another player arrive live: the hold-up on *All* and
    *Progression*, silence for a replay after a new save or reconnect, and the multiworld names ("X's item").
-   **Later idea, a yaml option (the user, 2026-09-25): enemy drops.** The first defeat of each ordinary enemy type is
-   a check (bosses and one-off fights left out), shown as a guaranteed drop; after that the type's drops are the
-   game's own, as with respawning pickups. The game already counts defeats per type in the save
-   (`enemyencounter[id, 1]`, raised on each win, `BattleControl.cs:30712`), so the check can be "that count reached
-   1", with no drop to swap. The logic needs, per type, a place where it's always fought. Another Bug Fables randomizer
-   reportedly does this: not looked at; its licence goes in `licensing.md` and
-   `references.md` is read before borrowing anything from it.
-   **Or per placed enemy, "enemy sanity" (the user, 2026-09-25), its own opt-in toggle:** each enemy standing on a
-   map (map plus entity index) is its own check on its first defeat, so the same enemy type in another room is
-   another check; afterwards it's the game's own again, as with respawning pickups. The entity dump holds 327 placed
-   enemies on 124 maps (some are one spot in different story states, swapped by flags, so fewer real spots). To
-   measure first: how a won battle knows which map enemy started it, and whether the mod has to keep what's done
-   (like respawning pickups, since nothing in the save marks a single map enemy beaten).
-3. **An "open start" yaml option next** (the user, 2026-09-24), after chapter 1's locations: skip the prologue and
-   tutorial, optionally with Leif from the start (the new-game party `{0, 1}`, `MainManager.cs:3591`, becoming
-   `{0, 1, 2}`; early cutscenes are written for two, so tested on a fresh file). A full story strip, as the Metroid
-   Fusion randomizer does, isn't the plan: here every cutscene also changes the world through flags.
-   **Open world is the default, not an option** (the user, 2026-09-25: nobody picks a linear game in
-   Archipelago). The target: the world open as if the story were done, nothing collected, the ending gated by the
-   artifact count. **Built one gate at a time, never by forcing chapters done** (decided 2026-09-25): "chapter done"
-   is the artifact flag the goal counts, and a finished world is hundreds of story flags, many of which remove
-   locations (bosses beaten, characters gone, quests closed, cutscene gifts skipped). So each gate (a blocker, a
-   door, a guard, a story flag) is opened by the seed on its own, tested on screen, and known to the logic; key
-   items and abilities become the real gates (the Peculiar Gem for Upper Snakemouth); story events and bosses stay
-   as locations. The goal stays "collect N artifacts". The ending's gate is researched without spoiling it for the
-   user, who hasn't finished the game. Regions stay whole areas for now; one region per map (doors from the dump,
-   `dev-scripts/door-graph.py`) comes as the gates open (the user, 2026-09-24).
-   **Areas and doors that close later are kept open** (the user, 2026-09-24), as Pokémon Emerald keeps Mirage
-   Island visible: the mod makes the game's `CheckIfCanExist` answer "exists" for a list of doors and blockers
-   sent in `slot_data`, decided at generation, with no save writes. Each is checked in game first; where forcing
-   one open breaks the story state, its locations are left out instead. **First case, built 2026-09-24:** after the
-   first boss, Eetl turns you back outside the city (`eetlblocker1 - Duplicate`, Event12, until chapter 2's flag
-   67), closing the way back to Snakemouth Den (the user). Event12 only walks the player and sets no flags, so it's
-   safe to remove. `locations.json` lists it under `kept_open`, `slot_data` carries it, and the mod's `KeptOpen`
-   gives that entity a marker `limit` array after the map creates it, which its prefix on `CheckIfCanExist`
-   answers with "hide" (test `TestKeptOpen`). Not yet seen in game. Day/night map pairs are made reachable
-   both ways (like Emerald's Shoal Cave tides). One-way drops stay as they are: the logic handles one-way
-   connections.
-4. **A full bag:** key items keep arriving, only ordinary items wait.
-5. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
-6. **A release: three separate downloads** (the user, 2026-09-25). There is no release packaging yet;
+6. **A full bag:** key items keep arriving, only ordinary items wait.
+7. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
+8. **A release: three separate downloads** (the user, 2026-09-25). There is no release packaging yet;
    `dev-scripts/stage-dev.ps1` stages for development only (checked 2026-09-25).
    - **The mod:** a zip with the folder structure already made, so it drops into the game's root folder next
      to the game's exe. Only the files the mod needs to work: `BugFablesAP.dll`, `Archipelago.MultiClient.Net.dll`,
@@ -387,6 +75,11 @@ the *Starting Party Member* plan) plays through chapter 1 into chapter 2 (seen, 
 6. [Build step 6: sending checks](#build-step-6-sending-checks)
 7. [Build step 7: receiving items](#build-step-7-receiving-items)
 8. [Build step 8: logic from the game's own gates (in progress)](#build-step-8-logic-from-the-games-own-gates-in-progress)
+9. [Build step 9: keeping the world open](#build-step-9-keeping-the-world-open)
+10. [Build step 10: more kinds of location](#build-step-10-more-kinds-of-location)
+11. [Build step 11: shops](#build-step-11-shops)
+12. [Build step 12: the entrance randomizer (experimental)](#build-step-12-the-entrance-randomizer-experimental)
+13. [Build step 13: party members and moves as items (in progress)](#build-step-13-party-members-and-moves-as-items-in-progress)
 
 **How it works**
 
@@ -806,23 +499,6 @@ mushroom pit's Gummies need Leif's ice while its medal needs nothing), and what 
 one door to another (a connection through it; a room split by an obstacle becomes two regions). The in-room
 rule is written even when the region already implies it, so a different way into the room can't lose it (test
 `TestInRoomRules`).
-**A quest reward from the code** (2026-09-24): the lost ladybug kid at the lake gives a Lore Book once you've
-beaten his monsters (Event31: `giveitem,1,52`, then flag 55, the check). He only appears after the first boss,
-which is a story event of its own (*Snakemouth Den Cleared*, flag 41), and his cutscene moves all three party
-members, so the location requires Leif and that event (test `TestLostKid`). Added from the code. The cutscene
-also expects the kid's sister, the ladybug girl, to be following you (`FindEntity` of her character type): after
-the first boss you talk to her outside the city and she comes along. Faked flags crashed it twice (no Leif, then
-no sister), so it gets tested when a file reaches the first boss by play.
-**Story pickups** (the user, 2026-09-24): some pickups have no "taken" flag of their own; the story makes them
-appear and hides them for good (the trapdoor Mushroom in the Snakemouth door room exists between flags 13 and 14,
-and taking it starts Event5, which sets 14). The rule: a pickup is a location if, once taken, a story flag hides
-it for good; items that come back are not. A story pickup is known by **the story event picking it up starts**
-(`source.event`, sent in `slot_data`; the pickup's `data[1]`), not by its entity name: the play-through log showed
-the scene creating its own copy, `tempitem`, while the map's `MushroomItem` only appears on a later visit, and both
-start Event5. Its check is the flag that event sets, and an option that skips the event can leave the location
-out (test `TestStoryPickup`). For a future story strip or open world, the
-mod could force such a pickup to exist (like the doors kept open) and send its check on pickup, making it
-independent of the story.
 **Into chapter 2** (the user's play-through, 2026-09-24): two more story events, each a region gate from the gate
 table. *City Opened* (Event60, flag 107, after the first boss) opens the door from outside the city into *Bugaria
 City*; *Chapter 2 Started* (Event45 at the Ant Palace, flag 67) opens the palace rooms and city districts (*Ant
@@ -835,49 +511,69 @@ Lore Book (category quest; the user played it through). **Mid-quest items are sh
 reward (*Old Book Delivery Reward*, flag 243) requires it (test `TestMidQuestItem`). With Shuffle Quests off the
 whole quest stays vanilla together. Still to see in game: that the recipient accepts a Quest Book received from
 the server.
-**Berries are shuffled like items** (the user, 2026-09-24): a berry reward is the same `giveitem` as an item, type
--1, so it's a location, and its amount goes into the pool as an item such as *10 Berries* (kind 3, its own id range;
-filler). Two checks can share one flag: the delivery quest pays 15 berries and a Lore Book at flag 243, so both
-are locations and are sent together. In the mod, receiving berries uses the game's own money reward (capped at
-999); at a berry location the command is turned, just before it runs, into a hand-over the item swap already
-handles (`BerryPrefix`). **The pool is now exactly the included locations' vanilla items** plus padding: an item
-whose vanilla spot isn't a location (the Plushie at the theater) stays with the game (test `TestBerries`).
-**Crystal berries** (the user, 2026-09-24: the first thing you pick up): a counted currency (`flagvar[14]`, the
-crystal berry shop's counter), 50 berry spots each known by its `crystalbflags` index. A berry location's check is
-that index (`location_berries`), the pickup is recognised by it (`data[0]`), and all of them hold the one item
-*Crystal Berry* (kind 4). The mod undoes the count the pickup code already raised, keeps the berry's "taken" mark,
-shows the seed's item (a berry is a 3D model, so the model is hidden for a sprite), and drops the first-berry
-tutorial; receiving one raises the count. First location: berry #0 outside the cave (test `TestCrystalBerries`).
-They're a yaml category, *Shuffle Crystal Berries*, on by default (the user: some are obscure, like quests; test
-`TestCrystalBerriesOff`).
-**Respawning pickups** (the user, 2026-09-24, always shuffled, no option): some floor items have no flag of their
-own, only a *regional* flag the game wipes on every area change, so they come back. They're locations too: the
-first pickup sends the check and gives nothing, and once the check is done the spot is the game's own again, with
-its vanilla item each time it comes back (so it stays useful locally). How it works:
-1. The apworld marks such a location with `source.regional`, its regional flag, and `slot_data` sends it inside
-   `location_pickups` (`"regional": N`, flag -1). The client recognises the pickup by map plus regional flag.
-2. The game sets nothing that stays in the save, so the check can't be read back later like a flag. The mod sends
-   it from the pickup itself: `ItemSwap`'s pickup prefix queues it, and `LocationChecks` sends the queue each tick
-   while connected.
-3. "Done" is the server's checked list from the last login, its updates, and the checks queued here. A pickup made
-   while the connection is down waits in the queue, tagged with its save's seed, and is sent after the next login
-   to that seed. The queue is only memory: if the game closes first, the spot shows the seed's item again and the
-   pickup is made again. Nothing is lost and nothing is doubled.
-Tests: `TestRespawningPickups` (the client gets the regional flag and no flag entry; the vanilla item is in the
-pool; the logic's region) and `TestSlotData` (every location watched exactly one way). First three: chapter 1's
-Snakemouth underground (a Honey Drop, a Mushroom and a Crunchy Leaf). **Seen in play by the user (2026-09-24):**
-each first pickup showed the seed's item and sent its check, and after an area change the Honey Drop came back
-and gave a real Honey Drop with no check. Two are named from the user's description (*Underground Door Room,
-Pillar*; *Underground Bridge Room, Behind Pillar*, hidden from the camera); the Mushroom's landmark is still to come.
-**Optional categories** (the user, 2026-09-24): a location can carry a `category`; its yaml option decides whether
-the seed includes it. *Shuffle Quests* (on by default) covers quest-board and side-quest rewards; one-off NPC gifts
-will have their own toggle. With a category off, its locations aren't created, their vanilla items stay out of the
-pool, and they're left out of `slot_data`, so the client never swaps them and the game hands them out as usual
-(tests `TestQuestsOff`, `TestQuestsOnByDefault`).
-**Each toggle says how many checks it adds** (the user, 2026-09-25: so people know what they're getting into). The
-option's description, which Archipelago copies into the yaml template, ends "Checks added in this version: N.", with
-N counted from the location data when the world loads (`options.category_count`), so it never goes stale; test
-`TestOptionCounts`. Seen in a generated template on 2026-09-25.
+**Mapping connections, one-way included** (the user, 2026-09-25: for room-level regions and a later entrance
+rando). An entrance shuffle can only pair a two-way door with another two-way door; a one-way link marked two-way
+can strand the player. So every connection is recorded with its direction. How:
+1. `dev-scripts/door-graph.py <entitydump> [map prefix]` lists every door between maps, its gating flags, and the
+   doors on the target map that lead back ("NONE": a one-way candidate).
+2. Play decides the rest, since the dump can't see inside a map: a drop off a ledge, a barrier opened from one
+   side, a door whose other side can't be climbed back to. The user's findings go into `MEASURED.md` as they're
+   seen (the first: Snakemouth's switch-room ledges, paired doors that are one-way in play).
+3. When rooms become regions, the table plus those notes become the region graph, each exit one-way or two-way.
+**The general rule** (the user, 2026-09-24): if reaching something uses an ability, the logic requires that
+ability. Leif is in effect the freeze ability. Some droplet rooms are optional, so this is stricter than the game,
+which is the safe direction: never impossible, only less random.
+
+**An impossible seed, and what it taught** (2026-09-25). The user stood in the Outskirts with nothing left to
+reach: the seed had put the Explorer Permit on *Outskirts: Favor Reward*, which the logic thought was open from
+the start. Its entry mixed two sources. Its check (flag 17) is set by a scene on `NearSnakemouth`, past the permit
+gate (Event10, 10 berries, written in the event's code), while its "30 berries on the Outskirts" came from a
+ScriptDump line that belongs to an unrelated NPC who appears only much later. So a location's flag, its give and
+its region must all be traced to **the same scene**, and a give written in an event's code won't show up in the
+ScriptDump at all. The fix moved it past the gate as *Outskirts: Near Snakemouth Den, Reward* with its real give,
+and the test `test_only_two_locations_before_the_gate` now pins what the user knows from play: before the permit,
+only Maki and Eetl's gift and Artis's gift are reachable. It fails on the old data.
+
+Still to do: the one event not found, characters that block a path, the region graph built from all of
+it, and the tests.
+
+*Code: `dev-scripts/gate-table.py`, `dev-scripts/event-triggers.py`; the dumps in `mod/BugFablesAP/EntityDump.cs`,
+`MapDump.cs` and `ScriptDump.cs`.*
+
+---
+
+## Build step 9: keeping the world open
+
+The world is open by default: each gate the story would close (a blocker, a door, a guard, a story flag) is opened
+by the seed on its own, from lists in `slot_data` decided at generation, tested on screen and known to the logic.
+This step is those lists (`kept_open`, `kept_present`, `held_until`, `present_from` and the rest) and each gate
+opened with them.
+
+**An "open start" yaml option next** (the user, 2026-09-24), after chapter 1's locations: skip the prologue and
+tutorial, optionally with Leif from the start (the new-game party `{0, 1}`, `MainManager.cs:3591`, becoming
+`{0, 1, 2}`; early cutscenes are written for two, so tested on a fresh file). A full story strip, as the Metroid
+Fusion randomizer does, isn't the plan: here every cutscene also changes the world through flags.
+**Open world is the default, not an option** (the user, 2026-09-25: nobody picks a linear game in
+Archipelago). The target: the world open as if the story were done, nothing collected, the ending gated by the
+artifact count. **Built one gate at a time, never by forcing chapters done** (decided 2026-09-25): "chapter done"
+is the artifact flag the goal counts, and a finished world is hundreds of story flags, many of which remove
+locations (bosses beaten, characters gone, quests closed, cutscene gifts skipped). So each gate (a blocker, a
+door, a guard, a story flag) is opened by the seed on its own, tested on screen, and known to the logic; key
+items and abilities become the real gates (the Peculiar Gem for Upper Snakemouth); story events and bosses stay
+as locations. The goal stays "collect N artifacts". The ending's gate is researched without spoiling it for the
+user, who hasn't finished the game. Regions stay whole areas for now; one region per map (doors from the dump,
+`dev-scripts/door-graph.py`) comes as the gates open (the user, 2026-09-24).
+**Areas and doors that close later are kept open** (the user, 2026-09-24), as Pokémon Emerald keeps Mirage
+Island visible: the mod makes the game's `CheckIfCanExist` answer "exists" for a list of doors and blockers
+sent in `slot_data`, decided at generation, with no save writes. Each is checked in game first; where forcing
+one open breaks the story state, its locations are left out instead. **First case, built 2026-09-24:** after the
+first boss, Eetl turns you back outside the city (`eetlblocker1 - Duplicate`, Event12, until chapter 2's flag
+67), closing the way back to Snakemouth Den (the user). Event12 only walks the player and sets no flags, so it's
+safe to remove. `locations.json` lists it under `kept_open`, `slot_data` carries it, and the mod's `KeptOpen`
+gives that entity a marker `limit` array after the map creates it, which its prefix on `CheckIfCanExist`
+answers with "hide" (test `TestKeptOpen`). Not yet seen in game. Day/night map pairs are made reachable
+both ways (like Emerald's Shoal Cave tides). One-way drops stay as they are: the logic handles one-way
+connections.
 **Keeping ways present** (the user, 2026-09-25: no dead end in chapter 1, and the Gem opens chapter 5 whenever
 it's found). The reverse of kept open: `locations.json` lists under `kept_present` entities the story only makes
 later, `slot_data` carries them, and the mod's `KeptOpen` gives each a marker `requires` array right after the map
@@ -978,34 +674,395 @@ boss, so Leif is always there. Opening a gate means checking every scene behind 
 The sailor joins `held_until`, waiting for Leif (flag 16); the user chose Leif over the first boss, because a party
 rule suits a random start later, when party members may be items and this becomes a party-size check. Metal Island's
 checks will need Leif in logic when they're added. Built, not yet seen.
-**Mapping connections, one-way included** (the user, 2026-09-25: for room-level regions and a later entrance
-rando). An entrance shuffle can only pair a two-way door with another two-way door; a one-way link marked two-way
-can strand the player. So every connection is recorded with its direction. How:
-1. `dev-scripts/door-graph.py <entitydump> [map prefix]` lists every door between maps, its gating flags, and the
-   doors on the target map that lead back ("NONE": a one-way candidate).
-2. Play decides the rest, since the dump can't see inside a map: a drop off a ledge, a barrier opened from one
-   side, a door whose other side can't be climbed back to. The user's findings go into `MEASURED.md` as they're
-   seen (the first: Snakemouth's switch-room ledges, paired doors that are one-way in play).
-3. When rooms become regions, the table plus those notes become the region graph, each exit one-way or two-way.
-**The general rule** (the user, 2026-09-24): if reaching something uses an ability, the logic requires that
-ability. Leif is in effect the freeze ability. Some droplet rooms are optional, so this is stricter than the game,
-which is the safe direction: never impossible, only less random.
+**The plaza's discoveries open from the start** (the user, 2026-09-25): before chapter 2's briefing (flag 67) a
+stand-in (`Discovery Pre Briefing`, a Check saying "We can check this out later. Let's hurry to the castle.") stands
+where the plaza statue and the inn portrait will be; the discoveries themselves (`StatueDesc`, Event38, discovery 5;
+`InnPortrait`, Event37, discovery 4) require 67. Both stand-ins are kept out of the way and both discoveries kept
+present (`kept_open`, `kept_present`); the two events ask for members by name and set no story flag. Test
+`TestKeptOpen`. Seeds generated solo and with APQuest; **seen (the user):** the statue can be examined.
+**The inn from the start too** (the user, 2026-09-25: couldn't stay while escorted): the innkeeper's default line
+(53) hands the talk to the follower, "We mustn't keep the Queen waiting."; from flag 67 line 1 offers a stay. The
+line's flag is repointed to 691 (set by every new game, `dialogue_flags`, as for the bar entrance). Test
+`TestKeptOpen.test_inn_open_before_the_briefing`; seeds solo and with APQuest. Not yet seen. Also found: the stay
+costs a fixed 9 berries, "3 berries a bug" written for three (`checkmoney,9` then `money,-9`, line 2), whatever the
+party's size.
+**Chapter 2's three opening scenes held in story order** (the user, 2026-09-25: "it's the only place the follower is
+removed and changed to another"): after the first boss a follower joins outside the city (Event63: follower 30, flag
+114); the palace bridge swaps them for Maki (Event44: removes 30, adds Maki, flag 66), the only place follower 30
+leaves; the briefing (Event45) uses Maki and clears the list. In the game the town opens only after chapter 1, so the
+bridge always comes after the boss. **The briefing waits for the swap itself** (the user, 2026-09-25: a shuffled door
+or a random start inside the palace could reach it without the bridge, with no follower or the wrong one): its hold
+moved from 114 to 66, so first boss, follower, swap, briefing, whatever the way in. No new logic: the bridge is in the
+town, which *Chapter 2 Start* already needs. With the town open from the start the bridge could come first: Maki early, and
+follower 30 never leaving. The bridge's trigger (`makiautoevent`) is now held until 114, like the briefing's already
+was (`held_until`). Test `TestKeptOpen.test_follower_swap_waits_for_the_first_follower`. Not seen (the user's file is
+past it).
 
-**An impossible seed, and what it taught** (2026-09-25). The user stood in the Outskirts with nothing left to
-reach: the seed had put the Explorer Permit on *Outskirts: Favor Reward*, which the logic thought was open from
-the start. Its entry mixed two sources. Its check (flag 17) is set by a scene on `NearSnakemouth`, past the permit
-gate (Event10, 10 berries, written in the event's code), while its "30 berries on the Outskirts" came from a
-ScriptDump line that belongs to an unrelated NPC who appears only much later. So a location's flag, its give and
-its region must all be traced to **the same scene**, and a give written in an event's code won't show up in the
-ScriptDump at all. The fix moved it past the gate as *Outskirts: Near Snakemouth Den, Reward* with its real give,
-and the test `test_only_two_locations_before_the_gate` now pins what the user knows from play: before the permit,
-only Maki and Eetl's gift and Artis's gift are reachable. It fails on the old data.
+---
 
-Still to do: the one event not found, characters that block a path, the region graph built from all of
-it, and the tests.
+## Build step 10: more kinds of location
 
-*Code: `dev-scripts/gate-table.py`, `dev-scripts/event-triggers.py`; the dumps in `mod/BugFablesAP/EntityDump.cs`,
-`MapDump.cs` and `ScriptDump.cs`.*
+Beyond floor pickups and gifts, a location can be a berry reward, a crystal berry, a pickup that comes back, a story
+pickup, a quest's reward or its middle, a boss's prize medal, a journal entry, or later an enemy's first defeat.
+Optional kinds each get a yaml toggle that states how many checks it adds.
+
+**Berries are shuffled like items** (the user, 2026-09-24): a berry reward is the same `giveitem` as an item, type
+-1, so it's a location, and its amount goes into the pool as an item such as *10 Berries* (kind 3, its own id range;
+filler). Two checks can share one flag: the delivery quest pays 15 berries and a Lore Book at flag 243, so both
+are locations and are sent together. In the mod, receiving berries uses the game's own money reward (capped at
+999); at a berry location the command is turned, just before it runs, into a hand-over the item swap already
+handles (`BerryPrefix`). **The pool is now exactly the included locations' vanilla items** plus padding: an item
+whose vanilla spot isn't a location (the Plushie at the theater) stays with the game (test `TestBerries`).
+**Crystal berries** (the user, 2026-09-24: the first thing you pick up): a counted currency (`flagvar[14]`, the
+crystal berry shop's counter), 50 berry spots each known by its `crystalbflags` index. A berry location's check is
+that index (`location_berries`), the pickup is recognised by it (`data[0]`), and all of them hold the one item
+*Crystal Berry* (kind 4). The mod undoes the count the pickup code already raised, keeps the berry's "taken" mark,
+shows the seed's item (a berry is a 3D model, so the model is hidden for a sprite), and drops the first-berry
+tutorial; receiving one raises the count. First location: berry #0 outside the cave (test `TestCrystalBerries`).
+They're a yaml category, *Shuffle Crystal Berries*, on by default (the user: some are obscure, like quests; test
+`TestCrystalBerriesOff`).
+**Respawning pickups** (the user, 2026-09-24, always shuffled, no option): some floor items have no flag of their
+own, only a *regional* flag the game wipes on every area change, so they come back. They're locations too: the
+first pickup sends the check and gives nothing, and once the check is done the spot is the game's own again, with
+its vanilla item each time it comes back (so it stays useful locally). How it works:
+1. The apworld marks such a location with `source.regional`, its regional flag, and `slot_data` sends it inside
+   `location_pickups` (`"regional": N`, flag -1). The client recognises the pickup by map plus regional flag.
+2. The game sets nothing that stays in the save, so the check can't be read back later like a flag. The mod sends
+   it from the pickup itself: `ItemSwap`'s pickup prefix queues it, and `LocationChecks` sends the queue each tick
+   while connected.
+3. "Done" is the server's checked list from the last login, its updates, and the checks queued here. A pickup made
+   while the connection is down waits in the queue, tagged with its save's seed, and is sent after the next login
+   to that seed. The queue is only memory: if the game closes first, the spot shows the seed's item again and the
+   pickup is made again. Nothing is lost and nothing is doubled.
+Tests: `TestRespawningPickups` (the client gets the regional flag and no flag entry; the vanilla item is in the
+pool; the logic's region) and `TestSlotData` (every location watched exactly one way). First three: chapter 1's
+Snakemouth underground (a Honey Drop, a Mushroom and a Crunchy Leaf). **Seen in play by the user (2026-09-24):**
+each first pickup showed the seed's item and sent its check, and after an area change the Honey Drop came back
+and gave a real Honey Drop with no check. Two are named from the user's description (*Underground Door Room,
+Pillar*; *Underground Bridge Room, Behind Pillar*, hidden from the camera); the Mushroom's landmark is still to come.
+**A quest reward from the code** (2026-09-24): the lost ladybug kid at the lake gives a Lore Book once you've
+beaten his monsters (Event31: `giveitem,1,52`, then flag 55, the check). He only appears after the first boss,
+which is a story event of its own (*Snakemouth Den Cleared*, flag 41), and his cutscene moves all three party
+members, so the location requires Leif and that event (test `TestLostKid`). Added from the code. The cutscene
+also expects the kid's sister, the ladybug girl, to be following you (`FindEntity` of her character type): after
+the first boss you talk to her outside the city and she comes along. Faked flags crashed it twice (no Leif, then
+no sister), so it gets tested when a file reaches the first boss by play.
+**Story pickups** (the user, 2026-09-24): some pickups have no "taken" flag of their own; the story makes them
+appear and hides them for good (the trapdoor Mushroom in the Snakemouth door room exists between flags 13 and 14,
+and taking it starts Event5, which sets 14). The rule: a pickup is a location if, once taken, a story flag hides
+it for good; items that come back are not. A story pickup is known by **the story event picking it up starts**
+(`source.event`, sent in `slot_data`; the pickup's `data[1]`), not by its entity name: the play-through log showed
+the scene creating its own copy, `tempitem`, while the map's `MushroomItem` only appears on a later visit, and both
+start Event5. Its check is the flag that event sets, and an option that skips the event can leave the location
+out (test `TestStoryPickup`). For a future story strip or open world, the
+mod could force such a pickup to exist (like the doors kept open) and send its check on pickup, making it
+independent of the story.
+**Hard Mode boss prize medals** (23, `MEASURED.md`) are always shuffled, with no option: every boss pays
+its prize as if Hard Mode were on, whatever the player's setting, so a prize can never be skipped and its
+location is simply "beat this boss". The mod does that by widening the Hard Mode test inside the game's
+own `AddPrizeMedal`, never by writing the prize slot itself. **The Archipelago panel gets a
+row, "Difficulty: Normal / Hard / Hardest",** that only adds a way in: *Hard* acts as if the Hard Mode medal
+(Artis's, #11) were equipped, *Hardest* as if the save had been started with the HARDEST code (the game's
+two levels, `MEASURED.md`). Equipping the medal or typing the code still works as the game made it, and
+the prize medals are paid out on every setting. Logic never needs either (the user, 2026-09-24). For
+*Hardest*: its extras read flag 614 directly in about 35 places, so it means setting that flag. **Measured
+2026-09-24: the game keeps no other record of a typed code.** `flagstring[10]` is only the typing buffer,
+emptied as soon as the code is accepted (`EventControl.cs:2450-2455`), so flag 614 is the code's only trace,
+so the mod marks a 614 it set itself, and keeps it out of every save (the user chose, 2026-09-24:
+switchable, the save stays clean; the mod guide's design list, item 6).
+**Built 2026-09-24 (not yet seen in game):** each tick outside battles and events, a prize slot reading "missed"
+(2) is paid through the game's own `AddPrizeMedal(slot)` with Hard Mode answered "yes" for that call, because
+most bosses test Hard Mode in their own event and write 2 directly. Artis's `Event33` then hands the prize over
+with a `giveitem` the swap handles, and the location is done when the slot reaches 3 (`location_vars`, a number
+slot instead of a flag). First location: *Outskirts: Artis's Prize for Snakemouth Den* (Quick Flea, which the
+user saw for sale at the caravan and bought after a Normal kill: the missed-prize path, confirmed on screen).
+**Everything in, placeholders for what isn't checked (the user, 2026-09-25):** every item, medal and other spot in the
+game is added, so everything is randomized. A spot whose logic and name haven't been checked yet is a *Placeholder*:
+"Placeholder" in its name, and it holds filler only (Archipelago's excluded type), so no progression item from any
+game lands where the logic may be wrong. Its own vanilla item still goes into the pool and lands at a checked spot.
+Each placeholder is promoted to a normal location once its requirements and name are checked, one at a time.
+**Optional categories** (the user, 2026-09-24): a location can carry a `category`; its yaml option decides whether
+the seed includes it. *Shuffle Quests* (on by default) covers quest-board and side-quest rewards; one-off NPC gifts
+will have their own toggle. With a category off, its locations aren't created, their vanilla items stay out of the
+pool, and they're left out of `slot_data`, so the client never swaps them and the game hands them out as usual
+(tests `TestQuestsOff`, `TestQuestsOnByDefault`).
+**Each toggle says how many checks it adds** (the user, 2026-09-25: so people know what they're getting into). The
+option's description, which Archipelago copies into the yaml template, ends "Checks added in this version: N.", with
+N counted from the location data when the world loads (`options.category_count`), so it never goes stale; test
+`TestOptionCounts`. Seen in a generated template on 2026-09-25.
+**Journal locations, each its own yaml option (the user, 2026-09-25).** The journal is `librarystuff[type, n]`,
+set through `MainManager.UpdateJounal`, so a check can be "this entry became true", with no item to swap.
+*Shuffle Discoveries* comes first (the simplest). **Built 2026-09-25**, opt-in (off by default): a location
+source `discovery: n`, sent as `slot_data`'s `location_discoveries`, and the mod's `LocationChecks` sends the
+check when `librarystuff[0, n]` turns true. No item to swap: a discovery gives none, so its pool slot is padding.
+Where each discovery is came from four sources: `|discovery,N|` in map dialogue (ScriptDump), about 37
+`UpdateJounal` calls in events (which event sets which), a few set from story flags in code, and each map's own
+list (`MapControl.discoveryids`, MapDump). The five in regions the logic already has are locations: the pier
+statue (49), the arrival outside Snakemouth (0, Event11), the spider fight (1, Event6), the bridge room's hidden
+spot (2, Event13) and the Underground Door Room's grass (3, Event27). **First check seen:** the user had examined
+the pier statue before the option existed; joining the new seed, the mod found discovery 49 recorded and sent
+*Outskirts: Pier, Statue*. **First discovery seen live** (2026-09-25): the user examined the bridge room's hidden
+spot, Event13 recorded discovery 2, and the check went out with the seed's item back. Tests `TestDiscoveriesOn`,
+`TestDiscoveriesOffByDefault`. **Parked:** *Shuffle Bestiary* (an entry
+comes only from Spy in battle or from Event65's catch-up NPC, who sells entries for enemies already fought, 19
+berries, 49 for bosses, except the 23 in `excludeids`, which are the missable ones; seeing an enemy on the map
+records nothing) and *Shuffle Recipes* (each needs its ingredients, which the seed may shuffle, so it waits
+until the logic knows where ingredients come from). Two Quality of life rows go with the bestiary (the user):
+auto-spy (a fought enemy counts as spied) and free entries at the catch-up NPC, perhaps folded with Free boat into
+one "no NPC costs" row.
+**Later idea, a yaml option (the user, 2026-09-25): enemy drops.** The first defeat of each ordinary enemy type is
+a check (bosses and one-off fights left out), shown as a guaranteed drop; after that the type's drops are the
+game's own, as with respawning pickups. The game already counts defeats per type in the save
+(`enemyencounter[id, 1]`, raised on each win, `BattleControl.cs:30712`), so the check can be "that count reached
+1", with no drop to swap. The logic needs, per type, a place where it's always fought. Another Bug Fables randomizer
+reportedly does this: not looked at; its licence goes in `licensing.md` and
+`references.md` is read before borrowing anything from it.
+**Or per placed enemy, "enemy sanity" (the user, 2026-09-25), its own opt-in toggle:** each enemy standing on a
+map (map plus entity index) is its own check on its first defeat, so the same enemy type in another room is
+another check; afterwards it's the game's own again, as with respawning pickups. The entity dump holds 327 placed
+enemies on 124 maps (some are one spot in different story states, swapped by flags, so fewer real spots). To
+measure first: how a won battle knows which map enemy started it, and whether the mod has to keep what's done
+(like respawning pickups, since nothing in the save marks a single map enemy beaten).
+
+---
+
+## Build step 11: shops
+
+Every medal a shop stocks, and the first purchase of each item in an item shop, is a location. The shelf shows the
+seed's item, a purchase sends the check, and purchases are made permanent like checks, so no reload or spending
+order can lock one away.
+
+**Medal shops (the user, 2026-09-25), being built.** Each medal a shop stocks is a location; the shelf shows the
+seed's item, buying runs the shopkeeper's `giveitem` (swapped as for a gift), and the check is the medal leaving the
+stock (`badgeshops[shop]`), which the save keeps. A done location shows as sold, so a reloaded save never charges
+twice. A *Shop prices: Normal / Half / Free* row (default Normal) scales the price columns. Merab's (berries) first:
+berries can always be earned, so no lockout. **Shades's shop takes crystal berries, a consumable** (the user's
+concern: consumable keys, lockout, savescumming): crystal berries are spent nowhere else (measured), and her stock
+arrives in tiers whose Normal prices add up to 18, 25, 27, 40 and 50, exactly every berry in the game. **A tiered
+rule (each item needs its tier's running total) was proposed and is wrong** (the user asked what happens when the
+stock grows): with a later tier already on the shelf, berries spent there starve an earlier tier, and a rule that
+raised the need once a later tier opens would not be monotonic, which Archipelago's fill doesn't allow. **Decided
+(the user, 2026-09-25): every Shades location requires all 50 crystal berries, and her full stock (all 13) is on the
+shelf from a new game.** The first stops spending order from locking anything out; the second stops a story event
+that never runs (as the open world skips or bypasses scenes) from leaving a tier's medals, and their checks, never
+appearing. The same holds for Merab's later additions when they become locations. Crystal berries become progression. **Also wanted (the user,
+2026-09-25): Shades's counter showing 3 or 4 medals** instead of 2. The slot count is the shopkeeper's `data` length and
+each slot's place its `vectordata` entry (`NPCControl.cs:1530-1534`), so longer arrays with new counter positions,
+set before the shelf is built; positions to settle on screen. Built with her shop.
+**Full stock from the start for both medal shops, duplicates as their own locations** (the user, 2026-09-25: "a 2nd
+copy is a 2nd check", like the delivery quest's two checks on one flag). The story adds some medals twice (Merab: TP
+Plus 1 and Ambusher 86; Shades: medal 6), so each copy is a location: Merab 22 (20 medals, two doubled), Shades 13
+(costing exactly 50). **The mod owns each shop's stock:** the shelf is the full list minus the copies whose checks are
+done. Buying removes a copy as the game does; one copy fewer than expected marks the next undone copy done. A reloaded
+save with extra copies, or the story adding stock, is trimmed back to the list (a done location shows as sold). An
+offline purchase stays in the save's stock and its check goes out on reconnecting.
+**Built for Merab's (2026-09-25, not yet seen in game):** her 12 later copies are locations *Medal Shop 11* to *22*
+(ids 46-57), with 10 new medal items. "One copy fewer than expected" turned out unworkable: a fresh file holds 10 of
+the 22 and would read as 12 purchases. So the save keeps a bit per copy bought (`flagvar[7]`, the mod guide, step 12; slot_data's `location_shops`
+lists each copy's location with its shop and medal),
+set by the purchase's swapped `giveitem`, and the stock is set from those bits and the server's checks. Test
+`TestMedalShop` pins the 22 copies in story order.
+**Item shops** (endless consumables, the user): the first purchase of each item in each shop is a check that shows
+and gives the seed's item, then the shop sells its own item again, like respawning pickups, so restocking still works.
+Their own yaml toggle, *Shuffle Item Shops*, default on, apart from *Shuffle Medal Shops*. Built after the medal shops.
+**Built for Madame Butterfly's shop (2026-09-25, seen working):** five locations (*Item Shop 1* to *5*, ids 58-62), one
+per stock entry, known by map, shopkeeper and item (`location_item_shops`); each puts its own item in the pool, with
+no `give` entry, so an unrelated `giveitem` of the same item on that map is never swapped. *Shop Contents* covers
+them too. The buy line adds the item with `additem` (no item-get box), so the mod takes that command out when the line
+is read and treats berries paid as the purchase; the check goes out through the respawning pickups' queue. Tests
+`TestItemShop*`. The other shops follow the same data.
+**The caravan from the start (2026-09-25, seen: the user bought all three, each check sent, then her own items):** its keeper `Crickerly2` kept present, its stall
+(`Base/Stall`, scenery) shown through a new `scenery_present` list, and `Crickerly1`, who stands there before it,
+kept away; its three items (Spicy Berry, Burly Berry, Magic Seed) are *Outskirts: Caravan, Item Shop 1* to *3*
+(ids 63-65), reachable from the start. Its stock is fixed (the keeper's own data); Crickerly's later stands on other
+maps are other shops. **Lines about the rocks** (the user): every Outskirts line was searched (`line` dev command):
+the waiting moth (`FuzzyMoth`, line 76) is kept away, the caravan husband's welcome (line 78) answers to flag 691
+instead of 41 (line 75 was the rocks), Crickerly1 (line 74) is gone with the caravan. Gen and Eri, Artis and Eetl keep
+their flag-41 lines: those are after the first boss (the river, Artis's prize, Eetl leading into chapter 2). The
+Seen (the user, 2026-09-25): the moth gone, nobody mentioning the rocks any more. The
+ladybug siblings (flag 41) are present from the start too, so the map doesn't feel empty (the user); their everyday
+lines are neutral and their quest lines answer to the quest's own flags. Test `TestCaravan`.
+**Shop Contents** (the user, 2026-09-25: shops are many easy checks in one place and soak up the good items, as in
+Tevi): a yaml choice, *Anything*, *No Progression* (default) or *Filler Only*. No Progression is an `item_rule` on each
+shop location refusing progression items from any game; Filler Only is Archipelago's excluded type (no progression,
+no useful, `BaseClasses.py:1502`). 36 seeds (solo, with a second game, with discoveries) all generated.
+**Filler Only falls back when the room can't hold it** (the user, 2026-09-25): an excluded spot takes only an item
+that is neither progression nor useful, from any game, and with Merab's 22 copies a solo seed has 17 such items, so
+generation failed. In `pre_fill`, once every world's items exist, the room's excludable items are counted against its
+excluded spots; if short, this world's shops take No Progression instead, with a warning naming the player. 18 seeds
+(solo, with APQuest, with discoveries, each Shop Contents) generated; the fallback fired solo and with APQuest (18
+filler for 22 spots), not with discoveries on (22 for 22). Tests
+`TestShopContents*`. **The caravan is there from the start** (the user), built with the item shops. **Reloads refund currency** (the user
+caught this: buy, reload, keep the check and the berries), so purchases are made **permanent like checks**: spending
+is tallied on the server (per-slot storage), each save brought in line on load (crystal berries exactly: received
+minus spent; ordinary berries: the save's own paid record against the server's tally, the higher wins), and a
+purchase made offline is recorded in the save and queued.
+**Built for Merab's (2026-09-25):** no server tally needed. The save's bits (a bit per copy) are its paid
+record, and the server's checked list says what was bought anywhere. A copy the server has checked with no bit in
+the save was bought in another save, so on a save tied to the seed, outside events, the mod charges its price here
+(clamped at 0, the rest forgiven) and sets its bit. Crystal berries (Shades's) still want the exact count.
+**Seen in the log (2026-09-25):** the user loaded a save with 0 berries that had bought nothing, while the server held
+all 22 copies' checks: each was charged (0 -> 0, forgiven) and marked paid. Forgiving can't be farmed: a save only
+ever ends with fewer berries. A save that has berries losing exactly the prices isn't seen yet (same code path). A done location shows as sold. **Nothing requires a shop
+bought out** (the user asked): the sold-out flags (587 Merab's, 588 Shades's, set in `MainManager.cs:14283-14291`) only
+change dialogue (an NPC's line 159 on the Commercial map; Shades's greeting, `checktrue,588,92`). A check that ever
+depends on a bought-out shop would need the full total, 50, still safe; a seed holding fewer than 50 crystal berries
+leaves the unaffordable tiers out of the pool instead. **The bar is "no action can make a check unreachable"**, not
+just "the logic never asks for it" (the user: a consumable that can lock a check away is a broken seed). Shades's
+checks meet it because (1) crystal berries buy nothing but her stock, (2) the stock costs exactly 50, (3) all 50 are
+always obtainable and never taken away, (4) purchases are permanent. Every berry spent buys one of her items, so what's
+left always costs what's left to collect. **Shades's shop is only shuffled when the seed holds all 50 crystal
+berries**; otherwise it stays vanilla. Merab's has no such risk: ordinary berries are renewable from battles.
+
+---
+
+## Build step 12: the entrance randomizer (experimental)
+
+Every map-to-map door shuffled, as a yaml option labelled *experimental* until every door's logic is done. The
+apworld pairs the doors and sends the result as `door_targets` in `slot_data`; the mod rewrites each door as its
+map loads.
+
+**Entrance randomizer (the user, 2026-09-25):** every map-to-map door, as an option labelled *experimental* until
+every door's logic is done: until then a shuffled seed may be unfinishable (the one exception to "never
+impossible", while that option is on; *Warp to start* gets the player out of a dead end). Coupled (a door and its way
+back stay a pair) by default, decoupled as a choice. Order: a proof of concept (the mod rewriting a door's
+destination, seen on screen), then every door, then the room-by-room logic that removes the experimental label.
+**The proof of concept, seen (the user, 2026-09-25):** one door, then a coupled swap of two connections both ways
+(the mod guide, step 13). **Every door, built (2026-09-25):** the yaml option *Entrance Randomizer (experimental)*,
+*Off* (default) or *Coupled*; decoupled later. How it was built:
+1. **A door table** (`data/doors.json`), exported by `dev-scripts/door-graph.py --export` from EntityDump: every
+   door paired with its way back (the door the party arrives next to), 254 connections, 508 doors. Doors stay
+   fixed when the mod couldn't tell them apart by name, when they have a story variant at the same spot, or when they
+   lead into their own map; the table lists the map links those make.
+2. **The shuffle** (`doors.py`), in `generate_early`, with the world's own random: the same doors joined in new
+   pairs, x with y meaning x leads where y's old partner led (so you arrive next to y) and y where x's old partner
+   led. Sent as `door_targets`, which the mod already applies.
+3. **Every area stays reachable.** A plain random pairing strands areas: two dead-end rooms joined to each other are
+   cut off. Measured: stranded in 20 of 20 seeds on the real table. So the shuffle grows the world outwards from one
+   area (maps joined by fixed doors count as one): an open door of the reached part is joined to a door of an area
+   not reached yet, taking an area with more doors whenever only one open door is left; the doors left at the end
+   are paired at random. Tests `TestDoors*`: every way back leads back, every map is reachable, and a hub with dead
+   ends is never stranded over 300 seeds (a plain random pairing strands 266 of them).
+4. Six seeds generated with it on, three solo and three with APQuest. **Seen (the user, 2026-09-25), one generated
+   pair both ways:** the town gate led into the desert (`DesertBeforeGH`, the log: rewritten like `DesertSouthern`'s
+   left exit), and the exit there back to the start in front of the gate. The logic still assumes the vanilla doors
+   (the named allowance).
+5. **A dropped connection leaves the doors as the seed has them** (code: `door_targets` arrive with slot_data at login
+   and are never cleared by a drop; each map's doors are rewritten from memory as it loads). **Seen (the user,
+   2026-09-25):** with the server stopped, the town gate to the desert and back several times (15 rewrites in the log
+   while offline); on restarting the server the mod logged back in by itself.
+6. **Found while roaming:** a shuffled door reaches areas the seed has no locations in yet, whose items are the
+   game's own (the user picked up the desert's Strong Start medal, flag 415). The Placeholders plan (every spot a
+   location, unchecked ones filler-only) closes that.
+7. **A trap found while roaming (the user, 2026-09-25):** in the bandit hideout's garden (`HideoutGarden`) a guard
+   (`burglar`) caught the party, which starts the game's own caught scene (Event108, the log) and puts the party in
+   `HideoutCell`, whose one door leads to the central room. **Getting out needs the dig ability** (the user,
+   correcting a first guess of Leif's ice: you dig under the bars in the sand). The code agrees: in the story the
+   cell is where dig is learnt: Event109, the first capture, takes the beemerang (flag 11 off), sends the party to
+   the cell (`LoadMap(100)`) and there sets flag 18, dig; Event108, caught again later, expects you to dig out. So
+   without dig it's a dead end (the Warp button is the way out), and the hideout's garden needs dig in the logic
+   once the logic follows the doors. A guard catching you is a transfer that isn't a door.
+8. **Transfers that aren't doors (decided, the user, 2026-09-25).** The game also moves the party by the dialogue
+   script commands `|transfer|` and `|warp|` (`MainManager.cs:13263-13270`) and by story events (about 88 `LoadMap`
+   calls in `EventControl`). **Entrances the player chooses** (the bar's hatch, elevators, the boat) are doors in all
+   but name: shuffled like doors, coupled with their way back where they have one, behind their own toggle at first.
+   **Places the game sends you** (caught by guards, a fall, a story scene) keep their destination: the scene expects
+   to end there, they have no way back to pair with, and a destination you didn't choose is only confusing. They
+   become one-way connections in the logic, which must make sure you can leave where they put you; some happen only
+   at some story points, and some can strand you. **The Warp button and fast travel stay outside the logic.** First
+   step: list every such transfer from the data (the script dump and `event-triggers.py`), map, trigger and target.
+   **Listed (2026-09-25):** ScriptDump gained a column of the moving commands on each dialogue line (7 lines,
+   all `|warp|` or `|loadmap|`), and `dev-scripts/event-transfers.py` lists each event method's `LoadMap` calls and
+   targets from the decompiled code (88 calls in 63 events); `event-triggers.py` on those events says what starts
+   each. It found the bar's hatch (Event61) and the hideout cell (Events 108/109) at once (`MEASURED.md`,
+   "Transfers that aren't doors"). Next: sort them into chosen and forced, reading each event.
+
+---
+
+## Build step 13: party members and moves as items (in progress)
+
+Field abilities, the basic moves and party members as items, each unusable until it arrives. Only a rehearsal is
+built so far: a dev setting that starts the game with one member.
+
+**Also wanted (the user, 2026-09-25): the basic moves as items**, a yaml option apart from the abilities: Vi's
+beemerang, Kabbu's horn, Leif's freeze, and jumping, each unusable until its item arrives. Proposed: *Shuffle Basic
+Moves* (the three field moves) and *Shuffle Jump* (its own toggle: it gates the most), both off by default. **The mod
+side is small** (code read, 2026-09-25): the three moves are one method, `PlayerControl.DoActionTap`
+(`PlayerControl.cs:1008`), switching on the leader's `animid` (0 Vi, 1 Kabbu, 2 Leif), so a prefix can refuse the move;
+the game itself takes the beemerang away in the bandit hideout (flag 11, `case 0` checks it), so Vi without it is a
+state the game already knows. The jump is its own method, `DoJump`, called from the button it shares with talking
+(`PlayerControl.cs:372-392`), so it can be refused without touching talk. **The logic is the cost:** every spot that
+needs a move (a ledge, a beemerang switch, grass, water to freeze) becomes a rule, seen room by room, and the start
+must have checks that need none of them.
+**Later idea, a yaml option (the user, 2026-09-25): party members as items.** Start with one random member and
+find the other two, each its own item, on top of the abilities. **Its shape (the user, 2026-09-25, later):** *Starting
+Party Member: Off / Vi / Kabbu / Leif / Random*; Off is the story's party, otherwise the game starts with that one
+member and the other two are items. Prompted by the stand-ins for missing members in scenes, which make one-member play
+look possible; the story's own joining scenes (Kabbu at the start, Leif at the lake) must then add nobody.
+**The two joining moments become the two locations** (the user, 2026-09-25): with the option on, whoever starts, the
+other two members are items, and the story has exactly two joining moments: Vi's in the opening scene and Leif's right
+after the spider scene (where the mod now has him join). Both become locations whatever the start (Vi's even when you
+start as Vi), named after the place, not the member ("Snakemouth Den: Fall Room, After the Spider"), so two items get
+exactly two spots and no filler has to go. With the option off they're no locations; the members just join.
+**Rehearsal built (2026-09-25), the mod only:** a dev setting `TestStartMember` (0 Vi, 1 Kabbu, 2 Leif) and a prefix
+on `MainManager.ChangeParty(ids, fromscratch, destroyoldentity)`, which every party change of the story goes through
+(the two-argument form forwards to it; about 20 calls in `EventControl`, some already one member: Kabbu alone after
+the slides, Vi alone in one scene). The prefix keeps in `ids` only the starting member and those received (dev:
+`addmember`), so the opening's Vi-and-Kabbu becomes the one member; it runs last so the opening skip's own prefix sees
+the story's ids. **First test, Leif alone (the user, 2026-09-25):** the start and the camera right after four fixes
+(the mod guide, step 11, item 1); Artis's talk (lines for Vi and Kabbu, now stand-ins in conversations too) gave the
+permit; the gate scene played; the grass tutorial (Event10) played once stand-ins arrive at once, its reward sent.
+**Then a real gate:** the corridor after the tutorial (`BugariaOutskirtsSnakemouthCorridor2`) needs the horn to
+cross, so Snakemouth Den needs Kabbu (or the horn, once moves are items) in the logic.
+**Further (the user, 2026-09-25):** the trapdoor scene, landing in the right spot once stand-ins stay where a scene
+puts them; the spider fight's lead-in once stand-ins get their physics body when made; and **the spider fight itself
+with Leif alone** (the user's screenshot: Leif alone against the spider, the battle menu working). In the story that
+fight is Kabbu alone at first, then Vi joins.
+**The first boss and after, Leif alone (the user, 2026-09-25):** the boss scene (Event26) and the one after the bridge
+(Event63) played with Leif acting the story leader's part, no error in the log; the follower joined crossing the
+bridge; the way back to the cave is closed after the boss; what the seed keeps open (the caravan, the ladybug
+siblings) still works; the NPCs in the starting house moved away as the story has them. Chapter 2 next.
+**Decided (the user, 2026-09-25): the members present act out the missing ones' parts** in scenes, where they would
+be and what they would do, instead of standing idle beside invisible stand-ins ("looks more fun"). Plan: the real
+leader plays the story's leader (the first member of the party the story expects); only other missing members stay
+invisible stand-ins; in a party list by member (Vi, Kabbu, Leif) the leader's own slot then gets an invisible
+stand-in, so a scene moving "each member" never moves the player twice (why this was set aside at first).
+Animations play by number, so the leader shows his own animation with that number: the field action is
+`animstate` 100 for everyone (Vi's throw and Kabbu's horn, `PlayerControl.cs:1029`, `:1076`), so Leif acting Kabbu's
+horn swing casts his ice (wanted, the user: "Kabbu using the horn, Leif using ice"). States a character lacks show
+as `Animator.GotoState: State could not be found`; the mod logs the number and maps it to the closest one. To build after the current
+replay of the trapdoor and the spider fight, then replay the same scenes to compare. Opt-in only: fighting with one or two changes
+the game a lot. Open questions: the story may need all three after chapter 1, and adding a member outside the
+story's own event hasn't worked yet (log.md, 2026-09-24: `ChangeParty` left Leif without a character).
+**Solved 2026-09-25:** without `fromscratch`, `ChangeParty`'s copy loop never runs (`for m < 0`,
+`MainManager.cs:3805`), so the party list came out empty. `ChangeParty({0, 1, 2}, fromscratch: true)` rebuilds all
+members (stats from defaults, then the stat bonuses reapplied), and `SetPlayers(positions)` makes their characters.
+The user saw Leif join the party and fight on a file where he'd never joined (dev command `addleif`). Next measured:
+the trapdoor, the spider fight and Leif's own joining scene with him already there.
+**Chapter 1 scenes with Leif added early** (the user, 2026-09-25): Event2 (the Tattle tutorial, bridge room) played
+fine; it moves only the first two (`GetEntity(-4)`, `(-5)`), so Leif stood still in it and was left behind until it
+ended, which looked odd (the user). Scenes switch normal following off (`overridefollower`) and move only who they
+name. Cosmetic fix for the open start: during a scene, a member the scene never moves walks along behind the one
+ahead of him.
+**The trapdoor scene broke with three** (2026-09-25): Event5 recreates the party with `SetPlayers(positions)` and a
+list of two positions, and `SetPlayers` indexes it for every member: IndexOutOfRange, the scene stopped halfway, the
+user stuck in the fall room (freed with `unstick`). The mod's `PartyFit` now lengthens a short position list before
+the game uses it (each extra member a step behind the last listed one), which covers every scene that places the
+party this way. **Retest:** `SetPlayers` then took the lengthened list, but the scene then places each member from
+**its own** two-long list (`for m < playerdata.Length`, `array[m]`, `EventControl.cs:1476-1484`), which a fix outside
+the scene can't reach. Stopped there (two fixes on one scene). `unstick` now also resets the party's bodies (gravity,
+physics, forced animation), which the crash had left as the scene set them.
+**Parked design (the user, 2026-09-25), for party members as items:** scenes find members by **character**
+(`GetEntity(-4)` Vi, `(-5)` Kabbu, `(-6)` Leif search the party by `animid`; `-1` to `-3` are positions), so the leader's
+order never matters. Two rules then: (1) a member a scene doesn't know about (Leif early in chapter 1) **steps out**
+while it runs and rejoins after (the `addleif` method: `ChangeParty` with `fromscratch`, then `SetPlayers`); (2) a
+scene that needs a member who isn't there (only Leif, no Vi) **waits**, held in the game and a rule in the logic for
+any check it gives, like the boat. First step when this is picked up: list chapter 1's scenes by the characters they
+use, from the code.
+Scenes that need a particular member must then become rules. The horn tutorial near Snakemouth (Event10, a
+location) is not one: the scene cuts the grass itself, and it played through with Leif alone once stand-ins
+arrived at once (the user, 2026-09-25; the mod guide, step 11, item 3). The way down to Shades's shop is:
+grass on the way there has to be cut with the horn (the user, 2026-09-25), so her locations will need Kabbu.
 
 # How it works
 

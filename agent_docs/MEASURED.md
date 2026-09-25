@@ -754,8 +754,8 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   flag 11, and in the cell gives dig, flag 18, `EventControl.cs` Event109; leaving the cell needs dig, the user; the cell also holds a `Dropplet` with no flags, which the user thinks is
   cosmetic, not needed to leave: unconfirmed, so the rule is dig only); **Event153, the boat** (seven harbours); **Event68**, three map
   pairs chosen by an `entrance` flag (elevators, to read); Event196, a destination from a list chosen in a menu.
-- Not yet sorted into "chosen by the player" and "the game sends you" (the decision: `apimplementation.md`, Next,
-  the entrance randomizer's step 8).
+- Not yet sorted into "chosen by the player" and "the game sends you" (the decision: `apimplementation.md`, build
+  step 12, item 8).
 
 ## What the Explorer Permit opens (2026-09-24, code read and ScriptDump; the wiki lists four uses)
 

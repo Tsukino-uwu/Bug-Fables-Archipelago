@@ -18,14 +18,17 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
   known issues and the index at the top, nothing buried. **A step is not done until it is written in the
   right one, in the same commit.** `.githooks/commit-msg` refuses a commit touching `mod/`, `apworld/` or
   `dev-scripts/` without either, unless the message has a line `docs: no process change` (a typo, never a
-  step). Re-read both when a session starts.
+  step). Re-read both when a session starts. **A feature gets its own step** when it adds a yaml option or
+  panel setting, a new kind of location, or changes how the game plays in a seed; everything else joins the step
+  it belongs to. Say so in the commit message. `.githooks/doc-coverage.py` (pre-commit) refuses an option,
+  setting, `slot_data` key or source file that no guide or `code-map.md` names.
 - **The root `README.md` never goes stale either.** Its "Status" line and "How it works" must agree with the
   guides' "Where it stands" and with the code. A commit that changes either one updates the README in the
   same commit. Check all three against each other when a session starts, and fact-check the README against
   the code, never against an older doc.
 - **Items are remote only.** A pickup grants nothing locally; it sends its check. Every item, the player's
   own included, arrives from the server. No local-items mode (decided 2026-09-24). One named exception: a
-  respawning pickup whose check is done is the game's own again (`apimplementation.md`, build step 8).
+  respawning pickup whose check is done is the game's own again (`apimplementation.md`, build step 10).
 - **Randomizer saves are separate files** (decided 2026-09-24). With the randomizer on (a main-menu toggle),
   the game reads and writes its own save files in a separate folder. Normal saves and Steam Cloud's copies
   are never written. This must exist before the mod grants its first item.
@@ -50,7 +53,7 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
   the generator knew:** anything it changes (a gate opened as a last resort, a start) comes from `slot_data`,
   decided at design time, never at runtime. **Two named allowances (the user, 2026-09-25):** an unchecked
   "Placeholder" location holds filler only; the entrance randomizer is an option labelled experimental until
-  every door's logic is done (`apimplementation.md`, Next).
+  every door's logic is done (`apimplementation.md`, build step 12).
 
 ## Who verifies what
 

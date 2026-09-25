@@ -21,4 +21,7 @@ check '/home/' 'a home path'
 [ -n "$USER" ] && [ "$USER" != "$USERNAME" ] && check "$USER" 'your user name'
 [ -n "$COMPUTERNAME" ] && check "$COMPUTERNAME" 'this machine name'
 
+# Every yaml option, setting, slot_data key and source file must be written up (doc-coverage.py says which).
+python "$(git rev-parse --show-toplevel)/.githooks/doc-coverage.py" || fail=1
+
 exit $fail

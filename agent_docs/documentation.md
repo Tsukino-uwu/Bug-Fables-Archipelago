@@ -17,42 +17,16 @@ server, and items from the server arrive in the game once each.
 
 **Next:**
 
-1. **Separate randomizer saves:** done. Through a whole session played with the Archipelago mod enabled, the game
-   saved only into the `archipelago` folder (last write 05:06), and the normal save files kept their earlier
-   times (03:42 and 2023), checked on disk on 2026-09-24. The redirect covers all five places the game touches
-   a save file, and normal saves are only reachable with the mod disabled.
+1. **Separate randomizer saves:** done (step 16).
 2. **Give an item the game's own way**, when the server sends one: works (apimplementation.md, build step 7).
 3. **Spot a location being done** (the flag the game sets) and report it: works (apimplementation.md, build
    step 6). The game's own item there is kept out, and the seed's item shown instead (step 9).
 4. **Keep the received-item count in the save**, so loading never hands items out twice: works, in a save slot
    the game never uses (`MEASURED.md`, "Free save slots for the mod").
 5. **The chat feed**, then the in-game text client (see the design list in step 2).
-6. **A row "Difficulty: Normal / Hard / Hardest" in the Archipelago panel** (the user, 2026-09-24). Hard and
-   Hardest add the game's two Hard Mode levels; Normal leaves it to the game (the medal equipped, or the
-   HARDEST code). **Default: Normal.** Boss prize medals are paid out on every setting (apimplementation.md,
-   "Where it stands").
-   **What belongs in the panel** (the user, 2026-09-24): only on/off preferences that never change what's where
-   (Difficulty, Detector, later DeathLink, which only adds a tag to the connection). Anything that decides the
-   seed (entrance rando, shuffles, goals) is a player-file (yaml) option, applied from `slot_data`.
-   **Every panel setting applies only while Archipelago is enabled** (the user, 2026-09-24): vanilla saves play
-   exactly as vanilla. Difficulty, Detector and every item swap check the switch; a Hardest flag the mod set is
-   cleared the moment it's switched off.
-7. **A row "Detector: On / Off" in the Archipelago panel** (the user, 2026-09-24), a help for finding items.
-   On acts as if the Detector medal (#2) were equipped; Off leaves it to the game (the medal equipped or not).
-   **Default: On.**
-   All three of its effects ask one question, `BadgeIsEquipped(2)` (objects `NPCControl.cs:1344`, discoveries
-   `MapControl.cs:408`, music `MusicSpinner.cs:54`), and Hard is the same question for medal #11, so one patch
-   on `BadgeIsEquipped` serves both rows. It changes no save data and no logic.
-   **Built (2026-09-24), not yet seen on screen:** the panel has eight rows now (spaced tighter so the status
-   line still fits). Difficulty offers Normal, Hard and Hardest. `MedalAssist.cs`
-   answers "equipped" for medal 11 (Hard) or 2 (Detector) on party-wide checks, on randomizer saves only. The
-   medals menu equips from the medal list itself, never through that check, so it's unaffected.
-   **Hardest** (the user chose: switchable, the save stays clean): its extras read the save's HARDEST flag (614)
-   directly, and the game keeps no other trace of a typed code. So the mod turns 614 on in play and remembers
-   that it did; each time the game saves, the flag is cleared just for the write and put back after, and
-   switching down clears only a 614 the mod set. Loading a save or starting a new one forgets the mark, since
-   those flags are the save's own. If any of the three hooks (save, load, new game) is missing, Hardest does
-   nothing rather than risk a save.
+6. **A row "Difficulty: Normal / Hard / Hardest" in the Archipelago panel:** built (2026-09-24), not yet seen on
+   screen (step 15).
+7. **A row "Detector: On / Off" in the Archipelago panel:** built (2026-09-24), not yet seen on screen (step 15).
 8. **A "Quality of life" page in the Archipelago panel** (the user, 2026-09-25): on/off rows that speed the game
    up and make it smoother: skips first, others later (a pause-menu warp back to the seed's start, say). Skip
    intro and Fast text (with a faster hold-to-skip) are confirmed on screen; battle tutorials next (step 10).
@@ -73,6 +47,12 @@ server, and items from the server arrive in the game once each.
 8. [An Archipelago menu inside the game](#8-an-archipelago-menu-inside-the-game)
 9. [Keep the game's own item, show the seed's](#9-keep-the-games-own-item-show-the-seeds)
 10. [Quality of life: a quicker, smoother game](#10-quality-of-life-a-quicker-smoother-game)
+11. [Playing with fewer party members: stand-ins and followers](#11-playing-with-fewer-party-members-stand-ins-and-followers)
+12. [Shops in the game](#12-shops-in-the-game)
+13. [Doors rewritten: the entrance randomizer in the game](#13-doors-rewritten-the-entrance-randomizer-in-the-game)
+14. [The Detector for every check](#14-the-detector-for-every-check)
+15. [Difficulty and the Detector: the panel's two game settings](#15-difficulty-and-the-detector-the-panels-two-game-settings)
+16. [Randomizer saves kept apart from normal saves](#16-randomizer-saves-kept-apart-from-normal-saves)
 
 ## Keeping this guide honest
 
@@ -263,7 +243,7 @@ but it takes real typing: the game itself never reads typed text (its name scree
 mod reads the keyboard itself. Backspace, Ctrl+V to paste and Ctrl+C to copy all work. The same panel switches
 **the Archipelago mod** (enabled or disabled), which keeps randomizer saves in their own folder so normal saves are never touched.
 Its rows, top to bottom (the user's order, 2026-09-24): Address, Port, Slot, Password, Difficulty, Detector,
-**Archipelago** (the mod on/off, just "Archipelago"). No Back row: cancel backs out, as the hint box says.
+**Archipelago** (the mod on/off, just "Archipelago"; the config's `RandomizerEnabled`). No Back row: cancel backs out, as the hint box says.
 Under them, one line explains the highlighted row (the user, 2026-09-24: "Detector" alone didn't say it means
 the medal), then the connection's state. The game's text colour 5 draws light blue here, not grey, and a long
 coloured line looked tilted, so both lines are plain black. The choice rows use the settings screen's own
@@ -332,8 +312,7 @@ arrows around the On/Off value.
 
 *Code: `MenuToggle.cs` (the menu entry: `BeforeSetMenuText` and `AfterSetMenuText` around the game's rebuild,
 `AfterUpdate` for the cursor, `SetMode` for the switch); `ApMenu.cs` (the panel: `Build`, `Redraw`,
-`Navigate`, `TypeInto` for typing, `Close`); `SaveRedirect.cs` (the separate save folder, patching the
-game's five save-file functions in `InputIO`).*
+`Navigate`, `TypeInto` for typing, `Close`).*
 
 ## 9. Keep the game's own item, show the seed's
 
@@ -547,134 +526,6 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    building, since the same entity numbers are other things on other maps.
    Seen (the user, 2026-09-25): the spawn in the town looks right; only the building's music played briefly, so with a
    test start the scene's end no longer starts it.
-   (8) **Without a test start, the party stood under the house** (the user, 2026-09-25: "the weird broken location" seen
-   briefly before (7)'s fix). Event8 places the party only after its slides (Kabbu 2.5 left of entity 4,
-   `EventControl.cs:2770`), so cut before them the party kept a new game's raw spawn point; every test since (6) had a
-   test start, whose warp moved it away. The opening now stands the party where the scene would have. Seen (the user):
-   right spot, but the fade-in first showed the spawn point, then a jump: the opening runs a few frames after the scene's
-   end, and the fade-in starts at that end. So the scene's end (the mod's) moves the party there and snaps the camera
-   before the fade-in. Seen with only the first half loaded (the user): the right spot, then a snap back once the opening
-   ran, since it waits for the fade-in to end and the player can walk during it. So the opening no longer places anyone:
-   it uses where the player stands. Seen (the user): right spot, no snap, but outside the house the camera was broken
-   with Leif alone. `ResetCamera` at the scene's end aims the camera at the leader, the opening's `ChangeParty` then
-   destroyed that character (with Vi and Kabbu, Kabbu's was reused), and leaving the house hands the camera back to the
-   player only for insides that centre on themselves (`MapControl.cs:1373`). Event16 itself ends with `ResetCamera()`
-   after its party change (`EventControl.cs:3795`); the opening now does too. **Didn't help** (the user: still low outside,
-   and stuck after the gift). Two guesses failed, so measured: a console command `cam` logs what the camera follows. It
-   read `target DESTROYED` with the leader (`Player 0`) fine. Unity destroys an object at the end of the frame, so the
-   opening's `ResetCamera`, aiming at `MainManager.player`, still found the old leader's character and followed it as it
-   vanished, leaving the camera where it last stood, under the house. The opening now aims the camera at the new
-   leader's character itself (`playerdata[0].entity`). Seen (the user): the camera fine from the gift on, but Vi and
-   Kabbu showed for a moment and the camera was odd outside until then: the opening swaps the party only once the
-   fade-in is over. Moving the swap into the scene's end, before the game's `EndEvent`, crashed it (`FixEntities`,
-   a NullReferenceException, a black screen; freed with `unstick`). Now the scene ends as before behind the black
-   screen, and on the next frame the party is swapped, placed and the camera set, then the fade-in starts. **Seen (the
-   user, 2026-09-25):** Leif alone from the first frame, in the room, the camera right inside, outside and after the gift.
-   (9) **Stand-ins in conversations too** (the user, 2026-09-25, Leif alone): Artis's talk hands lines to Vi and Kabbu
-   (`|next,-4|`, `|next,-5|`), and `SetText` resolves a speaker through `GetEntity` (`MainManager.cs:12385-12398`,
-   `:18418-18440`). The stand-ins only answered while a scene ran (`inevent`), and a talk isn't one, so the lookup came
-   back empty and `SetText` threw a NullReferenceException at the end of the talk. They now answer while a scene or a
-   conversation runs (`inevent` or `message`) and go when both are over. Kept that narrow on purpose: an invisible
-   member around all the time could be counted as real by battles, followers or menus. **Seen (the user):** Artis's talk
-   played to the end and the permit's check went out (the crashed one had left a dead dialogue: `unstick`).
-   (10) **A stand-in arrives at once** (the user, 2026-09-25): the horn tutorial (Event10, near Snakemouth) walks Vi to a
-   spot and waits until she's there (`while (entities[0].forcemove)`, `EventControl.cs:2935`); the stand-in, without
-   collision, never arrived, and the scene never reached its first line. Every `MoveTowards` overload ends in the
-   five-argument one (`EntityControl.cs:4911-4960`); a postfix puts a stand-in straight on the spot and ends the walk.
-   The scene's cut itself is done by the scene (`CutGrass()` after the action button), not by Kabbu. **Seen (the user):**
-   the tutorial played through and its reward was sent.
-   (11) **Stand-ins stay where they're put** (the user, 2026-09-25): the trapdoor scene ran with stand-ins, but Leif
-   landed "down/left at a rock" instead of on the mushroom. Its end places member m on the m-th scene character's spot
-   (`EventControl.cs:1476-1484`), so Leif took stand-in Vi's; a stand-in had its collision switched off but not its
-   gravity, so it would sink through the floor. Stand-ins are now kinematic, without gravity. The likely cause, not
-   measured. **Wrong** (the user: now all the way left). Read in the code instead: just before placing, the scene runs
-   `PartyMover`, which walks every party member, stand-ins included, to `MainManager.player`, and with one member the
-   player (Leif) isn't in the scene: he stood where the fall room put him on loading, far left. (10)'s instant arrival
-   then put stand-in Vi on him, and the end put Leif on her spot. So a stand-in sent toward the real player stays where
-   the scene last put it, and the positions the scene hands `SetPlayers` are logged, with the stand-ins' and the
-   player's. **Seen (the user, 2026-09-25):** Leif landed at the right spot; the log: placed at (12.7, 6.5, 0.3), stand-in
-   Vi's landing point, with the player at (-21.9, 0, 0) before.
-   (12) **A stand-in has its physics body at once** (the user, 2026-09-25): the spider fight's lead-in (Event6) made a
-   stand-in `Jump()` in the frame it was made, and `Jump`'s `Unfix` needs the body (`rigid`), which a new character only
-   gets in its `Start`, a frame later (`EntityControl.cs:524-528`): NullReferenceException, the scene dead (`unstick`).
-   The stand-in now gets its body when made, weightless; `Start` adds one only when there is none. Not yet seen.
-   (13) **Stand-ins hidden at the last moment** (the user, 2026-09-25: their sprites flashed now and then): the
-   per-frame hiding ran before the scene's step and the character's own updates, which could switch a sprite back on
-   for a frame. A postfix on `EntityControl.LateUpdate` (`EntityControl.cs:3672`) hides a stand-in after both, just
-   before drawing. First reload with the guard: it waited for the running scene. Not yet seen.
-   (14) **A scene's end hands over to the real party** (the user, 2026-09-25: after the spider fight's end, Leif stood to
-   the right instead of where the scene leaves the party). The end of Event6 (`EventControl.cs:2272-2289`) walks Vi and
-   Kabbu to the spot and never the player, whom it takes to be one of them, and sets the fall room's character to follow
-   Kabbu (`entities[2].following = entities[1]`, then `extrafollowers.Add(2)`). Now, before the stand-ins go: if the
-   story's leader (the first member of the party the story last asked for, remembered by the member guard before it
-   filters) was a stand-in, the real party moves to where it was left; anyone following a stand-in follows the real
-   party's last member. Both logged. Not yet seen.
-   (15) **A party member isn't also a follower** (the user, 2026-09-25: three Leifs after the spider fight, one standing,
-   one trailing the player). In the story, Leif meets the party after that fight and follows until he joins at the lake:
-   the scene's third character is the room's Leif (entity 1), set to follow Kabbu, and `extrafollowers.Add(2)` (ids are
-   characters: 0 Vi, 1 Kabbu, 2 Leif; removed when he joins, `EventControl.cs:3533`), from which every map load makes a
-   follower (`MapControl.cs:826-829`, `AddFollower`, kept in `map.tempfollowers`). With Leif the one member, that's the
-   player plus two copies. Now the member guard, each frame, takes any party member off `extrafollowers` with their
-   follower copies, and a scene's end removes a party member's character that followed a stand-in. On first load it took
-   Leif off the list but found no copy in `tempfollowers`: the copies were the scene's own character, not made by
-   `AddFollower`. **Still a copy** (the user: a second Leif copying every move). Measured with a new console command,
-   `who` (every character drawn as a party member): two "Player 0", both player characters. The spider scene calls
-   `ChangeParty({0, 1})` then the no-argument `SetPlayers()` (`EventControl.cs:1711-1712`), which makes new player
-   characters without removing the old ones; in the story those become the scene's actors, but with stand-ins the old
-   Leif stayed, controls and all. Now, outside scenes, twice a second, any character with player controls other than
-   the leader's is removed (logged). On loading it removed the stray at once; `who` then listed one player. **Seen
-   (the user, 2026-09-25):** no extra Leif any more.
-   **The whole sequence replayed (the user, 2026-09-25): "worked perfectly"**, no extra Leif, the right spot after the
-   ending. The log: the fall placed at (12.7, 6.5, 0.3); Leif taken off the follower list; the scene's end moved the
-   party to stand-in Vi's spot (-44, 0, 1.2); the story's Leif ("Moth") removed as a copy; the stray player removed.
-   (14) and (15) seen with it.
-   (16) **The leader acts the story leader's part** (the user's wish, `apimplementation.md`): at a scene's or talk's
-   first stand-in, if the story's leader isn't in the party, the real leader plays that member (walks, faces, is placed
-   where they would be) and only other missing members stay invisible; chosen once per scene; in a party list by member
-   the leader's own slot gets an invisible stand-in so he's never moved twice. **Seen (the user, 2026-09-25):** Leif
-   acting the story leader's part in the scenes ("doing the funny animation things"), the user's screenshot of the
-   treasure room scene with Leif speaking the party's line. **Then cast twice** (the user, 2026-09-25: Leif didn't move in the
-   briefing, where Kabbu and Leif stand back while Vi gives the artifact to the Queen): Event45 asks for Vi, Kabbu and
-   Leif by name; Leif acted Vi but the request for Leif still found him, so he followed whichever order came last and
-   stayed back. Now a by-name request for the acting leader's own member gets an invisible stand-in, as his slot in a
-   party list already did. **Replayed (the user):** Leif acted Vi in the palace entrance, but the scene then reloads into
-   the throne room with the party remade, the actor was lost, and Leif played himself there. The user's view: that's
-   right once the story has Leif ("wrong to force one member to do the others' part"). So: **a leader the story's party
-   already holds plays himself** (Vi from the opening, flag 15; Kabbu always; Leif from flag 16); he acts the lead only
-   in scenes whose party doesn't have him (chapter 1 before Leif joins). And after a scene remakes the party characters,
-   the new leader takes the acting part on again (for chapter 1 scenes that change maps). **Seen (the user,
-   2026-09-25):** the briefing replayed with Leif playing himself, "working as intended".
-   The briefing's hold moved from 114 to 66 (the bridge swap; the user: a shuffled door or a random start inside the
-   palace could reach it with no follower or the wrong one), `apimplementation.md`.
-   (17) **Leif's joining scene skipped when Leif is already in the party** (the user, 2026-09-25): Event14 at the lake
-   takes its Leif from the follower list (`map.tempfollowers[0]`, `EventControl.cs:3339`), empty since (15), and threw
-   `ArgumentOutOfRange` at its start (predicted from the code a moment before the user reached it; freed with
-   `unstick`). A prefix on `EventControl.StartEvent` doesn't start it and leaves what it leaves: flag 16, the regional
-   flag of the creature it removes (entity 5) with the creature gone, Leif off the follower list. **Then always skipped**
-   with Archipelago on (the user: "it's not a check"): it's no location, only the logic's *Leif Joins* event at the lake
-   (flag 16), and without its fight the lake no longer quietly needs Vi. When Leif isn't in the party yet, he joins right
-   there, as the scene's own `ChangeParty({0, 1, 2})` would have him (then `SetPlayers`, the camera on the leader); with
-   one starting member the guard still decides whether he may. **Moved earlier** (the user: "it could just happen after
-   the spider, when Leif first starts to follow"): once the spider scene is over (flag 27, not yet 16), Leif joins for
-   real, flag 16 goes on, and the story's follower Leif is removed with his follower entry. The logic is unchanged: *Leif
-   Joins* is in the same region (*Snakemouth Den*) as the lake. With one starting member, only once Leif is allowed
-   (received). On loading, the user's Leif-alone file got flag 16 ("Leif was already in the party"); **seen (the user):**
-   the lake walked past with no scene. With a two-member start, not yet seen.
-   (18) **Position lookups beyond the party** (the user, 2026-09-25): the droplet scene (Event21) ends by walking the
-   second and third members by position (`GetEntity(-2)`, `(-3)`, `EventControl.cs:4112-4114`; `MainManager.cs:18526-18537`
-   answer only inside the party) and threw on nothing. In a scene, slot k beyond the party now gets the k-th member in the
-   story's order (the acting role first, then the others by id) as a stand-in. The acting leader also has a fallback
-   when a reload forgot the story's party: the first missing member by id.
-   (19) **Every way the code reaches for a party member, listed** (the user, 2026-09-25: "dump fully what a party member
-   or follower is, so we know everything they could ask for"): `dev-scripts/party-access.py` counts 29 ways across the
-   decompiled code, with the methods and events using each (`--where <way>`). Covered: lookups by position and character,
-   the party as a list, `PartyMover`, `SetPlayers()`, `ChangeParty`, `.following`, `extrafollowers`, the leader. Open,
-   since a direct index can't be intercepted: `playerdata[1]`/`[2]` (Events 52, 122, 130, 137, 138, 182, all past
-   chapter 1, and `BattleControl.DoAction`/`EventDialogue`, to confirm they check the party's size), `tempfollowers[..]`
-   (11 events; they read story companions, and break only for a removed party member, so far only Event14, now skipped),
-   `partyorder` (Events 6, 54, 138) and `GetExtraFollower` (Event223).
-   **Seen (the user, 2026-09-25):** the droplet scene replayed to its end with no crash, and the log shows (16) at work in
-   it and in the switch scene (Event23): "the leader (Player 0, member 2) acts member 0's part".
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,
@@ -682,18 +533,6 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    positions the game's parser uses, and hands those spots to `TransferMap`.
    **Seen (the user, 2026-09-25): "looks perfect"**: a new file goes from the main menu straight to the town's gate
    from the Outskirts, with Vi and Kabbu and the first check's item, no slides, talk, fight or building on the way.
-   **Scenes with a member missing get a stand-in** (the user, 2026-09-25: make scenes work with one or two members;
-   the barkeeper's first talk, Event83, crashed twice on `p[2]` with Vi and Kabbu). Scenes take the party as a list and
-   use fixed slots (about 110 lookups). While a scene runs, `GetPartyEntities` returns three: each missing member is
-   an invisible, collision-free stand-in with that member's `animid`, made the way the game makes scene characters,
-   in the member's own slot (id order) or after the party, and removed when the scene ends. Outside scenes nothing
-   changes, and no scene tests a member with `GetEntity(-6) != null` (grep). A member asked for by name during a scene
-   (`GetEntity(-4)` to `(-6)`) gets the same stand-in. The user asked why not the leader, as for followers: a scene
-   moves every member at once, so the leader would be pulled to two spots and play another character's animations. Limits: a scene that changes the party, or
-   needs a member's ability, still needs the member (a logic rule, as for the boat); some scenes will look odd, and each
-   one that used a stand-in is logged, to skip or hold back one by one. **Seen (the user, 2026-09-25):** the barkeeper's
-   first talk played through with Leif's stand-in (naming Leif, as expected), so it went on the skip list, only while
-   its flag 158 is unset: the same scene later takes bounties and gives their rewards.
    **The rule since (the user, 2026-09-25):** a scene that gives an item may be skipped *as long as the item can still
    be received*, and fewer cutscenes are preferred, as an option at least. So a skip now has to keep every check the
    scene holds (sent by the mod, or moved to something the player still does). Next candidate, the user's idea: the
@@ -740,6 +579,166 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
 
 The panel got an eighth row, "Quality of life", which opens a second page in the same box; cancel comes back.
 
+*Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page),
+`WarpButton.cs` (the Warp button), `HoldUps.cs` (item animation's hold-ups).*
+
+## 11. Playing with fewer party members: stand-ins and followers
+
+Bug Fables' scenes are written for a party of two or three, but a seed can start with one member and add the
+others as items. So every scene, talk and follower has to cope with a member who isn't there: the mod fills the
+gaps with invisible stand-ins, and the problems below were found in play, one at a time.
+
+**Scenes with a member missing get a stand-in** (the user, 2026-09-25: make scenes work with one or two members;
+the barkeeper's first talk, Event83, crashed twice on `p[2]` with Vi and Kabbu). Scenes take the party as a list and
+use fixed slots (about 110 lookups). While a scene runs, `GetPartyEntities` returns three: each missing member is
+an invisible, collision-free stand-in with that member's `animid`, made the way the game makes scene characters,
+in the member's own slot (id order) or after the party, and removed when the scene ends. Outside scenes nothing
+changes, and no scene tests a member with `GetEntity(-6) != null` (grep). A member asked for by name during a scene
+(`GetEntity(-4)` to `(-6)`) gets the same stand-in. The user asked why not the leader, as for followers: a scene
+moves every member at once, so the leader would be pulled to two spots and play another character's animations. Limits: a scene that changes the party, or
+needs a member's ability, still needs the member (a logic rule, as for the boat); some scenes will look odd, and each
+one that used a stand-in is logged, to skip or hold back one by one. **Seen (the user, 2026-09-25):** the barkeeper's
+first talk played through with Leif's stand-in (naming Leif, as expected), so it went on the skip list, only while
+its flag 158 is unset: the same scene later takes bounties and gives their rewards.
+
+1. **Without a test start, the party stood under the house** (the user, 2026-09-25: "the weird broken location" seen
+   briefly before step 10's (7) fix). Event8 places the party only after its slides (Kabbu 2.5 left of entity 4,
+   `EventControl.cs:2770`), so cut before them the party kept a new game's raw spawn point; every test since step 10's (6) had a
+   test start, whose warp moved it away. The opening now stands the party where the scene would have. Seen (the user):
+   right spot, but the fade-in first showed the spawn point, then a jump: the opening runs a few frames after the scene's
+   end, and the fade-in starts at that end. So the scene's end (the mod's) moves the party there and snaps the camera
+   before the fade-in. Seen with only the first half loaded (the user): the right spot, then a snap back once the opening
+   ran, since it waits for the fade-in to end and the player can walk during it. So the opening no longer places anyone:
+   it uses where the player stands. Seen (the user): right spot, no snap, but outside the house the camera was broken
+   with Leif alone. `ResetCamera` at the scene's end aims the camera at the leader, the opening's `ChangeParty` then
+   destroyed that character (with Vi and Kabbu, Kabbu's was reused), and leaving the house hands the camera back to the
+   player only for insides that centre on themselves (`MapControl.cs:1373`). Event16 itself ends with `ResetCamera()`
+   after its party change (`EventControl.cs:3795`); the opening now does too. **Didn't help** (the user: still low outside,
+   and stuck after the gift). Two guesses failed, so measured: a console command `cam` logs what the camera follows. It
+   read `target DESTROYED` with the leader (`Player 0`) fine. Unity destroys an object at the end of the frame, so the
+   opening's `ResetCamera`, aiming at `MainManager.player`, still found the old leader's character and followed it as it
+   vanished, leaving the camera where it last stood, under the house. The opening now aims the camera at the new
+   leader's character itself (`playerdata[0].entity`). Seen (the user): the camera fine from the gift on, but Vi and
+   Kabbu showed for a moment and the camera was odd outside until then: the opening swaps the party only once the
+   fade-in is over. Moving the swap into the scene's end, before the game's `EndEvent`, crashed it (`FixEntities`,
+   a NullReferenceException, a black screen; freed with `unstick`). Now the scene ends as before behind the black
+   screen, and on the next frame the party is swapped, placed and the camera set, then the fade-in starts. **Seen (the
+   user, 2026-09-25):** Leif alone from the first frame, in the room, the camera right inside, outside and after the gift.
+2. **Stand-ins in conversations too** (the user, 2026-09-25, Leif alone): Artis's talk hands lines to Vi and Kabbu
+   (`|next,-4|`, `|next,-5|`), and `SetText` resolves a speaker through `GetEntity` (`MainManager.cs:12385-12398`,
+   `:18418-18440`). The stand-ins only answered while a scene ran (`inevent`), and a talk isn't one, so the lookup came
+   back empty and `SetText` threw a NullReferenceException at the end of the talk. They now answer while a scene or a
+   conversation runs (`inevent` or `message`) and go when both are over. Kept that narrow on purpose: an invisible
+   member around all the time could be counted as real by battles, followers or menus. **Seen (the user):** Artis's talk
+   played to the end and the permit's check went out (the crashed one had left a dead dialogue: `unstick`).
+3. **A stand-in arrives at once** (the user, 2026-09-25): the horn tutorial (Event10, near Snakemouth) walks Vi to a
+   spot and waits until she's there (`while (entities[0].forcemove)`, `EventControl.cs:2935`); the stand-in, without
+   collision, never arrived, and the scene never reached its first line. Every `MoveTowards` overload ends in the
+   five-argument one (`EntityControl.cs:4911-4960`); a postfix puts a stand-in straight on the spot and ends the walk.
+   The scene's cut itself is done by the scene (`CutGrass()` after the action button), not by Kabbu. **Seen (the user):**
+   the tutorial played through and its reward was sent.
+4. **Stand-ins stay where they're put** (the user, 2026-09-25): the trapdoor scene ran with stand-ins, but Leif
+   landed "down/left at a rock" instead of on the mushroom. Its end places member m on the m-th scene character's spot
+   (`EventControl.cs:1476-1484`), so Leif took stand-in Vi's; a stand-in had its collision switched off but not its
+   gravity, so it would sink through the floor. Stand-ins are now kinematic, without gravity. The likely cause, not
+   measured. **Wrong** (the user: now all the way left). Read in the code instead: just before placing, the scene runs
+   `PartyMover`, which walks every party member, stand-ins included, to `MainManager.player`, and with one member the
+   player (Leif) isn't in the scene: he stood where the fall room put him on loading, far left. Item 3's instant arrival
+   then put stand-in Vi on him, and the end put Leif on her spot. So a stand-in sent toward the real player stays where
+   the scene last put it, and the positions the scene hands `SetPlayers` are logged, with the stand-ins' and the
+   player's. **Seen (the user, 2026-09-25):** Leif landed at the right spot; the log: placed at (12.7, 6.5, 0.3), stand-in
+   Vi's landing point, with the player at (-21.9, 0, 0) before.
+5. **A stand-in has its physics body at once** (the user, 2026-09-25): the spider fight's lead-in (Event6) made a
+   stand-in `Jump()` in the frame it was made, and `Jump`'s `Unfix` needs the body (`rigid`), which a new character only
+   gets in its `Start`, a frame later (`EntityControl.cs:524-528`): NullReferenceException, the scene dead (`unstick`).
+   The stand-in now gets its body when made, weightless; `Start` adds one only when there is none. Not yet seen.
+6. **Stand-ins hidden at the last moment** (the user, 2026-09-25: their sprites flashed now and then): the
+   per-frame hiding ran before the scene's step and the character's own updates, which could switch a sprite back on
+   for a frame. A postfix on `EntityControl.LateUpdate` (`EntityControl.cs:3672`) hides a stand-in after both, just
+   before drawing. First reload with the guard: it waited for the running scene. Not yet seen.
+7. **A scene's end hands over to the real party** (the user, 2026-09-25: after the spider fight's end, Leif stood to
+   the right instead of where the scene leaves the party). The end of Event6 (`EventControl.cs:2272-2289`) walks Vi and
+   Kabbu to the spot and never the player, whom it takes to be one of them, and sets the fall room's character to follow
+   Kabbu (`entities[2].following = entities[1]`, then `extrafollowers.Add(2)`). Now, before the stand-ins go: if the
+   story's leader (the first member of the party the story last asked for, remembered by the member guard before it
+   filters) was a stand-in, the real party moves to where it was left; anyone following a stand-in follows the real
+   party's last member. Both logged. Not yet seen.
+8. **A party member isn't also a follower** (the user, 2026-09-25: three Leifs after the spider fight, one standing,
+   one trailing the player). In the story, Leif meets the party after that fight and follows until he joins at the lake:
+   the scene's third character is the room's Leif (entity 1), set to follow Kabbu, and `extrafollowers.Add(2)` (ids are
+   characters: 0 Vi, 1 Kabbu, 2 Leif; removed when he joins, `EventControl.cs:3533`), from which every map load makes a
+   follower (`MapControl.cs:826-829`, `AddFollower`, kept in `map.tempfollowers`). With Leif the one member, that's the
+   player plus two copies. Now the member guard, each frame, takes any party member off `extrafollowers` with their
+   follower copies, and a scene's end removes a party member's character that followed a stand-in. On first load it took
+   Leif off the list but found no copy in `tempfollowers`: the copies were the scene's own character, not made by
+   `AddFollower`. **Still a copy** (the user: a second Leif copying every move). Measured with a new console command,
+   `who` (every character drawn as a party member): two "Player 0", both player characters. The spider scene calls
+   `ChangeParty({0, 1})` then the no-argument `SetPlayers()` (`EventControl.cs:1711-1712`), which makes new player
+   characters without removing the old ones; in the story those become the scene's actors, but with stand-ins the old
+   Leif stayed, controls and all. Now, outside scenes, twice a second, any character with player controls other than
+   the leader's is removed (logged). On loading it removed the stray at once; `who` then listed one player. **Seen
+   (the user, 2026-09-25):** no extra Leif any more.
+   **The whole sequence replayed (the user, 2026-09-25): "worked perfectly"**, no extra Leif, the right spot after the
+   ending. The log: the fall placed at (12.7, 6.5, 0.3); Leif taken off the follower list; the scene's end moved the
+   party to stand-in Vi's spot (-44, 0, 1.2); the story's Leif ("Moth") removed as a copy; the stray player removed.
+   Items 7 and 8 seen with it.
+9. **The leader acts the story leader's part** (the user's wish, `apimplementation.md`): at a scene's or talk's
+   first stand-in, if the story's leader isn't in the party, the real leader plays that member (walks, faces, is placed
+   where they would be) and only other missing members stay invisible; chosen once per scene; in a party list by member
+   the leader's own slot gets an invisible stand-in so he's never moved twice. **Seen (the user, 2026-09-25):** Leif
+   acting the story leader's part in the scenes ("doing the funny animation things"), the user's screenshot of the
+   treasure room scene with Leif speaking the party's line. **Then cast twice** (the user, 2026-09-25: Leif didn't move in the
+   briefing, where Kabbu and Leif stand back while Vi gives the artifact to the Queen): Event45 asks for Vi, Kabbu and
+   Leif by name; Leif acted Vi but the request for Leif still found him, so he followed whichever order came last and
+   stayed back. Now a by-name request for the acting leader's own member gets an invisible stand-in, as his slot in a
+   party list already did. **Replayed (the user):** Leif acted Vi in the palace entrance, but the scene then reloads into
+   the throne room with the party remade, the actor was lost, and Leif played himself there. The user's view: that's
+   right once the story has Leif ("wrong to force one member to do the others' part"). So: **a leader the story's party
+   already holds plays himself** (Vi from the opening, flag 15; Kabbu always; Leif from flag 16); he acts the lead only
+   in scenes whose party doesn't have him (chapter 1 before Leif joins). And after a scene remakes the party characters,
+   the new leader takes the acting part on again (for chapter 1 scenes that change maps). **Seen (the user,
+   2026-09-25):** the briefing replayed with Leif playing himself, "working as intended".
+   The briefing's hold moved from 114 to 66 (the bridge swap; the user: a shuffled door or a random start inside the
+   palace could reach it with no follower or the wrong one), `apimplementation.md`.
+10. **Leif's joining scene skipped when Leif is already in the party** (the user, 2026-09-25): Event14 at the lake
+   takes its Leif from the follower list (`map.tempfollowers[0]`, `EventControl.cs:3339`), empty since item 8, and threw
+   `ArgumentOutOfRange` at its start (predicted from the code a moment before the user reached it; freed with
+   `unstick`). A prefix on `EventControl.StartEvent` doesn't start it and leaves what it leaves: flag 16, the regional
+   flag of the creature it removes (entity 5) with the creature gone, Leif off the follower list. **Then always skipped**
+   with Archipelago on (the user: "it's not a check"): it's no location, only the logic's *Leif Joins* event at the lake
+   (flag 16), and without its fight the lake no longer quietly needs Vi. When Leif isn't in the party yet, he joins right
+   there, as the scene's own `ChangeParty({0, 1, 2})` would have him (then `SetPlayers`, the camera on the leader); with
+   one starting member the guard still decides whether he may. **Moved earlier** (the user: "it could just happen after
+   the spider, when Leif first starts to follow"): once the spider scene is over (flag 27, not yet 16), Leif joins for
+   real, flag 16 goes on, and the story's follower Leif is removed with his follower entry. The logic is unchanged: *Leif
+   Joins* is in the same region (*Snakemouth Den*) as the lake. With one starting member, only once Leif is allowed
+   (received). On loading, the user's Leif-alone file got flag 16 ("Leif was already in the party"); **seen (the user):**
+   the lake walked past with no scene. With a two-member start, not yet seen.
+11. **Position lookups beyond the party** (the user, 2026-09-25): the droplet scene (Event21) ends by walking the
+   second and third members by position (`GetEntity(-2)`, `(-3)`, `EventControl.cs:4112-4114`; `MainManager.cs:18526-18537`
+   answer only inside the party) and threw on nothing. In a scene, slot k beyond the party now gets the k-th member in the
+   story's order (the acting role first, then the others by id) as a stand-in. The acting leader also has a fallback
+   when a reload forgot the story's party: the first missing member by id.
+12. **Every way the code reaches for a party member, listed** (the user, 2026-09-25: "dump fully what a party member
+   or follower is, so we know everything they could ask for"): `dev-scripts/party-access.py` counts 29 ways across the
+   decompiled code, with the methods and events using each (`--where <way>`). Covered: lookups by position and character,
+   the party as a list, `PartyMover`, `SetPlayers()`, `ChangeParty`, `.following`, `extrafollowers`, the leader. Open,
+   since a direct index can't be intercepted: `playerdata[1]`/`[2]` (Events 52, 122, 130, 137, 138, 182, all past
+   chapter 1, and `BattleControl.DoAction`/`EventDialogue`, to confirm they check the party's size), `tempfollowers[..]`
+   (11 events; they read story companions, and break only for a removed party member, so far only Event14, now skipped),
+   `partyorder` (Events 6, 54, 138) and `GetExtraFollower` (Event223).
+   **Seen (the user, 2026-09-25):** the droplet scene replayed to its end with no crash, and the log shows item 9 at work in
+   it and in the switch scene (Event23): "the leader (Player 0, member 2) acts member 0's part".
+
+*Code: `PartyFit.cs` (the stand-ins and the acting leader), `PartyMembers.cs` (the member guard, followers,
+Leif's joining).*
+
+## 12. Shops in the game
+
+Shops needed their own approach because buying isn't a pickup or a gift: a medal shop is a shelf of item entities
+and a script, an item shop adds its item silently, and nothing in the save marks a purchase. So each kind of
+shop had to show the seed's items and tell when one was bought.
+
 **Medal shops as locations** (the user, 2026-09-25). A medal shop turned out not to be a menu: each shelf slot is an
 item entity on the counter (`NPCControl.SetBadgeShop`), looking at one opens its description box, and buying runs the
 shopkeeper's dialogue, whose script checks the money, pays, removes the medal from the stock and gives it
@@ -776,37 +775,6 @@ marker came too late. While a map builds, the mod now remembers the entity just 
 Scenery (a `ConditionChecker`) gets the mirror of the rocks' treatment: a marker `requires` before its `Start`, which
 answers "exists" (`scenery_present`, the caravan's stall). Seen (the user, 2026-09-25): the stall and Crickerly with
 her three slots, the seed's items in them, each first purchase a check, then her own items.
-
-**Doors rewritten: the entrance randomizer's proof of concept** (the user, 2026-09-25). A door to another map calls
-`TransferMap(data[0], vectordata[0], vectordata[1], vectordata[2])` when walked into (`NPCControl.cs:5458-5461`): the
-target map, the walk on this side, where the party appears, where it then walks. So "door A leads where door B leads"
-is: after the map builds its entities, A's `data` and its `vectordata` from `[1]` on are replaced by B's, read from B's
-own map's entity table and names table (`Data/EntityData/Names/<map>names`); A's own `vectordata[0]` stays. The pairs
-come from `slot_data` (`door_targets`) or, for a test, the dev setting `TestDoors`. First test: the Outskirts' east exit
-leading where the plaza's door to the Commercial District leads. **Seen (the user, 2026-09-25):** from the Outskirts'
-bottom-right exit they appeared on the right side of the Commercial District, exactly as when coming in from the plaza.
-**Both ways, seen (the user, 2026-09-25):** four rewrites swapped two connections as a coupled shuffle would (the
-Outskirts' east exit with the plaza's Commercial door, and their ways back). The log showed every trip landing on the
-right map: the plaza's door to the Outskirts' east area and back, the Outskirts' exit to the Commercial District and back,
-each several times. The user found it confusing to keep track by eye, so from here the log is the record of each trip.
-
-**What a door carries, side by side** (2026-09-25, reading the rest of `TransferMap`, `MainManager.cs:17467-17620`). A
-door's `data` is more than its target: `[1..3]` switch the camera's offset, angle and limits on arrival (from
-`vectordata[3..6]`), and `[4] == 1` means the party isn't walked into the door first (nine doors: holes, wells, ladders,
-the fall room's). The arrival jump is read off the door's own entity, `emoticonoffset.x` (entity table field 175). So a
-rewritten door takes the target, the camera and the jump from the other door, and keeps its own `[4]` and `vectordata[0]`:
-whatever happens on the side you leave stays, whatever happens on the side you arrive at comes along.
-
-**Pairing each door with its way back** (2026-09-25). Two maps can be joined by several doors, so "the door on the
-other map that leads back" can be more than one. The one that belongs to a door is the one the party arrives next to:
-the door on the target map whose start position is nearest (on the ground plane) to where the door places the party,
-`vectordata[1]`. EntityDump now writes each entity's start position (fields 6-8) and the jump (field 175), and
-`dev-scripts/door-graph.py` pairs every door that way, marking pairs that don't point at each other ("not mutual").
-The first run found three things to fix in the script itself: Rubber Prison's pier stacks doors floor above floor, so
-the distance is 3D; a map can hold two doors of one name, so doors are told apart by entity index; and story variants
-of one door (day and night copies at one spot) count as one. After that, 531 of 567 doors paired both ways; the rest
-are listed in `MEASURED.md` to check in play. The
-coupled entrance randomizer needs those pairs: going through a shuffled door and turning round must bring you back.
 
 **The reshuffle choice first** (the user, 2026-09-25: faster to reset a shelf). A shopkeeper's greeting ends in a
 `prompt` whose choices are listed as N targets then N texts (`MainManager.cs:12213-12222`); the reshuffle is the one with
@@ -849,6 +817,53 @@ purchases, and two copies of one medal can't be told apart in a list of medal id
    location pickup's own item, the seed's item goes back on in the same call. **Seen (the user, 2026-09-25):** nothing
    odd going in or out any more. The first guess was taken back out.
 
+*Code: `ShopSwap.cs` (medal shops and their stock), `ItemShops.cs` (item shops), `KeptOpen.cs` (the shopkeeper
+and scenery kept present), `QualityOfLife.cs` (the reshuffle choice first), `ItemSwap.cs` (`UpdateItem`, pickups
+in houses).*
+
+## 13. Doors rewritten: the entrance randomizer in the game
+
+The entrance randomizer changes where doors lead. Each door in the game carries its own target, so the mod
+rewrites doors as a map loads, and a shuffled door needs its own way back.
+
+**Doors rewritten: the entrance randomizer's proof of concept** (the user, 2026-09-25). A door to another map calls
+`TransferMap(data[0], vectordata[0], vectordata[1], vectordata[2])` when walked into (`NPCControl.cs:5458-5461`): the
+target map, the walk on this side, where the party appears, where it then walks. So "door A leads where door B leads"
+is: after the map builds its entities, A's `data` and its `vectordata` from `[1]` on are replaced by B's, read from B's
+own map's entity table and names table (`Data/EntityData/Names/<map>names`); A's own `vectordata[0]` stays. The pairs
+come from `slot_data` (`door_targets`) or, for a test, the dev setting `TestDoors`. First test: the Outskirts' east exit
+leading where the plaza's door to the Commercial District leads. **Seen (the user, 2026-09-25):** from the Outskirts'
+bottom-right exit they appeared on the right side of the Commercial District, exactly as when coming in from the plaza.
+**Both ways, seen (the user, 2026-09-25):** four rewrites swapped two connections as a coupled shuffle would (the
+Outskirts' east exit with the plaza's Commercial door, and their ways back). The log showed every trip landing on the
+right map: the plaza's door to the Outskirts' east area and back, the Outskirts' exit to the Commercial District and back,
+each several times. The user found it confusing to keep track by eye, so from here the log is the record of each trip.
+
+**What a door carries, side by side** (2026-09-25, reading the rest of `TransferMap`, `MainManager.cs:17467-17620`). A
+door's `data` is more than its target: `[1..3]` switch the camera's offset, angle and limits on arrival (from
+`vectordata[3..6]`), and `[4] == 1` means the party isn't walked into the door first (nine doors: holes, wells, ladders,
+the fall room's). The arrival jump is read off the door's own entity, `emoticonoffset.x` (entity table field 175). So a
+rewritten door takes the target, the camera and the jump from the other door, and keeps its own `[4]` and `vectordata[0]`:
+whatever happens on the side you leave stays, whatever happens on the side you arrive at comes along.
+
+**Pairing each door with its way back** (2026-09-25). Two maps can be joined by several doors, so "the door on the
+other map that leads back" can be more than one. The one that belongs to a door is the one the party arrives next to:
+the door on the target map whose start position is nearest (on the ground plane) to where the door places the party,
+`vectordata[1]`. EntityDump now writes each entity's start position (fields 6-8) and the jump (field 175), and
+`dev-scripts/door-graph.py` pairs every door that way, marking pairs that don't point at each other ("not mutual").
+The first run found three things to fix in the script itself: Rubber Prison's pier stacks doors floor above floor, so
+the distance is 3D; a map can hold two doors of one name, so doors are told apart by entity index; and story variants
+of one door (day and night copies at one spot) count as one. After that, 531 of 567 doors paired both ways; the rest
+are listed in `MEASURED.md` to check in play. The
+coupled entrance randomizer needs those pairs: going through a shuffled door and turning round must bring you back.
+
+*Code: `DoorShuffle.cs`; `dev-scripts/door-graph.py` (the pairs).*
+
+## 14. The Detector for every check
+
+The Detector medal beeps when a room hides something. In a seed it should beep for what matters instead: any
+of the seed's checks left in the room. That meant replacing the game's answer, not adding to it.
+
 **The Detector for every check** (the user, 2026-09-25: beep for any kind of check left in the room: shops, quests,
 someone to help, not only hidden items). Read first how the medal works: one second after a map loads, the game asks its
 objects (`NPCControl.CheckHidden`: buried crystal berries, grass hiding one, a dig spot with a medal) and the map
@@ -867,5 +882,55 @@ either way), and a music record's `Start`, which sets the value as the map build
 in the Residential District it beeped for the rooftop item, then, with both items taken, for the quest reward still
 handed out there (location 16, the delivery quest), as intended; quiet in the plaza with none left.
 
-*Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page), `ShopSwap.cs`,
-`CheckDetector.cs`.*
+*Code: `CheckDetector.cs`.*
+
+## 15. Difficulty and the Detector: the panel's two game settings
+
+Two rows in the Archipelago panel change how the game plays, never where items are. Both work by answering the
+game's own "is this medal equipped?" question, so the save stays clean and the logic never changes.
+
+**A row "Difficulty: Normal / Hard / Hardest" in the Archipelago panel** (the user, 2026-09-24). Hard and
+Hardest add the game's two Hard Mode levels; Normal leaves it to the game (the medal equipped, or the
+HARDEST code). **Default: Normal.** Boss prize medals are paid out on every setting (apimplementation.md,
+build step 10).
+
+**What belongs in the panel** (the user, 2026-09-24): only on/off preferences that never change what's where
+(Difficulty, Detector, later DeathLink, which only adds a tag to the connection). Anything that decides the
+seed (entrance rando, shuffles, goals) is a player-file (yaml) option, applied from `slot_data`.
+
+**Every panel setting applies only while Archipelago is enabled** (the user, 2026-09-24): vanilla saves play
+exactly as vanilla. Difficulty, Detector and every item swap check the switch; a Hardest flag the mod set is
+cleared the moment it's switched off.
+
+**A row "Detector: On / Off" in the Archipelago panel** (the user, 2026-09-24), a help for finding items.
+On acts as if the Detector medal (#2) were equipped; Off leaves it to the game (the medal equipped or not).
+**Default: On.**
+All three of its effects ask one question, `BadgeIsEquipped(2)` (objects `NPCControl.cs:1344`, discoveries
+`MapControl.cs:408`, music `MusicSpinner.cs:54`), and Hard is the same question for medal #11, so one patch
+on `BadgeIsEquipped` serves both rows. It changes no save data and no logic.
+
+**Built (2026-09-24), not yet seen on screen:** the panel has eight rows now (spaced tighter so the status
+line still fits). Difficulty offers Normal, Hard and Hardest. `MedalAssist.cs`
+answers "equipped" for medal 11 (Hard) or 2 (Detector) on party-wide checks, on randomizer saves only. The
+medals menu equips from the medal list itself, never through that check, so it's unaffected.
+
+**Hardest** (the user chose: switchable, the save stays clean): its extras read the save's HARDEST flag (614)
+directly, and the game keeps no other trace of a typed code. So the mod turns 614 on in play and remembers
+that it did; each time the game saves, the flag is cleared just for the write and put back after, and
+switching down clears only a 614 the mod set. Loading a save or starting a new one forgets the mark, since
+those flags are the save's own. If any of the three hooks (save, load, new game) is missing, Hardest does
+nothing rather than risk a save.
+
+*Code: `MedalAssist.cs`.*
+
+## 16. Randomizer saves kept apart from normal saves
+
+With the Archipelago mod enabled, the game reads and writes its saves in a separate folder, so a randomizer
+run never touches a normal save. It had to exist before the mod granted its first item.
+
+Through a whole session played with the Archipelago mod enabled, the game
+saved only into the `archipelago` folder (last write 05:06), and the normal save files kept their earlier
+times (03:42 and 2023), checked on disk on 2026-09-24. The redirect covers all five places the game touches
+a save file, and normal saves are only reachable with the mod disabled.
+
+*Code: `SaveRedirect.cs` (the separate save folder, patching the game's five save-file functions in `InputIO`).*
