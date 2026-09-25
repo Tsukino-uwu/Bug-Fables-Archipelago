@@ -490,7 +490,8 @@ The output stays in the BepInEx folder.
   side on the right from the cave side on the left; the crystal berry, location 19, x -9.9, and the dig spot `Mound`
   far left, x -24, are on the cave side: reachable from the den without the horn, the user), and in `SnakemouthBridgeRoom` the bridge comes down when its rope is hit: from the right only Vi's beemerang reaches
   it; from the left Leif's move hit it (the user), so presumably any member's (Kabbu's horn not tried): crossing from
-  the right needs Vi (the user, Leif alone, 2026-09-25; the room's Tattle tutorial, Event2, ran with stand-ins and
+  the right needs Vi; the room's hidden-spot discovery (discovery 2, location 30) is behind grass only the horn cuts,
+  the user (the user, Leif alone, 2026-09-25; the room's Tattle tutorial, Event2, ran with stand-ins and
   finished, flag 10, and its hint, Event0, is skipped by Skip cutscenes), the user with
   Leif alone, 2026-09-25, the map from the Detector's log); Leif (moth) freezes, droplets included (always on, once he has joined at the Snakemouth lake). Vi and
   Kabbu are in the party from a new game, so while the party is vanilla only Leif gates anything.
