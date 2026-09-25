@@ -129,6 +129,8 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
   date. What a source says but we haven't measured waits in its last section.
 - **Comments are lean** (the user, 2026-09-25). One line, only where the code can't say it (a game quirk, a
   non-obvious why). No provenance, dates or decompiled line numbers in code: those go to `agent_docs/`.
+- **Before changing a file, look it up in `agent_docs/code-map.md`** and read the notes it links. A new file
+  gets its row in the same commit; a fact moved out of code ends "Used by `File.cs`" so its name finds it.
 - **When the user confirms a fix, write down HOW it was found** (wrong theories, the measurement that
   settled it) in `agent_docs/log.md` before moving on.
 

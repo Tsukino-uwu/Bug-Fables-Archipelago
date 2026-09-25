@@ -4,6 +4,33 @@ Each entry names our evidence and its date. The game can update without this rep
 entry is true as of that date. **Nothing here is "verified"**: that word is reserved for what the user
 confirms on screen.
 
+## Contents
+
+- [The build](#the-build-2026-09-24-read-from-the-users-steam-install-game-not-run)
+- [How the game grants items](#how-the-game-grants-items-2026-09-24-read-from-assembly-csharpdll-decompiled-with-ilspycmd-1011)
+- [Observed in the running game](#observed-in-the-running-game-2026-09-24-grantprobe-a-new-game-played-by-the-user)
+- [Save files](#save-files-2026-09-24-decompiled-inputiomanagerinputiocs)
+- [Free save slots for the mod](#free-save-slots-for-the-mod-2026-09-24)
+- [The main menu](#the-main-menu-2026-09-24-decompiled-startmenucs)
+- [The quest board](#the-quest-board-2026-09-24)
+- [Input](#input-2026-09-24)
+- [Key-item grant sources, raw — SPOILERS for the whole game](#key-item-grant-sources-raw-2026-09-24--spoilers-for-the-whole-game)
+- [World pickups and their gates](#world-pickups-and-their-gates-2026-09-24-entitydump)
+- [Hard Mode boss prize medals](#hard-mode-boss-prize-medals-2026-09-24-code-read-not-seen-in-game)
+- [Chapters — SPOILERS: map names](#chapters-2026-09-24-code-read-and-entitydump--spoilers-map-names)
+- [What starts the gate events — SPOILERS](#what-starts-the-gate-events-2026-09-24-entitydump-scriptdump-with-event-lines-mapdump--spoilers)
+- [Lore Books at the library](#lore-books-at-the-library-2026-09-24-the-users-play-through)
+- [All crystal berries](#all-crystal-berries-2026-09-24-entity-dump-and-scriptdump-matched-to-the-bug-fables-wiki)
+- [Respawning pickups, seen in play](#respawning-pickups-seen-in-play-2026-09-24-the-user-with-the-dev-log)
+- [The door graph](#the-door-graph-2026-09-25-dev-scriptsdoor-graphpy-on-the-entitydump)
+- [Doors paired with their way back](#doors-paired-with-their-way-back-2026-09-25-a-new-entitydump-with-positions-door-graphpy)
+- [Transfers that aren't doors](#transfers-that-arent-doors-2026-09-25-scriptdumps-transfer-column-dev-scriptsevent-transferspy)
+- [What the Explorer Permit opens](#what-the-explorer-permit-opens-2026-09-24-code-read-and-scriptdump-the-wiki-lists-four-uses)
+- [All medals by source](#all-medals-by-source-2026-09-24-entity-dump-scriptdump-code-read-matched-to-the-bug-fables-wiki)
+- [What the mod's code relies on](#what-the-mods-code-relies-on-code-read-2026-09-24-and-2026-09-25-moved-here-from-code-comments-2026-09-25)
+- [Quests: to measure](#quests-to-measure-when-quests-come-into-scope)
+- [Key items: to measure](#key-items-to-measure)
+
 ## The build (2026-09-24, read from the user's Steam install, game not run)
 
 - **Unity 2018.4.12f1**, read from the header of `Bug Fables_Data\data.unity3d`.
@@ -863,6 +890,27 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 - World pickups pass the item id to SetText as `var,0`: NPCControl.CheckItem puts it in `flagvar[0]` first. Used by `TextProbe.cs`.
 - The plugin is built with a Windows ("full") pdb: ScriptEngine reads the plugin through Mono.Cecil with symbols and can't read a portable pdb, so the plugin would silently never load (measured in the author's other project, 2026-08-28). Used by `BugFablesAP.csproj`.
 - A dig spot (DigSpot) starts an event only when data[0] >= 2; data[0] = 0 buries an item, 1 a crystal berry (NPCControl.cs:5396-5420). Used by `dev-scripts/event-triggers.py`.
+
+### The world's locations, from the data file's notes
+
+- Event10 (the horn tutorial near Snakemouth, which sets flag 17) is started by the `Woodboring` EventTrigger on `NearSnakemouth` (EventControl.cs:2915); its 10 berries are `giveitem,-1,10,6` written in the event's code (EventControl.cs:3040) (location id 2). Used by `data/locations.json`.
+- Cut grass that drops an item copies its own one-time flag onto the drop (NPCControl.cs:5981-5983), so a grass drop is an ordinary pickup location (location id 12). Used by `data/locations.json`.
+- The Lore Book behind the Ant Palace library bookshelf is flag 71 (play-through log, 2026-09-24) (location id 15). Used by `data/locations.json`.
+- A ground crystal berry's map data holds its index in data[3], copied to data[0] at load (NPCControl.cs:938); a berry dropped from cut grass has the index in the grass's data[1], carried by the drop in data[0] (NPCControl.cs:5967-5972) (location ids 19, 21). Used by `data/locations.json`.
+- Flag 281 (one of the three respawning Snakemouth pickups' hiding flags) is set by nothing found in the code, the map scripts or the entities (2026-09-24); MEASURED.md only records it reading False in play (location ids 22, 23, 24). Used by `data/locations.json`.
+- Entities behind pickup locations: `SnakemouthUndergrondDoor` entity 6 (HoneyDrop, id 22) and entity 20 (`CrunchyLeaf - Duplicate`, holding a Mushroom, id 23); `SnakemouthUndergroundRightB` entity 11 (CrunchyLeaf, id 24); `BugariaOutskirtsEast1` entity 38 (a Drowsy Cake under a stone, flag 735, id 25); `BugariaResidential` entity 39 (`badbook`, id 32) and entity 10 (`BugMeNot - Duplicate`, flag 59, id 33); Madeleine's house (inside 2) entity 71 (`tea`, Burly Tea, x 36, id 44) and entity 54 (`lorebookmadeleine`, Lore Book, x 33.6, activationflag 392, id 45) (EntityData / entity dump; locations.json)
+- The pier statue's dialogue line 63 runs `|discovery,49|` (ScriptDump; `BugariaPier`'s own discovery list is 49, MapDump); examining it set flag 654 in the play log (2026-09-25) (location id 27). Used by `data/locations.json`.
+- Discovery sources: Event11 (arrival outside Snakemouth) is `OutsideSnakemouth`'s autoevent 22:11 (MapDump) and records discovery 0 (EventControl.cs:3095); Event6 (fall room EventTrigger, data 6, limit 27) records discovery 1 at its end (EventControl.cs:2293); Event13 (entity `HiddenEvent` on `SnakemouthBridgeRoom`) records discovery 2 (EventControl.cs:3278); Event27, started by cutting the grass entity `AncientHouseDiscovery` (BeetleGrass) on `SnakemouthUndergrondDoor`, records discovery 3 (EventControl.cs:5001) (location ids 28-31). Used by `data/locations.json`.
+- Event38 (the plaza statue discovery) asks for party members by name and sets no story flag (kept_present StatueDesc). Used by `data/locations.json`.
+- Merab's buy is her line 39, `giveitem,2,var,0`; the later stock entries are added at EventControl.cs:11960-11962 (Event73), :16952-16954 (Event99), :20562-20563 (Event120), :24279-24281 (Event142), and We Owe Ya! by `MapControl.HelperMedalCheck` (flag 716, MapControl.cs:355-361). Entry 18 is the second TP Plus copy (after entry 2), entry 19 the second Ambusher (after entry 6) (location ids 34-57). Used by `data/locations.json`.
+- Madame Butterfly is `ButterflyShopkeeper`, entity 10 on `BugariaCommercial`; the caravan's keeper is `Crickerly2`, entity 33 on `BugariaOutskirtsOutsideCity`; each stock entry is a `Fixedshop<n>` slot (the keeper's data, entity dump) (location ids 58-65). Used by `data/locations.json`.
+- After the first boss, a ladybug girl outside the city starts the lost-kid quest (her flag 54); the kid then waits at the lake (story event First Boss Beaten). Used by `data/locations.json`.
+- Event12 (the "turn back" blockers) only walks the player and sets no flags (kept_open eetlblocker1 - Duplicate, MM). Used by `data/locations.json`.
+- The town's arrival-scene trigger is `DoorBugaria - Duplicate` on `BugariaOutskirtsOutsideCity` (an EventTrigger starting Event60, hidden by 107); the real door `DoorBugaria` is a DoorOtherMap to map 9 requiring 107 (kept_open / kept_present). Used by `data/locations.json`.
+- On `BugariaOutskirtsOutsideCity`, `MiningAnt` and `MinerAntWalk` (miners at the rocks), `Crickerly1` (talk only) and `FuzzyMoth` all have limit 41; `LaydbugGirl` and `LaydbugBoy` require 41, with everyday lines 100 ("Dib, please don't do anything reckless") and 101 ("I'm not a kid anymore, Leby!"); their other lines answer to the lost-brother quest's flags (kept_open / kept_present). Used by `data/locations.json`.
+- `SnakemouthFallRoom`'s `JumpShroom` (the bounce mushroom up to the pitfall room) requires 41 like `LoadingZoneDoorRoom` (kept_present). Used by `data/locations.json`.
+- The palace's own blockers `makiblocker1` and `makiblocker2` stay in place: the story goes on there (kept_open MM). Used by `data/locations.json`.
+- The Outskirts rocks' removal leaves `LoadZoneGoldenPath` still waiting for flag 41 on its own (scenery_hidden Base/BlockingRocks). Used by `data/locations.json`.
 
 ## Quests: to measure (when quests come into scope)
 
