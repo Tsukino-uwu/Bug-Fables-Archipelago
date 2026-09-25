@@ -79,6 +79,10 @@ namespace BugFablesAP
                 "Dev only, with DevConsole. A text file the console also reads: each line is run as a typed command, "
                 + "then the file is emptied. Lets a developer outside the game drive a test. Empty = off.");
             DevConsole.CommandFile = devCommandFile.Value;
+            // Dev only: doors rewritten by hand, a proof of concept of the entrance randomizer (2026-09-25).
+            DoorShuffle.TestDoors = Config.Bind("Debug", "TestDoors", "",
+                "Dev only. Doors rewritten by hand: Map/Door=LikeMap/LikeDoor;... makes that door lead where the other one leads "
+                + "(entity names). Empty = off.").Value;
             // Dev only: a stand-in for a random start (the user, 2026-09-25), until the seed chooses one.
             QualityOfLife.TestStart = Config.Bind("Debug", "TestStart", "",
                 "Dev only. A map name (MainManager.Maps), optionally @ the map you arrive from, e.g. "
@@ -152,6 +156,7 @@ namespace BugFablesAP
             PartyFit.Enable(Log, Guid, () => randomizerEnabled.Value);
             ShopSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             ItemShops.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
+            DoorShuffle.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             WarpButton.Enable(Log, Guid, () => randomizerEnabled.Value && QualityOfLife.WarpButton.Value);
             MenuToggle.Enable(Log, Guid, randomizerEnabled, server, port, slot, password,
                 () => { },
@@ -340,6 +345,7 @@ namespace BugFablesAP
             PartyFit.Disable();
             ShopSwap.Disable();
             ItemShops.Disable();
+            DoorShuffle.Disable();
             // ScriptEngine destroys the old instance on reload. Say so, so a reload shows up in the log.
             Log?.LogInfo($"{Name} {Version} unloaded.");
         }

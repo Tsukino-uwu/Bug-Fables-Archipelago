@@ -649,6 +649,14 @@ Scenery (a `ConditionChecker`) gets the mirror of the rocks' treatment: a marker
 answers "exists" (`scenery_present`, the caravan's stall). Seen (the user, 2026-09-25): the stall and Crickerly with
 her three slots, the seed's items in them, each first purchase a check, then her own items.
 
+**Doors rewritten: the entrance randomizer's proof of concept** (the user, 2026-09-25). A door to another map calls
+`TransferMap(data[0], vectordata[0], vectordata[1], vectordata[2])` when walked into (`NPCControl.cs:5458-5461`): the
+target map, the walk on this side, where the party appears, where it then walks. So "door A leads where door B leads"
+is: after the map builds its entities, A's `data` and its `vectordata` from `[1]` on are replaced by B's, read from B's
+own map's entity table and names table (`Data/EntityData/Names/<map>names`); A's own `vectordata[0]` stays. The pairs
+come from `slot_data` (`door_targets`) or, for a test, the dev setting `TestDoors`. First test: the Outskirts' east exit
+leading where the plaza's door to the Commercial District leads. Built, not yet seen.
+
 **The reshuffle choice first** (the user, 2026-09-25: faster to reset a shelf). A shopkeeper's greeting ends in a
 `prompt` whose choices are listed as N targets then N texts (`MainManager.cs:12213-12222`); the reshuffle is the one with
 target `-199` and text `-195` (Shades's line 1, Merab's line 34, read with the console's `script`). With Archipelago on,

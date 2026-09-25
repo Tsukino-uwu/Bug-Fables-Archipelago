@@ -101,6 +101,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   `OneHit` (off in the code), so it survives reloads; `copy-dev.ps1 -DebugOn OneHit` turns it on for a dev install.
 - `infjump`: flips jumping again in mid-air. It's the `[Debug]` setting `InfJump` (off in the code), on in the dev
   install (`copy-dev.ps1 -DebugOn InfJump`), so it survives reloads.
+- **`TestDoors`** (`[Debug]`, not a console command): doors rewritten by hand, `Map/Door=LikeMap/LikeDoor;...` (entity
+  names): that door leads where the other one leads, the entrance randomizer's proof of concept (`copy-dev.ps1 -DebugSet
+  "TestDoors=BugariaOutskirtsOutsideCity/loadzone east=BugariaMainPlaza/LoadingZoneCommercial"`; empty turns it off).
 - `line <map> <n> [n...]`: log the full text of a map's dialogue lines (the same table `script` reads), e.g. to find
   every line that mentions something (2026-09-25: the Outskirts lines about the rocks).
 - `berries <n>`: add n berries (negative takes them), clamped to 0-999 as the game's own `money` script command does.

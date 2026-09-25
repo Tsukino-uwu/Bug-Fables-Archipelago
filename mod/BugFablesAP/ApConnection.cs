@@ -322,6 +322,11 @@ namespace BugFablesAP
         }
 
         internal Dictionary<long, ItemShopSlot> LocationItemShops => locationItemShops;
+
+        // slot_data's door_targets: doors the entrance randomizer rewrites ([{map, door, like_map, like_door}]: that door
+        // leads where like_door leads; DoorShuffle). Null when not sent.
+        internal List<DoorShuffle.Target> DoorTargets => doorTargets;
+        private volatile List<DoorShuffle.Target> doorTargets;
         private volatile Dictionary<long, ItemShopSlot> locationItemShops;
 
         private static Dictionary<long, int> ReadLocationBerries(Dictionary<string, object> slotData, string key = "location_berries")
@@ -618,6 +623,15 @@ namespace BugFablesAP
                             Keeper = p.Value.Value<string>("keeper"),
                             Item = p.Value.Value<int>("item"),
                         })
+                        : null;
+                    doorTargets = ok.SlotData != null && ok.SlotData.TryGetValue("door_targets", out object dts) && dts is JArray dta
+                        ? dta.Select(e => new DoorShuffle.Target
+                        {
+                            Map = e.Value<string>("map"),
+                            Door = e.Value<string>("door"),
+                            LikeMap = e.Value<string>("like_map"),
+                            LikeDoor = e.Value<string>("like_door"),
+                        }).ToList()
                         : null;
                     ownSlot = ok.Slot;
                     itemKinds = ReadItemKinds(ok.SlotData);
