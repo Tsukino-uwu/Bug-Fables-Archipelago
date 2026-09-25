@@ -432,7 +432,7 @@ came before any code. Two findings shaped everything:
   flags" would lose items and checks. Skips are built in layers instead, the safest first, and each row must leave
   the game exactly as playing it would. Anything that changes what's reachable is a yaml option, never a panel row.
 
-The rows, all Off by default and active only while the Archipelago mod is enabled:
+The rows, all On by default (the user, 2026-09-25) and active only while the Archipelago mod is enabled:
 
 1. **Fast text.** Each frame a dialogue box is typing, the mod sets the game's own `skiptext`, under the same
    conditions holding the button needs (a box open, no prompt or list, not `|noskip|`, on the newest line). Each box
