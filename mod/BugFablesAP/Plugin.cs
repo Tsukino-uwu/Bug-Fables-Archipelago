@@ -239,6 +239,7 @@ namespace BugFablesAP
             MedalAssist.Tick();
             MedalAssist.PayPrizes();
             QualityOfLife.Tick();
+            KeptOpen.Tick();
 
             DevCheats.Tick(Log, giveMoney);
             DevConsole.Tick(devConsole.Value);

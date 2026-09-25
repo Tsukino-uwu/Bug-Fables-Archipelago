@@ -56,6 +56,48 @@ namespace BugFablesAP
             log.LogInfo($"[open] installed on MapControl.CreateEntities and MainManager.CheckIfCanExist{(scenery != null ? " and ConditionChecker.Start" : "")}");
         }
 
+        // The lists arrive with slot_data at login. A map loaded before that (the first map after a plugin reload or a
+        // seed change, before the login) was built as vanilla: the user saw the Outskirts rocks back (2026-09-25).
+        // So when a new set of lists arrives, it's applied to the map already loaded as well.
+        private static object appliedFor;
+
+        internal static void Tick()
+        {
+            object lists = connection?.KeptOpen;
+            MapControl map = MainManager.map;
+            if (lists == null || ReferenceEquals(lists, appliedFor) || map == null || randomizerOn == null || !randomizerOn())
+            {
+                return;
+            }
+            appliedFor = lists;
+            log.LogInfo($"[open] the seed's lists arrived with {map.mapid} already loaded: applying them to it");
+            AfterCreate(map);
+            foreach (ConditionChecker scenery in map.GetComponentsInChildren<ConditionChecker>(true))
+            {
+                if (!Listed(scenery) || !scenery.gameObject.activeSelf)
+                {
+                    continue;
+                }
+                MarkHidden(scenery, map.mapid.ToString());
+                // What ConditionChecker.Start does to hide an object (ConditionChecker.cs:41-55).
+                NPCControl data = scenery.GetComponent<NPCControl>();
+                if (data != null && data.entity != null)
+                {
+                    data.entity.iskill = true;
+                }
+                else
+                {
+                    UnityEngine.Animator animator = scenery.GetComponent<UnityEngine.Animator>();
+                    if (animator != null)
+                    {
+                        UnityEngine.Object.Destroy(animator);
+                    }
+                    scenery.transform.position = new UnityEngine.Vector3(0f, 9999f, 0f);
+                    scenery.gameObject.SetActive(false);
+                }
+            }
+        }
+
         internal static void Disable()
         {
             harmony?.UnpatchSelf();
@@ -126,20 +168,30 @@ namespace BugFablesAP
         // the start (the user, 2026-09-25).
         private static void BeforeSceneryStart(ConditionChecker __instance)
         {
-            List<ApConnection.Blocker> hidden = connection?.SceneryHidden;
-            if (hidden == null || randomizerOn == null || !randomizerOn() || MainManager.map == null)
+            if (randomizerOn != null && randomizerOn() && Listed(__instance))
             {
-                return;
+                MarkHidden(__instance, MainManager.map.mapid.ToString());
+            }
+        }
+
+        private static bool Listed(ConditionChecker scenery)
+        {
+            List<ApConnection.Blocker> hidden = connection?.SceneryHidden;
+            if (hidden == null || MainManager.map == null)
+            {
+                return false;
             }
             string map = MainManager.map.mapid.ToString();
-            string path = PathOf(__instance.transform, MainManager.map.transform);
-            if (hidden.Any(b => b.Map == map && b.Entity == path))
-            {
-                var marker = new[] { -1 };
-                markers.Add(marker);
-                __instance.limit = marker;
-                log.LogInfo($"[open] {map}: scenery {path} removed (the seed keeps this area open)");
-            }
+            string path = PathOf(scenery.transform, MainManager.map.transform);
+            return hidden.Any(b => b.Map == map && b.Entity == path);
+        }
+
+        private static void MarkHidden(ConditionChecker scenery, string map)
+        {
+            var marker = new[] { -1 };
+            markers.Add(marker);
+            scenery.limit = marker;
+            log.LogInfo($"[open] {map}: scenery {PathOf(scenery.transform, MainManager.map.transform)} removed (the seed keeps this area open)");
         }
 
         private static string PathOf(UnityEngine.Transform t, UnityEngine.Transform root)

@@ -619,7 +619,12 @@ Kabbu's horn and found a Drowsy Cake (flag 735), now a location (*Outskirts: Eas
 up crystal berry #10 at the pier with no abilities (*Outskirts: Pier*). The miners working
 at the rocks (gone from 41 in the game) mine nothing now, so they join `kept_open`. The test
 `test_only_what_play_showed_before_the_gate` pins the locations reachable before the permit (five, with the pier's
-crystal berry). Still to see: the town door doing nothing before the first boss.
+crystal berry). **The town door does nothing before the first boss** (the user walked up to it, 2026-09-25: "the
+entrance does not work/do anything"), which is the held trigger. **The lists must reach a map already loaded:** after a
+plugin reload or a seed change, a map loaded before the login is built as vanilla, and the user saw the rocks come
+back until they left and re-entered. `KeptOpen.Tick` now applies a newly arrived set of lists to the current map (the
+same marks as at map load, and the scenery hidden the way `ConditionChecker.Start` hides it); the log shows it
+removing the miners on the Outskirts right after a reload.
 **The boat to Metal Island crashed with two in the party** (2026-09-25). With the rocks gone the user reached the
 pier on a chapter 1 file, paid the fare, and the boat scene (Event107) threw IndexOutOfRange: it seats three party
 members (`p[0..2]`, `EventControl.cs:17944-17946`), and in the game the pier is behind the rocks until the first
