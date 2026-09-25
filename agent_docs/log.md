@@ -453,3 +453,39 @@ Newest last. What was tried, what happened, what the user said.
   several times (edit by hand instead); a wait loop missed a log line written before it started.
 - **Next:** Merab's full stock (22 with duplicates, the mod owning the stock), Shades on the same system (13, all 50),
   permanent purchases, item shops and the caravan; map fast travel; a two-player test; the Warp's landing spot.
+
+## 2026-09-25 (afternoon): full medal stock, the intro skipped, item shops, the caravan, first shuffled door
+
+- **Merab's full stock (seen):** 22 copies from a new game (TP Plus and Ambusher twice, each its own check). "One copy
+  fewer than expected" was unworkable (a fresh file holds 10 of 22), so the save keeps a bit per copy bought
+  (`flagvar[7]`), set by the purchase's swapped `giveitem`, and `UpdateShops` sets the stock. Caught before the first
+  test by reading the code: `kill,caller` rebuilds the shelf before `giveitem`, so the stock is left alone mid-purchase.
+  The user bought 18, reloaded, and exactly the 4 left stayed. A vanilla-medal flash on reshuffle fixed (sprites every
+  frame for a second). Reshuffle choice moved to the top of shop prompts (seen). Permanent purchases: a copy checked on
+  the server but not paid in this save is charged on load (seen in the log, 0 berries, forgiven).
+- **Shop Contents: Filler Only** falls back to No Progression with a warning when the room lacks filler (the user's
+  choice): a solo seed has 17 filler for 22 shop spots.
+- **The intro, seen after eight tries:** Event16 (Maki, Vi joining, the tutorial battle, the permit) skipped with the mod
+  doing what it leaves; then Event8 cut before its slides (`NewSolidColor("back")`); a black screen was tried and
+  dropped ("looks dumb"). Wrong turns: waiting for the trigger (the user stood clear), the trigger surviving to start the
+  scene again (crash), the talk after the slides, the house showing before the warp, the house's music. Skip intro
+  folded into Skip cutscenes (six rows). Rule changed (the user): a scene giving an item may be skipped if the item
+  stays obtainable.
+- **Test start** (`TestStart`, dev): a new file starts at the town gate, arriving as if through the Outskirts door
+  (the user: "looks perfect"; decided: random starts arrive through a door).
+- **Stand-ins (seen):** scenes that expect a missing party member get an invisible stand-in (the barkeeper's first talk
+  crashed twice on `p[2]`); why not the leader: it would be pulled to two spots. That talk is now skipped (flag 158).
+- **Item shops (seen):** Madame Butterfly's five and the caravan's three first purchases are checks, then the shops' own
+  items. First try showed the vanilla items: item shop locations weren't scouted. The caravan is there from the start
+  (keeper made present during the map build, a new `scenery_present` for its stall); the Outskirts lines about the rocks
+  are gone (the moth away, the husband's welcome), seen. The ladybug siblings are present from the start (in the seed
+  running at the end, not seen yet).
+- **Decided (the user):** everything in, unchecked spots as filler-only *Placeholders*; the entrance randomizer as an
+  experimental option (all doors, coupled by default) until its logic is done. Both named in CLAUDE.md.
+- **Entrance randomizer, proof of concept (built, not seen):** a door rewritten to lead where another leads
+  (`door_targets`, `TestDoors`). Set in the dev install: the Outskirts' east exit leads to the Commercial District.
+- **Dev install state at the end:** `TestStart = BugariaMainPlaza@BugariaOutskirtsOutsideCity`, `TestDoors` as above,
+  DevConsole with a command file in the session scratchpad (empty it or turn it off next time), AdoptSeed as before.
+- **Next:** see the shuffled door on screen; pair both directions (a door's way back found by position, which needs
+  EntityDump to write positions); the generator shuffling doors (coupled first); Placeholders for every spot; Shades's
+  shop once all 50 crystal berries are locations.

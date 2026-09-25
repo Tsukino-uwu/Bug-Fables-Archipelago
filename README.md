@@ -5,8 +5,8 @@ the game plus an apworld for the Archipelago generator.
 
 **Status: not playable yet.** A small apworld generates seeds, and the mod logs in to an Archipelago server
 from inside the game, sends checks and receives items. The world is opening up one gate at a time (open world is
-the default: the Outskirts rocks are gone from the start). Next: every key item and medal in the pool, with field
-abilities shuffled as items.
+the default: the Outskirts rocks are gone from the start). Next: every item spot in the game in the pool (unchecked
+ones as filler-only placeholders), field abilities shuffled as items, and an experimental entrance randomizer.
 
 ## How it will work
 
