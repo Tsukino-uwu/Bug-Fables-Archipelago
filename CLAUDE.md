@@ -126,6 +126,8 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
   step 1; enforced by `TestLocationNames`).
 - **`agent_docs/MEASURED.md`** holds game facts: class, method, field and flag, each with its evidence and
   date. What a source says but we haven't measured waits in its last section.
+- **Comments are lean** (the user, 2026-09-25). One line, only where the code can't say it (a game quirk, a
+  non-obvious why). No provenance, dates or decompiled line numbers in code: those go to `agent_docs/`.
 - **When the user confirms a fix, write down HOW it was found** (wrong theories, the measurement that
   settled it) in `agent_docs/log.md` before moving on.
 
