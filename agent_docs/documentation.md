@@ -521,7 +521,7 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    **Seen (2026-09-25):** three queued test hold-ups waited through the spider fights' chain, then played one after
    another, reading "You got the Explorer Permit from TestPlayer!" (the game's own article for it). Each was followed
    by an empty box: an empty follow-up line is still shown as a box waiting for a press. The follow-up is now the
-   game's `|end|`, which skips that wait.
+   game's `|end|`, which skips that wait. Confirmed by the user the same day: no empty box.
 7. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
    read in full before anything is skipped.
 
