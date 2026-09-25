@@ -66,6 +66,13 @@ seed's (the mod guide, step 9).
    until the logic knows where ingredients come from). Two Quality of life rows go with the bestiary (the user):
    auto-spy (a fought enemy counts as spied) and free entries at the catch-up NPC, perhaps folded with Free boat into
    one "no NPC costs" row.
+   **Later idea, a yaml option (the user, 2026-09-25): enemy drops.** The first defeat of each ordinary enemy type is
+   a check (bosses and one-off fights left out), shown as a guaranteed drop; after that the type's drops are the
+   game's own, as with respawning pickups. The game already counts defeats per type in the save
+   (`enemyencounter[id, 1]`, raised on each win, `BattleControl.cs:30712`), so the check can be "that count reached
+   1", with no drop to swap. The logic needs, per type, a place where it's always fought. Heard of from a Discord user,
+   who said another Bug Fables randomizer does this: not looked at; its licence goes in `licensing.md` and
+   `references.md` is read before borrowing anything from it.
 3. **An "open start" yaml option next** (the user, 2026-09-24), after chapter 1's locations: skip the prologue and
    tutorial, optionally with Leif from the start (the new-game party `{0, 1}`, `MainManager.cs:3591`, becoming
    `{0, 1, 2}`; early cutscenes are written for two, so tested on a fresh file). A full story strip, as the Metroid
