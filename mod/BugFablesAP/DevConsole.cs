@@ -99,7 +99,9 @@ namespace BugFablesAP
         // infjump: each press of the jump button in mid-air jumps again, through the game's own EntityControl.Jump
         // (the height and sound of a normal jump, EntityControl.cs:4598, PlayerControl.DoJump). The game's own jump
         // only fires on the ground (PlayerControl.cs:372), so the two never both act on one press. Off by default.
-        private static bool infJump;
+        // Kept in the config ([Debug] InfJump, off in the code) like OneHit (the user, 2026-09-25); "infjump" flips it.
+        internal static BepInEx.Configuration.ConfigEntry<bool> InfJumpSetting;
+        private static bool infJump => InfJumpSetting != null && InfJumpSetting.Value;
 
         private static void TickInfJump()
         {
@@ -303,7 +305,13 @@ namespace BugFablesAP
                         ItemSwap.DescribeOurs(ItemIds.Base + 27, ItemIds.KeyItemKind, out string name, out Sprite sprite, out Color? color);
                         HoldUps.Received(name + " from TestPlayer", sprite, color);
                         return "holdup queued: " + name + " from TestPlayer";
-                    case "infjump": infJump = !infJump; return "infjump " + (infJump ? "on: press jump in mid-air to jump again" : "off");
+                    case "infjump":
+                        if (InfJumpSetting == null)
+                        {
+                            return "infjump: no setting";
+                        }
+                        InfJumpSetting.Value = !InfJumpSetting.Value;
+                        return "infjump " + (infJump ? "on: press jump in mid-air to jump again" : "off");
                     case "onehit":
                         if (OneHitSetting == null)
                         {

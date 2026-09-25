@@ -69,6 +69,9 @@ namespace BugFablesAP
                 "Dev only. F9 opens a command line: loc <n> (go to a pickup location), warp <map> [flag], "
                 + "spawn <item|key|medal> <id> [flag], flag <n> [on|off]. Can put a save in states the story never "
                 + "makes: test files only. Off by default.");
+            DevConsole.InfJumpSetting = Config.Bind("Debug", "InfJump", false,
+                "Dev only, with DevConsole. Each press of jump in mid-air jumps again, to reach high places. The console's "
+                + "infjump flips it. Off by default.");
             DevConsole.OneHitSetting = Config.Bind("Debug", "OneHit", false,
                 "Dev only, with DevConsole. Every hit on an enemy does at least 99, to get through test fights. The console's "
                 + "onehit flips it. Off by default.");

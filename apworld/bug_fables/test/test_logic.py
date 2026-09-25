@@ -451,6 +451,12 @@ class TestKeptPresent(BugFablesTestBase):
         self.assertIn({"map": "SnakemouthFallRoom", "entity": "LoadingZoneDoorRoom"}, present)
         self.assertIn({"map": "SnakemouthDoorRoom", "entity": "DoorLoadZone"}, present)
 
+    def test_way_back_down_from_the_trapdoor(self) -> None:
+        # Going up the kept mushroom before the spider fight left no way back down (the user, 2026-09-25): the door room's
+        # door to the fall room exists from the trapdoor (flag 14), not from the first boss.
+        self.assertIn({"map": "SnakemouthDoorRoom", "entity": "LoadZoneFallRoom", "flag": 14},
+                      self.world.fill_slot_data()["present_from"])
+
     def test_fall_room_blocker_is_kept_open(self) -> None:
         self.assertIn({"map": "SnakemouthFallRoom", "entity": "blocker"}, self.world.fill_slot_data()["kept_open"])
 

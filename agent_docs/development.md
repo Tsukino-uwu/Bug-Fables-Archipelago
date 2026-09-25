@@ -89,16 +89,5 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   player is shown.
 - `onehit`: flips a test boost: every hit on an enemy does at least 99 (before defence). It's the `[Debug]` setting
   `OneHit` (off in the code), so it survives reloads; `copy-dev.ps1 -DebugOn OneHit` turns it on for a dev install.
-- `infjump`: toggles jumping again in mid-air (each press of the jump button), to reach high places while testing. Off by default.
-
-While a warp is in flight and for 1.5 s after it lands, touching a pickup does nothing (a warp lands on the
-item's own spot); step off and back on to take it.
-
-`loc` and `warp <map> <flag>` go straight to the entity's start position, read from the map's entity table,
-and land a couple of steps from it; the pickup can't be taken for about 1.5 s and you can't walk for 1 s after
-arriving (the user, 2026-09-24: one step away was too close, and the old origin-then-hop looked like two warps).
-`loc` and `warp` mark the target map's auto-start cutscenes as seen before arriving: one played out of the
-story's order crashed and froze the game (2026-09-24). A test file only.
-
-It uses the game's own warp and pickup functions, but it can put a save in states the story never makes.
-
+- `infjump`: flips jumping again in mid-air. It's the `[Debug]` setting `InfJump` (off in the code), on in the dev
+  install (`copy-dev.ps1 -DebugOn InfJump`), so it survives reloads.

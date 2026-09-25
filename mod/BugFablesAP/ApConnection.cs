@@ -337,6 +337,11 @@ namespace BugFablesAP
         internal List<Blocker> HeldUntil => heldUntil;
         private volatile List<Blocker> heldUntil;
 
+        // slot_data's present_from: a way the story makes at a late flag that the seed makes at an earlier one instead
+        // ([{map, entity, flag}]): the door back down to the fall room exists from the trapdoor (14), not the first boss.
+        internal List<Blocker> PresentFrom => presentFrom;
+        private volatile List<Blocker> presentFrom;
+
         internal sealed class Blocker
         {
             internal string Map;
@@ -554,6 +559,7 @@ namespace BugFablesAP
                     keptPresent = ReadKeptOpen(ok.SlotData, "kept_present");
                     sceneryHidden = ReadKeptOpen(ok.SlotData, "scenery_hidden");
                     heldUntil = ReadKeptOpen(ok.SlotData, "held_until");
+                    presentFrom = ReadKeptOpen(ok.SlotData, "present_from");
                     locationVars = ReadLocationVars(ok.SlotData);
                     locationBerries = ReadLocationBerries(ok.SlotData);
                     locationDiscoveries = ReadLocationBerries(ok.SlotData, "location_discoveries");

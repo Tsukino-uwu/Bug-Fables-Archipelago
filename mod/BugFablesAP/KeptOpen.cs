@@ -140,6 +140,20 @@ namespace BugFablesAP
                     log.LogInfo($"[open] {map}: {npc.name} made present (the seed keeps this way open)");
                 }
             }
+            // present_from: the entity's requires replaced by an earlier story flag, so the game makes it from then on.
+            foreach (ApConnection.Blocker from in (connection.PresentFrom ?? new List<ApConnection.Blocker>()).Where(b => b.Map == map && b.Flag >= 0))
+            {
+                foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true).Where(n => n.name == from.Entity))
+                {
+                    npc.requires = new[] { from.Flag };
+                    bool now = MainManager.instance.flags[from.Flag];
+                    if (npc.entity != null && now)
+                    {
+                        npc.entity.iskill = false;
+                    }
+                    log.LogInfo($"[open] {map}: {npc.name} present from flag {from.Flag} ({(now ? "set: present" : "not set yet")})");
+                }
+            }
             // held_until: a real story flag as the entity's requires, so the game's own check keeps it away until then
             // and brings it back after. Only added to: an entity that already needs something keeps that too.
             foreach (ApConnection.Blocker held in (connection.HeldUntil ?? new List<ApConnection.Blocker>()).Where(b => b.Map == map && b.Flag >= 0))

@@ -617,6 +617,13 @@ vanilla). The fall room's chapter 1 blocker joins `kept_open`. The ordinary door
 alone: before the trapdoor event it would skip that event, where Leif's joining starts. Tests `TestKeptPresent`.
 **Built 2026-09-25, not yet seen in game;** it needs a fresh file played through chapter 1, to see that the spider
 fight and Leif's joining still play out with the way back up open.
+**Seen, and a hole found** (the user, 2026-09-25): the bounce mushroom and the door at its top were there before the
+first boss, and the user went up. But then there was **no way back down**: the door room's door to the fall room
+(`LoadZoneFallRoom`) also needs 41, and before the boss the fall room is reached only by the trapdoor drop. Going up
+before the spider fight cut the file off from Leif, the spider fight and the lake. Keeping one direction of a
+connection open means checking the other direction too. The fix, a new `slot_data` list, `present_from` (map, entity,
+flag): the entity's `requires` becomes that earlier flag, so the door exists from the trapdoor (14) on. Not from the
+start, which would skip the trapdoor scene where Leif's joining begins. Test `test_way_back_down_from_the_trapdoor`.
 **The Outskirts rocks** (the user, 2026-09-25: before chapter 1 is done, a rock pile cuts the Outskirts off, so
 only the way to chapter 1 is left). Everything that changes on that map at the end of chapter 1 is flag 41, read
 from the entity dump and the map dump's flag-scenery list: the rocks (`Base/BlockingRocks`, scenery hidden from

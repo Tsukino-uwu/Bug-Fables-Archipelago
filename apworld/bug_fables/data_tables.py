@@ -38,6 +38,7 @@ KEPT_OPEN: list[dict[str, Any]] = _LOCATION_DATA.get("kept_open", [])
 KEPT_PRESENT: list[dict[str, Any]] = _LOCATION_DATA.get("kept_present", [])
 SCENERY_HIDDEN: list[dict[str, Any]] = _LOCATION_DATA.get("scenery_hidden", [])
 HELD_UNTIL: list[dict[str, Any]] = _LOCATION_DATA.get("held_until", [])
+PRESENT_FROM: list[dict[str, Any]] = _LOCATION_DATA.get("present_from", [])
 
 # Medal ids (MainManager.BadgeTypes) overlap item ids (MainManager.Items), so medals get their own range.
 MEDAL_KIND = 2
