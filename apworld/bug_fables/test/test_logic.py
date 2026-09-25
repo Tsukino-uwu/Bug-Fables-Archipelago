@@ -480,6 +480,13 @@ class TestOutskirtsRocks(BugFablesTestBase):
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "DoorBugaria"}, data["kept_present"])
         self.assertIn({"map": "AntPalace1", "entity": "Chapter1StartEvent", "flag": 114}, data["held_until"])
 
+    def test_plaza_blockers_removed(self) -> None:
+        # The plaza's three blockers kept the party in the plaza until chapter 2 (the user, 2026-09-25: open the town).
+        kept = self.world.fill_slot_data()["kept_open"]
+        for entity in ("MM", "blockereetl2", "blockereetl2 - Duplicate"):
+            with self.subTest(entity=entity):
+                self.assertIn({"map": "BugariaMainPlaza", "entity": entity}, kept)
+
     def test_boat_waits_for_leif(self) -> None:
         # The boat scene seats three; with the rocks gone a two-member party reached it and the scene threw (the user,
         # 2026-09-25). The sailor waits for Leif's joining flag.

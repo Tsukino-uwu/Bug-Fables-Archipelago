@@ -701,6 +701,11 @@ leader (no crash; the companion's line comes from the leader) and logs each map 
 needs him can be held back individually. Scenes that read `map.tempfollowers[0]` directly, like the palace's Event45,
 aren't covered and stay held. **Seen (the user, 2026-09-25):** the plaza NPC's conversation played through; the log
 shows the companion asked for on `BugariaMainPlaza` outside any scene and the leader answering.
+**The rest of the town** (the user, 2026-09-25: "can we remove the block here"): three blockers in the plaza (`MM`,
+`blockereetl2` and its duplicate, Event12, until flag 67) kept the party in the plaza. No city map has a scene that
+starts on its own, and every other city scene trigger needs flag 67 or later (entity dump, map dump), so they join
+`kept_open` and the districts can be walked early. The palace's own blockers stay (the story goes on there). The
+districts' checks keep requiring chapter 2 in logic until they're seen working. Test `test_plaza_blockers_removed`.
 **The boat to Metal Island crashed with two in the party** (2026-09-25). With the rocks gone the user reached the
 pier on a chapter 1 file, paid the fare, and the boat scene (Event107) threw IndexOutOfRange: it seats three party
 members (`p[0..2]`, `EventControl.cs:17944-17946`), and in the game the pier is behind the rocks until the first
