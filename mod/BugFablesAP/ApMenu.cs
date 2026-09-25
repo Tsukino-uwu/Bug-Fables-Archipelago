@@ -325,7 +325,7 @@ namespace BugFablesAP
                 case DifficultyRow: return "Only affects how tough enemies are; every check stays the same.";
                 case DetectorRow: return "Acts like the Detector medal is always equipped, to find hidden items.";
                 case ModeRow: return "Turns Archipelago on or off. While on, normal saves are never touched.";
-                case QolRow: return "Speed-ups that change nothing you find. Confirm to open.";
+                case QolRow: return "Optional helpers to make the game smoother. Confirm to open.";
                 default: return "";
             }
         }

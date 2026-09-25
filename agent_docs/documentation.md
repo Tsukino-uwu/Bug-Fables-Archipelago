@@ -53,8 +53,9 @@ server, and items from the server arrive in the game once each.
    switching down clears only a 614 the mod set. Loading a save or starting a new one forgets the mark, since
    those flags are the save's own. If any of the three hooks (save, load, new game) is missing, Hardest does
    nothing rather than risk a save.
-8. **A "Quality of life" page in the Archipelago panel** (the user, 2026-09-25): on/off speed-ups that change
-   nothing you find. Fast text and Skip intro are built, not yet seen; battle tutorials next (step 10).
+8. **A "Quality of life" page in the Archipelago panel** (the user, 2026-09-25): on/off helpers, skips first,
+   other helpers later (a pause-menu warp back to the seed's start, say). Fast text and Skip intro are built, not
+   yet seen; battle tutorials next (step 10).
 
 ## The steps
 
@@ -67,7 +68,7 @@ server, and items from the server arrive in the game once each.
 7. [List everything, without playing everything](#7-list-everything-without-playing-everything)
 8. [An Archipelago menu inside the game](#8-an-archipelago-menu-inside-the-game)
 9. [Keep the game's own item, show the seed's](#9-keep-the-games-own-item-show-the-seeds)
-10. [Speed-ups: the Quality of life page](#10-speed-ups-the-quality-of-life-page)
+10. [Helpers: the Quality of life page](#10-helpers-the-quality-of-life-page)
 
 ## Keeping this guide honest
 
@@ -419,10 +420,12 @@ points to `warp <map> @<entity>`. Built, not yet seen in game.
 `Recolour` and `FirstMedalSeen` do the swapping; `PickupPrefix`, `FindPickup` and `TickGround` handle pickups); the
 scout is `ApConnection.Scout`.*
 
-## 10. Speed-ups: the Quality of life page
+## 10. Helpers: the Quality of life page
 
 The user asked for a way to skip the intro, the tutorials and other slow parts, as a sub-menu of on/off rows
-(2026-09-25). The first job was finding out what a "skip" can safely do, so a search through the decompiled game
+(2026-09-25). The page isn't only for skips: the user named a later helper that changes play, a pause-menu button
+back to the seed's start. Such a helper is fine in the panel as long as it never changes where items are, and the
+logic never counts on it. The first job was finding out what a "skip" can safely do, so a search through the decompiled game
 came before any code. Two findings shaped everything:
 
 - **The game has no cutscene skip**, only its own text fast-forward: holding cancel sets `skiptext`, which drops the
