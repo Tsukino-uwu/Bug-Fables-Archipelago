@@ -51,6 +51,8 @@ seed's (the mod guide, step 9).
    members (stats from defaults, then the stat bonuses reapplied), and `SetPlayers(positions)` makes their characters.
    The user saw Leif join the party and fight on a file where he'd never joined (dev command `addleif`). Next measured:
    the trapdoor, the spider fight and Leif's own joining scene with him already there.
+   **Chapter 1 scenes with Leif added early** (the user, 2026-09-25): Event2 (the Tattle tutorial, bridge room) played
+   fine; it moves only the first two (`GetEntity(-4)`, `(-5)`), so Leif stood still in it.
    Scenes that need a particular member must then become rules: the horn tutorial near Snakemouth (Event10, a
    location) can't be finished without Kabbu's horn (the user, 2026-09-25).
    **Journal locations, each its own yaml option (the user, 2026-09-25).** The journal is `librarystuff[type, n]`,
