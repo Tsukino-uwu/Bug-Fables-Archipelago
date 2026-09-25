@@ -38,7 +38,12 @@ seed's (the mod guide, step 9).
    bought out** (the user asked): the sold-out flags (587 Merab's, 588 Shades's, set in `MainManager.cs:14283-14291`) only
    change dialogue (an NPC's line 159 on the Commercial map; Shades's greeting, `checktrue,588,92`). A check that ever
    depends on a bought-out shop would need the full total, 50, still safe; a seed holding fewer than 50 crystal berries
-   leaves the unaffordable tiers out of the pool instead.
+   leaves the unaffordable tiers out of the pool instead. **The bar is "no action can make a check unreachable"**, not
+   just "the logic never asks for it" (the user: a consumable that can lock a check away is a broken seed). Shades's
+   checks meet it because (1) crystal berries buy nothing but her stock, (2) the stock costs exactly 50, (3) all 50 are
+   always obtainable and never taken away, (4) purchases are permanent. Every berry spent buys one of her items, so what's
+   left always costs what's left to collect. **Shades's shop is only shuffled when the seed holds all 50 crystal
+   berries**; otherwise it stays vanilla. Merab's has no such risk: ordinary berries are renewable from battles.
    **Built 2026-09-24 (not yet seen in game):** each tick outside battles and events, a prize slot reading "missed"
    (2) is paid through the game's own `AddPrizeMedal(slot)` with Hard Mode answered "yes" for that call, because
    most bosses test Hard Mode in their own event and write 2 directly. Artis's `Event33` then hands the prize over

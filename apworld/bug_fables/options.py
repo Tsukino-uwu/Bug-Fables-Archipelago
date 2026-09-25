@@ -54,6 +54,18 @@ class ShuffleDiscoveries(Toggle):
     display_name = "Shuffle Discoveries"
 
 
+class ShuffleMedalShops(DefaultOnToggle):
+    """
+    Medals sold in shops are locations: the shelf shows what's really there, and buying it sends the check.
+
+    Turned off, shops sell their own medals as usual.
+
+    Checks added in this version: {count}.
+    """
+
+    display_name = "Shuffle Medal Shops"
+
+
 def category_count(category: str) -> int:
     """How many locations an option's category adds, straight from the location data."""
     return sum(1 for location in LOCATIONS if location.get("category") == category)
@@ -64,6 +76,7 @@ def category_count(category: str) -> int:
 ShuffleQuests.__doc__ = ShuffleQuests.__doc__.replace("{count}", str(category_count("quest")))
 ShuffleCrystalBerries.__doc__ = ShuffleCrystalBerries.__doc__.replace("{count}", str(category_count("crystal_berry")))
 ShuffleDiscoveries.__doc__ = ShuffleDiscoveries.__doc__.replace("{count}", str(category_count("discovery")))
+ShuffleMedalShops.__doc__ = ShuffleMedalShops.__doc__.replace("{count}", str(category_count("shop")))
 
 
 @dataclass
@@ -72,3 +85,4 @@ class BugFablesOptions(PerGameCommonOptions):
     shuffle_quests: ShuffleQuests
     shuffle_crystal_berries: ShuffleCrystalBerries
     shuffle_discoveries: ShuffleDiscoveries
+    shuffle_medal_shops: ShuffleMedalShops

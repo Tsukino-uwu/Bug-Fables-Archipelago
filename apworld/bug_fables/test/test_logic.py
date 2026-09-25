@@ -28,7 +28,8 @@ class TestPermitGate(BugFablesTestBase):
                      if loc.address is not None}
         self.assertEqual(reachable, {"Outskirts: Maki and Eetl's Gift", "Outskirts: Artis's Gift",
                                      "Outskirts: Ladybug Siblings' House", "Outskirts: East Road, Stone",
-                                     "Outskirts: Pier", "Bugaria City: Residential District, Rooftop"})
+                                     "Outskirts: Pier", "Bugaria City: Residential District, Rooftop"}
+                         | {f"Bugaria City: Commercial District, Medal Shop {n}" for n in range(1, 11)})
 
     def test_reward_near_snakemouth_needs_the_permit(self) -> None:
         self.assertFalse(self.can_reach_location("Outskirts: Near Snakemouth Den, Reward"))
@@ -68,12 +69,13 @@ class TestSlotData(BugFablesTestBase):
         data = self.world.fill_slot_data()
         flags, variables, berries = data["location_flags"], data["location_vars"], data["location_berries"]
         discoveries = data["location_discoveries"]
+        shops = data["location_shops"]
         respawns = {loc for loc, pickup in data["location_pickups"].items() if "regional" in pickup}
         ids = {str(loc.address) for loc in self.multiworld.get_locations(self.player) if loc.address is not None}
         # Each location is watched exactly one way: a flag, a number slot, a crystal berry's index, a journal
         # discovery, or (a respawning pickup) the pickup itself.
-        self.assertEqual(set(flags) | set(variables) | set(berries) | set(discoveries) | respawns, ids)
-        self.assertEqual(len(flags) + len(variables) + len(berries) + len(discoveries) + len(respawns), len(ids))
+        self.assertEqual(set(flags) | set(variables) | set(berries) | set(discoveries) | set(shops) | respawns, ids)
+        self.assertEqual(len(flags) + len(variables) + len(berries) + len(discoveries) + len(shops) + len(respawns), len(ids))
         self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Maki and Eetl's Gift"])], 15)
         self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Artis's Gift"])], 32)
 
@@ -545,3 +547,20 @@ class TestBarAndBoards(BugFablesTestBase):
         present = self.world.fill_slot_data()["kept_present"]
         self.assertIn({"map": "BugariaMainPlaza", "entity": "QuestBoard"}, present)
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "QuestBoard"}, present)
+
+
+class TestMedalShop(BugFablesTestBase):
+    # Merab's ten starting medals are locations, open from the start (the town is), each known by its shop and medal.
+    def test_stock_in_slot_data(self) -> None:
+        data = self.world.fill_slot_data()
+        first = str(self.world.location_name_to_id["Bugaria City: Commercial District, Medal Shop 1"])
+        self.assertEqual(data["location_shops"][first], {"shop": 0, "medal": 0})
+        self.assertEqual(data["location_gives"][first], {"map": "BugariaCommercial", "type": 2, "item": 0})
+        self.assertEqual(len(data["location_shops"]), 10)
+
+
+class TestMedalShopsOff(BugFablesTestBase):
+    options = {"shuffle_medal_shops": False}
+
+    def test_no_shop_locations(self) -> None:
+        self.assertEqual(self.world.fill_slot_data()["location_shops"], {})
