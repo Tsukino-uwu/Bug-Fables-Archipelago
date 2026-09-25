@@ -156,4 +156,5 @@ All live under `[Debug]` in `BepInEx/config/bugfables.archipelago.cfg`, are off 
 | `GiveMoney` | Berries to add once (capped at 999), then back to 0. |
 | `GrantProbe`, `TextProbe` | Log every key item added and flag flipped / every dialogue line with an item command, with the map. |
 | `SaveDiff` | Two save file names, `a.dat\|b.dat`: once per load, logs what differs between them. |
+| `QuestDump` | Every board quest's name, its `BoardData` numbers (column 3: the flag taking it sets) and its `QuestChecks` row, to `bugfablesap-questdump.tsv`. |
 | `EntityDump`, `ScriptDump`, `MapDump`, `VarDump`, `SpriteDump` | Write the game's entities, dialogue commands, map events, script slots or GUI sprites to `bugfablesap-*.tsv` / `.png` in the BepInEx folder. |

@@ -20,9 +20,11 @@ namespace BugFablesAP
         private ConfigEntry<bool> entityDumpEnabled;
         private ConfigEntry<bool> mapDumpEnabled;
         private ConfigEntry<bool> varDumpEnabled;
+        private ConfigEntry<bool> questDumpEnabled;
         private ConfigEntry<bool> spriteDumpEnabled;
         private bool spriteDumpDone;
         private bool varDumpDone;
+        private bool questDumpDone;
         private ConfigEntry<string> server;
         private ConfigEntry<string> port;
         private ConfigEntry<string> slot;
@@ -110,6 +112,9 @@ namespace BugFablesAP
             varDumpEnabled = Config.Bind("Debug", "VarDump", false,
                 "Dev only. Once per load, writes every flagvar/flagstring slot the game's text uses to "
                 + "BepInEx/bugfablesap-vardump.tsv. Off by default.");
+            questDumpEnabled = Config.Bind("Debug", "QuestDump", false,
+                "Dev only. Once per launch, writes every board quest's name, BoardData numbers and QuestChecks row to "
+                + "BepInEx/bugfablesap-questdump.tsv. Off by default.");
             if (textProbeEnabled.Value)
             {
                 TextProbe.Enable(Log, Guid);
@@ -280,6 +285,12 @@ namespace BugFablesAP
                 {
                     SaveDiff.Run(Log, pair[0].Trim(), pair[1].Trim());
                 }
+            }
+
+            if (questDumpEnabled.Value && !questDumpDone && MainManager.boardquestdata != null)
+            {
+                questDumpDone = true;
+                QuestDump.Run(Log);
             }
 
             if (varDumpEnabled.Value && !varDumpDone && MainManager.instance != null && MainManager.instance.prizeflags != null)
