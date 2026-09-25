@@ -21,13 +21,14 @@ class TestPermitGate(BugFablesTestBase):
     def test_only_what_play_showed_before_the_gate(self) -> None:
         # Before the permit, the user reached exactly these (2026-09-25): Maki and Eetl's gift and Artis's gift, then,
         # with the seed's rocks removed, the ladybug siblings' house, the stone on the east road and the pier's crystal
-        # berry. A spot claimed open here that isn't (the 10-berry reward near Snakemouth, past the gate) let a seed put
+        # berry, and, with the town open from the start, the Bad Book in the residential district. A spot claimed open
+        # here that isn't (the 10-berry reward near Snakemouth, past the gate) let a seed put
         # the permit behind its own gate: the user's impossible seed.
         reachable = {loc.name for loc in self.multiworld.get_reachable_locations(self.multiworld.state, self.player)
                      if loc.address is not None}
         self.assertEqual(reachable, {"Outskirts: Maki and Eetl's Gift", "Outskirts: Artis's Gift",
                                      "Outskirts: Ladybug Siblings' House", "Outskirts: East Road, Stone",
-                                     "Outskirts: Pier"})
+                                     "Outskirts: Pier", "Bugaria City: Residential District, Past the Grass"})
 
     def test_reward_near_snakemouth_needs_the_permit(self) -> None:
         self.assertFalse(self.can_reach_location("Outskirts: Near Snakemouth Den, Reward"))
