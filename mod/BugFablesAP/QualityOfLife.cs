@@ -269,7 +269,26 @@ namespace BugFablesAP
                 UnityEngine.Object.Destroy(back.gameObject);
             }
             mm.hud[0].transform.parent.gameObject.SetActive(true);
+            // Stand the party where Event8 would have (RunOpening does it too, a few frames later): moved only there, the
+            // fade-in showed the spawn point under the house first, then a jump (the user, 2026-09-25).
+            EntityControl four = !TestStartSet && MainManager.map != null && MainManager.map.mapid.ToString() == OpeningMap
+                ? MainManager.GetEntity(4) : null;
+            if (four != null && mm.playerdata != null)
+            {
+                Vector3 spot = four.transform.position + Vector3.left * 2.5f;
+                for (int i = 0; i < mm.playerdata.Length; i++)
+                {
+                    if (mm.playerdata[i].entity != null)
+                    {
+                        mm.playerdata[i].entity.transform.position = spot + new Vector3(-0.6f * i, 0f, 0.1f * i);
+                    }
+                }
+            }
             MainManager.ResetCamera();
+            if (four != null && MainManager.player != null)
+            {
+                MainManager.MainCamera.transform.position = MainManager.player.transform.position + mm.camoffset;
+            }
             // The building's music only when the game starts there: with a test start it played briefly before the start
             // map's own (the user, 2026-09-25).
             if (!TestStartSet)
