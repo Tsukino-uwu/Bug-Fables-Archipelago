@@ -288,9 +288,27 @@ namespace BugFablesAP
                     case FreeBoatRow: return "The boat to Metal Island costs nothing.";
                     case WarpRow: return "Adds a Warp to Start button to the pause menu.";
                     case CutscenesRow: return "Skips the intro and scenes you don't need to watch.";
-                    case AnimationRow: return "Which items from other players are shown held up.";
-                    case PricesRow: return "What medal shops charge.";
-                    case ScalingRow: return "Enemies scaled to your level, your artifacts, or not at all.";
+                    case AnimationRow:
+                        switch (QualityOfLife.ItemAnimation?.Value)
+                        {
+                            case "Progression": return "Only items from others that unlock something are held up.";
+                            case "Off": return "Items from others arrive without being held up.";
+                            default: return "Every item from another player is held up as it arrives.";
+                        }
+                    case PricesRow:
+                        switch (QualityOfLife.ShopPrices?.Value)
+                        {
+                            case "Half": return "Medal shops charge half their price.";
+                            case "Free": return "Medal shops charge nothing.";
+                            default: return "Medal shops charge their normal price.";
+                        }
+                    case ScalingRow:
+                        switch (QualityOfLife.EnemyScaling?.Value)
+                        {
+                            case "Off": return "Enemies keep their own stats, as in vanilla.";
+                            case "Artifacts": return "Enemies grow with artifacts found; levelling ahead makes it easier.";
+                            default: return "Enemies match your level, so every area plays fair in any order.";
+                        }
                     default: return "";
                 }
             }
@@ -300,7 +318,13 @@ namespace BugFablesAP
                 case PortRow: return "The room's port, e.g. 38281.";
                 case SlotRow: return "Your player slot name.";
                 case PasswordRow: return "The room's password, if it has one.";
-                case DifficultyRow: return "Only affects how tough enemies are; every check stays the same.";
+                case DifficultyRow:
+                    switch (Difficulty?.Value)
+                    {
+                        case "Hard": return "As if the Hard Mode medal were on: tougher enemies. Checks stay the same.";
+                        case "Hardest": return "As the HARDEST code: toughest enemies. Checks stay the same.";
+                        default: return "Enemies as the game makes them. Checks stay the same.";
+                    }
                 case DetectorRow: return "Acts like the Detector medal is always equipped, to find hidden items.";
                 case ModeRow: return "Turns Archipelago on or off. While on, normal saves are never touched.";
                 case QolRow: return "Settings that speed up the game.";

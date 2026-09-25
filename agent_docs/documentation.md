@@ -310,6 +310,10 @@ from the game's own pieces, read from how the pause menu builds it: the same ora
 above it with the game's button hints, the game's leaf cursor, labels on the left and values on the right, and
 arrows around the On/Off value.
 
+**The help line follows the value (the user, 2026-09-26):** on a row whose values mean different things (Difficulty,
+Item animation, Shop prices, Enemy scaling), the line under the rows describes the value now chosen, and changes as
+left/right steps through them; every step redraws the screen. On/off rows keep one line.
+
 **Status:** works, seen by the user (2026-09-24): the menu entry, the panel, and the file select held back until the first login.
 
 *Code: `MenuToggle.cs` (the menu entry: `BeforeSetMenuText` and `AfterSetMenuText` around the game's rebuild,
