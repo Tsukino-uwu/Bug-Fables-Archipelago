@@ -392,6 +392,11 @@ namespace BugFablesAP
                 spots[i] = at + new Vector3(-0.6f * i, 0f, 0.1f * i);
             }
             MainManager.SetPlayers(spots);
+            // As Event16 ends (EventControl.cs:3795): the camera follows the new leader. ResetCamera at Event8's end aimed it
+            // at the leader then; with one starting member that character was destroyed by ChangeParty above, and the house's
+            // exit hands the camera back to the player only for insides that centre on themselves (MapControl.cs:1373), so
+            // outside the camera followed nothing (the user, 2026-09-25, Leif alone).
+            MainManager.ResetCamera();
             // The building's own entities, only when the opening runs there: elsewhere these numbers are other things.
             bool inBuilding = MainManager.map.mapid.ToString() == OpeningMap;
             EntityControl exit = inBuilding ? MainManager.GetEntity(2) : null;
