@@ -214,7 +214,9 @@ folder; the facts drawn from them go into `MEASURED.md`.
 **Each enemy's encounter, for enemy shuffle** (2026-09-26): a map enemy's fight is the list of enemy ids in its
 entity row (`battleids`: a count, then up to four ids), which the dump didn't write. It now writes it as a last
 column, `battleids`, so the scripts that read columns by name are unchanged. Run at the title screen
-(2026-09-26): 327 map enemies, each with its encounter (`MEASURED.md`, "Battles, for enemy shuffle").
+(2026-09-26): 327 map enemies, each with its encounter (`MEASURED.md`, "Battles, for enemy shuffle"). The same run
+now also writes the enemy table's columns the shuffle needs (`bugfablesap-enemies.tsv`: stats, start position,
+can't fall, event on death), since that table is game data the code doesn't hold. Built, not yet run.
 
 
 **Scenery switched by flags** (2026-09-25): a door can be two things, a load-zone entity and a model in the map's

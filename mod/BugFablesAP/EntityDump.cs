@@ -31,7 +31,33 @@ namespace BugFablesAP
             }
             WriteEntities(log);
             WriteNames(log);
+            WriteEnemies(log);
             return true;
+        }
+
+        // The enemy table's columns the enemy shuffle needs: stats, start position, can't fall, event on death.
+        private static void WriteEnemies(ManualLogSource log)
+        {
+            if (MainManager.enemydata == null)
+            {
+                log.LogWarning("[dump] no enemy table loaded yet");
+                return;
+            }
+            string outPath = Path.Combine(Paths.BepInExRootPath, "bugfablesap-enemies.tsv");
+            var sb = new StringBuilder();
+            sb.AppendLine("id\tenum\tname\thp\tdef\texp\tposition\tcantfall\teventondeath\tswapid");
+            int rows = MainManager.enemydata.GetLength(0);
+            for (int id = 0; id < rows; id++)
+            {
+                string name = MainManager.enemynames != null && id < MainManager.enemynames.Length ? MainManager.enemynames[id] : "";
+                sb.Append(id).Append('\t').Append((MainManager.Enemies)id).Append('\t').Append(name).Append('\t')
+                  .Append(MainManager.enemydata[id, 1]).Append('\t').Append(MainManager.enemydata[id, 2]).Append('\t')
+                  .Append(MainManager.enemydata[id, 3]).Append('\t').Append(MainManager.enemydata[id, 19]).Append('\t')
+                  .Append(MainManager.enemydata[id, 29]).Append('\t').Append(MainManager.enemydata[id, 26]).Append('\t')
+                  .Append(MainManager.enemydata[id, 25]).AppendLine();
+            }
+            File.WriteAllText(outPath, sb.ToString());
+            log.LogInfo($"[dump] {rows} enemies -> {outPath}");
         }
 
         private static void WriteEntities(ManualLogSource log)
