@@ -564,7 +564,10 @@ namespace BugFablesAP
         private void Choice(int r, string label, string value)
         {
             Label(r, label);
-            Text("|center||size,0.75|" + value, 2.6f, RowY[r]);
+            // Between the arrows (ArrowLeftX to ArrowRightX) there's room for about 8 letters at 0.75 ("DISABLED");
+            // "PROGRESSION" ran over both arrows (the user's screenshot, 2026-09-25), so a longer value shrinks to fit.
+            float size = value.Length > 8 ? 0.75f * 8f / value.Length : 0.75f;
+            Text("|center||size," + size.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + value, 2.6f, RowY[r]);
         }
 
         private void Label(int r, string label)
