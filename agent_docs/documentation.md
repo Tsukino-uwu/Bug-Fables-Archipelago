@@ -657,6 +657,10 @@ own map's entity table and names table (`Data/EntityData/Names/<map>names`); A's
 come from `slot_data` (`door_targets`) or, for a test, the dev setting `TestDoors`. First test: the Outskirts' east exit
 leading where the plaza's door to the Commercial District leads. **Seen (the user, 2026-09-25):** from the Outskirts'
 bottom-right exit they appeared on the right side of the Commercial District, exactly as when coming in from the plaza.
+**Both ways, seen (the user, 2026-09-25):** four rewrites swapped two connections as a coupled shuffle would (the
+Outskirts' east exit with the plaza's Commercial door, and their ways back). The log showed every trip landing on the
+right map: the plaza's door to the Outskirts' east area and back, the Outskirts' exit to the Commercial District and back,
+each several times. The user found it confusing to keep track by eye, so from here the log is the record of each trip.
 
 **What a door carries, side by side** (2026-09-25, reading the rest of `TransferMap`, `MainManager.cs:17467-17620`). A
 door's `data` is more than its target: `[1..3]` switch the camera's offset, angle and limits on arrival (from
