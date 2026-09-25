@@ -485,7 +485,8 @@ The output stays in the BepInEx folder.
   on; the way down to Shades's shop has grass only the horn clears, and so does the Strong Start medal's spot in
   `DesertBeforeGH`, flag 415: grass to cut, then something to hit; whether another member's move does the hit is
   untested, the grass needs the horn either way, the user, 2026-09-25; and **the way to Snakemouth Den**:
-  `BugariaOutskirtsSnakemouthCorridor2`, after the grass tutorial, can't be crossed without the horn, the user with
+  `BugariaOutskirtsSnakemouthCorridor2`, after the grass tutorial, and `OutsideSnakemouth`, the next map, can't be
+  crossed without the horn, the user with
   Leif alone, 2026-09-25, the map from the Detector's log); Leif (moth) freezes, droplets included (always on, once he has joined at the Snakemouth lake). Vi and
   Kabbu are in the party from a new game, so while the party is vanilla only Leif gates anything.
 - **Ability flags, confirmed as reads in `PlayerControl.cs`:** 11 (beemerang, with `!flags[41]`), 699
