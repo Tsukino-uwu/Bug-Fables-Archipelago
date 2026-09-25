@@ -68,6 +68,9 @@ seed's (the mod guide, step 9).
    until the logic knows where ingredients come from). Two Quality of life rows go with the bestiary (the user):
    auto-spy (a fought enemy counts as spied) and free entries at the catch-up NPC, perhaps folded with Free boat into
    one "no NPC costs" row.
+   **To test later (the user, 2026-09-25): a two-player room.** The user's slot plus a second one the agent drives,
+   sending items while the user plays, to see items from another player arrive live: the hold-up on *All* and
+   *Progression*, silence for a replay after a new save or reconnect, and the multiworld names ("X's item").
    **Later idea, a yaml option (the user, 2026-09-25): enemy drops.** The first defeat of each ordinary enemy type is
    a check (bosses and one-off fights left out), shown as a guaranteed drop; after that the type's drops are the
    game's own, as with respawning pickups. The game already counts defeats per type in the save
