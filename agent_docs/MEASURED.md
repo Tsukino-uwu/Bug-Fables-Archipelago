@@ -481,27 +481,36 @@ The output stays in the BepInEx folder.
   crashes entering its middle.
 - **The party's basic moves** (the user, 2026-09-24, matching `PlayerControl.cs`): Vi (bee) throws the
   beemerang, which hits and grabs at range (flag 11, on from the start; Event109 takes it away in the bandit
-  hideout and gives it back); Kabbu (beetle) uses the horn, a knock-up and melee hit that also cuts grass (always
-  on; the way down to Shades's shop has grass only the horn clears, and so does the Strong Start medal's spot in
-  `DesertBeforeGH`, flag 415: grass to cut, then something to hit; whether another member's move does the hit is
-  untested, the grass needs the horn either way, the user, 2026-09-25; and **the way to Snakemouth Den**:
-  `BugariaOutskirtsSnakemouthCorridor2`, after the grass tutorial, and `OutsideSnakemouth`, the next map, can't be
-  crossed without the horn (on `OutsideSnakemouth` seven `BeetleGrass` patches, x -2 to -18.5, split the corridor
-  side on the right from the cave side on the left; the crystal berry, location 19, x -9.9, and the dig spot `Mound`
-  far left, x -24, are on the cave side: reachable from the den without the horn, the user), and in `SnakemouthBridgeRoom` the bridge comes down when its rope is hit: from the right only Vi's beemerang reaches
-  it; from the left Leif's move hit it (the user), so presumably any member's (Kabbu's horn not tried): crossing from
-  the right needs Vi; the room's hidden-spot discovery (discovery 2, location 30) is behind grass only the horn cuts,
-  the user; and `SnakemouthDoorRoom`, from the bridge side, is a chain of horn steps (the user): cut grass to reach a
-  trampoline, knock a rock down onto a vine, then push two rocks onto switches, which starts the trapdoor scene (its
-  starter, `MushroomItem`, requires flag 13, presumably the switches' flag: not measured). Coming up from the trapdoor
-  without the horn is presumably one-way for the same reason (the user's reading, not tried); and **the lake's fight** (Leif's joining scene, Event14 on `SnakemouthLake`: `ChangeParty({0, 1, 2})`, flag 16,
-  then a battle with two of enemy 1 that can't be fled, `EventControl.cs:3462-3466`) needs something that hits enemies
-  in the air, in chapter 1 only Vi's beemerang: a hard gate on Vi (the user, 2026-09-25; whether Kabbu or Leif learn
-  such a move later is unknown; moot while the mod skips that scene, since 2026-09-25); and **Snakemouth's switch-room switches** (`Big Switch`, Event23, flags 33/34) can be hit with Leif's ice as
-  well as the beemerang or the horn: any member's field attack (the user, 2026-09-25, in `SnakemouthUndergroundLeftB`) (the user, Leif alone, 2026-09-25; the room's Tattle tutorial, Event2, ran with stand-ins and
-  finished, flag 10, and its hint, Event0, is skipped by Skip cutscenes), the user with
-  Leif alone, 2026-09-25, the map from the Detector's log); Leif (moth) freezes, droplets included (always on, once he has joined at the Snakemouth lake). Vi and
-  Kabbu are in the party from a new game, so while the party is vanilla only Leif gates anything.
+  hideout and gives it back); Kabbu (beetle) uses the horn, a knock-up and melee hit that also cuts grass (always on);
+  Leif (moth) freezes, droplets included (always on, once he has joined). Vi and Kabbu are in the party from a new game,
+  so while the party is vanilla only Leif gates anything.
+- **Where a move is needed** (the user, 2026-09-25, most of it playing Leif alone; the maps from the Detector's log):
+  - **Kabbu's horn (grass):** the way down to Shades's shop; the Strong Start medal's spot in `DesertBeforeGH` (flag
+    415: grass, then something to hit; whether another member's move does the hit is untested); the way to Snakemouth
+    Den, both `BugariaOutskirtsSnakemouthCorridor2` (after the grass tutorial) and `OutsideSnakemouth`. On
+    `OutsideSnakemouth` seven `BeetleGrass` patches (x -2 to -18.5) split the corridor side (right) from the cave side
+    (left); the crystal berry (location 19, x -9.9) and the dig spot `Mound` (x -24) are on the cave side, reachable
+    from the den without the horn.
+  - **Kabbu's horn (puzzles):** `SnakemouthDoorRoom` from the bridge side is a chain of horn steps: cut grass to reach a
+    trampoline, knock a rock down onto a vine, push two rocks onto switches, which starts the trapdoor scene (its
+    starter, `MushroomItem`, requires flag 13, presumably the switches' flag: not measured). Coming up from the trapdoor
+    without the horn is presumably one-way for the same reason (the user's reading, not tried). The bridge room's
+    hidden-spot discovery (discovery 2, location 30) is behind grass too.
+  - **Vi's beemerang (range):** `SnakemouthBridgeRoom`'s bridge comes down when its rope is hit; from the right only the
+    beemerang reaches it, from the left Leif's move hit it (so presumably any member's; Kabbu's not tried). The room's
+    Tattle tutorial (Event2) ran with stand-ins and finished (flag 10); its hint (Event0) is skipped by Skip cutscenes.
+  - **Vi's beemerang (enemies in the air):** the lake's fight, in Leif's joining scene (Event14 on `SnakemouthLake`:
+    `ChangeParty({0, 1, 2})`, flag 16, then two of enemy 1 that can't be fled, `EventControl.cs:3462-3466`); in chapter 1
+    only the beemerang hits them. Whether Kabbu or Leif learn such a move later is unknown. Moot while the mod skips
+    that scene (since 2026-09-25).
+  - **Any member's attack:** Snakemouth's switch-room switches (`Big Switch`, Event23, flags 33/34) take Leif's ice as
+    well as the beemerang or the horn (in `SnakemouthUndergroundLeftB`).
+- **A blocked walk-in ends in a teleport** (the user, 2026-09-25, the game's own behaviour): entering
+  `SnakemouthUndergroundRightB` the "wrong", one-way way, the gate blocked the walk-in, the party stood still for a
+  moment, then was put past the gate; after that the switch could be hit and the way back used. A forced walk
+  (`MoveTowards`) has a timer (500 frames for the player, 0.75 of it in a scene, `EntityControl.cs:4951`); when it runs
+  out the character is moved straight to the target, with smoke (`EntityControl.cs:3692-3701`). So a door whose walk-in
+  point is behind a barrier can still be entered. The logic doesn't count on it (more cautious than the game is allowed).
 - **Ability flags, confirmed as reads in `PlayerControl.cs`:** 11 (beemerang, with `!flags[41]`), 699
   (horn dash), 39 (heavy dash: its absence changes the dash), 171 (big icicle), 19 (hover), 18 (dig), 20
   (bubble shield).
