@@ -519,6 +519,11 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    Leaf, Vi's stand-in and the `blockingbox` destroyed, the exit (entity 2) active again with the default camera, flag 15
    and quest 11 on the board. Flag 15 sends location 1's check, and a hold-up shows the seed's item. The logic needs no
    change: Vi is in the party either way, and location 1 was already reachable from the start. Built, not yet seen.
+   **The rule since (the user, 2026-09-25):** a scene that gives an item may be skipped *as long as the item can still
+   be received*, and fewer cutscenes are preferred, as an option at least. So a skip now has to keep every check the
+   scene holds (sent by the mod, or moved to something the player still does). Next candidate, the user's idea: the
+   spider fight with Leif and its scenes, with the discovery granted on entering or leaving the room instead. Not read
+   yet: that fight is also the first boss (its prize medal, flag 41 and what gates on it), so each of those needs a home.
 6. **Item animation** (the user, 2026-09-25): a discovery showed nothing of what it found, and items from other
    players arrive silently. Your own finds always get the hold-up (pickups already did; a discovery recorded in play
    now does too); the row, *Item animation: All / Progression / Off* decides which items from other players do

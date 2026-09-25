@@ -32,8 +32,9 @@ namespace BugFablesAP
         // Skip cutscenes (the user, 2026-09-25: scenes and fluff that give no checks). Each scene is read in full first
         // (EventControl.EventN): one that only moves the camera and the party, talks, and sets flags is skipped by
         // setting those flags instead of starting it; one that also changes the world is run by the game itself at
-        // speed, its lines answered, so it ends exactly as it would. Never a scene that gives an item, sends a check,
-        // changes the party or starts a battle.
+        // speed, its lines answered, so it ends exactly as it would. A scene that gives an item, changes the party or
+        // starts a battle may go too, as long as everything it gives can still be received (the user, 2026-09-25): the
+        // mod then does what the scene leaves behind and keeps its checks (the opening, below).
         private sealed class Scene
         {
             internal string Map;
