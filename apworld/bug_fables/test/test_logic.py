@@ -28,7 +28,7 @@ class TestPermitGate(BugFablesTestBase):
                      if loc.address is not None}
         self.assertEqual(reachable, {"Outskirts: Maki and Eetl's Gift", "Outskirts: Artis's Gift",
                                      "Outskirts: Ladybug Siblings' House", "Outskirts: East Road, Stone",
-                                     "Outskirts: Pier", "Bugaria City: Residential District, On Top of the House"})
+                                     "Outskirts: Pier", "Bugaria City: Residential District, Rooftop"})
 
     def test_reward_near_snakemouth_needs_the_permit(self) -> None:
         self.assertFalse(self.can_reach_location("Outskirts: Near Snakemouth Den, Reward"))
@@ -528,7 +528,7 @@ class TestDiscoveriesOn(BugFablesTestBase):
 class TestTownMedal(BugFablesTestBase):
     # The Bug Me Not! medal in the residential district needs Leif's ice (the user, 2026-09-25); the town itself is open.
     def test_needs_leif(self) -> None:
-        name = "Bugaria City: Residential District, On Top of the House by the Fountain"
+        name = "Bugaria City: Residential District, Fountain Rooftop"
         self.assertFalse(self.can_reach_location(name))
         self.collect_by_name(["Explorer Permit", "Leif"])
         self.assertTrue(self.can_reach_location(name))
