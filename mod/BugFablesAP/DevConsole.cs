@@ -320,6 +320,16 @@ namespace BugFablesAP
                         log.LogInfo(posLog.ToString());
                         return "pos logged";
                     }
+                    case "berries":
+                        // Berries for a shop test (2026-09-25), as the game's own money script command adds them: plus n,
+                        // clamped to 0-999 (MainManager.cs:12580-12590). Test files only.
+                        if (parts.Length < 2 || !int.TryParse(parts[1], out int berries))
+                        {
+                            return "berries <n>";
+                        }
+                        MainManager.instance.money = Mathf.Clamp(MainManager.instance.money + berries, 0, 999);
+                        MainManager.instance.showmoney = 1f;
+                        return "berries now " + MainManager.instance.money;
                     case "prices":
                         // Medal prices from the game's medal table: berries (column 5) and crystal berries (column 7),
                         // for the ids given (2026-09-25: the sum of Shades's stock, for the crystal berry rule).
