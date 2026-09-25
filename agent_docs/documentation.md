@@ -713,7 +713,12 @@ purchases, and two copies of one medal can't be told apart in a list of medal id
    second after a rebuild; seen gone, the user, 2026-09-25).
    **The same flash on the ground, in houses** (the user, 2026-09-25): Madeleine's table items looked right from outside
    and once inside, but showed their own items for a moment on the way in. A house on the same map is an "inside", and
-   going in switches its entities on (`MapControl.RefreshInsides`), which redraws them; the ground swap only came round
-   every 15 frames. Now it runs right after `RefreshInsides` and every frame for a second. Built, not yet seen.
+   going in switches its entities on (`MapControl.RefreshInsides`). **First guess, wrong:** swap right after
+   `RefreshInsides` and every frame for a second; the flash stayed. **Measured instead:** a log line in a patch on
+   `EntityControl.UpdateItem` (`EntityControl.cs:3218`), the one place the game draws an item entity's own sprite, run
+   whenever its animation state changes. Every way in, the game redrew the house's pickups there, and the ground pass
+   (logged in its one-second window) never found anything to fix. So the fix is that patch: when the game draws a
+   location pickup's own item, the seed's item goes back on in the same call. **Seen (the user, 2026-09-25):** nothing
+   odd going in or out any more. The first guess was taken back out.
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page), `ShopSwap.cs`.*

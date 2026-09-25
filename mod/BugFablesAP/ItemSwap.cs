@@ -124,27 +124,57 @@ namespace BugFablesAP
             descWindowField = AccessTools.Field(typeof(NPCControl), "descwindow");
             harmony.Patch(setText, prefix: new HarmonyMethod(typeof(ItemSwap), nameof(PickupPrefix)));
             harmony.Patch(setText, prefix: new HarmonyMethod(typeof(ItemSwap), nameof(BerryPrefix)));
-            MethodInfo refreshInsides = AccessTools.Method(typeof(MapControl), "RefreshInsides");
-            if (refreshInsides != null)
+            MethodInfo updateItem = AccessTools.Method(typeof(EntityControl), nameof(EntityControl.UpdateItem));
+            if (updateItem != null)
             {
-                harmony.Patch(refreshInsides, postfix: new HarmonyMethod(typeof(ItemSwap), nameof(AfterRefreshInsides)));
+                harmony.Patch(updateItem, postfix: new HarmonyMethod(typeof(ItemSwap), nameof(AfterUpdateItem)));
             }
             else
             {
-                log.LogWarning("[swap] MapControl.RefreshInsides not found: pickups in a house may flash their own item on entering.");
+                log.LogWarning("[swap] EntityControl.UpdateItem not found: a pickup the game redraws shows its own item until the ground swap.");
             }
         }
 
-        // Going into or out of a house on the same map (an "inside") switches its entities on (MapControl.RefreshInsides,
-        // MapControl.cs:1236), and a pickup switched on is drawn with its own item until the ground swap comes round again
-        // (the user, 2026-09-25: Madeleine's house, the table items flashed their vanilla look on entering). So swap right
-        // after, and every frame for a second, as for a rebuilt shop shelf.
-        private static float insideChangedAt = -10f;
-
-        private static void AfterRefreshInsides()
+        // EntityControl.UpdateItem is where the game draws an item entity's own sprite (EntityControl.cs:3218), whenever its
+        // animation state changes (UpdateSprite, :4049). For a pickup that is a location, the seed's item goes back on in
+        // the same call, so no frame shows the vanilla item, whatever made the game redraw it. Found 2026-09-25 (the user:
+        // Madeleine's table items flashed their own look on the way into her house): going into a house redraws its
+        // pickups through here, before the ground pass came round.
+        private static void AfterUpdateItem(EntityControl __instance)
         {
-            insideChangedAt = Time.realtimeSinceStartup;
-            TickGround(force: true);
+            NPCControl npc = __instance.npcdata;
+            Dictionary<long, ApConnection.Pickup> pickups = connection?.LocationPickups;
+            if (npc == null || npc.objecttype != NPCControl.ObjectTypes.Item || pickups == null || MainManager.map == null
+                || __instance.sprite == null || randomizerOn == null || !randomizerOn())
+            {
+                return;
+            }
+            string mapName = MainManager.map.mapid.ToString();
+            foreach (KeyValuePair<long, ApConnection.Pickup> entry in pickups)
+            {
+                if (entry.Value.Map != mapName || (entry.Value.Regional >= 0 && connection.IsDone(entry.Key)) || !IsPickup(entry.Value, npc))
+                {
+                    continue;
+                }
+                Describe(entry.Key, out _, out Sprite sprite, out _);
+                if (sprite == null)
+                {
+                    return;
+                }
+                if (__instance.animid == 3)
+                {
+                    ShowAsSprite(__instance, sprite);
+                }
+                else
+                {
+                    __instance.sprite.sprite = sprite;
+                    if (__instance.spritetransform != null)
+                    {
+                        __instance.spritetransform.localPosition = new Vector2(0f, sprite.bounds.extents.y);
+                    }
+                }
+                return;
+            }
         }
 
         internal static void Disable()
@@ -495,10 +525,9 @@ namespace BugFablesAP
         // EntityControl.UpdateItem places one (EntityControl.cs:3238-3241). The game only redraws an item's sprite
         // when its id changes (UpdateSprite, :4051), so it holds; this pass re-applies it if anything resets it.
         // Another game's item keeps the vanilla sprite until the Archipelago icon is in the mod.
-        internal static void TickGround(bool force = false)
+        internal static void TickGround()
         {
-            bool burst = Time.realtimeSinceStartup - insideChangedAt < 1f;
-            if ((!force && !burst && Time.frameCount % 15 != 0) || connection == null || !randomizerOn())
+            if (Time.frameCount % 15 != 0 || connection == null || !randomizerOn())
             {
                 return;
             }
