@@ -442,12 +442,6 @@ namespace BugFablesAP
 
         private static string pendingName;
 
-        // The console's warp by map name, for the TestStart stand-in (QualityOfLife).
-        internal static string WarpTo(string mapName)
-        {
-            return StartWarp((MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), mapName, true), -1);
-        }
-
         private static string StartWarp(MainManager.Maps map, int flag)
         {
             if (MainManager.player == null || MainManager.instance.inevent || MainManager.instance.message)

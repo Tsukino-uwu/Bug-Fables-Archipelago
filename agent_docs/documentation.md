@@ -533,6 +533,11 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    is still in the party. A prefix refuses that one call and stops the scene (`StopCoroutine("Event8")`, since scenes
    run as `StartCoroutine("Event" + id)`); the next frame the mod ends it as its own end does (HUD, camera, the
    building's music, `EndEvent`, the fade-in), and the opening and any warp follow before a single line of talk.
+   Seen (the user, 2026-09-25): straight into the town. (6) The slides still showed, and the test start's warp stepped
+   to the save crystal afterwards (the console's warp looks for a spot beside a save point). With *Skip intro* on, the
+   cut now comes before the slides, at their first step, the backdrop `NewSolidColor("back")` made after the building's
+   map has loaded (`EventControl.cs:2655`); the talk cut stays for *Skip intro* off. The test start uses the game's
+   `TransferMap` alone.
    **The rule since (the user, 2026-09-25):** a scene that gives an item may be skipped *as long as the item can still
    be received*, and fewer cutscenes are preferred, as an option at least. So a skip now has to keep every check the
    scene holds (sent by the mod, or moved to something the player still does). Next candidate, the user's idea: the

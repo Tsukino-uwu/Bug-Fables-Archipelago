@@ -83,7 +83,7 @@ namespace BugFablesAP
                 + "skip), but still requires a button press to proceed. Holding the skip button also moves through boxes "
                 + "much faster than the game's own hold. Lines the game marks unskippable stay as they are.");
             SkipIntro = config.Bind("QualityOfLife", "SkipIntro", true,
-                "A new game's four story slides pass by on their own, fast. The rest of the opening plays as normal.");
+                "A new game's four story slides are skipped (with Skip cutscenes, so is the talk after them).");
             FreeBoat = config.Bind("QualityOfLife", "FreeBoat", true,
                 "The boat to Metal Island costs nothing (the user, 2026-09-25: no farming berries in Archipelago).");
             SkipCutscenes = config.Bind("QualityOfLife", "SkipCutscenes", true,
@@ -125,6 +125,14 @@ namespace BugFablesAP
                 return;
             }
             harmony.Patch(changeParty, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeChangeParty)));
+            MethodInfo solid = AccessTools.Method(typeof(MainManager), nameof(MainManager.NewSolidColor),
+                new[] { typeof(string), typeof(Color), typeof(float), typeof(Vector3), typeof(Vector2) });
+            if (solid == null)
+            {
+                log.LogError("[qol] MainManager.NewSolidColor not found: the slides play (fast).");
+                return;
+            }
+            harmony.Patch(solid, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeSolidColor)));
         }
 
         // The opening (the user, 2026-09-25: skip the scenes and the fight, "just start playing the game"). After the
@@ -169,9 +177,31 @@ namespace BugFablesAP
             return false;
         }
 
+        // With Skip intro, the cut comes before the slides (the user, 2026-09-25: still saw them): their first step is
+        // their black backdrop, NewSolidColor("back"), after the building's map has loaded (EventControl.cs:2655). The
+        // scene stops there; the backdrop is made and parented in that same step, and removed with the scene's end.
+        private static void BeforeSolidColor(string name)
+        {
+            MainManager mm = MainManager.instance;
+            if (name != "back" || randomizerOn == null || !randomizerOn() || !SkipIntro.Value || mm == null || MainManager.map == null
+                || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap || mm.flags[15]
+                || MainManager.events == null || event8Cut)
+            {
+                return;
+            }
+            MainManager.events.StopCoroutine("Event8");
+            event8Cut = true;
+            log.LogInfo("[qol] Event8 cut before its slides (Skip intro): the scene stopped");
+        }
+
         private static void EndEvent8()
         {
             MainManager mm = MainManager.instance;
+            Transform back = MainManager.GUICamera == null ? null : MainManager.GUICamera.transform.Find("back");
+            if (back != null)
+            {
+                UnityEngine.Object.Destroy(back.gameObject);
+            }
             mm.hud[0].transform.parent.gameObject.SetActive(true);
             MainManager.ResetCamera();
             MainManager.ChangeMusic(Resources.Load<AudioClip>("Audio/Music/Inside0"));
@@ -360,7 +390,11 @@ namespace BugFablesAP
                 startPending = false;
                 try
                 {
-                    log.LogInfo($"[qol] test start (Debug.TestStart): {DevConsole.WarpTo(TestStart)}");
+                    // The game's own map transfer to where the map puts an arriving party; not the console's warp, which
+                    // then stepped beside the save point, a second move (the user, 2026-09-25).
+                    var start = (MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), TestStart, true);
+                    MainManager.instance.StartCoroutine(MainManager.TransferMap((int)start, Vector3.zero));
+                    log.LogInfo($"[qol] test start (Debug.TestStart): transferring to {start}");
                 }
                 catch (Exception e)
                 {
