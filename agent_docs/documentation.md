@@ -216,7 +216,8 @@ entity row (`battleids`: a count, then up to four ids), which the dump didn't wr
 column, `battleids`, so the scripts that read columns by name are unchanged. Run at the title screen
 (2026-09-26): 327 map enemies, each with its encounter (`MEASURED.md`, "Battles, for enemy shuffle"). The same run
 now also writes the enemy table's columns the shuffle needs (`bugfablesap-enemies.tsv`: stats, start position,
-can't fall, event on death), since that table is game data the code doesn't hold. Built, not yet run.
+can't fall, event on death), since that table is game data the code doesn't hold. Run at the title screen
+(2026-09-26): 117 enemies.
 
 
 **Scenery switched by flags** (2026-09-25): a door can be two things, a load-zone entity and a model in the map's

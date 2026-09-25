@@ -1061,6 +1061,18 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   and 8 (front only), and columns 4-6 say which members a skill needs (`CanSkill`, `:30472`). Who knows which skill
   depends on story flags, party level and equipped medals (`MainManager.RefreshSkills`, `:8395`). The tables
   themselves are game data (`Data/EnemyData`, `Data/SkillData`), not in the code, so not dumped yet.
+- **Each enemy's start position** (2026-09-26, EntityDump's new `bugfablesap-enemies.tsv`, the enemy table read at
+  the title screen, 117 rows): 96 Ground, 16 Flying, 3 Random, 1 Underground, one blank row.
+  - **Flying:** Thief 6, FlyingSeedling 10, WaspHealer 28, Midge 29, Flowering 38, CursedSkull 61, Mothfly 78,
+    MothflyCluster 79, DeadLanderB 88 (can't fall), IceWarden 109 (all on maps); MidgeBroodmother 36, BeeBoss 46,
+    EverlastingKing 91 (bosses); KeyR 101, KeyL 102, FireWarden 106.
+  - **Underground:** Sandworm 33 (on maps).
+  - **Random:** Mushroom 1, BeeBot 43, Mantidfly 71 (on maps).
+  - Every other boss starts on the Ground.
+  - Bosses with an event on defeat (column 26): VenusBoss 24, UltimaxTank 95, SandWyrm 50, Pitcher 98, WaspKing 90,
+    EverlastingKing 91, Acolyte 21, Scarlet 31, Kali 51, Cenn 85 and Pisci 86. The rematch machine runs them too.
+  - So for the base attacks: a flier needs Vi, the Sandworm needs Leif, and a Random one needs whichever position it
+    takes.
 - **Which fights can be fled:** every map fight (`NPCControl.StartBattle`, `canescape: true`). Almost every scripted
   fight can't be (`canescape: false`); the exceptions are Event30, Event42, the rematch machine (Event85), Event156,
   Event207 and Event224 (the list above).

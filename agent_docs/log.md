@@ -635,3 +635,7 @@ Newest last. What was tried, what happened, what the user said.
   guaranteed party can hit. If enemy checks come, map fights count too. The user remembered the base attacks
   (only Vi hits fliers; Kabbu and Leif hit the ground). The code agrees, and adds that Kabbu hits only the front
   enemy and only Leif hits burrowed ones.
+- **The enemy table was dumped** (the user said go ahead). Same run as before: title screen, game closed, dump off.
+  - 16 enemies start flying (three bosses: BeeBoss, MidgeBroodmother, EverlastingKing), one underground
+    (Sandworm) and three at random.
+  - The party rule for fights that can't be fled: no fliers without Vi, no Sandworm without Leif.
