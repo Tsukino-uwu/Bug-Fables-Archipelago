@@ -588,9 +588,15 @@ into the city, which sets flag 107), and the city is written for chapter 2. So t
 `scenery_hidden` (map plus the object's path in the map; the mod's prefix on `ConditionChecker.Start` gives it a
 marker `limit`, which the existing check answers with "hide") and `held_until` (map, entity, flag; the mod adds the
 flag to the entity's own `requires`, so the game keeps the trigger away until the first boss and brings it back
-after). The user chose rocks and house now, the town as a later gate of its own. **The house's logic stays
-cautious** (it still needs the first boss) until the user has walked in with the rocks gone. Tests
-`TestOutskirtsRocks`. **Built 2026-09-25, not yet seen in game.**
+after). The user chose rocks and house now, the town as a later gate of its own. The house's logic stayed cautious
+(it needed the first boss) until play showed otherwise. Tests `TestOutskirtsRocks`.
+**Seen by the user (2026-09-25), chapter 1 file:** the rocks were gone, the user walked into the house (the ladybug
+siblings, who come with flag 41, weren't there) and took its item: the seed's Crystal Berry, check sent from flag 679.
+So the house now needs nothing. With the rocks gone the east road opened too; there the user knocked a stone with
+Kabbu's horn and found a Drowsy Cake (flag 735), now a location (*Outskirts: East Road, Stone*). The miners working
+at the rocks (gone from 41 in the game) mine nothing now, so they join `kept_open`. The test
+`test_only_what_play_showed_before_the_gate` pins the four locations reachable before the permit. Still to see: the
+town door doing nothing before the first boss.
 **Mapping connections, one-way included** (the user, 2026-09-25: for room-level regions and a later entrance
 rando). An entrance shuffle can only pair a two-way door with another two-way door; a one-way link marked two-way
 can strand the player. So every connection is recorded with its direction. How:
