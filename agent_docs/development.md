@@ -103,3 +103,6 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   install (`copy-dev.ps1 -DebugOn InfJump`), so it survives reloads.
 - `berries <n>`: add n berries (negative takes them), clamped to 0-999 as the game's own `money` script command does.
   For shop tests.
+- **`TestStart`** (`[Debug]`, not a console command): a map name (`MainManager.Maps`, e.g. `BugariaMainPlaza`). A new
+  file's opening ends with the console's warp there, a stand-in for a random start until the seed chooses one
+  (`copy-dev.ps1 -DebugSet TestStart=BugariaMainPlaza`; empty turns it off).

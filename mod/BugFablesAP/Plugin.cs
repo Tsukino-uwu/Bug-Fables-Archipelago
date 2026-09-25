@@ -79,6 +79,10 @@ namespace BugFablesAP
                 "Dev only, with DevConsole. A text file the console also reads: each line is run as a typed command, "
                 + "then the file is emptied. Lets a developer outside the game drive a test. Empty = off.");
             DevConsole.CommandFile = devCommandFile.Value;
+            // Dev only: a stand-in for a random start (the user, 2026-09-25), until the seed chooses one.
+            QualityOfLife.TestStart = Config.Bind("Debug", "TestStart", "",
+                "Dev only. A map name (MainManager.Maps, e.g. BugariaMainPlaza): a new file's opening ends with a warp there, "
+                + "a stand-in for a random start. Empty = off.").Value;
             if (devConsole.Value)
             {
                 DevConsole.EnableGuard(Guid);

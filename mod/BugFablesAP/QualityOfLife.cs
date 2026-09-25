@@ -139,6 +139,9 @@ namespace BugFablesAP
         private const long OpeningLocation = 7_720_001; // Outskirts: Maki and Eetl's Gift (apworld id 1)
         private static bool openingPending;
         private static bool openingFailed; // one try per session: a failure is logged, never retried every frame
+        // Dev only ([Debug] TestStart): a map the opening ends with a warp to, a stand-in for a random start.
+        internal static string TestStart;
+        private static bool startPending;
 
         private static void RunOpening()
         {
@@ -184,6 +187,7 @@ namespace BugFablesAP
             mm.flags[15] = true;
             mm.boardquests[1].Insert(0, 11);
             HoldUps.FoundAt(OpeningLocation, "the opening's gift (location 1)");
+            startPending = !string.IsNullOrEmpty(TestStart);
             log.LogInfo($"[qol] opening done without Event16: party {string.Join(", ", mm.playerdata.Select(p => p.trueid.ToString()).ToArray())}, "
                 + $"characters {mm.playerdata.Count(p => p.entity != null)}, exit {(exit != null ? "active " + exit.gameObject.activeSelf : "NOT found")}, flag 15 {mm.flags[15]}");
         }
@@ -293,6 +297,19 @@ namespace BugFablesAP
                 {
                     openingFailed = true;
                     log.LogError($"[qol] opening failed: {e}");
+                }
+            }
+            // The test start, once the opening's hold-up is over and the player is free again.
+            if (startPending && MainManager.player != null && !mm.inevent && !mm.message && !mm.minipause && MainManager.battle == null)
+            {
+                startPending = false;
+                try
+                {
+                    log.LogInfo($"[qol] test start (Debug.TestStart): {DevConsole.WarpTo(TestStart)}");
+                }
+                catch (Exception e)
+                {
+                    log.LogError($"[qol] test start {TestStart} failed: {e.Message}");
                 }
             }
             bool slides = on && ((SkipIntro.Value && InIntroSlides()) || InFastScene());
