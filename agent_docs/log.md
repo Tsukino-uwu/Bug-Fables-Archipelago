@@ -611,3 +611,7 @@ Newest last. What was tried, what happened, what the user said.
     stage, so those bosses work outside their story event.
   - Two story fights change the boss after it starts (Event137 and Event182), so they can't be swapped yet.
   - A scripted fight is keyed by its event and its original id array: one event can start several fights.
+- **Two more Quality of life rows (the user):** an EXP multiplier and a berry multiplier, each 1x to 5x.
+  - The EXP multiplier helps even with moves never shuffled, because levels still give HP, TP and MP.
+  - The berry multiplier counts only berries picked up in the world, never a check's reward.
+  - Written as Next 16 and 17. Where EXP and berries are granted is in MEASURED.md.

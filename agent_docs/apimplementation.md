@@ -107,6 +107,12 @@ be wrong.
    later than vanilla would (open world, the entrance randomizer) and is not a challenge setting: Normal / Hard /
    Hardest stays on top of the scaled numbers. Each enemy needs a home level (where it first appears), from a real
    source. Only while Archipelago is enabled. Its own build step when built.
+16. **EXP multiplier, a panel setting** (the user, 2026-09-26): *EXP Multiplier* on the Quality of life page, 1x to
+   5x, default 1x. Levels still give HP, TP and MP, so it helps even without moves being shuffled. It stacks on
+   top of enemy scaling's EXP. No check and no logic depend on it. Only while Archipelago is enabled.
+17. **Berry multiplier, a panel setting** (the user, 2026-09-26): *Berry Multiplier* on the Quality of life page, 1x
+   to 5x, default 1x. Only the berries picked up in the world (lying there or dropped after a fight), never a
+   check's reward from the server. Only while Archipelago is enabled.
 
 **Known issues:**
 

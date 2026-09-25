@@ -1040,6 +1040,16 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   `EventDialogue` (`BattleControl.cs:1972`, `:30719-30731`); setup by id at `:976+` (VenusBoss's extra entity,
   fixed positions for BeeBoss, SandWyrmTail, Pitcher); `GetEnemyData` swaps some ids' data (`MainManager.cs:
   6157-6191`); `NPCControl.StartBattle` forces "Battle3" music for ids 25-28 (`NPCControl.cs:5932`).
+- **EXP from a fight** (for the EXP multiplier): each enemy's share is `BattleControl.GetEXP(amount, fixedexp,
+  enemy)` (`BattleControl.cs:30844`; 0 at level 27 or with flag 613; +15% on Hard Mode; +50% with medal 42), then
+  clamped per enemy to `neededexp` (`:30715`), so one enemy never gives more than the rest of a level. The EXP shown
+  on a map enemy is `MainManager.GetEXP` (`NPCControl.cs:5846`), a separate function. A level-up's rewards come
+  from a table (`MainManager.LevelUpMessage`, `:9315`): TP or MP (`maxtp`, `maxbp`), and attack, defence or HP
+  bonuses per member (`AddStatBonus`).
+- **Berries picked up** (for the berry multiplier): touching a berry adds 1, 5 or 20 (`MoneySmall` / `MoneyMedium` /
+  `MoneyBig`, `NPCControl.cs:5741-5753`), then clamps the wallet to 999. Berries an enemy drops after a fight are
+  the same pickups (`EntityControl.spitmoney` creates them, `EntityControl.cs:5353-5361`). Items from the server
+  and dialogue rewards add money elsewhere (`MainManager.cs:12583-12590`), so they aren't touched by this path.
 - **Still to measure:** each scripted event's fight, one by one (safe to swap in, safe to swap out); what a map
   enemy's `battleids` hold across the EntityDump (group sizes); which enemies a one-member party can't hit.
 
