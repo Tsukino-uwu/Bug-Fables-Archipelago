@@ -523,3 +523,12 @@ class TestDiscoveriesOn(BugFablesTestBase):
         self.assertFalse(self.can_reach_location("Outskirts: Snakemouth Den Entrance, Arrival"))
         self.collect_by_name("Explorer Permit")
         self.assertTrue(self.can_reach_location("Outskirts: Snakemouth Den Entrance, Arrival"))
+
+
+class TestTownMedal(BugFablesTestBase):
+    # The Bug Me Not! medal in the residential district needs Leif's ice (the user, 2026-09-25); the town itself is open.
+    def test_needs_leif(self) -> None:
+        name = "Bugaria City: Residential District, Past the Ice"
+        self.assertFalse(self.can_reach_location(name))
+        self.collect_by_name(["Explorer Permit", "Leif"])
+        self.assertTrue(self.can_reach_location(name))

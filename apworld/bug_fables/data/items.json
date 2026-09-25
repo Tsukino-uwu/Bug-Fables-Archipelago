@@ -17,6 +17,7 @@
     {"name": "Mistake", "game_id": 8, "kind": 0, "classification": "filler"},
     {"name": "Drowsy Cake", "game_id": 147, "kind": 0, "classification": "filler"},
     {"name": "Bad Book", "game_id": 174, "kind": 1, "classification": "useful"},
+    {"name": "Bug Me Not!", "game_id": 18, "kind": 2, "classification": "useful"},
     {"name": "Quest Book", "game_id": 93, "kind": 1, "classification": "progression"},
     {"name": "10 Berries", "game_id": 10, "kind": 3, "classification": "filler"},
     {"name": "15 Berries", "game_id": 15, "kind": 3, "classification": "filler"},

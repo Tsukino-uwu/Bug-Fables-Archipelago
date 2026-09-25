@@ -711,7 +711,9 @@ require flag 67 themselves, and a `Cube` in the plaza hides at 67. The three doo
 `scenery_hidden`. Lesson: an area closed "until chapter N" is closed by several things at once (blockers, doors,
 scenery); list every entity and scenery piece gated by that flag before opening it. First find
 in the open town: the Bad Book (key item 174, flag 621) outdoors in the residential district, reached with Kabbu's
-horn before chapter 2 (the user, 2026-09-25): a location in the *Bugaria City* region, open from the start.
+horn before chapter 2 (the user, 2026-09-25): a location in the *Bugaria City* region, open from the start. Then the
+Bug Me Not! medal (flag 59), also outdoors in the residential district, which needed Leif's ice: the same region,
+requiring Leif (test `TestTownMedal`).
 **The boat to Metal Island crashed with two in the party** (2026-09-25). With the rocks gone the user reached the
 pier on a chapter 1 file, paid the fare, and the boat scene (Event107) threw IndexOutOfRange: it seats three party
 members (`p[0..2]`, `EventControl.cs:17944-17946`), and in the game the pier is behind the rocks until the first
