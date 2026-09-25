@@ -16,7 +16,6 @@ namespace BugFablesAP
     {
         internal static ConfigEntry<bool> FastText;
         internal static ConfigEntry<bool> SkipIntro;
-        internal static ConfigEntry<bool> TurboSkip;
 
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
@@ -36,11 +35,10 @@ namespace BugFablesAP
             randomizerOn = on;
             FastText = config.Bind("QualityOfLife", "FastText", true,
                 "Dialogue text is instant instead of letter by letter, as if the skip button were held (the game's own "
-                + "skip), but still requires a button press to proceed. Lines the game marks unskippable stay as they are.");
+                + "skip), but still requires a button press to proceed. Holding the skip button also moves through boxes "
+                + "much faster than the game's own hold. Lines the game marks unskippable stay as they are.");
             SkipIntro = config.Bind("QualityOfLife", "SkipIntro", true,
                 "A new game's four story slides pass by on their own, fast. The rest of the opening plays as normal.");
-            TurboSkip = config.Bind("QualityOfLife", "TurboSkip", true,
-                "Holding the skip button moves through dialogue boxes much faster than the game's own hold.");
         }
 
         internal static void Tick()
@@ -82,16 +80,17 @@ namespace BugFablesAP
             // Holding the skip button advances a box, then waits out inputcooldown (16 after a box, 10 when a new
             // dialogue opens; MainManager.cs:5147, :10738), counted down one per frame (:7298). With the text already
             // instant that wait is all that's left (the user, 2026-09-25: holding didn't feel faster), so while it's
-            // held the wait is cut short. The game's own hold branch still does the advancing.
-            if (skippable && TurboSkip.Value && MainManager.GetKey(5, hold: true) && mm.inputcooldown > TurboCooldown)
+            // held the wait is cut short, as part of Fast text (the user found it faster and folded it in, 2026-09-25).
+            // The game's own hold branch still does the advancing.
+            if (skippable && FastText.Value && MainManager.GetKey(5, hold: true) && mm.inputcooldown > HeldCooldown)
             {
-                mm.inputcooldown = TurboCooldown;
+                mm.inputcooldown = HeldCooldown;
             }
         }
 
-        // Frames between boxes while the skip button is held with Turbo skip on: the game's own 4 while a box is
+        // Frames between boxes while the skip button is held with Fast text on: the game's own 4 while a box is
         // still typing (MainManager.cs:5151), instead of 16 between boxes.
-        private const float TurboCooldown = 4f;
+        private const float HeldCooldown = 4f;
 
         // The same conditions under which holding the skip button works (MainManager.cs:5125-5140): a dialogue box
         // is open, not a prompt or list, not marked |noskip|, and on the newest line rather than one looked back at.
