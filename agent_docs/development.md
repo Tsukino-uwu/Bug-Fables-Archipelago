@@ -110,6 +110,15 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   "TestDoors=BugariaOutskirtsOutsideCity/loadzone east=BugariaMainPlaza/LoadingZoneCommercial"`; empty turns it off).
 - `line <map> <n> [n...]`: log the full text of a map's dialogue lines (the same table `script` reads), e.g. to find
   every line that mentions something (2026-09-25: the Outskirts lines about the rocks).
+- `cam`: log what the camera follows (its target, or "DESTROYED"), the player, offsets, limits and the party with its
+  characters. Settled a camera stuck on a removed character (2026-09-25).
+- `who`: log every character drawn as Vi, Kabbu or Leif: name, position, what it follows, whether it's a player
+  character. Found a stray second player character (2026-09-25).
+- `follower <animid>`: make that character follow the party the story's way (the follower list, then `AddFollower`),
+  e.g. `follower 46` (Maki) to replay the castle briefing, which needs her.
+- `addmember <0|1|2>`: with `TestStartMember`, add Vi, Kabbu or Leif to the party, standing in for receiving them.
+- **`TestStartMember`** (`[Debug]`): a new randomizer file starts with that one member (0 Vi, 1 Kabbu, 2 Leif); the
+  story adds nobody else. -1 = off.
 - `berries <n>`: add n berries (negative takes them), clamped to 0-999 as the game's own `money` script command does.
   For shop tests.
 - **`TestStart`** (`[Debug]`, not a console command): a map name (`MainManager.Maps`), optionally `@` the map you
