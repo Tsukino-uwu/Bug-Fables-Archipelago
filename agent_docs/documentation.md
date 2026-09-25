@@ -631,7 +631,9 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    (16) **The leader acts the story leader's part** (the user's wish, `apimplementation.md`): at a scene's or talk's
    first stand-in, if the story's leader isn't in the party, the real leader plays that member (walks, faces, is placed
    where they would be) and only other missing members stay invisible; chosen once per scene; in a party list by member
-   the leader's own slot gets an invisible stand-in so he's never moved twice. Not yet seen.
+   the leader's own slot gets an invisible stand-in so he's never moved twice. **Seen (the user, 2026-09-25):** Leif
+   acting the story leader's part in the scenes ("doing the funny animation things"), the user's screenshot of the
+   treasure room scene with Leif speaking the party's line.
    (17) **Leif's joining scene skipped when Leif is already in the party** (the user, 2026-09-25): Event14 at the lake
    takes its Leif from the follower list (`map.tempfollowers[0]`, `EventControl.cs:3339`), empty since (15), and threw
    `ArgumentOutOfRange` at its start (predicted from the code a moment before the user reached it; freed with
