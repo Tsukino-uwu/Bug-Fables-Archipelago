@@ -104,16 +104,8 @@ be wrong.
    checks come (build step 10), map fights count too, since their checks would then be required. The base attacks
    decide it, skills learned later don't: Vi alone hits fliers, Leif alone hits burrowed enemies, Kabbu only the
    front enemy on the ground (`MEASURED.md`, "Who can hit what"). Its own build step when built.
-15. **Enemy scaling, a panel setting** (the user, 2026-09-26): *Enemy Scaling* on the Quality of life page (Next 10),
-   `off / party_level / chapter / artifacts`, on by default (`party_level`), up and down. A panel row, not the yaml:
-   it ties to no check, so the player can change it from the main menu if the game feels too easy or too hard.
-   Enemy shuffle stays in the yaml so a slot plays the same for anyone on it. Scaling balances an area met earlier or
-   later than vanilla would (open world, the entrance randomizer) and is not a challenge setting: Normal / Hard /
-   Hardest stays on top of the scaled numbers. Each enemy needs a home level (where it first appears), from a real
-   source. Only while Archipelago is enabled. **The bestiary shows the scaled numbers** (the user, 2026-09-26): the
-   pause menu's enemy page reads the raw table (`MEASURED.md`, "Battles, for enemy shuffle"), so the mod applies the
-   same scaling there, as the enemy would be if met now; Spy in a fight already shows the live numbers. Its own
-   build step when built.
+15. **Enemy scaling, a panel setting** (the user, 2026-09-26): on by default, balancing an area met earlier or later
+   than vanilla would. A mod-side setting with no logic, so its design and status live in the mod guide, step 17.
 16. **EXP multiplier, a panel setting** (the user, 2026-09-26): *EXP Multiplier* on the Quality of life page, 1x to
    5x, default 1x: an opt-in for a faster, easier game. Levels still give HP, TP and MP, so it helps even without moves being shuffled. It stacks on
    top of enemy scaling's EXP. No check and no logic depend on it. Only while Archipelago is enabled.

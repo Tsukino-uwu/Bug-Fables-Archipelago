@@ -26,6 +26,7 @@ anyone curious about the process, or thinking of doing the same for another game
 14. [The Detector for every check](#14-the-detector-for-every-check)
 15. [Difficulty and the Detector: the panel's two game settings](#15-difficulty-and-the-detector-the-panels-two-game-settings)
 16. [Randomizer saves kept apart from normal saves](#16-randomizer-saves-kept-apart-from-normal-saves)
+17. [Enemy scaling: every area fair whenever you reach it](#17-enemy-scaling-every-area-fair-whenever-you-reach-it)
 
 ## Where it stands
 
@@ -951,3 +952,40 @@ a save file, and normal saves are only reachable with the mod disabled.
 **Status:** works, checked on disk (2026-09-24).
 
 *Code: `SaveRedirect.cs` (the separate save folder, patching the game's five save-file functions in `InputIO`).*
+
+## 17. Enemy scaling: every area fair whenever you reach it
+
+The world is always open, so a chapter 6 area can be reached during chapter 1 (and the entrance randomizer and
+a random start make that more likely). In vanilla that never happens, so its enemies would be far too strong,
+and a chapter 1 area met late far too weak. Enemy scaling makes each area about as hard as it would be at the
+right point in the story. It is a balance setting, not a challenge setting.
+
+**Decided (the user, 2026-09-26):**
+- A row on the panel's Quality of life page, *Enemy Scaling*: `off / party_level / chapter / artifacts`, on by
+  default (`party_level`). It isn't in the yaml: it ties to no check and no logic, so the player can change it
+  from the main menu if the game feels too easy or too hard. Only while Archipelago is enabled (vanilla stays
+  vanilla).
+- It scales **both up and down**.
+- **Normal / Hard / Hardest** (step 15) stays the challenge setting, on top of the scaled numbers.
+- The **bestiary** shows the scaled numbers, as the enemy would be if met now. Spy in a fight already shows the
+  live ones.
+
+**How it will work** (planned; the facts are in `MEASURED.md`, "Battles, for enemy shuffle"):
+1. **Each enemy gets a home level:** the party level vanilla expects where it first appears. The level curve per
+   chapter must come from a real source, not memory. The enemy table dump gives each enemy's base HP, defence
+   and EXP.
+2. **The mode gives a target level:**
+   - `party_level`: the party's level.
+   - `chapter`: the level vanilla expects at the story progress reached.
+   - `artifacts`: the artifacts received, mapped to a level.
+3. **When a fight builds an enemy**, a postfix on `MainManager.GetEnemyData` scales it by target against home:
+   - HP and EXP are multiplied, so levelling keeps pace.
+   - Defence is added to, and attack through `hardatk`, the only knob for it. Attack is written per enemy in the
+     battle code, not in the table.
+   - It is applied to the base numbers, before the Hard/Hardest bonuses, so those still stack.
+   - Minimums are clamped, and the ids the game itself leaves alone are left alone.
+4. **The bestiary page** applies the same scaling, because it reads the raw table rather than `GetEnemyData`.
+
+It scales whatever enemy is fought, so it works with and without enemy shuffle (the Archipelago guide, Next 14).
+
+**Status:** planned (the user, 2026-09-26); not built. Next: the home level table and the level curve's source.
