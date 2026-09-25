@@ -51,6 +51,18 @@ namespace BugFablesAP
             {
                 log.LogError("[party] MainManager.GetPartyEntities not found: scenes written for three still crash with two.");
             }
+            // Hidden as late as possible: the per-frame Tick came before the scene's step and the entity's own updates,
+            // which switched a stand-in's sprite back on for a frame now and then (the user, 2026-09-25: stand-ins
+            // flashing). A postfix on its own LateUpdate (EntityControl.cs:3672) runs after both, just before drawing.
+            MethodInfo lateUpdate = AccessTools.Method(typeof(EntityControl), "LateUpdate");
+            if (lateUpdate != null)
+            {
+                harmony.Patch(lateUpdate, postfix: new HarmonyMethod(typeof(PartyFit), nameof(AfterLateUpdate)));
+            }
+            else
+            {
+                log.LogError("[party] EntityControl.LateUpdate not found: stand-ins may flash into view.");
+            }
             // Every MoveTowards overload ends in this one (EntityControl.cs:4911-4960).
             MethodInfo moveTowards = AccessTools.Method(typeof(EntityControl), nameof(EntityControl.MoveTowards),
                 new[] { typeof(Vector3), typeof(float), typeof(int), typeof(int), typeof(bool) });
@@ -119,6 +131,18 @@ namespace BugFablesAP
         // A scene walking a stand-in somewhere, then waiting until it arrives (Event10, the horn tutorial: while
         // (entities[0].forcemove), EventControl.cs:2935): a stand-in has no collision and never got there, so the scene
         // stood still (the user, 2026-09-25, Leif alone). A stand-in arrives at once.
+        private static void AfterLateUpdate(EntityControl __instance)
+        {
+            if (__instance == null || !standIns.Contains(__instance))
+            {
+                return;
+            }
+            foreach (Renderer r in __instance.GetComponentsInChildren<Renderer>(true))
+            {
+                r.enabled = false;
+            }
+        }
+
         private static void AfterMoveTowards(EntityControl __instance, Vector3 pos)
         {
             if (__instance == null || !standIns.Contains(__instance))

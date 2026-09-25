@@ -598,6 +598,10 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    stand-in `Jump()` in the frame it was made, and `Jump`'s `Unfix` needs the body (`rigid`), which a new character only
    gets in its `Start`, a frame later (`EntityControl.cs:524-528`): NullReferenceException, the scene dead (`unstick`).
    The stand-in now gets its body when made, weightless; `Start` adds one only when there is none. Not yet seen.
+   (13) **Stand-ins hidden at the last moment** (the user, 2026-09-25: their sprites flashed now and then): the
+   per-frame hiding ran before the scene's step and the character's own updates, which could switch a sprite back on
+   for a frame. A postfix on `EntityControl.LateUpdate` (`EntityControl.cs:3672`) hides a stand-in after both, just
+   before drawing. First reload with the guard: it waited for the running scene. Not yet seen.
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,
