@@ -9,14 +9,8 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Dev-only measurement: for every map, load its dialogue table the way the game does
-    // (Resources "Data/Dialogues<lang>/Maps/<map>", MainManager.cs:2981). For each line that carries an item
-    // command, starts an event or handles money, write out only the command tokens: the item commands plus the flag
-    // and event commands on the same line, and the money commands (checkmoney, money: fares and prices, added
-    // 2026-09-25 for the Metal Island boat).
-    //
-    // Never the prose: this is the game's text, so only the |command,args| tokens leave it. The output goes to
-    // the BepInEx folder, not the repo; facts taken from it are written into agent_docs by hand.
+    // Dev only: dumps the item, flag, event, money and transfer command tokens of every map's dialogue lines.
+    // Never the prose: the game's text stays out; only |command,args| tokens leave it.
     internal static class ScriptDump
     {
         private static readonly Regex Token = new Regex(@"\|([a-zA-Z]+)((?:,[^|]*)?)\|");
@@ -32,15 +26,13 @@ namespace BugFablesAP
         {
             "checkmoney", "money", "setvar", "checkvar"
         };
-        // Commands that move the party to another map from a dialogue line (MainManager.cs:13262-13280): transfer and
-        // warp take a map id (or varN) and an optional position; loadmap reloads a map. Added 2026-09-25 to list every
-        // transfer that isn't a door (entrances like the bar's hatch, and places a scene sends you).
+        // Dialogue commands that send the party to another map.
         private static readonly HashSet<string> TransferCommands = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "transfer", "warp", "loadmap"
         };
 
-        // Returns true once it has run (successfully or not), so the caller stops asking.
+        // True once it has run, successfully or not.
         internal static bool TryRun(ManualLogSource log)
         {
             if (MainManager.languageid < 0)
@@ -88,7 +80,6 @@ namespace BugFablesAP
                             transfers.Add(tokenText);
                         }
                     }
-                    // Lines that start an event are kept too: they're where story steps begin.
                     if (items.Count > 0 || money.Count > 0 || transfers.Count > 0 || flags.Exists(t => t.StartsWith("event,") || t.StartsWith("discovery,")))
                     {
                         lines++;

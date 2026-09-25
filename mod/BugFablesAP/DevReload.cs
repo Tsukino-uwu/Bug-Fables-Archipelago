@@ -7,14 +7,8 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Dev only. ScriptEngine's FileSystemWatcher can't work in this game: the Mono it ships throws
-    // NotImplementedException from `new FileSystemWatcher(path)`, inside ScriptEngine.Awake (2026-09-24, with
-    // BepInEx's WriteUnityLog on). So the watcher option has to stay off.
-    // So this polls our own DLL in BepInEx/scripts once a second. When it changes, it sets ScriptEngine's own
-    // `shouldReload` flag, and ScriptEngine's Update performs the reload exactly as its watcher would.
-    //
-    // Inert unless ScriptEngine is loaded, which only happens on a dev machine. Field names were read from
-    // ScriptEngine.dll r11.1 with ilspycmd (`shouldReload`, `autoReloadTimer`).
+    // Dev only: ScriptEngine's FileSystemWatcher throws in this game's Mono, so this polls our DLL once a second and
+    // sets ScriptEngine's private shouldReload flag. Inert unless ScriptEngine is loaded.
     internal sealed class DevReload
     {
         private readonly ManualLogSource log;
@@ -78,8 +72,7 @@ namespace BugFablesAP
             DateTime now = File.Exists(dllPath) ? File.GetLastWriteTimeUtc(dllPath) : lastWrite;
             if (now != lastWrite)
             {
-                // Not in the middle of a scene, a conversation or a battle: a reload there orphaned the stand-ins the old
-                // plugin had made for a running scene (the spider fight's, 2026-09-25). Wait for a free moment.
+                // Never mid-scene, dialogue or battle: a reload there orphans the stand-ins the old plugin made.
                 MainManager mm = MainManager.instance;
                 if (mm != null && (mm.inevent || mm.message || MainManager.battle != null))
                 {

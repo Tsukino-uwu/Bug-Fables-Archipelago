@@ -32,8 +32,7 @@ namespace BugFablesAP
         private ApConnection connection;
         private LocationChecks checks;
         private ItemReceiver receiver;
-        // The details last tried automatically: new details connect at once; the same details only retry after an
-        // unreachable server or a dropped connection (ApConnection.ShouldRetry).
+        // The details last tried automatically: the same details only retry after an unreachable server or a drop.
         private string lastAttempt;
         private bool wasEnabled;
         private bool scriptDumpDone;
@@ -79,16 +78,13 @@ namespace BugFablesAP
                 "Dev only, with DevConsole. A text file the console also reads: each line is run as a typed command, "
                 + "then the file is emptied. Lets a developer outside the game drive a test. Empty = off.");
             DevConsole.CommandFile = devCommandFile.Value;
-            // Dev only: doors rewritten by hand, a proof of concept of the entrance randomizer (2026-09-25).
             DoorShuffle.TestDoors = Config.Bind("Debug", "TestDoors", "",
                 "Dev only. Doors rewritten by hand: Map/Door=LikeMap/LikeDoor;... makes that door lead where the other one leads "
                 + "(entity names). Empty = off.").Value;
-            // Dev only: a stand-in for a random start (the user, 2026-09-25), until the seed chooses one.
             QualityOfLife.TestStart = Config.Bind("Debug", "TestStart", "",
                 "Dev only. A map name (MainManager.Maps), optionally @ the map you arrive from, e.g. "
                 + "BugariaMainPlaza@BugariaOutskirtsOutsideCity: a new file starts there, arriving through that map's door into "
                 + "it (without @, the first door found). A stand-in for a random start. Empty = off.").Value;
-            // Dev only: one starting party member (the user, 2026-09-25), a rehearsal before the yaml option.
             PartyMembers.StartMember = Config.Bind("Debug", "TestStartMember", -1,
                 "Dev only. The one party member a randomizer file has (0 Vi, 1 Kabbu, 2 Leif): the story adds nobody else; "
                 + "the console's addmember adds one. -1 = off.").Value;
@@ -118,9 +114,7 @@ namespace BugFablesAP
             {
                 TextProbe.Enable(Log, Guid);
             }
-            // Address and port are separate so a player usually edits only the port (the user, 2026-09-24).
-            // A server on this computer needs the ws:// prefix: a bare "localhost:38281" timed out on
-            // 2026-09-24, and ws://127.0.0.1:38281 logged in.
+            // A server on this computer needs the ws:// prefix; a bare localhost:38281 times out.
             server = Config.Bind("Connection", "Address", "archipelago.gg",
                 "The Archipelago server's address: archipelago.gg for a hosted room, or ws://127.0.0.1 for a server "
                 + "on this computer.");
@@ -143,7 +137,6 @@ namespace BugFablesAP
             SaveRedirect.Enable(Log, Guid);
             ItemSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             KeptOpen.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
-            // The panel's Difficulty and Detector rows (the user, 2026-09-24): defaults Normal and On.
             difficulty = Config.Bind("Archipelago", "Difficulty", "Normal", new ConfigDescription(
                 "Normal leaves it to the game; Hard acts as if the Hard Mode medal were equipped; Hardest as if the save had "
                 + "the HARDEST code, never written into the save. Boss prize medals are paid out on every setting. "
@@ -171,9 +164,7 @@ namespace BugFablesAP
             Log.LogInfo($"{Name} {Version} loaded. GrantProbe={grantProbeEnabled.Value} TextProbe={textProbeEnabled.Value}");
         }
 
-        // While the Archipelago mod is enabled and the details are filled in, connect on its own (the user,
-        // 2026-09-24: less friction than a Connect button). A refusal waits for the details to change; an
-        // unreachable server or a dropped connection retries on its own (ApConnection). Disabling disconnects.
+        // Connects on its own while enabled with details filled in; a refusal waits for new details. Disabling disconnects.
         private void AutoConnect()
         {
             bool enabled = randomizerEnabled.Value;
@@ -220,7 +211,6 @@ namespace BugFablesAP
             return address.Length > 0 && hasPort && slot.Value.Trim().Length > 0;
         }
 
-        // "address:port", or the address alone when no port is set (it may carry one already).
         private string Target()
         {
             string address = server.Value.Trim().TrimEnd('/');
@@ -235,8 +225,7 @@ namespace BugFablesAP
 
         private void Update()
         {
-            // An exception thrown from Update goes to Unity's log, which this game doesn't write and BepInEx
-            // doesn't copy by default. So catch and log it here, once per distinct message.
+            // Unity's log isn't written by this game, so log exceptions here, once per distinct message.
             try
             {
                 Tick();
@@ -254,7 +243,7 @@ namespace BugFablesAP
 
         private void Tick()
         {
-            // Looked up on the first frame rather than in Awake, so ScriptEngine's own object exists by then.
+            // On the first frame, not in Awake, so ScriptEngine's own object exists.
             if (!devReloadChecked)
             {
                 devReloadChecked = true;
@@ -355,7 +344,6 @@ namespace BugFablesAP
             ShopSwap.Disable();
             ItemShops.Disable();
             DoorShuffle.Disable();
-            // ScriptEngine destroys the old instance on reload. Say so, so a reload shows up in the log.
             Log?.LogInfo($"{Name} {Version} unloaded.");
         }
     }

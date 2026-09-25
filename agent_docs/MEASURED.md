@@ -846,6 +846,21 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 - ArchipelagoSocketHelper tries wss:// first for a bare address and falls back to ws://. Used by `ApConnection.cs`.
 - slot_data location_shops: {location id: {shop, medal}}, one location per copy a medal shop ever stocks, done when the save marks that copy bought (ShopSwap). Used by `ApConnection.cs`.
 
+### Map data, doors, dumps and probes, hot reload
+
+- Interacting with an item shop slot (`Fixedshop<n>`, an item entity: animid 0, animstate the item id) puts the price in `flagvar[1]` and the item's name in `flagstring[0]`, then opens the shopkeeper's buy talk; looking at a slot opens its description box from `itemdata[0, id, 0]` and `[.., 2]`. The `additem` command only adds to the bag list, with no item-get box (NPCControl.cs:4374-4378, NPCControl.cs:4220-4226, MainManager.cs:12570-12571). Used by `ItemShops.cs`.
+- A map's entity table (`Data/EntityData/<map id>`, one line per entity, fields split by `}`) holds an entity's `data` count at field 60 (values from 61) and its `vectordata` count at field 71 (each vector three fields from 72); names are in `Data/EntityData/Names/<map id>names`, one per line in the same order (MapControl.CreateEntities, MapControl.cs:1540-1566, MapControl.cs:1454). Used by `DoorShuffle.cs`.
+- A door's `data[4] == 1` means TransferMap skips the walk into the door (`vectordata[0]`): a hole or a ladder. Used by `DoorShuffle.cs`.
+- Grass that drops an item picks one `vectordata` entry at random and drops item x of it, so a grass entity's `vectordata` is its item list (NPCControl.cs:5976-5983). Used by `EntityDump.cs`.
+- `GlowTrigger` components are the electric triggers, which the bubble shield also blocks (GlowTrigger.cs:189); `Hazards` type `WalkableSpike` is what the bubble shield walks over (Hazards.cs:207). Map prefabs load from Resources `Prefabs/Maps/<map>` (MainManager.cs:9652); dialogue tables from `Data/Dialogues<lang>/Maps/<map>` (MainManager.cs:2981) . Used by `MapDump.cs`, `ScriptDump.cs`.
+- Dialogue commands that move the party to another map: `transfer` and `warp` take a map id (or varN) and an optional position; `loadmap` reloads a map (MainManager.cs:13262-13280). Used by `ScriptDump.cs`.
+- `MapControl.autoevent` holds (flag, event) pairs: the map starts the event once while the flag is off, then sets the flag; these are story steps no entity or dialogue starts (MapControl.cs:874-883). Used by `MapDump.cs`.
+- Loading a save allocates new `flags`/`regionalflags`/`crystalbflags` arrays of the same length, so a watcher must compare array identity, not length, or a load reads as mass flag flips (MainManager.cs:17274). Used by `GrantProbe.cs`.
+- ScriptEngine's FileSystemWatcher can't run in this game: its Mono throws NotImplementedException from `new FileSystemWatcher(path)` inside ScriptEngine.Awake (2026-09-24), so DevReload polls the DLL and sets ScriptEngine's private `shouldReload` (with `autoReloadTimer`), field names read from ScriptEngine.dll r11.1 with ilspycmd. Used by `DevReload.cs`.
+- A hot reload during a scene, conversation or battle orphaned the stand-ins the old plugin made for a running scene (the spider fight, 2026-09-25), so DevReload waits for a free moment. Used by `DevReload.cs`.
+- World pickups pass the item id to SetText as `var,0`: NPCControl.CheckItem puts it in `flagvar[0]` first. Used by `TextProbe.cs`.
+- The plugin is built with a Windows ("full") pdb: ScriptEngine reads the plugin through Mono.Cecil with symbols and can't read a portable pdb, so the plugin would silently never load (measured in the author's other project, 2026-08-28). Used by `BugFablesAP.csproj`.
+
 ## Quests: to measure (when quests come into scope)
 
 - **The pause menu's quest list groups quests by chapter and shows done / not done** (the user,

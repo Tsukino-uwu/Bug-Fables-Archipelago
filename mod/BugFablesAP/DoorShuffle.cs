@@ -9,17 +9,8 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // The entrance randomizer (the user, 2026-09-25: every door, experimental until its logic is done). A door to another
-    // map is an entity whose data says where it leads: walking in calls TransferMap(data[0], vectordata[0], vectordata[1],
-    // vectordata[2]) (NPCControl.cs:5458-5461): the target map, the walk on this side, where the party appears, where it
-    // then walks. A shuffled door "leads where another door leads": after the map builds its entities, the door's data
-    // and its vectordata from [1] on are replaced by the other door's, read from that door's own map's entity table
-    // (Data/EntityData/<map>, fields split by '}', at the positions MapControl.CreateEntities reads, MapControl.cs:1540-1566:
-    // the data count at 60, the vectordata count at 71) and its names table (Data/EntityData/Names/<map>names, one name
-    // per entity, MapControl.cs:1454). What belongs to this side stays: vectordata[0], the walk into it, and data[4], set
-    // to 1 when there is no walk (a hole, a ladder). data[1..3] (the camera on arrival) and the arrival jump (the door
-    // entity's emoticonoffset.x, field 175, read by TransferMap) come from the other door. The list comes from
-    // slot_data (door_targets); a dev setting (Debug.TestDoors) can add pairs by hand.
+    // The entrance randomizer: after a map builds its entities, a door's data and vectordata[1..] are replaced by another
+    // door's, read from that door's map's entity table. vectordata[0] (the walk in) and data[4] stay this side's.
     internal static class DoorShuffle
     {
         internal sealed class Target
@@ -35,7 +26,6 @@ namespace BugFablesAP
         private static Func<bool> randomizerOn;
         private static Harmony harmony;
 
-        // Dev only: "Map/Door=LikeMap/LikeDoor;..." (Debug.TestDoors).
         internal static string TestDoors;
 
         internal static void Enable(ManualLogSource logger, string guid, ApConnection conn, Func<bool> on)
@@ -106,8 +96,7 @@ namespace BugFablesAP
                     log.LogWarning($"[doors] {map}: {t.Door} kept as it is ({t.LikeMap}/{t.LikeDoor} not readable as a door)");
                     continue;
                 }
-                // data[4] == 1 means the party doesn't walk into this door (a hole, a ladder: TransferMap skips the
-                // walk to vectordata[0]), so it belongs to this side and stays, like vectordata[0].
+                // data[4] == 1: no walk into this door (a hole, a ladder), so it stays with this side.
                 int ownWalk = door.data != null && door.data.Length > 4 ? door.data[4] : 0;
                 var own = door.vectordata != null && door.vectordata.Length > 0 ? door.vectordata[0] : vectors[0];
                 if (data.Length > 4 || ownWalk != 0)
@@ -118,7 +107,7 @@ namespace BugFablesAP
                 door.data = data;
                 door.vectordata = (Vector3[])vectors.Clone();
                 door.vectordata[0] = own;
-                // The jump on arrival is read from the door walked into (TransferMap: caller.entity.emoticonoffset.x).
+                // TransferMap reads the arrival jump from the door walked into (its entity's emoticonoffset.x).
                 if (door.entity != null)
                 {
                     door.entity.emoticonoffset = new Vector3(jump, door.entity.emoticonoffset.y, door.entity.emoticonoffset.z);
@@ -127,7 +116,6 @@ namespace BugFablesAP
             }
         }
 
-        // A door's data and vectordata from its map's entity table, found by name.
         private static bool Read(string mapName, string doorName, out int[] data, out Vector3[] vectors, out float jump)
         {
             data = new int[0];

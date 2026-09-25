@@ -9,32 +9,18 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Dev-only measurement: for every map, read its entity table the way MapControl.CreateEntities does
-    // (Resources "Data/EntityData/<map id>" plus "Data/EntityData/Names/<map id>names", MapControl.cs:1446) and
-    // write out the fields logic needs: what each entity is, its item (for pickups), the flags it needs
-    // (requires), the flags that hide it (limit), its data, its dialogue selectors, and its regional and
-    // activation flags. The offsets are the parser's (MapControl.cs:1476-1640); every count slot is followed by
-    // a fixed-size block, so the positions never move.
-    //
-    // A second file lists every item and medal id with its enum name and in-game name, to name the apworld's
-    // items. Both go to the BepInEx folder, not the repo; facts taken from them are written into agent_docs.
+    // Dev only: dumps every map's entity table (fields the logic needs) and every item and medal name to the BepInEx folder.
     internal static class EntityDump
     {
         private const int RequiresCount = 38, LimitCount = 49, DataCount = 60, DialogueCount = 102;
-        // vectordata: a count, then that many (x, y, z). Grass that drops an item picks one entry at random and drops
-        // item x (NPCControl.cs:5976-5983), so this is the grass's item list.
+        // vectordata: a count, then (x, y, z) each; for item grass, x is the item list.
         private const int VectorCount = 71;
         private const int RegionalFlag = 190, ActivationFlag = 194;
-        // Which inside (a building's interior on the same map) the entity belongs to; -1 outdoors. An indoor pickup
-        // is reached through that inside's door, whose own flags gate it (found 2026-09-24: a pickup the apworld had
-        // outdoors was in a house that opens later).
+        // The inside (a building's interior on the same map) the entity belongs to; -1 outdoors.
         private const int InsideId = 178;
-        // Where the entity starts (fields 6-8, MapControl.cs:1661) and its emoticonoffset's x (fields 175-177,
-        // MapControl.cs:1629), which for a door is the jump on arrival (MainManager.TransferMap reads the door's
-        // entity.emoticonoffset.x). Positions pair a door with its way back (dev-scripts/door-graph.py).
+        // Fields 175-177: emoticonoffset, whose x on a door is the jump on arrival.
         private const int Position = 6, EmoticonOffset = 175;
 
-        // Returns true once it has run (successfully or not), so the caller stops asking.
         internal static bool TryRun(ManualLogSource log)
         {
             if (MainManager.languageid < 0 || MainManager.itemdata == null || MainManager.badgedata == null)
@@ -64,7 +50,7 @@ namespace BugFablesAP
                 maps++;
                 string[] lines = data.ToString().Split('\n');
                 string[] nameLines = names.ToString().Split('\n');
-                // The game stops one short: the last line is the empty one after the final newline.
+                // The last line is the empty one after the final newline.
                 for (int i = 0; i < lines.Length - 1 && i < nameLines.Length; i++)
                 {
                     try
@@ -95,8 +81,7 @@ namespace BugFablesAP
             log.LogInfo($"[dump] {rows} entities from {maps} maps ({bad} unreadable) -> {outPath}");
         }
 
-        // A count slot, then that many values right after it (in groups of `width`), joined by spaces; groups
-        // joined by ':'. Empty when the count is 0.
+        // A count slot, then that many values in groups of `width`: values joined by spaces, groups by ':'.
         private static string List(string[] f, int countAt, int width)
         {
             int n = int.Parse(f[countAt].Trim(), CultureInfo.InvariantCulture);

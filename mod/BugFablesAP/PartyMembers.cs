@@ -8,24 +8,19 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // One starting party member (the user, 2026-09-25: Starting Party Member Off / Vi / Kabbu / Leif / Random, the other
-    // two as items). Every party change the story makes goes through MainManager.ChangeParty(ids, fromscratch,
-    // destroyoldentity) (the two-argument form forwards to it, MainManager.cs:3635; EventControl calls it about 20 times),
-    // so a prefix takes out of `ids` every member not allowed yet: Vi joining in the opening, Leif at the lake. What a
-    // scene then asks of a missing member is PartyFit's (the invisible stand-ins). Allowed: the starting member and the
-    // members received. Only while the Archipelago mod is enabled, and only while a starting member is set.
+    // One starting party member: a prefix on MainManager.ChangeParty, which every story party change goes through,
+    // drops members not allowed yet (the starting one and those received are).
     internal static class PartyMembers
     {
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
         private static Harmony harmony;
 
-        // Dev only for now ([Debug] TestStartMember): -1 off, 0 Vi, 1 Kabbu, 2 Leif. Later from slot_data.
+        // -1 off, 0 Vi, 1 Kabbu, 2 Leif.
         internal static int StartMember = -1;
-        // Members received (dev: the console's addmember). Later from the server's items.
         internal static readonly HashSet<int> Received = new HashSet<int>();
 
-        // Only with a map loaded: the title screen sets up a party of its own (seen 2026-09-25: the guard rewrote it there).
+        // Needs a map: the title screen sets up a party of its own.
         internal static bool Active => StartMember >= 0 && randomizerOn != null && randomizerOn() && MainManager.map != null;
 
         internal static bool Allowed(int id) => id == StartMember || Received.Contains(id);
@@ -41,8 +36,7 @@ namespace BugFablesAP
                 return;
             }
             harmony = new Harmony(guid + ".members." + DateTime.UtcNow.Ticks);
-            // Last, so the opening skip's own prefix (QualityOfLife, which refuses Event8's Kabbu-alone call) sees the
-            // story's ids as they are.
+        // Last, so QualityOfLife's opening-skip prefix sees the story's ids unchanged.
             harmony.Patch(changeParty, prefix: new HarmonyMethod(typeof(PartyMembers), nameof(BeforeChangeParty)) { priority = Priority.Last });
             MethodInfo startEvent = AccessTools.Method(typeof(EventControl), nameof(EventControl.StartEvent), new[] { typeof(int), typeof(NPCControl) });
             if (startEvent != null)
@@ -62,8 +56,7 @@ namespace BugFablesAP
             harmony = null;
         }
 
-        // The party the story last asked for, before the guard: its first member is who the story thinks leads, which
-        // PartyFit uses when a scene played that member with a stand-in.
+        // The story's party before the guard; its first member is who the story thinks leads (PartyFit reads it).
         internal static int[] LastStoryParty;
 
         private static void BeforeChangeParty(ref int[] ids)
@@ -80,7 +73,7 @@ namespace BugFablesAP
             }
             if (kept.Length == 0)
             {
-                // A scene asking for only members not allowed yet (Kabbu alone after the slides): keep who is here.
+        // The story asked only for members not allowed yet (Kabbu alone after the slides): keep who is here.
                 MainManager mm = MainManager.instance;
                 kept = mm?.playerdata != null && mm.playerdata.Length > 0
                     ? mm.playerdata.Select(p => p.trueid).Where(Allowed).ToArray()
@@ -95,17 +88,8 @@ namespace BugFablesAP
             ids = kept;
         }
 
-        // Leif's joining scene (Event14, the lake) when Leif is already in the party (the user, 2026-09-25, Leif alone): it
-        // takes its Leif from the follower list (map.tempfollowers[0], EventControl.cs:3339), which Leif isn't on, and threw
-        // ArgumentOutOfRange at its start. Its point, Leif joining, is moot, and its fight (two of enemy 1, no escape) needs
-        // something that hits enemies in the air, in chapter 1 only Vi's beemerang (the user). So it doesn't start; the mod
-        // leaves what it leaves: flag 16 (Leif joined, set before the fight), the regional flag of the creature it removes
-        // (entity 5, EventControl.cs:3501-3502) with that creature gone, and Leif off the follower list.
-        //
-        // Always skipped with Archipelago on (the user, 2026-09-25: "just always skip it, it's not a check"): it's no location,
-        // only the logic's "Leif Joins" event at the lake, and without its fight the lake no longer quietly needs Vi. When Leif
-        // isn't in the party yet he joins right there, as the scene's ChangeParty({0, 1, 2}) would have him; with one
-        // starting member the guard above still decides whether he may.
+        // Leif's lake scene (Event14) never starts with Archipelago on: it reads its Leif from map.tempfollowers[0] and
+        // crashes when he's in the party. Its effects are done here instead: flag 16, entity 5's regional flag, the follower entry.
         private static bool BeforeStartEvent(int id)
         {
             MainManager mm = MainManager.instance;
@@ -127,12 +111,7 @@ namespace BugFablesAP
             return false;
         }
 
-        // Leif joins the party for real, where the story has him start following (the user, 2026-09-25: with the lake scene
-        // skipped, "it could just happen after the spider, when Leif first starts to follow"). The spider scene's end sets
-        // flag 27 and makes the room's Leif a follower (EventControl.cs:2278-2291); Leif Joins (flag 16) is in the same logic
-        // region as the lake, so the logic is unchanged. Once that scene is over: Leif into the party (as the lake scene's
-        // ChangeParty({0, 1, 2}) would, then SetPlayers), flag 16, and the story's follower Leif gone with its entry. With
-        // one starting member only once Leif is allowed (received); otherwise he's an item still to find.
+        // Leif joins once the spider scene is over (flag 27, not yet 16), where the story has him start following.
         private static void TickLeifJoins(MainManager mm)
         {
             if (randomizerOn == null || !randomizerOn() || MainManager.map == null || mm.flags == null || !mm.flags[27] || mm.flags[16]
@@ -146,8 +125,6 @@ namespace BugFablesAP
             log.LogInfo("[members] after the spider scene: " + (joined ? "Leif joined the party" : "Leif was already in the party") + "; flag 16 set");
         }
 
-        // Leif into the party where it stands, and every story copy of him gone (the follower entry and characters drawn as
-        // Leif that aren't the party's). Returns whether he joined now.
         private static bool JoinLeif(MainManager mm)
         {
             bool joined = false;
@@ -181,11 +158,7 @@ namespace BugFablesAP
             return joined;
         }
 
-        // A party member can't also be a story follower (the user, 2026-09-25: three Leifs after the spider fight). The
-        // story makes Leif a temporary follower there (extrafollowers.Add(2), EventControl.cs:2281, removed when he joins,
-        // :3533), and every map load makes a follower character for each entry (MapControl.cs:826-829, AddFollower). The
-        // entries are character ids (animid: 0 Vi, 1 Kabbu, 2 Leif). So while a member is in the party, their entry goes and
-        // any follower copy of them with it. Each frame; the cost is a list lookup.
+        // Each map load makes a follower per extrafollowers entry (an animid), so a party member's entry and copies go.
         internal static void Tick()
         {
             MainManager mm = MainManager.instance;
@@ -220,12 +193,7 @@ namespace BugFablesAP
             }
         }
 
-        // Only one character carries the player's controls (the user, 2026-09-25: a second Leif copying every move). The
-        // spider fight's scene calls ChangeParty({0, 1}) then the no-argument SetPlayers() (EventControl.cs:1711-1712), which
-        // makes new player characters without removing the old ones (MainManager.SetPlayers()); in the story the old ones
-        // are the scene's own actors, but with one member those are stand-ins, and the old Leif stayed, controls and all
-        // (the console's who: two "Player 0", both playerentity, tag Player). Outside scenes, twice a second, any other
-        // character with a PlayerControl than the leader's goes.
+        // SetPlayers() without arguments leaves the old player characters, controls and all: remove any not the party's.
         private static float nextSweep;
 
         private static void RemoveStrayPlayers(MainManager mm)
@@ -251,8 +219,7 @@ namespace BugFablesAP
             }
         }
 
-        // A member arriving (dev: addmember; later a received item): into the party behind the others, with a character
-        // where the party stands, as the dev console's addleif does (ChangeParty with fromscratch, then SetPlayers).
+        // As the dev console's addleif: ChangeParty with fromscratch (without it the list comes out empty), then SetPlayers.
         internal static string Add(int id)
         {
             MainManager mm = MainManager.instance;

@@ -10,18 +10,12 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Dev-only measurement: which flagvar and flagstring slots the game's text uses. Both arrays are saved
-    // (MainManager.SaveFile), and one unused slot of each can hold the received-item count and the seed's name
-    // without a new save format. The code's own uses are read from the decompiled source; this covers the other
-    // half, the dialogue scripts, which address slots by number.
-    //
-    // Scans every TextAsset the game ships under Resources, in every language. Writes only command tokens that
-    // name a slot, never prose, to the BepInEx folder (not the repo), with how often and where each appears.
+    // Dev only: dumps which flagvar/flagstring slots the game's text uses (every TextAsset, every language); command
+    // tokens only, never prose.
     internal static class VarDump
     {
         private static readonly Regex Token = new Regex(@"\|([a-zA-Z]+)((?:,[^|]*)?)\|");
-        // Commands that take a flagvar or flagstring slot as an argument (MainManager.SetText's switch), plus any
-        // token with a "var,N" argument (giveitem,1,var,0 and the like).
+        // Commands that take a flagvar or flagstring slot, plus any token with a "var,N" argument.
         private static readonly HashSet<string> SlotCommands = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "setvar", "addvar", "copyvar", "checkvar", "flagvar", "flagvalue", "var", "string", "sstring", "clonestring",

@@ -7,20 +7,8 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Item shops (the user, 2026-09-25): the first purchase of each item in each shop is a check, then the shop sells its
-    // own item again, like a respawning pickup. An item shop's slots are built by the map from the shopkeeper's data:
-    // one "Fixedshop<n>" entity per stock entry, an item (animid 0) with animstate the item id, its shopkeeper set
-    // (MapControl.cs:1715-1745). Looking at a slot opens its description box, from itemdata[0, id, 0] (name) and [.., 2]
-    // (description) (NPCControl.cs:4220-4226); interacting puts the price in flagvar[1] and the name in flagstring[0]
-    // (NPCControl.cs:4374-4378) and opens the shopkeeper's buy talk, whose buy line pays and adds the item silently:
-    // checkmoney, money minus the price, additem,0,var,0 (BugariaCommercial line 16, ScriptDump; additem only adds to the
-    // bag list, MainManager.cs:12570-12571, no item-get box). So for a slot whose first purchase is a location:
-    //   - the slot shows the seed's item, and its name and description read as the seed's while those two methods run;
-    //   - when the buy line is read (GetDialogueText), its additem is taken out: nothing local is given;
-    //   - once the dialogue is over, berries paid (down by the price) mean it was bought: the check goes out through the
-    //     respawning pickups' queue, and the seed's item is held up. Not paid (too few berries, "no"): nothing.
-    // Nothing in the save marks it, as for respawning pickups: the server's checked list and the mod's queue do. Once the
-    // check is done the slot is the shop's own item again, sold as usual.
+    // Item shops: the first purchase of each item in each shop is a check, then the shop's own item again. The buy line's
+    // additem is taken out, and berries down by the price (flagvar[1]) once the dialogue ends mean it was bought.
     internal static class ItemShops
     {
         private static ManualLogSource log;
@@ -28,13 +16,13 @@ namespace BugFablesAP
         private static Func<bool> randomizerOn;
         private static Harmony harmony;
 
-        // The slot whose buy talk is open, and a purchase waiting to be confirmed by the berries paid.
+        // pending: the slot whose buy talk is open; watching: a purchase to confirm by the berries paid.
         private static long pending = -1;
         private static long watching = -1;
         private static int moneyBefore;
         private static int price;
 
-        // The game's own sprite of each slot the mod changed, put back once its check is done.
+        // The game's own sprite of each slot the mod changed.
         private static readonly Dictionary<EntityControl, Sprite> original = new Dictionary<EntityControl, Sprite>();
 
         internal static void Enable(ManualLogSource logger, string guid, ApConnection conn, Func<bool> on)
@@ -64,7 +52,7 @@ namespace BugFablesAP
             harmony = null;
         }
 
-        // The location this slot's first purchase is, while its check isn't done; else -1.
+        // The location this slot's first purchase is while its check isn't done, else -1.
         private static long LocationOf(NPCControl npc)
         {
             Dictionary<long, ApConnection.ItemShopSlot> shops = connection?.LocationItemShops;

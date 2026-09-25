@@ -5,13 +5,8 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Dev-only measurement: the game's events and pickups are dialogue scripts passed to MainManager.SetText,
-    // with commands such as |giveitem,1,27| and |flag,15,true| inline (MainManager.cs:10626). This logs every
-    // script that contains an item command, together with the map and the calling NPC. That shows which flag
-    // travels with which grant, so the two can be tied together as one location.
-    //
-    // Read-only: a Harmony prefix that logs its arguments and always lets the original run.
-    // Patches the 10-argument overload that the other three SetText overloads all call.
+    // Dev only: logs every dialogue script (MainManager.SetText, the 10-argument overload the others call) that carries
+    // an item command, with the map and calling NPC. Read-only prefix.
     internal static class TextProbe
     {
         private static ManualLogSource log;
@@ -20,8 +15,7 @@ namespace BugFablesAP
         internal static void Enable(ManualLogSource logger, string guid)
         {
             log = logger;
-            // A distinct id per load: UnpatchSelf removes every patch with its id, so if the old instance's
-            // OnDestroy ever ran after the new one's Awake, a shared id would strip the new patch too.
+            // A distinct id per load: a shared id's UnpatchSelf from the old instance would strip the new patch too.
             harmony = new Harmony(guid + ".textprobe." + DateTime.UtcNow.Ticks);
             var target = AccessTools.Method(typeof(MainManager), "SetText", new[]
             {
@@ -39,7 +33,6 @@ namespace BugFablesAP
 
         internal static void Disable()
         {
-            // ScriptEngine reloads leave old patches behind unless removed; a second copy would log twice.
             harmony?.UnpatchSelf();
             harmony = null;
         }
@@ -63,8 +56,7 @@ namespace BugFablesAP
             string where = map == null ? "none" : $"{map.mapid}/{map.areaid}";
             string who = caller == null ? "none" : caller.name;
             string shown = text.Length > 800 ? text.Substring(0, 800) + "…(" + text.Length + " chars)" : text;
-            // World pickups pass the item id as "var,0": it's in flagvar[0], set by NPCControl.CheckItem before
-            // SetText is called.
+            // World pickups pass the item id as "var,0": NPCControl.CheckItem puts it in flagvar[0] first.
             string var0 = "";
             if (text.IndexOf(",var,0", StringComparison.Ordinal) >= 0 && MainManager.instance?.flagvar != null)
             {

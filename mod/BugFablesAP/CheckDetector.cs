@@ -8,19 +8,8 @@ using HarmonyLib;
 
 namespace BugFablesAP
 {
-    // The Detector for every check (the user, 2026-09-25: beep for any kind of Archipelago check left in the room, not
-    // only the hidden items the medal looks for). The medal's whole effect is one value: a second after a map loads, the
-    // game asks its objects (NPCControl.CheckHidden) and the map (MapControl.CheckDisc) whether something hidden is here,
-    // and if so sets map.hiddenitem = 100; the map's update then shows the "!" over the leader and plays the beep
-    // (MapControl.cs:885-896). So a postfix on CheckDisc (run by Invoke one second after every map load, MapControl.cs:319,
-    // whether or not the map has discoveries) sets that same value when one of the seed's locations on this map isn't done
-    // yet: pickups, gifts, shops and item shops by their map, discoveries by the map's own discoveryids. Only while the
-    // Detector counts as equipped (the medal, or the panel's Detector row through MedalAssist) and the mod is enabled.
-    //
-    // In a seed the mod's answer is the only one (the user, 2026-09-25: beep with one check or more left, quiet when the
-    // room is done): the game's own checks would still beep for hidden things the seed doesn't have. So the objects'
-    // CheckHidden doesn't run, CheckDisc is replaced, and a music record's Start (which sets the value as the map builds,
-    // MusicSpinner.cs:54-57, used on the first free frame) has it cleared right after. Outside a seed, vanilla.
+    // The Detector beeps for any of the seed's checks left on this map. Its whole effect is map.hiddenitem = 100, so in a
+    // seed CheckDisc is replaced, CheckHidden skipped and a music record's value cleared: the mod's answer is the only one.
     internal static class CheckDetector
     {
         private static ManualLogSource log;
@@ -123,9 +112,7 @@ namespace BugFablesAP
             }
         }
 
-        // Done when the server has the check, or (offline, or not sent yet) when the save says so: the location's flag,
-        // its crystal berry, its journal entry, a shop copy's bought bit, or a respawning pickup or item shop's first
-        // purchase taken this session.
+        // Done when the server has it, or, offline or not sent yet, when the save or this session says so.
         private static bool Done(long id)
         {
             ArchipelagoSession session = connection.Session;

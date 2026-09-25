@@ -5,15 +5,8 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Hold-ups waiting for a free moment (the user, 2026-09-25): a discovery just recorded shows what it found, and an
-    // item received from another player is shown as the Item animation setting says (Off, Progression, All). They
-    // wait for the same free moment the receiver waits for (ItemReceiver.Busy: no battle, scene, dialogue, menu or map
-    // change) and play one at a time. Display only: the item itself is given by the receiver, never here.
-    //
-    // Bursts (the user tried 50 in a row at "All": about a minute of boxes): only the first waits for a settled moment,
-    // the rest follow as soon as the previous box closes, every item still gets its own box (a "...and N more" summary
-    // felt off to the user), and holding the skip button runs the game faster while the mod's hold-up is on screen, so
-    // the item-get's fixed pauses (WaitForSeconds in Giveitem) pass quickly too.
+    // Queued hold-ups (display only; the receiver gives the item), played one at a time when the player is free.
+    // In a burst only the first waits for a settled moment; holding skip speeds up the item-get's fixed pauses.
     internal static class HoldUps
     {
         private sealed class Entry
@@ -24,16 +17,12 @@ namespace BugFablesAP
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
         private static readonly List<Entry> waiting = new List<Entry>();
-        // Frames to let a started hold-up open its text before the next may start.
         private static int settle;
-        // Free frames in a row before the first of a burst plays: a chain of scenes and fights (the spider fights: scene,
-        // fight, scene, fight, scene) can leave a free frame between two links (the user, 2026-09-25), and a hold-up
-        // there would cut in. Within a burst, the next follows after NextFor.
+        // A chain of scenes and fights can leave a lone free frame between links: the first of a burst waits for FreeFor.
         private const int FreeFor = 30;
         private const int NextFor = 3;
         private static int freeFrames;
         private static bool inBurst;
-        // Frames since the mod's last hold-up started, while its box may still be up; and whether this sped the game up.
         private static bool showing;
         private static bool speeding;
         private const float HoldSpeed = 4f;
@@ -74,7 +63,6 @@ namespace BugFablesAP
                     showing = false;
                     if (waiting.Count == 0)
                     {
-                        // The burst is over once the queue is empty and the last box has closed.
                         inBurst = false;
                     }
                 }
@@ -93,8 +81,7 @@ namespace BugFablesAP
             next.Show();
         }
 
-        // While the mod's own hold-up is on screen and the skip button is held, the game runs faster; otherwise normal.
-        // Only a speed this set is undone, so a scene the game or the mod speeds up itself is left alone.
+        // Only a speed this set is undone, so a speed-up by the game or the mod elsewhere is left alone.
         private static void Speed()
         {
             bool want = showing && MainManager.instance != null && MainManager.instance.message && MainManager.GetKey(5, hold: true);
@@ -110,7 +97,6 @@ namespace BugFablesAP
             }
         }
 
-        // A reload or a new seed: nothing carries over (the items themselves are already given).
         internal static void Clear()
         {
             waiting.Clear();

@@ -5,12 +5,8 @@ using InputIOManager;
 
 namespace BugFablesAP
 {
-    // Dev-only measurement: what changed between two saves. It decodes both files with the game's own
-    // InputIO.Encrypt (a symmetric XOR with the game's key, InputIO.cs:538), so the key never leaves the game,
-    // and logs which lines differ. For a line of comma-separated true/false values, such as the flags, it logs
-    // which positions flipped.
-    //
-    // Read-only: it only reads the two files, and never writes any save.
+    // Dev only: logs what changed between two saves, decoded with the game's own InputIO.Encrypt so its key never
+    // leaves the game. Read-only.
     internal static class SaveDiff
     {
         internal static void Run(ManualLogSource log, string before, string after)

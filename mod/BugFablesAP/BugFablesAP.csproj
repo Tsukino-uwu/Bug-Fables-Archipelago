@@ -1,12 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <!--
-    The Bug Fables Archipelago BepInEx 5 plugin.
-
-    It compiles against the user's own game assembly through HintPath, with Private=false, so nothing
-    from the game is copied into the build output. Set BugFablesDir when the game is installed
-    somewhere other than Steam's default library:
-      dotnet build -p:BugFablesDir="D:\Games\Bug Fables"
-  -->
+  <!-- Compiles against your own game assembly (HintPath, Private=false: nothing of the game is copied out).
+       Another install: dotnet build -p:BugFablesDir="D:\Games\Bug Fables" -->
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
@@ -14,15 +8,10 @@
     <AssemblyName>BugFablesAP</AssemblyName>
     <RootNamespace>BugFablesAP</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <!--
-      A Windows ("full") pdb, not the SDK's portable default. ScriptEngine reads the plugin through
-      Mono.Cecil with symbols and can't read a portable pdb, so the plugin would silently never load
-      (measured in the author's other project, 2026-08-28).
-    -->
+    <!-- Not portable: ScriptEngine can't read a portable pdb, and the plugin then silently never loads. -->
     <DebugType>full</DebugType>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <!-- Archipelago.MultiClient.Net, websocket-sharp and Newtonsoft.Json are copied into the output by their
-         references below: the game ships none of them. -->
+    <!-- The game ships none of the referenced libraries: copy them to the output. -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <BugFablesDir Condition="'$(BugFablesDir)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Bug Fables</BugFablesDir>
     <GameManaged>$(BugFablesDir)\Bug Fables_Data\Managed</GameManaged>
@@ -30,12 +19,9 @@
 
   <ItemGroup>
     <PackageReference Include="BepInEx.Core" Version="5.4.*" />
-    <!-- Pinned to the game's measured Unity version, 2018.4.12 (agent_docs/MEASURED.md). -->
+    <!-- The game's Unity version. -->
     <PackageReference Include="UnityEngine.Modules" Version="2018.4.12" IncludeAssets="compile" />
-    <!-- The package is only downloaded here; its net40 build is referenced by hand below. NuGet would pick
-         the netstandard2.0 build, which runs on the runtime's ClientWebSocket: this game's Mono version of that
-         can't compress (no permessage-deflate). The net40 build runs on the bundled websocket-sharp, which can
-         (agent_docs/apimplementation.md, build step 5). -->
+    <!-- Only downloaded: the net40 build is referenced below, since its websocket-sharp can compress in this Mono. -->
     <PackageReference Include="Archipelago.MultiClient.Net" Version="6.7.1" ExcludeAssets="all" GeneratePathProperty="true" />
   </ItemGroup>
 
@@ -46,10 +32,7 @@
     <Reference Include="websocket-sharp">
       <HintPath>$(PkgArchipelago_MultiClient_Net)\lib\net40\websocket-sharp.dll</HintPath>
     </Reference>
-    <!-- Newtonsoft.Json from the netstandard2.0 folder, not net40: the net40 build compiles code at runtime
-         (DynamicMethod), which this game's Mono can't do ("Supports SRE: False"). It threw
-         PlatformNotSupportedException on the server's first message (2026-09-24). Both builds are
-         Newtonsoft.Json 11.0.0.0, unsigned, so the net40 client library binds to this one. -->
+    <!-- netstandard2.0, not net40: the net40 build needs Reflection.Emit, which this Mono lacks. Same version, so it binds. -->
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(PkgArchipelago_MultiClient_Net)\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
     </Reference>

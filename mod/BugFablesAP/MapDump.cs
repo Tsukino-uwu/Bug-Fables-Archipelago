@@ -9,17 +9,8 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Dev-only measurement: for every map, load its prefab the way MainManager does (Resources
-    // "Prefabs/Maps/<map>", MainManager.cs:9652) WITHOUT instantiating it, and read serialized data only:
-    //   - MapControl.autoevent: (flag, event) pairs; the map starts the event once while the flag is off, then
-    //     sets the flag (MapControl.cs:874-883). These are story steps no entity or dialogue starts.
-    //   - Hazards components by type (Hazards.cs:8). WalkableSpike is what the bubble shield walks over
-    //     (Hazards.cs:207); Hole is a candidate for hover.
-    //   - GlowTrigger components (GlowTrigger.cs): electric, which the bubble shield also blocks (:189).
-    //   - Scenery switched by story flags, into bugfablesap-mapflags.tsv: ConditionChecker (hidden, or moved to
-    //     activepos, by requires/limit flags, ConditionChecker.cs) and FlagAnimation (plays anims[i] while flags[i]
-    //     is set, FlagAnimation.cs). A door's model can be one of these, apart from its load zone entity.
-    // Nothing is instantiated, so no Awake/Start runs. Output goes to the BepInEx folder, not the repo.
+    // Dev only: dumps every map prefab's auto-start events, hazards, electric triggers, discoveries and flag-switched
+    // scenery. Prefabs are loaded, never instantiated, so no Awake/Start runs.
     internal static class MapDump
     {
         internal static bool TryRun(ManualLogSource log)
@@ -30,8 +21,6 @@ namespace BugFablesAP
             }
             string outPath = Path.Combine(Paths.BepInExRootPath, "bugfablesap-mapdump.tsv");
             var sb = new StringBuilder();
-            // discoveries: the map's own list of the journal discoveries found on it (MapControl.discoveryids, which the
-            // Detector medal's hint reads, MapControl.cs:406-418), added 2026-09-25 for Shuffle Discoveries.
             sb.AppendLine("map\tautoevents(flag:event)\thazards(type:count)\tglowtriggers\tdiscoveries");
             var flagged = new StringBuilder();
             flagged.AppendLine("map\tcomponent\tobject\trequires\tlimit\tdetail");

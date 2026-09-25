@@ -6,18 +6,8 @@ using BepInEx.Logging;
 
 namespace BugFablesAP
 {
-    // Gives the items the server sends, the game's own way, one per frame and only while the player is free.
-    //
-    // The count of items already given lives in the save, in flagvar[60], and the seed the save belongs to in
-    // flagstring[5]: two slots nothing in the game's code or text uses (agent_docs/MEASURED.md, "Free save slots
-    // for the mod"). Both are saved with the game's own save. So a fresh save starts at 0 and the server replays
-    // everything, and reloading an older save gives exactly the items that save hasn't had yet.
-    //
-    // Writes go through the same operations the game's own code uses: items[kind].Add(id) as the story events add
-    // key items (e.g. EventControl.cs:19958), and flagvar/flagstring element writes as its setvar command does.
-    //
-    // Never during a battle: a battle retry restores flagvar and the bag from a snapshot taken at battle start but
-    // not key items (BattleControl.cs:614-624, :3443), so a key item given mid-battle would be given again.
+    // Gives the items the server sends, one per frame, only while the player is free. The given count (flagvar[60])
+    // and the seed (flagstring[5]) live in the save. Never in battle: a retry restores flagvar but not key items.
     internal sealed class ItemReceiver
     {
         internal const int CountSlot = 60;
@@ -34,8 +24,7 @@ namespace BugFablesAP
             this.connection = connection;
         }
 
-        // Whether the save in play belongs to the connected seed. Binds an unbound save on first contact.
-        // null: can't tell yet (no save, or not connected).
+        // Whether the save in play belongs to the connected seed (null: can't tell yet). Binds an unbound save.
         internal static bool? SaveMatchesSeed(ApConnection connection, ManualLogSource log)
         {
             MainManager mm = MainManager.instance;
@@ -54,8 +43,7 @@ namespace BugFablesAP
             }
             if (bound != seed && AdoptOtherSeed != null && AdoptOtherSeed())
             {
-                // Dev only (Debug.AdoptSeed): a test file moves to a new test seed without replaying the opening. The
-                // count goes back to 0 so the new seed replays every item; the old seed's items and flags stay.
+                // Dev only (Debug.AdoptSeed): re-tie a test file to a new seed; the count goes back to 0 for a full replay.
                 log.LogWarning($"[recv] AdoptSeed: this save belonged to seed {bound}; now tied to {seed}, received count "
                     + $"{mm.flagvar[CountSlot]} -> 0. The old seed's items and flags stay in it: a test file only.");
                 mm.flagstring[SeedSlot] = seed;
@@ -69,7 +57,6 @@ namespace BugFablesAP
             return bound == seed;
         }
 
-        // Dev only: whether a save tied to another seed may be re-tied to the connected one (Plugin, Debug.AdoptSeed).
         internal static System.Func<bool> AdoptOtherSeed;
 
         internal void Tick(bool randomizerOn)
@@ -86,8 +73,7 @@ namespace BugFablesAP
             int given = matches == true ? mm.flagvar[CountSlot] : -1;
             string state = blocked != null ? "waiting: " + blocked
                 : $"giving: {given} of {received.Count} received";
-            // Log what the guard decided, when it changes (busy/free flips often, so only the reason's first word
-            // and the counts are compared).
+        // Log the guard's decision when it changes; busy/free flips often, so all busy reasons compare equal.
             string key = blocked != null && blocked.StartsWith("busy") ? "busy" : state;
             if (key != lastState)
             {
@@ -100,7 +86,7 @@ namespace BugFablesAP
             }
             if (given < 0 || given > received.Count)
             {
-                // A count past what the server sent: the save had more items than this slot has now. Leave it.
+                // The save counts more items than the server has sent this slot: leave it.
                 if (waitingAt != -2)
                 {
                     log.LogWarning($"[recv] this save counts {given} items received, but the server has sent {received.Count}; nothing given");
@@ -126,10 +112,7 @@ namespace BugFablesAP
             ShowIfWanted(item, given);
         }
 
-        // An item another player found for you is held up as the Item animation setting says (the user, 2026-09-25);
-        // your own finds already showed theirs when you made them. Display only: it was just given above. Only items that
-        // arrive during play: the ones the server already had at login are a replay (a new save rebuilding, a reconnect),
-        // and a new save on a busy seed would otherwise play a hold-up for each (the user chose silence for those).
+        // Another player's item gets a hold-up per the Item animation setting; items the server had at login (a replay) don't.
         private void ShowIfWanted(ItemInfo item, int index)
         {
             if (index < connection.ReceivedAtLogin)
@@ -168,20 +151,18 @@ namespace BugFablesAP
             }
             if (kind == ItemIds.CrystalKind)
             {
-                // The count the game raises when a crystal berry is picked up (NPCControl.cs:5658), the shop's currency.
+                // flagvar[14]: the crystal berry count, the shop's currency.
                 mm.flagvar[14]++;
                 return $"added a crystal berry (count now {mm.flagvar[14]})";
             }
             if (kind == ItemIds.MoneyKind)
             {
-                // The game's own money reward: added, capped at 999, the counter shown (MainManager.cs:11534).
                 mm.showmoney = 1f;
                 mm.money = UnityEngine.Mathf.Clamp(mm.money + gameId, 0, 999);
                 return $"added {gameId} berries (now {mm.money})";
             }
             if (kind == ItemIds.MedalKind)
             {
-                // The game's own medal add: unequipped, like any medal found (MainManager.cs:16974).
                 MainManager.AddBadge(gameId);
                 return "added to medals";
             }
@@ -198,7 +179,6 @@ namespace BugFablesAP
             return null;
         }
 
-        // Null when the player is free: on a map, in control, and nothing else on screen.
         internal static string Busy(MainManager mm)
         {
             if (MainManager.player == null) return "busy: no player";

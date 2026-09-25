@@ -3,12 +3,8 @@ using BepInEx.Logging;
 
 namespace BugFablesAP
 {
-    // Dev-only measurement: what else happens when a key item arrives. It logs every key item added to
-    // MainManager.instance.items[1], and every flip of flags / regionalflags / crystalbflags, each with the
-    // frame and map, so a key-item grant can be matched to the flag that marks its location as done.
-    //
-    // Read-only: it copies arrays and compares; it never writes game state.
-    // Cost per frame: comparing 750 + 100 + 50 bools plus the key-item list, and logging only on change.
+    // Dev only: logs every key item added and every flip of flags/regionalflags/crystalbflags, with frame and map,
+    // to match a grant to the flag marking its location done. Read-only.
     internal sealed class GrantProbe
     {
         private readonly ManualLogSource log;
@@ -18,8 +14,7 @@ namespace BugFablesAP
         private readonly Dictionary<int, int> keyItemCounts = new Dictionary<int, int>();
         private bool primed;
         private int frame;
-        // Loading a save allocates new arrays of the same length (MainManager.cs:17274), so a length check
-        // alone would report a whole save load as flag flips. Watch the array identity instead.
+        // Loading a save allocates new arrays of the same length: watch array identity, not length.
         private string lastBlocked = "";
         private string[] quests;
         private bool[] flagsRef;
@@ -40,7 +35,6 @@ namespace BugFablesAP
                 : mm.items.Length < 2 ? $"items has {mm.items.Length} lists"
                 : mm.items[1] == null ? "items[1] is null"
                 : null;
-            // A silent early return hid a whole play session once (2026-09-24). Say why, each time it changes.
             if (blocked != lastBlocked)
             {
                 log.LogInfo($"[probe] frame {frame} {(blocked == null ? "reading the game" : "waiting: " + blocked)} map={Where()}");
@@ -61,7 +55,7 @@ namespace BugFablesAP
             {
                 flagsRef = mm.flags;
                 keyItemsRef = mm.items[1];
-                // A new save or a load replaces the arrays: take a baseline silently, never report it as flips.
+                // A new save or a load: take a baseline silently.
                 flags = (bool[])mm.flags.Clone();
                 regional = mm.regionalflags == null ? new bool[0] : (bool[])mm.regionalflags.Clone();
                 crystal = mm.crystalbflags == null ? new bool[0] : (bool[])mm.crystalbflags.Clone();
@@ -123,8 +117,7 @@ namespace BugFablesAP
                 keyItemCounts[entry.Key] = entry.Value;
             }
 
-            // Quest board: MainManager.boardquests is 3 lists of quest ids (MainManager.cs:2219); which list means
-            // what is what this measures. Log any list whose contents changed.
+            // Quest board: 3 lists of quest ids; log any list whose contents changed.
             if (mm.boardquests != null)
             {
                 if (quests == null || quests.Length != mm.boardquests.Length)
