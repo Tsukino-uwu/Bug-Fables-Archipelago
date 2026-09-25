@@ -140,3 +140,20 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   arrive from, e.g. `BugariaMainPlaza@BugariaOutskirtsOutsideCity`. A new file starts there, arriving through that
   map's door into it (without `@`, the first door found), a stand-in for a random start until the seed chooses one
   (`copy-dev.ps1 -DebugSet TestStart=...`; empty turns it off).
+
+## Every Debug setting
+
+All live under `[Debug]` in `BepInEx/config/bugfables.archipelago.cfg`, are off by default, and are switched with
+`copy-dev.ps1 -DebugOn <name>` / `-DebugOff <name>` (step 3 above). Dev installs and test files only.
+
+| Setting | What it does |
+|---|---|
+| `DevConsole` | F9 opens the dev console (section above). |
+| `DevCommandFile` | With `DevConsole`: a text file whose lines are run as console commands, then emptied, so a test can be driven from outside the game. |
+| `InfJump`, `OneHit` | With `DevConsole`: jump again in mid-air; every hit on an enemy does at least 99. The console's `infjump` and `onehit` flip them. |
+| `AdoptSeed` | A save tied to another seed is re-tied to the connected one and replays every item (section "A local server to test against"). |
+| `TestStart`, `TestStartMember`, `TestDoors` | A new file's start map, its one party member, doors rewritten by hand (Dev console section). |
+| `GiveMoney` | Berries to add once (capped at 999), then back to 0. |
+| `GrantProbe`, `TextProbe` | Log every key item added and flag flipped / every dialogue line with an item command, with the map. |
+| `SaveDiff` | Two save file names, `a.dat\|b.dat`: once per load, logs what differs between them. |
+| `EntityDump`, `ScriptDump`, `MapDump`, `VarDump`, `SpriteDump` | Write the game's entities, dialogue commands, map events, script slots or GUI sprites to `bugfablesap-*.tsv` / `.png` in the BepInEx folder. |
