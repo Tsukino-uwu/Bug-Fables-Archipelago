@@ -563,7 +563,9 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    (`GetEntity(-4)` to `(-6)`) gets the same stand-in. The user asked why not the leader, as for followers: a scene
    moves every member at once, so the leader would be pulled to two spots and play another character's animations. Limits: a scene that changes the party, or
    needs a member's ability, still needs the member (a logic rule, as for the boat); some scenes will look odd, and each
-   one that used a stand-in is logged, to skip or hold back one by one. Built, not yet seen.
+   one that used a stand-in is logged, to skip or hold back one by one. **Seen (the user, 2026-09-25):** the barkeeper's
+   first talk played through with Leif's stand-in (naming Leif, as expected), so it went on the skip list, only while
+   its flag 158 is unset: the same scene later takes bounties and gives their rewards.
    **The rule since (the user, 2026-09-25):** a scene that gives an item may be skipped *as long as the item can still
    be received*, and fewer cutscenes are preferred, as an option at least. So a skip now has to keep every check the
    scene holds (sent by the mod, or moved to something the player still does). Next candidate, the user's idea: the

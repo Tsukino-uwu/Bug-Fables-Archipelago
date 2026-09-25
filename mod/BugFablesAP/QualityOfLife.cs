@@ -39,6 +39,7 @@ namespace BugFablesAP
             internal string Map;
             internal int Event;
             internal int[] Flags; // null: fast-forward instead of skipping
+            internal int OnlyWhileUnset = -1; // skipped only while this flag is unset (a scene with a later, needed part)
         }
 
         private static readonly Scene[] Scenes =
@@ -50,6 +51,10 @@ namespace BugFablesAP
             // and 11 (EventControl.cs:334-407). The bridge's end state is set by the scene itself, not by its flags, so
             // it's fast-forwarded.
             new Scene { Map = "SnakemouthBridgeRoom", Event = 1, Flags = null },
+            // The barkeeper's first talk (the user, 2026-09-25: it played with Leif's stand-in, naming Leif): camera and party
+            // moves, one line, then flag 158 (EventControl.cs:13052-13080). The same scene later takes bounties and gives
+            // their rewards (the else branch), so it's skipped only while flag 158 is unset.
+            new Scene { Map = "UndergroundBar", Event = 83, Flags = new[] { 158 }, OnlyWhileUnset = 158 },
         };
 
         // The Metal Island boat's fares: the pier sailor's lines 16 (300 berries) and 19 (90), each
@@ -351,7 +356,8 @@ namespace BugFablesAP
                 return false;
             }
             Scene scene = SceneFor(id);
-            if (scene == null || scene.Flags == null || !SkipCutscenes.Value || !randomizerOn())
+            if (scene == null || scene.Flags == null || !SkipCutscenes.Value || !randomizerOn()
+                || (scene.OnlyWhileUnset >= 0 && MainManager.instance.flags[scene.OnlyWhileUnset]))
             {
                 return true;
             }
