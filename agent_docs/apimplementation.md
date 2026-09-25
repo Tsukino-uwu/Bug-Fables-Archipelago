@@ -209,7 +209,11 @@ coupled, off by default) shuffles 508 doors with every area kept reachable; a ge
    (the mod guide, step 10, (8)); Artis's talk (lines for Vi and Kabbu, now stand-ins in conversations too) gave the
    permit; the gate scene played; the grass tutorial (Event10) played once stand-ins arrive at once, its reward sent.
    **Then a real gate:** the corridor after the tutorial (`BugariaOutskirtsSnakemouthCorridor2`) needs the horn to
-   cross, so Snakemouth Den needs Kabbu (or the horn, once moves are items) in the logic. Opt-in only: fighting with one or two changes
+   cross, so Snakemouth Den needs Kabbu (or the horn, once moves are items) in the logic.
+   **Further (the user, 2026-09-25):** the trapdoor scene, landing in the right spot once stand-ins stay where a scene
+   puts them; the spider fight's lead-in once stand-ins get their physics body when made; and **the spider fight itself
+   with Leif alone** (the user's screenshot: Leif alone against the spider, the battle menu working). In the story that
+   fight is Kabbu alone at first, then Vi joins. Opt-in only: fighting with one or two changes
    the game a lot. Open questions: the story may need all three after chapter 1, and adding a member outside the
    story's own event hasn't worked yet (log.md, 2026-09-24: `ChangeParty` left Leif without a character).
    **Solved 2026-09-25:** without `fromscratch`, `ChangeParty`'s copy loop never runs (`for m < 0`,
