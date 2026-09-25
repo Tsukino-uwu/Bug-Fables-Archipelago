@@ -863,7 +863,9 @@ says so (its flag, crystal berry, journal entry, a shop copy's bought bit). Only
 or more left, quiet when the room is done): the game's own checks would still beep for hidden things the seed doesn't
 have, so `NPCControl.CheckHidden` doesn't run, `CheckDisc` is replaced by the mod's answer (a beep or silence, logged
 either way), and a music record's `Start`, which sets the value as the map builds and is used on the first free frame
-(`MusicSpinner.cs:54-57`), has it cleared right after. Outside a seed, all vanilla. Built, not yet seen.
+(`MusicSpinner.cs:54-57`), has it cleared right after. Outside a seed, all vanilla. **Seen (the user, 2026-09-25):**
+in the Residential District it beeped for the rooftop item, then, with both items taken, for the quest reward still
+handed out there (location 16, the delivery quest), as intended; quiet in the plaza with none left.
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page), `ShopSwap.cs`,
 `CheckDetector.cs`.*
