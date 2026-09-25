@@ -3,14 +3,16 @@
 An [Archipelago](https://archipelago.gg) randomizer for *Bug Fables: The Everlasting Sapling*: a BepInEx mod for
 the game plus an apworld for the Archipelago generator.
 
-**Status: not playable yet.** A tiny apworld generates seeds, and the mod logs in to an Archipelago server
-from inside the game, sends checks and receives items. Next: every key item and medal in the pool, with
-field abilities shuffled as items and logic that follows the story's chapter order.
+**Status: not playable yet.** A small apworld generates seeds, and the mod logs in to an Archipelago server
+from inside the game, sends checks and receives items. The world is opening up one gate at a time (open world is
+the default: the Outskirts rocks are gone from the start). Next: every key item and medal in the pool, with field
+abilities shuffled as items.
 
 ## How it will work
 
 - **The apworld** (`apworld/bug_fables/`) tells the generator which items and locations exist and which key
-  items gate which areas. Today it covers 23 early locations.
+  items gate which areas. Today it covers 25 early locations, 30 with the opt-in *Shuffle Discoveries*. Each
+  yaml toggle that adds checks says how many in its description.
 - **The mod** (`mod/`) runs inside the game. Finishing a location sends a check to the server, and every
   item, including your own, arrives from the server and is given to you through the game's own item
   system. Because items are remote only, a new save can recover everything the server has sent.
@@ -49,6 +51,9 @@ On the game's main menu, choose **Archipelago**. The panel has:
   it to the medal.
 - **Archipelago**: Enabled keeps randomizer saves in their own folder, apart from your normal saves.
   The main menu shows it as "Archipelago (Enabled)" or "(Disabled)".
+- **Quality of life**: opens a second page of settings that speed up the game, all on by default: **Fast text**
+  (dialogue is instant, and holding skip races through it), **Skip intro** (a new game's story slides pass by on
+  their own) and **Free boat** (the boat to Metal Island costs nothing). Cancel goes back.
 - Under the rows, a line explaining the highlighted one, and a line showing the connection's state. Cancel
   (X, or B on a gamepad) backs out of the panel.
 
