@@ -655,7 +655,8 @@ target map, the walk on this side, where the party appears, where it then walks.
 is: after the map builds its entities, A's `data` and its `vectordata` from `[1]` on are replaced by B's, read from B's
 own map's entity table and names table (`Data/EntityData/Names/<map>names`); A's own `vectordata[0]` stays. The pairs
 come from `slot_data` (`door_targets`) or, for a test, the dev setting `TestDoors`. First test: the Outskirts' east exit
-leading where the plaza's door to the Commercial District leads. Built, not yet seen.
+leading where the plaza's door to the Commercial District leads. **Seen (the user, 2026-09-25):** from the Outskirts'
+bottom-right exit they appeared on the right side of the Commercial District, exactly as when coming in from the plaza.
 
 **What a door carries, side by side** (2026-09-25, reading the rest of `TransferMap`, `MainManager.cs:17467-17620`). A
 door's `data` is more than its target: `[1..3]` switch the camera's offset, angle and limits on arrival (from

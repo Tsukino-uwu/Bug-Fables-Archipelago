@@ -26,6 +26,8 @@ The build and the copy into the game are separate steps. The build never writes 
    (`DevReload: BugFablesAP.dll changed` then `Reloaded all plugins!` in `BepInEx/LogOutput.log`).
    - `-DebugOn EntityDump,ScriptDump` / `-DebugOff GrantProbe` switch Debug settings in the mod's config
      in the same run, and read the result back.
+   - The copied DLL is stamped with the current time, since DevReload watches write times: copying an unchanged
+     build to reload a changed `-DebugSet` did nothing until then (2026-09-25).
    - Every file it replaces (the plugin, the config) is first copied to `stage/backup/<time>/`;
      `-Restore <time>` puts it back. It writes nothing else in the game: the libraries and ScriptEngine's
      config stay the once-per-setup copy of step 2.

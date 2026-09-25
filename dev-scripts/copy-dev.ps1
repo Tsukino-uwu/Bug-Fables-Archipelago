@@ -73,6 +73,9 @@ foreach ($f in 'BugFablesAP.pdb', 'BugFablesAP.dll') {
         catch { if ($try -eq 10) { throw }; Start-Sleep -Milliseconds 300 }
     }
 }
+# DevReload watches the DLL's write time, and Copy-Item keeps the source's, so copying an unchanged build (to reload a
+# changed -DebugSet) never reloaded (2026-09-25). Stamp the copy with now.
+(Get-Item (Join-Path $scripts 'BugFablesAP.dll')).LastWriteTimeUtc = [DateTime]::UtcNow
 $hash = (Get-FileHash (Join-Path $scripts 'BugFablesAP.dll') -Algorithm SHA256).Hash.Substring(0, 12)
 Write-Output "copied BugFablesAP.dll (sha256 $hash...) into BepInEx\scripts; DevReload will pick it up"
 
