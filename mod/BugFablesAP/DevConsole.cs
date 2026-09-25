@@ -552,6 +552,17 @@ namespace BugFablesAP
                 }
                 UnityEngine.Object.Destroy(box.gameObject, 1f);
             }
+            // That field holds the letters ("Text: ...", MainManager.cs:10677, :10814); the speech box itself is the
+            // Textbox prefab kept in maintextbox (:10781), which stayed on screen after the first try (the user).
+            if (MainManager.maintextbox != null)
+            {
+                DialogueAnim boxAnim = MainManager.maintextbox.GetComponent<DialogueAnim>();
+                if (boxAnim != null)
+                {
+                    boxAnim.shrink = true;
+                }
+                UnityEngine.Object.Destroy(MainManager.maintextbox, 1f);
+            }
             if (MainManager.player != null && MainManager.player.entity != null && MainManager.player.entity.rigid != null)
             {
                 MainManager.player.entity.rigid.constraints = RigidbodyConstraints.FreezeRotation;
