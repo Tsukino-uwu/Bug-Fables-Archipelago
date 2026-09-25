@@ -121,6 +121,14 @@ be wrong.
    off a map (put back at `lastpos`, `PlayerControl.cs:688-691`), and ice (`EntityControl.inice`, set by ice maps).
    First measure how each is applied. A yaml option (how many traps), so its own build step when built.
 
+20. **Enemy group sizes, a yaml option** (the user, 2026-09-26): its own option, apart from *Enemy Shuffle*, off by
+   default, for example `vanilla / shuffled / random` (fights of any size swap places; or 1-4 enemies rolled per
+   fight). The game takes any number of ids: 4 on the field, the rest in reserve (`BattleControl.cs:787-800`). Only
+   ordinary map fights change size. A boss or special fight is one unit of several slots (the Sand Wyrm's head and
+   tail, Mother Chomper with two Fly Traps, the Wasp General's squad, Zasp and Mothiva, Cenn and Pisci, Stratos and
+   Delilah, Maki's team; the rematch machine's switch lists them) and always moves whole, as the shuffle already
+   moves whole id lists. Built after enemy scaling, so a bigger group stays fair. Its own build step when built.
+
 **Known issues:**
 
 - **A Kabbu / horn rule is owed** once party members or the basic horn become items (Starting Party Member).
