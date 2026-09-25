@@ -622,7 +622,8 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    `ChangeParty({0, 1})` then the no-argument `SetPlayers()` (`EventControl.cs:1711-1712`), which makes new player
    characters without removing the old ones; in the story those become the scene's actors, but with stand-ins the old
    Leif stayed, controls and all. Now, outside scenes, twice a second, any character with player controls other than
-   the leader's is removed (logged). On loading it removed the stray at once; `who` then listed one player.
+   the leader's is removed (logged). On loading it removed the stray at once; `who` then listed one player. **Seen
+   (the user, 2026-09-25):** no extra Leif any more.
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,
