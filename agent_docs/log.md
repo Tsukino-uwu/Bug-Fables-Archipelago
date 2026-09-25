@@ -532,3 +532,32 @@ Newest last. What was tried, what happened, what the user said.
   seed from the scratchpad.
 - **Next:** the scan's open list before those scenes come up; the Starting Party Member option in the apworld; Placeholders
   for every spot; a two-member start to see Leif join after the spider.
+
+## 2026-09-25 (night): lean comments, licences, the grant paths checked
+
+- **Comments trimmed to the new CLAUDE.md rule** (the user asked for leaner comments): about 1,300 comment lines in
+  `mod/`, `apworld/` and `dev-scripts/` down to about 430. The code is unchanged: a script compared every file
+  with comments stripped (the C# token by token, the Python by its syntax tree without docstrings) against the
+  commit before, and only the FreeBoat description changed (it lost a provenance note). Build clean, 232 apworld
+  tests passing. Facts that left the code went to MEASURED.md ("What the mod's code relies on") and
+  development.md (why the dev scripts do what they do). The data files' `_comment` fields weren't touched.
+- **Decisions that only lived in code comments**, recorded here:
+  - The dev console logs every story event that starts; asked for on 2026-09-24 to trace Leif's joining.
+  - A dev warp lands on the entity's own start spot in one transfer (origin-then-hop looked like two warps), and
+    blocks walking for a second so a held key doesn't carry the party (2026-09-24).
+  - A missing companion (`GetEntity` 1000 + n) falls back to the party's leader, logged once per place (2026-09-25).
+  - The not-connected popup closes on confirm and on cancel (B on a gamepad), over the save slots (2026-09-24).
+  - The Warp button's Yes / No are two words at fixed spots with the leaf beside the chosen one (a bracketed line
+    shifted when switching); its icon is `guisprites[34]` (a tinted Settings icon looked wrong) (2026-09-25).
+  - Difficulty and Detector default to Normal and On; address and port are separate settings so a player
+    usually edits only the port (2026-09-24).
+- **Licences:** Newtonsoft.Json, shipped by the mod, had no row in licensing.md; now it has one. A release is planned
+  as three downloads (the user): the mod as a drop-in zip with each library's licence notice, the apworld, a yaml
+  (apimplementation.md, Next 6).
+- **The save rule measured:** the game's own `Giveitem` writes items, money and flags directly (it has no setters),
+  and the mod's grants make the same writes (MEASURED.md). One difference: a received crystal berry doesn't mark a
+  berry location found, so the game's berry total counts spots checked. The user was asked about both (the rule's
+  wording and the berry total).
+- **My slip:** in answering, I first called the mod's safety "stricter than many mods" from the rules alone,
+  without reading the code; the user asked whether that was fact or guess, and the check turned up the rule/code
+  mismatch above.
