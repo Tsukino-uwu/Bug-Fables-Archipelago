@@ -154,6 +154,7 @@ namespace BugFablesAP
             PartyMembers.Enable(Log, Guid, () => randomizerEnabled.Value);
             CheckDetector.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             CrystalBerryTotal.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
+            QuestBoards.Enable(Log, Guid, () => randomizerEnabled.Value);
             ShopSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             ItemShops.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             DoorShuffle.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
@@ -343,6 +344,7 @@ namespace BugFablesAP
             PartyMembers.Disable();
             CheckDetector.Disable();
             CrystalBerryTotal.Disable();
+            QuestBoards.Disable();
             ShopSwap.Disable();
             ItemShops.Disable();
             DoorShuffle.Disable();

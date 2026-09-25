@@ -80,7 +80,8 @@ be wrong.
    `MainManager.UpdateArea`). Its own Quality of life row; the logic never counts on it, like the warp.
 12. **A quest board in the starting house** (the user, 2026-09-25): the quests every board lists, taken without
    walking to the town or the bar. Every board shows the same list (`MEASURED.md`, "The quest board"), so it adds no
-   quests, only a shorter way; quest locations' logic then needs the house instead of the town. Design questions open.
+   quests, only a shorter way. Every board lists bounties too (built, build step 9); next, the house's board from
+   the start.
 
 **Known issues:**
 
@@ -716,7 +717,16 @@ follower 30 never leaving. The bridge's trigger (`makiautoevent`) is now held un
 was (`held_until`). Test `TestKeptOpen.test_follower_swap_waits_for_the_first_follower`. Not seen (the user's file is
 past it).
 
-**Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion fallback and statue, Madeleine's house, and the bar with its quest board seen by the user (2026-09-25); Eetl's blocker, the inn, the boat's hold and chapter 2's held scenes not yet seen; an "open start" option planned.
+**Every quest board lists every open quest** (the user, 2026-09-25: all boards should act the same). The game keeps
+one list of open quests, but each board filters it: the five bounties show only on the underground bar's board, and
+every other board hides them (`MEASURED.md`, "The quest board"). In a randomizer save the mod drops that filter, so
+any board, the town's or the starting house's, offers bounties too; what the game hides everywhere (the chapter
+entries, Leif's) stays hidden. The logic needs no change: it never counted on a board, only on the quest's own
+region. **Next, the starting house's board from the start:** it waits for chapter 2 (flag 67), and so does its
+caretaker, an Eetl in the house whose line takes the quest; whether to keep him present early or have the mod play
+that line is decided after reading it in game. *Code: `QuestBoards.cs`.*
+
+**Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion fallback and statue, Madeleine's house, and the bar with its quest board seen by the user (2026-09-25); every board listing bounties (built 2026-09-25), Eetl's blocker, the inn, the boat's hold and chapter 2's held scenes not yet seen; an "open start" option planned.
 
 ---
 
