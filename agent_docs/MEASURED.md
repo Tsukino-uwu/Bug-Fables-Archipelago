@@ -406,6 +406,12 @@ slot of each can hold the mod's own state in the game's own save, with no new fo
   (null checks); taking a quest needs `boardcaller`: it plays `|questprompt|` + that line (`:5683-5694`), whose
   `|activateselectedquest|` moves the quest to taken and sets its `boardquestdata[id, 3]` flag (`:13899-13910`).
   The story adds quests to the list (`ChangeBoardQuest(id, 0)`).
+- **But each board filters that list** (2026-09-25, code read, `MainManager.GetQuestsBoard`, `:15214`): the five
+  bounties (`BoardQuests` 8 SeedlingKing, 9 FalseMonarch, 10 MotherChomper, 21 Sandwyrm, 23 PeacockSpider) show only on
+  map 30, `UndergroundBar`; every other board hides them. Every board hides 11-17 (Prologue to Chapter6), 26 (Leif)
+  and 30 (only the test room shows all). So the starting house's board (`BugariaOutskirtsOutsideCity` entity 26,
+  inside 0, waits for flag 67 like the plaza's) lists exactly what the plaza's does. The open list measured on
+  2026-09-24, `[0]` = 8,9,10,21,23, was all bounties: the bar showed them and any other board showed nothing.
 
 ## Input (2026-09-24)
 
