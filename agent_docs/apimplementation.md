@@ -229,6 +229,12 @@ coupled, off by default) shuffles 508 doors with every area kept reachable; a ge
    `InnPortrait`, Event37, discovery 4) require 67. Both stand-ins are kept out of the way and both discoveries kept
    present (`kept_open`, `kept_present`); the two events ask for members by name and set no story flag. Test
    `TestKeptOpen`. Seeds generated solo and with APQuest; **seen (the user):** the statue can be examined.
+   **The inn from the start too** (the user, 2026-09-25: couldn't stay while escorted): the innkeeper's default line
+   (53) hands the talk to the follower, "We mustn't keep the Queen waiting."; from flag 67 line 1 offers a stay. The
+   line's flag is repointed to 691 (set by every new game, `dialogue_flags`, as for the bar entrance). Test
+   `TestKeptOpen.test_inn_open_before_the_briefing`; seeds solo and with APQuest. Not yet seen. Also found: the stay
+   costs a fixed 9 berries, "3 berries a bug" written for three (`checkmoney,9` then `money,-9`, line 2), whatever the
+   party's size.
    **Decided (the user, 2026-09-25): the members present act out the missing ones' parts** in scenes, where they would
    be and what they would do, instead of standing idle beside invisible stand-ins ("looks more fun"). Plan: the real
    leader plays the story's leader (the first member of the party the story expects); only other missing members stay

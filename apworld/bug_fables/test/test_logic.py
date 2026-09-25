@@ -298,6 +298,11 @@ class TestKeptOpen(BugFablesTestBase):
         for entity in ("StatueDesc", "InnPortrait"):
             self.assertIn({"map": "BugariaMainPlaza", "entity": entity}, slot["kept_present"])
 
+    def test_inn_open_before_the_briefing(self) -> None:
+        # Before flag 67 the innkeeper hands the talk to the follower ("We mustn't keep the Queen waiting.").
+        flags = self.world.fill_slot_data()["dialogue_flags"]
+        self.assertIn({"map": "BugariaMainPlaza", "entity": "Innkeeper", "flag": 67, "to": 691}, flags)
+
 
 class TestBossPrize(BugFablesTestBase):
     # The first boss's prize is handed over by Artis; the client knows it's done when its prize slot reaches 3.
