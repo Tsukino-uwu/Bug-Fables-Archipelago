@@ -110,6 +110,14 @@ be wrong.
    waits for (build step 12). Picking one named spot (a given town), as some worlds allow, is a later idea, only if
    players ask; `towns` and `random` come first (the user, 2026-09-26). Its own build step when built.
 
+19. **Traps, an idea for later** (the user, 2026-09-26; not planned yet). A trap sent to this game takes effect when
+   the server delivers it, after any open text box, like any received item. Held up at pickup: its own icon on a red
+   starburst. One icon per trap, so the player knows what's coming. The user's examples: the Mistake medal poisons
+   the party at the start of the next fight; a crystal berry (or something icy) freezes the player in an ice block
+   for 1-3 seconds. Each trap: only with Archipelago on, never a soft-lock (a freeze always ends, even in a scene),
+   nothing written to the save the game wouldn't write, never in logic. First measure how the game applies poison at
+   a fight's start and its own freeze on the map. A yaml option (how many traps), so its own build step when built.
+
 **Known issues:**
 
 - **A Kabbu / horn rule is owed** once party members or the basic horn become items (Starting Party Member).
