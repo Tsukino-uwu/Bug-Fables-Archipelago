@@ -200,6 +200,11 @@ coupled, off by default) shuffles 508 doors with every area kept reachable; a ge
    Party Member: Off / Vi / Kabbu / Leif / Random*; Off is the story's party, otherwise the game starts with that one
    member and the other two are items. Prompted by the stand-ins for missing members in scenes, which make one-member play
    look possible; the story's own joining scenes (Kabbu at the start, Leif at the lake) must then add nobody.
+   **The two joining moments become the two locations** (the user, 2026-09-25): with the option on, whoever starts, the
+   other two members are items, and the story has exactly two joining moments: Vi's in the opening scene and Leif's right
+   after the spider scene (where the mod now has him join). Both become locations whatever the start (Vi's even when you
+   start as Vi), named after the place, not the member ("Snakemouth Den: Fall Room, After the Spider"), so two items get
+   exactly two spots and no filler has to go. With the option off they're no locations; the members just join.
    **Rehearsal built (2026-09-25), the mod only:** a dev setting `TestStartMember` (0 Vi, 1 Kabbu, 2 Leif) and a prefix
    on `MainManager.ChangeParty(ids, fromscratch, destroyoldentity)`, which every party change of the story goes through
    (the two-argument form forwards to it; about 20 calls in `EventControl`, some already one member: Kabbu alone after
