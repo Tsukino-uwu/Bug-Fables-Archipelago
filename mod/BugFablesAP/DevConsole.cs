@@ -380,6 +380,18 @@ namespace BugFablesAP
                         log.LogInfo(guiLog.ToString());
                         return "gui logged";
                     case "addleif": return AddLeif();
+                    case "follower":
+                    {
+                        // A character follows the party, as the story makes one (the follower list, then AddFollower,
+                        // MainManager.cs:10479), e.g. to replay a scene that expects its follower (Maki is 46).
+                        if (parts.Length < 2 || !int.TryParse(parts[1], out int followerId))
+                        {
+                            return "follower <animid>";
+                        }
+                        MainManager.instance.extrafollowers.Add(followerId);
+                        MainManager.AddFollower(null, followerId);
+                        return $"follower {followerId} added; followers now {string.Join(",", MainManager.instance.extrafollowers.Select(f => f.ToString()).ToArray())}";
+                    }
                     case "who":
                     {
                         // Every character drawn as a party member (animid 0 Vi, 1 Kabbu, 2 Leif): what it is and what it
