@@ -636,5 +636,10 @@ purchases, and two copies of one medal can't be told apart in a list of medal id
    runs after `removebadgeshop` but *before* `giveitem`, so the bit isn't set yet and step 1 would put the bought medal
    straight back on the shelf. While a buy prompt's dialogue runs, the game's own removal stands; the next rebuild
    happens after the bit is set. (Caught reading the code before the first test, 2026-09-25.)
+   **Seen (the user, 2026-09-25):** 18 of Merab's 22 copies bought on a new file, each check sent for the copy bought
+   (both TP Plus copies and both Ambusher copies separately), the guard in step 5 firing every time; after saving,
+   the title screen and loading, exactly the 4 unbought copies stayed, reshuffles included. One flash fixed after: a
+   rebuilt shelf showed the game's own medal sprites for a moment (the swap ran every 15 frames; now every frame for a
+   second after a rebuild).
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page), `ShopSwap.cs`.*

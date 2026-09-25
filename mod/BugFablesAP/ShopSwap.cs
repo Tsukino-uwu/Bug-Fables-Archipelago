@@ -57,7 +57,7 @@ namespace BugFablesAP
             MethodInfo shelf = AccessTools.Method(typeof(NPCControl), nameof(NPCControl.SetBadgeShop), new[] { typeof(bool) });
             if (shelf != null)
             {
-                harmony.Patch(shelf, prefix: new HarmonyMethod(typeof(ShopSwap), nameof(BeforeShelf)));
+                harmony.Patch(shelf, prefix: new HarmonyMethod(typeof(ShopSwap), nameof(BeforeShelf)), postfix: new HarmonyMethod(typeof(ShopSwap), nameof(AfterShelf)));
             }
             MethodInfo pool = AccessTools.Method(typeof(MainManager), nameof(MainManager.UpdateShops));
             if (pool == null)
@@ -89,6 +89,15 @@ namespace BugFablesAP
         // Shopkeepers already stretched: the game rebuilds the shelf on the same shopkeeper after a purchase (SetBadgeShop
         // with refresh), and stretching the stretched spots again drifted the shelf right (a 6th slot appeared).
         private static readonly HashSet<NPCControl> stretched = new HashSet<NPCControl>();
+
+        // A rebuilt shelf's slots appear with the game's own medal sprites, and the swap below ran every 15 frames, so the
+        // vanilla medals flashed on every reshuffle (the user, 2026-09-25). For a second after a rebuild, every frame.
+        private static float shelfBuiltAt = -10f;
+
+        private static void AfterShelf()
+        {
+            shelfBuiltAt = Time.realtimeSinceStartup;
+        }
 
         private static void BeforeShelf(NPCControl __instance)
         {
@@ -332,7 +341,7 @@ namespace BugFablesAP
 
         internal static void Tick()
         {
-            if (Time.frameCount % 15 != 0)
+            if (Time.frameCount % 15 != 0 && Time.realtimeSinceStartup - shelfBuiltAt > 1f)
             {
                 return;
             }
