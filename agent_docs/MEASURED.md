@@ -61,6 +61,21 @@ Read from code only; nothing observed running yet.
   `|flag,<activationflag>,true|` and `|regionalflag,<n>,true|` (`NPCControl.cs`, inside `CheckItem`). So an
   object's flag is a natural stable location identity. The save's flags are also where offline checks can
   be recovered from.
+- **What `Giveitem` writes, set against the mod's `ItemReceiver.Give`** (2026-09-25, code read,
+  `MainManager.cs:11457-11563`). The game has no setter functions for this state: its own code writes the
+  fields directly, and so does the mod, write for write:
+  - item and key item: `items[type].Add(id)`. The game drops an item when the bag is full
+    (`items[0].Count + 1 > maxitems`); the mod puts it in storage (`items[2]`, capped at `maxstorage` as the
+    game's `Additem` does, `:12503`), else holds it back.
+  - money: `showmoney = 1`, `money = Clamp(money + n, 0, 999)`: the same two lines.
+  - medal: `badges.Add({id, -2})`, which is the game's `AddBadge` (`:16974`); the mod calls `AddBadge`.
+  - crystal berry: `flagvar[14]++` (the shop currency) **and** `crystalbflags[n] = true`. The mod does only the
+    first. `crystalbflags[n]` marks berry location n as found (the pickup's presence, `NPCControl.cs:818`, `:1349`),
+    so a received berry must not set it. **Consequence:** the game's own berry total, `CrystalBerryAmmount()`
+    (`:10212`, counts `crystalbflags`), counts berry *locations checked*, not berries received. It is shown by the
+    `|cberrytotal|` text command (`:12744`) and unlocks the "all 50 berries" logbook entry (`:4343`).
+  - flags: the game's `|flag,n,v|` command is a plain `flags[n] = v` (`:12462`), and `EventControl` alone
+    sets a literal flag directly 338 times.
 - **Open question for location identity:** most key-item grants live in the dialogue text assets, not the
   code. A hook on the three commands catches every grant, but naming *which* location fired needs context:
   the calling NPC, the map, and the flag set in the same text. That's the next thing to measure.
