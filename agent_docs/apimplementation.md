@@ -59,7 +59,9 @@ seed's (the mod guide, step 9).
    statue (49), the arrival outside Snakemouth (0, Event11), the spider fight (1, Event6), the bridge room's hidden
    spot (2, Event13) and the Underground Door Room's grass (3, Event27). **First check seen:** the user had examined
    the pier statue before the option existed; joining the new seed, the mod found discovery 49 recorded and sent
-   *Outskirts: Pier, Statue*. Tests `TestDiscoveriesOn`, `TestDiscoveriesOffByDefault`. **Parked:** *Shuffle Bestiary* (an entry
+   *Outskirts: Pier, Statue*. **First discovery seen live** (2026-09-25): the user examined the bridge room's hidden
+   spot, Event13 recorded discovery 2, and the check went out with the seed's item back. Tests `TestDiscoveriesOn`,
+   `TestDiscoveriesOffByDefault`. **Parked:** *Shuffle Bestiary* (an entry
    comes only from Spy in battle or from Event65's catch-up NPC, who sells entries for enemies already fought, 19
    berries, 49 for bosses, except the 23 in `excludeids`, which are the missable ones; seeing an enemy on the map
    records nothing) and *Shuffle Recipes* (each needs its ingredients, which the seed may shuffle, so it waits
