@@ -61,10 +61,10 @@ namespace BugFablesAP
         }
 
         // More medals on show at once (the user, 2026-09-25: a QoL thing): Merab's shelf 5 instead of 3 (a 6th past her last
-        // spot was hard to reach, the user), Shades's 6 instead of 2 (hers sat far apart; the user asked for 6).
+        // spot was hard to reach, the user), Shades's 4 instead of 2 (hers sat far apart; 6 packed them too close, the user).
         // The shelf has one slot per entry of the shopkeeper's data, each at vectordata[j] (NPCControl.cs:1531-1534); before
         // it's built, the spots are laid out evenly: {shop: (slots spanning her first to last spot, slots in all)}.
-        private static readonly Dictionary<int, int[]> ShelfSlots = new Dictionary<int, int[]> { { 0, new[] { 5, 5 } }, { 1, new[] { 6, 6 } } };
+        private static readonly Dictionary<int, int[]> ShelfSlots = new Dictionary<int, int[]> { { 0, new[] { 5, 5 } }, { 1, new[] { 4, 4 } } };
 
         // Shopkeepers already stretched: the game rebuilds the shelf on the same shopkeeper after a purchase (SetBadgeShop
         // with refresh), and stretching the stretched spots again drifted the shelf right (a 6th slot appeared).
