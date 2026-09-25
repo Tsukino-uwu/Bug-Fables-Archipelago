@@ -30,6 +30,16 @@
     {"name": "Quest Book", "game_id": 93, "kind": 1, "classification": "progression"},
     {"name": "10 Berries", "game_id": 10, "kind": 3, "classification": "filler"},
     {"name": "15 Berries", "game_id": 15, "kind": 3, "classification": "filler"},
-    {"name": "Crystal Berry", "game_id": 0, "kind": 4, "classification": "filler"}
+    {"name": "Crystal Berry", "game_id": 0, "kind": 4, "classification": "filler"},
+    {"name": "Numb Resistance", "game_id": 21, "kind": 2, "classification": "useful"},
+    {"name": "Poison Needles", "game_id": 22, "kind": 2, "classification": "useful"},
+    {"name": "Secure Pouch", "game_id": 48, "kind": 2, "classification": "useful"},
+    {"name": "Freeze Resistance", "game_id": 33, "kind": 2, "classification": "useful"},
+    {"name": "Meditation", "game_id": 56, "kind": 2, "classification": "useful"},
+    {"name": "Heal Plus", "game_id": 74, "kind": 2, "classification": "useful"},
+    {"name": "Status Relay", "game_id": 45, "kind": 2, "classification": "useful"},
+    {"name": "Prayer", "game_id": 62, "kind": 2, "classification": "useful"},
+    {"name": "Sleepy Needles", "game_id": 41, "kind": 2, "classification": "useful"},
+    {"name": "We Owe Ya!", "game_id": 85, "kind": 2, "classification": "useful"}
   ]
 }

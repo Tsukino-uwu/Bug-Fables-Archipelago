@@ -556,7 +556,8 @@ item entity on the counter (`NPCControl.SetBadgeShop`), looking at one opens its
 shopkeeper's dialogue, whose script checks the money, pays, removes the medal from the stock and gives it
 (`giveitem`). So: the shelf shows the seed's item's sprite; while the description box and the buy prompt are built,
 the medal table briefly holds the seed item's name and description; the `giveitem` is swapped like a gift; and the
-check is the medal leaving the shop's stock, which the save keeps (no "bought" flag exists). **Seen (the user,
+check was first the medal leaving the shop's stock, which the save keeps (no "bought" flag exists; replaced by a bit
+per copy, below). **Seen (the user,
 2026-09-25):** Merab's shelf showed the seed's items (two books, a leaf, a mushroom); buying the Mushroom Gummies at
 medal 12's slot held them up, kept Sleep Resistance out, sent *Medal Shop 4* when medal 12 left her stock, and the
 server's Mushroom Gummies arrived. On joining the seed, two medals bought earlier (before shops were locations) sent
@@ -565,5 +566,26 @@ first-to-last spots (a 6th past the end was hard to reach), and Shades's 4 inste
 shopkeeper's `data` length and each slot sits at `vectordata[j]`, so both are lengthened before the shelf is built,
 once per shopkeeper: the game rebuilds the shelf on the same shopkeeper after a purchase, and a second stretch drifted
 it right. Seen: 5 on Merab's counter (screenshot, 2026-09-25).
+
+**Full stock from the start, the mod owning it** (the user, 2026-09-25; built, not yet seen in game). Every medal a
+shop will ever stock is on its shelf from a new game, and a medal the story stocks twice is two locations. That broke
+"the check is the medal leaving the stock" twice over: a fresh file holds 10 of Merab's 22 copies, which looks like 12
+purchases, and two copies of one medal can't be told apart in a list of medal ids. So:
+
+1. **The stock is set, not read.** The game rebuilds a shop's shelf pool from its stock in one method, `UpdateShops`,
+   on every map start and after each purchase. A prefix there sets the stock to the shop's copies not yet done, as the
+   game's own `shoppool` script command writes it. Medals the story adds later are trimmed there too.
+2. **What was bought is a bit per copy in the save:** a free number slot per shop (`flagvar[7]` Merab's, `[8]`
+   Shades's; both unused by the game's code and text). A shop's copies are its locations in id order. A copy is done
+   once its bit is set or the server has its check, so an offline purchase survives a save and quit and is sent on
+   reconnecting.
+3. **The bit is set by the purchase itself:** the swapped `giveitem` of a shop medal is the moment of buying, the same
+   moment the vanilla medal is kept out, so "check marked" and "item withheld" can't come apart.
+4. **Each shelf slot stands for one copy:** the k-th slot showing a medal is that medal's k-th copy not yet done, and
+   opening a slot's buy prompt remembers that copy, so buying the second TP Plus slot gives what that slot showed.
+5. **Leave the stock alone mid-purchase.** The shelf is rebuilt by the buy line's `kill,caller`, which in Shades's line
+   runs after `removebadgeshop` but *before* `giveitem`, so the bit isn't set yet and step 1 would put the bought medal
+   straight back on the shelf. While a buy prompt's dialogue runs, the game's own removal stands; the next rebuild
+   happens after the bit is set. (Caught reading the code before the first test, 2026-09-25.)
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page), `ShopSwap.cs`.*

@@ -19,6 +19,15 @@ namespace BugFablesAP
     //
     // Shop prices (a Quality of life row: Normal, Half, Free) scale the medal table's price columns in memory, 5 for
     // berries and 7 for crystal berries (MainManager.cs:3474-3488), and put them back when the setting or the mod is off.
+    //
+    // Full stock from the start (the user, 2026-09-25). Every copy a shop will ever stock is a location, a medal the story
+    // adds twice being two ("a 2nd copy is a 2nd check"). A shop's copies are its locations in id order. The mod owns the
+    // stock: whenever the game rebuilds its shelf pool (UpdateShops, on every map start and after each purchase,
+    // MainManager.cs:4087, MapControl.cs:343, NPCControl.cs:1528), badgeshops[shop] is first set to the copies not yet
+    // done, as the game's own shoppool command writes it (MainManager.cs:11638-11657); what the story adds is trimmed there.
+    // Which copies were bought is a bit per copy in the save, flagvar[7] for Merab's and [8] for Shades's (both unused by
+    // the game's code and text, MEASURED.md), set when the swapped giveitem of a purchase runs; a copy is done once its
+    // bit is set or the server has its check. So an offline purchase is kept by the save and sent on reconnecting.
     internal static class ShopSwap
     {
         private static ManualLogSource log;
@@ -44,13 +53,22 @@ namespace BugFablesAP
             var before = new HarmonyMethod(typeof(ShopSwap), nameof(BeforeShow));
             var after = new HarmonyMethod(typeof(ShopSwap), nameof(AfterShow));
             harmony.Patch(desc, prefix: before, postfix: after);
-            harmony.Patch(interact, prefix: before, postfix: after);
+            harmony.Patch(interact, prefix: new HarmonyMethod(typeof(ShopSwap), nameof(BeforeInteract)), postfix: after);
             MethodInfo shelf = AccessTools.Method(typeof(NPCControl), nameof(NPCControl.SetBadgeShop), new[] { typeof(bool) });
             if (shelf != null)
             {
                 harmony.Patch(shelf, prefix: new HarmonyMethod(typeof(ShopSwap), nameof(BeforeShelf)));
             }
-            log.LogInfo("[shop] installed on NPCControl.CreateDescWindow and Interact");
+            MethodInfo pool = AccessTools.Method(typeof(MainManager), nameof(MainManager.UpdateShops));
+            if (pool == null)
+            {
+                log.LogError("[shop] UpdateShops not found: shops keep the game's own stock.");
+            }
+            else
+            {
+                harmony.Patch(pool, prefix: new HarmonyMethod(typeof(ShopSwap), nameof(BeforeUpdateShops)));
+            }
+            log.LogInfo("[shop] installed on NPCControl.CreateDescWindow, Interact and MainManager.UpdateShops");
         }
 
         internal static void Disable()
@@ -106,25 +124,163 @@ namespace BugFablesAP
             log.LogInfo($"[shop] shop {(int)__instance.dialogues[9].x}'s shelf: {slots} slots instead of {shown}");
         }
 
-        // The location a shop slot stands for, or -1.
-        private static long LocationOf(NPCControl npc)
+        // The save's bought-copy bits, one flagvar slot per shop (badgeshops index).
+        internal static readonly int[] BoughtSlot = { 7, 8 };
+
+        private static readonly AccessTools.FieldRef<NPCControl, EntityControl[]> ShelfItems =
+            AccessTools.FieldRefAccess<NPCControl, EntityControl[]>("shopitems");
+
+        // The copy whose buy prompt the player last opened (the slot's Interact), so the purchase is that slot's copy.
+        private static long pendingCopy = -1;
+
+        // A shop's copies, in location id order: (location, medal).
+        private static List<KeyValuePair<long, int>> Copies(int shop)
         {
             Dictionary<long, int[]> shops = connection?.LocationShops;
-            if (shops == null || npc == null || npc.interacttype != NPCControl.Interaction.Shop || npc.entity == null
+            if (shops == null)
+            {
+                return new List<KeyValuePair<long, int>>();
+            }
+            return shops.Where(e => e.Value[0] == shop).OrderBy(e => e.Key)
+                .Select(e => new KeyValuePair<long, int>(e.Key, e.Value[1])).ToList();
+        }
+
+        private static bool Bought(int shop, int index)
+        {
+            int[] vars = MainManager.instance?.flagvar;
+            return vars != null && shop < BoughtSlot.Length && index < 31 && (vars[BoughtSlot[shop]] & (1 << index)) != 0;
+        }
+
+        private static bool Done(int shop, int index, long location)
+        {
+            return Bought(shop, index) || connection.IsDone(location);
+        }
+
+        // Whether the save marks this shop location bought (LocationChecks sends it from here).
+        internal static bool BoughtInSave(long location)
+        {
+            Dictionary<long, int[]> shops = connection?.LocationShops;
+            if (shops == null || !shops.TryGetValue(location, out int[] at))
+            {
+                return false;
+            }
+            int index = Copies(at[0]).FindIndex(c => c.Key == location);
+            return index >= 0 && Bought(at[0], index);
+        }
+
+        // The k-th copy of this medal in this shop not yet done, or -1.
+        private static long UndoneCopy(int shop, int medal, int k)
+        {
+            List<KeyValuePair<long, int>> copies = Copies(shop);
+            for (int i = 0; i < copies.Count; i++)
+            {
+                if (copies[i].Value == medal && !Done(shop, i, copies[i].Key) && k-- == 0)
+                {
+                    return copies[i].Key;
+                }
+            }
+            return -1;
+        }
+
+        // A purchase: the giveitem of a shop location's medal is running (ItemSwap.FindLocation). The copy bought is the
+        // slot's the player chose, else the first not yet done; its bit is set in the save and it becomes the swap's
+        // location. With every copy done (a stale shelf), the first copy's location still swaps: nothing local is given.
+        internal static long Buy(long location)
+        {
+            Dictionary<long, int[]> shops = connection?.LocationShops;
+            MainManager mm = MainManager.instance;
+            if (shops == null || mm?.flagvar == null || !shops.TryGetValue(location, out int[] at))
+            {
+                return location;
+            }
+            int shop = at[0];
+            int medal = at[1];
+            long chosen = pendingCopy;
+            pendingCopy = -1;
+            List<KeyValuePair<long, int>> copies = Copies(shop);
+            int index = copies.FindIndex(c => c.Key == chosen);
+            if (index < 0 || copies[index].Value != medal || Done(shop, index, chosen))
+            {
+                chosen = UndoneCopy(shop, medal, 0);
+                index = copies.FindIndex(c => c.Key == chosen);
+            }
+            if (index < 0)
+            {
+                log.LogWarning($"[shop] medal {medal} bought from shop {shop}, but every copy of it is done; location {location} swaps");
+                return location;
+            }
+            if (shop < BoughtSlot.Length && index < 31)
+            {
+                mm.flagvar[BoughtSlot[shop]] |= 1 << index;
+            }
+            log.LogInfo($"[shop] bought copy {index + 1} of shop {shop} (medal {medal}): location {chosen}, save's bits now {mm.flagvar[BoughtSlot[shop]]}");
+            return chosen;
+        }
+
+        // The game is rebuilding a shop's shelf pool from badgeshops: make each shop with locations hold exactly its copies
+        // not yet done.
+        private static void BeforeUpdateShops()
+        {
+            MainManager mm = MainManager.instance;
+            Dictionary<long, int[]> shops = connection?.LocationShops;
+            if (randomizerOn == null || !randomizerOn() || shops == null || mm?.badgeshops == null || mm.flagvar == null)
+            {
+                return;
+            }
+            // A purchase in flight: the buy line's kill,caller rebuilds the shelf after removebadgeshop but before its
+            // giveitem (Shades's line 3, MEASURED.md; MainManager.cs:12800-12812), so the copy's bit isn't set yet. The
+            // game's own removal stands until the next rebuild, by which time the bit is set.
+            if (mm.message && pendingCopy >= 0)
+            {
+                log.LogInfo($"[shop] shelf rebuilt during a purchase (location {pendingCopy}): stock left as the game has it");
+                return;
+            }
+            foreach (int shop in shops.Values.Select(v => v[0]).Distinct())
+            {
+                if (shop < 0 || shop >= mm.badgeshops.Length)
+                {
+                    continue;
+                }
+                List<KeyValuePair<long, int>> copies = Copies(shop);
+                List<int> wanted = copies.Where((c, i) => !Done(shop, i, c.Key)).Select(c => c.Value).ToList();
+                List<int> had = mm.badgeshops[shop] ?? new List<int>();
+                if (had.OrderBy(m => m).SequenceEqual(wanted.OrderBy(m => m)))
+                {
+                    continue;
+                }
+                mm.badgeshops[shop] = wanted;
+                log.LogInfo($"[shop] shop {shop}'s stock set to its {wanted.Count} copies not yet done (of {copies.Count}; it held {had.Count}): {string.Join(",", wanted)}");
+            }
+        }
+
+        // The location a shop slot stands for, or -1: among the shelf's live slots of the same medal, the k-th stands
+        // for that medal's k-th copy not yet done.
+        private static long LocationOf(NPCControl npc)
+        {
+            if (connection?.LocationShops == null || npc == null || npc.interacttype != NPCControl.Interaction.Shop || npc.entity == null
                 || npc.entity.animid != 2 || npc.shopkeeper == null || npc.shopkeeper.dialogues == null || npc.shopkeeper.dialogues.Length < 10)
             {
                 return -1;
             }
             int shop = (int)npc.shopkeeper.dialogues[9].x;
             int medal = npc.entity.animstate;
-            foreach (KeyValuePair<long, int[]> entry in shops)
+            int k = 0;
+            EntityControl[] shelf = ShelfItems(npc.shopkeeper);
+            if (shelf != null)
             {
-                if (entry.Value[0] == shop && entry.Value[1] == medal)
+                foreach (EntityControl slot in shelf)
                 {
-                    return entry.Key;
+                    if (slot == npc.entity)
+                    {
+                        break;
+                    }
+                    if (slot != null && !slot.iskill && slot.animid == 2 && slot.animstate == medal)
+                    {
+                        k++;
+                    }
                 }
             }
-            return -1;
+            return UndoneCopy(shop, medal, k);
         }
 
         private sealed class Saved
@@ -151,6 +307,17 @@ namespace BugFablesAP
             __state = new Saved { Medal = medal, Name = MainManager.badgedata[medal, 0], Description = MainManager.badgedata[medal, 1] };
             MainManager.badgedata[medal, 0] = name ?? __state.Name;
             MainManager.badgedata[medal, 1] = description ?? __state.Description;
+        }
+
+        // Interacting with a slot opens its buy prompt: the same swap as for the description box, and the slot's copy is
+        // the one a purchase in this dialogue buys.
+        private static void BeforeInteract(NPCControl __instance, out Saved __state)
+        {
+            BeforeShow(__instance, out __state);
+            if (__state != null)
+            {
+                pendingCopy = LocationOf(__instance);
+            }
         }
 
         private static void AfterShow(Saved __state)

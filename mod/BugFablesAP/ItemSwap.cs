@@ -701,7 +701,8 @@ namespace BugFablesAP
                 bool sameKind = badge ? give.Type == 2 : give.Type == 0 || give.Type == 1;
                 if (sameKind && give.Item == id && give.Map == map)
                 {
-                    return entry.Key;
+                    // A shop's medal: this is a purchase, and the copy bought is the location (ShopSwap.Buy).
+                    return connection.LocationShops != null && connection.LocationShops.ContainsKey(entry.Key) ? ShopSwap.Buy(entry.Key) : entry.Key;
                 }
             }
             return -1;

@@ -307,7 +307,7 @@ namespace BugFablesAP
         internal Dictionary<long, int> LocationDiscoveries => locationDiscoveries;
         private volatile Dictionary<long, int> locationDiscoveries;
 
-        // slot_data's location_shops: shop stock locations, done when the medal leaves that shop's stock
+        // slot_data's location_shops: shop stock locations, one per copy the shop ever stocks, done when the save marks the copy bought (ShopSwap)
         // ({location id: [shop, medal]}; Shuffle Medal Shops, 2026-09-25). Null when not sent.
         internal Dictionary<long, int[]> LocationShops => locationShops;
         private volatile Dictionary<long, int[]> locationShops;

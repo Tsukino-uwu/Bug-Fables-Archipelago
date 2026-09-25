@@ -154,6 +154,28 @@ class BugFablesWorld(World):
                 self.set_rule(self.get_location(event["name"]), HasAll(*event["requires"]))
         self.set_completion_rule(Has("Artifact", count=self.artifacts_required))
 
+    def pre_fill(self) -> None:
+        # Filler Only when the room can't hold it (the user, 2026-09-25: fall back with a warning). An excluded spot takes
+        # only an item that is neither progression nor useful, from any game (Fill.py, distribute_items_restrictive), so a
+        # room with fewer of those than excluded spots fails to generate: a solo seed has 17 filler items for Merab's 22
+        # copies. Then this world's shops take No Progression instead, which every seed can hold.
+        if self.options.shop_contents != ShopContents.option_filler_only:
+            return
+        shops = [self.get_location(loc["name"]) for loc in self.included_locations if loc.get("category") == "shop"]
+        excludable = sum(1 for item in self.multiworld.itempool if item.excludable)
+        excluded = sum(1 for location in self.multiworld.get_unfilled_locations()
+                       if location.progress_type == LocationProgressType.EXCLUDED)
+        if excludable >= excluded:
+            return
+        logging.warning(
+            "Bug Fables: player %s (%s) asked for Shop Contents: Filler Only, but the room has %d filler items for %d "
+            "excluded locations; this seed's shops use No Progression instead.",
+            self.player, self.player_name, excludable, excluded,
+        )
+        for location in shops:
+            location.progress_type = LocationProgressType.DEFAULT
+            location.item_rule = lambda item: not item.advancement
+
     def get_filler_item_name(self) -> str:
         return self.random.choice(self._padding)
 
@@ -173,7 +195,8 @@ class BugFablesWorld(World):
             # Journal discovery locations, done when librarystuff[0, n] is set ({location id: n}).
             "location_discoveries": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["discovery"]
                                      for loc in self.included_locations if "discovery" in loc["source"]},
-            # Shop stock locations, done when the medal leaves that shop's stock ({location id: {shop, medal}}).
+            # Shop stock locations, one per copy a shop ever stocks (a shop's copies are its locations in id order); the client
+            # marks a copy done in the save when it is bought ({location id: {shop, medal}}).
             "location_shops": {str(LOCATION_NAME_TO_ID[loc["name"]]): {"shop": loc["source"]["shop"], "medal": loc["source"]["medal"]}
                                for loc in self.included_locations if "shop" in loc["source"]},
             # Locations marked done by a number slot reaching a value instead of a flag (a boss prize handed over:

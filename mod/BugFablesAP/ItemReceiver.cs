@@ -60,6 +60,10 @@ namespace BugFablesAP
                     + $"{mm.flagvar[CountSlot]} -> 0. The old seed's items and flags stay in it: a test file only.");
                 mm.flagstring[SeedSlot] = seed;
                 mm.flagvar[CountSlot] = 0;
+                foreach (int slot in ShopSwap.BoughtSlot)
+                {
+                    mm.flagvar[slot] = 0; // the old seed's shop purchases aren't this seed's locations
+                }
                 return true;
             }
             return bound == seed;

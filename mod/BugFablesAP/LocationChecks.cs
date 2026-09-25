@@ -157,16 +157,15 @@ namespace BugFablesAP
                     (finished ?? (finished = new List<long>())).Add(entry.Key);
                 }
             }
-            // Shop stock: done when the medal has left that shop's stock (the buy line's removebadgeshop,
-            // MainManager.cs:13805-13825), which the save keeps. No per-medal "bought" flag exists.
+            // Shop stock: done when the save marks that copy bought (ShopSwap.Buy's bit in flagvar[7] or [8]). The stock
+            // can't tell: a medal stocked twice is two copies, and the mod rewrites the stock itself.
             Dictionary<long, int[]> shops = connection.LocationShops;
-            if (shops != null && mm.badgeshops != null && MainManager.map != null)
+            if (shops != null && MainManager.map != null)
             {
                 foreach (KeyValuePair<long, int[]> entry in shops)
                 {
                     int shop = entry.Value[0];
-                    if (handled.Contains(entry.Key) || shop < 0 || shop >= mm.badgeshops.Length || mm.badgeshops[shop] == null
-                        || mm.badgeshops[shop].Contains(entry.Value[1]))
+                    if (handled.Contains(entry.Key) || !ShopSwap.BoughtInSave(entry.Key))
                     {
                         continue;
                     }
@@ -175,7 +174,7 @@ namespace BugFablesAP
                     {
                         continue;
                     }
-                    log.LogInfo($"[check] location {entry.Key} is done (medal {entry.Value[1]} gone from shop {shop}'s stock) on {Where()}: sending");
+                    log.LogInfo($"[check] location {entry.Key} is done (medal {entry.Value[1]} bought from shop {shop}, the save's bit) on {Where()}: sending");
                     (finished ?? (finished = new List<long>())).Add(entry.Key);
                 }
             }

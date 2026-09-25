@@ -30,7 +30,7 @@ class TestPermitGate(BugFablesTestBase):
                                      "Outskirts: Ladybug Siblings' House", "Outskirts: East Road, Stone",
                                      "Outskirts: Pier", "Bugaria City: Residential District, Rooftop",
                                      "Outskirts: Madeleine's House, Table Right", "Outskirts: Madeleine's House, Table Left"}
-                         | {f"Bugaria City: Commercial District, Medal Shop {n}" for n in range(1, 11)})
+                         | {f"Bugaria City: Commercial District, Medal Shop {n}" for n in range(1, 23)})
 
     def test_reward_near_snakemouth_needs_the_permit(self) -> None:
         self.assertFalse(self.can_reach_location("Outskirts: Near Snakemouth Den, Reward"))
@@ -551,13 +551,27 @@ class TestBarAndBoards(BugFablesTestBase):
 
 
 class TestMedalShop(BugFablesTestBase):
-    # Merab's ten starting medals are locations, open from the start (the town is), each known by its shop and medal.
+    # Merab's full stock is locations from the start (the user, 2026-09-25), open from the start (the town is), each known
+    # by its shop and medal: 22 copies, TP Plus and Ambusher twice ("a 2nd copy is a 2nd check").
     def test_stock_in_slot_data(self) -> None:
         data = self.world.fill_slot_data()
         first = str(self.world.location_name_to_id["Bugaria City: Commercial District, Medal Shop 1"])
         self.assertEqual(data["location_shops"][first], {"shop": 0, "medal": 0})
         self.assertEqual(data["location_gives"][first], {"map": "BugariaCommercial", "type": 2, "item": 0})
-        self.assertEqual(len(data["location_shops"]), 10)
+        self.assertEqual(len(data["location_shops"]), 22)
+
+    def test_full_stock_with_duplicates(self) -> None:
+        # The stock the story builds up, in order (MainManager.cs:4010, then Event73, Event99, Event120, Event142 and the
+        # helper medal), read back from the locations in id order: the mod treats a shop's copies in that order.
+        shops = self.world.fill_slot_data()["location_shops"]
+        medals = [shops[key]["medal"] for key in sorted(shops, key=int) if shops[key]["shop"] == 0]
+        self.assertEqual(medals, [0, 1, 7, 12, 30, 86, 84, 87, 88, 81, 21, 22, 48, 33, 56, 74, 45, 1, 86, 62, 41, 85])
+
+    def test_each_copy_puts_its_medal_in_the_pool(self) -> None:
+        names = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        self.assertEqual(names.count("TP Plus"), 2)
+        self.assertEqual(names.count("Ambusher"), 2)
+        self.assertEqual(names.count("We Owe Ya!"), 1)
 
 
 class TestMedalShopsOff(BugFablesTestBase):
@@ -582,12 +596,28 @@ class TestShopContentsDefault(BugFablesTestBase):
 
 
 class TestShopContentsFillerOnly(BugFablesTestBase):
-    options = {"shop_contents": "filler_only"}
+    # With discoveries on, a solo seed has exactly enough filler (17 items and 5 padding) for Merab's 22 copies
+    # (2026-09-25), so Filler Only holds.
+    options = {"shop_contents": "filler_only", "shuffle_discoveries": True}
 
     def test_shops_excluded(self) -> None:
         from BaseClasses import LocationProgressType
         shop = self.world.get_location("Bugaria City: Commercial District, Medal Shop 1")
         self.assertEqual(shop.progress_type, LocationProgressType.EXCLUDED)
+
+
+class TestShopContentsFillerOnlyFallsBack(BugFablesTestBase):
+    # A solo seed without discoveries has 17 filler items for 22 excluded shop spots (2026-09-25), which Archipelago's
+    # fill can't place. The shops take No Progression instead, with a warning (the user, 2026-09-25), and the seed
+    # generates (the default test_fill, which failed before the fallback).
+    options = {"shop_contents": "filler_only"}
+
+    def test_shops_fall_back_to_no_progression(self) -> None:
+        from BaseClasses import LocationProgressType
+        shop = self.world.get_location("Bugaria City: Commercial District, Medal Shop 1")
+        self.assertEqual(shop.progress_type, LocationProgressType.DEFAULT)
+        self.assertFalse(shop.item_rule(self.world.create_item("Explorer Permit")))
+        self.assertTrue(shop.item_rule(self.world.create_item("TP Plus")))
 
 
 class TestShopContentsAnything(BugFablesTestBase):

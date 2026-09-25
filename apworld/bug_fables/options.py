@@ -73,7 +73,8 @@ class ShopContents(Choice):
 
     Anything: any item, progression included.
     No Progression: useful and filler items only; everything that unlocks something is out in the world.
-    Filler Only: small items only.
+    Filler Only: small items only. If the whole room has too few small items to fill every shop, this seed's shops use
+    No Progression instead, and the generator says so.
     """
 
     display_name = "Shop Contents"

@@ -10,13 +10,13 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 
 ## Where it stands
 
-**Done so far:** an apworld (44 locations, 39 by default; 30 items) that generates seeds and passes its tests, with
+**Done so far:** an apworld (56 locations, 51 by default; 40 items) that generates seeds and passes its tests, with
 the goal "collect N artifacts"; the mod connecting on its own, compressed, to a local server or a hosted room on
 archipelago.gg, retrying when the server is unreachable or drops; sending checks (build step 6); receiving
 items, with the count kept in the save (build step 7); the game's own item at a location swapped for the
 seed's (the mod guide, step 9); and, as of 2026-09-25, the world opening one gate at a time (the Outskirts rocks,
 Snakemouth's fall room both ways, the town, its districts, the bar, Madeleine's house), journal discoveries and
-Merab's medal shop as locations, and a Quality of life page (build step 8 and the mod guide, step 10).
+Merab's medal shop as locations (her full stock of 22 from a new game, built 2026-09-25, not yet seen), and a Quality of life page (build step 8 and the mod guide, step 10).
 
 **Next** (decided by the user, 2026-09-24):
 
@@ -47,13 +47,24 @@ Merab's medal shop as locations, and a Quality of life page (build step 8 and th
    done. Buying removes a copy as the game does; one copy fewer than expected marks the next undone copy done. A reloaded
    save with extra copies, or the story adding stock, is trimmed back to the list (a done location shows as sold). An
    offline purchase stays in the save's stock and its check goes out on reconnecting.
+   **Built for Merab's (2026-09-25, not yet seen in game):** her 12 later copies are locations *Medal Shop 11* to *22*
+   (ids 46-57), with 10 new medal items. "One copy fewer than expected" turned out unworkable: a fresh file holds 10 of
+   the 22 and would read as 12 purchases. So the save keeps a bit per copy bought (`flagvar[7]`, the mod guide, step 10),
+   set by the purchase's swapped `giveitem`, and the stock is set from those bits and the server's checks. Test
+   `TestMedalShop` pins the 22 copies in story order.
    **Item shops** (endless consumables, the user): the first purchase of each item in each shop is a check that shows
    and gives the seed's item, then the shop sells its own item again, like respawning pickups, so restocking still works.
    Their own yaml toggle, *Shuffle Item Shops*, default on, apart from *Shuffle Medal Shops*. Built after the medal shops.
    **Shop Contents** (the user, 2026-09-25: shops are many easy checks in one place and soak up the good items, as in
    Tevi): a yaml choice, *Anything*, *No Progression* (default) or *Filler Only*. No Progression is an `item_rule` on each
    shop location refusing progression items from any game; Filler Only is Archipelago's excluded type (no progression,
-   no useful, `BaseClasses.py:1502`). 36 seeds (solo, with a second game, with discoveries) all generated. Tests
+   no useful, `BaseClasses.py:1502`). 36 seeds (solo, with a second game, with discoveries) all generated.
+   **Filler Only falls back when the room can't hold it** (the user, 2026-09-25): an excluded spot takes only an item
+   that is neither progression nor useful, from any game, and with Merab's 22 copies a solo seed has 17 such items, so
+   generation failed. In `pre_fill`, once every world's items exist, the room's excludable items are counted against its
+   excluded spots; if short, this world's shops take No Progression instead, with a warning naming the player. 18 seeds
+   (solo, with APQuest, with discoveries, each Shop Contents) generated; the fallback fired solo and with APQuest (18
+   filler for 22 spots), not with discoveries on (22 for 22). Tests
    `TestShopContents*`. **The caravan is there from the start** (the user), built with the item shops. **Reloads refund currency** (the user
    caught this: buy, reload, keep the check and the berries), so purchases are made **permanent like checks**: spending
    is tallied on the server (per-slot storage), each save brought in line on load (crystal berries exactly: received
