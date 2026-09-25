@@ -1040,6 +1040,15 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   `EventDialogue` (`BattleControl.cs:1972`, `:30719-30731`); setup by id at `:976+` (VenusBoss's extra entity,
   fixed positions for BeeBoss, SandWyrmTail, Pitcher); `GetEnemyData` swaps some ids' data (`MainManager.cs:
   6157-6191`); `NPCControl.StartBattle` forces "Battle3" music for ids 25-28 (`NPCControl.cs:5932`).
+- **Map enemies' encounters** (2026-09-26, EntityDump with its new `battleids` column, run at the title screen): 327
+  `Enemy` entities on 124 maps, every one with an encounter. Sizes: 74 of one enemy, 183 of two, 66 of three, 4 of
+  four. 59 distinct enemy ids, **none from `bosslist` or `minibosslist`**. NPC and Object rows also fill
+  `battleids`, for other uses (an event id, a stealth size), and aren't encounters. Odd ones: TestRoom's
+  {113, 114, 115} (the holo party, a test room), and one {108} (IceKrawler).
+- **An enemy's `eventid` is a respawn timer, not an event** (`NPCControl.cs:1236-1239`, `:4024-4035`): the enemy
+  respawns that many frames after its death. 20 map enemies have one, all puzzle enemies (a flower to freeze, a
+  pressure plate, a crank). The game's own `EnemyCheck` swap skips them (`calledfrom.eventid <= 0`). Their fight can
+  be shuffled; their map model can't be changed without breaking the puzzle.
 - **EXP from a fight** (for the EXP multiplier): each enemy's share is `BattleControl.GetEXP(amount, fixedexp,
   enemy)` (`BattleControl.cs:30844`; 0 at level 27 or with flag 613; +15% on Hard Mode; +50% with medal 42), then
   clamped per enemy to `neededexp` (`:30715`), so one enemy never gives more than the rest of a level. The EXP shown

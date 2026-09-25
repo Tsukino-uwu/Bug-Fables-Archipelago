@@ -615,3 +615,8 @@ Newest last. What was tried, what happened, what the user said.
   - The EXP multiplier helps even with moves never shuffled, because levels still give HP, TP and MP.
   - The berry multiplier counts only berries picked up in the world, never a check's reward.
   - Written as Next 16 and 17. Where EXP and berries are granted is in MEASURED.md.
+- **The entity dump ran again** (the user said go ahead). It ran at the title screen with the new `battleids`
+  column. The game was closed afterwards, no process was left, and the dump was switched off.
+  - 327 map enemies, each with its encounter.
+  - No boss appears on a map.
+  - 20 are respawning puzzle enemies: an enemy's `eventid` is a respawn timer, not an event.
