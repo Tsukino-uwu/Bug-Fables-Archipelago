@@ -1204,7 +1204,8 @@ location, only the fights move.
 - then `both` and `chaos`;
 - then the map look.
 
-**Status:** in progress: `enemies_only` built (2026-09-26), the apworld tests pass, not yet seen in game; bosses,
+**Status:** in progress: `enemies_only` built (2026-09-26), the apworld tests pass, a seed generated with a second
+game (APQuest) carrying all 325 fights in `slot_data`, not yet seen in game; bosses,
 `both`, `chaos` and the map look to come.
 
 # How it works
