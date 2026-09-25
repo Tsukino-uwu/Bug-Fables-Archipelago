@@ -34,7 +34,10 @@ seed's (the mod guide, step 9).
    (the user, 2026-09-25): every Shades location requires all 50 crystal berries, and her full stock (all 13) is on the
    shelf from a new game.** The first stops spending order from locking anything out; the second stops a story event
    that never runs (as the open world skips or bypasses scenes) from leaving a tier's medals, and their checks, never
-   appearing. The same holds for Merab's later additions when they become locations. Crystal berries become progression. **Reloads refund currency** (the user
+   appearing. The same holds for Merab's later additions when they become locations. Crystal berries become progression. **Also wanted (the user,
+   2026-09-25): Shades's counter showing 3 or 4 medals** instead of 2. The slot count is the shopkeeper's `data` length and
+   each slot's place its `vectordata` entry (`NPCControl.cs:1530-1534`), so longer arrays with new counter positions,
+   set before the shelf is built; positions to settle on screen. Built with her shop. **Reloads refund currency** (the user
    caught this: buy, reload, keep the check and the berries), so purchases are made **permanent like checks**: spending
    is tallied on the server (per-slot storage), each save brought in line on load (crystal berries exactly: received
    minus spent; ordinary berries: the save's own paid record against the server's tally, the higher wins), and a
