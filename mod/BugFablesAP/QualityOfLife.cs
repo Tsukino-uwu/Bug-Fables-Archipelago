@@ -86,7 +86,9 @@ namespace BugFablesAP
             FreeBoat = config.Bind("QualityOfLife", "FreeBoat", true,
                 "The boat to Metal Island costs nothing (the user, 2026-09-25: no farming berries in Archipelago).");
             SkipCutscenes = config.Bind("QualityOfLife", "SkipCutscenes", true,
-                "Scenes that give nothing are skipped or pass by fast (a list that grows scene by scene).");
+                "Scenes that give nothing are skipped or pass by fast (a list that grows scene by scene). The opening after the "
+                + "slides (Maki's talk and the tutorial battle) is skipped too: Vi joins and the first check is sent, and you "
+                + "can walk out of the building.");
             ItemAnimation = config.Bind("QualityOfLife", "ItemAnimation", "All", new ConfigDescription(
                 "Which items received from other players are shown held up, as when you find one: Progression (items that "
                 + "unlock something), All, or Off. They always arrive either way; your own finds are always shown.",
@@ -117,9 +119,74 @@ namespace BugFablesAP
             harmony.Patch(startEvent, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeStartEvent)));
         }
 
+        // The opening (the user, 2026-09-25: skip the scenes and the fight, "just start playing the game"). After the
+        // slides you play Kabbu alone inside the starting building, and Event16's trigger (entity 9, hidden by flag 15)
+        // stands between you and the door. Event16 (EventControl.cs:3538-3822) is Maki's talk, Vi joining, the tutorial
+        // battle, the Explorer Permit (location 1's giveitem) and Kina's and Eetl's talk. The one scene given an item, a
+        // battle and a party change on purpose: it never starts, and the mod leaves what it leaves behind, the game's
+        // way: Vi and Kabbu in the party (ChangeParty, then SetPlayers), the tutorial's Crunchy Leaf in the bag, Vi's
+        // stand-in (Beee) and the blockingbox gone, the exit (entity 2) back with the default camera, entity 11 at
+        // animstate 0, flag 15 and quest 11 on the board. Flag 15 marks location 1 done, so LocationChecks sends it,
+        // and the hold-up shows the seed's item there. Done on a later frame, outside the trigger that started it.
+        private const string OpeningMap = "BugariaOutskirtsOutsideCity";
+        private const int OpeningEvent = 16;
+        private const long OpeningLocation = 7_720_001; // Outskirts: Maki and Eetl's Gift (apworld id 1)
+        private static bool openingPending;
+
+        private static void RunOpening()
+        {
+            MainManager mm = MainManager.instance;
+            Vector3 at = MainManager.player.transform.position;
+            MainManager.ChangeParty(new[] { 0, 1 }, true, true);
+            mm.items[0].Add(0);
+            foreach (string name in new[] { "Beee", "blockingbox" })
+            {
+                GameObject thing = GameObject.Find(name);
+                if (thing != null)
+                {
+                    UnityEngine.Object.Destroy(thing);
+                }
+                else
+                {
+                    log.LogWarning($"[qol] opening: {name} not found");
+                }
+            }
+            var spots = new Vector3[mm.playerdata.Length];
+            for (int i = 0; i < spots.Length; i++)
+            {
+                spots[i] = at + new Vector3(-0.6f * i, 0f, 0.1f * i);
+            }
+            MainManager.SetPlayers(spots);
+            EntityControl exit = MainManager.GetEntity(2);
+            if (exit != null && exit.npcdata != null)
+            {
+                exit.gameObject.SetActive(true);
+                exit.npcdata.vectordata[4] = MainManager.defaultcamoffset;
+                exit.npcdata.vectordata[5] = MainManager.defaultcamangle;
+            }
+            EntityControl eleven = MainManager.GetEntity(11);
+            if (eleven != null)
+            {
+                eleven.animstate = 0;
+            }
+            mm.flags[15] = true;
+            mm.boardquests[1].Insert(0, 11);
+            HoldUps.FoundAt(OpeningLocation, "the opening's gift (location 1)");
+            log.LogInfo($"[qol] opening done without Event16: party {string.Join(", ", mm.playerdata.Select(p => p.trueid.ToString()).ToArray())}, "
+                + $"characters {mm.playerdata.Count(p => p.entity != null)}, exit {(exit != null ? "active " + exit.gameObject.activeSelf : "NOT found")}, flag 15 {mm.flags[15]}");
+        }
+
         // Every scene starts here (EventControl.cs:74). A listed scene to skip gets its flags and never starts.
         private static bool BeforeStartEvent(int id)
         {
+            if (id == OpeningEvent && SkipCutscenes.Value && randomizerOn() && MainManager.map != null
+                && MainManager.map.mapid.ToString() == OpeningMap && !MainManager.instance.flags[15])
+            {
+                openingPending = true;
+                endEvent?.Invoke(null, null);
+                log.LogInfo("[qol] Event16 (the opening) skipped: the mod does what it leaves behind on the next free frame");
+                return false;
+            }
             Scene scene = SceneFor(id);
             if (scene == null || scene.Flags == null || !SkipCutscenes.Value || !randomizerOn())
             {
@@ -192,6 +259,11 @@ namespace BugFablesAP
                 return;
             }
             bool on = randomizerOn();
+            if (openingPending && MainManager.player != null && !mm.inevent && !mm.message && MainManager.battle == null)
+            {
+                openingPending = false;
+                RunOpening();
+            }
             bool slides = on && ((SkipIntro.Value && InIntroSlides()) || InFastScene());
             if (slides)
             {

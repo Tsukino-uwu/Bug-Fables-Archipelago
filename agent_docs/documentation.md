@@ -510,6 +510,15 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    freezes the player (`minipause`) before starting its scene (`NPCControl.cs:5512-5525`), and the scene's own
    `EndEvent` unfreezes. A skipped scene never ends, so the skip now calls the game's `EndEvent()` itself, which is all
    resets (`EventControl.cs:146-187`). Not yet seen.
+   **The opening is the one exception, on purpose** (the user, 2026-09-25: "just start playing the game"). After the
+   slides you play Kabbu alone inside the starting building, and one scene, Event16, stands between you and the door
+   (its trigger, entity 9, is hidden by flag 15). It holds Maki's talk, Vi joining, the tutorial battle, the Explorer
+   Permit (location 1) and Kina's and Eetl's talk: an item, a battle and a party change, so no flag list could skip it.
+   So the scene never starts, and on the next free frame the mod leaves what its end leaves (`EventControl.cs:3598-3822`),
+   through the game's own calls: `ChangeParty({0, 1})` and `SetPlayers` (the `addleif` method), the tutorial's Crunchy
+   Leaf, Vi's stand-in and the `blockingbox` destroyed, the exit (entity 2) active again with the default camera, flag 15
+   and quest 11 on the board. Flag 15 sends location 1's check, and a hold-up shows the seed's item. The logic needs no
+   change: Vi is in the party either way, and location 1 was already reachable from the start. Built, not yet seen.
 6. **Item animation** (the user, 2026-09-25): a discovery showed nothing of what it found, and items from other
    players arrive silently. Your own finds always get the hold-up (pickups already did; a discovery recorded in play
    now does too); the row, *Item animation: All / Progression / Off* decides which items from other players do
