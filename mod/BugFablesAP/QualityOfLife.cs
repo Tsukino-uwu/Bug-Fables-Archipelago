@@ -217,10 +217,15 @@ namespace BugFablesAP
             }
             mm.hud[0].transform.parent.gameObject.SetActive(true);
             MainManager.ResetCamera();
-            MainManager.ChangeMusic(Resources.Load<AudioClip>("Audio/Music/Inside0"));
-            MainManager.music[0].clip = Resources.Load<AudioClip>("Audio/Musics/Field0");
-            MainManager.music[0].volume = 0f;
-            MainManager.music[0].Play();
+            // The building's music only when the game starts there: with a test start it played briefly before the start
+            // map's own (the user, 2026-09-25).
+            if (!TestStartSet)
+            {
+                MainManager.ChangeMusic(Resources.Load<AudioClip>("Audio/Music/Inside0"));
+                MainManager.music[0].clip = Resources.Load<AudioClip>("Audio/Musics/Field0");
+                MainManager.music[0].volume = 0f;
+                MainManager.music[0].Play();
+            }
             endEvent?.Invoke(null, null);
             if (TestStartSet)
             {

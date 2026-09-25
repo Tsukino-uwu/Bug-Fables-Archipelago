@@ -545,6 +545,8 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    the transfer starts as the scene ends, the backdrop goes once the start map has loaded behind the transfer's own
    fade, and the opening runs there. Its building-only steps (the exit, entity 11, the trigger) run only in the
    building, since the same entity numbers are other things on other maps.
+   Seen (the user, 2026-09-25): the spawn in the town looks right; only the building's music played briefly, so with a
+   test start the scene's end no longer starts it.
    **The rule since (the user, 2026-09-25):** a scene that gives an item may be skipped *as long as the item can still
    be received*, and fewer cutscenes are preferred, as an option at least. So a skip now has to keep every check the
    scene holds (sent by the mod, or moved to something the player still does). Next candidate, the user's idea: the
