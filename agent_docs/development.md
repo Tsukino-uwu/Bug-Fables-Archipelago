@@ -78,7 +78,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   location's map, it is that location.
 - `flag <n> [on|off]`: show or set a story flag.
 - `unstick`: runs the game's own end-of-cutscene cleanup, when a cutscene died and left you frozen, and ends a
-  map transfer stuck walking to a spot it can't reach.
+  map transfer stuck walking to a spot it can't reach. It also takes the party off anything a scene parked it on
+  and lifts a leftover fade: the boat scene crashed mid-fade and left a black screen with music playing, which the
+  cleanup alone didn't clear (2026-09-25; the user saw the screen come back).
 - `nudge <x> <y> <z>`: shift the party by that much on the current map.
 - `items`: list every pickup that exists on the current map right now (kind, id, flag, distance), in the log.
 - `onehit`: toggles a test boost: every hit on an enemy does at least 99 (before defence). Off by default.

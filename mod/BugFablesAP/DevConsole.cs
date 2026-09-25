@@ -17,7 +17,8 @@ namespace BugFablesAP
     //                           whose activationflag it is; with @name, beside the entity of that name
     //   spawn <item|key|medal> <id> [flag]   drop a pickup next to you; with a location's flag, it is that location
     //   flag <n> [on|off]       show or set flags[n]
-    //   unstick                 run the game's end-of-event cleanup, when a cutscene died and left you frozen
+    //   unstick                 run the game's end-of-event cleanup, when a cutscene died and left you frozen; also
+    //                           takes the party off whatever the scene parked it on and lifts a leftover fade
     //   nudge <x> <y> <z>       shift the party by that much on this map
     //   onehit                  toggle: every hit on an enemy does at least 99 (off by default)
     //   infjump                 toggle: jump again in mid-air, to reach high places (off by default)
@@ -476,7 +477,30 @@ namespace BugFablesAP
             MainManager.ResetCamera(true);
             MainManager.map?.RestoreLimit(false);
             MainManager.ChangeMusic();
-            return "ran the game's end-of-event cleanup and camera, limit and music resets; inevent=" + MainManager.instance.inevent + ", minipause=" + MainManager.instance.minipause;
+            // It can also leave the screen black and the party parked: the boat scene (Event107) fades out
+            // (PlayTransition 4, which ends on a black dimmer, MainManager.cs Transition case 4 -> 0) and puts the party
+            // on the boat with frozen physics before it moves; it threw halfway (2026-09-25: black screen, music on).
+            // Its own ending undoes both: the party back to no parent and LockRigid(false), then a fade in (id 1, which
+            // fades and removes the dimmer).
+            int freed = 0;
+            foreach (EntityControl member in MainManager.GetPartyEntities() ?? new EntityControl[0])
+            {
+                if (member != null && member.transform.parent != null)
+                {
+                    member.transform.parent = null;
+                    member.LockRigid(false);
+                    freed++;
+                }
+            }
+            bool black = MainManager.instance.transitionobj != null && MainManager.instance.transitionobj.Length > 0
+                && MainManager.instance.transitionobj[0] != null;
+            if (black)
+            {
+                MainManager.PlayTransition(1, 0, 0.1f, Color.black);
+            }
+            return "ran the game's end-of-event cleanup and camera, limit and music resets; inevent=" + MainManager.instance.inevent
+                + ", minipause=" + MainManager.instance.minipause + $"; freed {freed} party member(s); "
+                + (black ? "faded the screen back in" : "no fade left on screen");
         }
 
         // Once the target map is up and the transfer is over, stand by the entity with the wanted flag, or else by
