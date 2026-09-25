@@ -772,7 +772,8 @@ set by one conversation in a later area: a locked-door check (`lockeddoor`, unti
 (`doormadeleine`, from 390, `kept_present`) and a lock (`Base/lock (1)`, `scenery_hidden`). Inside, only her and her
 butler need 390, so they stay away and none of her story starts early; the rest is two plain pickups, a Burly Tea
 (flag 686, the retired location 4, back under id 44) and a Lore Book (flag 392, id 45), both reachable from the start.
-Test `TestMadeleinesHouse`. Not yet seen.
+Test `TestMadeleinesHouse`. **Seen (the user, 2026-09-25):** walked in on a chapter 1 file and took both; the swap
+showed the seed's items (a Sleep Resistance medal, a Crystal Berry) and both checks went out.
 **The boat to Metal Island crashed with two in the party** (2026-09-25). With the rocks gone the user reached the
 pier on a chapter 1 file, paid the fare, and the boat scene (Event107) threw IndexOutOfRange: it seats three party
 members (`p[0..2]`, `EventControl.cs:17944-17946`), and in the game the pier is behind the rocks until the first
