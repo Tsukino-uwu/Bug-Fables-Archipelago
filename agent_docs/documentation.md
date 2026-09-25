@@ -522,6 +522,10 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    another, reading "You got the Explorer Permit from TestPlayer!" (the game's own article for it). Each was followed
    by an empty box: an empty follow-up line is still shown as a box waiting for a press. The follow-up is now the
    game's `|end|`, which skips that wait. Confirmed by the user the same day: no empty box.
+   **Bursts** (the user queued 50 to see what *All* feels like when a multiworld sends many at once: about a minute of
+   boxes). Only the first of a burst waits for the settled half second; the rest follow as soon as the previous box
+   closes, and past three items from other players the rest of the burst collapses into one "...and N more items from
+   other players!" box (the user chose both). Own finds are never collapsed. Not yet seen.
 7. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
    read in full before anything is skipped.
 
