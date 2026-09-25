@@ -42,6 +42,10 @@ seed's (the mod guide, step 9).
    switchable, the save stays clean; the mod guide's design list, item 6).
 2. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
+   **Later idea, a yaml option (the user, 2026-09-25): party members as items.** Start with one random member and
+   find the other two, each its own item, on top of the abilities. Opt-in only: fighting with one or two changes
+   the game a lot. Open questions: the story may need all three after chapter 1, and adding a member outside the
+   story's own event hasn't worked yet (log.md, 2026-09-24: `ChangeParty` left Leif without a character).
 3. **An "open start" yaml option next** (the user, 2026-09-24), after chapter 1's locations: skip the prologue and
    tutorial, optionally with Leif from the start (the new-game party `{0, 1}`, `MainManager.cs:3591`, becoming
    `{0, 1, 2}`; early cutscenes are written for two, so tested on a fresh file). A full story strip, as the Metroid
