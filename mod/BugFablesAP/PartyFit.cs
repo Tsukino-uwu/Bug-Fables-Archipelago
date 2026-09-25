@@ -96,6 +96,17 @@ namespace BugFablesAP
             if (standIns[member] == null)
             {
                 standIns[member] = EntityControl.CreateNewEntity("apstandin" + member, member, MainManager.player.transform.position);
+                // A new character gets its physics body only in its Start, a frame later (EntityControl.cs:524-528), and a
+                // scene using the stand-in at once crashed: the spider fight's lead-in made it Jump(), whose Unfix uses the
+                // body (Event6, the user, 2026-09-25). Start adds one only when there is none, so this one is kept.
+                EntityControl made = standIns[member];
+                if (made.rigid == null)
+                {
+                    made.rigid = made.gameObject.GetComponent<Rigidbody>() ?? made.gameObject.AddComponent<Rigidbody>();
+                    made.rigid.constraints = RigidbodyConstraints.FreezeRotation;
+                    made.rigid.useGravity = false;
+                    made.rigid.isKinematic = true;
+                }
                 string where = (MainManager.map != null ? MainManager.map.mapid.ToString() : "no map") + " Event" + MainManager.lastevent + " member " + member;
                 if (standInReported.Add(where))
                 {

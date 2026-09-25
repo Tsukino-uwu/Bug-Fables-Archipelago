@@ -593,6 +593,10 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    then put stand-in Vi on him, and the end put Leif on her spot. So a stand-in sent toward the real player stays where
    the scene last put it, and the positions the scene hands `SetPlayers` are logged, with the stand-ins' and the
    player's. Not yet seen.
+   (12) **A stand-in has its physics body at once** (the user, 2026-09-25): the spider fight's lead-in (Event6) made a
+   stand-in `Jump()` in the frame it was made, and `Jump`'s `Unfix` needs the body (`rigid`), which a new character only
+   gets in its `Start`, a frame later (`EntityControl.cs:524-528`): NullReferenceException, the scene dead (`unstick`).
+   The stand-in now gets its body when made, weightless; `Start` adds one only when there is none. Not yet seen.
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,
