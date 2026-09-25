@@ -7,14 +7,8 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // A fifth button in the pause menu's row, "Warp to start" (the user, 2026-09-25), with a Yes / No box before it
-    // does anything. It takes the party back to where a new game begins, through the game's own map transfer, as a
-    // door would. The logic never counts on it: it only takes you somewhere you could walk to.
-    //
-    // The row is PauseMenu window 0: maxoptions icons (4, or 2 in battle) made in BuildWindow as sprites[13 + n] with
-    // guisprites[74 + n] (PauseMenu.cs:2378-2497); confirm opens window option + 1 (:374-380), and the labels are
-    // menutext[10 + option] and [50 + option] (UpdateText). So the mod adds the icon and a fifth option, catches confirm
-    // on it before the game would open a "window 5", and writes its own labels.
+    // A fifth pause-menu button, "Warp to start", behind a Yes / No box: the game's own map transfer to where a new
+    // game begins. The logic never counts on it. Confirm on it is caught before the game would open a "window 5".
     internal static class WarpButton
     {
         private static ManualLogSource log;
@@ -29,8 +23,7 @@ namespace BugFablesAP
 
         private const int Button = 4;
         private const int IconSprite = 34;
-        // Where a new game begins: the Outskirts (Event8 loads map 16, EventControl.cs:2636), by its save point: entity 1
-        // (SaveTutorial) before the first boss, entity 22 (SaveAfterTutorial) from flag 41 (the entity dump).
+        // By its save point: entity 1 (SaveTutorial) before flag 41, entity 22 (SaveAfterTutorial) after.
         private const MainManager.Maps StartMap = MainManager.Maps.BugariaOutskirtsOutsideCity;
 
         private static SpriteRenderer icon;
@@ -54,8 +47,7 @@ namespace BugFablesAP
             harmony = new Harmony(guid + ".warp." + DateTime.UtcNow.Ticks);
             harmony.Patch(update, prefix: new HarmonyMethod(typeof(WarpButton), nameof(BeforeUpdate)));
             harmony.Patch(updateText, postfix: new HarmonyMethod(typeof(WarpButton), nameof(AfterUpdateText)));
-            // Window 0 hands IconAnim its four icons ({13, 14, 15, 16}, PauseMenu.cs:351) and it indexes them by option,
-            // so on the fifth button it threw IndexOutOfRange every frame (the user, 2026-09-25): hand it five.
+            // Window 0 hands IconAnim four icons and it indexes them by option: hand it five.
             MethodInfo iconAnim = AccessTools.Method(typeof(PauseMenu), "IconAnim");
             if (iconAnim != null)
             {
@@ -68,8 +60,7 @@ namespace BugFablesAP
         {
             harmony?.UnpatchSelf();
             harmony = null;
-            // A hot reload with the pause menu open left the old icon behind the new one (the user's screenshot,
-            // 2026-09-25): take this instance's icon and box with it.
+            // Take this instance's icon and box with it, or a hot reload leaves the old icon behind.
             CloseConfirm();
             if (icon != null)
             {
@@ -89,9 +80,7 @@ namespace BugFablesAP
             SpriteRenderer[] sprites = (SpriteRenderer[])spritesField.GetValue(__instance);
             if (!ReferenceEquals(builtFor, __instance) || icon == null)
             {
-                // Window 0 builds over a few frames; add the button once its fourth icon is there. Coming back from another
-                // page, the sprites array is briefly that page's shorter one (8 to 12 long, PauseMenu.cs:2235-2678): the
-                // check threw IndexOutOfRange every frame (the user, 2026-09-25). Window 0's is 19 long (:2404).
+                // Window 0 builds over a few frames. Coming back from another page, sprites is briefly that page's shorter array.
                 if (sprites == null || sprites.Length <= 13 + Button || sprites[16] == null)
                 {
                     return true;
@@ -125,15 +114,12 @@ namespace BugFablesAP
         private static void AddButton(PauseMenu menu, SpriteRenderer[] sprites)
         {
             builtFor = menu;
-            // Five across instead of four: -4..4 two apart, inside the 11-wide box (the game's four sit at -3..3).
+            // Five across: -4..4 two apart, inside the 11-wide box (the game's four sit at -3..3).
             for (int n = 0; n < 4; n++)
             {
                 sprites[13 + n].transform.localPosition = new Vector3(-4f + 2f * n, 3f);
             }
-            // Made the way BuildWindow makes the other four (NewUIObject under the same box, one complete round sprite
-            // from the GUI sheet, PauseMenu.cs:2493-2497), so the game's IconAnim outlines and wiggles it like them. The
-            // sprite: guisprites[34], the round blue map icon in the same style (picked from SpriteDump's sheet,
-            // 2026-09-25; a tinted Settings icon with the map item on top looked wrong to the user).
+            // Made as BuildWindow makes the other four, so IconAnim outlines and wiggles it like them.
             icon = MainManager.NewUIObject("menuicon" + Button, sprites[16].transform.parent, new Vector3(4f, 3f), Vector3.one,
                 MainManager.guisprites[IconSprite]).GetComponent<SpriteRenderer>();
             sprites[13 + Button] = icon;
@@ -147,7 +133,7 @@ namespace BugFablesAP
             {
                 return;
             }
-            // The game just wrote menutext[14] and [54] for this option: replace them with the button's own.
+            // The game just wrote this option's labels: replace them.
             Transform labels = ((DialogueAnim[])boxesField.GetValue(__instance))[0].transform;
             MainManager.DestroyText(labels);
             __instance.StartCoroutine(MainManager.SetText("|single|Go back to where the game started.", 0, 99999f, false, false,
@@ -168,8 +154,7 @@ namespace BugFablesAP
 
         private static void DrawConfirm(PauseMenu menu)
         {
-            // Yes and No as two words at fixed spots, the chosen one coloured with the game's leaf cursor beside it:
-            // one centred line whose brackets moved made both words shift when switching (the user, 2026-09-25).
+            // Yes and No at fixed spots so they don't shift when switching; the chosen one coloured, the leaf beside it.
             MainManager.DestroyText(confirmBox);
             menu.StartCoroutine(MainManager.SetText("|center||sort,40|Warp to the start?", 0, 99999f, false, false,
                 new Vector3(0f, 0.6f), Vector3.zero, Vector2.one * 0.8f, confirmBox, null));
@@ -179,7 +164,7 @@ namespace BugFablesAP
                 new Vector3(1.5f, -0.6f), Vector3.zero, Vector2.one * 0.8f, confirmBox, null));
             if (leaf == null)
             {
-                // The game's menu cursor, set up the way it sets up its own (MainManager.cs:14822), as the panel does.
+                // The game's menu cursor, set up as it sets up its own.
                 leaf = new GameObject("warpleaf").AddComponent<SpriteRenderer>();
                 leaf.sprite = MainManager.cursorsprite[0];
                 leaf.sortingOrder = 41;
@@ -239,7 +224,7 @@ namespace BugFablesAP
 
         private static IEnumerator WarpWhenUnpaused()
         {
-            // PrepareExit shrinks the boxes and DestroyPause follows 0.25 s later (PauseMenu.cs:1839), clearing pause.
+            // PrepareExit shrinks the boxes; DestroyPause follows 0.25 s later and clears pause.
             float since = Time.realtimeSinceStartup;
             while ((MainManager.instance.pause || MainManager.pausemenu != null) && Time.realtimeSinceStartup - since < 3f)
             {
@@ -255,8 +240,7 @@ namespace BugFablesAP
             yield return MainManager.TransferMap((int)StartMap, target);
         }
 
-        // The save point's own spot from the map's entity table (Data/EntityData/<map>, fields 6-8, as the game reads
-        // them, MapControl.cs:1661), then a step toward the camera so the party lands beside it, not inside it.
+        // Entity table fields 6-8, then a step toward the camera so the party lands beside the save point, not in it.
         private static Vector3 SavePointSpot()
         {
             int entity = MainManager.instance.flags[41] ? 22 : 1;

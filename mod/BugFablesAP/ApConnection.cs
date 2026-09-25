@@ -13,15 +13,8 @@ using WebSocketSharp;
 
 namespace BugFablesAP
 {
-    // The connection to the Archipelago server: connect, log in, stay connected, and send the checks that
-    // LocationChecks finds. No items are granted yet.
-    //
-    // TryConnectAndLogin blocks for up to 5 s (MultiClient.Net's own docs), so it runs on a worker thread and
-    // its outcome is handed to the game thread through a queue. Nothing here touches game state.
-    //
-    // It runs on MultiClient.Net's net40 build, over websocket-sharp, so the connection can be compressed
-    // (WebSocketCompression). On that build every send first pings and waits for the pong: never send on the
-    // game thread.
+    // The Archipelago server connection: connect, log in, stay connected, send checks. Never touches game state.
+    // On the net40 build (websocket-sharp) every send pings and waits for the pong: never send on the game thread.
     internal sealed class ApConnection
     {
         internal const string Game = "Bug Fables";
@@ -31,26 +24,22 @@ namespace BugFablesAP
         private readonly Queue<string> messages = new Queue<string>();
         private ArchipelagoSession session;
         private volatile bool busy;
-        // Each attempt gets a number. An attempt that outlives its deadline is abandoned: the number moves on, and
-        // whatever the old worker reports later is thrown away.
+        // An attempt past its deadline is abandoned: the number moves on and its late report is thrown away.
         private int attemptNumber;
         private DateTime attemptStartedUtc;
         private ArchipelagoSession attemptSession;
         private const double AttemptDeadlineSeconds = 12;
         private volatile string status = "Not connected.";
 
-        // A one-line summary for the Archipelago panel: the last thing that happened.
         internal string Status => status;
         internal bool Busy => busy;
 
-        // Refused (wrong slot, password, game...) waits for the details to change. Unreachable or dropped retries
-        // on its own with a growing wait (AP's hard requirement: reconnect when the connection is lost).
+        // Refused waits for new details; unreachable or dropped retries on its own with a growing wait.
         private static readonly int[] RetrySeconds = { 2, 4, 8, 15, 30 };
         private volatile bool refused;
         private int failures;
         private DateTime nextRetryUtc;
 
-        // New details: start over, connect at once.
         internal void ResetForNewDetails()
         {
             refused = false;
@@ -59,19 +48,14 @@ namespace BugFablesAP
 
         internal bool ShouldRetry(DateTime nowUtc) => !busy && !refused && session == null && failures > 0 && nowUtc >= nextRetryUtc;
 
-        // A dead server isn't noticed by an idle socket (2026-09-24: the local server was killed and nothing was
-        // reported). So while connected, ask the server something tiny every few seconds, and treat a long
-        // silence, a failed send or a socket error as a lost connection. `_read_race_mode` is a documented
-        // read-only key (network protocol.md, "Get"); any packet from the server counts as a sign of life.
+        // An idle socket never notices a dead server: ping every few seconds and treat silence or a failed send as lost.
         private const double PingSeconds = 5, SilenceSeconds = 15;
         private long lastHeardTicks;
         private DateTime lastPingUtc;
 
         internal void Watchdog(DateTime nowUtc)
         {
-            // TryConnectAndLogin bounds the socket connect at 4 s, but its login step waits on SendPacket with no
-            // timeout (ArchipelagoSession.LoginAsync -> BaseArchipelagoSocketHelper.SendMultiplePackets(...).Wait(),
-            // MultiClient.Net 6.7.1). An attempt stuck there kept `busy` set and stopped every retry (2026-09-24).
+            // The login step waits on a send with no timeout, so a stuck attempt would keep `busy` set forever.
             if (busy && (nowUtc - attemptStartedUtc).TotalSeconds > AttemptDeadlineSeconds)
             {
                 ArchipelagoSession stuck;
@@ -105,8 +89,7 @@ namespace BugFablesAP
             if ((nowUtc - lastPingUtc).TotalSeconds >= PingSeconds && Interlocked.CompareExchange(ref pingInFlight, 1, 0) == 0)
             {
                 lastPingUtc = nowUtc;
-                // Never send on the game thread: websocket-sharp's IsAlive, which every MultiClient.Net send checks
-                // first, sends a ping and blocks until the pong arrives, up to 5 s (WebSocket.ping, WaitTime).
+                // Off the game thread: IsAlive, checked before every send, blocks up to 5 s for a pong.
                 ThreadPool.QueueUserWorkItem(_ =>
                 {
                     try
@@ -134,7 +117,7 @@ namespace BugFablesAP
 
         private void MarkLost(ArchipelagoSession s, string reason)
         {
-            // Called from the game thread and from connection threads: only the first caller for a session acts.
+            // Game thread and connection threads: only the first caller for a session acts.
             if (s == null || !ReferenceEquals(Interlocked.CompareExchange(ref session, null, s), s))
             {
                 return;
@@ -164,17 +147,12 @@ namespace BugFablesAP
 
         internal bool Connected => session != null && session.Socket.Connected;
 
-        // The logged-in session, or null. Read on the game thread by LocationChecks.
         internal ArchipelagoSession Session => session;
 
-        // True once a login this run has brought the seed's tables (slot_data). They stay after a drop, so a dropped
-        // connection keeps the rules in force; before the first login nothing is known, and the file select holds
-        // randomizer saves back (MenuToggle): the mod keeps no copy of the seed on disk (the user, 2026-09-24).
+        // True once a login brought slot_data; kept after a drop so the rules stay in force. Never saved to disk.
         internal bool SeedKnown => seedKnown;
         private volatile bool seedKnown;
 
-        // slot_data's location_flags: which game flag marks each location done ({location id: flag}). Set at each
-        // login; null when the world didn't send it.
         internal Dictionary<long, int> LocationFlags => locationFlags;
         private volatile Dictionary<long, int> locationFlags;
 
@@ -192,12 +170,9 @@ namespace BugFablesAP
             return result;
         }
 
-        // slot_data's location_gives: the |giveitem| that hands out each location's vanilla item. ItemSwap keeps
-        // that item out of the inventory. Null when the world didn't send it.
         internal Dictionary<long, Give> LocationGives => locationGives;
         private volatile Dictionary<long, Give> locationGives;
 
-        // slot_data's item_kinds: which inventory list each Bug Fables item belongs to ({item id: 0 item, 1 key item}).
         internal Dictionary<long, int> ItemKinds => itemKinds;
         private volatile Dictionary<long, int> itemKinds;
 
@@ -210,7 +185,7 @@ namespace BugFablesAP
             return map.Properties().ToDictionary(p => long.Parse(p.Name), p => p.Value.Value<int>());
         }
 
-        // This player's slot number, from the last login (kept after a drop, like the tables above).
+        // Kept after a drop, like the tables above.
         internal int OwnSlot => ownSlot;
         private volatile int ownSlot = -1;
 
@@ -240,9 +215,6 @@ namespace BugFablesAP
             return result;
         }
 
-        // slot_data's location_pickups: locations that are items lying in the world (or buried), each known by the
-        // pickup's own activationflag on its map ({location id: {map, flag}}). ItemSwap's pickup prefix keeps their
-        // vanilla item out. Null when the world didn't send it.
         internal Dictionary<long, Pickup> LocationPickups => locationPickups;
         private volatile Dictionary<long, Pickup> locationPickups;
 
@@ -250,14 +222,11 @@ namespace BugFablesAP
         {
             internal string Map;
             internal int Flag;
-            // A story pickup has no activationflag of its own (its story event hides it for good): it's known by the
-            // story event picking it up starts (its data[1]), the same whether the scene created it (Event4's
-            // "tempitem") or the map did on a later visit ("MushroomItem"). -1 for ordinary pickups.
+            // A story pickup has no activationflag: it's known by the event picking it up starts (its data[1]).
             internal int Event = -1;
-            // A crystal berry is known by its index (crystalbflags), in data[0] at pickup. -1 for other pickups.
+            // Crystal berry index (crystalbflags), in data[0].
             internal int Berry = -1;
-            // A respawning pickup has no flag of its own, only a regional flag the game wipes on every area change
-            // (NPCControl.CheckItem writes |regionalflag,N,true| before the add). -1 for other pickups.
+            // A respawning pickup has only a regional flag, which the game wipes on every area change.
             internal int Regional = -1;
         }
 
@@ -282,8 +251,7 @@ namespace BugFablesAP
             return result;
         }
 
-        // slot_data's location_vars: locations marked done by a number slot reaching a value, not a flag
-        // ({location id: {var, at_least}}; a boss prize handed over is its prize slot reaching 3). Null when not sent.
+        // {location id: {var, at_least}}: done when a number slot reaches a value (a boss prize: its slot at 3).
         internal Dictionary<long, int[]> LocationVars => locationVars;
         private volatile Dictionary<long, int[]> locationVars;
 
@@ -297,23 +265,15 @@ namespace BugFablesAP
                 p => new[] { p.Value.Value<int>("var"), p.Value.Value<int>("at_least") });
         }
 
-        // slot_data's location_berries: crystal berry locations, done when their crystalbflags index is set
-        // ({location id: index}). Null when not sent.
         internal Dictionary<long, int> LocationBerries => locationBerries;
         private volatile Dictionary<long, int> locationBerries;
 
-        // slot_data's location_discoveries: journal discovery locations, done when librarystuff[0, n] is set
-        // ({location id: n}; Shuffle Discoveries, 2026-09-25). Null when not sent.
         internal Dictionary<long, int> LocationDiscoveries => locationDiscoveries;
         private volatile Dictionary<long, int> locationDiscoveries;
 
-        // slot_data's location_shops: shop stock locations, one per copy the shop ever stocks, done when the save marks the copy bought (ShopSwap)
-        // ({location id: [shop, medal]}; Shuffle Medal Shops, 2026-09-25). Null when not sent.
         internal Dictionary<long, int[]> LocationShops => locationShops;
         private volatile Dictionary<long, int[]> locationShops;
 
-        // slot_data's location_item_shops: an item shop's first purchase of an item ({location id: {map, keeper, item}};
-        // Shuffle Item Shops, 2026-09-25). Null when not sent.
         internal sealed class ItemShopSlot
         {
             internal string Map;
@@ -323,8 +283,6 @@ namespace BugFablesAP
 
         internal Dictionary<long, ItemShopSlot> LocationItemShops => locationItemShops;
 
-        // slot_data's door_targets: doors the entrance randomizer rewrites ([{map, door, like_map, like_door}]: that door
-        // leads where like_door leads; DoorShuffle). Null when not sent.
         internal List<DoorShuffle.Target> DoorTargets => doorTargets;
         private volatile List<DoorShuffle.Target> doorTargets;
         private volatile Dictionary<long, ItemShopSlot> locationItemShops;
@@ -338,44 +296,28 @@ namespace BugFablesAP
             return map.Properties().ToDictionary(p => long.Parse(p.Name), p => p.Value.Value<int>());
         }
 
-        // slot_data's kept_open: blockers the story puts up for a while that the seed keeps out of the way, so an area
-        // with locations never closes ([{map, entity}], KeptOpen). Null when the world didn't send it.
         internal List<Blocker> KeptOpen => keptOpen;
         private volatile List<Blocker> keptOpen;
 
-        // slot_data's kept_present: ways the story only makes later (a door, a bounce mushroom) that the seed makes
-        // exist from the start ([{map, entity}], KeptOpen). Null when the world didn't send it.
         internal List<Blocker> KeptPresent => keptPresent;
         private volatile List<Blocker> keptPresent;
 
-        // slot_data's scenery_hidden: map scenery the story removes later (the Outskirts rocks) that the seed removes from
-        // the start ([{map, entity}], entity being the object's path inside the map, as MapDump writes it).
+        // Scenery entities are paths inside the map, as MapDump writes them.
         internal List<Blocker> SceneryHidden => sceneryHidden;
-        // slot_data's scenery_present: scenery the story shows later that the seed shows from the start (the caravan's
-        // stall), by path. Null when not sent.
         internal List<Blocker> SceneryPresent => sceneryPresent;
         private volatile List<Blocker> sceneryPresent;
         private volatile List<Blocker> sceneryHidden;
 
-        // slot_data's held_until: an entity with no gate of its own that the seed keeps away until a story flag
-        // ([{map, entity, flag}]): the town's first-entry scene, reachable once the rocks are gone, waits for the first
-        // boss as it did behind them.
         internal List<Blocker> HeldUntil => heldUntil;
         private volatile List<Blocker> heldUntil;
 
-        // slot_data's present_from: a way the story makes at a late flag that the seed makes at an earlier one instead
-        // ([{map, entity, flag}]): the door back down to the fall room exists from the trapdoor (14), not the first boss.
-        // How many items the server had sent this slot when the current login began: items up to here are a replay (a new
-        // save catching up, or a reconnect), not something arriving during play (HoldUps, the user, 2026-09-25).
+        // Items the server had sent when this login began: those are a replay, not something arriving during play.
         internal int ReceivedAtLogin => receivedAtLogin;
         private volatile int receivedAtLogin;
 
         internal List<Blocker> PresentFrom => presentFrom;
         private volatile List<Blocker> presentFrom;
 
-        // slot_data's dialogue_flags: one of an entity's dialogue lines chosen by another flag ([{map, entity, flag, to}]):
-        // the bar entrance's line for flag 135 (the way down) answers to flag 691, set on every new game, so the bar is
-        // open from the start without flag 135's other effects.
         internal List<DialogueFlag> DialogueFlags => dialogueFlags;
         private volatile List<DialogueFlag> dialogueFlags;
 
@@ -408,12 +350,8 @@ namespace BugFablesAP
             }).ToList();
         }
 
-        // Respawning pickups (the user, 2026-09-24): the first pickup sends the check and gives nothing, later ones are
-        // the game's own again. Nothing in the save marks them, so the mod keeps what's done: the server's checked list
-        // from the last login, its updates, and the checks picked up here. A pickup made while the connection is down
-        // waits in the outbox, tagged with its save's seed, and LocationChecks sends it once a session for that seed
-        // is up. Only memory: if the game closes first, the spot shows the seed's item again next time and the pickup
-        // is simply made again. Game thread and connection threads, hence the lock.
+        // Respawning pickups: nothing in the save marks them, so what's done lives here (server list, updates, local
+        // checks), and offline pickups wait in the outbox tagged with their seed. Memory only; locked across threads.
         private readonly object doneLock = new object();
         private readonly HashSet<long> done = new HashSet<long>();
         private readonly Dictionary<long, string> respawnOutbox = new Dictionary<long, string>();
@@ -435,7 +373,7 @@ namespace BugFablesAP
             }
         }
 
-        // The outbox's checks for this seed, taken out to send; a stale seed's are dropped.
+        // A stale seed's checks are dropped.
         internal long[] TakeRespawnChecks(string seed)
         {
             lock (doneLock)
@@ -465,8 +403,7 @@ namespace BugFablesAP
             }
         }
 
-        // What the seed put at each of this slot's locations, asked once per login without creating hints
-        // (HintCreationPolicy.None: a hint-creating scout would announce the seed). Null until it arrives.
+        // HintCreationPolicy.None: a hint-creating scout would announce the seed.
         internal Dictionary<long, ScoutedItemInfo> Scouts => scouts;
         private volatile Dictionary<long, ScoutedItemInfo> scouts;
 
@@ -498,9 +435,7 @@ namespace BugFablesAP
             });
         }
 
-        // Send finished locations from a worker thread (on this build every send pings first and waits). The
-        // library keeps every check the server hasn't confirmed and resends them with the next send
-        // (LocationCheckHelper, 6.7.1); checks made offline are found again in the save's flags at the next login.
+        // The library resends unconfirmed checks with the next send; offline checks are found in the save's flags at login.
         internal void SendChecks(ArchipelagoSession s, long[] ids)
         {
             ThreadPool.QueueUserWorkItem(_ =>
@@ -526,7 +461,6 @@ namespace BugFablesAP
                 return;
             }
             busy = true;
-            // Connecting again (another room, or the same one after a change) replaces the old session.
             Disconnect();
             log.LogInfo($"[ap] connecting to {server} as '{slot}'");
             status = $"Connecting to {server} as {slot}...";
@@ -560,8 +494,7 @@ namespace BugFablesAP
                         attemptSession = attempt;
                     }
                 }
-                // A login that times out says only "Connection timed out." Log what the socket reported on the way,
-                // once per attempt and message.
+                // A timed-out login says only "Connection timed out.": log what the socket reported on the way.
                 var seen = new HashSet<string>();
                 attempt.Socket.ErrorReceived += (e, message) =>
                 {
@@ -573,7 +506,6 @@ namespace BugFablesAP
                     }
                     if (first && ReferenceEquals(session, null))
                     {
-                        // The whole exception, stack included: the message alone didn't say where it came from.
                         Post("[ap] socket error while connecting: " + line + "\n" + e);
                     }
                 };
@@ -582,7 +514,7 @@ namespace BugFablesAP
 
                 if (!IsCurrent(number))
                 {
-                    // Abandoned at its deadline (Watchdog) or replaced: close whatever it opened, report nothing else.
+                    // Abandoned at its deadline or replaced: close what it opened, report nothing else.
                     KillSocket(attempt);
                     Post("[ap] an abandoned connect attempt finished late (" + result?.GetType().Name + "); ignored");
                     return;
@@ -596,7 +528,6 @@ namespace BugFablesAP
                     status = $"Connected as {slot}.";
                     Heard();
                     lastPingUtc = DateTime.UtcNow;
-                    // Only this session dropping counts; Disconnect() clears `session` first.
                     locationFlags = ReadLocationFlags(ok.SlotData);
                     locationGives = ReadLocationGives(ok.SlotData);
                     locationPickups = ReadLocationPickups(ok.SlotData);
@@ -638,7 +569,6 @@ namespace BugFablesAP
                     seedKnown = true;
                     scouts = null;
                     ResetDone(attempt);
-                    // Every location this slot has: gifts and pickups alike show what's really there.
                     Scout(attempt, (locationFlags?.Keys ?? Enumerable.Empty<long>()).Concat(locationVars?.Keys ?? Enumerable.Empty<long>())
                         .Concat(locationBerries?.Keys ?? Enumerable.Empty<long>())
                         .Concat(locationDiscoveries?.Keys ?? Enumerable.Empty<long>())
@@ -658,9 +588,7 @@ namespace BugFablesAP
                     Post($"[ap] logged in: slot {ok.Slot}, team {ok.Team}, world_version {version}, "
                         + $"{attempt.Items.AllItemsReceived.Count} items received so far, "
                         + $"{attempt.Locations.AllLocationsChecked.Count} of {attempt.Locations.AllLocations.Count} locations checked");
-                    // Read back what the handshake settled, from the socket itself.
-                    // A bare address tries wss:// first and falls back to ws:// (ArchipelagoSocketHelper), so which
-                    // one connected is only known from the socket.
+                    // A bare address tries wss:// then ws://: only the socket knows which connected.
                     WebSocket socket = WebSocketOf(attempt);
                     string extensions = socket?.Extensions;
                     Post("[ap] connected over " + (socket?.Url?.Scheme ?? "unknown") + ", compression: "
@@ -671,14 +599,13 @@ namespace BugFablesAP
                     string why = string.Join("; ", failed.Errors);
                     if (failed.ErrorCodes != null && failed.ErrorCodes.Length > 0)
                     {
-                        // The server answered and said no: retrying the same details cannot help.
+                        // The server said no: retrying the same details cannot help.
                         refused = true;
                         status = "Refused: " + why;
                         Post("[ap] login refused: " + why + " (" + string.Join(", ", failed.ErrorCodes) + ")");
                     }
                     else
                     {
-                        // No answer from a server (unreachable, timed out): worth retrying.
                         Post("[ap] could not reach the server: " + why);
                         ScheduleRetry("Could not reach the server.");
                     }
@@ -694,8 +621,6 @@ namespace BugFablesAP
             }
             catch (Exception e)
             {
-                // The first connect is also the measurement of whether this game's Mono can run the client
-                // library at all (websocket-sharp, no System.Reflection.Emit), so report the whole exception.
                 Post("[ap] connect threw: " + e);
                 ScheduleRetry("Could not connect: " + e.GetBaseException().Message + ".");
             }
@@ -720,7 +645,6 @@ namespace BugFablesAP
             }
         }
 
-        // Game thread: write out what the worker reported.
         internal void Tick()
         {
             lock (gate)
@@ -740,20 +664,15 @@ namespace BugFablesAP
             failures = 0;
         }
 
-        // The websocket-sharp socket inside MultiClient.Net's net40 helper (an internal field, hence reflection).
+        // An internal field of MultiClient.Net's net40 helper, hence reflection.
         private static WebSocket WebSocketOf(ArchipelagoSession s)
         {
             FieldInfo field = s?.Socket?.GetType().GetField("webSocket", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             return field?.GetValue(s.Socket) as WebSocket;
         }
 
-        // Close a session's socket for good, on a worker thread: websocket-sharp's Close sends a close frame and waits
-        // up to 5 s for the answer (WaitTime), which a dead server never sends. Closing releases the TCP stream, which
-        // also ends websocket-sharp's receive thread if the server vanished without a word.
-        // History: on the netstandard2.0 build (Mono's ClientWebSocket) a lost socket stayed "Open" and the library's
-        // receive loop spun forever, measured 2026-09-24 as five threads at ~75% of a core and memory growing
-        // ~2.5 MB/s. Switching to the net40 build (websocket-sharp, for compression) replaced that layer; the same
-        // drop test is re-run on it (agent_docs/apimplementation.md, build step 5).
+        // On a worker thread: Close waits up to 5 s for a close frame a dead server never sends. Closing also ends
+        // websocket-sharp's receive thread.
         private void KillSocket(ArchipelagoSession s)
         {
             if (s == null)

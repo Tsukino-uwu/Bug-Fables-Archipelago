@@ -809,6 +809,43 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 - Shopkeeper prompts are |prompt,map,Y,N,target1..targetN,text1..textN| (MainManager.cs:12213-12222). Used by `QualityOfLife.cs`.
 - Holding skip: inputcooldown is 16 after a box, 10 when a new dialogue opens (MainManager.cs:5147, :10738), 4 while a box is typing (:5151), counted down one per frame (:7298). Used by `QualityOfLife.cs`.
 
+### The connection, the dev console, the party, the menus
+
+- The game's berry sprite for a money giveitem, by amount: itemsprites[0, 186] for 20 or more, [0, 6] under 5, else [0, 7] (MainManager.cs:11506). Used by `ItemIds.cs`.
+- The game's money reward code adds berries clamped to 0..999 and sets showmoney = 1 to show the counter (MainManager.cs:11534); the money script command does the same (MainManager.cs:12580-12590). Used by `DevCheats.cs`, `DevConsole.cs`.
+- A pickup's touch starts in NPCControl.OnTriggerEnter, an Enter trigger: standing on an item doesn't take it again, stepping off and back on does (NPCControl.cs:4516). Used by `DevConsole.cs`.
+- A pickup's touchcooldown is waited out by CheckItem (NPCControl.cs:5608) and counted down each frame (NPCControl.cs:2802); 90 holds it about 1.5 s. Used by `DevConsole.cs`.
+- Every hit's damage ends in BattleControl.DoDamage(attacker, ref target, amount, property, overrides, block); the other overloads lead there. The game tells the party from enemies by the target's "Player" tag (BattleControl.cs:7283, :7295). Used by `DevConsole.cs`.
+- EntityControl.Jump is the normal jump (height and sound, EntityControl.cs:4598, via PlayerControl.DoJump); the player's own jump only fires on the ground (PlayerControl.cs:372); a jump sets jumpcooldown to 30 frames, longer than the whole jump (measured in the log 2026-09-24). Used by `DevConsole.cs`.
+- Map entity table Data/EntityData/<map id>: rows split on '}', fields 6-8 the start position, field 194 the activationflag, as MapControl.CreateEntities reads them (MapControl.cs:1477-1640, :1661). Used by `DevConsole.cs`, `WarpButton.cs`.
+- MainManager.TransferMap ends by walking the party to its target and waits for that walk (MainManager.cs:17610-17624): a target over water is never reached, the transition never ends, and the game keeps respawning the party there (seen at SnakemouthLake, 2026-09-24). Used by `DevConsole.cs`.
+- Water raycasts as ground; water, spikes and pits carry the game's Hazards component. Used by `DevConsole.cs`.
+- A map's auto-start cutscenes (MapControl.autoevent, pairs of (flag, event)) run on arrival while their flag is off (MapControl.cs:874-883); arriving out of story order, Event21 on SnakemouthUndergrondDoor crashed and left the game "in an event" (2026-09-24). Used by `DevConsole.cs`.
+- Resets for what a dead cutscene leaves: MainManager.ResetCamera (MainManager.cs:7398), MapControl.RestoreLimit (MapControl.cs:1432), MainManager.ChangeMusic() for the map's own music (MainManager.cs:4873); Event31 left all three broken (2026-09-24). Used by `DevConsole.cs`.
+- PlayTransition 4 ends on a black dimmer (MainManager.cs, Transition case 4 -> 0); PlayTransition 1 fades in and removes it. The boat scene (Event107) parents the party to the boat with LockRigid(true) and undoes both at its end (unparent, LockRigid(false), fade in). Used by `DevConsole.cs`.
+- The trapdoor scene turns the party's gravity off and forces an animation (EventControl.cs:1334-1335). Used by `DevConsole.cs`.
+- The game's dialogue end turns off message and the waits, and shrinks and removes the box (MainManager.cs:14185-14204). The private field `textbox` holds only the letters ("Text: ...", MainManager.cs:10677, :10814); the speech box is the Textbox prefab kept in maintextbox (MainManager.cs:10781), and an orphan "Textbox(Clone)" can stay under the GUI camera after dialogue ends. Used by `DevConsole.cs`.
+- MainManager.SetPlayers(positions) places member j at newentitypos[j] (MainManager.cs:9416-9439), so a list shorter than the party throws IndexOutOfRange. Used by `PartyFit.cs`.
+- A scene that reloads the map with recreateplayers (Event45's throne room, LoadMap) remakes the party characters, so references to the old ones go null. Used by `PartyFit.cs`.
+- EntityControl.LateUpdate (EntityControl.cs:3672) runs after the scene's step and the entity's own updates, just before drawing: the place to force a renderer off. Used by `PartyFit.cs`.
+- Every EntityControl.MoveTowards overload ends in MoveTowards(Vector3, float, int, int, bool) (EntityControl.cs:4911-4960). Used by `PartyFit.cs`.
+- Scenes take the party as a list and use fixed slots p[0]..p[2] (about 110 lookups; Event83, the barkeeper's first talk, reads p[2], EventControl.cs:13055-13058); GetPartyEntities(true) returns the party in id order (MainManager.cs:9483-9503). Used by `PartyFit.cs`.
+- The horn tutorial (Event10) waits while entities[0].forcemove (EventControl.cs:2935); the trapdoor's end puts member m at the m-th scene character's position (EventControl.cs:1476-1484); the spider fight's end (Event6, EventControl.cs:2272-2289) sets entities[2].following = entities[1]; the droplet scene's end (Event21, EventControl.cs:4112-4114) walks GetEntity(-2) and (-3) to the player. Used by `PartyFit.cs`.
+- MainManager.GetEntity: -2 and -3 are the second and third member by position (MainManager.cs:18526-18537), -4/-5/-6 are Vi/Kabbu/Leif by name (MainManager.cs:18538-18570), 1000 + n reads map.tempfollowers[n] (MainManager.cs:18512-18515) and throws ArgumentOutOfRange when nobody is there; no caller null-checks the result. Used by `PartyFit.cs`.
+- The main menu's confirm sound: StartMenu.Update plays "Confirm" for every main-menu choice (menuid 1) before acting on it. Used by `MenuToggle.cs`.
+- On the file select (menuid 2, submenu 0), confirm on file 0-2 is StartMenu.Update's load or new-game branch (StartMenu.cs:512-535, Event22 or Event8); the save slots' boxes sort at -20 to -60 and their text at 10 (StartMenu.ShowSaves). Used by `MenuToggle.cs`.
+- Closing the game's Settings from the title resets maxoptions to 3 (PauseMenu.cs:1811). Used by `MenuToggle.cs`.
+- MainManager.Create9Box box type 1 is the game's orange box; ButtonSprite draws its label with no sort of its own, so the label text must carry |sort,N| to show over a box. Used by `MenuToggle.cs`.
+- Pause menu window 0: maxoptions icons (4, or 2 in battle) built in BuildWindow as sprites[13 + n] with guisprites[74 + n] via NewUIObject (PauseMenu.cs:2378-2497, :2493-2497); window 0's sprites array is 19 long (:2404), other pages' 8 to 12 (PauseMenu.cs:2235-2678); confirm opens window option + 1 (:374-380); labels are menutext[10 + option] and [50 + option] (UpdateText); IconAnim gets {13, 14, 15, 16} and indexes by option (PauseMenu.cs:351); PrepareExit shrinks the boxes and DestroyPause follows 0.25 s later (PauseMenu.cs:1839). Used by `WarpButton.cs`.
+- The game's menu cursor sprite is MainManager.cursorsprite[0], set up as at MainManager.cs:14822 (sort, layer 5, SpriteBounce.MessageBounce). Used by `WarpButton.cs`.
+- A new game begins on the Outskirts: Event8 loads map 16 (EventControl.cs:2636). Used by `WarpButton.cs`.
+- guisprites[34] is a round blue map icon in the pause-menu icon style (from SpriteDump's sheet). Used by `WarpButton.cs`.
+- MultiClient.Net 6.7.1 net40: every send first checks websocket-sharp's IsAlive, which pings and blocks up to 5 s for the pong (WebSocket.ping, WaitTime); websocket-sharp's Close sends a close frame and waits up to 5 s for the answer. Used by `ApConnection.cs`.
+- MultiClient.Net 6.7.1 keeps every location check the server hasn't confirmed and resends them with the next send (LocationCheckHelper). Used by `ApConnection.cs`.
+- Scouting with HintCreationPolicy.None creates no hints; a hint-creating scout would announce the seed's placements. Used by `ApConnection.cs`.
+- ArchipelagoSocketHelper tries wss:// first for a bare address and falls back to ws://. Used by `ApConnection.cs`.
+- slot_data location_shops: {location id: {shop, medal}}, one location per copy a medal shop ever stocks, done when the save marks that copy bought (ShopSwap). Used by `ApConnection.cs`.
+
 ## Quests: to measure (when quests come into scope)
 
 - **The pause menu's quest list groups quests by chapter and shows done / not done** (the user,

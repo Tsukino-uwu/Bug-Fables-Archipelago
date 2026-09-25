@@ -7,12 +7,8 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Chapter 1 scenes are written for a party of two. With a third member there early (an open start with Leif; the
-    // user's rehearsal with addleif, 2026-09-25), the trapdoor scene (Event5) recreated the party with
-    // SetPlayers(positions) and a list of two positions, and SetPlayers indexed it for all three: IndexOutOfRange, the
-    // scene stopped halfway and the player was stuck. SetPlayers places member j at newentitypos[j]
-    // (MainManager.cs:9416-9439), so a list shorter than the party is lengthened first: each extra member stands a step
-    // behind the last listed one. Only while the Archipelago mod is enabled.
+    // Makes scenes written for a fixed party (two or three) run with the party the seed has. Only while Archipelago is on.
+    // SetPlayers indexes its position list for every member, so a shorter list is lengthened first.
     internal static class PartyFit
     {
         private static ManualLogSource log;
@@ -51,9 +47,7 @@ namespace BugFablesAP
             {
                 log.LogError("[party] MainManager.GetPartyEntities not found: scenes written for three still crash with two.");
             }
-            // Hidden as late as possible: the per-frame Tick came before the scene's step and the entity's own updates,
-            // which switched a stand-in's sprite back on for a frame now and then (the user, 2026-09-25: stand-ins
-            // flashing). A postfix on its own LateUpdate (EntityControl.cs:3672) runs after both, just before drawing.
+            // Hidden as late as possible: after the scene's step and the entity's own updates, just before drawing.
             MethodInfo lateUpdate = AccessTools.Method(typeof(EntityControl), "LateUpdate");
             if (lateUpdate != null)
             {
@@ -63,7 +57,7 @@ namespace BugFablesAP
             {
                 log.LogError("[party] EntityControl.LateUpdate not found: stand-ins may flash into view.");
             }
-            // Every MoveTowards overload ends in this one (EntityControl.cs:4911-4960).
+            // Every MoveTowards overload ends in this one.
             MethodInfo moveTowards = AccessTools.Method(typeof(EntityControl), nameof(EntityControl.MoveTowards),
                 new[] { typeof(Vector3), typeof(float), typeof(int), typeof(int), typeof(bool) });
             if (moveTowards != null)
@@ -85,37 +79,23 @@ namespace BugFablesAP
             ClearStandIns();
         }
 
-        // Stand-ins (the user, 2026-09-25: make scenes work with one or two members). A scene takes the party as a list and
-        // uses fixed slots, p[0] to p[2] (about 110 lookups; the barkeeper's first talk, Event83, crashed on p[2] with Vi
-        // and Kabbu, EventControl.cs:13055-13058). While a scene runs, the list is padded to three with an invisible
-        // stand-in for each missing member, made as the game makes scene characters (EntityControl.CreateNewEntity, with
-        // that member's animid: Vi 0, Kabbu 1, Leif 2) at the leader's feet, hidden and without collision, and removed
-        // when the scene ends. By id order (Vi, Kabbu, Leif; GetPartyEntities(true), MainManager.cs:9483-9503) the stand-in
-        // takes the missing member's own slot; otherwise it is added after the party. Outside scenes nothing changes, so
-        // nothing can take a stand-in for a member who has joined. Each scene that used one is logged once.
+        // Scenes use fixed slots p[0] to p[2]: while one runs, the party list is padded with an invisible stand-in per
+        // missing member (id order keeps its own slot). Outside scenes nothing changes.
         private static readonly EntityControl[] standIns = new EntityControl[3];
         private static readonly System.Collections.Generic.HashSet<string> standInReported = new System.Collections.Generic.HashSet<string>();
 
-        // A scene or a conversation: an NPC's line can hand the talk to a member by name (|next,-4|, Vi), outside any scene
-        // (Artis's talk with Leif alone crashed SetText on the missing speaker, the user, 2026-09-25).
+        // A conversation counts too: an NPC's line can hand the talk to a member by name.
         private static bool Talking => MainManager.instance != null && (MainManager.instance.inevent || MainManager.instance.message);
 
         private static bool InScene() =>
             randomizerOn != null && randomizerOn() && Talking && MainManager.player != null;
 
-        // The leader acts a missing member's part (the user, 2026-09-25: Leif walking up to the grass, picking up the
-        // mushroom and falling like Kabbu, rather than standing idle beside invisible stand-ins). Once per scene or
-        // conversation, at its first stand-in: if the story's leader (the first member of the party it last asked for) isn't
-        // in the party, the real leader plays that member; every other missing member stays an invisible stand-in. Chosen
-        // once, since a scene can change the party partway (the spider fight's does). Animations play by number, so the
-        // leader shows his own animation for the role's (the field action is 100 for everyone: Leif's ice for Kabbu's horn).
+        // The leader acts the part of the story's missing leader, chosen once per scene since a scene can change the party
+        // partway. Animations play by number, so he shows his own for the role's.
         private static EntityControl actor;
         private static int actorRole = -1; // -1 not chosen yet this scene, -2 nobody acts
 
-        // Whether the story's party holds this member at this point: Vi from the opening (flag 15), Kabbu always, Leif once
-        // he has joined (flag 16). A leader the story already has plays himself (the user, 2026-09-25: in the briefing
-        // Leif doing Leif's part is right, rather than one member doing another's); he acts the lead only in scenes whose
-        // party doesn't have him yet (chapter 1 before Leif joins).
+        // Vi from the opening (flag 15), Kabbu always, Leif once joined (flag 16). A member the story has plays himself.
         private static bool InStoryParty(int member)
         {
             bool[] flags = MainManager.instance.flags;
@@ -125,8 +105,7 @@ namespace BugFablesAP
         private static void ChooseActor()
         {
             MainManager mm = MainManager.instance;
-            // A scene that reloads the map partway remakes the party characters (Event45's throne room, LoadMap with
-            // recreateplayers): the actor was the old leader character, now gone; the new leader takes the part on.
+            // A scene that reloads the map remakes the party characters: the new leader takes the part on.
             if (actorRole >= 0 && actor == null && mm.playerdata != null && mm.playerdata.Length > 0 && mm.playerdata[0].entity != null)
             {
                 actor = mm.playerdata[0].entity;
@@ -143,8 +122,7 @@ namespace BugFablesAP
             }
             int[] story = PartyMembers.LastStoryParty;
             int lead = story != null && story.Length > 0 ? story[0] : -1;
-            // Unknown (a reload forgets it): the first missing member by id, Vi before Kabbu (the droplet scene,
-            // Event21, ran with no actor after a reload, the user, 2026-09-25).
+            // Unknown after a reload: the first missing member by id.
             if (lead < 0 && mm.playerdata != null)
             {
                 lead = Enumerable.Range(0, 3).Where(m => !mm.playerdata.Any(p => p.trueid == m)).DefaultIfEmpty(-1).First();
@@ -172,9 +150,7 @@ namespace BugFablesAP
             if (standIns[member] == null)
             {
                 standIns[member] = EntityControl.CreateNewEntity("apstandin" + member, member, MainManager.player.transform.position);
-                // A new character gets its physics body only in its Start, a frame later (EntityControl.cs:524-528), and a
-                // scene using the stand-in at once crashed: the spider fight's lead-in made it Jump(), whose Unfix uses the
-                // body (Event6, the user, 2026-09-25). Start adds one only when there is none, so this one is kept.
+                // A new character gets its body only in Start, a frame later; a scene using it at once crashed. Start keeps this one.
                 EntityControl made = standIns[member];
                 if (made.rigid == null)
                 {
@@ -192,9 +168,7 @@ namespace BugFablesAP
             return standIns[member];
         }
 
-        // A scene walking a stand-in somewhere, then waiting until it arrives (Event10, the horn tutorial: while
-        // (entities[0].forcemove), EventControl.cs:2935): a stand-in has no collision and never got there, so the scene
-        // stood still (the user, 2026-09-25, Leif alone). A stand-in arrives at once.
+        // A scene that waits for a stand-in to arrive would wait for good (no collision): it arrives at once.
         private static void AfterLateUpdate(EntityControl __instance)
         {
             if (__instance == null || !standIns.Contains(__instance))
@@ -213,10 +187,7 @@ namespace BugFablesAP
             {
                 return;
             }
-            // Except toward the real player: PartyMover walks every party member, stand-ins included, to the player
-            // (EventControl PartyMover), who with one member isn't in the scene at all (left where the map put him). The
-            // trapdoor's end then placed Leif on stand-in Vi's spot, by then teleported to Leif: far left instead of the
-            // landing spot (the user, 2026-09-25). A stand-in doesn't follow the real party; it stays where the scene put it.
+            // Except toward the real player: a stand-in stays where the scene put it rather than follow the party.
             if (MainManager.player != null && Vector3.Distance(pos, MainManager.player.transform.position) < 2f)
             {
                 __instance.forcemove = false;
@@ -237,8 +208,7 @@ namespace BugFablesAP
             for (int member = 0; member < 3; member++)
             {
                 EntityControl found = __result.FirstOrDefault(e => e != null && e.animid == member);
-                // The acting leader fills the role's slot; his own gets an invisible stand-in, so a scene moving "each
-                // member" never moves the player twice.
+                // The acting leader fills the role's slot; his own gets a stand-in, so the player never moves twice.
                 if (found != null && found == actor && member != actorRole)
                 {
                     found = null;
@@ -267,11 +237,8 @@ namespace BugFablesAP
             __result = longer.ToArray();
         }
 
-        // A scene that ends with stand-ins treated them as the party (the spider fight's end, Event6, EventControl.cs:
-        // 2272-2289, the user, 2026-09-25): it walked Vi and Kabbu to where the player should stand, never the real player,
-        // and made the fall room's character follow Kabbu (entities[2].following = entities[1]). Before the stand-ins go:
-        // if the story's leader (the first member of the party it last asked for) was a stand-in, the real party moves to
-        // where it was left; anyone following a stand-in follows the real party's last member instead.
+        // A scene can end treating stand-ins as the party: if the story's leader was a stand-in, the party moves to its
+        // spot; anyone following a stand-in follows the party's last member.
         private static void HandOver()
         {
             MainManager mm = MainManager.instance;
@@ -298,8 +265,7 @@ namespace BugFablesAP
             {
                 if (e.following != null && standIns.Contains(e.following) && !standIns.Contains(e))
                 {
-                    // A character of someone already in the party (the story's Leif after the spider fight, with Leif
-                    // the one member): a copy, so it goes.
+                    // A copy of someone already in the party: remove it.
                     if (e.animid >= 0 && e.animid <= 2 && mm.playerdata.Any(p => p.trueid == e.animid))
                     {
                         UnityEngine.Object.Destroy(e.gameObject);
@@ -326,7 +292,6 @@ namespace BugFablesAP
             }
         }
 
-        // Each frame: stand-ins stay invisible and solid-free while the scene runs, and go when it ends.
         internal static void Tick()
         {
             if (!standIns.Any(e => e != null) && actorRole == -1)
@@ -354,10 +319,7 @@ namespace BugFablesAP
                 {
                     c.enabled = false;
                 }
-                // Without collision a stand-in fell through the floor, and a scene that then places a real member on its spot
-                // (the trapdoor's end puts member m at the m-th scene character's position, EventControl.cs:1476-1484) put
-                // Leif where it had sunk to (the user, 2026-09-25: "down/left at a rock" instead of on the mushroom). So a
-                // stand-in stays exactly where the scene puts it.
+                // Kinematic: a scene may place a real member on a stand-in's spot, so it must not sink through the floor.
                 if (e.rigid != null)
                 {
                     if (!e.rigid.isKinematic)
@@ -370,17 +332,12 @@ namespace BugFablesAP
             }
         }
 
-        // The town open from the start (the user, 2026-09-25) reaches lines and scenes written for after chapter 1, when a
-        // companion travels with the party: GetEntity(1000 + n) reads map.tempfollowers[n] (MainManager.cs:18512-18515),
-        // and with nobody there it threw ArgumentOutOfRange (the town's arrival scene, then a theater NPC's line). The
-        // user chose a fallback: the party's leader answers instead, so nothing crashes (the companion's line comes from
-        // the leader), and each place is logged once, so a scene that truly needs the companion can be held back.
+        // GetEntity(1000 + n) reads map.tempfollowers[n]: with no companion there, the leader answers (logged once per place).
         private static readonly System.Collections.Generic.HashSet<string> reported = new System.Collections.Generic.HashSet<string>();
 
         private static bool BeforeGetEntity(int id, ref EntityControl __result)
         {
-            // A member asked for by name (-4 Vi, -5 Kabbu, -6 Leif, MainManager.cs:18538-18570) while a scene runs, and
-            // not in the party: the stand-in answers, as in GetPartyEntities (no code tests these for null, grep).
+            // A member by name (-4 Vi, -5 Kabbu, -6 Leif) not in the party: the stand-in answers (callers never null-check).
             if (id <= -4 && id >= -6 && InScene())
             {
                 int member = -4 - id;
@@ -390,9 +347,7 @@ namespace BugFablesAP
                     __result = StandIn(member);
                     return false;
                 }
-                // The acting leader asked for by his own name: cast twice, he'd follow whichever order came last. The
-                // briefing (Event45) sends "Vi" up to the Queen and "Leif" back, and Leif stayed back (the user,
-                // 2026-09-25). His own part goes to an invisible stand-in; he plays only the lead's.
+                // The acting leader asked for by his own name: his own part goes to a stand-in, or he'd follow two sets of orders.
                 ChooseActor();
                 if (actor != null && actorRole != member && actor.animid == member)
                 {
@@ -401,17 +356,13 @@ namespace BugFablesAP
                 }
                 return true;
             }
-            // The second and third member by position (-2, -3; MainManager.cs:18526-18537) with a smaller party: the droplet
-            // scene's end walks both to the player (Event21, EventControl.cs:4112-4114) and threw on nothing (the user,
-            // 2026-09-25). While a scene runs, slot k beyond the party answers with the k-th stand-in by member id (the
-            // acting leader already counts as the first).
+            // The second and third member by position (-2, -3) beyond the party: the stand-ins, acting leader counted first.
             if ((id == -2 || id == -3) && InScene())
             {
                 MainManager party = MainManager.instance;
                 int slot = -1 - id; // 1 or 2
                 if (party.playerdata != null && party.playerdata.Length <= slot)
                 {
-                    // The story's order: the acting role first (the leader, slot 0), then the others by id.
                     ChooseActor();
                     int[] order = (actorRole >= 0 ? new[] { actorRole } : new int[0])
                         .Concat(Enumerable.Range(0, 3).Where(m => m != actorRole)).ToArray();

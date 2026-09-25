@@ -6,11 +6,8 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // A fourth main-menu entry, "Archipelago", that opens the Archipelago panel (ApMenu). Measured 2026-09-24
-    // (agent_docs/MEASURED.md, "The main menu"): the menu is three lines built by StartMenu.SetMenuText, one unit
-    // apart; navigation wraps on maxoptions; Update's confirm branch acts only on options 0-2; the cursor is
-    // placed each frame at y = -option - 0.25. A fourth line one unit lower overlapped the credit line
-    // (the user's screenshot, 2026-09-24), so the four lines are spaced by Spacing and the cursor follows.
+    // A fourth main-menu entry, "Archipelago", that opens the Archipelago panel (ApMenu). The four lines are
+    // spaced tighter (Spacing) so the fourth clears the credit line, and the cursor follows.
     internal static class MenuToggle
     {
         private const int Option = 3;
@@ -54,9 +51,7 @@ namespace BugFablesAP
             harmony = null;
         }
 
-        // "Archipelago" is centred like the other three entries, about as wide as "Start Game", so the game's
-        // leaf cursor (a fixed column per language) stays clear of it. The state is a smaller tag to its right:
-        // a centred "Archipelago (Enabled)" ran under the leaf (the user's screenshot, 2026-09-24).
+        // Centred like the others so the leaf cursor (a fixed column) clears it; the state is a smaller tag to the right.
         private const string Label = "|center|Archipelago";
         private static string StateTag => "|size,0.55|" + (mode.Value ? "(Enabled)" : "(Disabled)");
         private const float StateTagX = 1.75f;
@@ -67,9 +62,7 @@ namespace BugFablesAP
             MainManager.instance.StartCoroutine(MainManager.SetText(StateTag, new Vector3(StateTagX, 0.22f, 10f), line));
         }
 
-        // The game calls SetMenuText again whenever it returns to the main menu, and its own loop indexes a
-        // three-label array by selections.Length. With our fourth entry still in the list that read past the end
-        // (IndexOutOfRangeException in SetMenuText, 2026-09-24). So hand the game back its three entries first.
+        // The game's SetMenuText loop indexes a three-label array by selections.Length: hand it back its three entries first.
         private static void BeforeSetMenuText(StartMenu __instance)
         {
             Transform[] selections = __instance.selections;
@@ -123,12 +116,11 @@ namespace BugFablesAP
             }
         }
 
-        // Called by the panel's "Archipelago mod" row.
         internal static void SetMode(StartMenu menu, bool on)
         {
             SaveRedirect.On = on;
             mode.Value = on;
-            // Show the other mode's saves: the file select reads slot summaries through ReadFile.
+            // Show the other mode's saves.
             AccessTools.Method(typeof(StartMenu), "ReloadData").Invoke(menu, null);
             RefreshLabel(menu);
             log.LogInfo($"[menu] Archipelago mod {(on ? "enabled: saves in the archipelago folder" : "disabled: normal saves")}");
@@ -150,8 +142,7 @@ namespace BugFablesAP
                 {
                     return true;
                 }
-                // The game plays this for every main-menu choice before acting on it (StartMenu.Update, menuid 1);
-                // our entry takes the press before the game's code runs, so it plays it itself.
+                // The game plays this for every main-menu choice; we take the press before its code runs.
                 MainManager.PlaySound("Confirm", -1);
                 ApMenu.Show(log, __instance, server, port, slot, password, mode, connect, status);
             }
@@ -162,17 +153,13 @@ namespace BugFablesAP
             return true;
         }
 
-        // A randomizer save, or a new game, needs the seed: before the first login this run the mod knows none of
-        // its locations, and every pickup would give its vanilla item (the user, 2026-09-24: require a connection).
-        // On the file select (menuid 2, submenu 0), choosing one of the three files (option 0-2) with the confirm
-        // key is StartMenu.Update's load or new-game branch (StartMenu.cs:512-535, Event22 or Event8). With the mod
-        // on and no seed yet, that press gets the game's buzzer and a popup saying why, and the game never sees it.
-        // While the popup is up the file select is frozen under it; confirm or cancel closes it.
+        // With the mod on and no seed known yet, choosing a file (load or new game) gets the buzzer and a popup saying
+        // why, and the game never sees the press. The file select is frozen under the popup.
         private static Transform popup, popupStatus;
         private static string shownPopupStatus;
         private static int popupFrame;
 
-        // Over the save slots: their boxes sort at -20 to -60 and their text at 10 (StartMenu.ShowSaves).
+        // Over the save slots: their boxes sort at -20 to -60 and their text at 10.
         private const int PopupDimSort = 50, PopupBoxSort = 60, PopupTextSort = 70;
 
         private static bool HoldBackFile(int menuid, int submenu, float cd, bool canselect)
@@ -193,8 +180,7 @@ namespace BugFablesAP
             return true;
         }
 
-        // A dimmer over the whole screen, then the game's orange box (type 1) in the middle with the reason, the
-        // connection's live state and an OK button hint. Hangs off the GUI camera at (0, 0, 10) like the panel (ApMenu).
+        // Box type 1 is the game's orange box.
         private static void ShowPopup()
         {
             popup = new GameObject("apnotconnected").transform;
@@ -216,8 +202,7 @@ namespace BugFablesAP
             dim.sortingOrder = PopupDimSort;
             Transform box = MainManager.Create9Box(new Vector3(0f, 0f, 10f), new Vector2(12f, 4.75f), 1, PopupBoxSort, Color.white, false);
             box.parent = popup;
-            // Over the three save slots rather than the screen's middle (the user's screenshot, 2026-09-24): the slots
-            // sit above the Copy / Delete row, about 0.9 units higher.
+            // Over the three save slots, about 0.9 units above the screen's middle.
             box.localPosition = new Vector3(0f, 0.9f, 0f);
             string sort = "|sort," + PopupTextSort + "|";
             MainManager.instance.StartCoroutine(MainManager.SetText(sort + "|center||size,0.8|Not connected to Archipelago", new Vector3(0f, 1.45f, 0f), box));
@@ -227,8 +212,7 @@ namespace BugFablesAP
             popupStatus.parent = box;
             popupStatus.localPosition = Vector3.zero;
             shownPopupStatus = null;
-            // Both closing buttons, confirm and cancel (B on a gamepad; the user, 2026-09-24). ButtonSprite draws its
-            // label with no sort of its own, which put it behind the box: the label carries the sort itself.
+            // ButtonSprite's label has no sort of its own and fell behind the box: the label carries the sort.
             new GameObject("okbutton").AddComponent<ButtonSprite>().SetUp(4, -1, sort + "OK", new Vector3(-2.4f, -1.6f), Vector3.one * 0.5f, PopupTextSort, box);
             new GameObject("closebutton").AddComponent<ButtonSprite>().SetUp(5, -1, sort + "Close", new Vector3(0.6f, -1.6f), Vector3.one * 0.5f, PopupTextSort, box);
             popupFrame = Time.frameCount;
@@ -272,14 +256,12 @@ namespace BugFablesAP
         // The game places the cursor at y = -option - 0.25 each frame; move it to the tighter spacing.
         private static void AfterUpdate(int ___menuid)
         {
-            // The title screen keeps updating under the game's own Settings screen, and there the cursor is
-            // Settings' cursor: moving it broke that screen (the user, 2026-09-24). Only touch the main menu's own.
+            // Only the main menu's own cursor: under the game's Settings screen it is Settings' cursor.
             if (___menuid != 1 || MainManager.instance?.cursor == null || MainManager.pausemenu != null || ApMenu.Open != null)
             {
                 return;
             }
-            // Closing the game's Settings from the title resets maxoptions to 3 (PauseMenu.cs:1811), which would
-            // leave "Archipelago" unreachable until the menu is rebuilt.
+            // Closing the game's Settings resets maxoptions to 3, leaving "Archipelago" unreachable.
             if (MainManager.instance.maxoptions == Option)
             {
                 MainManager.instance.maxoptions = Option + 1;

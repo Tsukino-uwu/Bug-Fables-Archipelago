@@ -6,10 +6,7 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Dev-only measurement: saves the game's GUI sprite sheets (Resources "Sprites/GUI/gui" and "gui2", which make up
-    // MainManager.guisprites, MainManager.cs:3195-3197) as PNGs, with a table of each guisprites index, its name and
-    // its rectangle on its sheet, to pick art for the mod's own UI (the Warp button's icon, 2026-09-25). The files go
-    // to the BepInEx folder, never the repo: they're the game's art.
+    // Dev-only: dumps the guisprites sheets and an index table to the BepInEx folder (game art: never the repo).
     internal static class SpriteDump
     {
         internal static bool TryRun(ManualLogSource log)
@@ -40,7 +37,7 @@ namespace BugFablesAP
             return true;
         }
 
-        // The sheets aren't readable from script, so they're drawn into a render texture and read back from there.
+        // The sheets aren't script-readable, so blit to a render texture and read that back.
         private static void Save(Texture2D texture, string path)
         {
             RenderTexture rt = RenderTexture.GetTemporary(texture.width, texture.height, 0, RenderTextureFormat.ARGB32);
