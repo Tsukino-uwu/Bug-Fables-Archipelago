@@ -119,13 +119,19 @@ namespace BugFablesAP
             mm.flagvar[CountSlot] = given + 1;
             log.LogInfo($"[recv] item {given + 1} of {received.Count}: {item.ItemDisplayName} from {item.Player.Name} "
                 + $"({item.LocationDisplayName}): {outcome}");
-            ShowIfWanted(item);
+            ShowIfWanted(item, given);
         }
 
         // An item another player found for you is held up as the Item animation setting says (the user, 2026-09-25);
-        // your own finds already showed theirs when you made them. Display only: it was just given above.
-        private void ShowIfWanted(ItemInfo item)
+        // your own finds already showed theirs when you made them. Display only: it was just given above. Only items that
+        // arrive during play: the ones the server already had at login are a replay (a new save rebuilding, a reconnect),
+        // and a new save on a busy seed would otherwise play a hold-up for each (the user chose silence for those).
+        private void ShowIfWanted(ItemInfo item, int index)
         {
+            if (index < connection.ReceivedAtLogin)
+            {
+                return;
+            }
             string setting = QualityOfLife.ItemAnimation?.Value ?? "All";
             bool fromOther = item.Player.Slot != connection.OwnSlot;
             bool progression = (item.Flags & ItemFlags.Advancement) != 0;

@@ -339,6 +339,11 @@ namespace BugFablesAP
 
         // slot_data's present_from: a way the story makes at a late flag that the seed makes at an earlier one instead
         // ([{map, entity, flag}]): the door back down to the fall room exists from the trapdoor (14), not the first boss.
+        // How many items the server had sent this slot when the current login began: items up to here are a replay (a new
+        // save catching up, or a reconnect), not something arriving during play (HoldUps, the user, 2026-09-25).
+        internal int ReceivedAtLogin => receivedAtLogin;
+        private volatile int receivedAtLogin;
+
         internal List<Blocker> PresentFrom => presentFrom;
         private volatile List<Blocker> presentFrom;
 
@@ -581,6 +586,7 @@ namespace BugFablesAP
                     attempt.Socket.PacketReceived += packet => Heard();
                     attempt.Socket.SocketClosed += reason => MarkLost(attempt, "closed: " + reason);
                     attempt.Socket.ErrorReceived += (e, message) => MarkLost(attempt, "socket error: " + message);
+                    receivedAtLogin = attempt.Items.AllItemsReceived.Count;
                     string version = ok.SlotData != null && ok.SlotData.TryGetValue("world_version", out object v) ? v?.ToString() : "missing";
                     Post($"[ap] logged in: slot {ok.Slot}, team {ok.Team}, world_version {version}, "
                         + $"{attempt.Items.AllItemsReceived.Count} items received so far, "

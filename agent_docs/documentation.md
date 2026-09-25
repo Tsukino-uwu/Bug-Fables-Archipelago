@@ -527,7 +527,13 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    closes. A summary box ("...and N more items from other players!") past three was tried and dropped: it felt off to
    the user, so every item gets its own box. Instead, **holding the skip button runs the game at 4 times speed while one
    of the mod's hold-ups is on screen**, since the item-get's own pauses are fixed waits that fast text doesn't shorten;
-   only a speed-up the hold-up made is undone. Not yet seen.
+   only a speed-up the hold-up made is undone. **Seen (the user, 2026-09-25): "better"**, and *All* became the default.
+   **Replays stay silent** (the user asked what a new save does): a new save starts at 0 received and the mod gives it
+   everything the server has for the slot, oldest first, which is what makes a lost save recoverable. On *All* that
+   would be a hold-up for every item another player ever sent. So only items past the count the server had at login
+   (`ApConnection.ReceivedAtLogin`) are held up: a new save catching up, or a reconnect, is silent; items arriving
+   during play are shown. Items sent while the player was offline come in silently too (the user accepted that). Not yet
+   seen with a second player.
 7. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
    read in full before anything is skipped.
 
