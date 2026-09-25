@@ -30,13 +30,51 @@ namespace BugFablesAP
             }
             harmony = new Harmony(guid + ".party." + DateTime.UtcNow.Ticks);
             harmony.Patch(setPlayers, prefix: new HarmonyMethod(typeof(PartyFit), nameof(BeforeSetPlayers)));
-            log.LogInfo("[party] installed on MainManager.SetPlayers");
+            MethodInfo getEntity = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetEntity), new[] { typeof(int) });
+            if (getEntity != null)
+            {
+                harmony.Patch(getEntity, prefix: new HarmonyMethod(typeof(PartyFit), nameof(BeforeGetEntity)));
+            }
+            else
+            {
+                log.LogError("[party] MainManager.GetEntity(int) not found: a missing companion will still crash lines and scenes.");
+            }
+            log.LogInfo("[party] installed on MainManager.SetPlayers" + (getEntity != null ? " and GetEntity" : ""));
         }
 
         internal static void Disable()
         {
             harmony?.UnpatchSelf();
             harmony = null;
+        }
+
+        // The town open from the start (the user, 2026-09-25) reaches lines and scenes written for after chapter 1, when a
+        // companion travels with the party: GetEntity(1000 + n) reads map.tempfollowers[n] (MainManager.cs:18512-18515),
+        // and with nobody there it threw ArgumentOutOfRange (the town's arrival scene, then a theater NPC's line). The
+        // user chose a fallback: the party's leader answers instead, so nothing crashes (the companion's line comes from
+        // the leader), and each place is logged once, so a scene that truly needs the companion can be held back.
+        private static readonly System.Collections.Generic.HashSet<string> reported = new System.Collections.Generic.HashSet<string>();
+
+        private static bool BeforeGetEntity(int id, ref EntityControl __result)
+        {
+            if (id < 1000 || randomizerOn == null || !randomizerOn())
+            {
+                return true;
+            }
+            MapControl map = MainManager.map;
+            int index = id - 1000;
+            if (map != null && map.tempfollowers != null && index < map.tempfollowers.Count)
+            {
+                return true;
+            }
+            MainManager mm = MainManager.instance;
+            __result = mm != null && mm.playerdata != null && mm.playerdata.Length > 0 ? mm.playerdata[0].entity : null;
+            string where = (map != null ? map.mapid.ToString() : "no map") + " #" + id;
+            if (reported.Add(where))
+            {
+                log.LogWarning($"[party] companion {id} asked for on {where.Split(' ')[0]} (Event{MainManager.lastevent}), nobody there: the leader answers");
+            }
+            return false;
         }
 
         private static void BeforeSetPlayers(ref Vector3[] newentitypos)

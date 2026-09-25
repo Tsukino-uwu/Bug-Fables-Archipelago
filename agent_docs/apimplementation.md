@@ -694,7 +694,12 @@ its own, and its blockers keep the party in it until chapter 2 starts. That star
 same companion, so its trigger is held until 114 (`held_until`), and in logic *Chapter 2 Start* now requires the
 first boss explicitly, while the city region needs nothing and the *Entering the City* story event is gone. Tests
 `test_town_open_from_the_start`, `test_the_city_is_open_from_the_start`, `test_chapter_two_needs_the_first_boss`.
-Not yet seen.
+**The companion in ordinary lines:** a theater NPC's line in the city also asked for the companion
+(`GetEntity(1000)` inside `SetText`) and threw. The city is written for after chapter 1, so more lines will. The user
+chose a fallback over closing the town again: `PartyFit` answers a follower lookup that finds nobody with the party's
+leader (no crash; the companion's line comes from the leader) and logs each map and id once, so a scene that truly
+needs him can be held back individually. Scenes that read `map.tempfollowers[0]` directly, like the palace's Event45,
+aren't covered and stay held.
 **The boat to Metal Island crashed with two in the party** (2026-09-25). With the rocks gone the user reached the
 pier on a chapter 1 file, paid the fare, and the boat scene (Event107) threw IndexOutOfRange: it seats three party
 members (`p[0..2]`, `EventControl.cs:17944-17946`), and in the game the pier is behind the rocks until the first
