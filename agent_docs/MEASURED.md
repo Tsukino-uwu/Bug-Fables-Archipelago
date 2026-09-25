@@ -1083,6 +1083,12 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   Harmless: nothing plays. Seen in clusters of 18-21 during the map look tests, where a boss look kept the Underling's
   map AI and was asked for its dig animations; also from a lone Leif acting other members' parts (build step 13).
   Whether vanilla shows it too: not checked (a run with the mod disabled would tell).
+- **An enemy's "outgrown" level, from its EXP** (2026-09-26, the enemy table dump and `MainManager.GetEXP`, for
+  enemy scaling): a fight's EXP per enemy is `base - (level - 1) * 2.5`, clamped, so each enemy stops giving EXP near
+  level `base / 2.5 + 1`. Ordinary enemies climb steadily through the game: Seedling 3.8, Cordyceps Ant 4.6, Underling
+  7, Pseudoscorpion 10.6, Cactus 11.4, Wasp Trooper 11, Abomihoney 13.4, Krawler 16.6, Jumping Spider 19, Zombee 21,
+  Ironclad 24.6, Ruffian 26.6, Dead Landers 29.4-31 (the level cap is 27). **Not usable:** bosses (flat EXP, most
+  20-25, the Wasp King 0), the Flying Seedling (2, deliberately low) and ids whose data the game swaps (IceKrawler 2).
 - **Which fights can be fled:** every map fight (`NPCControl.StartBattle`, `canescape: true`). Almost every scripted
   fight can't be (`canescape: false`); the exceptions are Event30, Event42, the rematch machine (Event85), Event156,
   Event207 and Event224 (the list above).
