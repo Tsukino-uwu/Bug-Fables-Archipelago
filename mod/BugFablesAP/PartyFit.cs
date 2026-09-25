@@ -72,8 +72,12 @@ namespace BugFablesAP
         private static readonly EntityControl[] standIns = new EntityControl[3];
         private static readonly System.Collections.Generic.HashSet<string> standInReported = new System.Collections.Generic.HashSet<string>();
 
+        // A scene or a conversation: an NPC's line can hand the talk to a member by name (|next,-4|, Vi), outside any scene
+        // (Artis's talk with Leif alone crashed SetText on the missing speaker, the user, 2026-09-25).
+        private static bool Talking => MainManager.instance != null && (MainManager.instance.inevent || MainManager.instance.message);
+
         private static bool InScene() =>
-            randomizerOn != null && randomizerOn() && MainManager.instance != null && MainManager.instance.inevent && MainManager.player != null;
+            randomizerOn != null && randomizerOn() && Talking && MainManager.player != null;
 
         private static EntityControl StandIn(int member)
         {
@@ -139,10 +143,10 @@ namespace BugFablesAP
             {
                 return;
             }
-            if (MainManager.instance == null || !MainManager.instance.inevent)
+            if (!Talking)
             {
                 ClearStandIns();
-                log.LogInfo("[party] scene over: stand-ins removed");
+                log.LogInfo("[party] scene or conversation over: stand-ins removed");
                 return;
             }
             foreach (EntityControl e in standIns)

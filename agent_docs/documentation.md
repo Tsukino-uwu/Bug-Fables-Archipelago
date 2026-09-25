@@ -570,6 +570,12 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    a NullReferenceException, a black screen; freed with `unstick`). Now the scene ends as before behind the black
    screen, and on the next frame the party is swapped, placed and the camera set, then the fade-in starts. **Seen (the
    user, 2026-09-25):** Leif alone from the first frame, in the room, the camera right inside, outside and after the gift.
+   (9) **Stand-ins in conversations too** (the user, 2026-09-25, Leif alone): Artis's talk hands lines to Vi and Kabbu
+   (`|next,-4|`, `|next,-5|`), and `SetText` resolves a speaker through `GetEntity` (`MainManager.cs:12385-12398`,
+   `:18418-18440`). The stand-ins only answered while a scene ran (`inevent`), and a talk isn't one, so the lookup came
+   back empty and `SetText` threw a NullReferenceException at the end of the talk. They now answer while a scene or a
+   conversation runs (`inevent` or `message`) and go when both are over. Kept that narrow on purpose: an invisible
+   member around all the time could be counted as real by battles, followers or menus. Not yet seen.
    (8) The test start put the party behind the plaza's statue: `TransferMap` with position zero is the map's origin.
    **Decided (the user, 2026-09-25): a start arrives as if through a door**, the way random starts will work. A door
    holds its target (`data[0]` the map, `vectordata[1]` where the party appears, `vectordata[2]` where it walks,
