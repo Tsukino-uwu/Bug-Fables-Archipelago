@@ -560,6 +560,10 @@ check is the medal leaving the shop's stock, which the save keeps (no "bought" f
 2026-09-25):** Merab's shelf showed the seed's items (two books, a leaf, a mushroom); buying the Mushroom Gummies at
 medal 12's slot held them up, kept Sleep Resistance out, sent *Medal Shop 4* when medal 12 left her stock, and the
 server's Mushroom Gummies arrived. On joining the seed, two medals bought earlier (before shops were locations) sent
-their checks from the stock alone.
+their checks from the stock alone. **More on show** (the user): Merab's shelf holds 5 instead of 3, spread evenly across her own
+first-to-last spots (a 6th past the end was hard to reach), and Shades's 4 instead of 2. The slot count is the
+shopkeeper's `data` length and each slot sits at `vectordata[j]`, so both are lengthened before the shelf is built,
+once per shopkeeper: the game rebuilds the shelf on the same shopkeeper after a purchase, and a second stretch drifted
+it right. Seen: 5 on Merab's counter (screenshot, 2026-09-25).
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page), `ShopSwap.cs`.*
