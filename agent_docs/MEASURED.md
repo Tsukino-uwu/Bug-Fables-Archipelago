@@ -488,7 +488,9 @@ The output stays in the BepInEx folder.
   `BugariaOutskirtsSnakemouthCorridor2`, after the grass tutorial, and `OutsideSnakemouth`, the next map, can't be
   crossed without the horn (on `OutsideSnakemouth` seven `BeetleGrass` patches, x -2 to -18.5, split the corridor
   side on the right from the cave side on the left; the crystal berry, location 19, x -9.9, and the dig spot `Mound`
-  far left, x -24, are on the cave side: reachable from the den without the horn, the user), the user with
+  far left, x -24, are on the cave side: reachable from the den without the horn, the user), and in `SnakemouthBridgeRoom` the bridge comes down only when its rope is hit with Vi's beemerang: crossing from
+  the right needs Vi (the user, Leif alone, 2026-09-25; the room's Tattle tutorial, Event2, ran with stand-ins and
+  finished, flag 10, and its hint, Event0, is skipped by Skip cutscenes), the user with
   Leif alone, 2026-09-25, the map from the Detector's log); Leif (moth) freezes, droplets included (always on, once he has joined at the Snakemouth lake). Vi and
   Kabbu are in the party from a new game, so while the party is vanilla only Leif gates anything.
 - **Ability flags, confirmed as reads in `PlayerControl.cs`:** 11 (beemerang, with `!flags[41]`), 699
