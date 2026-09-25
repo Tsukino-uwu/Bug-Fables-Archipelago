@@ -60,7 +60,17 @@ seed's (the mod guide, step 9).
    list of two positions, and `SetPlayers` indexes it for every member: IndexOutOfRange, the scene stopped halfway, the
    user stuck in the fall room (freed with `unstick`). The mod's `PartyFit` now lengthens a short position list before
    the game uses it (each extra member a step behind the last listed one), which covers every scene that places the
-   party this way. Not yet seen.
+   party this way. **Retest:** `SetPlayers` then took the lengthened list, but the scene then places each member from
+   **its own** two-long list (`for m < playerdata.Length`, `array[m]`, `EventControl.cs:1476-1484`), which a fix outside
+   the scene can't reach. Stopped there (two fixes on one scene). `unstick` now also resets the party's bodies (gravity,
+   physics, forced animation), which the crash had left as the scene set them.
+   **Parked design (the user, 2026-09-25), for party members as items:** scenes find members by **character**
+   (`GetEntity(-4)` Vi, `(-5)` Kabbu, `(-6)` Leif search the party by `animid`; `-1` to `-3` are positions), so the leader's
+   order never matters. Two rules then: (1) a member a scene doesn't know about (Leif early in chapter 1) **steps out**
+   while it runs and rejoins after (the `addleif` method: `ChangeParty` with `fromscratch`, then `SetPlayers`); (2) a
+   scene that needs a member who isn't there (only Leif, no Vi) **waits**, held in the game and a rule in the logic for
+   any check it gives, like the boat. First step when this is picked up: list chapter 1's scenes by the characters they
+   use, from the code.
    Scenes that need a particular member must then become rules: the horn tutorial near Snakemouth (Event10, a
    location) can't be finished without Kabbu's horn (the user, 2026-09-25).
    **Journal locations, each its own yaml option (the user, 2026-09-25).** The journal is `librarystuff[type, n]`,

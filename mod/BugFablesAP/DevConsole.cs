@@ -510,12 +510,26 @@ namespace BugFablesAP
             int freed = 0;
             foreach (EntityControl member in MainManager.GetPartyEntities() ?? new EntityControl[0])
             {
-                if (member != null && member.transform.parent != null)
+                if (member == null)
+                {
+                    continue;
+                }
+                if (member.transform.parent != null)
                 {
                     member.transform.parent = null;
-                    member.LockRigid(false);
                     freed++;
                 }
+                // A scene that died mid-move also leaves the bodies as it set them: the trapdoor scene had just turned
+                // gravity off and forced an animation (EventControl.cs:1334-1335) when it threw with three in the party
+                // (2026-09-25, the user frozen in the fall room). Physics, gravity and animation back to normal.
+                member.LockRigid(false);
+                if (member.rigid != null)
+                {
+                    member.rigid.useGravity = true;
+                }
+                member.overrideanim = false;
+                member.animstate = 0;
+                member.StopForceMove();
             }
             bool black = MainManager.instance.transitionobj != null && MainManager.instance.transitionobj.Length > 0
                 && MainManager.instance.transitionobj[0] != null;
