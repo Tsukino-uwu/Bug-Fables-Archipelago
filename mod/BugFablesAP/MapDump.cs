@@ -30,7 +30,9 @@ namespace BugFablesAP
             }
             string outPath = Path.Combine(Paths.BepInExRootPath, "bugfablesap-mapdump.tsv");
             var sb = new StringBuilder();
-            sb.AppendLine("map\tautoevents(flag:event)\thazards(type:count)\tglowtriggers");
+            // discoveries: the map's own list of the journal discoveries found on it (MapControl.discoveryids, which the
+            // Detector medal's hint reads, MapControl.cs:406-418), added 2026-09-25 for Shuffle Discoveries.
+            sb.AppendLine("map\tautoevents(flag:event)\thazards(type:count)\tglowtriggers\tdiscoveries");
             var flagged = new StringBuilder();
             flagged.AppendLine("map\tcomponent\tobject\trequires\tlimit\tdetail");
             int maps = 0, missing = 0;
@@ -71,7 +73,9 @@ namespace BugFablesAP
                 }
                 sb.Append(map).Append('\t').Append(autos).Append('\t')
                   .Append(string.Join(" ", hazards.Select(kv => kv.Key + ":" + kv.Value).ToArray())).Append('\t')
-                  .Append(glow).AppendLine();
+                  .Append(glow).Append('\t')
+                  .Append(control != null && control.discoveryids != null ? string.Join(" ", control.discoveryids.Select(d => d.ToString()).ToArray()) : "")
+                  .AppendLine();
             }
             File.WriteAllText(outPath, sb.ToString());
             File.WriteAllText(Path.Combine(Paths.BepInExRootPath, "bugfablesap-mapflags.tsv"), flagged.ToString());

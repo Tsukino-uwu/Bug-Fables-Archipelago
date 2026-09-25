@@ -46,6 +46,15 @@ seed's (the mod guide, step 9).
    find the other two, each its own item, on top of the abilities. Opt-in only: fighting with one or two changes
    the game a lot. Open questions: the story may need all three after chapter 1, and adding a member outside the
    story's own event hasn't worked yet (log.md, 2026-09-24: `ChangeParty` left Leif without a character).
+   **Journal locations, each its own yaml option (the user, 2026-09-25).** The journal is `librarystuff[type, n]`,
+   set through `MainManager.UpdateJounal`, so a check can be "this entry became true", with no item to swap.
+   *Shuffle Discoveries* comes first (the simplest; started 2026-09-25). **Parked:** *Shuffle Bestiary* (an entry
+   comes only from Spy in battle or from Event65's catch-up NPC, who sells entries for enemies already fought, 19
+   berries, 49 for bosses, except the 23 in `excludeids`, which are the missable ones; seeing an enemy on the map
+   records nothing) and *Shuffle Recipes* (each needs its ingredients, which the seed may shuffle, so it waits
+   until the logic knows where ingredients come from). Two Quality of life rows go with the bestiary (the user):
+   auto-spy (a fought enemy counts as spied) and free entries at the catch-up NPC, perhaps folded with Free boat into
+   one "no NPC costs" row.
 3. **An "open start" yaml option next** (the user, 2026-09-24), after chapter 1's locations: skip the prologue and
    tutorial, optionally with Leif from the start (the new-game party `{0, 1}`, `MainManager.cs:3591`, becoming
    `{0, 1, 2}`; early cutscenes are written for two, so tested on a fresh file). A full story strip, as the Metroid
@@ -568,6 +577,10 @@ the seed includes it. *Shuffle Quests* (on by default) covers quest-board and si
 will have their own toggle. With a category off, its locations aren't created, their vanilla items stay out of the
 pool, and they're left out of `slot_data`, so the client never swaps them and the game hands them out as usual
 (tests `TestQuestsOff`, `TestQuestsOnByDefault`).
+**Each toggle says how many checks it adds** (the user, 2026-09-25: so people know what they're getting into). The
+option's description, which Archipelago copies into the yaml template, ends "Checks added in this version: N.", with
+N counted from the location data when the world loads (`options.category_count`), so it never goes stale; test
+`TestOptionCounts`. Seen in a generated template on 2026-09-25.
 **Keeping ways present** (the user, 2026-09-25: no dead end in chapter 1, and the Gem opens chapter 5 whenever
 it's found). The reverse of kept open: `locations.json` lists under `kept_present` entities the story only makes
 later, `slot_data` carries them, and the mod's `KeptOpen` gives each a marker `requires` array right after the map

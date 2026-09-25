@@ -26,7 +26,7 @@ namespace BugFablesAP
         };
         private static readonly HashSet<string> FlagCommands = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
-            "flag", "regionalflag", "flagvar", "event"
+            "flag", "regionalflag", "flagvar", "event", "discovery"
         };
         private static readonly HashSet<string> MoneyCommands = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -77,7 +77,7 @@ namespace BugFablesAP
                         }
                     }
                     // Lines that start an event are kept too: they're where story steps begin.
-                    if (items.Count > 0 || money.Count > 0 || flags.Exists(t => t.StartsWith("event,")))
+                    if (items.Count > 0 || money.Count > 0 || flags.Exists(t => t.StartsWith("event,") || t.StartsWith("discovery,")))
                     {
                         lines++;
                         sb.Append(map).Append('\t').Append(i).Append('\t')

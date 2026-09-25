@@ -2,6 +2,8 @@ from dataclasses import dataclass
 
 from Options import DefaultOnToggle, PerGameCommonOptions, Range
 
+from .data_tables import LOCATIONS
+
 
 class ArtifactsRequired(Range):
     """
@@ -22,6 +24,8 @@ class ShuffleQuests(DefaultOnToggle):
     Quest rewards are locations: quests from the quest board, and side quests such as helping a lost kid.
 
     Turned off, quests give their usual rewards and aren't part of the seed.
+
+    Checks added in this version: {count}.
     """
 
     display_name = "Shuffle Quests"
@@ -32,9 +36,22 @@ class ShuffleCrystalBerries(DefaultOnToggle):
     Crystal berry spots are locations, and the berries are items. Some are well hidden.
 
     Turned off, crystal berries stay where they are and the crystal berry shop works as usual.
+
+    Checks added in this version: {count}.
     """
 
     display_name = "Shuffle Crystal Berries"
+
+
+def category_count(category: str) -> int:
+    """How many locations an option's category adds, straight from the location data."""
+    return sum(1 for location in LOCATIONS if location.get("category") == category)
+
+
+# Each toggle that adds locations says how many (the user, 2026-09-25: so people know what they're getting into),
+# counted from the data so the number never goes stale.
+ShuffleQuests.__doc__ = ShuffleQuests.__doc__.replace("{count}", str(category_count("quest")))
+ShuffleCrystalBerries.__doc__ = ShuffleCrystalBerries.__doc__.replace("{count}", str(category_count("crystal_berry")))
 
 
 @dataclass
