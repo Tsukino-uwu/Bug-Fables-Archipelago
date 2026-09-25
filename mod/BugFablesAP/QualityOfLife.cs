@@ -291,6 +291,59 @@ namespace BugFablesAP
             log.LogInfo($"[qol] Event8 ended the game's way; inevent={mm.inevent}");
         }
 
+        // Shops' "see more medals" first (the user, 2026-09-25: faster to reshuffle). A shopkeeper's greeting ends in
+        // |prompt,map,Y,N,target1..targetN,text1..textN| (MainManager.cs:12213-12222); the reshuffle is the choice with target
+        // -199 and text -195 (Shades's line 1, Merab's line 34). That choice and its text move to the front, in the map's
+        // dialogue table in memory, once per map load (a reload reads the table afresh), only with Archipelago on.
+        private static MapControl reorderedMap;
+
+        private static void RerollFirst(MapControl map)
+        {
+            if (map.dialogues == null)
+            {
+                return;
+            }
+            for (int line = 0; line < map.dialogues.Length; line++)
+            {
+                string text = map.dialogues[line];
+                if (text == null || !text.Contains(",-199,"))
+                {
+                    continue;
+                }
+                int at = text.IndexOf("|prompt,map,", StringComparison.Ordinal);
+                while (at >= 0)
+                {
+                    int end = text.IndexOf('|', at + 1);
+                    if (end < 0)
+                    {
+                        break;
+                    }
+                    string[] f = text.Substring(at + 1, end - at - 1).Split(',');
+                    int n;
+                    if (f.Length >= 4 && int.TryParse(f[3], out n) && f.Length >= 4 + 2 * n)
+                    {
+                        int k = Array.IndexOf(f, "-199", 4, n) - 4;
+                        if (k > 0)
+                        {
+                            var targets = f.Skip(4).Take(n).ToList();
+                            var texts = f.Skip(4 + n).Take(n).ToList();
+                            string target = targets[k], label = texts[k];
+                            targets.RemoveAt(k);
+                            texts.RemoveAt(k);
+                            targets.Insert(0, target);
+                            texts.Insert(0, label);
+                            string command = string.Join(",", f.Take(4).Concat(targets).Concat(texts).Concat(f.Skip(4 + 2 * n)).ToArray());
+                            text = text.Substring(0, at + 1) + command + text.Substring(end);
+                            end = at + 1 + command.Length;
+                            log.LogInfo($"[qol] {map.mapid} line {line}: the reshuffle choice moved to the top of its prompt");
+                        }
+                    }
+                    at = text.IndexOf("|prompt,map,", end, StringComparison.Ordinal);
+                }
+                map.dialogues[line] = text;
+            }
+        }
+
         private static void RunOpening()
         {
             MainManager mm = MainManager.instance;
@@ -461,6 +514,11 @@ namespace BugFablesAP
                     openingFailed = true;
                     log.LogError($"[qol] opening failed: {e}");
                 }
+            }
+            if (on && MainManager.map != null && MainManager.map != reorderedMap)
+            {
+                reorderedMap = MainManager.map;
+                RerollFirst(MainManager.map);
             }
             if (event8Cut && !mm.message)
             {
