@@ -33,8 +33,9 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
   2026-09-24): even if it only sometimes does, even if not always. `TestClassifications` enforces it.
 - **Vanilla stays vanilla** (the user, 2026-09-24). Everything the mod does, every panel setting (Difficulty,
   Detector, any future one) included, applies only while Archipelago is enabled. Gate each new effect on it.
-- **Never corrupt a save.** The mod writes game state only through the game's own functions (its give-item
-  path, its flag setters). No raw writes into save data, and no new save format.
+- **Never corrupt a save.** The mod writes game state the way the game itself does: the same fields, the same
+  caps, the game's own function where it has one (`MEASURED.md`, what `Giveitem` writes). Saves go only through
+  the game's own save code. No raw writes into save files, and no new save format.
 - **The received-item count lives in the save**, next to the items it produced. A fresh save starts at 0 and
   the server replays everything. That makes lost-save recovery work.
 - **"In a seed" and "connected" are different states.** A dropped socket keeps randomizer rules in force:
