@@ -685,6 +685,14 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   Detector 2 (`:14024-14065`, B.O.S.S., flags 164/165); Mightier Pebble 29 (`:18821`); Prayer 62 (`:25648`); Freeze
   Resistance 33 (`:26535`, flag 430) and Seedling Affinity 78 (`:26575`, flag 477); TP Plus 1 (`:35843`); the Hard
   Mode prizes (`:5747`, see above). Quest-board rewards not yet read (see "Quests: to measure").
+- **Crystal berries are spent only at Shades's shop** (2026-09-25, a full script scan with `setvar`/`checkvar` added):
+  her buy line (`UndergroundBar` line 3) is `checkvar,atleast,14,var10,5 setvar,sub,14,var,10 removebadgeshop,1,var,0
+  kill,caller giveitem,2,var,0,6`: it checks and subtracts the price (`flagvar[10]`) from the counter (`flagvar[14]`).
+  Nothing else in the game's code or scripts lowers `flagvar[14]`. **Prices** (medal table column 7, read in game with
+  the console's `prices`): starting stock 19 (4), 6 (5), 9 (4), 43 (3), 42 (2) = 18; chapter 3's end 0 (2), 49 (5) =
+  7; chapter 4's end 76 (2) = 2; chapter 5's start 44 (3), 6 (5), 50 (5) = 13; chapter 6's start 57 (5), 35 (5) = 10.
+  **All of it costs exactly 50, every crystal berry in the game.** Berry prices (column 5) for the record: Merab's
+  starting stock 0 (45), 1 (55), 7 (35), 12, 30, 86, 84, 87, 88 (30 each), 81 (45).
 - **The way down to Shades's shop (the underground bar, map 30)** (2026-09-25, entity dump, ScriptDump, code): no door;
   `HideoutEntrance` on `BugariaCommercial` is examined (Check). Its lines: default 27 (sets flag 8), with flag 8 line
   30, with flag 135 line 32, which starts Event61, a plain `LoadMap(30)` with no party lookups. Flag 135 is set by a story

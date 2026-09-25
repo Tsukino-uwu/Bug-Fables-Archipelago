@@ -26,10 +26,15 @@ seed's (the mod guide, step 9).
    stock (`badgeshops[shop]`), which the save keeps. A done location shows as sold, so a reloaded save never charges
    twice. A *Shop prices: Normal / Half / Free* row (default Normal) scales the price columns. Merab's (berries) first:
    berries can always be earned, so no lockout. **Shades's shop takes crystal berries, a consumable** (the user's
-   concern: consumable keys, lockout, savescumming): crystal berries are spent nowhere else, so every Shades location
-   requires enough crystal berries to buy **everything** Shades sells, at Normal prices. Then no purchase order can lock
-   a player out. Crystal berries become progression. Savescumming gains nothing: each stocked medal is its own location,
-   fixed at generation, and a done check stays done.
+   concern: consumable keys, lockout, savescumming): crystal berries are spent nowhere else (measured), and her stock
+   arrives in tiers whose Normal prices add up to 18, 25, 27, 40 and 50, exactly every berry in the game. **Rule:** a
+   Shades location requires the running total of crystal berries up to its tier. Safe in any purchase order: an item
+   can't be bought before its tier exists, so whatever was spent went on tiers already open, and "collected ≥ running
+   total" covers everything on the shelf. Crystal berries become progression. **Reloads refund currency** (the user
+   caught this: buy, reload, keep the check and the berries), so purchases are made **permanent like checks**: spending
+   is tallied on the server (per-slot storage), each save brought in line on load (crystal berries exactly: received
+   minus spent; ordinary berries: the save's own paid record against the server's tally, the higher wins), and a
+   purchase made offline is recorded in the save and queued. A done location shows as sold.
    **Built 2026-09-24 (not yet seen in game):** each tick outside battles and events, a prize slot reading "missed"
    (2) is paid through the game's own `AddPrizeMedal(slot)` with Hard Mode answered "yes" for that call, because
    most bosses test Hard Mode in their own event and write 2 directly. Artis's `Event33` then hands the prize over

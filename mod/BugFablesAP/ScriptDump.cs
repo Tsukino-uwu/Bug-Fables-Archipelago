@@ -30,7 +30,7 @@ namespace BugFablesAP
         };
         private static readonly HashSet<string> MoneyCommands = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
-            "checkmoney", "money"
+            "checkmoney", "money", "setvar", "checkvar"
         };
 
         // Returns true once it has run (successfully or not), so the caller stops asking.

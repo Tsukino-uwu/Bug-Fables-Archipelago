@@ -299,6 +299,19 @@ namespace BugFablesAP
                     case "nudge": return Nudge(parts);
                     case "items": return Items();
                     case "tree": return Tree();
+                    case "script": return Script(parts);
+                    case "prices":
+                        // Medal prices from the game's medal table: berries (column 5) and crystal berries (column 7),
+                        // for the ids given (2026-09-25: the sum of Shades's stock, for the crystal berry rule).
+                        var priceLog = new System.Text.StringBuilder("[dev] prices:");
+                        foreach (string idText in parts.Skip(1))
+                        {
+                            int medal = int.Parse(idText);
+                            priceLog.Append(" ").Append(medal).Append("=").Append(MainManager.badgedata[medal, 5]).Append("b/")
+                                .Append(MainManager.badgedata[medal, 7]).Append("c");
+                        }
+                        log.LogInfo(priceLog.ToString());
+                        return "prices logged";
                     case "gui":
                         // Everything under the GUI camera, two levels down: what's really on screen when a box or text is
                         // stuck (2026-09-25: a speech box stayed after two cleanup tries).
@@ -777,6 +790,34 @@ namespace BugFablesAP
             MainManager.SetPlayers(spots);
             return "addleif: party now " + string.Join(", ", mm.playerdata.Select(p => p.trueid.ToString()).ToArray())
                 + $"; characters {mm.playerdata.Count(p => p.entity != null)} of {mm.playerdata.Length}";
+        }
+
+        // Every |command| token (never the prose) of one map's dialogue lines, to see what a line really does when the
+        // dump's filtered columns miss it (2026-09-25: how Shades takes crystal berries).
+        private static string Script(string[] parts)
+        {
+            if (parts.Length < 2)
+            {
+                return "script <map>";
+            }
+            TextAsset asset = Resources.Load<TextAsset>("Data/Dialogues" + MainManager.languageid + "/Maps/" + parts[1]);
+            if (asset == null)
+            {
+                return "script: no dialogue table for " + parts[1];
+            }
+            string[] rows = asset.ToString().Replace("\r\n", "\n").Split('\n');
+            var sb = new System.Text.StringBuilder("[dev] script " + parts[1] + ":");
+            var token = new System.Text.RegularExpressions.Regex(@"\|([a-zA-Z]+)((?:,[^|]*)?)\|");
+            for (int i = 0; i < rows.Length; i++)
+            {
+                var tokens = token.Matches(rows[i]).Cast<System.Text.RegularExpressions.Match>().Select(m => m.Groups[1].Value.ToLowerInvariant() + m.Groups[2].Value).ToArray();
+                if (tokens.Length > 0)
+                {
+                    sb.Append("\n  ").Append(i).Append(": ").Append(string.Join(" ", tokens));
+                }
+            }
+            log.LogInfo(sb.ToString());
+            return "script of " + parts[1] + " logged";
         }
 
         private static string Tree()
