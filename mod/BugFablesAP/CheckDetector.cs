@@ -16,6 +16,11 @@ namespace BugFablesAP
     // whether or not the map has discoveries) sets that same value when one of the seed's locations on this map isn't done
     // yet: pickups, gifts, shops and item shops by their map, discoveries by the map's own discoveryids. Only while the
     // Detector counts as equipped (the medal, or the panel's Detector row through MedalAssist) and the mod is enabled.
+    //
+    // In a seed the mod's answer is the only one (the user, 2026-09-25: beep with one check or more left, quiet when the
+    // room is done): the game's own checks would still beep for hidden things the seed doesn't have. So the objects'
+    // CheckHidden doesn't run, CheckDisc is replaced, and a music record's Start (which sets the value as the map builds,
+    // MusicSpinner.cs:54-57, used on the first free frame) has it cleared right after. Outside a seed, vanilla.
     internal static class CheckDetector
     {
         private static ManualLogSource log;
@@ -35,8 +40,19 @@ namespace BugFablesAP
                 return;
             }
             harmony = new Harmony(guid + ".detector." + DateTime.UtcNow.Ticks);
-            harmony.Patch(checkDisc, postfix: new HarmonyMethod(typeof(CheckDetector), nameof(AfterCheckDisc)));
-            log.LogInfo("[detector] installed on MapControl.CheckDisc");
+            harmony.Patch(checkDisc, prefix: new HarmonyMethod(typeof(CheckDetector), nameof(BeforeCheckDisc)));
+            MethodInfo checkHidden = AccessTools.Method(typeof(NPCControl), "CheckHidden");
+            MethodInfo spinnerStart = AccessTools.Method(typeof(MusicSpinner), "Start");
+            if (checkHidden != null)
+            {
+                harmony.Patch(checkHidden, prefix: new HarmonyMethod(typeof(CheckDetector), nameof(BeforeCheckHidden)));
+            }
+            if (spinnerStart != null)
+            {
+                harmony.Patch(spinnerStart, postfix: new HarmonyMethod(typeof(CheckDetector), nameof(AfterSpinnerStart)));
+            }
+            log.LogInfo("[detector] installed on MapControl.CheckDisc" + (checkHidden != null ? ", NPCControl.CheckHidden" : " (NOT CheckHidden)")
+                + (spinnerStart != null ? ", MusicSpinner.Start" : " (NOT MusicSpinner.Start)"));
         }
 
         internal static void Disable()
@@ -45,20 +61,34 @@ namespace BugFablesAP
             harmony = null;
         }
 
-        private static void AfterCheckDisc(MapControl __instance)
+        private static bool InSeed => randomizerOn != null && randomizerOn() && connection != null && connection.SeedKnown;
+
+        private static bool BeforeCheckHidden() => !InSeed;
+
+        private static void AfterSpinnerStart()
         {
-            if (randomizerOn == null || !randomizerOn() || connection == null || !connection.SeedKnown
-                || !MainManager.BadgeIsEquipped(MedalAssist.DetectorMedal) || __instance.hiddenitem.HasValue)
+            if (InSeed && MainManager.map != null)
             {
-                return;
+                MainManager.map.hiddenitem = null;
+            }
+        }
+
+        private static bool BeforeCheckDisc(MapControl __instance)
+        {
+            if (!InSeed)
+            {
+                return true;
+            }
+            if (!MainManager.BadgeIsEquipped(MedalAssist.DetectorMedal))
+            {
+                return false;
             }
             string map = __instance.mapid.ToString();
             long left = OnThisMap(__instance, map).FirstOrDefault(id => !Done(id));
-            if (left != 0)
-            {
-                __instance.hiddenitem = 100;
-                log.LogInfo($"[detector] {map}: location {left} not done yet: the Detector beeps");
-            }
+            __instance.hiddenitem = left != 0 ? 100 : (int?)null;
+            log.LogInfo(left != 0 ? $"[detector] {map}: location {left} not done yet: the Detector beeps"
+                                  : $"[detector] {map}: no check left here: quiet");
+            return false;
         }
 
         private static IEnumerable<long> OnThisMap(MapControl map, string name)

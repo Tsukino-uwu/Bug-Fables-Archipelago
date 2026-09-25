@@ -731,7 +731,11 @@ map load, discoveries or not) sets the same value when one of the seed's locatio
 type has a map: pickups, gifts (quest rewards included, where the reward is handed over), shop copies and item shops
 from `slot_data`, discoveries from the map's own `discoveryids`. Done means the server has the check, or offline the save
 says so (its flag, crystal berry, journal entry, a shop copy's bought bit). Only while the Detector counts as equipped
-(the medal, or the panel's Detector row). Built, not yet seen.
+(the medal, or the panel's Detector row). **In a seed the mod's answer is the only one** (the user: beep with one check
+or more left, quiet when the room is done): the game's own checks would still beep for hidden things the seed doesn't
+have, so `NPCControl.CheckHidden` doesn't run, `CheckDisc` is replaced by the mod's answer (a beep or silence, logged
+either way), and a music record's `Start`, which sets the value as the map builds and is used on the first free frame
+(`MusicSpinner.cs:54-57`), has it cleared right after. Outside a seed, all vanilla. Built, not yet seen.
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page), `ShopSwap.cs`,
 `CheckDetector.cs`.*
