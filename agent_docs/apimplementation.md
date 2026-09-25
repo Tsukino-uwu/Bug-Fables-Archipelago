@@ -122,6 +122,16 @@ Merab's medal shop as locations (her full stock of 22 from a new game, seen 2026
    emptied as soon as the code is accepted (`EventControl.cs:2450-2455`), so flag 614 is the code's only trace,
    so the mod marks a 614 it set itself, and keeps it out of every save (the user chose, 2026-09-24:
    switchable, the save stays clean; the mod guide's design list, item 6).
+   **Everything in, placeholders for what isn't checked (the user, 2026-09-25):** every item, medal and other spot in the
+   game is added, so everything is randomized. A spot whose logic and name haven't been checked yet is a *Placeholder*:
+   "Placeholder" in its name, and it holds filler only (Archipelago's excluded type), so no progression item from any
+   game lands where the logic may be wrong. Its own vanilla item still goes into the pool and lands at a checked spot.
+   Each placeholder is promoted to a normal location once its requirements and name are checked, one at a time.
+   **Entrance randomizer (the user, 2026-09-25):** every map-to-map door, as an option labelled *experimental* until
+   every door's logic is done: until then a shuffled seed may be unfinishable (the one exception to "never
+   impossible", while that option is on; *Warp to start* gets the player out of a dead end). Coupled (a door and its way
+   back stay a pair) by default, decoupled as a choice. Order: a proof of concept (the mod rewriting a door's
+   destination, seen on screen), then every door, then the room-by-room logic that removes the experimental label.
 2. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
    **Later idea, a yaml option (the user, 2026-09-25): party members as items.** Start with one random member and

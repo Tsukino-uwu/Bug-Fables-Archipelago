@@ -47,7 +47,9 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
   a seed only by the logic, so every gate the game has (a story flag, an ability check) goes into the
   apworld; the logic may be more cautious than the game, never less. **(2) The mod never departs from what
   the generator knew:** anything it changes (a gate opened as a last resort, a start) comes from `slot_data`,
-  decided at design time, never at runtime.
+  decided at design time, never at runtime. **Two named allowances (the user, 2026-09-25):** an unchecked
+  "Placeholder" location holds filler only; the entrance randomizer is an option labelled experimental until
+  every door's logic is done (`apimplementation.md`, Next).
 
 ## Who verifies what
 
