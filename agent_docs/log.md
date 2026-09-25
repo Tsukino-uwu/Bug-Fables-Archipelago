@@ -652,5 +652,5 @@ Newest last. What was tried, what happened, what the user said.
 - **Testing enemy shuffle live** (the user said go ahead). The server and game are running with the two-game seed.
   - Artis's gift held QuestTester's Sword. The box said "You got the QuestTester's Sword!", and the user thought
     it was theirs.
-  - Planned: a "You sent ... to ..." line for other players' items (the mod guide, step 9).
+  - Planned: "You found QuestTester's Sword!" (the user's wording) for other players' items (the mod guide, step 9).
   - The room was restarted fresh so the user could look again.

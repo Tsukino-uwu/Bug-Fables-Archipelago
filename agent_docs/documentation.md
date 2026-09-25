@@ -418,7 +418,8 @@ the user (2026-09-25, screenshot):** the seed's Mistake standing on the ground o
 another player's Sword and the box read "You got the QuestTester's Sword!", which the user took for their own item.
 The sentence is the game's menu text 106 ("You got ..."; 110 in one branch), with the article (`flagstring[1]`) and
 name (`flagstring[0]`) that the mod already swaps (`MainManager.cs:11490-11564`). For another player's item, the mod
-will swap in its own line for that one box ("You sent Sword to QuestTester!") and put 106 back after. First step:
+will swap in its own line for that one box and put 106 back after. **Wording (the user, 2026-09-26): "You found
+QuestTester's Sword!"**; the player's own items keep the game's "You got ...". First step:
 log text 106 in the running game to see its placeholder syntax, not guess it.
 
 **Status:** works for gifts, pickups and their ground sprites, and respawning pickups seen by the user (2026-09-24, `MEASURED.md`), and crystal berry spots (2026-09-25); berry rewards and story pickups built, not yet seen in game.
