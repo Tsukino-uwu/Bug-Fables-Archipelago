@@ -624,6 +624,8 @@ before the spider fight cut the file off from Leif, the spider fight and the lak
 connection open means checking the other direction too. The fix, a new `slot_data` list, `present_from` (map, entity,
 flag): the entity's `requires` becomes that earlier flag, so the door exists from the trapdoor (14) on. Not from the
 start, which would skip the trapdoor scene where Leif's joining begins. Test `test_way_back_down_from_the_trapdoor`.
+**Confirmed by the user (2026-09-25):** on a chapter 1 file before the first boss, they went up and down between the
+fall room and the door room several times, and through the big door and back; then on to the spider fight.
 **The Outskirts rocks** (the user, 2026-09-25: before chapter 1 is done, a rock pile cuts the Outskirts off, so
 only the way to chapter 1 is left). Everything that changes on that map at the end of chapter 1 is flag 41, read
 from the entity dump and the map dump's flag-scenery list: the rocks (`Base/BlockingRocks`, scenery hidden from
