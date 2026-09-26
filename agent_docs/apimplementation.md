@@ -30,6 +30,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 16. [Build step 16: the Boat Ticket](#build-step-16-the-boat-ticket)
 17. [Build step 17: a release](#build-step-17-a-release)
 18. [Build step 18: Starting Party Member](#build-step-18-starting-party-member)
+19. [Build step 19: Archipelago's colours for players and items](#build-step-19-archipelagos-colours-for-players-and-items)
 
 **How it works**
 
@@ -1561,6 +1562,37 @@ the ground at the new size, seen too (dev `spawn member`, a screenshot of Vi on 
 
 **Status:** works before the Outskirts gate, seen by the user with a Kabbu start (2026-09-26); past the gate (the
 trapdoor and spider scenes with three) not yet played.
+
+## Build step 19: Archipelago's colours for players and items
+
+Archipelago's own clients colour a message the same way everywhere, so players read "whose, and how important" at a
+glance. This mod follows that standard in the game's item boxes (the user, 2026-09-26: it follows the expected
+Archipelago colours, so it belongs here as well as in the mod guide).
+
+**The standard** (your Archipelago checkout, `NetUtils.py`, `JSONtoTextParser`, and `data/client.kv`, read 2026-09-26):
+- a player's name: magenta `EE00EE` when it's you, yellow `FAFAD2` for anyone else (`_handle_player_id`);
+- an item by its flags (`_handle_item_name`): progression (`0b001`) plum `AF99EF`, useful (`0b010`) slate blue
+  `6D8BE8`, trap (`0b100`) salmon `FA8072`, anything else (filler) cyan `00EEEE`;
+- a location: green `00FF7F`.
+The flags come with every item the client sees (`NetworkItem.flags`; MultiClient.Net's `ItemInfo.Flags`, and a
+scouted item's), so the colour needs no table of our own.
+
+**Built (2026-09-26):**
+1. **The same meaning, darkened.** Those colours are picked for a dark window; the game's text box is near white, and
+   pale yellow, plum, slate blue and cyan faded on it (three rounds on screen with the user). Used: another player
+   dark yellow `B8860B`, progression dark plum `8A63D2`, useful dark slate blue `4A6BD8`, filler dark cyan `008B8B`,
+   trap `E9573F` (salmon was too pale; red would read as the game's own red item names). Your own name never shows:
+   only another player's item gets a "from" or "'s".
+2. **Where:** "You got <item> from <player>!" for an item another player found for you, and "You found <player>'s
+   <item>!" for another player's item found here (a gift or a pickup). Your own finds keep the game's red.
+3. **Off switch:** the Quality of life row *Item colors: Archipelago / Off* (the mod guide, step 20).
+4. **In the game** (the mod guide, step 9): the game's text colours by palette index only, so the colours are added
+   after the game's own; that and the lines' wording are game-side, written up there.
+
+**Seen by the user (2026-09-26):** "You got Kabbu from TestPlayer!" in dark plum and dark yellow (a dev hold-up), and
+every colour on screen while picking them. Another player's real items, found and received: next, with a second slot.
+
+**Status:** built; the colours seen on dev hold-ups, a real second player's items not yet.
 
 # How it works
 
