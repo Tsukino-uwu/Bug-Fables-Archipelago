@@ -831,3 +831,8 @@ Newest last. What was tried, what happened, what the user said.
 - **Skip battle tutorials** (the user asked whether it was done): only the first, inside the opening; the later
   tutorial fights are still planned. Test server: a fresh BugTester seed hosted from the scratchpad; left up with the
   game (the user: keep them up).
+- **The goal seen** (the user, Leif alone, a dev file): the spider fight first lost (Leif can't hit the spider in the air;
+  OneHit was off: now always on in dev, the user). An F6 reload mid-fight (the user's choice, to load the new `killall`)
+  crashed the scene after the fight (Event26's own references to the old stand-ins): the reason DevReload waits, seen
+  again. `unstick`, re-entered the room, `killall` (HP 0, the death check only ran after an attack), and the scene ended:
+  `[goal] sent: 1 of 1 artifacts`, the server released the slot and logged the team's games complete.

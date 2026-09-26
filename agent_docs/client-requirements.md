@@ -9,7 +9,9 @@ anything that happens in the game.
 - [ ] Secure (`wss://`) and insecure (`ws://`) connections
 - [ ] Reconnects when the connection is lost mid-play
 - [ ] The port in saved connection info can be changed (hosted rooms can lose their reserved port)
-- [ ] Sends `StatusUpdate` (goal) when the player completes their goal. Use StatusUpdate, not an event
+- [x] Sends `StatusUpdate` (goal) when the player completes their goal. Use StatusUpdate, not an event (2026-09-26:
+  the first artifact reached in play, `[goal] sent: 1 of 1 artifacts`; the server logged the release and "Team #1 has
+  completed all of their games")
 - [ ] Sends a location check when one is detected in the game
 - [ ] Checks made while offline are sent on connect, recovered from the save's own flags
 - [ ] Items can be given on demand, at any time
