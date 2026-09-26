@@ -38,6 +38,12 @@ HELD_UNTIL: list[dict[str, Any]] = _LOCATION_DATA.get("held_until", [])
 PRESENT_FROM: list[dict[str, Any]] = _LOCATION_DATA.get("present_from", [])
 DIALOGUE_FLAGS: list[dict[str, Any]] = _LOCATION_DATA.get("dialogue_flags", [])
 DOORS: dict[str, Any] = _load("doors.json")
+# Every room entered through a door, as {"map", "from"}: the map, and the map whose door leads in (both ways of each
+# connection). A start there lands where walking in through that door ends.
+ROOM_STARTS: list[dict[str, str]] = sorted(
+    {(end["map"], other["map"]) for c in DOORS["connections"] for end, other in ((c["a"], c["b"]), (c["b"], c["a"]))
+     if end["map"] != other["map"]})
+ROOM_STARTS = [{"map": room, "from": door_map} for room, door_map in ROOM_STARTS]
 # Every save point (map, entity index): the spots a random start picks from.
 STARTS: list[dict[str, Any]] = _load("starts.json")["starts"]
 # Every map enemy (map, entity index) and the enemy ids its fight starts with.

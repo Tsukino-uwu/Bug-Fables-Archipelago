@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle
 
-from .data_tables import DOORS, ENCOUNTERS, LOCATIONS, STARTS
+from .data_tables import DOORS, ENCOUNTERS, LOCATIONS, ROOM_STARTS
 
 
 class ArtifactsRequired(Range):
@@ -134,13 +134,13 @@ class EnemyShuffle(Choice):
 
 class StartingLocation(Choice):
     """
-    EXPERIMENTAL. Where a new file begins. Off: where the game begins, outside Bugaria. Anywhere: beside any save point in
-    the game, even in the middle of a dungeon. The pause menu's Warp takes you back to it.
+    EXPERIMENTAL. Where a new file begins. Off: where the game begins, outside Bugaria. Anywhere: any room in the game,
+    even in the middle of a dungeon, arriving as if through one of its doors. The pause menu's Warp takes you back to it.
 
     The logic doesn't know the start yet: items are placed as if you began outside Bugaria, so a seed started anywhere
-    may not be finishable (the map's fast travel and the Warp get you around). Off by default.
+    may not be finishable, and a room with no free way out can strand you (a new seed then). Off by default.
 
-    Save points to start at in this version: {count}.
+    Room arrivals to start at in this version: {count}.
     """
 
     display_name = "Starting Location (experimental)"
@@ -163,7 +163,7 @@ ShuffleMedalShops.__doc__ = ShuffleMedalShops.__doc__.replace("{count}", str(cat
 ShuffleItemShops.__doc__ = ShuffleItemShops.__doc__.replace("{count}", str(category_count("item_shop")))
 EntranceRandomizer.__doc__ = EntranceRandomizer.__doc__.replace("{count}", str(2 * len(DOORS["connections"])))
 EnemyShuffle.__doc__ = EnemyShuffle.__doc__.replace("{count}", str(len(ENCOUNTERS)))
-StartingLocation.__doc__ = StartingLocation.__doc__.replace("{count}", str(len(STARTS)))
+StartingLocation.__doc__ = StartingLocation.__doc__.replace("{count}", str(len(ROOM_STARTS)))
 
 
 @dataclass

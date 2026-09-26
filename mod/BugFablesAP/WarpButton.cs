@@ -576,7 +576,9 @@ namespace BugFablesAP
                 map = AreaSpots[area].Key;
                 entity = AreaSpots[area].Value;
             }
-            Vector3 target = SavePointSpot(map, entity);
+            // A room start has no save point: where walking in through its door ends.
+            Vector3[] entry = kind == Kind.Warp && seeded.HasValue ? QualityOfLife.SeedStartDoor(map) : null;
+            Vector3 target = entry != null ? entry[2] : SavePointSpot(map, entity);
             log.LogInfo($"[warp] to {map} at {target}");
             yield return MainManager.TransferMap((int)map, target);
         }

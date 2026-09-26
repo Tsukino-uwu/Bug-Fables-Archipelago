@@ -163,6 +163,40 @@ namespace BugFablesAP
                 return;
             }
             harmony.Patch(reset, postfix: new HarmonyMethod(typeof(QualityOfLife), nameof(ResetFileState)));
+            // Every music change ends in this overload.
+            MethodInfo music = AccessTools.Method(typeof(MainManager), nameof(MainManager.ChangeMusic),
+                new[] { typeof(AudioClip), typeof(float), typeof(int), typeof(bool) });
+            if (music == null)
+            {
+                log.LogError("[qol] MainManager.ChangeMusic(AudioClip, float, int, bool) not found: the opening map's music plays before a seed start.");
+                return;
+            }
+            harmony.Patch(music, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeChangeMusic)));
+        }
+
+        // A new file with a seed start goes from the title screen straight to that start: no music of the opening map.
+        private static bool HoldingMusic()
+        {
+            MainManager mm = MainManager.instance;
+            return randomizerOn != null && randomizerOn() && Seeded.HasValue && !TestStartSet && mm?.flags != null
+                && MainManager.map != null && MainManager.map.mapid.ToString() == OpeningMap
+                && (!mm.flags[15] || openingPending || startPending || transferring);
+        }
+
+        private static bool heldMusicLogged;
+
+        private static void BeforeChangeMusic(ref AudioClip musicclip, int id)
+        {
+            if (musicclip == null || id != 0 || !HoldingMusic())
+            {
+                return;
+            }
+            if (!heldMusicLogged)
+            {
+                heldMusicLogged = true;
+                log.LogInfo($"[qol] seed start: {musicclip.name} held back on the opening map (silence until the start)");
+            }
+            musicclip = null;
         }
 
         private static void ResetFileState()
@@ -172,7 +206,7 @@ namespace BugFablesAP
                 log.LogInfo($"[qol] title screen: the last file's opening state cleared (pending {openingPending}, start {startPending}, "
                     + $"failed {openingFailed}, transferring {transferring})");
             }
-            openingPending = startPending = openingFailed = event8Cut = partyThenFade = transferring = false;
+            openingPending = startPending = openingFailed = event8Cut = partyThenFade = transferring = heldMusicLogged = false;
         }
 
         // The opening: Event16 (Maki's talk, Vi joining, the tutorial battle, location 1) never starts; the mod does
@@ -186,6 +220,15 @@ namespace BugFablesAP
         internal static string TestStart;
         // The seed's start (Starting Location): the opening ends with a transfer beside that save point instead.
         internal static Func<KeyValuePair<string, int>?> SeedStart;
+        // A room start: the map whose door leads into the start map.
+        internal static Func<string> SeedStartFrom;
+
+        // A room start's door spots (appear, walk to), read from the door in the "from" map; null for a save-point start.
+        internal static Vector3[] SeedStartDoor(MainManager.Maps map)
+        {
+            string from = SeedStartFrom?.Invoke();
+            return from == null ? null : DoorInto(map, from);
+        }
         internal static Func<bool> SeedKnown;
         private static KeyValuePair<string, int>? Seeded => SeedStart?.Invoke();
         // A seed's start needs the intro skipped (it ends with the transfer there), whatever Skip cutscenes says.
@@ -207,7 +250,7 @@ namespace BugFablesAP
 
         // Arriving as if through a door: data[0] the map, vectordata[1] where the party appears, [2] where it walks.
         // Read from the entity table of the map left behind; fields split by '}', data count at 60, vectordata at 71.
-        private static Vector3[] DoorInto(MainManager.Maps target, string fromMap)
+        internal static Vector3[] DoorInto(MainManager.Maps target, string fromMap)
         {
             foreach (MainManager.Maps map in Enum.GetValues(typeof(MainManager.Maps)))
             {
@@ -240,7 +283,7 @@ namespace BugFablesAP
                             float.Parse(f[73 + k * 3].Trim(), System.Globalization.CultureInfo.InvariantCulture),
                             float.Parse(f[74 + k * 3].Trim(), System.Globalization.CultureInfo.InvariantCulture));
                     }
-                    log.LogInfo($"[qol] test start: arriving through {map}'s door (entity {i}): appear at {v[1]}, walk to {v[2]}");
+                    log.LogInfo($"[qol] arriving in {target} through {map}'s door (entity {i}): appear at {v[1]}, walk to {v[2]}");
                     return v;
                 }
             }
@@ -300,7 +343,12 @@ namespace BugFablesAP
             // The party change waits for the next frame, behind the black screen: before EndEvent, FixEntities met a
             // character being replaced (NullReferenceException).
             partyThenFade = !TestStartSet && MainManager.map != null && MainManager.map.mapid.ToString() == OpeningMap;
-            if (!TestStartSet)
+            if (Seeded.HasValue && !TestStartSet)
+            {
+                // Leaving for the seed's start: silence until that map starts its own music.
+                MainManager.FadeMusic(0.05f);
+            }
+            else if (!TestStartSet)
             {
                 MainManager.ChangeMusic(Resources.Load<AudioClip>("Audio/Music/Inside0"));
                 MainManager.music[0].clip = Resources.Load<AudioClip>("Audio/Musics/Field0");
@@ -609,8 +657,22 @@ namespace BugFablesAP
                     KeyValuePair<string, int>? seeded = Seeded;
                     if (seeded.HasValue && !TestStartSet)
                     {
-                        // The seed's start: beside its save point, as Warp to Start lands.
                         var map = (MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), seeded.Value.Key, true);
+                        // A room start: walking in through its door, as the game's own door transfer does.
+                        Vector3[] entry = SeedStartDoor(map);
+                        if (entry != null)
+                        {
+                            MainManager.instance.StartCoroutine(MainManager.TransferMap((int)map, MainManager.player.transform.position, entry[1], entry[2]));
+                            log.LogInfo($"[qol] the seed's start (Starting Location): transferring to {map}, entering from {SeedStartFrom?.Invoke()}");
+                            return;
+                        }
+                        if (seeded.Value.Value < 0)
+                        {
+                            transferring = false;
+                            log.LogError($"[qol] the seed's start {map} (from {SeedStartFrom?.Invoke()}): no door found; staying at the game's start");
+                            return;
+                        }
+                        // A save-point start: beside it, as Warp to Start lands.
                         Vector3 spot = WarpButton.SavePointSpot(map, seeded.Value.Value);
                         MainManager.instance.StartCoroutine(MainManager.TransferMap((int)map, spot));
                         log.LogInfo($"[qol] the seed's start (Starting Location): transferring to {map}, beside save point {seeded.Value.Value}, at {spot}");

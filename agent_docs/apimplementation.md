@@ -1367,7 +1367,25 @@ logic can't model giving access up. With the Warp guaranteed, the start can alwa
 every start at once. The mod shows the Warp with a seed start even when Travel is Off or Map; the logic's side (the start
 region reachable from every region) comes with the room-by-room logic.
 
-**Status:** in progress (experimental): `anywhere` works, seen by the user (2026-09-26): a new file starts at the seed's start;
+**No music between the menu and the start (the user, 2026-09-26: "as if I'm going from the start menu directly to a
+random spawn"):** the game starts the opening map's music as a new file loads. With a seed start, the mod turns any new
+music into silence while the file is still on the opening map (a prefix on `ChangeMusic`'s full overload, which every
+music change reaches), and its own opening music is a fade-out instead. Seen by the user: "looks/feels instant now".
+
+**Any room, not just save points (the user, 2026-09-26: "an actual random area ... somewhere in a dungeon"):**
+- **Values:** the user's off / towns / random, but Archipelago reserves `random`, so `anywhere` is the fully random one;
+  `towns` is still to come (the save-point table, `data/starts.json`, stays for it).
+- **The pool** (`ROOM_STARTS` in `data_tables.py`): every room entered through a door, both ways of each connection in
+  `doors.json`. `slot_data` `start` is `{"map", "from"}`: the room, and the map whose door leads in.
+- **The mod** reads the door in the `from` map that leads into the room (`QualityOfLife.DoorInto`, the dev test start's
+  reader), and arrives as the game's own door transfer does: appear, then walk in. Warp to Start lands where that walk
+  ends. A save-point start (`{"map", "entity"}`) still works.
+- **Stuck starts are accepted while experimental (the user):** item and entrance logic everywhere comes later.
+- **Chapter 1 test** (the user asked for one): seeds regenerated until the start was a Snakemouth Den room (seed 17,
+  `SnakemouthFallRoom` from `SnakemouthDoorRoom`). **Seen by the user (2026-09-26):** the new file arrived right where
+  the trapdoor scene drops you; jumping up out of the room is one-way, and the Warp brought the user back down.
+
+**Status:** in progress (experimental): `anywhere` (any room) works, seen by the user (2026-09-26): a new file starts in the seed's room;
 `towns` and the logic from the start to come; the intro is always skipped with a seed start.
 
 ## Build step 16: the Boat Ticket

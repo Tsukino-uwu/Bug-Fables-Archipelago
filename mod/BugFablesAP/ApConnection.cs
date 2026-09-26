@@ -265,10 +265,13 @@ namespace BugFablesAP
                 p => new[] { p.Value.Value<int>("var"), p.Value.Value<int>("at_least") });
         }
 
-        // The save point a new file begins beside (Starting Location); null for the game's own start.
+        // Where a new file begins (Starting Location): the map and a save point's entity index (-1 for none); null for the
+        // game's own start. StartFrom: the map whose door leads in, for a start entered as if through that door.
         internal KeyValuePair<string, int>? Start => start;
         private volatile object startBox;
         private KeyValuePair<string, int>? start => startBox as KeyValuePair<string, int>?;
+        internal string StartFrom => startFrom;
+        private volatile string startFrom;
 
         // {"map:entity index": enemy ids}: the fight a map enemy starts instead of its own (Enemy Shuffle).
         internal Dictionary<string, int[]> EnemySwaps => enemySwaps;
@@ -576,9 +579,11 @@ namespace BugFablesAP
                     enemySwaps = ok.SlotData != null && ok.SlotData.TryGetValue("enemy_swaps", out object es) && es is JObject eso
                         ? eso.Properties().ToDictionary(p => p.Name, p => p.Value.ToObject<int[]>())
                         : null;
-                    startBox = ok.SlotData != null && ok.SlotData.TryGetValue("start", out object st) && st is JObject sto
-                        && sto["map"] != null && sto["entity"] != null
-                        ? (object)new KeyValuePair<string, int>(sto.Value<string>("map"), sto.Value<int>("entity"))
+                    JObject startData = ok.SlotData != null && ok.SlotData.TryGetValue("start", out object st) && st is JObject sto
+                        && sto["map"] != null && (sto["entity"] != null || sto["from"] != null) ? sto : null;
+                    startFrom = startData?.Value<string>("from");
+                    startBox = startData != null
+                        ? (object)new KeyValuePair<string, int>(startData.Value<string>("map"), startData["entity"] != null ? startData.Value<int>("entity") : -1)
                         : null;
                     ownSlot = ok.Slot;
                     itemKinds = ReadItemKinds(ok.SlotData);

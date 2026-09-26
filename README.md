@@ -9,7 +9,7 @@ the default: the Outskirts rocks are gone from the start). Next: every item spot
 ones as filler-only placeholders) and field abilities shuffled as items. An experimental entrance randomizer (coupled,
 off by default) is in the apworld; its first shuffled doors work both ways in game. An enemy shuffle (off by default) swaps
 which ordinary enemies you fight on each map; its first swapped fight was seen in game. A random start (experimental,
-off by default) can begin a new file beside any save point in the game. Enemy scaling (a Gameplay
+off by default) can begin a new file in any room in the game, as if walking in through one of its doors. Enemy scaling (a Gameplay
 setting, on by default) scales enemies to your level so every area plays fair in any order; its first scaled fight was
 seen in game. Starting with a single party
 member is being rehearsed (a dev setting for now).

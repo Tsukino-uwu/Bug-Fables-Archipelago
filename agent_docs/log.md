@@ -755,3 +755,8 @@ Newest last. What was tried, what happened, what the user said.
   (`GlowGuard.cs`); the first guard missed two of the three reads.
 - **Panel:** Shop prices became *Medal prices*, a 0-10 bar; the leaf's height needed two screenshots (it bounces in
   scale only), one guess made it worse; Disable all centred.
+- **Random start, any room:** the menu straight to the start with no music between (seen: "feels instant"), then
+  `anywhere` became any room entered through a door (the user); seen on seed 17 in Snakemouth Den's fall room, the Warp
+  the way back down from a one-way exit. A mistake of mine: I replaced the Archipelago checkout's link to the apworld
+  with a copy while running the tests (the user's checkout: ask first); restoring the link was refused by auto mode,
+  so it's left for the user (delete the copy, then a junction to `apworld/bug_fables`, `development.md`).
