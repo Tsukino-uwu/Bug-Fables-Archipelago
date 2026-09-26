@@ -85,7 +85,12 @@ be wrong.
    map icon always (so the button says what it does), the user undecided. Both means a sixth button in the pause menu:
    it must fit and look good there, seen on screen before it counts as done. **The order (the user):** both sit to
    the right of the game's buttons, Warp first, Map last. Left from the first button wraps round to Map for quick
-   access, and Warp sits in between, so it's reached by accident less often.
+   access, and Warp sits in between, so it's reached by accident less often. **How it's picked (the user, 2026-09-26):** on the pause menu's map, target a
+   visited area and press confirm: a "Travel to <area>?" Yes / No box (No first). Confirm flips an area's description
+   pages today (`PauseMenu.cs:1407-1433`, with Z the other way, wrapping), so while map travel is on, Z alone flips
+   pages; nothing is lost, as Z wraps round. The game's map: a free cursor (`sprites[0]`) snapping to the visited
+   areas' markers (`sprites[area + 1]`), `option` the area. Each area needs a travel spot: a save point in it, from
+   the entity dump and each map's area (`MapControl.areaid`, now in the map dump).
 12. **A quest board in the starting house** (the user, 2026-09-25): the quests every board lists, taken without
    walking to the town or the bar. Every board shows the same list (`MEASURED.md`, "The quest board"), so it adds no
    quests, only a shorter way. Every board lists bounties too (built, build step 9); next, the house's board from
