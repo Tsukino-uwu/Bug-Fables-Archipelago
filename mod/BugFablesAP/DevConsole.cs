@@ -270,6 +270,7 @@ namespace BugFablesAP
                     case "warp": return Warp(parts);
                     case "spawn": return Spawn(parts);
                     case "flag": return Flag(parts);
+                    case "discovery": return Discovery(parts);
                     case "unstick": return Unstick();
                     case "take":
                     {
@@ -1269,6 +1270,22 @@ namespace BugFablesAP
                 MainManager.instance.flags[n] = parts[2].ToLowerInvariant() == "on" || parts[2] == "true" || parts[2] == "1";
             }
             return $"flags[{n}] = {MainManager.instance.flags[n]}";
+        }
+
+        // Written straight, with no pop-up: for replaying a scene that records one.
+        private static string Discovery(string[] parts)
+        {
+            if (parts.Length < 2)
+            {
+                return "discovery <n> [on|off]";
+            }
+            int n = int.Parse(parts[1]);
+            int library = (int)MainManager.Library.Discovery;
+            if (parts.Length > 2)
+            {
+                MainManager.instance.librarystuff[library, n] = parts[2].ToLowerInvariant() == "on" || parts[2] == "true" || parts[2] == "1";
+            }
+            return $"discovery {n} = {MainManager.instance.librarystuff[library, n]}";
         }
     }
 }
