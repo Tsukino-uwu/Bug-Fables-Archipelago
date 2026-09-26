@@ -273,6 +273,25 @@ namespace BugFablesAP
                         // The game's own full heal (HP and TP, the whole party), as the rematch machine uses.
                         MainManager.Heal();
                         return "party healed";
+                    case "killall":
+                    {
+                        // HP to 0 only: the battle's own CheckDead, after the next action, ends them the game's way.
+                        BattleControl battle = MainManager.battle;
+                        if (battle == null || battle.enemydata == null)
+                        {
+                            return "killall: not in a battle";
+                        }
+                        int set = 0;
+                        for (int i = 0; i < battle.enemydata.Length; i++)
+                        {
+                            if (battle.enemydata[i].hp > 0)
+                            {
+                                battle.enemydata[i].hp = 0;
+                                set++;
+                            }
+                        }
+                        return $"killall: {set} enemies at 0 HP; they fall after the next action";
+                    }
                     case "enemylook":
                         // A visual test: reloads the current map with every ordinary map enemy looking like one enemy.
                         if (parts.Length < 2 || (parts[1] != "off" && !int.TryParse(parts[1], out _)))

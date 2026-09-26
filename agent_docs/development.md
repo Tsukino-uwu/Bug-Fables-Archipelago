@@ -102,6 +102,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   location's map, it is that location.
 - `flag <n> [on|off]`: show or set a story flag.
 - `heal`: the game's own full heal (HP and TP, the whole party). Test files only.
+- `killall`: in a battle, every enemy's HP to 0; the battle's own death check ends them after the next action (a boss
+  a test party can't hit, such as the spider in the air). Test files only.
 - `take <item|key> <id>`: removes one from the inventory, as the game's own `removeitem` does. Test files only.
 - `warpicon leaf|key|scroll`: the Warp button's icon (the leaf is the default), shown the next time the pause menu opens.
 - `warpcolor orange|pink|lime|<hue>`: the drawn backdrop's colour, for `warpicon scroll` (a design test).
