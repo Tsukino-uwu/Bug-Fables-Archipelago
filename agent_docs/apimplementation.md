@@ -169,6 +169,15 @@ be wrong.
    `removeitem` takes an item (`items[kind].Remove(id)`). The rule the crystal berries set (build step 11): no action may
    make a check unreachable, so a key either opens one named door, or the keys and the doors that take them are exactly
    as many, with no door that could waste one.
+26. **Enemy stats randomized, planned for later** (the user, 2026-09-27): an option Off / Enemies / Bosses / Both that
+   changes HP, defence and EXP per enemy type. Decided at generation (`slot_data`, per enemy id), applied after enemy
+   scaling as a fixed multiplier, so the two stack. Defence is the risk: damage is attack minus defence, so a raised
+   defence can make an early enemy unhurtable; HP and EXP take a wide range (about x0.5 to x2), defence at most +-1 and
+   never above what a fight at that point can get through, bosses especially.
+27. **Enemy attacks randomized: not planned** (the user asked, 2026-09-27): each enemy's attacks are written for that
+   enemy in `BattleControl.DoAction` (its own animation numbers, shape, positions, summons), so another enemy's attack
+   would miss animations or wait forever on one and soft-lock the battle. At most, later, swaps between enemies built
+   alike, tested one by one.
 
 **Known issues:**
 
