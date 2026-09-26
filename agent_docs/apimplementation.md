@@ -1337,6 +1337,14 @@ island's checks before the ticket, and the ticket can't be placed behind its own
 early look. **The rule for any start:** it's safe while every way out of it is free and every way back in is something
 the logic already gates; only a start that could be left behind for good would need its checks to be filler.
 
+**The rule that keeps every random start valid (the user, 2026-09-26: "really important for the logic"):** with a
+random start, **Warp to Start is always available and counts in the logic**, whatever the Travel setting. The case it
+closes: once the logic starts in the start room (the room-by-room logic), a way back into the start may need an item
+lying in the start itself (the Boat Ticket on Metal Island); leaving without it would strand the seed, and Archipelago's
+logic can't model giving access up. With the Warp guaranteed, the start can always be re-entered from anywhere, for
+every start at once. The mod shows the Warp with a seed start even when Travel is Off or Map; the logic's side (the start
+region reachable from every region) comes with the room-by-room logic.
+
 **Status:** in progress (experimental): `anywhere` built (2026-09-26), the apworld tests pass, not yet seen in game;
 `towns`, the logic from the start, and a start without *Skip cutscenes* to come.
 
