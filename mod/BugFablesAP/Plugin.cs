@@ -163,6 +163,7 @@ namespace BugFablesAP
             QualityOfLife.SeedStart = () => connection?.Start;
             EnemyScaling.Enable(Log, Guid, () => randomizerEnabled.Value, () => QualityOfLife.EnemyScaling?.Value);
             InGameSettings.Enable(Log, Guid, () => randomizerEnabled.Value);
+            CustomItems.Enable(Log, () => randomizerEnabled.Value);
             HoldUps.Init(Log, () => randomizerEnabled.Value);
             PartyFit.Enable(Log, Guid, () => randomizerEnabled.Value);
             PartyMembers.Enable(Log, Guid, () => randomizerEnabled.Value);
@@ -275,6 +276,7 @@ namespace BugFablesAP
             receiver.Tick(randomizerEnabled.Value);
             ItemSwap.TickGround();
             MedalAssist.Tick();
+            CustomItems.Tick();
             MedalAssist.PayPrizes();
             QualityOfLife.Tick();
             KeptOpen.Tick();

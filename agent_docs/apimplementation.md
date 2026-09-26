@@ -156,7 +156,10 @@ be wrong.
    server like any item and sits in the key items as a real id, saved like one; randomizer saves are separate files
    vanilla never opens. The sailor's dialogue (refusing, then free) goes through the fare lines the mod already
    rewrites (lines 16 and 19); **the user reviews every changed dialogue line** before it goes in, the old and new text
-   side by side, so nothing reads off or machine-written.
+   side by side, so nothing reads off or machine-written. **Built so far (2026-09-26):** the item itself, `CustomItems.cs`: id 200 (the game's
+   items end at 186, both tables hold 256), the Platinum Card's fields and sprite copied, its own name and description
+   set, re-applied if the game reloads its table, only with Archipelago on; `spawn key 200` gives one (dev). Still to
+   build: the apworld item, the sailor's gate and lines (reviewed by the user), the logic, and Free boat's removal.
 
 22. **Healing save crystals, an idea for later** (suggested on Discord; the user, 2026-09-26): an item that makes the
    blue save crystals (save only) act like the yellow ones (save and heal), a nice filler or useful check. The colour
