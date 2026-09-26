@@ -1121,6 +1121,12 @@ destination, seen on screen), then every door, then the room-by-room logic that 
    quest is a step too, now just "reach any board" (build step 9). Known gap today: the lost kid's reward
    (location 10) doesn't require the sister's step.
 
+**The Warp is always there with the entrance randomizer** (the user, 2026-09-26: "so we never get impossible
+seeds/softlocks, even if we will check/make logic for things"). Coupled doors can always be retraced, but a one-way
+transfer (a drop, a fall, a scripted move) could land the player in a pocket whose way out needs an item not yet found:
+the seed stays possible, the player is stuck. The Warp to Start is that escape, shown whatever the Travel setting, as
+with a random start (build step 15), where it also counts in the logic.
+
 **Status:** in progress (experimental): every door, coupled, built, and a generated pair seen both ways, offline too (the user, 2026-09-25); next, sorting the transfers that aren't doors, then the room-by-room logic; decoupled later.
 
 ---

@@ -161,6 +161,7 @@ namespace BugFablesAP
                 () => difficulty.Value == "Hardest", () => detector.Value);
             QualityOfLife.Enable(Log, Config, () => randomizerEnabled.Value);
             QualityOfLife.SeedStart = () => connection?.Start;
+            QualityOfLife.EntrancesShuffled = () => connection?.DoorTargets != null && connection.DoorTargets.Count > 0;
             EnemyScaling.Enable(Log, Guid, () => randomizerEnabled.Value, () => QualityOfLife.EnemyScaling?.Value);
             InGameSettings.Enable(Log, Guid, () => randomizerEnabled.Value);
             CustomItems.Enable(Log, () => randomizerEnabled.Value);

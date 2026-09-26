@@ -16,9 +16,11 @@ namespace BugFablesAP
         internal static ConfigEntry<bool> FastText;
         internal static readonly string[] TravelValues = { "Off", "Warp", "Map", "Both" };
         internal static ConfigEntry<string> Travel;
-        // With a seed start (a random start) the Warp is always there: the logic counts on it to re-enter the start.
+        // The Warp is always there with a random start (the logic counts on it to re-enter the start) and with the
+        // entrance randomizer (the escape from a dead end), whatever Travel says.
         internal static bool WarpOn => (Travel != null && (Travel.Value == "Warp" || Travel.Value == "Both"))
-            || (SeedStart?.Invoke()).HasValue;
+            || (SeedStart?.Invoke()).HasValue || (EntrancesShuffled?.Invoke() ?? false);
+        internal static Func<bool> EntrancesShuffled;
         internal static bool MapOn => Travel != null && (Travel.Value == "Map" || Travel.Value == "Both");
         internal static ConfigEntry<bool> SkipCutscenes;
         internal static readonly string[] ItemAnimations = { "All", "Progression", "Off" };
