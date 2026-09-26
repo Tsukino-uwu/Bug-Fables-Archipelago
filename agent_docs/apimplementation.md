@@ -1777,7 +1777,7 @@ the attacks"), behind its own option, `shuffle_jump` (off).
    first artifact need Jump.
 
 **Status:** works, seen by the user (2026-09-27): the jump locked until its item (the Ladybug house), then free for
-the whole party; the forced Warp not yet checked (the user's Travel is Both).
+the whole party; the Warp stayed in the pause menu with Travel set to Off.
 
 # How it works
 
