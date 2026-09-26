@@ -811,3 +811,8 @@ Newest last. What was tried, what happened, what the user said.
   None of it is in v0.1.0; it ships with the next release, which the user isn't making right away. The dev install
   was updated (stage-dev, copy-dev) and is on the dev layout.
 - **Open next session:** the doc commits after `6fdd230` wait for the user's word to push.
+- **v0.1.0 remade (2026-09-26, the user's yes):** the zip's readme moved to its top level as plain `README.txt` (the
+  user: it was three folders down; a clash with another mod's readme is the player's call). The release and tag were
+  deleted and `release.ps1` published v0.1.0 again from `191b1da`: every job green, the zip checked. The generated notes
+  are the same "Full Changelog" link (first tag). Then made a full release, not a pre-release (the user: pre-releases
+  are hidden away); `release.yml` now defaults to a full release. The user trimmed the root README's intro.

@@ -10,10 +10,10 @@ on:
         required: true
         type: string
       prerelease:
-        description: 'Mark as a pre-release'
+        description: 'Mark as a pre-release (hidden from Latest, so easy to miss)'
         required: false
         type: boolean
-        default: true
+        default: false
       highlights:
         description: 'Changes and new features, above the generated notes. Empty for the generated notes alone.'
         required: false

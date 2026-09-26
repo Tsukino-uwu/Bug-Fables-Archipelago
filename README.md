@@ -1,10 +1,8 @@
 # Bug Fables Archipelago
 
-An [Archipelago](https://archipelago.gg) randomizer for *Bug Fables: The Everlasting Sapling*. An apworld tells the
-generator what's in the game, and a BepInEx mod sends your checks from inside it; every item, your own included,
-arrives from the server. You need your own copy of the game; nothing of it is in this repo.
+An [Archipelago](https://archipelago.gg) randomizer for *Bug Fables: The Everlasting Sapling*.
 
-**Status:** early work in progress, released as pre-releases. It covers the start of the game, and the mod doesn't
+**Status:** early work in progress. It covers the start of the game, and the mod doesn't
 report the goal yet.
 
 ## Setup
