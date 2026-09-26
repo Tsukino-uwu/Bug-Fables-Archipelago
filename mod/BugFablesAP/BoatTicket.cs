@@ -12,7 +12,7 @@ namespace BugFablesAP
     {
         private const string PierMap = "BugariaPier";
         private const string Offer = "Hm. You look disappointingly poor. But I'll ask out of decency...|next|"
-            + "Would you fancy traveling to |color,1|Metal Island|color,0|? Show me your ticket.|goto,15,keep|";
+            + "Would you fancy traveling to|line||color,1|Metal Island|color,0|? Show me your ticket.|goto,15,keep|";
 
         private static Func<bool> randomizerOn;
         private static Harmony harmony;
