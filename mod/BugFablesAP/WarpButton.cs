@@ -34,9 +34,11 @@ namespace BugFablesAP
         // Map: the round blue map in the other buttons' style. Warp: the map item's scroll, a "return scroll" (the user).
         private const int MapIconSprite = 34;
         private const int ScrollItem = 41;
-        // The scroll has no round backdrop of its own: the game's plain white circle, as a dark ring and a light fill.
-        private const int CircleSprite = 59;
-        private static readonly Color RingColor = new Color(0.45f, 0.22f, 0.1f), FillColor = new Color(1f, 0.9f, 0.72f);
+        // The scroll has no round backdrop of its own: one is drawn like the other buttons', one flat ring and one flat
+        // fill, in a colour none of them uses (orange), at the blue map icon's size.
+        private static readonly Color RingColor = new Color(0.86f, 0.42f, 0.08f), FillColor = new Color(1f, 0.84f, 0.62f);
+        private const float RingShare = 0.14f;
+        private static Sprite backdrop;
         // By its save point: entity 1 (SaveTutorial) before flag 41, entity 22 (SaveAfterTutorial) after.
         private const MainManager.Maps StartMap = MainManager.Maps.BugariaOutskirtsOutsideCity;
 
@@ -219,25 +221,53 @@ namespace BugFablesAP
             {
                 // Made as BuildWindow makes the other four, so IconAnim outlines and wiggles it like them.
                 bool map = buttons[i] == Kind.Map;
-                Sprite look = map ? MainManager.guisprites[MapIconSprite] : MainManager.guisprites[CircleSprite];
+                Sprite look = map ? MainManager.guisprites[MapIconSprite] : Backdrop();
+                // The button's own sprite, so the game's outline and wiggle apply; the scroll rides on it.
                 SpriteRenderer icon = MainManager.NewUIObject("menuicon" + (FirstOption + i), sprites[16].transform.parent,
                     new Vector3(x + step * (4 + i), 3f), Vector3.one, look).GetComponent<SpriteRenderer>();
                 if (!map)
                 {
-                    // The ring is the button's own sprite, so the game's outline and wiggle apply; fill and scroll ride on it.
-                    icon.color = RingColor;
-                    SpriteRenderer fill = MainManager.NewUIObject("fill", icon.transform, Vector3.zero, Vector3.one * 0.82f,
-                        MainManager.guisprites[CircleSprite]).GetComponent<SpriteRenderer>();
-                    fill.color = FillColor;
-                    fill.sortingOrder = icon.sortingOrder + 1;
                     SpriteRenderer scroll = MainManager.NewUIObject("scroll", icon.transform, Vector3.zero, Vector3.one,
                         MainManager.itemsprites[0, ScrollItem]).GetComponent<SpriteRenderer>();
-                    scroll.sortingOrder = icon.sortingOrder + 2;
+                    scroll.sortingOrder = icon.sortingOrder + 1;
                 }
                 sprites[SpriteSlot[i]] = icon;
                 icons.Add(icon);
             }
             maxField.SetValue(menu, total);
+        }
+
+        // Drawn once: a circle the size of the blue map icon, a flat ring round a flat fill, edges smoothed by a pixel.
+        private static Sprite Backdrop()
+        {
+            if (backdrop != null)
+            {
+                return backdrop;
+            }
+            Sprite model = MainManager.guisprites[MapIconSprite];
+            int size = Mathf.RoundToInt(Mathf.Max(model.rect.width, model.rect.height));
+            var texture = new Texture2D(size, size, TextureFormat.RGBA32, false) { filterMode = FilterMode.Bilinear };
+            float radius = size / 2f - 1f, inner = radius * (1f - RingShare), centre = (size - 1) / 2f;
+            var pixels = new Color[size * size];
+            for (int y = 0; y < size; y++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    float d = Vector2.Distance(new Vector2(x, y), new Vector2(centre, centre));
+                    Color c = d <= inner ? FillColor : RingColor;
+                    // Smooth the ring's inner edge and the circle's outer edge over one pixel.
+                    if (d > inner - 0.5f && d < inner + 0.5f)
+                    {
+                        c = Color.Lerp(FillColor, RingColor, d - (inner - 0.5f));
+                    }
+                    c.a = Mathf.Clamp01(radius + 0.5f - d);
+                    pixels[y * size + x] = c;
+                }
+            }
+            texture.SetPixels(pixels);
+            texture.Apply();
+            backdrop = Sprite.Create(texture, new Rect(0f, 0f, size, size), new Vector2(0.5f, 0.5f), model.pixelsPerUnit);
+            return backdrop;
         }
 
         private static void AfterUpdateText(PauseMenu __instance)
