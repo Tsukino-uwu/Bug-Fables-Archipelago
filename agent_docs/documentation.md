@@ -1203,8 +1203,12 @@ An opt-in for a faster, easier game (Next 16 and 17 in `apimplementation.md`).
   so it stacks on top of enemy scaling. The game then adds it to the battle's total, which it caps at one level's worth
   (`neededexp`); that cap stays, so a high multiplier early mostly means a level per battle. The hologram fights
   (flag 166) keep the game's 5.
-- **Berries:** a prefix on `NPCControl.BerryBounce`, which the game calls only right after a berry lying in the world
-  (1, 5 or 20, from the map or dropped after a fight) has been added, and before it clamps money at 999. It adds the
+- **Berries:** a prefix on the first step of `NPCControl.BerryBounce`, the coroutine the game starts only right after a
+  berry lying in the world (1, 5 or 20, from the map or dropped after a fight) has been added, and before it clamps
+  money at 999. **First hooked on `BerryBounce()` itself, which never ran** (the user, 2026-09-26: 10x berries gave the
+  plain amount, and the log had no berry line while the EXP lines were there): that method only builds the coroutine
+  object, and a stub that small is inlined into its caller, so a patch on it is skipped. The patch is now on the
+  coroutine's `MoveNext` (`AccessTools.EnumeratorMoveNext`), reached only through the interface, and acts on state 0. It adds the
   rest (value x (multiplier - 1)) and clamps the same way. A check's berries come from the server through the item
   grant, never this pickup, so they aren't multiplied.
 - **The bar** (`ApMenu.DrawPips`): the game draws a volume row's ten pips with `guisprites[59]` (empty, a quarter
@@ -1212,4 +1216,7 @@ An opt-in for a faster, easier game (Next 16 and 17 in `apimplementation.md`).
   (`MainManager.ShowItemList`, type 17). The panel's arrows sit closer, so the same layout is scaled by 0.68.
 - Each page's two buttons: Reset puts both back to 1x, Disable all sets 1x.
 
-**Status:** built (2026-09-26), the build succeeds and the hooks install in the running game; not yet seen.
+**Seen by the user (2026-09-26):** EXP at 10x: a Pseudoscorpion and a Cactus logged 5 -> 50 and 7 -> 70, and the
+battle gave 100, the game's cap of a level's worth.
+
+**Status:** EXP works, seen by the user (2026-09-26); berries re-hooked, not yet seen.

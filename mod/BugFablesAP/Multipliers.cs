@@ -29,17 +29,19 @@ namespace BugFablesAP
                 "Berries picked up in the world (lying there or dropped after a fight) times this, 1 to 10; never a check's "
                 + "berries. Switch it on the Gameplay page.", new AcceptableValueRange<int>(Min, Max)));
             var exp = AccessTools.Method(typeof(BattleControl), "GetEXP", new[] { typeof(int), typeof(bool), typeof(MainManager.Enemies) });
-            var berry = AccessTools.Method(typeof(NPCControl), "BerryBounce");
+            // The iterator's own MoveNext: the tiny BerryBounce() stub is inlined into its caller, so a patch there never runs.
+            var bounce = AccessTools.Method(typeof(NPCControl), "BerryBounce");
+            var berry = bounce == null ? null : AccessTools.EnumeratorMoveNext(bounce);
             if (exp == null || berry == null)
             {
-                log.LogError($"[mult] NOT installed (BattleControl.GetEXP {exp != null}, NPCControl.BerryBounce {berry != null}); "
+                log.LogError($"[mult] NOT installed (BattleControl.GetEXP {exp != null}, NPCControl.BerryBounce's MoveNext {berry != null}); "
                     + "the multipliers do nothing.");
                 return;
             }
             harmony = new Harmony(guid + ".mult." + DateTime.UtcNow.Ticks);
             harmony.Patch(exp, postfix: new HarmonyMethod(typeof(Multipliers), nameof(AfterGetExp)));
-            harmony.Patch(berry, prefix: new HarmonyMethod(typeof(Multipliers), nameof(BeforeBerryBounce)));
-            log.LogInfo("[mult] installed on BattleControl.GetEXP and NPCControl.BerryBounce");
+            harmony.Patch(berry, prefix: new HarmonyMethod(typeof(Multipliers), nameof(BeforeBerryStep)));
+            log.LogInfo("[mult] installed on BattleControl.GetEXP and NPCControl.BerryBounce's MoveNext");
         }
 
         internal static void Disable()
@@ -68,15 +70,25 @@ namespace BugFablesAP
             log.LogInfo($"[mult] EXP {was} -> {__result} ({Exp.Value}x)");
         }
 
-        // Called right after a berry pickup has added its 1, 5 or 20, and only then.
-        private static void BeforeBerryBounce(NPCControl __instance)
+        // BerryBounce starts right after a berry pickup has added its 1, 5 or 20, and only then; its first step runs at once.
+        private static void BeforeBerryStep(object __instance)
         {
-            if (!On(Berries) || __instance?.entity == null)
+            if (!On(Berries))
+            {
+                return;
+            }
+            var step = Traverse.Create(__instance);
+            if (step.Field("<>1__state").GetValue<int>() != 0)
+            {
+                return;
+            }
+            NPCControl npc = step.Field("<>4__this").GetValue<NPCControl>();
+            if (npc?.entity == null)
             {
                 return;
             }
             int value;
-            switch ((MainManager.Items)__instance.entity.animstate)
+            switch ((MainManager.Items)npc.entity.animstate)
             {
                 case MainManager.Items.MoneySmall: value = 1; break;
                 case MainManager.Items.MoneyMedium: value = 5; break;

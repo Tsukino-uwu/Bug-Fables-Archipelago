@@ -1139,7 +1139,9 @@ hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0
   `EndBattleWon(addexp)` adds the raw `exp` of enemies still standing, without `GetEXP`.
 - **A berry picked up in the world** (`NPCControl.CheckItem`, items MoneySmall, MoneyMedium, MoneyBig) adds 1, 5 or 20,
   then calls `StartCoroutine(BerryBounce())` (its only caller) and clamps money to 0-999. Berries dropped after a fight
-  are the same pickups (`EntityControl` spits them from `spitmoney`). Used by `Multipliers.cs`.
+  are the same pickups (`EntityControl` spits them from `spitmoney`). A Harmony prefix on `BerryBounce()` itself never
+  ran in game (2026-09-26, the user's 10x test): the stub is inlined. Its iterator class is `<BerryBounce>d__172`, with
+  the compiler's standard `<>1__state` and `<>4__this` fields (read from the game's DLL). Used by `Multipliers.cs`.
 - **The volume rows' bar** (`MainManager.ShowItemList`, type 17, `settingsindex` 33, 34 and 160): ten `pip` objects from
   x 4.45, 0.4 apart, between arrows at 3.75 and 8.75; empty `guisprites[59]` at 1/4 scale, lit `guisprites[42]` at 1/3,
   yellow; sorting 10 + index. Used by `ApMenu.cs`.
