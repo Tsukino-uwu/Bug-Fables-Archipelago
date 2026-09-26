@@ -32,6 +32,8 @@ namespace BugFablesAP
         internal static ConfigEntry<bool> Detector;
 
         internal static ApMenu Open;
+        // Opened from the pause menu's Settings: only the Quality of life or Gameplay page, over a hidden pause menu.
+        private bool inGame;
 
         private static ManualLogSource log;
         private StartMenu owner;
@@ -75,11 +77,41 @@ namespace BugFablesAP
             menu.Build();
         }
 
+        // From the pause menu's Settings (InGameSettings): one settings page, no connection page.
+        internal static void ShowInGame(ManualLogSource logger, bool gameplay)
+        {
+            if (Open != null)
+            {
+                return;
+            }
+            log = logger;
+            var go = new GameObject("ArchipelagoMenu");
+            ApMenu menu = go.AddComponent<ApMenu>();
+            menu.inGame = true;
+            menu.status = () => "";
+            menu.page = gameplay ? Page.Gameplay : Page.Qol;
+            menu.row = ButtonsRow;
+            Open = menu;
+            menu.Build();
+        }
+
         private void Build()
         {
-            Traverse.Create(owner).Field("canselect").SetValue(false);
-            // Hide the title screen under the panel, as the game does for the file select.
-            SetTitleVisible(false);
+            if (inGame)
+            {
+                // The pause menu stays underneath, switched off so it neither draws nor reads input.
+                MainManager.pausemenu.gameObject.SetActive(false);
+                if (MainManager.instance.cursor != null)
+                {
+                    MainManager.instance.cursor.enabled = false;
+                }
+            }
+            else
+            {
+                Traverse.Create(owner).Field("canselect").SetValue(false);
+                // Hide the title screen under the panel, as the game does for the file select.
+                SetTitleVisible(false);
+            }
             // The settings screen's two boxes (leafy type 1, controls type 4), hung off the GUI camera at (0, 0, 10)
             // as PauseMenu does; under the title screen's object everything sat one unit low.
             transform.parent = MainManager.GUICamera.transform;
@@ -107,8 +139,11 @@ namespace BugFablesAP
             help.localPosition = new Vector3(0f, 3.75f, 0f);
             new GameObject("confirmbutton").AddComponent<ButtonSprite>().SetUp(4, -1, "Select / Edit", new Vector3(-4.5f, 0.25f), Vector3.one * 0.5f, ButtonSort, help);
             new GameObject("cancelbutton").AddComponent<ButtonSprite>().SetUp(5, -1, "Back", new Vector3(0.5f, 0.25f), Vector3.one * 0.5f, ButtonSort, help);
-            new GameObject("enterbutton").AddComponent<ButtonSprite>().SetUp(9, -1, "Done typing", new Vector3(-4.5f, -0.5f), Vector3.one * 0.5f, ButtonSort, help);
-            MainManager.instance.StartCoroutine(MainManager.SetText(TextSort + "|size,0.55|Ctrl+V paste   Ctrl+C copy", new Vector3(0.5f, -0.45f, 0f), help));
+            if (!inGame)
+            {
+                new GameObject("enterbutton").AddComponent<ButtonSprite>().SetUp(9, -1, "Done typing", new Vector3(-4.5f, -0.5f), Vector3.one * 0.5f, ButtonSort, help);
+                MainManager.instance.StartCoroutine(MainManager.SetText(TextSort + "|size,0.55|Ctrl+V paste   Ctrl+C copy", new Vector3(0.5f, -0.45f, 0f), help));
+            }
             textRoot = new GameObject("text").transform;
             textRoot.parent = box;
             textRoot.localPosition = Vector3.zero;
@@ -131,6 +166,23 @@ namespace BugFablesAP
 
         private void Close()
         {
+            if (inGame)
+            {
+                // Back to the Settings list as it was; the cooldown keeps the closing press from acting there too.
+                if (MainManager.pausemenu != null)
+                {
+                    MainManager.pausemenu.gameObject.SetActive(true);
+                }
+                if (MainManager.instance.cursor != null)
+                {
+                    MainManager.instance.cursor.enabled = true;
+                }
+                MainManager.instance.inputcooldown = 10f;
+                Open = null;
+                Destroy(gameObject);
+                log.LogInfo("[apmenu] closed (back to Settings)");
+                return;
+            }
             SetTitleVisible(true);
             Traverse.Create(owner).Field("canselect").SetValue(true);
             Traverse.Create(owner).Field("cd").SetValue(10f);
@@ -284,7 +336,7 @@ namespace BugFablesAP
             else if (cancel)
             {
                 MainManager.PlaySound("Cancel", 10);
-                if (page != Page.Main)
+                if (page != Page.Main && !inGame)
                 {
                     SwitchPage(Page.Main, page == Page.Qol ? QolRow : GameplayRow);
                 }
@@ -613,7 +665,7 @@ namespace BugFablesAP
                 Choice(AnimationRow, "Item animation", (QualityOfLife.ItemAnimation?.Value ?? "All").ToUpperInvariant());
                 Choice(PricesRow, "Shop prices", (QualityOfLife.ShopPrices?.Value ?? "Normal").ToUpperInvariant());
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
-                Text("|center||size,0.5|Quality of life. Cancel goes back.", 0f, StatusY);
+                Text("|center||size,0.5|Quality of life. Cancel goes back" + (inGame ? " to Settings." : "."), 0f, StatusY);
                 PlaceCursor();
                 return;
             }
@@ -624,7 +676,7 @@ namespace BugFablesAP
                 Choice(ScalingRow, "Enemy scaling", ScalingLabel(QualityOfLife.EnemyScaling?.Value ?? "PartyLevel"));
                 Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
-                Text("|center||size,0.5|Gameplay. Cancel goes back.", 0f, StatusY);
+                Text("|center||size,0.5|Gameplay. Cancel goes back" + (inGame ? " to Settings." : "."), 0f, StatusY);
                 PlaceCursor();
                 return;
             }

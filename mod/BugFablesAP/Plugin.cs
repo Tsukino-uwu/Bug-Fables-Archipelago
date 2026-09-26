@@ -157,6 +157,7 @@ namespace BugFablesAP
                 () => difficulty.Value == "Hardest", () => detector.Value);
             QualityOfLife.Enable(Log, Config, () => randomizerEnabled.Value);
             EnemyScaling.Enable(Log, Guid, () => randomizerEnabled.Value, () => QualityOfLife.EnemyScaling?.Value);
+            InGameSettings.Enable(Log, Guid, () => randomizerEnabled.Value);
             HoldUps.Init(Log, () => randomizerEnabled.Value);
             PartyFit.Enable(Log, Guid, () => randomizerEnabled.Value);
             PartyMembers.Enable(Log, Guid, () => randomizerEnabled.Value);
@@ -354,6 +355,7 @@ namespace BugFablesAP
             EnemyShuffle.Disable();
             AnimGuard.Disable();
             EnemyScaling.Disable();
+            InGameSettings.Disable();
             QualityOfLife.Disable();
             WarpButton.Disable();
             HoldUps.Clear();
