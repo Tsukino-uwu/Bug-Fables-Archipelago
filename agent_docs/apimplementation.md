@@ -1605,7 +1605,8 @@ plando both ways; `development.md`, "A second player"): found here, "You found O
 "...Health Upgrade!" (a pickup, useful), "...Confetti Cannon!" (filler) and "...Math Trap!" (trap), each in its
 colour; received, "You got Kabbu from Other!" and "You got Leif from Other!" when Other's chests were checked.
 
-**Status:** works, seen by the user with a real second player (2026-09-26), every class and both directions.
+**Status:** works, seen by the user with a real second player (2026-09-26), every class and both directions; Rarity, the
+default since, seen on a gift (the icon and its text in purple).
 
 # How it works
 

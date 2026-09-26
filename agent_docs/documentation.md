@@ -1391,7 +1391,8 @@ once: filler green `4CC94C`, useful blue `4A90E8`, progression purple `B36BE8`, 
 but the user dislikes it). So *Item colors* became **RARITY / ARCHIPELAGO / OFF**, Rarity by default, one setting for
 the text and the starbursts together: Rarity's text shades are darker for the white box (`8A45C8`, `2F6FD8`, `C62828`,
 `2E9E3E`); Off gives the game's red text and its own starburst colours by kind (items teal, key items pink, medals
-orange). Not yet seen: the Rarity text, and Off.
+orange). **Seen (the user, 2026-09-26):** Artis's gift with Rarity, "You found Other's Key!" in dark yellow and purple,
+the Archipelago icon held up on a purple starburst ("looks really good now"). Off not yet seen.
 
 **Status:** works, seen by the user on the Caravan's shelf and on the ground (2026-09-26).
 
