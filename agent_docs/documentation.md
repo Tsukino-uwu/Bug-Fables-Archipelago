@@ -896,7 +896,9 @@ its flag 158 is unset: the same scene later takes bounties and gives their rewar
    fight): the scene deletes its characters and remakes the party (`destroyoldentity`), and the actor was kept as a
    character, so the remake rule took the new leader (Vi) and Kabbu's part went to an invisible stand-in. Actors and
    spares are now kept by member number and looked up again when asked for, so a remade Leif stays Kabbu's actor.
-   Not yet seen.
+   **Seen (the user, 2026-09-26):** Leif visible after the first fight, then Vi and Leif in the second (a screenshot).
+   One retry went idle for a reason of mine: resetting the scene, flag 16 was cleared before 27, and the mod's "Leif
+   joins after the spider" rule set 16 again in between, so Leif counted as joined. Clear 27 first.
 
 **No warnings for missing animations (the user, 2026-09-26: "dumb to leave bug/errors laying around, even if its
 harmless").** A character asked for a state its controller lacks (a lone Leif acting another member's part, a swapped
