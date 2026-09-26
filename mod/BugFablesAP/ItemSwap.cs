@@ -645,9 +645,16 @@ namespace BugFablesAP
             Mark(caller.entity, null);
             string article = info != null && IsOurs(info) ? ArticleOf(info.ItemId, KindOf(info)) : null;
             // "You found |string,1| ...": the seed item's own article, none for a member or another player's item.
-            if (ForOther(info, ref name) || article == "")
+            bool other = ForOther(info, ref name);
+            if (other || article == "")
             {
                 text = text.Replace(ArticleSlot, "");
+            }
+            // The pickup line ends its name in the game's red ("...|string,0||color,1|!"); after a name in the Item colors
+            // that "!" looked stray, so it ends in black as the gift line does.
+            if (other && QualityOfLife.ApColors)
+            {
+                text = text.Replace(NameThenRed, NameThenBlack);
             }
             else if (article != null)
             {
@@ -804,6 +811,7 @@ namespace BugFablesAP
         // reads menutext[106] right after this), then the game's text is put back.
         private const int GotLine = 106;
         private const string ArticleSlot = "|string,1| ";
+        private const string NameThenRed = "|string,0||color,1|", NameThenBlack = "|string,0||color,0|";
 
         // Another player's item, found here: "You found <player>'s <item>!" (the user), so it isn't taken for your own.
         private const string GotWords = "You got " + ArticleSlot;

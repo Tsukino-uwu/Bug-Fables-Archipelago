@@ -481,6 +481,8 @@ and "You found Player's Sword!" for another player's item, article gone, in the 
 (2026-09-26):** "You found an Ambusher Medal!" (the medal's own article, at the Residential rooftop) and "You found
 Vi!" at the Fountain Rooftop, Vi's icon in a yellow starburst, no description; then another player's items, a gift
 and three pickups, "You found Other's Key!" and the rest, in their colours (the Archipelago guide, build step 19).
+The pickup line's own "!" is red (it ends `|color,1|!`); after another player's coloured name it looked stray (the user),
+so with Item colors on it ends in black there, as the gift line does. Your own finds keep the game's all-red name.
 
 **Archipelago's colours in the line (the user, 2026-09-26, three rounds on screen).** The game colours text only from
 its own palette (`|color,n|`), which in its scene is 10 colours, not the 7 in the code (dev `palette`; a first try that
