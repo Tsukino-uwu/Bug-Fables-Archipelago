@@ -1447,6 +1447,13 @@ Those are the parts that make each game's client different.
 - The client library and its JSON library sit in `BepInEx/plugins`, loaded once, and the mod itself
   reloads on its own during development.
 
+**Custom gates are the mod's own items** (the user, 2026-09-26). Where the randomizer wants a gate vanilla doesn't have,
+the mod makes an item of its own, added to the game's item table at runtime (an existing sprite, its own name and
+description), and the gate is "has the item": the logic reasons about it like any key item, and the mod checks it in
+the game. The Boat Ticket is the first (Next 21); the party members as items (build step 13) are the same idea on the
+location side, turning a story moment vanilla never made a check into one. Each new item takes a filler slot in the
+pool, so a seed needs one to spare, which a test pins.
+
 ## 10. Things that go wrong quietly
 
 Most connection mistakes don't crash; they just silently do nothing, or look like they worked. The full
