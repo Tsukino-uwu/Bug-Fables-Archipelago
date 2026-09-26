@@ -1244,6 +1244,16 @@ location) is not one: the scene cuts the grass itself, and it played through wit
 arrived at once (the user, 2026-09-25; the mod guide, step 11, item 3). The way down to Shades's shop is:
 grass on the way there has to be cut with the horn (the user, 2026-09-25), so her locations will need Kabbu.
 
+**Rules name the move, not the member (the user, 2026-09-26):** "assume horn/boomerang/ice for logic, same as
+having Kabbu/Vi/Leif", so the logic already holds for a random start, one member and missing moves before any move is
+an item. A spot or exit lists `abilities` (Horn, Beemerang, Ice, Jump); the world turns each into who has it today
+(`_ability_holders`: Horn Kabbu, Beemerang Vi, Ice Leif; Jump the whole party, so nothing), and only when members
+are items, as for `members`. The two horn spots (25, 32) moved from `members` to `abilities`, and location 19 (crystal
+berry #0 outside the den, behind grass from the Outskirts' side) got the Horn: cautious, since the cave's side needs
+no horn, which room-level regions will count. Tests `TestAbilities`; three seeds with a random start and APQuest
+generated. **Next, after the current tests (the user):** the three attacks as items, one per member, and Jump as one
+item for the whole party; then every move's spot from `MEASURED.md` (where a move is needed) written as `abilities`.
+
 **Status:** in progress: a one-member party (Leif) seen through chapter 1 into chapter 2 (the user, 2026-09-25); *Starting Party Member* built as its own step (build step 18); basic moves, jump and field abilities not built.
 
 ## Build step 14: enemy shuffle (in progress)

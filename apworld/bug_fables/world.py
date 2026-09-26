@@ -132,9 +132,19 @@ class BugFablesWorld(World):
             return self.starting_member < 0
         return True
 
+    # Rules name the field move, not who has it, so a move can become an item without rewriting them. Until then each
+    # attack is its member's, and Jump is the whole party's (always there).
+    _ability_holders = {"Horn": "Kabbu", "Beemerang": "Vi", "Ice": "Leif", "Jump": None}
+
     def _requires(self, data: dict[str, Any]) -> list[str]:
-        """What a spot or exit needs: its own requires, and its members when members are items."""
-        members = data.get("members", []) if self.starting_member >= 0 else []
+        """What a spot or exit needs: its own requires, and its members and moves' members when members are items."""
+        if self.starting_member < 0:
+            return list(data.get("requires", []))
+        members = list(data.get("members", []))
+        for ability in data.get("abilities", []):
+            holder = self._ability_holders[ability]
+            if holder is not None and holder not in members:
+                members.append(holder)
         return data.get("requires", []) + members
 
     def create_regions(self) -> None:

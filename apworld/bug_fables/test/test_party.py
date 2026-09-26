@@ -97,3 +97,26 @@ class TestStartRandomMember(BugFablesTestBase):
         start = self.world.fill_slot_data()["starting_member"]
         self.assertIn(start, range(3))
         self.assertEqual(_names(self.multiworld.precollected_items[self.player]), [MEMBERS[start]])
+
+
+class TestAbilities(BugFablesTestBase):
+    # Rules name a field move; until moves are items, each attack is its member's and Jump the whole party's.
+    options = {"starting_party_member": "leif"}
+
+    def test_every_ability_in_the_data_is_known(self) -> None:
+        from ..data_tables import LOCATIONS, REGIONS
+        named = {ability for loc in LOCATIONS for ability in loc.get("abilities", [])}
+        named |= {ability for region in REGIONS for exit_data in region["exits"] for ability in exit_data.get("abilities", [])}
+        self.assertLessEqual(named, set(self.world._ability_holders))
+
+    def test_each_attack_needs_its_member(self) -> None:
+        for ability, member in (("Horn", "Kabbu"), ("Beemerang", "Vi"), ("Ice", "Leif")):
+            with self.subTest(ability=ability):
+                self.assertEqual(self.world._requires({"abilities": [ability]}), [member])
+
+    def test_jump_needs_no_member(self) -> None:
+        self.assertEqual(self.world._requires({"abilities": ["Jump"]}), [])
+
+    def test_story_party_needs_nothing_for_a_move(self) -> None:
+        self.world.starting_member = -1
+        self.assertEqual(self.world._requires({"abilities": ["Horn"], "requires": ["Explorer Permit"]}), ["Explorer Permit"])
