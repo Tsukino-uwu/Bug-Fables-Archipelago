@@ -257,6 +257,7 @@ namespace BugFablesAP
                     case "spawn": return Spawn(parts);
                     case "flag": return Flag(parts);
                     case "unstick": return Unstick();
+                    case "warpicon": return WarpButton.SetIcon(parts.Length > 1 ? parts[1] : "");
                     case "warpcolor": return WarpButton.SetColour(parts.Length > 1 ? parts[1] : "");
                     case "heal":
                         // The game's own full heal (HP and TP, the whole party), as the rematch machine uses.

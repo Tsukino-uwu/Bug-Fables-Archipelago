@@ -651,7 +651,10 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    (black outline to dark lime, colours lifted) was tried and looked worse each time (first the copy took another
    sprite from the atlas, as a render texture's rows run the other way on Direct3D; then dark reds were caught as
    outline; then it read flat and washed out), and none of the game's other round icons (key, leaf, the library tabs)
-   means "warp". A drawn icon would be art work, not code; it is the button's own sprite (so the game's outline and wiggle apply), the scroll on top.
+   means "warp". A drawn icon would be art work, not code. **Then the leaf (the user):** of the game's premade round
+   icons (the key and leaf of the item categories, `guisprites[23]` / `[22]`; the Library's tabs, where the map icon
+   comes from), the leaf "looks more as the game intended" than the scroll on a drawn backdrop, so Warp uses the leaf,
+   unchanged. The drawn backdrop stays for the dev console's `warpicon scroll`; it is the button's own sprite (so the game's outline and wiggle apply), the scroll on top.
    **Map** opens the game's own map window (6) the way its map shortcut does (`windowid = 6`, `BuildWindow`), in a
    travel mode: confirm on a visited area (`librarystuff[4, area]`) opens "Travel to <area>?" (No first) instead of
    flipping the description's pages; the map opened any other way keeps vanilla controls. On Yes the menu closes the

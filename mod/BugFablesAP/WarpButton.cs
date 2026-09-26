@@ -50,6 +50,23 @@ namespace BugFablesAP
             FillColor = Color.HSVToRGB(Mathf.Repeat(hue - 0.01f, 1f), 0.34f, 1f);
         }
 
+        // Warp's icon: the game's own round leaf (22), picked by the user over the scroll on a drawn backdrop ("looks more
+        // as the game intended"). Dev (console `warpicon`): the key (23), or the scroll again.
+        private static int premadeIcon = 22;
+
+        internal static string SetIcon(string name)
+        {
+            switch (name)
+            {
+                case "key": premadeIcon = 23; break;
+                case "leaf": premadeIcon = 22; break;
+                case "scroll": premadeIcon = -1; break;
+                default: return "warpicon key|leaf|scroll";
+            }
+            builtFor = null;
+            return "warp icon now " + name + ": reopen the pause menu";
+        }
+
         // Dev only (console `warpcolor`): try a backdrop colour; the pause menu shows it the next time it opens.
         internal static string SetColour(string name)
         {
@@ -318,11 +335,12 @@ namespace BugFablesAP
             {
                 // Made as BuildWindow makes the other four, so IconAnim outlines and wiggles it like them.
                 bool map = buttons[i] == Kind.Map;
-                Sprite look = map ? MainManager.guisprites[MapIconSprite] : Backdrop();
+                bool premade = !map && premadeIcon >= 0;
+                Sprite look = map ? MainManager.guisprites[MapIconSprite] : premade ? MainManager.guisprites[premadeIcon] : Backdrop();
                 // The button's own sprite, so the game's outline and wiggle apply; the scroll rides on it.
                 SpriteRenderer icon = MainManager.NewUIObject("menuicon" + (FirstOption + i), sprites[16].transform.parent,
                     new Vector3(ButtonX(4 + i, total), 3f), Vector3.one, look).GetComponent<SpriteRenderer>();
-                if (!map)
+                if (!map && !premade)
                 {
                     SpriteRenderer scroll = MainManager.NewUIObject("scroll", icon.transform, Vector3.zero, Vector3.one,
                         MainManager.itemsprites[0, ScrollItem]).GetComponent<SpriteRenderer>();

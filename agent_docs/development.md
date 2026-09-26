@@ -97,7 +97,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   location's map, it is that location.
 - `flag <n> [on|off]`: show or set a story flag.
 - `heal`: the game's own full heal (HP and TP, the whole party). Test files only.
-- `warpcolor orange|pink`: the Warp button's backdrop colour, shown the next time the pause menu opens (a design test).
+- `warpicon leaf|key|scroll`: the Warp button's icon (the leaf is the default), shown the next time the pause menu opens.
+- `warpcolor orange|pink|lime|<hue>`: the drawn backdrop's colour, for `warpicon scroll` (a design test).
 - `enemylook <enemy id|off>`: reloads the current map with every ordinary map enemy looking like that enemy (a
   visual test for enemy shuffle's map look; the fights stay the seed's). Puzzle enemies keep their own look.
 - `enemyfight <enemy id> [id...] | off`: every map fight starts with those enemy ids instead of the seed's (a test).
