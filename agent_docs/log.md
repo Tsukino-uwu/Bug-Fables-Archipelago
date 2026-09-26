@@ -816,3 +816,5 @@ Newest last. What was tried, what happened, what the user said.
   deleted and `release.ps1` published v0.1.0 again from `191b1da`: every job green, the zip checked. The generated notes
   are the same "Full Changelog" link (first tag). Then made a full release, not a pre-release (the user: pre-releases
   are hidden away); `release.yml` now defaults to a full release. The user trimmed the root README's intro.
+- **Idea logged (the user, 2026-09-26), not built:** after the pitfall scene, land the party as if it entered the fall
+  room through a door, as the random start does (`documentation.md`, step 11, before its Status line).

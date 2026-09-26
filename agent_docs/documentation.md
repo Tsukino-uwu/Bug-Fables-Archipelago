@@ -892,6 +892,11 @@ added member comes with new characters (`MEASURED.md`, enemy-only walls). Adding
 game's way (`SetPlayerColliders`, 0.2 s later), as receiving a party member will need. Seen by the user
 (2026-09-26): Vi then Kabbu added mid-map, and the party walked through where the wall had been.
 
+**Idea, not built (the user, 2026-09-26):** after the pitfall scene (the trapdoor into `SnakemouthFallRoom`,
+Event5), place the party as if it had just entered the fall room through one of its doors, the same arrival a random
+start uses (build step 15 of the Archipelago guide; the arrival jump from the door's entity, step 13 here). The user
+expects it to line the landing up better than the scene's own spot, as the random start into that room did.
+
 **Status:** works with Leif alone, seen by the user through chapter 1 into chapter 2 (2026-09-25); items 5 and 6, and Leif joining after the spider with a two-member start, not yet seen; the direct lookups in item 12 still open.
 
 *Code: `PartyFit.cs` (the stand-ins and the acting leader), `PartyMembers.cs` (the member guard, followers,
