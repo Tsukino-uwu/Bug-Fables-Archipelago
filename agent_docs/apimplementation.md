@@ -1330,6 +1330,13 @@ still starts outside Bugaria, so a seed started elsewhere may not be finishable 
    now: the transfer hangs on the skip's end.
 4. **Tests** (`test/test_start.py`): off gives `{}`; `anywhere` gives a save point from the table; the start is fixed.
 
+**A worked example: starting on Metal Island** (the user asked, 2026-09-26). Leaving needs nothing (the island
+sailor is unchanged); coming back needs the Boat Ticket, or the Warp (the seed's start) or map travel. Nothing can be
+missed, and nothing there has to be filler: the logic already gates Metal Island on the ticket, so it never expects the
+island's checks before the ticket, and the ticket can't be placed behind its own gate. Starting there only gives an
+early look. **The rule for any start:** it's safe while every way out of it is free and every way back in is something
+the logic already gates; only a start that could be left behind for good would need its checks to be filler.
+
 **Status:** in progress (experimental): `anywhere` built (2026-09-26), the apworld tests pass, not yet seen in game;
 `towns`, the logic from the start, and a start without *Skip cutscenes* to come.
 
