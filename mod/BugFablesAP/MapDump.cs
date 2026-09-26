@@ -21,7 +21,7 @@ namespace BugFablesAP
             }
             string outPath = Path.Combine(Paths.BepInExRootPath, "bugfablesap-mapdump.tsv");
             var sb = new StringBuilder();
-            sb.AppendLine("map\tautoevents(flag:event)\thazards(type:count)\tglowtriggers\tdiscoveries");
+            sb.AppendLine("map\tautoevents(flag:event)\thazards(type:count)\tglowtriggers\tdiscoveries\tarea");
             var flagged = new StringBuilder();
             flagged.AppendLine("map\tcomponent\tobject\trequires\tlimit\tdetail");
             int maps = 0, missing = 0;
@@ -64,6 +64,7 @@ namespace BugFablesAP
                   .Append(string.Join(" ", hazards.Select(kv => kv.Key + ":" + kv.Value).ToArray())).Append('\t')
                   .Append(glow).Append('\t')
                   .Append(control != null && control.discoveryids != null ? string.Join(" ", control.discoveryids.Select(d => d.ToString()).ToArray()) : "")
+                  .Append('\t').Append(control != null ? ((int)control.areaid).ToString() : "")
                   .AppendLine();
             }
             File.WriteAllText(outPath, sb.ToString());

@@ -431,7 +431,14 @@ namespace BugFablesAP
                         return confirming ? "" : button == 0 ? "Puts every setting on this page back to its default." : "Turns every setting on this page off.";
                     case FastTextRow: return "Dialogue text is instant, but still requires a button press to proceed.";
                     case FreeBoatRow: return "The boat to Metal Island costs nothing.";
-                    case WarpRow: return "Adds a Warp to Start button to the pause menu.";
+                    case WarpRow:
+                        switch (QualityOfLife.Travel?.Value)
+                        {
+                            case "Off": return "No travel buttons in the pause menu.";
+                            case "Warp": return "A pause menu button back to where the game started.";
+                            case "Map": return "A pause menu map: pick an area you've been to and travel there.";
+                            default: return "Both pause menu buttons: Warp to the start, and Map travel.";
+                        }
                     case CutscenesRow: return "Skips the intro and scenes you don't need to watch.";
                     case AnimationRow:
                         switch (QualityOfLife.ItemAnimation?.Value)
@@ -516,6 +523,10 @@ namespace BugFablesAP
                 {
                     Cycle(QualityOfLife.ItemAnimation, QualityOfLife.ItemAnimations, by);
                 }
+                else if (r == WarpRow && QualityOfLife.Travel != null)
+                {
+                    Cycle(QualityOfLife.Travel, QualityOfLife.TravelValues, by);
+                }
                 else
                 {
                     ConfigEntry<bool> setting = QolSetting(r);
@@ -551,7 +562,6 @@ namespace BugFablesAP
         private static ConfigEntry<bool> QolSetting(int r) =>
             r == FastTextRow ? QualityOfLife.FastText
             : r == FreeBoatRow ? QualityOfLife.FreeBoat
-            : r == WarpRow ? QualityOfLife.WarpButton
             : r == CutscenesRow ? QualityOfLife.SkipCutscenes
             : null;
 
@@ -674,7 +684,7 @@ namespace BugFablesAP
                 DrawButtons();
                 Choice(FastTextRow, "Fast text", OnOff(QualityOfLife.FastText));
                 Choice(FreeBoatRow, "Free boat", OnOff(QualityOfLife.FreeBoat));
-                Choice(WarpRow, "Warp button", OnOff(QualityOfLife.WarpButton));
+                Choice(WarpRow, "Travel", (QualityOfLife.Travel?.Value ?? "Both").ToUpperInvariant());
                 Choice(CutscenesRow, "Skip cutscenes", OnOff(QualityOfLife.SkipCutscenes));
                 Choice(AnimationRow, "Item animation", (QualityOfLife.ItemAnimation?.Value ?? "All").ToUpperInvariant());
                 Choice(PricesRow, "Shop prices", (QualityOfLife.ShopPrices?.Value ?? "Normal").ToUpperInvariant());

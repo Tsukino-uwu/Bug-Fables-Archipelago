@@ -15,7 +15,10 @@ namespace BugFablesAP
     {
         internal static ConfigEntry<bool> FastText;
         internal static ConfigEntry<bool> FreeBoat;
-        internal static ConfigEntry<bool> WarpButton;
+        internal static readonly string[] TravelValues = { "Off", "Warp", "Map", "Both" };
+        internal static ConfigEntry<string> Travel;
+        internal static bool WarpOn => Travel != null && (Travel.Value == "Warp" || Travel.Value == "Both");
+        internal static bool MapOn => Travel != null && (Travel.Value == "Map" || Travel.Value == "Both");
         internal static ConfigEntry<bool> SkipCutscenes;
         internal static readonly string[] ItemAnimations = { "All", "Progression", "Off" };
         internal static ConfigEntry<string> ItemAnimation;
@@ -65,7 +68,7 @@ namespace BugFablesAP
         // each setting's own default. Enemy scaling lives on the Gameplay page and isn't touched.
         internal static void DisableAll()
         {
-            foreach (ConfigEntry<bool> setting in new[] { FastText, FreeBoat, WarpButton, SkipCutscenes })
+            foreach (ConfigEntry<bool> setting in new[] { FastText, FreeBoat, SkipCutscenes })
             {
                 if (setting != null)
                 {
@@ -80,11 +83,15 @@ namespace BugFablesAP
             {
                 ShopPrices.Value = "Normal";
             }
+            if (Travel != null)
+            {
+                Travel.Value = "Off";
+            }
         }
 
         internal static void ResetAll()
         {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, FreeBoat, WarpButton, SkipCutscenes, ItemAnimation, ShopPrices })
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, FreeBoat, Travel, SkipCutscenes, ItemAnimation, ShopPrices })
             {
                 if (setting != null)
                 {
@@ -120,9 +127,10 @@ namespace BugFablesAP
                 + "difficulty follows the story (levelling ahead makes it easier); Off keeps each enemy's own stats. "
                 + "Difficulty (Hard, Hardest) still applies on top. Never changes a check.",
                 new AcceptableValueList<string>(BugFablesAP.EnemyScaling.Modes)));
-            WarpButton = config.Bind("QualityOfLife", "WarpButton", true,
-                "A fifth button in the pause menu, Warp to Start, takes the party back to where the game began (after a "
-                + "Yes / No box). Not shown in battle.");
+            Travel = config.Bind("QualityOfLife", "Travel", "Both", new ConfigDescription(
+                "Travel buttons in the pause menu, each behind a Yes / No box: Warp (back to where the game started), Map (the "
+                + "map, where confirm on an area you've been to travels to its save point), Both, or Off. Not shown in battle.",
+                new AcceptableValueList<string>(TravelValues)));
             // A fare line is fetched inside the running dialogue (a prompt's jump), not through a new SetText.
             MethodInfo getLine = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetDialogueText), new[] { typeof(int) });
             if (getLine == null)

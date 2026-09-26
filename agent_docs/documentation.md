@@ -622,6 +622,18 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    mod is off. The logic never counts on it.
 8. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
    read in full before anything is skipped.
+   **Travel: Off / Warp / Map / Both (the user, 2026-09-26; built, not yet seen).** The Warp button's on/off became one
+   *Travel* row (config `Travel`, default Both). `WarpButton.cs` now places the travel buttons after the game's four:
+   Warp, then Map (left from the first button wraps to Map; Warp sits between, harder to hit by accident). Five fit
+   two apart as before; six sit 1.8 apart. The map shortcut already holds sprite 18, so a second button takes sprite 19
+   in a grown `sprites` array, and `IconAnim` is handed one entry per button. Both use the round blue map icon
+   (`guisprites[34]`; an item sprite on a pause button looked wrong before); with both, Warp's is tinted warm.
+   **Map** opens the game's own map window (6) the way its map shortcut does (`windowid = 6`, `BuildWindow`), in a
+   travel mode: confirm on a visited area (`librarystuff[4, area]`) opens "Travel to <area>?" (No first) instead of
+   flipping the description's pages; the map opened any other way keeps vanilla controls. On Yes the menu closes the
+   game's way and `TransferMap` lands the party beside the area's travel spot: a save point at its entrance or hub
+   (starting choices, `AreaSpots`; the Outskirts use Warp's start spot), from the entity dump and each map's area
+   (the map dump's new `area` column, `MapControl.areaid`).
 
 The panel got an eighth row, "Quality of life", which opens a second page in the same box; cancel comes back.
 

@@ -167,7 +167,8 @@ namespace BugFablesAP
             ShopSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             ItemShops.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             DoorShuffle.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
-            WarpButton.Enable(Log, Guid, () => randomizerEnabled.Value && QualityOfLife.WarpButton.Value);
+            WarpButton.Enable(Log, Guid, () => randomizerEnabled.Value && QualityOfLife.WarpOn,
+                () => randomizerEnabled.Value && QualityOfLife.MapOn);
             MenuToggle.Enable(Log, Guid, randomizerEnabled, server, port, slot, password,
                 () => { },
                 () => connection.Status,
