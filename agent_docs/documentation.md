@@ -330,8 +330,8 @@ labels appended to `menutext` and two entries to `settingsindex` (re-added if th
 draws left/right arrows on every row but a named few, so a postfix on `ShowItemList` (type 17) removes the new rows'
 (`Bar<index>` rows, `slider0/1` children). A prefix on `PauseMenu.Update` catches confirm on them and opens the page
 (`ApMenu.ShowInGame`), with the pause menu switched off underneath (it has no OnEnable/OnDisable of its own), so it
-neither draws nor reads input; cancel switches it back on, on Settings. Only in game (`calledfrommain` false): on the
-main menu the panel already has both.
+neither draws nor reads input; cancel switches it back on, on Settings. In the main menu's Settings too (the user:
+one Settings screen, not two), though the panel there has both pages as well.
 
 **Status:** works, seen by the user (2026-09-24): the menu entry, the panel, and the file select held back until the first login.
 

@@ -46,8 +46,8 @@ namespace BugFablesAP
             harmony = null;
         }
 
-        private static bool InGame() => randomizerOn != null && randomizerOn() && MainManager.pausemenu != null
-            && !MainManager.pausemenu.calledfrommain;
+        // In game and on the main menu alike (the user: one Settings screen, not two).
+        private static bool InGame() => randomizerOn != null && randomizerOn() && MainManager.pausemenu != null;
 
         // The labels live at the end of menutext, re-added whenever the game reloads it (a language change).
         private static void EnsureTables()
