@@ -1414,7 +1414,9 @@ the Archipelago icon held up on a purple starburst ("looks really good now"); th
 useful item, green behind BugTester2's filler and the player's own. **Then bought, they turned teal** (the user): a Bug
 Fables item's pickup starburst still took the game's colour for its kind. With Item colors on, the starburst at pickup
 and on a received item's hold-up is now the class colour too, matching the backdrop; seen by the user (2026-09-26):
-BugTester2's Lore Book bought at Madame Butterfly's stayed blue. Off not yet seen.
+BugTester2's Lore Book bought at Madame Butterfly's stayed blue. A bought slot, its check done, goes back to the shop's
+own item at the game's height with no backdrop, so a shelf shows at a glance which slots are still checks (the user:
+"really visible that they are not AP checks anymore"). Off not yet seen.
 
 **Status:** works, seen by the user on the Caravan's shelf and on the ground (2026-09-26).
 
