@@ -160,7 +160,7 @@ be wrong.
    blocks, the third the ranged attack). Archipelago counts copies of one item (`Has(item, count)`), so the logic is
    simple. Candidates: each member's field abilities in their game order, and other chains; decided when abilities
    become items (Next 3, build step 13).
-24. **The panel's settings on normal saves, an idea** (the user, 2026-09-26): an opt-in row so Quality of life and
+24. **The panel's settings on normal saves** (the user, 2026-09-26; built, `documentation.md` step 18): an opt-in row so Quality of life and
    Gameplay also apply with Archipelago off. A deliberate exception to "vanilla stays vanilla", which only the user can
    make; off by default. **Named (the user): *Use on normal saves*, ON / OFF**, help line "Quality of life and Gameplay
    also apply with Archipelago off." Only the two pages' settings; nothing tied to a seed (items, checks, the shuffles).
@@ -1332,8 +1332,9 @@ still starts outside Bugaria, so a seed started elsewhere may not be finishable 
    and sends it as `slot_data` `start`: `{"map", "entity"}`, or `{}` for the game's own start.
 3. **The mod:** the opening's one-time transfer (the Quality of life skip's end, where a dev `TestStart` already
    warped: it only happens once per file, so no save field is spent on "started") goes beside the seed's save point,
-   as Warp to Start lands (`WarpButton.SavePointSpot`). Warp to Start goes there too. Needs *Skip cutscenes* on for
-   now: the transfer hangs on the skip's end.
+   as Warp to Start lands (`WarpButton.SavePointSpot`). Warp to Start goes there too. The transfer hangs on the intro
+   skip's end, so **a seed start always skips the intro**, whatever *Skip cutscenes* says (the user asked, 2026-09-26);
+   the setting still governs every other scene.
 4. **Tests** (`test/test_start.py`): off gives `{}`; `anywhere` gives a save point from the table; the start is fixed.
 
 **A worked example: starting on Metal Island** (the user asked, 2026-09-26). Leaving needs nothing (the island
@@ -1352,7 +1353,7 @@ every start at once. The mod shows the Warp with a seed start even when Travel i
 region reachable from every region) comes with the room-by-room logic.
 
 **Status:** in progress (experimental): `anywhere` built (2026-09-26), the apworld tests pass, not yet seen in game;
-`towns`, the logic from the start, and a start without *Skip cutscenes* to come.
+`towns` and the logic from the start to come; the intro is always skipped with a seed start.
 
 ## Build step 16: the Boat Ticket
 

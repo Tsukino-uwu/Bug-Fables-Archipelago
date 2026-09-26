@@ -400,7 +400,7 @@ namespace BugFablesAP
             // The game just wrote this option's labels: replace them.
             bool warp = buttons[button] == Kind.Warp;
             Transform labels = ((DialogueAnim[])boxesField.GetValue(__instance))[0].transform;
-            MainManager.DestroyText(labels);
+            TextPool.Free(labels);
             __instance.StartCoroutine(MainManager.SetText("|single|" + (warp ? "Go back to where the game started." : "Travel to an area you've been to."),
                 0, 99999f, false, false, new Vector3(-5f, 0.1f), Vector3.zero, Vector2.one, labels, null));
             __instance.StartCoroutine(MainManager.SetText("|center||single|" + (warp ? "Warp" : "Map"), 0, 99999f, false, false,
@@ -477,7 +477,7 @@ namespace BugFablesAP
         private static void DrawConfirm(PauseMenu menu)
         {
             // Yes and No at fixed spots so they don't shift when switching; the chosen one coloured, the leaf beside it.
-            MainManager.DestroyText(confirmBox);
+            TextPool.Free(confirmBox);
             string question = asking == Kind.Warp ? "Warp to the start?" : "Travel to " + MainManager.areanames[askedArea] + "?";
             menu.StartCoroutine(MainManager.SetText("|center||sort,40|" + question, 0, 99999f, false, false,
                 new Vector3(0f, 0.6f), Vector3.zero, Vector2.one * 0.8f, confirmBox, null));

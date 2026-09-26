@@ -37,6 +37,7 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
   2026-09-24): even if it only sometimes does, even if not always. `TestClassifications` enforces it.
 - **Vanilla stays vanilla** (the user, 2026-09-24). Everything the mod does, every panel setting (Difficulty,
   Detector, any future one) included, applies only while Archipelago is enabled. Gate each new effect on it.
+  One named exception: the opt-in row *Use on normal saves* (off by default; `documentation.md`, step 18).
 - **Never corrupt a save.** The mod writes game state the way the game itself does: the same fields, the same
   caps, the game's own function where it has one (`MEASURED.md`, what `Giveitem` writes). Saves go only through
   the game's own save code. No raw writes into save files, and no new save format.

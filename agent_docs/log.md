@@ -725,3 +725,17 @@ Newest last. What was tried, what happened, what the user said.
   - Found on the way: the item swap's description box read the wrong field (field 1, "Desc" for key items). Fixed.
 - **Ideas recorded:** progressive items (Next 23), *Use on normal saves* (Next 24, off by default), consumable keys
   (Next 25), plus the Boat Ticket (21) and healing crystals (22) from Discord.
+
+## 2026-09-26 (later): the panel tidied, Use on normal saves, letters going missing
+
+- **The main page lost its Quality of life and Gameplay links** (the user: "so AP looks clean"); the two pages are
+  reached from Settings only. **Use on normal saves** (Next 24) is built in their place under Achievements
+  (`documentation.md` step 18): the two pages' settings also apply with Archipelago off; nothing tied to a seed does.
+- **A seed start always skips the intro** (the user asked whether to force it): the start's transfer hangs on the intro
+  skip's end, so without *Skip cutscenes* a random start would have begun at the game's own start. Build step 15.
+- **The Reset box lost letters on left / right** (the user's screenshots: "Ye", no "No"); Disable all was fine. No
+  exception in the log. The game's code settled it: a 500-letter pool, and `DestroyText` frees only every other letter
+  in the frame, so the redraw ran dry; the longer Reset question tipped it over. Fixed with `TextPool.cs`.
+- **Found on the way:** `copy-dev.ps1` copies what `stage-dev.ps1` staged, so a plain `dotnet build` then a copy sends
+  the old build. Two copies this session sent an old DLL before it was caught by its hash.
+- The main menu's help text looked tilted once (the user), then was normal again; not chased.

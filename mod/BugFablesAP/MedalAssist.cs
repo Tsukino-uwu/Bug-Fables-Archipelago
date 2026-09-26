@@ -12,6 +12,7 @@ namespace BugFablesAP
         internal const int DetectorMedal = 2;
 
         private static Func<bool> active;
+        private static Func<bool> randomizer;
         private static Func<bool> hard;
         private static Func<bool> detector;
         private static Func<bool> hardest;
@@ -21,11 +22,12 @@ namespace BugFablesAP
         internal const int HardestFlag = 614;
         private static bool forced;
 
-        internal static void Enable(ManualLogSource logger, string guid, Func<bool> randomizerOn, Func<bool> hardOn,
-            Func<bool> hardestOn, Func<bool> detectorOn)
+        internal static void Enable(ManualLogSource logger, string guid, Func<bool> randomizerOn, Func<bool> settingsOn,
+            Func<bool> hardOn, Func<bool> hardestOn, Func<bool> detectorOn)
         {
             log = logger;
-            active = randomizerOn;
+            active = settingsOn;
+            randomizer = randomizerOn;
             hard = hardOn;
             hardest = hardestOn;
             detector = detectorOn;
@@ -129,7 +131,7 @@ namespace BugFablesAP
         internal static void PayPrizes()
         {
             MainManager mm = MainManager.instance;
-            if (active == null || !active() || mm == null || mm.flagvar == null || mm.prizeflags == null || MainManager.map == null
+            if (randomizer == null || !randomizer() || mm == null || mm.flagvar == null || mm.prizeflags == null || MainManager.map == null
                 || mm.inbattle || MainManager.battle != null || mm.inevent)
             {
                 return;

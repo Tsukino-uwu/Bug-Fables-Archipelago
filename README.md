@@ -9,7 +9,7 @@ the default: the Outskirts rocks are gone from the start). Next: every item spot
 ones as filler-only placeholders) and field abilities shuffled as items. An experimental entrance randomizer (coupled,
 off by default) is in the apworld; its first shuffled doors work both ways in game. An enemy shuffle (off by default) swaps
 which ordinary enemies you fight on each map; its first swapped fight was seen in game. A random start (experimental,
-off by default) can begin a new file beside any save point in the game. Enemy scaling (a Quality of life
+off by default) can begin a new file beside any save point in the game. Enemy scaling (a Gameplay
 setting, on by default) scales enemies to your level so every area plays fair in any order; its first scaled fight was
 seen in game. Starting with a single party
 member is being rehearsed (a dev setting for now).
@@ -51,22 +51,12 @@ On the game's main menu, choose **Archipelago**. The panel has:
   `archipelago.gg:38281` into Address fills in the port too.
 - **Slot**: your slot name in the room.
 - **Password**: only if the room has one; leave it empty otherwise.
-- **Difficulty**: Normal (the default) leaves it to the game. Hard plays as if the Hard Mode medal were
-  equipped, Hardest as if the save had the HARDEST code, without writing it into the save. Boss prize medals
-  are handed out on every setting.
-- **Detector**: On (the default) acts as if the Detector medal were equipped, to help find items. Off leaves
-  it to the medal. With the Archipelago mod enabled, the Detector (row or medal) also beeps on entering a room that
-  still has a check of any kind (an item on the ground, a gift or quest reward, a shop, a discovery), and stays
-  quiet in a room with none left.
 - **Archipelago**: Enabled keeps randomizer saves in their own folder, apart from your normal saves.
   The main menu shows it as "Archipelago (Enabled)" or "(Disabled)".
-- **Quality of life**: opens a second page of settings that speed up the game, all on by default: **Fast text**
-  (dialogue is instant, and holding skip races through it), **Free boat** (the boat to Metal Island costs nothing),
-  **Warp button** (a fifth pause-menu button that takes you back to where the game began, after a Yes / No), **Skip
-  cutscenes** (the new game's intro, tutorial battle included, is skipped, Vi joining and the first check sent; other
-  scenes you don't need to watch are skipped or pass by fast), **Item animation** (which items from other players are shown held up: All, the default,
-  Progression or Off; your own finds always are; holding B speeds a burst of them up) and **Shop prices** (Normal,
-  Half or Free; default Normal). Cancel goes back.
+- **Achievements**: Off (the default) holds Steam achievements back while the Archipelago mod is enabled, as
+  normal saves are kept apart. It only concerns Steam, never Archipelago.
+- **Use on normal saves**: Off (the default) keeps normal saves vanilla. On, the Quality of life and Gameplay settings
+  also apply with the Archipelago mod disabled. Nothing tied to a seed does.
 - Under the rows, a line explaining the highlighted one, and a line showing the connection's state. Cancel
   (X, or B on a gamepad) backs out of the panel.
 
@@ -80,6 +70,24 @@ disconnects.
 doesn't know the seed, so choosing a file (or a new game) on the file select plays a buzzer and says to connect
 first. After that, a dropped connection doesn't stop play: pickups still hold the seed's items, and their
 checks are sent when the connection comes back.
+
+**Quality of life and Gameplay** are two more pages, at the top of the game's own **Settings** (from the pause
+menu, and from the main menu), shown while the Archipelago mod is enabled or *Use on normal saves* is on. Each has
+**Reset to defaults** and **Disable all** on top, each asking Yes / No first.
+
+- **Quality of life**: **Fast text** (dialogue is instant, and holding skip races through it; On), **Travel** (Off,
+  Warp, Map or Both, the default: the Warp is a pause-menu button back to where the game began, or to the seed's
+  start; Map is fast travel from the pause menu's map to areas you've visited; both ask Yes / No), **Skip cutscenes**
+  (On: the new game's intro, tutorial battle included, is skipped, Vi joining and the first check sent; other scenes
+  you don't need to watch are skipped or pass by fast; with a random start the intro is always skipped), **Item
+  animation** (which items from other players are shown held up: All, the default, Progression or Off; your own finds
+  always are) and **Shop prices** (medal shops: Normal, the default, Half or Free).
+- **Gameplay**: **Difficulty** (Normal, the default, leaves it to the game; Hard plays as if the Hard Mode medal were
+  equipped, Hardest as if the save had the HARDEST code, without writing it into the save; boss prize medals are
+  handed out on every setting), **Enemy scaling** (Party level, the default, scales every enemy to your level;
+  Artifacts to the artifacts found; Off keeps each enemy's own stats; Difficulty applies on top) and **Detector** (On,
+  the default, acts as if the Detector medal were equipped. With the Archipelago mod enabled, the Detector (row or
+  medal) also beeps on entering a room that still has a check of any kind, and stays quiet in a room with none left).
 
 Select a row and press confirm to type into it: Backspace deletes, **Ctrl+V pastes**, Ctrl+C copies, Enter
 keeps it, Escape undoes. The same settings are saved in `BepInEx/config/bugfables.archipelago.cfg`.

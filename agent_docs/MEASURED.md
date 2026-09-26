@@ -1129,6 +1129,19 @@ hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0
   from another window and no marker there, it threw a NullReferenceException every frame (the diagnostic: window 6,
   option 5, markers 1-25 all null).
 
+## The text letter pool (2026-09-26, code read; the symptom seen by the user)
+
+- **Every drawn letter comes from one pool of 500** `TextMesh`es (`MainManager.letterpool`, made at start-up).
+  `GetEmptyLetter` hands out the first whose text is `""`, or **null when none is free**: `SetText` then skips that
+  letter silently, so the text just ends early.
+- **`DestroyText(parent)` frees only every other letter at once.** For each `Text` holder it steps forward through the
+  holder's children and moves each freed letter back under `MainManager.instance`, which shifts the next child into the
+  index it just left. The skipped letters keep their text until the holder is destroyed at the frame's end. A redraw
+  in the same frame therefore needs about half the old letters plus all the new ones.
+- **Seen:** the Quality of life page opened from Settings (the Settings list stays drawn behind it) with the Reset
+  question's Yes / No box: the first draw was whole, and after a left / right redraw it showed "Ye" and no "No". The
+  shorter Disable all question fitted. Used by `TextPool.cs`.
+
 ## The item table's fields (2026-09-26, code read)
 
 `MainManager.itemdata` is `string[1, 256, 7]` (`MainManager.cs:3431`): 256 slots, about 188 used, so ids after the last

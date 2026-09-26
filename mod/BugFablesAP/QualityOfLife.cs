@@ -10,7 +10,7 @@ using UnityEngine;
 namespace BugFablesAP
 {
     // The panel's "Quality of life" page: rows that speed the game up without changing what it gives or where.
-    // The logic never counts on any of them, and nothing happens while the Archipelago mod is disabled.
+    // The logic never counts on any of them. With the Archipelago mod disabled only Use on normal saves turns them on.
     internal static class QualityOfLife
     {
         internal static ConfigEntry<bool> FastText;
@@ -172,6 +172,10 @@ namespace BugFablesAP
         // The seed's start (Starting Location): the opening ends with a transfer beside that save point instead.
         internal static Func<KeyValuePair<string, int>?> SeedStart;
         private static KeyValuePair<string, int>? Seeded => SeedStart?.Invoke();
+        // A seed's start needs the intro skipped (it ends with the transfer there), whatever Skip cutscenes says.
+        private static bool SkipIntro => SkipCutscenes.Value || Seeded.HasValue;
+        // With Archipelago on, or off with Use on normal saves: fast text and the scene list, never the intro.
+        internal static Func<bool> SettingsOn;
         private static bool startPending;
         // With a test start, the slides' backdrop stays up until the start map has loaded behind the transfer's fade.
         private static GameObject heldBack;
@@ -234,7 +238,7 @@ namespace BugFablesAP
         private static bool BeforeChangeParty(int[] ids, bool fromscratch, bool destroyoldentity)
         {
             MainManager mm = MainManager.instance;
-            if (randomizerOn == null || !randomizerOn() || !SkipCutscenes.Value || mm == null || MainManager.map == null
+            if (randomizerOn == null || !randomizerOn() || !SkipIntro || mm == null || MainManager.map == null
                 || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap || mm.flags[15]
                 || ids == null || ids.Length != 1 || ids[0] != 1 || !fromscratch || destroyoldentity || MainManager.events == null)
             {
@@ -250,7 +254,7 @@ namespace BugFablesAP
         private static void BeforeSolidColor(string name)
         {
             MainManager mm = MainManager.instance;
-            if (name != "back" || randomizerOn == null || !randomizerOn() || !SkipCutscenes.Value || mm == null || MainManager.map == null
+            if (name != "back" || randomizerOn == null || !randomizerOn() || !SkipIntro || mm == null || MainManager.map == null
                 || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap || mm.flags[15]
                 || MainManager.events == null || event8Cut)
             {
@@ -435,7 +439,7 @@ namespace BugFablesAP
 
         private static bool BeforeStartEvent(int id)
         {
-            if (id == OpeningEvent && SkipCutscenes.Value && randomizerOn() && MainManager.map != null
+            if (id == OpeningEvent && SkipIntro && randomizerOn() && MainManager.map != null
                 && MainManager.map.mapid.ToString() == OpeningMap)
             {
                 // Also once done: its trigger stays until the map reloads, and running the scene then crashes.
@@ -446,7 +450,7 @@ namespace BugFablesAP
                 return false;
             }
             Scene scene = SceneFor(id);
-            if (scene == null || scene.Flags == null || !SkipCutscenes.Value || !randomizerOn()
+            if (scene == null || scene.Flags == null || !SkipCutscenes.Value || SettingsOn == null || !SettingsOn()
                 || (scene.OnlyWhileUnset >= 0 && MainManager.instance.flags[scene.OnlyWhileUnset]))
             {
                 return true;
@@ -497,7 +501,7 @@ namespace BugFablesAP
                 return;
             }
             bool on = randomizerOn();
-            if (on && SkipCutscenes.Value && !openingPending && !openingFailed && MainManager.map != null && MainManager.map.mapid.ToString() == OpeningMap
+            if (on && SkipIntro && !openingPending && !openingFailed && MainManager.map != null && MainManager.map.mapid.ToString() == OpeningMap
                 && !mm.flags[15] && mm.flags[691])
             {
                 openingPending = true;
@@ -594,7 +598,8 @@ namespace BugFablesAP
                     log.LogError($"[qol] test start {TestStart} failed: {e.Message}");
                 }
             }
-            bool slides = on && ((SkipCutscenes.Value && InIntroSlides()) || InFastScene());
+            bool settings = SettingsOn != null && SettingsOn();
+            bool slides = (on && SkipIntro && InIntroSlides()) || (settings && InFastScene());
             if (slides)
             {
                 // Each slide's line waits for a press at its end; answer it.
@@ -617,7 +622,7 @@ namespace BugFablesAP
                 log.LogInfo("[qol] scene over: normal speed");
             }
 
-            bool skippable = on && Skippable(mm);
+            bool skippable = settings && Skippable(mm);
             if (skippable && FastText.Value && !mm.waitinput)
             {
                 mm.skiptext = true;

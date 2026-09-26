@@ -111,7 +111,7 @@ namespace BugFablesAP
             Transform line = menu.selections != null && menu.selections.Length > Option ? menu.selections[Option] : null;
             if (line != null)
             {
-                MainManager.DestroyText(line);
+                TextPool.Free(line);
                 DrawLabel(line);
             }
         }
@@ -227,7 +227,7 @@ namespace BugFablesAP
                 return;
             }
             shownPopupStatus = s;
-            MainManager.DestroyText(popupStatus);
+            TextPool.Free(popupStatus);
             MainManager.instance.StartCoroutine(MainManager.SetText("|sort," + PopupTextSort + "||center||size,0.5|" + s.Replace("|", "/"),
                 new Vector3(0f, -0.75f, 0f), popupStatus));
         }

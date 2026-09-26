@@ -27,6 +27,7 @@ anyone curious about the process, or thinking of doing the same for another game
 15. [Difficulty and the Detector: the panel's two game settings](#15-difficulty-and-the-detector-the-panels-two-game-settings)
 16. [Randomizer saves kept apart from normal saves](#16-randomizer-saves-kept-apart-from-normal-saves)
 17. [Enemy scaling: every area fair whenever you reach it](#17-enemy-scaling-every-area-fair-whenever-you-reach-it)
+18. [Use on normal saves: the settings without Archipelago](#18-use-on-normal-saves-the-settings-without-archipelago)
 
 ## Where it stands
 
@@ -322,10 +323,12 @@ left/right steps through them; every step redraws the screen. On/off rows keep o
 on/off, plus two links, *Quality of life* and *Gameplay*. Gameplay holds how the game plays: Difficulty, Enemy scaling
 (moved from Quality of life; its config key stays under `[QualityOfLife]`, so a saved choice carries over) and
 Detector. Quality of life keeps the speed-ups, with Disable all / Reset to defaults on top (step 10). Cancel backs out
-of a Yes / No first, then out of a page, landing on that page's link. `ApMenu` tracks the page as an enum.
+of a Yes / No first, then out of a page. `ApMenu` tracks the page as an enum. **The two links left the main page (the
+user, 2026-09-26: "so AP looks clean"):** the pages are reached only from Settings (below), and *Use on normal saves*
+(step 18) took their place under Achievements.
 
 **The two pages in game too (the user, 2026-09-26; seen by the user, in game and on the main menu).** While Archipelago is enabled, the pause
-menu's Settings list gets *Quality of life* and *Gameplay* at the top, above Music Volume (the user; first between
+menu's Settings list gets *Quality of life* and *Gameplay* at the top (with it disabled, only under *Use on normal saves*, step 18), above Music Volume (the user; first between
 Key Bindings and Return to Main Menu), opening the same pages. Neither touches a check or the logic, so changing them mid-save is safe (Hardest is already kept out of the
 save; a boss prize reads Hard Mode as the boss falls, and missed prizes are paid anyway). The connection page stays on
 the main menu. How (`InGameSettings.cs`): the Settings list is `MainManager.GetSettings()`, a list of ids; an id's
@@ -338,7 +341,13 @@ them), and the pause menu's `Update` is skipped while the page is open. Switchin
 also took its darkened background away: the game view flashed before the page appeared (the user). Now the
 background stays, as going from the pause menu to Settings does, and the page skips its own dimmer in game. Cancel
 shows the boxes again, on Settings. In the main menu's Settings too (the user:
-one Settings screen, not two), though the panel there has both pages as well.
+one Settings screen, not two); since 2026-09-26 that is the only way to them from the main menu.
+
+**Letters going missing (the user, 2026-09-26):** the Reset to defaults Yes / No box drew whole, then lost letters
+("Ye", no "No") after left / right. The game draws text from a pool of 500 letters, and its own `DestroyText` frees only
+every other one until the frame ends (`MEASURED.md`, the text letter pool); behind a page opened from Settings the
+Settings list holds many, so a redraw ran the pool dry. Disable all's shorter question just fitted. `TextPool.Free`
+frees every letter and replaces `DestroyText` everywhere in the mod, and left / right in the box redraws only the box.
 
 **Achievements (the user, 2026-09-26; built, not yet seen):** an *Achievements* row on the main page, off by default.
 While Archipelago is enabled and it's off, Steam achievements aren't unlocked, as normal saves are kept apart; the help
@@ -1087,9 +1096,10 @@ and a chapter 1 area met late far too weak. Enemy scaling makes each area about 
 right point in the story. It is a balance setting, not a challenge setting.
 
 **Decided (the user, 2026-09-26):**
-- A row on the panel's Quality of life page, *Enemy scaling*: **Off / Party level / Artifacts**, on by default
-  (Party level). It isn't in the yaml: it ties to no check and no logic, so the player can change it from the main
-  menu. Only while Archipelago is enabled (vanilla stays vanilla).
+- A row on the panel's Quality of life page (now the Gameplay page, step 8), *Enemy scaling*: **Off / Party level /
+  Artifacts**, on by default (Party level). It isn't in the yaml: it ties to no check and no logic, so the player can
+  change it from the main menu. Only while Archipelago is enabled (vanilla stays vanilla), or with *Use on normal
+  saves* (step 18).
   - **Off:** vanilla, each enemy's own stats.
   - **Party level:** every enemy scaled to the party's level, so every area plays fair in any order. No cheese: a hard
     area early is scaled down, an easy one late scaled up, and EXP follows (below).
@@ -1148,3 +1158,26 @@ that floor is the first knob to try.
 
 **Status:** works, seen by the user (2026-09-26): scaled HP, defence and per-hit damage in a fight, and the bestiary;
 the constants still to tune by play.
+
+## 18. Use on normal saves: the settings without Archipelago
+
+Quality of life and Gameplay are useful without a seed too. **Decided (the user, 2026-09-26):** an opt-in row, a
+deliberate exception to "vanilla stays vanilla" that only the user could make.
+
+- **The row:** *Use on normal saves*, ON / OFF, **off by default**, on the panel's main page under Achievements.
+  Help lines: "Quality of life and Gameplay also apply with Archipelago off." (on) and "Quality of life and Gameplay
+  apply only with Archipelago on." (off). A label longer than 15 letters now shrinks to fit before the arrows, as a
+  long value already did.
+- **What it turns on, with Archipelago off:** the Settings rows to both pages (step 8), Fast text, the scenes Skip
+  cutscenes skips or speeds by, Travel (Warp to Start goes to the game's own start), Shop prices, Difficulty,
+  Detector and Enemy scaling.
+- **What it never turns on:** anything tied to a seed. The intro skip (its end sends the first check and makes the
+  seed's start), items, checks, the shuffles, the Detector's check beeps, boss prizes paid on any difficulty (they are
+  checks), Item animation (only items from the server), and the achievement guard.
+- **How:** one `settingsOn` in `Plugin.cs` (Archipelago enabled, or this row) goes to the modules behind the two pages
+  in place of the Archipelago switch: `MedalAssist` (which keeps the Archipelago switch for boss prizes),
+  `EnemyScaling`, `InGameSettings`, the Travel buttons, and `QualityOfLife.SettingsOn` (fast text, the scene list, and
+  `ShopSwap`'s prices). The seed's start and the entrance randomizer's forced Warp answer only with Archipelago
+  enabled, so a normal save never warps to a seed's start.
+
+**Status:** built (2026-09-26), the build succeeds, not yet seen in game.

@@ -10,8 +10,8 @@ namespace BugFablesAP
     // The title screen's input is suspended while it's open (StartMenu.canselect), so C, X, Z and V can be typed.
     internal sealed class ApMenu : MonoBehaviour
     {
-        private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, AchievementsRow = 5, QolRow = 6,
-            GameplayRow = 7, Rows = 8;
+        private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, AchievementsRow = 5, NormalSavesRow = 6,
+            Rows = 7;
         // The Quality of life page: the two buttons side by side on top, then the settings.
         private const int ButtonsRow = 0, FastTextRow = 1, WarpRow = 2, CutscenesRow = 3, AnimationRow = 4, PricesRow = 5,
             QolRows = 6;
@@ -31,6 +31,7 @@ namespace BugFablesAP
         internal static ConfigEntry<string> Difficulty;
         internal static ConfigEntry<bool> Detector;
         internal static ConfigEntry<bool> Achievements;
+        internal static ConfigEntry<bool> NormalSaves;
 
         internal static ApMenu Open;
         // Opened from the pause menu's Settings: only the Quality of life or Gameplay page, over a hidden pause menu.
@@ -286,7 +287,7 @@ namespace BugFablesAP
                 {
                     answer = 1 - answer;
                     MainManager.PlayScrollSound();
-                    Redraw();
+                    DrawPopup(); // the page under it is unchanged
                 }
                 else if (confirm)
                 {
@@ -351,14 +352,7 @@ namespace BugFablesAP
             else if (cancel)
             {
                 MainManager.PlaySound("Cancel", 10);
-                if (page != Page.Main && !inGame)
-                {
-                    SwitchPage(Page.Main, page == Page.Qol ? QolRow : GameplayRow);
-                }
-                else
-                {
-                    Close();
-                }
+                Close();
             }
             else if (confirm && page != Page.Main && row == ButtonsRow)
             {
@@ -393,34 +387,12 @@ namespace BugFablesAP
                         break;
                     case ModeRow:
                     case AchievementsRow:
+                    case NormalSavesRow:
                         Step(row, 1);
                         Redraw();
                         break;
-                    case QolRow:
-                        SwitchPage(Page.Qol, ButtonsRow);
-                        break;
-                    case GameplayRow:
-                        SwitchPage(Page.Gameplay, ButtonsRow);
-                        break;
                 }
             }
-        }
-
-        private void SwitchPage(Page to, int at)
-        {
-            page = to;
-            row = at;
-            button = 0;
-            confirming = false;
-            ClosePopup();
-            if (arrows != null)
-            {
-                Destroy(arrows.gameObject);
-                arrows = null;
-            }
-            settleFrames = 2;
-            Redraw();
-            log.LogInfo("[apmenu] " + to + " page");
         }
 
         private string Describe(int r)
@@ -493,8 +465,10 @@ namespace BugFablesAP
                     return Achievements != null && Achievements.Value
                         ? "Steam achievements unlock as usual. This only affects Steam, not Archipelago."
                         : "Steam achievements aren't unlocked while Archipelago is on. Only affects Steam.";
-                case QolRow: return "Settings that speed up the game.";
-                case GameplayRow: return "How the game plays: difficulty, enemy scaling, the Detector.";
+                case NormalSavesRow:
+                    return NormalSaves != null && NormalSaves.Value
+                        ? "Quality of life and Gameplay also apply with Archipelago off."
+                        : "Quality of life and Gameplay apply only with Archipelago on.";
                 default: return "";
             }
         }
@@ -506,7 +480,7 @@ namespace BugFablesAP
             MainManager.sounds[10].volume = MainManager.pausemenu != null ? MainManager.pausemenu.svolume : MainManager.soundvolume;
         }
 
-        private bool IsChoice(int r) => page == Page.Main ? r == ModeRow || r == AchievementsRow : r != ButtonsRow;
+        private bool IsChoice(int r) => page == Page.Main ? r == ModeRow || r == AchievementsRow || r == NormalSavesRow : r != ButtonsRow;
 
         private static void Cycle(ConfigEntry<string> entry, string[] values, int by)
         {
@@ -566,6 +540,11 @@ namespace BugFablesAP
             {
                 Achievements.Value = !Achievements.Value;
                 log.LogInfo("[apmenu] Achievements: " + (Achievements.Value ? "On" : "Off"));
+            }
+            else if (r == NormalSavesRow && NormalSaves != null)
+            {
+                NormalSaves.Value = !NormalSaves.Value;
+                log.LogInfo("[apmenu] Use on normal saves: " + (NormalSaves.Value ? "On" : "Off"));
             }
         }
 
@@ -682,7 +661,7 @@ namespace BugFablesAP
 
         private void Redraw()
         {
-            MainManager.DestroyText(textRoot);
+            TextPool.Free(textRoot);
             if (arrows == null)
             {
                 BuildArrows();
@@ -720,8 +699,7 @@ namespace BugFablesAP
 
             Choice(ModeRow, "Archipelago", mode.Value ? "ENABLED" : "DISABLED");
             Choice(AchievementsRow, "Achievements", Achievements != null && Achievements.Value ? "ON" : "OFF");
-            Label(QolRow, "Quality of life");
-            Label(GameplayRow, "Gameplay");
+            Choice(NormalSavesRow, "Use on normal saves", NormalSaves != null && NormalSaves.Value ? "ON" : "OFF");
 
             Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
             Text("|center||size,0.5|" + Safe(shownStatus), 0f, StatusY);
@@ -736,7 +714,7 @@ namespace BugFablesAP
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
             foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, CutscenesRow, AnimationRow, PricesRow }
-                : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, DetectorRow } : new[] { ModeRow, AchievementsRow })
+                : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, DetectorRow } : new[] { ModeRow, AchievementsRow, NormalSavesRow })
             {
                 for (int side = 0; side < 2; side++)
                 {
@@ -813,7 +791,7 @@ namespace BugFablesAP
                 popupText.parent = popup;
                 popupText.localPosition = Vector3.zero;
             }
-            MainManager.DestroyText(popupText);
+            TextPool.Free(popupText);
             string what = page == Page.Qol ? "Quality of life" : "Gameplay";
             string question = button == 0 ? "Put every " + what + " setting back to its default?" : "Turn every " + what + " setting off?";
             MainManager.instance.StartCoroutine(MainManager.SetText(PopupTextSort + "|center||size,0.55|" + question, new Vector3(0f, 0.45f, 0f), popupText));
@@ -850,7 +828,9 @@ namespace BugFablesAP
         private void Label(int r, string label)
         {
             string colour = editing && r == row ? "|color,1|" : "";
-            Text("|size,0.8|" + colour + label, LabelX, RowY[r]);
+            // About 15 letters fit before the arrows at 0.8; a longer label shrinks to fit.
+            float size = label.Length > 15 ? 0.8f * 15f / label.Length : 0.8f;
+            Text("|size," + size.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + colour + label, LabelX, RowY[r]);
         }
 
         private void Row(int r, string label, string value)

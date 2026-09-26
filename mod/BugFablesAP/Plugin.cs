@@ -157,13 +157,19 @@ namespace BugFablesAP
                 "On lets Steam achievements unlock while Archipelago is enabled; off (the default) holds them back, as normal "
                 + "saves are kept apart. It only concerns Steam, never Archipelago. Switch it in the Archipelago panel.");
             AchievementGuard.Enable(Log, Guid, () => randomizerEnabled.Value, () => ApMenu.Achievements.Value);
-            MedalAssist.Enable(Log, Guid, () => randomizerEnabled.Value, () => difficulty.Value == "Hard",
+            ApMenu.NormalSaves = Config.Bind("Archipelago", "NormalSaves", false,
+                "On: the Quality of life and Gameplay settings also apply with Archipelago off, on normal saves. Nothing tied "
+                + "to a seed does (items, checks, the shuffles, the intro skip). Off (the default) keeps normal saves vanilla. "
+                + "Switch it in the Archipelago panel.");
+            Func<bool> settingsOn = () => randomizerEnabled.Value || ApMenu.NormalSaves.Value;
+            MedalAssist.Enable(Log, Guid, () => randomizerEnabled.Value, settingsOn, () => difficulty.Value == "Hard",
                 () => difficulty.Value == "Hardest", () => detector.Value);
             QualityOfLife.Enable(Log, Config, () => randomizerEnabled.Value);
-            QualityOfLife.SeedStart = () => connection?.Start;
-            QualityOfLife.EntrancesShuffled = () => connection?.DoorTargets != null && connection.DoorTargets.Count > 0;
-            EnemyScaling.Enable(Log, Guid, () => randomizerEnabled.Value, () => QualityOfLife.EnemyScaling?.Value);
-            InGameSettings.Enable(Log, Guid, () => randomizerEnabled.Value);
+            QualityOfLife.SettingsOn = settingsOn;
+            QualityOfLife.SeedStart = () => randomizerEnabled.Value ? connection?.Start : null;
+            QualityOfLife.EntrancesShuffled = () => randomizerEnabled.Value && connection?.DoorTargets != null && connection.DoorTargets.Count > 0;
+            EnemyScaling.Enable(Log, Guid, settingsOn, () => QualityOfLife.EnemyScaling?.Value);
+            InGameSettings.Enable(Log, Guid, settingsOn);
             CustomItems.Enable(Log, () => randomizerEnabled.Value);
             BoatTicket.Enable(Log, Guid, () => randomizerEnabled.Value);
             HoldUps.Init(Log, () => randomizerEnabled.Value);
@@ -175,8 +181,7 @@ namespace BugFablesAP
             ShopSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             ItemShops.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             DoorShuffle.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
-            WarpButton.Enable(Log, Guid, () => randomizerEnabled.Value && QualityOfLife.WarpOn,
-                () => randomizerEnabled.Value && QualityOfLife.MapOn);
+            WarpButton.Enable(Log, Guid, () => settingsOn() && QualityOfLife.WarpOn, () => settingsOn() && QualityOfLife.MapOn);
             MenuToggle.Enable(Log, Guid, randomizerEnabled, server, port, slot, password,
                 () => { },
                 () => connection.Status,

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // With Archipelago on, the pause menu's Settings list gets Quality of life and Gameplay rows at the top, each opening
+    // With Archipelago on (or Use on normal saves), the pause menu's Settings list gets Quality of life and Gameplay rows at the top, each opening
     // the panel's page of that name. A settings row is an id whose label is
     // menutext[settingsindex[id]], so both tables get two entries; the game gives every row but a few arrows, removed here.
     internal static class InGameSettings
