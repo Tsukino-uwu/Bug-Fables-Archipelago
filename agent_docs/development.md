@@ -28,6 +28,9 @@ The build and the copy into the game are separate steps. The build never writes 
      in the same run, and read the result back.
    - The copied DLL is stamped with the current time, since DevReload watches write times: copying an unchanged
      build to reload a changed `-DebugSet` did nothing until then (2026-09-25).
+   - A Debug setting changed in the file while the game runs is overwritten by the game's value the next time the mod
+     saves its config (the console's `onehit` saving put `TestStartMember = 2` back, 2026-09-26). Change it with a
+     reload in the same run (stage, then copy), and read the new value in the reload's log line.
    - DevReload waits while a scene, a conversation or a battle runs, and logs that it's waiting: a reload in the
      middle of a scene orphaned what the old plugin had made for it (the spider fight's stand-ins, 2026-09-25).
    - Every file it replaces (the plugin, the config) is first copied to `stage/backup/<time>/`;
