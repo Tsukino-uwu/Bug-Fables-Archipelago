@@ -165,6 +165,11 @@ be wrong.
    make; off by default. **Named (the user): *Use on normal saves*, ON / OFF**, help line "Quality of life and Gameplay
    also apply with Archipelago off." Only the two pages' settings; nothing tied to a seed (items, checks, the shuffles).
 
+25. **Consumable keys, an idea for later** (the user, 2026-09-26): custom items used up on a door, as the game's own
+   `removeitem` takes an item (`items[kind].Remove(id)`). The rule the crystal berries set (build step 11): no action may
+   make a check unreachable, so a key either opens one named door, or the keys and the doors that take them are exactly
+   as many, with no door that could waste one.
+
 **Known issues:**
 
 - **A Kabbu / horn rule is owed** once party members or the basic horn become items (Starting Party Member).
