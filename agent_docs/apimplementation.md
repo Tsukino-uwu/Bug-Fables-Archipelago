@@ -78,7 +78,9 @@ be wrong.
 11. **Planned (the user, 2026-09-25): map fast travel**, apart from the Warp to Start button. On the pause menu's map
    (window 6, which lists areas), pick an area you've been to and confirm (Yes / No) to travel to its save point
    through the game's own map transfer. The game already records visited areas (`librarystuff[4, area]`, set by
-   `MainManager.UpdateArea`). Its own Quality of life row; the logic never counts on it, like the warp.
+   `MainManager.UpdateArea`). The logic never counts on it, like the warp. **One row with the warp (the user,
+   2026-09-26):** the Warp button's on/off becomes *Travel: Off / Warp / Map / Both* (Warp to Start only, map fast
+   travel only, or both), so the two are set together.
 12. **A quest board in the starting house** (the user, 2026-09-25): the quests every board lists, taken without
    walking to the town or the bar. Every board shows the same list (`MEASURED.md`, "The quest board"), so it adds no
    quests, only a shorter way. Every board lists bounties too (built, build step 9); next, the house's board from
