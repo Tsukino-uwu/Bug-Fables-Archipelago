@@ -320,6 +320,11 @@ on/off, plus two links, *Quality of life* and *Gameplay*. Gameplay holds how the
 Detector. Quality of life keeps the speed-ups, with Disable all / Reset to defaults on top (step 10). Cancel backs out
 of a Yes / No first, then out of a page, landing on that page's link. `ApMenu` tracks the page as an enum.
 
+**Planned (the user, 2026-09-26): the two pages in game too.** While Archipelago is enabled, the pause menu's Settings
+list gets *Quality of life* and *Gameplay* between *Key Bindings* and *Return to Main Menu*, opening the same pages.
+Neither touches a check or the logic, so changing them mid-save is safe (Hardest is already kept out of the save). The
+connection page stays on the main menu only.
+
 **Status:** works, seen by the user (2026-09-24): the menu entry, the panel, and the file select held back until the first login.
 
 *Code: `MenuToggle.cs` (the menu entry: `BeforeSetMenuText` and `AfterSetMenuText` around the game's rebuild,
