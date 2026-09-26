@@ -141,12 +141,18 @@ class TestPool(BugFablesTestBase):
                     self.assertIsNotNone(vanilla_item(loc))
 
     def test_each_location_puts_its_item_in_the_pool(self) -> None:
-        from ..data_tables import LOCATIONS, vanilla_item
+        # Every location's item is in the pool once per location holding it, except the copies the mod's own items
+        # (the Boat Ticket) take when the pool is full: one duplicated filler copy each, never an item's last copy.
+        from ..data_tables import ITEMS, LOCATIONS, vanilla_item
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        own = sum(1 for item in ITEMS if item.get("always"))
+        short = 0
         for name in {vanilla_item(loc) for loc in LOCATIONS} - {None}:
             expected = sum(1 for loc in LOCATIONS if vanilla_item(loc) == name)
             with self.subTest(item=name):
-                self.assertGreaterEqual(pool.count(name), expected)
+                self.assertGreaterEqual(pool.count(name), 1)
+                short += max(0, expected - pool.count(name))
+        self.assertLessEqual(short, own)
 
 
 class TestLeif(BugFablesTestBase):
@@ -640,13 +646,15 @@ class TestShopContentsDefault(BugFablesTestBase):
 
 
 class TestShopContentsFillerOnly(BugFablesTestBase):
-    # With discoveries on, a solo seed has exactly enough filler for every shop location.
+    # With discoveries on, a solo seed had exactly enough filler for every shop location; the Boat Ticket now takes one
+    # filler slot, so it falls one short and falls back too. With other games' filler in the room, Filler Only holds.
     options = {"shop_contents": "filler_only", "shuffle_discoveries": True}
 
-    def test_shops_excluded(self) -> None:
+    def test_one_short_after_the_boat_ticket(self) -> None:
         from BaseClasses import LocationProgressType
         shop = self.world.get_location("Bugaria City: Commercial District, Medal Shop 1")
-        self.assertEqual(shop.progress_type, LocationProgressType.EXCLUDED)
+        self.assertEqual(shop.progress_type, LocationProgressType.DEFAULT)
+        self.assertFalse(shop.item_rule(self.world.create_item("Explorer Permit")))
 
 
 class TestShopContentsFillerOnlyFallsBack(BugFablesTestBase):

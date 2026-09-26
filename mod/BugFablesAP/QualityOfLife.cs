@@ -14,7 +14,6 @@ namespace BugFablesAP
     internal static class QualityOfLife
     {
         internal static ConfigEntry<bool> FastText;
-        internal static ConfigEntry<bool> FreeBoat;
         internal static readonly string[] TravelValues = { "Off", "Warp", "Map", "Both" };
         internal static ConfigEntry<string> Travel;
         internal static bool WarpOn => Travel != null && (Travel.Value == "Warp" || Travel.Value == "Both");
@@ -46,11 +45,6 @@ namespace BugFablesAP
             new Scene { Map = "UndergroundBar", Event = 83, Flags = new[] { 158 }, OnlyWhileUnset = 158 },
         };
 
-        // The Metal Island fares: the pier sailor's lines 16 and 19, each |checkmoney,N,20||money,-N|.
-        private const string BoatMap = "BugariaPier";
-        private static readonly int[] FareLines = { 16, 19 };
-        private static readonly System.Text.RegularExpressions.Regex MoneyToken =
-            new System.Text.RegularExpressions.Regex(@"\|(checkmoney|money),[^|]*\|", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
         private static Harmony harmony;
         private static readonly MethodInfo endEvent = AccessTools.Method(typeof(EventControl), "EndEvent", Type.EmptyTypes);
 
@@ -68,7 +62,7 @@ namespace BugFablesAP
         // each setting's own default. Enemy scaling lives on the Gameplay page and isn't touched.
         internal static void DisableAll()
         {
-            foreach (ConfigEntry<bool> setting in new[] { FastText, FreeBoat, SkipCutscenes })
+            foreach (ConfigEntry<bool> setting in new[] { FastText, SkipCutscenes })
             {
                 if (setting != null)
                 {
@@ -91,7 +85,7 @@ namespace BugFablesAP
 
         internal static void ResetAll()
         {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, FreeBoat, Travel, SkipCutscenes, ItemAnimation, ShopPrices })
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, Travel, SkipCutscenes, ItemAnimation, ShopPrices })
             {
                 if (setting != null)
                 {
@@ -108,8 +102,6 @@ namespace BugFablesAP
                 "Dialogue text is instant instead of letter by letter, as if the skip button were held (the game's own "
                 + "skip), but still requires a button press to proceed. Holding the skip button also moves through boxes "
                 + "much faster than the game's own hold. Lines the game marks unskippable stay as they are.");
-            FreeBoat = config.Bind("QualityOfLife", "FreeBoat", true,
-                "The boat to Metal Island costs nothing.");
             SkipCutscenes = config.Bind("QualityOfLife", "SkipCutscenes", true,
                 "The new game's intro (its story slides, the talk after them, Maki's talk and the tutorial battle) is skipped: "
                 + "Vi joins and the first check is sent. Other scenes you don't need to watch are skipped or pass by fast (a list "
@@ -139,7 +131,6 @@ namespace BugFablesAP
                 return;
             }
             harmony = new Harmony(Plugin.Guid + ".qol." + DateTime.UtcNow.Ticks);
-            harmony.Patch(getLine, postfix: new HarmonyMethod(typeof(QualityOfLife), nameof(AfterGetLine)));
             harmony.Patch(getLine, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeGetLine)));
             MethodInfo startEvent = AccessTools.Method(typeof(EventControl), nameof(EventControl.StartEvent), new[] { typeof(int), typeof(NPCControl) });
             if (startEvent == null)
@@ -492,21 +483,6 @@ namespace BugFablesAP
             }
             __result = "|end|";
             return false;
-        }
-
-        private static void AfterGetLine(int id, ref string __result)
-        {
-            if (__result == null || Array.IndexOf(FareLines, id) < 0 || MainManager.map == null
-                || MainManager.map.mapid.ToString() != BoatMap || !randomizerOn() || !FreeBoat.Value)
-            {
-                return;
-            }
-            string free = MoneyToken.Replace(__result, "");
-            if (free != __result)
-            {
-                __result = free;
-                log.LogInfo($"[qol] boat fare waived (pier line {id})");
-            }
         }
 
         internal static void Tick()

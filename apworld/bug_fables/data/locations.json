@@ -68,13 +68,14 @@
   ],
   "regions": [
     {"name": "Menu", "exits": [{"to": "Bugaria Outskirts"}]},
-    {"name": "Bugaria Outskirts", "exits": [{"to": "Past the Outskirts Gate", "requires": ["Explorer Permit"]}, {"to": "Golden Path", "requires": ["Snakemouth Den Cleared"]}, {"to": "Bugaria City"}]},
+    {"name": "Bugaria Outskirts", "exits": [{"to": "Past the Outskirts Gate", "requires": ["Explorer Permit"]}, {"to": "Golden Path", "requires": ["Snakemouth Den Cleared"]}, {"to": "Bugaria City"}, {"to": "Metal Island", "requires": ["Boat Ticket"]}]},
     {"name": "Past the Outskirts Gate", "exits": [{"to": "Snakemouth Den"}]},
     {"name": "Snakemouth Den", "exits": [{"to": "Snakemouth Den Underground", "requires": ["Leif"]}]},
     {"name": "Snakemouth Den Underground", "exits": [], "_comment": "Every Snakemouth room with water droplets, or reached only through one: Leif freezes the droplets."},
     {"name": "Golden Path", "exits": []},
     {"name": "Bugaria City", "exits": [{"to": "Bugaria Inner City", "requires": ["Chapter 2 Started"]}], "_comment": "Open from the start: the game's door in (flag 107) is kept present."},
-    {"name": "Bugaria Inner City", "exits": [], "_comment": "The Ant Palace's rooms and the city districts; their doors require chapter 2 (flag 67)."}
+    {"name": "Bugaria Inner City", "exits": [], "_comment": "The Ant Palace's rooms and the city districts; their doors require chapter 2 (flag 67)."},
+    {"name": "Metal Island", "exits": [], "_comment": "Over the sea from the pier; the sailor sails only for the Boat Ticket (Next 21). No locations yet."}
   ],
   "artifacts": [
     {"number": 1, "name": "Artifact 1", "region": "Snakemouth Den Underground", "source": {"event": 26, "flag": 41}}

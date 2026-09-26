@@ -164,6 +164,7 @@ namespace BugFablesAP
             EnemyScaling.Enable(Log, Guid, () => randomizerEnabled.Value, () => QualityOfLife.EnemyScaling?.Value);
             InGameSettings.Enable(Log, Guid, () => randomizerEnabled.Value);
             CustomItems.Enable(Log, () => randomizerEnabled.Value);
+            BoatTicket.Enable(Log, Guid, () => randomizerEnabled.Value);
             HoldUps.Init(Log, () => randomizerEnabled.Value);
             PartyFit.Enable(Log, Guid, () => randomizerEnabled.Value);
             PartyMembers.Enable(Log, Guid, () => randomizerEnabled.Value);
@@ -365,6 +366,7 @@ namespace BugFablesAP
             EnemyScaling.Disable();
             InGameSettings.Disable();
             AchievementGuard.Disable();
+            BoatTicket.Disable();
             QualityOfLife.Disable();
             WarpButton.Disable();
             HoldUps.Clear();

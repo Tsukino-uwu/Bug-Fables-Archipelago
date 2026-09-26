@@ -27,6 +27,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 13. [Build step 13: party members and moves as items (in progress)](#build-step-13-party-members-and-moves-as-items-in-progress)
 14. [Build step 14: enemy shuffle (in progress)](#build-step-14-enemy-shuffle-in-progress)
 15. [Build step 15: starting location (experimental)](#build-step-15-starting-location-experimental)
+16. [Build step 16: the Boat Ticket](#build-step-16-the-boat-ticket)
 
 **How it works**
 
@@ -146,29 +147,7 @@ be wrong.
    summoning, as the game itself does. Still a guard before building: each branch read, and one full-field fight.
    Its own build step when built.
 
-21. **Boat Ticket** (suggested on Discord; decided by the user, 2026-09-26): a progression item, always in the pool,
-   that unlocks the boat to Metal Island: without it the sailor won't sail; with it the trip is free and the ticket
-   isn't used up (a key item). The logic gates Metal Island on it, so Metal Island isn't open from the start. The
-   Quality of life row *Free boat* goes. **The mod's own item** (the user, 2026-09-26): the game has no ticket, so the
-   mod adds one entry at the end of the game's item table at runtime, a unique item: its own name "Boat Ticket", its own
-   description ("A boat ticket. Maybe we should visit the pier.", the user's line, "we" for the team of three), and the Platinum Card's sprite (item 176) as it is (the user: combined icons were tried as mockups
-   and none looked right on the silver card), as the Settings rows add their labels to the text table. It arrives from the
-   server like any item and sits in the key items as a real id, saved like one; randomizer saves are separate files
-   vanilla never opens. The sailor's dialogue (refusing, then free) goes through the fare lines the mod already
-   rewrites (lines 16 and 19); **the user reviews every changed dialogue line** before it goes in, the old and new text
-   side by side, so nothing reads off or machine-written. **Approved (the user, 2026-09-26), the pier sailor on `BugariaPier`:** line 3
-   keeps its first box ("Hm. You look disappointingly poor. But I'll ask out of decency..."); its second becomes
-   "Would you fancy traveling to Metal Island? Show me your ticket." ("you three" became "you"); line 18 (the card
-   Masters' discount) says the same as line 3; the choice (line 15) is "Let's go!" / "I lost my ticket!" without the
-   ticket and "Let's go!" / "Not yet!" with it, in the style of "That's too expensive!", with no berry counter; the fare
-   checks (lines 16 and 19) check the ticket instead: with it, line 21 "...Ticket's in order. Hop on! Our destination:
-   Metal Island!"; without, line 20 "What?! No ticket, no trip! Get out of here!". Line 17 ("Psh. Don't waste my time
-   then."), the arrival, the Metal Island sailor and the later story lines stay as they are. **Built so far (2026-09-26):** the item itself, `CustomItems.cs`: id 200 (the game's
-   items end at 186, both tables hold 256), the Platinum Card's fields and sprite copied, its own name and description
-   set, re-applied if the game reloads its table, only with Archipelago on; `spawn key 200` gives one (dev). **Seen by
-   the user (2026-09-26):** "You found a Boat Ticket!" with the card's icon and its line. Still to
-   build: the apworld item, the sailor's gate and lines (reviewed by the user), the logic, and Free boat's removal.
-
+21. **Boat Ticket** (Discord, decided by the user, 2026-09-26): built, see build step 16.
 22. **Healing save crystals, an idea for later** (suggested on Discord; the user, 2026-09-26): an item that makes the
    blue save crystals (save only) act like the yellow ones (save and heal), a nice filler or useful check. The colour
    is not baked into the art (code read, 2026-09-26): a save point is tinted in code from its entity data, yellow when
@@ -1338,6 +1317,37 @@ still starts outside Bugaria, so a seed started elsewhere may not be finishable 
 
 **Status:** in progress (experimental): `anywhere` built (2026-09-26), the apworld tests pass, not yet seen in game;
 `towns`, the logic from the start, and a start without *Skip cutscenes* to come.
+
+## Build step 16: the Boat Ticket
+
+The first of the mod's own items (custom gates, "How this mod does it"), suggested on Discord. **Decided (the user,
+2026-09-26):** a progression key item, always in the pool; the pier sailor sails to Metal Island only with it, the
+trip free and the ticket kept; the logic gates Metal Island on it, so Metal Island isn't open from the start; Free boat
+(the Quality of life row) goes.
+
+**Built (2026-09-26):**
+1. **The item** (`CustomItems.cs`): id 200 in the game's item and sprite tables (the game's items end at 186, both
+   hold 256), the Platinum Card's fields and sprite (item 176, the user's pick after mockups of combined icons), its
+   own name "Boat Ticket" and the user's description "A boat ticket. Maybe we should visit the pier." (field 2, the one
+   the menus show; `MEASURED.md`, "The item table's fields"). Only with Archipelago on. Seen by the user.
+2. **In the pool** (`items.json`): kind 1 (key item), game id 200, progression, with `always`: it enters once in every
+   seed. When every location already holds its vanilla item (the default seed has 59 for 59), one ordinary item or
+   berries with a copy left makes room, picked with the seed's random; never a medal, never an item's last copy.
+3. **The logic** (`locations.json`): a Metal Island region, reached from the Outskirts (the pier) with the Boat Ticket.
+   No locations there yet.
+4. **The sailor** (`BoatTicket.cs`): a postfix on `MainManager.GetDialogueText` on `BugariaPier`, since every line of
+   his, the first included, comes through it. His lines as the user approved them, line by line (build step 16's
+   record in Next 21's history): the offer "Would you fancy traveling to Metal Island? Show me your ticket.", the
+   choice "Let's go!" / "Not yet!" with the ticket or "I lost my ticket!" without, the ticket checked where the fare
+   was (lines 16 and 19), "...Ticket's in order. Hop on!" or "What?! No ticket, no trip! Get out of here!". The card
+   Masters' discount (line 18) makes the same offer. English only.
+5. **Free boat removed** (`QualityOfLife.cs`, `ApMenu.cs`): its fare rewrite and its row.
+6. **Tests** (`test/test_boat_ticket.py`): once in the pool, progression; Metal Island unreachable without it,
+   reachable with it. `TestPool` now allows the one filler copy the ticket takes. *Shop Contents: Filler Only* in a solo
+   seed with discoveries on is now one filler short and falls back to No Progression, as it already did without
+   discoveries; with other games' filler in the room it holds.
+
+**Status:** built (2026-09-26), the apworld tests pass (275); the item seen in game; the sailor's lines not yet seen.
 
 # How it works
 

@@ -154,7 +154,20 @@ class BugFablesWorld(World):
         # The included locations' vanilla items (duplicates kept), then padding; an item whose spot is off stays vanilla.
         pool: list[Item] = [self.create_item(name) for name in
                             (vanilla_item(loc) for loc in self.included_locations) if name is not None]
+        # The mod's own items (custom gates) enter once in every seed, in a filler slot: when every location already
+        # has its vanilla item, one filler item (an ordinary item or berries, picked by the seed) makes room.
+        always = [self.create_item(item["name"]) for item in ITEMS if item.get("always")]
         unfilled = len(self.multiworld.get_unfilled_locations(self.player))
+        while always and len(pool) + len(always) > unfilled:
+            # Only an ordinary item or berries, and only one with a copy left in the pool: every location's own item
+            # stays in the pool at least once, and a filler medal (the Hard Mode medal) is never taken.
+            names = [item.name for item in pool]
+            filler = [item for item in pool if item.classification == ItemClassification.filler
+                      and self._items_by_name[item.name]["kind"] in (0, 3) and names.count(item.name) > 1]
+            if not filler:
+                raise Exception(f"Bug Fables: no filler item to make room for {always[0].name} in player {self.player_name}'s pool")
+            pool.remove(self.random.choice(filler))
+        pool += always
         pool += [self.create_filler() for _ in range(unfilled - len(pool))]
         self.multiworld.itempool += pool
 
