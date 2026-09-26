@@ -8,7 +8,14 @@ def _names(items) -> list[str]:
     return [item.name for item in items]
 
 
-class TestPartyOffByDefault(BugFablesTestBase):
+class TestPartyDefault(BugFablesTestBase):
+    def test_all_three_by_default(self) -> None:
+        self.assertEqual(self.world.fill_slot_data()["starting_member"], 3)
+
+
+class TestPartyOff(BugFablesTestBase):
+    options = {"starting_party_member": "off"}
+
     def test_story_party(self) -> None:
         self.assertEqual(self.world.fill_slot_data()["starting_member"], -1)
         pool = _names(item for item in self.multiworld.itempool if item.player == self.player)
@@ -129,3 +136,30 @@ class TestAbilities(BugFablesTestBase):
         self.assertIn("Kabbu", self.world._requires(into_den))
         trapdoor = next(loc for loc in LOCATIONS if loc["name"] == "Snakemouth Den: Door Room, Trapdoor")
         self.assertIn("Kabbu", self.world._requires(trapdoor))
+
+
+class TestStartAllThree(BugFablesTestBase):
+    options = {"starting_party_member": "all_three"}
+
+    def test_all_three_are_start_inventory(self) -> None:
+        self.assertEqual(self.world.fill_slot_data()["starting_member"], 3)
+        self.assertEqual(sorted(_names(self.multiworld.precollected_items[self.player])), sorted(MEMBERS))
+        pool = _names(item for item in self.multiworld.itempool if item.player == self.player)
+        for member in MEMBERS:
+            self.assertNotIn(member, pool)
+
+    def test_joining_moments_are_locations(self) -> None:
+        locations = {loc.name for loc in self.multiworld.get_locations(self.player)}
+        for name in JOINS:
+            self.assertIn(name, locations)
+        self.assertNotIn("Leif Joins", locations)
+
+    def test_nothing_waits_on_a_member(self) -> None:
+        self.collect_by_name("Explorer Permit")
+        self.assertTrue(self.can_reach_location("Outskirts: Near Snakemouth Den, Reward"))
+        self.assertTrue(self.can_reach_location("Outskirts: East Road, Stone"))
+
+    def test_pool_matches_locations(self) -> None:
+        pool = [item for item in self.multiworld.itempool if item.player == self.player]
+        locations = [loc for loc in self.multiworld.get_locations(self.player) if loc.address is not None]
+        self.assertEqual(len(pool), len(locations))

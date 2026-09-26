@@ -21,8 +21,8 @@ Bugaria with Merab's medal shop and Madame Butterfly's item shop, and the Golden
 - **Entrance Randomizer** (off, experimental): doors between areas lead somewhere else, in coupled pairs.
 - **Enemy Shuffle** (off): ordinary enemies on each map are swapped for others of the same group size.
 - **Starting Location** (off, experimental): a new file begins in any room in the game.
-- **Starting Party Member** (off): a new file starts with Vi, Kabbu or Leif alone (or one picked by the seed), and the
-  other two are items. New in this version and not yet played past the Outskirts gate.
+- **Starting Party Member** (all three): a new file starts with the whole party; or with Vi, Kabbu or Leif alone (or one
+  picked by the seed), and the other two are items; or Off, the story's party, with Leif joining in Snakemouth Den.
 
 Each option's description in the yaml says what it does in full and how many checks it adds.
 

@@ -22,12 +22,14 @@ namespace BugFablesAP
         internal static volatile int SeedStartMember = -1;
         internal static volatile bool SeedSaysMember;
         internal static int StartMember => SeedSaysMember ? SeedStartMember : DevStartMember;
+        // starting_member 3: the whole party from the start (none of them an item).
+        internal const int AllMembers = 3;
         internal static readonly HashSet<int> Received = new HashSet<int>();
 
         // Needs a map: the title screen sets up a party of its own.
         internal static bool Active => StartMember >= 0 && randomizerOn != null && randomizerOn() && MainManager.map != null;
 
-        internal static bool Allowed(int id) => id == StartMember || Received.Contains(id);
+        internal static bool Allowed(int id) => id == StartMember || StartMember == AllMembers || Received.Contains(id);
 
         // The apworld's item names.
         internal static string Name(int id) => id == 0 ? "Vi" : id == 1 ? "Kabbu" : id == 2 ? "Leif" : "member " + id;
@@ -103,6 +105,7 @@ namespace BugFablesAP
             LastStoryParty = (int[])ids.Clone();
             if (ids.All(Allowed))
             {
+                KeepMembersAhead(ref ids);
                 return;
             }
             // A member not allowed yet is played by an allowed one the story doesn't have yet, as in scenes (PartyFit):
@@ -137,6 +140,27 @@ namespace BugFablesAP
             log.LogInfo($"[members] the story asked for party {string.Join(",", ids.Select(i => i.ToString()).ToArray())}; "
                 + $"given {string.Join(",", kept.Select(i => i.ToString()).ToArray())} (event {MainManager.lastevent})");
             ids = kept.ToArray();
+        }
+
+        // A member already in the party whom the story hasn't reached yet (Leif before the spider) stays when the story
+        // sets its own party, e.g. the opening's Vi and Kabbu. Not in the spider scene (Event6): its fights are the story's,
+        // and he rejoins after it.
+        private static void KeepMembersAhead(ref int[] ids)
+        {
+            MainManager mm = MainManager.instance;
+            if (mm?.playerdata == null || (MainManager.lastevent == 6 && mm.inevent))
+            {
+                return;
+            }
+            int[] asked = ids;
+            int[] ahead = mm.playerdata.Select(p => p.trueid).Where(m => Allowed(m) && !asked.Contains(m) && !PartyFit.InStoryParty(m)).ToArray();
+            if (ahead.Length == 0)
+            {
+                return;
+            }
+            ids = ids.Concat(ahead).ToArray();
+            log.LogInfo($"[members] the story asked for party {string.Join(",", asked.Select(i => i.ToString()).ToArray())}; "
+                + $"kept {string.Join(",", ahead.Select(i => i.ToString()).ToArray())} too (event {MainManager.lastevent})");
         }
 
         // Leif's lake scene (Event14) never starts with Archipelago on: it reads its Leif from map.tempfollowers[0] and

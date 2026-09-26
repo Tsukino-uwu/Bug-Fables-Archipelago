@@ -31,6 +31,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 17. [Build step 17: a release](#build-step-17-a-release)
 18. [Build step 18: Starting Party Member](#build-step-18-starting-party-member)
 19. [Build step 19: Archipelago's colours for players and items](#build-step-19-archipelagos-colours-for-players-and-items)
+20. [Build step 20: All three members from the start (the default)](#build-step-20-all-three-members-from-the-start-the-default)
 
 **How it works**
 
@@ -1661,6 +1662,27 @@ colour; received, "You got Kabbu from Other!" and "You got Leif from Other!" whe
 
 **Status:** works, seen by the user with a real second player (2026-09-26), every class and both directions; Rarity, the
 default since, seen on a gift (the icon and its text in purple).
+
+## Build step 20: All three members from the start (the default)
+
+*Starting Party Member* gets a sixth choice, **All Three**: a new file starts with Vi, Kabbu and Leif, and no member is an
+item. It is the default (the user, 2026-09-27: "so that you can start with all 3 if you don't want to rando partners";
+then "all 3 could probably be the default"). With *Off*, Leif joins at a fixed spot after the spider, behind the
+Explorer Permit, so a late permit makes him late; with All Three nothing waits on him.
+
+1. **The world:** `option_all_three = 5`, the default. `starting_member` becomes 3 (`ALL_MEMBERS`) and all three are
+   start inventory; the pool has no member, and filler takes the two slots they'd have held. The two joining moments stay
+   locations, as with one member (the category is on for any start); the story's "Leif Joins" event is off. Rules ask
+   for members as before, and all three are held from the start, so none waits.
+2. **The mod:** `starting_member` 3 allows every member (`PartyMembers.AllMembers`). The start inventory arrives as
+   received items, and each member joins as a received one does. **A story party change no longer drops a member the
+   story hasn't reached yet** (Leif before flag 16): the opening's "Vi and Kabbu" keeps Leif (`KeepMembersAhead`), in
+   every mode. The spider scene (Event6) is the exception: its fights stay the story's, and Leif rejoins after it.
+3. **Tests:** `TestStartAllThree` (start inventory, no member in the pool, the two locations, nothing waits),
+   `TestPartyDefault`; the tests of the story party's logic (Leif's droplet rooms, the permit gate, the town medal, a
+   shop count) now pin *Off*, whose logic they check. A default seed with APQuest generated: all three in Starting Items.
+
+**Status:** built, tests pass; not yet played.
 
 # How it works
 

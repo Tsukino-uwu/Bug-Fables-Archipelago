@@ -81,8 +81,9 @@ class BugFablesWorld(World):
     # By member number: 0 Vi, 1 Kabbu, 2 Leif.
     _members = [item["name"] for item in sorted((item for item in ITEMS if item.get("member")), key=lambda item: item["game_id"])]
 
-    # -1 is the story's party; otherwise the one member a new file starts with.
+    # -1 is the story's party; 0-2 the one member a new file starts with; ALL_MEMBERS the whole party.
     starting_member: int = -1
+    ALL_MEMBERS = 3
 
     def generate_early(self) -> None:
         wanted = self.options.artifacts_required.value
@@ -97,6 +98,8 @@ class BugFablesWorld(World):
         choice = self.options.starting_party_member
         if choice == StartingPartyMember.option_random_member:
             self.starting_member = self.random.randrange(len(self._members))
+        elif choice == StartingPartyMember.option_all_three:
+            self.starting_member = self.ALL_MEMBERS
         elif choice != StartingPartyMember.option_off:
             self.starting_member = choice.value - StartingPartyMember.option_vi
         self.included_locations = [loc for loc in LOCATIONS if self._category_on(loc.get("category"))]
@@ -185,7 +188,7 @@ class BugFablesWorld(World):
         # With a starting member, it is start inventory (the client gets it too) and the other two are in the pool.
         if self.starting_member >= 0:
             for number, name in enumerate(self._members):
-                if number == self.starting_member:
+                if self.starting_member in (number, self.ALL_MEMBERS):
                     self.push_precollected(self.create_item(name))
                 else:
                     pool.append(self.create_item(name))
@@ -299,7 +302,7 @@ class BugFablesWorld(World):
             # {"map", "from"}: the room a new file begins in, as if entering through the door from "from"; empty for the
             # game's own start.
             "start": self.start,
-            # The one member a new file starts with (0 Vi, 1 Kabbu, 2 Leif); -1 is the story's party.
+            # The one member a new file starts with (0 Vi, 1 Kabbu, 2 Leif); 3 all three; -1 is the story's party.
             "starting_member": self.starting_member,
             # 0 item, 1 key item, 2 medal, 3 berries, 4 crystal berry, 5 party member.
             "item_kinds": {str(ITEM_NAME_TO_ID[item["name"]]): item["kind"] for item in ITEMS},

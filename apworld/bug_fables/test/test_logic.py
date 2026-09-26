@@ -2,6 +2,7 @@ from . import BugFablesTestBase
 
 
 class TestPermitGate(BugFablesTestBase):
+    options = {"starting_party_member": "off"}
     def test_first_artifact_needs_the_permit(self) -> None:
         # With no items the permit's gate must hold, or fill could put the permit behind it.
         self.assertFalse(self.can_reach_location("Artifact 1"))
@@ -156,6 +157,7 @@ class TestPool(BugFablesTestBase):
 
 
 class TestLeif(BugFablesTestBase):
+    options = {"starting_party_member": "off"}
     # Rooms with water droplets need Leif to freeze them.
     def test_droplet_room_needs_leif(self) -> None:
         from BaseClasses import CollectionState, ItemClassification
@@ -184,6 +186,7 @@ class TestLeif(BugFablesTestBase):
 
 
 class TestInRoomRules(BugFablesTestBase):
+    options = {"starting_party_member": "off"}
     # A spot's own needs are written on the location, so entrance rando can't lose them.
     def test_gummies_need_leif_in_the_room(self) -> None:
         from BaseClasses import CollectionState, ItemClassification
@@ -541,6 +544,7 @@ class TestDiscoveriesOn(BugFablesTestBase):
 
 
 class TestTownMedal(BugFablesTestBase):
+    options = {"starting_party_member": "off"}
     # The Bug Me Not! medal needs Leif's ice; the town itself is open.
     def test_needs_leif(self) -> None:
         name = "Bugaria City: Residential District, Fountain Rooftop"
@@ -656,7 +660,7 @@ class TestShopContentsDefault(BugFablesTestBase):
 class TestShopContentsFillerOnly(BugFablesTestBase):
     # With discoveries on, a solo seed had exactly enough filler for every shop location; the Boat Ticket now takes one
     # filler slot, so it falls one short and falls back too. With other games' filler in the room, Filler Only holds.
-    options = {"shop_contents": "filler_only", "shuffle_discoveries": True}
+    options = {"shop_contents": "filler_only", "shuffle_discoveries": True, "starting_party_member": "off"}
 
     def test_one_short_after_the_boat_ticket(self) -> None:
         from BaseClasses import LocationProgressType
