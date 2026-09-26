@@ -67,6 +67,8 @@ namespace BugFablesAP
             // The trapdoor: fast-forwarded, not skipped (a skip showed no opening or fall, just a teleport: the user); the
             // trapdoor landing below then places the party.
             new Scene { Map = "SnakemouthDoorRoom", Event = 5, Flags = null },
+            // The spider: two battles, party changes, flag 27 and discovery 1, so fast-forwarded (the battles at normal speed).
+            new Scene { Map = "SnakemouthFallRoom", Event = 6, Flags = null },
             // The barkeeper's first talk; the same scene later handles bounties, so skipped only while 158 is unset.
             new Scene { Map = "UndergroundBar", Event = 83, Flags = new[] { 158 }, OnlyWhileUnset = 158 },
             // Arriving outside Snakemouth Den: walk, one line, discovery 0 (a location); the map's autostart sets its flag 22.
@@ -686,7 +688,8 @@ namespace BugFablesAP
 
         private static bool InFastScene()
         {
-            if (!SkipCutscenes.Value || !MainManager.instance.inevent)
+            // A battle a scene starts is played at the game's own speed.
+            if (!SkipCutscenes.Value || !MainManager.instance.inevent || MainManager.battle != null || MainManager.instance.inbattle)
             {
                 return false;
             }

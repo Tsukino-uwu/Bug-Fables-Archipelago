@@ -622,6 +622,11 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    right after the fall: its coroutine stopped, the party's bodies made normal (the game's `LockRigid(false)`,
    gravity, animations), the camera limits restored, `EndEvent`, the cave music, then the landing's door arrival.
    **Seen (the user, 2026-09-27): works correctly:** the opening and the fall at speed, black, the arrival.
+   **The spider scene** (Event6, the user, 2026-09-27): two battles, party changes, flag 27 and discovery 1, no
+   choice prompt; fast-forwarded. A battle a scene starts now plays at normal speed (the fast-forward checks
+   `MainManager.battle` and `inbattle`) and the scene speeds up again after it. Built. **Seen with three members** (the
+   user, the same day, at normal speed): Leif stood idle through the scenes; the fights were Kabbu alone, then Kabbu and
+   Vi, as the story has them.
    **First skip froze the player** (the user at the bridge, 2026-09-25): a trigger
    freezes the player (`minipause`) before starting its scene (`NPCControl.cs:5512-5525`), and the scene's own
    `EndEvent` unfreezes. A skipped scene never ends, so the skip now calls the game's `EndEvent()` itself, which is all
