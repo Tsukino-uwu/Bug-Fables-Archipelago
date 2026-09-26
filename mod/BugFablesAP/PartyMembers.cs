@@ -219,6 +219,46 @@ namespace BugFablesAP
             }
         }
 
+        // Dev: takes a member out, and turns the guard on for the members left (the first as the start), so the story's
+        // next party change doesn't put them back.
+        internal static string Remove(int id)
+        {
+            MainManager mm = MainManager.instance;
+            if (MainManager.player == null || mm.inevent || mm.message || MainManager.battle != null)
+            {
+                return "not now: an event, dialogue or battle";
+            }
+            int[] left = mm.playerdata.Select(p => p.trueid).Where(m => m != id).ToArray();
+            if (left.Length == mm.playerdata.Length)
+            {
+                return $"member {id} isn't in the party";
+            }
+            if (left.Length == 0)
+            {
+                return "the party can't be empty";
+            }
+            Received.Remove(id);
+            if (StartMember < 0 || StartMember == id)
+            {
+                StartMember = left[0];
+            }
+            foreach (int m in left)
+            {
+                Received.Add(m);
+            }
+            Vector3 at = MainManager.player.transform.position;
+            MainManager.ChangeParty(left, true, true);
+            var spots = new Vector3[mm.playerdata.Length];
+            for (int i = 0; i < spots.Length; i++)
+            {
+                spots[i] = at + new Vector3(-0.6f * i, 0f, 0.1f * i);
+            }
+            MainManager.SetPlayers(spots);
+            MainManager.map?.Invoke("SetPlayerColliders", 0.2f);
+            return "party now " + string.Join(", ", mm.playerdata.Select(p => p.trueid.ToString()).ToArray())
+                + $"; the guard keeps member {id} out (start {StartMember})";
+        }
+
         // As the dev console's addleif: ChangeParty with fromscratch (without it the list comes out empty), then SetPlayers.
         internal static string Add(int id)
         {

@@ -427,6 +427,10 @@ namespace BugFablesAP
                         return parts.Length > 1 && int.TryParse(parts[1], out int member) && member >= 0 && member <= 2
                             ? "addmember: " + PartyMembers.Add(member)
                             : "addmember <0 Vi | 1 Kabbu | 2 Leif>";
+                    case "removemember":
+                        return parts.Length > 1 && int.TryParse(parts[1], out int gone) && gone >= 0 && gone <= 2
+                            ? "removemember: " + PartyMembers.Remove(gone)
+                            : "removemember <0 Vi | 1 Kabbu | 2 Leif>";
                     case "holdup":
                         ItemSwap.DescribeOurs(ItemIds.Base + 27, ItemIds.KeyItemKind, out string name, out Sprite sprite, out Color? color);
                         HoldUps.Received(name + " from TestPlayer", sprite, color, ItemSwap.ArticleOf(ItemIds.Base + 27, ItemIds.KeyItemKind));
