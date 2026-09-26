@@ -3,7 +3,8 @@
 An [Archipelago](https://archipelago.gg) randomizer for *Bug Fables: The Everlasting Sapling*: a BepInEx mod for
 the game plus an apworld for the Archipelago generator.
 
-**Status: early work in progress, released as pre-releases.** A small apworld generates seeds, and the mod logs in to an Archipelago server
+**Status: early work in progress, released as pre-releases.** The mod doesn't report the goal yet, so a seed can't
+be marked finished from the game. A small apworld generates seeds, and the mod logs in to an Archipelago server
 from inside the game, sends checks and receives items. The world is opening up one gate at a time (open world is
 the default: the Outskirts rocks are gone from the start). Next: every item spot in the game in the pool (unchecked
 ones as filler-only placeholders) and field abilities shuffled as items. An experimental entrance randomizer (coupled,
@@ -14,7 +15,7 @@ setting, on by default) scales enemies to your level so every area plays fair in
 seen in game. Starting with a single party
 member is being rehearsed (a dev setting for now).
 
-## How it will work
+## How it works
 
 - **The apworld** (`apworld/bug_fables/`) tells the generator which items and locations exist and which key
   items gate which areas. Today it covers 59 locations (the Outskirts with the caravan, Snakemouth Den, the open parts of the town, Merab's medal

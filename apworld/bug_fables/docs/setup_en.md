@@ -4,8 +4,9 @@
 
 - Bug Fables: The Everlasting Sapling (PC)
 - [BepInEx 5.4](https://github.com/BepInEx/BepInEx/releases) (the `win_x64` download)
-- `bugfables-archipelago.zip` from the
-  [latest release](https://github.com/Tsukino-uwu/Bug-Fables-Archipelago/releases)
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) 0.6.7 or newer
+- From the [latest release](https://github.com/Tsukino-uwu/Bug-Fables-Archipelago/releases):
+  `bugfables-archipelago.zip`, `bug_fables.apworld` and `bug_fables.yaml`
 
 ## Installing
 
@@ -13,6 +14,11 @@
    once, then close it.
 2. Extract `bugfables-archipelago.zip` into your Bug Fables folder. The mod ends up in
    `BepInEx/plugins/BugFablesAP`.
+3. Put `bug_fables.apworld` in your Archipelago's `custom_worlds` folder.
+
+## Your options
+
+Edit `bug_fables.yaml` (at least `name`, your slot name) and give it to whoever generates the room.
 
 ## Connecting
 
