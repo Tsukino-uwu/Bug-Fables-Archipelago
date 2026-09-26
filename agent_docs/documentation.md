@@ -634,6 +634,11 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    spider alone, `flagvar[11]` at 0 or 1. The second fight (the spider and Leif in the web, enemy 12, `flagvar[11]` 2)
    is a real one and untouched. **Seen (the user, 2026-09-27, flags 27 and 16 reset):** the first fight ended at
    once and the real one began.
+   **Leif out of sight in the spider scene** (the user, 2026-09-27: with all three, a Leif standing idle next to the
+   Leif stuck in the web looked wrong): while Event6 runs in the fall room, a Leif who is a party character
+   (`playerentity`, set by the game for the `Player` and `PFollower` tags) is hidden like a stand-in (`PartyFit`'s
+   `LateUpdate` pass), so only the map's own Moth shows, in the web; the scene's party changes already take him out
+   and the mod adds him back after. Built.
    **First skip froze the player** (the user at the bridge, 2026-09-25): a trigger
    freezes the player (`minipause`) before starting its scene (`NPCControl.cs:5512-5525`), and the scene's own
    `EndEvent` unfreezes. A skipped scene never ends, so the skip now calls the game's `EndEvent()` itself, which is all

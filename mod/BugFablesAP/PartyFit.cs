@@ -263,7 +263,7 @@ namespace BugFablesAP
 
         private static void AfterLateUpdate(EntityControl __instance)
         {
-            if (__instance == null || !standIns.Contains(__instance))
+            if (__instance == null || (!standIns.Contains(__instance) && !LeifInTheWeb(__instance)))
             {
                 return;
             }
@@ -328,6 +328,15 @@ namespace BugFablesAP
                 }
             }
             __result = longer.ToArray();
+        }
+
+        // The spider scene (Event6) has Leif stuck in the web (the map's own Moth): a Leif already in the party stays out
+        // of sight until it ends, when the mod adds him back (PartyMembers).
+        private static bool LeifInTheWeb(EntityControl e)
+        {
+            return e.animid == 2 && MainManager.lastevent == 6 && Talking && randomizerOn != null && randomizerOn()
+                && MainManager.map != null && MainManager.map.mapid == MainManager.Maps.SnakemouthFallRoom
+                && e.playerentity;
         }
 
         // A scene can end treating stand-ins as the party: if the story's leader was a stand-in, the party moves to its
