@@ -1614,6 +1614,10 @@ the ground at the new size, seen too (dev `spawn member`, a screenshot of Vi on 
 **Seen by the user (2026-09-26), a Vi start with a second player:** Vi alone after the opening; Kabbu and Leif both
 arrived from the other player's chests and joined (party 0, 1, 2).
 
+**A story-party seed started Leif alone (the user, 2026-09-27):** the mod took the dev `TestStartMember` (left at 2)
+whenever the seed's `starting_member` was -1, so a seed with the option off still used it. Now a seed that sends the key
+decides, -1 included, and the dev setting only stands in with no seed (`PartyMembers.SeedSaysMember`).
+
 **Status:** works, seen by the user: before the Outskirts gate with a Kabbu start and a Vi start, members arriving from
 this world and from another player (2026-09-26); past the gate with a Leif start, the trapdoor and spider scenes with
 all three, Leif back in the party after (2026-09-27).

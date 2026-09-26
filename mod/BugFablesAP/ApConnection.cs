@@ -613,8 +613,9 @@ namespace BugFablesAP
                         ? (object)new KeyValuePair<string, int>(startData.Value<string>("map"), startData["entity"] != null ? startData.Value<int>("entity") : -1)
                         : null;
                     ownSlot = ok.Slot;
-                    PartyMembers.SeedStartMember = ok.SlotData != null && ok.SlotData.TryGetValue("starting_member", out object sm) && sm != null
-                        ? Convert.ToInt32(sm) : -1;
+                    object sm = null;
+                    PartyMembers.SeedSaysMember = ok.SlotData != null && ok.SlotData.TryGetValue("starting_member", out sm) && sm != null;
+                    PartyMembers.SeedStartMember = PartyMembers.SeedSaysMember ? Convert.ToInt32(sm) : -1;
                     itemKinds = ReadItemKinds(ok.SlotData);
                     artifactsRequired = ok.SlotData != null && ok.SlotData.TryGetValue("artifacts_required", out object ar) && ar != null
                         ? Convert.ToInt32(ar) : 0;

@@ -192,7 +192,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `solids`: logs every solid collider under and within 4 of the player, with its path, size, components and any
   `ConditionChecker` switch: what an invisible wall is.
 - **`TestStartMember`** (`[Debug]`): a new randomizer file starts with that one member (0 Vi, 1 Kabbu, 2 Leif); the
-  story adds nobody else. -1 = off.
+  story adds nobody else. -1 = off. Only without a seed: a connected seed's `starting_member` wins, -1 (the story's
+  party) included (2026-09-27: a story-party seed with a leftover `TestStartMember = 2` started Leif alone).
 - `berries <n>`: add n berries (negative takes them), clamped to 0-999 as the game's own `money` script command does.
   For shop tests.
 - **`TestStart`** (`[Debug]`, not a console command): a map name (`MainManager.Maps`), optionally `@` the map you

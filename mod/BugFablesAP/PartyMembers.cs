@@ -16,10 +16,12 @@ namespace BugFablesAP
         private static Func<bool> randomizerOn;
         private static Harmony harmony;
 
-        // -1 off, 0 Vi, 1 Kabbu, 2 Leif. The seed's (slot_data starting_member) wins over the dev setting.
+        // -1 off, 0 Vi, 1 Kabbu, 2 Leif. A seed that names one (slot_data starting_member, -1 the story's party included)
+        // wins; the dev setting only stands in without one.
         internal static int DevStartMember = -1;
         internal static volatile int SeedStartMember = -1;
-        internal static int StartMember => SeedStartMember >= 0 ? SeedStartMember : DevStartMember;
+        internal static volatile bool SeedSaysMember;
+        internal static int StartMember => SeedSaysMember ? SeedStartMember : DevStartMember;
         internal static readonly HashSet<int> Received = new HashSet<int>();
 
         // Needs a map: the title screen sets up a party of its own.
