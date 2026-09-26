@@ -314,6 +314,11 @@ arrows around the On/Off value.
 Item animation, Shop prices, Enemy scaling), the line under the rows describes the value now chosen, and changes as
 left/right steps through them; every step redraws the screen. On/off rows keep one line.
 
+**Planned (the user, 2026-09-26): a Gameplay page.** The main page keeps the connection and the Archipelago on/off,
+plus two links, *Quality of life* and *Gameplay*. Gameplay holds how the game plays: Difficulty, Enemy scaling (moved
+from Quality of life) and Detector. Quality of life keeps the speed-ups (text, boat, cutscenes, item animation, shop
+prices, travel), with Disable all / Reset to defaults (step 10). Both pages stay within the panel's rows.
+
 **Status:** works, seen by the user (2026-09-24): the menu entry, the panel, and the file select held back until the first login.
 
 *Code: `MenuToggle.cs` (the menu entry: `BeforeSetMenuText` and `AfterSetMenuText` around the game's rebuild,
