@@ -745,7 +745,9 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    skipped with Archipelago on** (the user, 2026-09-27, even with Skip cutscenes off): once flag 16 is set and 24 isn't,
    the mod sets 24, outside a battle. Flag 24 also lets enemy 1 appear on the ground instead of always in the air
    (`MainManager.cs:6299-6309`); the game sets it with that same line, so only the moments between Leif joining and his
-   first battle change, and only toward easier. Built. *Code: `PartyMembers.cs`.*
+   first battle change, and only toward easier. **Seen (the user, 2026-09-27):** flag 16 set by the dev console at the
+   lake (the lake scene hadn't triggered before the spider), the mod logged the line marked said, and the next fight
+   started without it. *Code: `PartyMembers.cs`.*
    **Travel: Off / Warp / Map / Both (the user, 2026-09-26; built, not yet seen).** The Warp button's on/off became one
    *Travel* row (config `Travel`, default Both). `WarpButton.cs` now places the travel buttons after the game's four:
    Warp, then Map (left from the first button wraps to Map; Warp sits between, harder to hit by accident). Five fit
