@@ -155,6 +155,15 @@ be wrong.
    yellow by setting its data before the map builds it, as the enemy look test does. Still to find: where saving
    decides to heal (the save prompt's handling), so the item gives the heal and the look together.
 
+23. **Progressive items, an idea for later** (the user, 2026-09-26): items that unlock in a fixed order however they're
+   found, as Pseudoregalia's progressive sword (three copies of one item; the first gives the sword, the second breaking
+   blocks, the third the ranged attack). Archipelago counts copies of one item (`Has(item, count)`), so the logic is
+   simple. Candidates: each member's field abilities in their game order, and other chains; decided when abilities
+   become items (Next 3, build step 13).
+24. **The panel's settings on normal saves, an idea** (the user, 2026-09-26): an opt-in row so Quality of life and
+   Gameplay also apply with Archipelago off. A deliberate exception to "vanilla stays vanilla", which only the user can
+   make; off by default. Its name is still to choose (it isn't Archipelago on/off).
+
 **Known issues:**
 
 - **A Kabbu / horn rule is owed** once party members or the basic horn become items (Starting Party Member).
