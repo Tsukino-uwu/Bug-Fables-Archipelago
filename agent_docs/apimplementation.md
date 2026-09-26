@@ -1746,7 +1746,7 @@ once per press): the game retries a held attack every few frames (`DoActionHold`
 refused press comes after a quiet 0.25 s, once per press. **Then it felt delayed** (the user): the game fires a tap
 on the button's release, so the refusal came then. Now the attack's buzz plays on the press itself (a per-frame check
 of the button while the leader's move is locked and the player is free), and the refusals stay silent; the jump
-fires on its press and buzzes there.
+fires on its press and buzzes there. **Seen (the user, 2026-09-27): "works way better".**
 
 **Status:** built, tests pass; the jump and attack gates seen by the user; the single buzz while holding and the key
 items not yet seen.
