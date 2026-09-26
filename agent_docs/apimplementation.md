@@ -1250,7 +1250,9 @@ an item. A spot or exit lists `abilities` (Horn, Beemerang, Ice, Jump); the worl
 (`_ability_holders`: Horn Kabbu, Beemerang Vi, Ice Leif; Jump the whole party, so nothing), and only when members
 are items, as for `members`. The two horn spots (25, 32) moved from `members` to `abilities`, and location 19 (crystal
 berry #0 outside the den, behind grass from the Outskirts' side) got the Horn: cautious, since the cave's side needs
-no horn, which room-level regions will count. Tests `TestAbilities`; three seeds with a random start and APQuest
+no horn, which room-level regions will count. Location 30 (the bridge room's hidden spot, behind grass) got the Horn too (the user,
+2026-09-26). Both sit in regions that need all three members today, so the Horn changes nothing yet; it keeps the
+rule true once regions stop asking for everyone. Tests `TestAbilities`; three seeds with a random start and APQuest
 generated. **Next, after the current tests (the user):** the three attacks as items, one per member, and Jump as one
 item for the whole party; then every move's spot from `MEASURED.md` (where a move is needed) written as `abilities`.
 
