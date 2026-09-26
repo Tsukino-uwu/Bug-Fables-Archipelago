@@ -28,6 +28,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 14. [Build step 14: enemy shuffle (in progress)](#build-step-14-enemy-shuffle-in-progress)
 15. [Build step 15: starting location (experimental)](#build-step-15-starting-location-experimental)
 16. [Build step 16: the Boat Ticket](#build-step-16-the-boat-ticket)
+17. [Build step 17: a release](#build-step-17-a-release)
 
 **How it works**
 
@@ -65,15 +66,8 @@ be wrong.
    *Progression*, silence for a replay after a new save or reconnect, and the multiworld names ("X's item").
 6. **A full bag:** key items keep arriving, only ordinary items wait.
 7. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
-8. **A release: three separate downloads** (the user, 2026-09-25). There is no release packaging yet;
-   `dev-scripts/stage-dev.ps1` stages for development only (checked 2026-09-25).
-   - **The mod:** a zip with the folder structure already made, so it drops into the game's root folder next
-     to the game's exe. Only the files the mod needs to work: `BugFablesAP.dll`, `Archipelago.MultiClient.Net.dll`,
-     `websocket-sharp.dll` and `Newtonsoft.Json.dll`, **with each library's licence notice next to it** (all three
-     are MIT, which requires it). BepInEx itself is not bundled: the player installs it first. Whether a subfolder
-     under `BepInEx/plugins` works is to be checked in BepInEx's source before choosing the layout.
-   - **The apworld:** `bug_fables.apworld`, packaged with the "Build APWorlds" launcher component (build step 1).
-   - **A yaml:** a player options file to start from.
+8. **A release: three separate downloads** (the user, 2026-09-25): built, see build step 17. Next: the first run
+   on GitHub (v0.1.0, a pre-release), and the user seeing the release zip load in game.
 9. **The chat feed**, then the in-game text client (see the design list in the mod guide, step 2).
 10. **A "Quality of life" page in the Archipelago panel** (the user, 2026-09-25): on/off rows that speed the game
    up and make it smoother: skips first, others later. Battle tutorials next (the mod guide, step 10).
@@ -1426,6 +1420,64 @@ got the refusal; seen by the user.
 
 **Status:** works both ways, seen by the user (2026-09-26); the pool and logic take effect in the next generated seed
 (the apworld tests pass, 275).
+
+## Build step 17: a release
+
+Three separate downloads on a GitHub release (the user, 2026-09-25/26), made the way MeshGhost makes its TEVI release.
+
+| Download | What it is |
+|---|---|
+| `bugfables-archipelago.zip` | The mod. Extract it into the Bug Fables folder, next to `Bug Fables.exe`; it holds only `BepInEx/plugins/BugFablesAP/`. |
+| `bug_fables.apworld` | The world, for Archipelago's `custom_worlds` folder. |
+| `bug_fables.yaml` | The player options template. |
+
+**Names.** No version in any file name: the release and its tag carry it, and `releases/latest/download/<name>`
+links stay the same. The apworld's name is fixed: Archipelago 0.6.7 imports the module named after the file
+(`worlds/__init__.py`, `world_name = Path(apworld.path).stem`), so it must match the folder inside, `bug_fables`.
+The template generator names the yaml `Bug Fables.yaml`; GitHub turns spaces in asset names into dots, so it ships
+as `bug_fables.yaml`.
+
+**The layout.** A subfolder of `BepInEx/plugins` works: BepInEx 5.4.23.5's chainloader scans `plugins` with
+`SearchOption.AllDirectories` (`BepInEx/Bootstrap/TypeLoader.cs`), and its runtime resolver
+(`BepInEx.Preloader/Entrypoint.cs`, `LocalResolve`) looks for a missing assembly in every subfolder of `plugins`
+(`Utility.TryResolveDllAssembly`). The folder holds the four DLLs, `LICENSE.txt` (ours), `THIRD-PARTY-NOTICES.txt`
+(the three libraries' MIT notices, which the NuGet package doesn't carry; `licensing.md`) and a short `README.txt`.
+BepInEx is not bundled; the player installs it first.
+
+**How it was built:**
+1. **The mod is built locally and committed.** CI can't build it: it compiles against the game's own
+   `Assembly-CSharp.dll`, which never enters the repo. `dev-scripts/build-release.ps1` builds Release and stages
+   `release/mod/` (with no debug info: the pdb isn't shipped, and its path would put the build machine's folders into
+   the DLL; checked with `strings`), and writes `release/built-from.txt`: each source file's git blob hash (line endings normalised, so
+   a Windows and a Linux checkout agree) and each shipped DLL's SHA-256. `.gitignore` lets exactly those four DLLs in.
+2. **A stale gate.** `build-release.ps1 -Check` recomputes both lists and fails if they differ. CI runs it on every
+   push, so a source change without a rebuild shows red. Tried both ways (2026-09-26): a probe line in a `.cs` file
+   failed it, naming the file; removing it passed.
+3. **CI** (`.github/workflows/ci.yml`, every push, and called by the release): the gate, and the apworld on a
+   Python matrix (3.11, 3.12, 3.13, what Archipelago's own CI tests at 0.6.7). Each leg checks out Archipelago
+   `0.6.7`, installs it the way Archipelago's own `unittests.yml` does, runs our tests, and generates three presets
+   (default, every experimental option on, every location toggle off) with APQuest as a second game. The whole suite
+   takes about 3 seconds, so the matrix splits by Python version, not by test file: every job pays the install.
+   The 3.13 leg also builds the apworld (`Launcher.py "Build APWorlds" -- "Bug Fables"`, with our `LICENSE` copied
+   in) and the template (`Launcher.py "Generate Template Options" -- --skip_open_folder`), then generates once more
+   the way a player would: the built `.apworld` in `custom_worlds`, the template as the yaml, no loose world.
+4. **The release** (`.github/workflows/release.yml`, run by hand): a guard first (the version is `vX.Y.Z` and
+   matches `Plugin.cs` and `world_version`; the tag is free; no personal path in the highlights or in any commit
+   subject the generated notes will publish; the patterns live in `.githooks/release-path-patterns.txt`, since the
+   pre-commit hook refuses them anywhere else), then CI, then the publish job zips `release/mod/BepInEx` and attaches
+   the three files. The body is the highlights (changes and new features, or nothing) plus GitHub's generated notes.
+   `softprops/action-gh-release` is pinned to a commit, since it runs with write access.
+5. **One command cuts it:** `dev-scripts/release.ps1 -Version v0.1.0 -Prerelease [-HighlightsFile notes.md]`. It
+   refuses unless the versions match, `main` is clean and not behind, and the tag is free. Then its preflight runs
+   the stale gate; a stale DLL is rebuilt and committed on the spot, and the gate runs again. Then it pushes, waits
+   for CI to go green, dispatches the release and waits for it to publish. Running it is the go-ahead to push.
+
+**Versions.** The mod's `Plugin.Version` and the apworld's `world_version` both equal the tag without its `v`.
+v0.1.0 is the first (the mod was 0.0.1 and the world 0.2.0 before).
+
+**Status:** in progress: the scripts, both workflows and the staged mod committed; the gate tried both ways, the
+tests and a two-game seed pass locally (2026-09-26). Not yet run on GitHub, and the release zip not yet seen loading
+in game.
 
 # How it works
 

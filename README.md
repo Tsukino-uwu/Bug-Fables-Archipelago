@@ -3,7 +3,7 @@
 An [Archipelago](https://archipelago.gg) randomizer for *Bug Fables: The Everlasting Sapling*: a BepInEx mod for
 the game plus an apworld for the Archipelago generator.
 
-**Status: not playable yet.** A small apworld generates seeds, and the mod logs in to an Archipelago server
+**Status: early work in progress, released as pre-releases.** A small apworld generates seeds, and the mod logs in to an Archipelago server
 from inside the game, sends checks and receives items. The world is opening up one gate at a time (open world is
 the default: the Outskirts rocks are gone from the start). Next: every item spot in the game in the pool (unchecked
 ones as filler-only placeholders) and field abilities shuffled as items. An experimental entrance randomizer (coupled,
@@ -34,12 +34,13 @@ You need your own copy of the game. Nothing from the game is included in this re
 
 ## Install
 
-**Coming with the first release. There's nothing to install and play yet.** The steps will be:
-
-1. Extract BepInEx into your Bug Fables folder, so `winhttp.dll` sits next to `Bug Fables.exe`.
-2. Start the game once, so BepInEx creates its folders, then close it.
-3. Extract the release into `BepInEx/plugins`.
-4. Set your connection (below) and start the game.
+1. Extract BepInEx into your Bug Fables folder, so `winhttp.dll` sits next to `Bug Fables.exe`. Start the game
+   once, then close it.
+2. From the [latest release](https://github.com/Tsukino-uwu/Bug-Fables-Archipelago/releases), extract
+   `bugfables-archipelago.zip` into your Bug Fables folder.
+3. Put `bug_fables.apworld` in your Archipelago's `custom_worlds` folder, and make your player options from
+   `bug_fables.yaml`.
+4. Start the game and connect (below).
 
 ## Connecting
 

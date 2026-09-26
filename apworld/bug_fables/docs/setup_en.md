@@ -3,15 +3,18 @@
 ## Requirements
 
 - Bug Fables: The Everlasting Sapling (PC)
-- BepInEx 5 (x64) installed into your Bug Fables folder
-- The Bug Fables Archipelago mod
+- [BepInEx 5.4](https://github.com/BepInEx/BepInEx/releases) (the `win_x64` download)
+- `bugfables-archipelago.zip` from the
+  [latest release](https://github.com/Tsukino-uwu/Bug-Fables-Archipelago/releases)
 
 ## Installing
 
-1. Install BepInEx 5 into your Bug Fables folder and start the game once, so BepInEx creates its folders.
-2. Put the mod's files into `BepInEx/plugins`.
+1. Extract BepInEx into your Bug Fables folder, so `winhttp.dll` sits next to `Bug Fables.exe`. Start the game
+   once, then close it.
+2. Extract `bugfables-archipelago.zip` into your Bug Fables folder. The mod ends up in
+   `BepInEx/plugins/BugFablesAP`.
 
 ## Connecting
 
-Connection settings are in the mod's config file, `BepInEx/config/bugfables.archipelago.cfg`: the server
-address and port, your slot name, and the password if the room has one.
+On the game's main menu, choose **Archipelago** and fill in the room's address, port and your slot name (and the
+password if the room has one). With Archipelago enabled, the mod connects on its own.

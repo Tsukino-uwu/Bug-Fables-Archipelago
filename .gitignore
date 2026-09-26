@@ -1,6 +1,8 @@
 # The game's own files never enter the repo: its assemblies, anything decompiled from them, its assets.
 *.dll
 *.pdb
+# The one exception: the mod download staged by dev-scripts/build-release.ps1 (our DLL and its MIT libraries).
+!release/mod/BepInEx/plugins/BugFablesAP/*.dll
 decompiled/
 lib/
 

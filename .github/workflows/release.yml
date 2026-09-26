@@ -1,0 +1,116 @@
+name: Release
+
+# Manual only, normally dispatched by dev-scripts/release.ps1 after its preflight. Three separate downloads:
+# the mod zip, bug_fables.apworld and bug_fables.yaml.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version, e.g. v0.1.0 (creates this tag). Must match Plugin.cs and archipelago.json.'
+        required: true
+        type: string
+      prerelease:
+        description: 'Mark as a pre-release'
+        required: false
+        type: boolean
+        default: true
+      highlights:
+        description: 'Changes and new features, above the generated notes. Empty for the generated notes alone.'
+        required: false
+        type: string
+        default: ''
+
+permissions: {}
+
+jobs:
+  # First, and everything needs it: a bad version or a leaked path costs seconds, not a tag.
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      # Inputs through env:, never ${{ }} in the script, so their text is only ever data.
+      - name: Version matches the mod and the world
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          set -eu
+          if ! printf '%s' "$VERSION" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::version must look like v0.1.0, got '$VERSION'"; exit 1
+          fi
+          bare="${VERSION#v}"
+          plugin=$(grep -oP 'Version = "\K[^"]+' mod/BugFablesAP/Plugin.cs)
+          world=$(python3 -c 'import json; print(json.load(open("apworld/bug_fables/archipelago.json"))["world_version"])')
+          if [ "$plugin" != "$bare" ] || [ "$world" != "$bare" ]; then
+            echo "::error::Plugin.cs says $plugin and archipelago.json says $world; both must be $bare"; exit 1
+          fi
+          if git rev-parse -q --verify "refs/tags/$VERSION" >/dev/null; then
+            echo "::error::tag $VERSION already exists"; exit 1
+          fi
+
+      - name: No machine-specific path in the release body
+        env:
+          HIGHLIGHTS: ${{ inputs.highlights }}
+        run: |
+          set -u
+          fail=0
+          # Kept in .githooks, which the pre-commit hook skips because it has to spell them out.
+          PATTERNS='-f .githooks/release-path-patterns.txt'
+          if printf '%s' "$HIGHLIGHTS" | grep -qIF $PATTERNS; then
+            echo "::error::The highlights contain a machine-specific path."; fail=1
+          fi
+          # gh sends a file's path as the text when the @ is missing.
+          lines=$(printf '%s' "$HIGHLIGHTS" | grep -c '' || true)
+          if [ "$lines" = "1" ] && printf '%s' "$HIGHLIGHTS" | grep -qE '^([A-Za-z]:[\\/]|[.]{0,2}/)[^ ]*$|^[^ ]+\.(md|txt)$'; then
+            echo "::error::The highlights are a file path. Use: gh workflow run release.yml -F 'highlights=@notes.md'"; fail=1
+          fi
+          # The generated notes publish every commit subject since the last tag.
+          prev=$(git tag --sort=-v:refname | head -n 1 || true)
+          range="${prev:+$prev..}HEAD"
+          if git log --format=%s $range | grep -qIF $PATTERNS; then
+            echo "::error::A commit subject in $range contains a machine-specific path."
+            git log --format=%s $range | grep -nIF $PATTERNS; fail=1
+          fi
+          exit $fail
+
+  ci:
+    needs: guard
+    uses: ./.github/workflows/ci.yml
+
+  publish:
+    needs: [guard, ci]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: apworld
+          path: dist
+
+      # Only release/mod: built-from.txt sits beside it and is a CI gate, not something a player needs.
+      - name: Zip the mod
+        run: |
+          set -e
+          (cd release/mod && zip -r -X ../../dist/bugfables-archipelago.zip BepInEx)
+          unzip -l dist/bugfables-archipelago.zip
+          ls -l dist
+
+      # Pinned to a commit: it runs with contents: write. v3.0.3's tag resolves to this commit.
+      - uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
+        with:
+          tag_name: ${{ inputs.version }}
+          # The commit that was checked, not whatever main has become since.
+          target_commitish: ${{ github.sha }}
+          prerelease: ${{ inputs.prerelease }}
+          files: |
+            dist/bugfables-archipelago.zip
+            dist/bug_fables.apworld
+            dist/bug_fables.yaml
+          body: ${{ inputs.highlights }}
+          generate_release_notes: true
+          fail_on_unmatched_files: true

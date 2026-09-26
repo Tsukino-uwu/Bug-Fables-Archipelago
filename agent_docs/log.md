@@ -766,3 +766,27 @@ Newest last. What was tried, what happened, what the user said.
   apworld to be restored by the user (above). Test server stopped; the game left running for the user.
 - **The checkout's link restored** (the user said to, 2026-09-26): `worlds/bug_fables` is a junction to
   `apworld/bug_fables` again; the tests pass through it (276).
+
+## 2026-09-26 (release): the first pre-release set up
+
+- **The user asked for** a WIP pre-release, v0.1.0, made the MeshGhost (TEVI) way: the DLL built locally and
+  committed with a hash file, a hand-run release workflow, three separate downloads. Their calls, in order: the
+  MeshGhost pipeline and v0.1.0 for both mod and world; the zip named `bugfables-archipelago.zip` (they had typo'd
+  "bugfable"; I misread the correction once as "bug fables" and renamed it wrongly, then back); no version in the
+  file names; a licensing double-check; a matrix where it speeds CI up; the disclaimer only in the zip's README,
+  never the root README or the release page; the release body is their highlights plus GitHub's generated notes
+  (I wrongly turned the generated notes off once; they're on, as MeshGhost has them); a local release script whose
+  preflight rebuilds a stale DLL, as MeshGhost's `release.ps1` does.
+- **Measured:** BepInEx 5.4.23.5 loads plugins and their dependencies from subfolders of `plugins`; Archipelago
+  0.6.7 needs the `.apworld` named after its folder; the NuGet package has no licence files; the game's terms say
+  nothing about mods (all in `apimplementation.md` build step 17 and `licensing.md`). The whole apworld suite takes
+  2.9 s (276 tests), so a matrix by test file would only add installs: the matrix is by Python version instead.
+- **Checked:** the stale gate fails on a probe edit and passes after; the three libraries are byte-identical to
+  NuGet's; the plugin references no game resource; a two-game seed with every experimental option on generates.
+- **Caught by the pre-commit hook:** the release guard's own scan patterns, written inline in `release.yml`, read
+  as home paths; they moved to `.githooks/release-path-patterns.txt`. Looking then at what the DLLs carry, our Release
+  build had this machine's pdb path in it; it's now built with no debug info. The three upstream DLLs carry their
+  author's build paths: NuGet's own binaries, unchanged, left as they are.
+- **Open:** the workflows have never run on GitHub; `release.ps1` pushes, so it waits for the user's go-ahead. The
+  release zip must be seen loading in game: on this dev machine the libraries are already loose in
+  `BepInEx/plugins` and the plugin in `BepInEx/scripts`, so both come out before the zip goes in.

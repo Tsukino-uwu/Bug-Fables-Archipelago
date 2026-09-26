@@ -1,0 +1,118 @@
+name: CI
+
+# Every push, and every release (release.yml calls this). Jobs run in parallel; the apworld job is a Python matrix.
+on:
+  push:
+  pull_request:
+  workflow_call:
+
+permissions: {}
+
+env:
+  AP_TAG: '0.6.7'
+
+jobs:
+  # CI can't build the mod (it needs the game's own assembly), so the DLLs in release/mod are committed.
+  mod-dll:
+    name: Committed mod DLL matches its sources
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Stale gate
+        shell: pwsh
+        run: ./dev-scripts/build-release.ps1 -Check
+
+  apworld:
+    name: Apworld on Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # The versions Archipelago's own CI tests at this tag.
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: bug_fables_ap
+
+      - uses: actions/checkout@v7
+        with:
+          repository: ArchipelagoMW/Archipelago
+          ref: ${{ env.AP_TAG }}
+          path: Archipelago
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: |
+            Archipelago/requirements.txt
+            Archipelago/ci-requirements.txt
+            Archipelago/worlds/*/requirements.txt
+
+      # The same install as Archipelago's own unittests workflow.
+      - name: Install Archipelago with the world
+        working-directory: Archipelago
+        run: |
+          cp -r ../bug_fables_ap/apworld/bug_fables worlds/bug_fables
+          cp ../bug_fables_ap/LICENSE worlds/bug_fables/LICENSE
+          python -m pip install --upgrade pip
+          pip install -r ci-requirements.txt
+          python ModuleUpdate.py --yes --force
+          python Launcher.py --update_settings
+
+      - name: Tests
+        working-directory: Archipelago
+        run: pytest -n auto worlds/bug_fables/test
+
+      # Some failures only show in a room with two different games.
+      - name: Generate with a second game
+        working-directory: Archipelago
+        run: |
+          set -e
+          presets=(
+            '{}'
+            '{"entrance_randomizer": "coupled", "enemy_shuffle": "enemies_only", "starting_location": "anywhere", "shuffle_discoveries": true}'
+            '{"shuffle_quests": false, "shuffle_crystal_berries": false, "shuffle_medal_shops": false, "shuffle_item_shops": false, "shop_contents": "filler_only"}'
+          )
+          for i in "${!presets[@]}"; do
+            dir="$RUNNER_TEMP/gen$i"; mkdir -p "$dir/players" "$dir/out"
+            printf 'name: BugTester\ngame: Bug Fables\nBug Fables: %s\n' "${presets[$i]}" > "$dir/players/bf.yaml"
+            printf 'name: QuestTester\ngame: APQuest\nAPQuest: {}\n' > "$dir/players/aq.yaml"
+            python Generate.py --player_files_path "$dir/players" --outputpath "$dir/out" --seed "$((i + 1))"
+            ls "$dir/out"/AP_*.zip
+          done
+
+      - name: Build the apworld and its yaml
+        if: matrix.python == '3.13'
+        working-directory: Archipelago
+        run: |
+          set -e
+          python Launcher.py "Build APWorlds" -- "Bug Fables"
+          python Launcher.py "Generate Template Options" -- --skip_open_folder
+          mkdir -p ../dist
+          cp build/apworlds/bug_fables.apworld ../dist/bug_fables.apworld
+          # GitHub turns spaces in asset names into dots.
+          cp "Players/Templates/Bug Fables.yaml" ../dist/bug_fables.yaml
+          unzip -p ../dist/bug_fables.apworld bug_fables/archipelago.json
+
+      # What a player does: the built apworld in custom_worlds, the template as their yaml, no loose world.
+      - name: Generate from the built apworld and yaml
+        if: matrix.python == '3.13'
+        working-directory: Archipelago
+        run: |
+          set -e
+          rm -rf worlds/bug_fables
+          cp ../dist/bug_fables.apworld custom_worlds/
+          dir="$RUNNER_TEMP/player"; mkdir -p "$dir/players" "$dir/out"
+          cp ../dist/bug_fables.yaml "$dir/players/"
+          printf 'name: QuestTester\ngame: APQuest\nAPQuest: {}\n' > "$dir/players/aq.yaml"
+          python Generate.py --player_files_path "$dir/players" --outputpath "$dir/out"
+          ls "$dir/out"/AP_*.zip
+
+      - uses: actions/upload-artifact@v7
+        if: matrix.python == '3.13'
+        with:
+          name: apworld
+          path: dist/
+          if-no-files-found: error
