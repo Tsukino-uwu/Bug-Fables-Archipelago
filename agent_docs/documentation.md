@@ -631,15 +631,18 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    **Travel: Off / Warp / Map / Both (the user, 2026-09-26; built, not yet seen).** The Warp button's on/off became one
    *Travel* row (config `Travel`, default Both). `WarpButton.cs` now places the travel buttons after the game's four:
    Warp, then Map (left from the first button wraps to Map; Warp sits between, harder to hit by accident). Five fit
-   two apart as before; six sit 1.6 apart (at 1.8 the first was pushed off the panel, the user's screenshot). The map shortcut already holds sprite 18, so a second button takes sprite 19
+   two apart as before; six sit 1.7 apart (the user's screenshots: 1.8 pushed the first off the panel, 1.6 made them
+   touch). The game's four are placed at their final spots as the game makes them (a postfix on `NewUIObject` for the
+   `menuicon` objects): moving them a few frames later made them jump and overlap while the menu opened. The map shortcut already holds sprite 18, so a second button takes sprite 19
    in a grown `sprites` array, and `IconAnim` is handed one entry per button. **Icons (the user):** Map gets the round
    blue map (`guisprites[34]`, Warp's icon until now: "fits a map more"), Warp gets the map item's scroll
    (`itemsprites[0, 41]`, "like a return scroll"), so the two differ without a tint. The blue map is one finished sprite with its round
    backdrop painted in; the scroll is an item sprite with none (the user: "don't have a background thing"), so it gets
    one. The game's white circle (`guisprites[59]`) came with its own dark outline and shading and looked off (the
    user: the others are one flat ring and one flat inner colour, and brown and pale was dull). Now the mod draws the
-   backdrop itself: a texture the size of the blue map icon, a flat ring round a flat fill, in orange, a colour none of
-   the other buttons uses; it is the button's own sprite (so the game's outline and wiggle apply), the scroll on top.
+   backdrop itself: a texture the size of the blue map icon, a flat ring round a flat fill, in teal (a dark ring and a
+   light fill of one colour, as the others pair theirs; orange was tried first; teal sits between the green wrench
+   and the blue map in the row, and is cool against the warm scroll); it is the button's own sprite (so the game's outline and wiggle apply), the scroll on top.
    **Map** opens the game's own map window (6) the way its map shortcut does (`windowid = 6`, `BuildWindow`), in a
    travel mode: confirm on a visited area (`librarystuff[4, area]`) opens "Travel to <area>?" (No first) instead of
    flipping the description's pages; the map opened any other way keeps vanilla controls. On Yes the menu closes the

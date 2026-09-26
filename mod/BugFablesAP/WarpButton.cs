@@ -34,9 +34,9 @@ namespace BugFablesAP
         // Map: the round blue map in the other buttons' style. Warp: the map item's scroll, a "return scroll" (the user).
         private const int MapIconSprite = 34;
         private const int ScrollItem = 41;
-        // The scroll has no round backdrop of its own: one is drawn like the other buttons', one flat ring and one flat
-        // fill, in a colour none of them uses (orange), at the blue map icon's size.
-        private static readonly Color RingColor = new Color(0.86f, 0.42f, 0.08f), FillColor = new Color(1f, 0.84f, 0.62f);
+        // The scroll has no round backdrop of its own: one is drawn like the other buttons', a dark ring and a light fill
+        // of one colour. Teal: between the green wrench and the blue map in the row, and cool against the warm scroll.
+        private static readonly Color RingColor = new Color(0.02f, 0.42f, 0.45f), FillColor = new Color(0.62f, 0.9f, 0.95f);
         private const float RingShare = 0.14f;
         private static Sprite backdrop;
         // By its save point: entity 1 (SaveTutorial) before flag 41, entity 22 (SaveAfterTutorial) after.
@@ -101,6 +101,13 @@ namespace BugFablesAP
             harmony.Patch(update, prefix: new HarmonyMethod(typeof(WarpButton), nameof(BeforeUpdate)));
             harmony.Patch(updateText, postfix: new HarmonyMethod(typeof(WarpButton), nameof(AfterUpdateText)));
             // Window 0 hands IconAnim four icons and it indexes them by option: hand it one per button.
+            // The game's four buttons are placed at their final spots as they're made, so nothing jumps while the menu opens.
+            MethodInfo newObject = AccessTools.Method(typeof(MainManager), nameof(MainManager.NewUIObject),
+                new[] { typeof(string), typeof(Transform), typeof(Vector3), typeof(Vector3), typeof(Sprite), typeof(int) });
+            if (newObject != null)
+            {
+                harmony.Patch(newObject, postfix: new HarmonyMethod(typeof(WarpButton), nameof(AfterNewObject)));
+            }
             MethodInfo iconAnim = AccessTools.Method(typeof(PauseMenu), "IconAnim");
             if (iconAnim != null)
             {
@@ -191,6 +198,30 @@ namespace BugFablesAP
             }
         }
 
+        private static int ButtonCount() => (warpOn() ? 1 : 0) + (mapOn() ? 1 : 0);
+
+        // Where button n of total sits: centred, two apart for five; 1.7 for six (1.6 touched, 1.8 cut the first off).
+        private static float ButtonX(int n, int total)
+        {
+            float step = total <= 5 ? 2f : 1.7f;
+            return -step * (total - 1) / 2f + step * n;
+        }
+
+        private static void AfterNewObject(string objname, GameObject __result)
+        {
+            if (__result == null || !objname.StartsWith("menuicon") || MainManager.pausemenu == null
+                || MainManager.pausemenu.windowid != 0 || MainManager.battle != null
+                || !int.TryParse(objname.Substring("menuicon".Length), out int n) || n > 3)
+            {
+                return;
+            }
+            int extra = ButtonCount();
+            if (extra > 0)
+            {
+                __result.transform.localPosition = new Vector3(ButtonX(n, 4 + extra), __result.transform.localPosition.y);
+            }
+        }
+
         private static void AddButtons(PauseMenu menu, SpriteRenderer[] sprites)
         {
             ClearIcons();
@@ -208,14 +239,11 @@ namespace BugFablesAP
                 spritesField.SetValue(menu, sprites);
             }
             builtFor = sprites;
-            // All across, centred, inside the 11-wide box (the game's four sit at -3..3; five fit two apart).
+            // All across, centred, inside the 11-wide box (the game's four sit at -3..3); already placed as they were made.
             int total = 4 + buttons.Count;
-            // Six span what five do (-4..4), so the first isn't pushed off the panel.
-            float step = total <= 5 ? 2f : 1.6f;
-            float x = -step * (total - 1) / 2f;
             for (int n = 0; n < 4; n++)
             {
-                sprites[13 + n].transform.localPosition = new Vector3(x + step * n, 3f);
+                sprites[13 + n].transform.localPosition = new Vector3(ButtonX(n, total), 3f);
             }
             for (int i = 0; i < buttons.Count; i++)
             {
@@ -224,7 +252,7 @@ namespace BugFablesAP
                 Sprite look = map ? MainManager.guisprites[MapIconSprite] : Backdrop();
                 // The button's own sprite, so the game's outline and wiggle apply; the scroll rides on it.
                 SpriteRenderer icon = MainManager.NewUIObject("menuicon" + (FirstOption + i), sprites[16].transform.parent,
-                    new Vector3(x + step * (4 + i), 3f), Vector3.one, look).GetComponent<SpriteRenderer>();
+                    new Vector3(ButtonX(4 + i, total), 3f), Vector3.one, look).GetComponent<SpriteRenderer>();
                 if (!map)
                 {
                     SpriteRenderer scroll = MainManager.NewUIObject("scroll", icon.transform, Vector3.zero, Vector3.one,
