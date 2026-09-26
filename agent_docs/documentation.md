@@ -608,7 +608,8 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    from the Outskirts, with Vi and Kabbu and the first check's item, no slides, talk, fight or building on the way.
    (9) **Maki stayed in the building** at his start spot (the user, 2026-09-26, on a file with no seed start): flag 15,
    his limit, only hides him on a map load, and the scene itself walks him out and destroys him (`EventControl.cs`,
-   Event16). The opening now removes him the same way (entity 4, checked by name, in the building only). Not yet seen.
+   Event16). The opening now removes him the same way (entity 4, checked by name, in the building only). **Seen (the
+   user, 2026-09-26):** a new file starts in the building with Maki gone; the log says `Maki removed`.
    **The rule since (the user, 2026-09-25):** a scene that gives an item may be skipped *as long as the item can still
    be received*, and fewer cutscenes are preferred, as an option at least. So a skip now has to keep every check the
    scene holds (sent by the mod, or moved to something the player still does). Next candidate, the user's idea: the

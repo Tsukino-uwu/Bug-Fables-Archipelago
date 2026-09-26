@@ -827,7 +827,7 @@ Newest last. What was tried, what happened, what the user said.
   `StatusUpdatePacket`, checked by reflection on the DLL). Seen: `[goal] 0 of 1 artifacts` on a save without it; the
   send still to see (the first artifact, after the spider boss). README and the game page no longer say it's missing.
 - **Maki left in the building after the opening skip** (the user): flag 15 hides him only on a map load; the scene
-  destroys him, so the skip now does too (`documentation.md`, step 10, item 5 (9)). Not yet seen.
+  destroys him, so the skip now does too (`documentation.md`, step 10, item 5 (9)). Seen by the user on a new file: Maki gone.
 - **Skip battle tutorials** (the user asked whether it was done): only the first, inside the opening; the later
   tutorial fights are still planned. Test server: a fresh BugTester seed hosted from the scratchpad; left up with the
   game (the user: keep them up).
