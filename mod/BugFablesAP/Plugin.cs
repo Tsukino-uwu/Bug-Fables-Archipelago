@@ -76,6 +76,9 @@ namespace BugFablesAP
             DevConsole.OneHitSetting = Config.Bind("Debug", "OneHit", false,
                 "Dev only, with DevConsole. Every hit on an enemy does at least 99, to get through test fights. The console's "
                 + "onehit flips it. Off by default.");
+            DevConsole.InfBerriesSetting = Config.Bind("Debug", "InfBerries", false,
+                "Dev only, with DevConsole. Berries stay at 999, the game's cap, for test purchases. The console's infberries "
+                + "flips it. Off by default.");
             devCommandFile = Config.Bind("Debug", "DevCommandFile", "",
                 "Dev only, with DevConsole. A text file the console also reads: each line is run as a typed command, "
                 + "then the file is emptied. Lets a developer outside the game drive a test. Empty = off.");

@@ -74,6 +74,18 @@ namespace BugFablesAP
         // infjump: the game's own jump fires only on the ground, so one press never jumps twice.
         internal static BepInEx.Configuration.ConfigEntry<bool> InfJumpSetting;
         private static bool infJump => InfJumpSetting != null && InfJumpSetting.Value;
+        internal static BepInEx.Configuration.ConfigEntry<bool> InfBerriesSetting;
+
+        // Tops berries back up to the game's cap (999) whenever they drop.
+        private static void TickInfBerries()
+        {
+            MainManager mm = MainManager.instance;
+            if (InfBerriesSetting == null || !InfBerriesSetting.Value || mm == null || MainManager.map == null || mm.money >= 999)
+            {
+                return;
+            }
+            mm.money = 999;
+        }
 
         private static void TickInfJump()
         {
@@ -159,6 +171,7 @@ namespace BugFablesAP
             FinishWarp();
             PollFile();
             TickInfJump();
+            TickInfBerries();
             // A queued warp waits for the player to be free rather than failing with "not now".
             bool warpWaits = queued.Count > 0 && (queued.Peek().StartsWith("loc") || queued.Peek().StartsWith("warp"))
                 && (MainManager.player == null || MainManager.instance.inevent || MainManager.instance.message
@@ -612,6 +625,13 @@ namespace BugFablesAP
                         log.LogInfo(articles.ToString());
                         return "articles logged";
                     }
+                    case "infberries":
+                        if (InfBerriesSetting == null)
+                        {
+                            return "infberries: no setting";
+                        }
+                        InfBerriesSetting.Value = !InfBerriesSetting.Value;
+                        return "infberries " + (InfBerriesSetting.Value ? "on: berries stay at 999" : "off");
                     case "infjump":
                         if (InfJumpSetting == null)
                         {

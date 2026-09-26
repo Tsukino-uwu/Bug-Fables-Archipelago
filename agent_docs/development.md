@@ -169,6 +169,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `colortry <hex...>`: queue a trap's "You got" line in each colour given, to compare them on screen.
 - `onehit`: flips a test boost: every hit on an enemy does at least 99 (before defence). It's the `[Debug]` setting
   `OneHit` (off in the code), so it survives reloads; `copy-dev.ps1 -DebugOn OneHit` turns it on for a dev install.
+- `infberries`: flips berries staying at 999 (the `[Debug]` setting `InfBerries`, off in the code, on in the dev
+  install: `copy-dev.ps1 -DebugOn InfBerries`).
 - `infjump`: flips jumping again in mid-air. It's the `[Debug]` setting `InfJump` (off in the code), on in the dev
   install (`copy-dev.ps1 -DebugOn InfJump`), so it survives reloads.
 - **`TestDoors`** (`[Debug]`, not a console command): doors rewritten by hand, `Map/Door=LikeMap/LikeDoor;...` (entity
@@ -206,7 +208,7 @@ All live under `[Debug]` in `BepInEx/config/bugfables.archipelago.cfg`, are off 
 |---|---|
 | `DevConsole` | F9 opens the dev console (section above). |
 | `DevCommandFile` | With `DevConsole`: a text file whose lines are run as console commands, then emptied, so a test can be driven from outside the game. |
-| `InfJump`, `OneHit` | With `DevConsole`: jump again in mid-air; every hit on an enemy does at least 99. The console's `infjump` and `onehit` flip them. |
+| `InfJump`, `OneHit`, `InfBerries` | With `DevConsole`: jump again in mid-air; every hit on an enemy does at least 99; berries stay at 999. The console's `infjump`, `onehit` and `infberries` flip them. |
 | `AdoptSeed` | A save tied to another seed is re-tied to the connected one and replays every item (section "A local server to test against"). |
 | `TestStart`, `TestStartMember`, `TestDoors` | A new file's start map, its one party member, doors rewritten by hand (Dev console section). |
 | `GiveMoney` | Berries to add once (capped at 999), then back to 0. |
