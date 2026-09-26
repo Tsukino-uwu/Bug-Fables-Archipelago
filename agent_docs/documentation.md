@@ -1411,7 +1411,8 @@ orange). **Seen (the user, 2026-09-26):** Artis's gift with Rarity, "You found O
 the Archipelago icon held up on a purple starburst ("looks really good now"); the Caravan's shelf, blue behind Other's
 useful item, green behind BugTester2's filler and the player's own. **Then bought, they turned teal** (the user): a Bug
 Fables item's pickup starburst still took the game's colour for its kind. With Item colors on, the starburst at pickup
-and on a received item's hold-up is now the class colour too, matching the backdrop. Off not yet seen.
+and on a received item's hold-up is now the class colour too, matching the backdrop; seen by the user (2026-09-26):
+BugTester2's Lore Book bought at Madame Butterfly's stayed blue. Off not yet seen.
 
 **Status:** works, seen by the user on the Caravan's shelf and on the ground (2026-09-26).
 
