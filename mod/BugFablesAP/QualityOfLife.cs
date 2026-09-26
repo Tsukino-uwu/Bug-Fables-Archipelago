@@ -520,11 +520,18 @@ namespace BugFablesAP
             {
                 trigger.gameObject.SetActive(false); // gone as on a reload with flag 15 (its limit)
             }
+            // The scene walks Maki out and destroys him; flag 15 (his limit) only hides him from the next map load.
+            EntityControl maki = inBuilding ? MainManager.GetEntity(4) : null;
+            if (maki != null && maki.name == "Maki")
+            {
+                UnityEngine.Object.Destroy(maki.gameObject);
+            }
             mm.flags[15] = true;
             mm.boardquests[1].Insert(0, 11);
             HoldUps.FoundAt(OpeningLocation, "the opening's gift (location 1)");
             log.LogInfo($"[qol] opening done without Event16 on {MainManager.map.mapid}: party {string.Join(", ", mm.playerdata.Select(p => p.trueid.ToString()).ToArray())}, "
-                + $"characters {mm.playerdata.Count(p => p.entity != null)}, exit {(exit != null ? "active " + exit.gameObject.activeSelf : inBuilding ? "NOT found" : "not here")}, flag 15 {mm.flags[15]}");
+                + $"characters {mm.playerdata.Count(p => p.entity != null)}, exit {(exit != null ? "active " + exit.gameObject.activeSelf : inBuilding ? "NOT found" : "not here")}, "
+                + $"Maki {(maki != null && maki.name == "Maki" ? "removed" : inBuilding ? "NOT found" : "not here")}, flag 15 {mm.flags[15]}");
         }
 
         private static bool BeforeStartEvent(int id)

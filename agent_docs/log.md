@@ -822,3 +822,12 @@ Newest last. What was tried, what happened, what the user said.
   Off), right below Travel (the user: keep the two together); Warp or a visited area on the travel map then goes at
   once, without the Yes / No box (`documentation.md`, step 10, the Travel item; first written as its own step 20, folded
   in: the user, an add-on to Travel). Built, staged and copied in for hot reload.
+- **Goal reporting built (Next 7, build step 3):** `artifacts_required` from slot_data against the game's own
+  `SaveProgressIcons()`, `StatusUpdate` `ClientGoal` once per login while reached (MultiClient.Net 6.7.1's
+  `StatusUpdatePacket`, checked by reflection on the DLL). Seen: `[goal] 0 of 1 artifacts` on a save without it; the
+  send still to see (the first artifact, after the spider boss). README and the game page no longer say it's missing.
+- **Maki left in the building after the opening skip** (the user): flag 15 hides him only on a map load; the scene
+  destroys him, so the skip now does too (`documentation.md`, step 10, item 5 (9)). Not yet seen.
+- **Skip battle tutorials** (the user asked whether it was done): only the first, inside the opening; the later
+  tutorial fights are still planned. Test server: a fresh BugTester seed hosted from the scratchpad; left up with the
+  game (the user: keep them up).
