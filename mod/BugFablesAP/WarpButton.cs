@@ -34,6 +34,9 @@ namespace BugFablesAP
         // Map: the round blue map in the other buttons' style. Warp: the map item's scroll, a "return scroll" (the user).
         private const int MapIconSprite = 34;
         private const int ScrollItem = 41;
+        // The scroll has no round backdrop of its own: the game's plain white circle, as a dark ring and a light fill.
+        private const int CircleSprite = 59;
+        private static readonly Color RingColor = new Color(0.45f, 0.22f, 0.1f), FillColor = new Color(1f, 0.9f, 0.72f);
         // By its save point: entity 1 (SaveTutorial) before flag 41, entity 22 (SaveAfterTutorial) after.
         private const MainManager.Maps StartMap = MainManager.Maps.BugariaOutskirtsOutsideCity;
 
@@ -215,9 +218,22 @@ namespace BugFablesAP
             for (int i = 0; i < buttons.Count; i++)
             {
                 // Made as BuildWindow makes the other four, so IconAnim outlines and wiggles it like them.
-                Sprite look = buttons[i] == Kind.Map ? MainManager.guisprites[MapIconSprite] : MainManager.itemsprites[0, ScrollItem];
+                bool map = buttons[i] == Kind.Map;
+                Sprite look = map ? MainManager.guisprites[MapIconSprite] : MainManager.guisprites[CircleSprite];
                 SpriteRenderer icon = MainManager.NewUIObject("menuicon" + (FirstOption + i), sprites[16].transform.parent,
                     new Vector3(x + step * (4 + i), 3f), Vector3.one, look).GetComponent<SpriteRenderer>();
+                if (!map)
+                {
+                    // The ring is the button's own sprite, so the game's outline and wiggle apply; fill and scroll ride on it.
+                    icon.color = RingColor;
+                    SpriteRenderer fill = MainManager.NewUIObject("fill", icon.transform, Vector3.zero, Vector3.one * 0.82f,
+                        MainManager.guisprites[CircleSprite]).GetComponent<SpriteRenderer>();
+                    fill.color = FillColor;
+                    fill.sortingOrder = icon.sortingOrder + 1;
+                    SpriteRenderer scroll = MainManager.NewUIObject("scroll", icon.transform, Vector3.zero, Vector3.one,
+                        MainManager.itemsprites[0, ScrollItem]).GetComponent<SpriteRenderer>();
+                    scroll.sortingOrder = icon.sortingOrder + 2;
+                }
                 sprites[SpriteSlot[i]] = icon;
                 icons.Add(icon);
             }

@@ -153,6 +153,10 @@ namespace BugFablesAP
                 + "Switch it in the Archipelago panel.");
             ApMenu.Difficulty = difficulty;
             ApMenu.Detector = detector;
+            ApMenu.Achievements = Config.Bind("Archipelago", "Achievements", false,
+                "On lets Steam achievements unlock while Archipelago is enabled; off (the default) holds them back, as normal "
+                + "saves are kept apart. It only concerns Steam, never Archipelago. Switch it in the Archipelago panel.");
+            AchievementGuard.Enable(Log, Guid, () => randomizerEnabled.Value, () => ApMenu.Achievements.Value);
             MedalAssist.Enable(Log, Guid, () => randomizerEnabled.Value, () => difficulty.Value == "Hard",
                 () => difficulty.Value == "Hardest", () => detector.Value);
             QualityOfLife.Enable(Log, Config, () => randomizerEnabled.Value);
@@ -357,6 +361,7 @@ namespace BugFablesAP
             AnimGuard.Disable();
             EnemyScaling.Disable();
             InGameSettings.Disable();
+            AchievementGuard.Disable();
             QualityOfLife.Disable();
             WarpButton.Disable();
             HoldUps.Clear();

@@ -10,8 +10,8 @@ namespace BugFablesAP
     // The title screen's input is suspended while it's open (StartMenu.canselect), so C, X, Z and V can be typed.
     internal sealed class ApMenu : MonoBehaviour
     {
-        private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, QolRow = 5, GameplayRow = 6,
-            Rows = 7;
+        private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, AchievementsRow = 5, QolRow = 6,
+            GameplayRow = 7, Rows = 8;
         // The Quality of life page: the two buttons side by side on top, then the settings.
         private const int ButtonsRow = 0, FastTextRow = 1, FreeBoatRow = 2, WarpRow = 3, CutscenesRow = 4, AnimationRow = 5,
             PricesRow = 6, QolRows = 7;
@@ -30,6 +30,7 @@ namespace BugFablesAP
         internal static readonly string[] Difficulties = { "Normal", "Hard", "Hardest" };
         internal static ConfigEntry<string> Difficulty;
         internal static ConfigEntry<bool> Detector;
+        internal static ConfigEntry<bool> Achievements;
 
         internal static ApMenu Open;
         // Opened from the pause menu's Settings: only the Quality of life or Gameplay page, over a hidden pause menu.
@@ -391,6 +392,7 @@ namespace BugFablesAP
                         Redraw();
                         break;
                     case ModeRow:
+                    case AchievementsRow:
                         Step(row, 1);
                         Redraw();
                         break;
@@ -488,6 +490,10 @@ namespace BugFablesAP
                 case SlotRow: return "Your player slot name.";
                 case PasswordRow: return "The room's password, if it has one.";
                 case ModeRow: return "Turns Archipelago on or off. While on, normal saves are never touched.";
+                case AchievementsRow:
+                    return Achievements != null && Achievements.Value
+                        ? "Steam achievements unlock as usual. This only affects Steam, not Archipelago."
+                        : "Steam achievements aren't unlocked while Archipelago is on. Only affects Steam.";
                 case QolRow: return "Settings that speed up the game.";
                 case GameplayRow: return "How the game plays: difficulty, enemy scaling, the Detector.";
                 default: return "";
@@ -501,7 +507,7 @@ namespace BugFablesAP
             MainManager.sounds[10].volume = MainManager.pausemenu != null ? MainManager.pausemenu.svolume : MainManager.soundvolume;
         }
 
-        private bool IsChoice(int r) => page == Page.Main ? r == ModeRow : r != ButtonsRow;
+        private bool IsChoice(int r) => page == Page.Main ? r == ModeRow || r == AchievementsRow : r != ButtonsRow;
 
         private static void Cycle(ConfigEntry<string> entry, string[] values, int by)
         {
@@ -556,6 +562,11 @@ namespace BugFablesAP
             else if (r == ModeRow)
             {
                 MenuToggle.SetMode(owner, !mode.Value);
+            }
+            else if (r == AchievementsRow && Achievements != null)
+            {
+                Achievements.Value = !Achievements.Value;
+                log.LogInfo("[apmenu] Achievements: " + (Achievements.Value ? "On" : "Off"));
             }
         }
 
@@ -711,6 +722,7 @@ namespace BugFablesAP
             Row(PasswordRow, "Password", pw);
 
             Choice(ModeRow, "Archipelago", mode.Value ? "ENABLED" : "DISABLED");
+            Choice(AchievementsRow, "Achievements", Achievements != null && Achievements.Value ? "ON" : "OFF");
             Label(QolRow, "Quality of life");
             Label(GameplayRow, "Gameplay");
 
@@ -727,7 +739,7 @@ namespace BugFablesAP
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
             foreach (int r in page == Page.Qol ? new[] { FastTextRow, FreeBoatRow, WarpRow, CutscenesRow, AnimationRow, PricesRow }
-                : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, DetectorRow } : new[] { ModeRow })
+                : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, DetectorRow } : new[] { ModeRow, AchievementsRow })
             {
                 for (int side = 0; side < 2; side++)
                 {

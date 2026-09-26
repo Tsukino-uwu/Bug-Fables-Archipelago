@@ -336,6 +336,12 @@ background stays, as going from the pause menu to Settings does, and the page sk
 shows the boxes again, on Settings. In the main menu's Settings too (the user:
 one Settings screen, not two), though the panel there has both pages as well.
 
+**Achievements (the user, 2026-09-26; built, not yet seen):** an *Achievements* row on the main page, off by default.
+While Archipelago is enabled and it's off, Steam achievements aren't unlocked, as normal saves are kept apart; the help
+line says it only concerns Steam, never Archipelago. Every achievement goes through one function,
+`InputIO.Achivement(id)` (the game's spelling), which asks Steam and sets it; `AchievementGuard.cs` skips it and logs
+each id held back once. With Archipelago disabled the game unlocks as usual (vanilla stays vanilla).
+
 **Status:** works, seen by the user (2026-09-24): the menu entry, the panel, and the file select held back until the first login.
 
 *Code: `MenuToggle.cs` (the menu entry: `BeforeSetMenuText` and `AfterSetMenuText` around the game's rebuild,
@@ -628,7 +634,10 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    two apart as before; six sit 1.6 apart (at 1.8 the first was pushed off the panel, the user's screenshot). The map shortcut already holds sprite 18, so a second button takes sprite 19
    in a grown `sprites` array, and `IconAnim` is handed one entry per button. **Icons (the user):** Map gets the round
    blue map (`guisprites[34]`, Warp's icon until now: "fits a map more"), Warp gets the map item's scroll
-   (`itemsprites[0, 41]`, "like a return scroll"), so the two differ without a tint.
+   (`itemsprites[0, 41]`, "like a return scroll"), so the two differ without a tint. The blue map is one finished sprite with its round
+   backdrop painted in; the scroll is an item sprite with none (the user: "don't have a background thing"), so it gets
+   one from the game's plain white circle (`guisprites[59]`, the volume pips' circle): a dark ring as the button's own
+   sprite (so the game's outline and wiggle apply), a smaller light fill and the scroll as its children.
    **Map** opens the game's own map window (6) the way its map shortcut does (`windowid = 6`, `BuildWindow`), in a
    travel mode: confirm on a visited area (`librarystuff[4, area]`) opens "Travel to <area>?" (No first) instead of
    flipping the description's pages; the map opened any other way keeps vanilla controls. On Yes the menu closes the
