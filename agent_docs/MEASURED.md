@@ -30,6 +30,7 @@ confirms on screen.
 - [What the mod's code relies on](#what-the-mods-code-relies-on-code-read-2026-09-24-and-2026-09-25-moved-here-from-code-comments-2026-09-25)
 - [Battles, for enemy shuffle — SPOILERS: boss ids](#battles-for-enemy-shuffle-2026-09-26-code-read-nothing-seen-in-game--spoilers-boss-ids)
 - [The round pause-menu icons' colours](#the-round-pause-menu-icons-colours-2026-09-26-sampled-from-the-spritedump-sheet)
+- [Visited areas and the pause-menu map](#visited-areas-and-the-pause-menu-map-2026-09-26-code-read-and-the-mods-diagnostic)
 - [Quests: to measure](#quests-to-measure-when-quests-come-into-scope)
 - [Key items: to measure](#key-items-to-measure)
 
@@ -1113,6 +1114,19 @@ Every round icon (`guisprites` 30-34, 74-77) is one hue in two tones: the **ring
 hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0.05, purple 0.75-0.77, green
 0.43-0.46, blue 0.59. Sprite 31 is the game's own orange (ring 129, 40, 0; fill 255, 189, 169). Used by
 `WarpButton.cs` for the Warp button's drawn backdrop.
+
+## Visited areas and the pause-menu map (2026-09-26, code read and the mod's diagnostic)
+
+- **An area counts as visited** when `librarystuff[4, area]` is set, which only `MainManager.UpdateArea` does, and a map
+  calls it only when its area differs from the current one (`MapControl.cs:279-282`). A new file starts in area 0,
+  the Outskirts, so the start is **never marked visited** until the party leaves and comes back. In vanilla the map
+  item comes much later, so it never shows.
+- **The map window** (6): `BuildWindow` sets it up 0.25 s later (`MapSetup`, `PauseMenu.cs:2776`) with a new
+  `sprites` array (0 the cursor, `area + 1` a marker for each visited area, the rest null), **one** box, and
+  `option` set to the current area only if that area is visited. Its `Update` draws the cursor toward
+  `sprites[option + 1]` every frame while `option >= 0`; `-1` means none chosen yet. Opened with an `option` left over
+  from another window and no marker there, it threw a NullReferenceException every frame (the diagnostic: window 6,
+  option 5, markers 1-25 all null).
 
 ## Quests: to measure (when quests come into scope)
 

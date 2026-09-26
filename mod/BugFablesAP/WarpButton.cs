@@ -411,6 +411,17 @@ namespace BugFablesAP
         private static void OpenMap(PauseMenu menu)
         {
             mapTravel = true;
+            // The map reads option as the chosen area and draws toward its marker every frame: the pause menu's option
+            // (this button's) pointed at a marker that didn't exist. -1 is the map's own "none yet".
+            optionField.SetValue(menu, -1);
+            // The area you stand in is visited. A new file starts in area 0 and the game marks an area only on a change
+            // of area (UpdateArea), so the start was never marked: the same one field UpdateArea writes.
+            int here = MainManager.instance.areaid;
+            if (here >= 0 && here < MainManager.areanames.Length && !MainManager.instance.librarystuff[4, here])
+            {
+                MainManager.instance.librarystuff[4, here] = true;
+                log.LogInfo($"[warp] area {here} ({MainManager.areanames[here]}) marked visited: you're in it, and the game never marked it");
+            }
             menu.windowid = 6;
             menu.StartCoroutine((IEnumerator)buildWindow.Invoke(menu, null));
             log.LogInfo("[warp] map travel opened");

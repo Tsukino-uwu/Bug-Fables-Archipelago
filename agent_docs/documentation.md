@@ -662,7 +662,12 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    flipping the description's pages; the map opened any other way keeps vanilla controls. On Yes the menu closes the
    game's way and `TransferMap` lands the party beside the area's travel spot: a save point at its entrance or hub
    (starting choices, `AreaSpots`; the Outskirts use Warp's start spot), from the entity dump and each map's area
-   (the map dump's new `area` column, `MapControl.areaid`).
+   (the map dump's new `area` column, `MapControl.areaid`). **The first try threw every frame** (the user: "a lot of errors"; a one-time
+   diagnostic finalizer on `PauseMenu.Update` logged the state): the map read the pause menu's leftover `option` (5,
+   the Map button) as an area and drew toward a marker that didn't exist, and no area was marked visited at all, as
+   a new file never marks its starting area (`MEASURED.md`, "Visited areas and the pause-menu map"). Opening the
+   travel map now sets `option` to -1, the map's own "none yet", and marks the area the party stands in as visited
+   (the one field `UpdateArea` writes).
 
 The panel got an eighth row, "Quality of life", which opens a second page in the same box; cancel comes back.
 
