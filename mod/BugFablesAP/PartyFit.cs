@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using BepInEx.Logging;
 using HarmonyLib;
 using UnityEngine;
@@ -68,8 +70,48 @@ namespace BugFablesAP
             {
                 log.LogError("[party] EntityControl.MoveTowards not found: a scene waiting for a stand-in to walk somewhere waits for good.");
             }
+            // The trapdoor scene then places each member from its own two-long list: that read is swapped for PlaceAt.
+            MethodInfo event5 = AccessTools.Method(typeof(EventControl), "Event5");
+            MethodInfo event5Step = event5 != null ? AccessTools.EnumeratorMoveNext(event5) : null;
+            if (event5Step != null)
+            {
+                harmony.Patch(event5Step, transpiler: new HarmonyMethod(typeof(PartyFit), nameof(TranspileEvent5)));
+            }
+            else
+            {
+                log.LogError("[party] EventControl.Event5 not found: the trapdoor scene still breaks with three members.");
+            }
             log.LogInfo("[party] installed on MainManager.SetPlayers" + (getEntity != null ? ", GetEntity" : "") + (byId != null ? ", GetPartyEntities" : "")
                 + (moveTowards != null ? " and MoveTowards" : ""));
+        }
+
+        private static IEnumerable<CodeInstruction> TranspileEvent5(IEnumerable<CodeInstruction> instructions)
+        {
+            List<CodeInstruction> code = instructions.ToList();
+            MethodInfo setPlayers = AccessTools.Method(typeof(MainManager), nameof(MainManager.SetPlayers), new[] { typeof(Vector3[]) });
+            int call = code.FindIndex(i => i.Calls(setPlayers));
+            int read = call < 0 ? -1 : code.FindIndex(call, i => i.opcode == OpCodes.Ldelem && Equals(i.operand, typeof(Vector3)));
+            if (read < 0)
+            {
+                log.LogWarning("[party] Event5's placing loop not found (no Vector3 read after SetPlayers); the trapdoor scene is unchanged.");
+                return code;
+            }
+            code[read].opcode = OpCodes.Call;
+            code[read].operand = AccessTools.Method(typeof(PartyFit), nameof(PlaceAt));
+            log.LogInfo("[party] installed in Event5 (the trapdoor scene's placing loop)");
+            return code;
+        }
+
+        // A member past the end of a scene's list stands a step behind the one before, as BeforeSetPlayers places him.
+        private static Vector3 PlaceAt(Vector3[] list, int index)
+        {
+            if (index < list.Length || list.Length == 0 || randomizerOn == null || !randomizerOn())
+            {
+                return list[index];
+            }
+            Vector3 at = list[list.Length - 1] + new Vector3(-0.6f, 0f, 0.1f) * (index - list.Length + 1);
+            log.LogInfo($"[party] Event{MainManager.lastevent} placed {list.Length} members; member slot {index} stands behind, at {at}");
+            return at;
         }
 
         internal static void Disable()

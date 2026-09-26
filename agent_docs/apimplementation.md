@@ -1213,6 +1213,11 @@ party this way. **Retest:** `SetPlayers` then took the lengthened list, but the 
 **its own** two-long list (`for m < playerdata.Length`, `array[m]`, `EventControl.cs:1476-1484`), which a fix outside
 the scene can't reach. Stopped there (two fixes on one scene). `unstick` now also resets the party's bodies (gravity,
 physics, forced animation), which the crash had left as the scene set them.
+**The scene's own list (2026-09-26):** the one read that loop makes (`array[m]`, the only `Vector3` read after
+`SetPlayers` in Event5's step method, `MEASURED.md`) is swapped by a Harmony transpiler for `PartyFit.PlaceAt`: the
+same value inside the list, and past its end a step behind the last listed member, as the lengthened `SetPlayers` list
+has him. The loop is Event5's alone among the scenes (a search of `EventControl`). Built; the user's play down the
+trapdoor with three is next.
 **Parked design (the user, 2026-09-25), for party members as items:** scenes find members by **character**
 (`GetEntity(-4)` Vi, `(-5)` Kabbu, `(-6)` Leif search the party by `animid`; `-1` to `-3` are positions), so the leader's
 order never matters. Two rules then: (1) a member a scene doesn't know about (Leif early in chapter 1) **steps out**
@@ -1557,6 +1562,8 @@ everything past the Outskirts gate needs all three members until the rooms there
 **Known before the first play:** with all three needed before Snakemouth Den, the trapdoor scene (Event5) always runs
 with three members, and it broke with three before (build step 13: its own two-long position list). A three-member
 spider scene is also still open (the mod guide, step 11). Both come up in the first play past the gate.
+The trapdoor's own list is now patched (build step 13, 2026-09-26). Test seed for the first play: a Leif start, Vi and
+Kabbu on the two opening locations, the permit on Madeleine's table (plando).
 
 **Seen by the user (2026-09-26), a Kabbu start:** the opening left Kabbu alone and sent its check; Artis's gift was Leif,
 who joined on the spot; the Fountain Rooftop held Vi, who joined too (party 1, 2, 0). Then each member's hold-up: "You got
