@@ -847,3 +847,14 @@ Newest last. What was tried, what happened, what the user said.
   and showed in the pause menu. AdoptSeed and TestStartMember turned off (the user: every item comes from the server
   anyway); the fourth test seed is hosted with release and collect off. New dev command `removemember`, for trying Vi
   and Leif next.
+- **Session end (the user, 2026-09-26: stop here, commit, push; continue in another chat).** Done and seen this
+  session: Skip confirm (under Travel), Maki gone after the opening skip, goal reporting (StatusUpdate at the first
+  artifact, the server released and finished the slot), Leif joining after the spider with Vi and Kabbu, and with Vi
+  and Leif: Leif acting Kabbu's part in the scene and in the story's party changes (Leif alone, then Vi and Leif).
+  **Open next time:** the *Starting Party Member* yaml option (designed in build step 13; the logic agreed as cautious:
+  measured gates as rules, everything past the Outskirts gate needing all three until measured; the first boss needs
+  Vi, measured; nothing coded yet); a three-member run of the spider scene (Leif would sit it out today, the user to
+  decide); Skip battle tutorials past the first. **Dev state left in the game's config:** `TestStartMember = 2` (a Leif
+  start, from the Vi and Leif test), `AdoptSeed = false`, `OneHit` and `InfJump` on (the user: always on in dev). The
+  test server was stopped; the game left running for the user. MeshGhost got two small commits of its own (the
+  Crystal ROM check), logged in its phase file.
