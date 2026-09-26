@@ -325,6 +325,7 @@ namespace BugFablesAP
                     continue;
                 }
                 ItemSwap.LookOf(at, out _, out Sprite sprite, out _);
+                ItemSwap.Mark(npc.entity, ItemSwap.MarkColorOf(at));
                 if (sprite != null && npc.entity.sprite.sprite != sprite)
                 {
                     npc.entity.sprite.sprite = sprite;

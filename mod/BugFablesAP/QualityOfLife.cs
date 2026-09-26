@@ -36,6 +36,7 @@ namespace BugFablesAP
         internal static readonly string[] ItemIconValues = { "OtherGames", "AllPlayers", "Off" };
         internal static ConfigEntry<string> ItemIcons;
         internal static string IconMode => ItemIcons?.Value ?? "OtherGames";
+        internal static ConfigEntry<bool> ItemBackgrounds;
         // Tenths of the normal price: 10 normal, 5 half, 0 free.
         internal const int FullPrice = 10;
         internal static ConfigEntry<int> MedalPrices;
@@ -78,7 +79,7 @@ namespace BugFablesAP
         // each setting's own default. Enemy scaling and Shop prices live on the Gameplay page and aren't touched.
         internal static void DisableAll()
         {
-            foreach (ConfigEntry<bool> setting in new[] { FastText, SkipCutscenes, ApMenu.Detector })
+            foreach (ConfigEntry<bool> setting in new[] { FastText, SkipCutscenes, ItemBackgrounds, ApMenu.Detector })
             {
                 if (setting != null)
                 {
@@ -109,7 +110,7 @@ namespace BugFablesAP
 
         internal static void ResetAll()
         {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, Travel, SkipConfirm, SkipCutscenes, ItemAnimation, ItemColors, ItemIcons, ApMenu.Detector })
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, Travel, SkipConfirm, SkipCutscenes, ItemAnimation, ItemColors, ItemIcons, ItemBackgrounds, ApMenu.Detector })
             {
                 if (setting != null)
                 {
@@ -143,6 +144,10 @@ namespace BugFablesAP
                 + "(another game's items; another Bug Fables player's show their real sprite), AllPlayers (every item that isn't "
                 + "yours), or Off (they look like the item the game had there, a surprise).",
                 new AcceptableValueList<string>(ItemIconValues)));
+            ItemBackgrounds = config.Bind("QualityOfLife", "ItemBackgrounds", true,
+                "An item that isn't yours, on the ground or on a shop shelf, has the pickup's starburst behind it in its "
+                + "Archipelago class colour (progression, useful, filler, trap), so you can tell from afar whether it matters. "
+                + "Off: no backdrop until it's picked up, a surprise.");
             MedalPrices = config.Bind("Gameplay", "MedalPrices", FullPrice, new ConfigDescription(
                 "Medal shop prices, in berries and crystal berries, in tenths of the normal price: 10 normal, 5 half, 0 free. "
                 + "Any price above free is at least 1. Switch it on the Gameplay page.", new AcceptableValueRange<int>(0, FullPrice)));

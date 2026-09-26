@@ -320,6 +320,57 @@ namespace BugFablesAP
             return info;
         }
 
+        private static string ClassWord(ItemFlags flags) =>
+            (flags & ItemFlags.Advancement) != 0 ? "A progression"
+            : (flags & ItemFlags.NeverExclude) != 0 ? "A useful"
+            : (flags & ItemFlags.Trap) != 0 ? "A trap"
+            : "A filler";
+
+        // Behind an item that isn't yours, on the ground or a shelf: the pickup's own starburst, smaller, in its class
+        // colour, so its importance shows before it's taken. Null clears it.
+        private const string MarkName = "apback";
+        private const float MarkScale = 0.7f;
+
+        internal static void Mark(EntityControl entity, Color? color)
+        {
+            Transform shown = entity?.sprite?.transform;
+            if (shown == null)
+            {
+                return;
+            }
+            Transform mark = shown.Find(MarkName);
+            if (color == null)
+            {
+                if (mark != null)
+                {
+                    UnityEngine.Object.Destroy(mark.gameObject);
+                }
+                return;
+            }
+            if (mark == null)
+            {
+                SpriteRenderer back = MainManager.NewSpriteObject(MarkName, new Vector3(0f, 0f, 0.2f), Vector3.zero, shown,
+                    MainManager.guisprites[85], entity.sprite.material);
+                back.transform.localScale = Vector3.one * MarkScale;
+                back.gameObject.layer = shown.gameObject.layer;
+                mark = back.transform;
+            }
+            SpriteRenderer renderer = mark.GetComponent<SpriteRenderer>();
+            if (renderer.material.color != color.Value)
+            {
+                renderer.material.color = color.Value;
+            }
+        }
+
+        // The class colour of an item that isn't yours at this location, else null.
+        internal static Color? MarkColorOf(long at)
+        {
+            ScoutedItemInfo info = null;
+            connection?.Scouts?.TryGetValue(at, out info);
+            return info != null && info.Player.Slot != connection.OwnSlot && (QualityOfLife.ItemBackgrounds?.Value ?? true)
+                ? ClassColor(info.Flags) : (Color?)null;
+        }
+
         private static Color ClassColor(ItemFlags flags) =>
             (flags & ItemFlags.Advancement) != 0 ? Hex(0xAF99EF)
             : (flags & ItemFlags.NeverExclude) != 0 ? Hex(0x6D8BE8)
@@ -335,6 +386,11 @@ namespace BugFablesAP
             if (DevLooks.TryGetValue(at, out Sprite look))
             {
                 sprite = look;
+            }
+            // A shop's box parses text: another player's item is named in the Item colors, then back to the box's black.
+            if (ForOther(info, ref name))
+            {
+                name += "|color,0|";
             }
             description = "An Archipelago item.";
             if (info == null)
@@ -359,7 +415,7 @@ namespace BugFablesAP
             }
             else
             {
-                description = $"An item for {info.Player.Name} ({info.ItemGame}).";
+                description = $"{ClassWord(info.Flags)} item for {info.Player.Name} ({info.ItemGame}).";
             }
         }
 
@@ -527,6 +583,7 @@ namespace BugFablesAP
                 connection.QueueRespawnCheck(at, MainManager.instance.flagstring[ItemReceiver.SeedSlot]);
             }
             ScoutedItemInfo info = Describe(at, out string name, out Sprite sprite, out Color? color);
+            Mark(caller.entity, null);
             string article = info != null && IsOurs(info) ? ArticleOf(info.ItemId, KindOf(info)) : null;
             // "You found |string,1| ...": the seed item's own article, none for a member or another player's item.
             if (ForOther(info, ref name) || article == "")
@@ -603,6 +660,7 @@ namespace BugFablesAP
                     {
                         continue;
                     }
+                    Mark(entity, MarkColorOf(entry.Key));
                     // A crystal berry every time: the game shows its model again after it's hidden.
                     if (entity.animid == 3)
                     {

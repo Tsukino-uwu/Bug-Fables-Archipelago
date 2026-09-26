@@ -31,6 +31,7 @@ anyone curious about the process, or thinking of doing the same for another game
 19. [EXP and berry multipliers: bars like the volume rows](#19-exp-and-berry-multipliers-bars-like-the-volume-rows)
 20. [Item colors: Archipelago's colours in the "You got" box](#20-item-colors-archipelagos-colours-in-the-you-got-box)
 21. [Archipelago icon: other players' items on the ground and on shelves](#21-archipelago-icon-other-players-items-on-the-ground-and-on-shelves)
+22. [Item backgrounds: how much an item matters, before you take it](#22-item-backgrounds-how-much-an-item-matters-before-you-take-it)
 
 ## Where it stands
 
@@ -1343,10 +1344,28 @@ colors.
 - **All players:** any item that isn't yours is the icon, in its class colour.
 - **Off:** another game's item keeps the vanilla item's look (as before the icon), a surprise until found; Bug Fables
   items show their real sprite. The text always names whose it is.
-- With nine rows, the Quality of life page's rows sit closer (the first and last where they were); the other pages
+- With more rows, the Quality of life page's rows sit closer (the first and last where they were); the other pages
   are unchanged.
+- **Shops name it too (the user, 2026-09-26):** a shop's box shows another player's item as "<player>'s <item>" in the
+  Item colors (step 20), and its description says the class: "A useful item for Other (APQuest)."
 
 **Status:** built (2026-09-26), not yet seen: a three-slot test seed (you, a second Bug Fables player, APQuest) has one
 of each on the ground in the Outskirts, on the Caravan's shelf, and at Artis's gift.
 
 *Code: `QualityOfLife.cs` (`ItemIcons`, `IconMode`), `ApMenu.cs` (`IconsRow`, `RowAt`), `ItemSwap.cs` (`Describe`), `ApIcon.cs`.*
+
+## 22. Item backgrounds: how much an item matters, before you take it
+
+**Asked (the user, 2026-09-26):** the sprite (or the Archipelago icon) says what an item is, not whether it matters; the
+starburst a pickup grows when taken already has the class colour. So show it before: an item that isn't yours, on
+the ground or on a shop shelf, has that starburst behind it, and a Quality of life row turns it off for a surprise:
+**Item backgrounds: ON / OFF**, On by default, apart from the icon row.
+
+**How it works** (`ItemSwap.Mark`, called where a location's look is kept: `TickGround`, and the item and medal shops'
+shelf ticks): a child sprite `apback` on the item's sprite, the game's starburst (`guisprites[85]`, what a pickup's own
+"back" uses) at 70%, behind the item (z 0.2, the game's offset), in Archipelago's class colour. Taking the item removes
+it, so the game's own starburst grows as usual. Only items that aren't yours; yours look as the game has them.
+
+**Status:** built (2026-09-26), not yet seen.
+
+*Code: `ItemSwap.cs` (`Mark`, `MarkColorOf`), `QualityOfLife.cs` (`ItemBackgrounds`), `ApMenu.cs` (`BackgroundsRow`).*

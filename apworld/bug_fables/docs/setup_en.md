@@ -64,7 +64,9 @@ menu, and from the main menu), shown while the Archipelago mod is enabled or *Us
   always are), **Item colors** (Archipelago, the default, colours another player's name and the item by its kind, as
   Archipelago's own client does; Off keeps the game's red), **Archipelago icon** (Other games, the default: another
   game's item shows the Archipelago icon on the ground, on shelves and when found; All players: every item that isn't
-  yours; Off: they look like the game's own item there) and **Detector** (On, the default, acts as if the Detector medal were equipped. With the Archipelago mod
+  yours; Off: they look like the game's own item there), **Item backgrounds** (On, the default: an item that isn't
+  yours has a starburst behind it in its Archipelago class colour, so you can tell from afar whether it matters; Off
+  keeps it a surprise) and **Detector** (On, the default, acts as if the Detector medal were equipped. With the Archipelago mod
   enabled, the Detector (row or medal) also beeps on entering a room that still has a check of any kind, and stays
   quiet in a room with none left).
 - **Gameplay**: **Difficulty** (Normal, the default, leaves it to the game; Hard plays as if the Hard Mode medal were
