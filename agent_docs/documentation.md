@@ -321,11 +321,11 @@ Detector. Quality of life keeps the speed-ups, with Disable all / Reset to defau
 of a Yes / No first, then out of a page, landing on that page's link. `ApMenu` tracks the page as an enum.
 
 **The two pages in game too (the user, 2026-09-26; built, not yet seen).** While Archipelago is enabled, the pause
-menu's Settings list gets *Quality of life* and *Gameplay* between *Key Bindings* and *Return to Main Menu*, opening the
-same pages. Neither touches a check or the logic, so changing them mid-save is safe (Hardest is already kept out of the
+menu's Settings list gets *Quality of life* and *Gameplay* at the top, above Music Volume (the user; first between
+Key Bindings and Return to Main Menu), opening the same pages. Neither touches a check or the logic, so changing them mid-save is safe (Hardest is already kept out of the
 save; a boss prize reads Hard Mode as the boss falls, and missed prizes are paid anyway). The connection page stays on
 the main menu. How (`InGameSettings.cs`): the Settings list is `MainManager.GetSettings()`, a list of ids; an id's
-label is `menutext[settingsindex[id]]`. A postfix adds ids 26 and 27 before Return to Main Menu (id 15), after two
+label is `menutext[settingsindex[id]]`. A postfix adds ids 26 and 27 at the top of the list, after two
 labels appended to `menutext` and two entries to `settingsindex` (re-added if the game reloads its text). The game
 draws left/right arrows on every row but a named few, so a postfix on `ShowItemList` (type 17) removes the new rows'
 (`Bar<index>` rows, `slider0/1` children). A prefix on `PauseMenu.Update` catches confirm on them and opens the page

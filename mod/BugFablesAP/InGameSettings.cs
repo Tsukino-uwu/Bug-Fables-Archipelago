@@ -7,12 +7,12 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // With Archipelago on, the pause menu's Settings list gets Quality of life and Gameplay rows (before Return to Main
-    // Menu), each opening the panel's page of that name. A settings row is an id whose label is
+    // With Archipelago on, the pause menu's Settings list gets Quality of life and Gameplay rows at the top, each opening
+    // the panel's page of that name. A settings row is an id whose label is
     // menutext[settingsindex[id]], so both tables get two entries; the game gives every row but a few arrows, removed here.
     internal static class InGameSettings
     {
-        private const int QolId = 26, GameplayId = 27, ReturnId = 15;
+        private const int QolId = 26, GameplayId = 27;
         private const string QolLabel = "Quality of life", GameplayLabel = "Gameplay";
 
         private static Func<bool> randomizerOn;
@@ -81,8 +81,7 @@ namespace BugFablesAP
             }
             EnsureTables();
             List<int> list = __result.ToList();
-            int at = list.IndexOf(ReturnId);
-            list.InsertRange(at < 0 ? list.Count : at, new[] { QolId, GameplayId });
+            list.InsertRange(0, new[] { QolId, GameplayId });
             __result = list.ToArray();
         }
 
