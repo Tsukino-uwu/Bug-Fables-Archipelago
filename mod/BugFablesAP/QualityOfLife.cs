@@ -121,14 +121,14 @@ namespace BugFablesAP
                 + "Difficulty (Hard, Hardest) still applies on top. Never changes a check.",
                 new AcceptableValueList<string>(BugFablesAP.EnemyScaling.Modes)));
             Travel = config.Bind("QualityOfLife", "Travel", "Both", new ConfigDescription(
-                "Travel buttons in the pause menu, each behind a Yes / No box: Warp (back to where the game started), Map (the "
+                "Travel buttons in the pause menu, each behind a Yes / No box: Warp (back to where the game started, or to the seed's start), Map (the "
                 + "map, where confirm on an area you've been to travels to its save point), Both, or Off. Not shown in battle.",
                 new AcceptableValueList<string>(TravelValues)));
-            // A fare line is fetched inside the running dialogue (a prompt's jump), not through a new SetText.
+            // A follow-up line is fetched inside the running dialogue, not through a new SetText.
             MethodInfo getLine = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetDialogueText), new[] { typeof(int) });
             if (getLine == null)
             {
-                log.LogError("[qol] MainManager.GetDialogueText(int) not found: Free boat does nothing, the fare stays.");
+                log.LogError("[qol] MainManager.GetDialogueText(int) not found: item hold-ups' empty follow-up line goes unanswered.");
                 return;
             }
             harmony = new Harmony(Plugin.Guid + ".qol." + DateTime.UtcNow.Ticks);

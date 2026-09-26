@@ -1,5 +1,5 @@
 # Written by dev-scripts/build-release.ps1; checked by its -Check in CI.
-commit: fd7b6cc
+commit: b0e308d
 mod/BugFablesAP/AchievementGuard.cs: 69e978492ec4b2cbea2d06670a5f4261713162bb
 mod/BugFablesAP/AnimGuard.cs: 6ee566719d1f52548c4625da0a1a9e83164d32ce
 mod/BugFablesAP/ApConnection.cs: 9d8df426b8f642624fcc8d4be5a7b83b8045bfc5
@@ -32,8 +32,8 @@ mod/BugFablesAP/MenuToggle.cs: 8ebfef10b654c2466e4ea6ac91d67fef89b9202e
 mod/BugFablesAP/Multipliers.cs: 2ff8e499dbe4b70b7082b5df8cf2db368d4ee528
 mod/BugFablesAP/PartyFit.cs: f3ddf38a0e22202554970717cb20b53ade8623f0
 mod/BugFablesAP/PartyMembers.cs: c56556f0c892f84a1359369dc95cd1fe3def8dbd
-mod/BugFablesAP/Plugin.cs: 52413da0f01bbdc100be528fea3cae360e2a7657
-mod/BugFablesAP/QualityOfLife.cs: 1b9e5e83a2ffa244fdab160b5040d5ce732def60
+mod/BugFablesAP/Plugin.cs: 53b1d9fff3251de96f5b01afdf77fb6902138e40
+mod/BugFablesAP/QualityOfLife.cs: 09dea68336c575e20b20c27c6260357952a698e7
 mod/BugFablesAP/QuestBoards.cs: ec691b328916e6662ae9068e57ab597296f61ed5
 mod/BugFablesAP/QuestDump.cs: a6d08247309adae8a2766c107af5f3812cbb015f
 mod/BugFablesAP/SaveDiff.cs: 1195465f84d472b5eed1580b0809acf2e54fdd36
@@ -46,7 +46,7 @@ mod/BugFablesAP/TextProbe.cs: a941dbf95f742e3f0f67650db55243ee6f7d5617
 mod/BugFablesAP/VarDump.cs: c05f4b023fb5012c5b26f65c5f11267f81d16df4
 mod/BugFablesAP/WarpButton.cs: 9a8e433b2c5ed0589734e3383d1430cad553bd35
 mod/BugFablesAP/WebSocketCompression.cs: 67ebcea9ac3f9ae945ef0068d6f253494db565b1
-BugFablesAP.dll: 73f6332116effc5697ac33cd199fd47c5c93012366fcb7d3e7ec61974d10f155
+BugFablesAP.dll: 54ed10ca91667fdd0c9ac357beac2bc71e4554b3ad43d4236c5bfed8f8dea46e
 Archipelago.MultiClient.Net.dll: 4d4f49b1528cf88b00fc07c69ff27d16cb1eeff52c0636009befd87f4e9dde5b
 websocket-sharp.dll: 5f59b27b01d6d6d0ea6ae2258e2639d80bc4ccedc0c16917cdd73e0b30e07f58
 Newtonsoft.Json.dll: 0cc6b1d3f4e8c938edfe1f02f2167d1cbf596a4df6ac0dbd82fe89ed67e45eb0

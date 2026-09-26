@@ -148,10 +148,10 @@ namespace BugFablesAP
             difficulty = Config.Bind("Archipelago", "Difficulty", "Normal", new ConfigDescription(
                 "Normal leaves it to the game; Hard acts as if the Hard Mode medal were equipped; Hardest as if the save had "
                 + "the HARDEST code, never written into the save. Boss prize medals are paid out on every setting. "
-                + "Switch it in the Archipelago panel.", new AcceptableValueList<string>(ApMenu.Difficulties)));
+                + "Switch it on the Gameplay page.", new AcceptableValueList<string>(ApMenu.Difficulties)));
             detector = Config.Bind("Archipelago", "Detector", true,
                 "On acts as if the Detector medal were equipped, to help find items. Off leaves it to the medal. "
-                + "Switch it in the Archipelago panel.");
+                + "Switch it on the Quality of life page.");
             ApMenu.Difficulty = difficulty;
             ApMenu.Detector = detector;
             ApMenu.Achievements = Config.Bind("Archipelago", "Achievements", false,
