@@ -891,7 +891,12 @@ its flag 158 is unset: the same scene later takes bounties and gives their rewar
    spider scene's `ChangeParty({1})` brought Kabbu back for real. The guard now substitutes instead of only dropping:
    each member the story asks for who isn't allowed is replaced by an allowed member the story doesn't have yet (by
    its flags, as the scenes pick), so `{1}` becomes `{2}` and `{0, 1}` becomes `{0, 2}`; with no one to stand in, it
-   keeps who is here as before. Logged: "the story asked for party 1; given 2". Not yet seen.
+   keeps who is here as before. **Seen in the log (2026-09-26):** "asked for party 1; given 2" before the first fight,
+   "asked for party 0,1; given 0,2" before the second. **Then Leif lost his part** (the user: invisible after the first
+   fight): the scene deletes its characters and remakes the party (`destroyoldentity`), and the actor was kept as a
+   character, so the remake rule took the new leader (Vi) and Kabbu's part went to an invisible stand-in. Actors and
+   spares are now kept by member number and looked up again when asked for, so a remade Leif stays Kabbu's actor.
+   Not yet seen.
 
 **No warnings for missing animations (the user, 2026-09-26: "dumb to leave bug/errors laying around, even if its
 harmless").** A character asked for a state its controller lacks (a lone Leif acting another member's part, a swapped

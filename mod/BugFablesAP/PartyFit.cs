@@ -95,7 +95,15 @@ namespace BugFablesAP
         private static EntityControl actor;
         private static int actorRole = -1; // -1 not chosen yet this scene, -2 nobody acts
         // Members in the party the story doesn't have yet act a missing member's part too (role -> character).
-        private static readonly System.Collections.Generic.Dictionary<int, EntityControl> spares = new System.Collections.Generic.Dictionary<int, EntityControl>();
+        // Kept by member, not character: a scene that remakes the party (ChangeParty with destroyoldentity) makes new ones.
+        private static readonly System.Collections.Generic.Dictionary<int, int> spares = new System.Collections.Generic.Dictionary<int, int>();
+        private static int actorMember = -1;
+
+        private static EntityControl CharacterOf(int member)
+        {
+            MainManager mm = MainManager.instance;
+            return mm?.playerdata?.Select(p => p.entity).FirstOrDefault(e => e != null && e.animid == member);
+        }
 
         // Vi from the opening (flag 15), Kabbu always, Leif once joined (flag 16). A member the story has plays himself.
         internal static bool InStoryParty(int member)
@@ -110,7 +118,8 @@ namespace BugFablesAP
             // A scene that reloads the map remakes the party characters: the new leader takes the part on.
             if (actorRole >= 0 && actor == null && mm.playerdata != null && mm.playerdata.Length > 0 && mm.playerdata[0].entity != null)
             {
-                actor = mm.playerdata[0].entity;
+                // The same member if still in the party (a remade Leif stays Kabbu's actor), else the new leader.
+                actor = CharacterOf(actorMember) ?? mm.playerdata[0].entity;
                 log.LogInfo($"[party] Event{MainManager.lastevent}: the map was remade; {actor.name} acts member {actorRole}'s part again");
             }
             if (actorRole != -1)
@@ -135,6 +144,7 @@ namespace BugFablesAP
             {
                 actorRole = lead;
                 actor = leader;
+                actorMember = mm.playerdata[0].trueid;
                 log.LogInfo($"[party] Event{MainManager.lastevent}: the leader ({leader.name}, member {mm.playerdata[0].trueid}) acts member {lead}'s part");
             }
             else
@@ -163,7 +173,7 @@ namespace BugFablesAP
                 {
                     continue;
                 }
-                spares[missing[0]] = p.entity;
+                spares[missing[0]] = p.trueid;
                 log.LogInfo($"[party] Event{MainManager.lastevent}: {p.entity.name} (member {p.trueid}) acts member {missing[0]}'s part");
                 missing.RemoveAt(0);
             }
@@ -171,7 +181,7 @@ namespace BugFablesAP
 
         // A spare acting another member's part isn't also asked for as himself.
         private static bool ActsOtherPart(EntityControl e, int member) =>
-            e != null && spares.Any(s => s.Value == e && s.Key != member);
+            e != null && spares.Any(s => s.Value == e.animid && s.Key != member);
 
         private static EntityControl StandIn(int member)
         {
@@ -180,13 +190,13 @@ namespace BugFablesAP
             {
                 return actor;
             }
-            if (spares.TryGetValue(member, out EntityControl spare))
+            if (spares.TryGetValue(member, out int spareMember))
             {
+                EntityControl spare = CharacterOf(spareMember);
                 if (spare != null)
                 {
                     return spare;
                 }
-                spares.Remove(member); // the map was remade: a stand-in from here on
             }
             if (standIns[member] == null)
             {
@@ -323,6 +333,7 @@ namespace BugFablesAP
         {
             actor = null;
             actorRole = -1;
+            actorMember = -1;
             spares.Clear();
             for (int member = 0; member < standIns.Length; member++)
             {
