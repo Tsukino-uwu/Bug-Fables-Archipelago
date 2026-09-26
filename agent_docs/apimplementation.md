@@ -155,7 +155,8 @@ be wrong.
    and none looked right on the silver card), as the Settings rows add their labels to the text table. It arrives from the
    server like any item and sits in the key items as a real id, saved like one; randomizer saves are separate files
    vanilla never opens. The sailor's dialogue (refusing, then free) goes through the fare lines the mod already
-   rewrites (lines 16 and 19).
+   rewrites (lines 16 and 19); **the user reviews every changed dialogue line** before it goes in, the old and new text
+   side by side, so nothing reads off or machine-written.
 
 22. **Healing save crystals, an idea for later** (suggested on Discord; the user, 2026-09-26): an item that makes the
    blue save crystals (save only) act like the yellow ones (save and heal), a nice filler or useful check. The colour

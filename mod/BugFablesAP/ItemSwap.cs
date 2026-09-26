@@ -330,7 +330,7 @@ namespace BugFablesAP
                     description = kind == ItemIds.MedalKind ? MainManager.badgedata[gameId, 1]
                         : kind == ItemIds.MoneyKind ? gameId + " berries."
                         : kind == ItemIds.CrystalKind ? MainManager.menutext[112] + "."
-                        : MainManager.itemdata[0, gameId, 1];
+                        : MainManager.itemdata[0, gameId, 2];
                 }
                 catch (IndexOutOfRangeException)
                 {

@@ -31,6 +31,7 @@ confirms on screen.
 - [Battles, for enemy shuffle — SPOILERS: boss ids](#battles-for-enemy-shuffle-2026-09-26-code-read-nothing-seen-in-game--spoilers-boss-ids)
 - [The round pause-menu icons' colours](#the-round-pause-menu-icons-colours-2026-09-26-sampled-from-the-spritedump-sheet)
 - [Visited areas and the pause-menu map](#visited-areas-and-the-pause-menu-map-2026-09-26-code-read-and-the-mods-diagnostic)
+- [The item table's fields](#the-item-tables-fields-2026-09-26-code-read)
 - [Quests: to measure](#quests-to-measure-when-quests-come-into-scope)
 - [Key items: to measure](#key-items-to-measure)
 
@@ -1127,6 +1128,15 @@ hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0
   `sprites[option + 1]` every frame while `option >= 0`; `-1` means none chosen yet. Opened with an `option` left over
   from another window and no marker there, it threw a NullReferenceException every frame (the diagnostic: window 6,
   option 5, markers 1-25 all null).
+
+## The item table's fields (2026-09-26, code read)
+
+`MainManager.itemdata` is `string[1, 256, 7]` (`MainManager.cs:3431`): 256 slots, about 188 used, so ids after the last
+are free for the mod's own items. Per id, fields 0-3 come from the language file `Data/Dialogues<lang>/Items` (split on
+`@`), 4-6 from `Data/ItemData`: **0 the name, 2 the description the menus and the item-get box show**
+(`PauseMenu.cs:1868`, `:2274`; `NPCControl.CreateDescWindow` reads `itemdata[type, id, 2]`), 3 the article, 4 the price.
+**Field 1 is not the description**: every key item holds "Desc" there, the Explorer Permit nothing. Medals keep theirs
+in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 1) and `EntityDump.cs`.
 
 ## Quests: to measure (when quests come into scope)
 

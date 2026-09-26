@@ -466,6 +466,10 @@ by default, for players who'd rather be surprised. Bug Fables items that belong 
 their real sprite, and the owner's name is in the text. Before adding the icon: which image file, and whether
 it's fine in a public repo forever (Archipelago's licence row covers its code; check the image).
 
+**The description box read the wrong field (fixed 2026-09-26):** the swap showed `itemdata[0, id, 1]`, but the game's
+box shows field 2 (`MEASURED.md`, "The item table's fields"); field 1 is "Desc" for every key item. Found while reading
+key items' descriptions for the Boat Ticket; not yet seen fixed in game.
+
 **Status:** works for gifts, pickups and their ground sprites, and respawning pickups seen by the user (2026-09-24, `MEASURED.md`), and crystal berry spots (2026-09-25); berry rewards and story pickups built, not yet seen in game.
 
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,

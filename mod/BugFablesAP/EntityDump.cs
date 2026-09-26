@@ -144,7 +144,7 @@ namespace BugFablesAP
                     continue;
                 }
                 sb.Append("item\t").Append(id).Append('\t').Append(item).Append('\t')
-                  .Append(MainManager.itemdata[0, id, 0]).Append('\t').Append(Line(MainManager.itemdata[0, id, 1])).AppendLine();
+                  .Append(MainManager.itemdata[0, id, 0]).Append('\t').Append(Line(MainManager.itemdata[0, id, 2])).AppendLine();
                 items++;
             }
             foreach (MainManager.BadgeTypes badge in Enum.GetValues(typeof(MainManager.BadgeTypes)))
