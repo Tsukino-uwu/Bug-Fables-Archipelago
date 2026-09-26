@@ -432,9 +432,29 @@ namespace BugFablesAP
                             ? "removemember: " + PartyMembers.Remove(gone)
                             : "removemember <0 Vi | 1 Kabbu | 2 Leif>";
                     case "holdup":
-                        ItemSwap.DescribeOurs(ItemIds.Base + 27, ItemIds.KeyItemKind, out string name, out Sprite sprite, out Color? color);
-                        HoldUps.Received(name + " from TestPlayer", sprite, color, ItemSwap.ArticleOf(ItemIds.Base + 27, ItemIds.KeyItemKind));
+                    {
+                        // holdup [member n]: the permit, or party member n (0 Vi, 1 Kabbu, 2 Leif).
+                        bool asMember = parts.Length > 2 && parts[1] == "member";
+                        long held = asMember ? ItemIds.Base + ItemIds.MemberOffset + int.Parse(parts[2]) : ItemIds.Base + 27;
+                        int heldKind = asMember ? ItemIds.MemberKind : ItemIds.KeyItemKind;
+                        ItemSwap.DescribeOurs(held, heldKind, out string name, out Sprite sprite, out Color? color);
+                        HoldUps.Received(name + " from TestPlayer", sprite, color, ItemSwap.ArticleOf(held, heldKind));
                         return "holdup queued: " + name + " from TestPlayer";
+                    }
+                    case "articles":
+                    {
+                        // The found-item line's article: the default (menutext[125]) and each item's own (itemdata[0, id, 3]).
+                        var articles = new System.Text.StringBuilder("[dev] default article '" + MainManager.menutext[125] + "'");
+                        foreach (string n in parts.Skip(1))
+                        {
+                            int id = int.Parse(n);
+                            articles.Append($"; item {id} {MainManager.itemdata[0, id, 0]}: '{MainManager.itemdata[0, id, 3]}'");
+                        }
+                        // Giveitem's "You got" lines (menutext 106, and 110 for the other case).
+                        articles.Append($"; menutext[106] '{MainManager.menutext[106]}'; menutext[110] '{MainManager.menutext[110]}'");
+                        log.LogInfo(articles.ToString());
+                        return "articles logged";
+                    }
                     case "infjump":
                         if (InfJumpSetting == null)
                         {

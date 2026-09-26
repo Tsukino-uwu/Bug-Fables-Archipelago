@@ -134,8 +134,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   fromscratch: true)` rebuilds the party list, then `SetPlayers` makes all three characters where the party stands.
   The 2026-09-24 try failed because without `fromscratch` the game's copy loop never runs (`for m < 0`) and the list
   comes out empty. First run (2026-09-25): three members, three characters, no errors.
-- `holdup`: queue a test hold-up (the Explorer Permit "from TestPlayer"), display only, the way an item from another
-  player is shown.
+- `holdup [member n]`: queue a test hold-up (the Explorer Permit "from TestPlayer", or party member n: 0 Vi, 1 Kabbu,
+  2 Leif), display only, the way an item from another player is shown.
+- `articles [id...]`: log the found-item line's default article, each listed item's own, and the "You got" lines.
 - `onehit`: flips a test boost: every hit on an enemy does at least 99 (before defence). It's the `[Debug]` setting
   `OneHit` (off in the code), so it survives reloads; `copy-dev.ps1 -DebugOn OneHit` turns it on for a dev install.
 - `infjump`: flips jumping again in mid-air. It's the `[Debug]` setting `InfJump` (off in the code), on in the dev

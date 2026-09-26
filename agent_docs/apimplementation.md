@@ -1541,6 +1541,10 @@ everything past the Outskirts gate needs all three members until the rooms there
    every frame and cleared on the title screen, so one file's members never carry into another. A hold-up for a
    member shows the pause menu's party icon (`guisprites[94 + member]`) in the member's colour (`charcolor`). An item
    kind the mod doesn't know is now skipped with a log line; before, it went into the bag as an ordinary item.
+   **Fixed after the first play (the user, 2026-09-26):** the rooftop pickup showed Vi's icon far too large and the
+   Crunchy Leaf's description (a member's number read as item 0). The icon is now scaled to an item sprite's size, a
+   member gets no description box (the game has no item row for him), and no article: "You got Vi!", the line's
+   space after the article dropped for that one line (`MEASURED.md`, the found-item line). Seen in a hold-up.
 7. **Tests** (`test/test_party.py`): Off adds nothing; each start is start inventory with the other two in the pool;
    both locations exist with flags 15 and 27; the gate needs all three; the horn spots need Kabbu; a random start is one
    of the three. `TestClassifications` counts `members` too. Generated with APQuest for all four choices: every seed
@@ -1550,7 +1554,12 @@ everything past the Outskirts gate needs all three members until the rooms there
 with three members, and it broke with three before (build step 13: its own two-long position list). A three-member
 spider scene is also still open (the mod guide, step 11). Both come up in the first play past the gate.
 
-**Status:** built, the apworld tests pass (315) and the mod builds; not yet played.
+**Seen by the user (2026-09-26), a Kabbu start:** the opening left Kabbu alone and sent its check; Artis's gift was Leif,
+who joined on the spot; the Fountain Rooftop held Vi, who joined too (party 1, 2, 0). Then a member's hold-up: "You got
+Vi from TestPlayer!", item-sized, no description.
+
+**Status:** works before the Outskirts gate, seen by the user with a Kabbu start (2026-09-26); past the gate (the
+trapdoor and spider scenes with three) not yet played.
 
 # How it works
 

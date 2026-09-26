@@ -330,6 +330,7 @@ namespace BugFablesAP
                     description = kind == ItemIds.MedalKind ? MainManager.badgedata[gameId, 1]
                         : kind == ItemIds.MoneyKind ? gameId + " berries."
                         : kind == ItemIds.CrystalKind ? MainManager.menutext[112] + "."
+                        : kind == ItemIds.MemberKind ? PartyMembers.Name(gameId) + " joins the party."
                         : MainManager.itemdata[0, gameId, 2];
                 }
                 catch (IndexOutOfRangeException)
@@ -350,7 +351,7 @@ namespace BugFablesAP
                 {
                     // The pause menu's party icon and the member's own colour.
                     name = PartyMembers.Name(gameId);
-                    sprite = MainManager.guisprites[94 + gameId];
+                    sprite = MemberSprite(gameId);
                     color = MainManager.instance.charcolor[gameId];
                     return;
                 }
@@ -366,19 +367,43 @@ namespace BugFablesAP
             }
         }
 
+        private static readonly Sprite[] memberSprites = new Sprite[3];
+
+        // The pause menu's party icon is drawn far larger than an item: a copy scaled to an item sprite's size.
+        private static Sprite MemberSprite(int id)
+        {
+            Sprite icon = MainManager.guisprites[94 + id];
+            if (id < 0 || id >= memberSprites.Length || icon == null)
+            {
+                return icon;
+            }
+            if (memberSprites[id] == null)
+            {
+                Vector3 item = MainManager.itemsprites[0, 0].bounds.size;
+                Vector3 own = icon.bounds.size;
+                float scale = Mathf.Max(own.x, own.y) / Mathf.Max(item.x, item.y);
+                Rect rect = icon.packed ? icon.textureRect : icon.rect;
+                memberSprites[id] = Sprite.Create(icon.texture, rect, new Vector2(icon.pivot.x / icon.rect.width, icon.pivot.y / icon.rect.height),
+                    icon.pixelsPerUnit * scale);
+                log.LogInfo($"[swap] {PartyMembers.Name(id)}'s icon ({own.x:0.00} x {own.y:0.00}) scaled by 1/{scale:0.00} to an item's size");
+            }
+            return memberSprites[id];
+        }
+
         // A hold-up without a pickup runs Giveitem on a key item stand-in (key items have no bag limit), and the
         // stand-ins show the chosen item instead. Its follow-up line is the empty one QualityOfLife answers.
         private const int StandIn = 0;
         internal const int EmptyLine = -90000;
 
-        // An item's itemdata[0, id, 3], a medal's badgedata[id, 6]; null for berries, which keep the default.
+        // An item's itemdata[0, id, 3], a medal's badgedata[id, 6]; null for berries, which keep the default; none for a member.
         internal static string ArticleOf(long itemId, int kind)
         {
             int gameId = ItemIds.GameId(itemId, kind);
             try
             {
                 return kind == ItemIds.MedalKind ? MainManager.badgedata[gameId, 6]
-                    : kind == ItemIds.MoneyKind || kind == ItemIds.CrystalKind || kind == ItemIds.MemberKind ? null
+                    : kind == ItemIds.MemberKind ? ""
+                    : kind == ItemIds.MoneyKind || kind == ItemIds.CrystalKind ? null
                     : MainManager.itemdata[0, gameId, 3];
             }
             catch (IndexOutOfRangeException)
@@ -588,6 +613,28 @@ namespace BugFablesAP
             return -1;
         }
 
+        // "You got |string,1| |color,1||string,0|...": with no article the space goes too, for this one line (Giveitem
+        // reads menutext[106] right after this), then the game's text is put back.
+        private const int GotLine = 106;
+        private const string ArticleSlot = "|string,1| ";
+
+        private static void DropArticleOnce()
+        {
+            string line = MainManager.menutext[GotLine];
+            if (line == null || !line.Contains(ArticleSlot))
+            {
+                return;
+            }
+            MainManager.menutext[GotLine] = line.Replace(ArticleSlot, "");
+            MainManager.instance.StartCoroutine(RestoreLine(line));
+        }
+
+        private static System.Collections.IEnumerator RestoreLine(string line)
+        {
+            yield return null;
+            MainManager.menutext[GotLine] = line;
+        }
+
         // The "You got" box reads flagstring[0], which the game just set to the vanilla name.
         private static bool TakeSwap(string what)
         {
@@ -599,6 +646,10 @@ namespace BugFablesAP
             if (shownArticle != null)
             {
                 MainManager.instance.flagstring[1] = shownArticle;
+            }
+            if (shownArticle == "")
+            {
+                DropArticleOnce();
             }
             if (shownColor.HasValue)
             {
@@ -640,9 +691,10 @@ namespace BugFablesAP
 
         private static void ShowOwnDescription(NPCControl caller, ScoutedItemInfo info)
         {
-            if (info == null || !IsOurs(info) || KindOf(info) == ItemIds.MoneyKind || KindOf(info) == ItemIds.CrystalKind)
+            if (info == null || !IsOurs(info) || KindOf(info) == ItemIds.MoneyKind || KindOf(info) == ItemIds.CrystalKind
+                || KindOf(info) == ItemIds.MemberKind)
             {
-                return; // berries have no description box, as in the game's own money giveitem
+                return; // berries have no description box, as in the game's own money giveitem; a member has no item row
             }
             int kind = KindOf(info);
             bool medal = kind == ItemIds.MedalKind;
