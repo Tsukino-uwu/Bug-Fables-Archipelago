@@ -10,11 +10,19 @@ namespace BugFablesAP
     // The title screen's input is suspended while it's open (StartMenu.canselect), so C, X, Z and V can be typed.
     internal sealed class ApMenu : MonoBehaviour
     {
-        private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, DifficultyRow = 4, DetectorRow = 5, ModeRow = 6,
-            QolRow = 7, Rows = 8;
-        // The Quality of life page; cancel goes back to the first page, on the Quality of life row.
-        private const int FastTextRow = 0, FreeBoatRow = 1, WarpRow = 2, CutscenesRow = 3, AnimationRow = 4, PricesRow = 5, ScalingRow = 6, QolRows = 7;
-        private bool qolPage;
+        private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, QolRow = 5, GameplayRow = 6,
+            Rows = 7;
+        // The Quality of life page: the two buttons side by side on top, then the settings.
+        private const int ButtonsRow = 0, FastTextRow = 1, FreeBoatRow = 2, WarpRow = 3, CutscenesRow = 4, AnimationRow = 5,
+            PricesRow = 6, QolRows = 7;
+        // The Gameplay page: how the game plays.
+        private const int DifficultyRow = 0, ScalingRow = 1, DetectorRow = 2, GameplayRows = 3;
+        private enum Page { Main, Qol, Gameplay }
+        private Page page;
+        // On the buttons row: 0 Disable all, 1 Reset to defaults; confirming shows Yes / No there (0 Yes, 1 No).
+        private int button;
+        private bool confirming;
+        private int answer;
 
         internal static readonly string[] Difficulties = { "Normal", "Hard", "Hardest" };
         internal static ConfigEntry<string> Difficulty;
@@ -198,7 +206,48 @@ namespace BugFablesAP
 
         private void Navigate()
         {
-            int rows = qolPage ? QolRows : Rows;
+            int rows = page == Page.Qol ? QolRows : page == Page.Gameplay ? GameplayRows : Rows;
+            bool confirm = MainManager.GetKey(4, hold: false) || Input.GetKeyDown(KeyCode.Return);
+            bool sideways = MainManager.GetKey(2, hold: false) || MainManager.GetKey(3, hold: false);
+            bool cancel = MainManager.GetKey(5, hold: false) || Input.GetKeyDown(KeyCode.Escape);
+            if (confirming)
+            {
+                if (sideways)
+                {
+                    answer = 1 - answer;
+                    MainManager.PlayScrollSound();
+                    Redraw();
+                }
+                else if (confirm)
+                {
+                    confirming = false;
+                    if (answer == 0)
+                    {
+                        MainManager.PlaySound("Confirm", -1);
+                        if (button == 0)
+                        {
+                            QualityOfLife.DisableAll();
+                        }
+                        else
+                        {
+                            QualityOfLife.ResetAll();
+                        }
+                        log.LogInfo("[apmenu] Quality of life: " + (button == 0 ? "all disabled" : "all reset to defaults"));
+                    }
+                    else
+                    {
+                        MainManager.PlaySound("Cancel", 10);
+                    }
+                    Redraw();
+                }
+                else if (cancel)
+                {
+                    confirming = false;
+                    MainManager.PlaySound("Cancel", 10);
+                    Redraw();
+                }
+                return;
+            }
             if (MainManager.GetKey(0, hold: false))
             {
                 row = (row + rows - 1) % rows;
@@ -211,29 +260,43 @@ namespace BugFablesAP
                 MainManager.PlayScrollSound();
                 Redraw();
             }
-            else if (IsChoice(row) && (MainManager.GetKey(2, hold: false) || MainManager.GetKey(3, hold: false)))
+            else if (page == Page.Qol && row == ButtonsRow && sideways)
+            {
+                button = 1 - button;
+                MainManager.PlayScrollSound();
+                Redraw();
+            }
+            else if (IsChoice(row) && sideways)
             {
                 Step(row, MainManager.GetKey(3, hold: false) ? 1 : -1);
                 Redraw();
             }
-            else if (MainManager.GetKey(5, hold: false) || Input.GetKeyDown(KeyCode.Escape))
+            else if (cancel)
             {
                 MainManager.PlaySound("Cancel", 10);
-                if (qolPage)
+                if (page != Page.Main)
                 {
-                    SwitchPage(qol: false, QolRow);
+                    SwitchPage(Page.Main, page == Page.Qol ? QolRow : GameplayRow);
                 }
                 else
                 {
                     Close();
                 }
             }
-            else if (qolPage && (MainManager.GetKey(4, hold: false) || Input.GetKeyDown(KeyCode.Return)))
+            else if (confirm && page == Page.Qol && row == ButtonsRow)
+            {
+                // No is chosen first, so a stray press never wipes the settings.
+                MainManager.PlaySound("Confirm", -1);
+                confirming = true;
+                answer = 1;
+                Redraw();
+            }
+            else if (confirm && page != Page.Main)
             {
                 Step(row, 1);
                 Redraw();
             }
-            else if (MainManager.GetKey(4, hold: false) || Input.GetKeyDown(KeyCode.Return))
+            else if (confirm)
             {
                 if (!IsChoice(row))
                 {
@@ -252,22 +315,25 @@ namespace BugFablesAP
                         Redraw();
                         break;
                     case ModeRow:
-                    case DifficultyRow:
-                    case DetectorRow:
                         Step(row, 1);
                         Redraw();
                         break;
                     case QolRow:
-                        SwitchPage(qol: true, 0);
+                        SwitchPage(Page.Qol, ButtonsRow);
+                        break;
+                    case GameplayRow:
+                        SwitchPage(Page.Gameplay, DifficultyRow);
                         break;
                 }
             }
         }
 
-        private void SwitchPage(bool qol, int at)
+        private void SwitchPage(Page to, int at)
         {
-            qolPage = qol;
+            page = to;
             row = at;
+            button = 0;
+            confirming = false;
             if (arrows != null)
             {
                 Destroy(arrows.gameObject);
@@ -275,15 +341,21 @@ namespace BugFablesAP
             }
             settleFrames = 2;
             Redraw();
-            log.LogInfo("[apmenu] " + (qol ? "Quality of life page" : "first page"));
+            log.LogInfo("[apmenu] " + to + " page");
         }
 
         private string Describe(int r)
         {
-            if (qolPage)
+            if (page == Page.Qol)
             {
                 switch (r)
                 {
+                    case ButtonsRow:
+                        if (confirming)
+                        {
+                            return button == 0 ? "Turn every Quality of life setting off?" : "Put every Quality of life setting back to its default?";
+                        }
+                        return button == 0 ? "Turns every setting on this page off." : "Puts every setting on this page back to its default.";
                     case FastTextRow: return "Dialogue text is instant, but still requires a button press to proceed.";
                     case FreeBoatRow: return "The boat to Metal Island costs nothing.";
                     case WarpRow: return "Adds a Warp to Start button to the pause menu.";
@@ -302,6 +374,20 @@ namespace BugFablesAP
                             case "Free": return "Medal shops charge nothing.";
                             default: return "Medal shops charge their normal price.";
                         }
+                    default: return "";
+                }
+            }
+            if (page == Page.Gameplay)
+            {
+                switch (r)
+                {
+                    case DifficultyRow:
+                        switch (Difficulty?.Value)
+                        {
+                            case "Hard": return "As if the Hard Mode medal were on: tougher enemies. Checks stay the same.";
+                            case "Hardest": return "As the HARDEST code: toughest enemies. Checks stay the same.";
+                            default: return "Enemies as the game makes them. Checks stay the same.";
+                        }
                     case ScalingRow:
                         switch (QualityOfLife.EnemyScaling?.Value)
                         {
@@ -309,6 +395,7 @@ namespace BugFablesAP
                             case "Artifacts": return "Enemies grow with artifacts found; levelling ahead makes it easier.";
                             default: return "Enemies match your level, so every area plays fair in any order.";
                         }
+                    case DetectorRow: return "Acts like the Detector medal is always equipped, to find hidden items.";
                     default: return "";
                 }
             }
@@ -318,16 +405,9 @@ namespace BugFablesAP
                 case PortRow: return "The room's port, e.g. 38281.";
                 case SlotRow: return "Your player slot name.";
                 case PasswordRow: return "The room's password, if it has one.";
-                case DifficultyRow:
-                    switch (Difficulty?.Value)
-                    {
-                        case "Hard": return "As if the Hard Mode medal were on: tougher enemies. Checks stay the same.";
-                        case "Hardest": return "As the HARDEST code: toughest enemies. Checks stay the same.";
-                        default: return "Enemies as the game makes them. Checks stay the same.";
-                    }
-                case DetectorRow: return "Acts like the Detector medal is always equipped, to find hidden items.";
                 case ModeRow: return "Turns Archipelago on or off. While on, normal saves are never touched.";
                 case QolRow: return "Settings that speed up the game.";
+                case GameplayRow: return "How the game plays: difficulty, enemy scaling, the Detector.";
                 default: return "";
             }
         }
@@ -339,55 +419,57 @@ namespace BugFablesAP
             MainManager.sounds[10].volume = MainManager.pausemenu != null ? MainManager.pausemenu.svolume : MainManager.soundvolume;
         }
 
-        private bool IsChoice(int r) => qolPage || r == ModeRow || r == DifficultyRow || r == DetectorRow;
+        private bool IsChoice(int r) => page == Page.Qol ? r != ButtonsRow : page == Page.Gameplay || r == ModeRow;
+
+        private static void Cycle(ConfigEntry<string> entry, string[] values, int by)
+        {
+            int at = Array.IndexOf(values, entry.Value);
+            entry.Value = values[((at < 0 ? 0 : at) + by + values.Length) % values.Length];
+            log.LogInfo("[apmenu] " + entry.Definition.Key + ": " + entry.Value);
+        }
 
         private void Step(int r, int by)
         {
             ChangeSound();
-            if (qolPage && r == PricesRow && QualityOfLife.ShopPrices != null)
+            if (page == Page.Qol)
             {
-                string[] prices = QualityOfLife.ShopPriceValues;
-                int at = Array.IndexOf(prices, QualityOfLife.ShopPrices.Value);
-                QualityOfLife.ShopPrices.Value = prices[((at < 0 ? 0 : at) + by + prices.Length) % prices.Length];
-                log.LogInfo("[apmenu] ShopPrices: " + QualityOfLife.ShopPrices.Value);
-            }
-            else if (qolPage && r == ScalingRow && QualityOfLife.EnemyScaling != null)
-            {
-                string[] modes = EnemyScaling.Modes;
-                int at = Array.IndexOf(modes, QualityOfLife.EnemyScaling.Value);
-                QualityOfLife.EnemyScaling.Value = modes[((at < 0 ? 0 : at) + by + modes.Length) % modes.Length];
-                log.LogInfo("[apmenu] EnemyScaling: " + QualityOfLife.EnemyScaling.Value);
-            }
-            else if (qolPage && r == AnimationRow && QualityOfLife.ItemAnimation != null)
-            {
-                string[] values = QualityOfLife.ItemAnimations;
-                int at = Array.IndexOf(values, QualityOfLife.ItemAnimation.Value);
-                QualityOfLife.ItemAnimation.Value = values[((at < 0 ? 0 : at) + by + values.Length) % values.Length];
-                log.LogInfo("[apmenu] ItemAnimation: " + QualityOfLife.ItemAnimation.Value);
-            }
-            else if (qolPage)
-            {
-                ConfigEntry<bool> setting = QolSetting(r);
-                if (setting != null)
+                if (r == PricesRow && QualityOfLife.ShopPrices != null)
                 {
-                    setting.Value = !setting.Value;
-                    log.LogInfo("[apmenu] " + setting.Definition.Key + ": " + (setting.Value ? "On" : "Off"));
+                    Cycle(QualityOfLife.ShopPrices, QualityOfLife.ShopPriceValues, by);
+                }
+                else if (r == AnimationRow && QualityOfLife.ItemAnimation != null)
+                {
+                    Cycle(QualityOfLife.ItemAnimation, QualityOfLife.ItemAnimations, by);
+                }
+                else
+                {
+                    ConfigEntry<bool> setting = QolSetting(r);
+                    if (setting != null)
+                    {
+                        setting.Value = !setting.Value;
+                        log.LogInfo("[apmenu] " + setting.Definition.Key + ": " + (setting.Value ? "On" : "Off"));
+                    }
+                }
+            }
+            else if (page == Page.Gameplay)
+            {
+                if (r == DifficultyRow && Difficulty != null)
+                {
+                    Cycle(Difficulty, Difficulties, by);
+                }
+                else if (r == ScalingRow && QualityOfLife.EnemyScaling != null)
+                {
+                    Cycle(QualityOfLife.EnemyScaling, EnemyScaling.Modes, by);
+                }
+                else if (r == DetectorRow && Detector != null)
+                {
+                    Detector.Value = !Detector.Value;
+                    log.LogInfo("[apmenu] Detector: " + (Detector.Value ? "On" : "Off"));
                 }
             }
             else if (r == ModeRow)
             {
                 MenuToggle.SetMode(owner, !mode.Value);
-            }
-            else if (r == DifficultyRow && Difficulty != null)
-            {
-                int at = Array.IndexOf(Difficulties, Difficulty.Value);
-                Difficulty.Value = Difficulties[((at < 0 ? 0 : at) + by + Difficulties.Length) % Difficulties.Length];
-                log.LogInfo("[apmenu] Difficulty: " + Difficulty.Value);
-            }
-            else if (r == DetectorRow && Detector != null)
-            {
-                Detector.Value = !Detector.Value;
-                log.LogInfo("[apmenu] Detector: " + (Detector.Value ? "On" : "Off"));
             }
         }
 
@@ -512,17 +594,32 @@ namespace BugFablesAP
                 BuildArrows();
             }
             shownStatus = status();
-            if (qolPage)
+            if (page == Page.Qol)
             {
+                // The two buttons side by side; confirming turns them into Yes / No.
+                string left = confirming ? "Yes" : "Disable all", right = confirming ? "No" : "Reset to defaults";
+                int picked = confirming ? answer : button;
+                Text("|size,0.8|" + (row == ButtonsRow && picked == 0 ? "|color,1|" : "") + left, LabelX, RowY[ButtonsRow]);
+                Text("|size,0.8|" + (row == ButtonsRow && picked == 1 ? "|color,1|" : "") + right, ButtonRightX, RowY[ButtonsRow]);
                 Choice(FastTextRow, "Fast text", OnOff(QualityOfLife.FastText));
                 Choice(FreeBoatRow, "Free boat", OnOff(QualityOfLife.FreeBoat));
                 Choice(WarpRow, "Warp button", OnOff(QualityOfLife.WarpButton));
                 Choice(CutscenesRow, "Skip cutscenes", OnOff(QualityOfLife.SkipCutscenes));
                 Choice(AnimationRow, "Item animation", (QualityOfLife.ItemAnimation?.Value ?? "All").ToUpperInvariant());
                 Choice(PricesRow, "Shop prices", (QualityOfLife.ShopPrices?.Value ?? "Normal").ToUpperInvariant());
-                Choice(ScalingRow, "Enemy scaling", ScalingLabel(QualityOfLife.EnemyScaling?.Value ?? "PartyLevel"));
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Quality of life. Cancel goes back.", 0f, StatusY);
+                float leafX = row == ButtonsRow && picked == 1 ? ButtonRightX : LabelX;
+                leaf.transform.localPosition = new Vector3(leafX + LeafOffset, RowY[row] + LeafRise, 0f);
+                return;
+            }
+            if (page == Page.Gameplay)
+            {
+                Choice(DifficultyRow, "Difficulty", (Difficulty?.Value ?? "Normal").ToUpperInvariant());
+                Choice(ScalingRow, "Enemy scaling", ScalingLabel(QualityOfLife.EnemyScaling?.Value ?? "PartyLevel"));
+                Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
+                Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
+                Text("|center||size,0.5|Gameplay. Cancel goes back.", 0f, StatusY);
                 leaf.transform.localPosition = new Vector3(LabelX + LeafOffset, RowY[row] + LeafRise, 0f);
                 return;
             }
@@ -533,9 +630,8 @@ namespace BugFablesAP
             Row(PasswordRow, "Password", pw);
 
             Choice(ModeRow, "Archipelago", mode.Value ? "ENABLED" : "DISABLED");
-            Choice(DifficultyRow, "Difficulty", (Difficulty?.Value ?? "Normal").ToUpperInvariant());
-            Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
             Label(QolRow, "Quality of life");
+            Label(GameplayRow, "Gameplay");
 
             Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
             Text("|center||size,0.5|" + Safe(shownStatus), 0f, StatusY);
@@ -549,7 +645,8 @@ namespace BugFablesAP
             arrows.parent = box;
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
-            foreach (int r in qolPage ? new[] { FastTextRow, FreeBoatRow, WarpRow, CutscenesRow, AnimationRow, PricesRow, ScalingRow } : new[] { DifficultyRow, DetectorRow, ModeRow })
+            foreach (int r in page == Page.Qol ? new[] { FastTextRow, FreeBoatRow, WarpRow, CutscenesRow, AnimationRow, PricesRow }
+                : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, DetectorRow } : new[] { ModeRow })
             {
                 for (int side = 0; side < 2; side++)
                 {
@@ -562,6 +659,8 @@ namespace BugFablesAP
             }
         }
 
+        // The second button's label, clear of the first.
+        private const float ButtonRightX = 0.6f;
         private const float ArrowLeftX = 0.9f, ArrowRightX = 4.3f, ArrowRise = 0.15f, ArrowScale = 0.75f;
 
         private void Choice(int r, string label, string value)

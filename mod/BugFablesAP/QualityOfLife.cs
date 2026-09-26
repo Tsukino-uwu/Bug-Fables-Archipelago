@@ -61,6 +61,38 @@ namespace BugFablesAP
         // The slides' fades are lerps scaled by Time.smoothDeltaTime, so timeScale speeds them; EndEvent resets it.
         private const float IntroSpeed = 8f;
 
+        // The panel's two buttons: every Quality of life row off (a choice to its "nothing extra" value), or back to
+        // each setting's own default. Enemy scaling lives on the Gameplay page and isn't touched.
+        internal static void DisableAll()
+        {
+            foreach (ConfigEntry<bool> setting in new[] { FastText, FreeBoat, WarpButton, SkipCutscenes })
+            {
+                if (setting != null)
+                {
+                    setting.Value = false;
+                }
+            }
+            if (ItemAnimation != null)
+            {
+                ItemAnimation.Value = "Off";
+            }
+            if (ShopPrices != null)
+            {
+                ShopPrices.Value = "Normal";
+            }
+        }
+
+        internal static void ResetAll()
+        {
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, FreeBoat, WarpButton, SkipCutscenes, ItemAnimation, ShopPrices })
+            {
+                if (setting != null)
+                {
+                    setting.BoxedValue = setting.DefaultValue;
+                }
+            }
+        }
+
         internal static void Enable(ManualLogSource logger, ConfigFile config, Func<bool> on)
         {
             log = logger;

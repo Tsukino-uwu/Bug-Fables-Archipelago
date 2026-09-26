@@ -314,10 +314,11 @@ arrows around the On/Off value.
 Item animation, Shop prices, Enemy scaling), the line under the rows describes the value now chosen, and changes as
 left/right steps through them; every step redraws the screen. On/off rows keep one line.
 
-**Planned (the user, 2026-09-26): a Gameplay page.** The main page keeps the connection and the Archipelago on/off,
-plus two links, *Quality of life* and *Gameplay*. Gameplay holds how the game plays: Difficulty, Enemy scaling (moved
-from Quality of life) and Detector. Quality of life keeps the speed-ups (text, boat, cutscenes, item animation, shop
-prices, travel), with Disable all / Reset to defaults (step 10). Both pages stay within the panel's rows.
+**Three pages (the user, 2026-09-26; built, not yet seen):** the main page keeps the connection and the Archipelago
+on/off, plus two links, *Quality of life* and *Gameplay*. Gameplay holds how the game plays: Difficulty, Enemy scaling
+(moved from Quality of life; its config key stays under `[QualityOfLife]`, so a saved choice carries over) and
+Detector. Quality of life keeps the speed-ups, with Disable all / Reset to defaults on top (step 10). Cancel backs out
+of a Yes / No first, then out of a page, landing on that page's link. `ApMenu` tracks the page as an enum.
 
 **Status:** works, seen by the user (2026-09-24): the menu entry, the panel, and the file select held back until the first login.
 
@@ -608,10 +609,11 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
 
 The panel got an eighth row, "Quality of life", which opens a second page in the same box; cancel comes back.
 
-**Planned (the user, 2026-09-26): Disable all and Reset to defaults.** Two buttons side by side at the top of the
-Quality of life page (not rows in the list). Each asks Yes / No first. Disable all turns every row off (a choice row
+**Disable all and Reset to defaults (the user, 2026-09-26; built, not yet seen).** Two buttons side by side at the top
+of the Quality of life page (not rows in the list); left/right picks one. Confirming turns them into Yes / No, with No
+picked first so a stray press never wipes the settings. Disable all turns every row off (a choice row
 to its off value: Enemy scaling Off, Item animation Off, Shop prices Normal); Reset to defaults puts every row back to
-its default.
+its default (`QualityOfLife.DisableAll` / `ResetAll`, the defaults from each setting's own config definition).
 
 **Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen by the user (2026-09-25); Free boat, the bridge skips, the warp itself, Shop prices and silent replays with a second player not yet seen; Skip battle tutorials planned.
 
