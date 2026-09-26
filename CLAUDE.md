@@ -23,10 +23,10 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
   panel setting, a new kind of location, or changes how the game plays in a seed; everything else joins the step
   it belongs to. Say so in the commit message. `.githooks/doc-coverage.py` (pre-commit) refuses an option,
   setting, `slot_data` key or source file that no guide or `code-map.md` names.
-- **The root `README.md` never goes stale either.** Its "Status" line and "How it works" must agree with the
+- **The root `README.md` never goes stale either.** Its "Status" line and its intro (how it works) must agree with the
   steps' Status lines and with the code. A commit that changes either one updates the README in the
   same commit. Check all three against each other when a session starts, and fact-check the README against
-  the code, never against an older doc. It stays short; player docs (setup, options, panel) live in `apworld/bug_fables/docs/`, same rule.
+  the code, never against an older doc. It stays minimal, links only (like MeshGhost's); player docs live in `apworld/bug_fables/docs/`, same rule.
 - **Items are remote only.** A pickup grants nothing locally; it sends its check. Every item, the player's
   own included, arrives from the server. No local-items mode (decided 2026-09-24). One named exception: a
   respawning pickup whose check is done is the game's own again (`apimplementation.md`, build step 10).
