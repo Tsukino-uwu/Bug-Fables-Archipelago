@@ -15,8 +15,8 @@ namespace BugFablesAP
         // The Quality of life page: the two buttons side by side on top, then the settings.
         private const int ButtonsRow = 0, FastTextRow = 1, FreeBoatRow = 2, WarpRow = 3, CutscenesRow = 4, AnimationRow = 5,
             PricesRow = 6, QolRows = 7;
-        // The Gameplay page: how the game plays.
-        private const int DifficultyRow = 0, ScalingRow = 1, DetectorRow = 2, GameplayRows = 3;
+        // The Gameplay page: how the game plays, under the same two buttons.
+        private const int DifficultyRow = 1, ScalingRow = 2, DetectorRow = 3, GameplayRows = 4;
         private enum Page { Main, Qol, Gameplay }
         private Page page;
         // On the buttons row: 0 Reset to defaults (where the cursor lands), 1 Disable all; confirming shows Yes / No there (0 Yes, 1 No).
@@ -227,15 +227,22 @@ namespace BugFablesAP
                     if (answer == 0)
                     {
                         MainManager.PlaySound("Confirm", -1);
-                        if (button == 0)
+                        if (page == Page.Qol)
                         {
-                            QualityOfLife.ResetAll();
+                            if (button == 0)
+                            {
+                                QualityOfLife.ResetAll();
+                            }
+                            else
+                            {
+                                QualityOfLife.DisableAll();
+                            }
                         }
                         else
                         {
-                            QualityOfLife.DisableAll();
+                            GameplayAll(reset: button == 0);
                         }
-                        log.LogInfo("[apmenu] Quality of life: " + (button == 0 ? "all reset to defaults" : "all disabled"));
+                        log.LogInfo("[apmenu] " + page + ": " + (button == 0 ? "all reset to defaults" : "all disabled"));
                     }
                     else
                     {
@@ -263,7 +270,7 @@ namespace BugFablesAP
                 MainManager.PlayScrollSound();
                 Redraw();
             }
-            else if (page == Page.Qol && row == ButtonsRow && sideways)
+            else if (page != Page.Main && row == ButtonsRow && sideways)
             {
                 button = 1 - button;
                 MainManager.PlayScrollSound();
@@ -286,7 +293,7 @@ namespace BugFablesAP
                     Close();
                 }
             }
-            else if (confirm && page == Page.Qol && row == ButtonsRow)
+            else if (confirm && page != Page.Main && row == ButtonsRow)
             {
                 // No is chosen first, so a stray press never wipes the settings.
                 MainManager.PlaySound("Confirm", -1);
@@ -325,7 +332,7 @@ namespace BugFablesAP
                         SwitchPage(Page.Qol, ButtonsRow);
                         break;
                     case GameplayRow:
-                        SwitchPage(Page.Gameplay, DifficultyRow);
+                        SwitchPage(Page.Gameplay, ButtonsRow);
                         break;
                 }
             }
@@ -355,11 +362,7 @@ namespace BugFablesAP
                 switch (r)
                 {
                     case ButtonsRow:
-                        if (confirming)
-                        {
-                            return button == 0 ? "Put every Quality of life setting back to its default?" : "Turn every Quality of life setting off?";
-                        }
-                        return button == 0 ? "Puts every setting on this page back to its default." : "Turns every setting on this page off.";
+                        return confirming ? "" : button == 0 ? "Puts every setting on this page back to its default." : "Turns every setting on this page off.";
                     case FastTextRow: return "Dialogue text is instant, but still requires a button press to proceed.";
                     case FreeBoatRow: return "The boat to Metal Island costs nothing.";
                     case WarpRow: return "Adds a Warp to Start button to the pause menu.";
@@ -385,6 +388,8 @@ namespace BugFablesAP
             {
                 switch (r)
                 {
+                    case ButtonsRow:
+                        return confirming ? "" : button == 0 ? "Puts every setting on this page back to its default." : "Turns every setting on this page off.";
                     case DifficultyRow:
                         switch (Difficulty?.Value)
                         {
@@ -423,7 +428,7 @@ namespace BugFablesAP
             MainManager.sounds[10].volume = MainManager.pausemenu != null ? MainManager.pausemenu.svolume : MainManager.soundvolume;
         }
 
-        private bool IsChoice(int r) => page == Page.Qol ? r != ButtonsRow : page == Page.Gameplay || r == ModeRow;
+        private bool IsChoice(int r) => page == Page.Main ? r == ModeRow : r != ButtonsRow;
 
         private static void Cycle(ConfigEntry<string> entry, string[] values, int by)
         {
@@ -600,9 +605,7 @@ namespace BugFablesAP
             shownStatus = status();
             if (page == Page.Qol)
             {
-                // The two buttons side by side; confirming one opens a Yes / No box over the page.
-                Text("|size,0.8|" + (row == ButtonsRow && button == 0 ? "|color,1|" : "") + "Reset to defaults", LabelX, RowY[ButtonsRow]);
-                Text("|size,0.8|" + (row == ButtonsRow && button == 1 ? "|color,1|" : "") + "Disable all", ButtonRightX, RowY[ButtonsRow]);
+                DrawButtons();
                 Choice(FastTextRow, "Fast text", OnOff(QualityOfLife.FastText));
                 Choice(FreeBoatRow, "Free boat", OnOff(QualityOfLife.FreeBoat));
                 Choice(WarpRow, "Warp button", OnOff(QualityOfLife.WarpButton));
@@ -611,24 +614,18 @@ namespace BugFablesAP
                 Choice(PricesRow, "Shop prices", (QualityOfLife.ShopPrices?.Value ?? "Normal").ToUpperInvariant());
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Quality of life. Cancel goes back.", 0f, StatusY);
-                if (confirming)
-                {
-                    DrawPopup();
-                    return;
-                }
-                ClosePopup();
-                float leafX = row == ButtonsRow && button == 1 ? ButtonRightX : LabelX;
-                leaf.transform.localPosition = new Vector3(leafX + LeafOffset, RowY[row] + LeafRise, 0f);
+                PlaceCursor();
                 return;
             }
             if (page == Page.Gameplay)
             {
+                DrawButtons();
                 Choice(DifficultyRow, "Difficulty", (Difficulty?.Value ?? "Normal").ToUpperInvariant());
                 Choice(ScalingRow, "Enemy scaling", ScalingLabel(QualityOfLife.EnemyScaling?.Value ?? "PartyLevel"));
                 Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Gameplay. Cancel goes back.", 0f, StatusY);
-                leaf.transform.localPosition = new Vector3(LabelX + LeafOffset, RowY[row] + LeafRise, 0f);
+                PlaceCursor();
                 return;
             }
             string pw = editing && row == PasswordRow ? edited : new string('*', password.Value.Length);
@@ -673,6 +670,53 @@ namespace BugFablesAP
         private static readonly Vector3 PopupAt = new Vector3(0f, -0.25f, 0f);
         private const float YesX = -2.1f, NoX = 1.1f, AnswerY = -0.45f;
 
+        // The two buttons side by side at the top of a settings page; confirming one opens the Yes / No box.
+        private void DrawButtons()
+        {
+            Text("|size,0.8|" + (row == ButtonsRow && button == 0 ? "|color,1|" : "") + "Reset to defaults", LabelX, RowY[ButtonsRow]);
+            Text("|size,0.8|" + (row == ButtonsRow && button == 1 ? "|color,1|" : "") + "Disable all", ButtonRightX, RowY[ButtonsRow]);
+        }
+
+        private void PlaceCursor()
+        {
+            if (confirming)
+            {
+                DrawPopup();
+                return;
+            }
+            ClosePopup();
+            float leafX = row == ButtonsRow && button == 1 ? ButtonRightX : LabelX;
+            leaf.transform.localPosition = new Vector3(leafX + LeafOffset, RowY[row] + LeafRise, 0f);
+        }
+
+        // The Gameplay page's two buttons: every row to its plain value, or back to its default.
+        private static void GameplayAll(bool reset)
+        {
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { Difficulty, QualityOfLife.EnemyScaling, Detector })
+            {
+                if (setting != null && reset)
+                {
+                    setting.BoxedValue = setting.DefaultValue;
+                }
+            }
+            if (reset)
+            {
+                return;
+            }
+            if (Difficulty != null)
+            {
+                Difficulty.Value = "Normal";
+            }
+            if (QualityOfLife.EnemyScaling != null)
+            {
+                QualityOfLife.EnemyScaling.Value = "Off";
+            }
+            if (Detector != null)
+            {
+                Detector.Value = false;
+            }
+        }
+
         private void DrawPopup()
         {
             if (popup == null)
@@ -685,13 +729,14 @@ namespace BugFablesAP
                 popupText.localPosition = Vector3.zero;
             }
             MainManager.DestroyText(popupText);
-            string question = button == 0 ? "Put every Quality of life setting back to its default?" : "Turn every Quality of life setting off?";
+            string what = page == Page.Qol ? "Quality of life" : "Gameplay";
+            string question = button == 0 ? "Put every " + what + " setting back to its default?" : "Turn every " + what + " setting off?";
             MainManager.instance.StartCoroutine(MainManager.SetText(PopupTextSort + "|center||size,0.55|" + question, new Vector3(0f, 0.45f, 0f), popupText));
             MainManager.instance.StartCoroutine(MainManager.SetText(PopupTextSort + "|size,0.8|" + (answer == 0 ? "|color,1|" : "") + "Yes", new Vector3(YesX, AnswerY, 0f), popupText));
             MainManager.instance.StartCoroutine(MainManager.SetText(PopupTextSort + "|size,0.8|" + (answer == 1 ? "|color,1|" : "") + "No", new Vector3(NoX, AnswerY, 0f), popupText));
             // The leaf lives under the panel's box: place it by world position on the picked answer.
             leaf.sortingOrder = PopupCursorSort;
-            leaf.transform.position = popup.TransformPoint(new Vector3((answer == 0 ? YesX : NoX) + LeafOffset - 0.5f, AnswerY + LeafRise, 0f));
+            leaf.transform.position = popup.TransformPoint(new Vector3((answer == 0 ? YesX : NoX) + LeafOffset, AnswerY + LeafRise, 0f));
         }
 
         private void ClosePopup()
