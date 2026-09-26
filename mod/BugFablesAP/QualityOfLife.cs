@@ -64,6 +64,8 @@ namespace BugFablesAP
             new Scene { Map = "SnakemouthBridgeRoom", Event = 2, Flags = new[] { 10 } },
             // The door room's puzzle solved: it moves the rocks, removes two entities and drops the trapdoor's Mushroom, so fast-forwarded.
             new Scene { Map = "SnakemouthDoorRoom", Event = 4, Flags = null },
+            // The trapdoor: flag 14 (its check) and the fall into the next room, which the trapdoor landing below does.
+            new Scene { Map = "SnakemouthDoorRoom", Event = 5, Flags = new[] { 14 } },
             // The barkeeper's first talk; the same scene later handles bounties, so skipped only while 158 is unset.
             new Scene { Map = "UndergroundBar", Event = 83, Flags = new[] { 158 }, OnlyWhileUnset = 158 },
             // Arriving outside Snakemouth Den: walk, one line, discovery 0 (a location); the map's autostart sets its flag 22.
@@ -348,7 +350,9 @@ namespace BugFablesAP
 
         private static void TickTrapdoorLanding(MainManager mm, string here)
         {
-            if (here != "SnakemouthFallRoom")
+            // In the door room only once the scene was skipped (flag 14 set, no scene running).
+            bool skipped = here == "SnakemouthDoorRoom" && mm.flags[14];
+            if (here != "SnakemouthFallRoom" && !skipped)
             {
                 if (here != "SnakemouthDoorRoom")
                 {
@@ -369,7 +373,7 @@ namespace BugFablesAP
                 return;
             }
             MainManager.instance.StartCoroutine(MainManager.TransferMap((int)MainManager.Maps.SnakemouthFallRoom, MainManager.player.transform.position, door[1], door[2]));
-            log.LogInfo("[qol] after the trapdoor scene: entering the fall room through the door room's way down");
+            log.LogInfo("[qol] after the trapdoor scene" + (skipped ? " (skipped)" : "") + ": entering the fall room through the door room's way down");
         }
 
         // Event8's talk after the slides is cut: its first step is ChangeParty({1}) (Kabbu alone); refusing it stops the

@@ -609,6 +609,10 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    two rocks, destroys entities 0 and 1, sets flag 13 and drops the Mushroom whose pickup starts the trapdoor scene
    (`EntityControl.CreateItem`), so it is fast-forwarded, like the rope. Built. The trapdoor scene (Event5) itself stays
    at normal speed until it has been seen with three members.
+   **The trapdoor scene** (Event5, the user, 2026-09-27, once it had been seen with three): skipped, since the mod's
+   trapdoor landing (step 11) now does its other half. What it leaves is flag 14 (location 11's check) and the party in
+   the fall room; the skip sets 14, ends it the game's way, and the landing's `TransferMap` goes from the door room
+   (flag 14 set, no scene running) through the trapdoor's door. Built.
    **First skip froze the player** (the user at the bridge, 2026-09-25): a trigger
    freezes the player (`minipause`) before starting its scene (`NPCControl.cs:5512-5525`), and the scene's own
    `EndEvent` unfreezes. A skipped scene never ends, so the skip now calls the game's `EndEvent()` itself, which is all
