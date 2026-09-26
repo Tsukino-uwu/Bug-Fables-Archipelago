@@ -120,3 +120,12 @@ class TestAbilities(BugFablesTestBase):
     def test_story_party_needs_nothing_for_a_move(self) -> None:
         self.world.starting_member = -1
         self.assertEqual(self.world._requires({"abilities": ["Horn"], "requires": ["Explorer Permit"]}), ["Explorer Permit"])
+
+    def test_the_den_needs_the_horn(self) -> None:
+        # Grass on the way in and the door room's puzzle down the trapdoor (the user, 2026-09-26).
+        from ..data_tables import LOCATIONS, REGIONS
+        gate = next(region for region in REGIONS if region["name"] == "Past the Outskirts Gate")
+        into_den = next(exit_data for exit_data in gate["exits"] if exit_data["to"] == "Snakemouth Den")
+        self.assertIn("Kabbu", self.world._requires(into_den))
+        trapdoor = next(loc for loc in LOCATIONS if loc["name"] == "Snakemouth Den: Door Room, Trapdoor")
+        self.assertIn("Kabbu", self.world._requires(trapdoor))

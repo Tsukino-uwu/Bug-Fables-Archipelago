@@ -10,7 +10,7 @@
     {"name": "Snakemouth Den: Mushroom Pit, Floor", "id": 8, "region": "Snakemouth Den Underground", "source": {"flag": 42, "pickup": {"map": "SnakemouthMushroomPit", "type": 2, "item": 7}}},
     {"name": "Snakemouth Den: Mushroom Pit, Droplets", "id": 9, "region": "Snakemouth Den Underground", "requires": ["Leif"], "source": {"flag": 724, "pickup": {"map": "SnakemouthMushroomPit", "type": 0, "item": 144}}},
     {"name": "Snakemouth Den: Lake, Ladybug Kid's Reward", "id": 10, "region": "Snakemouth Den", "requires": ["Leif", "Snakemouth Den Cleared"], "source": {"event": 31, "flag": 55, "give": {"map": "SnakemouthLake", "type": 1, "item": 52}}, "category": "quest"},
-    {"name": "Snakemouth Den: Door Room, Trapdoor", "id": 11, "region": "Snakemouth Den", "source": {"event": 5, "flag": 14, "pickup": {"map": "SnakemouthDoorRoom", "type": 0, "item": 13, "story": true}}},
+    {"name": "Snakemouth Den: Door Room, Trapdoor", "id": 11, "region": "Snakemouth Den", "abilities": ["Horn"], "source": {"event": 5, "flag": 14, "pickup": {"map": "SnakemouthDoorRoom", "type": 0, "item": 13, "story": true}}},
     {"name": "Outskirts: Golden Path, Grass", "id": 12, "region": "Golden Path", "source": {"flag": 74, "pickup": {"map": "BOGoldenPath", "type": 0, "item": 2}}, "_comment": "Cut grass copies its own one-time flag onto the item it drops, so this is an ordinary pickup."},
     {"name": "Outskirts: Artis's Prize for Snakemouth Den", "id": 13, "region": "Bugaria Outskirts", "requires": ["Snakemouth Den Cleared"], "source": {"event": 33, "var": 13, "at_least": 3, "give": {"map": "BugariaOutskirtsOutsideCity", "type": 2, "item": 5}}, "_comment": "The first boss's prize medal: the mod pays prizes as if Hard Mode were on, so it waits at Artis."},
     {"name": "Outskirts: Ladybug Siblings' House", "id": 14, "region": "Bugaria Outskirts", "source": {"flag": 679, "pickup": {"map": "BugariaOutskirtsOutsideCity", "type": 0, "item": 8}}, "_comment": "No gate of its own: in the game only the Outskirts rocks, removed by the seed, keep it out of reach."},
@@ -71,7 +71,7 @@
   "regions": [
     {"name": "Menu", "exits": [{"to": "Bugaria Outskirts"}]},
     {"name": "Bugaria Outskirts", "exits": [{"to": "Past the Outskirts Gate", "requires": ["Explorer Permit"], "members": ["Vi", "Kabbu", "Leif"]}, {"to": "Golden Path", "requires": ["Snakemouth Den Cleared"]}, {"to": "Bugaria City"}, {"to": "Metal Island", "requires": ["Boat Ticket"]}]},
-    {"name": "Past the Outskirts Gate", "exits": [{"to": "Snakemouth Den"}]},
+    {"name": "Past the Outskirts Gate", "exits": [{"to": "Snakemouth Den", "abilities": ["Horn"], "_comment": "Grass in the second corridor and outside the cave, then the door room's horn puzzle down the trapdoor (the user)."}]},
     {"name": "Snakemouth Den", "exits": [{"to": "Snakemouth Den Underground", "requires": ["Leif"]}]},
     {"name": "Snakemouth Den Underground", "exits": [], "_comment": "Every Snakemouth room with water droplets, or reached only through one: Leif freezes the droplets."},
     {"name": "Golden Path", "exits": []},
