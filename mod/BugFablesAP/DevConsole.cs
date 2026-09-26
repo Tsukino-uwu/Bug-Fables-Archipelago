@@ -471,8 +471,8 @@ namespace BugFablesAP
                             int id = int.Parse(n);
                             articles.Append($"; item {id} {MainManager.itemdata[0, id, 0]}: '{MainManager.itemdata[0, id, 3]}'");
                         }
-                        // Giveitem's "You got" lines (menutext 106, and 110 for the other case).
-                        articles.Append($"; menutext[106] '{MainManager.menutext[106]}'; menutext[110] '{MainManager.menutext[110]}'");
+                        // A pickup's "You found" line (menutext 2) and Giveitem's "You got" lines (106, and 110 for the other case).
+                        articles.Append($"; menutext[2] '{MainManager.menutext[2]}'; menutext[106] '{MainManager.menutext[106]}'; menutext[110] '{MainManager.menutext[110]}'");
                         log.LogInfo(articles.ToString());
                         return "articles logged";
                     }

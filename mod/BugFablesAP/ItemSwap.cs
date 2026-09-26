@@ -279,13 +279,7 @@ namespace BugFablesAP
                 return;
             }
             ScoutedItemInfo info = Describe(location, out shownName, out shownSprite, out shownColor);
-            if (info != null && info.Player.Slot != connection.OwnSlot)
-            {
-                // Another player's item: "<player>'s <item>" in Archipelago's colours.
-                string item = IsOurs(info) ? shownName.Substring(info.Player.Name.Length + 3) : info.ItemDisplayName;
-                shownName = PlayerText(info.Player.Name) + Black + "'s " + ClassText(item, info.Flags);
-                shownForOther = true;
-            }
+            shownForOther = ForOther(info, ref shownName);
             log.LogInfo($"[swap] location {location}: giveitem {(badge ? "medal" : "item")} {id} on {MapName()} is a location; showing '{shownName}'"
                 + (info == null ? " (not scouted yet)" : ""));
         }
@@ -427,6 +421,18 @@ namespace BugFablesAP
             StartHoldUp();
         }
 
+        // Another player's item: "<player>'s <item>", in Archipelago's colours when Item colors is on.
+        private static bool ForOther(ScoutedItemInfo info, ref string name)
+        {
+            if (info == null || info.Player.Slot == connection.OwnSlot)
+            {
+                return false;
+            }
+            string item = IsOurs(info) ? name.Substring(info.Player.Name.Length + 3) : info.ItemDisplayName;
+            name = PlayerText(info.Player.Name) + Black + "'s " + ClassText(item, info.Flags);
+            return true;
+        }
+
         // For the "You got" line, which wraps the name in |color,1|...|color,0|: another player's name, and an item by class.
         internal static string PlayerText(string player)
         {
@@ -504,6 +510,16 @@ namespace BugFablesAP
                 connection.QueueRespawnCheck(at, MainManager.instance.flagstring[ItemReceiver.SeedSlot]);
             }
             ScoutedItemInfo info = Describe(at, out string name, out Sprite sprite, out Color? color);
+            string article = info != null && IsOurs(info) ? ArticleOf(info.ItemId, KindOf(info)) : null;
+            // "You found |string,1| ...": the seed item's own article, none for a member or another player's item.
+            if (ForOther(info, ref name) || article == "")
+            {
+                text = text.Replace(ArticleSlot, "");
+            }
+            else if (article != null)
+            {
+                MainManager.instance.flagstring[1] = article;
+            }
             MainManager.instance.flagstring[0] = name;
             SpriteRenderer held = caller.entity.sprite;
             if (sprite != null && held != null)

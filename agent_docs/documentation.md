@@ -471,6 +471,11 @@ the article (`flagstring[1]`) then the name (`flagstring[0]`), both of which the
 mod changes line 106 and puts it back the next frame: **"You found QuestTester's Sword!"** (the user's wording), the
 article and its space gone. A party member, who has no article, loses just the article: "You got Vi!". Not yet seen:
 this needs a room with a second player.
+**Pickups have their own line** (seen by the user, 2026-09-26: a picked-up item read "You found a ..."): menu text 2,
+`You found |string,1| |color,1||string,0||color,1|!`, built into the text the mod already rewrites for a pickup
+location. It kept the vanilla item's article (a Bad Book spot holding the Explorer Permit would say "a Explorer
+Permit"). Now the same rules as the gift line: the seed item's own article, none for a party member ("You found Vi!"),
+and "You found Player's Sword!" for another player's item, article gone, in the Item colors. Not yet seen.
 
 **Archipelago's colours in the line (the user, 2026-09-26, three rounds on screen).** The game colours text only from
 its own palette (`|color,n|`), which in its scene is 10 colours, not the 7 in the code (dev `palette`; a first try that
