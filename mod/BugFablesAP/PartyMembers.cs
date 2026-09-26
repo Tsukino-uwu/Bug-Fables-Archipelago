@@ -188,6 +188,19 @@ namespace BugFablesAP
             return false;
         }
 
+        // Leif's one line at the start of his first battle (BattleControl.EventDialogue 3, while 16 is set and 24 isn't) is
+        // marked said as soon as he has joined, whatever Skip cutscenes says (the user, 2026-09-27).
+        private static void SkipLeifsFirstBattleLine(MainManager mm)
+        {
+            if (randomizerOn == null || !randomizerOn() || MainManager.map == null || mm.flags == null || !mm.flags[16] || mm.flags[24]
+                || MainManager.battle != null)
+            {
+                return;
+            }
+            mm.flags[24] = true;
+            log.LogInfo("[members] Leif has joined (flag 16): his first-battle line marked said (flag 24)");
+        }
+
         // Leif joins once the spider scene is over (flag 27, not yet 16), where the story has him start following.
         private static void TickLeifJoins(MainManager mm)
         {
@@ -244,6 +257,7 @@ namespace BugFablesAP
                 return;
             }
             TickLeifJoins(mm);
+            SkipLeifsFirstBattleLine(mm);
             if (!Active || mm.extrafollowers == null || mm.playerdata == null)
             {
                 return;

@@ -741,7 +741,11 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    the fight against Maki in the opening (case 0 and 1, enemy `MakiTutorial`, while flag 15 is unset), which the
    opening skip already removes. The spider's first fight ends at once (item 5). What's left: case 3, Leif's one line in
    the first battle after he joins (flag 16 set, 24 not; it sets 24; `SetMaxOptions` reads 15 and 16, not 24), and
-   story lines inside boss fights (cases 7, 8 in the first boss; others later), which stay.
+   story lines inside boss fights (cases 7, 8 in the first boss; others later), which stay. **Leif's line is always
+   skipped with Archipelago on** (the user, 2026-09-27, even with Skip cutscenes off): once flag 16 is set and 24 isn't,
+   the mod sets 24, outside a battle. Flag 24 also lets enemy 1 appear on the ground instead of always in the air
+   (`MainManager.cs:6299-6309`); the game sets it with that same line, so only the moments between Leif joining and his
+   first battle change, and only toward easier. Built. *Code: `PartyMembers.cs`.*
    **Travel: Off / Warp / Map / Both (the user, 2026-09-26; built, not yet seen).** The Warp button's on/off became one
    *Travel* row (config `Travel`, default Both). `WarpButton.cs` now places the travel buttons after the game's four:
    Warp, then Map (left from the first button wraps to Map; Warp sits between, harder to hit by accident). Five fit
