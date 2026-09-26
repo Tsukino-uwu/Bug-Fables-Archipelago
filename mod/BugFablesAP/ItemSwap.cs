@@ -302,19 +302,29 @@ namespace BugFablesAP
                 if (info.Player.Slot != connection.OwnSlot)
                 {
                     name = info.Player.Name + "'s " + name;
+                    if (QualityOfLife.IconMode == "AllPlayers")
+                    {
+                        sprite = ApIcon.Get();
+                        color = ClassColor(info.Flags);
+                    }
                 }
             }
             else
             {
-                // Archipelago's classification colours (NetUtils.py): progression, useful, trap, filler.
+                // Another game's item: the drawn Archipelago icon, on Archipelago's classification colours (NetUtils.py):
+                // progression, useful, trap, filler.
                 name = info.Player.Name + "'s " + info.ItemDisplayName;
-                color = (info.Flags & ItemFlags.Advancement) != 0 ? Hex(0xAF99EF)
-                    : (info.Flags & ItemFlags.NeverExclude) != 0 ? Hex(0x6D8BE8)
-                    : (info.Flags & ItemFlags.Trap) != 0 ? Hex(0xFA8072)
-                    : Hex(0x00EEEE);
+                sprite = QualityOfLife.IconMode == "Off" ? null : ApIcon.Get();
+                color = ClassColor(info.Flags);
             }
             return info;
         }
+
+        private static Color ClassColor(ItemFlags flags) =>
+            (flags & ItemFlags.Advancement) != 0 ? Hex(0xAF99EF)
+            : (flags & ItemFlags.NeverExclude) != 0 ? Hex(0x6D8BE8)
+            : (flags & ItemFlags.Trap) != 0 ? Hex(0xFA8072)
+            : Hex(0x00EEEE);
 
         // Dev (console `shelflook`): a location drawn with another sprite, to compare looks where they'll be seen.
         internal static readonly Dictionary<long, Sprite> DevLooks = new Dictionary<long, Sprite>();

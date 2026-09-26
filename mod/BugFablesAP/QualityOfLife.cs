@@ -32,6 +32,10 @@ namespace BugFablesAP
         internal static readonly string[] ItemColorValues = { "Archipelago", "Off" };
         internal static ConfigEntry<string> ItemColors;
         internal static bool ApColors => ItemColors == null || ItemColors.Value != "Off";
+        // Which items not your own show the drawn Archipelago icon: another game's, every other player's, or none.
+        internal static readonly string[] ItemIconValues = { "OtherGames", "AllPlayers", "Off" };
+        internal static ConfigEntry<string> ItemIcons;
+        internal static string IconMode => ItemIcons?.Value ?? "OtherGames";
         // Tenths of the normal price: 10 normal, 5 half, 0 free.
         internal const int FullPrice = 10;
         internal static ConfigEntry<int> MedalPrices;
@@ -89,6 +93,10 @@ namespace BugFablesAP
             {
                 ItemColors.Value = "Off";
             }
+            if (ItemIcons != null)
+            {
+                ItemIcons.Value = "Off";
+            }
             if (Travel != null)
             {
                 Travel.Value = "Off";
@@ -101,7 +109,7 @@ namespace BugFablesAP
 
         internal static void ResetAll()
         {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, Travel, SkipConfirm, SkipCutscenes, ItemAnimation, ItemColors, ApMenu.Detector })
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, Travel, SkipConfirm, SkipCutscenes, ItemAnimation, ItemColors, ItemIcons, ApMenu.Detector })
             {
                 if (setting != null)
                 {
@@ -130,6 +138,11 @@ namespace BugFablesAP
                 + "its kind (progression, useful, filler, trap) as Archipelago's text client does, darkened to read on the box; "
                 + "Off keeps the game's red for the whole name.",
                 new AcceptableValueList<string>(ItemColorValues)));
+            ItemIcons = config.Bind("QualityOfLife", "ItemIcons", "OtherGames", new ConfigDescription(
+                "Which items that aren't yours show the Archipelago icon, on the ground, on shelves and when found: OtherGames "
+                + "(another game's items; another Bug Fables player's show their real sprite), AllPlayers (every item that isn't "
+                + "yours), or Off (they look like the item the game had there, a surprise).",
+                new AcceptableValueList<string>(ItemIconValues)));
             MedalPrices = config.Bind("Gameplay", "MedalPrices", FullPrice, new ConfigDescription(
                 "Medal shop prices, in berries and crystal berries, in tenths of the normal price: 10 normal, 5 half, 0 free. "
                 + "Any price above free is at least 1. Switch it on the Gameplay page.", new AcceptableValueRange<int>(0, FullPrice)));

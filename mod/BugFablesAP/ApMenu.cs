@@ -14,7 +14,7 @@ namespace BugFablesAP
             Rows = 7;
         // The Quality of life page: the two buttons side by side on top, then the settings.
         private const int ButtonsRow = 0, FastTextRow = 1, WarpRow = 2, SkipConfirmRow = 3, CutscenesRow = 4, AnimationRow = 5, ColorsRow = 6,
-            DetectorRow = 7, QolRows = 8;
+            IconsRow = 7, DetectorRow = 8, QolRows = 9;
         // The Gameplay page: how the game plays, under the same two buttons.
         private const int DifficultyRow = 1, ScalingRow = 2, MedalPricesRow = 3, ExpRow = 4, BerryRow = 5, GameplayRows = 6;
         private enum Page { Main, Qol, Gameplay }
@@ -201,6 +201,10 @@ namespace BugFablesAP
         private const int CursorSort = 20;
         private const string TextSort = "|sort,10|";
         private static readonly float[] RowY = { 2.65f, 2.0f, 1.35f, 0.7f, 0.05f, -0.6f, -1.25f, -1.9f };
+        // The Quality of life page has nine rows: the same top and bottom row, closer together.
+        private const float QolRowStep = (2.65f + 1.9f) / 8f;
+
+        private float RowAt(int r) => page == Page.Qol ? RowY[0] - r * QolRowStep : RowY[r];
         private const float DescribeY = -2.55f, StatusY = -3.1f;
         // Matched to the game's Settings screen: labels ~88 px in from the vine border.
         private const float LabelX = -5.15f;
@@ -434,6 +438,13 @@ namespace BugFablesAP
                         return QualityOfLife.ApColors
                             ? "Other players and their items in Archipelago's colours."
                             : "Other players' items named in the game's red.";
+                    case IconsRow:
+                        switch (QualityOfLife.IconMode)
+                        {
+                            case "AllPlayers": return "Every item that isn't yours shows the Archipelago icon.";
+                            case "Off": return "Items that aren't yours look like the game's own item there.";
+                            default: return "Other games' items show the Archipelago icon.";
+                        }
                     case DetectorRow: return "Acts like the Detector medal is always equipped, to find hidden items.";
                     default: return "";
                 }
@@ -521,6 +532,10 @@ namespace BugFablesAP
                 else if (r == ColorsRow && QualityOfLife.ItemColors != null)
                 {
                     Cycle(QualityOfLife.ItemColors, QualityOfLife.ItemColorValues, by);
+                }
+                else if (r == IconsRow && QualityOfLife.ItemIcons != null)
+                {
+                    Cycle(QualityOfLife.ItemIcons, QualityOfLife.ItemIconValues, by);
                 }
                 else if (r == WarpRow && QualityOfLife.Travel != null)
                 {
@@ -708,6 +723,8 @@ namespace BugFablesAP
                 Choice(CutscenesRow, "Skip cutscenes", OnOff(QualityOfLife.SkipCutscenes));
                 Choice(AnimationRow, "Item animation", (QualityOfLife.ItemAnimation?.Value ?? "All").ToUpperInvariant());
                 Choice(ColorsRow, "Item colors", (QualityOfLife.ItemColors?.Value ?? "Archipelago").ToUpperInvariant());
+                Choice(IconsRow, "Archipelago icon", QualityOfLife.IconMode == "OtherGames" ? "OTHER GAMES"
+                    : QualityOfLife.IconMode == "AllPlayers" ? "ALL PLAYERS" : "OFF");
                 Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Quality of life. Cancel goes back" + (inGame ? " to Settings." : "."), 0f, StatusY);
@@ -741,7 +758,7 @@ namespace BugFablesAP
 
             Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
             Text("|center||size,0.5|" + Safe(shownStatus), 0f, StatusY);
-            leaf.transform.localPosition = new Vector3(LabelX + LeafOffset, RowY[row] + LeafRise, 0f);
+            leaf.transform.localPosition = new Vector3(LabelX + LeafOffset, RowAt(row) + LeafRise, 0f);
         }
 
         // Made once: prompts rebuilt on every redraw replayed their pop-in each time the cursor moved.
@@ -751,13 +768,13 @@ namespace BugFablesAP
             arrows.parent = box;
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
-            foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, SkipConfirmRow, CutscenesRow, AnimationRow, ColorsRow, DetectorRow }
+            foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, SkipConfirmRow, CutscenesRow, AnimationRow, ColorsRow, IconsRow, DetectorRow }
                 : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, MedalPricesRow, ExpRow, BerryRow } : new[] { ModeRow, AchievementsRow, NormalSavesRow })
             {
                 for (int side = 0; side < 2; side++)
                 {
                     GameObject arrow = MainManager.NewUIObject("arrow" + r + side, arrows,
-                        new Vector3(side == 0 ? ArrowLeftX : ArrowRightX, RowY[r] + ArrowRise), Vector3.one * ArrowScale,
+                        new Vector3(side == 0 ? ArrowLeftX : ArrowRightX, RowAt(r) + ArrowRise), Vector3.one * ArrowScale,
                         MainManager.guisprites[1], ButtonSort);
                     arrow.transform.localEulerAngles = new Vector3(0f, 0f, side == 0 ? -90f : 90f);
                     arrow.layer = 5;
@@ -785,7 +802,7 @@ namespace BugFablesAP
                 {
                     bool on = p < lit[i];
                     GameObject pip = MainManager.NewUIObject("pip", pips,
-                        new Vector3(ArrowLeftX + (0.7f + 0.4f * p) * PipScale, RowY[rows[i]] + ArrowRise),
+                        new Vector3(ArrowLeftX + (0.7f + 0.4f * p) * PipScale, RowAt(rows[i]) + ArrowRise),
                         Vector3.one * (on ? 1f / 3f : 1f / 4f) * PipScale, MainManager.guisprites[on ? 42 : 59], ButtonSort + p);
                     if (on)
                     {
@@ -805,8 +822,8 @@ namespace BugFablesAP
         // The two buttons side by side at the top of a settings page; confirming one opens the Yes / No box.
         private void DrawButtons()
         {
-            Text("|size,0.8|" + (row == ButtonsRow && button == 0 ? "|color,1|" : "") + "Reset to defaults", LabelX, RowY[ButtonsRow]);
-            Text("|center||size,0.8|" + (row == ButtonsRow && button == 1 ? "|color,1|" : "") + "Disable all", ValueCenterX, RowY[ButtonsRow]);
+            Text("|size,0.8|" + (row == ButtonsRow && button == 0 ? "|color,1|" : "") + "Reset to defaults", LabelX, RowAt(ButtonsRow));
+            Text("|center||size,0.8|" + (row == ButtonsRow && button == 1 ? "|color,1|" : "") + "Disable all", ValueCenterX, RowAt(ButtonsRow));
         }
 
         private void PlaceCursor()
@@ -818,7 +835,7 @@ namespace BugFablesAP
             }
             ClosePopup();
             float leafX = row == ButtonsRow && button == 1 ? ValueCenterX - DisableHalfWidth : LabelX;
-            leaf.transform.localPosition = new Vector3(leafX + LeafOffset, RowY[row] + LeafRise, 0f);
+            leaf.transform.localPosition = new Vector3(leafX + LeafOffset, RowAt(row) + LeafRise, 0f);
         }
 
         // The Gameplay page's two buttons: every row to its plain value, or back to its default.
@@ -899,7 +916,7 @@ namespace BugFablesAP
             Label(r, label);
             // About 8 letters fit between the arrows at 0.75; a longer value shrinks to fit.
             float size = value.Length > 8 ? 0.75f * 8f / value.Length : 0.75f;
-            Text("|center||size," + size.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + value, ValueCenterX, RowY[r]);
+            Text("|center||size," + size.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + value, ValueCenterX, RowAt(r));
         }
 
         private void Label(int r, string label)
@@ -907,7 +924,7 @@ namespace BugFablesAP
             string colour = editing && r == row ? "|color,1|" : "";
             // About 15 letters fit before the arrows at 0.8; a longer label shrinks to fit.
             float size = label.Length > 15 ? 0.8f * 15f / label.Length : 0.8f;
-            Text("|size," + size.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + colour + label, LabelX, RowY[r]);
+            Text("|size," + size.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + colour + label, LabelX, RowAt(r));
         }
 
         private void Row(int r, string label, string value)
@@ -919,7 +936,7 @@ namespace BugFablesAP
             }
             bool typing = editing && r == row;
             string shown = value.Length == 0 && !typing ? "|color,5|(empty)" : Safe(value);
-            Text("|size,0.65|" + (typing ? "|color,1|" : "") + shown + (typing ? "_" : ""), ValueX, RowY[r]);
+            Text("|size,0.65|" + (typing ? "|color,1|" : "") + shown + (typing ? "_" : ""), ValueX, RowAt(r));
         }
 
         private void Text(string text, float x, float y)

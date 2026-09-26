@@ -30,6 +30,7 @@ anyone curious about the process, or thinking of doing the same for another game
 18. [Use on normal saves: the settings without Archipelago](#18-use-on-normal-saves-the-settings-without-archipelago)
 19. [EXP and berry multipliers: bars like the volume rows](#19-exp-and-berry-multipliers-bars-like-the-volume-rows)
 20. [Item colors: Archipelago's colours in the "You got" box](#20-item-colors-archipelagos-colours-in-the-you-got-box)
+21. [Archipelago icon: other players' items on the ground and on shelves](#21-archipelago-icon-other-players-items-on-the-ground-and-on-shelves)
 
 ## Where it stands
 
@@ -1327,3 +1328,25 @@ default. Right below Item animation, since both are about another player's items
 **Status:** built (2026-09-26), not yet seen: the row on the page, and a hold-up with it off.
 
 *Code: `QualityOfLife.cs` (`ItemColors`, `ApColors`), `ApMenu.cs` (`ColorsRow`), `ItemSwap.cs` (`PlayerText`, `ClassText`).*
+
+## 21. Archipelago icon: other players' items on the ground and on shelves
+
+**Asked (the user, 2026-09-26):** once the icon was drawn (step 9, `ApIcon.cs`), use it for every other world's item,
+with a Quality of life row. The design from 2026-09-24 and 2026-09-26 (another game's item as the icon, another Bug
+Fables player's with its real sprite, a row on by default, off for a surprise) plus a mode the user added: every other
+player's item as the icon. **Archipelago icon: OTHER GAMES / ALL PLAYERS / OFF**, Other games by default, below Item
+colors.
+
+**How it works** (`ItemSwap.Describe`, the one place every look comes from: the ground, a shop shelf, a pickup, a gift):
+- **Other games:** another game's item is the icon, its starburst in its class colour; another Bug Fables player's item
+  keeps its real sprite; yours too.
+- **All players:** any item that isn't yours is the icon, in its class colour.
+- **Off:** another game's item keeps the vanilla item's look (as before the icon), a surprise until found; Bug Fables
+  items show their real sprite. The text always names whose it is.
+- With nine rows, the Quality of life page's rows sit closer (the first and last where they were); the other pages
+  are unchanged.
+
+**Status:** built (2026-09-26), not yet seen: a three-slot test seed (you, a second Bug Fables player, APQuest) has one
+of each on the ground in the Outskirts, on the Caravan's shelf, and at Artis's gift.
+
+*Code: `QualityOfLife.cs` (`ItemIcons`, `IconMode`), `ApMenu.cs` (`IconsRow`, `RowAt`), `ItemSwap.cs` (`Describe`), `ApIcon.cs`.*
