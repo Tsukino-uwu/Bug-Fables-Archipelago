@@ -479,6 +479,13 @@ class TestKeptPresent(BugFablesTestBase):
     def test_fall_room_blocker_is_kept_open(self) -> None:
         self.assertIn({"map": "SnakemouthFallRoom", "entity": "blocker"}, self.world.fill_slot_data()["kept_open"])
 
+    def test_near_snakemouth_exits_open_before_the_boss(self) -> None:
+        data = self.world.fill_slot_data()
+        for trigger, door in (("BlockLeft", "loadingzonechuck"), ("BlockRight", "loadingzonefields")):
+            with self.subTest(door=door):
+                self.assertIn({"map": "NearSnakemouth", "entity": trigger}, data["kept_open"])
+                self.assertIn({"map": "NearSnakemouth", "entity": door}, data["kept_present"])
+
 
 class TestOutskirtsRocks(BugFablesTestBase):
     # The Outskirts rocks go from the start, so the town opens without its early scenes (arrival, plaza blockers).

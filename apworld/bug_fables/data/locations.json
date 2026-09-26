@@ -100,6 +100,8 @@
     {"map": "BugariaOutskirtsOutsideCity", "entity": "MinerAntWalk", "_comment": "His fellow miner."},
     {"map": "BugariaOutskirtsOutsideCity", "entity": "eetlblocker1 - Duplicate", "_comment": "Eetl turns the party back from the first boss until chapter 2, cutting off Snakemouth Den."},
     {"map": "SnakemouthFallRoom", "entity": "blocker", "_comment": "Turns the party back until the first boss; with the way up kept present it has nothing left to guard."},
+    {"map": "NearSnakemouth", "entity": "BlockLeft", "_comment": "Turns the party back from Chuck's Abode until the first boss ('the cave first'); nothing inside waits on the story."},
+    {"map": "NearSnakemouth", "entity": "BlockRight", "_comment": "Turns the party back from the shortcut to the first corridor until the first boss."},
     {"map": "BugariaOutskirtsOutsideCity", "entity": "Crickerly1", "_comment": "The Crickerly who stands there before the caravan opens."},
     {"map": "BugariaOutskirtsOutsideCity", "entity": "FuzzyMoth", "_comment": "A moth waiting for the rocks to be cleared; gone with the rocks."}
   ],
@@ -116,6 +118,8 @@
     {"map": "SnakemouthDoorRoom", "entity": "DoorLoadZone", "_comment": "The big door to Upper Snakemouth; the Peculiar Gem slot right behind it still locks the way."},
     {"map": "SnakemouthFallRoom", "entity": "JumpShroom", "_comment": "The bounce mushroom back up to the pitfall room, so the trapdoor is never a dead end."},
     {"map": "SnakemouthFallRoom", "entity": "LoadingZoneDoorRoom", "_comment": "The door at the top of the bounce mushroom."},
+    {"map": "NearSnakemouth", "entity": "loadingzonechuck", "_comment": "The way into Chuck's Abode, made only after the first boss."},
+    {"map": "NearSnakemouth", "entity": "loadingzonefields", "_comment": "The shortcut back to the first corridor, made only after the first boss."},
     {"map": "BugariaOutskirtsOutsideCity", "entity": "Crickerly2", "_comment": "The caravan's shopkeeper, made while the map builds its entities so the game builds its shop slots."},
     {"map": "BugariaOutskirtsOutsideCity", "entity": "LaydbugGirl", "_comment": "A ladybug sibling outside their house; their other lines answer to the lost-brother quest's own flags."},
     {"map": "BugariaOutskirtsOutsideCity", "entity": "LaydbugBoy", "_comment": "The other ladybug sibling."}
