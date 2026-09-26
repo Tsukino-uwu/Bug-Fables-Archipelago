@@ -150,8 +150,10 @@ be wrong.
    that unlocks the boat to Metal Island: without it the sailor won't sail; with it the trip is free and the ticket
    isn't used up (a key item). The logic gates Metal Island on it, so Metal Island isn't open from the start. The
    Quality of life row *Free boat* goes. **The mod's own item** (the user, 2026-09-26): the game has no ticket, so the
-   mod adds one entry at the end of the game's item table at runtime (name "Boat Ticket", its own description, the
-   Platinum Card's sprite, item 176, the user's pick, or a combined icon on it), as the Settings rows add their labels to the text table. It arrives from the
+   mod adds one entry at the end of the game's item table at runtime, a unique item: its own name "Boat Ticket", its own
+   description (proposed: "A ticket for the boat to Metal Island. Show it to the sailor at the Bugaria pier. It never
+   runs out."), and the Platinum Card's sprite (item 176) as it is (the user: combined icons were tried as mockups
+   and none looked right on the silver card), as the Settings rows add their labels to the text table. It arrives from the
    server like any item and sits in the key items as a real id, saved like one; randomizer saves are separate files
    vanilla never opens. The sailor's dialogue (refusing, then free) goes through the fare lines the mod already
    rewrites (lines 16 and 19).
@@ -1479,9 +1481,10 @@ the mod guide, step 7). An icon is only lent: the item has its own name and desc
 | 140 | Red Paint | looks like soup |
 | 149 | Package | a box or mail |
 
-**Combined icons** (the user's idea): the mod can layer game sprites into a new icon, e.g. the Platinum Card with a
-small emblem on it, still the game's own art. To test when the ticket is built; the plain card is the fallback (an
-item laid on a drawn backdrop looked off on the Warp button).
+**Combined icons** (the user's idea): the mod can layer game sprites into a new icon, still the game's own art. Tried
+as mockups for the ticket (2026-09-26): emblems in the card's corner looked stuck on; centred and tilted with the card
+they read better, but grey or brown on silver has no contrast. The ticket uses the plain card; a combined icon needs an
+emblem that contrasts with its base.
 
 ## 10. Things that go wrong quietly
 
