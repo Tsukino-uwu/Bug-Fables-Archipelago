@@ -56,7 +56,8 @@ menu, and from the main menu), shown while the Archipelago mod is enabled or *Us
 
 - **Quality of life**: **Fast text** (dialogue is instant, and holding skip races through it; On), **Travel** (Off,
   Warp, Map or Both, the default: the Warp is a pause-menu button back to where the game began, or to the seed's
-  start; Map is fast travel from the pause menu's map to areas you've visited; both ask Yes / No), **Skip cutscenes**
+  start; Map is fast travel from the pause menu's map to areas you've visited; both ask Yes / No), **Skip confirm**
+  (Off, the default, Warp, Map or Both: which travel buttons go at once, without the Yes / No), **Skip cutscenes**
   (On: the new game's intro, tutorial battle included, is skipped, Vi joining and the first check sent; other scenes
   you don't need to watch are skipped or pass by fast; with a random start the intro is always skipped), **Item
   animation** (which items from other players are shown held up: All, the default, Progression or Off; your own finds

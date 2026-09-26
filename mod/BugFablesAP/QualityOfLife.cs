@@ -22,6 +22,10 @@ namespace BugFablesAP
             || (SeedStart?.Invoke()).HasValue || (EntrancesShuffled?.Invoke() ?? false);
         internal static Func<bool> EntrancesShuffled;
         internal static bool MapOn => Travel != null && (Travel.Value == "Map" || Travel.Value == "Both");
+        // Which travel buttons go without their Yes / No box (the same four values as Travel).
+        internal static ConfigEntry<string> SkipConfirm;
+        internal static bool SkipWarpConfirm => SkipConfirm != null && (SkipConfirm.Value == "Warp" || SkipConfirm.Value == "Both");
+        internal static bool SkipMapConfirm => SkipConfirm != null && (SkipConfirm.Value == "Map" || SkipConfirm.Value == "Both");
         internal static ConfigEntry<bool> SkipCutscenes;
         internal static readonly string[] ItemAnimations = { "All", "Progression", "Off" };
         internal static ConfigEntry<string> ItemAnimation;
@@ -82,11 +86,15 @@ namespace BugFablesAP
             {
                 Travel.Value = "Off";
             }
+            if (SkipConfirm != null)
+            {
+                SkipConfirm.Value = "Off";
+            }
         }
 
         internal static void ResetAll()
         {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, Travel, SkipCutscenes, ItemAnimation, ApMenu.Detector })
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, Travel, SkipConfirm, SkipCutscenes, ItemAnimation, ApMenu.Detector })
             {
                 if (setting != null)
                 {
@@ -123,6 +131,10 @@ namespace BugFablesAP
             Travel = config.Bind("QualityOfLife", "Travel", "Both", new ConfigDescription(
                 "Travel buttons in the pause menu, each behind a Yes / No box: Warp (back to where the game started, or to the seed's start), Map (the "
                 + "map, where confirm on an area you've been to travels to its save point), Both, or Off. Not shown in battle.",
+                new AcceptableValueList<string>(TravelValues)));
+            SkipConfirm = config.Bind("QualityOfLife", "SkipConfirm", "Off", new ConfigDescription(
+                "Which travel buttons act without their Yes / No box: Warp (warps as soon as it's picked), Map (confirm on an "
+                + "area you've been to travels there at once), Both, or Off (both ask first).",
                 new AcceptableValueList<string>(TravelValues)));
             // A follow-up line is fetched inside the running dialogue, not through a new SetText.
             MethodInfo getLine = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetDialogueText), new[] { typeof(int) });

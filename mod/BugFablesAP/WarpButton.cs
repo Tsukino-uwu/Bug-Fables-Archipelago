@@ -9,7 +9,7 @@ using UnityEngine;
 namespace BugFablesAP
 {
     // The travel buttons after the pause menu's four (Quality of life, Travel: Warp / Map / Both), each behind a
-    // Yes / No box. Warp to start: the game's own map transfer to where a new game begins. Map: the game's own map
+    // Yes / No box unless Skip confirm says otherwise. Warp to start: the game's own map transfer to where a new game begins. Map: the game's own map
     // window in a travel mode, where confirm on a visited area travels to its save point (the map opened any other way
     // keeps vanilla controls). The logic never counts on either. Confirm is caught before the game would act on it.
     internal static class WarpButton
@@ -17,6 +17,8 @@ namespace BugFablesAP
         private static ManualLogSource log;
         private static Func<bool> warpOn;
         private static Func<bool> mapOn;
+        private static Func<bool> skipWarpConfirm;
+        private static Func<bool> skipMapConfirm;
         private static Harmony harmony;
 
         private static readonly FieldInfo optionField = AccessTools.Field(typeof(PauseMenu), "option");
@@ -142,11 +144,14 @@ namespace BugFablesAP
         private static Kind asking;
         private static int askedArea;
 
-        internal static void Enable(ManualLogSource logger, string guid, Func<bool> warpEnabled, Func<bool> mapEnabled)
+        internal static void Enable(ManualLogSource logger, string guid, Func<bool> warpEnabled, Func<bool> mapEnabled,
+            Func<bool> skipWarp, Func<bool> skipMap)
         {
             log = logger;
             warpOn = warpEnabled;
             mapOn = mapEnabled;
+            skipWarpConfirm = skipWarp;
+            skipMapConfirm = skipMap;
             MethodInfo update = AccessTools.Method(typeof(PauseMenu), "Update");
             MethodInfo updateText = AccessTools.Method(typeof(PauseMenu), "UpdateText");
             if (update == null || updateText == null || optionField == null || maxField == null || spritesField == null
@@ -230,7 +235,11 @@ namespace BugFablesAP
             if (button >= 0 && button < buttons.Count && MainManager.instance.inputcooldown <= 0f && MainManager.GetKey(4, hold: false))
             {
                 MainManager.PlaySound("Confirm", 10);
-                if (buttons[button] == Kind.Warp)
+                if (buttons[button] == Kind.Warp && skipWarpConfirm())
+                {
+                    Go(__instance, Kind.Warp, -1);
+                }
+                else if (buttons[button] == Kind.Warp)
                 {
                     OpenConfirm(__instance, Kind.Warp, -1);
                 }
@@ -447,7 +456,14 @@ namespace BugFablesAP
                 return false;
             }
             MainManager.PlaySound("Confirm", 10);
-            OpenConfirm(menu, Kind.Map, area);
+            if (skipMapConfirm())
+            {
+                Go(menu, Kind.Map, area);
+            }
+            else
+            {
+                OpenConfirm(menu, Kind.Map, area);
+            }
             return false;
         }
 
@@ -529,14 +545,18 @@ namespace BugFablesAP
                 }
                 MainManager.PlaySound("Confirm", 10);
                 CloseConfirm();
-                Kind kind = asking;
-                int area = askedArea;
-                mapTravel = false;
-                log.LogInfo(kind == Kind.Warp ? $"[warp] warp to start chosen on {MainManager.map?.mapid}"
-                    : $"[warp] travel to area {area} ({MainManager.areanames[area]}) chosen on {MainManager.map?.mapid}");
-                prepareExit.Invoke(menu, null);
-                MainManager.instance.StartCoroutine(TravelWhenUnpaused(kind, area));
+                Go(menu, asking, askedArea);
             }
+        }
+
+        private static void Go(PauseMenu menu, Kind kind, int area)
+        {
+            mapTravel = false;
+            bool asked = kind == Kind.Warp ? !skipWarpConfirm() : !skipMapConfirm();
+            log.LogInfo((kind == Kind.Warp ? "[warp] warp to start chosen" : $"[warp] travel to area {area} ({MainManager.areanames[area]}) chosen")
+                + $" on {MainManager.map?.mapid}" + (asked ? "" : " (Skip confirm: no Yes / No box)"));
+            prepareExit.Invoke(menu, null);
+            MainManager.instance.StartCoroutine(TravelWhenUnpaused(kind, area));
         }
 
         private static void CloseConfirm()

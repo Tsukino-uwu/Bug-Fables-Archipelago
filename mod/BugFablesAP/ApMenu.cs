@@ -13,7 +13,8 @@ namespace BugFablesAP
         private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, AchievementsRow = 5, NormalSavesRow = 6,
             Rows = 7;
         // The Quality of life page: the two buttons side by side on top, then the settings.
-        private const int ButtonsRow = 0, FastTextRow = 1, WarpRow = 2, CutscenesRow = 3, AnimationRow = 4, DetectorRow = 5, QolRows = 6;
+        private const int ButtonsRow = 0, FastTextRow = 1, WarpRow = 2, SkipConfirmRow = 3, CutscenesRow = 4, AnimationRow = 5, DetectorRow = 6,
+            QolRows = 7;
         // The Gameplay page: how the game plays, under the same two buttons.
         private const int DifficultyRow = 1, ScalingRow = 2, MedalPricesRow = 3, ExpRow = 4, BerryRow = 5, GameplayRows = 6;
         private enum Page { Main, Qol, Gameplay }
@@ -413,6 +414,14 @@ namespace BugFablesAP
                             case "Map": return "A pause menu map: pick an area you've been to and travel there.";
                             default: return "Both pause menu buttons: Warp to the start, and Map travel.";
                         }
+                    case SkipConfirmRow:
+                        switch (QualityOfLife.SkipConfirm?.Value)
+                        {
+                            case "Warp": return "Warp goes at once, without asking Yes / No first.";
+                            case "Map": return "Map travel goes at once, without asking Yes / No first.";
+                            case "Both": return "Warp and Map travel go at once, without asking Yes / No first.";
+                            default: return "Warp and Map travel ask Yes / No first.";
+                        }
                     case CutscenesRow: return "Skips the intro and scenes you don't need to watch.";
                     case AnimationRow:
                         switch (QualityOfLife.ItemAnimation?.Value)
@@ -508,6 +517,10 @@ namespace BugFablesAP
                 else if (r == WarpRow && QualityOfLife.Travel != null)
                 {
                     Cycle(QualityOfLife.Travel, QualityOfLife.TravelValues, by);
+                }
+                else if (r == SkipConfirmRow && QualityOfLife.SkipConfirm != null)
+                {
+                    Cycle(QualityOfLife.SkipConfirm, QualityOfLife.TravelValues, by);
                 }
                 else
                 {
@@ -683,6 +696,7 @@ namespace BugFablesAP
                 DrawButtons();
                 Choice(FastTextRow, "Fast text", OnOff(QualityOfLife.FastText));
                 Choice(WarpRow, "Travel", (QualityOfLife.Travel?.Value ?? "Both").ToUpperInvariant());
+                Choice(SkipConfirmRow, "Skip confirm", (QualityOfLife.SkipConfirm?.Value ?? "Off").ToUpperInvariant());
                 Choice(CutscenesRow, "Skip cutscenes", OnOff(QualityOfLife.SkipCutscenes));
                 Choice(AnimationRow, "Item animation", (QualityOfLife.ItemAnimation?.Value ?? "All").ToUpperInvariant());
                 Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
@@ -728,7 +742,7 @@ namespace BugFablesAP
             arrows.parent = box;
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
-            foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, CutscenesRow, AnimationRow, DetectorRow }
+            foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, SkipConfirmRow, CutscenesRow, AnimationRow, DetectorRow }
                 : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, MedalPricesRow, ExpRow, BerryRow } : new[] { ModeRow, AchievementsRow, NormalSavesRow })
             {
                 for (int side = 0; side < 2; side++)

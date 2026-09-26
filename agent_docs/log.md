@@ -818,3 +818,6 @@ Newest last. What was tried, what happened, what the user said.
   are hidden away); `release.yml` now defaults to a full release. The user trimmed the root README's intro.
 - **Idea logged (the user, 2026-09-26), not built:** after the pitfall scene, land the party as if it entered the fall
   room through a door, as the random start does (`documentation.md`, step 11, before its Status line).
+- **Skip confirm (the user, 2026-09-26), built, not yet seen:** a Quality of life row, Off / Warp / Map / Both (default
+  Off), right below Travel (the user: keep the two together); Warp or a visited area on the travel map then goes at
+  once, without the Yes / No box (`documentation.md`, step 20). Built, staged and copied in for hot reload.

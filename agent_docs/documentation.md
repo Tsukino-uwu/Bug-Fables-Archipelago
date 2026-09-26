@@ -29,6 +29,7 @@ anyone curious about the process, or thinking of doing the same for another game
 17. [Enemy scaling: every area fair whenever you reach it](#17-enemy-scaling-every-area-fair-whenever-you-reach-it)
 18. [Use on normal saves: the settings without Archipelago](#18-use-on-normal-saves-the-settings-without-archipelago)
 19. [EXP and berry multipliers: bars like the volume rows](#19-exp-and-berry-multipliers-bars-like-the-volume-rows)
+20. [Skip confirm: travel without the Yes / No box](#20-skip-confirm-travel-without-the-yes--no-box)
 
 ## Where it stands
 
@@ -1242,3 +1243,25 @@ An opt-in for a faster, easier game (Next 16 and 17 in `apimplementation.md`).
 battle gave 100, the game's cap of a level's worth.
 
 **Status:** works, seen by the user (2026-09-26): EXP at 10x, and a berry picked up at 10x.
+
+## 20. Skip confirm: travel without the Yes / No box
+
+The travel buttons (step 10, item 8) each ask Yes / No before they act, with No picked first. Once you know them, that
+box is one more press every time.
+
+**Decided (the user, 2026-09-26):**
+- A row on the **Quality of life** page, *Skip confirm*: **Off / Warp / Map / Both**, the same four values as *Travel*.
+  Warp: picking the Warp button warps at once. Map: confirm on a visited area in the travel map goes there at once.
+- **It sits right below *Travel*** (the user: the two belong together, not split apart), so the rows below it move
+  down one; the page now has seven rows, as the main page does.
+- **Default Off**, so both still ask; Disable all sets it Off (asking is the safe value), Reset puts it back to Off.
+- Only while Archipelago is enabled, or with *Use on normal saves* (step 18), as the buttons themselves are.
+
+**How it works** (`WarpButton.cs`): the press that would open the box (the Warp button, or confirm on a visited
+area in travel mode) goes straight to what Yes did: the menu closes the game's way (`PrepareExit`) and the same
+transfer runs. Yes and the skip share one method (`Go`), so the two can't drift apart; its log line says when no box
+was shown. The map still refuses an area you haven't visited, with the game's buzzer. Config `[QualityOfLife] SkipConfirm`.
+
+**Status:** built, not yet seen (2026-09-26).
+
+*Code: `WarpButton.cs` (`Go`), `QualityOfLife.cs` (`SkipConfirm`), `ApMenu.cs` (the row).*
