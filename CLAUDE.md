@@ -21,8 +21,9 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
   `dev-scripts/` without either, unless the message has a line `docs: no process change` (a typo, never a
   step). Re-read both when a session starts. **A feature gets its own step** when it adds a yaml option or
   panel setting, a new kind of location, or changes how the game plays in a seed; everything else joins the step
-  it belongs to. Say so in the commit message. `.githooks/doc-coverage.py` (pre-commit) refuses an option,
-  setting, `slot_data` key or source file that no guide or `code-map.md` names.
+  it belongs to, or one the user merges it into. **In doubt, its own step:** the user can merge it later, while an
+  unwanted merge goes unnoticed. Say so in the commit message. `.githooks/doc-coverage.py` (pre-commit) refuses an
+  option, setting, `slot_data` key or source file that no guide or `code-map.md` names.
 - **The root `README.md` never goes stale either.** Its "Status" line and its intro (how it works) must agree with the
   steps' Status lines and with the code. A commit that changes either one updates the README in the
   same commit. Check all three against each other when a session starts, and fact-check the README against
