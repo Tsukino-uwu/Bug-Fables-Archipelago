@@ -836,3 +836,8 @@ Newest last. What was tried, what happened, what the user said.
   crashed the scene after the fight (Event26's own references to the old stand-ins): the reason DevReload waits, seen
   again. `unstick`, re-entered the room, `killall` (HP 0, the death check only ran after an attack), and the scene ended:
   `[goal] sent: 1 of 1 artifacts`, the server released the slot and logged the team's games complete.
+- **A frozen battle start** (the user, in `SnakemouthDoorRoom` after a dev warp): the warp moved the party twice (the
+  map's origin, then beside a door), an enemy touched the party, and the fight's leaf transition never finished; no
+  exception logged. At the same moment the server was restarted for a new seed and the mod re-applied the seed's room
+  lists mid-battle-start. Which of the two stopped the battle's start isn't known yet. Only a game restart got out.
+  The plain warp now lands once (through a door into the map); the step aside refuses during a battle, event or dialogue.

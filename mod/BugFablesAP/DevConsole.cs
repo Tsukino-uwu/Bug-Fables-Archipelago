@@ -505,6 +505,7 @@ namespace BugFablesAP
         }
 
         private static string pendingName;
+        private static bool landed;
 
         private static string StartWarp(MainManager.Maps map, int flag)
         {
@@ -520,8 +521,13 @@ namespace BugFablesAP
             // over water. FinishWarp guards the item, then steps aside once the transition is over.
             Vector3? at = flag >= 0 ? StartPosition(map, flag) : null;
             guarded = false;
-            MainManager.instance.StartCoroutine(MainManager.TransferMap((int)map, at.HasValue ? at.Value + Vector3.up * 0.5f : Vector3.zero));
-            return "warping to " + map + skipped;
+            // A plain warp lands once, where walking in through a door into the map ends; a second move after arrival
+            // could come after an enemy had already touched the party.
+            Vector3[] door = at.HasValue || pendingName != null ? null : QualityOfLife.DoorInto(map, null);
+            landed = door != null;
+            Vector3 target = landed ? door[2] : at.HasValue ? at.Value + Vector3.up * 0.5f : Vector3.zero;
+            MainManager.instance.StartCoroutine(MainManager.TransferMap((int)map, target));
+            return "warping to " + map + (landed ? " (through a door into it)" : "") + skipped;
         }
 
 
@@ -736,6 +742,18 @@ namespace BugFablesAP
             }
             if (MainManager.roomtransition || MainManager.instance.intransition)
             {
+                return;
+            }
+            string busy = landed ? null : MainManager.battle != null ? "a battle" : MainManager.instance.inevent ? "an event"
+                : MainManager.instance.message ? "a dialogue" : null;
+            if (landed || busy != null)
+            {
+                lastResult = "arrived on " + map.mapid + (landed ? ", through a door into it" : $"; not stepped aside: {busy} started on arrival");
+                shownAt = Time.realtimeSinceStartup;
+                log.LogInfo("[dev] " + lastResult);
+                pendingMap = -1;
+                pendingName = null;
+                landed = false;
                 return;
             }
             List<NPCControl> entities = map.GetComponentsInChildren<NPCControl>(true).ToList();

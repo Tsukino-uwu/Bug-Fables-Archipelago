@@ -96,8 +96,10 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 
 - `loc <n>`: go to pickup location n (the apworld's id, e.g. `loc 5`) and stand next to it. If it was taken,
   its flag is cleared first so it's back.
-- `warp <map> [flag]`: go to a map by `MainManager.Maps` name or number (`warp TestRoom` included); with a flag,
-  stand next to the entity that has it, else by a save point or door.
+- `warp <map> [flag]`: go to a map by `MainManager.Maps` name or number (`warp TestRoom` included). Without a flag it
+  lands once, where walking in through a door into the map ends (a second move after arrival once came after an
+  enemy had touched the party, and the battle's start froze, 2026-09-26). With a flag (or `@name`) it lands on the
+  entity, then steps beside it, unless a battle, event or dialogue has started by then.
 - `spawn <item|key|medal> <id> [flag]`: drop a pickup next to you. With a pickup location's flag, on that
   location's map, it is that location.
 - `flag <n> [on|off]`: show or set a story flag.
