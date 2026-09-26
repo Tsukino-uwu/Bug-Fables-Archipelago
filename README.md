@@ -18,5 +18,3 @@ report the goal yet.
 - [Building from source](agent_docs/development.md)
 - [How the mod was made](agent_docs/documentation.md)
 - [Archipelago implementation](agent_docs/apimplementation.md)
-
-MIT, see [LICENSE](LICENSE).
