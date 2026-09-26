@@ -1375,6 +1375,9 @@ its base. At 45% the item hid it. So: 60%, only 0.05 behind, and **the item and 
 still differ in look along a shelf: their pictures differ in shape and margin, as in vanilla. Dev `mark <size> <raise>`
 tunes it live.
 
-**Status:** works on the Caravan's shelf, seen by the user (2026-09-26); the ground not yet seen at the final settings.
+**Seen on the ground too (the user, 2026-09-26):** the Ladybugs' Sword, the icon on plum, raised clear of the stump it
+used to sit half inside: "more visually clear than it clipping inside terrain".
+
+**Status:** works, seen by the user on the Caravan's shelf and on the ground (2026-09-26).
 
 *Code: `ItemSwap.cs` (`Mark`, `MarkColorOf`), `QualityOfLife.cs` (`ItemBackgrounds`), `ApMenu.cs` (`BackgroundsRow`).*
