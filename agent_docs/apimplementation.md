@@ -151,8 +151,7 @@ be wrong.
    isn't used up (a key item). The logic gates Metal Island on it, so Metal Island isn't open from the start. The
    Quality of life row *Free boat* goes. **The mod's own item** (the user, 2026-09-26): the game has no ticket, so the
    mod adds one entry at the end of the game's item table at runtime, a unique item: its own name "Boat Ticket", its own
-   description (proposed: "A ticket for the boat to Metal Island. Show it to the sailor at the Bugaria pier. It never
-   runs out."), and the Platinum Card's sprite (item 176) as it is (the user: combined icons were tried as mockups
+   description ("A boat ticket. Maybe we should visit the pier.", the user's line, "we" for the team of three), and the Platinum Card's sprite (item 176) as it is (the user: combined icons were tried as mockups
    and none looked right on the silver card), as the Settings rows add their labels to the text table. It arrives from the
    server like any item and sits in the key items as a real id, saved like one; randomizer saves are separate files
    vanilla never opens. The sailor's dialogue (refusing, then free) goes through the fare lines the mod already
