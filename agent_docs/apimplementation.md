@@ -1455,6 +1455,10 @@ the game. The Boat Ticket is the first (Next 21); the party members as items (bu
 location side, turning a story moment vanilla never made a check into one. Each new item takes a filler slot in the
 pool, so a seed needs one to spare, which a test pins.
 
+**Custom items' text** (the user, 2026-09-26): written to fit the game, as the menus and art do. A short plain line
+saying what it is ("this is a key"), or a hint in the team's voice of where it might matter ("might unlock something at
+X"), never a rules explanation. The first: "A boat ticket. Maybe we should visit the pier."
+
 **Icon ideas for custom items** (the user, 2026-09-26, from a labelled contact sheet of the item sprites; `SpriteDump`,
 the mod guide, step 7). An icon is only lent: the item has its own name and description. Item sprite ids
 (`itemsprites[0, id]`):
