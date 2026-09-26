@@ -257,6 +257,10 @@ namespace BugFablesAP
                     case "spawn": return Spawn(parts);
                     case "flag": return Flag(parts);
                     case "unstick": return Unstick();
+                    case "heal":
+                        // The game's own full heal (HP and TP, the whole party), as the rematch machine uses.
+                        MainManager.Heal();
+                        return "party healed";
                     case "enemylook":
                         // A visual test: reloads the current map with every ordinary map enemy looking like one enemy.
                         if (parts.Length < 2 || (parts[1] != "off" && !int.TryParse(parts[1], out _)))

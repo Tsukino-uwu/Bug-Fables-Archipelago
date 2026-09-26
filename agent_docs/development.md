@@ -96,6 +96,7 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `spawn <item|key|medal> <id> [flag]`: drop a pickup next to you. With a pickup location's flag, on that
   location's map, it is that location.
 - `flag <n> [on|off]`: show or set a story flag.
+- `heal`: the game's own full heal (HP and TP, the whole party). Test files only.
 - `enemylook <enemy id|off>`: reloads the current map with every ordinary map enemy looking like that enemy (a
   visual test for enemy shuffle's map look; the fights stay the seed's). Puzzle enemies keep their own look.
 - `enemyfight <enemy id> [id...] | off`: every map fight starts with those enemy ids instead of the seed's (a test).

@@ -83,7 +83,9 @@ be wrong.
    travel only, or both), so the two are set together. **The look (the user, 2026-09-26):** alone, either button
    looks like the Warp button does now; with Both, the two get different background colours. Map's icon: proposed a
    map icon always (so the button says what it does), the user undecided. Both means a sixth button in the pause menu:
-   it must fit and look good there, seen on screen before it counts as done.
+   it must fit and look good there, seen on screen before it counts as done. **The order (the user):** both sit to
+   the right of the game's buttons, Warp first, Map last. Left from the first button wraps round to Map for quick
+   access, and Warp sits in between, so it's reached by accident less often.
 12. **A quest board in the starting house** (the user, 2026-09-25): the quests every board lists, taken without
    walking to the town or the bar. Every board shows the same list (`MEASURED.md`, "The quest board"), so it adds no
    quests, only a shorter way. Every board lists bounties too (built, build step 9); next, the house's board from
