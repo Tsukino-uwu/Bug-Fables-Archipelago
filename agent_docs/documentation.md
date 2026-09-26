@@ -875,6 +875,11 @@ Unity's `Animator.Play(string, int, float)`, so a prefix there gives them the sa
 layer for -1), installed and logged at load. A layer warning that still shows comes from another path; the log names
 it.
 
+**A member added mid-map meets the enemy-only walls (the user, 2026-09-26):** after adding Kabbu on Outskirts East,
+walls only enemies should bump into blocked the party. A map load tells those walls to ignore each character, and the
+added member comes with new characters (`MEASURED.md`, enemy-only walls). Adding a member now redoes that step the
+game's way (`SetPlayerColliders`, 0.2 s later), as receiving a party member will need.
+
 **Status:** works with Leif alone, seen by the user through chapter 1 into chapter 2 (2026-09-25); items 5 and 6, and Leif joining after the spider with a two-member start, not yet seen; the direct lookups in item 12 still open.
 
 *Code: `PartyFit.cs` (the stand-ins and the acting leader), `PartyMembers.cs` (the member guard, followers,

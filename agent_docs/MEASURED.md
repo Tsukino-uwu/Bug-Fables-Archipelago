@@ -1129,6 +1129,17 @@ hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0
   from another window and no marker there, it threw a NullReferenceException every frame (the diagnostic: window 6,
   option 5, markers 1-25 all null).
 
+## Enemy-only walls (2026-09-26, code read and the console's `solids`; the symptom seen by the user)
+
+- **Maps have walls only enemies bump into**: colliders tagged `EntityOnly`. `MapControl.SetPlayerColliders` (private,
+  run by `Invoke("SetPlayerColliders", 0.2f)` as a map loads) gathers them into `map.entityonly` and calls
+  `EntityControl.IgnoreColliders(member, wall, true)` for each party member's entity and each temporary follower:
+  `Physics.IgnoreCollision` pairs, so they belong to those exact colliders.
+- **A party changed after the map loaded meets them as walls**: `ChangeParty(..., destroyoldentity: true)` makes new
+  characters with no ignore pairs. Seen on Outskirts East (map 55) after the console's `addmember 1`: `55/Cube (2)`, a
+  bare `BoxCollider` (layer 13, 1 x 19.8 x 19.9 at x 33.4) across the map, blocked the way left and up with either
+  leader; the user stood on top of it at height 15.5. Loading any map clears it. Used by `PartyMembers.cs`.
+
 ## EXP and berries picked up (2026-09-26, code read)
 
 - **A battle's EXP** is summed per defeated enemy: `num = Clamp(GetEXP(exp, fixedexp, animid), 0, hologram ? 5 : neededexp)`,

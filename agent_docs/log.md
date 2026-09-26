@@ -739,3 +739,10 @@ Newest last. What was tried, what happened, what the user said.
 - **Found on the way:** `copy-dev.ps1` copies what `stage-dev.ps1` staged, so a plain `dotnet build` then a copy sends
   the old build. Two copies this session sent an old DLL before it was caught by its hash.
 - The main menu's help text looked tilted once (the user), then was normal again; not chased.
+- **Multipliers:** EXP at 10x seen (50 + 70, capped by the game at 100, a level's worth). The berry hook never ran:
+  `BerryBounce()` is a stub small enough to be inlined; re-hooked on its `MoveNext`. The user likes big EXP orbs; they
+  already follow the multiplied total.
+- **Invisible walls after `addmember 1`** (the user; first thought the fight). Wrong lead: the open-world code, which
+  logged nothing on this map. Settled by a new console command, `solids`: the user stood on the wall, and it was the
+  map's own `Cube (2)` with no switch on it; the game code showed `EntityOnly` walls are ignored per character at map
+  load, and `addmember` makes new characters. Fixed: `addmember` redoes it; leaving the map clears it.

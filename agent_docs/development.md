@@ -139,6 +139,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `follower <animid>`: make that character follow the party the story's way (the follower list, then `AddFollower`),
   e.g. `follower 46` (Maki) to replay the castle briefing, which needs her.
 - `addmember <0|1|2>`: with `TestStartMember`, add Vi, Kabbu or Leif to the party, standing in for receiving them.
+  It redoes the map's enemy-only walls for the new characters (`MEASURED.md`, enemy-only walls).
+- `solids`: logs every solid collider under and within 4 of the player, with its path, size, components and any
+  `ConditionChecker` switch: what an invisible wall is.
 - **`TestStartMember`** (`[Debug]`): a new randomizer file starts with that one member (0 Vi, 1 Kabbu, 2 Leif); the
   story adds nobody else. -1 = off.
 - `berries <n>`: add n berries (negative takes them), clamped to 0-999 as the game's own `money` script command does.

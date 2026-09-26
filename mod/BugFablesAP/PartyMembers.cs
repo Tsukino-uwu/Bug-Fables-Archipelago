@@ -241,6 +241,8 @@ namespace BugFablesAP
                 spots[i] = at + new Vector3(-0.6f * i, 0f, 0.1f * i);
             }
             MainManager.SetPlayers(spots);
+            // The new characters must pass the map's enemy-only walls too: redone as a map load does, 0.2 s later.
+            MainManager.map?.Invoke("SetPlayerColliders", 0.2f);
             return "party now " + string.Join(", ", mm.playerdata.Select(p => p.trueid.ToString()).ToArray())
                 + $"; characters {mm.playerdata.Count(p => p.entity != null)} of {mm.playerdata.Length}";
         }

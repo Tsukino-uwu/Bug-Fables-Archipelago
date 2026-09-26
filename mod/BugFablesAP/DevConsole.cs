@@ -293,6 +293,7 @@ namespace BugFablesAP
                     case "nudge": return Nudge(parts);
                     case "items": return Items();
                     case "tree": return Tree();
+                    case "solids": return Solids();
                     case "script": return Script(parts);
                     case "pos":
                     {
@@ -846,6 +847,51 @@ namespace BugFablesAP
             }
             log.LogInfo(sb.ToString());
             return "script of " + parts[1] + " logged";
+        }
+
+        // Every solid collider under and around the player: what an invisible wall is.
+        private static string Solids()
+        {
+            if (MainManager.player == null)
+            {
+                return "solids: no player";
+            }
+            Vector3 me = MainManager.player.transform.position;
+            var sb = new System.Text.StringBuilder($"[dev] solids around {me}:");
+            if (Physics.Raycast(me + Vector3.up * 0.5f, Vector3.down, out RaycastHit below, 30f, ~0, QueryTriggerInteraction.Ignore))
+            {
+                sb.Append("\n  under: ").Append(Describe(below.collider));
+            }
+            foreach (Collider c in Physics.OverlapSphere(me, 4f, ~0, QueryTriggerInteraction.Ignore)
+                .Where(c => MainManager.player.transform != c.transform && !c.transform.IsChildOf(MainManager.player.transform)))
+            {
+                sb.Append("\n  near: ").Append(Describe(c));
+            }
+            log.LogInfo(sb.ToString());
+            return "solids logged";
+        }
+
+        private static string Describe(Collider c)
+        {
+            string path = c.name;
+            for (Transform t = c.transform.parent; t != null; t = t.parent)
+            {
+                path = t.name + "/" + path;
+            }
+            var parts = new System.Text.StringBuilder();
+            for (Transform t = c.transform; t != null && t != MainManager.map?.transform; t = t.parent)
+            {
+                parts.Append(" | ").Append(t.name).Append(": ")
+                    .Append(string.Join(", ", t.GetComponents<Component>().Select(k => k.GetType().Name).ToArray()));
+                ConditionChecker check = t.GetComponent<ConditionChecker>();
+                if (check != null)
+                {
+                    parts.Append(" [ConditionChecker requires ").Append(string.Join(",", (check.requires ?? new int[0]).Select(f => f.ToString()).ToArray()))
+                        .Append(" limit ").Append(string.Join(",", (check.limit ?? new int[0]).Select(f => f.ToString()).ToArray()))
+                        .Append(" region ").Append(check.regionID).Append("]");
+                }
+            }
+            return $"{path} <{c.GetType().Name}> layer {c.gameObject.layer}, bounds {c.bounds.center} size {c.bounds.size}{parts}";
         }
 
         private static string Tree()
