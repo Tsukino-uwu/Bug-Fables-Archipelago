@@ -447,8 +447,8 @@ namespace BugFablesAP
                         }
                     case BackgroundsRow:
                         return QualityOfLife.ItemBackgrounds == null || QualityOfLife.ItemBackgrounds.Value
-                            ? "Others' items show how important they are before you take them."
-                            : "Others' items show no backdrop until you take them.";
+                            ? "Items show how important they are before you take them."
+                            : "Items show no backdrop until you take them.";
                     case DetectorRow: return "Acts like the Detector medal is always equipped, to find hidden items.";
                     default: return "";
                 }

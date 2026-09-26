@@ -326,7 +326,7 @@ namespace BugFablesAP
             : (flags & ItemFlags.Trap) != 0 ? "A trap"
             : "A filler";
 
-        // Behind an item that isn't yours, on the ground or a shelf: the pickup's own starburst, smaller, in its class
+        // Behind a location's item, on the ground or a shelf: the pickup's own starburst, smaller, in its class
         // colour, so its importance shows before it's taken. Null clears it.
         private const string MarkName = "apback";
         private const float MarkScale = 0.7f;
@@ -362,13 +362,12 @@ namespace BugFablesAP
             }
         }
 
-        // The class colour of an item that isn't yours at this location, else null.
+        // The class colour of the item at this location, anyone's (the user: your own too), else null.
         internal static Color? MarkColorOf(long at)
         {
             ScoutedItemInfo info = null;
             connection?.Scouts?.TryGetValue(at, out info);
-            return info != null && info.Player.Slot != connection.OwnSlot && (QualityOfLife.ItemBackgrounds?.Value ?? true)
-                ? ClassColor(info.Flags) : (Color?)null;
+            return info != null && (QualityOfLife.ItemBackgrounds?.Value ?? true) ? ClassColor(info.Flags) : (Color?)null;
         }
 
         private static Color ClassColor(ItemFlags flags) =>

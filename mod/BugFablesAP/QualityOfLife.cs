@@ -145,7 +145,7 @@ namespace BugFablesAP
                 + "yours), or Off (they look like the item the game had there, a surprise).",
                 new AcceptableValueList<string>(ItemIconValues)));
             ItemBackgrounds = config.Bind("QualityOfLife", "ItemBackgrounds", true,
-                "An item that isn't yours, on the ground or on a shop shelf, has the pickup's starburst behind it in its "
+                "A check's item, on the ground or on a shop shelf, yours included, has the pickup's starburst behind it in its "
                 + "Archipelago class colour (progression, useful, filler, trap), so you can tell from afar whether it matters. "
                 + "Off: no backdrop until it's picked up, a surprise.");
             MedalPrices = config.Bind("Gameplay", "MedalPrices", FullPrice, new ConfigDescription(
