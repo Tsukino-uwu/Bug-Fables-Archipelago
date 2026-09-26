@@ -636,6 +636,10 @@ The output stays in the BepInEx folder.
   - **Vi's beemerang (range):** `SnakemouthBridgeRoom`'s bridge comes down when its rope is hit; from the right only the
     beemerang reaches it, from the left Leif's move hit it (so presumably any member's; Kabbu's not tried). The room's
     Tattle tutorial (Event2) ran with stand-ins and finished (flag 10); its hint (Event0) is skipped by Skip cutscenes.
+  - **Not needed: the spider scene's second fight** (Event6, enemies 2 and 12; the user, 2026-09-27): it is won by
+    beating Leif in the web (enemy 12), whom ground attacks reach; only the spider is in the air. So the fall room's
+    spots (locations 29, 67) need no Beemerang. With Kabbu and Leif and no Vi, the mod gives Vi's place to Leif
+    (`PartyMembers`), so Leif fights beside Kabbu against the Leif in the web: not yet played.
   - **Vi's beemerang (enemies in the air):** the lake's fight, in Leif's joining scene (Event14 on `SnakemouthLake`:
     `ChangeParty({0, 1, 2})`, flag 16, then two of enemy 1 that can't be fled, `EventControl.cs:3462-3466`); in chapter 1
     only the beemerang hits them. Whether Kabbu or Leif learn such a move later is unknown. Moot while the mod skips
