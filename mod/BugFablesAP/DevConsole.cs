@@ -76,14 +76,23 @@ namespace BugFablesAP
         private static bool infJump => InfJumpSetting != null && InfJumpSetting.Value;
         internal static BepInEx.Configuration.ConfigEntry<bool> InfBerriesSetting;
 
-        // Tops berries back up to the game's cap (999) whenever they drop.
+        // Berries to the game's cap (999) once per save played, when its first map loads. A refill on every drop hid
+        // purchases from the item shops, which see a purchase as the berries going down (2026-09-27).
+        private static bool berriesTopped;
+
         private static void TickInfBerries()
         {
             MainManager mm = MainManager.instance;
-            if (InfBerriesSetting == null || !InfBerriesSetting.Value || mm == null || MainManager.map == null || mm.money >= 999)
+            if (MainManager.map == null)
+            {
+                berriesTopped = false; // the title screen: the next save gets its top-up
+                return;
+            }
+            if (InfBerriesSetting == null || !InfBerriesSetting.Value || mm == null || berriesTopped)
             {
                 return;
             }
+            berriesTopped = true;
             mm.money = 999;
         }
 
