@@ -204,7 +204,8 @@ namespace BugFablesAP
         // Matched to the game's Settings screen: labels ~88 px in from the vine border.
         private const float LabelX = -5.15f;
         private const float LeafOffset = -0.1f;
-        private const float LeafRise = 0.15f;
+        // Centred on a row's text, as the Settings screen's leaf is; the Yes / No box's answers sit differently.
+        private const float LeafRise = -0.07f, PopupLeafRise = 0.15f;
         private const float ValueX = -1.9f;
 
         private static void SetSettingsBoxes(bool visible)
@@ -850,7 +851,7 @@ namespace BugFablesAP
             MainManager.instance.StartCoroutine(MainManager.SetText(PopupTextSort + "|size,0.8|" + (answer == 1 ? "|color,1|" : "") + "No", new Vector3(NoX, AnswerY, 0f), popupText));
             // The leaf lives under the panel's box: place it by world position on the picked answer.
             leaf.sortingOrder = PopupCursorSort;
-            leaf.transform.position = popup.TransformPoint(new Vector3((answer == 0 ? YesX : NoX) + LeafOffset, AnswerY + LeafRise, 0f));
+            leaf.transform.position = popup.TransformPoint(new Vector3((answer == 0 ? YesX : NoX) + LeafOffset, AnswerY + PopupLeafRise, 0f));
         }
 
         private void ClosePopup()
