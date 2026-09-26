@@ -32,6 +32,7 @@ anyone curious about the process, or thinking of doing the same for another game
 20. [Item colors: Archipelago's colours in the "You got" box](#20-item-colors-archipelagos-colours-in-the-you-got-box)
 21. [Archipelago icon: other players' items on the ground and on shelves](#21-archipelago-icon-other-players-items-on-the-ground-and-on-shelves)
 22. [Item backgrounds: how much an item matters, before you take it](#22-item-backgrounds-how-much-an-item-matters-before-you-take-it)
+23. [The Archipelago icon, drawn in the game's style](#23-the-archipelago-icon-drawn-in-the-games-style)
 
 ## Where it stands
 
@@ -499,13 +500,8 @@ shop shelf, another game's item still shows the vanilla item's sprite today, whi
 will show an Archipelago icon on a backdrop in its type's colour (Archipelago's: progression plum, useful blue,
 trap salmon, filler cyan), the same colours the starburst already uses at pickup. It's a Quality of life row, on
 by default, for players who'd rather be surprised. Bug Fables items that belong to another Bug Fables player keep
-their real sprite, and the owner's name is in the text. **The icon is drawn in code (2026-09-26), so no image file
-is copied:** `ApIcon.cs` draws Archipelago's logo, six overlapping circles in its colours (sampled from your
-checkout's `data/icon.png`), with the middle open, and the gaps and a rim round the flower in black, like the game's
-outlined item sprites. The user picked it from eight looks, first as hold-ups on the four class backdrops, then on the
-Caravan's shelf close up and at a distance (dev `holdup ap`, `shelflook`): the game's own orb recipe (a dark ring round
-a pale fill) came out pastel with heavy outlines at item size; see-through gaps let the backdrop wash the colours out; a
-white rim looked odd; a thin black one too sharp. Not yet used for another game's items: that's the row above.
+their real sprite, and the owner's name is in the text. **Built as the Archipelago icon (step 23), used by the
+Archipelago icon row (step 21).**
 
 **The description box read the wrong field (fixed 2026-09-26):** the swap showed `itemdata[0, id, 1]`, but the game's
 box shows field 2 (`MEASURED.md`, "The item table's fields"); field 1 is "Desc" for every key item. Found while reading
@@ -1410,3 +1406,34 @@ and on a received item's hold-up is now the class colour too, matching the backd
 **Status:** works, seen by the user on the Caravan's shelf and on the ground (2026-09-26).
 
 *Code: `ItemSwap.cs` (`Mark`, `MarkColorOf`), `QualityOfLife.cs` (`ItemBackgrounds`), `ApMenu.cs` (`BackgroundsRow`).*
+
+## 23. The Archipelago icon, drawn in the game's style
+
+Another game's item needs a picture in Bug Fables, and today it showed the vanilla item's sprite, which read as the
+vanilla item (the user took another player's Sword for their own). Archipelago has a logo; the question was which
+image, and whether it's fine in a public repo forever.
+
+**Drawn in code, so nothing is copied (the user, 2026-09-26):** "use art from within the game itself ... something
+that looks good but also the same style as the game". The game's round pause-menu icons are flat, one hue as a dark ring
+round a pale fill (`MEASURED.md`, the round icons' colours), and the mod already drew circles that way for the Warp
+button. So `ApIcon.cs` draws the logo itself at runtime: six overlapping circles in the logo's colours (sampled from
+your Archipelago checkout's `data/icon.png`), placed round a circle with the middle open, each later one cutting a gap
+into those below, as in the logo. Item-sized, like the party members' icons (the mod guide, step 11).
+
+**How the look was picked (the user, on screen, eight looks):**
+1. The game's orb recipe exactly (dark ring, pale fill): pastel, with outlines too heavy at item size ("the outlines /
+   shading is a bit weird").
+2. The logo's own colours with a thinner ring, flat with no ring, and the recipe thinner and stronger: better, but on
+   the red starburst of a hold-up the red circle vanished, and see-through gaps let any backdrop wash the colours out.
+3. As a sticker, the gaps and a rim round the flower filled: white (odd), white thinner, black thin (too sharp), black
+   as thick as the first white. Compared as hold-ups on the four class backdrops (dev `holdup ap`), then side by side
+   on the Caravan's shelf, close up and at a distance (dev `shelflook`). **Black, the fuller rim**, won: it reads on any
+   backdrop, keeps six separate circles at a distance, and matches the game's outlined item sprites.
+
+**Where it's used:** another game's item on the ground, on a shelf, at a pickup and a gift (step 21's row decides whose
+items), on the class-coloured backdrop of step 22.
+
+**Status:** works, seen by the user (2026-09-26) on hold-ups, on the Caravan's shelf and on the ground.
+
+*Code: `ApIcon.cs`; used by `ItemSwap.Describe`.*
+
