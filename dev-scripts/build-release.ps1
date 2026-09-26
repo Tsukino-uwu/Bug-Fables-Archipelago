@@ -29,6 +29,19 @@ function Get-DllLines {
     }
 }
 
+# Dev tools and cheats ship, but off: every [Debug] setting must default to off (-1 is TestStartMember's off).
+function Assert-DebugDefaultsOff {
+    $binds = Get-ChildItem (Join-Path $repo 'mod/BugFablesAP') -Filter *.cs | ForEach-Object {
+        [regex]::Matches((Get-Content -Raw $_.FullName), 'Config\.Bind\(\s*"Debug"\s*,\s*"(\w+)"\s*,\s*([^,]+?)\s*,') |
+            ForEach-Object { [pscustomobject]@{ Key = $_.Groups[1].Value; Default = $_.Groups[2].Value } }
+    }
+    if (-not $binds) { throw 'no [Debug] settings found: the default check is reading the wrong pattern' }
+    $on = @($binds | Where-Object { $_.Default -notin @('false', '0', '""', '-1') })
+    if ($on) { throw "[Debug] settings on by default, never in a release: $(($on | ForEach-Object { "$($_.Key) = $($_.Default)" }) -join ', ')" }
+    Write-Output "all $(@($binds).Count) [Debug] settings default to off"
+}
+Assert-DebugDefaultsOff
+
 if ($Check) {
     if (-not (Test-Path $builtFrom)) { throw 'release/built-from.txt is missing: run dev-scripts/build-release.ps1' }
     $recorded = Get-Content $builtFrom | Where-Object { $_ -notmatch '^(#|commit:)' -and $_.Trim() }

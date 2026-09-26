@@ -1453,6 +1453,10 @@ BepInEx is not bundled; the player installs it first.
 2. **A stale gate.** `build-release.ps1 -Check` recomputes both lists and fails if they differ. CI runs it on every
    push, so a source change without a rebuild shows red. Tried both ways (2026-09-26): a probe line in a `.cs` file
    failed it, naming the file; removing it passed.
+   The same run refuses a release whose dev tools or cheats are on by default (the user, 2026-09-26: never a release
+   with 99 damage or infinite jump): every `Config.Bind("Debug", ...)` must default to off (`false`, `0`, `""`, or
+   `-1`, TestStartMember's off). The dev tools still ship, off; only a hand-edited config turns them on (the user's
+   choice over compiling them out). Tried both ways: InfJump defaulting to true failed it, naming the key.
 3. **CI** (`.github/workflows/ci.yml`, every push, and called by the release): the gate, and the apworld on a
    Python matrix (3.11, 3.12, 3.13, what Archipelago's own CI tests at 0.6.7). Each leg checks out Archipelago
    `0.6.7`, installs it the way Archipelago's own `unittests.yml` does (then sets `SKIP_REQUIREMENTS_UPDATE=1`: on the first

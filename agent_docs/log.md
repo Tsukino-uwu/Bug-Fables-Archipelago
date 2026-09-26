@@ -790,3 +790,13 @@ Newest last. What was tried, what happened, what the user said.
 - **Open:** the workflows have never run on GitHub; `release.ps1` pushes, so it waits for the user's go-ahead. The
   release zip must be seen loading in game: on this dev machine the libraries are already loose in
   `BepInEx/plugins` and the plugin in `BepInEx/scripts`, so both come out before the zip goes in.
+- **First CI run on GitHub (2026-09-26):** the stale gate and Python 3.11 passed; 3.12 and 3.13 failed installing
+  Archipelago: other worlds' requirements clashed over `typing-extensions` (4.16.0 installed, 4.15.0 pinned), and
+  `Launcher.py`'s own requirement check then waited for Enter. Fixed with `SKIP_REQUIREMENTS_UPDATE=1` after the one
+  forced install, as the local runs already did.
+- **The release layout in game (the user's screenshot, 2026-09-26):** after `copy-dev.ps1 -Layout Release`, BepInEx
+  loaded "Bug Fables Archipelago 0.1.0" once from `plugins/BugFablesAP`, ScriptEngine had nothing to reload, the log
+  had no load errors, and with a local server up the game connected as BugTester and sent a check (the server's log).
+- **The user asked:** no release with 99 damage or infinite jump. Those came from their own config; every `[Debug]`
+  setting already defaults to off in the code. Offered a guard on the defaults or compiling the dev tools out; they
+  chose the guard, now part of `build-release.ps1` (so of the preflight and CI).

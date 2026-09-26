@@ -46,12 +46,12 @@ $behind = (& $git rev-list --count 'HEAD..origin/main').Trim()
 if ($behind -ne '0') { Refuse "HEAD is $behind commit(s) behind origin/main; pull first" }
 Write-Host "main, clean, $Version is free"
 
-Step 'Preflight: is the committed mod DLL fresh?'
+Step 'Preflight: is the committed mod DLL fresh, with every dev tool off by default?'
 if (-not (Preflight)) {
     Step 'Rebuilding the stale mod DLL'
     & powershell -NoProfile -ExecutionPolicy Bypass -File $buildRelease -GameDir $GameDir
     if ($LASTEXITCODE -ne 0) { Refuse 'build-release.ps1 failed' }
-    if (-not (Preflight)) { Refuse 'still stale after the rebuild; look at build-release.ps1''s output' }
+    if (-not (Preflight)) { Refuse 'preflight still fails after the rebuild (stale, or a [Debug] setting on by default); see above' }
     & $git add -- release
     & $git commit -q -m "Release prep: mod DLL rebuilt from current sources for $Version"
     if ($LASTEXITCODE -ne 0) { Refuse 'commit of the rebuilt DLL failed' }
