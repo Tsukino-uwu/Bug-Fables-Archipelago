@@ -1366,8 +1366,11 @@ trip free and the ticket kept; the logic gates Metal Island on it, so Metal Isla
 Show me your ticket." (a `|line|` before the name, which wrapped mid-name at first), "Let's go!" / "Not yet!", and
 "...Ticket's in order. Hop on! Our destination: Metal Island!", then the boat.
 
-**Status:** works with the ticket, seen by the user (2026-09-26); the refusal without it not yet seen; the pool and
-logic in the next generated seed (the apworld tests pass, 275).
+Without it (the ticket taken with the dev console's `take key 200`), the choice read "I lost my ticket!" and "Let's go!"
+got the refusal; seen by the user.
+
+**Status:** works both ways, seen by the user (2026-09-26); the pool and logic take effect in the next generated seed
+(the apworld tests pass, 275).
 
 # How it works
 

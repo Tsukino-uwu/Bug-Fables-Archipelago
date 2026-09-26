@@ -717,3 +717,11 @@ Newest last. What was tried, what happened, what the user said.
   - The fare text still says 300. The mod could change it to say free.
 - **Random start** built as `anywhere` (Archipelago reserves `random`). Not yet seen: it needs a new seed and a new
   file.
+- **The Boat Ticket built and seen both ways** (build step 16).
+  - The item is the mod's own: id 200, the Platinum Card's look, the user's description.
+  - The sailor's lines were approved one by one. The user asked for "you" not "you three", "Show me your ticket",
+    "I lost my ticket!" (in "That's too expensive!"'s style), and a line break so "Metal Island" isn't split.
+  - Free boat is removed.
+  - Found on the way: the item swap's description box read the wrong field (field 1, "Desc" for key items). Fixed.
+- **Ideas recorded:** progressive items (Next 23), *Use on normal saves* (Next 24, off by default), consumable keys
+  (Next 25), plus the Boat Ticket (21) and healing crystals (22) from Discord.
