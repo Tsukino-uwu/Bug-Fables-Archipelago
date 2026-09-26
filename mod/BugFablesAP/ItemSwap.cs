@@ -296,6 +296,11 @@ namespace BugFablesAP
             else if (IsOurs(info))
             {
                 DescribeOurs(info.ItemId, KindOf(info), out name, out sprite, out color);
+                // With Item colors on, the starburst at pickup matches the backdrop it had on the ground or shelf.
+                if (QualityOfLife.ApColors)
+                {
+                    color = ClassColor(info.Flags);
+                }
                 shownArticle = ArticleOf(info.ItemId, KindOf(info));
                 if (info.Player.Slot != connection.OwnSlot)
                 {
@@ -408,6 +413,9 @@ namespace BugFablesAP
             : Hex(ClassColors[(flags & ItemFlags.Advancement) != 0 ? 0 : (flags & ItemFlags.NeverExclude) != 0 ? 1
                 : (flags & ItemFlags.Trap) != 0 ? 2 : 3]);
 
+        // A received item's starburst: its class colour while Item colors is on, else null (the game's own by kind).
+        internal static Color? StarburstColor(ItemFlags flags) => QualityOfLife.ApColors ? ClassColor(flags) : (Color?)null;
+
         // A location's starburst: its class colour, or with Item colors off the game's colour for a Bug Fables item's kind.
         private static Color MarkColor(ScoutedItemInfo info)
         {
@@ -429,10 +437,11 @@ namespace BugFablesAP
             {
                 sprite = look;
             }
-            // A shop's box parses text: another player's item is named in the Item colors, then back to the box's black.
-            if (ForOther(info, ref name))
+            // A shop's lines paste the name in after wrapping them, so a long one runs off the box: another player's item
+            // is named alone, in its class colour (whose it is, the description says).
+            if (info != null && info.Player.Slot != connection.OwnSlot)
             {
-                name += "|color,0|";
+                name = ClassText(IsOurs(info) ? name.Substring(info.Player.Name.Length + 3) : info.ItemDisplayName, info.Flags) + Black;
             }
             description = "An Archipelago item.";
             if (info == null)
@@ -453,6 +462,10 @@ namespace BugFablesAP
                 }
                 catch (IndexOutOfRangeException)
                 {
+                }
+                if (info.Player.Slot != connection.OwnSlot)
+                {
+                    description = $"For {info.Player.Name}: " + description;
                 }
             }
             else

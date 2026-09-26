@@ -146,6 +146,7 @@ namespace BugFablesAP
                 return;
             }
             ItemSwap.DescribeOurs(item.ItemId, kind, out string name, out UnityEngine.Sprite sprite, out UnityEngine.Color? color);
+            color = ItemSwap.StarburstColor(item.Flags) ?? color;
             HoldUps.Received(ItemSwap.FromText(name, item.Flags, item.Player.Name), sprite, color, ItemSwap.ArticleOf(item.ItemId, kind));
         }
 

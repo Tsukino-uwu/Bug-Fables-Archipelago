@@ -1347,8 +1347,11 @@ colors.
   items show their real sprite. The text always names whose it is.
 - With more rows, the Quality of life page's rows sit closer (the first and last where they were); the other pages
   are unchanged.
-- **Shops name it too (the user, 2026-09-26):** a shop's box shows another player's item as "<player>'s <item>" in the
-  Item colors (step 20), and its description says the class: "A useful item for Other (APQuest)."
+- **Shops name it too (the user, 2026-09-26):** a shop's box names another player's item in its class colour, and its
+  description says whose: "A useful item for Other (APQuest).", or for another Bug Fables player's item "For
+  BugTester2: " before the item's own description. First the name was "<player>'s <item>", but a shopkeeper pastes the
+  name into a line the game has already wrapped, so it ran off the bubble ("Interested in that BugTester2's Crunchy
+  Leaf?", seen by the user): the name is now the item alone.
 
 **Seen (the user, 2026-09-26):** the icon on the ground (the Ladybugs' Sword) and on the Caravan's shelf beside another Bug
 Fables player's and your own items; the page with ten rows, every row and both help lines fitting (after a fresh
@@ -1393,7 +1396,9 @@ the text and the starbursts together: Rarity's text shades are darker for the wh
 `2E9E3E`); Off gives the game's red text and its own starburst colours by kind (items teal, key items pink, medals
 orange). **Seen (the user, 2026-09-26):** Artis's gift with Rarity, "You found Other's Key!" in dark yellow and purple,
 the Archipelago icon held up on a purple starburst ("looks really good now"); the Caravan's shelf, blue behind Other's
-useful item, green behind BugTester2's filler and the player's own. Off not yet seen.
+useful item, green behind BugTester2's filler and the player's own. **Then bought, they turned teal** (the user): a Bug
+Fables item's pickup starburst still took the game's colour for its kind. With Item colors on, the starburst at pickup
+and on a received item's hold-up is now the class colour too, matching the backdrop. Off not yet seen.
 
 **Status:** works, seen by the user on the Caravan's shelf and on the ground (2026-09-26).
 
