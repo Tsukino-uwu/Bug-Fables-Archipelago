@@ -233,6 +233,10 @@ straight after `CreateEntities`, before `Start`, with a `requires` array of its 
 `CheckIfCanExist` answers with "exists", the mirror of how a kept-open blocker gets a `limit` answered "hide".
 Built, not yet seen in game.
 
+**Item and medal sprites too** (2026-09-26): `SpriteDump` also writes every item and medal sprite with its id and name
+(`bugfablesap-itemsprites.tsv`) and their sheets, so a labelled contact sheet can be made from them, to pick an icon
+(the Boat Ticket's) by pointing at it. Game art stays local, never in the repo.
+
 **Status:** done: the script, entity and map dumps are in use; making an entity exist early built, not yet seen in game.
 
 ## 8. An Archipelago menu inside the game

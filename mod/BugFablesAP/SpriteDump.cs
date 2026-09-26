@@ -34,7 +34,49 @@ namespace BugFablesAP
             }
             File.WriteAllText(Path.Combine(Paths.BepInExRootPath, "bugfablesap-guisprites.tsv"), table.ToString());
             log.LogInfo($"[dump] {MainManager.guisprites.Length} GUI sprites on {saved.Count} sheets -> bugfablesap-guisprites.tsv and bugfablesap-sheet-*.png");
+            WriteItemSprites(log, saved);
             return true;
+        }
+
+        // The item and medal sprites too (itemsprites[kind, id]; kind 0 items and key items, 1 medals), with names, so a
+        // contact sheet can be made from them.
+        private static void WriteItemSprites(ManualLogSource log, System.Collections.Generic.HashSet<Texture2D> saved)
+        {
+            if (MainManager.itemsprites == null)
+            {
+                return;
+            }
+            var table = new StringBuilder("kind\tid\tname\tsheet\tx\ty\tw\th\n");
+            int count = 0;
+            for (int kind = 0; kind < MainManager.itemsprites.GetLength(0); kind++)
+            {
+                for (int id = 0; id < MainManager.itemsprites.GetLength(1); id++)
+                {
+                    Sprite s = MainManager.itemsprites[kind, id];
+                    if (s == null)
+                    {
+                        continue;
+                    }
+                    string name = "";
+                    try
+                    {
+                        name = kind == 0 ? MainManager.itemdata[0, id, 0] : MainManager.badgedata[id, 0];
+                    }
+                    catch (System.IndexOutOfRangeException)
+                    {
+                    }
+                    Rect r = s.textureRect;
+                    table.Append(kind).Append('\t').Append(id).Append('\t').Append(name).Append('\t').Append(s.texture.name).Append('\t')
+                        .Append((int)r.x).Append('\t').Append((int)r.y).Append('\t').Append((int)r.width).Append('\t').Append((int)r.height).Append('\n');
+                    if (saved.Add(s.texture))
+                    {
+                        Save(s.texture, Path.Combine(Paths.BepInExRootPath, "bugfablesap-sheet-" + s.texture.name + ".png"));
+                    }
+                    count++;
+                }
+            }
+            File.WriteAllText(Path.Combine(Paths.BepInExRootPath, "bugfablesap-itemsprites.tsv"), table.ToString());
+            log.LogInfo($"[dump] {count} item and medal sprites -> bugfablesap-itemsprites.tsv and their sheets");
         }
 
         // The sheets aren't script-readable, so blit to a render texture and read that back.
