@@ -172,6 +172,9 @@ be wrong.
 - **A Kabbu / horn rule is owed** once the basic horn becomes an item (build step 13). With *Starting Party Member*
   on, Kabbu is the rule (build step 18: 25 and 32 need him, 21 and 31 are past the gate, which needs all three).
   Not location 2: the horn tutorial cuts its grass itself and played through with Leif alone (the user, 2026-09-25).
+  **Upper Snakemouth, when it gets locations:** the big door in the door room stays shut until flag 14 (its closed
+  halves stand until the trapdoor fall, `MEASURED.md`, scenery switched by flags), so its rule is the trapdoor (the
+  door room's horn puzzle: the Horn) and the Peculiar Gem for the slot behind it (the user asked, 2026-09-27).
   Also location 19 (crystal berry #0 outside Snakemouth Den): the horn from the Outskirts' side, or the way round
   through the cave (the user, 2026-09-26; `MEASURED.md`). Safe today: it's past the gate, which needs Kabbu.
 - **Starting Party Member, past the gate:** the trapdoor scene broke with three members (build step 13), and the
