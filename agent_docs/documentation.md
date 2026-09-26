@@ -882,7 +882,8 @@ its flag 158 is unset: the same scene later takes bounties and gives their rewar
    picks his: every lookup by name, by list or by id order hands out that member where a stand-in would have gone,
    and his own part, if asked for, goes to a stand-in so he never gets two sets of orders. The user chose this over
    hiding him, knowing it shows two Leifs in this scene (one acting Kabbu, the story's own in the web). Logged:
-   "[party] EventN: Moth (member 2) acts member 1's part". Not yet seen.
+   "[party] EventN: Moth (member 2) acts member 1's part". **Seen (the user, 2026-09-26):** in the spider scene with
+   Vi and Leif, Leif did Kabbu's part (his moves and actions) before the first fight.
    **`unstick` now stops the dead scene too:** the first try got stuck, and after `unstick` the scene's coroutine
    kept running and threw once its stand-ins were cleared (a NullReferenceException in Event6, Vi left tilted).
 14. **The story's party changes use the same stand-in** (the user, 2026-09-26: "Leif is Kabbu, so Leif fights alone in
