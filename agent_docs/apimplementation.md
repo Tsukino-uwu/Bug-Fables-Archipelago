@@ -172,6 +172,8 @@ be wrong.
 - **A Kabbu / horn rule is owed** once the basic horn becomes an item (build step 13). With *Starting Party Member*
   on, Kabbu is the rule (build step 18: 25 and 32 need him, 21 and 31 are past the gate, which needs all three).
   Not location 2: the horn tutorial cuts its grass itself and played through with Leif alone (the user, 2026-09-25).
+  Also location 19 (crystal berry #0 outside Snakemouth Den): the horn from the Outskirts' side, or the way round
+  through the cave (the user, 2026-09-26; `MEASURED.md`). Safe today: it's past the gate, which needs Kabbu.
 - **Starting Party Member, past the gate:** the trapdoor scene broke with three members (build step 13), and the
   option always brings three there (build step 18).
 - **Crystal berry #2 (location 20)** sits in the Underground region, which needs Leif, though the room's
