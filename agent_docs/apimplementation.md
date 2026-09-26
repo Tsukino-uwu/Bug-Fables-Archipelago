@@ -1568,7 +1568,9 @@ Kabbu on the two opening locations, the permit on Madeleine's table (plando).
 shows it; Kabbu's did (the opening's gift line, swapped). But the two joining moments are only a story flag and show
 nothing, so Vi arrived silently. `slot_data` now lists `silent_locations` (every location whose source is only an event
 and a flag: exactly these two), and the mod's receiver gives your own item from one of them the usual hold-up, as it
-does another player's. Tested (`test_joining_moments_are_silent`); built, to be seen from the next seed.
+does another player's. Tested (`test_joining_moments_are_silent`). **Seen (the user, 2026-09-26, a new seed):** both boxes, Kabbu's then
+Vi's. Vi already stood in the party during Kabbu's box (a member joins on arrival, the box waits its turn); left as
+it is (the user: the order doesn't matter, the player can't act in between).
 
 **Seen by the user (2026-09-26), a Kabbu start:** the opening left Kabbu alone and sent its check; Artis's gift was Leif,
 who joined on the spot; the Fountain Rooftop held Vi, who joined too (party 1, 2, 0). Then each member's hold-up: "You got
