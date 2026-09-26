@@ -602,6 +602,9 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    starting it (`MapControl.cs:874-882`), so the skip only records the discovery with `MainManager.UpdateJounal`, the
    scene's own call, which also shows the game's discovery pop-up; the check then goes as it would. **Seen (the
    user, 2026-09-26):** flag 22 and discovery 0 reset (dev), walked in from the cave's side: no scene, the pop-up.
+   **The Tattle tutorial in the bridge room** (Event2, the user, 2026-09-26): Vi and Kabbu walk, one line (map line 1,
+   no item, flag, event or transfer command in the script dump), then flag 10, which also hides its trigger
+   (`TattleTutorial`); skipped like the bridge message. Built.
    **First skip froze the player** (the user at the bridge, 2026-09-25): a trigger
    freezes the player (`minipause`) before starting its scene (`NPCControl.cs:5512-5525`), and the scene's own
    `EndEvent` unfreezes. A skipped scene never ends, so the skip now calls the game's `EndEvent()` itself, which is all

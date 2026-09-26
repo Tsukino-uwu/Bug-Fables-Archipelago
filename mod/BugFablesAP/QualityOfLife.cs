@@ -60,6 +60,8 @@ namespace BugFablesAP
             new Scene { Map = "SnakemouthBridgeRoom", Event = 0, Flags = new[] { 11 } },
             // Hitting the rope: the bridge's fallen state is set by the scene itself, not its flags, so fast-forwarded.
             new Scene { Map = "SnakemouthBridgeRoom", Event = 1, Flags = null },
+            // The Tattle tutorial: Vi and Kabbu walk, one line with no commands, flag 10 (which also hides its trigger).
+            new Scene { Map = "SnakemouthBridgeRoom", Event = 2, Flags = new[] { 10 } },
             // The barkeeper's first talk; the same scene later handles bounties, so skipped only while 158 is unset.
             new Scene { Map = "UndergroundBar", Event = 83, Flags = new[] { 158 }, OnlyWhileUnset = 158 },
             // Arriving outside Snakemouth Den: walk, one line, discovery 0 (a location); the map's autostart sets its flag 22.
