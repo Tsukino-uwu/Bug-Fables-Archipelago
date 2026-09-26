@@ -67,10 +67,9 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
   save fields, with their evidence and date) go to `agent_docs/MEASURED.md`.
 - **Never assume what the game is MEANT to do. Ask.** Name the exact state: "the main menu", never bare
   "menu".
-- **No addresses, names or APIs from memory.** Every game class, field and hook traces to the decompiled
-  assembly; every Archipelago or MultiClient.Net call to its docs or source. **ALWAYS read how the game does a
-  thing before building or fixing ours** (the user, 2026-09-26): its code is the proven example to follow.
-  Anything suspiciously tidy is invented until confirmed.
+- **No addresses, names or APIs from memory.** Game code traces to the decompiled assembly, Archipelago and
+  MultiClient.Net calls to their docs or source; anything suspiciously tidy is invented until confirmed. **ALWAYS
+  read how the game does a thing before building or fixing ours** (the user, 2026-09-26): the proven example.
 - **An apworld change is done when its tests pass** in the local Archipelago checkout (at the tag the world
   targets). A behaviour change gets a test that fails without the fix. Generate a seed with a second game
   as well: some failures only show up in a room with two different games (`agent_docs/client-requirements.md`).
