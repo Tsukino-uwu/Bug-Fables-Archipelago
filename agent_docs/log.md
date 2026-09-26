@@ -804,3 +804,10 @@ Newest last. What was tried, what happened, what the user said.
   the release run's guard, CI and publish jobs green. The downloads fetched back: the zip holds only
   `BepInEx/plugins/BugFablesAP/` and its DLL matches the one seen in game; the tag is on the commit CI checked. The
   local server was stopped; the game install goes back to the dev layout once the game is closed.
+- **After the release (2026-09-26):** a stale check of everything a player reads. The game page and setup guide
+  were rewritten from the code (all 10 options; the goal isn't reported yet); the root README cut to a MeshGhost-shaped
+  landing page of links (the user: simple, minimal), its panel text moved unchanged into the setup guide; the config
+  descriptions for Difficulty, Detector and Travel and a Free boat log line fixed; the release DLL rebuilt with them.
+  None of it is in v0.1.0; it ships with the next release, which the user isn't making right away. The dev install
+  was updated (stage-dev, copy-dev) and is on the dev layout.
+- **Open next session:** the doc commits after `6fdd230` wait for the user's word to push.
