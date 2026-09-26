@@ -438,9 +438,29 @@ namespace BugFablesAP
                         long held = asMember ? ItemIds.Base + ItemIds.MemberOffset + int.Parse(parts[2]) : ItemIds.Base + 27;
                         int heldKind = asMember ? ItemIds.MemberKind : ItemIds.KeyItemKind;
                         ItemSwap.DescribeOurs(held, heldKind, out string name, out Sprite sprite, out Color? color);
-                        HoldUps.Received(name + " from TestPlayer", sprite, color, ItemSwap.ArticleOf(held, heldKind));
+                        HoldUps.Received(ItemSwap.FromText(name, Archipelago.MultiClient.Net.Enums.ItemFlags.Advancement, "TestPlayer"), sprite, color, ItemSwap.ArticleOf(held, heldKind));
                         return "holdup queued: " + name + " from TestPlayer";
                     }
+                    case "colortry":
+                    {
+                        // colortry <hex...>: a trap's "You got" line per colour, each added after ours for the test only.
+                        HoldUps.AddApColors();
+                        ItemSwap.DescribeOurs(ItemIds.Base + 27, ItemIds.KeyItemKind, out string permit, out Sprite permitSprite, out Color? permitColor);
+                        var tried = new List<Color>(MainManager.instance.textcolors);
+                        foreach (string hex in parts.Skip(1))
+                        {
+                            int rgb = Convert.ToInt32(hex, 16);
+                            tried.Add(new Color(((rgb >> 16) & 0xFF) / 255f, ((rgb >> 8) & 0xFF) / 255f, (rgb & 0xFF) / 255f));
+                            HoldUps.Received($"|color,{tried.Count - 1}|trap {hex}|color,0| from " + ItemSwap.PlayerText("TestPlayer"),
+                                permitSprite, permitColor, "a");
+                        }
+                        MainManager.instance.textcolors = tried.ToArray();
+                        return $"colortry: {parts.Length - 1} hold-ups queued";
+                    }
+                    case "palette":
+                        log.LogInfo("[dev] text colours: " + string.Join(", ", MainManager.instance.textcolors
+                            .Select((c, i) => i + " " + ColorUtility.ToHtmlStringRGB(c)).ToArray()));
+                        return "palette logged";
                     case "articles":
                     {
                         // The found-item line's article: the default (menutext[125]) and each item's own (itemdata[0, id, 3]).
@@ -832,7 +852,11 @@ namespace BugFablesAP
         {
             if (parts.Length < 3)
             {
-                return "spawn <item|key|medal> <id> [flag]";
+                return "spawn <item|key|medal> <id> [flag] | spawn member <n> [x z]";
+            }
+            if (parts[1].ToLowerInvariant() == "member")
+            {
+                return SpawnMember(parts);
             }
             int kind = parts[1].ToLowerInvariant() == "medal" ? 2 : parts[1].ToLowerInvariant() == "key" ? 1 : 0;
             int id = int.Parse(parts[2]);
@@ -849,6 +873,30 @@ namespace BugFablesAP
                 MainManager.instance.flags[flag] = false;
             }
             return $"spawned {parts[1]} {id}" + (flag >= 0 ? $" with flag {flag}" : "") + " next to you";
+        }
+
+        // Looks only: a Crunchy Leaf pickup drawn as party member n, as a location holding him is; taking it gives the leaf.
+        private static string SpawnMember(string[] parts)
+        {
+            if (MainManager.player == null || MainManager.map == null)
+            {
+                return "not now: no player";
+            }
+            int member = int.Parse(parts[2]);
+            float x = parts.Length > 4 ? float.Parse(parts[3], System.Globalization.CultureInfo.InvariantCulture) : 1.5f;
+            float z = parts.Length > 4 ? float.Parse(parts[4], System.Globalization.CultureInfo.InvariantCulture) : 0f;
+            Vector3 at = MainManager.player.transform.position + new Vector3(x, 1f, z);
+            NPCControl item = EntityControl.CreateItem(at, 0, 0, Vector3.zero, -1);
+            ItemSwap.DescribeOurs(ItemIds.Base + ItemIds.MemberOffset + member, ItemIds.MemberKind, out string name, out Sprite sprite, out _);
+            if (item.entity != null && item.entity.sprite != null && sprite != null)
+            {
+                item.entity.sprite.sprite = sprite;
+                if (item.entity.spritetransform != null)
+                {
+                    item.entity.spritetransform.localPosition = new Vector2(0f, sprite.bounds.extents.y);
+                }
+            }
+            return $"spawned {name}'s look at {x}, {z} from you (a Crunchy Leaf if taken)";
         }
 
         private static string Nudge(string[] parts)

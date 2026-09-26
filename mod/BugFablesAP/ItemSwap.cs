@@ -33,6 +33,7 @@ namespace BugFablesAP
         private static Sprite pendingSprite;
         private static Color? pendingColor;
         private static string shownName;
+        private static bool shownForOther;
         private static Sprite shownSprite;
         private static Color? shownColor;
         // Giveitem always uses the default article (menutext[125]); a picked-up item has its own.
@@ -262,6 +263,7 @@ namespace BugFablesAP
             shownColor = null;
             shownName = null;
             shownArticle = null;
+            shownForOther = false;
             if (location == -1 && pendingName != null && !badge && id == StandIn)
             {
                 location = DisplayOnly;
@@ -277,6 +279,13 @@ namespace BugFablesAP
                 return;
             }
             ScoutedItemInfo info = Describe(location, out shownName, out shownSprite, out shownColor);
+            if (info != null && info.Player.Slot != connection.OwnSlot)
+            {
+                // Another player's item: "<player>'s <item>" in Archipelago's colours.
+                string item = IsOurs(info) ? shownName.Substring(info.Player.Name.Length + 3) : info.ItemDisplayName;
+                shownName = PlayerText(info.Player.Name) + "|color,0|'s " + ClassText(item, info.Flags);
+                shownForOther = true;
+            }
             log.LogInfo($"[swap] location {location}: giveitem {(badge ? "medal" : "item")} {id} on {MapName()} is a location; showing '{shownName}'"
                 + (info == null ? " (not scouted yet)" : ""));
         }
@@ -417,6 +426,26 @@ namespace BugFablesAP
             pendingBerries = at;
             StartHoldUp();
         }
+
+        // For the "You got" line, which wraps the name in |color,1|...|color,0|: another player's name, and an item by class.
+        internal static string PlayerText(string player)
+        {
+            HoldUps.AddApColors();
+            return $"|color,{HoldUps.ApBase + HoldUps.Player}|{player}";
+        }
+
+        internal static string ClassText(string item, ItemFlags flags)
+        {
+            HoldUps.AddApColors();
+            int shade = (flags & ItemFlags.Advancement) != 0 ? HoldUps.Progression
+                : (flags & ItemFlags.NeverExclude) != 0 ? HoldUps.Useful
+                : (flags & ItemFlags.Trap) != 0 ? HoldUps.Trap
+                : HoldUps.Filler;
+            return $"|color,{HoldUps.ApBase + shade}|{item}";
+        }
+
+        internal static string FromText(string item, ItemFlags flags, string player) =>
+            ClassText(item, flags) + "|color,0| from " + PlayerText(player);
 
         internal static void ShowHeldUp(string name, Sprite sprite, Color? color, string article)
         {
@@ -618,14 +647,18 @@ namespace BugFablesAP
         private const int GotLine = 106;
         private const string ArticleSlot = "|string,1| ";
 
-        private static void DropArticleOnce()
+        // Another player's item, found here: "You found <player>'s <item>!" (the user), so it isn't taken for your own.
+        private const string GotWords = "You got " + ArticleSlot;
+        private const string FoundWords = "You found ";
+
+        private static void ChangeLineOnce(string from, string to)
         {
             string line = MainManager.menutext[GotLine];
-            if (line == null || !line.Contains(ArticleSlot))
+            if (line == null || !line.Contains(from))
             {
                 return;
             }
-            MainManager.menutext[GotLine] = line.Replace(ArticleSlot, "");
+            MainManager.menutext[GotLine] = line.Replace(from, to);
             MainManager.instance.StartCoroutine(RestoreLine(line));
         }
 
@@ -647,9 +680,13 @@ namespace BugFablesAP
             {
                 MainManager.instance.flagstring[1] = shownArticle;
             }
-            if (shownArticle == "")
+            if (shownForOther)
             {
-                DropArticleOnce();
+                ChangeLineOnce(GotWords, FoundWords);
+            }
+            else if (shownArticle == "")
+            {
+                ChangeLineOnce(ArticleSlot, "");
             }
             if (shownColor.HasValue)
             {

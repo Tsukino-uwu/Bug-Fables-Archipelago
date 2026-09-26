@@ -104,7 +104,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   enemy had touched the party, and the battle's start froze, 2026-09-26). With a flag (or `@name`) it lands on the
   entity, then steps beside it, unless a battle, event or dialogue has started by then.
 - `spawn <item|key|medal> <id> [flag]`: drop a pickup next to you. With a pickup location's flag, on that
-  location's map, it is that location.
+  location's map, it is that location. `spawn member <n> [x z]` drops party member n's look (0 Vi, 1 Kabbu, 2 Leif)
+  at that offset from you, to see how a location holding him looks; it's a Crunchy Leaf underneath, given if taken.
 - `flag <n> [on|off]`: show or set a story flag.
 - `heal`: the game's own full heal (HP and TP, the whole party). Test files only.
 - `killall`: in a battle, every enemy's HP to 0; the battle's own death check ends them after the next action (a boss
@@ -137,6 +138,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `holdup [member n]`: queue a test hold-up (the Explorer Permit "from TestPlayer", or party member n: 0 Vi, 1 Kabbu,
   2 Leif), display only, the way an item from another player is shown.
 - `articles [id...]`: log the found-item line's default article, each listed item's own, and the "You got" lines.
+- `palette`: log the game's text colours by index (`|color,n|`), Archipelago's added ones included.
+- `colortry <hex...>`: queue a trap's "You got" line in each colour given, to compare them on screen.
 - `onehit`: flips a test boost: every hit on an enemy does at least 99 (before defence). It's the `[Debug]` setting
   `OneHit` (off in the code), so it survives reloads; `copy-dev.ps1 -DebugOn OneHit` turns it on for a dev install.
 - `infjump`: flips jumping again in mid-air. It's the `[Debug]` setting `InfJump` (off in the code), on in the dev

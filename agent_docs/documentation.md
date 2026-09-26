@@ -463,13 +463,23 @@ sprite enabled. The game toggles the object, never its renderers, so the swap no
 renderers, on every pass. `tree` then showed both berry renderers disabled with the item sprite on. **Confirmed by
 the user (2026-09-25, screenshot):** the seed's Mistake standing on the ground outside the cave, no berry, no spin.
 
-**Planned (the user, 2026-09-26): another player's item says it was sent.** Seen in play: Artis's gift held
-another player's Sword and the box read "You got the QuestTester's Sword!", which the user took for their own item.
-The sentence is the game's menu text 106 ("You got ..."; 110 in one branch), with the article (`flagstring[1]`) and
-name (`flagstring[0]`) that the mod already swaps (`MainManager.cs:11490-11564`). For another player's item, the mod
-will swap in its own line for that one box and put 106 back after. **Wording (the user, 2026-09-26): "You found
-QuestTester's Sword!"**; the player's own items keep the game's "You got ...". First step:
-log text 106 in the running game to see its placeholder syntax, not guess it.
+**Another player's item says whose it is (built 2026-09-26).** Seen in play: Artis's gift held another player's
+Sword and the box read "You got the QuestTester's Sword!", which the user took for their own item. The sentence is the
+game's menu text 106, read in the running game (dev `articles`): `You got |string,1| |color,1||string,0||color,0|!`,
+the article (`flagstring[1]`) then the name (`flagstring[0]`), both of which the mod already swaps. For that one box the
+mod changes line 106 and puts it back the next frame: **"You found QuestTester's Sword!"** (the user's wording), the
+article and its space gone. A party member, who has no article, loses just the article: "You got Vi!". Not yet seen:
+this needs a room with a second player.
+
+**Archipelago's colours in the line (the user, 2026-09-26, three rounds on screen).** The game colours text only from
+its own palette (`|color,n|`), which in its scene is 10 colours, not the 7 in the code (dev `palette`; a first try that
+assumed 7 showed the game's gray and green, and indices past the end stopped the line). The mod adds Archipelago's text
+client colours after them (`HoldUps.AddApColors`, while Archipelago is on), darkened, since the client's are made for a
+dark window and fade on the near-white box: another player dark yellow `B8860B` (Archipelago's yellow `FAFAD2` was near
+invisible), progression dark plum `8A63D2`, useful dark slate blue `4A6BD8`, filler dark cyan `008B8B`, trap `E9573F`
+(Archipelago's salmon was pale, its red would look like the game's red for every find). "from" and "'s" are black. So:
+"You got Kabbu (plum) from TestPlayer (dark yellow)!" for an item received from another player, seen; "You found
+Player's Sword!" in the same colours for one found here. The player's own finds keep the game's red. Dev `colortry <hex...>` shows a trap line per colour.
 
 **Planned (the user, 2026-09-26): another game's item shows its type before you take it.** On the ground and on a
 shop shelf, another game's item still shows the vanilla item's sprite today, which reads as the vanilla item. It

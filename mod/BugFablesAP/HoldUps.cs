@@ -39,6 +39,41 @@ namespace BugFablesAP
             log.LogInfo($"[show] queued the hold-up for {what}");
         }
 
+        // Archipelago's text client colours (NetUtils.py: another player yellow; progression plum, useful slate blue, trap
+        // salmon, filler cyan), darkened for the near-white text box (the user's picks), after the game's own text colours
+        // (10 in its scene, not the code's 7). Offsets from ApBase.
+        internal const int Player = 0, Progression = 1, Useful = 2, Trap = 3, Filler = 4;
+        private static readonly string[] apColors = { "B8860B", "8A63D2", "4A6BD8", "E9573F", "008B8B" };
+        internal static int ApBase = -1;
+
+        private static Color FromHex(string hex)
+        {
+            int rgb = Convert.ToInt32(hex, 16);
+            return new Color(((rgb >> 16) & 0xFF) / 255f, ((rgb >> 8) & 0xFF) / 255f, (rgb & 0xFF) / 255f);
+        }
+
+        // The array outlives a hot reload: our colours are found again by the first of them, and the list redone.
+        internal static void AddApColors()
+        {
+            MainManager mm = MainManager.instance;
+            if (mm == null || mm.textcolors == null || (ApBase >= 0 && mm.textcolors.Length == ApBase + apColors.Length))
+            {
+                return;
+            }
+            Color first = FromHex(apColors[0]);
+            int own = Array.FindIndex(mm.textcolors, c => Mathf.Approximately(c.r, first.r) && Mathf.Approximately(c.g, first.g)
+                && Mathf.Approximately(c.b, first.b));
+            ApBase = own >= 0 ? own : mm.textcolors.Length;
+            var colors = new List<Color>(mm.textcolors);
+            colors.RemoveRange(ApBase, colors.Count - ApBase);
+            foreach (string hex in apColors)
+            {
+                colors.Add(FromHex(hex));
+            }
+            mm.textcolors = colors.ToArray();
+            log.LogInfo($"[show] Archipelago's text colours at index {ApBase} on");
+        }
+
         internal static void Received(string name, Sprite sprite, Color? color, string article)
         {
             waiting.Add(new Entry { Show = () => ItemSwap.ShowHeldUp(name, sprite, color, article) });
