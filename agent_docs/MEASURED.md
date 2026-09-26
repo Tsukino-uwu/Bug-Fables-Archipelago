@@ -636,6 +636,9 @@ The output stays in the BepInEx folder.
     `ChangeParty({0, 1, 2})`, flag 16, then two of enemy 1 that can't be fled, `EventControl.cs:3462-3466`); in chapter 1
     only the beemerang hits them. Whether Kabbu or Leif learn such a move later is unknown. Moot while the mod skips
     that scene (since 2026-09-25).
+    **The first boss too** (the user, 2026-09-26, Leif alone, OneHit off): in the spider boss fight (Event26, battle 13)
+    Leif couldn't hit the enemies in the air and lost. So the boss needs Vi in chapter 1 (the beemerang), unless a later
+    measurement finds another way; with OneHit on, the earlier Leif-alone run (2026-09-25) never showed it.
   - **Any member's attack:** Snakemouth's switch-room switches (`Big Switch`, Event23, flags 33/34) take Leif's ice as
     well as the beemerang or the horn (in `SnakemouthUndergroundLeftB`).
 - **A blocked walk-in ends in a teleport** (the user, 2026-09-25, the game's own behaviour): entering
