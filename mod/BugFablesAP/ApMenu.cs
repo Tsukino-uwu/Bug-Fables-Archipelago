@@ -456,7 +456,7 @@ namespace BugFablesAP
                             : "Enemies give " + Multipliers.Exp.Value + "x EXP. A battle still gives at most a level's worth.";
                     case BerryRow:
                         return Multipliers.Berries == null || Multipliers.Berries.Value <= 1 ? "Berries you pick up count as usual."
-                            : "Berries you pick up count " + Multipliers.Berries.Value + "x. Never a check's berries.";
+                            : "Berries you pick up count " + Multipliers.Berries.Value + "x. Never berries that come from a check.";
                     default: return "";
                 }
             }

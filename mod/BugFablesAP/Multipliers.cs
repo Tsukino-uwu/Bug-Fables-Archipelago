@@ -7,7 +7,7 @@ namespace BugFablesAP
 {
     // The Gameplay page's EXP and berry multipliers, 1x to 10x (a pip each, like the volume bars).
     // EXP: each defeated enemy's share, after the game's own per-enemy caps; the game still caps a battle at a level's worth.
-    // Berries: only those picked up in the world (lying there or dropped after a fight), never a check's.
+    // Berries: only those picked up in the world (lying there or dropped after a fight), never berries from a check.
     internal static class Multipliers
     {
         internal const int Min = 1, Max = 10;
@@ -26,8 +26,8 @@ namespace BugFablesAP
                 "EXP from each defeated enemy times this, 1 to 10. The game still caps one battle at a level's worth. "
                 + "Switch it on the Gameplay page.", new AcceptableValueRange<int>(Min, Max)));
             Berries = config.Bind("Gameplay", "BerryMultiplier", 1, new ConfigDescription(
-                "Berries picked up in the world (lying there or dropped after a fight) times this, 1 to 10; never a check's "
-                + "berries. Switch it on the Gameplay page.", new AcceptableValueRange<int>(Min, Max)));
+                "Berries picked up in the world (lying there or dropped after a fight) times this, 1 to 10; never berries "
+                + "that come from a check. Switch it on the Gameplay page.", new AcceptableValueRange<int>(Min, Max)));
             var exp = AccessTools.Method(typeof(BattleControl), "GetEXP", new[] { typeof(int), typeof(bool), typeof(MainManager.Enemies) });
             // The iterator's own MoveNext: the tiny BerryBounce() stub is inlined into its caller, so a patch there never runs.
             var bounce = AccessTools.Method(typeof(NPCControl), "BerryBounce");
