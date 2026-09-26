@@ -88,7 +88,7 @@ menu, and from the main menu), shown while the Archipelago mod is enabled or *Us
   equipped, Hardest as if the save had the HARDEST code, without writing it into the save; boss prize medals are
   handed out on every setting), **Enemy scaling** (Party level, the default, scales every enemy to your level;
   Artifacts to the artifacts found; Off keeps each enemy's own stats; Difficulty applies on top), **Shop prices**
-  (medal shops: Normal, the default, Half or Free), and **EXP multiplier** and **Berry multiplier** (1x, the default,
+  (medal shops, a bar in tenths of the price: full, the default, is normal, half is half price, empty is free), and **EXP multiplier** and **Berry multiplier** (1x, the default,
   to 10x, a bar like the volume rows; EXP from every defeated enemy, berries picked up in the world; a battle still
   gives at most a level's worth, and a check's berries are never multiplied).
 

@@ -50,9 +50,9 @@ namespace BugFablesAP
             harmony = null;
         }
 
-        internal static void StepBy(ConfigEntry<int> entry, int by)
+        internal static void StepBy(ConfigEntry<int> entry, int by, int min = Min, int max = Max)
         {
-            entry.Value = UnityEngine.Mathf.Clamp(entry.Value + by, Min, Max);
+            entry.Value = UnityEngine.Mathf.Clamp(entry.Value + by, min, max);
             log.LogInfo("[apmenu] " + entry.Definition.Key + ": " + entry.Value + "x");
         }
 

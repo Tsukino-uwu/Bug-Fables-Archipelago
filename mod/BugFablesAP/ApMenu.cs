@@ -446,12 +446,12 @@ namespace BugFablesAP
                             default: return "Enemies match your level, so every area plays fair in any order.";
                         }
                     case PricesRow:
-                        switch (QualityOfLife.ShopPrices?.Value)
-                        {
-                            case "Half": return "Medal shops charge half their price.";
-                            case "Free": return "Medal shops charge nothing.";
-                            default: return "Medal shops charge their normal price.";
-                        }
+                    {
+                        int tenths = QualityOfLife.ShopPrices?.Value ?? QualityOfLife.FullPrice;
+                        return tenths >= QualityOfLife.FullPrice ? "Medal shops charge their normal price."
+                            : tenths <= 0 ? "Medal shops charge nothing."
+                            : "Medal shops charge " + tenths * 10 + "% of their price.";
+                    }
                     case ExpRow:
                         return Multipliers.Exp == null || Multipliers.Exp.Value <= 1 ? "Enemies give their normal EXP."
                             : "Enemies give " + Multipliers.Exp.Value + "x EXP. A battle still gives at most a level's worth.";
@@ -531,7 +531,7 @@ namespace BugFablesAP
                 }
                 else if (r == PricesRow && QualityOfLife.ShopPrices != null)
                 {
-                    Cycle(QualityOfLife.ShopPrices, QualityOfLife.ShopPriceValues, by);
+                    Multipliers.StepBy(QualityOfLife.ShopPrices, by, 0, QualityOfLife.FullPrice);
                 }
                 else if (r == ExpRow && Multipliers.Exp != null)
                 {
@@ -696,10 +696,11 @@ namespace BugFablesAP
                 DrawButtons();
                 Choice(DifficultyRow, "Difficulty", (Difficulty?.Value ?? "Normal").ToUpperInvariant());
                 Choice(ScalingRow, "Enemy scaling", ScalingLabel(QualityOfLife.EnemyScaling?.Value ?? "PartyLevel"));
-                Choice(PricesRow, "Shop prices", (QualityOfLife.ShopPrices?.Value ?? "Normal").ToUpperInvariant());
+                Label(PricesRow, "Shop prices");
                 Label(ExpRow, "EXP multiplier");
                 Label(BerryRow, "Berry multiplier");
-                DrawPips(new[] { ExpRow, BerryRow }, new[] { Multipliers.Exp?.Value ?? 1, Multipliers.Berries?.Value ?? 1 });
+                DrawPips(new[] { PricesRow, ExpRow, BerryRow }, new[] { QualityOfLife.ShopPrices?.Value ?? QualityOfLife.FullPrice,
+                    Multipliers.Exp?.Value ?? 1, Multipliers.Berries?.Value ?? 1 });
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Gameplay. Cancel goes back" + (inGame ? " to Settings." : "."), 0f, StatusY);
                 PlaceCursor();
@@ -821,7 +822,7 @@ namespace BugFablesAP
             }
             if (QualityOfLife.ShopPrices != null)
             {
-                QualityOfLife.ShopPrices.Value = "Normal";
+                QualityOfLife.ShopPrices.Value = QualityOfLife.FullPrice;
             }
             foreach (ConfigEntry<int> multiplier in new[] { Multipliers.Exp, Multipliers.Berries })
             {

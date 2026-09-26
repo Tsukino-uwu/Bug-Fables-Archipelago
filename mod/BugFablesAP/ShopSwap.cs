@@ -17,7 +17,7 @@ namespace BugFablesAP
         private static Func<bool> randomizerOn;
         private static Harmony harmony;
         private static string[,] originalPrices;
-        private static string appliedPrices = "Normal";
+        private static int appliedPrices = QualityOfLife.FullPrice;
 
         internal static void Enable(ManualLogSource logger, string guid, ApConnection conn, Func<bool> on)
         {
@@ -57,7 +57,7 @@ namespace BugFablesAP
         {
             harmony?.UnpatchSelf();
             harmony = null;
-            SetPrices("Normal");
+            SetPrices(QualityOfLife.FullPrice);
         }
 
         // {shop: (slots, spread)}: spots laid out evenly around the middle of the shopkeeper's first and last spot.
@@ -310,7 +310,7 @@ namespace BugFablesAP
                 return;
             }
             bool on = randomizerOn != null && randomizerOn();
-            SetPrices(QualityOfLife.SettingsOn != null && QualityOfLife.SettingsOn() ? QualityOfLife.ShopPrices?.Value ?? "Normal" : "Normal");
+            SetPrices(QualityOfLife.SettingsOn != null && QualityOfLife.SettingsOn() ? QualityOfLife.ShopPrices?.Value ?? QualityOfLife.FullPrice : QualityOfLife.FullPrice);
             MapControl map = MainManager.map;
             if (!on || map == null || connection?.LocationShops == null)
             {
@@ -360,7 +360,7 @@ namespace BugFablesAP
         }
 
         // Columns 5 (berries) and 7 (crystal berries) are the medal table's prices.
-        private static void SetPrices(string setting)
+        private static void SetPrices(int setting)
         {
             string[,] table = MainManager.badgedata;
             if (table == null || setting == appliedPrices)
@@ -382,17 +382,17 @@ namespace BugFablesAP
                 table[i, 5] = Scaled(originalPrices[i, 0], setting);
                 table[i, 7] = Scaled(originalPrices[i, 1], setting);
             }
-            log.LogInfo($"[shop] prices: {setting}");
+            log.LogInfo($"[shop] prices: {setting * 10}%");
             appliedPrices = setting;
         }
 
-        private static string Scaled(string original, string setting)
+        private static string Scaled(string original, int tenths)
         {
-            if (setting == "Normal" || !int.TryParse(original, out int price))
+            if (tenths >= QualityOfLife.FullPrice || !int.TryParse(original, out int price))
             {
                 return original;
             }
-            return setting == "Free" ? "0" : Math.Max(1, (price + 1) / 2).ToString();
+            return tenths <= 0 ? "0" : Math.Max(1, (price * tenths + 9) / 10).ToString();
         }
     }
 }

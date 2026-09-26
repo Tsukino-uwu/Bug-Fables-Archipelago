@@ -646,7 +646,11 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    seen with a second player.
 7. **Shop prices** (the user, 2026-09-25: Normal by default, Half or Free). The medal table's price columns (5 for
    berries, 7 for crystal berries) are scaled in memory, from a kept copy, and put back when the row is Normal or the
-   mod is off. The logic never counts on it.
+   mod is off. The logic never counts on it. **Now a bar on the Gameplay page (the user, 2026-09-26):** 0 to 10 pips
+   like the multipliers (step 19), each a tenth of the price: a full bar normal (the default), 5 half, an empty bar free
+   (the user first asked 1 = free; an empty bar keeps 5 = half and 10 = normal exact). Any price above free is at least
+   1, rounded up, so small crystal-berry prices stay 1 on the low settings. A new key (`[Gameplay] ShopPrices`, a
+   number), as the old one held a word.
 8. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
    read in full before anything is skipped.
    **Travel: Off / Warp / Map / Both (the user, 2026-09-26; built, not yet seen).** The Warp button's on/off became one
@@ -705,7 +709,7 @@ cursor lands** (the user: entering the page shouldn't put you on Disable all), D
 picked first, so a stray press never wipes the settings; cancel closes the box. The question isn't repeated in the help line below
 (the user). **The Gameplay page has the same two buttons** (the user): Disable all there sets Difficulty Normal, Enemy
 scaling Off and Detector Off; Reset puts each back to its default. Both pages open on Reset to defaults. Disable all turns every row off (a choice row
-to its off value: Enemy scaling Off, Item animation Off, Shop prices Normal); Reset to defaults puts every row back to
+to its off value: Enemy scaling Off, Item animation Off, Shop prices full); Reset to defaults puts every row back to
 its default (`QualityOfLife.DisableAll` / `ResetAll`, the defaults from each setting's own config definition).
 
 **Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen by the user (2026-09-25); the bridge skips, Shop prices and silent replays with a second player not yet seen; Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat Ticket (the Archipelago guide, build step 16), the warp itself and map travel seen (2026-09-26); Skip battle tutorials planned.

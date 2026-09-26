@@ -25,8 +25,9 @@ namespace BugFablesAP
         internal static ConfigEntry<bool> SkipCutscenes;
         internal static readonly string[] ItemAnimations = { "All", "Progression", "Off" };
         internal static ConfigEntry<string> ItemAnimation;
-        internal static readonly string[] ShopPriceValues = { "Normal", "Half", "Free" };
-        internal static ConfigEntry<string> ShopPrices;
+        // Tenths of the normal price: 10 normal, 5 half, 0 free.
+        internal const int FullPrice = 10;
+        internal static ConfigEntry<int> ShopPrices;
         internal static ConfigEntry<string> EnemyScaling;
 
         // A scene that only moves, talks and sets flags is skipped by setting its flags; one that also changes the
@@ -110,9 +111,9 @@ namespace BugFablesAP
                 "Which items received from other players are shown held up, as when you find one: Progression (items that "
                 + "unlock something), All, or Off. They always arrive either way; your own finds are always shown.",
                 new AcceptableValueList<string>(ItemAnimations)));
-            ShopPrices = config.Bind("QualityOfLife", "ShopPrices", "Normal", new ConfigDescription(
-                "Medal shop prices, in berries and crystal berries: Normal, Half or Free.",
-                new AcceptableValueList<string>(ShopPriceValues)));
+            ShopPrices = config.Bind("Gameplay", "ShopPrices", FullPrice, new ConfigDescription(
+                "Medal shop prices, in berries and crystal berries, in tenths of the normal price: 10 normal, 5 half, 0 free. "
+                + "Any price above free is at least 1. Switch it on the Gameplay page.", new AcceptableValueRange<int>(0, FullPrice)));
             EnemyScaling = config.Bind("QualityOfLife", "EnemyScaling", "PartyLevel", new ConfigDescription(
                 "How tough enemies are, wherever you meet them: PartyLevel scales every enemy to the party's level, so "
                 + "every area plays fair in any order; Artifacts scales them to the artifacts found, as vanilla's "
