@@ -475,7 +475,9 @@ this needs a room with a second player.
 `You found |string,1| |color,1||string,0||color,1|!`, built into the text the mod already rewrites for a pickup
 location. It kept the vanilla item's article (a Bad Book spot holding the Explorer Permit would say "a Explorer
 Permit"). Now the same rules as the gift line: the seed item's own article, none for a party member ("You found Vi!"),
-and "You found Player's Sword!" for another player's item, article gone, in the Item colors. Not yet seen.
+and "You found Player's Sword!" for another player's item, article gone, in the Item colors. **Seen by the user
+(2026-09-26):** "You found an Ambusher Medal!" (the medal's own article, at the Residential rooftop) and "You found
+Vi!" at the Fountain Rooftop, Vi's icon in a yellow starburst, no description; another player's item still to see.
 
 **Archipelago's colours in the line (the user, 2026-09-26, three rounds on screen).** The game colours text only from
 its own palette (`|color,n|`), which in its scene is 10 colours, not the 7 in the code (dev `palette`; a first try that
