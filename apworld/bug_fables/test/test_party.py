@@ -18,6 +18,7 @@ class TestPartyOffByDefault(BugFablesTestBase):
         for name in JOINS:
             self.assertNotIn(name, locations)
         self.assertIn("Leif Joins", locations)
+        self.assertEqual(self.world.fill_slot_data()["silent_locations"], [])
 
     def test_horn_spots_need_no_member(self) -> None:
         self.assertTrue(self.can_reach_location("Outskirts: East Road, Stone"))
@@ -46,6 +47,11 @@ class _StartWith:
         flags = self.world.fill_slot_data()["location_flags"]
         self.assertEqual(flags[str(self.world.location_name_to_id[JOINS[0]])], 15)
         self.assertEqual(flags[str(self.world.location_name_to_id[JOINS[1]])], 27)
+
+    def test_joining_moments_are_silent(self) -> None:
+        # Neither shows an item of its own, so the client shows the player's own item arriving there.
+        self.assertEqual(self.world.fill_slot_data()["silent_locations"],
+                         sorted(self.world.location_name_to_id[name] for name in JOINS))
 
     def test_past_the_gate_needs_all_three(self) -> None:
         self.collect_by_name("Explorer Permit")

@@ -286,6 +286,9 @@ namespace BugFablesAP
 
         internal Dictionary<long, int> LocationDiscoveries => locationDiscoveries;
         private volatile Dictionary<long, int> locationDiscoveries;
+        // Checks that show no item of their own: the receiver shows the player's own item from them.
+        internal HashSet<long> SilentLocations => silentLocations;
+        private volatile HashSet<long> silentLocations;
 
         internal Dictionary<long, int[]> LocationShops => locationShops;
         private volatile Dictionary<long, int[]> locationShops;
@@ -577,6 +580,9 @@ namespace BugFablesAP
                     locationVars = ReadLocationVars(ok.SlotData);
                     locationBerries = ReadLocationBerries(ok.SlotData);
                     locationDiscoveries = ReadLocationBerries(ok.SlotData, "location_discoveries");
+                    silentLocations = ok.SlotData != null && ok.SlotData.TryGetValue("silent_locations", out object sl) && sl is JArray sla
+                        ? new HashSet<long>(sla.Select(e => e.Value<long>()))
+                        : null;
                     locationShops = ok.SlotData != null && ok.SlotData.TryGetValue("location_shops", out object ls) && ls is JObject lso
                         ? lso.Properties().ToDictionary(p => long.Parse(p.Name), p => new[] { p.Value.Value<int>("shop"), p.Value.Value<int>("medal") })
                         : null;

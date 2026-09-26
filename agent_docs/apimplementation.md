@@ -1564,6 +1564,11 @@ with three members, and it broke with three before (build step 13: its own two-l
 spider scene is also still open (the mod guide, step 11). Both come up in the first play past the gate.
 The trapdoor's own list is now patched (build step 13, 2026-09-26). Test seed for the first play: a Leif start, Vi and
 Kabbu on the two opening locations, the permit on Madeleine's table (plando).
+**Vi joined with no box (the user, 2026-09-26):** your own item gets no arrival hold-up, since the location's own scene
+shows it; Kabbu's did (the opening's gift line, swapped). But the two joining moments are only a story flag and show
+nothing, so Vi arrived silently. `slot_data` now lists `silent_locations` (every location whose source is only an event
+and a flag: exactly these two), and the mod's receiver gives your own item from one of them the usual hold-up, as it
+does another player's. Tested (`test_joining_moments_are_silent`); built, to be seen from the next seed.
 
 **Seen by the user (2026-09-26), a Kabbu start:** the opening left Kabbu alone and sent its check; Artis's gift was Leif,
 who joined on the spot; the Fountain Rooftop held Vi, who joined too (party 1, 2, 0). Then each member's hold-up: "You got

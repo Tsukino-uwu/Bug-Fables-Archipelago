@@ -130,7 +130,8 @@ namespace BugFablesAP
             }
         }
 
-        // Another player's item gets a hold-up per the Item animation setting; items the server had at login (a replay) don't.
+        // Another player's item gets a hold-up per the Item animation setting, and so does the player's own from a check
+        // that shows no item; items the server had at login (a replay) don't.
         private void ShowIfWanted(ItemInfo item, int index)
         {
             if (index < connection.ReceivedAtLogin)
@@ -138,9 +139,10 @@ namespace BugFablesAP
                 return;
             }
             string setting = QualityOfLife.ItemAnimation?.Value ?? "All";
-            bool fromOther = item.Player.Slot != connection.OwnSlot;
+            bool noScene = item.Player.Slot != connection.OwnSlot
+                || (connection.SilentLocations != null && connection.SilentLocations.Contains(item.LocationId));
             bool progression = (item.Flags & ItemFlags.Advancement) != 0;
-            if (!fromOther || setting == "Off" || (setting == "Progression" && !progression)
+            if (!noScene || setting == "Off" || (setting == "Progression" && !progression)
                 || connection.ItemKinds == null || !connection.ItemKinds.TryGetValue(item.ItemId, out int kind))
             {
                 return;

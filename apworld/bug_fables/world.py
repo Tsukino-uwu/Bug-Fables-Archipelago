@@ -255,6 +255,9 @@ class BugFablesWorld(World):
             "location_vars": {str(LOCATION_NAME_TO_ID[loc["name"]]): {"var": loc["source"]["var"],
                                                                        "at_least": loc["source"]["at_least"]}
                               for loc in self.included_locations if "var" in loc["source"]},
+            # Checks that show no item of their own (only a story flag): the client shows the player's own item there.
+            "silent_locations": sorted(LOCATION_NAME_TO_ID[loc["name"]] for loc in self.included_locations
+                                       if set(loc["source"]) <= {"event", "flag"}),
             "location_gives": {
                 str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["give"]
                 for loc in self.included_locations
