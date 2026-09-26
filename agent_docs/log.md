@@ -800,3 +800,7 @@ Newest last. What was tried, what happened, what the user said.
 - **The user asked:** no release with 99 damage or infinite jump. Those came from their own config; every `[Debug]`
   setting already defaults to off in the code. Offered a guard on the defaults or compiling the dev tools out; they
   chose the guard, now part of `build-release.ps1` (so of the preflight and CI).
+- **v0.1.0 published (2026-09-26),** a pre-release, by `release.ps1` on the user's yes: preflight clean, CI green,
+  the release run's guard, CI and publish jobs green. The downloads fetched back: the zip holds only
+  `BepInEx/plugins/BugFablesAP/` and its DLL matches the one seen in game; the tag is on the commit CI checked. The
+  local server was stopped; the game install goes back to the dev layout once the game is closed.

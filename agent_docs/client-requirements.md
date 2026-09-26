@@ -30,7 +30,8 @@ anything that happens in the game.
 - [ ] `multiworld.completion_condition[player]` is set
 - [ ] Items and regions are added with `append`/`extend`/`+=`, never `=`
 - [ ] Only `self.random` is used, never Python's `random`
-- [ ] Packaged with the "Build APWorlds" launcher component into a lowercase `bug_fables.apworld`
+- [x] Packaged with the "Build APWorlds" launcher component into a lowercase `bug_fables.apworld` (2026-09-26: CI
+  builds it for every release; v0.1.0's loaded from `custom_worlds` and generated, `apimplementation.md` build step 17)
 
 ## Known failure modes
 

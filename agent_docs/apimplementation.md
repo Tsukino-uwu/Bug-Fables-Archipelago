@@ -66,8 +66,8 @@ be wrong.
    *Progression*, silence for a replay after a new save or reconnect, and the multiworld names ("X's item").
 6. **A full bag:** key items keep arriving, only ordinary items wait.
 7. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
-8. **A release: three separate downloads** (the user, 2026-09-25): built, see build step 17. Next: the first run
-   on GitHub (v0.1.0, a pre-release), and the user seeing the release zip load in game.
+8. **A release: three separate downloads** (the user, 2026-09-25): built, see build step 17; v0.1.0 out as a
+   pre-release (2026-09-26). The next one: `dev-scripts/release.ps1 -Version vX.Y.Z` after bumping both versions.
 9. **The chat feed**, then the in-game text client (see the design list in the mod guide, step 2).
 10. **A "Quality of life" page in the Archipelago panel** (the user, 2026-09-25): on/off rows that speed the game
    up and make it smoother: skips first, others later. Battle tutorials next (the mod guide, step 10).
@@ -1489,9 +1489,8 @@ BepInEx is not bundled; the player installs it first.
 **Versions.** The mod's `Plugin.Version` and the apworld's `world_version` both equal the tag without its `v`.
 v0.1.0 is the first (the mod was 0.0.1 and the world 0.2.0 before).
 
-**Status:** in progress: the scripts, both workflows and the staged mod committed; the gate tried both ways, the
-tests and a two-game seed pass locally (2026-09-26). Not yet run on GitHub, and the release zip not yet seen loading
-in game.
+**Status:** works: v0.1.0 published as a pre-release by `release.ps1` (2026-09-26), every job green; the three
+downloads fetched back and checked (the zip's DLL byte-identical to the one the user saw load and connect in game).
 
 # How it works
 
