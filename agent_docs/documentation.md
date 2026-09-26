@@ -632,7 +632,8 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    (`BattleControl.CheckEvent`, while flag 15 is set and 27 isn't). With *Skip cutscenes* a prefix on `CheckEvent`
    calls the same `ExitBattle` at the first moment the player could act, only for that fight: during Event6, the
    spider alone, `flagvar[11]` at 0 or 1. The second fight (the spider and Leif in the web, enemy 12, `flagvar[11]` 2)
-   is a real one and untouched. Built.
+   is a real one and untouched. **Seen (the user, 2026-09-27, flags 27 and 16 reset):** the first fight ended at
+   once and the real one began.
    **First skip froze the player** (the user at the bridge, 2026-09-25): a trigger
    freezes the player (`minipause`) before starting its scene (`NPCControl.cs:5512-5525`), and the scene's own
    `EndEvent` unfreezes. A skipped scene never ends, so the skip now calls the game's `EndEvent()` itself, which is all
