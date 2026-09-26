@@ -369,8 +369,9 @@ their arrows and no text, while the game's Settings list was fine. Wrong theorie
 letters beside one of the game's in the running game (dev `menuinfo`): **the GUI camera is turned 90° in the shop**, the
 game's letters turned with it, and the panel's were not. Its text object was attached with `.parent =` and never had
 its rotation reset, so it kept an unturned world rotation and was seen edge-on. Every attached box and text now resets
-`localEulerAngles`, as the arrows already did; the Warp button's Yes / No box too. The lesson went into CLAUDE.md:
-read how the game does a thing first.
+`localEulerAngles`, as the arrows already did; the Warp button's Yes / No box too. **Seen by the user (2026-09-26):**
+the Quality of life page with all its text inside the shop. It follows whatever turn the camera has, so any room that
+turns it is covered. The lesson went into CLAUDE.md: read how the game does a thing first.
 
 **Status:** works, seen by the user (2026-09-24): the menu entry, the panel, and the file select held back until the first login.
 
