@@ -351,6 +351,12 @@ namespace BugFablesAP
 
         private static void TickTrapdoorLanding(MainManager mm, string here)
         {
+            // The scene's second half (the landing talk in the fall room) is replaced: it ends on the black screen right after
+            // the fall, before its own placing (which at speed left the party far left, the camera swinging after them).
+            if (here == "SnakemouthFallRoom" && mm.inevent && MainManager.lastevent == TrapdoorEvent)
+            {
+                CutTrapdoorScene();
+            }
             // In the door room only once the scene was skipped (flag 14 set, no scene running).
             bool skipped = here == "SnakemouthDoorRoom" && mm.flags[14];
             if (here != "SnakemouthFallRoom" && !skipped)
@@ -375,6 +381,31 @@ namespace BugFablesAP
             }
             MainManager.instance.StartCoroutine(MainManager.TransferMap((int)MainManager.Maps.SnakemouthFallRoom, MainManager.player.transform.position, door[1], door[2]));
             log.LogInfo("[qol] after the trapdoor scene" + (skipped ? " (skipped)" : "") + ": entering the fall room through the door room's way down");
+        }
+
+        private static void CutTrapdoorScene()
+        {
+            MainManager.events.StopCoroutine("Event" + TrapdoorEvent);
+            // The scene turned the party's gravity off and forced their animations; the landing's transfer needs them normal.
+            foreach (EntityControl member in MainManager.GetPartyEntities() ?? new EntityControl[0])
+            {
+                if (member == null)
+                {
+                    continue;
+                }
+                member.LockRigid(false);
+                if (member.rigid != null)
+                {
+                    member.rigid.useGravity = true;
+                }
+                member.overrideanim = false;
+                member.overrridejump = false;
+                member.animstate = 0;
+            }
+            MainManager.map?.RestoreLimit(false);
+            endEvent?.Invoke(null, null);
+            MainManager.ChangeMusic("Cave0");
+            log.LogInfo("[qol] the trapdoor scene ended after the fall (its landing talk replaced by the door arrival)");
         }
 
         // Event8's talk after the slides is cut: its first step is ChangeParty({1}) (Kabbu alone); refusing it stops the

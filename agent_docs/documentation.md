@@ -616,6 +616,11 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    wrong:** the party stood idle, a pause, then a teleport, and the trapdoor never opened. So it is fast-forwarded
    instead (the opening and the fall at speed), and the landing places the party after it. The landing itself, after
    the full scene, seen by the user: arrived where the trapdoor leads in.
+   **At speed the camera swung far left before the landing** (the user, 2026-09-27): the fast-forward drops once the
+   scene loads the fall room (the scene list matches by map), and the scene's own landing then placed the party at a
+   door-room position (x -22.8, logged by PartyFit), the camera following. So the scene now ends on the black screen
+   right after the fall: its coroutine stopped, the party's bodies made normal (the game's `LockRigid(false)`,
+   gravity, animations), the camera limits restored, `EndEvent`, the cave music, then the landing's door arrival.
    **First skip froze the player** (the user at the bridge, 2026-09-25): a trigger
    freezes the player (`minipause`) before starting its scene (`NPCControl.cs:5512-5525`), and the scene's own
    `EndEvent` unfreezes. A skipped scene never ends, so the skip now calls the game's `EndEvent()` itself, which is all
