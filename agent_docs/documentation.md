@@ -667,7 +667,10 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    the Map button) as an area and drew toward a marker that didn't exist, and no area was marked visited at all, as
    a new file never marks its starting area (`MEASURED.md`, "Visited areas and the pause-menu map"). Opening the
    travel map now sets `option` to -1, the map's own "none yet", and marks the area the party stands in as visited
-   (the one field `UpdateArea` writes).
+   (the one field `UpdateArea` writes). **Then no box showed:** it opened (the log said so) but behind the map, a 3D
+   object at depth 5 on the GUI camera; the map's box now hangs off the GUI camera at depth 2. **Seen by the user
+   (2026-09-26):** the map opened without errors, "Travel to Bugaria Outskirts?" showed over it, and Yes landed the
+   party beside the start's save point ("a good location"). Travel between two areas' spots not yet tried.
 
 The panel got an eighth row, "Quality of life", which opens a second page in the same box; cancel comes back.
 

@@ -705,3 +705,8 @@ Newest last. What was tried, what happened, what the user said.
   - Softening the scroll's art was tried three ways and reverted. The user asked about other premade icons; none
     fits "warp".
   - Travel defaults to Both (the user: warp does what the map can't).
+- **Map travel works** (the user). Two bugs came first:
+  - Errors every frame: a leftover `option`, and a new file never marks its starting area visited.
+  - The confirm box opened behind the map.
+  - The first was found by a one-time diagnostic finalizer, the second by a log line. The user travelled to the
+    Outskirts and landed well.

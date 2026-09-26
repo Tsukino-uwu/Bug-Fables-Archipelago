@@ -75,7 +75,8 @@ be wrong.
 9. **The chat feed**, then the in-game text client (see the design list in the mod guide, step 2).
 10. **A "Quality of life" page in the Archipelago panel** (the user, 2026-09-25): on/off rows that speed the game
    up and make it smoother: skips first, others later. Battle tutorials next (the mod guide, step 10).
-11. **Planned (the user, 2026-09-25): map fast travel**, apart from the Warp to Start button. On the pause menu's map
+11. **Map fast travel, built (2026-09-26; the mod guide, step 10), seen travelling to the Outskirts** (planned by the
+   user, 2026-09-25), apart from the Warp to Start button. On the pause menu's map
    (window 6, which lists areas), pick an area you've been to and confirm (Yes / No) to travel to its save point
    through the game's own map transfer. The game already records visited areas (`librarystuff[4, area]`, set by
    `MainManager.UpdateArea`). The logic never counts on it, like the warp. **One row with the warp (the user,

@@ -457,8 +457,19 @@ namespace BugFablesAP
             asking = kind;
             askedArea = area;
             confirmBox = MainManager.Create9Box(new Vector3(0f, 0f, 5f), new Vector2(kind == Kind.Map ? 9f : 7f, 3f), 1, 30, Color.white, grow: false);
-            confirmBox.parent = menu.transform;
-            confirmBox.localPosition = new Vector3(0f, -0.5f, -1f);
+            if (kind == Kind.Map)
+            {
+                // The map is a 3D object at depth 5 on the GUI camera, in front of the pause menu: the box goes in front of it.
+                confirmBox.parent = MainManager.GUICamera.transform;
+                confirmBox.localPosition = new Vector3(0f, -0.5f, 2f);
+                confirmBox.localEulerAngles = Vector3.zero;
+            }
+            else
+            {
+                confirmBox.parent = menu.transform;
+                confirmBox.localPosition = new Vector3(0f, -0.5f, -1f);
+            }
+            log.LogInfo(kind == Kind.Warp ? "[warp] asking: warp to the start?" : $"[warp] asking: travel to area {area} ({MainManager.areanames[area]})?");
             DrawConfirm(menu);
             MainManager.instance.inputcooldown = 10f;
         }
