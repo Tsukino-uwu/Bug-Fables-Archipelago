@@ -613,7 +613,9 @@ The output stays in the BepInEx folder.
   pause menu and usable in battle. Each step expects the one before: a file that skipped part of the chain
   crashes entering its middle. **One exception seen** (the user, 2026-09-26, Vi and Kabbu, a new file): a dev warp
   into `SnakemouthFallRoom` through the trapdoor's way down, with flags 13 and 14 still off, played Event6 to its end
-  with no error, and Leif joined (the mod's join after flag 27).
+  with no error, and Leif joined (the mod's join after flag 27). **The spider scene can be entered from the lake side too**
+  (the user, the same day): the web holding Leif has no collision, and walking far enough right from
+  `DoorLakeRoom` starts Event6 as usual (its trigger, entity 2, sits between the lake door and the trapdoor's landing).
 - **The party's basic moves** (the user, 2026-09-24, matching `PlayerControl.cs`): Vi (bee) throws the
   beemerang, which hits and grabs at range (flag 11, on from the start; Event109 takes it away in the bandit
   hideout and gives it back); Kabbu (beetle) uses the horn, a knock-up and melee hit that also cuts grass (always on);
