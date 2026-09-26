@@ -64,8 +64,9 @@ namespace BugFablesAP
             new Scene { Map = "SnakemouthBridgeRoom", Event = 2, Flags = new[] { 10 } },
             // The door room's puzzle solved: it moves the rocks, removes two entities and drops the trapdoor's Mushroom, so fast-forwarded.
             new Scene { Map = "SnakemouthDoorRoom", Event = 4, Flags = null },
-            // The trapdoor: flag 14 (its check) and the fall into the next room, which the trapdoor landing below does.
-            new Scene { Map = "SnakemouthDoorRoom", Event = 5, Flags = new[] { 14 } },
+            // The trapdoor: fast-forwarded, not skipped (a skip showed no opening or fall, just a teleport: the user); the
+            // trapdoor landing below then places the party.
+            new Scene { Map = "SnakemouthDoorRoom", Event = 5, Flags = null },
             // The barkeeper's first talk; the same scene later handles bounties, so skipped only while 158 is unset.
             new Scene { Map = "UndergroundBar", Event = 83, Flags = new[] { 158 }, OnlyWhileUnset = 158 },
             // Arriving outside Snakemouth Den: walk, one line, discovery 0 (a location); the map's autostart sets its flag 22.
