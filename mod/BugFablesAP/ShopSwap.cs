@@ -310,7 +310,7 @@ namespace BugFablesAP
                 return;
             }
             bool on = randomizerOn != null && randomizerOn();
-            SetPrices(QualityOfLife.SettingsOn != null && QualityOfLife.SettingsOn() ? QualityOfLife.ShopPrices?.Value ?? QualityOfLife.FullPrice : QualityOfLife.FullPrice);
+            SetPrices(QualityOfLife.SettingsOn != null && QualityOfLife.SettingsOn() ? QualityOfLife.MedalPrices?.Value ?? QualityOfLife.FullPrice : QualityOfLife.FullPrice);
             MapControl map = MainManager.map;
             if (!on || map == null || connection?.LocationShops == null)
             {

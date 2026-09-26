@@ -325,7 +325,7 @@ on/off, plus two links, *Quality of life* and *Gameplay*. Gameplay holds how the
 (moved from Quality of life; its config key stays under `[QualityOfLife]`, so a saved choice carries over) and
 Detector. Quality of life keeps the speed-ups, with Disable all / Reset to defaults on top (step 10). Cancel backs out
 of a Yes / No first, then out of a page. `ApMenu` tracks the page as an enum. **Rows moved (the user, 2026-09-26):**
-Shop prices to Gameplay, Detector to Quality of life, so Gameplay is Difficulty, Enemy scaling, Shop prices and Quality
+Shop prices (now Medal prices) to Gameplay, Detector to Quality of life, so Gameplay is Difficulty, Enemy scaling, Medal prices and Quality
 of life is Fast text, Travel, Skip cutscenes, Item animation, Detector; each config key stays where it was, so a saved
 choice carries over, and each page's two buttons cover its own rows. **The two links left the main page (the
 user, 2026-09-26: "so AP looks clean"):** the pages are reached only from Settings (below), and *Use on normal saves*
@@ -649,8 +649,10 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    mod is off. The logic never counts on it. **Now a bar on the Gameplay page (the user, 2026-09-26):** 0 to 10 pips
    like the multipliers (step 19), each a tenth of the price: a full bar normal (the default), 5 half, an empty bar free
    (the user first asked 1 = free; an empty bar keeps 5 = half and 10 = normal exact). Any price above free is at least
-   1, rounded up, so small crystal-berry prices stay 1 on the low settings. A new key (`[Gameplay] ShopPrices`, a
-   number), as the old one held a word.
+   1, rounded up, so small crystal-berry prices stay 1 on the low settings. A new key (`[Gameplay] MedalPrices`, a
+   number), as the old one held a word. **Renamed *Medal prices*** (the user, 2026-09-26: more accurate): it scales
+   the medal table, so every medal on sale anywhere, never an item shop's consumables. If item shops are ever scaled,
+   they get their own row (*Item prices*), as their prices sit on another scale.
 8. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
    read in full before anything is skipped.
    **Travel: Off / Warp / Map / Both (the user, 2026-09-26; built, not yet seen).** The Warp button's on/off became one
@@ -709,7 +711,7 @@ cursor lands** (the user: entering the page shouldn't put you on Disable all), D
 picked first, so a stray press never wipes the settings; cancel closes the box. The question isn't repeated in the help line below
 (the user). **The Gameplay page has the same two buttons** (the user): Disable all there sets Difficulty Normal, Enemy
 scaling Off and Detector Off; Reset puts each back to its default. Both pages open on Reset to defaults. Disable all turns every row off (a choice row
-to its off value: Enemy scaling Off, Item animation Off, Shop prices full); Reset to defaults puts every row back to
+to its off value: Enemy scaling Off, Item animation Off, Medal prices full); Reset to defaults puts every row back to
 its default (`QualityOfLife.DisableAll` / `ResetAll`, the defaults from each setting's own config definition).
 
 **Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen by the user (2026-09-25); the bridge skips, Shop prices and silent replays with a second player not yet seen; Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat Ticket (the Archipelago guide, build step 16), the warp itself and map travel seen (2026-09-26); Skip battle tutorials planned.

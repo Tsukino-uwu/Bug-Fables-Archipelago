@@ -27,7 +27,7 @@ namespace BugFablesAP
         internal static ConfigEntry<string> ItemAnimation;
         // Tenths of the normal price: 10 normal, 5 half, 0 free.
         internal const int FullPrice = 10;
-        internal static ConfigEntry<int> ShopPrices;
+        internal static ConfigEntry<int> MedalPrices;
         internal static ConfigEntry<string> EnemyScaling;
 
         // A scene that only moves, talks and sets flags is skipped by setting its flags; one that also changes the
@@ -111,7 +111,7 @@ namespace BugFablesAP
                 "Which items received from other players are shown held up, as when you find one: Progression (items that "
                 + "unlock something), All, or Off. They always arrive either way; your own finds are always shown.",
                 new AcceptableValueList<string>(ItemAnimations)));
-            ShopPrices = config.Bind("Gameplay", "ShopPrices", FullPrice, new ConfigDescription(
+            MedalPrices = config.Bind("Gameplay", "MedalPrices", FullPrice, new ConfigDescription(
                 "Medal shop prices, in berries and crystal berries, in tenths of the normal price: 10 normal, 5 half, 0 free. "
                 + "Any price above free is at least 1. Switch it on the Gameplay page.", new AcceptableValueRange<int>(0, FullPrice)));
             EnemyScaling = config.Bind("QualityOfLife", "EnemyScaling", "PartyLevel", new ConfigDescription(
