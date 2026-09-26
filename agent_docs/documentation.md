@@ -907,7 +907,7 @@ Event5), place the party as if it had just entered the fall room through one of 
 start uses (build step 15 of the Archipelago guide; the arrival jump from the door's entity, step 13 here). The user
 expects it to line the landing up better than the scene's own spot, as the random start into that room did.
 
-**Status:** works with Leif alone, seen by the user through chapter 1 into chapter 2 (2026-09-25); items 5 and 6, and Leif joining after the spider with a two-member start, not yet seen; the direct lookups in item 12 still open.
+**Status:** works with Leif alone, seen by the user through chapter 1 into chapter 2 (2026-09-25); Leif joining after the spider with the story's two (Vi and Kabbu) seen (2026-09-26: he followed, could lead, and showed in the pause menu); items 5 and 6 not yet seen; the direct lookups in item 12 still open.
 
 *Code: `PartyFit.cs` (the stand-ins and the acting leader), `PartyMembers.cs` (the member guard, followers,
 Leif's joining).*

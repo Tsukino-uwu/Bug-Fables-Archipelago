@@ -842,3 +842,8 @@ Newest last. What was tried, what happened, what the user said.
   lists mid-battle-start. Which of the two stopped the battle's start isn't proven; the user's reading: the warp's second move while the
   enemy's hit was starting the fight. Only a game restart got out.
   The plain warp now lands once (through a door into the map); the step aside refuses during a battle, event or dialogue.
+- **Seen (the user): Leif joins after the spider with Vi and Kabbu**, on a new file with no dev start: warped into the
+  fall room (the trapdoor scene skipped), Event6 played, the mod added Leif (flag 16), no error; he followed, could lead,
+  and showed in the pause menu. AdoptSeed and TestStartMember turned off (the user: every item comes from the server
+  anyway); the fourth test seed is hosted with release and collect off. New dev command `removemember`, for trying Vi
+  and Leif next.

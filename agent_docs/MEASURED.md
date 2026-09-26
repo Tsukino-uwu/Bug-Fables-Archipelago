@@ -611,7 +611,9 @@ The output stays in the BepInEx folder.
   follows, not yet in the party) → Event18 on `SnakemouthLake`, a switch (flag 29) → Event14, the lake's
   `MothEvent` trigger (flag 16: Leif joins the party; then flag 24). The user confirmed him a full member: in the
   pause menu and usable in battle. Each step expects the one before: a file that skipped part of the chain
-  crashes entering its middle.
+  crashes entering its middle. **One exception seen** (the user, 2026-09-26, Vi and Kabbu, a new file): a dev warp
+  into `SnakemouthFallRoom` through the trapdoor's way down, with flags 13 and 14 still off, played Event6 to its end
+  with no error, and Leif joined (the mod's join after flag 27).
 - **The party's basic moves** (the user, 2026-09-24, matching `PlayerControl.cs`): Vi (bee) throws the
   beemerang, which hits and grabs at range (flag 11, on from the start; Event109 takes it away in the bandit
   hideout and gives it back); Kabbu (beetle) uses the horn, a knock-up and melee hit that also cuts grass (always on);
