@@ -122,7 +122,9 @@ be wrong.
    of a dungeon. Chosen at generation and sent in `slot_data`, never at runtime. The logic starts from that room, so
    every seed is still completable from it: `random` needs the room-by-room logic that the entrance randomizer also
    waits for (build step 12). Picking one named spot (a given town), as some worlds allow, is a later idea, only if
-   players ask; `towns` and `random` come first (the user, 2026-09-26). Its own build step when built.
+   players ask; `towns` and `random` come first (the user, 2026-09-26). **Warp to Start goes to the seed's start**
+   (the user, 2026-09-26): the same spot the seed sends in `slot_data`, the vanilla save point when it's `off`; map
+   travel's Outskirts spot follows it. Its own build step when built.
 
 19. **Traps, an idea for later** (the user, 2026-09-26; not planned yet). A trap sent to this game takes effect when
    the server delivers it, after any open text box, like any received item. Held up at pickup: its own icon on a red
