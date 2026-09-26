@@ -387,10 +387,11 @@ class TestClassifications(BugFablesTestBase):
         used: set[str] = set()
         for region in REGIONS:
             for exit_data in region["exits"]:
-                used.update(exit_data.get("requires", []))
+                used.update(exit_data.get("requires", []) + exit_data.get("members", []))
         for spot in LOCATIONS + STORY_EVENTS:
-            used.update(spot.get("requires", []))
-        event_items = {event["item"] for event in STORY_EVENTS} | {"Artifact"}
+            used.update(spot.get("requires", []) + spot.get("members", []))
+        # Leif is both: the story's event with Starting Party Member off, an item with it on.
+        event_items = {event["item"] for event in STORY_EVENTS} - {item["name"] for item in ITEMS} | {"Artifact"}
         real_items_used = used - event_items
         for item in ITEMS:
             with self.subTest(item=item["name"]):

@@ -58,10 +58,14 @@ MONEY_ID_OFFSET = 2_000
 # Crystal berries: one counted item (game_id 0).
 CRYSTAL_KIND = 4
 CRYSTAL_ID_OFFSET = 3_000
+# Party members: game_id is the member (0 Vi, 1 Kabbu, 2 Leif).
+MEMBER_KIND = 5
+MEMBER_ID_OFFSET = 4_000
 
 
 def item_id(item: dict[str, Any]) -> int:
-    offset = {MEDAL_KIND: MEDAL_ID_OFFSET, MONEY_KIND: MONEY_ID_OFFSET, CRYSTAL_KIND: CRYSTAL_ID_OFFSET}.get(item["kind"], 0)
+    offset = {MEDAL_KIND: MEDAL_ID_OFFSET, MONEY_KIND: MONEY_ID_OFFSET, CRYSTAL_KIND: CRYSTAL_ID_OFFSET,
+              MEMBER_KIND: MEMBER_ID_OFFSET}.get(item["kind"], 0)
     return ITEM_ID_BASE + offset + item["game_id"]
 
 

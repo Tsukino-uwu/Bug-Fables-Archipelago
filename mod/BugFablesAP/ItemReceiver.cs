@@ -81,6 +81,10 @@ namespace BugFablesAP
                 log.LogInfo("[recv] " + state);
                 lastState = key;
             }
+            if (matches == true && given >= 0 && given <= received.Count)
+            {
+                PartyMembers.SetReceived(MembersGiven(received, given));
+            }
             if (blocked != null || given == received.Count)
             {
                 return;
@@ -111,6 +115,19 @@ namespace BugFablesAP
             log.LogInfo($"[recv] item {given + 1} of {received.Count}: {item.ItemDisplayName} from {item.Player.Name} "
                 + $"({item.LocationDisplayName}): {outcome}");
             ShowIfWanted(item, given);
+        }
+
+        private System.Collections.Generic.IEnumerable<int> MembersGiven(ReadOnlyCollection<ItemInfo> received, int given)
+        {
+            for (int i = 0; i < given; i++)
+            {
+                ItemInfo item = received[i];
+                if (item.ItemGame == ApConnection.Game && connection.ItemKinds != null
+                    && connection.ItemKinds.TryGetValue(item.ItemId, out int kind) && kind == ItemIds.MemberKind)
+                {
+                    yield return ItemIds.GameId(item.ItemId, kind);
+                }
+            }
         }
 
         // Another player's item gets a hold-up per the Item animation setting; items the server had at login (a replay) don't.
@@ -167,6 +184,15 @@ namespace BugFablesAP
             {
                 MainManager.AddBadge(gameId);
                 return "added to medals";
+            }
+            if (kind == ItemIds.MemberKind)
+            {
+                return PartyMembers.Receive(gameId);
+            }
+            if (kind != 0)
+            {
+                // A kind from a newer apworld: never guessed into the bag.
+                return $"item kind {kind} unknown to this mod, skipped";
             }
             if (mm.items[0].Count < mm.maxitems)
             {

@@ -219,6 +219,7 @@ namespace BugFablesAP
                     + $"failed {openingFailed}, transferring {transferring})");
             }
             openingPending = startPending = openingFailed = event8Cut = partyThenFade = transferring = heldMusicLogged = false;
+            PartyMembers.SetReceived(System.Linq.Enumerable.Empty<int>());
         }
 
         // The opening: Event16 (Maki's talk, Vi joining, the tutorial battle, location 1) never starts; the mod does

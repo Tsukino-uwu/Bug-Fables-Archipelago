@@ -150,6 +150,28 @@ class StartingLocation(Choice):
     default = 0
 
 
+class StartingPartyMember(Choice):
+    """
+    Off: the story's party (Vi and Kabbu from the start, Leif after the spider in Snakemouth Den).
+
+    Vi, Kabbu or Leif: a new file starts with that one member, and the other two are items, found like any other.
+    Random Member: one of the three, picked by the seed. The two places where the story adds a member (the opening
+    outside the city, and the fall room after the spider) become locations, whoever starts.
+
+    The logic is cautious for now: everything past the Outskirts gate needs all three members, and a few spots before
+    it need Kabbu's horn. Off by default.
+    """
+
+    display_name = "Starting Party Member"
+    option_off = 0
+    option_vi = 1
+    option_kabbu = 2
+    option_leif = 3
+    # Not "random": Archipelago reserves it (any Choice can be set to random, Off included).
+    option_random_member = 4
+    default = 0
+
+
 def category_count(category: str) -> int:
     """How many locations an option's category adds, straight from the location data."""
     return sum(1 for location in LOCATIONS if location.get("category") == category)
@@ -178,3 +200,4 @@ class BugFablesOptions(PerGameCommonOptions):
     entrance_randomizer: EntranceRandomizer
     enemy_shuffle: EnemyShuffle
     starting_location: StartingLocation
+    starting_party_member: StartingPartyMember

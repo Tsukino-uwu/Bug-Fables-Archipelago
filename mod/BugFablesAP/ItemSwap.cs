@@ -346,6 +346,14 @@ namespace BugFablesAP
         {
             {
                 int gameId = ItemIds.GameId(itemId, kind);
+                if (kind == ItemIds.MemberKind)
+                {
+                    // The pause menu's party icon and the member's own colour.
+                    name = PartyMembers.Name(gameId);
+                    sprite = MainManager.guisprites[94 + gameId];
+                    color = MainManager.instance.charcolor[gameId];
+                    return;
+                }
                 bool medal = kind == ItemIds.MedalKind;
                 bool money = kind == ItemIds.MoneyKind;
                 bool crystal = kind == ItemIds.CrystalKind;
@@ -370,7 +378,7 @@ namespace BugFablesAP
             try
             {
                 return kind == ItemIds.MedalKind ? MainManager.badgedata[gameId, 6]
-                    : kind == ItemIds.MoneyKind || kind == ItemIds.CrystalKind ? null
+                    : kind == ItemIds.MoneyKind || kind == ItemIds.CrystalKind || kind == ItemIds.MemberKind ? null
                     : MainManager.itemdata[0, gameId, 3];
             }
             catch (IndexOutOfRangeException)

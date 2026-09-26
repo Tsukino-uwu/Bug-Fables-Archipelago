@@ -16,14 +16,47 @@ namespace BugFablesAP
         private static Func<bool> randomizerOn;
         private static Harmony harmony;
 
-        // -1 off, 0 Vi, 1 Kabbu, 2 Leif.
-        internal static int StartMember = -1;
+        // -1 off, 0 Vi, 1 Kabbu, 2 Leif. The seed's (slot_data starting_member) wins over the dev setting.
+        internal static int DevStartMember = -1;
+        internal static volatile int SeedStartMember = -1;
+        internal static int StartMember => SeedStartMember >= 0 ? SeedStartMember : DevStartMember;
         internal static readonly HashSet<int> Received = new HashSet<int>();
 
         // Needs a map: the title screen sets up a party of its own.
         internal static bool Active => StartMember >= 0 && randomizerOn != null && randomizerOn() && MainManager.map != null;
 
         internal static bool Allowed(int id) => id == StartMember || Received.Contains(id);
+
+        // The apworld's item names.
+        internal static string Name(int id) => id == 0 ? "Vi" : id == 1 ? "Kabbu" : id == 2 ? "Leif" : "member " + id;
+
+        // The members this save has been given (ItemReceiver, from the received items it counts): with a seed start,
+        // exactly these and the start are allowed, so another file's members never carry over.
+        internal static void SetReceived(IEnumerable<int> ids)
+        {
+            if (SeedStartMember < 0)
+            {
+                return;
+            }
+            Received.Clear();
+            Received.UnionWith(ids);
+        }
+
+        // A party member item: allowed from now on, and joins at once (ItemReceiver gives only while the player is free).
+        internal static string Receive(int id)
+        {
+            Received.Add(id);
+            if (StartMember < 0)
+            {
+                return $"{Name(id)}: this seed keeps the story's party, nothing to add";
+            }
+            MainManager mm = MainManager.instance;
+            if (mm.playerdata != null && mm.playerdata.Any(p => p.trueid == id))
+            {
+                return $"{Name(id)} allowed, already in the party";
+            }
+            return $"{Name(id)} joins: " + Add(id);
+        }
 
         internal static void Enable(ManualLogSource logger, string guid, Func<bool> on)
         {
@@ -256,7 +289,7 @@ namespace BugFablesAP
             Received.Remove(id);
             if (StartMember < 0 || StartMember == id)
             {
-                StartMember = left[0];
+                DevStartMember = left[0];
             }
             foreach (int m in left)
             {

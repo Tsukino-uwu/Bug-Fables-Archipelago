@@ -11,7 +11,7 @@ from worlds.AutoWorld import WebWorld, World
 from .data_tables import (ARTIFACTS, DOORS, ENCOUNTERS, ROOM_STARTS, ITEM_NAME_TO_ID, ITEMS, DIALOGUE_FLAGS, HELD_UNTIL, KEPT_OPEN, PRESENT_FROM, KEPT_PRESENT, SCENERY_HIDDEN, SCENERY_PRESENT, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, STORY_EVENTS,
                           WORLD_VERSION, vanilla_item)
 from .doors import shuffle_coupled
-from .options import BugFablesOptions, EnemyShuffle, EntranceRandomizer, ShopContents, StartingLocation
+from .options import BugFablesOptions, EnemyShuffle, EntranceRandomizer, ShopContents, StartingLocation, StartingPartyMember
 
 GAME = "Bug Fables"
 SHOP_CATEGORIES = ("shop", "item_shop")
@@ -78,6 +78,11 @@ class BugFablesWorld(World):
     _items_by_name = {item["name"]: item for item in ITEMS}
     # Only padding fills leftover slots; other filler (the Hard Mode medal) enters only as a location's vanilla item.
     _padding = [item["name"] for item in ITEMS if item.get("padding")]
+    # By member number: 0 Vi, 1 Kabbu, 2 Leif.
+    _members = [item["name"] for item in sorted((item for item in ITEMS if item.get("member")), key=lambda item: item["game_id"])]
+
+    # -1 is the story's party; otherwise the one member a new file starts with.
+    starting_member: int = -1
 
     def generate_early(self) -> None:
         wanted = self.options.artifacts_required.value
@@ -89,6 +94,11 @@ class BugFablesWorld(World):
                 self.player, self.player_name, wanted, available, available,
             )
         self.artifacts_required = min(wanted, available)
+        choice = self.options.starting_party_member
+        if choice == StartingPartyMember.option_random_member:
+            self.starting_member = self.random.randrange(len(self._members))
+        elif choice != StartingPartyMember.option_off:
+            self.starting_member = choice.value - StartingPartyMember.option_vi
         self.included_locations = [loc for loc in LOCATIONS if self._category_on(loc.get("category"))]
         # A quest's step events follow its category: without the quest's items they couldn't be reached.
         self.included_events = [event for event in STORY_EVENTS if self._category_on(event.get("category"))]
@@ -116,7 +126,16 @@ class BugFablesWorld(World):
             return bool(self.options.shuffle_medal_shops.value)
         if category == "item_shop":
             return bool(self.options.shuffle_item_shops.value)
+        if category == "party_member":
+            return self.starting_member >= 0
+        if category == "story_party":
+            return self.starting_member < 0
         return True
+
+    def _requires(self, data: dict[str, Any]) -> list[str]:
+        """What a spot or exit needs: its own requires, and its members when members are items."""
+        members = data.get("members", []) if self.starting_member >= 0 else []
+        return data.get("requires", []) + members
 
     def create_regions(self) -> None:
         regions = {data["name"]: Region(data["name"], self.player, self.multiworld) for data in REGIONS}
@@ -124,7 +143,7 @@ class BugFablesWorld(World):
 
         for data in REGIONS:
             for exit_data in data["exits"]:
-                requires = exit_data.get("requires", [])
+                requires = self._requires(exit_data)
                 rule = HasAll(*requires) if requires else None
                 self.create_entrance(regions[data["name"]], regions[exit_data["to"]], rule)
 
@@ -153,6 +172,13 @@ class BugFablesWorld(World):
         # The included locations' vanilla items (duplicates kept), then padding; an item whose spot is off stays vanilla.
         pool: list[Item] = [self.create_item(name) for name in
                             (vanilla_item(loc) for loc in self.included_locations) if name is not None]
+        # With a starting member, it is start inventory (the client gets it too) and the other two are in the pool.
+        if self.starting_member >= 0:
+            for number, name in enumerate(self._members):
+                if number == self.starting_member:
+                    self.push_precollected(self.create_item(name))
+                else:
+                    pool.append(self.create_item(name))
         # The mod's own items (custom gates) enter once in every seed, in a filler slot: when every location already
         # has its vanilla item, one filler item (an ordinary item or berries, picked by the seed) makes room.
         always = [self.create_item(item["name"]) for item in ITEMS if item.get("always")]
@@ -180,11 +206,11 @@ class BugFablesWorld(World):
             elif self.options.shop_contents == ShopContents.option_no_progression:
                 location.item_rule = lambda item: not item.advancement
         for loc in self.included_locations:
-            if loc.get("requires"):
-                self.set_rule(self.get_location(loc["name"]), HasAll(*loc["requires"]))
+            if self._requires(loc):
+                self.set_rule(self.get_location(loc["name"]), HasAll(*self._requires(loc)))
         for event in self.included_events:
-            if event.get("requires"):
-                self.set_rule(self.get_location(event["name"]), HasAll(*event["requires"]))
+            if self._requires(event):
+                self.set_rule(self.get_location(event["name"]), HasAll(*self._requires(event)))
         self.set_completion_rule(Has("Artifact", count=self.artifacts_required))
 
     def pre_fill(self) -> None:
@@ -260,6 +286,8 @@ class BugFablesWorld(World):
             # {"map", "from"}: the room a new file begins in, as if entering through the door from "from"; empty for the
             # game's own start.
             "start": self.start,
-            # 0 item, 1 key item, 2 medal, 3 berries, 4 crystal berry.
+            # The one member a new file starts with (0 Vi, 1 Kabbu, 2 Leif); -1 is the story's party.
+            "starting_member": self.starting_member,
+            # 0 item, 1 key item, 2 medal, 3 berries, 4 crystal berry, 5 party member.
             "item_kinds": {str(ITEM_NAME_TO_ID[item["name"]]): item["kind"] for item in ITEMS},
         }

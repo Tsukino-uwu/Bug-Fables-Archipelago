@@ -13,10 +13,14 @@ namespace BugFablesAP
         // Crystal berries: a counter (flagvar[14]), one item, game id 0.
         internal const int CrystalOffset = 3_000;
         internal const int CrystalKind = 4;
+        // Party members: game id 0 Vi, 1 Kabbu, 2 Leif.
+        internal const int MemberOffset = 4_000;
+        internal const int MemberKind = 5;
 
         internal static int GameId(long itemId, int kind)
         {
-            int offset = kind == MedalKind ? MedalOffset : kind == MoneyKind ? MoneyOffset : kind == CrystalKind ? CrystalOffset : 0;
+            int offset = kind == MedalKind ? MedalOffset : kind == MoneyKind ? MoneyOffset : kind == CrystalKind ? CrystalOffset
+                : kind == MemberKind ? MemberOffset : 0;
             return (int)(itemId - Base - offset);
         }
 

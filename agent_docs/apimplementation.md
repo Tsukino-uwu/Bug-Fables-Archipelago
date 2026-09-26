@@ -29,6 +29,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 15. [Build step 15: starting location (experimental)](#build-step-15-starting-location-experimental)
 16. [Build step 16: the Boat Ticket](#build-step-16-the-boat-ticket)
 17. [Build step 17: a release](#build-step-17-a-release)
+18. [Build step 18: Starting Party Member](#build-step-18-starting-party-member)
 
 **How it works**
 
@@ -59,7 +60,7 @@ be wrong.
    into chosen and forced, then the room-by-room logic that removes the label. See build step 12.
 3. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
-   The basic moves and party members as items (*Starting Party Member*): see build step 13.
+   The basic moves as items: see build step 13. Party members as items (*Starting Party Member*): built, see build step 18.
 4. **Open world, one gate at a time** (always on, never an option; the user, 2026-09-26): see build step 9.
 5. **To test later (the user, 2026-09-25): a two-player room.** The user's slot plus a second one the agent drives,
    sending items while the user plays, to see items from another player arrive live: the hold-up on *All* and
@@ -167,10 +168,11 @@ be wrong.
 
 **Known issues:**
 
-- **A Kabbu / horn rule is owed** once party members or the basic horn become items (Starting Party Member).
-  Kabbu and his horn are always there today, so these locations have no rule for them: 21 (a berry in a bush),
-  25 (under a stone), 31 (a grass discovery) and 32 (past grass). Without the rule, a seed could be impossible.
+- **A Kabbu / horn rule is owed** once the basic horn becomes an item (build step 13). With *Starting Party Member*
+  on, Kabbu is the rule (build step 18: 25 and 32 need him, 21 and 31 are past the gate, which needs all three).
   Not location 2: the horn tutorial cuts its grass itself and played through with Leif alone (the user, 2026-09-25).
+- **Starting Party Member, past the gate:** the trapdoor scene broke with three members (build step 13), and the
+  option always brings three there (build step 18).
 - **Crystal berry #2 (location 20)** sits in the Underground region, which needs Leif, though the room's
   upper-left entrance needs nothing. More cautious than the game, so safe; room-level regions would split it.
 - **Landmark names** for locations 2, 22, 23, 24, 25 and 30 are still to come from the user.
@@ -1222,7 +1224,7 @@ location) is not one: the scene cuts the grass itself, and it played through wit
 arrived at once (the user, 2026-09-25; the mod guide, step 11, item 3). The way down to Shades's shop is:
 grass on the way there has to be cut with the horn (the user, 2026-09-25), so her locations will need Kabbu.
 
-**Status:** in progress: a rehearsal only (dev `TestStartMember`), a one-member party (Leif) seen through chapter 1 into chapter 2 (the user, 2026-09-25); the yaml options (*Starting Party Member*, basic moves, jump, field abilities) not built.
+**Status:** in progress: a one-member party (Leif) seen through chapter 1 into chapter 2 (the user, 2026-09-25); *Starting Party Member* built as its own step (build step 18); basic moves, jump and field abilities not built.
 
 ## Build step 14: enemy shuffle (in progress)
 
@@ -1509,6 +1511,47 @@ v0.1.0 is the first (the mod was 0.0.1 and the world 0.2.0 before).
 a later `main` for the zip's top-level README and switched from pre-release to a full release (the user: a pre-release
 is hidden from Latest). The downloads fetched back and checked; the DLL is the build the user saw load and connect.
 
+## Build step 18: Starting Party Member
+
+The first part of build step 13 made real: a yaml option that starts a new file with one party member and makes the
+other two items. Its design (the user, 2026-09-25) and the rehearsal behind it are in build step 13; this is the
+option itself. **Decided (the user, 2026-09-26): cautious logic.** The gates measured so far become rules, and
+everything past the Outskirts gate needs all three members until the rooms there are measured.
+
+**Built (2026-09-26):**
+1. **The option** (`options.py`): *Starting Party Member: Off / Vi / Kabbu / Leif / Random Member*, Off by default.
+   Not "Random": Archipelago reserves that word, and it would pick Off too. The seed picks a random member in
+   `generate_early`, with its own random.
+2. **The items** (`items.json`): Vi, Kabbu and Leif, a new kind 5 (game id 0, 1, 2; Archipelago id base + 4000 + the
+   member), progression. With the option on, the starting member is start inventory (`push_precollected`), which the
+   server sends the client like any item, and the other two go in the pool. With it off, none of them exists.
+3. **Two locations, whoever starts** (`locations.json`, category `party_member`, only with the option on): *Outskirts:
+   Outside the City, Opening* (flag 15, where Vi joins in the opening) and *Snakemouth Den: Fall Room, After the Spider*
+   (flag 27, where the mod has Leif join). Two items, two spots, no filler removed. The story's "Leif Joins" event
+   (category `story_party`) exists only with the option off, so Leif isn't handed out for free.
+4. **The rules** (`locations.json`, a `members` list, applied only with the option on): the way past the Outskirts gate
+   needs Vi, Kabbu and Leif (on top of the permit), which covers the measured gates past it (the horn corridor needs
+   Kabbu, the first boss needs Vi); *East Road, Stone* and *Residential District, Rooftop* need Kabbu (his horn). The
+   Leif rules that already existed (droplets, the fountain rooftop) now need the item instead of the story's event.
+5. **slot_data** `starting_member`: -1 for Off, else 0 Vi, 1 Kabbu, 2 Leif.
+6. **The mod** (`ApConnection.cs`, `PartyMembers.cs`, `ItemReceiver.cs`, `ItemSwap.cs`): the seed's
+   `starting_member` replaces the dev `TestStartMember` for the member guard (the mod guide, step 11), so the opening's
+   Vi and Kabbu become the one member. A received member (kind 5) joins on the spot, the way the dev `addmember` does;
+   the members allowed are the start plus those among the items this save has counted (`flagvar[60]`), recomputed
+   every frame and cleared on the title screen, so one file's members never carry into another. A hold-up for a
+   member shows the pause menu's party icon (`guisprites[94 + member]`) in the member's colour (`charcolor`). An item
+   kind the mod doesn't know is now skipped with a log line; before, it went into the bag as an ordinary item.
+7. **Tests** (`test/test_party.py`): Off adds nothing; each start is start inventory with the other two in the pool;
+   both locations exist with flags 15 and 27; the gate needs all three; the horn spots need Kabbu; a random start is one
+   of the three. `TestClassifications` counts `members` too. Generated with APQuest for all four choices: every seed
+   finished generating (Leif start: Kabbu on the Pier, Vi on the Fountain Rooftop, which needs Leif).
+
+**Known before the first play:** with all three needed before Snakemouth Den, the trapdoor scene (Event5) always runs
+with three members, and it broke with three before (build step 13: its own two-long position list). A three-member
+spider scene is also still open (the mod guide, step 11). Both come up in the first play past the gate.
+
+**Status:** built, the apworld tests pass (315) and the mod builds; not yet played.
+
 # How it works
 
 ## 1. The big picture
@@ -1599,7 +1642,8 @@ only way a setting chosen at generation (an option, a version number) reaches th
 - `location_flags`, the game flag that marks each location done;
 - `location_gives`, the `giveitem` that hands out a gift location's vanilla item;
 - `location_pickups`, the map and flag of each location that is an item lying in the world;
-- `item_kinds`, which inventory list each of its items goes to.
+- `item_kinds`, which inventory list each of its items goes to;
+- `starting_member`, the one party member a new file starts with (*Starting Party Member*, build step 18).
 
 The mod does nothing from its own knowledge of the game's locations: every table it acts on comes from here.
 

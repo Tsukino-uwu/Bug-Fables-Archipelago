@@ -1,0 +1,93 @@
+from . import BugFablesTestBase
+
+MEMBERS = ["Vi", "Kabbu", "Leif"]
+JOINS = ["Outskirts: Outside the City, Opening", "Snakemouth Den: Fall Room, After the Spider"]
+
+
+def _names(items) -> list[str]:
+    return [item.name for item in items]
+
+
+class TestPartyOffByDefault(BugFablesTestBase):
+    def test_story_party(self) -> None:
+        self.assertEqual(self.world.fill_slot_data()["starting_member"], -1)
+        pool = _names(item for item in self.multiworld.itempool if item.player == self.player)
+        for member in MEMBERS:
+            self.assertNotIn(member, pool)
+        locations = {loc.name for loc in self.multiworld.get_locations(self.player)}
+        for name in JOINS:
+            self.assertNotIn(name, locations)
+        self.assertIn("Leif Joins", locations)
+
+    def test_horn_spots_need_no_member(self) -> None:
+        self.assertTrue(self.can_reach_location("Outskirts: East Road, Stone"))
+
+
+class _StartWith:
+    # A mixin, not a test case: only the classes below, which name a start, run it.
+    start = ""
+
+    def test_start_member_is_start_inventory(self) -> None:
+        self.assertEqual(self.world.fill_slot_data()["starting_member"], MEMBERS.index(self.start))
+        self.assertEqual(_names(self.multiworld.precollected_items[self.player]), [self.start])
+        self.assertIsNotNone(self.multiworld.precollected_items[self.player][0].code)
+
+    def test_other_two_are_in_the_pool(self) -> None:
+        pool = _names(item for item in self.multiworld.itempool if item.player == self.player)
+        for member in MEMBERS:
+            self.assertEqual(pool.count(member), 0 if member == self.start else 1)
+
+    def test_joining_moments_are_locations(self) -> None:
+        locations = {loc.name for loc in self.multiworld.get_locations(self.player)}
+        for name in JOINS:
+            self.assertIn(name, locations)
+        # Leif's story event would hand him out for free.
+        self.assertNotIn("Leif Joins", locations)
+        flags = self.world.fill_slot_data()["location_flags"]
+        self.assertEqual(flags[str(self.world.location_name_to_id[JOINS[0]])], 15)
+        self.assertEqual(flags[str(self.world.location_name_to_id[JOINS[1]])], 27)
+
+    def test_past_the_gate_needs_all_three(self) -> None:
+        self.collect_by_name("Explorer Permit")
+        others = [member for member in MEMBERS if member != self.start]
+        self.collect_by_name(others[0])
+        self.assertFalse(self.can_reach_location("Outskirts: Near Snakemouth Den, Reward"))
+        self.collect_by_name(others[1])
+        self.assertTrue(self.can_reach_location("Outskirts: Near Snakemouth Den, Reward"))
+
+    def test_horn_spots_need_kabbu(self) -> None:
+        spots = ["Outskirts: East Road, Stone", "Bugaria City: Residential District, Rooftop"]
+        for spot in spots:
+            self.assertEqual(self.can_reach_location(spot), self.start == "Kabbu")
+        self.collect_by_name("Kabbu")
+        for spot in spots:
+            self.assertTrue(self.can_reach_location(spot))
+
+    def test_pool_matches_locations(self) -> None:
+        pool = [item for item in self.multiworld.itempool if item.player == self.player]
+        locations = [loc for loc in self.multiworld.get_locations(self.player) if loc.address is not None]
+        self.assertEqual(len(pool), len(locations))
+
+
+class TestStartVi(_StartWith, BugFablesTestBase):
+    options = {"starting_party_member": "vi"}
+    start = "Vi"
+
+
+class TestStartKabbu(_StartWith, BugFablesTestBase):
+    options = {"starting_party_member": "kabbu"}
+    start = "Kabbu"
+
+
+class TestStartLeif(_StartWith, BugFablesTestBase):
+    options = {"starting_party_member": "leif"}
+    start = "Leif"
+
+
+class TestStartRandomMember(BugFablesTestBase):
+    options = {"starting_party_member": "random_member"}
+
+    def test_one_member_picked(self) -> None:
+        start = self.world.fill_slot_data()["starting_member"]
+        self.assertIn(start, range(3))
+        self.assertEqual(_names(self.multiworld.precollected_items[self.player]), [MEMBERS[start]])
