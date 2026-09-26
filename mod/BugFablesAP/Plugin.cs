@@ -160,6 +160,7 @@ namespace BugFablesAP
             MedalAssist.Enable(Log, Guid, () => randomizerEnabled.Value, () => difficulty.Value == "Hard",
                 () => difficulty.Value == "Hardest", () => detector.Value);
             QualityOfLife.Enable(Log, Config, () => randomizerEnabled.Value);
+            QualityOfLife.SeedStart = () => connection?.Start;
             EnemyScaling.Enable(Log, Guid, () => randomizerEnabled.Value, () => QualityOfLife.EnemyScaling?.Value);
             InGameSettings.Enable(Log, Guid, () => randomizerEnabled.Value);
             HoldUps.Init(Log, () => randomizerEnabled.Value);

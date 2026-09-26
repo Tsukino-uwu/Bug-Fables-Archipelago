@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle
 
-from .data_tables import DOORS, ENCOUNTERS, LOCATIONS
+from .data_tables import DOORS, ENCOUNTERS, LOCATIONS, STARTS
 
 
 class ArtifactsRequired(Range):
@@ -132,6 +132,24 @@ class EnemyShuffle(Choice):
     default = 0
 
 
+class StartingLocation(Choice):
+    """
+    EXPERIMENTAL. Where a new file begins. Off: where the game begins, outside Bugaria. Anywhere: beside any save point in
+    the game, even in the middle of a dungeon. The pause menu's Warp takes you back to it.
+
+    The logic doesn't know the start yet: items are placed as if you began outside Bugaria, so a seed started anywhere
+    may not be finishable (the map's fast travel and the Warp get you around). Off by default.
+
+    Save points to start at in this version: {count}.
+    """
+
+    display_name = "Starting Location (experimental)"
+    option_off = 0
+    # Not "random": Archipelago reserves it (any Choice can be set to random).
+    option_anywhere = 1
+    default = 0
+
+
 def category_count(category: str) -> int:
     """How many locations an option's category adds, straight from the location data."""
     return sum(1 for location in LOCATIONS if location.get("category") == category)
@@ -145,6 +163,7 @@ ShuffleMedalShops.__doc__ = ShuffleMedalShops.__doc__.replace("{count}", str(cat
 ShuffleItemShops.__doc__ = ShuffleItemShops.__doc__.replace("{count}", str(category_count("item_shop")))
 EntranceRandomizer.__doc__ = EntranceRandomizer.__doc__.replace("{count}", str(2 * len(DOORS["connections"])))
 EnemyShuffle.__doc__ = EnemyShuffle.__doc__.replace("{count}", str(len(ENCOUNTERS)))
+StartingLocation.__doc__ = StartingLocation.__doc__.replace("{count}", str(len(STARTS)))
 
 
 @dataclass
@@ -158,3 +177,4 @@ class BugFablesOptions(PerGameCommonOptions):
     shop_contents: ShopContents
     entrance_randomizer: EntranceRandomizer
     enemy_shuffle: EnemyShuffle
+    starting_location: StartingLocation

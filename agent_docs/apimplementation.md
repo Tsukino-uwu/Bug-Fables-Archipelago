@@ -26,6 +26,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 12. [Build step 12: the entrance randomizer (experimental)](#build-step-12-the-entrance-randomizer-experimental)
 13. [Build step 13: party members and moves as items (in progress)](#build-step-13-party-members-and-moves-as-items-in-progress)
 14. [Build step 14: enemy shuffle (in progress)](#build-step-14-enemy-shuffle-in-progress)
+15. [Build step 15: starting location (experimental)](#build-step-15-starting-location-experimental)
 
 **How it works**
 
@@ -117,15 +118,8 @@ be wrong.
 17. **Berry multiplier, a panel setting** (the user, 2026-09-26): *Berry Multiplier* on the Quality of life page, 1x
    to 5x, default 1x, the same opt-in. Only the berries picked up in the world (lying there or dropped after a fight), never a
    check's reward from the server. Only while Archipelago is enabled.
-18. **Random start, a yaml option** (the user, 2026-09-26): *Starting Location*, `off / towns / random`, off by
-   default. Off is the vanilla start. `towns` starts in one of the towns. `random` starts anywhere, even in the middle
-   of a dungeon. Chosen at generation and sent in `slot_data`, never at runtime. The logic starts from that room, so
-   every seed is still completable from it: `random` needs the room-by-room logic that the entrance randomizer also
-   waits for (build step 12). Picking one named spot (a given town), as some worlds allow, is a later idea, only if
-   players ask; `towns` and `random` come first (the user, 2026-09-26). **Warp to Start goes to the seed's start**
-   (the user, 2026-09-26): the same spot the seed sends in `slot_data`, the vanilla save point when it's `off`; map
-   travel's Outskirts spot follows it. Its own build step when built.
-
+18. **Random start** (the user, 2026-09-26): `anywhere` built, experimental; `towns` and named spots to come. See build
+   step 15.
 19. **Traps, an idea for later** (the user, 2026-09-26; not planned yet). A trap sent to this game takes effect when
    the server delivers it, after any open text box, like any received item. Held up at pickup: its own icon on a red
    starburst. One icon per trap, so the player knows what's coming. The user's examples: the Mistake medal poisons
@@ -1284,6 +1278,34 @@ game (APQuest) carrying all 325 fights in `slot_data`, and **seen by the user** 
 `BugariaOutskirtsEast1` an Underling + Flying Seedling map enemy started a Flying Seedling + Seedling fight, as the
 seed and the log (`[enemies] BugariaOutskirtsEast1:4: 30 10 -> 10 9`) said; bosses,
 `both`, `chaos` and the map look to come.
+
+## Build step 15: starting location (experimental)
+
+A yaml option for where a new file begins. **Experimental** by the user's ruling (2026-09-26), like the entrance
+randomizer: "random start should be fully random… random spawn is experimental just like entrance rando". The logic
+still starts outside Bugaria, so a seed started elsewhere may not be finishable until the room-by-room logic exists.
+
+**Decided (the user, 2026-09-26):**
+- *Starting Location (experimental)*: `off / anywhere` for now (`towns`, and a named spot if players ask, later), off
+  by default. **Not `random`:** Archipelago reserves that word for every Choice (any option can be set to random), so
+  the generator refuses it as a value.
+- **Fully random:** beside any save point in the game, even mid-dungeon.
+- **Warp to Start goes to the seed's start**; the pause menu's map keeps fast travel to the areas you've visited.
+
+**Built (2026-09-26):**
+1. **The data:** `dev-scripts/save-points.py --export` writes `data/starts.json` from the entity dump: every save
+   point (map, entity index), 72 of them (TestRoom's and duplicate copies left out). The start uses a save point's
+   spot, not the save point itself, so one that only exists in some story states is still a fine spot.
+2. **The option and the pick:** `starting_location`; `generate_early` picks one save point with the seed's random
+   and sends it as `slot_data` `start`: `{"map", "entity"}`, or `{}` for the game's own start.
+3. **The mod:** the opening's one-time transfer (the Quality of life skip's end, where a dev `TestStart` already
+   warped: it only happens once per file, so no save field is spent on "started") goes beside the seed's save point,
+   as Warp to Start lands (`WarpButton.SavePointSpot`). Warp to Start goes there too. Needs *Skip cutscenes* on for
+   now: the transfer hangs on the skip's end.
+4. **Tests** (`test/test_start.py`): off gives `{}`; `anywhere` gives a save point from the table; the start is fixed.
+
+**Status:** in progress (experimental): `anywhere` built (2026-09-26), the apworld tests pass, not yet seen in game;
+`towns`, the logic from the start, and a start without *Skip cutscenes* to come.
 
 # How it works
 

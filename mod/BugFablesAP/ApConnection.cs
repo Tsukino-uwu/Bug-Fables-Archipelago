@@ -265,6 +265,11 @@ namespace BugFablesAP
                 p => new[] { p.Value.Value<int>("var"), p.Value.Value<int>("at_least") });
         }
 
+        // The save point a new file begins beside (Starting Location); null for the game's own start.
+        internal KeyValuePair<string, int>? Start => start;
+        private volatile object startBox;
+        private KeyValuePair<string, int>? start => startBox as KeyValuePair<string, int>?;
+
         // {"map:entity index": enemy ids}: the fight a map enemy starts instead of its own (Enemy Shuffle).
         internal Dictionary<string, int[]> EnemySwaps => enemySwaps;
         private volatile Dictionary<string, int[]> enemySwaps;
@@ -570,6 +575,10 @@ namespace BugFablesAP
                         : null;
                     enemySwaps = ok.SlotData != null && ok.SlotData.TryGetValue("enemy_swaps", out object es) && es is JObject eso
                         ? eso.Properties().ToDictionary(p => p.Name, p => p.Value.ToObject<int[]>())
+                        : null;
+                    startBox = ok.SlotData != null && ok.SlotData.TryGetValue("start", out object st) && st is JObject sto
+                        && sto["map"] != null && sto["entity"] != null
+                        ? (object)new KeyValuePair<string, int>(sto.Value<string>("map"), sto.Value<int>("entity"))
                         : null;
                     ownSlot = ok.Slot;
                     itemKinds = ReadItemKinds(ok.SlotData);

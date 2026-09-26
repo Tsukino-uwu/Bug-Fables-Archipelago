@@ -8,10 +8,10 @@ from BaseClasses import Item, ItemClassification, Location, LocationProgressType
 from rule_builder.rules import Has, HasAll
 from worlds.AutoWorld import WebWorld, World
 
-from .data_tables import (ARTIFACTS, DOORS, ENCOUNTERS, ITEM_NAME_TO_ID, ITEMS, DIALOGUE_FLAGS, HELD_UNTIL, KEPT_OPEN, PRESENT_FROM, KEPT_PRESENT, SCENERY_HIDDEN, SCENERY_PRESENT, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, STORY_EVENTS,
+from .data_tables import (ARTIFACTS, DOORS, ENCOUNTERS, STARTS, ITEM_NAME_TO_ID, ITEMS, DIALOGUE_FLAGS, HELD_UNTIL, KEPT_OPEN, PRESENT_FROM, KEPT_PRESENT, SCENERY_HIDDEN, SCENERY_PRESENT, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, STORY_EVENTS,
                           WORLD_VERSION, vanilla_item)
 from .doors import shuffle_coupled
-from .options import BugFablesOptions, EnemyShuffle, EntranceRandomizer, ShopContents
+from .options import BugFablesOptions, EnemyShuffle, EntranceRandomizer, ShopContents, StartingLocation
 
 GAME = "Bug Fables"
 SHOP_CATEGORIES = ("shop", "item_shop")
@@ -100,6 +100,11 @@ class BugFablesWorld(World):
         self.enemy_swaps = {}
         if self.options.enemy_shuffle == EnemyShuffle.option_enemies_only:
             self.enemy_swaps = shuffle_encounters(ENCOUNTERS, self.random)
+        # The start too: a save point picked here, sent in slot_data; empty is the game's own start.
+        self.start = {}
+        if self.options.starting_location == StartingLocation.option_anywhere:
+            spot = self.random.choice(STARTS)
+            self.start = {"map": spot["map"], "entity": spot["entity"]}
 
     def _category_on(self, category: str | None) -> bool:
         if category == "quest":
@@ -240,6 +245,8 @@ class BugFablesWorld(World):
             "door_targets": self.door_targets,
             # {"map:entity": [enemy ids]}: the fight a map enemy starts instead of its own.
             "enemy_swaps": self.enemy_swaps,
+            # {"map", "entity"}: the save point a new file begins beside; empty for the game's own start.
+            "start": self.start,
             # 0 item, 1 key item, 2 medal, 3 berries, 4 crystal berry.
             "item_kinds": {str(ITEM_NAME_TO_ID[item["name"]]): item["kind"] for item in ITEMS},
         }

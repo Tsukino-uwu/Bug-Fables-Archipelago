@@ -564,6 +564,13 @@ namespace BugFablesAP
             }
             MainManager.Maps map = StartMap;
             int entity = MainManager.instance.flags[41] ? 22 : 1;
+            // Warp to Start goes to the seed's start when it has one (Starting Location); map travel keeps its spots.
+            KeyValuePair<string, int>? seeded = QualityOfLife.SeedStart?.Invoke();
+            if (kind == Kind.Warp && seeded.HasValue && Enum.IsDefined(typeof(MainManager.Maps), seeded.Value.Key))
+            {
+                map = (MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), seeded.Value.Key);
+                entity = seeded.Value.Value;
+            }
             if (kind == Kind.Map && area != OutskirtsArea)
             {
                 map = AreaSpots[area].Key;
@@ -575,7 +582,7 @@ namespace BugFablesAP
         }
 
         // Entity table fields 6-8, then a step toward the camera so the party lands beside the save point, not in it.
-        private static Vector3 SavePointSpot(MainManager.Maps map, int entity)
+        internal static Vector3 SavePointSpot(MainManager.Maps map, int entity)
         {
             TextAsset data = Resources.Load<TextAsset>("Data/EntityData/" + (int)map);
             string[] lines = data == null ? new string[0] : data.ToString().Split('\n');

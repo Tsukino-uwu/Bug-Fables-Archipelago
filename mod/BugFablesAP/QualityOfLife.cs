@@ -174,6 +174,9 @@ namespace BugFablesAP
         private static bool openingFailed; // one try per session: a failure is logged, never retried every frame
         // Dev only ([Debug] TestStart): a map the opening ends with a warp to, a stand-in for a random start.
         internal static string TestStart;
+        // The seed's start (Starting Location): the opening ends with a transfer beside that save point instead.
+        internal static Func<KeyValuePair<string, int>?> SeedStart;
+        private static KeyValuePair<string, int>? Seeded => SeedStart?.Invoke();
         private static bool startPending;
         // With a test start, the slides' backdrop stays up until the start map has loaded behind the transfer's fade.
         private static GameObject heldBack;
@@ -518,7 +521,7 @@ namespace BugFablesAP
                 && !mm.flags[15] && mm.flags[691])
             {
                 openingPending = true;
-                startPending = TestStartSet && !transferring;
+                startPending = (TestStartSet || Seeded.HasValue) && !transferring;
                 log.LogInfo("[qol] the opening is due (flag 15 unset on the starting map): doing it at the start, on a free frame");
             }
             string here = MainManager.map == null ? null : MainManager.map.mapid.ToString();
@@ -581,6 +584,16 @@ namespace BugFablesAP
                 transferring = true;
                 try
                 {
+                    KeyValuePair<string, int>? seeded = Seeded;
+                    if (seeded.HasValue && !TestStartSet)
+                    {
+                        // The seed's start: beside its save point, as Warp to Start lands.
+                        var map = (MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), seeded.Value.Key, true);
+                        Vector3 spot = WarpButton.SavePointSpot(map, seeded.Value.Value);
+                        MainManager.instance.StartCoroutine(MainManager.TransferMap((int)map, spot));
+                        log.LogInfo($"[qol] the seed's start (Starting Location): transferring to {map}, beside save point {seeded.Value.Value}, at {spot}");
+                        return;
+                    }
                     // The game's own transfer to a door's spots; the console's warp steps beside the save point.
                     var start = (MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), StartMapName, true);
                     string[] parts = TestStart.Split('@');
