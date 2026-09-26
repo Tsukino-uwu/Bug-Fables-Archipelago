@@ -38,3 +38,10 @@ class TestEnemiesOnly(BugFablesTestBase):
 class TestEnemyShuffleSeeded(BugFablesTestBase):
     def test_same_seed_same_fights(self) -> None:
         self.assertEqual(shuffle_encounters(ENCOUNTERS, Random(7)), shuffle_encounters(ENCOUNTERS, Random(7)))
+
+
+class TestSceneOnlyEnemies(BugFablesTestBase):
+    # Only map enemies are shuffled; an enemy that exists only in a scene's fight must never enter the pool.
+    def test_leif_in_the_web_is_never_shuffled(self) -> None:
+        # Enemy 12: Leif stuck in the web, the spider scene's second fight (Event6).
+        self.assertFalse(any(12 in e["ids"] for e in ENCOUNTERS))

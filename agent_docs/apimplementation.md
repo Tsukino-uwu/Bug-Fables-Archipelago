@@ -1345,6 +1345,10 @@ not burrowing like the Underlings they replaced (the user). A boss has no map ro
 movement is still to decide: **tested per boss later, whatever looks best** (the user, 2026-09-26). In the real step,
 the seed can pick each donor at generation.
 
+**Scene-only enemies stay out (the user asked, 2026-09-27):** Leif in the web (enemy 12, the spider scene's second
+fight) is in no map encounter, and scene fights (`calledfrom` not a map enemy) are never swapped, so neither the fight
+nor the enemy is shuffled. Test `TestSceneOnlyEnemies`.
+
 **Next:**
 - see the shuffled fights in the game;
 - then bosses: each scripted fight read one by one, keyed by its event and its original ids;
