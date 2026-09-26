@@ -1616,9 +1616,9 @@ the ground at the new size, seen too (dev `spawn member`, a screenshot of Vi on 
 **Seen by the user (2026-09-26), a Vi start with a second player:** Vi alone after the opening; Kabbu and Leif both
 arrived from the other player's chests and joined (party 0, 1, 2).
 
-**Status:** works before the Outskirts gate, seen by the user with a Kabbu start and a Vi start, members arriving from
-this world and from another player (2026-09-26); past the gate (the trapdoor and spider scenes with three) not yet
-played.
+**Status:** works, seen by the user: before the Outskirts gate with a Kabbu start and a Vi start, members arriving from
+this world and from another player (2026-09-26); past the gate with a Leif start, the trapdoor and spider scenes with
+all three, Leif back in the party after (2026-09-27).
 
 ## Build step 19: Archipelago's colours for players and items
 
