@@ -185,6 +185,10 @@ namespace BugFablesAP
             return map.Properties().ToDictionary(p => long.Parse(p.Name), p => p.Value.Value<int>());
         }
 
+        // The goal: this many artifacts, as the game counts them. 0 when slot_data has none.
+        internal int ArtifactsRequired => artifactsRequired;
+        private volatile int artifactsRequired;
+
         // Kept after a drop, like the tables above.
         internal int OwnSlot => ownSlot;
         private volatile int ownSlot = -1;
@@ -465,6 +469,23 @@ namespace BugFablesAP
             });
         }
 
+        // StatusUpdate, as Archipelago asks: the server marks the slot finished and releases per the room's settings.
+        internal void SendGoal(ArchipelagoSession s, string why)
+        {
+            ThreadPool.QueueUserWorkItem(_ =>
+            {
+                try
+                {
+                    s.Socket.SendPacketAsync(new StatusUpdatePacket { Status = ArchipelagoClientState.ClientGoal }).Wait();
+                    Post("[goal] sent: " + why);
+                }
+                catch (Exception e)
+                {
+                    Post("[goal] sending failed: " + e.GetBaseException().Message + " (sent again after the next login)");
+                }
+            });
+        }
+
         internal void Connect(string server, string slot, string password)
         {
             if (busy)
@@ -587,6 +608,8 @@ namespace BugFablesAP
                         : null;
                     ownSlot = ok.Slot;
                     itemKinds = ReadItemKinds(ok.SlotData);
+                    artifactsRequired = ok.SlotData != null && ok.SlotData.TryGetValue("artifacts_required", out object ar) && ar != null
+                        ? Convert.ToInt32(ar) : 0;
                     seedKnown = true;
                     scouts = null;
                     ResetDone(attempt);

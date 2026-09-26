@@ -17,6 +17,8 @@ namespace BugFablesAP
         private readonly HashSet<long> notYetRecorded = new HashSet<long>();
         private ArchipelagoSession notYetRecordedFor;
         private string lastState;
+        private ArchipelagoSession goalSentFor;
+        private string lastGoalState;
 
         internal LocationChecks(ManualLogSource log, ApConnection connection)
         {
@@ -172,6 +174,26 @@ namespace BugFablesAP
             if (finished != null)
             {
                 connection.SendChecks(session, finished.ToArray());
+            }
+            CheckGoal(session);
+        }
+
+        // Sent once per login while reached: the server keeps it, and a send lost with the connection goes again.
+        private void CheckGoal(ArchipelagoSession session)
+        {
+            int required = connection.ArtifactsRequired;
+            int have = MainManager.SaveProgressIcons();
+            string state = required <= 0 ? "slot_data has no artifacts_required: never sent"
+                : have < required ? $"{have} of {required} artifacts" : $"reached, {have} of {required} artifacts";
+            if (state != lastGoalState)
+            {
+                log.LogInfo("[goal] " + state);
+                lastGoalState = state;
+            }
+            if (required > 0 && have >= required && !ReferenceEquals(goalSentFor, session))
+            {
+                goalSentFor = session;
+                connection.SendGoal(session, $"{have} of {required} artifacts on {Where()}");
             }
         }
 

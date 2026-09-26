@@ -27,5 +27,5 @@ Each option's description in the yaml says what it does in full and how many che
 ## What is the goal?
 
 Collect a number of artifacts (the option *Artifacts Required*). The game has 7, one per chapter milestone. This
-version includes only the first, so the goal is capped at 1. The mod doesn't report the goal to the server yet, so a
-seed can't be marked finished from the game.
+version includes only the first, so the goal is capped at 1. Once you have that many, the mod tells the server,
+which marks your game finished.

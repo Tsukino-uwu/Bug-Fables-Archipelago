@@ -65,7 +65,8 @@ be wrong.
    sending items while the user plays, to see items from another player arrive live: the hold-up on *All* and
    *Progression*, silence for a replay after a new save or reconnect, and the multiworld names ("X's item").
 6. **A full bag:** key items keep arriving, only ordinary items wait.
-7. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number.
+7. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number: built, the
+   send not yet seen (build step 3).
 8. **A release: three separate downloads** (the user, 2026-09-25): built, see build step 17; v0.1.0 out
    (2026-09-26). The next one: `dev-scripts/release.ps1 -Version vX.Y.Z` after bumping both versions.
 9. **The chat feed**, then the in-game text client (see the design list in the mod guide, step 2).
@@ -287,10 +288,20 @@ One rule came out of this for every later option: **every seed can be completed 
 Whatever an area or the goal needs is written into the logic, and the mod never hands things out to patch
 a gap.
 
-**Status:** in progress: the goal is in the apworld, with only the first artifact so far; the mod doesn't count the artifacts or send "goal reached" yet (Next 7).
+**The mod reports the goal (2026-09-26).** It reads `artifacts_required` from `slot_data` and each frame compares it
+with the game's own count, `MainManager.SaveProgressIcons()` (the seven artifact flags; `MEASURED.md`). Once the count
+is reached it sends Archipelago's `StatusUpdate` with `ClientGoal`, the way `adding games.md` asks (never an event),
+through MultiClient.Net 6.7.1's `StatusUpdatePacket`. It's sent once per login while reached, so a send lost with the
+connection goes again at the next one, and the server keeps it. The game counts all seven flags while the logic
+knows only the ones the world includes, so the mod can see the goal reached sooner than the logic proves it, never
+later. The log says what it decided: `[goal] 0 of 1 artifacts`, then `[goal] sent: ...`. Seen so far (2026-09-26):
+the count read on a save without the first artifact (`[goal] 0 of 1 artifacts`); the send itself still to see.
+
+**Status:** in progress: the goal is in the apworld, with only the first artifact so far; the mod sends "goal reached" at the required count, built, the send not yet seen (Next 7).
 
 *Code: `apworld/bug_fables/options.py` (`ArtifactsRequired`), `world.py` (`generate_early` lowers the
-number, `create_regions` adds the artifact events), test `TestArtifactsCapped`.*
+number, `create_regions` adds the artifact events), test `TestArtifactsCapped`; the mod: `LocationChecks.CheckGoal`,
+`ApConnection.SendGoal`.*
 
 ## Build step 4: connecting on its own, and staying connected
 
