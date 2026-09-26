@@ -687,7 +687,7 @@ scaling Off and Detector Off; Reset puts each back to its default. Both pages op
 to its off value: Enemy scaling Off, Item animation Off, Shop prices Normal); Reset to defaults puts every row back to
 its default (`QualityOfLife.DisableAll` / `ResetAll`, the defaults from each setting's own config definition).
 
-**Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen by the user (2026-09-25); Free boat, the bridge skips, the warp itself, Shop prices and silent replays with a second player not yet seen; Skip battle tutorials planned.
+**Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen by the user (2026-09-25); the bridge skips, Shop prices and silent replays with a second player not yet seen; Free boat seen (the fare waived with no berries, the boat left, 2026-09-26), the warp itself and map travel seen (2026-09-26); Skip battle tutorials planned.
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page),
 `WarpButton.cs` (the Warp button), `HoldUps.cs` (item animation's hold-ups).*

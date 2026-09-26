@@ -366,7 +366,8 @@ class TestMidQuestItemQuestsOff(BugFablesTestBase):
     def test_quest_book_not_in_pool(self) -> None:
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         self.assertNotIn("Quest Book", pool)
-
+
+
     def test_quest_steps_left_out(self) -> None:
         # A step event that needs the book would be unreachable without it.
         with self.assertRaises(KeyError):
@@ -495,10 +496,10 @@ class TestOutskirtsRocks(BugFablesTestBase):
                 self.assertIn({"map": "BugariaMainPlaza", "entity": entity}, data["kept_present"])
         self.assertIn({"map": "BugariaMainPlaza", "entity": "Cube"}, data["scenery_hidden"])
 
-    def test_boat_waits_for_leif(self) -> None:
-        # The boat scene seats three, so the sailor waits for Leif.
-        self.assertIn({"map": "BugariaPier", "entity": "boatsailor", "flag": 16},
-                      self.world.fill_slot_data()["held_until"])
+    def test_boat_sailor_always_there(self) -> None:
+        # The boat scene ran with Leif alone once stand-ins filled the missing seats, so the sailor no longer waits.
+        held = self.world.fill_slot_data()["held_until"]
+        self.assertFalse(any(e["entity"] == "boatsailor" for e in held), held)
 
 
 class TestDiscoveriesOffByDefault(BugFablesTestBase):

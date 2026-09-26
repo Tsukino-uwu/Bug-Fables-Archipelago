@@ -760,8 +760,10 @@ pier on a chapter 1 file, paid the fare, and the boat scene (Event107) threw Ind
 members (`p[0..2]`, `EventControl.cs:17944-17946`), and in the game the pier is behind the rocks until the first
 boss, so Leif is always there. Opening a gate means checking every scene behind it for what the story guaranteed.
 The sailor joins `held_until`, waiting for Leif (flag 16); the user chose Leif over the first boss, because a party
-rule suits a random start later, when party members may be items and this becomes a party-size check. Metal Island's
-checks will need Leif in logic when they're added. Built, not yet seen.
+rule suits a random start later, when party members may be items and this becomes a party-size check. **Removed
+(2026-09-26, the user):** with the stand-ins (the mod guide, step 11) the boat scene asked for Vi and Kabbu, got
+invisible stand-ins, and the boat left with Leif alone, the fare waived by Free boat. The sailor is always there, as in
+vanilla ("before we added the bandage workaround"), and Metal Island's checks need no party member for the boat.
 **The plaza's discoveries open from the start** (the user, 2026-09-25): before chapter 2's briefing (flag 67) a
 stand-in (`Discovery Pre Briefing`, a Check saying "We can check this out later. Let's hurry to the castle.") stands
 where the plaza statue and the inn portrait will be; the discoveries themselves (`StatueDesc`, Event38, discovery 5;

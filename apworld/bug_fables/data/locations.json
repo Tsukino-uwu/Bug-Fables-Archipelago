@@ -135,7 +135,6 @@
   ],
   "held_until": [
     {"map": "AntBridge", "entity": "makiautoevent", "flag": 114, "_comment": "Maki's swap on the palace bridge waits for the follower who joins after the first boss, so the scenes run in story order."},
-    {"map": "AntPalace1", "entity": "Chapter1StartEvent", "flag": 66, "_comment": "Chapter 2's briefing waits for Maki's swap, whatever the way into the palace."},
-    {"map": "BugariaPier", "entity": "boatsailor", "flag": 16, "_comment": "The boat scene seats three party members, so the sailor waits for Leif."}
+    {"map": "AntPalace1", "entity": "Chapter1StartEvent", "flag": 66, "_comment": "Chapter 2's briefing waits for Maki's swap, whatever the way into the palace."}
   ]
 }

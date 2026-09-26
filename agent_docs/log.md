@@ -710,3 +710,10 @@ Newest last. What was tried, what happened, what the user said.
   - The confirm box opened behind the map.
   - The first was found by a one-time diagnostic finalizer, the second by a log line. The user travelled to the
     Outskirts and landed well.
+- **The boat with Leif alone** (the user). The sailor was held back on this file: Leif had been added directly, so
+  flag 16 was never set. With flag 16 set by console, Free boat waived the fare (no berries needed), and the boat
+  scene got stand-ins for Vi and Kabbu and ran.
+  - The sailor's hold (`held_until`, flag 16) is removed, so he's always there, as in vanilla.
+  - The fare text still says 300. The mod could change it to say free.
+- **Random start** built as `anywhere` (Archipelago reserves `random`). Not yet seen: it needs a new seed and a new
+  file.
