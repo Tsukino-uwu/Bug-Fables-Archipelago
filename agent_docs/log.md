@@ -694,3 +694,5 @@ Newest last. What was tried, what happened, what the user said.
     through a string of attacks.
   - The bestiary shows scaled HP and defence: a row swap around `PauseMenu.UpdateText`. The user saw Dead Lander G
     at HP 7, Defense 0 there.
+- **Per-hit scaling felt fair** (the user). With the `onehit` cheat off, a scaled Dead Lander G landed 1-2 hits at
+  fair damage. The first rematch had been one-shot by that forgotten cheat.

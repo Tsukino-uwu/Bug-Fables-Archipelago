@@ -1061,5 +1061,8 @@ The panel row stepped through its three values (the log followed each). **How it
 "fair/hard" for anyone who shuffles enemies. Its attack sits at the -3 floor; if late enemies prove too harsh early,
 that floor is the first knob to try.
 
-**Status:** works, the scaled numbers seen in a fight and in the bestiary by the user (2026-09-26); per-hit attack
-scaling built, not yet felt in a fight; the constants still to tune by play.
+**Per-hit attack felt fair (the user, 2026-09-26):** the same Dead Lander G at level 1 (hits x0.19, the dev cheat
+`onehit` off) landed 1-2 attacks at "fair damage" and died in two hits, like any other enemy there.
+
+**Status:** works, seen by the user (2026-09-26): scaled HP, defence and per-hit damage in a fight, and the bestiary;
+the constants still to tune by play.
