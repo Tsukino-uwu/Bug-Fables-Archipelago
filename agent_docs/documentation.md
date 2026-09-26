@@ -1364,7 +1364,9 @@ colors.
   description says whose: "A useful item for Other (APQuest).", or for another Bug Fables player's item "For
   BugTester2: " before the item's own description. First the name was "<player>'s <item>", but a shopkeeper pastes the
   name into a line the game has already wrapped, so it ran off the bubble ("Interested in that BugTester2's Crunchy
-  Leaf?", seen by the user): the name is now the item alone.
+  Leaf?", seen by the user): the name is now the item alone. The shelf's own description box shows every item's name in
+  plain black, the game's own included; kept so (the user, 2026-09-26): the backdrop and the bubble already carry the
+  colour.
 
 **Seen (the user, 2026-09-26):** the icon on the ground (the Ladybugs' Sword) and on the Caravan's shelf beside another Bug
 Fables player's and your own items; the page with ten rows, every row and both help lines fitting (after a fresh
