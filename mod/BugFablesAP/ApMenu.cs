@@ -23,6 +23,9 @@ namespace BugFablesAP
         private int button;
         private bool confirming;
         private int answer;
+        // The Yes / No box over the page while confirming.
+        private Transform popup;
+        private Transform popupText;
 
         internal static readonly string[] Difficulties = { "Normal", "Hard", "Hardest" };
         internal static ConfigEntry<string> Difficulty;
@@ -334,6 +337,7 @@ namespace BugFablesAP
             row = at;
             button = 0;
             confirming = false;
+            ClosePopup();
             if (arrows != null)
             {
                 Destroy(arrows.gameObject);
@@ -596,11 +600,9 @@ namespace BugFablesAP
             shownStatus = status();
             if (page == Page.Qol)
             {
-                // The two buttons side by side; confirming turns them into Yes / No.
-                string left = confirming ? "Yes" : "Reset to defaults", right = confirming ? "No" : "Disable all";
-                int picked = confirming ? answer : button;
-                Text("|size,0.8|" + (row == ButtonsRow && picked == 0 ? "|color,1|" : "") + left, LabelX, RowY[ButtonsRow]);
-                Text("|size,0.8|" + (row == ButtonsRow && picked == 1 ? "|color,1|" : "") + right, ButtonRightX, RowY[ButtonsRow]);
+                // The two buttons side by side; confirming one opens a Yes / No box over the page.
+                Text("|size,0.8|" + (row == ButtonsRow && button == 0 ? "|color,1|" : "") + "Reset to defaults", LabelX, RowY[ButtonsRow]);
+                Text("|size,0.8|" + (row == ButtonsRow && button == 1 ? "|color,1|" : "") + "Disable all", ButtonRightX, RowY[ButtonsRow]);
                 Choice(FastTextRow, "Fast text", OnOff(QualityOfLife.FastText));
                 Choice(FreeBoatRow, "Free boat", OnOff(QualityOfLife.FreeBoat));
                 Choice(WarpRow, "Warp button", OnOff(QualityOfLife.WarpButton));
@@ -609,7 +611,13 @@ namespace BugFablesAP
                 Choice(PricesRow, "Shop prices", (QualityOfLife.ShopPrices?.Value ?? "Normal").ToUpperInvariant());
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Quality of life. Cancel goes back.", 0f, StatusY);
-                float leafX = row == ButtonsRow && picked == 1 ? ButtonRightX : LabelX;
+                if (confirming)
+                {
+                    DrawPopup();
+                    return;
+                }
+                ClosePopup();
+                float leafX = row == ButtonsRow && button == 1 ? ButtonRightX : LabelX;
                 leaf.transform.localPosition = new Vector3(leafX + LeafOffset, RowY[row] + LeafRise, 0f);
                 return;
             }
@@ -657,6 +665,44 @@ namespace BugFablesAP
                     arrow.layer = 5;
                 }
             }
+        }
+
+        // The Yes / No box: the controls box type, over the page, its text and the leaf above it.
+        private const int PopupSort = 30, PopupCursorSort = 45;
+        private const string PopupTextSort = "|sort,40|";
+        private static readonly Vector3 PopupAt = new Vector3(0f, -0.25f, 0f);
+        private const float YesX = -2.1f, NoX = 1.1f, AnswerY = -0.45f;
+
+        private void DrawPopup()
+        {
+            if (popup == null)
+            {
+                popup = MainManager.Create9Box(PopupAt + new Vector3(0f, 0f, 10f), new Vector2(9f, 2.75f), 4, PopupSort, Color.white, false);
+                popup.parent = transform;
+                popup.localPosition = PopupAt;
+                popupText = new GameObject("popuptext").transform;
+                popupText.parent = popup;
+                popupText.localPosition = Vector3.zero;
+            }
+            MainManager.DestroyText(popupText);
+            string question = button == 0 ? "Put every Quality of life setting back to its default?" : "Turn every Quality of life setting off?";
+            MainManager.instance.StartCoroutine(MainManager.SetText(PopupTextSort + "|center||size,0.55|" + question, new Vector3(0f, 0.45f, 0f), popupText));
+            MainManager.instance.StartCoroutine(MainManager.SetText(PopupTextSort + "|size,0.8|" + (answer == 0 ? "|color,1|" : "") + "Yes", new Vector3(YesX, AnswerY, 0f), popupText));
+            MainManager.instance.StartCoroutine(MainManager.SetText(PopupTextSort + "|size,0.8|" + (answer == 1 ? "|color,1|" : "") + "No", new Vector3(NoX, AnswerY, 0f), popupText));
+            // The leaf lives under the panel's box: place it by world position on the picked answer.
+            leaf.sortingOrder = PopupCursorSort;
+            leaf.transform.position = popup.TransformPoint(new Vector3((answer == 0 ? YesX : NoX) + LeafOffset - 0.5f, AnswerY + LeafRise, 0f));
+        }
+
+        private void ClosePopup()
+        {
+            if (popup != null)
+            {
+                Destroy(popup.gameObject);
+                popup = null;
+                popupText = null;
+            }
+            leaf.sortingOrder = CursorSort;
         }
 
         // The second button's label, clear of the first.

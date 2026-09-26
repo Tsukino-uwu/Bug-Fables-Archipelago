@@ -616,8 +616,10 @@ The panel got an eighth row, "Quality of life", which opens a second page in the
 
 **Disable all and Reset to defaults (the user, 2026-09-26; built, not yet seen).** Two buttons side by side at the top
 of the Quality of life page (not rows in the list); left/right picks one. **Reset to defaults is on the left, where the
-cursor lands** (the user: entering the page shouldn't put you on Disable all), Disable all on the right. Confirming turns them into Yes / No, with No
-picked first so a stray press never wipes the settings. Disable all turns every row off (a choice row
+cursor lands** (the user: entering the page shouldn't put you on Disable all), Disable all on the right. Confirming one opens a
+**Yes / No box** over the page (the user: a box, not the choice inside the menu), built with the game's own box
+(`MainManager.Create9Box`, the controls type the help box uses), the question on top and the leaf on the answer. No is
+picked first, so a stray press never wipes the settings; cancel closes the box. Disable all turns every row off (a choice row
 to its off value: Enemy scaling Off, Item animation Off, Shop prices Normal); Reset to defaults puts every row back to
 its default (`QualityOfLife.DisableAll` / `ResetAll`, the defaults from each setting's own config definition).
 
