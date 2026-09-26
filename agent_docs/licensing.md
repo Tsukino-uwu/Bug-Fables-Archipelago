@@ -41,6 +41,6 @@ Entertainment. All rights reserved.", with no custom EULA and nothing about mods
 officially supported, and not blocked. The apworld's data (`data/*.json`) is map, door and entity names and numeric
 ids read from the game: facts, no game text or assets.
 
-**The disclaimer** (courtesy, not a requirement): the mod zip's `README.txt` says "Unofficial fan project. Not
+**The disclaimer** (courtesy, not a requirement): the mod zip's `BugFablesAP-README.txt` says "Unofficial fan project. Not
 affiliated with or endorsed by Moonsprout Games or DANGEN Entertainment." Only there: not the root README, not the
 release page (the user, 2026-09-26).

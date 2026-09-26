@@ -41,6 +41,9 @@ function Assert-DebugDefaultsOff {
     Write-Output "all $(@($binds).Count) [Debug] settings default to off"
 }
 Assert-DebugDefaultsOff
+# The zip's top level lands next to Bug Fables.exe: only BepInEx and the README, named so it's clearly ours.
+$top = @(Get-ChildItem (Join-Path $release 'mod') | ForEach-Object Name | Sort-Object)
+if (($top -join ',') -ne 'BepInEx,BugFablesAP-README.txt') { throw "release/mod's top level must be BepInEx and BugFablesAP-README.txt, is: $($top -join ', ')" }
 
 if ($Check) {
     if (-not (Test-Path $builtFrom)) { throw 'release/built-from.txt is missing: run dev-scripts/build-release.ps1' }
@@ -67,7 +70,7 @@ foreach ($d in @('BugFablesAP.dll') + $libraries) {
 }
 Copy-Item (Join-Path $repo 'LICENSE') (Join-Path $pluginDir 'LICENSE.txt') -Force
 # Only what the zip should hold: a stray file here would ship.
-$expected = @('BugFablesAP.dll') + $libraries + 'LICENSE.txt', 'THIRD-PARTY-NOTICES.txt', 'README.txt'
+$expected = @('BugFablesAP.dll') + $libraries + 'LICENSE.txt', 'THIRD-PARTY-NOTICES.txt'
 $extra = Get-ChildItem $pluginDir -File | Where-Object { $expected -notcontains $_.Name }
 if ($extra) { throw "unexpected files in release/mod: $($extra.Name -join ', ')" }
 
