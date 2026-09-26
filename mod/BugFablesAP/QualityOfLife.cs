@@ -341,6 +341,37 @@ namespace BugFablesAP
             return null;
         }
 
+        // The trapdoor scene lands the party on its own spots; once it ends, the party enters the fall room again the way the
+        // opened trapdoor leads in (the door room's way down), as any door arrival does.
+        private const int TrapdoorEvent = 5;
+        private static bool trapdoorLanding;
+
+        private static void TickTrapdoorLanding(MainManager mm, string here)
+        {
+            if (here != "SnakemouthFallRoom")
+            {
+                if (here != "SnakemouthDoorRoom")
+                {
+                    trapdoorLanding = false;
+                }
+                return;
+            }
+            if (MainManager.player == null || mm.inevent || mm.message || mm.minipause || MainManager.battle != null
+                || mm.intransition || MainManager.roomtransition)
+            {
+                return;
+            }
+            trapdoorLanding = false;
+            Vector3[] door = DoorInto(MainManager.Maps.SnakemouthFallRoom, "SnakemouthDoorRoom");
+            if (door == null)
+            {
+                log.LogWarning("[qol] after the trapdoor scene: no door from SnakemouthDoorRoom into the fall room; the party stays where the scene left it");
+                return;
+            }
+            MainManager.instance.StartCoroutine(MainManager.TransferMap((int)MainManager.Maps.SnakemouthFallRoom, MainManager.player.transform.position, door[1], door[2]));
+            log.LogInfo("[qol] after the trapdoor scene: entering the fall room through the door room's way down");
+        }
+
         // Event8's talk after the slides is cut: its first step is ChangeParty({1}) (Kabbu alone); refusing it stops the
         // scene, and the next frame the mod ends it as its own end does.
         private static bool event8Cut;
@@ -575,6 +606,10 @@ namespace BugFablesAP
 
         private static bool BeforeStartEvent(int id)
         {
+            if (id == TrapdoorEvent && randomizerOn() && MainManager.map != null && MainManager.map.mapid.ToString() == "SnakemouthDoorRoom")
+            {
+                trapdoorLanding = true;
+            }
             if (id == OpeningEvent && randomizerOn() && MainManager.map != null
                 && MainManager.map.mapid.ToString() == OpeningMap)
             {
@@ -691,6 +726,10 @@ namespace BugFablesAP
                     MainManager.PlayTransition(1, 0, 0.02f, Color.black);
                     log.LogError($"[qol] opening party failed: {e}");
                 }
+            }
+            if (trapdoorLanding)
+            {
+                TickTrapdoorLanding(mm, here);
             }
             if (event8Cut && !mm.message)
             {

@@ -981,10 +981,15 @@ as items. A received member joins at once, the way `addmember` does. Which membe
 from the items the save has counted, every frame, and forgotten on the title screen: kept only in memory, a member
 from one file would let the story add him early in the next. Not yet seen in play.
 
-**Idea, not built (the user, 2026-09-26):** after the pitfall scene (the trapdoor into `SnakemouthFallRoom`,
+**Built (the user asked again, 2026-09-27, after landing by the rock once more):** after the pitfall scene (the trapdoor into `SnakemouthFallRoom`,
 Event5), place the party as if it had just entered the fall room through one of its doors, the same arrival a random
 start uses (build step 15 of the Archipelago guide; the arrival jump from the door's entity, step 13 here). The user
 expects it to line the landing up better than the scene's own spot, as the random start into that room did.
+How: Event5 starting on `SnakemouthDoorRoom` marks a landing due; on the first free frame in `SnakemouthFallRoom` after
+the scene, the game's `TransferMap` into the same room with the spots of the door room's door into it (`DoorInto`, the
+way down the opened trapdoor), as a random start arrives. Only with Archipelago on. First seen with three members: the
+scene ended without error (the patched list, `[party] Event5 placed 2 members; member slot 2 stands behind`); the
+landing spot itself not yet seen. *Code: `QualityOfLife.cs`.*
 
 **Status:** works with Leif alone, seen by the user through chapter 1 into chapter 2 (2026-09-25); Leif joining after the spider with the story's two (Vi and Kabbu) seen (2026-09-26: he followed, could lead, and showed in the pause menu); items 5 and 6 not yet seen; the direct lookups in item 12 still open.
 

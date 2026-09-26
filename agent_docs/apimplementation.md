@@ -1230,8 +1230,9 @@ physics, forced animation), which the crash had left as the scene set them.
 **The scene's own list (2026-09-26):** the one read that loop makes (`array[m]`, the only `Vector3` read after
 `SetPlayers` in Event5's step method, `MEASURED.md`) is swapped by a Harmony transpiler for `PartyFit.PlaceAt`: the
 same value inside the list, and past its end a step behind the last listed member, as the lengthened `SetPlayers` list
-has him. The loop is Event5's alone among the scenes (a search of `EventControl`). Built; the user's play down the
-trapdoor with three is next.
+has him. The loop is Event5's alone among the scenes (a search of `EventControl`). **Seen (the user, 2026-09-27):**
+down the trapdoor with Leif, Vi and Kabbu, the scene ran to its end, no error; the landing spot moved to a door
+arrival (the mod guide, step 11).
 **Parked design (the user, 2026-09-25), for party members as items:** scenes find members by **character**
 (`GetEntity(-4)` Vi, `(-5)` Kabbu, `(-6)` Leif search the party by `animid`; `-1` to `-3` are positions), so the leader's
 order never matters. Two rules then: (1) a member a scene doesn't know about (Leif early in chapter 1) **steps out**
