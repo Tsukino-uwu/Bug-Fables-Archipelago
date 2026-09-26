@@ -736,8 +736,12 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    number), as the old one held a word. **Renamed *Medal prices*** (the user, 2026-09-26: more accurate): it scales
    the medal table, so every medal on sale anywhere, never an item shop's consumables. If item shops are ever scaled,
    they get their own row (*Item prices*), as their prices sit on another scale.
-8. **Skip battle tutorials:** next. The tutorial battles end on fixed turns and read story flags, so each one is
-   read in full before anything is skipped.
+8. **Skip battle tutorials: read (2026-09-27), nothing left to build but one line.** A battle's scripted moments are
+   `BattleControl.EventDialogue` cases, started by `CheckEvent` or by an enemy's own action. The only real tutorial is
+   the fight against Maki in the opening (case 0 and 1, enemy `MakiTutorial`, while flag 15 is unset), which the
+   opening skip already removes. The spider's first fight ends at once (item 5). What's left: case 3, Leif's one line in
+   the first battle after he joins (flag 16 set, 24 not; it sets 24; `SetMaxOptions` reads 15 and 16, not 24), and
+   story lines inside boss fights (cases 7, 8 in the first boss; others later), which stay.
    **Travel: Off / Warp / Map / Both (the user, 2026-09-26; built, not yet seen).** The Warp button's on/off became one
    *Travel* row (config `Travel`, default Both). `WarpButton.cs` now places the travel buttons after the game's four:
    Warp, then Map (left from the first button wraps to Map; Warp sits between, harder to hit by accident). Five fit
