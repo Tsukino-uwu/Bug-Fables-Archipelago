@@ -23,6 +23,10 @@ Bugaria with Merab's medal shop and Madame Butterfly's item shop, and the Golden
 - **Starting Location** (off, experimental): a new file begins in any room in the game.
 - **Starting Party Member** (all three): a new file starts with the whole party; or with Vi, Kabbu or Leif alone (or one
   picked by the seed), and the other two are items; or Off, the story's party, with Leif joining in Snakemouth Den.
+- **Shuffle Field Moves** (off): Vi's Beemerang, Kabbu's Horn and Leif's Ice are items; until one arrives, that
+  attack only buzzes. New in this version.
+- **Shuffle Jump** (off): Jump is an item for the whole party; until it arrives, the jump button only buzzes, and the
+  pause menu's Warp is always there. New in this version.
 
 Each option's description in the yaml says what it does in full and how many checks it adds.
 

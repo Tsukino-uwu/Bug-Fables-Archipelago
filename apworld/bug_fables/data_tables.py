@@ -61,11 +61,14 @@ CRYSTAL_ID_OFFSET = 3_000
 # Party members: game_id is the member (0 Vi, 1 Kabbu, 2 Leif).
 MEMBER_KIND = 5
 MEMBER_ID_OFFSET = 4_000
+# Field moves: game_id 0 Beemerang (Vi), 1 Horn (Kabbu), 2 Ice (Leif), 3 Jump (the whole party).
+MOVE_KIND = 6
+MOVE_ID_OFFSET = 5_000
 
 
 def item_id(item: dict[str, Any]) -> int:
     offset = {MEDAL_KIND: MEDAL_ID_OFFSET, MONEY_KIND: MONEY_ID_OFFSET, CRYSTAL_KIND: CRYSTAL_ID_OFFSET,
-              MEMBER_KIND: MEMBER_ID_OFFSET}.get(item["kind"], 0)
+              MEMBER_KIND: MEMBER_ID_OFFSET, MOVE_KIND: MOVE_ID_OFFSET}.get(item["kind"], 0)
     return ITEM_ID_BASE + offset + item["game_id"]
 
 

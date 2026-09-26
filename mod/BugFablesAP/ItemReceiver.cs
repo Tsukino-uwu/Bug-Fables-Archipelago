@@ -84,6 +84,7 @@ namespace BugFablesAP
             if (matches == true && given >= 0 && given <= received.Count)
             {
                 PartyMembers.SetReceived(MembersGiven(received, given));
+                FieldMoves.SetReceived(KindGiven(received, given, ItemIds.MoveKind));
             }
             if (blocked != null || given == received.Count)
             {
@@ -117,13 +118,16 @@ namespace BugFablesAP
             ShowIfWanted(item, given);
         }
 
-        private System.Collections.Generic.IEnumerable<int> MembersGiven(ReadOnlyCollection<ItemInfo> received, int given)
+        private System.Collections.Generic.IEnumerable<int> MembersGiven(ReadOnlyCollection<ItemInfo> received, int given) =>
+            KindGiven(received, given, ItemIds.MemberKind);
+
+        private System.Collections.Generic.IEnumerable<int> KindGiven(ReadOnlyCollection<ItemInfo> received, int given, int wanted)
         {
             for (int i = 0; i < given; i++)
             {
                 ItemInfo item = received[i];
                 if (item.ItemGame == ApConnection.Game && connection.ItemKinds != null
-                    && connection.ItemKinds.TryGetValue(item.ItemId, out int kind) && kind == ItemIds.MemberKind)
+                    && connection.ItemKinds.TryGetValue(item.ItemId, out int kind) && kind == wanted)
                 {
                     yield return ItemIds.GameId(item.ItemId, kind);
                 }
@@ -191,6 +195,11 @@ namespace BugFablesAP
             if (kind == ItemIds.MemberKind)
             {
                 return PartyMembers.Receive(gameId);
+            }
+            if (kind == ItemIds.MoveKind)
+            {
+                // Counted like every item; FieldMoves reads the counted ones back each frame.
+                return $"{FieldMoves.Name(gameId)} can be used now";
             }
             if (kind != 0)
             {

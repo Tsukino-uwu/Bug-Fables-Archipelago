@@ -16,11 +16,14 @@ namespace BugFablesAP
         // Party members: game id 0 Vi, 1 Kabbu, 2 Leif.
         internal const int MemberOffset = 4_000;
         internal const int MemberKind = 5;
+        // Field moves: game id 0 Beemerang, 1 Horn, 2 Ice, 3 Jump.
+        internal const int MoveOffset = 5_000;
+        internal const int MoveKind = 6;
 
         internal static int GameId(long itemId, int kind)
         {
             int offset = kind == MedalKind ? MedalOffset : kind == MoneyKind ? MoneyOffset : kind == CrystalKind ? CrystalOffset
-                : kind == MemberKind ? MemberOffset : 0;
+                : kind == MemberKind ? MemberOffset : kind == MoveKind ? MoveOffset : 0;
             return (int)(itemId - Base - offset);
         }
 

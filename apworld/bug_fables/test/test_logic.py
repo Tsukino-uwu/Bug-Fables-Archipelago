@@ -388,11 +388,16 @@ class TestClassifications(BugFablesTestBase):
     def test_items_rules_use_are_progression_and_only_those(self) -> None:
         from ..data_tables import ITEMS, LOCATIONS, REGIONS, STORY_EVENTS
         used: set[str] = set()
+        def named(data: dict) -> list[str]:
+            return data.get("requires", []) + data.get("members", []) + data.get("abilities", []) + data.get("moves", [])
+
         for region in REGIONS:
             for exit_data in region["exits"]:
-                used.update(exit_data.get("requires", []) + exit_data.get("members", []))
+                used.update(named(exit_data))
         for spot in LOCATIONS + STORY_EVENTS:
-            used.update(spot.get("requires", []) + spot.get("members", []))
+            used.update(named(spot))
+        # Shuffle Jump's blanket rule: every spot not marked no_jump needs it.
+        used.add("Jump")
         # Leif is both: the story's event with Starting Party Member off, an item with it on.
         event_items = {event["item"] for event in STORY_EVENTS} - {item["name"] for item in ITEMS} | {"Artifact"}
         real_items_used = used - event_items

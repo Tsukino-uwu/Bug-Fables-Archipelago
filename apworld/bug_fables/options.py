@@ -174,6 +174,30 @@ class StartingPartyMember(Choice):
     default = 5
 
 
+class ShuffleFieldMoves(Toggle):
+    """
+    Vi's Beemerang, Kabbu's Horn and Leif's Ice are items: until a member's move arrives, his field attack does nothing
+    but a short "can't" sound. A move works only with its member in the party too.
+
+    The logic is cautious for now: everything past the Outskirts gate needs all three moves, and a few spots before it
+    need the one they were seen to need. Off by default.
+    """
+
+    display_name = "Shuffle Field Moves"
+
+
+class ShuffleJump(Toggle):
+    """
+    Jump is an item, for the whole party: until it arrives, the jump button does nothing but a short "can't" sound.
+    The pause menu's Warp is always there with it on, the way out of a spot you can't jump out of.
+
+    The logic is cautious for now: every check needs Jump except the few seen reachable without it (the opening, the
+    ladybug siblings' house, the caravan and the town's shops). Off by default.
+    """
+
+    display_name = "Shuffle Jump"
+
+
 def category_count(category: str) -> int:
     """How many locations an option's category adds, straight from the location data."""
     return sum(1 for location in LOCATIONS if location.get("category") == category)
@@ -203,3 +227,5 @@ class BugFablesOptions(PerGameCommonOptions):
     enemy_shuffle: EnemyShuffle
     starting_location: StartingLocation
     starting_party_member: StartingPartyMember
+    shuffle_field_moves: ShuffleFieldMoves
+    shuffle_jump: ShuffleJump

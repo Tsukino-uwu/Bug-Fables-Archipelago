@@ -32,6 +32,8 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 18. [Build step 18: Starting Party Member](#build-step-18-starting-party-member)
 19. [Build step 19: Archipelago's colours for players and items](#build-step-19-archipelagos-colours-for-players-and-items)
 20. [Build step 20: All three members from the start (the default)](#build-step-20-all-three-members-from-the-start-the-default)
+21. [Build step 21: Shuffle Field Moves](#build-step-21-shuffle-field-moves)
+22. [Build step 22: Shuffle Jump](#build-step-22-shuffle-jump)
 
 **How it works**
 
@@ -1693,6 +1695,53 @@ there from the first frame; his item then finds him already in.
 with party 0, 1, 2; Leif's item found him already in). On a fresh seed both opening spots showed their box (Poison
 Resistance, then Sleep Resistance from the silent spot); a second file on a used seed shows only the gift's, since the
 server already holds the silent spot's item at login.
+
+
+## Build step 21: Shuffle Field Moves
+
+Vi's Beemerang, Kabbu's Horn and Leif's Ice become items (the user, 2026-09-27: "field moves on/off, and jump as its
+own on/off thing as well due to how much it impacts, both off by default"). The rules were already written in moves
+(build step 13), so the logic only learns that a move is also an item.
+
+1. **The game's own move** (`PlayerControl.DoActionTap`, `MEASURED.md`): the leader's field attack by his `animid`;
+   Vi's already waits for flag 11, Kabbu's and Leif's are always on.
+2. **The world:** option `shuffle_field_moves` (off). Three items, kind 6 (`MOVE_ID_OFFSET`), in the pool only with it
+   on. `_requires` turns an ability into its member (when members are items; with the story's party only Leif, who
+   joins late) and, with moves shuffled, its item. **Cautious like members** (the user's choice): the gate's exit lists
+   `moves` (all three items, not who uses them, so the story's Leif isn't pulled before the gate); the measured spots
+   before it name their ability (the two horn spots; the fountain rooftop and the droplets now say Ice). `slot_data`
+   `shuffle_moves`.
+3. **The mod** (`FieldMoves.cs`): a prefix on `DoActionTap` refuses the leader's move until its item has been counted
+   (recomputed every frame from the save's counted items, as members are), with the game's own
+   `MainManager.PlayBuzzer()` (the user: a short "can't" sound). Only with Archipelago on and the seed saying so. A
+   move item's box shows its member's party icon and colour, no article, "<member> can use the <move>."
+4. **Tests** (`test/test_moves.py`): off by default; the three in the pool; the gate needs every move; a horn spot
+   needs the Horn, an ice spot the Ice; with the story's party the ice spot needs Leif too. Five seeds with both
+   options, a random member and APQuest generated.
+
+**Status:** built, tests pass; not yet played.
+
+## Build step 22: Shuffle Jump
+
+Jump becomes one item for the whole party (the user: "jump would just apply for any member/the whole party, unlike
+the attacks"), behind its own option, `shuffle_jump` (off).
+
+1. **The game's jump** (`PlayerControl.DoJump`, called only by the jump button): no gate of its own.
+2. **Cautious logic** (the user's choice): with it on, every location and story event (artifacts included) needs Jump
+   except those seen reachable without it, marked `no_jump` in the data. **The user's measurements (2026-09-27, the
+   starting map and the town):** the ladybug siblings' house item needs no jump; Madeleine's house does, and so do
+   the Hard Mode NPC's gifts and the inn's item (neither a location yet); the plaza statue discovery (not a location
+   yet), the caravan and the Commercial District's two shops need nothing; the underground bar needs the Horn (grass);
+   the inn review quest's completion needs nothing (if quest completions become locations). The two opening checks
+   need nothing either (they happen on their own). Jump lands in one of those spots, or in another game.
+3. **The Warp is forced on** with it (the user: like a random start or the entrance randomizer), the way out of a spot
+   you can't jump out of: `QualityOfLife.WarpOn` reads `FieldMoves.JumpShuffled` from `slot_data` `shuffle_jump`.
+4. **The mod:** a prefix on `DoJump` refuses the jump with the buzzer until the item is counted. Jump's box shows the
+   Archipelago icon (it belongs to no member).
+5. **Tests** (`test_moves.py`, `TestJump`): the measured spots are reachable with nothing; Madeleine's house and the
+   first artifact need Jump.
+
+**Status:** built, tests pass; not yet played.
 
 # How it works
 

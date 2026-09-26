@@ -182,6 +182,7 @@ namespace BugFablesAP
             HoldUps.Init(Log, () => randomizerEnabled.Value);
             PartyFit.Enable(Log, Guid, () => randomizerEnabled.Value);
             PartyMembers.Enable(Log, Guid, () => randomizerEnabled.Value);
+            FieldMoves.Enable(Log, Guid, () => randomizerEnabled.Value);
             CheckDetector.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             CrystalBerryTotal.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             QuestBoards.Enable(Log, Guid, () => randomizerEnabled.Value);
@@ -388,6 +389,7 @@ namespace BugFablesAP
             HoldUps.Clear();
             PartyFit.Disable();
             PartyMembers.Disable();
+            FieldMoves.Disable();
             CheckDetector.Disable();
             CrystalBerryTotal.Disable();
             QuestBoards.Disable();

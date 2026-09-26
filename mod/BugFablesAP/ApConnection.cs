@@ -617,6 +617,8 @@ namespace BugFablesAP
                     PartyMembers.SeedSaysMember = ok.SlotData != null && ok.SlotData.TryGetValue("starting_member", out sm) && sm != null;
                     PartyMembers.SeedStartMember = PartyMembers.SeedSaysMember ? Convert.ToInt32(sm) : -1;
                     itemKinds = ReadItemKinds(ok.SlotData);
+                    FieldMoves.MovesShuffled = ok.SlotData != null && ok.SlotData.TryGetValue("shuffle_moves", out object smv) && smv is bool smb && smb;
+                    FieldMoves.JumpShuffled = ok.SlotData != null && ok.SlotData.TryGetValue("shuffle_jump", out object sj) && sj is bool sjb && sjb;
                     artifactsRequired = ok.SlotData != null && ok.SlotData.TryGetValue("artifacts_required", out object ar) && ar != null
                         ? Convert.ToInt32(ar) : 0;
                     seedKnown = true;

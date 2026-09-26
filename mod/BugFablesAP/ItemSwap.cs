@@ -458,6 +458,7 @@ namespace BugFablesAP
                         : kind == ItemIds.MoneyKind ? gameId + " berries."
                         : kind == ItemIds.CrystalKind ? MainManager.menutext[112] + "."
                         : kind == ItemIds.MemberKind ? PartyMembers.Name(gameId) + " joins the party."
+                        : kind == ItemIds.MoveKind ? MoveDescription(gameId)
                         : MainManager.itemdata[0, gameId, 2];
                 }
                 catch (IndexOutOfRangeException)
@@ -486,6 +487,15 @@ namespace BugFablesAP
                     color = MainManager.instance.charcolor[gameId];
                     return;
                 }
+                if (kind == ItemIds.MoveKind)
+                {
+                    // An attack shows its member's icon and colour; Jump is the whole party's, so the Archipelago icon.
+                    name = FieldMoves.Name(gameId);
+                    bool attack = gameId >= 0 && gameId <= 2;
+                    sprite = attack ? MemberSprite(gameId) : ApIcon.Get();
+                    color = attack ? MainManager.instance.charcolor[gameId] : (Color?)null;
+                    return;
+                }
                 bool medal = kind == ItemIds.MedalKind;
                 bool money = kind == ItemIds.MoneyKind;
                 bool crystal = kind == ItemIds.CrystalKind;
@@ -497,6 +507,9 @@ namespace BugFablesAP
                     : new Color(0f, 0.7f, 0.7f);
             }
         }
+
+        private static string MoveDescription(int id) =>
+            id == FieldMoves.Jump ? "The whole party can jump." : PartyMembers.Name(id) + " can use the " + FieldMoves.Name(id) + ".";
 
         private static readonly Sprite[] memberSprites = new Sprite[3];
 
@@ -533,7 +546,7 @@ namespace BugFablesAP
             try
             {
                 return kind == ItemIds.MedalKind ? MainManager.badgedata[gameId, 6]
-                    : kind == ItemIds.MemberKind ? ""
+                    : kind == ItemIds.MemberKind || kind == ItemIds.MoveKind ? ""
                     : kind == ItemIds.MoneyKind || kind == ItemIds.CrystalKind ? null
                     : MainManager.itemdata[0, gameId, 3];
             }
@@ -895,9 +908,9 @@ namespace BugFablesAP
         private static void ShowOwnDescription(NPCControl caller, ScoutedItemInfo info)
         {
             if (info == null || !IsOurs(info) || KindOf(info) == ItemIds.MoneyKind || KindOf(info) == ItemIds.CrystalKind
-                || KindOf(info) == ItemIds.MemberKind)
+                || KindOf(info) == ItemIds.MemberKind || KindOf(info) == ItemIds.MoveKind)
             {
-                return; // berries have no description box, as in the game's own money giveitem; a member has no item row
+                return; // berries have no description box, as in the game's own money giveitem; a member or move has no item row
             }
             int kind = KindOf(info);
             bool medal = kind == ItemIds.MedalKind;

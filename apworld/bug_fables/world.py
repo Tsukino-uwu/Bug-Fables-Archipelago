@@ -135,20 +135,42 @@ class BugFablesWorld(World):
             return self.starting_member < 0
         return True
 
-    # Rules name the field move, not who has it, so a move can become an item without rewriting them. Until then each
-    # attack is its member's, and Jump is the whole party's (always there).
+    # Rules name the field move, not who has it: an attack needs its member (when members are items; with the story's
+    # party, only Leif, who joins late), and its own item when moves are shuffled. Jump is the whole party's.
     _ability_holders = {"Horn": "Kabbu", "Beemerang": "Vi", "Ice": "Leif", "Jump": None}
 
-    def _requires(self, data: dict[str, Any]) -> list[str]:
-        """What a spot or exit needs: its own requires, and its members and moves' members when members are items."""
-        if self.starting_member < 0:
-            return list(data.get("requires", []))
-        members = list(data.get("members", []))
+    def _moves_shuffled(self) -> bool:
+        return bool(self.options.shuffle_field_moves.value)
+
+    def _jump_shuffled(self) -> bool:
+        return bool(self.options.shuffle_jump.value)
+
+    def _requires(self, data: dict[str, Any], location: bool = False) -> list[str]:
+        """What a spot or exit needs: its own requires, members when members are items, and its moves' members and items.
+        With Jump shuffled, a location or story event needs Jump unless it was seen reachable without (no_jump)."""
+        needed = list(data.get("requires", []))
+        members_are_items = self.starting_member >= 0
+
+        def add(name: str) -> None:
+            if name not in needed:
+                needed.append(name)
+
+        if members_are_items:
+            for member in data.get("members", []):
+                add(member)
         for ability in data.get("abilities", []):
             holder = self._ability_holders[ability]
-            if holder is not None and holder not in members:
-                members.append(holder)
-        return data.get("requires", []) + members
+            if holder is not None and (members_are_items or holder == "Leif"):
+                add(holder)
+            if ability == "Jump" and self._jump_shuffled() or ability != "Jump" and self._moves_shuffled():
+                add(ability)
+        # A blanket rule for unmeasured ground: the move items alone, not who does them.
+        if self._moves_shuffled():
+            for move in data.get("moves", []):
+                add(move)
+        if location and self._jump_shuffled() and not data.get("no_jump"):
+            add("Jump")
+        return needed
 
     def create_regions(self) -> None:
         regions = {data["name"]: Region(data["name"], self.player, self.multiworld) for data in REGIONS}
@@ -192,6 +214,10 @@ class BugFablesWorld(World):
                     self.push_precollected(self.create_item(name))
                 else:
                     pool.append(self.create_item(name))
+        # Field moves are items only with their option: the three attacks, and Jump on its own.
+        for item in ITEMS:
+            if item.get("move") and (self._jump_shuffled() if item["name"] == "Jump" else self._moves_shuffled()):
+                pool.append(self.create_item(item["name"]))
         # The mod's own items (custom gates) enter once in every seed, in a filler slot: when every location already
         # has its vanilla item, one filler item (an ordinary item or berries, picked by the seed) makes room.
         always = [self.create_item(item["name"]) for item in ITEMS if item.get("always")]
@@ -219,11 +245,15 @@ class BugFablesWorld(World):
             elif self.options.shop_contents == ShopContents.option_no_progression:
                 location.item_rule = lambda item: not item.advancement
         for loc in self.included_locations:
-            if self._requires(loc):
-                self.set_rule(self.get_location(loc["name"]), HasAll(*self._requires(loc)))
+            if self._requires(loc, location=True):
+                self.set_rule(self.get_location(loc["name"]), HasAll(*self._requires(loc, location=True)))
         for event in self.included_events:
-            if self._requires(event):
-                self.set_rule(self.get_location(event["name"]), HasAll(*self._requires(event)))
+            if self._requires(event, location=True):
+                self.set_rule(self.get_location(event["name"]), HasAll(*self._requires(event, location=True)))
+        # Artifacts are events with no data of their own: with Jump shuffled they wait for it like every other spot.
+        if self._jump_shuffled():
+            for artifact in ARTIFACTS:
+                self.set_rule(self.get_location(artifact["name"]), Has("Jump"))
         self.set_completion_rule(Has("Artifact", count=self.artifacts_required))
 
     def pre_fill(self) -> None:
@@ -304,6 +334,9 @@ class BugFablesWorld(World):
             "start": self.start,
             # The one member a new file starts with (0 Vi, 1 Kabbu, 2 Leif); 3 all three; -1 is the story's party.
             "starting_member": self.starting_member,
+            # Field moves as items: the three attacks, and Jump (the mod then keeps the Warp on).
+            "shuffle_moves": self._moves_shuffled(),
+            "shuffle_jump": self._jump_shuffled(),
             # 0 item, 1 key item, 2 medal, 3 berries, 4 crystal berry, 5 party member.
             "item_kinds": {str(ITEM_NAME_TO_ID[item["name"]]): item["kind"] for item in ITEMS},
         }
