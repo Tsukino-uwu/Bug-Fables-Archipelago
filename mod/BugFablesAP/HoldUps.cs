@@ -39,11 +39,12 @@ namespace BugFablesAP
             log.LogInfo($"[show] queued the hold-up for {what}");
         }
 
-        // Archipelago's text client colours (NetUtils.py: another player yellow; progression plum, useful slate blue, trap
-        // salmon, filler cyan), darkened for the near-white text box (the user's picks), after the game's own text colours
-        // (10 in its scene, not the code's 7). Offsets from ApBase.
-        internal const int Player = 0, Progression = 1, Useful = 2, Trap = 3, Filler = 4;
-        private static readonly string[] apColors = { "B8860B", "8A63D2", "4A6BD8", "E9573F", "008B8B" };
+        // Text colours after the game's own (10 in its scene, not the code's 7), offsets from ApBase: another player (dark
+        // yellow, Archipelago's yellow darkened), then by class, Archipelago's (NetUtils.py: plum, slate blue, salmon, cyan)
+        // darkened for the near-white text box, then Rarity's (the user's ladder: purple, blue, red, green), darkened too.
+        internal const int Player = 0, Progression = 1, Useful = 2, Trap = 3, Filler = 4, RarityOffset = 4;
+        private static readonly string[] apColors = { "B8860B", "8A63D2", "4A6BD8", "E9573F", "008B8B",
+            "8A45C8", "2F6FD8", "C62828", "2E9E3E" };
         internal static int ApBase = -1;
 
         private static Color FromHex(string hex)

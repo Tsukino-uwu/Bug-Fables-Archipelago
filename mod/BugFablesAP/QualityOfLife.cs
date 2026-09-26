@@ -29,9 +29,10 @@ namespace BugFablesAP
         internal static ConfigEntry<bool> SkipCutscenes;
         internal static readonly string[] ItemAnimations = { "All", "Progression", "Off" };
         internal static ConfigEntry<string> ItemAnimation;
-        internal static readonly string[] ItemColorValues = { "Archipelago", "Off" };
+        internal static readonly string[] ItemColorValues = { "Rarity", "Archipelago", "Off" };
         internal static ConfigEntry<string> ItemColors;
         internal static bool ApColors => ItemColors == null || ItemColors.Value != "Off";
+        internal static bool RarityColors => ItemColors == null || ItemColors.Value == "Rarity";
         // Which items not your own show the drawn Archipelago icon: another game's, every other player's, or none.
         internal static readonly string[] ItemIconValues = { "OtherGames", "AllPlayers", "Off" };
         internal static ConfigEntry<string> ItemIcons;
@@ -134,10 +135,11 @@ namespace BugFablesAP
                 "Which items received from other players are shown held up, as when you find one: Progression (items that "
                 + "unlock something), All, or Off. They always arrive either way; your own finds are always shown.",
                 new AcceptableValueList<string>(ItemAnimations)));
-            ItemColors = config.Bind("QualityOfLife", "ItemColors", "Archipelago", new ConfigDescription(
-                "How another player's items are named in the \"You got\" box: Archipelago colours the player and the item by "
-                + "its kind (progression, useful, filler, trap) as Archipelago's text client does, darkened to read on the box; "
-                + "Off keeps the game's red for the whole name.",
+            ItemColors = config.Bind("QualityOfLife", "ItemColors", "Rarity", new ConfigDescription(
+                "The colours for how much an item matters, in the \"You got\" box and the starburst behind it: Rarity, a loot "
+                + "game's ladder (filler green, useful blue, progression purple, trap red); Archipelago, its own text client's "
+                + "(plum, slate blue, cyan, salmon), darkened to read on the box; Off, the game's red text and its own "
+                + "starburst colours.",
                 new AcceptableValueList<string>(ItemColorValues)));
             ItemIcons = config.Bind("QualityOfLife", "ItemIcons", "OtherGames", new ConfigDescription(
                 "Which items that aren't yours show the Archipelago icon, on the ground, on shelves and when found: OtherGames "

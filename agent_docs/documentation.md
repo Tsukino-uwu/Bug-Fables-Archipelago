@@ -1315,7 +1315,8 @@ battle gave 100, the game's cap of a level's worth.
 
 **Asked (the user, 2026-09-26):** after picking the colours on screen (step 9, "Archipelago's colours in the line"),
 a Quality of life row to turn them off and keep the game's look: *Item colors: Archipelago / Off*, Archipelago by
-default. Right below Item animation, since both are about another player's items.
+default. **Later the same day: RARITY / ARCHIPELAGO / OFF, Rarity by default, for the starbursts too** (step 22, the
+end). Right below Item animation, since both are about another player's items.
 
 **How it works** (`QualityOfLife.cs` binds it, `ApMenu.cs` draws the row, `ItemSwap.cs` reads it):
 - **Archipelago:** another player's name in dark yellow, the item by its kind (progression, useful, filler, trap),
@@ -1381,3 +1382,12 @@ used to sit half inside: "more visually clear than it clipping inside terrain".
 **Status:** works, seen by the user on the Caravan's shelf and on the ground (2026-09-26).
 
 *Code: `ItemSwap.cs` (`Mark`, `MarkColorOf`), `QualityOfLife.cs` (`ItemBackgrounds`), `ApMenu.cs` (`BackgroundsRow`).*
+
+**Rarity colours (the user, 2026-09-26), in Item colors (step 20).** Side by side on a shelf (dev `markclass`, four
+slots forced to the four classes), Archipelago's plum and slate blue read alike, and so did slate blue and cyan: "blue,
+red, blue, purple". The user's ladder from loot games (common green, rare blue, epic purple) told all four apart at
+once: filler green `4CC94C`, useful blue `4A90E8`, progression purple `B36BE8`, trap red `E03C3C` (salmon read clearly
+but the user dislikes it). So *Item colors* became **RARITY / ARCHIPELAGO / OFF**, Rarity by default, one setting for
+the text and the starbursts together: Rarity's text shades are darker for the white box (`8A45C8`, `2F6FD8`, `C62828`,
+`2E9E3E`); Off gives the game's red text and its own starburst colours by kind (items teal, key items pink, medals
+orange). Not yet seen: the Rarity text, and Off.

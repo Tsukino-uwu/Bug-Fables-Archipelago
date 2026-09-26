@@ -61,8 +61,9 @@ menu, and from the main menu), shown while the Archipelago mod is enabled or *Us
   (On: scenes you don't need to watch are skipped or pass by fast. The new game's intro, tutorial battle included, is
   always skipped with the Archipelago mod enabled: Vi joins and the first check is sent), **Item
   animation** (which items from other players are shown held up: All, the default, Progression or Off; your own finds
-  always are), **Item colors** (Archipelago, the default, colours another player's name and the item by its kind, as
-  Archipelago's own client does; Off keeps the game's red), **Archipelago icon** (Other games, the default: another
+  always are), **Item colors** (how an item's importance is coloured, in the text and the starburst behind it: Rarity, the
+  default, like loot in other games: filler green, useful blue, progression purple, trap red; Archipelago, as its own
+  client colours them; Off, the game's own colours), **Archipelago icon** (Other games, the default: another
   game's item shows the Archipelago icon on the ground, on shelves and when found; All players: every item that isn't
   yours; Off: they look like the game's own item there), **Item backgrounds** (On, the default: a check's item,
   yours included, has a starburst behind it in its Archipelago class colour, so you can tell from afar whether it matters; Off

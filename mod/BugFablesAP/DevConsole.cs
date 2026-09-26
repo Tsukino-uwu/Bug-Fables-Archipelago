@@ -508,6 +508,50 @@ namespace BugFablesAP
                         log.LogInfo(info.ToString());
                         return "item info logged";
                     }
+                    case "markcolor":
+                    {
+                        // markcolor <progression|useful|trap|filler> <hex>: a class's starburst colour, live.
+                        string[] classes = { "progression", "useful", "trap", "filler" };
+                        int which = parts.Length > 2 ? Array.IndexOf(classes, parts[1]) : -1;
+                        if (which < 0)
+                        {
+                            return "markcolor <progression|useful|trap|filler> <hex> (now " + string.Join(" ", ItemSwap.ClassColors.Select(c => c.ToString("X6")).ToArray()) + ")";
+                        }
+                        ItemSwap.ClassColors[which] = Convert.ToInt32(parts[2], 16);
+                        return $"markcolor: {classes[which]} now {parts[2]}";
+                    }
+                    case "hide":
+                    {
+                        // hide <entity name>: switch an entity on this map off until the map reloads (nothing saved).
+                        if (parts.Length < 2 || MainManager.map == null)
+                        {
+                            return "hide <entity name>";
+                        }
+                        NPCControl found = MainManager.map.GetComponentsInChildren<NPCControl>(true).FirstOrDefault(n => n.name == parts[1]);
+                        if (found == null)
+                        {
+                            return "hide: no " + parts[1] + " on this map";
+                        }
+                        found.gameObject.SetActive(false);
+                        return "hidden until the map reloads: " + parts[1];
+                    }
+                    case "markclass":
+                    {
+                        // markclass <entity name> <progression|useful|trap|filler> | markclass off: force a slot's backdrop class.
+                        string[] classes = { "progression", "useful", "trap", "filler" };
+                        if (parts.Length > 1 && parts[1] == "off")
+                        {
+                            ItemSwap.DevClasses.Clear();
+                            return "markclass: every backdrop its own class again";
+                        }
+                        int which = parts.Length > 2 ? Array.IndexOf(classes, parts[2]) : -1;
+                        if (which < 0)
+                        {
+                            return "markclass <entity name> <progression|useful|trap|filler> | markclass off";
+                        }
+                        ItemSwap.DevClasses[parts[1]] = which;
+                        return $"markclass: {parts[1]} drawn as {classes[which]}";
+                    }
                     case "mark":
                     {
                         // mark <scale> <raise>: the backdrop behind a check's item, live.

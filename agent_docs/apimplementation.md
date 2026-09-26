@@ -1592,7 +1592,10 @@ scouted item's), so the colour needs no table of our own.
    only another player's item gets a "from" or "'s".
 2. **Where:** "You got <item> from <player>!" for an item another player found for you, and "You found <player>'s
    <item>!" for another player's item found here (a gift or a pickup). Your own finds keep the game's red.
-3. **Off switch:** the Quality of life row *Item colors: Archipelago / Off* (the mod guide, step 20).
+3. **A choice:** the Quality of life row *Item colors: Rarity / Archipelago / Off* (the mod guide, steps 20 and 22).
+   Archipelago's plum, slate blue and cyan are neighbours on the colour wheel and blurred together as big starbursts
+   side by side, so the default is a loot game's ladder in the same order of importance (filler green, useful blue,
+   progression purple, trap red); Archipelago keeps its own client's colours for those who know them.
 4. **In the game** (the mod guide, step 9): the game's text colours by palette index only, so the colours are added
    after the game's own; that and the lines' wording are game-side, written up there.
 

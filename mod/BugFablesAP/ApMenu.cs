@@ -435,9 +435,9 @@ namespace BugFablesAP
                             default: return "Every item from another player is held up as it arrives.";
                         }
                     case ColorsRow:
-                        return QualityOfLife.ApColors
-                            ? "Other players and their items in Archipelago's colours."
-                            : "Other players' items named in the game's red.";
+                        return QualityOfLife.RarityColors ? "Items coloured like loot: green, blue, purple, red for traps."
+                            : QualityOfLife.ApColors ? "Items coloured as in Archipelago's own client."
+                            : "The game's own colours.";
                     case IconsRow:
                         switch (QualityOfLife.IconMode)
                         {
@@ -727,7 +727,7 @@ namespace BugFablesAP
                 Choice(SkipConfirmRow, "Skip confirm", (QualityOfLife.SkipConfirm?.Value ?? "Off").ToUpperInvariant());
                 Choice(CutscenesRow, "Skip cutscenes", OnOff(QualityOfLife.SkipCutscenes));
                 Choice(AnimationRow, "Item animation", (QualityOfLife.ItemAnimation?.Value ?? "All").ToUpperInvariant());
-                Choice(ColorsRow, "Item colors", (QualityOfLife.ItemColors?.Value ?? "Archipelago").ToUpperInvariant());
+                Choice(ColorsRow, "Item colors", (QualityOfLife.ItemColors?.Value ?? "Rarity").ToUpperInvariant());
                 Choice(IconsRow, "Archipelago icon", QualityOfLife.IconMode == "OtherGames" ? "OTHER GAMES"
                     : QualityOfLife.IconMode == "AllPlayers" ? "ALL PLAYERS" : "OFF");
                 Choice(BackgroundsRow, "Item backgrounds", OnOff(QualityOfLife.ItemBackgrounds));

@@ -109,8 +109,8 @@ namespace BugFablesAP
             }
         }
 
-        // The one place the game redraws an item entity's own sprite: put the seed's item back in the same call, so
-        // no frame shows the vanilla item (houses redraw their pickups on the way in).
+        // The one place the game redraws an item entity's own sprite: put the seed's item, its lift and its backdrop back
+        // in the same call, so no frame shows the vanilla look (houses redraw their pickups on the way in).
         private static void AfterUpdateItem(EntityControl __instance)
         {
             NPCControl npc = __instance.npcdata;
@@ -139,11 +139,9 @@ namespace BugFablesAP
                 else
                 {
                     __instance.sprite.sprite = sprite;
-                    if (__instance.spritetransform != null)
-                    {
-                        __instance.spritetransform.localPosition = new Vector2(0f, sprite.bounds.extents.y);
-                    }
                 }
+                // The lift and backdrop in the same call too, or the item shows at the game's height, then jumps.
+                Mark(__instance, MarkColorOf(entry.Key));
                 return;
             }
         }
@@ -342,6 +340,10 @@ namespace BugFablesAP
             {
                 return;
             }
+            if (color != null && entity.npcdata != null && DevClasses.TryGetValue(entity.npcdata.name, out int devClass))
+            {
+                color = Hex(ClassColors[devClass]);
+            }
             Transform mark = shown.Find(MarkName);
             // The item's own lift, as the game sets it (half its height), plus the raise while marked.
             Sprite item = entity.sprite.sprite;
@@ -388,14 +390,34 @@ namespace BugFablesAP
         {
             ScoutedItemInfo info = null;
             connection?.Scouts?.TryGetValue(at, out info);
-            return info != null && (QualityOfLife.ItemBackgrounds?.Value ?? true) ? ClassColor(info.Flags) : (Color?)null;
+            return info != null && (QualityOfLife.ItemBackgrounds?.Value ?? true) ? MarkColor(info) : (Color?)null;
         }
 
+        // The starburst colours by class: progression, useful, trap, filler. Archipelago's own, and Rarity's (the user's
+        // ladder, told apart side by side on a shelf, 2026-09-26). Dev `markcolor` changes the one in use.
+        internal static readonly int[] ArchipelagoColors = { 0xAF99EF, 0x6D8BE8, 0xFA8072, 0x00EEEE };
+        internal static readonly int[] RarityColors = { 0xB36BE8, 0x4A90E8, 0xE03C3C, 0x4CC94C };
+        internal static int[] ClassColors => QualityOfLife.RarityColors ? RarityColors : ArchipelagoColors;
+        // Item colors off: the game's own starburst colours by kind (NPCControl's pickup): an item, a key item, a medal.
+        private static readonly Color GameItem = new Color(0f, 0.7f, 0.7f), GameKey = new Color(1f, 0.3f, 0.4f), GameMedal = new Color(1f, 0.5f, 0f);
+        // Dev (console `markclass`): a marked entity, by name, drawn as a class (index in ClassColors) to compare them.
+        internal static readonly Dictionary<string, int> DevClasses = new Dictionary<string, int>();
+
         private static Color ClassColor(ItemFlags flags) =>
-            (flags & ItemFlags.Advancement) != 0 ? Hex(0xAF99EF)
-            : (flags & ItemFlags.NeverExclude) != 0 ? Hex(0x6D8BE8)
-            : (flags & ItemFlags.Trap) != 0 ? Hex(0xFA8072)
-            : Hex(0x00EEEE);
+            !QualityOfLife.ApColors ? GameItem
+            : Hex(ClassColors[(flags & ItemFlags.Advancement) != 0 ? 0 : (flags & ItemFlags.NeverExclude) != 0 ? 1
+                : (flags & ItemFlags.Trap) != 0 ? 2 : 3]);
+
+        // A location's starburst: its class colour, or with Item colors off the game's colour for a Bug Fables item's kind.
+        private static Color MarkColor(ScoutedItemInfo info)
+        {
+            if (QualityOfLife.ApColors || !IsOurs(info))
+            {
+                return ClassColor(info.Flags);
+            }
+            int kind = KindOf(info);
+            return kind == ItemIds.MedalKind ? GameMedal : kind == ItemIds.KeyItemKind ? GameKey : GameItem;
+        }
 
         // Dev (console `shelflook`): a location drawn with another sprite, to compare looks where they'll be seen.
         internal static readonly Dictionary<long, Sprite> DevLooks = new Dictionary<long, Sprite>();
@@ -548,6 +570,10 @@ namespace BugFablesAP
                 : (flags & ItemFlags.NeverExclude) != 0 ? HoldUps.Useful
                 : (flags & ItemFlags.Trap) != 0 ? HoldUps.Trap
                 : HoldUps.Filler;
+            if (QualityOfLife.RarityColors)
+            {
+                shade += HoldUps.RarityOffset;
+            }
             return $"|color,{HoldUps.ApBase + shade}|{item}";
         }
 
