@@ -878,7 +878,8 @@ it.
 **A member added mid-map meets the enemy-only walls (the user, 2026-09-26):** after adding Kabbu on Outskirts East,
 walls only enemies should bump into blocked the party. A map load tells those walls to ignore each character, and the
 added member comes with new characters (`MEASURED.md`, enemy-only walls). Adding a member now redoes that step the
-game's way (`SetPlayerColliders`, 0.2 s later), as receiving a party member will need.
+game's way (`SetPlayerColliders`, 0.2 s later), as receiving a party member will need. Seen by the user
+(2026-09-26): Vi then Kabbu added mid-map, and the party walked through where the wall had been.
 
 **Status:** works with Leif alone, seen by the user through chapter 1 into chapter 2 (2026-09-25); items 5 and 6, and Leif joining after the spider with a two-member start, not yet seen; the direct lookups in item 12 still open.
 
@@ -1224,4 +1225,4 @@ An opt-in for a faster, easier game (Next 16 and 17 in `apimplementation.md`).
 **Seen by the user (2026-09-26):** EXP at 10x: a Pseudoscorpion and a Cactus logged 5 -> 50 and 7 -> 70, and the
 battle gave 100, the game's cap of a level's worth.
 
-**Status:** EXP works, seen by the user (2026-09-26); berries re-hooked, not yet seen.
+**Status:** works, seen by the user (2026-09-26): EXP at 10x, and a berry picked up at 10x.

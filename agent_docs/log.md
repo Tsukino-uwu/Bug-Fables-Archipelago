@@ -746,3 +746,6 @@ Newest last. What was tried, what happened, what the user said.
   logged nothing on this map. Settled by a new console command, `solids`: the user stood on the wall, and it was the
   map's own `Cube (2)` with no switch on it; the game code showed `EntityOnly` walls are ignored per character at map
   load, and `addmember` makes new characters. Fixed: `addmember` redoes it; leaving the map clears it.
+- **Confirmed by the user:** the enemy-only walls fix (Vi and Kabbu added mid-map, the party walked through) and a
+  berry at 10x. On the way: `addmember`'s received members live only in memory, so a hot reload forgets them and the
+  next party change dropped Kabbu; `addmember 1` again restored him (a dev stand-in only).
