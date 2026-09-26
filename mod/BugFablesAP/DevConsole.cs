@@ -271,6 +271,7 @@ namespace BugFablesAP
                     case "spawn": return Spawn(parts);
                     case "flag": return Flag(parts);
                     case "discovery": return Discovery(parts);
+                    case "textsearch": return TextSearch(parts);
                     case "unstick": return Unstick();
                     case "take":
                     {
@@ -1270,6 +1271,31 @@ namespace BugFablesAP
                 MainManager.instance.flags[n] = parts[2].ToLowerInvariant() == "on" || parts[2] == "true" || parts[2] == "1";
             }
             return $"flags[{n}] = {MainManager.instance.flags[n]}";
+        }
+
+        // Every text file the game loads from Resources/Data, searched for a word (case-insensitive); matches go to the log.
+        private static string TextSearch(string[] parts)
+        {
+            if (parts.Length < 2)
+            {
+                return "textsearch <word>";
+            }
+            string word = string.Join(" ", parts.Skip(1).ToArray());
+            int found = 0;
+            foreach (TextAsset asset in Resources.LoadAll<TextAsset>("Data"))
+            {
+                string[] lines = asset.text.Split('\n');
+                for (int i = 0; i < lines.Length && found < 200; i++)
+                {
+                    if (lines[i].IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        found++;
+                        string line = lines[i].Length > 300 ? lines[i].Substring(0, 300) + "..." : lines[i];
+                        log.LogInfo($"[dev] textsearch '{word}': {asset.name}:{i}: {line.Trim()}");
+                    }
+                }
+            }
+            return $"textsearch '{word}': {found} lines logged" + (found >= 200 ? " (stopped at 200)" : "");
         }
 
         // Written straight, with no pop-up: for replaying a scene that records one.

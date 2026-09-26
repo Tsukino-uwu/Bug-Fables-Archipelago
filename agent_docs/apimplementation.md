@@ -1728,6 +1728,9 @@ before it sets `action`; the game clears `actionroutine` only at a tap's end, so
 can see in your inventory that you have jump". Four key items of the mod's own after the Boat Ticket (201 Beemerang,
 202 Horn, 203 Ice with the member's party icon; 204 Jump with the Archipelago icon; `CustomItems.cs`). Receiving a move
 puts its key item in the bag, and the gate reads the bag, so the inventory shows exactly what works.
+**The game's own names (the user, 2026-09-27: "we shouldn't make up names if there is something vanilla"):** the
+game's `Skills` text names the three **Beemerang Toss**, **Horn Slash** and **Freeze** (`MEASURED.md`); items, rules
+and key items use them. Jump has no entry there, so it stays "Jump".
 
 **Seen (the user):** the attacks now refused. **Holding the attack button buzzed nonstop** (B only; the jump fires
 once per press): the game retries a held attack every few frames (`DoActionHold`), so the buzzer now plays only when a

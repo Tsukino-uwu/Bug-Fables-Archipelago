@@ -176,8 +176,9 @@ class StartingPartyMember(Choice):
 
 class ShuffleFieldMoves(Toggle):
     """
-    Vi's Beemerang, Kabbu's Horn and Leif's Ice are items: until a member's move arrives, his field attack does nothing
-    but a short "can't" sound. A move works only with its member in the party too.
+    The three field attacks are items, under the game's own names: Vi's Beemerang Toss, Kabbu's Horn Slash and Leif's
+    Freeze. Until one arrives, that attack does nothing but a short "can't" sound, and each shows in the key items once
+    it does. A move works only with its member in the party too.
 
     The logic is cautious for now: everything past the Outskirts gate needs all three moves, and a few spots before it
     need the one they were seen to need. Off by default.

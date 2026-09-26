@@ -53,7 +53,12 @@ namespace BugFablesAP
 
         private static void AddMoves()
         {
-            if (MainManager.itemdata[0, MoveKeyItem(FieldMoves.Jump), 0] == FieldMoves.Name(FieldMoves.Jump) || MainManager.instance?.charcolor == null)
+            bool current = true;
+            for (int move = 0; move <= FieldMoves.Jump; move++)
+            {
+                current &= MainManager.itemdata[0, MoveKeyItem(move), 0] == FieldMoves.Name(move);
+            }
+            if (current || MainManager.instance?.charcolor == null)
             {
                 return;
             }

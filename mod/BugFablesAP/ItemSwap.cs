@@ -509,7 +509,7 @@ namespace BugFablesAP
         }
 
         internal static string MoveDescription(int id) =>
-            id == FieldMoves.Jump ? "The whole party can jump." : PartyMembers.Name(id) + " can use the " + FieldMoves.Name(id) + ".";
+            id == FieldMoves.Jump ? "The whole party can jump." : PartyMembers.Name(id) + " can use " + FieldMoves.Name(id) + ".";
 
         private static readonly Sprite[] memberSprites = new Sprite[3];
 

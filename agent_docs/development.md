@@ -122,6 +122,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   location's map, it is that location. `spawn member <n> [x z]` drops party member n's look (0 Vi, 1 Kabbu, 2 Leif)
   at that offset from you, to see how a location holding him looks; it's a Crunchy Leaf underneath, given if taken.
 - `flag <n> [on|off]`: show or set a story flag.
+- `textsearch <word>`: every text file the game loads from `Resources/Data`, searched case-insensitively; up to 200
+  matching lines go to the log with their file and line number (the game's own names for things, 2026-09-27).
 - `discovery <n> [on|off]`: show or set a journal discovery (no pop-up), to replay a scene that records one.
 - `heal`: the game's own full heal (HP and TP, the whole party). Test files only.
 - `killall`: in a battle, every enemy's HP to 0; the battle's own death check ends them after the next action (a boss

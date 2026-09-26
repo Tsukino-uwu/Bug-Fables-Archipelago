@@ -20,7 +20,7 @@ namespace BugFablesAP
         internal static volatile bool MovesShuffled;
         internal static volatile bool JumpShuffled;
 
-        internal static string Name(int id) => id == 0 ? "Beemerang" : id == 1 ? "Horn" : id == 2 ? "Ice" : id == Jump ? "Jump" : "move " + id;
+        internal static string Name(int id) => id == 0 ? "Beemerang Toss" : id == 1 ? "Horn Slash" : id == 2 ? "Freeze" : id == Jump ? "Jump" : "move " + id;
 
         internal static bool Locked(int id)
         {

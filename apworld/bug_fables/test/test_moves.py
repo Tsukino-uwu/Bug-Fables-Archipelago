@@ -1,6 +1,6 @@
 from . import BugFablesTestBase
 
-MOVES = ["Beemerang", "Horn", "Ice"]
+MOVES = ["Beemerang Toss", "Horn Slash", "Freeze"]
 PAST_THE_GATE = "Outskirts: Near Snakemouth Den, Reward"
 
 
@@ -42,13 +42,13 @@ class TestFieldMoves(BugFablesTestBase):
     def test_a_horn_spot_needs_the_horn(self) -> None:
         spot = "Outskirts: East Road, Stone"
         self.assertFalse(self.can_reach_location(spot))
-        self.collect_by_name("Horn")
+        self.collect_by_name("Horn Slash")
         self.assertTrue(self.can_reach_location(spot))
 
     def test_an_ice_spot_needs_the_ice(self) -> None:
         spot = "Bugaria City: Residential District, Fountain Rooftop"
         self.assertFalse(self.can_reach_location(spot))
-        self.collect_by_name("Ice")
+        self.collect_by_name("Freeze")
         self.assertTrue(self.can_reach_location(spot))
 
 
@@ -58,7 +58,7 @@ class TestFieldMovesStoryParty(BugFablesTestBase):
 
     def test_ice_spot_needs_leif_and_the_ice(self) -> None:
         spot = "Bugaria City: Residential District, Fountain Rooftop"
-        self.collect_by_name("Ice")
+        self.collect_by_name("Freeze")
         self.assertFalse(self.can_reach_location(spot))
         self.collect_by_name("Explorer Permit")
         self.collect_by_name(MOVES)

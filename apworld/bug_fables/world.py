@@ -137,7 +137,7 @@ class BugFablesWorld(World):
 
     # Rules name the field move, not who has it: an attack needs its member (when members are items; with the story's
     # party, only Leif, who joins late), and its own item when moves are shuffled. Jump is the whole party's.
-    _ability_holders = {"Horn": "Kabbu", "Beemerang": "Vi", "Ice": "Leif", "Jump": None}
+    _ability_holders = {"Horn Slash": "Kabbu", "Beemerang Toss": "Vi", "Freeze": "Leif", "Jump": None}
 
     def _moves_shuffled(self) -> bool:
         return bool(self.options.shuffle_field_moves.value)

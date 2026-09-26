@@ -117,7 +117,7 @@ class TestAbilities(BugFablesTestBase):
         self.assertLessEqual(named, set(self.world._ability_holders))
 
     def test_each_attack_needs_its_member(self) -> None:
-        for ability, member in (("Horn", "Kabbu"), ("Beemerang", "Vi"), ("Ice", "Leif")):
+        for ability, member in (("Horn Slash", "Kabbu"), ("Beemerang Toss", "Vi"), ("Freeze", "Leif")):
             with self.subTest(ability=ability):
                 self.assertEqual(self.world._requires({"abilities": [ability]}), [member])
 
@@ -126,7 +126,7 @@ class TestAbilities(BugFablesTestBase):
 
     def test_story_party_needs_nothing_for_a_move(self) -> None:
         self.world.starting_member = -1
-        self.assertEqual(self.world._requires({"abilities": ["Horn"], "requires": ["Explorer Permit"]}), ["Explorer Permit"])
+        self.assertEqual(self.world._requires({"abilities": ["Horn Slash"], "requires": ["Explorer Permit"]}), ["Explorer Permit"])
 
     def test_the_den_needs_the_horn(self) -> None:
         # Grass on the way in and the door room's puzzle down the trapdoor (the user, 2026-09-26).
