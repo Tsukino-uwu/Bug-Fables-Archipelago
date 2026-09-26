@@ -858,3 +858,21 @@ Newest last. What was tried, what happened, what the user said.
   start, from the Vi and Leif test), `AdoptSeed = false`, `OneHit` and `InfJump` on (the user: always on in dev). The
   test server was stopped; the game left running for the user. MeshGhost got two small commits of its own (the
   Crystal ROM check), logged in its phase file.
+- **2026-09-26, later (a new chat, continuing).** *Starting Party Member* built (apimplementation build step 18): the
+  option, Vi / Kabbu / Leif as items (kind 5), the two joining moments as locations, cautious logic (all three past the
+  Outskirts gate, Kabbu for the two horn spots). Seen: a Kabbu start (Leif from Artis, Vi from the Fountain Rooftop) and
+  a Vi start with a real second slot (Kabbu and Leif sent as that player by `dev-scripts/send-as-player.py`). The intro
+  is now always skipped with Archipelago on; *Skip cutscenes* is for later scenes (the user's call).
+  **Item looks, a long run of on-screen picks:** members' icons item-sized with no leaf description or article; the
+  "You got / You found" lines name other players with colours (the game's palette is 10 in its scene, not the code's 7,
+  found when the first colours came out gray and green); the Archipelago icon drawn in code (eight looks; black
+  outline); rows *Item colors* (Rarity / Archipelago / Off, Rarity the default after Archipelago's plum, slate blue and
+  cyan blurred together on a shelf), *Archipelago icon* (Other games / All players / Off) and *Item backgrounds* (a
+  class-coloured starburst behind every check's item, the item raised with it, clear of the terrain it clipped into).
+  **Mistakes of mine the user caught:** long waits for hot reloads that had already happened (a wait loop counting after
+  the reload, so it ran to its timeout every time: now check once and go; saved in agent memory); a `letters` readout
+  that logged the font preloader's glyph string and broke BepInEx's console writer, freezing the game until a restart
+  (development.md, `letters`). A settings page with arrows but no text, late in a day of about forty hot reloads, was
+  cured by the same restart; cause not found. **Open:** past the gate with three members (the trapdoor scene broke with
+  three before); the Rarity text colours and Off not yet seen; All players and Off for the icon not yet seen; the game
+  is running on the three-slot test seed, server up.

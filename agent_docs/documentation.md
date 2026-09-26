@@ -1350,8 +1350,13 @@ colors.
 - **Shops name it too (the user, 2026-09-26):** a shop's box shows another player's item as "<player>'s <item>" in the
   Item colors (step 20), and its description says the class: "A useful item for Other (APQuest)."
 
-**Status:** built (2026-09-26), not yet seen: a three-slot test seed (you, a second Bug Fables player, APQuest) has one
-of each on the ground in the Outskirts, on the Caravan's shelf, and at Artis's gift.
+**Seen (the user, 2026-09-26):** the icon on the ground (the Ladybugs' Sword) and on the Caravan's shelf beside another Bug
+Fables player's and your own items; the page with ten rows, every row and both help lines fitting (after a fresh
+launch: late in a day of about forty hot reloads the settings pages showed their arrows but no text, and a restart
+brought it back; no error was logged, and the letter pool had 487 of 500 free).
+
+**Status:** works, seen by the user (2026-09-26): Other games on the ground and on a shelf; All players and Off not yet
+seen.
 
 *Code: `QualityOfLife.cs` (`ItemIcons`, `IconMode`), `ApMenu.cs` (`IconsRow`, `RowAt`), `ItemSwap.cs` (`Describe`), `ApIcon.cs`.*
 
