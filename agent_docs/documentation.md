@@ -317,7 +317,7 @@ above it with the game's button hints, the game's leaf cursor, labels on the lef
 arrows around the On/Off value.
 
 **The help line follows the value (the user, 2026-09-26):** on a row whose values mean different things (Difficulty,
-Item animation, Shop prices, Enemy scaling), the line under the rows describes the value now chosen, and changes as
+Item animation, Medal prices, Enemy scaling), the line under the rows describes the value now chosen, and changes as
 left/right steps through them; every step redraws the screen. On/off rows keep one line.
 
 **Three pages (the user, 2026-09-26; built, not yet seen):** the main page keeps the connection and the Archipelago
@@ -1185,7 +1185,7 @@ deliberate exception to "vanilla stays vanilla" that only the user could make.
   apply only with Archipelago on." (off). A label longer than 15 letters now shrinks to fit before the arrows, as a
   long value already did.
 - **What it turns on, with Archipelago off:** the Settings rows to both pages (step 8), Fast text, the scenes Skip
-  cutscenes skips or speeds by, Travel (Warp to Start goes to the game's own start), Shop prices, Difficulty,
+  cutscenes skips or speeds by, Travel (Warp to Start goes to the game's own start), Medal prices, Difficulty,
   Detector and Enemy scaling.
 - **What it never turns on:** anything tied to a seed. The intro skip (its end sends the first check and makes the
   seed's start), items, checks, the shuffles, the Detector's check beeps, boss prizes paid on any difficulty (they are
