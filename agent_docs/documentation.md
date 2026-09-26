@@ -323,7 +323,10 @@ left/right steps through them; every step redraws the screen. On/off rows keep o
 on/off, plus two links, *Quality of life* and *Gameplay*. Gameplay holds how the game plays: Difficulty, Enemy scaling
 (moved from Quality of life; its config key stays under `[QualityOfLife]`, so a saved choice carries over) and
 Detector. Quality of life keeps the speed-ups, with Disable all / Reset to defaults on top (step 10). Cancel backs out
-of a Yes / No first, then out of a page. `ApMenu` tracks the page as an enum. **The two links left the main page (the
+of a Yes / No first, then out of a page. `ApMenu` tracks the page as an enum. **Rows moved (the user, 2026-09-26):**
+Shop prices to Gameplay, Detector to Quality of life, so Gameplay is Difficulty, Enemy scaling, Shop prices and Quality
+of life is Fast text, Travel, Skip cutscenes, Item animation, Detector; each config key stays where it was, so a saved
+choice carries over, and each page's two buttons cover its own rows. **The two links left the main page (the
 user, 2026-09-26: "so AP looks clean"):** the pages are reached only from Settings (below), and *Use on normal saves*
 (step 18) took their place under Achievements.
 

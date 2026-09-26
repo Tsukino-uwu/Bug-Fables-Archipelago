@@ -63,10 +63,10 @@ namespace BugFablesAP
         private const float IntroSpeed = 8f;
 
         // The panel's two buttons: every Quality of life row off (a choice to its "nothing extra" value), or back to
-        // each setting's own default. Enemy scaling lives on the Gameplay page and isn't touched.
+        // each setting's own default. Enemy scaling and Shop prices live on the Gameplay page and aren't touched.
         internal static void DisableAll()
         {
-            foreach (ConfigEntry<bool> setting in new[] { FastText, SkipCutscenes })
+            foreach (ConfigEntry<bool> setting in new[] { FastText, SkipCutscenes, ApMenu.Detector })
             {
                 if (setting != null)
                 {
@@ -77,10 +77,6 @@ namespace BugFablesAP
             {
                 ItemAnimation.Value = "Off";
             }
-            if (ShopPrices != null)
-            {
-                ShopPrices.Value = "Normal";
-            }
             if (Travel != null)
             {
                 Travel.Value = "Off";
@@ -89,7 +85,7 @@ namespace BugFablesAP
 
         internal static void ResetAll()
         {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, Travel, SkipCutscenes, ItemAnimation, ShopPrices })
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, Travel, SkipCutscenes, ItemAnimation, ApMenu.Detector })
             {
                 if (setting != null)
                 {

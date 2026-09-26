@@ -13,10 +13,9 @@ namespace BugFablesAP
         private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, AchievementsRow = 5, NormalSavesRow = 6,
             Rows = 7;
         // The Quality of life page: the two buttons side by side on top, then the settings.
-        private const int ButtonsRow = 0, FastTextRow = 1, WarpRow = 2, CutscenesRow = 3, AnimationRow = 4, PricesRow = 5,
-            QolRows = 6;
+        private const int ButtonsRow = 0, FastTextRow = 1, WarpRow = 2, CutscenesRow = 3, AnimationRow = 4, DetectorRow = 5, QolRows = 6;
         // The Gameplay page: how the game plays, under the same two buttons.
-        private const int DifficultyRow = 1, ScalingRow = 2, DetectorRow = 3, GameplayRows = 4;
+        private const int DifficultyRow = 1, ScalingRow = 2, PricesRow = 3, GameplayRows = 4;
         private enum Page { Main, Qol, Gameplay }
         private Page page;
         // On the buttons row: 0 Reset to defaults (where the cursor lands), 1 Disable all; confirming shows Yes / No there (0 Yes, 1 No).
@@ -420,13 +419,7 @@ namespace BugFablesAP
                             case "Off": return "Items from others arrive without being held up.";
                             default: return "Every item from another player is held up as it arrives.";
                         }
-                    case PricesRow:
-                        switch (QualityOfLife.ShopPrices?.Value)
-                        {
-                            case "Half": return "Medal shops charge half their price.";
-                            case "Free": return "Medal shops charge nothing.";
-                            default: return "Medal shops charge their normal price.";
-                        }
+                    case DetectorRow: return "Acts like the Detector medal is always equipped, to find hidden items.";
                     default: return "";
                 }
             }
@@ -450,7 +443,13 @@ namespace BugFablesAP
                             case "Artifacts": return "Enemies grow with artifacts found; levelling ahead makes it easier.";
                             default: return "Enemies match your level, so every area plays fair in any order.";
                         }
-                    case DetectorRow: return "Acts like the Detector medal is always equipped, to find hidden items.";
+                    case PricesRow:
+                        switch (QualityOfLife.ShopPrices?.Value)
+                        {
+                            case "Half": return "Medal shops charge half their price.";
+                            case "Free": return "Medal shops charge nothing.";
+                            default: return "Medal shops charge their normal price.";
+                        }
                     default: return "";
                 }
             }
@@ -494,11 +493,7 @@ namespace BugFablesAP
             ChangeSound();
             if (page == Page.Qol)
             {
-                if (r == PricesRow && QualityOfLife.ShopPrices != null)
-                {
-                    Cycle(QualityOfLife.ShopPrices, QualityOfLife.ShopPriceValues, by);
-                }
-                else if (r == AnimationRow && QualityOfLife.ItemAnimation != null)
+                if (r == AnimationRow && QualityOfLife.ItemAnimation != null)
                 {
                     Cycle(QualityOfLife.ItemAnimation, QualityOfLife.ItemAnimations, by);
                 }
@@ -526,10 +521,9 @@ namespace BugFablesAP
                 {
                     Cycle(QualityOfLife.EnemyScaling, EnemyScaling.Modes, by);
                 }
-                else if (r == DetectorRow && Detector != null)
+                else if (r == PricesRow && QualityOfLife.ShopPrices != null)
                 {
-                    Detector.Value = !Detector.Value;
-                    log.LogInfo("[apmenu] Detector: " + (Detector.Value ? "On" : "Off"));
+                    Cycle(QualityOfLife.ShopPrices, QualityOfLife.ShopPriceValues, by);
                 }
             }
             else if (r == ModeRow)
@@ -551,6 +545,7 @@ namespace BugFablesAP
         private static ConfigEntry<bool> QolSetting(int r) =>
             r == FastTextRow ? QualityOfLife.FastText
             : r == CutscenesRow ? QualityOfLife.SkipCutscenes
+            : r == DetectorRow ? Detector
             : null;
 
         private static string OnOff(ConfigEntry<bool> setting) => setting != null && setting.Value ? "ON" : "OFF";
@@ -674,7 +669,7 @@ namespace BugFablesAP
                 Choice(WarpRow, "Travel", (QualityOfLife.Travel?.Value ?? "Both").ToUpperInvariant());
                 Choice(CutscenesRow, "Skip cutscenes", OnOff(QualityOfLife.SkipCutscenes));
                 Choice(AnimationRow, "Item animation", (QualityOfLife.ItemAnimation?.Value ?? "All").ToUpperInvariant());
-                Choice(PricesRow, "Shop prices", (QualityOfLife.ShopPrices?.Value ?? "Normal").ToUpperInvariant());
+                Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Quality of life. Cancel goes back" + (inGame ? " to Settings." : "."), 0f, StatusY);
                 PlaceCursor();
@@ -685,7 +680,7 @@ namespace BugFablesAP
                 DrawButtons();
                 Choice(DifficultyRow, "Difficulty", (Difficulty?.Value ?? "Normal").ToUpperInvariant());
                 Choice(ScalingRow, "Enemy scaling", ScalingLabel(QualityOfLife.EnemyScaling?.Value ?? "PartyLevel"));
-                Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
+                Choice(PricesRow, "Shop prices", (QualityOfLife.ShopPrices?.Value ?? "Normal").ToUpperInvariant());
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Gameplay. Cancel goes back" + (inGame ? " to Settings." : "."), 0f, StatusY);
                 PlaceCursor();
@@ -713,8 +708,8 @@ namespace BugFablesAP
             arrows.parent = box;
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
-            foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, CutscenesRow, AnimationRow, PricesRow }
-                : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, DetectorRow } : new[] { ModeRow, AchievementsRow, NormalSavesRow })
+            foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, CutscenesRow, AnimationRow, DetectorRow }
+                : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, PricesRow } : new[] { ModeRow, AchievementsRow, NormalSavesRow })
             {
                 for (int side = 0; side < 2; side++)
                 {
@@ -755,7 +750,7 @@ namespace BugFablesAP
         // The Gameplay page's two buttons: every row to its plain value, or back to its default.
         private static void GameplayAll(bool reset)
         {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { Difficulty, QualityOfLife.EnemyScaling, Detector })
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { Difficulty, QualityOfLife.EnemyScaling, QualityOfLife.ShopPrices })
             {
                 if (setting != null && reset)
                 {
@@ -774,9 +769,9 @@ namespace BugFablesAP
             {
                 QualityOfLife.EnemyScaling.Value = "Off";
             }
-            if (Detector != null)
+            if (QualityOfLife.ShopPrices != null)
             {
-                Detector.Value = false;
+                QualityOfLife.ShopPrices.Value = "Normal";
             }
         }
 
