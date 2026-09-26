@@ -26,7 +26,7 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
 - **The root `README.md` never goes stale either.** Its "Status" line and "How it works" must agree with the
   steps' Status lines and with the code. A commit that changes either one updates the README in the
   same commit. Check all three against each other when a session starts, and fact-check the README against
-  the code, never against an older doc.
+  the code, never against an older doc. It stays short; player docs (setup, options, panel) live in `apworld/bug_fables/docs/`, same rule.
 - **Items are remote only.** A pickup grants nothing locally; it sends its check. Every item, the player's
   own included, arrives from the server. No local-items mode (decided 2026-09-24). One named exception: a
   respawning pickup whose check is done is the game's own again (`apimplementation.md`, build step 10).

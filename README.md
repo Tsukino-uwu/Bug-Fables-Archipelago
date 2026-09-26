@@ -3,99 +3,24 @@
 An [Archipelago](https://archipelago.gg) randomizer for *Bug Fables: The Everlasting Sapling*: a BepInEx mod for
 the game plus an apworld for the Archipelago generator.
 
-**Status: early work in progress, released as pre-releases.** The mod doesn't report the goal yet, so a seed can't
-be marked finished from the game. A small apworld generates seeds, and the mod logs in to an Archipelago server
-from inside the game, sends checks and receives items. The world is opening up one gate at a time (open world is
-the default: the Outskirts rocks are gone from the start). Next: every item spot in the game in the pool (unchecked
-ones as filler-only placeholders) and field abilities shuffled as items. An experimental entrance randomizer (coupled,
-off by default) is in the apworld; its first shuffled doors work both ways in game. An enemy shuffle (off by default) swaps
-which ordinary enemies you fight on each map; its first swapped fight was seen in game. A random start (experimental,
-off by default) can begin a new file in any room in the game, as if walking in through one of its doors. Enemy scaling (a Gameplay
-setting, on by default) scales enemies to your level so every area plays fair in any order; its first scaled fight was
-seen in game. Starting with a single party
-member is being rehearsed (a dev setting for now).
+**Status: early work in progress, released as pre-releases.** It covers the start of the game (59 locations by
+default). The mod doesn't report the goal yet, so a seed can't be marked finished from the game.
+
+## Playing
+
+- **[Setup guide](apworld/bug_fables/docs/setup_en.md)**: install, your options, connecting and the in-game settings.
+- **[Game page](apworld/bug_fables/docs/en_Bug%20Fables.md)**: what's randomized, the options and the goal.
+- **[Downloads](https://github.com/Tsukino-uwu/Bug-Fables-Archipelago/releases)**: the mod, the apworld and a yaml.
+
+You need your own copy of the game. Nothing from the game is included in this repo.
 
 ## How it works
 
 - **The apworld** (`apworld/bug_fables/`) tells the generator which items and locations exist and which key
-  items gate which areas. Today it covers 59 locations (the Outskirts with the caravan, Snakemouth Den, the open parts of the town, Merab's medal
-  shop with her full stock of 22 from the start, and Madame Butterfly's item shop), 64 with the opt-in *Shuffle Discoveries*. Each
-  yaml toggle that adds checks says how many in its description.
+  items gate which areas.
 - **The mod** (`mod/`) runs inside the game. Finishing a location sends a check to the server, and every
   item, including your own, arrives from the server and is given to you through the game's own item
   system. Because items are remote only, a new save can recover everything the server has sent.
-
-You need your own copy of the game. Nothing from the game is included in this repo.
-
-## Requirements
-
-- *Bug Fables: The Everlasting Sapling* on PC
-- [BepInEx 5.4](https://github.com/BepInEx/BepInEx/releases) (the `win_x64` download)
-- An Archipelago room (Archipelago 0.6.7)
-
-## Install
-
-1. Extract BepInEx into your Bug Fables folder, so `winhttp.dll` sits next to `Bug Fables.exe`. Start the game
-   once, then close it.
-2. From the [latest release](https://github.com/Tsukino-uwu/Bug-Fables-Archipelago/releases), extract
-   `bugfables-archipelago.zip` into your Bug Fables folder.
-3. Put `bug_fables.apworld` in your Archipelago's `custom_worlds` folder, and make your player options from
-   `bug_fables.yaml`.
-4. Start the game and connect (below).
-
-## Connecting
-
-On the game's main menu, choose **Archipelago**. The panel has:
-
-- **Address**: `archipelago.gg` by default, which is right for rooms hosted there. A server on your own
-  computer needs `ws://` in front: `ws://127.0.0.1`.
-- **Port**: the room's port, e.g. `38281`; usually the only thing to change. Pasting a whole
-  `archipelago.gg:38281` into Address fills in the port too.
-- **Slot**: your slot name in the room.
-- **Password**: only if the room has one; leave it empty otherwise.
-- **Archipelago**: Enabled keeps randomizer saves in their own folder, apart from your normal saves.
-  The main menu shows it as "Archipelago (Enabled)" or "(Disabled)".
-- **Achievements**: Off (the default) holds Steam achievements back while the Archipelago mod is enabled, as
-  normal saves are kept apart. It only concerns Steam, never Archipelago.
-- **Use on normal saves**: Off (the default) keeps normal saves vanilla. On, the Quality of life and Gameplay settings
-  also apply with the Archipelago mod disabled. Nothing tied to a seed does.
-- Under the rows, a line explaining the highlighted one, and a line showing the connection's state. Cancel
-  (X, or B on a gamepad) backs out of the panel.
-
-**While the Archipelago mod is enabled and the address, port and slot are filled in, the mod connects on its
-own**: when the game starts, when you enable it, and after you change a detail. If the room refuses (a wrong
-slot or password), the reason is shown until you change it. If the server can't be reached, or the
-connection drops mid-game, it keeps retrying on its own, waiting a bit longer each time. Disabling it
-disconnects.
-
-**A randomizer save needs one connection each time the game starts.** Until the mod has logged in once, it
-doesn't know the seed, so choosing a file (or a new game) on the file select plays a buzzer and says to connect
-first. After that, a dropped connection doesn't stop play: pickups still hold the seed's items, and their
-checks are sent when the connection comes back.
-
-**Quality of life and Gameplay** are two more pages, at the top of the game's own **Settings** (from the pause
-menu, and from the main menu), shown while the Archipelago mod is enabled or *Use on normal saves* is on. Each has
-**Reset to defaults** and **Disable all** on top, each asking Yes / No first.
-
-- **Quality of life**: **Fast text** (dialogue is instant, and holding skip races through it; On), **Travel** (Off,
-  Warp, Map or Both, the default: the Warp is a pause-menu button back to where the game began, or to the seed's
-  start; Map is fast travel from the pause menu's map to areas you've visited; both ask Yes / No), **Skip cutscenes**
-  (On: the new game's intro, tutorial battle included, is skipped, Vi joining and the first check sent; other scenes
-  you don't need to watch are skipped or pass by fast; with a random start the intro is always skipped), **Item
-  animation** (which items from other players are shown held up: All, the default, Progression or Off; your own finds
-  always are) and **Detector** (On, the default, acts as if the Detector medal were equipped. With the Archipelago mod
-  enabled, the Detector (row or medal) also beeps on entering a room that still has a check of any kind, and stays
-  quiet in a room with none left).
-- **Gameplay**: **Difficulty** (Normal, the default, leaves it to the game; Hard plays as if the Hard Mode medal were
-  equipped, Hardest as if the save had the HARDEST code, without writing it into the save; boss prize medals are
-  handed out on every setting), **Enemy scaling** (Party level, the default, scales every enemy to your level;
-  Artifacts to the artifacts found; Off keeps each enemy's own stats; Difficulty applies on top), **Medal prices**
-  (medals in any shop, a bar in tenths of the price: full, the default, is normal, half is half price, empty is free), and **EXP multiplier** and **Berry multiplier** (1x, the default,
-  to 10x, a bar like the volume rows; EXP from every defeated enemy, berries picked up in the world; a battle still
-  gives at most a level's worth, and a check's berries are never multiplied).
-
-Select a row and press confirm to type into it: Backspace deletes, **Ctrl+V pastes**, Ctrl+C copies, Enter
-keeps it, Escape undoes. The same settings are saved in `BepInEx/config/bugfables.archipelago.cfg`.
 
 ## Building from source
 
