@@ -257,7 +257,8 @@ namespace BugFablesAP
         internal static Func<bool> SeedKnown;
         private static KeyValuePair<string, int>? Seeded => SeedStart?.Invoke();
         // A seed's start needs the intro skipped (it ends with the transfer there), whatever Skip cutscenes says.
-        private static bool SkipIntro => SkipCutscenes.Value || Seeded.HasValue;
+        // A starting party member too: the opening's tutorial battle was written for two, and never played with one.
+        private static bool SkipIntro => SkipCutscenes.Value || Seeded.HasValue || PartyMembers.SeedStartMember >= 0;
         // With Archipelago on, or off with Use on normal saves: fast text and the scene list, never the intro.
         internal static Func<bool> SettingsOn;
         private static bool startPending;
