@@ -156,7 +156,14 @@ be wrong.
    server like any item and sits in the key items as a real id, saved like one; randomizer saves are separate files
    vanilla never opens. The sailor's dialogue (refusing, then free) goes through the fare lines the mod already
    rewrites (lines 16 and 19); **the user reviews every changed dialogue line** before it goes in, the old and new text
-   side by side, so nothing reads off or machine-written. **Built so far (2026-09-26):** the item itself, `CustomItems.cs`: id 200 (the game's
+   side by side, so nothing reads off or machine-written. **Approved (the user, 2026-09-26), the pier sailor on `BugariaPier`:** line 3
+   keeps its first box ("Hm. You look disappointingly poor. But I'll ask out of decency..."); its second becomes
+   "Would you fancy traveling to Metal Island? Show me your ticket." ("you three" became "you"); line 18 (the card
+   Masters' discount) says the same as line 3; the choice (line 15) is "Let's go!" / "I lost my ticket!" without the
+   ticket and "Let's go!" / "Not yet!" with it, in the style of "That's too expensive!", with no berry counter; the fare
+   checks (lines 16 and 19) check the ticket instead: with it, line 21 "...Ticket's in order. Hop on! Our destination:
+   Metal Island!"; without, line 20 "What?! No ticket, no trip! Get out of here!". Line 17 ("Psh. Don't waste my time
+   then."), the arrival, the Metal Island sailor and the later story lines stay as they are. **Built so far (2026-09-26):** the item itself, `CustomItems.cs`: id 200 (the game's
    items end at 186, both tables hold 256), the Platinum Card's fields and sprite copied, its own name and description
    set, re-applied if the game reloads its table, only with Archipelago on; `spawn key 200` gives one (dev). **Seen by
    the user (2026-09-26):** "You found a Boat Ticket!" with the card's icon and its line. Still to
