@@ -1563,8 +1563,12 @@ who joined on the spot; the Fountain Rooftop held Vi, who joined too (party 1, 2
 Vi / Kabbu / Leif from TestPlayer!", item-sized in the starburst, each in his colour, no description. A member lying on
 the ground at the new size, seen too (dev `spawn member`, a screenshot of Vi on the grass).
 
-**Status:** works before the Outskirts gate, seen by the user with a Kabbu start (2026-09-26); past the gate (the
-trapdoor and spider scenes with three) not yet played.
+**Seen by the user (2026-09-26), a Vi start with a second player:** Vi alone after the opening; Kabbu and Leif both
+arrived from the other player's chests and joined (party 0, 1, 2).
+
+**Status:** works before the Outskirts gate, seen by the user with a Kabbu start and a Vi start, members arriving from
+this world and from another player (2026-09-26); past the gate (the trapdoor and spider scenes with three) not yet
+played.
 
 ## Build step 19: Archipelago's colours for players and items
 
@@ -1593,9 +1597,12 @@ scouted item's), so the colour needs no table of our own.
    after the game's own; that and the lines' wording are game-side, written up there.
 
 **Seen by the user (2026-09-26):** "You got Kabbu from TestPlayer!" in dark plum and dark yellow (a dev hold-up), and
-every colour on screen while picking them. Another player's real items, found and received: next, with a second slot.
+every colour on screen while picking them. **Then with a real second slot** (an APQuest slot "Other", items placed by
+plando both ways; `development.md`, "A second player"): found here, "You found Other's Key!" (a gift, progression),
+"...Health Upgrade!" (a pickup, useful), "...Confetti Cannon!" (filler) and "...Math Trap!" (trap), each in its
+colour; received, "You got Kabbu from Other!" and "You got Leif from Other!" when Other's chests were checked.
 
-**Status:** built; the colours seen on dev hold-ups, a real second player's items not yet.
+**Status:** works, seen by the user with a real second player (2026-09-26), every class and both directions.
 
 # How it works
 

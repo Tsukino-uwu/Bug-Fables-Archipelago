@@ -469,15 +469,16 @@ Sword and the box read "You got the QuestTester's Sword!", which the user took f
 game's menu text 106, read in the running game (dev `articles`): `You got |string,1| |color,1||string,0||color,0|!`,
 the article (`flagstring[1]`) then the name (`flagstring[0]`), both of which the mod already swaps. For that one box the
 mod changes line 106 and puts it back the next frame: **"You found QuestTester's Sword!"** (the user's wording), the
-article and its space gone. A party member, who has no article, loses just the article: "You got Vi!". Not yet seen:
-this needs a room with a second player.
+article and its space gone. A party member, who has no article, loses just the article: "You got Vi!". Seen with a
+second player (2026-09-26): "You found Other's Key!".
 **Pickups have their own line** (seen by the user, 2026-09-26: a picked-up item read "You found a ..."): menu text 2,
 `You found |string,1| |color,1||string,0||color,1|!`, built into the text the mod already rewrites for a pickup
 location. It kept the vanilla item's article (a Bad Book spot holding the Explorer Permit would say "a Explorer
 Permit"). Now the same rules as the gift line: the seed item's own article, none for a party member ("You found Vi!"),
 and "You found Player's Sword!" for another player's item, article gone, in the Item colors. **Seen by the user
 (2026-09-26):** "You found an Ambusher Medal!" (the medal's own article, at the Residential rooftop) and "You found
-Vi!" at the Fountain Rooftop, Vi's icon in a yellow starburst, no description; another player's item still to see.
+Vi!" at the Fountain Rooftop, Vi's icon in a yellow starburst, no description; then another player's items, a gift
+and three pickups, "You found Other's Key!" and the rest, in their colours (the Archipelago guide, build step 19).
 
 **Archipelago's colours in the line (the user, 2026-09-26, three rounds on screen).** The game colours text only from
 its own palette (`|color,n|`), which in its scene is 10 colours, not the 7 in the code (dev `palette`; a first try that

@@ -87,6 +87,21 @@ came back `false` after a panel change). So change a setting and reload in one g
    The mod connects by itself. Read both logs: the mod's in `BepInEx/LogOutput.log` (`[ap]`, `[ws]`,
    `[check]` lines) and the server's console.
 
+## A second player
+
+Some things only show with another player in the room: their items found here, and items they send you. The slot
+needs no one playing it (2026-09-26, the user saw both directions this way):
+
+1. Two player files: yours, and one for another game in your Archipelago checkout (APQuest is small), e.g. `name:
+   Other`. Place items with plando both ways: under Other's game, `plando_items` with `world: BugTester` puts Other's
+   items on your locations (one per class shows every colour); under yours, `world: Other` puts your items in Other's
+   locations. Generate with `--plando "bosses, items, connections, texts"` and check the spoiler.
+2. Host it as usual.
+3. To have Other find your items, from the checkout: `PYTHONPATH=. python <this repo>/dev-scripts/send-as-player.py
+   Other APQuest "Bottom Left Chest"`. It logs in as Other and checks those locations (Archipelago's `Connect` and
+   `LocationChecks`); your game gets "You got <item> from Other!". A location is checked once: the same one twice sends
+   nothing.
+
 ## The apworld's tests
 
 With the world linked as above, run `python -m pytest worlds/bug_fables/test` in the Archipelago checkout. Set
