@@ -647,7 +647,11 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    that read as two colours); the user pointed at the map icon, "it nailed the color scheme", and measuring it gave the
    recipe. **Lime, hue 0.28 (the user's pick)**: colour-wheel spacing put it in the row's biggest gap (gold 50° to green 155°),
    after orange at the recipe turned salmon (0.05) or brown (0.08, a dark orange is brown) and pink (0.9) sat too close
-   to purple and red. `warpcolor` (dev) still tries a hue; it is the button's own sprite (so the game's outline and wiggle apply), the scroll on top.
+   to purple and red. `warpcolor` (dev) still tries a hue. **The scroll stays the game's own art:** softening a copy
+   (black outline to dark lime, colours lifted) was tried and looked worse each time (first the copy took another
+   sprite from the atlas, as a render texture's rows run the other way on Direct3D; then dark reds were caught as
+   outline; then it read flat and washed out), and none of the game's other round icons (key, leaf, the library tabs)
+   means "warp". A drawn icon would be art work, not code; it is the button's own sprite (so the game's outline and wiggle apply), the scroll on top.
    **Map** opens the game's own map window (6) the way its map shortcut does (`windowid = 6`, `BuildWindow`), in a
    travel mode: confirm on a visited area (`librarystuff[4, area]`) opens "Travel to <area>?" (No first) instead of
    flipping the description's pages; the map opened any other way keeps vanilla controls. On Yes the menu closes the

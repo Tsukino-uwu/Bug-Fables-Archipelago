@@ -696,3 +696,12 @@ Newest last. What was tried, what happened, what the user said.
     at HP 7, Defense 0 there.
 - **Per-hit scaling felt fair** (the user). With the `onehit` cheat off, a scaled Dead Lander G landed 1-2 hits at
   fair damage. The first rematch had been one-shot by that forgotten cheat.
+- **The travel buttons' look** (the user, with screenshots).
+  - The icons: Map took the blue map, Warp the scroll.
+  - The spacing: 1.7 apart. Also the game's four buttons now go straight to their final spots, which stopped a jump
+    when the menu opens.
+  - The colour: guessed colours kept failing until the game's own recipe was measured from its sprite sheet
+    (MEASURED). Lime then filled the row's biggest colour-wheel gap, and the user picked it.
+  - Softening the scroll's art was tried three ways and reverted. The user asked about other premade icons; none
+    fits "warp".
+  - Travel defaults to Both (the user: warp does what the map can't).
