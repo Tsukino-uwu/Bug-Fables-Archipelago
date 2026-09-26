@@ -422,7 +422,7 @@ namespace BugFablesAP
                             case "Both": return "Warp and Map travel go at once, without asking Yes / No first.";
                             default: return "Warp and Map travel ask Yes / No first.";
                         }
-                    case CutscenesRow: return "Skips the intro and scenes you don't need to watch.";
+                    case CutscenesRow: return "Skips or speeds up scenes you don't need to watch.";
                     case AnimationRow:
                         switch (QualityOfLife.ItemAnimation?.Value)
                         {

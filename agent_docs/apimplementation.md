@@ -1542,8 +1542,9 @@ everything past the Outskirts gate needs all three members until the rooms there
    every frame and cleared on the title screen, so one file's members never carry into another. A hold-up for a
    member shows the pause menu's party icon (`guisprites[94 + member]`) in the member's colour (`charcolor`). An item
    kind the mod doesn't know is now skipped with a log line; before, it went into the bag as an ordinary item.
-   **The opening is always skipped with a starting member (the user, 2026-09-26),** as with a random start, whatever
-   *Skip cutscenes* says: the opening's tutorial battle was written for two and was never played with one.
+   **The opening is always skipped with a starting member (the user, 2026-09-26),** whatever *Skip cutscenes* says: the
+   opening's tutorial battle was written for two and was never played with one. Then made the rule for every
+   Archipelago file (the mod guide, step 10, item 5).
    **Fixed after the first play (the user, 2026-09-26):** the rooftop pickup showed Vi's icon far too large and the
    Crunchy Leaf's description (a member's number read as item 0). The icon is now scaled to an item sprite's size, a
    member gets no description box (the game has no item row for him), and no article: "You got Vi!", the line's

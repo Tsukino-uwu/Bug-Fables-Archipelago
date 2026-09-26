@@ -571,7 +571,9 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    **The logic never counts on the warp** (the user, 2026-09-25): it's fast travel and a way out when stuck, but a
    seed must not assume players teleport out, so every one-way drop still needs a real way back in the logic.
 5. **Skip cutscenes** (the user, 2026-09-25: scenes and fluff that give no checks, starting with the two at the
-   Snakemouth bridge). Every scene starts through `EventControl.StartEvent`, so a prefix there sees each one by its
+   Snakemouth bridge). **The intro is no longer part of it (the user, 2026-09-26):** with Archipelago enabled the
+   opening is always skipped, since a random start and a starting party member both need it gone, and the row is what
+   players expect it to be, for scenes later in the game. Every scene starts through `EventControl.StartEvent`, so a prefix there sees each one by its
    event number and map. Each scene is read in full before it goes on the list, and it gets one of two treatments:
    *skipped* when it only moves the camera and party, talks and sets flags (the mod sets those flags and the scene
    never starts: the bridge message, Event0, flag 11), or *fast-forwarded* when it also changes the world in ways its

@@ -119,9 +119,8 @@ namespace BugFablesAP
                 + "skip), but still requires a button press to proceed. Holding the skip button also moves through boxes "
                 + "much faster than the game's own hold. Lines the game marks unskippable stay as they are.");
             SkipCutscenes = config.Bind("QualityOfLife", "SkipCutscenes", true,
-                "The new game's intro (its story slides, the talk after them, Maki's talk and the tutorial battle) is skipped: "
-                + "Vi joins and the first check is sent. Other scenes you don't need to watch are skipped or pass by fast (a list "
-                + "that grows scene by scene).");
+                "Scenes you don't need to watch are skipped or pass by fast (a list that grows scene by scene). The new "
+                + "game's intro is always skipped with Archipelago enabled, whatever this says.");
             ItemAnimation = config.Bind("QualityOfLife", "ItemAnimation", "All", new ConfigDescription(
                 "Which items received from other players are shown held up, as when you find one: Progression (items that "
                 + "unlock something), All, or Off. They always arrive either way; your own finds are always shown.",
@@ -234,6 +233,8 @@ namespace BugFablesAP
             PartyMembers.SetReceived(System.Linq.Enumerable.Empty<int>());
         }
 
+        // Always with Archipelago on (the user): a seed's start ends the opening with a transfer, and its tutorial battle
+        // was written for two, never played with one member. Skip cutscenes is for later scenes.
         // The opening: Event16 (Maki's talk, Vi joining, the tutorial battle, location 1) never starts; the mod does
         // what it would leave behind, the game's way, on a later frame. Flag 15 marks location 1 done.
         private const string OpeningMap = "BugariaOutskirtsOutsideCity";
@@ -256,9 +257,6 @@ namespace BugFablesAP
         }
         internal static Func<bool> SeedKnown;
         private static KeyValuePair<string, int>? Seeded => SeedStart?.Invoke();
-        // A seed's start needs the intro skipped (it ends with the transfer there), whatever Skip cutscenes says.
-        // A starting party member too: the opening's tutorial battle was written for two, and never played with one.
-        private static bool SkipIntro => SkipCutscenes.Value || Seeded.HasValue || PartyMembers.SeedStartMember >= 0;
         // With Archipelago on, or off with Use on normal saves: fast text and the scene list, never the intro.
         internal static Func<bool> SettingsOn;
         private static bool startPending;
@@ -323,7 +321,7 @@ namespace BugFablesAP
         private static bool BeforeChangeParty(int[] ids, bool fromscratch, bool destroyoldentity)
         {
             MainManager mm = MainManager.instance;
-            if (randomizerOn == null || !randomizerOn() || !SkipIntro || mm == null || MainManager.map == null
+            if (randomizerOn == null || !randomizerOn() || mm == null || MainManager.map == null
                 || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap || mm.flags[15]
                 || ids == null || ids.Length != 1 || ids[0] != 1 || !fromscratch || destroyoldentity || MainManager.events == null)
             {
@@ -339,7 +337,7 @@ namespace BugFablesAP
         private static void BeforeSolidColor(string name)
         {
             MainManager mm = MainManager.instance;
-            if (name != "back" || randomizerOn == null || !randomizerOn() || !SkipIntro || mm == null || MainManager.map == null
+            if (name != "back" || randomizerOn == null || !randomizerOn() || mm == null || MainManager.map == null
                 || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap || mm.flags[15]
                 || MainManager.events == null || event8Cut)
             {
@@ -550,7 +548,7 @@ namespace BugFablesAP
 
         private static bool BeforeStartEvent(int id)
         {
-            if (id == OpeningEvent && SkipIntro && randomizerOn() && MainManager.map != null
+            if (id == OpeningEvent && randomizerOn() && MainManager.map != null
                 && MainManager.map.mapid.ToString() == OpeningMap)
             {
                 // Also once done: its trigger stays until the map reloads, and running the scene then crashes.
@@ -612,7 +610,7 @@ namespace BugFablesAP
                 return;
             }
             bool on = randomizerOn();
-            if (on && SkipIntro && !openingPending && !openingFailed && MainManager.map != null && MainManager.map.mapid.ToString() == OpeningMap
+            if (on && !openingPending && !openingFailed && MainManager.map != null && MainManager.map.mapid.ToString() == OpeningMap
                 && !mm.flags[15] && mm.flags[691])
             {
                 openingPending = true;
@@ -732,7 +730,7 @@ namespace BugFablesAP
                 }
             }
             bool settings = SettingsOn != null && SettingsOn();
-            bool slides = (on && SkipIntro && InIntroSlides()) || (settings && InFastScene());
+            bool slides = (on && InIntroSlides()) || (settings && InFastScene());
             if (slides)
             {
                 // Each slide's line waits for a press at its end; answer it.
