@@ -80,7 +80,10 @@ be wrong.
    through the game's own map transfer. The game already records visited areas (`librarystuff[4, area]`, set by
    `MainManager.UpdateArea`). The logic never counts on it, like the warp. **One row with the warp (the user,
    2026-09-26):** the Warp button's on/off becomes *Travel: Off / Warp / Map / Both* (Warp to Start only, map fast
-   travel only, or both), so the two are set together.
+   travel only, or both), so the two are set together. **The look (the user, 2026-09-26):** alone, either button
+   looks like the Warp button does now; with Both, the two get different background colours. Map's icon: proposed a
+   map icon always (so the button says what it does), the user undecided. Both means a sixth button in the pause menu:
+   it must fit and look good there, seen on screen before it counts as done.
 12. **A quest board in the starting house** (the user, 2026-09-25): the quests every board lists, taken without
    walking to the town or the bar. Every board shows the same list (`MEASURED.md`, "The quest board"), so it adds no
    quests, only a shorter way. Every board lists bounties too (built, build step 9); next, the house's board from
