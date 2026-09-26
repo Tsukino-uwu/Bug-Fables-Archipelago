@@ -158,6 +158,11 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   looks on a shelf; `shelflook off` puts every slot back.
 - `iteminfo`: log every item entity on the map with its sprite, pivot, size, lift and backdrop (placement checks).
 - `mark <size> <raise>`: the Item backgrounds starburst's size and the lift it and its item get, live.
+- `letters`: count the game's 500 text letters that are taken, by owner (to spot a leak).
+  **Never log a text holder's own name:** it carries its whole text, and the game's font preloader's is every glyph it
+  has. Logging it once (2026-09-26) broke BepInEx's console writer (`ConsoleEncoding.ReadByteBuffer`
+  IndexOutOfRange) for the rest of the session: every later log line threw inside the plugin's update, which then
+  stopped partway every frame, and the game froze. Only a restart recovers it.
 - `palette`: log the game's text colours by index (`|color,n|`), Archipelago's added ones included.
 - `colortry <hex...>`: queue a trap's "You got" line in each colour given, to compare them on screen.
 - `onehit`: flips a test boost: every hit on an enemy does at least 99 (before defence). It's the `[Debug]` setting

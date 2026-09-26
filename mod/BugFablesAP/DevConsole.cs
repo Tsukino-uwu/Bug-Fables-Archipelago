@@ -563,6 +563,31 @@ namespace BugFablesAP
                         ItemSwap.MarkRaise = float.Parse(parts[2], System.Globalization.CultureInfo.InvariantCulture);
                         return $"mark now scale {ItemSwap.MarkScale}, raise {ItemSwap.MarkRaise}";
                     }
+                    case "letters":
+                    {
+                        // The game's 500-letter text pool: how many are taken (text set), and by which text holder.
+                        var pool = (TextMesh[])HarmonyLib.AccessTools.Field(typeof(MainManager), "letterpool").GetValue(null);
+                        var holders = new Dictionary<string, int>();
+                        int taken = 0;
+                        foreach (TextMesh letter in pool)
+                        {
+                            if (letter == null || letter.text == "")
+                            {
+                                continue;
+                            }
+                            taken++;
+                            // Holder names carry their whole text (the font preloader's is every glyph the game has), and
+                            // BepInEx's console broke writing that: only the owner's name, cut short and plain.
+                            Transform t = letter.transform.parent;
+                            string owner = t == null ? "(none)" : t.parent != null ? t.parent.name : t.name;
+                            owner = new string(owner.Where(c => c >= ' ' && c < 127).Take(40).ToArray());
+                            string path = owner + (t != null && !t.gameObject.activeInHierarchy ? " [hidden]" : "");
+                            holders[path] = holders.TryGetValue(path, out int n) ? n + 1 : 1;
+                        }
+                        log.LogInfo($"[dev] letters: {taken} of {pool.Length} taken; " + string.Join("; ", holders.OrderByDescending(h => h.Value)
+                            .Select(h => h.Key + " " + h.Value).ToArray()));
+                        return $"letters: {taken} of {pool.Length} taken";
+                    }
                     case "palette":
                         log.LogInfo("[dev] text colours: " + string.Join(", ", MainManager.instance.textcolors
                             .Select((c, i) => i + " " + ColorUtility.ToHtmlStringRGB(c)).ToArray()));
