@@ -1682,7 +1682,14 @@ Explorer Permit, so a late permit makes him late; with All Three nothing waits o
    `TestPartyDefault`; the tests of the story party's logic (Leif's droplet rooms, the permit gate, the town medal, a
    shop count) now pin *Off*, whose logic they check. A default seed with APQuest generated: all three in Starting Items.
 
-**Status:** built, tests pass; not yet played.
+**First play (the user, 2026-09-27):** all three were there, but no member showed a box and Leif appeared a moment
+after the start. No box: the members are start inventory, which the server has at login, and the receiver shows no
+box for what it had at login (the rule that keeps a loaded save from replaying boxes); kept, since a starting item
+isn't found anywhere. Leif late: items are given only while the player is free, after the opening skip and a map
+change. Now, with All Three, the opening's own party change adds whoever the story hasn't reached yet, so Leif is
+there from the first frame; his item then finds him already in.
+
+**Status:** built, tests pass; played once (all three present); Leif at the opening not yet seen.
 
 # How it works
 

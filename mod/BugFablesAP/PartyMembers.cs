@@ -143,7 +143,7 @@ namespace BugFablesAP
         }
 
         // A member already in the party whom the story hasn't reached yet (Leif before the spider) stays when the story
-        // sets its own party, e.g. the opening's Vi and Kabbu. Not in the spider scene (Event6): its fights are the story's,
+        // sets its own party, e.g. the opening's Vi and Kabbu; with all three from the start he joins there. Not in the spider scene (Event6): its fights are the story's,
         // and he rejoins after it.
         private static void KeepMembersAhead(ref int[] ids)
         {
@@ -153,7 +153,9 @@ namespace BugFablesAP
                 return;
             }
             int[] asked = ids;
-            int[] ahead = mm.playerdata.Select(p => p.trueid).Where(m => Allowed(m) && !asked.Contains(m) && !PartyFit.InStoryParty(m)).ToArray();
+            // With all three from the start, whoever isn't here yet joins too (the opening then has Leif at once).
+            IEnumerable<int> candidates = StartMember == AllMembers ? Enumerable.Range(0, 3) : mm.playerdata.Select(p => p.trueid);
+            int[] ahead = candidates.Where(m => Allowed(m) && !asked.Contains(m) && !PartyFit.InStoryParty(m)).ToArray();
             if (ahead.Length == 0)
             {
                 return;
