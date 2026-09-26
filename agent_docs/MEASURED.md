@@ -638,7 +638,7 @@ The output stays in the BepInEx folder.
     that scene (since 2026-09-25).
     **The first boss too** (the user, 2026-09-26, Leif alone, OneHit off): in the spider boss fight (Event26, battle 13)
     Leif couldn't hit the enemies in the air and lost. So the boss needs Vi in chapter 1 (the beemerang), unless a later
-    measurement finds another way; with OneHit on, the earlier Leif-alone run (2026-09-25) never showed it.
+    measurement finds another way. The Leif-alone run of 2026-09-25 got past this boss; how is not recorded.
   - **Any member's attack:** Snakemouth's switch-room switches (`Big Switch`, Event23, flags 33/34) take Leif's ice as
     well as the beemerang or the horn (in `SnakemouthUndergroundLeftB`).
 - **A blocked walk-in ends in a teleport** (the user, 2026-09-25, the game's own behaviour): entering
