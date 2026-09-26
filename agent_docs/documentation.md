@@ -1379,10 +1379,6 @@ tunes it live.
 **Seen on the ground too (the user, 2026-09-26):** the Ladybugs' Sword, the icon on plum, raised clear of the stump it
 used to sit half inside: "more visually clear than it clipping inside terrain".
 
-**Status:** works, seen by the user on the Caravan's shelf and on the ground (2026-09-26).
-
-*Code: `ItemSwap.cs` (`Mark`, `MarkColorOf`), `QualityOfLife.cs` (`ItemBackgrounds`), `ApMenu.cs` (`BackgroundsRow`).*
-
 **Rarity colours (the user, 2026-09-26), in Item colors (step 20).** Side by side on a shelf (dev `markclass`, four
 slots forced to the four classes), Archipelago's plum and slate blue read alike, and so did slate blue and cyan: "blue,
 red, blue, purple". The user's ladder from loot games (common green, rare blue, epic purple) told all four apart at
@@ -1391,3 +1387,7 @@ but the user dislikes it). So *Item colors* became **RARITY / ARCHIPELAGO / OFF*
 the text and the starbursts together: Rarity's text shades are darker for the white box (`8A45C8`, `2F6FD8`, `C62828`,
 `2E9E3E`); Off gives the game's red text and its own starburst colours by kind (items teal, key items pink, medals
 orange). Not yet seen: the Rarity text, and Off.
+
+**Status:** works, seen by the user on the Caravan's shelf and on the ground (2026-09-26).
+
+*Code: `ItemSwap.cs` (`Mark`, `MarkColorOf`), `QualityOfLife.cs` (`ItemBackgrounds`), `ApMenu.cs` (`BackgroundsRow`).*
