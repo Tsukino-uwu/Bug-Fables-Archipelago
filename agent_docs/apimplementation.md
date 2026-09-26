@@ -1719,7 +1719,17 @@ own on/off thing as well due to how much it impacts, both off by default"). The 
    needs the Horn, an ice spot the Ice; with the story's party the ice spot needs Leif too. Five seeds with both
    options, a random member and APQuest generated.
 
-**Status:** built, tests pass; not yet played.
+**First play (the user, 2026-09-27):** the jump stayed locked until its item, but **every attack worked from the
+start**. The prefix on `DoActionTap` never ran: the method only builds its coroutine and is small enough for the
+runtime to inline into its callers, where a patch never runs (no "refused" line for any attack in the log, while
+`DoJump`'s patch worked). The gate moved to the coroutine's own first step (`MoveNext` at state 0), which ends it
+before it sets `action`; the game clears `actionroutine` only at a tap's end, so the mod clears it a frame later.
+**The moves as key items (the user, the same day):** "make all these locked abilities into visual key items... so you
+can see in your inventory that you have jump". Four key items of the mod's own after the Boat Ticket (201 Beemerang,
+202 Horn, 203 Ice with the member's party icon; 204 Jump with the Archipelago icon; `CustomItems.cs`). Receiving a move
+puts its key item in the bag, and the gate reads the bag, so the inventory shows exactly what works.
+
+**Status:** built, tests pass; the jump gate seen by the user; the attack gate and the key items not yet seen.
 
 ## Build step 22: Shuffle Jump
 

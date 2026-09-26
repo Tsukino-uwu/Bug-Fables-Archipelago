@@ -14,6 +14,11 @@ namespace BugFablesAP
         private const string TicketName = "Boat Ticket";
         private const string TicketDescription = "A boat ticket. Maybe we should visit the pier.";
 
+        // Field moves (Shuffle Field Moves / Shuffle Jump) as key items, so the bag shows which ones work: 201 Beemerang,
+        // 202 Horn, 203 Ice (each its member's party icon), 204 Jump (the Archipelago icon, the whole party's).
+        internal const int FirstMove = 201;
+        internal static int MoveKeyItem(int move) => FirstMove + move;
+
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
 
@@ -25,8 +30,12 @@ namespace BugFablesAP
 
         internal static void Tick()
         {
-            if (randomizerOn == null || !randomizerOn() || MainManager.itemdata == null || MainManager.itemsprites == null
-                || MainManager.itemdata[0, BoatTicket, 0] == TicketName)
+            if (randomizerOn == null || !randomizerOn() || MainManager.itemdata == null || MainManager.itemsprites == null)
+            {
+                return;
+            }
+            AddMoves();
+            if (MainManager.itemdata[0, BoatTicket, 0] == TicketName)
             {
                 return;
             }
@@ -40,6 +49,26 @@ namespace BugFablesAP
             MainManager.itemdata[0, BoatTicket, 2] = TicketDescription;
             MainManager.itemsprites[0, BoatTicket] = MainManager.itemsprites[0, TicketLooksLike];
             log.LogInfo($"[items] the {TicketName} added as item {BoatTicket}, looking like item {TicketLooksLike}");
+        }
+
+        private static void AddMoves()
+        {
+            if (MainManager.itemdata[0, MoveKeyItem(FieldMoves.Jump), 0] == FieldMoves.Name(FieldMoves.Jump) || MainManager.instance?.charcolor == null)
+            {
+                return;
+            }
+            for (int move = 0; move <= FieldMoves.Jump; move++)
+            {
+                int id = MoveKeyItem(move);
+                for (int field = 0; field < MainManager.itemdata.GetLength(2); field++)
+                {
+                    MainManager.itemdata[0, id, field] = MainManager.itemdata[0, TicketLooksLike, field];
+                }
+                MainManager.itemdata[0, id, 0] = FieldMoves.Name(move);
+                MainManager.itemdata[0, id, 2] = ItemSwap.MoveDescription(move);
+                MainManager.itemsprites[0, id] = move == FieldMoves.Jump ? ApIcon.Get() : ItemSwap.MemberSprite(move);
+            }
+            log.LogInfo($"[items] the field moves added as key items {MoveKeyItem(0)}-{MoveKeyItem(FieldMoves.Jump)}");
         }
     }
 }

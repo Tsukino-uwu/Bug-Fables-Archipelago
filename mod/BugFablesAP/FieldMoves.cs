@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using BepInEx.Logging;
@@ -20,14 +19,6 @@ namespace BugFablesAP
         // From slot_data (shuffle_moves, shuffle_jump); false with no seed.
         internal static volatile bool MovesShuffled;
         internal static volatile bool JumpShuffled;
-        // The moves this save has been given, recomputed from the counted items every frame (ItemReceiver).
-        private static readonly HashSet<int> received = new HashSet<int>();
-
-        internal static void SetReceived(IEnumerable<int> ids)
-        {
-            received.Clear();
-            received.UnionWith(ids);
-        }
 
         internal static string Name(int id) => id == 0 ? "Beemerang" : id == 1 ? "Horn" : id == 2 ? "Ice" : id == Jump ? "Jump" : "move " + id;
 
@@ -38,24 +29,30 @@ namespace BugFablesAP
                 return false;
             }
             bool shuffled = id == Jump ? JumpShuffled : MovesShuffled;
-            return shuffled && !received.Contains(id);
+            // A move works once its key item (CustomItems) is in the bag, where the receiver puts it.
+            return shuffled && MainManager.instance?.items != null && !MainManager.instance.items[1].Contains(CustomItems.MoveKeyItem(id));
         }
 
         internal static void Enable(ManualLogSource logger, string guid, Func<bool> on)
         {
             log = logger;
             randomizerOn = on;
+            // DoActionTap only builds its coroutine, small enough to be inlined into its callers, where a patch never runs
+            // (a prefix there never fired, 2026-09-27): the coroutine's own first step is gated instead.
             MethodInfo tap = AccessTools.Method(typeof(PlayerControl), "DoActionTap");
+            MethodInfo tapStep = tap != null ? AccessTools.EnumeratorMoveNext(tap) : null;
             MethodInfo jump = AccessTools.Method(typeof(PlayerControl), "DoJump");
-            if (tap == null || jump == null)
+            if (tapStep == null || jump == null)
             {
-                log.LogError($"[moves] NOT installed (DoActionTap {tap != null}, DoJump {jump != null}): moves and jump are never locked.");
+                log.LogError($"[moves] NOT installed (DoActionTap's MoveNext {tapStep != null}, DoJump {jump != null}): moves and jump are never locked.");
                 return;
             }
+            tapState = AccessTools.Field(tapStep.DeclaringType, "<>1__state");
+            tapOwner = AccessTools.Field(tapStep.DeclaringType, "<>4__this");
             harmony = new Harmony(guid + ".moves." + DateTime.UtcNow.Ticks);
-            harmony.Patch(tap, prefix: new HarmonyMethod(typeof(FieldMoves), nameof(BeforeActionTap)));
+            harmony.Patch(tapStep, prefix: new HarmonyMethod(typeof(FieldMoves), nameof(BeforeTapStep)));
             harmony.Patch(jump, prefix: new HarmonyMethod(typeof(FieldMoves), nameof(BeforeJump)));
-            log.LogInfo("[moves] installed on PlayerControl.DoActionTap and DoJump");
+            log.LogInfo($"[moves] installed on PlayerControl.DoActionTap's first step (state field {tapState != null}, owner {tapOwner != null}) and DoJump");
         }
 
         internal static void Disable()
@@ -75,16 +72,20 @@ namespace BugFablesAP
             }
         }
 
-        private static IEnumerator Nothing()
-        {
-            yield break;
-        }
+        private static FieldInfo tapState;
+        private static FieldInfo tapOwner;
 
-        // The tap's move is the leader's (playerdata[0].animid); the submarine's tap is its own and never locked.
-        private static bool BeforeActionTap(PlayerControl __instance, ref IEnumerator __result)
+        // The tap's move is the leader's (playerdata[0].animid); the submarine's tap is its own and never locked. Only the
+        // first step (state 0) is checked; a refused tap ends there, before it sets action or lockkeys.
+        private static bool BeforeTapStep(object __instance, ref bool __result)
         {
+            if (tapState == null || (int)tapState.GetValue(__instance) != 0)
+            {
+                return true;
+            }
             MainManager mm = MainManager.instance;
-            if (__instance.submarine || mm?.playerdata == null || mm.playerdata.Length == 0)
+            PlayerControl player = tapOwner?.GetValue(__instance) as PlayerControl;
+            if (player == null || player.submarine || mm?.playerdata == null || mm.playerdata.Length == 0)
             {
                 return true;
             }
@@ -94,8 +95,23 @@ namespace BugFablesAP
                 return true;
             }
             Refuse(move);
-            __result = Nothing();
+            tapState.SetValue(__instance, -1);
+            __result = false;
+            player.StartCoroutine(ClearActionRoutine(player));
             return false;
+        }
+
+        // The game clears actionroutine only at a tap's end; the caller stores the refused one after this step, and the hold
+        // path starts a tap only while it's null. Cleared a frame later, as a finished tap leaves it.
+        private static readonly FieldInfo actionRoutine = AccessTools.Field(typeof(PlayerControl), "actionroutine");
+
+        private static System.Collections.IEnumerator ClearActionRoutine(PlayerControl player)
+        {
+            yield return null;
+            if (player != null && !player.action)
+            {
+                actionRoutine?.SetValue(player, null);
+            }
         }
 
         private static bool BeforeJump()

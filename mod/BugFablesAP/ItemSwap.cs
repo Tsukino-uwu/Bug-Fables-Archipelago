@@ -508,13 +508,13 @@ namespace BugFablesAP
             }
         }
 
-        private static string MoveDescription(int id) =>
+        internal static string MoveDescription(int id) =>
             id == FieldMoves.Jump ? "The whole party can jump." : PartyMembers.Name(id) + " can use the " + FieldMoves.Name(id) + ".";
 
         private static readonly Sprite[] memberSprites = new Sprite[3];
 
         // The pause menu's party icon is drawn far larger than an item: a copy scaled to an item sprite's size.
-        private static Sprite MemberSprite(int id)
+        internal static Sprite MemberSprite(int id)
         {
             Sprite icon = MainManager.guisprites[94 + id];
             if (id < 0 || id >= memberSprites.Length || icon == null)

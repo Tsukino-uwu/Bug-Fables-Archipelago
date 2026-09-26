@@ -84,7 +84,6 @@ namespace BugFablesAP
             if (matches == true && given >= 0 && given <= received.Count)
             {
                 PartyMembers.SetReceived(MembersGiven(received, given));
-                FieldMoves.SetReceived(KindGiven(received, given, ItemIds.MoveKind));
             }
             if (blocked != null || given == received.Count)
             {
@@ -198,8 +197,13 @@ namespace BugFablesAP
             }
             if (kind == ItemIds.MoveKind)
             {
-                // Counted like every item; FieldMoves reads the counted ones back each frame.
-                return $"{FieldMoves.Name(gameId)} can be used now";
+                // A key item of the mod's own: the bag shows it, and FieldMoves reads it.
+                int key = CustomItems.MoveKeyItem(gameId);
+                if (!mm.items[1].Contains(key))
+                {
+                    mm.items[1].Add(key);
+                }
+                return $"{FieldMoves.Name(gameId)} added to key items ({key}): it can be used now";
             }
             if (kind != 0)
             {
