@@ -13,8 +13,8 @@ namespace BugFablesAP
         private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, AchievementsRow = 5, NormalSavesRow = 6,
             Rows = 7;
         // The Quality of life page: the two buttons side by side on top, then the settings.
-        private const int ButtonsRow = 0, FastTextRow = 1, WarpRow = 2, SkipConfirmRow = 3, CutscenesRow = 4, AnimationRow = 5, DetectorRow = 6,
-            QolRows = 7;
+        private const int ButtonsRow = 0, FastTextRow = 1, WarpRow = 2, SkipConfirmRow = 3, CutscenesRow = 4, AnimationRow = 5, ColorsRow = 6,
+            DetectorRow = 7, QolRows = 8;
         // The Gameplay page: how the game plays, under the same two buttons.
         private const int DifficultyRow = 1, ScalingRow = 2, MedalPricesRow = 3, ExpRow = 4, BerryRow = 5, GameplayRows = 6;
         private enum Page { Main, Qol, Gameplay }
@@ -430,6 +430,10 @@ namespace BugFablesAP
                             case "Off": return "Items from others arrive without being held up.";
                             default: return "Every item from another player is held up as it arrives.";
                         }
+                    case ColorsRow:
+                        return QualityOfLife.ApColors
+                            ? "Other players and their items in Archipelago's colours."
+                            : "Other players' items named in the game's red.";
                     case DetectorRow: return "Acts like the Detector medal is always equipped, to find hidden items.";
                     default: return "";
                 }
@@ -513,6 +517,10 @@ namespace BugFablesAP
                 if (r == AnimationRow && QualityOfLife.ItemAnimation != null)
                 {
                     Cycle(QualityOfLife.ItemAnimation, QualityOfLife.ItemAnimations, by);
+                }
+                else if (r == ColorsRow && QualityOfLife.ItemColors != null)
+                {
+                    Cycle(QualityOfLife.ItemColors, QualityOfLife.ItemColorValues, by);
                 }
                 else if (r == WarpRow && QualityOfLife.Travel != null)
                 {
@@ -699,6 +707,7 @@ namespace BugFablesAP
                 Choice(SkipConfirmRow, "Skip confirm", (QualityOfLife.SkipConfirm?.Value ?? "Off").ToUpperInvariant());
                 Choice(CutscenesRow, "Skip cutscenes", OnOff(QualityOfLife.SkipCutscenes));
                 Choice(AnimationRow, "Item animation", (QualityOfLife.ItemAnimation?.Value ?? "All").ToUpperInvariant());
+                Choice(ColorsRow, "Item colors", (QualityOfLife.ItemColors?.Value ?? "Archipelago").ToUpperInvariant());
                 Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Quality of life. Cancel goes back" + (inGame ? " to Settings." : "."), 0f, StatusY);
@@ -742,7 +751,7 @@ namespace BugFablesAP
             arrows.parent = box;
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
-            foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, SkipConfirmRow, CutscenesRow, AnimationRow, DetectorRow }
+            foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, SkipConfirmRow, CutscenesRow, AnimationRow, ColorsRow, DetectorRow }
                 : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, MedalPricesRow, ExpRow, BerryRow } : new[] { ModeRow, AchievementsRow, NormalSavesRow })
             {
                 for (int side = 0; side < 2; side++)

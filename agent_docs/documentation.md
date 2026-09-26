@@ -29,6 +29,7 @@ anyone curious about the process, or thinking of doing the same for another game
 17. [Enemy scaling: every area fair whenever you reach it](#17-enemy-scaling-every-area-fair-whenever-you-reach-it)
 18. [Use on normal saves: the settings without Archipelago](#18-use-on-normal-saves-the-settings-without-archipelago)
 19. [EXP and berry multipliers: bars like the volume rows](#19-exp-and-berry-multipliers-bars-like-the-volume-rows)
+20. [Item colors: Archipelago's colours in the "You got" box](#20-item-colors-archipelagos-colours-in-the-you-got-box)
 
 ## Where it stands
 
@@ -1292,3 +1293,22 @@ An opt-in for a faster, easier game (Next 16 and 17 in `apimplementation.md`).
 battle gave 100, the game's cap of a level's worth.
 
 **Status:** works, seen by the user (2026-09-26): EXP at 10x, and a berry picked up at 10x.
+
+## 20. Item colors: Archipelago's colours in the "You got" box
+
+**Asked (the user, 2026-09-26):** after picking the colours on screen (step 9, "Archipelago's colours in the line"),
+a Quality of life row to turn them off and keep the game's look: *Item colors: Archipelago / Off*, Archipelago by
+default. Right below Item animation, since both are about another player's items.
+
+**How it works** (`QualityOfLife.cs` binds it, `ApMenu.cs` draws the row, `ItemSwap.cs` reads it):
+- **Archipelago:** another player's name in dark yellow, the item by its kind (progression, useful, filler, trap),
+  "from" and "'s" in black.
+- **Off:** no colour commands at all, so the whole name stays in the game's red, as it was before. The wording ("You
+  found ...", "from ...") is the same either way; only the colours change. Your own finds are always the game's red.
+- The row joins Reset to defaults (back to Archipelago) and Disable all (Off). Only while Archipelago is enabled, or
+  with *Use on normal saves* (step 18), like the page's other rows.
+- The Quality of life page grows to eight rows (the last at the panel's lowest row spot, above the help line).
+
+**Status:** built (2026-09-26), not yet seen: the row on the page, and a hold-up with it off.
+
+*Code: `QualityOfLife.cs` (`ItemColors`, `ApColors`), `ApMenu.cs` (`ColorsRow`), `ItemSwap.cs` (`PlayerText`, `ClassText`).*

@@ -61,7 +61,8 @@ menu, and from the main menu), shown while the Archipelago mod is enabled or *Us
   (On: the new game's intro, tutorial battle included, is skipped, Vi joining and the first check sent; other scenes
   you don't need to watch are skipped or pass by fast; with a random start the intro is always skipped), **Item
   animation** (which items from other players are shown held up: All, the default, Progression or Off; your own finds
-  always are) and **Detector** (On, the default, acts as if the Detector medal were equipped. With the Archipelago mod
+  always are), **Item colors** (Archipelago, the default, colours another player's name and the item by its kind, as
+  Archipelago's own client does; Off keeps the game's red) and **Detector** (On, the default, acts as if the Detector medal were equipped. With the Archipelago mod
   enabled, the Detector (row or medal) also beeps on entering a room that still has a check of any kind, and stays
   quiet in a room with none left).
 - **Gameplay**: **Difficulty** (Normal, the default, leaves it to the game; Hard plays as if the Hard Mode medal were

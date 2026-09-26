@@ -29,6 +29,9 @@ namespace BugFablesAP
         internal static ConfigEntry<bool> SkipCutscenes;
         internal static readonly string[] ItemAnimations = { "All", "Progression", "Off" };
         internal static ConfigEntry<string> ItemAnimation;
+        internal static readonly string[] ItemColorValues = { "Archipelago", "Off" };
+        internal static ConfigEntry<string> ItemColors;
+        internal static bool ApColors => ItemColors == null || ItemColors.Value != "Off";
         // Tenths of the normal price: 10 normal, 5 half, 0 free.
         internal const int FullPrice = 10;
         internal static ConfigEntry<int> MedalPrices;
@@ -82,6 +85,10 @@ namespace BugFablesAP
             {
                 ItemAnimation.Value = "Off";
             }
+            if (ItemColors != null)
+            {
+                ItemColors.Value = "Off";
+            }
             if (Travel != null)
             {
                 Travel.Value = "Off";
@@ -94,7 +101,7 @@ namespace BugFablesAP
 
         internal static void ResetAll()
         {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, Travel, SkipConfirm, SkipCutscenes, ItemAnimation, ApMenu.Detector })
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, Travel, SkipConfirm, SkipCutscenes, ItemAnimation, ItemColors, ApMenu.Detector })
             {
                 if (setting != null)
                 {
@@ -119,6 +126,11 @@ namespace BugFablesAP
                 "Which items received from other players are shown held up, as when you find one: Progression (items that "
                 + "unlock something), All, or Off. They always arrive either way; your own finds are always shown.",
                 new AcceptableValueList<string>(ItemAnimations)));
+            ItemColors = config.Bind("QualityOfLife", "ItemColors", "Archipelago", new ConfigDescription(
+                "How another player's items are named in the \"You got\" box: Archipelago colours the player and the item by "
+                + "its kind (progression, useful, filler, trap) as Archipelago's text client does, darkened to read on the box; "
+                + "Off keeps the game's red for the whole name.",
+                new AcceptableValueList<string>(ItemColorValues)));
             MedalPrices = config.Bind("Gameplay", "MedalPrices", FullPrice, new ConfigDescription(
                 "Medal shop prices, in berries and crystal berries, in tenths of the normal price: 10 normal, 5 half, 0 free. "
                 + "Any price above free is at least 1. Switch it on the Gameplay page.", new AcceptableValueRange<int>(0, FullPrice)));

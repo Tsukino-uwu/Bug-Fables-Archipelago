@@ -283,7 +283,7 @@ namespace BugFablesAP
             {
                 // Another player's item: "<player>'s <item>" in Archipelago's colours.
                 string item = IsOurs(info) ? shownName.Substring(info.Player.Name.Length + 3) : info.ItemDisplayName;
-                shownName = PlayerText(info.Player.Name) + "|color,0|'s " + ClassText(item, info.Flags);
+                shownName = PlayerText(info.Player.Name) + Black + "'s " + ClassText(item, info.Flags);
                 shownForOther = true;
             }
             log.LogInfo($"[swap] location {location}: giveitem {(badge ? "medal" : "item")} {id} on {MapName()} is a location; showing '{shownName}'"
@@ -430,12 +430,20 @@ namespace BugFablesAP
         // For the "You got" line, which wraps the name in |color,1|...|color,0|: another player's name, and an item by class.
         internal static string PlayerText(string player)
         {
+            if (!QualityOfLife.ApColors)
+            {
+                return player;
+            }
             HoldUps.AddApColors();
             return $"|color,{HoldUps.ApBase + HoldUps.Player}|{player}";
         }
 
         internal static string ClassText(string item, ItemFlags flags)
         {
+            if (!QualityOfLife.ApColors)
+            {
+                return item;
+            }
             HoldUps.AddApColors();
             int shade = (flags & ItemFlags.Advancement) != 0 ? HoldUps.Progression
                 : (flags & ItemFlags.NeverExclude) != 0 ? HoldUps.Useful
@@ -444,8 +452,11 @@ namespace BugFablesAP
             return $"|color,{HoldUps.ApBase + shade}|{item}";
         }
 
+        // With Item colors off, the whole name stays in the game's red, as it was.
         internal static string FromText(string item, ItemFlags flags, string player) =>
-            ClassText(item, flags) + "|color,0| from " + PlayerText(player);
+            ClassText(item, flags) + Black + " from " + PlayerText(player);
+
+        private static string Black => QualityOfLife.ApColors ? "|color,0|" : "";
 
         internal static void ShowHeldUp(string name, Sprite sprite, Color? color, string article)
         {
