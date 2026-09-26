@@ -1555,8 +1555,9 @@ with three members, and it broke with three before (build step 13: its own two-l
 spider scene is also still open (the mod guide, step 11). Both come up in the first play past the gate.
 
 **Seen by the user (2026-09-26), a Kabbu start:** the opening left Kabbu alone and sent its check; Artis's gift was Leif,
-who joined on the spot; the Fountain Rooftop held Vi, who joined too (party 1, 2, 0). Then a member's hold-up: "You got
-Vi from TestPlayer!", item-sized, no description.
+who joined on the spot; the Fountain Rooftop held Vi, who joined too (party 1, 2, 0). Then each member's hold-up: "You got
+Vi / Kabbu / Leif from TestPlayer!", item-sized in the starburst, each in his colour, no description. A member lying on
+the ground at the new size is still to see (the rooftop's was the old, oversized one).
 
 **Status:** works before the Outskirts gate, seen by the user with a Kabbu start (2026-09-26); past the gate (the
 trapdoor and spider scenes with three) not yet played.
