@@ -689,3 +689,8 @@ Newest last. What was tried, what happened, what the user said.
   - Not yet seen in game. The bestiary page is not built.
 - **Enemy scaling seen in game** (the user's screenshot). A Dead Lander G met at level 1 was scaled 35 -> 7 HP, and
   Spy showed HP 7, Defense 0, matching the log line. It worked on the first try.
+- **Scaling, two more pieces.**
+  - Attack now scales each hit by the HP ratio, instead of a flat `hardatk` step. The user's Dead Lander hit hard
+    through a string of attacks.
+  - The bestiary shows scaled HP and defence: a row swap around `PauseMenu.UpdateText`. The user saw Dead Lander G
+    at HP 7, Defense 0 there.

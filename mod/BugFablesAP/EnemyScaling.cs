@@ -71,6 +71,16 @@ namespace BugFablesAP
                 harmony.Patch(damage, prefix: new HarmonyMethod(typeof(EnemyScaling), nameof(BeforeBaseDamage)));
             }
             log.LogInfo("[scale] installed on MainManager.GetEnemyData" + (damage != null ? " and BattleControl.CalculateBaseDamage" : ""));
+            var bestiary = AccessTools.Method(typeof(PauseMenu), "UpdateText");
+            if (bestiary == null || BestiaryRows == null)
+            {
+                log.LogWarning("[scale] PauseMenu.UpdateText or its enemydata wasn't found; the bestiary shows vanilla stats.");
+            }
+            else
+            {
+                harmony.Patch(bestiary, prefix: new HarmonyMethod(typeof(EnemyScaling), nameof(BeforeBestiary)),
+                    postfix: new HarmonyMethod(typeof(EnemyScaling), nameof(AfterBestiary)));
+            }
         }
 
         internal static void Disable()
@@ -129,6 +139,58 @@ namespace BugFablesAP
         }
 
         private static float Ratio(int home, int target) => (target + Base) / (home + Base);
+
+        // The bestiary page reads the raw enemy table (PauseMenu's own copy), not GetEnemyData: the shown enemy's row is
+        // swapped for a scaled one while the page's text is built, then put back. The field holds other text elsewhere.
+        private static readonly System.Reflection.FieldInfo BestiaryRows = AccessTools.Field(typeof(PauseMenu), "enemydata");
+        private static int swappedRow = -1;
+        private static string originalRow;
+
+        private static void BeforeBestiary(PauseMenu __instance)
+        {
+            swappedRow = -1;
+            if (randomizerOn == null || !randomizerOn() || MainManager.listvar == null || MainManager.instance == null)
+            {
+                return;
+            }
+            int option = MainManager.instance.option;
+            if (!(BestiaryRows.GetValue(__instance) is string[] rows) || option < 0 || option >= MainManager.listvar.Length)
+            {
+                return;
+            }
+            int id = MainManager.listvar[option];
+            int? target = TargetLevel();
+            int? home = HomeLevel(id);
+            if (id < 0 || id >= rows.Length || target == null || home == null || target == home)
+            {
+                return;
+            }
+            string[] f = rows[id].Split(',');
+            if (f.Length < 38 || !int.TryParse(f[1], out int hp) || !int.TryParse(f[36], out int hardHp)
+                || !int.TryParse(f[2], out int def))
+            {
+                return;
+            }
+            float ratio = Ratio(home.Value, target.Value);
+            f[1] = Mathf.Max(1, Mathf.RoundToInt(hp * ratio)).ToString();
+            f[36] = Mathf.RoundToInt(hardHp * ratio).ToString();
+            if (def >= 0)
+            {
+                f[2] = Mathf.Max(0, def + (target.Value - home.Value) / LevelsPerDefence).ToString();
+            }
+            swappedRow = id;
+            originalRow = rows[id];
+            rows[id] = string.Join(",", f);
+        }
+
+        private static void AfterBestiary(PauseMenu __instance)
+        {
+            if (swappedRow >= 0 && BestiaryRows.GetValue(__instance) is string[] rows && swappedRow < rows.Length)
+            {
+                rows[swappedRow] = originalRow;
+            }
+            swappedRow = -1;
+        }
 
         // Each hit an enemy lands: its move's own damage scaled, before hardatk (Hard/Hardest) is added on top, so a
         // many-hit attack and a single big one shrink or grow alike. The game's floor of 1 per hit stays.

@@ -1015,8 +1015,8 @@ right point in the story. It is a balance setting, not a challenge setting.
     easier, rushing harder. A `chapter` mode was dropped: the chapter ends *are* the artifact flags, so it would be
     the same number.
 - Both up and down. **Normal / Hard / Hardest** (step 15) stays the challenge setting, on top.
-- The **bestiary** shows the scaled numbers, as the enemy would be if met now (not built yet). Spy in a fight already
-  shows the live ones.
+- The **bestiary** shows the scaled numbers, as the enemy would be if met now. Spy in a fight already shows the live
+  ones.
 
 **Where the numbers come from** (the facts in `MEASURED.md`, "Battles, for enemy shuffle"). The user hasn't finished
 the game, so nothing is from memory; everything is from the game's own data:
@@ -1046,6 +1046,11 @@ its enemies (`createentity`), after the game has applied Hard/Hardest:
   level mode that's the enemy's home level, so levelling keeps vanilla's pace. Left alone where the game fixes it
   (fixed EXP, no EXP, the level cap, hologram fights).
 - Some ids read another row's data (column 25); the row the game read is used.
+- **The bestiary** (built 2026-09-26, seen by the user): the page builds its text in `PauseMenu.UpdateText` from its
+  own copy of the raw table (`PauseMenu.enemydata`), so a prefix swaps the shown enemy's row for a scaled one (HP and
+  its Hard bonus by the ratio, defence by the step) and a postfix puts it back; the page's own Hard/Hardest maths runs
+  on top. The field holds other text on other pages, so only a real enemy row is touched. The Dead Lander G showed
+  HP 7, Defense 0 there, as in the fight.
 - Every scaled enemy is logged (`[scale] Seedling (9): home 1, target 10: hp 4 -> 10, attack +2, ...`).
 All the constants are starting values, tuned by play.
 
@@ -1056,5 +1061,5 @@ The panel row stepped through its three values (the log followed each). **How it
 "fair/hard" for anyone who shuffles enemies. Its attack sits at the -3 floor; if late enemies prove too harsh early,
 that floor is the first knob to try.
 
-**Status:** works, the scaled numbers seen in a fight by the user (2026-09-26); the constants still to tune by play;
-the bestiary page not built.
+**Status:** works, the scaled numbers seen in a fight and in the bestiary by the user (2026-09-26); per-hit attack
+scaling built, not yet felt in a fight; the constants still to tune by play.
