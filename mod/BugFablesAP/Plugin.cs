@@ -301,6 +301,7 @@ namespace BugFablesAP
             ItemShops.Tick();
             PartyFit.Tick();
             PartyMembers.Tick();
+            FieldMoves.Tick();
 
             DevCheats.Tick(Log, giveMoney);
             DevConsole.Tick(devConsole.Value);

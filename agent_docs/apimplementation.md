@@ -1743,7 +1743,10 @@ and key items use them. Jump has no entry there, so it stays "Jump".
 
 **Seen (the user):** the attacks now refused. **Holding the attack button buzzed nonstop** (B only; the jump fires
 once per press): the game retries a held attack every few frames (`DoActionHold`), so the buzzer now plays only when a
-refused press comes after a quiet 0.25 s, once per press.
+refused press comes after a quiet 0.25 s, once per press. **Then it felt delayed** (the user): the game fires a tap
+on the button's release, so the refusal came then. Now the attack's buzz plays on the press itself (a per-frame check
+of the button while the leader's move is locked and the player is free), and the refusals stay silent; the jump
+fires on its press and buzzes there.
 
 **Status:** built, tests pass; the jump and attack gates seen by the user; the single buzz while holding and the key
 items not yet seen.
