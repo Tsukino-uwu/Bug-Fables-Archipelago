@@ -1752,8 +1752,9 @@ fires on its press and buzzes there. **Seen (the user, 2026-09-27): "works way b
 alone didn't unlock the others. (Buying first failed with the dev berry cheat on: it refilled the berries, and item
 shops see a purchase as berries going down; the cheat is now a one-time top-up.)
 
-**Status:** works, seen by the user (2026-09-27): each attack locked until its own item, the buzz on the press;
-Beemerang Toss and the key items' look not yet seen.
+**Status:** works, seen by the user (2026-09-27): each attack locked until its own item, the buzz on the press,
+Beemerang Toss from Madeleine's table; the key items in the bag (Freeze and Horn Slash with Leif's and Kabbu's party
+icons, Jump with the Archipelago icon, "Kabbu can use Horn Slash." as the description; the user's screenshot).
 
 ## Build step 22: Shuffle Jump
 
@@ -1775,8 +1776,8 @@ the attacks"), behind its own option, `shuffle_jump` (off).
 5. **Tests** (`test_moves.py`, `TestJump`): the measured spots are reachable with nothing; Madeleine's house and the
    first artifact need Jump.
 
-**Status:** works, seen by the user (2026-09-27): the jump locked until its item (the Ladybug house), then free; the
-forced Warp not yet checked.
+**Status:** works, seen by the user (2026-09-27): the jump locked until its item (the Ladybug house), then free for
+the whole party; the forced Warp not yet checked (the user's Travel is Both).
 
 # How it works
 
