@@ -153,6 +153,13 @@ be wrong.
    carry it (shown in the key items like a real one), or whether the mod keeps it from the received items; its
    dialogue with the sailor (refusing, then free) through the fare lines the mod already rewrites (lines 16 and 19).
 
+22. **Healing save crystals, an idea for later** (suggested on Discord; the user, 2026-09-26): an item that makes the
+   blue save crystals (save only) act like the yellow ones (save and heal), a nice filler or useful check. The colour
+   is not baked into the art (code read, 2026-09-26): a save point is tinted in code from its entity data, yellow when
+   `data[2] == 0`, red when `data[1] >= 10` (`NPCControl.cs:1190-1217`), so the mod could turn every blue crystal
+   yellow by setting its data before the map builds it, as the enemy look test does. Still to find: where saving
+   decides to heal (the save prompt's handling), so the item gives the heal and the look together.
+
 **Known issues:**
 
 - **A Kabbu / horn rule is owed** once party members or the basic horn become items (Starting Party Member).
