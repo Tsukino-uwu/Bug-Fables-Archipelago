@@ -144,6 +144,7 @@ namespace BugFablesAP
             KeptOpen.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             EnemyShuffle.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             AnimGuard.Enable(Log, Guid, () => randomizerEnabled.Value);
+            GlowGuard.Enable(Log, Guid, () => randomizerEnabled.Value);
             difficulty = Config.Bind("Archipelago", "Difficulty", "Normal", new ConfigDescription(
                 "Normal leaves it to the game; Hard acts as if the Hard Mode medal were equipped; Hardest as if the save had "
                 + "the HARDEST code, never written into the save. Boss prize medals are paid out on every setting. "
@@ -167,6 +168,7 @@ namespace BugFablesAP
             QualityOfLife.Enable(Log, Config, () => randomizerEnabled.Value);
             QualityOfLife.SettingsOn = settingsOn;
             QualityOfLife.SeedStart = () => randomizerEnabled.Value ? connection?.Start : null;
+            QualityOfLife.SeedKnown = () => connection != null && connection.SeedKnown;
             QualityOfLife.EntrancesShuffled = () => randomizerEnabled.Value && connection?.DoorTargets != null && connection.DoorTargets.Count > 0;
             Multipliers.Enable(Log, Guid, Config, settingsOn);
             EnemyScaling.Enable(Log, Guid, settingsOn, () => QualityOfLife.EnemyScaling?.Value);
@@ -370,6 +372,7 @@ namespace BugFablesAP
             KeptOpen.Disable();
             EnemyShuffle.Disable();
             AnimGuard.Disable();
+            GlowGuard.Disable();
             EnemyScaling.Disable();
             Multipliers.Disable();
             InGameSettings.Disable();

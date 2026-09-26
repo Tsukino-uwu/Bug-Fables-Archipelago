@@ -155,6 +155,24 @@ namespace BugFablesAP
                 return;
             }
             harmony.Patch(solid, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeSolidColor)));
+            // The title screen resets the game's variables; the opening's own state is per file, so it resets there too.
+            MethodInfo reset = AccessTools.Method(typeof(MainManager), nameof(MainManager.SetVariables));
+            if (reset == null)
+            {
+                log.LogError("[qol] MainManager.SetVariables not found: the opening's state can carry into the next file.");
+                return;
+            }
+            harmony.Patch(reset, postfix: new HarmonyMethod(typeof(QualityOfLife), nameof(ResetFileState)));
+        }
+
+        private static void ResetFileState()
+        {
+            if (openingPending || startPending || openingFailed || event8Cut || partyThenFade || transferring)
+            {
+                log.LogInfo($"[qol] title screen: the last file's opening state cleared (pending {openingPending}, start {startPending}, "
+                    + $"failed {openingFailed}, transferring {transferring})");
+            }
+            openingPending = startPending = openingFailed = event8Cut = partyThenFade = transferring = false;
         }
 
         // The opening: Event16 (Maki's talk, Vi joining, the tutorial battle, location 1) never starts; the mod does
@@ -168,6 +186,7 @@ namespace BugFablesAP
         internal static string TestStart;
         // The seed's start (Starting Location): the opening ends with a transfer beside that save point instead.
         internal static Func<KeyValuePair<string, int>?> SeedStart;
+        internal static Func<bool> SeedKnown;
         private static KeyValuePair<string, int>? Seeded => SeedStart?.Invoke();
         // A seed's start needs the intro skipped (it ends with the transfer there), whatever Skip cutscenes says.
         private static bool SkipIntro => SkipCutscenes.Value || Seeded.HasValue;
@@ -266,7 +285,8 @@ namespace BugFablesAP
         {
             MainManager mm = MainManager.instance;
             Transform back = MainManager.GUICamera == null ? null : MainManager.GUICamera.transform.Find("back");
-            if (back != null && TestStartSet)
+            // A start elsewhere keeps the slides' black backdrop until the new map has loaded, so the opening map isn't seen.
+            if (back != null && (TestStartSet || Seeded.HasValue))
             {
                 heldBack = back.gameObject;
                 heldSince = Time.realtimeSinceStartup;
@@ -292,6 +312,10 @@ namespace BugFablesAP
             {
                 startPending = true; // at once, still behind the backdrop
             }
+            else if (Seeded.HasValue)
+            {
+                startPending = !transferring; // after the party is set; the transfer fades in
+            }
             else if (!partyThenFade)
             {
                 MainManager.PlayTransition(1, 0, 0.02f, Color.black);
@@ -301,9 +325,12 @@ namespace BugFablesAP
 
         private static bool partyThenFade;
 
+        private static int partySetFrame = -10;
+
         private static void PartyThenFade()
         {
             partyThenFade = false;
+            partySetFrame = Time.frameCount;
             MainManager mm = MainManager.instance;
             EntityControl four = MainManager.GetEntity(4);
             if (four != null && mm.playerdata != null)
@@ -317,6 +344,12 @@ namespace BugFablesAP
             else
             {
                 log.LogWarning("[qol] opening: entity 4 not found; the party stays where it is");
+            }
+            // A seed start's transfer fades in on arrival; fading in here would destroy the fade it waits on.
+            if (startPending && Seeded.HasValue)
+            {
+                log.LogInfo("[qol] opening party set; the fade-in is left to the seed start's transfer");
+                return;
             }
             MainManager.PlayTransition(1, 0, 0.02f, Color.black);
         }
@@ -502,7 +535,8 @@ namespace BugFablesAP
                 && !mm.flags[15] && mm.flags[691])
             {
                 openingPending = true;
-                startPending = (TestStartSet || Seeded.HasValue) && !transferring;
+                // Whether the seed has a start is asked at the transfer: before the login it isn't known yet.
+                startPending = !transferring;
                 log.LogInfo("[qol] the opening is due (flag 15 unset on the starting map): doing it at the start, on a free frame");
             }
             string here = MainManager.map == null ? null : MainManager.map.mapid.ToString();
@@ -559,7 +593,14 @@ namespace BugFablesAP
                     log.LogError($"[qol] ending Event8 failed: {e}");
                 }
             }
-            if (startPending && MainManager.player != null && !mm.inevent && !mm.message && MainManager.battle == null)
+            if (startPending && !TestStartSet && !Seeded.HasValue && SeedKnown != null && SeedKnown())
+            {
+                startPending = false;
+                log.LogInfo("[qol] the seed has no start of its own (Starting Location off): staying at the game's start");
+            }
+            if (startPending && (TestStartSet || Seeded.HasValue) && !partyThenFade
+                && Time.frameCount > partySetFrame + 1 && MainManager.player != null && !mm.inevent
+                && !mm.message && MainManager.battle == null)
             {
                 startPending = false;
                 transferring = true;

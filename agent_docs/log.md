@@ -749,3 +749,9 @@ Newest last. What was tried, what happened, what the user said.
 - **Confirmed by the user:** the enemy-only walls fix (Vi and Kabbu added mid-map, the party walked through) and a
   berry at 10x. On the way: `addmember`'s received members live only in memory, so a hot reload forgets them and the
   next party change dropped Kabbu; `addmember 1` again restored him (a dev stand-in only).
+- **The random start, seen working** after three failures (build step 15 has each, and how it was found). Mistakes of
+  mine on the way: a hot reload landed mid-intro on a new file (don't copy a build while the user starts a file), and
+  I told the user to start a new file before the race was fixed. The `_Emission` error: the game's own, guarded
+  (`GlowGuard.cs`); the first guard missed two of the three reads.
+- **Panel:** Shop prices became *Medal prices*, a 0-10 bar; the leaf's height needed two screenshots (it bounces in
+  scale only), one guess made it worse; Disable all centred.

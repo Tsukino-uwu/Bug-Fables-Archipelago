@@ -1337,6 +1337,21 @@ still starts outside Bugaria, so a seed started elsewhere may not be finishable 
    the setting still governs every other scene.
 4. **Tests** (`test/test_start.py`): off gives `{}`; `anywhere` gives a save point from the table; the start is fixed.
 
+**First tries in game (the user, 2026-09-26), three failures and how each was found:**
+- **Frozen, with a `NullReferenceException` in `TransferMap`.** The transfer's first step is the game's fade to black,
+  and it waits on that fade's sprite; the intro skip's own fade-in started a frame later, and `PlayTransition` destroys
+  the running fade's sprite. Read from the stack trace and the game's `PlayTransition`. Now, with a seed start, the
+  skip sets the party but leaves the fade-in to the transfer, which waits a frame after the party is set.
+- **Left at the game's start, no transfer.** The mod's "opening due" state outlived the file it belonged to (a file
+  quit before its opening ran), so the next file skipped the step that books the start. Found in the log of the file
+  before. The state now resets with the game's own `SetVariables` (the title screen), and the intro skip's end books
+  the start as well. The start is also asked at the transfer, not before the login.
+- **A glimpse of the opening map before the transfer.** The skip removed the slides' black backdrop at once; with a
+  seed start it now stays until the new map has loaded, as the dev `TestStart` already did.
+
+**Seen by the user (2026-09-26):** a new file ended at the seed's start, Rubber Prison's cell block, the pause map
+marking only Rubber Prison visited; Warp to Start went there from the Outskirts.
+
 **A worked example: starting on Metal Island** (the user asked, 2026-09-26). Leaving needs nothing (the island
 sailor is unchanged); coming back needs the Boat Ticket, or the Warp (the seed's start) or map travel. Nothing can be
 missed, and nothing there has to be filler: the logic already gates Metal Island on the ticket, so it never expects the
@@ -1352,7 +1367,7 @@ logic can't model giving access up. With the Warp guaranteed, the start can alwa
 every start at once. The mod shows the Warp with a seed start even when Travel is Off or Map; the logic's side (the start
 region reachable from every region) comes with the room-by-room logic.
 
-**Status:** in progress (experimental): `anywhere` built (2026-09-26), the apworld tests pass, not yet seen in game;
+**Status:** in progress (experimental): `anywhere` works, seen by the user (2026-09-26): a new file starts at the seed's start;
 `towns` and the logic from the start to come; the intro is always skipped with a seed start.
 
 ## Build step 16: the Boat Ticket

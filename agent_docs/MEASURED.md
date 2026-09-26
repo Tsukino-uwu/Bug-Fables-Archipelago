@@ -1129,6 +1129,18 @@ hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0
   from another window and no marker there, it threw a NullReferenceException every frame (the diagnostic: window 6,
   option 5, markers 1-25 all null).
 
+## Fades, and a light's glow colour (2026-09-26, code read; both seen in the log)
+
+- **`MainManager.PlayTransition(id, ...)`** stops the running transition coroutine and, for ids 0, 2, 4 and 5 (a fade
+  out), destroys every `transitionobj` before starting its own. `TransferMap` fades out, then waits on
+  `transitionobj[0]`'s `SpriteRenderer` alpha; another fade started meanwhile leaves it reading a destroyed sprite
+  (`NullReferenceException` in `SpriteRenderer.get_color`, seen 2026-09-26). Used by `QualityOfLife.cs`.
+- **`MainManager.SetVariables`** runs as the game boots and whenever the title screen starts (`StartMenu`), and after
+  a language pick: every file begins after it. Used by `QualityOfLife.cs`.
+- **`GlowTrigger`** reads `material.GetColor("_Emission")` in `Start` (once, with `getactivecolorfromstart`) and twice
+  in `LateUpdate`, and writes it back with `SetColor`. A material without the property makes Unity log "Material
+  doesn't have a color property '_Emission'" (seen on arriving at Rubber Prison's cell block). Used by `GlowGuard.cs`.
+
 ## Enemy-only walls (2026-09-26, code read and the console's `solids`; the symptom seen by the user)
 
 - **Maps have walls only enemies bump into**: colliders tagged `EntityOnly`. `MapControl.SetPlayerColliders` (private,

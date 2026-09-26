@@ -881,6 +881,11 @@ Unity's `Animator.Play(string, int, float)`, so a prefix there gives them the sa
 layer for -1), installed and logged at load. A layer warning that still shows comes from another path; the log names
 it.
 
+**Unity's glow-colour error, handled like the animation warnings (2026-09-26):** a light in Rubber Prison's cell
+block has a material without the glow colour the game's `GlowTrigger` reads, so Unity logged an error on arrival
+(harmless: the value is only written back to the same missing property). `GlowGuard.cs` swaps the three reads for one
+that checks first and reads black, logging each material once; only while Archipelago is enabled.
+
 **A member added mid-map meets the enemy-only walls (the user, 2026-09-26):** after adding Kabbu on Outskirts East,
 walls only enemies should bump into blocked the party. A map load tells those walls to ignore each character, and the
 added member comes with new characters (`MEASURED.md`, enemy-only walls). Adding a member now redoes that step the
