@@ -329,7 +329,11 @@ namespace BugFablesAP
         // Behind a location's item, on the ground or a shelf: the pickup's own starburst, smaller, in its class
         // colour, so its importance shows before it's taken. Null clears it.
         private const string MarkName = "apback";
-        private const float MarkScale = 0.7f;
+        // Big enough to show round the item, the item and it raised together so its bottom stays near the item's old base
+        // (items are lifted half their height; lower, the counter hid it), and close behind (the hold-up's 0.2 slid
+        // sideways seen at an angle). Dev `mark` tunes them.
+        internal static float MarkScale = 0.6f, MarkRaise = 0.3f;
+        private const float MarkBehind = 0.05f;
 
         internal static void Mark(EntityControl entity, Color? color)
         {
@@ -339,6 +343,16 @@ namespace BugFablesAP
                 return;
             }
             Transform mark = shown.Find(MarkName);
+            // The item's own lift, as the game sets it (half its height), plus the raise while marked.
+            Sprite item = entity.sprite.sprite;
+            if (entity.spritetransform != null && item != null)
+            {
+                var lift = new Vector3(0f, item.bounds.extents.y + (color == null ? 0f : MarkRaise), entity.spritetransform.localPosition.z);
+                if (entity.spritetransform.localPosition != lift)
+                {
+                    entity.spritetransform.localPosition = lift;
+                }
+            }
             if (color == null)
             {
                 if (mark != null)
@@ -349,11 +363,18 @@ namespace BugFablesAP
             }
             if (mark == null)
             {
-                SpriteRenderer back = MainManager.NewSpriteObject(MarkName, new Vector3(0f, 0f, 0.2f), Vector3.zero, shown,
+                SpriteRenderer back = MainManager.NewSpriteObject(MarkName, new Vector3(0f, 0f, MarkBehind), Vector3.zero, shown,
                     MainManager.guisprites[85], entity.sprite.material);
                 back.transform.localScale = Vector3.one * MarkScale;
                 back.gameObject.layer = shown.gameObject.layer;
                 mark = back.transform;
+            }
+            // Kept in step after a hot reload, which leaves the old plugin's marks at their old size.
+            var at = new Vector3(0f, 0f, MarkBehind);
+            if (mark.localScale != Vector3.one * MarkScale || mark.localPosition != at)
+            {
+                mark.localScale = Vector3.one * MarkScale;
+                mark.localPosition = at;
             }
             SpriteRenderer renderer = mark.GetComponent<SpriteRenderer>();
             if (renderer.material.color != color.Value)
@@ -659,22 +680,19 @@ namespace BugFablesAP
                     {
                         continue;
                     }
-                    Mark(entity, MarkColorOf(entry.Key));
                     // A crystal berry every time: the game shows its model again after it's hidden.
                     if (entity.animid == 3)
                     {
                         ShowAsSprite(entity, sprite);
+                        Mark(entity, MarkColorOf(entry.Key));
                         continue;
                     }
-                    if (entity.sprite.sprite == sprite)
+                    if (entity.sprite.sprite != sprite)
                     {
-                        continue;
+                        entity.sprite.sprite = sprite;
                     }
-                    entity.sprite.sprite = sprite;
-                    if (entity.spritetransform != null)
-                    {
-                        entity.spritetransform.localPosition = new Vector2(0f, sprite.bounds.extents.y);
-                    }
+                    // Sets the lift too (half the sprite's height, raised while marked).
+                    Mark(entity, MarkColorOf(entry.Key));
                 }
             }
         }

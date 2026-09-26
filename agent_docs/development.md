@@ -156,6 +156,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `holdup ap`: the drawn Archipelago icon held up on two class backdrops (plum, cyan).
 - `shelflook <location id> <white|black> <rim share>`: a shop slot shows the drawn icon with that outline, to compare
   looks on a shelf; `shelflook off` puts every slot back.
+- `iteminfo`: log every item entity on the map with its sprite, pivot, size, lift and backdrop (placement checks).
+- `mark <size> <raise>`: the Item backgrounds starburst's size and the lift it and its item get, live.
 - `palette`: log the game's text colours by index (`|color,n|`), Archipelago's added ones included.
 - `colortry <hex...>`: queue a trap's "You got" line in each colour given, to compare them on screen.
 - `onehit`: flips a test boost: every hit on an enemy does at least 99 (before defence). It's the `[Debug]` setting

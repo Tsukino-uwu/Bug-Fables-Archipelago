@@ -169,14 +169,13 @@ namespace BugFablesAP
                 {
                     if (original.TryGetValue(npc.entity, out Sprite own))
                     {
-                        ItemSwap.Mark(npc.entity, null);
                         npc.entity.sprite.sprite = own; // its check is done: the shop's own item again
+                        ItemSwap.Mark(npc.entity, null);
                         original.Remove(npc.entity);
                     }
                     continue;
                 }
                 ItemSwap.LookOf(at, out _, out Sprite sprite, out _);
-                ItemSwap.Mark(npc.entity, ItemSwap.MarkColorOf(at));
                 if (sprite != null && npc.entity.sprite.sprite != sprite)
                 {
                     if (!original.ContainsKey(npc.entity))
@@ -185,6 +184,7 @@ namespace BugFablesAP
                     }
                     npc.entity.sprite.sprite = sprite;
                 }
+                ItemSwap.Mark(npc.entity, ItemSwap.MarkColorOf(at));
             }
         }
     }

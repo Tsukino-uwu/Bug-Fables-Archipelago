@@ -485,6 +485,40 @@ namespace BugFablesAP
                             parts[2] == "white" ? Color.white : Color.black);
                         return $"shelflook: location {at} shows the icon, {parts[2]} outline {parts[3]}";
                     }
+                    case "iteminfo":
+                    {
+                        // Every item entity on the map: its sprite, pivot, size and the offsets that place it (shelf heights).
+                        Sprite star = MainManager.guisprites[85];
+                        var info = new System.Text.StringBuilder("[dev] items on " + MainManager.map.mapid + $" (starburst {star.name} pivot {star.pivot} rect {star.rect.size} bounds c{star.bounds.center} e{star.bounds.extents}):");
+                        foreach (NPCControl npc in MainManager.map.GetComponentsInChildren<NPCControl>(true))
+                        {
+                            EntityControl e = npc.entity;
+                            if (e == null || e.sprite == null || (npc.objecttype != NPCControl.ObjectTypes.Item && e.sprite.sprite == null))
+                            {
+                                continue;
+                            }
+                            Sprite sp = e.sprite.sprite;
+                            Transform mark = e.sprite.transform.Find("apback");
+                            info.Append($"\n  {npc.name} ({npc.objecttype}, animid {e.animid}, state {e.animstate}) at {e.transform.position}: sprite "
+                                + (sp == null ? "none" : $"{sp.name} pivot {sp.pivot} rect {sp.rect.size} bounds c{sp.bounds.center} e{sp.bounds.extents}")
+                                + $"; spritetransform {(e.spritetransform != null ? e.spritetransform.localPosition.ToString() : "none")}"
+                                + $"; sprite local {e.sprite.transform.localPosition} parent {(e.sprite.transform.parent != null ? e.sprite.transform.parent.name : "none")}"
+                                + (mark != null ? $"; apback {mark.localPosition}" : ""));
+                        }
+                        log.LogInfo(info.ToString());
+                        return "item info logged";
+                    }
+                    case "mark":
+                    {
+                        // mark <scale> <raise>: the backdrop behind a check's item, live.
+                        if (parts.Length < 3)
+                        {
+                            return $"mark <scale> <raise> (now {ItemSwap.MarkScale} {ItemSwap.MarkRaise})";
+                        }
+                        ItemSwap.MarkScale = float.Parse(parts[1], System.Globalization.CultureInfo.InvariantCulture);
+                        ItemSwap.MarkRaise = float.Parse(parts[2], System.Globalization.CultureInfo.InvariantCulture);
+                        return $"mark now scale {ItemSwap.MarkScale}, raise {ItemSwap.MarkRaise}";
+                    }
                     case "palette":
                         log.LogInfo("[dev] text colours: " + string.Join(", ", MainManager.instance.textcolors
                             .Select((c, i) => i + " " + ColorUtility.ToHtmlStringRGB(c)).ToArray()));

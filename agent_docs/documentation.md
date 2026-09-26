@@ -1363,9 +1363,18 @@ or on a shop shelf, has that starburst behind it (yours included, the user: "inc
 
 **How it works** (`ItemSwap.Mark`, called where a location's look is kept: `TickGround`, and the item and medal shops'
 shelf ticks): a child sprite `apback` on the item's sprite, the game's starburst (`guisprites[85]`, what a pickup's own
-"back" uses) at 70%, behind the item (z 0.2, the game's offset), in Archipelago's class colour. Taking the item removes
-it, so the game's own starburst grows as usual. Every check's item, yours included.
+"back" uses), in Archipelago's class colour. Taking the item removes it, so the game's own starburst grows as usual.
+Every check's item, yours included.
 
-**Status:** built (2026-09-26), not yet seen.
+**Getting it to sit right (the user, on the Caravan's shelf, 2026-09-26):** at 70% and the hold-up's 0.2 behind, it
+hung low, its bottom hidden by the counter, and from the side it slid away from its item. A readout (dev `iteminfo`)
+settled why: every slot stands at the same height, every item sprite is pivoted at its centre and lifted half its
+height (0.5), and the starburst too is centred (`MEASURED.md`); at 60% it reaches 0.84 below the item's centre, below
+its base. At 45% the item hid it. So: 60%, only 0.05 behind, and **the item and its starburst raised 0.3 together**
+(the user: move the items up so they sit in the centre), back to the game's height when backgrounds are off. Items
+still differ in look along a shelf: their pictures differ in shape and margin, as in vanilla. Dev `mark <size> <raise>`
+tunes it live.
+
+**Status:** works on the Caravan's shelf, seen by the user (2026-09-26); the ground not yet seen at the final settings.
 
 *Code: `ItemSwap.cs` (`Mark`, `MarkColorOf`), `QualityOfLife.cs` (`ItemBackgrounds`), `ApMenu.cs` (`BackgroundsRow`).*
