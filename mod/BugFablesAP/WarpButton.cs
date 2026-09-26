@@ -31,10 +31,9 @@ namespace BugFablesAP
         // is the map shortcut, so a second travel button takes sprite 19 in a grown array.
         private const int FirstOption = 4;
         private static readonly int[] SpriteSlot = { 17, 19 };
-        // The round icon in the other buttons' style (a blue map). Alone, either button uses it as is; with both, Warp's
-        // is tinted warm so the two tell apart (the user).
-        private const int IconSprite = 34;
-        private static readonly Color BothWarpTint = new Color(1f, 0.75f, 0.45f);
+        // Map: the round blue map in the other buttons' style. Warp: the map item's scroll, a "return scroll" (the user).
+        private const int MapIconSprite = 34;
+        private const int ScrollItem = 41;
         // By its save point: entity 1 (SaveTutorial) before flag 41, entity 22 (SaveAfterTutorial) after.
         private const MainManager.Maps StartMap = MainManager.Maps.BugariaOutskirtsOutsideCity;
 
@@ -206,7 +205,8 @@ namespace BugFablesAP
             builtFor = sprites;
             // All across, centred, inside the 11-wide box (the game's four sit at -3..3; five fit two apart).
             int total = 4 + buttons.Count;
-            float step = total <= 5 ? 2f : 1.8f;
+            // Six span what five do (-4..4), so the first isn't pushed off the panel.
+            float step = total <= 5 ? 2f : 1.6f;
             float x = -step * (total - 1) / 2f;
             for (int n = 0; n < 4; n++)
             {
@@ -215,12 +215,9 @@ namespace BugFablesAP
             for (int i = 0; i < buttons.Count; i++)
             {
                 // Made as BuildWindow makes the other four, so IconAnim outlines and wiggles it like them.
+                Sprite look = buttons[i] == Kind.Map ? MainManager.guisprites[MapIconSprite] : MainManager.itemsprites[0, ScrollItem];
                 SpriteRenderer icon = MainManager.NewUIObject("menuicon" + (FirstOption + i), sprites[16].transform.parent,
-                    new Vector3(x + step * (4 + i), 3f), Vector3.one, MainManager.guisprites[IconSprite]).GetComponent<SpriteRenderer>();
-                if (buttons.Count == 2 && buttons[i] == Kind.Warp)
-                {
-                    icon.color = BothWarpTint;
-                }
+                    new Vector3(x + step * (4 + i), 3f), Vector3.one, look).GetComponent<SpriteRenderer>();
                 sprites[SpriteSlot[i]] = icon;
                 icons.Add(icon);
             }

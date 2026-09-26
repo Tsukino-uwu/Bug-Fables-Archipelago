@@ -625,9 +625,10 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    **Travel: Off / Warp / Map / Both (the user, 2026-09-26; built, not yet seen).** The Warp button's on/off became one
    *Travel* row (config `Travel`, default Both). `WarpButton.cs` now places the travel buttons after the game's four:
    Warp, then Map (left from the first button wraps to Map; Warp sits between, harder to hit by accident). Five fit
-   two apart as before; six sit 1.8 apart. The map shortcut already holds sprite 18, so a second button takes sprite 19
-   in a grown `sprites` array, and `IconAnim` is handed one entry per button. Both use the round blue map icon
-   (`guisprites[34]`; an item sprite on a pause button looked wrong before); with both, Warp's is tinted warm.
+   two apart as before; six sit 1.6 apart (at 1.8 the first was pushed off the panel, the user's screenshot). The map shortcut already holds sprite 18, so a second button takes sprite 19
+   in a grown `sprites` array, and `IconAnim` is handed one entry per button. **Icons (the user):** Map gets the round
+   blue map (`guisprites[34]`, Warp's icon until now: "fits a map more"), Warp gets the map item's scroll
+   (`itemsprites[0, 41]`, "like a return scroll"), so the two differ without a tint.
    **Map** opens the game's own map window (6) the way its map shortcut does (`windowid = 6`, `BuildWindow`), in a
    travel mode: confirm on a visited area (`librarystuff[4, area]`) opens "Travel to <area>?" (No first) instead of
    flipping the description's pages; the map opened any other way keeps vanilla controls. On Yes the menu closes the
