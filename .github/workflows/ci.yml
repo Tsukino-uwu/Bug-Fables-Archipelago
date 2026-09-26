@@ -59,7 +59,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ci-requirements.txt
           python ModuleUpdate.py --yes --force
-          python Launcher.py --update_settings
+          # Installed once; after this, a clash between other worlds' pins would stop at a press-Enter prompt.
+          echo "SKIP_REQUIREMENTS_UPDATE=1" >> "$GITHUB_ENV"
+          SKIP_REQUIREMENTS_UPDATE=1 python Launcher.py --update_settings
 
       - name: Tests
         working-directory: Archipelago

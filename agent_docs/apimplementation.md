@@ -1455,7 +1455,9 @@ BepInEx is not bundled; the player installs it first.
    failed it, naming the file; removing it passed.
 3. **CI** (`.github/workflows/ci.yml`, every push, and called by the release): the gate, and the apworld on a
    Python matrix (3.11, 3.12, 3.13, what Archipelago's own CI tests at 0.6.7). Each leg checks out Archipelago
-   `0.6.7`, installs it the way Archipelago's own `unittests.yml` does, runs our tests, and generates three presets
+   `0.6.7`, installs it the way Archipelago's own `unittests.yml` does (then sets `SKIP_REQUIREMENTS_UPDATE=1`: on the first
+   run, 2026-09-26, two worlds' pins clashed over `typing-extensions` on Python 3.12 and 3.13, and `Launcher.py` stopped
+   at a press-Enter prompt with no one to press it), runs our tests, and generates three presets
    (default, every experimental option on, every location toggle off) with APQuest as a second game. The whole suite
    takes about 3 seconds, so the matrix splits by Python version, not by test file: every job pays the install.
    The 3.13 leg also builds the apworld (`Launcher.py "Build APWorlds" -- "Bug Fables"`, with our `LICENSE` copied
