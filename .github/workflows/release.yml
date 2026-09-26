@@ -96,7 +96,7 @@ jobs:
       - name: Zip the mod
         run: |
           set -e
-          (cd release/mod && zip -r -X ../../dist/bugfables-archipelago.zip BepInEx BugFablesAP-README.txt)
+          (cd release/mod && zip -r -X ../../dist/bugfables-archipelago.zip BepInEx README.txt)
           unzip -l dist/bugfables-archipelago.zip
           ls -l dist
 

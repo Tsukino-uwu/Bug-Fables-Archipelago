@@ -1427,7 +1427,7 @@ Three separate downloads on a GitHub release (the user, 2026-09-25/26), made the
 
 | Download | What it is |
 |---|---|
-| `bugfables-archipelago.zip` | The mod. Extract it into the Bug Fables folder, next to `Bug Fables.exe`; it holds `BepInEx/plugins/BugFablesAP/` and `BugFablesAP-README.txt`. |
+| `bugfables-archipelago.zip` | The mod. Extract it into the Bug Fables folder, next to `Bug Fables.exe`; it holds `BepInEx/plugins/BugFablesAP/` and `README.txt`. |
 | `bug_fables.apworld` | The world, for Archipelago's `custom_worlds` folder. |
 | `bug_fables.yaml` | The player options template. |
 
@@ -1442,8 +1442,8 @@ as `bug_fables.yaml`.
 (`BepInEx.Preloader/Entrypoint.cs`, `LocalResolve`) looks for a missing assembly in every subfolder of `plugins`
 (`Utility.TryResolveDllAssembly`). The folder holds the four DLLs, `LICENSE.txt` (ours), `THIRD-PARTY-NOTICES.txt`
 (the three libraries' MIT notices, which the NuGet package doesn't carry; `licensing.md`). The zip's top level
-holds only `BepInEx/` and `BugFablesAP-README.txt`, where someone opening the zip sees it (the user, 2026-09-26: it
-was three folders down at first); named for the mod since it lands next to `Bug Fables.exe`. `build-release.ps1`
+holds only `BepInEx/` and `README.txt`, where someone opening the zip sees it (the user, 2026-09-26: it was three
+folders down at first). A plain name, though it lands next to `Bug Fables.exe` (the user: overwriting it is fine). `build-release.ps1`
 refuses any other file at the top level, in `-Check` too.
 BepInEx is not bundled; the player installs it first.
 

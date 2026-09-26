@@ -41,9 +41,9 @@ function Assert-DebugDefaultsOff {
     Write-Output "all $(@($binds).Count) [Debug] settings default to off"
 }
 Assert-DebugDefaultsOff
-# The zip's top level lands next to Bug Fables.exe: only BepInEx and the README, named so it's clearly ours.
+# The zip's top level lands next to Bug Fables.exe: only BepInEx and the README.
 $top = @(Get-ChildItem (Join-Path $release 'mod') | ForEach-Object Name | Sort-Object)
-if (($top -join ',') -ne 'BepInEx,BugFablesAP-README.txt') { throw "release/mod's top level must be BepInEx and BugFablesAP-README.txt, is: $($top -join ', ')" }
+if (($top -join ',') -ne 'BepInEx,README.txt') { throw "release/mod's top level must be BepInEx and README.txt, is: $($top -join ', ')" }
 
 if ($Check) {
     if (-not (Test-Path $builtFrom)) { throw 'release/built-from.txt is missing: run dev-scripts/build-release.ps1' }
