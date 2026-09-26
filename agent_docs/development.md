@@ -145,6 +145,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   holder, then `maintextbox`); the new `gui` command showed a `Textbox(Clone)` under the GUI camera that
   `maintextbox` no longer pointed at, so `unstick` now removes any such box once dialogue has ended.
 - `gui`: log what hangs under the GUI camera (name, active, renderer, children), to find what's really stuck on screen.
+- `display`: log the monitor's reported resolution and refresh rate, the window, the game's FPS and VSync settings,
+  what Unity was given (`vSyncCount`, `targetFrameRate`) and the measured frame rate.
 - `nudge <x> <y> <z>`: shift the party by that much on the current map.
 - `items`: list every pickup that exists on the current map right now (kind, id, flag, distance), in the log.
 - `tree`: log the nearest pickup's whole object tree: each object, whether it's active, and its renderers, on or

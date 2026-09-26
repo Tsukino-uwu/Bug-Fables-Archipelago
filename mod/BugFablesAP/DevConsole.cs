@@ -410,6 +410,17 @@ namespace BugFablesAP
                         }
                         log.LogInfo(guiLog.ToString());
                         return "gui logged";
+                    case "display":
+                    {
+                        // The inputs of the game's own frame-rate code (MainManager's vSyncCount and targetFrameRate lines).
+                        Resolution cur = Screen.currentResolution;
+                        string display = $"display: current {cur.width}x{cur.height} @ {cur.refreshRate} Hz, window {Screen.width}x{Screen.height}, "
+                            + $"fullscreen {Screen.fullScreen} ({Screen.fullScreenMode}); game settings fps {MainManager.fps}, vsync {MainManager.vsync}; "
+                            + $"Unity vSyncCount {QualitySettings.vSyncCount}, targetFrameRate {Application.targetFrameRate}; "
+                            + $"measured {1f / Time.smoothDeltaTime:0.0} fps";
+                        log.LogInfo("[dev] " + display);
+                        return display;
+                    }
                     case "addleif": return AddLeif();
                     case "follower":
                     {

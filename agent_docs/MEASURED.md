@@ -1211,6 +1211,24 @@ are free for the mod's own items. Per id, fields 0-3 come from the language file
 **Field 1 is not the description**: every key item holds "Desc" there, the Explorer Permit nothing. Medals keep theirs
 in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 1) and `EntityDump.cs`.
 
+## Frame rate (2026-09-27, code read; the console's `display` on the user's machine)
+
+- **The game's settings:** `MainManager.fps` 0 = 30, 1 = 60, 2 = uncapped (`targetFrameRate = -1`), applied in
+  MainManager next to `vSyncCount`. The settings menu (PauseMenu, option 80) cycles only 0 and 1; option 2 still has a
+  label (menutext 107), so it was cut. The value is saved in the game's own settings file, read at `fps = ...` in
+  MainManager's settings loader.
+- **VSync on:** `vSyncCount = clamp(floor(refreshRate / 60), 1, 4)`, so 144 Hz runs at 72 and 240 Hz at 60.
+- **Scales with time:** `MainManager.TieFramerate(v) = v * Time.smoothDeltaTime * 60`, used almost everywhere.
+- **Does not:** about 32 `Time.frameCount % N` checks (EntityControl, NPCControl, FishAI, Fader, LightSorter,
+  Hidder, BattleControl, ...), so they tick in proportion to the frame rate. `MainManager.FrameDifference` divides by
+  the target rate or the refresh rate.
+- **The tapping-key action command** (BattleControl, `TappingKey`/`RandomTappingBar`): each press adds
+  `TieFramerate(data[1]) / 80 * (rate / 60)`, with rate = `targetFrameRate` (VSync off) or the monitor's refresh
+  rate (VSync on). Right at any fixed cap with VSync off; negative, so the bar drains, at uncapped (-1); with VSync on
+  it is off by refresh / actual fps (4x on a 240 Hz monitor at 60).
+- **Seen on the user's machine (VSync off, 60fps, windowed):** current resolution 3840x2160 @ 240 Hz, window
+  1280x720, `vSyncCount` 0, `targetFrameRate` 60, measured 60.6 fps.
+
 ## Quests: to measure (when quests come into scope)
 
 - **The pause menu's quest list groups quests by chapter and shows done / not done** (the user,
