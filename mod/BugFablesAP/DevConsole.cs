@@ -916,6 +916,10 @@ namespace BugFablesAP
             if (sprite != null)
             {
                 memberLooks.Add(new KeyValuePair<NPCControl, Sprite>(item, sprite));
+                if (item.entity != null && item.entity.sprite != null)
+                {
+                    item.entity.sprite.sprite = sprite;
+                }
             }
             return $"spawned {name}'s look at {x}, {z} from you (a Crunchy Leaf if taken)";
         }

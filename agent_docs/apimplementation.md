@@ -1557,7 +1557,7 @@ spider scene is also still open (the mod guide, step 11). Both come up in the fi
 **Seen by the user (2026-09-26), a Kabbu start:** the opening left Kabbu alone and sent its check; Artis's gift was Leif,
 who joined on the spot; the Fountain Rooftop held Vi, who joined too (party 1, 2, 0). Then each member's hold-up: "You got
 Vi / Kabbu / Leif from TestPlayer!", item-sized in the starburst, each in his colour, no description. A member lying on
-the ground at the new size is still to see (the rooftop's was the old, oversized one).
+the ground at the new size, seen too (dev `spawn member`, a screenshot of Vi on the grass).
 
 **Status:** works before the Outskirts gate, seen by the user with a Kabbu start (2026-09-26); past the gate (the
 trapdoor and spider scenes with three) not yet played.
