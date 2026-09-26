@@ -627,6 +627,12 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    `MainManager.battle` and `inbattle`) and the scene speeds up again after it. Built. **Seen with three members** (the
    user, the same day, at normal speed): Leif stood idle through the scenes; the fights were Kabbu alone, then Kabbu and
    Vi, as the story has them.
+   **The first spider fight ends at once** (the user, 2026-09-27: a scripted fight, three turns of waiting): the
+   game makes it unwinnable (the spider at 999 HP, 99 defence) and ends it itself on turn 3 with `ExitBattle`
+   (`BattleControl.CheckEvent`, while flag 15 is set and 27 isn't). With *Skip cutscenes* a prefix on `CheckEvent`
+   calls the same `ExitBattle` at the first moment the player could act, only for that fight: during Event6, the
+   spider alone, `flagvar[11]` at 0 or 1. The second fight (the spider and Leif in the web, enemy 12, `flagvar[11]` 2)
+   is a real one and untouched. Built.
    **First skip froze the player** (the user at the bridge, 2026-09-25): a trigger
    freezes the player (`minipause`) before starting its scene (`NPCControl.cs:5512-5525`), and the scene's own
    `EndEvent` unfreezes. A skipped scene never ends, so the skip now calls the game's `EndEvent()` itself, which is all

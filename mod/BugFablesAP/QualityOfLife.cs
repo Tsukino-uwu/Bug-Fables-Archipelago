@@ -195,6 +195,15 @@ namespace BugFablesAP
                 return;
             }
             harmony.Patch(startEvent, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeStartEvent)));
+            MethodInfo checkEvent = AccessTools.Method(typeof(BattleControl), "CheckEvent");
+            if (checkEvent != null && exitBattle != null && battleInEvent != null && battleAction != null)
+            {
+                harmony.Patch(checkEvent, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeCheckEvent)));
+            }
+            else
+            {
+                log.LogError("[qol] BattleControl.CheckEvent, ExitBattle, inevent or action not found: the first spider fight runs its three turns.");
+            }
             MethodInfo changeParty = AccessTools.Method(typeof(MainManager), nameof(MainManager.ChangeParty), new[] { typeof(int[]), typeof(bool), typeof(bool) });
             if (changeParty == null)
             {
@@ -344,6 +353,27 @@ namespace BugFablesAP
                 }
             }
             return null;
+        }
+
+        // The first spider fight (Event6) can't be won and ends by itself on turn 3: with Skip cutscenes it ends, the same
+        // way, as soon as the player could act. The second fight (two enemies, flagvar 11 at 2) is a real one.
+        private static readonly MethodInfo exitBattle = AccessTools.Method(typeof(BattleControl), "ExitBattle");
+        private static readonly FieldInfo battleInEvent = AccessTools.Field(typeof(BattleControl), "inevent");
+        private static readonly FieldInfo battleAction = AccessTools.Field(typeof(BattleControl), "action");
+
+        private static bool BeforeCheckEvent(BattleControl __instance)
+        {
+            MainManager mm = MainManager.instance;
+            if (!SkipCutscenes.Value || SettingsOn == null || !SettingsOn() || MainManager.lastevent != 6
+                || !mm.flags[15] || mm.flags[27] || (mm.flagvar[11] != 0 && mm.flagvar[11] != 1)
+                || __instance.enemydata == null || __instance.enemydata.Length != 1 || __instance.enemydata[0].animid != 2
+                || (bool)battleInEvent.GetValue(__instance) || (bool)battleAction.GetValue(__instance))
+            {
+                return true;
+            }
+            exitBattle.Invoke(__instance, null);
+            log.LogInfo("[qol] the first spider fight (Event6) ended at its start, as its third turn would");
+            return false;
         }
 
         // The trapdoor scene lands the party on its own spots; once it ends, the party enters the fall room again the way the
