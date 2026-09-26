@@ -608,6 +608,12 @@ namespace BugFablesAP
             {
                 return "EventControl.EndEvent not found";
             }
+            // Scenes run as StartCoroutine("Event" + id): stop the dead one first, or it runs on and touches what the cleanup removes.
+            string stopped = MainManager.events != null && MainManager.lastevent >= 0 ? "Event" + MainManager.lastevent : null;
+            if (stopped != null)
+            {
+                MainManager.events.StopCoroutine(stopped);
+            }
             end.Invoke(null, new object[] { false });
             if (MainManager.player != null)
             {
@@ -696,7 +702,7 @@ namespace BugFablesAP
             {
                 MainManager.PlayTransition(1, 0, 0.1f, Color.black);
             }
-            return "ran the game's end-of-event cleanup and camera, limit and music resets; inevent=" + MainManager.instance.inevent
+            return (stopped != null ? "stopped " + stopped + "; " : "") + "ran the game's end-of-event cleanup and camera, limit and music resets; inevent=" + MainManager.instance.inevent
                 + ", minipause=" + MainManager.instance.minipause + (talking ? "; closed a dead dialogue" : "")
                 + (boxes > 0 ? $"; removed {boxes} leftover speech box(es)" : "")
                 + $"; freed {freed} party member(s); "

@@ -876,6 +876,15 @@ its flag 158 is unset: the same scene later takes bounties and gives their rewar
    `partyorder` (Events 6, 54, 138) and `GetExtraFollower` (Event223).
    **Seen (the user, 2026-09-25):** the droplet scene replayed to its end with no crash, and the log shows item 9 at work in
    it and in the switch scene (Event23): "the leader (Player 0, member 2) acts member 0's part".
+13. **Every member present acts, not only the leader** (the user, 2026-09-26, with Vi and Leif in the spider scene:
+   Vi led as herself, Kabbu's part went to an invisible stand-in, and Leif stood idle). A member the story doesn't have
+   yet (by the story's flags, as for the leader) now takes a missing member's part, in party order, after the leader
+   picks his: every lookup by name, by list or by id order hands out that member where a stand-in would have gone,
+   and his own part, if asked for, goes to a stand-in so he never gets two sets of orders. The user chose this over
+   hiding him, knowing it shows two Leifs in this scene (one acting Kabbu, the story's own in the web). Logged:
+   "[party] EventN: Moth (member 2) acts member 1's part". Not yet seen.
+   **`unstick` now stops the dead scene too:** the first try got stuck, and after `unstick` the scene's coroutine
+   kept running and threw once its stand-ins were cleared (a NullReferenceException in Event6, Vi left tilted).
 
 **No warnings for missing animations (the user, 2026-09-26: "dumb to leave bug/errors laying around, even if its
 harmless").** A character asked for a state its controller lacks (a lone Leif acting another member's part, a swapped

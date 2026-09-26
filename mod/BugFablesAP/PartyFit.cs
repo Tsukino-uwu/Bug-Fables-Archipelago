@@ -94,6 +94,8 @@ namespace BugFablesAP
         // partway. Animations play by number, so he shows his own for the role's.
         private static EntityControl actor;
         private static int actorRole = -1; // -1 not chosen yet this scene, -2 nobody acts
+        // Members in the party the story doesn't have yet act a missing member's part too (role -> character).
+        private static readonly System.Collections.Generic.Dictionary<int, EntityControl> spares = new System.Collections.Generic.Dictionary<int, EntityControl>();
 
         // Vi from the opening (flag 15), Kabbu always, Leif once joined (flag 16). A member the story has plays himself.
         private static bool InStoryParty(int member)
@@ -118,6 +120,7 @@ namespace BugFablesAP
             if (mm.playerdata != null && mm.playerdata.Length > 0 && InStoryParty(mm.playerdata[0].trueid))
             {
                 actorRole = -2;
+                ChooseSpares(mm);
                 return;
             }
             int[] story = PartyMembers.LastStoryParty;
@@ -138,7 +141,37 @@ namespace BugFablesAP
             {
                 actorRole = -2;
             }
+            ChooseSpares(mm);
         }
+
+        // Each member the story has but the party doesn't gets, in turn, a party member the story doesn't have yet.
+        private static void ChooseSpares(MainManager mm)
+        {
+            spares.Clear();
+            if (mm.playerdata == null)
+            {
+                return;
+            }
+            var missing = Enumerable.Range(0, 3).Where(m => InStoryParty(m) && m != actorRole && !mm.playerdata.Any(p => p.trueid == m)).ToList();
+            foreach (MainManager.BattleData p in mm.playerdata)
+            {
+                if (missing.Count == 0)
+                {
+                    break;
+                }
+                if (p.entity == null || p.entity == actor || InStoryParty(p.trueid))
+                {
+                    continue;
+                }
+                spares[missing[0]] = p.entity;
+                log.LogInfo($"[party] Event{MainManager.lastevent}: {p.entity.name} (member {p.trueid}) acts member {missing[0]}'s part");
+                missing.RemoveAt(0);
+            }
+        }
+
+        // A spare acting another member's part isn't also asked for as himself.
+        private static bool ActsOtherPart(EntityControl e, int member) =>
+            e != null && spares.Any(s => s.Value == e && s.Key != member);
 
         private static EntityControl StandIn(int member)
         {
@@ -146,6 +179,14 @@ namespace BugFablesAP
             if (member == actorRole && actor != null)
             {
                 return actor;
+            }
+            if (spares.TryGetValue(member, out EntityControl spare))
+            {
+                if (spare != null)
+                {
+                    return spare;
+                }
+                spares.Remove(member); // the map was remade: a stand-in from here on
             }
             if (standIns[member] == null)
             {
@@ -209,7 +250,7 @@ namespace BugFablesAP
             {
                 EntityControl found = __result.FirstOrDefault(e => e != null && e.animid == member);
                 // The acting leader fills the role's slot; his own gets a stand-in, so the player never moves twice.
-                if (found != null && found == actor && member != actorRole)
+                if (found != null && ((found == actor && member != actorRole) || ActsOtherPart(found, member)))
                 {
                     found = null;
                 }
@@ -229,7 +270,7 @@ namespace BugFablesAP
             for (int member = 0; member < 3 && longer.Count < 3; member++)
             {
                 // The acting leader is already first in the party's own list.
-                if (!__result.Any(e => e != null && e.animid == member) && member != actorRole)
+                if (!__result.Any(e => e != null && e.animid == member) && member != actorRole && !spares.ContainsKey(member))
                 {
                     longer.Add(StandIn(member));
                 }
@@ -282,6 +323,7 @@ namespace BugFablesAP
         {
             actor = null;
             actorRole = -1;
+            spares.Clear();
             for (int member = 0; member < standIns.Length; member++)
             {
                 if (standIns[member] != null)
@@ -350,6 +392,12 @@ namespace BugFablesAP
                 // The acting leader asked for by his own name: his own part goes to a stand-in, or he'd follow two sets of orders.
                 ChooseActor();
                 if (actor != null && actorRole != member && actor.animid == member)
+                {
+                    __result = StandIn(member);
+                    return false;
+                }
+                EntityControl own = party.playerdata.Select(p => p.entity).FirstOrDefault(e => e != null && e.animid == member);
+                if (ActsOtherPart(own, member))
                 {
                     __result = StandIn(member);
                     return false;
