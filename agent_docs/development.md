@@ -153,6 +153,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `holdup [member n]`: queue a test hold-up (the Explorer Permit "from TestPlayer", or party member n: 0 Vi, 1 Kabbu,
   2 Leif), display only, the way an item from another player is shown.
 - `articles [id...]`: log the found-item line's default article, each listed item's own, and the "You got" lines.
+- `holdup ap`: the drawn Archipelago icon held up on two class backdrops (plum, cyan).
+- `shelflook <location id> <white|black> <rim share>`: a shop slot shows the drawn icon with that outline, to compare
+  looks on a shelf; `shelflook off` puts every slot back.
 - `palette`: log the game's text colours by index (`|color,n|`), Archipelago's added ones included.
 - `colortry <hex...>`: queue a trap's "You got" line in each colour given, to compare them on screen.
 - `onehit`: flips a test boost: every hit on an enemy does at least 99 (before defence). It's the `[Debug]` setting

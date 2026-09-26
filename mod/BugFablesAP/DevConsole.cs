@@ -434,7 +434,17 @@ namespace BugFablesAP
                             : "removemember <0 Vi | 1 Kabbu | 2 Leif>";
                     case "holdup":
                     {
-                        // holdup [member n]: the permit, or party member n (0 Vi, 1 Kabbu, 2 Leif).
+                        // holdup [member n | ap]: the permit, party member n (0 Vi, 1 Kabbu, 2 Leif), or the drawn Archipelago icon.
+                        if (parts.Length > 1 && parts[1] == "ap")
+                        {
+                            // The drawn icon on two of the class backdrops a real item gets (ItemSwap.Describe's plum and cyan).
+                            foreach (Color backdrop in new[] { new Color(0xAF / 255f, 0x99 / 255f, 0xEF / 255f), new Color(0f, 0xEE / 255f, 0xEE / 255f) })
+                            {
+                                HoldUps.Received(ItemSwap.FromText("Archipelago icon", Archipelago.MultiClient.Net.Enums.ItemFlags.None, "TestPlayer"),
+                                    ApIcon.Get(), backdrop, "an");
+                            }
+                            return "holdup queued: the Archipelago icon";
+                        }
                         bool asMember = parts.Length > 2 && parts[1] == "member";
                         long held = asMember ? ItemIds.Base + ItemIds.MemberOffset + int.Parse(parts[2]) : ItemIds.Base + 27;
                         int heldKind = asMember ? ItemIds.MemberKind : ItemIds.KeyItemKind;
@@ -457,6 +467,23 @@ namespace BugFablesAP
                         }
                         MainManager.instance.textcolors = tried.ToArray();
                         return $"colortry: {parts.Length - 1} hold-ups queued";
+                    }
+                    case "shelflook":
+                    {
+                        // shelflook <location id> <white|black> <rim share> | shelflook off: a shop slot shows the drawn icon so.
+                        if (parts.Length > 1 && parts[1] == "off")
+                        {
+                            ItemSwap.DevLooks.Clear();
+                            return "shelflook: every slot back to the seed's item";
+                        }
+                        if (parts.Length < 4)
+                        {
+                            return "shelflook <location id> <white|black> <rim share> | shelflook off";
+                        }
+                        long at = LocationIdBase + long.Parse(parts[1]);
+                        ItemSwap.DevLooks[at] = ApIcon.Get(float.Parse(parts[3], System.Globalization.CultureInfo.InvariantCulture),
+                            parts[2] == "white" ? Color.white : Color.black);
+                        return $"shelflook: location {at} shows the icon, {parts[2]} outline {parts[3]}";
                     }
                     case "palette":
                         log.LogInfo("[dev] text colours: " + string.Join(", ", MainManager.instance.textcolors

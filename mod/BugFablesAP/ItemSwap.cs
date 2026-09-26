@@ -316,9 +316,16 @@ namespace BugFablesAP
             return info;
         }
 
+        // Dev (console `shelflook`): a location drawn with another sprite, to compare looks where they'll be seen.
+        internal static readonly Dictionary<long, Sprite> DevLooks = new Dictionary<long, Sprite>();
+
         internal static void LookOf(long at, out string name, out Sprite sprite, out string description)
         {
             ScoutedItemInfo info = Describe(at, out name, out sprite, out _);
+            if (DevLooks.TryGetValue(at, out Sprite look))
+            {
+                sprite = look;
+            }
             description = "An Archipelago item.";
             if (info == null)
             {

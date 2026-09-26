@@ -495,8 +495,13 @@ shop shelf, another game's item still shows the vanilla item's sprite today, whi
 will show an Archipelago icon on a backdrop in its type's colour (Archipelago's: progression plum, useful blue,
 trap salmon, filler cyan), the same colours the starburst already uses at pickup. It's a Quality of life row, on
 by default, for players who'd rather be surprised. Bug Fables items that belong to another Bug Fables player keep
-their real sprite, and the owner's name is in the text. Before adding the icon: which image file, and whether
-it's fine in a public repo forever (Archipelago's licence row covers its code; check the image).
+their real sprite, and the owner's name is in the text. **The icon is drawn in code (2026-09-26), so no image file
+is copied:** `ApIcon.cs` draws Archipelago's logo, six overlapping circles in its colours (sampled from your
+checkout's `data/icon.png`), with the middle open, and the gaps and a rim round the flower in black, like the game's
+outlined item sprites. The user picked it from eight looks, first as hold-ups on the four class backdrops, then on the
+Caravan's shelf close up and at a distance (dev `holdup ap`, `shelflook`): the game's own orb recipe (a dark ring round
+a pale fill) came out pastel with heavy outlines at item size; see-through gaps let the backdrop wash the colours out; a
+white rim looked odd; a thin black one too sharp. Not yet used for another game's items: that's the row above.
 
 **The description box read the wrong field (fixed 2026-09-26):** the swap showed `itemdata[0, id, 1]`, but the game's
 box shows field 2 (`MEASURED.md`, "The item table's fields"); field 1 is "Desc" for every key item. Found while reading
