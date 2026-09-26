@@ -320,7 +320,7 @@ on/off, plus two links, *Quality of life* and *Gameplay*. Gameplay holds how the
 Detector. Quality of life keeps the speed-ups, with Disable all / Reset to defaults on top (step 10). Cancel backs out
 of a Yes / No first, then out of a page, landing on that page's link. `ApMenu` tracks the page as an enum.
 
-**The two pages in game too (the user, 2026-09-26; built, not yet seen).** While Archipelago is enabled, the pause
+**The two pages in game too (the user, 2026-09-26; seen by the user, in game and on the main menu).** While Archipelago is enabled, the pause
 menu's Settings list gets *Quality of life* and *Gameplay* at the top, above Music Volume (the user; first between
 Key Bindings and Return to Main Menu), opening the same pages. Neither touches a check or the logic, so changing them mid-save is safe (Hardest is already kept out of the
 save; a boss prize reads Hard Mode as the boss falls, and missed prizes are paid anyway). The connection page stays on
