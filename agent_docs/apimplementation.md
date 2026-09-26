@@ -149,9 +149,12 @@ be wrong.
 21. **Boat Ticket** (suggested on Discord; decided by the user, 2026-09-26): a progression item, always in the pool,
    that unlocks the boat to Metal Island: without it the sailor won't sail; with it the trip is free and the ticket
    isn't used up (a key item). The logic gates Metal Island on it, so Metal Island isn't open from the start. The
-   Quality of life row *Free boat* goes. The game has no such item: first measure whether an unused key item slot can
-   carry it (shown in the key items like a real one), or whether the mod keeps it from the received items; its
-   dialogue with the sailor (refusing, then free) through the fare lines the mod already rewrites (lines 16 and 19).
+   Quality of life row *Free boat* goes. **The mod's own item** (the user, 2026-09-26): the game has no ticket, so the
+   mod adds one entry at the end of the game's item table at runtime (name "Boat Ticket", its own description, an
+   existing sprite from the game's art), as the Settings rows add their labels to the text table. It arrives from the
+   server like any item and sits in the key items as a real id, saved like one; randomizer saves are separate files
+   vanilla never opens. The sailor's dialogue (refusing, then free) goes through the fare lines the mod already
+   rewrites (lines 16 and 19).
 
 22. **Healing save crystals, an idea for later** (suggested on Discord; the user, 2026-09-26): an item that makes the
    blue save crystals (save only) act like the yellow ones (save and heal), a nice filler or useful check. The colour
