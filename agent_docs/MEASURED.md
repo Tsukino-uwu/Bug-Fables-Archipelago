@@ -1129,6 +1129,21 @@ hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0
   from another window and no marker there, it threw a NullReferenceException every frame (the diagnostic: window 6,
   option 5, markers 1-25 all null).
 
+## EXP and berries picked up (2026-09-26, code read)
+
+- **A battle's EXP** is summed per defeated enemy: `num = Clamp(GetEXP(exp, fixedexp, animid), 0, hologram ? 5 : neededexp)`,
+  then `expreward = Clamp(expreward + num, 0, neededexp)`: one battle never gives more than a level's worth.
+  `BattleControl.GetEXP(int, bool, Enemies)` (private) returns 0 at level 27 or with flag 613, adds 15% for Hard Mode
+  (medal 11 or flag 614) and 50% for medal 42, returns at most 5 with flag 166 (hologram fights), the amount itself
+  when `fixedexp`, else caps it at 20 (Chomper Brute, Toe Biter and enemies 87-89) or 15.
+  `EndBattleWon(addexp)` adds the raw `exp` of enemies still standing, without `GetEXP`.
+- **A berry picked up in the world** (`NPCControl.CheckItem`, items MoneySmall, MoneyMedium, MoneyBig) adds 1, 5 or 20,
+  then calls `StartCoroutine(BerryBounce())` (its only caller) and clamps money to 0-999. Berries dropped after a fight
+  are the same pickups (`EntityControl` spits them from `spitmoney`). Used by `Multipliers.cs`.
+- **The volume rows' bar** (`MainManager.ShowItemList`, type 17, `settingsindex` 33, 34 and 160): ten `pip` objects from
+  x 4.45, 0.4 apart, between arrows at 3.75 and 8.75; empty `guisprites[59]` at 1/4 scale, lit `guisprites[42]` at 1/3,
+  yellow; sorting 10 + index. Used by `ApMenu.cs`.
+
 ## The text letter pool (2026-09-26, code read; the symptom seen by the user)
 
 - **Every drawn letter comes from one pool of 500** `TextMesh`es (`MainManager.letterpool`, made at start-up).

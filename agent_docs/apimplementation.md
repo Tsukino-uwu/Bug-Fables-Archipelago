@@ -113,10 +113,10 @@ be wrong.
 15. **Enemy scaling, a panel setting** (the user, 2026-09-26): Off / Party level / Artifacts, Party level by default,
    balancing an area met earlier or later than vanilla would. Built, not yet seen; a mod-side setting with no logic,
    so its design and status live in the mod guide, step 17.
-16. **EXP multiplier, a panel setting** (the user, 2026-09-26): *EXP Multiplier* on the Quality of life page, 1x to
+16. **EXP multiplier, a panel setting** (the user, 2026-09-26; built as 1x-10x on the Gameplay page, `documentation.md` step 19): *EXP Multiplier* on the Quality of life page, 1x to
    5x, default 1x: an opt-in for a faster, easier game. Levels still give HP, TP and MP, so it helps even without moves being shuffled. It stacks on
    top of enemy scaling's EXP. No check and no logic depend on it. Only while Archipelago is enabled.
-17. **Berry multiplier, a panel setting** (the user, 2026-09-26): *Berry Multiplier* on the Quality of life page, 1x
+17. **Berry multiplier, a panel setting** (the user, 2026-09-26; built as 1x-10x on the Gameplay page, `documentation.md` step 19): *Berry Multiplier* on the Quality of life page, 1x
    to 5x, default 1x, the same opt-in. Only the berries picked up in the world (lying there or dropped after a fight), never a
    check's reward from the server. Only while Archipelago is enabled.
 18. **Random start** (the user, 2026-09-26): `anywhere` built, experimental; `towns` and named spots to come. See build

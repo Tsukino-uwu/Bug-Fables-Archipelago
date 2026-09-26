@@ -15,7 +15,7 @@ namespace BugFablesAP
         // The Quality of life page: the two buttons side by side on top, then the settings.
         private const int ButtonsRow = 0, FastTextRow = 1, WarpRow = 2, CutscenesRow = 3, AnimationRow = 4, DetectorRow = 5, QolRows = 6;
         // The Gameplay page: how the game plays, under the same two buttons.
-        private const int DifficultyRow = 1, ScalingRow = 2, PricesRow = 3, GameplayRows = 4;
+        private const int DifficultyRow = 1, ScalingRow = 2, PricesRow = 3, ExpRow = 4, BerryRow = 5, GameplayRows = 6;
         private enum Page { Main, Qol, Gameplay }
         private Page page;
         // On the buttons row: 0 Reset to defaults (where the cursor lands), 1 Disable all; confirming shows Yes / No there (0 Yes, 1 No).
@@ -48,6 +48,7 @@ namespace BugFablesAP
         private SpriteRenderer leaf;
         private SpriteRenderer dimmer;
         private Transform arrows;
+        private Transform pips;
         private Transform textRoot;
         private int row;
         private bool editing;
@@ -450,6 +451,12 @@ namespace BugFablesAP
                             case "Free": return "Medal shops charge nothing.";
                             default: return "Medal shops charge their normal price.";
                         }
+                    case ExpRow:
+                        return Multipliers.Exp == null || Multipliers.Exp.Value <= 1 ? "Enemies give their normal EXP."
+                            : "Enemies give " + Multipliers.Exp.Value + "x EXP. A battle still gives at most a level's worth.";
+                    case BerryRow:
+                        return Multipliers.Berries == null || Multipliers.Berries.Value <= 1 ? "Berries you pick up count as usual."
+                            : "Berries you pick up count " + Multipliers.Berries.Value + "x. Never a check's berries.";
                     default: return "";
                 }
             }
@@ -524,6 +531,14 @@ namespace BugFablesAP
                 else if (r == PricesRow && QualityOfLife.ShopPrices != null)
                 {
                     Cycle(QualityOfLife.ShopPrices, QualityOfLife.ShopPriceValues, by);
+                }
+                else if (r == ExpRow && Multipliers.Exp != null)
+                {
+                    Multipliers.StepBy(Multipliers.Exp, by);
+                }
+                else if (r == BerryRow && Multipliers.Berries != null)
+                {
+                    Multipliers.StepBy(Multipliers.Berries, by);
                 }
             }
             else if (r == ModeRow)
@@ -681,6 +696,9 @@ namespace BugFablesAP
                 Choice(DifficultyRow, "Difficulty", (Difficulty?.Value ?? "Normal").ToUpperInvariant());
                 Choice(ScalingRow, "Enemy scaling", ScalingLabel(QualityOfLife.EnemyScaling?.Value ?? "PartyLevel"));
                 Choice(PricesRow, "Shop prices", (QualityOfLife.ShopPrices?.Value ?? "Normal").ToUpperInvariant());
+                Label(ExpRow, "EXP multiplier");
+                Label(BerryRow, "Berry multiplier");
+                DrawPips(new[] { ExpRow, BerryRow }, new[] { Multipliers.Exp?.Value ?? 1, Multipliers.Berries?.Value ?? 1 });
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Gameplay. Cancel goes back" + (inGame ? " to Settings." : "."), 0f, StatusY);
                 PlaceCursor();
@@ -709,7 +727,7 @@ namespace BugFablesAP
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
             foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, CutscenesRow, AnimationRow, DetectorRow }
-                : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, PricesRow } : new[] { ModeRow, AchievementsRow, NormalSavesRow })
+                : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, PricesRow, ExpRow, BerryRow } : new[] { ModeRow, AchievementsRow, NormalSavesRow })
             {
                 for (int side = 0; side < 2; side++)
                 {
@@ -718,6 +736,37 @@ namespace BugFablesAP
                         MainManager.guisprites[1], ButtonSort);
                     arrow.transform.localEulerAngles = new Vector3(0f, 0f, side == 0 ? -90f : 90f);
                     arrow.layer = 5;
+                }
+            }
+        }
+
+        // The volume rows' look (MainManager.ShowItemList, type 17): ten pips between the arrows, the lit ones the yellow
+        // hexagon, scaled from the Settings row's spacing to this panel's narrower one.
+        private const float PipScale = 0.68f;
+
+        private void DrawPips(int[] rows, int[] lit)
+        {
+            if (pips != null)
+            {
+                Destroy(pips.gameObject);
+            }
+            pips = new GameObject("pips").transform;
+            pips.parent = box;
+            pips.localPosition = Vector3.zero;
+            pips.localEulerAngles = Vector3.zero;
+            for (int i = 0; i < rows.Length; i++)
+            {
+                for (int p = 0; p < Multipliers.Max; p++)
+                {
+                    bool on = p < lit[i];
+                    GameObject pip = MainManager.NewUIObject("pip", pips,
+                        new Vector3(ArrowLeftX + (0.7f + 0.4f * p) * PipScale, RowY[rows[i]] + ArrowRise),
+                        Vector3.one * (on ? 1f / 3f : 1f / 4f) * PipScale, MainManager.guisprites[on ? 42 : 59], ButtonSort + p);
+                    if (on)
+                    {
+                        pip.GetComponent<SpriteRenderer>().color = Color.yellow;
+                    }
+                    pip.layer = 5;
                 }
             }
         }
@@ -750,7 +799,7 @@ namespace BugFablesAP
         // The Gameplay page's two buttons: every row to its plain value, or back to its default.
         private static void GameplayAll(bool reset)
         {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { Difficulty, QualityOfLife.EnemyScaling, QualityOfLife.ShopPrices })
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { Difficulty, QualityOfLife.EnemyScaling, QualityOfLife.ShopPrices, Multipliers.Exp, Multipliers.Berries })
             {
                 if (setting != null && reset)
                 {
@@ -772,6 +821,13 @@ namespace BugFablesAP
             if (QualityOfLife.ShopPrices != null)
             {
                 QualityOfLife.ShopPrices.Value = "Normal";
+            }
+            foreach (ConfigEntry<int> multiplier in new[] { Multipliers.Exp, Multipliers.Berries })
+            {
+                if (multiplier != null)
+                {
+                    multiplier.Value = 1;
+                }
             }
         }
 

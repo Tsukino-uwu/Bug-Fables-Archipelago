@@ -28,6 +28,7 @@ anyone curious about the process, or thinking of doing the same for another game
 16. [Randomizer saves kept apart from normal saves](#16-randomizer-saves-kept-apart-from-normal-saves)
 17. [Enemy scaling: every area fair whenever you reach it](#17-enemy-scaling-every-area-fair-whenever-you-reach-it)
 18. [Use on normal saves: the settings without Archipelago](#18-use-on-normal-saves-the-settings-without-archipelago)
+19. [EXP and berry multipliers: bars like the volume rows](#19-exp-and-berry-multipliers-bars-like-the-volume-rows)
 
 ## Where it stands
 
@@ -1184,3 +1185,31 @@ deliberate exception to "vanilla stays vanilla" that only the user could make.
   enabled, so a normal save never warps to a seed's start.
 
 **Status:** built (2026-09-26), the build succeeds, not yet seen in game.
+
+## 19. EXP and berry multipliers: bars like the volume rows
+
+An opt-in for a faster, easier game (Next 16 and 17 in `apimplementation.md`).
+
+**Decided (the user, 2026-09-26):**
+- Two rows on the **Gameplay** page, *EXP multiplier* and *Berry multiplier*, **1x to 10x, default 1x** (the user:
+  "just 1-10x to make it simple"). First planned as 1x-5x on Quality of life.
+- **They look like the game's volume rows** (the user asked, with a screenshot of Music Volume): ten pips between the
+  two arrows, one per step, the lit ones yellow; left / right lights or clears one.
+- Only while Archipelago is enabled, or with *Use on normal saves* (step 18). No check and no logic depend on them.
+
+**How it works** (`Multipliers.cs`, the facts in `MEASURED.md`, "What the mod's code relies on"):
+- **EXP:** a postfix on the battle's own `BattleControl.GetEXP(amount, fixedexp, enemy)`, the one call that turns each
+  defeated enemy into its EXP share, after the game's Hard Mode bonus and its per-enemy caps. It multiplies that share,
+  so it stacks on top of enemy scaling. The game then adds it to the battle's total, which it caps at one level's worth
+  (`neededexp`); that cap stays, so a high multiplier early mostly means a level per battle. The hologram fights
+  (flag 166) keep the game's 5.
+- **Berries:** a prefix on `NPCControl.BerryBounce`, which the game calls only right after a berry lying in the world
+  (1, 5 or 20, from the map or dropped after a fight) has been added, and before it clamps money at 999. It adds the
+  rest (value x (multiplier - 1)) and clamps the same way. A check's berries come from the server through the item
+  grant, never this pickup, so they aren't multiplied.
+- **The bar** (`ApMenu.DrawPips`): the game draws a volume row's ten pips with `guisprites[59]` (empty, a quarter
+  size) and `guisprites[42]` coloured yellow (lit, a third), 0.4 apart from 0.7 past the left arrow
+  (`MainManager.ShowItemList`, type 17). The panel's arrows sit closer, so the same layout is scaled by 0.68.
+- Each page's two buttons: Reset puts both back to 1x, Disable all sets 1x.
+
+**Status:** built (2026-09-26), the build succeeds and the hooks install in the running game; not yet seen.

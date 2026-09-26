@@ -168,6 +168,7 @@ namespace BugFablesAP
             QualityOfLife.SettingsOn = settingsOn;
             QualityOfLife.SeedStart = () => randomizerEnabled.Value ? connection?.Start : null;
             QualityOfLife.EntrancesShuffled = () => randomizerEnabled.Value && connection?.DoorTargets != null && connection.DoorTargets.Count > 0;
+            Multipliers.Enable(Log, Guid, Config, settingsOn);
             EnemyScaling.Enable(Log, Guid, settingsOn, () => QualityOfLife.EnemyScaling?.Value);
             InGameSettings.Enable(Log, Guid, settingsOn);
             CustomItems.Enable(Log, () => randomizerEnabled.Value);
@@ -370,6 +371,7 @@ namespace BugFablesAP
             EnemyShuffle.Disable();
             AnimGuard.Disable();
             EnemyScaling.Disable();
+            Multipliers.Disable();
             InGameSettings.Disable();
             AchievementGuard.Disable();
             BoatTicket.Disable();
