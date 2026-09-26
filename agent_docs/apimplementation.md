@@ -150,8 +150,8 @@ be wrong.
    that unlocks the boat to Metal Island: without it the sailor won't sail; with it the trip is free and the ticket
    isn't used up (a key item). The logic gates Metal Island on it, so Metal Island isn't open from the start. The
    Quality of life row *Free boat* goes. **The mod's own item** (the user, 2026-09-26): the game has no ticket, so the
-   mod adds one entry at the end of the game's item table at runtime (name "Boat Ticket", its own description, an
-   existing sprite from the game's art), as the Settings rows add their labels to the text table. It arrives from the
+   mod adds one entry at the end of the game's item table at runtime (name "Boat Ticket", its own description, the
+   Platinum Card's sprite, item 176, the user's pick, or a combined icon on it), as the Settings rows add their labels to the text table. It arrives from the
    server like any item and sits in the key items as a real id, saved like one; randomizer saves are separate files
    vanilla never opens. The sailor's dialogue (refusing, then free) goes through the fare lines the mod already
    rewrites (lines 16 and 19).
@@ -1453,6 +1453,35 @@ description), and the gate is "has the item": the logic reasons about it like an
 the game. The Boat Ticket is the first (Next 21); the party members as items (build step 13) are the same idea on the
 location side, turning a story moment vanilla never made a check into one. Each new item takes a filler slot in the
 pool, so a seed needs one to spare, which a test pins.
+
+**Icon ideas for custom items** (the user, 2026-09-26, from a labelled contact sheet of the item sprites; `SpriteDump`,
+the mod guide, step 7). An icon is only lent: the item has its own name and description. Item sprite ids
+(`itemsprites[0, id]`):
+
+| Id | The game's item | Could stand for |
+|---|---|---|
+| 176 | Platinum Card (silver) | **the Boat Ticket** (the user's pick); 95 (Factory Pass, a yellow pass) the other card |
+| 95 | Factory Pass | a pass or ticket, though players know it as the Factory Pass |
+| 161 | Prison Key | a generic "Key", if one is needed (the other keys have odd shapes) |
+| 111 | Rusty Key | looks like a sword |
+| 160 | Lab Card | an ID or pass (reads differently from a plain card) |
+| 138 | Shady Note | a paper, note or code |
+| 159 | Big Gear | a cog: fixing something broken |
+| 187 | (no name; the queen's face) | something enemy related |
+| 171 | Big Mistake | a pixelated Mistake: a bad or negative item, or a trap |
+| 42 | Magic Ice | an ice cube: an ice trap |
+| 181 | Danger Dish | eating something bad: a poison trap |
+| 180 | Plumpling Pie | a derpy face: a trap |
+| 150, 155 | Crystal Feather, Aphid Shake | jump or other moves, if moves are split into items |
+| 29 | Coal Crystal | a plain block: something neutral |
+| 98 | Crimson Ore | a stone, ore or gem |
+| 110 | Game Tokens | currency or tokens (e.g. medal shops locked behind tokens) |
+| 140 | Red Paint | looks like soup |
+| 149 | Package | a box or mail |
+
+**Combined icons** (the user's idea): the mod can layer game sprites into a new icon, e.g. the Platinum Card with a
+small emblem on it, still the game's own art. To test when the ticket is built; the plain card is the fallback (an
+item laid on a drawn backdrop looked off on the Warp button).
 
 ## 10. Things that go wrong quietly
 
