@@ -1418,6 +1418,10 @@ BugTester2's Lore Book bought at Madame Butterfly's stayed blue. A bought slot, 
 own item at the game's height with no backdrop, so a shelf shows at a glance which slots are still checks (the user:
 "really visible that they are not AP checks anymore"). Off not yet seen.
 
+**Crystal berries stay flat (the user, 2026-09-26):** the game draws a crystal berry as a spinning 3D model, which would
+cut through the flat starburst close behind it, and every other item is a flat sprite; so a crystal berry is its flat
+icon everywhere, crystal berry spots included, always with its backdrop, for the clarity the backdrop gives.
+
 **Status:** works, seen by the user on the Caravan's shelf and on the ground (2026-09-26).
 
 *Code: `ItemSwap.cs` (`Mark`, `MarkColorOf`), `QualityOfLife.cs` (`ItemBackgrounds`), `ApMenu.cs` (`BackgroundsRow`).*
