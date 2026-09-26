@@ -1357,7 +1357,12 @@ trip free and the ticket kept; the logic gates Metal Island on it, so Metal Isla
    seed with discoveries on is now one filler short and falls back to No Progression, as it already did without
    discoveries; with other games' filler in the room it holds.
 
-**Status:** built (2026-09-26), the apworld tests pass (275); the item seen in game; the sailor's lines not yet seen.
+**Seen by the user (2026-09-26):** with the ticket, the sailor offered "Would you fancy traveling to / Metal Island?
+Show me your ticket." (a `|line|` before the name, which wrapped mid-name at first), "Let's go!" / "Not yet!", and
+"...Ticket's in order. Hop on! Our destination: Metal Island!", then the boat.
+
+**Status:** works with the ticket, seen by the user (2026-09-26); the refusal without it not yet seen; the pool and
+logic in the next generated seed (the apworld tests pass, 275).
 
 # How it works
 
