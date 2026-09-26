@@ -257,6 +257,16 @@ namespace BugFablesAP
                     case "spawn": return Spawn(parts);
                     case "flag": return Flag(parts);
                     case "unstick": return Unstick();
+                    case "take":
+                    {
+                        // As the game's own |removeitem,kind,id| does: items[kind].Remove(id). Test files only.
+                        int kind = parts.Length > 1 && parts[1] == "key" ? 1 : parts.Length > 1 && parts[1] == "item" ? 0 : -1;
+                        if (kind < 0 || parts.Length < 3 || !int.TryParse(parts[2], out int takeId))
+                        {
+                            return "take <item|key> <id>";
+                        }
+                        return MainManager.instance.items[kind].Remove(takeId) ? $"took {parts[1]} {takeId}" : $"no {parts[1]} {takeId} to take";
+                    }
                     case "warpicon": return WarpButton.SetIcon(parts.Length > 1 ? parts[1] : "");
                     case "warpcolor": return WarpButton.SetColour(parts.Length > 1 ? parts[1] : "");
                     case "heal":
