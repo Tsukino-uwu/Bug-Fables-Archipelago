@@ -836,7 +836,8 @@ made only from 41: `loadingzonechuck` into Chuck's Abode and `loadingzonefields`
 The triggers are `kept_open` and the doors `kept_present`; no scenery there waits on 41 (map dump). Inside Chuck's
 Abode nothing waits on the story (Chuck, a save point, crystal berry #3 behind a rock). No logic change: nothing there
 is a location yet. **Owed:** Chuck's quest (flag 44, the Mighty Pebble) becomes reachable from here, so when it becomes
-a location its rule is this map's region plus the quest's own needs (the user pointed it out). Test
+a location its rule is this map's region plus the quest's own needs (the user pointed it out: Chuck wants a
+Hearty Breakfast, cooked in the town by the two shops; the cook's own gates to check in code before the rule is written). Test
 `test_near_snakemouth_exits_open_before_the_boss`.
 
 **Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion fallback and statue, Madeleine's house, and the bar with its quest board seen by the user (2026-09-25); every board listing bounties (built 2026-09-25), Eetl's blocker, the inn, the boat's hold and chapter 2's held scenes not yet seen; the open start is always on, not an option (the user, 2026-09-26).
