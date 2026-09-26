@@ -19,7 +19,7 @@ namespace BugFablesAP
         private const int DifficultyRow = 0, ScalingRow = 1, DetectorRow = 2, GameplayRows = 3;
         private enum Page { Main, Qol, Gameplay }
         private Page page;
-        // On the buttons row: 0 Disable all, 1 Reset to defaults; confirming shows Yes / No there (0 Yes, 1 No).
+        // On the buttons row: 0 Reset to defaults (where the cursor lands), 1 Disable all; confirming shows Yes / No there (0 Yes, 1 No).
         private int button;
         private bool confirming;
         private int answer;
@@ -226,13 +226,13 @@ namespace BugFablesAP
                         MainManager.PlaySound("Confirm", -1);
                         if (button == 0)
                         {
-                            QualityOfLife.DisableAll();
+                            QualityOfLife.ResetAll();
                         }
                         else
                         {
-                            QualityOfLife.ResetAll();
+                            QualityOfLife.DisableAll();
                         }
-                        log.LogInfo("[apmenu] Quality of life: " + (button == 0 ? "all disabled" : "all reset to defaults"));
+                        log.LogInfo("[apmenu] Quality of life: " + (button == 0 ? "all reset to defaults" : "all disabled"));
                     }
                     else
                     {
@@ -353,9 +353,9 @@ namespace BugFablesAP
                     case ButtonsRow:
                         if (confirming)
                         {
-                            return button == 0 ? "Turn every Quality of life setting off?" : "Put every Quality of life setting back to its default?";
+                            return button == 0 ? "Put every Quality of life setting back to its default?" : "Turn every Quality of life setting off?";
                         }
-                        return button == 0 ? "Turns every setting on this page off." : "Puts every setting on this page back to its default.";
+                        return button == 0 ? "Puts every setting on this page back to its default." : "Turns every setting on this page off.";
                     case FastTextRow: return "Dialogue text is instant, but still requires a button press to proceed.";
                     case FreeBoatRow: return "The boat to Metal Island costs nothing.";
                     case WarpRow: return "Adds a Warp to Start button to the pause menu.";
@@ -597,7 +597,7 @@ namespace BugFablesAP
             if (page == Page.Qol)
             {
                 // The two buttons side by side; confirming turns them into Yes / No.
-                string left = confirming ? "Yes" : "Disable all", right = confirming ? "No" : "Reset to defaults";
+                string left = confirming ? "Yes" : "Reset to defaults", right = confirming ? "No" : "Disable all";
                 int picked = confirming ? answer : button;
                 Text("|size,0.8|" + (row == ButtonsRow && picked == 0 ? "|color,1|" : "") + left, LabelX, RowY[ButtonsRow]);
                 Text("|size,0.8|" + (row == ButtonsRow && picked == 1 ? "|color,1|" : "") + right, ButtonRightX, RowY[ButtonsRow]);
