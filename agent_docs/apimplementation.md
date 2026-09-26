@@ -1690,7 +1690,9 @@ change. Now, with All Three, the opening's own party change adds whoever the sto
 there from the first frame; his item then finds him already in.
 
 **Status:** works, seen by the user (2026-09-27): a new file starts with all three at once (log: the opening done
-with party 0, 1, 2; Leif's item found him already in).
+with party 0, 1, 2; Leif's item found him already in). On a fresh seed both opening spots showed their box (Poison
+Resistance, then Sleep Resistance from the silent spot); a second file on a used seed shows only the gift's, since the
+server already holds the silent spot's item at login.
 
 # How it works
 
