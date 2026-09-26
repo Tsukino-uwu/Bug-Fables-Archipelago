@@ -363,6 +363,15 @@ line says it only concerns Steam, never Archipelago. Every achievement goes thro
 `InputIO.Achivement(id)` (the game's spelling), which asks Steam and sets it; `AchievementGuard.cs` skips it and logs
 each id held back once. With Archipelago disabled the game unlocks as usual (vanilla stays vanilla).
 
+**Text gone inside shops (the user, 2026-09-26):** in the shop building the Quality of life and Gameplay pages showed
+their arrows and no text, while the game's Settings list was fine. Wrong theories first: the letter pool running dry
+(132 of 500 taken), text cleared every frame, depth against the camera. The fix came from putting one of the panel's
+letters beside one of the game's in the running game (dev `menuinfo`): **the GUI camera is turned 90° in the shop**, the
+game's letters turned with it, and the panel's were not. Its text object was attached with `.parent =` and never had
+its rotation reset, so it kept an unturned world rotation and was seen edge-on. Every attached box and text now resets
+`localEulerAngles`, as the arrows already did; the Warp button's Yes / No box too. The lesson went into CLAUDE.md:
+read how the game does a thing first.
+
 **Status:** works, seen by the user (2026-09-24): the menu entry, the panel, and the file select held back until the first login.
 
 *Code: `MenuToggle.cs` (the menu entry: `BeforeSetMenuText` and `AfterSetMenuText` around the game's rebuild,

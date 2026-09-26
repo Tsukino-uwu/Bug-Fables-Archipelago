@@ -163,6 +163,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   has. Logging it once (2026-09-26) broke BepInEx's console writer (`ConsoleEncoding.ReadByteBuffer`
   IndexOutOfRange) for the rest of the session: every later log line threw inside the plugin's update, which then
   stopped partway every frame, and the game froze. Only a restart recovers it.
+- `menuinfo`: with an Archipelago panel open, its text pieces and letters, one of its letters beside one of the game's
+  Settings letters in the GUI camera's own frame (position, rotation, layer, sort, visible), and the camera itself.
 - `palette`: log the game's text colours by index (`|color,n|`), Archipelago's added ones included.
 - `colortry <hex...>`: queue a trap's "You got" line in each colour given, to compare them on screen.
 - `onehit`: flips a test boost: every hit on an enemy does at least 99 (before defence). It's the `[Debug]` setting

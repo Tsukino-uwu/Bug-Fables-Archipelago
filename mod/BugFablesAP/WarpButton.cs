@@ -484,6 +484,7 @@ namespace BugFablesAP
             {
                 confirmBox.parent = menu.transform;
                 confirmBox.localPosition = new Vector3(0f, -0.5f, -1f);
+                confirmBox.localEulerAngles = Vector3.zero;
             }
             log.LogInfo(kind == Kind.Warp ? "[warp] asking: warp to the start?" : $"[warp] asking: travel to area {area} ({MainManager.areanames[area]})?");
             DrawConfirm(menu);

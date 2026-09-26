@@ -138,9 +138,13 @@ namespace BugFablesAP
             box = MainManager.Create9Box(new Vector3(0f, -1f, 10f), new Vector2(13.5f, 7.25f), 1, BoxSort, Color.white, false);
             box.parent = transform;
             box.localPosition = new Vector3(0f, -1f, 0f);
+            // Attached objects keep their world rotation: reset it, or they stay unturned where the GUI camera is
+            // turned (in shops) and are seen edge-on, as nothing.
+            box.localEulerAngles = Vector3.zero;
             help = MainManager.Create9Box(new Vector3(0f, 3.75f, 10f), new Vector2(12.5f, 2f), 4, HelpSort, Color.white, false);
             help.parent = transform;
             help.localPosition = new Vector3(0f, 3.75f, 0f);
+            help.localEulerAngles = Vector3.zero;
             new GameObject("confirmbutton").AddComponent<ButtonSprite>().SetUp(4, -1, "Select / Edit", new Vector3(-4.5f, 0.25f), Vector3.one * 0.5f, ButtonSort, help);
             new GameObject("cancelbutton").AddComponent<ButtonSprite>().SetUp(5, -1, "Back", new Vector3(0.5f, 0.25f), Vector3.one * 0.5f, ButtonSort, help);
             if (!inGame)
@@ -151,6 +155,7 @@ namespace BugFablesAP
             textRoot = new GameObject("text").transform;
             textRoot.parent = box;
             textRoot.localPosition = Vector3.zero;
+            textRoot.localEulerAngles = Vector3.zero;
             leaf = new GameObject("leaf").AddComponent<SpriteRenderer>();
             leaf.sprite = MainManager.cursorsprite[0];
             leaf.sortingOrder = CursorSort;
@@ -947,9 +952,11 @@ namespace BugFablesAP
                 popup = MainManager.Create9Box(PopupAt + new Vector3(0f, 0f, 10f), new Vector2(9f, 2.75f), 4, PopupSort, Color.white, false);
                 popup.parent = transform;
                 popup.localPosition = PopupAt;
+                popup.localEulerAngles = Vector3.zero;
                 popupText = new GameObject("popuptext").transform;
                 popupText.parent = popup;
                 popupText.localPosition = Vector3.zero;
+                popupText.localEulerAngles = Vector3.zero;
             }
             TextPool.Free(popupText);
             string what = page == Page.Qol ? "Quality of life" : "Gameplay";
