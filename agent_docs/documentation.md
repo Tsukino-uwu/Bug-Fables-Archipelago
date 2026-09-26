@@ -1047,7 +1047,10 @@ All the constants are starting values, tuned by play.
 
 **Seen by the user (2026-09-26):** at level 1 on Party level, a map Underling shuffled into a Dead Lander G was
 logged `home 27, target 1: hp 35 -> 7, attack -3, def 1 -> 0, exp 74 -> 9`, and Spy in the fight showed HP 7, Defense 0.
-The panel row stepped through its three values (the log followed each).
+The panel row stepped through its three values (the log followed each). **How it played (the user):** tough but fair. Leif alone at 7 HP
+(healing 1+ a turn) went to 4 HP after its first hits, then to 2. The user judged 35 -> 7 HP and no defence balanced,
+"fair/hard" for anyone who shuffles enemies. Its attack sits at the -3 floor; if late enemies prove too harsh early,
+that floor is the first knob to try.
 
 **Status:** works, the scaled numbers seen in a fight by the user (2026-09-26); the constants still to tune by play;
 the bestiary page not built.
