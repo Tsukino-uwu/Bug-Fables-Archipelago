@@ -1748,8 +1748,12 @@ on the button's release, so the refusal came then. Now the attack's buzz plays o
 of the button while the leader's move is locked and the player is free), and the refusals stay silent; the jump
 fires on its press and buzzes there. **Seen (the user, 2026-09-27): "works way better".**
 
-**Status:** built, tests pass; the jump and attack gates seen by the user; the single buzz while holding and the key
-items not yet seen.
+**Seen (the user, 2026-09-27):** bought Freeze and Horn Slash at the caravan; each worked from then on, and Freeze
+alone didn't unlock the others. (Buying first failed with the dev berry cheat on: it refilled the berries, and item
+shops see a purchase as berries going down; the cheat is now a one-time top-up.)
+
+**Status:** works, seen by the user (2026-09-27): each attack locked until its own item, the buzz on the press;
+Beemerang Toss and the key items' look not yet seen.
 
 ## Build step 22: Shuffle Jump
 
@@ -1771,7 +1775,8 @@ the attacks"), behind its own option, `shuffle_jump` (off).
 5. **Tests** (`test_moves.py`, `TestJump`): the measured spots are reachable with nothing; Madeleine's house and the
    first artifact need Jump.
 
-**Status:** built, tests pass; not yet played.
+**Status:** works, seen by the user (2026-09-27): the jump locked until its item (the Ladybug house), then free; the
+forced Warp not yet checked.
 
 # How it works
 
