@@ -1729,7 +1729,12 @@ can see in your inventory that you have jump". Four key items of the mod's own a
 202 Horn, 203 Ice with the member's party icon; 204 Jump with the Archipelago icon; `CustomItems.cs`). Receiving a move
 puts its key item in the bag, and the gate reads the bag, so the inventory shows exactly what works.
 
-**Status:** built, tests pass; the jump gate seen by the user; the attack gate and the key items not yet seen.
+**Seen (the user):** the attacks now refused. **Holding the attack button buzzed nonstop** (B only; the jump fires
+once per press): the game retries a held attack every few frames (`DoActionHold`), so the buzzer now plays only when a
+refused press comes after a quiet 0.25 s, once per press.
+
+**Status:** built, tests pass; the jump and attack gates seen by the user; the single buzz while holding and the key
+items not yet seen.
 
 ## Build step 22: Shuffle Jump
 

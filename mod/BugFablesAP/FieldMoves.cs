@@ -63,9 +63,19 @@ namespace BugFablesAP
 
         private static readonly HashSet<string> reported = new HashSet<string>();
 
+        // Holding the button retries the attack every few frames (DoActionHold): one buzz per press, not per retry.
+        private const float Quiet = 0.25f;
+        private static float lastAttempt = -1f;
+
         private static void Refuse(int id)
         {
-            MainManager.PlayBuzzer();
+            float now = UnityEngine.Time.realtimeSinceStartup;
+            bool newPress = now - lastAttempt > Quiet;
+            lastAttempt = now;
+            if (newPress)
+            {
+                MainManager.PlayBuzzer();
+            }
             if (reported.Add(Name(id) + (MainManager.map != null ? MainManager.map.mapid.ToString() : "")))
             {
                 log.LogInfo($"[moves] {Name(id)} pressed without its item: refused (buzzer)");
