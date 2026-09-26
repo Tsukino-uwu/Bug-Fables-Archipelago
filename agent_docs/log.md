@@ -760,3 +760,7 @@ Newest last. What was tried, what happened, what the user said.
   the way back down from a one-way exit. A mistake of mine: I replaced the Archipelago checkout's link to the apworld
   with a copy while running the tests (the user's checkout: ask first); restoring the link was refused by auto mode,
   so it's left for the user (delete the copy, then a junction to `apworld/bug_fables`, `development.md`).
+- **Session end (the user, 2026-09-26: stop here, write it down, commit, push).** Open next time: `towns` for the
+  random start; the panel leaf's height at 0.05 not yet confirmed on the last row; Medal prices' bar not yet seen at
+  half; bosses / both / chaos for the enemy shuffle and the map look (Next); the Archipelago checkout's link to the
+  apworld to be restored by the user (above). Test server stopped; the game left running for the user.
