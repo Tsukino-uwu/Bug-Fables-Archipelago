@@ -66,26 +66,42 @@ namespace BugFablesAP
                 return;
             }
             LastStoryParty = (int[])ids.Clone();
-            int[] kept = ids.Where(Allowed).ToArray();
-            if (kept.Length == ids.Length)
+            if (ids.All(Allowed))
             {
                 return;
             }
-            if (kept.Length == 0)
+            // A member not allowed yet is played by an allowed one the story doesn't have yet, as in scenes (PartyFit):
+            // the story's "Kabbu alone" becomes Leif alone, its "Vi and Kabbu" Vi and Leif.
+            int[] asked = ids;
+            var substitutes = Enumerable.Range(0, 3).Where(m => Allowed(m) && !asked.Contains(m) && !PartyFit.InStoryParty(m)).ToList();
+            var kept = new List<int>();
+            foreach (int id in ids)
             {
-                // The story asked only for members not allowed yet (Kabbu alone after the slides): keep who is here.
+                if (Allowed(id))
+                {
+                    kept.Add(id);
+                }
+                else if (substitutes.Count > 0)
+                {
+                    kept.Add(substitutes[0]);
+                    substitutes.RemoveAt(0);
+                }
+            }
+            if (kept.Count == 0)
+            {
+                // No one to stand in: keep who is here.
                 MainManager mm = MainManager.instance;
                 kept = mm?.playerdata != null && mm.playerdata.Length > 0
-                    ? mm.playerdata.Select(p => p.trueid).Where(Allowed).ToArray()
-                    : new int[0];
-                if (kept.Length == 0)
+                    ? mm.playerdata.Select(p => p.trueid).Where(Allowed).ToList()
+                    : new List<int>();
+                if (kept.Count == 0)
                 {
-                    kept = new[] { StartMember };
+                    kept.Add(StartMember);
                 }
             }
             log.LogInfo($"[members] the story asked for party {string.Join(",", ids.Select(i => i.ToString()).ToArray())}; "
-                + $"allowed {string.Join(",", kept.Select(i => i.ToString()).ToArray())} (event {MainManager.lastevent})");
-            ids = kept;
+                + $"given {string.Join(",", kept.Select(i => i.ToString()).ToArray())} (event {MainManager.lastevent})");
+            ids = kept.ToArray();
         }
 
         // Leif's lake scene (Event14) never starts with Archipelago on: it reads its Leif from map.tempfollowers[0] and

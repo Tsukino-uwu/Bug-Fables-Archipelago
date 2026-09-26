@@ -885,6 +885,13 @@ its flag 158 is unset: the same scene later takes bounties and gives their rewar
    "[party] EventN: Moth (member 2) acts member 1's part". Not yet seen.
    **`unstick` now stops the dead scene too:** the first try got stuck, and after `unstick` the scene's coroutine
    kept running and threw once its stand-ins were cleared (a NullReferenceException in Event6, Vi left tilted).
+14. **The story's party changes use the same stand-in** (the user, 2026-09-26: "Leif is Kabbu, so Leif fights alone in
+   the first fight, then when Vi comes back for the 2nd fight it's Leif + Vi, similar to how it works in vanilla for
+   Kabbu"). The first try ran with the guard off (a plugin reload resets it, and no yaml option sets it yet), so the
+   spider scene's `ChangeParty({1})` brought Kabbu back for real. The guard now substitutes instead of only dropping:
+   each member the story asks for who isn't allowed is replaced by an allowed member the story doesn't have yet (by
+   its flags, as the scenes pick), so `{1}` becomes `{2}` and `{0, 1}` becomes `{0, 2}`; with no one to stand in, it
+   keeps who is here as before. Logged: "the story asked for party 1; given 2". Not yet seen.
 
 **No warnings for missing animations (the user, 2026-09-26: "dumb to leave bug/errors laying around, even if its
 harmless").** A character asked for a state its controller lacks (a lone Leif acting another member's part, a swapped

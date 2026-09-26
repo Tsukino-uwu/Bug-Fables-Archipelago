@@ -98,7 +98,7 @@ namespace BugFablesAP
         private static readonly System.Collections.Generic.Dictionary<int, EntityControl> spares = new System.Collections.Generic.Dictionary<int, EntityControl>();
 
         // Vi from the opening (flag 15), Kabbu always, Leif once joined (flag 16). A member the story has plays himself.
-        private static bool InStoryParty(int member)
+        internal static bool InStoryParty(int member)
         {
             bool[] flags = MainManager.instance.flags;
             return member == 1 || (member == 0 && flags[15]) || (member == 2 && flags[16]);
