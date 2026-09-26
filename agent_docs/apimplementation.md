@@ -146,6 +146,13 @@ be wrong.
    summoning, as the game itself does. Still a guard before building: each branch read, and one full-field fight.
    Its own build step when built.
 
+21. **Boat Ticket** (suggested on Discord; decided by the user, 2026-09-26): a progression item, always in the pool,
+   that unlocks the boat to Metal Island: without it the sailor won't sail; with it the trip is free and the ticket
+   isn't used up (a key item). The logic gates Metal Island on it, so Metal Island isn't open from the start. The
+   Quality of life row *Free boat* goes. The game has no such item: first measure whether an unused key item slot can
+   carry it (shown in the key items like a real one), or whether the mod keeps it from the received items; its
+   dialogue with the sailor (refusing, then free) through the fare lines the mod already rewrites (lines 16 and 19).
+
 **Known issues:**
 
 - **A Kabbu / horn rule is owed** once party members or the basic horn become items (Starting Party Member).
