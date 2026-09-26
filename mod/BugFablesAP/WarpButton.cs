@@ -37,10 +37,12 @@ namespace BugFablesAP
         // The scroll has no round backdrop of its own: one is drawn like the other buttons', a dark ring and a bright fill
         // of one vibrant colour (teal blended into the green and blue beside it, the user). Being chosen: orange or pink.
         // The game's own recipe, measured on its round icons: ring at full saturation and brightness 0.51, fill at
-        // saturation 0.34 and full brightness, the fill's hue 0.01 lower. Orange is the game's own sprite 31's hue.
+        // saturation 0.34 and full brightness, the fill's hue 0.01 lower. Orange at 0.08: the game's sprite 31 (0.05)
+        // read salmon at this fill (the user), gold is 0.14.
         private static Color RingColor, FillColor;
-        private static float hue = OrangeHue;
-        private const float OrangeHue = 0.05f, PinkHue = 0.9f;
+        // Lime (the user's pick): the row's biggest gap on the colour wheel, between gold and green.
+        private static float hue = LimeHue;
+        private const float OrangeHue = 0.08f, PinkHue = 0.9f, LimeHue = 0.28f;
 
         private static void Colours()
         {
@@ -59,8 +61,18 @@ namespace BugFablesAP
                 case "pink":
                     hue = PinkHue;
                     break;
+                case "lime":
+                    hue = LimeHue;
+                    break;
                 default:
-                    return "warpcolor orange|pink";
+                    // Or a hue from 0 to 1 (0.28 lime, 0.5 cyan, 0.9 pink).
+                    if (!float.TryParse(name, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out float h)
+                        || h < 0f || h > 1f)
+                    {
+                        return "warpcolor orange|pink|lime|<hue 0-1>";
+                    }
+                    hue = h;
+                    break;
             }
             backdrop = null;
             builtFor = null;
@@ -127,7 +139,8 @@ namespace BugFablesAP
                 return;
             }
             harmony = new Harmony(guid + ".warp." + DateTime.UtcNow.Ticks);
-            harmony.Patch(update, prefix: new HarmonyMethod(typeof(WarpButton), nameof(BeforeUpdate)));
+            harmony.Patch(update, prefix: new HarmonyMethod(typeof(WarpButton), nameof(BeforeUpdate)),
+                finalizer: new HarmonyMethod(typeof(WarpButton), nameof(UpdateFailed)));
             harmony.Patch(updateText, postfix: new HarmonyMethod(typeof(WarpButton), nameof(AfterUpdateText)));
             // Window 0 hands IconAnim four icons and it indexes them by option: hand it one per button.
             // The game's four buttons are placed at their final spots as they're made, so nothing jumps while the menu opens.
@@ -211,6 +224,33 @@ namespace BugFablesAP
                 return false;
             }
             return true;
+        }
+
+        // Diagnostic (map travel threw every frame): the first failure's exception and what the map window holds.
+        private static bool failureLogged;
+
+        private static Exception UpdateFailed(Exception __exception, PauseMenu __instance)
+        {
+            if (__exception != null && !failureLogged)
+            {
+                failureLogged = true;
+                var sprites = (SpriteRenderer[])spritesField.GetValue(__instance);
+                var boxes = (DialogueAnim[])boxesField.GetValue(__instance);
+                int option = (int)optionField.GetValue(__instance);
+                var nulls = new List<string>();
+                for (int i = 0; sprites != null && i < sprites.Length; i++)
+                {
+                    if (sprites[i] == null)
+                    {
+                        nulls.Add(i.ToString());
+                    }
+                }
+                log.LogWarning($"[warp] PauseMenu.Update threw: window {__instance.windowid}, option {option}, mapTravel {mapTravel}, "
+                    + $"sprites {(sprites == null ? "null" : sprites.Length.ToString())} (null: {string.Join(" ", nulls.ToArray())}), "
+                    + $"boxes {(boxes == null ? "null" : boxes.Length.ToString())}, tempanim {Traverse.Create(__instance).Field("tempanim").GetValue() != null}, "
+                    + $"cursor {MainManager.instance.cursor != null}. " + __exception);
+            }
+            return __exception;
         }
 
         private static void BeforeIconAnim(PauseMenu __instance, ref int[] values)
