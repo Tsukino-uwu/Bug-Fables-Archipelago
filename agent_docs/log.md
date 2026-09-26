@@ -891,3 +891,25 @@ Newest last. What was tried, what happened, what the user said.
   scene) before playing, since it broke with three members before. Also unseen: Item colors Off, the icon's All
   players and Off. **Left running:** the game (on the three-slot test seed) and the local server hosting it; dev
   config has OneHit, InfJump and InfBerries on. Nothing pushed this chat.
+- **2026-09-26/27, a new chat (continuing: Starting Party Member past the gate).** Read Event5 first: it places each
+  member from its own two-long list after `SetPlayers`; a transpiler swaps that one read (`PartyFit.PlaceAt`). Seen by
+  the user with a Leif start: the trapdoor and spider scenes with three, Leif back after. **Along the way, each seen by
+  the user:** Vi's arrival box from a silent location (`slot_data` `silent_locations`); Chuck's Abode and the corridor
+  shortcut open near Snakemouth; Skip cutscenes grew: the arrival outside the den (discovery recorded the game's way),
+  the Tattle tutorial, the door-room puzzle and the spider scene at speed, the trapdoor at speed then ended on the
+  black screen with a door arrival into the fall room (a full skip looked like a teleport, the user; at speed the scene's
+  own landing swung the camera left), the scripted first spider fight ended at once, only the Leif in the web shown,
+  Leif's first-battle line always skipped. **New options:** *All Three* (Starting Party Member, now the default; Leif
+  joins in the opening's own party change), *Shuffle Field Moves* and *Shuffle Jump* (both off; cautious logic; the
+  game's buzzer; the moves as key items 201-204 with the game's names Beemerang Toss, Horn Slash, Freeze, read with the
+  new dev `textsearch`; Warp forced with Jump). **Bugs of mine the user caught:** a leftover dev `TestStartMember = 2`
+  overrode a story-party seed (a seed now always decides); a Harmony prefix on `DoActionTap` never ran (inlined; the
+  coroutine's `MoveNext` is gated now); the attack buzz spammed while held, then felt late (the game fires taps on
+  release; the buzz is on the press now); the dev berry cheat hid shop purchases (now a one-time top-up). **Logic:**
+  rules name moves (abilities), the den and the trapdoor need Horn Slash; the user's measurements recorded (the dig spot
+  and berry outside the den, jump spots on the starting map and town, the spider's second fight won with ground
+  attacks). Planned: enemy stats randomized (Next 26); enemy attacks randomized not planned (Next 27). The battle
+  tutorials were read: only the opening's, already skipped. **Open next:** measure where moves and Jump are needed
+  past the gate so the logic can drop its blanket rules; enemy stats. **Left:** the game running on the move test
+  seed (all three members, moves and jump shuffled); dev config: `AdoptSeed = true`, `TestStartMember = -1`,
+  OneHit, InfJump and InfBerries on. The test server stopped at the session's end. Nothing pushed.
