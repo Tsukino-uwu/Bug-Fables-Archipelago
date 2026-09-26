@@ -99,8 +99,9 @@ namespace BugFablesAP
         {
             if (inGame)
             {
-                // The pause menu stays underneath, switched off so it neither draws nor reads input.
-                MainManager.pausemenu.gameObject.SetActive(false);
+                // Only the Settings screen's two boxes (its list lives inside them) are hidden: the pause menu's own
+                // background stays, as going from the pause menu to Settings does. Its input is held by InGameSettings.
+                SetSettingsBoxes(false);
                 if (MainManager.instance.cursor != null)
                 {
                     MainManager.instance.cursor.enabled = false;
@@ -169,10 +170,7 @@ namespace BugFablesAP
             if (inGame)
             {
                 // Back to the Settings list as it was; the cooldown keeps the closing press from acting there too.
-                if (MainManager.pausemenu != null)
-                {
-                    MainManager.pausemenu.gameObject.SetActive(true);
-                }
+                SetSettingsBoxes(true);
                 if (MainManager.instance.cursor != null)
                 {
                     MainManager.instance.cursor.enabled = true;
@@ -207,6 +205,22 @@ namespace BugFablesAP
         private const float LeafRise = 0.15f;
         private const float ValueX = -1.9f;
 
+        private static void SetSettingsBoxes(bool visible)
+        {
+            if (MainManager.pausemenu == null)
+            {
+                return;
+            }
+            DialogueAnim[] boxes = Traverse.Create(MainManager.pausemenu).Field("boxes").GetValue<DialogueAnim[]>();
+            foreach (DialogueAnim settingsBox in boxes ?? new DialogueAnim[0])
+            {
+                if (settingsBox != null)
+                {
+                    settingsBox.gameObject.SetActive(visible);
+                }
+            }
+        }
+
         private void SetTitleVisible(bool visible)
         {
             Transform menu = Traverse.Create(owner).Field("menu1").GetValue<Transform>();
@@ -229,7 +243,7 @@ namespace BugFablesAP
         {
             try
             {
-                if (dimmer != null)
+                if (dimmer != null && !inGame)
                 {
                     dimmer.color = Color.Lerp(dimmer.color, new Color(1f, 1f, 1f, 0.5f), 0.15f);
                 }

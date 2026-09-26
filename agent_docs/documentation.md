@@ -329,8 +329,11 @@ label is `menutext[settingsindex[id]]`. A postfix adds ids 26 and 27 at the top 
 labels appended to `menutext` and two entries to `settingsindex` (re-added if the game reloads its text). The game
 draws left/right arrows on every row but a named few, so a postfix on `ShowItemList` (type 17) removes the new rows'
 (`Bar<index>` rows, `slider0/1` children). A prefix on `PauseMenu.Update` catches confirm on them and opens the page
-(`ApMenu.ShowInGame`), with the pause menu switched off underneath (it has no OnEnable/OnDisable of its own), so it
-neither draws nor reads input; cancel switches it back on, on Settings. In the main menu's Settings too (the user:
+(`ApMenu.ShowInGame`). **Only the Settings screen's two boxes are hidden** (`PauseMenu.boxes`; its list lives inside
+them), and the pause menu's `Update` is skipped while the page is open. Switching the whole pause menu off at first
+also took its darkened background away: the game view flashed before the page appeared (the user). Now the
+background stays, as going from the pause menu to Settings does, and the page skips its own dimmer in game. Cancel
+shows the boxes again, on Settings. In the main menu's Settings too (the user:
 one Settings screen, not two), though the panel there has both pages as well.
 
 **Status:** works, seen by the user (2026-09-24): the menu entry, the panel, and the file select held back until the first login.
