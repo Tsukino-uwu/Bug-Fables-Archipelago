@@ -1464,7 +1464,8 @@ rules explanation. (The key items' texts aren't in `itemdata[0, id, 1]`, which h
 on screen.)
 
 **Icon ideas for custom items** (the user, 2026-09-26, from a labelled contact sheet of the item sprites; `SpriteDump`,
-the mod guide, step 7). An icon is only lent: the item has its own name and description. Item sprite ids
+the mod guide, step 7). An icon is only lent: the item has its own name and description, and a reused or similar icon
+is fine in the menus as long as those differ (the user, looking at the Key Items list). Item sprite ids
 (`itemsprites[0, id]`):
 
 | Id | The game's item | Could stand for |
