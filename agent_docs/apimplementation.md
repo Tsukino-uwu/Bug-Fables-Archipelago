@@ -1689,7 +1689,8 @@ isn't found anywhere. Leif late: items are given only while the player is free, 
 change. Now, with All Three, the opening's own party change adds whoever the story hasn't reached yet, so Leif is
 there from the first frame; his item then finds him already in.
 
-**Status:** built, tests pass; played once (all three present); Leif at the opening not yet seen.
+**Status:** works, seen by the user (2026-09-27): a new file starts with all three at once (log: the opening done
+with party 0, 1, 2; Leif's item found him already in).
 
 # How it works
 
