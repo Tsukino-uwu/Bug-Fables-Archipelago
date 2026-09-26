@@ -781,7 +781,7 @@ namespace BugFablesAP
         private void DrawButtons()
         {
             Text("|size,0.8|" + (row == ButtonsRow && button == 0 ? "|color,1|" : "") + "Reset to defaults", LabelX, RowY[ButtonsRow]);
-            Text("|size,0.8|" + (row == ButtonsRow && button == 1 ? "|color,1|" : "") + "Disable all", ButtonRightX, RowY[ButtonsRow]);
+            Text("|center||size,0.8|" + (row == ButtonsRow && button == 1 ? "|color,1|" : "") + "Disable all", ValueCenterX, RowY[ButtonsRow]);
         }
 
         private void PlaceCursor()
@@ -792,7 +792,7 @@ namespace BugFablesAP
                 return;
             }
             ClosePopup();
-            float leafX = row == ButtonsRow && button == 1 ? ButtonRightX : LabelX;
+            float leafX = row == ButtonsRow && button == 1 ? ValueCenterX - DisableHalfWidth : LabelX;
             leaf.transform.localPosition = new Vector3(leafX + LeafOffset, RowY[row] + LeafRise, 0f);
         }
 
@@ -864,8 +864,9 @@ namespace BugFablesAP
             leaf.sortingOrder = CursorSort;
         }
 
-        // The second button's label, clear of the first.
-        private const float ButtonRightX = 0.6f;
+        // The second button's label, centred over the values like them; its half width (about 2.3 at 0.8, measured on
+        // screen) puts the leaf at its left edge.
+        private const float ValueCenterX = 2.6f, DisableHalfWidth = 1.15f;
         private const float ArrowLeftX = 0.9f, ArrowRightX = 4.3f, ArrowRise = 0.15f, ArrowScale = 0.75f;
 
         private void Choice(int r, string label, string value)
@@ -873,7 +874,7 @@ namespace BugFablesAP
             Label(r, label);
             // About 8 letters fit between the arrows at 0.75; a longer value shrinks to fit.
             float size = value.Length > 8 ? 0.75f * 8f / value.Length : 0.75f;
-            Text("|center||size," + size.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + value, 2.6f, RowY[r]);
+            Text("|center||size," + size.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + value, ValueCenterX, RowY[r]);
         }
 
         private void Label(int r, string label)
