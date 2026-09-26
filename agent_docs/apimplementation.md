@@ -162,7 +162,8 @@ be wrong.
    become items (Next 3, build step 13).
 24. **The panel's settings on normal saves, an idea** (the user, 2026-09-26): an opt-in row so Quality of life and
    Gameplay also apply with Archipelago off. A deliberate exception to "vanilla stays vanilla", which only the user can
-   make; off by default. Its name is still to choose (it isn't Archipelago on/off).
+   make; off by default. **Named (the user): *Use on normal saves*, ON / OFF**, help line "Quality of life and Gameplay
+   also apply with Archipelago off." Only the two pages' settings; nothing tied to a seed (items, checks, the shuffles).
 
 **Known issues:**
 
