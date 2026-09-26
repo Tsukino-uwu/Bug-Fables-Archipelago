@@ -621,6 +621,7 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    door-room position (x -22.8, logged by PartyFit), the camera following. So the scene now ends on the black screen
    right after the fall: its coroutine stopped, the party's bodies made normal (the game's `LockRigid(false)`,
    gravity, animations), the camera limits restored, `EndEvent`, the cave music, then the landing's door arrival.
+   **Seen (the user, 2026-09-27): works correctly:** the opening and the fall at speed, black, the arrival.
    **First skip froze the player** (the user at the bridge, 2026-09-25): a trigger
    freezes the player (`minipause`) before starting its scene (`NPCControl.cs:5512-5525`), and the scene's own
    `EndEvent` unfreezes. A skipped scene never ends, so the skip now calls the game's `EndEvent()` itself, which is all
