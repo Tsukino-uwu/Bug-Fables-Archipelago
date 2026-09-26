@@ -1045,4 +1045,9 @@ its enemies (`createentity`), after the game has applied Hard/Hardest:
 - Every scaled enemy is logged (`[scale] Seedling (9): home 1, target 10: hp 4 -> 10, attack +2, ...`).
 All the constants are starting values, tuned by play.
 
-**Status:** built (2026-09-26), not yet seen in game; the bestiary page not built.
+**Seen by the user (2026-09-26):** at level 1 on Party level, a map Underling shuffled into a Dead Lander G was
+logged `home 27, target 1: hp 35 -> 7, attack -3, def 1 -> 0, exp 74 -> 9`, and Spy in the fight showed HP 7, Defense 0.
+The panel row stepped through its three values (the log followed each).
+
+**Status:** works, the scaled numbers seen in a fight by the user (2026-09-26); the constants still to tune by play;
+the bestiary page not built.

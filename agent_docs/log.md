@@ -687,3 +687,5 @@ Newest last. What was tried, what happened, what the user said.
   - The user asked about cheese (a hard area early, level 27 in chapter 1). Party level removes it, and EXP follows
     through the game's own rule.
   - Not yet seen in game. The bestiary page is not built.
+- **Enemy scaling seen in game** (the user's screenshot). A Dead Lander G met at level 1 was scaled 35 -> 7 HP, and
+  Spy showed HP 7, Defense 0, matching the log line. It worked on the first try.
