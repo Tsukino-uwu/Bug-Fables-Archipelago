@@ -700,7 +700,7 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    party beside the start's save point ("a good location"); then back and forth between the Outskirts and Defiant Root
    (the user, after a dev warp there), both working. The other areas' spots are starting choices, checked as they're
    reached.
-   **Skip confirm: Off / Warp / Map / Both (the user, 2026-09-26; built, not yet seen),** an add-on to *Travel*, so its
+   **Skip confirm: Off / Warp / Map / Both (the user, 2026-09-26; seen by the user the same day: on Map, map travel went at once and Warp still asked),** an add-on to *Travel*, so its
    row sits right below it (the user: the two belong together, not split apart). Warp: picking the Warp button warps at
    once; Map: confirm on a visited area in the travel map goes there at once; Off (the default) keeps both boxes.
    Disable all sets it Off (asking is the safe value). The press that would open the box goes straight to what Yes
@@ -720,7 +720,7 @@ scaling Off and Detector Off; Reset puts each back to its default. Both pages op
 to its off value: Enemy scaling Off, Item animation Off, Medal prices full); Reset to defaults puts every row back to
 its default (`QualityOfLife.DisableAll` / `ResetAll`, the defaults from each setting's own config definition).
 
-**Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen by the user (2026-09-25); the bridge skips, Shop prices and silent replays with a second player not yet seen; Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat Ticket (the Archipelago guide, build step 16), the warp itself and map travel seen (2026-09-26); Skip battle tutorials planned.
+**Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen by the user (2026-09-25); the bridge skips, Shop prices and silent replays with a second player not yet seen; Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat Ticket (the Archipelago guide, build step 16), the warp itself, map travel and Skip confirm seen (2026-09-26); Skip battle tutorials planned.
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page),
 `WarpButton.cs` (the Warp button), `HoldUps.cs` (item animation's hold-ups).*
