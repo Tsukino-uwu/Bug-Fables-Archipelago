@@ -1472,6 +1472,14 @@ BepInEx is not bundled; the player installs it first.
    the stale gate; a stale DLL is rebuilt and committed on the spot, and the gate runs again. Then it pushes, waits
    for CI to go green, dispatches the release and waits for it to publish. Running it is the go-ahead to push.
 
+6. **Rehearsed before the first run (2026-09-26):** every CI step on a fresh clone of Archipelago `0.6.7`: the
+   tests, the three two-game presets, Build APWorlds (its manifest gained `version` and `compatible_version` on its
+   own), the template, and a seed from the built `.apworld` in `custom_worlds` with the template as the yaml (loaded
+   as v0.1.0, no manifest warning). The zip, built the same way, extracted next to `Bug Fables.exe` lands only in
+   `BepInEx/plugins/BugFablesAP/`.
+7. **Trying the download in game:** `copy-dev.ps1 -Layout Release` swaps a dev install for exactly what the zip
+   holds, and `-Layout Dev` swaps back (`development.md`, step 4 of the build-and-copy list).
+
 **Versions.** The mod's `Plugin.Version` and the apworld's `world_version` both equal the tag without its `v`.
 v0.1.0 is the first (the mod was 0.0.1 and the world 0.2.0 before).
 

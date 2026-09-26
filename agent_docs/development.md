@@ -33,6 +33,11 @@ The build and the copy into the game are separate steps. The build never writes 
    - Every file it replaces (the plugin, the config) is first copied to `stage/backup/<time>/`;
      `-Restore <time>` puts it back. It writes nothing else in the game: the libraries and ScriptEngine's
      config stay the once-per-setup copy of step 2.
+4. **Trying the release download instead (game closed):** `copy-dev.ps1 -Layout Release` moves the dev copies out
+   (the plugin in `scripts`, the libraries loose in `plugins`) and installs `release/mod`, exactly what the zip
+   holds; `-Layout Dev` switches back (it needs `stage-dev.ps1` run first). Both layouts at once would load the
+   plugin twice, so each switch takes the other one out, into `stage/backup/<time>/`. DevReload stays off in the
+   release layout: it only starts when `BepInEx/scripts/BugFablesAP.dll` exists.
    - **Why a script with backups** (2026-09-24): Claude Code's auto mode refused, as irreversible, both a
      deploy script that rewrote configs and libraries in the game and an ad-hoc `cp` plus in-place `sed`.
      MeshGhost, which never hit this, only ever replaces its own rebuildable DLL through one named script.

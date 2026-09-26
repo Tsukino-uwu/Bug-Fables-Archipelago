@@ -2,7 +2,10 @@
 #   powershell -ExecutionPolicy Bypass -File dev-scripts\copy-dev.ps1 [-GameDir <dir>]
 #       [-DebugOn A,B] [-DebugOff C] [-DebugSet Key=Value]
 #   powershell -ExecutionPolicy Bypass -File dev-scripts\copy-dev.ps1 -Restore <folder under stage\backup>
+#   powershell -ExecutionPolicy Bypass -File dev-scripts\copy-dev.ps1 -Layout Release|Dev   (game closed)
 param(
+    # Release: the dev copies out, release\mod in, as a player's install; Dev: back to the hot-reload setup.
+    [ValidateSet('', 'Release', 'Dev')][string]$Layout = '',
     [string]$GameDir = 'C:\Program Files (x86)\Steam\steamapps\common\Bug Fables',
     [string[]]$DebugOn = @(),
     [string[]]$DebugOff = @(),
@@ -39,7 +42,44 @@ if ($Restore) {
 }
 
 $backup = Join-Path $backupRoot (Get-Date -Format 'yyyyMMdd-HHmmss')
+# Two runs in one second would share a folder, and a later move would land inside an earlier one.
+for ($n = 2; Test-Path $backup; $n++) { $backup = Join-Path $backupRoot "$(Get-Date -Format 'yyyyMMdd-HHmmss')-$n" }
 New-Item -ItemType Directory -Force $backup | Out-Null
+
+if ($Layout) {
+    if (Get-Process 'Bug Fables' -ErrorAction SilentlyContinue) { throw 'close the game first: BepInEx holds the plugin DLLs' }
+    $libs = 'Archipelago.MultiClient.Net.dll', 'websocket-sharp.dll', 'Newtonsoft.Json.dll'
+    # Both layouts at once load the plugin twice, so each move takes the other layout's files out first.
+    $devFiles = @('BepInEx\scripts\BugFablesAP.dll', 'BepInEx\scripts\BugFablesAP.pdb') + ($libs | ForEach-Object { "BepInEx\plugins\$_" })
+    $releaseDir = 'BepInEx\plugins\BugFablesAP'
+    function MoveOut([string]$rel) {
+        $path = Join-Path $GameDir $rel
+        if (-not (Test-Path $path)) { return }
+        $dest = Join-Path $backup $rel
+        New-Item -ItemType Directory -Force (Split-Path -Parent $dest) | Out-Null
+        Move-Item $path $dest -Force
+        Write-Output "moved out $rel"
+    }
+    if ($Layout -eq 'Release') {
+        $src = Join-Path $repo 'release\mod\BepInEx'
+        if (-not (Test-Path (Join-Path $src 'plugins\BugFablesAP\BugFablesAP.dll'))) { throw 'release\mod is empty: run build-release.ps1 first' }
+        foreach ($rel in $devFiles + $releaseDir) { MoveOut $rel }
+        Copy-Item $src (Join-Path $GameDir '.') -Recurse -Force
+        Get-ChildItem (Join-Path $GameDir $releaseDir) -File | ForEach-Object { Write-Output "installed $releaseDir\$($_.Name)" }
+    } else {
+        $every = Join-Path $stage 'every-build\BepInEx\scripts'
+        $setup = Join-Path $stage 'setup\BepInEx\plugins'
+        foreach ($f in @('BugFablesAP.dll', 'BugFablesAP.pdb' | ForEach-Object { Join-Path $every $_ }) + ($libs | ForEach-Object { Join-Path $setup $_ })) {
+            if (-not (Test-Path $f)) { throw "$f isn't staged: run stage-dev.ps1 first" }
+        }
+        MoveOut $releaseDir
+        foreach ($f in 'BugFablesAP.dll', 'BugFablesAP.pdb') { Copy-Item (Join-Path $every $f) (Join-Path $GameDir "BepInEx\scripts\$f") -Force }
+        foreach ($f in $libs) { Copy-Item (Join-Path $setup $f) (Join-Path $GameDir "BepInEx\plugins\$f") -Force }
+        Write-Output 'installed the dev layout: the plugin in BepInEx\scripts, its libraries in BepInEx\plugins'
+    }
+    Write-Output "backup: stage\backup\$(Split-Path -Leaf $backup)"
+    exit 0
+}
 function Backup([string]$name) {
     $path = Join-Path $GameDir $targets[$name]
     if (Test-Path $path) { Copy-Item $path (Join-Path $backup $name) -Force }
