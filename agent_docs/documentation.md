@@ -596,7 +596,12 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    flags don't cover (the game runs it at 8 times speed with its lines answered, as for the intro slides: the rope,
    Event1, which plays the bridge's Fall animation and fixes it fallen before setting flags 7 and 11; setting the flags
    alone would leave the bridge standing until the room reloads). Never a scene that gives an item, sends a check,
-   changes the party or starts a battle. **First skip froze the player** (the user at the bridge, 2026-09-25): a trigger
+   changes the party or starts a battle, **unless the skip does that one thing itself through the game's own call.**
+   **The arrival outside Snakemouth Den** (Event11, the user, 2026-09-26: "can we skip this cutscene?"): a walk, one
+   line, then journal discovery 0, which is a location. Its autostart (map `autoevent` 22:11) sets flag 22 itself on
+   starting it (`MapControl.cs:874-882`), so the skip only records the discovery with `MainManager.UpdateJounal`, the
+   scene's own call, which also shows the game's discovery pop-up; the check then goes as it would. Built.
+   **First skip froze the player** (the user at the bridge, 2026-09-25): a trigger
    freezes the player (`minipause`) before starting its scene (`NPCControl.cs:5512-5525`), and the scene's own
    `EndEvent` unfreezes. A skipped scene never ends, so the skip now calls the game's `EndEvent()` itself, which is all
    resets (`EventControl.cs:146-187`). Not yet seen.

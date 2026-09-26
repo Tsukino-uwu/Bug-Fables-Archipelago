@@ -51,6 +51,7 @@ namespace BugFablesAP
             internal int Event;
             internal int[] Flags; // null: fast-forward instead of skipping
             internal int OnlyWhileUnset = -1; // skipped only while this flag is unset (a scene with a later, needed part)
+            internal int Discovery = -1; // a journal discovery the scene records, recorded by the skip too
         }
 
         private static readonly Scene[] Scenes =
@@ -61,6 +62,8 @@ namespace BugFablesAP
             new Scene { Map = "SnakemouthBridgeRoom", Event = 1, Flags = null },
             // The barkeeper's first talk; the same scene later handles bounties, so skipped only while 158 is unset.
             new Scene { Map = "UndergroundBar", Event = 83, Flags = new[] { 158 }, OnlyWhileUnset = 158 },
+            // Arriving outside Snakemouth Den: walk, one line, discovery 0 (a location); the map's autostart sets its flag 22.
+            new Scene { Map = "OutsideSnakemouth", Event = 11, Flags = new int[0], Discovery = 0 },
         };
 
         private static Harmony harmony;
@@ -588,9 +591,14 @@ namespace BugFablesAP
             {
                 MainManager.instance.flags[flag] = true;
             }
+            if (scene.Discovery >= 0)
+            {
+                MainManager.UpdateJounal(MainManager.Library.Discovery, scene.Discovery);
+            }
             // A trigger freezes the player (minipause) and only the scene's end undoes it: end it the game's way.
             endEvent?.Invoke(null, null);
             log.LogInfo($"[qol] skipped Event{id} on {scene.Map}: set flags {string.Join(", ", scene.Flags.Select(f => f.ToString()).ToArray())}, "
+                + (scene.Discovery >= 0 ? $"discovery {scene.Discovery} now {MainManager.instance.librarystuff[(int)MainManager.Library.Discovery, scene.Discovery]}, " : "")
                 + (endEvent != null ? "ended it the game's way" : "EndEvent NOT found: the player may stay frozen"));
             return false;
         }
