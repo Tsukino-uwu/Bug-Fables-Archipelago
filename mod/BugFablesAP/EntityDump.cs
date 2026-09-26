@@ -127,11 +127,14 @@ namespace BugFablesAP
             return string.Join(" ", parts.ToArray());
         }
 
+        // One line for the table: the text's own line breaks and tabs become spaces.
+        private static string Line(string text) => (text ?? "").Replace('\n', ' ').Replace('\r', ' ').Replace('\t', ' ');
+
         private static void WriteNames(ManualLogSource log)
         {
             string outPath = Path.Combine(Paths.BepInExRootPath, "bugfablesap-names.tsv");
             var sb = new StringBuilder();
-            sb.AppendLine("kind\tid\tenum\tname");
+            sb.AppendLine("kind\tid\tenum\tname\tdescription");
             int items = 0, medals = 0;
             foreach (MainManager.Items item in Enum.GetValues(typeof(MainManager.Items)))
             {
@@ -141,7 +144,7 @@ namespace BugFablesAP
                     continue;
                 }
                 sb.Append("item\t").Append(id).Append('\t').Append(item).Append('\t')
-                  .Append(MainManager.itemdata[0, id, 0]).AppendLine();
+                  .Append(MainManager.itemdata[0, id, 0]).Append('\t').Append(Line(MainManager.itemdata[0, id, 1])).AppendLine();
                 items++;
             }
             foreach (MainManager.BadgeTypes badge in Enum.GetValues(typeof(MainManager.BadgeTypes)))
@@ -152,7 +155,7 @@ namespace BugFablesAP
                     continue;
                 }
                 sb.Append("medal\t").Append(id).Append('\t').Append(badge).Append('\t')
-                  .Append(MainManager.badgedata[id, 0]).AppendLine();
+                  .Append(MainManager.badgedata[id, 0]).Append('\t').Append(Line(MainManager.badgedata[id, 1])).AppendLine();
                 medals++;
             }
             File.WriteAllText(outPath, sb.ToString());

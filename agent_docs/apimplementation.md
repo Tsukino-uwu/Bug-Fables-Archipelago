@@ -1455,9 +1455,13 @@ the game. The Boat Ticket is the first (Next 21); the party members as items (bu
 location side, turning a story moment vanilla never made a check into one. Each new item takes a filler slot in the
 pool, so a seed needs one to spare, which a test pins.
 
-**Custom items' text** (the user, 2026-09-26): written to fit the game, as the menus and art do. A short plain line
-saying what it is ("this is a key"), or a hint in the team's voice of where it might matter ("might unlock something at
-X"), never a rules explanation. The first: "A boat ticket. Maybe we should visit the pier."
+**Custom items' text** (the user, 2026-09-26): written to fit the game, as the menus and art do. The game's own voice,
+seen in play: items are witty ("Don't say you weren't warned."), medals strictly informative, and **key items say what
+they open, then a small joke** ("This keycard can open doors in the Honey Factory. Whoever lost this probably got
+fired."; "This key opens a door in Rubber Prison. A guard probably dropped it while fleeing from the Wasps."; the
+Platinum Card's is plain). A custom key item follows that: what it opens, and a light line in the team's voice; never a
+rules explanation. (The key items' texts aren't in `itemdata[0, id, 1]`, which holds "Desc" for them; they were read
+on screen.)
 
 **Icon ideas for custom items** (the user, 2026-09-26, from a labelled contact sheet of the item sprites; `SpriteDump`,
 the mod guide, step 7). An icon is only lent: the item has its own name and description. Item sprite ids
