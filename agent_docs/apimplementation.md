@@ -177,8 +177,6 @@ be wrong.
   door room's horn puzzle: the Horn) and the Peculiar Gem for the slot behind it (the user asked, 2026-09-27).
   Also location 19 (crystal berry #0 outside Snakemouth Den): the horn from the Outskirts' side, or the way round
   through the cave (the user, 2026-09-26; `MEASURED.md`). Safe today: it's past the gate, which needs Kabbu.
-- **Starting Party Member, past the gate:** the trapdoor scene broke with three members (build step 13), and the
-  option always brings three there (build step 18).
 - **Crystal berry #2 (location 20)** sits in the Underground region, which needs Leif, though the room's
   upper-left entrance needs nothing. More cautious than the game, so safe; room-level regions would split it.
 - **Landmark names** for locations 2, 22, 23, 24, 25 and 30 are still to come from the user.
