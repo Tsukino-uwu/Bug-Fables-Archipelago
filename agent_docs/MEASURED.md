@@ -637,8 +637,10 @@ The output stays in the BepInEx folder.
     only the beemerang hits them. Whether Kabbu or Leif learn such a move later is unknown. Moot while the mod skips
     that scene (since 2026-09-25).
     **The first boss too** (the user, 2026-09-26, Leif alone, OneHit off): in the spider boss fight (Event26, battle 13)
-    Leif couldn't hit the enemies in the air and lost. So the boss needs Vi in chapter 1 (the beemerang), unless a later
-    measurement finds another way. The Leif-alone run of 2026-09-25 got past this boss; how is not recorded.
+    Leif couldn't hit the enemies in the air and lost. **The spider itself goes up into the air during the fight, and
+    Kabbu can't hit it there either** (the user, the same day): so it counts as an air enemy even though it starts on the
+    ground, and the boss needs Vi in chapter 1 (the beemerang). The Leif-alone run of 2026-09-25 got past this boss; how
+    is not recorded.
   - **Any member's attack:** Snakemouth's switch-room switches (`Big Switch`, Event23, flags 33/34) take Leif's ice as
     well as the beemerang or the horn (in `SnakemouthUndergroundLeftB`).
 - **A blocked walk-in ends in a teleport** (the user, 2026-09-25, the game's own behaviour): entering
