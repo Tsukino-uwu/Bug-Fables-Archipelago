@@ -1617,7 +1617,8 @@ arrived from the other player's chests and joined (party 0, 1, 2).
 **A story-party seed started Leif alone (the user, 2026-09-27):** the mod took the dev `TestStartMember` (left at 2)
 whenever the seed's `starting_member` was -1, so a seed with the option off still used it. Now a seed that sends the key
 decides, -1 included, and the dev setting only stands in with no seed (`PartyMembers.SeedSaysMember`). **Seen (the
-user, the same day):** a new file on that seed started in the town plaza with Kabbu and Vi.
+user, the same day):** a new file on that seed started in the town plaza with Kabbu and Vi. Warped to the fall room
+(dev), the spider scene at speed, the first fight ended at once, and Leif joined after it, as the story has him.
 
 **Status:** works, seen by the user: before the Outskirts gate with a Kabbu start and a Vi start, members arriving from
 this world and from another player (2026-09-26); past the gate with a Leif start, the trapdoor and spider scenes with
