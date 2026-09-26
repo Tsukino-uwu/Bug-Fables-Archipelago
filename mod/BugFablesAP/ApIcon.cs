@@ -3,8 +3,7 @@ using UnityEngine;
 namespace BugFablesAP
 {
     // Archipelago's logo, six overlapping circles in its colours, drawn in code (no game or Archipelago art copied): flat
-    // circles with the gaps between them and a rim round the flower in black, like the game's outlined item sprites. The
-    // user's pick of eight looks on the class backdrops a real item gets.
+    // circles with the gaps between them and a rim round the flower in black, like the game's outlined item sprites.
     internal static class ApIcon
     {
         // The logo's colours (Archipelago's data/icon.png), in drawing order: each later circle sits on the ones before.

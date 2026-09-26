@@ -253,7 +253,7 @@ namespace BugFablesAP
             PartyMembers.SetReceived(System.Linq.Enumerable.Empty<int>());
         }
 
-        // Always with Archipelago on (the user): a seed's start ends the opening with a transfer, and its tutorial battle
+        // Always with Archipelago on: a seed's start ends the opening with a transfer, and its tutorial battle
         // was written for two, never played with one member. Skip cutscenes is for later scenes.
         // The opening: Event16 (Maki's talk, Vi joining, the tutorial battle, location 1) never starts; the mod does
         // what it would leave behind, the game's way, on a later frame. Flag 15 marks location 1 done.

@@ -588,6 +588,12 @@ namespace BugFablesAP
                             .Select(h => h.Key + " " + h.Value).ToArray()));
                         return $"letters: {taken} of {pool.Length} taken";
                     }
+                    case "menuinfo":
+                    {
+                        string menu = ApMenu.Open == null ? "no Archipelago panel open" : ApMenu.Open.TextReport();
+                        log.LogInfo("[dev] menuinfo: " + menu);
+                        return "menuinfo logged";
+                    }
                     case "palette":
                         log.LogInfo("[dev] text colours: " + string.Join(", ", MainManager.instance.textcolors
                             .Select((c, i) => i + " " + ColorUtility.ToHtmlStringRGB(c)).ToArray()));

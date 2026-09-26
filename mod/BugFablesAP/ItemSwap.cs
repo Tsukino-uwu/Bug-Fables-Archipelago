@@ -390,7 +390,7 @@ namespace BugFablesAP
             }
         }
 
-        // The class colour of the item at this location, anyone's (the user: your own too), else null.
+        // The class colour of the item at this location, yours included, else null.
         internal static Color? MarkColorOf(long at)
         {
             ScoutedItemInfo info = null;
@@ -398,8 +398,8 @@ namespace BugFablesAP
             return info != null && (QualityOfLife.ItemBackgrounds?.Value ?? true) ? MarkColor(info) : (Color?)null;
         }
 
-        // The starburst colours by class: progression, useful, trap, filler. Archipelago's own, and Rarity's (the user's
-        // ladder, told apart side by side on a shelf, 2026-09-26). Dev `markcolor` changes the one in use.
+        // The starburst colours by class: progression, useful, trap, filler. Archipelago's own, and Rarity's (a loot game's
+        // ladder, which tells all four apart side by side). Dev `markcolor` changes the one in use.
         internal static readonly int[] ArchipelagoColors = { 0xAF99EF, 0x6D8BE8, 0xFA8072, 0x00EEEE };
         internal static readonly int[] RarityColors = { 0xB36BE8, 0x4A90E8, 0xE03C3C, 0x4CC94C };
         internal static int[] ClassColors => QualityOfLife.RarityColors ? RarityColors : ArchipelagoColors;
@@ -813,7 +813,7 @@ namespace BugFablesAP
         private const string ArticleSlot = "|string,1| ";
         private const string NameThenRed = "|string,0||color,1|", NameThenBlack = "|string,0||color,0|";
 
-        // Another player's item, found here: "You found <player>'s <item>!" (the user), so it isn't taken for your own.
+        // Another player's item, found here: "You found <player>'s <item>!", so it isn't taken for your own.
         private const string GotWords = "You got " + ArticleSlot;
         private const string FoundWords = "You found ";
 
