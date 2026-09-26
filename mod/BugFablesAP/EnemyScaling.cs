@@ -21,9 +21,9 @@ namespace BugFablesAP
         // Home level below "outgrown" (the level where an enemy's EXP runs out): fits both the new game (level 1, the
         // first enemies outgrown near 4) and the level cap (27, the last enemies outgrown near 30).
         private const float OutgrownGap = 3f;
-        // HP scales by (target + HpBase) / (home + HpBase); attack and defence by one step per so many levels.
-        private const float HpBase = 5f;
-        private const int LevelsPerAttack = 4, LevelsPerDefence = 6, MinAttackStep = -3, MaxAttackStep = 6;
+        // HP and each hit's damage scale by (target + Base) / (home + Base); defence by one step per so many levels.
+        private const float Base = 5f;
+        private const int LevelsPerDefence = 6;
 
         // Bosses and special enemies: flat EXP says nothing, so their home level is their chapter's (the story event
         // that starts their fight); summoned parts take their boss's.
@@ -61,7 +61,16 @@ namespace BugFablesAP
             }
             harmony = new Harmony(guid + ".scale." + DateTime.UtcNow.Ticks);
             harmony.Patch(method, postfix: new HarmonyMethod(typeof(EnemyScaling), nameof(AfterGetEnemyData)));
-            log.LogInfo("[scale] installed on MainManager.GetEnemyData");
+            var damage = AccessTools.Method(typeof(BattleControl), "CalculateBaseDamage");
+            if (damage == null)
+            {
+                log.LogError("[scale] BattleControl.CalculateBaseDamage wasn't found; enemy damage isn't scaled.");
+            }
+            else
+            {
+                harmony.Patch(damage, prefix: new HarmonyMethod(typeof(EnemyScaling), nameof(BeforeBaseDamage)));
+            }
+            log.LogInfo("[scale] installed on MainManager.GetEnemyData" + (damage != null ? " and BattleControl.CalculateBaseDamage" : ""));
         }
 
         internal static void Disable()
@@ -119,6 +128,26 @@ namespace BugFablesAP
             return null;
         }
 
+        private static float Ratio(int home, int target) => (target + Base) / (home + Base);
+
+        // Each hit an enemy lands: its move's own damage scaled, before hardatk (Hard/Hardest) is added on top, so a
+        // many-hit attack and a single big one shrink or grow alike. The game's floor of 1 per hit stays.
+        private static void BeforeBaseDamage(MainManager.BattleData? attacker, ref int basevalue)
+        {
+            if (basevalue <= 0 || attacker == null || attacker.Value.battleentity == null
+                || attacker.Value.battleentity.CompareTag("Player") || randomizerOn == null || !randomizerOn())
+            {
+                return;
+            }
+            int? target = TargetLevel();
+            int? home = HomeLevel(attacker.Value.animid);
+            if (target == null || home == null || target == home)
+            {
+                return;
+            }
+            basevalue = Mathf.Max(1, Mathf.RoundToInt(basevalue * Ratio(home.Value, target.Value)));
+        }
+
         private static void AfterGetEnemyData(int id, bool createentity, bool noexp, ref MainManager.BattleData __result)
         {
             if (!createentity || randomizerOn == null || !randomizerOn() || MainManager.instance == null)
@@ -136,8 +165,8 @@ namespace BugFablesAP
             {
                 return;
             }
-            int hp = Mathf.Max(1, Mathf.RoundToInt(__result.hp * (target.Value + HpBase) / (home.Value + HpBase)));
-            int atk = Mathf.Clamp(diff / LevelsPerAttack, MinAttackStep, MaxAttackStep);
+            float ratio = Ratio(home.Value, target.Value);
+            int hp = Mathf.Max(1, Mathf.RoundToInt(__result.hp * ratio));
             // A defence of -1 means "shown as ?", left alone; otherwise never below 0.
             int def = __result.def < 0 ? __result.def : Mathf.Max(0, __result.def + diff / LevelsPerDefence);
             int exp = __result.exp;
@@ -151,10 +180,9 @@ namespace BugFablesAP
                 exp = MainManager.GetEXP(baseExp, asIf, (MainManager.Enemies)__result.animid);
             }
             log.LogInfo($"[scale] {(MainManager.Enemies)id} ({id}): home {home}, target {target}: hp {__result.hp} -> {hp}, "
-                + $"attack {(atk >= 0 ? "+" : "")}{atk}, def {__result.def} -> {def}, exp {__result.exp} -> {exp}");
+                + $"hits x{ratio:0.00}, def {__result.def} -> {def}, exp {__result.exp} -> {exp}");
             __result.hp = hp;
             __result.maxhp = hp;
-            __result.hardatk += atk;
             __result.def = def;
             __result.exp = exp;
         }

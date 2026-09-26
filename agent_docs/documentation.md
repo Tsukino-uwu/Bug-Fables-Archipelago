@@ -1035,8 +1035,12 @@ the game, so nothing is from memory; everything is from the game's own data:
 **How it works** (built 2026-09-26): `EnemyScaling.cs`, a postfix on `MainManager.GetEnemyData` when a fight builds
 its enemies (`createentity`), after the game has applied Hard/Hardest:
 - **HP** times `(target + 5) / (home + 5)` (and `maxhp`, which the game copies from HP).
-- **Attack** +1 per 4 levels of difference, through `hardatk`, the only knob: attack is written per enemy in the
-  battle code. Held to -3...+6 so a weakened enemy still hits.
+- **Attack, per hit, by the same ratio as HP** (changed 2026-09-26, the user). First it was a flat step through
+  `hardatk` (+1 per 4 levels, held to -3...+6). But the game adds `hardatk` to every hit (`CalculateBaseDamage`,
+  `BattleControl.cs:6364`, per hit), so a flat -3 barely touched one big hit and floored many small ones. A Dead Lander
+  G at level 1 still hit hard through its string of attacks (the user). Now a prefix on `CalculateBaseDamage` scales
+  the move's own damage by the ratio, before `hardatk` (so Hard/Hardest still add on top), when an enemy is the
+  attacker. The game's floor of 1 per hit stays.
 - **Defence** +1 per 6 levels, never below 0; a defence of -1 (shown as "?") is left alone.
 - **EXP** by the game's own rule at the level the enemy is matched to, `GetEXP(base, level - difference)`: in Party
   level mode that's the enemy's home level, so levelling keeps vanilla's pace. Left alone where the game fixes it
