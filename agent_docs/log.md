@@ -876,3 +876,18 @@ Newest last. What was tried, what happened, what the user said.
   cured by the same restart; cause not found. **Open:** past the gate with three members (the trapdoor scene broke with
   three before); the Rarity text colours and Off not yet seen; All players and Off for the icon not yet seen; the game
   is running on the three-slot test seed, server up.
+- **2026-09-26, the rest of that chat.** Rarity colours seen on a gift and the Caravan's shelf. Fixed, each seen by the
+  user: a bought Bug Fables item's starburst turned teal (it now keeps its class colour); a shopkeeper's line ran off
+  its bubble with "<player>'s <item>" in it (shops name the item alone, the owner in the description); a bought
+  Caravan slot kept the Archipelago icon after a hot reload (the slot's own sprite now comes from the game); the
+  pickup line's red "!" after a coloured name (black now). **The blank settings pages were the shop, not the hot
+  reloads:** the shop turns the GUI camera 90 degrees and the panel's text, attached without resetting its rotation,
+  was seen edge-on; wrong theories first (the letter pool, per-frame redraws, depth), settled by `menuinfo` putting one
+  of our letters beside one of the game's. Lesson into CLAUDE.md (the user): always read how the game does a thing
+  first. New: the Archipelago icon has its own step (23); dev cheat `InfBerries`. Decided (the user): shelf-box names
+  stay plain black; crystal berries stay flat icons everywhere.
+  **Open next (the user: straight away in a new chat):** *Starting Party Member* past the Outskirts gate: a new seed
+  with a starting member, the permit and the other two members placed early by plando; read `Event5` (the trapdoor
+  scene) before playing, since it broke with three members before. Also unseen: Item colors Off, the icon's All
+  players and Off. **Left running:** the game (on the three-slot test seed) and the local server hosting it; dev
+  config has OneHit, InfJump and InfBerries on. Nothing pushed this chat.
