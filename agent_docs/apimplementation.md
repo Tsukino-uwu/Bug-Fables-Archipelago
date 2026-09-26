@@ -158,7 +158,8 @@ be wrong.
    rewrites (lines 16 and 19); **the user reviews every changed dialogue line** before it goes in, the old and new text
    side by side, so nothing reads off or machine-written. **Built so far (2026-09-26):** the item itself, `CustomItems.cs`: id 200 (the game's
    items end at 186, both tables hold 256), the Platinum Card's fields and sprite copied, its own name and description
-   set, re-applied if the game reloads its table, only with Archipelago on; `spawn key 200` gives one (dev). Still to
+   set, re-applied if the game reloads its table, only with Archipelago on; `spawn key 200` gives one (dev). **Seen by
+   the user (2026-09-26):** "You found a Boat Ticket!" with the card's icon and its line. Still to
    build: the apworld item, the sailor's gate and lines (reviewed by the user), the logic, and Free boat's removal.
 
 22. **Healing save crystals, an idea for later** (suggested on Discord; the user, 2026-09-26): an item that makes the
