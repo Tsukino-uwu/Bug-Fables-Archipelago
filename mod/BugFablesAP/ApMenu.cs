@@ -205,7 +205,7 @@ namespace BugFablesAP
         private const float LabelX = -5.15f;
         private const float LeafOffset = -0.1f;
         // Centred on a row's text, as the Settings screen's leaf is; the Yes / No box's answers sit differently.
-        private const float LeafRise = -0.07f, PopupLeafRise = 0.15f;
+        private const float LeafRise = 0.05f, PopupLeafRise = 0.15f;
         private const float ValueX = -1.9f;
 
         private static void SetSettingsBoxes(bool visible)
