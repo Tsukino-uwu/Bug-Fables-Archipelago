@@ -29,6 +29,7 @@ confirms on screen.
 - [All medals by source](#all-medals-by-source-2026-09-24-entity-dump-scriptdump-code-read-matched-to-the-bug-fables-wiki)
 - [What the mod's code relies on](#what-the-mods-code-relies-on-code-read-2026-09-24-and-2026-09-25-moved-here-from-code-comments-2026-09-25)
 - [Battles, for enemy shuffle — SPOILERS: boss ids](#battles-for-enemy-shuffle-2026-09-26-code-read-nothing-seen-in-game--spoilers-boss-ids)
+- [The round pause-menu icons' colours](#the-round-pause-menu-icons-colours-2026-09-26-sampled-from-the-spritedump-sheet)
 - [Quests: to measure](#quests-to-measure-when-quests-come-into-scope)
 - [Key items: to measure](#key-items-to-measure)
 
@@ -1104,6 +1105,14 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   and dialogue rewards add money elsewhere (`MainManager.cs:12583-12590`), so they aren't touched by this path.
 - **Still to measure:** each scripted event's fight, one by one (safe to swap in, safe to swap out); what a map
   enemy's `battleids` hold across the EntityDump (group sizes); which enemies a one-member party can't hit.
+
+## The round pause-menu icons' colours (2026-09-26, sampled from the SpriteDump sheet)
+
+Every round icon (`guisprites` 30-34, 74-77) is one hue in two tones: the **ring at full saturation and brightness
+0.51**, the **fill at saturation 0.34 and full brightness** (one fill measured 0.38 / 0.85, one 0.40 / 0.84), the fill's
+hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0.05, purple 0.75-0.77, green
+0.43-0.46, blue 0.59. Sprite 31 is the game's own orange (ring 129, 40, 0; fill 255, 189, 169). Used by
+`WarpButton.cs` for the Warp button's drawn backdrop.
 
 ## Quests: to measure (when quests come into scope)
 

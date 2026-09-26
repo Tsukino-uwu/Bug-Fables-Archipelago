@@ -640,9 +640,12 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    backdrop painted in; the scroll is an item sprite with none (the user: "don't have a background thing"), so it gets
    one. The game's white circle (`guisprites[59]`) came with its own dark outline and shading and looked off (the
    user: the others are one flat ring and one flat inner colour, and brown and pale was dull). Now the mod draws the
-   backdrop itself: a texture the size of the blue map icon, a flat ring round a flat fill, in teal (a dark ring and a
-   light fill of one colour, as the others pair theirs; orange was tried first; teal sits between the green wrench
-   and the blue map in the row, and is cool against the warm scroll); it is the button's own sprite (so the game's outline and wiggle apply), the scroll on top.
+   backdrop itself: a texture the size of the blue map icon, a flat ring round a flat fill, in the game's own colour recipe,
+   measured from its icons (`MEASURED.md`, "The round pause-menu icons' colours"): ring at full saturation and 0.51
+   brightness, fill at 0.34 saturation and full brightness, one hue. Guessed colours kept looking off (pale brown, a
+   pale orange, teal that blended into the green and blue beside it, a vivid orange that stuck out, a ring and fill
+   that read as two colours); the user pointed at the map icon, "it nailed the color scheme", and measuring it gave the
+   recipe. Orange (the game's own sprite 31 hue) or pink, being compared with the dev console's `warpcolor`; it is the button's own sprite (so the game's outline and wiggle apply), the scroll on top.
    **Map** opens the game's own map window (6) the way its map shortcut does (`windowid = 6`, `BuildWindow`), in a
    travel mode: confirm on a visited area (`librarystuff[4, area]`) opens "Travel to <area>?" (No first) instead of
    flipping the description's pages; the map opened any other way keeps vanilla controls. On Yes the menu closes the

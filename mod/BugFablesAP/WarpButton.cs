@@ -34,9 +34,38 @@ namespace BugFablesAP
         // Map: the round blue map in the other buttons' style. Warp: the map item's scroll, a "return scroll" (the user).
         private const int MapIconSprite = 34;
         private const int ScrollItem = 41;
-        // The scroll has no round backdrop of its own: one is drawn like the other buttons', a dark ring and a light fill
-        // of one colour. Teal: between the green wrench and the blue map in the row, and cool against the warm scroll.
-        private static readonly Color RingColor = new Color(0.02f, 0.42f, 0.45f), FillColor = new Color(0.62f, 0.9f, 0.95f);
+        // The scroll has no round backdrop of its own: one is drawn like the other buttons', a dark ring and a bright fill
+        // of one vibrant colour (teal blended into the green and blue beside it, the user). Being chosen: orange or pink.
+        // The game's own recipe, measured on its round icons: ring at full saturation and brightness 0.51, fill at
+        // saturation 0.34 and full brightness, the fill's hue 0.01 lower. Orange is the game's own sprite 31's hue.
+        private static Color RingColor, FillColor;
+        private static float hue = OrangeHue;
+        private const float OrangeHue = 0.05f, PinkHue = 0.9f;
+
+        private static void Colours()
+        {
+            RingColor = Color.HSVToRGB(hue, 1f, 0.51f);
+            FillColor = Color.HSVToRGB(Mathf.Repeat(hue - 0.01f, 1f), 0.34f, 1f);
+        }
+
+        // Dev only (console `warpcolor`): try a backdrop colour; the pause menu shows it the next time it opens.
+        internal static string SetColour(string name)
+        {
+            switch (name)
+            {
+                case "orange":
+                    hue = OrangeHue;
+                    break;
+                case "pink":
+                    hue = PinkHue;
+                    break;
+                default:
+                    return "warpcolor orange|pink";
+            }
+            backdrop = null;
+            builtFor = null;
+            return "warp backdrop now " + name + ": reopen the pause menu";
+        }
         private const float RingShare = 0.14f;
         private static Sprite backdrop;
         // By its save point: entity 1 (SaveTutorial) before flag 41, entity 22 (SaveAfterTutorial) after.
@@ -272,6 +301,7 @@ namespace BugFablesAP
             {
                 return backdrop;
             }
+            Colours();
             Sprite model = MainManager.guisprites[MapIconSprite];
             int size = Mathf.RoundToInt(Mathf.Max(model.rect.width, model.rect.height));
             var texture = new Texture2D(size, size, TextureFormat.RGBA32, false) { filterMode = FilterMode.Bilinear };
