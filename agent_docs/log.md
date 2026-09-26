@@ -764,3 +764,5 @@ Newest last. What was tried, what happened, what the user said.
   random start; the panel leaf's height at 0.05 not yet confirmed on the last row; Medal prices' bar not yet seen at
   half; bosses / both / chaos for the enemy shuffle and the map look (Next); the Archipelago checkout's link to the
   apworld to be restored by the user (above). Test server stopped; the game left running for the user.
+- **The checkout's link restored** (the user said to, 2026-09-26): `worlds/bug_fables` is a junction to
+  `apworld/bug_fables` again; the tests pass through it (276).
