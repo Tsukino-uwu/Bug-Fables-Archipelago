@@ -1054,6 +1054,11 @@ purchases, and two copies of one medal can't be told apart in a list of medal id
    location pickup's own item, the seed's item goes back on in the same call. **Seen (the user, 2026-09-25):** nothing
    odd going in or out any more. The first guess was taken back out.
 
+**A bought slot shows the shop's own item again, asked of the game (2026-09-26):** the item shops remembered each slot's
+sprite before swapping it and put that back once the check was done. After a hot reload the memory was empty while the
+shelf still showed the seed's look, so that look was remembered as the original, and the Caravan's slot 1 kept the
+Archipelago icon after it was bought (the user). The slot's own item now comes from `MainManager.GetItemSprite`.
+
 **Status:** works, seen by the user (2026-09-25): Merab's medal shop with its full stock, the reshuffle choice, Madame Butterfly's item shop, the caravan, and pickups in houses; Shades's shop not yet built as locations.
 
 *Code: `ShopSwap.cs` (medal shops and their stock), `ItemShops.cs` (item shops), `KeptOpen.cs` (the shopkeeper

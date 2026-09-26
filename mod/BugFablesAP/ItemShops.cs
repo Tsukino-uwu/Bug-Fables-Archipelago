@@ -22,9 +22,6 @@ namespace BugFablesAP
         private static int moneyBefore;
         private static int price;
 
-        // The game's own sprite of each slot the mod changed.
-        private static readonly Dictionary<EntityControl, Sprite> original = new Dictionary<EntityControl, Sprite>();
-
         internal static void Enable(ManualLogSource logger, string guid, ApConnection conn, Func<bool> on)
         {
             log = logger;
@@ -167,21 +164,19 @@ namespace BugFablesAP
                 long at = LocationOf(npc);
                 if (at < 0)
                 {
-                    if (original.TryGetValue(npc.entity, out Sprite own))
+                    // Its check is done (or it was never one): the shop's own item, asked of the game, not remembered
+                    // (a hot reload once remembered the seed's look as the original).
+                    Sprite own = MainManager.GetItemSprite(false, npc.entity.animstate);
+                    if (npc.entity.sprite.sprite != own)
                     {
-                        npc.entity.sprite.sprite = own; // its check is done: the shop's own item again
-                        ItemSwap.Mark(npc.entity, null);
-                        original.Remove(npc.entity);
+                        npc.entity.sprite.sprite = own;
                     }
+                    ItemSwap.Mark(npc.entity, null);
                     continue;
                 }
                 ItemSwap.LookOf(at, out _, out Sprite sprite, out _);
                 if (sprite != null && npc.entity.sprite.sprite != sprite)
                 {
-                    if (!original.ContainsKey(npc.entity))
-                    {
-                        original[npc.entity] = npc.entity.sprite.sprite;
-                    }
                     npc.entity.sprite.sprite = sprite;
                 }
                 ItemSwap.Mark(npc.entity, ItemSwap.MarkColorOf(at));
