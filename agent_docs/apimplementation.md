@@ -218,6 +218,16 @@ be wrong.
    key-item prompt, the mod asks "Show the <item>?" (Yes / No) when you have the item it takes, and says you don't
    otherwise, as the Boat Ticket's sailor does, instead of the game's list to pick from. Every key-item prompt, not
    only the permits. Its own step in the mod guide.
+33. **Movement speed and the dash, an idea for later** (the user, 2026-09-27): faster base movement, a faster
+   ("turbo") dash to go with it, and starting with the dash. The game's only dash is Kabbu's horn dash, allowed by
+   flag 699 (`MEASURED.md`, ability flags). Code read (2026-09-27, not measured): speed comes from one field,
+   `PlayerControl.basespeed` (5), in `RefreshSpeed`: walking `(basespeed + friction) × 1.3`, dashing `basespeed × 2.5`.
+   So raising `basespeed` speeds up both, and the turbo dash comes free with the faster movement. Two pieces: a speed
+   panel setting (Off / faster values, no logic), and *start with the dash*, which touches Next 3 (the horn dash as an
+   item) and so needs logic. Values still to decide.
+34. **Early Jump, an idea for later** (the user, 2026-09-27): *Shuffle Jump* (build step 22) becomes Off / On /
+   Early, where Early puts Jump in an early sphere, since it gates the most. Archipelago may already have this built in
+   (an early-items setting): check `world api.md` at the targeted tag before building one of ours.
 
 **Known issues:**
 
