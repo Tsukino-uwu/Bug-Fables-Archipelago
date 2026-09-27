@@ -187,7 +187,8 @@ be wrong.
    Artifact 4 can come before 1; the goal is any N of them. The game draws the first N of `StartMenu.psprite` from a
    flag count (`PauseMenu.cs:2397-2402`), so the mod draws the received ones itself. Each item is tied to its chapter
    (the user): its chapter's icon, and the game's own name for that chapter's artifact if it has one (`textsearch`);
-   the chapter-end locations keep place names. Open: only the received icons, or all 7 with the missing ones faded. The pool: always 7, *Artifacts Required* 1-7, so the game's 7 icons can show it (the user agreed); a
+   the chapter-end locations keep place names. **Icons (the user):** the received ones only; all 7 with the missing
+   ones faded is worth a look on screen when it's built, kept only if it looks good. The pool: always 7, *Artifacts Required* 1-7, so the game's 7 icons can show it (the user agreed); a
    bigger pool breaks nothing in Archipelago but needs a filler slot per Artifact and a display past 7 icons, so later
    if asked. A yaml
    option, so its own build step.
@@ -204,8 +205,8 @@ be wrong.
 31. **The Explorer Permit split, an idea for later** (the user, 2026-09-27): one permit per gate, so one item never
    opens four areas (as custom roadblocks spread Surf's reach in Pokemon Emerald randomizers). The gates (`MEASURED.md`,
    "What the Explorer Permit opens"): the Outskirts gate, the Rubber Prison's `PrisonDoor` (the locked-door routine's
-   list, index 16), and B.O.S.S. and the Cave of Trials (the wiki's word; which item they take still to measure, and it
-   must be before they're gated). The user's names: Snakemouth, Prison, Lab and Trial Permit; proposed: the Explorer
+   list, index 16), and B.O.S.S. and the Cave of Trials (the wiki's word; which item they take is measured in game as
+   the first part of this step, before they're gated). The user's names: Snakemouth, Prison, Lab and Trial Permit; proposed: the Explorer
    Permit stays the Snakemouth one (the game's own gate and lines), plus three of the mod's own items as the Boat
    Ticket was made (build step 16). **Proposed (asked for vanilla kept optional):** a yaml choice *Explorer Permit*:
    Vanilla (one permit, every permit gate behind it, the mod leaves the gates alone), Split (the three new permits in the
