@@ -224,7 +224,15 @@ be wrong.
    `PlayerControl.basespeed` (5), in `RefreshSpeed`: walking `(basespeed + friction) × 1.3`, dashing `basespeed × 2.5`.
    So raising `basespeed` speeds up both, and the turbo dash comes free with the faster movement. Two pieces: a speed
    panel setting (Off / faster values, no logic), and *start with the dash*, which touches Next 3 (the horn dash as an
-   item) and so needs logic. Values still to decide.
+   item) and so needs logic. Values still to decide. **The dash on Vi and Leif, for travel only?** (the user asked,
+   2026-09-27; code read, not measured): the dash is Kabbu's action tap (the horn slash) tapped again within 15 frames
+   (`PlayerControl.DoActionTap`, case 1); what it breaks is a separate hitbox (`tbox`, tagged `BeetleHorn`, or
+   `BeetleDash` with flag 39) that grass, rocks, switches and enemies react to (`NPCControl`, `Hornable`, `ShakeHorn`),
+   so a travel-only dash would skip the hitbox. The catch is the button: every leader's tap and hold already does
+   something (Vi's tap the beemerang, and a second tap is ignored while it flies; Leif's tap the icicle; holds are
+   hover, dig and bubble shield), and the dash poses (animstates 116/117) are Kabbu's. So Vi and Leif would need a new
+   trigger, and poses of their own that aren't checked yet. Faster movement (above) speeds up every leader and clashes
+   with nothing.
 34. **Early Jump, an idea for later** (the user, 2026-09-27): *Shuffle Jump* (build step 22) becomes Off / On /
    Early, where Early puts Jump in an early sphere, since it gates the most. Archipelago may already have this built in
    (an early-items setting): check `world api.md` at the targeted tag before building one of ours.
