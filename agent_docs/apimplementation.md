@@ -309,6 +309,8 @@ be wrong.
 - **Uncap FPS (mod guide, step 24) still speeds some things up.** Each to compare at 60 and above on screen, then
   step at the game's own rate, as the other per-frame sites are:
   - **Being hit plays too fast, for enemies and the party** (a tester, 2026-09-27, FPS unlocked). Cause not read yet.
+  - **The party moves in slow motion on bridges and moving platforms** (the user, 2026-09-27, high FPS). Cause not
+    read yet.
   - **Shaking text in conversations looks blurry** (the user, 2026-09-27: sharp at 60 FPS, blurry at 240, confirmed on
     screen). Likely cause, from code: the game's shaky and glitchy letters update once per frame, so they're 4x as busy
     at 240 (`MEASURED.md`, Frame rate).
