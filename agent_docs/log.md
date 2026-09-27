@@ -913,3 +913,32 @@ Newest last. What was tried, what happened, what the user said.
   past the gate so the logic can drop its blanket rules; enemy stats. **Left:** the game running on the move test
   seed (all three members, moves and jump shuffled); dev config: `AdoptSeed = true`, `TestStartMember = -1`,
   OneHit, InfJump and InfBerries on. The test server stopped at the session's end. Nothing pushed.
+
+## 2026-09-27: Uncap FPS, and the hitches
+
+- **The user asked** whether going above 60 fps breaks things (the game offers 30 or 60), then for a Quality of life row
+  (Off/120/144/240, off by default, "properly so things don't break", kept experimental until confirmed). It's "a kinda
+  for fun qol feature", for playing chapters 5-7, vanilla saves included (Use on normal saves), and they care a lot
+  about fps and frame pacing. Documentation steps 24 (Uncap FPS) and 25 (hitches).
+- **Looked before building:** the console's `display`/`fps`/`interp`/`camlerp` let the user compare one change at a time.
+  240 as is looked the same (physics at 50 Hz, camera in FixedUpdate); characters interpolated looked worse ("like motion
+  blur"); camera drawn between steps as well looked "better/sharper", against 60 "a really big difference".
+- **Dips (246 to 220) at 60 and 240:** measured with `frames`, not guessed. Every ~1.8 s the mod's own garbage (68 KB a
+  frame from the check tick rebuilding shop lists), found by timing and counting each plugin job's allocations; fixed.
+  Every 5.00 s the game's clock forcing an unload and a collection; pinging the server every 30 s instead of 5 ruled
+  the connection out, the game's code showed the rest. The user: "always on with archipelago". Measured gone.
+- **Four read-only audit agents** listed every per-frame site in the game (per file group). New finds beyond the known
+  frame counts: framestep/TieFramerate inside physics steps (weaker at high fps), constant per-frame counters, lerps
+  and spins, and FloorToInt(a) % n toggles in scenes.
+- **The "!" over NPCs blurred on sideways walking at 240.** Tearing was a wrong theory (VSync at refresh divisors went in
+  anyway: frame times had wobbled 2.9-5.3 ms). A screen-position trace showed the bubble exactly on its NPC; the user's
+  A/B (vanilla 60: not seen) and subtraction (interpolation off: still there; camera smoothing off: gone) pointed at
+  the camera; `cams` showed 3DGUI and GUICamera as children drawn after the main camera. Fixed by putting the camera
+  back after the frame's last camera; the user: "stays steady and sharp".
+- **Two self-inflicted breakages, both from HarmonyX in this game:** Harmony's `GetOriginalInstructions` needs
+  `System.Reflection.Emit.ILGeneration` (aborted `Awake`, restart needed); a transpiler using `CodeInstruction.labels`
+  failed and stayed registered on its methods, so a later feature's patch of `PauseMenu.Update` failed too, aborting
+  `Awake` and hot reload: several builds sat unloaded and looked like fixes changing nothing. Two guessed fixes failed
+  the same way; reading the last error in the log settled it. Restart needed; the sites' transpiler now never throws.
+- **Logic checked by measurement** (`rates` at 240: 59.88 sixtieths and 59.78 new-sixtieth frames a second). Install
+  only when the row is on (about 4 s, 3 of them one battle coroutine). Nothing of the per-site fixes seen on screen yet.
