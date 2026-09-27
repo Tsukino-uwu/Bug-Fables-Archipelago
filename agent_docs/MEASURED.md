@@ -698,6 +698,31 @@ The output stays in the BepInEx folder.
   (`Icefall`) (`NPCControl.cs:4779, 4829`; the user: droplets in Snakemouth Den, a fountain in town). Bee Fly, crossing large gaps (not yet unlocked by the user); Icicle, platforms on
   water, dropped by a second tap during the Freeze (`PlayerControl.cs:1164`), so chained on Freeze as the Dash is on the
   Horn Slash. Used by the Next 3 plan (field abilities as items).
+- **The unlock scenes, read** (2026-09-27, code read with the entity, script and map dumps; nothing seen in game):
+  - *Beemerang Halt*, flag 21, `Event55` (`EventControl.cs:8989`, its only setter): the end of the Wacka Worm
+    minigame at the festival on `GoldenSettlement2`, only when won (`flagvar[1] >= 15`; the win also sets flag 96,
+    `:8691`); the replays on `GoldenSMinigame` never set it. Chapter 2.
+  - *Dash*, flag 699: the scene is `Event221` on `BOLostSandsEntrance` (trigger `dashevent`, req flags 138 and 88,
+    set by `Event78` and `Event73`), so **chapter 3**, not 1. `Event137` (the swamp boss, `SwamplandsBoss`, marker flag
+    359) also sets it as a fallback, and `Event22`, run on **every save load** (`StartMenu.cs:526`, `ReloadSave`), turns
+    699 on when 39 or 359 is set (`EventControl.cs:4167-4185`).
+  - *Shield*, flag 20, `Event95` (`:15962`): started by the switch in `FactoryProcessingFirstRoom` (Switch data `1 95`,
+    `NPCControl.cs:4701-4705`; `event-triggers.py` misses Switch-started events). The switch counts as hit on load once
+    20 is set (`NPCControl.cs:1022-1033`). Chapter 3.
+  - *Beetle Dig*, flag 18, `Event109`'s `HideoutCell` branch (`:18554`). 18 also gates the hideout's story: its
+    capture scene (`HideoutEntrance/eventcheck`, lim 18), the door below and the Astotheles fight (req 18); the cell is
+    left by digging. Chapter 4.
+  - *Horn Dash*, flag 39, `Event131` on `SwamplandsBridge` (`:22344`; trigger `eventtrigger2`); 39 also removes that
+    map's rock and the `GoldenPathTunnel` mushroom spring (lim 39). Chapter 5.
+  - *Bee Fly*, flag 19, `Event150` on `BarrenLandsBeefly` (`:25049`; trigger `beeflyevent`, req 347 from `Event142`).
+    Chapter 6.
+  - *Icicle*, flag 171, `Event180` on `UpperSnekTransition` (`:30509`), with a miniboss (enemies 52, 53) that 171
+    removes. Chapter 6.
+  - None of these scenes sets another flag that marks it done, apart from `Event55` (96) and `Event137` (359): the
+    ability flag is the scene's own marker.
+  - **The same flags give battle skills** (`MainManager.RefreshSkills`, `MainManager.cs:8395-8577`): 21 Vi's skill 18;
+    19 Vi's 5 and Kabbu's 5; 699 Kabbu's 10; 18 Kabbu's 6; 20 Leif's 7; 171 Leif's 25 (plus each field skill's menu
+    entry). Used by the build step for field abilities as items.
 - **59 doors to other maps have required or hiding flags, on 22 flags.** Setters: 11 Events 0/1/109,
   18 `Event109`, 20 `Event95`, 41 `Event26`, 67 `Event45`, 85 `Event52`, 86 `Event58`, 107 `Event60`,
   160 `Event84`, 169 `Event87`, 211 `Event98`, 226 and 239 dialogue only, 280 `Event112`, 299 `Event99`,
