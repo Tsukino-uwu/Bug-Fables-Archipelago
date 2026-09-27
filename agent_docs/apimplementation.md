@@ -201,6 +201,17 @@ be wrong.
    reaches 1 ... 10 (the `location_vars` kind, as Artis's prize). Rule: milestone k needs 5 × k discoveries reachable,
    so only the first fits today's 5 listed discoveries. Five of the rewards are crystal berries (43-47). Still to find:
    the library's region and any story flag the librarian needs; how the mod turns `EventControl.GiveItem` into a check.
+31. **The Explorer Permit split, an idea for later** (the user, 2026-09-27): one permit per gate, so one item never
+   opens four areas (as custom roadblocks spread Surf's reach in Pokemon Emerald randomizers). The gates (`MEASURED.md`,
+   "What the Explorer Permit opens"): the Outskirts gate, the Rubber Prison's `PrisonDoor` (the locked-door routine's
+   list, index 16), and B.O.S.S. and the Cave of Trials (the wiki's word; which item they take still to measure, and it
+   must be before they're gated). The user's names: Snakemouth, Prison, Lab and Trial Permit; proposed: the Explorer
+   Permit stays the Snakemouth one (the game's own gate and lines), plus three of the mod's own items as the Boat
+   Ticket was made (build step 16). Open: always, or a yaml option (and its default). Its own build step.
+32. **Key items shown without browsing, a Quality of life row, an idea for later** (the user, 2026-09-27): at a
+   key-item prompt, the mod asks "Show the <item>?" (Yes / No) when you have the item it takes, and says you don't
+   otherwise, as the Boat Ticket's sailor does, instead of the game's list to pick from. Every key-item prompt, not
+   only the permits. Its own step in the mod guide.
 
 **Known issues:**
 
