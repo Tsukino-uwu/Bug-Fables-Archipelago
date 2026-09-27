@@ -690,7 +690,11 @@ The output stays in the BepInEx folder.
   The places the scenes run aren't read yet, apart from the game's own text: the Dash learned at `BOLostSandsEntrance`,
   the Horn Dash at `SwamplandsBridge`. **Beemerang Halt in play** (the user, 2026-09-27): holding the action button
   keeps the Beemerang in place to spin things, which is how some bridges are activated; so a spot behind such a
-  mechanism needs the Halt, not just the Toss. Used by the Next 3 plan (field abilities as items).
+  mechanism needs the Halt, not just the Toss. **What each opens, for the logic** (the game's text, with the user's play,
+  2026-09-27): Shield, walking on hazardous terrain (its deflecting attacks is comfort only); Beetle Dig, going under
+  some roadblocks and the dig spots; Bee Fly, crossing large gaps (not yet unlocked by the user); Icicle, platforms on
+  water, dropped by a second tap during the Freeze (`PlayerControl.cs:1164`), so chained on Freeze as the Dash is on the
+  Horn Slash. Used by the Next 3 plan (field abilities as items).
 - **59 doors to other maps have required or hiding flags, on 22 flags.** Setters: 11 Events 0/1/109,
   18 `Event109`, 20 `Event95`, 41 `Event26`, 67 `Event45`, 85 `Event52`, 86 `Event58`, 107 `Event60`,
   160 `Event84`, 169 `Event87`, 211 `Event98`, 226 and 239 dialogue only, 280 `Event112`, 299 `Event99`,
