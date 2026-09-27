@@ -251,34 +251,34 @@ be wrong.
    (an early-items setting): check `world api.md` at the targeted tag before building one of ours.
 35. **Skip cutscenes and Speed up cutscenes, two rows, an idea for later** (the user, 2026-09-27). Today one row,
    *Skip cutscenes* (`QualityOfLife.cs`, `Scenes`; the mod guide, step 10), both skips and fast-forwards (8x speed, lines
-   answered), chosen per scene by what is safe. The idea splits it by what a scene is:
+   answered, battles at normal speed), chosen per scene by what is safe. The idea splits it by what a scene is:
    - **Skip:** scenes with no mechanic or check tied to them. Off: they play as in vanilla.
-   - **Speed up:** story beats and scenes that give an item or reward (the user's examples: the game's tutorial, the
-     trapdoor, saving Leif from the spider web). Off: they play as in vanilla, at normal speed.
+   - **Speed up:** story beats, scenes that change the world, and scenes that give an item or reward. Off: they play
+     as in vanilla, at normal speed.
    - **Always, with Archipelago on, whatever the two rows say:** what the randomizer needs gone, or scripted parts
-     that only slow the pace (the user's list: the intro slides, the new-game combat tutorial, the scripted first
-     spider fight, Leif joining at the lake and its fight).
+     that only slow the pace: the opening (the intro slides, the new-game combat tutorial) and the scripted first
+     spider fight.
 
-   How a scene is cut (skipped or fast-forwarded) stays per scene, apart from its row: a fluff scene that can only be
-   fast-forwarded safely (the rope) goes under Skip and is sped up, never cut out. Today's scenes, sorted as proposed:
+   How a scene is cut (skipped or fast-forwarded) stays per scene: a Skip scene that can't be cut out safely is sped
+   up instead. **Sorted (the user, 2026-09-27):**
 
-   | Scene | Today | Proposed |
+   | Scene | Today | Decided |
    |---|---|---|
    | The opening: slides (Event8), Maki's talk, Vi joining, the tutorial battle (Event16) | always | always |
    | The first spider fight, ended at its start (`BeforeCheckEvent`) | *Skip cutscenes* | always |
    | The bridge message (Event0) | skipped | Skip |
-   | The rope (Event1) | fast-forwarded | Skip (sped up) |
-   | The Tattle tutorial (Event2) | skipped | Skip, or Speed up as "the tutorial"? |
+   | The Tattle tutorial (Event2) | skipped | Skip (no check) |
    | The barkeeper's first talk (Event83) | skipped | Skip |
-   | Arriving outside Snakemouth Den (Event11, records discovery 0) | skipped | Speed up (gives a check)? |
+   | Arriving outside Snakemouth Den (Event11) | skipped | Skip (the skip records discovery 0 itself) |
+   | The rope (Event1) | fast-forwarded | Speed up (the bridge falls) |
    | The door room's puzzle solved (Event4, drops a Mushroom) | fast-forwarded | Speed up |
    | The trapdoor (Event5) | fast-forwarded | Speed up |
-   | The spider scene (Event6: the fights, Leif freed and joining, discovery 1) | fast-forwarded | split: see below |
+   | The spider scene (Event6) | fast-forwarded | Speed up |
 
-   Still to ask: "Leif joining at the lake and its fight" (always) and "saving Leif from the web" (Speed up) may both
-   be Event6, one scene today; which part goes where, and whether "its fight" is the second spider fight (a real one,
-   with the first boss's prize and flag 27 behind it). Defaults proposed: both rows on. Only while Archipelago is
-   enabled, as every row. A panel setting, so its own step in the mod guide.
+   The spider scene is one game coroutine in three parts (the user saw "2-3 cutscenes"): talk and the first fight
+   (Kabbu alone, `flagvar[11]` 0), talk and the second fight (two enemies, `flagvar[11]` 2, a real one), then Leif's
+   part, flags 30 and 27 and discovery 1. Its first fight ends at once always; the rest is sped up. Defaults proposed:
+   both rows on. Only while Archipelago is enabled, as every row. A panel setting, so its own step in the mod guide.
 
 **Known issues:**
 
