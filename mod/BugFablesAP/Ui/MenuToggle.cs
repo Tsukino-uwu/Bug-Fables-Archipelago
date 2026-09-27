@@ -16,14 +16,13 @@ namespace BugFablesAP
         private static ManualLogSource log;
         private static ConfigEntry<bool> mode;
         private static ConfigEntry<string> server, port, slot, password;
-        private static Action connect;
         private static Func<string> status;
         private static Func<bool> seedKnown;
         private static Harmony harmony;
 
         internal static void Enable(ManualLogSource logger, string guid, ConfigEntry<bool> randomizerEnabled,
             ConfigEntry<string> serverEntry, ConfigEntry<string> portEntry, ConfigEntry<string> slotEntry, ConfigEntry<string> passwordEntry,
-            Action connectAction, Func<string> statusText, Func<bool> seedIsKnown)
+            Func<string> statusText, Func<bool> seedIsKnown)
         {
             log = logger;
             mode = randomizerEnabled;
@@ -31,7 +30,6 @@ namespace BugFablesAP
             port = portEntry;
             slot = slotEntry;
             password = passwordEntry;
-            connect = connectAction;
             status = statusText;
             seedKnown = seedIsKnown;
             harmony = new Harmony(guid + ".menu." + DateTime.UtcNow.Ticks);
@@ -144,7 +142,7 @@ namespace BugFablesAP
                 }
                 // The game plays this for every main-menu choice; we take the press before its code runs.
                 MainManager.PlaySound("Confirm", -1);
-                ApMenu.Show(log, __instance, server, port, slot, password, mode, connect, status);
+                ApMenu.Show(log, __instance, server, port, slot, password, mode, status);
             }
             catch (Exception e)
             {

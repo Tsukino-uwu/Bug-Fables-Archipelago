@@ -195,7 +195,6 @@ namespace BugFablesAP
             WarpButton.Enable(Log, Guid, () => settingsOn() && QualityOfLife.WarpOn, () => settingsOn() && QualityOfLife.MapOn,
                 () => QualityOfLife.SkipWarpConfirm, () => QualityOfLife.SkipMapConfirm);
             MenuToggle.Enable(Log, Guid, randomizerEnabled, server, port, slot, password,
-                () => { },
                 () => connection.Status,
                 () => connection.SeedKnown);
             Log.LogInfo($"{Name} {Version} loaded. GrantProbe={grantProbeEnabled.Value} TextProbe={textProbeEnabled.Value}");

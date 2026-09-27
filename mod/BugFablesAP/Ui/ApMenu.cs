@@ -41,7 +41,6 @@ namespace BugFablesAP
         private StartMenu owner;
         private ConfigEntry<string> server, port, slot, password;
         private ConfigEntry<bool> mode;
-        private Action connect;
         private Func<string> status;
 
         private Transform box;
@@ -59,7 +58,7 @@ namespace BugFablesAP
         private string shownStatus;
 
         internal static void Show(ManualLogSource logger, StartMenu owner, ConfigEntry<string> server, ConfigEntry<string> port, ConfigEntry<string> slot,
-            ConfigEntry<string> password, ConfigEntry<bool> mode, Action connect, Func<string> status)
+            ConfigEntry<string> password, ConfigEntry<bool> mode, Func<string> status)
         {
             if (Open != null)
             {
@@ -74,7 +73,6 @@ namespace BugFablesAP
             menu.slot = slot;
             menu.password = password;
             menu.mode = mode;
-            menu.connect = connect;
             menu.status = status;
             Open = menu;
             menu.Build();
