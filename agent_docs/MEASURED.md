@@ -1214,6 +1214,12 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   `MoneyBig`, `NPCControl.cs:5741-5753`), then clamps the wallet to 999. Berries an enemy drops after a fight are
   the same pickups (`EntityControl.spitmoney` creates them, `EntityControl.cs:5353-5361`). Items from the server
   and dialogue rewards add money elsewhere (`MainManager.cs:12583-12590`), so they aren't touched by this path.
+- **The game's own per-hit bonuses for the party** (for the attack boost, code read 2026-09-28):
+  `BattleControl.CalculateBaseDamage(attacker, ref target, basevalue, ...)` runs for each hit. A Raw hit returns
+  first, unchanged. Then, when the attacker is a party member (tag `Player`) and not in the demo battle (`demomode`),
+  it adds +1 for the member in front (`partypointer[0] == currentturn`), medal 6's count while poisoned and medal 3's
+  count at 4 HP or less. Skills pass their damage in built from `playerdata[].atk`, most per hit (`atk + combo - 1`
+  on each hit of one), so +1 attack and +1 per hit come to the same. Used by `AttackBoost.cs`.
 - **Still to measure:** each scripted event's fight, one by one (safe to swap in, safe to swap out); what a map
   enemy's `battleids` hold across the EntityDump (group sizes); which enemies a one-member party can't hit.
 

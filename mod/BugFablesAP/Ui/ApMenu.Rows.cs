@@ -83,6 +83,10 @@ namespace BugFablesAP
                             case "Artifacts": return "Enemies grow with artifacts found; levelling ahead makes it easier.";
                             default: return "Enemies match your level, so every area plays fair in any order.";
                         }
+                    case AttackRow:
+                        return AttackBoost.Boost != null && AttackBoost.Boost.Value
+                            ? "Each hit your party lands does 1 more damage, as if attack were 1 higher."
+                            : "Your party hits as hard as the game makes it.";
                     case MedalPricesRow:
                     {
                         int tenths = QualityOfLife.MedalPrices?.Value ?? QualityOfLife.FullPrice;
@@ -183,6 +187,11 @@ namespace BugFablesAP
                 {
                     Cycle(QualityOfLife.EnemyScalingMode, EnemyScaling.Modes, by);
                 }
+                else if (r == AttackRow && AttackBoost.Boost != null)
+                {
+                    AttackBoost.Boost.Value = !AttackBoost.Boost.Value;
+                    log.LogInfo("[apmenu] AttackBoost: " + (AttackBoost.Boost.Value ? "+1" : "Off"));
+                }
                 else if (r == MedalPricesRow && QualityOfLife.MedalPrices != null)
                 {
                     Multipliers.StepBy(QualityOfLife.MedalPrices, by, 0, QualityOfLife.FullPrice);
@@ -226,7 +235,7 @@ namespace BugFablesAP
         // The Gameplay page's two buttons: every row to its plain value, or back to its default.
         private static void GameplayAll(bool reset)
         {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { Difficulty, QualityOfLife.EnemyScalingMode, QualityOfLife.MedalPrices, Multipliers.Exp, Multipliers.Berries })
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { Difficulty, QualityOfLife.EnemyScalingMode, AttackBoost.Boost, QualityOfLife.MedalPrices, Multipliers.Exp, Multipliers.Berries })
             {
                 if (setting != null && reset)
                 {
@@ -244,6 +253,10 @@ namespace BugFablesAP
             if (QualityOfLife.EnemyScalingMode != null)
             {
                 QualityOfLife.EnemyScalingMode.Value = "Off";
+            }
+            if (AttackBoost.Boost != null)
+            {
+                AttackBoost.Boost.Value = false;
             }
             if (QualityOfLife.MedalPrices != null)
             {

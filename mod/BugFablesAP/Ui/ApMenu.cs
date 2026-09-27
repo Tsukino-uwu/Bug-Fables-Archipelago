@@ -16,7 +16,7 @@ namespace BugFablesAP
         private const int ButtonsRow = 0, FastTextRow = 1, WarpRow = 2, SkipConfirmRow = 3, CutscenesRow = 4, AnimationRow = 5, ColorsRow = 6,
             IconsRow = 7, BackgroundsRow = 8, DetectorRow = 9, UncapRow = 10, QolRows = 11;
         // The Gameplay page: how the game plays, under the same two buttons.
-        private const int DifficultyRow = 1, ScalingRow = 2, MedalPricesRow = 3, ExpRow = 4, BerryRow = 5, GameplayRows = 6;
+        private const int DifficultyRow = 1, ScalingRow = 2, AttackRow = 3, MedalPricesRow = 4, ExpRow = 5, BerryRow = 6, GameplayRows = 7;
         private enum Page { Main, Qol, Gameplay }
         private Page page;
         // On the buttons row: 0 Reset to defaults (where the cursor lands), 1 Disable all; confirming shows Yes / No there (0 Yes, 1 No).
@@ -436,6 +436,7 @@ namespace BugFablesAP
                 DrawButtons();
                 Choice(DifficultyRow, "Difficulty", (Difficulty?.Value ?? "Normal").ToUpperInvariant());
                 Choice(ScalingRow, "Enemy scaling", ScalingLabel(QualityOfLife.EnemyScalingMode?.Value ?? "PartyLevel"));
+                Choice(AttackRow, "Attack boost", AttackBoost.Boost != null && AttackBoost.Boost.Value ? "+1" : "OFF");
                 Label(MedalPricesRow, "Medal prices");
                 Label(ExpRow, "EXP multiplier");
                 Label(BerryRow, "Berry multiplier");
@@ -469,7 +470,7 @@ namespace BugFablesAP
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
             foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, SkipConfirmRow, CutscenesRow, AnimationRow, ColorsRow, IconsRow, BackgroundsRow, DetectorRow, UncapRow }
-                : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, MedalPricesRow, ExpRow, BerryRow } : new[] { ModeRow, AchievementsRow, NormalSavesRow })
+                : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, AttackRow, MedalPricesRow, ExpRow, BerryRow } : new[] { ModeRow, AchievementsRow, NormalSavesRow })
             {
                 for (int side = 0; side < 2; side++)
                 {

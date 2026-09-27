@@ -177,6 +177,7 @@ namespace BugFablesAP
             QualityOfLife.EntrancesShuffled = () => randomizerEnabled.Value && connection?.DoorTargets != null && connection.DoorTargets.Count > 0;
             Multipliers.Enable(Log, Guid, Config, settingsOn);
             EnemyScaling.Enable(Log, Guid, settingsOn, () => QualityOfLife.EnemyScalingMode?.Value);
+            AttackBoost.Enable(Log, Guid, Config, settingsOn);
             FrameRate.Enable(Log, Guid, settingsOn);
             ClockCleanup.Enable(Log, Guid, settingsOn);
             InGameSettings.Enable(Log, Guid, settingsOn);
@@ -387,6 +388,7 @@ namespace BugFablesAP
             FrameRate.Disable();
             ClockCleanup.Disable();
             EnemyScaling.Disable();
+            AttackBoost.Disable();
             Multipliers.Disable();
             InGameSettings.Disable();
             AchievementGuard.Disable();

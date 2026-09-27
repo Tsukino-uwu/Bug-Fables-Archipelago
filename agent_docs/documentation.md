@@ -40,6 +40,7 @@ anyone curious about the process, or thinking of doing the same for another game
 24. [Frame rates above 60: smoother, and the same game](#24-frame-rates-above-60-smoother-and-the-same-game)
 25. [Hitches: the mod's garbage and the game's 5-second collection](#25-hitches-the-mods-garbage-and-the-games-5-second-collection)
 26. [Field abilities as items: the game asks the bag](#26-field-abilities-as-items-the-game-asks-the-bag)
+27. [Attack boost: +1 on every hit, the way the game adds its own](#27-attack-boost-1-on-every-hit-the-way-the-game-adds-its-own)
 
 ## Where it stands
 
@@ -1686,3 +1687,28 @@ is story state (a scene checks it; a rock or a miniboss is gone once it's set). 
 
 *Code: `Abilities.cs`; the receiver in `ItemReceiver.cs`, the key items in `CustomItems.cs`, the looks in
 `ItemSwap.Looks.cs`, `slot_data` `ability_items` in `ApConnection.cs`, the Warp in `QualityOfLife.cs`.*
+
+## 27. Attack boost: +1 on every hit, the way the game adds its own
+
+An opt-in for a faster, easier game, asked for after a hard boss (the user, 2026-09-28). Enemy scaling (step 17) balances
+an area met early or late; this is for a fight that's hard at the right level.
+
+**Decided (the user, 2026-09-28):**
+- A row on the **Gameplay** page, *Attack boost*: **Off / +1, off by default** (the user: "a kinda cheaty gameplay
+  setting"). No +2 or more.
+- **+1 attack, not +1 per hit, was the ask.** Read first: nearly every attack and skill reads the attack stat on each
+  hit, so the two are the same thing; a three-hit skill gains 3. At attack 2-3 that is +33-50%, told to the user before
+  building.
+- Only while Archipelago is enabled, or with *Use on normal saves* (step 18). No check and no logic depend on it.
+
+**How it works** (`AttackBoost.cs`, the facts in `MEASURED.md`, "The game's own per-hit bonuses"):
+- **Read how the game does it first.** `BattleControl.CalculateBaseDamage` already adds the party's own per-hit
+  bonuses (+1 for the member in front, two medals) when the attacker is a party member, after it returns Raw hits
+  as they are, and never in the demo battle.
+- **A prefix on that function adds 1 under the same conditions.** The save's attack stat is never written; switching
+  the row off ends it at the next hit.
+- Each page's two buttons: Reset and Disable all both set Off.
+
+**Status:** built (2026-09-28), the build succeeds, not yet seen in game.
+
+*Code: `AttackBoost.cs`; the row in `ApMenu.cs` and `ApMenu.Rows.cs`.*

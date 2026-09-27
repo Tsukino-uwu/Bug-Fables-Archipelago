@@ -80,7 +80,8 @@ seconds (it tidies its memory on a timer).
   equipped, Hardest as if the save had the HARDEST code, without writing it into the save; in a seed, boss prize
   medals are handed out on every setting; on a normal save, as in the game: on Hard from Artis, a missed one at the
   caravan), **Enemy scaling** (Party level, the default, scales every enemy to your level;
-  Artifacts to the artifacts found; Off keeps each enemy's own stats; Difficulty applies on top), **Medal prices**
+  Artifacts to the artifacts found; Off keeps each enemy's own stats; Difficulty applies on top), **Attack boost** (Off, the default, or +1: each hit
+  your party lands does 1 more damage), **Medal prices**
   (medals in any shop, a bar in tenths of the price: full, the default, is normal, half is half price, empty is free), and **EXP multiplier** and **Berry multiplier** (1x, the default,
   to 10x, a bar like the volume rows; EXP from every defeated enemy, berries picked up in the world; a battle still
   gives at most a level's worth, and a check's berries are never multiplied).
