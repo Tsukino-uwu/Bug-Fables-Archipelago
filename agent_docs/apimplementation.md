@@ -275,8 +275,8 @@ be wrong.
    | The trapdoor (Event5) | fast-forwarded | Speed up |
    | The spider scene (Event6) | fast-forwarded | Speed up |
 
-   The spider scene is one game coroutine in three parts (the user saw "2-3 cutscenes"): talk and the first fight
-   (Kabbu alone, `flagvar[11]` 0), talk and the second fight (two enemies, `flagvar[11]` 2, a real one), then Leif's
+   The spider scene is one game coroutine, played as scene, scripted fight, scene, second fight, scene (the user): talk, the first fight
+   (Kabbu alone, `flagvar[11]` 0), talk, the second fight (two enemies, `flagvar[11]` 2, a real one), then Leif's
    part, flags 30 and 27 and discovery 1. Its first fight ends at once always; the rest is sped up. Defaults proposed:
    both rows on. Only while Archipelago is enabled, as every row. A panel setting, so its own step in the mod guide.
 
