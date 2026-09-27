@@ -9,8 +9,8 @@ anyone curious about the process, or thinking of doing the same for another game
 - **Facts about how Bug Fables works inside** live in `MEASURED.md`.
 - **The programming ideas underneath** (DLLs, Harmony, reflection, frames, coroutines), in plain words:
   [programming-concepts.md](https://github.com/Tsukino-uwu/MeshGhost/blob/master/agent_docs/programming-concepts.md)
-  in [MeshGhost](https://github.com/Tsukino-uwu/MeshGhost), another project by the same author (an online layer
-  for singleplayer games).
+  in [MeshGhost](https://github.com/Tsukino-uwu/MeshGhost), another project by Tsukino (an online layer for
+  singleplayer games).
 
 ## The steps
 
