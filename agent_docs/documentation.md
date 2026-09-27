@@ -1751,7 +1751,8 @@ done by drawing into a texture that the HUD camera's quad shows on screen.
   nothing. Every decision is logged (`[gfx]`).
 
 **Status:** Render scale 200% seen by the user (2026-09-28): the picture normal and sharp, in a 1920x1080 window.
-Still to see: the framing unchanged between 100% and 200%, 150%, Anti-aliasing on screen.
+(a closer view in the user's screenshot was the spot they stood in, not the scale). Still to see: 150%, Anti-aliasing
+on screen.
 
 *Code: `RenderQuality.cs`; the page in `ApMenu.cs`, `ApMenu.Rows.cs` and `InGameSettings.cs`; the console's `cams` in
 `DevConsole.cs`.*
