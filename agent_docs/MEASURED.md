@@ -1179,9 +1179,12 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
     ones to flip over, Vi the ones in the air). Kabbu's base attack carries `AttackProperty.Flip` (`BattleControl.cs:11545`,
     `:11551`). "Flip" is the user's word for it: Kabbu's attack knocks the enemy over, and then its defence is reduced
     (in the code, a flipped enemy's defence is 0: `TrueDef`, `:3131`). Which enemies it works on: those with `Flip`
-    among their weaknesses (enemy data column 23, `{`-separated after a count); not dumped yet (EntityDump writes
-    column 23 as `weakness` from 2026-09-27; needs a re-run). The code also has `ToppleFirst` and `ToppleAirOnly`
-    weaknesses; what they change in play is not seen.
+    among their weaknesses (enemy data column 23, `{`-separated after a count; EntityDump's `weakness` column, run
+    2026-09-27 on the user's game): only **five**, all Ground, all defence 2: Cactiling 4, Inichas 8, Acornling 16,
+    Wasp Bomber 26 (also `ToppleFirst`) and Madesphy 68. Whether each *needs* Kabbu depends on the others' attack
+    against that defence (not measured). The code also has `ToppleFirst` (Wasp Bomber, Heavy Drone B-33 46),
+    `ToppleAirOnly` (Venus' Guardian 24) and `FlyOnFlip` (The Everlasting King 91, TANGYBUG 110); what they change in
+    play is not seen.
 - **Where enemy stats are shown** (2026-09-26, code read): in a fight, the bar over a spied enemy (or with the scope
   medal) shows its live `hp`, `maxhp` and defence (`TrueDef`) (`BattleControl.cs:3148-3163`), so changed numbers show
   there as they are. The pause menu's bestiary page works out HP and defence from the raw `enemydata` row plus the
