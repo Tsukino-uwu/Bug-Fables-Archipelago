@@ -66,7 +66,8 @@ are in `CLAUDE.md`: the logic may be more cautious than the game, never less, an
    links neighbouring spots by height: within the walkable step height, walk; above it but within the jump height,
    jump; higher, or a wall between, no way; down always, so a jump-only way up is a one-way down. From every door,
    save point and location it then marks what a walk reaches and what needs a jump. Two numbers first: the step
-   height (just below Madeleine's rocks, the calibration) and the jump height (from the jump's speed and the gravity,
+   height and slope limit (between Madeleine's rock, not walkable, and the ladybug house stump's side, walkable:
+   `MEASURED.md`) and the jump height (from the jump's speed and the gravity,
    read in code, checked on a ledge known to be just jumpable). It can't know invisible walls, one-sided colliders,
    blockers that come and go with the story, moving platforms or springs: a draft, confirmed on screen. A script turns those into the room's
    checklist with a guess at each requirement.

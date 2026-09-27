@@ -1321,6 +1321,11 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   `Resources.UnloadUnusedAssets()` then `GC.Collect()` when `clocksec % 5 == 0` and no room transition is on. Leaving a
   map does the same when no event is running. Measured cost on the user's machine: two slow frames, about 45 and 66 ms,
   exactly 5.00 s apart (the console's `frames`, 2026-09-27). Used by `ClockCleanup.cs`.
+- **Walking up versus jumping, two calibration points** (seen by the user, 2026-09-27; heights not measured yet):
+  the rock up to Madeleine's house (`BugariaOutskirtsOutsideCity`) can't be walked up, though it looks barely above the
+  ground, so it needs Jump; the side of the stump inside the ladybug siblings' house can be walked up. The walkable
+  limit lies between them; which of the two is a step and which a slope is still to read (a step limit and a slope
+  limit may differ). For the planned Jump draft (`room-logic.md`).
 - **A frozen enemy's slide** (2026-09-27, code read; both symptoms seen by the user at 240): the knock
   (`NPCControl.Dizzy`, `:5107`) sets `rigid.velocity` and `icevel` to the push with no vertical part, then hops the
   enemy on the next frame; `NPCControl.Update`'s frozen branch (`:1648-1657`, enemies with `freezecooldown > 0`) and
