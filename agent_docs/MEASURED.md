@@ -1217,21 +1217,6 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 - **Still to measure:** each scripted event's fight, one by one (safe to swap in, safe to swap out); what a map
   enemy's `battleids` hold across the EntityDump (group sizes); which enemies a one-member party can't hit.
 
-## Action commands and damage modifiers (2026-09-27, code read; the setting and its feel seen by the user)
-
-- **The settings menu's *Mash Action Commands*** (`MainManager.mashcommandalt`, default **FILL BAR**): the other value
-  turns the two mash commands (`TappingKey`, `RandomTappingBar`) into `SequentialKeys`, 6 random buttons in order in
-  the move's own time (300 frames if it has none); any wrong button ends it, and partial credit is 1/6 per button.
-  Other commands are untouched (`BattleControl.DoCommand`). The user: "way easier", done slowly at 70-80% of the time.
-- **The mash bar succeeds only when full** (`barfill >= 1`); each press adds `data[1] / 80` (frame-rate corrected,
-  see "Frame rate"), it drains by time. A move with `{4, 8, 1.25, 1}` needs about 7.3 presses a second; the user
-  reached about 90%.
-- **Attack up / attack down change each hit by 1** (`BattleControl.cs:6792-6798`, the attacker's condition), so a
-  multi-hit attack moves by 1 per hit. The user's boss hits went from about 7 to 3 with Leif's debuff on it.
-- **What makes enemies hit harder** (`MainManager.GetEnemyData`, `:6268`): the Hard Mode medal (11), `flags[166]`
-  or `flags[614]` (HARDEST) add `hardatk` (column 35) to each hit. On the user's save both flags were off (the
-  console, 2026-09-27).
-
 ## The round pause-menu icons' colours (2026-09-26, sampled from the SpriteDump sheet)
 
 Every round icon (`guisprites` 30-34, 74-77) is one hue in two tones: the **ring at full saturation and brightness
