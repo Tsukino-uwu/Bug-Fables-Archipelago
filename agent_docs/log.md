@@ -1096,3 +1096,7 @@ Newest last. What was tried, what happened, what the user said.
   old-TV look (its shader is `Custom/CRT`); a command-buffer copy fixed it, 150% and 200% then normal. The user then
   saw 240 -> ~95 fps at 200% + 8x MSAA for little visible difference, and had it removed; Uncap FPS back on Quality of
   life. What would sharpen sprites: the game's own 3840x2160 (the user plays a 1920x1080 window on a 4K screen).
+- **The attack boost on the medals screen** (the user: "nice to visually see/know about it" when setting up medals):
+  a postfix on `PauseMenu.UpdateDynamicText` shows attack + 1; seen by the user (Vi 3 with Power Exchange shown as 04,
+  right as medals go on and off). The damage in a fight is still to test; the user will do it another time.
+- **Unpushed at the end of the session:** 11 commits on `main`, from `b3b48bf` to the medals-screen status.
