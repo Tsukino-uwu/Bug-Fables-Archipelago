@@ -33,29 +33,32 @@ are in `CLAUDE.md`: the logic may be more cautious than the game, never less, an
 6. Is there a ledge that needs Jump? Walking down one without Jump is a one-way.
 7. Does anything move you one way (wind, water, conveyors, moving or rotating platforms, a spring)?
 8. Is there a fight you can't avoid? It must be winnable with the members' plain attacks (combat logic stays basic).
-9. Does anything change once and stay changed (a switch that stays down, a bridge lowered, a rock broken)? That's an
+9. Does a scene move you? A cutscene can put the party somewhere else in the same map (the trapdoor) or on another
+   map: from which area, to which, once or every time, on what flag. It's an edge like any other, often a one-way.
+10. Does anything change once and stay changed (a switch that stays down, a bridge lowered, a rock broken)? That's an
    event in the logic, reachable from wherever it can be triggered, and it may open a way in both directions.
 
 **Each location**
 
-10. Which area is it in, and does reaching it from there need anything?
-11. Can you get back from it and leave the map with what reaching it took? If not, the way back is an edge too.
-12. Does it need something only when you arrive from a particular entrance?
-13. Is it there only in some story states (an NPC present from a flag, a pickup that respawns)?
+11. Which area is it in, and does reaching it from there need anything?
+12. Can you get back from it and leave the map with what reaching it took? If not, the way back is an edge too.
+13. Does it need something only when you arrive from a particular entrance?
+14. Is it there only in some story states (an NPC present from a flag, a pickup that respawns)?
 
 **The whole room**
 
-14. Spawning in each area (a random start lands at an arrival): can you reach every exit, or which ones, and with what?
-15. With one member only: which of the above does each member manage alone?
-16. Does falling (a pit, water) put you back somewhere? A respawn never counts as a way through or out.
-17. The Warp is on in every randomized mode: it's the way out of a dead end, never a way *in* to anything.
+15. Spawning in each area (a random start lands at an arrival): can you reach every exit, or which ones, and with what?
+16. With one member only: which of the above does each member manage alone?
+17. Does falling (a pit, water) put you back somewhere? A respawn never counts as a way through or out.
+18. The Warp is on in every randomized mode: it's the way out of a dead end, never a way *in* to anything.
 
 ## How a room gets mapped
 
 1. **A draft from the data.** The entity dump lists every object in the map by type: `BeetleGrass`, `PushRock`,
    `DigWall`, `DigSpot`, `BreakableRock`, `JumpSpring`, `Dropplet`, `Geizer`, `WindPusher`, `Switch`,
    `RotatingPlatform`, `PathPlatform`, `TempPlatform`, plus the doors (`door-graph.py`), the flag-gated doors
-   (`gate-table.py`) and the transfers scenes make (`event-transfers.py`). A script turns those into the room's
+   (`gate-table.py`), the transfers scenes make (`event-transfers.py`) and, still to script, the scenes that move the
+   party within a map (story events that set the player's position). A script turns those into the room's
    checklist with a guess at each requirement.
 2. **Checked on screen by the user**, one area at a time, with the dev console to test what the draft can't know:
    warp in through each entrance, and try each way across without the ability or without Jump. Record what was seen,
