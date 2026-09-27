@@ -41,6 +41,7 @@ anyone curious about the process, or thinking of doing the same for another game
 25. [Hitches: the mod's garbage and the game's 5-second collection](#25-hitches-the-mods-garbage-and-the-games-5-second-collection)
 26. [Field abilities as items: the game asks the bag](#26-field-abilities-as-items-the-game-asks-the-bag)
 27. [Attack boost: +1 on every hit, the way the game adds its own](#27-attack-boost-1-on-every-hit-the-way-the-game-adds-its-own)
+28. [A Graphics page: render scale and MSAA](#28-a-graphics-page-render-scale-and-msaa)
 
 ## Where it stands
 
@@ -352,7 +353,8 @@ Shop prices (now Medal prices) to Gameplay, Detector to Quality of life, so Game
 of life is Fast text, Travel, Skip cutscenes, Item animation, Detector; each config key stays where it was, so a saved
 choice carries over, and each page's two buttons cover its own rows. **The two links left the main page (the
 user, 2026-09-26: "so AP looks clean"):** the pages are reached only from Settings (below), and *Use on normal saves*
-(step 18) took their place under Achievements.
+(step 18) took their place under Achievements. **A third page, Graphics (the user, 2026-09-28; step 28):** Uncap FPS
+moved there from Quality of life (its config key stays under `[QualityOfLife]`), with Render scale and Anti-aliasing.
 
 **The two pages in game too (the user, 2026-09-26; seen by the user, in game and on the main menu).** While Archipelago is enabled, the pause
 menu's Settings list gets *Quality of life* and *Gameplay* at the top (with it disabled, only under *Use on normal saves*, step 18), above Music Volume (the user; first between
@@ -1536,7 +1538,7 @@ items), on the class-coloured backdrop of step 22.
 
 ## 24. Frame rates above 60: smoother, and the same game
 
-The game's settings offer 30 or 60 fps. The user plays on a 240 Hz monitor and asked for more, as a Quality of life row
+The game's settings offer 30 or 60 fps. The user plays on a 240 Hz monitor and asked for more, as a Quality of life row (on the Graphics page since step 28)
 (Off, 120, 144, 240; `UncapFps` in the config), off by default, overriding the game's own frame rate and VSync while Archipelago is on, and done
 "properly so things don't break" (2026-09-27).
 
@@ -1712,3 +1714,39 @@ an area met early or late; this is for a fight that's hard at the right level.
 **Status:** built (2026-09-28), the build succeeds, not yet seen in game.
 
 *Code: `AttackBoost.cs`; the row in `ApMenu.cs` and `ApMenu.Rows.cs`.*
+
+## 28. A Graphics page: render scale and MSAA
+
+Asked for after the frame-rate work (the user, 2026-09-28): the game looking sharper, the way Uncap FPS made it
+smoother. DLSS / FSR were ruled out first (they render *lower* and upscale, for speed; the game is light and already
+draws at the screen's resolution), and upscaled art too (a texture pack of the game's own art can't be published).
+
+**Decided (the user, 2026-09-28):**
+- **A third settings page, Graphics**, reached from Settings like the other two (Quality of life was full at eleven
+  rows). Uncap FPS moved there from Quality of life, so the page is Uncap FPS, Render scale, Anti-aliasing, under the
+  same Reset to defaults / Disable all.
+- **Render scale: 100% / 150% / 200%**, default 100% (supersampling: drawn larger, shrunk to fit). The user asked for
+  "110-200% like other games"; 150 and 200 are the steps that shrink evenly enough to be sharp.
+- **Anti-aliasing: Off / 2x / 4x / 8x MSAA**, default Off.
+- Only while Archipelago is enabled, or with *Use on normal saves* (step 18). No check and no logic depend on them.
+
+**Measured first, in the running game** (the console's `cams`, extended for this; `MEASURED.md`, "How the game draws a
+frame"): MSAA was 0; all three cameras render forward with MSAA allowed; the world camera carries the game's FXAA; the
+HUD has its own camera. The game's settings already have a render scale, but only downwards (100% to 40%, for slow PCs),
+done by drawing into a texture that the HUD camera's quad shows on screen.
+
+**How it works** (`RenderQuality.cs`, checked every frame from `Plugin.Tick`):
+- **Anti-aliasing** sets Unity's `QualitySettings.antiAliasing` (the game never sets it), and puts the game's own
+  value back when switched off.
+- **Render scale reuses the game's own render-scale path, pointed the other way:** the world and 3DGUI cameras draw
+  into a texture the size of the screen times the scale (with the MSAA level on it), shown on the game's quad. The HUD
+  stays at the screen's resolution. Back to 100%, the game's own `SetRenderTexture(0)` restores the screen.
+- **The game keeps priority:** its own render scale below 100% (and the minigames, which use it) take over, and the row
+  steps aside while they're in use. A resolution change rebuilds the texture.
+- **Safe at 2x:** the game places things by viewport position (0 to 1), never by pixel, so a larger texture moves
+  nothing. Every decision is logged (`[gfx]`).
+
+**Status:** built (2026-09-28), the build succeeds, not yet seen in game.
+
+*Code: `RenderQuality.cs`; the page in `ApMenu.cs`, `ApMenu.Rows.cs` and `InGameSettings.cs`; the console's `cams` in
+`DevConsole.cs`.*

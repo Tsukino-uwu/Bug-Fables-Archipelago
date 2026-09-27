@@ -1223,6 +1223,23 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 - **Still to measure:** each scripted event's fight, one by one (safe to swap in, safe to swap out); what a map
   enemy's `battleids` hold across the EntityDump (group sizes); which enemies a one-member party can't hit.
 
+## How the game draws a frame (2026-09-28, measured in the running game and code read)
+
+- **Cameras** (the console's `cams`, the user's game, 2026-09-28): `Main Camera` (the world; the game's `FXAA`
+  component on it), `3DGUI` (a child of it, layer mask 32768, clears depth only) and `GUICamera` (the HUD, mask 32).
+  All three forward rendering, MSAA allowed; the world camera has HDR on. `QualitySettings.antiAliasing` was 0: the
+  game never sets it.
+- **The game's render scale** (`MainManager.SetRenderTexture(index)`, `downsamples` 1, 0.9, 0.8, 0.75, 0.6, 0.5, 0.4):
+  0 draws straight to the screen and hides `GUICamera`'s first child (a quad). Any other draws the world and 3DGUI
+  cameras into a `RenderTexture` of 1920x1080 times the factor (whatever the screen's size), the world camera's `rect`
+  shrunk to the factor, shown on that quad (bilinear). Called with 0 on start and after a minigame, with 2 by some
+  minigames. Settings save `downsample` and FXAA.
+- **Screen positions are viewport-relative:** every conversion the game makes is `WorldToViewportPoint` (0 to 1),
+  none in pixels, so a larger render texture moves nothing.
+- **Resolutions:** the game's list runs 1024x576 to 3840x2160; fullscreen is a bool passed to `Screen.SetResolution`.
+  The user's game on 2026-09-28: a 1920x1080 window on a 3840x2160, 240 Hz screen. Unity 2018.4.12.
+- Used by `RenderQuality.cs`.
+
 ## The round pause-menu icons' colours (2026-09-26, sampled from the SpriteDump sheet)
 
 Every round icon (`guisprites` 30-34, 74-77) is one hue in two tones: the **ring at full saturation and brightness

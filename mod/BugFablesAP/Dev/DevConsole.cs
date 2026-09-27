@@ -479,11 +479,15 @@ namespace BugFablesAP
                         return FrameRate.StartRates(parts.Length > 1 && float.TryParse(parts[1], out float rateSecs) ? rateSecs : 5f);
                     case "cams":
                     {
-                        var camLog = new System.Text.StringBuilder("[dev] cams:");
+                        var camLog = new System.Text.StringBuilder($"[dev] cams: QualitySettings.antiAliasing {QualitySettings.antiAliasing}, "
+                            + $"downsample {MainManager.downsample}, runInBackground {Application.runInBackground}:");
                         foreach (Camera c in Camera.allCameras)
                         {
                             camLog.Append($"\n  {c.name} depth {c.depth} enabled {c.enabled} parent {(c.transform.parent != null ? c.transform.parent.name : "none")} "
-                                + $"mask {c.cullingMask} clear {c.clearFlags} main {c == MainManager.MainCamera} guicam {c == MainManager.GUICamera}");
+                                + $"mask {c.cullingMask} clear {c.clearFlags} main {c == MainManager.MainCamera} guicam {c == MainManager.GUICamera} "
+                                + $"path {c.renderingPath}/{c.actualRenderingPath} msaa {c.allowMSAA} hdr {c.allowHDR} rect {c.rect} "
+                                + $"target {(c.targetTexture != null ? c.targetTexture.width + "x" + c.targetTexture.height + " aa" + c.targetTexture.antiAliasing : "screen")} "
+                                + $"effects {string.Join(",", System.Array.ConvertAll(c.GetComponents<MonoBehaviour>(), m => m.GetType().Name + (m.enabled ? "" : "(off)")))}");
                         }
                         log.LogInfo(camLog.ToString());
                         return "cams logged";

@@ -1080,8 +1080,9 @@ Newest last. What was tried, what happened, what the user said.
   apimplementation.md, which has its own explainer from Archipelago's protocol doc.
 - **The Beast (id 69, chapter 5, home level 17), vanilla:** the user lost twice (down to 40/70, then 20-30/70, out of
   items), then won. HP 76, Defense 1, 25 EXP; party level 17 (Vi 3 atk/-1 def, Kabbu and Leif 2/0), 18 after. Enemy
-  scaling was on Party level, but no `[scale]` line: at home level there is nothing to scale, so the fight was
-  vanilla. The chapter 5 home level matched a real playthrough. The user plans to turn scaling off.
+  scaling was on Party level, but no `[scale]` line: at home level there is nothing to scale. **Not vanilla after
+  all:** the user found the Hard Hits medal equipped ("raises enemy attack", on since a save 2-3 years old), so the
+  boss hit harder than intended. The chapter 5 home level matched a real playthrough. The user plans to turn scaling off.
 - **Asked for, then dropped:** an *Attack boost: Off / +1* row. Read first: nearly every attack and skill reads `atk`
   per hit, so +1 attack is +1 on every hit (+33-50% at attack 2-3). Dropped once scaling showed the fight was at level.
   The user also declined a log line for why scaling skipped an enemy.

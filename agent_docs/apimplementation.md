@@ -326,6 +326,9 @@ be wrong.
 37. **Attack boost, a panel setting** (the user, 2026-09-28): built, `documentation.md` step 27. *Attack boost* on the
    Gameplay page, Off / +1, off by default: +1 on each hit a party member lands, an opt-in for a hard fight. No check
    and no logic depend on it. Only while Archipelago is enabled, or with *Use on normal saves*.
+38. **A Graphics page, render scale and MSAA** (the user, 2026-09-28): built, `documentation.md` step 28. Render scale
+   100 / 150 / 200% (supersampling) and Anti-aliasing Off / 2x / 4x / 8x, both off by default; Uncap FPS moved there.
+   No check and no logic depend on them. Only while Archipelago is enabled, or with *Use on normal saves*.
 
 **Known issues:**
 

@@ -34,7 +34,7 @@ On the game's main menu, choose **Archipelago**. The panel has:
   The main menu shows it as "Archipelago (Enabled)" or "(Disabled)".
 - **Achievements**: Off (the default) holds Steam achievements back while the Archipelago mod is enabled, as
   normal saves are kept apart. It only concerns Steam, never Archipelago.
-- **Use on normal saves**: Off (the default) keeps normal saves vanilla. On, the Quality of life and Gameplay settings
+- **Use on normal saves**: Off (the default) keeps normal saves vanilla. On, the Quality of life, Gameplay and Graphics settings
   also apply with the Archipelago mod disabled. Nothing tied to a seed does.
 - Under the rows, a line explaining the highlighted one, and a line showing the connection's state. Cancel
   (X, or B on a gamepad) backs out of the panel.
@@ -50,7 +50,7 @@ doesn't know the seed, so choosing a file (or a new game) on the file select pla
 first. After that, a dropped connection doesn't stop play: pickups still hold the seed's items, and their
 checks are sent when the connection comes back.
 
-**Quality of life and Gameplay** are two more pages, at the top of the game's own **Settings** (from the pause
+**Quality of life, Gameplay and Graphics** are three more pages, at the top of the game's own **Settings** (from the pause
 menu, and from the main menu), shown while the Archipelago mod is enabled or *Use on normal saves* is on. Each has
 **Reset to defaults** and **Disable all** on top, each asking Yes / No first.
 Enabling the Archipelago mod (or *Use on normal saves*) also stops a short stutter the game itself has every 5
@@ -72,10 +72,7 @@ seconds (it tidies its memory on a timer).
   yours included, has a starburst behind it in its Archipelago class colour, so you can tell from afar whether it matters; Off
   keeps it a surprise), **Detector** (On, the default, acts as if the Detector medal were equipped. With the Archipelago mod
   enabled, the Detector (row or medal) also beeps on entering a room that still has a check of any kind, and stays
-  quiet in a room with none left) and **Uncap FPS** (experimental; Off, the default, keeps the game's own 30 or 60 FPS
-  setting; 120, 144 or 240 raise the frame rate, with VSync when the number divides your monitor's refresh rate, otherwise as a frame-rate limit. Motion is
-  drawn smoothly between the game's steps, and the game still plays as it does at 60. Switching it on the first time in a
-  session takes a few seconds).
+  quiet in a room with none left).
 - **Gameplay**: **Difficulty** (Normal, the default, leaves it to the game; Hard plays as if the Hard Mode medal were
   equipped, Hardest as if the save had the HARDEST code, without writing it into the save; in a seed, boss prize
   medals are handed out on every setting; on a normal save, as in the game: on Hard from Artis, a missed one at the
@@ -85,6 +82,13 @@ seconds (it tidies its memory on a timer).
   (medals in any shop, a bar in tenths of the price: full, the default, is normal, half is half price, empty is free), and **EXP multiplier** and **Berry multiplier** (1x, the default,
   to 10x, a bar like the volume rows; EXP from every defeated enemy, berries picked up in the world; a battle still
   gives at most a level's worth, and a check's berries are never multiplied).
+- **Graphics**: **Uncap FPS** (experimental; Off, the default, keeps the game's own 30 or 60 FPS
+  setting; 120, 144 or 240 raise the frame rate, with VSync when the number divides your monitor's refresh rate, otherwise as a frame-rate limit. Motion is
+  drawn smoothly between the game's steps, and the game still plays as it does at 60. Switching it on the first time in a
+  session takes a few seconds), **Render scale** (100%, the default, is the game's own; 150% or 200% draw the world
+  larger than your screen and shrink it to fit, for smoother edges, at a GPU cost; menus and text stay at your
+  resolution; the game's own render scale below 100% takes over when set) and **Anti-aliasing** (Off, the default, or
+  2x, 4x or 8x MSAA: smoother edges on the 3D world, not on sprites; the game's own Antialiasing setting is separate).
 
 Select a row and press confirm to type into it: Backspace deletes, **Ctrl+V pastes**, Ctrl+C copies, Enter
 keeps it, Escape undoes. The same settings are saved in `BepInEx/config/bugfables.archipelago.cfg`.

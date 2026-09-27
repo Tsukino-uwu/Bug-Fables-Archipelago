@@ -7,13 +7,15 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // With Archipelago on (or Use on normal saves), the pause menu's Settings list gets Quality of life and Gameplay rows at the top, each opening
-    // the panel's page of that name. A settings row is an id whose label is
-    // menutext[settingsindex[id]], so both tables get two entries; the game gives every row but a few arrows, removed here.
+    // With Archipelago on (or Use on normal saves), the pause menu's Settings list gets Quality of life, Gameplay and Graphics rows at the
+    // top, each opening the panel's page of that name. A settings row is an id whose label is
+    // menutext[settingsindex[id]], so both tables get three entries; the game gives every row but a few arrows, removed here.
     internal static class InGameSettings
     {
-        private const int QolId = 26, GameplayId = 27;
-        private const string QolLabel = "Quality of life", GameplayLabel = "Gameplay";
+        private const int QolId = 26, GameplayId = 27, GraphicsId = 28;
+        private static readonly int[] PageIds = { QolId, GameplayId, GraphicsId };
+        private static readonly string[] PageLabels = { "Quality of life", "Gameplay", "Graphics" };
+        private static readonly ApMenu.Page[] Pages = { ApMenu.Page.Qol, ApMenu.Page.Gameplay, ApMenu.Page.Graphics };
 
         private static Func<bool> randomizerOn;
         private static Harmony harmony;
@@ -52,24 +54,23 @@ namespace BugFablesAP
         // The labels live at the end of menutext, re-added whenever the game reloads it (a language change).
         private static void EnsureTables()
         {
-            string[] text = MainManager.menutext;
-            int qol = Array.IndexOf(text, QolLabel), gameplay = Array.IndexOf(text, GameplayLabel);
-            if (qol < 0 || gameplay < 0)
-            {
-                List<string> grown = text.ToList();
-                qol = grown.Count;
-                grown.Add(QolLabel);
-                gameplay = grown.Count;
-                grown.Add(GameplayLabel);
-                MainManager.menutext = grown.ToArray();
-            }
+            List<string> text = MainManager.menutext.ToList();
             int[] index = MainManager.settingsindex;
-            if (index.Length <= GameplayId)
+            if (index.Length <= GraphicsId)
             {
-                Array.Resize(ref index, GameplayId + 1);
+                Array.Resize(ref index, GraphicsId + 1);
             }
-            index[QolId] = qol;
-            index[GameplayId] = gameplay;
+            for (int p = 0; p < PageIds.Length; p++)
+            {
+                int at = text.IndexOf(PageLabels[p]);
+                if (at < 0)
+                {
+                    at = text.Count;
+                    text.Add(PageLabels[p]);
+                }
+                index[PageIds[p]] = at;
+            }
+            MainManager.menutext = text.ToArray();
             MainManager.settingsindex = index;
         }
 
@@ -81,11 +82,11 @@ namespace BugFablesAP
             }
             EnsureTables();
             List<int> list = __result.ToList();
-            list.InsertRange(0, new[] { QolId, GameplayId });
+            list.InsertRange(0, PageIds);
             __result = list.ToArray();
         }
 
-        // The game draws left/right arrows on every settings row but a named few: take them off the two page rows.
+        // The game draws left/right arrows on every settings row but a named few: take them off the page rows.
         private static void AfterShowList(int type)
         {
             if (type != 17 || MainManager.instance?.itemlist == null || MainManager.listvar == null || !InGame())
@@ -95,7 +96,7 @@ namespace BugFablesAP
             Transform[] all = MainManager.instance.itemlist.GetComponentsInChildren<Transform>(true);
             for (int m = 0; m < MainManager.listvar.Length; m++)
             {
-                if (MainManager.listvar[m] != QolId && MainManager.listvar[m] != GameplayId)
+                if (Array.IndexOf(PageIds, MainManager.listvar[m]) < 0)
                 {
                     continue;
                 }
@@ -125,15 +126,15 @@ namespace BugFablesAP
             {
                 return true;
             }
-            int id = MainManager.listvar[option];
-            if ((id != QolId && id != GameplayId) || !MainManager.GetKey(4, hold: false))
+            int page = Array.IndexOf(PageIds, MainManager.listvar[option]);
+            if (page < 0 || !MainManager.GetKey(4, hold: false))
             {
                 return true;
             }
             MainManager.PlaySound("Confirm", -1);
             MainManager.instance.inputcooldown = 5f;
-            log.LogInfo("[settings] opening the " + (id == QolId ? QolLabel : GameplayLabel) + " page from Settings");
-            ApMenu.ShowInGame(log, gameplay: id == GameplayId);
+            log.LogInfo("[settings] opening the " + PageLabels[page] + " page from Settings");
+            ApMenu.ShowInGame(log, Pages[page]);
             return false;
         }
     }
