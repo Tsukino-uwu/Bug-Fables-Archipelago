@@ -234,7 +234,7 @@ namespace BugFablesAP
             int exp = __result.exp;
             // EXP as the game gives it at the enemy's home level, so levelling keeps its pace. Left alone where the game
             // fixes it: fixed EXP, no EXP, the level cap, hologram fights.
-            if (!noexp && !__result.fixedexp && MainManager.instance.partylevel < 27 && !MainManager.instance.flags[613]
+            if (!noexp && !__result.fixedexp && MainManager.instance.partylevel < 27 && !MainManager.instance.flags[GameFlags.NoExp]
                 && !MainManager.instance.flags[162] && int.TryParse(MainManager.enemydata[__result.animid, 3], out int baseExp))
             {
                 // animid is the row the game read (column 25 can point an id at another row).

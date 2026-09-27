@@ -257,7 +257,7 @@ namespace BugFablesAP
             MainManager mm = MainManager.instance;
             return randomizerOn != null && randomizerOn() && Seeded.HasValue && !TestStartSet && mm?.flags != null
                 && MainManager.map != null && MainManager.map.mapid.ToString() == OpeningMap
-                && (!mm.flags[15] || openingPending || startPending || transferring);
+                && (!mm.flags[GameFlags.PermitEvent] || openingPending || startPending || transferring);
         }
 
         private static bool heldMusicLogged;
@@ -378,7 +378,7 @@ namespace BugFablesAP
         {
             MainManager mm = MainManager.instance;
             if (!SkipCutscenes.Value || SettingsOn == null || !SettingsOn() || MainManager.lastevent != 6
-                || !mm.flags[15] || mm.flags[27] || (mm.flagvar[11] != 0 && mm.flagvar[11] != 1)
+                || !mm.flags[GameFlags.PermitEvent] || mm.flags[GameFlags.LeifFollows] || (mm.flagvar[11] != 0 && mm.flagvar[11] != 1)
                 || __instance.enemydata == null || __instance.enemydata.Length != 1 || __instance.enemydata[0].animid != 2
                 || (bool)battleInEvent.GetValue(__instance) || (bool)battleAction.GetValue(__instance))
             {
@@ -403,7 +403,7 @@ namespace BugFablesAP
                 CutTrapdoorScene();
             }
             // In the door room only once the scene was skipped (flag 14 set, no scene running).
-            bool skipped = here == "SnakemouthDoorRoom" && mm.flags[14];
+            bool skipped = here == "SnakemouthDoorRoom" && mm.flags[GameFlags.TrapdoorFall];
             if (here != "SnakemouthFallRoom" && !skipped)
             {
                 if (here != "SnakemouthDoorRoom")
@@ -461,7 +461,7 @@ namespace BugFablesAP
         {
             MainManager mm = MainManager.instance;
             if (randomizerOn == null || !randomizerOn() || mm == null || MainManager.map == null
-                || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap || mm.flags[15]
+                || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap || mm.flags[GameFlags.PermitEvent]
                 || ids == null || ids.Length != 1 || ids[0] != 1 || !fromscratch || destroyoldentity || MainManager.events == null)
             {
                 return true;
@@ -477,7 +477,7 @@ namespace BugFablesAP
         {
             MainManager mm = MainManager.instance;
             if (name != "back" || randomizerOn == null || !randomizerOn() || mm == null || MainManager.map == null
-                || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap || mm.flags[15]
+                || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap || mm.flags[GameFlags.PermitEvent]
                 || MainManager.events == null || event8Cut)
             {
                 return;
@@ -677,12 +677,12 @@ namespace BugFablesAP
             {
                 UnityEngine.Object.Destroy(maki.gameObject);
             }
-            mm.flags[15] = true;
+            mm.flags[GameFlags.PermitEvent] = true;
             mm.boardquests[1].Insert(0, 11);
             HoldUps.FoundAt(OpeningLocation, "the opening's gift (location 1)");
             log.LogInfo($"[qol] opening done without Event16 on {MainManager.map.mapid}: party {string.Join(", ", mm.playerdata.Select(p => p.trueid.ToString()).ToArray())}, "
                 + $"characters {mm.playerdata.Count(p => p.entity != null)}, exit {(exit != null ? "active " + exit.gameObject.activeSelf : inBuilding ? "NOT found" : "not here")}, "
-                + $"Maki {(maki != null && maki.name == "Maki" ? "removed" : inBuilding ? "NOT found" : "not here")}, flag 15 {mm.flags[15]}");
+                + $"Maki {(maki != null && maki.name == "Maki" ? "removed" : inBuilding ? "NOT found" : "not here")}, flag 15 {mm.flags[GameFlags.PermitEvent]}");
         }
 
         private static bool BeforeStartEvent(int id)
@@ -695,7 +695,7 @@ namespace BugFablesAP
                 && MainManager.map.mapid.ToString() == OpeningMap)
             {
                 // Also once done: its trigger stays until the map reloads, and running the scene then crashes.
-                openingPending = !MainManager.instance.flags[15];
+                openingPending = !MainManager.instance.flags[GameFlags.PermitEvent];
                 endEvent?.Invoke(null, null);
                 log.LogInfo(openingPending ? "[qol] Event16 (the opening) skipped: the mod does what it leaves behind on the next free frame"
                     : "[qol] Event16 (the opening) refused: already done");
@@ -760,7 +760,7 @@ namespace BugFablesAP
             }
             bool on = randomizerOn();
             if (on && !openingPending && !openingFailed && MainManager.map != null && MainManager.map.mapid.ToString() == OpeningMap
-                && !mm.flags[15] && mm.flags[691])
+                && !mm.flags[GameFlags.PermitEvent] && mm.flags[GameFlags.NewGame])
             {
                 openingPending = true;
                 // Whether the seed has a start is asked at the transfer: before the login it isn't known yet.

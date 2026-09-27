@@ -584,7 +584,7 @@ namespace BugFablesAP
                 yield break;
             }
             MainManager.Maps map = StartMap;
-            int entity = MainManager.instance.flags[41] ? 22 : 1;
+            int entity = MainManager.instance.flags[GameFlags.FirstBossBeaten] ? 22 : 1;
             // Warp to Start goes to the seed's start when it has one (Starting Location); map travel keeps its spots.
             KeyValuePair<string, int>? seeded = QualityOfLife.SeedStart?.Invoke();
             if (kind == Kind.Warp && seeded.HasValue && Enum.IsDefined(typeof(MainManager.Maps), seeded.Value.Key))

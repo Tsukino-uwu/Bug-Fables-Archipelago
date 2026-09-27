@@ -175,7 +175,7 @@ namespace BugFablesAP
                 return true;
             }
             bool joined = JoinLeif(mm);
-            mm.flags[16] = true;
+            mm.flags[GameFlags.LeifJoined] = true;
             EntityControl creature = MainManager.GetEntity(5);
             if (creature != null && creature.npcdata != null && creature.npcdata.regionalflag >= 0)
             {
@@ -192,7 +192,7 @@ namespace BugFablesAP
         // marked said as soon as he has joined, whatever Skip cutscenes says (the user, 2026-09-27).
         private static void SkipLeifsFirstBattleLine(MainManager mm)
         {
-            if (randomizerOn == null || !randomizerOn() || MainManager.map == null || mm.flags == null || !mm.flags[16] || mm.flags[24]
+            if (randomizerOn == null || !randomizerOn() || MainManager.map == null || mm.flags == null || !mm.flags[GameFlags.LeifJoined] || mm.flags[24]
                 || MainManager.battle != null)
             {
                 return;
@@ -204,14 +204,14 @@ namespace BugFablesAP
         // Leif joins once the spider scene is over (flag 27, not yet 16), where the story has him start following.
         private static void TickLeifJoins(MainManager mm)
         {
-            if (randomizerOn == null || !randomizerOn() || MainManager.map == null || mm.flags == null || !mm.flags[27] || mm.flags[16]
+            if (randomizerOn == null || !randomizerOn() || MainManager.map == null || mm.flags == null || !mm.flags[GameFlags.LeifFollows] || mm.flags[GameFlags.LeifJoined]
                 || mm.inevent || mm.message || MainManager.battle != null || MainManager.player == null || mm.playerdata == null
                 || (StartMember >= 0 && !Allowed(2)))
             {
                 return;
             }
             bool joined = JoinLeif(mm);
-            mm.flags[16] = true;
+            mm.flags[GameFlags.LeifJoined] = true;
             log.LogInfo("[members] after the spider scene: " + (joined ? "Leif joined the party" : "Leif was already in the party") + "; flag 16 set");
         }
 

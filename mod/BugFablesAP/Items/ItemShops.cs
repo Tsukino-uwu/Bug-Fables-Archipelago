@@ -125,7 +125,7 @@ namespace BugFablesAP
             watching = pending;
             pending = -1;
             moneyBefore = MainManager.instance.money;
-            price = MainManager.instance.flagvar[1];
+            price = MainManager.instance.flagvar[GameVars.ShopPrice];
             log.LogInfo($"[itemshop] location {watching}: its buy line read, additem taken out (berries {moneyBefore}, price {price})");
         }
 

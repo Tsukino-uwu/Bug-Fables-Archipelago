@@ -176,9 +176,9 @@ namespace BugFablesAP
             if (kind == ItemIds.CrystalKind)
             {
                 // flagvar[14]: the crystal berry count, the shop's currency.
-                mm.flagvar[14]++;
+                mm.flagvar[GameVars.CrystalBerries]++;
                 mm.flagvar[CrystalBerryTotal.ReceivedSlot]++;
-                return $"added a crystal berry (count now {mm.flagvar[14]}, received {mm.flagvar[CrystalBerryTotal.ReceivedSlot]})";
+                return $"added a crystal berry (count now {mm.flagvar[GameVars.CrystalBerries]}, received {mm.flagvar[CrystalBerryTotal.ReceivedSlot]})";
             }
             if (kind == ItemIds.MoneyKind)
             {

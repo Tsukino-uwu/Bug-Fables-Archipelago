@@ -671,9 +671,9 @@ namespace BugFablesAP
             }
             else if (article != null)
             {
-                MainManager.instance.flagstring[1] = article;
+                MainManager.instance.flagstring[GameStrings.ItemArticle] = article;
             }
-            MainManager.instance.flagstring[0] = name;
+            MainManager.instance.flagstring[GameStrings.ItemName] = name;
             SpriteRenderer held = caller.entity.sprite;
             if (sprite != null && held != null)
             {
@@ -696,7 +696,7 @@ namespace BugFablesAP
             if (kind == 3)
             {
                 // The berry's pickup code already marked it taken and raised the count: undo the count, keep the mark.
-                MainManager.instance.flagvar[14]--;
+                MainManager.instance.flagvar[GameVars.CrystalBerries]--;
                 text = text.Replace(FirstBerryTutorial + "|break|", "").Replace(FirstBerryTutorial, "");
                 ShowAsSprite(caller.entity, sprite);
             }
@@ -854,10 +854,10 @@ namespace BugFablesAP
             {
                 return false;
             }
-            MainManager.instance.flagstring[0] = shownName;
+            MainManager.instance.flagstring[GameStrings.ItemName] = shownName;
             if (shownArticle != null)
             {
-                MainManager.instance.flagstring[1] = shownArticle;
+                MainManager.instance.flagstring[GameStrings.ItemArticle] = shownArticle;
             }
             if (shownForOther)
             {

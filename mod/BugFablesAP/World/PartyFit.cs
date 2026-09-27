@@ -151,7 +151,7 @@ namespace BugFablesAP
         internal static bool InStoryParty(int member)
         {
             bool[] flags = MainManager.instance.flags;
-            return member == 1 || (member == 0 && flags[15]) || (member == 2 && flags[16]);
+            return member == 1 || (member == 0 && flags[GameFlags.PermitEvent]) || (member == 2 && flags[GameFlags.LeifJoined]);
         }
 
         private static void ChooseActor()

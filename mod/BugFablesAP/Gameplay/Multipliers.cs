@@ -61,7 +61,7 @@ namespace BugFablesAP
         // flag 166: the hologram fights, which the game holds to 5 EXP.
         private static void AfterGetExp(ref int __result)
         {
-            if (__result <= 0 || !On(Exp) || MainManager.instance.flags[166])
+            if (__result <= 0 || !On(Exp) || MainManager.instance.flags[GameFlags.HologramFight])
             {
                 return;
             }
