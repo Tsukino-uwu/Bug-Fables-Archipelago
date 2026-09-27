@@ -35,6 +35,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 21. [Build step 21: Shuffle Field Moves](#build-step-21-shuffle-field-moves)
 22. [Build step 22: Shuffle Jump](#build-step-22-shuffle-jump)
 23. [Build step 23: every learned field ability an item](#build-step-23-every-learned-field-ability-an-item)
+24. [Build step 24: how we plan and build the logic](#build-step-24-how-we-plan-and-build-the-logic)
 
 **How it works**
 
@@ -2004,6 +2005,46 @@ level without the first "wouldn't work"): Beemerang Toss then Halt, Dash then Ho
 **Status:** built (2026-09-27): the logic and pool tested, the mod built, its patch counts taken from the game's IL and
 confirmed in the running game (its log: 8 of 8, 2 of 2, 15 of 15). Not yet seen in game: a received ability working, its battle skill, the key items' text, a scene sending its check.
 Decided and still to build: without the Horn Slash the Dash only moves (Next 23), for Shuffle Field Moves.
+
+## Build step 24: how we plan and build the logic
+
+The logic is what Archipelago uses to prove a seed can be finished, and some options will lean on it hard: one party
+member, a random start in any room, a decoupled entrance randomizer, shuffled attacks, no Jump. So before the rooms of
+chapters 1-7 are mapped, this is how every part of it gets done (the user, 2026-09-27: "the logic has to be precise").
+
+**The rules**
+
+1. **The logic may demand more than the game does, never less.** A rule that asks for too much only makes a seed a
+   little stricter; a rule that asks for too little can place an item somewhere the player can't reach, and the seed
+   is impossible. Anything not yet measured is written the cautious way.
+2. **Nothing counts as known until the user has seen it on screen.** Each need goes into `MEASURED.md` with its date.
+3. **The mod never departs from what the generator knew.** Anything it changes comes from `slot_data`, decided at
+   generation, never at runtime.
+4. **Combat stays basic:** only each member's plain attack, never a battle skill or a medal. It keeps fights simple
+   and leaves room to play out of logic for fun.
+5. **The Warp is a way out, never a way in.** It's on in every randomized mode so no dead end strands the player, but
+   the logic never counts it to reach anything.
+
+**The method: `room-logic.md`**, one checklist for every room:
+
+1. **A draft from the game's data:** the entity dump's objects in the map (grass, rocks, dig walls, springs, droplets,
+   fountains, wind, switches, platforms), its doors, its flag-gated doors, and the scenes that move the party.
+2. **The questions, per room:** where each entrance puts you and whether you can leave the way you came; what crossing
+   the room needs, in each direction; ledges without Jump; forced fights; scenes that move you; changes that stay
+   (a switch, a broken rock); what each location needs, and whether you can get back; story state (what changes with
+   the chapter); spawning in each part of the room; what each member manages alone.
+3. **Checked on screen by the user**, one part of the room at a time: the user says what needs what.
+4. **Written into the data by the agent:** each room split into the parts you can walk around freely, each way
+   between them one-directional with its own needs, each location in its part.
+5. **Tested:** each measured need gets a test that fails without it; every part reachable from every arrival once
+   everything is collected; no arrival strands the player.
+
+**The safeguards already in place:** the tests generate seeds across option sets and check they're beatable;
+`TestClassifications` makes an item progression the moment a rule uses it; one location per ability; the entrance
+randomizer and a random start stay labelled experimental until their room-level logic is done and tested.
+
+**Status:** planned (2026-09-27): the method and the checklist written (`room-logic.md`), no room mapped with it yet.
+Today's logic is by large areas (the Outskirts, Snakemouth Den, Bugaria City, Later Chapters).
 
 # How it works
 

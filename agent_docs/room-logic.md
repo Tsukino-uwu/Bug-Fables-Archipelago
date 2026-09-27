@@ -1,5 +1,7 @@
 # Mapping a room for the logic
 
+The working checklist for `apimplementation.md`, build step 24 (how we plan and build the logic).
+
 How each room gets its logic, so it holds for **one party member** (random party), **a random start** (any room in the
 game), **the entrance randomizer** (any door may lead anywhere, even decoupled), **shuffled attacks** (the Horn Slash
 may not be there) and **no Jump** (a ledge may be a one-way). Written with the user, 2026-09-27. The rules it serves
