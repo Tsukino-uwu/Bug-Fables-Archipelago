@@ -183,8 +183,9 @@ be wrong.
    *Artifact* item goes into the pool; the goal counts Artifacts received. The item never sets the game's artifact
    flags: they drive the story (flag 41 is the logic's "Snakemouth Den Cleared"). **Decided (the user, 2026-09-27):**
    the pause menu's icons show Artifacts received (drawn only; the save's own count, which the file select shows, stays
-   the game's). The pool: proposed always 7, *Artifacts Required* 1-7, matching the game's 7 icons; a bigger pool breaks
-   nothing in Archipelago but needs a filler slot per Artifact and a display past 7 icons, so later if asked. A yaml
+   the game's). The pool: always 7, *Artifacts Required* 1-7, so the game's 7 icons can show it (the user agreed); a
+   bigger pool breaks nothing in Archipelago but needs a filler slot per Artifact and a display past 7 icons, so later
+   if asked. A yaml
    option, so its own build step.
 29. **A bosses goal, an idea for later** (the user, 2026-09-27): a *Goal* option (Artifacts / Bosses) and *Bosses
    Required* (all, or a number): each boss's beaten flag an event the goal counts, as artifacts are today. **Decided
