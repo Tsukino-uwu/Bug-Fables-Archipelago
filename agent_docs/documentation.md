@@ -178,6 +178,10 @@ rests on it, guards the item from being taken the moment the map exists, and onl
 to a side with room and safe ground (no wall, no water, spikes or pits), else to the save point. `unstick` also
 ends a stuck walk now.
 
+**Which build is loaded, at a glance** (the user, 2026-09-27: checking a reload took minutes): the plugin writes one
+line to `BepInEx/bugfablesap-reload.txt`, the loaded build's hash (as `copy-dev.ps1` prints it) or what a new copy
+waits for; `copy-dev.ps1 -Status` prints it. One read instead of watching the log.
+
 **Status:** done: hot reload, the build-and-copy scripts and the dev console are in use.
 
 *Code: `DevConsole.cs`.*

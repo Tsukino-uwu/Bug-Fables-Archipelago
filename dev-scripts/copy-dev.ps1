@@ -3,6 +3,7 @@
 #       [-DebugOn A,B] [-DebugOff C] [-DebugSet Key=Value]
 #   powershell -ExecutionPolicy Bypass -File dev-scripts\copy-dev.ps1 -Restore <folder under stage\backup>
 #   powershell -ExecutionPolicy Bypass -File dev-scripts\copy-dev.ps1 -Layout Release|Dev   (game closed)
+#   powershell -ExecutionPolicy Bypass -File dev-scripts\copy-dev.ps1 -Status   (which build the game runs; copies nothing)
 param(
     # Release: the dev copies out, release\mod in, as a player's install; Dev: back to the hot-reload setup.
     [ValidateSet('', 'Release', 'Dev')][string]$Layout = '',
@@ -11,7 +12,8 @@ param(
     [string[]]$DebugOff = @(),
     # Key=Value, one per -DebugSet; not comma-split.
     [string[]]$DebugSet = @(),
-    [string]$Restore = ''
+    [string]$Restore = '',
+    [switch]$Status
 )
 $ErrorActionPreference = 'Stop'
 # Through `powershell -File`, "-DebugOn A,B" arrives as one string.
@@ -27,6 +29,14 @@ $targets = @{
 }
 
 if (-not (Test-Path (Join-Path $GameDir 'BepInEx'))) { throw "no BepInEx folder in $GameDir" }
+
+# DevReload's one line: the loaded build's hash (as printed below for a copy), or what a new copy waits for.
+function Show-ReloadStatus {
+    $file = Join-Path $GameDir 'BepInEx\bugfablesap-reload.txt'
+    if (Test-Path $file) { Write-Output "game: $((Get-Content $file -Raw).Trim())" }
+    else { Write-Output "game: no reload status yet (the game not started, or a plugin from before the status file)" }
+}
+if ($Status) { Show-ReloadStatus; return }
 
 if ($Restore) {
     $from = Join-Path $backupRoot $Restore
@@ -137,3 +147,4 @@ if ($DebugOn.Count -gt 0 -or $DebugOff.Count -gt 0 -or $DebugSet.Count -gt 0) {
     }
 }
 Write-Output "backup: stage\backup\$(Split-Path -Leaf $backup) (undo with -Restore $(Split-Path -Leaf $backup))"
+Show-ReloadStatus

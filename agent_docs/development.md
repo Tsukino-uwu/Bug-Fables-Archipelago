@@ -24,6 +24,10 @@ The build and the copy into the game are separate steps. The build never writes 
    staged plugin into the game (or copy `stage/every-build/BepInEx` onto the game folder by hand). The game can
    be running: the plugin notices its DLL changed and ScriptEngine reloads it within a few seconds
    (`DevReload: BugFablesAP.dll changed` then `Reloaded all plugins!` in `BepInEx/LogOutput.log`).
+   - **Which build runs, in one line:** DevReload writes `BepInEx/bugfablesap-reload.txt`: `loaded <hash>` (the same
+     12 digits copy-dev prints for a copy), `waiting for the scene/talk/battle to end`, or `reloading`. copy-dev prints
+     it after copying, and `copy-dev.ps1 -Status` prints only it. A reload waits for a scene, talk or battle to end,
+     so check once when the user says it's in; never poll for it.
    - `-DebugOn EntityDump,ScriptDump` / `-DebugOff GrantProbe` switch Debug settings in the mod's config
      in the same run, and read the result back.
    - The copied DLL is stamped with the current time, since DevReload watches write times: copying an unchanged

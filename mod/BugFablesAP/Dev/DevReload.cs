@@ -8,7 +8,9 @@ using UnityEngine;
 namespace BugFablesAP
 {
     // Dev only: ScriptEngine's FileSystemWatcher throws in this game's Mono, so this polls our DLL once a second and
-    // sets ScriptEngine's private shouldReload flag. Inert unless ScriptEngine is loaded.
+    // sets ScriptEngine's private shouldReload flag. Inert unless ScriptEngine is loaded. Its state goes to one line in
+    // BepInEx/bugfablesap-reload.txt (the loaded build's hash as copy-dev prints it, or what a new copy waits for), so
+    // a reload is checked by reading one file, never by watching the log.
     internal sealed class DevReload
     {
         private readonly ManualLogSource log;
@@ -26,6 +28,40 @@ namespace BugFablesAP
             this.scriptEngine = scriptEngine;
             this.shouldReload = shouldReload;
             lastWrite = File.GetLastWriteTimeUtc(dllPath);
+            loaded = Hash(dllPath);
+            Status("loaded " + loaded);
+        }
+
+        private readonly string loaded;
+        private static readonly string statusPath = Path.Combine(Paths.BepInExRootPath, "bugfablesap-reload.txt");
+
+        // The first 12 hex digits of the DLL's SHA-256, upper case: what copy-dev.ps1 prints.
+        private static string Hash(string path)
+        {
+            try
+            {
+                using (var sha = System.Security.Cryptography.SHA256.Create())
+                using (FileStream file = File.OpenRead(path))
+                {
+                    return BitConverter.ToString(sha.ComputeHash(file)).Replace("-", "").Substring(0, 12);
+                }
+            }
+            catch (Exception)
+            {
+                return "unknown";
+            }
+        }
+
+        private void Status(string text)
+        {
+            try
+            {
+                File.WriteAllText(statusPath, text + " (" + DateTime.Now.ToString("HH:mm:ss") + ")\n");
+            }
+            catch (Exception e)
+            {
+                log.LogWarning("DevReload: couldn't write " + statusPath + ": " + e.Message);
+            }
         }
 
         internal static DevReload TryCreate(ManualLogSource log)
@@ -79,11 +115,14 @@ namespace BugFablesAP
                     if (!waitingReported)
                     {
                         waitingReported = true;
+                        string what = MainManager.battle != null ? "battle" : mm.inevent ? "scene" : "talk";
+                        Status($"waiting for the {what} to end (loaded {loaded}, a new copy on disk)");
                         log.LogInfo("DevReload: BugFablesAP.dll changed; waiting for the scene, talk or battle to end.");
                     }
                     return;
                 }
                 requested = true;
+                Status($"reloading (was {loaded})");
                 shouldReload.SetValue(scriptEngine, true);
                 log.LogInfo("DevReload: BugFablesAP.dll changed; asked ScriptEngine to reload.");
             }
