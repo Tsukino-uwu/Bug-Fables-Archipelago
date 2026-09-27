@@ -948,3 +948,17 @@ Newest last. What was tried, what happened, what the user said.
   Offered prizes on Normal for normal saves as a new row; the user: "nahh, keep as is. we shouldn't try to change
   vanilla more than we already do". Measured with everything installed at 240: 3599 frames in 15 s, median 4.11 ms,
   worst 13 ms, no collections. The player guide got Uncap FPS and the stutter fix.
+
+## 2026-09-27 (release): v0.2.0
+
+- **The user asked for v0.2.0** with what `main` has, before playing chapters 5-7 on a vanilla save. Both versions
+  bumped; highlights written from the 127 commits since v0.1.0. `release.ps1` found the committed DLL stale (CI had
+  been red on it for two pushes) and rebuilt it.
+- **Mid-run, the user asked to stale check everything first.** The run was stopped after its push, before any tag.
+  Three read-only agents checked the player docs, the mod guide with development.md and the code map, and the
+  Archipelago guide with the checklist, each against the code. Fixed: the zip's README never said to enable
+  Archipelago; the Difficulty config text still said boss prizes pay out on normal saves (the user's decision earlier
+  today says as in the game); the slot_data list had 7 of 25 keys; several Status lines lagged the "Seen" commits;
+  the code map had no rows for the hooks. Tests: 372 passed at Archipelago 0.6.7.
+- **Published** on the second run, every job green; the downloads fetched back and checked. Not yet seen in game: the
+  release zip itself on a clean install (the DLL is the same source the user has been playing).

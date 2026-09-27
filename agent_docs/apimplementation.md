@@ -1563,6 +1563,8 @@ before the user played chapters 5 to 7, with highlights written from the commits
 **Status:** works: v0.1.0 published by `release.ps1` (2026-09-26), every job green, then remade the same day from
 a later `main` for the zip's top-level README and switched from pre-release to a full release (the user: a pre-release
 is hidden from Latest). The downloads fetched back and checked; the DLL is the build the user saw load and connect.
+v0.2.0 published by `release.ps1` (2026-09-27), every job green, after a stale check of every doc against the code;
+the downloads fetched back: the zip's DLL matches `built-from.txt` and reports 0.2.0, the apworld's manifest says 0.2.0.
 
 ## Build step 18: Starting Party Member
 
