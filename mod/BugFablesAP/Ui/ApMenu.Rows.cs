@@ -91,6 +91,10 @@ namespace BugFablesAP
                         return SaveCrystals.AllHeal != null && SaveCrystals.AllHeal.Value
                             ? "Every save crystal is yellow: it heals HP and TP too. From the next room on."
                             : "Save crystals as the game has them: only yellow ones heal.";
+                    case DeathLinkRow:
+                        return DeathLinkGame.Enabled != null && DeathLinkGame.Enabled.Value
+                            ? "When your party falls, so does everyone with DeathLink on, and their deaths reach you."
+                            : "Deaths stay your own.";
                     case MedalPricesRow:
                     {
                         int tenths = QualityOfLife.MedalPrices?.Value ?? QualityOfLife.FullPrice;
@@ -201,6 +205,11 @@ namespace BugFablesAP
                     SaveCrystals.AllHeal.Value = !SaveCrystals.AllHeal.Value;
                     log.LogInfo("[apmenu] HealingCrystals: " + (SaveCrystals.AllHeal.Value ? "On" : "Off"));
                 }
+                else if (r == DeathLinkRow && DeathLinkGame.Enabled != null)
+                {
+                    DeathLinkGame.Enabled.Value = !DeathLinkGame.Enabled.Value;
+                    log.LogInfo("[apmenu] DeathLink: " + (DeathLinkGame.Enabled.Value ? "On" : "Off"));
+                }
                 else if (r == MedalPricesRow && QualityOfLife.MedalPrices != null)
                 {
                     Multipliers.StepBy(QualityOfLife.MedalPrices, by, 0, QualityOfLife.FullPrice);
@@ -244,7 +253,7 @@ namespace BugFablesAP
         // The Gameplay page's two buttons: every row to its plain value, or back to its default.
         private static void GameplayAll(bool reset)
         {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { Difficulty, QualityOfLife.EnemyScalingMode, AttackBoost.Boost, SaveCrystals.AllHeal, QualityOfLife.MedalPrices, Multipliers.Exp, Multipliers.Berries })
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { Difficulty, QualityOfLife.EnemyScalingMode, AttackBoost.Boost, SaveCrystals.AllHeal, DeathLinkGame.Enabled, QualityOfLife.MedalPrices, Multipliers.Exp, Multipliers.Berries })
             {
                 if (setting != null && reset)
                 {
@@ -270,6 +279,10 @@ namespace BugFablesAP
             if (SaveCrystals.AllHeal != null)
             {
                 SaveCrystals.AllHeal.Value = false;
+            }
+            if (DeathLinkGame.Enabled != null)
+            {
+                DeathLinkGame.Enabled.Value = false;
             }
             if (QualityOfLife.MedalPrices != null)
             {

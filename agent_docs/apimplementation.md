@@ -36,6 +36,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 22. [Build step 22: Shuffle Jump](#build-step-22-shuffle-jump)
 23. [Build step 23: every learned field ability an item](#build-step-23-every-learned-field-ability-an-item)
 24. [Build step 24: how we plan and build the logic](#build-step-24-how-we-plan-and-build-the-logic)
+25. [Build step 25: DeathLink, a panel row](#build-step-25-deathlink-a-panel-row)
 
 **How it works**
 
@@ -329,6 +330,9 @@ be wrong.
    and no logic depend on it. Only while Archipelago is enabled, or with *Use on normal saves*.
 38. **A Graphics page, render scale and MSAA** (the user, 2026-09-28): built, seen, then removed the same day (240 to
    about 95 fps for little visible gain), `documentation.md` step 28.
+39. **DeathLink** (the user, 2026-09-28): built, not yet seen, build step 25. A row on the Gameplay page, not a yaml
+   option, so it can be switched mid-seed. **Auto-save between rooms**, its own Gameplay row, is next (planned:
+   `documentation.md` gets the step), so a death costs one room rather than a long way back.
 
 **Known issues:**
 
@@ -2055,6 +2059,49 @@ randomizer and a random start stay labelled experimental until their room-level 
 
 **Status:** planned (2026-09-27): the method and the checklist written (`room-logic.md`), no room mapped with it yet.
 Today's logic is by large areas (the Outskirts, Snakemouth Den, Bugaria City, Later Chapters).
+
+## Build step 25: DeathLink, a panel row
+
+**What it is:** Archipelago's DeathLink, one of its "bounce" features (`docs/network protocol.md` at 0.6.7, "DeathLink"):
+a client wearing the `DeathLink` tag sends a `Bounce` with `time`, `source` and an optional `cause` when its player
+dies, and the server passes it to every other client wearing the tag. Each game decides what "die" means.
+
+**Decided (the user, 2026-09-28):**
+- **A row on the Gameplay page, *DeathLink*, ON / OFF, off by default; not a yaml option**, so a player can change their
+  mind mid-seed. Only while Archipelago is enabled; the seed and the logic know nothing of it.
+- **A death DeathLink caused never sends one** (the user: a common apworld bug, two games killing each other in a
+  loop, or a death queued before you're back in game that kills you and sends again). Only the game's own deaths send.
+- **A death that can't land yet waits, and strikes at whatever comes first afterwards:** free on the map, or the
+  party's turn in a normal battle. Never inside a cutscene, a text box, a menu, a door or a scripted fight.
+- **In a battle: the game's own Game Over menu** (Retry, Retry after changing medals, Load, Title). **On the map:** a
+  Game Over (music out, black, its sound), then the last save, as the menu's Load does.
+
+**What counts as a death here** (`MEASURED.md`, save crystals, saving, Game Over): only a party wipe in a battle.
+Hazards and falls cost no HP; they put the party back. A scripted loss (`battlelossevent`, the story's own defeats)
+isn't a Game Over, and neither sends nor receives.
+
+**How it works:**
+- **The connection** (`ApConnection.cs`): MultiClient.Net's `DeathLinkService` (read at `v6.7.1`: `EnableDeathLink` /
+  `DisableDeathLink` change the tag with a `ConnectUpdate`, `SendDeathLink`, `OnDeathLinkReceived`). The tag is set
+  **after** login from the row, and again whenever the row changes, so it never depends on what `Connect` carried
+  (`client-requirements.md`, the tag-before-`slot_data` trap). A `ConnectUpdate` waits on the socket, so it runs off
+  the game thread, as every send does. Received deaths wait in a queue for the game thread.
+- **Our own echo:** the library drops a received death equal to the last one it sent, by source and time to the
+  second, never by name alone (the two-clients-on-one-slot trap).
+- **Sending** (`DeathLinkGame.cs`): a prefix on the first step of `BattleControl.GameOver` with its setup (only a wipe
+  starts that; the game's own re-shows of the menu skip it). The cause names the slot, as the protocol asks:
+  "<slot>'s party was defeated in Bug Fables."
+- **Receiving:** in a battle, at the party's turn (no action running, no death check, no Game Over yet), the game's own
+  `DeadParty` is started, which runs the game's Game Over; that Game Over is marked as the link's, so it sends nothing.
+  On the map, once the player is free and a save exists, our Game Over, then `MainManager.ReloadSave()`.
+- **One at a time:** from a strike until play is back (the Game Over's menu answered, or free on the map after the
+  reload), deaths that arrive join it. A waiting death is dropped if the row is switched off, or on the title screen.
+- **Logged at every decision** (`[death]`): received, waiting and for what, joined, struck and how, not sent and why.
+
+**Status:** built (2026-09-28), not yet seen in game or in a room.
+
+*Code: `DeathLinkGame.cs`; the service in `ApConnection.cs` (`SetDeathLinkTag`, `SendDeath`, `TakeDeath`); the row in
+`ApMenu.cs` and `ApMenu.Rows.cs`.*
 
 # How it works
 

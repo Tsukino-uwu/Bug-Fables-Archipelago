@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using Archipelago.MultiClient.Net;
+using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
@@ -122,6 +123,7 @@ namespace BugFablesAP
             {
                 return;
             }
+            deathLinks = null;
             KillSocket(s);
             Post("[ap] connection lost: " + reason);
             ScheduleRetry("Connection lost.");
@@ -565,6 +567,19 @@ namespace BugFablesAP
                     attempt.Socket.ErrorReceived += (e, message) => MarkLost(attempt, "socket error: " + message);
                     receivedAtLogin = attempt.Items.AllItemsReceived.Count;
                     string version = ok.SlotData != null && ok.SlotData.TryGetValue("world_version", out object v) ? v?.ToString() : "missing";
+                    // The tag is set after login (a ConnectUpdate), so it never depends on what Connect was sent with.
+                    DeathLinkService links = attempt.CreateDeathLinkService();
+                    links.OnDeathLinkReceived += death =>
+                    {
+                        lock (gate)
+                        {
+                            receivedDeaths.Enqueue(death);
+                        }
+                    };
+                    deathLinks = links;
+                    slotName = slot;
+                    deathLinkTagged = null;
+                    SetDeathLinkTag(DeathLinkWanted != null && DeathLinkWanted());
                     Post($"[ap] logged in: slot {ok.Slot}, team {ok.Team}, world_version {version}, "
                         + $"{attempt.Items.AllItemsReceived.Count} items received so far, "
                         + $"{attempt.Locations.AllLocationsChecked.Count} of {attempt.Locations.AllLocations.Count} locations checked");
@@ -617,6 +632,78 @@ namespace BugFablesAP
             }
         }
 
+        // DeathLink (the Gameplay page's row): the tag follows the row, received deaths wait here for the game thread.
+        internal Func<bool> DeathLinkWanted;
+        private volatile DeathLinkService deathLinks;
+        private string slotName;
+        private readonly Queue<DeathLink> receivedDeaths = new Queue<DeathLink>();
+        private bool? deathLinkTagged;
+
+        // Off a worker: the tag change is a ConnectUpdate, sent and waited for.
+        internal void SetDeathLinkTag(bool on)
+        {
+            DeathLinkService links = deathLinks;
+            if (links == null || session == null || deathLinkTagged == on)
+            {
+                return;
+            }
+            deathLinkTagged = on;
+            ThreadPool.QueueUserWorkItem(_ =>
+            {
+                try
+                {
+                    if (on)
+                    {
+                        links.EnableDeathLink();
+                    }
+                    else
+                    {
+                        links.DisableDeathLink();
+                    }
+                    Post("[death] DeathLink tag " + (on ? "added" : "removed"));
+                }
+                catch (Exception e)
+                {
+                    deathLinkTagged = null;
+                    Post("[death] changing the DeathLink tag failed: " + e.GetBaseException().Message);
+                }
+            });
+        }
+
+        internal bool SendDeath(string cause)
+        {
+            DeathLinkService links = deathLinks;
+            string source = slotName;
+            if (links == null || session == null || deathLinkTagged != true)
+            {
+                return false;
+            }
+            ThreadPool.QueueUserWorkItem(_ =>
+            {
+                try
+                {
+                    links.SendDeathLink(new DeathLink(source, cause));
+                    Post("[death] sent: " + cause);
+                }
+                catch (Exception e)
+                {
+                    Post("[death] sending failed: " + e.GetBaseException().Message);
+                }
+            });
+            return true;
+        }
+
+        // Our own echo never gets here: the library drops a death equal to the last one it sent (name and time).
+        internal DeathLink TakeDeath()
+        {
+            lock (gate)
+            {
+                return receivedDeaths.Count > 0 ? receivedDeaths.Dequeue() : null;
+            }
+        }
+
+        internal string SlotName => slotName;
+
         internal void Post(string message)
         {
             lock (gate)
@@ -640,6 +727,7 @@ namespace BugFablesAP
         {
             // First, so the SocketClosed handler knows this close was on purpose.
             ArchipelagoSession closing = Interlocked.Exchange(ref session, null);
+            deathLinks = null;
             KillSocket(closing);
             failures = 0;
         }
