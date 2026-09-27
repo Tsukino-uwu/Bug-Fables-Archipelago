@@ -188,6 +188,11 @@ be wrong.
    Required* (all, or a number): each boss's beaten flag an event the goal counts, as artifacts are today. Open: story
    bosses only, or the bounties and other optional bosses too (those need their own logic first, Next 13). Only a real
    choice once the world reaches past chapter 1 (today: one artifact, one story boss). Its own build step.
+30. **Library discovery milestones as locations, an idea for later** (the user, 2026-09-27): the librarian's 10
+   rewards (one per 5 discoveries, 5 to 50; `MEASURED.md`, "Journal rewards") as locations, "done" when `flagvar[53]`
+   reaches 1 ... 10 (the `location_vars` kind, as Artis's prize). Rule: milestone k needs 5 × k discoveries reachable,
+   so only the first fits today's 5 listed discoveries. Five of the rewards are crystal berries (43-47). Still to find:
+   the library's region and any story flag the librarian needs; how the mod turns `EventControl.GiveItem` into a check.
 
 **Known issues:**
 

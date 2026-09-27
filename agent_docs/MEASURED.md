@@ -272,9 +272,16 @@ throttled to changes.
   an item with several copies, and any rule needing them counts copies. The library also added quest **27** to
   the taken list with `flag[70]` (frame 9985), then `flag[579]`.
 - **Journal rewards (partly measured; the first reading was wrong).** 20 berries in `AntPalaceLibrary`
-  (`|giveitem,-1,20,-11|`, `caller=none`); the NPC spoke of 5 discoveries both times (the user). **Which code pays
-  it is NOT found.** `Event156`'s `10 × (thisdecimal + 1)` payout (`EventControl.cs:26186`, item tiers with
-  `rewardflags` 503–506, 673) was first taken for it, but it sits in a hologram minigame; the link is unproven.
+  (`|giveitem,-1,20,-11|`, `caller=none`); the NPC spoke of 5 discoveries both times (the user). `Event156`'s
+  `10 × (thisdecimal + 1)` payout (`EventControl.cs:26186`) was first taken for it; it belongs to a hologram minigame.
+  **The payer, found (2026-09-27, code read, not seen in game): `Event189`** (`EventControl.cs:31243`), the
+  librarian in `AntPalaceLibrary`. The first talk only introduces it (sets `flag[579]`). Each later talk counts the
+  set Discovery bools (`librarylimit[0]` = 50) and pays every milestone not yet paid: milestone j (1-10) at 5 × j
+  discoveries, while `flagvar[53]` < j, then `flagvar[53]++`. So **`flagvar[53]` = milestones claimed (0-10)**.
+  Rewards in order (`rewards` array; below 0 berries, 1000s crystal berry, 2000s key item, else medal): 20 berries,
+  crystal berry 43, crystal berry 44, 25 berries, medal 69, 30 berries, crystal berries 45, 46, 47, key item 83
+  (game names not yet read). Paid through `EventControl.GiveItem`. No such track for the Bestiary or Recipes: their
+  completion only unlocks Logbook entries (below).
   **Measured:** the journal is `librarystuff`, 5 rows (`MainManager.Library`: Discovery, Bestiary, Recipes,
   Logbook, Map). Completing Discovery / Bestiary / Recipes unlocks Logbook entries 10 / 9 / 8, and nearly
   finishing the Logbook sets `flag[63]` (`MainManager.cs:4294–4371`, counts via `HowManyTrue(GetLibraryBools(n))`
