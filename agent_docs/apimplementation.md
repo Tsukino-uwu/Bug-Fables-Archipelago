@@ -314,15 +314,14 @@ be wrong.
   - **A slight shimmer while standing on a platform or bridge** (the user, 2026-09-27, at 240). The slow motion there
     is fixed (mod guide, step 24); the party isn't interpolated while a platform carries it, so it's drawn at physics
     steps. Smoothing it relative to the platform is left for later.
-  - **Shaking text in conversations looks blurry** (the user, 2026-09-27: sharp at 60 FPS, blurry at 240, confirmed on
-    screen). Likely cause, from code: the game's shaky and glitchy letters update once per frame, so they're 4x as busy
-    at 240 (`MEASURED.md`, Frame rate).
-  - **Bushes shaking before an enemy pops out look blurry** (the user, 2026-09-27, at 240). Where the game shakes
-    them isn't found in code yet; the enemy-in-a-bush countdown itself is already held to 60 a second.
-  - **Other shakes that pick a new random offset every frame** (code read, 2026-09-27, not seen): the camera's screen
-    shake (`MainManager`, `screenshake`), `MainManager.ShakeObject` (many story scenes), a numb character's twitch (a
-    5% roll per frame, `EntityControl.Numb`), the geyser and the crumbling platform (`NPCControl`). Likely the same
-    blur; each to be compared on screen.
+  - **Bushes shaking before the leaf gang's ambush looked blurry** (the user, 2026-09-27, at 240; the swamp,
+    Event128): `ShakeObject` fixed (mod guide, step 24), not yet seen. Shaky text: fixed and seen.
+  - **Hits:** a character's own shake (`ShakeSprite`) was per frame and is fixed, not yet seen; which part of a hit
+    looked fast is still to be told apart on screen (the flinch pose is timed in seconds, the screen shake in physics
+    steps).
+  - **Other shakes still rolled every frame** (code read, 2026-09-27, not seen): a numb character's twitch (a 5% roll
+    per frame, `EntityControl.Numb`), the geyser and the crumbling platform (`NPCControl`), Heavy Strike's charge sound
+    (its pitch rises per frame). Each to be compared on screen.
 
 ---
 

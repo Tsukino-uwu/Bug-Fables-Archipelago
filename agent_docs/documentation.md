@@ -1565,6 +1565,14 @@ place it counts frames instead of time first.
   fix:** after the game's ground check (`GroundDetector.OnTriggerStay` / `OnTriggerExit`), a body standing on a
   platform isn't interpolated, and is again once off it. Seen by the user (2026-09-27): normal speed on the platform,
   with a slight shimmer there only (drawn at physics steps); sharp again on the ground.
+- **Random shakes re-rolled once per 1/60 s.** Some effects jump to a new random offset every frame, a blur at 240 (the
+  user: shaky text in conversations sharp at 60, blurry at 240). Their timing was already right; only the re-roll
+  was per frame. Now, while the row is on, the offset holds between ticks: `FontEffects` (shaky and glitchy letters;
+  a shaky letter's position also overrides wavy, so wavy holds with it), `MainManager.ShakeObject` (the bushes before
+  the leaf gang's ambush, Event128, and many scenes) and `EntityControl.ShakeSprite` (a character's shake), the last two
+  run as the game's own loop with the offset kept. The camera's screen shake needs nothing: it's rolled in
+  `FixedUpdate`, 50 times a second at any frame rate. **Seen by the user (2026-09-27):** the text sharp at 240. Not
+  yet seen: the bushes, a character's shake.
 - **What the game counts in frames runs 60 times a second.** Every method that reads `Time.frameCount` (24, found by
   reading each method's IL at load) sees a 60 Hz count instead: on a frame that starts a new 1/60 s, the count; on the
   frames between, 1, which no `% n` check divides. `FrameDifference` ("once every 1/60 s") answers the same way.

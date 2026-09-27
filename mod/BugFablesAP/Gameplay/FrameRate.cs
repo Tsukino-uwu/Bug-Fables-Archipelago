@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -156,6 +157,10 @@ namespace BugFablesAP
             Patch(AccessTools.Method(typeof(EntityControl), "Start"), postfix: nameof(AfterEntityStart));
             Patch(AccessTools.Method(typeof(GroundDetector), "OnTriggerStay"), postfix: nameof(AfterGround));
             Patch(AccessTools.Method(typeof(GroundDetector), "OnTriggerExit"), postfix: nameof(AfterGround));
+            Patch(AccessTools.Method(typeof(FontEffects), "Update"), prefix: nameof(BeforeFontEffects), postfix: nameof(AfterFontEffects));
+            Patch(AccessTools.Method(typeof(MainManager), nameof(MainManager.ShakeObject)), prefix: nameof(BeforeShakeObject));
+            Patch(AccessTools.Method(typeof(EntityControl), nameof(EntityControl.ShakeSprite), new[] { typeof(Vector3), typeof(float) }),
+                prefix: nameof(BeforeShakeSprite));
             Patch(AccessTools.Method(typeof(MainManager), nameof(MainManager.TieFramerate)), prefix: nameof(BeforeTieFramerate));
             Patch(AccessTools.Method(typeof(MainManager), nameof(MainManager.FrameDifference)), prefix: nameof(BeforeFrameDifference));
             MethodInfo doCommand = AccessTools.EnumeratorMoveNext(AccessTools.Method(typeof(BattleControl), "DoCommand"));
@@ -323,6 +328,110 @@ namespace BugFablesAP
             {
                 body.interpolation = wanted;
             }
+        }
+
+        // Shaky letters jump to a new random spot, and glitchy ones roll their swap, once per frame: at 240 a blur (the
+        // user). Between 1/60 s ticks both hold still; a shaky letter's position also overrides wavy, so wavy holds too.
+        private const int Shaky = 1, Wavy = 2, Glitchy = 4;
+
+        private static void BeforeFontEffects(FontEffects __instance, out int __state)
+        {
+            __state = 0;
+            if (!active || OnTick || !(__instance.shaky || __instance.glitchy))
+            {
+                return;
+            }
+            if (__instance.shaky)
+            {
+                __state |= Shaky | (__instance.wavy ? Wavy : 0);
+                __instance.shaky = __instance.wavy = false;
+            }
+            if (__instance.glitchy)
+            {
+                __state |= Glitchy;
+                __instance.glitchy = false;
+            }
+        }
+
+        private static void AfterFontEffects(FontEffects __instance, int __state)
+        {
+            if ((__state & Shaky) != 0)
+            {
+                __instance.shaky = true;
+            }
+            if ((__state & Wavy) != 0)
+            {
+                __instance.wavy = true;
+            }
+            if ((__state & Glitchy) != 0)
+            {
+                __instance.glitchy = true;
+            }
+        }
+
+        // MainManager.ShakeObject (the bushes before the leaf gang's ambush, and many scenes) moves its object to a new random
+        // offset every frame. The game's loop, with the offset kept between 1/60 s ticks.
+        private static bool BeforeShakeObject(Transform obj, Vector3 shake, float frametime, bool returntostart, ref IEnumerator __result)
+        {
+            if (!active)
+            {
+                return true;
+            }
+            __result = ShakeOnTicks(obj, shake, frametime, returntostart);
+            return false;
+        }
+
+        private static IEnumerator ShakeOnTicks(Transform obj, Vector3 shake, float frametime, bool returntostart)
+        {
+            Vector3 p = obj.position;
+            Vector3 offset = MainManager.RandomVector(shake);
+            float a = 0f;
+            do
+            {
+                if (OnTick)
+                {
+                    offset = MainManager.RandomVector(shake);
+                }
+                obj.position = p + offset;
+                a += MainManager.TieFramerate(1f);
+                yield return null;
+            }
+            while (a < frametime + 1f);
+            if (returntostart)
+            {
+                obj.position = p;
+            }
+        }
+
+        // EntityControl.ShakeSprite (a character's shake, as on a hit that does no damage): the same, its sprite.
+        private static bool BeforeShakeSprite(EntityControl __instance, Vector3 intensity, float frametimer, ref IEnumerator __result)
+        {
+            if (!active)
+            {
+                return true;
+            }
+            __result = ShakeSpriteOnTicks(__instance, intensity, frametimer);
+            return false;
+        }
+
+        private static IEnumerator ShakeSpriteOnTicks(EntityControl entity, Vector3 intensity, float frametimer)
+        {
+            Vector3 startp = entity.spritetransform.localPosition;
+            Vector3 offset = Vector3.zero;
+            bool first = true;
+            while (frametimer > 0f)
+            {
+                if (first || OnTick)
+                {
+                    offset = new Vector3(UnityEngine.Random.Range(0f - intensity.x, intensity.x), UnityEngine.Random.Range(0f - intensity.y, intensity.y),
+                        UnityEngine.Random.Range(0f - intensity.z, intensity.z));
+                    first = false;
+                }
+                entity.spritetransform.localPosition = startp + offset;
+                frametimer -= MainManager.framestep;
+                yield return null;
+            }
+            entity.spritetransform.localPosition = startp + entity.extraoffset;
         }
 
         private static void SetInterpolation(bool on)

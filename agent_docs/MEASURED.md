@@ -1273,7 +1273,11 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
 - **Text effects per frame** (2026-09-27, code read; not seen): `FontEffects.Update` moves a *shaky* letter to a new
   random offset (up to 0.025) every frame, and a *glitchy* letter rolls its swap chance every frame, so both run 4x as
   often at 240 FPS as at 60. *Wavy* follows `Time.time` and doesn't change with the frame rate. Nothing in the mod
-  handles `FontEffects` yet.
+  handles `FontEffects` yet. The same per-frame re-roll: `MainManager.ShakeObject` (a coroutine, one random offset per
+  frame, its length in frames via `TieFramerate`; the leaf gang's ambush shakes two bushes with it, `Event128`,
+  `EventControl.cs:21712-21714`) and `EntityControl.ShakeSprite` (its length via `framestep`), both called on hits and in
+  scenes; the camera's `screenshake` is rolled in `RefreshCamera`, run from `MainManager.FixedUpdate` (50 a second).
+  The user saw the text blurry at 240 and sharp at 60. Used by `FrameRate.cs`.
 
 ## Quests: to measure (when quests come into scope)
 
