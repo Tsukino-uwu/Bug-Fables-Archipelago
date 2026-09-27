@@ -7,7 +7,7 @@ in a shuffled shop or finishing a quest sends a check instead, and the item ther
 place. Every item, your own included, arrives from the server and is given to you through the game's own item system.
 
 This is an early version. It covers the start of the game: the Bugaria Outskirts, Snakemouth Den, the open parts of
-Bugaria with Merab's medal shop and Madame Butterfly's item shop, and the Golden Path. More chapters come later.
+Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's shop outside the city, and the Golden Path. More chapters come later.
 
 ## Options
 
@@ -22,7 +22,8 @@ Bugaria with Merab's medal shop and Madame Butterfly's item shop, and the Golden
 - **Enemy Shuffle** (off): ordinary enemies on each map are swapped for others of the same group size.
 - **Starting Location** (off, experimental): a new file begins in any room in the game.
 - **Starting Party Member** (all three): a new file starts with the whole party; or with Vi, Kabbu or Leif alone (or one
-  picked by the seed), and the other two are items; or Off, the story's party, with Leif joining in Snakemouth Den.
+  picked by the seed), and the other two are items; or Off, the story's party, with Leif joining in Snakemouth Den. With any setting but Off, the opening and the fall
+  room after the spider become locations. New in this version.
 - **Shuffle Field Moves** (off): Vi's Beemerang Toss, Kabbu's Horn Slash and Leif's Freeze are items; until one
   arrives, that attack only buzzes, and each shows in your key items once it does. New in this version.
 - **Shuffle Jump** (off): Jump is an item for the whole party; until it arrives, the jump button only buzzes, and the

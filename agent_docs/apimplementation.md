@@ -64,7 +64,7 @@ be wrong.
    into chosen and forced, then the room-by-room logic that removes the label. See build step 12.
 3. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
    Party members stay where the story puts them.
-   The basic moves as items: see build step 13. Party members as items (*Starting Party Member*): built, see build step 18.
+   The three attacks and Jump as items: built, see build steps 21 and 22. Party members as items (*Starting Party Member*): built, see build step 18.
 4. **Open world, one gate at a time** (always on, never an option; the user, 2026-09-26): see build step 9.
 5. **To test later (the user, 2026-09-25): a two-player room.** The user's slot plus a second one the agent drives,
    sending items while the user plays, to see items from another player arrive live: the hold-up on *All* and
@@ -181,21 +181,17 @@ be wrong.
 
 **Known issues:**
 
-- **A Kabbu / horn rule is owed** once the basic horn becomes an item (build step 13). With *Starting Party Member*
-  on, Kabbu is the rule (build step 18: 25 and 32 need him, 21 and 31 are past the gate, which needs all three).
-  Not location 2: the horn tutorial cuts its grass itself and played through with Leif alone (the user, 2026-09-25).
-  **Upper Snakemouth, when it gets locations:** the big door in the door room stays shut until flag 14 (its closed
+- **Horn rules:** written as `abilities: ["Horn Slash"]` since the horn became an item (build step 21): locations
+  11, 19, 25, 30 and 32, and 31 through the Den's entrance (build step 13). Not location 2: the horn tutorial cuts its
+  grass itself and played through with Leif alone (the user, 2026-09-25). **Upper Snakemouth, when it gets locations:** the big door in the door room stays shut until flag 14 (its closed
   halves stand until the trapdoor fall, `MEASURED.md`, scenery switched by flags), so its rule is the trapdoor (the
   door room's horn puzzle: the Horn) and the Peculiar Gem for the slot behind it (the user asked, 2026-09-27).
   Also location 19 (crystal berry #0 outside Snakemouth Den): the horn from the Outskirts' side, or the way round
-  through the cave (the user, 2026-09-26; `MEASURED.md`). Safe today: it's past the gate, which needs Kabbu.
+  through the cave (the user, 2026-09-26; `MEASURED.md`): today it takes the Horn, more cautious than the game;
+  room-level regions would add the cave.
 - **Crystal berry #2 (location 20)** sits in the Underground region, which needs Leif, though the room's
   upper-left entrance needs nothing. More cautious than the game, so safe; room-level regions would split it.
 - **Landmark names** for locations 2, 22, 23, 24, 25 and 30 are still to come from the user.
-
-- The generator's manifest warning ("will stop working with Archipelago 0.7.0") came from a hand-zipped
-  apworld. The properly packaged file (build step 1) fixes it once it replaces the copy in the installed
-  Archipelago's `custom_worlds`.
 
 ---
 
@@ -265,7 +261,7 @@ Archipelago's `custom_worlds` folder.
   `TestLocationNames` fails if a location's name contains its own vanilla item's name. Renaming a location
   never changes its id or flag.
 
-**Status:** done; the world has since grown to 64 locations (59 by default) and 44 items (counted 2026-09-25).
+**Status:** done; the world has since grown to 66 locations (61 by default) and 52 items (counted 2026-09-27).
 
 *Code: `apworld/bug_fables/world.py` (`BugFablesWorld`: `create_regions`, `create_items`), the data in
 `data/items.json` and `data/locations.json` (read by `data_tables.py`), tests in `test/test_logic.py`
@@ -1276,7 +1272,7 @@ test `test_the_den_needs_the_horn`. Tests `TestAbilities`; three seeds with a ra
 generated. **Next, after the current tests (the user):** the three attacks as items, one per member, and Jump as one
 item for the whole party; then every move's spot from `MEASURED.md` (where a move is needed) written as `abilities`.
 
-**Status:** in progress: a one-member party (Leif) seen through chapter 1 into chapter 2 (the user, 2026-09-25); *Starting Party Member* built as its own step (build step 18); basic moves, jump and field abilities not built.
+**Status:** in progress: a one-member party (Leif) seen through chapter 1 into chapter 2 (the user, 2026-09-25); *Starting Party Member* built as its own step (build step 18); the three attacks and Jump built as their own steps (21, 22); field abilities not built.
 
 ## Build step 14: enemy shuffle (in progress)
 
@@ -1871,11 +1867,18 @@ only way a setting chosen at generation (an option, a version number) reaches th
 
 - `world_version`, so a mismatched mod and apworld can be caught;
 - `artifacts_required`, the goal;
-- `location_flags`, the game flag that marks each location done;
+- how each location is done: `location_flags` (a game flag), `location_berries` (a crystal berry),
+  `location_discoveries` (a journal discovery), `location_shops` and `location_item_shops` (a shop's copy or first
+  purchase), `location_vars` (a number reaching a value, a boss prize);
 - `location_gives`, the `giveitem` that hands out a gift location's vanilla item;
 - `location_pickups`, the map and flag of each location that is an item lying in the world;
-- `item_kinds`, which inventory list each of its items goes to;
-- `starting_member`, the one party member a new file starts with (*Starting Party Member*, build step 18).
+- `silent_locations`, checks that show no item of their own (a member joining), where the player's own item is shown;
+- the open world (build step 9): `kept_open`, `kept_present`, `scenery_hidden`, `scenery_present`, `held_until`,
+  `present_from` and `dialogue_flags`, the story's blockers and scenery the mod keeps the way the logic assumes;
+- `door_targets` (the entrance randomizer), `enemy_swaps` (enemy shuffle) and `start` (the starting location);
+- `starting_member`: 0 Vi, 1 Kabbu, 2 Leif alone, 3 all three, -1 the story's party (build steps 18 and 20);
+- `shuffle_moves` and `shuffle_jump`, whether the attacks and Jump are items (build steps 21 and 22);
+- `item_kinds`, which inventory list each of its items goes to.
 
 The mod does nothing from its own knowledge of the game's locations: every table it acts on comes from here.
 

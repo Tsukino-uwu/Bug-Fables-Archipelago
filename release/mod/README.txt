@@ -8,7 +8,8 @@ Install
    Bug Fables.exe. Start the game once, then close it.
 2. Extract this zip into your Bug Fables folder. The mod ends up in BepInEx\plugins\BugFablesAP, and this
    file next to Bug Fables.exe (you can delete it).
-3. Start the game. On the main menu, choose Archipelago and fill in the address, port and slot.
+3. Start the game. On the main menu, choose Archipelago, set Archipelago to Enabled, and fill in the address,
+   port and slot.
 
 The apworld (bug_fables.apworld) and the player options (bug_fables.yaml) are separate downloads on the
 same release page. The full setup guide:

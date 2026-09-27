@@ -59,7 +59,7 @@ The build and the copy into the game are separate steps. The build never writes 
      - ScriptEngine's own config turns its file watcher off: this game's Mono throws
        `NotImplementedException` from `new FileSystemWatcher`, which aborts `ScriptEngine.Awake`. DevReload
        polls instead.
-4. If the script says **the libraries differ from the game's**, copy `stage/setup/BepInEx` again with the game
+5. If `stage-dev.ps1` says **the libraries differ from the game's**, copy `stage/setup/BepInEx` again with the game
    closed: a running game holds the libraries open.
 
 The plugin reads its config when it loads, so a hot reload also picks up a changed
@@ -164,6 +164,11 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `frames [seconds]` (5 by default): logs the frame count, median and slow frames with their times, the camera's draw
   time and garbage collections. A collection is marked on the frame before the slow one it causes.
 - `nudge <x> <y> <z>`: shift the party by that much on the current map.
+- `script <map>`: log a map's dialogue table, row by row. `pos <map> <index...>`: log those entities' start positions
+  from the map's entity table. `prices <medal id...>`: log each medal's price columns (berries and crystal berries).
+- `markcolor <progression|useful|trap|filler> <hex>`: a class's starburst colour, live (a design test).
+  `markclass <entity> <class>` draws one slot's backdrop as that class; `markclass off` puts them back.
+- `hide <entity>`: switch an entity on this map off until the map reloads (nothing saved).
 - `items`: list every pickup that exists on the current map right now (kind, id, flag, distance), in the log.
 - `tree`: log the nearest pickup's whole object tree: each object, whether it's active, and its renderers, on or
   off. Settles what's really on screen when a visual fix doesn't take.

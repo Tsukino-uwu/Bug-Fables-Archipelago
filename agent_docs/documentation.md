@@ -738,7 +738,7 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    number), as the old one held a word. **Renamed *Medal prices*** (the user, 2026-09-26: more accurate): it scales
    the medal table, so every medal on sale anywhere, never an item shop's consumables. If item shops are ever scaled,
    they get their own row (*Item prices*), as their prices sit on another scale.
-8. **Skip battle tutorials: read (2026-09-27), nothing left to build but one line.** A battle's scripted moments are
+8. **Skip battle tutorials: read, and Leif's line skipped (2026-09-27).** A battle's scripted moments are
    `BattleControl.EventDialogue` cases, started by `CheckEvent` or by an enemy's own action. The only real tutorial is
    the fight against Maki in the opening (case 0 and 1, enemy `MakiTutorial`, while flag 15 is unset), which the
    opening skip already removes. The spider's first fight ends at once (item 5). What's left: case 3, Leif's one line in
@@ -815,7 +815,7 @@ scaling Off and Detector Off; Reset puts each back to its default. Both pages op
 to its off value: Enemy scaling Off, Item animation Off, Medal prices full); Reset to defaults puts every row back to
 its default (`QualityOfLife.DisableAll` / `ResetAll`, the defaults from each setting's own config definition).
 
-**Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen by the user (2026-09-25); the bridge skips, Shop prices and silent replays with a second player not yet seen; Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat Ticket (the Archipelago guide, build step 16), the warp itself, map travel and Skip confirm seen (2026-09-26); Skip battle tutorials planned.
+**Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen by the user (2026-09-25); the bridge skips, Medal prices and silent replays with a second player not yet seen; Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat Ticket (the Archipelago guide, build step 16), the warp itself, map travel and Skip confirm seen (2026-09-26); Skip cutscenes' Den arrival, trapdoor and spider scene seen (2026-09-27); Skip battle tutorials: Leif's first-battle line skipped, seen (2026-09-27).
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page),
 `WarpButton.cs` (the Warp button), `HoldUps.cs` (item animation's hold-ups).*
@@ -1337,13 +1337,14 @@ deliberate exception to "vanilla stays vanilla" that only the user could make.
   long value already did.
 - **What it turns on, with Archipelago off:** the Settings rows to both pages (step 8), Fast text, the scenes Skip
   cutscenes skips or speeds by, Travel (Warp to Start goes to the game's own start), Medal prices, Difficulty,
-  Detector, Enemy scaling, Uncap FPS (step 24) and skipping the game's 5-second forced collection (step 25).
+  Detector, Enemy scaling, the EXP and berry multipliers (step 19), Uncap FPS (step 24) and skipping the game's
+  5-second forced collection (step 25).
 - **What it never turns on:** anything tied to a seed. The intro skip (its end sends the first check and makes the
   seed's start), items, checks, the shuffles, the Detector's check beeps, boss prizes paid on any difficulty (they are
   checks), Item animation (only items from the server), and the achievement guard.
 - **How:** one `settingsOn` in `Plugin.cs` (Archipelago enabled, or this row) goes to the modules behind the two pages
   in place of the Archipelago switch: `MedalAssist` (which keeps the Archipelago switch for boss prizes),
-  `EnemyScaling`, `InGameSettings`, the Travel buttons, and `QualityOfLife.SettingsOn` (fast text, the scene list, and
+  `EnemyScaling`, `InGameSettings`, `Multipliers`, `FrameRate`, `ClockCleanup`, the Travel buttons, and `QualityOfLife.SettingsOn` (fast text, the scene list, and
   `ShopSwap`'s prices). The seed's start and the entrance randomizer's forced Warp answer only with Archipelago
   enabled, so a normal save never warps to a seed's start.
 
@@ -1396,11 +1397,11 @@ end). Right below Item animation, since both are about another player's items.
   "from" and "'s" in black.
 - **Off:** no colour commands at all, so the whole name stays in the game's red, as it was before. The wording ("You
   found ...", "from ...") is the same either way; only the colours change. Your own finds are always the game's red.
-- The row joins Reset to defaults (back to Archipelago) and Disable all (Off). Only while Archipelago is enabled, or
+- The row joins Reset to defaults (back to its default: Archipelago then, Rarity since step 22) and Disable all (Off). Only while Archipelago is enabled, or
   with *Use on normal saves* (step 18), like the page's other rows.
 - The Quality of life page grows to eight rows (the last at the panel's lowest row spot, above the help line).
 
-**Status:** built (2026-09-26), not yet seen: the row on the page, and a hold-up with it off.
+**Status:** built (2026-09-26); the row seen on the ten-row page (2026-09-26, step 21); not yet seen: a hold-up with it off.
 
 *Code: `QualityOfLife.cs` (`ItemColors`, `ApColors`), `ApMenu.cs` (`ColorsRow`), `ItemSwap.cs` (`PlayerText`, `ClassText`).*
 

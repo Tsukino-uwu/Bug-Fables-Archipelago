@@ -82,7 +82,7 @@ Every source file, what it's for, and where the notes behind it live. Search a f
 | [`test/test_enemies.py`](../apworld/bug_fables/test/test_enemies.py) | Enemy shuffle: off by default, every map enemy listed, sizes kept, each fight once. | [apimplementation § Build step 14](apimplementation.md#build-step-14-enemy-shuffle-in-progress) |
 | [`test/test_start.py`](../apworld/bug_fables/test/test_start.py) | Starting location: off by default, anywhere picks a save point, fixed per seed. | [apimplementation § Build step 15](apimplementation.md#build-step-15-starting-location-experimental) |
 | [`test/test_moves.py`](../apworld/bug_fables/test/test_moves.py) | Shuffle Field Moves and Shuffle Jump: off by default, the items, the cautious rules, the no-jump spots. | [apimplementation § Build step 21](apimplementation.md#build-step-21-shuffle-field-moves)<br>[apimplementation § Build step 22](apimplementation.md#build-step-22-shuffle-jump) |
-| [`test/test_party.py`](../apworld/bug_fables/test/test_party.py) | Starting Party Member: off adds nothing; the start is start inventory, the other two in the pool; the two joining locations; the member rules. | [apimplementation § Build step 18](apimplementation.md#build-step-18-starting-party-member) |
+| [`test/test_party.py`](../apworld/bug_fables/test/test_party.py) | Starting Party Member: All Three the default, off adds nothing; the start is start inventory, the other two in the pool; the two joining locations; the member and ability rules. | [apimplementation § Build step 18](apimplementation.md#build-step-18-starting-party-member)<br>[apimplementation § Build step 20](apimplementation.md#build-step-20-all-three-members-from-the-start-the-default)<br>[apimplementation § Build step 21](apimplementation.md#build-step-21-shuffle-field-moves) |
 | [`test/test_boat_ticket.py`](../apworld/bug_fables/test/test_boat_ticket.py) | The Boat Ticket: once in the pool, progression; Metal Island needs it. | [apimplementation § Build step 16](apimplementation.md#build-step-16-the-boat-ticket) |
 
 ## Dev scripts
@@ -101,6 +101,15 @@ Every source file, what it's for, and where the notes behind it live. Search a f
 | [`event-triggers.py`](../dev-scripts/event-triggers.py) | What starts each story event. | [MEASURED § What starts the gate events](MEASURED.md#what-starts-the-gate-events-2026-09-24-entitydump-scriptdump-with-event-lines-mapdump--spoilers)<br>[apimplementation § Build step 8](apimplementation.md#build-step-8-logic-from-the-games-own-gates-in-progress) |
 | [`gate-table.py`](../dev-scripts/gate-table.py) | Each flag-gated door, tagged with the chapter that sets its flag. | [apimplementation § Build step 8](apimplementation.md#build-step-8-logic-from-the-games-own-gates-in-progress)<br>[MEASURED § Chapters](MEASURED.md#chapters-2026-09-24-code-read-and-entitydump--spoilers-map-names) |
 | [`party-access.py`](../dev-scripts/party-access.py) | Every way the game's code reaches for a party member. | [documentation § 11. Playing with fewer party members](documentation.md#11-playing-with-fewer-party-members-stand-ins-and-followers) |
+
+## Hooks
+
+| File | What it does | Notes |
+|---|---|---|
+| [`commit-msg`](../.githooks/commit-msg) | Refuses a commit touching `mod/`, `apworld/` or `dev-scripts/` without a process guide, unless the message says `docs: no process change`. | [documentation § Keeping this guide honest](documentation.md#keeping-this-guide-honest) |
+| [`pre-commit`](../.githooks/pre-commit) | Refuses a home path or this machine's user or computer name in a tracked file; runs doc-coverage.py. | [documentation § Keeping this guide honest](documentation.md#keeping-this-guide-honest) |
+| [`doc-coverage.py`](../.githooks/doc-coverage.py) | Refuses an option, setting, slot_data key or source file that no guide or this map names. | [documentation § Keeping this guide honest](documentation.md#keeping-this-guide-honest) |
+| [`release-path-patterns.txt`](../.githooks/release-path-patterns.txt) | The personal-path patterns release.yml checks the release notes for. | [apimplementation § Build step 17](apimplementation.md#build-step-17-a-release) |
 
 ## Release
 

@@ -150,7 +150,8 @@ namespace BugFablesAP
             GlowGuard.Enable(Log, Guid, () => randomizerEnabled.Value);
             difficulty = Config.Bind("Archipelago", "Difficulty", "Normal", new ConfigDescription(
                 "Normal leaves it to the game; Hard acts as if the Hard Mode medal were equipped; Hardest as if the save had "
-                + "the HARDEST code, never written into the save. Boss prize medals are paid out on every setting. "
+                + "the HARDEST code, never written into the save. In a seed, boss prize medals are paid out on every setting; on a "
+                + "normal save, as in the game. "
                 + "Switch it on the Gameplay page.", new AcceptableValueList<string>(ApMenu.Difficulties)));
             detector = Config.Bind("Archipelago", "Detector", true,
                 "On acts as if the Detector medal were equipped, to help find items. Off leaves it to the medal. "

@@ -53,11 +53,13 @@ checks are sent when the connection comes back.
 **Quality of life and Gameplay** are two more pages, at the top of the game's own **Settings** (from the pause
 menu, and from the main menu), shown while the Archipelago mod is enabled or *Use on normal saves* is on. Each has
 **Reset to defaults** and **Disable all** on top, each asking Yes / No first.
-The same switch also stops a short stutter the game itself has every 5 seconds (it tidies its memory on a timer).
+Enabling the Archipelago mod (or *Use on normal saves*) also stops a short stutter the game itself has every 5
+seconds (it tidies its memory on a timer).
 
 - **Quality of life**: **Fast text** (dialogue is instant, and holding skip races through it; On), **Travel** (Off,
   Warp, Map or Both, the default: the Warp is a pause-menu button back to where the game began, or to the seed's
-  start; Map is fast travel from the pause menu's map to areas you've visited; both ask Yes / No), **Skip confirm**
+  start; Map is fast travel from the pause menu's map to areas you've visited; both ask Yes / No; the Warp is always there with a random start, the Entrance Randomizer or Shuffle Jump,
+  whatever this says), **Skip confirm**
   (Off, the default, Warp, Map or Both: which travel buttons go at once, without the Yes / No), **Skip cutscenes**
   (On: scenes you don't need to watch are skipped or pass by fast. The new game's intro, tutorial battle included, is
   always skipped with the Archipelago mod enabled: Vi joins and the first check is sent), **Item
@@ -68,10 +70,10 @@ The same switch also stops a short stutter the game itself has every 5 seconds (
   game's item shows the Archipelago icon on the ground, on shelves and when found; All players: every item that isn't
   yours; Off: they look like the game's own item there), **Item backgrounds** (On, the default: a check's item,
   yours included, has a starburst behind it in its Archipelago class colour, so you can tell from afar whether it matters; Off
-  keeps it a surprise) and **Detector** (On, the default, acts as if the Detector medal were equipped. With the Archipelago mod
+  keeps it a surprise), **Detector** (On, the default, acts as if the Detector medal were equipped. With the Archipelago mod
   enabled, the Detector (row or medal) also beeps on entering a room that still has a check of any kind, and stays
   quiet in a room with none left) and **Uncap FPS** (experimental; Off, the default, keeps the game's own 30 or 60 FPS
-  setting; 120, 144 or 240 raise the frame rate, with VSync when the number divides your monitor's refresh rate. Motion is
+  setting; 120, 144 or 240 raise the frame rate, with VSync when the number divides your monitor's refresh rate, otherwise as a frame-rate limit. Motion is
   drawn smoothly between the game's steps, and the game still plays as it does at 60. Switching it on the first time in a
   session takes a few seconds).
 - **Gameplay**: **Difficulty** (Normal, the default, leaves it to the game; Hard plays as if the Hard Mode medal were
