@@ -77,7 +77,7 @@ namespace BugFablesAP
                             default: return "Enemies as the game makes them. Checks stay the same.";
                         }
                     case ScalingRow:
-                        switch (QualityOfLife.EnemyScaling?.Value)
+                        switch (QualityOfLife.EnemyScalingMode?.Value)
                         {
                             case "Off": return "Enemies keep their own stats, as in vanilla.";
                             case "Artifacts": return "Enemies grow with artifacts found; levelling ahead makes it easier.";
@@ -179,9 +179,9 @@ namespace BugFablesAP
                 {
                     Cycle(Difficulty, Difficulties, by);
                 }
-                else if (r == ScalingRow && QualityOfLife.EnemyScaling != null)
+                else if (r == ScalingRow && QualityOfLife.EnemyScalingMode != null)
                 {
-                    Cycle(QualityOfLife.EnemyScaling, EnemyScaling.Modes, by);
+                    Cycle(QualityOfLife.EnemyScalingMode, EnemyScaling.Modes, by);
                 }
                 else if (r == MedalPricesRow && QualityOfLife.MedalPrices != null)
                 {
@@ -226,7 +226,7 @@ namespace BugFablesAP
         // The Gameplay page's two buttons: every row to its plain value, or back to its default.
         private static void GameplayAll(bool reset)
         {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { Difficulty, QualityOfLife.EnemyScaling, QualityOfLife.MedalPrices, Multipliers.Exp, Multipliers.Berries })
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { Difficulty, QualityOfLife.EnemyScalingMode, QualityOfLife.MedalPrices, Multipliers.Exp, Multipliers.Berries })
             {
                 if (setting != null && reset)
                 {
@@ -241,9 +241,9 @@ namespace BugFablesAP
             {
                 Difficulty.Value = "Normal";
             }
-            if (QualityOfLife.EnemyScaling != null)
+            if (QualityOfLife.EnemyScalingMode != null)
             {
-                QualityOfLife.EnemyScaling.Value = "Off";
+                QualityOfLife.EnemyScalingMode.Value = "Off";
             }
             if (QualityOfLife.MedalPrices != null)
             {

@@ -42,7 +42,7 @@ namespace BugFablesAP
         // Tenths of the normal price: 10 normal, 5 half, 0 free.
         internal const int FullPrice = 10;
         internal static ConfigEntry<int> MedalPrices;
-        internal static ConfigEntry<string> EnemyScaling;
+        internal static ConfigEntry<string> EnemyScalingMode;
         internal static readonly string[] UncapValues = { "Off", "120", "144", "240" };
         internal static ConfigEntry<string> UncapFps;
 
@@ -172,12 +172,12 @@ namespace BugFablesAP
             MedalPrices = config.Bind("Gameplay", "MedalPrices", FullPrice, new ConfigDescription(
                 "Medal shop prices, in berries and crystal berries, in tenths of the normal price: 10 normal, 5 half, 0 free. "
                 + "Any price above free is at least 1. Switch it on the Gameplay page.", new AcceptableValueRange<int>(0, FullPrice)));
-            EnemyScaling = config.Bind("QualityOfLife", "EnemyScaling", "PartyLevel", new ConfigDescription(
+            EnemyScalingMode = config.Bind("QualityOfLife", "EnemyScaling", "PartyLevel", new ConfigDescription(
                 "How tough enemies are, wherever you meet them: PartyLevel scales every enemy to the party's level, so "
                 + "every area plays fair in any order; Artifacts scales them to the artifacts found, as vanilla's "
                 + "difficulty follows the story (levelling ahead makes it easier); Off keeps each enemy's own stats. "
                 + "Difficulty (Hard, Hardest) still applies on top. Never changes a check.",
-                new AcceptableValueList<string>(BugFablesAP.EnemyScaling.Modes)));
+                new AcceptableValueList<string>(EnemyScaling.Modes)));
             Travel = config.Bind("QualityOfLife", "Travel", "Both", new ConfigDescription(
                 "Travel buttons in the pause menu, each behind a Yes / No box: Warp (back to where the game started, or to the seed's start), Map (the "
                 + "map, where confirm on an area you've been to travels to its save point), Both, or Off. Not shown in battle.",

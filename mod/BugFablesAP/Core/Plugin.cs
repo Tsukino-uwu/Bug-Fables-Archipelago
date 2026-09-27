@@ -176,7 +176,7 @@ namespace BugFablesAP
             QualityOfLife.SeedKnown = () => connection != null && connection.SeedKnown;
             QualityOfLife.EntrancesShuffled = () => randomizerEnabled.Value && connection?.DoorTargets != null && connection.DoorTargets.Count > 0;
             Multipliers.Enable(Log, Guid, Config, settingsOn);
-            EnemyScaling.Enable(Log, Guid, settingsOn, () => QualityOfLife.EnemyScaling?.Value);
+            EnemyScaling.Enable(Log, Guid, settingsOn, () => QualityOfLife.EnemyScalingMode?.Value);
             FrameRate.Enable(Log, Guid, settingsOn);
             ClockCleanup.Enable(Log, Guid, settingsOn);
             InGameSettings.Enable(Log, Guid, settingsOn);

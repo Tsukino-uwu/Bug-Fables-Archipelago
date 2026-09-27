@@ -435,7 +435,7 @@ namespace BugFablesAP
             {
                 DrawButtons();
                 Choice(DifficultyRow, "Difficulty", (Difficulty?.Value ?? "Normal").ToUpperInvariant());
-                Choice(ScalingRow, "Enemy scaling", ScalingLabel(QualityOfLife.EnemyScaling?.Value ?? "PartyLevel"));
+                Choice(ScalingRow, "Enemy scaling", ScalingLabel(QualityOfLife.EnemyScalingMode?.Value ?? "PartyLevel"));
                 Label(MedalPricesRow, "Medal prices");
                 Label(ExpRow, "EXP multiplier");
                 Label(BerryRow, "Berry multiplier");
