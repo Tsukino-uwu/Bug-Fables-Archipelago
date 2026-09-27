@@ -178,6 +178,16 @@ be wrong.
    enemy in `BattleControl.DoAction` (its own animation numbers, shape, positions, summons), so another enemy's attack
    would miss animations or wait forever on one and soft-lock the battle. At most, later, swaps between enemies built
    alike, tested one by one.
+28. **Artifacts shuffled, an idea for later** (the user, 2026-09-27): the goal's artifacts found anywhere, not only at
+   the chapter ends. Each chapter end (its artifact flag) becomes an ordinary location, and an Archipelago-only
+   *Artifact* item goes into the pool; the goal counts Artifacts received. The item never sets the game's artifact
+   flags: they drive the story (flag 41 is the logic's "Snakemouth Den Cleared"). Open: what the pause menu's artifact
+   icons show (chapters finished or Artifacts received); exactly 7 in the pool, or extras (a Triforce-hunt style
+   "N in the pool, M needed"). A yaml option, so its own build step.
+29. **A bosses goal, an idea for later** (the user, 2026-09-27): a *Goal* option (Artifacts / Bosses) and *Bosses
+   Required* (all, or a number): each boss's beaten flag an event the goal counts, as artifacts are today. Open: story
+   bosses only, or the bounties and other optional bosses too (those need their own logic first, Next 13). Only a real
+   choice once the world reaches past chapter 1 (today: one artifact, one story boss). Its own build step.
 
 **Known issues:**
 
