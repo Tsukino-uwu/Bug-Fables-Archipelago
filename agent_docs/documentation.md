@@ -1711,7 +1711,8 @@ an area met early or late; this is for a fight that's hard at the right level.
   the row off ends it at the next hit.
 - Each page's two buttons: Reset and Disable all both set Off.
 
-**Status:** built (2026-09-28), the build succeeds, not yet seen in game.
+**Status:** built (2026-09-28), the build succeeds, not yet seen in a fight. The menus show the real attack, by design:
+the stat isn't touched (the user noticed the medal menu's attack unchanged, 2026-09-28).
 
 *Code: `AttackBoost.cs`; the row in `ApMenu.cs` and `ApMenu.Rows.cs`.*
 
@@ -1751,8 +1752,8 @@ done by drawing into a texture that the HUD camera's quad shows on screen.
   nothing. Every decision is logged (`[gfx]`).
 
 **Status:** Render scale 200% seen by the user (2026-09-28): the picture normal and sharp, in a 1920x1080 window.
-(a closer view in the user's screenshot was the spot they stood in, not the scale). Still to see: 150%, Anti-aliasing
-on screen.
+(a closer view in the user's screenshot was the spot they stood in, not the scale). 150% seen too, normal (the
+user: it looked the same as 200%). Still to see: Anti-aliasing on screen.
 
 *Code: `RenderQuality.cs`; the page in `ApMenu.cs`, `ApMenu.Rows.cs` and `InGameSettings.cs`; the console's `cams` in
 `DevConsole.cs`.*
