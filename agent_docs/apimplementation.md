@@ -257,20 +257,24 @@ be wrong.
      as in vanilla, at normal speed.
    - **Always, with Archipelago on, whatever the two rows say:** what the randomizer needs gone, or scripted parts
      that only slow the pace: the opening (the intro slides, the new-game combat tutorial) and the scripted first
-     spider fight.
+     spider fight. **Also always (the user, 2026-09-27):** every tutorial and scripted scene, and the "can't go this
+     way yet" scenes that turn the player back. Those are gates, so each goes through the open world (build step 9):
+     opened only with its rule in the logic and through `slot_data`, never just cut.
 
    How a scene is cut (skipped or fast-forwarded) stays per scene: a Skip scene that can't be cut out safely is sped
    up instead. **A scene the player should see happen is sped up, never cut out** (the user, 2026-09-27: the bridge
    falling, the fall through the trapdoor, the spider scene; a cut looks wrong, as the trapdoor's skip showed: just a
    teleport). A scene that only talks is cut out: without it the player just walks past, as normal (the user: arriving
-   at Snakemouth Den, the Tattle tutorial). **Sorted (the user, 2026-09-27):**
+   at Snakemouth Den). **In short (the user):** something happens or a check = Speed up; only dialogue = Skip;
+   tutorials, scripted parts and turn-backs = always. A guide, not a shortcut: every scene is still read and sorted by
+   hand. **Sorted (the user, 2026-09-27):**
 
    | Scene | Today | Decided |
    |---|---|---|
    | The opening: slides (Event8), Maki's talk, Vi joining, the tutorial battle (Event16) | always | always |
    | The first spider fight, ended at its start (`BeforeCheckEvent`) | *Skip cutscenes* | always |
    | The bridge message (Event0) | skipped | Skip |
-   | The Tattle tutorial (Event2) | skipped | Skip (no check) |
+   | The Tattle tutorial (Event2) | skipped | always (a tutorial) |
    | The barkeeper's first talk (Event83) | skipped | Skip |
    | Arriving outside Snakemouth Den (Event11) | skipped | Skip (the skip records discovery 0 itself) |
    | The rope (Event1) | fast-forwarded | Speed up (the bridge falls) |
