@@ -176,10 +176,15 @@ class TestOldBookChain(BugFablesTestBase):
 class TestClassifications(BugFablesTestBase):
     # Progression exactly when a rule needs it: too few locks items behind themselves, too many skews fill.
     def test_items_rules_use_are_progression_and_only_those(self) -> None:
+        from ..abilities import ABILITIES
         from ..data_tables import ITEMS, LOCATIONS, REGIONS, STORY_EVENTS
         used: set[str] = set()
+
         def named(data: dict) -> list[str]:
-            return data.get("requires", []) + data.get("members", []) + data.get("abilities", []) + data.get("moves", [])
+            # Rules name abilities; each is its item and its holder.
+            abilities = data.get("abilities", []) + data.get("moves", [])
+            return (data.get("requires", []) + data.get("members", []) + [ABILITIES[a].item for a in abilities]
+                    + [ABILITIES[a].holder for a in abilities if ABILITIES[a].holder])
 
         for region in REGIONS:
             for exit_data in region["exits"]:

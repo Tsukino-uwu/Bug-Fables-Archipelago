@@ -5,8 +5,9 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 from BaseClasses import Item, LocationProgressType
-from rule_builder.rules import Has, HasAll
+from rule_builder.rules import Has, HasAllCounts
 
+from .abilities import ABILITIES, item_count
 from .data_tables import ARTIFACTS
 from .options import ShopContents
 
@@ -15,36 +16,35 @@ if TYPE_CHECKING:
 
 SHOP_CATEGORIES = ("shop", "item_shop")
 
-# Rules name the field move, not who has it: an attack needs its member (when members are items; with the story's
-# party, only Leif, who joins late), and its own item when moves are shuffled. Jump is the whole party's.
-ABILITY_HOLDERS = {"Horn Slash": "Kabbu", "Beemerang Toss": "Vi", "Freeze": "Leif", "Jump": None}
 # The one member the story's party lacks at first.
 LATE_MEMBER = "Leif"
 
 
-def requires(world: BugFablesWorld, data: dict[str, Any], location: bool = False) -> list[str]:
-    """What a spot or exit needs: its own requires, members when members are items, and its moves' members and items.
-    With Jump shuffled, a location or story event needs Jump unless it was seen reachable without (no_jump)."""
-    needed = list(data.get("requires", []))
+def requires(world: BugFablesWorld, data: dict[str, Any], location: bool = False) -> dict[str, int]:
+    """What a spot or exit needs, as item counts: its own requires, members when members are items, and each ability's
+    member (when members are items; with the story's party, only Leif, who joins late) and its item's copies. With Jump
+    shuffled, a location or story event needs Jump unless it was seen reachable without (no_jump)."""
+    needed: dict[str, int] = {}
     members_are_items = world.starting_member >= 0
 
-    def add(name: str) -> None:
-        if name not in needed:
-            needed.append(name)
+    def add(name: str, count: int = 1) -> None:
+        needed[name] = max(needed.get(name, 0), count)
 
+    for name in data.get("requires", []):
+        add(name)
     if members_are_items:
         for member in data.get("members", []):
             add(member)
     for ability in data.get("abilities", []):
-        holder = ABILITY_HOLDERS[ability]
+        holder = ABILITIES[ability].holder
         if holder is not None and (members_are_items or holder == LATE_MEMBER):
             add(holder)
-        if ability == "Jump" and world.jump_shuffled() or ability != "Jump" and world.moves_shuffled():
-            add(ability)
-    # A blanket rule for unmeasured ground: the move items alone, not who does them.
-    if world.moves_shuffled():
-        for move in data.get("moves", []):
-            add(move)
+        if item_count(world, ability):
+            add(ABILITIES[ability].item, item_count(world, ability))
+    # A blanket rule for unmeasured ground: the abilities' items alone, not who does them.
+    for ability in data.get("moves", []):
+        if item_count(world, ability):
+            add(ABILITIES[ability].item, item_count(world, ability))
     if location and world.jump_shuffled() and not data.get("no_jump"):
         add("Jump")
     return needed
@@ -66,7 +66,7 @@ def set_all_rules(world: BugFablesWorld) -> None:
     for data in (*world.included_locations, *world.included_events):
         needed = requires(world, data, location=True)
         if needed:
-            world.set_rule(world.get_location(data["name"]), HasAll(*needed))
+            world.set_rule(world.get_location(data["name"]), HasAllCounts(needed))
     # Artifacts are events with no data of their own: with Jump shuffled they wait for it like every other spot.
     if world.jump_shuffled():
         for artifact in ARTIFACTS:

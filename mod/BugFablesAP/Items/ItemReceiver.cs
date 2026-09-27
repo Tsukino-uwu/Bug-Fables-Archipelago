@@ -197,13 +197,14 @@ namespace BugFablesAP
             }
             if (kind == ItemIds.MoveKind)
             {
-                // A key item of the mod's own: the bag shows it, and FieldMoves reads it.
-                int key = CustomItems.MoveKeyItem(gameId);
+                // A key item of the mod's own, the next level of a progressive item: the bag shows it, and FieldMoves and
+                // Abilities read it.
+                int key = Abilities.KeyFor(gameId, mm.items[1]);
                 if (!mm.items[1].Contains(key))
                 {
                     mm.items[1].Add(key);
                 }
-                return $"{FieldMoves.Name(gameId)} added to key items ({key}): it can be used now";
+                return $"{Abilities.KeyName(key)} added to key items ({key}): it can be used now";
             }
             if (kind != 0)
             {

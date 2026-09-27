@@ -543,6 +543,7 @@ namespace BugFablesAP
                     itemKinds = SlotData.ByLocation(data, "item_kinds", v => v.Value<int>());
                     FieldMoves.MovesShuffled = data != null && data.TryGetValue("shuffle_moves", out object smv) && smv is bool smb && smb;
                     FieldMoves.JumpShuffled = data != null && data.TryGetValue("shuffle_jump", out object sj) && sj is bool sjb && sjb;
+                    Abilities.AbilityItems = data != null && data.TryGetValue("ability_items", out object ai) && ai is bool aib && aib;
                     artifactsRequired = data != null && data.TryGetValue("artifacts_required", out object ar) && ar != null
                         ? Convert.ToInt32(ar) : 0;
                     seedKnown = true;

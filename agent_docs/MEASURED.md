@@ -722,7 +722,9 @@ The output stays in the BepInEx folder.
     ability flag is the scene's own marker.
   - **The same flags give battle skills** (`MainManager.RefreshSkills`, `MainManager.cs:8395-8577`): 21 Vi's skill 18;
     19 Vi's 5 and Kabbu's 5; 699 Kabbu's 10; 18 Kabbu's 6; 20 Leif's 7; 171 Leif's 25 (plus each field skill's menu
-    entry). Used by the build step for field abilities as items.
+    entry). **In the game's IL** (an ILSpy IL dump of `Assembly-CSharp.dll`, 2026-09-27) the reads as `ldfld flags;
+    ldc.i4 n; ldelem.u1`: `PlayerControl` 8 (`DashBehavior` 39; `DoActionHold` 18 x2, 19, 20; `DoActionTap`'s coroutine
+    39, 171, 699), `NPCControl.Update` 2 (21), `MainManager.RefreshSkills` 15 (39 twice). Used by `Abilities.cs`.
 - **59 doors to other maps have required or hiding flags, on 22 flags.** Setters: 11 Events 0/1/109,
   18 `Event109`, 20 `Event95`, 41 `Event26`, 67 `Event45`, 85 `Event52`, 86 `Event58`, 107 `Event60`,
   160 `Event84`, 169 `Event87`, 211 `Event98`, 226 and 239 dialogue only, 280 `Event112`, 299 `Event99`,

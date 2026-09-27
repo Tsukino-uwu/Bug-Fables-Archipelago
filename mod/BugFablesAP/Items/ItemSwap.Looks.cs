@@ -174,11 +174,11 @@ namespace BugFablesAP
                 }
                 if (kind == ItemIds.MoveKind)
                 {
-                    // An attack shows its member's icon and colour; Jump is the whole party's, so the Archipelago icon.
-                    name = FieldMoves.Name(gameId);
-                    bool attack = gameId >= 0 && gameId <= 2;
-                    sprite = attack ? MemberSprite(gameId) : ApIcon.Get();
-                    color = attack ? MainManager.instance.charcolor[gameId] : (Color?)null;
+                    // An ability shows its member's icon and colour; Jump is the whole party's, so the Archipelago icon.
+                    name = Abilities.ItemName(gameId);
+                    int member = Abilities.Member(gameId);
+                    sprite = member >= 0 ? MemberSprite(member) : ApIcon.Get();
+                    color = member >= 0 ? MainManager.instance.charcolor[member] : (Color?)null;
                     return;
                 }
                 bool medal = kind == ItemIds.MedalKind;
@@ -194,7 +194,9 @@ namespace BugFablesAP
         }
 
         internal static string MoveDescription(int id) =>
-            id == FieldMoves.Jump ? "The whole party can jump." : PartyMembers.Name(id) + " can use " + FieldMoves.Name(id) + ".";
+            id >= 0 && id <= FieldMoves.Jump && !Abilities.AbilityItems
+                ? (id == FieldMoves.Jump ? "The whole party can jump." : PartyMembers.Name(id) + " can use " + FieldMoves.Name(id) + ".")
+                : Abilities.Description(id);
 
         private static readonly Sprite[] memberSprites = new Sprite[3];
 

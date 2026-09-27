@@ -35,6 +35,7 @@ anyone curious about the process, or thinking of doing the same for another game
 23. [The Archipelago icon, drawn in the game's style](#23-the-archipelago-icon-drawn-in-the-games-style)
 24. [Frame rates above 60: smoother, and the same game](#24-frame-rates-above-60-smoother-and-the-same-game)
 25. [Hitches: the mod's garbage and the game's 5-second collection](#25-hitches-the-mods-garbage-and-the-games-5-second-collection)
+26. [Field abilities as items: the game asks the bag](#26-field-abilities-as-items-the-game-asks-the-bag)
 
 ## Where it stands
 
@@ -1644,3 +1645,25 @@ whether a garbage collection ran. Two clocks showed up:
 that it's gone is still to come.
 
 *Code: `ClockCleanup.cs`; `LocationChecks.cs` and `ShopSwap.cs` (`Copies`); the console's `frames` (`FrameRate.cs`).*
+
+## 26. Field abilities as items: the game asks the bag
+
+Every ability the story teaches became an item (the Archipelago side, build step 23). The game remembers a learned
+ability as a flag, and that flag does three jobs: it lets the party *use* the ability, it gives a battle skill, and it
+is story state (a scene checks it; a rock or a miniboss is gone once it's set). Only the first two may follow the item.
+
+- **Read the game's reads in its IL.** The decompiled C# shows where each flag is read, but a patch matches IL: an
+  ILSpy IL dump counted the exact pattern (`ldfld flags; ldc.i4 n; ldelem.u1`): 8 in `PlayerControl`, 2 in
+  `NPCControl`'s Beemerang (flag 21), 15 in `MainManager.RefreshSkills` (the C# suggested 14). Every other read is
+  story and stays.
+- **Swap only the read.** That one instruction becomes a call taking the same two values and returning the same bool:
+  the game's flag, or, in a seed with ability items, whether the key item is in the bag. Nothing is written to the save
+  but the key item, which the receiver gives like any other.
+- **Log what the patch decided:** the counts found against the measured 8, 2 and 15, an error when they differ.
+- **Seven key items** (205-211) with the game's own names and field descriptions from `skilldata`; the battle skill
+  rides on the same key item (the user: fourteen would be bloat).
+
+**Status:** built (2026-09-27), not yet seen in game.
+
+*Code: `Abilities.cs`; the receiver in `ItemReceiver.cs`, the key items in `CustomItems.cs`, the looks in
+`ItemSwap.Looks.cs`, `slot_data` `ability_items` in `ApConnection.cs`, the Warp in `QualityOfLife.cs`.*

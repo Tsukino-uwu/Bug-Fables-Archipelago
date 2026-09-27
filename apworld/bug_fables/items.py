@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
 
+from .abilities import item_copies
 from .data_tables import ITEM_KIND, ITEM_NAME_TO_ID, ITEMS, MONEY_KIND, vanilla_item
 
 if TYPE_CHECKING:
@@ -47,10 +48,10 @@ def create_all_items(world: BugFablesWorld) -> None:
                 world.push_precollected(world.create_item(name))
             else:
                 pool.append(world.create_item(name))
-    # Field moves are items only with their option: the three attacks, and Jump on its own.
+    # Field abilities: enough copies of each item for its highest level; a base level the party starts with isn't one.
     for item in ITEMS:
-        if item.get("move") and (world.jump_shuffled() if item["name"] == "Jump" else world.moves_shuffled()):
-            pool.append(world.create_item(item["name"]))
+        if item.get("move"):
+            pool += [world.create_item(item["name"]) for _ in range(item_copies(world, item["name"]))]
     # The mod's own items (custom gates) enter once in every seed, in a filler slot: when every location already
     # has its vanilla item, one filler item (an ordinary item or berries, picked by the seed) makes room.
     always = [world.create_item(item["name"]) for item in ITEMS if item.get("always")]

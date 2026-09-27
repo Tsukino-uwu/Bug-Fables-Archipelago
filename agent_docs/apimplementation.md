@@ -34,6 +34,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 20. [Build step 20: All three members from the start (the default)](#build-step-20-all-three-members-from-the-start-the-default)
 21. [Build step 21: Shuffle Field Moves](#build-step-21-shuffle-field-moves)
 22. [Build step 22: Shuffle Jump](#build-step-22-shuffle-jump)
+23. [Build step 23: every learned field ability an item](#build-step-23-every-learned-field-ability-an-item)
 
 **How it works**
 
@@ -62,7 +63,7 @@ be wrong.
    placeholders, journal entries, enemy drops): see build step 10.
 2. **Entrance randomizer (experimental):** every door, coupled, built; next, sorting the transfers that aren't doors
    into chosen and forced, then the room-by-room logic that removes the label. See build step 12.
-3. **Field abilities shuffled as items** (by the game's names: Beemerang Halt, Bee Fly, Dash, Horn Dash, Beetle Dig, Icicle, Shield; `MEASURED.md`, every field ability).
+3. **Field abilities shuffled as items** (every learned ability built, build step 23) (by the game's names: Beemerang Halt, Bee Fly, Dash, Horn Dash, Beetle Dig, Icicle, Shield; `MEASURED.md`, every field ability).
    Party members stay where the story puts them.
    The three attacks and Jump as items: built, see build steps 21 and 22. Party members as items (*Starting Party Member*): built, see build step 18.
 4. **Open world, one gate at a time** (always on, never an option; the user, 2026-09-26): see build step 9.
@@ -332,7 +333,8 @@ be wrong.
   room-level regions would add the cave.
 - **Crystal berry #2 (location 20)** sits in the Underground region, which needs Leif, though the room's
   upper-left entrance needs nothing. More cautious than the game, so safe; room-level regions would split it.
-- **Landmark names** for locations 2, 22, 23, 24, 25 and 30 are still to come from the user.
+- **Landmark names** for locations 2, 22, 23, 24, 25 and 30 are still to come from the user, and the seven ability
+  scenes' names (68-74, build step 23) are provisional.
 - **Uncap FPS (mod guide, step 24) still speeds some things up.** Each to compare at 60 and above on screen, then
   step at the game's own rate, as the other per-frame sites are:
   - **Being hit plays too fast, for enemies and the party** (a tester, 2026-09-27, FPS unlocked). Cause not read yet.
@@ -1955,6 +1957,49 @@ the attacks"), behind its own option, `shuffle_jump` (off).
 
 **Status:** works, seen by the user (2026-09-27): the jump locked until its item (the Ladybug house), then free for
 the whole party; the Warp stayed in the pause menu with Travel set to Off.
+
+## Build step 23: every learned field ability an item
+
+The user (2026-09-27): every ability the story teaches is an item, **always** (not an option: "randomizing things the
+player would have found"), and the scene that teaches it is its location, as the party members' joining spots are, so
+no temporary double grant is ever left to remove. Three are **progressive, always**, in the game's own order (a second
+level without the first "wouldn't work"): Beemerang Toss then Halt, Dash then Horn Dash, Freeze then Icicle. All are
+*progression*: each unlocks checks.
+
+1. **Read first** (`MEASURED.md`, the unlock scenes and every field ability): seven scenes in chapters 2-6, each
+   setting one flag that is also a story gate (the Dig flag opens the hideout's next scenes, the Horn Dash flag removes
+   a rock); the same flags give battle skills (`MainManager.RefreshSkills`).
+2. **The ability table** (`abilities.py`): each ability by the game's name, its member, its item, its level (copies of
+   the item it takes) and the option that makes its base level an item. With Shuffle Field Moves off the party starts
+   with the Toss and the Freeze, so their progressive items take one copy, the upgrade. Rules name abilities, never
+   items; `rules.requires` turns them into item counts (`HasAllCounts`), and the pool puts in enough copies for the
+   highest level. Existing ids kept: the Beemerang and Freeze items were renamed, not renumbered.
+3. **The locations:** the seven scenes, each checked by its own flag (`source.flag`), in a region *Later Chapters*
+   past chapter 2's start that needs everything the story used before (the permit, the Boat Ticket, the first boss,
+   the party and its attacks). Until chapters 2-7 get room-level logic, each needs every ability taught before it
+   (story order): more cautious than the game. They show no item of their own (`silent_locations`). Their names are
+   provisional (Known issues). 7 locations and 7 items: the pool stays balanced in every option set.
+4. **Combat stays basic** (the user): no fight needs a battle skill or a medal in the logic, only each member's plain
+   attack. It keeps enemies and bosses simple, and leaves room to play out of logic for fun (Kabbu with a medal that
+   hits fliers might beat the spider the logic gives to Vi).
+5. **The mod** (`Abilities.cs`): each learned ability is a key item of the mod's own (205-211, after the moves'),
+   named and described from the game's own Skills text (`skilldata`) in the player's language. The receiver gives a
+   progressive item's next level. Where the game reads an ability flag to *use* it (8 reads in `PlayerControl`, the
+   thrown Beemerang's hold in `NPCControl`, 15 in `RefreshSkills`), the read (`ldfld flags; ldc.i4 n; ldelem.u1`)
+   becomes a call answering from the bag; the story's reads and the flags themselves stay the game's, so every scene
+   still runs and marks its own check. The counts come from the game's IL (an ILSpy IL dump), not its decompiled C#,
+   and the mod logs how many it patched against them. A battle skill comes with its ability's key item (the user:
+   seven key items, not fourteen). The Warp is always on with it (`QualityOfLife.WarpOn`): a spot such as the
+   hideout's cell is left by an ability that may not have come yet. Only with `slot_data` `ability_items`, so older
+   seeds play as before.
+6. **Tests** (`test_abilities.py`; `test_moves.py` and `test_party.py` updated): every learned ability in the pool;
+   **exactly one location per ability**, by its flag (the user's guard against a second check for the same one);
+   story order; the Horn Dash as the second copy. 395 tests pass; every option set of the scratch snapshot generates,
+   is beatable and gains exactly the seven locations; a room with APQuest generates.
+
+**Status:** built (2026-09-27): the logic and pool tested, the mod built, its patch counts taken from the game's IL and
+confirmed in the running game (its log: 8 of 8, 2 of 2, 15 of 15). Not yet seen in game: a received ability working, its battle skill, the key items' text, a scene sending its check.
+Decided and still to build: without the Horn Slash the Dash only moves (Next 23), for Shuffle Field Moves.
 
 # How it works
 

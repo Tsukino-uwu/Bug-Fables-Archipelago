@@ -1048,4 +1048,12 @@ Newest last. What was tried, what happened, what the user said.
   Dash* its upgrade (flag 39). Earlier notes called 699 "horn dash" and 39 "heavy dash"; the game's text (`textsearch`)
   confirms the user's names. Fixed in MEASURED.md and Next 3, 23 and 33; the 2026-09-27 planning entry above keeps its
   wording as written then.
+- **Field abilities as items (build step 23), decided with the user one question at a time:** every learned ability
+  an item, always; three progressive pairs, always (Toss/Halt, Dash/Horn Dash, Freeze/Icicle), all progression; each
+  teaching scene a location now, so no temporary double check is left to remove (a test enforces one per ability);
+  story-order logic for chapters 2-7 until they get rooms; battle skills with their ability's key item, seven key items
+  not fourteen; the game's own names and descriptions; combat logic stays basic (room to play out of logic). The Dash
+  without the Horn Slash only moves, decided, not built. A reader agent read the seven scenes: Dash is taught in
+  chapter 3 at Lost Sands (`Event221`), not chapter 1. The patch points were counted in the game's IL, not its C#
+  (RefreshSkills has 15 reads, the C# suggested 14); the running game logged 8/8, 2/2, 15/15. Nothing seen on screen yet.
 

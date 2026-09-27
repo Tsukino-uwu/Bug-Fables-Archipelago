@@ -1,6 +1,6 @@
 from . import BugFablesTestBase
 
-MOVES = ["Beemerang Toss", "Horn Slash", "Freeze"]
+MOVES = ["Progressive Beemerang", "Horn Slash", "Progressive Freeze"]
 PAST_THE_GATE = "Outskirts: Near Snakemouth Den, Reward"
 
 
@@ -10,9 +10,13 @@ def _pool(test: BugFablesTestBase) -> list[str]:
 
 class TestMovesOffByDefault(BugFablesTestBase):
     def test_no_move_items(self) -> None:
+        # The party starts with its attacks: no Horn Slash or Jump item, and one copy of each progressive attack, its
+        # upgrade (the Halt, the Icicle).
         pool = _pool(self)
-        for move in MOVES + ["Jump"]:
+        for move in ("Horn Slash", "Jump"):
             self.assertNotIn(move, pool)
+        self.assertEqual(pool.count("Progressive Beemerang"), 1)
+        self.assertEqual(pool.count("Progressive Freeze"), 1)
         data = self.world.fill_slot_data()
         self.assertFalse(data["shuffle_moves"])
         self.assertFalse(data["shuffle_jump"])
@@ -26,9 +30,9 @@ class TestFieldMoves(BugFablesTestBase):
     options = {"shuffle_field_moves": True}
 
     def test_three_moves_in_the_pool(self) -> None:
+        # The attack, then for the two progressive ones its upgrade.
         pool = _pool(self)
-        for move in MOVES:
-            self.assertEqual(pool.count(move), 1)
+        self.assertEqual([pool.count(move) for move in MOVES], [2, 1, 2])
         self.assertNotIn("Jump", pool)
         self.assertTrue(self.world.fill_slot_data()["shuffle_moves"])
 
@@ -48,7 +52,7 @@ class TestFieldMoves(BugFablesTestBase):
     def test_an_ice_spot_needs_the_ice(self) -> None:
         spot = "Bugaria City: Residential District, Fountain Rooftop"
         self.assertFalse(self.can_reach_location(spot))
-        self.collect_by_name("Freeze")
+        self.collect(self.get_item_by_name("Progressive Freeze"))
         self.assertTrue(self.can_reach_location(spot))
 
 
@@ -58,7 +62,7 @@ class TestFieldMovesStoryParty(BugFablesTestBase):
 
     def test_ice_spot_needs_leif_and_the_ice(self) -> None:
         spot = "Bugaria City: Residential District, Fountain Rooftop"
-        self.collect_by_name("Freeze")
+        self.collect(self.get_item_by_name("Progressive Freeze"))
         self.assertFalse(self.can_reach_location(spot))
         self.collect_by_name("Explorer Permit")
         self.collect_by_name(MOVES)
@@ -99,5 +103,4 @@ class TestMovesAndJumpTogether(BugFablesTestBase):
 
     def test_all_four_in_the_pool(self) -> None:
         pool = _pool(self)
-        for move in MOVES + ["Jump"]:
-            self.assertEqual(pool.count(move), 1)
+        self.assertEqual([pool.count(move) for move in MOVES + ["Jump"]], [2, 1, 2, 1])

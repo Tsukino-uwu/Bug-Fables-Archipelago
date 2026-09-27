@@ -69,6 +69,8 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         # Field moves as items: the three attacks, and Jump (the mod then keeps the Warp on).
         "shuffle_moves": world.moves_shuffled(),
         "shuffle_jump": world.jump_shuffled(),
+        # Every learned ability is an item: the mod answers the game's ability checks from the items received.
+        "ability_items": True,
         # An item's kind, as data_tables names them (ITEM_KIND and the rest).
         "item_kinds": {str(ITEM_NAME_TO_ID[item["name"]]): item["kind"] for item in ITEMS},
     }

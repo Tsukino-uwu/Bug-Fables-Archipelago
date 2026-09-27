@@ -1,5 +1,6 @@
 from . import BugFablesTestBase
-from ..rules import ABILITY_HOLDERS, requires
+from ..abilities import ABILITIES
+from ..rules import requires
 
 MEMBERS = ["Vi", "Kabbu", "Leif"]
 JOINS = ["Outskirts: Outside the City, Opening", "Snakemouth Den: Fall Room, After the Spider"]
@@ -26,7 +27,10 @@ class TestPartyOff(BugFablesTestBase):
         for name in JOINS:
             self.assertNotIn(name, locations)
         self.assertIn("Leif Joins", locations)
-        self.assertEqual(self.world.fill_slot_data()["silent_locations"], [])
+        # Only the ability unlock scenes (build step 23): no joining moment.
+        silent = self.world.fill_slot_data()["silent_locations"]
+        for name in JOINS:
+            self.assertNotIn(self.world.location_name_to_id.get(name), silent)
 
     def test_horn_spots_need_no_member(self) -> None:
         self.assertTrue(self.can_reach_location("Outskirts: East Road, Stone"))
@@ -58,8 +62,9 @@ class _StartWith:
 
     def test_joining_moments_are_silent(self) -> None:
         # Neither shows an item of its own, so the client shows the player's own item arriving there.
-        self.assertEqual(self.world.fill_slot_data()["silent_locations"],
-                         sorted(self.world.location_name_to_id[name] for name in JOINS))
+        silent = self.world.fill_slot_data()["silent_locations"]
+        for name in JOINS:
+            self.assertIn(self.world.location_name_to_id[name], silent)
 
     def test_past_the_gate_needs_all_three(self) -> None:
         self.collect_by_name("Explorer Permit")
@@ -115,19 +120,19 @@ class TestAbilities(BugFablesTestBase):
         from ..data_tables import LOCATIONS, REGIONS
         named = {ability for loc in LOCATIONS for ability in loc.get("abilities", [])}
         named |= {ability for region in REGIONS for exit_data in region["exits"] for ability in exit_data.get("abilities", [])}
-        self.assertLessEqual(named, set(ABILITY_HOLDERS))
+        self.assertLessEqual(named, set(ABILITIES))
 
     def test_each_attack_needs_its_member(self) -> None:
         for ability, member in (("Horn Slash", "Kabbu"), ("Beemerang Toss", "Vi"), ("Freeze", "Leif")):
             with self.subTest(ability=ability):
-                self.assertEqual(requires(self.world, {"abilities": [ability]}), [member])
+                self.assertEqual(requires(self.world, {"abilities": [ability]}), {member: 1})
 
     def test_jump_needs_no_member(self) -> None:
-        self.assertEqual(requires(self.world, {"abilities": ["Jump"]}), [])
+        self.assertEqual(requires(self.world, {"abilities": ["Jump"]}), {})
 
     def test_story_party_needs_nothing_for_a_move(self) -> None:
         self.world.starting_member = -1
-        self.assertEqual(requires(self.world, {"abilities": ["Horn Slash"], "requires": ["Explorer Permit"]}), ["Explorer Permit"])
+        self.assertEqual(requires(self.world, {"abilities": ["Horn Slash"], "requires": ["Explorer Permit"]}), {"Explorer Permit": 1})
 
     def test_the_den_needs_the_horn(self) -> None:
         # Grass on the way in and the door room's puzzle down the trapdoor (the user, 2026-09-26).

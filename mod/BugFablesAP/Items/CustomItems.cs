@@ -58,9 +58,25 @@ namespace BugFablesAP
             {
                 current &= MainManager.itemdata[0, MoveKeyItem(move), 0] == FieldMoves.Name(move);
             }
+            foreach (var ability in Abilities.Keys)
+            {
+                current &= MainManager.itemdata[0, ability.Key, 0] == Abilities.SkillText(ability.Skill, 0, ability.Name);
+            }
             if (current || MainManager.instance?.charcolor == null)
             {
                 return;
+            }
+            // The learned abilities (Abilities.cs), each with its member's icon.
+            foreach (var ability in Abilities.Keys)
+            {
+                for (int field = 0; field < MainManager.itemdata.GetLength(2); field++)
+                {
+                    MainManager.itemdata[0, ability.Key, field] = MainManager.itemdata[0, TicketLooksLike, field];
+                }
+                // The game's own name and field description (what it does outside battle); its battle skill comes with it.
+                MainManager.itemdata[0, ability.Key, 0] = Abilities.SkillText(ability.Skill, 0, ability.Name);
+                MainManager.itemdata[0, ability.Key, 2] = Abilities.SkillText(ability.Skill, 1, PartyMembers.Name(ability.Member) + " can use " + ability.Name + ".");
+                MainManager.itemsprites[0, ability.Key] = ItemSwap.MemberSprite(ability.Member);
             }
             for (int move = 0; move <= FieldMoves.Jump; move++)
             {
@@ -73,7 +89,7 @@ namespace BugFablesAP
                 MainManager.itemdata[0, id, 2] = ItemSwap.MoveDescription(move);
                 MainManager.itemsprites[0, id] = move == FieldMoves.Jump ? ApIcon.Get() : ItemSwap.MemberSprite(move);
             }
-            log.LogInfo($"[items] the field moves added as key items {MoveKeyItem(0)}-{MoveKeyItem(FieldMoves.Jump)}");
+            log.LogInfo($"[items] the field moves and abilities added as key items {MoveKeyItem(0)}-{Abilities.Shield}");
         }
     }
 }

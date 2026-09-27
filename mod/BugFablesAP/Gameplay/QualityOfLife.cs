@@ -17,10 +17,10 @@ namespace BugFablesAP
         internal static readonly string[] TravelValues = { "Off", "Warp", "Map", "Both" };
         internal static ConfigEntry<string> Travel;
         // The Warp is always there with a random start (the logic counts on it to re-enter the start), with the
-        // entrance randomizer (the escape from a dead end) and with Shuffle Jump (a spot left without a jump), whatever
-        // Travel says.
+        // entrance randomizer (the escape from a dead end), with Shuffle Jump (a spot left without a jump) and with the
+        // abilities as items (a spot such as the hideout's cell, left by an ability not yet received), whatever Travel says.
         internal static bool WarpOn => (Travel != null && (Travel.Value == "Warp" || Travel.Value == "Both"))
-            || (SeedStart?.Invoke()).HasValue || (EntrancesShuffled?.Invoke() ?? false) || FieldMoves.JumpShuffled;
+            || (SeedStart?.Invoke()).HasValue || (EntrancesShuffled?.Invoke() ?? false) || FieldMoves.JumpShuffled || Abilities.AbilityItems;
         internal static Func<bool> EntrancesShuffled;
         internal static bool MapOn => Travel != null && (Travel.Value == "Map" || Travel.Value == "Both");
         // Which travel buttons go without their Yes / No box (the same four values as Travel).
