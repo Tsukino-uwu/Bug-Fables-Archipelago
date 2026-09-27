@@ -1,0 +1,58 @@
+from . import BugFablesTestBase
+
+
+class TestMedals(BugFablesTestBase):
+    # Medal ids overlap item ids in the game, so an id collision would give the wrong thing.
+    def test_medals_have_their_own_ids(self) -> None:
+        from ..data_tables import ITEM_ID_BASE, MEDAL_ID_OFFSET
+        self.assertEqual(self.world.item_name_to_id["Poison Defender"], ITEM_ID_BASE + MEDAL_ID_OFFSET + 9)
+        self.assertEqual(self.world.item_name_to_id["Hard Mode"], ITEM_ID_BASE + MEDAL_ID_OFFSET + 11)
+        kinds = self.world.fill_slot_data()["item_kinds"]
+        self.assertEqual(kinds[str(self.world.item_name_to_id["Poison Defender"])], 2)
+
+    def test_filler_that_isnt_padding_is_in_the_pool_once(self) -> None:
+        pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        self.assertEqual(pool.count("Hard Mode"), 1)
+        self.assertEqual(pool.count("Poison Defender"), 1)
+        padding = {self.world.get_filler_item_name() for _ in range(50)}
+        self.assertEqual(padding, {"Crunchy Leaf"})
+
+
+class TestPool(BugFablesTestBase):
+    # An item at two spots is in the pool twice; one missing from items.json would be lost.
+    def test_every_location_item_is_known(self) -> None:
+        from ..data_tables import LOCATIONS, vanilla_item
+        for loc in LOCATIONS:
+            if "give" in loc["source"] or "pickup" in loc["source"]:
+                with self.subTest(location=loc["name"]):
+                    self.assertIsNotNone(vanilla_item(loc))
+
+    def test_each_location_puts_its_item_in_the_pool(self) -> None:
+        # Every location's item is in the pool once per location holding it, except the copies the mod's own items
+        # (the Boat Ticket) take when the pool is full: one duplicated filler copy each, never an item's last copy.
+        from ..data_tables import ITEMS, LOCATIONS, vanilla_item
+        pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        own = sum(1 for item in ITEMS if item.get("always"))
+        short = 0
+        for name in {vanilla_item(loc) for loc in LOCATIONS} - {None}:
+            expected = sum(1 for loc in LOCATIONS if vanilla_item(loc) == name)
+            with self.subTest(item=name):
+                self.assertGreaterEqual(pool.count(name), 1)
+                short += max(0, expected - pool.count(name))
+        self.assertLessEqual(short, own)
+
+
+class TestBerries(BugFablesTestBase):
+    # Each berry reward puts its own amount in the pool.
+    def test_reward_near_snakemouth_puts_its_berries_in_the_pool(self) -> None:
+        pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        self.assertIn("10 Berries", pool)
+        gives = self.world.fill_slot_data()["location_gives"]
+        reward = str(self.world.location_name_to_id["Outskirts: Near Snakemouth Den, Reward"])
+        self.assertEqual(gives[reward], {"map": "NearSnakemouth", "type": -1, "item": 10})
+
+    def test_berries_have_their_own_ids(self) -> None:
+        from ..data_tables import ITEM_ID_BASE, MONEY_ID_OFFSET
+        self.assertEqual(self.world.item_name_to_id["10 Berries"], ITEM_ID_BASE + MONEY_ID_OFFSET + 10)
+        kinds = self.world.fill_slot_data()["item_kinds"]
+        self.assertEqual(kinds[str(self.world.item_name_to_id["10 Berries"])], 3)

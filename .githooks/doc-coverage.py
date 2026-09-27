@@ -30,9 +30,11 @@ for node in ast.parse(options_src).body:
         if squash(node.name) not in guides and squash(display) not in guides:
             missing.append(f"yaml option {display} ({node.name}): name it in a guide")
 
-world_src = read("apworld/bug_fables/world.py")
-slot_data = world_src[world_src.index("def fill_slot_data"):]
-for key in re.findall(r'^\s{12}"([a-z_]+)":', slot_data, re.M):
+slot_src = read("apworld/bug_fables/slot_data.py")
+keys = re.findall(r'^\s{8}"([a-z_]+)":', slot_src[slot_src.index("def build_slot_data"):], re.M)
+if not keys:
+    missing.append("slot_data.py: no slot_data keys found; update this hook's pattern")
+for key in keys:
     if squash(key) not in guides:
         missing.append(f"slot_data key {key}: name it in a guide")
 

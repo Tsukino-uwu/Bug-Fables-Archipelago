@@ -318,6 +318,19 @@ it opens, and "open that gate" as a temporary goal. Items and locations live in 
 growing the world is mostly adding data. It follows the layout of `worlds/apquest`, Archipelago's own
 teaching example, and writes its rules with Archipelago's Rule Builder.
 
+**One file per job, as APQuest does** (2026-09-27, a refactor that changed nothing a seed contains): `world.py` holds
+only the `World` class, whose steps call module functions that take the world: `items.py` (the item class and the
+pool), `locations.py` (the location class, which categories a seed includes, placing locations and events),
+`regions.py` (regions and exits), `rules.py` (what each spot needs, the shop policy, the goal), `slot_data.py`
+(everything the client reads), `web_world.py`, and the two shuffles `doors.py` and `enemies.py`. `data_tables.py`
+loads the JSON and names the id scheme's kinds (`ITEM_KIND` ... `MOVE_KIND`); `options.py` has the one table from a
+location category to its yaml toggle (`CATEGORY_OPTIONS`). **How "changed nothing" was proven:** before the split, a
+script generated 13 option sets x 2 seeds and saved each seed's regions, locations, pool, the locations each
+progression item's absence locks, the fill and `slot_data`; after it, the same output byte for byte. The script was
+first shown to catch a one-word rule change. Tests are split by subject too (`test_logic.py` gates, `test_slot_data.py`,
+`test_pool.py`, `test_categories.py`, `test_shops.py`), and `BugFablesTestBase.state_with` builds a state holding
+just the named items or events.
+
 We wrote **tests**, including one that proves the gate really needs the permit. To make sure that test
 could fail, we removed the rule on purpose, watched the test fail, and put the rule back. Archipelago's
 own test suite passes for it too.
@@ -377,8 +390,8 @@ Archipelago's `custom_worlds` folder.
 
 **Status:** done; the world has since grown to 66 locations (61 by default) and 52 items (counted 2026-09-27).
 
-*Code: `apworld/bug_fables/world.py` (`BugFablesWorld`: `create_regions`, `create_items`), the data in
-`data/items.json` and `data/locations.json` (read by `data_tables.py`), tests in `test/test_logic.py`
+*Code: `apworld/bug_fables/world.py` (`BugFablesWorld`), `regions.py`, `locations.py`, `items.py`, `rules.py`, the
+data in `data/items.json` and `data/locations.json` (read by `data_tables.py`), tests in `test/test_logic.py`
 (`TestPermitGate`).*
 
 ## Build step 2: connect the mod to a real server
@@ -429,7 +442,7 @@ slot's remaining items and logged "Team #1 has completed all of their games!".
 **Status:** in progress: the goal is in the apworld, with only the first artifact so far; the mod sends "goal reached" at the required count, seen working (2026-09-26); more artifacts come with more of the world (Next 7).
 
 *Code: `apworld/bug_fables/options.py` (`ArtifactsRequired`), `world.py` (`generate_early` lowers the
-number, `create_regions` adds the artifact events), test `TestArtifactsCapped`; the mod: `LocationChecks.CheckGoal`,
+number), `locations.py` (`create_all_locations` adds the artifact events), test `TestArtifactsCapped`; the mod: `LocationChecks.CheckGoal`,
 `ApConnection.SendGoal`.*
 
 ## Build step 4: connecting on its own, and staying connected
@@ -591,7 +604,7 @@ done (flag N set): sending`, `[check] sent ...`, and `[check] now checked on the
 medal's 32), and that the world version is written in one place only (the manifest). Both fail without the
 change. The world version went to 0.2.0.
 
-*Code: `apworld/bug_fables/world.py` (`fill_slot_data`), test `TestSlotData`; in the mod,
+*Code: `apworld/bug_fables/slot_data.py` (`build_slot_data`), test `TestSlotData`; in the mod,
 `LocationChecks.cs` (`Tick`) and `ApConnection.cs` (`ReadLocationFlags`, `SendChecks`).*
 
 **Not yet:** the game still hands out its own item at the location, the medal here. Replacing that with the
@@ -1375,7 +1388,7 @@ grass on the way there has to be cut with the horn (the user, 2026-09-25), so he
 **Rules name the move, not the member (the user, 2026-09-26):** "assume horn/boomerang/ice for logic, same as
 having Kabbu/Vi/Leif", so the logic already holds for a random start, one member and missing moves before any move is
 an item. A spot or exit lists `abilities` (Horn, Beemerang, Ice, Jump); the world turns each into who has it today
-(`_ability_holders`: Horn Kabbu, Beemerang Vi, Ice Leif; Jump the whole party, so nothing), and only when members
+(`ABILITY_HOLDERS` in `rules.py`: Horn Kabbu, Beemerang Vi, Ice Leif; Jump the whole party, so nothing), and only when members
 are items, as for `members`. The two horn spots (25, 32) moved from `members` to `abilities`, and location 19 (crystal
 berry #0 outside the den, behind grass from the Outskirts' side) got the Horn: cautious, since the cave's side needs
 no horn, which room-level regions will count. Location 30 (the bridge room's hidden spot, behind grass) got the Horn too (the user,
@@ -1423,7 +1436,7 @@ location, only the fights move.
    (map, entity index) and its fight, 325 of them (TestRoom left out). Generated, never edited by hand.
 2. **The option:** `enemy_shuffle` (`options.py`), with only `off` and `enemies_only` for now. The other three come
    when their parts are built. An option value that does nothing would mislead.
-3. **The shuffle:** in `generate_early`, `shuffle_encounters` groups the fights by size and shuffles each group
+3. **The shuffle:** in `generate_early`, `shuffle_encounters` (`enemies.py`) groups the fights by size and shuffles each group
    with the seed's random. A lone enemy stays a lone enemy, and every fight still happens exactly once, somewhere
    else. The result goes out as `slot_data` `enemy_swaps`: `{"map:entity index": [enemy ids]}`.
 4. **The mod:** `EnemyShuffle.cs` puts a prefix on `BattleControl.StartBattle`. When a map enemy starts a fight, it
@@ -1837,7 +1850,7 @@ own on/off thing as well due to how much it impacts, both off by default"). The 
 1. **The game's own move** (`PlayerControl.DoActionTap`, `MEASURED.md`): the leader's field attack by his `animid`;
    Vi's already waits for flag 11, Kabbu's and Leif's are always on.
 2. **The world:** option `shuffle_field_moves` (off). Three items, kind 6 (`MOVE_ID_OFFSET`), in the pool only with it
-   on. `_requires` turns an ability into its member (when members are items; with the story's party only Leif, who
+   on. `requires` (`rules.py`) turns an ability into its member (when members are items; with the story's party only Leif, who
    joins late) and, with moves shuffled, its item. **Cautious like members** (the user's choice): the gate's exit lists
    `moves` (all three items, not who uses them, so the story's Leif isn't pulled before the gate); the measured spots
    before it name their ability (the two horn spots; the fountain rooftop and the droplets now say Ice). `slot_data`

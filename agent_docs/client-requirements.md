@@ -27,14 +27,14 @@ anything that happens in the game.
 
 - [x] `worlds/bug_fables/` with `__init__.py`, and an `__init__.py` in every subfolder holding `.py` files
       (including `test/`) (2026-09-27: both present; `test/` is the only subfolder with `.py` files)
-- [x] A game info doc `en_Bug Fables.md` and a setup doc, both listed in the `WebWorld`'s tutorials (2026-09-27: read in `world.py`; 372 tests pass at 0.6.7)
-- [x] A `World` subclass with a unique `game`, and a `WebWorld` instance (2026-09-27: read in `world.py`; 372 tests pass at 0.6.7)
-- [x] `item_name_to_id`, `location_name_to_id` and `create_item` (2026-09-27: read in `world.py`; 372 tests pass at 0.6.7)
-- [x] An origin region ("Menu" by default), always reachable (2026-09-27: read in `world.py`; 372 tests pass at 0.6.7)
+- [x] A game info doc `en_Bug Fables.md` and a setup doc, both listed in the `WebWorld`'s tutorials (2026-09-27: read in `web_world.py`; 384 tests pass at 0.6.7)
+- [x] A `World` subclass with a unique `game`, and a `WebWorld` instance (2026-09-27: read in `world.py`; 384 tests pass at 0.6.7)
+- [x] `item_name_to_id`, `location_name_to_id` and `create_item` (2026-09-27: read in `world.py` and `items.py`; 384 tests pass at 0.6.7)
+- [x] An origin region ("Menu" by default), always reachable (2026-09-27: read in `world.py`; 384 tests pass at 0.6.7)
 - [x] At least one location, and **an item pool exactly equal in size to the location count** (2026-09-27:
   asserted by `test_logic.py`, which passes)
-- [x] `multiworld.completion_condition[player]` is set (2026-09-27: through `set_completion_rule`, read in `world.py`)
-- [x] Items and regions are added with `append`/`extend`/`+=`, never `=` (2026-09-27: read in `world.py`; 372 tests pass at 0.6.7)
+- [x] `multiworld.completion_condition[player]` is set (2026-09-27: through `set_completion_rule`, read in `rules.py`)
+- [x] Items and regions are added with `append`/`extend`/`+=`, never `=` (2026-09-27: read in `regions.py`, `locations.py` and `items.py`; 384 tests pass at 0.6.7)
 - [x] Only `self.random` is used, never Python's `random` (2026-09-27: the door and enemy shuffles take it as an
   argument; no module-level `random` call)
 - [x] Packaged with the "Build APWorlds" launcher component into a lowercase `bug_fables.apworld` (2026-09-26: CI

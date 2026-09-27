@@ -29,14 +29,14 @@ _LOCATION_DATA = _load("locations.json")
 LOCATIONS: list[dict[str, Any]] = _LOCATION_DATA["locations"]
 REGIONS: list[dict[str, Any]] = _LOCATION_DATA["regions"]
 ARTIFACTS: list[dict[str, Any]] = _LOCATION_DATA["artifacts"]
-STORY_EVENTS: list[dict[str, Any]] = _LOCATION_DATA.get("story_events", [])
-KEPT_OPEN: list[dict[str, Any]] = _LOCATION_DATA.get("kept_open", [])
-KEPT_PRESENT: list[dict[str, Any]] = _LOCATION_DATA.get("kept_present", [])
-SCENERY_HIDDEN: list[dict[str, Any]] = _LOCATION_DATA.get("scenery_hidden", [])
-SCENERY_PRESENT: list[dict[str, Any]] = _LOCATION_DATA.get("scenery_present", [])
-HELD_UNTIL: list[dict[str, Any]] = _LOCATION_DATA.get("held_until", [])
-PRESENT_FROM: list[dict[str, Any]] = _LOCATION_DATA.get("present_from", [])
-DIALOGUE_FLAGS: list[dict[str, Any]] = _LOCATION_DATA.get("dialogue_flags", [])
+STORY_EVENTS: list[dict[str, Any]] = _LOCATION_DATA["story_events"]
+KEPT_OPEN: list[dict[str, Any]] = _LOCATION_DATA["kept_open"]
+KEPT_PRESENT: list[dict[str, Any]] = _LOCATION_DATA["kept_present"]
+SCENERY_HIDDEN: list[dict[str, Any]] = _LOCATION_DATA["scenery_hidden"]
+SCENERY_PRESENT: list[dict[str, Any]] = _LOCATION_DATA["scenery_present"]
+HELD_UNTIL: list[dict[str, Any]] = _LOCATION_DATA["held_until"]
+PRESENT_FROM: list[dict[str, Any]] = _LOCATION_DATA["present_from"]
+DIALOGUE_FLAGS: list[dict[str, Any]] = _LOCATION_DATA["dialogue_flags"]
 DOORS: dict[str, Any] = _load("doors.json")
 # Every room entered through a door, as {"map", "from"}: the map, and the map whose door leads in (both ways of each
 # connection). A start there lands where walking in through that door ends.
@@ -44,11 +44,15 @@ ROOM_STARTS: list[dict[str, str]] = sorted(
     {(end["map"], other["map"]) for c in DOORS["connections"] for end, other in ((c["a"], c["b"]), (c["b"], c["a"]))
      if end["map"] != other["map"]})
 ROOM_STARTS = [{"map": room, "from": door_map} for room, door_map in ROOM_STARTS]
-# Every save point (map, entity index): the spots a random start picks from.
+# Every save point (map, entity index). Unused today (a random start picks from ROOM_STARTS); kept for named start
+# spots, Next 18.
 STARTS: list[dict[str, Any]] = _load("starts.json")["starts"]
 # Every map enemy (map, entity index) and the enemy ids its fight starts with.
 ENCOUNTERS: list[dict[str, Any]] = _load("enemies.json")["encounters"]
 
+# An item's kind: where the game puts it. Ordinary items and key items share the base range.
+ITEM_KIND = 0
+KEY_ITEM_KIND = 1
 # Medal ids overlap item ids, so medals get their own range.
 MEDAL_KIND = 2
 MEDAL_ID_OFFSET = 1_000
@@ -81,17 +85,22 @@ if len(set(LOCATION_NAME_TO_ID.values())) != len(LOCATIONS):
     raise ValueError("bug_fables: two locations share an id")
 
 
+# A give or pickup's type: the item kinds, except these two.
+MONEY_TYPE = -1
+CRYSTAL_TYPE = 3
+
+
 def vanilla_item(location: dict[str, Any]) -> str | None:
     """The name of the item the game hands out at a location, or None."""
     source = location["source"].get("give") or location["source"].get("pickup")
     if source is None and "item_shop" in location["source"]:
-        source = {"type": 0, "item": location["source"]["item_shop"]["item"]}
+        source = {"type": ITEM_KIND, "item": location["source"]["item_shop"]["item"]}
     if source is None:
         return None
-    if source["type"] == 3:
+    if source["type"] == CRYSTAL_TYPE:
         kind, game_id = CRYSTAL_KIND, 0
     else:
-        kind, game_id = (MONEY_KIND if source["type"] == -1 else source["type"]), source["item"]
+        kind, game_id = (MONEY_KIND if source["type"] == MONEY_TYPE else source["type"]), source["item"]
     for item in ITEMS:
         if item["kind"] == kind and item["game_id"] == game_id:
             return item["name"]

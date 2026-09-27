@@ -4,59 +4,13 @@ import logging
 from collections.abc import Mapping
 from typing import Any
 
-from BaseClasses import Item, ItemClassification, Location, LocationProgressType, Region, Tutorial
-from rule_builder.rules import Has, HasAll
-from worlds.AutoWorld import WebWorld, World
+from worlds.AutoWorld import World
 
-from .data_tables import (ARTIFACTS, DOORS, ENCOUNTERS, ROOM_STARTS, ITEM_NAME_TO_ID, ITEMS, DIALOGUE_FLAGS, HELD_UNTIL, KEPT_OPEN, PRESENT_FROM, KEPT_PRESENT, SCENERY_HIDDEN, SCENERY_PRESENT, LOCATION_NAME_TO_ID, LOCATIONS, REGIONS, STORY_EVENTS,
-                          WORLD_VERSION, vanilla_item)
+from . import items, locations, regions, rules, slot_data, web_world
+from .data_tables import ARTIFACTS, DOORS, ENCOUNTERS, ITEM_NAME_TO_ID, LOCATION_NAME_TO_ID, LOCATIONS, ROOM_STARTS, STORY_EVENTS
 from .doors import shuffle_coupled
-from .options import BugFablesOptions, EnemyShuffle, EntranceRandomizer, ShopContents, StartingLocation, StartingPartyMember
-
-GAME = "Bug Fables"
-SHOP_CATEGORIES = ("shop", "item_shop")
-_CLASSIFICATIONS = {
-    "progression": ItemClassification.progression,
-    "useful": ItemClassification.useful,
-    "filler": ItemClassification.filler,
-    "trap": ItemClassification.trap,
-}
-
-
-def shuffle_encounters(encounters: list[dict[str, Any]], random) -> dict[str, list[int]]:
-    """Each map enemy gets another map enemy's fight of the same size, so every fight still happens somewhere."""
-    by_size: dict[int, list[dict[str, Any]]] = {}
-    for encounter in encounters:
-        by_size.setdefault(len(encounter["ids"]), []).append(encounter)
-    swaps = {}
-    for group in by_size.values():
-        fights = [list(encounter["ids"]) for encounter in group]
-        random.shuffle(fights)
-        for encounter, fight in zip(group, fights):
-            swaps[f'{encounter["map"]}:{encounter["entity"]}'] = fight
-    return swaps
-
-
-class BugFablesItem(Item):
-    game = GAME
-
-
-class BugFablesLocation(Location):
-    game = GAME
-
-
-class BugFablesWebWorld(WebWorld):
-    theme = "grassFlowers"
-    tutorials = [
-        Tutorial(
-            "Multiworld Setup Guide",
-            "Setting up the Bug Fables randomizer mod and connecting to a room.",
-            "English",
-            "setup_en.md",
-            "setup/en",
-            ["Tsukino"],
-        )
-    ]
+from .enemies import shuffle_encounters
+from .options import BugFablesOptions, EnemyShuffle, EntranceRandomizer, StartingLocation, StartingPartyMember
 
 
 class BugFablesWorld(World):
@@ -65,8 +19,8 @@ class BugFablesWorld(World):
     Items, medals, key items and berries are shuffled; every item, your own included, arrives from the server.
     """
 
-    game = GAME
-    web = BugFablesWebWorld()
+    game = items.GAME
+    web = web_world.BugFablesWebWorld()
     item_name_to_id = ITEM_NAME_TO_ID
     location_name_to_id = LOCATION_NAME_TO_ID
     origin_region_name = "Menu"
@@ -74,13 +28,6 @@ class BugFablesWorld(World):
     options: BugFablesOptions
 
     artifacts_required: int = 1
-
-    _items_by_name = {item["name"]: item for item in ITEMS}
-    # Only padding fills leftover slots; other filler (the Hard Mode medal) enters only as a location's vanilla item.
-    _padding = [item["name"] for item in ITEMS if item.get("padding")]
-    # By member number: 0 Vi, 1 Kabbu, 2 Leif.
-    _members = [item["name"] for item in sorted((item for item in ITEMS if item.get("member")), key=lambda item: item["game_id"])]
-
     # -1 is the story's party; 0-2 the one member a new file starts with; ALL_MEMBERS the whole party.
     starting_member: int = -1
     ALL_MEMBERS = 3
@@ -97,14 +44,14 @@ class BugFablesWorld(World):
         self.artifacts_required = min(wanted, available)
         choice = self.options.starting_party_member
         if choice == StartingPartyMember.option_random_member:
-            self.starting_member = self.random.randrange(len(self._members))
+            self.starting_member = self.random.randrange(len(items.MEMBERS))
         elif choice == StartingPartyMember.option_all_three:
             self.starting_member = self.ALL_MEMBERS
         elif choice != StartingPartyMember.option_off:
             self.starting_member = choice.value - StartingPartyMember.option_vi
-        self.included_locations = [loc for loc in LOCATIONS if self._category_on(loc.get("category"))]
+        self.included_locations = [loc for loc in LOCATIONS if locations.category_on(self, loc.get("category"))]
         # A quest's step events follow its category: without the quest's items they couldn't be reached.
-        self.included_events = [event for event in STORY_EVENTS if self._category_on(event.get("category"))]
+        self.included_events = [event for event in STORY_EVENTS if locations.category_on(self, event.get("category"))]
         # Doors are decided here and sent in slot_data; the client never decides a door itself.
         self.door_targets = []
         if self.options.entrance_randomizer == EntranceRandomizer.option_coupled:
@@ -118,225 +65,30 @@ class BugFablesWorld(World):
         if self.options.starting_location == StartingLocation.option_anywhere:
             self.start = dict(self.random.choice(ROOM_STARTS))
 
-    def _category_on(self, category: str | None) -> bool:
-        if category == "quest":
-            return bool(self.options.shuffle_quests.value)
-        if category == "crystal_berry":
-            return bool(self.options.shuffle_crystal_berries.value)
-        if category == "discovery":
-            return bool(self.options.shuffle_discoveries.value)
-        if category == "shop":
-            return bool(self.options.shuffle_medal_shops.value)
-        if category == "item_shop":
-            return bool(self.options.shuffle_item_shops.value)
-        if category == "party_member":
-            return self.starting_member >= 0
-        if category == "story_party":
-            return self.starting_member < 0
-        return True
-
-    # Rules name the field move, not who has it: an attack needs its member (when members are items; with the story's
-    # party, only Leif, who joins late), and its own item when moves are shuffled. Jump is the whole party's.
-    _ability_holders = {"Horn Slash": "Kabbu", "Beemerang Toss": "Vi", "Freeze": "Leif", "Jump": None}
-
-    def _moves_shuffled(self) -> bool:
+    def moves_shuffled(self) -> bool:
         return bool(self.options.shuffle_field_moves.value)
 
-    def _jump_shuffled(self) -> bool:
+    def jump_shuffled(self) -> bool:
         return bool(self.options.shuffle_jump.value)
 
-    def _requires(self, data: dict[str, Any], location: bool = False) -> list[str]:
-        """What a spot or exit needs: its own requires, members when members are items, and its moves' members and items.
-        With Jump shuffled, a location or story event needs Jump unless it was seen reachable without (no_jump)."""
-        needed = list(data.get("requires", []))
-        members_are_items = self.starting_member >= 0
-
-        def add(name: str) -> None:
-            if name not in needed:
-                needed.append(name)
-
-        if members_are_items:
-            for member in data.get("members", []):
-                add(member)
-        for ability in data.get("abilities", []):
-            holder = self._ability_holders[ability]
-            if holder is not None and (members_are_items or holder == "Leif"):
-                add(holder)
-            if ability == "Jump" and self._jump_shuffled() or ability != "Jump" and self._moves_shuffled():
-                add(ability)
-        # A blanket rule for unmeasured ground: the move items alone, not who does them.
-        if self._moves_shuffled():
-            for move in data.get("moves", []):
-                add(move)
-        if location and self._jump_shuffled() and not data.get("no_jump"):
-            add("Jump")
-        return needed
-
     def create_regions(self) -> None:
-        regions = {data["name"]: Region(data["name"], self.player, self.multiworld) for data in REGIONS}
-        self.multiworld.regions += regions.values()
+        regions.create_and_connect_regions(self)
+        locations.create_all_locations(self)
 
-        for data in REGIONS:
-            for exit_data in data["exits"]:
-                requires = self._requires(exit_data)
-                rule = HasAll(*requires) if requires else None
-                self.create_entrance(regions[data["name"]], regions[exit_data["to"]], rule)
-
-        for loc in self.included_locations:
-            region = regions[loc["region"]]
-            region.locations.append(
-                BugFablesLocation(self.player, loc["name"], LOCATION_NAME_TO_ID[loc["name"]], region)
-            )
-
-        for event in self.included_events:
-            regions[event["region"]].add_event(
-                event["name"], event["item"], location_type=BugFablesLocation, item_type=BugFablesItem
-            )
-
-        # The game counts artifacts from flags, so these events hold no real item: they let fill prove the goal.
-        for artifact in ARTIFACTS:
-            regions[artifact["region"]].add_event(
-                artifact["name"], "Artifact", location_type=BugFablesLocation, item_type=BugFablesItem
-            )
-
-    def create_item(self, name: str) -> BugFablesItem:
-        data = self._items_by_name[name]
-        return BugFablesItem(name, _CLASSIFICATIONS[data["classification"]], ITEM_NAME_TO_ID[name], self.player)
+    def create_item(self, name: str) -> items.BugFablesItem:
+        return items.create_item(self, name)
 
     def create_items(self) -> None:
-        # The included locations' vanilla items (duplicates kept), then padding; an item whose spot is off stays vanilla.
-        pool: list[Item] = [self.create_item(name) for name in
-                            (vanilla_item(loc) for loc in self.included_locations) if name is not None]
-        # With a starting member, it is start inventory (the client gets it too) and the other two are in the pool.
-        if self.starting_member >= 0:
-            for number, name in enumerate(self._members):
-                if self.starting_member in (number, self.ALL_MEMBERS):
-                    self.push_precollected(self.create_item(name))
-                else:
-                    pool.append(self.create_item(name))
-        # Field moves are items only with their option: the three attacks, and Jump on its own.
-        for item in ITEMS:
-            if item.get("move") and (self._jump_shuffled() if item["name"] == "Jump" else self._moves_shuffled()):
-                pool.append(self.create_item(item["name"]))
-        # The mod's own items (custom gates) enter once in every seed, in a filler slot: when every location already
-        # has its vanilla item, one filler item (an ordinary item or berries, picked by the seed) makes room.
-        always = [self.create_item(item["name"]) for item in ITEMS if item.get("always")]
-        unfilled = len(self.multiworld.get_unfilled_locations(self.player))
-        while always and len(pool) + len(always) > unfilled:
-            # Only an ordinary item or berries, and only one with a copy left in the pool: every location's own item
-            # stays in the pool at least once, and a filler medal (the Hard Mode medal) is never taken.
-            names = [item.name for item in pool]
-            filler = [item for item in pool if item.classification == ItemClassification.filler
-                      and self._items_by_name[item.name]["kind"] in (0, 3) and names.count(item.name) > 1]
-            if not filler:
-                raise Exception(f"Bug Fables: no filler item to make room for {always[0].name} in player {self.player_name}'s pool")
-            pool.remove(self.random.choice(filler))
-        pool += always
-        pool += [self.create_filler() for _ in range(unfilled - len(pool))]
-        self.multiworld.itempool += pool
+        items.create_all_items(self)
 
     def set_rules(self) -> None:
-        for loc in self.included_locations:
-            if loc.get("category") not in SHOP_CATEGORIES:
-                continue
-            location = self.get_location(loc["name"])
-            if self.options.shop_contents == ShopContents.option_filler_only:
-                location.progress_type = LocationProgressType.EXCLUDED
-            elif self.options.shop_contents == ShopContents.option_no_progression:
-                location.item_rule = lambda item: not item.advancement
-        for loc in self.included_locations:
-            if self._requires(loc, location=True):
-                self.set_rule(self.get_location(loc["name"]), HasAll(*self._requires(loc, location=True)))
-        for event in self.included_events:
-            if self._requires(event, location=True):
-                self.set_rule(self.get_location(event["name"]), HasAll(*self._requires(event, location=True)))
-        # Artifacts are events with no data of their own: with Jump shuffled they wait for it like every other spot.
-        if self._jump_shuffled():
-            for artifact in ARTIFACTS:
-                self.set_rule(self.get_location(artifact["name"]), Has("Jump"))
-        self.set_completion_rule(Has("Artifact", count=self.artifacts_required))
+        rules.set_all_rules(self)
 
     def pre_fill(self) -> None:
-        # A room with fewer excludable items than excluded spots fails to generate, so Filler Only falls back.
-        if self.options.shop_contents != ShopContents.option_filler_only:
-            return
-        shops = [self.get_location(loc["name"]) for loc in self.included_locations if loc.get("category") in SHOP_CATEGORIES]
-        excludable = sum(1 for item in self.multiworld.itempool if item.excludable)
-        excluded = sum(1 for location in self.multiworld.get_unfilled_locations()
-                       if location.progress_type == LocationProgressType.EXCLUDED)
-        if excludable >= excluded:
-            return
-        logging.warning(
-            "Bug Fables: player %s (%s) asked for Shop Contents: Filler Only, but the room has %d filler items for %d "
-            "excluded locations; this seed's shops use No Progression instead.",
-            self.player, self.player_name, excludable, excluded,
-        )
-        for location in shops:
-            location.progress_type = LocationProgressType.DEFAULT
-            location.item_rule = lambda item: not item.advancement
+        rules.fall_back_from_filler_only(self)
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(self._padding)
+        return items.random_filler_name(self)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
-        # The client acts only on what is listed here. JSON object keys are strings.
-        return {
-            "world_version": WORLD_VERSION,
-            "artifacts_required": self.artifacts_required,
-            "location_flags": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["flag"] for loc in self.included_locations
-                               if "flag" in loc["source"]},
-            "location_berries": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["berry"]
-                                 for loc in self.included_locations if "berry" in loc["source"]},
-            "location_discoveries": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["discovery"]
-                                     for loc in self.included_locations if "discovery" in loc["source"]},
-            # One location per copy a shop ever stocks; a shop's copies are its locations in id order.
-            "location_shops": {str(LOCATION_NAME_TO_ID[loc["name"]]): {"shop": loc["source"]["shop"], "medal": loc["source"]["medal"]}
-                               for loc in self.included_locations if "shop" in loc["source"]},
-            "location_item_shops": {str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["item_shop"]
-                                    for loc in self.included_locations if "item_shop" in loc["source"]},
-            # Done when a number slot reaches a value, not a flag (a boss prize handed over).
-            "location_vars": {str(LOCATION_NAME_TO_ID[loc["name"]]): {"var": loc["source"]["var"],
-                                                                       "at_least": loc["source"]["at_least"]}
-                              for loc in self.included_locations if "var" in loc["source"]},
-            # Checks that show no item of their own (only a story flag): the client shows the player's own item there.
-            "silent_locations": sorted(LOCATION_NAME_TO_ID[loc["name"]] for loc in self.included_locations
-                                       if set(loc["source"]) <= {"event", "flag"}),
-            "location_gives": {
-                str(LOCATION_NAME_TO_ID[loc["name"]]): loc["source"]["give"]
-                for loc in self.included_locations
-                if "give" in loc["source"]
-            },
-            "location_pickups": {
-                str(LOCATION_NAME_TO_ID[loc["name"]]): {"map": loc["source"]["pickup"]["map"], "flag": loc["source"].get("flag", -1),
-                                                       **({"event": loc["source"]["event"]}
-                                                          if loc["source"]["pickup"].get("story") else {}),
-                                                       **({"berry": loc["source"]["berry"]}
-                                                          if "berry" in loc["source"] else {}),
-                                                       # A respawning pickup: its regional flag is wiped on area change.
-                                                       **({"regional": loc["source"]["regional"]}
-                                                          if "regional" in loc["source"] else {})}
-                for loc in self.included_locations
-                if "pickup" in loc["source"]
-            },
-            # Story blockers the client keeps away, so an area the logic counts as reachable never closes.
-            "kept_open": [{"map": b["map"], "entity": b["entity"]} for b in KEPT_OPEN],
-            "kept_present": [{"map": e["map"], "entity": e["entity"]} for e in KEPT_PRESENT],
-            "scenery_hidden": [{"map": e["map"], "entity": e["entity"]} for e in SCENERY_HIDDEN],
-            "scenery_present": [{"map": e["map"], "entity": e["entity"]} for e in SCENERY_PRESENT],
-            "held_until": [{"map": e["map"], "entity": e["entity"], "flag": e["flag"]} for e in HELD_UNTIL],
-            "present_from": [{"map": e["map"], "entity": e["entity"], "flag": e["flag"]} for e in PRESENT_FROM],
-            "dialogue_flags": [{"map": e["map"], "entity": e["entity"], "flag": e["flag"], "to": e["to"]} for e in DIALOGUE_FLAGS],
-            "door_targets": self.door_targets,
-            # {"map:entity": [enemy ids]}: the fight a map enemy starts instead of its own.
-            "enemy_swaps": self.enemy_swaps,
-            # {"map", "from"}: the room a new file begins in, as if entering through the door from "from"; empty for the
-            # game's own start.
-            "start": self.start,
-            # The one member a new file starts with (0 Vi, 1 Kabbu, 2 Leif); 3 all three; -1 is the story's party.
-            "starting_member": self.starting_member,
-            # Field moves as items: the three attacks, and Jump (the mod then keeps the Warp on).
-            "shuffle_moves": self._moves_shuffled(),
-            "shuffle_jump": self._jump_shuffled(),
-            # 0 item, 1 key item, 2 medal, 3 berries, 4 crystal berry, 5 party member.
-            "item_kinds": {str(ITEM_NAME_TO_ID[item["name"]]): item["kind"] for item in ITEMS},
-        }
+        return slot_data.build_slot_data(self)

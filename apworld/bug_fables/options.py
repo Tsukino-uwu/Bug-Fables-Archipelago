@@ -199,22 +199,6 @@ class ShuffleJump(Toggle):
     display_name = "Shuffle Jump"
 
 
-def category_count(category: str) -> int:
-    """How many locations an option's category adds, straight from the location data."""
-    return sum(1 for location in LOCATIONS if location.get("category") == category)
-
-
-# Counted from the data so the numbers players see never go stale.
-ShuffleQuests.__doc__ = ShuffleQuests.__doc__.replace("{count}", str(category_count("quest")))
-ShuffleCrystalBerries.__doc__ = ShuffleCrystalBerries.__doc__.replace("{count}", str(category_count("crystal_berry")))
-ShuffleDiscoveries.__doc__ = ShuffleDiscoveries.__doc__.replace("{count}", str(category_count("discovery")))
-ShuffleMedalShops.__doc__ = ShuffleMedalShops.__doc__.replace("{count}", str(category_count("shop")))
-ShuffleItemShops.__doc__ = ShuffleItemShops.__doc__.replace("{count}", str(category_count("item_shop")))
-EntranceRandomizer.__doc__ = EntranceRandomizer.__doc__.replace("{count}", str(2 * len(DOORS["connections"])))
-EnemyShuffle.__doc__ = EnemyShuffle.__doc__.replace("{count}", str(len(ENCOUNTERS)))
-StartingLocation.__doc__ = StartingLocation.__doc__.replace("{count}", str(len(ROOM_STARTS)))
-
-
 @dataclass
 class BugFablesOptions(PerGameCommonOptions):
     artifacts_required: ArtifactsRequired
@@ -230,3 +214,27 @@ class BugFablesOptions(PerGameCommonOptions):
     starting_party_member: StartingPartyMember
     shuffle_field_moves: ShuffleFieldMoves
     shuffle_jump: ShuffleJump
+
+
+# The location categories a yaml toggle leaves out, and the toggle's field.
+CATEGORY_OPTIONS: dict[str, str] = {
+    "quest": "shuffle_quests",
+    "crystal_berry": "shuffle_crystal_berries",
+    "discovery": "shuffle_discoveries",
+    "shop": "shuffle_medal_shops",
+    "item_shop": "shuffle_item_shops",
+}
+
+
+def category_count(category: str) -> int:
+    """How many locations an option's category adds, straight from the location data."""
+    return sum(1 for location in LOCATIONS if location.get("category") == category)
+
+
+# Counted from the data so the numbers players see never go stale.
+for _category, _field in CATEGORY_OPTIONS.items():
+    _option = BugFablesOptions.type_hints[_field]
+    _option.__doc__ = _option.__doc__.replace("{count}", str(category_count(_category)))
+EntranceRandomizer.__doc__ = EntranceRandomizer.__doc__.replace("{count}", str(2 * len(DOORS["connections"])))
+EnemyShuffle.__doc__ = EnemyShuffle.__doc__.replace("{count}", str(len(ENCOUNTERS)))
+StartingLocation.__doc__ = StartingLocation.__doc__.replace("{count}", str(len(ROOM_STARTS)))

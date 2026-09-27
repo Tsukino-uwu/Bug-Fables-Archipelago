@@ -3,7 +3,7 @@ from random import Random
 
 from . import BugFablesTestBase
 from ..data_tables import ENCOUNTERS
-from ..world import shuffle_encounters
+from ..enemies import shuffle_encounters
 
 
 class TestEnemiesOffByDefault(BugFablesTestBase):

@@ -1,18 +1,16 @@
 from . import BugFablesTestBase
-from ..data_tables import ITEMS, LOCATIONS
+from ..data_tables import LOCATIONS, vanilla_item
 
 
 class TestLocationNames(BugFablesTestBase):
     # A location named after its vanilla item misleads hints once items are shuffled.
     def test_no_location_is_named_after_its_vanilla_item(self) -> None:
         for location in LOCATIONS:
-            give = location["source"].get("give") or location["source"].get("pickup")
-            if give is None:
+            item = vanilla_item(location)
+            if item is None:
                 continue
-            for item in ITEMS:
-                if item["game_id"] == give["item"] and item["kind"] == give["type"]:
-                    with self.subTest(location=location["name"]):
-                        self.assertNotIn(item["name"].lower(), location["name"].lower())
+            with self.subTest(location=location["name"]):
+                self.assertNotIn(item.lower(), location["name"].lower())
 
 
 class TestOptionCounts(BugFablesTestBase):
