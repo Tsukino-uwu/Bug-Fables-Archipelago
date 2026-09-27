@@ -7,6 +7,9 @@ anyone curious about the process, or thinking of doing the same for another game
 - **The Archipelago side** (the apworld, seeds, the server, connecting, items and checks) has its own
   guide: [apimplementation.md](apimplementation.md).
 - **Facts about how Bug Fables works inside** live in `MEASURED.md`.
+- **The programming ideas underneath** (DLLs, Harmony, reflection, frames, coroutines), in plain words:
+  [programming-concepts.md](https://github.com/Tsukino-uwu/MeshGhost/blob/master/agent_docs/programming-concepts.md)
+  in MeshGhost.
 
 ## The steps
 
