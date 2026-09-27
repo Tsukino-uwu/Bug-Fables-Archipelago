@@ -259,7 +259,7 @@ be wrong.
      that only slow the pace: the opening (the intro slides, the new-game combat tutorial) and the scripted first
      spider fight. **Also always (the user, 2026-09-27):** every tutorial and scripted scene, and the "can't go this
      way yet" scenes that turn the player back. Those are gates, so each goes through the open world (build step 9):
-     opened only with its rule in the logic and through `slot_data`, never just cut.
+     cut only in the same change that fixes its gate and logic, never on its own (the user, 2026-09-27).
 
    How a scene is cut (skipped or fast-forwarded) stays per scene: a Skip scene that can't be cut out safely is sped
    up instead. **A scene the player should see happen is sped up, never cut out** (the user, 2026-09-27: the bridge
