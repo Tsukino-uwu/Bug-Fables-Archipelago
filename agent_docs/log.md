@@ -942,3 +942,9 @@ Newest last. What was tried, what happened, what the user said.
   the same way; reading the last error in the log settled it. Restart needed; the sites' transpiler now never throws.
 - **Logic checked by measurement** (`rates` at 240: 59.88 sixtieths and 59.78 new-sixtieth frames a second). Install
   only when the row is on (about 4 s, 3 of them one battle coroutine). Nothing of the per-site fixes seen on screen yet.
+- **Later the same day:** the 5-second stall fix now follows the settings rule (Archipelago on, or Use on normal saves):
+  the user plans to finish chapters 5-7 on a vanilla save at 240. Asked how Difficulty works there: Hard answers
+  "medal 11 equipped" (prizes the vanilla way, from Artis), Normal leaves it to the game (missed prizes at the caravan).
+  Offered prizes on Normal for normal saves as a new row; the user: "nahh, keep as is. we shouldn't try to change
+  vanilla more than we already do". Measured with everything installed at 240: 3599 frames in 15 s, median 4.11 ms,
+  worst 13 ms, no collections. The player guide got Uncap FPS and the stutter fix.

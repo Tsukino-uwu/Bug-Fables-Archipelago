@@ -53,6 +53,7 @@ checks are sent when the connection comes back.
 **Quality of life and Gameplay** are two more pages, at the top of the game's own **Settings** (from the pause
 menu, and from the main menu), shown while the Archipelago mod is enabled or *Use on normal saves* is on. Each has
 **Reset to defaults** and **Disable all** on top, each asking Yes / No first.
+The same switch also stops a short stutter the game itself has every 5 seconds (it tidies its memory on a timer).
 
 - **Quality of life**: **Fast text** (dialogue is instant, and holding skip races through it; On), **Travel** (Off,
   Warp, Map or Both, the default: the Warp is a pause-menu button back to where the game began, or to the seed's
@@ -69,10 +70,14 @@ menu, and from the main menu), shown while the Archipelago mod is enabled or *Us
   yours included, has a starburst behind it in its Archipelago class colour, so you can tell from afar whether it matters; Off
   keeps it a surprise) and **Detector** (On, the default, acts as if the Detector medal were equipped. With the Archipelago mod
   enabled, the Detector (row or medal) also beeps on entering a room that still has a check of any kind, and stays
-  quiet in a room with none left).
+  quiet in a room with none left) and **Uncap FPS** (experimental; Off, the default, keeps the game's own 30 or 60 FPS
+  setting; 120, 144 or 240 raise the frame rate, with VSync when the number divides your monitor's refresh rate. Motion is
+  drawn smoothly between the game's steps, and the game still plays as it does at 60. Switching it on the first time in a
+  session takes a few seconds).
 - **Gameplay**: **Difficulty** (Normal, the default, leaves it to the game; Hard plays as if the Hard Mode medal were
-  equipped, Hardest as if the save had the HARDEST code, without writing it into the save; boss prize medals are
-  handed out on every setting), **Enemy scaling** (Party level, the default, scales every enemy to your level;
+  equipped, Hardest as if the save had the HARDEST code, without writing it into the save; in a seed, boss prize
+  medals are handed out on every setting; on a normal save, as in the game: on Hard from Artis, a missed one at the
+  caravan), **Enemy scaling** (Party level, the default, scales every enemy to your level;
   Artifacts to the artifacts found; Off keeps each enemy's own stats; Difficulty applies on top), **Medal prices**
   (medals in any shop, a bar in tenths of the price: full, the default, is normal, half is half price, empty is free), and **EXP multiplier** and **Berry multiplier** (1x, the default,
   to 10x, a bar like the volume rows; EXP from every defeated enemy, berries picked up in the world; a battle still
