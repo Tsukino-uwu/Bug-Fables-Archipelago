@@ -964,3 +964,11 @@ Newest last. What was tried, what happened, what the user said.
   release zip itself on a clean install (the DLL is the same source the user has been playing).
 - **Decided (the user, 2026-09-27): the Archipelago switch stays off by default.** Asked after the README fix; a
   player sets the address, port and slot in the same panel the first time anyway, so enabling it there costs nothing.
+- **Release notes format:** the user compared other Archipelago mods' releases (Tevi, Pseudoregalia, a Pokemon one) and
+  set the standard: one-liners under Features / Logic / Bug Fixes, no "update both" line, a base-game bug named as
+  such. v0.2.0's body rewritten to it; the format is in build step 17.
+- **Planning, no code (Next 28-32):** artifacts as seven distinct items in any order, tied to their chapters, 1-7
+  required, the pause menu drawing the received ones (display still open: received only, or all 7 with missing
+  faded); a story-bosses goal; the library's discovery milestones as locations (the payer found in code, `Event189`,
+  `flagvar[53]`); the Explorer Permit split per gate as a yaml choice, Vanilla or Split, Split the default once
+  built (the game stays vanilla until then); key items shown without browsing as a Quality of life row.
