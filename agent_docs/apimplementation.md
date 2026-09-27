@@ -181,12 +181,15 @@ be wrong.
 28. **Artifacts shuffled, an idea for later** (the user, 2026-09-27): the goal's artifacts found anywhere, not only at
    the chapter ends. Each chapter end (its artifact flag) becomes an ordinary location, and an Archipelago-only
    *Artifact* item goes into the pool; the goal counts Artifacts received. The item never sets the game's artifact
-   flags: they drive the story (flag 41 is the logic's "Snakemouth Den Cleared"). Open: what the pause menu's artifact
-   icons show (chapters finished or Artifacts received); exactly 7 in the pool, or extras (a Triforce-hunt style
-   "N in the pool, M needed"). A yaml option, so its own build step.
+   flags: they drive the story (flag 41 is the logic's "Snakemouth Den Cleared"). **Decided (the user, 2026-09-27):**
+   the pause menu's icons show Artifacts received (drawn only; the save's own count, which the file select shows, stays
+   the game's). The pool: proposed always 7, *Artifacts Required* 1-7, matching the game's 7 icons; a bigger pool breaks
+   nothing in Archipelago but needs a filler slot per Artifact and a display past 7 icons, so later if asked. A yaml
+   option, so its own build step.
 29. **A bosses goal, an idea for later** (the user, 2026-09-27): a *Goal* option (Artifacts / Bosses) and *Bosses
-   Required* (all, or a number): each boss's beaten flag an event the goal counts, as artifacts are today. Open: story
-   bosses only, or the bounties and other optional bosses too (those need their own logic first, Next 13). Only a real
+   Required* (all, or a number): each boss's beaten flag an event the goal counts, as artifacts are today. **Decided
+   (the user, 2026-09-27): story bosses only**; the bounties maybe a side setting later, once *Shuffle Bounties* gives
+   them logic (Next 13). Only a real
    choice once the world reaches past chapter 1 (today: one artifact, one story boss). Its own build step.
 30. **Library discovery milestones as locations, an idea for later** (the user, 2026-09-27): the librarian's 10
    rewards (one per 5 discoveries, 5 to 50; `MEASURED.md`, "Journal rewards") as locations, "done" when `flagvar[53]`
