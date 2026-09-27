@@ -166,9 +166,13 @@ be wrong.
    without the first wouldn't work (the user); in the game the Halt, the Horn Dash and the Icicle each extend the first
    (the Halt holds a thrown Beemerang, the Icicle is a second tap during the Freeze, the Horn Dash changes the Dash).
    With Shuffle Field Moves (build step 21), the Beemerang and Freeze items become the progressive ones' first copy.
-   **Open (asked the user):** the Dash starts as a second tap during the Horn Slash (`PlayerControl.cs:1083`), so while
-   the Horn Slash is locked the Dash can't be used either; either the logic makes the Dash need the Horn Slash too, or
-   the mod lets the Dash start without it.
+   **The Dash without the Horn Slash (the user's idea, 2026-09-27; to be confirmed):** the Dash starts as a second tap
+   during the Horn Slash (`PlayerControl.cs:1083`), and its hitbox carries the slash's own tag (`BeetleHorn`, `:1139`),
+   so today it cuts grass, pushes rocks and hits switches like the slash (grass takes `BeetleHorn` or the Horn Dash's
+   `BeetleDash`, `NPCControl.cs:4764`). Proposed: with the Horn Slash locked, a double tap still starts the Dash, the
+   first tap doing no slash and the dash's hitbox no horn effect, as the Horn Dash adds rock breaking to it; the Horn
+   Dash then breaks rocks but leaves grass and the rest to the Horn Slash. The logic: grass and pushing need the Horn
+   Slash, speed the Dash, rocks the Horn Dash; no progressive item needs another.
 24. **The panel's settings on normal saves** (the user, 2026-09-26; built, `documentation.md` step 18): an opt-in row so Quality of life and
    Gameplay also apply with Archipelago off. A deliberate exception to "vanilla stays vanilla", which only the user can
    make; off by default. **Named (the user): *Use on normal saves*, ON / OFF**, help line "Quality of life and Gameplay
