@@ -1072,3 +1072,16 @@ Newest last. What was tried, what happened, what the user said.
   `weakness` column; the run found five flippable enemies (MEASURED, "Who can hit what"). The first copy loaded the old
   plugin: the build had gone to `bin/Release` without `stage-dev.ps1`, so copy-dev copied the stale stage (same hash
   as loaded). Build with `stage-dev.ps1`, then copy.
+
+## 2026-09-28: a link to the concepts doc, and The Beast at level 17
+
+- **documentation.md links MeshGhost's `programming-concepts.md`** under its opening bullets (the user asked whether to
+  point to it). Wording the user's: "from MeshGhost, another project by Tsukino", so the reader knows who. Not in
+  apimplementation.md, which has its own explainer from Archipelago's protocol doc.
+- **The Beast (id 69, chapter 5, home level 17), vanilla:** the user lost twice (down to 40/70, then 20-30/70, out of
+  items), then won. HP 76, Defense 1, 25 EXP; party level 17 (Vi 3 atk/-1 def, Kabbu and Leif 2/0), 18 after. Enemy
+  scaling was on Party level, but no `[scale]` line: at home level there is nothing to scale, so the fight was
+  vanilla. The chapter 5 home level matched a real playthrough. The user then turned scaling off.
+- **Asked for, then dropped:** an *Attack boost: Off / +1* row. Read first: nearly every attack and skill reads `atk`
+  per hit, so +1 attack is +1 on every hit (+33-50% at attack 2-3). Dropped once scaling showed the fight was at level.
+  The user also declined a log line for why scaling skipped an enemy.
