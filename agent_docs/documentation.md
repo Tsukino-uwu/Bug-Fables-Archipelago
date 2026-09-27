@@ -1713,8 +1713,8 @@ an area met early or late; this is for a fight that's hard at the right level.
   member's attack); a postfix writes attack + 1 into that line only. The stat itself stays untouched.
 - Each page's two buttons: Reset and Disable all both set Off.
 
-**Status:** built (2026-09-28), the build succeeds, not yet seen in a fight. The medals screen's +1 built (2026-09-28),
-not yet seen (the user first noticed that screen showing the plain attack).
+**Status:** the medals screen's +1 seen by the user (2026-09-28): Vi's attack 3 (with Power Exchange) shown as 04, and
+right as medals go on and off. The +1 in a fight's damage not yet seen.
 
 *Code: `AttackBoost.cs`; the row in `ApMenu.cs` and `ApMenu.Rows.cs`.*
 

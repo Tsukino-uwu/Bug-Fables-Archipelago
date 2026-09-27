@@ -323,7 +323,7 @@ be wrong.
    by changing only the medal's pick at a battle's start, **never by setting the helpers' flags**: those are story and
    quest state. Still to decide with the user: every helper, or a set. It changes how a seed plays, so its own step.
    Until then the game page tells players (`docs/en_Bug Fables.md`).
-37. **Attack boost, a panel setting** (the user, 2026-09-28): built, `documentation.md` step 27. *Attack boost* on the
+37. **Attack boost, a panel setting** (the user, 2026-09-28): built, shown on the medals screen (seen), `documentation.md` step 27. *Attack boost* on the
    Gameplay page, Off / +1, off by default: +1 on each hit a party member lands, an opt-in for a hard fight. No check
    and no logic depend on it. Only while Archipelago is enabled, or with *Use on normal saves*.
 38. **A Graphics page, render scale and MSAA** (the user, 2026-09-28): built, seen, then removed the same day (240 to
