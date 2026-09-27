@@ -232,7 +232,12 @@ be wrong.
    something (Vi's tap the beemerang, and a second tap is ignored while it flies; Leif's tap the icicle; holds are
    hover, dig and bubble shield), and the dash poses (animstates 116/117) are Kabbu's. So Vi and Leif would need a new
    trigger, and poses of their own that aren't checked yet. Faster movement (above) speeds up every leader and clashes
-   with nothing.
+   with nothing. **A trigger: the HUD key** (the user, 2026-09-27: the Y button's "drop down"; code read, not
+   measured): key 7 in `PlayerControl.GetInput`, whose only field use drops the HUD (HP, TP, berries) for 300 frames
+   or pulls it back up. The same key also works in the pause menu, the shop list (`MainManager`) and one battle
+   spot (`BattleControl`), which stay as they are; only the field use would be taken over. Still to check: that Y is
+   key 7 by default on a controller (keys can be rebound, so the mod follows the key, not "Y"), and what the player
+   loses, since the HUD still shows up by itself when HP or berries change.
 34. **Early Jump, an idea for later** (the user, 2026-09-27): *Shuffle Jump* (build step 22) becomes Off / On /
    Early, where Early puts Jump in an early sphere, since it gates the most. Archipelago may already have this built in
    (an early-items setting): check `world api.md` at the targeted tag before building one of ours.
