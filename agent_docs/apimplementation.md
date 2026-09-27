@@ -176,6 +176,14 @@ be wrong.
    is the game's own again** (the user): it cuts grass and does everything the slash does, the Horn Dash too.
    **Why it suits the logic (the user):** grass is always "Horn Slash", never "Horn Slash or Dash"; the grass rules
    written today (`abilities: ["Horn Slash"]`) stay right once the Dash is an item.
+   **Every learned ability an item, always (the user, 2026-09-27):** Beemerang Halt, Bee Fly, Dash, Horn Dash, Beetle
+   Dig, Icicle and Shield are always in the pool, not behind an option ("randomizing things the player would have
+   found"); the three starting moves stay under Shuffle Field Moves ("removing things"). **Each unlock scene a location
+   now** (the user: as the party members' joining spots, no temporary double grant to forget), with a story-order rule
+   until chapters 2-7 get room-level logic: each needs every ability learned before it, chapter 1 done, and the members
+   and moves when those are items (more cautious than the game). **How (proposed):** the scene runs untouched and
+   still sets its flag, which is the check; using the ability follows the item, the game's ability checks answered
+   from the received items, never by writing a story flag. Its own build step.
 24. **The panel's settings on normal saves** (the user, 2026-09-26; built, `documentation.md` step 18): an opt-in row so Quality of life and
    Gameplay also apply with Archipelago off. A deliberate exception to "vanilla stays vanilla", which only the user can
    make; off by default. **Named (the user): *Use on normal saves*, ON / OFF**, help line "Quality of life and Gameplay
