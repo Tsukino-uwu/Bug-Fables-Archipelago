@@ -211,8 +211,8 @@ be wrong.
    Vanilla (one permit, every permit gate behind it, the mod leaves the gates alone), Split (the three new permits in the
    pool, each gate checking its own); only these two (the user: "either 4 permits, or 1 permit vanilla"). Through
    `slot_data`, so the gates change only in a Split seed; the new items always exist in the item table (Archipelago's
-   names are fixed) and enter the pool only with Split, each taking a filler slot as the ticket does. Default Vanilla
-   until all four gates are seen, then maybe Split. Its own build step.
+   names are fixed) and enter the pool only with Split, each taking a filler slot as the ticket does. **Default: Split**
+   (the user, 2026-09-27). Its own build step.
 32. **Key items shown without browsing, a Quality of life row, an idea for later** (the user, 2026-09-27): at a
    key-item prompt, the mod asks "Show the <item>?" (Yes / No) when you have the item it takes, and says you don't
    otherwise, as the Boat Ticket's sailor does, instead of the game's list to pick from. Every key-item prompt, not
