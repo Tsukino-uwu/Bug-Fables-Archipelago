@@ -1044,4 +1044,8 @@ Newest last. What was tried, what happened, what the user said.
   the agent sent `interp off` through the command file: "I can move around freely now". Fix: no interpolation while a
   platform carries a body. Hot-reloaded (the refactored plugin's first run in game, loaded clean); the user: normal
   speed on platforms with a slight shimmer, sharp on the ground.
+- **Kabbu's dash names corrected (the user):** Horn Slash is the attack, *Dash* the mobility skill (flag 699), *Horn
+  Dash* its upgrade (flag 39). Earlier notes called 699 "horn dash" and 39 "heavy dash"; the game's text (`textsearch`)
+  confirms the user's names. Fixed in MEASURED.md and Next 3, 23 and 33; the 2026-09-27 planning entry above keeps its
+  wording as written then.
 

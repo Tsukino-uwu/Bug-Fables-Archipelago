@@ -62,7 +62,7 @@ be wrong.
    placeholders, journal entries, enemy drops): see build step 10.
 2. **Entrance randomizer (experimental):** every door, coupled, built; next, sorting the transfers that aren't doors
    into chosen and forced, then the room-by-room logic that removes the label. See build step 12.
-3. **Field abilities shuffled as items** (hover, dig, horn dash, heavy dash, big icicle, bubble shield).
+3. **Field abilities shuffled as items** (hover, dig, Dash, Horn Dash, big icicle, bubble shield).
    Party members stay where the story puts them.
    The three attacks and Jump as items: built, see build steps 21 and 22. Party members as items (*Starting Party Member*): built, see build step 18.
 4. **Open world, one gate at a time** (always on, never an option; the user, 2026-09-26): see build step 9.
@@ -160,9 +160,10 @@ be wrong.
    blocks, the third the ranged attack). Archipelago counts copies of one item (`Has(item, count)`), so the logic is
    simple. Candidates: each member's field abilities in their game order, and other chains; decided when abilities
    become items (Next 3, build step 13).
-   **First candidate, Kabbu's horn (the user, 2026-09-27, on unlocking the dash):** Horn Slash, then Horn Dash. In the
-   game the dash is a second tap of the horn slash, allowed once flag 699 is set (Next 33), so it can't come without
-   the slash: a progressive *Horn* (first copy the slash, second the dash) matches the game's own order.
+   **First candidate, Kabbu's Dash (the user, 2026-09-27, on unlocking the Horn Dash):** *Dash* (flag 699), then *Horn
+   Dash* (flag 39), the game's own upgrade of it (a dash that breaks rocks; the names from its text, `MEASURED.md`). A
+   progressive *Dash*: the first copy the Dash, the second the Horn Dash, the game's own order. *Horn Slash*, the attack,
+   is apart from both.
 24. **The panel's settings on normal saves** (the user, 2026-09-26; built, `documentation.md` step 18): an opt-in row so Quality of life and
    Gameplay also apply with Archipelago off. A deliberate exception to "vanilla stays vanilla", which only the user can
    make; off by default. **Named (the user): *Use on normal saves*, ON / OFF**, help line "Quality of life and Gameplay
@@ -233,8 +234,9 @@ be wrong.
      faster walking: it stops when the stick is let go and steers like walking. The game's dash keeps moving by itself,
      stops at a wall and turns slowly (`DashBehavior` eases toward the stick by 2.5% a frame; the user remembered it
      hard to steer).
-   - **Kabbu's horn dash stays the game's ability and a gate** (flag 699; Next 3, the horn dash as an item), with
-     everything it breaks: that is its hitbox (`tbox`, tagged `BeetleHorn`, or `BeetleDash` with flag 39, that
+   - **Kabbu's Dash stays the game's ability and a gate** (flag 699, and its upgrade the Horn Dash, flag 39; Next 3,
+     the Dash as an item), with everything it breaks: that is its hitbox (`tbox`, tagged `BeetleHorn`, or `BeetleDash`
+     with the Horn Dash, that
      `NPCControl`, `Hornable` and `ShakeHorn` react to), which the sprint never has. The dash starts as a second tap of
      the horn slash within 15 frames (`DoActionTap`, case 1); every leader's tap and hold is taken, hence the HUD key.
    - **Sprint and dash stack:** with the sprint on, the dash goes faster too (fun, and the toggle turns it off). Speed

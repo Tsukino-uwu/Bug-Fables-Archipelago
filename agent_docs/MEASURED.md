@@ -666,8 +666,11 @@ The output stays in the BepInEx folder.
   out the character is moved straight to the target, with smoke (`EntityControl.cs:3692-3701`). So a door whose walk-in
   point is behind a barrier can still be entered. The logic doesn't count on it (more cautious than the game is allowed).
 - **Ability flags, confirmed as reads in `PlayerControl.cs`:** 11 (beemerang, with `!flags[41]`), 699
-  (horn dash), 39 (heavy dash: its absence changes the dash), 171 (big icicle), 19 (hover), 18 (dig), 20
-  (bubble shield).
+  (Dash), 39 (Horn Dash, the Dash's upgrade: its hitbox breaks rocks), 171 (big icicle), 19 (hover), 18 (dig), 20
+  (bubble shield). **The game's names** (its text, the console's `textsearch`, 2026-09-27): *Dash* (`Skills` 49, "Press
+  twice for Kabbu to dash, letting you move faster!"; learned at `BOLostSandsEntrance`, "Kabbu can now Dash!") and
+  *Horn Dash* (`Skills` 38, "a strong move which can break some objects!"; learned at `SwamplandsBridge`, "Kabbu's Dash
+  is now the Horn Dash! ... a rock destroying dash!"). *Horn Slash* is the attack, apart from both (the user).
 - **59 doors to other maps have required or hiding flags, on 22 flags.** Setters: 11 Events 0/1/109,
   18 `Event109`, 20 `Event95`, 41 `Event26`, 67 `Event45`, 85 `Event52`, 86 `Event58`, 107 `Event60`,
   160 `Event84`, 169 `Event87`, 211 `Event98`, 226 and 239 dialogue only, 280 `Event112`, 299 `Event99`,
@@ -758,7 +761,7 @@ UpperSnekPressurePlateRoom, #48 GiantLairFridgeInside, #49 GiantLairDeadLands1 (
 
 **Chapter 1 per the wiki, matched:** #0 (behind a bush outside the cave), #1 (cut the bush by the sign, lake room's far
 left), #2 (behind the large mushroom; the user: upper-left entrance free, from below Leif), #5 (the Queen, for the
-Ancient Mask). **Later:** #3 behind Chuck's house needs a large boulder smashed (chapter 5; heavy dash, to confirm);
+Ancient Mask). **Later:** #3 behind Chuck's house needs a large boulder smashed (chapter 5; the Horn Dash, to confirm);
 #32 in the bridge room needs Vi's fly (hover) over two pillars and the beemerang on a vine (chapter 6), as the user
 guessed. The wiki is a lead, not proof: each entry is checked against the data or on screen before it's logic.
 
