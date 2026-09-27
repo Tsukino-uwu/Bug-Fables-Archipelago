@@ -317,6 +317,12 @@ be wrong.
   - **Shaking text in conversations looks blurry** (the user, 2026-09-27: sharp at 60 FPS, blurry at 240, confirmed on
     screen). Likely cause, from code: the game's shaky and glitchy letters update once per frame, so they're 4x as busy
     at 240 (`MEASURED.md`, Frame rate).
+  - **Bushes shaking before an enemy pops out look blurry** (the user, 2026-09-27, at 240). Where the game shakes
+    them isn't found in code yet; the enemy-in-a-bush countdown itself is already held to 60 a second.
+  - **Other shakes that pick a new random offset every frame** (code read, 2026-09-27, not seen): the camera's screen
+    shake (`MainManager`, `screenshake`), `MainManager.ShakeObject` (many story scenes), a numb character's twitch (a
+    5% roll per frame, `EntityControl.Numb`), the geyser and the crumbling platform (`NPCControl`). Likely the same
+    blur; each to be compared on screen.
 
 ---
 
