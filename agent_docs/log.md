@@ -1100,3 +1100,28 @@ Newest last. What was tried, what happened, what the user said.
   a postfix on `PauseMenu.UpdateDynamicText` shows attack + 1; seen by the user (Vi 3 with Power Exchange shown as 04,
   right as medals go on and off). The damage in a fight is still to test; the user will do it another time.
 - **Unpushed at the end of the session:** 11 commits on `main`, from `b3b48bf` to the medals-screen status.
+
+## 2026-09-28 (later): save crystals without a move, DeathLink, auto-save
+
+- **The question first** (the user): with DeathLink, does a death lose flags? Answered from the code: a death goes back
+  to the last save, so story and cutscene flags since then are lost; items come back from the server (the save's
+  count is lower), checks are never lost or sent twice, and the seed's world changes come from `slot_data` on every
+  map load. A pickup taken after the save shows its box again but gives nothing.
+- **Save crystals by confirm** (mod guide, step 29): with Shuffle Field Moves there was no way to save or heal until a
+  move arrived, since only an attack's hit starts a crystal. The user chose confirm "like talking to an NPC", always
+  in a seed. The crystal drops in and out of the player's talk list, so the mod finds the nearest one itself (the
+  hit's own reach) and runs the hit's steps from the jump's prefix.
+- **Healing crystals** (step 30, the user's add-on): every crystal yellow via `data[2] = 0` in `SetUp`; the game's
+  own code then tints and heals. The game names no "save crystal" (`textsearch crystal`: "ancient crystal").
+- **DeathLink** (Archipelago side, build step 25): the user decided a Gameplay row, not yaml, switchable mid-seed;
+  a received death strikes only once play allows (the user: after a cutscene, whichever of map or battle comes
+  first; never inside a scripted fight such as the first spider fight); **a death DeathLink caused never sends**
+  (the user: a common apworld bug). MultiClient.Net's `DeathLinkService` read at `v6.7.1` first, and the protocol doc
+  at 0.6.7; an earlier Archipelago project's notes read for the design.
+- **Auto-save** (step 31): first planned as tied to DeathLink; the user made it its own row, off by default, 15 s
+  between saves. A room reached inside the 15 s saves when the time is up rather than being skipped.
+- **Private repos stay out of public ones** (the user): a licensing row naming a private project was taken back out;
+  unnamed mentions ("an earlier project") are fine and stay. A mistyped `git revert -q` once renamed a local commit;
+  that commit was dropped with `reset --hard` to the one before (nothing pushed).
+- **Loaded:** build 44D57CE33379 copied into the game; nothing seen in game yet. DeathLink needs a room with a second
+  DeathLink client to test.
