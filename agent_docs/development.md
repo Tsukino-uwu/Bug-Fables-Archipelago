@@ -150,6 +150,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `fps <cap>` (-1 uncapped): the frame cap for this session only, VSync off; the game's settings put theirs back when
   applied. `interp on|off`: Unity's rigidbody interpolation on every character on the map. `camlerp on|off`: the camera
   drawn between physics steps (`FrameRate.cs`). A look at higher frame rates; frame-counted logic runs fast meanwhile.
+- `trace [frames]`: while you move with an NPC's emoticon showing, logs where the player, the NPC and its emoticon land
+  on screen each drawn frame, with the camera's and the emoticon's angles. `cams`: every camera, its depth, parent and
+  layer mask.
 - `frames [seconds]` (5 by default): logs the frame count, median and slow frames with their times, the camera's draw
   time and garbage collections. A collection is marked on the frame before the slow one it causes.
 - `nudge <x> <y> <z>`: shift the party by that much on the current map.

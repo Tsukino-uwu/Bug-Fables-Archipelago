@@ -464,7 +464,7 @@ the save. The probes showed which flag belongs to which location (`MEASURED.md`)
   it sends that location's check. It only reads flags; it never changes them.
 - **That per-frame read makes no garbage.** It once rebuilt its status text and every shop's sorted list each frame,
   68 KB a frame, which forced a 42 ms garbage collection every couple of seconds, a visible hitch (found 2026-09-27
-  with the console's `frames`; the mod guide, step 24). The lists are built once per `slot_data` now, and the
+  with the console's `frames`; the mod guide, step 25). The lists are built once per `slot_data` now, and the
   status text only when it changes.
 
 **Offline play needs no extra queue.** The flags are saved with the game, so a location finished while the

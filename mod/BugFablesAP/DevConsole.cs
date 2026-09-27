@@ -435,6 +435,19 @@ namespace BugFablesAP
                     }
                     case "frames":
                         return FrameRate.StartSample(parts.Length > 1 && float.TryParse(parts[1], out float secs) ? secs : 5f);
+                    case "trace":
+                        return FrameRate.StartTrace(parts.Length > 1 && int.TryParse(parts[1], out int traceFrames) ? traceFrames : 40);
+                    case "cams":
+                    {
+                        var camLog = new System.Text.StringBuilder("[dev] cams:");
+                        foreach (Camera c in Camera.allCameras)
+                        {
+                            camLog.Append($"\n  {c.name} depth {c.depth} enabled {c.enabled} parent {(c.transform.parent != null ? c.transform.parent.name : "none")} "
+                                + $"mask {c.cullingMask} clear {c.clearFlags} main {c == MainManager.MainCamera} guicam {c == MainManager.GUICamera}");
+                        }
+                        log.LogInfo(camLog.ToString());
+                        return "cams logged";
+                    }
                     case "camlerp":
                         FrameRate.SmoothCamera = parts.Length > 1 && parts[1] == "on";
                         return "camlerp: " + (FrameRate.SmoothCamera ? "on" : "off");

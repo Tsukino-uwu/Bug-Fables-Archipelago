@@ -148,7 +148,7 @@ namespace BugFablesAP
             EnemyShuffle.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             AnimGuard.Enable(Log, Guid, () => randomizerEnabled.Value);
             GlowGuard.Enable(Log, Guid, () => randomizerEnabled.Value);
-            FrameRate.Enable(Log);
+            ClockCleanup.Enable(Log, Guid, () => randomizerEnabled.Value);
             difficulty = Config.Bind("Archipelago", "Difficulty", "Normal", new ConfigDescription(
                 "Normal leaves it to the game; Hard acts as if the Hard Mode medal were equipped; Hardest as if the save had "
                 + "the HARDEST code, never written into the save. Boss prize medals are paid out on every setting. "
@@ -177,6 +177,7 @@ namespace BugFablesAP
             QualityOfLife.EntrancesShuffled = () => randomizerEnabled.Value && connection?.DoorTargets != null && connection.DoorTargets.Count > 0;
             Multipliers.Enable(Log, Guid, Config, settingsOn);
             EnemyScaling.Enable(Log, Guid, settingsOn, () => QualityOfLife.EnemyScaling?.Value);
+            FrameRate.Enable(Log, Guid, settingsOn);
             InGameSettings.Enable(Log, Guid, settingsOn);
             CustomItems.Enable(Log, () => randomizerEnabled.Value);
             BoatTicket.Enable(Log, Guid, () => randomizerEnabled.Value);
@@ -303,6 +304,7 @@ namespace BugFablesAP
             PartyFit.Tick();
             PartyMembers.Tick();
             FieldMoves.Tick();
+            FrameRate.Tick();
 
             DevCheats.Tick(Log, giveMoney);
             DevConsole.Tick(devConsole.Value);
@@ -382,6 +384,7 @@ namespace BugFablesAP
             AnimGuard.Disable();
             GlowGuard.Disable();
             FrameRate.Disable();
+            ClockCleanup.Disable();
             EnemyScaling.Disable();
             Multipliers.Disable();
             InGameSettings.Disable();

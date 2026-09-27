@@ -43,6 +43,8 @@ namespace BugFablesAP
         internal const int FullPrice = 10;
         internal static ConfigEntry<int> MedalPrices;
         internal static ConfigEntry<string> EnemyScaling;
+        internal static readonly string[] UncapValues = { "Off", "120", "144", "240" };
+        internal static ConfigEntry<string> UncapFps;
 
         // A scene that only moves, talks and sets flags is skipped by setting its flags; one that also changes the
         // world is fast-forwarded by the game itself, so it ends exactly as it would.
@@ -120,11 +122,15 @@ namespace BugFablesAP
             {
                 SkipConfirm.Value = "Off";
             }
+            if (UncapFps != null)
+            {
+                UncapFps.Value = "Off";
+            }
         }
 
         internal static void ResetAll()
         {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, Travel, SkipConfirm, SkipCutscenes, ItemAnimation, ItemColors, ItemIcons, ItemBackgrounds, ApMenu.Detector })
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, Travel, SkipConfirm, SkipCutscenes, ItemAnimation, ItemColors, ItemIcons, ItemBackgrounds, ApMenu.Detector, UncapFps })
             {
                 if (setting != null)
                 {
@@ -180,6 +186,12 @@ namespace BugFablesAP
                 "Which travel buttons act without their Yes / No box: Warp (warps as soon as it's picked), Map (confirm on an "
                 + "area you've been to travels there at once), Both, or Off (both ask first).",
                 new AcceptableValueList<string>(TravelValues)));
+            UncapFps = config.Bind("QualityOfLife", "UncapFps", "Off", new ConfigDescription(
+                "A frame rate above the game's 30 or 60: 120, 144 or 240, with VSync when it divides the monitor's refresh rate "
+                + "(no tearing), else as a limit. Motion is drawn between the game's "
+                + "physics steps, and whatever the game counts in frames still runs at 60 per second, so it plays as it does at "
+                + "60. Off: the game's own FPS and VSync settings.",
+                new AcceptableValueList<string>(UncapValues)));
             // A follow-up line is fetched inside the running dialogue, not through a new SetText.
             MethodInfo getLine = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetDialogueText), new[] { typeof(int) });
             if (getLine == null)

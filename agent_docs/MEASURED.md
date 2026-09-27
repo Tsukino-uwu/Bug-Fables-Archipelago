@@ -1232,10 +1232,16 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   follows in `MainManager.FixedUpdate` (`RefreshCamera`: the camera's parent position, the camera's local position and
   angles, all lerps with a fixed factor); characters move by rigidbody velocity. The player's rigidbody has no
   interpolation (`None`). Used by `FrameRate.cs`.
+- **Three cameras** (the console's `cams`, 2026-09-27): Main Camera (depth -1, parent MainCam), 3DGUI (depth 0, a child
+  of Main Camera, culling mask 32768 = layer 15, where emoticons such as the "!" over NPCs draw) and GUICamera (depth 1,
+  a child of Main Camera, layer 5, the HUD). The children draw after the main camera, from wherever it is. Used by
+  `FrameRate.cs`.
+- **`MainManager.ApplySettings()`** (static, no arguments) applies FPS and VSync with the rest of the settings; the
+  settings screen calls it. Used by `FrameRate.cs`.
 - **The game forces a collection every 5 seconds:** `MainManager.DoClock` (the play-time clock, once a second) calls
   `Resources.UnloadUnusedAssets()` then `GC.Collect()` when `clocksec % 5 == 0` and no room transition is on. Leaving a
   map does the same when no event is running. Measured cost on the user's machine: two slow frames, about 45 and 66 ms,
-  exactly 5.00 s apart (the console's `frames`, 2026-09-27).
+  exactly 5.00 s apart (the console's `frames`, 2026-09-27). Used by `ClockCleanup.cs`.
 
 ## Quests: to measure (when quests come into scope)
 

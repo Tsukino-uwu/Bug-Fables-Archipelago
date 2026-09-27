@@ -14,7 +14,7 @@ namespace BugFablesAP
             Rows = 7;
         // The Quality of life page: the two buttons side by side on top, then the settings.
         private const int ButtonsRow = 0, FastTextRow = 1, WarpRow = 2, SkipConfirmRow = 3, CutscenesRow = 4, AnimationRow = 5, ColorsRow = 6,
-            IconsRow = 7, BackgroundsRow = 8, DetectorRow = 9, QolRows = 10;
+            IconsRow = 7, BackgroundsRow = 8, DetectorRow = 9, UncapRow = 10, QolRows = 11;
         // The Gameplay page: how the game plays, under the same two buttons.
         private const int DifficultyRow = 1, ScalingRow = 2, MedalPricesRow = 3, ExpRow = 4, BerryRow = 5, GameplayRows = 6;
         private enum Page { Main, Qol, Gameplay }
@@ -206,8 +206,8 @@ namespace BugFablesAP
         private const int CursorSort = 20;
         private const string TextSort = "|sort,10|";
         private static readonly float[] RowY = { 2.65f, 2.0f, 1.35f, 0.7f, 0.05f, -0.6f, -1.25f, -1.9f };
-        // The Quality of life page has ten rows: the same top and bottom row, closer together.
-        private const float QolRowStep = (2.65f + 1.9f) / 9f;
+        // The Quality of life page has eleven rows: the same top and bottom row, closer together.
+        private const float QolRowStep = (2.65f + 1.9f) / 10f;
 
         private float RowAt(int r) => page == Page.Qol ? RowY[0] - r * QolRowStep : RowY[r];
         private const float DescribeY = -2.55f, StatusY = -3.1f;
@@ -455,6 +455,9 @@ namespace BugFablesAP
                             ? "Items show how important they are before you take them."
                             : "Items show no backdrop until you take them.";
                     case DetectorRow: return "Acts like the Detector medal is always equipped, to find hidden items.";
+                    case UncapRow:
+                        return FrameRate.Cap == 0 ? "The game's own FPS setting (30 or 60)."
+                            : $"{FrameRate.Cap} FPS, smooth motion; the game plays as it does at 60.";
                     default: return "";
                 }
             }
@@ -553,6 +556,10 @@ namespace BugFablesAP
                 else if (r == SkipConfirmRow && QualityOfLife.SkipConfirm != null)
                 {
                     Cycle(QualityOfLife.SkipConfirm, QualityOfLife.TravelValues, by);
+                }
+                else if (r == UncapRow && QualityOfLife.UncapFps != null)
+                {
+                    Cycle(QualityOfLife.UncapFps, QualityOfLife.UncapValues, by);
                 }
                 else
                 {
@@ -798,6 +805,7 @@ namespace BugFablesAP
                     : QualityOfLife.IconMode == "AllPlayers" ? "ALL PLAYERS" : "OFF");
                 Choice(BackgroundsRow, "Item backgrounds", OnOff(QualityOfLife.ItemBackgrounds));
                 Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
+                Choice(UncapRow, "Uncap FPS", (QualityOfLife.UncapFps?.Value ?? "Off").ToUpperInvariant());
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Quality of life. Cancel goes back" + (inGame ? " to Settings." : "."), 0f, StatusY);
                 PlaceCursor();
@@ -840,7 +848,7 @@ namespace BugFablesAP
             arrows.parent = box;
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
-            foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, SkipConfirmRow, CutscenesRow, AnimationRow, ColorsRow, IconsRow, BackgroundsRow, DetectorRow }
+            foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, SkipConfirmRow, CutscenesRow, AnimationRow, ColorsRow, IconsRow, BackgroundsRow, DetectorRow, UncapRow }
                 : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, MedalPricesRow, ExpRow, BerryRow } : new[] { ModeRow, AchievementsRow, NormalSavesRow })
             {
                 for (int side = 0; side < 2; side++)
