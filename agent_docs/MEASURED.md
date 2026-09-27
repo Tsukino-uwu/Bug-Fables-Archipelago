@@ -693,7 +693,9 @@ The output stays in the BepInEx folder.
   mechanism needs the Halt, not just the Toss. **What each opens, for the logic** (the game's text, with the user's play,
   2026-09-27): Shield, walking on hazardous terrain (its deflecting attacks is comfort only); Beetle Dig, going under
   some roadblocks and the dig spots; Freeze, freezing droplets and water fountains ("freeze enemies and liquids"; the
-  droplet rooms already need it); Bee Fly, crossing large gaps (not yet unlocked by the user); Icicle, platforms on
+  droplet rooms already need it). The game has exactly two freezable objects, `ObjectTypes.Dropplet` and
+  `ObjectTypes.Geizer` (the fountains), reacting to Freeze's hitbox (tag `Icecle`); the Geizer also to the Icicle
+  (`Icefall`) (`NPCControl.cs:4779, 4829`; the user: droplets in Snakemouth Den, a fountain in town). Bee Fly, crossing large gaps (not yet unlocked by the user); Icicle, platforms on
   water, dropped by a second tap during the Freeze (`PlayerControl.cs:1164`), so chained on Freeze as the Dash is on the
   Horn Slash. Used by the Next 3 plan (field abilities as items).
 - **59 doors to other maps have required or hiding flags, on 22 flags.** Setters: 11 Events 0/1/109,
