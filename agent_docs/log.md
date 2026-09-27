@@ -1005,3 +1005,36 @@ Newest last. What was tried, what happened, what the user said.
   experimental (build step 12), so no promise it is in play.
 - **A refactor was planned and set aside:** the user asked for "whole project refactor" as general work while they
   play chapters 5-7; a plan (apworld split proved by a seed diff, mod helpers and folders, docs tidy) waits for a go.
+
+## 2026-09-27 (night): the whole-project refactor, and three Uncap FPS reports
+
+- **Asked for:** "whole project refactor", as general work while the user plays chapters 5-7; the user left the
+  scope to the agent and asked what's best for behaviour. Decided: nothing a seed or the plugin does changes; bugs
+  found go to Known issues, not into the refactor.
+- **apworld** (one commit): `world.py` split as APQuest is (items, locations, regions, rules, slot_data, web_world,
+  enemies); item kinds named; one category-to-toggle table; tests split by subject with a `state_with` helper.
+  **Proof:** a scratch script generated 13 option sets x 2 seeds and saved regions, locations, pool, each progression
+  item's dependent locations, the fill and slot_data; byte-identical before and after. It was first shown to catch a
+  one-word rule change. 372 -> 384 tests (the base class's default tests collected in 4 new files), all pass; a seed
+  with APQuest generates. **Found on the way:** `doc-coverage.py` read slot_data keys out of `world.py`; after the split
+  it would have found none and passed silently. It now reads `slot_data.py` and fails if it finds no keys.
+  `test_names` now uses the world's `vanilla_item` (its own copy skipped berries and item shops; still passes).
+- **mod** (commits per slice): folders by job; `GameSlots.cs` (flags named only where MEASURED.md says what they
+  are); the dead connect action; `SlotData.cs` (one reader); DevConsole, QualityOfLife, ApMenu, ItemSwap and FrameRate
+  split into partial files (dev-only parts under `Dev/`); `QualityOfLife.EnemyScaling` renamed `EnemyScalingMode`
+  (config key unchanged). **Proof:** each build decompiled with ILSpy and compared member by member with the one
+  before: moves came out identical (apart from the compiler's delegate-cache numbering), other changes differed only
+  where intended. **Found on the way:** `build-release.ps1`'s [Debug]-defaults check listed only the top folder, so
+  the move would have hidden every setting from it; it now recurses (still 19). `release/` rebuilt at the end.
+- **Left out on purpose:** a shared Harmony helper (27 files, one or two lines each, every "NOT installed" message
+  its own); one shared Yes/No popup for the panel, the pause menu and the main menu (it changes what's drawn, so only
+  with the user checking on screen); WarpButton's dev tuning (40 lines, tangled with shipped fields); Colour/Color
+  spelling; the finished items in Next (their decisions live only there, so they stay; only 15, 16, 17 corrected).
+- **Not verified in game.** The plugin was never copied in while the user played. Before the next release, the user
+  checks on screen: connect, a pickup, a shop, the panel's pages, Warp and Map, a door, the opening, the main menu's
+  toggle, save and reload.
+- **Uncap FPS reports (Known issues):** shaking text blurry above 60 (the user, confirmed sharp at 60; from code,
+  `FontEffects` moves shaky letters every frame); hit animations too fast (a tester); slow motion on bridges and
+  moving platforms (the user). The user: "we have some work to do with the fps things still".
+- **Also this session:** We Owe Ya! does nothing when received early (Next 36, `MEASURED.md`).
+
