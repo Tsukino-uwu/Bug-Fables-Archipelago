@@ -1321,6 +1321,11 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   `Resources.UnloadUnusedAssets()` then `GC.Collect()` when `clocksec % 5 == 0` and no room transition is on. Leaving a
   map does the same when no event is running. Measured cost on the user's machine: two slow frames, about 45 and 66 ms,
   exactly 5.00 s apart (the console's `frames`, 2026-09-27). Used by `ClockCleanup.cs`.
+- **A frozen enemy's slide** (2026-09-27, code read; both symptoms seen by the user at 240): the knock
+  (`NPCControl.Dizzy`, `:5107`) sets `rigid.velocity` and `icevel` to the push with no vertical part, then hops the
+  enemy on the next frame; `NPCControl.Update`'s frozen branch (`:1648-1657`, enemies with `freezecooldown > 0`) and
+  `PushRockStuff` (`:2862-2877`) cancel the slide (`icevel = 0`) whenever the vertical speed reads near zero, and the
+  frozen branch writes `transform.position = LimitRadius(...)` every frame. Used by `FrameRate.cs`.
 - **Platforms carry by parenting** (2026-09-27, code read; the symptom seen by the user): `GroundDetector.OnTriggerStay`
   makes the entity a child of a collider tagged `Platform` or `PlatformNoClock` and sets its `platform`;
   `OnTriggerExit` un-parents it (the player and followers to no parent, others to the map) and clears `platform`

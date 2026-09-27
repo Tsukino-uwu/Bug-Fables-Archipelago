@@ -1570,6 +1570,17 @@ place it counts frames instead of time first.
   fix:** after the game's ground check (`GroundDetector.OnTriggerStay` / `OnTriggerExit`), a body standing on a
   platform isn't interpolated, and is again once off it. Seen by the user (2026-09-27): normal speed on the platform,
   with a slight shimmer there only (drawn at physics steps); sharp again on the ground.
+- **Pitfall, a knocked frozen enemy: two faults stacked.** The user, at 240: knocking an enemy in ice looked slow,
+  then "stops short". **First fault, frame order:** the knock (`NPCControl.Dizzy`) sets the block's speed flat and hops
+  it a frame later; in between, the frozen enemy's own check reads no vertical speed as landed and cancels the slide
+  (`icevel`). At 60 a physics step (gravity) nearly always comes between; at 240 usually not. Fixed: a cancel in a frame
+  no physics step came before is undone (`Time.fixedTime` unchanged since that enemy's last `Update`); one right after a
+  step, a real landing, stands. It covers pushed rocks too (the same check). **Second fault, hidden by the first:** a
+  frozen enemy's position is written back every frame (`LimitRadius`), from the drawn pose, which trails the physics one
+  under interpolation, so it dragged. The first test with `interp off` showed nothing because the slide was cancelled
+  anyway; after the first fix: "worked for 1 hit, then it became slow", and with `interp off` it moved properly. Fixed
+  as the platforms: not interpolated while frozen, one decision for both cases so neither undoes the other. **Seen by
+  the user (2026-09-27):** knocked around properly, every time.
 - **Random shakes re-rolled once per 1/60 s.** Some effects jump to a new random offset every frame, a blur at 240 (the
   user: shaky text in conversations sharp at 60, blurry at 240). Their timing was already right; only the re-roll
   was per frame. Now, while the row is on, the offset holds between ticks: `FontEffects` (shaky and glitchy letters;

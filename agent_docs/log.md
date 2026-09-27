@@ -1056,4 +1056,11 @@ Newest last. What was tried, what happened, what the user said.
   without the Horn Slash only moves, decided, not built. A reader agent read the seven scenes: Dash is taught in
   chapter 3 at Lost Sands (`Event221`), not chapter 1. The patch points were counted in the game's IL, not its C#
   (RefreshSkills has 15 reads, the C# suggested 14); the running game logged 8/8, 2/2, 15/15. Nothing seen on screen yet.
+- **A knocked frozen enemy, two stacked faults, how it was found:** the user at 240: slow, then "stops short". The
+  console's `interp off` first changed nothing; the knock code then showed a frame-order fault (the slide cancelled in
+  frames with no physics step between the flat push and the hop). With that fixed: "it worked for 1 hit, and then it
+  became slow"; `interp off` again, now it moved properly (the first test had been masked by the cancelled slide); the
+  frozen branch writes its position back every frame. Fixed as the platforms (no interpolation while frozen, one shared
+  decision). The user: "moved properly when knocked around". Also: `copy-dev -Status` added after the user asked for a
+  faster reload check; the first status read showed the new build loaded at once.
 

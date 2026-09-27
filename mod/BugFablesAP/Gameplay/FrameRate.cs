@@ -159,6 +159,7 @@ namespace BugFablesAP
             Patch(AccessTools.Method(typeof(GroundDetector), "OnTriggerExit"), postfix: nameof(AfterGround));
             Patch(AccessTools.Method(typeof(FontEffects), "Update"), prefix: nameof(BeforeFontEffects), postfix: nameof(AfterFontEffects));
             Patch(AccessTools.Method(typeof(MainManager), nameof(MainManager.ShakeObject)), prefix: nameof(BeforeShakeObject));
+            Patch(AccessTools.Method(typeof(NPCControl), "Update"), prefix: nameof(BeforeNpcUpdate), postfix: nameof(AfterNpcUpdate));
             Patch(AccessTools.Method(typeof(EntityControl), nameof(EntityControl.ShakeSprite), new[] { typeof(Vector3), typeof(float) }),
                 prefix: nameof(BeforeShakeSprite));
             Patch(AccessTools.Method(typeof(MainManager), nameof(MainManager.TieFramerate)), prefix: nameof(BeforeTieFramerate));
@@ -318,12 +319,25 @@ namespace BugFablesAP
         // held them back, like walking in mud (the user, 240 fps). Not interpolated while on one.
         private static void AfterGround(GroundDetector __instance)
         {
-            Rigidbody body = __instance.parent != null ? __instance.parent.rigid : null;
-            if (!active || body == null)
+            if (active && __instance.parent != null)
+            {
+                Interpolate(__instance.parent, __instance.platform != null);
+            }
+        }
+
+        // One decision for both cases, so neither undoes the other: not interpolated on a platform, or while a frozen enemy
+        // (the game writes a frozen enemy's position back every frame, from the drawn pose that trails the physics one, so
+        // it dragged; the user, 2026-09-27: slow after the first knock, fine with interp off).
+        private static void Interpolate(EntityControl entity, bool onPlatform)
+        {
+            Rigidbody body = entity.rigid;
+            if (body == null)
             {
                 return;
             }
-            RigidbodyInterpolation wanted = __instance.platform != null ? RigidbodyInterpolation.None : RigidbodyInterpolation.Interpolate;
+            NPCControl npc = entity.npcdata;
+            bool frozen = npc != null && npc.entitytype == NPCControl.NPCType.Enemy && npc.freezecooldown > 0f;
+            RigidbodyInterpolation wanted = onPlatform || frozen ? RigidbodyInterpolation.None : RigidbodyInterpolation.Interpolate;
             if (body.interpolation != wanted)
             {
                 body.interpolation = wanted;
@@ -401,6 +415,45 @@ namespace BugFablesAP
             {
                 obj.position = p;
             }
+        }
+
+        // A knocked ice block (a frozen enemy, a pushed rock) slides by icevel until a frame sees it with no vertical speed,
+        // which reads as landed. The knock sets its speed flat and hops it a frame later: at 60 a physics step (gravity)
+        // comes between, at 240 usually not, so the slide was cancelled at once (the user: it stopped short). A cancel in a
+        // frame no physics step came before is undone; one right after a step (a real landing) stands.
+        private static readonly AccessTools.FieldRef<NPCControl, Vector3> iceVelocity = AccessTools.FieldRefAccess<NPCControl, Vector3>("icevel");
+        private static readonly Dictionary<int, float> lastPhysics = new Dictionary<int, float>();
+
+        private static void BeforeNpcUpdate(NPCControl __instance, out Vector3 __state)
+        {
+            __state = Vector3.zero;
+            if (!active || __instance.entity == null || __instance.entity.rigid == null)
+            {
+                return;
+            }
+            Interpolate(__instance.entity, __instance.entity.feet != null && __instance.entity.feet.platform != null);
+            int id = __instance.GetInstanceID();
+            if (lastPhysics.Count > 4096)
+            {
+                lastPhysics.Clear(); // ids of maps left behind
+            }
+            bool stepped = !lastPhysics.TryGetValue(id, out float seen) || seen != Time.fixedTime;
+            lastPhysics[id] = Time.fixedTime;
+            if (!stepped)
+            {
+                __state = iceVelocity(__instance);
+            }
+        }
+
+        private static void AfterNpcUpdate(NPCControl __instance, Vector3 __state)
+        {
+            if (__state.sqrMagnitude < 0.01f || iceVelocity(__instance).sqrMagnitude >= 0.01f)
+            {
+                return;
+            }
+            iceVelocity(__instance) = __state;
+            Rigidbody body = __instance.entity.rigid;
+            body.velocity = new Vector3(__state.x, body.velocity.y, __state.z);
         }
 
         // EntityControl.ShakeSprite (a character's shake, as on a hit that does no damage): the same, its sprite.

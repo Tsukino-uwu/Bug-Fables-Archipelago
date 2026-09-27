@@ -1,5 +1,5 @@
 # Written by dev-scripts/build-release.ps1; checked by its -Check in CI.
-commit: c5dec07
+commit: d0d1059
 mod/BugFablesAP/BugFablesAP.csproj: 8887b0c3d82d1997c484b1c9d1cd812e524af292
 mod/BugFablesAP/Core/ApConnection.cs: 46c2321aaa9bf72bbc338b3e237ca3053cc101bb
 mod/BugFablesAP/Core/GameSlots.cs: 7e24c60494cf50cbbb05408d3a863c6332d5249b
@@ -14,7 +14,7 @@ mod/BugFablesAP/Dev/DevConsole.cs: cfc2537ec17b71eb7ecdf7c2eaa0fc2cf0a00f0e
 mod/BugFablesAP/Dev/DevConsole.Inspect.cs: 82e0dff741f5c8989f619d91f7f930d7579472ad
 mod/BugFablesAP/Dev/DevConsole.Party.cs: 138809c3ca7aed916fcfa3789a5f249e66450b0e
 mod/BugFablesAP/Dev/DevConsole.Warp.cs: 71a9da1ee8cd07ff7a37f1bdedcbc18d9ca9ef9b
-mod/BugFablesAP/Dev/DevReload.cs: a6c8ce18d26b3052327eb96f337861c69024d59c
+mod/BugFablesAP/Dev/DevReload.cs: 356f4b74b14ee1b13c3ed58b4ddd8a0ee48bc2ea
 mod/BugFablesAP/Dev/EntityDump.cs: 85753c64db870019ec724028d536053ce106d00e
 mod/BugFablesAP/Dev/FrameRate.Dev.cs: a51653bb319b51bc80b57b589f773dd5b3799fd6
 mod/BugFablesAP/Dev/GrantProbe.cs: a7c9fd998599aaf5dfd3ed357de03e59393079ef
@@ -27,7 +27,7 @@ mod/BugFablesAP/Dev/TextProbe.cs: a941dbf95f742e3f0f67650db55243ee6f7d5617
 mod/BugFablesAP/Dev/VarDump.cs: c05f4b023fb5012c5b26f65c5f11267f81d16df4
 mod/BugFablesAP/Gameplay/CheckDetector.cs: 5ba08e83007833ee978a35018ccd606f2871c058
 mod/BugFablesAP/Gameplay/EnemyScaling.cs: 964c3cb640bbef5de52d7b7a85495f99b7bbf6c4
-mod/BugFablesAP/Gameplay/FrameRate.cs: 2d861dccf27eefe589832160563323c8d095950d
+mod/BugFablesAP/Gameplay/FrameRate.cs: 78f7fa4704c0c2fda50a2992d6902cec39f4e2d4
 mod/BugFablesAP/Gameplay/FrameSites.cs: dc95f42406ebf181fdfaa59963171c23862636b0
 mod/BugFablesAP/Gameplay/MedalAssist.cs: 962675c05d884c23ff41c201c147746977be6b89
 mod/BugFablesAP/Gameplay/Multipliers.cs: 44a009d3301ff2790095aa191b30c4d036aa4031
@@ -65,7 +65,7 @@ mod/BugFablesAP/World/FieldMoves.cs: e163b12f836481edab649c47a2698e37ee0cd4d7
 mod/BugFablesAP/World/KeptOpen.cs: 22f61e7baa23bfe86e6514562c6dc29ae90edcd0
 mod/BugFablesAP/World/PartyFit.cs: c89798b7b55d04a90a5612d4a35e835bff8e4f54
 mod/BugFablesAP/World/PartyMembers.cs: c47a1eedcc3ea4f7e94732dd4d9c54cffc031835
-BugFablesAP.dll: 747c04a36afe584ec788b327464d572e87901087df4bc21c2c7935afb25a4565
+BugFablesAP.dll: b03eeb8f81a6e255984015ac5971fdc2bcca340c0e43afe445e86cb4a0fb9ac9
 Archipelago.MultiClient.Net.dll: 4d4f49b1528cf88b00fc07c69ff27d16cb1eeff52c0636009befd87f4e9dde5b
 websocket-sharp.dll: 5f59b27b01d6d6d0ea6ae2258e2639d80bc4ccedc0c16917cdd73e0b30e07f58
 Newtonsoft.Json.dll: 0cc6b1d3f4e8c938edfe1f02f2167d1cbf596a4df6ac0dbd82fe89ed67e45eb0

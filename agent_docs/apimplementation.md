@@ -338,9 +338,8 @@ be wrong.
 - **Uncap FPS (mod guide, step 24) still speeds some things up.** Each to compare at 60 and above on screen, then
   step at the game's own rate, as the other per-frame sites are:
   - **Being hit plays too fast, for enemies and the party** (a tester, 2026-09-27, FPS unlocked). Cause not read yet.
-  - **Knocking a frozen enemy looks slow or weird** (the user, 2026-09-27, at 240). Not interpolation: the same with
-    the console's `interp off` on that map. Lead from code: the frozen enemy's slide is re-applied or stopped every
-    frame by its vertical speed (`NPCControl.cs:2866-2877`, `1650-1657`), several times per physics step at 240.
+  - **A frozen enemy shimmers slightly while it flies** after a knock (not interpolated while frozen; the slow motion
+    and the short slide are fixed and seen, mod guide, step 24).
   - **A slight shimmer while standing on a platform or bridge** (the user, 2026-09-27, at 240). The slow motion there
     is fixed (mod guide, step 24); the party isn't interpolated while a platform carries it, so it's drawn at physics
     steps. Smoothing it relative to the platform is left for later.
