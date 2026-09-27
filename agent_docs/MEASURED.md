@@ -1232,12 +1232,16 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 - **The game's render scale** (`MainManager.SetRenderTexture(index)`, `downsamples` 1, 0.9, 0.8, 0.75, 0.6, 0.5, 0.4):
   0 draws straight to the screen and hides `GUICamera`'s first child (a quad). Any other draws the world and 3DGUI
   cameras into a `RenderTexture` of 1920x1080 times the factor (whatever the screen's size), the world camera's `rect`
-  shrunk to the factor, shown on that quad (bilinear). Called with 0 on start and after a minigame, with 2 by some
+  shrunk to the factor, shown on that quad (bilinear). **The quad's shader is `Custom/CRT`** (the console's `cams`,
+  2026-09-28): a CRT-TV look (curved, inset picture, vertical colour stripes, darker), the minigames' look; the user
+  saw it at 200% when the mod first drew through that quad. Called with 0 on start and after a minigame, with 2 by some
   minigames. Settings save `downsample` and FXAA.
 - **Screen positions are viewport-relative:** every conversion the game makes is `WorldToViewportPoint` (0 to 1),
   none in pixels, so a larger render texture moves nothing.
 - **Resolutions:** the game's list runs 1024x576 to 3840x2160; fullscreen is a bool passed to `Screen.SetResolution`.
   The user's game on 2026-09-28: a 1920x1080 window on a 3840x2160, 240 Hz screen. Unity 2018.4.12.
+- **Textures at full size** (the user's game, 2026-09-28): the game's low-texture setting off (`lowtexture` False,
+  `QualitySettings.masterTextureLimit` 0), anisotropic filtering `Enable` (per texture).
 - Used by `RenderQuality.cs`.
 
 ## The round pause-menu icons' colours (2026-09-26, sampled from the SpriteDump sheet)

@@ -480,7 +480,8 @@ namespace BugFablesAP
                     case "cams":
                     {
                         var camLog = new System.Text.StringBuilder($"[dev] cams: QualitySettings.antiAliasing {QualitySettings.antiAliasing}, "
-                            + $"downsample {MainManager.downsample}, runInBackground {Application.runInBackground}:");
+                            + $"downsample {MainManager.downsample}, runInBackground {Application.runInBackground}, lowtexture {MainManager.lowtexture}, "
+                            + $"masterTextureLimit {QualitySettings.masterTextureLimit}, anisotropic {QualitySettings.anisotropicFiltering}:");
                         foreach (Camera c in Camera.allCameras)
                         {
                             camLog.Append($"\n  {c.name} depth {c.depth} enabled {c.enabled} parent {(c.transform.parent != null ? c.transform.parent.name : "none")} "
@@ -489,6 +490,10 @@ namespace BugFablesAP
                                 + $"target {(c.targetTexture != null ? c.targetTexture.width + "x" + c.targetTexture.height + " aa" + c.targetTexture.antiAliasing : "screen")} "
                                 + $"effects {string.Join(",", System.Array.ConvertAll(c.GetComponents<MonoBehaviour>(), m => m.GetType().Name + (m.enabled ? "" : "(off)")))}");
                         }
+                        Transform quad = MainManager.GUICamera != null && MainManager.GUICamera.transform.childCount > 0 ? MainManager.GUICamera.transform.GetChild(0) : null;
+                        Renderer quadRenderer = quad != null ? quad.GetComponentInChildren<MeshRenderer>(true) : null;
+                        camLog.Append($"\n  render-scale quad: {(quad != null ? quad.name + " active " + quad.gameObject.activeSelf : "none")}, "
+                            + $"shader {(quadRenderer != null ? quadRenderer.sharedMaterial.shader.name : "none")}");
                         log.LogInfo(camLog.ToString());
                         return "cams logged";
                     }

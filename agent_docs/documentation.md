@@ -1738,15 +1738,20 @@ done by drawing into a texture that the HUD camera's quad shows on screen.
 **How it works** (`RenderQuality.cs`, checked every frame from `Plugin.Tick`):
 - **Anti-aliasing** sets Unity's `QualitySettings.antiAliasing` (the game never sets it), and puts the game's own
   value back when switched off.
-- **Render scale reuses the game's own render-scale path, pointed the other way:** the world and 3DGUI cameras draw
-  into a texture the size of the screen times the scale (with the MSAA level on it), shown on the game's quad. The HUD
-  stays at the screen's resolution. Back to 100%, the game's own `SetRenderTexture(0)` restores the screen.
+- **Render scale reuses the game's own render-scale idea, pointed the other way:** the world and 3DGUI cameras draw
+  into a texture the size of the screen times the scale (with the MSAA level on it). A plain copy (a command buffer's
+  `Blit` on the HUD camera, before it draws) puts it on screen, and the HUD stays at the screen's resolution. Back to
+  100%, the game's own `SetRenderTexture(0)` restores the screen.
+- **First drawn through the game's own quad, which looked like an old TV** (the user, 2026-09-28, at 200%: curved and
+  inset, vertical colour stripes, darker). The quad's shader is `Custom/CRT`, the minigames' look, so the copy replaced
+  it; seen normal right after.
 - **The game keeps priority:** its own render scale below 100% (and the minigames, which use it) take over, and the row
   steps aside while they're in use. A resolution change rebuilds the texture.
 - **Safe at 2x:** the game places things by viewport position (0 to 1), never by pixel, so a larger texture moves
   nothing. Every decision is logged (`[gfx]`).
 
-**Status:** built (2026-09-28), the build succeeds, not yet seen in game.
+**Status:** Render scale 200% seen by the user (2026-09-28): the picture normal and sharp, in a 1920x1080 window.
+Still to see: the framing unchanged between 100% and 200%, 150%, Anti-aliasing on screen.
 
 *Code: `RenderQuality.cs`; the page in `ApMenu.cs`, `ApMenu.Rows.cs` and `InGameSettings.cs`; the console's `cams` in
 `DevConsole.cs`.*

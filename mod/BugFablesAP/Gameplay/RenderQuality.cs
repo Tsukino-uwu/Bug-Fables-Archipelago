@@ -2,12 +2,14 @@ using System;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace BugFablesAP
 {
     // The Graphics page's Render scale (supersampling) and Anti-aliasing (MSAA) rows (mod guide, step 28).
-    // Render scale borrows the game's own render-scale path (MainManager.SetRenderTexture): the world and 3DGUI cameras
-    // draw into a texture, which the GUI camera's quad shows on screen; here the texture is larger than the screen.
+    // Render scale: the world and 3DGUI cameras draw into a texture larger than the screen, as the game's own render scale
+    // does below 100%; a plain copy puts it on screen just before the HUD camera draws. The game's own quad for that
+    // texture has a CRT-TV shader (the minigames' look), so it isn't used.
     internal static class RenderQuality
     {
         internal static readonly string[] Scales = { "100", "150", "200" };
@@ -19,6 +21,7 @@ namespace BugFablesAP
         private static ManualLogSource log;
         private static int vanillaMsaa = -1;
         private static RenderTexture ours;
+        private static CommandBuffer copy;
         private static string lastDecision;
 
         internal static void Enable(ManualLogSource logger, ConfigFile config, Func<bool> on)
@@ -83,6 +86,10 @@ namespace BugFablesAP
                 StandDown(scale <= 1f ? "render scale 100%" : "the game's own render scale is in use");
                 return;
             }
+            if (ours != null && MainManager.MainCamera.targetTexture != ours)
+            {
+                StandDown("the game changed the camera's target");
+            }
             int width = Mathf.RoundToInt(Screen.width * scale), height = Mathf.RoundToInt(Screen.height * scale);
             int samples = Mathf.Max(1, msaa);
             if (ours != null && MainManager.MainCamera.targetTexture == ours && ours.width == width && ours.height == height
@@ -96,20 +103,19 @@ namespace BugFablesAP
         private static void Apply(int width, int height, int samples)
         {
             Camera ui3d = MainManager.MainCamera.transform.childCount > 1 ? MainManager.MainCamera.transform.GetChild(1).GetComponent<Camera>() : null;
-            Transform quad = MainManager.GUICamera.transform.childCount > 0 ? MainManager.GUICamera.transform.GetChild(0) : null;
-            Renderer shown = quad != null ? quad.GetComponent<Renderer>() : null;
-            if (ui3d == null || shown == null)
+            if (ui3d == null)
             {
-                Decide($"not applied: the game's render texture objects weren't found (3DGUI camera {ui3d != null}, screen quad {shown != null})");
+                Decide("not applied: the 3DGUI camera wasn't found");
                 return;
             }
+            RemoveCopy();
             var texture = new RenderTexture(width, height, 24) { antiAliasing = samples, filterMode = FilterMode.Bilinear };
-            quad.gameObject.SetActive(true);
             MainManager.MainCamera.rect = new Rect(0f, 0f, 1f, 1f);
             MainManager.MainCamera.targetTexture = texture;
             ui3d.targetTexture = texture;
-            shown.material.mainTexture = texture;
-            shown.material.mainTextureScale = Vector2.one;
+            copy = new CommandBuffer { name = "BugFablesAP render scale" };
+            copy.Blit(texture, BuiltinRenderTextureType.CameraTarget);
+            MainManager.GUICamera.AddCommandBuffer(CameraEvent.BeforeForwardOpaque, copy);
             RenderTexture old = ours;
             ours = texture;
             if (old != null)
@@ -120,6 +126,19 @@ namespace BugFablesAP
             log.LogInfo($"[gfx] rendering at {width}x{height} (screen {Screen.width}x{Screen.height}, MSAA {samples})");
         }
 
+        private static void RemoveCopy()
+        {
+            if (copy != null)
+            {
+                if (MainManager.GUICamera != null)
+                {
+                    MainManager.GUICamera.RemoveCommandBuffer(CameraEvent.BeforeForwardOpaque, copy);
+                }
+                copy.Release();
+                copy = null;
+            }
+        }
+
         // Back to the screen through the game's own SetRenderTexture(0), only while the texture on the camera is ours.
         private static void StandDown(string why)
         {
@@ -127,6 +146,7 @@ namespace BugFablesAP
             {
                 return;
             }
+            RemoveCopy();
             if (MainManager.MainCamera != null && MainManager.MainCamera.targetTexture == ours && MainManager.downsample == 0)
             {
                 MainManager.SetRenderTexture(0);
