@@ -321,7 +321,8 @@ be wrong.
     steps).
   - **Other shakes still rolled every frame** (code read, 2026-09-27, not seen): a numb character's twitch (a 5% roll
     per frame, `EntityControl.Numb`), the geyser and the crumbling platform (`NPCControl`), Heavy Strike's charge sound
-    (its pitch rises per frame). Each to be compared on screen.
+    (its pitch rises per frame). Each to be compared on screen. A bridge falling apart looked normal at 240 (the user,
+    2026-09-27); whether it was the crumbling platform is still to be asked.
 
 ---
 
