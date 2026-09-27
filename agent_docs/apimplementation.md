@@ -160,10 +160,15 @@ be wrong.
    blocks, the third the ranged attack). Archipelago counts copies of one item (`Has(item, count)`), so the logic is
    simple. Candidates: each member's field abilities in their game order, and other chains; decided when abilities
    become items (Next 3, build step 13).
-   **First candidate, Kabbu's Dash (the user, 2026-09-27, on unlocking the Horn Dash):** *Dash* (flag 699), then *Horn
-   Dash* (flag 39), the game's own upgrade of it (a dash that breaks rocks; the names from its text, `MEASURED.md`). A
-   progressive *Dash*: the first copy the Dash, the second the Horn Dash, the game's own order. *Horn Slash*, the attack,
-   is apart from both.
+   **Decided (the user, 2026-09-27): three progressive items, always, never an option, each *progression*** (every
+   level unlocks checks): Vi's *Beemerang Toss* then *Beemerang Halt*; Kabbu's *Dash* then *Horn Dash*; Leif's
+   *Freeze* then *Icicle* (the game's names and flags, `MEASURED.md`, every field ability). Why always: a second level
+   without the first wouldn't work (the user); in the game the Halt, the Horn Dash and the Icicle each extend the first
+   (the Halt holds a thrown Beemerang, the Icicle is a second tap during the Freeze, the Horn Dash changes the Dash).
+   With Shuffle Field Moves (build step 21), the Beemerang and Freeze items become the progressive ones' first copy.
+   **Open (asked the user):** the Dash starts as a second tap during the Horn Slash (`PlayerControl.cs:1083`), so while
+   the Horn Slash is locked the Dash can't be used either; either the logic makes the Dash need the Horn Slash too, or
+   the mod lets the Dash start without it.
 24. **The panel's settings on normal saves** (the user, 2026-09-26; built, `documentation.md` step 18): an opt-in row so Quality of life and
    Gameplay also apply with Archipelago off. A deliberate exception to "vanilla stays vanilla", which only the user can
    make; off by default. **Named (the user): *Use on normal saves*, ON / OFF**, help line "Quality of life and Gameplay
