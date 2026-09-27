@@ -223,6 +223,8 @@ be wrong.
      (`PlayerControl.GetInput`) shows the HUD (HP, TP, berries) for 300 frames or hides it; little is lost, since the
      HUD shows itself when the player stands still (the user). Its uses in the pause menu, the shop list
      (`MainManager`) and one battle spot (`BattleControl`) stay. Keys can be rebound, so the mod follows the key, not "Y".
+     **In battle** the key only shows or hides the EXP bar (the user, 2026-09-27, seen on screen): little lost there too,
+     if a later feature ever needs a battle button.
    - **A toggle, not a hold:** each press turns the sprint on or off, so a controller needs no held button.
    - **Whoever leads, the same for all three** (only the leader is controlled; the other two follow). A sprint is
      faster walking: it stops when the stick is let go and steers like walking. The game's dash keeps moving by itself,
