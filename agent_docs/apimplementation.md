@@ -73,7 +73,7 @@ be wrong.
 7. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number: done, seen
    (build step 3).
 8. **A release: three separate downloads** (the user, 2026-09-25): built, see build step 17; v0.1.0 out
-   (2026-09-26). The next one: `dev-scripts/release.ps1 -Version vX.Y.Z` after bumping both versions.
+   (2026-09-26), v0.2.0 (2026-09-27). The next one: `dev-scripts/release.ps1 -Version vX.Y.Z` after bumping both versions.
 9. **The chat feed**, then the in-game text client (see the design list in the mod guide, step 2).
 10. **A "Quality of life" page in the Archipelago panel** (the user, 2026-09-25): on/off rows that speed the game
    up and make it smoother: skips first, others later. Battle tutorials next (the mod guide, step 10).
@@ -1561,7 +1561,8 @@ BepInEx is not bundled; the player installs it first.
    holds, and `-Layout Dev` swaps back (`development.md`, step 4 of the build-and-copy list).
 
 **Versions.** The mod's `Plugin.Version` and the apworld's `world_version` both equal the tag without its `v`.
-v0.1.0 is the first (the mod was 0.0.1 and the world 0.2.0 before).
+v0.1.0 is the first (the mod was 0.0.1 and the world 0.2.0 before). v0.2.0 is the second (2026-09-27), cut from `main` as it stood
+before the user played chapters 5 to 7, with highlights written from the commits since v0.1.0.
 
 **Status:** works: v0.1.0 published by `release.ps1` (2026-09-26), every job green, then remade the same day from
 a later `main` for the zip's top-level README and switched from pre-release to a full release (the user: a pre-release
