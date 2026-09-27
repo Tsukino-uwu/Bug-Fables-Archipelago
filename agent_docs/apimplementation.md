@@ -174,6 +174,8 @@ be wrong.
    Dash then breaks rocks but leaves grass and the rest to the Horn Slash. The logic: grass and pushing need the Horn
    Slash, speed the Dash, rocks the Horn Dash; no progressive item needs another. **With the Horn Slash received the Dash
    is the game's own again** (the user): it cuts grass and does everything the slash does, the Horn Dash too.
+   **Why it suits the logic (the user):** grass is always "Horn Slash", never "Horn Slash or Dash"; the grass rules
+   written today (`abilities: ["Horn Slash"]`) stay right once the Dash is an item.
 24. **The panel's settings on normal saves** (the user, 2026-09-26; built, `documentation.md` step 18): an opt-in row so Quality of life and
    Gameplay also apply with Archipelago off. A deliberate exception to "vanilla stays vanilla", which only the user can
    make; off by default. **Named (the user): *Use on normal saves*, ON / OFF**, help line "Quality of life and Gameplay
