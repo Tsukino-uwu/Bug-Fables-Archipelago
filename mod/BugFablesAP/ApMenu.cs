@@ -456,8 +456,8 @@ namespace BugFablesAP
                             : "Items show no backdrop until you take them.";
                     case DetectorRow: return "Acts like the Detector medal is always equipped, to find hidden items.";
                     case UncapRow:
-                        return FrameRate.Cap == 0 ? "The game's own FPS setting (30 or 60)."
-                            : $"{FrameRate.Cap} FPS, smooth motion; the game plays as it does at 60.";
+                        return FrameRate.Cap == 0 ? "Experimental. Off: the game's own FPS setting (30 or 60)."
+                            : $"Experimental. {FrameRate.Cap} FPS, smooth motion; plays as at 60.";
                     default: return "";
                 }
             }

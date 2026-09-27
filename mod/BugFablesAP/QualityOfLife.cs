@@ -187,7 +187,7 @@ namespace BugFablesAP
                 + "area you've been to travels there at once), Both, or Off (both ask first).",
                 new AcceptableValueList<string>(TravelValues)));
             UncapFps = config.Bind("QualityOfLife", "UncapFps", "Off", new ConfigDescription(
-                "A frame rate above the game's 30 or 60: 120, 144 or 240, with VSync when it divides the monitor's refresh rate "
+                "Experimental. A frame rate above the game's 30 or 60: 120, 144 or 240, with VSync when it divides the monitor's refresh rate "
                 + "(no tearing), else as a limit. Motion is drawn between the game's "
                 + "physics steps, and whatever the game counts in frames still runs at 60 per second, so it plays as it does at "
                 + "60. Off: the game's own FPS and VSync settings.",

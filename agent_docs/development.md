@@ -153,6 +153,14 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `trace [frames]`: while you move with an NPC's emoticon showing, logs where the player, the NPC and its emoticon land
   on screen each drawn frame, with the camera's and the emoticon's angles. `cams`: every camera, its depth, parent and
   layer mask.
+- `il <Type> <Method> [iter]`: every overload's IL (a coroutine's MoveNext with `iter`) to the log, to write a
+  transpiler against the real instructions. `rates [seconds]`: with Uncap FPS on, what frames were worth in sixtieths
+  and how many started a new sixtieth, per second (both 60: as at 60 fps). `fpsscan`: reads every method of the game and
+  compares with Uncap FPS's fixed lists.
+- **A transpiler must never throw.** One that throws stays registered on its method, and the next patch of that
+  method by any feature fails with it until the game restarts (the mod guide, step 24). `CodeInstruction.labels` isn't
+  usable in this game's HarmonyX, and neither is Harmony's `GetOriginalInstructions` (it needs
+  `System.Reflection.Emit.ILGeneration`); `PatchProcessor.ReadMethodBody` works.
 - `frames [seconds]` (5 by default): logs the frame count, median and slow frames with their times, the camera's draw
   time and garbage collections. A collection is marked on the frame before the slow one it causes.
 - `nudge <x> <y> <z>`: shift the party by that much on the current map.

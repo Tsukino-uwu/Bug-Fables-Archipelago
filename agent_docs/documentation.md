@@ -1560,12 +1560,40 @@ place it counts frames instead of time first.
   every feature after it, hot reload included (a restart was needed). `PatchProcessor.ReadMethodBody` needs no such
   assembly, and the row's setup now catches its own failure and stays off.
 
-**Status:** in progress. Seen by the user (2026-09-27) at 240: smooth, the "!" steady and sharp. Next: the per-frame
-counters, spins and lerps the audits listed (the screw platform, fishing's approach, the dig skill's aim, disguised
-enemies, the Wacka Worm, spins, scene flips), then a round of play at 240.
+- **The rest, one site at a time** (`FrameSites.cs`). The audits' list: a counter that ticks once a frame, a fixed amount
+  added each frame, a smoothing step with a fixed factor. Each site is patched on its exact instructions, written against
+  the method's IL (the console's `il`), with the count of matches it expects; a site that doesn't match exactly is left
+  alone and logged. Three kinds of fix: a counter's 1 counts only on a frame that starts a new 1/60 s (and a check made
+  right after it sees the counter only on that frame: the disguised enemy turns at 80 and 40, once each); an amount is
+  scaled by the frame's worth in sixtieths; a factor f becomes 1 - (1 - f)^k. Per-frame blinks (`enabled = !enabled`)
+  flip at most once per renderer each 1/60 s. A cutscene's `FloorToInt(a) % n == 0` on a time-driven `a` counts once
+  per whole value. Text waits round up to whole sixtieths, as a 60 fps frame does.
+  **Gameplay:** fishing's fish approach and nibble, the screw platform, the Wacka Worm, disguised enemies, wandering
+  enemies' retries, dizzy enemies dropping, gate slides, the dig skill's aim in battle, Vi's hover, the map's culling
+  grace. **Scenes:** the battle drop, return from digging, two scenes' turns (26, 99) and a fade, text waits. **Looks:**
+  spins, sprite turning, the dig spin, followers catching up and braking, the Watcher's eye, the battle EXP counter,
+  damage numbers, the enemy beemerang, particles, blinking. **Left as they are** (cosmetic): random jitter, some battle
+  skills' spin effects, HUD numbers counting up, fleeing losing a berry a frame sooner.
+- **How the logic is checked without the game on screen.** Every fix rests on two measures: what a frame is worth in
+  sixtieths, and whether it starts a new sixtieth. The console's `rates` sums both over a few seconds: at 240 fps,
+  59.88 sixtieths and 59.78 new-sixtieth frames a second (2026-09-27), so everything built on them runs as at 60 (a
+  long frame counts as at most one, as at 60 fps). What each site does on screen still needs the user.
+- **Installed only when the row is on:** with it off nothing of the game is patched. Installing takes about 4 s, 3 of
+  them for the battle's action coroutine (one enormous method). The methods to patch come from a fixed list; the
+  console's `fpsscan` reads all 4111 of the game's methods and compares (2026-09-27: nothing missing, nothing stale).
+- **Pitfall, a transpiler that throws poisons its method.** The first site build used `CodeInstruction.labels`, which
+  this game's HarmonyX lacks. The failed transpiler stayed registered on its methods, so the next feature to patch one of
+  them (the pause menu's Settings rows, on `PauseMenu.Update`) failed with it, aborting the plugin's `Awake`, hot reload
+  included: every later build sat unloaded, which looked like fixes that changed nothing. Found by reading the error at
+  the end of the log, after two guessed fixes failed the same way. Only a game restart clears it; the sites'
+  transpiler now never throws (it returns the method unchanged and logs why).
 
-*Code: `FrameRate.cs`, the row in `ApMenu.cs` and `QualityOfLife.cs`; the console's `display`, `fps`, `interp`,
-`camlerp`, `frames`, `trace` and `cams` (`DevConsole.cs`).*
+**Status:** in progress, experimental (the row says so). Seen by the user (2026-09-27) at 240: smooth, the "!" steady and
+sharp. The logic measured (`rates`); each site patched as expected (the log's `[fps] frame sites`). Not yet seen on
+screen: every site above, most of all fishing, the screw platform, the Wacka Worm, a disguised enemy and the dig skill.
+
+*Code: `FrameRate.cs`, `FrameSites.cs`, the row in `ApMenu.cs` and `QualityOfLife.cs`; the console's `display`, `fps`,
+`interp`, `camlerp`, `frames`, `trace`, `cams`, `il`, `rates` and `fpsscan` (`DevConsole.cs`).*
 
 ## 25. Hitches: the mod's garbage and the game's 5-second collection
 

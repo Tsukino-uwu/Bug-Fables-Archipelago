@@ -23,7 +23,35 @@ namespace BugFablesAP
         // Read once a frame (Tick): the hooks below run thousands of times a frame.
         private static bool active;
         private static int activeCap;
-        private static bool installed;
+        private static bool installed, installFailed;
+
+        internal static bool Active => active;
+
+        // What this frame is worth in sixtieths of a second: 1 at 60 fps and below, inside a physics step, or with the row off.
+        internal static float Step => !active || Time.inFixedTimeStep ? 1f : Mathf.Min(1f, Time.unscaledDeltaTime * 60f);
+
+        // Whether this frame starts a new 1/60 s (always, with the row off or inside a physics step).
+        internal static bool OnTick
+        {
+            get
+            {
+                if (!active || Time.inFixedTimeStep)
+                {
+                    return true;
+                }
+                AdvanceClock();
+                return tickFrame;
+            }
+        }
+
+        internal static long Tick60
+        {
+            get
+            {
+                AdvanceClock();
+                return clockTick;
+            }
+        }
 
         internal static int Cap
         {
@@ -41,18 +69,26 @@ namespace BugFablesAP
             Camera.onPreCull += BeforeDraw;
             Camera.onPostRender += AfterDraw;
             harmony = new Harmony(guid + ".fps." + DateTime.UtcNow.Ticks);
+        }
+
+        // Installed the first time the row is on, so with it off nothing of the game is patched.
+        private static void EnsureInstalled()
+        {
+            if (installed || installFailed)
+            {
+                return;
+            }
             try
             {
                 Install();
+                installed = true;
             }
             catch (Exception e)
             {
                 log.LogError("[fps] NOT installed, Uncap FPS stays off: " + e);
                 harmony.UnpatchSelf();
-                installed = false;
-                return;
+                installFailed = true;
             }
-            installed = true;
         }
 
         internal static void Disable()
@@ -75,7 +111,15 @@ namespace BugFablesAP
             {
                 RestoreCamera("the next frame's Update began");
             }
-            int cap = installed && settingsOn != null && settingsOn() ? Cap : 0;
+            int cap = settingsOn != null && settingsOn() ? Cap : 0;
+            if (cap > 0)
+            {
+                EnsureInstalled();
+                if (!installed)
+                {
+                    cap = 0;
+                }
+            }
             bool nowActive = cap > 0;
             if (nowActive)
             {
@@ -115,7 +159,98 @@ namespace BugFablesAP
             MethodInfo doCommand = AccessTools.EnumeratorMoveNext(AccessTools.Method(typeof(BattleControl), "DoCommand"));
             Patch(doCommand, transpiler: nameof(TranspileTapBar));
 
-            // Every method that counts frames, and every method a physics step reaches that scales by framestep.
+            // The lists the console's "fpsscan" finds by reading every method of the game; each method's body is still checked.
+            List<MethodBase> countsFrames = Listed(FrameCounters, m => Reads(m, (op, v) => v is MethodInfo mi && mi == FrameCountGetter));
+            foreach (MethodBase m in countsFrames)
+            {
+                Patch(m, transpiler: nameof(TranspileFrameCount));
+            }
+            List<MethodBase> fixedFramestep = Listed(PhysicsFramestep, m => Reads(m, (op, v) => op == OpCodes.Ldsfld && v is FieldInfo f && f == FramestepField));
+            foreach (MethodBase m in fixedFramestep)
+            {
+                Patch(m, transpiler: nameof(TranspileFramestep));
+            }
+            List<MethodBase> blinkers = Listed(Blinkers, HasBlink);
+            long coreMs = watch.ElapsedMilliseconds;
+            FrameSites.Install(log, harmony, blinkers);
+            log.LogInfo($"[fps] installed in {watch.ElapsedMilliseconds} ms (sites {watch.ElapsedMilliseconds - coreMs}): "
+                + $"{countsFrames.Count} of {FrameCounters.Length} methods count frames, {fixedFramestep.Count} of {PhysicsFramestep.Length} "
+                + $"physics-step methods read framestep, {blinkers.Count} of {Blinkers.Length} blink");
+        }
+
+        // Type.Method; a star marks a coroutine (its MoveNext is patched).
+        private static readonly string[] FrameCounters =
+        {
+            "BattleControl.Update", "BattleControl.EnemyHeavyThrow*", "Caravan.LateUpdate", "EntityControl.DoFollow", "EntityControl.Numb",
+            "EntityControl.LateUpdate", "EntityControl.UpdateVelocity", "EntityControl.UpdateCollider", "EntityControl.UpdateEmoticon",
+            "EntityControl.RefreshShadow", "EntityControl.OnTriggerStay", "Fader.LateUpdate", "FishAI.DoAI", "FishAI.UpdateDistance",
+            "FishAI.UpdatePos", "FishingMain.Update", "HelpArrow.Update", "Hidder.LateUpdate", "LightFlicker.Update", "LightSorter.LateUpdate",
+            "MapControl.LateUpdate", "NPCControl.Update", "NPCControl.LateUpdate", "PlayerControl.LateUpdate",
+        };
+
+        private static readonly string[] PhysicsFramestep = { "EntityControl.FixedUpdate", "PlayerControl.OnTriggerStay", "BattleControl.UpdateEntities" };
+
+        private static readonly string[] Blinkers =
+        {
+            "NPCControl.Update", "BattleControl.DoAction*", "EntityControl.Update", "PauseMenu.Update", "Pips.ChangeRenderers",
+            "EntityControl.ZaspWarp*", "EventControl.Event111*", "EventControl.ZaspWarp*", "EventControl.Event173*",
+        };
+
+        private static List<MethodBase> Listed(string[] names, Func<MethodBase, bool> check)
+        {
+            var found = new List<MethodBase>();
+            foreach (string entry in names)
+            {
+                bool iter = entry.EndsWith("*");
+                string[] parts = entry.TrimEnd('*').Split('.');
+                Type type = typeof(MainManager).Assembly.GetType(parts[0]);
+                var overloads = type == null ? new List<MethodInfo>() : type.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance
+                    | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).Where(m => m.Name == parts[1]).ToList();
+                var matched = overloads.Select(m => iter ? (MethodBase)AccessTools.EnumeratorMoveNext(m) : m).Where(m => m != null && check(m)).ToList();
+                if (matched.Count == 0)
+                {
+                    log.LogWarning($"[fps] {entry} no longer found as expected: that correction is missing");
+                }
+                found.AddRange(matched);
+            }
+            return found;
+        }
+
+        private static bool Reads(MethodBase m, Func<OpCode, object, bool> match)
+        {
+            try
+            {
+                return PatchProcessor.ReadMethodBody(m).Any(i => match(i.Key, i.Value));
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static bool HasBlink(MethodBase m)
+        {
+            try
+            {
+                List<KeyValuePair<OpCode, object>> body = PatchProcessor.ReadMethodBody(m).ToList();
+                if (!body.Any(i => i.Value is MethodInfo sm && sm.Name == "set_enabled" && sm.DeclaringType == typeof(Renderer)))
+                {
+                    return false;
+                }
+                List<CodeInstruction> ci = body.Select(i => new CodeInstruction(i.Key, i.Value)).ToList();
+                return Enumerable.Range(0, ci.Count).Any(i => FrameSites.IsBlink(ci, i));
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        // The console's "fpsscan": reads every method of the game and logs any that counts frames, scales by framestep inside
+        // a physics step, or blinks per frame, and isn't in the lists above (or is listed and no longer does).
+        internal static string Scan()
+        {
+            var watch = Stopwatch.StartNew();
             Assembly game = typeof(MainManager).Assembly;
             var methods = new List<MethodBase>();
             foreach (Type type in AccessTools.GetTypesFromAssembly(game))
@@ -130,8 +265,9 @@ namespace BugFablesAP
                 }
             }
             var calls = new Dictionary<MethodBase, List<MethodBase>>();
-            var countsFrames = new List<MethodBase>();
+            var countsFrames = new HashSet<string>();
             var readsFramestep = new HashSet<MethodBase>();
+            var blinks = new HashSet<string>();
             foreach (MethodBase m in methods)
             {
                 List<KeyValuePair<OpCode, object>> code;
@@ -150,7 +286,7 @@ namespace BugFablesAP
                     {
                         if (mi == FrameCountGetter)
                         {
-                            countsFrames.Add(m);
+                            countsFrames.Add(ListName(m));
                         }
                         else if (mi.DeclaringType != null && mi.DeclaringType.Assembly == game)
                         {
@@ -163,13 +299,12 @@ namespace BugFablesAP
                     }
                 }
                 calls[m] = callees;
+                if (HasBlink(m))
+                {
+                    blinks.Add(ListName(m));
+                }
             }
-            countsFrames = countsFrames.Distinct().Where(m => m.Name != nameof(MainManager.FrameDifference)).ToList();
-            foreach (MethodBase m in countsFrames)
-            {
-                Patch(m, transpiler: nameof(TranspileFrameCount));
-            }
-            // A physics step: FixedUpdate and the collision and trigger messages, and what they call, three calls deep.
+            countsFrames.Remove("MainManager.FrameDifference");
             var reached = new HashSet<MethodBase>();
             var frontier = methods.Where(m => m.Name == "FixedUpdate" || m.Name.StartsWith("OnTrigger") || m.Name.StartsWith("OnCollision")).ToList();
             for (int depth = 0; depth < 4 && frontier.Count > 0; depth++)
@@ -184,14 +319,30 @@ namespace BugFablesAP
                 }
                 frontier = next;
             }
-            List<MethodBase> fixedFramestep = reached.Where(readsFramestep.Contains).ToList();
-            foreach (MethodBase m in fixedFramestep)
+            var physics = new HashSet<string>(reached.Where(readsFramestep.Contains).Select(ListName));
+            string result = $"fpsscan: {methods.Count} methods in {watch.ElapsedMilliseconds} ms. Frame counts {Diff(countsFrames, FrameCounters)}. "
+                + $"Physics framestep {Diff(physics, PhysicsFramestep)}. Blinks {Diff(blinks, Blinkers)}.";
+            log.LogInfo("[dev] " + result);
+            return result;
+        }
+
+        private static string Diff(HashSet<string> seen, string[] listed)
+        {
+            string[] missing = seen.Except(listed).ToArray();
+            string[] stale = listed.Except(seen).ToArray();
+            return "missing from the list: " + (missing.Length > 0 ? string.Join(", ", missing) : "none")
+                + "; listed but not seen: " + (stale.Length > 0 ? string.Join(", ", stale) : "none");
+        }
+
+        // As the lists name a method: a coroutine's MoveNext is its outer type's method with a star.
+        private static string ListName(MethodBase m)
+        {
+            Type t = m.DeclaringType;
+            if (t != null && t.Name.StartsWith("<") && t.DeclaringType != null)
             {
-                Patch(m, transpiler: nameof(TranspileFramestep));
+                return t.DeclaringType.Name + "." + t.Name.Substring(1, t.Name.IndexOf('>') - 1) + "*";
             }
-            log.LogInfo($"[fps] installed in {watch.ElapsedMilliseconds} ms: {countsFrames.Count} methods count frames ("
-                + string.Join(", ", countsFrames.Select(Name).ToArray()) + $"); {fixedFramestep.Count} physics-step methods read framestep ("
-                + string.Join(", ", fixedFramestep.Select(Name).ToArray()) + ")");
+            return t?.Name + "." + m.Name;
         }
 
         private static string Name(MethodBase m) => m.DeclaringType?.Name + "." + m.Name;
@@ -289,6 +440,7 @@ namespace BugFablesAP
                 return;
             }
             Sample();
+            Rates();
             drawWork.Restart();
             if (!SmoothCamera)
             {
@@ -571,6 +723,40 @@ namespace BugFablesAP
         private static int lastGcCount;
         private static readonly Stopwatch drawWork = new Stopwatch();
         private static float lastDrawMs;
+
+        // The console's "rates <seconds>": per second, how many sixtieths the frames were worth (Step) and how many frames
+        // started a new sixtieth (OnTick). Both 60 means everything built on them runs as at 60 fps.
+        private static float ratesUntil = -1f, ratesStart, stepSum;
+        private static int ratesFrames, tickCount, ratesLastFrame = -1;
+
+        internal static string StartRates(float seconds)
+        {
+            ratesUntil = Time.realtimeSinceStartup + seconds;
+            ratesStart = Time.realtimeSinceStartup;
+            stepSum = 0f;
+            ratesFrames = tickCount = 0;
+            return $"rates: measuring {seconds} s";
+        }
+
+        private static void Rates()
+        {
+            if (ratesUntil < 0f || Time.frameCount == ratesLastFrame)
+            {
+                return;
+            }
+            ratesLastFrame = Time.frameCount;
+            ratesFrames++;
+            stepSum += Step;
+            tickCount += OnTick ? 1 : 0;
+            if (Time.realtimeSinceStartup < ratesUntil)
+            {
+                return;
+            }
+            float span = Time.realtimeSinceStartup - ratesStart;
+            ratesUntil = -1f;
+            log.LogInfo($"[dev] rates over {span:0.00} s (row {(active ? activeCap.ToString() : "off")}): {ratesFrames / span:0.0} frames/s, "
+                + $"frame worth {stepSum / span:0.00} sixtieths/s, new-sixtieth frames {tickCount / span:0.00}/s (60 and 60 = as at 60 fps)");
+        }
 
         internal static string StartSample(float seconds)
         {

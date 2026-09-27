@@ -437,6 +437,46 @@ namespace BugFablesAP
                         return FrameRate.StartSample(parts.Length > 1 && float.TryParse(parts[1], out float secs) ? secs : 5f);
                     case "trace":
                         return FrameRate.StartTrace(parts.Length > 1 && int.TryParse(parts[1], out int traceFrames) ? traceFrames : 40);
+                    case "il":
+                    {
+                        // il <Type> <Method> [iter]: the method's IL (its iterator's MoveNext with "iter"), to write a patch against.
+                        if (parts.Length < 3)
+                        {
+                            return "il <Type> <Method> [iter]";
+                        }
+                        Type type = typeof(MainManager).Assembly.GetType(parts[1]);
+                        if (type == null)
+                        {
+                            return $"il: type {parts[1]} not found";
+                        }
+                        int dumped = 0;
+                        foreach (System.Reflection.MethodInfo overload in type.GetMethods(System.Reflection.BindingFlags.DeclaredOnly
+                            | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static
+                            | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic).Where(m => m.Name == parts[2]))
+                        {
+                            System.Reflection.MethodInfo method = parts.Length > 3 && parts[3] == "iter"
+                                ? HarmonyLib.AccessTools.EnumeratorMoveNext(overload) : overload;
+                            if (method == null)
+                            {
+                                continue;
+                            }
+                            var ilLog = new System.Text.StringBuilder($"[dev] il {parts[1]}.{parts[2]}{overload.GetParameters().Length}:");
+                            int index = 0;
+                            foreach (KeyValuePair<System.Reflection.Emit.OpCode, object> ins in HarmonyLib.PatchProcessor.ReadMethodBody(method))
+                            {
+                                string operand = ins.Value is System.Reflection.MemberInfo mi ? mi.DeclaringType?.Name + "." + mi.Name
+                                    : ins.Value is float f ? f.ToString("R") + "f" : ins.Value?.ToString() ?? "";
+                                ilLog.Append("\n  ").Append(index++).Append(' ').Append(ins.Key.Name).Append(' ').Append(operand);
+                            }
+                            log.LogInfo(ilLog.ToString());
+                            dumped++;
+                        }
+                        return $"il: {dumped} overloads logged";
+                    }
+                    case "fpsscan":
+                        return FrameRate.Scan();
+                    case "rates":
+                        return FrameRate.StartRates(parts.Length > 1 && float.TryParse(parts[1], out float rateSecs) ? rateSecs : 5f);
                     case "cams":
                     {
                         var camLog = new System.Text.StringBuilder("[dev] cams:");
