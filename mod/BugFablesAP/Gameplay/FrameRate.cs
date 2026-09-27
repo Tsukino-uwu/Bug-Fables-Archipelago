@@ -154,6 +154,8 @@ namespace BugFablesAP
             var watch = Stopwatch.StartNew();
             Patch(AccessTools.Method(typeof(MainManager), nameof(MainManager.ApplySettings)), postfix: nameof(AfterApplySettings));
             Patch(AccessTools.Method(typeof(EntityControl), "Start"), postfix: nameof(AfterEntityStart));
+            Patch(AccessTools.Method(typeof(GroundDetector), "OnTriggerStay"), postfix: nameof(AfterGround));
+            Patch(AccessTools.Method(typeof(GroundDetector), "OnTriggerExit"), postfix: nameof(AfterGround));
             Patch(AccessTools.Method(typeof(MainManager), nameof(MainManager.TieFramerate)), prefix: nameof(BeforeTieFramerate));
             Patch(AccessTools.Method(typeof(MainManager), nameof(MainManager.FrameDifference)), prefix: nameof(BeforeFrameDifference));
             MethodInfo doCommand = AccessTools.EnumeratorMoveNext(AccessTools.Method(typeof(BattleControl), "DoCommand"));
@@ -304,6 +306,22 @@ namespace BugFablesAP
                 {
                     body.interpolation = RigidbodyInterpolation.Interpolate;
                 }
+            }
+        }
+
+        // A platform carries whoever stands on it as its child; interpolation drew them from their own physics poses and
+        // held them back, like walking in mud (the user, 240 fps). Not interpolated while on one.
+        private static void AfterGround(GroundDetector __instance)
+        {
+            Rigidbody body = __instance.parent != null ? __instance.parent.rigid : null;
+            if (!active || body == null)
+            {
+                return;
+            }
+            RigidbodyInterpolation wanted = __instance.platform != null ? RigidbodyInterpolation.None : RigidbodyInterpolation.Interpolate;
+            if (body.interpolation != wanted)
+            {
+                body.interpolation = wanted;
             }
         }
 

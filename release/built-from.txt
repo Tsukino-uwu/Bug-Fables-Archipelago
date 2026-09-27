@@ -1,5 +1,5 @@
 # Written by dev-scripts/build-release.ps1; checked by its -Check in CI.
-commit: dc2cf24
+commit: ef109b8
 mod/BugFablesAP/BugFablesAP.csproj: 8887b0c3d82d1997c484b1c9d1cd812e524af292
 mod/BugFablesAP/Core/ApConnection.cs: 1ba7e76fb7102d529729b34c1ee4eadc5d712ed9
 mod/BugFablesAP/Core/GameSlots.cs: 7e24c60494cf50cbbb05408d3a863c6332d5249b
@@ -27,7 +27,7 @@ mod/BugFablesAP/Dev/TextProbe.cs: a941dbf95f742e3f0f67650db55243ee6f7d5617
 mod/BugFablesAP/Dev/VarDump.cs: c05f4b023fb5012c5b26f65c5f11267f81d16df4
 mod/BugFablesAP/Gameplay/CheckDetector.cs: 5ba08e83007833ee978a35018ccd606f2871c058
 mod/BugFablesAP/Gameplay/EnemyScaling.cs: 964c3cb640bbef5de52d7b7a85495f99b7bbf6c4
-mod/BugFablesAP/Gameplay/FrameRate.cs: 1c742ad12c6cee8270b1e12c46710a14028710ba
+mod/BugFablesAP/Gameplay/FrameRate.cs: 74a5a6361154acc92cfc4465d9705cb0ab2c8dfc
 mod/BugFablesAP/Gameplay/FrameSites.cs: dc95f42406ebf181fdfaa59963171c23862636b0
 mod/BugFablesAP/Gameplay/MedalAssist.cs: 962675c05d884c23ff41c201c147746977be6b89
 mod/BugFablesAP/Gameplay/Multipliers.cs: 44a009d3301ff2790095aa191b30c4d036aa4031
@@ -64,7 +64,7 @@ mod/BugFablesAP/World/FieldMoves.cs: e163b12f836481edab649c47a2698e37ee0cd4d7
 mod/BugFablesAP/World/KeptOpen.cs: 22f61e7baa23bfe86e6514562c6dc29ae90edcd0
 mod/BugFablesAP/World/PartyFit.cs: c89798b7b55d04a90a5612d4a35e835bff8e4f54
 mod/BugFablesAP/World/PartyMembers.cs: c47a1eedcc3ea4f7e94732dd4d9c54cffc031835
-BugFablesAP.dll: ae1b3b0ca046bf50263c7b64579298bb2c3d3c74326d0acc01b7281c47194580
+BugFablesAP.dll: 81fcf7ac3f166b7a056c853cb03db7d2dcef15945f2c33d3dd2a6afff7277a8e
 Archipelago.MultiClient.Net.dll: 4d4f49b1528cf88b00fc07c69ff27d16cb1eeff52c0636009befd87f4e9dde5b
 websocket-sharp.dll: 5f59b27b01d6d6d0ea6ae2258e2639d80bc4ccedc0c16917cdd73e0b30e07f58
 Newtonsoft.Json.dll: 0cc6b1d3f4e8c938edfe1f02f2167d1cbf596a4df6ac0dbd82fe89ed67e45eb0

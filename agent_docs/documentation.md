@@ -1556,6 +1556,15 @@ place it counts frames instead of time first.
   it. Putting the camera back straight after its own draw left the "!" jittering against the world, on sideways walking
   only. Found by subtraction (the user, one piece off at a time: interpolation off, still there; camera smoothing off,
   gone), then the console's `cams`. The camera now goes back after the frame's last camera.
+- **Pitfall, interpolation against a moving parent: mud on platforms.** The user, at 240: on bridges and moving
+  platforms the party moved in slow motion, nearly stuck unless jumping; at 30 and 60 (the game's own, no
+  interpolation) normal. The game carries whoever stands on a platform by making them its child (`GroundDetector`,
+  `MEASURED.md`), while walking sets the body's velocity; interpolation redraws the body from its own last physics
+  poses every frame and so pulled it back against the platform's carrying. **Isolated with one switch:** at 240 on the
+  platform, the console's `interp off` (sent through the command file); the user: "I can move around freely now". **The
+  fix:** after the game's ground check (`GroundDetector.OnTriggerStay` / `OnTriggerExit`), a body standing on a
+  platform isn't interpolated, and is again once off it. Seen by the user (2026-09-27): normal speed on the platform,
+  with a slight shimmer there only (drawn at physics steps); sharp again on the ground.
 - **What the game counts in frames runs 60 times a second.** Every method that reads `Time.frameCount` (24, found by
   reading each method's IL at load) sees a 60 Hz count instead: on a frame that starts a new 1/60 s, the count; on the
   frames between, 1, which no `% n` check divides. `FrameDifference` ("once every 1/60 s") answers the same way.
@@ -1599,6 +1608,7 @@ place it counts frames instead of time first.
 **Status:** in progress, experimental (the row says so). Seen by the user (2026-09-27) at 240: smooth, the "!" steady and
 sharp. The logic measured (`rates`); each site patched as expected (the log's `[fps] frame sites`). Not yet seen on
 screen: every site above, most of all fishing, the screw platform, the Wacka Worm, a disguised enemy and the dig skill.
+Platforms and bridges: fixed and seen (2026-09-27), a slight shimmer on them left.
 
 *Code: `FrameRate.cs`, `FrameSites.cs`, the row in `ApMenu.cs` and `QualityOfLife.cs`; the console's `display`, `fps`,
 `interp`, `camlerp`, `frames`, `trace`, `cams`, `il`, `rates` and `fpsscan` (`DevConsole.cs`).*

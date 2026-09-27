@@ -1037,4 +1037,11 @@ Newest last. What was tried, what happened, what the user said.
   `FontEffects` moves shaky letters every frame); hit animations too fast (a tester); slow motion on bridges and
   moving platforms (the user). The user: "we have some work to do with the fps things still".
 - **Also this session:** We Owe Ya! does nothing when received early (Next 36, `MEASURED.md`).
+- **Platforms fixed, how it was found:** the user, standing on a platform: normal at 30 and 60 (the game's own, so no
+  interpolation either), "mud" at 240, stuck unless jumping. Code read: the game parents whoever stands on a platform
+  to it (`GroundDetector`) while walking sets velocity; the row interpolates every body. One switch to split the two
+  candidates (frame rate or interpolation): the user set 240 first (a change of FPS turns interpolation back on), then
+  the agent sent `interp off` through the command file: "I can move around freely now". Fix: no interpolation while a
+  platform carries a body. Hot-reloaded (the refactored plugin's first run in game, loaded clean); the user: normal
+  speed on platforms with a slight shimmer, sharp on the ground.
 
