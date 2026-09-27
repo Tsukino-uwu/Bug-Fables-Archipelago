@@ -962,3 +962,5 @@ Newest last. What was tried, what happened, what the user said.
   the code map had no rows for the hooks. Tests: 372 passed at Archipelago 0.6.7.
 - **Published** on the second run, every job green; the downloads fetched back and checked. Not yet seen in game: the
   release zip itself on a clean install (the DLL is the same source the user has been playing).
+- **Decided (the user, 2026-09-27): the Archipelago switch stays off by default.** Asked after the README fix; a
+  player sets the address, port and slot in the same panel the first time anyway, so enabling it there costs nothing.
