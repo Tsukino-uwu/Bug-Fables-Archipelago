@@ -122,11 +122,15 @@ namespace BugFablesAP
             {
                 SkipConfirm.Value = "Off";
             }
+            if (UncapFps != null)
+            {
+                UncapFps.Value = "Off";
+            }
         }
 
         internal static void ResetAll()
         {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, Travel, SkipConfirm, SkipCutscenes, ItemAnimation, ItemColors, ItemIcons, ItemBackgrounds, ApMenu.Detector })
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, Travel, SkipConfirm, SkipCutscenes, ItemAnimation, ItemColors, ItemIcons, ItemBackgrounds, ApMenu.Detector, UncapFps })
             {
                 if (setting != null)
                 {

@@ -57,24 +57,9 @@ namespace BugFablesAP
                             ? "Items show how important they are before you take them."
                             : "Items show no backdrop until you take them.";
                     case DetectorRow: return "Acts like the Detector medal is always equipped, to find hidden items.";
-                    default: return "";
-                }
-            }
-            if (page == Page.Graphics)
-            {
-                switch (r)
-                {
-                    case ButtonsRow:
-                        return confirming ? "" : button == 0 ? "Puts every setting on this page back to its default." : "Turns every setting on this page off.";
                     case UncapRow:
                         return FrameRate.Cap == 0 ? "Experimental. Off: the game's own FPS setting (30 or 60)."
                             : $"Experimental. {FrameRate.Cap} FPS, smooth motion; plays as at 60.";
-                    case ScaleRow:
-                        return RenderQuality.Scale == null || RenderQuality.Scale.Value == "100" ? "The world is drawn at your resolution, as the game does."
-                            : "The world is drawn at " + RenderQuality.Scale.Value + "% and shrunk to fit: smoother edges, more GPU.";
-                    case MsaaRow:
-                        return RenderQuality.Msaa == null || RenderQuality.Msaa.Value == "Off" ? "No MSAA, as the game has it. Its own Antialiasing (FXAA) is apart."
-                            : RenderQuality.Msaa.Value + " MSAA: smoother edges on the 3D world. Sprites stay as they are.";
                     default: return "";
                 }
             }
@@ -131,8 +116,8 @@ namespace BugFablesAP
                         : "Steam achievements aren't unlocked while Archipelago is on. Only affects Steam.";
                 case NormalSavesRow:
                     return NormalSaves != null && NormalSaves.Value
-                        ? "Quality of life, Gameplay and Graphics also apply with Archipelago off."
-                        : "Quality of life, Gameplay and Graphics apply only with Archipelago on.";
+                        ? "Quality of life and Gameplay also apply with Archipelago off."
+                        : "Quality of life and Gameplay apply only with Archipelago on.";
                 default: return "";
             }
         }
@@ -178,6 +163,10 @@ namespace BugFablesAP
                 {
                     Cycle(QualityOfLife.SkipConfirm, QualityOfLife.TravelValues, by);
                 }
+                else if (r == UncapRow && QualityOfLife.UncapFps != null)
+                {
+                    Cycle(QualityOfLife.UncapFps, QualityOfLife.UncapValues, by);
+                }
                 else
                 {
                     ConfigEntry<bool> setting = QolSetting(r);
@@ -186,21 +175,6 @@ namespace BugFablesAP
                         setting.Value = !setting.Value;
                         log.LogInfo("[apmenu] " + setting.Definition.Key + ": " + (setting.Value ? "On" : "Off"));
                     }
-                }
-            }
-            else if (page == Page.Graphics)
-            {
-                if (r == UncapRow && QualityOfLife.UncapFps != null)
-                {
-                    Cycle(QualityOfLife.UncapFps, QualityOfLife.UncapValues, by);
-                }
-                else if (r == ScaleRow && RenderQuality.Scale != null)
-                {
-                    Cycle(RenderQuality.Scale, RenderQuality.Scales, by);
-                }
-                else if (r == MsaaRow && RenderQuality.Msaa != null)
-                {
-                    Cycle(RenderQuality.Msaa, RenderQuality.AntiAliasing, by);
                 }
             }
             else if (page == Page.Gameplay)
@@ -257,18 +231,6 @@ namespace BugFablesAP
         private static string OnOff(ConfigEntry<bool> setting) => setting != null && setting.Value ? "ON" : "OFF";
 
         private static string ScalingLabel(string value) => value == "PartyLevel" ? "PARTY LEVEL" : value.ToUpperInvariant();
-
-        // The Graphics page's two buttons: every row to its plain value, or back to its default.
-        private static void GraphicsAll(bool reset)
-        {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { QualityOfLife.UncapFps, RenderQuality.Scale, RenderQuality.Msaa })
-            {
-                if (setting != null)
-                {
-                    setting.BoxedValue = reset ? setting.DefaultValue : setting == RenderQuality.Scale ? "100" : "Off";
-                }
-            }
-        }
 
         // The Gameplay page's two buttons: every row to its plain value, or back to its default.
         private static void GameplayAll(bool reset)

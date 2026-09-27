@@ -1242,7 +1242,7 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   The user's game on 2026-09-28: a 1920x1080 window on a 3840x2160, 240 Hz screen. Unity 2018.4.12.
 - **Textures at full size** (the user's game, 2026-09-28): the game's low-texture setting off (`lowtexture` False,
   `QualitySettings.masterTextureLimit` 0), anisotropic filtering `Enable` (per texture).
-- Used by `RenderQuality.cs`.
+- Measured for the render-scale and MSAA rows, since removed (mod guide, step 28).
 
 ## The round pause-menu icons' colours (2026-09-26, sampled from the SpriteDump sheet)
 

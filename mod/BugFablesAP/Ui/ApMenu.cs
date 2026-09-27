@@ -14,12 +14,10 @@ namespace BugFablesAP
             Rows = 7;
         // The Quality of life page: the two buttons side by side on top, then the settings.
         private const int ButtonsRow = 0, FastTextRow = 1, WarpRow = 2, SkipConfirmRow = 3, CutscenesRow = 4, AnimationRow = 5, ColorsRow = 6,
-            IconsRow = 7, BackgroundsRow = 8, DetectorRow = 9, QolRows = 10;
+            IconsRow = 7, BackgroundsRow = 8, DetectorRow = 9, UncapRow = 10, QolRows = 11;
         // The Gameplay page: how the game plays, under the same two buttons.
         private const int DifficultyRow = 1, ScalingRow = 2, AttackRow = 3, MedalPricesRow = 4, ExpRow = 5, BerryRow = 6, GameplayRows = 7;
-        // The Graphics page: how the game is drawn, under the same two buttons.
-        private const int UncapRow = 1, ScaleRow = 2, MsaaRow = 3, GraphicsRows = 4;
-        internal enum Page { Main, Qol, Gameplay, Graphics }
+        private enum Page { Main, Qol, Gameplay }
         private Page page;
         // On the buttons row: 0 Reset to defaults (where the cursor lands), 1 Disable all; confirming shows Yes / No there (0 Yes, 1 No).
         private int button;
@@ -36,7 +34,7 @@ namespace BugFablesAP
         internal static ConfigEntry<bool> NormalSaves;
 
         internal static ApMenu Open;
-        // Opened from the pause menu's Settings: only one settings page, over a hidden pause menu.
+        // Opened from the pause menu's Settings: only the Quality of life or Gameplay page, over a hidden pause menu.
         private bool inGame;
 
         private static ManualLogSource log;
@@ -81,7 +79,7 @@ namespace BugFablesAP
         }
 
         // From the pause menu's Settings (InGameSettings): one settings page, no connection page.
-        internal static void ShowInGame(ManualLogSource logger, Page shown)
+        internal static void ShowInGame(ManualLogSource logger, bool gameplay)
         {
             if (Open != null)
             {
@@ -92,7 +90,7 @@ namespace BugFablesAP
             ApMenu menu = go.AddComponent<ApMenu>();
             menu.inGame = true;
             menu.status = () => "";
-            menu.page = shown;
+            menu.page = gameplay ? Page.Gameplay : Page.Qol;
             menu.row = ButtonsRow;
             Open = menu;
             menu.Build();
@@ -206,8 +204,8 @@ namespace BugFablesAP
         private const int CursorSort = 20;
         private const string TextSort = "|sort,10|";
         private static readonly float[] RowY = { 2.65f, 2.0f, 1.35f, 0.7f, 0.05f, -0.6f, -1.25f, -1.9f };
-        // The Quality of life page has ten rows: the same top and bottom row, closer together.
-        private const float QolRowStep = (2.65f + 1.9f) / 9f;
+        // The Quality of life page has eleven rows: the same top and bottom row, closer together.
+        private const float QolRowStep = (2.65f + 1.9f) / 10f;
 
         private float RowAt(int r) => page == Page.Qol ? RowY[0] - r * QolRowStep : RowY[r];
         private const float DescribeY = -2.55f, StatusY = -3.1f;
@@ -288,7 +286,7 @@ namespace BugFablesAP
 
         private void Navigate()
         {
-            int rows = page == Page.Qol ? QolRows : page == Page.Gameplay ? GameplayRows : page == Page.Graphics ? GraphicsRows : Rows;
+            int rows = page == Page.Qol ? QolRows : page == Page.Gameplay ? GameplayRows : Rows;
             bool confirm = MainManager.GetKey(4, hold: false) || Input.GetKeyDown(KeyCode.Return);
             bool sideways = MainManager.GetKey(2, hold: false) || MainManager.GetKey(3, hold: false);
             bool cancel = MainManager.GetKey(5, hold: false) || Input.GetKeyDown(KeyCode.Escape);
@@ -316,10 +314,6 @@ namespace BugFablesAP
                             {
                                 QualityOfLife.DisableAll();
                             }
-                        }
-                        else if (page == Page.Graphics)
-                        {
-                            GraphicsAll(reset: button == 0);
                         }
                         else
                         {
@@ -431,6 +425,7 @@ namespace BugFablesAP
                     : QualityOfLife.IconMode == "AllPlayers" ? "ALL PLAYERS" : "OFF");
                 Choice(BackgroundsRow, "Item backgrounds", OnOff(QualityOfLife.ItemBackgrounds));
                 Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
+                Choice(UncapRow, "Uncap FPS", (QualityOfLife.UncapFps?.Value ?? "Off").ToUpperInvariant());
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Quality of life. Cancel goes back" + (inGame ? " to Settings." : "."), 0f, StatusY);
                 PlaceCursor();
@@ -449,17 +444,6 @@ namespace BugFablesAP
                     Multipliers.Exp?.Value ?? 1, Multipliers.Berries?.Value ?? 1 });
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Gameplay. Cancel goes back" + (inGame ? " to Settings." : "."), 0f, StatusY);
-                PlaceCursor();
-                return;
-            }
-            if (page == Page.Graphics)
-            {
-                DrawButtons();
-                Choice(UncapRow, "Uncap FPS", (QualityOfLife.UncapFps?.Value ?? "Off").ToUpperInvariant());
-                Choice(ScaleRow, "Render scale", (RenderQuality.Scale?.Value ?? "100") + "%");
-                Choice(MsaaRow, "Anti-aliasing", (RenderQuality.Msaa?.Value ?? "Off").ToUpperInvariant());
-                Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
-                Text("|center||size,0.5|Graphics. Cancel goes back" + (inGame ? " to Settings." : "."), 0f, StatusY);
                 PlaceCursor();
                 return;
             }
@@ -485,9 +469,8 @@ namespace BugFablesAP
             arrows.parent = box;
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
-            foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, SkipConfirmRow, CutscenesRow, AnimationRow, ColorsRow, IconsRow, BackgroundsRow, DetectorRow }
-                : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, AttackRow, MedalPricesRow, ExpRow, BerryRow }
-                : page == Page.Graphics ? new[] { UncapRow, ScaleRow, MsaaRow } : new[] { ModeRow, AchievementsRow, NormalSavesRow })
+            foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, SkipConfirmRow, CutscenesRow, AnimationRow, ColorsRow, IconsRow, BackgroundsRow, DetectorRow, UncapRow }
+                : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, AttackRow, MedalPricesRow, ExpRow, BerryRow } : new[] { ModeRow, AchievementsRow, NormalSavesRow })
             {
                 for (int side = 0; side < 2; side++)
                 {
@@ -570,7 +553,7 @@ namespace BugFablesAP
                 popupText.localEulerAngles = Vector3.zero;
             }
             TextPool.Free(popupText);
-            string what = page == Page.Qol ? "Quality of life" : page == Page.Graphics ? "Graphics" : "Gameplay";
+            string what = page == Page.Qol ? "Quality of life" : "Gameplay";
             string question = button == 0 ? "Put every " + what + " setting back to its default?" : "Turn every " + what + " setting off?";
             MainManager.instance.StartCoroutine(MainManager.SetText(PopupTextSort + "|center||size,0.55|" + question, new Vector3(0f, 0.45f, 0f), popupText));
             MainManager.instance.StartCoroutine(MainManager.SetText(PopupTextSort + "|size,0.8|" + (answer == 0 ? "|color,1|" : "") + "Yes", new Vector3(YesX, AnswerY, 0f), popupText));

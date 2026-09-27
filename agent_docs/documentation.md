@@ -41,7 +41,7 @@ anyone curious about the process, or thinking of doing the same for another game
 25. [Hitches: the mod's garbage and the game's 5-second collection](#25-hitches-the-mods-garbage-and-the-games-5-second-collection)
 26. [Field abilities as items: the game asks the bag](#26-field-abilities-as-items-the-game-asks-the-bag)
 27. [Attack boost: +1 on every hit, the way the game adds its own](#27-attack-boost-1-on-every-hit-the-way-the-game-adds-its-own)
-28. [A Graphics page: render scale and MSAA](#28-a-graphics-page-render-scale-and-msaa)
+28. [A Graphics page, tried and removed: render scale and MSAA](#28-a-graphics-page-tried-and-removed-render-scale-and-msaa)
 
 ## Where it stands
 
@@ -353,8 +353,7 @@ Shop prices (now Medal prices) to Gameplay, Detector to Quality of life, so Game
 of life is Fast text, Travel, Skip cutscenes, Item animation, Detector; each config key stays where it was, so a saved
 choice carries over, and each page's two buttons cover its own rows. **The two links left the main page (the
 user, 2026-09-26: "so AP looks clean"):** the pages are reached only from Settings (below), and *Use on normal saves*
-(step 18) took their place under Achievements. **A third page, Graphics (the user, 2026-09-28; step 28):** Uncap FPS
-moved there from Quality of life (its config key stays under `[QualityOfLife]`), with Render scale and Anti-aliasing.
+(step 18) took their place under Achievements. A third page, Graphics, came and went on 2026-09-28 (step 28).
 
 **The two pages in game too (the user, 2026-09-26; seen by the user, in game and on the main menu).** While Archipelago is enabled, the pause
 menu's Settings list gets *Quality of life* and *Gameplay* at the top (with it disabled, only under *Use on normal saves*, step 18), above Music Volume (the user; first between
@@ -1538,7 +1537,7 @@ items), on the class-coloured backdrop of step 22.
 
 ## 24. Frame rates above 60: smoother, and the same game
 
-The game's settings offer 30 or 60 fps. The user plays on a 240 Hz monitor and asked for more, as a Quality of life row (on the Graphics page since step 28)
+The game's settings offer 30 or 60 fps. The user plays on a 240 Hz monitor and asked for more, as a Quality of life row
 (Off, 120, 144, 240; `UncapFps` in the config), off by default, overriding the game's own frame rate and VSync while Archipelago is on, and done
 "properly so things don't break" (2026-09-27).
 
@@ -1716,47 +1715,27 @@ the stat isn't touched (the user noticed the medal menu's attack unchanged, 2026
 
 *Code: `AttackBoost.cs`; the row in `ApMenu.cs` and `ApMenu.Rows.cs`.*
 
-## 28. A Graphics page: render scale and MSAA
+## 28. A Graphics page, tried and removed: render scale and MSAA
 
-Asked for after the frame-rate work (the user, 2026-09-28): the game looking sharper, the way Uncap FPS made it
-smoother. DLSS / FSR were ruled out first (they render *lower* and upscale, for speed; the game is light and already
-draws at the screen's resolution), and upscaled art too (a texture pack of the game's own art can't be published).
+Asked for after the frame-rate work (the user, 2026-09-28): the game, mostly its paper sprites, looking sharper. Built,
+seen working, and removed the same day because it cost too much for what it showed. Kept here as a record of the process.
 
-**Decided (the user, 2026-09-28):**
-- **A third settings page, Graphics**, reached from Settings like the other two (Quality of life was full at eleven
-  rows). Uncap FPS moved there from Quality of life, so the page is Uncap FPS, Render scale, Anti-aliasing, under the
-  same Reset to defaults / Disable all.
-- **Render scale: 100% / 150% / 200%**, default 100% (supersampling: drawn larger, shrunk to fit). The user asked for
-  "110-200% like other games"; 150 and 200 are the steps that shrink evenly enough to be sharp.
-- **Anti-aliasing: Off / 2x / 4x / 8x MSAA**, default Off.
-- Only while Archipelago is enabled, or with *Use on normal saves* (step 18). No check and no logic depend on them.
+- **Ruled out first:** DLSS / FSR (they render *lower* and upscale, for speed; the game is light and already draws at
+  the screen's resolution) and upscaled art (a texture pack of the game's own art can't be published).
+- **Measured first, in the running game** (the console's `cams`, extended for this; `MEASURED.md`, "How the game draws
+  a frame"): MSAA was 0 and never set by the game; three forward-rendering cameras; the game's FXAA on the world camera;
+  the game's own render scale goes only down (100% to 40%), drawing into a texture a quad shows on screen; the
+  sprites' textures already at full size.
+- **Built** (the user chose a third settings page, Graphics, with Uncap FPS moved onto it): Render scale 100 / 150 /
+  200% (the world and 3DGUI cameras drawn into a larger texture) and Anti-aliasing Off / 2x / 4x / 8x MSAA.
+- **The game's own quad looked like an old TV** (the user, at 200%: curved, inset, vertical colour stripes, darker):
+  its shader is `Custom/CRT`, the minigames' look. A plain copy to the screen before the HUD camera (a command buffer
+  `Blit`) replaced it, and 150% and 200% then looked normal (the user).
+- **Removed (the user, 2026-09-28): "bad result/useless for the fps impact".** 200% with 8x MSAA took a 1920x1080
+  window from 240 to about 95 fps, and the user saw little or no difference from either row: the art's thick outlines
+  and the game's own FXAA leave few jagged edges, and the result is shrunk back into the window. Uncap FPS went back to
+  Quality of life; the page, its Settings row and `RenderQuality.cs` are gone.
+- **What would sharpen the sprites instead:** the game's own 3840x2160 resolution, when the screen has it (the user's
+  game ran a 1920x1080 window on a 3840x2160 screen).
 
-**Measured first, in the running game** (the console's `cams`, extended for this; `MEASURED.md`, "How the game draws a
-frame"): MSAA was 0; all three cameras render forward with MSAA allowed; the world camera carries the game's FXAA; the
-HUD has its own camera. The game's settings already have a render scale, but only downwards (100% to 40%, for slow PCs),
-done by drawing into a texture that the HUD camera's quad shows on screen.
-
-**How it works** (`RenderQuality.cs`, checked every frame from `Plugin.Tick`):
-- **Anti-aliasing** sets Unity's `QualitySettings.antiAliasing` (the game never sets it), and puts the game's own
-  value back when switched off.
-- **Render scale reuses the game's own render-scale idea, pointed the other way:** the world and 3DGUI cameras draw
-  into a texture the size of the screen times the scale (with the MSAA level on it). A plain copy (a command buffer's
-  `Blit` on the HUD camera, before it draws) puts it on screen, and the HUD stays at the screen's resolution. Back to
-  100%, the game's own `SetRenderTexture(0)` restores the screen.
-- **First drawn through the game's own quad, which looked like an old TV** (the user, 2026-09-28, at 200%: curved and
-  inset, vertical colour stripes, darker). The quad's shader is `Custom/CRT`, the minigames' look, so the copy replaced
-  it; seen normal right after.
-- **The game keeps priority:** its own render scale below 100% (and the minigames, which use it) take over, and the row
-  steps aside while they're in use. A resolution change rebuilds the texture.
-- **Safe at 2x:** the game places things by viewport position (0 to 1), never by pixel, so a larger texture moves
-  nothing. Every decision is logged (`[gfx]`).
-
-**Status:** Render scale 200% seen by the user (2026-09-28): the picture normal and sharp, in a 1920x1080 window.
-(a closer view in the user's screenshot was the spot they stood in, not the scale). 150% seen too, normal (the
-user: it looked the same as 200%). **The cost (the user, 2026-09-28):** 200% with 8x MSAA took a 1920x1080 window
-from 240 to about 95 fps, and the user saw little or no difference from either row: the art's thick outlines and the
-game's own FXAA leave few jagged edges, and the result is shrunk back into the window. Both kept (off by default, free
-when off); for sharper sprites, the game's own 3840x2160 resolution is the test to try.
-
-*Code: `RenderQuality.cs`; the page in `ApMenu.cs`, `ApMenu.Rows.cs` and `InGameSettings.cs`; the console's `cams` in
-`DevConsole.cs`.*
+**Status:** removed (2026-09-28), at the user's call after seeing it work.

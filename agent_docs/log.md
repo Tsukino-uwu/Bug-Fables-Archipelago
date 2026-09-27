@@ -1086,3 +1086,13 @@ Newest last. What was tried, what happened, what the user said.
 - **Asked for, then dropped:** an *Attack boost: Off / +1* row. Read first: nearly every attack and skill reads `atk`
   per hit, so +1 attack is +1 on every hit (+33-50% at attack 2-3). Dropped once scaling showed the fight was at level.
   The user also declined a log line for why scaling skipped an enemy.
+- **Attack boost built** (the user asked, after first shelving it): *Attack boost: Off / +1* on the Gameplay page,
+  +1 per hit in `CalculateBaseDamage` under the game's own conditions for its party bonuses. Loaded (`[boost]
+  installed`); the user saw the medal menu's attack unchanged, which is by design; not yet seen in a fight.
+- **A Graphics page, built and removed the same day** (mod guide, step 28). Upscaling / DLSS / FSR / borderless were
+  talked through first: fullscreen looked borderless already (no flicker switching) but minimizes on focus loss,
+  likely Unity's build-time *Visible In Background*; not pursued. Measured first with an extended `cams`: MSAA 0,
+  forward rendering, the game's render scale only goes down. First try drew through the game's quad and gave an
+  old-TV look (its shader is `Custom/CRT`); a command-buffer copy fixed it, 150% and 200% then normal. The user then
+  saw 240 -> ~95 fps at 200% + 8x MSAA for little visible difference, and had it removed; Uncap FPS back on Quality of
+  life. What would sharpen sprites: the game's own 3840x2160 (the user plays a 1920x1080 window on a 4K screen).

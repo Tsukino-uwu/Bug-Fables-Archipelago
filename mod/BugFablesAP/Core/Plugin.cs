@@ -178,7 +178,6 @@ namespace BugFablesAP
             Multipliers.Enable(Log, Guid, Config, settingsOn);
             EnemyScaling.Enable(Log, Guid, settingsOn, () => QualityOfLife.EnemyScalingMode?.Value);
             AttackBoost.Enable(Log, Guid, Config, settingsOn);
-            RenderQuality.Enable(Log, Config, settingsOn);
             FrameRate.Enable(Log, Guid, settingsOn);
             ClockCleanup.Enable(Log, Guid, settingsOn);
             InGameSettings.Enable(Log, Guid, settingsOn);
@@ -308,7 +307,6 @@ namespace BugFablesAP
             PartyMembers.Tick();
             FieldMoves.Tick();
             FrameRate.Tick();
-            RenderQuality.Tick();
 
             DevCheats.Tick(Log, giveMoney);
             DevConsole.Tick(devConsole.Value);
@@ -391,7 +389,6 @@ namespace BugFablesAP
             ClockCleanup.Disable();
             EnemyScaling.Disable();
             AttackBoost.Disable();
-            RenderQuality.Disable();
             Multipliers.Disable();
             InGameSettings.Disable();
             AchievementGuard.Disable();
