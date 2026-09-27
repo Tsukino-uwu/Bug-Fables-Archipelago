@@ -114,7 +114,7 @@ Read from code only; nothing observed running yet.
 
 ## Observed in the running game (2026-09-24, GrantProbe, a new game played by the user)
 
-Instrument: `mod/BugFablesAP/GrantProbe.cs`, which is read-only, logged to `BepInEx/LogOutput.log`, and
+Instrument: `mod/BugFablesAP/Dev/GrantProbe.cs`, which is read-only, logged to `BepInEx/LogOutput.log`, and
 throttled to changes.
 
 - **At the file select**, before any map (`map=none`): `flag[691]`, `flag[694]` and `flag[715]` go
@@ -510,7 +510,7 @@ slot of each can hold the mod's own state in the game's own save, with no new fo
 
 Two instruments, both read-only. **Code:** `giveitem,1,<id>` literals and `items[1].Add(...)` in the
 decompiled `EventControl.cs`/`BattleControl.cs`, each with its enclosing `Event<N>`. **Data:** `ScriptDump`
-(`mod/BugFablesAP/ScriptDump.cs`), which loads every map's dialogue table in the running game and keeps only
+(`mod/BugFablesAP/Dev/ScriptDump.cs`), which loads every map's dialogue table in the running game and keeps only
 the command tokens: 179 item lines from all 246 maps, 30 of them `giveitem,1`. Ids are `MainManager.Items`
 ordinals. **Raw material, not locations yet:** some ids are granted more than once (83, 84 and 52 especially),
 so each grant has to be judged as a one-time location, a repeatable, or a quest hand-off before it goes into
@@ -537,7 +537,7 @@ DesertRoachVillage 1: 105 · TermiteIndustrial 31: 139, 46: 145
 
 ## World pickups and their gates (2026-09-24, EntityDump)
 
-`EntityDump` (`mod/BugFablesAP/EntityDump.cs`) read every map's entity table in the running game, at the
+`EntityDump` (`mod/BugFablesAP/Dev/EntityDump.cs`) read every map's entity table in the running game, at the
 same field positions as `MapControl.CreateEntities` (`MapControl.cs:1446-1640`): **4072 entities from all
 246 maps, none unreadable**; names for **187 items and 91 medals** (`itemdata[0,id,0]`, `badgedata[id,0]`).
 The output stays in the BepInEx folder.

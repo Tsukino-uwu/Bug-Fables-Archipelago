@@ -25,7 +25,7 @@ if ($HighlightsFile -ne '' -and -not (Test-Path -LiteralPath $HighlightsFile)) {
 
 Step 'Versions'
 $bare = $Version.Substring(1)
-$pluginVersion = [regex]::Match((Get-Content -Raw 'mod\BugFablesAP\Plugin.cs'), 'Version = "([^"]+)"').Groups[1].Value
+$pluginVersion = [regex]::Match((Get-Content -Raw 'mod\BugFablesAP\Core\Plugin.cs'), 'Version = "([^"]+)"').Groups[1].Value
 $worldVersion = (Get-Content -Raw 'apworld\bug_fables\archipelago.json' | ConvertFrom-Json).world_version
 if ($pluginVersion -ne $bare -or $worldVersion -ne $bare) {
     Refuse "Plugin.cs says $pluginVersion and archipelago.json says $worldVersion; both must be $bare"

@@ -107,9 +107,16 @@ needs to hook in.
 Unity games don't load mods by themselves, so we installed **BepInEx 5**, the usual mod loader for
 Unity games. One launch of the game confirmed it worked, and showed its log file.
 
+**Where the code lives** (2026-09-27, a refactor that changed nothing the plugin does): one project, its sources in
+folders by job under `mod/BugFablesAP/`: `Core` (the plugin, the connection), `Items` (checks sent, items received,
+what a location shows), `World` (doors, enemies, the open world, the party), `Ui`, `Gameplay` (panel settings that
+change play), `Guards` (quiet fixes for the game's own warnings) and `Dev` (the console, probes and dumps). The
+namespace stays `BugFablesAP` everywhere, so a move never touches code. **How "changed nothing" is proven:** build
+before and after, decompile both DLLs with ILSpy, and diff the output; a pure move comes out identical.
+
 **Status:** done.
 
-*Code: `mod/BugFablesAP/Plugin.cs` (`Plugin`, a BepInEx plugin: `Awake` sets everything up, `Tick` runs
+*Code: `mod/BugFablesAP/Core/Plugin.cs` (`Plugin`, a BepInEx plugin: `Awake` sets everything up, `Tick` runs
 every frame); the project file is `BugFablesAP.csproj`.*
 
 ## 5. Make changes load without restarting the game

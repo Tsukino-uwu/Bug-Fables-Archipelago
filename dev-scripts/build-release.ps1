@@ -31,7 +31,8 @@ function Get-DllLines {
 
 # Dev tools and cheats ship, but off: every [Debug] setting must default to off (-1 is TestStartMember's off).
 function Assert-DebugDefaultsOff {
-    $binds = Get-ChildItem (Join-Path $repo 'mod/BugFablesAP') -Filter *.cs | ForEach-Object {
+    $binds = Get-ChildItem (Join-Path $repo 'mod/BugFablesAP') -Filter *.cs -Recurse |
+        Where-Object { $_.FullName -notmatch '[\\/](bin|obj)[\\/]' } | ForEach-Object {
         [regex]::Matches((Get-Content -Raw $_.FullName), 'Config\.Bind\(\s*"Debug"\s*,\s*"(\w+)"\s*,\s*([^,]+?)\s*,') |
             ForEach-Object { [pscustomobject]@{ Key = $_.Groups[1].Value; Default = $_.Groups[2].Value } }
     }

@@ -41,7 +41,7 @@ jobs:
             echo "::error::version must look like v0.1.0, got '$VERSION'"; exit 1
           fi
           bare="${VERSION#v}"
-          plugin=$(grep -oP 'Version = "\K[^"]+' mod/BugFablesAP/Plugin.cs)
+          plugin=$(grep -oP 'Version = "\K[^"]+' mod/BugFablesAP/Core/Plugin.cs)
           world=$(python3 -c 'import json; print(json.load(open("apworld/bug_fables/archipelago.json"))["world_version"])')
           if [ "$plugin" != "$bare" ] || [ "$world" != "$bare" ]; then
             echo "::error::Plugin.cs says $plugin and archipelago.json says $world; both must be $bare"; exit 1

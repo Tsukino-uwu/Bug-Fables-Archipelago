@@ -410,7 +410,7 @@ computer is entered as `ws://127.0.0.1` with port `38281`. (The mod's default ad
 
 **Status:** works (2026-09-24, local server; hosted rooms on archipelago.gg since build step 5).
 
-*Code: `mod/BugFablesAP/ApConnection.cs` (`ConnectOnWorker`); the address settings in `Plugin.cs` (`Awake`).*
+*Code: `mod/BugFablesAP/Core/ApConnection.cs` (`ConnectOnWorker`); the address settings in `Plugin.cs` (`Awake`).*
 
 ## Build step 3: the goal, counted in artifacts
 
@@ -678,7 +678,7 @@ item comes once per seed, and the count in the save keeps it that way.
 
 **Status:** works, seen by the user (2026-09-24): items and medals, each once; crystal berries built, not yet seen in game; the full-bag rule not built yet (Next 6).
 
-*Code: `mod/BugFablesAP/ItemReceiver.cs`: `CountSlot` and `SeedSlot` (the two save slots),
+*Code: `mod/BugFablesAP/Items/ItemReceiver.cs`: `CountSlot` and `SeedSlot` (the two save slots),
 `SaveMatchesSeed`, `Tick` (one item per frame), `Busy` (is the player free), `Give` (where each item goes).
 `CrystalBerryTotal.cs`: the berries-received slot and the total. The slot survey was `VarDump.cs`.*
 
@@ -798,7 +798,7 @@ it, and the tests.
 
 **Status:** in progress: the one event not found, characters that block a path, the region graph and its tests.
 
-*Code: `dev-scripts/gate-table.py`, `dev-scripts/event-triggers.py`; the dumps in `mod/BugFablesAP/EntityDump.cs`,
+*Code: `dev-scripts/gate-table.py`, `dev-scripts/event-triggers.py`; the dumps in `mod/BugFablesAP/Dev/EntityDump.cs`,
 `MapDump.cs` and `ScriptDump.cs`.*
 
 ---
