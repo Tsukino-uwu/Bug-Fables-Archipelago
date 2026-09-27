@@ -1228,6 +1228,14 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   it is off by refresh / actual fps (4x on a 240 Hz monitor at 60).
 - **Seen on the user's machine (VSync off, 60fps, windowed):** current resolution 3840x2160 @ 240 Hz, window
   1280x720, `vSyncCount` 0, `targetFrameRate` 60, measured 60.6 fps.
+- **Physics steps 50 times a second** (`Time.fixedDeltaTime` 0.02, the console's `display`, 2026-09-27). The camera
+  follows in `MainManager.FixedUpdate` (`RefreshCamera`: the camera's parent position, the camera's local position and
+  angles, all lerps with a fixed factor); characters move by rigidbody velocity. The player's rigidbody has no
+  interpolation (`None`). Used by `FrameRate.cs`.
+- **The game forces a collection every 5 seconds:** `MainManager.DoClock` (the play-time clock, once a second) calls
+  `Resources.UnloadUnusedAssets()` then `GC.Collect()` when `clocksec % 5 == 0` and no room transition is on. Leaving a
+  map does the same when no event is running. Measured cost on the user's machine: two slow frames, about 45 and 66 ms,
+  exactly 5.00 s apart (the console's `frames`, 2026-09-27).
 
 ## Quests: to measure (when quests come into scope)
 

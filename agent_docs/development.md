@@ -147,6 +147,11 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `gui`: log what hangs under the GUI camera (name, active, renderer, children), to find what's really stuck on screen.
 - `display`: log the monitor's reported resolution and refresh rate, the window, the game's FPS and VSync settings,
   what Unity was given (`vSyncCount`, `targetFrameRate`) and the measured frame rate.
+- `fps <cap>` (-1 uncapped): the frame cap for this session only, VSync off; the game's settings put theirs back when
+  applied. `interp on|off`: Unity's rigidbody interpolation on every character on the map. `camlerp on|off`: the camera
+  drawn between physics steps (`FrameRate.cs`). A look at higher frame rates; frame-counted logic runs fast meanwhile.
+- `frames [seconds]` (5 by default): logs the frame count, median and slow frames with their times, the camera's draw
+  time and garbage collections. A collection is marked on the frame before the slow one it causes.
 - `nudge <x> <y> <z>`: shift the party by that much on the current map.
 - `items`: list every pickup that exists on the current map right now (kind, id, flag, distance), in the log.
 - `tree`: log the nearest pickup's whole object tree: each object, whether it's active, and its renderers, on or

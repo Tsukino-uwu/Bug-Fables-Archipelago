@@ -33,6 +33,7 @@ anyone curious about the process, or thinking of doing the same for another game
 21. [Archipelago icon: other players' items on the ground and on shelves](#21-archipelago-icon-other-players-items-on-the-ground-and-on-shelves)
 22. [Item backgrounds: how much an item matters, before you take it](#22-item-backgrounds-how-much-an-item-matters-before-you-take-it)
 23. [The Archipelago icon, drawn in the game's style](#23-the-archipelago-icon-drawn-in-the-games-style)
+24. [Frame rates above 60: smoother, and the same game](#24-frame-rates-above-60-smoother-and-the-same-game)
 
 ## Where it stands
 
@@ -1514,3 +1515,36 @@ items), on the class-coloured backdrop of step 22.
 
 *Code: `ApIcon.cs`; used by `ItemSwap.Describe`.*
 
+## 24. Frame rates above 60: smoother, and the same game
+
+The game's settings offer 30 or 60 fps. The user plays on a 240 Hz monitor and asked for more, as a Quality of life row
+(Off, 120, 144, 240), off by default, overriding the game's own frame rate and VSync while Archipelago is on, and done
+"properly so things don't break" (2026-09-27).
+
+**First, read how the game ties itself to frames** (`MEASURED.md`, frame rate). Most motion is scaled by frame time
+(`TieFramerate`), but about 30 checks count frames (`Time.frameCount % N`: AI ticks, fishing, fades, shadows), the
+tapping-key action command and `FrameDifference` read the frame rate or refresh rate, and an unused "uncapped" setting
+would break the tap bar outright. A plain higher cap would make those run faster.
+
+**Then look before building: does a higher cap even look better?** The console's `display` read the monitor (240 Hz)
+and the game's settings; `fps <cap>` and `interp on|off` let the user compare on screen, one change at a time:
+1. 240 fps as is: hard to tell apart. The measurement said why: physics steps 50 times a second
+   (`fixedDeltaTime` 0.02) and the camera follows in `FixedUpdate`, so most frames repeat the last picture.
+2. Characters interpolated (Unity's rigidbody interpolation): worse, "like motion blur", because the camera still jumped
+   50 times a second under smoothly moving characters.
+3. The camera drawn between its last two physics steps as well (`FrameRate.cs`: placed just before drawing, put back
+   after, so the game's camera code never sees it): "better/sharper", and against plain 60, "a really big difference".
+
+**Dips, at 60 and at 240.** The console's `frames <seconds>` logs each slow frame with its time and whether a garbage
+collection ran. Two clocks showed up:
+- Every ~1.8 s, 42 ms: a collection forced by the mod's own garbage, 68 KB a frame, nearly all from the check tick
+  asking every frame whether each shop copy was bought, which rebuilt and sorted every shop's list each time. Found by
+  timing each of the plugin's jobs in turn and counting what each allocated. Fixed (build step 6): 3.6 KB a frame, the
+  collections from 7 to 2 in 12 s. It cost at 60 fps too, a quarter as often.
+- Every 5.00 s, 45 + 66 ms: the game itself. Its play-time clock unloads unused assets and forces a collection every
+  fifth second. Pinging the server every 30 s instead of 5 left it in place, which ruled out the mod's connection.
+
+**Status:** in progress. The camera smoothing and the dev commands are in; the setting, the frame-counted checks, the
+tap bar and the game's 5-second collection are next.
+
+*Code: `FrameRate.cs`; the console's `display`, `fps`, `interp`, `camlerp` and `frames` (`DevConsole.cs`).*

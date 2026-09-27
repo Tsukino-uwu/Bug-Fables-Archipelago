@@ -16,7 +16,7 @@ namespace BugFablesAP
         // Discoveries seen unrecorded this session: only one recorded in play gets a hold-up.
         private readonly HashSet<long> notYetRecorded = new HashSet<long>();
         private ArchipelagoSession notYetRecordedFor;
-        private string lastState;
+        private object lastStateKey;
         private ArchipelagoSession goalSentFor;
         private string lastGoalState;
 
@@ -38,13 +38,14 @@ namespace BugFablesAP
                 : MainManager.map == null ? "no save in play"
                 : ItemReceiver.SaveMatchesSeed(connection, log) == false ? "this save belongs to another seed"
                 : null;
-            string state = waiting == null
-                ? "watching " + string.Join(", ", flagsById.Select(e => e.Key + " (flag " + e.Value + ")").ToArray())
-                : "waiting: " + waiting;
-            if (state != lastState)
+            // Compared without building the watched list's text: that ran every frame and made steady garbage.
+            object stateKey = waiting ?? (object)flagsById;
+            if (!Equals(stateKey, lastStateKey))
             {
-                log.LogInfo("[check] " + state);
-                lastState = state;
+                lastStateKey = stateKey;
+                log.LogInfo("[check] " + (waiting == null
+                    ? "watching " + string.Join(", ", flagsById.Select(e => e.Key + " (flag " + e.Value + ")").ToArray())
+                    : "waiting: " + waiting));
             }
             if (waiting != null)
             {

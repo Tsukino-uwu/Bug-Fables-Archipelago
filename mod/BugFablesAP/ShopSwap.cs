@@ -117,15 +117,37 @@ namespace BugFablesAP
         private static long pendingCopy = -1;
 
         // A shop's copies, in location id order: (location, medal).
+        // Built once per slot_data: the check tick asks every frame, and rebuilding made garbage enough for a
+        // collection (a visible stall) every couple of seconds.
+        private static Dictionary<long, int[]> copiesFor;
+        private static readonly Dictionary<int, List<KeyValuePair<long, int>>> copiesByShop = new Dictionary<int, List<KeyValuePair<long, int>>>();
+        private static readonly Dictionary<long, int> copyIndex = new Dictionary<long, int>();
+        private static readonly List<KeyValuePair<long, int>> noCopies = new List<KeyValuePair<long, int>>();
+
         private static List<KeyValuePair<long, int>> Copies(int shop)
         {
             Dictionary<long, int[]> shops = connection?.LocationShops;
             if (shops == null)
             {
-                return new List<KeyValuePair<long, int>>();
+                return noCopies;
             }
-            return shops.Where(e => e.Value[0] == shop).OrderBy(e => e.Key)
-                .Select(e => new KeyValuePair<long, int>(e.Key, e.Value[1])).ToList();
+            if (!ReferenceEquals(shops, copiesFor))
+            {
+                copiesFor = shops;
+                copiesByShop.Clear();
+                copyIndex.Clear();
+                foreach (int s in shops.Values.Select(v => v[0]).Distinct())
+                {
+                    List<KeyValuePair<long, int>> list = shops.Where(e => e.Value[0] == s).OrderBy(e => e.Key)
+                        .Select(e => new KeyValuePair<long, int>(e.Key, e.Value[1])).ToList();
+                    copiesByShop[s] = list;
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        copyIndex[list[i].Key] = i;
+                    }
+                }
+            }
+            return copiesByShop.TryGetValue(shop, out List<KeyValuePair<long, int>> copies) ? copies : noCopies;
         }
 
         private static bool Bought(int shop, int index)
@@ -146,8 +168,8 @@ namespace BugFablesAP
             {
                 return false;
             }
-            int index = Copies(at[0]).FindIndex(c => c.Key == location);
-            return index >= 0 && Bought(at[0], index);
+            Copies(at[0]);
+            return copyIndex.TryGetValue(location, out int index) && Bought(at[0], index);
         }
 
         private static long UndoneCopy(int shop, int medal, int k)

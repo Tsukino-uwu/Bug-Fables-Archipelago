@@ -417,9 +417,40 @@ namespace BugFablesAP
                         string display = $"display: current {cur.width}x{cur.height} @ {cur.refreshRate} Hz, window {Screen.width}x{Screen.height}, "
                             + $"fullscreen {Screen.fullScreen} ({Screen.fullScreenMode}); game settings fps {MainManager.fps}, vsync {MainManager.vsync}; "
                             + $"Unity vSyncCount {QualitySettings.vSyncCount}, targetFrameRate {Application.targetFrameRate}; "
-                            + $"measured {1f / Time.smoothDeltaTime:0.0} fps";
+                            + $"measured {1f / Time.smoothDeltaTime:0.0} fps; fixedDeltaTime {Time.fixedDeltaTime}, "
+                            + $"player rigidbody interpolation {(MainManager.player != null && MainManager.player.entity != null && MainManager.player.entity.rigid != null ? MainManager.player.entity.rigid.interpolation.ToString() : "no player")}";
                         log.LogInfo("[dev] " + display);
                         return display;
+                    }
+                    case "fps":
+                    {
+                        // A look at a frame cap for this session only; the game's own settings put theirs back when applied.
+                        if (parts.Length < 2 || !int.TryParse(parts[1], out int cap))
+                        {
+                            return "fps <cap, -1 uncapped>";
+                        }
+                        QualitySettings.vSyncCount = 0;
+                        Application.targetFrameRate = cap;
+                        return $"fps: vSyncCount 0, targetFrameRate {Application.targetFrameRate}";
+                    }
+                    case "frames":
+                        return FrameRate.StartSample(parts.Length > 1 && float.TryParse(parts[1], out float secs) ? secs : 5f);
+                    case "camlerp":
+                        FrameRate.SmoothCamera = parts.Length > 1 && parts[1] == "on";
+                        return "camlerp: " + (FrameRate.SmoothCamera ? "on" : "off");
+                    case "interp":
+                    {
+                        bool interpOn = parts.Length > 1 && parts[1] == "on";
+                        int changed = 0;
+                        foreach (EntityControl e in UnityEngine.Object.FindObjectsOfType<EntityControl>())
+                        {
+                            if (e.rigid != null)
+                            {
+                                e.rigid.interpolation = interpOn ? RigidbodyInterpolation.Interpolate : RigidbodyInterpolation.None;
+                                changed++;
+                            }
+                        }
+                        return $"interp: {(interpOn ? "Interpolate" : "None")} on {changed} rigidbodies";
                     }
                     case "addleif": return AddLeif();
                     case "follower":
