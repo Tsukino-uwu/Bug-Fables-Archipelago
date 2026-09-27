@@ -1547,6 +1547,11 @@ BepInEx is not bundled; the player installs it first.
    refuses unless the versions match, `main` is clean and not behind, and the tag is free. Then its preflight runs
    the stale gate; a stale DLL is rebuilt and committed on the spot, and the gate runs again. Then it pushes, waits
    for CI to go green, dispatches the release and waits for it to publish. Running it is the go-ahead to push.
+   **The highlights' format (the user, 2026-09-27, the standard from v0.2.0 on):** short one-line bullets under
+   `### Features`, `### Logic` and `### Bug Fixes` (a heading left out when empty), as other Archipelago mods write
+   theirs. What a player notices only: no internal fixes, and no "update both, regenerate" line (players are assumed
+   to be on the latest version). A fix to the base game's own bug says so ("a base-game stutter"). GitHub adds the
+   Full Changelog link below.
 
 6. **Rehearsed before the first run (2026-09-26):** every CI step on a fresh clone of Archipelago `0.6.7`: the
    tests, the three two-game presets, Build APWorlds (its manifest gained `version` and `compatible_version` on its
