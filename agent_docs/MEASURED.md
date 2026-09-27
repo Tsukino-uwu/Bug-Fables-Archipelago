@@ -1264,6 +1264,10 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   `Resources.UnloadUnusedAssets()` then `GC.Collect()` when `clocksec % 5 == 0` and no room transition is on. Leaving a
   map does the same when no event is running. Measured cost on the user's machine: two slow frames, about 45 and 66 ms,
   exactly 5.00 s apart (the console's `frames`, 2026-09-27). Used by `ClockCleanup.cs`.
+- **Text effects per frame** (2026-09-27, code read; not seen): `FontEffects.Update` moves a *shaky* letter to a new
+  random offset (up to 0.025) every frame, and a *glitchy* letter rolls its swap chance every frame, so both run 4x as
+  often at 240 FPS as at 60. *Wavy* follows `Time.time` and doesn't change with the frame rate. Nothing in the mod
+  handles `FontEffects` yet.
 
 ## Quests: to measure (when quests come into scope)
 

@@ -306,6 +306,10 @@ be wrong.
 - **Crystal berry #2 (location 20)** sits in the Underground region, which needs Leif, though the room's
   upper-left entrance needs nothing. More cautious than the game, so safe; room-level regions would split it.
 - **Landmark names** for locations 2, 22, 23, 24, 25 and 30 are still to come from the user.
+- **Shaking text in conversations may look wrong above 60 FPS** (the user, 2026-09-27, at 240 FPS; not yet compared
+  at 60). Likely cause, from code: the game's shaky and glitchy letters update once per frame, so Uncap FPS (mod
+  guide, step 24) makes them 4x as busy at 240 (`MEASURED.md`, Frame rate). To do: compare at 60 and 240 on screen; if
+  it differs, step `FontEffects` at the game's own rate, as the other per-frame sites are.
 
 ---
 
