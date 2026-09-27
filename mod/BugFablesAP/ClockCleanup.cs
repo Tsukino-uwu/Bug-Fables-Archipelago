@@ -9,20 +9,21 @@ using UnityEngine;
 namespace BugFablesAP
 {
     // The play-time clock unloads unused assets and forces a garbage collection every fifth second, a ~110 ms stall. With
-    // Archipelago on it doesn't: leaving a map still does both, and the runtime collects when it needs to.
+    // Archipelago on (or Use on normal saves) it doesn't: leaving a map still does both, and the runtime collects when it
+    // needs to.
     internal static class ClockCleanup
     {
         private static ManualLogSource log;
-        private static Func<bool> randomizerOn;
+        private static Func<bool> settingsOn;
         private static Harmony harmony;
         private static bool skipLogged;
         private static readonly MethodInfo UnloadUnused = AccessTools.Method(typeof(Resources), nameof(Resources.UnloadUnusedAssets));
         private static readonly MethodInfo Collect = AccessTools.Method(typeof(GC), nameof(GC.Collect), Type.EmptyTypes);
 
-        internal static void Enable(ManualLogSource logger, string guid, Func<bool> randomizerEnabled)
+        internal static void Enable(ManualLogSource logger, string guid, Func<bool> settingsEnabled)
         {
             log = logger;
-            randomizerOn = randomizerEnabled;
+            settingsOn = settingsEnabled;
             MethodInfo doClock = AccessTools.Method(typeof(MainManager), nameof(MainManager.DoClock));
             if (doClock == null || UnloadUnused == null || Collect == null)
             {
@@ -63,11 +64,11 @@ namespace BugFablesAP
 
         private static bool Skip()
         {
-            bool skip = randomizerOn != null && randomizerOn();
+            bool skip = settingsOn != null && settingsOn();
             if (skip && !skipLogged)
             {
                 skipLogged = true;
-                log.LogInfo("[clock] the 5-second unload and collection skipped (Archipelago on)");
+                log.LogInfo("[clock] the 5-second unload and collection skipped (Archipelago on, or Use on normal saves)");
             }
             return skip;
         }

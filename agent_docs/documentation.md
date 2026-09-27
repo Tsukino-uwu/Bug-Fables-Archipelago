@@ -1337,7 +1337,7 @@ deliberate exception to "vanilla stays vanilla" that only the user could make.
   long value already did.
 - **What it turns on, with Archipelago off:** the Settings rows to both pages (step 8), Fast text, the scenes Skip
   cutscenes skips or speeds by, Travel (Warp to Start goes to the game's own start), Medal prices, Difficulty,
-  Detector and Enemy scaling.
+  Detector, Enemy scaling, Uncap FPS (step 24) and skipping the game's 5-second forced collection (step 25).
 - **What it never turns on:** anything tied to a seed. The intro skip (its end sends the first check and makes the
   seed's start), items, checks, the shuffles, the Detector's check beeps, boss prizes paid on any difficulty (they are
   checks), Item animation (only items from the server), and the achievement guard.
@@ -1608,8 +1608,9 @@ whether a garbage collection ran. Two clocks showed up:
    collections from 7 to 2 in 12 s. At 60 fps it cost the same, a quarter as often.
 2. **Every 5.00 s, 45 + 66 ms: the game.** Its play-time clock (`MainManager.DoClock`) unloads unused assets and forces
    a collection every fifth second. Pinging the server every 30 s instead of 5 left it in place, which ruled the mod's
-   connection out; the game's code showed the rest. With Archipelago on, the mod skips those two calls there
-   (`ClockCleanup.cs`); leaving a map still does both, and the runtime collects when memory needs it. 20 s of play
+   connection out; the game's code showed the rest. With Archipelago on, or with Use on normal saves (step 18, the user,
+   2026-09-27: for their vanilla chapters at 240), the mod skips those two calls there (`ClockCleanup.cs`); leaving a
+   map still does both, and the runtime collects when memory needs it. 20 s of play
    afterwards: one collection (47 ms) instead of four double stalls.
 
 **Status:** works, measured (2026-09-27). The user's FPS counter dipping to 220 was that stall; confirmation on screen
