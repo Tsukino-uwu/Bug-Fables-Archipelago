@@ -60,7 +60,15 @@ are in `CLAUDE.md`: the logic may be more cautious than the game, never less, an
    `DigWall`, `DigSpot`, `BreakableRock`, `JumpSpring`, `Dropplet`, `Geizer`, `WindPusher`, `Switch`,
    `RotatingPlatform`, `PathPlatform`, `TempPlatform`, plus the doors (`door-graph.py`), the flag-gated doors
    (`gate-table.py`), the transfers scenes make (`event-transfers.py`) and, still to script, the scenes that move the
-   party within a map (story events that set the player's position). A script turns those into the room's
+   party within a map (story events that set the player's position).
+   **Jump, drafted from the ground itself (planned; the user, 2026-09-27: Madeleine's rocks look walkable and aren't):**
+   a dev tool loads a map's collision, samples the ground on a grid (as the console's `solids` reads colliders), and
+   links neighbouring spots by height: within the walkable step height, walk; above it but within the jump height,
+   jump; higher, or a wall between, no way; down always, so a jump-only way up is a one-way down. From every door,
+   save point and location it then marks what a walk reaches and what needs a jump. Two numbers first: the step
+   height (just below Madeleine's rocks, the calibration) and the jump height (from the jump's speed and the gravity,
+   read in code, checked on a ledge known to be just jumpable). It can't know invisible walls, one-sided colliders,
+   blockers that come and go with the story, moving platforms or springs: a draft, confirmed on screen. A script turns those into the room's
    checklist with a guess at each requirement.
 2. **Checked on screen by the user**, one area at a time, with the dev console to test what the draft can't know:
    warp in through each entrance, and try each way across without the ability or without Jump. Record what was seen,
