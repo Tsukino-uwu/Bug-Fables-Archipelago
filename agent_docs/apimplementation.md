@@ -231,7 +231,7 @@ be wrong.
    so a travel-only dash would skip the hitbox. The catch is the button: every leader's tap and hold already does
    something (Vi's tap the beemerang, and a second tap is ignored while it flies; Leif's tap the icicle; holds are
    hover, dig and bubble shield), and the dash poses (animstates 116/117) are Kabbu's. So Vi and Leif would need a new
-   trigger, and poses of their own that aren't checked yet. Faster movement (above) speeds up every leader and clashes
+   trigger, and poses of their own: looked for on screen first, the normal walk made faster if none fits (the user, 2026-09-27). A pose is a number per character (`animstate`), and battle sets 116 on a member too (`BattleControl`, `playerdata[2]`), so each number means a different pose per member; which ones suit is a screen check. Faster movement (above) speeds up every leader and clashes
    with nothing. **A trigger: the HUD key** (the user, 2026-09-27: the Y button's "drop down"; code read, not
    measured): key 7 in `PlayerControl.GetInput`, whose only field use drops the HUD (HP, TP, berries) for 300 frames
    or pulls it back up. The same key also works in the pause menu, the shop list (`MainManager`) and one battle
