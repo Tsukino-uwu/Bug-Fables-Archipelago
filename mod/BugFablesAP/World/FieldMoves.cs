@@ -134,8 +134,13 @@ namespace BugFablesAP
             }
         }
 
+        // Confirm next to a save crystal uses it instead of jumping (SaveCrystals).
         private static bool BeforeJump()
         {
+            if (SaveCrystals.TryUse())
+            {
+                return false;
+            }
             if (!Locked(Jump))
             {
                 return true;

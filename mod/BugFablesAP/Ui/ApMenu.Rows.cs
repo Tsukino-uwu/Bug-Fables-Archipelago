@@ -87,6 +87,10 @@ namespace BugFablesAP
                         return AttackBoost.Boost != null && AttackBoost.Boost.Value
                             ? "Each hit your party lands does 1 more damage, as if attack were 1 higher."
                             : "Your party hits as hard as the game makes it.";
+                    case CrystalsRow:
+                        return SaveCrystals.AllHeal != null && SaveCrystals.AllHeal.Value
+                            ? "Every save crystal is yellow: it heals HP and TP too. From the next room on."
+                            : "Save crystals as the game has them: only yellow ones heal.";
                     case MedalPricesRow:
                     {
                         int tenths = QualityOfLife.MedalPrices?.Value ?? QualityOfLife.FullPrice;
@@ -192,6 +196,11 @@ namespace BugFablesAP
                     AttackBoost.Boost.Value = !AttackBoost.Boost.Value;
                     log.LogInfo("[apmenu] AttackBoost: " + (AttackBoost.Boost.Value ? "+1" : "Off"));
                 }
+                else if (r == CrystalsRow && SaveCrystals.AllHeal != null)
+                {
+                    SaveCrystals.AllHeal.Value = !SaveCrystals.AllHeal.Value;
+                    log.LogInfo("[apmenu] HealingCrystals: " + (SaveCrystals.AllHeal.Value ? "On" : "Off"));
+                }
                 else if (r == MedalPricesRow && QualityOfLife.MedalPrices != null)
                 {
                     Multipliers.StepBy(QualityOfLife.MedalPrices, by, 0, QualityOfLife.FullPrice);
@@ -235,7 +244,7 @@ namespace BugFablesAP
         // The Gameplay page's two buttons: every row to its plain value, or back to its default.
         private static void GameplayAll(bool reset)
         {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { Difficulty, QualityOfLife.EnemyScalingMode, AttackBoost.Boost, QualityOfLife.MedalPrices, Multipliers.Exp, Multipliers.Berries })
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { Difficulty, QualityOfLife.EnemyScalingMode, AttackBoost.Boost, SaveCrystals.AllHeal, QualityOfLife.MedalPrices, Multipliers.Exp, Multipliers.Berries })
             {
                 if (setting != null && reset)
                 {
@@ -257,6 +266,10 @@ namespace BugFablesAP
             if (AttackBoost.Boost != null)
             {
                 AttackBoost.Boost.Value = false;
+            }
+            if (SaveCrystals.AllHeal != null)
+            {
+                SaveCrystals.AllHeal.Value = false;
             }
             if (QualityOfLife.MedalPrices != null)
             {

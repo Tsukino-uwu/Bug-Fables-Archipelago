@@ -16,7 +16,8 @@ namespace BugFablesAP
         private const int ButtonsRow = 0, FastTextRow = 1, WarpRow = 2, SkipConfirmRow = 3, CutscenesRow = 4, AnimationRow = 5, ColorsRow = 6,
             IconsRow = 7, BackgroundsRow = 8, DetectorRow = 9, UncapRow = 10, QolRows = 11;
         // The Gameplay page: how the game plays, under the same two buttons.
-        private const int DifficultyRow = 1, ScalingRow = 2, AttackRow = 3, MedalPricesRow = 4, ExpRow = 5, BerryRow = 6, GameplayRows = 7;
+        private const int DifficultyRow = 1, ScalingRow = 2, AttackRow = 3, CrystalsRow = 4, MedalPricesRow = 5, ExpRow = 6, BerryRow = 7,
+            GameplayRows = 8;
         private enum Page { Main, Qol, Gameplay }
         private Page page;
         // On the buttons row: 0 Reset to defaults (where the cursor lands), 1 Disable all; confirming shows Yes / No there (0 Yes, 1 No).
@@ -204,10 +205,9 @@ namespace BugFablesAP
         private const int CursorSort = 20;
         private const string TextSort = "|sort,10|";
         private static readonly float[] RowY = { 2.65f, 2.0f, 1.35f, 0.7f, 0.05f, -0.6f, -1.25f, -1.9f };
-        // The Quality of life page has eleven rows: the same top and bottom row, closer together.
-        private const float QolRowStep = (2.65f + 1.9f) / 10f;
-
-        private float RowAt(int r) => page == Page.Qol ? RowY[0] - r * QolRowStep : RowY[r];
+        // The settings pages spread their rows between the same top and bottom row, closer together the more they have.
+        private float RowAt(int r) => page == Page.Main ? RowY[r]
+            : RowY[0] - r * (RowY[0] - RowY[RowY.Length - 1]) / ((page == Page.Qol ? QolRows : GameplayRows) - 1);
         private const float DescribeY = -2.55f, StatusY = -3.1f;
         // Matched to the game's Settings screen: labels ~88 px in from the vine border.
         private const float LabelX = -5.15f;
@@ -437,6 +437,7 @@ namespace BugFablesAP
                 Choice(DifficultyRow, "Difficulty", (Difficulty?.Value ?? "Normal").ToUpperInvariant());
                 Choice(ScalingRow, "Enemy scaling", ScalingLabel(QualityOfLife.EnemyScalingMode?.Value ?? "PartyLevel"));
                 Choice(AttackRow, "Attack boost", AttackBoost.Boost != null && AttackBoost.Boost.Value ? "+1" : "OFF");
+                Choice(CrystalsRow, "Healing crystals", OnOff(SaveCrystals.AllHeal));
                 Label(MedalPricesRow, "Medal prices");
                 Label(ExpRow, "EXP multiplier");
                 Label(BerryRow, "Berry multiplier");

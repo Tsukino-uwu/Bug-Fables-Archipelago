@@ -187,6 +187,7 @@ namespace BugFablesAP
             PartyFit.Enable(Log, Guid, () => randomizerEnabled.Value);
             PartyMembers.Enable(Log, Guid, () => randomizerEnabled.Value);
             FieldMoves.Enable(Log, Guid, () => randomizerEnabled.Value);
+            SaveCrystals.Enable(Log, Guid, Config, () => randomizerEnabled.Value, settingsOn);
             Abilities.Enable(Log, Guid, () => randomizerEnabled.Value);
             CheckDetector.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             CrystalBerryTotal.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
@@ -306,6 +307,7 @@ namespace BugFablesAP
             PartyFit.Tick();
             PartyMembers.Tick();
             FieldMoves.Tick();
+            SaveCrystals.Tick();
             FrameRate.Tick();
 
             DevCheats.Tick(Log, giveMoney);
@@ -389,6 +391,7 @@ namespace BugFablesAP
             ClockCleanup.Disable();
             EnemyScaling.Disable();
             AttackBoost.Disable();
+            SaveCrystals.Disable();
             Multipliers.Disable();
             InGameSettings.Disable();
             AchievementGuard.Disable();

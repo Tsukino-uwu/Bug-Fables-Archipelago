@@ -33,6 +33,7 @@ confirms on screen.
 - [The round pause-menu icons' colours](#the-round-pause-menu-icons-colours-2026-09-26-sampled-from-the-spritedump-sheet)
 - [Visited areas and the pause-menu map](#visited-areas-and-the-pause-menu-map-2026-09-26-code-read-and-the-mods-diagnostic)
 - [The item table's fields](#the-item-tables-fields-2026-09-26-code-read)
+- [Save crystals, saving, Game Over and room transfers](#save-crystals-saving-game-over-and-room-transfers-2026-09-28-code-read-nothing-seen-in-game-yet)
 - [Quests: to measure](#quests-to-measure-when-quests-come-into-scope)
 - [Key items: to measure](#key-items-to-measure)
 
@@ -1384,6 +1385,44 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   `EventControl.cs:21712-21714`) and `EntityControl.ShakeSprite` (its length via `framestep`), both called on hits and in
   scenes; the camera's `screenshake` is rolled in `RefreshCamera`, run from `MainManager.FixedUpdate` (50 a second).
   The user saw the text blurry at 240 and sharp at 60. Used by `FrameRate.cs`.
+
+## Save crystals, saving, Game Over and room transfers (2026-09-28, code read; nothing seen in game yet)
+
+- **A save crystal** is an `NPCControl` with `entitytype` Object and `objecttype` SavePoint; `SetUp` gives it
+  `interacttype` SavePoint and tints it from its entity data: yellow when `data[2] == 0`, red (a DeadLander's) when
+  `data[1] >= 10`, blue otherwise (`NPCControl.SetUp`, the SavePoint case). `data` is the map's entity data, rebuilt on
+  every map load; nothing of it is saved.
+- **Only a hit starts one** (`NPCControl.OnTriggerEnter`, SavePoint): the Beemerang, or a hitbox tagged `BeetleHorn`,
+  `BeetleDash` or `Icecle`. In order: `entity.anim.Play("BounceUp")`, `entity.PlaySound("Save", 0.5f)`,
+  `MainManager.Heal()` if `data[2] == 0` (the full heal, HP and TP, **on the hit**, before any prompt), `HitPart`, then
+  a red crystal turns its DeadLander, any other opens the prompt with `Interact("save")` when the player is within
+  squared distance 30. The prompt is `menutext[4]` with Yes / No; Yes runs the text command `Save`, which calls
+  `MainManager.Save(caller.vectordata[0])`.
+- **The confirm button never reaches a crystal:** `PlayerControl` calls `npc[0].Interact(null)` only for the NPC and
+  SemiNPC types, and jumps (`DoJump`, private, called only from there) otherwise; each frame it also drops a non-NPC
+  `npc[0]` from its list. The "!" over the player for something to check is `entity.emoticonid = 1` with
+  `emoticoncooldown = 2`.
+- **The game's own word** (`textsearch crystal`, 2026-09-28): "ancient crystal"; the yellow one "will heal our HP and
+  TP too. Try smacking it sometime." (SnakemouthFallRoom:19). No name for a save crystal as such.
+- **Saving:** `MainManager.Save(pos)` is only `InputIO.Save(pos)`: `SaveFile` builds the text (line 0 the position given,
+  or the player's; line 1 each member's HP as it is; line 2 `map.name`, the map id), then `save{slot}t.dat`, the old
+  `save{slot}.dat` moved to `save{slot}backup.dat`, the temp renamed. Synchronous, no UI of its own, no precondition;
+  the game has no "can't save here" flag. The mod's `SaveRedirect` prefix on `InputIO.Save` catches every caller.
+- **Loading:** `Event22` loads `mapid` and puts the party at the saved position; `lastpos` and `lastloadzone` are set to
+  it; `insideid` is reset to -1.
+- **Death is only a party wipe in battle.** Hazards and falls never cost HP: `Hazards.HazardAction` puts the party back
+  at `player.lastpos` (after 3 tries `lastloadzone`), falling below `map.ylimit` too.
+- **Game Over:** `BattleControl.DeadParty` runs `GameOver` unless `MainManager.battlelossevent` is set (a scripted loss:
+  the battle just ends and the story goes on). The menu: Retry, Retry after changing medals, Load, Title; in a battle
+  that can be fled only Load and Title. Retry restores `flags`, `flagvar` and `items[0]` from the battle's start. Load
+  checks `InputIO.SaveExists(saveslot)`, then `MainManager.ReloadSave()` (public): stops the battle and event
+  coroutines, destroys the map and party, `StartEvent(22)`. `GameOver` and `DeadParty` are private.
+- **A door** (`DoorOtherMap`) runs `MainManager.TransferMap`, refused during `inevent`, `pause` or `minipause`; it sets
+  `roomtransition` and `minipause`, `LoadMap`s, places the party, walks it in, then clears `minipause` and sets
+  `player.lastpos = lastloadzone =` where the walk ended, and clears `roomtransition` a frame later. Cutscenes change
+  maps with `LoadMap` alone. A map's auto-event starts once the player is free (`MapControl.LateUpdate`) and sets its
+  flag as it starts.
+- Used by `SaveCrystals.cs`.
 
 ## Quests: to measure (when quests come into scope)
 

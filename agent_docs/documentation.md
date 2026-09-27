@@ -42,6 +42,8 @@ anyone curious about the process, or thinking of doing the same for another game
 26. [Field abilities as items: the game asks the bag](#26-field-abilities-as-items-the-game-asks-the-bag)
 27. [Attack boost: +1 on every hit, the way the game adds its own](#27-attack-boost-1-on-every-hit-the-way-the-game-adds-its-own)
 28. [A Graphics page, tried and removed: render scale and MSAA](#28-a-graphics-page-tried-and-removed-render-scale-and-msaa)
+29. [Save crystals by the confirm button, as an NPC is talked to](#29-save-crystals-by-the-confirm-button-as-an-npc-is-talked-to)
+30. [Healing crystals: every save crystal yellow](#30-healing-crystals-every-save-crystal-yellow)
 
 ## Where it stands
 
@@ -1742,3 +1744,48 @@ seen working, and removed the same day because it cost too much for what it show
   game ran a 1920x1080 window on a 3840x2160 screen).
 
 **Status:** removed (2026-09-28), at the user's call after seeing it work.
+
+## 29. Save crystals by the confirm button, as an NPC is talked to
+
+With Shuffle Field Moves (the Archipelago side, build step 21), the party may have no field attack for a long time, and
+the game only starts a save crystal when an attack hits it: no save and no heal until a move item arrives (a gap the
+user spotted, 2026-09-28).
+
+**Decided (the user, 2026-09-28):** confirm next to a crystal uses it, "like talking to an NPC", not touching it (a
+prompt each time you brush past one); always, in a seed, whether or not a move is in hand. Hitting it still works.
+
+- **Read how the game does it first** (`MEASURED.md`, "Save crystals, saving, Game Over and room transfers"): the hit
+  bounces the crystal, plays its sound, heals if it's yellow, shows the hit sparkle, then opens the save prompt. The
+  heal is in the hit, not in the prompt.
+- **The confirm button jumps next to a crystal**, because the game only talks to NPCs, and the crystal drops in and out
+  of the player's talk list. So the mod finds the nearest crystal itself, within the game's own reach (squared distance
+  30, the hit's check), on the same inside/outside view, and only when no one to talk to is in front.
+- **The jump's prefix** (already there for Shuffle Jump, `FieldMoves.cs`) asks first: a crystal in reach takes the
+  press and runs the game's hit steps in order, the prompt last; the save is the game's own. No jump, no buzzer.
+- **The "!" over the player** while in reach, the one the game shows next to something to check.
+- Red DeadLander crystals are left alone (their hit turns a DeadLander). Only while Archipelago is enabled.
+
+**Status:** built (2026-09-28), not yet seen in game.
+
+*Code: `SaveCrystals.cs` (`InReach`, `TryUse`, `Tick`); the call in `FieldMoves.BeforeJump`.*
+
+## 30. Healing crystals: every save crystal yellow
+
+Asked for with step 29 (the user, 2026-09-28), and suggested on Discord before (the Archipelago side, "Where it
+stands", Next 22): blue crystals only save, yellow ones save and heal.
+
+**Decided (the user, 2026-09-28):** a row on the **Gameplay** page, *Healing crystals*, **ON / OFF, off by default**
+(off: as the game has them; on: every crystal yellow). The game names no "save crystal" (it says "ancient crystal"),
+so the row's name is ours. Only while Archipelago is enabled, or with *Use on normal saves* (step 18). No check and
+no logic depend on it.
+
+- **One value decides both the look and the heal:** `data[2] == 0` makes `SetUp` tint the crystal yellow and the hit
+  heal. A prefix on `NPCControl.SetUp` sets it for every save crystal except the red ones, so the game's own code does
+  the rest: the colour, the heal on a hit, and step 29's confirm. `data` is the map's entity data, never saved.
+- **Switching it takes effect in the next room**, when the map's crystals are built again (said in the row's help).
+- **The Gameplay page grew a row:** its rows now spread between the same top and bottom row as Quality of life's do.
+- Reset sets Off; Disable all sets Off.
+
+**Status:** built (2026-09-28), not yet seen in game.
+
+*Code: `SaveCrystals.cs` (`BeforeSetUp`); the row in `ApMenu.cs` and `ApMenu.Rows.cs`.*

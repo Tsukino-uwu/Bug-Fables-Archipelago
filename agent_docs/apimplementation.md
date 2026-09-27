@@ -156,8 +156,9 @@ be wrong.
    blue save crystals (save only) act like the yellow ones (save and heal), a nice filler or useful check. The colour
    is not baked into the art (code read, 2026-09-26): a save point is tinted in code from its entity data, yellow when
    `data[2] == 0`, red when `data[1] >= 10` (`NPCControl.cs:1190-1217`), so the mod could turn every blue crystal
-   yellow by setting its data before the map builds it, as the enemy look test does. Still to find: where saving
-   decides to heal (the save prompt's handling), so the item gives the heal and the look together.
+   yellow by setting its data before the map builds it, as the enemy look test does. **Built as a panel setting
+   instead (the user, 2026-09-28):** *Healing crystals* on the Gameplay page, `documentation.md` step 30; the heal is
+   in the crystal's hit, not the prompt (`MEASURED.md`, save crystals).
 
 23. **Progressive items, an idea for later** (the user, 2026-09-26): items that unlock in a fixed order however they're
    found, as Pseudoregalia's progressive sword (three copies of one item; the first gives the sword, the second breaking
@@ -1940,6 +1941,10 @@ fires on its press and buzzes there. **Seen (the user, 2026-09-27): "works way b
 **Seen (the user, 2026-09-27):** bought Freeze and Horn Slash at the caravan; each worked from then on, and Freeze
 alone didn't unlock the others. (Buying first failed with the dev berry cheat on: it refilled the berries, and item
 shops see a purchase as berries going down; the cheat is now a one-time top-up.)
+
+**Save crystals without a move (the user, 2026-09-28):** the game only starts one from an attack's hit, so with no move
+item there was no save or heal; confirm next to a crystal now uses it, as an NPC is talked to (`documentation.md`,
+step 29).
 
 **Status:** works, seen by the user (2026-09-27): each attack locked until its own item, the buzz on the press,
 Beemerang Toss from Madeleine's table; the key items in the bag (Freeze and Horn Slash with Leif's and Kabbu's party
