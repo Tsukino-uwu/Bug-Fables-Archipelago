@@ -972,3 +972,17 @@ Newest last. What was tried, what happened, what the user said.
   faded); a story-bosses goal; the library's discovery milestones as locations (the payer found in code, `Event189`,
   `flagvar[53]`); the Explorer Permit split per gate as a yaml choice, Vanilla or Split, Split the default once
   built (the game stays vanilla until then); key items shown without browsing as a Quality of life row.
+
+## 2026-09-27 (planning): Sprint and Early Jump
+
+- **Ideas, nothing built (Next 33-34).** The user began with "dash, faster base movement, turbo dash, start with
+  dash" and "early jump (off/on/early)". Read in code: the game's only dash is Kabbu's horn dash (a second tap of the
+  horn slash, flag 699), its breaking is a separate hitbox, and one field, `basespeed`, sets walking and dash speed.
+- **How it became a sprint:** the user asked for the dash on Vi and Leif, for travel only. Every leader's tap and hold
+  is taken, so the user proposed the Y button's HUD "drop down" (key 7), taken over on the overworld only. Then a toggle
+  instead of a hold (for controllers), which makes it a sprint and not the game's dash (the dash turns slowly, as the
+  user remembered and `DashBehavior` confirms). The same for all three; Kabbu's dash stays an ability and a gate;
+  sprint and dash stack. Poses for Vi and Leif looked for on screen, a fast walk if none fits.
+- **Settings:** a yaml *Sprint* (Start With by default, Shuffled, Off: Off keeps the HUD key as the game has it), the
+  speeds in the panel. Its classification waits on whether a faster jump or dash reaches anything the logic thinks
+  locked. Next 33 rewritten as one entry at the end, nothing dropped.

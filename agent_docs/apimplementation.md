@@ -218,26 +218,34 @@ be wrong.
    key-item prompt, the mod asks "Show the <item>?" (Yes / No) when you have the item it takes, and says you don't
    otherwise, as the Boat Ticket's sailor does, instead of the game's list to pick from. Every key-item prompt, not
    only the permits. Its own step in the mod guide.
-33. **Movement speed and the dash, an idea for later** (the user, 2026-09-27): faster base movement, a faster
-   ("turbo") dash to go with it, and starting with the dash. The game's only dash is Kabbu's horn dash, allowed by
-   flag 699 (`MEASURED.md`, ability flags). Code read (2026-09-27, not measured): speed comes from one field,
-   `PlayerControl.basespeed` (5), in `RefreshSpeed`: walking `(basespeed + friction) × 1.3`, dashing `basespeed × 2.5`.
-   So raising `basespeed` speeds up both, and the turbo dash comes free with the faster movement. Two pieces: a speed
-   panel setting (Off / faster values, no logic), and *start with the dash*, which touches Next 3 (the horn dash as an
-   item) and so needs logic. Values still to decide. **The dash on Vi and Leif, for travel only?** (the user asked,
-   2026-09-27; code read, not measured): the dash is Kabbu's action tap (the horn slash) tapped again within 15 frames
-   (`PlayerControl.DoActionTap`, case 1); what it breaks is a separate hitbox (`tbox`, tagged `BeetleHorn`, or
-   `BeetleDash` with flag 39) that grass, rocks, switches and enemies react to (`NPCControl`, `Hornable`, `ShakeHorn`),
-   so a travel-only dash would skip the hitbox. The catch is the button: every leader's tap and hold already does
-   something (Vi's tap the beemerang, and a second tap is ignored while it flies; Leif's tap the icicle; holds are
-   hover, dig and bubble shield), and the dash poses (animstates 116/117) are Kabbu's. So Vi and Leif would need a new
-   trigger, and poses of their own: looked for on screen first, the normal walk made faster if none fits (the user, 2026-09-27). A pose is a number per character (`animstate`), and battle sets 116 on a member too (`BattleControl`, `playerdata[2]`), so each number means a different pose per member; which ones suit is a screen check. Faster movement (above) speeds up every leader and clashes
-   with nothing. **A trigger: the HUD key** (the user, 2026-09-27: the Y button's "drop down"; code read, not
-   measured): key 7 in `PlayerControl.GetInput`, whose only field use drops the HUD (HP, TP, berries) for 300 frames
-   or pulls it back up. The same key also works in the pause menu, the shop list (`MainManager`) and one battle
-   spot (`BattleControl`), which stay as they are; only the field use is taken over (decided, the user, 2026-09-27: "at least replace its function on the overworld"), and it does the travel dash for whoever leads (decided, the user: only the leader is controlled; the other two follow, whoever leads). Still to see on screen: whether the followers keep up during a dash. **A toggle, not a hold** (the user, 2026-09-27: "like sprint on/off", so a controller needs no held Y): each press turns the sprint on or off. So it is a sprint (faster while the stick is held, stopping when it is let go), not the game's dash (which keeps moving by itself, stops at a wall, and turns slowly: `DashBehavior` eases its direction toward the stick by 2.5% a frame, where walking follows the stick at once; the user remembered it hard to steer). The same for all three members, and apart from Kabbu's horn dash, which stays the game's ability and a gate (flag 699; Next 3, the horn dash as an item) with everything it breaks (the user, 2026-09-27). The logic never counts on the sprint (a faster run may jump further: to check before it ships). **Sprint and dash stack** (the user, 2026-09-27: fun, and the toggle turns it off if the dash is too fast): with the sprint on, Kabbu's dash goes faster too (`RefreshSpeed`: dashing is `basespeed × 2.5`, walking `(basespeed + friction) × 1.3`); whether a faster dash reaches anything the logic thinks locked is part of the same check. **An item or a setting?** (the user asked, 2026-09-27): as a check, the sprint is an item in the pool, so a yaml option (the pool is fixed at generation; `slot_data` tells the mod), its own build step. Proposed: *Sprint*: Start With / Shuffled (an item, the button does nothing until it arrives) / Off, with the speeds a panel setting (taste, no logic). **Default: Start With** (the user, 2026-09-27); Off is there for players who don't want the feature, and with it the HUD key keeps the game's own use. Its classification follows the jump check: if a sprinting jump or dash can reach even one location, it is progression and that reach goes into the logic; if not, useful. Still to decide: whether it stays on across maps, fights and scenes. Still to check: that Y is
-   key 7 by default on a controller (keys can be rebound, so the mod follows the key, not "Y"). Little is lost (the
-   user): the HUD only shows HP, berries and the like, and drops down by itself when the player stands still a moment.
+33. **Sprint, an idea for later** (the user, 2026-09-27; code read, not measured). Decided so far:
+   - **The button:** the HUD key (key 7, the Y button's "drop down"), on the overworld only. Its only field use
+     (`PlayerControl.GetInput`) shows the HUD (HP, TP, berries) for 300 frames or hides it; little is lost, since the
+     HUD shows itself when the player stands still (the user). Its uses in the pause menu, the shop list
+     (`MainManager`) and one battle spot (`BattleControl`) stay. Keys can be rebound, so the mod follows the key, not "Y".
+   - **A toggle, not a hold:** each press turns the sprint on or off, so a controller needs no held button.
+   - **Whoever leads, the same for all three** (only the leader is controlled; the other two follow). A sprint is
+     faster walking: it stops when the stick is let go and steers like walking. The game's dash keeps moving by itself,
+     stops at a wall and turns slowly (`DashBehavior` eases toward the stick by 2.5% a frame; the user remembered it
+     hard to steer).
+   - **Kabbu's horn dash stays the game's ability and a gate** (flag 699; Next 3, the horn dash as an item), with
+     everything it breaks: that is its hitbox (`tbox`, tagged `BeetleHorn`, or `BeetleDash` with flag 39, that
+     `NPCControl`, `Hornable` and `ShakeHorn` react to), which the sprint never has. The dash starts as a second tap of
+     the horn slash within 15 frames (`DoActionTap`, case 1); every leader's tap and hold is taken, hence the HUD key.
+   - **Sprint and dash stack:** with the sprint on, the dash goes faster too (fun, and the toggle turns it off). Speed
+     comes from `PlayerControl.basespeed` (5) in `RefreshSpeed`: walking `(basespeed + friction) × 1.3`, dashing
+     `basespeed × 2.5`, the submarine `basespeed / 1.8`.
+   - **Poses for Vi and Leif:** looked for on screen first (a dev command stepping through `animstate` numbers), the
+     normal walk made faster if none fits. Kabbu's dash poses are 116/117, but each member's numbers mean different
+     poses (battle sets 116 on `playerdata[2]`).
+   - **A yaml option, its own build step:** *Sprint*: Start With (default) / Shuffled (an item; the button does
+     nothing until it arrives) / Off (the HUD key keeps the game's own use, for players who don't want it). The
+     speeds are a panel setting (taste, no logic).
+
+   Still open: the speed values; whether it stays on across maps, fights and scenes (proposed: on until pressed
+   again); feedback on a press (proposed: the HUD's own down/up sounds); that Y is key 7 by default on a controller;
+   whether the followers keep up. **Before it ships:** a faster run or dash may jump further. If it reaches even one
+   location the logic thinks locked, the item is progression and that reach goes into the logic; if not, useful.
 34. **Early Jump, an idea for later** (the user, 2026-09-27): *Shuffle Jump* (build step 22) becomes Off / On /
    Early, where Early puts Jump in an early sphere, since it gates the most. Archipelago may already have this built in
    (an early-items setting): check `world api.md` at the targeted tag before building one of ours.
