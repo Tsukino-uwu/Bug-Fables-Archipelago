@@ -183,7 +183,10 @@ be wrong.
    *Artifact* item goes into the pool; the goal counts Artifacts received. The item never sets the game's artifact
    flags: they drive the story (flag 41 is the logic's "Snakemouth Den Cleared"). **Decided (the user, 2026-09-27):**
    the pause menu's icons show Artifacts received (drawn only; the save's own count, which the file select shows, stays
-   the game's). The pool: always 7, *Artifacts Required* 1-7, so the game's 7 icons can show it (the user agreed); a
+   the game's). **Any order (the user):** seven distinct items, *Artifact 1* to *7*, each drawn with its own icon, so
+   Artifact 4 can come before 1; the goal is any N of them. The game draws the first N of `StartMenu.psprite` from a
+   flag count (`PauseMenu.cs:2397-2402`), so the mod draws the received ones itself. Open: only the received icons, or
+   all 7 with the missing ones faded. The pool: always 7, *Artifacts Required* 1-7, so the game's 7 icons can show it (the user agreed); a
    bigger pool breaks nothing in Archipelago but needs a filler slot per Artifact and a display past 7 icons, so later
    if asked. A yaml
    option, so its own build step.
