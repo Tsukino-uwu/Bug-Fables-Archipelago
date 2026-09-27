@@ -260,7 +260,9 @@ be wrong.
      spider fight.
 
    How a scene is cut (skipped or fast-forwarded) stays per scene: a Skip scene that can't be cut out safely is sped
-   up instead. **Sorted (the user, 2026-09-27):**
+   up instead. **A scene the player should see happen is sped up, never cut out** (the user, 2026-09-27: the bridge
+   falling, the fall through the trapdoor, the spider scene; a cut looks wrong, as the trapdoor's skip showed: just a
+   teleport). **Sorted (the user, 2026-09-27):**
 
    | Scene | Today | Decided |
    |---|---|---|
