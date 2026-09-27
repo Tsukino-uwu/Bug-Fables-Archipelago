@@ -156,34 +156,11 @@ namespace BugFablesAP
         internal Dictionary<long, int> LocationFlags => locationFlags;
         private volatile Dictionary<long, int> locationFlags;
 
-        private static Dictionary<long, int> ReadLocationFlags(Dictionary<string, object> slotData)
-        {
-            if (slotData == null || !slotData.TryGetValue("location_flags", out object raw) || !(raw is JObject map))
-            {
-                return null;
-            }
-            var result = new Dictionary<long, int>();
-            foreach (JProperty entry in map.Properties())
-            {
-                result[long.Parse(entry.Name)] = entry.Value.Value<int>();
-            }
-            return result;
-        }
-
         internal Dictionary<long, Give> LocationGives => locationGives;
         private volatile Dictionary<long, Give> locationGives;
 
         internal Dictionary<long, int> ItemKinds => itemKinds;
         private volatile Dictionary<long, int> itemKinds;
-
-        private static Dictionary<long, int> ReadItemKinds(Dictionary<string, object> slotData)
-        {
-            if (slotData == null || !slotData.TryGetValue("item_kinds", out object raw) || !(raw is JObject map))
-            {
-                return null;
-            }
-            return map.Properties().ToDictionary(p => long.Parse(p.Name), p => p.Value.Value<int>());
-        }
 
         // The goal: this many artifacts, as the game counts them. 0 when slot_data has none.
         internal int ArtifactsRequired => artifactsRequired;
@@ -198,25 +175,6 @@ namespace BugFablesAP
             internal string Map;
             internal int Type;
             internal int Item;
-        }
-
-        private static Dictionary<long, Give> ReadLocationGives(Dictionary<string, object> slotData)
-        {
-            if (slotData == null || !slotData.TryGetValue("location_gives", out object raw) || !(raw is JObject map))
-            {
-                return null;
-            }
-            var result = new Dictionary<long, Give>();
-            foreach (JProperty entry in map.Properties())
-            {
-                result[long.Parse(entry.Name)] = new Give
-                {
-                    Map = entry.Value.Value<string>("map"),
-                    Type = entry.Value.Value<int>("type"),
-                    Item = entry.Value.Value<int>("item"),
-                };
-            }
-            return result;
         }
 
         internal Dictionary<long, Pickup> LocationPickups => locationPickups;
@@ -234,40 +192,9 @@ namespace BugFablesAP
             internal int Regional = -1;
         }
 
-        private static Dictionary<long, Pickup> ReadLocationPickups(Dictionary<string, object> slotData)
-        {
-            if (slotData == null || !slotData.TryGetValue("location_pickups", out object raw) || !(raw is JObject map))
-            {
-                return null;
-            }
-            var result = new Dictionary<long, Pickup>();
-            foreach (JProperty entry in map.Properties())
-            {
-                result[long.Parse(entry.Name)] = new Pickup
-                {
-                    Map = entry.Value.Value<string>("map"),
-                    Flag = entry.Value.Value<int>("flag"),
-                    Event = entry.Value.Value<int?>("event") ?? -1,
-                    Berry = entry.Value.Value<int?>("berry") ?? -1,
-                    Regional = entry.Value.Value<int?>("regional") ?? -1,
-                };
-            }
-            return result;
-        }
-
         // {location id: {var, at_least}}: done when a number slot reaches a value (a boss prize: its slot at 3).
         internal Dictionary<long, int[]> LocationVars => locationVars;
         private volatile Dictionary<long, int[]> locationVars;
-
-        private static Dictionary<long, int[]> ReadLocationVars(Dictionary<string, object> slotData)
-        {
-            if (slotData == null || !slotData.TryGetValue("location_vars", out object raw) || !(raw is JObject map))
-            {
-                return null;
-            }
-            return map.Properties().ToDictionary(p => long.Parse(p.Name),
-                p => new[] { p.Value.Value<int>("var"), p.Value.Value<int>("at_least") });
-        }
 
         // Where a new file begins (Starting Location): the map and a save point's entity index (-1 for none); null for the
         // game's own start. StartFrom: the map whose door leads in, for a start entered as if through that door.
@@ -305,15 +232,6 @@ namespace BugFablesAP
         internal List<DoorShuffle.Target> DoorTargets => doorTargets;
         private volatile List<DoorShuffle.Target> doorTargets;
         private volatile Dictionary<long, ItemShopSlot> locationItemShops;
-
-        private static Dictionary<long, int> ReadLocationBerries(Dictionary<string, object> slotData, string key = "location_berries")
-        {
-            if (slotData == null || !slotData.TryGetValue(key, out object raw) || !(raw is JObject map))
-            {
-                return null;
-            }
-            return map.Properties().ToDictionary(p => long.Parse(p.Name), p => p.Value.Value<int>());
-        }
 
         internal List<Blocker> KeptOpen => keptOpen;
         private volatile List<Blocker> keptOpen;
@@ -355,18 +273,14 @@ namespace BugFablesAP
             internal int Flag = -1;
         }
 
-        private static List<Blocker> ReadKeptOpen(Dictionary<string, object> slotData, string key = "kept_open")
+        private static Blocker ReadBlocker(JToken e)
         {
-            if (slotData == null || !slotData.TryGetValue(key, out object raw) || !(raw is JArray list))
-            {
-                return null;
-            }
-            return list.Select(e => new Blocker
+            return new Blocker
             {
                 Map = e.Value<string>("map"),
                 Entity = e.Value<string>("entity"),
                 Flag = e["flag"] != null ? e.Value<int>("flag") : -1,
-            }).ToList();
+            };
         }
 
         // Respawning pickups: nothing in the save marks them, so what's done lives here (server list, updates, local
@@ -564,62 +478,72 @@ namespace BugFablesAP
                     status = $"Connected as {slot}.";
                     Heard();
                     lastPingUtc = DateTime.UtcNow;
-                    locationFlags = ReadLocationFlags(ok.SlotData);
-                    locationGives = ReadLocationGives(ok.SlotData);
-                    locationPickups = ReadLocationPickups(ok.SlotData);
-                    keptOpen = ReadKeptOpen(ok.SlotData);
-                    keptPresent = ReadKeptOpen(ok.SlotData, "kept_present");
-                    sceneryHidden = ReadKeptOpen(ok.SlotData, "scenery_hidden");
-                    sceneryPresent = ReadKeptOpen(ok.SlotData, "scenery_present");
-                    heldUntil = ReadKeptOpen(ok.SlotData, "held_until");
-                    presentFrom = ReadKeptOpen(ok.SlotData, "present_from");
-                    dialogueFlags = ok.SlotData != null && ok.SlotData.TryGetValue("dialogue_flags", out object df) && df is JArray dfl
-                        ? dfl.Select(e => new DialogueFlag { Map = e.Value<string>("map"), Entity = e.Value<string>("entity"),
-                            From = e.Value<int>("flag"), To = e.Value<int>("to") }).ToList()
-                        : null;
-                    locationVars = ReadLocationVars(ok.SlotData);
-                    locationBerries = ReadLocationBerries(ok.SlotData);
-                    locationDiscoveries = ReadLocationBerries(ok.SlotData, "location_discoveries");
-                    silentLocations = ok.SlotData != null && ok.SlotData.TryGetValue("silent_locations", out object sl) && sl is JArray sla
-                        ? new HashSet<long>(sla.Select(e => e.Value<long>()))
-                        : null;
-                    locationShops = ok.SlotData != null && ok.SlotData.TryGetValue("location_shops", out object ls) && ls is JObject lso
-                        ? lso.Properties().ToDictionary(p => long.Parse(p.Name), p => new[] { p.Value.Value<int>("shop"), p.Value.Value<int>("medal") })
-                        : null;
-                    locationItemShops = ok.SlotData != null && ok.SlotData.TryGetValue("location_item_shops", out object lis) && lis is JObject liso
-                        ? liso.Properties().ToDictionary(p => long.Parse(p.Name), p => new ItemShopSlot
-                        {
-                            Map = p.Value.Value<string>("map"),
-                            Keeper = p.Value.Value<string>("keeper"),
-                            Item = p.Value.Value<int>("item"),
-                        })
-                        : null;
-                    doorTargets = ok.SlotData != null && ok.SlotData.TryGetValue("door_targets", out object dts) && dts is JArray dta
-                        ? dta.Select(e => new DoorShuffle.Target
-                        {
-                            Map = e.Value<string>("map"),
-                            Door = e.Value<string>("door"),
-                            LikeMap = e.Value<string>("like_map"),
-                            LikeDoor = e.Value<string>("like_door"),
-                        }).ToList()
-                        : null;
-                    enemySwaps = ok.SlotData != null && ok.SlotData.TryGetValue("enemy_swaps", out object es) && es is JObject eso
-                        ? eso.Properties().ToDictionary(p => p.Name, p => p.Value.ToObject<int[]>())
-                        : null;
-                    JObject startData = ok.SlotData != null && ok.SlotData.TryGetValue("start", out object st) && st is JObject sto
-                        && sto["map"] != null && (sto["entity"] != null || sto["from"] != null) ? sto : null;
+                    Dictionary<string, object> data = ok.SlotData;
+                    locationFlags = SlotData.ByLocation(data, "location_flags", v => v.Value<int>());
+                    locationGives = SlotData.ByLocation(data, "location_gives", v => new Give
+                    {
+                        Map = v.Value<string>("map"),
+                        Type = v.Value<int>("type"),
+                        Item = v.Value<int>("item"),
+                    });
+                    locationPickups = SlotData.ByLocation(data, "location_pickups", v => new Pickup
+                    {
+                        Map = v.Value<string>("map"),
+                        Flag = v.Value<int>("flag"),
+                        Event = v.Value<int?>("event") ?? -1,
+                        Berry = v.Value<int?>("berry") ?? -1,
+                        Regional = v.Value<int?>("regional") ?? -1,
+                    });
+                    keptOpen = SlotData.List(data, "kept_open", ReadBlocker);
+                    keptPresent = SlotData.List(data, "kept_present", ReadBlocker);
+                    sceneryHidden = SlotData.List(data, "scenery_hidden", ReadBlocker);
+                    sceneryPresent = SlotData.List(data, "scenery_present", ReadBlocker);
+                    heldUntil = SlotData.List(data, "held_until", ReadBlocker);
+                    presentFrom = SlotData.List(data, "present_from", ReadBlocker);
+                    dialogueFlags = SlotData.List(data, "dialogue_flags", e => new DialogueFlag
+                    {
+                        Map = e.Value<string>("map"),
+                        Entity = e.Value<string>("entity"),
+                        From = e.Value<int>("flag"),
+                        To = e.Value<int>("to"),
+                    });
+                    locationVars = SlotData.ByLocation(data, "location_vars", v => new[] { v.Value<int>("var"), v.Value<int>("at_least") });
+                    locationBerries = SlotData.ByLocation(data, "location_berries", v => v.Value<int>());
+                    locationDiscoveries = SlotData.ByLocation(data, "location_discoveries", v => v.Value<int>());
+                    List<long> silent = SlotData.List(data, "silent_locations", e => e.Value<long>());
+                    silentLocations = silent != null ? new HashSet<long>(silent) : null;
+                    locationShops = SlotData.ByLocation(data, "location_shops", v => new[] { v.Value<int>("shop"), v.Value<int>("medal") });
+                    locationItemShops = SlotData.ByLocation(data, "location_item_shops", v => new ItemShopSlot
+                    {
+                        Map = v.Value<string>("map"),
+                        Keeper = v.Value<string>("keeper"),
+                        Item = v.Value<int>("item"),
+                    });
+                    doorTargets = SlotData.List(data, "door_targets", e => new DoorShuffle.Target
+                    {
+                        Map = e.Value<string>("map"),
+                        Door = e.Value<string>("door"),
+                        LikeMap = e.Value<string>("like_map"),
+                        LikeDoor = e.Value<string>("like_door"),
+                    });
+                    enemySwaps = SlotData.Object(data, "enemy_swaps")?.Properties().ToDictionary(p => p.Name, p => p.Value.ToObject<int[]>());
+                    JObject startData = SlotData.Object(data, "start");
+                    if (startData != null && (startData["map"] == null || startData["entity"] == null && startData["from"] == null))
+                    {
+                        startData = null;
+                    }
                     startFrom = startData?.Value<string>("from");
                     startBox = startData != null
                         ? (object)new KeyValuePair<string, int>(startData.Value<string>("map"), startData["entity"] != null ? startData.Value<int>("entity") : -1)
                         : null;
                     ownSlot = ok.Slot;
                     object sm = null;
-                    PartyMembers.SeedSaysMember = ok.SlotData != null && ok.SlotData.TryGetValue("starting_member", out sm) && sm != null;
+                    PartyMembers.SeedSaysMember = data != null && data.TryGetValue("starting_member", out sm) && sm != null;
                     PartyMembers.SeedStartMember = PartyMembers.SeedSaysMember ? Convert.ToInt32(sm) : -1;
-                    itemKinds = ReadItemKinds(ok.SlotData);
-                    FieldMoves.MovesShuffled = ok.SlotData != null && ok.SlotData.TryGetValue("shuffle_moves", out object smv) && smv is bool smb && smb;
-                    FieldMoves.JumpShuffled = ok.SlotData != null && ok.SlotData.TryGetValue("shuffle_jump", out object sj) && sj is bool sjb && sjb;
-                    artifactsRequired = ok.SlotData != null && ok.SlotData.TryGetValue("artifacts_required", out object ar) && ar != null
+                    itemKinds = SlotData.ByLocation(data, "item_kinds", v => v.Value<int>());
+                    FieldMoves.MovesShuffled = data != null && data.TryGetValue("shuffle_moves", out object smv) && smv is bool smb && smb;
+                    FieldMoves.JumpShuffled = data != null && data.TryGetValue("shuffle_jump", out object sj) && sj is bool sjb && sjb;
+                    artifactsRequired = data != null && data.TryGetValue("artifacts_required", out object ar) && ar != null
                         ? Convert.ToInt32(ar) : 0;
                     seedKnown = true;
                     scouts = null;
