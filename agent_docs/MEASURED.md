@@ -1175,6 +1175,12 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
     EverlastingKing 91, Acolyte 21, Scarlet 31, Kali 51, Cenn 85 and Pisci 86. The rematch machine runs them too.
   - So for the base attacks: a flier needs Vi, the Sandworm needs Leif, and a Random one needs whichever position it
     takes.
+  - **Kabbu flips** (2026-09-27, code read; the user's rule of thumb the same day: Leif hits the burrowed, Kabbu the
+    ones to flip over, Vi the ones in the air). Kabbu's base attack carries `AttackProperty.Flip` (`BattleControl.cs:11545`,
+    `:11551`). An enemy with `Flip` among its weaknesses (enemy data column 23, `{`-separated after a count) is flipped by
+    it, and a flipped enemy's defence is 0 (`TrueDef`, `:3131`); some need a topple first (`ToppleFirst`,
+    `ToppleAirOnly`). Which enemies have the weakness: not dumped yet (EntityDump writes column 23 as `weakness` from
+    2026-09-27; needs a re-run).
 - **Where enemy stats are shown** (2026-09-26, code read): in a fight, the bar over a spied enemy (or with the scope
   medal) shows its live `hp`, `maxhp` and defence (`TrueDef`) (`BattleControl.cs:3148-3163`), so changed numbers show
   there as they are. The pause menu's bestiary page works out HP and defence from the raw `enemydata` row plus the
