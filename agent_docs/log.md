@@ -986,3 +986,9 @@ Newest last. What was tried, what happened, what the user said.
 - **Settings:** a yaml *Sprint* (Start With by default, Shuffled, Off: Off keeps the HUD key as the game has it), the
   speeds in the panel. Its classification waits on whether a faster jump or dash reaches anything the logic thinks
   locked. Next 33 rewritten as one entry at the end, nothing dropped.
+- **Skip / Speed up cutscenes (Next 35):** the user split today's one row into *Skip* (only dialogue) and *Speed up*
+  (something happens, or a check), with an always group under Archipelago (the opening, every tutorial, the scripted
+  first spider fight, turn-backs). Every current scene sorted with the user; the rope, trapdoor and spider scene stay
+  sped up, since a cut looks wrong (the trapdoor's teleport). The spider scene read in code: one coroutine, played as
+  scene, scripted fight, scene, second fight, scene. A turn-back is cut only in the same change that fixes its gate
+  and logic. Every scene is still read and sorted by hand.
