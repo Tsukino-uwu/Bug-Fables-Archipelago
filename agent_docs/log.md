@@ -1063,4 +1063,8 @@ Newest last. What was tried, what happened, what the user said.
   frozen branch writes its position back every frame. Fixed as the platforms (no interpolation while frozen, one shared
   decision). The user: "moved properly when knocked around". Also: `copy-dev -Status` added after the user asked for a
   faster reload check; the first status read showed the new build loaded at once.
+- **How to map rooms, written down (the user's questions):** one-ways per entrance and inside a room, roadblocks and
+  ledges, what each location needs and whether you can get back, spawning anywhere; the agent added story state,
+  one-time changes, one-way mechanisms, forced fights, respawns, the Warp as a way out only, non-door transfers, and a
+  draft per room from the entity dump. In `room-logic.md`. The user: tell "what needs what", the agent writes the logic.
 

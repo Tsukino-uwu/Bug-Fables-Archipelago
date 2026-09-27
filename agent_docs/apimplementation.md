@@ -63,6 +63,8 @@ be wrong.
    placeholders, journal entries, enemy drops): see build step 10.
 2. **Entrance randomizer (experimental):** every door, coupled, built; next, sorting the transfers that aren't doors
    into chosen and forced, then the room-by-room logic that removes the label. See build step 12.
+   **How each room gets mapped** (the user, 2026-09-27): the checklist in `room-logic.md`; the user says what needs
+   what, the agent turns it into areas and rules.
 3. **Field abilities shuffled as items** (every learned ability built, build step 23) (by the game's names: Beemerang Halt, Bee Fly, Dash, Horn Dash, Beetle Dig, Icicle, Shield; `MEASURED.md`, every field ability).
    Party members stay where the story puts them.
    The three attacks and Jump as items: built, see build steps 21 and 22. Party members as items (*Starting Party Member*): built, see build step 18.

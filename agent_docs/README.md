@@ -10,4 +10,5 @@ One line per file.
 - [MEASURED.md](MEASURED.md): game facts measured by us (classes, hooks, flags, save fields), each with evidence and date.
 - [licensing.md](licensing.md): every third-party project, with its licence read from the file and what we may do with it.
 - [references.md](references.md): other randomizers read for their approach, and what was taken from each.
+- [room-logic.md](room-logic.md): how a room gets mapped for the logic: its areas, one-ways, needs per entrance, the questions to ask and the method. Read before any room-level logic.
 - [log.md](log.md): dated session log. What was tried, what happened, what the user said.
