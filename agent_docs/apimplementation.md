@@ -249,6 +249,36 @@ be wrong.
 34. **Early Jump, an idea for later** (the user, 2026-09-27): *Shuffle Jump* (build step 22) becomes Off / On /
    Early, where Early puts Jump in an early sphere, since it gates the most. Archipelago may already have this built in
    (an early-items setting): check `world api.md` at the targeted tag before building one of ours.
+35. **Skip cutscenes and Speed up cutscenes, two rows, an idea for later** (the user, 2026-09-27). Today one row,
+   *Skip cutscenes* (`QualityOfLife.cs`, `Scenes`; the mod guide, step 10), both skips and fast-forwards (8x speed, lines
+   answered), chosen per scene by what is safe. The idea splits it by what a scene is:
+   - **Skip:** scenes with no mechanic or check tied to them. Off: they play as in vanilla.
+   - **Speed up:** story beats and scenes that give an item or reward (the user's examples: the game's tutorial, the
+     trapdoor, saving Leif from the spider web). Off: they play as in vanilla, at normal speed.
+   - **Always, with Archipelago on, whatever the two rows say:** what the randomizer needs gone, or scripted parts
+     that only slow the pace (the user's list: the intro slides, the new-game combat tutorial, the scripted first
+     spider fight, Leif joining at the lake and its fight).
+
+   How a scene is cut (skipped or fast-forwarded) stays per scene, apart from its row: a fluff scene that can only be
+   fast-forwarded safely (the rope) goes under Skip and is sped up, never cut out. Today's scenes, sorted as proposed:
+
+   | Scene | Today | Proposed |
+   |---|---|---|
+   | The opening: slides (Event8), Maki's talk, Vi joining, the tutorial battle (Event16) | always | always |
+   | The first spider fight, ended at its start (`BeforeCheckEvent`) | *Skip cutscenes* | always |
+   | The bridge message (Event0) | skipped | Skip |
+   | The rope (Event1) | fast-forwarded | Skip (sped up) |
+   | The Tattle tutorial (Event2) | skipped | Skip, or Speed up as "the tutorial"? |
+   | The barkeeper's first talk (Event83) | skipped | Skip |
+   | Arriving outside Snakemouth Den (Event11, records discovery 0) | skipped | Speed up (gives a check)? |
+   | The door room's puzzle solved (Event4, drops a Mushroom) | fast-forwarded | Speed up |
+   | The trapdoor (Event5) | fast-forwarded | Speed up |
+   | The spider scene (Event6: the fights, Leif freed and joining, discovery 1) | fast-forwarded | split: see below |
+
+   Still to ask: "Leif joining at the lake and its fight" (always) and "saving Leif from the web" (Speed up) may both
+   be Event6, one scene today; which part goes where, and whether "its fight" is the second spider fight (a real one,
+   with the first boss's prize and flag 27 behind it). Defaults proposed: both rows on. Only while Archipelago is
+   enabled, as every row. A panel setting, so its own step in the mod guide.
 
 **Known issues:**
 
