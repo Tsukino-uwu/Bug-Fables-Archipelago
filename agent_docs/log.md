@@ -1067,4 +1067,12 @@ Newest last. What was tried, what happened, what the user said.
   ledges, what each location needs and whether you can get back, spawning anywhere; the agent added story state,
   one-time changes, one-way mechanisms, forced fights, respawns, the Warp as a way out only, non-door transfers, and a
   draft per room from the entity dump. In `room-logic.md`. The user: tell "what needs what", the agent writes the logic.
-
+- **Combat logic, from the user (2026-09-27):** air needs Vi, burrowed needs Leif, and an enemy Kabbu can flip
+  (knocked over, then its defence drops) needs Kabbu, expected even where the others could win. EntityDump gained a
+  `weakness` column; the run found five flippable enemies (MEASURED, "Who can hit what"). The first copy loaded the old
+  plugin: the build had gone to `bin/Release` without `stage-dev.ps1`, so copy-dev copied the stale stage (same hash
+  as loaded). Build with `stage-dev.ps1`, then copy.
+- **Mash bar and hit damage (the user's questions):** the bar is frame-rate corrected at 240 (code read); the user
+  switched *Mash Action Commands* to the sequence and found it much easier. A boss hitting 3 instead of 7: no mod
+  scaling (Off, no `[scale]` lines), Difficulty Normal, hard flags 166/614 off (read live); attack down is -1 per hit,
+  so a multi-hit attack under Leif's debuff explains it.
