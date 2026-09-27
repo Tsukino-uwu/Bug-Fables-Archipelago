@@ -236,8 +236,8 @@ be wrong.
    measured): key 7 in `PlayerControl.GetInput`, whose only field use drops the HUD (HP, TP, berries) for 300 frames
    or pulls it back up. The same key also works in the pause menu, the shop list (`MainManager`) and one battle
    spot (`BattleControl`), which stay as they are; only the field use would be taken over. Still to check: that Y is
-   key 7 by default on a controller (keys can be rebound, so the mod follows the key, not "Y"), and what the player
-   loses, since the HUD still shows up by itself when HP or berries change.
+   key 7 by default on a controller (keys can be rebound, so the mod follows the key, not "Y"). Little is lost (the
+   user): the HUD only shows HP, berries and the like, and drops down by itself when the player stands still a moment.
 34. **Early Jump, an idea for later** (the user, 2026-09-27): *Shuffle Jump* (build step 22) becomes Off / On /
    Early, where Early puts Jump in an early sphere, since it gates the most. Archipelago may already have this built in
    (an early-items setting): check `world api.md` at the targeted tag before building one of ours.
