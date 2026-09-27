@@ -28,6 +28,8 @@ namespace BugFablesAP
 
         // A received death not yet struck, and who it came from.
         internal static bool Pending { get; private set; }
+        // A death waiting or under way: nothing may save over the state it goes back from.
+        internal static bool Busy => Pending || striking;
         private static string pendingFrom;
         // From the strike until play is back: deaths arriving meanwhile join this one.
         private static bool striking;

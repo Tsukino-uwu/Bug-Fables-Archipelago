@@ -331,8 +331,8 @@ be wrong.
 38. **A Graphics page, render scale and MSAA** (the user, 2026-09-28): built, seen, then removed the same day (240 to
    about 95 fps for little visible gain), `documentation.md` step 28.
 39. **DeathLink** (the user, 2026-09-28): built, not yet seen, build step 25. A row on the Gameplay page, not a yaml
-   option, so it can be switched mid-seed. **Auto-save between rooms**, its own Gameplay row, is next (planned:
-   `documentation.md` gets the step), so a death costs one room rather than a long way back.
+   option, so it can be switched mid-seed. **Auto-save between rooms**, its own Gameplay row, built, not yet seen
+   (`documentation.md` step 31), so a death costs one room rather than a long way back.
 
 **Known issues:**
 

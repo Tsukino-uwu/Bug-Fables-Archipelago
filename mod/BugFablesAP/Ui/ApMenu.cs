@@ -16,8 +16,8 @@ namespace BugFablesAP
         private const int ButtonsRow = 0, FastTextRow = 1, WarpRow = 2, SkipConfirmRow = 3, CutscenesRow = 4, AnimationRow = 5, ColorsRow = 6,
             IconsRow = 7, BackgroundsRow = 8, DetectorRow = 9, UncapRow = 10, QolRows = 11;
         // The Gameplay page: how the game plays, under the same two buttons.
-        private const int DifficultyRow = 1, ScalingRow = 2, AttackRow = 3, CrystalsRow = 4, DeathLinkRow = 5, MedalPricesRow = 6, ExpRow = 7,
-            BerryRow = 8, GameplayRows = 9;
+        private const int DifficultyRow = 1, ScalingRow = 2, AttackRow = 3, CrystalsRow = 4, AutoSaveRow = 5, DeathLinkRow = 6, MedalPricesRow = 7,
+            ExpRow = 8, BerryRow = 9, GameplayRows = 10;
         private enum Page { Main, Qol, Gameplay }
         private Page page;
         // On the buttons row: 0 Reset to defaults (where the cursor lands), 1 Disable all; confirming shows Yes / No there (0 Yes, 1 No).
@@ -438,6 +438,7 @@ namespace BugFablesAP
                 Choice(ScalingRow, "Enemy scaling", ScalingLabel(QualityOfLife.EnemyScalingMode?.Value ?? "PartyLevel"));
                 Choice(AttackRow, "Attack boost", AttackBoost.Boost != null && AttackBoost.Boost.Value ? "+1" : "OFF");
                 Choice(CrystalsRow, "Healing crystals", OnOff(SaveCrystals.AllHeal));
+                Choice(AutoSaveRow, "Auto-save", OnOff(AutoSave.Enabled));
                 Choice(DeathLinkRow, "DeathLink", OnOff(DeathLinkGame.Enabled));
                 Label(MedalPricesRow, "Medal prices");
                 Label(ExpRow, "EXP multiplier");

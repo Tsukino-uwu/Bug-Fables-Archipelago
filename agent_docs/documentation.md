@@ -44,6 +44,7 @@ anyone curious about the process, or thinking of doing the same for another game
 28. [A Graphics page, tried and removed: render scale and MSAA](#28-a-graphics-page-tried-and-removed-render-scale-and-msaa)
 29. [Save crystals by the confirm button, as an NPC is talked to](#29-save-crystals-by-the-confirm-button-as-an-npc-is-talked-to)
 30. [Healing crystals: every save crystal yellow](#30-healing-crystals-every-save-crystal-yellow)
+31. [Auto-save between rooms: a death costs one room](#31-auto-save-between-rooms-a-death-costs-one-room)
 
 ## Where it stands
 
@@ -1789,3 +1790,34 @@ no logic depend on it.
 **Status:** built (2026-09-28), not yet seen in game.
 
 *Code: `SaveCrystals.cs` (`BeforeSetUp`); the row in `ApMenu.cs` and `ApMenu.Rows.cs`.*
+
+## 31. Auto-save between rooms: a death costs one room
+
+Asked for with DeathLink (the Archipelago side, build step 25; the user, 2026-09-28): a received death goes back to the
+last save, and story progress lives only in the save (items and checks come back from the server), so without saves
+along the way a death can mean a long walk back and scenes played again.
+
+**Decided (the user, 2026-09-28):** a row on the **Gameplay** page, *Auto-save*, **ON / OFF, off by default**; its own
+row, not tied to DeathLink ("an on/off thing in gameplay, not forced"). Saves go to the room you walk into, not more
+than once every 15 seconds, so going back and forth through a door doesn't save over and over. Only while
+Archipelago is enabled, or with *Use on normal saves* (step 18). Save crystals work as before.
+
+- **Read how the game saves first** (`MEASURED.md`, "Save crystals, saving, Game Over and room transfers"): the
+  crystal's Yes calls `MainManager.Save(position)`, which writes the whole save (the map, the position given, HP as it
+  is, flags) through `InputIO.Save`, keeping the old file as a backup. No UI, no precondition. The mod's
+  randomizer-save redirect catches it like every save.
+- **When:** a door's transfer holds `roomtransition` until the party has walked in, then sets `lastloadzone`, where
+  the walk ended. When it clears in a new map, the save waits until the player has been free for 20 frames in a row
+  (no scene, text box, menu, battle or transition, on the ground). A map's auto-event starts as soon as the player is
+  free and sets its flag as it starts, so saving on the first free frame could store that flag and skip the scene on a
+  reload; if a scene starts, the save waits until it ends. Cutscene map changes aren't doors and don't save.
+- **Where:** at the room's entrance (`lastloadzone`), where a reload puts the party.
+- **Within 15 seconds of the last auto-save** the room waits rather than being skipped: it saves once the time is up,
+  if you're still there and free, so the save is always the room you're in.
+- **Never while a DeathLink death is waiting or under way**, so a reload can't come back to a state saved after the
+  death.
+- Reset sets Off; Disable all sets Off. No sound or text on screen yet; the log says `[autosave] saved`.
+
+**Status:** built (2026-09-28), not yet seen in game.
+
+*Code: `AutoSave.cs`; `DeathLinkGame.Busy`; the row in `ApMenu.cs` and `ApMenu.Rows.cs`.*

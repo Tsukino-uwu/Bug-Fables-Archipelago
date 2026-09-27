@@ -189,6 +189,7 @@ namespace BugFablesAP
             FieldMoves.Enable(Log, Guid, () => randomizerEnabled.Value);
             SaveCrystals.Enable(Log, Guid, Config, () => randomizerEnabled.Value, settingsOn);
             DeathLinkGame.Enable(Log, Guid, Config, connection, () => randomizerEnabled.Value);
+            AutoSave.Enable(Log, Config, settingsOn);
             Abilities.Enable(Log, Guid, () => randomizerEnabled.Value);
             CheckDetector.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             CrystalBerryTotal.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
@@ -310,6 +311,7 @@ namespace BugFablesAP
             FieldMoves.Tick();
             SaveCrystals.Tick();
             DeathLinkGame.Tick();
+            AutoSave.Tick();
             FrameRate.Tick();
 
             DevCheats.Tick(Log, giveMoney);

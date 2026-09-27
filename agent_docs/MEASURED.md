@@ -1422,7 +1422,7 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   `player.lastpos = lastloadzone =` where the walk ended, and clears `roomtransition` a frame later. Cutscenes change
   maps with `LoadMap` alone. A map's auto-event starts once the player is free (`MapControl.LateUpdate`) and sets its
   flag as it starts.
-- Used by `SaveCrystals.cs` and `DeathLinkGame.cs`.
+- Used by `SaveCrystals.cs`, `DeathLinkGame.cs` and `AutoSave.cs`.
 
 ## Quests: to measure (when quests come into scope)
 
