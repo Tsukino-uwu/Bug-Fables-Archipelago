@@ -62,7 +62,7 @@ be wrong.
    placeholders, journal entries, enemy drops): see build step 10.
 2. **Entrance randomizer (experimental):** every door, coupled, built; next, sorting the transfers that aren't doors
    into chosen and forced, then the room-by-room logic that removes the label. See build step 12.
-3. **Field abilities shuffled as items** (hover, dig, Dash, Horn Dash, big icicle, bubble shield).
+3. **Field abilities shuffled as items** (by the game's names: Beemerang Halt, Bee Fly, Dash, Horn Dash, Beetle Dig, Icicle, Shield; `MEASURED.md`, every field ability).
    Party members stay where the story puts them.
    The three attacks and Jump as items: built, see build steps 21 and 22. Party members as items (*Starting Party Member*): built, see build step 18.
 4. **Open world, one gate at a time** (always on, never an option; the user, 2026-09-26): see build step 9.

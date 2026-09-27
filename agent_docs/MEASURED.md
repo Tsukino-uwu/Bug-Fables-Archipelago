@@ -671,6 +671,24 @@ The output stays in the BepInEx folder.
   twice for Kabbu to dash, letting you move faster!"; learned at `BOLostSandsEntrance`, "Kabbu can now Dash!") and
   *Horn Dash* (`Skills` 38, "a strong move which can break some objects!"; learned at `SwamplandsBridge`, "Kabbu's Dash
   is now the Horn Dash! ... a rock destroying dash!"). *Horn Slash* is the attack, apart from both (the user).
+- **Every field ability** (2026-09-27: names and inputs from the game's `Skills` text, lines 34-42 and 49, the console's
+  `textsearch`; flags from `PlayerControl.cs` and the Beemerang's `NPCControl` case; setters from `EventControl.cs`):
+
+  | Member | Ability (the game's name) | Input | Unlocked by | Set in |
+  |---|---|---|---|---|
+  | Vi | Beemerang Toss | press | none of its own: allowed before flag 41, after it with flag 11 (set early) | Event0, Event1, Event109 |
+  | Vi | Beemerang Halt | toss, then hold | flag 21 (checked on the thrown Beemerang) | Event55 |
+  | Vi | Bee Fly | hold | flag 19 (without it, a hold tosses) | Event150 |
+  | Kabbu | Horn Slash | press | none: always | |
+  | Kabbu | Dash | press twice (the second within the slash's 15 frames) | flag 699 | Event22, Event137, Event221 |
+  | Kabbu | Horn Dash | as the Dash | flag 39 (the Dash's hitbox then `BeetleDash`, breaking rocks) | Event131 (after the swamp bridge) |
+  | Kabbu | Beetle Dig | hold | flag 18 | Event109 |
+  | Leif | Freeze | press | none: always | |
+  | Leif | Icicle | press twice | flag 171 | Event180 |
+  | Leif | Shield | hold | flag 20 | Event95 |
+
+  The places the scenes run aren't read yet, apart from the game's own text: the Dash learned at `BOLostSandsEntrance`,
+  the Horn Dash at `SwamplandsBridge`. Used by the Next 3 plan (field abilities as items).
 - **59 doors to other maps have required or hiding flags, on 22 flags.** Setters: 11 Events 0/1/109,
   18 `Event109`, 20 `Event95`, 41 `Event26`, 67 `Event45`, 85 `Event52`, 86 `Event58`, 107 `Event60`,
   160 `Event84`, 169 `Event87`, 211 `Event98`, 226 and 239 dialogue only, 280 `Event112`, 299 `Event99`,
