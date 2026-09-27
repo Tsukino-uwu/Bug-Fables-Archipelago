@@ -35,8 +35,8 @@ are in `CLAUDE.md`: the logic may be more cautious than the game, never less, an
 6. Is there a ledge that needs Jump? Walking down one without Jump is a one-way.
 7. Does anything move you one way (wind, water, conveyors, moving or rotating platforms, a spring)?
 8. Is there a fight you can't avoid? It must be winnable with the members' plain attacks (combat logic stays basic):
-   an enemy in the air needs Vi, a burrowed one Leif, one that must be flipped over Kabbu (`MEASURED.md`, "Who can
-   hit what").
+   an enemy in the air needs Vi, a burrowed one Leif, one that can be flipped over Kabbu, expected even where the
+   others could win without him (the user, 2026-09-27; the five are in `MEASURED.md`, "Who can hit what").
 9. Does a scene move you? A cutscene can put the party somewhere else in the same map (the trapdoor) or on another
    map: from which area, to which, once or every time, on what flag. It's an edge like any other, often a one-way.
 10. Does anything change once and stay changed (a switch that stays down, a bridge lowered, a rock broken)? That's an

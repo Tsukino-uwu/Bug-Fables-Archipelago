@@ -1181,8 +1181,8 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
     (in the code, a flipped enemy's defence is 0: `TrueDef`, `:3131`). Which enemies it works on: those with `Flip`
     among their weaknesses (enemy data column 23, `{`-separated after a count; EntityDump's `weakness` column, run
     2026-09-27 on the user's game): only **five**, all Ground, all defence 2: Cactiling 4, Inichas 8, Acornling 16,
-    Wasp Bomber 26 (also `ToppleFirst`) and Madesphy 68. Whether each *needs* Kabbu depends on the others' attack
-    against that defence (not measured). The code also has `ToppleFirst` (Wasp Bomber, Heavy Drone B-33 46),
+    Wasp Bomber 26 (also `ToppleFirst`) and Madesphy 68. The logic expects Kabbu for them even where the others
+    could get through the defence (the user, 2026-09-27; `room-logic.md`, question 8). The code also has `ToppleFirst` (Wasp Bomber, Heavy Drone B-33 46),
     `ToppleAirOnly` (Venus' Guardian 24) and `FlyOnFlip` (The Everlasting King 91, TANGYBUG 110); what they change in
     play is not seen.
 - **Where enemy stats are shown** (2026-09-26, code read): in a fight, the bar over a spied enemy (or with the scope
