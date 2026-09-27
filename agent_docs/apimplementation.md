@@ -160,6 +160,9 @@ be wrong.
    blocks, the third the ranged attack). Archipelago counts copies of one item (`Has(item, count)`), so the logic is
    simple. Candidates: each member's field abilities in their game order, and other chains; decided when abilities
    become items (Next 3, build step 13).
+   **First candidate, Kabbu's horn (the user, 2026-09-27, on unlocking the dash):** Horn Slash, then Horn Dash. In the
+   game the dash is a second tap of the horn slash, allowed once flag 699 is set (Next 33), so it can't come without
+   the slash: a progressive *Horn* (first copy the slash, second the dash) matches the game's own order.
 24. **The panel's settings on normal saves** (the user, 2026-09-26; built, `documentation.md` step 18): an opt-in row so Quality of life and
    Gameplay also apply with Archipelago off. A deliberate exception to "vanilla stays vanilla", which only the user can
    make; off by default. **Named (the user): *Use on normal saves*, ON / OFF**, help line "Quality of life and Gameplay
