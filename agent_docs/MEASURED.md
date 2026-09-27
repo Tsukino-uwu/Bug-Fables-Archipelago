@@ -27,6 +27,7 @@ confirms on screen.
 - [Transfers that aren't doors](#transfers-that-arent-doors-2026-09-25-scriptdumps-transfer-column-dev-scriptsevent-transferspy)
 - [What the Explorer Permit opens](#what-the-explorer-permit-opens-2026-09-24-code-read-and-scriptdump-the-wiki-lists-four-uses)
 - [All medals by source](#all-medals-by-source-2026-09-24-entity-dump-scriptdump-code-read-matched-to-the-bug-fables-wiki)
+- [We Owe Ya!'s helpers](#we-owe-yas-helpers-2026-09-27-code-read-a-testers-report)
 - [What the mod's code relies on](#what-the-mods-code-relies-on-code-read-2026-09-24-and-2026-09-25-moved-here-from-code-comments-2026-09-25)
 - [Battles, for enemy shuffle — SPOILERS: boss ids](#battles-for-enemy-shuffle-2026-09-26-code-read-nothing-seen-in-game--spoilers-boss-ids)
 - [The round pause-menu icons' colours](#the-round-pause-menu-icons-colours-2026-09-26-sampled-from-the-spritedump-sheet)
@@ -927,6 +928,20 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   already.** Mighty Pebble (Chuck) waits for the source of a Hearty Breakfast. Next in story order: chapter 2's floor
   medals and dialogue gifts around the city (Bug Me Not!, Sleep Resistance, Favorite One) and the waterfall HP Plus,
   each checked on screen first.
+
+## We Owe Ya!'s helpers (2026-09-27, code read; a tester's report)
+
+- **What it does:** at a battle's start, if no helper has joined already (`aiparty == null`) and medal 85 is equipped,
+  the game builds a list from the flags below, picks one entry at random and adds it as a hologram ally
+  (`BattleControl.cs:1202-1240`; `AddAI(id, animstate)` makes an entity with that id, `:1553`). **With none of the
+  flags set the list is empty and the medal does nothing.** The game hides this: the medal joins Merab's stock only
+  once one of the flags is set (`MapControl.HelperMedalCheck`, flag 716). A randomizer can hand it out before that; a
+  tester received it early from another game and saw nothing happen (2026-09-27).
+- **The list:** flag 514 → `AddAI(72, 5)` (set in Event177); 498 → `(47, 0)` (Event175; entity 47 also brings entity 48
+  beside it, `:1242-1251`); 610 → `(46, 13)` (Event207); 135 → `(3, 0)` and `(49, 13)`, two entries (Event77); 709 →
+  `(95, 13)` (Event222); 391 → `(76, 0)`; 298 and 189 together → `(20, 13)` (298 in Event111). The shop check also
+  counts flag 704, which adds no entry. Where 391 and 189 are set, and which characters these entity ids are, isn't
+  read yet. Not seen in game.
 
 ## What the mod's code relies on (code read 2026-09-24 and 2026-09-25; moved here from code comments 2026-09-25)
 

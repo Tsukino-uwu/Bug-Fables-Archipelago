@@ -31,6 +31,11 @@ Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's 
 
 Each option's description in the yaml says what it does in full and how many checks it adds.
 
+## Good to know
+
+- **We Owe Ya!** calls a helper into battle only from those you have unlocked in the story or a side quest.
+  Received early, it does nothing until then.
+
 ## What is the goal?
 
 Collect a number of artifacts (the option *Artifacts Required*). The game has 7, one per chapter milestone. This

@@ -286,6 +286,12 @@ be wrong.
    (Kabbu alone, `flagvar[11]` 0), talk, the second fight (two enemies, `flagvar[11]` 2, a real one), then Leif's
    part, flags 30 and 27 and discovery 1. Its first fight ends at once always; the rest is sped up. Defaults proposed:
    both rows on. Only while Archipelago is enabled, as every row. A panel setting, so its own step in the mod guide.
+36. **We Owe Ya! does something from the start, an idea for later** (the user, 2026-09-27). Today the medal calls a
+   random helper only from those the story or a side quest has unlocked, so received early it does nothing (a tester
+   saw it; `MEASURED.md`, We Owe Ya!'s helpers). The idea: with Archipelago on, the medal picks from every helper. Build it
+   by changing only the medal's pick at a battle's start, **never by setting the helpers' flags**: those are story and
+   quest state. Still to decide with the user: every helper, or a set. It changes how a seed plays, so its own step.
+   Until then the game page tells players (`docs/en_Bug Fables.md`).
 
 **Known issues:**
 

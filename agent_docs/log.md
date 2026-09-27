@@ -992,3 +992,16 @@ Newest last. What was tried, what happened, what the user said.
   sped up, since a cut looks wrong (the trapdoor's teleport). The spider scene read in code: one coroutine, played as
   scene, scripted fight, scene, second fight, scene. A turn-back is cut only in the same change that fixes its gate
   and logic. Every scene is still read and sorted by hand.
+
+## 2026-09-27 (evening): We Owe Ya! does nothing when received early
+
+- **The report:** a tester (a three-game room, Bug Fables with the entrance randomizer on) received We Owe Ya! from
+  another game and saw it do nothing. Read in code: the medal picks a random helper only from those whose story or
+  side-quest flags are set, and the game only sells it once one is; a randomizer can give it before. Vanilla
+  behaviour, not a mod bug. Recorded in `MEASURED.md` (We Owe Ya!'s helpers), with a line on the game page for players.
+- **The user's idea (Next 36):** have every helper available so the medal always does something. Parked as an idea:
+  built only by changing the medal's pick, never by setting the story flags; every helper or a set is still open.
+- **The seed:** generated with Accessibility Full, so the logic says it's completable; but the entrance randomizer is
+  experimental (build step 12), so no promise it is in play.
+- **A refactor was planned and set aside:** the user asked for "whole project refactor" as general work while they
+  play chapters 5-7; a plan (apworld split proved by a seed diff, mod helpers and folders, docs tidy) waits for a go.
