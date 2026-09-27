@@ -1753,7 +1753,10 @@ done by drawing into a texture that the HUD camera's quad shows on screen.
 
 **Status:** Render scale 200% seen by the user (2026-09-28): the picture normal and sharp, in a 1920x1080 window.
 (a closer view in the user's screenshot was the spot they stood in, not the scale). 150% seen too, normal (the
-user: it looked the same as 200%). Still to see: Anti-aliasing on screen.
+user: it looked the same as 200%). **The cost (the user, 2026-09-28):** 200% with 8x MSAA took a 1920x1080 window
+from 240 to about 95 fps, and the user saw little or no difference from either row: the art's thick outlines and the
+game's own FXAA leave few jagged edges, and the result is shrunk back into the window. Both kept (off by default, free
+when off); for sharper sprites, the game's own 3840x2160 resolution is the test to try.
 
 *Code: `RenderQuality.cs`; the page in `ApMenu.cs`, `ApMenu.Rows.cs` and `InGameSettings.cs`; the console's `cams` in
 `DevConsole.cs`.*
