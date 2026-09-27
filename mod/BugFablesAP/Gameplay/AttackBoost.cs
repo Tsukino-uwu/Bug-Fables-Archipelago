@@ -6,7 +6,8 @@ using HarmonyLib;
 namespace BugFablesAP
 {
     // The Gameplay page's Attack boost: Off / +1, off by default. +1 on each hit a party member lands, where and when the
-    // game adds its own +1 for the member in front (mod guide, step 27); the save's attack stat is never touched.
+    // game adds its own +1 for the member in front (mod guide, step 27); the save's attack stat is never touched, only the
+    // medals screen's attack number shows the +1.
     internal static class AttackBoost
     {
         internal static ConfigEntry<bool> Boost;
@@ -15,6 +16,10 @@ namespace BugFablesAP
         private static Harmony harmony;
         private static ManualLogSource log;
         private static AccessTools.FieldRef<BattleControl, bool> demoMode;
+        private static AccessTools.FieldRef<PauseMenu, DynamicFont[]> statText;
+        private static AccessTools.FieldRef<PauseMenu, int> menuOption;
+        // PauseMenu.windowid of the medals screen, whose second stat line is the chosen member's attack.
+        private const int MedalsWindow = 2;
 
         internal static void Enable(ManualLogSource logger, string guid, ConfigFile config, Func<bool> on)
         {
@@ -34,7 +39,21 @@ namespace BugFablesAP
             demoMode = AccessTools.FieldRefAccess<BattleControl, bool>(demo);
             harmony = new Harmony(guid + ".boost." + DateTime.UtcNow.Ticks);
             harmony.Patch(damage, prefix: new HarmonyMethod(typeof(AttackBoost), nameof(BeforeBaseDamage)));
-            log.LogInfo("[boost] installed on BattleControl.CalculateBaseDamage");
+            var stats = AccessTools.Method(typeof(PauseMenu), "UpdateDynamicText");
+            var texts = AccessTools.Field(typeof(PauseMenu), "dynamictext");
+            var picked = AccessTools.Field(typeof(PauseMenu), "option");
+            if (stats == null || texts == null || picked == null)
+            {
+                log.LogWarning($"[boost] the medals screen won't show the +1 (PauseMenu.UpdateDynamicText {stats != null}, "
+                    + $"dynamictext {texts != null}, option {picked != null})");
+            }
+            else
+            {
+                statText = AccessTools.FieldRefAccess<PauseMenu, DynamicFont[]>(texts);
+                menuOption = AccessTools.FieldRefAccess<PauseMenu, int>(picked);
+                harmony.Patch(stats, postfix: new HarmonyMethod(typeof(AttackBoost), nameof(AfterStatText)));
+            }
+            log.LogInfo("[boost] installed on BattleControl.CalculateBaseDamage" + (statText != null ? " and PauseMenu.UpdateDynamicText" : ""));
         }
 
         internal static void Disable()
@@ -54,6 +73,22 @@ namespace BugFablesAP
                 return;
             }
             basevalue++;
+        }
+
+        // The game rewrites the medals screen's stats every frame; the attack line then shows the boosted value.
+        private static void AfterStatText(PauseMenu __instance)
+        {
+            if (Boost == null || !Boost.Value || settingsOn == null || !settingsOn() || __instance.windowid != MedalsWindow)
+            {
+                return;
+            }
+            DynamicFont[] text = statText(__instance);
+            int member = menuOption(__instance);
+            if (text == null || text.Length < 6 || text[1] == null || member < 0 || member >= MainManager.instance.playerdata.Length)
+            {
+                return;
+            }
+            text[1].text = (MainManager.instance.playerdata[member].atk + 1).ToString().PadLeft(2, '0');
         }
     }
 }

@@ -1219,7 +1219,9 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   first, unchanged. Then, when the attacker is a party member (tag `Player`) and not in the demo battle (`demomode`),
   it adds +1 for the member in front (`partypointer[0] == currentturn`), medal 6's count while poisoned and medal 3's
   count at 4 HP or less. Skills pass their damage in built from `playerdata[].atk`, most per hit (`atk + combo - 1`
-  on each hit of one), so +1 attack and +1 per hit come to the same. Used by `AttackBoost.cs`.
+  on each hit of one), so +1 attack and +1 per hit come to the same. **The medals screen's stats** (code read,
+  2026-09-28): `PauseMenu.UpdateDynamicText`, run every frame from `PauseMenu.Update`, rewrites window 2's
+  `dynamictext` (0 HP, 1 attack, 2 defence of `playerdata[option]`, 3 TP). Used by `AttackBoost.cs`.
 - **Still to measure:** each scripted event's fight, one by one (safe to swap in, safe to swap out); what a map
   enemy's `battleids` hold across the EntityDump (group sizes); which enemies a one-member party can't hit.
 

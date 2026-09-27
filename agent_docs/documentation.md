@@ -1708,10 +1708,13 @@ an area met early or late; this is for a fight that's hard at the right level.
   as they are, and never in the demo battle.
 - **A prefix on that function adds 1 under the same conditions.** The save's attack stat is never written; switching
   the row off ends it at the next hit.
+- **Shown on the medals screen** (the user, 2026-09-28: "nice to visually see/know about it", when setting up medals).
+  The game rewrites that screen's stats every frame (`PauseMenu.UpdateDynamicText`, window 2, the second line the chosen
+  member's attack); a postfix writes attack + 1 into that line only. The stat itself stays untouched.
 - Each page's two buttons: Reset and Disable all both set Off.
 
-**Status:** built (2026-09-28), the build succeeds, not yet seen in a fight. The menus show the real attack, by design:
-the stat isn't touched (the user noticed the medal menu's attack unchanged, 2026-09-28).
+**Status:** built (2026-09-28), the build succeeds, not yet seen in a fight. The medals screen's +1 built (2026-09-28),
+not yet seen (the user first noticed that screen showing the plain attack).
 
 *Code: `AttackBoost.cs`; the row in `ApMenu.cs` and `ApMenu.Rows.cs`.*
 
