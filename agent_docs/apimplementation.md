@@ -2226,6 +2226,11 @@ still be running on it. Logged: `[swap] location <id>: found by another client o
 hidden`. **Seen by the user (2026-09-28):** standing in Madeleine's house, the right table checked by a second
 client: the pickup went at once, and Poison Resistance arrived with its box.
 
+**A flash between rooms** (the user, the same day: gone outside and inside, but visible while going in or out).
+A house is an *inside* of its map: `MapControl.RefreshInsides` turns that inside's entities on without asking whether
+they exist (`MapControl.cs:1262-1265`). A postfix now turns every entity the mod keeps away off again in the same frame
+(found pickups and the open world's blockers alike), and a pickup hidden live gets the same marker. Built, not yet seen.
+
 **Status:** works, seen by the user (2026-09-28): a floor item, on the next entry into its room; a crystal berry not yet seen.
 
 *Code: `KeptOpen.cs` (`AfterCreate`, the found pickups), `ItemSwap.Pickups.cs` (`IsPickup`, now shared).*

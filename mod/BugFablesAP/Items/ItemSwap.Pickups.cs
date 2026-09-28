@@ -175,6 +175,7 @@ namespace BugFablesAP
                 {
                     if (npc.gameObject.activeSelf && npc.objecttype == NPCControl.ObjectTypes.Item && IsPickup(pickup, npc))
                     {
+                        KeptOpen.KeepAway(npc);
                         npc.gameObject.SetActive(false);
                         log.LogInfo($"[swap] location {entry.Key}: found by another client on this slot; its pickup on {mapName} hidden");
                     }

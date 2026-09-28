@@ -39,6 +39,15 @@ namespace BugFablesAP
                 harmony.Patch(made, postfix: new HarmonyMethod(typeof(KeptOpen), nameof(AfterNewEntity)));
             }
             harmony.Patch(check, prefix: new HarmonyMethod(typeof(KeptOpen), nameof(BeforeCheck)));
+            var insides = AccessTools.Method(typeof(MapControl), nameof(MapControl.RefreshInsides));
+            if (insides != null)
+            {
+                harmony.Patch(insides, postfix: new HarmonyMethod(typeof(KeptOpen), nameof(AfterRefreshInsides)));
+            }
+            else
+            {
+                log.LogError("[open] MapControl.RefreshInsides not found: an entity kept away flashes when entering or leaving a house.");
+            }
             var scenery = AccessTools.Method(typeof(ConditionChecker), "Start");
             if (scenery != null)
             {
@@ -170,13 +179,7 @@ namespace BugFablesAP
                 foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true)
                     .Where(n => n.objecttype == NPCControl.ObjectTypes.Item && ItemSwap.IsPickup(found.Value, n)))
                 {
-                    var marker = new[] { -1 };
-                    markers.Add(marker);
-                    npc.limit = marker;
-                    if (npc.entity != null)
-                    {
-                        npc.entity.iskill = true;
-                    }
+                    KeepAway(npc);
                     log.LogInfo($"[open] {map}: {npc.name} kept away (location {found.Key} is already checked)");
                 }
             }
@@ -282,6 +285,36 @@ namespace BugFablesAP
             }
             parts.Reverse();
             return string.Join("/", parts.ToArray());
+        }
+
+        // Hidden by the mod now and on every later rebuild of the map: the game's own existence check answers "gone".
+        internal static void KeepAway(NPCControl npc)
+        {
+            var marker = new[] { -1 };
+            markers.Add(marker);
+            npc.limit = marker;
+            if (npc.entity != null)
+            {
+                npc.entity.iskill = true;
+            }
+        }
+
+        // Entering or leaving a house turns that inside's entities on without asking whether they exist: the ones kept
+        // away go off again in the same frame, before anything is drawn.
+        private static void AfterRefreshInsides(MapControl __instance)
+        {
+            if (__instance.entities == null || randomizerOn == null || !randomizerOn())
+            {
+                return;
+            }
+            foreach (EntityControl entity in __instance.entities)
+            {
+                if (entity != null && entity.npcdata != null && entity.npcdata.limit != null && markers.Contains(entity.npcdata.limit)
+                    && entity.gameObject.activeSelf)
+                {
+                    entity.gameObject.SetActive(false);
+                }
+            }
         }
 
         private static bool BeforeCheck(int[] requires, int[] limit, ref bool __result)
