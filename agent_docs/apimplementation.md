@@ -1142,7 +1142,9 @@ own `AddPrizeMedal`, never by writing the prize slot itself. **The Archipelago p
 row, "Difficulty: Normal / Hard / Hardest",** that only adds a way in: *Hard* acts as if the Hard Mode medal
 (Artis's, #11) were equipped, *Hardest* as if the save had been started with the HARDEST code (the game's
 two levels, `MEASURED.md`). Equipping the medal or typing the code still works as the game made it, and
-the prize medals are paid out on every setting. Logic never needs either (the user, 2026-09-24). For
+the prize medals are paid out on every setting. Logic never needs either (the user, 2026-09-24). **Only boss prizes**
+(an audit, 2026-09-28): one of the 23 slots (medal 24) is a dialogue gift the game marks missed when skipped, so the
+missed-prize payout skips it and the game sells it at the caravan as usual (`MEASURED.md`, Hard Mode boss prizes). For
 *Hardest*: its extras read flag 614 directly in about 35 places, so it means setting that flag. **Measured
 2026-09-24: the game keeps no other record of a typed code.** `flagstring[10]` is only the typing buffer,
 emptied as soon as the code is accepted (`EventControl.cs:2450-2455`), so flag 614 is the code's only trace,

@@ -593,16 +593,22 @@ The output stays in the BepInEx folder.
   (`EntityControl.cs:3645`) is cosmetic, a model swap, not difficulty.
 - **23 prize slots:** `prizeflags` (flagvar indices), `prizeids` (the medal) and `prizeenemyids` (the enemy),
   parallel arrays of 23 (`MainManager.cs:3401-3418`). One slot's enemy is -1 (no single enemy).
-- **Beating the boss writes the slot** (`AddPrizeMedal(id)`, `MainManager.cs:3981`; called from 23 story
-  events): **1** with Hard Mode on (and `flags[56]`, "a prize waits"), **2** without. `flagvar[55]` counts.
+- **Beating the boss writes the slot** (`AddPrizeMedal(id)`, `MainManager.cs:3981`; 22 calls in `EventControl.cs`
+  plus the dialogue command `addprize`, corrected 2026-09-28 from "23 story events"): **1** with Hard Mode on (and
+  `flags[56]`, "a prize waits"), **2** without. `flagvar[55]` counts. **Not every slot is a boss prize** (an audit,
+  2026-09-28): slot 1 (`flagvar[17]`, medal 24) is written 2 by `Event58` when the dialogue gift of flag 102 was
+  skipped (`EventControl.cs:9531`), so the game sells it at the caravan; slot 15 has no event call (dialogue
+  `addprize` only). Used by `MedalAssist.cs` (`PayPrizes` skips slot 1).
 - **Value 1:** `Event33` hands every waiting prize over with `giveitem,2,<medal>` from an NPC
   (`EventControl.cs:5724-5752`), then sets the slot to **3**. **Event33 is started by talking to Artis**
   (`ShwEmArtys`, outside the city; seen in the event log, 2026-09-24).
 - **Seen in play (the user, 2026-09-24):** the first boss beaten on Normal wrote its slot as missed; talking to Artis
   then gave nothing, and the caravan (open after flag 41) offered a medal: **Quick Flea, medal 5 = `prizeids[0]`**,
   which the user bought. Confirmed: a missed prize is sold at the caravan. Event26 writes a Normal kill's slot
-  directly (`flagvar[13] = 2`, `EventControl.cs:4962`), not through `AddPrizeMedal`; eight boss events test Hard
-  Mode themselves like this.
+  directly (`flagvar[13] = 2`, `EventControl.cs:4962`), not through `AddPrizeMedal`. It is the only boss event that
+  does: the other `BadgeIsEquipped(11) || flags[614]` tests in `EventControl.cs` only add a Logbook entry
+  (corrected 2026-09-28 from "eight boss events test Hard Mode themselves like this"; searched: every
+  `BadgeIsEquipped(11)` in `EventControl.cs`).
 - **Value 2 is not lost:** a caravan medal seller (`Interaction.CaravanBadge`, `NPCControl.CaravanMedalSet`,
   `NPCControl.cs:1462`) offers the missed ones one at a time, in random order (`PrizeBadges(caravan: true)`),
   and buying one sets its slot to **3** (`Setprize`, `MainManager.cs:11090-11121`). `CaravanBadge`

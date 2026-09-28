@@ -127,6 +127,8 @@ namespace BugFablesAP
         // Boss prizes are always paid as if Hard Mode were on: a prize slot reading 2 (missed) is paid by the game's own
         // AddPrizeMedal with Hard Mode answered yes for that call. Never in battle (a retry rolls flagvar back).
         private static bool payingPrize;
+        // Slot 1 is a dialogue gift the game marks missed when skipped (Event58), not a boss prize.
+        private const int NotABossPrize = 1;
 
         internal static void PayPrizes()
         {
@@ -138,7 +140,7 @@ namespace BugFablesAP
             }
             for (int i = 0; i < mm.prizeflags.Length; i++)
             {
-                if (mm.flagvar[mm.prizeflags[i]] != 2)
+                if (i == NotABossPrize || mm.flagvar[mm.prizeflags[i]] != 2)
                 {
                     continue;
                 }
