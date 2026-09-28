@@ -1153,3 +1153,7 @@ Newest last. What was tried, what happened, what the user said.
   in the room (gates change the logic); needs from other rooms (quests, followers: the throne room needs Maki from two
   rooms away) are traced there; a need that isn't a quest may be removed for good, case by case, always on in a seed
   and never part of *Skip cutscenes*.
+- **Later the same night:** the Uncap FPS pips seen fine (the user). The "Animator.GotoState" warnings come from the
+  game's own boss scene with Archipelago off (`MEASURED.md`). **Next 41** (the user): a "!" over each discovery you
+  interact with (a stone, a statue; not the automatic ones) and over undug dig spots holding a check, with the Detector
+  on; the 12 berry dig spots as checks, an idea, respawning to measure first.
