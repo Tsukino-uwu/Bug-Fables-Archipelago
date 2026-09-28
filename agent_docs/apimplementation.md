@@ -359,6 +359,11 @@ be wrong.
 
 **Known issues:**
 
+- **About 1 seed in 9 fails to generate** (the fuzzer, 2026-09-28: 1163 of 10000): "no filler item to make room for
+  Boat Ticket". Every failure has *Shuffle Field Moves* on with *Shuffle Item Shops* and *Shuffle Discoveries* off:
+  the move items outnumber the spare filler copies (one yaml: 30 slots, 2 removable copies), and every location's own
+  item stays in the pool at least once. Deterministic for those options.
+
 - **Horn rules:** written as `abilities: ["Horn Slash"]` since the horn became an item (build step 21): locations
   11, 19, 25, 30 and 32, and 31 through the Den's entrance (build step 13). Not location 2: the horn tutorial cuts its
   grass itself and played through with Leif alone (the user, 2026-09-25). **Upper Snakemouth, when it gets locations:** the big door in the door room stays shut until flag 14 (its closed
@@ -416,7 +421,8 @@ just the named items or events.
 
 We wrote **tests**, including one that proves the gate really needs the permit. To make sure that test
 could fail, we removed the rule on purpose, watched the test fail, and put the rule back. Archipelago's
-own test suite passes for it too.
+own test suite passes for it too. Since 2026-09-28 every apworld change is also fuzzed: 10000 seeds from random
+yamls (`development.md`, "Fuzzing the apworld"), which finds the option combinations no test thought of.
 
 To try it, the world folder is linked into a local copy of Archipelago (run from source), and seeds are
 generated with `Generate.py`.

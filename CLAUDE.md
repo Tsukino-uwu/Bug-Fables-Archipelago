@@ -73,6 +73,7 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
 - **An apworld change is done when its tests pass** in the local Archipelago checkout (at the tag the world
   targets). A behaviour change gets a test that fails without the fix. Generate a seed with a second game
   as well: some failures only show up in a room with two different games (`agent_docs/client-requirements.md`).
+  **Tests always run with the fuzzer** (the user, 2026-09-28): `dev-scripts/test-apworld.ps1`, 0 failures in 10000.
 
 ## What may enter the repo
 

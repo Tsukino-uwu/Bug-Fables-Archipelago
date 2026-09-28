@@ -20,6 +20,7 @@ when an author objects to their work being used here, we don't use it, even wher
 | [BepInEx.Debug](https://github.com/BepInEx/BepInEx.Debug) (`ScriptEngine`) | LGPL-3.0 | Recorded 2026-08-28 in the author's other project; re-read before first use | Dev-machine hot reload only. Never shipped |
 | [ILSpy](https://github.com/icsharpcode/ILSpy) (`ilspycmd`) | MIT | Recorded 2026-08-12 in the author's other project; re-read before first use | Decompiles the user's own `Assembly-CSharp.dll` into gitignored `decompiled/` to read names. The output is never committed |
 | [Tevi_Randomizer](https://github.com/BlackSoulKnight/Tevi_Randomizer) | MIT (`LICENSE`, "Copyright (c) 2024 BlackSoulKnight") | 2026-09-24, the file in a fresh clone (last commit 2026-07-01) | Read for its approach to Archipelago in a Unity Mono BepInEx mod. No code copied. See `references.md` |
+| [Archipelago-fuzzer](https://github.com/Eijebong/Archipelago-fuzzer) | MIT (`LICENSE`, "Copyright (c) 2025 Bastien Orivel") | 2026-09-28, via `gh api .../license` and by reading the file; latest `fuzz.py` is 0.6.2 (last commit 2026-06-09) | A test tool: `fuzz.py` and its `hooks/` are copied into your Archipelago checkout (never this repo) and generate thousands of seeds with random options. Not shipped, no code copied. See `development.md`, "Fuzzing the apworld" |
 
 ## Reference sites (facts only)
 

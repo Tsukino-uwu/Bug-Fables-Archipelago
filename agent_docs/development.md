@@ -111,6 +111,22 @@ needs no one playing it (2026-09-26, the user saw both directions this way):
 With the world linked as above, run `python -m pytest worlds/bug_fables/test` in the Archipelago checkout. Set
 `SKIP_REQUIREMENTS_UPDATE=1` to stop Archipelago's scripts from prompting to install other games' packages.
 
+## Fuzzing the apworld
+
+The tests check the option sets we thought of; the [Archipelago-fuzzer](https://github.com/Eijebong/Archipelago-fuzzer)
+generates seeds from random yamls and catches the rare combination that fails. **Whenever the tests run, the fuzzer
+runs too** (the user, 2026-09-28); 10000 seeds take a few minutes.
+
+1. Once: copy its `fuzz.py` (and `hooks/`) to the root of your Archipelago checkout.
+2. `dev-scripts/test-apworld.ps1 -Archipelago <your checkout>` runs the tests, then the fuzzer
+   (`fuzz.py -r 10000 -n 1 -g bug_fables --skip-output`: one Bug Fables yaml per seed), and prints each error with its
+   count. `-With apquest` puts another world in every room; `-Runs` changes the count. It fails unless both are clean.
+3. Read `fuzz_output/report.json` (counts and each error with the runs that hit it). Each failed run keeps its yaml and
+   log in `fuzz_output/error/bug_fables/<run>/`; regenerate it with `Generate.py --player_files_path` on that folder.
+   A new run replaces `fuzz_output`, so copy anything you still need first.
+
+Exit code 1 only means some runs failed. The goal is 0 failures in 10000.
+
 ## Dev console (test files only)
 
 Set `DevConsole = true` under `[Debug]` (`copy-dev.ps1 -DebugOn DevConsole`). In game, **F9** opens a command
