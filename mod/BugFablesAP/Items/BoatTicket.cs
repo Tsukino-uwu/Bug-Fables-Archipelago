@@ -5,7 +5,7 @@ using HarmonyLib;
 namespace BugFablesAP
 {
     // The pier sailor sails to Metal Island only for the Boat Ticket (the mod's own key item, CustomItems.cs); the trip
-    // is free and the ticket stays. His lines as the user approved them; he checks the ticket where the game checked the
+    // is free and the ticket stays. He checks the ticket where the game checked the
     // fare (lines 16 and 19), and a missing ticket gets his old "no money" reply. Every line of his, the first included,
     // comes through GetDialogueText.
     internal static class BoatTicket

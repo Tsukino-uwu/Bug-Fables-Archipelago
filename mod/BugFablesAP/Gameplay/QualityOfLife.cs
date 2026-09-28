@@ -68,7 +68,7 @@ namespace BugFablesAP
             new Scene { Map = "SnakemouthBridgeRoom", Event = 2, Flags = new[] { 10 } },
             // The door room's puzzle solved: it moves the rocks, removes two entities and drops the trapdoor's Mushroom, so fast-forwarded.
             new Scene { Map = "SnakemouthDoorRoom", Event = 4, Flags = null },
-            // The trapdoor: fast-forwarded, not skipped (a skip showed no opening or fall, just a teleport: the user); the
+            // The trapdoor: fast-forwarded, not skipped (a skip showed no opening or fall, just a teleport); the
             // trapdoor landing below then places the party.
             new Scene { Map = "SnakemouthDoorRoom", Event = 5, Flags = null },
             // The spider: two battles, party changes, flag 27 and discovery 1, so fast-forwarded (the battles at normal speed).

@@ -10,7 +10,7 @@ using UnityEngine;
 namespace BugFablesAP
 {
     // The places the game does something a fixed amount per rendered frame (a counter, a spin, a smoothing step), found by
-    // reading its code (the mod guide, step 24), each patched on the exact instructions so that above 60 fps it happens
+    // reading its code, each patched on the exact instructions so that above 60 fps it happens
     // as much per second as at 60. Every helper is the plain operation when the Uncap FPS row is off or inside a physics
     // step. A site whose instructions aren't found exactly as expected is left alone and logged.
     internal static class FrameSites
@@ -257,7 +257,7 @@ namespace BugFablesAP
         private static MethodBase patching;
 
         // Never throws: a transpiler that throws stays registered on its method, and every later patch of that method, by
-        // any feature, fails with it until the game restarts (the mod guide, step 24).
+        // any feature, fails with it until the game restarts.
         private static IEnumerable<CodeInstruction> Transpile(IEnumerable<CodeInstruction> instructions)
         {
             List<CodeInstruction> original = instructions.ToList();

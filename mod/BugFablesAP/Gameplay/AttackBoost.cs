@@ -6,7 +6,7 @@ using HarmonyLib;
 namespace BugFablesAP
 {
     // The Gameplay page's Attack boost: Off / +1, off by default. +1 on each hit a party member lands, where and when the
-    // game adds its own +1 for the member in front (mod guide, step 27); the save's attack stat is never touched, only the
+    // game adds its own +1 for the member in front; the save's attack stat is never touched, only the
     // medals screen's attack number shows the +1.
     internal static class AttackBoost
     {

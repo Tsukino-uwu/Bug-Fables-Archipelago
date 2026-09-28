@@ -1,6 +1,6 @@
 namespace BugFablesAP
 {
-    // The game's own save slots the mod reads or writes, by what the game uses them for (MEASURED.md).
+    // The game's own save slots the mod reads or writes, by what the game uses them for.
     internal static class GameFlags
     {
         internal const int TrapdoorFall = 14;

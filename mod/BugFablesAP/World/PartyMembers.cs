@@ -189,7 +189,7 @@ namespace BugFablesAP
         }
 
         // Leif's one line at the start of his first battle (BattleControl.EventDialogue 3, while 16 is set and 24 isn't) is
-        // marked said as soon as he has joined, whatever Skip cutscenes says (the user, 2026-09-27).
+        // marked said as soon as he has joined, whatever Skip cutscenes says.
         private static void SkipLeifsFirstBattleLine(MainManager mm)
         {
             if (randomizerOn == null || !randomizerOn() || MainManager.map == null || mm.flags == null || !mm.flags[GameFlags.LeifJoined] || mm.flags[24]

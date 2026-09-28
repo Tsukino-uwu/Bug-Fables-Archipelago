@@ -317,7 +317,7 @@ namespace BugFablesAP
         }
 
         // A platform carries whoever stands on it as its child; interpolation drew them from their own physics poses and
-        // held them back, like walking in mud (the user, 240 fps). Not interpolated while on one.
+        // held them back, like walking in mud (seen at 240 fps). Not interpolated while on one.
         private static void AfterGround(GroundDetector __instance)
         {
             if (active && __instance.parent != null)
@@ -328,7 +328,7 @@ namespace BugFablesAP
 
         // One decision for both cases, so neither undoes the other: not interpolated on a platform, or while a frozen enemy
         // (the game writes a frozen enemy's position back every frame, from the drawn pose that trails the physics one, so
-        // it dragged; the user, 2026-09-27: slow after the first knock, fine with interp off).
+        // it dragged: slow after the first knock, fine with interpolation off).
         private static void Interpolate(EntityControl entity, bool onPlatform)
         {
             Rigidbody body = entity.rigid;
@@ -420,7 +420,7 @@ namespace BugFablesAP
 
         // A knocked ice block (a frozen enemy, a pushed rock) slides by icevel until a frame sees it with no vertical speed,
         // which reads as landed. The knock sets its speed flat and hops it a frame later: at 60 a physics step (gravity)
-        // comes between, at 240 usually not, so the slide was cancelled at once (the user: it stopped short). A cancel in a
+        // comes between, at 240 usually not, so the slide was cancelled at once and stopped short. A cancel in a
         // frame no physics step came before is undone; one right after a step (a real landing) stands.
         private static readonly AccessTools.FieldRef<NPCControl, Vector3> iceVelocity = AccessTools.FieldRefAccess<NPCControl, Vector3>("icevel");
         private static readonly Dictionary<int, float> lastPhysics = new Dictionary<int, float>();

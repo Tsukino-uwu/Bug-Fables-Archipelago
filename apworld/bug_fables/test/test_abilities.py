@@ -9,7 +9,7 @@ def _pool(test: BugFablesTestBase) -> list[str]:
 
 
 class TestLearnedAbilities(BugFablesTestBase):
-    # Every ability the story teaches is an item, always (the user, 2026-09-27); the Dash takes two copies.
+    # Every ability the story teaches is an item, always; the Dash takes two copies.
     def test_always_in_the_pool(self) -> None:
         pool = _pool(self)
         self.assertEqual([pool.count(item) for item in LEARNED], [2, 1, 1, 1])

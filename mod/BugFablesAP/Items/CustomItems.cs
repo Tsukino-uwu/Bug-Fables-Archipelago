@@ -8,7 +8,7 @@ namespace BugFablesAP
     // reloads its table (a language change), and only while Archipelago is enabled.
     internal static class CustomItems
     {
-        // The Boat Ticket (Next 21): the Platinum Card's look, its own words.
+        // The Boat Ticket: the Platinum Card's look, its own words.
         internal const int BoatTicket = 200;
         private const int TicketLooksLike = 176;
         private const string TicketName = "Boat Ticket";

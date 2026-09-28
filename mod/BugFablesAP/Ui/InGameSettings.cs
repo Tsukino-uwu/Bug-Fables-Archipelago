@@ -46,7 +46,7 @@ namespace BugFablesAP
             harmony = null;
         }
 
-        // In game and on the main menu alike (the user: one Settings screen, not two).
+        // In game and on the main menu alike: one Settings screen, not two.
         private static bool InGame() => randomizerOn != null && randomizerOn() && MainManager.pausemenu != null;
 
         // The labels live at the end of menutext, re-added whenever the game reloads it (a language change).

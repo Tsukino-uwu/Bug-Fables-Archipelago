@@ -77,14 +77,14 @@ class TestJump(BugFablesTestBase):
         self.assertTrue(self.world.fill_slot_data()["shuffle_jump"])
 
     def test_measured_spots_need_no_jump(self) -> None:
-        # The user, 2026-09-27: the opening, the ladybug siblings' house, the caravan and the town's shops.
+        # Seen reachable without a jump: the opening, the ladybug siblings' house, the caravan and the town's shops.
         for spot in ("Outskirts: Maki and Eetl's Gift", "Outskirts: Ladybug Siblings' House",
                      "Outskirts: Caravan, Item Shop 1", "Bugaria City: Commercial District, Medal Shop 1"):
             with self.subTest(spot=spot):
                 self.assertTrue(self.can_reach_location(spot))
 
     def test_everything_else_needs_jump(self) -> None:
-        # Madeleine's house needs a jump (the user); unmeasured spots are cautious.
+        # Madeleine's house needs a jump; unmeasured spots are cautious.
         spot = "Outskirts: Madeleine's House, Table Right"
         self.assertFalse(self.can_reach_location(spot))
         self.collect_by_name("Jump")

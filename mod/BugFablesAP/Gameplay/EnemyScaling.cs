@@ -8,7 +8,7 @@ namespace BugFablesAP
 {
     // Enemy scaling (Quality of life): each enemy has a home level, where vanilla expects it; a fight's enemies are
     // scaled from their home level to the target (the party's level, or the artifacts found). Starting values, tuned
-    // by play; the numbers' sources are in the mod guide, step 17.
+    // by play.
     internal static class EnemyScaling
     {
         internal static readonly string[] Modes = { "Off", "PartyLevel", "Artifacts" };

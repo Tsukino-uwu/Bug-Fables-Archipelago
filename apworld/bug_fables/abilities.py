@@ -17,7 +17,7 @@ class Ability(NamedTuple):
     level: int  # copies of the item it takes, counting the base level
     # The option that makes the base level an item; with it off the base level is the party's from the start.
     base_option: str | None
-    # The game flag the story sets where it teaches the ability: that spot is its location (build step 23).
+    # The game flag the story sets where it teaches the ability: that spot is its location.
     flag: int | None = None
 
 

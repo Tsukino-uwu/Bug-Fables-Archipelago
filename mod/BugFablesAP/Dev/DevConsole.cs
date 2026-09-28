@@ -77,7 +77,7 @@ namespace BugFablesAP
         internal static BepInEx.Configuration.ConfigEntry<bool> InfBerriesSetting;
 
         // Berries to the game's cap (999) once per save played, when its first map loads. A refill on every drop hid
-        // purchases from the item shops, which see a purchase as the berries going down (2026-09-27).
+        // purchases from the item shops, which see a purchase as the berries going down.
         private static bool berriesTopped;
 
         private static void TickInfBerries()

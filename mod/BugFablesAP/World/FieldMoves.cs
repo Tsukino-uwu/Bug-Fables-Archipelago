@@ -38,7 +38,7 @@ namespace BugFablesAP
             log = logger;
             randomizerOn = on;
             // DoActionTap only builds its coroutine, small enough to be inlined into its callers, where a patch never runs
-            // (a prefix there never fired, 2026-09-27): the coroutine's own first step is gated instead.
+            // (a prefix there never fired): the coroutine's own first step is gated instead.
             MethodInfo tap = AccessTools.Method(typeof(PlayerControl), "DoActionTap");
             MethodInfo tapStep = tap != null ? AccessTools.EnumeratorMoveNext(tap) : null;
             MethodInfo jump = AccessTools.Method(typeof(PlayerControl), "DoJump");

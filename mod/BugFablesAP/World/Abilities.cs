@@ -95,7 +95,7 @@ namespace BugFablesAP
             log = logger;
             randomizerOn = on;
             harmony = new Harmony(guid + ".abilities." + DateTime.UtcNow.Ticks);
-            // Where each measured read is (MEASURED.md, the unlock scenes): the field's uses, the thrown Beemerang's hold
+            // Where each measured read is (the unlock scenes): the field's uses, the thrown Beemerang's hold
             // (flag 21 only; NPCControl's other reads are story state), and the skill lists.
             int field = Install(Methods(typeof(PlayerControl)), keyForFlag.Keys.ToArray(), nameof(TranspileAll));
             int halt = Install(Methods(typeof(NPCControl)), new[] { 21 }, nameof(TranspileHalt));

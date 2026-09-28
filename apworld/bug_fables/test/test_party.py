@@ -27,7 +27,7 @@ class TestPartyOff(BugFablesTestBase):
         for name in JOINS:
             self.assertNotIn(name, locations)
         self.assertIn("Leif Joins", locations)
-        # Only the ability unlock scenes (build step 23): no joining moment.
+        # Only the ability unlock scenes: no joining moment.
         silent = self.world.fill_slot_data()["silent_locations"]
         for name in JOINS:
             self.assertNotIn(self.world.location_name_to_id.get(name), silent)
@@ -135,7 +135,7 @@ class TestAbilities(BugFablesTestBase):
         self.assertEqual(requires(self.world, {"abilities": ["Horn Slash"], "requires": ["Explorer Permit"]}), {"Explorer Permit": 1})
 
     def test_the_den_needs_the_horn(self) -> None:
-        # Grass on the way in and the door room's puzzle down the trapdoor (the user, 2026-09-26).
+        # Grass on the way in and the door room's puzzle down the trapdoor.
         from ..data_tables import LOCATIONS, REGIONS
         gate = next(region for region in REGIONS if region["name"] == "Past the Outskirts Gate")
         into_den = next(exit_data for exit_data in gate["exits"] if exit_data["to"] == "Snakemouth Den")

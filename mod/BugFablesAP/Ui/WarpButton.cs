@@ -33,16 +33,16 @@ namespace BugFablesAP
         // is the map shortcut, so a second travel button takes sprite 19 in a grown array.
         private const int FirstOption = 4;
         private static readonly int[] SpriteSlot = { 17, 19 };
-        // Map: the round blue map in the other buttons' style. Warp: the map item's scroll, a "return scroll" (the user).
+        // Map: the round blue map in the other buttons' style. Warp: the map item's scroll, a "return scroll".
         private const int MapIconSprite = 34;
         private const int ScrollItem = 41;
         // The scroll has no round backdrop of its own: one is drawn like the other buttons', a dark ring and a bright fill
-        // of one vibrant colour (teal blended into the green and blue beside it, the user). Being chosen: orange or pink.
+        // of one vibrant colour (teal blended into the green and blue beside it). Being chosen: orange or pink.
         // The game's own recipe, measured on its round icons: ring at full saturation and brightness 0.51, fill at
         // saturation 0.34 and full brightness, the fill's hue 0.01 lower. Orange at 0.08: the game's sprite 31 (0.05)
-        // read salmon at this fill (the user), gold is 0.14.
+        // read salmon at this fill, gold is 0.14.
         private static Color RingColor, FillColor;
-        // Lime (the user's pick): the row's biggest gap on the colour wheel, between gold and green.
+        // Lime: the row's biggest gap on the colour wheel, between gold and green.
         private static float hue = LimeHue;
         private const float OrangeHue = 0.08f, PinkHue = 0.9f, LimeHue = 0.28f;
 
@@ -52,8 +52,8 @@ namespace BugFablesAP
             FillColor = Color.HSVToRGB(Mathf.Repeat(hue - 0.01f, 1f), 0.34f, 1f);
         }
 
-        // Warp's icon: the game's own round leaf (22), picked by the user over the scroll on a drawn backdrop ("looks more
-        // as the game intended"). Dev (console `warpicon`): the key (23), or the scroll again.
+        // Warp's icon: the game's own round leaf (22), which looks more as the game intended than the scroll on a drawn
+        // backdrop. Dev (console `warpicon`): the key (23), or the scroll again.
         private static int premadeIcon = 22;
 
         internal static string SetIcon(string name)
