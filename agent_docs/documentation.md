@@ -149,7 +149,9 @@ far: AchievementGuard, BoatTicket, CrystalBerryTotal, QuestBoards, DoorShuffle, 
 InGameSettings, MenuToggle, Multipliers, EnemyShuffle, AnimGuard, ClockCleanup, GlowGuard, DeathLinkGame, FieldMoves, ItemSwap,
 PartyFit, CheckDetector, EnemyScaling, AttackBoost, MedalAssist, PartyMembers, KeptOpen, ShopSwap, WarpButton, QualityOfLife, SaveRedirect, WebSocketCompression, FrameRate, Abilities, DevConsole, TextProbe: all of them (the list
 unchanged, 167). Only `Hooks.cs` makes a Harmony instance now. A target an attribute can't name (an overload taking a
-private nested type, DevConsole's `DoDamage`) is given by the group's `TargetMethod`. Where the methods to
+private nested type, DevConsole's `DoDamage`) is given by the group's `TargetMethod`. Two hot reloads in a row
+(2026-09-28): each load's list had the same 167 patches and none left from the load before, so `UninstallAll` takes
+everything off. Where the methods to
 patch are found by reading the game's code at install time (FrameRate's lists, FrameSites, Abilities' scan), they
 stay patched by hand, on a `Hooks.Create` instance that `UninstallAll` still removes.
 SaveRedirect's group is `required`: without every redirect a randomizer save could land beside the normal ones, so a
