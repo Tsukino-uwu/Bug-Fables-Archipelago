@@ -17,37 +17,15 @@ namespace BugFablesAP
         private static readonly Regex SaveName = new Regex(@"^save\d+(backup|t)?\.dat$", RegexOptions.IgnoreCase);
 
         private static ManualLogSource log;
-        private static Harmony harmony;
 
         internal static bool On { get; set; }
 
-        internal static void Enable(ManualLogSource logger, string guid)
+        // Required: without every redirect a randomizer save could land beside the normal ones, so the plugin stops.
+        internal static void Enable(ManualLogSource logger)
         {
             log = logger;
-            harmony = new Harmony(guid + ".saves." + DateTime.UtcNow.Ticks);
-            Type io = typeof(InputIO);
-            PatchPath(io, "ReadFile", nameof(RewriteFirstPath));
-            PatchPath(io, "DeleteFile", nameof(RewriteFirstPath));
-            PatchPath(io, "CreateFile", nameof(RewriteFirstPath));
-            harmony.Patch(AccessTools.Method(io, "SaveExists"), prefix: new HarmonyMethod(typeof(SaveRedirect), nameof(SaveExistsPrefix)));
-            harmony.Patch(AccessTools.Method(io, "Save"), prefix: new HarmonyMethod(typeof(SaveRedirect), nameof(SavePrefix)));
+            Hooks.Install(typeof(SaveRedirect), "saves", "the plugin can't keep randomizer saves apart", required: true);
             log.LogInfo($"[saves] redirect installed; Archipelago mod {(On ? "enabled" : "disabled")}");
-        }
-
-        internal static void Disable()
-        {
-            harmony?.UnpatchSelf();
-            harmony = null;
-        }
-
-        private static void PatchPath(Type type, string method, string prefix)
-        {
-            var target = AccessTools.Method(type, method);
-            if (target == null)
-            {
-                throw new MissingMethodException(type.Name, method);
-            }
-            harmony.Patch(target, prefix: new HarmonyMethod(typeof(SaveRedirect), prefix));
         }
 
         internal static string Redirect(string path)
@@ -60,11 +38,17 @@ namespace BugFablesAP
             return Path.Combine(Folder, path);
         }
 
+        [HarmonyPatch(typeof(InputIO), nameof(InputIO.ReadFile))]
+        [HarmonyPatch(typeof(InputIO), nameof(InputIO.DeleteFile))]
+        [HarmonyPatch(typeof(InputIO), nameof(InputIO.CreateFile))]
+        [HarmonyPrefix]
         private static void RewriteFirstPath(ref string path)
         {
             path = Redirect(path);
         }
 
+        [HarmonyPatch(typeof(InputIO), nameof(InputIO.SaveExists))]
+        [HarmonyPrefix]
         private static bool SaveExistsPrefix(int id, ref bool __result)
         {
             if (!On)
@@ -76,6 +60,8 @@ namespace BugFablesAP
         }
 
         // Mirrors InputIO.Save's temp file, backup, move sequence, in the randomizer folder.
+        [HarmonyPatch(typeof(InputIO), nameof(InputIO.Save))]
+        [HarmonyPrefix]
         private static bool SavePrefix(Vector3? savepos, ref bool __result)
         {
             if (!On)

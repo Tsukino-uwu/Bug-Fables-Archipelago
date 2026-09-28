@@ -141,7 +141,7 @@ namespace BugFablesAP
             compression = Config.Bind("Connection", "Compression", true,
                 "Compress the connection (permessage-deflate), as the Archipelago server asks. Turn off only if "
                 + "connecting fails with it on.");
-            WebSocketCompression.Enable(Guid, connection.Post, () => compression.Value);
+            WebSocketCompression.Enable(connection.Post, () => compression.Value);
             checks = new LocationChecks(Log, connection);
             receiver = new ItemReceiver(Log, connection);
             DevConsole.Init(Log, connection);
@@ -150,7 +150,7 @@ namespace BugFablesAP
                 "Archipelago mod enabled: the game uses its own saves in the 'archipelago' folder, apart from your normal "
                 + "saves. Switch it in the Archipelago panel on the main menu.");
             SaveRedirect.On = randomizerEnabled.Value;
-            SaveRedirect.Enable(Log, Guid);
+            SaveRedirect.Enable(Log);
             ItemSwap.Enable(Log, connection, () => randomizerEnabled.Value);
             KeptOpen.Enable(Log, connection, () => randomizerEnabled.Value);
             EnemyShuffle.Enable(Log, connection, () => randomizerEnabled.Value);
@@ -410,10 +410,8 @@ namespace BugFablesAP
             DevConsole.DisableGuard();
             TextProbe.Disable();
             MenuToggle.Disable();
-            SaveRedirect.Disable();
             // A hot reload must not leave the old instance's socket open next to the new one.
             connection?.Disconnect();
-            WebSocketCompression.Disable();
             MedalAssist.Disable();
             FrameRate.Disable();
             SaveCrystals.Disable();
