@@ -762,6 +762,11 @@ item table, skipped the item as unknown and still counted it, so it was lost for
 launch with a save already loaded). Now the session is published last, and the receiver waits while the table is
 missing (`[recv] waiting: the seed's item table isn't loaded`). Built, not yet seen in game.
 
+**Not held up by a fade that's already gone** (the user, 2026-09-28: items came "5-10+ sec" after getting control).
+The receiver waited while the game reported a transition, and a dimmer fade-out reports one for its full 10 s
+failsafe, long after it looks clear (`MEASURED.md`, a dimmer fade-out never finishes early). Now it waits during a
+map load and while a fade is still visible (a dimmer above 2%), not for the invisible tail. Built, not yet seen.
+
 **Seen working (2026-09-24).** The server already held the Explorer Permit and the G-Bug Ranger Plushie from
 the swap test. On loading, the save tied itself to the seed, and both arrived in key items as soon as the
 player was free (the user saw them). Talking to Artis again showed the plushie but gave no second one: each

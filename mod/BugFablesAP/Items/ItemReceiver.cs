@@ -3,6 +3,7 @@ using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Models;
 using BepInEx.Logging;
+using UnityEngine;
 
 namespace BugFablesAP
 {
@@ -234,8 +235,17 @@ namespace BugFablesAP
             if (mm.inevent) return "busy: event";
             if (mm.message || mm.waitinput || mm.prompt || mm.inlist) return "busy: dialogue";
             if (mm.pause || mm.minipause || MainManager.pausemenu != null) return "busy: paused";
-            if (mm.intransition) return "busy: changing maps";
+            if (MainManager.roomtransition || (mm.intransition && !FadeAllButDone(mm))) return "busy: changing maps";
             return null;
+        }
+
+        // A dimmer fade-out eases towards clear and never reaches it: the game's loop ends only at its 10 s failsafe,
+        // with intransition set all along. Past 2% it is invisible; other transitions (no dimmer) count until they end.
+        private static bool FadeAllButDone(MainManager mm)
+        {
+            Transform dimmer = mm.transitionobj != null && mm.transitionobj.Length == 1 ? mm.transitionobj[0] : null;
+            SpriteRenderer fade = dimmer != null ? dimmer.GetComponent<SpriteRenderer>() : null;
+            return fade != null && dimmer.name == "Dimmer" && fade.color.a < 0.02f;
         }
     }
 }

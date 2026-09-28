@@ -1482,3 +1482,15 @@ For the first version, measure and record:
 5. Where the final goal is detected.
 6. Where the received-item count can live in the save without breaking its format.
 7. How the game shows an item popup or text box that we can reuse to name a remote item.
+
+## A dimmer fade-out never finishes early (2026-09-28, code read; the delay seen by the user)
+
+- `MainManager.Transition` sets `intransition` at its start and clears it only at its end (`MainManager.cs:8862`,
+  `:9033`). A dimmer fade-out (id 1) eases towards clear: `r.color = Color.Lerp(r.color, Color.clear, framestep *
+  speed)` while `r.color.a > 0f`, with `failsafe = 600f` counted down by `framestep` (`:8914-8920`). A float scaled
+  by `1 - t` never reaches 0 (it stops at the smallest denormal), so the loop always ends at the failsafe: 600
+  sixtieths, **10 seconds** of `intransition` after any dimmer fade-out, at any speed, long after it looks clear.
+  The game's own `FreePlayer` ignores `intransition`, so the player walks around meanwhile.
+- Seen: after the opening skip's fade-in (speed 0.02), received items waited about 2800 frames on "busy: changing
+  maps" (the user: "5-10+ sec"). The dimmer is `transitionobj[0]`, a lone object named `Dimmer` with a
+  `SpriteRenderer` (`:8880-8900`). Used by `ItemReceiver.cs` (`FadeAllButDone`).
