@@ -108,12 +108,12 @@ namespace BugFablesAP
             BoatTicket.Enable(Log, () => randomizerEnabled.Value);
             HoldUps.Init(Log, () => randomizerEnabled.Value);
             PartyFit.Enable(Log, () => randomizerEnabled.Value);
-            PartyMembers.Enable(Log, () => randomizerEnabled.Value);
-            FieldMoves.Enable(Log, () => randomizerEnabled.Value);
+            PartyMembers.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
+            FieldMoves.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             SaveCrystals.Enable(Log, Config, () => randomizerEnabled.Value, settingsOn);
             DeathLinkGame.Enable(Log, Config, connection, () => randomizerEnabled.Value);
             AutoSave.Enable(Log, Config, settingsOn);
-            Abilities.Enable(Log, () => randomizerEnabled.Value);
+            Abilities.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             CheckDetector.Enable(Log, connection, () => randomizerEnabled.Value);
             CrystalBerryTotal.Enable(Log, connection, () => randomizerEnabled.Value);
             QuestBoards.Enable(Log, () => randomizerEnabled.Value);

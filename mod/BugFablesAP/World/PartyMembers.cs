@@ -18,8 +18,9 @@ namespace BugFablesAP
         // -1 off, 0 Vi, 1 Kabbu, 2 Leif. A seed that names one (slot_data starting_member, -1 the story's party included)
         // wins; the dev setting only stands in without one.
         internal static int DevStartMember = -1;
-        internal static volatile int SeedStartMember = -1;
-        internal static volatile bool SeedSaysMember;
+        private static Func<SeedData> seed;
+        internal static int SeedStartMember => seed?.Invoke()?.StartingMember ?? -1;
+        internal static bool SeedSaysMember => seed?.Invoke()?.StartingMemberGiven ?? false;
         internal static int StartMember => SeedSaysMember ? SeedStartMember : DevStartMember;
         // starting_member 3: the whole party from the start (none of them an item).
         internal const int AllMembers = 3;
@@ -61,9 +62,10 @@ namespace BugFablesAP
             return $"{Name(id)} joins: " + Add(id);
         }
 
-        internal static void Enable(ManualLogSource logger, Func<bool> on)
+        internal static void Enable(ManualLogSource logger, Func<SeedData> seedData, Func<bool> on)
         {
             log = logger;
+            seed = seedData;
             randomizerOn = on;
             if (!Hooks.Install(typeof(PartyMembers), "members", "the story adds every member as usual"))
             {

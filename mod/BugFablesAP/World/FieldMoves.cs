@@ -16,8 +16,9 @@ namespace BugFablesAP
         private static Func<bool> randomizerOn;
 
         // From slot_data (shuffle_moves, shuffle_jump); false with no seed.
-        internal static volatile bool MovesShuffled;
-        internal static volatile bool JumpShuffled;
+        private static Func<SeedData> seed;
+        internal static bool MovesShuffled => seed?.Invoke()?.MovesShuffled ?? false;
+        internal static bool JumpShuffled => seed?.Invoke()?.JumpShuffled ?? false;
 
         internal static string Name(int id) => id == 0 ? "Beemerang Toss" : id == 1 ? "Horn Slash" : id == 2 ? "Freeze" : id == Jump ? "Jump" : "move " + id;
 
@@ -32,9 +33,10 @@ namespace BugFablesAP
             return shuffled && MainManager.instance?.items != null && !MainManager.instance.items[1].Contains(CustomItems.MoveKeyItem(id));
         }
 
-        internal static void Enable(ManualLogSource logger, Func<bool> on)
+        internal static void Enable(ManualLogSource logger, Func<SeedData> seedData, Func<bool> on)
         {
             log = logger;
+            seed = seedData;
             randomizerOn = on;
             // DoActionTap only builds its coroutine, small enough to be inlined into its callers, where a patch never runs
             // (a prefix there never fired): the coroutine's own first step is gated instead.

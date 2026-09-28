@@ -423,11 +423,6 @@ namespace BugFablesAP
                     lastPingUtc = DateTime.UtcNow;
                     // Parsed whole before anything is published: a malformed slot_data changes nothing.
                     var parsed = new SeedData(ok.SlotData, ok.Slot);
-                    PartyMembers.SeedSaysMember = parsed.StartingMemberGiven;
-                    PartyMembers.SeedStartMember = parsed.StartingMember;
-                    FieldMoves.MovesShuffled = parsed.MovesShuffled;
-                    FieldMoves.JumpShuffled = parsed.JumpShuffled;
-                    Abilities.AbilityItems = parsed.AbilityItems;
                     seedData = parsed;
                     // Published last, with a fence: the game thread never sees a live session with the seed's tables unread.
                     Interlocked.Exchange(ref session, attempt);

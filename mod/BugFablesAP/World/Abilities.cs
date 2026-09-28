@@ -34,7 +34,8 @@ namespace BugFablesAP
         private static readonly Dictionary<int, int> keyForFlag = Keys.ToDictionary(k => k.Flag, k => k.Key);
 
         // From slot_data; false with no seed or a seed from before abilities were items.
-        internal static volatile bool AbilityItems;
+        private static Func<SeedData> seed;
+        internal static bool AbilityItems => seed?.Invoke()?.AbilityItems ?? false;
 
         // The field-ability items by their game id (the apworld's items.json, kind 6).
         internal static string ItemName(int gameId)
@@ -90,9 +91,10 @@ namespace BugFablesAP
         private static Harmony harmony;
         private static readonly FieldInfo flagsField = AccessTools.Field(typeof(MainManager), "flags");
 
-        internal static void Enable(ManualLogSource logger, Func<bool> on)
+        internal static void Enable(ManualLogSource logger, Func<SeedData> seedData, Func<bool> on)
         {
             log = logger;
+            seed = seedData;
             randomizerOn = on;
             // Patched by hand: which methods read the flags is found by reading their code, not known ahead.
             harmony = Hooks.Create("abilities");
