@@ -1290,4 +1290,12 @@ Newest last. What was tried, what happened, what the user said.
   - Two hot reloads in a row: 167 patches each time, nothing stale.
   - **Phase 4 built.** Waiting on the tester's play-through (the plan's verification list). Compression over a live
     connection is not yet re-checked since its hooks moved (the dump shows them in place).
-  - **Next:** phase 5 (dev tools out of the release), then phase 6 (`SeedData`).
+- **Phase 5 done:**
+  - `Plugin` is split into a dev half, `Dev/Plugin.Dev.cs` (3a26c4a).
+  - The Release build leaves `Dev/` out, gated in build-release (a43d9da). The release DLL went from 389,632 to
+    308,224 bytes and ran in game with no dev line.
+  - **Caught on the way:**
+    - my `copy-dev.ps1` message had `$cfg:` in a string, which breaks the script (fixed with `${cfg}`);
+    - the gate's `-match` ignored case and saw the checkout's `dev` folder as `Dev/` (now `-cmatch` on the mod's own
+      folder), which a probe setting proved.
+- **Next:** phase 6 (`SeedData`), then the wrap-and-trim pass.
