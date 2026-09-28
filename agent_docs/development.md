@@ -130,6 +130,14 @@ runs too** (2026-09-28); 10000 seeds take a few minutes.
 
 Exit code 1 only means some runs failed. The goal is 0 failures in 10000.
 
+## Proving a refactor changed nothing
+
+`python dev-scripts/seed-snapshot.py --archipelago <your checkout> --out <folder>` generates CI's three presets, alone
+and with APQuest, each with a fixed seed, and writes each seed's Bug Fables slot_data (decoded as MultiServer does, keys
+in their own order) and its spoiler. Take one snapshot before the change and one after, then `diff -r` the two
+folders: a refactor leaves them identical. Two snapshots of the same code were identical (2026-09-28), so any
+difference is the change's.
+
 ## Dev console (test files only)
 
 Set `DevConsole = true` under `[Debug]` (`copy-dev.ps1 -DebugOn DevConsole`). In game, **F9** opens a command

@@ -419,7 +419,9 @@ just the named items or events.
 We wrote **tests**, including one that proves the gate really needs the permit. To make sure that test
 could fail, we removed the rule on purpose, watched the test fail, and put the rule back. Archipelago's
 own test suite passes for it too. Since 2026-09-28 every apworld change is also fuzzed: 10000 seeds from random
-yamls (`development.md`, "Fuzzing the apworld"), which finds the option combinations no test thought of.
+yamls (`development.md`, "Fuzzing the apworld"), which finds the option combinations no test thought of. A change
+meant to alter nothing (a refactor) is also proven with a seed snapshot: fixed seeds before and after, whose slot_data
+and spoilers must come out identical (`development.md`, "Proving a refactor changed nothing").
 
 To try it, the world folder is linked into a local copy of Archipelago (run from source), and seeds are
 generated with `Generate.py`.
