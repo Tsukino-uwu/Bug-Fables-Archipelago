@@ -749,12 +749,13 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    the user, so every item gets its own box. Instead, **holding the skip button runs the game at 4 times speed while one
    of the mod's hold-ups is on screen**, since the item-get's own pauses are fixed waits that fast text doesn't shorten;
    only a speed-up the hold-up made is undone. **Seen (the user, 2026-09-25): "better"**, and *All* became the default.
-   **Replays stay silent** (the user asked what a new save does): a new save starts at 0 received and the mod gives it
-   everything the server has for the slot, oldest first, which is what makes a lost save recoverable. On *All* that
-   would be a hold-up for every item another player ever sent. So only items past the count the server had at login
-   (`ApConnection.ReceivedAtLogin`) are held up: a new save catching up, or a reconnect, is silent; items arriving
-   during play are shown. Items sent while the player was offline come in silently too (the user accepted that). Not yet
-   seen with a second player.
+   **Replays are shown too** (the user, 2026-09-28: "all items appear, even on a reconnect"). A new save starts at 0
+   received and the mod gives it everything the server has for the slot, oldest first, which is what makes a lost save
+   recoverable; each of those items now gets its hold-up, per the setting, as items arriving during play do. At first
+   replays were silent (only items past the count the server had at login, `ApConnection.ReceivedAtLogin`, were held
+   up), so a new file showed nothing for a check with no scene of its own. The one exception left: the player's own
+   item arriving live from a check whose own scene already showed it. On *All*, a new file late in a seed plays a
+   hold-up for every item, starting members included; *Progression* or *Off* shortens that.
 7. **Shop prices** (the user, 2026-09-25: Normal by default, Half or Free). The medal table's price columns (5 for
    berries, 7 for crystal berries) are scaled in memory, from a kept copy, and put back when the row is Normal or the
    mod is off. The logic never counts on it. **Now a bar on the Gameplay page (the user, 2026-09-26):** 0 to 10 pips
@@ -841,7 +842,7 @@ scaling Off and Detector Off; Reset puts each back to its default. Both pages op
 to its off value: Enemy scaling Off, Item animation Off, Medal prices full); Reset to defaults puts every row back to
 its default (`QualityOfLife.DisableAll` / `ResetAll`, the defaults from each setting's own config definition).
 
-**Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen by the user (2026-09-25); the bridge skips, Medal prices and silent replays with a second player not yet seen; Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat Ticket (the Archipelago guide, build step 16), the warp itself, map travel and Skip confirm seen (2026-09-26); Skip cutscenes' Den arrival, trapdoor and spider scene seen (2026-09-27); Skip battle tutorials: Leif's first-battle line skipped, seen (2026-09-27).
+**Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen by the user (2026-09-25); the bridge skips and Medal prices not yet seen; replays held up too, built 2026-09-28, not yet seen; Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat Ticket (the Archipelago guide, build step 16), the warp itself, map travel and Skip confirm seen (2026-09-26); Skip cutscenes' Den arrival, trapdoor and spider scene seen (2026-09-27); Skip battle tutorials: Leif's first-battle line skipped, seen (2026-09-27).
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page),
 `WarpButton.cs` (the Warp button), `HoldUps.cs` (item animation's hold-ups).*

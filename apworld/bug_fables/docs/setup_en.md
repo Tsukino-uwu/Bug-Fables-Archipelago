@@ -63,8 +63,8 @@ seconds (it tidies its memory on a timer).
   (Off, the default, Warp, Map or Both: which travel buttons go at once, without the Yes / No), **Skip cutscenes**
   (On: scenes you don't need to watch are skipped or pass by fast. The new game's intro, tutorial battle included, is
   always skipped with the Archipelago mod enabled: Vi joins and the first check is sent), **Item
-  animation** (which items from other players are shown held up: All, the default, Progression or Off; your own finds
-  always are), **Item colors** (how an item's importance is coloured, in the text and the starburst behind it: Rarity, the
+  animation** (which received items are shown held up: All, the default, Progression or Off. Items replayed on a new
+  file or a reconnect are shown too. Your own finds that the game already shows in its own scene aren't shown twice), **Item colors** (how an item's importance is coloured, in the text and the starburst behind it: Rarity, the
   default, like loot in other games: filler green, useful blue, progression purple, trap red; Archipelago, as its own
   client colours them; Off, the game's own colours), **Archipelago icon** (Other games, the default: another
   game's item shows the Archipelago icon on the ground, on shelves and when found; All players: every item that isn't

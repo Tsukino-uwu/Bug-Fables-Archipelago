@@ -134,16 +134,12 @@ namespace BugFablesAP
             }
         }
 
-        // Another player's item gets a hold-up per the Item animation setting, and so does the player's own from a check
-        // that shows no item; items the server had at login (a replay) don't.
+        // Every received item gets a hold-up per the Item animation setting, replays included, except the player's own
+        // item arriving live from a check whose own scene already showed it.
         private void ShowIfWanted(ItemInfo item, int index)
         {
-            if (index < connection.ReceivedAtLogin)
-            {
-                return;
-            }
             string setting = QualityOfLife.ItemAnimation?.Value ?? "All";
-            bool noScene = item.Player.Slot != connection.OwnSlot
+            bool noScene = index < connection.ReceivedAtLogin || item.Player.Slot != connection.OwnSlot
                 || (connection.SilentLocations != null && connection.SilentLocations.Contains(item.LocationId));
             bool progression = (item.Flags & ItemFlags.Advancement) != 0;
             if (!noScene || setting == "Off" || (setting == "Progression" && !progression)
