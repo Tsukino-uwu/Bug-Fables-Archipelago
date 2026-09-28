@@ -348,9 +348,10 @@ be wrong.
 41. **A "!" over each unrecorded discovery, with the Detector on** (the user, 2026-09-28): today the Detector puts the
    game's "!" over the leader and beeps when a room has a check left (the mod guide, step 15); this shows where. The
    "!" is the game's emoticon (`EntityControl.emoticonid`, held with `emoticoncooldown`, and `alwaysemoticon` exists).
-   Discoveries that are objects (the pier statue, `HiddenEvent`, the `AncientHouseDiscovery` grass) can carry it;
-   those that are places (arriving outside Snakemouth, the fall room's scene) need the mod's own "!" at a spot from the
-   map data. Open: only discoveries, or every check that isn't visible (buried crystal berries, dig spots). Not built.
+   **Only the ones you interact with** (the user, 2026-09-28): a stone to read, a statue to look at (the pier statue,
+   `HiddenEvent`, the `AncientHouseDiscovery` grass), so the player knows to walk up to it. The ones recorded by just
+   being there (arriving outside Snakemouth, the fall room's scene) need none, so no "!" of the mod's own at a spot.
+   Open: other checks that aren't visible (buried crystal berries, dig spots). Not built.
 
 **Known issues:**
 
