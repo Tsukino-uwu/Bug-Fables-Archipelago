@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
@@ -262,22 +263,29 @@ namespace BugFablesAP
         private bool devReloadChecked;
         private DevReload devReload;
 
-        private string lastError;
+        private readonly Dictionary<string, string> lastErrors = new Dictionary<string, string>();
+        private (string Name, Action Step)[] steps;
 
         private void Update()
         {
-            // Unity's log isn't written by this game, so log exceptions here, once per distinct message.
+            Guarded("tick", Tick);
+        }
+
+        // Each system runs in its own guard, so one that throws every frame doesn't stop the ones after it.
+        // Unity's log isn't written by this game, so exceptions are logged here, once per distinct message per system.
+        private void Guarded(string name, Action step)
+        {
             try
             {
-                Tick();
+                step();
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 string text = e.ToString();
-                if (text != lastError)
+                if (!lastErrors.TryGetValue(name, out string last) || last != text)
                 {
-                    lastError = text;
-                    Log.LogError($"Update threw: {text}");
+                    lastErrors[name] = text;
+                    Log.LogError($"[{name}] threw: {text}");
                 }
             }
         }
@@ -292,30 +300,36 @@ namespace BugFablesAP
             }
             devReload?.Tick();
 
-            AutoConnect();
-            connection.Watchdog(DateTime.UtcNow);
-            connection.Tick();
-            checks.Tick(randomizerEnabled.Value);
-            receiver.Tick(randomizerEnabled.Value);
-            ItemSwap.TickGround();
-            MedalAssist.Tick();
-            CustomItems.Tick();
-            MedalAssist.PayPrizes();
-            QualityOfLife.Tick();
-            KeptOpen.Tick();
-            HoldUps.Tick();
-            ShopSwap.Tick();
-            ItemShops.Tick();
-            PartyFit.Tick();
-            PartyMembers.Tick();
-            FieldMoves.Tick();
-            SaveCrystals.Tick();
-            DeathLinkGame.Tick();
-            AutoSave.Tick();
-            FrameRate.Tick();
-
-            DevCheats.Tick(Log, giveMoney);
-            DevConsole.Tick(devConsole.Value);
+            steps = steps ?? new (string, Action)[]
+            {
+                ("connect", AutoConnect),
+                ("watchdog", () => connection.Watchdog(DateTime.UtcNow)),
+                ("connection", connection.Tick),
+                ("checks", () => checks.Tick(randomizerEnabled.Value)),
+                ("recv", () => receiver.Tick(randomizerEnabled.Value)),
+                ("itemswap", ItemSwap.TickGround),
+                ("medals", MedalAssist.Tick),
+                ("customitems", CustomItems.Tick),
+                ("prizes", MedalAssist.PayPrizes),
+                ("qol", QualityOfLife.Tick),
+                ("keptopen", KeptOpen.Tick),
+                ("holdups", HoldUps.Tick),
+                ("shops", ShopSwap.Tick),
+                ("itemshops", ItemShops.Tick),
+                ("party", PartyFit.Tick),
+                ("members", PartyMembers.Tick),
+                ("moves", FieldMoves.Tick),
+                ("crystals", SaveCrystals.Tick),
+                ("deathlink", DeathLinkGame.Tick),
+                ("autosave", AutoSave.Tick),
+                ("fps", FrameRate.Tick),
+                ("cheats", () => DevCheats.Tick(Log, giveMoney)),
+                ("console", () => DevConsole.Tick(devConsole.Value)),
+            };
+            foreach ((string name, Action step) in steps)
+            {
+                Guarded(name, step);
+            }
 
             if (!saveDiffDone && !string.IsNullOrEmpty(saveDiff.Value))
             {

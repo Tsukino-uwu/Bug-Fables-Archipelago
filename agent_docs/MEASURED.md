@@ -527,6 +527,12 @@ the apworld. World pickups of key items (`animid == 1` objects in map entity dat
 133, 137, 136, 134 and a menu choice · 37342 Event222: 83 · 37555 Event223: 84 ·
 `BattleControl.cs:11029` (no event): `Add(flagvar[56])`
 
+**Missed by the search above** (an audit, 2026-09-28): `EventControl.GiveItem(type, id[, playerid])` builds the
+`|giveitem,…|` command at runtime, so a literal search never sees it. `grep "GiveItem(1,"` in `EventControl.cs`:
+20883–21306 Event124: 151, 150, 118, 146, 29 · 31319 Event189: `Abs(2000 - rewards[j])` (83) · 35637/35643 Event207:
+4, 5 · 36130 Event210: 184. Also `items[1].AddRange(...)` at 31506 and grants whose type is a variable (13123, 20667,
+26249), not yet read. **A grant search needs three patterns:** the literal, `GiveItem(`, and `items[1].Add`.
+
 **Data** (map, dialogue line: id [flags set on the same line])
 AntTunnels 8: 37 · BugariaMainPlaza 82: 142 [flag 442] · BugariaCommercial 92/112/143: 110 ×3 ·
 BugariaOutskirtsOutsideCity 114: 149 [flag 480], 128: 167 · BugariaTheater 7: 25 · BugariaResidential 26: 93,

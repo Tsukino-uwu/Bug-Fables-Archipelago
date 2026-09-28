@@ -124,7 +124,12 @@ change play), `Guards` (quiet fixes for the game's own warnings) and `Dev` (the 
 namespace stays `BugFablesAP` everywhere, so a move never touches code. **How "changed nothing" is proven:** build
 before and after, decompile both DLLs with ILSpy, and diff the output; a pure move comes out identical.
 
-**Status:** done.
+**Each system runs on its own** (an outside review, 2026-09-28). Every frame the plugin runs about 20 systems in turn
+(the connection, checks, received items, shops, the party...). They used to share one error guard, so a system that
+threw on every frame silently stopped every system after it. Now each has its own guard, and its errors are logged
+under its name (`[recv] threw: ...`), once per distinct message. Built, not yet seen in game.
+
+**Status:** done; separate guards per system built 2026-09-28, not yet seen in game.
 
 *Code: `mod/BugFablesAP/Core/Plugin.cs` (`Plugin`, a BepInEx plugin: `Awake` sets everything up, `Tick` runs
 every frame); the project file is `BugFablesAP.csproj`.*
