@@ -1274,5 +1274,11 @@ Newest last. What was tried, what happened, what the user said.
   - `seed-snapshot.py` added; two runs of the same code came out identical.
   - Typed data parts 1-4 (items, encounters, doors and starts, the client's entity lists), each with the snapshot
     identical, the tests passing and the fuzzer at 0 of 10000.
-  - **Left:** regions, exits, locations, story events and artifacts, in one commit, since `rules.requires` reads
-    exits, locations and events alike. Then the top-level `_comment` in locations.json moves into the docstrings.
+  - Part 5 (f6f8303): regions, exits, locations, story events and artifacts, with a shared `Needs` base. The schema
+    strings of items.json and locations.json are now docstrings. `TestDataRecords` proves unknown keys are refused:
+    it fails with the check off.
+- **Phase 3 done.** Every step kept the seed snapshot identical, the tests passing and the fuzzer at 0 of 10000.
+  Not pushed (the push earlier today was a one-time yes).
+- **Next, phase 4 (Harmony attributes):** first `Dev/PatchDump.cs` and a baseline taken with the dev build in game.
+  The baseline must be taken from the code before the migration: if a session ends, rebuild it from the commit before
+  the first migrated batch.
