@@ -1168,3 +1168,26 @@ Newest last. What was tried, what happened, what the user said.
   copies. Adding locations wouldn't reliably fix it (each brings its own item). The user chose the fallback: the last
   copy of an ordinary item or berries gives way, only once no duplicate is left. `TestSmallPool` failed before the
   fix; after it 0 of 10000, and 0 of 2000 with APQuest.
+
+## 2026-09-28 (night, later): outside criticism, seven reviewers, part 1 of the fixes
+
+- **What happened:** the Tevi dev suggested Harmony attributes over hand-written `harmony.Patch` calls; a long-time
+  Bug Fables modder left the AP server calling the project's code bad and its docs full of "accuracy errors ... and
+  outright lies" about the game's internals, with no example named. The user doesn't code (they judge the game
+  only), so quality is ours to find.
+- **Seven read-only agents:** a style review, three audits of `MEASURED.md` against the decompiled code, and three
+  neutral reviewers (code only, docs only, docs against code). Audits: about 245 claims, 37 problems (14 wrong, 21
+  misleading, 2 unsupported), mostly low; the medium ones were "everywhere/only" claims from an incomplete search.
+  Docs-vs-code: 18 claims, game facts exact, A-. Code: mod B, apworld B. Docs: C+ players, B contributors, B- credibility
+  ("the user" about 595 times reads as an AI transcript).
+- **Agents were wrong too, so each finding was re-read in the code before a fix:** the style review said the
+  timestamped Harmony ids were unneeded (our hot-reload measurement says otherwise); an audit called a branch of
+  flag 699 live that looks dead on new files; the event-trigger audit double-counted one starter and named the wrong
+  switch type; my own first map of `StartEvent` calls to object types was wrong for the shared switch case.
+- **Fixed:** an item-loss race at login (build step 7), one error guard per per-frame system (mod guide step 4), the
+  non-boss prize slot (MedalAssist), flag 166 named as the hard rematch, the hiding-flag rule in the docs and two
+  scripts (no door or pickup affected), event-triggers.py's missing starters (57 found; no gate changed), the missed
+  key-item grants in MEASURED. HarmonyX 2.9.0 read: `PatchAll(Type)` resolves every target before patching, but a
+  failure mid-way leaves the earlier ones patched, and order isn't guaranteed.
+- **Open, asked the user:** Enemy Shuffle across the whole game vs "never harder than the logic"; medal-shop stock
+  available from a new file; dropping "(the user, date)" from the guides.
