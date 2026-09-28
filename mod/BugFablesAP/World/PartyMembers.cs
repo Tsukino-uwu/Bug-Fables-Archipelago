@@ -14,7 +14,6 @@ namespace BugFablesAP
     {
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
-        private static Harmony harmony;
 
         // -1 off, 0 Vi, 1 Kabbu, 2 Leif. A seed that names one (slot_data starting_member, -1 the story's party included)
         // wins; the dev setting only stands in without one.
@@ -62,40 +61,25 @@ namespace BugFablesAP
             return $"{Name(id)} joins: " + Add(id);
         }
 
-        internal static void Enable(ManualLogSource logger, string guid, Func<bool> on)
+        internal static void Enable(ManualLogSource logger, Func<bool> on)
         {
             log = logger;
             randomizerOn = on;
-            MethodInfo changeParty = AccessTools.Method(typeof(MainManager), nameof(MainManager.ChangeParty), new[] { typeof(int[]), typeof(bool), typeof(bool) });
-            if (changeParty == null)
+            if (!Hooks.Install(typeof(PartyMembers), "members", "the story adds every member as usual"))
             {
-                log.LogError("[members] MainManager.ChangeParty(int[], bool, bool) not found: the story adds every member as usual.");
                 return;
             }
-            harmony = new Harmony(guid + ".members." + DateTime.UtcNow.Ticks);
-            // Last, so QualityOfLife's opening-skip prefix sees the story's ids unchanged.
-            harmony.Patch(changeParty, prefix: new HarmonyMethod(typeof(PartyMembers), nameof(BeforeChangeParty)) { priority = Priority.Last });
-            MethodInfo startEvent = AccessTools.Method(typeof(EventControl), nameof(EventControl.StartEvent), new[] { typeof(int), typeof(NPCControl) });
-            if (startEvent != null)
-            {
-                harmony.Patch(startEvent, prefix: new HarmonyMethod(typeof(PartyMembers), nameof(BeforeStartEvent)));
-            }
-            else
-            {
-                log.LogError("[members] EventControl.StartEvent not found: a joining scene for a member already in the party plays and may crash.");
-            }
+            Hooks.Install(typeof(JoiningScenes), "members", "a joining scene for a member already in the party plays and may crash");
             log.LogInfo($"[members] installed on MainManager.ChangeParty (starting member {StartMember})");
-        }
-
-        internal static void Disable()
-        {
-            harmony?.UnpatchSelf();
-            harmony = null;
         }
 
         // The story's party before the guard; its first member is who the story thinks leads (PartyFit reads it).
         internal static int[] LastStoryParty;
 
+        // Last, so QualityOfLife's opening-skip prefix sees the story's ids unchanged.
+        [HarmonyPatch(typeof(MainManager), nameof(MainManager.ChangeParty), typeof(int[]), typeof(bool), typeof(bool))]
+        [HarmonyPrefix]
+        [HarmonyPriority(Priority.Last)]
         private static void BeforeChangeParty(ref int[] ids)
         {
             if (!Active || ids == null)
@@ -167,25 +151,30 @@ namespace BugFablesAP
 
         // Leif's lake scene (Event14) never starts with Archipelago on: it reads its Leif from map.tempfollowers[0] and
         // crashes when he's in the party. Its effects are done here instead: flag 16, entity 5's regional flag, the follower entry.
-        private static bool BeforeStartEvent(int id)
+        private static class JoiningScenes
         {
-            MainManager mm = MainManager.instance;
-            if (id != 14 || randomizerOn == null || !randomizerOn() || MainManager.map == null || mm.playerdata == null)
+            [HarmonyPatch(typeof(EventControl), nameof(EventControl.StartEvent), typeof(int), typeof(NPCControl))]
+            [HarmonyPrefix]
+            private static bool BeforeStartEvent(int id)
             {
-                return true;
+                MainManager mm = MainManager.instance;
+                if (id != 14 || randomizerOn == null || !randomizerOn() || MainManager.map == null || mm.playerdata == null)
+                {
+                    return true;
+                }
+                bool joined = JoinLeif(mm);
+                mm.flags[GameFlags.LeifJoined] = true;
+                EntityControl creature = MainManager.GetEntity(5);
+                if (creature != null && creature.npcdata != null && creature.npcdata.regionalflag >= 0)
+                {
+                    mm.regionalflags[creature.npcdata.regionalflag] = true;
+                    creature.gameObject.SetActive(false);
+                }
+                mm.extrafollowers?.RemoveAll(f => f == 2);
+                log.LogInfo($"[members] Leif's joining scene (Event14) skipped: " + (joined ? "Leif joined the party" : "Leif not added (already in, or not allowed)") + "; flag 16 set, "
+                    + (creature != null ? $"entity 5 ({creature.name}) removed" : "no entity 5"));
+                return false;
             }
-            bool joined = JoinLeif(mm);
-            mm.flags[GameFlags.LeifJoined] = true;
-            EntityControl creature = MainManager.GetEntity(5);
-            if (creature != null && creature.npcdata != null && creature.npcdata.regionalflag >= 0)
-            {
-                mm.regionalflags[creature.npcdata.regionalflag] = true;
-                creature.gameObject.SetActive(false);
-            }
-            mm.extrafollowers?.RemoveAll(f => f == 2);
-            log.LogInfo($"[members] Leif's joining scene (Event14) skipped: " + (joined ? "Leif joined the party" : "Leif not added (already in, or not allowed)") + "; flag 16 set, "
-                + (creature != null ? $"entity 5 ({creature.name}) removed" : "no entity 5"));
-            return false;
         }
 
         // Leif's one line at the start of his first battle (BattleControl.EventDialogue 3, while 16 is set and 24 isn't) is

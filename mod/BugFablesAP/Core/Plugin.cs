@@ -175,7 +175,7 @@ namespace BugFablesAP
                 + "to a seed does (items, checks, the shuffles, the intro skip). Off (the default) keeps normal saves vanilla. "
                 + "Switch it in the Archipelago panel.");
             Func<bool> settingsOn = () => randomizerEnabled.Value || ApMenu.NormalSaves.Value;
-            MedalAssist.Enable(Log, Guid, () => randomizerEnabled.Value, settingsOn, () => difficulty.Value == "Hard",
+            MedalAssist.Enable(Log, () => randomizerEnabled.Value, settingsOn, () => difficulty.Value == "Hard",
                 () => difficulty.Value == "Hardest", () => detector.Value);
             QualityOfLife.Enable(Log, Config, () => randomizerEnabled.Value);
             QualityOfLife.SettingsOn = settingsOn;
@@ -195,7 +195,7 @@ namespace BugFablesAP
             BoatTicket.Enable(Log, () => randomizerEnabled.Value);
             HoldUps.Init(Log, () => randomizerEnabled.Value);
             PartyFit.Enable(Log, () => randomizerEnabled.Value);
-            PartyMembers.Enable(Log, Guid, () => randomizerEnabled.Value);
+            PartyMembers.Enable(Log, () => randomizerEnabled.Value);
             FieldMoves.Enable(Log, () => randomizerEnabled.Value);
             SaveCrystals.Enable(Log, Config, () => randomizerEnabled.Value, settingsOn);
             DeathLinkGame.Enable(Log, Config, connection, () => randomizerEnabled.Value);
@@ -422,7 +422,6 @@ namespace BugFablesAP
             WarpButton.Disable();
             HoldUps.Clear();
             PartyFit.Disable();
-            PartyMembers.Disable();
             Abilities.Disable();
             ShopSwap.Disable();
             Hooks.UninstallAll();

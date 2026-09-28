@@ -16,13 +16,12 @@ namespace BugFablesAP
         private static Func<bool> hard;
         private static Func<bool> detector;
         private static Func<bool> hardest;
-        private static Harmony harmony;
         private static ManualLogSource log;
 
         internal const int HardestFlag = 614;
         private static bool forced;
 
-        internal static void Enable(ManualLogSource logger, string guid, Func<bool> randomizerOn, Func<bool> settingsOn,
+        internal static void Enable(ManualLogSource logger, Func<bool> randomizerOn, Func<bool> settingsOn,
             Func<bool> hardOn, Func<bool> hardestOn, Func<bool> detectorOn)
         {
             log = logger;
@@ -31,30 +30,14 @@ namespace BugFablesAP
             hard = hardOn;
             hardest = hardestOn;
             detector = detectorOn;
-            var method = AccessTools.Method(typeof(MainManager), nameof(MainManager.BadgeIsEquipped), new[] { typeof(int), typeof(int) });
-            if (method == null)
+            if (!Hooks.Install(typeof(MedalAssist), "medals", "Difficulty and Detector do nothing"))
             {
-                log.LogError("[medals] NOT installed: MainManager.BadgeIsEquipped(int, int) wasn't found; Difficulty and Detector do nothing.");
                 return;
             }
-            harmony = new Harmony(guid + ".medals." + DateTime.UtcNow.Ticks);
-            harmony.Patch(method, postfix: new HarmonyMethod(typeof(MedalAssist), nameof(Postfix)));
-            var save = AccessTools.Method(typeof(MainManager), nameof(MainManager.SaveFile), new[] { typeof(UnityEngine.Vector3?) });
-            var load = AccessTools.Method(typeof(MainManager), nameof(MainManager.Load), new[] { typeof(int), typeof(bool) });
-            var reset = AccessTools.Method(typeof(MainManager), nameof(MainManager.SetVariables));
-            if (save == null || load == null || reset == null)
+            // Without all three a save could keep the panel's 614, so Hardest stays off.
+            if (!Hooks.Install(typeof(HardestSaves), "medals", "Hardest does nothing"))
             {
-                // Without all three a save could keep the panel's 614, so Hardest stays off.
-                log.LogError($"[medals] Hardest NOT installed (SaveFile {save != null}, Load {load != null}, "
-                    + $"SetVariables {reset != null}); Hardest does nothing.");
                 hardest = () => false;
-            }
-            else
-            {
-                harmony.Patch(save, prefix: new HarmonyMethod(typeof(MedalAssist), nameof(BeforeSave)),
-                    postfix: new HarmonyMethod(typeof(MedalAssist), nameof(AfterSave)));
-                harmony.Patch(load, postfix: new HarmonyMethod(typeof(MedalAssist), nameof(AfterLoad)));
-                harmony.Patch(reset, postfix: new HarmonyMethod(typeof(MedalAssist), nameof(AfterReset)));
             }
             log.LogInfo("[medals] installed on MainManager.BadgeIsEquipped, SaveFile, Load and SetVariables");
         }
@@ -67,8 +50,6 @@ namespace BugFablesAP
                 MainManager.instance.flags[HardestFlag] = false;
                 forced = false;
             }
-            harmony?.UnpatchSelf();
-            harmony = null;
         }
 
         internal static void Tick()
@@ -93,36 +74,48 @@ namespace BugFablesAP
             }
         }
 
-        private static void BeforeSave(ref bool __state)
+        private static class HardestSaves
         {
-            __state = forced && MainManager.instance?.flags != null;
-            if (__state)
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.SaveFile), typeof(UnityEngine.Vector3?))]
+            [HarmonyPrefix]
+            private static void BeforeSave(ref bool __state)
             {
-                MainManager.instance.flags[HardestFlag] = false;
+                __state = forced && MainManager.instance?.flags != null;
+                if (__state)
+                {
+                    MainManager.instance.flags[HardestFlag] = false;
+                }
             }
-        }
 
-        private static void AfterSave(bool __state)
-        {
-            if (__state)
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.SaveFile), typeof(UnityEngine.Vector3?))]
+            [HarmonyPostfix]
+            private static void AfterSave(bool __state)
             {
-                MainManager.instance.flags[HardestFlag] = true;
+                if (__state)
+                {
+                    MainManager.instance.flags[HardestFlag] = true;
+                }
             }
-        }
 
-        // lite loads are the file select's previews.
-        private static void AfterLoad(bool lite)
-        {
-            if (!lite)
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.Load), typeof(int), typeof(bool))]
+            [HarmonyPostfix]
+            private static void AfterLoad(bool lite)
+            {
+                if (!lite)
+                {
+                    forced = false;
+                }
+            }
+
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.SetVariables))]
+            [HarmonyPostfix]
+            private static void AfterReset()
             {
                 forced = false;
             }
         }
 
-        private static void AfterReset()
-        {
-            forced = false;
-        }
+        // lite loads are the file select's previews.
 
         // Boss prizes are always paid as if Hard Mode were on: a prize slot reading 2 (missed) is paid by the game's own
         // AddPrizeMedal with Hard Mode answered yes for that call. Never in battle (a retry rolls flagvar back).
@@ -157,6 +150,8 @@ namespace BugFablesAP
             }
         }
 
+        [HarmonyPatch(typeof(MainManager), nameof(MainManager.BadgeIsEquipped), typeof(int), typeof(int))]
+        [HarmonyPostfix]
         private static void Postfix(int id, int playerid, ref bool __result)
         {
             if (__result || playerid != -1 || active == null || !active())
