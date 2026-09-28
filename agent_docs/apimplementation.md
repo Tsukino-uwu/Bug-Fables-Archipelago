@@ -2214,7 +2214,11 @@ respawning pickup (once its check is done it is the game's own item again, the n
 story pickup (it starts its scene). Shops already left out a copy whose check is done (build step 11).
 Logged: `[open] <map>: <entity> kept away (location <id> is already checked)`.
 
-**Status:** built (2026-09-28), not yet seen in game.
+**Seen by the user (2026-09-28):** on a new file the Ladybug Siblings' house was empty (its pickup found in an earlier
+file; `LadybugMistake kept away (location 7720014 ...)`), and Meditation and 15 Berries (Artis's gift) arrived as
+replays with their boxes.
+
+**Status:** works, seen by the user (2026-09-28): a floor item; a crystal berry not yet seen.
 
 *Code: `KeptOpen.cs` (`AfterCreate`, the found pickups), `ItemSwap.Pickups.cs` (`IsPickup`, now shared).*
 
