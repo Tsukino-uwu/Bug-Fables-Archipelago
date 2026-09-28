@@ -38,6 +38,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 24. [Build step 24: how we plan and build the logic](#build-step-24-how-we-plan-and-build-the-logic)
 25. [Build step 25: DeathLink, a panel row](#build-step-25-deathlink-a-panel-row)
 26. [Build step 26: the tutorial leaf, an item the story puts in the bag](#build-step-26-the-tutorial-leaf-an-item-the-story-puts-in-the-bag)
+27. [Build step 27: a found pickup is gone in every save](#build-step-27-a-found-pickup-is-gone-in-every-save)
 
 **How it works**
 
@@ -2197,6 +2198,25 @@ their items (a Lore Book, Mistake, Bee Fly in one seed) in the bag with the thre
 
 *Code: `data/locations.json` (id 75), `data_tables.vanilla_item`, `slot_data.py` (`location_added`, the silent rule);
 `ApConnection.cs` (`LocationAdded`), `QualityOfLife.Opening.cs` (`RunOpening`, `SeedAdded`), wired in `Plugin.cs`.*
+
+---
+
+## Build step 27: a found pickup is gone in every save
+
+**Why:** on a new file every pickup was back, those already found included: the game keeps "picked up" in the save,
+and a new save starts empty. Picking one up again sent and gave nothing (the user, 2026-09-28: one Meditation after
+two pickups), so it was clutter. The user chose Pseudoregalia's way: a pickup whose check is done isn't there.
+
+**What:** when a map's entities are made, a one-time pickup (a floor item or a crystal berry) whose location the server
+has as checked is kept away, the way the open world keeps blockers away (build step 9): its hiding list is replaced by
+a marker the game's own existence check answers "gone" to. Nothing is written to the save. **Not hidden:** a
+respawning pickup (once its check is done it is the game's own item again, the named exception, build step 10) and a
+story pickup (it starts its scene). Shops already left out a copy whose check is done (build step 11).
+Logged: `[open] <map>: <entity> kept away (location <id> is already checked)`.
+
+**Status:** built (2026-09-28), not yet seen in game.
+
+*Code: `KeptOpen.cs` (`AfterCreate`, the found pickups), `ItemSwap.Pickups.cs` (`IsPickup`, now shared).*
 
 # How it works
 

@@ -148,7 +148,7 @@ namespace BugFablesAP
             }
         }
 
-        private static bool IsPickup(ApConnection.Pickup pickup, NPCControl npc)
+        internal static bool IsPickup(ApConnection.Pickup pickup, NPCControl npc)
         {
             if (pickup.Berry >= 0)
             {

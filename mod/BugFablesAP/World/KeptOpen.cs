@@ -162,6 +162,24 @@ namespace BugFablesAP
                     log.LogInfo($"[open] {map}: {npc.name} made present (the seed keeps this way open)");
                 }
             }
+            // A one-time pickup whose check the server has is kept away in every save; a respawning one is the game's own
+            // again and a story one starts its scene, so both stay.
+            foreach (KeyValuePair<long, ApConnection.Pickup> found in (connection.LocationPickups ?? new Dictionary<long, ApConnection.Pickup>())
+                .Where(p => p.Value.Map == map && p.Value.Regional < 0 && p.Value.Event < 0 && connection.IsDone(p.Key)))
+            {
+                foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true)
+                    .Where(n => n.objecttype == NPCControl.ObjectTypes.Item && ItemSwap.IsPickup(found.Value, n)))
+                {
+                    var marker = new[] { -1 };
+                    markers.Add(marker);
+                    npc.limit = marker;
+                    if (npc.entity != null)
+                    {
+                        npc.entity.iskill = true;
+                    }
+                    log.LogInfo($"[open] {map}: {npc.name} kept away (location {found.Key} is already checked)");
+                }
+            }
             // present_from: the entity's requires replaced by an earlier story flag, so the game makes it from then on.
             foreach (ApConnection.Blocker from in (connection.PresentFrom ?? new List<ApConnection.Blocker>()).Where(b => b.Map == map && b.Flag >= 0))
             {
