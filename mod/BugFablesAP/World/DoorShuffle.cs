@@ -24,30 +24,18 @@ namespace BugFablesAP
         private static ManualLogSource log;
         private static ApConnection connection;
         private static Func<bool> randomizerOn;
-        private static Harmony harmony;
 
         internal static string TestDoors;
 
-        internal static void Enable(ManualLogSource logger, string guid, ApConnection conn, Func<bool> on)
+        internal static void Enable(ManualLogSource logger, ApConnection conn, Func<bool> on)
         {
             log = logger;
             connection = conn;
             randomizerOn = on;
-            MethodInfo create = AccessTools.Method(typeof(MapControl), "CreateEntities");
-            if (create == null)
+            if (Hooks.Install(typeof(Entities), "doors", "doors lead where the game has them"))
             {
-                log.LogError("[doors] MapControl.CreateEntities not found: doors lead where the game has them.");
-                return;
+                log.LogInfo("[doors] installed on MapControl.CreateEntities");
             }
-            harmony = new Harmony(guid + ".doors." + DateTime.UtcNow.Ticks);
-            harmony.Patch(create, postfix: new HarmonyMethod(typeof(DoorShuffle), nameof(AfterCreate)));
-            log.LogInfo("[doors] installed on MapControl.CreateEntities");
-        }
-
-        internal static void Disable()
-        {
-            harmony?.UnpatchSelf();
-            harmony = null;
         }
 
         private static IEnumerable<Target> Targets()
@@ -75,44 +63,49 @@ namespace BugFablesAP
             }
         }
 
-        private static void AfterCreate(MapControl __instance)
+        [HarmonyPatch(typeof(MapControl), "CreateEntities")]
+        private static class Entities
         {
-            if (randomizerOn == null || !randomizerOn())
+            [HarmonyPostfix]
+            private static void AfterCreate(MapControl __instance)
             {
-                return;
-            }
-            string map = __instance.mapid.ToString();
-            foreach (Target t in Targets().Where(t => t.Map == map))
-            {
-                NPCControl door = __instance.GetComponentsInChildren<NPCControl>(true)
-                    .FirstOrDefault(n => n.name == t.Door && n.objecttype == NPCControl.ObjectTypes.DoorOtherMap);
-                if (door == null)
+                if (randomizerOn == null || !randomizerOn())
                 {
-                    log.LogWarning($"[doors] {map}: no door {t.Door} to rewrite");
-                    continue;
+                    return;
                 }
-                if (!Read(t.LikeMap, t.LikeDoor, out int[] data, out Vector3[] vectors, out float jump) || data.Length == 0 || vectors.Length < 3)
+                string map = __instance.mapid.ToString();
+                foreach (Target t in Targets().Where(t => t.Map == map))
                 {
-                    log.LogWarning($"[doors] {map}: {t.Door} kept as it is ({t.LikeMap}/{t.LikeDoor} not readable as a door)");
-                    continue;
+                    NPCControl door = __instance.GetComponentsInChildren<NPCControl>(true)
+                        .FirstOrDefault(n => n.name == t.Door && n.objecttype == NPCControl.ObjectTypes.DoorOtherMap);
+                    if (door == null)
+                    {
+                        log.LogWarning($"[doors] {map}: no door {t.Door} to rewrite");
+                        continue;
+                    }
+                    if (!Read(t.LikeMap, t.LikeDoor, out int[] data, out Vector3[] vectors, out float jump) || data.Length == 0 || vectors.Length < 3)
+                    {
+                        log.LogWarning($"[doors] {map}: {t.Door} kept as it is ({t.LikeMap}/{t.LikeDoor} not readable as a door)");
+                        continue;
+                    }
+                    // data[4] == 1: no walk into this door (a hole, a ladder), so it stays with this side.
+                    int ownWalk = door.data != null && door.data.Length > 4 ? door.data[4] : 0;
+                    var own = door.vectordata != null && door.vectordata.Length > 0 ? door.vectordata[0] : vectors[0];
+                    if (data.Length > 4 || ownWalk != 0)
+                    {
+                        Array.Resize(ref data, Math.Max(data.Length, 5));
+                        data[4] = ownWalk;
+                    }
+                    door.data = data;
+                    door.vectordata = (Vector3[])vectors.Clone();
+                    door.vectordata[0] = own;
+                    // TransferMap reads the arrival jump from the door walked into (its entity's emoticonoffset.x).
+                    if (door.entity != null)
+                    {
+                        door.entity.emoticonoffset = new Vector3(jump, door.entity.emoticonoffset.y, door.entity.emoticonoffset.z);
+                    }
+                    log.LogInfo($"[doors] {map}: {t.Door} now leads where {t.LikeMap}/{t.LikeDoor} leads (map {(MainManager.Maps)data[0]}, appear {vectors[1]}, jump {jump}, own walk {ownWalk})");
                 }
-                // data[4] == 1: no walk into this door (a hole, a ladder), so it stays with this side.
-                int ownWalk = door.data != null && door.data.Length > 4 ? door.data[4] : 0;
-                var own = door.vectordata != null && door.vectordata.Length > 0 ? door.vectordata[0] : vectors[0];
-                if (data.Length > 4 || ownWalk != 0)
-                {
-                    Array.Resize(ref data, Math.Max(data.Length, 5));
-                    data[4] = ownWalk;
-                }
-                door.data = data;
-                door.vectordata = (Vector3[])vectors.Clone();
-                door.vectordata[0] = own;
-                // TransferMap reads the arrival jump from the door walked into (its entity's emoticonoffset.x).
-                if (door.entity != null)
-                {
-                    door.entity.emoticonoffset = new Vector3(jump, door.entity.emoticonoffset.y, door.entity.emoticonoffset.z);
-                }
-                log.LogInfo($"[doors] {map}: {t.Door} now leads where {t.LikeMap}/{t.LikeDoor} leads (map {(MainManager.Maps)data[0]}, appear {vectors[1]}, jump {jump}, own walk {ownWalk})");
             }
         }
 

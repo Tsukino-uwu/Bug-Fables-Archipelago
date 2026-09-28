@@ -192,21 +192,21 @@ namespace BugFablesAP
             ClockCleanup.Enable(Log, Guid, settingsOn);
             InGameSettings.Enable(Log, Guid, settingsOn);
             CustomItems.Enable(Log, () => randomizerEnabled.Value);
-            BoatTicket.Enable(Log, Guid, () => randomizerEnabled.Value);
+            BoatTicket.Enable(Log, () => randomizerEnabled.Value);
             HoldUps.Init(Log, () => randomizerEnabled.Value);
             PartyFit.Enable(Log, Guid, () => randomizerEnabled.Value);
             PartyMembers.Enable(Log, Guid, () => randomizerEnabled.Value);
             FieldMoves.Enable(Log, Guid, () => randomizerEnabled.Value);
-            SaveCrystals.Enable(Log, Guid, Config, () => randomizerEnabled.Value, settingsOn);
+            SaveCrystals.Enable(Log, Config, () => randomizerEnabled.Value, settingsOn);
             DeathLinkGame.Enable(Log, Guid, Config, connection, () => randomizerEnabled.Value);
             AutoSave.Enable(Log, Config, settingsOn);
             Abilities.Enable(Log, Guid, () => randomizerEnabled.Value);
             CheckDetector.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
-            CrystalBerryTotal.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
-            QuestBoards.Enable(Log, Guid, () => randomizerEnabled.Value);
+            CrystalBerryTotal.Enable(Log, connection, () => randomizerEnabled.Value);
+            QuestBoards.Enable(Log, () => randomizerEnabled.Value);
             ShopSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             ItemShops.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
-            DoorShuffle.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
+            DoorShuffle.Enable(Log, connection, () => randomizerEnabled.Value);
             WarpButton.Enable(Log, Guid, () => settingsOn() && QualityOfLife.WarpOn, () => settingsOn() && QualityOfLife.MapOn,
                 () => QualityOfLife.SkipWarpConfirm, () => QualityOfLife.SkipMapConfirm);
             MenuToggle.Enable(Log, Guid, randomizerEnabled, server, port, slot, password,
@@ -428,7 +428,6 @@ namespace BugFablesAP
             DeathLinkGame.Disable();
             Multipliers.Disable();
             InGameSettings.Disable();
-            BoatTicket.Disable();
             QualityOfLife.Disable();
             WarpButton.Disable();
             HoldUps.Clear();
@@ -437,11 +436,8 @@ namespace BugFablesAP
             FieldMoves.Disable();
             Abilities.Disable();
             CheckDetector.Disable();
-            CrystalBerryTotal.Disable();
-            QuestBoards.Disable();
             ShopSwap.Disable();
             ItemShops.Disable();
-            DoorShuffle.Disable();
             Hooks.UninstallAll();
             Log?.LogInfo($"{Name} {Version} unloaded.");
         }

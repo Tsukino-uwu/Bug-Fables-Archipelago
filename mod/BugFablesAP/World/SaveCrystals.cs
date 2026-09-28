@@ -16,7 +16,6 @@ namespace BugFablesAP
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
         private static Func<bool> settingsOn;
-        private static Harmony harmony;
 
         // The game's own reach for a hit to open the prompt (NPCControl.OnTriggerEnter, SavePoint).
         private const float Reach = 30f;
@@ -25,7 +24,7 @@ namespace BugFablesAP
         private static readonly List<NPCControl> crystals = new List<NPCControl>();
         private static float cooldown;
 
-        internal static void Enable(ManualLogSource logger, string guid, ConfigFile config, Func<bool> on, Func<bool> settings)
+        internal static void Enable(ManualLogSource logger, ConfigFile config, Func<bool> on, Func<bool> settings)
         {
             log = logger;
             randomizerOn = on;
@@ -33,34 +32,32 @@ namespace BugFablesAP
             AllHeal = config.Bind("Gameplay", "HealingCrystals", false,
                 "On: every save crystal is yellow, so it heals HP and TP as well as saving. Off: as the game has them. "
                 + "Switch it on the Gameplay page.");
-            var setUp = AccessTools.Method(typeof(NPCControl), "SetUp");
-            if (setUp == null)
+            if (Hooks.Install(typeof(Colour), "crystals", "Healing crystals does nothing"))
             {
-                log.LogError("[crystals] NPCControl.SetUp not found: Healing crystals does nothing.");
-                return;
+                log.LogInfo("[crystals] installed on NPCControl.SetUp; the confirm press through FieldMoves' DoJump prefix");
             }
-            harmony = new Harmony(guid + ".crystals." + DateTime.UtcNow.Ticks);
-            harmony.Patch(setUp, prefix: new HarmonyMethod(typeof(SaveCrystals), nameof(BeforeSetUp)));
-            log.LogInfo("[crystals] installed on NPCControl.SetUp; the confirm press through FieldMoves' DoJump prefix");
         }
 
         internal static void Disable()
         {
-            harmony?.UnpatchSelf();
-            harmony = null;
             crystals.Clear();
             scanned = null;
         }
 
         // Tint and heal both read data[2] == 0; red DeadLander crystals (data[1] >= 10) do something else and stay.
-        private static void BeforeSetUp(NPCControl __instance)
+        [HarmonyPatch(typeof(NPCControl), "SetUp")]
+        private static class Colour
         {
-            if (AllHeal == null || !AllHeal.Value || settingsOn == null || !settingsOn() || !IsSaveCrystal(__instance)
-                || __instance.data[2] == 0)
+            [HarmonyPrefix]
+            private static void BeforeSetUp(NPCControl __instance)
             {
-                return;
+                if (AllHeal == null || !AllHeal.Value || settingsOn == null || !settingsOn() || !IsSaveCrystal(__instance)
+                    || __instance.data[2] == 0)
+                {
+                    return;
+                }
+                __instance.data[2] = 0;
             }
-            __instance.data[2] = 0;
         }
 
         private static bool IsSaveCrystal(NPCControl npc) =>
