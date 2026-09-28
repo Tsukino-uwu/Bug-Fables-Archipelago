@@ -1785,6 +1785,8 @@ no logic depend on it.
   the rest: the colour, the heal on a hit, and step 29's confirm. `data` is the map's entity data, never saved.
 - **Switching it takes effect in the next room**, when the map's crystals are built again (said in the row's help).
 - **The Gameplay page grew a row:** its rows now spread between the same top and bottom row as Quality of life's do.
+  Each row with a value gets its left/right arrows from one list per page; *Healing crystals* and *Auto-save* were
+  first missing from it (caught 2026-09-28, before anyone saw it).
 - Reset sets Off; Disable all sets Off.
 
 **Status:** built (2026-09-28), not yet seen in game.

@@ -95,10 +95,6 @@ namespace BugFablesAP
                         return AutoSave.Enabled != null && AutoSave.Enabled.Value
                             ? "Entering a new room saves at its door once you can move (at most every 15 s)."
                             : "Only save crystals save, as in the game.";
-                    case DeathLinkRow:
-                        return DeathLinkGame.Enabled != null && DeathLinkGame.Enabled.Value
-                            ? "When your party falls, so does everyone with DeathLink on, and their deaths reach you."
-                            : "Deaths stay your own.";
                     case MedalPricesRow:
                     {
                         int tenths = QualityOfLife.MedalPrices?.Value ?? QualityOfLife.FullPrice;
@@ -122,6 +118,10 @@ namespace BugFablesAP
                 case SlotRow: return "Your player slot name.";
                 case PasswordRow: return "The room's password, if it has one.";
                 case ModeRow: return "Turns Archipelago on or off. While on, normal saves are never touched.";
+                case DeathLinkRow:
+                    return DeathLinkGame.Enabled != null && DeathLinkGame.Enabled.Value
+                        ? "When your party falls, so does everyone with DeathLink on, and their deaths reach you."
+                        : "Deaths stay your own.";
                 case AchievementsRow:
                     return Achievements != null && Achievements.Value
                         ? "Steam achievements unlock as usual. This only affects Steam, not Archipelago."
@@ -141,7 +141,7 @@ namespace BugFablesAP
             MainManager.sounds[10].volume = MainManager.pausemenu != null ? MainManager.pausemenu.svolume : MainManager.soundvolume;
         }
 
-        private bool IsChoice(int r) => page == Page.Main ? r == ModeRow || r == AchievementsRow || r == NormalSavesRow : r != ButtonsRow;
+        private bool IsChoice(int r) => page == Page.Main ? r == ModeRow || r == DeathLinkRow || r == AchievementsRow || r == NormalSavesRow : r != ButtonsRow;
 
         private static void Cycle(ConfigEntry<string> entry, string[] values, int by)
         {
@@ -214,11 +214,6 @@ namespace BugFablesAP
                     AutoSave.Enabled.Value = !AutoSave.Enabled.Value;
                     log.LogInfo("[apmenu] AutoSave: " + (AutoSave.Enabled.Value ? "On" : "Off"));
                 }
-                else if (r == DeathLinkRow && DeathLinkGame.Enabled != null)
-                {
-                    DeathLinkGame.Enabled.Value = !DeathLinkGame.Enabled.Value;
-                    log.LogInfo("[apmenu] DeathLink: " + (DeathLinkGame.Enabled.Value ? "On" : "Off"));
-                }
                 else if (r == MedalPricesRow && QualityOfLife.MedalPrices != null)
                 {
                     Multipliers.StepBy(QualityOfLife.MedalPrices, by, 0, QualityOfLife.FullPrice);
@@ -235,6 +230,11 @@ namespace BugFablesAP
             else if (r == ModeRow)
             {
                 MenuToggle.SetMode(owner, !mode.Value);
+            }
+            else if (r == DeathLinkRow && DeathLinkGame.Enabled != null)
+            {
+                DeathLinkGame.Enabled.Value = !DeathLinkGame.Enabled.Value;
+                log.LogInfo("[apmenu] DeathLink: " + (DeathLinkGame.Enabled.Value ? "On" : "Off"));
             }
             else if (r == AchievementsRow && Achievements != null)
             {
@@ -262,7 +262,7 @@ namespace BugFablesAP
         // The Gameplay page's two buttons: every row to its plain value, or back to its default.
         private static void GameplayAll(bool reset)
         {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { Difficulty, QualityOfLife.EnemyScalingMode, AttackBoost.Boost, SaveCrystals.AllHeal, AutoSave.Enabled, DeathLinkGame.Enabled, QualityOfLife.MedalPrices, Multipliers.Exp, Multipliers.Berries })
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { Difficulty, QualityOfLife.EnemyScalingMode, AttackBoost.Boost, SaveCrystals.AllHeal, AutoSave.Enabled, QualityOfLife.MedalPrices, Multipliers.Exp, Multipliers.Berries })
             {
                 if (setting != null && reset)
                 {
@@ -293,10 +293,7 @@ namespace BugFablesAP
             {
                 AutoSave.Enabled.Value = false;
             }
-            if (DeathLinkGame.Enabled != null)
-            {
-                DeathLinkGame.Enabled.Value = false;
-            }
+
             if (QualityOfLife.MedalPrices != null)
             {
                 QualityOfLife.MedalPrices.Value = QualityOfLife.FullPrice;

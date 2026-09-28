@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // DeathLink, the Gameplay page's row: a party wipe that reaches the game's Game Over sends a death; a received one
+    // DeathLink, a row in the Archipelago panel: a party wipe that reaches the game's Game Over sends a death; a received one
     // strikes once play can take it (the game's own Game Over in a battle, Game Over then the last save outside one).
     // A death DeathLink caused is never sent back.
     internal static class DeathLinkGame
@@ -44,9 +44,9 @@ namespace BugFablesAP
             log = logger;
             connection = conn;
             randomizerOn = on;
-            Enabled = config.Bind("Gameplay", "DeathLink", false,
+            Enabled = config.Bind("Archipelago", "DeathLink", false,
                 "On: when your party is defeated, everyone in the room with DeathLink on is too, and their deaths reach you. "
-                + "Can be switched mid-seed. Switch it on the Gameplay page.");
+                + "Switch it in the Archipelago panel on the main menu.");
             Enabled.SettingChanged += (s, e) => connection.SetDeathLinkTag(Wanted());
             connection.DeathLinkWanted = Wanted;
             deadParty = AccessTools.Method(typeof(BattleControl), "DeadParty");

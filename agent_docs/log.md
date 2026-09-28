@@ -1125,3 +1125,8 @@ Newest last. What was tried, what happened, what the user said.
   that commit was dropped with `reset --hard` to the one before (nothing pushed).
 - **Loaded:** build 44D57CE33379 copied into the game; nothing seen in game yet. DeathLink needs a room with a second
   DeathLink client to test.
+- **DeathLink moved to the panel's first page** (the user: "its an AP setting"): first built on the Gameplay page,
+  which the pause menu also opens, so a waiting death could be switched off there. Now changing it means the main
+  menu, on purpose (the user). The pause menu itself only delays a death: it strikes once the menu closes (the user
+  agreed: "a guaranteed death either way"). The two new Gameplay rows had no left/right arrows (one list per page);
+  fixed with the move.

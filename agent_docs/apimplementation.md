@@ -330,8 +330,8 @@ be wrong.
    and no logic depend on it. Only while Archipelago is enabled, or with *Use on normal saves*.
 38. **A Graphics page, render scale and MSAA** (the user, 2026-09-28): built, seen, then removed the same day (240 to
    about 95 fps for little visible gain), `documentation.md` step 28.
-39. **DeathLink** (the user, 2026-09-28): built, not yet seen, build step 25. A row on the Gameplay page, not a yaml
-   option, so it can be switched mid-seed. **Auto-save between rooms**, its own Gameplay row, built, not yet seen
+39. **DeathLink** (the user, 2026-09-28): built, not yet seen, build step 25. A row in the Archipelago panel on the
+   main menu, not a yaml option, so it can be switched mid-seed by going back to the main menu. **Auto-save between rooms**, its own Gameplay row, built, not yet seen
    (`documentation.md` step 31), so a death costs one room rather than a long way back.
 
 **Known issues:**
@@ -2067,8 +2067,12 @@ a client wearing the `DeathLink` tag sends a `Bounce` with `time`, `source` and 
 dies, and the server passes it to every other client wearing the tag. Each game decides what "die" means.
 
 **Decided (the user, 2026-09-28):**
-- **A row on the Gameplay page, *DeathLink*, ON / OFF, off by default; not a yaml option**, so a player can change their
-  mind mid-seed. Only while Archipelago is enabled; the seed and the logic know nothing of it.
+- **A row in the Archipelago panel, *DeathLink*, ON / OFF, off by default; not a yaml option**, so a player can change
+  their mind mid-seed. Only while Archipelago is enabled; the seed and the logic know nothing of it.
+- **In the panel on the main menu, next to *Archipelago*, not on the Gameplay page** (the user, 2026-09-28: "its an AP
+  setting"; first built on the Gameplay page, which the pause menu's Settings also opens). Changing your mind means
+  going back to the main menu, on purpose (the user): a death waiting in game can't be switched away from the pause
+  menu, and returning to the title drops it, which costs as much as the death.
 - **A death DeathLink caused never sends one** (the user: a common apworld bug, two games killing each other in a
   loop, or a death queued before you're back in game that kills you and sends again). Only the game's own deaths send.
 - **A death that can't land yet waits, and strikes at whatever comes first afterwards:** free on the map, or the
@@ -2100,8 +2104,8 @@ isn't a Game Over, and neither sends nor receives.
 
 **Status:** built (2026-09-28), not yet seen in game or in a room.
 
-*Code: `DeathLinkGame.cs`; the service in `ApConnection.cs` (`SetDeathLinkTag`, `SendDeath`, `TakeDeath`); the row in
-`ApMenu.cs` and `ApMenu.Rows.cs`.*
+*Code: `DeathLinkGame.cs`; the service in `ApConnection.cs` (`SetDeathLinkTag`, `SendDeath`, `TakeDeath`); the row on
+the panel's first page in `ApMenu.cs` and `ApMenu.Rows.cs`.*
 
 # How it works
 

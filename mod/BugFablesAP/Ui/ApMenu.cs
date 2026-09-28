@@ -10,14 +10,14 @@ namespace BugFablesAP
     // The title screen's input is suspended while it's open (StartMenu.canselect), so C, X, Z and V can be typed.
     internal sealed partial class ApMenu : MonoBehaviour
     {
-        private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, AchievementsRow = 5, NormalSavesRow = 6,
-            Rows = 7;
+        private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, DeathLinkRow = 5, AchievementsRow = 6,
+            NormalSavesRow = 7, Rows = 8;
         // The Quality of life page: the two buttons side by side on top, then the settings.
         private const int ButtonsRow = 0, FastTextRow = 1, WarpRow = 2, SkipConfirmRow = 3, CutscenesRow = 4, AnimationRow = 5, ColorsRow = 6,
             IconsRow = 7, BackgroundsRow = 8, DetectorRow = 9, UncapRow = 10, QolRows = 11;
         // The Gameplay page: how the game plays, under the same two buttons.
-        private const int DifficultyRow = 1, ScalingRow = 2, AttackRow = 3, CrystalsRow = 4, AutoSaveRow = 5, DeathLinkRow = 6, MedalPricesRow = 7,
-            ExpRow = 8, BerryRow = 9, GameplayRows = 10;
+        private const int DifficultyRow = 1, ScalingRow = 2, AttackRow = 3, CrystalsRow = 4, AutoSaveRow = 5, MedalPricesRow = 6, ExpRow = 7,
+            BerryRow = 8, GameplayRows = 9;
         private enum Page { Main, Qol, Gameplay }
         private Page page;
         // On the buttons row: 0 Reset to defaults (where the cursor lands), 1 Disable all; confirming shows Yes / No there (0 Yes, 1 No).
@@ -395,6 +395,7 @@ namespace BugFablesAP
                         Redraw();
                         break;
                     case ModeRow:
+                    case DeathLinkRow:
                     case AchievementsRow:
                     case NormalSavesRow:
                         Step(row, 1);
@@ -439,7 +440,6 @@ namespace BugFablesAP
                 Choice(AttackRow, "Attack boost", AttackBoost.Boost != null && AttackBoost.Boost.Value ? "+1" : "OFF");
                 Choice(CrystalsRow, "Healing crystals", OnOff(SaveCrystals.AllHeal));
                 Choice(AutoSaveRow, "Auto-save", OnOff(AutoSave.Enabled));
-                Choice(DeathLinkRow, "DeathLink", OnOff(DeathLinkGame.Enabled));
                 Label(MedalPricesRow, "Medal prices");
                 Label(ExpRow, "EXP multiplier");
                 Label(BerryRow, "Berry multiplier");
@@ -457,6 +457,7 @@ namespace BugFablesAP
             Row(PasswordRow, "Password", pw);
 
             Choice(ModeRow, "Archipelago", mode.Value ? "ENABLED" : "DISABLED");
+            Choice(DeathLinkRow, "DeathLink", OnOff(DeathLinkGame.Enabled));
             Choice(AchievementsRow, "Achievements", Achievements != null && Achievements.Value ? "ON" : "OFF");
             Choice(NormalSavesRow, "Use on normal saves", NormalSaves != null && NormalSaves.Value ? "ON" : "OFF");
 
@@ -473,7 +474,8 @@ namespace BugFablesAP
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
             foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, SkipConfirmRow, CutscenesRow, AnimationRow, ColorsRow, IconsRow, BackgroundsRow, DetectorRow, UncapRow }
-                : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, AttackRow, MedalPricesRow, ExpRow, BerryRow } : new[] { ModeRow, AchievementsRow, NormalSavesRow })
+                : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, AttackRow, CrystalsRow, AutoSaveRow, MedalPricesRow, ExpRow, BerryRow }
+                : new[] { ModeRow, DeathLinkRow, AchievementsRow, NormalSavesRow })
             {
                 for (int side = 0; side < 2; side++)
                 {
