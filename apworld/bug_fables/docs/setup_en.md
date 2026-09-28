@@ -72,8 +72,10 @@ seconds (it tidies its memory on a timer).
   yours included, has a starburst behind it in its Archipelago class colour, so you can tell from afar whether it matters; Off
   keeps it a surprise), **Detector** (On, the default, acts as if the Detector medal were equipped. With the Archipelago mod
   enabled, the Detector (row or medal) also beeps on entering a room that still has a check of any kind, and stays
-  quiet in a room with none left) and **Uncap FPS** (experimental; Off, the default, keeps the game's own 30 or 60 FPS
-  setting; 120, 144 or 240 raise the frame rate, with VSync when the number divides your monitor's refresh rate, otherwise as a frame-rate limit. Motion is
+  quiet in a room with none left) and **Uncap FPS** (experimental; ten pips like the volume rows. The last, Monitor, is the
+  default: your display's own refresh rate, with VSync, so no tearing; on a 60 Hz display it keeps the game's own
+  setting. The first pip, Off, keeps the game's own 30 or 60 FPS; the ones between cap it at 90, 100, 120, 144, 165,
+  180, 240 or 360, with VSync when the number divides your monitor's refresh rate or reaches it, otherwise as a limit. Motion is
   drawn smoothly between the game's steps, and the game still plays as it does at 60. Switching it on the first time in a
   session takes a few seconds).
 - **Gameplay**: **Difficulty** (Normal, the default, leaves it to the game; Hard plays as if the Hard Mode medal were

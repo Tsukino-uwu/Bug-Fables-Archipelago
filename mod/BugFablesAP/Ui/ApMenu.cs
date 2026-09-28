@@ -426,7 +426,8 @@ namespace BugFablesAP
                     : QualityOfLife.IconMode == "AllPlayers" ? "ALL PLAYERS" : "OFF");
                 Choice(BackgroundsRow, "Item backgrounds", OnOff(QualityOfLife.ItemBackgrounds));
                 Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
-                Choice(UncapRow, "Uncap FPS", (QualityOfLife.UncapFps?.Value ?? "Off").ToUpperInvariant());
+                Label(UncapRow, "Uncap FPS");
+                DrawPips(new[] { UncapRow }, new[] { Mathf.Max(0, Array.IndexOf(QualityOfLife.UncapValues, QualityOfLife.UncapFps?.Value)) + 1 });
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Quality of life. Cancel goes back" + (inGame ? " to Settings." : "."), 0f, StatusY);
                 PlaceCursor();

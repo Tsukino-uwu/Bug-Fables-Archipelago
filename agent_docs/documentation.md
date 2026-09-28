@@ -1541,7 +1541,7 @@ items), on the class-coloured backdrop of step 22.
 ## 24. Frame rates above 60: smoother, and the same game
 
 The game's settings offer 30 or 60 fps. The user plays on a 240 Hz monitor and asked for more, as a Quality of life row
-(Off, 120, 144, 240; `UncapFps` in the config), off by default, overriding the game's own frame rate and VSync while Archipelago is on, and done
+(first Off, 120, 144, 240; now ten pips with Monitor the default, below; `UncapFps` in the config), overriding the game's own frame rate and VSync while Archipelago is on, and done
 "properly so things don't break" (2026-09-27).
 
 **First, read how the game ties itself to frames** (`MEASURED.md`, frame rate). Most motion is scaled by frame time
@@ -1638,6 +1638,17 @@ place it counts frames instead of time first.
   included: every later build sat unloaded, which looked like fixes that changed nothing. Found by reading the error at
   the end of the log, after two guessed fixes failed the same way. Only a game restart clears it; the sites'
   transpiler now never throws (it returns the method unchanged and logs why).
+
+**Ten pips, and Monitor by default (2026-09-28).** A tester played on a 180 Hz monitor, where 120 and 144 divide
+nothing (a limit without VSync, so tearing) and only 240 synced (at 180), with nothing on screen saying so. Other
+common rates (165, 170, 200, 360, 480) had the same gap. The user asked for the row to work like the volume rows:
+ten pips, the first Off, then 90, 100, 120, 144, 165, 180, 240, 360, and **Monitor** last, which is the display's own
+refresh rate (`Screen.currentResolution.refreshRate`) met with VSync, so any display is smooth without tearing. At 60 Hz
+or less Monitor keeps the game's own setting, and the row's line says so. The row stops at its ends, as the volume rows
+do. Monitor is the default (the user, 2026-09-28, once shaky text was fixed and they'd seen no odd combat), so a fresh
+config runs above 60 while Archipelago is on; a config that already says Off keeps it. The first frame with the row on
+installs the frame sites (a few seconds), so on a fresh config that pause lands on the main menu. Rates above 240 are
+untested.
 
 **Status:** in progress, experimental (the row says so). Seen by the user (2026-09-27) at 240: smooth, the "!" steady and
 sharp. The logic measured (`rates`); each site patched as expected (the log's `[fps] frame sites`). Not yet seen on

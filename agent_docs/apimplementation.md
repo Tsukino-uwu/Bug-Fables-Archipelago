@@ -350,7 +350,8 @@ be wrong.
   scenes' names (68-74, build step 23) are provisional.
 - **Uncap FPS (mod guide, step 24) still speeds some things up.** Each to compare at 60 and above on screen, then
   step at the game's own rate, as the other per-frame sites are:
-  - **Being hit plays too fast, for enemies and the party** (a tester, 2026-09-27, FPS unlocked). Cause not read yet.
+  - **Being hit plays too fast, for enemies and the party** (a tester, 2026-09-27, FPS unlocked). Cause not read yet;
+    the user, playing with the `ShakeSprite` fix below, saw nothing odd in combat (2026-09-28; no before/after seen).
   - **A frozen enemy shimmers slightly while it flies** after a knock (not interpolated while frozen; the slow motion
     and the short slide are fixed and seen, mod guide, step 24).
   - **A slight shimmer while standing on a platform or bridge** (the user, 2026-09-27, at 240). The slow motion there
@@ -358,7 +359,7 @@ be wrong.
     steps. Smoothing it relative to the platform is left for later.
   - **Bushes shaking before the leaf gang's ambush looked blurry** (the user, 2026-09-27, at 240; the swamp,
     Event128): `ShakeObject` fixed (mod guide, step 24), not yet seen. Shaky text: fixed and seen.
-  - **Hits:** a character's own shake (`ShakeSprite`) was per frame and is fixed, not yet seen; which part of a hit
+  - **Hits:** a character's own shake (`ShakeSprite`) was per frame and is fixed, seen without anything odd (2026-09-28); which part of a hit
     looked fast is still to be told apart on screen (the flinch pose is timed in seconds, the screen shake in physics
     steps).
   - **Other shakes still rolled every frame** (code read, 2026-09-27, not seen): a numb character's twitch (a 5% roll

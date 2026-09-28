@@ -58,6 +58,11 @@ namespace BugFablesAP
                             : "Items show no backdrop until you take them.";
                     case DetectorRow: return "Acts like the Detector medal is always equipped, to find hidden items.";
                     case UncapRow:
+                        if (QualityOfLife.UncapFps?.Value == "Monitor")
+                        {
+                            return FrameRate.Cap == 0 ? $"Experimental. Monitor: yours runs at {Screen.currentResolution.refreshRate} Hz, so the game's own FPS."
+                                : $"Experimental. Monitor: {FrameRate.Cap} FPS, your display's rate; plays as at 60.";
+                        }
                         return FrameRate.Cap == 0 ? "Experimental. Off: the game's own FPS setting (30 or 60)."
                             : $"Experimental. {FrameRate.Cap} FPS, smooth motion; plays as at 60.";
                     default: return "";
@@ -150,6 +155,14 @@ namespace BugFablesAP
             log.LogInfo("[apmenu] " + entry.Definition.Key + ": " + entry.Value);
         }
 
+        // A pip row stops at its ends, as the volume rows do.
+        private static void StepThrough(ConfigEntry<string> entry, string[] values, int by)
+        {
+            int at = Mathf.Max(0, Array.IndexOf(values, entry.Value));
+            entry.Value = values[Mathf.Clamp(at + by, 0, values.Length - 1)];
+            log.LogInfo("[apmenu] " + entry.Definition.Key + ": " + entry.Value);
+        }
+
         private void Step(int r, int by)
         {
             ChangeSound();
@@ -177,7 +190,7 @@ namespace BugFablesAP
                 }
                 else if (r == UncapRow && QualityOfLife.UncapFps != null)
                 {
-                    Cycle(QualityOfLife.UncapFps, QualityOfLife.UncapValues, by);
+                    StepThrough(QualityOfLife.UncapFps, QualityOfLife.UncapValues, by);
                 }
                 else
                 {

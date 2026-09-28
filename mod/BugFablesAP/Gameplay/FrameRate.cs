@@ -59,7 +59,8 @@ namespace BugFablesAP
             get
             {
                 string v = QualityOfLife.UncapFps?.Value;
-                return v != null && int.TryParse(v, out int cap) && cap > 60 ? cap : 0;
+                int cap = v == "Monitor" ? Screen.currentResolution.refreshRate : v != null && int.TryParse(v, out int n) ? n : 0;
+                return cap > 60 ? cap : 0;
             }
         }
 

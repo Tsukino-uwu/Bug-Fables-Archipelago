@@ -43,7 +43,8 @@ namespace BugFablesAP
         internal const int FullPrice = 10;
         internal static ConfigEntry<int> MedalPrices;
         internal static ConfigEntry<string> EnemyScalingMode;
-        internal static readonly string[] UncapValues = { "Off", "120", "144", "240" };
+        // Ten pips, like the volume rows: Off, eight caps, and the monitor's own refresh rate.
+        internal static readonly string[] UncapValues = { "Off", "90", "100", "120", "144", "165", "180", "240", "360", "Monitor" };
         internal static ConfigEntry<string> UncapFps;
 
         // A scene that only moves, talks and sets flags is skipped by setting its flags; one that also changes the
@@ -186,9 +187,10 @@ namespace BugFablesAP
                 "Which travel buttons act without their Yes / No box: Warp (warps as soon as it's picked), Map (confirm on an "
                 + "area you've been to travels there at once), Both, or Off (both ask first).",
                 new AcceptableValueList<string>(TravelValues)));
-            UncapFps = config.Bind("QualityOfLife", "UncapFps", "Off", new ConfigDescription(
-                "Experimental. A frame rate above the game's 30 or 60: 120, 144 or 240, with VSync when it divides the monitor's refresh rate "
-                + "(no tearing), else as a limit. Motion is drawn between the game's "
+            UncapFps = config.Bind("QualityOfLife", "UncapFps", "Monitor", new ConfigDescription(
+                "Experimental. A frame rate above the game's 30 or 60: 90 to 360, or Monitor, the default (the display's own refresh rate; "
+                + "a 60 Hz display keeps the game's own). With VSync when it divides the monitor's refresh rate or reaches it (no tearing), "
+                + "else as a limit. Motion is drawn between the game's "
                 + "physics steps, and whatever the game counts in frames still runs at 60 per second, so it plays as it does at "
                 + "60. Off: the game's own FPS and VSync settings.",
                 new AcceptableValueList<string>(UncapValues)));
