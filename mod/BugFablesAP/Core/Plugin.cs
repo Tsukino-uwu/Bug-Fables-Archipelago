@@ -56,6 +56,7 @@ namespace BugFablesAP
         private void Awake()
         {
             Log = Logger;
+            Hooks.Init(Log);
             grantProbeEnabled = Config.Bind("Debug", "GrantProbe", false,
                 "Dev only. Logs every key item added to the inventory and every flag that flips, with the map, "
                 + "to measure how locations can be identified. Off by default.");
@@ -168,7 +169,7 @@ namespace BugFablesAP
             ApMenu.Achievements = Config.Bind("Archipelago", "Achievements", false,
                 "On lets Steam achievements unlock while Archipelago is enabled; off (the default) holds them back, as normal "
                 + "saves are kept apart. It only concerns Steam, never Archipelago. Switch it in the Archipelago panel.");
-            AchievementGuard.Enable(Log, Guid, () => randomizerEnabled.Value, () => ApMenu.Achievements.Value);
+            AchievementGuard.Enable(Log, () => randomizerEnabled.Value, () => ApMenu.Achievements.Value);
             ApMenu.NormalSaves = Config.Bind("Archipelago", "NormalSaves", false,
                 "On: the Quality of life and Gameplay settings also apply with Archipelago off, on normal saves. Nothing tied "
                 + "to a seed does (items, checks, the shuffles, the intro skip). Off (the default) keeps normal saves vanilla. "
@@ -427,7 +428,6 @@ namespace BugFablesAP
             DeathLinkGame.Disable();
             Multipliers.Disable();
             InGameSettings.Disable();
-            AchievementGuard.Disable();
             BoatTicket.Disable();
             QualityOfLife.Disable();
             WarpButton.Disable();
@@ -442,6 +442,7 @@ namespace BugFablesAP
             ShopSwap.Disable();
             ItemShops.Disable();
             DoorShuffle.Disable();
+            Hooks.UninstallAll();
             Log?.LogInfo($"{Name} {Version} unloaded.");
         }
     }

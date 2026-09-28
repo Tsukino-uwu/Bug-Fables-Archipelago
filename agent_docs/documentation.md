@@ -142,11 +142,14 @@ nothing" is proven:** the Debug setting `PatchDump` writes every patch the mod m
 priority) once per load. The list is taken before the first batch and after each one, and must not change. The
 HarmonyX members it reads (`GetAllPatchedMethods`, `GetPatchInfo`, `Patch.owner`/`priority`/`PatchMethod`) were read
 at both tags, 2.7.0 (compiled against) and 2.9.0 (the game's), and match. Baseline (2026-09-28, in game, main menu,
-HarmonyX 2.9.0.0): 167 patches.
+HarmonyX 2.9.0.0): 167 patches. `Core/Hooks.cs` installs each group (a class of attributed hooks) with its own
+Harmony instance: a group with a missing target installs nothing rather than half, logs what the player loses, and
+every group comes off with the plugin. `Hooks.Safe` keeps a failing transpiler from breaking its method. Moved so
+far: AchievementGuard (the list unchanged, 167).
 
 **Status:** done; separate guards per system built 2026-09-28, not yet seen in game; errors checked for instead of
 swallowed, built 2026-09-28 (both builds pass), not yet seen in game; hooks to attributes under way (the patch list
-taken, 167 patches).
+taken, 167 patches; AchievementGuard moved, list unchanged).
 
 *Code: `mod/BugFablesAP/Core/Plugin.cs` (`Plugin`, a BepInEx plugin: `Awake` sets everything up, `Tick` runs
 every frame); the project file is `BugFablesAP.csproj`.*
