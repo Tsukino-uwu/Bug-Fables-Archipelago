@@ -1252,10 +1252,20 @@ Newest last. What was tried, what happened, what the user said.
 - **Done:** the stale gate moved into the release workflow (8926345), so `main` is green after the next push. Licence
   rows for Tevi's apworld and Crystal: the licences were read first, but the rows came after the read. The findings
   are in `references.md`.
-- **Next:** the plan's phases, in order:
-  1. traces;
-  2. small fixes;
-  3. typed apworld data;
-  4. Harmony attributes;
-  5. dev tools out;
-  6. `SeedData`.
+- **Done later the same day (phases 0-2 of the plan):**
+  - Traces out of code and data (a3dd592).
+  - Commit subjects kept to 72 characters with no attribution, enforced by `commit-msg`; `Seen:` defined in
+    CLAUDE.md (f60c365).
+  - The four guides without attributions (b0fe6df, c2634e0, 68901e3, e838985): three agents edited, and a script
+    confirmed every number, code span and link unchanged. MEASURED.md defines **Seen** as the tester's on-screen
+    sighting, and code-map's links follow its renamed headings.
+  - Errors checked for instead of swallowed, the dev console's logger fix, clearer FrameSites names, and
+    `.editorconfig` (382f4e6). Both builds pass; tests pass, fuzzer 0 of 10000; nothing seen in game yet.
+- **Stopped at 98% of the weekly usage**, by the user's word, before the larger phases.
+- **Next, phase 3 (typed apworld data):** first `dev-scripts/seed-snapshot.py`.
+  - What it runs: Generate.py at 0.6.7 takes `--seed`, `--spoiler`, `--player_files_path` and `--outputpath`.
+    MultiServer decodes a seed with `restricted_loads(zlib.decompress(data[1:]))` (`MultiServer.decompress`).
+  - Take the baseline twice to prove the output repeats, then the dataclasses, one commit per table.
+  - The user allowed running Generate.py in the Archipelago checkout, and starting and closing the game for phase 4's
+    hook dumps.
+- **Also waiting:** a push. `main` goes green on GitHub only after one, and pushing needs the user's word.
