@@ -69,6 +69,7 @@ namespace BugFablesAP
                 : session == null ? "not connected"
                 : matches == null ? "no save in play"
                 : matches == false ? $"this save belongs to seed {mm.flagstring[SeedSlot]}, not {session.RoomState.Seed}"
+                : connection.ItemKinds == null ? "the seed's item table isn't loaded" // skipping would count the item as given
                 : Busy(mm);
             ReadOnlyCollection<ItemInfo> received = session?.Items.AllItemsReceived;
             int given = matches == true ? mm.flagvar[CountSlot] : -1;

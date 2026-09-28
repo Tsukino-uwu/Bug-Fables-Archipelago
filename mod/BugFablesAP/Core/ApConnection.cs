@@ -474,7 +474,6 @@ namespace BugFablesAP
 
                 if (result is LoginSuccessful ok)
                 {
-                    session = attempt;
                     failures = 0;
                     refused = false;
                     status = $"Connected as {slot}.";
@@ -549,6 +548,8 @@ namespace BugFablesAP
                     artifactsRequired = data != null && data.TryGetValue("artifacts_required", out object ar) && ar != null
                         ? Convert.ToInt32(ar) : 0;
                     seedKnown = true;
+                    // Published last, with a fence: the game thread never sees a live session with the seed's tables unread.
+                    Interlocked.Exchange(ref session, attempt);
                     scouts = null;
                     ResetDone(attempt);
                     Scout(attempt, (locationFlags?.Keys ?? Enumerable.Empty<long>()).Concat(locationVars?.Keys ?? Enumerable.Empty<long>())

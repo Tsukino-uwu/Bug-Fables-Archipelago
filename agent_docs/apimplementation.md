@@ -755,12 +755,18 @@ replay with everything else, so a fresh save rebuilds the count. A save that rec
 change counts only the berries it receives afterwards (test files only). Built, not yet seen in game.
 Which dialogue shows the total isn't known yet; the mod logs each time the game asks for it (`[berries]`).
 
+**Nothing given before the seed's tables are read** (an outside review, 2026-09-28). At login the connection was
+published before `slot_data` was parsed, on the connection thread. A game frame in that gap saw a live session with no
+item table, skipped the item as unknown and still counted it, so it was lost for good (rare: the first login of a
+launch with a save already loaded). Now the session is published last, and the receiver waits while the table is
+missing (`[recv] waiting: the seed's item table isn't loaded`). Built, not yet seen in game.
+
 **Seen working (2026-09-24).** The server already held the Explorer Permit and the G-Bug Ranger Plushie from
 the swap test. On loading, the save tied itself to the seed, and both arrived in key items as soon as the
 player was free (the user saw them). Talking to Artis again showed the plushie but gave no second one: each
 item comes once per seed, and the count in the save keeps it that way.
 
-**Status:** works, seen by the user (2026-09-24): items and medals, each once; crystal berries built, not yet seen in game; the full-bag rule not built yet (Next 6).
+**Status:** works, seen by the user (2026-09-24): items and medals, each once; crystal berries built, not yet seen in game; the full-bag rule not built yet (Next 6); nothing given before the seed's tables are read: built 2026-09-28, not yet seen.
 
 *Code: `mod/BugFablesAP/Items/ItemReceiver.cs`: `CountSlot` and `SeedSlot` (the two save slots),
 `SaveMatchesSeed`, `Tick` (one item per frame), `Busy` (is the player free), `Give` (where each item goes).
