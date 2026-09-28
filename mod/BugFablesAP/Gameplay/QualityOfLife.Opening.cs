@@ -28,6 +28,8 @@ namespace BugFablesAP
         internal static Func<string> SeedStartFrom;
         // The seed's items the story puts straight into the bag (slot_data location_added), or null outside a seed.
         internal static Func<Dictionary<long, int[]>> SeedAdded;
+        // The seed's quiet checks (slot_data quiet_locations), or null outside a seed.
+        internal static Func<HashSet<long>> SeedQuiet;
         private const int TutorialLeaf = (int)MainManager.Items.CrunchyLeaf;
 
         // A room start's door spots (appear, walk to), read from the door in the "from" map; null for a save-point start.
@@ -330,7 +332,12 @@ namespace BugFablesAP
             }
             mm.flags[GameFlags.PermitEvent] = true;
             mm.boardquests[1].Insert(0, 11);
-            HoldUps.FoundAt(OpeningLocation, "the opening's gift (location 1)");
+            // Stands in for the gift scene the skip removes, unless the seed marks the opening's checks quiet.
+            HashSet<long> quiet = SeedQuiet?.Invoke();
+            if (quiet == null || !quiet.Contains(OpeningLocation))
+            {
+                HoldUps.FoundAt(OpeningLocation, "the opening's gift (location 1)");
+            }
             log.LogInfo($"[qol] opening done without Event16 on {MainManager.map.mapid}: party {string.Join(", ", mm.playerdata.Select(p => p.trueid.ToString()).ToArray())}, "
                 + $"characters {mm.playerdata.Count(p => p.entity != null)}, exit {(exit != null ? "active " + exit.gameObject.activeSelf : inBuilding ? "NOT found" : "not here")}, "
                 + $"Maki {(maki != null && maki.name == "Maki" ? "removed" : inBuilding ? "NOT found" : "not here")}, flag 15 {mm.flags[GameFlags.PermitEvent]}");

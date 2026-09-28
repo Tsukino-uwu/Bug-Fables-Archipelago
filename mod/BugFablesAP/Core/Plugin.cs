@@ -175,6 +175,7 @@ namespace BugFablesAP
             QualityOfLife.SeedStart = () => randomizerEnabled.Value ? connection?.Start : null;
             QualityOfLife.SeedStartFrom = () => randomizerEnabled.Value ? connection?.StartFrom : null;
             QualityOfLife.SeedAdded = () => randomizerEnabled.Value ? connection?.LocationAdded : null;
+            QualityOfLife.SeedQuiet = () => randomizerEnabled.Value ? connection?.QuietLocations : null;
             QualityOfLife.SeedKnown = () => connection != null && connection.SeedKnown;
             QualityOfLife.EntrancesShuffled = () => randomizerEnabled.Value && connection?.DoorTargets != null && connection.DoorTargets.Count > 0;
             Multipliers.Enable(Log, Guid, Config, settingsOn);
