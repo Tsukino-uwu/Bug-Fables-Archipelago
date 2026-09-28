@@ -64,13 +64,14 @@ namespace BugFablesAP
             }
         }
 
-        internal static void Enable(ManualLogSource logger, string guid, Func<bool> settingsEnabled)
+        internal static void Enable(ManualLogSource logger, Func<bool> settingsEnabled)
         {
             log = logger;
             settingsOn = settingsEnabled;
             Camera.onPreCull += BeforeDraw;
             Camera.onPostRender += AfterDraw;
-            harmony = new Harmony(guid + ".fps." + DateTime.UtcNow.Ticks);
+            // For the method lists decided when installing; the fixed hooks are this class's attributed group.
+            harmony = Hooks.Create("fps");
         }
 
         // Installed the first time the row is on, so with it off nothing of the game is patched.
@@ -103,7 +104,6 @@ namespace BugFablesAP
                 SetInterpolation(false);
                 MainManager.ApplySettings();
             }
-            harmony?.UnpatchSelf();
             harmony = null;
         }
 
@@ -154,19 +154,10 @@ namespace BugFablesAP
         private static void Install()
         {
             var watch = Stopwatch.StartNew();
-            Patch(AccessTools.Method(typeof(MainManager), nameof(MainManager.ApplySettings)), postfix: nameof(AfterApplySettings));
-            Patch(AccessTools.Method(typeof(EntityControl), "Start"), postfix: nameof(AfterEntityStart));
-            Patch(AccessTools.Method(typeof(GroundDetector), "OnTriggerStay"), postfix: nameof(AfterGround));
-            Patch(AccessTools.Method(typeof(GroundDetector), "OnTriggerExit"), postfix: nameof(AfterGround));
-            Patch(AccessTools.Method(typeof(FontEffects), "Update"), prefix: nameof(BeforeFontEffects), postfix: nameof(AfterFontEffects));
-            Patch(AccessTools.Method(typeof(MainManager), nameof(MainManager.ShakeObject)), prefix: nameof(BeforeShakeObject));
-            Patch(AccessTools.Method(typeof(NPCControl), "Update"), prefix: nameof(BeforeNpcUpdate), postfix: nameof(AfterNpcUpdate));
-            Patch(AccessTools.Method(typeof(EntityControl), nameof(EntityControl.ShakeSprite), new[] { typeof(Vector3), typeof(float) }),
-                prefix: nameof(BeforeShakeSprite));
-            Patch(AccessTools.Method(typeof(MainManager), nameof(MainManager.TieFramerate)), prefix: nameof(BeforeTieFramerate));
-            Patch(AccessTools.Method(typeof(MainManager), nameof(MainManager.FrameDifference)), prefix: nameof(BeforeFrameDifference));
-            MethodInfo doCommand = AccessTools.EnumeratorMoveNext(AccessTools.Method(typeof(BattleControl), "DoCommand"));
-            Patch(doCommand, transpiler: nameof(TranspileTapBar));
+            if (!Hooks.Install(typeof(FrameRate), "fps", "Uncap FPS stays off"))
+            {
+                throw new InvalidOperationException("its fixed hooks didn't install");
+            }
 
             // The lists the console's "fpsscan" finds by reading every method of the game; each method's body is still checked.
             List<MethodBase> countsFrames = Listed(FrameCounters, m => Reads(m, (op, v) => v is MethodInfo mi && mi == FrameCountGetter));
@@ -301,6 +292,8 @@ namespace BugFablesAP
         }
 
         // The game's settings screen re-applies its own FPS and VSync; the row wins while it's on.
+        [HarmonyPatch(typeof(MainManager), nameof(MainManager.ApplySettings))]
+        [HarmonyPostfix]
         private static void AfterApplySettings()
         {
             if (active)
@@ -311,6 +304,8 @@ namespace BugFablesAP
 
         // ---- Motion drawn between physics steps. ----
 
+        [HarmonyPatch(typeof(EntityControl), "Start")]
+        [HarmonyPostfix]
         private static void AfterEntityStart(EntityControl __instance)
         {
             if (active)
@@ -325,6 +320,9 @@ namespace BugFablesAP
 
         // A platform carries whoever stands on it as its child; interpolation drew them from their own physics poses and
         // held them back, like walking in mud (seen at 240 fps). Not interpolated while on one.
+        [HarmonyPatch(typeof(GroundDetector), "OnTriggerStay")]
+        [HarmonyPatch(typeof(GroundDetector), "OnTriggerExit")]
+        [HarmonyPostfix]
         private static void AfterGround(GroundDetector __instance)
         {
             if (active && __instance.parent != null)
@@ -356,6 +354,8 @@ namespace BugFablesAP
         // user). Between 1/60 s ticks both hold still; a shaky letter's position also overrides wavy, so wavy holds too.
         private const int Shaky = 1, Wavy = 2, Glitchy = 4;
 
+        [HarmonyPatch(typeof(FontEffects), "Update")]
+        [HarmonyPrefix]
         private static void BeforeFontEffects(FontEffects __instance, out int __state)
         {
             __state = 0;
@@ -375,6 +375,8 @@ namespace BugFablesAP
             }
         }
 
+        [HarmonyPatch(typeof(FontEffects), "Update")]
+        [HarmonyPostfix]
         private static void AfterFontEffects(FontEffects __instance, int __state)
         {
             if ((__state & Shaky) != 0)
@@ -393,6 +395,8 @@ namespace BugFablesAP
 
         // MainManager.ShakeObject (the bushes before the leaf gang's ambush, and many scenes) moves its object to a new random
         // offset every frame. The game's loop, with the offset kept between 1/60 s ticks.
+        [HarmonyPatch(typeof(MainManager), nameof(MainManager.ShakeObject))]
+        [HarmonyPrefix]
         private static bool BeforeShakeObject(Transform obj, Vector3 shake, float frametime, bool returntostart, ref IEnumerator __result)
         {
             if (!active)
@@ -432,6 +436,8 @@ namespace BugFablesAP
         private static readonly AccessTools.FieldRef<NPCControl, Vector3> iceVelocity = AccessTools.FieldRefAccess<NPCControl, Vector3>("icevel");
         private static readonly Dictionary<int, float> lastPhysics = new Dictionary<int, float>();
 
+        [HarmonyPatch(typeof(NPCControl), "Update")]
+        [HarmonyPrefix]
         private static void BeforeNpcUpdate(NPCControl __instance, out Vector3 __state)
         {
             __state = Vector3.zero;
@@ -453,6 +459,8 @@ namespace BugFablesAP
             }
         }
 
+        [HarmonyPatch(typeof(NPCControl), "Update")]
+        [HarmonyPostfix]
         private static void AfterNpcUpdate(NPCControl __instance, Vector3 __state)
         {
             if (__state.sqrMagnitude < 0.01f || iceVelocity(__instance).sqrMagnitude >= 0.01f)
@@ -465,6 +473,8 @@ namespace BugFablesAP
         }
 
         // EntityControl.ShakeSprite (a character's shake, as on a hit that does no damage): the same, its sprite.
+        [HarmonyPatch(typeof(EntityControl), nameof(EntityControl.ShakeSprite), typeof(Vector3), typeof(float))]
+        [HarmonyPrefix]
         private static bool BeforeShakeSprite(EntityControl __instance, Vector3 intensity, float frametimer, ref IEnumerator __result)
         {
             if (!active)
@@ -673,19 +683,21 @@ namespace BugFablesAP
             return tickFrame ? logicalFrame : 1;
         }
 
-        private static IEnumerable<CodeInstruction> TranspileFrameCount(IEnumerable<CodeInstruction> instructions)
+        private static IEnumerable<CodeInstruction> TranspileFrameCount(IEnumerable<CodeInstruction> instructions) =>
+            Hooks.Safe(instructions, EditFrameCount, "fps");
+
+        private static IEnumerable<CodeInstruction> EditFrameCount(List<CodeInstruction> code)
         {
-            foreach (CodeInstruction i in instructions)
-            {
-                if (i.Calls(FrameCountGetter))
-                {
-                    i.operand = AccessTools.Method(typeof(FrameRate), nameof(FrameCount));
-                }
-                yield return i;
-            }
+            List<CodeInstruction> reads = code.Where(i => i.Calls(FrameCountGetter)).ToList();
+            MethodInfo counter = AccessTools.Method(typeof(FrameRate), nameof(FrameCount))
+                ?? throw new MissingMethodException(nameof(FrameRate), nameof(FrameCount));
+            reads.ForEach(i => i.operand = counter);
+            return code;
         }
 
         // "Once every 1/60 s", which the game works out from the frame rate it asked for.
+        [HarmonyPatch(typeof(MainManager), nameof(MainManager.FrameDifference))]
+        [HarmonyPrefix]
         private static bool BeforeFrameDifference(ref bool __result)
         {
             if (!active)
@@ -700,6 +712,8 @@ namespace BugFablesAP
         // ---- Frame time inside a physics step reads as it does at 60. ----
 
         // TieFramerate scales by the render frame time, even when called from a 50 Hz physics step.
+        [HarmonyPatch(typeof(MainManager), nameof(MainManager.TieFramerate))]
+        [HarmonyPrefix]
         private static bool BeforeTieFramerate(float value, ref float __result)
         {
             if (!active || !Time.inFixedTimeStep)
@@ -712,37 +726,43 @@ namespace BugFablesAP
 
         private static float Framestep() => active && Time.inFixedTimeStep ? 1f : MainManager.framestep;
 
-        private static IEnumerable<CodeInstruction> TranspileFramestep(IEnumerable<CodeInstruction> instructions)
+        private static IEnumerable<CodeInstruction> TranspileFramestep(IEnumerable<CodeInstruction> instructions) =>
+            Hooks.Safe(instructions, EditFramestep, "fps");
+
+        private static IEnumerable<CodeInstruction> EditFramestep(List<CodeInstruction> code)
         {
-            foreach (CodeInstruction i in instructions)
+            List<CodeInstruction> reads = code.Where(i => i.opcode == OpCodes.Ldsfld && i.operand is FieldInfo f && f == FramestepField).ToList();
+            MethodInfo framestep = AccessTools.Method(typeof(FrameRate), nameof(Framestep))
+                ?? throw new MissingMethodException(nameof(FrameRate), nameof(Framestep));
+            foreach (CodeInstruction i in reads)
             {
-                if (i.opcode == OpCodes.Ldsfld && i.operand is FieldInfo f && f == FramestepField)
-                {
-                    i.opcode = OpCodes.Call;
-                    i.operand = AccessTools.Method(typeof(FrameRate), nameof(Framestep));
-                }
-                yield return i;
+                i.opcode = OpCodes.Call;
+                i.operand = framestep;
             }
+            return code;
         }
 
         // The tapping-key command's fill per press uses the refresh rate when the game's own VSync is on; with the row on,
         // it reads the target frame rate, which Enforce sets to the rate that results.
         private static int GameVsync() => active ? 0 : MainManager.vsync;
 
-        private static IEnumerable<CodeInstruction> TranspileTapBar(IEnumerable<CodeInstruction> instructions)
+        [HarmonyPatch(typeof(BattleControl), "DoCommand", MethodType.Enumerator)]
+        [HarmonyTranspiler]
+        private static IEnumerable<CodeInstruction> TranspileTapBar(IEnumerable<CodeInstruction> instructions) =>
+            Hooks.Safe(instructions, EditTapBar, "fps");
+
+        private static IEnumerable<CodeInstruction> EditTapBar(List<CodeInstruction> code)
         {
-            int replaced = 0;
-            foreach (CodeInstruction i in instructions)
+            List<CodeInstruction> reads = code.Where(i => i.opcode == OpCodes.Ldsfld && i.operand is FieldInfo f && f == VsyncField).ToList();
+            MethodInfo vsync = AccessTools.Method(typeof(FrameRate), nameof(GameVsync))
+                ?? throw new MissingMethodException(nameof(FrameRate), nameof(GameVsync));
+            foreach (CodeInstruction i in reads)
             {
-                if (i.opcode == OpCodes.Ldsfld && i.operand is FieldInfo f && f == VsyncField)
-                {
-                    i.opcode = OpCodes.Call;
-                    i.operand = AccessTools.Method(typeof(FrameRate), nameof(GameVsync));
-                    replaced++;
-                }
-                yield return i;
+                i.opcode = OpCodes.Call;
+                i.operand = vsync;
             }
-            log.LogInfo($"[fps] tap bar: {replaced} VSync reads in BattleControl.DoCommand");
+            log.LogInfo($"[fps] tap bar: {reads.Count} VSync reads in BattleControl.DoCommand");
+            return code;
         }
 
     }

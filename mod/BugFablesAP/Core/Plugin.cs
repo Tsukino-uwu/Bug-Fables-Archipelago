@@ -188,7 +188,7 @@ namespace BugFablesAP
             Multipliers.Enable(Log, Config, settingsOn);
             EnemyScaling.Enable(Log, settingsOn, () => QualityOfLife.EnemyScalingMode?.Value);
             AttackBoost.Enable(Log, Config, settingsOn);
-            FrameRate.Enable(Log, Guid, settingsOn);
+            FrameRate.Enable(Log, settingsOn);
             ClockCleanup.Enable(Log, settingsOn);
             InGameSettings.Enable(Log, settingsOn);
             CustomItems.Enable(Log, () => randomizerEnabled.Value);
