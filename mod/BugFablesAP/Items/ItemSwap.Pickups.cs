@@ -92,7 +92,10 @@ namespace BugFablesAP
                 ShowAsSprite(caller.entity, sprite);
             }
             text = text.Replace(FirstMedalTutorial + "|break|", "").Replace(FirstMedalTutorial, "");
-            ShownInScene.Add(at);
+            if (!connection.IsDone(at))
+            {
+                ShownInScene.Add(at); // a done check's item only comes back as a replay, which keeps its box
+            }
             log.LogInfo($"[swap] location {at}: pickup (kind {kind}, id {caller.entity.animstate}, flag {caller.activationflag}) "
                 + $"on {MapName()} is a location; showing '{name}'" + (info == null ? " (not scouted yet)" : ""));
         }

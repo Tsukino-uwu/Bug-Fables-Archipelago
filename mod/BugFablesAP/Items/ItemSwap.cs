@@ -278,7 +278,10 @@ namespace BugFablesAP
             }
             ScoutedItemInfo info = Describe(location, out shownName, out shownSprite, out shownColor);
             shownForOther = ForOther(info, ref shownName);
-            ShownInScene.Add(location);
+            if (!connection.IsDone(location))
+            {
+                ShownInScene.Add(location); // a done check's item only comes back as a replay, which keeps its box
+            }
             log.LogInfo($"[swap] location {location}: giveitem {(badge ? "medal" : "item")} {id} on {MapName()} is a location; showing '{shownName}'"
                 + (info == null ? " (not scouted yet)" : ""));
         }
