@@ -94,8 +94,8 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
 
 - **Never suggest stopping, pausing or resuming later, not even as one option among several.** Silence
   means keep going until it works. If blocked, name the blocker and the next measurement.
-- **Commit freely, straight to `main`; never create a branch. Push only when told to, in that message.**
-  A past yes is not a standing one.
+- **Commit freely, straight to `main`; never create a branch. Push only when told to, in that message.** A past
+  yes is not a standing one. Subjects: imperative, 72 characters at most, no attribution; `Seen:` = seen by the user.
 - **Ask before touching anything outside this repo:** the game install (BepInEx and its setup) and the
   Archipelago checkout. One standing exception, below: copying the plugin in with `copy-dev.ps1`.
 - **Small runnable steps only**, each with a visible outcome.

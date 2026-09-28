@@ -56,8 +56,8 @@ are in [apimplementation.md, "Where it stands"](apimplementation.md#where-it-sta
 A step-by-step guide is only useful if no step is missing, so the project enforces it: any commit that
 changes the mod, the apworld or the dev scripts is refused unless it also updates this file or
 [apimplementation.md](apimplementation.md) (or says, explicitly, that nothing about the process changed).
-That check is a small git hook, `.githooks/commit-msg` (its neighbour `.githooks/pre-commit` refuses
-personal paths and names). Each step below ends with a short *Code:* line naming the files and methods to
+That check is a small git hook, `.githooks/commit-msg`, which also keeps each subject to 72 characters with no
+attribution (its neighbour `.githooks/pre-commit` refuses personal paths and names). Each step below ends with a short *Code:* line naming the files and methods to
 read, just after its **Status:** line. Each new step also gets a line in the index above.
 
 ---

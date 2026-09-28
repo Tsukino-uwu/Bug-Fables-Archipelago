@@ -1,9 +1,22 @@
 #!/bin/sh
+# Every commit: a subject of at most 72 characters, with no attribution (who decided goes in log.md).
 # A commit touching mod/, apworld/ or dev-scripts/ must update a process guide (agent_docs/documentation.md
 # or apimplementation.md), unless its message has this line on its own:
 #   docs: no process change
 
 msg_file="$1"
+
+subject=$(grep -v '^#' "$msg_file" | sed -n '1p')
+# Characters, not bytes: a name like Pokémon counts once.
+length=$(printf '%s' "$subject" | python -c "import sys; print(len(sys.stdin.buffer.read().decode('utf-8')))")
+if [ "$length" -gt 72 ]; then
+    echo "commit-msg: the subject is $length characters; keep it to 72 (details go in the body)." >&2
+    exit 1
+fi
+if printf '%s' "$subject" | grep -qi '(the user'; then
+    echo "commit-msg: the subject names who decided; that goes in agent_docs/log.md, not the commit." >&2
+    exit 1
+fi
 staged=$(git diff --cached --name-only)
 
 touches_work=$(printf '%s\n' "$staged" | grep -E '^(mod|apworld|dev-scripts)/' | head -1)
