@@ -228,14 +228,16 @@ namespace BugFablesAP
             return null;
         }
 
-        internal static string Busy(MainManager mm)
+        // Giving waits for these; a hold-up also waits for the screen (onScreen): a visible fade.
+        internal static string Busy(MainManager mm, bool onScreen = false)
         {
             if (MainManager.player == null) return "busy: no player";
             if (mm.inbattle || MainManager.battle != null) return "busy: battle";
             if (mm.inevent) return "busy: event";
             if (mm.message || mm.waitinput || mm.prompt || mm.inlist) return "busy: dialogue";
             if (mm.pause || mm.minipause || MainManager.pausemenu != null) return "busy: paused";
-            if (MainManager.roomtransition || (mm.intransition && !FadeAllButDone(mm))) return "busy: changing maps";
+            if (MainManager.roomtransition) return "busy: changing maps";
+            if (onScreen && mm.intransition && !FadeAllButDone(mm)) return "busy: fading";
             return null;
         }
 

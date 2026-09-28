@@ -90,7 +90,7 @@ namespace BugFablesAP
                 return;
             }
             MainManager mm = MainManager.instance;
-            bool busy = mm == null || ItemReceiver.Busy(mm) != null;
+            bool busy = mm == null || ItemReceiver.Busy(mm, onScreen: true) != null;
             if (waiting.Count == 0 || busy || randomizerOn == null || !randomizerOn())
             {
                 freeFrames = 0;

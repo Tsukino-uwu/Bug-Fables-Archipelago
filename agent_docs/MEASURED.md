@@ -1493,4 +1493,5 @@ For the first version, measure and record:
   The game's own `FreePlayer` ignores `intransition`, so the player walks around meanwhile.
 - Seen: after the opening skip's fade-in (speed 0.02), received items waited about 2800 frames on "busy: changing
   maps" (the user: "5-10+ sec"). The dimmer is `transitionobj[0]`, a lone object named `Dimmer` with a
-  `SpriteRenderer` (`:8880-8900`). Used by `ItemReceiver.cs` (`FadeAllButDone`).
+  `SpriteRenderer` (`:8880-8900`). Used by `ItemReceiver.cs` (`FadeAllButDone`). After the tail was ignored, the same wait was about 870 frames:
+  the fade from opaque to 2% at speed 0.02 takes about 194 sixtieths (0.98^n), about 3 s.

@@ -764,8 +764,10 @@ missing (`[recv] waiting: the seed's item table isn't loaded`). Built, not yet s
 
 **Not held up by a fade that's already gone** (the user, 2026-09-28: items came "5-10+ sec" after getting control).
 The receiver waited while the game reported a transition, and a dimmer fade-out reports one for its full 10 s
-failsafe, long after it looks clear (`MEASURED.md`, a dimmer fade-out never finishes early). Now it waits during a
-map load and while a fade is still visible (a dimmer above 2%), not for the invisible tail. Built, not yet seen.
+failsafe, long after it looks clear (`MEASURED.md`, a dimmer fade-out never finishes early). Ignoring the invisible
+tail left about 870 frames (the opening's fade-in, speed 0.02, takes about 3 s to reach 2%), so giving and showing
+were split: an item goes into the bag during a fade (only a map load holds it), and only its hold-up waits for the
+screen (a dimmer above 2%, or another transition until it ends). Built, not yet seen.
 
 **Seen working (2026-09-24).** The server already held the Explorer Permit and the G-Bug Ranger Plushie from
 the swap test. On loading, the save tied itself to the seed, and both arrived in key items as soon as the
