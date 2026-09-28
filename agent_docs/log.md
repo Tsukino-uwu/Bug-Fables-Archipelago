@@ -1282,11 +1282,11 @@ Newest last. What was tried, what happened, what the user said.
 - **Phase 4 under way:**
   - `PatchDump` baseline in game: 167 patches, HarmonyX 2.9.0.0 (6c5bb82). A copy is in `stage/patches-baseline.tsv`
     (gitignored). To rebuild it, use the commit before 2b7b935.
-  - `Core/Hooks.cs` with AchievementGuard (2b7b935), then batches 1 to 5b (through 2080ce3). 23 of 33 features are
+  - `Core/Hooks.cs` with AchievementGuard (2b7b935), then batches 1 to 8 (through 90b2ebf). 29 of 33 features are
     moved, and each dump is identical to the baseline.
   - The dump also logs the run order where one target has several of ours. Its reference is
     `stage/patches-order.txt` (19 targets), identical after each batch.
   - The game is started through `steam://rungameid/1082710`, the dump is read, and the game is closed each time. With
     PatchDump, DevConsole and TextProbe on in the dev config, no cheats.
-  - **Left:** KeptOpen/ShopSwap/WarpButton, QualityOfLife, SaveRedirect/WebSocketCompression,
-    FrameRate/Abilities, and DevConsole/TextProbe.
+  - **Left:** FrameRate/Abilities, and DevConsole/TextProbe. Compression over a live connection is not yet re-checked
+    since its hooks moved (the dump shows them in place).
