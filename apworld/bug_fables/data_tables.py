@@ -92,7 +92,7 @@ CRYSTAL_TYPE = 3
 
 def vanilla_item(location: dict[str, Any]) -> str | None:
     """The name of the item the game hands out at a location, or None."""
-    source = location["source"].get("give") or location["source"].get("pickup")
+    source = location["source"].get("give") or location["source"].get("pickup") or location["source"].get("added")
     if source is None and "item_shop" in location["source"]:
         source = {"type": ITEM_KIND, "item": location["source"]["item_shop"]["item"]}
     if source is None:

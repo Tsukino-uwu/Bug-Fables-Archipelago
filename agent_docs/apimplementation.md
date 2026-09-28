@@ -37,6 +37,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 23. [Build step 23: every learned field ability an item](#build-step-23-every-learned-field-ability-an-item)
 24. [Build step 24: how we plan and build the logic](#build-step-24-how-we-plan-and-build-the-logic)
 25. [Build step 25: DeathLink, a panel row](#build-step-25-deathlink-a-panel-row)
+26. [Build step 26: the tutorial leaf, an item the story puts in the bag](#build-step-26-the-tutorial-leaf-an-item-the-story-puts-in-the-bag)
 
 **How it works**
 
@@ -1938,9 +1939,9 @@ Explorer Permit, so a late permit makes him late; with All Three nothing waits o
    shop count) now pin *Off*, whose logic they check. A default seed with APQuest generated: all three in Starting Items.
 
 **First play (the user, 2026-09-27):** all three were there, but no member showed a box and Leif appeared a moment
-after the start. No box: the members are start inventory, which the server has at login, and the receiver shows no
-box for what it had at login (the rule that keeps a loaded save from replaying boxes); kept, since a starting item
-isn't found anywhere. Leif late: items are given only while the player is free, after the opening skip and a map
+after the start. No box: the members are start inventory, which the server has at login, and the receiver showed no
+box for what it had at login. Since 2026-09-28 replays are held up too (the mod guide, step on Item animation), so the
+starting members get their boxes on a new file. Leif late: items are given only while the player is free, after the opening skip and a map
 change. Now, with All Three, the opening's own party change adds whoever the story hasn't reached yet, so Leif is
 there from the first frame; his item then finds him already in.
 
@@ -2157,6 +2158,34 @@ isn't a Game Over, and neither sends nor receives.
 *Code: `DeathLinkGame.cs`; the service in `ApConnection.cs` (`SetDeathLinkTag`, `SendDeath`, `TakeDeath`); the row on
 the panel's first page in `ApMenu.cs` and `ApMenu.Rows.cs`.*
 
+---
+
+## Build step 26: the tutorial leaf, an item the story puts in the bag
+
+**Why:** on a new file a Crunchy Leaf was already in the bag before any check (the user, 2026-09-28). Items are
+remote only, so it becomes a check (the user's choice, over keeping it or taking it back).
+
+**Where it came from:** the opening (`Event16`) adds it straight to the bag for its tutorial battle
+(`items[0].Add(0)`, not a `giveitem`, and never taken back; items are locked in that battle, so it isn't used). With
+the Archipelago mod on, the opening is skipped and the mod's skip redoes its effects, the leaf included
+(`QualityOfLife.Opening.cs`). So the mod added it, and no game code needed patching.
+
+**A new kind of location:** `source.added`, an item the story puts straight into the bag (type and item, as a
+`giveitem` has). The apworld reads it as the location's vanilla item (so the leaf joins the pool) and lists it in
+`slot_data` as `location_added`; it is done by the opening's flag 15, with the other two opening checks, and it's
+silent (no scene of its own shows an item). The location: *Outskirts: Outside the City, Tutorial Battle*, reachable
+from the start. The mod's opening skip leaves the leaf out when the seed has it as a location
+(`[qol] opening: the tutorial leaf is a location; left out of the bag`).
+
+**Tests:** `test_tutorial_leaf_is_a_location` (the slot_data entry, its flag, silent, the leaf in the pool). Two tests
+moved with it: the permit gate's reachable set gains the location, and a solo *Filler Only* seed with discoveries on
+now has exactly enough filler (the leaf adds one), so its shops stay filler-only. 400 tests pass; 0 of 10000 fuzzed seeds fail.
+
+**Status:** built (2026-09-28), not yet seen in game.
+
+*Code: `data/locations.json` (id 75), `data_tables.vanilla_item`, `slot_data.py` (`location_added`, the silent rule);
+`ApConnection.cs` (`LocationAdded`), `QualityOfLife.Opening.cs` (`RunOpening`, `SeedAdded`), wired in `Plugin.cs`.*
+
 # How it works
 
 ## 1. The big picture
@@ -2248,6 +2277,7 @@ only way a setting chosen at generation (an option, a version number) reaches th
   `location_discoveries` (a journal discovery), `location_shops` and `location_item_shops` (a shop's copy or first
   purchase), `location_vars` (a number reaching a value, a boss prize);
 - `location_gives`, the `giveitem` that hands out a gift location's vanilla item;
+- `location_added`, an item the story puts straight into the bag at a location (build step 26);
 - `location_pickups`, the map and flag of each location that is an item lying in the world;
 - `silent_locations`, checks that show no item of their own (a member joining), where the player's own item is shown;
 - the open world (build step 9): `kept_open`, `kept_present`, `scenery_hidden`, `scenery_present`, `held_until`,

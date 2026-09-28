@@ -47,7 +47,9 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "location_vars": _by_location(world, "var", lambda source: {"var": source["var"], "at_least": source["at_least"]}),
         # Checks that show no item of their own (only a story flag): the client shows the player's own item there.
         "silent_locations": sorted(LOCATION_NAME_TO_ID[loc["name"]] for loc in world.included_locations
-                                   if set(loc["source"]) <= {"event", "flag"}),
+                                   if set(loc["source"]) <= {"event", "flag", "added"}),
+        # Items the story puts straight into the bag at a location: the client leaves them out.
+        "location_added": _by_location(world, "added"),
         "location_gives": _by_location(world, "give"),
         "location_pickups": _by_location(world, "pickup", _pickup),
         # Story blockers the client keeps away, so an area the logic counts as reachable never closes.

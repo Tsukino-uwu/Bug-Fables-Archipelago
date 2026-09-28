@@ -205,3 +205,13 @@ class TestMadeleinesHouse(BugFablesTestBase):
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "doormadeleine"}, data["kept_present"])
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "lockeddoor"}, data["kept_open"])
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "Base/lock (1)"}, data["scenery_hidden"])
+
+    def test_tutorial_leaf_is_a_location(self) -> None:
+        # The opening's Crunchy Leaf would otherwise reach the bag from the game, not the server.
+        data = self.world.fill_slot_data()
+        leaf = str(self.world.location_name_to_id["Outskirts: Outside the City, Tutorial Battle"])
+        self.assertEqual(data["location_added"], {leaf: {"type": 0, "item": 0}})
+        self.assertEqual(data["location_flags"][leaf], 15)
+        self.assertIn(int(leaf), data["silent_locations"])
+        pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        self.assertIn("Crunchy Leaf", pool)

@@ -159,6 +159,9 @@ namespace BugFablesAP
         private volatile Dictionary<long, int> locationFlags;
 
         internal Dictionary<long, Give> LocationGives => locationGives;
+        // Items the story puts straight into the bag at a location: {type, item}; left out while in a seed.
+        internal Dictionary<long, int[]> LocationAdded => locationAdded;
+        private volatile Dictionary<long, int[]> locationAdded;
         private volatile Dictionary<long, Give> locationGives;
 
         internal Dictionary<long, int> ItemKinds => itemKinds;
@@ -510,6 +513,7 @@ namespace BugFablesAP
                     });
                     locationVars = SlotData.ByLocation(data, "location_vars", v => new[] { v.Value<int>("var"), v.Value<int>("at_least") });
                     locationBerries = SlotData.ByLocation(data, "location_berries", v => v.Value<int>());
+                    locationAdded = SlotData.ByLocation(data, "location_added", v => new[] { v.Value<int>("type"), v.Value<int>("item") });
                     locationDiscoveries = SlotData.ByLocation(data, "location_discoveries", v => v.Value<int>());
                     List<long> silent = SlotData.List(data, "silent_locations", e => e.Value<long>());
                     silentLocations = silent != null ? new HashSet<long>(silent) : null;

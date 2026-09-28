@@ -73,15 +73,14 @@ class TestShopContentsDefault(BugFablesTestBase):
 
 
 class TestShopContentsFillerOnly(BugFablesTestBase):
-    # With discoveries on, a solo seed had exactly enough filler for every shop location; the Boat Ticket now takes one
-    # filler slot, so it falls one short and falls back too. With other games' filler in the room, Filler Only holds.
+    # With discoveries on, a solo seed has exactly enough filler for every shop location: the Boat Ticket takes one
+    # filler slot and the tutorial leaf adds one back. Filler Only holds (the shops are excluded).
     options = {"shop_contents": "filler_only", "shuffle_discoveries": True, "starting_party_member": "off"}
 
-    def test_one_short_after_the_boat_ticket(self) -> None:
+    def test_just_enough_filler_with_discoveries(self) -> None:
         from BaseClasses import LocationProgressType
         shop = self.world.get_location("Bugaria City: Commercial District, Medal Shop 1")
-        self.assertEqual(shop.progress_type, LocationProgressType.DEFAULT)
-        self.assertFalse(shop.item_rule(self.world.create_item("Explorer Permit")))
+        self.assertEqual(shop.progress_type, LocationProgressType.EXCLUDED)
 
 
 class TestShopContentsFillerOnlyFallsBack(BugFablesTestBase):

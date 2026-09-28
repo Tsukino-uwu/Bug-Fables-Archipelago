@@ -23,7 +23,8 @@ class TestPermitGate(BugFablesTestBase):
         # Exactly what play reached before the permit; a wrong spot here let a seed lock the permit behind itself.
         reachable = {loc.name for loc in self.multiworld.get_reachable_locations(self.multiworld.state, self.player)
                      if loc.address is not None}
-        self.assertEqual(reachable, {"Outskirts: Maki and Eetl's Gift", "Outskirts: Artis's Gift",
+        self.assertEqual(reachable, {"Outskirts: Maki and Eetl's Gift", "Outskirts: Outside the City, Tutorial Battle",
+                                     "Outskirts: Artis's Gift",
                                      "Outskirts: Ladybug Siblings' House", "Outskirts: East Road, Stone",
                                      "Outskirts: Pier", "Bugaria City: Residential District, Rooftop",
                                      "Outskirts: Madeleine's House, Table Right", "Outskirts: Madeleine's House, Table Left"}

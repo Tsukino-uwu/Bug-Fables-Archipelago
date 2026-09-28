@@ -26,6 +26,9 @@ namespace BugFablesAP
         internal static Func<KeyValuePair<string, int>?> SeedStart;
         // A room start: the map whose door leads into the start map.
         internal static Func<string> SeedStartFrom;
+        // The seed's items the story puts straight into the bag (slot_data location_added), or null outside a seed.
+        internal static Func<Dictionary<long, int[]>> SeedAdded;
+        private const int TutorialLeaf = (int)MainManager.Items.CrunchyLeaf;
 
         // A room start's door spots (appear, walk to), read from the door in the "from" map; null for a save-point start.
         internal static Vector3[] SeedStartDoor(MainManager.Maps map)
@@ -278,7 +281,16 @@ namespace BugFablesAP
             MainManager mm = MainManager.instance;
             // Where the player already is: placing the party anywhere else snapped back a player walking during the fade-in.
             SetOpeningParty(MainManager.player.transform.position);
-            mm.items[0].Add(0);
+            // Event16's tutorial leaf, unless the seed has it as a location (then it comes from the server).
+            Dictionary<long, int[]> added = SeedAdded?.Invoke();
+            if (added == null || !added.Values.Any(a => a[0] == 0 && a[1] == TutorialLeaf))
+            {
+                mm.items[0].Add(TutorialLeaf);
+            }
+            else
+            {
+                log.LogInfo("[qol] opening: the tutorial leaf is a location; left out of the bag");
+            }
             foreach (string name in new[] { "Beee", "blockingbox" })
             {
                 GameObject thing = GameObject.Find(name);
