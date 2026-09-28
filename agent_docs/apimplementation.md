@@ -1306,7 +1306,8 @@ roadblock is a rule. **Look across rooms, too** (the user, 2026-09-28): a flag o
 from elsewhere, from a quest or a character who has to walk with the party from another room (the throne room needs
 Maki, from two rooms away). Each such need names the room or quest it comes from, so the rule follows it there, or,
 when it isn't a quest (a scene that happens to want a follower), the mod may remove the need for good so the room works
-on its own (the user). Decided case by case, like the rest of the logic, and fixed in the mod and the logic alike, never
+on its own (the user). Such a removal is always on in a seed, never part of the *Skip cutscenes* setting (the user,
+2026-09-28): the logic counts on it. Decided case by case, like the rest of the logic, and fixed in the mod and the logic alike, never
 at runtime. No room is done until its flags are listed.
 **The proof of concept, seen (the user, 2026-09-25):** one door, then a coupled swap of two connections both ways
 (the mod guide, step 13). **Every door, built (2026-09-25):** the yaml option *Entrance Randomizer (experimental)*,
