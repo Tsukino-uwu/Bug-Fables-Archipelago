@@ -14,7 +14,6 @@ namespace BugFablesAP
         private static ManualLogSource log;
         private static ApConnection connection;
         private static Func<bool> randomizerOn;
-        private static Harmony harmony;
 
         // pending: the slot whose buy talk is open; watching: a purchase to confirm by the berries paid.
         private static long pending = -1;
@@ -22,31 +21,15 @@ namespace BugFablesAP
         private static int moneyBefore;
         private static int price;
 
-        internal static void Enable(ManualLogSource logger, string guid, ApConnection conn, Func<bool> on)
+        internal static void Enable(ManualLogSource logger, ApConnection conn, Func<bool> on)
         {
             log = logger;
             connection = conn;
             randomizerOn = on;
-            MethodInfo desc = AccessTools.Method(typeof(NPCControl), nameof(NPCControl.CreateDescWindow), new[] { typeof(bool) });
-            MethodInfo interact = AccessTools.Method(typeof(NPCControl), nameof(NPCControl.Interact), new[] { typeof(string) });
-            MethodInfo line = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetDialogueText), new[] { typeof(int) });
-            if (desc == null || interact == null || line == null)
+            if (Hooks.Install(typeof(ItemShops), "itemshop", "item shops sell their own items"))
             {
-                log.LogError($"[itemshop] NOT installed (CreateDescWindow {desc != null}, Interact {interact != null}, GetDialogueText {line != null}): item shops sell their own items.");
-                return;
+                log.LogInfo("[itemshop] installed on NPCControl.CreateDescWindow, Interact and MainManager.GetDialogueText");
             }
-            harmony = new Harmony(guid + ".itemshop." + DateTime.UtcNow.Ticks);
-            var after = new HarmonyMethod(typeof(ItemShops), nameof(AfterShow));
-            harmony.Patch(desc, prefix: new HarmonyMethod(typeof(ItemShops), nameof(BeforeShow)), postfix: after);
-            harmony.Patch(interact, prefix: new HarmonyMethod(typeof(ItemShops), nameof(BeforeInteract)), postfix: after);
-            harmony.Patch(line, postfix: new HarmonyMethod(typeof(ItemShops), nameof(AfterLine)));
-            log.LogInfo("[itemshop] installed on NPCControl.CreateDescWindow, Interact and MainManager.GetDialogueText");
-        }
-
-        internal static void Disable()
-        {
-            harmony?.UnpatchSelf();
-            harmony = null;
         }
 
         // This slot's location while its check isn't done, else -1.
@@ -76,6 +59,8 @@ namespace BugFablesAP
             internal string Description;
         }
 
+        [HarmonyPatch(typeof(NPCControl), nameof(NPCControl.CreateDescWindow), typeof(bool))]
+        [HarmonyPrefix]
         private static void BeforeShow(NPCControl __instance, out Saved __state)
         {
             __state = null;
@@ -95,6 +80,8 @@ namespace BugFablesAP
             MainManager.itemdata[0, item, 2] = description ?? __state.Description;
         }
 
+        [HarmonyPatch(typeof(NPCControl), nameof(NPCControl.Interact), typeof(string))]
+        [HarmonyPrefix]
         private static void BeforeInteract(NPCControl __instance, out Saved __state)
         {
             BeforeShow(__instance, out __state);
@@ -104,6 +91,9 @@ namespace BugFablesAP
             }
         }
 
+        [HarmonyPatch(typeof(NPCControl), nameof(NPCControl.CreateDescWindow), typeof(bool))]
+        [HarmonyPatch(typeof(NPCControl), nameof(NPCControl.Interact), typeof(string))]
+        [HarmonyPostfix]
         private static void AfterShow(Saved __state)
         {
             if (__state == null)
@@ -114,6 +104,8 @@ namespace BugFablesAP
             MainManager.itemdata[0, __state.Item, 2] = __state.Description;
         }
 
+        [HarmonyPatch(typeof(MainManager), nameof(MainManager.GetDialogueText), typeof(int))]
+        [HarmonyPostfix]
         private static void AfterLine(ref string __result)
         {
             const string add = "|additem,0,var,0|";

@@ -15,10 +15,9 @@ namespace BugFablesAP
         internal static ConfigEntry<int> Berries;
 
         private static Func<bool> settingsOn;
-        private static Harmony harmony;
         private static ManualLogSource log;
 
-        internal static void Enable(ManualLogSource logger, string guid, ConfigFile config, Func<bool> on)
+        internal static void Enable(ManualLogSource logger, ConfigFile config, Func<bool> on)
         {
             log = logger;
             settingsOn = on;
@@ -28,26 +27,10 @@ namespace BugFablesAP
             Berries = config.Bind("Gameplay", "BerryMultiplier", 1, new ConfigDescription(
                 "Berries picked up in the world (lying there or dropped after a fight) times this, 1 to 10; never berries "
                 + "that come from a check. Switch it on the Gameplay page.", new AcceptableValueRange<int>(Min, Max)));
-            var exp = AccessTools.Method(typeof(BattleControl), "GetEXP", new[] { typeof(int), typeof(bool), typeof(MainManager.Enemies) });
-            // The iterator's own MoveNext: the tiny BerryBounce() stub is inlined into its caller, so a patch there never runs.
-            var bounce = AccessTools.Method(typeof(NPCControl), "BerryBounce");
-            var berry = bounce == null ? null : AccessTools.EnumeratorMoveNext(bounce);
-            if (exp == null || berry == null)
+            if (Hooks.Install(typeof(Multipliers), "mult", "the multipliers do nothing"))
             {
-                log.LogError($"[mult] NOT installed (BattleControl.GetEXP {exp != null}, NPCControl.BerryBounce's MoveNext {berry != null}); "
-                    + "the multipliers do nothing.");
-                return;
+                log.LogInfo("[mult] installed on BattleControl.GetEXP and NPCControl.BerryBounce's MoveNext");
             }
-            harmony = new Harmony(guid + ".mult." + DateTime.UtcNow.Ticks);
-            harmony.Patch(exp, postfix: new HarmonyMethod(typeof(Multipliers), nameof(AfterGetExp)));
-            harmony.Patch(berry, prefix: new HarmonyMethod(typeof(Multipliers), nameof(BeforeBerryStep)));
-            log.LogInfo("[mult] installed on BattleControl.GetEXP and NPCControl.BerryBounce's MoveNext");
-        }
-
-        internal static void Disable()
-        {
-            harmony?.UnpatchSelf();
-            harmony = null;
         }
 
         internal static void StepBy(ConfigEntry<int> entry, int by, int min = Min, int max = Max)
@@ -59,6 +42,8 @@ namespace BugFablesAP
         private static bool On(ConfigEntry<int> entry) => entry != null && entry.Value > 1 && settingsOn != null && settingsOn();
 
         // A hard rematch (flag 166), which the game holds to 5 EXP.
+        [HarmonyPatch(typeof(BattleControl), "GetEXP", typeof(int), typeof(bool), typeof(MainManager.Enemies))]
+        [HarmonyPostfix]
         private static void AfterGetExp(ref int __result)
         {
             if (__result <= 0 || !On(Exp) || MainManager.instance.flags[GameFlags.HardRematch])
@@ -71,6 +56,9 @@ namespace BugFablesAP
         }
 
         // BerryBounce starts right after a berry pickup has added its 1, 5 or 20, and only then; its first step runs at once.
+        // The iterator's own MoveNext: the tiny BerryBounce() stub is inlined into its caller, so a patch there never runs.
+        [HarmonyPatch(typeof(NPCControl), "BerryBounce", MethodType.Enumerator)]
+        [HarmonyPrefix]
         private static void BeforeBerryStep(object __instance)
         {
             if (!On(Berries))

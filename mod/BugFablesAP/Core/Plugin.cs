@@ -153,7 +153,7 @@ namespace BugFablesAP
             SaveRedirect.Enable(Log, Guid);
             ItemSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             KeptOpen.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
-            EnemyShuffle.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
+            EnemyShuffle.Enable(Log, connection, () => randomizerEnabled.Value);
             AnimGuard.Enable(Log, Guid, () => randomizerEnabled.Value);
             GlowGuard.Enable(Log, Guid, () => randomizerEnabled.Value);
             difficulty = Config.Bind("Archipelago", "Difficulty", "Normal", new ConfigDescription(
@@ -185,12 +185,12 @@ namespace BugFablesAP
             QualityOfLife.SeedQuiet = () => randomizerEnabled.Value ? connection?.QuietLocations : null;
             QualityOfLife.SeedKnown = () => connection != null && connection.SeedKnown;
             QualityOfLife.EntrancesShuffled = () => randomizerEnabled.Value && connection?.DoorTargets != null && connection.DoorTargets.Count > 0;
-            Multipliers.Enable(Log, Guid, Config, settingsOn);
+            Multipliers.Enable(Log, Config, settingsOn);
             EnemyScaling.Enable(Log, Guid, settingsOn, () => QualityOfLife.EnemyScalingMode?.Value);
             AttackBoost.Enable(Log, Guid, Config, settingsOn);
             FrameRate.Enable(Log, Guid, settingsOn);
             ClockCleanup.Enable(Log, Guid, settingsOn);
-            InGameSettings.Enable(Log, Guid, settingsOn);
+            InGameSettings.Enable(Log, settingsOn);
             CustomItems.Enable(Log, () => randomizerEnabled.Value);
             BoatTicket.Enable(Log, () => randomizerEnabled.Value);
             HoldUps.Init(Log, () => randomizerEnabled.Value);
@@ -205,11 +205,11 @@ namespace BugFablesAP
             CrystalBerryTotal.Enable(Log, connection, () => randomizerEnabled.Value);
             QuestBoards.Enable(Log, () => randomizerEnabled.Value);
             ShopSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
-            ItemShops.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
+            ItemShops.Enable(Log, connection, () => randomizerEnabled.Value);
             DoorShuffle.Enable(Log, connection, () => randomizerEnabled.Value);
             WarpButton.Enable(Log, Guid, () => settingsOn() && QualityOfLife.WarpOn, () => settingsOn() && QualityOfLife.MapOn,
                 () => QualityOfLife.SkipWarpConfirm, () => QualityOfLife.SkipMapConfirm);
-            MenuToggle.Enable(Log, Guid, randomizerEnabled, server, port, slot, password,
+            MenuToggle.Enable(Log, randomizerEnabled, server, port, slot, password,
                 () => connection.Status,
                 () => connection.SeedKnown);
             Log.LogInfo($"{Name} {Version} loaded. GrantProbe={grantProbeEnabled.Value} TextProbe={textProbeEnabled.Value}");
@@ -417,7 +417,6 @@ namespace BugFablesAP
             ItemSwap.Disable();
             MedalAssist.Disable();
             KeptOpen.Disable();
-            EnemyShuffle.Disable();
             AnimGuard.Disable();
             GlowGuard.Disable();
             FrameRate.Disable();
@@ -426,8 +425,6 @@ namespace BugFablesAP
             AttackBoost.Disable();
             SaveCrystals.Disable();
             DeathLinkGame.Disable();
-            Multipliers.Disable();
-            InGameSettings.Disable();
             QualityOfLife.Disable();
             WarpButton.Disable();
             HoldUps.Clear();
@@ -437,7 +434,6 @@ namespace BugFablesAP
             Abilities.Disable();
             CheckDetector.Disable();
             ShopSwap.Disable();
-            ItemShops.Disable();
             Hooks.UninstallAll();
             Log?.LogInfo($"{Name} {Version} unloaded.");
         }

@@ -145,12 +145,13 @@ at both tags, 2.7.0 (compiled against) and 2.9.0 (the game's), and match. Baseli
 HarmonyX 2.9.0.0): 167 patches. `Core/Hooks.cs` installs each group (a class of attributed hooks) with its own
 Harmony instance: a group with a missing target installs nothing rather than half, logs what the player loses, and
 every group comes off with the plugin. `Hooks.Safe` keeps a failing transpiler from breaking its method. Moved so
-far: AchievementGuard, BoatTicket, CrystalBerryTotal, QuestBoards, DoorShuffle, SaveCrystals (the list
-unchanged, 167).
+far: AchievementGuard, BoatTicket, CrystalBerryTotal, QuestBoards, DoorShuffle, SaveCrystals, ItemShops,
+InGameSettings, MenuToggle, Multipliers, EnemyShuffle (the list unchanged, 167). A feature whose hooks stand or fall
+together is its own group, its hook methods annotated in place; an optional hook gets a nested group of its own.
 
 **Status:** done; separate guards per system built 2026-09-28, not yet seen in game; errors checked for instead of
 swallowed, built 2026-09-28 (both builds pass), not yet seen in game; hooks to attributes under way (the patch list
-taken, 167 patches; 6 of 33 features moved, list unchanged).
+taken, 167 patches; 11 of 33 features moved, list unchanged).
 
 *Code: `mod/BugFablesAP/Core/Plugin.cs` (`Plugin`, a BepInEx plugin: `Awake` sets everything up, `Tick` runs
 every frame); the project file is `BugFablesAP.csproj`.*

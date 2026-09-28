@@ -18,9 +18,8 @@ namespace BugFablesAP
         private static ConfigEntry<string> server, port, slot, password;
         private static Func<string> status;
         private static Func<bool> seedKnown;
-        private static Harmony harmony;
 
-        internal static void Enable(ManualLogSource logger, string guid, ConfigEntry<bool> randomizerEnabled,
+        internal static void Enable(ManualLogSource logger, ConfigEntry<bool> randomizerEnabled,
             ConfigEntry<string> serverEntry, ConfigEntry<string> portEntry, ConfigEntry<string> slotEntry, ConfigEntry<string> passwordEntry,
             Func<string> statusText, Func<bool> seedIsKnown)
         {
@@ -32,21 +31,13 @@ namespace BugFablesAP
             password = passwordEntry;
             status = statusText;
             seedKnown = seedIsKnown;
-            harmony = new Harmony(guid + ".menu." + DateTime.UtcNow.Ticks);
-            harmony.Patch(AccessTools.Method(typeof(StartMenu), "SetMenuText"),
-                prefix: new HarmonyMethod(typeof(MenuToggle), nameof(BeforeSetMenuText)),
-                postfix: new HarmonyMethod(typeof(MenuToggle), nameof(AfterSetMenuText)));
-            harmony.Patch(AccessTools.Method(typeof(StartMenu), "Update"),
-                prefix: new HarmonyMethod(typeof(MenuToggle), nameof(BeforeUpdate)),
-                postfix: new HarmonyMethod(typeof(MenuToggle), nameof(AfterUpdate)));
+            Hooks.Install(typeof(MenuToggle), "menu", "the main menu has no Archipelago panel");
         }
 
         internal static void Disable()
         {
             ApMenu.Open?.CloseNow();
             ClosePopup();
-            harmony?.UnpatchSelf();
-            harmony = null;
         }
 
         // Centred like the others so the leaf cursor (a fixed column) clears it; the state is a smaller tag to the right.
@@ -61,6 +52,8 @@ namespace BugFablesAP
         }
 
         // The game's SetMenuText loop indexes a three-label array by selections.Length: hand it back its three entries first.
+        [HarmonyPatch(typeof(StartMenu), "SetMenuText")]
+        [HarmonyPrefix]
         private static void BeforeSetMenuText(StartMenu __instance)
         {
             Transform[] selections = __instance.selections;
@@ -75,6 +68,8 @@ namespace BugFablesAP
             }
         }
 
+        [HarmonyPatch(typeof(StartMenu), "SetMenuText")]
+        [HarmonyPostfix]
         private static void AfterSetMenuText(StartMenu __instance, Transform ___menu1)
         {
             try
@@ -124,6 +119,8 @@ namespace BugFablesAP
             log.LogInfo($"[menu] Archipelago mod {(on ? "enabled: saves in the archipelago folder" : "disabled: normal saves")}");
         }
 
+        [HarmonyPatch(typeof(StartMenu), "Update")]
+        [HarmonyPrefix]
         private static bool BeforeUpdate(StartMenu __instance, int ___menuid, int ___submenu, float ___cd, bool ___canselect)
         {
             try
@@ -252,6 +249,8 @@ namespace BugFablesAP
         }
 
         // The game places the cursor at y = -option - 0.25 each frame; move it to the tighter spacing.
+        [HarmonyPatch(typeof(StartMenu), "Update")]
+        [HarmonyPostfix]
         private static void AfterUpdate(int ___menuid)
         {
             // Only the main menu's own cursor: under the game's Settings screen it is Settings' cursor.

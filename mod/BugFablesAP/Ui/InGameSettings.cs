@@ -16,34 +16,16 @@ namespace BugFablesAP
         private const string QolLabel = "Quality of life", GameplayLabel = "Gameplay";
 
         private static Func<bool> randomizerOn;
-        private static Harmony harmony;
         private static ManualLogSource log;
 
-        internal static void Enable(ManualLogSource logger, string guid, Func<bool> randomizerEnabled)
+        internal static void Enable(ManualLogSource logger, Func<bool> randomizerEnabled)
         {
             log = logger;
             randomizerOn = randomizerEnabled;
-            var settings = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetSettings));
-            var showList = AccessTools.Method(typeof(MainManager), nameof(MainManager.ShowItemList),
-                new[] { typeof(int), typeof(Vector2), typeof(bool), typeof(bool) });
-            var update = AccessTools.Method(typeof(PauseMenu), "Update");
-            if (settings == null || showList == null || update == null)
+            if (Hooks.Install(typeof(InGameSettings), "settings", "the pages are reached from the main menu only"))
             {
-                log.LogError($"[settings] NOT installed (GetSettings {settings != null}, ShowItemList {showList != null}, "
-                    + $"PauseMenu.Update {update != null}); the pages are reached from the main menu only.");
-                return;
+                log.LogInfo("[settings] installed on MainManager.GetSettings, ShowItemList and PauseMenu.Update");
             }
-            harmony = new Harmony(guid + ".settings." + DateTime.UtcNow.Ticks);
-            harmony.Patch(settings, postfix: new HarmonyMethod(typeof(InGameSettings), nameof(AfterGetSettings)));
-            harmony.Patch(showList, postfix: new HarmonyMethod(typeof(InGameSettings), nameof(AfterShowList)));
-            harmony.Patch(update, prefix: new HarmonyMethod(typeof(InGameSettings), nameof(BeforePauseUpdate)));
-            log.LogInfo("[settings] installed on MainManager.GetSettings, ShowItemList and PauseMenu.Update");
-        }
-
-        internal static void Disable()
-        {
-            harmony?.UnpatchSelf();
-            harmony = null;
         }
 
         // In game and on the main menu alike: one Settings screen, not two.
@@ -73,6 +55,8 @@ namespace BugFablesAP
             MainManager.settingsindex = index;
         }
 
+        [HarmonyPatch(typeof(MainManager), nameof(MainManager.GetSettings))]
+        [HarmonyPostfix]
         private static void AfterGetSettings(ref int[] __result)
         {
             if (!InGame())
@@ -86,6 +70,8 @@ namespace BugFablesAP
         }
 
         // The game draws left/right arrows on every settings row but a named few: take them off the two page rows.
+        [HarmonyPatch(typeof(MainManager), nameof(MainManager.ShowItemList), typeof(int), typeof(Vector2), typeof(bool), typeof(bool))]
+        [HarmonyPostfix]
         private static void AfterShowList(int type)
         {
             if (type != 17 || MainManager.instance?.itemlist == null || MainManager.listvar == null || !InGame())
@@ -110,6 +96,8 @@ namespace BugFablesAP
         }
 
         // Confirm on a page row opens that page; while a page is open, the (switched off) pause menu reads nothing.
+        [HarmonyPatch(typeof(PauseMenu), "Update")]
+        [HarmonyPrefix]
         private static bool BeforePauseUpdate(PauseMenu __instance)
         {
             if (ApMenu.Open != null)
