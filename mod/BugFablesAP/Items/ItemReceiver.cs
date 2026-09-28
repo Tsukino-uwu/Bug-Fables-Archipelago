@@ -242,12 +242,13 @@ namespace BugFablesAP
         }
 
         // A dimmer fade-out eases towards clear and never reaches it: the game's loop ends only at its 10 s failsafe,
-        // with intransition set all along. Past 2% it is invisible; other transitions (no dimmer) count until they end.
+        // with intransition set all along. Below 25% a hold-up reads fine over it (about 1 s into the opening's
+        // fade-in instead of 3 s at 2%); other transitions (no dimmer) count until they end.
         private static bool FadeAllButDone(MainManager mm)
         {
             Transform dimmer = mm.transitionobj != null && mm.transitionobj.Length == 1 ? mm.transitionobj[0] : null;
             SpriteRenderer fade = dimmer != null ? dimmer.GetComponent<SpriteRenderer>() : null;
-            return fade != null && dimmer.name == "Dimmer" && fade.color.a < 0.02f;
+            return fade != null && dimmer.name == "Dimmer" && fade.color.a < 0.25f;
         }
     }
 }

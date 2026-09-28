@@ -767,7 +767,8 @@ The receiver waited while the game reported a transition, and a dimmer fade-out 
 failsafe, long after it looks clear (`MEASURED.md`, a dimmer fade-out never finishes early). Ignoring the invisible
 tail left about 870 frames (the opening's fade-in, speed 0.02, takes about 3 s to reach 2%), so giving and showing
 were split: an item goes into the bag during a fade (only a map load holds it), and only its hold-up waits for the
-screen (a dimmer above 2%, or another transition until it ends). Built, not yet seen.
+screen (a dimmer above 25%, about 1 s into the opening's fade-in; 2% was tried first and took about 3 s; or another
+transition until it ends). Items seen given 5 frames after the opening (2026-09-28, log). The box: not yet seen.
 
 **Seen working (2026-09-24).** The server already held the Explorer Permit and the G-Bug Ranger Plushie from
 the swap test. On loading, the save tied itself to the seed, and both arrived in key items as soon as the
