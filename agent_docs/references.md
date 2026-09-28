@@ -19,6 +19,42 @@ Where we differ:
 - By its own header comment it lacks automatic reconnect and a clean disconnect, and it blocks the main
   thread with `.Wait()`/`.Result` while scouting at connect. We need all three done properly.
 
+Its code style, read again 2026-09-28 (`main` at `0ef738f`), for a comparison with ours:
+- **Hooks are Harmony attributes:** `[HarmonyPatch]` with `[HarmonyPrefix]`/`[HarmonyPostfix]` (about 213), installed
+  with `PatchAll(typeof(X))` one class at a time and removed with `UnpatchSelf` when the mod is switched off.
+- **A mismatch shows on the title screen:** an apworld version or a location list that doesn't match the client.
+- **Weak spots:** methods up to about 1,077 lines, connecting blocks the game's main thread, no tests or CI, and
+  debug code ships in the release.
+- **We take:** the attribute style (`documentation.md`, step 4).
+
+## Tevi's apworld: `worlds/tevi` in BlackSoulKnight/Tevi_Archipelago (read 2026-09-28, world 0.7.5)
+
+- **Data-driven:** 1 MB of JSON (areas, locations, items). Rules are strings such as `"A || (B && C)"`, turned
+  into nested lambdas by a hand-written parser that matches about 30 special words by substring.
+- **Strengths:** entrances through Archipelago's generic entrance randomizer (`connect_entrances`), and Universal
+  Tracker support (a generated location table, map pages, `interpret_slot_data`).
+- **Weak spots:** the player docs are `# TODO`, 10 tests, dead code and typos, locations with ID 0 in the
+  datapackage, and no `get_filler_item_name`.
+- **We take, later:** the generic entrance randomizer and Universal Tracker support, each as its own step.
+
+## The Pokémon Crystal apworld: gerbiljames/Archipelago-Crystal (read 2026-09-28)
+
+Two branches: `pokecrystal-develop` (world 0.20.1) and `future/6.0.0`, the next major version (at `55197f1a06`).
+- **Typed data:** 36 to 41 frozen dataclasses (`LocationData`, `ItemData`, `RegionData`...) and a dozen enums,
+  parsed once at import into one frozen data object. Per-seed changes go through `dataclasses.replace`. Raw
+  `dict[str, Any]` appears 6 times in the whole world.
+- **`future/6.0.0` moved its logic to `rule_builder`:** 12 custom `Rule` dataclasses (`CanUseHM`, `HasBadges`...)
+  and a `LogicMixin` for its counters. Its lambdas fell from 363 to 49.
+- **Its entrance randomizer is Archipelago's generic one,** with a retry ladder and pinning to vanilla as a last
+  resort. Rules sit on named entrances, so they travel with the entrance.
+- **Tests:** 95 methods on the old branch, 461 on the new one, plus a fuzzer in CI.
+- **Style:** the new modules are typed, documented and within 120 columns. The old core isn't: rules.py has 0 of 37
+  functions documented.
+- **Weak spots:** a few very long functions, measured with Python's `ast` on `future/6.0.0`: `set_rules` 1,503
+  lines, `rom.generate_output` 1,467, `game_watcher` 717, `data._init` 647. The JSON exits carry no rules.
+- **We take:** typed frozen data (the apworld's data tables), the 120-column limit, and later option groups and
+  Universal Tracker support. **Not:** the long functions.
+
 ## Pokémon Emerald's apworld `remote_items` option (read 2026-09-24, local checkout at `0.6.7`)
 
 - With it off, your own items are patched into the ROM at their locations (`rom.py`). With it on, the

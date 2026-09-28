@@ -1215,3 +1215,47 @@ Newest last. What was tried, what happened, what the user said.
 - **Not done yet:** parts 2 and 3 of the review plan (the rest of MEASURED's corrections; Harmony attributes, lean
   comments, dev tools out of the release). Open questions to the user: Enemy Shuffle across the whole game, medal-shop
   stock from a new file, "(the user, date)" in the guides.
+
+## 2026-09-28 (day): three projects compared, the cleanup plan
+
+- **What happened:** after the "bad code" comments with nothing named, the user asked how the project compares with
+  hand-written ones: Tevi's mod and apworld, and the Pokémon Crystal apworld on both its branches. Five read-only
+  surveys, my own spot checks, then a sixth agent fact-checking the plan (7 wrong claims, about 12 misses, all fixed).
+- **Numbers:**
+  - Ours: 14,852 lines of C# for 74 locations, 147 tests plus the fuzzer, 83 hand-written Harmony call sites.
+  - Tevi's mod: 16,510 lines for about 1,440 locations, no tests, Harmony attributes.
+  - Crystal: 14,789 lines of Python growing to 21,384, 803 locations, 95 tests growing to 461.
+- **Verdict:** by measure the code isn't bad; it is cleaner than Tevi's mod and on par with or ahead of the
+  apworlds, except Crystal's next version on tests and typing. What an outsider sees first:
+  - hooks wired by hand;
+  - AI traces in code, data and commits;
+  - a lot of code for 74 checks;
+  - dev tools in the release;
+  - untyped apworld data;
+  - CI red since 2026-09-27.
+- **The user chose:**
+  - dev tools compiled out of the release, reversing 2026-09-26;
+  - the traces out of code, data, future commit subjects, the guides and MEASURED.md;
+  - every hook moved to attributes;
+  - the stale gate only at release.
+- **Agents were wrong too:**
+  - Crystal's "leftover caching flag" is `rule_builder`'s own idiom.
+  - Its "stale Holes doc" names entrances that exist.
+  - Both were caught before the user sent anything.
+- **Sent by the user:** four small, verified findings to the Crystal developer:
+  - the translated docs a WebHost won't list;
+  - an `=` meant as `:`;
+  - `print("oopsie")`;
+  - a duplicate annotation.
+
+  A blunter follow-up about its long functions is drafted, not sent.
+- **Done:** the stale gate moved into the release workflow (8926345), so `main` is green after the next push. Licence
+  rows for Tevi's apworld and Crystal: the licences were read first, but the rows came after the read. The findings
+  are in `references.md`.
+- **Next:** the plan's phases, in order:
+  1. traces;
+  2. small fixes;
+  3. typed apworld data;
+  4. Harmony attributes;
+  5. dev tools out;
+  6. `SeedData`.
