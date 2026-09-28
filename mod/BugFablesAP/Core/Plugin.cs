@@ -200,7 +200,7 @@ namespace BugFablesAP
             SaveCrystals.Enable(Log, Config, () => randomizerEnabled.Value, settingsOn);
             DeathLinkGame.Enable(Log, Config, connection, () => randomizerEnabled.Value);
             AutoSave.Enable(Log, Config, settingsOn);
-            Abilities.Enable(Log, Guid, () => randomizerEnabled.Value);
+            Abilities.Enable(Log, () => randomizerEnabled.Value);
             CheckDetector.Enable(Log, connection, () => randomizerEnabled.Value);
             CrystalBerryTotal.Enable(Log, connection, () => randomizerEnabled.Value);
             QuestBoards.Enable(Log, () => randomizerEnabled.Value);
@@ -419,7 +419,6 @@ namespace BugFablesAP
             WarpButton.Disable();
             HoldUps.Clear();
             PartyFit.Disable();
-            Abilities.Disable();
             ShopSwap.Disable();
             Hooks.UninstallAll();
             Log?.LogInfo($"{Name} {Version} unloaded.");

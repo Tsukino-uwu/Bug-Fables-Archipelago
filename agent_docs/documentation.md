@@ -147,7 +147,9 @@ Harmony instance: a group with a missing target installs nothing rather than hal
 every group comes off with the plugin. `Hooks.Safe` keeps a failing transpiler from breaking its method. Moved so
 far: AchievementGuard, BoatTicket, CrystalBerryTotal, QuestBoards, DoorShuffle, SaveCrystals, ItemShops,
 InGameSettings, MenuToggle, Multipliers, EnemyShuffle, AnimGuard, ClockCleanup, GlowGuard, DeathLinkGame, FieldMoves, ItemSwap,
-PartyFit, CheckDetector, EnemyScaling, AttackBoost, MedalAssist, PartyMembers, KeptOpen, ShopSwap, WarpButton, QualityOfLife, SaveRedirect, WebSocketCompression, FrameRate (the list unchanged, 167).
+PartyFit, CheckDetector, EnemyScaling, AttackBoost, MedalAssist, PartyMembers, KeptOpen, ShopSwap, WarpButton, QualityOfLife, SaveRedirect, WebSocketCompression, FrameRate, Abilities (the list unchanged, 167). Where the methods to
+patch are found by reading the game's code at install time (FrameRate's lists, FrameSites, Abilities' scan), they
+stay patched by hand, on a `Hooks.Create` instance that `UninstallAll` still removes.
 SaveRedirect's group is `required`: without every redirect a randomizer save could land beside the normal ones, so a
 missing target still stops the plugin loading. Hooks that
 depend on each other are separate groups installed in order, each only if the one before went in. A hook that
@@ -158,7 +160,7 @@ together is its own group, its hook methods annotated in place; an optional hook
 
 **Status:** done; separate guards per system built 2026-09-28, not yet seen in game; errors checked for instead of
 swallowed, built 2026-09-28 (both builds pass), not yet seen in game; hooks to attributes under way (the patch list
-taken, 167 patches; 30 of 33 features moved, list and run order unchanged).
+taken, 167 patches; 31 of 33 features moved, list and run order unchanged).
 
 *Code: `mod/BugFablesAP/Core/Plugin.cs` (`Plugin`, a BepInEx plugin: `Awake` sets everything up, `Tick` runs
 every frame); the project file is `BugFablesAP.csproj`.*

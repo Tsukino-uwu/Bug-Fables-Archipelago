@@ -90,11 +90,12 @@ namespace BugFablesAP
         private static Harmony harmony;
         private static readonly FieldInfo flagsField = AccessTools.Field(typeof(MainManager), "flags");
 
-        internal static void Enable(ManualLogSource logger, string guid, Func<bool> on)
+        internal static void Enable(ManualLogSource logger, Func<bool> on)
         {
             log = logger;
             randomizerOn = on;
-            harmony = new Harmony(guid + ".abilities." + DateTime.UtcNow.Ticks);
+            // Patched by hand: which methods read the flags is found by reading their code, not known ahead.
+            harmony = Hooks.Create("abilities");
             // Where each measured read is (the unlock scenes): the field's uses, the thrown Beemerang's hold
             // (flag 21 only; NPCControl's other reads are story state), and the skill lists.
             int field = Install(Methods(typeof(PlayerControl)), keyForFlag.Keys.ToArray(), nameof(TranspileAll));
@@ -107,12 +108,6 @@ namespace BugFablesAP
                     + "story flag instead of its item");
             }
             log.LogInfo($"[abilities] installed: the learned abilities' reads answered from the bag ({counts})");
-        }
-
-        internal static void Disable()
-        {
-            harmony?.UnpatchSelf();
-            harmony = null;
         }
 
         // A class's own methods and those of its nested types (coroutines, lambdas).
@@ -170,25 +165,25 @@ namespace BugFablesAP
             op == OpCodes.Ldc_I4 || op == OpCodes.Ldc_I4_S ? Convert.ToInt32(operand) : (int?)null;
 
         private static IEnumerable<CodeInstruction> TranspileAll(IEnumerable<CodeInstruction> instructions) =>
-            Transpile(instructions, keyForFlag.Keys.ToArray());
+            Hooks.Safe(instructions, code => Transpile(code, keyForFlag.Keys.ToArray()), "abilities");
 
         private static IEnumerable<CodeInstruction> TranspileHalt(IEnumerable<CodeInstruction> instructions) =>
-            Transpile(instructions, new[] { 21 });
+            Hooks.Safe(instructions, code => Transpile(code, new[] { 21 }), "abilities");
 
         // `ldfld flags; ldc.i4 n; ldelem.u1` becomes `ldfld flags; ldc.i4 n; call Learned`: the same stack, bool[] and int in,
         // bool out. Labels stay on the instruction.
-        private static IEnumerable<CodeInstruction> Transpile(IEnumerable<CodeInstruction> instructions, int[] flags)
+        private static IEnumerable<CodeInstruction> Transpile(List<CodeInstruction> code, int[] flags)
         {
-            List<CodeInstruction> code = instructions.ToList();
-            MethodInfo learned = AccessTools.Method(typeof(Abilities), nameof(Learned));
-            for (int i = 2; i < code.Count; i++)
-            {
-                if (code[i].opcode == OpCodes.Ldelem_U1 && code[i - 2].LoadsField(flagsField)
+            List<int> reads = Enumerable.Range(2, Math.Max(0, code.Count - 2))
+                .Where(i => code[i].opcode == OpCodes.Ldelem_U1 && code[i - 2].LoadsField(flagsField)
                     && Constant(code[i - 1].opcode, code[i - 1].operand) is int n && flags.Contains(n))
-                {
-                    code[i].opcode = OpCodes.Call;
-                    code[i].operand = learned;
-                }
+                .ToList();
+            MethodInfo learned = AccessTools.Method(typeof(Abilities), nameof(Learned))
+                ?? throw new MissingMethodException(nameof(Abilities), nameof(Learned));
+            foreach (int i in reads)
+            {
+                code[i].opcode = OpCodes.Call;
+                code[i].operand = learned;
             }
             return code;
         }
