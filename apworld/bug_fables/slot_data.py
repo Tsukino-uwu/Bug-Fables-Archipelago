@@ -1,11 +1,12 @@
 """slot_data: everything the client acts on. Its keys are the contract with the mod (ApConnection.cs)."""
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Iterable, Mapping
 from typing import TYPE_CHECKING, Any
 
 from .data_tables import (DIALOGUE_FLAGS, HELD_UNTIL, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN, KEPT_PRESENT, LOCATION_NAME_TO_ID,
                           PRESENT_FROM, SCENERY_HIDDEN, SCENERY_PRESENT, WORLD_VERSION)
+from .data_types import DialogueFlag, EntityRef, FlagEntity
 
 if TYPE_CHECKING:
     from .world import BugFablesWorld
@@ -29,8 +30,8 @@ def _pickup(source: dict[str, Any]) -> dict[str, Any]:
     return pickup
 
 
-def _entities(entries: list[dict[str, Any]], *fields: str) -> list[dict[str, Any]]:
-    return [{field: entry[field] for field in ("map", "entity", *fields)} for entry in entries]
+def _entities(entries: Iterable[EntityRef | FlagEntity | DialogueFlag]) -> list[dict[str, Any]]:
+    return [entry.to_slot() for entry in entries]
 
 
 def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
@@ -59,9 +60,9 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "kept_present": _entities(KEPT_PRESENT),
         "scenery_hidden": _entities(SCENERY_HIDDEN),
         "scenery_present": _entities(SCENERY_PRESENT),
-        "held_until": _entities(HELD_UNTIL, "flag"),
-        "present_from": _entities(PRESENT_FROM, "flag"),
-        "dialogue_flags": _entities(DIALOGUE_FLAGS, "flag", "to"),
+        "held_until": _entities(HELD_UNTIL),
+        "present_from": _entities(PRESENT_FROM),
+        "dialogue_flags": _entities(DIALOGUE_FLAGS),
         "door_targets": world.door_targets,
         # {"map:entity": [enemy ids]}: the fight a map enemy starts instead of its own.
         "enemy_swaps": world.enemy_swaps,

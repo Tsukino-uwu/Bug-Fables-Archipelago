@@ -5,7 +5,7 @@ import json
 import pkgutil
 from typing import Any
 
-from .data_types import Doors, Encounter, Item, RoomStart, SavePoint
+from .data_types import DialogueFlag, Doors, Encounter, EntityRef, FlagEntity, Item, RoomStart, SavePoint
 
 ITEM_ID_BASE = 7_710_000
 LOCATION_ID_BASE = 7_720_000
@@ -32,13 +32,13 @@ LOCATIONS: list[dict[str, Any]] = _LOCATION_DATA["locations"]
 REGIONS: list[dict[str, Any]] = _LOCATION_DATA["regions"]
 ARTIFACTS: list[dict[str, Any]] = _LOCATION_DATA["artifacts"]
 STORY_EVENTS: list[dict[str, Any]] = _LOCATION_DATA["story_events"]
-KEPT_OPEN: list[dict[str, Any]] = _LOCATION_DATA["kept_open"]
-KEPT_PRESENT: list[dict[str, Any]] = _LOCATION_DATA["kept_present"]
-SCENERY_HIDDEN: list[dict[str, Any]] = _LOCATION_DATA["scenery_hidden"]
-SCENERY_PRESENT: list[dict[str, Any]] = _LOCATION_DATA["scenery_present"]
-HELD_UNTIL: list[dict[str, Any]] = _LOCATION_DATA["held_until"]
-PRESENT_FROM: list[dict[str, Any]] = _LOCATION_DATA["present_from"]
-DIALOGUE_FLAGS: list[dict[str, Any]] = _LOCATION_DATA["dialogue_flags"]
+KEPT_OPEN: tuple[EntityRef, ...] = tuple(EntityRef.from_json(e) for e in _LOCATION_DATA["kept_open"])
+KEPT_PRESENT: tuple[EntityRef, ...] = tuple(EntityRef.from_json(e) for e in _LOCATION_DATA["kept_present"])
+SCENERY_HIDDEN: tuple[EntityRef, ...] = tuple(EntityRef.from_json(e) for e in _LOCATION_DATA["scenery_hidden"])
+SCENERY_PRESENT: tuple[EntityRef, ...] = tuple(EntityRef.from_json(e) for e in _LOCATION_DATA["scenery_present"])
+HELD_UNTIL: tuple[FlagEntity, ...] = tuple(FlagEntity.from_json(e) for e in _LOCATION_DATA["held_until"])
+PRESENT_FROM: tuple[FlagEntity, ...] = tuple(FlagEntity.from_json(e) for e in _LOCATION_DATA["present_from"])
+DIALOGUE_FLAGS: tuple[DialogueFlag, ...] = tuple(DialogueFlag.from_json(e) for e in _LOCATION_DATA["dialogue_flags"])
 DOORS: Doors = Doors.from_json(_load("doors.json"))
 # Every room entered through a door: the map, and the map whose door leads in (both ways of each connection). A start
 # there lands where walking in through that door ends.

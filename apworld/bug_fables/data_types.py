@@ -123,6 +123,63 @@ class RoomStart:
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
+class EntityRef:
+    """A map entity the client changes, by name (a scenery entity by its path inside the map); data/locations.json.
+
+    kept_open: story blockers kept out of the way, so an area with locations never closes. kept_present: entities the
+    story only makes later, made to exist from the start. scenery_hidden and scenery_present: flag-switched scenery
+    hidden or shown from the start.
+    """
+
+    map: str
+    entity: str
+
+    @classmethod
+    def from_json(cls, data: dict[str, Any]) -> EntityRef:
+        return cls(**_known(cls, data))
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"map": self.map, "entity": self.entity}
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class FlagEntity:
+    """A map entity tied to a story flag instead of, or on top of, its own requirements; data/locations.json.
+
+    present_from: made from flag instead of its own requirement. held_until: kept away until flag, on top of its own
+    requirements.
+    """
+
+    map: str
+    entity: str
+    flag: int
+
+    @classmethod
+    def from_json(cls, data: dict[str, Any]) -> FlagEntity:
+        return cls(**_known(cls, data))
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"map": self.map, "entity": self.entity, "flag": self.flag}
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class DialogueFlag:
+    """One dialogue line of an entity whose flag is repointed from flag to to (dialogue_flags, data/locations.json)."""
+
+    map: str
+    entity: str
+    flag: int
+    to: int
+
+    @classmethod
+    def from_json(cls, data: dict[str, Any]) -> DialogueFlag:
+        return cls(**_known(cls, data))
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"map": self.map, "entity": self.entity, "flag": self.flag, "to": self.to}
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
 class SavePoint:
     """A save point (data/starts.json): its map and entity index."""
 
