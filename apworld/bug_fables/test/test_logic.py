@@ -181,21 +181,21 @@ class TestClassifications(BugFablesTestBase):
         from ..data_tables import ITEMS, LOCATIONS, REGIONS, STORY_EVENTS
         used: set[str] = set()
 
-        def named(data: dict) -> list[str]:
+        def named(data) -> list[str]:
             # Rules name abilities; each is its item and its holder.
-            abilities = data.get("abilities", []) + data.get("moves", [])
-            return (data.get("requires", []) + data.get("members", []) + [ABILITIES[a].item for a in abilities]
+            abilities = data.abilities + data.moves
+            return (list(data.requires) + list(data.members) + [ABILITIES[a].item for a in abilities]
                     + [ABILITIES[a].holder for a in abilities if ABILITIES[a].holder])
 
         for region in REGIONS:
-            for exit_data in region["exits"]:
+            for exit_data in region.exits:
                 used.update(named(exit_data))
         for spot in LOCATIONS + STORY_EVENTS:
             used.update(named(spot))
         # Shuffle Jump's blanket rule: every spot not marked no_jump needs it.
         used.add("Jump")
         # Leif is both: the story's event with Starting Party Member off, an item with it on.
-        event_items = {event["item"] for event in STORY_EVENTS} - {item.name for item in ITEMS} | {"Artifact"}
+        event_items = {event.item for event in STORY_EVENTS} - {item.name for item in ITEMS} | {"Artifact"}
         real_items_used = used - event_items
         for item in ITEMS:
             with self.subTest(item=item.name):

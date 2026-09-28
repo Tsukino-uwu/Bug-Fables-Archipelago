@@ -5,7 +5,8 @@ import json
 import pkgutil
 from typing import Any
 
-from .data_types import DialogueFlag, Doors, Encounter, EntityRef, FlagEntity, Item, RoomStart, SavePoint
+from .data_types import (Artifact, DialogueFlag, Doors, Encounter, EntityRef, FlagEntity, Item, Location, Region,
+                         RoomStart, SavePoint, StoryEvent)
 
 ITEM_ID_BASE = 7_710_000
 LOCATION_ID_BASE = 7_720_000
@@ -28,10 +29,10 @@ def _load(name: str) -> dict[str, Any]:
 WORLD_VERSION: str = _load_manifest()["world_version"]
 ITEMS: tuple[Item, ...] = tuple(Item.from_json(item) for item in _load("items.json")["items"])
 _LOCATION_DATA = _load("locations.json")
-LOCATIONS: list[dict[str, Any]] = _LOCATION_DATA["locations"]
-REGIONS: list[dict[str, Any]] = _LOCATION_DATA["regions"]
-ARTIFACTS: list[dict[str, Any]] = _LOCATION_DATA["artifacts"]
-STORY_EVENTS: list[dict[str, Any]] = _LOCATION_DATA["story_events"]
+LOCATIONS: tuple[Location, ...] = tuple(Location.from_json(loc) for loc in _LOCATION_DATA["locations"])
+REGIONS: tuple[Region, ...] = tuple(Region.from_json(region) for region in _LOCATION_DATA["regions"])
+ARTIFACTS: tuple[Artifact, ...] = tuple(Artifact.from_json(artifact) for artifact in _LOCATION_DATA["artifacts"])
+STORY_EVENTS: tuple[StoryEvent, ...] = tuple(StoryEvent.from_json(event) for event in _LOCATION_DATA["story_events"])
 KEPT_OPEN: tuple[EntityRef, ...] = tuple(EntityRef.from_json(e) for e in _LOCATION_DATA["kept_open"])
 KEPT_PRESENT: tuple[EntityRef, ...] = tuple(EntityRef.from_json(e) for e in _LOCATION_DATA["kept_present"])
 SCENERY_HIDDEN: tuple[EntityRef, ...] = tuple(EntityRef.from_json(e) for e in _LOCATION_DATA["scenery_hidden"])
@@ -78,7 +79,7 @@ def item_id(item: Item) -> int:
 
 
 ITEM_NAME_TO_ID: dict[str, int] = {item.name: item_id(item) for item in ITEMS}
-LOCATION_NAME_TO_ID: dict[str, int] = {loc["name"]: LOCATION_ID_BASE + loc["id"] for loc in LOCATIONS}
+LOCATION_NAME_TO_ID: dict[str, int] = {loc.name: LOCATION_ID_BASE + loc.id for loc in LOCATIONS}
 
 if len(set(ITEM_NAME_TO_ID.values())) != len(ITEMS):
     raise ValueError("bug_fables: two items share an id (same kind and game_id)")
@@ -91,17 +92,20 @@ MONEY_TYPE = -1
 CRYSTAL_TYPE = 3
 
 
-def vanilla_item(location: dict[str, Any]) -> str | None:
+def vanilla_item(location: Location) -> str | None:
     """The name of the item the game hands out at a location, or None."""
-    source = location["source"].get("give") or location["source"].get("pickup") or location["source"].get("added")
-    if source is None and "item_shop" in location["source"]:
-        source = {"type": ITEM_KIND, "item": location["source"]["item_shop"]["item"]}
-    if source is None:
+    source = location.source
+    handed = source.give or source.pickup or source.added
+    if handed is not None:
+        give_type, give_item = handed.type, handed.item
+    elif source.item_shop is not None:
+        give_type, give_item = ITEM_KIND, source.item_shop.item
+    else:
         return None
-    if source["type"] == CRYSTAL_TYPE:
+    if give_type == CRYSTAL_TYPE:
         kind, game_id = CRYSTAL_KIND, 0
     else:
-        kind, game_id = (MONEY_KIND if source["type"] == MONEY_TYPE else source["type"]), source["item"]
+        kind, game_id = (MONEY_KIND if give_type == MONEY_TYPE else give_type), give_item
     for item in ITEMS:
         if item.kind == kind and item.game_id == game_id:
             return item.name

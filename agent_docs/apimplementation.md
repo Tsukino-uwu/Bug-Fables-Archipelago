@@ -420,7 +420,11 @@ just the named items or events.
 data): each data file's entries become frozen dataclasses in `data_types.py`, read once in `data_tables.py`, so code
 reads `item.kind` instead of `item["kind"]`, and a key a record doesn't have is refused when the world loads instead
 of being silently ignored. A file's schema lives in its record's docstring. One table per commit, each proven by
-`seed-snapshot.py` (identical slot_data and spoilers), the tests and the fuzzer. Done: items, encounters, doors and room starts, the client's entity lists.
+`seed-snapshot.py` (identical slot_data and spoilers), the tests and the fuzzer. Done for every table: items,
+encounters, doors and room starts, the client's entity lists, then regions, exits, locations, story events and
+artifacts together (`rules.requires` reads exits and spots alike, through their shared `Needs` fields). The schema
+strings that headed `items.json` and `locations.json` are now those docstrings. `TestDataRecords` proves an unknown
+key is refused; with the check switched off, it fails.
 
 We wrote **tests**, including one that proves the gate really needs the permit. To make sure that test
 could fail, we removed the rule on purpose, watched the test fail, and put the rule back. Archipelago's

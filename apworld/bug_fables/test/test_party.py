@@ -1,5 +1,6 @@
 from . import BugFablesTestBase
 from ..abilities import ABILITIES
+from ..data_types import Needs
 from ..rules import requires
 
 MEMBERS = ["Vi", "Kabbu", "Leif"]
@@ -118,29 +119,30 @@ class TestAbilities(BugFablesTestBase):
 
     def test_every_ability_in_the_data_is_known(self) -> None:
         from ..data_tables import LOCATIONS, REGIONS
-        named = {ability for loc in LOCATIONS for ability in loc.get("abilities", [])}
-        named |= {ability for region in REGIONS for exit_data in region["exits"] for ability in exit_data.get("abilities", [])}
+        named = {ability for loc in LOCATIONS for ability in loc.abilities}
+        named |= {ability for region in REGIONS for exit_data in region.exits for ability in exit_data.abilities}
         self.assertLessEqual(named, set(ABILITIES))
 
     def test_each_attack_needs_its_member(self) -> None:
         for ability, member in (("Horn Slash", "Kabbu"), ("Beemerang Toss", "Vi"), ("Freeze", "Leif")):
             with self.subTest(ability=ability):
-                self.assertEqual(requires(self.world, {"abilities": [ability]}), {member: 1})
+                self.assertEqual(requires(self.world, Needs(abilities=(ability,))), {member: 1})
 
     def test_jump_needs_no_member(self) -> None:
-        self.assertEqual(requires(self.world, {"abilities": ["Jump"]}), {})
+        self.assertEqual(requires(self.world, Needs(abilities=("Jump",))), {})
 
     def test_story_party_needs_nothing_for_a_move(self) -> None:
         self.world.starting_member = -1
-        self.assertEqual(requires(self.world, {"abilities": ["Horn Slash"], "requires": ["Explorer Permit"]}), {"Explorer Permit": 1})
+        self.assertEqual(requires(self.world, Needs(abilities=("Horn Slash",), requires=("Explorer Permit",))),
+                         {"Explorer Permit": 1})
 
     def test_the_den_needs_the_horn(self) -> None:
         # Grass on the way in and the door room's puzzle down the trapdoor.
         from ..data_tables import LOCATIONS, REGIONS
-        gate = next(region for region in REGIONS if region["name"] == "Past the Outskirts Gate")
-        into_den = next(exit_data for exit_data in gate["exits"] if exit_data["to"] == "Snakemouth Den")
+        gate = next(region for region in REGIONS if region.name == "Past the Outskirts Gate")
+        into_den = next(exit_data for exit_data in gate.exits if exit_data.to == "Snakemouth Den")
         self.assertIn("Kabbu", requires(self.world, into_den))
-        trapdoor = next(loc for loc in LOCATIONS if loc["name"] == "Snakemouth Den: Door Room, Trapdoor")
+        trapdoor = next(loc for loc in LOCATIONS if loc.name == "Snakemouth Den: Door Room, Trapdoor")
         self.assertIn("Kabbu", requires(self.world, trapdoor))
 
 

@@ -29,16 +29,16 @@ def category_on(world: BugFablesWorld, category: str | None) -> bool:
 
 def create_all_locations(world: BugFablesWorld) -> None:
     for loc in world.included_locations:
-        region = world.get_region(loc["region"])
-        region.locations.append(BugFablesLocation(world.player, loc["name"], LOCATION_NAME_TO_ID[loc["name"]], region))
+        region = world.get_region(loc.region)
+        region.locations.append(BugFablesLocation(world.player, loc.name, LOCATION_NAME_TO_ID[loc.name], region))
 
     for event in world.included_events:
-        world.get_region(event["region"]).add_event(
-            event["name"], event["item"], location_type=BugFablesLocation, item_type=BugFablesItem
+        world.get_region(event.region).add_event(
+            event.name, event.item, location_type=BugFablesLocation, item_type=BugFablesItem
         )
 
     # The game counts artifacts from flags, so these events hold no real item: they let fill prove the goal.
     for artifact in ARTIFACTS:
-        world.get_region(artifact["region"]).add_event(
-            artifact["name"], "Artifact", location_type=BugFablesLocation, item_type=BugFablesItem
+        world.get_region(artifact.region).add_event(
+            artifact.name, "Artifact", location_type=BugFablesLocation, item_type=BugFablesItem
         )

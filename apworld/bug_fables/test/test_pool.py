@@ -23,8 +23,8 @@ class TestPool(BugFablesTestBase):
     def test_every_location_item_is_known(self) -> None:
         from ..data_tables import LOCATIONS, vanilla_item
         for loc in LOCATIONS:
-            if "give" in loc["source"] or "pickup" in loc["source"]:
-                with self.subTest(location=loc["name"]):
+            if loc.source.give or loc.source.pickup:
+                with self.subTest(location=loc.name):
                     self.assertIsNotNone(vanilla_item(loc))
 
     def test_each_location_puts_its_item_in_the_pool(self) -> None:

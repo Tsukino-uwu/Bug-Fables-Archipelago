@@ -22,7 +22,7 @@ class TestLearnedAbilities(BugFablesTestBase):
             if ability.flag is None:
                 continue
             with self.subTest(ability=name):
-                spots = [loc["name"] for loc in LOCATIONS if loc["source"].get("flag") == ability.flag]
+                spots = [loc.name for loc in LOCATIONS if loc.source.flag == ability.flag]
                 self.assertEqual(len(spots), 1, spots)
 
     def test_unlock_spots_are_silent(self) -> None:
@@ -31,8 +31,8 @@ class TestLearnedAbilities(BugFablesTestBase):
         silent = self.world.fill_slot_data()["silent_locations"]
         flags = {ability.flag for ability in ABILITIES.values() if ability.flag is not None}
         for loc in LOCATIONS:
-            if loc["source"].get("flag") in flags:
-                self.assertIn(self.world.location_name_to_id[loc["name"]], silent)
+            if loc.source.flag in flags:
+                self.assertIn(self.world.location_name_to_id[loc.name], silent)
 
     def test_story_order(self) -> None:
         # Until chapters 2-7 get room-level logic, an unlock spot needs every ability taught before it.

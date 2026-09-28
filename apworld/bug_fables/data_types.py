@@ -14,6 +14,11 @@ def _known(cls: type, data: dict[str, Any]) -> dict[str, Any]:
     return {key: value for key, value in data.items() if key in names}
 
 
+def _tuples(known: dict[str, Any], *names: str) -> dict[str, Any]:
+    """The same fields, with these lists made tuples, so a frozen record stays unchanged."""
+    return {**known, **{name: tuple(known[name]) for name in names if name in known}}
+
+
 @dataclass(frozen=True, slots=True, kw_only=True)
 class Item:
     """An item this world can place (data/items.json).
@@ -189,3 +194,194 @@ class SavePoint:
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> SavePoint:
         return cls(**_known(cls, data))
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class Give:
+    """The |giveitem,type,item,...| that hands out the vanilla item on that map (type -1 berries, 0 item, 1 key item,
+    2 medal): the client keeps it out of the inventory and shows the seed's item instead."""
+
+    map: str
+    type: int
+    item: int
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"map": self.map, "type": self.type, "item": self.item}
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class Pickup:
+    """An item lying in the world or buried in a dig spot (type 0 item, 1 key item, 2 medal, 3 crystal berry).
+
+    Its flag (Source.flag) is the pickup's own activationflag. A story pickup (story) has none: it is known by the
+    story event it starts (Source.event) and checked by the flag that event sets.
+    """
+
+    map: str
+    type: int
+    item: int
+    story: bool = False
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class Added:
+    """An item the story puts straight into the bag, with no giveitem (type 0 item, 1 key item): the client leaves it
+    out."""
+
+    type: int
+    item: int
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"type": self.type, "item": self.item}
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class ItemShop:
+    """An item shop's slot: its map, keeper and item; its first purchase is the check."""
+
+    map: str
+    keeper: str
+    item: int
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"map": self.map, "keeper": self.keeper, "item": self.item}
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class Source:
+    """How the game marks a spot done. Each field is None when the source doesn't have it.
+
+    flag: the global flag the client watches. event: the EventControl event that sets it. npc: the character who gives
+    it. give, pickup, added, item_shop: see their records. Instead of a flag: var and at_least (done when
+    flagvar[var] reaches at_least; slot_data location_vars), berry (a crystal berry's crystalbflags index;
+    location_berries), regional (a respawning pickup's regional flag), discovery (a journal discovery), shop and medal
+    (a medal shop's badgeshops index and the medal; one location per copy it ever stocks).
+    """
+
+    flag: int | None = None
+    event: int | None = None
+    npc: str | None = None
+    give: Give | None = None
+    pickup: Pickup | None = None
+    added: Added | None = None
+    item_shop: ItemShop | None = None
+    var: int | None = None
+    at_least: int | None = None
+    berry: int | None = None
+    regional: int | None = None
+    discovery: int | None = None
+    shop: int | None = None
+    medal: int | None = None
+
+    @classmethod
+    def from_json(cls, data: dict[str, Any]) -> Source:
+        known = _known(cls, data)
+        for name, record in (("give", Give), ("pickup", Pickup), ("added", Added), ("item_shop", ItemShop)):
+            if name in known:
+                known[name] = record(**_known(record, known[name]))
+        return cls(**known)
+
+    def present(self) -> set[str]:
+        """The fields this source has."""
+        return {field.name for field in fields(self) if getattr(self, field.name) is not None}
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class Needs:
+    """What a spot or exit needs, read by rules.requires.
+
+    requires: the event or item names the spot itself needs once you're in the room, kept apart from what reaching the
+    room needs (so entrance rando can change one without the other); written even when the region implies it.
+    members: the party members needed only with Starting Party Member on (with it off the story's members are always
+    there). abilities: the field abilities needed (each its item and, with members as items, its holder). moves: a
+    blanket rule for unmeasured ground, the abilities' items alone, not who does them. no_jump: a location seen
+    reachable without a jump (with Shuffle Jump, every other one needs it).
+    """
+
+    requires: tuple[str, ...] = ()
+    members: tuple[str, ...] = ()
+    abilities: tuple[str, ...] = ()
+    moves: tuple[str, ...] = ()
+    no_jump: bool = False
+
+
+_NEEDS = ("requires", "members", "abilities", "moves")
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class Exit(Needs):
+    """A way from one region to region to, and what it needs."""
+
+    to: str
+
+    @classmethod
+    def from_json(cls, data: dict[str, Any]) -> Exit:
+        return cls(**_tuples(_known(cls, data), *_NEEDS))
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class Region:
+    """A region and its exits (data/locations.json)."""
+
+    name: str
+    exits: tuple[Exit, ...]
+
+    @classmethod
+    def from_json(cls, data: dict[str, Any]) -> Region:
+        known = _known(cls, data)
+        return cls(name=known["name"], exits=tuple(Exit.from_json(e) for e in known["exits"]))
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class Location(Needs):
+    """A location (data/locations.json).
+
+    id is added to LOCATION_ID_BASE and never reused (retired: 4). quiet marks an opening check whose item arrives with
+    no hold-up (the start of a new file). category marks a location a yaml option can leave out (quest, crystal_berry,
+    discovery, shop, item_shop; party_member, only with Starting Party Member on; story_party, a story event only with
+    it off).
+    """
+
+    name: str
+    id: int
+    region: str
+    source: Source
+    category: str | None = None
+    quiet: bool = False
+
+    @classmethod
+    def from_json(cls, data: dict[str, Any]) -> Location:
+        known = _tuples(_known(cls, data), *_NEEDS)
+        return cls(**{**known, "source": Source.from_json(known["source"])})
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class StoryEvent(Needs):
+    """A logic-only event (no id): a story step, placed in the region where it happens, whose item other rules
+    require."""
+
+    name: str
+    item: str
+    region: str
+    source: Source
+    category: str | None = None
+
+    @classmethod
+    def from_json(cls, data: dict[str, Any]) -> StoryEvent:
+        known = _tuples(_known(cls, data), *_NEEDS)
+        return cls(**{**known, "source": Source.from_json(known["source"])})
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class Artifact:
+    """An artifact, an event (no id): the game counts 7 artifact flags, and the goal is having enough of them."""
+
+    number: int
+    name: str
+    region: str
+    source: Source
+
+    @classmethod
+    def from_json(cls, data: dict[str, Any]) -> Artifact:
+        known = _known(cls, data)
+        return cls(**{**known, "source": Source.from_json(known["source"])})
