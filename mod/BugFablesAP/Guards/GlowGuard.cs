@@ -15,46 +15,40 @@ namespace BugFablesAP
     internal static class GlowGuard
     {
         private static Func<bool> randomizerOn;
-        private static Harmony harmony;
         private static ManualLogSource log;
         private static readonly HashSet<string> reported = new HashSet<string>();
 
         private static readonly MethodInfo GetColorByName = AccessTools.Method(typeof(Material), nameof(Material.GetColor), new[] { typeof(string) });
 
-        internal static void Enable(ManualLogSource logger, string guid, Func<bool> randomizerEnabled)
+        internal static void Enable(ManualLogSource logger, Func<bool> randomizerEnabled)
         {
             log = logger;
             randomizerOn = randomizerEnabled;
-            var start = AccessTools.Method(typeof(GlowTrigger), "Start");
-            var late = AccessTools.Method(typeof(GlowTrigger), "LateUpdate");
-            if (start == null || late == null || GetColorByName == null)
+            if (GetColorByName == null)
             {
-                log.LogError($"[glow] NOT installed (GlowTrigger.Start {start != null}, LateUpdate {late != null}, "
-                    + $"Material.GetColor {GetColorByName != null}); a light without a glow colour keeps logging an error.");
+                log.LogError("[glow] NOT installed (Material.GetColor not found); a light without a glow colour keeps logging an error.");
                 return;
             }
-            harmony = new Harmony(guid + ".glow." + DateTime.UtcNow.Ticks);
-            harmony.Patch(start, transpiler: new HarmonyMethod(typeof(GlowGuard), nameof(Transpile)));
-            harmony.Patch(late, transpiler: new HarmonyMethod(typeof(GlowGuard), nameof(Transpile)));
+            Hooks.Install(typeof(GlowGuard), "glow", "a light without a glow colour keeps logging an error");
         }
 
-        internal static void Disable()
-        {
-            harmony?.UnpatchSelf();
-            harmony = null;
-        }
+        [HarmonyPatch(typeof(GlowTrigger), "Start")]
+        [HarmonyPatch(typeof(GlowTrigger), "LateUpdate")]
+        [HarmonyTranspiler]
+        private static IEnumerable<CodeInstruction> Transpile(IEnumerable<CodeInstruction> instructions) =>
+            Hooks.Safe(instructions, EditColourReads, "glow");
 
-        private static IEnumerable<CodeInstruction> Transpile(IEnumerable<CodeInstruction> instructions)
+        private static IEnumerable<CodeInstruction> EditColourReads(List<CodeInstruction> code)
         {
-            List<CodeInstruction> code = instructions.ToList();
-            int replaced = 0;
-            foreach (CodeInstruction instruction in code.Where(i => i.Calls(GetColorByName)))
+            List<CodeInstruction> reads = code.Where(i => i.Calls(GetColorByName)).ToList();
+            MethodInfo guarded = AccessTools.Method(typeof(GlowGuard), nameof(GetColor))
+                ?? throw new MissingMethodException(nameof(GlowGuard), nameof(GetColor));
+            foreach (CodeInstruction instruction in reads)
             {
                 instruction.opcode = OpCodes.Call;
-                instruction.operand = AccessTools.Method(typeof(GlowGuard), nameof(GetColor));
-                replaced++;
+                instruction.operand = guarded;
             }
-            log.LogInfo(replaced > 0 ? $"[glow] installed in a GlowTrigger method ({replaced} colour reads)"
+            log.LogInfo(reads.Count > 0 ? $"[glow] installed in a GlowTrigger method ({reads.Count} colour reads)"
                 : "[glow] a GlowTrigger method reads no colour by name; nothing guarded there");
             return code;
         }

@@ -15,51 +15,51 @@ namespace BugFablesAP
     internal static class AnimGuard
     {
         private static Func<bool> randomizerOn;
-        private static Harmony harmony;
         private static ManualLogSource log;
         private static readonly HashSet<string> reported = new HashSet<string>();
 
         private static readonly MethodInfo CrossFade = AccessTools.Method(typeof(Animator), nameof(Animator.CrossFadeInFixedTime),
             new[] { typeof(string), typeof(float) });
 
-        internal static void Enable(ManualLogSource logger, string guid, Func<bool> randomizerEnabled)
+        internal static void Enable(ManualLogSource logger, Func<bool> randomizerEnabled)
         {
             log = logger;
             randomizerOn = randomizerEnabled;
-            var setAnim = AccessTools.Method(typeof(EntityControl), nameof(EntityControl.SetAnim), new[] { typeof(string), typeof(bool) });
-            if (setAnim == null || CrossFade == null)
+            if (CrossFade == null)
             {
-                log.LogError($"[anim] NOT installed (SetAnim {setAnim != null}, CrossFadeInFixedTime {CrossFade != null}); "
-                    + "missing animation states keep warning.");
+                log.LogError("[anim] NOT installed (Animator.CrossFadeInFixedTime not found); missing animation states keep warning.");
                 return;
             }
-            harmony = new Harmony(guid + ".anim." + DateTime.UtcNow.Ticks);
-            harmony.Patch(setAnim, transpiler: new HarmonyMethod(typeof(AnimGuard), nameof(Transpile)));
-            // The game's direct anim.Play("name") calls (battles, events, menus) all end in this overload.
-            var play = AccessTools.Method(typeof(Animator), nameof(Animator.Play), new[] { typeof(string), typeof(int), typeof(float) });
-            if (play == null)
+            if (!Hooks.Install(typeof(AnimGuard), "anim", "missing animation states keep warning"))
             {
-                log.LogWarning("[anim] Animator.Play(string, int, float) wasn't found; direct plays aren't guarded.");
                 return;
             }
-            harmony.Patch(play, prefix: new HarmonyMethod(typeof(AnimGuard), nameof(BeforePlay)));
-            log.LogInfo("[anim] installed on Animator.Play(string, int, float)");
+            if (Hooks.Install(typeof(DirectPlays), "anim", "direct plays aren't guarded"))
+            {
+                log.LogInfo("[anim] installed on Animator.Play(string, int, float)");
+            }
         }
 
         // False skips a play of a state the animator lacks on the asked layer (or on any, for -1).
-        private static bool BeforePlay(Animator __instance, string stateName, int layer)
+        private static class DirectPlays
         {
-            if (randomizerOn == null || !randomizerOn() || __instance == null || __instance.layerCount == 0)
+            // The game's direct anim.Play("name") calls (battles, events, menus) all end in this overload.
+            [HarmonyPatch(typeof(Animator), nameof(Animator.Play), typeof(string), typeof(int), typeof(float))]
+            [HarmonyPrefix]
+            private static bool BeforePlay(Animator __instance, string stateName, int layer)
             {
-                return true;
+                if (randomizerOn == null || !randomizerOn() || __instance == null || __instance.layerCount == 0)
+                {
+                    return true;
+                }
+                int hash = Animator.StringToHash(stateName);
+                bool found = layer >= 0 && layer < __instance.layerCount ? __instance.HasState(layer, hash) : HasStateOnAnyLayer(__instance, hash);
+                if (!found)
+                {
+                    Report(__instance, stateName);
+                }
+                return found;
             }
-            int hash = Animator.StringToHash(stateName);
-            bool found = layer >= 0 && layer < __instance.layerCount ? __instance.HasState(layer, hash) : HasStateOnAnyLayer(__instance, hash);
-            if (!found)
-            {
-                Report(__instance, stateName);
-            }
-            return found;
         }
 
         private static void Report(Animator anim, string state)
@@ -71,29 +71,28 @@ namespace BugFablesAP
             }
         }
 
-        internal static void Disable()
-        {
-            harmony?.UnpatchSelf();
-            harmony = null;
-        }
+        [HarmonyPatch(typeof(EntityControl), nameof(EntityControl.SetAnim), typeof(string), typeof(bool))]
+        [HarmonyTranspiler]
+        private static IEnumerable<CodeInstruction> Transpile(IEnumerable<CodeInstruction> instructions) =>
+            Hooks.Safe(instructions, EditSetAnim, "anim");
 
-        private static IEnumerable<CodeInstruction> Transpile(IEnumerable<CodeInstruction> instructions)
+        private static IEnumerable<CodeInstruction> EditSetAnim(List<CodeInstruction> code)
         {
-            List<CodeInstruction> code = instructions.ToList();
-            int replaced = 0;
-            foreach (CodeInstruction instruction in code.Where(i => i.Calls(CrossFade)))
+            List<CodeInstruction> plays = code.Where(i => i.Calls(CrossFade)).ToList();
+            MethodInfo guarded = AccessTools.Method(typeof(AnimGuard), nameof(Play))
+                ?? throw new MissingMethodException(nameof(AnimGuard), nameof(Play));
+            foreach (CodeInstruction instruction in plays)
             {
                 instruction.opcode = OpCodes.Call;
-                instruction.operand = AccessTools.Method(typeof(AnimGuard), nameof(Play));
-                replaced++;
+                instruction.operand = guarded;
             }
-            if (replaced == 2)
+            if (plays.Count == 2)
             {
                 log.LogInfo("[anim] installed in EntityControl.SetAnim (both plays)");
             }
             else
             {
-                log.LogWarning($"[anim] EntityControl.SetAnim has {replaced} plays, not 2; the guard covers those it found.");
+                log.LogWarning($"[anim] EntityControl.SetAnim has {plays.Count} plays, not 2; the guard covers those it found.");
             }
             return code;
         }

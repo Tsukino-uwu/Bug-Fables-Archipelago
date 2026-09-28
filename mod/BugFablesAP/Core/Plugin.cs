@@ -154,8 +154,8 @@ namespace BugFablesAP
             ItemSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             KeptOpen.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             EnemyShuffle.Enable(Log, connection, () => randomizerEnabled.Value);
-            AnimGuard.Enable(Log, Guid, () => randomizerEnabled.Value);
-            GlowGuard.Enable(Log, Guid, () => randomizerEnabled.Value);
+            AnimGuard.Enable(Log, () => randomizerEnabled.Value);
+            GlowGuard.Enable(Log, () => randomizerEnabled.Value);
             difficulty = Config.Bind("Archipelago", "Difficulty", "Normal", new ConfigDescription(
                 "Normal leaves it to the game; Hard acts as if the Hard Mode medal were equipped; Hardest as if the save had "
                 + "the HARDEST code, never written into the save. In a seed, boss prize medals are paid out on every setting; on a "
@@ -189,7 +189,7 @@ namespace BugFablesAP
             EnemyScaling.Enable(Log, Guid, settingsOn, () => QualityOfLife.EnemyScalingMode?.Value);
             AttackBoost.Enable(Log, Guid, Config, settingsOn);
             FrameRate.Enable(Log, Guid, settingsOn);
-            ClockCleanup.Enable(Log, Guid, settingsOn);
+            ClockCleanup.Enable(Log, settingsOn);
             InGameSettings.Enable(Log, settingsOn);
             CustomItems.Enable(Log, () => randomizerEnabled.Value);
             BoatTicket.Enable(Log, () => randomizerEnabled.Value);
@@ -417,10 +417,7 @@ namespace BugFablesAP
             ItemSwap.Disable();
             MedalAssist.Disable();
             KeptOpen.Disable();
-            AnimGuard.Disable();
-            GlowGuard.Disable();
             FrameRate.Disable();
-            ClockCleanup.Disable();
             EnemyScaling.Disable();
             AttackBoost.Disable();
             SaveCrystals.Disable();
