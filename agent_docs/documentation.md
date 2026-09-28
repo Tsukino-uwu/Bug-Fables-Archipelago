@@ -136,8 +136,17 @@ game's own number format, as `Convert.ToSingle` reads it under the en-US culture
 read is logged once. The dev console's pickup guard now gets its logger before its first use: before, a missing hook
 target would have thrown inside `Awake` and stopped the plugin loading. The code style is in `.editorconfig`.
 
+**Hooks marked with attributes, the way BepInEx mods do** (2026-09-28, under way). Each hook was wired by hand, with
+the same setup copied into every feature. They move to Harmony's attributes one batch at a time. **How "changed
+nothing" is proven:** the Debug setting `PatchDump` writes every patch the mod made (target, kind, patch method,
+priority) once per load. The list is taken before the first batch and after each one, and must not change. The
+HarmonyX members it reads (`GetAllPatchedMethods`, `GetPatchInfo`, `Patch.owner`/`priority`/`PatchMethod`) were read
+at both tags, 2.7.0 (compiled against) and 2.9.0 (the game's), and match. Baseline (2026-09-28, in game, main menu,
+HarmonyX 2.9.0.0): 167 patches.
+
 **Status:** done; separate guards per system built 2026-09-28, not yet seen in game; errors checked for instead of
-swallowed, built 2026-09-28 (both builds pass), not yet seen in game.
+swallowed, built 2026-09-28 (both builds pass), not yet seen in game; hooks to attributes under way (the patch list
+taken, 167 patches).
 
 *Code: `mod/BugFablesAP/Core/Plugin.cs` (`Plugin`, a BepInEx plugin: `Awake` sets everything up, `Tick` runs
 every frame); the project file is `BugFablesAP.csproj`.*

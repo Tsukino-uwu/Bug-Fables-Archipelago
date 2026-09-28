@@ -22,6 +22,8 @@ namespace BugFablesAP
         private ConfigEntry<bool> mapDumpEnabled;
         private ConfigEntry<bool> varDumpEnabled;
         private ConfigEntry<bool> questDumpEnabled;
+        private ConfigEntry<bool> patchDumpEnabled;
+        private bool patchDumpDone;
         private ConfigEntry<bool> spriteDumpEnabled;
         private bool spriteDumpDone;
         private bool varDumpDone;
@@ -116,6 +118,10 @@ namespace BugFablesAP
             varDumpEnabled = Config.Bind("Debug", "VarDump", false,
                 "Dev only. Once per load, writes every flagvar/flagstring slot the game's text uses to "
                 + "BepInEx/bugfablesap-vardump.tsv. Off by default.");
+            patchDumpEnabled = Config.Bind("Debug", "PatchDump", false,
+                "Dev only. Once per load, writes every method the mod patches (target, kind, patch method, priority) to "
+                + "BepInEx/bugfablesap-patches.tsv, Uncap FPS's hooks included, to compare before and after a refactor. "
+                + "Off by default.");
             questDumpEnabled = Config.Bind("Debug", "QuestDump", false,
                 "Dev only. Once per launch, writes every board quest's name, BoardData numbers and QuestChecks row to "
                 + "BepInEx/bugfablesap-questdump.tsv. Off by default.");
@@ -341,6 +347,12 @@ namespace BugFablesAP
                 {
                     SaveDiff.Run(Log, pair[0].Trim(), pair[1].Trim());
                 }
+            }
+
+            if (patchDumpEnabled.Value && !patchDumpDone)
+            {
+                patchDumpDone = true;
+                PatchDump.Run(Log, Guid);
             }
 
             if (questDumpEnabled.Value && !questDumpDone && MainManager.boardquestdata != null)

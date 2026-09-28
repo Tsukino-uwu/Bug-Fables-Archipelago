@@ -12,6 +12,9 @@ namespace BugFablesAP
 {
     internal static partial class FrameRate
     {
+        // For the patch dump: the hooks are installed as when the row turns on; each does nothing while it's off.
+        internal static void InstallForDump() => EnsureInstalled();
+
         // The console's "fpsscan": reads every method of the game and logs any that counts frames, scales by framestep inside
         // a physics step, or blinks per frame, and isn't in the lists above (or is listed and no longer does).
         internal static string Scan()
