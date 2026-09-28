@@ -2216,9 +2216,11 @@ Logged: `[open] <map>: <entity> kept away (location <id> is already checked)`.
 
 **Seen by the user (2026-09-28):** on a new file the Ladybug Siblings' house was empty (its pickup found in an earlier
 file; `LadybugMistake kept away (location 7720014 ...)`), and Meditation and 15 Berries (Artis's gift) arrived as
-replays with their boxes.
+replays with their boxes. A check sent from outside (Madeleine's left table, checked by a second client on the slot)
+arrived with its box while the player stood in the house; the pickup stayed until the house was entered again, then
+was gone, the right one still there: hiding applies when a map is made, not live.
 
-**Status:** works, seen by the user (2026-09-28): a floor item; a crystal berry not yet seen.
+**Status:** works, seen by the user (2026-09-28): a floor item, on the next entry into its room; a crystal berry not yet seen.
 
 *Code: `KeptOpen.cs` (`AfterCreate`, the found pickups), `ItemSwap.Pickups.cs` (`IsPickup`, now shared).*
 
