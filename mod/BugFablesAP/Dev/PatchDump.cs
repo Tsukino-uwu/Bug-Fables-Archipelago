@@ -31,7 +31,15 @@ namespace BugFablesAP
                     ("transpiler", info.Transpilers), ("finalizer", info.Finalizers),
                 })
                 {
-                    foreach (Patch patch in patches.Where(p => p.owner.StartsWith(guid)))
+                    List<Patch> ours = patches.Where(p => p.owner.StartsWith(guid)).ToList();
+                    if (ours.Count > 1)
+                    {
+                        // Order matters where one target has several of ours of a kind: the order they run in.
+                        log.LogInfo($"[dump] order of {kind}{(kind.EndsWith("x") ? "es" : "s")} on {Describe(target)}: " + string.Join(", ", ours
+                            .OrderByDescending(p => p.priority).ThenBy(p => p.index)
+                            .Select(p => $"{TopType(p.PatchMethod.DeclaringType)?.Name}.{p.PatchMethod.Name}").ToArray()));
+                    }
+                    foreach (Patch patch in ours)
                     {
                         MethodInfo method = patch.PatchMethod;
                         if (method.DeclaringType?.Assembly != typeof(PatchDump).Assembly)

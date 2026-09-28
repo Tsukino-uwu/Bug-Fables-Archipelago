@@ -16,88 +16,93 @@ namespace BugFablesAP
     {
         // Turns a location pickup's add into |additemtoss,3,...| (crystal-berry kind: adds nothing, closes the box
         // the same way); the |flag,...| before it still marks the pickup taken, so the check is sent.
-        public static void PickupPrefix(ref string text, NPCControl caller)
+        private static class Pickups
         {
-            if (caller == null || caller.objecttype != NPCControl.ObjectTypes.Item || text == null || caller.entity == null)
+            [HarmonyPatch(typeof(MainManager), "SetText", typeof(string), typeof(int), typeof(float?), typeof(bool), typeof(bool), typeof(Vector3), typeof(Vector3), typeof(Vector2), typeof(Transform), typeof(NPCControl))]
+            [HarmonyPrefix]
+            public static void PickupPrefix(ref string text, NPCControl caller)
             {
-                return;
-            }
-            int kind = caller.entity.animid;
-            string add = "|additemtoss," + kind + ",var,0|";
-            if (kind < 0 || kind > 3 || !text.Contains(add))
-            {
-                return;
-            }
-            long at = FindPickup(caller);
-            if (at < 0)
-            {
-                return;
-            }
-            bool respawning = connection.LocationPickups[at].Regional >= 0;
-            if (respawning)
-            {
-                // Once its check is done, a respawning pickup is the game's own again.
-                if (connection.IsDone(at))
+                if (caller == null || caller.objecttype != NPCControl.ObjectTypes.Item || text == null || caller.entity == null)
                 {
-                    log.LogInfo($"[swap] location {at}: respawning pickup on {MapName()}, check already done: vanilla item");
                     return;
                 }
-                // The game marks nothing LocationChecks could read later, so its check goes out now.
-                connection.QueueRespawnCheck(at, MainManager.instance.flagstring[ItemReceiver.SeedSlot]);
+                int kind = caller.entity.animid;
+                string add = "|additemtoss," + kind + ",var,0|";
+                if (kind < 0 || kind > 3 || !text.Contains(add))
+                {
+                    return;
+                }
+                long at = FindPickup(caller);
+                if (at < 0)
+                {
+                    return;
+                }
+                bool respawning = connection.LocationPickups[at].Regional >= 0;
+                if (respawning)
+                {
+                    // Once its check is done, a respawning pickup is the game's own again.
+                    if (connection.IsDone(at))
+                    {
+                        log.LogInfo($"[swap] location {at}: respawning pickup on {MapName()}, check already done: vanilla item");
+                        return;
+                    }
+                    // The game marks nothing LocationChecks could read later, so its check goes out now.
+                    connection.QueueRespawnCheck(at, MainManager.instance.flagstring[ItemReceiver.SeedSlot]);
+                }
+                ScoutedItemInfo info = Describe(at, out string name, out Sprite sprite, out Color? color);
+                Mark(caller.entity, null);
+                string article = info != null && IsOurs(info) ? ArticleOf(info.ItemId, KindOf(info)) : null;
+                // "You found |string,1| ...": the seed item's own article, none for a member or another player's item.
+                bool other = ForOther(info, ref name);
+                if (other || article == "")
+                {
+                    text = text.Replace(ArticleSlot, "");
+                }
+                // The pickup line ends its name in the game's red ("...|string,0||color,1|!"); after a name in the Item colors
+                // that "!" looked stray, so it ends in black as the gift line does.
+                if (other && QualityOfLife.ApColors)
+                {
+                    text = text.Replace(NameThenRed, NameThenBlack);
+                }
+                else if (article != null)
+                {
+                    MainManager.instance.flagstring[GameStrings.ItemArticle] = article;
+                }
+                MainManager.instance.flagstring[GameStrings.ItemName] = name;
+                SpriteRenderer held = caller.entity.sprite;
+                if (sprite != null && held != null)
+                {
+                    held.sprite = sprite;
+                }
+                Transform back = held == null ? null : held.transform.Find("back");
+                SpriteRenderer backRenderer = back == null ? null : back.GetComponent<SpriteRenderer>();
+                if (color.HasValue && backRenderer != null)
+                {
+                    backRenderer.material.color = color.Value;
+                }
+                // Replace the vanilla box at once: DestroyDescWindow would shrink it out while the new one grows.
+                if (descWindowField != null && descWindowField.GetValue(caller) is DialogueAnim box && box != null)
+                {
+                    UnityEngine.Object.Destroy(box.gameObject);
+                    descWindowField.SetValue(caller, null);
+                }
+                ShowOwnDescription(caller, info);
+                text = text.Replace(add, "|additemtoss,3,var,0|");
+                if (kind == 3)
+                {
+                    // The berry's pickup code already marked it taken and raised the count: undo the count, keep the mark.
+                    MainManager.instance.flagvar[GameVars.CrystalBerries]--;
+                    text = text.Replace(FirstBerryTutorial + "|break|", "").Replace(FirstBerryTutorial, "");
+                    ShowAsSprite(caller.entity, sprite);
+                }
+                text = text.Replace(FirstMedalTutorial + "|break|", "").Replace(FirstMedalTutorial, "");
+                if (!connection.IsDone(at))
+                {
+                    ShownInScene.Add(at); // a done check's item only comes back as a replay, which keeps its box
+                }
+                log.LogInfo($"[swap] location {at}: pickup (kind {kind}, id {caller.entity.animstate}, flag {caller.activationflag}) "
+                    + $"on {MapName()} is a location; showing '{name}'" + (info == null ? " (not scouted yet)" : ""));
             }
-            ScoutedItemInfo info = Describe(at, out string name, out Sprite sprite, out Color? color);
-            Mark(caller.entity, null);
-            string article = info != null && IsOurs(info) ? ArticleOf(info.ItemId, KindOf(info)) : null;
-            // "You found |string,1| ...": the seed item's own article, none for a member or another player's item.
-            bool other = ForOther(info, ref name);
-            if (other || article == "")
-            {
-                text = text.Replace(ArticleSlot, "");
-            }
-            // The pickup line ends its name in the game's red ("...|string,0||color,1|!"); after a name in the Item colors
-            // that "!" looked stray, so it ends in black as the gift line does.
-            if (other && QualityOfLife.ApColors)
-            {
-                text = text.Replace(NameThenRed, NameThenBlack);
-            }
-            else if (article != null)
-            {
-                MainManager.instance.flagstring[GameStrings.ItemArticle] = article;
-            }
-            MainManager.instance.flagstring[GameStrings.ItemName] = name;
-            SpriteRenderer held = caller.entity.sprite;
-            if (sprite != null && held != null)
-            {
-                held.sprite = sprite;
-            }
-            Transform back = held == null ? null : held.transform.Find("back");
-            SpriteRenderer backRenderer = back == null ? null : back.GetComponent<SpriteRenderer>();
-            if (color.HasValue && backRenderer != null)
-            {
-                backRenderer.material.color = color.Value;
-            }
-            // Replace the vanilla box at once: DestroyDescWindow would shrink it out while the new one grows.
-            if (descWindowField != null && descWindowField.GetValue(caller) is DialogueAnim box && box != null)
-            {
-                UnityEngine.Object.Destroy(box.gameObject);
-                descWindowField.SetValue(caller, null);
-            }
-            ShowOwnDescription(caller, info);
-            text = text.Replace(add, "|additemtoss,3,var,0|");
-            if (kind == 3)
-            {
-                // The berry's pickup code already marked it taken and raised the count: undo the count, keep the mark.
-                MainManager.instance.flagvar[GameVars.CrystalBerries]--;
-                text = text.Replace(FirstBerryTutorial + "|break|", "").Replace(FirstBerryTutorial, "");
-                ShowAsSprite(caller.entity, sprite);
-            }
-            text = text.Replace(FirstMedalTutorial + "|break|", "").Replace(FirstMedalTutorial, "");
-            if (!connection.IsDone(at))
-            {
-                ShownInScene.Add(at); // a done check's item only comes back as a replay, which keeps its box
-            }
-            log.LogInfo($"[swap] location {at}: pickup (kind {kind}, id {caller.entity.animstate}, flag {caller.activationflag}) "
-                + $"on {MapName()} is a location; showing '{name}'" + (info == null ? " (not scouted yet)" : ""));
         }
 
         internal static void TickGround()
@@ -209,27 +214,32 @@ namespace BugFablesAP
         // of item 0 marked as that location, which the stand-ins then swap.
         private static long pendingBerries = -1;
 
-        public static void BerryPrefix(ref string text)
+        private static class Berries
         {
-            Dictionary<long, ApConnection.Give> gives = connection?.LocationGives;
-            string map = MapName();
-            if (text == null || gives == null || map == null || randomizerOn == null || !randomizerOn() || !text.Contains("|giveitem,-1,"))
+            [HarmonyPatch(typeof(MainManager), "SetText", typeof(string), typeof(int), typeof(float?), typeof(bool), typeof(bool), typeof(Vector3), typeof(Vector3), typeof(Vector2), typeof(Transform), typeof(NPCControl))]
+            [HarmonyPrefix]
+            public static void BerryPrefix(ref string text)
             {
-                return;
-            }
-            foreach (KeyValuePair<long, ApConnection.Give> entry in gives)
-            {
-                ApConnection.Give give = entry.Value;
-                string token = "|giveitem,-1," + give.Item + ",";
-                int at = text.IndexOf(token, StringComparison.Ordinal);
-                if (give.Type != -1 || give.Map != map || at < 0)
+                Dictionary<long, ApConnection.Give> gives = connection?.LocationGives;
+                string map = MapName();
+                if (text == null || gives == null || map == null || randomizerOn == null || !randomizerOn() || !text.Contains("|giveitem,-1,"))
                 {
-                    continue;
+                    return;
                 }
-                text = text.Substring(0, at) + "|giveitem,0,0," + text.Substring(at + token.Length);
-                pendingBerries = entry.Key;
-                log.LogInfo($"[swap] location {entry.Key}: berry reward ({give.Item}) on {map} turned into a hand-over to swap");
-                return;
+                foreach (KeyValuePair<long, ApConnection.Give> entry in gives)
+                {
+                    ApConnection.Give give = entry.Value;
+                    string token = "|giveitem,-1," + give.Item + ",";
+                    int at = text.IndexOf(token, StringComparison.Ordinal);
+                    if (give.Type != -1 || give.Map != map || at < 0)
+                    {
+                        continue;
+                    }
+                    text = text.Substring(0, at) + "|giveitem,0,0," + text.Substring(at + token.Length);
+                    pendingBerries = entry.Key;
+                    log.LogInfo($"[swap] location {entry.Key}: berry reward ({give.Item}) on {map} turned into a hand-over to swap");
+                    return;
+                }
             }
         }
 

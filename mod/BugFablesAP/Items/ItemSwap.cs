@@ -22,7 +22,6 @@ namespace BugFablesAP
         private static ManualLogSource log;
         private static ApConnection connection;
         private static Func<bool> randomizerOn;
-        private static Harmony harmony;
 
         private static bool decided;
         private static bool decidedBadge;
@@ -76,85 +75,73 @@ namespace BugFablesAP
 
         private const string FirstMedalTutorial = "|flag,31,true||tail,null||center,true||destroydescbox||goto,-32,break,end|";
 
-        internal static void Enable(ManualLogSource logger, string guid, ApConnection conn, Func<bool> on)
+        internal static void Enable(ManualLogSource logger, ApConnection conn, Func<bool> on)
         {
             log = logger;
             connection = conn;
             randomizerOn = on;
-            MethodInfo setText = AccessTools.Method(typeof(MainManager), "SetText", new[]
+            if (!Hooks.Install(typeof(ItemSwap), "swap", "vanilla items would be given at locations"))
             {
-                typeof(string), typeof(int), typeof(float?), typeof(bool), typeof(bool), typeof(Vector3),
-                typeof(Vector3), typeof(Vector2), typeof(Transform), typeof(NPCControl),
-            });
-            MethodInfo moveNext = setText == null ? null : AccessTools.EnumeratorMoveNext(setText);
-            if (moveNext == null)
-            {
-                log.LogError("[swap] NOT installed: MainManager.SetText's coroutine wasn't found. Vanilla items would be given at locations.");
                 return;
             }
-            harmony = new Harmony(guid + ".swap." + DateTime.UtcNow.Ticks);
-            harmony.Patch(moveNext, transpiler: new HarmonyMethod(typeof(ItemSwap), nameof(Transpile)));
             descWindowField = AccessTools.Field(typeof(NPCControl), "descwindow");
             // World pickups don't use |giveitem|: CheckItem hands SetText a text ending in |additemtoss,<kind>,var,0|.
-            harmony.Patch(setText, prefix: new HarmonyMethod(typeof(ItemSwap), nameof(PickupPrefix)));
-            harmony.Patch(setText, prefix: new HarmonyMethod(typeof(ItemSwap), nameof(BerryPrefix)));
-            MethodInfo updateItem = AccessTools.Method(typeof(EntityControl), nameof(EntityControl.UpdateItem));
-            if (updateItem != null)
-            {
-                harmony.Patch(updateItem, postfix: new HarmonyMethod(typeof(ItemSwap), nameof(AfterUpdateItem)));
-            }
-            else
-            {
-                log.LogWarning("[swap] EntityControl.UpdateItem not found: a pickup the game redraws shows its own item until the ground swap.");
-            }
+            // Two groups, installed in this order: the pickup prefix runs before the berry prefix.
+            Hooks.Install(typeof(Pickups), "swap", "a pickup in the world would give its vanilla item");
+            Hooks.Install(typeof(Berries), "swap", "berries at a location would be given as berries");
+            Hooks.Install(typeof(Redraws), "swap", "a pickup the game redraws shows its own item until the ground swap");
         }
 
         // The one place the game redraws an item entity's own sprite: put the seed's item, its lift and its backdrop back
         // in the same call, so no frame shows the vanilla look (houses redraw their pickups on the way in).
-        private static void AfterUpdateItem(EntityControl __instance)
+        private static class Redraws
         {
-            NPCControl npc = __instance.npcdata;
-            Dictionary<long, ApConnection.Pickup> pickups = connection?.LocationPickups;
-            if (npc == null || npc.objecttype != NPCControl.ObjectTypes.Item || pickups == null || MainManager.map == null
-                || __instance.sprite == null || randomizerOn == null || !randomizerOn())
+            [HarmonyPatch(typeof(EntityControl), nameof(EntityControl.UpdateItem))]
+            [HarmonyPostfix]
+            private static void AfterUpdateItem(EntityControl __instance)
             {
-                return;
-            }
-            string mapName = MainManager.map.mapid.ToString();
-            foreach (KeyValuePair<long, ApConnection.Pickup> entry in pickups)
-            {
-                if (entry.Value.Map != mapName || (entry.Value.Regional >= 0 && connection.IsDone(entry.Key)) || !IsPickup(entry.Value, npc))
-                {
-                    continue;
-                }
-                Describe(entry.Key, out _, out Sprite sprite, out _);
-                if (sprite == null)
+                NPCControl npc = __instance.npcdata;
+                Dictionary<long, ApConnection.Pickup> pickups = connection?.LocationPickups;
+                if (npc == null || npc.objecttype != NPCControl.ObjectTypes.Item || pickups == null || MainManager.map == null
+                    || __instance.sprite == null || randomizerOn == null || !randomizerOn())
                 {
                     return;
                 }
-                if (__instance.animid == 3)
+                string mapName = MainManager.map.mapid.ToString();
+                foreach (KeyValuePair<long, ApConnection.Pickup> entry in pickups)
                 {
-                    ShowAsSprite(__instance, sprite);
+                    if (entry.Value.Map != mapName || (entry.Value.Regional >= 0 && connection.IsDone(entry.Key)) || !IsPickup(entry.Value, npc))
+                    {
+                        continue;
+                    }
+                    Describe(entry.Key, out _, out Sprite sprite, out _);
+                    if (sprite == null)
+                    {
+                        return;
+                    }
+                    if (__instance.animid == 3)
+                    {
+                        ShowAsSprite(__instance, sprite);
+                    }
+                    else
+                    {
+                        __instance.sprite.sprite = sprite;
+                    }
+                    // The lift and backdrop in the same call too, or the item shows at the game's height, then jumps.
+                    Mark(__instance, MarkColorOf(entry.Key));
+                    return;
                 }
-                else
-                {
-                    __instance.sprite.sprite = sprite;
-                }
-                // The lift and backdrop in the same call too, or the item shows at the game's height, then jumps.
-                Mark(__instance, MarkColorOf(entry.Key));
-                return;
             }
         }
 
-        internal static void Disable()
-        {
-            harmony?.UnpatchSelf();
-            harmony = null;
-        }
+        [HarmonyPatch(typeof(MainManager), "SetText", typeof(string), typeof(int), typeof(float?), typeof(bool), typeof(bool), typeof(Vector3), typeof(Vector3), typeof(Vector2), typeof(Transform), typeof(NPCControl))]
+        [HarmonyPatch(MethodType.Enumerator)]
+        [HarmonyTranspiler]
+        private static IEnumerable<CodeInstruction> Transpile(IEnumerable<CodeInstruction> instructions) =>
+            Hooks.Safe(instructions, EditGiveitem, "swap");
 
-        private static IEnumerable<CodeInstruction> Transpile(IEnumerable<CodeInstruction> instructions)
+        private static IEnumerable<CodeInstruction> EditGiveitem(List<CodeInstruction> code)
         {
-            List<CodeInstruction> code = instructions.ToList();
             MethodInfo descWindow = AccessTools.Method(typeof(NPCControl), nameof(NPCControl.CreateDescWindow), new[] { typeof(int), typeof(int) });
             MethodInfo getSprite = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetItemSprite));
             MethodInfo addItem = AccessTools.Method(typeof(List<int>), nameof(List<int>.Add));

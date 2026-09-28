@@ -151,7 +151,7 @@ namespace BugFablesAP
                 + "saves. Switch it in the Archipelago panel on the main menu.");
             SaveRedirect.On = randomizerEnabled.Value;
             SaveRedirect.Enable(Log, Guid);
-            ItemSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
+            ItemSwap.Enable(Log, connection, () => randomizerEnabled.Value);
             KeptOpen.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
             EnemyShuffle.Enable(Log, connection, () => randomizerEnabled.Value);
             AnimGuard.Enable(Log, () => randomizerEnabled.Value);
@@ -414,7 +414,6 @@ namespace BugFablesAP
             // A hot reload must not leave the old instance's socket open next to the new one.
             connection?.Disconnect();
             WebSocketCompression.Disable();
-            ItemSwap.Disable();
             MedalAssist.Disable();
             KeptOpen.Disable();
             FrameRate.Disable();
