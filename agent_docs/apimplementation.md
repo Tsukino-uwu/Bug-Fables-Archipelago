@@ -2223,7 +2223,8 @@ for if people share 1 slot"): every 15 frames, while the player is free, a one-t
 check is done but which this save hasn't taken (its flag, or its crystal berry mark, unset) is hidden the way the game
 hides an entity, `SetActive(false)` (`NPCControl.Start`). A pickup this save took is left to the game: its scene may
 still be running on it. Logged: `[swap] location <id>: found by another client on this slot; its pickup on <map>
-hidden`. Built, not yet seen.
+hidden`. **Seen by the user (2026-09-28):** standing in Madeleine's house, the right table checked by a second
+client: the pickup went at once, and Poison Resistance arrived with its box.
 
 **Status:** works, seen by the user (2026-09-28): a floor item, on the next entry into its room; a crystal berry not yet seen.
 
