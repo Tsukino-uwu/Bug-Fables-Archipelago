@@ -351,7 +351,11 @@ be wrong.
    **Only the ones you interact with** (the user, 2026-09-28): a stone to read, a statue to look at (the pier statue,
    `HiddenEvent`, the `AncientHouseDiscovery` grass), so the player knows to walk up to it. The ones recorded by just
    being there (arriving outside Snakemouth, the fall room's scene) need none, so no "!" of the mod's own at a spot.
-   Open: other checks that aren't visible (buried crystal berries, dig spots). Not built.
+   **Dig spots too** (the user, 2026-09-28): an undug one holding a check. A dig spot buries an item, a crystal berry
+   or an event (`MEASURED.md`, dig spots); 12 hold plain berries, no check today (the user dug one). **Those as checks**
+   (the user's idea): real locations, a new kind (its own build step, likely a yaml option); first measure whether
+   they come back on re-entering (no one-time flag, likely), since a check needs a lasting record the save already
+   has a place for. Not built.
 
 **Known issues:**
 
