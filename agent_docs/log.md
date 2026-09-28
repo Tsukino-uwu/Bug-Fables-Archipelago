@@ -1149,3 +1149,7 @@ Newest last. What was tried, what happened, what the user said.
   slot, removed by the boss's first beam, as the user then saw.
 - **Traps annoy, never harm** (the user, Next 19): a lost turn was considered from that fight and dropped; gliding
   movement on the overworld (momentum when turning, a timer) is the kind the user wants.
+- **The room survey (build step 12), the user's additions:** every flag a room reads is checked with everything else
+  in the room (gates change the logic); needs from other rooms (quests, followers: the throne room needs Maki from two
+  rooms away) are traced there; a need that isn't a quest may be removed for good, case by case, always on in a seed
+  and never part of *Skip cutscenes*.
