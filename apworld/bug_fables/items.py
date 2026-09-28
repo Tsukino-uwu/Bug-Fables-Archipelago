@@ -57,11 +57,12 @@ def create_all_items(world: BugFablesWorld) -> None:
     always = [world.create_item(item["name"]) for item in ITEMS if item.get("always")]
     unfilled = len(world.multiworld.get_unfilled_locations(world.player))
     while always and len(pool) + len(always) > unfilled:
-        # Only an ordinary item or berries, and only one with a copy left in the pool: every location's own item
-        # stays in the pool at least once, and a filler medal (the Hard Mode medal) is never taken.
+        # Only an ordinary item or berries, never a filler medal (the Hard Mode medal). A duplicate copy first; the
+        # last copy only when none is left (few locations, many move items).
         names = [item.name for item in pool]
-        filler = [item for item in pool if item.classification == ItemClassification.filler
-                  and ITEMS_BY_NAME[item.name]["kind"] in (ITEM_KIND, MONEY_KIND) and names.count(item.name) > 1]
+        ordinary = [item for item in pool if item.classification == ItemClassification.filler
+                    and ITEMS_BY_NAME[item.name]["kind"] in (ITEM_KIND, MONEY_KIND)]
+        filler = [item for item in ordinary if names.count(item.name) > 1] or ordinary
         if not filler:
             raise Exception(f"Bug Fables: no filler item to make room for {always[0].name} in player {world.player_name}'s pool")
         pool.remove(world.random.choice(filler))

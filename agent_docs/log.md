@@ -1157,3 +1157,14 @@ Newest last. What was tried, what happened, what the user said.
   game's own boss scene with Archipelago off (`MEASURED.md`). **Next 41** (the user): a "!" over each discovery you
   interact with (a stone, a statue; not the automatic ones) and over undug dig spots holding a check, with the Detector
   on; the 12 berry dig spots as checks, an idea, respawning to measure first.
+
+## 2026-09-28 (night): the fuzzer joins the tests
+
+- **Asked:** are we using the Archipelago-fuzzer? No, only the tests and hand-generated seeds. The user: use it
+  regularly, and **whenever the tests run, the fuzzer runs too**; 1000 or 10000 seeds are quick. Its `fuzz.py` 0.6.2
+  (the latest) was already in the Archipelago checkout. `dev-scripts/test-apworld.ps1` runs both.
+- **First 10000 seeds: 1163 failed**, all "no filler item to make room for Boat Ticket". The user's guess (too few
+  checks) was right: *Shuffle Field Moves* on with item shops and discoveries off leaves too few duplicate filler
+  copies. Adding locations wouldn't reliably fix it (each brings its own item). The user chose the fallback: the last
+  copy of an ordinary item or berries gives way, only once no duplicate is left. `TestSmallPool` failed before the
+  fix; after it 0 of 10000, and 0 of 2000 with APQuest.

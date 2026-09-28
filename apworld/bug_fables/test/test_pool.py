@@ -29,7 +29,7 @@ class TestPool(BugFablesTestBase):
 
     def test_each_location_puts_its_item_in_the_pool(self) -> None:
         # Every location's item is in the pool once per location holding it, except the copies the mod's own items
-        # (the Boat Ticket) take when the pool is full: one duplicated filler copy each, never an item's last copy.
+        # (the Boat Ticket) take when the pool is full: one duplicated filler copy each (TestSmallPool: a last copy).
         from ..data_tables import ITEMS, LOCATIONS, vanilla_item
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         own = sum(1 for item in ITEMS if item.get("always"))
@@ -56,3 +56,24 @@ class TestBerries(BugFablesTestBase):
         self.assertEqual(self.world.item_name_to_id["10 Berries"], ITEM_ID_BASE + MONEY_ID_OFFSET + 10)
         kinds = self.world.fill_slot_data()["item_kinds"]
         self.assertEqual(kinds[str(self.world.item_name_to_id["10 Berries"])], 3)
+
+
+class TestSmallPool(BugFablesTestBase):
+    # Found by the fuzzer: with this few locations the move items outnumber the duplicate filler copies.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True, "starting_party_member": "vi",
+               "shuffle_quests": False, "shuffle_crystal_berries": False, "shuffle_discoveries": False,
+               "shuffle_medal_shops": False, "shuffle_item_shops": False}
+
+    def test_only_ordinary_filler_gives_way(self) -> None:
+        from ..data_tables import ITEM_KIND, MONEY_KIND, ITEMS, vanilla_item
+        from ..items import ITEMS_BY_NAME
+        pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        for item in ITEMS:
+            if item.get("always"):
+                self.assertEqual(pool.count(item["name"]), 1)
+        for name in {vanilla_item(loc) for loc in self.world.included_locations} - {None}:
+            data = ITEMS_BY_NAME[name]
+            if data["classification"] != "filler" or data["kind"] not in (ITEM_KIND, MONEY_KIND):
+                expected = sum(1 for loc in self.world.included_locations if vanilla_item(loc) == name)
+                with self.subTest(item=name):
+                    self.assertEqual(pool.count(name), expected)

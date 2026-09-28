@@ -359,11 +359,6 @@ be wrong.
 
 **Known issues:**
 
-- **About 1 seed in 9 fails to generate** (the fuzzer, 2026-09-28: 1163 of 10000): "no filler item to make room for
-  Boat Ticket". Every failure has *Shuffle Field Moves* on with *Shuffle Item Shops* and *Shuffle Discoveries* off:
-  the move items outnumber the spare filler copies (one yaml: 30 slots, 2 removable copies), and every location's own
-  item stays in the pool at least once. Deterministic for those options.
-
 - **Horn rules:** written as `abilities: ["Horn Slash"]` since the horn became an item (build step 21): locations
   11, 19, 25, 30 and 32, and 31 through the Den's entrance (build step 13). Not location 2: the horn tutorial cuts its
   grass itself and played through with Leif alone (the user, 2026-09-25). **Upper Snakemouth, when it gets locations:** the big door in the door room stays shut until flag 14 (its closed
@@ -1704,6 +1699,10 @@ trip free and the ticket kept; the logic gates Metal Island on it, so Metal Isla
    reachable with it. `TestPool` now allows the one filler copy the ticket takes. *Shop Contents: Filler Only* in a solo
    seed with discoveries on is now one filler short and falls back to No Progression, as it already did without
    discoveries; with other games' filler in the room it holds.
+7. **When no duplicate is left** (the fuzzer, 2026-09-28: 1163 of 10000 seeds failed with *Shuffle Field Moves* on and
+   item shops and discoveries off): the last copy of an ordinary item or berries gives way too, only then. No
+   progression, useful item or medal ever does, so the fill and the logic are unchanged; the seed has a few fewer
+   plain items. `TestSmallPool` (the smallest option set), then 0 of 10000 fuzzed seeds failed, and 0 of 2000 with APQuest.
 
 **Seen by the user (2026-09-26):** with the ticket, the sailor offered "Would you fancy traveling to / Metal Island?
 Show me your ticket." (a `|line|` before the name, which wrapped mid-name at first), "Let's go!" / "Not yet!", and
