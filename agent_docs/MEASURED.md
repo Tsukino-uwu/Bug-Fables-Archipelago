@@ -725,7 +725,7 @@ The output stays in the BepInEx folder.
     359) also sets it as a fallback, and `Event22`, run on **every save load** (`StartMenu.cs:526`, `ReloadSave`), turns
     699 on when 39 or 359 is set (`EventControl.cs:4167-4185`).
   - *Shield*, flag 20, `Event95` (`:15962`): started by the switch in `FactoryProcessingFirstRoom` (Switch data `1 95`,
-    `NPCControl.cs:4701-4705`; `event-triggers.py` misses Switch-started events). The switch counts as hit on load once
+    `NPCControl.cs:4701-4705`; `event-triggers.py` finds it since 2026-09-28). The switch counts as hit on load once
     20 is set (`NPCControl.cs:1022-1033`). Chapter 3.
   - *Beetle Dig*, flag 18, `Event109`'s `HideoutCell` branch (`:18554`). 18 also gates the hideout's story: its
     capture scene (`HideoutEntrance/eventcheck`, lim 18), the door below and the Astotheles fight (req 18); the cell is
@@ -766,11 +766,18 @@ The output stays in the BepInEx folder.
 
 ## What starts the gate events (2026-09-24, EntityDump, ScriptDump with event lines, MapDump) — SPOILERS
 
-`dev-scripts/event-triggers.py` looks in every place an event can start. **How events start:**
+`dev-scripts/event-triggers.py` looks in the places below (corrected 2026-09-28 after an audit: the first version
+missed switches, AND gates and pressure plates; searched: every `StartEvent(` in `NPCControl.cs`). **How events
+start:**
 - talking to or touching an entity whose `eventid` is the event (`NPCControl.cs:4358`);
 - an `EventTrigger` object, `data[0]` (`NPCControl.cs:5525`);
 - a dig spot with `data[0] >= 2`, `data[1]` (`:5530`);
-- a pickup chain, `data[1]` (`MainManager.cs:12543`);
+- a pickup chain, `data[1]` (`NPCControl.cs` ~5704-5710; `MainManager.cs:12543` is the full-bag toss path);
+- a `Switch`, `StencilSwitch` or `WaterSwitch` hit while `data[0] == 1`, `data[1]` (`NPCControl.cs:4705`);
+- an `ANDGate`, `data[0]` (`:1856`); a `PressurePlate`, `data[2]` (`:5438`);
+- touching any entity while `entitytouchevent` is set (`:5903`; only `Event102` sets it, to 102);
+- a stealth guard (`StealthAI`) spotting the party, `battleids[0]` (`:3362`): not in the script, the entity dump
+  has no behaviours;
 - a locked door's `dialogues[1].y` once the right key is used (`EventControl.cs:9606`);
 - a dialogue line's `|event,N|`;
 - a map's `autoevent` (only 5 maps have any, e.g. `HoneycombsLab` 175:80, `Swamplands5` 383:147);
@@ -794,7 +801,9 @@ The output stays in the BepInEx folder.
 - **200** by `Swamplands7/archertop` and a trigger on `GiantLairSaplingPlains`. **203** is called from
   `Event200`.
 - **Not found:** Events 0 and 1 (the prologue: flag 11, the beemerang, is on from the start) and **Event95**
-  (flag 20, the bubble shield). 95 has no data trigger, no dialogue line and no literal call; still to find.
+  (flag 20, the bubble shield): found since, a switch in `FactoryProcessingFirstRoom` (above). Rerun on
+  2026-09-28 with every starter: 57 more found, and only one for a gate event (Event109, a switch hidden by flag 11,
+  which is on from the start, so it never appears). No gate changed.
 
 **Dig spots bury things** (`NPCControl.cs:5396-5420`): `data[0]` 0 = an item (kind `data[1]`, id `data[2]`,
 with its own `activationflag`), 1 = a crystal berry (index `data[1]`), 2 or more = an event (`data[1]`).

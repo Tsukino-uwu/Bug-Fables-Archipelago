@@ -812,8 +812,9 @@ bubble shield's maps from data. Hover has no object at all; pits (`Hole` hazards
 Obstacles for moves that are never shuffled (Kabbu's horn on grass, Vi's beemerang on switches) aren't gates.
 
 **Where each story step starts.** `dev-scripts/event-triggers.py` looks in every place the game starts an
-event: talking to an entity, trigger objects, dig spots, pickups, locked doors, dialogue lines, a map's own
-auto-start list and literal calls in code. It found the start of all but one of the gate events. Two
+event: talking to an entity, trigger objects, dig spots, pickups, switches, AND gates, pressure plates, locked
+doors, dialogue lines, a map's own auto-start list and literal calls in code (switches, AND gates and plates added
+2026-09-28 after an audit found them missing; rerun, no gate changed). It found the start of all but one of the gate events. Two
 surprises: one gate is a locked door that needs a key item (so a key item gates a whole area), and dig
 spots bury items, which are locations the floor-pickup count had missed, each needing dig.
 

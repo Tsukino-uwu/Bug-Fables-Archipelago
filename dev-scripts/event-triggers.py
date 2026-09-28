@@ -2,7 +2,9 @@
 
     python dev-scripts/event-triggers.py <entitydump.tsv> <scriptdump.tsv> <mapdump.tsv> <event> [<event> ...]
 
-Looks in entity eventids, triggers, dig spots, pickups, locked doors, |event,N| lines, map autoevents and StartEvent(N).
+Looks in entity eventids, triggers, dig spots, pickups, AND gates, switches (all three kinds), pressure plates, locked doors,
+|event,N| lines, map autoevents, StartEvent(N) and entitytouchevent = N. Not found: a stealth guard's spot event
+(battleids[0] of an entity with StealthAI), since the entity dump has no behaviours.
 """
 import collections
 import csv
@@ -13,7 +15,10 @@ from pathlib import Path
 DECOMPILED = Path(__file__).resolve().parent.parent / "decompiled"
 CODE_FILES = ["EventControl.cs", "MainManager.cs", "NPCControl.cs", "BattleControl.cs", "MapControl.cs",
               "PlayerControl.cs"]
-DATA_SLOT = {"EventTrigger": 0, "DigSpot": 1, "Item": 1}
+# The data slot holding the event each object starts (NPCControl's StartEvent calls).
+DATA_SLOT = {"EventTrigger": 0, "DigSpot": 1, "Item": 1, "ANDGate": 0, "PressurePlate": 2,
+             "Switch": 1, "StencilSwitch": 1, "WaterSwitch": 1}
+SWITCHES = {"Switch", "StencilSwitch", "WaterSwitch"}
 
 
 def main() -> None:
@@ -31,6 +36,9 @@ def main() -> None:
         slot = DATA_SLOT.get(r["objecttype"])
         # A dig spot starts an event only when data[0] >= 2; 0 buries an item, 1 a crystal berry.
         if r["objecttype"] == "DigSpot" and (not data or data[0] < 2):
+            slot = None
+        # A switch starts data[1] only when data[0] == 1.
+        if r["objecttype"] in SWITCHES and (not data or data[0] != 1):
             slot = None
         if slot is not None and len(data) > slot and data[slot] > 0:
             found[data[slot]].append(f"{r['objecttype']} {r['map']}/{r['name']} {gate}")
@@ -59,6 +67,8 @@ def main() -> None:
                 current = m.group(1)
             for e in re.findall(r"StartEvent\((\d+)", text):
                 found[int(e)].append(f"code {name}:{number} in {current}")
+            for e in re.findall(r"entitytouchevent = (\d+)", text):
+                found[int(e)].append(f"touching an entity, armed by {name}:{number} in {current}")
 
     for event in wanted:
         print(f"Event{event}:")
