@@ -151,29 +151,40 @@ namespace BugFablesAP
 
         internal ArchipelagoSession Session => session;
 
-        // True once a login brought slot_data; kept after a drop so the rules stay in force. Never saved to disk.
-        internal bool SeedKnown => seedKnown;
-        private volatile bool seedKnown;
+        // The seed's data, parsed at a login; kept after a drop so the rules stay in force. Never saved to disk.
+        internal SeedData Seed => seedData;
+        private volatile SeedData seedData;
+        internal bool SeedKnown => seedData != null;
 
-        internal Dictionary<long, int> LocationFlags => locationFlags;
-        private volatile Dictionary<long, int> locationFlags;
+        internal Dictionary<long, int> LocationFlags => seedData?.LocationFlags;
+        internal Dictionary<long, Give> LocationGives => seedData?.LocationGives;
+        internal Dictionary<long, int[]> LocationAdded => seedData?.LocationAdded;
+        internal Dictionary<long, Pickup> LocationPickups => seedData?.LocationPickups;
+        internal Dictionary<long, int[]> LocationVars => seedData?.LocationVars;
+        internal Dictionary<long, int> LocationBerries => seedData?.LocationBerries;
+        internal Dictionary<long, int> LocationDiscoveries => seedData?.LocationDiscoveries;
+        internal HashSet<long> SilentLocations => seedData?.SilentLocations;
+        internal HashSet<long> QuietLocations => seedData?.QuietLocations;
+        internal Dictionary<long, int[]> LocationShops => seedData?.LocationShops;
+        internal Dictionary<long, ItemShopSlot> LocationItemShops => seedData?.LocationItemShops;
+        internal Dictionary<long, int> ItemKinds => seedData?.ItemKinds;
+        internal List<Blocker> KeptOpen => seedData?.KeptOpen;
+        internal List<Blocker> KeptPresent => seedData?.KeptPresent;
+        internal List<Blocker> SceneryHidden => seedData?.SceneryHidden;
+        internal List<Blocker> SceneryPresent => seedData?.SceneryPresent;
+        internal List<Blocker> HeldUntil => seedData?.HeldUntil;
+        internal List<Blocker> PresentFrom => seedData?.PresentFrom;
+        internal List<DialogueFlag> DialogueFlags => seedData?.DialogueFlags;
+        internal List<DoorShuffle.Target> DoorTargets => seedData?.DoorTargets;
+        internal Dictionary<string, int[]> EnemySwaps => seedData?.EnemySwaps;
+        internal KeyValuePair<string, int>? Start => seedData?.Start;
+        internal string StartFrom => seedData?.StartFrom;
+        internal int ArtifactsRequired => seedData?.ArtifactsRequired ?? 0;
+        internal int OwnSlot => seedData?.OwnSlot ?? -1;
 
-        internal Dictionary<long, Give> LocationGives => locationGives;
-        // Items the story puts straight into the bag at a location: {type, item}; left out while in a seed.
-        internal Dictionary<long, int[]> LocationAdded => locationAdded;
-        private volatile Dictionary<long, int[]> locationAdded;
-        private volatile Dictionary<long, Give> locationGives;
-
-        internal Dictionary<long, int> ItemKinds => itemKinds;
-        private volatile Dictionary<long, int> itemKinds;
-
-        // The goal: this many artifacts, as the game counts them. 0 when slot_data has none.
-        internal int ArtifactsRequired => artifactsRequired;
-        private volatile int artifactsRequired;
-
-        // Kept after a drop, like the tables above.
-        internal int OwnSlot => ownSlot;
-        private volatile int ownSlot = -1;
+        // Items the server had sent when this login began: those are a replay, not something arriving during play.
+        internal int ReceivedAtLogin => receivedAtLogin;
+        private volatile int receivedAtLogin;
 
         internal sealed class Give
         {
@@ -181,9 +192,6 @@ namespace BugFablesAP
             internal int Type;
             internal int Item;
         }
-
-        internal Dictionary<long, Pickup> LocationPickups => locationPickups;
-        private volatile Dictionary<long, Pickup> locationPickups;
 
         internal sealed class Pickup
         {
@@ -197,74 +205,12 @@ namespace BugFablesAP
             internal int Regional = -1;
         }
 
-        // {location id: {var, at_least}}: done when a number slot reaches a value (a boss prize: its slot at 3).
-        internal Dictionary<long, int[]> LocationVars => locationVars;
-        private volatile Dictionary<long, int[]> locationVars;
-
-        // Where a new file begins (Starting Location): the map and a save point's entity index (-1 for none); null for the
-        // game's own start. StartFrom: the map whose door leads in, for a start entered as if through that door.
-        internal KeyValuePair<string, int>? Start => start;
-        private volatile object startBox;
-        private KeyValuePair<string, int>? start => startBox as KeyValuePair<string, int>?;
-        internal string StartFrom => startFrom;
-        private volatile string startFrom;
-
-        // {"map:entity index": enemy ids}: the fight a map enemy starts instead of its own (Enemy Shuffle).
-        internal Dictionary<string, int[]> EnemySwaps => enemySwaps;
-        private volatile Dictionary<string, int[]> enemySwaps;
-
-        internal Dictionary<long, int> LocationBerries => locationBerries;
-        private volatile Dictionary<long, int> locationBerries;
-
-        internal Dictionary<long, int> LocationDiscoveries => locationDiscoveries;
-        private volatile Dictionary<long, int> locationDiscoveries;
-        // Checks that show no item of their own: the receiver shows the player's own item from them.
-        internal HashSet<long> SilentLocations => silentLocations;
-        private volatile HashSet<long> silentLocations;
-        // The opening's checks: their items arrive with no hold-up.
-        internal HashSet<long> QuietLocations => quietLocations;
-        private volatile HashSet<long> quietLocations;
-
-        internal Dictionary<long, int[]> LocationShops => locationShops;
-        private volatile Dictionary<long, int[]> locationShops;
-
         internal sealed class ItemShopSlot
         {
             internal string Map;
             internal string Keeper;
             internal int Item;
         }
-
-        internal Dictionary<long, ItemShopSlot> LocationItemShops => locationItemShops;
-
-        internal List<DoorShuffle.Target> DoorTargets => doorTargets;
-        private volatile List<DoorShuffle.Target> doorTargets;
-        private volatile Dictionary<long, ItemShopSlot> locationItemShops;
-
-        internal List<Blocker> KeptOpen => keptOpen;
-        private volatile List<Blocker> keptOpen;
-
-        internal List<Blocker> KeptPresent => keptPresent;
-        private volatile List<Blocker> keptPresent;
-
-        // Scenery entities are paths inside the map, as MapDump writes them.
-        internal List<Blocker> SceneryHidden => sceneryHidden;
-        internal List<Blocker> SceneryPresent => sceneryPresent;
-        private volatile List<Blocker> sceneryPresent;
-        private volatile List<Blocker> sceneryHidden;
-
-        internal List<Blocker> HeldUntil => heldUntil;
-        private volatile List<Blocker> heldUntil;
-
-        // Items the server had sent when this login began: those are a replay, not something arriving during play.
-        internal int ReceivedAtLogin => receivedAtLogin;
-        private volatile int receivedAtLogin;
-
-        internal List<Blocker> PresentFrom => presentFrom;
-        private volatile List<Blocker> presentFrom;
-
-        internal List<DialogueFlag> DialogueFlags => dialogueFlags;
-        private volatile List<DialogueFlag> dialogueFlags;
 
         internal sealed class DialogueFlag
         {
@@ -279,16 +225,6 @@ namespace BugFablesAP
             internal string Map;
             internal string Entity;
             internal int Flag = -1;
-        }
-
-        private static Blocker ReadBlocker(JToken e)
-        {
-            return new Blocker
-            {
-                Map = e.Value<string>("map"),
-                Entity = e.Value<string>("entity"),
-                Flag = e["flag"] != null ? e.Value<int>("flag") : -1,
-            };
         }
 
         // Respawning pickups: nothing in the save marks them, so what's done lives here (server list, updates, local
@@ -485,88 +421,19 @@ namespace BugFablesAP
                     status = $"Connected as {slot}.";
                     Heard();
                     lastPingUtc = DateTime.UtcNow;
-                    Dictionary<string, object> data = ok.SlotData;
-                    locationFlags = SlotData.ByLocation(data, "location_flags", v => v.Value<int>());
-                    locationGives = SlotData.ByLocation(data, "location_gives", v => new Give
-                    {
-                        Map = v.Value<string>("map"),
-                        Type = v.Value<int>("type"),
-                        Item = v.Value<int>("item"),
-                    });
-                    locationPickups = SlotData.ByLocation(data, "location_pickups", v => new Pickup
-                    {
-                        Map = v.Value<string>("map"),
-                        Flag = v.Value<int>("flag"),
-                        Event = v.Value<int?>("event") ?? -1,
-                        Berry = v.Value<int?>("berry") ?? -1,
-                        Regional = v.Value<int?>("regional") ?? -1,
-                    });
-                    keptOpen = SlotData.List(data, "kept_open", ReadBlocker);
-                    keptPresent = SlotData.List(data, "kept_present", ReadBlocker);
-                    sceneryHidden = SlotData.List(data, "scenery_hidden", ReadBlocker);
-                    sceneryPresent = SlotData.List(data, "scenery_present", ReadBlocker);
-                    heldUntil = SlotData.List(data, "held_until", ReadBlocker);
-                    presentFrom = SlotData.List(data, "present_from", ReadBlocker);
-                    dialogueFlags = SlotData.List(data, "dialogue_flags", e => new DialogueFlag
-                    {
-                        Map = e.Value<string>("map"),
-                        Entity = e.Value<string>("entity"),
-                        From = e.Value<int>("flag"),
-                        To = e.Value<int>("to"),
-                    });
-                    locationVars = SlotData.ByLocation(data, "location_vars", v => new[] { v.Value<int>("var"), v.Value<int>("at_least") });
-                    locationBerries = SlotData.ByLocation(data, "location_berries", v => v.Value<int>());
-                    locationAdded = SlotData.ByLocation(data, "location_added", v => new[] { v.Value<int>("type"), v.Value<int>("item") });
-                    locationDiscoveries = SlotData.ByLocation(data, "location_discoveries", v => v.Value<int>());
-                    List<long> silent = SlotData.List(data, "silent_locations", e => e.Value<long>());
-                    silentLocations = silent != null ? new HashSet<long>(silent) : null;
-                    List<long> quiet = SlotData.List(data, "quiet_locations", e => e.Value<long>());
-                    quietLocations = quiet != null ? new HashSet<long>(quiet) : null;
-                    locationShops = SlotData.ByLocation(data, "location_shops", v => new[] { v.Value<int>("shop"), v.Value<int>("medal") });
-                    locationItemShops = SlotData.ByLocation(data, "location_item_shops", v => new ItemShopSlot
-                    {
-                        Map = v.Value<string>("map"),
-                        Keeper = v.Value<string>("keeper"),
-                        Item = v.Value<int>("item"),
-                    });
-                    doorTargets = SlotData.List(data, "door_targets", e => new DoorShuffle.Target
-                    {
-                        Map = e.Value<string>("map"),
-                        Door = e.Value<string>("door"),
-                        LikeMap = e.Value<string>("like_map"),
-                        LikeDoor = e.Value<string>("like_door"),
-                    });
-                    enemySwaps = SlotData.Object(data, "enemy_swaps")?.Properties().ToDictionary(p => p.Name, p => p.Value.ToObject<int[]>());
-                    JObject startData = SlotData.Object(data, "start");
-                    if (startData != null && (startData["map"] == null || startData["entity"] == null && startData["from"] == null))
-                    {
-                        startData = null;
-                    }
-                    startFrom = startData?.Value<string>("from");
-                    startBox = startData != null
-                        ? (object)new KeyValuePair<string, int>(startData.Value<string>("map"), startData["entity"] != null ? startData.Value<int>("entity") : -1)
-                        : null;
-                    ownSlot = ok.Slot;
-                    object sm = null;
-                    PartyMembers.SeedSaysMember = data != null && data.TryGetValue("starting_member", out sm) && sm != null;
-                    PartyMembers.SeedStartMember = PartyMembers.SeedSaysMember ? Convert.ToInt32(sm) : -1;
-                    itemKinds = SlotData.ByLocation(data, "item_kinds", v => v.Value<int>());
-                    FieldMoves.MovesShuffled = data != null && data.TryGetValue("shuffle_moves", out object smv) && smv is bool smb && smb;
-                    FieldMoves.JumpShuffled = data != null && data.TryGetValue("shuffle_jump", out object sj) && sj is bool sjb && sjb;
-                    Abilities.AbilityItems = data != null && data.TryGetValue("ability_items", out object ai) && ai is bool aib && aib;
-                    artifactsRequired = data != null && data.TryGetValue("artifacts_required", out object ar) && ar != null
-                        ? Convert.ToInt32(ar) : 0;
-                    seedKnown = true;
+                    // Parsed whole before anything is published: a malformed slot_data changes nothing.
+                    var parsed = new SeedData(ok.SlotData, ok.Slot);
+                    PartyMembers.SeedSaysMember = parsed.StartingMemberGiven;
+                    PartyMembers.SeedStartMember = parsed.StartingMember;
+                    FieldMoves.MovesShuffled = parsed.MovesShuffled;
+                    FieldMoves.JumpShuffled = parsed.JumpShuffled;
+                    Abilities.AbilityItems = parsed.AbilityItems;
+                    seedData = parsed;
                     // Published last, with a fence: the game thread never sees a live session with the seed's tables unread.
                     Interlocked.Exchange(ref session, attempt);
                     scouts = null;
                     ResetDone(attempt);
-                    Scout(attempt, (locationFlags?.Keys ?? Enumerable.Empty<long>()).Concat(locationVars?.Keys ?? Enumerable.Empty<long>())
-                        .Concat(locationBerries?.Keys ?? Enumerable.Empty<long>())
-                        .Concat(locationDiscoveries?.Keys ?? Enumerable.Empty<long>())
-                        .Concat(locationShops?.Keys ?? Enumerable.Empty<long>())
-                        .Concat(locationItemShops?.Keys ?? Enumerable.Empty<long>())
-                        .Concat(locationPickups?.Keys ?? Enumerable.Empty<long>()).Distinct().ToList());
+                    Scout(attempt, parsed.ScoutedLocations());
                     attempt.Locations.CheckedLocationsUpdated += ids =>
                     {
                         MarkDone(ids);

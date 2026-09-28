@@ -176,7 +176,11 @@ and the calls into it vanish.
 separate fields on the connection into one immutable `SeedData`. **How "changed nothing" is proven:** the Debug setting
 `SeedDump` writes everything the mod read from the seed, one sorted line per entry, once a login brings it. It is taken
 before and after the change on the same local seed. `copy-dev.ps1 -ConfigSet Archipelago.RandomizerEnabled=true` lets the
-game log in at the main menu for it, with no save in play.
+game log in at the main menu for it, with no save in play. The same login showed compression on
+(`permessage-deflate`), with its hooks moved.
+- **Built so far:** `Core/SeedData.cs` parses the seed whole before anything is published, so a malformed `slot_data`
+  changes nothing. Before, a throw halfway left a mix of two seeds. The connection keeps one reference to it, and its
+  old properties forward to it. The seed dump was identical (1,073 entries, on a local seed, 2026-09-28).
 
 **Status:** done; separate guards per system built 2026-09-28, not yet seen in game; errors checked for instead of
 swallowed, built 2026-09-28 (both builds pass), not yet seen in game; hooks to attributes built 2026-09-28 (all 33
