@@ -1,14 +1,15 @@
 # Measured facts about Bug Fables
 
 Each entry names our evidence and its date. The game can update without this repo changing, so a dated
-entry is true as of that date. **Nothing here is "verified"**: that word is reserved for what the user
-confirms on screen.
+entry is true as of that date. **Nothing here is "verified"**: that word is reserved for what the tester
+confirms on screen. **Seen** (or *seen in play*) means the tester saw it on screen; everything else is a code
+read, a log or a probe.
 
 ## Contents
 
-- [The build](#the-build-2026-09-24-read-from-the-users-steam-install-game-not-run)
+- [The build](#the-build-2026-09-24-read-from-a-steam-install-game-not-run)
 - [How the game grants items](#how-the-game-grants-items-2026-09-24-read-from-assembly-csharpdll-decompiled-with-ilspycmd-1011)
-- [Observed in the running game](#observed-in-the-running-game-2026-09-24-grantprobe-a-new-game-played-by-the-user)
+- [Observed in the running game](#observed-in-the-running-game-2026-09-24-grantprobe-a-new-game-played-through)
 - [Save files](#save-files-2026-09-24-decompiled-inputiomanagerinputiocs)
 - [Free save slots for the mod](#free-save-slots-for-the-mod-2026-09-24)
 - [The main menu](#the-main-menu-2026-09-24-decompiled-startmenucs)
@@ -19,9 +20,9 @@ confirms on screen.
 - [Hard Mode boss prize medals](#hard-mode-boss-prize-medals-2026-09-24-code-read-not-seen-in-game)
 - [Chapters — SPOILERS: map names](#chapters-2026-09-24-code-read-and-entitydump--spoilers-map-names)
 - [What starts the gate events — SPOILERS](#what-starts-the-gate-events-2026-09-24-entitydump-scriptdump-with-event-lines-mapdump--spoilers)
-- [Lore Books at the library](#lore-books-at-the-library-2026-09-24-the-users-play-through)
+- [Lore Books at the library](#lore-books-at-the-library-2026-09-24-seen-in-a-play-through)
 - [All crystal berries](#all-crystal-berries-2026-09-24-entity-dump-and-scriptdump-matched-to-the-bug-fables-wiki)
-- [Respawning pickups, seen in play](#respawning-pickups-seen-in-play-2026-09-24-the-user-with-the-dev-log)
+- [Respawning pickups, seen in play](#respawning-pickups-seen-in-play-2026-09-24-with-the-dev-log)
 - [The door graph](#the-door-graph-2026-09-25-dev-scriptsdoor-graphpy-on-the-entitydump)
 - [Doors paired with their way back](#doors-paired-with-their-way-back-2026-09-25-a-new-entitydump-with-positions-door-graphpy)
 - [Transfers that aren't doors](#transfers-that-arent-doors-2026-09-25-scriptdumps-transfer-column-dev-scriptsevent-transferspy)
@@ -37,7 +38,7 @@ confirms on screen.
 - [Quests: to measure](#quests-to-measure-when-quests-come-into-scope)
 - [Key items: to measure](#key-items-to-measure)
 
-## The build (2026-09-24, read from the user's Steam install, game not run)
+## The build (2026-09-24, read from a Steam install, game not run)
 
 - **Unity 2018.4.12f1**, read from the header of `Bug Fables_Data\data.unity3d`.
 - **Mono, not IL2CPP:** `Bug Fables_Data\Managed\Assembly-CSharp.dll` (2,196,992 bytes) has a CLR header, a
@@ -45,7 +46,7 @@ confirms on screen.
 - **x64:** `UnityCrashHandler64.exe`.
 - **The game's own `version.txt` says `1.2`.**
 - **`Managed\` ships `netstandard.dll`**, so a `netstandard2.0` plugin should load. Not yet tested.
-- **BepInEx 5.4.23.5 loads in this game.** Measured 2026-09-24 from `BepInEx/LogOutput.log` after the user
+- **BepInEx 5.4.23.5 loads in this game.** Measured 2026-09-24 from `BepInEx/LogOutput.log` after the tester
   launched the game once: `Running under Unity v2018.4.12.5889476`, `CLR runtime version: 4.0.30319.17020`,
   `System platform: Bits64, Windows`, `Chainloader startup complete`, `Loading [Script Engine 11.1]`.
 - **`Supports SRE: False`** (the same log): System.Reflection.Emit isn't available. **Closed 2026-09-24:**
@@ -113,7 +114,7 @@ Read from code only; nothing observed running yet.
   code. A hook on the three commands catches every grant, but naming *which* location fired needs context:
   the calling NPC, the map, and the flag set in the same text. That's the next thing to measure.
 
-## Observed in the running game (2026-09-24, GrantProbe, a new game played by the user)
+## Observed in the running game (2026-09-24, GrantProbe, a new game played through)
 
 Instrument: `mod/BugFablesAP/Dev/GrantProbe.cs`, which is read-only, logged to `BepInEx/LogOutput.log`, and
 throttled to changes.
@@ -129,7 +130,7 @@ throttled to changes.
   whether the Giveitem call sits in that event's dialogue text, still has to be confirmed.
 - **Then `flag[31]` (frame 18896), `flag[32]` (19202) and `flag[30]` (19979)**, all on the same map. Flag 31
   is the one `NPCControl.CheckItem` sets the first time a medal is picked up (`|flag,31,true|` when
-  `animid == 2`), so the user's "first item" was probably a medal. GrantProbe doesn't watch `badges`, so no
+  `animid == 2`), so the "first item" seen in play was probably a medal. GrantProbe doesn't watch `badges`, so no
   item line appeared. 32 and 30 are unexplained so far.
 - **Story events are numbered coroutines in `EventControl`** (`private IEnumerator Event<N>()`). They run their
   dialogue from the current map's `MainManager.map.dialogues[]` text table and **set their flags in code**:
@@ -155,10 +156,10 @@ throttled to changes.
   location 7720003 from flag 32.
   GrantProbe doesn't watch `badges`, so no item line appeared.
   - **`Event17` (`:3824`) is the gate the permit opens.** It sets `flags[28] = true`. Observed live: when the
-    user showed the permit (frame 21527), `flag[28]` flipped, **and the permit stayed in `items[1]`**. It
-    is shown, not consumed. The user saw a gate open.
-  - **`flag[26]` and `flag[92]`** flipped earlier on the same map, *before* the permit was shown (the user
-    confirmed they hadn't used it yet), so they belong to something else there.
+    permit was shown (frame 21527), `flag[28]` flipped, **and the permit stayed in `items[1]`**. It
+    is shown, not consumed. Seen on screen: a gate opened.
+  - **`flag[26]` and `flag[92]`** flipped earlier on the same map, *before* the permit was shown (the tester
+    confirmed it hadn't been used yet), so they belong to something else there.
 - **An NPC reward, first TextProbe capture:** on `NearSnakemouth`, the reward script ended
   `|giveitem,-1,10,6|`: type -1 (money), amount 10, over entity 6. The 4th argument is the entity the item
   sprite shows above (`id3` in `Giveitem`). `caller=none`, so an event started it. **`flag[17]` flipped
@@ -206,8 +207,8 @@ throttled to changes.
 - **The first boss:** `Event26` (`EventControl.cs:4342`) starts the battle (`StartBattle`, enemy id 13) and
   sets `flags[41]` at its end. It grants no item. `flag[41]` flipped at frame 119806 in
   `SnakemouthTreasureRoom`. **"Beat the first boss" is flag 41.**
-- **The treasure after the boss leaves no trace of its own** (the user picked it up, 2026-09-24). Nothing was
-  logged at the pickup. `SaveDiff` of the user's save before the boss (`save2backup.dat`, 02:37) against after
+- **The treasure after the boss leaves no trace of its own** (picked up in play, 2026-09-24). Nothing was
+  logged at the pickup. `SaveDiff` of the tester's save before the boss (`save2backup.dat`, 02:37) against after
   the treasure (`save2.dat`, 02:55), decoded in-game with `InputIO.Encrypt`, found:
   - line 11 (the 750 global flags): only `[41]` changed;
   - line 6 (the items, `items[0]@items[1]@items[2]`): the key items are still just `27`;
@@ -216,7 +217,7 @@ throttled to changes.
     on entering an area (`MainManager.cs:4083`).
 
   **So the treasure is a story moment, and flag 41 carries it.**
-- **The artifacts are a count of story flags, not items** (the user saw the first one in the pause menu and
+- **The artifacts are a count of story flags, not items** (the first one seen on screen in the pause menu and
   on the save file, 2026-09-24). `MainManager.SaveProgressIcons()` counts the set flags among
   **41, 88, 299, 345, 347, 346, 555**, one artifact each (7 in all, `StartMenu.psprite` has 7 icons). The pause
   menu draws that many (`PauseMenu.cs:2398`). The save stores the count as `LoadData.progression`
@@ -228,9 +229,9 @@ throttled to changes.
   lines changed with ordinary play (position, stats, counters) and aren't identified yet.
 - **A two-part door, no item involved:** `flag[33]` on `SnakemouthUndergroundLeftB` (frame 25491), then
   `flag[34]` on `SnakemouthUndergroundRightB` (38629), then `flag[35]` on `SnakemouthUndergrondDoor`
-  (39302). **The user, on screen:** they did the left side, then the right, and the door opened. So in the
+  (39302). **Seen on screen:** the left side done first, then the right, and the door opened. So in the
   logic that door is "both sides done", with no key item.
-- **A crystal berry given by a character** (for handing over the first artifact, the user's report): on
+- **A crystal berry given by a character** (for handing over the first artifact, seen in play): on
   `AntPalace2`, `caller=none`, the script was `…|giveitem,3,5,16,-4|` (type 3 crystal berry, berry **5**, over
   entity 16), and `crystalbflag[5]` flipped (frame 46414). **Found or given, a crystal berry's identity is its
   `crystalbflags` index, and a `giveitem,3,<n>` names that index directly**, so the full berry list can come
@@ -239,12 +240,12 @@ throttled to changes.
   It matches the dialogue dump's `AntPalace2` line 14 → `giveitem,1,41`, so the dump named it before it happened.
   **`flag[67]` followed (frame 54157), set at the end of `Event45`** (`EventControl.cs:7181`, flag at `:7505`):
   the Map's location is Event45 / flag 67, the same shape as the permit. `flag[68]` (frame 55406, on
-  `AntPalace1`) is `Event46` (`:7511`), the next story step; the user saw it as walking out of the throne room.
+  `AntPalace1`) is `Event46` (`:7511`), the next story step; on screen, it was walking out of the throne room.
   **TextProbe logged nothing for this grant**: the event seems to pass `SetText` a reference to the map's
   dialogue line, not the text, so the probe never sees the `giveitem`. The dump and GrantProbe covered it.
 - **A pickup with no flag at all: the inn's item.** A Honey Drop (id 1) with `caller=Fixedtempitem` and the
-  script `|additemtoss,0,var,0|`: no global flag, no regional flag. **The user, on screen:** it appears when
-  they pay for and use the inn, not otherwise. So it's a repeatable reward spawned on the spot, recorded
+  script `|additemtoss,0,var,0|`: no global flag, no regional flag. **Seen on screen:** it appears when
+  the inn is paid for and used, not otherwise. So it's a repeatable reward spawned on the spot, recorded
   nowhere, and **not a location**. Three kinds of world pickup so far: a global flag (one-time, can be a
   location), a regional flag (respawns, not one), and no flag (repeatable, not one).
 - **A key item lying in the world, with a global flag:** on `BugariaResidential`, `caller=badbook`, the script
@@ -264,11 +265,11 @@ throttled to changes.
 - **`flag[349]` toggles on and off** at the `BugariaCommercial` shops (frames 31742–32369): temporary shop
   screen state, not progress. `flag[180]` flipped there too.
 - **A key item from a conversation:** `KEYITEM +1 id=25` on `BugariaTheater` (`GBugRangerPlushie`: the enum literal in the IL is 25, checked 2026-09-24; an earlier note called it "the doll", and `MothivaDoll` is 57) (frame 719,
-  `message=True`), then `flag[58]` when the user confirmed the dialogue (frame 2157). The dump predicted it
+  `message=True`), then `flag[58]` when the dialogue was confirmed (frame 2157). The dump predicted it
   (`BugariaTheater` line 7 → `giveitem,1,25`). **Location: flag 58.**
 - **A multi-step quest, measured step by step:** the quest book (id 93) was handed over with `flag[241]`, then
   delivered in `AntPalaceLibrary` with `flag[242]` and `KEYITEM -1 id=93` in the same frame (9030). The quest was
-  still not done (the user; its id hadn't reached `boardquests[2]`). So one quest can be several locations,
+  still not done (seen in play; its id hadn't reached `boardquests[2]`). So one quest can be several locations,
   chained in the logic: the delivery needs the book, and completion needs the delivery. The `0` placeholder in
   `boardquests[0]` comes and goes on map changes (frames 5855, 7865), so it's a list refresh, not a quest.
 - **The multi-step quest completed:** quest **33** moved `boardquests[1]` → `[2]` with `flag[243]` in the same
@@ -279,7 +280,7 @@ throttled to changes.
   an item with several copies, and any rule needing them counts copies. The library also added quest **27** to
   the taken list with `flag[70]` (frame 9985), then `flag[579]`.
 - **Journal rewards (partly measured; the first reading was wrong).** 20 berries in `AntPalaceLibrary`
-  (`|giveitem,-1,20,-11|`, `caller=none`); the NPC spoke of 5 discoveries both times (the user). `Event156`'s
+  (`|giveitem,-1,20,-11|`, `caller=none`); the NPC spoke of 5 discoveries both times (seen in play). `Event156`'s
   `10 × (thisdecimal + 1)` payout (`EventControl.cs:26186`) was first taken for it; it belongs to a hologram minigame.
   **The payer, found (2026-09-27, code read, not seen in game): `Event189`** (`EventControl.cs:31243`), the
   librarian in `AntPalaceLibrary`. The first talk only introduces it (sets `flag[579]`). Each later talk counts the
@@ -294,7 +295,7 @@ throttled to changes.
   finishing the Logbook sets `flag[63]` (`MainManager.cs:4294–4371`, counts via `HowManyTrue(GetLibraryBools(n))`
   against `librarylimit[n]`). The library's dialogue also takes Lore Books (`removeitem,1,52`, line 7) and has
   crystal berry 25 (`giveitem,3,25`, line 27).
-- **Turning in a Lore Book** (the user, `AntPalaceLibrary`): `KEYITEM -1 id=52` (frame 40180), **no global flag and
+- **Turning in a Lore Book** (seen in play, `AntPalaceLibrary`): `KEYITEM -1 id=52` (frame 40180), **no global flag and
   no item script**. On screen, the book was placed on a shelf and became readable. So placed books are
   recorded outside the global flags. **Measured in code: a counter, `flagvar[15]`.** The dialogue command
   `Librarybook` (`MainManager.cs:11032`) does `flagvar[15]++` and refreshes `LibraryShelf`, which draws that many
@@ -313,25 +314,25 @@ throttled to changes.
 - **An event-placed pickup:** a Mushroom (id 13) on `SnakemouthDoorRoom`. Its script had **no flag of its
   own** and ended `|event,5|`, and `flag[13]` flipped on the same map just before (frame 18327). So some
   world items belong to a story event and are recorded by that event's flag, not by a pickup flag.
-  **The user, on screen (2026-09-24):** picking it up drops the party through a trapdoor, which stays open
+  **Seen on screen (2026-09-24):** picking it up drops the party through a trapdoor, which stays open
   afterwards, so the item can't appear again. That's consistent with a one-time location identified by the
   event's flag.
-- **After the trapdoor and the third party member joining** (the user's report), `flag[14]` flipped on
+- **After the trapdoor and the third party member joining** (seen in play), `flag[14]` flipped on
   `SnakemouthDoorRoom` (frame 24876) and `flag[27]` on `SnakemouthFallRoom` (frame 38710). No item was
   involved, so joining is story flags only. **Open for the logic:** party members bring field abilities that
   gate areas, so the apworld will need abilities as requirements (fixed, or shuffled).
-- **The third party member joining for good** (the user's report): `flag[29]`, `flag[16]` and `flag[24]` on
+- **The third party member joining for good** (seen in play): `flag[29]`, `flag[16]` and `flag[24]` on
   `SnakemouthLake` (frames 117036–119390). The earlier `flag[27]` in `SnakemouthFallRoom` was likely the
   first meeting.
 - **Loose berries (money pickups) leave no flag.** `CheckItem` takes its `ismoney` path (anim states 6, 7 and
-  186), and no flag flipped when the user picked one up. They can't be recovered from the save, which is fine:
+  186), and no flag flipped when one was picked up in play. They can't be recovered from the save, which is fine:
   they're out of scope.
 - **A working model for locations:** a story-event grant is a location identified by its event number and
   the flag it sets. A world pickup is identified by its object's `activationflag` or `regionalflag`. A gate
   in the logic is "has item X", when the game shows the item rather than consuming it (true for the
   permit's gate).
 - **Saves live in the game folder as `save<slot>.dat`**, numbered from 0, with `save<slot>backup.dat` written
-  at the same moment. The user's slot 3 save is `save2.dat` (29,264 bytes, 01:11). These are the user's
+  at the same moment. The tester's slot 3 save is `save2.dat` (29,264 bytes, 01:11). These are the player's own
   files; nothing we build ever touches them directly.
 - **Starting a new game did not replace `flags` or `items[1]`.** The probe re-baselines when either
   array is replaced, and it didn't. Loading a saved game hasn't been observed yet.
@@ -404,14 +405,14 @@ slot of each can hold the mod's own state in the game's own save, with no new fo
 - **Quests are `MainManager.instance.boardquests`, 3 lists of quest ids** (`MainManager.cs:2219`, allocated
   `:3576`; the `BoardQuests` enum at `:535`; data from `Data/Dialogues<lang>/BoardQuests`). `ChangeBoardQuest`
   moves an id into a list (`:17945`), and taking a quest can also set a flag named in its data
-  (`boardquestdata[id, 3]`, `:13906`). After the user took
+  (`boardquestdata[id, 3]`, `:13906`). After the tester took
   several quests: `[0]` = 8,9,10,21,23; `[1]` = 12,1,2,4,33,49,56; `[2]` = 11,0. GrantProbe logs every
   change, so finishing one quest will show it.
 - **Taking quests set a burst of flags:** 3, 64, 44, 50, 240, 479, 617 on `BugariaMainPlaza` (frames
-  60502–61679; the user saw them), consistent with each taken quest setting its `boardquestdata[id, 3]` flag.
+  60502–61679; seen in play), consistent with each taken quest setting its `boardquestdata[id, 3]` flag.
   **Hypothesis, unmeasured:** `boardquests[1]` (7 ids) holds the taken quests. Those flags mark "taken", not
   "done"; finishing one will show which list completion moves an id to, and what the reward sets.
-- **Quest completion measured** (the user completed a quest, 2026-09-24): at frame 9844, quest **1** moved
+- **Quest completion measured** (a quest completed in play, 2026-09-24): at frame 9844, quest **1** moved
   from `boardquests[1]` (`12,1,2,4,33,49,56` → `12,2,4,33,49,56`) to `boardquests[2]` (`11,0` → `11,1`, the `0`
   placeholder dropped as `ChangeBoardQuest` does), and `flag[5]` flipped in the same frame. **So `[2]` = done,
   `[1]` = taken, `[0]` = most likely open on the board.** A quest's location identity is "its id is in
@@ -509,7 +510,7 @@ slot of each can hold the mod's own state in the game's own save, with no new fo
 - **Gamepad:** `InputIO.joykeys` are **raw buttons, not actions**: `[0]` Button0, `[1]` Button1, `[2]` Button2,
   `[3]` Button3, `[4]` Button7 (Start), `[5]` Button6 (Back) (`InputIO.cs:571–576`). With `usejoystick > 0`,
   `GetKey` maps action 4 (confirm) to `joykeys[0]`, 5 (cancel) to `[1]`, 6 to `[2]`, 7 to `[3]`, 8 to `[4]` and
-  9 to `[5]`. A first read of `joykeys[4]/[5]` as confirm/cancel was wrong; the user saw Start act as "done".
+  9 to `[5]`. A first read of `joykeys[4]/[5]` as confirm/cancel was wrong; on screen, Start acted as "done".
 - **The game never reads typed text** (no `Input.inputString` anywhere); its name entry is a letter grid.
 
 ## Key-item grant sources, raw (2026-09-24) — SPOILERS for the whole game
@@ -563,25 +564,25 @@ The output stays in the BepInEx folder.
   no flag of its own and one other `limit` flag, 14 or 281, so that flag alone hides it): the only floor missables. No floor key item or medal is missable.
 - **Required flags (`requires`):** only 10 pickups have any (4 key items, 1 medal, 4 items, 1 berry). Most
   pickups are gated by the map they lie on, not by a flag of their own.
-- **Indoor pickups (the user, on screen, 2026-09-24):** the pickup with flag 686 on
+- **Indoor pickups (seen on screen, 2026-09-24):** the pickup with flag 686 on
   `BugariaOutskirtsOutsideCity` is inside a building (an *inside*) that isn't open in chapter 1, next to a
   second item; seen after the dev console's `loc` put the party by it. It couldn't be picked up, since the warp
   hadn't entered the inside the way its door does. **An entity's `insideid` (field 178, `MapControl.cs:1609`)
   says which inside it's in; -1 is outdoors.** EntityDump now writes it. An indoor pickup is gated by its
   inside's door (`DoorSameMap`), not only by its map.
-- **The ladybug siblings are Leby (the sister) and Dib (the lost kid at the lake)** (the user, 2026-09-24).
-- **Crystal berries around Snakemouth** (2026-09-24, dev warps with the user): #2 in the underground door room is
+- **The ladybug siblings are Leby (the sister) and Dib (the lost kid at the lake)** (seen in play, 2026-09-24).
+- **Crystal berries around Snakemouth** (2026-09-24, seen in play after dev warps): #2 in the underground door room is
   reachable in chapter 1 from the room's upper-left entrance with nothing, from below only with Leif (a droplet);
   #32 (`VinedItem`, bridge room) sits up on the vines at the far side and only exists after the first boss
-  (requires flag 41). The user: not reachable in chapter 1; very likely needs **hover** to get onto the
+  (requires flag 41). Seen in play: not reachable in chapter 1; very likely needs **hover** to get onto the
   platforms/pillars, then the beemerang to grab it (hover not yet confirmed). Waits until hover is in the logic.
-  #3 (`ChucksAbode`) lies behind the house, out of reach in normal play (the user, 2026-09-24, after the first
+  #3 (`ChucksAbode`) lies behind the house, out of reach in normal play (seen 2026-09-24, after the first
   boss); what opens the way (a quest, an ability) is unknown. Not a location until that's found.
 - **Houses outside the city** (`BugariaOutskirtsOutsideCity`, 2026-09-24): the ladybug siblings' house
-  (`DoorLadybug`, inside 1) has no gate flags; the user found its Mistake (flag 679) after the first boss and
-  remembers it locked earlier (to check on an earlier save). The other house (`doormadeleine`, inside 2, with a
+  (`DoorLadybug`, inside 1) has no gate flags; its Mistake (flag 679) was found in play after the first boss, and
+  the tester remembers it locked earlier (to check on an earlier save). The other house (`doormadeleine`, inside 2, with a
   Lore Book and Burly Tea) needs flag 390, set by dialogue on `Swamplands8` line 4; a `lockeddoor` character
-  stands there until then. Confirmed by the user after the first boss: that house is locked, with a pop-up saying so.
+  stands there until then. Seen on screen after the first boss: that house is locked, with a pop-up saying so.
 - **Doors:** 567 `DoorOtherMap` entities, 59 of them with required or hiding flags. Those are the map graph
   and its story gates, for the regions.
 - **Not in this dump:** the one key item and one medal without an `activationflag` still need judging.
@@ -607,9 +608,9 @@ The output stays in the BepInEx folder.
 - **Value 1:** `Event33` hands every waiting prize over with `giveitem,2,<medal>` from an NPC
   (`EventControl.cs:5724-5752`), then sets the slot to **3**. **Event33 is started by talking to Artis**
   (`ShwEmArtys`, outside the city; seen in the event log, 2026-09-24).
-- **Seen in play (the user, 2026-09-24):** the first boss beaten on Normal wrote its slot as missed; talking to Artis
+- **Seen in play (2026-09-24):** the first boss beaten on Normal wrote its slot as missed; talking to Artis
   then gave nothing, and the caravan (open after flag 41) offered a medal: **Quick Flea, medal 5 = `prizeids[0]`**,
-  which the user bought. Confirmed: a missed prize is sold at the caravan. Event26 writes a Normal kill's slot
+  which the tester bought. Confirmed: a missed prize is sold at the caravan. Event26 writes a Normal kill's slot
   directly (`flagvar[13] = 2`, `EventControl.cs:4962`), not through `AddPrizeMedal`. It is the only boss event that
   does: the other `BadgeIsEquipped(11) || flags[614]` tests in `EventControl.cs` only add a Logbook entry
   (corrected 2026-09-28 from "eight boss events test Hard Mode themselves like this"; searched: every
@@ -630,24 +631,24 @@ The output stays in the BepInEx folder.
   the chapters. `dev-scripts/gate-table.py` uses it: an event below 16 is prologue, 16-44 chapter 1, 45-73
   chapter 2, 74-104 chapter 3, 105-119 chapter 4, 120-141 chapter 5, 142-193 chapter 6, 194 on chapter 7.
   Side events added late carry high numbers, so the rule errs toward a later chapter, the safe direction.
-- **Leif's joining chain, played through by the user with the event log on** (2026-09-24): Event4 on
+- **Leif's joining chain, played through with the event log on** (2026-09-24): Event4 on
   `SnakemouthDoorRoom` (the trapdoor, started by the map: a rock-and-pressure-plate puzzle's AND gate; flag 13) →
   Event5, started by picking up the Mushroom the trapdoor scene creates (`tempitem`, data {0,5,1}; flag 14; the
   first spider fight, scripted so damage can't win it) → Event6, the `SnakemouthFallRoom` trigger (flag 27: Leif
   follows, not yet in the party) → Event18 on `SnakemouthLake`, a switch (flag 29) → Event14, the lake's
-  `MothEvent` trigger (flag 16: Leif joins the party; then flag 24). The user confirmed him a full member: in the
+  `MothEvent` trigger (flag 16: Leif joins the party; then flag 24). Seen on screen as a full member: in the
   pause menu and usable in battle. Each step expects the one before: a file that skipped part of the chain
-  crashes entering its middle. **One exception seen** (the user, 2026-09-26, Vi and Kabbu, a new file): a dev warp
+  crashes entering its middle. **One exception seen** (2026-09-26, Vi and Kabbu, a new file): a dev warp
   into `SnakemouthFallRoom` through the trapdoor's way down, with flags 13 and 14 still off, played Event6 to its end
   with no error, and Leif joined (the mod's join after flag 27). **The spider scene can be entered from the lake side too**
-  (the user, the same day): the web holding Leif has no collision, and walking far enough right from
+  (seen the same day): the web holding Leif has no collision, and walking far enough right from
   `DoorLakeRoom` starts Event6 as usual (its trigger, entity 2, sits between the lake door and the trapdoor's landing).
-- **The party's basic moves** (the user, 2026-09-24, matching `PlayerControl.cs`): Vi (bee) throws the
+- **The party's basic moves** (seen in play, 2026-09-24, matching `PlayerControl.cs`): Vi (bee) throws the
   beemerang, which hits and grabs at range (flag 11, on from the start; Event109 takes it away in the bandit
   hideout and gives it back); Kabbu (beetle) uses the horn, a knock-up and melee hit that also cuts grass (always on);
   Leif (moth) freezes, droplets included (always on, once he has joined). Vi and Kabbu are in the party from a new game,
   so while the party is vanilla only Leif gates anything.
-- **Where a move is needed** (the user, 2026-09-25, most of it playing Leif alone; the maps from the Detector's log):
+- **Where a move is needed** (seen in play, 2026-09-25, most of it playing Leif alone; the maps from the Detector's log):
   - **Kabbu's horn (grass):** the way down to Shades's shop; the Strong Start medal's spot in `DesertBeforeGH` (flag
     415: grass, then something to hit; whether another member's move does the hit is untested); the way to Snakemouth
     Den, both `BugariaOutskirtsSnakemouthCorridor2` (after the grass tutorial) and `OutsideSnakemouth`. On
@@ -657,12 +658,12 @@ The output stays in the BepInEx folder.
   - **Kabbu's horn (puzzles):** `SnakemouthDoorRoom` from the bridge side is a chain of horn steps: cut grass to reach a
     trampoline, knock a rock down onto a vine, push two rocks onto switches, which starts the trapdoor scene (its
     starter, `MushroomItem`, requires flag 13, presumably the switches' flag: not measured). Coming up from the trapdoor
-    without the horn is presumably one-way for the same reason (the user's reading, not tried). The bridge room's
+    without the horn is presumably one-way for the same reason (the tester's reading, not tried). The bridge room's
     hidden-spot discovery (discovery 2, location 30) is behind grass too.
   - **Vi's beemerang (range):** `SnakemouthBridgeRoom`'s bridge comes down when its rope is hit; from the right only the
     beemerang reaches it, from the left Leif's move hit it (so presumably any member's; Kabbu's not tried). The room's
     Tattle tutorial (Event2) ran with stand-ins and finished (flag 10); its hint (Event0) is skipped by Skip cutscenes.
-  - **Not needed: the spider scene's second fight** (Event6, enemies 2 and 12; the user, 2026-09-27): it is won by
+  - **Not needed: the spider scene's second fight** (Event6, enemies 2 and 12; seen 2026-09-27): it is won by
     beating Leif in the web (enemy 12), whom ground attacks reach; only the spider is in the air. So the fall room's
     spots (locations 29, 67) need no Beemerang. With Kabbu and Leif and no Vi, the mod gives Vi's place to Leif
     (`PartyMembers`), so Leif fights beside Kabbu against the Leif in the web: not yet played.
@@ -670,14 +671,14 @@ The output stays in the BepInEx folder.
     `ChangeParty({0, 1, 2})`, flag 16, then two of enemy 1 that can't be fled, `EventControl.cs:3462-3466`); in chapter 1
     only the beemerang hits them. Whether Kabbu or Leif learn such a move later is unknown. Moot while the mod skips
     that scene (since 2026-09-25).
-    **The first boss too** (the user, 2026-09-26, Leif alone, OneHit off): in the spider boss fight (Event26, battle 13)
+    **The first boss too** (seen 2026-09-26, Leif alone, OneHit off): in the spider boss fight (Event26, battle 13)
     Leif couldn't hit the enemies in the air and lost. **The spider itself goes up into the air during the fight, and
-    Kabbu can't hit it there either** (the user, the same day): so it counts as an air enemy even though it starts on the
+    Kabbu can't hit it there either** (seen the same day): so it counts as an air enemy even though it starts on the
     ground, and the boss needs Vi in chapter 1 (the beemerang). The Leif-alone run of 2026-09-25 got past this boss; how
     is not recorded.
   - **Any member's attack:** Snakemouth's switch-room switches (`Big Switch`, Event23, flags 33/34) take Leif's ice as
     well as the beemerang or the horn (in `SnakemouthUndergroundLeftB`).
-- **A blocked walk-in ends in a teleport** (the user, 2026-09-25, the game's own behaviour): entering
+- **A blocked walk-in ends in a teleport** (seen 2026-09-25, the game's own behaviour): entering
   `SnakemouthUndergroundRightB` the "wrong", one-way way, the gate blocked the walk-in, the party stood still for a
   moment, then was put past the gate; after that the switch could be hit and the way back used. A forced walk
   (`MoveTowards`) has a timer (500 frames for the player, 0.75 of it in a scene, `EntityControl.cs:4951`); when it runs
@@ -688,7 +689,7 @@ The output stays in the BepInEx folder.
   (bubble shield). **The game's names** (its text, the console's `textsearch`, 2026-09-27): *Dash* (`Skills` 49, "Press
   twice for Kabbu to dash, letting you move faster!"; learned at `BOLostSandsEntrance`, "Kabbu can now Dash!") and
   *Horn Dash* (`Skills` 38, "a strong move which can break some objects!"; learned at `SwamplandsBridge`, "Kabbu's Dash
-  is now the Horn Dash! ... a rock destroying dash!"). *Horn Slash* is the attack, apart from both (the user).
+  is now the Horn Dash! ... a rock destroying dash!"). *Horn Slash* is the attack, apart from both (seen in play).
 - **Every field ability** (2026-09-27: names and inputs from the game's `Skills` text, lines 34-42 and 49, the console's
   `textsearch`; flags from `PlayerControl.cs` and the Beemerang's `NPCControl` case; setters from `EventControl.cs`):
 
@@ -706,14 +707,14 @@ The output stays in the BepInEx folder.
   | Leif | Shield | hold | flag 20 | Event95 |
 
   The places the scenes run aren't read yet, apart from the game's own text: the Dash learned at `BOLostSandsEntrance`,
-  the Horn Dash at `SwamplandsBridge`. **Beemerang Halt in play** (the user, 2026-09-27): holding the action button
+  the Horn Dash at `SwamplandsBridge`. **Beemerang Halt in play** (seen 2026-09-27): holding the action button
   keeps the Beemerang in place to spin things, which is how some bridges are activated; so a spot behind such a
-  mechanism needs the Halt, not just the Toss. **What each opens, for the logic** (the game's text, with the user's play,
+  mechanism needs the Halt, not just the Toss. **What each opens, for the logic** (the game's text, and seen in play,
   2026-09-27): Shield, walking on hazardous terrain (its deflecting attacks is comfort only); Beetle Dig, going under
   some roadblocks and the dig spots; Freeze, freezing droplets and water fountains ("freeze enemies and liquids"; the
   droplet rooms already need it). The game has exactly two freezable objects, `ObjectTypes.Dropplet` and
   `ObjectTypes.Geizer` (the fountains), reacting to Freeze's hitbox (tag `Icecle`); the Geizer also to the Icicle
-  (`Icefall`) (`NPCControl.cs:4779, 4829`; the user: droplets in Snakemouth Den, a fountain in town). Bee Fly, crossing large gaps (not yet unlocked by the user); Icicle, platforms on
+  (`Icefall`) (`NPCControl.cs:4779, 4829`; seen in play: droplets in Snakemouth Den, a fountain in town). Bee Fly, crossing large gaps (not yet unlocked in play); Icicle, platforms on
   water, dropped by a second tap during the Freeze (`PlayerControl.cs:1164`), so chained on Freeze as the Dash is on the
   Horn Slash. Used by the Next 3 plan (field abilities as items).
 - **The unlock scenes, read** (2026-09-27, code read with the entity, script and map dumps; nothing seen in game):
@@ -758,7 +759,7 @@ The output stays in the BepInEx folder.
   most are matched pairs. `SnakemouthDoorRoom` ↔ `SnakemouthFallRoom` exists both ways but only after flag 41
   (the first boss); in chapter 1 the way down is the trapdoor drop (flag 13), which is no door entity, so it
   is one-way until then. `SnakemouthEmpty` → `SnakemouthDoorRoom` and `UpperSnekEntrance` →
-  `UpperSnekTransition` have no door back. The user saw a door block the way back into a room while its
+  `UpperSnekTransition` have no door back. Seen on screen: a door blocked the way back into a room while its
   pickups were reachable from either side (2026-09-24). **Room-level regions need drops and scripted moves as
   connections of their own**, found from events, not doors.
 - **Not in this table:** gates that aren't doors (objects only an ability passes, characters that block a
@@ -814,10 +815,10 @@ flag. **Buried items are locations the floor-pickup count missed, and every one 
 the desert maps, `SandCastleRockRoom`, `FarGrasslands4`, `RubberPrisonSpikeRoom`). `Hole` hazards (pits) are
 on many maps from the first dungeon on, so a pit doesn't mean hover.
 
-## Lore Books at the library (2026-09-24, the user's play-through)
+## Lore Books at the library (2026-09-24, seen in a play-through)
 
 - **Placing Lore Books uses them up and gives only reading**: two placed at once logged `KEYITEM -1 id=52` twice
-  on `AntPalaceLibrary`, then the user could choose which to read; no item came back (Event189 ran there first,
+  on `AntPalaceLibrary`, then the tester could choose which to read; no item came back (Event189 ran there first,
   started by `LibrayantDiscovery`). The count, `flagvar[15]`, is used only by the shelf's display
   (`LibraryShelf.cs:27`) and the reading list (`MainManager.cs:15372`), and by no game text (VarDump). **No count
   reward: the Lore Book is useful, not progression.**
@@ -841,12 +842,12 @@ MetalIsland1, #37 WizardTowerBasement, #39 code gift, #40 GoldenPitcher2, #41 Fi
 UpperSnekPressurePlateRoom, #48 GiantLairFridgeInside, #49 GiantLairDeadLands1 (dig).
 
 **Chapter 1 per the wiki, matched:** #0 (behind a bush outside the cave), #1 (cut the bush by the sign, lake room's far
-left), #2 (behind the large mushroom; the user: upper-left entrance free, from below Leif), #5 (the Queen, for the
+left), #2 (behind the large mushroom; seen in play: upper-left entrance free, from below Leif), #5 (the Queen, for the
 Ancient Mask). **Later:** #3 behind Chuck's house needs a large boulder smashed (chapter 5; the Horn Dash, to confirm);
-#32 in the bridge room needs Vi's fly (hover) over two pillars and the beemerang on a vine (chapter 6), as the user
+#32 in the bridge room needs Vi's fly (hover) over two pillars and the beemerang on a vine (chapter 6), as the tester
 guessed. The wiki is a lead, not proof: each entry is checked against the data or on screen before it's logic.
 
-## Respawning pickups, seen in play (2026-09-24, the user, with the dev log)
+## Respawning pickups, seen in play (2026-09-24, with the dev log)
 
 - **The respawn cycle works as designed:** on `SnakemouthUndergrondDoor`, the Honey Drop (regional flag 24) and
   the Mushroom (29) each showed the seed's item and sent their check on the first pickup (server confirmed
@@ -856,54 +857,54 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
 - **Where they are:** the Honey Drop sits on top of a pillar, reached with Leif's ice. The Mushroom is reached with
   nothing from the room's left side, with ice from the bottom or right, like crystal berry #2. The Crunchy Leaf is
   behind a pillar, out of sight: from the room's bottom-middle entrance, walk right and behind it.
-- **Many items may be hidden behind walls or pillars** (the user): the camera never shows them. The dev console's
+- **Many items may be hidden behind walls or pillars** (seen in play): the camera never shows them. The dev console's
   `items` lists every pickup with its position, and `nudge` moves the party by an exact amount.
 - **Flag 281** (in all three pickups' hiding flags) read False in play.
-- **The underground's door layout** (the user, 2026-09-24), for room-level regions later: the big-door room has a
+- **The underground's door layout** (seen 2026-09-24), for room-level regions later: the big-door room has a
   switch room on each side (`SnakemouthUndergroundRightB` is one, with its switches and rotating bridge). Hitting
   a room's switch also opens a small gate back toward the big-door room, between the two. In
-  `SnakemouthUndergroundRightB` (the user's screenshot, 2026-09-24): the switch is the pentagon crystal on a
+  `SnakemouthUndergroundRightB` (a screenshot from play, 2026-09-24): the switch is the pentagon crystal on a
   pedestal at the top left of the room; hitting it lowers a pillar barrier beside it, the way back to the big-door
   room. **The switches in the data** (event log and EntityDump, 2026-09-24): each switch room has a `Big Switch`
   (`data` 1 23) that starts **Event23**, which sets the switch's own `activationflag` (`EventControl.cs`, Event23:
   `flags[call.activationflag] = true`): **flag 33** in `SnakemouthUndergroundLeftB`, **flag 34** in
   `SnakemouthUndergroundRightB`. On `SnakemouthUndergrondDoor`, the `DoorEvent` trigger requires **both 33 and 34**
   and is hidden by **35**, presumably the middle door opened (not yet seen). The log confirmed Event23 started by
-  RightB's Big Switch when the user hit it. Past the lowered barrier, the path leads back and **drops down into the big-door room** (the user): a
+  RightB's Big Switch when it was hit in play. Past the lowered barrier, the path leads back and **drops down into the big-door room** (seen in play): a
   one-way way back, for the room-level graph. The ledge above the drop can't be climbed to from the big-door
-  room: it's reached only from the switch room, through the lowered barrier (the user). The left and right
+  room: it's reached only from the switch room, through the lowered barrier (seen in play). The left and right
   switches can be done in either order; both are needed to open the middle door, which leads on to the first boss.
-  The Crunchy Leaf behind the pillar needs nothing once you're in its room (the user).
+  The Crunchy Leaf behind the pillar needs nothing once you're in its room (seen in play).
 
 ## The door graph (2026-09-25, `dev-scripts/door-graph.py` on the EntityDump)
 
 - **567 doors between maps; 15 have no door leading back.** A door sends the party to the map in its `data[0]`
   (`NPCControl` trigger -> `MainManager.TransferMap(data[0], vectordata...)`).
 - **Snakemouth Den: 31 doors, all paired except `SnakemouthEmpty`'s `WarpOut`** (to the door room).
-  `SnakemouthEmpty` holds nothing but that exit and no door leads in: an unused room, left out of the graph (the
-  user, warped there 2026-09-25; walking out led to the door room).
+  `SnakemouthEmpty` holds nothing but that exit and no door leads in: an unused room, left out of the graph (seen
+  in play, warped there 2026-09-25; walking out led to the door room).
 - **The door room's `DoorLoadZone` leads to Upper Snakemouth (`UpperSnekEntrance`) and requires only flag 41** in
-  the data. The user, on a file past the first boss (chapter 2 started), walked through into the later area
-  (2026-09-25). **What really gates it** (the user, 2026-09-25): in normal play the way back to the cave is
+  the data. Seen in play, on a file past the first boss (chapter 2 started): the party walked through into the later area
+  (2026-09-25). **What really gates it** (seen 2026-09-25): in normal play the way back to the cave is
   closed after the first boss (Eetl's blocker outside the city until flag 67; from 67 a `guard` and a `sign` on
-  `NearSnakemouth`, which no flag removes; seen closed after the first boss, the user, 2026-09-25, playing Leif alone). **And past the
+  `NearSnakemouth`, which no flag removes; seen closed after the first boss, 2026-09-25, playing Leif alone). **And past the
   door, a slot needs a key item even with the door open:** `UpperSnekEntrance`'s `slot` is a `LockedDoor`
   (hidden by 517) whose `dialogues[0].y` is 11, and Event59's key list at index 11 is **key item 116, the Peculiar
   Gem** (`SnakemouthKey`; names dump), given in code by **Event117** (`EventControl.cs:19958`, chapter 4 by the
-  event-number rule). The user saw the slot refuse them (Event59 twice in the log). So Upper Snakemouth's locations
+  event-number rule). Seen on screen: the slot refused them (Event59 twice in the log). So Upper Snakemouth's locations
   need the Peculiar Gem: a key-item rule once key items are shuffled. Its other locked doors (Event59 list):
   `keycard1`/`keycard2` on `UpperSnekMiddleRoom` index 12 (item 160, the Lab Card), and the gear slots on
   `UpperSnekBeforeBoss` indices 13-15 (items 157-159; 157 is the Small Gear).
 - **Paired on paper, one-way in play:** the big-door room's `WarpRightUp` <-> `SnakemouthUndergroundRightB`'s
-  `DoorMainRoom`. Leaving Right B puts the party on the ledge above the big-door room; the user dropped down and
+  `DoorMainRoom`. Leaving Right B puts the party on the ledge above the big-door room; the party dropped down in play and
   can't climb back to `WarpRightUp` (see "Respawning pickups, seen in play"). The left side has the same shape
   (`WarpLeftUp` <-> `SnakemouthUndergroundLeftB`), where the Mushroom spot and crystal berry #2 are (upper left).
   So the dump gives the doors, and play decides which way each can be crossed.
 - **Story-gated doors:** the door room -> fall room door (`LoadZoneFallRoom`) requires flag 41 (the first boss); in
   the story the fall room is first reached by the trapdoor (Event5), which is no door at all. The way back
   (`SnakemouthFallRoom`'s `LoadingZoneDoorRoom`) requires 41 too. **So before the first boss the trapdoor is a
-  one-way drop** into the fall room, and after it the rooms are joined both ways (the user remembers it as one-way;
-  from the data, 2026-09-25). **Confirmed after the boss** (the user, 2026-09-25): a green bounce mushroom leads back
+  one-way drop** into the fall room, and after it the rooms are joined both ways (the tester remembers it as one-way;
+  from the data, 2026-09-25). **Confirmed after the boss** (seen 2026-09-25): a green bounce mushroom leads back
   up. It's `SnakemouthFallRoom`'s `JumpShroom`, which requires 41, next to the door back (requires 41); before the
   boss the room has a `blocker` instead (Event12, hidden by 41). So the trapdoor is one-way until flag 41, two-way
   after: a connection whose direction depends on a story flag.
@@ -911,7 +912,7 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   hides or moves an object by its own `requires`/`limit`, `FlagAnimation` plays an animation by flags; 328 such
   objects in all maps). In `SnakemouthDoorRoom` the big door's closed halves (`Base/Door`, `Door (1)`) and the
   trapdoor models are hidden from **flag 14** (the trapdoor fall), and the open halves (`Door (2)`, `Door (3)`) shown
-  from 14 (seen, the user, 2026-09-25: the trapdoor scene opens the trapdoor and the big door). So the door looks open from 14, while its load zone (`DoorLoadZone`) waits for 41. On
+  from 14 (seen 2026-09-25: the trapdoor scene opens the trapdoor and the big door). So the door looks open from 14, while its load zone (`DoorLoadZone`) waits for 41. On
   `UpperSnekEntrance`, the round door (`Base/CircleDoor`) is hidden and the Gem shown in the slot from **517**.
   In `SnakemouthUndergrondDoor` the middle door's models switch at **35**; the switch rooms' `Gate`s at 33 / 34.
 
@@ -929,7 +930,7 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   (9 doors: `SnakemouthDoorRoom`/`SnakemouthFallRoom` fall-room doors, `UndergroundBar`'s exit, `DefiantRoot1`'s well
   and back, `FarGrasslandsWizard`'s basement, `GiantLairBeforeBoss`/`2`'s ladders). The arrival jump is the door
   entity's `emoticonoffset.x` (field 175).
-- **To check in play (the user: later, like `SnakemouthEmpty`):** `GoldenSettlement2`'s `Neo`, `beeguard`, `sign`,
+- **To check in play (later, like `SnakemouthEmpty`):** `GoldenSettlement2`'s `Neo`, `beeguard`, `sign`,
   `sign - Duplicate`, `farmer ant outside` (all lead to `GoldenSettlement1`'s farm door: story blockers that turn you
   back?); `TermiteIndustrial`'s `NEARloadzoneback` (doors into their own map); `GiantLairBeforeBoss2`'s two ladders
   down, one ladder up; the Barren Lands `return...` zones (arrival 25-75 units from any door: one-way, a maze's
@@ -944,8 +945,8 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
 - **Story events:** 88 `LoadMap` calls in 63 of `EventControl`'s event methods; 20-odd reload the current map. What
   starts each: `event-triggers.py` on the listed events. Among them: **Event61, the bar's hatch** (to `UndergroundBar`,
   started by `BugariaCommercial` line 32, the hatch examined); **Events 108 and 109, to `HideoutCell`** (108 is the
-  garden guards catching the party, the user's trip; 109 is the story's first capture, which takes the beemerang,
-  flag 11, and in the cell gives dig, flag 18, `EventControl.cs` Event109; leaving the cell needs dig, the user; the cell also holds a `Dropplet` with no flags, which the user thinks is
+  garden guards catching the party, seen in play; 109 is the story's first capture, which takes the beemerang,
+  flag 11, and in the cell gives dig, flag 18, `EventControl.cs` Event109; leaving the cell needs dig, seen in play; the cell also holds a `Dropplet` with no flags, which the tester thinks is
   cosmetic, not needed to leave: unconfirmed, so the rule is dig only); **Event153, the boat** (seven harbours); **Event68**, three map
   pairs chosen by an `entrance` flag (elevators, to read); Event196, a destination from a list chosen in a menu.
 - Not yet sorted into "chosen by the player" and "the game sends you" (the decision: `apimplementation.md`, build
@@ -1000,7 +1001,7 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
 - **The way down to Shades's shop (the underground bar, map 30)** (2026-09-25, entity dump, ScriptDump, code): no door;
   `HideoutEntrance` on `BugariaCommercial` is examined (Check). Its lines: default 27 (sets flag 8), with flag 8 line
   30, with flag 135 line 32, which starts Event61, a plain `LoadMap(30)` with no party lookups. Flag 135 is set by a story
-  scene (`EventControl.cs:12698`). The user asked for it set on a test file to reach the shop.
+  scene (`EventControl.cs:12698`). The tester asked for it set on a test file to reach the shop.
 - **Shops (`badgeshops[0]` is Merab's, `[1]` Shades's, for crystal berries):** new game (`MainManager.cs:4010`)
   Merab 0, 1, 7, 12, 30, 86, 84, 87, 88, 81 and Shades 19, 6, 9, 43, 42 (both open later in the story); Event73
   (chapter 2's end) Merab +21, 22, 48; Event99 (chapter 3's end) Merab +33, 56, 74, Shades +0, 49; Event118
@@ -1066,7 +1067,7 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 - Item entities' placement (read in game, 2026-09-26, `iteminfo` on the Caravan's shelf, Madeleine's and the Ladybugs'): an item sprite is pivoted at its centre and lifted by half its height (`spritetransform` y 0.5 for the usual 0.5-extent item sprites); shelf slots stand at one height. The pickup starburst `guisprites[85]` ("gui_85") is 212 x 207, pivoted at its centre, extents 1.4. Used by `ItemSwap.cs`.
 - The GUI camera can be turned (read in game, 2026-09-26, `menuinfo` in `BugariaCommercial`, the shop building): at (-5.6, 3.0, 6.0), rotation (5, 90, 0), orthographic, near 0.3; outside it has no turn. The game's own letters carry the camera's rotation; an object attached with `.parent =` keeps its world rotation, so it must set `localEulerAngles` to zero or it's seen edge-on there. Used by `ApMenu.cs`, `WarpButton.cs`.
 - The text palette (read in game, 2026-09-26, `palette`): `|color,n|` indexes MainManager.textcolors, which the scene sets to 10 colours, not the code's 7 (MainManager.cs:2318): 0 000000, 1 EE0B0B (item names), 2 00E700, 3 0000FF, 4 FFFFFF, 5 A9F1FF, 6 FFD500, 7 7C7C7C, 8 00CC01, 9 FFA400. An index past the end throws IndexOutOfRange and the line stops there. Used by `HoldUps.cs`.
-- A party member's icons, by member number (trueid 0 Vi, 1 Kabbu, 2 Leif): the pause menu's party row shows guisprites[94 + trueid] ("PlayerIcon", PauseMenu.cs:2486) and elsewhere guisprites[5 + trueid] (PauseMenu.cs:1906, :2541); each member's colour is charcolor[trueid], a Color[3] (MainManager.cs:2329). The party icon is about 2.7 times an item sprite's size (2.85 x 2.56 against the Crunchy Leaf); scaled down to it, seen by the user in a hold-up (2026-09-26). Used by `ItemSwap.cs`.
+- A party member's icons, by member number (trueid 0 Vi, 1 Kabbu, 2 Leif): the pause menu's party row shows guisprites[94 + trueid] ("PlayerIcon", PauseMenu.cs:2486) and elsewhere guisprites[5 + trueid] (PauseMenu.cs:1906, :2541); each member's colour is charcolor[trueid], a Color[3] (MainManager.cs:2329). The party icon is about 2.7 times an item sprite's size (2.85 x 2.56 against the Crunchy Leaf); scaled down to it, seen on screen in a hold-up (2026-09-26). Used by `ItemSwap.cs`.
 - MainManager.SetPlayers(positions) places member j at newentitypos[j] (MainManager.cs:9416-9439), so a list shorter than the party throws IndexOutOfRange. Used by `PartyFit.cs`.
 - A scene that reloads the map with recreateplayers (Event45's throne room, LoadMap) remakes the party characters, so references to the old ones go null. Used by `PartyFit.cs`.
 - EntityControl.LateUpdate (EntityControl.cs:3672) runs after the scene's step and the entity's own updates, just before drawing: the place to force a renderer off. Used by `PartyFit.cs`.
@@ -1123,7 +1124,7 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 - On `BugariaOutskirtsOutsideCity`, `MiningAnt` and `MinerAntWalk` (miners at the rocks), `Crickerly1` (talk only) and `FuzzyMoth` all have limit 41; `LaydbugGirl` and `LaydbugBoy` require 41, with everyday lines 100 ("Dib, please don't do anything reckless") and 101 ("I'm not a kid anymore, Leby!"); their other lines answer to the lost-brother quest's flags (kept_open / kept_present). Used by `data/locations.json`.
 - The field attack is `PlayerControl.DoActionTap`, by the leader's `playerdata[0].animid` (0 Vi's beemerang, only while `!flags[41] || flags[11]`; 1 Kabbu's horn; 2 Leif's ice), started from a tap or from `DoActionHold`; the jump is `PlayerControl.DoJump`, called only by the jump button (PlayerControl.cs:372-392, 1008-1100, 1549); the game's refusal sound is `MainManager.PlayBuzzer()` ("Buzzer", used by the pause menu). Read 2026-09-27. **A Harmony prefix on `DoActionTap` itself never runs** (seen 2026-09-27: no refusal logged while attacks worked): it only builds the coroutine, and the runtime inlines it into its callers; its `MoveNext` is patched instead. `DoActionTap` clears `actionroutine` only at its end (PlayerControl.cs:1224), and `DoActionHold` starts a tap only while it is null. The game's items end at 186 (`MainManager.Items`), so 200-204 are free for the mod's own. **The game's names for the three field attacks** (its `Skills` text, English, read with the dev `textsearch`, 2026-09-27): line 34 "Beemerang Toss" (Vi), 37 "Horn Slash" (Kabbu), 40 "Freeze" (Leif); the list has no entry for jumping. Used by `FieldMoves.cs`, `CustomItems.cs`, `data/items.json`.
 - `SnakemouthFallRoom`'s `JumpShroom` (the bounce mushroom up to the pitfall room) requires 41 like `LoadingZoneDoorRoom` (kept_present). Used by `data/locations.json`.
-- `OutsideSnakemouth` (the user, 2026-09-26, on screen): the arrival discovery (0) is reached from either side; the crystal berry (#0, location 19) and the dig spot (`Mound - Duplicate`, entity 12, hidden by flag 683) is reached from the cave's side, and from the Outskirts' side only by cutting the grass across the middle (entities 2-8, `BeetleGrass`). Both need the horn from the Outskirts' side, or the way round through the cave (the dig spot is no location yet). Used by `data/locations.json`.
+- `OutsideSnakemouth` (seen on screen, 2026-09-26): the arrival discovery (0) is reached from either side; the crystal berry (#0, location 19) and the dig spot (`Mound - Duplicate`, entity 12, hidden by flag 683) is reached from the cave's side, and from the Outskirts' side only by cutting the grass across the middle (entities 2-8, `BeetleGrass`). Both need the horn from the Outskirts' side, or the way round through the cave (the dig spot is no location yet). Used by `data/locations.json`.
 - The palace's own blockers `makiblocker1` and `makiblocker2` stay in place: the story goes on there (kept_open MM). Used by `data/locations.json`.
 - The Outskirts rocks' removal leaves `LoadZoneGoldenPath` still waiting for flag 41 on its own (scenery_hidden Base/BlockingRocks). Used by `data/locations.json`.
 
@@ -1202,14 +1203,14 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
     EverlastingKing 91, Acolyte 21, Scarlet 31, Kali 51, Cenn 85 and Pisci 86. The rematch machine runs them too.
   - So for the base attacks: a flier needs Vi, the Sandworm needs Leif, and a Random one needs whichever position it
     takes.
-  - **Kabbu flips** (2026-09-27, code read; the user's rule of thumb the same day: Leif hits the burrowed, Kabbu the
+  - **Kabbu flips** (2026-09-27, code read; the tester's rule of thumb the same day: Leif hits the burrowed, Kabbu the
     ones to flip over, Vi the ones in the air). Kabbu's base attack carries `AttackProperty.Flip` (`BattleControl.cs:11545`,
-    `:11551`). "Flip" is the user's word for it: Kabbu's attack knocks the enemy over, and then its defence is reduced
+    `:11551`). "Flip" is the tester's word for it: Kabbu's attack knocks the enemy over, and then its defence is reduced
     (in the code, a flipped enemy's defence is 0: `TrueDef`, `:3131`). Which enemies it works on: those with `Flip`
     among their weaknesses (enemy data column 23, `{`-separated after a count; EntityDump's `weakness` column, run
-    2026-09-27 on the user's game): only **five**, all Ground, all defence 2: Cactiling 4, Inichas 8, Acornling 16,
+    2026-09-27 on the test machine): only **five**, all Ground, all defence 2: Cactiling 4, Inichas 8, Acornling 16,
     Wasp Bomber 26 (also `ToppleFirst`) and Madesphy 68. The logic expects Kabbu for them even where the others
-    could get through the defence (the user, 2026-09-27; `room-logic.md`, question 8). The code also has `ToppleFirst` (Wasp Bomber, Heavy Drone B-33 46),
+    could get through the defence (2026-09-27; `room-logic.md`, question 8). The code also has `ToppleFirst` (Wasp Bomber, Heavy Drone B-33 46),
     `ToppleAirOnly` (Venus' Guardian 24) and `FlyOnFlip` (The Everlasting King 91, TANGYBUG 110); what they change in
     play is not seen.
 - **Where enemy stats are shown** (2026-09-26, code read): in a fight, the bar over a spied enemy (or with the scope
@@ -1256,7 +1257,7 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 
 ## How the game draws a frame (2026-09-28, measured in the running game and code read)
 
-- **Cameras** (the console's `cams`, the user's game, 2026-09-28): `Main Camera` (the world; the game's `FXAA`
+- **Cameras** (the console's `cams`, on the test machine, 2026-09-28): `Main Camera` (the world; the game's `FXAA`
   component on it), `3DGUI` (a child of it, layer mask 32768, clears depth only) and `GUICamera` (the HUD, mask 32).
   All three forward rendering, MSAA allowed; the world camera has HDR on. `QualitySettings.antiAliasing` was 0: the
   game never sets it.
@@ -1264,14 +1265,14 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   0 draws straight to the screen and hides `GUICamera`'s first child (a quad). Any other draws the world and 3DGUI
   cameras into a `RenderTexture` of 1920x1080 times the factor (whatever the screen's size), the world camera's `rect`
   shrunk to the factor, shown on that quad (bilinear). **The quad's shader is `Custom/CRT`** (the console's `cams`,
-  2026-09-28): a CRT-TV look (curved, inset picture, vertical colour stripes, darker), the minigames' look; the user
-  saw it at 200% when the mod first drew through that quad. Called with 0 on start and after a minigame, with 2 by some
+  2026-09-28): a CRT-TV look (curved, inset picture, vertical colour stripes, darker), the minigames' look; seen
+  on screen at 200% when the mod first drew through that quad. Called with 0 on start and after a minigame, with 2 by some
   minigames. Settings save `downsample` and FXAA.
 - **Screen positions are viewport-relative:** every conversion the game makes is `WorldToViewportPoint` (0 to 1),
   none in pixels, so a larger render texture moves nothing.
 - **Resolutions:** the game's list runs 1024x576 to 3840x2160; fullscreen is a bool passed to `Screen.SetResolution`.
-  The user's game on 2026-09-28: a 1920x1080 window on a 3840x2160, 240 Hz screen. Unity 2018.4.12.
-- **Textures at full size** (the user's game, 2026-09-28): the game's low-texture setting off (`lowtexture` False,
+  The test machine on 2026-09-28: a 1920x1080 window on a 3840x2160, 240 Hz screen. Unity 2018.4.12.
+- **Textures at full size** (the test machine, 2026-09-28): the game's low-texture setting off (`lowtexture` False,
   `QualitySettings.masterTextureLimit` 0), anisotropic filtering `Enable` (per texture).
 - Measured for the render-scale and MSAA rows, since removed (mod guide, step 28).
 
@@ -1308,7 +1309,7 @@ hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0
   in `LateUpdate`, and writes it back with `SetColor`. A material without the property makes Unity log "Material
   doesn't have a color property '_Emission'" (seen on arriving at Rubber Prison's cell block). Used by `GlowGuard.cs`.
 
-## Enemy-only walls (2026-09-26, code read and the console's `solids`; the symptom seen by the user)
+## Enemy-only walls (2026-09-26, code read and the console's `solids`; the symptom seen in play)
 
 - **Maps have walls only enemies bump into**: colliders tagged `EntityOnly`. `MapControl.SetPlayerColliders` (private,
   run by `Invoke("SetPlayerColliders", 0.2f)` as a map loads) gathers them into `map.entityonly` and calls
@@ -1317,7 +1318,7 @@ hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0
 - **A party changed after the map loaded meets them as walls**: `ChangeParty(..., destroyoldentity: true)` makes new
   characters with no ignore pairs. Seen on Outskirts East (map 55) after the console's `addmember 1`: `55/Cube (2)`, a
   bare `BoxCollider` (layer 13, 1 x 19.8 x 19.9 at x 33.4) across the map, blocked the way left and up with either
-  leader; the user stood on top of it at height 15.5. Loading any map clears it. Used by `PartyMembers.cs`.
+  leader; in play the party stood on top of it at height 15.5. Loading any map clears it. Used by `PartyMembers.cs`.
 
 ## EXP and berries picked up (2026-09-26, code read)
 
@@ -1330,13 +1331,13 @@ hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0
 - **A berry picked up in the world** (`NPCControl.CheckItem`, items MoneySmall, MoneyMedium, MoneyBig) adds 1, 5 or 20,
   then calls `StartCoroutine(BerryBounce())` (its only caller) and clamps money to 0-999. Berries dropped after a fight
   are the same pickups (`EntityControl` spits them from `spitmoney`). A Harmony prefix on `BerryBounce()` itself never
-  ran in game (2026-09-26, the user's 10x test): the stub is inlined. Its iterator class is `<BerryBounce>d__172`, with
+  ran in game (2026-09-26, a 10x test in play): the stub is inlined. Its iterator class is `<BerryBounce>d__172`, with
   the compiler's standard `<>1__state` and `<>4__this` fields (read from the game's DLL). Used by `Multipliers.cs`.
 - **The volume rows' bar** (`MainManager.ShowItemList`, type 17, `settingsindex` 33, 34 and 160): ten `pip` objects from
   x 4.45, 0.4 apart, between arrows at 3.75 and 8.75; empty `guisprites[59]` at 1/4 scale, lit `guisprites[42]` at 1/3,
   yellow; sorting 10 + index. Used by `ApMenu.cs`.
 
-## The text letter pool (2026-09-26, code read; the symptom seen by the user)
+## The text letter pool (2026-09-26, code read; the symptom seen in play)
 
 - **Every drawn letter comes from one pool of 500** `TextMesh`es (`MainManager.letterpool`, made at start-up).
   `GetEmptyLetter` hands out the first whose text is `""`, or **null when none is free**: `SetText` then skips that
@@ -1358,7 +1359,7 @@ are free for the mod's own items. Per id, fields 0-3 come from the language file
 **Field 1 is not the description**: every key item holds "Desc" there, the Explorer Permit nothing. Medals keep theirs
 in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 1) and `EntityDump.cs`.
 
-## Frame rate (2026-09-27, code read; the console's `display` on the user's machine)
+## Frame rate (2026-09-27, code read; the console's `display` on the test machine)
 
 - **The game's settings:** `MainManager.fps` 0 = 30, 1 = 60, 2 = uncapped (`targetFrameRate = -1`), applied in
   MainManager next to `vSyncCount`. The settings menu (PauseMenu, option 80) cycles only 0 and 1; option 2 still has a
@@ -1373,7 +1374,7 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   `TieFramerate(data[1]) / 80 * (rate / 60)`, with rate = `targetFrameRate` (VSync off) or the monitor's refresh
   rate (VSync on). Right at any fixed cap with VSync off; negative, so the bar drains, at uncapped (-1); with VSync on
   it is off by refresh / actual fps (4x on a 240 Hz monitor at 60).
-- **Seen on the user's machine (VSync off, 60fps, windowed):** current resolution 3840x2160 @ 240 Hz, window
+- **Read on the test machine with the console's `display` (VSync off, 60fps, windowed):** current resolution 3840x2160 @ 240 Hz, window
   1280x720, `vSyncCount` 0, `targetFrameRate` 60, measured 60.6 fps.
 - **Physics steps 50 times a second** (`Time.fixedDeltaTime` 0.02, the console's `display`, 2026-09-27). The camera
   follows in `MainManager.FixedUpdate` (`RefreshCamera`: the camera's parent position, the camera's local position and
@@ -1387,19 +1388,19 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   settings screen calls it. Used by `FrameRate.cs`.
 - **The game forces a collection every 5 seconds:** `MainManager.DoClock` (the play-time clock, once a second) calls
   `Resources.UnloadUnusedAssets()` then `GC.Collect()` when `clocksec % 5 == 0` and no room transition is on. Leaving a
-  map does the same when no event is running. Measured cost on the user's machine: two slow frames, about 45 and 66 ms,
+  map does the same when no event is running. Measured cost on the test machine: two slow frames, about 45 and 66 ms,
   exactly 5.00 s apart (the console's `frames`, 2026-09-27). Used by `ClockCleanup.cs`.
-- **Walking up versus jumping, two calibration points** (seen by the user, 2026-09-27; heights not measured yet):
+- **Walking up versus jumping, two calibration points** (seen in play, 2026-09-27; heights not measured yet):
   the rock up to Madeleine's house (`BugariaOutskirtsOutsideCity`) can't be walked up, though it looks barely above the
   ground, so it needs Jump; the side of the stump inside the ladybug siblings' house can be walked up. The walkable
   limit lies between them; which of the two is a step and which a slope is still to read (a step limit and a slope
   limit may differ). For the planned Jump draft (`room-logic.md`).
-- **A frozen enemy's slide** (2026-09-27, code read; both symptoms seen by the user at 240): the knock
+- **A frozen enemy's slide** (2026-09-27, code read; both symptoms seen in play at 240): the knock
   (`NPCControl.Dizzy`, `:5107`) sets `rigid.velocity` and `icevel` to the push with no vertical part, then hops the
   enemy on the next frame; `NPCControl.Update`'s frozen branch (`:1648-1657`, enemies with `freezecooldown > 0`) and
   `PushRockStuff` (`:2862-2877`) cancel the slide (`icevel = 0`) whenever the vertical speed reads near zero, and the
   frozen branch writes `transform.position = LimitRadius(...)` every frame. Used by `FrameRate.cs`.
-- **Platforms carry by parenting** (2026-09-27, code read; the symptom seen by the user): `GroundDetector.OnTriggerStay`
+- **Platforms carry by parenting** (2026-09-27, code read; the symptom seen in play): `GroundDetector.OnTriggerStay`
   makes the entity a child of a collider tagged `Platform` or `PlatformNoClock` and sets its `platform`;
   `OnTriggerExit` un-parents it (the player and followers to no parent, others to the map) and clears `platform`
   (`GroundDetector.cs:59-66, 102-116`). Walking sets `rigid.velocity` (`EntityControl.Move`). With rigidbody
@@ -1412,7 +1413,7 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   frame, its length in frames via `TieFramerate`; the leaf gang's ambush shakes two bushes with it, `Event128`,
   `EventControl.cs:21712-21714`) and `EntityControl.ShakeSprite` (its length via `framestep`), both called on hits and in
   scenes; the camera's `screenshake` is rolled in `RefreshCamera`, run from `MainManager.FixedUpdate` (50 a second).
-  The user saw the text blurry at 240 and sharp at 60. Used by `FrameRate.cs`.
+  Seen on screen: the text blurry at 240 and sharp at 60. Used by `FrameRate.cs`.
 
 ## Save crystals, saving, Game Over and room transfers (2026-09-28, code read; nothing seen in game yet)
 
@@ -1452,19 +1453,19 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   flag as it starts.
 - Used by `SaveCrystals.cs`, `DeathLinkGame.cs` and `AutoSave.cs`.
 
-## Upper Snakemouth's boss: Leif out until its beam (2026-09-28, code read; seen by the user)
+## Upper Snakemouth's boss: Leif out until its beam (2026-09-28, code read; seen in play)
 
 - `EventControl.Event182` (`UpperSnekBossRoom`) starts battle 96 (`"Battle8"`, no escape), then gives the third party
   slot (`playerdata[2]`) the condition `BattleCondition.EventStop` for 99999 turns: that member (Leif) can't act.
 - The boss's beam, the first time (`BattleControl`, the boss's AI, `enemydata[...].data[0] == 0`, not a hologram),
   revives every downed member at 1 HP, removes `playerdata[2]`'s `EventStop` (a rejoin animation, 116) and gives
   everyone a Shield before it hits.
-- Seen by the user (2026-09-28, vanilla save with the mod): Leif stuck in a pose and unusable until the boss's big
+- Seen in play (2026-09-28, vanilla save with the mod): Leif stuck in a pose and unusable until the boss's big
   attack, then active. By design, not the mod. For combat logic: the fight starts with two members.
 
 ## Quests: to measure (when quests come into scope)
 
-- **The pause menu's quest list groups quests by chapter and shows done / not done** (the user,
+- **The pause menu's quest list groups quests by chapter and shows done / not done** (seen in play,
   2026-09-24). In the logic, a quest is reachable only once its chapter is.
 - **Where that lives:** `boardquestdata` merges `Data/Dialogues<lang>/BoardQuests` (text columns) with
   `Data/BoardData` (numeric columns) per quest id (`MainManager.cs:3496`). Which column is the chapter, the
@@ -1483,7 +1484,7 @@ For the first version, measure and record:
 6. Where the received-item count can live in the save without breaking its format.
 7. How the game shows an item popup or text box that we can reuse to name a remote item.
 
-## A dimmer fade-out never finishes early (2026-09-28, code read; the delay seen by the user)
+## A dimmer fade-out never finishes early (2026-09-28, code read; the delay seen in play)
 
 - `MainManager.Transition` sets `intransition` at its start and clears it only at its end (`MainManager.cs:8862`,
   `:9033`). A dimmer fade-out (id 1) eases towards clear: `r.color = Color.Lerp(r.color, Color.clear, framestep *
@@ -1492,6 +1493,6 @@ For the first version, measure and record:
   sixtieths, **10 seconds** of `intransition` after any dimmer fade-out, at any speed, long after it looks clear.
   The game's own `FreePlayer` ignores `intransition`, so the player walks around meanwhile.
 - Seen: after the opening skip's fade-in (speed 0.02), received items waited about 2800 frames on "busy: changing
-  maps" (the user: "5-10+ sec"). The dimmer is `transitionobj[0]`, a lone object named `Dimmer` with a
+  maps" (seen in play: "5-10+ sec"). The dimmer is `transitionobj[0]`, a lone object named `Dimmer` with a
   `SpriteRenderer` (`:8880-8900`). Used by `ItemReceiver.cs` (`FadeAllButDone`). After the tail was ignored, the same wait was about 870 frames:
   the fade from opaque to 2% at speed 0.02 takes about 194 sixtieths (0.98^n), about 3 s.
