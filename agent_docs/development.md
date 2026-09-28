@@ -27,7 +27,7 @@ The build and the copy into the game are separate steps. The build never writes 
    - **Which build runs, in one line:** DevReload writes `BepInEx/bugfablesap-reload.txt`: `loaded <hash>` (the same
      12 digits copy-dev prints for a copy), `waiting for the scene/talk/battle to end`, or `reloading`. copy-dev prints
      it after copying, and `copy-dev.ps1 -Status` prints only it. A reload waits for a scene, talk or battle to end,
-     so check once when the user says it's in; never poll for it.
+     so check once when the tester says it's in; never poll for it.
    - `-DebugOn EntityDump,ScriptDump` / `-DebugOff GrantProbe` switch Debug settings in the mod's config
      in the same run, and read the result back.
    - The copied DLL is stamped with the current time, since DevReload watches write times: copying an unchanged
@@ -94,7 +94,7 @@ came back `false` after a panel change). So change a setting and reload in one g
 ## A second player
 
 Some things only show with another player in the room: their items found here, and items they send you. The slot
-needs no one playing it (2026-09-26, the user saw both directions this way):
+needs no one playing it (2026-09-26, both directions seen on screen this way):
 
 1. Two player files: yours, and one for another game in your Archipelago checkout (APQuest is small), e.g. `name:
    Other`. Place items with plando both ways: under Other's game, `plando_items` with `world: BugTester` puts Other's
@@ -115,7 +115,7 @@ With the world linked as above, run `python -m pytest worlds/bug_fables/test` in
 
 The tests check the option sets we thought of; the [Archipelago-fuzzer](https://github.com/Eijebong/Archipelago-fuzzer)
 generates seeds from random yamls and catches the rare combination that fails. **Whenever the tests run, the fuzzer
-runs too** (the user, 2026-09-28); 10000 seeds take a few minutes.
+runs too** (2026-09-28); 10000 seeds take a few minutes.
 
 1. Once: copy its `fuzz.py` (and `hooks/`) to the root of your Archipelago checkout.
 2. `dev-scripts/test-apworld.ps1 -Archipelago <your checkout>` runs the tests, then the fuzzer
@@ -158,7 +158,7 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   its stand-ins, 2026-09-26), runs the game's own end-of-cutscene cleanup, when a cutscene died and left you frozen, and ends a
   map transfer stuck walking to a spot it can't reach. It also takes the party off anything a scene parked it on
   and lifts a leftover fade: the boat scene crashed mid-fade and left a black screen with music playing, which the
-  cleanup alone didn't clear (2026-09-25; the user saw the screen come back).
+  cleanup alone didn't clear (2026-09-25; the screen was seen coming back).
   It also resets the party's bodies (gravity, physics, forced animation), and closes a dialogue that died mid-line:
   the game kept thinking a box was open (`message`) after a city NPC's line threw, which froze the player until
   `unstick` did what the game's own dialogue end does (2026-09-25). The speech box itself stayed on screen after two tries (removing the text's
