@@ -58,10 +58,10 @@ namespace BugFablesAP
 
         private static bool On(ConfigEntry<int> entry) => entry != null && entry.Value > 1 && settingsOn != null && settingsOn();
 
-        // flag 166: the hologram fights, which the game holds to 5 EXP.
+        // A hard rematch (flag 166), which the game holds to 5 EXP.
         private static void AfterGetExp(ref int __result)
         {
-            if (__result <= 0 || !On(Exp) || MainManager.instance.flags[GameFlags.HologramFight])
+            if (__result <= 0 || !On(Exp) || MainManager.instance.flags[GameFlags.HardRematch])
             {
                 return;
             }

@@ -1310,7 +1310,7 @@ hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0
 - **A battle's EXP** is summed per defeated enemy: `num = Clamp(GetEXP(exp, fixedexp, animid), 0, hologram ? 5 : neededexp)`,
   then `expreward = Clamp(expreward + num, 0, neededexp)`: one battle never gives more than a level's worth.
   `BattleControl.GetEXP(int, bool, Enemies)` (private) returns 0 at level 27 or with flag 613, adds 15% for Hard Mode
-  (medal 11 or flag 614) and 50% for medal 42, returns at most 5 with flag 166 (hologram fights), the amount itself
+  (medal 11 or flag 614) and 50% for medal 42, returns at most 5 with flag 166 (the rematch machine's hard option, set inside a flag-162 hologram fight, `EventControl.cs:13702-13707`; corrected 2026-09-28 from "hologram fights"), the amount itself
   when `fixedexp`, else caps it at 20 (Chomper Brute, Toe Biter and enemies 87-89) or 15.
   `EndBattleWon(addexp)` adds the raw `exp` of enemies still standing, without `GetEXP`.
 - **A berry picked up in the world** (`NPCControl.CheckItem`, items MoneySmall, MoneyMedium, MoneyBig) adds 1, 5 or 20,

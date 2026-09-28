@@ -10,7 +10,8 @@ namespace BugFablesAP
         // Leif follows after the spider scene, not yet in the party.
         internal const int LeifFollows = 27;
         internal const int FirstBossBeaten = 41;
-        internal const int HologramFight = 166;
+        // The rematch machine's hard option, inside a hologram fight (flag 162).
+        internal const int HardRematch = 166;
         internal const int NoExp = 613;
         // Set on every new game.
         internal const int NewGame = 691;
