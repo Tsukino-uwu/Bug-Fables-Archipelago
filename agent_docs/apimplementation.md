@@ -135,6 +135,11 @@ be wrong.
    2026-09-26, not yet measured): fight conditions (`MainManager.BattleCondition`: Poison, Freeze, Numb, Sleep,
    Inked, Sticky and more), map hazards (`Hazards.cs`, three `HazardAction` kinds, likely the knockback), falling
    off a map (put back at `lastpos`, `PlayerControl.cs:688-691`), and ice (`EntityControl.inice`, set by ice maps).
+   **A lost turn** (the user, 2026-09-28): one random party member (the only one, when alone) skips one turn, the
+   next turn in a fight, or the next fight's first when it arrives on the overworld. Seen in the game: Upper
+   Snakemouth's boss holds Leif with `EventStop` (`MEASURED.md`), which has no icon and looked like a bug, so the trap
+   would use a condition the game shows (Sleep, Numb or Freeze, whichever ends cleanly after a turn; to read), skip a
+   member the game has already stopped, and never touch the game's own conditions.
    First measure how each is applied. A yaml option (how many traps), so its own build step when built.
 
 20. **Enemy group sizes, a yaml option** (the user, 2026-09-26): its own option, apart from *Enemy Shuffle*, off by
