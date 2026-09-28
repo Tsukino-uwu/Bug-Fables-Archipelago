@@ -1130,3 +1130,22 @@ Newest last. What was tried, what happened, what the user said.
   menu, on purpose (the user). The pause menu itself only delays a death: it strikes once the menu closes (the user
   agreed: "a guaranteed death either way"). The two new Gameplay rows had no left/right arrows (one list per page);
   fixed with the move.
+
+## 2026-09-28 (night): Uncap FPS as ten pips, the boat, Leif's boss, traps
+
+- **Uncap FPS, ten pips like the volume rows** (the user, after a tester on a 180 Hz monitor): Off, 90, 100, 120, 144,
+  165, 180, 240, 360, Monitor (the display's refresh rate with VSync; a 60 Hz display keeps the game's own). At 180 Hz
+  the old 120 and 144 tore and only 240 synced, with nothing saying so. **Monitor is the default** (the user); a config
+  that already stores a value keeps it (the user: no migration). Held back at first for the Known issues; the user said
+  shaky text is fixed and seen, and nothing odd in combat with the hit fix (no before/after). Built, hot-reloaded, the
+  log shows every pip applied (Monitor as 240 on the user's screen); the pips themselves not confirmed on screen yet.
+- **A slip:** the first copy put the old plugin back: `dotnet build` without `stage-dev.ps1`, and `copy-dev.ps1` copies
+  the stage. The user saw no pips; `copy-dev.ps1`'s "game: loaded" hash and time showed it. Always stage first.
+- **The tester's `<RI.Hid>` errors:** the game's controller reading; the user's controller batteries died and
+  reconnected. Harmless.
+- **The boat is removed in chapter 6** (wasps attack it; the user, playing vanilla): Next 40, the boat always there in
+  a seed. Not built; nothing changed while the user plays.
+- **Leif unusable in Upper Snakemouth's boss fight:** the game's own design (`MEASURED.md`): `EventStop` on the third
+  slot, removed by the boss's first beam, as the user then saw.
+- **Traps annoy, never harm** (the user, Next 19): a lost turn was considered from that fight and dropped; gliding
+  movement on the overworld (momentum when turning, a timer) is the kind the user wants.
