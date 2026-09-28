@@ -1269,3 +1269,10 @@ Newest last. What was tried, what happened, what the user said.
   - The user allowed running Generate.py in the Archipelago checkout, and starting and closing the game for phase 4's
     hook dumps.
 - **Also waiting:** a push. `main` goes green on GitHub only after one, and pushing needs the user's word.
+- **Pushed** (the user's word): CI green again on `main`, all three Python versions (2026-09-28).
+- **Phase 3 under way:**
+  - `seed-snapshot.py` added; two runs of the same code came out identical.
+  - Typed data parts 1-4 (items, encounters, doors and starts, the client's entity lists), each with the snapshot
+    identical, the tests passing and the fuzzer at 0 of 10000.
+  - **Left:** regions, exits, locations, story events and artifacts, in one commit, since `rules.requires` reads
+    exits, locations and events alike. Then the top-level `_comment` in locations.json moves into the docstrings.
