@@ -55,7 +55,7 @@ class BugFablesWorld(World):
         # Doors are decided here and sent in slot_data; the client never decides a door itself.
         self.door_targets = []
         if self.options.entrance_randomizer == EntranceRandomizer.option_coupled:
-            self.door_targets = shuffle_coupled(DOORS["connections"], DOORS["fixed"], self.random)
+            self.door_targets = shuffle_coupled(DOORS.connections, DOORS.fixed, self.random)
         # Like doors, fights are decided here; the client only replays the list.
         self.enemy_swaps = {}
         if self.options.enemy_shuffle == EnemyShuffle.option_enemies_only:
@@ -63,7 +63,7 @@ class BugFablesWorld(World):
         # The start too: a room picked here, sent in slot_data; empty is the game's own start.
         self.start = {}
         if self.options.starting_location == StartingLocation.option_anywhere:
-            self.start = dict(self.random.choice(ROOM_STARTS))
+            self.start = self.random.choice(ROOM_STARTS).to_slot()
 
     def moves_shuffled(self) -> bool:
         return bool(self.options.shuffle_field_moves.value)

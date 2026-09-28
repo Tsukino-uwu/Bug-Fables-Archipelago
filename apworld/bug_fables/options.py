@@ -237,6 +237,6 @@ def category_count(category: str) -> int:
 for _category, _field in CATEGORY_OPTIONS.items():
     _option = BugFablesOptions.type_hints[_field]
     _option.__doc__ = _option.__doc__.replace("{count}", str(category_count(_category)))
-EntranceRandomizer.__doc__ = EntranceRandomizer.__doc__.replace("{count}", str(2 * len(DOORS["connections"])))
+EntranceRandomizer.__doc__ = EntranceRandomizer.__doc__.replace("{count}", str(2 * len(DOORS.connections)))
 EnemyShuffle.__doc__ = EnemyShuffle.__doc__.replace("{count}", str(len(ENCOUNTERS)))
 StartingLocation.__doc__ = StartingLocation.__doc__.replace("{count}", str(len(ROOM_STARTS)))

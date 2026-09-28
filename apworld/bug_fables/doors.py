@@ -4,21 +4,23 @@ It grows the world outwards from one area, since a random pairing strands dead-e
 """
 from __future__ import annotations
 
+from collections.abc import Sequence
 from random import Random
-from typing import Any
+
+from .data_types import DoorConnection
 
 Door = tuple[str, str]  # (map, door entity name)
 
 
-def _partners(connections: list[dict[str, Any]]) -> dict[Door, Door]:
+def _partners(connections: Sequence[DoorConnection]) -> dict[Door, Door]:
     partner: dict[Door, Door] = {}
     for c in connections:
-        a, b = (c["a"]["map"], c["a"]["door"]), (c["b"]["map"], c["b"]["door"])
+        a, b = (c.a.map, c.a.door), (c.b.map, c.b.door)
         partner[a], partner[b] = b, a
     return partner
 
 
-def _areas(maps: set[str], fixed: list[list[str]]) -> dict[str, str]:
+def _areas(maps: set[str], fixed: Sequence[tuple[str, str]]) -> dict[str, str]:
     """Each map's area: maps joined by fixed doors share one."""
     parent = {m: m for m in maps}
 
@@ -35,7 +37,8 @@ def _areas(maps: set[str], fixed: list[list[str]]) -> dict[str, str]:
     return {m: find(m) for m in parent}
 
 
-def shuffle_coupled(connections: list[dict[str, Any]], fixed: list[list[str]], random: Random) -> list[dict[str, str]]:
+def shuffle_coupled(connections: Sequence[DoorConnection], fixed: Sequence[tuple[str, str]],
+                    random: Random) -> list[dict[str, str]]:
     """Doors paired anew, as door_targets: each door leads where its new partner's old partner led."""
     partner = _partners(connections)
     doors = sorted(partner)
@@ -74,7 +77,7 @@ def shuffle_coupled(connections: list[dict[str, Any]], fixed: list[list[str]], r
     return targets
 
 
-def arrivals(connections: list[dict[str, Any]], targets: list[dict[str, str]]) -> dict[Door, Door]:
+def arrivals(connections: Sequence[DoorConnection], targets: list[dict[str, str]]) -> dict[Door, Door]:
     """Where each door leads once the targets are applied: the door the party arrives next to."""
     partner = _partners(connections)
     like = {(t["map"], t["door"]): (t["like_map"], t["like_door"]) for t in targets}

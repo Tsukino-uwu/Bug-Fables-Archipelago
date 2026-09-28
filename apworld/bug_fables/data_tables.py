@@ -5,7 +5,7 @@ import json
 import pkgutil
 from typing import Any
 
-from .data_types import Encounter, Item
+from .data_types import Doors, Encounter, Item, RoomStart, SavePoint
 
 ITEM_ID_BASE = 7_710_000
 LOCATION_ID_BASE = 7_720_000
@@ -39,16 +39,15 @@ SCENERY_PRESENT: list[dict[str, Any]] = _LOCATION_DATA["scenery_present"]
 HELD_UNTIL: list[dict[str, Any]] = _LOCATION_DATA["held_until"]
 PRESENT_FROM: list[dict[str, Any]] = _LOCATION_DATA["present_from"]
 DIALOGUE_FLAGS: list[dict[str, Any]] = _LOCATION_DATA["dialogue_flags"]
-DOORS: dict[str, Any] = _load("doors.json")
-# Every room entered through a door, as {"map", "from"}: the map, and the map whose door leads in (both ways of each
-# connection). A start there lands where walking in through that door ends.
-ROOM_STARTS: list[dict[str, str]] = sorted(
-    {(end["map"], other["map"]) for c in DOORS["connections"] for end, other in ((c["a"], c["b"]), (c["b"], c["a"]))
-     if end["map"] != other["map"]})
-ROOM_STARTS = [{"map": room, "from": door_map} for room, door_map in ROOM_STARTS]
+DOORS: Doors = Doors.from_json(_load("doors.json"))
+# Every room entered through a door: the map, and the map whose door leads in (both ways of each connection). A start
+# there lands where walking in through that door ends.
+ROOM_STARTS: tuple[RoomStart, ...] = tuple(sorted(
+    {RoomStart(map=end.map, from_map=other.map) for c in DOORS.connections for end, other in ((c.a, c.b), (c.b, c.a))
+     if end.map != other.map}))
 # Every save point (map, entity index). Unused today (a random start picks from ROOM_STARTS); kept for named start
 # spots, a planned option.
-STARTS: list[dict[str, Any]] = _load("starts.json")["starts"]
+STARTS: tuple[SavePoint, ...] = tuple(SavePoint.from_json(s) for s in _load("starts.json")["starts"])
 # Every map enemy (map, entity index) and the enemy ids its fight starts with.
 ENCOUNTERS: tuple[Encounter, ...] = tuple(Encounter.from_json(e) for e in _load("enemies.json")["encounters"])
 
