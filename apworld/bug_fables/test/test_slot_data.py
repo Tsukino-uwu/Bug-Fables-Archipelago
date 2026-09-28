@@ -215,3 +215,10 @@ class TestMadeleinesHouse(BugFablesTestBase):
         self.assertIn(int(leaf), data["silent_locations"])
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         self.assertIn("Crunchy Leaf", pool)
+
+    def test_opening_checks_are_quiet(self) -> None:
+        # A new file would otherwise start with a hold-up for each opening check.
+        quiet = self.world.fill_slot_data()["quiet_locations"]
+        names = ["Outskirts: Maki and Eetl's Gift", "Outskirts: Outside the City, Opening",
+                 "Outskirts: Outside the City, Tutorial Battle"]
+        self.assertEqual(quiet, sorted(self.world.location_name_to_id[name] for name in names))

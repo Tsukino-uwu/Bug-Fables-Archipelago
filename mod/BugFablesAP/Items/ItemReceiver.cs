@@ -135,11 +135,17 @@ namespace BugFablesAP
         }
 
         // Every received item gets a hold-up per the Item animation setting, replays included, except the player's own
-        // item arriving live from a check whose own scene already showed it.
+        // item arriving live from a check whose own scene already showed it, starting items (slot 0, the server) and
+        // the opening's checks (a new file would start with a string of boxes).
         private void ShowIfWanted(ItemInfo item, int index)
         {
+            bool own = item.Player.Slot == connection.OwnSlot;
+            if (item.Player.Slot == 0 || (own && connection.QuietLocations != null && connection.QuietLocations.Contains(item.LocationId)))
+            {
+                return;
+            }
             string setting = QualityOfLife.ItemAnimation?.Value ?? "All";
-            bool noScene = index < connection.ReceivedAtLogin || item.Player.Slot != connection.OwnSlot
+            bool noScene = index < connection.ReceivedAtLogin || !own
                 || (connection.SilentLocations != null && connection.SilentLocations.Contains(item.LocationId));
             bool progression = (item.Flags & ItemFlags.Advancement) != 0;
             if (!noScene || setting == "Off" || (setting == "Progression" && !progression)

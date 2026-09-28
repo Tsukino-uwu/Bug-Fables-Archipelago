@@ -221,6 +221,9 @@ namespace BugFablesAP
         // Checks that show no item of their own: the receiver shows the player's own item from them.
         internal HashSet<long> SilentLocations => silentLocations;
         private volatile HashSet<long> silentLocations;
+        // The opening's checks: their items arrive with no hold-up.
+        internal HashSet<long> QuietLocations => quietLocations;
+        private volatile HashSet<long> quietLocations;
 
         internal Dictionary<long, int[]> LocationShops => locationShops;
         private volatile Dictionary<long, int[]> locationShops;
@@ -517,6 +520,8 @@ namespace BugFablesAP
                     locationDiscoveries = SlotData.ByLocation(data, "location_discoveries", v => v.Value<int>());
                     List<long> silent = SlotData.List(data, "silent_locations", e => e.Value<long>());
                     silentLocations = silent != null ? new HashSet<long>(silent) : null;
+                    List<long> quiet = SlotData.List(data, "quiet_locations", e => e.Value<long>());
+                    quietLocations = quiet != null ? new HashSet<long>(quiet) : null;
                     locationShops = SlotData.ByLocation(data, "location_shops", v => new[] { v.Value<int>("shop"), v.Value<int>("medal") });
                     locationItemShops = SlotData.ByLocation(data, "location_item_shops", v => new ItemShopSlot
                     {

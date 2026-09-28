@@ -2280,6 +2280,7 @@ only way a setting chosen at generation (an option, a version number) reaches th
 - `location_added`, an item the story puts straight into the bag at a location (build step 26);
 - `location_pickups`, the map and flag of each location that is an item lying in the world;
 - `silent_locations`, checks that show no item of their own (a member joining), where the player's own item is shown;
+- `quiet_locations`, the opening's checks, whose items arrive with no hold-up (the mod guide, Item animation);
 - the open world (build step 9): `kept_open`, `kept_present`, `scenery_hidden`, `scenery_present`, `held_until`,
   `present_from` and `dialogue_flags`, the story's blockers and scenery the mod keeps the way the logic assumes;
 - `door_targets` (the entrance randomizer), `enemy_swaps` (enemy shuffle) and `start` (the starting location);

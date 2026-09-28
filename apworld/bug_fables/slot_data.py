@@ -48,6 +48,8 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         # Checks that show no item of their own (only a story flag): the client shows the player's own item there.
         "silent_locations": sorted(LOCATION_NAME_TO_ID[loc["name"]] for loc in world.included_locations
                                    if set(loc["source"]) <= {"event", "flag", "added"}),
+        # The opening's checks: their items arrive with no hold-up, so a new file doesn't start with a string of boxes.
+        "quiet_locations": sorted(LOCATION_NAME_TO_ID[loc["name"]] for loc in world.included_locations if loc.get("quiet")),
         # Items the story puts straight into the bag at a location: the client leaves them out.
         "location_added": _by_location(world, "added"),
         "location_gives": _by_location(world, "give"),

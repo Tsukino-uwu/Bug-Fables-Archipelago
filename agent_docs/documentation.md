@@ -755,7 +755,10 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    replays were silent (only items past the count the server had at login, `ApConnection.ReceivedAtLogin`, were held
    up), so a new file showed nothing for a check with no scene of its own. The one exception left: the player's own
    item arriving live from a check whose own scene already showed it. On *All*, a new file late in a seed plays a
-   hold-up for every item, starting members included; *Progression* or *Off* shortens that.
+   hold-up for every item; *Progression* or *Off* shortens that. **A quiet start** (the user, the same day: six boxes in a
+   row on a new file was "a bit much"): starting items (sent by the server itself, slot 0) and the items of the
+   opening's three checks (`quiet_locations` in `slot_data`, marked `quiet` in `locations.json`) arrive with no
+   hold-up. A party member placed at any other location still gets its box.
 7. **Shop prices** (the user, 2026-09-25: Normal by default, Half or Free). The medal table's price columns (5 for
    berries, 7 for crystal berries) are scaled in memory, from a kept copy, and put back when the row is Normal or the
    mod is off. The logic never counts on it. **Now a bar on the Gameplay page (the user, 2026-09-26):** 0 to 10 pips
