@@ -1,6 +1,6 @@
-# Copies the staged plugin into the game and optionally sets [Debug] config keys, backing up each file it replaces.
+# Copies the staged plugin into the game and optionally sets config keys, backing up each file it replaces.
 #   powershell -ExecutionPolicy Bypass -File dev-scripts\copy-dev.ps1 [-GameDir <dir>]
-#       [-DebugOn A,B] [-DebugOff C] [-DebugSet Key=Value]
+#       [-DebugOn A,B] [-DebugOff C] [-DebugSet Key=Value] [-ConfigSet Section.Key=Value]
 #   powershell -ExecutionPolicy Bypass -File dev-scripts\copy-dev.ps1 -Restore <folder under stage\backup>
 #   powershell -ExecutionPolicy Bypass -File dev-scripts\copy-dev.ps1 -Layout Release|Dev   (game closed)
 #   powershell -ExecutionPolicy Bypass -File dev-scripts\copy-dev.ps1 -Status   (which build the game runs; copies nothing)
@@ -12,6 +12,8 @@ param(
     [string[]]$DebugOff = @(),
     # Key=Value, one per -DebugSet; not comma-split.
     [string[]]$DebugSet = @(),
+    # Section.Key=Value for any other section, e.g. Archipelago.RandomizerEnabled=true for a test; one per -ConfigSet.
+    [string[]]$ConfigSet = @(),
     [string]$Restore = '',
     [switch]$Status
 )
@@ -115,35 +117,48 @@ foreach ($f in 'BugFablesAP.pdb', 'BugFablesAP.dll') {
 $hash = (Get-FileHash (Join-Path $scripts 'BugFablesAP.dll') -Algorithm SHA256).Hash.Substring(0, 12)
 Write-Output "copied BugFablesAP.dll (sha256 $hash...) into BepInEx\scripts; DevReload will pick it up"
 
-if ($DebugOn.Count -gt 0 -or $DebugOff.Count -gt 0 -or $DebugSet.Count -gt 0) {
+if ($DebugOn.Count -gt 0 -or $DebugOff.Count -gt 0 -or $DebugSet.Count -gt 0 -or $ConfigSet.Count -gt 0) {
     $cfg = Join-Path $GameDir $targets['bugfables.archipelago.cfg']
     if (-not (Test-Path $cfg)) { throw "no $cfg yet: start the game once with the mod so BepInEx writes it" }
     Backup 'bugfables.archipelago.cfg'
-    $want = [ordered]@{}
-    foreach ($k in $DebugOn) { $want[$k] = 'true' }
-    foreach ($k in $DebugOff) { $want[$k] = 'false' }
+    # Section -> ordered key -> value.
+    $want = [ordered]@{ 'Debug' = [ordered]@{} }
+    foreach ($k in $DebugOn) { $want['Debug'][$k] = 'true' }
+    foreach ($k in $DebugOff) { $want['Debug'][$k] = 'false' }
     foreach ($pair in $DebugSet) {
         $at = $pair.IndexOf('=')
         if ($at -lt 1) { throw "-DebugSet wants Key=Value, got '$pair'" }
-        $want[$pair.Substring(0, $at).Trim()] = $pair.Substring($at + 1).Trim()
+        $want['Debug'][$pair.Substring(0, $at).Trim()] = $pair.Substring($at + 1).Trim()
+    }
+    foreach ($pair in $ConfigSet) {
+        if ($pair -notmatch '^\s*(\w+)\.(\w+)\s*=(.*)$') { throw "-ConfigSet wants Section.Key=Value, got '$pair'" }
+        if (-not $want.Contains($Matches[1])) { $want[$Matches[1]] = [ordered]@{} }
+        $want[$Matches[1]][$Matches[2]] = $Matches[3].Trim()
     }
     $lines = [System.Collections.Generic.List[string]](Get-Content $cfg)
-    $start = $lines.IndexOf('[Debug]')
-    if ($start -lt 0) { throw "no [Debug] section in ${cfg}: the game runs a release build (-Layout Release), which has no dev settings" }
-    $end = $lines.Count
-    for ($i = $start + 1; $i -lt $lines.Count; $i++) { if ($lines[$i] -match '^\[') { $end = $i; break } }
-    foreach ($k in @($want.Keys)) {
-        $found = $false
-        for ($i = $start + 1; $i -lt $end; $i++) {
-            if ($lines[$i] -match "^$([regex]::Escape($k))\s*=") { $lines[$i] = "$k = $($want[$k])"; $found = $true; break }
+    foreach ($section in @($want.Keys)) {
+        if ($want[$section].Count -eq 0) { continue }
+        $start = $lines.IndexOf("[$section]")
+        if ($start -lt 0 -and $section -eq 'Debug') { throw "no [Debug] section in ${cfg}: the game runs a release build (-Layout Release), which has no dev settings" }
+        if ($start -lt 0) { throw "no [$section] section in $cfg" }
+        $end = $lines.Count
+        for ($i = $start + 1; $i -lt $lines.Count; $i++) { if ($lines[$i] -match '^\[') { $end = $i; break } }
+        foreach ($k in @($want[$section].Keys)) {
+            $value = $want[$section][$k]
+            $found = $false
+            for ($i = $start + 1; $i -lt $end; $i++) {
+                if ($lines[$i] -match "^$([regex]::Escape($k))\s*=") { $lines[$i] = "$k = $value"; $found = $true; break }
+            }
+            if (-not $found) { $lines.Insert($end, "$k = $value"); $lines.Insert($end, ''); $end += 2 }
         }
-        if (-not $found) { $lines.Insert($end, "$k = $($want[$k])"); $lines.Insert($end, ''); $end += 2 }
     }
     # UTF-8 without a BOM, as BepInEx writes it.
     [System.IO.File]::WriteAllLines($cfg, $lines)
-    foreach ($k in @($want.Keys)) {
-        $line = (Get-Content $cfg) | Where-Object { $_ -match "^$([regex]::Escape($k))\s*=" } | Select-Object -First 1
-        Write-Output "config: $line"
+    foreach ($section in @($want.Keys)) {
+        foreach ($k in @($want[$section].Keys)) {
+            $line = (Get-Content $cfg) | Where-Object { $_ -match "^$([regex]::Escape($k))\s*=" } | Select-Object -First 1
+            Write-Output "config: [$section] $line"
+        }
     }
 }
 Write-Output "backup: stage\backup\$(Split-Path -Leaf $backup) (undo with -Restore $(Split-Path -Leaf $backup))"

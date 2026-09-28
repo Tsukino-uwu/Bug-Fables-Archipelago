@@ -32,7 +32,8 @@ The build and the copy into the game are separate steps. The build never writes 
      it after copying, and `copy-dev.ps1 -Status` prints only it. A reload waits for a scene, talk or battle to end,
      so check once when the tester says it's in; never poll for it.
    - `-DebugOn EntityDump,ScriptDump` / `-DebugOff GrantProbe` switch Debug settings in the mod's config
-     in the same run, and read the result back.
+     in the same run, and read the result back. `-ConfigSet Section.Key=Value` sets a key in any other section, for a
+     test (`-ConfigSet Archipelago.RandomizerEnabled=true` to log in at the main menu); set it back after.
    - The copied DLL is stamped with the current time, since DevReload watches write times: copying an unchanged
      build to reload a changed `-DebugSet` did nothing until then (2026-09-25).
    - A Debug setting changed in the file while the game runs is overwritten by the game's value the next time the mod
@@ -275,5 +276,6 @@ only in the dev (Debug) build: every one is bound in `Dev/Plugin.Dev.cs`, and th
 | `GrantProbe`, `TextProbe` | Log every key item added and flag flipped / every dialogue line with an item command, with the map. |
 | `SaveDiff` | Two save file names, `a.dat\|b.dat`: once per load, logs what differs between them. |
 | `PatchDump` | Every method the mod patches (target, kind, patch method, priority), Uncap FPS's hooks included, sorted, to `bugfablesap-patches.tsv`, once per load: diff it before and after a change to how hooks are installed. The log also gets the run order wherever one target has several of the mod's hooks of a kind. |
+| `SeedDump` | Once per load, when a login brings the seed: everything the mod read from its slot_data, one sorted line per entry, to `bugfablesap-seed.tsv`, to diff before and after a change to how slot_data is read. |
 | `QuestDump` | Every board quest's name, its `BoardData` numbers (column 3: the flag taking it sets) and its `QuestChecks` row, to `bugfablesap-questdump.tsv`. |
 | `EntityDump`, `ScriptDump`, `MapDump`, `VarDump`, `SpriteDump` | Write the game's entities, dialogue commands, map events, script slots or GUI, item and medal sprites (`bugfablesap-guisprites.tsv`, `bugfablesap-itemsprites.tsv` and their sheets) to `bugfablesap-*.tsv` / `.png` in the BepInEx folder. A labelled contact sheet can be made from a table and its sheet (game art: kept local, never the repo). |

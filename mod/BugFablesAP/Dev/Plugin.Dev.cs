@@ -16,13 +16,14 @@ namespace BugFablesAP
         private ConfigEntry<bool> varDumpEnabled;
         private ConfigEntry<bool> questDumpEnabled;
         private ConfigEntry<bool> patchDumpEnabled;
+        private ConfigEntry<bool> seedDumpEnabled;
         private ConfigEntry<bool> spriteDumpEnabled;
         private ConfigEntry<string> saveDiff;
         private ConfigEntry<bool> adoptSeed;
         private ConfigEntry<bool> devConsole;
         private ConfigEntry<string> devCommandFile;
         private ConfigEntry<int> giveMoney;
-        private bool patchDumpDone, spriteDumpDone, varDumpDone, questDumpDone, scriptDumpDone, entityDumpDone, mapDumpDone;
+        private bool patchDumpDone, seedDumpDone, spriteDumpDone, varDumpDone, questDumpDone, scriptDumpDone, entityDumpDone, mapDumpDone;
         private bool saveDiffDone;
         private GrantProbe grantProbe;
         private bool devReloadChecked;
@@ -96,6 +97,9 @@ namespace BugFablesAP
                 "Dev only. Once per load, writes every method the mod patches (target, kind, patch method, priority) to "
                 + "BepInEx/bugfablesap-patches.tsv, Uncap FPS's hooks included, to compare before and after a refactor. "
                 + "Off by default.");
+            seedDumpEnabled = Config.Bind("Debug", "SeedDump", false,
+                "Dev only. Once per load, when a login brings the seed, writes everything the mod read from its slot_data "
+                + "to BepInEx/bugfablesap-seed.tsv, to compare before and after a change to how it's read. Off by default.");
             questDumpEnabled = Config.Bind("Debug", "QuestDump", false,
                 "Dev only. Once per launch, writes every board quest's name, BoardData numbers and QuestChecks row to "
                 + "BepInEx/bugfablesap-questdump.tsv. Off by default.");
@@ -144,6 +148,12 @@ namespace BugFablesAP
             {
                 patchDumpDone = true;
                 PatchDump.Run(Log, Guid);
+            }
+
+            if (seedDumpEnabled.Value && !seedDumpDone && connection.SeedKnown)
+            {
+                seedDumpDone = true;
+                SeedDump.Run(Log, connection);
             }
 
             if (questDumpEnabled.Value && !questDumpDone && MainManager.boardquestdata != null)

@@ -172,6 +172,12 @@ runs. `Dev/Plugin.Dev.cs` holds the [Debug] settings, the console, probes and du
 (`DevAwakeEarly`, `DevAfterTick`...). FrameRate's measurements work the same way. A build without `Dev/` still compiles,
 and the calls into it vanish.
 
+**The seed's data in one record** (2026-09-28, under way). What a login reads from `slot_data` moves from about 30
+separate fields on the connection into one immutable `SeedData`. **How "changed nothing" is proven:** the Debug setting
+`SeedDump` writes everything the mod read from the seed, one sorted line per entry, once a login brings it. It is taken
+before and after the change on the same local seed. `copy-dev.ps1 -ConfigSet Archipelago.RandomizerEnabled=true` lets the
+game log in at the main menu for it, with no save in play.
+
 **Status:** done; separate guards per system built 2026-09-28, not yet seen in game; errors checked for instead of
 swallowed, built 2026-09-28 (both builds pass), not yet seen in game; hooks to attributes built 2026-09-28 (all 33
 features; the patch list and run order identical to before, 167 patches, in game), not yet played with.
