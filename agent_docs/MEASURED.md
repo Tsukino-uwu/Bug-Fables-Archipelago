@@ -186,8 +186,13 @@ throttled to changes.
   medals use global flags and don't.
 - **A second medal, with BOTH kinds of flag:** on `SnakemouthMushroomPit`, `caller=PoisonResistance`, the
   script was `|flag,42,true||regionalflag,16,true||additemtoss,2,var,0|`, and `flag[42]` and
-  `regionalflag[16]` flipped in the same frame (47273). The spawn check (`MainManager.cs:7783`) hides an
-  object while its flags *or* its regional flag are set, and the global flag is never wiped. **The rule,
+  `regionalflag[16]` flipped in the same frame (47273). The spawn check (`MainManager.CheckIfCanExist`) hides an
+  object while its hiding flags or its regional flag are set, and the global flag is never wiped. **How it reads the
+  lists** (corrected 2026-09-28 after an audit): a `limit` entry below -1 hides the object if that one flag (its
+  absolute value) is set; the other `limit` entries hide it only if **all** are set; `requires` needs all its flags;
+  and either list is ignored when its first remaining entry is -1 or below. In the entity dump no door and no pickup
+  uses a negative or a second positive `limit` entry: 14 NPCs and one decoration do (2026-09-28, the dump read by
+  a script). **The rule,
   refined: a pickup with a global flag is one-time even if it also has a regional one, and the global flag
   is its location identity.** Not yet checked on screen that it stays gone.
 - **An ordinary item with a global flag:** a Mushroom Candy (id 144) on `SnakemouthMushroomPit`,
@@ -554,8 +559,8 @@ The output stays in the BepInEx folder.
 - **One-time:** 54 of 55 key items, 23 of 24 medals and 30 ordinary items have an `activationflag`, set when
   picked up (`NPCControl.cs:5714`). Berries are tracked by `crystalbflags` instead (1 has a flag too).
 - **Hiding flags (`limit`):** every one-time pickup lists its own `activationflag` there, which is how it
-  stays gone once collected. **Only 5 pickups, all ordinary items, are also hidden by some other flag**:
-  the only floor missables. No floor key item or medal is missable.
+  stays gone once collected. **Only 5 pickups, all ordinary items, are hidden by some other flag** (each has
+  no flag of its own and one other `limit` flag, 14 or 281, so that flag alone hides it): the only floor missables. No floor key item or medal is missable.
 - **Required flags (`requires`):** only 10 pickups have any (4 key items, 1 medal, 4 items, 1 berry). Most
   pickups are gated by the map they lie on, not by a flag of their own.
 - **Indoor pickups (the user, on screen, 2026-09-24):** the pickup with flag 686 on

@@ -16,6 +16,18 @@ CODE_FILES = ["EventControl.cs", "MainManager.cs", "BattleControl.cs", "NPCContr
               "MapControl.cs"]
 
 
+def flag_rule(requires: str, limit: str) -> tuple[list[str], list[str], list[str]]:
+    """As MainManager.CheckIfCanExist reads them: (all required, any of these hides, all of these hide)."""
+    req = requires.split()
+    lim = limit.split()
+    any_hides = [str(-int(f)) for f in lim if int(f) < -1]
+    rest = [f for f in lim if int(f) >= -1]
+    # A list counts only when its first remaining entry is a real flag.
+    all_hide = [f for f in rest if f != "-1"] if rest and int(rest[0]) > -1 else []
+    required = [f for f in req if f != "-1"] if req and int(req[0]) > -1 else []
+    return required, any_hides, all_hide
+
+
 def chapter(setter: str) -> str:
     m = re.match(r"EventControl\.Event(\d+)$", setter)
     if not m:
@@ -61,13 +73,13 @@ def main() -> None:
     for r in csv.DictReader(dump.open(encoding="utf-8"), delimiter="\t"):
         if r["objecttype"] != "DoorOtherMap":
             continue
-        required = [f for f in r["requires"].split() if f != "-1"]
-        hiding = [f for f in r["limit"].split() if f != "-1"]
-        if not required and not hiding:
+        required, any_hides, all_hide = flag_rule(r["requires"], r["limit"])
+        if not required and not any_hides and not all_hide:
             continue
         target = int(r["data"].split()[0])
+        hiding = ([f"any of {describe(any_hides)}"] if any_hides else []) + ([f"all of {describe(all_hide)}"] if all_hide else [])
         rows.append((r["map"], names[target] if 0 <= target < len(names) else str(target),
-                     describe(required), describe(hiding)))
+                     describe(required), "; ".join(hiding)))
     for row in sorted(rows):
         print("\t".join(row))
 

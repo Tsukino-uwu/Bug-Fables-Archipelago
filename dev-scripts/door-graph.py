@@ -28,6 +28,16 @@ def flags(field: str) -> str:
     return ",".join(f for f in field.split() if f != "-1")
 
 
+def hiding(limit: str) -> str:
+    """As MainManager.CheckIfCanExist reads limit: an entry below -1 hides alone; the rest hide only all together."""
+    lim = limit.split()
+    any_hides = [str(-int(f)) for f in lim if int(f) < -1]
+    rest = [f for f in lim if int(f) >= -1]
+    all_hide = [f for f in rest if f != "-1"] if rest and int(rest[0]) > -1 else []
+    return "; ".join(([f"any of {','.join(any_hides)}"] if any_hides else [])
+                     + ([f"all of {','.join(all_hide)}"] if all_hide else []))
+
+
 def point(field: str | None) -> tuple[float, float, float] | None:
     if not field:
         return None
@@ -115,7 +125,7 @@ def main() -> None:
         doors.append({
             "map": r["map"], "index": int(r["index"]), "name": r["name"],
             "to": names[target] if 0 <= target < len(names) else f"?{target}",
-            "requires": flags(r["requires"]), "limit": flags(r["limit"]),
+            "requires": flags(r["requires"]), "limit": hiding(r["limit"]),
             "vectordata": r.get("vectordata"), "position": point(r.get("position")),
         })
 
