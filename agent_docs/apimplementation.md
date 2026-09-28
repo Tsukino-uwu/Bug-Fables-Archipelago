@@ -1304,8 +1304,10 @@ added or removed), and for each: what sets it and when, and whether a seed can r
 through away (a boat, a bridge, a door) is either kept from happening in a seed or becomes a rule; one that adds a
 roadblock is a rule. **Look across rooms, too** (the user, 2026-09-28): a flag or a follower a room needs may come
 from elsewhere, from a quest or a character who has to walk with the party from another room (the throne room needs
-Maki, from two rooms away). Each such need names the room or quest it comes from, so the rule follows it there. No
-room is done until its flags are listed.
+Maki, from two rooms away). Each such need names the room or quest it comes from, so the rule follows it there, or,
+when it isn't a quest (a scene that happens to want a follower), the mod may remove the need for good so the room works
+on its own (the user). Decided case by case, like the rest of the logic, and fixed in the mod and the logic alike, never
+at runtime. No room is done until its flags are listed.
 **The proof of concept, seen (the user, 2026-09-25):** one door, then a coupled swap of two connections both ways
 (the mod guide, step 13). **Every door, built (2026-09-25):** the yaml option *Entrance Randomizer (experimental)*,
 *Off* (default) or *Coupled*; decoupled later. How it was built:
