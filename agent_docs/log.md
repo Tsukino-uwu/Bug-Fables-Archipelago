@@ -1298,4 +1298,12 @@ Newest last. What was tried, what happened, what the user said.
     - my `copy-dev.ps1` message had `$cfg:` in a string, which breaks the script (fixed with `${cfg}`);
     - the gate's `-match` ignored case and saw the checkout's `dev` folder as `Dev/` (now `-cmatch` on the mod's own
       folder), which a probe setting proved.
-- **Next:** phase 6 (`SeedData`), then the wrap-and-trim pass.
+- **Phase 6 done** (the user allowed a local server):
+  - `SeedDump` and `copy-dev -ConfigSet` (f8cebb7).
+  - `SeedData` parses a login whole before publishing (37059f3).
+  - PartyMembers, FieldMoves and Abilities read the seed through an injected `Func<SeedData>`, so the connection no
+    longer writes their statics (c13e881).
+  - The seed dump from a real login to a local server was identical (1,073 entries) after each commit. The same login
+    showed compression on after its hooks moved.
+  - The connection's table properties stay as forwards (about 80 readers).
+- **Next:** the wrap-and-trim pass (long lines, lean comments), proven by an identical Release DLL with no debug info.
