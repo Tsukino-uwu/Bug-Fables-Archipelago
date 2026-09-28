@@ -79,7 +79,6 @@ namespace BugFablesAP
             new Scene { Map = "OutsideSnakemouth", Event = 11, Flags = new int[0], Discovery = 0 },
         };
 
-        private static Harmony harmony;
         private static readonly MethodInfo endEvent = AccessTools.Method(typeof(EventControl), "EndEvent", Type.EmptyTypes);
 
         private static ManualLogSource log;
@@ -194,63 +193,30 @@ namespace BugFablesAP
                 + "physics steps, and whatever the game counts in frames still runs at 60 per second, so it plays as it does at "
                 + "60. Off: the game's own FPS and VSync settings.",
                 new AcceptableValueList<string>(UncapValues)));
+            // Installed in this order, each only if the one before went in, as they depend on each other.
             // A follow-up line is fetched inside the running dialogue, not through a new SetText.
-            MethodInfo getLine = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetDialogueText), new[] { typeof(int) });
-            if (getLine == null)
+            if (!Hooks.Install(typeof(LineHook), "qol", "item hold-ups' empty follow-up line goes unanswered")
+                || !Hooks.Install(typeof(EventHook), "qol", "Skip cutscenes does nothing"))
             {
-                log.LogError("[qol] MainManager.GetDialogueText(int) not found: item hold-ups' empty follow-up line goes unanswered.");
                 return;
             }
-            harmony = new Harmony(Plugin.Guid + ".qol." + DateTime.UtcNow.Ticks);
-            harmony.Patch(getLine, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeGetLine)));
-            MethodInfo startEvent = AccessTools.Method(typeof(EventControl), nameof(EventControl.StartEvent), new[] { typeof(int), typeof(NPCControl) });
-            if (startEvent == null)
+            if (exitBattle != null && battleInEvent != null && battleAction != null)
             {
-                log.LogError("[qol] EventControl.StartEvent(int, NPCControl) not found: Skip cutscenes does nothing.");
-                return;
-            }
-            harmony.Patch(startEvent, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeStartEvent)));
-            MethodInfo checkEvent = AccessTools.Method(typeof(BattleControl), "CheckEvent");
-            if (checkEvent != null && exitBattle != null && battleInEvent != null && battleAction != null)
-            {
-                harmony.Patch(checkEvent, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeCheckEvent)));
+                Hooks.Install(typeof(SpiderHook), "qol", "the first spider fight runs its three turns");
             }
             else
             {
-                log.LogError("[qol] BattleControl.CheckEvent, ExitBattle, inevent or action not found: the first spider fight runs its three turns.");
+                log.LogError("[qol] BattleControl.ExitBattle, inevent or action not found: the first spider fight runs its three turns.");
             }
-            MethodInfo changeParty = AccessTools.Method(typeof(MainManager), nameof(MainManager.ChangeParty), new[] { typeof(int[]), typeof(bool), typeof(bool) });
-            if (changeParty == null)
-            {
-                log.LogError("[qol] MainManager.ChangeParty(int[], bool, bool) not found: Event8's talk plays.");
-                return;
-            }
-            harmony.Patch(changeParty, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeChangeParty)));
-            MethodInfo solid = AccessTools.Method(typeof(MainManager), nameof(MainManager.NewSolidColor),
-                new[] { typeof(string), typeof(Color), typeof(float), typeof(Vector3), typeof(Vector2) });
-            if (solid == null)
-            {
-                log.LogError("[qol] MainManager.NewSolidColor not found: the slides play (fast).");
-                return;
-            }
-            harmony.Patch(solid, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeSolidColor)));
             // The title screen resets the game's variables; the opening's own state is per file, so it resets there too.
-            MethodInfo reset = AccessTools.Method(typeof(MainManager), nameof(MainManager.SetVariables));
-            if (reset == null)
+            // Every music change ends in the ChangeMusic overload patched.
+            if (!Hooks.Install(typeof(PartyHook), "qol", "Event8's talk plays")
+                || !Hooks.Install(typeof(SlideHook), "qol", "the slides play (fast)")
+                || !Hooks.Install(typeof(ResetHook), "qol", "the opening's state can carry into the next file"))
             {
-                log.LogError("[qol] MainManager.SetVariables not found: the opening's state can carry into the next file.");
                 return;
             }
-            harmony.Patch(reset, postfix: new HarmonyMethod(typeof(QualityOfLife), nameof(ResetFileState)));
-            // Every music change ends in this overload.
-            MethodInfo music = AccessTools.Method(typeof(MainManager), nameof(MainManager.ChangeMusic),
-                new[] { typeof(AudioClip), typeof(float), typeof(int), typeof(bool) });
-            if (music == null)
-            {
-                log.LogError("[qol] MainManager.ChangeMusic(AudioClip, float, int, bool) not found: the opening map's music plays before a seed start.");
-                return;
-            }
-            harmony.Patch(music, prefix: new HarmonyMethod(typeof(QualityOfLife), nameof(BeforeChangeMusic)));
+            Hooks.Install(typeof(MusicHook), "qol", "the opening map's music plays before a seed start");
         }
 
         // A new file with a seed start goes from the title screen straight to that start: no music of the opening map.
@@ -264,29 +230,39 @@ namespace BugFablesAP
 
         private static bool heldMusicLogged;
 
-        private static void BeforeChangeMusic(ref AudioClip musicclip, int id)
+        private static class MusicHook
         {
-            if (musicclip == null || id != 0 || !HoldingMusic())
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.ChangeMusic), typeof(AudioClip), typeof(float), typeof(int), typeof(bool))]
+            [HarmonyPrefix]
+            private static void BeforeChangeMusic(ref AudioClip musicclip, int id)
             {
-                return;
+                if (musicclip == null || id != 0 || !HoldingMusic())
+                {
+                    return;
+                }
+                if (!heldMusicLogged)
+                {
+                    heldMusicLogged = true;
+                    log.LogInfo($"[qol] seed start: {musicclip.name} held back on the opening map (silence until the start)");
+                }
+                musicclip = null;
             }
-            if (!heldMusicLogged)
-            {
-                heldMusicLogged = true;
-                log.LogInfo($"[qol] seed start: {musicclip.name} held back on the opening map (silence until the start)");
-            }
-            musicclip = null;
         }
 
-        private static void ResetFileState()
+        private static class ResetHook
         {
-            if (openingPending || startPending || openingFailed || event8Cut || partyThenFade || transferring)
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.SetVariables))]
+            [HarmonyPostfix]
+            private static void ResetFileState()
             {
-                log.LogInfo($"[qol] title screen: the last file's opening state cleared (pending {openingPending}, start {startPending}, "
-                    + $"failed {openingFailed}, transferring {transferring})");
+                if (openingPending || startPending || openingFailed || event8Cut || partyThenFade || transferring)
+                {
+                    log.LogInfo($"[qol] title screen: the last file's opening state cleared (pending {openingPending}, start {startPending}, "
+                        + $"failed {openingFailed}, transferring {transferring})");
+                }
+                openingPending = startPending = openingFailed = event8Cut = partyThenFade = transferring = heldMusicLogged = false;
+                PartyMembers.SetReceived(System.Linq.Enumerable.Empty<int>());
             }
-            openingPending = startPending = openingFailed = event8Cut = partyThenFade = transferring = heldMusicLogged = false;
-            PartyMembers.SetReceived(System.Linq.Enumerable.Empty<int>());
         }
 
         internal static void Tick()
@@ -480,9 +456,6 @@ namespace BugFablesAP
         // A hot reload mid-intro must not leave the game fast.
         internal static void Disable()
         {
-            harmony?.UnpatchSelf();
-            harmony = null;
-
             if (speeding)
             {
                 speeding = false;

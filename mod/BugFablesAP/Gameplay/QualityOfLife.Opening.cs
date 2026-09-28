@@ -101,34 +101,44 @@ namespace BugFablesAP
         // scene, and the next frame the mod ends it as its own end does.
         private static bool event8Cut;
 
-        private static bool BeforeChangeParty(int[] ids, bool fromscratch, bool destroyoldentity)
+        private static class PartyHook
         {
-            MainManager mm = MainManager.instance;
-            if (randomizerOn == null || !randomizerOn() || mm == null || MainManager.map == null
-                || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap || mm.flags[GameFlags.PermitEvent]
-                || ids == null || ids.Length != 1 || ids[0] != 1 || !fromscratch || destroyoldentity || MainManager.events == null)
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.ChangeParty), typeof(int[]), typeof(bool), typeof(bool))]
+            [HarmonyPrefix]
+            private static bool BeforeChangeParty(int[] ids, bool fromscratch, bool destroyoldentity)
             {
-                return true;
+                MainManager mm = MainManager.instance;
+                if (randomizerOn == null || !randomizerOn() || mm == null || MainManager.map == null
+                    || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap || mm.flags[GameFlags.PermitEvent]
+                    || ids == null || ids.Length != 1 || ids[0] != 1 || !fromscratch || destroyoldentity || MainManager.events == null)
+                {
+                    return true;
+                }
+                MainManager.events.StopCoroutine("Event8");
+                event8Cut = true;
+                log.LogInfo("[qol] Event8's talk after the slides cut: Kabbu-alone party refused, the scene stopped");
+                return false;
             }
-            MainManager.events.StopCoroutine("Event8");
-            event8Cut = true;
-            log.LogInfo("[qol] Event8's talk after the slides cut: Kabbu-alone party refused, the scene stopped");
-            return false;
         }
 
         // The cut before the slides: their first step is the black backdrop, NewSolidColor("back").
-        private static void BeforeSolidColor(string name)
+        private static class SlideHook
         {
-            MainManager mm = MainManager.instance;
-            if (name != "back" || randomizerOn == null || !randomizerOn() || mm == null || MainManager.map == null
-                || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap || mm.flags[GameFlags.PermitEvent]
-                || MainManager.events == null || event8Cut)
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.NewSolidColor), typeof(string), typeof(Color), typeof(float), typeof(Vector3), typeof(Vector2))]
+            [HarmonyPrefix]
+            private static void BeforeSolidColor(string name)
             {
-                return;
+                MainManager mm = MainManager.instance;
+                if (name != "back" || randomizerOn == null || !randomizerOn() || mm == null || MainManager.map == null
+                    || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap || mm.flags[GameFlags.PermitEvent]
+                    || MainManager.events == null || event8Cut)
+                {
+                    return;
+                }
+                MainManager.events.StopCoroutine("Event8");
+                event8Cut = true;
+                log.LogInfo("[qol] Event8 cut before its slides: the scene stopped");
             }
-            MainManager.events.StopCoroutine("Event8");
-            event8Cut = true;
-            log.LogInfo("[qol] Event8 cut before its slides: the scene stopped");
         }
 
         private static void EndEvent8()
