@@ -18,11 +18,11 @@ CLASSIFICATIONS = {
     "filler": ItemClassification.filler,
     "trap": ItemClassification.trap,
 }
-ITEMS_BY_NAME = {item["name"]: item for item in ITEMS}
+ITEMS_BY_NAME = {item.name: item for item in ITEMS}
 # Only padding fills leftover slots; other filler (the Hard Mode medal) enters only as a location's vanilla item.
-PADDING = [item["name"] for item in ITEMS if item.get("padding")]
+PADDING = [item.name for item in ITEMS if item.padding]
 # By member number: 0 Vi, 1 Kabbu, 2 Leif.
-MEMBERS = [item["name"] for item in sorted((item for item in ITEMS if item.get("member")), key=lambda item: item["game_id"])]
+MEMBERS = [item.name for item in sorted((item for item in ITEMS if item.member), key=lambda item: item.game_id)]
 
 
 class BugFablesItem(Item):
@@ -30,7 +30,7 @@ class BugFablesItem(Item):
 
 
 def create_item(world: BugFablesWorld, name: str) -> BugFablesItem:
-    return BugFablesItem(name, CLASSIFICATIONS[ITEMS_BY_NAME[name]["classification"]], ITEM_NAME_TO_ID[name], world.player)
+    return BugFablesItem(name, CLASSIFICATIONS[ITEMS_BY_NAME[name].classification], ITEM_NAME_TO_ID[name], world.player)
 
 
 def random_filler_name(world: BugFablesWorld) -> str:
@@ -50,18 +50,18 @@ def create_all_items(world: BugFablesWorld) -> None:
                 pool.append(world.create_item(name))
     # Field abilities: enough copies of each item for its highest level; a base level the party starts with isn't one.
     for item in ITEMS:
-        if item.get("move"):
-            pool += [world.create_item(item["name"]) for _ in range(item_copies(world, item["name"]))]
+        if item.move:
+            pool += [world.create_item(item.name) for _ in range(item_copies(world, item.name))]
     # The mod's own items (custom gates) enter once in every seed, in a filler slot: when every location already
     # has its vanilla item, one filler item (an ordinary item or berries, picked by the seed) makes room.
-    always = [world.create_item(item["name"]) for item in ITEMS if item.get("always")]
+    always = [world.create_item(item.name) for item in ITEMS if item.always]
     unfilled = len(world.multiworld.get_unfilled_locations(world.player))
     while always and len(pool) + len(always) > unfilled:
         # Only an ordinary item or berries, never a filler medal (the Hard Mode medal). A duplicate copy first; the
         # last copy only when none is left (few locations, many move items).
         names = [item.name for item in pool]
         ordinary = [item for item in pool if item.classification == ItemClassification.filler
-                    and ITEMS_BY_NAME[item.name]["kind"] in (ITEM_KIND, MONEY_KIND)]
+                    and ITEMS_BY_NAME[item.name].kind in (ITEM_KIND, MONEY_KIND)]
         filler = [item for item in ordinary if names.count(item.name) > 1] or ordinary
         if not filler:
             raise Exception(f"Bug Fables: no filler item to make room for {always[0].name} in player {world.player_name}'s pool")

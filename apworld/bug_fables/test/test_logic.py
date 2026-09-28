@@ -195,14 +195,14 @@ class TestClassifications(BugFablesTestBase):
         # Shuffle Jump's blanket rule: every spot not marked no_jump needs it.
         used.add("Jump")
         # Leif is both: the story's event with Starting Party Member off, an item with it on.
-        event_items = {event["item"] for event in STORY_EVENTS} - {item["name"] for item in ITEMS} | {"Artifact"}
+        event_items = {event["item"] for event in STORY_EVENTS} - {item.name for item in ITEMS} | {"Artifact"}
         real_items_used = used - event_items
         for item in ITEMS:
-            with self.subTest(item=item["name"]):
-                if item["name"] in real_items_used:
-                    self.assertEqual(item["classification"], "progression")
+            with self.subTest(item=item.name):
+                if item.name in real_items_used:
+                    self.assertEqual(item.classification, "progression")
                 else:
-                    self.assertNotEqual(item["classification"], "progression")
+                    self.assertNotEqual(item.classification, "progression")
 
 
 class TestTownMedal(BugFablesTestBase):

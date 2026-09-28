@@ -416,6 +416,12 @@ first shown to catch a one-word rule change. Tests are split by subject too (`te
 `test_pool.py`, `test_categories.py`, `test_shops.py`), and `BugFablesTestBase.state_with` builds a state holding
 just the named items or events.
 
+**Typed data** (2026-09-28, a refactor that changes nothing a seed contains, as the Pokémon Crystal apworld keeps its
+data): each data file's entries become frozen dataclasses in `data_types.py`, read once in `data_tables.py`, so code
+reads `item.kind` instead of `item["kind"]`, and a key a record doesn't have is refused when the world loads instead
+of being silently ignored. A file's schema lives in its record's docstring. One table per commit, each proven by
+`seed-snapshot.py` (identical slot_data and spoilers), the tests and the fuzzer. Done: items.
+
 We wrote **tests**, including one that proves the gate really needs the permit. To make sure that test
 could fail, we removed the rule on purpose, watched the test fail, and put the rule back. Archipelago's
 own test suite passes for it too. Since 2026-09-28 every apworld change is also fuzzed: 10000 seeds from random

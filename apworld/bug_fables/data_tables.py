@@ -5,6 +5,8 @@ import json
 import pkgutil
 from typing import Any
 
+from .data_types import Item
+
 ITEM_ID_BASE = 7_710_000
 LOCATION_ID_BASE = 7_720_000
 
@@ -24,7 +26,7 @@ def _load(name: str) -> dict[str, Any]:
 
 
 WORLD_VERSION: str = _load_manifest()["world_version"]
-ITEMS: list[dict[str, Any]] = _load("items.json")["items"]
+ITEMS: tuple[Item, ...] = tuple(Item.from_json(item) for item in _load("items.json")["items"])
 _LOCATION_DATA = _load("locations.json")
 LOCATIONS: list[dict[str, Any]] = _LOCATION_DATA["locations"]
 REGIONS: list[dict[str, Any]] = _LOCATION_DATA["regions"]
@@ -70,13 +72,13 @@ MOVE_KIND = 6
 MOVE_ID_OFFSET = 5_000
 
 
-def item_id(item: dict[str, Any]) -> int:
+def item_id(item: Item) -> int:
     offset = {MEDAL_KIND: MEDAL_ID_OFFSET, MONEY_KIND: MONEY_ID_OFFSET, CRYSTAL_KIND: CRYSTAL_ID_OFFSET,
-              MEMBER_KIND: MEMBER_ID_OFFSET, MOVE_KIND: MOVE_ID_OFFSET}.get(item["kind"], 0)
-    return ITEM_ID_BASE + offset + item["game_id"]
+              MEMBER_KIND: MEMBER_ID_OFFSET, MOVE_KIND: MOVE_ID_OFFSET}.get(item.kind, 0)
+    return ITEM_ID_BASE + offset + item.game_id
 
 
-ITEM_NAME_TO_ID: dict[str, int] = {item["name"]: item_id(item) for item in ITEMS}
+ITEM_NAME_TO_ID: dict[str, int] = {item.name: item_id(item) for item in ITEMS}
 LOCATION_NAME_TO_ID: dict[str, int] = {loc["name"]: LOCATION_ID_BASE + loc["id"] for loc in LOCATIONS}
 
 if len(set(ITEM_NAME_TO_ID.values())) != len(ITEMS):
@@ -102,7 +104,7 @@ def vanilla_item(location: dict[str, Any]) -> str | None:
     else:
         kind, game_id = (MONEY_KIND if source["type"] == MONEY_TYPE else source["type"]), source["item"]
     for item in ITEMS:
-        if item["kind"] == kind and item["game_id"] == game_id:
-            return item["name"]
+        if item.kind == kind and item.game_id == game_id:
+            return item.name
     return None
 

@@ -1,0 +1,49 @@
+"""The world's data files as typed, frozen records, each read once when the world loads (data_tables.py)."""
+from __future__ import annotations
+
+from dataclasses import dataclass, fields
+from typing import Any
+
+
+def _known(cls: type, data: dict[str, Any]) -> dict[str, Any]:
+    """The entry's fields, refusing a key the record doesn't have (a typo would otherwise be ignored)."""
+    names = {field.name for field in fields(cls)}
+    unknown = set(data) - names - {"_comment"}
+    if unknown:
+        raise ValueError(f"bug_fables: {cls.__name__} {data.get('name', '')!r} has unknown keys {sorted(unknown)}")
+    return {key: value for key, value in data.items() if key in names}
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class Item:
+    """An item this world can place (data/items.json).
+
+    game_id is the MainManager.Items ordinal (the enum starts at None = -1). kind is where it goes:
+    0 ordinary items, 1 key items, 2 medals (game_id is the medal id, MainManager.BadgeTypes), 3 berries (money;
+    game_id is the amount), 4 crystal berries (one item, game_id 0; the count is the currency; filler until the crystal
+    berry shop is in the seed, then progression, since they buy locations there), 5 party members (game_id 0 Vi,
+    1 Kabbu, 2 Leif), 6 field abilities (game_id 0 Progressive Beemerang, 1 Horn Slash, 2 Progressive Freeze, 3 Jump,
+    4 Progressive Dash, 5 Bee Fly, 6 Beetle Dig, 7 Shield; their names and copies are in abilities.py).
+
+    The Archipelago id is ITEM_ID_BASE + game_id, plus MEDAL_ID_OFFSET for a medal (medal ids overlap item ids),
+    MONEY_ID_OFFSET for berries, CRYSTAL_ID_OFFSET for crystal berries, MEMBER_ID_OFFSET for a party member or
+    MOVE_ID_OFFSET for a field move.
+
+    padding: the filler used to fill leftover locations, in any number. always: enters the pool once in every seed,
+    taking a filler slot (the mod's own items, which no location holds in vanilla). member: a party member, in the
+    pool only with Starting Party Member on (the two not starting). move: a field ability's item, in the pool as many
+    times as abilities.py says. Every other item enters the pool once per included location that holds it in vanilla.
+    """
+
+    name: str
+    game_id: int
+    kind: int
+    classification: str
+    padding: bool = False
+    always: bool = False
+    member: bool = False
+    move: bool = False
+
+    @classmethod
+    def from_json(cls, data: dict[str, Any]) -> Item:
+        return cls(**_known(cls, data))

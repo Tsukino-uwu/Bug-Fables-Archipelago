@@ -32,7 +32,7 @@ class TestPool(BugFablesTestBase):
         # (the Boat Ticket) take when the pool is full: one duplicated filler copy each (TestSmallPool: a last copy).
         from ..data_tables import ITEMS, LOCATIONS, vanilla_item
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
-        own = sum(1 for item in ITEMS if item.get("always"))
+        own = sum(1 for item in ITEMS if item.always)
         short = 0
         for name in {vanilla_item(loc) for loc in LOCATIONS} - {None}:
             expected = sum(1 for loc in LOCATIONS if vanilla_item(loc) == name)
@@ -69,11 +69,11 @@ class TestSmallPool(BugFablesTestBase):
         from ..items import ITEMS_BY_NAME
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         for item in ITEMS:
-            if item.get("always"):
-                self.assertEqual(pool.count(item["name"]), 1)
+            if item.always:
+                self.assertEqual(pool.count(item.name), 1)
         for name in {vanilla_item(loc) for loc in self.world.included_locations} - {None}:
             data = ITEMS_BY_NAME[name]
-            if data["classification"] != "filler" or data["kind"] not in (ITEM_KIND, MONEY_KIND):
+            if data.classification != "filler" or data.kind not in (ITEM_KIND, MONEY_KIND):
                 expected = sum(1 for loc in self.world.included_locations if vanilla_item(loc) == name)
                 with self.subTest(item=name):
                     self.assertEqual(pool.count(name), expected)
