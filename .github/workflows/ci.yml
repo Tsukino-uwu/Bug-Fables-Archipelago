@@ -1,6 +1,7 @@
 name: CI
 
-# Every push, and every release (release.yml calls this). Jobs run in parallel; the apworld job is a Python matrix.
+# Every push, and every release (release.yml calls this): the apworld on a Python matrix. The mod DLL's stale gate
+# runs only in release.yml: between releases, a committed DLL older than its sources is expected.
 on:
   push:
   pull_request:
@@ -12,16 +13,6 @@ env:
   AP_TAG: '0.6.7'
 
 jobs:
-  # CI can't build the mod (it needs the game's own assembly), so the DLLs in release/mod are committed.
-  mod-dll:
-    name: Committed mod DLL matches its sources
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - name: Stale gate
-        shell: pwsh
-        run: ./dev-scripts/build-release.ps1 -Check
-
   apworld:
     name: Apworld on Python ${{ matrix.python }}
     runs-on: ubuntu-latest

@@ -1766,14 +1766,15 @@ BepInEx is not bundled; the player installs it first.
    `release/mod/` (with no debug info: the pdb isn't shipped, and its path would put the build machine's folders into
    the DLL; checked with `strings`), and writes `release/built-from.txt`: each source file's git blob hash (line endings normalised, so
    a Windows and a Linux checkout agree) and each shipped DLL's SHA-256. `.gitignore` lets exactly those four DLLs in.
-2. **A stale gate.** `build-release.ps1 -Check` recomputes both lists and fails if they differ. CI runs it on every
-   push, so a source change without a rebuild shows red. Tried both ways (2026-09-26): a probe line in a `.cs` file
+2. **A stale gate.** `build-release.ps1 -Check` recomputes both lists and fails if they differ. It runs when
+   releasing: a job in the release workflow and `release.ps1`'s preflight. It ran on every push at first, which kept
+   `main` red between releases, where a DLL older than its sources is expected; moved on 2026-09-28. Tried both ways (2026-09-26): a probe line in a `.cs` file
    failed it, naming the file; removing it passed.
    The same run refuses a release whose dev tools or cheats are on by default (the user, 2026-09-26: never a release
    with 99 damage or infinite jump): every `Config.Bind("Debug", ...)` must default to off (`false`, `0`, `""`, or
    `-1`, TestStartMember's off). The dev tools still ship, off; only a hand-edited config turns them on (the user's
    choice over compiling them out). Tried both ways: InfJump defaulting to true failed it, naming the key.
-3. **CI** (`.github/workflows/ci.yml`, every push, and called by the release): the gate, and the apworld on a
+3. **CI** (`.github/workflows/ci.yml`, every push, and called by the release): the apworld on a
    Python matrix (3.11, 3.12, 3.13, what Archipelago's own CI tests at 0.6.7). Each leg checks out Archipelago
    `0.6.7`, installs it the way Archipelago's own `unittests.yml` does (then sets `SKIP_REQUIREMENTS_UPDATE=1`: on the first
    run, 2026-09-26, two worlds' pins clashed over `typing-extensions` on Python 3.12 and 3.13, and `Launcher.py` stopped
@@ -1786,7 +1787,7 @@ BepInEx is not bundled; the player installs it first.
 4. **The release** (`.github/workflows/release.yml`, run by hand): a guard first (the version is `vX.Y.Z` and
    matches `Plugin.cs` and `world_version`; the tag is free; no personal path in the highlights or in any commit
    subject the generated notes will publish; the patterns live in `.githooks/release-path-patterns.txt`, since the
-   pre-commit hook refuses them anywhere else), then CI, then the publish job zips `release/mod/BepInEx` and attaches
+   pre-commit hook refuses them anywhere else), then CI and the stale gate, then the publish job zips `release/mod/BepInEx` and attaches
    the three files. The body is the highlights (changes and new features, or nothing) plus GitHub's generated notes.
    `softprops/action-gh-release` is pinned to a commit, since it runs with write access.
 5. **One command cuts it:** `dev-scripts/release.ps1 -Version v0.1.0 [-HighlightsFile notes.md]` (add `-Prerelease`
@@ -1817,6 +1818,8 @@ a later `main` for the zip's top-level README and switched from pre-release to a
 is hidden from Latest). The downloads fetched back and checked; the DLL is the build the user saw load and connect.
 v0.2.0 published by `release.ps1` (2026-09-27), every job green, after a stale check of every doc against the code;
 the downloads fetched back: the zip's DLL matches `built-from.txt` and reports 0.2.0, the apworld's manifest says 0.2.0.
+The stale gate moved from push CI into the release workflow (2026-09-28), with `release/` rebuilt, so `main` is green
+between releases; `-Check` passes locally, and the moved job first runs at the next release.
 
 ## Build step 18: Starting Party Member
 

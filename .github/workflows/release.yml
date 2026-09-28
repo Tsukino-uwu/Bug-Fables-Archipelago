@@ -79,8 +79,19 @@ jobs:
     needs: guard
     uses: ./.github/workflows/ci.yml
 
+  # CI can't build the mod (it needs the game's own assembly), so the DLLs in release/mod are committed.
+  mod-dll:
+    name: Committed mod DLL matches its sources
+    needs: guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Stale gate
+        shell: pwsh
+        run: ./dev-scripts/build-release.ps1 -Check
+
   publish:
-    needs: [guard, ci]
+    needs: [guard, ci, mod-dll]
     runs-on: ubuntu-latest
     permissions:
       contents: write

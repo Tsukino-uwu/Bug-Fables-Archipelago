@@ -1,5 +1,5 @@
 # Builds the plugin (Release) and stages the mod download in release\mod, plus release\built-from.txt.
-# CI can't build (no game assembly), so the staged DLLs are committed; -Check is CI's gate that they match the sources.
+# CI can't build (no game assembly), so the staged DLLs are committed; -Check is the release's gate that they match.
 #   powershell -ExecutionPolicy Bypass -File dev-scripts\build-release.ps1 [-GameDir <dir>]
 #   pwsh dev-scripts/build-release.ps1 -Check
 param(
@@ -76,7 +76,7 @@ $extra = Get-ChildItem $pluginDir -File | Where-Object { $expected -notcontains 
 if ($extra) { throw "unexpected files in release/mod: $($extra.Name -join ', ')" }
 
 $commit = & git -C $repo rev-parse --short HEAD
-$lines = @('# Written by dev-scripts/build-release.ps1; checked by its -Check in CI.', "commit: $commit") +
+$lines = @('# Written by dev-scripts/build-release.ps1; checked by its -Check at release.', "commit: $commit") +
     @(Get-SourceLines) + @(Get-DllLines)
 $lines | Set-Content -Path $builtFrom -Encoding ascii
 
