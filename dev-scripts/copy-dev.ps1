@@ -129,7 +129,7 @@ if ($DebugOn.Count -gt 0 -or $DebugOff.Count -gt 0 -or $DebugSet.Count -gt 0) {
     }
     $lines = [System.Collections.Generic.List[string]](Get-Content $cfg)
     $start = $lines.IndexOf('[Debug]')
-    if ($start -lt 0) { throw "no [Debug] section in $cfg" }
+    if ($start -lt 0) { throw "no [Debug] section in ${cfg}: the game runs a release build (-Layout Release), which has no dev settings" }
     $end = $lines.Count
     for ($i = $start + 1; $i -lt $lines.Count; $i++) { if ($lines[$i] -match '^\[') { $end = $i; break } }
     foreach ($k in @($want.Keys)) {

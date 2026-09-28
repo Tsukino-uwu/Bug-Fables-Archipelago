@@ -261,7 +261,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 ## Every Debug setting
 
 All live under `[Debug]` in `BepInEx/config/bugfables.archipelago.cfg`, are off by default, and are switched with
-`copy-dev.ps1 -DebugOn <name>` / `-DebugOff <name>` (step 3 above). Dev installs and test files only.
+`copy-dev.ps1 -DebugOn <name>` / `-DebugOff <name>` (step 3 above). Dev installs and test files only. They exist
+only in the dev (Debug) build: every one is bound in `Dev/Plugin.Dev.cs`, and the release build leaves `Dev/` out.
 
 | Setting | What it does |
 |---|---|

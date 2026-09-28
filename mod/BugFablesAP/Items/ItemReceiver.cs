@@ -59,7 +59,8 @@ namespace BugFablesAP
             return bound == seed;
         }
 
-        internal static System.Func<bool> AdoptOtherSeed;
+        // Dev only ([Debug] AdoptSeed); off in the release build, which never sets it.
+        internal static System.Func<bool> AdoptOtherSeed = null;
 
         internal void Tick(bool randomizerOn)
         {

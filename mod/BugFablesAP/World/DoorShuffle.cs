@@ -25,7 +25,8 @@ namespace BugFablesAP
         private static ApConnection connection;
         private static Func<bool> randomizerOn;
 
-        internal static string TestDoors;
+        // Dev only ([Debug] TestDoors); off in the release build, which never sets it.
+        internal static string TestDoors = null;
 
         internal static void Enable(ManualLogSource logger, ApConnection conn, Func<bool> on)
         {

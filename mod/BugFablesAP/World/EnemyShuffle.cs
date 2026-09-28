@@ -22,14 +22,16 @@ namespace BugFablesAP
                 return;
             }
             log.LogInfo("[enemies] installed on BattleControl.StartBattle");
+#if DEV
             Hooks.Install(typeof(LookTestHook), "enemies", "the dev look test does nothing");
+#endif
         }
 
         // Dev only (console `enemylook`): every ordinary map enemy looks like this enemy id; -1 off.
         internal static int LookTest = -1;
 
         // Dev only (console `enemyfight`): every map fight is this list of enemy ids; null off.
-        internal static int[] FightTest;
+        internal static int[] FightTest = null;
 
         // After the map builds its entities and before their Start, which sets up the model from animid.
         private static class LookTestHook
@@ -72,7 +74,7 @@ namespace BugFablesAP
         }
 
         // Dev only: with the look test, also copy the movement of a map enemy whose fight starts with that enemy.
-        internal static bool MoveTest;
+        internal static bool MoveTest = false;
 
         // An entity row's layout, as MapControl.CreateEntities reads it.
         private const int BattleIdsAt = 166;

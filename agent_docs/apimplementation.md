@@ -1782,10 +1782,19 @@ BepInEx is not bundled; the player installs it first.
    releasing: a job in the release workflow and `release.ps1`'s preflight. It ran on every push at first, which kept
    `main` red between releases, where a DLL older than its sources is expected; moved on 2026-09-28. Tried both ways (2026-09-26): a probe line in a `.cs` file
    failed it, naming the file; removing it passed.
-   The same run refuses a release whose dev tools or cheats are on by default (2026-09-26: never a release
-   with 99 damage or infinite jump): every `Config.Bind("Debug", ...)` must default to off (`false`, `0`, `""`, or
-   `-1`, TestStartMember's off). The dev tools still ship, off; only a hand-edited config turns them on (chosen
-   over compiling them out). Tried both ways: InfJump defaulting to true failed it, naming the key.
+   **The dev tools don't ship** (2026-09-28, reversing the 2026-09-26 choice to ship them switched off). The Release
+   build leaves `Dev/` out (`BugFablesAP.csproj`: `<Compile Remove="Dev/**">` outside Debug, and `DEV` defined only
+   in Debug), so the download has no console, cheats, probes or dumps, and no `[Debug]` settings. The same run
+   refuses a release otherwise:
+   - a `Config.Bind("Debug", ...)` outside `Dev/`;
+   - a `[Debug]` setting on by default, for dev installs;
+   - one of `Dev/`'s own types, or a "Dev only" text, found in the built DLL. `-Check` repeats that last check on the
+     committed DLL.
+
+   Tried both ways (2026-09-28). A probe `[Debug]` bind in a feature file failed it, naming the key and file. The first
+   version of the check counted every file as in `Dev/`, because PowerShell's `-match` ignores case and the checkout
+   sat under a folder named `dev`; it is case-sensitive now. The release DLL went from 389,632 to 308,224 bytes, and it
+   loaded in game (`copy-dev -Layout Release`) with no dev line in the log and every feature installed.
 3. **CI** (`.github/workflows/ci.yml`, every push, and called by the release): the apworld on a
    Python matrix (3.11, 3.12, 3.13, what Archipelago's own CI tests at 0.6.7). Each leg checks out Archipelago
    `0.6.7`, installs it the way Archipelago's own `unittests.yml` does (then sets `SKIP_REQUIREMENTS_UPDATE=1`: on the first
@@ -1832,6 +1841,7 @@ v0.2.0 published by `release.ps1` (2026-09-27), every job green, after a stale c
 the downloads fetched back: the zip's DLL matches `built-from.txt` and reports 0.2.0, the apworld's manifest says 0.2.0.
 The stale gate moved from push CI into the release workflow (2026-09-28), with `release/` rebuilt, so `main` is green
 between releases; `-Check` passes locally, and the moved job first runs at the next release.
+The dev tools are out of the release build (2026-09-28): the gate checks it, and the Release DLL ran in game with none.
 
 ## Build step 18: Starting Party Member
 

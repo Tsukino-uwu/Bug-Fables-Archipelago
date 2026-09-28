@@ -17,6 +17,14 @@
     <GameManaged>$(BugFablesDir)\Bug Fables_Data\Managed</GameManaged>
   </PropertyGroup>
 
+  <!-- The dev tools (Dev/) are in the Debug build only: the release build compiles without them. -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>$(DefineConstants);DEV</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(Configuration)' != 'Debug'">
+    <Compile Remove="Dev/**" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="BepInEx.Core" Version="5.4.*" />
     <!-- The game's Unity version. -->
