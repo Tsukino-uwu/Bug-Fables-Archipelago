@@ -753,8 +753,11 @@ The rows, all On by default (the user, 2026-09-25) and active only while the Arc
    received and the mod gives it everything the server has for the slot, oldest first, which is what makes a lost save
    recoverable; each of those items now gets its hold-up, per the setting, as items arriving during play do. At first
    replays were silent (only items past the count the server had at login, `ApConnection.ReceivedAtLogin`, were held
-   up), so a new file showed nothing for a check with no scene of its own. The one exception left: the player's own
-   item arriving live from a check whose own scene already showed it. On *All*, a new file late in a seed plays a
+   up), so a new file showed nothing for a check with no scene of its own. The one exception left: an item whose
+   check's own scene just showed it on screen (`ItemSwap.ShownInScene`, filled when a pickup or gift shows the seed's
+   item, used up by that item's arrival). "Arrived after login" was tried first and missed a replay in a second new
+   file of the same session: Meditation, found in the file before, came in with no box (the user, 2026-09-28: "I
+   expected it to be remote"). On *All*, a new file late in a seed plays a
    hold-up for every item; *Progression* or *Off* shortens that. **A quiet start** (the user, the same day: six boxes in a
    row on a new file was "a bit much"): starting items (sent by the server itself, slot 0) and the items of the
    opening's three checks (`quiet_locations` in `slot_data`, marked `quiet` in `locations.json`) arrive with no

@@ -92,6 +92,7 @@ namespace BugFablesAP
                 ShowAsSprite(caller.entity, sprite);
             }
             text = text.Replace(FirstMedalTutorial + "|break|", "").Replace(FirstMedalTutorial, "");
+            ShownInScene.Add(at);
             log.LogInfo($"[swap] location {at}: pickup (kind {kind}, id {caller.entity.animstate}, flag {caller.activationflag}) "
                 + $"on {MapName()} is a location; showing '{name}'" + (info == null ? " (not scouted yet)" : ""));
         }

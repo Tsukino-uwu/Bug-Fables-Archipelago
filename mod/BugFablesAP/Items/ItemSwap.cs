@@ -278,6 +278,7 @@ namespace BugFablesAP
             }
             ScoutedItemInfo info = Describe(location, out shownName, out shownSprite, out shownColor);
             shownForOther = ForOther(info, ref shownName);
+            ShownInScene.Add(location);
             log.LogInfo($"[swap] location {location}: giveitem {(badge ? "medal" : "item")} {id} on {MapName()} is a location; showing '{shownName}'"
                 + (info == null ? " (not scouted yet)" : ""));
         }
@@ -456,6 +457,9 @@ namespace BugFablesAP
         {
             return new Color(((rgb >> 16) & 0xFF) / 255f, ((rgb >> 8) & 0xFF) / 255f, (rgb & 0xFF) / 255f);
         }
+
+        // Checks whose item a scene just showed on screen: that item's arrival gets no second box (ItemReceiver).
+        internal static readonly HashSet<long> ShownInScene = new HashSet<long>();
 
         private static long FindLocation(bool badge, int id)
         {
