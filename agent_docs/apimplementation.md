@@ -345,6 +345,12 @@ be wrong.
    (build step 16) gates Metal Island on the Boat Ticket and the pier only. Until then the logic is less cautious than
    the game past that scene. First step: read the scene and the flag that removes the boat, and whether a seed can
    reach it. Not built; nothing changed while the user plays vanilla.
+41. **A "!" over each unrecorded discovery, with the Detector on** (the user, 2026-09-28): today the Detector puts the
+   game's "!" over the leader and beeps when a room has a check left (the mod guide, step 15); this shows where. The
+   "!" is the game's emoticon (`EntityControl.emoticonid`, held with `emoticoncooldown`, and `alwaysemoticon` exists).
+   Discoveries that are objects (the pier statue, `HiddenEvent`, the `AncientHouseDiscovery` grass) can carry it;
+   those that are places (arriving outside Snakemouth, the fall room's scene) need the mod's own "!" at a spot from the
+   map data. Open: only discoveries, or every check that isn't visible (buried crystal berries, dig spots). Not built.
 
 **Known issues:**
 
