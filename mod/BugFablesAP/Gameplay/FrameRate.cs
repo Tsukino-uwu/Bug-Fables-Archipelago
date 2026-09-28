@@ -227,31 +227,38 @@ namespace BugFablesAP
 
         private static bool Reads(MethodBase m, Func<OpCode, object, bool> match)
         {
-            try
-            {
-                return PatchProcessor.ReadMethodBody(m).Any(i => match(i.Key, i.Value));
-            }
-            catch
-            {
-                return false;
-            }
+            List<KeyValuePair<OpCode, object>> body = ReadBody(m, log, "fps");
+            return body != null && body.Any(i => match(i.Key, i.Value));
         }
 
         private static bool HasBlink(MethodBase m)
         {
-            try
-            {
-                List<KeyValuePair<OpCode, object>> body = PatchProcessor.ReadMethodBody(m).ToList();
-                if (!body.Any(i => i.Value is MethodInfo sm && sm.Name == "set_enabled" && sm.DeclaringType == typeof(Renderer)))
-                {
-                    return false;
-                }
-                List<CodeInstruction> ci = body.Select(i => new CodeInstruction(i.Key, i.Value)).ToList();
-                return Enumerable.Range(0, ci.Count).Any(i => FrameSites.IsBlink(ci, i));
-            }
-            catch
+            List<KeyValuePair<OpCode, object>> body = ReadBody(m, log, "fps");
+            if (body == null || !body.Any(i => i.Value is MethodInfo sm && sm.Name == "set_enabled" && sm.DeclaringType == typeof(Renderer)))
             {
                 return false;
+            }
+            List<CodeInstruction> ci = body.Select(i => new CodeInstruction(i.Key, i.Value)).ToList();
+            return Enumerable.Range(0, ci.Count).Any(i => FrameSites.IsBlink(ci, i));
+        }
+
+        private static readonly HashSet<string> unreadableLogged = new HashSet<string>();
+
+        // A method's IL, or null: none for an abstract, extern or runtime method, and a failed read logged once per tag.
+        internal static List<KeyValuePair<OpCode, object>> ReadBody(MethodBase m, ManualLogSource logger, string tag)
+        {
+            try
+            {
+                return m.GetMethodBody() == null ? null : PatchProcessor.ReadMethodBody(m).ToList();
+            }
+            catch (Exception e)
+            {
+                if (unreadableLogged.Add(tag))
+                {
+                    logger?.LogWarning($"[{tag}] couldn't read {m.DeclaringType?.Name}.{m.Name}: {e.GetBaseException().Message}"
+                        + " (later failures not logged)");
+                }
+                return null;
             }
         }
 

@@ -96,7 +96,7 @@ namespace BugFablesAP
                 + "the console's addmember adds one. -1 = off.").Value;
             if (devConsole.Value)
             {
-                DevConsole.EnableGuard(Guid);
+                DevConsole.EnableGuard(Log, Guid);
             }
             saveDiff = Config.Bind("Debug", "SaveDiff", "",
                 "Dev only. Two save file names separated by |, e.g. 'save2backup.dat|save2.dat'. Once per load, logs "

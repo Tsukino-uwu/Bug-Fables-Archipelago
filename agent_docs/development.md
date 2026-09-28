@@ -8,6 +8,9 @@ For developers. You need the .NET SDK and your own copy of the game. The build c
 `dotnet build mod/BugFablesAP/BugFablesAP.csproj`. If the game isn't in Steam's default library, add
 `-p:BugFablesDir="D:\path\to\Bug Fables"`.
 
+The code style is in `.editorconfig`, which most editors apply: 4-space indents, braces on their own line, and lines
+up to 120 characters (the limit core Archipelago's `ruff.toml` sets for Python).
+
 ## Trying it in the running game: build, then copy
 
 The build and the copy into the game are separate steps. The build never writes to the game install.

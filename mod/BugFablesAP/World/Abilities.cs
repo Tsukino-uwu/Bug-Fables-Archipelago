@@ -149,12 +149,8 @@ namespace BugFablesAP
 
         private static int CountReads(MethodBase m, int[] flags)
         {
-            List<KeyValuePair<OpCode, object>> body;
-            try
-            {
-                body = PatchProcessor.ReadMethodBody(m).ToList();
-            }
-            catch
+            List<KeyValuePair<OpCode, object>> body = FrameRate.ReadBody(m, log, "abilities");
+            if (body == null)
             {
                 return 0;
             }

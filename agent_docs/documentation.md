@@ -129,7 +129,15 @@ before and after, decompile both DLLs with ILSpy, and diff the output; a pure mo
 threw on every frame silently stopped every system after it. Now each has its own guard, and its errors are logged
 under its name (`[recv] threw: ...`), once per distinct message. Built, not yet seen in game.
 
-**Status:** done; separate guards per system built 2026-09-28, not yet seen in game.
+**Errors are checked for, not swallowed** (a comparison with other randomizers, 2026-09-28). A few places caught an
+error and carried on without a word: an id outside the game's item or medal tables, a save point's coordinates that
+didn't parse, a method whose code couldn't be read. Each now checks first (the table's size; `TryParse` with the
+game's own number format, as `Convert.ToSingle` reads it under the en-US culture the game sets), and a failed code
+read is logged once. The dev console's pickup guard now gets its logger before its first use: before, a missing hook
+target would have thrown inside `Awake` and stopped the plugin loading. The code style is in `.editorconfig`.
+
+**Status:** done; separate guards per system built 2026-09-28, not yet seen in game; errors checked for instead of
+swallowed, built 2026-09-28 (both builds pass), not yet seen in game.
 
 *Code: `mod/BugFablesAP/Core/Plugin.cs` (`Plugin`, a BepInEx plugin: `Awake` sets everything up, `Tick` runs
 every frame); the project file is `BugFablesAP.csproj`.*

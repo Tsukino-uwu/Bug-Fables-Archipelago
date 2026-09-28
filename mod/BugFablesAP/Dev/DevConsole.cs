@@ -32,8 +32,9 @@ namespace BugFablesAP
         private static HarmonyLib.Harmony harmony;
         private static float blockUntil = -1f;
 
-        internal static void EnableGuard(string guid)
+        internal static void EnableGuard(ManualLogSource logger, string guid)
         {
+            log = logger;
             var enter = HarmonyLib.AccessTools.Method(typeof(NPCControl), "OnTriggerEnter");
             if (enter == null)
             {

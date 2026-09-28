@@ -57,14 +57,8 @@ namespace BugFablesAP
                     {
                         continue;
                     }
-                    string name = "";
-                    try
-                    {
-                        name = kind == 0 ? MainManager.itemdata[0, id, 0] : MainManager.badgedata[id, 0];
-                    }
-                    catch (System.IndexOutOfRangeException)
-                    {
-                    }
+                    string name = (kind == 0 ? ItemSwap.TableCell(MainManager.itemdata, 0, id, 0)
+                        : ItemSwap.TableCell(MainManager.badgedata, id, 0)) ?? "";
                     Rect r = s.textureRect;
                     table.Append(kind).Append('\t').Append(id).Append('\t').Append(name).Append('\t').Append(s.texture.name).Append('\t')
                         .Append((int)r.x).Append('\t').Append((int)r.y).Append('\t').Append((int)r.width).Append('\t').Append((int)r.height).Append('\n');

@@ -27,6 +27,7 @@ namespace BugFablesAP
             string outPath = Path.Combine(Paths.BepInExRootPath, "bugfablesap-vardump.tsv");
             var seen = new Dictionary<string, (int count, string where)>();
             TextAsset[] assets = Resources.LoadAll<TextAsset>("");
+            int unreadable = 0;
             foreach (TextAsset asset in assets)
             {
                 string text;
@@ -34,8 +35,9 @@ namespace BugFablesAP
                 {
                     text = asset.text;
                 }
-                catch
+                catch (Exception)
                 {
+                    unreadable++;
                     continue;
                 }
                 if (string.IsNullOrEmpty(text) || text.IndexOf('|') < 0)
@@ -61,7 +63,7 @@ namespace BugFablesAP
                 sb.Append(entry.Key).Append('\t').Append(entry.Value.count).Append('\t').Append(entry.Value.where).AppendLine();
             }
             File.WriteAllText(outPath, sb.ToString());
-            log.LogInfo($"[dump] {seen.Count} distinct slot tokens from {assets.Length} text assets -> {outPath}");
+            log.LogInfo($"[dump] {seen.Count} distinct slot tokens from {assets.Length} text assets ({unreadable} unreadable) -> {outPath}");
             log.LogInfo("[dump] prizeflags (flagvar slots) = " + string.Join(",", MainManager.instance.prizeflags.Select(p => p.ToString()).ToArray()));
         }
     }

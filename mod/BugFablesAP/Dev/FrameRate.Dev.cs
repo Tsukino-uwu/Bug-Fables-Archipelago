@@ -36,12 +36,8 @@ namespace BugFablesAP
             var blinks = new HashSet<string>();
             foreach (MethodBase m in methods)
             {
-                List<KeyValuePair<OpCode, object>> code;
-                try
-                {
-                    code = PatchProcessor.ReadMethodBody(m).ToList();
-                }
-                catch
+                List<KeyValuePair<OpCode, object>> code = ReadBody(m, log, "fpsscan");
+                if (code == null)
                 {
                     continue;
                 }

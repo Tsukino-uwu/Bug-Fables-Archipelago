@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -612,19 +613,17 @@ namespace BugFablesAP
             if (entity < lines.Length)
             {
                 string[] f = lines[entity].Split('}');
-                if (f.Length > 8)
+                if (f.Length > 8 && ReadFloat(f[6], out float x) && ReadFloat(f[7], out float y) && ReadFloat(f[8], out float z))
                 {
-                    try
-                    {
-                        return new Vector3(Convert.ToSingle(f[6]), Convert.ToSingle(f[7]) + 0.5f, Convert.ToSingle(f[8]) - 2f);
-                    }
-                    catch (FormatException)
-                    {
-                    }
+                    return new Vector3(x, y + 0.5f, z - 2f);
                 }
             }
             log.LogWarning($"[warp] the save point's spot on {map} wasn't found; landing at the map's origin");
             return Vector3.zero;
         }
+
+        // As the game's Convert.ToSingle reads its entity data, under the en-US culture it sets at start.
+        private static bool ReadFloat(string text, out float value) =>
+            float.TryParse(text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out value);
     }
 }

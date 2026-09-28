@@ -137,18 +137,13 @@ namespace BugFablesAP
             {
                 int kind = KindOf(info);
                 int gameId = ItemIds.GameId(info.ItemId, kind);
-                try
-                {
-                    description = kind == ItemIds.MedalKind ? MainManager.badgedata[gameId, 1]
-                        : kind == ItemIds.MoneyKind ? gameId + " berries."
-                        : kind == ItemIds.CrystalKind ? MainManager.menutext[112] + "."
-                        : kind == ItemIds.MemberKind ? PartyMembers.Name(gameId) + " joins the party."
-                        : kind == ItemIds.MoveKind ? MoveDescription(gameId)
-                        : MainManager.itemdata[0, gameId, 2];
-                }
-                catch (IndexOutOfRangeException)
-                {
-                }
+                string text = kind == ItemIds.MedalKind ? TableCell(MainManager.badgedata, gameId, 1)
+                    : kind == ItemIds.MoneyKind ? gameId + " berries."
+                    : kind == ItemIds.CrystalKind ? (MainManager.menutext?.Length > 112 ? MainManager.menutext[112] + "." : null)
+                    : kind == ItemIds.MemberKind ? PartyMembers.Name(gameId) + " joins the party."
+                    : kind == ItemIds.MoveKind ? MoveDescription(gameId)
+                    : TableCell(MainManager.itemdata, 0, gameId, 2);
+                description = text ?? description;
                 if (info.Player.Slot != connection.OwnSlot)
                 {
                     description = $"For {info.Player.Name}: " + description;
@@ -230,18 +225,18 @@ namespace BugFablesAP
         internal static string ArticleOf(long itemId, int kind)
         {
             int gameId = ItemIds.GameId(itemId, kind);
-            try
-            {
-                return kind == ItemIds.MedalKind ? MainManager.badgedata[gameId, 6]
-                    : kind == ItemIds.MemberKind || kind == ItemIds.MoveKind ? ""
-                    : kind == ItemIds.MoneyKind || kind == ItemIds.CrystalKind ? null
-                    : MainManager.itemdata[0, gameId, 3];
-            }
-            catch (IndexOutOfRangeException)
-            {
-                return null;
-            }
+            return kind == ItemIds.MedalKind ? TableCell(MainManager.badgedata, gameId, 6)
+                : kind == ItemIds.MemberKind || kind == ItemIds.MoveKind ? ""
+                : kind == ItemIds.MoneyKind || kind == ItemIds.CrystalKind ? null
+                : TableCell(MainManager.itemdata, 0, gameId, 3);
         }
+
+        // A cell of the game's item or medal table; null for an id outside it (an item this game version lacks).
+        internal static string TableCell(string[,] table, int row, int column) =>
+            table != null && row >= 0 && row < table.GetLength(0) && column < table.GetLength(1) ? table[row, column] : null;
+
+        internal static string TableCell(string[,,] table, int language, int row, int column) =>
+            table != null && row >= 0 && row < table.GetLength(1) && column < table.GetLength(2) ? table[language, row, column] : null;
 
         internal static void ShowFoundAt(long at)
         {

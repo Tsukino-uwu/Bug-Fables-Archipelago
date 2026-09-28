@@ -46,7 +46,11 @@ namespace BugFablesAP
                     return BitConverter.ToString(sha.ComputeHash(file)).Replace("-", "").Substring(0, 12);
                 }
             }
-            catch (Exception)
+            catch (IOException)
+            {
+                return "unknown";
+            }
+            catch (UnauthorizedAccessException)
             {
                 return "unknown";
             }

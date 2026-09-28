@@ -173,6 +173,7 @@ Sources are grouped in folders under `mod/BugFablesAP/`; the namespace is `BugFa
 | [`commit-msg`](../.githooks/commit-msg) | Refuses a subject over 72 characters or naming who decided, and a commit touching `mod/`, `apworld/` or `dev-scripts/` without a process guide, unless the message says `docs: no process change`. | [documentation § Keeping this guide honest](documentation.md#keeping-this-guide-honest) |
 | [`pre-commit`](../.githooks/pre-commit) | Refuses a home path or this machine's user or computer name in a tracked file; runs doc-coverage.py. | [documentation § Keeping this guide honest](documentation.md#keeping-this-guide-honest) |
 | [`doc-coverage.py`](../.githooks/doc-coverage.py) | Refuses an option, setting, slot_data key or source file that no guide or this map names. | [documentation § Keeping this guide honest](documentation.md#keeping-this-guide-honest) |
+| [`.editorconfig`](../.editorconfig) | The code style editors apply: 4-space indents, braces on their own line, lines up to 120. | [development § The mod](development.md#the-mod) |
 | [`release-path-patterns.txt`](../.githooks/release-path-patterns.txt) | The personal-path patterns release.yml checks the release notes for. | [apimplementation § Build step 17](apimplementation.md#build-step-17-a-release) |
 
 ## Release
