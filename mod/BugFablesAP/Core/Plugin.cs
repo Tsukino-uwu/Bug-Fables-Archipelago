@@ -152,7 +152,7 @@ namespace BugFablesAP
             SaveRedirect.On = randomizerEnabled.Value;
             SaveRedirect.Enable(Log, Guid);
             ItemSwap.Enable(Log, connection, () => randomizerEnabled.Value);
-            KeptOpen.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
+            KeptOpen.Enable(Log, connection, () => randomizerEnabled.Value);
             EnemyShuffle.Enable(Log, connection, () => randomizerEnabled.Value);
             AnimGuard.Enable(Log, () => randomizerEnabled.Value);
             GlowGuard.Enable(Log, () => randomizerEnabled.Value);
@@ -204,10 +204,10 @@ namespace BugFablesAP
             CheckDetector.Enable(Log, connection, () => randomizerEnabled.Value);
             CrystalBerryTotal.Enable(Log, connection, () => randomizerEnabled.Value);
             QuestBoards.Enable(Log, () => randomizerEnabled.Value);
-            ShopSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
+            ShopSwap.Enable(Log, connection, () => randomizerEnabled.Value);
             ItemShops.Enable(Log, connection, () => randomizerEnabled.Value);
             DoorShuffle.Enable(Log, connection, () => randomizerEnabled.Value);
-            WarpButton.Enable(Log, Guid, () => settingsOn() && QualityOfLife.WarpOn, () => settingsOn() && QualityOfLife.MapOn,
+            WarpButton.Enable(Log, () => settingsOn() && QualityOfLife.WarpOn, () => settingsOn() && QualityOfLife.MapOn,
                 () => QualityOfLife.SkipWarpConfirm, () => QualityOfLife.SkipMapConfirm);
             MenuToggle.Enable(Log, randomizerEnabled, server, port, slot, password,
                 () => connection.Status,
@@ -415,7 +415,6 @@ namespace BugFablesAP
             connection?.Disconnect();
             WebSocketCompression.Disable();
             MedalAssist.Disable();
-            KeptOpen.Disable();
             FrameRate.Disable();
             SaveCrystals.Disable();
             QualityOfLife.Disable();

@@ -20,7 +20,6 @@ namespace BugFablesAP
         private static Func<bool> mapOn;
         private static Func<bool> skipWarpConfirm;
         private static Func<bool> skipMapConfirm;
-        private static Harmony harmony;
 
         private static readonly FieldInfo optionField = AccessTools.Field(typeof(PauseMenu), "option");
         private static readonly FieldInfo maxField = AccessTools.Field(typeof(PauseMenu), "maxoptions");
@@ -145,7 +144,7 @@ namespace BugFablesAP
         private static Kind asking;
         private static int askedArea;
 
-        internal static void Enable(ManualLogSource logger, string guid, Func<bool> warpEnabled, Func<bool> mapEnabled,
+        internal static void Enable(ManualLogSource logger, Func<bool> warpEnabled, Func<bool> mapEnabled,
             Func<bool> skipWarp, Func<bool> skipMap)
         {
             log = logger;
@@ -153,38 +152,25 @@ namespace BugFablesAP
             mapOn = mapEnabled;
             skipWarpConfirm = skipWarp;
             skipMapConfirm = skipMap;
-            MethodInfo update = AccessTools.Method(typeof(PauseMenu), "Update");
-            MethodInfo updateText = AccessTools.Method(typeof(PauseMenu), "UpdateText");
-            if (update == null || updateText == null || optionField == null || maxField == null || spritesField == null
-                || boxesField == null || prepareExit == null || buildWindow == null)
+            if (optionField == null || maxField == null || spritesField == null || boxesField == null || prepareExit == null
+                || buildWindow == null)
             {
-                log.LogError("[warp] NOT installed: PauseMenu's Update, UpdateText, BuildWindow or fields weren't found; no travel buttons.");
+                log.LogError("[warp] NOT installed: PauseMenu's BuildWindow or fields weren't found; no travel buttons.");
                 return;
             }
-            harmony = new Harmony(guid + ".warp." + DateTime.UtcNow.Ticks);
-            harmony.Patch(update, prefix: new HarmonyMethod(typeof(WarpButton), nameof(BeforeUpdate)),
-                finalizer: new HarmonyMethod(typeof(WarpButton), nameof(UpdateFailed)));
-            harmony.Patch(updateText, postfix: new HarmonyMethod(typeof(WarpButton), nameof(AfterUpdateText)));
+            if (!Hooks.Install(typeof(WarpButton), "warp", "no travel buttons"))
+            {
+                return;
+            }
             // Window 0 hands IconAnim four icons and it indexes them by option: hand it one per button.
             // The game's four buttons are placed at their final spots as they're made, so nothing jumps while the menu opens.
-            MethodInfo newObject = AccessTools.Method(typeof(MainManager), nameof(MainManager.NewUIObject),
-                new[] { typeof(string), typeof(Transform), typeof(Vector3), typeof(Vector3), typeof(Sprite), typeof(int) });
-            if (newObject != null)
-            {
-                harmony.Patch(newObject, postfix: new HarmonyMethod(typeof(WarpButton), nameof(AfterNewObject)));
-            }
-            MethodInfo iconAnim = AccessTools.Method(typeof(PauseMenu), "IconAnim");
-            if (iconAnim != null)
-            {
-                harmony.Patch(iconAnim, prefix: new HarmonyMethod(typeof(WarpButton), nameof(BeforeIconAnim)));
-            }
+            Hooks.Install(typeof(Placing), "warp", "the menu's buttons move into place as it opens");
+            Hooks.Install(typeof(Icons), "warp", "the new buttons' icons don't animate");
             log.LogInfo("[warp] installed on PauseMenu.Update and UpdateText");
         }
 
         internal static void Disable()
         {
-            harmony?.UnpatchSelf();
-            harmony = null;
             // Take this instance's icons and box with it, or a hot reload leaves the old icons behind.
             CloseConfirm();
             ClearIcons();
@@ -205,6 +191,8 @@ namespace BugFablesAP
             buttons.Clear();
         }
 
+        [HarmonyPatch(typeof(PauseMenu), "Update")]
+        [HarmonyPrefix]
         private static bool BeforeUpdate(PauseMenu __instance)
         {
             if (__instance.windowid == 6 && mapTravel)
@@ -256,6 +244,8 @@ namespace BugFablesAP
         // Diagnostic (map travel threw every frame): the first failure's exception and what the map window holds.
         private static bool failureLogged;
 
+        [HarmonyPatch(typeof(PauseMenu), "Update")]
+        [HarmonyFinalizer]
         private static Exception UpdateFailed(Exception __exception, PauseMenu __instance)
         {
             if (__exception != null && !failureLogged)
@@ -280,17 +270,22 @@ namespace BugFablesAP
             return __exception;
         }
 
-        private static void BeforeIconAnim(PauseMenu __instance, ref int[] values)
+        private static class Icons
         {
-            if (__instance.windowid == 0 && buttons.Count > 0 && values != null && values.Length == 4 && values[0] == 13
-                && ReferenceEquals(builtFor, spritesField.GetValue(__instance)))
+            [HarmonyPatch(typeof(PauseMenu), "IconAnim")]
+            [HarmonyPrefix]
+            private static void BeforeIconAnim(PauseMenu __instance, ref int[] values)
             {
-                var all = new List<int> { 13, 14, 15, 16 };
-                for (int i = 0; i < buttons.Count; i++)
+                if (__instance.windowid == 0 && buttons.Count > 0 && values != null && values.Length == 4 && values[0] == 13
+                    && ReferenceEquals(builtFor, spritesField.GetValue(__instance)))
                 {
-                    all.Add(SpriteSlot[i]);
+                    var all = new List<int> { 13, 14, 15, 16 };
+                    for (int i = 0; i < buttons.Count; i++)
+                    {
+                        all.Add(SpriteSlot[i]);
+                    }
+                    values = all.ToArray();
                 }
-                values = all.ToArray();
             }
         }
 
@@ -303,18 +298,23 @@ namespace BugFablesAP
             return -step * (total - 1) / 2f + step * n;
         }
 
-        private static void AfterNewObject(string objname, GameObject __result)
+        private static class Placing
         {
-            if (__result == null || !objname.StartsWith("menuicon") || MainManager.pausemenu == null
-                || MainManager.pausemenu.windowid != 0 || MainManager.battle != null
-                || !int.TryParse(objname.Substring("menuicon".Length), out int n) || n > 3)
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.NewUIObject), typeof(string), typeof(Transform), typeof(Vector3), typeof(Vector3), typeof(Sprite), typeof(int))]
+            [HarmonyPostfix]
+            private static void AfterNewObject(string objname, GameObject __result)
             {
-                return;
-            }
-            int extra = ButtonCount();
-            if (extra > 0)
-            {
-                __result.transform.localPosition = new Vector3(ButtonX(n, 4 + extra), __result.transform.localPosition.y);
+                if (__result == null || !objname.StartsWith("menuicon") || MainManager.pausemenu == null
+                    || MainManager.pausemenu.windowid != 0 || MainManager.battle != null
+                    || !int.TryParse(objname.Substring("menuicon".Length), out int n) || n > 3)
+                {
+                    return;
+                }
+                int extra = ButtonCount();
+                if (extra > 0)
+                {
+                    __result.transform.localPosition = new Vector3(ButtonX(n, 4 + extra), __result.transform.localPosition.y);
+                }
             }
         }
 
@@ -396,6 +396,8 @@ namespace BugFablesAP
             return backdrop;
         }
 
+        [HarmonyPatch(typeof(PauseMenu), "UpdateText")]
+        [HarmonyPostfix]
         private static void AfterUpdateText(PauseMenu __instance)
         {
             if (__instance.windowid != 0 || buttons.Count == 0 || !ReferenceEquals(builtFor, spritesField.GetValue(__instance)))

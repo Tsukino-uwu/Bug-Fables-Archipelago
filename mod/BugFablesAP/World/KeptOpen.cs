@@ -13,51 +13,23 @@ namespace BugFablesAP
         private static ManualLogSource log;
         private static ApConnection connection;
         private static Func<bool> randomizerOn;
-        private static Harmony harmony;
         private static readonly HashSet<int[]> markers = new HashSet<int[]>();
         // Marker `requires` arrays answering "exists"; set before the entity's own Start, which would switch it off.
         private static readonly HashSet<int[]> presentMarkers = new HashSet<int[]>();
 
-        internal static void Enable(ManualLogSource logger, string guid, ApConnection conn, Func<bool> on)
+        internal static void Enable(ManualLogSource logger, ApConnection conn, Func<bool> on)
         {
             log = logger;
             connection = conn;
             randomizerOn = on;
-            var create = AccessTools.Method(typeof(MapControl), "CreateEntities");
-            var check = AccessTools.Method(typeof(MainManager), nameof(MainManager.CheckIfCanExist), new[] { typeof(int[]), typeof(int[]), typeof(int) });
-            if (create == null || check == null)
+            if (!Hooks.Install(typeof(KeptOpen), "open", "blockers the seed keeps open will still block"))
             {
-                log.LogError($"[open] NOT installed (CreateEntities {create != null}, CheckIfCanExist {check != null}): blockers the seed "
-                    + "keeps open will still block.");
                 return;
             }
-            harmony = new Harmony(guid + ".open." + DateTime.UtcNow.Ticks);
-            harmony.Patch(create, prefix: new HarmonyMethod(typeof(KeptOpen), nameof(BeforeCreate)), postfix: new HarmonyMethod(typeof(KeptOpen), nameof(AfterCreate)));
-            var made = AccessTools.Method(typeof(EntityControl), nameof(EntityControl.CreateNewEntity), new[] { typeof(string) });
-            if (made != null)
-            {
-                harmony.Patch(made, postfix: new HarmonyMethod(typeof(KeptOpen), nameof(AfterNewEntity)));
-            }
-            harmony.Patch(check, prefix: new HarmonyMethod(typeof(KeptOpen), nameof(BeforeCheck)));
-            var insides = AccessTools.Method(typeof(MapControl), nameof(MapControl.RefreshInsides));
-            if (insides != null)
-            {
-                harmony.Patch(insides, postfix: new HarmonyMethod(typeof(KeptOpen), nameof(AfterRefreshInsides)));
-            }
-            else
-            {
-                log.LogError("[open] MapControl.RefreshInsides not found: an entity kept away flashes when entering or leaving a house.");
-            }
-            var scenery = AccessTools.Method(typeof(ConditionChecker), "Start");
-            if (scenery != null)
-            {
-                harmony.Patch(scenery, prefix: new HarmonyMethod(typeof(KeptOpen), nameof(BeforeSceneryStart)));
-            }
-            else
-            {
-                log.LogError("[open] ConditionChecker.Start not found: scenery the seed removes (the Outskirts rocks) will stay.");
-            }
-            log.LogInfo($"[open] installed on MapControl.CreateEntities and MainManager.CheckIfCanExist{(scenery != null ? " and ConditionChecker.Start" : "")}");
+            Hooks.Install(typeof(NewEntities), "open", "a kept-present shopkeeper's shop is built without it");
+            Hooks.Install(typeof(Insides), "open", "an entity kept away flashes when entering or leaving a house");
+            bool scenery = Hooks.Install(typeof(Scenery), "open", "scenery the seed removes (the Outskirts rocks) will stay");
+            log.LogInfo($"[open] installed on MapControl.CreateEntities and MainManager.CheckIfCanExist{(scenery ? " and ConditionChecker.Start" : "")}");
         }
 
         // A map loaded before slot_data arrived was built as vanilla, so new lists are applied to it too.
@@ -100,18 +72,14 @@ namespace BugFablesAP
             }
         }
 
-        internal static void Disable()
-        {
-            harmony?.UnpatchSelf();
-            harmony = null;
-        }
-
         // A kept-present shopkeeper must exist while CreateEntities builds its shop slots, before AfterCreate runs;
         // so the entity just made is remembered and a check with its own requires array answers "exists".
         private static bool creating;
         private static EntityControl lastMade;
         private static string creatingMap;
 
+        [HarmonyPatch(typeof(MapControl), "CreateEntities")]
+        [HarmonyPrefix]
         private static void BeforeCreate(MapControl __instance)
         {
             creating = true;
@@ -119,11 +87,16 @@ namespace BugFablesAP
             creatingMap = __instance.mapid.ToString();
         }
 
-        private static void AfterNewEntity(EntityControl __result)
+        private static class NewEntities
         {
-            if (creating)
+            [HarmonyPatch(typeof(EntityControl), nameof(EntityControl.CreateNewEntity), typeof(string))]
+            [HarmonyPostfix]
+            private static void AfterNewEntity(EntityControl __result)
             {
-                lastMade = __result;
+                if (creating)
+                {
+                    lastMade = __result;
+                }
             }
         }
 
@@ -133,6 +106,8 @@ namespace BugFablesAP
             return present != null && creatingMap != null && present.Any(b => b.Map == creatingMap && b.Entity == name);
         }
 
+        [HarmonyPatch(typeof(MapControl), "CreateEntities")]
+        [HarmonyPostfix]
         private static void AfterCreate(MapControl __instance)
         {
             creating = false;
@@ -234,24 +209,29 @@ namespace BugFablesAP
         }
 
         // scenery_hidden: a marker limit before ConditionChecker.Start, so its own check answers "hide".
-        private static void BeforeSceneryStart(ConditionChecker __instance)
+        private static class Scenery
         {
-            if (randomizerOn != null && randomizerOn() && Listed(__instance))
+            [HarmonyPatch(typeof(ConditionChecker), "Start")]
+            [HarmonyPrefix]
+            private static void BeforeSceneryStart(ConditionChecker __instance)
             {
-                MarkHidden(__instance, MainManager.map.mapid.ToString());
-            }
-            // scenery_present: the other way round, a marker requires answering "exists" (the caravan's stall).
-            List<ApConnection.Blocker> shown = connection?.SceneryPresent;
-            if (randomizerOn != null && randomizerOn() && shown != null && MainManager.map != null)
-            {
-                string map = MainManager.map.mapid.ToString();
-                string path = PathOf(__instance.transform, MainManager.map.transform);
-                if (shown.Any(b => b.Map == map && b.Entity == path))
+                if (randomizerOn != null && randomizerOn() && Listed(__instance))
                 {
-                    var marker = new[] { -1 };
-                    presentMarkers.Add(marker);
-                    __instance.requires = marker;
-                    log.LogInfo($"[open] {map}: scenery {path} shown (the seed shows it from the start)");
+                    MarkHidden(__instance, MainManager.map.mapid.ToString());
+                }
+                // scenery_present: the other way round, a marker requires answering "exists" (the caravan's stall).
+                List<ApConnection.Blocker> shown = connection?.SceneryPresent;
+                if (randomizerOn != null && randomizerOn() && shown != null && MainManager.map != null)
+                {
+                    string map = MainManager.map.mapid.ToString();
+                    string path = PathOf(__instance.transform, MainManager.map.transform);
+                    if (shown.Any(b => b.Map == map && b.Entity == path))
+                    {
+                        var marker = new[] { -1 };
+                        presentMarkers.Add(marker);
+                        __instance.requires = marker;
+                        log.LogInfo($"[open] {map}: scenery {path} shown (the seed shows it from the start)");
+                    }
                 }
             }
         }
@@ -301,22 +281,29 @@ namespace BugFablesAP
 
         // Entering or leaving a house turns that inside's entities on without asking whether they exist: the ones kept
         // away go off again in the same frame, before anything is drawn.
-        private static void AfterRefreshInsides(MapControl __instance)
+        private static class Insides
         {
-            if (__instance.entities == null || randomizerOn == null || !randomizerOn())
+            [HarmonyPatch(typeof(MapControl), nameof(MapControl.RefreshInsides))]
+            [HarmonyPostfix]
+            private static void AfterRefreshInsides(MapControl __instance)
             {
-                return;
-            }
-            foreach (EntityControl entity in __instance.entities)
-            {
-                if (entity != null && entity.npcdata != null && entity.npcdata.limit != null && markers.Contains(entity.npcdata.limit)
-                    && entity.gameObject.activeSelf)
+                if (__instance.entities == null || randomizerOn == null || !randomizerOn())
                 {
-                    entity.gameObject.SetActive(false);
+                    return;
+                }
+                foreach (EntityControl entity in __instance.entities)
+                {
+                    if (entity != null && entity.npcdata != null && entity.npcdata.limit != null && markers.Contains(entity.npcdata.limit)
+                        && entity.gameObject.activeSelf)
+                    {
+                        entity.gameObject.SetActive(false);
+                    }
                 }
             }
         }
 
+        [HarmonyPatch(typeof(MainManager), nameof(MainManager.CheckIfCanExist), typeof(int[]), typeof(int[]), typeof(int))]
+        [HarmonyPrefix]
         private static bool BeforeCheck(int[] requires, int[] limit, ref bool __result)
         {
             if (creating && requires != null && lastMade != null && lastMade.npcdata != null && ReferenceEquals(requires, lastMade.npcdata.requires)

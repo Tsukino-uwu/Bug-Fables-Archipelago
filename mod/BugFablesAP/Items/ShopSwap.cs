@@ -15,48 +15,25 @@ namespace BugFablesAP
         private static ManualLogSource log;
         private static ApConnection connection;
         private static Func<bool> randomizerOn;
-        private static Harmony harmony;
         private static string[,] originalPrices;
         private static int appliedPrices = QualityOfLife.FullPrice;
 
-        internal static void Enable(ManualLogSource logger, string guid, ApConnection conn, Func<bool> on)
+        internal static void Enable(ManualLogSource logger, ApConnection conn, Func<bool> on)
         {
             log = logger;
             connection = conn;
             randomizerOn = on;
-            MethodInfo desc = AccessTools.Method(typeof(NPCControl), nameof(NPCControl.CreateDescWindow), new[] { typeof(bool) });
-            MethodInfo interact = AccessTools.Method(typeof(NPCControl), nameof(NPCControl.Interact), new[] { typeof(string) });
-            if (desc == null || interact == null)
+            if (!Hooks.Install(typeof(ShopSwap), "shop", "shop shelves show their own medals"))
             {
-                log.LogError($"[shop] NOT installed (CreateDescWindow {desc != null}, Interact {interact != null}): shop shelves show their own medals.");
                 return;
             }
-            harmony = new Harmony(guid + ".shop." + DateTime.UtcNow.Ticks);
-            var before = new HarmonyMethod(typeof(ShopSwap), nameof(BeforeShow));
-            var after = new HarmonyMethod(typeof(ShopSwap), nameof(AfterShow));
-            harmony.Patch(desc, prefix: before, postfix: after);
-            harmony.Patch(interact, prefix: new HarmonyMethod(typeof(ShopSwap), nameof(BeforeInteract)), postfix: after);
-            MethodInfo shelf = AccessTools.Method(typeof(NPCControl), nameof(NPCControl.SetBadgeShop), new[] { typeof(bool) });
-            if (shelf != null)
-            {
-                harmony.Patch(shelf, prefix: new HarmonyMethod(typeof(ShopSwap), nameof(BeforeShelf)), postfix: new HarmonyMethod(typeof(ShopSwap), nameof(AfterShelf)));
-            }
-            MethodInfo pool = AccessTools.Method(typeof(MainManager), nameof(MainManager.UpdateShops));
-            if (pool == null)
-            {
-                log.LogError("[shop] UpdateShops not found: shops keep the game's own stock.");
-            }
-            else
-            {
-                harmony.Patch(pool, prefix: new HarmonyMethod(typeof(ShopSwap), nameof(BeforeUpdateShops)));
-            }
+            Hooks.Install(typeof(Shelves), "shop", "a shelf shows the game's own medal until the shop is opened");
+            Hooks.Install(typeof(Stock), "shop", "shops keep the game's own stock");
             log.LogInfo("[shop] installed on NPCControl.CreateDescWindow, Interact and MainManager.UpdateShops");
         }
 
         internal static void Disable()
         {
-            harmony?.UnpatchSelf();
-            harmony = null;
             SetPrices(QualityOfLife.FullPrice);
         }
 
@@ -69,43 +46,50 @@ namespace BugFablesAP
         // Swap every frame for a second after a rebuild, or the vanilla medal sprites flash.
         private static float shelfBuiltAt = -10f;
 
-        private static void AfterShelf()
+        private static class Shelves
         {
-            shelfBuiltAt = Time.realtimeSinceStartup;
-        }
+            [HarmonyPatch(typeof(NPCControl), nameof(NPCControl.SetBadgeShop), typeof(bool))]
+            [HarmonyPostfix]
+            private static void AfterShelf()
+            {
+                shelfBuiltAt = Time.realtimeSinceStartup;
+            }
 
-        private static void BeforeShelf(NPCControl __instance)
-        {
-            stretched.RemoveWhere(n => n == null);
-            if (stretched.Contains(__instance))
+            [HarmonyPatch(typeof(NPCControl), nameof(NPCControl.SetBadgeShop), typeof(bool))]
+            [HarmonyPrefix]
+            private static void BeforeShelf(NPCControl __instance)
             {
-                return;
+                stretched.RemoveWhere(n => n == null);
+                if (stretched.Contains(__instance))
+                {
+                    return;
+                }
+                if (randomizerOn == null || !randomizerOn() || __instance.interacttype == NPCControl.Interaction.CaravanBadge
+                    || __instance.dialogues == null || __instance.dialogues.Length < 10
+                    || !ShelfSlots.TryGetValue((int)__instance.dialogues[9].x, out float[] layout)
+                    || __instance.data == null || __instance.data.Length < 2
+                    || __instance.vectordata == null || __instance.vectordata.Length < __instance.data.Length)
+                {
+                    return;
+                }
+                int shown = __instance.data.Length;
+                int slots = (int)layout[0];
+                Vector3 first = __instance.vectordata[0];
+                Vector3 last = __instance.vectordata[shown - 1];
+                Vector3 middle = (first + last) / 2f;
+                Vector3 step = (last - first) / (slots - 1) * layout[1];
+                var spots = new Vector3[slots];
+                var data = new int[slots];
+                for (int j = 0; j < slots; j++)
+                {
+                    spots[j] = middle + step * (j - (slots - 1) / 2f);
+                    data[j] = __instance.data[Math.Min(j, shown - 1)];
+                }
+                __instance.vectordata = spots;
+                __instance.data = data;
+                stretched.Add(__instance);
+                log.LogInfo($"[shop] shop {(int)__instance.dialogues[9].x}'s shelf: {slots} slots instead of {shown}");
             }
-            if (randomizerOn == null || !randomizerOn() || __instance.interacttype == NPCControl.Interaction.CaravanBadge
-                || __instance.dialogues == null || __instance.dialogues.Length < 10
-                || !ShelfSlots.TryGetValue((int)__instance.dialogues[9].x, out float[] layout)
-                || __instance.data == null || __instance.data.Length < 2
-                || __instance.vectordata == null || __instance.vectordata.Length < __instance.data.Length)
-            {
-                return;
-            }
-            int shown = __instance.data.Length;
-            int slots = (int)layout[0];
-            Vector3 first = __instance.vectordata[0];
-            Vector3 last = __instance.vectordata[shown - 1];
-            Vector3 middle = (first + last) / 2f;
-            Vector3 step = (last - first) / (slots - 1) * layout[1];
-            var spots = new Vector3[slots];
-            var data = new int[slots];
-            for (int j = 0; j < slots; j++)
-            {
-                spots[j] = middle + step * (j - (slots - 1) / 2f);
-                data[j] = __instance.data[Math.Min(j, shown - 1)];
-            }
-            __instance.vectordata = spots;
-            __instance.data = data;
-            stretched.Add(__instance);
-            log.LogInfo($"[shop] shop {(int)__instance.dialogues[9].x}'s shelf: {slots} slots instead of {shown}");
         }
 
         // One flagvar slot per shop for the bought-copy bits (unused by the game).
@@ -219,35 +203,40 @@ namespace BugFablesAP
             return chosen;
         }
 
-        private static void BeforeUpdateShops()
+        private static class Stock
         {
-            MainManager mm = MainManager.instance;
-            Dictionary<long, int[]> shops = connection?.LocationShops;
-            if (randomizerOn == null || !randomizerOn() || shops == null || mm?.badgeshops == null || mm.flagvar == null)
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.UpdateShops))]
+            [HarmonyPrefix]
+            private static void BeforeUpdateShops()
             {
-                return;
-            }
-            // The buy line's kill,caller rebuilds the shelf before its giveitem sets the bit; leave the game's removal alone.
-            if (mm.message && pendingCopy >= 0)
-            {
-                log.LogInfo($"[shop] shelf rebuilt during a purchase (location {pendingCopy}): stock left as the game has it");
-                return;
-            }
-            foreach (int shop in shops.Values.Select(v => v[0]).Distinct())
-            {
-                if (shop < 0 || shop >= mm.badgeshops.Length)
+                MainManager mm = MainManager.instance;
+                Dictionary<long, int[]> shops = connection?.LocationShops;
+                if (randomizerOn == null || !randomizerOn() || shops == null || mm?.badgeshops == null || mm.flagvar == null)
                 {
-                    continue;
+                    return;
                 }
-                List<KeyValuePair<long, int>> copies = Copies(shop);
-                List<int> wanted = copies.Where((c, i) => !Done(shop, i, c.Key)).Select(c => c.Value).ToList();
-                List<int> had = mm.badgeshops[shop] ?? new List<int>();
-                if (had.OrderBy(m => m).SequenceEqual(wanted.OrderBy(m => m)))
+                // The buy line's kill,caller rebuilds the shelf before its giveitem sets the bit; leave the game's removal alone.
+                if (mm.message && pendingCopy >= 0)
                 {
-                    continue;
+                    log.LogInfo($"[shop] shelf rebuilt during a purchase (location {pendingCopy}): stock left as the game has it");
+                    return;
                 }
-                mm.badgeshops[shop] = wanted;
-                log.LogInfo($"[shop] shop {shop}'s stock set to its {wanted.Count} copies not yet done (of {copies.Count}; it held {had.Count}): {string.Join(",", wanted)}");
+                foreach (int shop in shops.Values.Select(v => v[0]).Distinct())
+                {
+                    if (shop < 0 || shop >= mm.badgeshops.Length)
+                    {
+                        continue;
+                    }
+                    List<KeyValuePair<long, int>> copies = Copies(shop);
+                    List<int> wanted = copies.Where((c, i) => !Done(shop, i, c.Key)).Select(c => c.Value).ToList();
+                    List<int> had = mm.badgeshops[shop] ?? new List<int>();
+                    if (had.OrderBy(m => m).SequenceEqual(wanted.OrderBy(m => m)))
+                    {
+                        continue;
+                    }
+                    mm.badgeshops[shop] = wanted;
+                    log.LogInfo($"[shop] shop {shop}'s stock set to its {wanted.Count} copies not yet done (of {copies.Count}; it held {had.Count}): {string.Join(",", wanted)}");
+                }
             }
         }
 
@@ -287,6 +276,8 @@ namespace BugFablesAP
             internal string Description;
         }
 
+        [HarmonyPatch(typeof(NPCControl), nameof(NPCControl.CreateDescWindow), typeof(bool))]
+        [HarmonyPrefix]
         private static void BeforeShow(NPCControl __instance, out Saved __state)
         {
             __state = null;
@@ -306,6 +297,8 @@ namespace BugFablesAP
             MainManager.badgedata[medal, 1] = description ?? __state.Description;
         }
 
+        [HarmonyPatch(typeof(NPCControl), nameof(NPCControl.Interact), typeof(string))]
+        [HarmonyPrefix]
         private static void BeforeInteract(NPCControl __instance, out Saved __state)
         {
             BeforeShow(__instance, out __state);
@@ -315,6 +308,9 @@ namespace BugFablesAP
             }
         }
 
+        [HarmonyPatch(typeof(NPCControl), nameof(NPCControl.CreateDescWindow), typeof(bool))]
+        [HarmonyPatch(typeof(NPCControl), nameof(NPCControl.Interact), typeof(string))]
+        [HarmonyPostfix]
         private static void AfterShow(Saved __state)
         {
             if (__state == null)
