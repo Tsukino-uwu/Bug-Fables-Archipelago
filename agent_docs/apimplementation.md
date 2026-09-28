@@ -129,17 +129,19 @@ be wrong.
 19. **Traps, an idea for later** (the user, 2026-09-26; not planned yet). A trap sent to this game takes effect when
    the server delivers it, after any open text box, like any received item. Held up at pickup: its own icon on a red
    starburst. One icon per trap, so the player knows what's coming. The user's examples: the Mistake medal poisons
-   the party at the start of the next fight; a crystal berry (or something icy) freezes the player in an ice block
+   the party at the start of the next fight (dropped, below: traps never harm); a crystal berry (or something icy) freezes the player in an ice block
    for 1-3 seconds. Each trap: only with Archipelago on, never a soft-lock (a freeze always ends, even in a scene),
    nothing written to the save the game wouldn't write, never in logic. The game's own effects to reuse (code read
    2026-09-26, not yet measured): fight conditions (`MainManager.BattleCondition`: Poison, Freeze, Numb, Sleep,
    Inked, Sticky and more), map hazards (`Hazards.cs`, three `HazardAction` kinds, likely the knockback), falling
    off a map (put back at `lastpos`, `PlayerControl.cs:688-691`), and ice (`EntityControl.inice`, set by ice maps).
-   **A lost turn** (the user, 2026-09-28): one random party member (the only one, when alone) skips one turn, the
-   next turn in a fight, or the next fight's first when it arrives on the overworld. Seen in the game: Upper
-   Snakemouth's boss holds Leif with `EventStop` (`MEASURED.md`), which has no icon and looked like a bug, so the trap
-   would use a condition the game shows (Sleep, Numb or Freeze, whichever ends cleanly after a turn; to read), skip a
-   member the game has already stopped, and never touch the game's own conditions.
+   **Traps annoy, never harm** (the user, 2026-09-28, after Celeste's flipped screen and Zelda's freeze and chickens):
+   a trap never changes how a fight or a run goes, so no debuffs, no lost turns, nothing that can bring a Game Over
+   (with DeathLink that would kill the whole room). Each wears off on its own: a few seconds or a timer on the
+   overworld, cosmetic only in a fight. Ideas: frozen in an ice block for 1-3 s, reversed controls, a flipped camera,
+   slippery movement (the game has no slippery floor, code read 2026-09-28: `EntityControl.inice` is the ice block, so
+   it would be the mod's own), a silly look for the party in one fight. A lost turn (`EventStop`, `MEASURED.md`) was
+   considered and dropped for this reason; the game's own conditions are never touched.
    First measure how each is applied. A yaml option (how many traps), so its own build step when built.
 
 20. **Enemy group sizes, a yaml option** (the user, 2026-09-26): its own option, apart from *Enemy Shuffle*, off by
