@@ -114,6 +114,7 @@ namespace BugFablesAP
             }
             string mapName = map.mapid.ToString();
             NPCControl[] entities = null;
+            HideFoundElsewhere(pickups, map, mapName, ref entities);
             foreach (KeyValuePair<long, ApConnection.Pickup> entry in pickups)
             {
                 if (entry.Value.Map != mapName || (entry.Value.Regional >= 0 && connection.IsDone(entry.Key)))
@@ -150,6 +151,40 @@ namespace BugFablesAP
                 }
             }
         }
+
+        // A one-time pickup another client on this slot found while this player is in its room goes at once, as the game
+        // hides an entity (NPCControl.Start). Only one this save hasn't taken: the player's own pickup is the game's to end.
+        private static void HideFoundElsewhere(Dictionary<long, ApConnection.Pickup> pickups, MapControl map, string mapName,
+            ref NPCControl[] entities)
+        {
+            MainManager mm = MainManager.instance;
+            if (ItemReceiver.Busy(mm) != null)
+            {
+                return;
+            }
+            foreach (KeyValuePair<long, ApConnection.Pickup> entry in pickups)
+            {
+                ApConnection.Pickup pickup = entry.Value;
+                if (pickup.Map != mapName || pickup.Regional >= 0 || pickup.Event >= 0 || !connection.IsDone(entry.Key)
+                    || TakenHere(mm, pickup))
+                {
+                    continue;
+                }
+                entities = entities ?? map.GetComponentsInChildren<NPCControl>(true);
+                foreach (NPCControl npc in entities)
+                {
+                    if (npc.gameObject.activeSelf && npc.objecttype == NPCControl.ObjectTypes.Item && IsPickup(pickup, npc))
+                    {
+                        npc.gameObject.SetActive(false);
+                        log.LogInfo($"[swap] location {entry.Key}: found by another client on this slot; its pickup on {mapName} hidden");
+                    }
+                }
+            }
+        }
+
+        private static bool TakenHere(MainManager mm, ApConnection.Pickup pickup) =>
+            pickup.Berry >= 0 ? pickup.Berry < mm.crystalbflags.Length && mm.crystalbflags[pickup.Berry]
+                : pickup.Flag >= 0 && pickup.Flag < mm.flags.Length && mm.flags[pickup.Flag];
 
         internal static bool IsPickup(ApConnection.Pickup pickup, NPCControl npc)
         {

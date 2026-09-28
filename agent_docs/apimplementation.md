@@ -2218,7 +2218,12 @@ Logged: `[open] <map>: <entity> kept away (location <id> is already checked)`.
 file; `LadybugMistake kept away (location 7720014 ...)`), and Meditation and 15 Berries (Artis's gift) arrived as
 replays with their boxes. A check sent from outside (Madeleine's left table, checked by a second client on the slot)
 arrived with its box while the player stood in the house; the pickup stayed until the house was entered again, then
-was gone, the right one still there: hiding applies when a map is made, not live.
+was gone, the right one still there: hiding applies when a map is made, not live. **Live, for a shared slot** (the user: "good
+for if people share 1 slot"): every 15 frames, while the player is free, a one-time pickup on the current map whose
+check is done but which this save hasn't taken (its flag, or its crystal berry mark, unset) is hidden the way the game
+hides an entity, `SetActive(false)` (`NPCControl.Start`). A pickup this save took is left to the game: its scene may
+still be running on it. Logged: `[swap] location <id>: found by another client on this slot; its pickup on <map>
+hidden`. Built, not yet seen.
 
 **Status:** works, seen by the user (2026-09-28): a floor item, on the next entry into its room; a crystal berry not yet seen.
 
