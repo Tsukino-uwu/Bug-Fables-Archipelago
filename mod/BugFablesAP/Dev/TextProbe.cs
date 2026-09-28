@@ -10,33 +10,18 @@ namespace BugFablesAP
     internal static class TextProbe
     {
         private static ManualLogSource log;
-        private static Harmony harmony;
 
-        internal static void Enable(ManualLogSource logger, string guid)
+        internal static void Enable(ManualLogSource logger)
         {
             log = logger;
-            // A distinct id per load: a shared id's UnpatchSelf from the old instance would strip the new patch too.
-            harmony = new Harmony(guid + ".textprobe." + DateTime.UtcNow.Ticks);
-            var target = AccessTools.Method(typeof(MainManager), "SetText", new[]
+            if (Hooks.Install(typeof(TextProbe), "text", "TextProbe is off"))
             {
-                typeof(string), typeof(int), typeof(float?), typeof(bool), typeof(bool),
-                typeof(Vector3), typeof(Vector3), typeof(Vector2), typeof(Transform), typeof(NPCControl)
-            });
-            if (target == null)
-            {
-                log.LogWarning("[text] MainManager.SetText (10 arguments) not found; TextProbe is off.");
-                return;
+                log.LogInfo("[text] TextProbe on: logging SetText scripts that carry an item command.");
             }
-            harmony.Patch(target, prefix: new HarmonyMethod(typeof(TextProbe), nameof(Prefix)));
-            log.LogInfo("[text] TextProbe on: logging SetText scripts that carry an item command.");
         }
 
-        internal static void Disable()
-        {
-            harmony?.UnpatchSelf();
-            harmony = null;
-        }
-
+        [HarmonyPatch(typeof(MainManager), "SetText", typeof(string), typeof(int), typeof(float?), typeof(bool), typeof(bool), typeof(Vector3), typeof(Vector3), typeof(Vector2), typeof(Transform), typeof(NPCControl))]
+        [HarmonyPrefix]
         private static void Prefix(string text, NPCControl caller)
         {
             if (text == null || log == null)

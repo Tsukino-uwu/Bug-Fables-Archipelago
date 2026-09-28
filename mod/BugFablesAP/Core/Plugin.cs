@@ -99,7 +99,7 @@ namespace BugFablesAP
                 + "the console's addmember adds one. -1 = off.").Value;
             if (devConsole.Value)
             {
-                DevConsole.EnableGuard(Log, Guid);
+                DevConsole.EnableGuard(Log);
             }
             saveDiff = Config.Bind("Debug", "SaveDiff", "",
                 "Dev only. Two save file names separated by |, e.g. 'save2backup.dat|save2.dat'. Once per load, logs "
@@ -128,7 +128,7 @@ namespace BugFablesAP
                 + "BepInEx/bugfablesap-questdump.tsv. Off by default.");
             if (textProbeEnabled.Value)
             {
-                TextProbe.Enable(Log, Guid);
+                TextProbe.Enable(Log);
             }
             // A server on this computer needs the ws:// prefix; a bare localhost:38281 times out.
             server = Config.Bind("Connection", "Address", "archipelago.gg",
@@ -407,8 +407,6 @@ namespace BugFablesAP
         private void OnDestroy()
         {
             DevConsole.Tick(false);
-            DevConsole.DisableGuard();
-            TextProbe.Disable();
             MenuToggle.Disable();
             // A hot reload must not leave the old instance's socket open next to the new one.
             connection?.Disconnect();

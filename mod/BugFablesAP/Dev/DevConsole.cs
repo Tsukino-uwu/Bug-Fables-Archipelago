@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using BepInEx.Logging;
+using HarmonyLib;
 using UnityEngine;
 
 namespace BugFablesAP
@@ -29,43 +31,27 @@ namespace BugFablesAP
         }
 
         // Pickups ignore touches during a warp and ~1.5 s after: a warp lands on the item's own spot.
-        private static HarmonyLib.Harmony harmony;
         private static float blockUntil = -1f;
 
-        internal static void EnableGuard(ManualLogSource logger, string guid)
+        internal static void EnableGuard(ManualLogSource logger)
         {
             log = logger;
-            var enter = HarmonyLib.AccessTools.Method(typeof(NPCControl), "OnTriggerEnter");
-            if (enter == null)
+            if (Hooks.Install(typeof(PickupHold), "dev", "warps can't hold off pickups")
+                && Hooks.Install(typeof(OneHitHook), "dev", "onehit does nothing"))
             {
-                log.LogWarning("[dev] NPCControl.OnTriggerEnter not found: warps can't hold off pickups");
-                return;
-            }
-            harmony = new HarmonyLib.Harmony(guid + ".devguard." + DateTime.UtcNow.Ticks);
-            harmony.Patch(enter, prefix: new HarmonyLib.HarmonyMethod(typeof(DevConsole), nameof(HoldPickups)));
-            // onehit: every hit ends in this DoDamage overload.
-            var damage = HarmonyLib.AccessTools.Method(typeof(BattleControl), "DoDamage", new[]
-            {
-                typeof(MainManager.BattleData?), typeof(MainManager.BattleData).MakeByRefType(), typeof(int),
-                typeof(BattleControl.AttackProperty?), HarmonyLib.AccessTools.Inner(typeof(BattleControl), "DamageOverride").MakeArrayType(), typeof(bool),
-            });
-            if (damage == null)
-            {
-                log.LogWarning("[dev] BattleControl.DoDamage not found: onehit does nothing");
-                return;
-            }
-            harmony.Patch(damage, prefix: new HarmonyLib.HarmonyMethod(typeof(DevConsole), nameof(OneHit)));
-            var start = HarmonyLib.AccessTools.Method(typeof(EventControl), nameof(EventControl.StartEvent), new[] { typeof(int), typeof(NPCControl) });
-            if (start != null)
-            {
-                harmony.Patch(start, prefix: new HarmonyLib.HarmonyMethod(typeof(DevConsole), nameof(LogEvent)));
+                Hooks.Install(typeof(EventLog), "dev", "started events aren't logged");
             }
         }
 
-        private static void LogEvent(int id, NPCControl caller)
+        private static class EventLog
         {
-            log.LogInfo($"[event] Event{id} starts on {MainManager.map?.mapid.ToString() ?? "?"}, started by "
-                + (caller != null ? $"{caller.name} ({caller.objecttype})" : "the map or code"));
+            [HarmonyPatch(typeof(EventControl), nameof(EventControl.StartEvent), typeof(int), typeof(NPCControl))]
+            [HarmonyPrefix]
+            private static void LogEvent(int id, NPCControl caller)
+            {
+                log.LogInfo($"[event] Event{id} starts on {MainManager.map?.mapid.ToString() ?? "?"}, started by "
+                    + (caller != null ? $"{caller.name} ({caller.objecttype})" : "the map or code"));
+            }
         }
 
         // Kept in the config so it survives reloads; "onehit" flips it.
@@ -112,24 +98,34 @@ namespace BugFablesAP
             }
         }
 
-        private static void OneHit(ref MainManager.BattleData target, ref int damageammount)
+        private static class OneHitHook
         {
-            if (oneHit && target.battleentity != null && !target.battleentity.CompareTag("Player"))
+            // onehit: every hit ends in this DoDamage overload, whose parameters include a private nested type.
+            private static MethodBase TargetMethod() => AccessTools.Method(typeof(BattleControl), "DoDamage", new[]
             {
-                damageammount = Math.Max(damageammount, 99);
+                typeof(MainManager.BattleData?), typeof(MainManager.BattleData).MakeByRefType(), typeof(int),
+                typeof(BattleControl.AttackProperty?), AccessTools.Inner(typeof(BattleControl), "DamageOverride").MakeArrayType(), typeof(bool),
+            });
+
+            [HarmonyPrefix]
+            private static void OneHit(ref MainManager.BattleData target, ref int damageammount)
+            {
+                if (oneHit && target.battleentity != null && !target.battleentity.CompareTag("Player"))
+                {
+                    damageammount = Math.Max(damageammount, 99);
+                }
             }
         }
 
-        internal static void DisableGuard()
+        private static class PickupHold
         {
-            harmony?.UnpatchSelf();
-            harmony = null;
-        }
-
-        private static bool HoldPickups(NPCControl __instance)
-        {
-            bool holding = pendingMap >= 0 || Time.realtimeSinceStartup < blockUntil;
-            return !(holding && __instance.objecttype == NPCControl.ObjectTypes.Item);
+            [HarmonyPatch(typeof(NPCControl), "OnTriggerEnter")]
+            [HarmonyPrefix]
+            private static bool HoldPickups(NPCControl __instance)
+            {
+                bool holding = pendingMap >= 0 || Time.realtimeSinceStartup < blockUntil;
+                return !(holding && __instance.objecttype == NPCControl.ObjectTypes.Item);
+            }
         }
 
         // Debug.DevCommandFile: commands from outside the game, polled twice a second and run one at a time.
