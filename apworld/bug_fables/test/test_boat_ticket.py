@@ -3,7 +3,8 @@ from . import BugFablesTestBase
 
 class TestBoatTicket(BugFablesTestBase):
     def test_in_the_pool_once(self) -> None:
-        tickets = [item for item in self.multiworld.itempool if item.player == self.player and item.name == "Boat Ticket"]
+        tickets = [item for item in self.multiworld.itempool
+                   if item.player == self.player and item.name == "Boat Ticket"]
         self.assertEqual(len(tickets), 1)
         self.assertTrue(tickets[0].advancement)
 

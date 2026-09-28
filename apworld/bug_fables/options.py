@@ -135,7 +135,8 @@ class EnemyShuffle(Choice):
 class StartingLocation(Choice):
     """
     EXPERIMENTAL. Where a new file begins. Off: where the game begins, outside Bugaria. Anywhere: any room in the game,
-    even in the middle of a dungeon, arriving as if through one of its doors. The pause menu's Warp takes you back to it.
+    even in the middle of a dungeon, arriving as if through one of its doors. The pause menu's Warp takes you back to
+    it.
 
     The logic doesn't know the start yet: items are placed as if you began outside Bugaria, so a seed started anywhere
     may not be finishable, and a room with no free way out can strand you (a new seed then). Off by default.

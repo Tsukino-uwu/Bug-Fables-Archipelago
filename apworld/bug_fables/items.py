@@ -64,7 +64,8 @@ def create_all_items(world: BugFablesWorld) -> None:
                     and ITEMS_BY_NAME[item.name].kind in (ITEM_KIND, MONEY_KIND)]
         filler = [item for item in ordinary if names.count(item.name) > 1] or ordinary
         if not filler:
-            raise Exception(f"Bug Fables: no filler item to make room for {always[0].name} in player {world.player_name}'s pool")
+            raise Exception(f"Bug Fables: no filler item to make room for {always[0].name} "
+                            f"in player {world.player_name}'s pool")
         pool.remove(world.random.choice(filler))
     pool += always
     pool += [world.create_filler() for _ in range(unfilled - len(pool))]

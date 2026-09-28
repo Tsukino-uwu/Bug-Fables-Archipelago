@@ -7,7 +7,8 @@ from typing import Any
 from worlds.AutoWorld import World
 
 from . import items, locations, regions, rules, slot_data, web_world
-from .data_tables import ARTIFACTS, DOORS, ENCOUNTERS, ITEM_NAME_TO_ID, LOCATION_NAME_TO_ID, LOCATIONS, ROOM_STARTS, STORY_EVENTS
+from .data_tables import (ARTIFACTS, DOORS, ENCOUNTERS, ITEM_NAME_TO_ID, LOCATION_NAME_TO_ID, LOCATIONS, ROOM_STARTS,
+                          STORY_EVENTS)
 from .doors import shuffle_coupled
 from .enemies import shuffle_encounters
 from .options import BugFablesOptions, EnemyShuffle, EntranceRandomizer, StartingLocation, StartingPartyMember

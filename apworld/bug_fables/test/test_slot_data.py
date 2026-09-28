@@ -11,8 +11,10 @@ class TestSlotData(BugFablesTestBase):
         item_shops = data["location_item_shops"]
         respawns = {loc for loc, pickup in data["location_pickups"].items() if "regional" in pickup}
         ids = {str(loc.address) for loc in self.multiworld.get_locations(self.player) if loc.address is not None}
-        self.assertEqual(set(flags) | set(variables) | set(berries) | set(discoveries) | set(shops) | set(item_shops) | respawns, ids)
-        self.assertEqual(len(flags) + len(variables) + len(berries) + len(discoveries) + len(shops) + len(item_shops) + len(respawns),
+        self.assertEqual(set(flags) | set(variables) | set(berries) | set(discoveries) | set(shops) | set(item_shops)
+                         | respawns, ids)
+        self.assertEqual(len(flags) + len(variables) + len(berries) + len(discoveries) + len(shops) + len(item_shops)
+                         + len(respawns),
                          len(ids))
         self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Maki and Eetl's Gift"])], 15)
         self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Artis's Gift"])], 32)
@@ -99,7 +101,8 @@ class TestRespawningPickups(BugFablesTestBase):
     def test_known_by_regional_flag(self) -> None:
         data = self.world.fill_slot_data()
         spot = str(self.world.location_name_to_id["Snakemouth Den: Underground Bridge Room, Behind Pillar"])
-        self.assertEqual(data["location_pickups"][spot], {"map": "SnakemouthUndergroundRightB", "flag": -1, "regional": 28})
+        self.assertEqual(data["location_pickups"][spot],
+                         {"map": "SnakemouthUndergroundRightB", "flag": -1, "regional": 28})
         self.assertNotIn(spot, data["location_flags"])
 
     def test_vanilla_item_in_pool(self) -> None:
@@ -190,7 +193,8 @@ class TestCaravan(BugFablesTestBase):
     def test_no_rock_lines(self) -> None:
         data = self.world.fill_slot_data()
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "FuzzyMoth"}, data["kept_open"])
-        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "CHusband", "flag": 41, "to": 691}, data["dialogue_flags"])
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "CHusband", "flag": 41, "to": 691},
+                      data["dialogue_flags"])
         for sibling in ("LaydbugGirl", "LaydbugBoy"):
             self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": sibling}, data["kept_present"])
 

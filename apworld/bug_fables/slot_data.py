@@ -4,8 +4,8 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable, Mapping
 from typing import TYPE_CHECKING, Any
 
-from .data_tables import (DIALOGUE_FLAGS, HELD_UNTIL, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN, KEPT_PRESENT, LOCATION_NAME_TO_ID,
-                          PRESENT_FROM, SCENERY_HIDDEN, SCENERY_PRESENT, WORLD_VERSION)
+from .data_tables import (DIALOGUE_FLAGS, HELD_UNTIL, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN, KEPT_PRESENT,
+                          LOCATION_NAME_TO_ID, PRESENT_FROM, SCENERY_HIDDEN, SCENERY_PRESENT, WORLD_VERSION)
 from .data_types import DialogueFlag, EntityRef, FlagEntity, Source
 
 if TYPE_CHECKING:

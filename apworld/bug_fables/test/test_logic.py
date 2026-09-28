@@ -27,7 +27,8 @@ class TestPermitGate(BugFablesTestBase):
                                      "Outskirts: Artis's Gift",
                                      "Outskirts: Ladybug Siblings' House", "Outskirts: East Road, Stone",
                                      "Outskirts: Pier", "Bugaria City: Residential District, Rooftop",
-                                     "Outskirts: Madeleine's House, Table Right", "Outskirts: Madeleine's House, Table Left"}
+                                     "Outskirts: Madeleine's House, Table Right",
+                                     "Outskirts: Madeleine's House, Table Left"}
                          | {f"Bugaria City: Commercial District, Medal Shop {n}" for n in range(1, 23)}
                          | {f"Bugaria City: Commercial District, Item Shop {n}" for n in range(1, 6)}
                          | {f"Outskirts: Caravan, Item Shop {n}" for n in range(1, 4)})
@@ -162,7 +163,8 @@ class TestMidQuestItem(BugFablesTestBase):
         reward = self.world.get_location("Bugaria City: Residential District, Old Book Delivery Reward")
         state = self.state_with("Chapter 2 Started")
         self.assertFalse(reward.can_reach(state))
-        state.collect(self.world.create_item("Quest Book"), prevent_sweep=False)  # the sweep takes it to the library step
+        # The sweep takes it to the library step.
+        state.collect(self.world.create_item("Quest Book"), prevent_sweep=False)
         self.assertTrue(reward.can_reach(state))
 
 

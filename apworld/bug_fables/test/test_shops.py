@@ -29,7 +29,8 @@ class TestItemShop(BugFablesTestBase):
         data = self.world.fill_slot_data()
         shops = {k: e for k, e in data["location_item_shops"].items() if e["keeper"] == "ButterflyShopkeeper"}
         self.assertEqual(sorted(entry["item"] for entry in shops.values()), [0, 1, 13, 17, 26])
-        self.assertTrue(all(entry == {"map": "BugariaCommercial", "keeper": "ButterflyShopkeeper", "item": entry["item"]}
+        self.assertTrue(all(entry == {"map": "BugariaCommercial", "keeper": "ButterflyShopkeeper",
+                                      "item": entry["item"]}
                             for entry in shops.values()))
         for key in shops:
             self.assertNotIn(key, data["location_gives"])
