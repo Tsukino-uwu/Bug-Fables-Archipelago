@@ -1648,7 +1648,7 @@ or less Monitor keeps the game's own setting, and the row's line says so. The ro
 do. Monitor is the default (the user, 2026-09-28, once shaky text was fixed and they'd seen no odd combat), so a fresh
 config runs above 60 while Archipelago is on; a config that already says Off keeps it. The first frame with the row on
 installs the frame sites (a few seconds), so on a fresh config that pause lands on the main menu. Rates above 240 are
-untested.
+untested. **Seen by the user (2026-09-28):** the ten pips look and work fine.
 
 **Status:** in progress, experimental (the row says so). Seen by the user (2026-09-27) at 240: smooth, the "!" steady and
 sharp. The logic measured (`rates`); each site patched as expected (the log's `[fps] frame sites`). Not yet seen on

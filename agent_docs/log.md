@@ -1138,7 +1138,7 @@ Newest last. What was tried, what happened, what the user said.
   the old 120 and 144 tore and only 240 synced, with nothing saying so. **Monitor is the default** (the user); a config
   that already stores a value keeps it (the user: no migration). Held back at first for the Known issues; the user said
   shaky text is fixed and seen, and nothing odd in combat with the hit fix (no before/after). Built, hot-reloaded, the
-  log shows every pip applied (Monitor as 240 on the user's screen); the pips themselves not confirmed on screen yet.
+  log shows every pip applied (Monitor as 240 on the user's screen); the user then confirmed the pips look and work fine.
 - **A slip:** the first copy put the old plugin back: `dotnet build` without `stage-dev.ps1`, and `copy-dev.ps1` copies
   the stage. The user saw no pips; `copy-dev.ps1`'s "game: loaded" hash and time showed it. Always stage first.
 - **The tester's `<RI.Hid>` errors:** the game's controller reading; the user's controller batteries died and
