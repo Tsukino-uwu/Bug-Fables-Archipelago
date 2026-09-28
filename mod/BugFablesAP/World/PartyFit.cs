@@ -15,91 +15,51 @@ namespace BugFablesAP
     {
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
-        private static Harmony harmony;
 
-        internal static void Enable(ManualLogSource logger, string guid, Func<bool> on)
+        internal static void Enable(ManualLogSource logger, Func<bool> on)
         {
             log = logger;
             randomizerOn = on;
-            MethodInfo setPlayers = AccessTools.Method(typeof(MainManager), nameof(MainManager.SetPlayers), new[] { typeof(Vector3[]) });
-            if (setPlayers == null)
+            if (!Hooks.Install(typeof(PartyFit), "party", "scenes written for two may break with three"))
             {
-                log.LogError("[party] MainManager.SetPlayers(Vector3[]) not found: scenes written for two may break with three.");
                 return;
             }
-            harmony = new Harmony(guid + ".party." + DateTime.UtcNow.Ticks);
-            harmony.Patch(setPlayers, prefix: new HarmonyMethod(typeof(PartyFit), nameof(BeforeSetPlayers)));
-            MethodInfo getEntity = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetEntity), new[] { typeof(int) });
-            if (getEntity != null)
-            {
-                harmony.Patch(getEntity, prefix: new HarmonyMethod(typeof(PartyFit), nameof(BeforeGetEntity)));
-            }
-            else
-            {
-                log.LogError("[party] MainManager.GetEntity(int) not found: a missing companion will still crash lines and scenes.");
-            }
-            MethodInfo byId = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetPartyEntities), new[] { typeof(bool) });
-            MethodInfo plain = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetPartyEntities), Type.EmptyTypes);
-            if (byId != null && plain != null)
-            {
-                harmony.Patch(byId, postfix: new HarmonyMethod(typeof(PartyFit), nameof(AfterPartyById)));
-                harmony.Patch(plain, postfix: new HarmonyMethod(typeof(PartyFit), nameof(AfterParty)));
-            }
-            else
-            {
-                log.LogError("[party] MainManager.GetPartyEntities not found: scenes written for three still crash with two.");
-            }
+            bool entity = Hooks.Install(typeof(Entities), "party", "a missing companion will still crash lines and scenes");
+            bool lists = Hooks.Install(typeof(PartyLists), "party", "scenes written for three still crash with two");
             // Hidden as late as possible: after the scene's step and the entity's own updates, just before drawing.
-            MethodInfo lateUpdate = AccessTools.Method(typeof(EntityControl), "LateUpdate");
-            if (lateUpdate != null)
-            {
-                harmony.Patch(lateUpdate, postfix: new HarmonyMethod(typeof(PartyFit), nameof(AfterLateUpdate)));
-            }
-            else
-            {
-                log.LogError("[party] EntityControl.LateUpdate not found: stand-ins may flash into view.");
-            }
+            Hooks.Install(typeof(Hiding), "party", "stand-ins may flash into view");
             // Every MoveTowards overload ends in this one.
-            MethodInfo moveTowards = AccessTools.Method(typeof(EntityControl), nameof(EntityControl.MoveTowards),
-                new[] { typeof(Vector3), typeof(float), typeof(int), typeof(int), typeof(bool) });
-            if (moveTowards != null)
-            {
-                harmony.Patch(moveTowards, postfix: new HarmonyMethod(typeof(PartyFit), nameof(AfterMoveTowards)));
-            }
-            else
-            {
-                log.LogError("[party] EntityControl.MoveTowards not found: a scene waiting for a stand-in to walk somewhere waits for good.");
-            }
+            bool walking = Hooks.Install(typeof(Walking), "party", "a scene waiting for a stand-in to walk somewhere waits for good");
             // The trapdoor scene then places each member from its own two-long list: that read is swapped for PlaceAt.
-            MethodInfo event5 = AccessTools.Method(typeof(EventControl), "Event5");
-            MethodInfo event5Step = event5 != null ? AccessTools.EnumeratorMoveNext(event5) : null;
-            if (event5Step != null)
-            {
-                harmony.Patch(event5Step, transpiler: new HarmonyMethod(typeof(PartyFit), nameof(TranspileEvent5)));
-            }
-            else
-            {
-                log.LogError("[party] EventControl.Event5 not found: the trapdoor scene still breaks with three members.");
-            }
-            log.LogInfo("[party] installed on MainManager.SetPlayers" + (getEntity != null ? ", GetEntity" : "") + (byId != null ? ", GetPartyEntities" : "")
-                + (moveTowards != null ? " and MoveTowards" : ""));
+            Hooks.Install(typeof(Trapdoor), "party", "the trapdoor scene still breaks with three members");
+            log.LogInfo("[party] installed on MainManager.SetPlayers" + (entity ? ", GetEntity" : "") + (lists ? ", GetPartyEntities" : "")
+                + (walking ? " and MoveTowards" : ""));
         }
 
-        private static IEnumerable<CodeInstruction> TranspileEvent5(IEnumerable<CodeInstruction> instructions)
+        private static class Trapdoor
         {
-            List<CodeInstruction> code = instructions.ToList();
-            MethodInfo setPlayers = AccessTools.Method(typeof(MainManager), nameof(MainManager.SetPlayers), new[] { typeof(Vector3[]) });
-            int call = code.FindIndex(i => i.Calls(setPlayers));
-            int read = call < 0 ? -1 : code.FindIndex(call, i => i.opcode == OpCodes.Ldelem && Equals(i.operand, typeof(Vector3)));
-            if (read < 0)
+            [HarmonyPatch(typeof(EventControl), "Event5", MethodType.Enumerator)]
+            [HarmonyTranspiler]
+            private static IEnumerable<CodeInstruction> TranspileEvent5(IEnumerable<CodeInstruction> instructions) =>
+                Hooks.Safe(instructions, EditEvent5, "party");
+
+            private static IEnumerable<CodeInstruction> EditEvent5(List<CodeInstruction> code)
             {
-                log.LogWarning("[party] Event5's placing loop not found (no Vector3 read after SetPlayers); the trapdoor scene is unchanged.");
+                MethodInfo setPlayers = AccessTools.Method(typeof(MainManager), nameof(MainManager.SetPlayers), new[] { typeof(Vector3[]) });
+                int call = code.FindIndex(i => i.Calls(setPlayers));
+                int read = call < 0 ? -1 : code.FindIndex(call, i => i.opcode == OpCodes.Ldelem && Equals(i.operand, typeof(Vector3)));
+                if (read < 0)
+                {
+                    log.LogWarning("[party] Event5's placing loop not found (no Vector3 read after SetPlayers); the trapdoor scene is unchanged.");
+                    return code;
+                }
+                MethodInfo placeAt = AccessTools.Method(typeof(PartyFit), nameof(PlaceAt))
+                    ?? throw new MissingMethodException(nameof(PartyFit), nameof(PlaceAt));
+                code[read].opcode = OpCodes.Call;
+                code[read].operand = placeAt;
+                log.LogInfo("[party] installed in Event5 (the trapdoor scene's placing loop)");
                 return code;
             }
-            code[read].opcode = OpCodes.Call;
-            code[read].operand = AccessTools.Method(typeof(PartyFit), nameof(PlaceAt));
-            log.LogInfo("[party] installed in Event5 (the trapdoor scene's placing loop)");
-            return code;
         }
 
         // A member past the end of a scene's list stands a step behind the one before, as BeforeSetPlayers places him.
@@ -116,8 +76,6 @@ namespace BugFablesAP
 
         internal static void Disable()
         {
-            harmony?.UnpatchSelf();
-            harmony = null;
             ClearStandIns();
         }
 
@@ -261,73 +219,90 @@ namespace BugFablesAP
             return standIns[member];
         }
 
-        private static void AfterLateUpdate(EntityControl __instance)
+        private static class Hiding
         {
-            if (__instance == null || (!standIns.Contains(__instance) && !LeifInTheWeb(__instance)))
+            [HarmonyPatch(typeof(EntityControl), "LateUpdate")]
+            [HarmonyPostfix]
+            private static void AfterLateUpdate(EntityControl __instance)
             {
-                return;
-            }
-            foreach (Renderer r in __instance.GetComponentsInChildren<Renderer>(true))
-            {
-                r.enabled = false;
+                if (__instance == null || (!standIns.Contains(__instance) && !LeifInTheWeb(__instance)))
+                {
+                    return;
+                }
+                foreach (Renderer r in __instance.GetComponentsInChildren<Renderer>(true))
+                {
+                    r.enabled = false;
+                }
             }
         }
 
         // A scene that waits for a stand-in to arrive would wait for good (no collision): it arrives at once.
-        private static void AfterMoveTowards(EntityControl __instance, Vector3 pos)
+        private static class Walking
         {
-            if (__instance == null || !standIns.Contains(__instance))
+            [HarmonyPatch(typeof(EntityControl), nameof(EntityControl.MoveTowards), typeof(Vector3), typeof(float), typeof(int), typeof(int), typeof(bool))]
+            [HarmonyPostfix]
+            private static void AfterMoveTowards(EntityControl __instance, Vector3 pos)
             {
-                return;
-            }
-            // Except toward the real player: a stand-in stays where the scene put it rather than follow the party.
-            if (MainManager.player != null && Vector3.Distance(pos, MainManager.player.transform.position) < 2f)
-            {
+                if (__instance == null || !standIns.Contains(__instance))
+                {
+                    return;
+                }
+                // Except toward the real player: a stand-in stays where the scene put it rather than follow the party.
+                if (MainManager.player != null && Vector3.Distance(pos, MainManager.player.transform.position) < 2f)
+                {
+                    __instance.forcemove = false;
+                    return;
+                }
+                __instance.transform.position = pos;
                 __instance.forcemove = false;
-                return;
             }
-            __instance.transform.position = pos;
-            __instance.forcemove = false;
         }
 
-        private static void AfterPartyById(bool idorder, ref EntityControl[] __result)
+        private static class PartyLists
         {
-            if (!idorder || __result == null || __result.Length >= 3 || !InScene())
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.GetPartyEntities), typeof(bool))]
+            [HarmonyPostfix]
+            private static void AfterPartyById(bool idorder, ref EntityControl[] __result)
             {
-                return;
-            }
-            ChooseActor();
-            var full = new EntityControl[3];
-            for (int member = 0; member < 3; member++)
-            {
-                EntityControl found = __result.FirstOrDefault(e => e != null && e.animid == member);
-                // The acting leader fills the role's slot; his own gets a stand-in, so the player never moves twice.
-                if (found != null && ((found == actor && member != actorRole) || ActsOtherPart(found, member)))
+                if (!idorder || __result == null || __result.Length >= 3 || !InScene())
                 {
-                    found = null;
+                    return;
                 }
-                full[member] = found ?? StandIn(member);
+                ChooseActor();
+                var full = new EntityControl[3];
+                for (int member = 0; member < 3; member++)
+                {
+                    EntityControl found = __result.FirstOrDefault(e => e != null && e.animid == member);
+                    // The acting leader fills the role's slot; his own gets a stand-in, so the player never moves twice.
+                    if (found != null && ((found == actor && member != actorRole) || ActsOtherPart(found, member)))
+                    {
+                        found = null;
+                    }
+                    full[member] = found ?? StandIn(member);
+                }
+                __result = full;
             }
-            __result = full;
-        }
 
-        private static void AfterParty(ref EntityControl[] __result)
-        {
-            if (__result == null || __result.Length >= 3 || !InScene())
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.GetPartyEntities), new Type[0])]
+            [HarmonyPostfix]
+            private static void AfterParty(ref EntityControl[] __result)
             {
-                return;
-            }
-            ChooseActor();
-            var longer = __result.ToList();
-            for (int member = 0; member < 3 && longer.Count < 3; member++)
-            {
-                // The acting leader is already first in the party's own list.
-                if (!__result.Any(e => e != null && e.animid == member) && member != actorRole && !spares.ContainsKey(member))
+                if (__result == null || __result.Length >= 3 || !InScene())
                 {
-                    longer.Add(StandIn(member));
+                    return;
                 }
+                ChooseActor();
+                var longer = __result.ToList();
+                for (int member = 0; member < 3 && longer.Count < 3; member++)
+                {
+                    // The acting leader is already first in the party's own list.
+                    if (!__result.Any(e => e != null && e.animid == member) && member != actorRole && !spares.ContainsKey(member))
+                    {
+                        longer.Add(StandIn(member));
+                    }
+                }
+                __result = longer.ToArray();
             }
-            __result = longer.ToArray();
         }
 
         // The spider scene (Event6) has Leif stuck in the web (the map's own Moth): a Leif already in the party stays out
@@ -439,68 +414,75 @@ namespace BugFablesAP
         // GetEntity(1000 + n) reads map.tempfollowers[n]: with no companion there, the leader answers (logged once per place).
         private static readonly System.Collections.Generic.HashSet<string> reported = new System.Collections.Generic.HashSet<string>();
 
-        private static bool BeforeGetEntity(int id, ref EntityControl __result)
+        private static class Entities
         {
-            // A member by name (-4 Vi, -5 Kabbu, -6 Leif) not in the party: the stand-in answers (callers never null-check).
-            if (id <= -4 && id >= -6 && InScene())
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.GetEntity), typeof(int))]
+            [HarmonyPrefix]
+            private static bool BeforeGetEntity(int id, ref EntityControl __result)
             {
-                int member = -4 - id;
-                MainManager party = MainManager.instance;
-                if (party.playerdata != null && !party.playerdata.Any(p => p.entity != null && p.entity.animid == member))
+                // A member by name (-4 Vi, -5 Kabbu, -6 Leif) not in the party: the stand-in answers (callers never null-check).
+                if (id <= -4 && id >= -6 && InScene())
                 {
-                    __result = StandIn(member);
-                    return false;
-                }
-                // The acting leader asked for by his own name: his own part goes to a stand-in, or he'd follow two sets of orders.
-                ChooseActor();
-                if (actor != null && actorRole != member && actor.animid == member)
-                {
-                    __result = StandIn(member);
-                    return false;
-                }
-                EntityControl own = party.playerdata.Select(p => p.entity).FirstOrDefault(e => e != null && e.animid == member);
-                if (ActsOtherPart(own, member))
-                {
-                    __result = StandIn(member);
-                    return false;
-                }
-                return true;
-            }
-            // The second and third member by position (-2, -3) beyond the party: the stand-ins, acting leader counted first.
-            if ((id == -2 || id == -3) && InScene())
-            {
-                MainManager party = MainManager.instance;
-                int slot = -1 - id; // 1 or 2
-                if (party.playerdata != null && party.playerdata.Length <= slot)
-                {
+                    int member = -4 - id;
+                    MainManager party = MainManager.instance;
+                    if (party.playerdata != null && !party.playerdata.Any(p => p.entity != null && p.entity.animid == member))
+                    {
+                        __result = StandIn(member);
+                        return false;
+                    }
+                    // The acting leader asked for by his own name: his own part goes to a stand-in, or he'd follow two sets of orders.
                     ChooseActor();
-                    int[] order = (actorRole >= 0 ? new[] { actorRole } : new int[0])
-                        .Concat(Enumerable.Range(0, 3).Where(m => m != actorRole)).ToArray();
-                    __result = StandIn(order[slot]);
-                    return false;
+                    if (actor != null && actorRole != member && actor.animid == member)
+                    {
+                        __result = StandIn(member);
+                        return false;
+                    }
+                    EntityControl own = party.playerdata.Select(p => p.entity).FirstOrDefault(e => e != null && e.animid == member);
+                    if (ActsOtherPart(own, member))
+                    {
+                        __result = StandIn(member);
+                        return false;
+                    }
+                    return true;
                 }
-                return true;
+                // The second and third member by position (-2, -3) beyond the party: the stand-ins, acting leader counted first.
+                if ((id == -2 || id == -3) && InScene())
+                {
+                    MainManager party = MainManager.instance;
+                    int slot = -1 - id; // 1 or 2
+                    if (party.playerdata != null && party.playerdata.Length <= slot)
+                    {
+                        ChooseActor();
+                        int[] order = (actorRole >= 0 ? new[] { actorRole } : new int[0])
+                            .Concat(Enumerable.Range(0, 3).Where(m => m != actorRole)).ToArray();
+                        __result = StandIn(order[slot]);
+                        return false;
+                    }
+                    return true;
+                }
+                if (id < 1000 || randomizerOn == null || !randomizerOn())
+                {
+                    return true;
+                }
+                MapControl map = MainManager.map;
+                int index = id - 1000;
+                if (map != null && map.tempfollowers != null && index < map.tempfollowers.Count)
+                {
+                    return true;
+                }
+                MainManager mm = MainManager.instance;
+                __result = mm != null && mm.playerdata != null && mm.playerdata.Length > 0 ? mm.playerdata[0].entity : null;
+                string where = (map != null ? map.mapid.ToString() : "no map") + " #" + id;
+                if (reported.Add(where))
+                {
+                    log.LogWarning($"[party] companion {id} asked for on {where.Split(' ')[0]} (Event{MainManager.lastevent}), nobody there: the leader answers");
+                }
+                return false;
             }
-            if (id < 1000 || randomizerOn == null || !randomizerOn())
-            {
-                return true;
-            }
-            MapControl map = MainManager.map;
-            int index = id - 1000;
-            if (map != null && map.tempfollowers != null && index < map.tempfollowers.Count)
-            {
-                return true;
-            }
-            MainManager mm = MainManager.instance;
-            __result = mm != null && mm.playerdata != null && mm.playerdata.Length > 0 ? mm.playerdata[0].entity : null;
-            string where = (map != null ? map.mapid.ToString() : "no map") + " #" + id;
-            if (reported.Add(where))
-            {
-                log.LogWarning($"[party] companion {id} asked for on {where.Split(' ')[0]} (Event{MainManager.lastevent}), nobody there: the leader answers");
-            }
-            return false;
         }
 
+        [HarmonyPatch(typeof(MainManager), nameof(MainManager.SetPlayers), typeof(Vector3[]))]
+        [HarmonyPrefix]
         private static void BeforeSetPlayers(ref Vector3[] newentitypos)
         {
             int party = MainManager.instance?.playerdata?.Length ?? 0;
