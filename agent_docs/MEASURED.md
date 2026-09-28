@@ -1424,12 +1424,15 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   flag as it starts.
 - Used by `SaveCrystals.cs`, `DeathLinkGame.cs` and `AutoSave.cs`.
 
-## Upper Snakemouth's boss fights without Leif (2026-09-28, code read; seen by the user)
+## Upper Snakemouth's boss: Leif out until its beam (2026-09-28, code read; seen by the user)
 
 - `EventControl.Event182` (`UpperSnekBossRoom`) starts battle 96 (`"Battle8"`, no escape), then gives the third party
-  slot (`playerdata[2]`) the condition `BattleCondition.EventStop` for 99999 turns: that member (Leif) can't act all
-  fight. The user saw Leif stuck in a pose, unusable in the fight (2026-09-28, vanilla save with the mod). By design, not
-  the mod. For combat logic: this fight has two members at most.
+  slot (`playerdata[2]`) the condition `BattleCondition.EventStop` for 99999 turns: that member (Leif) can't act.
+- The boss's beam, the first time (`BattleControl`, the boss's AI, `enemydata[...].data[0] == 0`, not a hologram),
+  revives every downed member at 1 HP, removes `playerdata[2]`'s `EventStop` (a rejoin animation, 116) and gives
+  everyone a Shield before it hits.
+- Seen by the user (2026-09-28, vanilla save with the mod): Leif stuck in a pose and unusable until the boss's big
+  attack, then active. By design, not the mod. For combat logic: the fight starts with two members.
 
 ## Quests: to measure (when quests come into scope)
 
