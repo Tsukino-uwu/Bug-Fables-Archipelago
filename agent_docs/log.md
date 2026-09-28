@@ -1209,6 +1209,9 @@ Newest last. What was tried, what happened, what the user said.
 - **Found pickups hidden in every save** (build step 27, Pseudoregalia's way, the user's choice; respawning ones stay
   the game's own; the trapdoor's story pickup stays). Then live, for a shared slot. Both seen, a check sent by a second
   client via `send-as-player.py` on the user's own slot.
+- **After the wrap-up:** hidden pickups flashed at a house's doorway. A house is an *inside* of its map, and
+  `MapControl.RefreshInsides` turns its entities on without an existence check; a postfix turns the kept-away ones off
+  again in the same frame. Seen: no flash.
 - **Not done yet:** parts 2 and 3 of the review plan (the rest of MEASURED's corrections; Harmony attributes, lean
   comments, dev tools out of the release). Open questions to the user: Enemy Shuffle across the whole game, medal-shop
   stock from a new file, "(the user, date)" in the guides.
