@@ -1279,6 +1279,13 @@ Newest last. What was tried, what happened, what the user said.
     it fails with the check off.
 - **Phase 3 done.** Every step kept the seed snapshot identical, the tests passing and the fuzzer at 0 of 10000.
   Not pushed (the push earlier today was a one-time yes).
-- **Next, phase 4 (Harmony attributes):** first `Dev/PatchDump.cs` and a baseline taken with the dev build in game.
-  The baseline must be taken from the code before the migration: if a session ends, rebuild it from the commit before
-  the first migrated batch.
+- **Phase 4 under way:**
+  - `PatchDump` baseline in game: 167 patches, HarmonyX 2.9.0.0 (6c5bb82). A copy is in `stage/patches-baseline.tsv`
+    (gitignored). To rebuild it, use the commit before 2b7b935.
+  - `Core/Hooks.cs` with AchievementGuard (2b7b935); batch 1 (1baba2c) and batch 2 (b6b8a23). 11 of 33 features are
+    moved, and each dump is identical to the baseline.
+  - The game is started through `steam://rungameid/1082710`, the dump is read, and the game is closed each time. With
+    PatchDump, DevConsole and TextProbe on in the dev config, no cheats.
+  - **Left:** the guards, then DeathLinkGame/FieldMoves/ItemSwap/PartyFit, CheckDetector/EnemyScaling/AttackBoost/
+    MedalAssist/PartyMembers, KeptOpen/ShopSwap/WarpButton, QualityOfLife, SaveRedirect/WebSocketCompression,
+    FrameRate/Abilities, and DevConsole/TextProbe.
