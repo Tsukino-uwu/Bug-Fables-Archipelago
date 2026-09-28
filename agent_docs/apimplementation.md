@@ -768,7 +768,8 @@ failsafe, long after it looks clear (`MEASURED.md`, a dimmer fade-out never fini
 tail left about 870 frames (the opening's fade-in, speed 0.02, takes about 3 s to reach 2%), so giving and showing
 were split: an item goes into the bag during a fade (only a map load holds it), and only its hold-up waits for the
 screen (a dimmer above 25%, about 1 s into the opening's fade-in; 2% was tried first and took about 3 s; or another
-transition until it ends). Items seen given 5 frames after the opening (2026-09-28, log). The box: not yet seen.
+transition until it ends). Items seen given 5 frames after the opening (2026-09-28, log); the user kept the 1 s box
+wait ("we keep it") and confirmed the new-game start on screen the same day.
 
 **Seen working (2026-09-24).** The server already held the Explorer Permit and the G-Bug Ranger Plushie from
 the swap test. On loading, the save tied itself to the seed, and both arrived in key items as soon as the
@@ -2189,7 +2190,10 @@ from the start. The mod's opening skip leaves the leaf out when the seed has it 
 moved with it: the permit gate's reachable set gains the location, and a solo *Filler Only* seed with discoveries on
 now has exactly enough filler (the leaf adds one), so its shops stay filler-only. 400 tests pass; 0 of 10000 fuzzed seeds fail.
 
-**Status:** built (2026-09-28), not yet seen in game.
+**Seen by the user (2026-09-28):** on a new file no leaf in the bag; the three opening checks sent together, and
+their items (a Lore Book, Mistake, Bee Fly in one seed) in the bag with the three starting members, with no boxes.
+
+**Status:** works, seen by the user (2026-09-28).
 
 *Code: `data/locations.json` (id 75), `data_tables.vanilla_item`, `slot_data.py` (`location_added`, the silent rule);
 `ApConnection.cs` (`LocationAdded`), `QualityOfLife.Opening.cs` (`RunOpening`, `SeedAdded`), wired in `Plugin.cs`.*
