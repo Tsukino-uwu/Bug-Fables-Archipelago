@@ -1297,6 +1297,11 @@ every door's logic is done: until then a shuffled seed may be unfinishable (the 
 impossible", while that option is on; *Warp to start* gets the player out of a dead end). Coupled (a door and its way
 back stay a pair) by default, decoupled as a choice. Order: a proof of concept (the mod rewriting a door's
 destination, seen on screen), then every door, then the room-by-room logic that removes the experimental label.
+**The room-by-room checklist: every flag a room reads** (the user, 2026-09-28, after chapter 6 took the boat away,
+Next 40). For each room, list every flag its objects, doors and scenes read (a thing shown, hidden or moved, a blocker
+added or removed), and for each: what sets it and when, and whether a seed can reach that. A flag that can take a way
+through away (a boat, a bridge, a door) is either kept from happening in a seed or becomes a rule; one that adds a
+roadblock is a rule. No room is done until its flags are listed.
 **The proof of concept, seen (the user, 2026-09-25):** one door, then a coupled swap of two connections both ways
 (the mod guide, step 13). **Every door, built (2026-09-25):** the yaml option *Entrance Randomizer (experimental)*,
 *Off* (default) or *Coupled*; decoupled later. How it was built:
