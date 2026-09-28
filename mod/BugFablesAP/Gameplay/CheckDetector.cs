@@ -15,53 +15,46 @@ namespace BugFablesAP
         private static ManualLogSource log;
         private static ApConnection connection;
         private static Func<bool> randomizerOn;
-        private static Harmony harmony;
 
-        internal static void Enable(ManualLogSource logger, string guid, ApConnection conn, Func<bool> on)
+        internal static void Enable(ManualLogSource logger, ApConnection conn, Func<bool> on)
         {
             log = logger;
             connection = conn;
             randomizerOn = on;
-            MethodInfo checkDisc = AccessTools.Method(typeof(MapControl), "CheckDisc");
-            if (checkDisc == null)
+            if (!Hooks.Install(typeof(CheckDetector), "detector", "the Detector finds only what the medal finds"))
             {
-                log.LogError("[detector] MapControl.CheckDisc not found: the Detector finds only what the medal finds.");
                 return;
             }
-            harmony = new Harmony(guid + ".detector." + DateTime.UtcNow.Ticks);
-            harmony.Patch(checkDisc, prefix: new HarmonyMethod(typeof(CheckDetector), nameof(BeforeCheckDisc)));
-            MethodInfo checkHidden = AccessTools.Method(typeof(NPCControl), "CheckHidden");
-            MethodInfo spinnerStart = AccessTools.Method(typeof(MusicSpinner), "Start");
-            if (checkHidden != null)
-            {
-                harmony.Patch(checkHidden, prefix: new HarmonyMethod(typeof(CheckDetector), nameof(BeforeCheckHidden)));
-            }
-            if (spinnerStart != null)
-            {
-                harmony.Patch(spinnerStart, postfix: new HarmonyMethod(typeof(CheckDetector), nameof(AfterSpinnerStart)));
-            }
-            log.LogInfo("[detector] installed on MapControl.CheckDisc" + (checkHidden != null ? ", NPCControl.CheckHidden" : " (NOT CheckHidden)")
-                + (spinnerStart != null ? ", MusicSpinner.Start" : " (NOT MusicSpinner.Start)"));
-        }
-
-        internal static void Disable()
-        {
-            harmony?.UnpatchSelf();
-            harmony = null;
+            bool hidden = Hooks.Install(typeof(Hidden), "detector", "hidden spots show as the game has them");
+            bool spinners = Hooks.Install(typeof(Spinners), "detector", "music spinners show as the game has them");
+            log.LogInfo("[detector] installed on MapControl.CheckDisc" + (hidden ? ", NPCControl.CheckHidden" : " (NOT CheckHidden)")
+                + (spinners ? ", MusicSpinner.Start" : " (NOT MusicSpinner.Start)"));
         }
 
         private static bool InSeed => randomizerOn != null && randomizerOn() && connection != null && connection.SeedKnown;
 
-        private static bool BeforeCheckHidden() => !InSeed;
-
-        private static void AfterSpinnerStart()
+        private static class Hidden
         {
-            if (InSeed && MainManager.map != null)
+            [HarmonyPatch(typeof(NPCControl), "CheckHidden")]
+            [HarmonyPrefix]
+            private static bool BeforeCheckHidden() => !InSeed;
+        }
+
+        private static class Spinners
+        {
+            [HarmonyPatch(typeof(MusicSpinner), "Start")]
+            [HarmonyPostfix]
+            private static void AfterSpinnerStart()
             {
-                MainManager.map.hiddenitem = null;
+                if (InSeed && MainManager.map != null)
+                {
+                    MainManager.map.hiddenitem = null;
+                }
             }
         }
 
+        [HarmonyPatch(typeof(MapControl), "CheckDisc")]
+        [HarmonyPrefix]
         private static bool BeforeCheckDisc(MapControl __instance)
         {
             if (!InSeed)

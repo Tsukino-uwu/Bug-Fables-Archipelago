@@ -15,7 +15,6 @@ namespace BugFablesAP
 
         private static Func<bool> randomizerOn;
         private static Func<string> mode;
-        private static Harmony harmony;
         private static ManualLogSource log;
 
         // Home level below "outgrown" (the level where an enemy's EXP runs out): fits both the new game (level 1, the
@@ -48,45 +47,25 @@ namespace BugFablesAP
         private static readonly int[] ArtifactFlags = { 41, 88, 299, 345, 347, 346, 555 };
         private static readonly int[] ArtifactLevel = { 1, 6, 9, 13, 16, 19, 23, 27 };
 
-        internal static void Enable(ManualLogSource logger, string guid, Func<bool> randomizerEnabled, Func<string> scalingMode)
+        internal static void Enable(ManualLogSource logger, Func<bool> randomizerEnabled, Func<string> scalingMode)
         {
             log = logger;
             randomizerOn = randomizerEnabled;
             mode = scalingMode;
-            var method = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetEnemyData), new[] { typeof(int), typeof(bool), typeof(bool) });
-            if (method == null)
+            if (!Hooks.Install(typeof(EnemyScaling), "scale", "enemies keep vanilla stats"))
             {
-                log.LogError("[scale] NOT installed: MainManager.GetEnemyData(int, bool, bool) wasn't found; enemies keep vanilla stats.");
                 return;
             }
-            harmony = new Harmony(guid + ".scale." + DateTime.UtcNow.Ticks);
-            harmony.Patch(method, postfix: new HarmonyMethod(typeof(EnemyScaling), nameof(AfterGetEnemyData)));
-            var damage = AccessTools.Method(typeof(BattleControl), "CalculateBaseDamage");
-            if (damage == null)
+            bool damage = Hooks.Install(typeof(Damage), "scale", "enemy damage isn't scaled");
+            log.LogInfo("[scale] installed on MainManager.GetEnemyData" + (damage ? " and BattleControl.CalculateBaseDamage" : ""));
+            if (BestiaryRows == null)
             {
-                log.LogError("[scale] BattleControl.CalculateBaseDamage wasn't found; enemy damage isn't scaled.");
+                log.LogWarning("[scale] PauseMenu's enemydata wasn't found; the bestiary shows vanilla stats.");
             }
             else
             {
-                harmony.Patch(damage, prefix: new HarmonyMethod(typeof(EnemyScaling), nameof(BeforeBaseDamage)));
+                Hooks.Install(typeof(Bestiary), "scale", "the bestiary shows vanilla stats");
             }
-            log.LogInfo("[scale] installed on MainManager.GetEnemyData" + (damage != null ? " and BattleControl.CalculateBaseDamage" : ""));
-            var bestiary = AccessTools.Method(typeof(PauseMenu), "UpdateText");
-            if (bestiary == null || BestiaryRows == null)
-            {
-                log.LogWarning("[scale] PauseMenu.UpdateText or its enemydata wasn't found; the bestiary shows vanilla stats.");
-            }
-            else
-            {
-                harmony.Patch(bestiary, prefix: new HarmonyMethod(typeof(EnemyScaling), nameof(BeforeBestiary)),
-                    postfix: new HarmonyMethod(typeof(EnemyScaling), nameof(AfterBestiary)));
-            }
-        }
-
-        internal static void Disable()
-        {
-            harmony?.UnpatchSelf();
-            harmony = null;
         }
 
         internal static int? HomeLevel(int id)
@@ -146,70 +125,84 @@ namespace BugFablesAP
         private static int swappedRow = -1;
         private static string originalRow;
 
-        private static void BeforeBestiary(PauseMenu __instance)
+        private static class Bestiary
         {
-            swappedRow = -1;
-            if (randomizerOn == null || !randomizerOn() || MainManager.listvar == null || MainManager.instance == null)
+            [HarmonyPatch(typeof(PauseMenu), "UpdateText")]
+            [HarmonyPrefix]
+            private static void BeforeBestiary(PauseMenu __instance)
             {
-                return;
+                swappedRow = -1;
+                if (randomizerOn == null || !randomizerOn() || MainManager.listvar == null || MainManager.instance == null)
+                {
+                    return;
+                }
+                int option = MainManager.instance.option;
+                if (!(BestiaryRows.GetValue(__instance) is string[] rows) || option < 0 || option >= MainManager.listvar.Length)
+                {
+                    return;
+                }
+                int id = MainManager.listvar[option];
+                int? target = TargetLevel();
+                int? home = HomeLevel(id);
+                if (id < 0 || id >= rows.Length || target == null || home == null || target == home)
+                {
+                    return;
+                }
+                string[] f = rows[id].Split(',');
+                if (f.Length < 38 || !int.TryParse(f[1], out int hp) || !int.TryParse(f[36], out int hardHp)
+                    || !int.TryParse(f[2], out int def))
+                {
+                    return;
+                }
+                float ratio = Ratio(home.Value, target.Value);
+                f[1] = Mathf.Max(1, Mathf.RoundToInt(hp * ratio)).ToString();
+                f[36] = Mathf.RoundToInt(hardHp * ratio).ToString();
+                if (def >= 0)
+                {
+                    f[2] = Mathf.Max(0, def + (target.Value - home.Value) / LevelsPerDefence).ToString();
+                }
+                swappedRow = id;
+                originalRow = rows[id];
+                rows[id] = string.Join(",", f);
             }
-            int option = MainManager.instance.option;
-            if (!(BestiaryRows.GetValue(__instance) is string[] rows) || option < 0 || option >= MainManager.listvar.Length)
-            {
-                return;
-            }
-            int id = MainManager.listvar[option];
-            int? target = TargetLevel();
-            int? home = HomeLevel(id);
-            if (id < 0 || id >= rows.Length || target == null || home == null || target == home)
-            {
-                return;
-            }
-            string[] f = rows[id].Split(',');
-            if (f.Length < 38 || !int.TryParse(f[1], out int hp) || !int.TryParse(f[36], out int hardHp)
-                || !int.TryParse(f[2], out int def))
-            {
-                return;
-            }
-            float ratio = Ratio(home.Value, target.Value);
-            f[1] = Mathf.Max(1, Mathf.RoundToInt(hp * ratio)).ToString();
-            f[36] = Mathf.RoundToInt(hardHp * ratio).ToString();
-            if (def >= 0)
-            {
-                f[2] = Mathf.Max(0, def + (target.Value - home.Value) / LevelsPerDefence).ToString();
-            }
-            swappedRow = id;
-            originalRow = rows[id];
-            rows[id] = string.Join(",", f);
-        }
 
-        private static void AfterBestiary(PauseMenu __instance)
-        {
-            if (swappedRow >= 0 && BestiaryRows.GetValue(__instance) is string[] rows && swappedRow < rows.Length)
+            [HarmonyPatch(typeof(PauseMenu), "UpdateText")]
+            [HarmonyPostfix]
+            private static void AfterBestiary(PauseMenu __instance)
             {
-                rows[swappedRow] = originalRow;
+                if (swappedRow >= 0 && BestiaryRows.GetValue(__instance) is string[] rows && swappedRow < rows.Length)
+                {
+                    rows[swappedRow] = originalRow;
+                }
+                swappedRow = -1;
             }
-            swappedRow = -1;
         }
 
         // Each hit an enemy lands: its move's own damage scaled, before hardatk (Hard/Hardest) is added on top, so a
         // many-hit attack and a single big one shrink or grow alike. The game's floor of 1 per hit stays.
-        private static void BeforeBaseDamage(MainManager.BattleData? attacker, ref int basevalue)
+        private static class Damage
         {
-            if (basevalue <= 0 || attacker == null || attacker.Value.battleentity == null
-                || attacker.Value.battleentity.CompareTag("Player") || randomizerOn == null || !randomizerOn())
+            [HarmonyPatch(typeof(BattleControl), "CalculateBaseDamage")]
+            [HarmonyPrefix]
+            private static void BeforeBaseDamage(MainManager.BattleData? attacker, ref int basevalue)
             {
-                return;
+                if (basevalue <= 0 || attacker == null || attacker.Value.battleentity == null
+                    || attacker.Value.battleentity.CompareTag("Player") || randomizerOn == null || !randomizerOn())
+                {
+                    return;
+                }
+                int? target = TargetLevel();
+                int? home = HomeLevel(attacker.Value.animid);
+                if (target == null || home == null || target == home)
+                {
+                    return;
+                }
+                basevalue = Mathf.Max(1, Mathf.RoundToInt(basevalue * Ratio(home.Value, target.Value)));
             }
-            int? target = TargetLevel();
-            int? home = HomeLevel(attacker.Value.animid);
-            if (target == null || home == null || target == home)
-            {
-                return;
-            }
-            basevalue = Mathf.Max(1, Mathf.RoundToInt(basevalue * Ratio(home.Value, target.Value)));
         }
 
+        [HarmonyPatch(typeof(MainManager), nameof(MainManager.GetEnemyData), typeof(int), typeof(bool), typeof(bool))]
+        [HarmonyPostfix]
         private static void AfterGetEnemyData(int id, bool createentity, bool noexp, ref MainManager.BattleData __result)
         {
             if (!createentity || randomizerOn == null || !randomizerOn() || MainManager.instance == null)

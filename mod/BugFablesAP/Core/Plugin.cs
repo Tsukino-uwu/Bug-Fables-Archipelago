@@ -186,8 +186,8 @@ namespace BugFablesAP
             QualityOfLife.SeedKnown = () => connection != null && connection.SeedKnown;
             QualityOfLife.EntrancesShuffled = () => randomizerEnabled.Value && connection?.DoorTargets != null && connection.DoorTargets.Count > 0;
             Multipliers.Enable(Log, Config, settingsOn);
-            EnemyScaling.Enable(Log, Guid, settingsOn, () => QualityOfLife.EnemyScalingMode?.Value);
-            AttackBoost.Enable(Log, Guid, Config, settingsOn);
+            EnemyScaling.Enable(Log, settingsOn, () => QualityOfLife.EnemyScalingMode?.Value);
+            AttackBoost.Enable(Log, Config, settingsOn);
             FrameRate.Enable(Log, Guid, settingsOn);
             ClockCleanup.Enable(Log, settingsOn);
             InGameSettings.Enable(Log, settingsOn);
@@ -201,7 +201,7 @@ namespace BugFablesAP
             DeathLinkGame.Enable(Log, Config, connection, () => randomizerEnabled.Value);
             AutoSave.Enable(Log, Config, settingsOn);
             Abilities.Enable(Log, Guid, () => randomizerEnabled.Value);
-            CheckDetector.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
+            CheckDetector.Enable(Log, connection, () => randomizerEnabled.Value);
             CrystalBerryTotal.Enable(Log, connection, () => randomizerEnabled.Value);
             QuestBoards.Enable(Log, () => randomizerEnabled.Value);
             ShopSwap.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
@@ -417,8 +417,6 @@ namespace BugFablesAP
             MedalAssist.Disable();
             KeptOpen.Disable();
             FrameRate.Disable();
-            EnemyScaling.Disable();
-            AttackBoost.Disable();
             SaveCrystals.Disable();
             QualityOfLife.Disable();
             WarpButton.Disable();
@@ -426,7 +424,6 @@ namespace BugFablesAP
             PartyFit.Disable();
             PartyMembers.Disable();
             Abilities.Disable();
-            CheckDetector.Disable();
             ShopSwap.Disable();
             Hooks.UninstallAll();
             Log?.LogInfo($"{Name} {Version} unloaded.");

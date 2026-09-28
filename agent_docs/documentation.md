@@ -147,14 +147,14 @@ Harmony instance: a group with a missing target installs nothing rather than hal
 every group comes off with the plugin. `Hooks.Safe` keeps a failing transpiler from breaking its method. Moved so
 far: AchievementGuard, BoatTicket, CrystalBerryTotal, QuestBoards, DoorShuffle, SaveCrystals, ItemShops,
 InGameSettings, MenuToggle, Multipliers, EnemyShuffle, AnimGuard, ClockCleanup, GlowGuard, DeathLinkGame, FieldMoves, ItemSwap,
-PartyFit (the list unchanged, 167). A coroutine's step is targeted with `MethodType.Enumerator`. Where one target carries several of
+PartyFit, CheckDetector, EnemyScaling, AttackBoost (the list unchanged, 167). A coroutine's step is targeted with `MethodType.Enumerator`. Where one target carries several of
 our hooks of a kind, their run order matters (ItemSwap's pickup prefix before its berry prefix): hooks that must run
 in order are separate groups installed in that order, and the dump logs each such order to check against. A transpiler goes through `Hooks.Safe` and finds everything it needs before it changes anything. A feature whose hooks stand or fall
 together is its own group, its hook methods annotated in place; an optional hook gets a nested group of its own.
 
 **Status:** done; separate guards per system built 2026-09-28, not yet seen in game; errors checked for instead of
 swallowed, built 2026-09-28 (both builds pass), not yet seen in game; hooks to attributes under way (the patch list
-taken, 167 patches; 18 of 33 features moved, list and run order unchanged).
+taken, 167 patches; 21 of 33 features moved, list and run order unchanged).
 
 *Code: `mod/BugFablesAP/Core/Plugin.cs` (`Plugin`, a BepInEx plugin: `Awake` sets everything up, `Tick` runs
 every frame); the project file is `BugFablesAP.csproj`.*
