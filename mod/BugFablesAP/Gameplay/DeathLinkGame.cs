@@ -19,7 +19,6 @@ namespace BugFablesAP
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
         private static ApConnection connection;
-        private static Harmony harmony;
 
         private static MethodInfo deadParty;
         private static AccessTools.FieldRef<BattleControl, Coroutine> gameOver;
@@ -39,7 +38,7 @@ namespace BugFablesAP
         private static object linkGameOver;
         private static string waitingFor;
 
-        internal static void Enable(ManualLogSource logger, string guid, ConfigFile config, ApConnection conn, Func<bool> on)
+        internal static void Enable(ManualLogSource logger, ConfigFile config, ApConnection conn, Func<bool> on)
         {
             log = logger;
             connection = conn;
@@ -63,22 +62,20 @@ namespace BugFablesAP
             gameOver = AccessTools.FieldRefAccess<BattleControl, Coroutine>(over);
             overState = AccessTools.Field(step.DeclaringType, "<>1__state");
             overSkipSetup = AccessTools.Field(step.DeclaringType, "skipsetup");
-            harmony = new Harmony(guid + ".death." + DateTime.UtcNow.Ticks);
-            harmony.Patch(step, prefix: new HarmonyMethod(typeof(DeathLinkGame), nameof(BeforeGameOverStep)),
-                postfix: new HarmonyMethod(typeof(DeathLinkGame), nameof(AfterGameOverStep)));
+            if (!Hooks.Install(typeof(DeathLinkGame), "death", "DeathLink neither sends nor receives"))
+            {
+                deadParty = null;
+                return;
+            }
             log.LogInfo($"[death] installed on BattleControl.GameOver's steps (state {overState != null}, skipsetup {overSkipSetup != null})");
-        }
-
-        internal static void Disable()
-        {
-            harmony?.UnpatchSelf();
-            harmony = null;
         }
 
         private static bool Wanted() => Enabled != null && Enabled.Value && randomizerOn != null && randomizerOn();
 
         // The first step of a Game Over with its setup (the fade and the music), which only a party wipe starts; the
         // game's own re-shows of the menu skip the setup and are left alone.
+        [HarmonyPatch(typeof(BattleControl), "GameOver", MethodType.Enumerator)]
+        [HarmonyPrefix]
         private static void BeforeGameOverStep(object __instance)
         {
             if (overState == null || (int)overState.GetValue(__instance) != 0 || overSkipSetup == null || (bool)overSkipSetup.GetValue(__instance))
@@ -104,6 +101,8 @@ namespace BugFablesAP
         }
 
         // The link's Game Over ends when a Retry starts the battle again; the game's Load destroys the battle instead.
+        [HarmonyPatch(typeof(BattleControl), "GameOver", MethodType.Enumerator)]
+        [HarmonyPostfix]
         private static void AfterGameOverStep(object __instance, bool __result)
         {
             if (!__result && linkGameOver != null && ReferenceEquals(__instance, linkGameOver))

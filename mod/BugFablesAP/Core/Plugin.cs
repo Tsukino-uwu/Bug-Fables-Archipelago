@@ -196,9 +196,9 @@ namespace BugFablesAP
             HoldUps.Init(Log, () => randomizerEnabled.Value);
             PartyFit.Enable(Log, Guid, () => randomizerEnabled.Value);
             PartyMembers.Enable(Log, Guid, () => randomizerEnabled.Value);
-            FieldMoves.Enable(Log, Guid, () => randomizerEnabled.Value);
+            FieldMoves.Enable(Log, () => randomizerEnabled.Value);
             SaveCrystals.Enable(Log, Config, () => randomizerEnabled.Value, settingsOn);
-            DeathLinkGame.Enable(Log, Guid, Config, connection, () => randomizerEnabled.Value);
+            DeathLinkGame.Enable(Log, Config, connection, () => randomizerEnabled.Value);
             AutoSave.Enable(Log, Config, settingsOn);
             Abilities.Enable(Log, Guid, () => randomizerEnabled.Value);
             CheckDetector.Enable(Log, Guid, connection, () => randomizerEnabled.Value);
@@ -421,13 +421,11 @@ namespace BugFablesAP
             EnemyScaling.Disable();
             AttackBoost.Disable();
             SaveCrystals.Disable();
-            DeathLinkGame.Disable();
             QualityOfLife.Disable();
             WarpButton.Disable();
             HoldUps.Clear();
             PartyFit.Disable();
             PartyMembers.Disable();
-            FieldMoves.Disable();
             Abilities.Disable();
             CheckDetector.Disable();
             ShopSwap.Disable();

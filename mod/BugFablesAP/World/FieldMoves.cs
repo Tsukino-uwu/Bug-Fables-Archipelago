@@ -14,7 +14,6 @@ namespace BugFablesAP
 
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
-        private static Harmony harmony;
 
         // From slot_data (shuffle_moves, shuffle_jump); false with no seed.
         internal static volatile bool MovesShuffled;
@@ -33,7 +32,7 @@ namespace BugFablesAP
             return shuffled && MainManager.instance?.items != null && !MainManager.instance.items[1].Contains(CustomItems.MoveKeyItem(id));
         }
 
-        internal static void Enable(ManualLogSource logger, string guid, Func<bool> on)
+        internal static void Enable(ManualLogSource logger, Func<bool> on)
         {
             log = logger;
             randomizerOn = on;
@@ -49,16 +48,11 @@ namespace BugFablesAP
             }
             tapState = AccessTools.Field(tapStep.DeclaringType, "<>1__state");
             tapOwner = AccessTools.Field(tapStep.DeclaringType, "<>4__this");
-            harmony = new Harmony(guid + ".moves." + DateTime.UtcNow.Ticks);
-            harmony.Patch(tapStep, prefix: new HarmonyMethod(typeof(FieldMoves), nameof(BeforeTapStep)));
-            harmony.Patch(jump, prefix: new HarmonyMethod(typeof(FieldMoves), nameof(BeforeJump)));
+            if (!Hooks.Install(typeof(FieldMoves), "moves", "moves and jump are never locked"))
+            {
+                return;
+            }
             log.LogInfo($"[moves] installed on PlayerControl.DoActionTap's first step (state field {tapState != null}, owner {tapOwner != null}) and DoJump");
-        }
-
-        internal static void Disable()
-        {
-            harmony?.UnpatchSelf();
-            harmony = null;
         }
 
         private static readonly HashSet<string> reported = new HashSet<string>();
@@ -97,6 +91,8 @@ namespace BugFablesAP
 
         // The tap's move is the leader's (playerdata[0].animid); the submarine's tap is its own and never locked. Only the
         // first step (state 0) is checked; a refused tap ends there, before it sets action or lockkeys.
+        [HarmonyPatch(typeof(PlayerControl), "DoActionTap", MethodType.Enumerator)]
+        [HarmonyPrefix]
         private static bool BeforeTapStep(object __instance, ref bool __result)
         {
             if (tapState == null || (int)tapState.GetValue(__instance) != 0)
@@ -135,6 +131,8 @@ namespace BugFablesAP
         }
 
         // Confirm next to a save crystal uses it instead of jumping (SaveCrystals).
+        [HarmonyPatch(typeof(PlayerControl), "DoJump")]
+        [HarmonyPrefix]
         private static bool BeforeJump()
         {
             if (SaveCrystals.TryUse())
