@@ -5,7 +5,7 @@ import json
 import pkgutil
 from typing import Any
 
-from .data_types import Item
+from .data_types import Encounter, Item
 
 ITEM_ID_BASE = 7_710_000
 LOCATION_ID_BASE = 7_720_000
@@ -50,7 +50,7 @@ ROOM_STARTS = [{"map": room, "from": door_map} for room, door_map in ROOM_STARTS
 # spots, a planned option.
 STARTS: list[dict[str, Any]] = _load("starts.json")["starts"]
 # Every map enemy (map, entity index) and the enemy ids its fight starts with.
-ENCOUNTERS: list[dict[str, Any]] = _load("enemies.json")["encounters"]
+ENCOUNTERS: tuple[Encounter, ...] = tuple(Encounter.from_json(e) for e in _load("enemies.json")["encounters"])
 
 # An item's kind: where the game puts it. Ordinary items and key items share the base range.
 ITEM_KIND = 0

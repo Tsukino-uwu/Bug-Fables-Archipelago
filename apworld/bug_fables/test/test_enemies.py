@@ -16,22 +16,22 @@ class TestEnemiesOnly(BugFablesTestBase):
 
     def test_every_map_enemy_listed(self) -> None:
         swaps = self.world.fill_slot_data()["enemy_swaps"]
-        self.assertEqual(set(swaps), {f'{e["map"]}:{e["entity"]}' for e in ENCOUNTERS})
+        self.assertEqual(set(swaps), {f"{e.map}:{e.entity}" for e in ENCOUNTERS})
 
     def test_fights_keep_their_size(self) -> None:
         swaps = self.world.fill_slot_data()["enemy_swaps"]
         for e in ENCOUNTERS:
-            key = f'{e["map"]}:{e["entity"]}'
-            self.assertEqual(len(swaps[key]), len(e["ids"]), key)
+            key = f"{e.map}:{e.entity}"
+            self.assertEqual(len(swaps[key]), len(e.ids), key)
 
     def test_every_fight_still_happens_once(self) -> None:
         # A permutation within each size: the same fights, only at other places.
         swaps = self.world.fill_slot_data()["enemy_swaps"]
-        self.assertEqual(Counter(tuple(f) for f in swaps.values()), Counter(tuple(e["ids"]) for e in ENCOUNTERS))
+        self.assertEqual(Counter(tuple(f) for f in swaps.values()), Counter(e.ids for e in ENCOUNTERS))
 
     def test_fights_move(self) -> None:
         swaps = self.world.fill_slot_data()["enemy_swaps"]
-        moved = sum(1 for e in ENCOUNTERS if swaps[f'{e["map"]}:{e["entity"]}'] != e["ids"])
+        moved = sum(1 for e in ENCOUNTERS if swaps[f"{e.map}:{e.entity}"] != list(e.ids))
         self.assertGreater(moved, len(ENCOUNTERS) // 2)
 
 
@@ -44,4 +44,4 @@ class TestSceneOnlyEnemies(BugFablesTestBase):
     # Only map enemies are shuffled; an enemy that exists only in a scene's fight must never enter the pool.
     def test_leif_in_the_web_is_never_shuffled(self) -> None:
         # Enemy 12: Leif stuck in the web, the spider scene's second fight (Event6).
-        self.assertFalse(any(12 in e["ids"] for e in ENCOUNTERS))
+        self.assertFalse(any(12 in e.ids for e in ENCOUNTERS))
