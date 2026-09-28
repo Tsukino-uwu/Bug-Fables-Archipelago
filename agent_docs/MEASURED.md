@@ -1195,7 +1195,9 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   found`. Unity's warning when a character is asked for an animation state its controller lacks (layer -1 = any).
   Harmless: nothing plays. Seen in clusters of 18-21 during the map look tests, where a boss look kept the Underling's
   map AI and was asked for its dig animations; also from a lone Leif acting other members' parts (build step 13).
-  Whether vanilla shows it too: not checked (a run with the mod disabled would tell).
+  The game's own scenes show it too (2026-09-28, the log): Upper Snakemouth's boss scene (`Event182`) on a normal save,
+  Archipelago off so `AnimGuard` off (no `[anim]` skips logged), two pairs each time the scene started; the mod animates
+  nothing there. So vanilla warns as well; the guard only quiets it with Archipelago on.
 - **An enemy's "outgrown" level, from its EXP** (2026-09-26, the enemy table dump and `MainManager.GetEXP`, for
   enemy scaling): a fight's EXP per enemy is `base - (level - 1) * 2.5`, clamped, so each enemy stops giving EXP near
   level `base / 2.5 + 1`. Ordinary enemies climb steadily through the game: Seedling 3.8, Cordyceps Ant 4.6, Underling
