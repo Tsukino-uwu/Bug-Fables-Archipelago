@@ -222,6 +222,15 @@ namespace BugFablesAP
             return body != null && body.Any(i => match(i.Key, i.Value));
         }
 
+        private static string Name(MethodBase m) => m.DeclaringType?.Name + "." + m.Name;
+
+        // The dev build's frame measurements (Dev/FrameRate.Dev.cs); in the release build these calls vanish.
+        static partial void Sample();
+        static partial void Rates();
+        static partial void Trace(Camera cam);
+        static partial void DrawStarted();
+        static partial void DrawEnded();
+
         private static bool HasBlink(MethodBase m)
         {
             List<KeyValuePair<OpCode, object>> body = ReadBody(m, log, "fps");
@@ -538,7 +547,7 @@ namespace BugFablesAP
             }
             Sample();
             Rates();
-            drawWork.Restart();
+            DrawStarted();
             if (!SmoothCamera)
             {
                 return;
@@ -611,8 +620,7 @@ namespace BugFablesAP
             }
             if (cam == MainManager.MainCamera)
             {
-                drawWork.Stop();
-                lastDrawMs = (float)drawWork.Elapsed.TotalMilliseconds;
+                DrawEnded();
             }
             if (!drawnShifted || (cam != lastCamera && lastCamera != null))
             {

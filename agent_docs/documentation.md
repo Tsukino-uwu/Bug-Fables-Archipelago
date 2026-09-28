@@ -136,31 +136,41 @@ game's own number format, as `Convert.ToSingle` reads it under the en-US culture
 read is logged once. The dev console's pickup guard now gets its logger before its first use: before, a missing hook
 target would have thrown inside `Awake` and stopped the plugin loading. The code style is in `.editorconfig`.
 
-**Hooks marked with attributes, the way BepInEx mods do** (2026-09-28, under way). Each hook was wired by hand, with
-the same setup copied into every feature. They move to Harmony's attributes one batch at a time. **How "changed
-nothing" is proven:** the Debug setting `PatchDump` writes every patch the mod made (target, kind, patch method,
-priority) once per load. The list is taken before the first batch and after each one, and must not change. The
-HarmonyX members it reads (`GetAllPatchedMethods`, `GetPatchInfo`, `Patch.owner`/`priority`/`PatchMethod`) were read
-at both tags, 2.7.0 (compiled against) and 2.9.0 (the game's), and match. Baseline (2026-09-28, in game, main menu,
-HarmonyX 2.9.0.0): 167 patches. `Core/Hooks.cs` installs each group (a class of attributed hooks) with its own
-Harmony instance: a group with a missing target installs nothing rather than half, logs what the player loses, and
-every group comes off with the plugin. `Hooks.Safe` keeps a failing transpiler from breaking its method. Moved so
-far: AchievementGuard, BoatTicket, CrystalBerryTotal, QuestBoards, DoorShuffle, SaveCrystals, ItemShops,
-InGameSettings, MenuToggle, Multipliers, EnemyShuffle, AnimGuard, ClockCleanup, GlowGuard, DeathLinkGame, FieldMoves, ItemSwap,
-PartyFit, CheckDetector, EnemyScaling, AttackBoost, MedalAssist, PartyMembers, KeptOpen, ShopSwap, WarpButton, QualityOfLife, SaveRedirect, WebSocketCompression, FrameRate, Abilities, DevConsole, TextProbe: all of them (the list
-unchanged, 167). Only `Hooks.cs` makes a Harmony instance now. A target an attribute can't name (an overload taking a
-private nested type, DevConsole's `DoDamage`) is given by the group's `TargetMethod`. Two hot reloads in a row
-(2026-09-28): each load's list had the same 167 patches and none left from the load before, so `UninstallAll` takes
-everything off. Where the methods to
-patch are found by reading the game's code at install time (FrameRate's lists, FrameSites, Abilities' scan), they
-stay patched by hand, on a `Hooks.Create` instance that `UninstallAll` still removes.
-SaveRedirect's group is `required`: without every redirect a randomizer save could land beside the normal ones, so a
-missing target still stops the plugin loading. Hooks that
-depend on each other are separate groups installed in order, each only if the one before went in. A hook that
-must run last says so with `[HarmonyPriority(Priority.Last)]`, which the dump's priority column shows. A coroutine's step is targeted with `MethodType.Enumerator`. Where one target carries several of
-our hooks of a kind, their run order matters (ItemSwap's pickup prefix before its berry prefix): hooks that must run
-in order are separate groups installed in that order, and the dump logs each such order to check against. A transpiler goes through `Hooks.Safe` and finds everything it needs before it changes anything. A feature whose hooks stand or fall
-together is its own group, its hook methods annotated in place; an optional hook gets a nested group of its own.
+**Hooks marked with attributes, the way BepInEx mods do** (2026-09-28). Each hook used to be wired by hand, with the
+same setup copied into every feature. Now each is marked with Harmony's attributes (`[HarmonyPatch]`,
+`[HarmonyPrefix]`...), and `Core/Hooks.cs` installs them:
+- **A group at a time.** A group is a class of attributed hooks with its own Harmony instance. A group with a missing
+  target installs nothing rather than half, and logs what the player loses.
+  - A feature whose hooks stand or fall together is its own group, annotated in place.
+  - An optional hook gets a nested group of its own.
+  - Hooks that depend on each other are separate groups installed in order, each only if the one before went in.
+  - SaveRedirect's group is `required`: without every redirect a randomizer save could land beside the normal ones,
+    so a missing target still stops the plugin loading.
+- **Order.** Where one target carries several of our hooks of a kind, their run order can matter (ItemSwap's pickup
+  prefix before its berry prefix): such hooks are separate groups installed in that order. A hook that must run last
+  says so with `[HarmonyPriority(Priority.Last)]`.
+- **Targets an attribute can't name.**
+  - A coroutine's step is reached with `MethodType.Enumerator`.
+  - An overload taking a private nested type (DevConsole's `DoDamage`) is reached through the group's `TargetMethod`.
+  - Where the methods to patch are found by reading the game's code at install time (FrameRate's lists, FrameSites,
+    Abilities' scan), they stay patched by hand, on a `Hooks.Create` instance.
+- **Transpilers** go through `Hooks.Safe` and find everything they need before they change anything: a transpiler that
+  throws would break its method for every later patch until the game restarts.
+- **Unloading:** `Hooks.UninstallAll` takes every group off. Only `Hooks.cs` makes a Harmony instance.
+
+**How "changed nothing" was proven:**
+- The Debug setting `PatchDump` writes every patch the mod made (target, kind, patch method, priority) once per load,
+  and logs the run order wherever one target has several of ours.
+- The HarmonyX members it reads (`GetAllPatchedMethods`, `GetPatchInfo`, `Patch.owner`/`priority`/`PatchMethod`) were
+  read at both tags, 2.7.0 (compiled against) and 2.9.0 (the game's), and match.
+- The baseline was taken in game at the main menu (HarmonyX 2.9.0.0): 167 patches.
+- After each batch of the 33 features, the list and the run order were identical.
+- Two hot reloads in a row gave the same 167 patches each time, with none left from the load before.
+
+**The dev tools in their own half** (2026-09-28). `Plugin` is a partial class. `Plugin.cs` holds what every build
+runs. `Dev/Plugin.Dev.cs` holds the [Debug] settings, the console, probes and dumps, reached through partial methods
+(`DevAwakeEarly`, `DevAfterTick`...). FrameRate's measurements work the same way. A build without `Dev/` still compiles,
+and the calls into it vanish.
 
 **Status:** done; separate guards per system built 2026-09-28, not yet seen in game; errors checked for instead of
 swallowed, built 2026-09-28 (both builds pass), not yet seen in game; hooks to attributes built 2026-09-28 (all 33

@@ -110,7 +110,6 @@ namespace BugFablesAP
             return t?.Name + "." + m.Name;
         }
 
-        private static string Name(MethodBase m) => m.DeclaringType?.Name + "." + m.Name;
 
         // The console's "trace [frames]": where the nearest NPC showing an emoticon, its emoticon and the player land on
         // screen in each drawn frame (x in pixels), to see which of them doesn't move with the smoothed camera.
@@ -124,7 +123,7 @@ namespace BugFablesAP
             return $"trace: {frames} frames";
         }
 
-        private static void Trace(Camera cam)
+        static partial void Trace(Camera cam)
         {
             if (traceLeft <= 0 || MainManager.player == null)
             {
@@ -178,6 +177,17 @@ namespace BugFablesAP
         private static readonly Stopwatch drawWork = new Stopwatch();
         private static float lastDrawMs;
 
+        static partial void DrawStarted()
+        {
+            drawWork.Restart();
+        }
+
+        static partial void DrawEnded()
+        {
+            drawWork.Stop();
+            lastDrawMs = (float)drawWork.Elapsed.TotalMilliseconds;
+        }
+
         // The console's "rates <seconds>": per second, how many sixtieths the frames were worth (Step) and how many frames
         // started a new sixtieth (OnTick). Both 60 means everything built on them runs as at 60 fps.
         private static float ratesUntil = -1f, ratesStart, stepSum;
@@ -192,7 +202,7 @@ namespace BugFablesAP
             return $"rates: measuring {seconds} s";
         }
 
-        private static void Rates()
+        static partial void Rates()
         {
             if (ratesUntil < 0f || Time.frameCount == ratesLastFrame)
             {
@@ -223,7 +233,7 @@ namespace BugFablesAP
             return $"frames: sampling {seconds} s";
         }
 
-        private static void Sample()
+        static partial void Sample()
         {
             if (sampleUntil < 0f)
             {
