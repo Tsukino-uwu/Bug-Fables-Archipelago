@@ -333,6 +333,11 @@ be wrong.
 39. **DeathLink** (the user, 2026-09-28): built, not yet seen, build step 25. A row in the Archipelago panel on the
    main menu, not a yaml option, so it can be switched mid-seed by going back to the main menu. **Auto-save between rooms**, its own Gameplay row, built, not yet seen
    (`documentation.md` step 31), so a death costs one room rather than a long way back.
+40. **The boat to Metal Island, always there in a seed** (the user, 2026-09-28, playing vanilla): chapter 6's story
+   takes the boat away (wasps attack it). In a seed the pier's boat should always be available, since the logic
+   (build step 16) gates Metal Island on the Boat Ticket and the pier only. Until then the logic is less cautious than
+   the game past that scene. First step: read the scene and the flag that removes the boat, and whether a seed can
+   reach it. Not built; nothing changed while the user plays vanilla.
 
 **Known issues:**
 
