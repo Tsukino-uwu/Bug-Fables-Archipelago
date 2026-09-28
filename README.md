@@ -2,7 +2,7 @@
 
 An [Archipelago](https://archipelago.gg) randomizer for *Bug Fables: The Everlasting Sapling*.
 
-**Status:** early work in progress. It covers the start of the game/chapter1
+**Status:** early work in progress. It covers the start of the game (chapter 1).
 
 ## Setup
 

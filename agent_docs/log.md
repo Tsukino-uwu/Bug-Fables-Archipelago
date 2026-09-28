@@ -1191,3 +1191,24 @@ Newest last. What was tried, what happened, what the user said.
   failure mid-way leaves the earlier ones patched, and order isn't guaranteed.
 - **Open, asked the user:** Enemy Shuffle across the whole game vs "never harder than the logic"; medal-shop stock
   available from a new file; dropping "(the user, date)" from the guides.
+
+## 2026-09-28 (morning): playtesting the start of a new file
+
+- **In game with the user, a local server and fresh seeds.** The login race fix and per-system guards ran clean.
+- **The Crunchy Leaf** was in the bag on a new file before any check: the mod's own opening skip redoes Event16's
+  `items[0].Add(0)`. The user chose to make it a check (build step 26, a new `source.added`); seen.
+- **Item animation, iterated with the user:** replays held up too ("all items appear, even on a reconnect"); then six
+  boxes at the start was "a bit much", so starting items and the three opening checks are quiet (`quiet_locations`);
+  the opening skip's own gift box had to respect that too. "Arrived after login" as the test for "its scene showed
+  it" missed a replay in a second new file of the same session (Meditation, no box: "I expected it to be remote");
+  replaced by `ItemSwap.ShownInScene`, only for checks not yet done. All seen.
+- **Items 5-10 s late after the opening:** measured with the flag probe's frame numbers (2800 frames). Cause, from
+  the code: a dimmer fade-out never reaches alpha 0, so `intransition` stays set for the 10 s failsafe. Fixed in
+  three rounds: ignore the invisible tail (870 frames left), give during a fade and hold only the box, box at 25%.
+  Items then given 5 frames after the opening; the user kept the ~1 s box wait.
+- **Found pickups hidden in every save** (build step 27, Pseudoregalia's way, the user's choice; respawning ones stay
+  the game's own; the trapdoor's story pickup stays). Then live, for a shared slot. Both seen, a check sent by a second
+  client via `send-as-player.py` on the user's own slot.
+- **Not done yet:** parts 2 and 3 of the review plan (the rest of MEASURED's corrections; Harmony attributes, lean
+  comments, dev tools out of the release). Open questions to the user: Enemy Shuffle across the whole game, medal-shop
+  stock from a new file, "(the user, date)" in the guides.
