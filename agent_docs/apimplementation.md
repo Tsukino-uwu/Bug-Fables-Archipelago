@@ -44,6 +44,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 30. [Build step 30: Room Swap (experimental)](#build-step-30-room-swap-experimental)
 31. [Build step 31: Decoupled doors (experimental)](#build-step-31-decoupled-doors-experimental)
 32. [Build step 32: Connection plando](#build-step-32-connection-plando)
+33. [Build step 33: Music Shuffle](#build-step-33-music-shuffle)
 
 **How it works**
 
@@ -421,7 +422,8 @@ be wrong.
       5. respawning checks leaving the outbox before the server confirms them.
     - **Required:** 6. the door shuffle in `connect_entrances`; 7. `style.md` (brackets, a trailing blank line, long
       Markdown lines).
-    - **The apworld and the website:** 8. option groups, presets, reST option texts with rich text, a bug report
+    - **The apworld and the website:** 8. option groups (the first, "Aesthetic Options", came with build step 33),
+      presets, reST option texts with rich text, a bug report
       page, the WebWorld's `game`; 9. `topology_present`; 10. location and item groups; 11. `World.world_version`,
       `Region.add_locations`, `options.as_dict`; 12. `start_inventory_from_pool`; 13. the Rule Builder's
       `OptionFilter` for Jump, `__str__` and `@override` on our rules, a caching benchmark; 14. Universal Tracker and
@@ -463,6 +465,10 @@ be wrong.
    build step 32). Next, a sweep of the
    rest, each read in Archipelago's own code and guides before it's built or written off: item plando proven on a seed,
    the options Archipelago provides for a world to add (`Options.py`), and boss plando once bosses are shuffled.
+47. **Music Shuffle** (2026-09-30, the user: in the yaml): built, not yet seen in game, build step 33. Next, **Sound
+   Effect Shuffle** (`sfx_shuffle`, smw's name), its own step. It widens the same `PlaySound` and `StopSound` hooks to
+   every sound (dialogue bleeps out), and also swaps `SoundIsPlaying`, the entity sounds and `PlayClipAtPoint`. A
+   loop stopped by name (`Rumble`, 21 times) must stop the sound that replaced it.
 
 **Known issues:**
 
@@ -3011,6 +3017,72 @@ shuffle test holds with plando on.
 **Status:** built, not yet seen in game (2026-09-30).
 
 *Code: `options.py` (`DoorPlando`), `entrances.py` (`_plando`), `data_tables.py` (`DOOR_NAMES`); tests `test_doors.py`.*
+
+## Build step 33: Music Shuffle
+
+A yaml option, off by default: every song plays in place of another, the same way every time the seed is played. No
+item, check or rule depends on it.
+
+**Decided (the user, 2026-09-30):**
+- **In the yaml, not the panel.** Every Archipelago world with a music shuffle has it as a yaml option (about 23 at
+  0.6.7). APQuest keeps its own cosmetics there too, in an "Aesthetic Options" group and in slot_data. The PC and mod
+  worlds roll the tracks at generation and send them in slot_data: celeste_open_world `music_map`, sa2b `MusicMap`,
+  saving_princess `music_table`.
+  - A shuffle is a random result, so it comes from the seed: the same tracks every session, on any computer, for
+    anyone playing the slot.
+  - A panel row would need the mod to roll its own.
+- **On/off**, named `music_shuffle`, the most common name (7 worlds).
+- **The jingles go with it**: the victory fanfare, the game over and the chapter titles swap among themselves.
+- **The world's first option group**, "Aesthetic Options", APQuest's name. The other options show under "Game Options"
+  until Next 43, item 8.
+- **Sound effects** get their own option and step, after this one is seen working.
+
+**How it was built (2026-09-30):**
+
+1. **The pool** (`music.py`): the game's 75 track names less seven that stay put (`MEASURED.md`, "Music and jingles"):
+   - the title, which plays before the client connects (saving_princess leaves its title out for the same reason);
+   - the four ambience beds Samira leaves out of her list;
+   - the factory elevator's pair, which the game crossfades on a sound slot, outside the music player.
+
+   The jingles are 11 sounds the game plays at music volume.
+2. **The roll:** in `generate_basic`, which `world api.md` gives "player-specific randomization that does not affect
+   logic".
+   - Each list becomes a permutation with the world's random, so every track still plays somewhere.
+   - It runs after every roll the logic depends on, so turning it on changes nothing else in the seed.
+   - slot_data `music_map` and `jingle_map`, `{name: name played in its place}`, are empty when the option is off.
+3. **The mod** (`MusicShuffle.cs`), after reading how the game plays music.
+   - **Why not swap the clip:** the game saves and replays the playing track by name, checks it by name (the victory
+     fanfare follows only the regular battle themes) and Samira counts each track as it plays. Swapping the clip
+     passed to `ChangeMusic` would break all three: a replayed track would be swapped twice, and Samira would count
+     what played instead of what the game meant.
+   - **What it does instead:** the game's player keeps its own track, muted. A second AudioSource plays the seed's
+     track and follows the player's volume, fades, pitch and pauses every frame. The game does the same for a music
+     zone: a track on its own source while the main player fades out.
+   - **When it runs:** in LateUpdate, after the game's coroutines, so a track the game starts is muted before it's
+     heard.
+   - **Loop points** come from the game's own table, for the track that plays.
+   - **After a battle** the game can resume the map track where it was; the voice resumes its own.
+4. **Samira:** her list counts the game's track, never the played one, so the shuffle can't change her all-songs
+   reward (her key item, a future location). While she plays a song, the mod steps aside: the song picked is the song
+   heard.
+5. **Jingles:** a prefix on the game's `PlaySound` and `StopSound` funnels swaps the clip. The stop swaps the same way,
+   so the game's own stop by name (`Gameover`) stops the jingle it started.
+6. **The guards:**
+   - It acts only with Archipelago enabled and a seed whose map isn't empty.
+   - A name the game doesn't have plays the game's own track, logged once.
+   - Every switch is logged (`[music] Field0 plays as Battle4`).
+7. **The preflight's import list** gained `OptionGroup` from `Options`, in a commit of its own.
+
+**Tests** (`test_music.py`):
+- off swaps nothing;
+- on, every pool track plays exactly once, the kept tracks never move, and the jingles swap among themselves;
+- the same seed with the option on or off gives the same slot_data otherwise, the same item pool and the same fill
+  randomness. It failed with the roll moved to the start of `generate_early`.
+
+**Status:** built, not yet seen in game (2026-09-30).
+
+*Code: `music.py`, `options.py` (`MusicShuffle`, `option_groups`), `web_world.py`, `world.py` (`generate_basic`),
+`slot_data.py`; the mod's `MusicShuffle.cs`; tests `test_music.py`.*
 
 # How it works
 
