@@ -1555,5 +1555,13 @@ Newest last. What was tried, what happened, what the user said.
   mod from the apworld's data, the seed's locations from the server, a world-version check on connect, slot_data
   left with the version, the options and the seed's rolls. `CLAUDE.md`'s "(2) The mod never departs" reworded to
   allow tables built from the same apworld, checked by world version (still 149 lines).
+- **A second look at what we kept** (the user: "is there anything else from Archipelago we are not following like
+  this one?"): the enemy shuffle belongs in `generate_basic` (AutoWorld's own note, checked); the library's item
+  queue to check; DeathLink, the user's call: both Archipelago's yaml option and the panel switch. The library's cache
+  bug, re-checked on the user's questions ("are we sure its an issue and not something we made up?"): real in 6.7.1
+  and `main`, never reported (six searches), no fix proposed (#124 only touches the file's timestamp). The user: a
+  text-only issue they post themselves, "I don't want to push AI code onto other projects/repos" (kept as a standing
+  preference); the draft is on the review page, item 27. Upstream #141 and #142 (others') would retire two of our
+  workarounds. Review items 24-28, Next 43.
 - **Next session:** `gh run list` first; push when told (the user: after the review); then Next 43, item 1, one step
   at a time. The text client is Next 9, after the review's bugs.

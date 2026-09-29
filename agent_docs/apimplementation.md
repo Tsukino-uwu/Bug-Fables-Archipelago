@@ -396,6 +396,10 @@ be wrong.
       venv, `--log_network`, a local WebHost preview, `/send_location`, the world maintainer's duties).
     - **With the room mapping:** 23. Archipelago's entrance randomizer in place of `doors.py` (build step 12), and
       what to prepare for it.
+    - **A second look at what we kept:** 24. the enemy shuffle in `generate_basic`; 25. items through the library's
+      queue (to check first); 26. Archipelago's DeathLink yaml option, the panel switch kept too (decided
+      2026-09-29); 27. the library's cache bug: a text-only issue, drafted, posted by the user if they decide to;
+      28. upstream #141 and #142, which would retire our compression switch and dead-socket close.
     - **Kept** (Archipelago has nothing for them) **and doesn't apply** (with why): on the review page.
 
 **Known issues:**
@@ -427,8 +431,9 @@ be wrong.
     certificate. Next: a connection to archipelago.gg with it on, run once the user says so.
   - **MultiClient.Net 6.7.1's cache path used the server's game name and checksum unsanitised** (its
     `GetFileSystemSafeFileName` returns its input). **Fixed in the mod (2026-09-29, the mod guide's step 34): two
-    patches make both a plain file name; not yet seen in game.** Not reported upstream: the user's decision for now
-    (2026-09-29).
+    patches make both a plain file name; not yet seen in game.** Not reported upstream yet: checked again
+    (2026-09-29), nobody has reported or fixed it; a text-only issue is drafted (the review page, item 27), for the
+    user to post if they decide to. Never code from us in another project.
 - **Horn rules:** written as `abilities: ["Horn Slash"]` since the horn became an item (build step 21): locations
   11, 19, 25, 30 and 32, and 31 through the Den's entrance (build step 13). Not location 2: the horn tutorial cuts its
   grass itself and played through with Leif alone (2026-09-25). **Upper Snakemouth, when it gets locations:** the big door in the door room stays shut until flag 14 (its closed

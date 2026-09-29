@@ -134,14 +134,61 @@ conventions the docs and APQuest show), *main only* (not in 0.6.7 yet).
     (`rule builder.md:64`, `entrance randomization.md:228-230`); `pairings` turned into `door_targets` (`:381-384`);
     and Menu joined to the random start's region.
 
+## A second look at what we kept (2026-09-29)
+
+After the slot_data decision, each kept item was checked again for a way Archipelago or its library does offer.
+
+24. **The enemy shuffle belongs in `generate_basic`** (checked): "Useful for randomizing things that don't affect logic
+    … i.e. … randomizing enemies" (`AutoWorld.py:408-413`); ours runs in `generate_early` (`world.py:61-63`). Map
+    fights can always be fled, so the shuffle doesn't affect the logic.
+25. **Receiving items through the library's queue** (to check first): MultiClient.Net documents `ItemReceived` and
+    `DequeueItem` (`docfx/helpers/helpers.md:55-68`); the mod polls `AllItemsReceived` against the count in the save
+    (`ItemReceiver.cs:81-123`), and the library's queue is never read. The queue restarts each session, so it has to
+    work with the save's count: read the library before changing it.
+26. **DeathLink: Archipelago's yaml option too.** Decided (the user, 2026-09-29): both. Archipelago's `DeathLink`
+    option (`DeathLinkMixin`, `Options.py:1495-1498, 1726-1728`) sets it for the seed and turns the panel switch on or
+    off at login; the panel switch stays, to change it mid-seed.
+27. **The library's cache bug, reported upstream** (checked in its source, 6.7.1 and `main`): `GetFileSystemSafeFileName`
+    returns its input unchanged, and the read uses the checksum uncleaned. No issue or pull request mentions it (six
+    searches, 2026-09-29), and the file hasn't changed since 2024-05-27; PR #124 touches the same file but not this.
+    Decided (the user, 2026-09-29): if reported, a text-only issue the user posts; never code from us. Our patch stays
+    until a fixed release. The draft is below.
+28. **Two of our workarounds have fixes waiting upstream,** opened by others: #141 (websocket-sharp compression on the
+    older targets; our compression switch) and #142 (releasing the socket, its loops and the session on disconnect;
+    our dead-socket close). When a release carries them, ours go.
+
+**The draft issue** (for <https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net/issues/new>):
+
+> **Title:** Data package cache: GetFileSystemSafeFileName returns its input unchanged, and the checksum is used
+> unsanitized
+>
+> Version 6.7.1, and `main` (the file last changed in #88).
+>
+> In `Archipelago.MultiClient.Net/DataPackage/FileSystemCheckSumDataPackageProvider.cs`:
+>
+> - `GetFileSystemSafeFileName` (line 61) removes invalid characters from `gameName`, but returns `safeName`, which
+>   was copied from `gameName` before the loop (line 63), so it always returns the name unchanged.
+> - `TryGetDataPackage` (line 22) builds the file path from `checksum` without passing it through
+>   `GetFileSystemSafeFileName` at all.
+>
+> The game name and the checksum both come from the server. A name or checksum containing `..` or path separators
+> goes into the cache path as it is, so the server can choose which file is read (line 22) and where a `.json` file
+> is written (`SaveDataPackageToFile`, lines 45-46), outside `Archipelago/Cache/datapackage/`. A character that is
+> invalid in a file name on the platform makes the cache fail instead of being removed.
+>
+> Expected: both the folder and the file name are the cleaned names.
+>
+> Found by reading the source; not reproduced against a server sending such names. I searched the existing issues
+> and pull requests and found nothing about this; #124 changes the same file, but not these lines.
+
 ## Kept, because Archipelago has nothing for it
 
-Closing a dead socket ourselves (the library's `Disconnect` closes only a live one); the offline record of checks
-sent; reconnecting with a backoff; the compression switch (the net40 library never turns it on); the received count
-in the save, read against `AllItemsReceived` (the library's index resets each session, so its queue goes unread);
-the Harmony fix for the library's cache file names (a library bug, still on `main`); the enemy shuffle; the pool's
-make-room step; the DeathLink panel row (a switch mid-seed, the user's choice; no doc asks for a yaml option); our
-slot_data reader (it tolerates missing keys).
+Closing a dead socket ourselves (the library's `Disconnect` closes only a live one; until #142, item 28); the offline
+record of checks sent; reconnecting with a backoff; the compression switch (the net40 library never turns it on;
+until #141, item 28); the received count in the save (the library's index resets each session; its queue, item 25);
+the Harmony fix for the library's cache file names (until a fixed release, item 27); the enemy shuffle itself (its
+step, item 24); the pool's make-room step; the DeathLink panel switch, next to Archipelago's yaml option (item 26);
+our slot_data reader (it tolerates missing keys).
 
 ## Doesn't apply, and why
 
