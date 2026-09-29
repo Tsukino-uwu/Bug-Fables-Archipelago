@@ -1477,7 +1477,16 @@ Newest last. What was tried, what happened, what the user said.
 - **CI, the user's call:** the Crystal dev runs tests and fuzzing on every commit and acts only on the failure email.
   We do the same: `ci.yml` gains a `fuzz` job (`test-apworld.ps1` under `pwsh`, the fuzzer at `53686ba`, the Logic
   Test at `795f13b`, 30-minute limit, failed runs kept as an artifact), and the build moves out of the 3.13 leg into
-  its own job. No one waits on CI after a push; `gh run list` once when a session starts (the agent's memory).
+  its own job. No one waits on CI after a push; `gh run list` once when a session starts (now in `CLAUDE.md`).
   Actions are free on standard runners for a public repo (GitHub's billing docs, 2026-09-29). `test-apworld.ps1`
   now sets its own error preference and builds the `-g` list with a loop, for `pwsh` on Linux. Not run on
   Linux yet: no `pwsh` here, so the first push is its first run. Locally: 0 of 10000.
+- **`CLAUDE.md` trimmed, the user's go-ahead:** 150 to 144 lines with nothing lost. Two bullets saying the same
+  thing (the user verifies the game; nothing in-game is verified until seen) became one, the measurements half
+  moving into the `MEASURED.md` bullet; the finished sentence "this must exist before the mod grants its first item"
+  (separate saves, checked on disk 2026-09-24) went; four bullets were rewrapped. A word diff against the old file
+  showed nothing else dropped. The freed room holds the CI rule, which moved there from the agent's memory.
+  **Asked:** would cutting more make it worse? Yes: the rest is reasons, the user's dated calls and named
+  exceptions, which are what let a rule be applied right in a case no one foresaw.
+- **Next session:** read `gh run list` first; the push at the end of this session is the new `fuzz` and `build`
+  jobs' first run (`pwsh` on Linux untried). Then the game in a Logic Test room (Next 42).
