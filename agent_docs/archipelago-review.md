@@ -161,27 +161,19 @@ After the slot_data decision, each kept item was checked again for a way Archipe
 
 **The draft issue** (for <https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net/issues/new>):
 
-> **Title:** Data package cache: GetFileSystemSafeFileName returns its input unchanged, and the checksum is used
-> unsanitized
+The user writes their own first line (saying it was found with AI); the rest, kept plain and short:
+
+> **Title:** GetFileSystemSafeFileName doesn't actually sanitize anything
 >
-> Version 6.7.1, and `main` (the file last changed in #88).
+> In `DataPackage/FileSystemCheckSumDataPackageProvider.cs`, `GetFileSystemSafeFileName` strips the invalid
+> characters from `gameName` but returns `safeName`, which is still the original string. So nothing gets removed.
 >
-> In `Archipelago.MultiClient.Net/DataPackage/FileSystemCheckSumDataPackageProvider.cs`:
+> The checksum in `TryGetDataPackage` (line 22) doesn't go through it at all.
 >
-> - `GetFileSystemSafeFileName` (line 61) removes invalid characters from `gameName`, but returns `safeName`, which
->   was copied from `gameName` before the loop (line 63), so it always returns the name unchanged.
-> - `TryGetDataPackage` (line 22) builds the file path from `checksum` without passing it through
->   `GetFileSystemSafeFileName` at all.
+> Both come from the server, so a game name or checksum with `../` in it can point the cache read/write outside the
+> datapackage folder.
 >
-> The game name and the checksum both come from the server. A name or checksum containing `..` or path separators
-> goes into the cache path as it is, so the server can choose which file is read (line 22) and where a `.json` file
-> is written (`SaveDataPackageToFile`, lines 45-46), outside `Archipelago/Cache/datapackage/`. A character that is
-> invalid in a file name on the platform makes the cache fail instead of being removed.
->
-> Expected: both the folder and the file name are the cleaned names.
->
-> Found by reading the source; not reproduced against a server sending such names. I searched the existing issues
-> and pull requests and found nothing about this; #124 changes the same file, but not these lines.
+> Checked 6.7.1 and main. Didn't find an existing issue or PR for it (#124 touches the same file but not this).
 
 ## Kept, because Archipelago has nothing for it
 
