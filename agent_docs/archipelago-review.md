@@ -82,8 +82,12 @@ conventions the docs and APQuest show), *main only* (not in 0.6.7 yet).
 ## Recommended: the client
 
 18. **Room messages:** nothing in the mod shows `PrintJSON` ("sent to clients purely to display a message to the
-    player", `network protocol.md:173, 189`), and it doesn't send `NoText` (`:779`). Show them, or say so; until then
-    the player docs point to the Text Client for `!hint`, `!release` and `!collect` (`commands_en.md:13-15`).
+    player", `network protocol.md:173, 189`), and it doesn't send `NoText` (`:779`). **Chosen (the user,
+    2026-09-29): show them**, in the in-game text client already planned (`apimplementation.md`, Next 9; the design in
+    the mod guide, step 2): a feed in the bottom-left corner (items sent and received, joins and leaves, DeathLinks),
+    a filter per kind of message, and hints and commands typed in game, built on the library's message log and `Say`.
+    Until it exists, the player docs point to the Launcher's Text Client for `!hint`, `!release` and `!collect`
+    (`commands_en.md:13-15`).
 19. **Connect:** a `uuid` kept in Archipelago's `common.json` (`network protocol.md:298`, `shared_cache.md:12`; the
     library makes a new one each time); the targeted Archipelago version, not the library's default 0.6.0
     (`network protocol.md:299`); the DeathLink tag in Connect, with `ConnectUpdate` only for changes (the room is told

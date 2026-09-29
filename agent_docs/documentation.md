@@ -98,7 +98,12 @@ A few decisions made first, because they shape everything after:
     on/off switch in the Archipelago panel. Items arriving from the server show up only there, never as a
     popup. **Later, it becomes a real text client** (2026-09-24): a key opens a text line over
     the feed, so server commands like `!hint` work in game. The game's controls pause while typing, and the
-    server's replies show in the feed.
+    server's replies show in the feed. **Also** (2026-09-29, the user: so "people won't have to use the archipelago
+    launcher text client"): DeathLinks show in the feed too, and each kind of message can be hidden (a filter per
+    kind), with hints and the server's other commands typed from the text line. Built the Archipelago way: the client
+    library's message log (the server's `PrintJSON`), its kinds as the filter's categories (item sent, hint, join,
+    leave, chat, goal, release, collect, countdown and the rest), its message parts for the colours, and `Say` for
+    chat and commands.
   - **Item names are coloured the way Archipelago's clients colour them** (`NetUtils.py`): progression plum
     `#AF99EF`, useful slateblue `#6D8BE8`, trap salmon `#FA8072`, filler cyan `#00EEEE`.
 - **Read what others already solved.** We read the TEVI randomizer (another Unity mod), Pokémon Emerald's

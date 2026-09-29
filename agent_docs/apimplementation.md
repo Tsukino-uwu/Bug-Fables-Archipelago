@@ -85,7 +85,9 @@ be wrong.
    (build step 3).
 8. **A release: three separate downloads** (2026-09-25): built, see build step 17; v0.1.0 out
    (2026-09-26), v0.2.0 (2026-09-27). The next one: `dev-scripts/release.ps1 -Version vX.Y.Z` after bumping both versions.
-9. **The chat feed**, then the in-game text client (see the design list in the mod guide, step 2).
+9. **The chat feed**, then the in-game text client (see the design list in the mod guide, step 2), so players never
+   need the Launcher's Text Client (2026-09-29: DeathLinks shown too, a filter per kind of message, hints and
+   commands from the text line). It is the answer to Next 43, item 18.
 10. **A "Quality of life" page in the Archipelago panel** (2026-09-25): on/off rows that speed the game
    up and make it smoother: skips first, others later. Battle tutorials next (the mod guide, step 10).
 11. **Map fast travel, built (2026-09-26; the mod guide, step 10), seen travelling to the Outskirts** (planned
@@ -384,7 +386,8 @@ be wrong.
       necessary".
     - **Tests:** 16. the base in `test/bases.py` and Archipelago's generic tests in CI; 17. test hygiene (no repeated
       default runs, plain `TestCase` where no multiworld is used, options written out, `assertAccessDependency`).
-    - **The client:** 18. room messages shown in game (or `NoText`), the Text Client meanwhile; 19. the Connect
+    - **The client:** 18. room messages shown in game: the in-game text client (Next 9), the Launcher's Text
+      Client named in the player docs until then; 19. the Connect
       packet (a kept `uuid`, the right version, DeathLink's tag, hooks before connecting); 20. the rest (a refusal
       with no codes, `InvalidPacket`, the library's `SetGoalAchieved`, `AllLocations`, `GetRaceModeAsync`,
       `ColorUtils` and Analyzers, `ClientPlaying`).
