@@ -399,7 +399,7 @@ be wrong.
     - **A second look at what we kept:** 24. the enemy shuffle in `generate_basic`; 25. items through the library's
       queue (to check first); 26. Archipelago's DeathLink yaml option, the panel switch kept too (decided
       2026-09-29); 27. the library's cache bug: a text-only issue, drafted, posted by the user if they decide to;
-      28. upstream #141 and #142, which would retire our compression switch and dead-socket close.
+      28. upstream #141, which would retire our compression switch once released (#142 doesn't cover our net40 build).
     - **Kept** (Archipelago has nothing for them) **and doesn't apply** (with why): on the review page.
 
 **Known issues:**

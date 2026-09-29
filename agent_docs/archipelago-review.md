@@ -153,9 +153,11 @@ After the slot_data decision, each kept item was checked again for a way Archipe
     searches, 2026-09-29), and the file hasn't changed since 2024-05-27; PR #124 touches the same file but not this.
     Decided (the user, 2026-09-29): if reported, a text-only issue the user posts; never code from us. Our patch stays
     until a fixed release. The draft is below.
-28. **Two of our workarounds have fixes waiting upstream,** opened by others: #141 (websocket-sharp compression on the
-    older targets; our compression switch) and #142 (releasing the socket, its loops and the session on disconnect;
-    our dead-socket close). When a release carries them, ours go.
+28. **One of our workarounds has a fix waiting upstream** (checked in each pull request's diff, 2026-09-29): #141,
+    opened by someone else, turns on websocket-sharp's compression in the websocket-sharp helper and the DLL our net40
+    build uses (`DLLs/websocket-sharp.dll`), so our compression switch can go once a release carries it and we have
+    seen it work. #142 (releasing the socket on disconnect) changes only the `System.Net.WebSockets` helper, which
+    net40 doesn't use: it would not retire our dead-socket close. Neither is merged; until then, ours stay.
 
 **The draft issue** (for <https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net/issues/new>):
 
@@ -183,7 +185,7 @@ After the slot_data decision, each kept item was checked again for a way Archipe
 
 ## Kept, because Archipelago has nothing for it
 
-Closing a dead socket ourselves (the library's `Disconnect` closes only a live one; until #142, item 28); the offline
+Closing a dead socket ourselves (the library's `Disconnect` closes only a live one; #142 doesn't cover net40, item 28); the offline
 record of checks sent; reconnecting with a backoff; the compression switch (the net40 library never turns it on;
 until #141, item 28); the received count in the save (the library's index resets each session; its queue, item 25);
 the Harmony fix for the library's cache file names (until a fixed release, item 27); the enemy shuffle itself (its

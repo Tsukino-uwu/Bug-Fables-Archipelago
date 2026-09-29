@@ -1561,7 +1561,9 @@ Newest last. What was tried, what happened, what the user said.
   bug, re-checked on the user's questions ("are we sure its an issue and not something we made up?"): real in 6.7.1
   and `main`, never reported (six searches), no fix proposed (#124 only touches the file's timestamp). The user: a
   text-only issue they post themselves, "I don't want to push AI code onto other projects/repos" (kept as a standing
-  preference); the draft is on the review page, item 27. Upstream #141 and #142 (others') would retire two of our
-  workarounds. Review items 24-28, Next 43.
+  preference); the draft is on the review page, item 27. Upstream #141 (others') would retire our compression switch
+  once released; I first said #142 would retire our dead-socket close too, but its diff touches only the
+  `System.Net.WebSockets` helper, which our net40 build doesn't use (the user's "those are fixes we won't have to
+  worry about later?" prompted the check). Review items 24-28, Next 43.
 - **Next session:** `gh run list` first; push when told (the user: after the review); then Next 43, item 1, one step
   at a time. The text client is Next 9, after the review's bugs.
