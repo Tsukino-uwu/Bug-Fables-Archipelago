@@ -1828,7 +1828,8 @@ BepInEx is not bundled; the player installs it first.
    step 28) the files are checked against the commit before they are uploaded and again once published, and the
    apworld and yaml carry GitHub's provenance attestation.
 5. **One command cuts it:** `dev-scripts/release.ps1 -Version v0.1.0 [-HighlightsFile notes.md]` (add `-Prerelease`
-   only for a test build: a pre-release never shows as Latest, which hides it; 2026-09-26). It
+   only for a test build: a pre-release never shows as Latest, which hides it; 2026-09-26; since releases became
+   immutable on 2026-09-29, a pre-release stays a draft with its files until published from the releases page). It
    refuses unless the versions match, `main` is clean and not behind, and the tag is free. Then its preflight runs
    the stale gate; a stale DLL is rebuilt and committed on the spot, and the gate runs again. Then it pushes, waits
    for CI and the preflight workflow to go green, dispatches the release and waits for it to publish. Running it
@@ -2524,9 +2525,21 @@ character, no game file, and no binary other than the release DLLs. It first fla
 Writing the server-data part meant tracing every server input through the mod. That turned up three gaps, each
 confirmed in the code, listed under Known issues in "Where it stands" above.
 
+**GitHub's own settings (2026-09-29, each on the user's yes, set with `gh api` and read back):**
+- **Secret scanning and push protection:** already on. GitHub refuses a push carrying a known token format.
+- **Private vulnerability reporting:** on, for `SECURITY.md`'s *Report a vulnerability* button.
+- **Immutable releases:** a published release's files and tag can't be changed.
+  - The release action already uploads to a draft before publishing, so releases work unchanged.
+  - A pre-release, which it would publish first, now stays a draft with its files, to be published from the
+    releases page.
+- **Two rulesets, with no one allowed to bypass them:**
+  - `main` can't be force-pushed or deleted, so history can't be rewritten out of sight.
+  - `v*` tags can't be deleted or moved, so a release always points at the commit it was checked on.
+
 **Status:** built (2026-09-29): the sections above, their test, `verify-release.py`, every place they run
 (pre-commit, pre-push, CI on every push, the release) and the reviewer pages. The CI half runs for the first time on
-the next push. Next: the GitHub settings (each on the user's yes), and the review's three findings (Known issues).
+the next push; the GitHub settings are on. Next: the agent's guard in `.claude/settings.json`, and the review's two
+remaining findings (Known issues).
 
 *Code: `dev-scripts/preflight.py`, `dev-scripts/preflight-patterns.json`, `dev-scripts/dotnet_metadata.py`;
 `docs/capabilities.md`;

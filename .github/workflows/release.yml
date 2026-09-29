@@ -165,6 +165,9 @@ jobs:
           # The commit that was checked, not whatever main has become since.
           target_commitish: ${{ github.sha }}
           prerelease: ${{ inputs.prerelease }}
+          # Releases are immutable once published, and this action publishes a pre-release before uploading its files:
+          # so a pre-release stays a draft, files attached, to be published from the releases page.
+          draft: ${{ inputs.prerelease }}
           files: |
             dist/bugfables-archipelago.zip
             dist/bug_fables.apworld
@@ -176,6 +179,8 @@ jobs:
   # After publishing: what anyone downloads now is checked again, against the tag.
   verify:
     needs: publish
+    # A pre-release is still a draft here (above).
+    if: ${{ !inputs.prerelease }}
     runs-on: ubuntu-latest
     permissions:
       contents: read

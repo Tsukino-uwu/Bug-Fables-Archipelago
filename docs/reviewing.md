@@ -218,6 +218,12 @@ same person wrote both. Here is what can be checked.
 - **A copy from anywhere else.** All of this is about this repository and its releases page. A file from somewhere
   else is not covered.
 
+**What GitHub itself enforces** (since 2026-09-29):
+- A published release can't be changed: its files and its tag stay what was checked.
+- Release tags can't be moved or deleted.
+- `main` can't be force-pushed, so its history can't be rewritten.
+- A push carrying a known token format is refused.
+
 ## How it's built
 
 - **Two process guides record every step, and a commit hook enforces them:** a commit that changes the mod, the
