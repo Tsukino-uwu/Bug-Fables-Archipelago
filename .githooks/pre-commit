@@ -1,27 +1,8 @@
 #!/bin/sh
-# Refuses a commit that adds a home path or this machine's user or computer name to a tracked file.
-# The names come from the environment at commit time, so they never have to be written down here.
+# Every commit: dev-scripts/preflight.py over exactly what is staged (docs/reviewing.md says what each section
+# refuses), then doc-coverage.py: every yaml option, setting, slot_data key and source file must be written up.
+root=$(git rev-parse --show-toplevel) || exit 1
+. "$root/.githooks/python.sh"
 
-# The hook itself is excluded: it has to spell out the patterns it looks for.
-added=$(git diff --cached -U0 --no-color -- . ':(exclude).githooks' | grep '^+' | grep -v '^+++')
-[ -z "$added" ] && exit 0
-
-fail=0
-check() {
-    if printf '%s\n' "$added" | grep -i -F -q -- "$1"; then
-        echo "pre-commit: staged changes contain $2. Genericize it (\"your Bug Fables install\")." >&2
-        fail=1
-    fi
-}
-
-check 'C:\Users\' 'a Windows home path'
-check '/c/Users/' 'a Windows home path'
-check '/home/' 'a home path'
-[ -n "$USERNAME" ] && check "$USERNAME" 'your user name'
-[ -n "$USER" ] && [ "$USER" != "$USERNAME" ] && check "$USER" 'your user name'
-[ -n "$COMPUTERNAME" ] && check "$COMPUTERNAME" 'this machine name'
-
-# Every yaml option, setting, slot_data key and source file must be written up (doc-coverage.py says which).
-python "$(git rev-parse --show-toplevel)/.githooks/doc-coverage.py" || fail=1
-
-exit $fail
+run_python -B "$root/dev-scripts/preflight.py" --quiet || exit 1
+run_python -B "$root/.githooks/doc-coverage.py" || exit 1

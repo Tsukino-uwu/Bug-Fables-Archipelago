@@ -50,17 +50,14 @@ jobs:
             echo "::error::tag $VERSION already exists"; exit 1
           fi
 
-      - name: No machine-specific path in the release body
+      # preflight's text rules: no home path, credential, hidden character or unlisted host.
+      - name: Nothing unpublishable in the release body
         env:
           HIGHLIGHTS: ${{ inputs.highlights }}
         run: |
           set -u
           fail=0
-          # Kept in .githooks, which the pre-commit hook skips because it has to spell them out.
-          PATTERNS='-f .githooks/release-path-patterns.txt'
-          if printf '%s' "$HIGHLIGHTS" | grep -qIF $PATTERNS; then
-            echo "::error::The highlights contain a machine-specific path."; fail=1
-          fi
+          printf '%s' "$HIGHLIGHTS" | python3 dev-scripts/preflight.py --text-stdin highlights || fail=1
           # gh sends a file's path as the text when the @ is missing.
           lines=$(printf '%s' "$HIGHLIGHTS" | grep -c '' || true)
           if [ "$lines" = "1" ] && printf '%s' "$HIGHLIGHTS" | grep -qE '^([A-Za-z]:[\\/]|[.]{0,2}/)[^ ]*$|^[^ ]+\.(md|txt)$'; then
@@ -69,10 +66,7 @@ jobs:
           # The generated notes publish every commit subject since the last tag.
           prev=$(git tag --sort=-v:refname | head -n 1 || true)
           range="${prev:+$prev..}HEAD"
-          if git log --format=%s $range | grep -qIF $PATTERNS; then
-            echo "::error::A commit subject in $range contains a machine-specific path."
-            git log --format=%s $range | grep -nIF $PATTERNS; fail=1
-          fi
+          git log --format=%s $range | python3 dev-scripts/preflight.py --text-stdin "commit subjects in $range" || fail=1
           exit $fail
 
   ci:

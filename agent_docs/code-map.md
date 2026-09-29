@@ -178,14 +178,22 @@ Sources are grouped in folders under `mod/BugFablesAP/`; the namespace is `BugFa
 
 | File | What it does | Notes |
 |---|---|---|
-| [`commit-msg`](../.githooks/commit-msg) | Refuses a subject over 72 characters or naming who decided, and a commit touching `mod/`, `apworld/` or `dev-scripts/` without a process guide, unless the message says `docs: no process change`. | [documentation § Keeping this guide honest](documentation.md#keeping-this-guide-honest) |
-| [`pre-commit`](../.githooks/pre-commit) | Refuses a home path or this machine's user or computer name in a tracked file; runs doc-coverage.py. | [documentation § Keeping this guide honest](documentation.md#keeping-this-guide-honest) |
+| [`commit-msg`](../.githooks/commit-msg) | Refuses a subject over 72 characters or naming who decided, a change to the preflight gate mixed with mod or apworld code, and a commit touching `mod/`, `apworld/` or `dev-scripts/` without a process guide, unless the message says `docs: no process change`. | [apimplementation § Build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release)<br>[documentation § Keeping this guide honest](documentation.md#keeping-this-guide-honest) |
+| [`pre-commit`](../.githooks/pre-commit) | Runs preflight.py over what is staged, then doc-coverage.py. | [apimplementation § Build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release)<br>[documentation § Keeping this guide honest](documentation.md#keeping-this-guide-honest) |
 | [`doc-coverage.py`](../.githooks/doc-coverage.py) | Refuses an option, setting, slot_data key or source file that no guide or this map names. | [documentation § Keeping this guide honest](documentation.md#keeping-this-guide-honest) |
 | [`.editorconfig`](../.editorconfig) | The code style editors apply: 4-space indents, braces on their own line, lines up to 120. | [development § The mod](development.md#the-mod) |
 | [`nuget.config`](../nuget.config) | The two package feeds, and which packages each may serve. | [documentation § 32. A release DLL anyone with the game can rebuild](documentation.md#32-a-release-dll-anyone-with-the-game-can-rebuild-byte-for-byte) |
 | [`global.json`](../global.json) | The .NET SDK every build uses. | [documentation § 32. A release DLL anyone with the game can rebuild](documentation.md#32-a-release-dll-anyone-with-the-game-can-rebuild-byte-for-byte) |
 | [`Directory.Build.props`](../Directory.Build.props) | Stops MSBuild picking up build files from outside the repo. | [documentation § 32. A release DLL anyone with the game can rebuild](documentation.md#32-a-release-dll-anyone-with-the-game-can-rebuild-byte-for-byte) |
-| [`release-path-patterns.txt`](../.githooks/release-path-patterns.txt) | The personal-path patterns release.yml checks the release notes for. | [apimplementation § Build step 17](apimplementation.md#build-step-17-a-release) |
+| [`python.sh`](../.githooks/python.sh) | Finds a Python 3.11 or newer that really runs, for every hook. | [apimplementation § Build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release) |
+
+## Preflight
+
+| File | What it does | Notes |
+|---|---|---|
+| [`preflight.py`](../dev-scripts/preflight.py) | The gate: reads what git holds and refuses anything unpublishable or harmful, section by section; `--history` for every commit, `--text-stdin` for release notes. | [apimplementation § Build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release)<br>[reviewing](../docs/reviewing.md) |
+| [`preflight-patterns.json`](../dev-scripts/preflight-patterns.json) | What each section refuses, and the few things let through by name. | [apimplementation § Build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release) |
+| [`capabilities.md`](../docs/capabilities.md) | Everything the code may do beyond its own files, with the reason; exact, checked by preflight.py. | [apimplementation § Build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release) |
 
 ## Release
 

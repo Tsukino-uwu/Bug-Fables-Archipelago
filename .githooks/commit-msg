@@ -1,14 +1,22 @@
 #!/bin/sh
 # Every commit: a subject of at most 72 characters, with no attribution (who decided goes in log.md).
+# A change to the preflight gate (its scripts and patterns, the hooks, the workflows) is a commit of its own, never
+# mixed with mod/ or apworld/ code, so every change to what is checked stands alone in the history.
 # A commit touching mod/, apworld/ or dev-scripts/ must update a process guide (agent_docs/documentation.md
 # or apimplementation.md), unless its message has this line on its own:
 #   docs: no process change
 
 msg_file="$1"
+root=$(git rev-parse --show-toplevel) || exit 1
+. "$root/.githooks/python.sh"
 
 subject=$(grep -v '^#' "$msg_file" | sed -n '1p')
 # Characters, not bytes: a name like Pokémon counts once.
-length=$(printf '%s' "$subject" | python -c "import sys; print(len(sys.stdin.buffer.read().decode('utf-8')))")
+length=$(printf '%s' "$subject" | run_python -c "import sys; print(len(sys.stdin.buffer.read().decode('utf-8')))")
+case "$length" in
+    ''|*[!0-9]*) echo "commit-msg: could not measure the subject ($length); refusing rather than passing unchecked." >&2
+        exit 1 ;;
+esac
 if [ "$length" -gt 72 ]; then
     echo "commit-msg: the subject is $length characters; keep it to 72 (details go in the body)." >&2
     exit 1
@@ -18,6 +26,15 @@ if printf '%s' "$subject" | grep -qi '(the user'; then
     exit 1
 fi
 staged=$(git diff --cached --name-only)
+
+gate=$(printf '%s\n' "$staged" |
+    grep -E '^(dev-scripts/(preflight|negative-test-preflight|dotnet_metadata)|\.githooks/|\.github/|\.claude/)' | head -1)
+code=$(printf '%s\n' "$staged" | grep -E '^(mod|apworld)/' | head -1)
+if [ -n "$gate" ] && [ -n "$code" ]; then
+    echo "commit-msg: $gate is part of the preflight gate and $code is code; commit them apart, so a change" >&2
+    echo "  to what is checked is always a commit of its own." >&2
+    exit 1
+fi
 
 touches_work=$(printf '%s\n' "$staged" | grep -E '^(mod|apworld|dev-scripts)/' | head -1)
 [ -z "$touches_work" ] && exit 0

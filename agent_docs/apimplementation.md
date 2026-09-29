@@ -39,6 +39,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 25. [Build step 25: DeathLink, a panel row](#build-step-25-deathlink-a-panel-row)
 26. [Build step 26: the tutorial leaf, an item the story puts in the bag](#build-step-26-the-tutorial-leaf-an-item-the-story-puts-in-the-bag)
 27. [Build step 27: a found pickup is gone in every save](#build-step-27-a-found-pickup-is-gone-in-every-save)
+28. [Build step 28: nothing unpublishable in the repo or a release](#build-step-28-nothing-unpublishable-in-the-repo-or-a-release)
 
 **How it works**
 
@@ -1806,9 +1807,9 @@ BepInEx is not bundled; the player installs it first.
    in) and the template (`Launcher.py "Generate Template Options" -- --skip_open_folder`), then generates once more
    the way a player would: the built `.apworld` in `custom_worlds`, the template as the yaml, no loose world.
 4. **The release** (`.github/workflows/release.yml`, run by hand): a guard first (the version is `vX.Y.Z` and
-   matches `Plugin.cs` and `world_version`; the tag is free; no personal path in the highlights or in any commit
-   subject the generated notes will publish; the patterns live in `.githooks/release-path-patterns.txt`, since the
-   pre-commit hook refuses them anywhere else), then CI and the stale gate, then the publish job zips `release/mod/BepInEx` and attaches
+   matches `Plugin.cs` and `world_version`; the tag is free; nothing unpublishable in the highlights or in any commit
+   subject the generated notes will publish, checked by the preflight's text rules since 2026-09-29, build step 28),
+   then CI and the stale gate, then the publish job zips `release/mod/BepInEx` and attaches
    the three files. The body is the highlights (changes and new features, or nothing) plus GitHub's generated notes.
    `softprops/action-gh-release` is pinned to a commit, since it runs with write access.
 5. **One command cuts it:** `dev-scripts/release.ps1 -Version v0.1.0 [-HighlightsFile notes.md]` (add `-Prerelease`
@@ -2260,6 +2261,75 @@ they exist (`MapControl.cs:1262-1265`). A postfix now turns every entity the mod
 **Status:** works, seen on screen (2026-09-28): a floor item, on the next entry into its room; a crystal berry not yet seen.
 
 *Code: `KeptOpen.cs` (`AfterCreate`, the found pickups), `ItemSwap.Pickups.cs` (`IsPickup`, now shared).*
+
+---
+
+## Build step 28: nothing unpublishable in the repo or a release
+
+**Why (2026-09-29):** the Archipelago community's Developer Code of Conduct makes whoever publishes a project answer
+for all of it: where the code came from, what it does, and that a release holds exactly what the repository holds.
+Everyone who runs the mod or the apworld trusts it with their machine. So the repository now refuses, by itself,
+anything that couldn't be published or could harm whoever runs it, and a reviewer can check each of those claims
+without taking the author's word for it ([docs/reviewing.md](../docs/reviewing.md)).
+
+**One gate: `dev-scripts/preflight.py`.** It reads what git holds, which is exactly what a commit contains, never the
+working copy, and runs a list of sections that each pass or fail on their own. It needs only Python's standard library
+and git, so anyone can run it. Two files hold everything it decides by:
+- **`dev-scripts/preflight-patterns.json`:** what each section refuses (credential formats, home-path patterns, game
+  file names), and the few things let through by name (the four release DLLs, the libraries' hashes).
+- **`docs/capabilities.md`:** everything the code may do that reaches beyond its own files, each with its reason.
+  It is exact: something the code does that isn't listed fails, and so does a row nothing uses any more.
+  Adding a row is the maintainer's decision.
+
+A section that finds nothing to check fails rather than passing: "0 files scanned" would otherwise look like
+"0 problems".
+
+**The first sections (2026-09-29):**
+- **Hooks armed:** this clone runs the hooks, and the hooks are marked executable (on Linux and macOS, git silently
+  skips a hook that isn't).
+- **Index sanity:** plain files only (no links, submodules or conflicts), names that work on every system, no two
+  paths differing only in case.
+- **Known kinds only:** every file matches a kind in the patterns file ("a C# file of the mod", "a player doc"); a
+  file of any other kind fails.
+- **Binaries:** the only binary files are the four release DLLs, each a .NET assembly, and the three libraries are
+  byte for byte the files NuGet ships.
+- **Hidden characters:** no invisible, bidirectional or control character anywhere. Those can make code read
+  differently from what runs (the "Trojan Source" trick). In code, the only non-ASCII characters are `é`, `…` and `±`.
+- **Encoded blobs and long lines:** no long base64 or hex run, and no code line over 1000 characters, where a payload
+  could hide.
+- **Secrets:** no token, key or webhook in any file, the mod's DLL included.
+- **Personal paths and names:** no home-folder path, and not this machine's user or computer name, in any file, the
+  DLL included. This replaced the old pre-commit check, which saw only text and skipped its own folder.
+- **Game files:** no game assembly, asset, save or decompiled code.
+- **Hosts and addresses:** every host named anywhere is in the capabilities list with a reason, and no public IP
+  address appears (the four-part version numbers that look like one are listed by name).
+- **Licences:** every project cited has its row in `licensing.md`, and the release carries the licence and every
+  shipped library's notice.
+- **Commit messages** (`--history` only): no credential, home path or hidden character in any message.
+
+**Where it runs so far:**
+- **Every commit:** the pre-commit hook, quiet unless something fails.
+- **Every release:** the release guard runs its text rules on the release notes and on every commit subject the
+  notes will publish. This replaced a separate pattern list.
+
+**The hooks around it:**
+- **They find a Python that runs** (`.githooks/python.sh`). On this machine `python3` is the Microsoft Store's
+  stand-in, which only prints an install hint, so each candidate is tried before use. A clone can name its own with
+  `git config preflight.python <path>`.
+- **`commit-msg` fails closed.** Its subject-length check used to pass silently when no Python answered.
+- **A change to the gate is a commit of its own.** The preflight's files, the hooks and the workflows can't be
+  committed together with mod or apworld code, so every change to what is checked stands alone in the history.
+
+**Switched on (2026-09-29):** the first run took 0.4 s over 162 files. It caught the hooks not being executable, the old
+pattern list and hook spelling out home paths, and two slips in its own code: a real zero-width character where an
+escape was meant, and a string that read as a URL. All were fixed before the first commit.
+
+**Status:** in progress (2026-09-29). Built: the sections above, in pre-commit and the release guard. Next: the test
+that plants a violation for each section, the code rules (apworld, mod, dev scripts), the DLL checks, pre-push and
+CI.
+
+*Code: `dev-scripts/preflight.py`, `dev-scripts/preflight-patterns.json`; `docs/capabilities.md`;
+`.githooks/pre-commit`, `.githooks/commit-msg`, `.githooks/python.sh`; the guard in `.github/workflows/release.yml`.*
 
 # How it works
 

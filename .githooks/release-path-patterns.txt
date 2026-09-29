@@ -1,7 +1,0 @@
-C:\Users
-C:/Users
-/c/Users/
-/home/
-/Users/
-AppData
-%USERPROFILE%

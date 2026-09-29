@@ -1,0 +1,70 @@
+{
+  "about": "What dev-scripts/preflight.py refuses, and the few things it lets through by name. The only file exempt from the content rules it holds, since it has to spell them out. docs/reviewing.md explains each section; changing this file is the maintainer's decision.",
+  "kinds": [
+    ["README.md", "the project's front page"],
+    ["LICENSE", "the licence"],
+    ["CLAUDE.md", "the coding agent's working rules"],
+    [".gitignore", "what git leaves out"],
+    [".gitattributes", "line endings"],
+    [".editorconfig", "code style"],
+    ["nuget.config", "the package feeds, and which packages each may serve"],
+    ["global.json", "the .NET SDK every build uses"],
+    ["Directory.Build.props", "keeps build files from outside the repo out of the build"],
+    [".githooks/pre-commit", "a git hook"],
+    [".githooks/commit-msg", "a git hook"],
+    [".githooks/*.py", "a hook's helper"],
+    [".githooks/*.sh", "a hook's helper"],
+    [".github/workflows/*.yml", "CI and the release"],
+    ["agent_docs/*.md", "the process guides and records"],
+    ["docs/*.md", "pages for reviewers"],
+    ["apworld/bug_fables/**/*.py", "the apworld"],
+    ["apworld/bug_fables/archipelago.json", "the apworld's manifest"],
+    ["apworld/bug_fables/data/*.json", "the apworld's data"],
+    ["apworld/bug_fables/docs/*.md", "the player docs"],
+    ["dev-scripts/*.py", "a dev script"],
+    ["dev-scripts/*.ps1", "a dev script"],
+    ["dev-scripts/preflight-patterns.json", "this file"],
+    ["mod/BugFablesAP/**/*.cs", "the mod"],
+    ["mod/BugFablesAP/BugFablesAP.csproj", "the mod's build"],
+    ["mod/BugFablesAP/packages.lock.json", "every package, with its content hash"],
+    ["release/built-from.txt", "what the committed DLLs were built from"],
+    ["release/mod/README.txt", "the mod download's readme"],
+    ["release/mod/BepInEx/plugins/BugFablesAP/*.dll", "the mod download's DLLs (the binaries list names each)"],
+    ["release/mod/BepInEx/plugins/BugFablesAP/LICENSE.txt", "the licence, in the download"],
+    ["release/mod/BepInEx/plugins/BugFablesAP/THIRD-PARTY-NOTICES.txt", "the libraries' licences, in the download"]
+  ],
+  "binaries": {
+    "release/mod/BepInEx/plugins/BugFablesAP/BugFablesAP.dll": "the mod, built by dev-scripts/build-release.ps1",
+    "release/mod/BepInEx/plugins/BugFablesAP/Archipelago.MultiClient.Net.dll": "library, from NuGet's Archipelago.MultiClient.Net 6.7.1 (lib/net40)",
+    "release/mod/BepInEx/plugins/BugFablesAP/websocket-sharp.dll": "library, from NuGet's Archipelago.MultiClient.Net 6.7.1 (lib/net40)",
+    "release/mod/BepInEx/plugins/BugFablesAP/Newtonsoft.Json.dll": "library, from NuGet's Archipelago.MultiClient.Net 6.7.1 (lib/netstandard2.0)"
+  },
+  "libraries": {
+    "release/mod/BepInEx/plugins/BugFablesAP/Archipelago.MultiClient.Net.dll": "4d4f49b1528cf88b00fc07c69ff27d16cb1eeff52c0636009befd87f4e9dde5b",
+    "release/mod/BepInEx/plugins/BugFablesAP/websocket-sharp.dll": "5f59b27b01d6d6d0ea6ae2258e2639d80bc4ccedc0c16917cdd73e0b30e07f58",
+    "release/mod/BepInEx/plugins/BugFablesAP/Newtonsoft.Json.dll": "0cc6b1d3f4e8c938edfe1f02f2167d1cbf596a4df6ac0dbd82fe89ed67e45eb0"
+  },
+  "code_non_ascii": "\u00e9\u2026\u00b1",
+  "secrets": {
+    "GitHub token": "\\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{36,}",
+    "GitHub fine-grained token": "\\bgithub_pat_[A-Za-z0-9_]{50,}",
+    "AWS access key": "\\b(?:AKIA|ASIA)[0-9A-Z]{16}\\b",
+    "private key": "-----BEGIN [A-Z ]*PRIVATE KEY-----",
+    "Discord bot token": "\\b[MNO][A-Za-z0-9_-]{23,25}\\.[A-Za-z0-9_-]{6}\\.[A-Za-z0-9_-]{27,38}\\b",
+    "Discord webhook": "discord(?:app)?\\.com/api/webhooks/[0-9]+/[A-Za-z0-9_-]+",
+    "Slack token": "\\bxox[abprs]-[A-Za-z0-9-]{10,}",
+    "Google API key": "\\bAIza[0-9A-Za-z_-]{35}\\b",
+    "NuGet API key": "\\boy2[a-z0-9]{43}\\b",
+    "PyPI token": "\\bpypi-AgEIcHlwaS5vcmc[A-Za-z0-9_-]{50,}"
+  },
+  "personal_paths": ["C:\\Users\\", "C:/Users/", "/c/Users/", "/home/", "/Users/", "AppData", "%USERPROFILE%"],
+  "game_paths": ["(?i)assembly-csharp", "(?i)\\.(?:assets|ress|resource|bundle|unity3d|sav)$", "(?i)(?:^|/)decompiled/", "(?i)(?:^|/)save[0-9]*\\.dat$"],
+  "decompiler_markers": ["(?m)^// Decompiled with ", "(?m)^#region Assembly ", "(?m)^// Assembly: .*Version="],
+  "not_addresses": {
+    "5.4.23.5": "a BepInEx version",
+    "2.9.0.0": "a HarmonyX assembly version",
+    "11.0.0.0": "a Newtonsoft.Json assembly version",
+    "21.12.13.1": "a MonoMod package version"
+  },
+  "own_github_owners": ["Tsukino-uwu"]
+}
