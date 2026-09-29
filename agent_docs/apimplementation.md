@@ -370,7 +370,9 @@ be wrong.
     string goes through `ServerText`; not yet seen in game.**
   - **wss:// accepts any certificate** (websocket-sharp's default, `return true`), and a bare address falls back to
     plain ws://, password included. What to do is the user's decision: Mono in Unity may hold no root certificates, so
-    checking them could turn every connection into ws://. Measure that first.
+    checking them could turn every connection into ws://. Measure that first. **The probe is built (2026-09-29):**
+    the dev build's `TlsProbe` logs what this Mono's own check decides for each wss:// server, and still accepts the
+    certificate. Next: a connection to archipelago.gg with it on, run once the user says so.
   - **MultiClient.Net 6.7.1's cache path used the server's game name and checksum unsanitised** (its
     `GetFileSystemSafeFileName` returns its input). **Fixed in the mod (2026-09-29, the mod guide's step 34): two
     patches make both a plain file name; not yet seen in game.** Reporting it upstream is the user's to send; the

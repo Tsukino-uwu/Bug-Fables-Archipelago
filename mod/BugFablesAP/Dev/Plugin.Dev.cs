@@ -10,6 +10,7 @@ namespace BugFablesAP
     {
         private ConfigEntry<bool> grantProbeEnabled;
         private ConfigEntry<bool> textProbeEnabled;
+        private ConfigEntry<bool> tlsProbeEnabled;
         private ConfigEntry<bool> scriptDumpEnabled;
         private ConfigEntry<bool> entityDumpEnabled;
         private ConfigEntry<bool> mapDumpEnabled;
@@ -38,6 +39,9 @@ namespace BugFablesAP
             textProbeEnabled = Config.Bind("Debug", "TextProbe", false,
                 "Dev only. Logs every dialogue script that carries an item command, with the map and calling NPC. "
                 + "Off by default.");
+            tlsProbeEnabled = Config.Bind("Debug", "TlsProbe", false,
+                "Dev only. For each wss:// connection, logs what this Mono's certificate check decided about the "
+                + "server's certificate, then accepts it as before. Off by default.");
             giveMoney = Config.Bind("Debug", "GiveMoney", 0,
                 "Dev only. Berries to add once (the game caps at 999), then this resets to 0.");
             adoptSeed = Config.Bind("Debug", "AdoptSeed", false,
@@ -115,6 +119,10 @@ namespace BugFablesAP
         partial void DevAwakeLate()
         {
             DevConsole.Init(Log, connection);
+            if (tlsProbeEnabled.Value)
+            {
+                TlsProbe.Enable(connection.Post);
+            }
             Log.LogInfo($"[dev] dev build: GrantProbe={grantProbeEnabled.Value} TextProbe={textProbeEnabled.Value}");
         }
 
