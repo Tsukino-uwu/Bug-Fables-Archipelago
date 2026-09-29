@@ -125,7 +125,9 @@ $gameDll = Join-Path $GameDir 'Bug Fables_Data\Managed\Assembly-CSharp.dll'
 if (-not (Test-Path $gameDll)) { throw "no Assembly-CSharp.dll under $GameDir" }
 
 # A git variable inherited from a hook would point every clone below at this repo.
-Get-ChildItem env: | Where-Object { $_.Name -like 'GIT_*' } | ForEach-Object { Remove-Item "env:$($_.Name)" }
+foreach ($name in @(Get-ChildItem env: | Where-Object { $_.Name -like 'GIT_*' } | ForEach-Object Name)) {
+    [Environment]::SetEnvironmentVariable($name, $null)
+}
 $tmp = Join-Path ([System.IO.Path]::GetTempPath()) "bugfablesap-build-$([guid]::NewGuid().ToString('N').Substring(0, 8))"
 try {
     # Two clean clones at different paths: the same DLL from both proves no path, time or machine state went in.
