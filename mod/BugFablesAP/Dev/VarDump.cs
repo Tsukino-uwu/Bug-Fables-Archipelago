@@ -18,7 +18,8 @@ namespace BugFablesAP
         // Commands that take a flagvar or flagstring slot, plus any token whose arguments contain "var".
         private static readonly HashSet<string> SlotCommands = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
-            "setvar", "addvar", "copyvar", "checkvar", "flagvar", "flagvalue", "var", "string", "sstring", "clonestring",
+            "setvar", "addvar", "copyvar", "checkvar", "flagvar", "flagvalue", "var", "string", "sstring",
+                "clonestring",
             "anstring", "optiontovar", "numberprompt", "letterprompt", "itemname", "setprize", "addprize", "define",
         };
 
@@ -53,18 +54,21 @@ namespace BugFablesAP
                         continue;
                     }
                     string token = cmd + args;
-                    seen[token] = seen.TryGetValue(token, out var entry) ? (entry.count + 1, entry.where) : (1, asset.name);
+                    seen[token] = seen.TryGetValue(token, out var entry) ? (entry.count + 1, entry.where)
+                        : (1, asset.name);
                 }
             }
             var sb = new StringBuilder();
             sb.AppendLine("token\tcount\tfirst_asset");
             foreach (KeyValuePair<string, (int count, string where)> entry in seen.OrderBy(e => e.Key))
             {
-                sb.Append(entry.Key).Append('\t').Append(entry.Value.count).Append('\t').Append(entry.Value.where).AppendLine();
+                sb.Append(entry.Key).Append('\t').Append(entry.Value.count).Append('\t').Append(entry.Value.where)
+                    .AppendLine();
             }
             File.WriteAllText(outPath, sb.ToString());
             log.LogInfo($"[dump] {seen.Count} distinct slot tokens from {assets.Length} text assets ({unreadable} unreadable) -> {outPath}");
-            log.LogInfo("[dump] prizeflags (flagvar slots) = " + string.Join(",", MainManager.instance.prizeflags.Select(p => p.ToString()).ToArray()));
+            log.LogInfo("[dump] prizeflags (flagvar slots) = "
+                + string.Join(",", MainManager.instance.prizeflags.Select(p => p.ToString()).ToArray()));
         }
     }
 }

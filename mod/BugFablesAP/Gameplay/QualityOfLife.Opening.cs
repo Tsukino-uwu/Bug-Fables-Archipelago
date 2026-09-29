@@ -32,7 +32,8 @@ namespace BugFablesAP
         internal static Func<HashSet<long>> SeedQuiet;
         private const int TutorialLeaf = (int)MainManager.Items.CrunchyLeaf;
 
-        // A room start's door spots (appear, walk to), read from the door in the "from" map; null for a save-point start.
+        // A room start's door spots (appear, walk to), read from the door in the "from" map; null for a save-point
+        // start.
         internal static Vector3[] SeedStartDoor(MainManager.Maps map)
         {
             string from = SeedStartFrom?.Invoke();
@@ -53,7 +54,8 @@ namespace BugFablesAP
         private static string StartMapName => TestStart.Split('@')[0].Trim();
 
         private static bool AtStart(string map) =>
-            map != null && (TestStartSet ? string.Equals(map, StartMapName, StringComparison.OrdinalIgnoreCase) : map == OpeningMap);
+            map != null && (TestStartSet ? string.Equals(map, StartMapName, StringComparison.OrdinalIgnoreCase)
+            : map == OpeningMap);
 
         // Arriving as if through a door: data[0] the map, vectordata[1] where the party appears, [2] where it walks.
         // Read from the entity table of the map left behind; fields split by '}', data count at 60, vectordata at 71.
@@ -74,7 +76,8 @@ namespace BugFablesAP
                 for (int i = 0; i < lines.Length - 1; i++)
                 {
                     string[] f = lines[i].Split('}');
-                    if (f.Length < 81 || f[1].Trim() != "DoorOtherMap" || f[60].Trim() == "0" || f[61].Trim() != ((int)target).ToString())
+                    if (f.Length < 81 || f[1].Trim() != "DoorOtherMap" || f[60].Trim() == "0" || f[61]
+                        .Trim() != ((int)target).ToString())
                     {
                         continue;
                     }
@@ -86,7 +89,9 @@ namespace BugFablesAP
                     var v = new Vector3[count];
                     for (int k = 0; k < count; k++)
                     {
-                        v[k] = new Vector3(float.Parse(f[72 + k * 3].Trim(), System.Globalization.CultureInfo.InvariantCulture),
+                        v[k] =
+                            new Vector3(float.Parse(f[72 + k * 3].Trim(),
+                            System.Globalization.CultureInfo.InvariantCulture),
                             float.Parse(f[73 + k * 3].Trim(), System.Globalization.CultureInfo.InvariantCulture),
                             float.Parse(f[74 + k * 3].Trim(), System.Globalization.CultureInfo.InvariantCulture));
                     }
@@ -97,20 +102,23 @@ namespace BugFablesAP
             return null;
         }
 
-        // Event8's talk after the slides is cut: its first step is ChangeParty({1}) (Kabbu alone); refusing it stops the
-        // scene, and the next frame the mod ends it as its own end does.
+        // Event8's talk after the slides is cut: its first step is ChangeParty({1}) (Kabbu alone); refusing it stops
+        // the scene, and the next frame the mod ends it as its own end does.
         private static bool event8Cut;
 
         private static class PartyHook
         {
-            [HarmonyPatch(typeof(MainManager), nameof(MainManager.ChangeParty), typeof(int[]), typeof(bool), typeof(bool))]
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.ChangeParty), typeof(int[]), typeof(bool),
+                typeof(bool))]
             [HarmonyPrefix]
             private static bool BeforeChangeParty(int[] ids, bool fromscratch, bool destroyoldentity)
             {
                 MainManager mm = MainManager.instance;
                 if (randomizerOn == null || !randomizerOn() || mm == null || MainManager.map == null
-                    || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap || mm.flags[GameFlags.PermitEvent]
-                    || ids == null || ids.Length != 1 || ids[0] != 1 || !fromscratch || destroyoldentity || MainManager.events == null)
+                    || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap
+                    || mm.flags[GameFlags.PermitEvent]
+                    || ids == null || ids.Length != 1 || ids[0] != 1 || !fromscratch || destroyoldentity
+                    || MainManager.events == null)
                 {
                     return true;
                 }
@@ -124,13 +132,15 @@ namespace BugFablesAP
         // The cut before the slides: their first step is the black backdrop, NewSolidColor("back").
         private static class SlideHook
         {
-            [HarmonyPatch(typeof(MainManager), nameof(MainManager.NewSolidColor), typeof(string), typeof(Color), typeof(float), typeof(Vector3), typeof(Vector2))]
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.NewSolidColor), typeof(string), typeof(Color),
+                typeof(float), typeof(Vector3), typeof(Vector2))]
             [HarmonyPrefix]
             private static void BeforeSolidColor(string name)
             {
                 MainManager mm = MainManager.instance;
                 if (name != "back" || randomizerOn == null || !randomizerOn() || mm == null || MainManager.map == null
-                    || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap || mm.flags[GameFlags.PermitEvent]
+                    || MainManager.lastevent != 8 || !mm.inevent || MainManager.map.mapid.ToString() != OpeningMap
+                    || mm.flags[GameFlags.PermitEvent]
                     || MainManager.events == null || event8Cut)
                 {
                     return;
@@ -145,7 +155,8 @@ namespace BugFablesAP
         {
             MainManager mm = MainManager.instance;
             Transform back = MainManager.GUICamera == null ? null : MainManager.GUICamera.transform.Find("back");
-            // A start elsewhere keeps the slides' black backdrop until the new map has loaded, so the opening map isn't seen.
+            // A start elsewhere keeps the slides' black backdrop until the new map has loaded, so the opening map isn't
+            // seen.
             if (back != null && (TestStartSet || Seeded.HasValue))
             {
                 heldBack = back.gameObject;
@@ -257,7 +268,8 @@ namespace BugFablesAP
                             texts.RemoveAt(k);
                             targets.Insert(0, target);
                             texts.Insert(0, label);
-                            string command = string.Join(",", f.Take(4).Concat(targets).Concat(texts).Concat(f.Skip(4 + 2 * n)).ToArray());
+                            string command = string.Join(",", f.Take(4).Concat(targets).Concat(texts)
+                                .Concat(f.Skip(4 + 2 * n)).ToArray());
                             text = text.Substring(0, at + 1) + command + text.Substring(end);
                             end = at + 1 + command.Length;
                             log.LogInfo($"[qol] {map.mapid} line {line}: the reshuffle choice moved to the top of its prompt");
@@ -269,7 +281,8 @@ namespace BugFablesAP
             }
         }
 
-        // Vi and Kabbu (or the one starting member) set before the fade-in, so the first frame already has the right party.
+        // Vi and Kabbu (or the one starting member) set before the fade-in, so the first frame already has the right
+        // party.
         private static void SetOpeningParty(Vector3 at)
         {
             MainManager mm = MainManager.instance;
@@ -291,7 +304,8 @@ namespace BugFablesAP
         private static void RunOpening()
         {
             MainManager mm = MainManager.instance;
-            // Where the player already is: placing the party anywhere else snapped back a player walking during the fade-in.
+            // Where the player already is: placing the party anywhere else snapped back a player walking during the
+            // fade-in.
             SetOpeningParty(MainManager.player.transform.position);
             // Event16's tutorial leaf, unless the seed has it as a location (then it comes from the server).
             Dictionary<long, int[]> added = SeedAdded?.Invoke();

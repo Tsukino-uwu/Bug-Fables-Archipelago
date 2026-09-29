@@ -40,7 +40,8 @@ namespace BugFablesAP
             ClosePopup();
         }
 
-        // Centred like the others so the leaf cursor (a fixed column) clears it; the state is a smaller tag to the right.
+        // Centred like the others so the leaf cursor (a fixed column) clears it; the state is a smaller tag to the
+        // right.
         private const string Label = "|center|Archipelago";
         private static string StateTag => "|size,0.55|" + (mode.Value ? "(Enabled)" : "(Disabled)");
         private const float StateTagX = 1.75f;
@@ -51,7 +52,8 @@ namespace BugFablesAP
             MainManager.instance.StartCoroutine(MainManager.SetText(StateTag, new Vector3(StateTagX, 0.22f, 10f), line));
         }
 
-        // The game's SetMenuText loop indexes a three-label array by selections.Length: hand it back its three entries first.
+        // The game's SetMenuText loop indexes a three-label array by selections.Length: hand it back its three entries
+        // first.
         [HarmonyPatch(typeof(StartMenu), "SetMenuText")]
         [HarmonyPrefix]
         private static void BeforeSetMenuText(StartMenu __instance)

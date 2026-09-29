@@ -18,15 +18,19 @@ namespace BugFablesAP
         internal static ConfigEntry<string> Travel;
         // The Warp is always there with a random start (the logic counts on it to re-enter the start), with the
         // entrance randomizer (the escape from a dead end), with Shuffle Jump (a spot left without a jump) and with the
-        // abilities as items (a spot such as the hideout's cell, left by an ability not yet received), whatever Travel says.
+        // abilities as items (a spot such as the hideout's cell, left by an ability not yet received), whatever Travel
+        // says.
         internal static bool WarpOn => (Travel != null && (Travel.Value == "Warp" || Travel.Value == "Both"))
-            || (SeedStart?.Invoke()).HasValue || (EntrancesShuffled?.Invoke() ?? false) || FieldMoves.JumpShuffled || Abilities.AbilityItems;
+            || (SeedStart?.Invoke()).HasValue || (EntrancesShuffled?.Invoke() ?? false) || FieldMoves.JumpShuffled
+            || Abilities.AbilityItems;
         internal static Func<bool> EntrancesShuffled;
         internal static bool MapOn => Travel != null && (Travel.Value == "Map" || Travel.Value == "Both");
         // Which travel buttons go without their Yes / No box (the same four values as Travel).
         internal static ConfigEntry<string> SkipConfirm;
-        internal static bool SkipWarpConfirm => SkipConfirm != null && (SkipConfirm.Value == "Warp" || SkipConfirm.Value == "Both");
-        internal static bool SkipMapConfirm => SkipConfirm != null && (SkipConfirm.Value == "Map" || SkipConfirm.Value == "Both");
+        internal static bool SkipWarpConfirm => SkipConfirm != null
+            && (SkipConfirm.Value == "Warp" || SkipConfirm.Value == "Both");
+        internal static bool SkipMapConfirm => SkipConfirm != null
+            && (SkipConfirm.Value == "Map" || SkipConfirm.Value == "Both");
         internal static ConfigEntry<bool> SkipCutscenes;
         internal static readonly string[] ItemAnimations = { "All", "Progression", "Off" };
         internal static ConfigEntry<string> ItemAnimation;
@@ -44,7 +48,8 @@ namespace BugFablesAP
         internal static ConfigEntry<int> MedalPrices;
         internal static ConfigEntry<string> EnemyScalingMode;
         // Ten pips, like the volume rows: Off, eight caps, and the monitor's own refresh rate.
-        internal static readonly string[] UncapValues = { "Off", "90", "100", "120", "144", "165", "180", "240", "360", "Monitor" };
+        internal static readonly string[] UncapValues = { "Off", "90", "100", "120", "144", "165", "180", "240", "360",
+            "Monitor" };
         internal static ConfigEntry<string> UncapFps;
 
         // A scene that only moves, talks and sets flags is skipped by setting its flags; one that also changes the
@@ -54,7 +59,8 @@ namespace BugFablesAP
             internal string Map;
             internal int Event;
             internal int[] Flags; // null: fast-forward instead of skipping
-            internal int OnlyWhileUnset = -1; // skipped only while this flag is unset (a scene with a later, needed part)
+            internal int OnlyWhileUnset =
+                -1; // skipped only while this flag is unset (a scene with a later, needed part)
             internal int Discovery = -1; // a journal discovery the scene records, recorded by the skip too
         }
 
@@ -64,22 +70,27 @@ namespace BugFablesAP
             new Scene { Map = "SnakemouthBridgeRoom", Event = 0, Flags = new[] { 11 } },
             // Hitting the rope: the bridge's fallen state is set by the scene itself, not its flags, so fast-forwarded.
             new Scene { Map = "SnakemouthBridgeRoom", Event = 1, Flags = null },
-            // The Tattle tutorial: Vi and Kabbu walk, one line with no commands, flag 10 (which also hides its trigger).
+            // The Tattle tutorial: Vi and Kabbu walk, one line with no commands, flag 10 (which also hides its
+            // trigger).
             new Scene { Map = "SnakemouthBridgeRoom", Event = 2, Flags = new[] { 10 } },
-            // The door room's puzzle solved: it moves the rocks, removes two entities and drops the trapdoor's Mushroom, so fast-forwarded.
+            // The door room's puzzle solved: it moves the rocks, removes two entities and drops the trapdoor's
+            // Mushroom, so fast-forwarded.
             new Scene { Map = "SnakemouthDoorRoom", Event = 4, Flags = null },
             // The trapdoor: fast-forwarded, not skipped (a skip showed no opening or fall, just a teleport); the
             // trapdoor landing below then places the party.
             new Scene { Map = "SnakemouthDoorRoom", Event = 5, Flags = null },
-            // The spider: two battles, party changes, flag 27 and discovery 1, so fast-forwarded (the battles at normal speed).
+            // The spider: two battles, party changes, flag 27 and discovery 1, so fast-forwarded (the battles at normal
+            // speed).
             new Scene { Map = "SnakemouthFallRoom", Event = 6, Flags = null },
             // The barkeeper's first talk; the same scene later handles bounties, so skipped only while 158 is unset.
             new Scene { Map = "UndergroundBar", Event = 83, Flags = new[] { 158 }, OnlyWhileUnset = 158 },
-            // Arriving outside Snakemouth Den: walk, one line, discovery 0 (a location); the map's autostart sets its flag 22.
+            // Arriving outside Snakemouth Den: walk, one line, discovery 0 (a location); the map's autostart sets its
+            // flag 22.
             new Scene { Map = "OutsideSnakemouth", Event = 11, Flags = new int[0], Discovery = 0 },
         };
 
-        private static readonly MethodInfo endEvent = AccessTools.Method(typeof(EventControl), "EndEvent", Type.EmptyTypes);
+        private static readonly MethodInfo endEvent = AccessTools.Method(typeof(EventControl), "EndEvent",
+            Type.EmptyTypes);
 
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
@@ -130,7 +141,8 @@ namespace BugFablesAP
 
         internal static void ResetAll()
         {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, Travel, SkipConfirm, SkipCutscenes, ItemAnimation, ItemColors, ItemIcons, ItemBackgrounds, ApMenu.Detector, UncapFps })
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, Travel, SkipConfirm, SkipCutscenes,
+                ItemAnimation, ItemColors, ItemIcons, ItemBackgrounds, ApMenu.Detector, UncapFps })
             {
                 if (setting != null)
                 {
@@ -171,7 +183,8 @@ namespace BugFablesAP
                 + "Off: no backdrop until it's picked up, a surprise.");
             MedalPrices = config.Bind("Gameplay", "MedalPrices", FullPrice, new ConfigDescription(
                 "Medal shop prices, in berries and crystal berries, in tenths of the normal price: 10 normal, 5 half, 0 free. "
-                + "Any price above free is at least 1. Switch it on the Gameplay page.", new AcceptableValueRange<int>(0, FullPrice)));
+                + "Any price above free is at least 1. Switch it on the Gameplay page.",
+                new AcceptableValueRange<int>(0, FullPrice)));
             EnemyScalingMode = config.Bind("QualityOfLife", "EnemyScaling", "PartyLevel", new ConfigDescription(
                 "How tough enemies are, wherever you meet them: PartyLevel scales every enemy to the party's level, so "
                 + "every area plays fair in any order; Artifacts scales them to the artifacts found, as vanilla's "
@@ -208,8 +221,8 @@ namespace BugFablesAP
             {
                 log.LogError("[qol] BattleControl.ExitBattle, inevent or action not found: the first spider fight runs its three turns.");
             }
-            // The title screen resets the game's variables; the opening's own state is per file, so it resets there too.
-            // Every music change ends in the ChangeMusic overload patched.
+            // The title screen resets the game's variables; the opening's own state is per file, so it resets there
+            // too. Every music change ends in the ChangeMusic overload patched.
             if (!Hooks.Install(typeof(PartyHook), "qol", "Event8's talk plays")
                 || !Hooks.Install(typeof(SlideHook), "qol", "the slides play (fast)")
                 || !Hooks.Install(typeof(ResetHook), "qol", "the opening's state can carry into the next file"))
@@ -232,7 +245,8 @@ namespace BugFablesAP
 
         private static class MusicHook
         {
-            [HarmonyPatch(typeof(MainManager), nameof(MainManager.ChangeMusic), typeof(AudioClip), typeof(float), typeof(int), typeof(bool))]
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.ChangeMusic), typeof(AudioClip), typeof(float),
+                typeof(int), typeof(bool))]
             [HarmonyPrefix]
             private static void BeforeChangeMusic(ref AudioClip musicclip, int id)
             {
@@ -260,7 +274,8 @@ namespace BugFablesAP
                     log.LogInfo($"[qol] title screen: the last file's opening state cleared (pending {openingPending}, start {startPending}, "
                         + $"failed {openingFailed}, transferring {transferring})");
                 }
-                openingPending = startPending = openingFailed = event8Cut = partyThenFade = transferring = heldMusicLogged = false;
+                openingPending = startPending = openingFailed = event8Cut = partyThenFade = transferring =
+                    heldMusicLogged = false;
                 PartyMembers.SetReceived(System.Linq.Enumerable.Empty<int>());
             }
         }
@@ -273,7 +288,8 @@ namespace BugFablesAP
                 return;
             }
             bool on = randomizerOn();
-            if (on && !openingPending && !openingFailed && MainManager.map != null && MainManager.map.mapid.ToString() == OpeningMap
+            if (on && !openingPending && !openingFailed && MainManager.map != null
+                && MainManager.map.mapid.ToString() == OpeningMap
                 && !mm.flags[GameFlags.PermitEvent] && mm.flags[GameFlags.NewGame])
             {
                 openingPending = true;
@@ -292,7 +308,8 @@ namespace BugFablesAP
             {
                 transferring = false;
             }
-            if (openingPending && AtStart(here) && MainManager.player != null && !mm.inevent && !mm.message && !mm.minipause
+            if (openingPending && AtStart(here) && MainManager.player != null && !mm.inevent && !mm.message
+                && !mm.minipause
                 && MainManager.battle == null && !mm.intransition && !MainManager.roomtransition)
             {
                 openingPending = false;
@@ -360,7 +377,8 @@ namespace BugFablesAP
                         Vector3[] entry = SeedStartDoor(map);
                         if (entry != null)
                         {
-                            MainManager.instance.StartCoroutine(MainManager.TransferMap((int)map, MainManager.player.transform.position, entry[1], entry[2]));
+                            MainManager.instance.StartCoroutine(MainManager.TransferMap((int)map,
+                                MainManager.player.transform.position, entry[1], entry[2]));
                             log.LogInfo($"[qol] the seed's start (Starting Location): transferring to {map}, entering from {SeedStartFrom?.Invoke()}");
                             return;
                         }
@@ -382,7 +400,8 @@ namespace BugFablesAP
                     Vector3[] door = DoorInto(start, parts.Length > 1 ? parts[1].Trim() : null);
                     if (door != null)
                     {
-                        MainManager.instance.StartCoroutine(MainManager.TransferMap((int)start, MainManager.player.transform.position, door[1], door[2]));
+                        MainManager.instance.StartCoroutine(MainManager.TransferMap((int)start,
+                            MainManager.player.transform.position, door[1], door[2]));
                     }
                     else
                     {

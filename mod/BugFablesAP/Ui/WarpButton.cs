@@ -10,9 +10,10 @@ using UnityEngine;
 namespace BugFablesAP
 {
     // The travel buttons after the pause menu's four (Quality of life, Travel: Warp / Map / Both), each behind a
-    // Yes / No box unless Skip confirm says otherwise. Warp to start: the game's own map transfer to where a new game begins. Map: the game's own map
-    // window in a travel mode, where confirm on a visited area travels to its save point (the map opened any other way
-    // keeps vanilla controls). The logic never counts on either. Confirm is caught before the game would act on it.
+    // Yes / No box unless Skip confirm says otherwise. Warp to start: the game's own map transfer to where a new game
+    // begins. Map: the game's own map window in a travel mode, where confirm on a visited area travels to its save
+    // point (the map opened any other way keeps vanilla controls). The logic never counts on either. Confirm is caught
+    // before the game would act on it.
     internal static class WarpButton
     {
         private static ManualLogSource log;
@@ -29,15 +30,15 @@ namespace BugFablesAP
         private static readonly MethodInfo buildWindow = AccessTools.Method(typeof(PauseMenu), "BuildWindow");
 
         private enum Kind { Warp, Map }
-        // The game's four buttons are options 0-3 (sprites 13-16); the travel buttons follow as options 4 and 5. Sprite 18
-        // is the map shortcut, so a second travel button takes sprite 19 in a grown array.
+        // The game's four buttons are options 0-3 (sprites 13-16); the travel buttons follow as options 4 and 5. Sprite
+        // 18 is the map shortcut, so a second travel button takes sprite 19 in a grown array.
         private const int FirstOption = 4;
         private static readonly int[] SpriteSlot = { 17, 19 };
         // Map: the round blue map in the other buttons' style. Warp: the map item's scroll, a "return scroll".
         private const int MapIconSprite = 34;
         private const int ScrollItem = 41;
-        // The scroll has no round backdrop of its own: one is drawn like the other buttons', a dark ring and a bright fill
-        // of one vibrant colour (teal blended into the green and blue beside it). Being chosen: orange or pink.
+        // The scroll has no round backdrop of its own: one is drawn like the other buttons', a dark ring and a bright
+        // fill of one vibrant colour (teal blended into the green and blue beside it). Being chosen: orange or pink.
         // The game's own recipe, measured on its round icons: ring at full saturation and brightness 0.51, fill at
         // saturation 0.34 and full brightness, the fill's hue 0.01 lower. Orange at 0.08: the game's sprite 31 (0.05)
         // read salmon at this fill, gold is 0.14.
@@ -163,7 +164,8 @@ namespace BugFablesAP
                 return;
             }
             // Window 0 hands IconAnim four icons and it indexes them by option: hand it one per button.
-            // The game's four buttons are placed at their final spots as they're made, so nothing jumps while the menu opens.
+            // The game's four buttons are placed at their final spots as they're made, so nothing jumps while the menu
+            // opens.
             Hooks.Install(typeof(Placing), "warp", "the menu's buttons move into place as it opens");
             Hooks.Install(typeof(Icons), "warp", "the new buttons' icons don't animate");
             log.LogInfo("[warp] installed on PauseMenu.Update and UpdateText");
@@ -208,7 +210,8 @@ namespace BugFablesAP
             SpriteRenderer[] sprites = (SpriteRenderer[])spritesField.GetValue(__instance);
             if (!ReferenceEquals(builtFor, sprites))
             {
-                // Window 0 builds over a few frames. Coming back from another page, sprites is briefly that page's shorter array.
+                // Window 0 builds over a few frames. Coming back from another page, sprites is briefly that page's
+                // shorter array.
                 if (sprites == null || sprites.Length < 19 || sprites[16] == null)
                 {
                     return true;
@@ -335,7 +338,8 @@ namespace BugFablesAP
                 spritesField.SetValue(menu, sprites);
             }
             builtFor = sprites;
-            // All across, centred, inside the 11-wide box (the game's four sit at -3..3); already placed as they were made.
+            // All across, centred, inside the 11-wide box (the game's four sit at -3..3); already placed as they were
+            // made.
             int total = 4 + buttons.Count;
             for (int n = 0; n < 4; n++)
             {
@@ -478,7 +482,8 @@ namespace BugFablesAP
             confirmBox = MainManager.Create9Box(new Vector3(0f, 0f, 5f), new Vector2(kind == Kind.Map ? 9f : 7f, 3f), 1, 30, Color.white, grow: false);
             if (kind == Kind.Map)
             {
-                // The map is a 3D object at depth 5 on the GUI camera, in front of the pause menu: the box goes in front of it.
+                // The map is a 3D object at depth 5 on the GUI camera, in front of the pause menu: the box goes in
+                // front of it.
                 confirmBox.parent = MainManager.GUICamera.transform;
                 confirmBox.localPosition = new Vector3(0f, -0.5f, 2f);
                 confirmBox.localEulerAngles = Vector3.zero;
@@ -496,7 +501,8 @@ namespace BugFablesAP
 
         private static void DrawConfirm(PauseMenu menu)
         {
-            // Yes and No at fixed spots so they don't shift when switching; the chosen one coloured, the leaf beside it.
+            // Yes and No at fixed spots so they don't shift when switching; the chosen one coloured, the leaf beside
+            // it.
             TextPool.Free(confirmBox);
             string question = asking == Kind.Warp ? "Warp to the start?" : "Travel to " + MainManager.areanames[askedArea] + "?";
             menu.StartCoroutine(MainManager.SetText("|center||sort,40|" + question, 0, 99999f, false, false,

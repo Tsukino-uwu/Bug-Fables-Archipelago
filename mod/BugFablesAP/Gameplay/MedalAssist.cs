@@ -117,8 +117,8 @@ namespace BugFablesAP
 
         // lite loads are the file select's previews.
 
-        // Boss prizes are always paid as if Hard Mode were on: a prize slot reading 2 (missed) is paid by the game's own
-        // AddPrizeMedal with Hard Mode answered yes for that call. Never in battle (a retry rolls flagvar back).
+        // Boss prizes are always paid as if Hard Mode were on: a prize slot reading 2 (missed) is paid by the game's
+        // own AddPrizeMedal with Hard Mode answered yes for that call. Never in battle (a retry rolls flagvar back).
         private static bool payingPrize;
         // Slot 1 is a dialogue gift the game marks missed when skipped (Event58), not a boss prize.
         private const int NotABossPrize = 1;
@@ -126,7 +126,8 @@ namespace BugFablesAP
         internal static void PayPrizes()
         {
             MainManager mm = MainManager.instance;
-            if (randomizer == null || !randomizer() || mm == null || mm.flagvar == null || mm.prizeflags == null || MainManager.map == null
+            if (randomizer == null || !randomizer() || mm == null || mm.flagvar == null || mm.prizeflags == null
+                || MainManager.map == null
                 || mm.inbattle || MainManager.battle != null || mm.inevent)
             {
                 return;

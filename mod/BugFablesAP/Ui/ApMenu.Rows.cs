@@ -15,7 +15,9 @@ namespace BugFablesAP
                 switch (r)
                 {
                     case ButtonsRow:
-                        return confirming ? "" : button == 0 ? "Puts every setting on this page back to its default." : "Turns every setting on this page off.";
+                        return confirming ? ""
+                            : button == 0 ? "Puts every setting on this page back to its default."
+                            : "Turns every setting on this page off.";
                     case FastTextRow: return "Dialogue text is instant, but still requires a button press to proceed.";
                     case WarpRow:
                         switch (QualityOfLife.Travel?.Value)
@@ -42,7 +44,8 @@ namespace BugFablesAP
                             default: return "Every item from another player is held up as it arrives.";
                         }
                     case ColorsRow:
-                        return QualityOfLife.RarityColors ? "Items coloured like loot: green, blue, purple, red for traps."
+                        return QualityOfLife.RarityColors
+                            ? "Items coloured like loot: green, blue, purple, red for traps."
                             : QualityOfLife.ApColors ? "Items coloured as in Archipelago's own client."
                             : "The game's own colours.";
                     case IconsRow:
@@ -60,7 +63,8 @@ namespace BugFablesAP
                     case UncapRow:
                         if (QualityOfLife.UncapFps?.Value == "Monitor")
                         {
-                            return FrameRate.Cap == 0 ? $"Experimental. Monitor: yours runs at {Screen.currentResolution.refreshRate} Hz, so the game's own FPS."
+                            return FrameRate.Cap == 0
+                                ? $"Experimental. Monitor: yours runs at {Screen.currentResolution.refreshRate} Hz, so the game's own FPS."
                                 : $"Experimental. Monitor: {FrameRate.Cap} FPS, your display's rate; plays as at 60.";
                         }
                         return FrameRate.Cap == 0 ? "Experimental. Off: the game's own FPS setting (30 or 60)."
@@ -73,11 +77,14 @@ namespace BugFablesAP
                 switch (r)
                 {
                     case ButtonsRow:
-                        return confirming ? "" : button == 0 ? "Puts every setting on this page back to its default." : "Turns every setting on this page off.";
+                        return confirming ? ""
+                            : button == 0 ? "Puts every setting on this page back to its default."
+                            : "Turns every setting on this page off.";
                     case DifficultyRow:
                         switch (Difficulty?.Value)
                         {
-                            case "Hard": return "As if the Hard Mode medal were on: tougher enemies. Checks stay the same.";
+                            case "Hard":
+                                return "As if the Hard Mode medal were on: tougher enemies. Checks stay the same.";
                             case "Hardest": return "As the HARDEST code: toughest enemies. Checks stay the same.";
                             default: return "Enemies as the game makes them. Checks stay the same.";
                         }
@@ -85,7 +92,8 @@ namespace BugFablesAP
                         switch (QualityOfLife.EnemyScalingMode?.Value)
                         {
                             case "Off": return "Enemies keep their own stats, as in vanilla.";
-                            case "Artifacts": return "Enemies grow with artifacts found; levelling ahead makes it easier.";
+                            case "Artifacts":
+                                return "Enemies grow with artifacts found; levelling ahead makes it easier.";
                             default: return "Enemies match your level, so every area plays fair in any order.";
                         }
                     case AttackRow:
@@ -109,10 +117,13 @@ namespace BugFablesAP
                     }
                     case ExpRow:
                         return Multipliers.Exp == null || Multipliers.Exp.Value <= 1 ? "Enemies give their normal EXP."
-                            : "Enemies give " + Multipliers.Exp.Value + "x EXP. A battle still gives at most a level's worth.";
+                            : "Enemies give " + Multipliers.Exp.Value
+                                + "x EXP. A battle still gives at most a level's worth.";
                     case BerryRow:
-                        return Multipliers.Berries == null || Multipliers.Berries.Value <= 1 ? "Berries you pick up count as usual."
-                            : "Berries you pick up count " + Multipliers.Berries.Value + "x. Never berries that come from a check.";
+                        return Multipliers.Berries == null || Multipliers.Berries.Value <= 1
+                            ? "Berries you pick up count as usual."
+                            : "Berries you pick up count " + Multipliers.Berries.Value
+                                + "x. Never berries that come from a check.";
                     default: return "";
                 }
             }
@@ -143,10 +154,13 @@ namespace BugFablesAP
         private static void ChangeSound()
         {
             MainManager.PlaySound(Resources.Load<AudioClip>("Audio/Sounds/Confirm0"), 10, 1f, 1f);
-            MainManager.sounds[10].volume = MainManager.pausemenu != null ? MainManager.pausemenu.svolume : MainManager.soundvolume;
+            MainManager.sounds[10].volume =
+                MainManager.pausemenu != null ? MainManager.pausemenu.svolume : MainManager.soundvolume;
         }
 
-        private bool IsChoice(int r) => page == Page.Main ? r == ModeRow || r == DeathLinkRow || r == AchievementsRow || r == NormalSavesRow : r != ButtonsRow;
+        private bool IsChoice(int r) => page == Page.Main
+            ? r == ModeRow || r == DeathLinkRow || r == AchievementsRow || r == NormalSavesRow
+            : r != ButtonsRow;
 
         private static void Cycle(ConfigEntry<string> entry, string[] values, int by)
         {
@@ -270,12 +284,15 @@ namespace BugFablesAP
 
         private static string OnOff(ConfigEntry<bool> setting) => setting != null && setting.Value ? "ON" : "OFF";
 
-        private static string ScalingLabel(string value) => value == "PartyLevel" ? "PARTY LEVEL" : value.ToUpperInvariant();
+        private static string ScalingLabel(string value) =>
+            value == "PartyLevel" ? "PARTY LEVEL" : value.ToUpperInvariant();
 
         // The Gameplay page's two buttons: every row to its plain value, or back to its default.
         private static void GameplayAll(bool reset)
         {
-            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { Difficulty, QualityOfLife.EnemyScalingMode, AttackBoost.Boost, SaveCrystals.AllHeal, AutoSave.Enabled, QualityOfLife.MedalPrices, Multipliers.Exp, Multipliers.Berries })
+            foreach (ConfigEntryBase setting in new ConfigEntryBase[] { Difficulty, QualityOfLife.EnemyScalingMode,
+                AttackBoost.Boost, SaveCrystals.AllHeal, AutoSave.Enabled, QualityOfLife.MedalPrices, Multipliers.Exp,
+                Multipliers.Berries })
             {
                 if (setting != null && reset)
                 {

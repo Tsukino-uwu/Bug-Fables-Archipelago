@@ -47,7 +47,8 @@ namespace BugFablesAP
             MainManager.Maps map = int.TryParse(parts[1], out int number)
                 ? (MainManager.Maps)number
                 : (MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), parts[1], true);
-            // @<name>: land at the map's origin, then step beside the named entity, so a trigger starts on walking in, not mid-warp.
+            // @<name>: land at the map's origin, then step beside the named entity, so a trigger starts on walking in,
+            // not mid-warp.
             if (parts.Length > 2 && parts[2].StartsWith("@"))
             {
                 // The rest of the line: entity names can have spaces ("Crystal Berry").
@@ -71,8 +72,8 @@ namespace BugFablesAP
             pendingMap = (int)map;
             pendingFlag = flag;
             pendingSince = Time.realtimeSinceStartup;
-            // Warp onto the entity's own spot, never beside it: TransferMap waits for a walk to its target, which never ends
-            // over water. FinishWarp guards the item, then steps aside once the transition is over.
+            // Warp onto the entity's own spot, never beside it: TransferMap waits for a walk to its target, which never
+            // ends over water. FinishWarp guards the item, then steps aside once the transition is over.
             Vector3? at = flag >= 0 ? StartPosition(map, flag) : null;
             guarded = false;
             // A plain warp lands once, where walking in through a door into the map ends; a second move after arrival
@@ -94,10 +95,13 @@ namespace BugFablesAP
                 foreach (Vector3 side in sides)
                 {
                     Vector3 spot = at + side * distance + Vector3.up * 0.5f;
-                    bool blocked = Physics.OverlapSphere(spot + Vector3.up * 0.5f, 0.45f, ~0, QueryTriggerInteraction.Ignore)
-                        .Any(c => MainManager.player == null || !c.transform.IsChildOf(MainManager.player.transform.root));
+                    bool blocked = Physics.OverlapSphere(spot + Vector3.up * 0.5f, 0.45f, ~0,
+                        QueryTriggerInteraction.Ignore)
+                        .Any(c => MainManager.player == null
+                        || !c.transform.IsChildOf(MainManager.player.transform.root));
                     // Water raycasts as ground: hazards (water, spikes, pits) carry the Hazards component.
-                    bool ground = Physics.Raycast(spot + Vector3.up, Vector3.down, out RaycastHit hit, 4f, ~0, QueryTriggerInteraction.Collide)
+                    bool ground = Physics.Raycast(spot + Vector3.up, Vector3.down, out RaycastHit hit, 4f, ~0,
+                        QueryTriggerInteraction.Collide)
                         && hit.collider.GetComponentInParent<Hazards>() == null && !hit.collider.isTrigger;
                     if (!blocked && ground)
                     {
@@ -153,13 +157,16 @@ namespace BugFablesAP
         // The game's private end-of-event cleanup: clears inevent and minipause and resets the player.
         private static string Unstick()
         {
-            System.Reflection.MethodInfo end = HarmonyLib.AccessTools.Method(typeof(EventControl), "EndEvent", new[] { typeof(bool) });
+            System.Reflection.MethodInfo end = HarmonyLib.AccessTools.Method(typeof(EventControl), "EndEvent",
+                new[] { typeof(bool) });
             if (end == null)
             {
                 return "EventControl.EndEvent not found";
             }
-            // Scenes run as StartCoroutine("Event" + id): stop the dead one first, or it runs on and touches what the cleanup removes.
-            string stopped = MainManager.events != null && MainManager.lastevent >= 0 ? "Event" + MainManager.lastevent : null;
+            // Scenes run as StartCoroutine("Event" + id): stop the dead one first, or it runs on and touches what the
+            // cleanup removes.
+            string stopped = MainManager.events != null && MainManager.lastevent >= 0 ? "Event" + MainManager.lastevent
+                : null;
             if (stopped != null)
             {
                 MainManager.events.StopCoroutine(stopped);
@@ -200,7 +207,8 @@ namespace BugFablesAP
                 member.animstate = 0;
                 member.StopForceMove();
             }
-            // A dialogue that died mid-line leaves message set, freezing the player: undo it as the game's dialogue end does.
+            // A dialogue that died mid-line leaves message set, freezing the player: undo it as the game's dialogue end
+            // does.
             MainManager mmd = MainManager.instance;
             bool talking = mmd.message || mmd.waitinput || mmd.prompt;
             mmd.message = false;
@@ -242,7 +250,8 @@ namespace BugFablesAP
                     }
                 }
             }
-            if (MainManager.player != null && MainManager.player.entity != null && MainManager.player.entity.rigid != null)
+            if (MainManager.player != null && MainManager.player.entity != null
+                && MainManager.player.entity.rigid != null)
             {
                 MainManager.player.entity.rigid.constraints = RigidbodyConstraints.FreezeRotation;
             }
@@ -252,7 +261,9 @@ namespace BugFablesAP
             {
                 MainManager.PlayTransition(1, 0, 0.1f, Color.black);
             }
-            return (stopped != null ? "stopped " + stopped + "; " : "") + "ran the game's end-of-event cleanup and camera, limit and music resets; inevent=" + MainManager.instance.inevent
+            return (stopped != null ? "stopped " + stopped + "; " : "")
+                + "ran the game's end-of-event cleanup and camera, limit and music resets; inevent="
+                + MainManager.instance.inevent
                 + ", minipause=" + MainManager.instance.minipause + (talking ? "; closed a dead dialogue" : "")
                 + (boxes > 0 ? $"; removed {boxes} leftover speech box(es)" : "")
                 + $"; freed {freed} party member(s); "
@@ -304,11 +315,13 @@ namespace BugFablesAP
             {
                 return;
             }
-            string busy = landed ? null : MainManager.battle != null ? "a battle" : MainManager.instance.inevent ? "an event"
+            string busy = landed ? null : MainManager.battle != null ? "a battle" : MainManager.instance.inevent
+                ? "an event"
                 : MainManager.instance.message ? "a dialogue" : null;
             if (landed || busy != null)
             {
-                lastResult = "arrived on " + map.mapid + (landed ? ", through a door into it" : $"; not stepped aside: {busy} started on arrival");
+                lastResult = "arrived on " + map.mapid
+                    + (landed ? ", through a door into it" : $"; not stepped aside: {busy} started on arrival");
                 shownAt = Time.realtimeSinceStartup;
                 log.LogInfo("[dev] " + lastResult);
                 pendingMap = -1;
@@ -329,7 +342,8 @@ namespace BugFablesAP
             {
                 target = entities.FirstOrDefault(e => e.objecttype == NPCControl.ObjectTypes.SavePoint)
                     ?? entities.FirstOrDefault(e => e.objecttype == NPCControl.ObjectTypes.DoorOtherMap);
-                where = target != null ? "by " + target.name + (pendingFlag >= 0 ? $" (nothing with flag {pendingFlag} here)" : "") : "at the map's origin";
+                where = target != null ? "by " + target.name
+                    + (pendingFlag >= 0 ? $" (nothing with flag {pendingFlag} here)" : "") : "at the map's origin";
             }
             if (target != null)
             {

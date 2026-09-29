@@ -7,8 +7,8 @@ using BepInEx.Logging;
 
 namespace BugFablesAP
 {
-    // Dev only: everything the mod read from the seed's slot_data, one sorted line per entry, to compare before and after
-    // a change to how slot_data is read. Written once a login has brought the seed.
+    // Dev only: everything the mod read from the seed's slot_data, one sorted line per entry, to compare before and
+    // after a change to how slot_data is read. Written once a login has brought the seed.
     internal static class SeedDump
     {
         internal static void Run(ManualLogSource log, ApConnection c)
@@ -22,7 +22,8 @@ namespace BugFablesAP
                     Add(table, e.Key, text(e.Value));
                 }
             }
-            string Ints(IEnumerable<int> values) => values == null ? "null" : string.Join(",", values.Select(v => v.ToString()).ToArray());
+            string Ints(IEnumerable<int> values) => values == null ? "null"
+                : string.Join(",", values.Select(v => v.ToString()).ToArray());
             void Blockers(string table, IEnumerable<ApConnection.Blocker> list)
             {
                 int i = 0;

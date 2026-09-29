@@ -100,6 +100,7 @@ namespace BugFablesAP
             return true;
         }
 
-        private static string Short(string s) => s.Length <= 60 ? $"'{s}'" : $"'{s.Substring(0, 60)}…' ({s.Length} chars)";
+        private static string Short(string s) => s.Length <= 60 ? $"'{s}'"
+            : $"'{s.Substring(0, 60)}…' ({s.Length} chars)";
     }
 }

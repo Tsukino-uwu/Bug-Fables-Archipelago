@@ -5,8 +5,8 @@ using HarmonyLib;
 
 namespace BugFablesAP
 {
-    // The Gameplay page's Attack boost: Off / +1, off by default. +1 on each hit a party member lands, where and when the
-    // game adds its own +1 for the member in front; the save's attack stat is never touched, only the
+    // The Gameplay page's Attack boost: Off / +1, off by default. +1 on each hit a party member lands, where and when
+    // the game adds its own +1 for the member in front; the save's attack stat is never touched, only the
     // medals screen's attack number shows the +1.
     internal static class AttackBoost
     {
@@ -53,13 +53,15 @@ namespace BugFablesAP
                     statText = null;
                 }
             }
-            log.LogInfo("[boost] installed on BattleControl.CalculateBaseDamage" + (statText != null ? " and PauseMenu.UpdateDynamicText" : ""));
+            log.LogInfo("[boost] installed on BattleControl.CalculateBaseDamage"
+                + (statText != null ? " and PauseMenu.UpdateDynamicText" : ""));
         }
 
         // The game's own player bonuses skip Raw hits and the demo battle; so does this one.
         [HarmonyPatch(typeof(BattleControl), "CalculateBaseDamage")]
         [HarmonyPrefix]
-        private static void BeforeBaseDamage(BattleControl __instance, MainManager.BattleData? attacker, ref int basevalue,
+        private static void BeforeBaseDamage(BattleControl __instance, MainManager.BattleData? attacker,
+            ref int basevalue,
             BattleControl.AttackProperty? property)
         {
             if (Boost == null || !Boost.Value || settingsOn == null || !settingsOn() || attacker == null
@@ -78,13 +80,15 @@ namespace BugFablesAP
             [HarmonyPostfix]
             private static void AfterStatText(PauseMenu __instance)
             {
-                if (Boost == null || !Boost.Value || settingsOn == null || !settingsOn() || __instance.windowid != MedalsWindow)
+                if (Boost == null || !Boost.Value || settingsOn == null || !settingsOn()
+                    || __instance.windowid != MedalsWindow)
                 {
                     return;
                 }
                 DynamicFont[] text = statText(__instance);
                 int member = menuOption(__instance);
-                if (text == null || text.Length < 6 || text[1] == null || member < 0 || member >= MainManager.instance.playerdata.Length)
+                if (text == null || text.Length < 6 || text[1] == null || member < 0
+                    || member >= MainManager.instance.playerdata.Length)
                 {
                     return;
                 }

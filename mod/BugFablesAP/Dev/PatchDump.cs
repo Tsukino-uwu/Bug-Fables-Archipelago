@@ -35,9 +35,11 @@ namespace BugFablesAP
                     if (ours.Count > 1)
                     {
                         // Order matters where one target has several of ours of a kind: the order they run in.
-                        log.LogInfo($"[dump] order of {kind}{(kind.EndsWith("x") ? "es" : "s")} on {Describe(target)}: " + string.Join(", ", ours
+                        log.LogInfo($"[dump] order of {kind}{(kind.EndsWith("x") ? "es" : "s")} on {Describe(target)}: "
+                            + string.Join(", ", ours
                             .OrderByDescending(p => p.priority).ThenBy(p => p.index)
-                            .Select(p => $"{TopType(p.PatchMethod.DeclaringType)?.Name}.{p.PatchMethod.Name}").ToArray()));
+                            .Select(p => $"{TopType(p.PatchMethod.DeclaringType)?.Name}.{p.PatchMethod.Name}")
+                            .ToArray()));
                     }
                     foreach (Patch patch in ours)
                     {
@@ -54,7 +56,8 @@ namespace BugFablesAP
             string outPath = Path.Combine(Paths.BepInExRootPath, "bugfablesap-patches.tsv");
             File.WriteAllLines(outPath, rows);
             log.LogInfo($"[dump] {rows.Count} patches on our owners -> {outPath}; HarmonyX "
-                + typeof(Harmony).Assembly.GetName().Version + (stale > 0 ? $"; {stale} from an older load (stale)" : ""));
+                + typeof(Harmony).Assembly.GetName().Version + (stale > 0 ? $"; {stale} from an older load (stale)"
+                : ""));
         }
 
         private static string Describe(MethodBase m) =>

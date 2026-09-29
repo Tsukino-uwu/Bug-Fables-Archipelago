@@ -26,10 +26,12 @@ namespace BugFablesAP
                 }
                 Rect r = s.textureRect;
                 table.Append(i).Append('\t').Append(s.name).Append('\t').Append(s.texture.name).Append('\t')
-                    .Append((int)r.x).Append('\t').Append((int)r.y).Append('\t').Append((int)r.width).Append('\t').Append((int)r.height).Append('\n');
+                    .Append((int)r.x).Append('\t').Append((int)r.y).Append('\t').Append((int)r.width).Append('\t')
+                    .Append((int)r.height).Append('\n');
                 if (saved.Add(s.texture))
                 {
-                    Save(s.texture, Path.Combine(Paths.BepInExRootPath, "bugfablesap-sheet-" + s.texture.name + ".png"));
+                    Save(s.texture, Path.Combine(Paths.BepInExRootPath, "bugfablesap-sheet-" + s.texture.name
+                        + ".png"));
                 }
             }
             File.WriteAllText(Path.Combine(Paths.BepInExRootPath, "bugfablesap-guisprites.tsv"), table.ToString());
@@ -38,8 +40,8 @@ namespace BugFablesAP
             return true;
         }
 
-        // The item and medal sprites too (itemsprites[kind, id]; kind 0 items and key items, 1 medals), with names, so a
-        // contact sheet can be made from them.
+        // The item and medal sprites too (itemsprites[kind, id]; kind 0 items and key items, 1 medals), with names, so
+        // a contact sheet can be made from them.
         private static void WriteItemSprites(ManualLogSource log, System.Collections.Generic.HashSet<Texture2D> saved)
         {
             if (MainManager.itemsprites == null)
@@ -60,11 +62,14 @@ namespace BugFablesAP
                     string name = (kind == 0 ? ItemSwap.TableCell(MainManager.itemdata, 0, id, 0)
                         : ItemSwap.TableCell(MainManager.badgedata, id, 0)) ?? "";
                     Rect r = s.textureRect;
-                    table.Append(kind).Append('\t').Append(id).Append('\t').Append(name).Append('\t').Append(s.texture.name).Append('\t')
-                        .Append((int)r.x).Append('\t').Append((int)r.y).Append('\t').Append((int)r.width).Append('\t').Append((int)r.height).Append('\n');
+                    table.Append(kind).Append('\t').Append(id).Append('\t').Append(name).Append('\t')
+                        .Append(s.texture.name).Append('\t')
+                        .Append((int)r.x).Append('\t').Append((int)r.y).Append('\t').Append((int)r.width).Append('\t')
+                        .Append((int)r.height).Append('\n');
                     if (saved.Add(s.texture))
                     {
-                        Save(s.texture, Path.Combine(Paths.BepInExRootPath, "bugfablesap-sheet-" + s.texture.name + ".png"));
+                        Save(s.texture, Path.Combine(Paths.BepInExRootPath, "bugfablesap-sheet-" + s.texture.name
+                            + ".png"));
                     }
                     count++;
                 }

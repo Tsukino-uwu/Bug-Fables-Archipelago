@@ -9,9 +9,9 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // DeathLink, a row in the Archipelago panel: a party wipe that reaches the game's Game Over sends a death; a received one
-    // strikes once play can take it (the game's own Game Over in a battle, Game Over then the last save outside one).
-    // A death DeathLink caused is never sent back.
+    // DeathLink, a row in the Archipelago panel: a party wipe that reaches the game's Game Over sends a death; a
+    // received one strikes once play can take it (the game's own Game Over in a battle, Game Over then the last save
+    // outside one). A death DeathLink caused is never sent back.
     internal static class DeathLinkGame
     {
         internal static ConfigEntry<bool> Enabled;
@@ -78,7 +78,8 @@ namespace BugFablesAP
         [HarmonyPrefix]
         private static void BeforeGameOverStep(object __instance)
         {
-            if (overState == null || (int)overState.GetValue(__instance) != 0 || overSkipSetup == null || (bool)overSkipSetup.GetValue(__instance))
+            if (overState == null || (int)overState.GetValue(__instance) != 0 || overSkipSetup == null
+                || (bool)overSkipSetup.GetValue(__instance))
             {
                 return;
             }
@@ -139,8 +140,10 @@ namespace BugFablesAP
                     EndStrike("back at the title");
                     return;
                 }
-                // Outside a battle, free again after a reload's scene: a few frames, so a strike's own first frames never count.
-                if (strikeFrames > 30 && MainManager.battle == null && MainManager.player != null && MainManager.FreePlayer()
+                // Outside a battle, free again after a reload's scene: a few frames, so a strike's own first frames
+                // never count.
+                if (strikeFrames > 30 && MainManager.battle == null && MainManager.player != null
+                    && MainManager.FreePlayer()
                     && !MainManager.roomtransition)
                 {
                     linkGameOver = null;
@@ -177,7 +180,8 @@ namespace BugFablesAP
                 }
                 else if (striking || Pending)
                 {
-                    log.LogInfo("[death] received (" + from + ") while one is already " + (striking ? "under way" : "waiting") + ": joined to it");
+                    log.LogInfo("[death] received (" + from + ") while one is already "
+                        + (striking ? "under way" : "waiting") + ": joined to it");
                 }
                 else
                 {
@@ -214,7 +218,8 @@ namespace BugFablesAP
                     Wait("a scripted fight (its loss is the story's)");
                     return;
                 }
-                if (battle.action || battle.alreadyending || battle.checkingdead != null || gameOver(battle) != null || mm.message || mm.pause)
+                if (battle.action || battle.alreadyending || battle.checkingdead != null || gameOver(battle) != null
+                    || mm.message || mm.pause)
                 {
                     Wait("the party's turn in the battle");
                     return;
@@ -225,7 +230,8 @@ namespace BugFablesAP
                 battle.StartCoroutine((IEnumerator)deadParty.Invoke(battle, null));
                 return;
             }
-            if (MainManager.player == null || MainManager.map == null || !MainManager.FreePlayer() || MainManager.roomtransition
+            if (MainManager.player == null || MainManager.map == null || !MainManager.FreePlayer()
+                || MainManager.roomtransition
                 || mm.intransition || mm.inbattle)
             {
                 Wait("a scene, a text box, a menu or a transition to end");
@@ -249,7 +255,8 @@ namespace BugFablesAP
             waitingFor = null;
         }
 
-        // As the game's Game Over ends in Load: the music fades, the screen goes black, the Game Over sound, the last save.
+        // As the game's Game Over ends in Load: the music fades, the screen goes black, the Game Over sound, the last
+        // save.
         private static IEnumerator OverworldGameOver()
         {
             MainManager mm = MainManager.instance;

@@ -80,7 +80,8 @@ namespace BugFablesAP
                             transfers.Add(tokenText);
                         }
                     }
-                    if (items.Count > 0 || money.Count > 0 || transfers.Count > 0 || flags.Exists(t => t.StartsWith("event,") || t.StartsWith("discovery,")))
+                    if (items.Count > 0 || money.Count > 0 || transfers.Count > 0
+                        || flags.Exists(t => t.StartsWith("event,") || t.StartsWith("discovery,")))
                     {
                         lines++;
                         sb.Append(map).Append('\t').Append(i).Append('\t')

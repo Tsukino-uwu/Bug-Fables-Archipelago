@@ -4,8 +4,8 @@ using BepInEx.Configuration;
 
 namespace BugFablesAP
 {
-    // The plugin's dev half: the [Debug] settings, the console, probes and dumps. Only the dev build compiles it; in the
-    // release build the partial calls to it in Plugin.cs vanish.
+    // The plugin's dev half: the [Debug] settings, the console, probes and dumps. Only the dev build compiles it; in
+    // the release build the partial calls to it in Plugin.cs vanish.
     public partial class Plugin
     {
         private ConfigEntry<bool> grantProbeEnabled;
@@ -23,7 +23,8 @@ namespace BugFablesAP
         private ConfigEntry<bool> devConsole;
         private ConfigEntry<string> devCommandFile;
         private ConfigEntry<int> giveMoney;
-        private bool patchDumpDone, seedDumpDone, spriteDumpDone, varDumpDone, questDumpDone, scriptDumpDone, entityDumpDone, mapDumpDone;
+        private bool patchDumpDone, seedDumpDone, spriteDumpDone, varDumpDone, questDumpDone, scriptDumpDone,
+            entityDumpDone, mapDumpDone;
         private bool saveDiffDone;
         private GrantProbe grantProbe;
         private bool devReloadChecked;
@@ -162,7 +163,8 @@ namespace BugFablesAP
                 QuestDump.Run(Log);
             }
 
-            if (varDumpEnabled.Value && !varDumpDone && MainManager.instance != null && MainManager.instance.prizeflags != null)
+            if (varDumpEnabled.Value && !varDumpDone && MainManager.instance != null
+                && MainManager.instance.prizeflags != null)
             {
                 varDumpDone = true;
                 VarDump.Run(Log);

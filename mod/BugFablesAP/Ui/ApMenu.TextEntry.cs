@@ -37,8 +37,8 @@ namespace BugFablesAP
                 GUIUtility.systemCopyBuffer = edited;
                 return;
             }
-            // The gamepad's confirm/cancel end editing: joykeys are raw buttons, [0] confirm and [1] cancel ([4]/[5] are
-            // Start and Back). Only the pad is read, so the keyboard's C and X still type.
+            // The gamepad's confirm/cancel end editing: joykeys are raw buttons, [0] confirm and [1] cancel ([4]/[5]
+            // are Start and Back). Only the pad is read, so the keyboard's C and X still type.
             bool pad = MainManager.usejoystick > 0;
             bool padConfirm = pad && InputIOManager.InputIO.GetKeyDown(0, true);
             bool padCancel = pad && InputIOManager.InputIO.GetKeyDown(1, true);
@@ -88,7 +88,8 @@ namespace BugFablesAP
             Redraw();
         }
 
-        private ConfigEntry<string> Field(int r) => r == Address ? server : r == PortRow ? port : r == SlotRow ? slot : password;
+        private ConfigEntry<string> Field(int r) =>
+            r == Address ? server : r == PortRow ? port : r == SlotRow ? slot : password;
 
         private static string Clean(string s)
         {

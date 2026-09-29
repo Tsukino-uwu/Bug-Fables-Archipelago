@@ -36,7 +36,8 @@ namespace BugFablesAP
         }
 
         // The game redraws a pickup's own sprite, so the look is put back, as ItemSwap.TickGround does for locations.
-        private static readonly List<KeyValuePair<NPCControl, Sprite>> memberLooks = new List<KeyValuePair<NPCControl, Sprite>>();
+        private static readonly List<KeyValuePair<NPCControl, Sprite>> memberLooks =
+            new List<KeyValuePair<NPCControl, Sprite>>();
 
         private static void KeepMemberLooks()
         {
@@ -59,7 +60,8 @@ namespace BugFablesAP
             }
         }
 
-        // Looks only: a Crunchy Leaf pickup drawn as party member n, as a location holding him is; taking it gives the leaf.
+        // Looks only: a Crunchy Leaf pickup drawn as party member n, as a location holding him is; taking it gives the
+        // leaf.
         private static string SpawnMember(string[] parts)
         {
             if (MainManager.player == null || MainManager.map == null)
@@ -67,11 +69,13 @@ namespace BugFablesAP
                 return "not now: no player";
             }
             int member = int.Parse(parts[2]);
-            float x = parts.Length > 4 ? float.Parse(parts[3], System.Globalization.CultureInfo.InvariantCulture) : 1.5f;
+            float x = parts.Length > 4 ? float.Parse(parts[3], System.Globalization.CultureInfo.InvariantCulture)
+                : 1.5f;
             float z = parts.Length > 4 ? float.Parse(parts[4], System.Globalization.CultureInfo.InvariantCulture) : 0f;
             Vector3 at = MainManager.player.transform.position + new Vector3(x, 1f, z);
             NPCControl item = EntityControl.CreateItem(at, 0, 0, Vector3.zero, -1);
-            ItemSwap.DescribeOurs(ItemIds.Base + ItemIds.MemberOffset + member, ItemIds.MemberKind, out string name, out Sprite sprite, out _);
+            ItemSwap.DescribeOurs(ItemIds.Base + ItemIds.MemberOffset + member, ItemIds.MemberKind, out string name,
+                out Sprite sprite, out _);
             if (sprite != null)
             {
                 memberLooks.Add(new KeyValuePair<NPCControl, Sprite>(item, sprite));

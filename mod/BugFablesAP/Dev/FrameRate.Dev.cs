@@ -15,8 +15,8 @@ namespace BugFablesAP
         // For the patch dump: the hooks are installed as when the row turns on; each does nothing while it's off.
         internal static void InstallForDump() => EnsureInstalled();
 
-        // The console's "fpsscan": reads every method of the game and logs any that counts frames, scales by framestep inside
-        // a physics step, or blinks per frame, and isn't in the lists above (or is listed and no longer does).
+        // The console's "fpsscan": reads every method of the game and logs any that counts frames, scales by framestep
+        // inside a physics step, or blinks per frame, and isn't in the lists above (or is listed and no longer does).
         internal static string Scan()
         {
             var watch = Stopwatch.StartNew();
@@ -24,7 +24,8 @@ namespace BugFablesAP
             var methods = new List<MethodBase>();
             foreach (Type type in AccessTools.GetTypesFromAssembly(game))
             {
-                foreach (MethodInfo m in type.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Static
+                foreach (MethodInfo m in type.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance
+                    | BindingFlags.Static
                     | BindingFlags.Public | BindingFlags.NonPublic))
                 {
                     if (!m.IsAbstract && !m.ContainsGenericParameters && m.GetMethodBody() != null)
@@ -71,7 +72,8 @@ namespace BugFablesAP
             }
             countsFrames.Remove("MainManager.FrameDifference");
             var reached = new HashSet<MethodBase>();
-            var frontier = methods.Where(m => m.Name == "FixedUpdate" || m.Name.StartsWith("OnTrigger") || m.Name.StartsWith("OnCollision")).ToList();
+            var frontier = methods.Where(m => m.Name == "FixedUpdate" || m.Name.StartsWith("OnTrigger")
+                || m.Name.StartsWith("OnCollision")).ToList();
             for (int depth = 0; depth < 4 && frontier.Count > 0; depth++)
             {
                 var next = new List<MethodBase>();
@@ -85,7 +87,8 @@ namespace BugFablesAP
                 frontier = next;
             }
             var physics = new HashSet<string>(reached.Where(readsFramestep.Contains).Select(ListName));
-            string result = $"fpsscan: {methods.Count} methods in {watch.ElapsedMilliseconds} ms. Frame counts {Diff(countsFrames, FrameCounters)}. "
+            string result =
+                $"fpsscan: {methods.Count} methods in {watch.ElapsedMilliseconds} ms. Frame counts {Diff(countsFrames, FrameCounters)}. "
                 + $"Physics framestep {Diff(physics, PhysicsFramestep)}. Blinks {Diff(blinks, Blinkers)}.";
             log.LogInfo("[dev] " + result);
             return result;
@@ -111,8 +114,8 @@ namespace BugFablesAP
         }
 
 
-        // The console's "trace [frames]": where the nearest NPC showing an emoticon, its emoticon and the player land on
-        // screen in each drawn frame (x in pixels), to see which of them doesn't move with the smoothed camera.
+        // The console's "trace [frames]": where the nearest NPC showing an emoticon, its emoticon and the player land
+        // on screen in each drawn frame (x in pixels), to see which of them doesn't move with the smoothed camera.
         private static int traceLeft;
         private static readonly System.Text.StringBuilder traceLog = new System.Text.StringBuilder();
 
@@ -155,7 +158,8 @@ namespace BugFablesAP
             {
                 Vector3 n = cam.WorldToScreenPoint(npc.transform.position);
                 Vector3 m = cam.WorldToScreenPoint(npc.emoticon.transform.position);
-                Vector3 ms = npc.emoticonsprite != null ? cam.WorldToScreenPoint(npc.emoticonsprite.transform.position) : m;
+                Vector3 ms = npc.emoticonsprite != null ? cam.WorldToScreenPoint(npc.emoticonsprite.transform.position)
+                    : m;
                 traceLog.Append($" npc {n.x:0.0} emoticon {m.x:0.0} sprite {ms.x:0.0},{ms.y:0.0} yaw cam {cam.transform.eulerAngles.y:0.00} "
                     + $"true {savedTrueYaw:0.00} bubble {npc.emoticon.transform.eulerAngles.y:0.00} rotater {npc.emoticon.transform.parent.eulerAngles.y:0.00} ({npc.name}, interp {(npc.rigid != null ? npc.rigid.interpolation.ToString() : "none")}, "
                     + $"emoticon parent {(npc.emoticon.transform.parent != null ? npc.emoticon.transform.parent.name : "none")})");
@@ -188,8 +192,8 @@ namespace BugFablesAP
             lastDrawMs = (float)drawWork.Elapsed.TotalMilliseconds;
         }
 
-        // The console's "rates <seconds>": per second, how many sixtieths the frames were worth (Step) and how many frames
-        // started a new sixtieth (OnTick). Both 60 means everything built on them runs as at 60 fps.
+        // The console's "rates <seconds>": per second, how many sixtieths the frames were worth (Step) and how many
+        // frames started a new sixtieth (OnTick). Both 60 means everything built on them runs as at 60 fps.
         private static float ratesUntil = -1f, ratesStart, stepSum;
         private static int ratesFrames, tickCount, ratesLastFrame = -1;
 

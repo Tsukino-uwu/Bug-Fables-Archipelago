@@ -8,16 +8,17 @@ using HarmonyLib;
 
 namespace BugFablesAP
 {
-    // Every learned field ability is an item (slot_data ability_items). Where the game asks whether the party has learned
-    // one in order to use it (in the field, a skill list, a battle), the key item in the bag answers. The story's own
-    // reads of those flags, and the flags themselves, stay the game's: the scene that teaches an ability is its check.
+    // Every learned field ability is an item (slot_data ability_items). Where the game asks whether the party has
+    // learned one in order to use it (in the field, a skill list, a battle), the key item in the bag answers. The
+    // story's own reads of those flags, and the flags themselves, stay the game's: the scene that teaches an ability is
+    // its check.
     internal static class Abilities
     {
         // Key items, after the four moves' (CustomItems.MoveKeyItem, 201-204).
         internal const int Halt = 205, Dash = 206, HornDash = 207, BeeFly = 208, Dig = 209, Icicle = 210, Shield = 211;
 
-        // Each learned ability's key item: its name, its member (0 Vi, 1 Kabbu, 2 Leif), the game flag it answers for, and
-        // its field skill (skilldata's row: the game's own name and description, in the player's language).
+        // Each learned ability's key item: its name, its member (0 Vi, 1 Kabbu, 2 Leif), the game flag it answers for,
+        // and its field skill (skilldata's row: the game's own name and description, in the player's language).
         internal static readonly (int Key, string Name, int Member, int Flag, int Skill)[] Keys =
         {
             (Halt, "Beemerang Halt", 0, 21, 35), (Dash, "Dash", 1, 699, 49), (HornDash, "Horn Dash", 1, 39, 38),
@@ -172,8 +173,8 @@ namespace BugFablesAP
         private static IEnumerable<CodeInstruction> TranspileHalt(IEnumerable<CodeInstruction> instructions) =>
             Hooks.Safe(instructions, code => Transpile(code, new[] { 21 }), "abilities");
 
-        // `ldfld flags; ldc.i4 n; ldelem.u1` becomes `ldfld flags; ldc.i4 n; call Learned`: the same stack, bool[] and int in,
-        // bool out. Labels stay on the instruction.
+        // `ldfld flags; ldc.i4 n; ldelem.u1` becomes `ldfld flags; ldc.i4 n; call Learned`: the same stack, bool[] and
+        // int in, bool out. Labels stay on the instruction.
         private static IEnumerable<CodeInstruction> Transpile(List<CodeInstruction> code, int[] flags)
         {
             List<int> reads = Enumerable.Range(2, Math.Max(0, code.Count - 2))
@@ -190,7 +191,8 @@ namespace BugFablesAP
             return code;
         }
 
-        // The game's flags[index], or, for a learned ability in a seed that makes it an item, whether its key item has come.
+        // The game's flags[index], or, for a learned ability in a seed that makes it an item, whether its key item has
+        // come.
         public static bool Learned(bool[] flags, int index)
         {
             if (!AbilityItems || randomizerOn == null || !randomizerOn() || !keyForFlag.TryGetValue(index, out int key))

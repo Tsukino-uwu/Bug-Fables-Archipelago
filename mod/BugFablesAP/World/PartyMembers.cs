@@ -15,8 +15,8 @@ namespace BugFablesAP
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
 
-        // -1 off, 0 Vi, 1 Kabbu, 2 Leif. A seed that names one (slot_data starting_member, -1 the story's party included)
-        // wins; the dev setting only stands in without one.
+        // -1 off, 0 Vi, 1 Kabbu, 2 Leif. A seed that names one (slot_data starting_member, -1 the story's party
+        // included) wins; the dev setting only stands in without one.
         internal static int DevStartMember = -1;
         private static Func<SeedData> seed;
         internal static int SeedStartMember => seed?.Invoke()?.StartingMember ?? -1;
@@ -46,7 +46,8 @@ namespace BugFablesAP
             Received.UnionWith(ids);
         }
 
-        // A party member item: allowed from now on, and joins at once (ItemReceiver gives only while the player is free).
+        // A party member item: allowed from now on, and joins at once (ItemReceiver gives only while the player is
+        // free).
         internal static string Receive(int id)
         {
             Received.Add(id);
@@ -129,8 +130,8 @@ namespace BugFablesAP
         }
 
         // A member already in the party whom the story hasn't reached yet (Leif before the spider) stays when the story
-        // sets its own party, e.g. the opening's Vi and Kabbu; with all three from the start he joins there. Not in the spider scene (Event6): its fights are the story's,
-        // and he rejoins after it.
+        // sets its own party, e.g. the opening's Vi and Kabbu; with all three from the start he joins there. Not in the
+        // spider scene (Event6): its fights are the story's, and he rejoins after it.
         private static void KeepMembersAhead(ref int[] ids)
         {
             MainManager mm = MainManager.instance;
@@ -152,7 +153,8 @@ namespace BugFablesAP
         }
 
         // Leif's lake scene (Event14) never starts with Archipelago on: it reads its Leif from map.tempfollowers[0] and
-        // crashes when he's in the party. Its effects are done here instead: flag 16, entity 5's regional flag, the follower entry.
+        // crashes when he's in the party. Its effects are done here instead: flag 16, entity 5's regional flag, the
+        // follower entry.
         private static class JoiningScenes
         {
             [HarmonyPatch(typeof(EventControl), nameof(EventControl.StartEvent), typeof(int), typeof(NPCControl))]
@@ -179,8 +181,8 @@ namespace BugFablesAP
             }
         }
 
-        // Leif's one line at the start of his first battle (BattleControl.EventDialogue 3, while 16 is set and 24 isn't) is
-        // marked said as soon as he has joined, whatever Skip cutscenes says.
+        // Leif's one line at the start of his first battle (BattleControl.EventDialogue 3, while 16 is set and 24
+        // isn't) is marked said as soon as he has joined, whatever Skip cutscenes says.
         private static void SkipLeifsFirstBattleLine(MainManager mm)
         {
             if (randomizerOn == null || !randomizerOn() || MainManager.map == null || mm.flags == null || !mm.flags[GameFlags.LeifJoined] || mm.flags[24]
@@ -275,7 +277,8 @@ namespace BugFablesAP
             }
         }
 
-        // SetPlayers() without arguments leaves the old player characters, controls and all: remove any not the party's.
+        // SetPlayers() without arguments leaves the old player characters, controls and all: remove any not the
+        // party's.
         private static float nextSweep;
 
         private static void RemoveStrayPlayers(MainManager mm)
@@ -341,7 +344,8 @@ namespace BugFablesAP
                 + $"; the guard keeps member {id} out (start {StartMember})";
         }
 
-        // As the dev console's addleif: ChangeParty with fromscratch (without it the list comes out empty), then SetPlayers.
+        // As the dev console's addleif: ChangeParty with fromscratch (without it the list comes out empty), then
+        // SetPlayers.
         internal static string Add(int id)
         {
             MainManager mm = MainManager.instance;

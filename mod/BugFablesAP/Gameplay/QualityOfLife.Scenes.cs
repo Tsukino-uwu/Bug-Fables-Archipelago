@@ -11,8 +11,8 @@ namespace BugFablesAP
 {
     internal static partial class QualityOfLife
     {
-        // The first spider fight (Event6) can't be won and ends by itself on turn 3: with Skip cutscenes it ends, the same
-        // way, as soon as the player could act. The second fight (two enemies, flagvar 11 at 2) is a real one.
+        // The first spider fight (Event6) can't be won and ends by itself on turn 3: with Skip cutscenes it ends, the
+        // same way, as soon as the player could act. The second fight (two enemies, flagvar 11 at 2) is a real one.
         private static readonly MethodInfo exitBattle = AccessTools.Method(typeof(BattleControl), "ExitBattle");
         private static readonly FieldInfo battleInEvent = AccessTools.Field(typeof(BattleControl), "inevent");
         private static readonly FieldInfo battleAction = AccessTools.Field(typeof(BattleControl), "action");
@@ -25,8 +25,10 @@ namespace BugFablesAP
             {
                 MainManager mm = MainManager.instance;
                 if (!SkipCutscenes.Value || SettingsOn == null || !SettingsOn() || MainManager.lastevent != 6
-                    || !mm.flags[GameFlags.PermitEvent] || mm.flags[GameFlags.LeifFollows] || (mm.flagvar[11] != 0 && mm.flagvar[11] != 1)
-                    || __instance.enemydata == null || __instance.enemydata.Length != 1 || __instance.enemydata[0].animid != 2
+                    || !mm.flags[GameFlags.PermitEvent] || mm.flags[GameFlags.LeifFollows]
+                    || (mm.flagvar[11] != 0 && mm.flagvar[11] != 1)
+                    || __instance.enemydata == null || __instance.enemydata.Length != 1 || __instance.enemydata[0]
+                    .animid != 2
                     || (bool)battleInEvent.GetValue(__instance) || (bool)battleAction.GetValue(__instance))
                 {
                     return true;
@@ -37,15 +39,16 @@ namespace BugFablesAP
             }
         }
 
-        // The trapdoor scene lands the party on its own spots; once it ends, the party enters the fall room again the way the
-        // opened trapdoor leads in (the door room's way down), as any door arrival does.
+        // The trapdoor scene lands the party on its own spots; once it ends, the party enters the fall room again the
+        // way the opened trapdoor leads in (the door room's way down), as any door arrival does.
         private const int TrapdoorEvent = 5;
         private static bool trapdoorLanding;
 
         private static void TickTrapdoorLanding(MainManager mm, string here)
         {
-            // The scene's second half (the landing talk in the fall room) is replaced: it ends on the black screen right after
-            // the fall, before its own placing (which at speed left the party far left, the camera swinging after them).
+            // The scene's second half (the landing talk in the fall room) is replaced: it ends on the black screen
+            // right after the fall, before its own placing (which at speed left the party far left, the camera swinging
+            // after them).
             if (here == "SnakemouthFallRoom" && mm.inevent && MainManager.lastevent == TrapdoorEvent)
             {
                 CutTrapdoorScene();
@@ -72,14 +75,17 @@ namespace BugFablesAP
                 log.LogWarning("[qol] after the trapdoor scene: no door from SnakemouthDoorRoom into the fall room; the party stays where the scene left it");
                 return;
             }
-            MainManager.instance.StartCoroutine(MainManager.TransferMap((int)MainManager.Maps.SnakemouthFallRoom, MainManager.player.transform.position, door[1], door[2]));
-            log.LogInfo("[qol] after the trapdoor scene" + (skipped ? " (skipped)" : "") + ": entering the fall room through the door room's way down");
+            MainManager.instance.StartCoroutine(MainManager.TransferMap((int)MainManager.Maps.SnakemouthFallRoom,
+                MainManager.player.transform.position, door[1], door[2]));
+            log.LogInfo("[qol] after the trapdoor scene" + (skipped ? " (skipped)" : "")
+                + ": entering the fall room through the door room's way down");
         }
 
         private static void CutTrapdoorScene()
         {
             MainManager.events.StopCoroutine("Event" + TrapdoorEvent);
-            // The scene turned the party's gravity off and forced their animations; the landing's transfer needs them normal.
+            // The scene turned the party's gravity off and forced their animations; the landing's transfer needs them
+            // normal.
             foreach (EntityControl member in MainManager.GetPartyEntities() ?? new EntityControl[0])
             {
                 if (member == null)
@@ -107,7 +113,8 @@ namespace BugFablesAP
             [HarmonyPrefix]
             private static bool BeforeStartEvent(int id)
             {
-                if (id == TrapdoorEvent && randomizerOn() && MainManager.map != null && MainManager.map.mapid.ToString() == "SnakemouthDoorRoom")
+                if (id == TrapdoorEvent && randomizerOn() && MainManager.map != null
+                    && MainManager.map.mapid.ToString() == "SnakemouthDoorRoom")
                 {
                     trapdoorLanding = true;
                 }
@@ -117,7 +124,8 @@ namespace BugFablesAP
                     // Also once done: its trigger stays until the map reloads, and running the scene then crashes.
                     openingPending = !MainManager.instance.flags[GameFlags.PermitEvent];
                     endEvent?.Invoke(null, null);
-                    log.LogInfo(openingPending ? "[qol] Event16 (the opening) skipped: the mod does what it leaves behind on the next free frame"
+                    log.LogInfo(openingPending
+                        ? "[qol] Event16 (the opening) skipped: the mod does what it leaves behind on the next free frame"
                         : "[qol] Event16 (the opening) refused: already done");
                     return false;
                 }
@@ -138,8 +146,10 @@ namespace BugFablesAP
                 // A trigger freezes the player (minipause) and only the scene's end undoes it: end it the game's way.
                 endEvent?.Invoke(null, null);
                 log.LogInfo($"[qol] skipped Event{id} on {scene.Map}: set flags {string.Join(", ", scene.Flags.Select(f => f.ToString()).ToArray())}, "
-                    + (scene.Discovery >= 0 ? $"discovery {scene.Discovery} now {MainManager.instance.librarystuff[(int)MainManager.Library.Discovery, scene.Discovery]}, " : "")
-                    + (endEvent != null ? "ended it the game's way" : "EndEvent NOT found: the player may stay frozen"));
+                    + (scene.Discovery >= 0
+                    ? $"discovery {scene.Discovery} now {MainManager.instance.librarystuff[(int)MainManager.Library.Discovery, scene.Discovery]}, " : "")
+                    + (endEvent != null ? "ended it the game's way"
+                    : "EndEvent NOT found: the player may stay frozen"));
                 return false;
             }
         }
@@ -153,7 +163,8 @@ namespace BugFablesAP
         private static bool InFastScene()
         {
             // A battle a scene starts is played at the game's own speed.
-            if (!SkipCutscenes.Value || !MainManager.instance.inevent || MainManager.battle != null || MainManager.instance.inbattle)
+            if (!SkipCutscenes.Value || !MainManager.instance.inevent || MainManager.battle != null
+                || MainManager.instance.inbattle)
             {
                 return false;
             }
@@ -161,7 +172,8 @@ namespace BugFablesAP
             return scene != null && scene.Flags == null;
         }
 
-        // The mod's hold-ups ask for ItemSwap.EmptyLine as their follow-up: answer |end|, which skips the wait for a press.
+        // The mod's hold-ups ask for ItemSwap.EmptyLine as their follow-up: answer |end|, which skips the wait for a
+        // press.
         private static class LineHook
         {
             [HarmonyPatch(typeof(MainManager), nameof(MainManager.GetDialogueText), typeof(int))]

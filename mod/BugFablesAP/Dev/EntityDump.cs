@@ -9,7 +9,8 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Dev only: dumps every map's entity table (fields the logic needs) and every item and medal name to the BepInEx folder.
+    // Dev only: dumps every map's entity table (fields the logic needs) and every item and medal name to the BepInEx
+    // folder.
     internal static class EntityDump
     {
         private const int RequiresCount = 38, LimitCount = 49, DataCount = 60, DialogueCount = 102;
@@ -35,7 +36,8 @@ namespace BugFablesAP
             return true;
         }
 
-        // The enemy table's columns the enemy shuffle and combat logic need: stats, start position, can't fall, event on death, weaknesses.
+        // The enemy table's columns the enemy shuffle and combat logic need: stats, start position, can't fall, event
+        // on death, weaknesses.
         private static void WriteEnemies(ManualLogSource log)
         {
             if (MainManager.enemydata == null)
@@ -49,12 +51,14 @@ namespace BugFablesAP
             int rows = MainManager.enemydata.GetLength(0);
             for (int id = 0; id < rows; id++)
             {
-                string name = MainManager.enemynames != null && id < MainManager.enemynames.Length ? MainManager.enemynames[id] : "";
+                string name = MainManager.enemynames != null && id < MainManager.enemynames.Length
+                    ? MainManager.enemynames[id] : "";
                 sb.Append(id).Append('\t').Append((MainManager.Enemies)id).Append('\t').Append(name).Append('\t')
                   .Append(MainManager.enemydata[id, 1]).Append('\t').Append(MainManager.enemydata[id, 2]).Append('\t')
                   .Append(MainManager.enemydata[id, 3]).Append('\t').Append(MainManager.enemydata[id, 19]).Append('\t')
                   .Append(MainManager.enemydata[id, 29]).Append('\t').Append(MainManager.enemydata[id, 26]).Append('\t')
-                  .Append(MainManager.enemydata[id, 25]).Append('\t').Append(MainManager.enemydata[id, 23]).AppendLine();
+                  .Append(MainManager.enemydata[id, 25]).Append('\t').Append(MainManager.enemydata[id, 23])
+                  .AppendLine();
             }
             File.WriteAllText(outPath, sb.ToString());
             log.LogInfo($"[dump] {rows} enemies -> {outPath}");
@@ -94,7 +98,8 @@ namespace BugFablesAP
                           .Append(f[RegionalFlag]).Append('\t').Append(f[ActivationFlag].Trim()).Append('\t')
                           .Append(f[InsideId].Trim()).Append('\t')
                           .Append(List(f, VectorCount, 3)).Append('\t')
-                          .Append(f[Position].Trim()).Append(':').Append(f[Position + 1].Trim()).Append(':').Append(f[Position + 2].Trim()).Append('\t')
+                          .Append(f[Position].Trim()).Append(':').Append(f[Position + 1].Trim()).Append(':')
+                          .Append(f[Position + 2].Trim()).Append('\t')
                           .Append(f[EmoticonOffset].Trim()).Append('\t')
                           .Append(List(f, BattleIds, 1)).AppendLine();
                         rows++;
@@ -128,7 +133,8 @@ namespace BugFablesAP
         }
 
         // One line for the table: the text's own line breaks and tabs become spaces.
-        private static string Line(string text) => (text ?? "").Replace('\n', ' ').Replace('\r', ' ').Replace('\t', ' ');
+        private static string Line(string text) => (text ?? "").Replace('\n', ' ').Replace('\r', ' ')
+            .Replace('\t', ' ');
 
         private static void WriteNames(ManualLogSource log)
         {
@@ -144,7 +150,8 @@ namespace BugFablesAP
                     continue;
                 }
                 sb.Append("item\t").Append(id).Append('\t').Append(item).Append('\t')
-                  .Append(MainManager.itemdata[0, id, 0]).Append('\t').Append(Line(MainManager.itemdata[0, id, 2])).AppendLine();
+                  .Append(MainManager.itemdata[0, id, 0]).Append('\t').Append(Line(MainManager.itemdata[0, id, 2]))
+                  .AppendLine();
                 items++;
             }
             foreach (MainManager.BadgeTypes badge in Enum.GetValues(typeof(MainManager.BadgeTypes)))
@@ -155,7 +162,8 @@ namespace BugFablesAP
                     continue;
                 }
                 sb.Append("medal\t").Append(id).Append('\t').Append(badge).Append('\t')
-                  .Append(MainManager.badgedata[id, 0]).Append('\t').Append(Line(MainManager.badgedata[id, 1])).AppendLine();
+                  .Append(MainManager.badgedata[id, 0]).Append('\t').Append(Line(MainManager.badgedata[id, 1]))
+                  .AppendLine();
                 medals++;
             }
             File.WriteAllText(outPath, sb.ToString());

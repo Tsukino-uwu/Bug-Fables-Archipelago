@@ -11,10 +11,10 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // The Quality of life row "Uncap FPS": a frame cap above the game's 30 or 60, with the game playing as it does at 60.
-    // The game moves its camera and characters in FixedUpdate (50 steps a second), so motion is drawn between the last two
-    // steps; what it counts in frames is held to 60 a second; what it scales by frame time inside a physics step reads as
-    // it does at 60.
+    // The Quality of life row "Uncap FPS": a frame cap above the game's 30 or 60, with the game playing as it does at
+    // 60. The game moves its camera and characters in FixedUpdate (50 steps a second), so motion is drawn between the
+    // last two steps; what it counts in frames is held to 60 a second; what it scales by frame time inside a physics
+    // step reads as it does at 60.
     internal static partial class FrameRate
     {
         private static ManualLogSource log;
@@ -28,8 +28,10 @@ namespace BugFablesAP
 
         internal static bool Active => active;
 
-        // What this frame is worth in sixtieths of a second: 1 at 60 fps and below, inside a physics step, or with the row off.
-        internal static float Step => !active || Time.inFixedTimeStep ? 1f : Mathf.Min(1f, Time.unscaledDeltaTime * 60f);
+        // What this frame is worth in sixtieths of a second: 1 at 60 fps and below, inside a physics step, or with the
+        // row off.
+        internal static float Step => !active || Time.inFixedTimeStep ? 1f
+            : Mathf.Min(1f, Time.unscaledDeltaTime * 60f);
 
         // Whether this frame starts a new 1/60 s (always, with the row off or inside a physics step).
         internal static bool OnTick
@@ -59,7 +61,8 @@ namespace BugFablesAP
             get
             {
                 string v = QualityOfLife.UncapFps?.Value;
-                int cap = v == "Monitor" ? Screen.currentResolution.refreshRate : v != null && int.TryParse(v, out int n) ? n : 0;
+                int cap = v == "Monitor" ? Screen.currentResolution.refreshRate : v != null
+                    && int.TryParse(v, out int n) ? n : 0;
                 return cap > 60 ? cap : 0;
             }
         }
@@ -143,7 +146,8 @@ namespace BugFablesAP
                     MainManager.ApplySettings();
                 }
             }
-            log.LogInfo(nowActive ? $"[fps] uncapped to {cap}: vSyncCount {QualitySettings.vSyncCount}, targetFrameRate "
+            log.LogInfo(nowActive
+                ? $"[fps] uncapped to {cap}: vSyncCount {QualitySettings.vSyncCount}, targetFrameRate "
                 + $"{Application.targetFrameRate} (monitor {Screen.currentResolution.refreshRate} Hz); motion drawn between physics steps"
                 : $"[fps] the game's own settings (FPS {MainManager.fps}, VSync {MainManager.vsync}): targetFrameRate "
                 + $"{Application.targetFrameRate}, vSyncCount {QualitySettings.vSyncCount}");
@@ -159,13 +163,16 @@ namespace BugFablesAP
                 throw new InvalidOperationException("its fixed hooks didn't install");
             }
 
-            // The lists the console's "fpsscan" finds by reading every method of the game; each method's body is still checked.
-            List<MethodBase> countsFrames = Listed(FrameCounters, m => Reads(m, (op, v) => v is MethodInfo mi && mi == FrameCountGetter));
+            // The lists the console's "fpsscan" finds by reading every method of the game; each method's body is still
+            // checked.
+            List<MethodBase> countsFrames = Listed(FrameCounters, m => Reads(m, (op, v) => v is MethodInfo mi
+                && mi == FrameCountGetter));
             foreach (MethodBase m in countsFrames)
             {
                 Patch(m, transpiler: nameof(TranspileFrameCount));
             }
-            List<MethodBase> fixedFramestep = Listed(PhysicsFramestep, m => Reads(m, (op, v) => op == OpCodes.Ldsfld && v is FieldInfo f && f == FramestepField));
+            List<MethodBase> fixedFramestep = Listed(PhysicsFramestep, m => Reads(m, (op, v) => op == OpCodes.Ldsfld
+                && v is FieldInfo f && f == FramestepField));
             foreach (MethodBase m in fixedFramestep)
             {
                 Patch(m, transpiler: nameof(TranspileFramestep));
@@ -181,18 +188,24 @@ namespace BugFablesAP
         // Type.Method; a star marks a coroutine (its MoveNext is patched).
         private static readonly string[] FrameCounters =
         {
-            "BattleControl.Update", "BattleControl.EnemyHeavyThrow*", "Caravan.LateUpdate", "EntityControl.DoFollow", "EntityControl.Numb",
-            "EntityControl.LateUpdate", "EntityControl.UpdateVelocity", "EntityControl.UpdateCollider", "EntityControl.UpdateEmoticon",
-            "EntityControl.RefreshShadow", "EntityControl.OnTriggerStay", "Fader.LateUpdate", "FishAI.DoAI", "FishAI.UpdateDistance",
-            "FishAI.UpdatePos", "FishingMain.Update", "HelpArrow.Update", "Hidder.LateUpdate", "LightFlicker.Update", "LightSorter.LateUpdate",
+            "BattleControl.Update", "BattleControl.EnemyHeavyThrow*", "Caravan.LateUpdate", "EntityControl.DoFollow",
+                "EntityControl.Numb",
+            "EntityControl.LateUpdate", "EntityControl.UpdateVelocity", "EntityControl.UpdateCollider",
+                "EntityControl.UpdateEmoticon",
+            "EntityControl.RefreshShadow", "EntityControl.OnTriggerStay", "Fader.LateUpdate", "FishAI.DoAI",
+                "FishAI.UpdateDistance",
+            "FishAI.UpdatePos", "FishingMain.Update", "HelpArrow.Update", "Hidder.LateUpdate", "LightFlicker.Update",
+                "LightSorter.LateUpdate",
             "MapControl.LateUpdate", "NPCControl.Update", "NPCControl.LateUpdate", "PlayerControl.LateUpdate",
         };
 
-        private static readonly string[] PhysicsFramestep = { "EntityControl.FixedUpdate", "PlayerControl.OnTriggerStay", "BattleControl.UpdateEntities" };
+        private static readonly string[] PhysicsFramestep = { "EntityControl.FixedUpdate",
+            "PlayerControl.OnTriggerStay", "BattleControl.UpdateEntities" };
 
         private static readonly string[] Blinkers =
         {
-            "NPCControl.Update", "BattleControl.DoAction*", "EntityControl.Update", "PauseMenu.Update", "Pips.ChangeRenderers",
+            "NPCControl.Update", "BattleControl.DoAction*", "EntityControl.Update", "PauseMenu.Update",
+                "Pips.ChangeRenderers",
             "EntityControl.ZaspWarp*", "EventControl.Event111*", "EventControl.ZaspWarp*", "EventControl.Event173*",
         };
 
@@ -204,9 +217,12 @@ namespace BugFablesAP
                 bool iter = entry.EndsWith("*");
                 string[] parts = entry.TrimEnd('*').Split('.');
                 Type type = typeof(MainManager).Assembly.GetType(parts[0]);
-                var overloads = type == null ? new List<MethodInfo>() : type.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance
-                    | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).Where(m => m.Name == parts[1]).ToList();
-                var matched = overloads.Select(m => iter ? (MethodBase)AccessTools.EnumeratorMoveNext(m) : m).Where(m => m != null && check(m)).ToList();
+                var overloads = type == null ? new List<MethodInfo>() : type.GetMethods(BindingFlags.DeclaredOnly
+                    | BindingFlags.Instance
+                    | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).Where(m => m.Name == parts[1])
+                    .ToList();
+                var matched = overloads.Select(m => iter ? (MethodBase)AccessTools.EnumeratorMoveNext(m) : m)
+                    .Where(m => m != null && check(m)).ToList();
                 if (matched.Count == 0)
                 {
                     log.LogWarning($"[fps] {entry} no longer found as expected: that correction is missing");
@@ -234,7 +250,8 @@ namespace BugFablesAP
         private static bool HasBlink(MethodBase m)
         {
             List<KeyValuePair<OpCode, object>> body = ReadBody(m, log, "fps");
-            if (body == null || !body.Any(i => i.Value is MethodInfo sm && sm.Name == "set_enabled" && sm.DeclaringType == typeof(Renderer)))
+            if (body == null || !body.Any(i => i.Value is MethodInfo sm && sm.Name == "set_enabled"
+                && sm.DeclaringType == typeof(Renderer)))
             {
                 return false;
             }
@@ -244,7 +261,8 @@ namespace BugFablesAP
 
         private static readonly HashSet<string> unreadableLogged = new HashSet<string>();
 
-        // A method's IL, or null: none for an abstract, extern or runtime method, and a failed read logged once per tag.
+        // A method's IL, or null: none for an abstract, extern or runtime method, and a failed read logged once per
+        // tag.
         internal static List<KeyValuePair<OpCode, object>> ReadBody(MethodBase m, ManualLogSource logger, string tag)
         {
             try
@@ -262,7 +280,8 @@ namespace BugFablesAP
             }
         }
 
-        private static void Patch(MethodBase target, string prefix = null, string postfix = null, string transpiler = null)
+        private static void Patch(MethodBase target, string prefix = null, string postfix = null,
+            string transpiler = null)
         {
             if (target == null)
             {
@@ -282,9 +301,9 @@ namespace BugFablesAP
             }
         }
 
-        // A cap that divides the monitor's refresh rate is met with VSync (every refresh, every second one, ...): without it
-        // frames tear, which shows as a blur on anything moving sideways. Any other cap is a limit with VSync off. The
-        // target frame rate is the rate that results, which the game's tap bar reads.
+        // A cap that divides the monitor's refresh rate is met with VSync (every refresh, every second one, ...):
+        // without it frames tear, which shows as a blur on anything moving sideways. Any other cap is a limit with
+        // VSync off. The target frame rate is the rate that results, which the game's tap bar reads.
         private static void Enforce(int cap)
         {
             int refresh = Screen.currentResolution.refreshRate;
@@ -327,8 +346,8 @@ namespace BugFablesAP
             }
         }
 
-        // A platform carries whoever stands on it as its child; interpolation drew them from their own physics poses and
-        // held them back, like walking in mud (seen at 240 fps). Not interpolated while on one.
+        // A platform carries whoever stands on it as its child; interpolation drew them from their own physics poses
+        // and held them back, like walking in mud (seen at 240 fps). Not interpolated while on one.
         [HarmonyPatch(typeof(GroundDetector), "OnTriggerStay")]
         [HarmonyPatch(typeof(GroundDetector), "OnTriggerExit")]
         [HarmonyPostfix]
@@ -340,9 +359,9 @@ namespace BugFablesAP
             }
         }
 
-        // One decision for both cases, so neither undoes the other: not interpolated on a platform, or while a frozen enemy
-        // (the game writes a frozen enemy's position back every frame, from the drawn pose that trails the physics one, so
-        // it dragged: slow after the first knock, fine with interpolation off).
+        // One decision for both cases, so neither undoes the other: not interpolated on a platform, or while a frozen
+        // enemy (the game writes a frozen enemy's position back every frame, from the drawn pose that trails the
+        // physics one, so it dragged: slow after the first knock, fine with interpolation off).
         private static void Interpolate(EntityControl entity, bool onPlatform)
         {
             Rigidbody body = entity.rigid;
@@ -352,7 +371,8 @@ namespace BugFablesAP
             }
             NPCControl npc = entity.npcdata;
             bool frozen = npc != null && npc.entitytype == NPCControl.NPCType.Enemy && npc.freezecooldown > 0f;
-            RigidbodyInterpolation wanted = onPlatform || frozen ? RigidbodyInterpolation.None : RigidbodyInterpolation.Interpolate;
+            RigidbodyInterpolation wanted = onPlatform || frozen ? RigidbodyInterpolation.None
+                : RigidbodyInterpolation.Interpolate;
             if (body.interpolation != wanted)
             {
                 body.interpolation = wanted;
@@ -360,7 +380,8 @@ namespace BugFablesAP
         }
 
         // Shaky letters jump to a new random spot, and glitchy ones roll their swap, once per frame: at 240 a blur (the
-        // user). Between 1/60 s ticks both hold still; a shaky letter's position also overrides wavy, so wavy holds too.
+        // user). Between 1/60 s ticks both hold still; a shaky letter's position also overrides wavy, so wavy holds
+        // too.
         private const int Shaky = 1, Wavy = 2, Glitchy = 4;
 
         [HarmonyPatch(typeof(FontEffects), "Update")]
@@ -402,11 +423,12 @@ namespace BugFablesAP
             }
         }
 
-        // MainManager.ShakeObject (the bushes before the leaf gang's ambush, and many scenes) moves its object to a new random
-        // offset every frame. The game's loop, with the offset kept between 1/60 s ticks.
+        // MainManager.ShakeObject (the bushes before the leaf gang's ambush, and many scenes) moves its object to a new
+        // random offset every frame. The game's loop, with the offset kept between 1/60 s ticks.
         [HarmonyPatch(typeof(MainManager), nameof(MainManager.ShakeObject))]
         [HarmonyPrefix]
-        private static bool BeforeShakeObject(Transform obj, Vector3 shake, float frametime, bool returntostart, ref IEnumerator __result)
+        private static bool BeforeShakeObject(Transform obj, Vector3 shake, float frametime, bool returntostart,
+            ref IEnumerator __result)
         {
             if (!active)
             {
@@ -438,11 +460,12 @@ namespace BugFablesAP
             }
         }
 
-        // A knocked ice block (a frozen enemy, a pushed rock) slides by icevel until a frame sees it with no vertical speed,
-        // which reads as landed. The knock sets its speed flat and hops it a frame later: at 60 a physics step (gravity)
-        // comes between, at 240 usually not, so the slide was cancelled at once and stopped short. A cancel in a
-        // frame no physics step came before is undone; one right after a step (a real landing) stands.
-        private static readonly AccessTools.FieldRef<NPCControl, Vector3> iceVelocity = AccessTools.FieldRefAccess<NPCControl, Vector3>("icevel");
+        // A knocked ice block (a frozen enemy, a pushed rock) slides by icevel until a frame sees it with no vertical
+        // speed, which reads as landed. The knock sets its speed flat and hops it a frame later: at 60 a physics step
+        // (gravity) comes between, at 240 usually not, so the slide was cancelled at once and stopped short. A cancel
+        // in a frame no physics step came before is undone; one right after a step (a real landing) stands.
+        private static readonly AccessTools.FieldRef<NPCControl, Vector3> iceVelocity =
+            AccessTools.FieldRefAccess<NPCControl, Vector3>("icevel");
         private static readonly Dictionary<int, float> lastPhysics = new Dictionary<int, float>();
 
         [HarmonyPatch(typeof(NPCControl), "Update")]
@@ -484,7 +507,8 @@ namespace BugFablesAP
         // EntityControl.ShakeSprite (a character's shake, as on a hit that does no damage): the same, its sprite.
         [HarmonyPatch(typeof(EntityControl), nameof(EntityControl.ShakeSprite), typeof(Vector3), typeof(float))]
         [HarmonyPrefix]
-        private static bool BeforeShakeSprite(EntityControl __instance, Vector3 intensity, float frametimer, ref IEnumerator __result)
+        private static bool BeforeShakeSprite(EntityControl __instance, Vector3 intensity, float frametimer,
+            ref IEnumerator __result)
         {
             if (!active)
             {
@@ -503,7 +527,8 @@ namespace BugFablesAP
             {
                 if (first || OnTick)
                 {
-                    offset = new Vector3(UnityEngine.Random.Range(0f - intensity.x, intensity.x), UnityEngine.Random.Range(0f - intensity.y, intensity.y),
+                    offset = new Vector3(UnityEngine.Random.Range(0f - intensity.x, intensity.x),
+                        UnityEngine.Random.Range(0f - intensity.y, intensity.y),
                         UnityEngine.Random.Range(0f - intensity.z, intensity.z));
                     first = false;
                 }
@@ -649,9 +674,12 @@ namespace BugFablesAP
 
         // ---- What the game counts in frames, held to 60 a second. ----
 
-        private static readonly MethodInfo FrameCountGetter = AccessTools.PropertyGetter(typeof(Time), nameof(Time.frameCount));
-        private static readonly FieldInfo FramestepField = AccessTools.Field(typeof(MainManager), nameof(MainManager.framestep));
-        private static readonly FieldInfo VsyncField = AccessTools.Field(typeof(MainManager), nameof(MainManager.vsync));
+        private static readonly MethodInfo FrameCountGetter = AccessTools.PropertyGetter(typeof(Time),
+            nameof(Time.frameCount));
+        private static readonly FieldInfo FramestepField = AccessTools.Field(typeof(MainManager),
+            nameof(MainManager.framestep));
+        private static readonly FieldInfo VsyncField = AccessTools.Field(typeof(MainManager),
+            nameof(MainManager.vsync));
         private static int clockFrame = -1;
         private static long clockTick = -1;
         private static int logicalFrame;
@@ -675,8 +703,8 @@ namespace BugFablesAP
             }
         }
 
-        // For `Time.frameCount % n == 0`: the count of 1/60 s ticks on a tick's first frame; on the frames in between, 1,
-        // which no n above 1 divides, so a check made "every n frames" is made every n sixtieths of a second.
+        // For `Time.frameCount % n == 0`: the count of 1/60 s ticks on a tick's first frame; on the frames in between,
+        // 1, which no n above 1 divides, so a check made "every n frames" is made every n sixtieths of a second.
         private static int FrameCount()
         {
             if (!active)
@@ -739,7 +767,8 @@ namespace BugFablesAP
 
         private static IEnumerable<CodeInstruction> EditFramestep(List<CodeInstruction> code)
         {
-            List<CodeInstruction> reads = code.Where(i => i.opcode == OpCodes.Ldsfld && i.operand is FieldInfo f && f == FramestepField).ToList();
+            List<CodeInstruction> reads = code.Where(i => i.opcode == OpCodes.Ldsfld && i.operand is FieldInfo f
+                && f == FramestepField).ToList();
             MethodInfo framestep = AccessTools.Method(typeof(FrameRate), nameof(Framestep))
                 ?? throw new MissingMethodException(nameof(FrameRate), nameof(Framestep));
             foreach (CodeInstruction i in reads)
@@ -750,8 +779,8 @@ namespace BugFablesAP
             return code;
         }
 
-        // The tapping-key command's fill per press uses the refresh rate when the game's own VSync is on; with the row on,
-        // it reads the target frame rate, which Enforce sets to the rate that results.
+        // The tapping-key command's fill per press uses the refresh rate when the game's own VSync is on; with the row
+        // on, it reads the target frame rate, which Enforce sets to the rate that results.
         private static int GameVsync() => active ? 0 : MainManager.vsync;
 
         [HarmonyPatch(typeof(BattleControl), "DoCommand", MethodType.Enumerator)]
@@ -761,7 +790,8 @@ namespace BugFablesAP
 
         private static IEnumerable<CodeInstruction> EditTapBar(List<CodeInstruction> code)
         {
-            List<CodeInstruction> reads = code.Where(i => i.opcode == OpCodes.Ldsfld && i.operand is FieldInfo f && f == VsyncField).ToList();
+            List<CodeInstruction> reads = code.Where(i => i.opcode == OpCodes.Ldsfld && i.operand is FieldInfo f
+                && f == VsyncField).ToList();
             MethodInfo vsync = AccessTools.Method(typeof(FrameRate), nameof(GameVsync))
                 ?? throw new MissingMethodException(nameof(FrameRate), nameof(GameVsync));
             foreach (CodeInstruction i in reads)

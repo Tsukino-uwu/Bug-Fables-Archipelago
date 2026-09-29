@@ -15,8 +15,8 @@ namespace BugFablesAP
         private static Func<bool> settingsOn;
 
         private const float MinSeconds = 15f;
-        // Free this many frames in a row first: a map's auto-event starts once the player is free and sets its flag as it
-        // starts, so a save a frame too early could hold that flag and skip the scene on a reload.
+        // Free this many frames in a row first: a map's auto-event starts once the player is free and sets its flag as
+        // it starts, so a save a frame too early could hold that flag and skip the scene on a reload.
         private const int SettleFrames = 20;
 
         private static bool wasTransferring;
@@ -67,7 +67,8 @@ namespace BugFablesAP
                 freeFrames = 0;
                 return;
             }
-            if (mm == null || player == null || MainManager.battle != null || transferring || mm.intransition || mm.inbattle
+            if (mm == null || player == null || MainManager.battle != null || transferring || mm.intransition
+                || mm.inbattle
                 || !MainManager.FreePlayer() || player.entity == null || !player.entity.onground)
             {
                 freeFrames = 0;

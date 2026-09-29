@@ -9,10 +9,10 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // The places the game does something a fixed amount per rendered frame (a counter, a spin, a smoothing step), found by
-    // reading its code, each patched on the exact instructions so that above 60 fps it happens
-    // as much per second as at 60. Every helper is the plain operation when the Uncap FPS row is off or inside a physics
-    // step. A site whose instructions aren't found exactly as expected is left alone and logged.
+    // The places the game does something a fixed amount per rendered frame (a counter, a spin, a smoothing step), found
+    // by reading its code, each patched on the exact instructions so that above 60 fps it happens
+    // as much per second as at 60. Every helper is the plain operation when the Uncap FPS row is off or inside a
+    // physics step. A site whose instructions aren't found exactly as expected is left alone and logged.
     internal static class FrameSites
     {
         private enum Kind { InsertAfter, InsertBefore, ReplaceWithCall }
@@ -62,7 +62,8 @@ namespace BugFablesAP
             t.Rotate(x * k, y * k, z * k);
         }
 
-        // enabled = !enabled every frame (a blink): at most once per renderer each 1/60 s. A one-off toggle still happens.
+        // enabled = !enabled every frame (a blink): at most once per renderer each 1/60 s. A one-off toggle still
+        // happens.
         private static readonly Dictionary<int, long> toggledAt = new Dictionary<int, long>();
 
         private static void SetEnabledOnTick(Renderer r, bool value)
@@ -89,7 +90,8 @@ namespace BugFablesAP
             r.enabled = value;
         }
 
-        // `FloorToInt(a) % n == 0` on a time-driven a: true once per whole value, as at 60, not on every frame within it.
+        // `FloorToInt(a) % n == 0` on a time-driven a: true once per whole value, as at 60, not on every frame within
+        // it.
         private static int lastEvent26 = int.MinValue, lastEvent99 = int.MinValue;
 
         private static int OncePerValueEvent26(float a) => Once(Mathf.FloorToInt(a), ref lastEvent26);
@@ -111,7 +113,8 @@ namespace BugFablesAP
         }
 
         // WaitForSeconds resumes on the first frame at or after its time: at 60 fps a 0.02 s letter wait is two frames.
-        private static float WaitTime(float seconds) => FrameRate.Active ? Mathf.Ceil(seconds * 60f - 0.001f) / 60f : seconds;
+        private static float WaitTime(float seconds) => FrameRate.Active ? Mathf.Ceil(seconds * 60f - 0.001f) / 60f
+            : seconds;
 
         // ---- Matching. ----
 
@@ -121,20 +124,26 @@ namespace BugFablesAP
             (i.opcode == OpCodes.Call || i.opcode == OpCodes.Callvirt) && i.operand is MethodInfo m && m.Name == method
             && m.DeclaringType != null && m.DeclaringType.Name == type;
 
-        private static bool Field(CodeInstruction i, string field) => (i.opcode == OpCodes.Ldfld || i.opcode == OpCodes.Ldsfld) && Named(i, field);
+        private static bool Field(CodeInstruction i, string field) => (i.opcode == OpCodes.Ldfld
+            || i.opcode == OpCodes.Ldsfld) && Named(i, field);
 
-        private static bool LoadsFloat(CodeInstruction i, float value) => i.opcode == OpCodes.Ldc_R4 && i.operand is float f && Mathf.Approximately(f, value);
+        private static bool LoadsFloat(CodeInstruction i, float value) => i.opcode == OpCodes.Ldc_R4
+            && i.operand is float f && Mathf.Approximately(f, value);
 
         private static bool LoadsInt(CodeInstruction i, long value) => i.LoadsConstant(value);
 
-        private static CodeInstruction At(List<CodeInstruction> c, int i) => i >= 0 && i < c.Count ? c[i] : new CodeInstruction(OpCodes.Nop);
+        private static CodeInstruction At(List<CodeInstruction> c, int i) => i >= 0 && i < c.Count ? c[i]
+            : new CodeInstruction(OpCodes.Nop);
 
-        private static bool RotateVec(CodeInstruction i) => Calls(i, "Transform", "Rotate") && ((MethodInfo)i.operand).GetParameters().Length == 1
+        private static bool RotateVec(CodeInstruction i) => Calls(i, "Transform", "Rotate") && ((MethodInfo)i.operand)
+            .GetParameters().Length == 1
             && ((MethodInfo)i.operand).GetParameters()[0].ParameterType == typeof(Vector3);
 
-        private static bool Rotate3Floats(CodeInstruction i) => Calls(i, "Transform", "Rotate") && ((MethodInfo)i.operand).GetParameters().Length == 3;
+        private static bool Rotate3Floats(CodeInstruction i) => Calls(i, "Transform", "Rotate")
+            && ((MethodInfo)i.operand).GetParameters().Length == 3;
 
-        private static bool AnyLerp(CodeInstruction i) => Calls(i, "Vector3", "Lerp") || Calls(i, "Mathf", "Lerp") || Calls(i, "Color", "Lerp");
+        private static bool AnyLerp(CodeInstruction i) => Calls(i, "Vector3", "Lerp") || Calls(i, "Mathf", "Lerp")
+            || Calls(i, "Color", "Lerp");
 
         // A lerp whose factor is the constant right before it.
         private static Func<List<CodeInstruction>, int, bool> LerpWithConstant(params float[] factors) =>
@@ -142,9 +151,11 @@ namespace BugFablesAP
 
         // A per-frame "field ± 1" counter: the 1 between the field's load and the add or sub.
         private static Func<List<CodeInstruction>, int, bool> CounterOne(string field, bool add) =>
-            (c, i) => LoadsInt(c[i], 1) && Field(At(c, i - 1), field) && At(c, i + 1).opcode == (add ? OpCodes.Add : OpCodes.Sub);
+            (c, i) => LoadsInt(c[i], 1) && Field(At(c, i - 1), field) && At(c, i + 1)
+            .opcode == (add ? OpCodes.Add : OpCodes.Sub);
 
-        private static void Add(MethodBase method, string name, Kind kind, string helper, int expected, Func<List<CodeInstruction>, int, bool> at)
+        private static void Add(MethodBase method, string name, Kind kind, string helper, int expected,
+            Func<List<CodeInstruction>, int, bool> at)
         {
             if (method == null)
             {
@@ -158,7 +169,8 @@ namespace BugFablesAP
             list.Add(new Edit { Name = name, At = at, Kind = kind, Helper = helper, Expected = expected });
         }
 
-        private static MethodBase M(Type t, string name, params Type[] args) => args.Length == 0 ? AccessTools.Method(t, name) : AccessTools.Method(t, name, args);
+        private static MethodBase M(Type t, string name, params Type[] args) => args.Length == 0
+            ? AccessTools.Method(t, name) : AccessTools.Method(t, name, args);
 
         private static MethodBase Iter(Type t, string name, params Type[] args)
         {
@@ -176,38 +188,59 @@ namespace BugFablesAP
 
             // Gameplay.
             Add(M(typeof(FishAI), "DoAI"), "fish approach and nibble", Kind.InsertBefore, nameof(ScaleVec), 2,
-                (c, i) => Calls(c[i], "Vector3", "op_Addition") && Calls(At(c, i - 1), "Vector3", "op_Multiply") && Calls(At(c, i + 1), "Transform", "set_position"));
+                (c, i) => Calls(c[i], "Vector3", "op_Addition") && Calls(At(c, i - 1), "Vector3", "op_Multiply")
+                && Calls(At(c, i + 1), "Transform", "set_position"));
             Add(M(typeof(ScrewPlatform), "Update"), "screw platform", Kind.InsertAfter, nameof(Scale), 1,
-                (c, i) => c[i].opcode == OpCodes.Ldloc_1 && Calls(At(c, i - 1), "MainManager", "TieFramerate") && At(c, i + 1).opcode == OpCodes.Sub);
-            Add(M(typeof(WackaWorm), "Update"), "Wacka Worm reaction", Kind.InsertAfter, nameof(IntStep), 1, CounterOne("timer", add: false));
-            MethodBase doBehavior = typeof(NPCControl).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
-                .FirstOrDefault(m => m.Name == "DoBehavior" && m.GetParameters().Length == 2 && m.GetParameters()[0].ParameterType.IsByRef);
-            Add(doBehavior, "disguise countdown", Kind.InsertAfter, nameof(IntStep), 1, CounterOne("disguisecooldown", add: false));
+                (c, i) => c[i].opcode == OpCodes.Ldloc_1 && Calls(At(c, i - 1), "MainManager", "TieFramerate")
+                && At(c, i + 1).opcode == OpCodes.Sub);
+            Add(M(typeof(WackaWorm), "Update"), "Wacka Worm reaction", Kind.InsertAfter, nameof(IntStep), 1,
+                CounterOne("timer", add: false));
+            MethodBase doBehavior = typeof(NPCControl).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic
+                | BindingFlags.Public)
+                .FirstOrDefault(m => m.Name == "DoBehavior" && m.GetParameters().Length == 2 && m.GetParameters()[0]
+                .ParameterType.IsByRef);
+            Add(doBehavior, "disguise countdown", Kind.InsertAfter, nameof(IntStep), 1,
+                CounterOne("disguisecooldown", add: false));
             Add(doBehavior, "disguise turns", Kind.InsertAfter, nameof(TickValue), 2,
-                (c, i) => Field(c[i], "disguisecooldown") && (LoadsInt(At(c, i + 1), 80) || LoadsInt(At(c, i + 1), 40)));
+                (c, i) => Field(c[i], "disguisecooldown")
+                && (LoadsInt(At(c, i + 1), 80) || LoadsInt(At(c, i + 1), 40)));
             Add(doBehavior, "wander retries", Kind.InsertAfter, nameof(IntStep), 1, CounterOne("trycount", add: true));
             Add(doBehavior, "enemy height settling", Kind.InsertBefore, nameof(LerpT), 5, LerpWithConstant(0.1f));
             Add(M(typeof(NPCControl), "Update"), "dizzy enemy drop", Kind.InsertAfter, nameof(Scale), 1,
-                (c, i) => LoadsFloat(c[i], 0.075f) && Field(At(c, i - 1), "height") && At(c, i + 1).opcode == OpCodes.Sub);
+                (c, i) => LoadsFloat(c[i], 0.075f) && Field(At(c, i - 1), "height") && At(c, i + 1)
+                .opcode == OpCodes.Sub);
             Add(M(typeof(NPCControl), "Update"), "gate slides and sound fades", Kind.InsertBefore, nameof(LerpT), 4,
-                (c, i) => AnyLerp(c[i]) && (Field(At(c, i - 1), "x") || Field(At(c, i - 1), "y")) && Field(At(c, i - 4), "vectordata"));
-            Add(Iter(typeof(BattleControl), "DoAction"), "dig skill aim", Kind.InsertBefore, nameof(LerpT), 1, LerpWithConstant(0.025f));
-            Add(M(typeof(PlayerControl), "LateUpdate"), "Vi's hover rise", Kind.InsertBefore, nameof(LerpT), 1, LerpWithConstant(0.05f));
+                (c, i) => AnyLerp(c[i]) && (Field(At(c, i - 1), "x") || Field(At(c, i - 1), "y"))
+                && Field(At(c, i - 4), "vectordata"));
+            Add(Iter(typeof(BattleControl), "DoAction"), "dig skill aim", Kind.InsertBefore, nameof(LerpT), 1,
+                LerpWithConstant(0.025f));
+            Add(M(typeof(PlayerControl), "LateUpdate"), "Vi's hover rise", Kind.InsertBefore, nameof(LerpT), 1,
+                LerpWithConstant(0.05f));
             Add(M(typeof(MapControl), "LateUpdate"), "map culling grace", Kind.InsertAfter, nameof(Scale), 1,
-                (c, i) => LoadsFloat(c[i], 1f) && Field(At(c, i - 1), "alivetime") && At(c, i + 1).opcode == OpCodes.Sub);
+                (c, i) => LoadsFloat(c[i], 1f) && Field(At(c, i - 1), "alivetime") && At(c, i + 1)
+                .opcode == OpCodes.Sub);
 
             // Scenes.
             Add(Iter(typeof(EntityControl), "Drop"), "battle drop fall", Kind.InsertAfter, nameof(PowStep), 1,
                 (c, i) => LoadsFloat(c[i], 1.1f) && At(c, i + 1).opcode == OpCodes.Mul);
-            Add(M(typeof(EntityControl), "ReturnFromAction"), "return from dig", Kind.InsertBefore, nameof(LerpT), 1, LerpWithConstant(0.1f));
-            Add(Iter(typeof(EventControl), "Event26"), "scene 26 turns", Kind.ReplaceWithCall, nameof(OncePerValueEvent26), 1,
-                (c, i) => Calls(c[i], "Mathf", "FloorToInt") && LoadsInt(At(c, i + 1), 20) && At(c, i + 2).opcode == OpCodes.Rem);
-            Add(Iter(typeof(EventControl), "Event26"), "scene 26 fade", Kind.InsertBefore, nameof(LerpT), 1, LerpWithConstant(0.1f));
-            Add(Iter(typeof(EventControl), "Event99"), "scene 99 turns", Kind.ReplaceWithCall, nameof(OncePerValueEvent99), 1,
-                (c, i) => c[i].opcode == OpCodes.Conv_I4 && LoadsInt(At(c, i + 1), 50) && At(c, i + 2).opcode == OpCodes.Rem);
-            Add(Iter(typeof(MainManager), "SetText", typeof(string), typeof(int), typeof(float?), typeof(bool), typeof(bool), typeof(Vector3),
-                typeof(Vector3), typeof(Vector2), typeof(Transform), typeof(NPCControl)), "text waits", Kind.InsertBefore, nameof(WaitTime), -1,
-                (c, i) => c[i].opcode == OpCodes.Newobj && c[i].operand is ConstructorInfo ctor && ctor.DeclaringType == typeof(WaitForSeconds));
+            Add(M(typeof(EntityControl), "ReturnFromAction"), "return from dig", Kind.InsertBefore, nameof(LerpT), 1,
+                LerpWithConstant(0.1f));
+            Add(Iter(typeof(EventControl), "Event26"), "scene 26 turns", Kind.ReplaceWithCall,
+                nameof(OncePerValueEvent26), 1,
+                (c, i) => Calls(c[i], "Mathf", "FloorToInt") && LoadsInt(At(c, i + 1), 20) && At(c, i + 2)
+                .opcode == OpCodes.Rem);
+            Add(Iter(typeof(EventControl), "Event26"), "scene 26 fade", Kind.InsertBefore, nameof(LerpT), 1,
+                LerpWithConstant(0.1f));
+            Add(Iter(typeof(EventControl), "Event99"), "scene 99 turns", Kind.ReplaceWithCall,
+                nameof(OncePerValueEvent99), 1,
+                (c, i) => c[i].opcode == OpCodes.Conv_I4 && LoadsInt(At(c, i + 1), 50) && At(c, i + 2)
+                .opcode == OpCodes.Rem);
+            Add(Iter(typeof(MainManager), "SetText", typeof(string), typeof(int), typeof(float?), typeof(bool),
+                typeof(bool), typeof(Vector3),
+                typeof(Vector3), typeof(Vector2), typeof(Transform), typeof(NPCControl)), "text waits",
+                Kind.InsertBefore, nameof(WaitTime), -1,
+                (c, i) => c[i].opcode == OpCodes.Newobj && c[i].operand is ConstructorInfo ctor
+                && ctor.DeclaringType == typeof(WaitForSeconds));
 
             // Looks.
             Add(M(typeof(EntityControl), "UpdateFlip"), "spins", Kind.ReplaceWithCall, nameof(Rotate), 1,
@@ -216,22 +249,31 @@ namespace BugFablesAP
                 (c, i) => Calls(c[i], "Mathf", "LerpAngle") && Calls(At(c, i - 1), "EntityControl", "GetFlipSpeed"));
             Add(M(typeof(EntityControl), "UpdateFlip"), "dig spin", Kind.InsertAfter, nameof(Scale), 1,
                 (c, i) => LoadsFloat(c[i], 15f) && At(c, i + 1).opcode == OpCodes.Newobj);
-            Add(M(typeof(EntityControl), "Follow"), "followers catching up", Kind.InsertBefore, nameof(LerpT), 2, LerpWithConstant(0.075f, 0.1f));
-            Add(M(typeof(EntityControl), "StopForceMove", typeof(int), typeof(bool)), "followers braking", Kind.InsertBefore, nameof(LerpT), 1, LerpWithConstant(0.5f));
-            Add(M(typeof(EntityControl), "AnimSpecificQuirks"), "Watcher eye", Kind.InsertBefore, nameof(LerpT), 1, LerpWithConstant(0.1f));
-            Add(M(typeof(BattleControl), "Update"), "battle EXP counter", Kind.InsertAfter, nameof(IntStep), 1, CounterOne("idletimer", add: true));
-            Add(Iter(typeof(BattleControl), "CounterAnimation"), "damage number spins", Kind.ReplaceWithCall, nameof(Rotate), 5, (c, i) => RotateVec(c[i]));
-            Add(Iter(typeof(BattleControl), "CounterAnimation"), "damage number slides", Kind.InsertBefore, nameof(LerpT), 3, LerpWithConstant(0.3f));
-            Add(Iter(typeof(BattleControl), "EnemyTornadoToss"), "enemy beemerang spin", Kind.ReplaceWithCall, nameof(Rotate3), 3, (c, i) => Rotate3Floats(c[i]));
+            Add(M(typeof(EntityControl), "Follow"), "followers catching up", Kind.InsertBefore, nameof(LerpT), 2,
+                LerpWithConstant(0.075f, 0.1f));
+            Add(M(typeof(EntityControl), "StopForceMove", typeof(int), typeof(bool)), "followers braking",
+                Kind.InsertBefore, nameof(LerpT), 1, LerpWithConstant(0.5f));
+            Add(M(typeof(EntityControl), "AnimSpecificQuirks"), "Watcher eye", Kind.InsertBefore, nameof(LerpT), 1,
+                LerpWithConstant(0.1f));
+            Add(M(typeof(BattleControl), "Update"), "battle EXP counter", Kind.InsertAfter, nameof(IntStep), 1,
+                CounterOne("idletimer", add: true));
+            Add(Iter(typeof(BattleControl), "CounterAnimation"), "damage number spins", Kind.ReplaceWithCall,
+                nameof(Rotate), 5, (c, i) => RotateVec(c[i]));
+            Add(Iter(typeof(BattleControl), "CounterAnimation"), "damage number slides", Kind.InsertBefore,
+                nameof(LerpT), 3, LerpWithConstant(0.3f));
+            Add(Iter(typeof(BattleControl), "EnemyTornadoToss"), "enemy beemerang spin", Kind.ReplaceWithCall,
+                nameof(Rotate3), 3, (c, i) => Rotate3Floats(c[i]));
             Add(M(typeof(PrefabParticle), "LateUpdate"), "particle lifetime", Kind.InsertAfter, nameof(Scale), 1,
-                (c, i) => LoadsFloat(c[i], 1f) && At(c, i - 1).opcode == OpCodes.Ldind_R4 && At(c, i + 1).opcode == OpCodes.Sub);
+                (c, i) => LoadsFloat(c[i], 1f) && At(c, i - 1).opcode == OpCodes.Ldind_R4 && At(c, i + 1)
+                .opcode == OpCodes.Sub);
             Add(M(typeof(PrefabParticle), "LateUpdate"), "particle spin", Kind.ReplaceWithCall, nameof(Rotate), 1,
                 (c, i) => RotateVec(c[i]) && Field(At(c, i - 1), "childspin"));
             Add(M(typeof(PrefabParticle), "LateUpdate"), "particle drift", Kind.InsertAfter, nameof(Scale), 1,
                 (c, i) => Field(c[i], "speed") && Calls(At(c, i + 1), "Vector3", "op_Multiply"));
             foreach (MethodBase m in blinkers)
             {
-                Add(m, "blinking in " + m.DeclaringType?.Name + "." + m.Name, Kind.ReplaceWithCall, nameof(SetEnabledOnTick), -1, IsBlink);
+                Add(m, "blinking in " + m.DeclaringType?.Name + "." + m.Name, Kind.ReplaceWithCall,
+                    nameof(SetEnabledOnTick), -1, IsBlink);
             }
 
             foreach (MethodBase method in edits.Keys.ToList())
@@ -252,12 +294,13 @@ namespace BugFablesAP
 
         // enabled = !enabled: get_enabled, 0, ceq, set_enabled.
         internal static bool IsBlink(List<CodeInstruction> c, int i) =>
-            Calls(c[i], "Renderer", "set_enabled") && At(c, i - 1).opcode == OpCodes.Ceq && LoadsInt(At(c, i - 2), 0) && Calls(At(c, i - 3), "Renderer", "get_enabled");
+            Calls(c[i], "Renderer", "set_enabled") && At(c, i - 1).opcode == OpCodes.Ceq && LoadsInt(At(c, i - 2), 0)
+            && Calls(At(c, i - 3), "Renderer", "get_enabled");
 
         private static MethodBase patching;
 
-        // Never throws: a transpiler that throws stays registered on its method, and every later patch of that method, by
-        // any feature, fails with it until the game restarts.
+        // Never throws: a transpiler that throws stays registered on its method, and every later patch of that method,
+        // by any feature, fails with it until the game restarts.
         private static IEnumerable<CodeInstruction> Transpile(IEnumerable<CodeInstruction> instructions)
         {
             List<CodeInstruction> original = instructions.ToList();
@@ -307,7 +350,8 @@ namespace BugFablesAP
                         break;
                     case Kind.InsertBefore:
                         // Right after the value it takes is pushed (CodeInstruction.labels isn't usable in this game's
-                        // HarmonyX, so a branch landing on the target itself skips the helper: none of the sites has one).
+                        // HarmonyX, so a branch landing on the target itself skips the helper: none of the sites has
+                        // one).
                         code.Insert(p.Key, new CodeInstruction(OpCodes.Call, helper));
                         break;
                     case Kind.ReplaceWithCall:

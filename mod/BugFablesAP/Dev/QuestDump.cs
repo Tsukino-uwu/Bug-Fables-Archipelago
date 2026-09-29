@@ -27,7 +27,8 @@ namespace BugFablesAP
                 {
                     numbers.Append(c).Append('=').Append((data[id, c] ?? "").Trim()).Append(' ');
                 }
-                string name = Enum.IsDefined(typeof(MainManager.BoardQuests), id) ? ((MainManager.BoardQuests)id).ToString() : "?";
+                string name = Enum.IsDefined(typeof(MainManager.BoardQuests), id) ? ((MainManager.BoardQuests)id)
+                    .ToString() : "?";
                 sb.Append(id).Append('\t').Append(name).Append('\t').Append((data[id, 0] ?? "").Trim()).Append('\t')
                     .Append(numbers.ToString().Trim()).Append('\t')
                     .Append(id < checks.Length ? checks[id].Trim() : "").AppendLine();

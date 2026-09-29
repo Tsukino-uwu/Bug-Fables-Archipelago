@@ -9,8 +9,9 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // The entrance randomizer: after a map builds its entities, a door's data and vectordata[1..] are replaced by another
-    // door's, read from that door's map's entity table. vectordata[0] (the walk in) and data[4] stay this side's.
+    // The entrance randomizer: after a map builds its entities, a door's data and vectordata[1..] are replaced by
+    // another door's, read from that door's map's entity table. vectordata[0] (the walk in) and data[4] stay this
+    // side's.
     internal static class DoorShuffle
     {
         internal sealed class Target

@@ -18,7 +18,8 @@ namespace BugFablesAP
         private static ApConnection connection;
         private static bool open;
         private static string line = "";
-        private static string lastResult = "F9: dev console. loc <n> | warp <map> [flag] | spawn <item|key|medal> <id> [flag] | flag <n> [on|off]";
+        private static string lastResult =
+            "F9: dev console. loc <n> | warp <map> [flag] | spawn <item|key|medal> <id> [flag] | flag <n> [on|off]";
 
         private static int pendingMap = -1;
         private static int pendingFlag = -1;
@@ -85,7 +86,8 @@ namespace BugFablesAP
 
         private static void TickInfJump()
         {
-            if (!infJump || open || MainManager.player == null || MainManager.player.entity == null || !MainManager.GetKey(4, hold: false))
+            if (!infJump || open || MainManager.player == null || MainManager.player.entity == null
+                || !MainManager.GetKey(4, hold: false))
             {
                 return;
             }
@@ -104,7 +106,8 @@ namespace BugFablesAP
             private static MethodBase TargetMethod() => AccessTools.Method(typeof(BattleControl), "DoDamage", new[]
             {
                 typeof(MainManager.BattleData?), typeof(MainManager.BattleData).MakeByRefType(), typeof(int),
-                typeof(BattleControl.AttackProperty?), AccessTools.Inner(typeof(BattleControl), "DamageOverride").MakeArrayType(), typeof(bool),
+                typeof(BattleControl.AttackProperty?), AccessTools.Inner(typeof(BattleControl), "DamageOverride")
+                    .MakeArrayType(), typeof(bool),
             });
 
             [HarmonyPrefix]
@@ -199,7 +202,8 @@ namespace BugFablesAP
                 {
                     open = true;
                     line = "";
-                    // Freeze as an item-get does: lockkeys stops movement, minipause the rest (C and X are confirm/cancel).
+                    // Freeze as an item-get does: lockkeys stops movement, minipause the rest (C and X are
+                    // confirm/cancel).
                     MainManager.player.lockkeys = true;
                     MainManager.instance.minipause = true;
                 }
@@ -244,7 +248,8 @@ namespace BugFablesAP
             {
                 return;
             }
-            var style = new GUIStyle(GUI.skin.box) { alignment = TextAnchor.MiddleLeft, fontSize = 16, wordWrap = true };
+            var style = new GUIStyle(GUI.skin.box) { alignment = TextAnchor.MiddleLeft, fontSize = 16,
+                wordWrap = true };
             string text = open ? "> " + line + "_" : lastResult;
             GUI.Box(new Rect(10, Screen.height - 70, Screen.width - 20, 60), text, style);
         }
@@ -282,12 +287,14 @@ namespace BugFablesAP
                     case "take":
                     {
                         // As the game's own |removeitem,kind,id| does: items[kind].Remove(id). Test files only.
-                        int kind = parts.Length > 1 && parts[1] == "key" ? 1 : parts.Length > 1 && parts[1] == "item" ? 0 : -1;
+                        int kind = parts.Length > 1 && parts[1] == "key" ? 1 : parts.Length > 1 && parts[1] == "item"
+                            ? 0 : -1;
                         if (kind < 0 || parts.Length < 3 || !int.TryParse(parts[2], out int takeId))
                         {
                             return "take <item|key> <id>";
                         }
-                        return MainManager.instance.items[kind].Remove(takeId) ? $"took {parts[1]} {takeId}" : $"no {parts[1]} {takeId} to take";
+                        return MainManager.instance.items[kind].Remove(takeId) ? $"took {parts[1]} {takeId}"
+                            : $"no {parts[1]} {takeId} to take";
                     }
                     case "warpicon": return WarpButton.SetIcon(parts.Length > 1 ? parts[1] : "");
                     case "warpcolor": return WarpButton.SetColour(parts.Length > 1 ? parts[1] : "");
@@ -330,7 +337,8 @@ namespace BugFablesAP
                             return "enemyfight <enemy id> [id...] | off";
                         }
                         EnemyShuffle.FightTest = parts[1] == "off" ? null : parts.Skip(1).Select(int.Parse).ToArray();
-                        return parts[1] == "off" ? "map fights back to the seed's" : "map fights now: " + string.Join(" ", parts.Skip(1).ToArray());
+                        return parts[1] == "off" ? "map fights back to the seed's" : "map fights now: "
+                            + string.Join(" ", parts.Skip(1).ToArray());
                     case "nudge": return Nudge(parts);
                     case "items": return Items();
                     case "tree": return Tree();
@@ -350,7 +358,8 @@ namespace BugFablesAP
                         {
                             int index = int.Parse(indexText);
                             string[] f = index < rows.Length ? rows[index].Split('}') : new string[0];
-                            posLog.Append(" #").Append(index).Append(f.Length > 8 ? $"=({f[6]}, {f[7]}, {f[8]})" : "=?");
+                            posLog.Append(" #").Append(index).Append(f.Length > 8 ? $"=({f[6]}, {f[7]}, {f[8]})"
+                                : "=?");
                         }
                         log.LogInfo(posLog.ToString());
                         return "pos logged";
@@ -369,7 +378,8 @@ namespace BugFablesAP
                         {
                             return "line <map> <n> [n...]";
                         }
-                        TextAsset lineTable = Resources.Load<TextAsset>("Data/Dialogues" + MainManager.languageid + "/Maps/" + parts[1]);
+                        TextAsset lineTable = Resources.Load<TextAsset>("Data/Dialogues" + MainManager.languageid
+                            + "/Maps/" + parts[1]);
                         if (lineTable == null)
                         {
                             return "line: no dialogue table for " + parts[1];
@@ -379,7 +389,8 @@ namespace BugFablesAP
                         foreach (string n in parts.Skip(2))
                         {
                             int at = int.Parse(n);
-                            lineLog.Append("\n  ").Append(at).Append(": ").Append(at < lineRows.Length ? lineRows[at] : "(none)");
+                            lineLog.Append("\n  ").Append(at).Append(": ").Append(at < lineRows.Length ? lineRows[at]
+                                : "(none)");
                         }
                         log.LogInfo(lineLog.ToString());
                         return "lines logged";
@@ -388,7 +399,8 @@ namespace BugFablesAP
                         foreach (string idText in parts.Skip(1))
                         {
                             int medal = int.Parse(idText);
-                            priceLog.Append(" ").Append(medal).Append("=").Append(MainManager.badgedata[medal, 5]).Append("b/")
+                            priceLog.Append(" ").Append(medal).Append("=").Append(MainManager.badgedata[medal, 5])
+                                .Append("b/")
                                 .Append(MainManager.badgedata[medal, 7]).Append("c");
                         }
                         log.LogInfo(priceLog.ToString());
@@ -402,16 +414,20 @@ namespace BugFablesAP
                         foreach (Transform top in MainManager.GUICamera.transform)
                         {
                             Renderer tr = top.GetComponent<Renderer>();
-                            guiLog.Append("\n  ").Append(top.name).Append(top.gameObject.activeSelf ? "" : " [inactive]")
-                                .Append(tr != null ? " <" + tr.GetType().Name + ">" : "").Append(" children ").Append(top.childCount);
+                            guiLog.Append("\n  ").Append(top.name)
+                                .Append(top.gameObject.activeSelf ? "" : " [inactive]")
+                                .Append(tr != null ? " <" + tr.GetType().Name + ">" : "").Append(" children ")
+                                .Append(top.childCount);
                         }
                         log.LogInfo(guiLog.ToString());
                         return "gui logged";
                     case "display":
                     {
-                        // The inputs of the game's own frame-rate code (MainManager's vSyncCount and targetFrameRate lines).
+                        // The inputs of the game's own frame-rate code (MainManager's vSyncCount and targetFrameRate
+                        // lines).
                         Resolution cur = Screen.currentResolution;
-                        string display = $"display: current {cur.width}x{cur.height} @ {cur.refreshRate} Hz, window {Screen.width}x{Screen.height}, "
+                        string display =
+                            $"display: current {cur.width}x{cur.height} @ {cur.refreshRate} Hz, window {Screen.width}x{Screen.height}, "
                             + $"fullscreen {Screen.fullScreen} ({Screen.fullScreenMode}); game settings fps {MainManager.fps}, vsync {MainManager.vsync}; "
                             + $"Unity vSyncCount {QualitySettings.vSyncCount}, targetFrameRate {Application.targetFrameRate}; "
                             + $"measured {1f / Time.smoothDeltaTime:0.0} fps; fixedDeltaTime {Time.fixedDeltaTime}, "
@@ -421,7 +437,8 @@ namespace BugFablesAP
                     }
                     case "fps":
                     {
-                        // A look at a frame cap for this session only; the game's own settings put theirs back when applied.
+                        // A look at a frame cap for this session only; the game's own settings put theirs back when
+                        // applied.
                         if (parts.Length < 2 || !int.TryParse(parts[1], out int cap))
                         {
                             return "fps <cap, -1 uncapped>";
@@ -431,12 +448,15 @@ namespace BugFablesAP
                         return $"fps: vSyncCount 0, targetFrameRate {Application.targetFrameRate}";
                     }
                     case "frames":
-                        return FrameRate.StartSample(parts.Length > 1 && float.TryParse(parts[1], out float secs) ? secs : 5f);
+                        return FrameRate.StartSample(parts.Length > 1 && float.TryParse(parts[1], out float secs) ? secs
+                            : 5f);
                     case "trace":
-                        return FrameRate.StartTrace(parts.Length > 1 && int.TryParse(parts[1], out int traceFrames) ? traceFrames : 40);
+                        return FrameRate.StartTrace(parts.Length > 1 && int.TryParse(parts[1], out int traceFrames)
+                            ? traceFrames : 40);
                     case "il":
                     {
-                        // il <Type> <Method> [iter]: the method's IL (its iterator's MoveNext with "iter"), to write a patch against.
+                        // il <Type> <Method> [iter]: the method's IL (its iterator's MoveNext with "iter"), to write a
+                        // patch against.
                         if (parts.Length < 3)
                         {
                             return "il <Type> <Method> [iter]";
@@ -449,7 +469,8 @@ namespace BugFablesAP
                         int dumped = 0;
                         foreach (System.Reflection.MethodInfo overload in type.GetMethods(System.Reflection.BindingFlags.DeclaredOnly
                             | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static
-                            | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic).Where(m => m.Name == parts[2]))
+                            | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic)
+                            .Where(m => m.Name == parts[2]))
                         {
                             System.Reflection.MethodInfo method = parts.Length > 3 && parts[3] == "iter"
                                 ? HarmonyLib.AccessTools.EnumeratorMoveNext(overload) : overload;
@@ -457,13 +478,16 @@ namespace BugFablesAP
                             {
                                 continue;
                             }
-                            var ilLog = new System.Text.StringBuilder($"[dev] il {parts[1]}.{parts[2]}{overload.GetParameters().Length}:");
+                            var ilLog =
+                                new System.Text.StringBuilder($"[dev] il {parts[1]}.{parts[2]}{overload.GetParameters().Length}:");
                             int index = 0;
                             foreach (KeyValuePair<System.Reflection.Emit.OpCode, object> ins in HarmonyLib.PatchProcessor.ReadMethodBody(method))
                             {
-                                string operand = ins.Value is System.Reflection.MemberInfo mi ? mi.DeclaringType?.Name + "." + mi.Name
+                                string operand = ins.Value is System.Reflection.MemberInfo mi ? mi.DeclaringType?.Name
+                                    + "." + mi.Name
                                     : ins.Value is float f ? f.ToString("R") + "f" : ins.Value?.ToString() ?? "";
-                                ilLog.Append("\n  ").Append(index++).Append(' ').Append(ins.Key.Name).Append(' ').Append(operand);
+                                ilLog.Append("\n  ").Append(index++).Append(' ').Append(ins.Key.Name).Append(' ')
+                                    .Append(operand);
                             }
                             log.LogInfo(ilLog.ToString());
                             dumped++;
@@ -473,10 +497,12 @@ namespace BugFablesAP
                     case "fpsscan":
                         return FrameRate.Scan();
                     case "rates":
-                        return FrameRate.StartRates(parts.Length > 1 && float.TryParse(parts[1], out float rateSecs) ? rateSecs : 5f);
+                        return FrameRate.StartRates(parts.Length > 1 && float.TryParse(parts[1], out float rateSecs)
+                            ? rateSecs : 5f);
                     case "cams":
                     {
-                        var camLog = new System.Text.StringBuilder($"[dev] cams: QualitySettings.antiAliasing {QualitySettings.antiAliasing}, "
+                        var camLog =
+                            new System.Text.StringBuilder($"[dev] cams: QualitySettings.antiAliasing {QualitySettings.antiAliasing}, "
                             + $"downsample {MainManager.downsample}, runInBackground {Application.runInBackground}, lowtexture {MainManager.lowtexture}, "
                             + $"masterTextureLimit {QualitySettings.masterTextureLimit}, anisotropic {QualitySettings.anisotropicFiltering}:");
                         foreach (Camera c in Camera.allCameras)
@@ -487,7 +513,8 @@ namespace BugFablesAP
                                 + $"target {(c.targetTexture != null ? c.targetTexture.width + "x" + c.targetTexture.height + " aa" + c.targetTexture.antiAliasing : "screen")} "
                                 + $"effects {string.Join(",", System.Array.ConvertAll(c.GetComponents<MonoBehaviour>(), m => m.GetType().Name + (m.enabled ? "" : "(off)")))}");
                         }
-                        Transform quad = MainManager.GUICamera != null && MainManager.GUICamera.transform.childCount > 0 ? MainManager.GUICamera.transform.GetChild(0) : null;
+                        Transform quad = MainManager.GUICamera != null && MainManager.GUICamera.transform.childCount > 0
+                            ? MainManager.GUICamera.transform.GetChild(0) : null;
                         Renderer quadRenderer = quad != null ? quad.GetComponentInChildren<MeshRenderer>(true) : null;
                         camLog.Append($"\n  render-scale quad: {(quad != null ? quad.name + " active " + quad.gameObject.activeSelf : "none")}, "
                             + $"shader {(quadRenderer != null ? quadRenderer.sharedMaterial.shader.name : "none")}");
@@ -505,7 +532,8 @@ namespace BugFablesAP
                         {
                             if (e.rigid != null)
                             {
-                                e.rigid.interpolation = interpOn ? RigidbodyInterpolation.Interpolate : RigidbodyInterpolation.None;
+                                e.rigid.interpolation = interpOn ? RigidbodyInterpolation.Interpolate
+                                    : RigidbodyInterpolation.None;
                                 changed++;
                             }
                         }
@@ -527,7 +555,8 @@ namespace BugFablesAP
                     {
                         // Every character drawn as a party member (animid 0 Vi, 1 Kabbu, 2 Leif).
                         var whoLog = new System.Text.StringBuilder("[dev] who:");
-                        foreach (EntityControl e in UnityEngine.Object.FindObjectsOfType<EntityControl>().Where(e => e.animid >= 0 && e.animid <= 2))
+                        foreach (EntityControl e in UnityEngine.Object.FindObjectsOfType<EntityControl>()
+                            .Where(e => e.animid >= 0 && e.animid <= 2))
                         {
                             whoLog.Append($"\n  {e.name} animid {e.animid} at {e.transform.position}, parent {(e.transform.parent != null ? e.transform.parent.name : "none")}, "
                                 + $"tag {e.tag}, following {(e.following != null ? e.following.name : "none")}, tempfollower {e.tempfollower}, "
@@ -540,8 +569,10 @@ namespace BugFablesAP
                     {
                         MainManager m = MainManager.instance;
                         Transform target = m.camtarget;
-                        string targetName = target == null ? (ReferenceEquals(target, null) ? "none" : "DESTROYED") : target.name;
-                        string camLog = $"[dev] cam: target {targetName}, player {(MainManager.player != null ? MainManager.player.name + " at " + MainManager.player.transform.position : "none")}, "
+                        string targetName = target == null ? (ReferenceEquals(target, null) ? "none" : "DESTROYED")
+                            : target.name;
+                        string camLog =
+                            $"[dev] cam: target {targetName}, player {(MainManager.player != null ? MainManager.player.name + " at " + MainManager.player.transform.position : "none")}, "
                             + $"camera at {MainManager.MainCamera.transform.position}, camtargetpos {m.camtargetpos}, offset {m.camoffset}, offset2 {m.camoffset2}, "
                             + $"angle {m.camangleoffset}, speed {m.camspeed}, insideid {m.insideid}, limits {MainManager.map?.camlimitpos} / {MainManager.map?.camlimitneg}, "
                             + $"party {string.Join(",", m.playerdata.Select(p => p.trueid + (p.entity != null ? ":" + p.entity.name : ":no entity")).ToArray())}, "
@@ -559,35 +590,46 @@ namespace BugFablesAP
                             : "removemember <0 Vi | 1 Kabbu | 2 Leif>";
                     case "holdup":
                     {
-                        // holdup [member n | ap]: the permit, party member n (0 Vi, 1 Kabbu, 2 Leif), or the drawn Archipelago icon.
+                        // holdup [member n | ap]: the permit, party member n (0 Vi, 1 Kabbu, 2 Leif), or the drawn
+                        // Archipelago icon.
                         if (parts.Length > 1 && parts[1] == "ap")
                         {
-                            // The drawn icon on two of the class backdrops a real item gets (ItemSwap.Describe's plum and cyan).
-                            foreach (Color backdrop in new[] { new Color(0xAF / 255f, 0x99 / 255f, 0xEF / 255f), new Color(0f, 0xEE / 255f, 0xEE / 255f) })
+                            // The drawn icon on two of the class backdrops a real item gets (ItemSwap.Describe's plum
+                            // and cyan).
+                            foreach (Color backdrop in new[] { new Color(0xAF / 255f, 0x99 / 255f, 0xEF / 255f),
+                                new Color(0f, 0xEE / 255f, 0xEE / 255f) })
                             {
-                                HoldUps.Received(ItemSwap.FromText("Archipelago icon", Archipelago.MultiClient.Net.Enums.ItemFlags.None, "TestPlayer"),
+                                HoldUps.Received(ItemSwap.FromText("Archipelago icon",
+                                    Archipelago.MultiClient.Net.Enums.ItemFlags.None, "TestPlayer"),
                                     ApIcon.Get(), backdrop, "an");
                             }
                             return "holdup queued: the Archipelago icon";
                         }
                         bool asMember = parts.Length > 2 && parts[1] == "member";
-                        long held = asMember ? ItemIds.Base + ItemIds.MemberOffset + int.Parse(parts[2]) : ItemIds.Base + 27;
+                        long held = asMember ? ItemIds.Base + ItemIds.MemberOffset + int.Parse(parts[2]) : ItemIds.Base
+                            + 27;
                         int heldKind = asMember ? ItemIds.MemberKind : ItemIds.KeyItemKind;
                         ItemSwap.DescribeOurs(held, heldKind, out string name, out Sprite sprite, out Color? color);
-                        HoldUps.Received(ItemSwap.FromText(name, Archipelago.MultiClient.Net.Enums.ItemFlags.Advancement, "TestPlayer"), sprite, color, ItemSwap.ArticleOf(held, heldKind));
+                        HoldUps.Received(ItemSwap.FromText(name,
+                            Archipelago.MultiClient.Net.Enums.ItemFlags.Advancement, "TestPlayer"), sprite, color,
+                            ItemSwap.ArticleOf(held, heldKind));
                         return "holdup queued: " + name + " from TestPlayer";
                     }
                     case "colortry":
                     {
-                        // colortry <hex...>: a trap's "You got" line per colour, each added after ours for the test only.
+                        // colortry <hex...>: a trap's "You got" line per colour, each added after ours for the test
+                        // only.
                         HoldUps.AddApColors();
-                        ItemSwap.DescribeOurs(ItemIds.Base + 27, ItemIds.KeyItemKind, out string permit, out Sprite permitSprite, out Color? permitColor);
+                        ItemSwap.DescribeOurs(ItemIds.Base + 27, ItemIds.KeyItemKind, out string permit,
+                            out Sprite permitSprite, out Color? permitColor);
                         var tried = new List<Color>(MainManager.instance.textcolors);
                         foreach (string hex in parts.Skip(1))
                         {
                             int rgb = Convert.ToInt32(hex, 16);
-                            tried.Add(new Color(((rgb >> 16) & 0xFF) / 255f, ((rgb >> 8) & 0xFF) / 255f, (rgb & 0xFF) / 255f));
-                            HoldUps.Received($"|color,{tried.Count - 1}|trap {hex}|color,0| from " + ItemSwap.PlayerText("TestPlayer"),
+                            tried.Add(new Color(((rgb >> 16) & 0xFF) / 255f, ((rgb >> 8) & 0xFF) / 255f,
+                                (rgb & 0xFF) / 255f));
+                            HoldUps.Received($"|color,{tried.Count - 1}|trap {hex}|color,0| from "
+                                + ItemSwap.PlayerText("TestPlayer"),
                                 permitSprite, permitColor, "a");
                         }
                         MainManager.instance.textcolors = tried.ToArray();
@@ -595,7 +637,8 @@ namespace BugFablesAP
                     }
                     case "shelflook":
                     {
-                        // shelflook <location id> <white|black> <rim share> | shelflook off: a shop slot shows the drawn icon so.
+                        // shelflook <location id> <white|black> <rim share> | shelflook off: a shop slot shows the
+                        // drawn icon so.
                         if (parts.Length > 1 && parts[1] == "off")
                         {
                             ItemSwap.DevLooks.Clear();
@@ -606,26 +649,31 @@ namespace BugFablesAP
                             return "shelflook <location id> <white|black> <rim share> | shelflook off";
                         }
                         long at = LocationIdBase + long.Parse(parts[1]);
-                        ItemSwap.DevLooks[at] = ApIcon.Get(float.Parse(parts[3], System.Globalization.CultureInfo.InvariantCulture),
+                        ItemSwap.DevLooks[at] =
+                            ApIcon.Get(float.Parse(parts[3], System.Globalization.CultureInfo.InvariantCulture),
                             parts[2] == "white" ? Color.white : Color.black);
                         return $"shelflook: location {at} shows the icon, {parts[2]} outline {parts[3]}";
                     }
                     case "iteminfo":
                     {
-                        // Every item entity on the map: its sprite, pivot, size and the offsets that place it (shelf heights).
+                        // Every item entity on the map: its sprite, pivot, size and the offsets that place it (shelf
+                        // heights).
                         Sprite star = MainManager.guisprites[85];
-                        var info = new System.Text.StringBuilder("[dev] items on " + MainManager.map.mapid + $" (starburst {star.name} pivot {star.pivot} rect {star.rect.size} bounds c{star.bounds.center} e{star.bounds.extents}):");
+                        var info = new System.Text.StringBuilder("[dev] items on " + MainManager.map.mapid
+                            + $" (starburst {star.name} pivot {star.pivot} rect {star.rect.size} bounds c{star.bounds.center} e{star.bounds.extents}):");
                         foreach (NPCControl npc in MainManager.map.GetComponentsInChildren<NPCControl>(true))
                         {
                             EntityControl e = npc.entity;
-                            if (e == null || e.sprite == null || (npc.objecttype != NPCControl.ObjectTypes.Item && e.sprite.sprite == null))
+                            if (e == null || e.sprite == null || (npc.objecttype != NPCControl.ObjectTypes.Item
+                                && e.sprite.sprite == null))
                             {
                                 continue;
                             }
                             Sprite sp = e.sprite.sprite;
                             Transform mark = e.sprite.transform.Find("apback");
                             info.Append($"\n  {npc.name} ({npc.objecttype}, animid {e.animid}, state {e.animstate}) at {e.transform.position}: sprite "
-                                + (sp == null ? "none" : $"{sp.name} pivot {sp.pivot} rect {sp.rect.size} bounds c{sp.bounds.center} e{sp.bounds.extents}")
+                                + (sp == null ? "none"
+                                : $"{sp.name} pivot {sp.pivot} rect {sp.rect.size} bounds c{sp.bounds.center} e{sp.bounds.extents}")
                                 + $"; spritetransform {(e.spritetransform != null ? e.spritetransform.localPosition.ToString() : "none")}"
                                 + $"; sprite local {e.sprite.transform.localPosition} parent {(e.sprite.transform.parent != null ? e.sprite.transform.parent.name : "none")}"
                                 + (mark != null ? $"; apback {mark.localPosition}" : ""));
@@ -640,7 +688,8 @@ namespace BugFablesAP
                         int which = parts.Length > 2 ? Array.IndexOf(classes, parts[1]) : -1;
                         if (which < 0)
                         {
-                            return "markcolor <progression|useful|trap|filler> <hex> (now " + string.Join(" ", ItemSwap.ClassColors.Select(c => c.ToString("X6")).ToArray()) + ")";
+                            return "markcolor <progression|useful|trap|filler> <hex> (now "
+                                + string.Join(" ", ItemSwap.ClassColors.Select(c => c.ToString("X6")).ToArray()) + ")";
                         }
                         ItemSwap.ClassColors[which] = Convert.ToInt32(parts[2], 16);
                         return $"markcolor: {classes[which]} now {parts[2]}";
@@ -652,7 +701,8 @@ namespace BugFablesAP
                         {
                             return "hide <entity name>";
                         }
-                        NPCControl found = MainManager.map.GetComponentsInChildren<NPCControl>(true).FirstOrDefault(n => n.name == parts[1]);
+                        NPCControl found = MainManager.map.GetComponentsInChildren<NPCControl>(true)
+                            .FirstOrDefault(n => n.name == parts[1]);
                         if (found == null)
                         {
                             return "hide: no " + parts[1] + " on this map";
@@ -662,7 +712,8 @@ namespace BugFablesAP
                     }
                     case "markclass":
                     {
-                        // markclass <entity name> <progression|useful|trap|filler> | markclass off: force a slot's backdrop class.
+                        // markclass <entity name> <progression|useful|trap|filler> | markclass off: force a slot's
+                        // backdrop class.
                         string[] classes = { "progression", "useful", "trap", "filler" };
                         if (parts.Length > 1 && parts[1] == "off")
                         {
@@ -691,7 +742,8 @@ namespace BugFablesAP
                     case "letters":
                     {
                         // The game's 500-letter text pool: how many are taken (text set), and by which text holder.
-                        var pool = (TextMesh[])HarmonyLib.AccessTools.Field(typeof(MainManager), "letterpool").GetValue(null);
+                        var pool = (TextMesh[])HarmonyLib.AccessTools.Field(typeof(MainManager), "letterpool")
+                            .GetValue(null);
                         var holders = new Dictionary<string, int>();
                         int taken = 0;
                         foreach (TextMesh letter in pool)
@@ -701,15 +753,16 @@ namespace BugFablesAP
                                 continue;
                             }
                             taken++;
-                            // Holder names carry their whole text (the font preloader's is every glyph the game has), and
-                            // BepInEx's console broke writing that: only the owner's name, cut short and plain.
+                            // Holder names carry their whole text (the font preloader's is every glyph the game has),
+                            // and BepInEx's console broke writing that: only the owner's name, cut short and plain.
                             Transform t = letter.transform.parent;
                             string owner = t == null ? "(none)" : t.parent != null ? t.parent.name : t.name;
                             owner = new string(owner.Where(c => c >= ' ' && c < 127).Take(40).ToArray());
                             string path = owner + (t != null && !t.gameObject.activeInHierarchy ? " [hidden]" : "");
                             holders[path] = holders.TryGetValue(path, out int n) ? n + 1 : 1;
                         }
-                        log.LogInfo($"[dev] letters: {taken} of {pool.Length} taken; " + string.Join("; ", holders.OrderByDescending(h => h.Value)
+                        log.LogInfo($"[dev] letters: {taken} of {pool.Length} taken; "
+                            + string.Join("; ", holders.OrderByDescending(h => h.Value)
                             .Select(h => h.Key + " " + h.Value).ToArray()));
                         return $"letters: {taken} of {pool.Length} taken";
                     }
@@ -725,14 +778,17 @@ namespace BugFablesAP
                         return "palette logged";
                     case "articles":
                     {
-                        // The found-item line's article: the default (menutext[125]) and each item's own (itemdata[0, id, 3]).
-                        var articles = new System.Text.StringBuilder("[dev] default article '" + MainManager.menutext[125] + "'");
+                        // The found-item line's article: the default (menutext[125]) and each item's own (itemdata[0,
+                        // id, 3]).
+                        var articles = new System.Text.StringBuilder("[dev] default article '"
+                            + MainManager.menutext[125] + "'");
                         foreach (string n in parts.Skip(1))
                         {
                             int id = int.Parse(n);
                             articles.Append($"; item {id} {MainManager.itemdata[0, id, 0]}: '{MainManager.itemdata[0, id, 3]}'");
                         }
-                        // A pickup's "You found" line (menutext 2) and Giveitem's "You got" lines (106, and 110 for the other case).
+                        // A pickup's "You found" line (menutext 2) and Giveitem's "You got" lines (106, and 110 for the
+                        // other case).
                         articles.Append($"; menutext[2] '{MainManager.menutext[2]}'; menutext[106] '{MainManager.menutext[106]}'; menutext[110] '{MainManager.menutext[110]}'");
                         log.LogInfo(articles.ToString());
                         return "articles logged";

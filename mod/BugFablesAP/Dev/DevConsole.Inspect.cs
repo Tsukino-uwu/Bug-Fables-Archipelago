@@ -14,7 +14,8 @@ namespace BugFablesAP
             {
                 return "script <map>";
             }
-            TextAsset asset = Resources.Load<TextAsset>("Data/Dialogues" + MainManager.languageid + "/Maps/" + parts[1]);
+            TextAsset asset = Resources.Load<TextAsset>("Data/Dialogues" + MainManager.languageid + "/Maps/"
+                + parts[1]);
             if (asset == null)
             {
                 return "script: no dialogue table for " + parts[1];
@@ -24,7 +25,8 @@ namespace BugFablesAP
             var token = new System.Text.RegularExpressions.Regex(@"\|([a-zA-Z]+)((?:,[^|]*)?)\|");
             for (int i = 0; i < rows.Length; i++)
             {
-                var tokens = token.Matches(rows[i]).Cast<System.Text.RegularExpressions.Match>().Select(m => m.Groups[1].Value.ToLowerInvariant() + m.Groups[2].Value).ToArray();
+                var tokens = token.Matches(rows[i]).Cast<System.Text.RegularExpressions.Match>()
+                    .Select(m => m.Groups[1].Value.ToLowerInvariant() + m.Groups[2].Value).ToArray();
                 if (tokens.Length > 0)
                 {
                     sb.Append("\n  ").Append(i).Append(": ").Append(string.Join(" ", tokens));
@@ -43,12 +45,14 @@ namespace BugFablesAP
             }
             Vector3 me = MainManager.player.transform.position;
             var sb = new System.Text.StringBuilder($"[dev] solids around {me}:");
-            if (Physics.Raycast(me + Vector3.up * 0.5f, Vector3.down, out RaycastHit below, 30f, ~0, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(me + Vector3.up * 0.5f, Vector3.down, out RaycastHit below, 30f, ~0,
+                QueryTriggerInteraction.Ignore))
             {
                 sb.Append("\n  under: ").Append(Describe(below.collider));
             }
             foreach (Collider c in Physics.OverlapSphere(me, 4f, ~0, QueryTriggerInteraction.Ignore)
-                .Where(c => MainManager.player.transform != c.transform && !c.transform.IsChildOf(MainManager.player.transform)))
+                .Where(c => MainManager.player.transform != c.transform
+                && !c.transform.IsChildOf(MainManager.player.transform)))
             {
                 sb.Append("\n  near: ").Append(Describe(c));
             }
@@ -71,8 +75,10 @@ namespace BugFablesAP
                 ConditionChecker check = t.GetComponent<ConditionChecker>();
                 if (check != null)
                 {
-                    parts.Append(" [ConditionChecker requires ").Append(string.Join(",", (check.requires ?? new int[0]).Select(f => f.ToString()).ToArray()))
-                        .Append(" limit ").Append(string.Join(",", (check.limit ?? new int[0]).Select(f => f.ToString()).ToArray()))
+                    parts.Append(" [ConditionChecker requires ")
+                        .Append(string.Join(",", (check.requires ?? new int[0]).Select(f => f.ToString()).ToArray()))
+                        .Append(" limit ")
+                        .Append(string.Join(",", (check.limit ?? new int[0]).Select(f => f.ToString()).ToArray()))
                         .Append(" region ").Append(check.regionID).Append("]");
                 }
             }
@@ -155,12 +161,14 @@ namespace BugFablesAP
             int n = int.Parse(parts[1]);
             if (parts.Length > 2)
             {
-                MainManager.instance.flags[n] = parts[2].ToLowerInvariant() == "on" || parts[2] == "true" || parts[2] == "1";
+                MainManager.instance.flags[n] = parts[2].ToLowerInvariant() == "on" || parts[2] == "true"
+                    || parts[2] == "1";
             }
             return $"flags[{n}] = {MainManager.instance.flags[n]}";
         }
 
-        // Every text file the game loads from Resources/Data, searched for a word (case-insensitive); matches go to the log.
+        // Every text file the game loads from Resources/Data, searched for a word (case-insensitive); matches go to the
+        // log.
         private static string TextSearch(string[] parts)
         {
             if (parts.Length < 2)
@@ -196,7 +204,8 @@ namespace BugFablesAP
             int library = (int)MainManager.Library.Discovery;
             if (parts.Length > 2)
             {
-                MainManager.instance.librarystuff[library, n] = parts[2].ToLowerInvariant() == "on" || parts[2] == "true" || parts[2] == "1";
+                MainManager.instance.librarystuff[library, n] = parts[2].ToLowerInvariant() == "on"
+                    || parts[2] == "true" || parts[2] == "1";
             }
             return $"discovery {n} = {MainManager.instance.librarystuff[library, n]}";
         }

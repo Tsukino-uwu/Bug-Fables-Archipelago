@@ -8,8 +8,9 @@ using HarmonyLib;
 
 namespace BugFablesAP
 {
-    // The Detector beeps for any of the seed's checks left on this map. Its whole effect is map.hiddenitem = 100, so in a
-    // seed CheckDisc is replaced, CheckHidden skipped and a music record's value cleared: the mod's answer is the only one.
+    // The Detector beeps for any of the seed's checks left on this map. Its whole effect is map.hiddenitem = 100, so in
+    // a seed CheckDisc is replaced, CheckHidden skipped and a music record's value cleared: the mod's answer is the
+    // only one.
     internal static class CheckDetector
     {
         private static ManualLogSource log;
@@ -27,11 +28,13 @@ namespace BugFablesAP
             }
             bool hidden = Hooks.Install(typeof(Hidden), "detector", "hidden spots show as the game has them");
             bool spinners = Hooks.Install(typeof(Spinners), "detector", "music spinners show as the game has them");
-            log.LogInfo("[detector] installed on MapControl.CheckDisc" + (hidden ? ", NPCControl.CheckHidden" : " (NOT CheckHidden)")
+            log.LogInfo("[detector] installed on MapControl.CheckDisc"
+                + (hidden ? ", NPCControl.CheckHidden" : " (NOT CheckHidden)")
                 + (spinners ? ", MusicSpinner.Start" : " (NOT MusicSpinner.Start)"));
         }
 
-        private static bool InSeed => randomizerOn != null && randomizerOn() && connection != null && connection.SeedKnown;
+        private static bool InSeed => randomizerOn != null && randomizerOn() && connection != null
+            && connection.SeedKnown;
 
         private static class Hidden
         {

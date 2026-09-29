@@ -47,15 +47,19 @@ namespace BugFablesAP
                 int glow = prefab.GetComponentsInChildren<GlowTrigger>(true).Length;
                 foreach (ConditionChecker c in prefab.GetComponentsInChildren<ConditionChecker>(true))
                 {
-                    flagged.Append(map).Append("\tConditionChecker\t").Append(PathOf(c.transform, prefab.transform)).Append('\t')
+                    flagged.Append(map).Append("\tConditionChecker\t").Append(PathOf(c.transform, prefab.transform))
+                        .Append('\t')
                         .Append(Join(c.requires)).Append('\t').Append(Join(c.limit)).Append('\t')
-                        .Append("region " + c.regionID + (c.activepos.magnitude > 0.1f ? ", moves to " + c.activepos : ", hides")
-                            + (c.dontdelete ? ", dontdelete" : "") + (c.spriteflagchange > -1 ? ", sprite on flag " + c.spriteflagchange : ""))
+                        .Append("region " + c.regionID + (c.activepos.magnitude > 0.1f ? ", moves to " + c.activepos
+                        : ", hides")
+                            + (c.dontdelete ? ", dontdelete" : "") + (c.spriteflagchange > -1 ? ", sprite on flag "
+                            + c.spriteflagchange : ""))
                         .AppendLine();
                 }
                 foreach (FlagAnimation f in prefab.GetComponentsInChildren<FlagAnimation>(true))
                 {
-                    flagged.Append(map).Append("\tFlagAnimation\t").Append(PathOf(f.transform, prefab.transform)).Append("\t\t\t")
+                    flagged.Append(map).Append("\tFlagAnimation\t").Append(PathOf(f.transform, prefab.transform))
+                        .Append("\t\t\t")
                         .Append(f.flags == null ? "" : string.Join(" ", f.flags.Select((flag, i) =>
                             flag + ":" + (f.anims != null && i < f.anims.Length ? f.anims[i] : "?")).ToArray()))
                         .AppendLine();
@@ -63,7 +67,8 @@ namespace BugFablesAP
                 sb.Append(map).Append('\t').Append(autos).Append('\t')
                   .Append(string.Join(" ", hazards.Select(kv => kv.Key + ":" + kv.Value).ToArray())).Append('\t')
                   .Append(glow).Append('\t')
-                  .Append(control != null && control.discoveryids != null ? string.Join(" ", control.discoveryids.Select(d => d.ToString()).ToArray()) : "")
+                  .Append(control != null && control.discoveryids != null
+                  ? string.Join(" ", control.discoveryids.Select(d => d.ToString()).ToArray()) : "")
                   .Append('\t').Append(control != null ? ((int)control.areaid).ToString() : "")
                   .AppendLine();
             }
@@ -74,7 +79,8 @@ namespace BugFablesAP
             return true;
         }
 
-        private static string Join(int[] values) => values == null ? "" : string.Join(" ", values.Where(v => v != -1).Select(v => v.ToString()).ToArray());
+        private static string Join(int[] values) => values == null ? "" : string.Join(" ", values.Where(v => v != -1)
+            .Select(v => v.ToString()).ToArray());
 
         private static string PathOf(Transform t, Transform root)
         {

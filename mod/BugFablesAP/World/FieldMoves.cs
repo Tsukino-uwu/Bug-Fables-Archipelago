@@ -38,8 +38,8 @@ namespace BugFablesAP
             log = logger;
             seed = seedData;
             randomizerOn = on;
-            // DoActionTap only builds its coroutine, small enough to be inlined into its callers, where a patch never runs
-            // (a prefix there never fired): the coroutine's own first step is gated instead.
+            // DoActionTap only builds its coroutine, small enough to be inlined into its callers, where a patch never
+            // runs (a prefix there never fired): the coroutine's own first step is gated instead.
             MethodInfo tap = AccessTools.Method(typeof(PlayerControl), "DoActionTap");
             MethodInfo tapStep = tap != null ? AccessTools.EnumeratorMoveNext(tap) : null;
             MethodInfo jump = AccessTools.Method(typeof(PlayerControl), "DoJump");
@@ -59,8 +59,8 @@ namespace BugFablesAP
 
         private static readonly HashSet<string> reported = new HashSet<string>();
 
-        // The game fires a tap on release and retries a held one every few frames, so the attack's buzz is played on the
-        // press itself (Tick) and its refusals stay silent; the jump fires on the press and buzzes there.
+        // The game fires a tap on release and retries a held one every few frames, so the attack's buzz is played on
+        // the press itself (Tick) and its refusals stay silent; the jump fires on the press and buzzes there.
         private static void Refuse(int id)
         {
             if (id == Jump)
@@ -91,8 +91,8 @@ namespace BugFablesAP
         private static FieldInfo tapState;
         private static FieldInfo tapOwner;
 
-        // The tap's move is the leader's (playerdata[0].animid); the submarine's tap is its own and never locked. Only the
-        // first step (state 0) is checked; a refused tap ends there, before it sets action or lockkeys.
+        // The tap's move is the leader's (playerdata[0].animid); the submarine's tap is its own and never locked. Only
+        // the first step (state 0) is checked; a refused tap ends there, before it sets action or lockkeys.
         [HarmonyPatch(typeof(PlayerControl), "DoActionTap", MethodType.Enumerator)]
         [HarmonyPrefix]
         private static bool BeforeTapStep(object __instance, ref bool __result)
@@ -119,8 +119,8 @@ namespace BugFablesAP
             return false;
         }
 
-        // The game clears actionroutine only at a tap's end; the caller stores the refused one after this step, and the hold
-        // path starts a tap only while it's null. Cleared a frame later, as a finished tap leaves it.
+        // The game clears actionroutine only at a tap's end; the caller stores the refused one after this step, and the
+        // hold path starts a tap only while it's null. Cleared a frame later, as a finished tap leaves it.
         private static readonly FieldInfo actionRoutine = AccessTools.Field(typeof(PlayerControl), "actionroutine");
 
         private static System.Collections.IEnumerator ClearActionRoutine(PlayerControl player)

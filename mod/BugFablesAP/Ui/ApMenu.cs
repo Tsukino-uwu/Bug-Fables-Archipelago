@@ -6,21 +6,24 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // The Archipelago panel on the main menu, drawn with the game's own box and font, with real typing (paste included).
-    // The title screen's input is suspended while it's open (StartMenu.canselect), so C, X, Z and V can be typed.
+    // The Archipelago panel on the main menu, drawn with the game's own box and font, with real typing (paste
+    // included). The title screen's input is suspended while it's open (StartMenu.canselect), so C, X, Z and V can be
+    // typed.
     internal sealed partial class ApMenu : MonoBehaviour
     {
-        private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, DeathLinkRow = 5, AchievementsRow = 6,
-            NormalSavesRow = 7, Rows = 8;
+        private const int Address = 0, PortRow = 1, SlotRow = 2, PasswordRow = 3, ModeRow = 4, DeathLinkRow = 5,
+            AchievementsRow = 6, NormalSavesRow = 7, Rows = 8;
         // The Quality of life page: the two buttons side by side on top, then the settings.
-        private const int ButtonsRow = 0, FastTextRow = 1, WarpRow = 2, SkipConfirmRow = 3, CutscenesRow = 4, AnimationRow = 5, ColorsRow = 6,
-            IconsRow = 7, BackgroundsRow = 8, DetectorRow = 9, UncapRow = 10, QolRows = 11;
+        private const int ButtonsRow = 0, FastTextRow = 1, WarpRow = 2, SkipConfirmRow = 3, CutscenesRow = 4,
+            AnimationRow = 5, ColorsRow = 6, IconsRow = 7, BackgroundsRow = 8, DetectorRow = 9, UncapRow = 10,
+            QolRows = 11;
         // The Gameplay page: how the game plays, under the same two buttons.
-        private const int DifficultyRow = 1, ScalingRow = 2, AttackRow = 3, CrystalsRow = 4, AutoSaveRow = 5, MedalPricesRow = 6, ExpRow = 7,
-            BerryRow = 8, GameplayRows = 9;
+        private const int DifficultyRow = 1, ScalingRow = 2, AttackRow = 3, CrystalsRow = 4, AutoSaveRow = 5,
+            MedalPricesRow = 6, ExpRow = 7, BerryRow = 8, GameplayRows = 9;
         private enum Page { Main, Qol, Gameplay }
         private Page page;
-        // On the buttons row: 0 Reset to defaults (where the cursor lands), 1 Disable all; confirming shows Yes / No there (0 Yes, 1 No).
+        // On the buttons row: 0 Reset to defaults (where the cursor lands), 1 Disable all; confirming shows Yes / No
+        // there (0 Yes, 1 No).
         private int button;
         private bool confirming;
         private int answer;
@@ -58,8 +61,9 @@ namespace BugFablesAP
         private int settleFrames;
         private string shownStatus;
 
-        internal static void Show(ManualLogSource logger, StartMenu owner, ConfigEntry<string> server, ConfigEntry<string> port, ConfigEntry<string> slot,
-            ConfigEntry<string> password, ConfigEntry<bool> mode, Func<string> status)
+        internal static void Show(ManualLogSource logger, StartMenu owner, ConfigEntry<string> server,
+            ConfigEntry<string> port, ConfigEntry<string> slot, ConfigEntry<string> password, ConfigEntry<bool> mode,
+            Func<string> status)
         {
             if (Open != null)
             {
@@ -134,22 +138,28 @@ namespace BugFablesAP
             dimmer.transform.localScale = new Vector3(3000f, 3000f, 1f);
             dimmer.gameObject.layer = 5;
             dimmer.sortingOrder = -100;
-            box = MainManager.Create9Box(new Vector3(0f, -1f, 10f), new Vector2(13.5f, 7.25f), 1, BoxSort, Color.white, false);
+            box = MainManager.Create9Box(new Vector3(0f, -1f, 10f),
+                new Vector2(13.5f, 7.25f), 1, BoxSort, Color.white, false);
             box.parent = transform;
             box.localPosition = new Vector3(0f, -1f, 0f);
             // Attached objects keep their world rotation: reset it, or they stay unturned where the GUI camera is
             // turned (in shops) and are seen edge-on, as nothing.
             box.localEulerAngles = Vector3.zero;
-            help = MainManager.Create9Box(new Vector3(0f, 3.75f, 10f), new Vector2(12.5f, 2f), 4, HelpSort, Color.white, false);
+            help = MainManager.Create9Box(new Vector3(0f, 3.75f, 10f),
+                new Vector2(12.5f, 2f), 4, HelpSort, Color.white, false);
             help.parent = transform;
             help.localPosition = new Vector3(0f, 3.75f, 0f);
             help.localEulerAngles = Vector3.zero;
-            new GameObject("confirmbutton").AddComponent<ButtonSprite>().SetUp(4, -1, "Select / Edit", new Vector3(-4.5f, 0.25f), Vector3.one * 0.5f, ButtonSort, help);
-            new GameObject("cancelbutton").AddComponent<ButtonSprite>().SetUp(5, -1, "Back", new Vector3(0.5f, 0.25f), Vector3.one * 0.5f, ButtonSort, help);
+            new GameObject("confirmbutton").AddComponent<ButtonSprite>().SetUp(4, -1, "Select / Edit",
+                new Vector3(-4.5f, 0.25f), Vector3.one * 0.5f, ButtonSort, help);
+            new GameObject("cancelbutton").AddComponent<ButtonSprite>().SetUp(5, -1, "Back",
+                new Vector3(0.5f, 0.25f), Vector3.one * 0.5f, ButtonSort, help);
             if (!inGame)
             {
-                new GameObject("enterbutton").AddComponent<ButtonSprite>().SetUp(9, -1, "Done typing", new Vector3(-4.5f, -0.5f), Vector3.one * 0.5f, ButtonSort, help);
-                MainManager.instance.StartCoroutine(MainManager.SetText(TextSort + "|size,0.55|Ctrl+V paste   Ctrl+C copy", new Vector3(0.5f, -0.45f, 0f), help));
+                new GameObject("enterbutton").AddComponent<ButtonSprite>().SetUp(9, -1, "Done typing",
+                    new Vector3(-4.5f, -0.5f), Vector3.one * 0.5f, ButtonSort, help);
+                MainManager.instance.StartCoroutine(MainManager.SetText(TextSort
+                    + "|size,0.55|Ctrl+V paste   Ctrl+C copy", new Vector3(0.5f, -0.45f, 0f), help));
             }
             textRoot = new GameObject("text").transform;
             textRoot.parent = box;
@@ -319,7 +329,8 @@ namespace BugFablesAP
                         {
                             GameplayAll(reset: button == 0);
                         }
-                        log.LogInfo("[apmenu] " + page + ": " + (button == 0 ? "all reset to defaults" : "all disabled"));
+                        log.LogInfo("[apmenu] " + page + ": "
+                            + (button == 0 ? "all reset to defaults" : "all disabled"));
                     }
                     else
                     {
@@ -420,16 +431,19 @@ namespace BugFablesAP
                 Choice(WarpRow, "Travel", (QualityOfLife.Travel?.Value ?? "Both").ToUpperInvariant());
                 Choice(SkipConfirmRow, "Skip confirm", (QualityOfLife.SkipConfirm?.Value ?? "Off").ToUpperInvariant());
                 Choice(CutscenesRow, "Skip cutscenes", OnOff(QualityOfLife.SkipCutscenes));
-                Choice(AnimationRow, "Item animation", (QualityOfLife.ItemAnimation?.Value ?? "All").ToUpperInvariant());
+                Choice(AnimationRow, "Item animation",
+                    (QualityOfLife.ItemAnimation?.Value ?? "All").ToUpperInvariant());
                 Choice(ColorsRow, "Item colors", (QualityOfLife.ItemColors?.Value ?? "Rarity").ToUpperInvariant());
                 Choice(IconsRow, "Archipelago icon", QualityOfLife.IconMode == "OtherGames" ? "OTHER GAMES"
                     : QualityOfLife.IconMode == "AllPlayers" ? "ALL PLAYERS" : "OFF");
                 Choice(BackgroundsRow, "Item backgrounds", OnOff(QualityOfLife.ItemBackgrounds));
                 Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
                 Label(UncapRow, "Uncap FPS");
-                DrawPips(new[] { UncapRow }, new[] { Mathf.Max(0, Array.IndexOf(QualityOfLife.UncapValues, QualityOfLife.UncapFps?.Value)) + 1 });
+                DrawPips(new[] { UncapRow }, new[] { Mathf.Max(0, Array.IndexOf(QualityOfLife.UncapValues,
+                    QualityOfLife.UncapFps?.Value)) + 1 });
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
-                Text("|center||size,0.5|Quality of life. Cancel goes back" + (inGame ? " to Settings." : "."), 0f, StatusY);
+                Text("|center||size,0.5|Quality of life. Cancel goes back"
+                    + (inGame ? " to Settings." : "."), 0f, StatusY);
                 PlaceCursor();
                 return;
             }
@@ -437,14 +451,16 @@ namespace BugFablesAP
             {
                 DrawButtons();
                 Choice(DifficultyRow, "Difficulty", (Difficulty?.Value ?? "Normal").ToUpperInvariant());
-                Choice(ScalingRow, "Enemy scaling", ScalingLabel(QualityOfLife.EnemyScalingMode?.Value ?? "PartyLevel"));
+                Choice(ScalingRow, "Enemy scaling",
+                    ScalingLabel(QualityOfLife.EnemyScalingMode?.Value ?? "PartyLevel"));
                 Choice(AttackRow, "Attack boost", AttackBoost.Boost != null && AttackBoost.Boost.Value ? "+1" : "OFF");
                 Choice(CrystalsRow, "Healing crystals", OnOff(SaveCrystals.AllHeal));
                 Choice(AutoSaveRow, "Auto-save", OnOff(AutoSave.Enabled));
                 Label(MedalPricesRow, "Medal prices");
                 Label(ExpRow, "EXP multiplier");
                 Label(BerryRow, "Berry multiplier");
-                DrawPips(new[] { MedalPricesRow, ExpRow, BerryRow }, new[] { QualityOfLife.MedalPrices?.Value ?? QualityOfLife.FullPrice,
+                DrawPips(new[] { MedalPricesRow, ExpRow, BerryRow },
+                    new[] { QualityOfLife.MedalPrices?.Value ?? QualityOfLife.FullPrice,
                     Multipliers.Exp?.Value ?? 1, Multipliers.Berries?.Value ?? 1 });
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Gameplay. Cancel goes back" + (inGame ? " to Settings." : "."), 0f, StatusY);
@@ -474,23 +490,25 @@ namespace BugFablesAP
             arrows.parent = box;
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
-            foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, SkipConfirmRow, CutscenesRow, AnimationRow, ColorsRow, IconsRow, BackgroundsRow, DetectorRow, UncapRow }
-                : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, AttackRow, CrystalsRow, AutoSaveRow, MedalPricesRow, ExpRow, BerryRow }
+            foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, SkipConfirmRow, CutscenesRow, AnimationRow,
+                    ColorsRow, IconsRow, BackgroundsRow, DetectorRow, UncapRow }
+                : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, AttackRow, CrystalsRow, AutoSaveRow,
+                    MedalPricesRow, ExpRow, BerryRow }
                 : new[] { ModeRow, DeathLinkRow, AchievementsRow, NormalSavesRow })
             {
                 for (int side = 0; side < 2; side++)
                 {
                     GameObject arrow = MainManager.NewUIObject("arrow" + r + side, arrows,
-                        new Vector3(side == 0 ? ArrowLeftX : ArrowRightX, RowAt(r) + ArrowRise), Vector3.one * ArrowScale,
-                        MainManager.guisprites[1], ButtonSort);
+                        new Vector3(side == 0 ? ArrowLeftX : ArrowRightX, RowAt(r) + ArrowRise),
+                        Vector3.one * ArrowScale, MainManager.guisprites[1], ButtonSort);
                     arrow.transform.localEulerAngles = new Vector3(0f, 0f, side == 0 ? -90f : 90f);
                     arrow.layer = 5;
                 }
             }
         }
 
-        // The volume rows' look (MainManager.ShowItemList, type 17): ten pips between the arrows, the lit ones the yellow
-        // hexagon, scaled from the Settings row's spacing to this panel's narrower one.
+        // The volume rows' look (MainManager.ShowItemList, type 17): ten pips between the arrows, the lit ones the
+        // yellow hexagon, scaled from the Settings row's spacing to this panel's narrower one.
         private const float PipScale = 0.68f;
 
         private void DrawPips(int[] rows, int[] lit)
@@ -510,7 +528,8 @@ namespace BugFablesAP
                     bool on = p < lit[i];
                     GameObject pip = MainManager.NewUIObject("pip", pips,
                         new Vector3(ArrowLeftX + (0.7f + 0.4f * p) * PipScale, RowAt(rows[i]) + ArrowRise),
-                        Vector3.one * (on ? 1f / 3f : 1f / 4f) * PipScale, MainManager.guisprites[on ? 42 : 59], ButtonSort + p);
+                        Vector3.one * (on ? 1f / 3f : 1f / 4f) * PipScale,
+                        MainManager.guisprites[on ? 42 : 59], ButtonSort + p);
                     if (on)
                     {
                         pip.GetComponent<SpriteRenderer>().color = Color.yellow;
@@ -529,8 +548,10 @@ namespace BugFablesAP
         // The two buttons side by side at the top of a settings page; confirming one opens the Yes / No box.
         private void DrawButtons()
         {
-            Text("|size,0.8|" + (row == ButtonsRow && button == 0 ? "|color,1|" : "") + "Reset to defaults", LabelX, RowAt(ButtonsRow));
-            Text("|center||size,0.8|" + (row == ButtonsRow && button == 1 ? "|color,1|" : "") + "Disable all", ValueCenterX, RowAt(ButtonsRow));
+            Text("|size,0.8|" + (row == ButtonsRow && button == 0 ? "|color,1|" : "") + "Reset to defaults",
+                LabelX, RowAt(ButtonsRow));
+            Text("|center||size,0.8|" + (row == ButtonsRow && button == 1 ? "|color,1|" : "") + "Disable all",
+                ValueCenterX, RowAt(ButtonsRow));
         }
 
         private void PlaceCursor()
@@ -549,7 +570,8 @@ namespace BugFablesAP
         {
             if (popup == null)
             {
-                popup = MainManager.Create9Box(PopupAt + new Vector3(0f, 0f, 10f), new Vector2(9f, 2.75f), 4, PopupSort, Color.white, false);
+                popup = MainManager.Create9Box(PopupAt + new Vector3(0f, 0f, 10f),
+                    new Vector2(9f, 2.75f), 4, PopupSort, Color.white, false);
                 popup.parent = transform;
                 popup.localPosition = PopupAt;
                 popup.localEulerAngles = Vector3.zero;
@@ -560,13 +582,18 @@ namespace BugFablesAP
             }
             TextPool.Free(popupText);
             string what = page == Page.Qol ? "Quality of life" : "Gameplay";
-            string question = button == 0 ? "Put every " + what + " setting back to its default?" : "Turn every " + what + " setting off?";
-            MainManager.instance.StartCoroutine(MainManager.SetText(PopupTextSort + "|center||size,0.55|" + question, new Vector3(0f, 0.45f, 0f), popupText));
-            MainManager.instance.StartCoroutine(MainManager.SetText(PopupTextSort + "|size,0.8|" + (answer == 0 ? "|color,1|" : "") + "Yes", new Vector3(YesX, AnswerY, 0f), popupText));
-            MainManager.instance.StartCoroutine(MainManager.SetText(PopupTextSort + "|size,0.8|" + (answer == 1 ? "|color,1|" : "") + "No", new Vector3(NoX, AnswerY, 0f), popupText));
+            string question = button == 0 ? "Put every " + what + " setting back to its default?"
+                : "Turn every " + what + " setting off?";
+            MainManager.instance.StartCoroutine(MainManager.SetText(PopupTextSort + "|center||size,0.55|" + question,
+                new Vector3(0f, 0.45f, 0f), popupText));
+            MainManager.instance.StartCoroutine(MainManager.SetText(PopupTextSort + "|size,0.8|"
+                + (answer == 0 ? "|color,1|" : "") + "Yes", new Vector3(YesX, AnswerY, 0f), popupText));
+            MainManager.instance.StartCoroutine(MainManager.SetText(PopupTextSort + "|size,0.8|"
+                + (answer == 1 ? "|color,1|" : "") + "No", new Vector3(NoX, AnswerY, 0f), popupText));
             // The leaf lives under the panel's box: place it by world position on the picked answer.
             leaf.sortingOrder = PopupCursorSort;
-            leaf.transform.position = popup.TransformPoint(new Vector3((answer == 0 ? YesX : NoX) + LeafOffset, AnswerY + PopupLeafRise, 0f));
+            leaf.transform.position = popup.TransformPoint(new Vector3((answer == 0 ? YesX : NoX) + LeafOffset,
+                AnswerY + PopupLeafRise, 0f));
         }
 
         private void ClosePopup()
@@ -590,7 +617,8 @@ namespace BugFablesAP
             Label(r, label);
             // About 8 letters fit between the arrows at 0.75; a longer value shrinks to fit.
             float size = value.Length > 8 ? 0.75f * 8f / value.Length : 0.75f;
-            Text("|center||size," + size.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + value, ValueCenterX, RowAt(r));
+            Text("|center||size," + size.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + value,
+                ValueCenterX, RowAt(r));
         }
 
         private void Label(int r, string label)
@@ -598,7 +626,8 @@ namespace BugFablesAP
             string colour = editing && r == row ? "|color,1|" : "";
             // About 15 letters fit before the arrows at 0.8; a longer label shrinks to fit.
             float size = label.Length > 15 ? 0.8f * 15f / label.Length : 0.8f;
-            Text("|size," + size.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + colour + label, LabelX, RowAt(r));
+            Text("|size," + size.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + colour + label,
+                LabelX, RowAt(r));
         }
 
         private void Row(int r, string label, string value)

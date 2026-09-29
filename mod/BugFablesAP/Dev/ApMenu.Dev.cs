@@ -15,7 +15,8 @@ namespace BugFablesAP
             {
                 return "no text root";
             }
-            var report = new System.Text.StringBuilder($"page {page}, text root active {textRoot.gameObject.activeInHierarchy}, "
+            var report =
+                new System.Text.StringBuilder($"page {page}, text root active {textRoot.gameObject.activeInHierarchy}, "
                 + $"layer {textRoot.gameObject.layer}, pieces {textRoot.childCount}");
             for (int i = 0; i < textRoot.childCount && i < 6; i++)
             {
@@ -49,11 +50,14 @@ namespace BugFablesAP
             {
                 report.Append($"; GUI camera mask {gui.cullingMask} at {gui.transform.position} rot {gui.transform.eulerAngles} ortho {gui.orthographic} "
                     + $"near {gui.nearClipPlane} far {gui.farClipPlane}");
-                // Ours against one of the game's own letters (the Settings list, which shows), in the camera's own frame.
+                // Ours against one of the game's own letters (the Settings list, which shows), in the camera's own
+                // frame.
                 var pool = (TextMesh[])AccessTools.Field(typeof(MainManager), "letterpool").GetValue(null);
                 TextMesh game = System.Linq.Enumerable.FirstOrDefault(pool, l => l != null && l.text != ""
-                    && l.transform.parent != null && l.transform.parent.parent != null && l.transform.parent.parent.name.StartsWith("Bar"));
-                foreach (var pair in new[] { new System.Collections.Generic.KeyValuePair<string, TextMesh>("ours", first), new System.Collections.Generic.KeyValuePair<string, TextMesh>("game", game) })
+                    && l.transform.parent != null && l.transform.parent.parent != null
+                    && l.transform.parent.parent.name.StartsWith("Bar"));
+                foreach (var pair in new[] { new System.Collections.Generic.KeyValuePair<string, TextMesh>("ours",
+                    first), new System.Collections.Generic.KeyValuePair<string, TextMesh>("game", game) })
                 {
                     if (pair.Value == null)
                     {

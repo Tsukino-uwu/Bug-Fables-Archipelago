@@ -6,8 +6,9 @@ using HarmonyLib;
 namespace BugFablesAP
 {
     // The Gameplay page's EXP and berry multipliers, 1x to 10x (a pip each, like the volume bars).
-    // EXP: each defeated enemy's share, after the game's own per-enemy caps; the game still caps a battle at a level's worth.
-    // Berries: only those picked up in the world (lying there or dropped after a fight), never berries from a check.
+    // EXP: each defeated enemy's share, after the game's own per-enemy caps; the game still caps a battle at a level's
+    // worth. Berries: only those picked up in the world (lying there or dropped after a fight), never berries from a
+    // check.
     internal static class Multipliers
     {
         internal const int Min = 1, Max = 10;
@@ -39,7 +40,8 @@ namespace BugFablesAP
             log.LogInfo("[apmenu] " + entry.Definition.Key + ": " + entry.Value + "x");
         }
 
-        private static bool On(ConfigEntry<int> entry) => entry != null && entry.Value > 1 && settingsOn != null && settingsOn();
+        private static bool On(ConfigEntry<int> entry) => entry != null && entry.Value > 1 && settingsOn != null
+            && settingsOn();
 
         // A hard rematch (flag 166), which the game holds to 5 EXP.
         [HarmonyPatch(typeof(BattleControl), "GetEXP", typeof(int), typeof(bool), typeof(MainManager.Enemies))]
@@ -55,8 +57,9 @@ namespace BugFablesAP
             log.LogInfo($"[mult] EXP {was} -> {__result} ({Exp.Value}x)");
         }
 
-        // BerryBounce starts right after a berry pickup has added its 1, 5 or 20, and only then; its first step runs at once.
-        // The iterator's own MoveNext: the tiny BerryBounce() stub is inlined into its caller, so a patch there never runs.
+        // BerryBounce starts right after a berry pickup has added its 1, 5 or 20, and only then; its first step runs at
+        // once. The iterator's own MoveNext: the tiny BerryBounce() stub is inlined into its caller, so a patch there
+        // never runs.
         [HarmonyPatch(typeof(NPCControl), "BerryBounce", MethodType.Enumerator)]
         [HarmonyPrefix]
         private static void BeforeBerryStep(object __instance)
@@ -83,7 +86,8 @@ namespace BugFablesAP
                 case MainManager.Items.MoneyBig: value = 20; break;
                 default: return;
             }
-            MainManager.instance.money = UnityEngine.Mathf.Clamp(MainManager.instance.money + value * (Berries.Value - 1), 0, 999);
+            MainManager.instance.money = UnityEngine.Mathf.Clamp(MainManager.instance.money
+                + value * (Berries.Value - 1), 0, 999);
             log.LogInfo($"[mult] berries {value} -> {value * Berries.Value} ({Berries.Value}x)");
         }
     }

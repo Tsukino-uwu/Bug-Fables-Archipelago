@@ -7,8 +7,9 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Save crystals by the confirm button, as an NPC is talked to: the game only starts one from an attack's hitbox, which
-    // Shuffle Field Moves can take away. And the Gameplay page's Healing crystals: every crystal yellow (save and heal).
+    // Save crystals by the confirm button, as an NPC is talked to: the game only starts one from an attack's hitbox,
+    // which Shuffle Field Moves can take away. And the Gameplay page's Healing crystals: every crystal yellow (save and
+    // heal).
     internal static class SaveCrystals
     {
         internal static ConfigEntry<bool> AllHeal;

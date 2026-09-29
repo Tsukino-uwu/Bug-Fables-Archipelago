@@ -146,8 +146,8 @@ namespace BugFablesAP
                     log.LogInfo($"[open] {map}: {npc.name} made present (the seed keeps this way open)");
                 }
             }
-            // A one-time pickup whose check the server has is kept away in every save; a respawning one is the game's own
-            // again and a story one starts its scene, so both stay.
+            // A one-time pickup whose check the server has is kept away in every save; a respawning one is the game's
+            // own again and a story one starts its scene, so both stay.
             foreach (KeyValuePair<long, ApConnection.Pickup> found in (connection.LocationPickups ?? new Dictionary<long, ApConnection.Pickup>())
                 .Where(p => p.Value.Map == map && p.Value.Regional < 0 && p.Value.Event < 0 && connection.IsDone(p.Key)))
             {

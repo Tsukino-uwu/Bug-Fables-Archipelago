@@ -9,8 +9,8 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Makes scenes written for a fixed party (two or three) run with the party the seed has. Only while Archipelago is on.
-    // SetPlayers indexes its position list for every member, so a shorter list is lengthened first.
+    // Makes scenes written for a fixed party (two or three) run with the party the seed has. Only while Archipelago is
+    // on. SetPlayers indexes its position list for every member, so a shorter list is lengthened first.
     internal static class PartyFit
     {
         private static ManualLogSource log;
@@ -90,12 +90,13 @@ namespace BugFablesAP
         private static bool InScene() =>
             randomizerOn != null && randomizerOn() && Talking && MainManager.player != null;
 
-        // The leader acts the part of the story's missing leader, chosen once per scene since a scene can change the party
-        // partway. Animations play by number, so he shows his own for the role's.
+        // The leader acts the part of the story's missing leader, chosen once per scene since a scene can change the
+        // party partway. Animations play by number, so he shows his own for the role's.
         private static EntityControl actor;
         private static int actorRole = -1; // -1 not chosen yet this scene, -2 nobody acts
         // Members in the party the story doesn't have yet act a missing member's part too (role -> character).
-        // Kept by member, not character: a scene that remakes the party (ChangeParty with destroyoldentity) makes new ones.
+        // Kept by member, not character: a scene that remakes the party (ChangeParty with destroyoldentity) makes new
+        // ones.
         private static readonly System.Collections.Generic.Dictionary<int, int> spares = new System.Collections.Generic.Dictionary<int, int>();
         private static int actorMember = -1;
 
@@ -105,7 +106,8 @@ namespace BugFablesAP
             return mm?.playerdata?.Select(p => p.entity).FirstOrDefault(e => e != null && e.animid == member);
         }
 
-        // Vi from the opening (flag 15), Kabbu always, Leif once joined (flag 16). A member the story has plays himself.
+        // Vi from the opening (flag 15), Kabbu always, Leif once joined (flag 16). A member the story has plays
+        // himself.
         internal static bool InStoryParty(int member)
         {
             bool[] flags = MainManager.instance.flags;
@@ -201,7 +203,8 @@ namespace BugFablesAP
             if (standIns[member] == null)
             {
                 standIns[member] = EntityControl.CreateNewEntity("apstandin" + member, member, MainManager.player.transform.position);
-                // A new character gets its body only in Start, a frame later; a scene using it at once crashed. Start keeps this one.
+                // A new character gets its body only in Start, a frame later; a scene using it at once crashed. Start
+                // keeps this one.
                 EntityControl made = standIns[member];
                 if (made.rigid == null)
                 {
@@ -273,7 +276,8 @@ namespace BugFablesAP
                 for (int member = 0; member < 3; member++)
                 {
                     EntityControl found = __result.FirstOrDefault(e => e != null && e.animid == member);
-                    // The acting leader fills the role's slot; his own gets a stand-in, so the player never moves twice.
+                    // The acting leader fills the role's slot; his own gets a stand-in, so the player never moves
+                    // twice.
                     if (found != null && ((found == actor && member != actorRole) || ActsOtherPart(found, member)))
                     {
                         found = null;
@@ -305,8 +309,8 @@ namespace BugFablesAP
             }
         }
 
-        // The spider scene (Event6) has Leif stuck in the web (the map's own Moth): a Leif already in the party stays out
-        // of sight until it ends, when the mod adds him back (PartyMembers).
+        // The spider scene (Event6) has Leif stuck in the web (the map's own Moth): a Leif already in the party stays
+        // out of sight until it ends, when the mod adds him back (PartyMembers).
         private static bool LeifInTheWeb(EntityControl e)
         {
             return e.animid == 2 && MainManager.lastevent == 6 && Talking && randomizerOn != null && randomizerOn()
@@ -398,7 +402,8 @@ namespace BugFablesAP
                 {
                     c.enabled = false;
                 }
-                // Kinematic: a scene may place a real member on a stand-in's spot, so it must not sink through the floor.
+                // Kinematic: a scene may place a real member on a stand-in's spot, so it must not sink through the
+                // floor.
                 if (e.rigid != null)
                 {
                     if (!e.rigid.isKinematic)
@@ -411,7 +416,8 @@ namespace BugFablesAP
             }
         }
 
-        // GetEntity(1000 + n) reads map.tempfollowers[n]: with no companion there, the leader answers (logged once per place).
+        // GetEntity(1000 + n) reads map.tempfollowers[n]: with no companion there, the leader answers (logged once per
+        // place).
         private static readonly System.Collections.Generic.HashSet<string> reported = new System.Collections.Generic.HashSet<string>();
 
         private static class Entities
@@ -420,7 +426,8 @@ namespace BugFablesAP
             [HarmonyPrefix]
             private static bool BeforeGetEntity(int id, ref EntityControl __result)
             {
-                // A member by name (-4 Vi, -5 Kabbu, -6 Leif) not in the party: the stand-in answers (callers never null-check).
+                // A member by name (-4 Vi, -5 Kabbu, -6 Leif) not in the party: the stand-in answers (callers never
+                // null-check).
                 if (id <= -4 && id >= -6 && InScene())
                 {
                     int member = -4 - id;
@@ -430,7 +437,8 @@ namespace BugFablesAP
                         __result = StandIn(member);
                         return false;
                     }
-                    // The acting leader asked for by his own name: his own part goes to a stand-in, or he'd follow two sets of orders.
+                    // The acting leader asked for by his own name: his own part goes to a stand-in, or he'd follow two
+                    // sets of orders.
                     ChooseActor();
                     if (actor != null && actorRole != member && actor.animid == member)
                     {
@@ -445,7 +453,8 @@ namespace BugFablesAP
                     }
                     return true;
                 }
-                // The second and third member by position (-2, -3) beyond the party: the stand-ins, acting leader counted first.
+                // The second and third member by position (-2, -3) beyond the party: the stand-ins, acting leader
+                // counted first.
                 if ((id == -2 || id == -3) && InScene())
                 {
                     MainManager party = MainManager.instance;

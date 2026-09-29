@@ -33,9 +33,11 @@ namespace BugFablesAP
             { 3, 2 }, { 15, 2 }, { 21, 2 }, { 22, 2 }, { 24, 2 },
             { 31, 3 }, { 42, 3 }, { 46, 3 },
             { 40, 4 }, { 49, 4 }, { 54, 4 }, { 59, 4 }, { 60, 4 },
-            { 35, 5 }, { 41, 5 }, { 47, 5 }, { 50, 5 }, { 99, 5 }, { 55, 5 }, { 62, 5 }, { 69, 5 }, { 72, 5 }, { 77, 5 },
+            { 35, 5 }, { 41, 5 }, { 47, 5 }, { 50, 5 }, { 99, 5 }, { 55, 5 }, { 62, 5 }, { 69, 5 }, { 72, 5 },
+                { 77, 5 },
             { 98, 5 }, { 104, 5 },
-            { 23, 6 }, { 34, 6 }, { 36, 6 }, { 51, 6 }, { 74, 6 }, { 75, 6 }, { 76, 6 }, { 85, 6 }, { 86, 6 }, { 100, 6 },
+            { 23, 6 }, { 34, 6 }, { 36, 6 }, { 51, 6 }, { 74, 6 }, { 75, 6 }, { 76, 6 }, { 85, 6 }, { 86, 6 },
+                { 100, 6 },
             { 95, 6 }, { 96, 6 }, { 97, 6 },
             { 90, 7 }, { 91, 7 }, { 92, 7 }, { 93, 7 }, { 94, 7 }, { 111, 7 }, { 112, 7 }, { 113, 7 }, { 114, 7 },
             { 115, 7 },
@@ -57,7 +59,8 @@ namespace BugFablesAP
                 return;
             }
             bool damage = Hooks.Install(typeof(Damage), "scale", "enemy damage isn't scaled");
-            log.LogInfo("[scale] installed on MainManager.GetEnemyData" + (damage ? " and BattleControl.CalculateBaseDamage" : ""));
+            log.LogInfo("[scale] installed on MainManager.GetEnemyData"
+                + (damage ? " and BattleControl.CalculateBaseDamage" : ""));
             if (BestiaryRows == null)
             {
                 log.LogWarning("[scale] PauseMenu's enemydata wasn't found; the bestiary shows vanilla stats.");
@@ -84,7 +87,8 @@ namespace BugFablesAP
             }
             // Some ids read another row's data; that row's EXP is the one the game uses.
             int row = id;
-            if (int.TryParse(MainManager.enemydata[id, 25], out int swapped) && swapped >= 0 && swapped < MainManager.enemydata.GetLength(0))
+            if (int.TryParse(MainManager.enemydata[id, 25], out int swapped) && swapped >= 0
+                && swapped < MainManager.enemydata.GetLength(0))
             {
                 row = swapped;
             }
@@ -119,9 +123,11 @@ namespace BugFablesAP
 
         private static float Ratio(int home, int target) => (target + Base) / (home + Base);
 
-        // The bestiary page reads the raw enemy table (PauseMenu's own copy), not GetEnemyData: the shown enemy's row is
-        // swapped for a scaled one while the page's text is built, then put back. The field holds other text elsewhere.
-        private static readonly System.Reflection.FieldInfo BestiaryRows = AccessTools.Field(typeof(PauseMenu), "enemydata");
+        // The bestiary page reads the raw enemy table (PauseMenu's own copy), not GetEnemyData: the shown enemy's row
+        // is swapped for a scaled one while the page's text is built, then put back. The field holds other text
+        // elsewhere.
+        private static readonly System.Reflection.FieldInfo BestiaryRows = AccessTools.Field(typeof(PauseMenu),
+            "enemydata");
         private static int swappedRow = -1;
         private static string originalRow;
 
@@ -132,12 +138,14 @@ namespace BugFablesAP
             private static void BeforeBestiary(PauseMenu __instance)
             {
                 swappedRow = -1;
-                if (randomizerOn == null || !randomizerOn() || MainManager.listvar == null || MainManager.instance == null)
+                if (randomizerOn == null || !randomizerOn() || MainManager.listvar == null
+                    || MainManager.instance == null)
                 {
                     return;
                 }
                 int option = MainManager.instance.option;
-                if (!(BestiaryRows.GetValue(__instance) is string[] rows) || option < 0 || option >= MainManager.listvar.Length)
+                if (!(BestiaryRows.GetValue(__instance) is string[] rows) || option < 0
+                    || option >= MainManager.listvar.Length)
                 {
                     return;
                 }
@@ -203,7 +211,8 @@ namespace BugFablesAP
 
         [HarmonyPatch(typeof(MainManager), nameof(MainManager.GetEnemyData), typeof(int), typeof(bool), typeof(bool))]
         [HarmonyPostfix]
-        private static void AfterGetEnemyData(int id, bool createentity, bool noexp, ref MainManager.BattleData __result)
+        private static void AfterGetEnemyData(int id, bool createentity, bool noexp,
+            ref MainManager.BattleData __result)
         {
             if (!createentity || randomizerOn == null || !randomizerOn() || MainManager.instance == null)
             {
@@ -225,10 +234,12 @@ namespace BugFablesAP
             // A defence of -1 means "shown as ?", left alone; otherwise never below 0.
             int def = __result.def < 0 ? __result.def : Mathf.Max(0, __result.def + diff / LevelsPerDefence);
             int exp = __result.exp;
-            // EXP as the game gives it at the enemy's home level, so levelling keeps its pace. Left alone where the game
-            // fixes it: fixed EXP, no EXP, the level cap, hologram fights.
-            if (!noexp && !__result.fixedexp && MainManager.instance.partylevel < 27 && !MainManager.instance.flags[GameFlags.NoExp]
-                && !MainManager.instance.flags[162] && int.TryParse(MainManager.enemydata[__result.animid, 3], out int baseExp))
+            // EXP as the game gives it at the enemy's home level, so levelling keeps its pace. Left alone where the
+            // game fixes it: fixed EXP, no EXP, the level cap, hologram fights.
+            if (!noexp && !__result.fixedexp && MainManager.instance.partylevel < 27
+                && !MainManager.instance.flags[GameFlags.NoExp]
+                && !MainManager.instance.flags[162] && int.TryParse(MainManager.enemydata[__result.animid, 3],
+                out int baseExp))
             {
                 // animid is the row the game read (column 25 can point an id at another row).
                 int asIf = Mathf.Clamp(MainManager.instance.partylevel - diff, 1, 27);

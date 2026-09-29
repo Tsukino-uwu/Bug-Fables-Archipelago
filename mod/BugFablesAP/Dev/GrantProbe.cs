@@ -3,8 +3,9 @@ using BepInEx.Logging;
 
 namespace BugFablesAP
 {
-    // Dev only: logs key items added or removed, quest board changes and every flip of flags/regionalflags/crystalbflags,
-    // with frame and map, to match a grant to the flag marking its location done. Read-only.
+    // Dev only: logs key items added or removed, quest board changes and every flip of
+    // flags/regionalflags/crystalbflags, with frame and map, to match a grant to the flag marking its location done.
+    // Read-only.
     internal sealed class GrantProbe
     {
         private readonly ManualLogSource log;

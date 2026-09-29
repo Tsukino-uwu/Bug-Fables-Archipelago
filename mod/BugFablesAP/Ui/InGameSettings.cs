@@ -7,9 +7,10 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // With Archipelago on (or Use on normal saves), the pause menu's Settings list gets Quality of life and Gameplay rows at the top, each opening
-    // the panel's page of that name. A settings row is an id whose label is
-    // menutext[settingsindex[id]], so both tables get two entries; the game gives every row but a few arrows, removed here.
+    // With Archipelago on (or Use on normal saves), the pause menu's Settings list gets Quality of life and Gameplay
+    // rows at the top, each opening the panel's page of that name. A settings row is an id whose label is
+    // menutext[settingsindex[id]], so both tables get two entries; the game gives every row but a few arrows, removed
+    // here.
     internal static class InGameSettings
     {
         private const int QolId = 26, GameplayId = 27;
@@ -70,7 +71,8 @@ namespace BugFablesAP
         }
 
         // The game draws left/right arrows on every settings row but a named few: take them off the two page rows.
-        [HarmonyPatch(typeof(MainManager), nameof(MainManager.ShowItemList), typeof(int), typeof(Vector2), typeof(bool), typeof(bool))]
+        [HarmonyPatch(typeof(MainManager), nameof(MainManager.ShowItemList), typeof(int), typeof(Vector2), typeof(bool),
+            typeof(bool))]
         [HarmonyPostfix]
         private static void AfterShowList(int type)
         {
@@ -104,7 +106,8 @@ namespace BugFablesAP
             {
                 return false;
             }
-            if (__instance.windowid != 4 || !InGame() || MainManager.instance.inputcooldown > 0f || MainManager.listvar == null)
+            if (__instance.windowid != 4 || !InGame() || MainManager.instance.inputcooldown > 0f
+                || MainManager.listvar == null)
             {
                 return true;
             }
