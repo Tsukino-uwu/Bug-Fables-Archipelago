@@ -16,6 +16,7 @@
     [".githooks/*.py", "a hook's helper"],
     [".githooks/*.sh", "a hook's helper"],
     [".github/workflows/*.yml", "CI and the release"],
+    [".github/SECURITY.md", "how to report a problem"],
     ["agent_docs/*.md", "the process guides and records"],
     ["docs/*.md", "pages for reviewers"],
     ["apworld/bug_fables/**/*.py", "the apworld"],

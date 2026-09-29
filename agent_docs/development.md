@@ -3,10 +3,31 @@
 For developers. You need the .NET SDK and your own copy of the game. The build compiles against the game's
 `Assembly-CSharp.dll` from your install and never copies it into the repo.
 
+## Before the first commit: the hooks and the preflight
+
+Once per clone: `git config core.hooksPath .githooks`. The hooks need Python 3.11 or newer and find one themselves
+(`py -3`, `python3`, then `python`, each tried before use), or use the one you name:
+`git config preflight.python <path to python>`.
+
+- `python dev-scripts/preflight.py`: every section on what is staged; the hooks run it on every commit and push.
+  `--history` checks every commit ever made; `--text-stdin LABEL` checks text such as release notes.
+- `python dev-scripts/negative-test-preflight.py`: proves every section can still fail (about 25 s). Run it after any
+  change to the preflight.
+- `python dev-scripts/dotnet_metadata.py --selftest <dll>`: reads a .NET assembly and prints what it found.
+- `python dev-scripts/verify-release.py --ref vX.Y.Z --zip <file> --apworld <file>`: checks a release's files against
+  its tag.
+
+When a check refuses something the code really needs (a new host, a new capability), the fix is a row in
+`docs/capabilities.md` with its reason: the maintainer's decision, never a looser pattern. What each section does:
+[apimplementation.md, build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release).
+
 ## The mod
 
 `dotnet build mod/BugFablesAP/BugFablesAP.csproj`. If the game isn't in Steam's default library, add
-`-p:BugFablesDir="D:\path\to\Bug Fables"`.
+`-p:BugFablesDir="D:\path\to\Bug Fables"`. The SDK is pinned by `global.json` and every package by
+`mod/BugFablesAP/packages.lock.json`; restores are locked, so to update a package on purpose run
+`dotnet restore mod/BugFablesAP/BugFablesAP.csproj -p:RestoreLockedMode=false` and commit the lock file. A release DLL
+is built by `dev-scripts/build-release.ps1` (documentation.md, step 32).
 
 The code style is in `.editorconfig`, which most editors apply: 4-space indents, braces on their own line, and lines
 up to 120 characters (the limit core Archipelago's `ruff.toml` sets for Python).

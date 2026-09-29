@@ -362,6 +362,18 @@ be wrong.
 
 **Known issues:**
 
+- **Found by the review for build step 28 (2026-09-29), each confirmed in the code; `docs/reviewing.md` lists them for
+  reviewers:**
+  - **Names from the server run as game text commands.** Player and item names go into the game's text unescaped. The
+    game runs `|...|` commands inside a substituted string (`MainManager.cs:12688-12704`), among them `flag` and
+    `money`, and the save's separators could break a save. Next: strip them from every server string the game shows
+    or saves. This fix comes first.
+  - **wss:// accepts any certificate** (websocket-sharp's default, `return true`), and a bare address falls back to
+    plain ws://, password included. What to do is the user's decision: Mono in Unity may hold no root certificates, so
+    checking them could turn every connection into ws://. Measure that first.
+  - **MultiClient.Net 6.7.1's cache path uses the server's game name and checksum unsanitised** (its
+    `GetFileSystemSafeFileName` returns its input). Options, the user's call: report it upstream, and/or patch the
+    function in the mod (a new "patches outside the game" row).
 - **Horn rules:** written as `abilities: ["Horn Slash"]` since the horn became an item (build step 21): locations
   11, 19, 25, 30 and 32, and 31 through the Den's entrance (build step 13). Not location 2: the horn tutorial cuts its
   grass itself and played through with Leif alone (2026-09-25). **Upper Snakemouth, when it gets locations:** the big door in the door room stays shut until flag 14 (its closed
@@ -2491,9 +2503,24 @@ character, no game file, and no binary other than the release DLLs. It first fla
   exempt by their exact git hash (`history_reviewed` in the patterns file), each with its reason, so a different
   file can't hide behind the exemption.
 
-**Status:** in progress (2026-09-29). Built: the sections above, their test, `verify-release.py`, and every place
-they run (pre-commit, pre-push, CI on every push, the release). The CI half runs for the first time on the next
-push. Next: the pages for reviewers, and the GitHub settings.
+**The pages for reviewers (2026-09-29):**
+- **`docs/reviewing.md`** is for anyone checking the project before running it, the Archipelago Discord's
+  Developer Advocates among them. It covers:
+  - how AI is used;
+  - the checks that need only git and Python;
+  - what runs on whose machine;
+  - where a server's data goes, with what is and isn't checked;
+  - what's proven about the committed DLL, and what can't be;
+  - what the gates can't prove.
+- **`.github/SECURITY.md`** says how to report a problem.
+- **The README** carries the AI notice and links to both.
+
+Writing the server-data part meant tracing every server input through the mod. That turned up three gaps, each
+confirmed in the code, listed under Known issues in "Where it stands" above.
+
+**Status:** built (2026-09-29): the sections above, their test, `verify-release.py`, every place they run
+(pre-commit, pre-push, CI on every push, the release) and the reviewer pages. The CI half runs for the first time on
+the next push. Next: the GitHub settings (each on the user's yes), and the review's three findings (Known issues).
 
 *Code: `dev-scripts/preflight.py`, `dev-scripts/preflight-patterns.json`, `dev-scripts/dotnet_metadata.py`;
 `docs/capabilities.md`;

@@ -77,16 +77,16 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
 
 ## What may enter the repo
 
-- **Nothing goes in that couldn't be published. The test is "fine in a public repo forever?"**, not "does a
-  licence permit it?"
+- **Nothing goes in that couldn't be published, or could harm whoever runs it** ("fine in a public repo forever?", not
+  "does a licence permit it?"). `dev-scripts/preflight.py` enforces it: pre-commit, pre-push, CI, release (step 28).
 - **Never commit the game's files:** no `Assembly-CSharp.dll`, decompiled output, assets or saves. The build
   references the game DLL via `HintPath` to the user's own install. Decompiled source is read for facts only
   and lives in the gitignored `decompiled/`.
 - **Read a project's licence before its source**, and add a row to `agent_docs/licensing.md`. A project
   with no row hasn't been checked, so don't use it. Reading is fine; copying source is not.
-- **No personal username, home path or machine detail in any tracked file, prose included.** Write
-  "your Bug Fables install" or "your Archipelago checkout". `.githooks/pre-commit` refuses the obvious
-  cases; run `git config core.hooksPath .githooks` once per clone, and never use `--no-verify`.
+- **No personal username, home path or machine detail in any tracked file, prose included:** "your Bug Fables install".
+  **`docs/capabilities.md` is what the code may do:** widening it or the preflight's patterns is the user's call, never
+  a way to make a check pass. `git config core.hooksPath .githooks` once per clone; never `--no-verify`.
 - **A dated fact is true as of its date.** Archipelago, MultiClient.Net and the game all change without this
   repo changing, so re-check before a new use. Cite dates, never durations.
 
