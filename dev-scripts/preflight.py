@@ -1402,6 +1402,182 @@ def dll_matches_source(ctx, out):
                f'member names and {len(strings)} strings come from it; none of Dev/\'s {len(dev_types)} types')
 
 
+def yaml_code(line):
+    """A workflow line without its comment (a '#' outside quotes, after a space or at the start)."""
+    quote = None
+    for i, c in enumerate(line):
+        if quote:
+            quote = None if c == quote else quote
+        elif c in '\'"':
+            quote = c
+        elif c == '#' and (i == 0 or line[i - 1] == ' '):
+            return line[:i].rstrip()
+    return line.rstrip()
+
+
+@section('Workflows')
+def workflows(ctx, out):
+    w = ctx.patterns['workflows']
+    bad, jobs_seen = [], {}
+    files = [f for f in ctx.files if f.path.startswith('.github/workflows/')]
+    for f in files:
+        top, job, section_key, scalar, script = None, None, None, None, False
+        top_permissions, triggers, needs = None, [], {}
+        job_permissions = {}
+        for n, raw in enumerate(f.text.split('\n'), 1):
+            where = f'{f.path}:{n}'
+            indent = len(raw) - len(raw.lstrip(' '))
+            if raw[:indent + 1].count('\t'):
+                bad.append(f'{where}: a tab in the indentation')
+            if scalar is not None:
+                if not raw.strip() or indent > scalar:
+                    if script and '${{' in raw:
+                        bad.append(f'{where}: an expression inside a script (pass it through env:, where it is data)')
+                    continue
+                scalar = None
+            line = yaml_code(raw)
+            if not line.strip():
+                continue
+            body = line.strip()
+            key_match = re.match(r'^(?:-\s+)?([\w.-]+):(?:\s+(.*))?$', body)
+            key = key_match.group(1) if key_match else None
+            value = (key_match.group(2) or '').strip() if key_match else ''
+            if re.match(r'^[|>][-+]?$', value):
+                scalar, script = indent + (2 if body.startswith('- ') else 0), key == 'run'
+            outside_quotes = re.sub(r"'[^']*'|\"[^\"]*\"", '', line)
+            if re.search(r'(?:^|[\s\[{,:-])[&*][A-Za-z_]', outside_quotes):
+                bad.append(f'{where}: a YAML anchor or alias (a hidden copy of other text)')
+            if indent == 0 and key:
+                top = key
+                if key == 'permissions':
+                    top_permissions = value
+            elif top == 'on' and indent == 2 and key:
+                triggers.append(key)
+            elif top == 'jobs' and indent == 2 and key:
+                job, section_key = key, None
+                jobs_seen[f'{f.path.rsplit("/", 1)[-1]}:{job}'] = True
+            elif top == 'jobs' and indent == 4 and key:
+                section_key = key
+                if key == 'permissions':
+                    job_permissions.setdefault(job, [])
+                    if value:
+                        job_permissions[job].append(value)
+                if key == 'needs':
+                    needs[job] = re.findall(r'[\w-]+', value)
+                if key == 'runs-on' and value not in w['runners']:
+                    bad.append(f'{where}: runs on {value} (only GitHub\'s own runners)')
+            elif top == 'jobs' and section_key == 'permissions' and indent == 6 and key:
+                job_permissions[job].append(f'{key}: {value}')
+            if key == 'uses' and value and not value.startswith('./'):
+                if not re.fullmatch(r'[\w.-]+/[\w./-]+@[0-9a-f]{40}', value):
+                    bad.append(f'{where}: {value} is not pinned to a full commit hash')
+                elif not re.search(r'#\s*v\d', raw):
+                    bad.append(f'{where}: a pinned action without its version in a comment')
+            if key == 'continue-on-error':
+                bad.append(f'{where}: continue-on-error (a failing step would pass)')
+            for secret in re.findall(r'secrets\.(\w+)', line):
+                if secret != 'GITHUB_TOKEN':
+                    bad.append(f'{where}: the secret {secret}')
+        name = f.path.rsplit('/', 1)[-1]
+        if top_permissions != '{}':
+            bad.append(f'{f.path}: the workflow\'s own permissions must be exactly {{}} (each job asks for what it needs)')
+        bad += [f'{f.path}: triggered by {t}' for t in triggers if t not in w['triggers']]
+        if not triggers:
+            bad.append(f'{f.path}: no trigger read: the parser is wrong')
+        for job_name, grants in job_permissions.items():
+            allowed = w['job_permissions'].get(f'{name}:{job_name}', [])
+            bad += [f'{f.path}: job {job_name} asks for {g}' for g in grants if g not in allowed]
+        if name == 'release.yml':
+            missing = sorted(set(w['release_gates']) - set(needs.get('publish', [])))
+            if missing:
+                bad.append(f'{f.path}: publish does not wait for {", ".join(missing)}')
+    if len(files) < 2 or len(jobs_seen) < 4:
+        out.fail(f'only {len(files)} workflows and {len(jobs_seen)} jobs read: the listing is wrong')
+    elif bad:
+        out.fail('a workflow could run something other than what this repo says, or with more rights', bad)
+    else:
+        out.ok(f'{len(files)} workflows, {len(jobs_seen)} jobs: every action pinned to a commit, no permissions but '
+               f'the listed ones, only known triggers and GitHub\'s runners, no secrets, no expression inside a script; '
+               f'publish waits for {", ".join(w["release_gates"])}')
+
+
+@section('Dependencies pinned')
+def dependencies_pinned(ctx, out):
+    d = ctx.patterns['dependencies']
+    bad = []
+
+    def text(path):
+        f = ctx.file(path)
+        if f is None:
+            raise Unreadable(f'{path} is missing')
+        return f.text
+
+    csproj = text('mod/BugFablesAP/BugFablesAP.csproj')
+    refs = dict(re.findall(r'<PackageReference\s+Include="([^"]+)"\s+Version="([^"]+)"', csproj))
+    if len(refs) < 3:
+        bad.append(f'only {len(refs)} package references read: the pattern is wrong')
+    bad += [f'{name} {v}: not one exact version' for name, v in refs.items() if not re.fullmatch(r'\d+(\.\d+){1,3}', v)]
+    for prop in ('RestorePackagesWithLockFile', 'RestoreLockedMode'):
+        if f'<{prop}>true</{prop}>' not in csproj:
+            bad.append(f'the csproj does not set {prop}')
+    lock = strict_json(text('mod/BugFablesAP/packages.lock.json'))
+    target = next(iter(lock.get('dependencies', {}).values()), {})
+    direct = {k: v for k, v in target.items() if v.get('type') == 'Direct'}
+    # The SDK adds some packages itself (NETStandard.Library for a netstandard2.0 build): listed, version included.
+    refs = {**d['implicit_packages'], **refs}
+    if set(direct) != set(refs):
+        bad.append(f'the lock file\'s direct packages {sorted(direct)} are not the csproj\'s {sorted(refs)}')
+    bad += [f'{k}: the lock file resolves {v.get("resolved")}, the csproj asks for {refs.get(k)}'
+            for k, v in direct.items() if v.get('resolved') != refs.get(k)]
+    bad += [f'{k}: no content hash in the lock file' for k, v in target.items()
+            if not re.fullmatch(r'[A-Za-z0-9+/]{86}==', v.get('contentHash', ''))]
+    config = text('nuget.config')
+    sources = dict(re.findall(r'<add\s+key="([^"]+)"\s+value="([^"]+)"', config))
+    if sources != d['nuget_sources']:
+        bad.append(f'nuget.config feeds {sources}, expected {d["nuget_sources"]}')
+    mapping = {key: re.findall(r'<package\s+pattern="([^"]+)"', block) for key, block in
+               re.findall(r'<packageSource\s+key="([^"]+)">(.*?)</packageSource>', config, re.S)}
+    if mapping != d['nuget_mapping']:
+        bad.append(f'nuget.config maps {mapping}, expected {d["nuget_mapping"]}')
+    if config.count('<clear />') != 2:
+        bad.append('nuget.config must clear both the inherited feeds and the inherited mapping')
+    sdk = strict_json(text('global.json')).get('sdk', {})
+    if not re.fullmatch(r'\d+\.\d+\.\d+', str(sdk.get('version'))) or sdk.get('rollForward') not in d['roll_forward']:
+        bad.append(f'global.json pins {sdk}: one exact SDK, rolling forward at most a patch')
+    props = text('Directory.Build.props')
+    bad += [f'Directory.Build.props does not turn off {switch}' for switch in d['msbuild_switches']
+            if f'<{switch}>false</{switch}>' not in props]
+    if bad:
+        out.fail('a dependency or build input could change without a commit saying so', bad)
+    else:
+        out.ok(f'{len(refs)} packages at exact versions, {len(target)} locked with content hashes, each feed mapped to '
+               f'its packages, one SDK, no build files from outside the repo')
+
+
+@section('Capabilities list')
+def capabilities_list(ctx, out):
+    f = ctx.file(CAPABILITIES)
+    if f is None:
+        raise Unreadable(f'{CAPABILITIES} is missing')
+    known = set(ctx.patterns['capability_tables'])
+    headings = [line[3:].strip() for line in f.text.split('\n') if line.startswith('## ')]
+    unknown = [h for h in headings if h not in known]
+    missing = sorted(known - set(headings))
+    reasonless = [f'{h}: {key}' for h, rows in ctx.capabilities().items() for key, cells in rows
+                  if not cells[-1].strip() or len(cells) < 2]
+    if unknown:
+        out.fail(f'tables in {CAPABILITIES} that preflight does not check: a list nothing enforces would read as if it '
+                 f'were', unknown)
+    if missing:
+        out.fail(f'tables preflight checks against that {CAPABILITIES} no longer has', missing)
+    if reasonless:
+        out.fail('rows without a reason', reasonless)
+    if not (unknown or missing or reasonless):
+        rows = sum(len(r) for r in ctx.capabilities().values())
+        out.ok(f'{len(headings)} tables, {rows} rows, each checked against the code by its section and each with a '
+               f'reason')
+
+
 @section('Commit messages', modes=('history',))
 def commit_messages(ctx, out):
     rules = {name: re.compile(rx) for name, rx in ctx.patterns['secrets'].items()}
@@ -1435,7 +1611,8 @@ def load_patterns(files):
                 'apworld_denied_members', 'apworld_manifest_keys', 'mod_denied', 'mod_capabilities', 'ps1_denied',
                 'ps1_capabilities', 'sh_denied', 'script_denied_modules', 'script_denied_builtins',
                 'script_denied_methods', 'script_capability_modules', 'script_capability_calls', 'dll_assembly_refs',
-                'dll_denied', 'dll_denied_names', 'dll_capabilities', 'dll_synthesized_members', 'dll_compiler_types'}
+                'dll_denied', 'dll_denied_names', 'dll_capabilities', 'dll_synthesized_members', 'dll_compiler_types',
+                'workflows', 'dependencies', 'capability_tables'}
     if set(patterns) != expected:
         raise Unreadable(f'{PATTERNS} keys differ from what preflight reads: {sorted(set(patterns) ^ expected)}')
     for rx in list(patterns['secrets'].values()) + patterns['game_paths'] + patterns['decompiler_markers'] + [

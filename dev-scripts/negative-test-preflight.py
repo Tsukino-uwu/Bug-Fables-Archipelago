@@ -460,6 +460,58 @@ def fixtures():
     def _(c):
         patch_bytes(c, DLL, b'\0SaveRedirect\0', b'\0SaveRedirecx\0')
 
+    @add('everything a workflow must never do', 'Workflows',
+         names=('is not pinned to a full commit hash', 'must be exactly {}', 'triggered by pull_request_target',
+                'runs on self-hosted', 'the secret DEPLOY_KEY', 'an expression inside a script', 'continue-on-error',
+                'a YAML anchor or alias', 'job build asks for contents: write'))
+    def _(c):
+        c.write('.github/workflows/planted.yml', '\n'.join([
+            'name: Planted',
+            'on:',
+            '  pull_request_target:',
+            'permissions: write-all',
+            'jobs:',
+            '  build:',
+            '    runs-on: self-hosted',
+            '    permissions:',
+            '      contents: write',
+            '    steps:',
+            '      - uses: actions/checkout@v7',
+            '        with: &opts',
+            '          token: ${{ secrets.DEPLOY_KEY }}',
+            '      - run: |',
+            '          echo "${{ github.event.pull_request.title }}"',
+            '        continue-on-error: true',
+            '']))
+
+    @add('a release that no longer waits for its gates', 'Workflows', names=('publish does not wait for mod-dll',))
+    def _(c):
+        c.replace('.github/workflows/release.yml', b'needs: [guard, ci, mod-dll]', b'needs: [guard, ci]')
+
+    @add('dependencies that could drift', 'Dependencies pinned',
+         names=('not one exact version', 'does not set RestoreLockedMode', 'nuget.config feeds',
+                'global.json pins', 'does not turn off ImportDirectoryBuildTargets'))
+    def _(c):
+        c.replace('mod/BugFablesAP/BugFablesAP.csproj', b'Version="5.4.21"', b'Version="5.4.*"')
+        c.replace('mod/BugFablesAP/BugFablesAP.csproj', b'<RestoreLockedMode>true', b'<RestoreLockedMode>false')
+        c.replace('nuget.config', b'<clear />',
+                  b'<clear />\n    <add key="extra" value="https' + b'://nuget.example.org/v3/index.json" />')
+        c.replace('global.json', b'"latestPatch"', b'"latestMajor"')
+        c.replace('Directory.Build.props', b'<ImportDirectoryBuildTargets>false', b'<ImportDirectoryBuildTargets>true')
+
+    @add('a lock file that disagrees with the project', 'Dependencies pinned', names=('the lock file resolves',))
+    def _(c):
+        c.replace('mod/BugFablesAP/packages.lock.json', b'"resolved": "5.4.21"', b'"resolved": "5.4.22"')
+
+    @add('a capabilities table nothing checks', 'Capabilities list', names=('Mod: extra powers',))
+    def _(c):
+        c.append('docs/capabilities.md', '## Mod: extra powers\n\n| File | Does | Why |\n|---|---|---|\n'
+                 '| `mod/BugFablesAP/Core/Plugin.cs` | anything | trust me |')
+
+    @add('a capabilities row without a reason', 'Capabilities list', names=('rows without a reason',))
+    def _(c):
+        c.replace('docs/capabilities.md', b'| `github.com` |', b'| `nothing.example` |  |\n| `github.com` |')
+
     # History: a violation committed and removed again is gone from the tree, not from what was published.
     def committed_then_removed(rel, data):
         def plant(c):

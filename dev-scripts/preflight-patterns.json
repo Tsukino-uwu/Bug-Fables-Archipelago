@@ -488,10 +488,48 @@
     "Item5",
     "Item6",
     "Item7",
-    "Rest", "get_Chars"
+    "Rest",
+    "get_Chars"
   ],
   "dll_compiler_types": [
     "Microsoft.CodeAnalysis.EmbeddedAttribute",
     "System.Runtime.CompilerServices.RefSafetyRulesAttribute"
+  ],
+  "workflows": {
+    "triggers": ["push", "pull_request", "workflow_call", "workflow_dispatch"],
+    "runners": ["ubuntu-latest", "windows-latest", "macos-latest"],
+    "job_permissions": {
+      "release.yml:publish": ["contents: write"]
+    },
+    "release_gates": ["guard", "ci", "mod-dll"]
+  },
+  "dependencies": {
+    "nuget_sources": {
+      "nuget.org": "https://api.nuget.org/v3/index.json",
+      "bepinex": "https://nuget.bepinex.dev/v3/index.json"
+    },
+    "nuget_mapping": {
+      "nuget.org": ["*"],
+      "bepinex": ["BepInEx.*", "UnityEngine.Modules"]
+    },
+    "implicit_packages": {"NETStandard.Library": "2.0.3"},
+    "roll_forward": ["latestPatch", "disable"],
+    "msbuild_switches": [
+      "ImportDirectoryBuildTargets",
+      "ImportDirectoryPackagesProps",
+      "ImportUserLocationsByWildcardBeforeMicrosoftCommonProps",
+      "ImportUserLocationsByWildcardAfterMicrosoftCommonProps",
+      "ImportUserLocationsByWildcardBeforeMicrosoftCommonTargets",
+      "ImportUserLocationsByWildcardAfterMicrosoftCommonTargets",
+      "ImportUserLocationsByWildcardBeforeMicrosoftCSharpTargets",
+      "ImportUserLocationsByWildcardAfterMicrosoftCSharpTargets"
+    ]
+  },
+  "capability_tables": [
+    "Hosts",
+    "Apworld: reflection by name",
+    "Mod: what the code touches",
+    "Mod: patches outside the game",
+    "Dev scripts and hooks: what they touch"
   ]
 }

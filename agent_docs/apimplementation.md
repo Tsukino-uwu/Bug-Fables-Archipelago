@@ -2392,6 +2392,25 @@ Harmony target moved outside the game, a URL written into a string, a type renam
 data appended). **`build-release.ps1`** runs the three DLL sections on each fresh build before staging it, and
 its `-Check` (the release's gate) is now preflight with `--release`.
 
+**The workflows, the dependencies and the list itself (2026-09-29):**
+- **Workflows:** every action pinned to a full commit hash, with its version in a comment. The four first-party
+  actions were pinned by tag only until then; a tag can be moved, a commit can't.
+  - The workflow-level permissions are empty, and a job asks only for what the patterns file lists (today: the
+    release's publish job, to write the release).
+  - Only four triggers (push, pull request, a call from another workflow, a manual run), and only GitHub's own
+    runners.
+  - No secret but GitHub's own token, and no `${{ }}` inside a script, where text from outside would run as code.
+  - No `continue-on-error` and no YAML anchors.
+  - The release's publish job must wait for every gate.
+- **Dependencies pinned:**
+  - Every package at one exact version, and the lock file agreeing with the project, a content hash for each.
+    The SDK adds `NETStandard.Library` itself, so that one is listed by version in the patterns file.
+  - Each NuGet feed mapped to its packages.
+  - One SDK, rolling forward at most a patch.
+  - Every MSBuild switch that keeps outside build files out.
+- **Capabilities list:** every table in `docs/capabilities.md` is one a section checks, and every row has a
+  reason. A table nothing enforced would read as if something did.
+
 **Where it runs so far:**
 - **Every commit:** the pre-commit hook, quiet unless something fails.
 - **Every push** (`.githooks/pre-push`): preflight on each pushed commit, and `--history` on everything new in the
@@ -2406,7 +2425,7 @@ history, free text), the test plants a real violation and checks that the sectio
 non-zero. It works in a throwaway clone outside the repo, with its link back to the repo removed. The clone holds what
 the next commit contains (HEAD plus everything staged), or, from pre-push, exactly the commit being pushed:
 1. **A clean baseline** in all three modes, so a failure afterwards is the plant's doing.
-2. **One fixture per kind of violation** (64 on 2026-09-29): a bidi override in a doc, a homoglyph in code, every
+2. **One fixture per kind of violation** (70 on 2026-09-29): a bidi override in a doc, a homoglyph in code, every
    credential format at once (each must be named), a home path inside the DLL, a library changed by one byte, a
    symlink, a submodule, a stale host row, a secret committed and then removed, and more. The fake credentials and
    paths are assembled at run time, so the test file holds none itself.
@@ -2443,8 +2462,8 @@ character, no game file, and no binary other than the release DLLs. It first fla
   file can't hide behind the exemption.
 
 **Status:** in progress (2026-09-29). Built: the sections above (files, apworld, mod source, scripts, the compiled
-DLL), in pre-commit, pre-push, the release guard and the release build, and their test. Next: the workflows and
-dependencies, and CI.
+DLL, the workflows and the dependencies), in pre-commit, pre-push, the release guard and the release build, and
+their test. Next: CI on every push, and the release checks.
 
 *Code: `dev-scripts/preflight.py`, `dev-scripts/preflight-patterns.json`, `dev-scripts/dotnet_metadata.py`;
 `docs/capabilities.md`;
