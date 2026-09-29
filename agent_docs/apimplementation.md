@@ -152,6 +152,37 @@ be wrong.
    it would be the mod's own), a silly look for the party in one fight. A lost turn (`EventStop`, `MEASURED.md`) was
    considered and dropped for this reason; the game's own conditions are never touched.
    First measure how each is applied. A yaml option (how many traps), so its own build step when built.
+   **Frozen in an ice block, code read 2026-09-29 (not measured):** nothing in the game freezes the player on the
+   field (`PlayerControl.frozencube` is declared, never used). Leif's ice freezes a map enemy through
+   `NPCControl.freezecooldown` (300, 5 s), whose `Update` calls `EntityControl.Freeze()` (the ice cube) and later
+   `BreakIce()`. `Freeze()` itself is safe on the player: its NPC-only lines are guarded and `CheckSpecialID` sizes a
+   cube for every entity. The mod would bring the rest: its own timer and `BreakIce()` (which hops), the controls
+   locked (`CancelAction()` first, as the dash ignores `lockkeys`), and a thaw at a battle start, a map transfer and a
+   scene. A battle's Freeze (`SetCondition`, 2 turns on the party) costs turns, so it stays out, as above.
+   **Disguised traps (the user, 2026-09-29):** on the ground the player can't tell their own trap from an item they
+   want; a shop may tell (its description already says "A trap", `ClassWord`), and the pickup does.
+   - *The player's own trap:* on the ground, a real progression or useful Bug Fables item not yet received, drawn
+     exactly as a location holding it would be (`Describe`, `MarkColorOf`): its sprite and its class's backdrop, so
+     the two always match ("a fake useful item with a purple background would be obvious"); with Item colors off the
+     game's colour for its kind, with Item backgrounds off none. Picked up: red, its real look. A shelf shows it too.
+   - *Another Bug Fables player's trap:* the trap item's own sprite on red, everywhere (the icon with *Archipelago
+     icon: All players*), so you know it's a trap for someone else.
+   - *Another game's trap:* the Archipelago icon on red, as today.
+
+   **The look is always an item you don't have yet** ("you might want the hookshot so you will obviously try to go
+   for the item until you have it"). The apworld picks, per trap location, an ordered list of wanted items with their
+   class in that seed (a class can depend on options), with the seed's random, sent in `slot_data`; the mod shows the
+   first not fully received (every copy, starting items included), the next once it arrives, and the last when
+   nothing wanted is left. Fixed for the seed, never re-rolled on a visit, which would give it away. A fixed look can
+   show a unique item you already own, which gives the trap away to anyone; this one only to a player who remembers
+   what that spot showed. Only the two ground paths change (`ItemSwap.TickGround`, `ItemSwap.Redraws`); shelves and the
+   pickup keep the real look. Scouting creates no hints (`HintCreationPolicy.None`); a hint the player asks for tells
+   the truth, as in every game. **A yaml option, OoT's name and values:** *Trap Appearance*: Major Only (default:
+   the wanted items above) / Junk Only / Anything, as OoT's and CV64's `ice_trap_appearance` (OoT picks per trap
+   location at generation, from its own pool: `worlds/oot/Options.py:1130-1135`, `__init__.py:1081-1086`, 0.6.7).
+   No Archipelago doc forbids hiding a trap before pickup; hints always show it, marked "avoid"
+   (`network protocol.md:389`). Built with the traps, in their build step. Open: the `slot_data` shape (Next 43,
+   item 15).
 
 20. **Enemy group sizes, a yaml option** (2026-09-26): its own option, apart from *Enemy Shuffle*, off by
    default, for example `vanilla / shuffled / random` (fights of any size swap places; or 1-4 enemies rolled per
@@ -243,6 +274,14 @@ be wrong.
    (2026-09-27): story bosses only**; the bounties maybe a side setting later, once *Shuffle Bounties* gives
    them logic (Next 13). Only a real
    choice once the world reaches past chapter 1 (today: one artifact, one story boss). Its own build step.
+   **Several goals at once, asked 2026-09-29, as Super Metroid's objectives** (0.6.7, read the same day): SM's
+   `objective` (up to 5 of about 40 goals) or `custom_objective` (N picked at random), every one selected required
+   before the last boss (`worlds/sm/Options.py:318-370`); Satisfactory's `GoalSelection` with `GoalRequirement`, any
+   one or all (`worlds/satisfactory/Options.py:468-499`); Hollow Knight's `Goal: any`, whose rule requires logical
+   access to every goal (`worlds/hk/__init__.py:497-501`). Still to choose: all selected (SM's way) or any one (then
+   the logic needs them all, as HK). Either way one `completion_condition`, the mod's `CLIENT_GOAL`, and every chosen
+   goal reachable in logic. Goals so far: artifacts (built) and story bosses (this item); a count of Tattle entries
+   (Next 44) would fit the same way (proposed).
 30. **Library discovery milestones as locations, an idea for later** (2026-09-27): the librarian's 10
    rewards (one per 5 discoveries, 5 to 50; `MEASURED.md`, "Journal rewards") as locations, "done" when `flagvar[53]`
    reaches 1 ... 10 (the `location_vars` kind, as Artis's prize). Rule: milestone k needs 5 × k discoveries reachable,
@@ -401,6 +440,17 @@ be wrong.
       2026-09-29); 27. the library's cache bug: reported by the user as MultiClient.Net #143, our patch until a fix;
       28. upstream #141, which would retire our compression switch once released (#142 doesn't cover our net40 build).
     - **Kept** (Archipelago has nothing for them) **and doesn't apply** (with why): on the review page.
+44. **Shuffle Bestiary: Tattle checks, an idea for later** (asked again 2026-09-29, parked since 2026-09-25 in build
+   step 10): each enemy spied a location, as a Pokemon dexsanity. The bestiary has 92 entries (`librarylimit[1]`); the
+   check is `librarystuff[1, id]` turning true, read as discoveries are (`location_discoveries`). **Spy, then a
+   death (code read 2026-09-29):** the entry is written to memory as the Tattle text closes (`BattleControl.Tattle`
+   calls `UpdateJounal(Bestiary)`, which in a battle sets `librarystuff[1, id]` at once), and `LocationChecks` runs in
+   battles too, so while connected the check goes out before the fight ends and stays done whatever follows. Retry
+   keeps the entry as well (`GameOver` restores flags, not the bestiary); Reload save loses it unless saved, which
+   matters only if the check wasn't sent (disconnected): spy again. To measure first: what allows Spy in a battle
+   (`disablespy` in the tutorial fights, a flag?), a place each enemy is always fought (following the enemy shuffle's
+   `enemy_swaps`), bosses spied only in their own fight, the 23 missable ids (Event65's `excludeids`), and the
+   auto-spy row (build step 10). A yaml option, so its own build step when built.
 
 **Known issues:**
 
@@ -448,6 +498,10 @@ be wrong.
   scenes' names (68-74, build step 23) are provisional.
 - **Uncap FPS (mod guide, step 24) still speeds some things up.** Each to compare at 60 and above on screen, then
   step at the game's own rate, as the other per-frame sites are:
+  - **Vi's flight (Bee Fly) plays in slow motion at 240** (the user, 2026-09-29, *Use on normal saves*). Suspected,
+    from the code: while flying, `PlayerControl.LateUpdate` writes her position every frame (the rise), from the drawn
+    pose, which trails the physics one under interpolation: the platforms' and frozen enemies' fault. To confirm with
+    the console's `interp off` while flying, then fixed as they were.
   - **Being hit plays too fast, for enemies and the party** (a tester, 2026-09-27, FPS unlocked). Cause not read yet;
     with the `ShakeSprite` fix below, nothing odd was seen in combat on screen (2026-09-28; no before/after seen).
   - **A frozen enemy shimmers slightly while it flies** after a knock (not interpolated while frozen; the slow motion
@@ -1290,7 +1344,7 @@ spot (2, Event13) and the Underground Door Room's grass (3, Event27). **First ch
 the pier statue before the option existed; joining the new seed, the mod found discovery 49 recorded and sent
 *Outskirts: Pier, Statue*. **First discovery seen live** (2026-09-25): the tester examined the bridge room's hidden
 spot, Event13 recorded discovery 2, and the check went out with the seed's item back. Tests `TestDiscoveriesOn`,
-`TestDiscoveriesOffByDefault`. **Parked:** *Shuffle Bestiary* (an entry
+`TestDiscoveriesOffByDefault`. **Parked:** *Shuffle Bestiary* (Next 44; an entry
 comes only from Spy in battle or from Event65's catch-up NPC, who sells entries for enemies already fought, 19
 berries, 49 for bosses, except the 23 in `excludeids`, which are the missable ones; seeing an enemy on the map
 records nothing) and *Shuffle Recipes* (each needs its ingredients, which the seed may shuffle, so it waits

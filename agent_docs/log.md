@@ -1599,3 +1599,27 @@ Newest last. What was tried, what happened, what the user said.
   `AnimGuard` and `GlowGuard` now take `settingsOn` (mod guide step 18). The build succeeds; copied in, the game's
   reload waiting for a fight to end. Not yet seen: the next Barren Lands walk shows whether `[anim]` lines replace the
   warnings, and names what the game asks for.
+
+## 2026-09-29 (night, later still): six questions, disguised traps, Vi's flight
+
+- **The licence:** "Tsukino" or "Tsukino-uwu"? Archipelago's docs (0.6.7 and `main`) say nothing about a world's
+  licence or its holder; `authors` is "a list of strings" (on `main`, shown on the Supported Games page); the only
+  GitHub-username rule is `CODEOWNERS`, for the main repo's maintainers. Worlds use handles, real names or both. The
+  user: not aiming to be an official world, but "we should try to meet & pass anything that is required to become an
+  official apworld still". Already met: the released `.apworld` carries our LICENSE (CI copies it in,
+  `verify-release.py` checks it), as a main-repo world's own LICENSE exempts it from the root one. Nothing changed.
+- **Answered from the code, recorded in Next:** Tattle checks (Next 44; a spy is in memory as the text closes and the
+  check poller runs in battles, so a death after it keeps the check while connected), the ice block for a trap (Next
+  19), ALTTP's keys (answer only: per-dungeon named keys, one Choice per kind, a pre-fill stage), several goals as Super
+  Metroid's objectives (Next 29).
+- **Disguised traps, the user's design (Next 19):** own traps look like a wanted item on the ground, sprite and
+  backdrop matching ("a fake useful item with a purple background would be obvious"), red only once picked up; shops
+  may tell ("still fair to show that you are buying a trap from its description"). Other players' traps stay truthful:
+  another Bug Fables player's is its own trap sprite on red, another game's the icon on red ("so you know that you
+  are picking up a trap for someone else"). Asked which items a trap may look like: the user chose the look to adapt,
+  always a wanted item not yet received ("the funny thing with disguised traps is that for example in oot you might
+  want the hookshot so you will obviously try to go for the item until you have it"). A yaml option with OoT's name and
+  values (*Trap Appearance*, Major Only by default), the user's choice.
+- **Vi's flight in slow motion at 240** (the user; chapter 5 on a normal save): suspected interpolation against the
+  flight's per-frame position write, as platforms and frozen enemies were (Known issues). Next: `interp off` while
+  flying, then the fix in `FrameRate.cs`'s one interpolation decision.
