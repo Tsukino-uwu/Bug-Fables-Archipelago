@@ -1363,6 +1363,9 @@ hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0
   loaded), Uzura, BalsamiqSans, ONEMobilePOP. Before sizing a letter the game asks its font for it
   (`RequestCharactersInTexture`, then `GetCharacterInfo`, `MainManager.cs:9784-9787`); a character the font lacks has
   no info. For the in-game text client (`documentation.md`, step 2).
+- **Fonts from the computer:** the game's `UnityEngine.TextRenderingModule.dll` (Unity 2018.4) has
+  `Font.CreateDynamicFontFromOSFont` and `Font.GetOSInstalledFontNames` (2026-09-29, both names found in the DLL
+  itself; not called yet). The text client's fallback for characters the game's fonts lack.
 
 ## The item table's fields (2026-09-26, code read)
 
