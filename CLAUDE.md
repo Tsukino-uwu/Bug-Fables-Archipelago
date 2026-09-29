@@ -11,10 +11,10 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
 
 ## What never changes
 
-- **Archipelago's way, always; never reinvent it** (the user, 2026-09-29). The whole project follows Archipelago's
-  official standards: its docs (github.com/ArchipelagoMW/Archipelago/tree/main/docs) say how a thing is done, the
-  local checkout at the targeted tag what our version has. Whatever Archipelago or its client library provides, we use
-  as intended, never a custom version; custom work only where it has nothing (`apimplementation.md`, §8).
+- **Archipelago's way, always; never reinvent it** (the user, 2026-09-29). The whole project follows every standard
+  AND recommendation ("should", "recommended", "encouraged") in github.com/ArchipelagoMW/Archipelago/tree/main/docs
+  (the local checkout at the targeted tag says what our version has). Whatever Archipelago or its client library
+  provides, we use as intended, never a custom version; custom work only where it has none (`apimplementation.md` §8).
 - **The two process guides NEVER go stale** (the user, 2026-09-24: a step-by-step guide that misses steps is
   worthless). `agent_docs/documentation.md` is how the MOD was made; `agent_docs/apimplementation.md` is the
   Archipelago side (apworld, server, connecting, items, checks), built step by step, plus a stable explainer. Both

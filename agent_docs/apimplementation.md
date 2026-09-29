@@ -2842,7 +2842,9 @@ The mod does nothing from its own knowledge of the game's locations: every table
 says what our version has). We never build our own version of it. In the user's words: "there is a reason we are using
 whatever archipelago does for websockets etc, and not trying to do something dumb/stupid like reinventing and
 rebuilding archipelago inside the game just to connect/work with archipelago". A home-made version is more code to get
-wrong, it drifts as Archipelago changes, and nobody who knows Archipelago can read it.
+wrong, it drifts as Archipelago changes, and nobody who knows Archipelago can read it. **Recommendations too**
+(2026-09-29, the user: "we should do all standards & recommendations that Archipelago mentions"): what the docs call
+"should", "recommended" or "encouraged" (option groups, presets, a bug report page) is done like a requirement.
 
 **The connection: a library.** Writing all of the above by hand is possible, but libraries exist for most languages;
 the protocol doc lists them. For C# (Unity, BepInEx) it's **Archipelago.MultiClient.Net**. It handles:
