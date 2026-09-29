@@ -371,9 +371,10 @@ be wrong.
   - **wss:// accepts any certificate** (websocket-sharp's default, `return true`), and a bare address falls back to
     plain ws://, password included. What to do is the user's decision: Mono in Unity may hold no root certificates, so
     checking them could turn every connection into ws://. Measure that first.
-  - **MultiClient.Net 6.7.1's cache path uses the server's game name and checksum unsanitised** (its
-    `GetFileSystemSafeFileName` returns its input). Options, the user's call: report it upstream, and/or patch the
-    function in the mod (a new "patches outside the game" row).
+  - **MultiClient.Net 6.7.1's cache path used the server's game name and checksum unsanitised** (its
+    `GetFileSystemSafeFileName` returns its input). **Fixed in the mod (2026-09-29, the mod guide's step 34): two
+    patches make both a plain file name; not yet seen in game.** Reporting it upstream is the user's to send; the
+    text is drafted.
 - **Horn rules:** written as `abilities: ["Horn Slash"]` since the horn became an item (build step 21): locations
   11, 19, 25, 30 and 32, and 31 through the Den's entrance (build step 13). Not location 2: the horn tutorial cuts its
   grass itself and played through with Leif alone (2026-09-25). **Upper Snakemouth, when it gets locations:** the big door in the door room stays shut until flag 14 (its closed

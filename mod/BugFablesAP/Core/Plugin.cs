@@ -56,6 +56,7 @@ namespace BugFablesAP
                 "Compress the connection (permessage-deflate), as the Archipelago server asks. Turn off only if "
                 + "connecting fails with it on.");
             WebSocketCompression.Enable(connection.Post, () => compression.Value);
+            CachePaths.Enable(Log);
             checks = new LocationChecks(Log, connection);
             receiver = new ItemReceiver(Log, connection);
             DevAwakeLate();

@@ -47,6 +47,7 @@ anyone curious about the process, or thinking of doing the same for another game
 31. [Auto-save between rooms: a death costs one room](#31-auto-save-between-rooms-a-death-costs-one-room)
 32. [A release DLL anyone with the game can rebuild, byte for byte](#32-a-release-dll-anyone-with-the-game-can-rebuild-byte-for-byte)
 33. [Text from the server, shown safely](#33-text-from-the-server-shown-safely)
+34. [The library's cache, kept in its own folder](#34-the-librarys-cache-kept-in-its-own-folder)
 
 ## Where it stands
 
@@ -2016,3 +2017,44 @@ Each still shows the right names, colours and descriptions, as before.
 
 *Code: `Core/ServerText.cs`; its callers in `ItemSwap.cs`, `ItemSwap.Looks.cs`, `ItemReceiver.cs`, `LocationChecks.cs`,
 `ApConnection.cs`.*
+
+## 34. The library's cache, kept in its own folder
+
+**Found by the review (2026-09-29, apimplementation.md build step 28):** MultiClient.Net, the library the mod connects
+with, caches each game's item and location names. The file goes in `Archipelago\Cache\datapackage\<game>\<checksum>.json`
+in the user's local application data, and both names come from the server:
+- **The "safe name" function returns its input unchanged** in the version the mod ships (6.7.1). It cleans a copy and
+  hands back the original (`MEASURED.md`).
+- **The checksum used for reading isn't cleaned at all.**
+
+So a server could have named a path outside the cache: `..`, a folder separator, or a whole drive path. The file is
+always `.json` and holds only the game's names, but it could have replaced another program's file of the same name. A
+character Windows refuses in a name would also have thrown inside the library, while it handled the server's first
+message.
+
+**The fix (2026-09-29):** two patches on the library's cache class (`Core/CachePaths.cs`):
+- **Its safe-name function does what it was meant to.** It drops every character a file name can't hold (Windows'
+  set, on every system) and control characters, and keeps 100 characters. It never gives an empty name, dots alone,
+  or a device name like `CON`.
+- **The checksum is cleaned the same way** before the cache is read.
+
+A real game name and checksum come through unchanged, so the cache works as before; a `:` is dropped, as the library
+meant. The class is internal to the library, so the patches name it as text (`[HarmonyPatch("Type, Assembly",
+"Method")]`). HarmonyX looks it up when the plugin loads; if it's missing, the plugin stops rather than run with the
+cache unguarded, as the save redirect does. Both targets are rows in `docs/capabilities.md`, and preflight reads them
+back out of the built DLL (apimplementation.md, build step 28).
+
+**Tested outside the game (2026-09-29):**
+- **The cleaning, on 24 names in a scratch console run**, hostile and normal alike. Every hostile one came out as a
+  single name inside the folder. `Bug Fables`, `Pokémon Red and Blue` and a real checksum stayed as they were.
+- **A Release build of this source through preflight's DLL sections.** It found 5 patch targets outside the game, all
+  listed. With the two new rows removed, it failed and named exactly these two.
+
+**What to check in the game:**
+- the BepInEx log at start shows `[cache] data package cache names made safe`, and no `NOT installed`;
+- connecting to a room still works, and other games' item names still show;
+- the cache folder holds a `Bug Fables` folder with a `<checksum>.json` in it.
+
+**Status:** built (2026-09-29), not yet seen in game.
+
+*Code: `Core/CachePaths.cs`, installed from `Core/Plugin.cs`.*

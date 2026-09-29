@@ -75,6 +75,8 @@ Unity itself. Read from the shipped DLL's `[HarmonyPatch]` attributes, as `assem
 |---|---|
 | `Archipelago.MultiClient.Net:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper::CreateWebSocket` | Turns on compression (permessage-deflate) for the connection, which MultiClient.Net never enables (`Core/WebSocketCompression.cs`) |
 | `websocket-sharp:WebSocketSharp.WebSocket::validateSecWebSocketExtensionsServerHeader` | Accepts the server's compression reply, whose `server_max_window_bits` websocket-sharp would otherwise reject; dropping it is safe (`Core/WebSocketCompression.cs`) |
+| `Archipelago.MultiClient.Net:Archipelago.MultiClient.Net.DataPackage.FileSystemCheckSumDataPackageProvider::GetFileSystemSafeFileName` | Makes the game name and checksum the server sends a plain file name before MultiClient.Net caches its data under it; in 6.7.1 this function returns its input unchanged, so a server could pick the path (`Core/CachePaths.cs`) |
+| `Archipelago.MultiClient.Net:Archipelago.MultiClient.Net.DataPackage.FileSystemCheckSumDataPackageProvider::TryGetDataPackage` | Cleans the checksum the same way before the cache is read, which 6.7.1 never does (`Core/CachePaths.cs`) |
 | `UnityEngine.AnimationModule:UnityEngine.Animator::Play` | Skips a play of an animation state a character lacks, which would only log two Unity warnings and play nothing; only while Archipelago is on (`Guards/AnimGuard.cs`) |
 
 ## Dev scripts and hooks: what they touch

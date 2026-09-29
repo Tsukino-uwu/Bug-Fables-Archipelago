@@ -77,8 +77,10 @@ it on every start.
 - **Stores the connection settings** in its BepInEx config file, the room password included, in plain text on the
   player's own machine.
 - **Uses the clipboard** only when the player presses paste or copy in the address box.
-- **Patches three things outside the game** at run time: two in the connection's libraries, to turn on compression,
-  and one Unity call, to skip a missing animation.
+- **Patches five things outside the game** at run time:
+  - two in the connection's libraries, to turn on compression;
+  - two in MultiClient.Net's cache, to keep its file names inside its folder;
+  - one Unity call, to skip a missing animation.
 
 [capabilities.md](capabilities.md) lists each of these file by file. The preflight holds that list to exactly what
 the source does and what the compiled DLL calls.
@@ -109,7 +111,7 @@ This is what the mod does with what they send, what it checks, and what it doesn
 
 | What arrives | Where it goes | Checked on arrival | Known gaps |
 |---|---|---|---|
-| **Player and item names**, and the seed's name | The "You got X's item" boxes, shop names and descriptions, and pickups. The last one shown, and the seed's name, are also kept in the save | Since 2026-09-29, all through one class (`Core/ServerText.cs`): the game's command mark `|`, the save's separators, and control and format characters are dropped, and each string is kept to 100 characters. The preflight refuses a raw read anywhere else | See the first gap below: fixed, not yet seen in game |
+| **Player and item names**, and the seed's name | The "You got X's item" boxes, shop names and descriptions, and pickups. The last one shown, and the seed's name, are also kept in the save | Since 2026-09-29, all through one class (`Core/ServerText.cs`): the game's command mark `\|`, the save's separators, and control and format characters are dropped, and each string is kept to 100 characters. The preflight refuses a raw read anywhere else | See the first gap below: fixed, not yet seen in game |
 | **slot_data** (the seed's settings, at login) | The mod's features: which spots are locations, doors, enemies, the starting member, the goal | Read whole before anything uses it. A value of the wrong type fails the login, which is retried, and a missing setting turns its feature off | **Values are not range-checked.** An out-of-range flag or medal number throws an error; in per-frame code it is caught and logged, inside a game hook it is not. Enemy ids, the starting member and dialogue flags go to the game unchecked |
 | **Received items** | The bag, key items, medals, berries, party members | The received count in the save is bounds-checked, and unknown item ids and kinds are skipped | Item numbers have no upper bound: an out-of-range one is added, and then its "You got" box fails |
 | **DeathLink** | A Game Over, only when the player turned DeathLink on (on the map, back to the last save) | Joined with any death already waiting | Who sent it isn't checked; anyone in the room with DeathLink on can send one, as DeathLink is meant to work. The waiting list has no limit |
@@ -127,11 +129,12 @@ This is what the mod does with what they send, what it checks, and what it doesn
    doesn't change it. When a bare address is typed, MultiClient.Net tries wss:// first and falls back to plain ws://
    if that fails. On a network you don't trust, the room password (sent at login) could be read or the connection
    intercepted. The encrypted connection only keeps out someone passively listening.
-3. **MultiClient.Net writes a cache file whose path the server's data decides.** The library saves each game's
+3. **MultiClient.Net's cache file path was the server's to decide (fixed 2026-09-29).** The library saves each game's
    names to `Archipelago\Cache\datapackage\<game>\<checksum>.json` in the user's local application data, a folder
    shared with other Archipelago clients that use it. In the version the mod ships (6.7.1), its "safe file name"
-   function returns the name unchanged, so the game name and checksum the server sends become part of that path
-   unchecked.
+   function returns the name unchanged, so the game name and checksum the server sent became part of that path
+   unchecked. The mod now patches that function to do what it was meant to, and cleans the checksum the same way
+   (`Core/CachePaths.cs`, the mod guide's step 34); both patches are rows in [capabilities.md](capabilities.md).
 
 ## The capability list
 
