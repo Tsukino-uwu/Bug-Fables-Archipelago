@@ -168,6 +168,15 @@ The user writes their own first line (saying it was found with AI); the rest, ke
 > In `DataPackage/FileSystemCheckSumDataPackageProvider.cs`, `GetFileSystemSafeFileName` strips the invalid
 > characters from `gameName` but returns `safeName`, which is still the original string. So nothing gets removed.
 >
+> ```csharp
+> var safeName = gameName;
+>
+> foreach (var c in Path.GetInvalidFileNameChars())
+>     gameName = gameName.Replace(c.ToString(), string.Empty);
+>
+> return safeName;
+> ```
+>
 > The checksum in `TryGetDataPackage` (line 22) doesn't go through it at all.
 >
 > Both come from the server, so a game name or checksum with `../` in it can point the cache read/write outside the
