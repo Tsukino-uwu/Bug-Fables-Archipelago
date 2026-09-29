@@ -2576,8 +2576,10 @@ here (`.claude/settings.json`).
 
 **Status:** built (2026-09-29): the sections above, their test, `verify-release.py`, every place they run
 (pre-commit, pre-push, CI on every push, the release), the reviewer pages, the GitHub settings and the agent's guard.
-The CI half runs for the first time on the next push. The guard runs from the next Claude Code session (its folder
-didn't exist when this one started). Next: the review's two remaining findings (Known issues).
+The CI half first ran on the push of 2026-09-29 (`0fc15ce`), all green: preflight on Python 3.11 and 3.13 (the tree,
+all history, the harness's 76 fixtures), the libraries byte for byte against NuGet's package, and `ci.yml`. The guard
+went live in the session that made it. Next: the TLS measurement (Known issues); the cache fix waits for a look in
+game (the mod guide's step 34).
 
 *Code: `dev-scripts/preflight.py`, `dev-scripts/preflight-patterns.json`, `dev-scripts/dotnet_metadata.py`;
 `docs/capabilities.md`;

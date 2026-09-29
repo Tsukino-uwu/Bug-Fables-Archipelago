@@ -1435,3 +1435,7 @@ Newest last. What was tried, what happened, what the user said.
   whether anything is needed now; nothing blocks, their read of the rows stays open (the guard's own row was
   brought up to date with its narrowing). On pushing: finish first, then push in this session; waiting loses no
   history, since the commits sit on local `main` until pushed.
+- **Pushed** on the user's word (`457a9f1..0fc15ce`, 68 commits). Pre-push passed preflight on the tip, `--history`
+  over the 68 commits and the harness. **The first CI run of the preflight, all green:** on Python 3.11 and 3.13 the
+  tree, all history (28-39 s) and the harness (76 fixtures, total coverage), plus the libraries byte for byte against
+  NuGet's package; `ci.yml` on 3.11-3.13. Read in the job logs, not just from the ticks.
