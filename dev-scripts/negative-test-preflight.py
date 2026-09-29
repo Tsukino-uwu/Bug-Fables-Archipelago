@@ -1,12 +1,13 @@
 """Proves every preflight section can fail: a gate never seen failing can't be told from one that can't fail.
 
-Each fixture plants one kind of violation in a throwaway clone of HEAD (outside this repo, its origin removed, so
-nothing can reach this repo or a remote), runs preflight there and checks that the section named for it reports FAIL
-and that preflight exits non-zero. The preflight files tested are the working copy's, the ones about to be committed.
+Each fixture plants one kind of violation in a throwaway clone (outside this repo, its origin removed, so nothing can
+reach this repo or a remote), runs preflight there and checks that the section named for it reports FAIL and that
+preflight exits non-zero. The clone holds what the next commit contains (HEAD plus everything staged), the way
+preflight itself reads the index; --rev tests a commit instead (what pre-push does).
 Then the hooks themselves: a real commit and a real push carrying a violation must both be refused. Coverage must be
 total: every section, in every mode it runs in, needs a fixture. Standard library only.
 
-    python dev-scripts/negative-test-preflight.py [--only REGEX] [--keep] [--quiet]
+    python dev-scripts/negative-test-preflight.py [--rev REV] [--only REGEX] [--keep] [--quiet]
 """
 import argparse
 import os
@@ -19,10 +20,6 @@ import tempfile
 sys.dont_write_bytecode = True
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# The gate's own files: the working copy's are copied into the clone, the rest of the clone is HEAD.
-GATE = ['dev-scripts/preflight.py', 'dev-scripts/preflight-patterns.json', 'dev-scripts/negative-test-preflight.py',
-        '.githooks/pre-commit', '.githooks/commit-msg', '.githooks/pre-push', '.githooks/python.sh']
-GATE_OPTIONAL = ['dev-scripts/dotnet_metadata.py']
 # A stand-in machine name: real ones differ per machine, and a CI runner's ("runner") is a word in ci.yml.
 MACHINE = 'preflight' + 'harness' + 'host'
 DLL = 'release/mod/BepInEx/plugins/BugFablesAP/BugFablesAP.dll'
@@ -61,6 +58,12 @@ class Clone:
     def read(self, rel):
         with open(self.path(rel), 'rb') as f:
             return f.read()
+
+    def replace(self, rel, old, new):
+        data = self.read(rel)
+        if old not in data:
+            raise RuntimeError(f'nothing in {rel} to replace: the plant would change nothing')
+        self.write(rel, data.replace(old, new))
 
     def append(self, rel, text):
         self.write(rel, self.read(rel) + ('\n' + text + '\n').encode('utf-8'))
@@ -254,7 +257,7 @@ def fixtures():
 
     @add('a listed host nothing names', 'Hosts and addresses')
     def _(c):
-        c.append('docs/capabilities.md', '| `unused.example.net` | nothing uses it |')
+        c.replace('docs/capabilities.md', b'| `github.com` |', b'| `unused.example.net` | nothing uses it |\n| `github.com` |')
 
     @add('a project cited without a licence row', 'Licences')
     def _(c):
@@ -262,7 +265,56 @@ def fixtures():
 
     @add('a shipped library without its notice', 'Licences')
     def _(c):
-        c.write(NOTICES, c.read(NOTICES).replace(b'websocket-sharp', b'a library'))
+        c.replace(NOTICES, b'websocket-sharp', b'a library')
+
+    @add('imports the apworld may not make', 'Apworld imports',
+         names=('import socket', 'from BaseClasses import Utils', 'import json as j', 'from os import path'))
+    def _(c):
+        c.write('apworld/bug_fables/planted.py',
+                'import socket\nfrom BaseClasses import Utils\nimport json as j\nfrom os import path\n')
+
+    @add('everything the apworld must never do', 'Apworld runs nothing unexpected',
+         names=('the builtin open', '.__class__', '.write_text', 'json.dump', 'generate_output (', 'Planted.settings_key',
+                'the annotation of a', 'return annotation', 'at import time', '"__globals__"', 'getattr(..., "system")',
+                'While at the top level'))
+    def _(c):
+        c.write('apworld/bug_fables/planted.py', '\n'.join([
+            'import json',
+            'len([])',
+            'while False:',
+            '    pass',
+            'class Planted:',
+            '    settings_key = "x"',
+            '    def generate_output(self, output_directory):',
+            '        pass',
+            'def f(a: (lambda: int)()) -> json.loads("1"):',
+            '    open("x")',
+            '    ().__class__',
+            '    a.write_text("y")',
+            '    json.dump({}, a)',
+            '    getattr(a, "__globals__")',
+            '    getattr(a, "system")',
+            '']))
+
+    @add('a lookup by a computed name, not listed', 'Apworld runs nothing unexpected', names=('(in planted_lookup)',))
+    def _(c):
+        c.write('apworld/bug_fables/planted.py', 'def planted_lookup(a, name):\n    return getattr(a, name)\n')
+
+    @add('a listed lookup that no code has', 'Apworld runs nothing unexpected',
+         names=('apworld/bug_fables/rules.py nowhere',))
+    def _(c):
+        c.replace('docs/capabilities.md', b'| `apworld/bug_fables/data_types.py present` |',
+                  b'| `apworld/bug_fables/rules.py nowhere` | nothing |\n| `apworld/bug_fables/data_types.py present` |')
+
+    @add('apworld data that is not plain data', 'Apworld data and docs',
+         names=('a key given twice', 'NaN is not JSON', '"__class__"', 'archipelago.json: keys', 'raw HTML',
+                'a script or data link'))
+    def _(c):
+        c.write('apworld/bug_fables/data/planted.json', '{"a": 1, "a": 2}\n')
+        c.write('apworld/bug_fables/data/planted2.json', '{"x": NaN}\n')
+        c.write('apworld/bug_fables/data/planted3.json', '{"x": "__class__"}\n')
+        c.replace('apworld/bug_fables/archipelago.json', b'"game"', b'"extra": 1, "game"')
+        c.append('apworld/bug_fables/docs/setup_en.md', 'see <img src=x> and [this](java' + 'script:alert)')
 
     # History: a violation committed and removed again is gone from the tree, not from what was published.
     def committed_then_removed(rel, data):
@@ -315,31 +367,40 @@ class Harness:
                 print(f'          {d}')
 
 
-def setup(tmp):
+def git_repo(*args):
+    r = subprocess.run(['git', '-C', REPO, *args], capture_output=True, env=env())
+    if r.returncode != 0:
+        raise RuntimeError(f"git {' '.join(args)}: {r.stderr.decode(errors='replace').strip()}")
+    return r.stdout
+
+
+def setup(tmp, rev):
     root = os.path.join(tmp, 'clone')
     r = subprocess.run(['git', 'clone', '--quiet', '--no-local', '--no-hardlinks', REPO, root],
                        capture_output=True, env=env())
     if r.returncode != 0:
         raise RuntimeError('git clone failed: ' + r.stderr.decode(errors='replace'))
     c = Clone(root)
-    head = subprocess.run(['git', '-C', REPO, 'rev-parse', 'HEAD'], capture_output=True, env=env()).stdout.decode().strip()
-    c.git('checkout', '-q', '--detach', head)
+    c.git('checkout', '-q', '--detach', git_repo('rev-parse', rev or 'HEAD').decode().strip())
     # Nothing done here may reach the repo it came from.
     c.git('remote', 'remove', 'origin')
     c.git('config', 'core.hooksPath', '.githooks')
     c.git('config', 'user.name', 'harness')
     c.git('config', 'user.email', 'harness@example.invalid')
     c.git('config', 'core.autocrlf', 'false')
-    for rel in GATE + [g for g in GATE_OPTIONAL if os.path.exists(os.path.join(REPO, g))]:
-        src = os.path.join(REPO, *rel.split('/'))
-        if os.path.exists(src):
-            with open(src, 'rb') as f:
-                c.write(rel, f.read())
-    for hook in ('pre-commit', 'commit-msg', 'pre-push'):
-        if os.path.exists(c.path('.githooks/' + hook)):
-            c.git('add', '.githooks/' + hook)
-            c.git('update-index', '--chmod=+x', '.githooks/' + hook)
-    c.commit('the working copy\'s preflight gate')
+    if rev is None:
+        # What is staged, exactly as the index holds it: content and mode.
+        staged = git_repo('diff', '--cached', '--name-only', '-z', 'HEAD').decode().split('\0')
+        index = {line.split('\t', 1)[1]: line.split()[0] for line in
+                 git_repo('ls-files', '-s', '-z').decode().split('\0') if line}
+        for rel in filter(None, staged):
+            if rel in index:
+                c.write(rel, git_repo('show', ':' + rel))
+                c.git('add', '--', rel)
+                c.git('update-index', '--chmod=' + ('+x' if index[rel] == '100755' else '-x'), '--', rel)
+            elif os.path.exists(c.path(rel)):
+                c.git('rm', '-q', '--', rel)
+    c.git('-c', 'core.hooksPath=.git/hooks', 'commit', '-q', '--allow-empty', '-m', 'what is staged')
     return c
 
 
@@ -361,6 +422,7 @@ def run_fixture(c, fx, base):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n\n')[0])
+    ap.add_argument('--rev', help='test this commit instead of HEAD plus what is staged')
     ap.add_argument('--only', help='run only fixtures whose name matches this regex (skips the coverage check)')
     ap.add_argument('--keep', action='store_true', help='leave the throwaway clone in place')
     ap.add_argument('--quiet', action='store_true', help='print only what fails')
@@ -370,11 +432,12 @@ def main():
     h = Harness(args.quiet)
     tmp = tempfile.mkdtemp(prefix='bugfablesap-negtest-')
     try:
-        c = setup(tmp)
+        c = setup(tmp, args.rev)
         base = c.git('rev-parse', 'HEAD').stdout.decode().strip()
         all_fx = fixtures()
         chosen = [f for f in all_fx if not args.only or re.search(args.only, f.name)]
-        print(f'negative test: {len(chosen)} fixture(s), the working copy\'s preflight against a clean clone of HEAD')
+        what = args.rev or 'HEAD plus what is staged'
+        print(f'negative test: {len(chosen)} fixture(s), in a clean clone of {what}')
 
         print('== Baseline ==')
         baselines = {}

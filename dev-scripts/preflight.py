@@ -8,6 +8,8 @@ each one refuses. Exit 0 when every section passes, 1 on any FAIL (a WARN never 
     python dev-scripts/preflight.py [--rev REV | --history [RANGE] | --text-stdin LABEL] [--ci] [--quiet]
 """
 import argparse
+import ast
+import builtins
 import hashlib
 import ipaddress
 import json
@@ -34,6 +36,7 @@ QUOTED_HOST = re.compile(r'["\']((?:[a-z0-9-]+\.)+(?:com|net|org|io|gg|dev|app|x
 DOTTED_QUAD = re.compile(r'(?<![\d.])(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?![\d.])')
 GITHUB_REPO = re.compile(r'github\.com/([A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)')
 RESERVED = re.compile(r'(?i)^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$')
+BUILTIN_NAMES = set(dir(builtins))
 
 
 class Unreadable(Exception):
@@ -552,6 +555,227 @@ def licences(ctx, out):
                f'{len(ctx.patterns["libraries"])} shipped libraries are in place')
 
 
+APWORLD = 'apworld/bug_fables/'
+
+
+def apworld_sources(ctx):
+    """(file, parsed module) for every apworld .py; a file that doesn't parse is reported, never skipped."""
+    parsed, broken = [], []
+    for f in ctx.files:
+        if f.path.startswith(APWORLD) and f.path.endswith('.py'):
+            try:
+                parsed.append((f, ast.parse(f.text, f.path)))
+            except (SyntaxError, ValueError, TypeError) as e:
+                broken.append(f'{f.path}: does not parse ({e})')
+    return parsed, broken
+
+
+def enclosing_functions(tree):
+    """Each node -> the name of the function it sits in ('<module>' at the top level)."""
+    owner = {}
+
+    def visit(node, name):
+        for child in ast.iter_child_nodes(node):
+            inner = child.name if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)) else name
+            owner[child] = inner
+            visit(child, inner)
+    visit(tree, '<module>')
+    return owner
+
+
+@section('Apworld imports')
+def apworld_imports(ctx, out):
+    names = ctx.patterns['apworld_imports']
+    modules = ctx.patterns['apworld_modules']
+    parsed, broken = apworld_sources(ctx)
+    bad = list(broken)
+    for f, tree in parsed:
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ImportFrom) and node.level == 0:
+                allowed = names.get(node.module, [])
+                bad += [f'{f.path}:{node.lineno}: from {node.module} import {a.name}' for a in node.names
+                        if a.name not in allowed]
+            elif isinstance(node, ast.Import):
+                bad += [f'{f.path}:{node.lineno}: import {a.name}' + (f' as {a.asname}' if a.asname else '')
+                        for a in node.names if a.name not in modules or a.asname]
+    if len(parsed) < 10:
+        out.fail(f'only {len(parsed)} apworld source file(s) read: the listing is wrong')
+    elif bad:
+        out.fail('imports outside the list in the patterns file ("apworld_imports", "apworld_modules"): each name the '
+                 'apworld takes from Archipelago or Python is listed, since a module hands on everything it imported',
+                 bad)
+    else:
+        out.ok(f'{len(parsed)} apworld files import only listed names: '
+               f'{sum(len(v) for v in names.values())} from {len(names)} modules, and {", ".join(sorted(modules))}')
+
+
+def annotation_ok(node):
+    """Archipelago evaluates option annotations as code (typing.get_type_hints): only plain type expressions pass."""
+    if node is None:
+        return True
+    if isinstance(node, ast.Constant):
+        if isinstance(node.value, str):
+            try:
+                return annotation_ok(ast.parse(node.value, mode='eval').body)
+            except SyntaxError:
+                return False
+        return node.value is None or node.value is Ellipsis
+    if isinstance(node, ast.Name):
+        return not node.id.startswith('__')
+    if isinstance(node, ast.Attribute):
+        return not node.attr.startswith('__') and annotation_ok(node.value)
+    if isinstance(node, ast.Subscript):
+        return annotation_ok(node.value) and annotation_ok(node.slice)
+    if isinstance(node, (ast.Tuple, ast.List)):
+        return all(annotation_ok(e) for e in node.elts)
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.BitOr):
+        return annotation_ok(node.left) and annotation_ok(node.right)
+    return False
+
+
+@section('Apworld runs nothing unexpected')
+def apworld_behaviour(ctx, out):
+    p = ctx.patterns
+    allowed_builtins, dunders = set(p['apworld_builtins']), set(p['apworld_dunders'])
+    denied_attrs, denied_members = set(p['apworld_denied_attributes']), set(p['apworld_denied_members'])
+    modules = p['apworld_modules']
+    listed = {key for key, cells in ctx.capabilities().get('Apworld: reflection by name', [])}
+    parsed, broken = apworld_sources(ctx)
+    bad, reflection, used_rows = list(broken), [], set()
+    for f, tree in parsed:
+        owner = enclosing_functions(tree)
+        bound = {a.asname or a.name.split('.')[0] for n in ast.walk(tree) if isinstance(n, (ast.Import, ast.ImportFrom))
+                 for a in n.names}
+        bound |= {n.id for n in ast.walk(tree) if isinstance(n, ast.Name) and isinstance(n.ctx, ast.Store)}
+        bound |= {n.name for n in ast.walk(tree) if isinstance(n, (ast.FunctionDef, ast.ClassDef, ast.AsyncFunctionDef))}
+        bound |= {a.arg for n in ast.walk(tree) if isinstance(n, ast.arguments)
+                  for a in n.posonlyargs + n.args + n.kwonlyargs + [x for x in (n.vararg, n.kwarg) if x]}
+        imported_modules = {a.asname or a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names}
+        for node in tree.body:
+            if isinstance(node, ast.Expr) and not (isinstance(node.value, ast.Constant) and isinstance(node.value.value, str)):
+                bad.append(f'{f.path}:{node.lineno}: a statement run at import time (every Archipelago start runs it)')
+            elif isinstance(node, (ast.While, ast.With, ast.AsyncWith, ast.Try, ast.AsyncFunctionDef)):
+                bad.append(f'{f.path}:{node.lineno}: {type(node).__name__} at the top level of a module')
+        for node in ast.walk(tree):
+            where = f'{f.path}:{getattr(node, "lineno", 0)}'
+            if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Load):
+                if node.id in BUILTIN_NAMES and node.id not in bound | allowed_builtins | dunders:
+                    bad.append(f'{where}: the builtin {node.id}')
+                if node.id.startswith('__') and node.id not in dunders:
+                    bad.append(f'{where}: {node.id}')
+            elif isinstance(node, ast.Attribute):
+                if node.attr.startswith('__') and node.attr not in dunders:
+                    bad.append(f'{where}: .{node.attr}')
+                if node.attr in denied_attrs:
+                    bad.append(f'{where}: .{node.attr} (writes files, runs programs or opens connections)')
+                if isinstance(node.value, ast.Name) and node.value.id in imported_modules \
+                        and node.attr not in modules.get(node.value.id, []):
+                    bad.append(f'{where}: {node.value.id}.{node.attr}')
+            elif isinstance(node, ast.Constant) and isinstance(node.value, str) \
+                    and re.fullmatch(r'__\w+__', node.value) and node.value not in dunders:
+                bad.append(f'{where}: the string "{node.value}" (names a hidden attribute)')
+            elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                if node.name in denied_members:
+                    bad.append(f'{where}: {node.name} (a world hook handed files or settings to write)')
+                args = node.args
+                for a in args.posonlyargs + args.args + args.kwonlyargs + [x for x in (args.vararg, args.kwarg) if x]:
+                    if not annotation_ok(a.annotation):
+                        bad.append(f'{where}: the annotation of {a.arg} is more than a type')
+                if not annotation_ok(node.returns):
+                    bad.append(f'{where}: the return annotation of {node.name} is more than a type')
+            elif isinstance(node, ast.AnnAssign) and not annotation_ok(node.annotation):
+                bad.append(f'{where}: an annotation that is more than a type')
+            lookup = isinstance(node, ast.Call) and isinstance(node.func, ast.Name) \
+                and node.func.id in ('getattr', 'hasattr') and len(node.args) >= 2
+            if lookup and isinstance(node.args[1], ast.Constant) and node.args[1].value in denied_attrs:
+                bad.append(f'{where}: {node.func.id}(..., "{node.args[1].value}")')
+            if lookup and not (isinstance(node.args[1], ast.Constant) and isinstance(node.args[1].value, str)):
+                key = f'{f.path} {owner.get(node, "<module>")}'
+                if key in listed:
+                    used_rows.add(key)
+                else:
+                    reflection.append(f'{where}: {ast.unparse(node)[:90]} (in {owner.get(node, "<module>")})')
+        for cls in (n for n in ast.walk(tree) if isinstance(n, ast.ClassDef)):
+            for stmt in cls.body:
+                targets = (stmt.targets if isinstance(stmt, ast.Assign)
+                           else [stmt.target] if isinstance(stmt, ast.AnnAssign) else [])
+                bad += [f'{f.path}:{stmt.lineno}: {cls.name}.{t.id} (a world hook handed files or settings to write)'
+                        for t in targets if isinstance(t, ast.Name) and t.id in denied_members]
+    stale = sorted(listed - used_rows)
+    if len(parsed) < 10:
+        out.fail(f'only {len(parsed)} apworld source file(s) read: the listing is wrong')
+        return
+    if bad:
+        out.fail('the apworld reaches for something it must never do on a generating machine', bad)
+    if reflection:
+        out.fail(f'an attribute looked up by a computed name, not listed in {CAPABILITIES}, '
+                 '"Apworld: reflection by name" (path and function)', reflection)
+    if stale:
+        out.fail(f'rows in {CAPABILITIES}, "Apworld: reflection by name", that no code matches any more', stale)
+    if not (bad or reflection or stale):
+        out.ok(f'{len(parsed)} files: only listed builtins, no hidden attributes, no file, process or network calls, '
+               f'plain annotations, nothing run at import but definitions; {len(used_rows)} lookups by name, all listed')
+
+
+def strict_json(text):
+    def pairs(items):
+        keys = [k for k, v in items]
+        if len(keys) != len(set(keys)):
+            raise ValueError(f'a key given twice: {sorted(k for k in keys if keys.count(k) > 1)[0]}')
+        return dict(items)
+
+    def constant(name):
+        raise ValueError(f'{name} is not JSON')
+    return json.loads(text, object_pairs_hook=pairs, parse_constant=constant)
+
+
+def json_strings(value):
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, dict):
+        for k, v in value.items():
+            yield k
+            yield from json_strings(v)
+    elif isinstance(value, list):
+        for v in value:
+            yield from json_strings(v)
+
+
+@section('Apworld data and docs')
+def apworld_data(ctx, out):
+    bad, data = [], 0
+    for f in ctx.files:
+        if not f.path.startswith(APWORLD):
+            continue
+        if f.path.endswith('.json'):
+            data += 1
+            try:
+                value = strict_json(f.text)
+            except ValueError as e:
+                bad.append(f'{f.path}: not strict JSON ({e})')
+                continue
+            bad += [f'{f.path}: the string "{s}" (names a hidden attribute)' for s in json_strings(value)
+                    if re.fullmatch(r'__\w+__', s)]
+            if f.path == APWORLD + 'archipelago.json':
+                keys = set(value) if isinstance(value, dict) else set()
+                if keys != set(ctx.patterns['apworld_manifest_keys']):
+                    bad.append(f'{f.path}: keys {sorted(keys)}, expected exactly '
+                               f'{sorted(ctx.patterns["apworld_manifest_keys"])}')
+        elif f.path.endswith('.md'):
+            for n, line in f.lines():
+                if re.search(r'<\s*[A-Za-z!/?]', line):
+                    bad.append(f'{f.path}:{n}: raw HTML (the website renders player docs)')
+                if re.search(r'(?i)\b(javascript|vbscript|data)\s*:', line):
+                    bad.append(f'{f.path}:{n}: a script or data link')
+    if data < 5:
+        out.fail(f'only {data} apworld data file(s) read: the listing is wrong')
+    elif bad:
+        out.fail('apworld data or player docs that could carry something else', bad)
+    else:
+        out.ok(f'{data} data files are strict JSON with no hidden attribute names; the manifest has exactly its keys; '
+               'the player docs hold no raw HTML or script links')
+
+
 @section('Commit messages', modes=('history',))
 def commit_messages(ctx, out):
     rules = {name: re.compile(rx) for name, rx in ctx.patterns['secrets'].items()}
@@ -580,7 +804,9 @@ def load_patterns(files):
         raise Unreadable(f'{PATTERNS} is not in the tree')
     patterns = json.loads(f.text)
     expected = {'about', 'kinds', 'binaries', 'libraries', 'code_non_ascii', 'secrets', 'personal_paths', 'game_paths',
-                'decompiler_markers', 'not_addresses', 'own_github_owners', 'history_reviewed'}
+                'decompiler_markers', 'not_addresses', 'own_github_owners', 'history_reviewed', 'apworld_imports',
+                'apworld_modules', 'apworld_builtins', 'apworld_dunders', 'apworld_denied_attributes',
+                'apworld_denied_members', 'apworld_manifest_keys'}
     if set(patterns) != expected:
         raise Unreadable(f'{PATTERNS} keys differ from what preflight reads: {sorted(set(patterns) ^ expected)}')
     for rx in list(patterns['secrets'].values()) + patterns['game_paths'] + patterns['decompiler_markers']:

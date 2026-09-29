@@ -23,7 +23,7 @@ while read -r local_ref local_sha remote_ref remote_sha; do
     # shellcheck disable=SC2086
     if git log --format= --name-only $new |
         grep -qE '^(dev-scripts/(preflight|negative-test-preflight|dotnet_metadata)|\.githooks/|\.github/)'; then
-        run_python -B "$root/dev-scripts/negative-test-preflight.py" --quiet || status=1
+        run_python -B "$root/dev-scripts/negative-test-preflight.py" --rev "$local_sha" --quiet || status=1
     fi
 done
 [ $status -ne 0 ] && echo "pre-push: refused; fix what preflight names above, then push again." >&2

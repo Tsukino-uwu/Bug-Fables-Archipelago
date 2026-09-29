@@ -2307,6 +2307,26 @@ A section that finds nothing to check fails rather than passing: "0 files scanne
   shipped library's notice.
 - **Commit messages** (`--history` only): no credential, home path or hidden character in any message.
 
+**The apworld's rules (2026-09-29).** The apworld is Python that runs on whichever machine generates a seed, the
+archipelago.gg website's included, and Archipelago imports it on every start, even when nobody plays Bug Fables.
+So it gets the strictest rules, read from its syntax tree, not by searching text:
+- **Apworld imports:** every name it takes from Archipelago or Python is listed in the patterns file (30 names
+  from 12 modules), and a plain `import` only for `json`, `logging` and `pkgutil`, each with the few functions it
+  may use (`json.loads`, `pkgutil.get_data`). Listing names matters because a module hands on everything it
+  imported: Archipelago's `BaseClasses` can pass along a helper that runs programs.
+- **Apworld runs nothing unexpected:**
+  - Only listed builtins, so no `open`, `eval`, `exec` or `__import__`.
+  - No hidden attributes (`__class__`, `__globals__`), not even named in a string.
+  - No attribute that writes files, runs programs or opens connections, on any object.
+  - No world hook that is handed files or settings to write (`generate_output`, `settings`).
+  - Annotations are only type expressions. Archipelago evaluates option annotations as code.
+  - Nothing runs at import but definitions.
+  - A lookup by a computed name (`getattr(x, name)`) must be listed in `docs/capabilities.md` with where the name
+    comes from. There are four.
+- **Apworld data and docs:** the data files are strict JSON (no repeated key, no `NaN`) with no hidden attribute
+  name inside, the manifest has exactly its four keys, and the player docs, which the website renders, hold no
+  raw HTML or script link.
+
 **Where it runs so far:**
 - **Every commit:** the pre-commit hook, quiet unless something fails.
 - **Every push** (`.githooks/pre-push`): preflight on each pushed commit, and `--history` on everything new in the
@@ -2318,10 +2338,10 @@ A section that finds nothing to check fails rather than passing: "0 files scanne
 **The gate is tested by making it fail** (`dev-scripts/negative-test-preflight.py`). A check that only ever runs on
 a clean tree says "pass" whether it works or not. So for every section, and every mode it runs in (a commit, the
 history, free text), the test plants a real violation and checks that the section reports FAIL and preflight exits
-non-zero. It works in a throwaway clone outside the repo, with its link back to the repo removed, and it uses the
-preflight files about to be committed:
+non-zero. It works in a throwaway clone outside the repo, with its link back to the repo removed. The clone holds what
+the next commit contains (HEAD plus everything staged), or, from pre-push, exactly the commit being pushed:
 1. **A clean baseline** in all three modes, so a failure afterwards is the plant's doing.
-2. **One fixture per kind of violation** (41 on 2026-09-29): a bidi override in a doc, a homoglyph in code, every
+2. **One fixture per kind of violation** (46 on 2026-09-29): a bidi override in a doc, a homoglyph in code, every
    credential format at once (each must be named), a home path inside the DLL, a library changed by one byte, a
    symlink, a submodule, a stale host row, a secret committed and then removed, and more. The fake credentials and
    paths are assembled at run time, so the test file holds none itself.
@@ -2331,7 +2351,8 @@ preflight files about to be committed:
 
 It takes about 25 s. **Tested the other way round (2026-09-29):** with the Secrets section made blind on purpose,
 all four of its fixtures failed the test. Writing the test also caught its own slips: a sample written out whole
-(preflight flagged the test file itself), and a name git on Windows refuses to hold.
+(preflight flagged the test file itself), a name git on Windows refuses to hold, and a fixture that stopped reaching
+its section when a second table was added below it. A plant that changes nothing now stops the test.
 
 **The hooks around it:**
 - **They find a Python that runs** (`.githooks/python.sh`). On this machine `python3` is the Microsoft Store's
@@ -2354,8 +2375,8 @@ character, no game file, and no binary other than the release DLLs. It first fla
   exempt by their exact git hash (`history_reviewed` in the patterns file), each with its reason, so a different
   file can't hide behind the exemption.
 
-**Status:** in progress (2026-09-29). Built: the sections above, in pre-commit, pre-push and the release guard, and
-their test. Next: the code rules (apworld, mod, dev scripts), the DLL checks, and CI.
+**Status:** in progress (2026-09-29). Built: the sections above, the apworld's included, in pre-commit, pre-push and
+the release guard, and their test. Next: the mod's and the dev scripts' rules, the DLL checks, and CI.
 
 *Code: `dev-scripts/preflight.py`, `dev-scripts/preflight-patterns.json`; `docs/capabilities.md`;
 `dev-scripts/negative-test-preflight.py`; `.githooks/pre-commit`, `.githooks/pre-push`, `.githooks/commit-msg`,
