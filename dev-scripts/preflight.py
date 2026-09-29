@@ -1075,6 +1075,26 @@ def build_inputs(paths_and_shas):
     return {p: s for p, s in paths_and_shas if rx.match(p) and not p.startswith('mod/BugFablesAP/Dev/')}
 
 
+def stale_inputs(ctx):
+    """Build inputs changed since the committed DLL was built; none for a fresh build (--dll-commit)."""
+    if ctx.args.dll_commit:
+        return []
+    commit, recorded = built_from(ctx)
+    sources = {k: v for k, v in recorded.items() if k not in ('sdk', 'game') and not k.endswith('.dll')}
+    current = build_inputs((f.path, f.sha) for f in ctx.files)
+    return sorted(p for p in set(current) | set(sources) if current.get(p) != sources.get(p))
+
+
+def patched_in_source(ctx, target):
+    """Whether the current source has a [HarmonyPatch] naming this target's method, in a file that names its type."""
+    type_name, method = target.split(':', 1)[1].split('::')
+    simple = type_name.rsplit('.', 1)[-1]
+    return any(f'"{method}"' in attr and simple in f.text
+               for f in ctx.files
+               if f.path.startswith('mod/BugFablesAP/') and f.path.endswith('.cs') and '/Dev/' not in f.path
+               for attr in re.findall(r'\[HarmonyPatch\((.*?)\)\]', f.text, re.S))
+
+
 def our_dll(ctx):
     if ctx.dll is None:
         f = ctx.file(OUR_DLL)
@@ -1118,8 +1138,7 @@ def release_staging(ctx, out):
         diff = sorted(set(build_inputs(at_commit).items()) ^ set(sources.items()))
         problems.append(f'the sources {BUILT_FROM} lists are not commit {commit[:10]}\'s: ' +
                         ', '.join(p for p, s in diff[:6]))
-    current = build_inputs((f.path, f.sha) for f in ctx.files)
-    stale = sorted(p for p in set(current) | set(sources) if current.get(p) != sources.get(p))
+    stale = stale_inputs(ctx)
     if problems:
         out.fail('the committed mod download does not match its own record', problems)
     elif stale and ctx.args.release:
@@ -1249,16 +1268,23 @@ def dll_reach(ctx, out):
     patched = harmony_targets(a)
     listed_patches = {key for key, cells in ctx.capabilities().get('Mod: patches outside the game', [])}
     outside = {t for t in patched if not t.startswith('Assembly-CSharp:')}
+    extra, missing = outside - listed_patches, listed_patches - outside
+    # A DLL older than its sources lacks a patch added since: the row stands if today's source makes that patch.
+    ahead = {t for t in missing if patched_in_source(ctx, t)} if missing and stale_inputs(ctx) else set()
+    missing -= ahead
     if bad:
         out.fail('the shipped DLL reaches for something the mod must never do', bad)
     if unlisted:
         out.fail(f'the shipped DLL does something its source list ({CAPABILITIES}) doesn\'t say, by the type doing it',
                  sorted(unlisted))
-    if outside != listed_patches:
+    if extra or missing:
         out.fail(f'Harmony patches on code outside the game, against {CAPABILITIES}, "Mod: patches outside the game"',
-                 [f'patched, not listed: {t}' for t in sorted(outside - listed_patches)]
-                 + [f'listed, not patched: {t}' for t in sorted(listed_patches - outside)])
-    if not bad and not unlisted and outside == listed_patches:
+                 [f'patched, not listed: {t}' for t in sorted(extra)]
+                 + [f'listed, not patched: {t}' for t in sorted(missing)])
+    if ahead:
+        out.warn('listed patches the committed DLL predates; the current source makes each, and the release build '
+                 'checks them in the DLL', sorted(ahead))
+    if not bad and not unlisted and not extra and not missing:
         out.ok(f'{len(refs)} referenced assemblies, all expected; none of {len(denied)} denied calls in '
                f'{len(calls)} references; every capability in the binary is in the source list; '
                f'{len(patched)} Harmony patch targets by attribute, {len(outside)} outside the game, listed')
@@ -1330,9 +1356,14 @@ def harmony_targets(a):
         args = attribute_arguments(a, signature, a.blob(value))
         if parent[0] not in (0x02, 0x06):
             raise Unreadable(f'a HarmonyPatch attribute on metadata table {parent[0]:#x}')
+        if [k for k, v in args[:2]] == ['string', 'string']:
+            # HarmonyPatch(string assemblyQualifiedDeclaringType, string methodName): a type no typeof can reach.
+            given_type, given_name = args[0][1], args[1][1]
+        else:
+            given_type = next((v for k, v in args if k == 'type'), None)
+            given_name = next((v for k, v in args if k == 'string'), None)
         typ, name = merged.get(parent, (None, None))
-        merged[parent] = (typ or next((v for k, v in args if k == 'type'), None),
-                          name or next((v for k, v in args if k == 'string'), None))
+        merged[parent] = (typ or given_type, name or given_name)
     by_type = {index: target for (table, index), target in merged.items() if table == 0x02}
     by_method = [(index, target) for (table, index), target in merged.items() if table == 0x06]
 

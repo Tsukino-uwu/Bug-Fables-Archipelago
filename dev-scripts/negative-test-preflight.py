@@ -478,6 +478,26 @@ def fixtures():
     def _(c):
         patch_bytes(c, DLL, b'Assembly-CSharp, Version=0.0.0.0', b'Assembly-CSharq, Version=0.0.0.0')
 
+    @add('a listed patch neither the DLL nor the source makes', 'Shipped DLL reach',
+         names=('listed, not patched: Nowhere:Nowhere.Thing::Nothing',))
+    def _(c):
+        c.replace('docs/capabilities.md', b'| `UnityEngine.AnimationModule:',
+                  b'| `Nowhere:Nowhere.Thing::Nothing` | nothing |\n| `UnityEngine.AnimationModule:')
+
+    @add('a listed patch on a current DLL that lacks it', 'Shipped DLL reach',
+         names=('listed, not patched: Nowhere:Nowhere.Thing::Nothing',))
+    def _(c):
+        make_fresh(c)
+        c.replace('docs/capabilities.md', b'| `UnityEngine.AnimationModule:',
+                  b'| `Nowhere:Nowhere.Thing::Nothing` | nothing |\n| `UnityEngine.AnimationModule:')
+
+    @add('a listed patch only the source makes yet', 'Shipped DLL reach', expect='WARN',
+         names=('Nowhere:Nowhere.Thing::Nothing',))
+    def _(c):
+        c.replace('docs/capabilities.md', b'| `UnityEngine.AnimationModule:',
+                  b'| `Nowhere:Nowhere.Thing::Nothing` | nothing |\n| `UnityEngine.AnimationModule:')
+        c.write('mod/BugFablesAP/Planted.cs', '// Thing\n[HarmonyPatch("Nowhere.Thing, Nowhere", "Nothing")]\n')
+
     @add('an unlisted host in a DLL string', 'Shipped DLL reach', names=('unlisted host evil.example.org',))
     def _(c):
         old = '[saves] redirect installed; Archipelago mod '

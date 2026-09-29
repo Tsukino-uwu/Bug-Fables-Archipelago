@@ -2396,6 +2396,12 @@ Four sections read it:
   - Every Harmony patch target outside the game is listed. The first run found three that were written down
     nowhere, all legitimate: MultiClient.Net's socket creation and one websocket-sharp method (compression), and
     Unity's `Animator.Play` (a guard). They now have their rows.
+  - **A target given by name** (`[HarmonyPatch("Type, Assembly", "Method")]`, for a class `typeof` can't reach
+    because it's internal) is read as a type and a method, never as a method name alone (2026-09-29).
+  - **A patch newer than the committed DLL** (2026-09-29): between releases the DLL predates the source. A listed
+    patch it lacks is only a warning if today's source makes it (a `[HarmonyPatch]` naming that method, in a file
+    naming its type). Otherwise, or once the DLL is current (a release build, `--release`), a row with no patch
+    fails. Three fixtures cover it: stale with no such source, current, and stale with the source.
 - **The DLL says only what its source says:** read against the sources of the commit it was built from.
   - Every type, method, field and called member name, and every one of its 1,237 strings, must come from that
     source. The strings are matched to the literals, the pieces of interpolated strings, and the constants the
