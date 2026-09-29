@@ -1,0 +1,30 @@
+#!/bin/sh
+# Every push: preflight over each pushed commit's tree, and --history over everything new in the push, so a commit
+# made past the other hooks still can't leave this machine. When the push changes the preflight gate itself, the
+# gate's own test runs too (dev-scripts/negative-test-preflight.py).
+root=$(git rev-parse --show-toplevel) || exit 1
+. "$root/.githooks/python.sh"
+
+zero=0000000000000000000000000000000000000000
+# What every remote already has: only what's new since then is checked.
+known=$(git for-each-ref --format='^%(objectname)' refs/remotes)
+status=0
+while read -r local_ref local_sha remote_ref remote_sha; do
+    [ "$local_sha" = "$zero" ] && continue
+    if [ "$remote_sha" != "$zero" ] && git cat-file -e "$remote_sha^{commit}" 2>/dev/null; then
+        new="$local_sha ^$remote_sha"
+    else
+        new="$local_sha $known"
+    fi
+    echo "pre-push: $local_ref"
+    run_python -B "$root/dev-scripts/preflight.py" --rev "$local_sha" --quiet || status=1
+    # shellcheck disable=SC2086
+    run_python -B "$root/dev-scripts/preflight.py" --history $new --quiet || status=1
+    # shellcheck disable=SC2086
+    if git log --format= --name-only $new |
+        grep -qE '^(dev-scripts/(preflight|negative-test-preflight|dotnet_metadata)|\.githooks/|\.github/)'; then
+        run_python -B "$root/dev-scripts/negative-test-preflight.py" --quiet || status=1
+    fi
+done
+[ $status -ne 0 ] && echo "pre-push: refused; fix what preflight names above, then push again." >&2
+exit $status

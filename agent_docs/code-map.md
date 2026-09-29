@@ -185,6 +185,7 @@ Sources are grouped in folders under `mod/BugFablesAP/`; the namespace is `BugFa
 | [`nuget.config`](../nuget.config) | The two package feeds, and which packages each may serve. | [documentation § 32. A release DLL anyone with the game can rebuild](documentation.md#32-a-release-dll-anyone-with-the-game-can-rebuild-byte-for-byte) |
 | [`global.json`](../global.json) | The .NET SDK every build uses. | [documentation § 32. A release DLL anyone with the game can rebuild](documentation.md#32-a-release-dll-anyone-with-the-game-can-rebuild-byte-for-byte) |
 | [`Directory.Build.props`](../Directory.Build.props) | Stops MSBuild picking up build files from outside the repo. | [documentation § 32. A release DLL anyone with the game can rebuild](documentation.md#32-a-release-dll-anyone-with-the-game-can-rebuild-byte-for-byte) |
+| [`pre-push`](../.githooks/pre-push) | Runs preflight.py on each pushed commit and `--history` on everything new in the push; the gate's own test when the push changes the gate. | [apimplementation § Build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release) |
 | [`python.sh`](../.githooks/python.sh) | Finds a Python 3.11 or newer that really runs, for every hook. | [apimplementation § Build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release) |
 
 ## Preflight
@@ -192,6 +193,7 @@ Sources are grouped in folders under `mod/BugFablesAP/`; the namespace is `BugFa
 | File | What it does | Notes |
 |---|---|---|
 | [`preflight.py`](../dev-scripts/preflight.py) | The gate: reads what git holds and refuses anything unpublishable or harmful, section by section; `--history` for every commit, `--text-stdin` for release notes. | [apimplementation § Build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release)<br>[reviewing](../docs/reviewing.md) |
+| [`negative-test-preflight.py`](../dev-scripts/negative-test-preflight.py) | Proves every preflight section can fail: plants a violation per fixture in a throwaway clone; tests the hooks for real; coverage must be total. | [apimplementation § Build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release) |
 | [`preflight-patterns.json`](../dev-scripts/preflight-patterns.json) | What each section refuses, and the few things let through by name. | [apimplementation § Build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release) |
 | [`capabilities.md`](../docs/capabilities.md) | Everything the code may do beyond its own files, with the reason; exact, checked by preflight.py. | [apimplementation § Build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release) |
 

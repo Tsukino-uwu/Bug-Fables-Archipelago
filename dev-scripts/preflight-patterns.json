@@ -12,6 +12,7 @@
     ["Directory.Build.props", "keeps build files from outside the repo out of the build"],
     [".githooks/pre-commit", "a git hook"],
     [".githooks/commit-msg", "a git hook"],
+    [".githooks/pre-push", "a git hook"],
     [".githooks/*.py", "a hook's helper"],
     [".githooks/*.sh", "a hook's helper"],
     [".github/workflows/*.yml", "CI and the release"],

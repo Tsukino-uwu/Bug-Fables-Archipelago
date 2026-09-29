@@ -344,7 +344,7 @@ def hidden_characters(ctx, out):
                     hits.append(f'{f.path}:{n}: {show(ch)} (invisible or control)')
                 elif code and not ctx.history and not ch.isascii() and ch not in allowed_code:
                     hits.append(f'{f.path}:{n}: {show(ch)} in a code file')
-    if scanned < (1 if ctx.args.text_stdin else 100):
+    if scanned < (0 if ctx.history else 1 if ctx.args.text_stdin else 100):
         out.fail(f'only {scanned} text file(s) read: the listing is wrong')
     elif hits:
         out.fail('characters that hide or disguise what the text says', hits)

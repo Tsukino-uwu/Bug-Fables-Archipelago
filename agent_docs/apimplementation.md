@@ -2309,8 +2309,29 @@ A section that finds nothing to check fails rather than passing: "0 files scanne
 
 **Where it runs so far:**
 - **Every commit:** the pre-commit hook, quiet unless something fails.
+- **Every push** (`.githooks/pre-push`): preflight on each pushed commit, and `--history` on everything new in the
+  push. A commit made past the other hooks is caught here, before it leaves the machine. When the push changes the
+  gate itself, the gate's own test (below) runs too.
 - **Every release:** the release guard runs its text rules on the release notes and on every commit subject the
   notes will publish. This replaced a separate pattern list.
+
+**The gate is tested by making it fail** (`dev-scripts/negative-test-preflight.py`). A check that only ever runs on
+a clean tree says "pass" whether it works or not. So for every section, and every mode it runs in (a commit, the
+history, free text), the test plants a real violation and checks that the section reports FAIL and preflight exits
+non-zero. It works in a throwaway clone outside the repo, with its link back to the repo removed, and it uses the
+preflight files about to be committed:
+1. **A clean baseline** in all three modes, so a failure afterwards is the plant's doing.
+2. **One fixture per kind of violation** (41 on 2026-09-29): a bidi override in a doc, a homoglyph in code, every
+   credential format at once (each must be named), a home path inside the DLL, a library changed by one byte, a
+   symlink, a submodule, a stale host row, a secret committed and then removed, and more. The fake credentials and
+   paths are assembled at run time, so the test file holds none itself.
+3. **The hooks for real:** a normal commit carrying a credential is refused, and so is a gate change mixed with mod
+   code. A commit made past the hooks is refused at push, and the test remote stays unchanged.
+4. **Coverage is total:** a section without a fixture in a mode it runs in fails the test.
+
+It takes about 25 s. **Tested the other way round (2026-09-29):** with the Secrets section made blind on purpose,
+all four of its fixtures failed the test. Writing the test also caught its own slips: a sample written out whole
+(preflight flagged the test file itself), and a name git on Windows refuses to hold.
 
 **The hooks around it:**
 - **They find a Python that runs** (`.githooks/python.sh`). On this machine `python3` is the Microsoft Store's
@@ -2333,12 +2354,12 @@ character, no game file, and no binary other than the release DLLs. It first fla
   exempt by their exact git hash (`history_reviewed` in the patterns file), each with its reason, so a different
   file can't hide behind the exemption.
 
-**Status:** in progress (2026-09-29). Built: the sections above, in pre-commit and the release guard. Next: the test
-that plants a violation for each section, the code rules (apworld, mod, dev scripts), the DLL checks, pre-push and
-CI.
+**Status:** in progress (2026-09-29). Built: the sections above, in pre-commit, pre-push and the release guard, and
+their test. Next: the code rules (apworld, mod, dev scripts), the DLL checks, and CI.
 
 *Code: `dev-scripts/preflight.py`, `dev-scripts/preflight-patterns.json`; `docs/capabilities.md`;
-`.githooks/pre-commit`, `.githooks/commit-msg`, `.githooks/python.sh`; the guard in `.github/workflows/release.yml`.*
+`dev-scripts/negative-test-preflight.py`; `.githooks/pre-commit`, `.githooks/pre-push`, `.githooks/commit-msg`,
+`.githooks/python.sh`; the guard in `.github/workflows/release.yml`.*
 
 # How it works
 
