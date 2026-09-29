@@ -1,5 +1,6 @@
 """Refuses a commit when a feature's handle isn't written up: every yaml option, player setting and slot_data key
-must be named in a process guide, every Debug setting in development.md, every source file in code-map.md."""
+must be named in a process guide, every Debug setting in development.md, every source file in code-map.md; and when
+log.md's Contents list doesn't match its entries."""
 import ast
 import re
 import subprocess
@@ -52,6 +53,29 @@ for path in files:
 for path in files:
     if re.search(r"\.(cs|py|ps1)$", path) and path.rsplit("/", 1)[-1] not in code_map:
         missing.append(f"{path}: give it a row in agent_docs/code-map.md")
+
+
+def anchor(heading, seen):
+    """GitHub's: lower case, punctuation dropped, spaces to hyphens, a repeat numbered."""
+    slug = re.sub(r"[^\w\- ]", "", heading.lower()).replace(" ", "-")
+    count = seen.get(slug, 0)
+    seen[slug] = count + 1
+    return slug if count == 0 else f"{slug}-{count}"
+
+
+log = read(DOCS + "log.md")
+headings = [h for h in re.findall(r"^## (.+)$", log, re.M) if h != "Contents"]
+seen = {}
+wanted = [f"- [{h}](#{anchor(h, seen)})" for h in headings]
+contents = log.split("## Contents", 1)[-1].split("\n## ", 1)[0]
+listed = [line for line in contents.splitlines() if line.startswith("- [")]
+if listed != wanted:
+    absent = [line for line in wanted if line not in listed]
+    extra = [line for line in listed if line not in wanted]
+    missing += [f"log.md Contents: add this line: {line}" for line in absent]
+    missing += [f"log.md Contents: no entry has this heading: {line}" for line in extra]
+    if not absent and not extra:
+        missing.append("log.md Contents: the lines are out of the entries' order")
 
 if missing:
     print("doc-coverage: these aren't written up yet:", file=sys.stderr)

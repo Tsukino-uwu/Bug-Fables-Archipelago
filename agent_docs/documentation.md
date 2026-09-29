@@ -64,6 +64,11 @@ attribution (its neighbour `.githooks/pre-commit` runs the preflight, which refu
 [apimplementation.md, build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release)). Each step below ends with a short *Code:* line naming the files and methods to
 read, just after its **Status:** line. Each new step also gets a line in the index above.
 
+**The session log's index** (2026-09-29, the user: the log will become the longest file, and an index makes it
+"easy to read, and also easier to search/grep"): `log.md` opens with a Contents list, one line per entry with its
+link. The pre-commit's `doc-coverage.py` works out each heading's link the way GitHub does and refuses a commit whose
+list doesn't match the entries one to one, in order, printing the line to add.
+
 ---
 
 ## 1. Check whether the game can be modded at all

@@ -1,6 +1,49 @@
 # Session log
 
-Newest last. What was tried, what happened, what the user said.
+Newest last. What was tried, what happened, what the user said. A new entry gets its line in Contents too (the
+pre-commit `doc-coverage.py` refuses a mismatch).
+
+## Contents
+
+- [2026-09-24: the project starts](#2026-09-24-the-project-starts)
+- [2026-09-24: code pointers in both guides, checked against the code](#2026-09-24-code-pointers-in-both-guides-checked-against-the-code)
+- [2026-09-24: build, then copy (stage-dev.ps1)](#2026-09-24-build-then-copy-stage-devps1)
+- [2026-09-24: the plan for more items, and locations named by place](#2026-09-24-the-plan-for-more-items-and-locations-named-by-place)
+- [2026-09-24: copying into the game, refused twice; copy-dev.ps1](#2026-09-24-copying-into-the-game-refused-twice-copy-devps1)
+- [2026-09-24: EntityDump run](#2026-09-24-entitydump-run)
+- [2026-09-24: step 3, the chapter table and the gated doors](#2026-09-24-step-3-the-chapter-table-and-the-gated-doors)
+- [2026-09-24: what starts the gate events; MapDump](#2026-09-24-what-starts-the-gate-events-mapdump)
+- [2026-09-24: first pickup test; dev console; a logic bug found by it](#2026-09-24-first-pickup-test-dev-console-a-logic-bug-found-by-it)
+- [2026-09-25: what this session taught us (summary, the user closing the chat)](#2026-09-25-what-this-session-taught-us-summary-the-user-closing-the-chat)
+- [2026-09-25 (later): open world, QoL page, discoveries, warp](#2026-09-25-later-open-world-qol-page-discoveries-warp)
+- [2026-09-25 (end of session): open town, shops, party rehearsal (the user closing the chat)](#2026-09-25-end-of-session-open-town-shops-party-rehearsal-the-user-closing-the-chat)
+- [2026-09-25 (afternoon): full medal stock, the intro skipped, item shops, the caravan, first shuffled door](#2026-09-25-afternoon-full-medal-stock-the-intro-skipped-item-shops-the-caravan-first-shuffled-door)
+- [2026-09-25 (evening): doors both ways and shuffled, the Detector for every check, one party member (the user closing the chat)](#2026-09-25-evening-doors-both-ways-and-shuffled-the-detector-for-every-check-one-party-member-the-user-closing-the-chat)
+- [2026-09-25 (night): lean comments, licences, the grant paths checked](#2026-09-25-night-lean-comments-licences-the-grant-paths-checked)
+- [2026-09-26: enemy shuffle and enemy scaling designed](#2026-09-26-enemy-shuffle-and-enemy-scaling-designed)
+- [2026-09-26 (later): the panel tidied, Use on normal saves, letters going missing](#2026-09-26-later-the-panel-tidied-use-on-normal-saves-letters-going-missing)
+- [2026-09-26 (release): the first pre-release set up](#2026-09-26-release-the-first-pre-release-set-up)
+- [2026-09-27: Uncap FPS, and the hitches](#2026-09-27-uncap-fps-and-the-hitches)
+- [2026-09-27 (release): v0.2.0](#2026-09-27-release-v020)
+- [2026-09-27 (planning): Sprint and Early Jump](#2026-09-27-planning-sprint-and-early-jump)
+- [2026-09-27 (evening): We Owe Ya! does nothing when received early](#2026-09-27-evening-we-owe-ya-does-nothing-when-received-early)
+- [2026-09-27 (night): the whole-project refactor, and three Uncap FPS reports](#2026-09-27-night-the-whole-project-refactor-and-three-uncap-fps-reports)
+- [2026-09-28: a link to the concepts doc, and The Beast at level 17](#2026-09-28-a-link-to-the-concepts-doc-and-the-beast-at-level-17)
+- [2026-09-28 (later): save crystals without a move, DeathLink, auto-save](#2026-09-28-later-save-crystals-without-a-move-deathlink-auto-save)
+- [2026-09-28 (night): Uncap FPS as ten pips, the boat, Leif's boss, traps](#2026-09-28-night-uncap-fps-as-ten-pips-the-boat-leifs-boss-traps)
+- [2026-09-28 (night): the fuzzer joins the tests](#2026-09-28-night-the-fuzzer-joins-the-tests)
+- [2026-09-28 (night, later): outside criticism, seven reviewers, part 1 of the fixes](#2026-09-28-night-later-outside-criticism-seven-reviewers-part-1-of-the-fixes)
+- [2026-09-28 (morning): playtesting the start of a new file](#2026-09-28-morning-playtesting-the-start-of-a-new-file)
+- [2026-09-28 (day): three projects compared, the cleanup plan](#2026-09-28-day-three-projects-compared-the-cleanup-plan)
+- [2026-09-29: the cleanup plan finished](#2026-09-29-the-cleanup-plan-finished)
+- [2026-09-29 (afternoon): the preflight, the reviewing page, and a hole it found](#2026-09-29-afternoon-the-preflight-the-reviewing-page-and-a-hole-it-found)
+- [2026-09-29 (later): the agent's guard, the cache fix, the TLS probe](#2026-09-29-later-the-agents-guard-the-cache-fix-the-tls-probe)
+- [2026-09-29: the Logic Test apworld, judged](#2026-09-29-the-logic-test-apworld-judged)
+- [2026-09-29 (evening): Archipelago's way, the logic in Python, the rules for writing it](#2026-09-29-evening-archipelagos-way-the-logic-in-python-the-rules-for-writing-it)
+- [2026-09-29 (night): the concepts doc's second round](#2026-09-29-night-the-concepts-docs-second-round)
+- [2026-09-29 (night, later): the animation warnings on a normal save](#2026-09-29-night-later-the-animation-warnings-on-a-normal-save)
+- [2026-09-29 (night, later still): six questions, disguised traps, Vi's flight](#2026-09-29-night-later-still-six-questions-disguised-traps-vis-flight)
+- [2026-09-29 (night, last): Room Swap, Uncap FPS Off by default](#2026-09-29-night-last-room-swap-uncap-fps-off-by-default)
 
 ## 2026-09-24: the project starts
 
