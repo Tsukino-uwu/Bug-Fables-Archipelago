@@ -1358,6 +1358,11 @@ hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0
 - **Seen:** the Quality of life page opened from Settings (the Settings list stays drawn behind it) with the Reset
   question's Yes / No box: the first draw was whole, and after a left / right redraw it showed "Ye" and no "No". The
   shorter Disable all question fitted. Used by `TextPool.cs`.
+- **The game's fonts** (2026-09-29, code read): `MainManager.fonts`, loaded at start from `Resources/Fonts/`, one per
+  entry of the private enum `Fonts` (`MainManager.cs:15-23, 3167-3176`): BubblegumSans, D3Streetism, UNUSED (never
+  loaded), Uzura, BalsamiqSans, ONEMobilePOP. Before sizing a letter the game asks its font for it
+  (`RequestCharactersInTexture`, then `GetCharacterInfo`, `MainManager.cs:9784-9787`); a character the font lacks has
+  no info. For the in-game text client (`documentation.md`, step 2).
 
 ## The item table's fields (2026-09-26, code read)
 

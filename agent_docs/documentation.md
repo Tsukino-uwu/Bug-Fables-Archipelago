@@ -120,7 +120,9 @@ A few decisions made first, because they shape everything after:
     the typing line under it. Names, items (by class) and locations in Archipelago's colours. The Chat menu sets how
     long lines stay (or never fade), how many show, and how dark the panel is. The chat draws its own letters in the
     game's font (`MainManager.fonts`), never from the game's 500-letter pool, which its dialogue shares
-    (`MEASURED.md`, the text letter pool).
+    (`MEASURED.md`, the text letter pool). The font is borrowed from the running game, never copied into the mod.
+    Other games' names can hold characters the game's fonts lack: each is checked as the game checks its own
+    (`GetCharacterInfo`) and shown as a stand-in instead of a gap.
   - **Item names are coloured the way Archipelago's clients colour them** (`NetUtils.py`): progression plum
     `#AF99EF`, useful slateblue `#6D8BE8`, trap salmon `#FA8072`, filler cyan `#00EEEE`.
 - **Read what others already solved.** We read the TEVI randomizer (another Unity mod), Pokémon Emerald's
