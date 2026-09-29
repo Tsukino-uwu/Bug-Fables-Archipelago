@@ -6,7 +6,7 @@ from typing import Any
 
 from worlds.AutoWorld import World
 
-from . import entrances, items, locations, regions, rules, slot_data, web_world
+from . import entrances, items, locations, music, regions, rules, slot_data, web_world
 from .data_tables import (ARTIFACTS, DOORS, ENCOUNTERS, ITEM_NAME_TO_ID, LOCATION_NAME_TO_ID, LOCATIONS, ROOM_STARTS,
                           STORY_EVENTS)
 from .enemies import shuffle_encounters
@@ -75,6 +75,14 @@ class BugFablesWorld(World):
         # Doors are decided here, on the region graph, and sent in slot_data; the client never decides a door itself.
         self.door_pairings = entrances.shuffle(self)
         self.door_targets = entrances.door_targets(self.door_pairings, DOORS.connections)
+
+    def generate_basic(self) -> None:
+        # Archipelago's step for rolls that don't affect logic; the logic's own (doors, fights) come before the rules.
+        self.music_map = {}
+        self.jingle_map = {}
+        if self.options.music_shuffle:
+            self.music_map = music.shuffle(music.POOL, self.random)
+            self.jingle_map = music.shuffle(music.JINGLES, self.random)
 
     def write_spoiler_header(self, spoiler_handle: Any) -> None:
         # Nothing written here: the shuffled doors go to the spoiler's own Entrances section.

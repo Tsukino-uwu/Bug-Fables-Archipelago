@@ -37,6 +37,7 @@ read, a log or a probe.
 - [Save crystals, saving, Game Over and room transfers](#save-crystals-saving-game-over-and-room-transfers-2026-09-28-code-read-nothing-seen-in-game-yet)
 - [Quests: to measure](#quests-to-measure-when-quests-come-into-scope)
 - [Key items: to measure](#key-items-to-measure)
+- [Music and jingles](#music-and-jingles-2026-09-30-code-read-nothing-seen-in-game)
 
 ## The build (2026-09-24, read from a Steam install, game not run)
 
@@ -1538,3 +1539,47 @@ For the first version, measure and record:
   - The save file itself is split into lines (`:17034`, `:17040`).
   - So `|SPLIT|`, the not sign or a line break inside a saved string shifts the fields on the next load.
 - Used by `ServerText.cs`.
+
+## Music and jingles (2026-09-30, code read; nothing seen in game)
+
+- **One music player.** `MainManager.music` is one looping AudioSource and `sounds` has 15, all on MainManager's
+  object (`MainManager.cs:3121-3122`, `:3177-3192`).
+  - Every music change ends in `ChangeMusic(AudioClip, float, int, bool)` (`:4825`), which starts `SwitchMusic`
+    (`:4694`): a fade-out, 0.1 s, then `music[id].clip` is set and played (`:4741-4763`).
+  - It sets `lastmusic` from `Enum.Parse(Musics, clip.name)` (`:4834-4843`), so a clip must carry one of the
+    `MainManager.Musics` names. There are 75 (`:298-375`).
+  - Music loads from `Audio/Music/<name>`; a map's tracks are `MapControl.music`, chosen by `musicflags`
+    (`MapControl.cs:433-461`).
+- **Loop points:** `Data/LoopPoints`, one `start;end` line per track (`LoopPoint`, `:7655-7668`). `LoopMusic`, run in
+  `FixedUpdate`, sends the player back to the second value once it passes a non-zero first (`:7671-7684`).
+- **What reads the playing track back.** None of these would survive a swapped clip:
+  - The victory fanfare `BattleWon` plays only when the music is `Battle0` or `Battle6` (`BattleControl.cs:4069`).
+  - The level-up return checks `LevelUp` (`:31041`).
+  - The track is saved by name or clip and replayed later:
+    - the retry state (`BattleControl.cs:608`, `:1513`);
+    - the map track after a battle (`:754`, replayed at `:31051`, resumed at its time with `keepmusicafterbattle`, `:31049`);
+    - `EventControl.cs:754`, `MainManager.cs:10106`, `:12100`;
+    - the mono-audio switch (`:16724-16733`).
+- **Samira's list** (`samiramusics`, in the save, `:7000-7015`):
+  - A track is added when `SwitchMusic` finishes, with the clip on the player (`:4771-4773`). Other callers pass the
+    intended track: a map's (`MapControl.cs:452`), a door's (`:1115`), the minigames' literals, a music zone's clip
+    (`NPCControl.cs:2004`).
+  - `FixSamira` drops Title, Wind, Water, MachineHum and Breathing (`:9668-9688`).
+  - `SamiraGotAll` needs 75 - 8 bought (`:4404-4407`) for her key item (`EventControl.cs:5147-5150`).
+  - Her event plays the picked song through `ChangeMusic`, and floats her notes (`internaltransform[0]`) while it plays
+    (`:5205-5226`). `SamiraStop` removes them (`:5012-5018`).
+- **Outside the player:**
+  - The factory elevator crossfades `Dungeon2` and `Dungeon2b` (`seamless`, `EventControl.cs:17047-17051`) through a
+    sound slot (`MainManager.cs:4700-4756`).
+  - A music zone plays its own track on its entity and fades the main player out (`NPCControl.cs:882-890`, `:2016-2020`).
+  - The game never sets `mute` on any source (no `.mute` in the code).
+- **Jingles are sounds at music volume:**
+  - `BattleWon` (`BattleControl.cs:4091`) and `Gameover` (`:3493`, stopped by name at `:3533`).
+  - `Snakemouth` (`EventControl.cs:3079`) and `SandCastleRise` (`:19310`).
+  - `"ch" + (chapterid + 2)` for chapter titles, where `chapterid` runs from -1 to 5, so `ch1`-`ch7`
+    (`MainManager.cs:9536`; callers in `EventControl.cs`). The title waits for its clip's length (`:9543`).
+- **Sound funnels:**
+  - Every `PlaySound` ends in `PlaySound(AudioClip, int, float, float, bool)` (`:4509`).
+  - Every `StopSound` by name or clip ends in `StopSound(AudioClip, float)` (`:4565`), which stops the slots holding
+    that clip.
+- Used by `MusicShuffle.cs`; the pool by `music.py`.

@@ -69,6 +69,7 @@ namespace BugFablesAP
             ItemSwap.Enable(Log, connection, () => randomizerEnabled.Value);
             KeptOpen.Enable(Log, connection, () => randomizerEnabled.Value);
             EnemyShuffle.Enable(Log, connection, () => randomizerEnabled.Value);
+            MusicShuffle.Enable(Log, connection, () => randomizerEnabled.Value);
             difficulty = Config.Bind("Archipelago", "Difficulty", "Normal", new ConfigDescription(
                 "Normal leaves it to the game; Hard acts as if the Hard Mode medal were equipped; Hardest as if the "
                 + "save had the HARDEST code, never written into the save. In a seed, boss prize medals are paid out "
@@ -196,6 +197,11 @@ namespace BugFablesAP
             Guarded("tick", Tick);
         }
 
+        private void LateUpdate()
+        {
+            Guarded("music", MusicShuffle.LateTick);
+        }
+
         // Each system runs in its own guard, so one that throws every frame doesn't stop the ones after it.
         // Unity's log isn't written by this game, so exceptions are logged here, once per distinct message per system.
         private void Guarded(string name, Action step)
@@ -268,6 +274,7 @@ namespace BugFablesAP
             HoldUps.Clear();
             PartyFit.Disable();
             ShopSwap.Disable();
+            MusicShuffle.Disable();
             Hooks.UninstallAll();
             Log?.LogInfo($"{Name} {Version} unloaded.");
         }

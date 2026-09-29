@@ -36,6 +36,9 @@ namespace BugFablesAP
         internal readonly List<DoorShuffle.Target> DoorTargets;
         // {"map:entity index": enemy ids}: the fight a map enemy starts instead of its own (Enemy Shuffle).
         internal readonly Dictionary<string, int[]> EnemySwaps;
+        // Music Shuffle, {name: name played in its place}: tracks by the game's Musics names, jingles by sound name.
+        internal readonly Dictionary<string, string> MusicMap;
+        internal readonly Dictionary<string, string> JingleMap;
         // Where a new file begins (Starting Location): the map and a save point's entity index (-1 for none); null for
         // the game's own start. StartFrom: the map whose door leads in, for a start entered as if through that door.
         internal readonly KeyValuePair<string, int>? Start;
@@ -107,6 +110,10 @@ namespace BugFablesAP
             });
             EnemySwaps = SlotData.Object(data, "enemy_swaps")?.Properties()
                 .ToDictionary(p => p.Name, p => p.Value.ToObject<int[]>());
+            MusicMap = SlotData.Object(data, "music_map")?.Properties()
+                .ToDictionary(p => p.Name, p => p.Value.Value<string>());
+            JingleMap = SlotData.Object(data, "jingle_map")?.Properties()
+                .ToDictionary(p => p.Name, p => p.Value.Value<string>());
             JObject startData = SlotData.Object(data, "start");
             if (startData != null
                 && (startData["map"] == null || startData["entity"] == null && startData["from"] == null))

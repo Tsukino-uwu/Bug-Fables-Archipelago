@@ -181,6 +181,8 @@ namespace BugFablesAP
         internal List<DialogueFlag> DialogueFlags => seedData?.DialogueFlags;
         internal List<DoorShuffle.Target> DoorTargets => seedData?.DoorTargets;
         internal Dictionary<string, int[]> EnemySwaps => seedData?.EnemySwaps;
+        internal Dictionary<string, string> MusicMap => seedData?.MusicMap;
+        internal Dictionary<string, string> JingleMap => seedData?.JingleMap;
         internal KeyValuePair<string, int>? Start => seedData?.Start;
         internal string StartFrom => seedData?.StartFrom;
         internal int ArtifactsRequired => seedData?.ArtifactsRequired ?? 0;

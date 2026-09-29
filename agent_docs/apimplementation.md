@@ -3079,6 +3079,12 @@ item, check or rule depends on it.
 - the same seed with the option on or off gives the same slot_data otherwise, the same item pool and the same fill
   randomness. It failed with the roll moved to the start of `generate_early`.
 
+**Checked** (2026-09-30), both through Archipelago's own Generate:
+- The same seed with APQuest, the option off and on: slot_data is identical but for the two maps (68 tracks and 11
+  jingles when on), and the spoilers differ only in the option's own line.
+- `seed-snapshot.py` on CI's three presets, alone and with APQuest, before and after the change: only the two empty
+  maps and the option's spoiler line are new.
+
 **Status:** built, not yet seen in game (2026-09-30).
 
 *Code: `music.py`, `options.py` (`MusicShuffle`, `option_groups`), `web_world.py`, `world.py` (`generate_basic`),

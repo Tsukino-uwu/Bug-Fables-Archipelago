@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, DefaultOnToggle, PerGameCommonOptions, PlandoConnections, Range, Toggle
+from Options import Choice, DefaultOnToggle, OptionGroup, PerGameCommonOptions, PlandoConnections, Range, Toggle
 
 from .data_tables import DOOR_NAMES, DOORS, ENCOUNTERS, LOCATIONS, ROOM_STARTS
 
@@ -209,6 +209,17 @@ class ShuffleJump(Toggle):
     display_name = "Shuffle Jump"
 
 
+class MusicShuffle(Toggle):
+    """
+    Every song plays in place of another, the same way every time the seed is played: an area's music, a battle's, a
+    boss's. The short jingles (the victory fanfare, the game over, the chapter titles) swap among themselves. The title
+    screen, the wind, water and machine sounds, and the factory elevator's music stay as they are. Samira plays the
+    song you pick. Nothing else changes: no item, check or rule depends on it. Off by default.
+    """
+
+    display_name = "Music Shuffle"
+
+
 class DoorPlando(PlandoConnections):
     """
     Which door leads where, with the Entrance Randomizer on Coupled or Decoupled (ignored when it's off or on Room
@@ -238,6 +249,13 @@ class BugFablesOptions(PerGameCommonOptions):
     starting_party_member: StartingPartyMember
     shuffle_field_moves: ShuffleFieldMoves
     shuffle_jump: ShuffleJump
+    music_shuffle: MusicShuffle
+
+
+# Options not in a group show under "Game Options".
+option_groups = [
+    OptionGroup("Aesthetic Options", [MusicShuffle]),
+]
 
 
 # The location categories a yaml toggle leaves out, and the toggle's field.

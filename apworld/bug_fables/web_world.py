@@ -1,6 +1,8 @@
 from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld
 
+from .options import option_groups
+
 
 class BugFablesWebWorld(WebWorld):
     theme = "grassFlowers"
@@ -14,3 +16,4 @@ class BugFablesWebWorld(WebWorld):
             ["Tsukino"],
         )
     ]
+    option_groups = option_groups

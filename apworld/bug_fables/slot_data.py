@@ -76,6 +76,10 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "shuffle_jump": world.jump_shuffled(),
         # Every learned ability is an item: the mod answers the game's ability checks from the items received.
         "ability_items": True,
+        # Music Shuffle, {name: name played in its place}: tracks by the game's Musics names, jingles by their sound
+        # names; both empty when it's off.
+        "music_map": world.music_map,
+        "jingle_map": world.jingle_map,
         # An item's kind, as data_tables names them (ITEM_KIND and the rest).
         "item_kinds": {str(ITEM_NAME_TO_ID[item.name]): item.kind for item in ITEMS},
     }

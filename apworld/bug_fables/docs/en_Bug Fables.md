@@ -31,6 +31,10 @@ Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's 
   your key items once it does.
 - **Shuffle Jump** (off): Jump is an item for the whole party; until it arrives, the jump button only buzzes, and the
   pause menu's Warp is always there. New in this version.
+- **Music Shuffle** (off, under Aesthetic Options): every song plays in place of another, the same every time you play
+  the seed, and the jingles (victory, game over, chapter titles) swap among themselves. The title screen, the wind,
+  water and machine sounds, and the factory elevator's music stay. Samira plays the song you pick. It changes nothing
+  else. New in this version.
 
 Each option's description in the yaml says what it does in full and how many checks it adds.
 

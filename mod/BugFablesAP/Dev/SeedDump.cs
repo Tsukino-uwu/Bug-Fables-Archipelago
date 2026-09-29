@@ -71,6 +71,14 @@ namespace BugFablesAP
             {
                 Add("enemy_swaps", swap.Key, Ints(swap.Value));
             }
+            foreach (KeyValuePair<string, string> track in c.MusicMap ?? new Dictionary<string, string>())
+            {
+                Add("music_map", track.Key, track.Value);
+            }
+            foreach (KeyValuePair<string, string> jingle in c.JingleMap ?? new Dictionary<string, string>())
+            {
+                Add("jingle_map", jingle.Key, jingle.Value);
+            }
             Add("start", "", c.Start.HasValue ? $"{c.Start.Value.Key}|{c.Start.Value.Value}" : "null");
             Add("start_from", "", c.StartFrom ?? "null");
             Add("own_slot", "", c.OwnSlot.ToString());

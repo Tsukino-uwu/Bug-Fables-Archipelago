@@ -46,6 +46,7 @@ either one wrong).
 - [2026-09-29: six questions, disguised traps, Vi's flight](#2026-09-29-six-questions-disguised-traps-vis-flight)
 - [2026-09-29: Room Swap, Uncap FPS Off by default](#2026-09-29-room-swap-uncap-fps-off-by-default)
 - [2026-09-30: Archipelago's entrance randomizer, rooms as regions, Decoupled, plando](#2026-09-30-archipelagos-entrance-randomizer-rooms-as-regions-decoupled-plando)
+- [2026-09-30: Music Shuffle, in the yaml](#2026-09-30-music-shuffle-in-the-yaml)
 
 ## 2026-09-24: the project starts
 
@@ -1712,3 +1713,28 @@ either one wrong).
   (written into CLAUDE.md's Archipelago rule and §8; Next 46 holds the sweep of the other optional features).
 - Every step: 496 tests, the Logic Test check and the fuzzer (0 of 10000) pass; plando seeds generated through
   Archipelago's Generate in each mode, alone and with APQuest. Nothing seen in game yet: the user is playing vanilla.
+
+## 2026-09-30: Music Shuffle, in the yaml
+
+- **The user asked** whether music and SFX rando belong in the yaml "just to be/stay consistent across seeds" even
+  though they don't affect logic, or on the panel's Gameplay page, or on a menu of their own. The research:
+  - Every Archipelago world with a music shuffle has it as a yaml option (about 23 at 0.6.7). APQuest keeps its
+    cosmetics in the yaml, in "Aesthetic Options". PC worlds send the rolled map in slot_data.
+  - A shuffle is a random result, so it belongs to the seed.
+  - The user chose **yaml only**, and **the jingles under Music Shuffle**. SFX is its own later step (Next 47).
+- **The user corrected the reasoning:** Enemy Shuffle was cited as a logic-free precedent, and the review's item 24
+  wanted it moved to `generate_basic`. But fights that can't be fled and Tattle checks make it logic, so item 24 was
+  reversed; it stays in `generate_early`. Music goes in `generate_basic` alone.
+- **The design changed while reading the game:**
+  - The plan swapped the clip passed to `ChangeMusic`. The game saves and replays the playing track (after battles,
+    retries, events), checks it by name (the victory fanfare) and Samira counts what plays. Each replay would have
+    been swapped twice.
+  - Instead, the game's player stays on its own track, muted, and a second source plays the seed's track, following
+    it every frame. That is the game's own music-zone pattern.
+  - Samira's list keeps counting the game's tracks, and while she plays a song the mod steps aside.
+- **Checked:**
+  - The tests, including one that fails with the roll moved before the enemy shuffle.
+  - A seed generated through Archipelago's Generate with APQuest, off and on: slot_data identical but for the two
+    maps, and the spoiler differs only in the option's own line.
+  - The mod builds.
+  - Not yet seen in game: the user is playing vanilla.
