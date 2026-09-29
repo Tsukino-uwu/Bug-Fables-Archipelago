@@ -455,6 +455,10 @@ be wrong.
 45. **Room Swap (experimental)** (2026-09-29): whole rooms trade places with rooms of as many doors, a value of the
    entrance randomizer. Built, not yet seen in game; see build step 30. Next: the user plays a seed with it; later,
    doors matched by side.
+46. **Every optional feature Archipelago offers** (2026-09-30, the user: "we should try to support all available
+   things archipelago has/does, that includes plando"): connection plando first (build step 32). Next, a sweep of the
+   rest, each read in Archipelago's own code and guides before it's built or written off: item plando proven on a seed,
+   the options Archipelago provides for a world to add (`Options.py`), and boss plando once bosses are shuffled.
 
 **Known issues:**
 
@@ -3062,7 +3066,9 @@ rebuilding archipelago inside the game just to connect/work with archipelago". A
 wrong, it drifts as Archipelago changes, and nobody who knows Archipelago can read it. **Recommendations too**
 (2026-09-29, the user: "we should do all standards & recommendations that Archipelago mentions"): what the docs call
 "should", "recommended" or "encouraged" (option groups, presets, a bug report page) is done like a requirement.
-**Read all of it** (2026-09-29, the user: "we should read and take a look at everything/anything Archipelago. don't
+**Optional features too** (2026-09-30, the user: "we should try to support all available things archipelago has/does,
+that includes plando"): what Archipelago offers a world as optional, connection plando first, is supported, not
+written off as optional. **Read all of it** (2026-09-29, the user: "we should read and take a look at everything/anything Archipelago. don't
 skip/assume"): every doc, every generic guide and the reference world, APQuest, including the ones that look meant for
 someone else (the world maintainer's duties, the website's API); what doesn't apply is written down as not applying,
 with why.

@@ -133,7 +133,9 @@ conventions the docs and APQuest show), *main only* (not in 0.6.7 yet).
     `disconnect_entrance_for_randomization` (`:228-230`), placed by `randomize_entrances` in `connect_entrances`
     (`:373-379`), `pairings` turned into `door_targets` (`:381-384`), the pairs in the spoiler's Entrances section. Still
     to do: one-way doors kept as doors, not map links, so they can be one-way entrances (`:238-242`; today the 19
-    one-way fixed doors are plain entrances, never shuffled), and Menu joined to the random start's region.
+    one-way fixed doors are plain entrances, never shuffled), and Menu joined to the random start's region. Connection
+    plando (`plando_en.md:283-318`, `Options.PlandoConnections`): optional in the guide ("Support for connection plando
+    may vary"), built all the same (2026-09-30, the user: every optional feature, plando included; build step 32).
 
 ## A second look at what we kept (2026-09-29)
 
@@ -205,10 +207,7 @@ our slot_data reader (it tolerates missing keys).
 - `running from source.md`: the Enemizer, SNI and the Linux build are for other games; the rest is item 22.
 - `network diagram`: a picture; our client is its ".NET / MultiClient.Net / BepInEx" path.
 - `mac_en.md`: the client is a Windows BepInEx mod; generation is pure Python and runs anywhere.
-- Text plando and boss plando (`plando_en.md`): no texts or bosses shuffled.
-- Connection plando (`plando_en.md:9-11`, `Options.PlandoConnections`): optional, "Support for connection plando may
-  vary", and no doc asks a world for it; not built with item 23 (2026-09-30). A player-facing yaml option, so its own
-  build step if wanted.
+- Text plando and boss plando (`plando_en.md`): no texts or bosses shuffled; boss plando comes with a boss shuffle.
 - `triage role expectations.md`, `code_of_conduct.md`, `CODEOWNERS`: Archipelago's own repository (below).
 
 ## For the main repository (written down; not planned)
