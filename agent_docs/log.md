@@ -1621,5 +1621,7 @@ Newest last. What was tried, what happened, what the user said.
   want the hookshot so you will obviously try to go for the item until you have it"). A yaml option with OoT's name and
   values (*Trap Appearance*, Major Only by default), the user's choice.
 - **Vi's flight in slow motion at 240** (the user; chapter 5 on a normal save): suspected interpolation against the
-  flight's per-frame position write, as platforms and frozen enemies were (Known issues). Next: `interp off` while
-  flying, then the fix in `FrameRate.cs`'s one interpolation decision.
+  flight's per-frame position write, as platforms and frozen enemies were (Known issues). The log showed the row stepped
+  from Monitor down to Off right after Bee Fly was learned. The planned `interp off` test no longer works (the ground
+  check re-decides interpolation every physics step since the platform fix), so the fix is the one-change test: the
+  leader not interpolated while flying, in `FrameRate.cs`'s one decision. Built and copied in; not yet seen.

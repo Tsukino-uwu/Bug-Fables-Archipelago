@@ -361,9 +361,21 @@ namespace BugFablesAP
             }
         }
 
-        // One decision for both cases, so neither undoes the other: not interpolated on a platform, or while a frozen
-        // enemy (the game writes a frozen enemy's position back every frame, from the drawn pose that trails the
-        // physics one, so it dragged: slow after the first knock, fine with interpolation off).
+        // Vi's flight writes her position every frame (the rise), from the drawn pose: slow motion, as frozen enemies.
+        [HarmonyPatch(typeof(PlayerControl), "LateUpdate")]
+        [HarmonyPrefix]
+        private static void BeforePlayerLateUpdate(PlayerControl __instance)
+        {
+            EntityControl entity = __instance.entity;
+            if (active && entity != null)
+            {
+                Interpolate(entity, entity.feet != null && entity.feet.platform != null);
+            }
+        }
+
+        // One decision for every case, so none undoes another: not interpolated on a platform, while a frozen enemy
+        // (the game writes a frozen enemy's position back every frame, from the drawn pose that trails the physics
+        // one, so it dragged: slow after the first knock, fine with interpolation off), or the leader while flying.
         private static void Interpolate(EntityControl entity, bool onPlatform)
         {
             Rigidbody body = entity.rigid;
@@ -373,7 +385,9 @@ namespace BugFablesAP
             }
             NPCControl npc = entity.npcdata;
             bool frozen = npc != null && npc.entitytype == NPCControl.NPCType.Enemy && npc.freezecooldown > 0f;
-            RigidbodyInterpolation wanted = onPlatform || frozen ? RigidbodyInterpolation.None
+            PlayerControl player = MainManager.player;
+            bool flying = player != null && player.flying && player.entity == entity;
+            RigidbodyInterpolation wanted = onPlatform || frozen || flying ? RigidbodyInterpolation.None
                 : RigidbodyInterpolation.Interpolate;
             if (body.interpolation != wanted)
             {

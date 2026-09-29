@@ -500,8 +500,8 @@ be wrong.
   step at the game's own rate, as the other per-frame sites are:
   - **Vi's flight (Bee Fly) plays in slow motion at 240** (the user, 2026-09-29, *Use on normal saves*). Suspected,
     from the code: while flying, `PlayerControl.LateUpdate` writes her position every frame (the rise), from the drawn
-    pose, which trails the physics one under interpolation: the platforms' and frozen enemies' fault. To confirm with
-    the console's `interp off` while flying, then fixed as they were.
+    pose, which trails the physics one under interpolation: the platforms' and frozen enemies' fault. Fixed as they
+    were (2026-09-29, mod guide, step 24), which is also the test; not yet seen.
   - **Being hit plays too fast, for enemies and the party** (a tester, 2026-09-27, FPS unlocked). Cause not read yet;
     with the `ShakeSprite` fix below, nothing odd was seen in combat on screen (2026-09-28; no before/after seen).
   - **A frozen enemy shimmers slightly while it flies** after a knock (not interpolated while frozen; the slow motion

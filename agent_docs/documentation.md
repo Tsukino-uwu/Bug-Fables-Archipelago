@@ -1706,6 +1706,13 @@ place it counts frames instead of time first.
   anyway; after the first fix: "worked for 1 hit, then it became slow", and with `interp off` it moved properly. Fixed
   as the platforms: not interpolated while frozen, one decision for both cases so neither undoes the other. **Seen on
   screen (2026-09-27):** knocked around properly, every time.
+- **Pitfall, Vi's flight in slow motion** (the user, 2026-09-29, at 240). While Vi flies, `PlayerControl.LateUpdate`
+  lifts her by writing her whole position every frame (the rise), read from the drawn pose, which trails the physics
+  one under interpolation: the frozen enemy's second fault again. Her flying speed itself is a velocity, the same at
+  any frame rate. The console's `interp off` can no longer isolate it: since the platform fix, the ground check
+  re-decides interpolation every physics step, so the switch is undone before a flight starts. So the fix is the
+  test, one change: the leader isn't interpolated while flying, in the same one decision (checked before the
+  player's `LateUpdate`). If the slow motion stays, the cause is elsewhere and the change comes out. Not yet seen.
 - **Random shakes re-rolled once per 1/60 s.** Some effects jump to a new random offset every frame, a blur at 240
   (seen: shaky text in conversations sharp at 60, blurry at 240). Their timing was already right; only the re-roll
   was per frame. Now, while the row is on, the offset holds between ticks: `FontEffects` (shaky and glitchy letters;
@@ -1769,7 +1776,8 @@ untested. **Seen on screen (2026-09-28):** the ten pips look and work fine.
 **Status:** in progress, experimental (the row says so). Seen on screen (2026-09-27) at 240: smooth, the "!" steady and
 sharp. The logic measured (`rates`); each site patched as expected (the log's `[fps] frame sites`). Not yet seen on
 screen: every site above, most of all fishing, the screw platform, the Wacka Worm, a disguised enemy and the dig skill.
-Platforms and bridges: fixed and seen (2026-09-27), a slight shimmer on them left.
+Platforms and bridges: fixed and seen (2026-09-27), a slight shimmer on them left. Vi's flight: fixed (2026-09-29),
+not yet seen.
 
 *Code: `FrameRate.cs`, `FrameSites.cs`, the row in `ApMenu.cs` and `QualityOfLife.cs`; the console's `display`, `fps`,
 `interp`, `camlerp`, `frames`, `trace`, `cams`, `il`, `rates` and `fpsscan` (`DevConsole.cs`).*
