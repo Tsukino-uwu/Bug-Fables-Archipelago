@@ -1549,5 +1549,11 @@ Newest last. What was tried, what happened, what the user said.
   font borrowed at runtime, and letters it lacks drawn in a font from the computer's own rather than as "?" (the
   user: better than "gf798?? recieved from play????"). Read for it: the game's Enter is action 9 with six uses
   (`MEASURED.md`, Input); its fonts and its 500-letter pool; `CreateDynamicFontFromOSFont` exists in its Unity 2018.4.
+- **slot_data, decided** (review item 15): the doc's line is a recommendation ("should", `world api.md:878-887`);
+  measured 65 KB, 56 KB of it the door shuffle, 3.3 KB the fixed tables. I suggested keeping them; the user: "lets
+  follow it and do things properly then, and fix our issues properly instead". So: the fixed tables built into the
+  mod from the apworld's data, the seed's locations from the server, a world-version check on connect, slot_data
+  left with the version, the options and the seed's rolls. `CLAUDE.md`'s "(2) The mod never departs" reworded to
+  allow tables built from the same apworld, checked by world version (still 149 lines).
 - **Next session:** `gh run list` first; push when told (the user: after the review); then Next 43, item 1, one step
-  at a time; the slot_data question (item 15) is the user's. The text client is Next 9, after the review's bugs.
+  at a time. The text client is Next 9, after the review's bugs.

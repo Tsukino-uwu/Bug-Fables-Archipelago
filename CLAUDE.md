@@ -56,8 +56,8 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
   game never makes it harder than the logic. Two halves. **(1) The logic tells the truth:** Archipelago proves
   a seed only by the logic, so every gate the game has (a story flag, an ability check) goes into the
   apworld; the logic may be more cautious than the game, never less. **(2) The mod never departs from what
-  the generator knew:** anything it changes (a gate opened as a last resort, a start) comes from `slot_data`,
-  decided at design time, never at runtime. **Named allowances (the user, 2026-09-25/26):** an unchecked
+  the generator knew:** anything it changes comes from `slot_data` or from tables built from the same apworld
+  (checked by world version on connect), decided at design time, never at runtime. **Named allowances (the user, 2026-09-25/26):** an unchecked
   "Placeholder" location holds filler only; the entrance randomizer and a random start are options labelled
   experimental until the room-by-room logic is done (`apimplementation.md`, build steps 12 and 15).
 

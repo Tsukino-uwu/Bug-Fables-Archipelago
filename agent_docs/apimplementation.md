@@ -383,8 +383,8 @@ be wrong.
       page, the WebWorld's `game`; 9. `topology_present`; 10. location and item groups; 11. `World.world_version`,
       `Region.add_locations`, `options.as_dict`; 12. `start_inventory_from_pool`; 13. the Rule Builder's
       `OptionFilter` for Jump, `__str__` and `@override` on our rules, a caching benchmark; 14. Universal Tracker and
-      PopTracker; 15. **the user's decision:** slot_data's same-in-every-seed tables against "only what's
-      necessary".
+      PopTracker; 15. slot_data only what's necessary (decided 2026-09-29: the fixed tables built into the mod from
+      the apworld's data, the seed's locations from the server, a world-version check on connect).
     - **Tests:** 16. the base in `test/bases.py` and Archipelago's generic tests in CI; 17. test hygiene (no repeated
       default runs, plain `TestCase` where no multiworld is used, options written out, `assertAccessDependency`).
     - **The client:** 18. room messages shown in game: the in-game text client (Next 9), the Launcher's Text

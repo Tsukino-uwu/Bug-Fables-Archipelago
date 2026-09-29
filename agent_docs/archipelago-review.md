@@ -62,10 +62,22 @@ conventions the docs and APQuest show), *main only* (not in 0.6.7 yet).
     `_instantiate` (`:206`); benchmark `CachedRuleBuilderWorld` and record the decision (`:177`; `apquest/rules.py`,
     main only).
 14. **Trackers:** Universal Tracker support (`interpret_slot_data`) and a PopTracker pack (`other_en.md:31-37`).
-15. **slot_data size: a decision for the user.** "It should be limited to data that is absolutely necessary"
-    (`world api.md:880-881`), but seven entity tables, `ability_items` and `item_kinds` are the same in every seed
-    (`slot_data.py:59-65, 78, 80`). They are there because the mod knows nothing the generator didn't send (our own
-    rule); moving them into the mod trades one rule for the other.
+15. **slot_data: only what's necessary.** *Recommended:* "to not waste resources, it should be limited to data that
+    is absolutely necessary"; for locations "it is preferable to use LocationScouts"; "the most common usage of slot
+    data is sending option results" (`world api.md:878-887`). Ours sends seven entity tables, `ability_items` and
+    `item_kinds`, the same in every seed (`slot_data.py:59-65, 78, 80`), and every location's detection data
+    (`:41-57`), all fixed per location id. Measured (2026-09-29, doors shuffled): 65 KB, 56 KB of it the seed's own
+    door shuffle, 3.3 KB the same-in-every-seed tables. **Decided (the user, 2026-09-29): follow it, and fix what
+    it risks properly:**
+    - slot_data keeps the world version, the option results (`options.as_dict`, item 11) and the seed's own rolls
+      (doors, enemies, the start, a random starting member);
+    - the fixed tables (each location's detection, the entity lists, item kinds) are built into the mod from the
+      apworld's own data when the mod is built, with a check that the two never differ; never copied by hand;
+    - the seed's locations come from the server (the library's `Locations.AllLocations`), which also means the mod
+      never scouts an id the server doesn't know;
+    - on connect the mod refuses a seed whose world version isn't the one its tables were built from, with a clear
+      message: what keeps the mod from departing from what the generator knew (`CLAUDE.md`, reworded);
+    - `ability_items` goes: it is always true.
 
 ## Recommended: tests
 
