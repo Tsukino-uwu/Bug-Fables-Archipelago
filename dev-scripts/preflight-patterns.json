@@ -66,5 +66,12 @@
     "11.0.0.0": "a Newtonsoft.Json assembly version",
     "21.12.13.1": "a MonoMod package version"
   },
-  "own_github_owners": ["Tsukino-uwu"]
+  "own_github_owners": ["Tsukino-uwu"],
+  "history_reviewed": {
+    "Personal paths and names": {
+      "435cbb8409934d85508cd3c84fc22b8becc6f767": "an old .githooks/pre-commit: the patterns it refused, spelled out",
+      "5405ac6e16164f787fe41e823e20ce509e282b27": "an old .githooks/pre-commit: the patterns it refused, spelled out",
+      "dd912d950b928667985b4d73a8a3d178d42b4f3d": "the old .githooks/release-path-patterns.txt: the same list"
+    }
+  }
 }

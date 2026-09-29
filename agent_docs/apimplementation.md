@@ -2324,6 +2324,15 @@ A section that finds nothing to check fails rather than passing: "0 files scanne
 pattern list and hook spelling out home paths, and two slips in its own code: a real zero-width character where an
 escape was meant, and a string that read as a URL. All were fixed before the first commit.
 
+**The whole history, checked (2026-09-29):** `preflight.py --history` reads every file version and every commit
+message ever pushed (964 commits, 2843 file versions, in 19 s). It found no credential, no home path, no hidden
+character, no game file, and no binary other than the release DLLs. It first flagged two kinds of harmless thing:
+- **Old data files written on one line.** JSON is only ever parsed as data, so the long-line rule now skips it; the
+  encoded-blob rules still read it.
+- **Three old versions of the path checker.** They spelled out the home-path patterns they refused. These three are
+  exempt by their exact git hash (`history_reviewed` in the patterns file), each with its reason, so a different
+  file can't hide behind the exemption.
+
 **Status:** in progress (2026-09-29). Built: the sections above, in pre-commit and the release guard. Next: the test
 that plants a violation for each section, the code rules (apworld, mod, dev scripts), the DLL checks, pre-push and
 CI.

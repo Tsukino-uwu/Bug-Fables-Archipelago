@@ -350,7 +350,7 @@ def hidden_characters(ctx, out):
         out.fail('characters that hide or disguise what the text says', hits)
     else:
         out.ok(f'{scanned} text file(s): no invisible, bidi or control characters; code non-ASCII only '
-               f'{" ".join(sorted(allowed_code))}')
+               f'{", ".join(show(c) for c in sorted(allowed_code))}')
 
 
 @section('Encoded blobs and long lines', modes=('tree', 'history'))
@@ -363,12 +363,13 @@ def encoded_blobs(ctx, out):
         for n, line in f.lines():
             if base64.search(line) or hexrun.search(line):
                 hits.append(f'{f.path}:{n}: a long encoded run (base64 or hex)')
-            elif code and len(line) > 1000:
+            elif code and len(line) > 1000 and not f.path.endswith('.json'):
                 hits.append(f'{f.path}:{n}: a code line of {len(line)} characters')
     if hits:
         out.fail('text that could carry a hidden payload', hits)
     else:
-        out.ok('no base64 run of 200+ characters, no hex run of 128+, no code line over 1000 characters')
+        out.ok('no base64 run of 200+ characters, no hex run of 128+, no code line over 1000 characters '
+               '(JSON is data, parsed, never run)')
 
 
 @section('Secrets', modes=('tree', 'history', 'text'))
@@ -402,9 +403,10 @@ def machine_names(ctx):
 def personal_paths(ctx, out):
     patterns = [p.lower() for p in ctx.patterns['personal_paths']]
     names = [n.lower() for n in machine_names(ctx)]
+    reviewed = ctx.patterns['history_reviewed'].get('Personal paths and names', {}) if ctx.history else {}
     hits = []
     for f in ctx.files:
-        if f.path == PATTERNS or f.path in ctx.patterns['libraries']:
+        if f.path == PATTERNS or f.path in ctx.patterns['libraries'] or f.sha in reviewed:
             continue
         texts = [f.text] if not f.binary else [f.data.decode('latin-1'), f.data.decode('utf-16-le', 'replace')]
         for t in texts:
@@ -578,7 +580,7 @@ def load_patterns(files):
         raise Unreadable(f'{PATTERNS} is not in the tree')
     patterns = json.loads(f.text)
     expected = {'about', 'kinds', 'binaries', 'libraries', 'code_non_ascii', 'secrets', 'personal_paths', 'game_paths',
-                'decompiler_markers', 'not_addresses', 'own_github_owners'}
+                'decompiler_markers', 'not_addresses', 'own_github_owners', 'history_reviewed'}
     if set(patterns) != expected:
         raise Unreadable(f'{PATTERNS} keys differ from what preflight reads: {sorted(set(patterns) ^ expected)}')
     for rx in list(patterns['secrets'].values()) + patterns['game_paths'] + patterns['decompiler_markers']:
