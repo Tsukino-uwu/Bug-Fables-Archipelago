@@ -1395,3 +1395,39 @@ Newest last. What was tried, what happened, what the user said.
   - **The capabilities rows** describing today's code were written by the agent. **The user should read them**,
     since adding rows is the user's decision.
 
+
+## 2026-09-29 (later): the agent's guard, the cache fix, the TLS probe
+
+- **The user's answers:** GitHub settings, all four (on, read back, f4a43f3). A guard for the coding agent: yes. The
+  cache bug: patch it in the mod for now ("how are things reported upstream? manually by me?"). TLS: measure first.
+- **The agent's guard** (8e88357, narrowed in cc87c00): `.claude/settings.json` runs `.claude/hooks/agent-guard.py`
+  before every shell command and edit. It refuses whatever gets past the hooks, and fails closed (exit 2).
+  - **Proven** by pipe tests of the exact settings command, then in the harness: 37 cases, and two weakened copies
+    (the `--no-verify` check removed; exit 1 instead of 2) each made the harness fail.
+  - **It went live mid-session,** although Claude Code's docs say a settings folder created after the session
+    started isn't watched. A harmless `echo --no-verify-probe` was refused, which showed it.
+  - **Too many prompts:** the user asked "feels like i have to confirm a lot of bash commands now?" and "i don't want
+    to constantly have to confirm things in my workflow". The first version asked before every commit touching any
+    gate file, and before every push. It now asks only for edits to, or commits carrying, what the user decides
+    (capabilities.md, the patterns file, `.claude/`, `.git/`), and for `gh api` writes. The other prompts were
+    Claude Code's auto mode reacting to scratch Python scripts that edited the repo; repo edits now go through the
+    Edit and Write tools.
+- **The cache fix** (5c0ba51, mod guide step 34): the library's cache class is internal, so the patches name it as
+  text. That needed a gate change first (15635fc):
+  - **Reading the target:** the DLL reader took a string type name for the method name.
+  - **A patch ahead of the DLL:** a listed patch the stale committed DLL lacks now warns, and only if today's source
+    makes it.
+  - **Proven:** a Release build of the new source through `--dll` listed 5 patch targets outside the game. With the two
+    new rows removed, it failed naming exactly those two.
+  - **The cleaning function:** tested in a scratch console run on 24 names, hostile and normal. A device name (`CON`)
+    was the one gap found; it now gets a `_` prefix.
+  - **Also found:** two table cells with an unescaped `|`, which split their rows on GitHub (code-map, reviewing); now
+    escaped. And the harness baseline broke on the new warning, which pre-commit doesn't run and pre-push would have
+    caught; fixed before any push.
+- **Upstream:** MultiClient.Net's main branch still has the bug (the file was last changed 2024-05-27). The repo has
+  no private vulnerability reporting and no SECURITY.md. A report is drafted for the user to send.
+- **The TLS probe** (f6f5f02): the dev build's `TlsProbe` is on in the game's config. It logs what this Mono's
+  certificate check decides for each wss:// server, and accepts the certificate as before. Waiting on a connection
+  to archipelago.gg.
+- **Not seen in game yet:** step 33 (names), step 34 (the log line `[cache] data package cache names made safe`),
+  the TLS lines. The running game had not reloaded when the builds were copied in.
