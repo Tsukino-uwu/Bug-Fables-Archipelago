@@ -131,7 +131,8 @@ foreach ($name in @(Get-ChildItem env: | Where-Object { $_.Name -like 'GIT_*' } 
 $tmp = Join-Path ([System.IO.Path]::GetTempPath()) "bugfablesap-build-$([guid]::NewGuid().ToString('N').Substring(0, 8))"
 try {
     # Two clean clones at different paths: the same DLL from both proves no path, time or machine state went in.
-    $builds = foreach ($dir in (Join-Path $tmp 'a'), (Join-Path $tmp 'second\b')) {
+    $builds = [System.Collections.Generic.List[object]]::new()
+    foreach ($dir in (Join-Path $tmp 'a'), (Join-Path $tmp 'second\b')) {
         & git clone --quiet --no-local --no-hardlinks --no-checkout -- $repo $dir
         if ($LASTEXITCODE -ne 0) { throw "git clone into $dir failed" }
         & git -C $dir checkout --quiet --detach $head
@@ -142,12 +143,13 @@ try {
             $sdk = (& dotnet --version).Trim()
             # Restore is locked (the csproj): each package's content hash is checked against packages.lock.json.
             # No debug info: the pdb isn't shipped, and its path would put this machine's folders into the DLL.
-            & dotnet build 'mod/BugFablesAP/BugFablesAP.csproj' -c Release "-p:BugFablesDir=$GameDir" -p:DebugType=none --nologo -v q
+            & dotnet build 'mod/BugFablesAP/BugFablesAP.csproj' -c Release "-p:BugFablesDir=$GameDir" -p:DebugType=none --nologo -v q |
+                Out-Host
             if ($LASTEXITCODE -ne 0) { throw "build in $dir failed ($LASTEXITCODE)" }
         }
         finally { Pop-Location }
         $dll = Join-Path $dir 'mod/BugFablesAP/bin/Release/BugFablesAP.dll'
-        [pscustomobject]@{ Dir = $dir; Sdk = $sdk; Dll = $dll; Hash = Get-Sha256 $dll }
+        $builds.Add([pscustomobject]@{ Dir = $dir; Sdk = $sdk; Dll = $dll; Hash = Get-Sha256 $dll })
     }
     $a, $b = $builds
     if ($a.Hash -ne $b.Hash) { throw "two clean builds of $head differ ($($a.Hash) and $($b.Hash)): the build isn't reproducible" }
