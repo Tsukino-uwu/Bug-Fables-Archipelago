@@ -103,7 +103,7 @@
       "Tutorial"
     ],
     "entrance_rando": ["disconnect_entrance_for_randomization", "randomize_entrances"],
-    "Options": ["Choice", "DefaultOnToggle", "PerGameCommonOptions", "Range", "Toggle"],
+    "Options": ["Choice", "DefaultOnToggle", "PerGameCommonOptions", "PlandoConnections", "Range", "Toggle"],
     "rule_builder.rules": ["Has", "HasAllCounts", "Rule"],
     "test.bases": ["WorldTestBase"],
     "worlds.AutoWorld": ["WebWorld", "World"]

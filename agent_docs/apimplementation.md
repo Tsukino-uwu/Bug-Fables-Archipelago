@@ -43,6 +43,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 29. [Build step 29: the logic in Python, one module per area, the Rule Builder's way](#build-step-29-the-logic-in-python-one-module-per-area-the-rule-builders-way)
 30. [Build step 30: Room Swap (experimental)](#build-step-30-room-swap-experimental)
 31. [Build step 31: Decoupled doors (experimental)](#build-step-31-decoupled-doors-experimental)
+32. [Build step 32: Connection plando](#build-step-32-connection-plando)
 
 **How it works**
 
@@ -2974,6 +2975,40 @@ the mod doing what the logic proved); the way back no longer always leads back; 
 **Status:** built, not yet seen in game (2026-09-30); experimental like build step 12.
 
 *Code: `entrances.py` (`shuffle`, `write_spoiler`), `options.py`; tests `test_doors.py`.*
+
+## Build step 32: Connection plando
+
+A player's yaml can pin doors: "this door leads there". Archipelago's own plando option for it, `plando_connections`
+(`Options.PlandoConnections`, the plando guide's "Connection Plando"). Optional in the guide ("Support for connection
+plando may vary"), built anyway (2026-09-30, the user: "we should try to support all available things archipelago
+has/does, that includes plando"; How it works §8).
+
+**How it was built (2026-09-30):**
+
+1. **The option is Archipelago's class** with our names: `DoorPlando(PlandoConnections)`, whose `entrances` and
+   `exits` are every shuffled door's entrance name, `"<map>: <door>"`, as the spoiler lists them (`DOOR_NAMES` in
+   `data_tables.py`). Archipelago checks the names (any case), refuses a door used twice, and drops the whole option
+   when the host hasn't turned plando's "connections" on.
+2. **Placed first, the rest by the randomizer:** after the doors are split, each plando connection is joined by hand
+   (The Messenger's pattern), then `randomize_entrances` places what's left. entrance: the entrance door leads next to
+   the exit door; exit: the exit door leads back to the entrance door; both: both. Coupled always joins both ways (as
+   The Messenger does), Decoupled only the ways asked for. A door used by two connections is refused with the player's
+   name.
+3. **Only with Coupled or Decoupled:** with the doors off, or on Room Swap (whose rooms move whole), the connections
+   are ignored with a warning in the generation log.
+4. **Planned doors are pairings like any other,** so `door_targets` and the spoiler carry them: the mod needed no
+   change.
+5. **The preflight's import list** gained `PlandoConnections` from `Options`, in a commit of its own.
+
+**Checked:** seeds generated through Archipelago's own Generate with a plando connection, alone and with APQuest, under
+Coupled, Decoupled and Room Swap: the planned door leads where the yaml says (`<=>` coupled, `=>` decoupled in the
+spoiler), and Room Swap ignores it. Tests (`test_doors.py`): Coupled joins each planned door both ways, Decoupled
+only the way asked for, names match in any case, an unknown door is refused, Room Swap ignores plando, and every
+shuffle test holds with plando on.
+
+**Status:** built, not yet seen in game (2026-09-30).
+
+*Code: `options.py` (`DoorPlando`), `entrances.py` (`_plando`), `data_tables.py` (`DOOR_NAMES`); tests `test_doors.py`.*
 
 # How it works
 
