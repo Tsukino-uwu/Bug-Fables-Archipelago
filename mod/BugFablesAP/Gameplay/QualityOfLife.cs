@@ -16,10 +16,7 @@ namespace BugFablesAP
         internal static ConfigEntry<bool> FastText;
         internal static readonly string[] TravelValues = { "Off", "Warp", "Map", "Both" };
         internal static ConfigEntry<string> Travel;
-        // The Warp is always there with a random start (the logic counts on it to re-enter the start), with the
-        // entrance randomizer (the escape from a dead end), with Shuffle Jump (a spot left without a jump) and with the
-        // abilities as items (a spot such as the hideout's cell, left by an ability not yet received), whatever Travel
-        // says.
+        // Always on with a random start, door shuffle, Shuffle Jump or ability items: a way out the logic never counts.
         internal static bool WarpOn => (Travel != null && (Travel.Value == "Warp" || Travel.Value == "Both"))
             || (SeedStart?.Invoke()).HasValue || (EntrancesShuffled?.Invoke() ?? false) || FieldMoves.JumpShuffled
             || Abilities.AbilityItems;

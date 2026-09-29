@@ -1490,3 +1490,43 @@ Newest last. What was tried, what happened, what the user said.
   exceptions, which are what let a rule be applied right in a case no one foresaw.
 - **Next session:** read `gh run list` first; the push at the end of this session is the new `fuzz` and `build`
   jobs' first run (`pwsh` on Linux untried). Then the game in a Logic Test room (Next 42).
+
+## 2026-09-29 (evening): Archipelago's way, the logic in Python, the rules for writing it
+
+- **Asked:** the user's general rules for writing logic, for `apimplementation.md` ("An item/ability should NEVER say
+  what it can reach"; "A location should ALWAYS say what is required to reach it"; a need is "similar to the
+  expected/minimum requirement of the vanilla game"; "Boolean logic (and/or/not...)"). And: how are regions managed,
+  a folder with one `.cs` per room or Python? How big are the files? What is a region, simply and in depth, when and
+  why? "They basically work like a collection of rules?"
+- **Found, by two readers and the code:** all logic in the apworld, none in the mod; 10 regions and 9 exits in one
+  155-line `locations.json`, every rule "all of these" (`HasAllCounts`), no "or" anywhere; no item knew what it opens
+  (the user's rule already held). Three passages disagreed on the Warp (build step 15 and step 12: "counts in the
+  logic"; step 24: never) and three on region size (per chapter, per map, areas within a room).
+- **The Warp, the user's words:** "Warp always take you back to your seeds spawn location. we never base/make logic
+  around warp/map. but warp is always forced on for rando spawn, entrance rando & jump shuffle (just in case...)";
+  "it should never be expected of the player to have to go past a point of no return". Became build step 24's rules 4
+  (a one-way counts only with its way back) and 9; step 15's rule revised; the mod's comment corrected.
+- **Split per area, not per room:** asked "per area like all of the snakemouth den, or per room like each individual
+  room?"; answered per game area (the Outskirts' corridors go with the Outskirts, as the location names say).
+- **The entrance randomizer:** "shouldn't we use officially made things?" Yes: `doors.py` exists only because no door
+  was an `Entrance` when it was built; Archipelago's `randomize_entrances` replaces it with the room mapping.
+- **A new rule in `CLAUDE.md`** (the user: "we should ALWAYS use whatever archipelago does, we should never make up
+  some custom way"; "our whole bugfable ap project should follow archipelago's official standards for everything &
+  anything"; the docs at github.com/ArchipelagoMW/Archipelago/tree/main/docs as the reference). Reasoning in How it
+  works §8. 144 to 148 lines.
+- **What it changed at once:** I had planned an `any_of` JSON field for "or": a format of our own. Archipelago's Rule
+  Builder doc says rules are "intended to be written first in Python", APQuest keeps its regions and rules in Python,
+  and core worlds (Pokémon Emerald, KDL3) keep only generated tables in JSON. Asked the user: Python ("the more
+  intended way"). Built as build step 29: `logic/` with one module per area, `Has`/`&`/`|`, three registered rules
+  (`CanUse`, `Member`, `MoveItem`) in place of `rules.requires`. The preflight gained `Rule` (its own commit).
+- **Proven identical before committing:** a scratch recorder took every spot's rule, every spot's reachability and
+  every exit's rule on 300 random item sets under 7 option sets, before and after: 1306 of 1306 rows the same. New
+  tests `test_areas.py`, `test_rules.py`; `TestClassifications` now reads Archipelago's `item_dependencies()`.
+  `CanUse` broken on purpose made 7 tests fail. 445 tests, Logic Test 90 of 90, fuzzer 0 of 10000 with APQuest.
+- **The audit** (a reader over both codebases, MultiClient.Net's IL included): ten places we rebuilt what Archipelago
+  or the library provides, now Next 43 in order, each its own step; the ones kept and why. It found **two bugs** in
+  Shop Contents' fallback (drops Archipelago's item rules on shops; undoes a player's shop exclusions), confirmed by
+  reading `Main.py`'s order (Known issues; not seen in a seed).
+- **Docs:** build step 24's rules 1-4 and 9; How it works §11, regions and rules in short and in depth, when to make a
+  region; the region-size and Warp passages made to agree; room-logic.md's model.
+- **Next session:** `gh run list` first; then Next 43.1 (the shop fallback's bugs), one step at a time.

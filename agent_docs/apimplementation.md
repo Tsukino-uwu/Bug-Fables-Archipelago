@@ -54,6 +54,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 8. [Use what Archipelago provides](#8-use-what-archipelago-provides)
 9. [How this mod does it](#9-how-this-mod-does-it)
 10. [Things that go wrong quietly](#10-things-that-go-wrong-quietly)
+11. [The logic: regions, exits and rules](#11-the-logic-regions-exits-and-rules)
 
 ## Where it stands
 
@@ -62,13 +63,14 @@ be wrong.
 
 **Next** (decided from 2026-09-24 on; each item dated):
 
-1. **Every key item and medal in the pool,** on logic that follows the vanilla story order: one region
-   per chapter, entered once the chapter before is finished and the story's own keys and abilities are
-   in hand. Medal gifts and medal shops each get a yaml on/off toggle.
+1. **Every key item and medal in the pool,** on logic that follows the vanilla story order: each chapter
+   entered once the chapter before is finished and the story's own keys and abilities are in hand, its rooms
+   split into regions as build step 24 describes. Medal gifts and medal shops each get a yaml on/off toggle.
    Shops (medal shops, item shops, the caravan): see build step 11. Other kinds of location (boss prize medals,
    placeholders, journal entries, enemy drops): see build step 10.
 2. **Entrance randomizer (experimental):** every door, coupled, built; next, sorting the transfers that aren't doors
-   into chosen and forced, then the room-by-room logic that removes the label. See build step 12.
+   into chosen and forced, then the room-by-room logic that removes the label, on Archipelago's own entrance
+   randomizer in place of `doors.py` (2026-09-29). See build step 12.
    **How each room gets mapped** (2026-09-27): the checklist in `room-logic.md`; the tester says what needs
    what, the agent turns it into areas and rules.
 3. **Field abilities shuffled as items** (every learned ability built, build step 23) (by the game's names: Beemerang Halt, Bee Fly, Dash, Horn Dash, Beetle Dig, Icicle, Shield; `MEASURED.md`, every field ability).
@@ -365,8 +367,36 @@ be wrong.
    without the game, every sphere's items arriving (`development.md`, "Play-testing the logic"). Next: the game
    connects to such a room (its data package is 2.18 MB), then a seed played through. It matters most for the
    experimental options (build steps 12 and 15).
+43. **Archipelago's way, everywhere: the audit** (2026-09-29, after the rule in How it works §8). Each place we built
+   something Archipelago or MultiClient.Net already provides, read in both codebases; each becomes a step of its own,
+   in this order (the logic's own rules were the first, build step 29):
+   1. **The shop fallback's two bugs** (Known issues): add its rule with Archipelago's `add_item_rule`, and set back to
+      normal only the shops the option itself excluded.
+   2. **Tests the way `tests.md` says:** the test base in `test/bases.py` (in `test/__init__.py` it is deprecated), and
+      Archipelago's own generic tests (ids, item counts, slot_data, the manifest) run on this world in CI.
+   3. **`World.world_version`** instead of reading `archipelago.json` ourselves (`data_tables.py`).
+   4. **`Region.add_locations`** instead of our loop in `locations.py`.
+   5. **In the mod:** the library's `SetGoalAchieved` instead of a goal packet built by hand (`ApConnection.SendGoal`),
+      its `Locations.AllLocations` instead of `SeedData.ScoutedLocations`, its `GetRaceModeAsync` for the keepalive read.
+   6. **The library's `ColorUtils` palettes** for the item colours: one mapping instead of three copies.
+   7. **The server's own `/send_location`** instead of `dev-scripts/send-as-player.py`.
+   8. **Location and item groups:** a "Shops" location group for `exclude_locations`, and groups for players' hints.
+   9. **slot_data's option values** through `options.as_dict` (the mod's names for them change with it).
+   10. **The entrance randomizer:** Archipelago's `randomize_entrances` in place of `doors.py`, with the room mapping
+      (build step 12).
+
+   **Kept, because Archipelago has nothing for them:** closing a dead socket (the library's `Disconnect` closes only a
+   live one), the offline record of checks sent, reconnecting and its backoff, the compression switch (the net40
+   library never turns it on), the received count in the save, the enemy shuffle, the pool's make-room step, the
+   DeathLink panel row (a switch mid-seed, the user's choice), and our slot_data reader (it tolerates missing keys).
 
 **Known issues:**
+
+- **Shop Contents' fallback has two bugs** (found by the audit, 2026-09-29; read in the code, not yet seen in a
+  seed): `rules.fall_back_from_filler_only` runs in `pre_fill`, after Archipelago has applied a player's
+  `exclude_locations` and the local and non-local item rules (`Main.py`, 121 and 137-140). It assigns `item_rule`
+  outright, which drops those item rules on the shops, and it sets every shop back to normal, which undoes a player's
+  own exclusion of a shop. Only when Filler Only falls back (too few filler items in the room). Next 43.1.
 
 - **Found by the review for build step 28 (2026-09-29), each confirmed in the code; `docs/reviewing.md` lists them for
   reviewers:**
@@ -969,8 +999,9 @@ locations (bosses beaten, characters gone, quests closed, cutscene gifts skipped
 door, a guard, a story flag) is opened by the seed on its own, tested on screen, and known to the logic; key
 items and abilities become the real gates (the Peculiar Gem for Upper Snakemouth); story events and bosses stay
 as locations. The goal stays "collect N artifacts". The ending's gate is researched without spoiling it for the
-tester, who hasn't finished the game. Regions stay whole areas for now; one region per map (doors from the dump,
-`dev-scripts/door-graph.py`) comes as the gates open (2026-09-24).
+tester, who hasn't finished the game. Regions stay whole areas for now; each room's areas as regions (doors from the
+dump, `dev-scripts/door-graph.py`; build step 24) come as the gates open (2026-09-24; areas within a room since
+2026-09-27).
 **Areas and doors that close later are kept open** (2026-09-24), as Pokémon Emerald keeps Mirage
 Island visible: the mod makes the game's `CheckIfCanExist` answer "exists" for a list of doors and blockers
 sent in `slot_data`, decided at generation, with no save writes. Each is checked in game first; where forcing
@@ -1447,9 +1478,17 @@ at runtime. No room is done until its flags are listed.
 seeds/softlocks, even if we will check/make logic for things"). Coupled doors can always be retraced, but a one-way
 transfer (a drop, a fall, a scripted move) could land the player in a pocket whose way out needs an item not yet found:
 the seed stays possible, the player is stuck. The Warp to Start is that escape, shown whatever the Travel setting, as
-with a random start (build step 15), where it also counts in the logic.
+with a random start (build step 15). The logic never counts it (build step 24, rule 9).
 
-**Status:** in progress (experimental): every door, coupled, built, and a generated pair seen both ways, offline too (2026-09-25); next, sorting the transfers that aren't doors, then the room-by-room logic; decoupled later.
+**Archipelago's own entrance randomizer, with the room-by-room logic** (2026-09-29, the user: "shouldn't we use
+officially made things?"): `doors.py` shuffles the door table on its own because, when it was built, no door was an
+entrance in the logic (it had ten large regions), so Archipelago's generic entrance randomizer (`entrance_rando.py`,
+`randomize_entrances`) had nothing to shuffle. Once the rooms are regions (build step 24), every door is an `Entrance`
+of its room's region, and `randomize_entrances` replaces `doors.py`: coupled mode, one-ways paired only with one-ways,
+placed with the logic so the logic follows the doors, its `pairings` turned into the same `door_targets` the mod
+already reads (How it works §8; Archipelago's `entrance randomization.md`).
+
+**Status:** in progress (experimental): every door, coupled, built, and a generated pair seen both ways, offline too (2026-09-25); next, sorting the transfers that aren't doors, then the room-by-room logic, with Archipelago's entrance randomizer in place of `doors.py`; decoupled later.
 
 ---
 
@@ -1705,13 +1744,14 @@ island's checks before the ticket, and the ticket can't be placed behind its own
 early look. **The rule for any start:** it's safe while every way out of it is free and every way back in is something
 the logic already gates; only a start that could be left behind for good would need its checks to be filler.
 
-**The rule that keeps every random start valid (2026-09-26: "really important for the logic"):** with a
-random start, **Warp to Start is always available and counts in the logic**, whatever the Travel setting. The case it
-closes: once the logic starts in the start room (the room-by-room logic), a way back into the start may need an item
-lying in the start itself (the Boat Ticket on Metal Island); leaving without it would strand the seed, and Archipelago's
-logic can't model giving access up. With the Warp guaranteed, the start can always be re-entered from anywhere, for
-every start at once. The mod shows the Warp with a seed start even when Travel is Off or Map; the logic's side (the start
-region reachable from every region) comes with the room-by-room logic.
+**The rule that keeps every random start valid (2026-09-26: "really important for the logic"; revised 2026-09-29):**
+with a random start, **Warp to Start is always available**, whatever the Travel setting, and **the logic never counts
+it** (build step 24, rules 4 and 9). The case: once the logic starts in the start room (the room-by-room logic), a way
+back into the start may need an item lying in the start itself (the Boat Ticket on Metal Island); leaving without it
+would strand the player, and Archipelago's logic can't model giving access up. Until 2026-09-29 the Warp closed that
+case by counting in the logic. Now rule 4 does: leaving a start counts in the logic only together with what it takes
+to get back in, so the logic never expects the player to leave Metal Island without the ticket, and a player who does
+anyway has the Warp. The mod shows the Warp with a seed start even when Travel is Off or Map.
 
 **No music between the menu and the start (2026-09-26: "as if I'm going from the start menu directly to a
 random spawn"):** the game starts the opening map's music as a new file loads. With a seed start, the mod turns any new
@@ -2152,18 +2192,36 @@ The logic is what Archipelago uses to prove a seed can be finished, and some opt
 member, a random start in any room, a decoupled entrance randomizer, shuffled attacks, no Jump. So before the rooms of
 chapters 1-7 are mapped, this is how every part of it gets done (2026-09-27: "the logic has to be precise").
 
-**The rules**
+**The rules** (1 to 4 the user's, 2026-09-29, "to simplify things"; How it works §11 explains regions and rules)
 
-1. **The logic may demand more than the game does, never less.** A rule that asks for too much only makes a seed a
+1. **A location says what it needs; an item never says what it opens.** Every need is written on what it guards: the
+   location, the exit into a region, the story event. No item, ability or member lists what it unlocks. Which items
+   matter is read back from the rules (Archipelago's `item_dependencies`, in `TestClassifications`), so writing the
+   rule is the only step.
+2. **A need is what the vanilla game expects:** what the game asks of a player going the intended way, with no tricks,
+   skips or clever routes. The rules stay simple, players stay free to go out of logic, and every seed stays
+   completable (rule 5).
+3. **And, or, never not.** Everything one way needs is an *and* (`&`). When there are several ways, each is written
+   and any one will do (*or*, `|`): a second way into an area is a second exit into its region (the region graph does
+   the *or*); two ways to one spot inside an area are an `|` in the spot's own rule. Never a *not* on an item or a story
+   event: in Archipelago, receiving something may never make anything harder to reach (the same reason the tiered shop
+   rule was wrong, build step 11). An option may decide a rule, since it's fixed when the seed is made.
+4. **No point of no return in the logic** (the user: never expected "to go past a point of no return, where they can't
+   logically go back"). A one-way (a ledge dropped without Jump, a door with no way back, a transfer that leaves you
+   somewhere) counts in the logic only together with what it takes to get back. So the player can always retrace their
+   steps to the start, which is what Archipelago assumes of its origin region (§11). The Warp is never that way back.
+5. **The logic may demand more than the game does, never less.** A rule that asks for too much only makes a seed a
    little stricter; a rule that asks for too little can place an item somewhere the player can't reach, and the seed
    is impossible. Anything not yet measured is written the cautious way.
-2. **Nothing counts as known until the tester has seen it on screen.** Each need goes into `MEASURED.md` with its date.
-3. **The mod never departs from what the generator knew.** Anything it changes comes from `slot_data`, decided at
+6. **Nothing counts as known until the tester has seen it on screen.** Each need goes into `MEASURED.md` with its date.
+7. **The mod never departs from what the generator knew.** Anything it changes comes from `slot_data`, decided at
    generation, never at runtime.
-4. **Combat stays basic:** only each member's plain attack, never a battle skill or a medal. It keeps fights simple
+8. **Combat stays basic:** only each member's plain attack, never a battle skill or a medal. It keeps fights simple
    and leaves room to play out of logic for fun.
-5. **The Warp is a way out, never a way in.** It's on in every randomized mode so no dead end strands the player, but
-   the logic never counts it to reach anything.
+9. **The Warp is a safety net, never logic** (the user, 2026-09-29). It always takes you back to the seed's spawn, and
+   it's forced on with a random start, the entrance randomizer, Shuffle Jump and the abilities as items, so a player
+   who leaves the logic is never stuck. The logic never counts it, nor the map's fast travel, to reach anything, the
+   start included. (Until 2026-09-29 build step 15 counted it to re-enter a random start; rule 4 does that job now.)
 
 **The method: `room-logic.md`**, one checklist for every room:
 
@@ -2174,8 +2232,8 @@ chapters 1-7 are mapped, this is how every part of it gets done (2026-09-27: "th
    (a switch, a broken rock); what each location needs, and whether you can get back; story state (what changes with
    the chapter); spawning in each part of the room; what each member manages alone.
 3. **Checked on screen by the tester**, one part of the room at a time: the tester says what needs what.
-4. **Written into the data by the agent:** each room split into the parts you can walk around freely, each way
-   between them one-directional with its own needs, each location in its part.
+4. **Written into the area's module by the agent** (`logic/<area>.py`, build step 29): each room split into the parts
+   you can walk around freely, each way between them one-directional with its own rule, each location in its part.
 5. **Tested:** each measured need gets a test that fails without it; every part reachable from every arrival once
    everything is collected; no arrival strands the player.
 
@@ -2183,8 +2241,13 @@ chapters 1-7 are mapped, this is how every part of it gets done (2026-09-27: "th
 `TestClassifications` makes an item progression the moment a rule uses it; one location per ability; the entrance
 randomizer and a random start stay labelled experimental until their room-level logic is done and tested.
 
-**Status:** planned (2026-09-27): the method and the checklist written (`room-logic.md`), no room mapped with it yet.
-Today's logic is by large areas (the Outskirts, Snakemouth Den, Bugaria City, Later Chapters).
+**When the first area is mapped room by room** (2026-09-29): a test for rule 4 comes with it (every one-way's rule
+holds what its way back needs), and the doors become the regions' own entrances, shuffled by Archipelago's entrance
+randomizer instead of `doors.py` (build step 12).
+
+**Status:** planned (2026-09-27): the method and the checklist written (`room-logic.md`), no room mapped with it yet;
+the rules for writing it (1 to 4, and 9) and the region explainer (§11) written 2026-09-29, the logic in Python since
+build step 29. Today's logic is by large areas (the Outskirts, Snakemouth Den, Bugaria City, Later Chapters).
 
 ## Build step 25: DeathLink, a panel row
 
@@ -2876,3 +2939,107 @@ matter first:
   on in websocket-sharp without accepting `server_max_window_bits` breaks every connection (build step 5).
 - A lost connection that is only "disconnected" politely can keep a reading loop spinning in the background.
   The game just gets slower and uses more memory, with no error. Close the socket itself (build step 4).
+
+## 11. The logic: regions, exits and rules
+
+### In short
+
+The logic is how the generator knows where it may put an item. It is made of three things:
+
+- A **region** is a place: a part of the game you can walk around freely once you're in it.
+- An **exit** is a one-way path from one region into another, with a **rule**: what you need to go through.
+- A **location** (a check) sits in one region, and may have a rule of its own: what that one spot needs once you're
+  there.
+
+The generator starts in one region, the **origin** ("Menu"), and walks: through every exit whose rule the items it has
+so far meet, into every region that opens. Every location it reaches whose own rule is met is somewhere it may place
+the next item. That walk, repeated as items are placed, is how Archipelago proves a seed can be finished.
+
+```
+ Menu ──> Bugaria Outskirts ──[Explorer Permit, the party, its attacks]──> Past the Outskirts Gate
+                                                                                    │ [Horn Slash]
+                                                                                    ▼
+                                                                             Snakemouth Den
+                                                                                    │ [Freeze]
+                                                                                    ▼
+                                                                       Snakemouth Den Underground
+                                                                         • Mushroom Pit, Droplets [Freeze]
+```
+
+**Is a region a collection of rules?** Not quite. A region is a place; the rules sit on its ways in (the exits) and on
+its spots (the locations). What a region does is *share*: every location inside gets "you got here" for free, and any
+one of its ways in will do.
+
+### In depth
+
+- **Reaching a region:** some chain of exits leads to it from the origin, and every rule on that chain is met. Along
+  one chain the rules add up (an *and*); between chains, any one will do (an *or*). So two exits into one region are
+  an "or" nobody has to write.
+- **Reaching a location** takes its region plus its own rule. Archipelago checks the region by itself (`world api.md`:
+  entrances and locations "implicitly check for the accessibility of their parent region").
+- **The origin:** Archipelago assumes the player can always get back to the region the logic starts from. The logic
+  here leans on nothing outside the graph for that (the Warp never counts, build step 24, rule 9), so the graph itself
+  makes it true: a one-way counts only together with what it takes to get back (rule 4).
+- **Why a rule may only get easier:** the generator places items one at a time, each where the items placed so far can
+  reach. That works only if having more items never shuts anything, so a rule can say "has" but never "hasn't"
+  (rule 3).
+- **Events:** some needs aren't items: a story step, a boss beaten. Each is an event, a location with no id holding a
+  logic-only item (*First Boss Beaten* holds "Snakemouth Den Cleared"). It's reached like any location, and from then
+  on its item counts for every rule, so a rule names a story step with `Has`, as it would an item. The goal is one
+  too: "has enough Artifacts".
+- **The rules are Archipelago's Rule Builder** (build step 29): `Has("Boat Ticket")`, `a & b` for "and", `a | b` for
+  "or". Needs that depend on the seed's options are Bug Fables' own registered rules: `CanUse("Horn Slash")` (the
+  ability's item when it's an item, its member when members are), `Member("Vi")` and `MoveItem("Freeze")`. When a seed
+  is made, each becomes Archipelago's plain item checks, so an option that makes something free drops it from the rule.
+
+### When to make a region, and why
+
+Make a new region for:
+
+- a part of a room you can't walk to freely from the rest (an obstacle, a ledge, water, a one-way drop);
+- where a door or a transfer puts you (each arrival is a place of its own);
+- where a scene moves the party;
+- a place several spots share a need in, or a place with more than one way in.
+
+Don't make one for a single spot that needs something extra where you can otherwise walk around: that's the spot's own
+rule. A spot's own rule is written even when its region already implies it, so a different way into the region (the
+entrance randomizer, a random start) can't lose it (build step 8, `TestInRoomRules`).
+
+Why regions at all, instead of a full rule on every spot:
+
+- **Written once:** what a place needs sits on its ways in, not copied onto every spot inside.
+- **The "or" for free:** two ways in are two exits.
+- **Doors can move:** the entrance randomizer rewires exits, and each rule moves with its exit.
+- **The start can move:** a random start only changes where the walk begins.
+
+### How this world does it
+
+- **All of the logic is in the apworld; none is in the mod.** The mod only does what the generator decided
+  (`slot_data`; build step 24, rule 7), so the game's side has no logic and no file per room.
+- **One Python module per game area** (`logic/`, build step 29): `outskirts.py`, `snakemouth_den.py`,
+  `bugaria_city.py`, `metal_island.py`, `later_chapters.py`. Each lists its regions with their exits, and its locations
+  and story events, each with its rule. Per area, not per room: a room's logic often reaches into its neighbours, and
+  an area is tested in one sitting. Menu is made in `regions.py`.
+- **Today** (2026-09-29): 10 regions (Menu included), 9 exits, 74 locations, 4 story events and 1 artifact event, by
+  large areas until the rooms are mapped (build step 24). Adding a room is adding lines to its area's module, not code.
+- **What a module looks like** (shortened):
+
+  ```python
+  REGIONS = (
+      Region("Snakemouth Den", exits=(
+          # Water droplets: Leif freezes them.
+          Exit("Snakemouth Den Underground", CanUse("Freeze")),
+      )),
+      Region("Snakemouth Den Underground"),
+  )
+  LOCATIONS = (
+      Location("Snakemouth Den: Lake, Ladybug Kid's Reward", 10, "Snakemouth Den",
+               Source(event=31, flag=55, give=Give(map="SnakemouthLake", type=1, item=52)),
+               rule=Has("Leif") & Has("Snakemouth Den Cleared"), category="quest"),
+  )
+  ```
+
+  A spot with two ways to it inside its area writes both: `rule=Has("Key A") | Has("Key B")`.
+- **Checking it:** a test for each measured need, which fails without the rule; `test_areas.py` for how the modules
+  fit together; the Logic Test apworld, to play a seed's logic without the game (Next 42); and Archipelago's
+  `Utils.visualize_regions`, which draws the whole region graph as a PlantUML diagram.

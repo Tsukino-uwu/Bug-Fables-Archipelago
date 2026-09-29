@@ -12,9 +12,14 @@ are in `CLAUDE.md`: the logic may be more cautious than the game, never less, an
 - **A room is not one region.** Split it into *areas*: the parts you can walk between freely with nothing. Every
   door, transfer, save point and location sits in one area.
 - **Each edge between areas is one-directional**, with its own requirement. A two-way path is two edges. A path with
-  no edge back is a one-way.
-- **Requirements name abilities** (the game's names, `abilities.py`), never items or members; the ability names its
-  member. Add a story condition when one applies: "needs X", "only before flag Y", "only after event Z".
+  no edge back is a one-way, and it counts in the logic only together with what it takes to get back: no point of no
+  return (`apimplementation.md`, build step 24, rule 4).
+- **Requirements name abilities** (the game's names, `abilities.py`, written `CanUse(...)`), never items or members;
+  the ability names its member. Add a story condition when one applies: "needs X", "only after event Z" (a story
+  event, `Has(...)`). "Only before flag Y" is a *not*, which a rule can never say: build step 12's flag survey keeps
+  it from happening in a seed, or the logic never counts on that way.
+- **Several ways, each written:** two ways into an area are two edges into it; two ways to one spot inside an area are
+  an `|` in the spot's rule (build step 24, rule 3).
 - **Every door and transfer has an arrival area**: where you stand when you come in through it. A random start and
   the entrance randomizer both start from arrivals.
 
