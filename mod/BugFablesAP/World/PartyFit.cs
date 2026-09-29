@@ -24,16 +24,18 @@ namespace BugFablesAP
             {
                 return;
             }
-            bool entity = Hooks.Install(typeof(Entities), "party", "a missing companion will still crash lines and scenes");
+            bool entity = Hooks.Install(typeof(Entities), "party",
+                "a missing companion will still crash lines and scenes");
             bool lists = Hooks.Install(typeof(PartyLists), "party", "scenes written for three still crash with two");
             // Hidden as late as possible: after the scene's step and the entity's own updates, just before drawing.
             Hooks.Install(typeof(Hiding), "party", "stand-ins may flash into view");
             // Every MoveTowards overload ends in this one.
-            bool walking = Hooks.Install(typeof(Walking), "party", "a scene waiting for a stand-in to walk somewhere waits for good");
+            bool walking = Hooks.Install(typeof(Walking), "party",
+                "a scene waiting for a stand-in to walk somewhere waits for good");
             // The trapdoor scene then places each member from its own two-long list: that read is swapped for PlaceAt.
             Hooks.Install(typeof(Trapdoor), "party", "the trapdoor scene still breaks with three members");
-            log.LogInfo("[party] installed on MainManager.SetPlayers" + (entity ? ", GetEntity" : "") + (lists ? ", GetPartyEntities" : "")
-                + (walking ? " and MoveTowards" : ""));
+            log.LogInfo("[party] installed on MainManager.SetPlayers" + (entity ? ", GetEntity" : "")
+                + (lists ? ", GetPartyEntities" : "") + (walking ? " and MoveTowards" : ""));
         }
 
         private static class Trapdoor
@@ -45,9 +47,11 @@ namespace BugFablesAP
 
             private static IEnumerable<CodeInstruction> EditEvent5(List<CodeInstruction> code)
             {
-                MethodInfo setPlayers = AccessTools.Method(typeof(MainManager), nameof(MainManager.SetPlayers), new[] { typeof(Vector3[]) });
+                MethodInfo setPlayers = AccessTools.Method(typeof(MainManager), nameof(MainManager.SetPlayers),
+                    new[] { typeof(Vector3[]) });
                 int call = code.FindIndex(i => i.Calls(setPlayers));
-                int read = call < 0 ? -1 : code.FindIndex(call, i => i.opcode == OpCodes.Ldelem && Equals(i.operand, typeof(Vector3)));
+                int read = call < 0 ? -1
+                    : code.FindIndex(call, i => i.opcode == OpCodes.Ldelem && Equals(i.operand, typeof(Vector3)));
                 if (read < 0)
                 {
                     log.LogWarning("[party] Event5's placing loop not found (no Vector3 read after SetPlayers); the trapdoor scene is unchanged.");
@@ -82,10 +86,12 @@ namespace BugFablesAP
         // Scenes use fixed slots p[0] to p[2]: while one runs, the party list is padded with an invisible stand-in per
         // missing member (id order keeps its own slot). Outside scenes nothing changes.
         private static readonly EntityControl[] standIns = new EntityControl[3];
-        private static readonly System.Collections.Generic.HashSet<string> standInReported = new System.Collections.Generic.HashSet<string>();
+        private static readonly System.Collections.Generic.HashSet<string> standInReported =
+            new System.Collections.Generic.HashSet<string>();
 
         // A conversation counts too: an NPC's line can hand the talk to a member by name.
-        private static bool Talking => MainManager.instance != null && (MainManager.instance.inevent || MainManager.instance.message);
+        private static bool Talking =>
+            MainManager.instance != null && (MainManager.instance.inevent || MainManager.instance.message);
 
         private static bool InScene() =>
             randomizerOn != null && randomizerOn() && Talking && MainManager.player != null;
@@ -97,7 +103,8 @@ namespace BugFablesAP
         // Members in the party the story doesn't have yet act a missing member's part too (role -> character).
         // Kept by member, not character: a scene that remakes the party (ChangeParty with destroyoldentity) makes new
         // ones.
-        private static readonly System.Collections.Generic.Dictionary<int, int> spares = new System.Collections.Generic.Dictionary<int, int>();
+        private static readonly System.Collections.Generic.Dictionary<int, int> spares =
+            new System.Collections.Generic.Dictionary<int, int>();
         private static int actorMember = -1;
 
         private static EntityControl CharacterOf(int member)
@@ -111,14 +118,16 @@ namespace BugFablesAP
         internal static bool InStoryParty(int member)
         {
             bool[] flags = MainManager.instance.flags;
-            return member == 1 || (member == 0 && flags[GameFlags.PermitEvent]) || (member == 2 && flags[GameFlags.LeifJoined]);
+            return member == 1 || (member == 0 && flags[GameFlags.PermitEvent])
+                || (member == 2 && flags[GameFlags.LeifJoined]);
         }
 
         private static void ChooseActor()
         {
             MainManager mm = MainManager.instance;
             // A scene that reloads the map remakes the party characters: the new leader takes the part on.
-            if (actorRole >= 0 && actor == null && mm.playerdata != null && mm.playerdata.Length > 0 && mm.playerdata[0].entity != null)
+            if (actorRole >= 0 && actor == null && mm.playerdata != null && mm.playerdata.Length > 0
+                && mm.playerdata[0].entity != null)
             {
                 // The same member if still in the party (a remade Leif stays Kabbu's actor), else the new leader.
                 actor = CharacterOf(actorMember) ?? mm.playerdata[0].entity;
@@ -139,7 +148,8 @@ namespace BugFablesAP
             // Unknown after a reload: the first missing member by id.
             if (lead < 0 && mm.playerdata != null)
             {
-                lead = Enumerable.Range(0, 3).Where(m => !mm.playerdata.Any(p => p.trueid == m)).DefaultIfEmpty(-1).First();
+                lead = Enumerable.Range(0, 3).Where(m => !mm.playerdata.Any(p => p.trueid == m))
+                    .DefaultIfEmpty(-1).First();
             }
             EntityControl leader = mm.playerdata != null && mm.playerdata.Length > 0 ? mm.playerdata[0].entity : null;
             if (lead >= 0 && lead <= 2 && leader != null && !mm.playerdata.Any(p => p.trueid == lead))
@@ -164,7 +174,8 @@ namespace BugFablesAP
             {
                 return;
             }
-            var missing = Enumerable.Range(0, 3).Where(m => InStoryParty(m) && m != actorRole && !mm.playerdata.Any(p => p.trueid == m)).ToList();
+            var missing = Enumerable.Range(0, 3)
+                .Where(m => InStoryParty(m) && m != actorRole && !mm.playerdata.Any(p => p.trueid == m)).ToList();
             foreach (MainManager.BattleData p in mm.playerdata)
             {
                 if (missing.Count == 0)
@@ -202,7 +213,8 @@ namespace BugFablesAP
             }
             if (standIns[member] == null)
             {
-                standIns[member] = EntityControl.CreateNewEntity("apstandin" + member, member, MainManager.player.transform.position);
+                standIns[member] = EntityControl.CreateNewEntity("apstandin" + member, member,
+                    MainManager.player.transform.position);
                 // A new character gets its body only in Start, a frame later; a scene using it at once crashed. Start
                 // keeps this one.
                 EntityControl made = standIns[member];
@@ -213,7 +225,8 @@ namespace BugFablesAP
                     made.rigid.useGravity = false;
                     made.rigid.isKinematic = true;
                 }
-                string where = (MainManager.map != null ? MainManager.map.mapid.ToString() : "no map") + " Event" + MainManager.lastevent + " member " + member;
+                string where = (MainManager.map != null ? MainManager.map.mapid.ToString() : "no map")
+                    + " Event" + MainManager.lastevent + " member " + member;
                 if (standInReported.Add(where))
                 {
                     log.LogWarning($"[party] a scene asked for party member {member} (0 Vi, 1 Kabbu, 2 Leif), not in the party: an invisible stand-in ({where})");
@@ -242,7 +255,8 @@ namespace BugFablesAP
         // A scene that waits for a stand-in to arrive would wait for good (no collision): it arrives at once.
         private static class Walking
         {
-            [HarmonyPatch(typeof(EntityControl), nameof(EntityControl.MoveTowards), typeof(Vector3), typeof(float), typeof(int), typeof(int), typeof(bool))]
+            [HarmonyPatch(typeof(EntityControl), nameof(EntityControl.MoveTowards), typeof(Vector3), typeof(float),
+                typeof(int), typeof(int), typeof(bool))]
             [HarmonyPostfix]
             private static void AfterMoveTowards(EntityControl __instance, Vector3 pos)
             {
@@ -300,7 +314,8 @@ namespace BugFablesAP
                 for (int member = 0; member < 3 && longer.Count < 3; member++)
                 {
                     // The acting leader is already first in the party's own list.
-                    if (!__result.Any(e => e != null && e.animid == member) && member != actorRole && !spares.ContainsKey(member))
+                    if (!__result.Any(e => e != null && e.animid == member) && member != actorRole
+                        && !spares.ContainsKey(member))
                     {
                         longer.Add(StandIn(member));
                     }
@@ -329,7 +344,8 @@ namespace BugFablesAP
             }
             int[] story = PartyMembers.LastStoryParty;
             int lead = story != null && story.Length > 0 ? story[0] : -1;
-            if (lead >= 0 && lead < standIns.Length && standIns[lead] != null && !mm.playerdata.Any(p => p.trueid == lead))
+            if (lead >= 0 && lead < standIns.Length && standIns[lead] != null
+                && !mm.playerdata.Any(p => p.trueid == lead))
             {
                 Vector3 spot = standIns[lead].transform.position;
                 for (int i = 0; i < mm.playerdata.Length; i++)
@@ -418,7 +434,8 @@ namespace BugFablesAP
 
         // GetEntity(1000 + n) reads map.tempfollowers[n]: with no companion there, the leader answers (logged once per
         // place).
-        private static readonly System.Collections.Generic.HashSet<string> reported = new System.Collections.Generic.HashSet<string>();
+        private static readonly System.Collections.Generic.HashSet<string> reported =
+            new System.Collections.Generic.HashSet<string>();
 
         private static class Entities
         {
@@ -432,7 +449,8 @@ namespace BugFablesAP
                 {
                     int member = -4 - id;
                     MainManager party = MainManager.instance;
-                    if (party.playerdata != null && !party.playerdata.Any(p => p.entity != null && p.entity.animid == member))
+                    if (party.playerdata != null
+                        && !party.playerdata.Any(p => p.entity != null && p.entity.animid == member))
                     {
                         __result = StandIn(member);
                         return false;
@@ -445,7 +463,8 @@ namespace BugFablesAP
                         __result = StandIn(member);
                         return false;
                     }
-                    EntityControl own = party.playerdata.Select(p => p.entity).FirstOrDefault(e => e != null && e.animid == member);
+                    EntityControl own = party.playerdata.Select(p => p.entity)
+                        .FirstOrDefault(e => e != null && e.animid == member);
                     if (ActsOtherPart(own, member))
                     {
                         __result = StandIn(member);
@@ -480,7 +499,8 @@ namespace BugFablesAP
                     return true;
                 }
                 MainManager mm = MainManager.instance;
-                __result = mm != null && mm.playerdata != null && mm.playerdata.Length > 0 ? mm.playerdata[0].entity : null;
+                __result = mm != null && mm.playerdata != null && mm.playerdata.Length > 0
+                    ? mm.playerdata[0].entity : null;
                 string where = (map != null ? map.mapid.ToString() : "no map") + " #" + id;
                 if (reported.Add(where))
                 {

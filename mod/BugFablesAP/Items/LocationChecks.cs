@@ -44,7 +44,8 @@ namespace BugFablesAP
             {
                 lastStateKey = stateKey;
                 log.LogInfo("[check] " + (waiting == null
-                    ? "watching " + string.Join(", ", flagsById.Select(e => e.Key + " (flag " + e.Value + ")").ToArray())
+                    ? "watching "
+                        + string.Join(", ", flagsById.Select(e => e.Key + " (flag " + e.Value + ")").ToArray())
                     : "waiting: " + waiting));
             }
             if (waiting != null)
@@ -62,7 +63,8 @@ namespace BugFablesAP
             List<long> finished = null;
             foreach (KeyValuePair<long, int> entry in flagsById)
             {
-                if (handled.Contains(entry.Key) || entry.Value < 0 || entry.Value >= flags.Length || !flags[entry.Value])
+                if (handled.Contains(entry.Key) || entry.Value < 0 || entry.Value >= flags.Length
+                    || !flags[entry.Value])
                 {
                     continue;
                 }
@@ -81,7 +83,8 @@ namespace BugFablesAP
                 foreach (KeyValuePair<long, int[]> entry in vars)
                 {
                     int slot = entry.Value[0];
-                    if (handled.Contains(entry.Key) || slot < 0 || slot >= mm.flagvar.Length || mm.flagvar[slot] < entry.Value[1])
+                    if (handled.Contains(entry.Key) || slot < 0 || slot >= mm.flagvar.Length
+                        || mm.flagvar[slot] < entry.Value[1])
                     {
                         continue;
                     }
@@ -99,7 +102,8 @@ namespace BugFablesAP
             {
                 foreach (KeyValuePair<long, int> entry in berries)
                 {
-                    if (handled.Contains(entry.Key) || entry.Value < 0 || entry.Value >= mm.crystalbflags.Length || !mm.crystalbflags[entry.Value])
+                    if (handled.Contains(entry.Key) || entry.Value < 0 || entry.Value >= mm.crystalbflags.Length
+                        || !mm.crystalbflags[entry.Value])
                     {
                         continue;
                     }

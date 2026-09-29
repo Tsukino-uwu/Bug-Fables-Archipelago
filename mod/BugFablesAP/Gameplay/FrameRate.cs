@@ -180,7 +180,8 @@ namespace BugFablesAP
             List<MethodBase> blinkers = Listed(Blinkers, HasBlink);
             long coreMs = watch.ElapsedMilliseconds;
             FrameSites.Install(log, harmony, blinkers);
-            log.LogInfo($"[fps] installed in {watch.ElapsedMilliseconds} ms (sites {watch.ElapsedMilliseconds - coreMs}): "
+            log.LogInfo(
+                $"[fps] installed in {watch.ElapsedMilliseconds} ms (sites {watch.ElapsedMilliseconds - coreMs}): "
                 + $"{countsFrames.Count} of {FrameCounters.Length} methods count frames, {fixedFramestep.Count} of {PhysicsFramestep.Length} "
                 + $"physics-step methods read framestep, {blinkers.Count} of {Blinkers.Length} blink");
         }
@@ -273,7 +274,8 @@ namespace BugFablesAP
             {
                 if (unreadableLogged.Add(tag))
                 {
-                    logger?.LogWarning($"[{tag}] couldn't read {m.DeclaringType?.Name}.{m.Name}: {e.GetBaseException().Message}"
+                    logger?.LogWarning(
+                        $"[{tag}] couldn't read {m.DeclaringType?.Name}.{m.Name}: {e.GetBaseException().Message}"
                         + " (later failures not logged)");
                 }
                 return null;

@@ -14,8 +14,9 @@ namespace BugFablesAP
         private const string TicketName = "Boat Ticket";
         private const string TicketDescription = "A boat ticket. Maybe we should visit the pier.";
 
-        // Field moves (Shuffle Field Moves / Shuffle Jump) as key items, so the bag shows which ones work: 201 Beemerang,
-        // 202 Horn, 203 Ice (each its member's party icon), 204 Jump (the Archipelago icon, the whole party's).
+        // Field moves (Shuffle Field Moves / Shuffle Jump) as key items, so the bag shows which ones work:
+        // 201 Beemerang, 202 Horn, 203 Ice (each its member's party icon), 204 Jump (the Archipelago icon, the whole
+        // party's).
         internal const int FirstMove = 201;
         internal static int MoveKeyItem(int move) => FirstMove + move;
 
@@ -30,7 +31,8 @@ namespace BugFablesAP
 
         internal static void Tick()
         {
-            if (randomizerOn == null || !randomizerOn() || MainManager.itemdata == null || MainManager.itemsprites == null)
+            if (randomizerOn == null || !randomizerOn() || MainManager.itemdata == null
+                || MainManager.itemsprites == null)
             {
                 return;
             }
@@ -39,8 +41,8 @@ namespace BugFablesAP
             {
                 return;
             }
-            // Its fields as the card's (price, article, item data), then its own name and description (field 2 is the one
-            // the menus show; field 1 holds "Desc" for key items, as the game's own do).
+            // Its fields as the card's (price, article, item data), then its own name and description (field 2 is the
+            // one the menus show; field 1 holds "Desc" for key items, as the game's own do).
             for (int field = 0; field < MainManager.itemdata.GetLength(2); field++)
             {
                 MainManager.itemdata[0, BoatTicket, field] = MainManager.itemdata[0, TicketLooksLike, field];
@@ -60,7 +62,8 @@ namespace BugFablesAP
             }
             foreach (var ability in Abilities.Keys)
             {
-                current &= MainManager.itemdata[0, ability.Key, 0] == Abilities.SkillText(ability.Skill, 0, ability.Name);
+                current &= MainManager.itemdata[0, ability.Key, 0]
+                    == Abilities.SkillText(ability.Skill, 0, ability.Name);
             }
             if (current || MainManager.instance?.charcolor == null)
             {
@@ -73,9 +76,11 @@ namespace BugFablesAP
                 {
                     MainManager.itemdata[0, ability.Key, field] = MainManager.itemdata[0, TicketLooksLike, field];
                 }
-                // The game's own name and field description (what it does outside battle); its battle skill comes with it.
+                // The game's own name and field description (what it does outside battle); its battle skill comes
+                // with it.
                 MainManager.itemdata[0, ability.Key, 0] = Abilities.SkillText(ability.Skill, 0, ability.Name);
-                MainManager.itemdata[0, ability.Key, 2] = Abilities.SkillText(ability.Skill, 1, PartyMembers.Name(ability.Member) + " can use " + ability.Name + ".");
+                MainManager.itemdata[0, ability.Key, 2] = Abilities.SkillText(ability.Skill, 1,
+                    PartyMembers.Name(ability.Member) + " can use " + ability.Name + ".");
                 MainManager.itemsprites[0, ability.Key] = ItemSwap.MemberSprite(ability.Member);
             }
             for (int move = 0; move <= FieldMoves.Jump; move++)
@@ -89,7 +94,8 @@ namespace BugFablesAP
                 MainManager.itemdata[0, id, 2] = ItemSwap.MoveDescription(move);
                 MainManager.itemsprites[0, id] = move == FieldMoves.Jump ? ApIcon.Get() : ItemSwap.MemberSprite(move);
             }
-            log.LogInfo($"[items] the field moves and abilities added as key items {MoveKeyItem(0)}-{Abilities.Shield}");
+            log.LogInfo(
+                $"[items] the field moves and abilities added as key items {MoveKeyItem(0)}-{Abilities.Shield}");
         }
     }
 }

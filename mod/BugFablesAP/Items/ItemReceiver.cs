@@ -31,7 +31,8 @@ namespace BugFablesAP
             MainManager mm = MainManager.instance;
             ArchipelagoSession session = connection.Session;
             string seed = session?.RoomState.Seed;
-            if (mm == null || MainManager.map == null || mm.flagstring == null || mm.flagvar == null || string.IsNullOrEmpty(seed))
+            if (mm == null || MainManager.map == null || mm.flagstring == null || mm.flagvar == null
+                || string.IsNullOrEmpty(seed))
             {
                 return null;
             }
@@ -44,8 +45,10 @@ namespace BugFablesAP
             }
             if (bound != seed && AdoptOtherSeed != null && AdoptOtherSeed())
             {
-                // Dev only (Debug.AdoptSeed): re-tie a test file to a new seed; the count goes back to 0 for a full replay.
-                log.LogWarning($"[recv] AdoptSeed: this save belonged to seed {bound}; now tied to {seed}, received count "
+                // Dev only (Debug.AdoptSeed): re-tie a test file to a new seed; the count goes back to 0 for a full
+                // replay.
+                log.LogWarning(
+                    $"[recv] AdoptSeed: this save belonged to seed {bound}; now tied to {seed}, received count "
                     + $"{mm.flagvar[CountSlot]} -> 0. The old seed's items and flags stay in it: a test file only.");
                 mm.flagstring[SeedSlot] = seed;
                 mm.flagvar[CountSlot] = 0;
@@ -70,8 +73,10 @@ namespace BugFablesAP
             string blocked = !randomizerOn ? "the Archipelago mod is disabled"
                 : session == null ? "not connected"
                 : matches == null ? "no save in play"
-                : matches == false ? $"this save belongs to seed {mm.flagstring[SeedSlot]}, not {session.RoomState.Seed}"
-                : connection.ItemKinds == null ? "the seed's item table isn't loaded" // skipping would count the item as given
+                : matches == false
+                    ? $"this save belongs to seed {mm.flagstring[SeedSlot]}, not {session.RoomState.Seed}"
+                : connection.ItemKinds == null
+                    ? "the seed's item table isn't loaded" // skipping would count the item as given
                 : Busy(mm);
             ReadOnlyCollection<ItemInfo> received = session?.Items.AllItemsReceived;
             int given = matches == true ? mm.flagvar[CountSlot] : -1;
@@ -109,7 +114,8 @@ namespace BugFablesAP
             {
                 if (waitingAt != given)
                 {
-                    log.LogInfo($"[recv] item {given + 1} ({item.ItemDisplayName}) waits: the bag and storage are both full");
+                    log.LogInfo(
+                        $"[recv] item {given + 1} ({item.ItemDisplayName}) waits: the bag and storage are both full");
                     waitingAt = given;
                 }
                 return; // no room yet: try again next frame, in order
@@ -120,10 +126,12 @@ namespace BugFablesAP
             ShowIfWanted(item, given);
         }
 
-        private System.Collections.Generic.IEnumerable<int> MembersGiven(ReadOnlyCollection<ItemInfo> received, int given) =>
+        private System.Collections.Generic.IEnumerable<int> MembersGiven(ReadOnlyCollection<ItemInfo> received,
+            int given) =>
             KindGiven(received, given, ItemIds.MemberKind);
 
-        private System.Collections.Generic.IEnumerable<int> KindGiven(ReadOnlyCollection<ItemInfo> received, int given, int wanted)
+        private System.Collections.Generic.IEnumerable<int> KindGiven(ReadOnlyCollection<ItemInfo> received, int given,
+            int wanted)
         {
             for (int i = 0; i < given; i++)
             {
@@ -136,12 +144,14 @@ namespace BugFablesAP
             }
         }
 
-        // Every received item gets a hold-up per the Item animation setting, replays included, except an item a scene just
-        // showed at its check (ItemSwap.ShownInScene), starting items (slot 0, the server) and the opening's checks.
+        // Every received item gets a hold-up per the Item animation setting, replays included, except an item a scene
+        // just showed at its check (ItemSwap.ShownInScene), starting items (slot 0, the server) and the opening's
+        // checks.
         private void ShowIfWanted(ItemInfo item, int index)
         {
             bool own = item.Player.Slot == connection.OwnSlot;
-            if (item.Player.Slot == 0 || (own && connection.QuietLocations != null && connection.QuietLocations.Contains(item.LocationId)))
+            if (item.Player.Slot == 0
+                || (own && connection.QuietLocations != null && connection.QuietLocations.Contains(item.LocationId)))
             {
                 return;
             }
@@ -156,9 +166,11 @@ namespace BugFablesAP
             {
                 return;
             }
-            ItemSwap.DescribeOurs(item.ItemId, kind, out string name, out UnityEngine.Sprite sprite, out UnityEngine.Color? color);
+            ItemSwap.DescribeOurs(item.ItemId, kind, out string name, out UnityEngine.Sprite sprite,
+                out UnityEngine.Color? color);
             color = ItemSwap.StarburstColor(item.Flags) ?? color;
-            HoldUps.Received(ItemSwap.FromText(name, item.Flags, item.Player.Name), sprite, color, ItemSwap.ArticleOf(item.ItemId, kind));
+            HoldUps.Received(ItemSwap.FromText(name, item.Flags, item.Player.Name), sprite, color,
+                ItemSwap.ArticleOf(item.ItemId, kind));
         }
 
         // Returns what happened, or null when the item must wait.
@@ -203,8 +215,8 @@ namespace BugFablesAP
             }
             if (kind == ItemIds.MoveKind)
             {
-                // A key item of the mod's own, the next level of a progressive item: the bag shows it, and FieldMoves and
-                // Abilities read it.
+                // A key item of the mod's own, the next level of a progressive item: the bag shows it, and FieldMoves
+                // and Abilities read it.
                 int key = Abilities.KeyFor(gameId, mm.items[1]);
                 if (!mm.items[1].Contains(key))
                 {

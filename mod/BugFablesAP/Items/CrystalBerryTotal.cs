@@ -36,7 +36,8 @@ namespace BugFablesAP
             {
                 MainManager mm = MainManager.instance;
                 var berryLocations = connection?.LocationBerries;
-                if (randomizerOn == null || !randomizerOn() || connection == null || !connection.SeedKnown || berryLocations == null
+                if (randomizerOn == null || !randomizerOn() || connection == null || !connection.SeedKnown
+                    || berryLocations == null
                     || mm == null || mm.flagvar == null || mm.crystalbflags == null)
                 {
                     return true;

@@ -9,16 +9,17 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // GlowTrigger (Start and LateUpdate) reads its material's "_Emission" colour without checking it has one; a map light
-    // whose material lacks it makes Unity log an error. The colour is only ever written back to that same missing property, so a
-    // material without it gets black instead, silently; each one is logged once.
+    // GlowTrigger (Start and LateUpdate) reads its material's "_Emission" colour without checking it has one; a map
+    // light whose material lacks it makes Unity log an error. The colour is only ever written back to that same missing
+    // property, so a material without it gets black instead, silently; each one is logged once.
     internal static class GlowGuard
     {
         private static Func<bool> randomizerOn;
         private static ManualLogSource log;
         private static readonly HashSet<string> reported = new HashSet<string>();
 
-        private static readonly MethodInfo GetColorByName = AccessTools.Method(typeof(Material), nameof(Material.GetColor), new[] { typeof(string) });
+        private static readonly MethodInfo GetColorByName = AccessTools.Method(typeof(Material),
+            nameof(Material.GetColor), new[] { typeof(string) });
 
         internal static void Enable(ManualLogSource logger, Func<bool> randomizerEnabled)
         {

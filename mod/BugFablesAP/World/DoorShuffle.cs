@@ -60,7 +60,8 @@ namespace BugFablesAP
                 string[] like = sides.Length > 1 ? sides[1].Split('/') : new string[0];
                 if (from.Length == 2 && like.Length == 2)
                 {
-                    yield return new Target { Map = from[0].Trim(), Door = from[1].Trim(), LikeMap = like[0].Trim(), LikeDoor = like[1].Trim() };
+                    yield return new Target { Map = from[0].Trim(), Door = from[1].Trim(), LikeMap = like[0].Trim(),
+                        LikeDoor = like[1].Trim() };
                 }
             }
         }
@@ -85,9 +86,11 @@ namespace BugFablesAP
                         log.LogWarning($"[doors] {map}: no door {t.Door} to rewrite");
                         continue;
                     }
-                    if (!Read(t.LikeMap, t.LikeDoor, out int[] data, out Vector3[] vectors, out float jump) || data.Length == 0 || vectors.Length < 3)
+                    if (!Read(t.LikeMap, t.LikeDoor, out int[] data, out Vector3[] vectors, out float jump)
+                        || data.Length == 0 || vectors.Length < 3)
                     {
-                        log.LogWarning($"[doors] {map}: {t.Door} kept as it is ({t.LikeMap}/{t.LikeDoor} not readable as a door)");
+                        log.LogWarning(
+                            $"[doors] {map}: {t.Door} kept as it is ({t.LikeMap}/{t.LikeDoor} not readable as a door)");
                         continue;
                     }
                     // data[4] == 1: no walk into this door (a hole, a ladder), so it stays with this side.
@@ -104,7 +107,8 @@ namespace BugFablesAP
                     // TransferMap reads the arrival jump from the door walked into (its entity's emoticonoffset.x).
                     if (door.entity != null)
                     {
-                        door.entity.emoticonoffset = new Vector3(jump, door.entity.emoticonoffset.y, door.entity.emoticonoffset.z);
+                        door.entity.emoticonoffset =
+                            new Vector3(jump, door.entity.emoticonoffset.y, door.entity.emoticonoffset.z);
                     }
                     log.LogInfo($"[doors] {map}: {t.Door} now leads where {t.LikeMap}/{t.LikeDoor} leads (map {(MainManager.Maps)data[0]}, appear {vectors[1]}, jump {jump}, own walk {ownWalk})");
                 }

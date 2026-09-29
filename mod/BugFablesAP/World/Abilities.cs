@@ -22,14 +22,16 @@ namespace BugFablesAP
         internal static readonly (int Key, string Name, int Member, int Flag, int Skill)[] Keys =
         {
             (Halt, "Beemerang Halt", 0, 21, 35), (Dash, "Dash", 1, 699, 49), (HornDash, "Horn Dash", 1, 39, 38),
-            (BeeFly, "Bee Fly", 0, 19, 36), (Dig, "Beetle Dig", 1, 18, 39), (Icicle, "Icicle", 2, 171, 41), (Shield, "Shield", 2, 20, 42),
+            (BeeFly, "Bee Fly", 0, 19, 36), (Dig, "Beetle Dig", 1, 18, 39), (Icicle, "Icicle", 2, 171, 41),
+            (Shield, "Shield", 2, 20, 42),
         };
 
         // The game's name and description for a key's field skill; the English name and none before its table loads.
         internal static string SkillText(int skill, int field, string fallback)
         {
             string[,] data = MainManager.skilldata;
-            return data != null && skill < data.GetLength(0) && !string.IsNullOrEmpty(data[skill, field]) ? data[skill, field] : fallback;
+            return data != null && skill < data.GetLength(0) && !string.IsNullOrEmpty(data[skill, field])
+                ? data[skill, field] : fallback;
         }
 
         private static readonly Dictionary<int, int> keyForFlag = Keys.ToDictionary(k => k.Flag, k => k.Key);
@@ -54,7 +56,8 @@ namespace BugFablesAP
         }
 
         // The member an item's abilities belong to; -1 for the whole party's (Jump).
-        internal static int Member(int gameId) => gameId >= 0 && gameId <= 2 ? gameId : gameId == 4 || gameId == 6 ? 1 : gameId == 5 ? 0 : gameId == 7 ? 2 : -1;
+        internal static int Member(int gameId) => gameId >= 0 && gameId <= 2 ? gameId
+            : gameId == 4 || gameId == 6 ? 1 : gameId == 5 ? 0 : gameId == 7 ? 2 : -1;
 
         internal static string Description(int gameId) => gameId == FieldMoves.Jump ? "The whole party can jump."
             : PartyMembers.Name(Member(gameId)) + " learns " + ItemName(gameId) + ".";
@@ -65,8 +68,10 @@ namespace BugFablesAP
         {
             switch (gameId)
             {
-                case 0: return FieldMoves.MovesShuffled && !bag.Contains(CustomItems.MoveKeyItem(0)) ? CustomItems.MoveKeyItem(0) : Halt;
-                case 2: return FieldMoves.MovesShuffled && !bag.Contains(CustomItems.MoveKeyItem(2)) ? CustomItems.MoveKeyItem(2) : Icicle;
+                case 0: return FieldMoves.MovesShuffled && !bag.Contains(CustomItems.MoveKeyItem(0))
+                    ? CustomItems.MoveKeyItem(0) : Halt;
+                case 2: return FieldMoves.MovesShuffled && !bag.Contains(CustomItems.MoveKeyItem(2))
+                    ? CustomItems.MoveKeyItem(2) : Icicle;
                 case 4: return bag.Contains(Dash) ? HornDash : Dash;
                 case 5: return BeeFly;
                 case 6: return Dig;
@@ -103,11 +108,13 @@ namespace BugFablesAP
             // (flag 21 only; NPCControl's other reads are story state), and the skill lists.
             int field = Install(Methods(typeof(PlayerControl)), keyForFlag.Keys.ToArray(), nameof(TranspileAll));
             int halt = Install(Methods(typeof(NPCControl)), new[] { 21 }, nameof(TranspileHalt));
-            int skills = Install(new MethodBase[] { AccessTools.Method(typeof(MainManager), "RefreshSkills") }, keyForFlag.Keys.ToArray(), nameof(TranspileAll));
+            int skills = Install(new MethodBase[] { AccessTools.Method(typeof(MainManager), "RefreshSkills") },
+                keyForFlag.Keys.ToArray(), nameof(TranspileAll));
             string counts = $"field {field} of 8, the Beemerang's hold {halt} of 2, skill lists {skills} of 15";
             if (field != 8 || halt != 2 || skills != 15)
             {
-                log.LogError($"[abilities] reads found differ from what was measured ({counts}): an ability may follow its "
+                log.LogError(
+                    $"[abilities] reads found differ from what was measured ({counts}): an ability may follow its "
                     + "story flag instead of its item");
             }
             log.LogInfo($"[abilities] installed: the learned abilities' reads answered from the bag ({counts})");
@@ -116,9 +123,12 @@ namespace BugFablesAP
         // A class's own methods and those of its nested types (coroutines, lambdas).
         private static IEnumerable<MethodBase> Methods(Type type)
         {
-            const BindingFlags all = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
-            IEnumerable<Type> types = new[] { type }.Concat(type.GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic));
-            return types.SelectMany(t => t.GetMethods(all).Cast<MethodBase>().Concat(t.GetConstructors(all))).Where(m => m.GetMethodBody() != null);
+            const BindingFlags all = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public
+                | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
+            IEnumerable<Type> types = new[] { type }
+                .Concat(type.GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic));
+            return types.SelectMany(t => t.GetMethods(all).Cast<MethodBase>().Concat(t.GetConstructors(all)))
+                .Where(m => m.GetMethodBody() != null);
         }
 
         // Patches every method reading one of the flags as `flags[n]`; returns how many reads it has.
@@ -139,7 +149,8 @@ namespace BugFablesAP
                 }
                 catch (Exception e)
                 {
-                    log.LogError($"[abilities] couldn't patch {m.DeclaringType?.Name}.{m.Name}: {e.GetBaseException().Message}");
+                    log.LogError(
+                        $"[abilities] couldn't patch {m.DeclaringType?.Name}.{m.Name}: {e.GetBaseException().Message}");
                 }
             }
             return total;
@@ -155,7 +166,8 @@ namespace BugFablesAP
             int count = 0;
             for (int i = 2; i < body.Count; i++)
             {
-                if (body[i].Key == OpCodes.Ldelem_U1 && body[i - 2].Key == OpCodes.Ldfld && Equals(body[i - 2].Value, flagsField)
+                if (body[i].Key == OpCodes.Ldelem_U1 && body[i - 2].Key == OpCodes.Ldfld
+                    && Equals(body[i - 2].Value, flagsField)
                     && Constant(body[i - 1].Key, body[i - 1].Value) is int n && flags.Contains(n))
                 {
                     count++;

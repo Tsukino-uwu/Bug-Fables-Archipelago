@@ -467,7 +467,8 @@ namespace BugFablesAP
                             return $"il: type {parts[1]} not found";
                         }
                         int dumped = 0;
-                        foreach (System.Reflection.MethodInfo overload in type.GetMethods(System.Reflection.BindingFlags.DeclaredOnly
+                        foreach (System.Reflection.MethodInfo overload in type.GetMethods(
+                            System.Reflection.BindingFlags.DeclaredOnly
                             | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static
                             | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic)
                             .Where(m => m.Name == parts[2]))
@@ -479,9 +480,11 @@ namespace BugFablesAP
                                 continue;
                             }
                             var ilLog =
-                                new System.Text.StringBuilder($"[dev] il {parts[1]}.{parts[2]}{overload.GetParameters().Length}:");
+                                new System.Text.StringBuilder(
+                                    $"[dev] il {parts[1]}.{parts[2]}{overload.GetParameters().Length}:");
                             int index = 0;
-                            foreach (KeyValuePair<System.Reflection.Emit.OpCode, object> ins in HarmonyLib.PatchProcessor.ReadMethodBody(method))
+                            foreach (KeyValuePair<System.Reflection.Emit.OpCode, object> ins
+                                in HarmonyLib.PatchProcessor.ReadMethodBody(method))
                             {
                                 string operand = ins.Value is System.Reflection.MemberInfo mi ? mi.DeclaringType?.Name
                                     + "." + mi.Name
@@ -502,9 +505,10 @@ namespace BugFablesAP
                     case "cams":
                     {
                         var camLog =
-                            new System.Text.StringBuilder($"[dev] cams: QualitySettings.antiAliasing {QualitySettings.antiAliasing}, "
-                            + $"downsample {MainManager.downsample}, runInBackground {Application.runInBackground}, lowtexture {MainManager.lowtexture}, "
-                            + $"masterTextureLimit {QualitySettings.masterTextureLimit}, anisotropic {QualitySettings.anisotropicFiltering}:");
+                            new System.Text.StringBuilder(
+                                $"[dev] cams: QualitySettings.antiAliasing {QualitySettings.antiAliasing}, "
+                                + $"downsample {MainManager.downsample}, runInBackground {Application.runInBackground}, lowtexture {MainManager.lowtexture}, "
+                                + $"masterTextureLimit {QualitySettings.masterTextureLimit}, anisotropic {QualitySettings.anisotropicFiltering}:");
                         foreach (Camera c in Camera.allCameras)
                         {
                             camLog.Append($"\n  {c.name} depth {c.depth} enabled {c.enabled} parent {(c.transform.parent != null ? c.transform.parent.name : "none")} "
@@ -785,7 +789,8 @@ namespace BugFablesAP
                         foreach (string n in parts.Skip(1))
                         {
                             int id = int.Parse(n);
-                            articles.Append($"; item {id} {MainManager.itemdata[0, id, 0]}: '{MainManager.itemdata[0, id, 3]}'");
+                            articles.Append(
+                                $"; item {id} {MainManager.itemdata[0, id, 0]}: '{MainManager.itemdata[0, id, 3]}'");
                         }
                         // A pickup's "You found" line (menutext 2) and Giveitem's "You got" lines (106, and 110 for the
                         // other case).

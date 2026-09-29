@@ -18,7 +18,8 @@ namespace BugFablesAP
         private static Func<bool> randomizerOn;
         private static readonly List<Entry> waiting = new List<Entry>();
         private static int settle;
-        // A chain of scenes and fights can leave a lone free frame between links: the first of a burst waits for FreeFor.
+        // A chain of scenes and fights can leave a lone free frame between links: the first of a burst waits for
+        // FreeFor.
         private const int FreeFor = 30;
         private const int NextFor = 3;
         private static int freeFrames;
@@ -39,9 +40,10 @@ namespace BugFablesAP
             log.LogInfo($"[show] queued the hold-up for {what}");
         }
 
-        // Text colours after the game's own (10 in its scene, not the code's 7), offsets from ApBase: another player (dark
-        // yellow, Archipelago's yellow darkened), then by class, Archipelago's (NetUtils.py: plum, slate blue, salmon, cyan)
-        // darkened for the near-white text box, then Rarity's (a loot game's ladder: purple, blue, red, green), darkened too.
+        // Text colours after the game's own (10 in its scene, not the code's 7), offsets from ApBase: another player
+        // (dark yellow, Archipelago's yellow darkened), then by class, Archipelago's (NetUtils.py: plum, slate blue,
+        // salmon, cyan) darkened for the near-white text box, then Rarity's (a loot game's ladder: purple, blue, red,
+        // green), darkened too.
         internal const int Player = 0, Progression = 1, Useful = 2, Trap = 3, Filler = 4, RarityOffset = 4;
         private static readonly string[] apColors = { "B8860B", "8A63D2", "4A6BD8", "E9573F", "008B8B",
             "8A45C8", "2F6FD8", "C62828", "2E9E3E" };
@@ -57,12 +59,14 @@ namespace BugFablesAP
         internal static void AddApColors()
         {
             MainManager mm = MainManager.instance;
-            if (mm == null || mm.textcolors == null || (ApBase >= 0 && mm.textcolors.Length == ApBase + apColors.Length))
+            if (mm == null || mm.textcolors == null
+                || (ApBase >= 0 && mm.textcolors.Length == ApBase + apColors.Length))
             {
                 return;
             }
             Color first = FromHex(apColors[0]);
-            int own = Array.FindIndex(mm.textcolors, c => Mathf.Approximately(c.r, first.r) && Mathf.Approximately(c.g, first.g)
+            int own = Array.FindIndex(mm.textcolors, c => Mathf.Approximately(c.r, first.r)
+                && Mathf.Approximately(c.g, first.g)
                 && Mathf.Approximately(c.b, first.b));
             ApBase = own >= 0 ? own : mm.textcolors.Length;
             var colors = new List<Color>(mm.textcolors);
@@ -120,7 +124,8 @@ namespace BugFablesAP
         // Only a speed this set is undone, so a speed-up by the game or the mod elsewhere is left alone.
         private static void Speed()
         {
-            bool want = showing && MainManager.instance != null && MainManager.instance.message && MainManager.GetKey(5, hold: true);
+            bool want = showing && MainManager.instance != null && MainManager.instance.message
+                && MainManager.GetKey(5, hold: true);
             if (want && !speeding)
             {
                 speeding = true;

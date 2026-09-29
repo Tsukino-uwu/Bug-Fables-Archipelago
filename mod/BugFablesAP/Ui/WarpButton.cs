@@ -86,7 +86,8 @@ namespace BugFablesAP
                     break;
                 default:
                     // Or a hue from 0 to 1 (0.28 lime, 0.5 cyan, 0.9 pink).
-                    if (!float.TryParse(name, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out float h)
+                    if (!float.TryParse(name, System.Globalization.NumberStyles.Float,
+                            System.Globalization.CultureInfo.InvariantCulture, out float h)
                         || h < 0f || h > 1f)
                     {
                         return "warpcolor orange|pink|lime|<hue 0-1>";
@@ -104,7 +105,8 @@ namespace BugFablesAP
         private const MainManager.Maps StartMap = MainManager.Maps.BugariaOutskirtsOutsideCity;
 
         // Each area's travel spot: a save point at its entrance or hub (starting choices; the Outskirts use the start).
-        private static readonly Dictionary<int, KeyValuePair<MainManager.Maps, int>> AreaSpots = new Dictionary<int, KeyValuePair<MainManager.Maps, int>>
+        private static readonly Dictionary<int, KeyValuePair<MainManager.Maps, int>> AreaSpots =
+            new Dictionary<int, KeyValuePair<MainManager.Maps, int>>
         {
             { 1, Spot(MainManager.Maps.BugariaMainPlaza, 6) },
             { 2, Spot(MainManager.Maps.SnakemouthFallRoom, 0) },
@@ -133,7 +135,8 @@ namespace BugFablesAP
         };
         private const int OutskirtsArea = 0;
 
-        private static KeyValuePair<MainManager.Maps, int> Spot(MainManager.Maps map, int entity) => new KeyValuePair<MainManager.Maps, int>(map, entity);
+        private static KeyValuePair<MainManager.Maps, int> Spot(MainManager.Maps map, int entity) =>
+            new KeyValuePair<MainManager.Maps, int>(map, entity);
 
         private static readonly List<Kind> buttons = new List<Kind>();
         private static readonly List<SpriteRenderer> icons = new List<SpriteRenderer>();
@@ -153,10 +156,11 @@ namespace BugFablesAP
             mapOn = mapEnabled;
             skipWarpConfirm = skipWarp;
             skipMapConfirm = skipMap;
-            if (optionField == null || maxField == null || spritesField == null || boxesField == null || prepareExit == null
-                || buildWindow == null)
+            if (optionField == null || maxField == null || spritesField == null || boxesField == null
+                || prepareExit == null || buildWindow == null)
             {
-                log.LogError("[warp] NOT installed: PauseMenu's BuildWindow or fields weren't found; no travel buttons.");
+                log.LogError(
+                    "[warp] NOT installed: PauseMenu's BuildWindow or fields weren't found; no travel buttons.");
                 return;
             }
             if (!Hooks.Install(typeof(WarpButton), "warp", "no travel buttons"))
@@ -224,7 +228,8 @@ namespace BugFablesAP
                 return false;
             }
             int button = (int)optionField.GetValue(__instance) - FirstOption;
-            if (button >= 0 && button < buttons.Count && MainManager.instance.inputcooldown <= 0f && MainManager.GetKey(4, hold: false))
+            if (button >= 0 && button < buttons.Count && MainManager.instance.inputcooldown <= 0f
+                && MainManager.GetKey(4, hold: false))
             {
                 MainManager.PlaySound("Confirm", 10);
                 if (buttons[button] == Kind.Warp && skipWarpConfirm())
@@ -279,8 +284,8 @@ namespace BugFablesAP
             [HarmonyPrefix]
             private static void BeforeIconAnim(PauseMenu __instance, ref int[] values)
             {
-                if (__instance.windowid == 0 && buttons.Count > 0 && values != null && values.Length == 4 && values[0] == 13
-                    && ReferenceEquals(builtFor, spritesField.GetValue(__instance)))
+                if (__instance.windowid == 0 && buttons.Count > 0 && values != null && values.Length == 4
+                    && values[0] == 13 && ReferenceEquals(builtFor, spritesField.GetValue(__instance)))
                 {
                     var all = new List<int> { 13, 14, 15, 16 };
                     for (int i = 0; i < buttons.Count; i++)
@@ -303,7 +308,8 @@ namespace BugFablesAP
 
         private static class Placing
         {
-            [HarmonyPatch(typeof(MainManager), nameof(MainManager.NewUIObject), typeof(string), typeof(Transform), typeof(Vector3), typeof(Vector3), typeof(Sprite), typeof(int))]
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.NewUIObject), typeof(string), typeof(Transform),
+                typeof(Vector3), typeof(Vector3), typeof(Sprite), typeof(int))]
             [HarmonyPostfix]
             private static void AfterNewObject(string objname, GameObject __result)
             {
@@ -316,7 +322,8 @@ namespace BugFablesAP
                 int extra = ButtonCount();
                 if (extra > 0)
                 {
-                    __result.transform.localPosition = new Vector3(ButtonX(n, 4 + extra), __result.transform.localPosition.y);
+                    __result.transform.localPosition =
+                        new Vector3(ButtonX(n, 4 + extra), __result.transform.localPosition.y);
                 }
             }
         }
@@ -350,10 +357,12 @@ namespace BugFablesAP
                 // Made as BuildWindow makes the other four, so IconAnim outlines and wiggles it like them.
                 bool map = buttons[i] == Kind.Map;
                 bool premade = !map && premadeIcon >= 0;
-                Sprite look = map ? MainManager.guisprites[MapIconSprite] : premade ? MainManager.guisprites[premadeIcon] : Backdrop();
+                Sprite look = map ? MainManager.guisprites[MapIconSprite]
+                    : premade ? MainManager.guisprites[premadeIcon] : Backdrop();
                 // The button's own sprite, so the game's outline and wiggle apply; the scroll rides on it.
-                SpriteRenderer icon = MainManager.NewUIObject("menuicon" + (FirstOption + i), sprites[16].transform.parent,
-                    new Vector3(ButtonX(4 + i, total), 3f), Vector3.one, look).GetComponent<SpriteRenderer>();
+                SpriteRenderer icon = MainManager.NewUIObject("menuicon" + (FirstOption + i),
+                    sprites[16].transform.parent, new Vector3(ButtonX(4 + i, total), 3f), Vector3.one, look)
+                    .GetComponent<SpriteRenderer>();
                 if (!map && !premade)
                 {
                     SpriteRenderer scroll = MainManager.NewUIObject("scroll", icon.transform, Vector3.zero, Vector3.one,
@@ -396,7 +405,8 @@ namespace BugFablesAP
             }
             texture.SetPixels(pixels);
             texture.Apply();
-            backdrop = Sprite.Create(texture, new Rect(0f, 0f, size, size), new Vector2(0.5f, 0.5f), model.pixelsPerUnit);
+            backdrop = Sprite.Create(texture, new Rect(0f, 0f, size, size), new Vector2(0.5f, 0.5f),
+                model.pixelsPerUnit);
             return backdrop;
         }
 
@@ -404,7 +414,8 @@ namespace BugFablesAP
         [HarmonyPostfix]
         private static void AfterUpdateText(PauseMenu __instance)
         {
-            if (__instance.windowid != 0 || buttons.Count == 0 || !ReferenceEquals(builtFor, spritesField.GetValue(__instance)))
+            if (__instance.windowid != 0 || buttons.Count == 0
+                || !ReferenceEquals(builtFor, spritesField.GetValue(__instance)))
             {
                 return;
             }
@@ -417,10 +428,11 @@ namespace BugFablesAP
             bool warp = buttons[button] == Kind.Warp;
             Transform labels = ((DialogueAnim[])boxesField.GetValue(__instance))[0].transform;
             TextPool.Free(labels);
-            __instance.StartCoroutine(MainManager.SetText("|single|" + (warp ? "Go back to where the game started." : "Travel to an area you've been to."),
+            __instance.StartCoroutine(MainManager.SetText(
+                "|single|" + (warp ? "Go back to where the game started." : "Travel to an area you've been to."),
                 0, 99999f, false, false, new Vector3(-5f, 0.1f), Vector3.zero, Vector2.one, labels, null));
-            __instance.StartCoroutine(MainManager.SetText("|center||single|" + (warp ? "Warp" : "Map"), 0, 99999f, false, false,
-                new Vector3(0f, 7.5f), Vector3.zero, Vector2.one, labels, null));
+            __instance.StartCoroutine(MainManager.SetText("|center||single|" + (warp ? "Warp" : "Map"), 0, 99999f,
+                false, false, new Vector3(0f, 7.5f), Vector3.zero, Vector2.one, labels, null));
         }
 
         // The game's own map window (as its map shortcut opens it), in travel mode until it closes.
@@ -479,7 +491,8 @@ namespace BugFablesAP
             yes = false;
             asking = kind;
             askedArea = area;
-            confirmBox = MainManager.Create9Box(new Vector3(0f, 0f, 5f), new Vector2(kind == Kind.Map ? 9f : 7f, 3f), 1, 30, Color.white, grow: false);
+            confirmBox = MainManager.Create9Box(new Vector3(0f, 0f, 5f), new Vector2(kind == Kind.Map ? 9f : 7f, 3f),
+                1, 30, Color.white, grow: false);
             if (kind == Kind.Map)
             {
                 // The map is a 3D object at depth 5 on the GUI camera, in front of the pause menu: the box goes in
@@ -494,7 +507,8 @@ namespace BugFablesAP
                 confirmBox.localPosition = new Vector3(0f, -0.5f, -1f);
                 confirmBox.localEulerAngles = Vector3.zero;
             }
-            log.LogInfo(kind == Kind.Warp ? "[warp] asking: warp to the start?" : $"[warp] asking: travel to area {area} ({MainManager.areanames[area]})?");
+            log.LogInfo(kind == Kind.Warp ? "[warp] asking: warp to the start?"
+                : $"[warp] asking: travel to area {area} ({MainManager.areanames[area]})?");
             DrawConfirm(menu);
             MainManager.instance.inputcooldown = 10f;
         }
@@ -504,13 +518,14 @@ namespace BugFablesAP
             // Yes and No at fixed spots so they don't shift when switching; the chosen one coloured, the leaf beside
             // it.
             TextPool.Free(confirmBox);
-            string question = asking == Kind.Warp ? "Warp to the start?" : "Travel to " + MainManager.areanames[askedArea] + "?";
+            string question = asking == Kind.Warp ? "Warp to the start?"
+                : "Travel to " + MainManager.areanames[askedArea] + "?";
             menu.StartCoroutine(MainManager.SetText("|center||sort,40|" + question, 0, 99999f, false, false,
                 new Vector3(0f, 0.6f), Vector3.zero, Vector2.one * 0.8f, confirmBox, null));
-            menu.StartCoroutine(MainManager.SetText("|center||sort,40|" + (yes ? "|color,1|" : "") + "Yes", 0, 99999f, false, false,
-                new Vector3(-1.5f, -0.6f), Vector3.zero, Vector2.one * 0.8f, confirmBox, null));
-            menu.StartCoroutine(MainManager.SetText("|center||sort,40|" + (yes ? "" : "|color,1|") + "No", 0, 99999f, false, false,
-                new Vector3(1.5f, -0.6f), Vector3.zero, Vector2.one * 0.8f, confirmBox, null));
+            menu.StartCoroutine(MainManager.SetText("|center||sort,40|" + (yes ? "|color,1|" : "") + "Yes", 0, 99999f,
+                false, false, new Vector3(-1.5f, -0.6f), Vector3.zero, Vector2.one * 0.8f, confirmBox, null));
+            menu.StartCoroutine(MainManager.SetText("|center||sort,40|" + (yes ? "" : "|color,1|") + "No", 0, 99999f,
+                false, false, new Vector3(1.5f, -0.6f), Vector3.zero, Vector2.one * 0.8f, confirmBox, null));
             if (leaf == null)
             {
                 // The game's menu cursor, set up as it sets up its own.
@@ -563,7 +578,8 @@ namespace BugFablesAP
         {
             mapTravel = false;
             bool asked = kind == Kind.Warp ? !skipWarpConfirm() : !skipMapConfirm();
-            log.LogInfo((kind == Kind.Warp ? "[warp] warp to start chosen" : $"[warp] travel to area {area} ({MainManager.areanames[area]}) chosen")
+            log.LogInfo((kind == Kind.Warp ? "[warp] warp to start chosen"
+                    : $"[warp] travel to area {area} ({MainManager.areanames[area]}) chosen")
                 + $" on {MainManager.map?.mapid}" + (asked ? "" : " (Skip confirm: no Yes / No box)"));
             prepareExit.Invoke(menu, null);
             MainManager.instance.StartCoroutine(TravelWhenUnpaused(kind, area));
@@ -583,11 +599,13 @@ namespace BugFablesAP
         {
             // PrepareExit shrinks the boxes; DestroyPause follows 0.25 s later and clears pause.
             float since = Time.realtimeSinceStartup;
-            while ((MainManager.instance.pause || MainManager.pausemenu != null) && Time.realtimeSinceStartup - since < 3f)
+            while ((MainManager.instance.pause || MainManager.pausemenu != null)
+                && Time.realtimeSinceStartup - since < 3f)
             {
                 yield return null;
             }
-            if (MainManager.player == null || MainManager.instance.inevent || MainManager.instance.message || MainManager.battle != null)
+            if (MainManager.player == null || MainManager.instance.inevent || MainManager.instance.message
+                || MainManager.battle != null)
             {
                 log.LogWarning("[warp] not now: an event, dialogue or battle started; nothing done");
                 yield break;
@@ -621,7 +639,8 @@ namespace BugFablesAP
             if (entity < lines.Length)
             {
                 string[] f = lines[entity].Split('}');
-                if (f.Length > 8 && ReadFloat(f[6], out float x) && ReadFloat(f[7], out float y) && ReadFloat(f[8], out float z))
+                if (f.Length > 8 && ReadFloat(f[6], out float x) && ReadFloat(f[7], out float y)
+                    && ReadFloat(f[8], out float z))
                 {
                     return new Vector3(x, y + 0.5f, z - 2f);
                 }
@@ -632,6 +651,7 @@ namespace BugFablesAP
 
         // As the game's Convert.ToSingle reads its entity data, under the en-US culture it sets at start.
         private static bool ReadFloat(string text, out float value) =>
-            float.TryParse(text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.CurrentCulture, out value);
+            float.TryParse(text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.CurrentCulture,
+                out value);
     }
 }

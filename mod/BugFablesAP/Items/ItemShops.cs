@@ -7,8 +7,9 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Item shops: the first purchase of each item in each shop is a check, then the shop's own item again. The buy line's
-    // additem is taken out, and berries down by the price (flagvar[1]) once the dialogue ends mean it was bought.
+    // Item shops: the first purchase of each item in each shop is a check, then the shop's own item again. The buy
+    // line's additem is taken out, and berries down by the price (flagvar[1]) once the dialogue ends mean it was
+    // bought.
     internal static class ItemShops
     {
         private static ManualLogSource log;
@@ -28,7 +29,8 @@ namespace BugFablesAP
             randomizerOn = on;
             if (Hooks.Install(typeof(ItemShops), "itemshop", "item shops sell their own items"))
             {
-                log.LogInfo("[itemshop] installed on NPCControl.CreateDescWindow, Interact and MainManager.GetDialogueText");
+                log.LogInfo(
+                    "[itemshop] installed on NPCControl.CreateDescWindow, Interact and MainManager.GetDialogueText");
             }
         }
 
@@ -44,7 +46,8 @@ namespace BugFablesAP
             string map = MainManager.map.mapid.ToString();
             foreach (KeyValuePair<long, ApConnection.ItemShopSlot> entry in shops)
             {
-                if (entry.Value.Map == map && entry.Value.Keeper == npc.shopkeeper.name && entry.Value.Item == npc.entity.animstate)
+                if (entry.Value.Map == map && entry.Value.Keeper == npc.shopkeeper.name
+                    && entry.Value.Item == npc.entity.animstate)
                 {
                     return connection.IsDone(entry.Key) ? -1 : entry.Key;
                 }
@@ -75,7 +78,8 @@ namespace BugFablesAP
             }
             int item = __instance.entity.animstate;
             ItemSwap.LookOf(at, out string name, out _, out string description);
-            __state = new Saved { Item = item, Name = MainManager.itemdata[0, item, 0], Description = MainManager.itemdata[0, item, 2] };
+            __state = new Saved { Item = item, Name = MainManager.itemdata[0, item, 0],
+                Description = MainManager.itemdata[0, item, 2] };
             MainManager.itemdata[0, item, 0] = name ?? __state.Name;
             MainManager.itemdata[0, item, 2] = description ?? __state.Description;
         }
@@ -136,11 +140,13 @@ namespace BugFablesAP
                 {
                     connection.QueueRespawnCheck(at, mm.flagstring[ItemReceiver.SeedSlot]);
                     HoldUps.FoundAt(at, "item shop purchase");
-                    log.LogInfo($"[itemshop] location {at}: bought ({moneyBefore} -> {mm.money} berries): check queued");
+                    log.LogInfo(
+                        $"[itemshop] location {at}: bought ({moneyBefore} -> {mm.money} berries): check queued");
                 }
                 else
                 {
-                    log.LogInfo($"[itemshop] location {at}: not bought (berries {moneyBefore} -> {mm.money}, price {price})");
+                    log.LogInfo(
+                        $"[itemshop] location {at}: not bought (berries {moneyBefore} -> {mm.money}, price {price})");
                 }
             }
             if (Time.frameCount % 15 != 0 || MainManager.map == null || connection?.LocationItemShops == null)
@@ -149,7 +155,8 @@ namespace BugFablesAP
             }
             foreach (NPCControl npc in MainManager.map.GetComponentsInChildren<NPCControl>(true))
             {
-                if (npc.interacttype != NPCControl.Interaction.Shop || npc.entity == null || npc.entity.animid != 0 || npc.entity.sprite == null)
+                if (npc.interacttype != NPCControl.Interaction.Shop || npc.entity == null || npc.entity.animid != 0
+                    || npc.entity.sprite == null)
                 {
                     continue;
                 }

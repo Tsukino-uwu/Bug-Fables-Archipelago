@@ -41,7 +41,8 @@ namespace BugFablesAP
         private static bool swapped;
         private static FieldInfo descWindowField;
 
-        private const string FirstBerryTutorial = "|flag,108,true||tail,null||center,true||destroydescbox||goto,-88,break,end|";
+        private const string FirstBerryTutorial =
+            "|flag,108,true||tail,null||center,true||destroydescbox||goto,-88,break,end|";
 
         // A crystal berry is drawn as a spinning 3D model, not its sprite: hide the model and show the sprite.
         private static void ShowAsSprite(EntityControl entity, Sprite sprite)
@@ -73,7 +74,8 @@ namespace BugFablesAP
             entity.spin = Vector3.zero;
         }
 
-        private const string FirstMedalTutorial = "|flag,31,true||tail,null||center,true||destroydescbox||goto,-32,break,end|";
+        private const string FirstMedalTutorial =
+            "|flag,31,true||tail,null||center,true||destroydescbox||goto,-32,break,end|";
 
         internal static void Enable(ManualLogSource logger, ApConnection conn, Func<bool> on)
         {
@@ -89,11 +91,12 @@ namespace BugFablesAP
             // Two groups, installed in this order: the pickup prefix runs before the berry prefix.
             Hooks.Install(typeof(Pickups), "swap", "a pickup in the world would give its vanilla item");
             Hooks.Install(typeof(Berries), "swap", "berries at a location would be given as berries");
-            Hooks.Install(typeof(Redraws), "swap", "a pickup the game redraws shows its own item until the ground swap");
+            Hooks.Install(typeof(Redraws), "swap",
+                "a pickup the game redraws shows its own item until the ground swap");
         }
 
-        // The one place the game redraws an item entity's own sprite: put the seed's item, its lift and its backdrop back
-        // in the same call, so no frame shows the vanilla look (houses redraw their pickups on the way in).
+        // The one place the game redraws an item entity's own sprite: put the seed's item, its lift and its backdrop
+        // back in the same call, so no frame shows the vanilla look (houses redraw their pickups on the way in).
         private static class Redraws
         {
             [HarmonyPatch(typeof(EntityControl), nameof(EntityControl.UpdateItem))]
@@ -102,7 +105,8 @@ namespace BugFablesAP
             {
                 NPCControl npc = __instance.npcdata;
                 Dictionary<long, ApConnection.Pickup> pickups = connection?.LocationPickups;
-                if (npc == null || npc.objecttype != NPCControl.ObjectTypes.Item || pickups == null || MainManager.map == null
+                if (npc == null || npc.objecttype != NPCControl.ObjectTypes.Item || pickups == null
+                    || MainManager.map == null
                     || __instance.sprite == null || randomizerOn == null || !randomizerOn())
                 {
                     return;
@@ -110,7 +114,8 @@ namespace BugFablesAP
                 string mapName = MainManager.map.mapid.ToString();
                 foreach (KeyValuePair<long, ApConnection.Pickup> entry in pickups)
                 {
-                    if (entry.Value.Map != mapName || (entry.Value.Regional >= 0 && connection.IsDone(entry.Key)) || !IsPickup(entry.Value, npc))
+                    if (entry.Value.Map != mapName || (entry.Value.Regional >= 0 && connection.IsDone(entry.Key))
+                        || !IsPickup(entry.Value, npc))
                     {
                         continue;
                     }
@@ -134,7 +139,8 @@ namespace BugFablesAP
             }
         }
 
-        [HarmonyPatch(typeof(MainManager), "SetText", typeof(string), typeof(int), typeof(float?), typeof(bool), typeof(bool), typeof(Vector3), typeof(Vector3), typeof(Vector2), typeof(Transform), typeof(NPCControl))]
+        [HarmonyPatch(typeof(MainManager), "SetText", typeof(string), typeof(int), typeof(float?), typeof(bool),
+            typeof(bool), typeof(Vector3), typeof(Vector3), typeof(Vector2), typeof(Transform), typeof(NPCControl))]
         [HarmonyPatch(MethodType.Enumerator)]
         [HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> Transpile(IEnumerable<CodeInstruction> instructions) =>
@@ -142,7 +148,8 @@ namespace BugFablesAP
 
         private static IEnumerable<CodeInstruction> EditGiveitem(List<CodeInstruction> code)
         {
-            MethodInfo descWindow = AccessTools.Method(typeof(NPCControl), nameof(NPCControl.CreateDescWindow), new[] { typeof(int), typeof(int) });
+            MethodInfo descWindow = AccessTools.Method(typeof(NPCControl), nameof(NPCControl.CreateDescWindow),
+                new[] { typeof(int), typeof(int) });
             MethodInfo getSprite = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetItemSprite));
             MethodInfo addItem = AccessTools.Method(typeof(List<int>), nameof(List<int>.Add));
             MethodInfo addBadge = AccessTools.Method(typeof(List<int[]>), nameof(List<int[]>.Add));
@@ -151,10 +158,12 @@ namespace BugFablesAP
             int[] descs = All(code, 0, code.Count, c => c.Calls(descWindow));
             int[] anchors = All(code, 0, code.Count, c => c.Calls(getSprite));
             int start = anchors.Length == 1 ? anchors[0] : -1;
-            int end = start < 0 ? -1 : code.FindIndex(start, c => c.opcode == OpCodes.Ldstr && c.operand as string == "ItemGet");
+            int end = start < 0 ? -1 : code.FindIndex(start,
+                c => c.opcode == OpCodes.Ldstr && c.operand as string == "ItemGet");
             int[] itemAdds = end < 0 ? new int[0] : All(code, start, end, c => c.Calls(addItem));
             int[] badgeAdds = end < 0 ? new int[0] : All(code, start, end, c => c.Calls(addBadge));
-            int tutorial = end < 0 ? -1 : code.FindIndex(end, c => c.opcode == OpCodes.Ldstr && c.operand as string == TutorialText);
+            int tutorial = end < 0 ? -1 : code.FindIndex(end,
+                c => c.opcode == OpCodes.Ldstr && c.operand as string == TutorialText);
             // flags[31]: ldfld flags, ldc.i4.s 31, ldelem.u1, between the sound and the tutorial text.
             int[] reads = tutorial < 0 ? new int[0] : All(code, end, tutorial, c => c.opcode == OpCodes.Ldelem_U1)
                 .Where(i => i >= 2 && code[i - 2].LoadsField(flags) && code[i - 1].LoadsConstant(31)).ToArray();
@@ -174,7 +183,8 @@ namespace BugFablesAP
             Replace(code[itemAdds[0]], nameof(AddItem));
             Replace(code[badgeAdds[0]], nameof(AddBadge));
             Replace(code[reads[0]], nameof(FirstMedalSeen));
-            log.LogInfo($"[swap] installed in MainManager.SetText's Giveitem (instructions {descs[0]}, {start}, {itemAdds[0]}, "
+            log.LogInfo(
+                $"[swap] installed in MainManager.SetText's Giveitem (instructions {descs[0]}, {start}, {itemAdds[0]}, "
                 + $"{badgeAdds[0]}, {reads[0]})");
             return code;
         }
@@ -210,7 +220,8 @@ namespace BugFablesAP
                 Decide(badge, id); // no NPC: no description box came first
             }
             decided = false; // the next Giveitem decides afresh
-            return location == -1 ? MainManager.GetItemSprite(badge, id) : shownSprite ?? MainManager.GetItemSprite(badge, id);
+            return location == -1 ? MainManager.GetItemSprite(badge, id)
+                : shownSprite ?? MainManager.GetItemSprite(badge, id);
         }
 
         public static void AddItem(List<int> list, int id)
@@ -305,8 +316,8 @@ namespace BugFablesAP
             }
             else
             {
-                // Another game's item: the drawn Archipelago icon, on Archipelago's classification colours (NetUtils.py):
-                // progression, useful, trap, filler.
+                // Another game's item: the drawn Archipelago icon, on Archipelago's classification colours
+                // (NetUtils.py): progression, useful, trap, filler.
                 name = info.Player.Name + "'s " + info.ItemDisplayName;
                 sprite = QualityOfLife.IconMode == "Off" ? null : ApIcon.Get();
                 color = ClassColor(info.Flags);
@@ -331,11 +342,12 @@ namespace BugFablesAP
 
         private static void StartHoldUp()
         {
-            MainManager.instance.StartCoroutine(MainManager.SetText($"|giveitem,1,{StandIn},{EmptyLine},-1|", dialogue: true, Vector3.zero, null, null));
+            MainManager.instance.StartCoroutine(MainManager.SetText($"|giveitem,1,{StandIn},{EmptyLine},-1|",
+                dialogue: true, Vector3.zero, null, null));
         }
 
-        // "You got |string,1| |color,1||string,0|...": with no article the space goes too, for this one line (Giveitem
-        // reads menutext[106] right after this), then the game's text is put back.
+        // "You got |string,1| |color,1||string,0|...": with no article the space goes too, for this one line
+        // (Giveitem reads menutext[106] right after this), then the game's text is put back.
         private const int GotLine = 106;
         private const string ArticleSlot = "|string,1| ";
         private const string NameThenRed = "|string,0||color,1|", NameThenBlack = "|string,0||color,0|";
@@ -385,7 +397,8 @@ namespace BugFablesAP
             {
                 Recolour(shownColor.Value);
             }
-            log.LogInfo(location == DisplayOnly ? $"[swap] held up '{shownName}' (display only)" : $"[swap] location {location}: kept {what} out of the inventory");
+            log.LogInfo(location == DisplayOnly ? $"[swap] held up '{shownName}' (display only)"
+                : $"[swap] location {location}: kept {what} out of the inventory");
             location = -1;
             swapped = true;
             return true;
@@ -421,10 +434,12 @@ namespace BugFablesAP
 
         private static void ShowOwnDescription(NPCControl caller, ScoutedItemInfo info)
         {
-            if (info == null || !IsOurs(info) || KindOf(info) == ItemIds.MoneyKind || KindOf(info) == ItemIds.CrystalKind
+            if (info == null || !IsOurs(info) || KindOf(info) == ItemIds.MoneyKind
+                || KindOf(info) == ItemIds.CrystalKind
                 || KindOf(info) == ItemIds.MemberKind || KindOf(info) == ItemIds.MoveKind)
             {
-                return; // berries have no description box, as in the game's own money giveitem; a member or move has no item row
+                return; // berries have no description box, as in the game's own money giveitem; a member or move has
+                // no item row
             }
             int kind = KindOf(info);
             bool medal = kind == ItemIds.MedalKind;
@@ -472,7 +487,8 @@ namespace BugFablesAP
                 bool sameKind = badge ? give.Type == 2 : give.Type == 0 || give.Type == 1;
                 if (sameKind && give.Item == id && give.Map == map)
                 {
-                    return connection.LocationShops != null && connection.LocationShops.ContainsKey(entry.Key) ? ShopSwap.Buy(entry.Key) : entry.Key;
+                    return connection.LocationShops != null && connection.LocationShops.ContainsKey(entry.Key)
+                        ? ShopSwap.Buy(entry.Key) : entry.Key;
                 }
             }
             return -1;

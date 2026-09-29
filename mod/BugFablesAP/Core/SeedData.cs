@@ -5,8 +5,8 @@ using Newtonsoft.Json.Linq;
 
 namespace BugFablesAP
 {
-    // What a login reads from the seed's slot_data, parsed whole into one read-only record before anything is published.
-    // The connection keeps it after a drop, so the seed's rules stay in force while offline.
+    // What a login reads from the seed's slot_data, parsed whole into one read-only record before anything is
+    // published. The connection keeps it after a drop, so the seed's rules stay in force while offline.
     internal sealed class SeedData
     {
         internal readonly Dictionary<long, int> LocationFlags;
@@ -36,8 +36,8 @@ namespace BugFablesAP
         internal readonly List<DoorShuffle.Target> DoorTargets;
         // {"map:entity index": enemy ids}: the fight a map enemy starts instead of its own (Enemy Shuffle).
         internal readonly Dictionary<string, int[]> EnemySwaps;
-        // Where a new file begins (Starting Location): the map and a save point's entity index (-1 for none); null for the
-        // game's own start. StartFrom: the map whose door leads in, for a start entered as if through that door.
+        // Where a new file begins (Starting Location): the map and a save point's entity index (-1 for none); null for
+        // the game's own start. StartFrom: the map whose door leads in, for a start entered as if through that door.
         internal readonly KeyValuePair<string, int>? Start;
         internal readonly string StartFrom;
         // The goal: this many artifacts, as the game counts them. 0 when slot_data has none.
@@ -80,15 +80,18 @@ namespace BugFablesAP
                 From = e.Value<int>("flag"),
                 To = e.Value<int>("to"),
             });
-            LocationVars = SlotData.ByLocation(data, "location_vars", v => new[] { v.Value<int>("var"), v.Value<int>("at_least") });
+            LocationVars = SlotData.ByLocation(data, "location_vars",
+                v => new[] { v.Value<int>("var"), v.Value<int>("at_least") });
             LocationBerries = SlotData.ByLocation(data, "location_berries", v => v.Value<int>());
-            LocationAdded = SlotData.ByLocation(data, "location_added", v => new[] { v.Value<int>("type"), v.Value<int>("item") });
+            LocationAdded = SlotData.ByLocation(data, "location_added",
+                v => new[] { v.Value<int>("type"), v.Value<int>("item") });
             LocationDiscoveries = SlotData.ByLocation(data, "location_discoveries", v => v.Value<int>());
             List<long> silent = SlotData.List(data, "silent_locations", e => e.Value<long>());
             SilentLocations = silent != null ? new HashSet<long>(silent) : null;
             List<long> quiet = SlotData.List(data, "quiet_locations", e => e.Value<long>());
             QuietLocations = quiet != null ? new HashSet<long>(quiet) : null;
-            LocationShops = SlotData.ByLocation(data, "location_shops", v => new[] { v.Value<int>("shop"), v.Value<int>("medal") });
+            LocationShops = SlotData.ByLocation(data, "location_shops",
+                v => new[] { v.Value<int>("shop"), v.Value<int>("medal") });
             LocationItemShops = SlotData.ByLocation(data, "location_item_shops", v => new ApConnection.ItemShopSlot
             {
                 Map = v.Value<string>("map"),
@@ -102,25 +105,32 @@ namespace BugFablesAP
                 LikeMap = e.Value<string>("like_map"),
                 LikeDoor = e.Value<string>("like_door"),
             });
-            EnemySwaps = SlotData.Object(data, "enemy_swaps")?.Properties().ToDictionary(p => p.Name, p => p.Value.ToObject<int[]>());
+            EnemySwaps = SlotData.Object(data, "enemy_swaps")?.Properties()
+                .ToDictionary(p => p.Name, p => p.Value.ToObject<int[]>());
             JObject startData = SlotData.Object(data, "start");
-            if (startData != null && (startData["map"] == null || startData["entity"] == null && startData["from"] == null))
+            if (startData != null
+                && (startData["map"] == null || startData["entity"] == null && startData["from"] == null))
             {
                 startData = null;
             }
             StartFrom = startData?.Value<string>("from");
             Start = startData != null
-                ? new KeyValuePair<string, int>(startData.Value<string>("map"), startData["entity"] != null ? startData.Value<int>("entity") : -1)
+                ? new KeyValuePair<string, int>(startData.Value<string>("map"),
+                    startData["entity"] != null ? startData.Value<int>("entity") : -1)
                 : (KeyValuePair<string, int>?)null;
             OwnSlot = ownSlot;
             object member = null;
             StartingMemberGiven = data != null && data.TryGetValue("starting_member", out member) && member != null;
             StartingMember = StartingMemberGiven ? Convert.ToInt32(member) : -1;
             ItemKinds = SlotData.ByLocation(data, "item_kinds", v => v.Value<int>());
-            MovesShuffled = data != null && data.TryGetValue("shuffle_moves", out object moves) && moves is bool movesOn && movesOn;
-            JumpShuffled = data != null && data.TryGetValue("shuffle_jump", out object jump) && jump is bool jumpOn && jumpOn;
-            AbilityItems = data != null && data.TryGetValue("ability_items", out object abilities) && abilities is bool abilitiesOn && abilitiesOn;
-            ArtifactsRequired = data != null && data.TryGetValue("artifacts_required", out object required) && required != null
+            MovesShuffled = data != null && data.TryGetValue("shuffle_moves", out object moves) && moves is bool movesOn
+                && movesOn;
+            JumpShuffled = data != null && data.TryGetValue("shuffle_jump", out object jump) && jump is bool jumpOn
+                && jumpOn;
+            AbilityItems = data != null && data.TryGetValue("ability_items", out object abilities)
+                && abilities is bool abilitiesOn && abilitiesOn;
+            ArtifactsRequired = data != null && data.TryGetValue("artifacts_required", out object required)
+                && required != null
                 ? Convert.ToInt32(required) : 0;
         }
 

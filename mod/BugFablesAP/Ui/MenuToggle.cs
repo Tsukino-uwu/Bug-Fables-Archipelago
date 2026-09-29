@@ -20,7 +20,8 @@ namespace BugFablesAP
         private static Func<bool> seedKnown;
 
         internal static void Enable(ManualLogSource logger, ConfigEntry<bool> randomizerEnabled,
-            ConfigEntry<string> serverEntry, ConfigEntry<string> portEntry, ConfigEntry<string> slotEntry, ConfigEntry<string> passwordEntry,
+            ConfigEntry<string> serverEntry, ConfigEntry<string> portEntry, ConfigEntry<string> slotEntry,
+            ConfigEntry<string> passwordEntry,
             Func<string> statusText, Func<bool> seedIsKnown)
         {
             log = logger;
@@ -49,7 +50,8 @@ namespace BugFablesAP
         private static void DrawLabel(Transform line)
         {
             MainManager.instance.StartCoroutine(MainManager.SetText(Label, new Vector3(0f, 0f, 10f), line));
-            MainManager.instance.StartCoroutine(MainManager.SetText(StateTag, new Vector3(StateTagX, 0.22f, 10f), line));
+            MainManager.instance.StartCoroutine(
+                MainManager.SetText(StateTag, new Vector3(StateTagX, 0.22f, 10f), line));
         }
 
         // The game's SetMenuText loop indexes a three-label array by selections.Length: hand it back its three entries
@@ -79,7 +81,8 @@ namespace BugFablesAP
                 Transform[] selections = __instance.selections;
                 if (selections == null || selections.Length != Option)
                 {
-                    log.LogWarning($"[menu] expected {Option} main-menu entries, found {selections?.Length ?? 0}; no entry added");
+                    log.LogWarning(
+                        $"[menu] expected {Option} main-menu entries, found {selections?.Length ?? 0}; no entry added");
                     return;
                 }
                 Array.Resize(ref selections, Option + 1);
@@ -103,7 +106,8 @@ namespace BugFablesAP
 
         internal static void RefreshLabel(StartMenu menu)
         {
-            Transform line = menu.selections != null && menu.selections.Length > Option ? menu.selections[Option] : null;
+            Transform line = menu.selections != null && menu.selections.Length > Option
+                ? menu.selections[Option] : null;
             if (line != null)
             {
                 TextPool.Free(line);
@@ -123,7 +127,8 @@ namespace BugFablesAP
 
         [HarmonyPatch(typeof(StartMenu), "Update")]
         [HarmonyPrefix]
-        private static bool BeforeUpdate(StartMenu __instance, int ___menuid, int ___submenu, float ___cd, bool ___canselect)
+        private static bool BeforeUpdate(StartMenu __instance, int ___menuid, int ___submenu, float ___cd,
+            bool ___canselect)
         {
             try
             {
@@ -131,7 +136,8 @@ namespace BugFablesAP
                 {
                     return false;
                 }
-                if (ApMenu.Open != null || ___menuid != 1 || ___cd > 0f || !___canselect || MainManager.pausemenu != null)
+                if (ApMenu.Open != null || ___menuid != 1 || ___cd > 0f || !___canselect
+                    || MainManager.pausemenu != null)
                 {
                     return true;
                 }
@@ -167,13 +173,15 @@ namespace BugFablesAP
                 return true;
             }
             if (!mode.Value || seedKnown() || menuid != 2 || submenu != 0 || cd > 0f || !canselect
-                || MainManager.pausemenu != null || MainManager.instance.option >= Option || !MainManager.GetKey(4, hold: false))
+                || MainManager.pausemenu != null || MainManager.instance.option >= Option
+                || !MainManager.GetKey(4, hold: false))
             {
                 return false;
             }
             MainManager.PlayBuzzer();
             ShowPopup();
-            log.LogInfo("[menu] held back file " + MainManager.instance.option + ": the seed isn't known yet (no login this run)");
+            log.LogInfo("[menu] held back file " + MainManager.instance.option
+                + ": the seed isn't known yet (no login this run)");
             return true;
         }
 
@@ -197,21 +205,28 @@ namespace BugFablesAP
             dim.transform.localScale = new Vector3(3000f, 3000f, 1f);
             dim.gameObject.layer = 5;
             dim.sortingOrder = PopupDimSort;
-            Transform box = MainManager.Create9Box(new Vector3(0f, 0f, 10f), new Vector2(12f, 4.75f), 1, PopupBoxSort, Color.white, false);
+            Transform box = MainManager.Create9Box(new Vector3(0f, 0f, 10f), new Vector2(12f, 4.75f), 1, PopupBoxSort,
+                Color.white, false);
             box.parent = popup;
             // Over the three save slots.
             box.localPosition = new Vector3(0f, 0.9f, 0f);
             string sort = "|sort," + PopupTextSort + "|";
-            MainManager.instance.StartCoroutine(MainManager.SetText(sort + "|center||size,0.8|Not connected to Archipelago", new Vector3(0f, 1.45f, 0f), box));
-            MainManager.instance.StartCoroutine(MainManager.SetText(sort + "|center||size,0.6|Connect in the Archipelago panel on the main menu,", new Vector3(0f, 0.6f, 0f), box));
-            MainManager.instance.StartCoroutine(MainManager.SetText(sort + "|center||size,0.6|then choose your file again.", new Vector3(0f, 0.05f, 0f), box));
+            MainManager.instance.StartCoroutine(MainManager.SetText(
+                sort + "|center||size,0.8|Not connected to Archipelago", new Vector3(0f, 1.45f, 0f), box));
+            MainManager.instance.StartCoroutine(MainManager.SetText(
+                sort + "|center||size,0.6|Connect in the Archipelago panel on the main menu,",
+                new Vector3(0f, 0.6f, 0f), box));
+            MainManager.instance.StartCoroutine(MainManager.SetText(
+                sort + "|center||size,0.6|then choose your file again.", new Vector3(0f, 0.05f, 0f), box));
             popupStatus = new GameObject("status").transform;
             popupStatus.parent = box;
             popupStatus.localPosition = Vector3.zero;
             shownPopupStatus = null;
             // ButtonSprite's label has no sort of its own and fell behind the box: the label carries the sort.
-            new GameObject("okbutton").AddComponent<ButtonSprite>().SetUp(4, -1, sort + "OK", new Vector3(-2.4f, -1.6f), Vector3.one * 0.5f, PopupTextSort, box);
-            new GameObject("closebutton").AddComponent<ButtonSprite>().SetUp(5, -1, sort + "Close", new Vector3(0.6f, -1.6f), Vector3.one * 0.5f, PopupTextSort, box);
+            new GameObject("okbutton").AddComponent<ButtonSprite>().SetUp(4, -1, sort + "OK",
+                new Vector3(-2.4f, -1.6f), Vector3.one * 0.5f, PopupTextSort, box);
+            new GameObject("closebutton").AddComponent<ButtonSprite>().SetUp(5, -1, sort + "Close",
+                new Vector3(0.6f, -1.6f), Vector3.one * 0.5f, PopupTextSort, box);
             popupFrame = Time.frameCount;
             DrawPopupStatus();
         }
@@ -225,7 +240,8 @@ namespace BugFablesAP
             }
             shownPopupStatus = s;
             TextPool.Free(popupStatus);
-            MainManager.instance.StartCoroutine(MainManager.SetText("|sort," + PopupTextSort + "||center||size,0.5|" + s.Replace("|", "/"),
+            MainManager.instance.StartCoroutine(MainManager.SetText(
+                "|sort," + PopupTextSort + "||center||size,0.5|" + s.Replace("|", "/"),
                 new Vector3(0f, -0.75f, 0f), popupStatus));
         }
 
@@ -233,7 +249,8 @@ namespace BugFablesAP
         {
             DrawPopupStatus();
             // The press that opened it is still "down" this frame.
-            if (Time.frameCount > popupFrame && (MainManager.GetKey(4, hold: false) || MainManager.GetKey(5, hold: false)))
+            if (Time.frameCount > popupFrame
+                && (MainManager.GetKey(4, hold: false) || MainManager.GetKey(5, hold: false)))
             {
                 MainManager.PlaySound("Confirm", -1);
                 ClosePopup();
@@ -256,7 +273,8 @@ namespace BugFablesAP
         private static void AfterUpdate(int ___menuid)
         {
             // Only the main menu's own cursor: under the game's Settings screen it is Settings' cursor.
-            if (___menuid != 1 || MainManager.instance?.cursor == null || MainManager.pausemenu != null || ApMenu.Open != null)
+            if (___menuid != 1 || MainManager.instance?.cursor == null || MainManager.pausemenu != null
+                || ApMenu.Open != null)
             {
                 return;
             }

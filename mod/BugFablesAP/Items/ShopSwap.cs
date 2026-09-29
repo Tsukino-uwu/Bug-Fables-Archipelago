@@ -38,7 +38,8 @@ namespace BugFablesAP
         }
 
         // {shop: (slots, spread)}: spots laid out evenly around the middle of the shopkeeper's first and last spot.
-        private static readonly Dictionary<int, float[]> ShelfSlots = new Dictionary<int, float[]> { { 0, new[] { 5f, 1f } }, { 1, new[] { 4f, 1.35f } } };
+        private static readonly Dictionary<int, float[]> ShelfSlots =
+            new Dictionary<int, float[]> { { 0, new[] { 5f, 1f } }, { 1, new[] { 4f, 1.35f } } };
 
         // The game rebuilds the shelf on the same shopkeeper after a purchase; stretching twice drifts it.
         private static readonly HashSet<NPCControl> stretched = new HashSet<NPCControl>();
@@ -64,7 +65,8 @@ namespace BugFablesAP
                 {
                     return;
                 }
-                if (randomizerOn == null || !randomizerOn() || __instance.interacttype == NPCControl.Interaction.CaravanBadge
+                if (randomizerOn == null || !randomizerOn()
+                    || __instance.interacttype == NPCControl.Interaction.CaravanBadge
                     || __instance.dialogues == null || __instance.dialogues.Length < 10
                     || !ShelfSlots.TryGetValue((int)__instance.dialogues[9].x, out float[] layout)
                     || __instance.data == null || __instance.data.Length < 2
@@ -104,7 +106,8 @@ namespace BugFablesAP
         // Built once per slot_data: the check tick asks every frame, and rebuilding made garbage enough for a
         // collection (a visible stall) every couple of seconds.
         private static Dictionary<long, int[]> copiesFor;
-        private static readonly Dictionary<int, List<KeyValuePair<long, int>>> copiesByShop = new Dictionary<int, List<KeyValuePair<long, int>>>();
+        private static readonly Dictionary<int, List<KeyValuePair<long, int>>> copiesByShop =
+            new Dictionary<int, List<KeyValuePair<long, int>>>();
         private static readonly Dictionary<long, int> copyIndex = new Dictionary<long, int>();
         private static readonly List<KeyValuePair<long, int>> noCopies = new List<KeyValuePair<long, int>>();
 
@@ -137,7 +140,8 @@ namespace BugFablesAP
         private static bool Bought(int shop, int index)
         {
             int[] vars = MainManager.instance?.flagvar;
-            return vars != null && shop < BoughtSlot.Length && index < 31 && (vars[BoughtSlot[shop]] & (1 << index)) != 0;
+            return vars != null && shop < BoughtSlot.Length && index < 31
+                && (vars[BoughtSlot[shop]] & (1 << index)) != 0;
         }
 
         private static bool Done(int shop, int index, long location)
@@ -211,11 +215,13 @@ namespace BugFablesAP
             {
                 MainManager mm = MainManager.instance;
                 Dictionary<long, int[]> shops = connection?.LocationShops;
-                if (randomizerOn == null || !randomizerOn() || shops == null || mm?.badgeshops == null || mm.flagvar == null)
+                if (randomizerOn == null || !randomizerOn() || shops == null || mm?.badgeshops == null
+                    || mm.flagvar == null)
                 {
                     return;
                 }
-                // The buy line's kill,caller rebuilds the shelf before its giveitem sets the bit; leave the game's removal alone.
+                // The buy line's kill,caller rebuilds the shelf before its giveitem sets the bit; leave the game's
+                // removal alone.
                 if (mm.message && pendingCopy >= 0)
                 {
                     log.LogInfo($"[shop] shelf rebuilt during a purchase (location {pendingCopy}): stock left as the game has it");
@@ -243,8 +249,10 @@ namespace BugFablesAP
         // Among the shelf's live slots of the same medal, the k-th stands for that medal's k-th copy not yet done.
         private static long LocationOf(NPCControl npc)
         {
-            if (connection?.LocationShops == null || npc == null || npc.interacttype != NPCControl.Interaction.Shop || npc.entity == null
-                || npc.entity.animid != 2 || npc.shopkeeper == null || npc.shopkeeper.dialogues == null || npc.shopkeeper.dialogues.Length < 10)
+            if (connection?.LocationShops == null || npc == null || npc.interacttype != NPCControl.Interaction.Shop
+                || npc.entity == null
+                || npc.entity.animid != 2 || npc.shopkeeper == null || npc.shopkeeper.dialogues == null
+                || npc.shopkeeper.dialogues.Length < 10)
             {
                 return -1;
             }
@@ -292,7 +300,8 @@ namespace BugFablesAP
             }
             int medal = __instance.entity.animstate;
             ItemSwap.LookOf(at, out string name, out _, out string description);
-            __state = new Saved { Medal = medal, Name = MainManager.badgedata[medal, 0], Description = MainManager.badgedata[medal, 1] };
+            __state = new Saved { Medal = medal, Name = MainManager.badgedata[medal, 0],
+                Description = MainManager.badgedata[medal, 1] };
             MainManager.badgedata[medal, 0] = name ?? __state.Name;
             MainManager.badgedata[medal, 1] = description ?? __state.Description;
         }
@@ -328,7 +337,8 @@ namespace BugFablesAP
                 return;
             }
             bool on = randomizerOn != null && randomizerOn();
-            SetPrices(QualityOfLife.SettingsOn != null && QualityOfLife.SettingsOn() ? QualityOfLife.MedalPrices?.Value ?? QualityOfLife.FullPrice : QualityOfLife.FullPrice);
+            SetPrices(QualityOfLife.SettingsOn != null && QualityOfLife.SettingsOn()
+                ? QualityOfLife.MedalPrices?.Value ?? QualityOfLife.FullPrice : QualityOfLife.FullPrice);
             MapControl map = MainManager.map;
             if (!on || map == null || connection?.LocationShops == null)
             {
@@ -356,7 +366,8 @@ namespace BugFablesAP
         private static void Settle()
         {
             MainManager mm = MainManager.instance;
-            if (mm?.flagvar == null || MainManager.player == null || mm.inevent || mm.message || MainManager.battle != null
+            if (mm?.flagvar == null || MainManager.player == null || mm.inevent || mm.message
+                || MainManager.battle != null
                 || connection.Session == null || ItemReceiver.SaveMatchesSeed(connection, log) != true)
             {
                 return;

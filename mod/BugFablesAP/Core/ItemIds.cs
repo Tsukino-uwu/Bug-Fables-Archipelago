@@ -22,7 +22,8 @@ namespace BugFablesAP
 
         internal static int GameId(long itemId, int kind)
         {
-            int offset = kind == MedalKind ? MedalOffset : kind == MoneyKind ? MoneyOffset : kind == CrystalKind ? CrystalOffset
+            int offset = kind == MedalKind ? MedalOffset : kind == MoneyKind ? MoneyOffset
+                : kind == CrystalKind ? CrystalOffset
                 : kind == MemberKind ? MemberOffset : kind == MoveKind ? MoveOffset : 0;
             return (int)(itemId - Base - offset);
         }

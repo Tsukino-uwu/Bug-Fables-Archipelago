@@ -245,7 +245,8 @@ namespace BugFablesAP
                 int asIf = Mathf.Clamp(MainManager.instance.partylevel - diff, 1, 27);
                 exp = MainManager.GetEXP(baseExp, asIf, (MainManager.Enemies)__result.animid);
             }
-            log.LogInfo($"[scale] {(MainManager.Enemies)id} ({id}): home {home}, target {target}: hp {__result.hp} -> {hp}, "
+            log.LogInfo(
+                $"[scale] {(MainManager.Enemies)id} ({id}): home {home}, target {target}: hp {__result.hp} -> {hp}, "
                 + $"hits x{ratio:0.00}, def {__result.def} -> {def}, exp {__result.exp} -> {exp}");
             __result.hp = hp;
             __result.maxhp = hp;

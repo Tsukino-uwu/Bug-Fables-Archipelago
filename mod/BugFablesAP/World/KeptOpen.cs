@@ -28,7 +28,8 @@ namespace BugFablesAP
             }
             Hooks.Install(typeof(NewEntities), "open", "a kept-present shopkeeper's shop is built without it");
             Hooks.Install(typeof(Insides), "open", "an entity kept away flashes when entering or leaving a house");
-            bool scenery = Hooks.Install(typeof(Scenery), "open", "scenery the seed removes (the Outskirts rocks) will stay");
+            bool scenery = Hooks.Install(typeof(Scenery), "open",
+                "scenery the seed removes (the Outskirts rocks) will stay");
             log.LogInfo($"[open] installed on MapControl.CreateEntities and MainManager.CheckIfCanExist{(scenery ? " and ConditionChecker.Start" : "")}");
         }
 
@@ -39,7 +40,8 @@ namespace BugFablesAP
         {
             object lists = connection?.KeptOpen;
             MapControl map = MainManager.map;
-            if (lists == null || ReferenceEquals(lists, appliedFor) || map == null || randomizerOn == null || !randomizerOn())
+            if (lists == null || ReferenceEquals(lists, appliedFor) || map == null || randomizerOn == null
+                || !randomizerOn())
             {
                 return;
             }
@@ -120,7 +122,8 @@ namespace BugFablesAP
             string map = __instance.mapid.ToString();
             foreach (ApConnection.Blocker blocker in blockers.Where(b => b.Map == map))
             {
-                foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true).Where(n => n.name == blocker.Entity))
+                foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true)
+                    .Where(n => n.name == blocker.Entity))
                 {
                     var marker = new[] { -1 };
                     markers.Add(marker);
@@ -132,9 +135,11 @@ namespace BugFablesAP
                     log.LogInfo($"[open] {map}: {npc.name} kept out of the way (the seed keeps this area open)");
                 }
             }
-            foreach (ApConnection.Blocker way in (connection.KeptPresent ?? new List<ApConnection.Blocker>()).Where(b => b.Map == map))
+            foreach (ApConnection.Blocker way in (connection.KeptPresent ?? new List<ApConnection.Blocker>())
+                .Where(b => b.Map == map))
             {
-                foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true).Where(n => n.name == way.Entity))
+                foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true)
+                    .Where(n => n.name == way.Entity))
                 {
                     var marker = new[] { -1 };
                     presentMarkers.Add(marker);
@@ -148,8 +153,10 @@ namespace BugFablesAP
             }
             // A one-time pickup whose check the server has is kept away in every save; a respawning one is the game's
             // own again and a story one starts its scene, so both stay.
-            foreach (KeyValuePair<long, ApConnection.Pickup> found in (connection.LocationPickups ?? new Dictionary<long, ApConnection.Pickup>())
-                .Where(p => p.Value.Map == map && p.Value.Regional < 0 && p.Value.Event < 0 && connection.IsDone(p.Key)))
+            foreach (KeyValuePair<long, ApConnection.Pickup> found in
+                (connection.LocationPickups ?? new Dictionary<long, ApConnection.Pickup>())
+                .Where(p => p.Value.Map == map && p.Value.Regional < 0 && p.Value.Event < 0
+                    && connection.IsDone(p.Key)))
             {
                 foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true)
                     .Where(n => n.objecttype == NPCControl.ObjectTypes.Item && ItemSwap.IsPickup(found.Value, n)))
@@ -159,9 +166,11 @@ namespace BugFablesAP
                 }
             }
             // present_from: the entity's requires replaced by an earlier story flag, so the game makes it from then on.
-            foreach (ApConnection.Blocker from in (connection.PresentFrom ?? new List<ApConnection.Blocker>()).Where(b => b.Map == map && b.Flag >= 0))
+            foreach (ApConnection.Blocker from in (connection.PresentFrom ?? new List<ApConnection.Blocker>())
+                .Where(b => b.Map == map && b.Flag >= 0))
             {
-                foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true).Where(n => n.name == from.Entity))
+                foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true)
+                    .Where(n => n.name == from.Entity))
                 {
                     npc.requires = new[] { from.Flag };
                     bool now = MainManager.instance.flags[from.Flag];
@@ -173,9 +182,11 @@ namespace BugFablesAP
                 }
             }
             // dialogue_flags: an entity picks the last line whose flag is set; repoint one line's flag.
-            foreach (ApConnection.DialogueFlag swap in (connection.DialogueFlags ?? new List<ApConnection.DialogueFlag>()).Where(b => b.Map == map))
+            foreach (ApConnection.DialogueFlag swap in
+                (connection.DialogueFlags ?? new List<ApConnection.DialogueFlag>()).Where(b => b.Map == map))
             {
-                foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true).Where(n => n.name == swap.Entity && n.dialogues != null))
+                foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true)
+                    .Where(n => n.name == swap.Entity && n.dialogues != null))
                 {
                     for (int d = 0; d < npc.dialogues.Length; d++)
                     {
@@ -188,9 +199,11 @@ namespace BugFablesAP
                 }
             }
             // held_until: added to the entity's requires (never replacing them), so the game keeps it away until then.
-            foreach (ApConnection.Blocker held in (connection.HeldUntil ?? new List<ApConnection.Blocker>()).Where(b => b.Map == map && b.Flag >= 0))
+            foreach (ApConnection.Blocker held in (connection.HeldUntil ?? new List<ApConnection.Blocker>())
+                .Where(b => b.Map == map && b.Flag >= 0))
             {
-                foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true).Where(n => n.name == held.Entity))
+                foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true)
+                    .Where(n => n.name == held.Entity))
                 {
                     var requires = (npc.requires ?? new int[0]).Where(f => f >= 0).ToList();
                     if (!requires.Contains(held.Flag))
@@ -293,8 +306,8 @@ namespace BugFablesAP
                 }
                 foreach (EntityControl entity in __instance.entities)
                 {
-                    if (entity != null && entity.npcdata != null && entity.npcdata.limit != null && markers.Contains(entity.npcdata.limit)
-                        && entity.gameObject.activeSelf)
+                    if (entity != null && entity.npcdata != null && entity.npcdata.limit != null
+                        && markers.Contains(entity.npcdata.limit) && entity.gameObject.activeSelf)
                     {
                         entity.gameObject.SetActive(false);
                     }
@@ -302,11 +315,13 @@ namespace BugFablesAP
             }
         }
 
-        [HarmonyPatch(typeof(MainManager), nameof(MainManager.CheckIfCanExist), typeof(int[]), typeof(int[]), typeof(int))]
+        [HarmonyPatch(typeof(MainManager), nameof(MainManager.CheckIfCanExist), typeof(int[]), typeof(int[]),
+            typeof(int))]
         [HarmonyPrefix]
         private static bool BeforeCheck(int[] requires, int[] limit, ref bool __result)
         {
-            if (creating && requires != null && lastMade != null && lastMade.npcdata != null && ReferenceEquals(requires, lastMade.npcdata.requires)
+            if (creating && requires != null && lastMade != null && lastMade.npcdata != null
+                && ReferenceEquals(requires, lastMade.npcdata.requires)
                 && randomizerOn != null && randomizerOn() && KeptPresentHere(lastMade.name))
             {
                 __result = false;

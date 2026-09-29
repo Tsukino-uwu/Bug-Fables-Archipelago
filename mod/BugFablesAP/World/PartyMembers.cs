@@ -27,7 +27,8 @@ namespace BugFablesAP
         internal static readonly HashSet<int> Received = new HashSet<int>();
 
         // Needs a map: the title screen sets up a party of its own.
-        internal static bool Active => StartMember >= 0 && randomizerOn != null && randomizerOn() && MainManager.map != null;
+        internal static bool Active =>
+            StartMember >= 0 && randomizerOn != null && randomizerOn() && MainManager.map != null;
 
         internal static bool Allowed(int id) => id == StartMember || StartMember == AllMembers || Received.Contains(id);
 
@@ -72,7 +73,8 @@ namespace BugFablesAP
             {
                 return;
             }
-            Hooks.Install(typeof(JoiningScenes), "members", "a joining scene for a member already in the party plays and may crash");
+            Hooks.Install(typeof(JoiningScenes), "members",
+                "a joining scene for a member already in the party plays and may crash");
             log.LogInfo($"[members] installed on MainManager.ChangeParty (starting member {StartMember})");
         }
 
@@ -98,7 +100,8 @@ namespace BugFablesAP
             // A member not allowed yet is played by an allowed one the story doesn't have yet, as in scenes (PartyFit):
             // the story's "Kabbu alone" becomes Leif alone, its "Vi and Kabbu" Vi and Leif.
             int[] asked = ids;
-            var substitutes = Enumerable.Range(0, 3).Where(m => Allowed(m) && !asked.Contains(m) && !PartyFit.InStoryParty(m)).ToList();
+            var substitutes = Enumerable.Range(0, 3)
+                .Where(m => Allowed(m) && !asked.Contains(m) && !PartyFit.InStoryParty(m)).ToList();
             var kept = new List<int>();
             foreach (int id in ids)
             {
@@ -124,7 +127,8 @@ namespace BugFablesAP
                     kept.Add(StartMember);
                 }
             }
-            log.LogInfo($"[members] the story asked for party {string.Join(",", ids.Select(i => i.ToString()).ToArray())}; "
+            log.LogInfo(
+                $"[members] the story asked for party {string.Join(",", ids.Select(i => i.ToString()).ToArray())}; "
                 + $"given {string.Join(",", kept.Select(i => i.ToString()).ToArray())} (event {MainManager.lastevent})");
             ids = kept.ToArray();
         }
@@ -141,14 +145,17 @@ namespace BugFablesAP
             }
             int[] asked = ids;
             // With all three from the start, whoever isn't here yet joins too (the opening then has Leif at once).
-            IEnumerable<int> candidates = StartMember == AllMembers ? Enumerable.Range(0, 3) : mm.playerdata.Select(p => p.trueid);
-            int[] ahead = candidates.Where(m => Allowed(m) && !asked.Contains(m) && !PartyFit.InStoryParty(m)).ToArray();
+            IEnumerable<int> candidates = StartMember == AllMembers ? Enumerable.Range(0, 3)
+                : mm.playerdata.Select(p => p.trueid);
+            int[] ahead = candidates
+                .Where(m => Allowed(m) && !asked.Contains(m) && !PartyFit.InStoryParty(m)).ToArray();
             if (ahead.Length == 0)
             {
                 return;
             }
             ids = ids.Concat(ahead).ToArray();
-            log.LogInfo($"[members] the story asked for party {string.Join(",", asked.Select(i => i.ToString()).ToArray())}; "
+            log.LogInfo(
+                $"[members] the story asked for party {string.Join(",", asked.Select(i => i.ToString()).ToArray())}; "
                 + $"kept {string.Join(",", ahead.Select(i => i.ToString()).ToArray())} too (event {MainManager.lastevent})");
         }
 
@@ -162,7 +169,8 @@ namespace BugFablesAP
             private static bool BeforeStartEvent(int id)
             {
                 MainManager mm = MainManager.instance;
-                if (id != 14 || randomizerOn == null || !randomizerOn() || MainManager.map == null || mm.playerdata == null)
+                if (id != 14 || randomizerOn == null || !randomizerOn() || MainManager.map == null
+                    || mm.playerdata == null)
                 {
                     return true;
                 }
@@ -175,7 +183,9 @@ namespace BugFablesAP
                     creature.gameObject.SetActive(false);
                 }
                 mm.extrafollowers?.RemoveAll(f => f == 2);
-                log.LogInfo($"[members] Leif's joining scene (Event14) skipped: " + (joined ? "Leif joined the party" : "Leif not added (already in, or not allowed)") + "; flag 16 set, "
+                log.LogInfo($"[members] Leif's joining scene (Event14) skipped: "
+                    + (joined ? "Leif joined the party" : "Leif not added (already in, or not allowed)")
+                    + "; flag 16 set, "
                     + (creature != null ? $"entity 5 ({creature.name}) removed" : "no entity 5"));
                 return false;
             }
@@ -185,8 +195,8 @@ namespace BugFablesAP
         // isn't) is marked said as soon as he has joined, whatever Skip cutscenes says.
         private static void SkipLeifsFirstBattleLine(MainManager mm)
         {
-            if (randomizerOn == null || !randomizerOn() || MainManager.map == null || mm.flags == null || !mm.flags[GameFlags.LeifJoined] || mm.flags[24]
-                || MainManager.battle != null)
+            if (randomizerOn == null || !randomizerOn() || MainManager.map == null || mm.flags == null
+                || !mm.flags[GameFlags.LeifJoined] || mm.flags[24] || MainManager.battle != null)
             {
                 return;
             }
@@ -197,15 +207,17 @@ namespace BugFablesAP
         // Leif joins once the spider scene is over (flag 27, not yet 16), where the story has him start following.
         private static void TickLeifJoins(MainManager mm)
         {
-            if (randomizerOn == null || !randomizerOn() || MainManager.map == null || mm.flags == null || !mm.flags[GameFlags.LeifFollows] || mm.flags[GameFlags.LeifJoined]
-                || mm.inevent || mm.message || MainManager.battle != null || MainManager.player == null || mm.playerdata == null
-                || (StartMember >= 0 && !Allowed(2)))
+            if (randomizerOn == null || !randomizerOn() || MainManager.map == null || mm.flags == null
+                || !mm.flags[GameFlags.LeifFollows] || mm.flags[GameFlags.LeifJoined]
+                || mm.inevent || mm.message || MainManager.battle != null || MainManager.player == null
+                || mm.playerdata == null || (StartMember >= 0 && !Allowed(2)))
             {
                 return;
             }
             bool joined = JoinLeif(mm);
             mm.flags[GameFlags.LeifJoined] = true;
-            log.LogInfo("[members] after the spider scene: " + (joined ? "Leif joined the party" : "Leif was already in the party") + "; flag 16 set");
+            log.LogInfo("[members] after the spider scene: "
+                + (joined ? "Leif joined the party" : "Leif was already in the party") + "; flag 16 set");
         }
 
         private static bool JoinLeif(MainManager mm)
@@ -214,7 +226,8 @@ namespace BugFablesAP
             if (!mm.playerdata.Any(p => p.trueid == 2) && MainManager.player != null)
             {
                 Vector3 at = MainManager.player.transform.position;
-                MainManager.ChangeParty(mm.playerdata.Select(p => p.trueid).Concat(new[] { 2 }).ToArray(), true, true);
+                MainManager.ChangeParty(
+                    mm.playerdata.Select(p => p.trueid).Concat(new[] { 2 }).ToArray(), true, true);
                 var spots = new Vector3[mm.playerdata.Length];
                 for (int i = 0; i < spots.Length; i++)
                 {
@@ -231,7 +244,8 @@ namespace BugFablesAP
             {
                 mm.extrafollowers?.RemoveAll(f => f == 2);
                 foreach (EntityControl copy in UnityEngine.Object.FindObjectsOfType<EntityControl>()
-                    .Where(e => e.animid == 2 && !e.playerentity && !mm.playerdata.Any(p => p.entity == e) && (e.tempfollower || e.following != null)).ToList())
+                    .Where(e => e.animid == 2 && !e.playerentity && !mm.playerdata.Any(p => p.entity == e)
+                        && (e.tempfollower || e.following != null)).ToList())
                 {
                     MainManager.map.tempfollowers?.Remove(copy);
                     UnityEngine.Object.Destroy(copy.gameObject);
@@ -266,7 +280,8 @@ namespace BugFablesAP
                 int removed = 0;
                 if (MainManager.map.tempfollowers != null)
                 {
-                    foreach (EntityControl copy in MainManager.map.tempfollowers.Where(f => f != null && f.animid == id).ToList())
+                    foreach (EntityControl copy in MainManager.map.tempfollowers
+                        .Where(f => f != null && f.animid == id).ToList())
                     {
                         MainManager.map.tempfollowers.Remove(copy);
                         UnityEngine.Object.Destroy(copy.gameObject);

@@ -24,7 +24,8 @@ namespace BugFablesAP
         internal static void Enable(ManualLogSource logger)
         {
             log = logger;
-            Hooks.Install(typeof(SaveRedirect), "saves", "the plugin can't keep randomizer saves apart", required: true);
+            Hooks.Install(typeof(SaveRedirect), "saves", "the plugin can't keep randomizer saves apart",
+                required: true);
             log.LogInfo($"[saves] redirect installed; Archipelago mod {(On ? "enabled" : "disabled")}");
         }
 

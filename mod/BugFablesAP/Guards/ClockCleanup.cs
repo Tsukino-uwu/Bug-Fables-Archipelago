@@ -8,16 +8,18 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // The play-time clock unloads unused assets and forces a garbage collection every fifth second, a ~110 ms stall. With
-    // Archipelago on (or Use on normal saves) it doesn't: leaving a map still does both, and the runtime collects when it
-    // needs to.
+    // The play-time clock unloads unused assets and forces a garbage collection every fifth second, a ~110 ms stall.
+    // With Archipelago on (or Use on normal saves) it doesn't: leaving a map still does both, and the runtime collects
+    // when it needs to.
     internal static class ClockCleanup
     {
         private static ManualLogSource log;
         private static Func<bool> settingsOn;
         private static bool skipLogged;
-        private static readonly MethodInfo UnloadUnused = AccessTools.Method(typeof(Resources), nameof(Resources.UnloadUnusedAssets));
-        private static readonly MethodInfo Collect = AccessTools.Method(typeof(GC), nameof(GC.Collect), Type.EmptyTypes);
+        private static readonly MethodInfo UnloadUnused = AccessTools.Method(typeof(Resources),
+            nameof(Resources.UnloadUnusedAssets));
+        private static readonly MethodInfo Collect = AccessTools.Method(typeof(GC), nameof(GC.Collect),
+            Type.EmptyTypes);
 
         internal static void Enable(ManualLogSource logger, Func<bool> settingsEnabled)
         {
@@ -25,7 +27,8 @@ namespace BugFablesAP
             settingsOn = settingsEnabled;
             if (UnloadUnused == null || Collect == null)
             {
-                log.LogError($"[clock] NOT installed (UnloadUnusedAssets {UnloadUnused != null}, GC.Collect {Collect != null}): "
+                log.LogError(
+                    $"[clock] NOT installed (UnloadUnusedAssets {UnloadUnused != null}, GC.Collect {Collect != null}): "
                     + "the stall every 5 s stays.");
                 return;
             }
@@ -58,7 +61,8 @@ namespace BugFablesAP
             if (skip && !skipLogged)
             {
                 skipLogged = true;
-                log.LogInfo("[clock] the 5-second unload and collection skipped (Archipelago on, or Use on normal saves)");
+                log.LogInfo(
+                    "[clock] the 5-second unload and collection skipped (Archipelago on, or Use on normal saves)");
             }
             return skip;
         }

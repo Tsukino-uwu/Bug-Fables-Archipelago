@@ -121,7 +121,8 @@ namespace BugFablesAP
                         waitingReported = true;
                         string what = MainManager.battle != null ? "battle" : mm.inevent ? "scene" : "talk";
                         Status($"waiting for the {what} to end (loaded {loaded}, a new copy on disk)");
-                        log.LogInfo("DevReload: BugFablesAP.dll changed; waiting for the scene, talk or battle to end.");
+                        log.LogInfo(
+                            "DevReload: BugFablesAP.dll changed; waiting for the scene, talk or battle to end.");
                     }
                     return;
                 }

@@ -490,8 +490,8 @@ namespace BugFablesAP
             arrows.parent = box;
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
-            foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, SkipConfirmRow, CutscenesRow, AnimationRow,
-                    ColorsRow, IconsRow, BackgroundsRow, DetectorRow, UncapRow }
+            foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, SkipConfirmRow, CutscenesRow,
+                    AnimationRow, ColorsRow, IconsRow, BackgroundsRow, DetectorRow, UncapRow }
                 : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, AttackRow, CrystalsRow, AutoSaveRow,
                     MedalPricesRow, ExpRow, BerryRow }
                 : new[] { ModeRow, DeathLinkRow, AchievementsRow, NormalSavesRow })

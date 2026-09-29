@@ -17,9 +17,9 @@ namespace BugFablesAP
         // Behind a location's item, on the ground or a shelf: the pickup's own starburst, smaller, in its class
         // colour, so its importance shows before it's taken. Null clears it.
         private const string MarkName = "apback";
-        // Big enough to show round the item, the item and it raised together so its bottom stays near the item's old base
-        // (items are lifted half their height; lower, the counter hid it), and close behind (the hold-up's 0.2 slid
-        // sideways seen at an angle). Dev `mark` tunes them.
+        // Big enough to show round the item, the item and it raised together so its bottom stays near the item's old
+        // base (items are lifted half their height; lower, the counter hid it), and close behind (the hold-up's 0.2
+        // slid sideways seen at an angle). Dev `mark` tunes them.
         internal static float MarkScale = 0.6f, MarkRaise = 0.3f;
         private const float MarkBehind = 0.05f;
 
@@ -30,7 +30,8 @@ namespace BugFablesAP
             {
                 return;
             }
-            if (color != null && entity.npcdata != null && DevClasses.TryGetValue(entity.npcdata.name, out int devClass))
+            if (color != null && entity.npcdata != null
+                && DevClasses.TryGetValue(entity.npcdata.name, out int devClass))
             {
                 color = Hex(ClassColors[devClass]);
             }
@@ -39,7 +40,8 @@ namespace BugFablesAP
             Sprite item = entity.sprite.sprite;
             if (entity.spritetransform != null && item != null)
             {
-                var lift = new Vector3(0f, item.bounds.extents.y + (color == null ? 0f : MarkRaise), entity.spritetransform.localPosition.z);
+                var lift = new Vector3(0f, item.bounds.extents.y + (color == null ? 0f : MarkRaise),
+                    entity.spritetransform.localPosition.z);
                 if (entity.spritetransform.localPosition != lift)
                 {
                     entity.spritetransform.localPosition = lift;
@@ -55,7 +57,8 @@ namespace BugFablesAP
             }
             if (mark == null)
             {
-                SpriteRenderer back = MainManager.NewSpriteObject(MarkName, new Vector3(0f, 0f, MarkBehind), Vector3.zero, shown,
+                SpriteRenderer back = MainManager.NewSpriteObject(MarkName, new Vector3(0f, 0f, MarkBehind),
+                    Vector3.zero, shown,
                     MainManager.guisprites[85], entity.sprite.material);
                 back.transform.localScale = Vector3.one * MarkScale;
                 back.gameObject.layer = shown.gameObject.layer;
@@ -83,13 +86,15 @@ namespace BugFablesAP
             return info != null && (QualityOfLife.ItemBackgrounds?.Value ?? true) ? MarkColor(info) : (Color?)null;
         }
 
-        // The starburst colours by class: progression, useful, trap, filler. Archipelago's own, and Rarity's (a loot game's
-        // ladder, which tells all four apart side by side). Dev `markcolor` changes the one in use.
+        // The starburst colours by class: progression, useful, trap, filler. Archipelago's own, and Rarity's (a loot
+        // game's ladder, which tells all four apart side by side). Dev `markcolor` changes the one in use.
         internal static readonly int[] ArchipelagoColors = { 0xAF99EF, 0x6D8BE8, 0xFA8072, 0x00EEEE };
         internal static readonly int[] RarityColors = { 0xB36BE8, 0x4A90E8, 0xE03C3C, 0x4CC94C };
         internal static int[] ClassColors => QualityOfLife.RarityColors ? RarityColors : ArchipelagoColors;
-        // Item colors off: the game's own starburst colours by kind (NPCControl's pickup): an item, a key item, a medal.
-        private static readonly Color GameItem = new Color(0f, 0.7f, 0.7f), GameKey = new Color(1f, 0.3f, 0.4f), GameMedal = new Color(1f, 0.5f, 0f);
+        // Item colors off: the game's own starburst colours by kind (NPCControl's pickup): an item, a key item, a
+        // medal.
+        private static readonly Color GameItem = new Color(0f, 0.7f, 0.7f), GameKey = new Color(1f, 0.3f, 0.4f),
+            GameMedal = new Color(1f, 0.5f, 0f);
         // Dev (console `markclass`): a marked entity, by name, drawn as a class (index in ClassColors) to compare them.
         internal static readonly Dictionary<string, int> DevClasses = new Dictionary<string, int>();
 
@@ -99,9 +104,11 @@ namespace BugFablesAP
                 : (flags & ItemFlags.Trap) != 0 ? 2 : 3]);
 
         // A received item's starburst: its class colour while Item colors is on, else null (the game's own by kind).
-        internal static Color? StarburstColor(ItemFlags flags) => QualityOfLife.ApColors ? ClassColor(flags) : (Color?)null;
+        internal static Color? StarburstColor(ItemFlags flags) =>
+            QualityOfLife.ApColors ? ClassColor(flags) : (Color?)null;
 
-        // A location's starburst: its class colour, or with Item colors off the game's colour for a Bug Fables item's kind.
+        // A location's starburst: its class colour, or with Item colors off the game's colour for a Bug Fables item's
+        // kind.
         private static Color MarkColor(ScoutedItemInfo info)
         {
             if (QualityOfLife.ApColors || !IsOurs(info))
@@ -122,11 +129,12 @@ namespace BugFablesAP
             {
                 sprite = look;
             }
-            // A shop's lines paste the name in after wrapping them, so a long one runs off the box: another player's item
-            // is named alone, in its class colour (whose it is, the description says).
+            // A shop's lines paste the name in after wrapping them, so a long one runs off the box: another player's
+            // item is named alone, in its class colour (whose it is, the description says).
             if (info != null && info.Player.Slot != connection.OwnSlot)
             {
-                name = ClassText(IsOurs(info) ? name.Substring(info.Player.Name.Length + 3) : info.ItemDisplayName, info.Flags) + Black;
+                name = ClassText(IsOurs(info) ? name.Substring(info.Player.Name.Length + 3) : info.ItemDisplayName,
+                    info.Flags) + Black;
             }
             description = "An Archipelago item.";
             if (info == null)
@@ -139,7 +147,8 @@ namespace BugFablesAP
                 int gameId = ItemIds.GameId(info.ItemId, kind);
                 string text = kind == ItemIds.MedalKind ? TableCell(MainManager.badgedata, gameId, 1)
                     : kind == ItemIds.MoneyKind ? gameId + " berries."
-                    : kind == ItemIds.CrystalKind ? (MainManager.menutext?.Length > 112 ? MainManager.menutext[112] + "." : null)
+                    : kind == ItemIds.CrystalKind
+                        ? (MainManager.menutext?.Length > 112 ? MainManager.menutext[112] + "." : null)
                     : kind == ItemIds.MemberKind ? PartyMembers.Name(gameId) + " joins the party."
                     : kind == ItemIds.MoveKind ? MoveDescription(gameId)
                     : TableCell(MainManager.itemdata, 0, gameId, 2);
@@ -169,7 +178,8 @@ namespace BugFablesAP
                 }
                 if (kind == ItemIds.MoveKind)
                 {
-                    // An ability shows its member's icon and colour; Jump is the whole party's, so the Archipelago icon.
+                    // An ability shows its member's icon and colour; Jump is the whole party's, so the Archipelago
+                    // icon.
                     name = Abilities.ItemName(gameId);
                     int member = Abilities.Member(gameId);
                     sprite = member >= 0 ? MemberSprite(member) : ApIcon.Get();
@@ -179,7 +189,8 @@ namespace BugFablesAP
                 bool medal = kind == ItemIds.MedalKind;
                 bool money = kind == ItemIds.MoneyKind;
                 bool crystal = kind == ItemIds.CrystalKind;
-                sprite = crystal ? MainManager.guisprites[83] : money ? ItemIds.BerrySprite(gameId) : MainManager.GetItemSprite(medal, gameId);
+                sprite = crystal ? MainManager.guisprites[83] : money ? ItemIds.BerrySprite(gameId)
+                    : MainManager.GetItemSprite(medal, gameId);
                 name = crystal ? MainManager.menutext[112] : money ? gameId + " Berries"
                     : medal ? MainManager.GetBadgeName(gameId) : MainManager.itemdata[0, gameId, 0];
                 color = medal ? new Color(1f, 0.5f, 0f)
@@ -190,7 +201,8 @@ namespace BugFablesAP
 
         internal static string MoveDescription(int id) =>
             id >= 0 && id <= FieldMoves.Jump && !Abilities.AbilityItems
-                ? (id == FieldMoves.Jump ? "The whole party can jump." : PartyMembers.Name(id) + " can use " + FieldMoves.Name(id) + ".")
+                ? (id == FieldMoves.Jump ? "The whole party can jump."
+                    : PartyMembers.Name(id) + " can use " + FieldMoves.Name(id) + ".")
                 : Abilities.Description(id);
 
         private static readonly Sprite[] memberSprites = new Sprite[3];
@@ -209,7 +221,8 @@ namespace BugFablesAP
                 Vector3 own = icon.bounds.size;
                 float scale = Mathf.Max(own.x, own.y) / Mathf.Max(item.x, item.y);
                 Rect rect = icon.packed ? icon.textureRect : icon.rect;
-                memberSprites[id] = Sprite.Create(icon.texture, rect, new Vector2(icon.pivot.x / icon.rect.width, icon.pivot.y / icon.rect.height),
+                memberSprites[id] = Sprite.Create(icon.texture, rect,
+                    new Vector2(icon.pivot.x / icon.rect.width, icon.pivot.y / icon.rect.height),
                     icon.pixelsPerUnit * scale);
                 log.LogInfo($"[swap] {PartyMembers.Name(id)}'s icon ({own.x:0.00} x {own.y:0.00}) scaled by 1/{scale:0.00} to an item's size");
             }
@@ -221,7 +234,8 @@ namespace BugFablesAP
         private const int StandIn = 0;
         internal const int EmptyLine = -90000;
 
-        // An item's itemdata[0, id, 3], a medal's badgedata[id, 6]; null for berries, which keep the default; none for a member.
+        // An item's itemdata[0, id, 3], a medal's badgedata[id, 6]; null for berries, which keep the default; none for
+        // a member.
         internal static string ArticleOf(long itemId, int kind)
         {
             int gameId = ItemIds.GameId(itemId, kind);
@@ -233,10 +247,12 @@ namespace BugFablesAP
 
         // A cell of the game's item or medal table; null for an id outside it (an item this game version lacks).
         internal static string TableCell(string[,] table, int row, int column) =>
-            table != null && row >= 0 && row < table.GetLength(0) && column < table.GetLength(1) ? table[row, column] : null;
+            table != null && row >= 0 && row < table.GetLength(0) && column < table.GetLength(1)
+                ? table[row, column] : null;
 
         internal static string TableCell(string[,,] table, int language, int row, int column) =>
-            table != null && row >= 0 && row < table.GetLength(1) && column < table.GetLength(2) ? table[language, row, column] : null;
+            table != null && row >= 0 && row < table.GetLength(1) && column < table.GetLength(2)
+                ? table[language, row, column] : null;
 
         internal static void ShowFoundAt(long at)
         {
@@ -256,7 +272,8 @@ namespace BugFablesAP
             return true;
         }
 
-        // For the "You got" line, which wraps the name in |color,1|...|color,0|: another player's name, and an item by class.
+        // For the "You got" line, which wraps the name in |color,1|...|color,0|: another player's name, and an item by
+        // class.
         internal static string PlayerText(string player)
         {
             if (!QualityOfLife.ApColors)

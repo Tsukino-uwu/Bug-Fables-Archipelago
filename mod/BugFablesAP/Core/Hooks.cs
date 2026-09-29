@@ -39,7 +39,8 @@ namespace BugFablesAP
                 }
                 catch (Exception undo)
                 {
-                    log?.LogError($"[{tag}] removing the half-installed {group.Name} threw: {undo.GetBaseException().Message}");
+                    log?.LogError(
+                        $"[{tag}] removing the half-installed {group.Name} threw: {undo.GetBaseException().Message}");
                 }
                 log?.LogError($"[{tag}] NOT installed ({group.Name}): {e.GetBaseException().Message}; {ifMissing}");
                 if (required)
@@ -74,9 +75,9 @@ namespace BugFablesAP
             installed.Clear();
         }
 
-        // A transpiler that throws stays registered and breaks its method for every later patch until the game restarts,
-        // so on any error the method keeps its own code and the reason is logged. The edit finds everything it needs
-        // before it changes anything, as FrameSites does.
+        // A transpiler that throws stays registered and breaks its method for every later patch until the game
+        // restarts, so on any error the method keeps its own code and the reason is logged. The edit finds everything
+        // it needs before it changes anything, as FrameSites does.
         internal static IEnumerable<CodeInstruction> Safe(IEnumerable<CodeInstruction> instructions,
             Func<List<CodeInstruction>, IEnumerable<CodeInstruction>> edit, string tag)
         {

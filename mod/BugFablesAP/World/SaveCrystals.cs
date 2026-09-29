@@ -35,7 +35,8 @@ namespace BugFablesAP
                 + "Switch it on the Gameplay page.");
             if (Hooks.Install(typeof(Colour), "crystals", "Healing crystals does nothing"))
             {
-                log.LogInfo("[crystals] installed on NPCControl.SetUp; the confirm press through FieldMoves' DoJump prefix");
+                log.LogInfo(
+                    "[crystals] installed on NPCControl.SetUp; the confirm press through FieldMoves' DoJump prefix");
             }
         }
 
@@ -52,8 +53,8 @@ namespace BugFablesAP
             [HarmonyPrefix]
             private static void BeforeSetUp(NPCControl __instance)
             {
-                if (AllHeal == null || !AllHeal.Value || settingsOn == null || !settingsOn() || !IsSaveCrystal(__instance)
-                    || __instance.data[2] == 0)
+                if (AllHeal == null || !AllHeal.Value || settingsOn == null || !settingsOn()
+                    || !IsSaveCrystal(__instance) || __instance.data[2] == 0)
                 {
                     return;
                 }
@@ -62,7 +63,8 @@ namespace BugFablesAP
         }
 
         private static bool IsSaveCrystal(NPCControl npc) =>
-            npc != null && npc.entitytype == NPCControl.NPCType.Object && npc.objecttype == NPCControl.ObjectTypes.SavePoint
+            npc != null && npc.entitytype == NPCControl.NPCType.Object
+            && npc.objecttype == NPCControl.ObjectTypes.SavePoint
             && npc.data != null && npc.data.Length > 2 && npc.data[1] < 10;
 
         // The crystal the confirm button would use now, or null.
@@ -78,7 +80,8 @@ namespace BugFablesAP
             }
             // A person to talk to comes first, as the game's own confirm does.
             if (player.npc.Count > 0 && player.npc[0] != null
-                && (player.npc[0].entitytype == NPCControl.NPCType.NPC || player.npc[0].entitytype == NPCControl.NPCType.SemiNPC))
+                && (player.npc[0].entitytype == NPCControl.NPCType.NPC
+                    || player.npc[0].entitytype == NPCControl.NPCType.SemiNPC))
             {
                 return null;
             }
@@ -98,7 +101,8 @@ namespace BugFablesAP
             float bestDistance = Reach;
             foreach (NPCControl npc in crystals)
             {
-                if (npc == null || !npc.gameObject.activeInHierarchy || !IsSaveCrystal(npc) || npc.insideid != mm.insideid)
+                if (npc == null || !npc.gameObject.activeInHierarchy || !IsSaveCrystal(npc)
+                    || npc.insideid != mm.insideid)
                 {
                     continue;
                 }

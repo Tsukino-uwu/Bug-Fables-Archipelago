@@ -18,7 +18,8 @@ namespace BugFablesAP
         private static ManualLogSource log;
         private static readonly HashSet<string> reported = new HashSet<string>();
 
-        private static readonly MethodInfo CrossFade = AccessTools.Method(typeof(Animator), nameof(Animator.CrossFadeInFixedTime),
+        private static readonly MethodInfo CrossFade = AccessTools.Method(typeof(Animator),
+            nameof(Animator.CrossFadeInFixedTime),
             new[] { typeof(string), typeof(float) });
 
         internal static void Enable(ManualLogSource logger, Func<bool> randomizerEnabled)
@@ -53,7 +54,8 @@ namespace BugFablesAP
                     return true;
                 }
                 int hash = Animator.StringToHash(stateName);
-                bool found = layer >= 0 && layer < __instance.layerCount ? __instance.HasState(layer, hash) : HasStateOnAnyLayer(__instance, hash);
+                bool found = layer >= 0 && layer < __instance.layerCount ? __instance.HasState(layer, hash)
+                    : HasStateOnAnyLayer(__instance, hash);
                 if (!found)
                 {
                     Report(__instance, stateName);
@@ -92,7 +94,8 @@ namespace BugFablesAP
             }
             else
             {
-                log.LogWarning($"[anim] EntityControl.SetAnim has {plays.Count} plays, not 2; the guard covers those it found.");
+                log.LogWarning(
+                    $"[anim] EntityControl.SetAnim has {plays.Count} plays, not 2; the guard covers those it found.");
             }
             return code;
         }

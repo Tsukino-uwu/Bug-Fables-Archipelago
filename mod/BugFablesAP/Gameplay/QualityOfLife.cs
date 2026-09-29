@@ -257,7 +257,8 @@ namespace BugFablesAP
                 if (!heldMusicLogged)
                 {
                     heldMusicLogged = true;
-                    log.LogInfo($"[qol] seed start: {musicclip.name} held back on the opening map (silence until the start)");
+                    log.LogInfo(
+                        $"[qol] seed start: {musicclip.name} held back on the opening map (silence until the start)");
                 }
                 musicclip = null;
             }
@@ -359,7 +360,8 @@ namespace BugFablesAP
             if (startPending && !TestStartSet && !Seeded.HasValue && SeedKnown != null && SeedKnown())
             {
                 startPending = false;
-                log.LogInfo("[qol] the seed has no start of its own (Starting Location off): staying at the game's start");
+                log.LogInfo(
+                    "[qol] the seed has no start of its own (Starting Location off): staying at the game's start");
             }
             if (startPending && (TestStartSet || Seeded.HasValue) && !partyThenFade
                 && Time.frameCount > partySetFrame + 1 && MainManager.player != null && !mm.inevent

@@ -272,7 +272,8 @@ namespace BugFablesAP
                                 .Concat(f.Skip(4 + 2 * n)).ToArray());
                             text = text.Substring(0, at + 1) + command + text.Substring(end);
                             end = at + 1 + command.Length;
-                            log.LogInfo($"[qol] {map.mapid} line {line}: the reshuffle choice moved to the top of its prompt");
+                            log.LogInfo(
+                                $"[qol] {map.mapid} line {line}: the reshuffle choice moved to the top of its prompt");
                         }
                     }
                     at = text.IndexOf("|prompt,map,", end, StringComparison.Ordinal);

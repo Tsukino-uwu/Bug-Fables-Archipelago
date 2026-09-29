@@ -5,9 +5,9 @@ using HarmonyLib;
 namespace BugFablesAP
 {
     // The pier sailor sails to Metal Island only for the Boat Ticket (the mod's own key item, CustomItems.cs); the trip
-    // is free and the ticket stays. He checks the ticket where the game checked the
-    // fare (lines 16 and 19), and a missing ticket gets his old "no money" reply. Every line of his, the first included,
-    // comes through GetDialogueText.
+    // is free and the ticket stays. He checks the ticket where the game checked the fare (lines 16 and 19), and a
+    // missing ticket gets his old "no money" reply. Every line of his, the first included, comes through
+    // GetDialogueText.
     internal static class BoatTicket
     {
         private const string PierMap = "BugariaPier";
@@ -27,7 +27,8 @@ namespace BugFablesAP
             }
         }
 
-        private static bool HasTicket() => MainManager.instance?.items != null && MainManager.instance.items[1].Contains(CustomItems.BoatTicket);
+        private static bool HasTicket() => MainManager.instance?.items != null
+            && MainManager.instance.items[1].Contains(CustomItems.BoatTicket);
 
         [HarmonyPatch(typeof(MainManager), nameof(MainManager.GetDialogueText), typeof(int))]
         private static class Lines
@@ -55,7 +56,8 @@ namespace BugFablesAP
                     case 16:
                     case 19:
                         line = ticket ? "|goto,21|" : "|goto,20|";
-                        log.LogInfo(ticket ? "[boat] the ticket shown: sailing" : "[boat] no ticket: the sailor refuses");
+                        log.LogInfo(ticket ? "[boat] the ticket shown: sailing"
+                            : "[boat] no ticket: the sailor refuses");
                         break;
                     case 20:
                         line = "What?! No ticket, no trip! Get out of here!";

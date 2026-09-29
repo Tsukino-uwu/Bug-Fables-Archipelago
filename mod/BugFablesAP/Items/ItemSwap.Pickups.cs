@@ -18,11 +18,13 @@ namespace BugFablesAP
         // the same way); the |flag,...| before it still marks the pickup taken, so the check is sent.
         private static class Pickups
         {
-            [HarmonyPatch(typeof(MainManager), "SetText", typeof(string), typeof(int), typeof(float?), typeof(bool), typeof(bool), typeof(Vector3), typeof(Vector3), typeof(Vector2), typeof(Transform), typeof(NPCControl))]
+            [HarmonyPatch(typeof(MainManager), "SetText", typeof(string), typeof(int), typeof(float?), typeof(bool),
+                typeof(bool), typeof(Vector3), typeof(Vector3), typeof(Vector2), typeof(Transform), typeof(NPCControl))]
             [HarmonyPrefix]
             public static void PickupPrefix(ref string text, NPCControl caller)
             {
-                if (caller == null || caller.objecttype != NPCControl.ObjectTypes.Item || text == null || caller.entity == null)
+                if (caller == null || caller.objecttype != NPCControl.ObjectTypes.Item || text == null
+                    || caller.entity == null)
                 {
                     return;
                 }
@@ -58,8 +60,8 @@ namespace BugFablesAP
                 {
                     text = text.Replace(ArticleSlot, "");
                 }
-                // The pickup line ends its name in the game's red ("...|string,0||color,1|!"); after a name in the Item colors
-                // that "!" looked stray, so it ends in black as the gift line does.
+                // The pickup line ends its name in the game's red ("...|string,0||color,1|!"); after a name in the
+                // Item colors that "!" looked stray, so it ends in black as the gift line does.
                 if (other && QualityOfLife.ApColors)
                 {
                     text = text.Replace(NameThenRed, NameThenBlack);
@@ -90,7 +92,8 @@ namespace BugFablesAP
                 text = text.Replace(add, "|additemtoss,3,var,0|");
                 if (kind == 3)
                 {
-                    // The berry's pickup code already marked it taken and raised the count: undo the count, keep the mark.
+                    // The berry's pickup code already marked it taken and raised the count: undo the count, keep the
+                    // mark.
                     MainManager.instance.flagvar[GameVars.CrystalBerries]--;
                     text = text.Replace(FirstBerryTutorial + "|break|", "").Replace(FirstBerryTutorial, "");
                     ShowAsSprite(caller.entity, sprite);
@@ -157,9 +160,11 @@ namespace BugFablesAP
             }
         }
 
-        // A one-time pickup another client on this slot found while this player is in its room goes at once, as the game
-        // hides an entity (NPCControl.Start). Only one this save hasn't taken: the player's own pickup is the game's to end.
-        private static void HideFoundElsewhere(Dictionary<long, ApConnection.Pickup> pickups, MapControl map, string mapName,
+        // A one-time pickup another client on this slot found while this player is in its room goes at once, as the
+        // game hides an entity (NPCControl.Start). Only one this save hasn't taken: the player's own pickup is the
+        // game's to end.
+        private static void HideFoundElsewhere(Dictionary<long, ApConnection.Pickup> pickups, MapControl map,
+            string mapName,
             ref NPCControl[] entities)
         {
             MainManager mm = MainManager.instance;
@@ -178,7 +183,8 @@ namespace BugFablesAP
                 entities = entities ?? map.GetComponentsInChildren<NPCControl>(true);
                 foreach (NPCControl npc in entities)
                 {
-                    if (npc.gameObject.activeSelf && npc.objecttype == NPCControl.ObjectTypes.Item && IsPickup(pickup, npc))
+                    if (npc.gameObject.activeSelf && npc.objecttype == NPCControl.ObjectTypes.Item
+                        && IsPickup(pickup, npc))
                     {
                         KeptOpen.KeepAway(npc);
                         npc.gameObject.SetActive(false);
@@ -196,7 +202,8 @@ namespace BugFablesAP
         {
             if (pickup.Berry >= 0)
             {
-                return npc.entity != null && npc.entity.animid == 3 && npc.data != null && npc.data.Length > 0 && npc.data[0] == pickup.Berry;
+                return npc.entity != null && npc.entity.animid == 3 && npc.data != null && npc.data.Length > 0
+                    && npc.data[0] == pickup.Berry;
             }
             if (pickup.Regional >= 0)
             {
@@ -204,7 +211,8 @@ namespace BugFablesAP
             }
             if (pickup.Event >= 0)
             {
-                // A story pickup has no flag of its own: match the story event it starts (data[1]), not the entity name.
+                // A story pickup has no flag of its own: match the story event it starts (data[1]), not the entity
+                // name.
                 return npc.data != null && npc.data.Length > 1 && npc.data[1] == pickup.Event;
             }
             return npc.activationflag >= 0 && npc.activationflag == pickup.Flag;
@@ -216,13 +224,15 @@ namespace BugFablesAP
 
         private static class Berries
         {
-            [HarmonyPatch(typeof(MainManager), "SetText", typeof(string), typeof(int), typeof(float?), typeof(bool), typeof(bool), typeof(Vector3), typeof(Vector3), typeof(Vector2), typeof(Transform), typeof(NPCControl))]
+            [HarmonyPatch(typeof(MainManager), "SetText", typeof(string), typeof(int), typeof(float?), typeof(bool),
+                typeof(bool), typeof(Vector3), typeof(Vector3), typeof(Vector2), typeof(Transform), typeof(NPCControl))]
             [HarmonyPrefix]
             public static void BerryPrefix(ref string text)
             {
                 Dictionary<long, ApConnection.Give> gives = connection?.LocationGives;
                 string map = MapName();
-                if (text == null || gives == null || map == null || randomizerOn == null || !randomizerOn() || !text.Contains("|giveitem,-1,"))
+                if (text == null || gives == null || map == null || randomizerOn == null || !randomizerOn()
+                    || !text.Contains("|giveitem,-1,"))
                 {
                     return;
                 }

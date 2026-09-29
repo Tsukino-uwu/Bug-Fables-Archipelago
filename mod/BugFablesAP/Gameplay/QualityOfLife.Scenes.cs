@@ -104,7 +104,8 @@ namespace BugFablesAP
             MainManager.map?.RestoreLimit(false);
             endEvent?.Invoke(null, null);
             MainManager.ChangeMusic("Cave0");
-            log.LogInfo("[qol] the trapdoor scene ended after the fall (its landing talk replaced by the door arrival)");
+            log.LogInfo(
+                "[qol] the trapdoor scene ended after the fall (its landing talk replaced by the door arrival)");
         }
 
         private static class EventHook

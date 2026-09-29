@@ -30,7 +30,8 @@ namespace BugFablesAP
             var demo = AccessTools.Field(typeof(BattleControl), "demomode");
             if (demo == null)
             {
-                log.LogError("[boost] NOT installed (BattleControl.demomode not found); the attack boost does nothing.");
+                log.LogError(
+                    "[boost] NOT installed (BattleControl.demomode not found); the attack boost does nothing.");
                 return;
             }
             demoMode = AccessTools.FieldRefAccess<BattleControl, bool>(demo);

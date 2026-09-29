@@ -67,7 +67,8 @@ namespace BugFablesAP
                     }
                     changed++;
                 }
-                log.LogInfo($"[enemies] look test on {__instance.mapid}: {changed} map enemies now look like enemy {LookTest} "
+                log.LogInfo(
+                    $"[enemies] look test on {__instance.mapid}: {changed} map enemies now look like enemy {LookTest} "
                     + $"(anim {anim}){(MoveTest ? donor != null ? $", moving like {donorFrom}" : ", no map enemy of it found to move like" : "")}; "
                     + $"{puzzles} puzzle enemies kept");
             }
@@ -97,7 +98,8 @@ namespace BugFablesAP
                 {
                     continue;
                 }
-                UnityEngine.TextAsset data = UnityEngine.Resources.Load<UnityEngine.TextAsset>("Data/EntityData/" + (int)map);
+                UnityEngine.TextAsset data =
+                    UnityEngine.Resources.Load<UnityEngine.TextAsset>("Data/EntityData/" + (int)map);
                 if (data == null)
                 {
                     continue;
@@ -140,7 +142,8 @@ namespace BugFablesAP
             npc.teleportradius = Convert.ToSingle(f[21]);
         }
 
-        [HarmonyPatch(typeof(BattleControl), nameof(BattleControl.StartBattle), typeof(int[]), typeof(int), typeof(int), typeof(string), typeof(NPCControl), typeof(bool))]
+        [HarmonyPatch(typeof(BattleControl), nameof(BattleControl.StartBattle), typeof(int[]), typeof(int), typeof(int),
+            typeof(string), typeof(NPCControl), typeof(bool))]
         [HarmonyPrefix]
         private static void BeforeBattle(ref int[] enemyids, NPCControl calledfrom)
         {
@@ -152,8 +155,8 @@ namespace BugFablesAP
                 return;
             }
             Dictionary<string, int[]> swaps = connection?.EnemySwaps;
-            if (calledfrom == null || calledfrom.entitytype != NPCControl.NPCType.Enemy || swaps == null || swaps.Count == 0
-                || randomizerOn == null || !randomizerOn() || MainManager.map == null)
+            if (calledfrom == null || calledfrom.entitytype != NPCControl.NPCType.Enemy || swaps == null
+                || swaps.Count == 0 || randomizerOn == null || !randomizerOn() || MainManager.map == null)
             {
                 return;
             }

@@ -47,9 +47,11 @@ namespace BugFablesAP
             failures = 0;
         }
 
-        internal bool ShouldRetry(DateTime nowUtc) => !busy && !refused && session == null && failures > 0 && nowUtc >= nextRetryUtc;
+        internal bool ShouldRetry(DateTime nowUtc) => !busy && !refused && session == null && failures > 0
+            && nowUtc >= nextRetryUtc;
 
-        // An idle socket never notices a dead server: ping every few seconds and treat silence or a failed send as lost.
+        // An idle socket never notices a dead server: ping every few seconds and treat silence or a failed send as
+        // lost.
         private const double PingSeconds = 5, SilenceSeconds = 15;
         private long lastHeardTicks;
         private DateTime lastPingUtc;
@@ -82,12 +84,14 @@ namespace BugFablesAP
                 MarkLost(s, "the socket closed");
                 return;
             }
-            if ((nowUtc - new DateTime(Interlocked.Read(ref lastHeardTicks), DateTimeKind.Utc)).TotalSeconds > SilenceSeconds)
+            if ((nowUtc - new DateTime(Interlocked.Read(ref lastHeardTicks), DateTimeKind.Utc)).TotalSeconds
+                > SilenceSeconds)
             {
                 MarkLost(s, "no reply from the server for " + SilenceSeconds + " s");
                 return;
             }
-            if ((nowUtc - lastPingUtc).TotalSeconds >= PingSeconds && Interlocked.CompareExchange(ref pingInFlight, 1, 0) == 0)
+            if ((nowUtc - lastPingUtc).TotalSeconds >= PingSeconds
+                && Interlocked.CompareExchange(ref pingInFlight, 1, 0) == 0)
             {
                 lastPingUtc = nowUtc;
                 // Off the game thread: IsAlive, checked before every send, blocks up to 5 s for a pong.
@@ -302,7 +306,8 @@ namespace BugFablesAP
                     }
                     scouts = task.Result;
                     Post("[swap] scouted " + string.Join(", ", task.Result.Values
-                        .Select(i => i.LocationId + " = " + i.ItemDisplayName + " (" + i.ItemGame + ", for " + i.Player.Name + ")")
+                        .Select(i => i.LocationId + " = " + i.ItemDisplayName + " (" + i.ItemGame + ", for "
+                            + i.Player.Name + ")")
                         .ToArray()));
                 }
                 catch (Exception e)
@@ -312,7 +317,8 @@ namespace BugFablesAP
             });
         }
 
-        // The library resends unconfirmed checks with the next send; offline checks are found in the save's flags at login.
+        // The library resends unconfirmed checks with the next send; offline checks are found in the save's flags at
+        // login.
         internal void SendChecks(ArchipelagoSession s, long[] ids)
         {
             ThreadPool.QueueUserWorkItem(_ =>
@@ -337,12 +343,14 @@ namespace BugFablesAP
             {
                 try
                 {
-                    s.Socket.SendPacketAsync(new StatusUpdatePacket { Status = ArchipelagoClientState.ClientGoal }).Wait();
+                    s.Socket.SendPacketAsync(new StatusUpdatePacket { Status = ArchipelagoClientState.ClientGoal })
+                        .Wait();
                     Post("[goal] sent: " + why);
                 }
                 catch (Exception e)
                 {
-                    Post("[goal] sending failed: " + e.GetBaseException().Message + " (sent again after the next login)");
+                    Post("[goal] sending failed: " + e.GetBaseException().Message
+                        + " (sent again after the next login)");
                 }
             });
         }
@@ -392,7 +400,8 @@ namespace BugFablesAP
                 var seen = new HashSet<string>();
                 attempt.Socket.ErrorReceived += (e, message) =>
                 {
-                    string line = (e?.GetType().Name ?? "no exception") + ": " + (e?.GetBaseException().Message ?? message);
+                    string line = (e?.GetType().Name ?? "no exception") + ": "
+                        + (e?.GetBaseException().Message ?? message);
                     bool first;
                     lock (seen)
                     {
@@ -404,7 +413,8 @@ namespace BugFablesAP
                     }
                 };
                 LoginResult result = attempt.TryConnectAndLogin(
-                    Game, slot, ItemsHandlingFlags.AllItems, password: string.IsNullOrEmpty(password) ? null : password);
+                    Game, slot, ItemsHandlingFlags.AllItems,
+                    password: string.IsNullOrEmpty(password) ? null : password);
 
                 if (!IsCurrent(number))
                 {
@@ -424,7 +434,8 @@ namespace BugFablesAP
                     // Parsed whole before anything is published: a malformed slot_data changes nothing.
                     var parsed = new SeedData(ok.SlotData, ok.Slot);
                     seedData = parsed;
-                    // Published last, with a fence: the game thread never sees a live session with the seed's tables unread.
+                    // Published last, with a fence: the game thread never sees a live session with the seed's tables
+                    // unread.
                     Interlocked.Exchange(ref session, attempt);
                     scouts = null;
                     ResetDone(attempt);
@@ -432,13 +443,15 @@ namespace BugFablesAP
                     attempt.Locations.CheckedLocationsUpdated += ids =>
                     {
                         MarkDone(ids);
-                        Post("[check] now checked on the server: " + string.Join(", ", ids.Select(id => id.ToString()).ToArray()));
+                        Post("[check] now checked on the server: "
+                            + string.Join(", ", ids.Select(id => id.ToString()).ToArray()));
                     };
                     attempt.Socket.PacketReceived += packet => Heard();
                     attempt.Socket.SocketClosed += reason => MarkLost(attempt, "closed: " + reason);
                     attempt.Socket.ErrorReceived += (e, message) => MarkLost(attempt, "socket error: " + message);
                     receivedAtLogin = attempt.Items.AllItemsReceived.Count;
-                    string version = ok.SlotData != null && ok.SlotData.TryGetValue("world_version", out object v) ? v?.ToString() : "missing";
+                    string version = ok.SlotData != null && ok.SlotData.TryGetValue("world_version", out object v)
+                        ? v?.ToString() : "missing";
                     // The tag is set after login (a ConnectUpdate), so it never depends on what Connect was sent with.
                     DeathLinkService links = attempt.CreateDeathLinkService();
                     links.OnDeathLinkReceived += death =>
@@ -607,7 +620,8 @@ namespace BugFablesAP
         // An internal field of MultiClient.Net's net40 helper, hence reflection.
         private static WebSocket WebSocketOf(ArchipelagoSession s)
         {
-            FieldInfo field = s?.Socket?.GetType().GetField("webSocket", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            FieldInfo field = s?.Socket?.GetType().GetField("webSocket",
+                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             return field?.GetValue(s.Socket) as WebSocket;
         }
 

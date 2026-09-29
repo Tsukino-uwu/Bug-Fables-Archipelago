@@ -20,7 +20,8 @@ namespace BugFablesAP
         internal static bool MovesShuffled => seed?.Invoke()?.MovesShuffled ?? false;
         internal static bool JumpShuffled => seed?.Invoke()?.JumpShuffled ?? false;
 
-        internal static string Name(int id) => id == 0 ? "Beemerang Toss" : id == 1 ? "Horn Slash" : id == 2 ? "Freeze" : id == Jump ? "Jump" : "move " + id;
+        internal static string Name(int id) => id == 0 ? "Beemerang Toss" : id == 1 ? "Horn Slash" : id == 2 ? "Freeze"
+            : id == Jump ? "Jump" : "move " + id;
 
         internal static bool Locked(int id)
         {
@@ -30,7 +31,8 @@ namespace BugFablesAP
             }
             bool shuffled = id == Jump ? JumpShuffled : MovesShuffled;
             // A move works once its key item (CustomItems) is in the bag, where the receiver puts it.
-            return shuffled && MainManager.instance?.items != null && !MainManager.instance.items[1].Contains(CustomItems.MoveKeyItem(id));
+            return shuffled && MainManager.instance?.items != null
+                && !MainManager.instance.items[1].Contains(CustomItems.MoveKeyItem(id));
         }
 
         internal static void Enable(ManualLogSource logger, Func<SeedData> seedData, Func<bool> on)
@@ -76,8 +78,9 @@ namespace BugFablesAP
         internal static void Tick()
         {
             MainManager mm = MainManager.instance;
-            if (mm?.playerdata == null || mm.playerdata.Length == 0 || MainManager.player == null || MainManager.battle != null
-                || mm.pause || mm.minipause || mm.inevent || mm.message || MainManager.player.submarine)
+            if (mm?.playerdata == null || mm.playerdata.Length == 0 || MainManager.player == null
+                || MainManager.battle != null || mm.pause || mm.minipause || mm.inevent || mm.message
+                || MainManager.player.submarine)
             {
                 return;
             }

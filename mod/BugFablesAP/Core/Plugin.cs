@@ -47,7 +47,8 @@ namespace BugFablesAP
             server = Config.Bind("Connection", "Address", "archipelago.gg",
                 "The Archipelago server's address: archipelago.gg for a hosted room, or ws://127.0.0.1 for a server "
                 + "on this computer.");
-            port = Config.Bind("Connection", "Port", "", "The room's port, e.g. 38281. Rooms on archipelago.gg show it.");
+            port = Config.Bind("Connection", "Port", "",
+                "The room's port, e.g. 38281. Rooms on archipelago.gg show it.");
             slot = Config.Bind("Connection", "Slot", "", "Your slot name in the room.");
             password = Config.Bind("Connection", "Password", "", "The room password, if it has one.");
             connection = new ApConnection(Log);
@@ -97,7 +98,8 @@ namespace BugFablesAP
             QualityOfLife.SeedAdded = () => randomizerEnabled.Value ? connection?.LocationAdded : null;
             QualityOfLife.SeedQuiet = () => randomizerEnabled.Value ? connection?.QuietLocations : null;
             QualityOfLife.SeedKnown = () => connection != null && connection.SeedKnown;
-            QualityOfLife.EntrancesShuffled = () => randomizerEnabled.Value && connection?.DoorTargets != null && connection.DoorTargets.Count > 0;
+            QualityOfLife.EntrancesShuffled = () => randomizerEnabled.Value && connection?.DoorTargets != null
+                && connection.DoorTargets.Count > 0;
             Multipliers.Enable(Log, Config, settingsOn);
             EnemyScaling.Enable(Log, settingsOn, () => QualityOfLife.EnemyScalingMode?.Value);
             AttackBoost.Enable(Log, Config, settingsOn);
@@ -120,7 +122,8 @@ namespace BugFablesAP
             ShopSwap.Enable(Log, connection, () => randomizerEnabled.Value);
             ItemShops.Enable(Log, connection, () => randomizerEnabled.Value);
             DoorShuffle.Enable(Log, connection, () => randomizerEnabled.Value);
-            WarpButton.Enable(Log, () => settingsOn() && QualityOfLife.WarpOn, () => settingsOn() && QualityOfLife.MapOn,
+            WarpButton.Enable(Log, () => settingsOn() && QualityOfLife.WarpOn,
+                () => settingsOn() && QualityOfLife.MapOn,
                 () => QualityOfLife.SkipWarpConfirm, () => QualityOfLife.SkipMapConfirm);
             MenuToggle.Enable(Log, randomizerEnabled, server, port, slot, password,
                 () => connection.Status,
@@ -128,7 +131,8 @@ namespace BugFablesAP
             Log.LogInfo($"{Name} {Version} loaded.");
         }
 
-        // Connects on its own while enabled with details filled in; a refusal waits for new details. Disabling disconnects.
+        // Connects on its own while enabled with details filled in; a refusal waits for new details. Disabling
+        // disconnects.
         private void AutoConnect()
         {
             bool enabled = randomizerEnabled.Value;

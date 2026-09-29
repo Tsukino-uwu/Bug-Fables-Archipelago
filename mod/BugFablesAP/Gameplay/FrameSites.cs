@@ -286,7 +286,8 @@ namespace BugFablesAP
                 }
                 catch (Exception e)
                 {
-                    report.Add($"{method.DeclaringType?.Name}.{method.Name}: NOT patched ({e.GetBaseException().Message})");
+                    report.Add(
+                        $"{method.DeclaringType?.Name}.{method.Name}: NOT patched ({e.GetBaseException().Message})");
                 }
             }
             log.LogInfo("[fps] frame sites: " + string.Join("; ", report.ToArray()));

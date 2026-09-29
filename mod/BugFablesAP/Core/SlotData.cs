@@ -14,14 +14,16 @@ namespace BugFablesAP
         }
 
         // {"location id": value}, as the apworld writes per-location tables.
-        internal static Dictionary<long, T> ByLocation<T>(Dictionary<string, object> slotData, string key, Func<JToken, T> read)
+        internal static Dictionary<long, T> ByLocation<T>(Dictionary<string, object> slotData, string key,
+            Func<JToken, T> read)
         {
             return Object(slotData, key)?.Properties().ToDictionary(p => long.Parse(p.Name), p => read(p.Value));
         }
 
         internal static List<T> List<T>(Dictionary<string, object> slotData, string key, Func<JToken, T> read)
         {
-            return slotData != null && slotData.TryGetValue(key, out object raw) && raw is JArray list ? list.Select(read).ToList() : null;
+            return slotData != null && slotData.TryGetValue(key, out object raw) && raw is JArray list
+                ? list.Select(read).ToList() : null;
         }
     }
 }

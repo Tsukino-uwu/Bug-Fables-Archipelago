@@ -6,7 +6,8 @@ using HarmonyLib;
 namespace BugFablesAP
 {
     // The panel's Achievements row (off by default): while Archipelago is enabled and it's off, the game's one Steam
-    // unlock, InputIO.Achivement, is skipped, as normal saves are kept apart. It only concerns Steam, never Archipelago.
+    // unlock, InputIO.Achivement, is skipped, as normal saves are kept apart. It only concerns Steam, never
+    // Archipelago.
     internal static class AchievementGuard
     {
         private static Func<bool> randomizerOn;
