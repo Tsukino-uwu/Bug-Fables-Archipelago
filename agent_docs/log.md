@@ -1542,5 +1542,12 @@ Newest last. What was tried, what happened, what the user said.
   step, no `eval`/`yaml`/hand placement. New bugs in Known issues. The checklist corrected (`logic/`, the game info
   page, Menu's home) and extended. Not verified: `main`'s new `quantity` yaml key (the tools' safety check failed
   while the user's VPN was off).
+- **The in-game text client, designed with the user** (the mod guide, step 2; not built): the feed shows DeathLinks
+  too, a filter per kind of message, a Chat menu in the panel; Enter opens it in the field and in battles, sends and
+  closes, or closes an empty line; Esc leaves; nothing reaches the game while it's open ("so you have to close/leave
+  the chat first"); a Twitch-style look ("old msgs eventually become invisible unless you press enter"); the game's
+  font borrowed at runtime, and letters it lacks drawn in a font from the computer's own rather than as "?" (the
+  user: better than "gf798?? recieved from play????"). Read for it: the game's Enter is action 9 with six uses
+  (`MEASURED.md`, Input); its fonts and its 500-letter pool; `CreateDynamicFontFromOSFont` exists in its Unity 2018.4.
 - **Next session:** `gh run list` first; push when told (the user: after the review); then Next 43, item 1, one step
-  at a time; the slot_data question (item 15) is the user's.
+  at a time; the slot_data question (item 15) is the user's. The text client is Next 9, after the review's bugs.
