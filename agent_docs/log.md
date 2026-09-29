@@ -1442,3 +1442,18 @@ Newest last. What was tried, what happened, what the user said.
 - **Upstream:** the user decided not to send the MultiClient.Net report for now ("unsure if they would appreciate AI
   code or not"). The mod's patch stays the fix. Left for next time: the in-game checks (steps 33 and 34), and the
   `[tls]` lines from a connection to archipelago.gg (`TlsProbe` is on in the game's config).
+
+## 2026-09-29: the Logic Test apworld, judged
+
+- **Asked:** would the Logic Test apworld (palex00's fork, world 0.4.0) make good testing alongside the fuzzer? It
+  generates the under-test games again inside its own `generate_early`, reads their spheres, puts `KEY_i` in every
+  location of sphere i and holds the real items until all of sphere i's keys are in.
+- **Read, licence first** (MIT, row in `licensing.md`): `world.py`, `pass_a.py`, `options.py`, the setup guide.
+- **Fits our world, by the code:** every roll uses `self.random` (doors, fights, start, member, filler);
+  `generate_early` writes no option; no rule reads a location's item; `pre_fill` changes only the shops'
+  `progress_type`/`item_rule`, never access. It patches `Main.distribute_items_restrictive` and uses
+  `fill_hook`; both are there at our tag 0.6.7 (its `minimum_ap_version`).
+- **What it tests for us:** a stall is logic looser than the game, i.e. an impossible seed. Keys from a later
+  sphere are logic stricter than the game, which our rules allow. The fuzzer can't tell either apart.
+- **Not measured yet:** no seed generated with it (that needs the world copied into the Archipelago checkout, the
+  user's call). The mod's side is untested: its data package always names 100,000 locations.
