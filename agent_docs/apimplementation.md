@@ -2347,6 +2347,51 @@ So it gets the strictest rules, read from its syntax tree, not by searching text
   - What each script does (runs programs, writes files, talks to GitHub, connects to a local test server) is listed
     per script, so anyone about to run one can see what it will do.
 
+**The compiled DLL itself (2026-09-29).** The mod's DLL is the one file nobody can rebuild without the game, so
+it is read directly, the way the .NET runtime reads it: `dev-scripts/dotnet_metadata.py` parses its PE headers,
+its metadata tables and every method's IL, with Python's standard library only. It is strict:
+- the tables must fill their stream to the byte (one zero, then padding to 4, as the .NET writer lays it out);
+- an unknown opcode stops it;
+- it parses all four shipped DLLs: 7,700 method bodies from four different compilers.
+
+Four sections read it:
+- **Release staging:** the download holds exactly its seven files. Each DLL is the one `built-from.txt` records,
+  and the sources that file lists are exactly those of the commit it names. Sources changed since then only warn
+  (a committed DLL is older than its sources between releases); with `--release`, they fail.
+- **Shipped DLL structure:** a plain compiled library.
+  - Sections `.text`, `.rsrc` and `.reloc`, with no data after them.
+  - Only `mscoree.dll!_CorDllMain` imported.
+  - The five standard metadata streams.
+  - No native or P/Invoke methods, no embedded resources, and no stored data outside the compiler's array
+    initialisers.
+- **Shipped DLL reach:**
+  - It references only the 13 expected assemblies.
+  - None of 42 denied kinds of call appears among its 12,762 references: processes, `System.Net`, loading code,
+    `Marshal`, the registry, code written at run time, opening URLs, reading who the player is, JSON picking its
+    own type.
+  - No denied name or unlisted host in its strings, not even in attribute data.
+  - Each file, clipboard, connection and by-name lookup is traced to the type that makes it, and must be listed
+    for a source file declaring that type.
+  - Every Harmony patch target outside the game is listed. The first run found three that were written down
+    nowhere, all legitimate: MultiClient.Net's socket creation and one websocket-sharp method (compression), and
+    Unity's `Animator.Play` (a guard). They now have their rows.
+- **The DLL says only what its source says:** read against the sources of the commit it was built from.
+  - Every type, method, field and called member name, and every one of its 1,237 strings, must come from that
+    source. The strings are matched to the literals, the pieces of interpolated strings, and the constants the
+    compiler joins.
+  - The names the compiler makes up (`<Run>b__3_0`, tuple fields, operators) are allowed only by exact name or
+    when built from a source name.
+  - None of `Dev/`'s types may be in it.
+
+  This is the strongest check possible without the game: code in the DLL that the source doesn't have shows up
+  as names and strings the source never wrote. What it can't show is how the IL wires the allowed pieces
+  together; only a rebuild with the game (documentation step 32) or reading the decompiled DLL proves that.
+
+Each has its fixtures: same-length byte patches to a copy of the DLL (a namespace renamed to `System.Net`, a
+Harmony target moved outside the game, a URL written into a string, a type renamed, the native entry point flag,
+data appended). **`build-release.ps1`** runs the three DLL sections on each fresh build before staging it, and
+its `-Check` (the release's gate) is now preflight with `--release`.
+
 **Where it runs so far:**
 - **Every commit:** the pre-commit hook, quiet unless something fails.
 - **Every push** (`.githooks/pre-push`): preflight on each pushed commit, and `--history` on everything new in the
@@ -2361,7 +2406,7 @@ history, free text), the test plants a real violation and checks that the sectio
 non-zero. It works in a throwaway clone outside the repo, with its link back to the repo removed. The clone holds what
 the next commit contains (HEAD plus everything staged), or, from pre-push, exactly the commit being pushed:
 1. **A clean baseline** in all three modes, so a failure afterwards is the plant's doing.
-2. **One fixture per kind of violation** (53 on 2026-09-29): a bidi override in a doc, a homoglyph in code, every
+2. **One fixture per kind of violation** (64 on 2026-09-29): a bidi override in a doc, a homoglyph in code, every
    credential format at once (each must be named), a home path inside the DLL, a library changed by one byte, a
    symlink, a submodule, a stale host row, a secret committed and then removed, and more. The fake credentials and
    paths are assembled at run time, so the test file holds none itself.
@@ -2397,11 +2442,12 @@ character, no game file, and no binary other than the release DLLs. It first fla
   exempt by their exact git hash (`history_reviewed` in the patterns file), each with its reason, so a different
   file can't hide behind the exemption.
 
-**Status:** in progress (2026-09-29). Built: the sections above (files, apworld, mod source, scripts), in pre-commit,
-pre-push and the release guard, and their test. Next: the checks on the compiled DLL itself, the workflows and
+**Status:** in progress (2026-09-29). Built: the sections above (files, apworld, mod source, scripts, the compiled
+DLL), in pre-commit, pre-push, the release guard and the release build, and their test. Next: the workflows and
 dependencies, and CI.
 
-*Code: `dev-scripts/preflight.py`, `dev-scripts/preflight-patterns.json`; `docs/capabilities.md`;
+*Code: `dev-scripts/preflight.py`, `dev-scripts/preflight-patterns.json`, `dev-scripts/dotnet_metadata.py`;
+`docs/capabilities.md`;
 `dev-scripts/negative-test-preflight.py`; `.githooks/pre-commit`, `.githooks/pre-push`, `.githooks/commit-msg`,
 `.githooks/python.sh`; the guard in `.github/workflows/release.yml`.*
 

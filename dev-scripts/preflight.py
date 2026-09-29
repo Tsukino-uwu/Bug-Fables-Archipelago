@@ -10,6 +10,7 @@ each one refuses. Exit 0 when every section passes, 1 on any FAIL (a WARN never 
 import argparse
 import ast
 import builtins
+import fnmatch
 import hashlib
 import ipaddress
 import json
@@ -22,6 +23,8 @@ import time
 import unicodedata
 
 sys.dont_write_bytecode = True
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import dotnet_metadata  # noqa: E402 (next to this file)
 
 PATTERNS = 'dev-scripts/preflight-patterns.json'
 CAPABILITIES = 'docs/capabilities.md'
@@ -222,6 +225,7 @@ class Context:
     def __init__(self, repo, files, odd, patterns, caps, args, messages=None, history=False):
         self.repo, self.files, self.odd, self.patterns, self.args = repo, files, odd, patterns, args
         self.caps, self.messages, self.history = caps, messages or [], history
+        self.dll = self.dll_refs = None
 
     def texts(self, exempt=(PATTERNS,)):
         return [f for f in self.files if not f.binary and f.path not in exempt]
@@ -925,6 +929,479 @@ def dev_scripts(ctx, out):
         out.ok(f'{count} scripts and hooks: nothing denied; the {len(found)} things they do beyond reading are all listed')
 
 
+RELEASE = 'release/mod/BepInEx/plugins/BugFablesAP/'
+OUR_DLL = RELEASE + 'BugFablesAP.dll'
+BUILT_FROM = 'release/built-from.txt'
+CS_ESCAPES = {'n': '\n', 't': '\t', 'r': '\r', '0': '\0', 'a': '\a', 'b': '\b', 'f': '\f', 'v': '\v', '\\': '\\',
+              '"': '"', "'": "'"}
+
+
+def cs_literals(src):
+    """Every string literal of C# source, unescaped; an interpolated string gives each literal part, and the strings
+    inside its holes are read too. A raw or unterminated string is refused rather than guessed at."""
+    pieces = []
+
+    def char_literal(i):
+        j = i + 1
+        while j < len(src) and src[j] != "'":
+            j += 2 if src[j] == '\\' else 1
+        return j + 1
+
+    def code(i, closer):
+        depth = 0
+        while i < len(src):
+            c = src[i]
+            if src.startswith('//', i):
+                end = src.find('\n', i)
+                i = len(src) if end < 0 else end
+            elif src.startswith('/*', i):
+                end = src.find('*/', i + 2)
+                i = len(src) if end < 0 else end + 2
+            elif c == "'":
+                i = char_literal(i)
+            elif c in '$@"' and re.match(r'(\$@|@\$|\$|@)?"', src[i:i + 3]):
+                i = string(i)
+            elif closer and depth == 0 and c == closer:
+                return i
+            else:
+                depth += (c in '([{') - (c in ')]}')
+                i += 1
+        if closer:
+            raise Unreadable('an interpolated string whose hole never closes')
+        return i
+
+    def string(i):
+        prefix = re.match(r'(\$@|@\$|\$|@)?"', src[i:i + 3]).group(1) or ''
+        if src.startswith('"""', i + len(prefix)):
+            raise Unreadable('a raw string literal (""") that this reader does not follow')
+        interp, verbatim = '$' in prefix, '@' in prefix
+        j, buf = i + len(prefix) + 1, ''
+        while True:
+            if j >= len(src) or (not verbatim and src[j] == '\n'):
+                raise Unreadable('an unterminated string literal')
+            c = src[j]
+            if c == '"':
+                if verbatim and src.startswith('""', j):
+                    buf, j = buf + '"', j + 2
+                    continue
+                pieces.append(buf)
+                return j + 1
+            if c == '\\' and not verbatim:
+                n = src[j + 1]
+                if n in 'uU':
+                    width = 4 if n == 'u' else 8
+                    buf, j = buf + chr(int(src[j + 2:j + 2 + width], 16)), j + 2 + width
+                elif n == 'x':
+                    hexdigits = re.match(r'[0-9a-fA-F]{1,4}', src[j + 2:]).group(0)
+                    buf, j = buf + chr(int(hexdigits, 16)), j + 2 + len(hexdigits)
+                else:
+                    buf, j = buf + CS_ESCAPES.get(n, n), j + 2
+                continue
+            if interp and c in '{}':
+                if src.startswith(c * 2, j):
+                    buf, j = buf + c, j + 2
+                    continue
+                if c == '{':
+                    pieces.append(buf)
+                    buf, j = '', code(j + 1, '}') + 1
+                    continue
+            buf, j = buf + c, j + 1
+
+    code(0, None)
+    return {p for p in pieces if p}
+
+
+def built_from(ctx):
+    """built-from.txt: (commit, {name: hash}) of the committed release; --dll-commit names another build's commit."""
+    if ctx.args.dll_commit:
+        return ctx.args.dll_commit, {}
+    f = ctx.file(BUILT_FROM)
+    if f is None:
+        raise Unreadable(f'{BUILT_FROM} is missing')
+    commit, lines = None, {}
+    for line in f.text.splitlines():
+        key, _, value = line.partition(': ')
+        if key == 'commit':
+            commit = value.strip()
+        elif value and not line.startswith('#'):
+            lines[key] = value.strip()
+    if not commit or not re.fullmatch(r'[0-9a-f]{7,40}', commit):
+        raise Unreadable(f'{BUILT_FROM} names no commit')
+    return commit, lines
+
+
+def build_inputs(paths_and_shas):
+    """The files the release build reads, as build-release.ps1 lists them: {path: blob sha}."""
+    rx = re.compile(r'^(mod/BugFablesAP/.+\.(cs|csproj)|mod/BugFablesAP/packages\.lock\.json|global\.json|nuget\.config'
+                    r'|Directory\.Build\.props)$')
+    return {p: s for p, s in paths_and_shas if rx.match(p) and not p.startswith('mod/BugFablesAP/Dev/')}
+
+
+def our_dll(ctx):
+    if ctx.dll is None:
+        f = ctx.file(OUR_DLL)
+        if f is None:
+            raise Unreadable(f'{OUR_DLL} is missing')
+        try:
+            ctx.dll = dotnet_metadata.Assembly(f.data)
+            ctx.dll_refs = ctx.dll.references()
+        except dotnet_metadata.MetadataError as e:
+            raise Unreadable(f'{OUR_DLL} could not be read as .NET metadata: {e}')
+    return ctx.dll
+
+
+@section('Release staging')
+def release_staging(ctx, out):
+    staged = sorted(f.path for f in ctx.files if f.path.startswith('release/mod/'))
+    expected = sorted(['release/mod/README.txt'] + [RELEASE + n for n in (
+        'BugFablesAP.dll', 'Archipelago.MultiClient.Net.dll', 'websocket-sharp.dll', 'Newtonsoft.Json.dll', 'LICENSE.txt',
+        'THIRD-PARTY-NOTICES.txt')])
+    commit, recorded = built_from(ctx)
+    problems = []
+    if staged != expected:
+        problems.append(f'release/mod holds {staged}, not exactly {expected}')
+    for name in ('BugFablesAP.dll', 'Archipelago.MultiClient.Net.dll', 'websocket-sharp.dll', 'Newtonsoft.Json.dll'):
+        f = ctx.file(RELEASE + name)
+        if f and recorded.get(name) != sha256(f.data):
+            problems.append(f'{name}: sha256 {sha256(f.data)[:16]}..., {BUILT_FROM} records '
+                            f'{str(recorded.get(name))[:16]}...: the DLL changed without its record')
+    for key in ('sdk', 'game'):
+        if key not in recorded:
+            problems.append(f'{BUILT_FROM} records no {key}')
+    # The recorded sources must be exactly that commit's: what the DLL claims to be built from, it was.
+    try:
+        at_commit = [(p, s) for m, t, s, p in (line.split(None, 3) for line in ctx.repo.git(
+            'ls-tree', '-r', '--full-tree', commit).decode('utf-8', 'surrogateescape').splitlines())]
+    except Unreadable:
+        at_commit = None
+        problems.append(f'{BUILT_FROM} names commit {commit}, which this repository does not have')
+    sources = {k: v for k, v in recorded.items() if k not in ('sdk', 'game') and not k.endswith('.dll')}
+    if at_commit is not None and build_inputs(at_commit) != sources:
+        diff = sorted(set(build_inputs(at_commit).items()) ^ set(sources.items()))
+        problems.append(f'the sources {BUILT_FROM} lists are not commit {commit[:10]}\'s: ' +
+                        ', '.join(p for p, s in diff[:6]))
+    current = build_inputs((f.path, f.sha) for f in ctx.files)
+    stale = sorted(p for p in set(current) | set(sources) if current.get(p) != sources.get(p))
+    if problems:
+        out.fail('the committed mod download does not match its own record', problems)
+    elif stale and ctx.args.release:
+        out.fail('the committed DLL is older than its sources: run dev-scripts/build-release.ps1 and commit', stale)
+    elif stale:
+        out.warn(f'the committed DLL was built from {commit[:10]}; {len(stale)} build input(s) changed since (fine '
+                 f'between releases, a release rebuilds it)', stale[:8])
+    if not problems and not (stale and ctx.args.release):
+        out.ok(f'release/mod holds exactly its {len(expected)} files; each DLL is the one {BUILT_FROM} records, built '
+               f'from commit {commit[:10]}, whose {len(sources)} build inputs it lists exactly')
+
+
+@section('Shipped DLL structure')
+def dll_structure(ctx, out):
+    a = our_dll(ctx)
+    data = ctx.file(OUR_DLL).data
+    bad = []
+    names = [s[0] for s in a.sections]
+    if names != ['.text', '.rsrc', '.reloc']:
+        bad.append(f'sections {names}, expected .text, .rsrc, .reloc')
+    end = max(rawptr + rawsize for _, _, _, rawptr, rawsize in a.sections)
+    if len(data) != end:
+        bad.append(f'{len(data) - end} bytes after the last section (data no loader reads)')
+    for number, what in ((0, 'exports'), (4, 'an appended certificate'), (9, 'thread-local storage callbacks'),
+                         (11, 'bound imports'), (13, 'delay-loaded imports')):
+        if len(a.directories) > number and a.directories[number][1]:
+            bad.append(f'the PE has {what}')
+    if a.imports() != [('mscoree.dll', ['_CorDllMain'])]:
+        bad.append(f'native imports {a.imports()}, expected only mscoree.dll!_CorDllMain')
+    if not a.cli_flags & 1 or a.cli_flags & 0x10:
+        bad.append(f'CLI flags {a.cli_flags:#x}: not IL-only, or a native entry point')
+    bad += [f'the CLI header has {name}' for name, (rva, size) in a.cli_dirs.items()
+            if size and name != 'StrongNameSignature']
+    streams = [s[0] for s in a.streams]
+    if sorted(streams) != sorted(['#~', '#Strings', '#US', '#GUID', '#Blob']) or len(streams) != 5:
+        bad.append(f'metadata streams {streams}, expected exactly #~ #Strings #US #GUID #Blob')
+    for table in ('ModuleRef', 'ImplMap', 'ManifestResource', 'File', 'ExportedType', 'FieldPtr', 'MethodPtr',
+                  'ParamPtr', 'EventPtr', 'PropertyPtr', 'EncLog', 'EncMap', 'AssemblyProcessor', 'AssemblyOS',
+                  'AssemblyRefProcessor', 'AssemblyRefOS', 'DeclSecurity'):
+        if a.table[table]:
+            bad.append(f'{len(a.table[table])} {table} row(s)'
+                       + (' (native calls)' if table in ('ModuleRef', 'ImplMap') else
+                          ' (embedded resources)' if table == 'ManifestResource' else ''))
+    owner = a.method_owner()
+    for m, (rva, impl, flags, name, sig, params) in enumerate(a.table['MethodDef'], 1):
+        typ = a.typedef_name(owner[m])
+        if flags & 0x2000 or impl & 0x1000 or impl & 3 in (1, 2):
+            bad.append(f'{typ}::{a.string(name)}: native, internal-call or P/Invoke')
+        elif impl & 3 == 3:
+            extends = a.row('TypeDef', owner[m])[3]
+            if a.type_name(extends)[1] != 'System.MulticastDelegate':
+                bad.append(f'{typ}::{a.string(name)}: a runtime-implemented method outside a delegate')
+    for rva, field in a.table['FieldRVA']:
+        typ = a.member(0x04000000 | field)[1]
+        if not typ.startswith('<PrivateImplementationDetails>'):
+            bad.append(f'{typ}: data stored in the file itself (FieldRVA), outside the compiler\'s array initialisers')
+    module = a.string(a.table['Module'][0][1])
+    if module != 'BugFablesAP.dll' or a.assembly_name() != 'BugFablesAP':
+        bad.append(f'module {module}, assembly {a.assembly_name()}: not the mod')
+    if bad:
+        out.fail('the shipped DLL is not a plain compiled library', bad)
+    else:
+        out.ok(f'a plain IL-only library: .text/.rsrc/.reloc and nothing after, only mscoree!_CorDllMain imported, '
+               f'the five standard streams, no native calls, resources or embedded data; {len(a.table["MethodDef"])} '
+               f'methods, {len(a.table["TypeDef"])} types')
+
+
+def dll_calls(ctx):
+    """(caller's outermost type, kind, 'Type::Member', assembly) for every reference in every method body."""
+    a, out = our_dll(ctx), []
+    for owner, method, calls, strings, tokens in ctx.dll_refs:
+        caller = a.typedef_name(a.outermost(owner))
+        for kind, (asm, typ, member) in calls:
+            out.append((caller, kind, f'{typ}::{member}', asm))
+    return out
+
+
+def glob_any(text, globs):
+    return any(fnmatch.fnmatchcase(text, g) for g in globs)
+
+
+def printable_runs(data, minimum=6):
+    """ASCII and UTF-16 text runs inside binary data."""
+    runs = re.findall(rb'[\x20-\x7e]{%d,}' % minimum, data)
+    runs += [r.decode('utf-16-le').encode() for r in re.findall(rb'(?:[\x20-\x7e]\x00){%d,}' % minimum, data)]
+    return [r.decode('ascii', 'replace') for r in runs]
+
+
+@section('Shipped DLL reach')
+def dll_reach(ctx, out):
+    p = ctx.patterns
+    a = our_dll(ctx)
+    bad = []
+    refs = set(a.assembly_refs())
+    if not refs <= set(p['dll_assembly_refs']):
+        bad.append(f'references assemblies outside the list: {sorted(refs - set(p["dll_assembly_refs"]))}')
+    calls = dll_calls(ctx)
+    denied = p['dll_denied']
+    bad += sorted({f'{caller}: {kind} {target}' for caller, kind, target, asm in calls if glob_any(target, denied)})
+    # Names reached through strings or attributes (typeof in an attribute leaves only a name in #Blob).
+    names = p['dll_denied_names']
+    texts = a.user_strings() + printable_runs(a.heap['#Blob'])
+    bad += sorted({f'the text "{t[:80]}" names {n}' for t in texts for n in names if n in t})
+    listed = {key for key, cells in ctx.capabilities().get('Hosts', [])}
+    for t in a.user_strings():
+        for host, _ in hosts_in(File('dll', '100644', '', t.encode('utf-8'))):
+            if not loopback(host) and not any(host == k or host.endswith('.' + k) for k in listed):
+                bad.append(f'the string "{t[:80]}" names the unlisted host {host}')
+        for m in QUOTED_HOST.finditer('"' + t + '"'):
+            host = m.group(1).lower()
+            if not any(host == k or host.endswith('.' + k) for k in listed):
+                bad.append(f'the string "{t}" is an unlisted host')
+    # What the DLL does, by the type that does it, must be in the source list for a file declaring that type.
+    rows, reasonless = capability_rows(ctx, 'Mod: what the code touches')
+    declared = {}
+    for f in ctx.files:
+        if f.path.startswith('mod/BugFablesAP/') and f.path.endswith('.cs') and '/Dev/' not in f.path:
+            for name in re.findall(r'\b(?:class|struct|interface|enum)\s+([A-Za-z_]\w*)', f.text):
+                declared.setdefault(name, set()).add(f.path)
+    unlisted = set()
+    for cap, globs in p['dll_capabilities'].items():
+        for caller, kind, target, asm in calls:
+            if glob_any(target, globs):
+                simple = caller.rsplit('.', 1)[-1]
+                if not any((path, cap) in rows for path in declared.get(simple, ())):
+                    unlisted.add(f'{caller}: {cap} ({target})')
+    patched = harmony_targets(a)
+    listed_patches = {key for key, cells in ctx.capabilities().get('Mod: patches outside the game', [])}
+    outside = {t for t in patched if not t.startswith('Assembly-CSharp:')}
+    if bad:
+        out.fail('the shipped DLL reaches for something the mod must never do', bad)
+    if unlisted:
+        out.fail(f'the shipped DLL does something its source list ({CAPABILITIES}) doesn\'t say, by the type doing it',
+                 sorted(unlisted))
+    if outside != listed_patches:
+        out.fail(f'Harmony patches on code outside the game, against {CAPABILITIES}, "Mod: patches outside the game"',
+                 [f'patched, not listed: {t}' for t in sorted(outside - listed_patches)]
+                 + [f'listed, not patched: {t}' for t in sorted(listed_patches - outside)])
+    if not bad and not unlisted and outside == listed_patches:
+        out.ok(f'{len(refs)} referenced assemblies, all expected; none of {len(denied)} denied calls in '
+               f'{len(calls)} references; every capability in the binary is in the source list; '
+               f'{len(patched)} Harmony patch targets by attribute, {len(outside)} outside the game, listed')
+
+
+def attribute_arguments(a, signature, value):
+    """The fixed arguments of a custom attribute, decoded by its constructor's signature: [(kind, value)].
+    Only the shapes Harmony's attributes use are known; any other shape is refused rather than guessed at."""
+    def param(sig, pos):
+        tag = sig[pos]
+        if tag == 0x0E:
+            return 'string', pos + 1
+        if tag in (0x08, 0x02):
+            return {0x08: 'int', 0x02: 'bool'}[tag], pos + 1
+        if tag in (0x11, 0x12):
+            coded, nxt = dotnet_metadata.compressed(sig, pos + 1)
+            name = a.type_name(([0x02, 0x01, 0x1B][coded & 3], coded >> 2))[1]
+            if tag == 0x12 and name != 'System.Type':
+                raise Unreadable(f'an attribute argument of type {name}')
+            return ('type' if tag == 0x12 else 'enum'), nxt
+        if tag == 0x1D:
+            inner, nxt = param(sig, pos + 1)
+            return 'array of ' + inner, nxt
+        raise Unreadable(f'an attribute argument of element type {tag:#x}')
+
+    if signature[0] & 0x20 == 0 or signature[2] != 0x01:
+        raise Unreadable('an attribute constructor that is not an instance method returning void')
+    count, pos = dotnet_metadata.compressed(signature, 1)
+    kinds, pos = [], pos + 1
+    for _ in range(count):
+        kind, pos = param(signature, pos)
+        kinds.append(kind)
+    if value[:2] != b'\x01\x00':
+        raise Unreadable('a custom attribute without its prolog')
+
+    def read(kind, at):
+        if kind in ('string', 'type'):
+            if value[at] == 0xFF:
+                return None, at + 1
+            size, at = dotnet_metadata.compressed(value, at)
+            return value[at:at + size].decode('utf-8'), at + size
+        if kind in ('int', 'enum'):
+            return struct.unpack_from('<i', value, at)[0], at + 4
+        if kind == 'bool':
+            return value[at] != 0, at + 1
+        count = struct.unpack_from('<i', value, at)[0]
+        items, at = [], at + 4
+        for _ in range(max(count, 0)):
+            item, at = read(kind[len('array of '):], at)
+            items.append(item)
+        return items, at
+
+    out, at = [], 2
+    for kind in kinds:
+        item, at = read(kind, at)
+        out.append((kind, item))
+    return out
+
+
+def harmony_targets(a):
+    """'Assembly:Type::Method' for every [HarmonyPatch] target. As Harmony does, the attributes stacked on one method
+    (or class) are merged, and a method's are completed by its class's."""
+    merged = {}
+    for parent, ctor, value in a.table['CustomAttribute']:
+        table, index = ctor
+        if a.member((table << 24) | index)[1] != 'HarmonyLib.HarmonyPatch':
+            continue
+        signature = a.blob(a.row('MemberRef', index)[2] if table == 0x0A else a.row('MethodDef', index)[4])
+        args = attribute_arguments(a, signature, a.blob(value))
+        if parent[0] not in (0x02, 0x06):
+            raise Unreadable(f'a HarmonyPatch attribute on metadata table {parent[0]:#x}')
+        typ, name = merged.get(parent, (None, None))
+        merged[parent] = (typ or next((v for k, v in args if k == 'type'), None),
+                          name or next((v for k, v in args if k == 'string'), None))
+    by_type = {index: target for (table, index), target in merged.items() if table == 0x02}
+    by_method = [(index, target) for (table, index), target in merged.items() if table == 0x06]
+
+    def qualified(type_name, method):
+        if not type_name:
+            raise Unreadable('a HarmonyPatch whose target type is given nowhere')
+        name, _, rest = type_name.partition(',')
+        return f'{(rest.split(",")[0].strip() or a.assembly_name())}:{name.strip()}::{method or "*"}'
+
+    owners, targets = a.method_owner(), set()
+    for method, (typ, name) in by_method:
+        outer_type, outer_name = by_type.get(owners[method], (None, None))
+        targets.add(qualified(typ or outer_type, name or outer_name))
+    for tdef, (typ, name) in by_type.items():
+        if not any(owners[m] == tdef for m, _ in by_method):
+            targets.add(qualified(typ, name))
+    return targets
+
+
+@section('The DLL says only what its source says')
+def dll_matches_source(ctx, out):
+    p = ctx.patterns
+    a = our_dll(ctx)
+    commit, recorded = built_from(ctx)
+    listing = ctx.repo.git('ls-tree', '-r', '--full-tree', commit).decode('utf-8', 'surrogateescape').splitlines()
+    entries = [line.split(None, 3) for line in listing]
+    shas = [s for m, t, s, path in entries
+            if path.startswith('mod/BugFablesAP/') and path.endswith('.cs') and '/Dev/' not in path]
+    dev = [s for m, t, s, path in entries if path.startswith('mod/BugFablesAP/Dev/') and path.endswith('.cs')]
+    blobs = ctx.repo.blobs(shas + dev)
+    code = '\n'.join(blobs[s].decode('utf-8') for s in shas)
+    idents = set(re.findall(r'[A-Za-z_]\w*', code))
+    pieces = cs_literals(code)
+    declared = set(re.findall(r'\b(?:class|struct|enum|interface|record)\s+([A-Za-z_]\w*)', code)) | set(
+        re.findall(r'\bdelegate\s+[\w<>\[\],. ]+?\s+([A-Za-z_]\w*)\s*[(<]', code))
+    dev_types = set(re.findall(r'\b(?:class|struct|enum|interface)\s+([A-Za-z_]\w*)',
+                               '\n'.join(blobs[s].decode('utf-8') for s in dev))) - declared
+    synthesized, compiler_types = set(p['dll_synthesized_members']), set(p['dll_compiler_types'])
+
+    def generated_ok(name):
+        """A compiler-made name (<Run>b__3_0, <>c) must be built from a name in the source."""
+        return all(inner in idents or inner in ('', '.ctor', '.cctor', 'PrivateImplementationDetails', 'Module')
+                   or re.fullmatch(r'\d+', inner) for inner in re.findall(r'<([^<>]*)>', name))
+
+    def plain(name):
+        return name in idents or re.sub(r'^(get_|set_|add_|remove_)', '', name) in idents
+
+    bad = []
+    for i, row in enumerate(a.table['TypeDef'], 1):
+        name, full = a.string(row[1]), a.typedef_name(i)
+        if name in dev_types:
+            bad.append(f'type {full}: a Dev/ type, which the release build leaves out')
+        elif '<' in name or full.startswith('<PrivateImplementationDetails>'):
+            if not generated_ok(full):
+                bad.append(f'type {full}: a compiler-made name built from nothing in the source')
+        elif full not in compiler_types and name not in declared:
+            bad.append(f'type {full}: declared in no source file')
+    for rva, impl, flags, name, sig, params in a.table['MethodDef']:
+        n = a.string(name)
+        last = n.rsplit('.', 1)[-1]
+        if not (n in ('.ctor', '.cctor') or ('<' in n and generated_ok(n)) or plain(n) or n in synthesized
+                or ('.' in n and (plain(last) or last in synthesized))):
+            bad.append(f'method {n}: in no source file')
+    field_owner = a.field_owner()
+    for i, (flags, name, sig) in enumerate(a.table['Field'], 1):
+        n = a.string(name)
+        # Array initialiser data: the compiler names each field after its bytes' hash.
+        initialiser = a.typedef_name(field_owner[i]).startswith('<PrivateImplementationDetails>') and re.fullmatch(
+            r'[0-9A-F]{64}|__StaticArrayInit\w*', n)
+        if not (plain(n) or ('<' in n and generated_ok(n)) or n in synthesized or initialiser):
+            bad.append(f'field {n}: in no source file')
+    for parent, name, sig in a.table['MemberRef']:
+        n = a.string(name)
+        if not (plain(n) or n in synthesized or ('<' in n and generated_ok(n))):
+            bad.append(f'a call to {n}: a name in no source file')
+    by_first = {}
+    for piece in pieces:
+        by_first.setdefault(piece[0], []).append(piece)
+
+    def explained(s):
+        if s in pieces or s in idents:
+            return True
+        parts = [x.replace('{{', '{').replace('}}', '}') for x in re.split(r'\{\d+(?:[,:][^}]*)?\}', s) if x]
+        if parts and all(x in pieces for x in parts):
+            return True
+        reach = [False] * (len(s) + 1)
+        reach[0] = True
+        for i in range(len(s)):
+            if reach[i]:
+                for piece in by_first.get(s[i], ()):
+                    if s.startswith(piece, i):
+                        reach[i + len(piece)] = True
+        return reach[-1]
+
+    strings = {s for owner, m, calls, ss, tokens in ctx.dll_refs for s in ss}
+    bad += sorted(f'the string {ascii(s)[:90]}: in no source file' for s in strings if not explained(s))
+    if len(shas) < 40 or len(pieces) < 500:
+        out.fail(f'only {len(shas)} source files and {len(pieces)} literals read at {commit[:10]}: the listing is wrong')
+    elif bad:
+        out.fail(f'the shipped DLL holds what its source at {commit[:10]} does not (a DLL not built from it, or a '
+                 f'build step that added code)', bad)
+    else:
+        out.ok(f'against its source at {commit[:10]}: all {len(a.table["TypeDef"])} types, '
+               f'{len(a.table["MethodDef"])} methods, {len(a.table["Field"])} fields, {len(a.table["MemberRef"])} '
+               f'member names and {len(strings)} strings come from it; none of Dev/\'s {len(dev_types)} types')
+
+
 @section('Commit messages', modes=('history',))
 def commit_messages(ctx, out):
     rules = {name: re.compile(rx) for name, rx in ctx.patterns['secrets'].items()}
@@ -957,7 +1434,8 @@ def load_patterns(files):
                 'apworld_modules', 'apworld_builtins', 'apworld_dunders', 'apworld_denied_attributes',
                 'apworld_denied_members', 'apworld_manifest_keys', 'mod_denied', 'mod_capabilities', 'ps1_denied',
                 'ps1_capabilities', 'sh_denied', 'script_denied_modules', 'script_denied_builtins',
-                'script_denied_methods', 'script_capability_modules', 'script_capability_calls'}
+                'script_denied_methods', 'script_capability_modules', 'script_capability_calls', 'dll_assembly_refs',
+                'dll_denied', 'dll_denied_names', 'dll_capabilities', 'dll_synthesized_members', 'dll_compiler_types'}
     if set(patterns) != expected:
         raise Unreadable(f'{PATTERNS} keys differ from what preflight reads: {sorted(set(patterns) ^ expected)}')
     for rx in list(patterns['secrets'].values()) + patterns['game_paths'] + patterns['decompiler_markers'] + [
@@ -1006,6 +1484,10 @@ def main(argv=None):
     ap.add_argument('--repo', default=os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     ap.add_argument('--ci', action='store_true', default=os.environ.get('CI') == 'true',
                     help='skip what only a working clone can answer (on by itself in CI)')
+    ap.add_argument('--release', action='store_true', help='a release: the committed DLL must be built from the '
+                    'current sources, not an older commit')
+    ap.add_argument('--dll', help='check this file as the shipped DLL (a fresh build, before it is staged)')
+    ap.add_argument('--dll-commit', help='the commit the --dll file was built from')
     ap.add_argument('--only', action='append', help='run only this section (repeatable)')
     ap.add_argument('--quiet', action='store_true', help='print only sections that fail or warn')
     ap.add_argument('--timing', action='store_true')
@@ -1018,6 +1500,9 @@ def main(argv=None):
     repo = Repo(args.repo)
     try:
         files, odd = read_tree(repo, None if args.history is not None or args.text_stdin else args.rev)
+        if args.dll:
+            with open(args.dll, 'rb') as f:
+                files[OUR_DLL] = File(OUR_DLL, '100644', '', f.read())
         patterns = load_patterns(files)
         caps = capability_tables(files[CAPABILITIES].text) if CAPABILITIES in files else None
         if args.text_stdin:

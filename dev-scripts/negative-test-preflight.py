@@ -159,18 +159,34 @@ def patterns_of(clone):
 
 
 class Fixture:
-    def __init__(self, name, section, mode, plant, expect='FAIL', names=(), stage=True):
+    def __init__(self, name, section, mode, plant, expect='FAIL', names=(), stage=True, args=()):
         self.name, self.section, self.mode, self.plant, self.expect = name, section, mode, plant, expect
         # stage=False: the plant writes the index itself, which 'git add -A' would undo.
-        self.names, self.stage = names, stage
+        self.names, self.stage, self.args = names, stage, args
+
+
+def patch_bytes(c, rel, old, new):
+    """Same-length change inside a binary, so everything after it stays where the metadata says it is."""
+    if len(old) != len(new):
+        raise RuntimeError('a byte patch must keep the length')
+    data = c.read(rel)
+    if old not in data:
+        raise RuntimeError(f'nothing in {rel} to patch: the plant would change nothing')
+    c.write(rel, data.replace(old, new, 1))
+
+
+def metadata_of(c):
+    sys.path.insert(0, c.path('dev-scripts'))
+    import dotnet_metadata
+    return dotnet_metadata.Assembly(c.read(DLL))
 
 
 def fixtures():
     F = []
 
-    def add(name, section, mode='tree', expect='FAIL', names=(), stage=True):
+    def add(name, section, mode='tree', expect='FAIL', names=(), stage=True, args=()):
         def register(plant):
-            F.append(Fixture(name, section, mode, plant, expect, names, stage))
+            F.append(Fixture(name, section, mode, plant, expect, names, stage, args))
             return plant
         return register
 
@@ -387,6 +403,63 @@ def fixtures():
         c.replace('docs/capabilities.md', b'| `dev-scripts/preflight.py` |',
                   b'| `dev-scripts/nowhere.py` | runs programs | nothing |\n| `dev-scripts/preflight.py` |')
 
+    @add('a DLL that is not its record', 'Release staging', names=('the DLL changed without its record',))
+    def _(c):
+        c.write(DLL, c.read(DLL) + b'\0' * 16)
+
+    @add('a stray file in the download', 'Release staging', names=('release/mod holds',))
+    def _(c):
+        c.write('release/mod/extra.txt', 'x\n')
+
+    @add('sources changed since the DLL was built', 'Release staging', expect='WARN')
+    def _(c):
+        c.append('mod/BugFablesAP/Core/Plugin.cs', '// changed')
+
+    @add('a release with a stale DLL', 'Release staging', args=('--release',),
+         names=('the committed DLL is older than its sources',))
+    def _(c):
+        c.append('mod/BugFablesAP/Core/Plugin.cs', '// changed')
+
+    @add('data after the last section', 'Shipped DLL structure', names=('bytes after the last section',))
+    def _(c):
+        c.write(DLL, c.read(DLL) + b'\0' * 512)
+
+    @add('a native entry point flag', 'Shipped DLL structure', names=('not IL-only, or a native entry point',))
+    def _(c):
+        a = metadata_of(c)
+        at = a.offset(a.directories[14][0]) + 16
+        data = bytearray(c.read(DLL))
+        data[at] |= 0x10
+        c.write(DLL, bytes(data))
+
+    @add('a namespace pointed at System.Net', 'Shipped DLL reach', names=('System.Net.',))
+    def _(c):
+        net = ('System' + '.Net').encode()  # in two pieces: whole, it reads as a host name to preflight itself
+        old = b'\0System.Collections.Generic\0'
+        patch_bytes(c, DLL, old, b'\0' + net + b'\0' + b'x' * (len(old) - len(net) - 3) + b'\0')
+
+    @add('a Harmony patch aimed outside the game', 'Shipped DLL reach',
+         names=('patched, not listed: Assembly-CSharq',))
+    def _(c):
+        patch_bytes(c, DLL, b'Assembly-CSharp, Version=0.0.0.0', b'Assembly-CSharq, Version=0.0.0.0')
+
+    @add('an unlisted host in a DLL string', 'Shipped DLL reach', names=('unlisted host evil.example.org',))
+    def _(c):
+        old = '[saves] redirect installed; Archipelago mod '
+        new = ('see https' + '://evil.example.org/x').ljust(len(old))
+        patch_bytes(c, DLL, old.encode('utf-16-le'), new.encode('utf-16-le'))
+
+    @add('a DLL string no source holds', 'The DLL says only what its source says', names=('in no source file',))
+    def _(c):
+        old = '[saves] redirect installed; Archipelago mod '
+        patch_bytes(c, DLL, old.encode('utf-16-le'), 'a line nobody wrote, planted in the DLL.'.ljust(len(old))
+                    .encode('utf-16-le'))
+
+    @add('a DLL type no source declares', 'The DLL says only what its source says',
+         names=('SaveRedirecx: declared in no source file',))
+    def _(c):
+        patch_bytes(c, DLL, b'\0SaveRedirect\0', b'\0SaveRedirecx\0')
+
     # History: a violation committed and removed again is gone from the tree, not from what was published.
     def committed_then_removed(rel, data):
         def plant(c):
@@ -482,13 +555,14 @@ def run_fixture(c, fx, base):
     c.git('config', 'core.hooksPath', '.githooks')
     if fx.mode == 'text':
         text = fx.plant(c) if callable(fx.plant) else fx.plant
-        return c.preflight('--text-stdin', 'fixture', stdin=text.encode('utf-8'))
+        return c.preflight('--only', fx.section, '--text-stdin', 'fixture', stdin=text.encode('utf-8'))
     fx.plant(c)
     if fx.mode == 'history':
-        return c.preflight('--history', f'{base}..HEAD')
+        return c.preflight('--only', fx.section, '--history', f'{base}..HEAD')
     if fx.stage:
         c.git('add', '-A')
-    return c.preflight()
+    # Only the section under test: the baselines run them all, and this keeps each fixture to a fraction of a second.
+    return c.preflight('--only', fx.section, *fx.args)
 
 
 def main():

@@ -65,6 +65,18 @@ and preflight checks the shipped DLL holds none of it.
 | `mod/BugFablesAP/Dev/SpriteDump.cs` | writes files | Dev build only: saves the game's interface sprite sheets and an index as images in the BepInEx folder |
 | `mod/BugFablesAP/Dev/VarDump.cs` | writes files | Dev build only: dumps which flag slots the game's text uses to a file in the BepInEx folder |
 
+## Mod: patches outside the game
+
+The mod changes the game's own code at run time with Harmony, as every BepInEx mod does; those patches are its
+purpose and are read in `code-map.md`. These are the only ones that change code that isn't the game's: a library or
+Unity itself. Read from the shipped DLL's `[HarmonyPatch]` attributes, as `assembly:type::method`.
+
+| Target | Why |
+|---|---|
+| `Archipelago.MultiClient.Net:Archipelago.MultiClient.Net.Helpers.ArchipelagoSocketHelper::CreateWebSocket` | Turns on compression (permessage-deflate) for the connection, which MultiClient.Net never enables (`Core/WebSocketCompression.cs`) |
+| `websocket-sharp:WebSocketSharp.WebSocket::validateSecWebSocketExtensionsServerHeader` | Accepts the server's compression reply, whose `server_max_window_bits` websocket-sharp would otherwise reject; dropping it is safe (`Core/WebSocketCompression.cs`) |
+| `UnityEngine.AnimationModule:UnityEngine.Animator::Play` | Skips a play of an animation state a character lacks, which would only log two Unity warnings and play nothing; only while Archipelago is on (`Guards/AnimGuard.cs`) |
+
 ## Dev scripts and hooks: what they touch
 
 These run on the maintainer's machine (and on yours, if you run them); nothing here ships to players. Reading files

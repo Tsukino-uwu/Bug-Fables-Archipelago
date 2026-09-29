@@ -1965,7 +1965,9 @@ passes:
    deliberate (`-NewLibraries`).
 5. **Unchanged sources rebuild the committed DLL exactly.** If none of the build's inputs changed since the committed
    DLL was built, the new DLL must be byte-identical to it, or the committed one isn't what these sources make.
-6. **The old checks:** no dev tool in the DLL, and exactly the shipped files.
+6. **Preflight's DLL checks pass on the fresh build** before anything is staged: a plain compiled library, no denied
+   call, and nothing its source doesn't say (apimplementation.md, build step 28). The `[Debug]` settings stay in
+   the dev build, and exactly the shipped files are staged.
 
 `release/built-from.txt` then records the full commit, the SDK and the game's `Assembly-CSharp.dll` hash (which game
 build it was compiled against), next to each input's hash and each DLL's.

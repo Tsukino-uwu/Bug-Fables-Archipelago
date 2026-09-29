@@ -56,22 +56,29 @@ function Assert-DevToolsApart([string]$root) {
     Write-Output "all $(@($binds).Count) [Debug] settings in Dev/, off by default"
 }
 
-# The shipped DLL holds none of Dev/'s own types (a type's name sits in the metadata as UTF-8 between zero bytes) and no
-# "Dev only" config text (string literals are UTF-16).
-function Assert-NoDevInDll([string]$dll, [string]$root) {
-    $bytes = [System.IO.File]::ReadAllBytes($dll)
-    $text = [System.Text.Encoding]::GetEncoding(28591).GetString($bytes)
-    $names = Get-ChildItem (Join-Path $root 'mod/BugFablesAP/Dev') -Filter *.cs | ForEach-Object {
-        [regex]::Matches((Get-Content -Raw $_.FullName), '(?m)^\s*(?:(?:public|internal|private|static|sealed)\s+)*class\s+(\w+)') |
-            ForEach-Object { $_.Groups[1].Value }
-    } | Sort-Object -Unique
-    if (-not $names) { throw 'no Dev/ types found: the check is reading the wrong pattern' }
-    $found = @($names | Where-Object { $text.Contains("$([char]0)$_$([char]0)") })
-    if ($found) { throw "the release DLL holds dev types: $($found -join ', ')" }
-    $devOnly = [System.Text.Encoding]::GetEncoding(28591).GetString([System.Text.Encoding]::Unicode.GetBytes('Dev only'))
-    if ($text.Contains($devOnly)) { throw 'the release DLL holds a "Dev only" setting description' }
-    Write-Output "release DLL holds none of Dev/'s $(@($names).Count) types"
+# dev-scripts/preflight.py, with a Python 3.11 or newer that really runs: this clone's own choice
+# (git config preflight.python <path>), else py -3, python3, python. Returns preflight's exit code.
+function Invoke-Preflight([string[]]$preflightArgs) {
+    $ErrorActionPreference = 'Continue'
+    $configured = & git -C $repo config --get preflight.python
+    $candidates = @()
+    if ($configured) { $candidates += , @($configured) }
+    $candidates += , @('py', '-3')
+    $candidates += , @('python3')
+    $candidates += , @('python')
+    foreach ($candidate in $candidates) {
+        $exe = $candidate[0]
+        $pre = @($candidate | Select-Object -Skip 1)
+        if (-not (Get-Command $exe -ErrorAction SilentlyContinue)) { continue }
+        & $exe @pre -c 'import sys; sys.exit(sys.version_info < (3, 11))' *> $null
+        if ($LASTEXITCODE -ne 0) { continue }
+        & $exe @pre -B (Join-Path $repo 'dev-scripts/preflight.py') @preflightArgs | Out-Host
+        return $LASTEXITCODE
+    }
+    throw 'no Python 3.11 or newer runs here for preflight.py; name one with: git config preflight.python <path>'
 }
+$dllSections = @('--only', 'Shipped DLL structure', '--only', 'Shipped DLL reach',
+    '--only', 'The DLL says only what its source says')
 
 # Only what the zip should hold: a stray file would ship.
 function Assert-ShippedSet {
@@ -100,20 +107,13 @@ function Assert-BuildCodePackages([string]$dir) {
     Write-Output "build-time code only from $($buildCodePackages -join ' and ') ($(@($assets.libraries.PSObject.Properties).Count) packages restored, locked)"
 }
 
+# The release's gate: the committed download matches its record and its current sources (preflight's release
+# sections, --release), and the dev settings stay in the dev build.
 if ($Check) {
     Assert-DevToolsApart $repo
-    Assert-ShippedSet
-    if (-not (Test-Path $builtFrom)) { throw 'release/built-from.txt is missing: run dev-scripts/build-release.ps1' }
-    $recorded = @(Get-Content $builtFrom | Where-Object { $_ -notmatch '^(#|commit:|sdk:|game:)' -and $_.Trim() })
-    $actual = @(Get-SourceLines $repo) + @(Get-DllLines)
-    if (-not $recorded) { throw 'release/built-from.txt records nothing' }
-    $diff = Compare-Object $recorded $actual
-    if ($diff) {
-        $diff | ForEach-Object { Write-Output "  $($_.SideIndicator) $($_.InputObject)" }
-        throw 'release/mod is stale: the sources or DLLs changed since it was built. Run dev-scripts/build-release.ps1 and commit.'
-    }
-    Write-Output "release/mod matches its sources ($($actual.Count) entries)"
-    Assert-NoDevInDll (Join-Path $pluginDir 'BugFablesAP.dll') $repo
+    $code = Invoke-Preflight (@('--release', '--only', 'Release staging') + $dllSections)
+    if ($code -ne 0) { throw 'preflight refused the committed release (above): run dev-scripts/build-release.ps1 and commit' }
+    Write-Output 'release/mod matches its record and its sources; preflight passed its DLL'
     return
 }
 
@@ -158,7 +158,9 @@ try {
 
     Assert-DevToolsApart $a.Dir
     Assert-BuildCodePackages $a.Dir
-    Assert-NoDevInDll $a.Dll $a.Dir
+    # The fresh DLL, before it is staged: a plain library, reaching for nothing denied, saying only what HEAD says.
+    $code = Invoke-Preflight (@('--dll', $a.Dll, '--dll-commit', $head) + $dllSections)
+    if ($code -ne 0) { throw 'preflight refused the fresh DLL (above); nothing was staged' }
 
     $out = Split-Path -Parent $a.Dll
     foreach ($d in $libraries) {
