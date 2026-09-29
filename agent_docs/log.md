@@ -1624,4 +1624,7 @@ Newest last. What was tried, what happened, what the user said.
   flight's per-frame position write, as platforms and frozen enemies were (Known issues). The log showed the row stepped
   from Monitor down to Off right after Bee Fly was learned. The planned `interp off` test no longer works (the ground
   check re-decides interpolation every physics step since the platform fix), so the fix is the one-change test: the
-  leader not interpolated while flying, in `FrameRate.cs`'s one decision. Built and copied in; not yet seen.
+  leader not interpolated while flying, in `FrameRate.cs`'s one decision. Built and copied in; **the user, row on
+  Monitor (240): "fly works now"**. How it was found: no measurement in game first; the theory came from reading the
+  flight code (its speed is a velocity, frame-rate free; only the rise writes the position) against the two faults
+  already fixed in step 24, and the one-change fix settled it. Kabbu and Leif during a flight: not mentioned.

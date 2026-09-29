@@ -1712,7 +1712,8 @@ place it counts frames instead of time first.
   any frame rate. The console's `interp off` can no longer isolate it: since the platform fix, the ground check
   re-decides interpolation every physics step, so the switch is undone before a flight starts. So the fix is the
   test, one change: the leader isn't interpolated while flying, in the same one decision (checked before the
-  player's `LateUpdate`). If the slow motion stays, the cause is elsewhere and the change comes out. Not yet seen.
+  player's `LateUpdate`). If the slow motion stays, the cause is elsewhere and the change comes out. **Seen on screen
+  (2026-09-29, Monitor at 240 Hz):** "fly works now".
 - **Random shakes re-rolled once per 1/60 s.** Some effects jump to a new random offset every frame, a blur at 240
   (seen: shaky text in conversations sharp at 60, blurry at 240). Their timing was already right; only the re-roll
   was per frame. Now, while the row is on, the offset holds between ticks: `FontEffects` (shaky and glitchy letters;
@@ -1776,8 +1777,8 @@ untested. **Seen on screen (2026-09-28):** the ten pips look and work fine.
 **Status:** in progress, experimental (the row says so). Seen on screen (2026-09-27) at 240: smooth, the "!" steady and
 sharp. The logic measured (`rates`); each site patched as expected (the log's `[fps] frame sites`). Not yet seen on
 screen: every site above, most of all fishing, the screw platform, the Wacka Worm, a disguised enemy and the dig skill.
-Platforms and bridges: fixed and seen (2026-09-27), a slight shimmer on them left. Vi's flight: fixed (2026-09-29),
-not yet seen.
+Platforms and bridges: fixed and seen (2026-09-27), a slight shimmer on them left. Vi's flight: fixed and seen
+(2026-09-29).
 
 *Code: `FrameRate.cs`, `FrameSites.cs`, the row in `ApMenu.cs` and `QualityOfLife.cs`; the console's `display`, `fps`,
 `interp`, `camlerp`, `frames`, `trace`, `cams`, `il`, `rates` and `fpsscan` (`DevConsole.cs`).*
