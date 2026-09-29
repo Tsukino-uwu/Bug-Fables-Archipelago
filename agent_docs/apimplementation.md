@@ -50,7 +50,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 5. [Receiving items](#5-receiving-items)
 6. [Finishing the game](#6-finishing-the-game)
 7. [Settings from the seed: slot_data](#7-settings-from-the-seed-slot_data)
-8. [Use a library](#8-use-a-library)
+8. [Use what Archipelago provides](#8-use-what-archipelago-provides)
 9. [How this mod does it](#9-how-this-mod-does-it)
 10. [Things that go wrong quietly](#10-things-that-go-wrong-quietly)
 
@@ -2707,22 +2707,40 @@ only way a setting chosen at generation (an option, a version number) reaches th
 
 The mod does nothing from its own knowledge of the game's locations: every table it acts on comes from here.
 
-## 8. Use a library
+## 8. Use what Archipelago provides
 
-Writing all of the above by hand is possible, but libraries exist for most languages; the protocol doc
-lists them. For C# (Unity, BepInEx) it's **Archipelago.MultiClient.Net**. It handles:
+**The rule (2026-09-29):** whatever Archipelago or its official client library already does, we use, the way its
+[docs](https://github.com/ArchipelagoMW/Archipelago/tree/main/docs) describe it (the local checkout at the targeted tag
+says what our version has). We never build our own version of it. In the user's words: "there is a reason we are using
+whatever archipelago does for websockets etc, and not trying to do something dumb/stupid like reinventing and
+rebuilding archipelago inside the game just to connect/work with archipelago". A home-made version is more code to get
+wrong, it drifts as Archipelago changes, and nobody who knows Archipelago can read it.
+
+**The connection: a library.** Writing all of the above by hand is possible, but libraries exist for most languages;
+the protocol doc lists them. For C# (Unity, BepInEx) it's **Archipelago.MultiClient.Net**. It handles:
 
 - the handshake and every packet;
 - turning numbers into names;
 - a single call to log in.
 
-What it can't do for you:
+**The apworld: Archipelago's own tools.**
+
+- Rules with the Rule Builder, written in Python as its doc intends ("The rule builder is intended to be written first
+  in Python"): `&` for and, `|` for or, and a game's own needs as custom rules registered the way the doc shows.
+- Regions, exits and locations in Python modules, as `worlds/apquest` does.
+- Tables generated from the game's own data (the door graph, the enemies) may stay JSON, read with `pkgutil`, as core
+  worlds do (Pokémon Emerald's `data.py`, KDL3's `regions.py`).
+- Doors shuffled by Archipelago's entrance randomizer (`entrance_rando.py`, its doc `entrance randomization.md`).
+- Tests on `WorldTestBase`; packaging with the "Build APWorlds" launcher component; code in `style.md`'s style.
+
+**Our own work only where Archipelago has nothing.** What no library or Archipelago tool can do for you:
 
 - deciding **when** it's safe to hand the player an item in your game;
 - **saving** the received-item count in your game's save;
 - knowing **which spot** in your game is which location.
 
-Those are the parts that make each game's client different.
+Those are the parts that make each game's client different. Anything still home-made that Archipelago does provide is
+listed in "Where it stands" (Next), each replaced in a step of its own.
 
 ## 9. How this mod does it
 

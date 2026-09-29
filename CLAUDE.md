@@ -11,6 +11,10 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
 
 ## What never changes
 
+- **Archipelago's way, always; never reinvent it** (the user, 2026-09-29). The whole project follows Archipelago's
+  official standards: its docs (github.com/ArchipelagoMW/Archipelago/tree/main/docs) say how a thing is done, the
+  local checkout at the targeted tag what our version has. Whatever Archipelago or its client library provides, we use
+  as intended, never a custom version; custom work only where it has nothing (`apimplementation.md`, §8).
 - **The two process guides NEVER go stale** (the user, 2026-09-24: a step-by-step guide that misses steps is
   worthless). `agent_docs/documentation.md` is how the MOD was made; `agent_docs/apimplementation.md` is the
   Archipelago side (apworld, server, connecting, items, checks), built step by step, plus a stable explainer. Both
@@ -138,7 +142,7 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
 
 ## Read before
 
-- **The Archipelago docs in the local checkout, at the targeted tag:** `adding games.md` (the hard requirements),
-  `world api.md`, `rule builder.md`, `apworld specification.md` (package with the "Build APWorlds" launcher
-  component, never with hand-written `version` fields) and `tests.md`. `worlds/apquest` is the structural reference.
+- **Archipelago's docs, before any Archipelago work** (the rule above): `adding games.md` (the hard requirements),
+  `world api.md`, `rule builder.md`, `entrance randomization.md`, `tests.md`, `style.md` and `apworld specification.md`
+  (package with the "Build APWorlds" component, no hand-written `version`); `worlds/apquest` is the structural reference.
 - **`agent_docs/references.md`** before borrowing an approach from another randomizer.
