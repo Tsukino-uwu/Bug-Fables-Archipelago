@@ -7,6 +7,7 @@ One line per file.
 - [apimplementation.md](apimplementation.md): user-facing guide to the ARCHIPELAGO side: how the apworld and connection were built, step by step, plus how a game talks to Archipelago.
 - [development.md](development.md): building from source, staging and copying into the game, a local test server, the apworld's tests.
 - [client-requirements.md](client-requirements.md): Archipelago's hard requirements for the client and the world, plus known failure modes. The checklist.
+- [archipelago-review.md](archipelago-review.md): the full review of the project against everything Archipelago publishes (2026-09-29): each finding with its evidence, what's kept and what doesn't apply. The order of the work is `apimplementation.md`, Next 43.
 - [MEASURED.md](MEASURED.md): game facts measured by us (classes, hooks, flags, save fields), each with evidence and date.
 - [licensing.md](licensing.md): every third-party project, with its licence read from the file and what we may do with it.
 - [references.md](references.md): other randomizers read for their approach, and what was taken from each.

@@ -1,8 +1,9 @@
 # Archipelago requirements and known failure modes
 
-The hard requirements come from Archipelago's `docs/adding games.md` at tag `0.6.7` (read 2026-09-24). **Tick
-a box only with its evidence and date.** "It should work" doesn't count, and neither does a green build for
-anything that happens in the game.
+The hard requirements come from Archipelago's `docs/adding games.md` at tag `0.6.7` (read 2026-09-24); since
+2026-09-29 the lines below also carry what the full review of every Archipelago doc found
+([archipelago-review.md](archipelago-review.md), whose numbers they cite). **Tick a box only with its evidence and
+date.** "It should work" doesn't count, and neither does a green build for anything that happens in the game.
 
 ## Client (the mod)
 
@@ -22,15 +23,26 @@ anything that happens in the game.
 - [x] Keeps a received-item index for resyncing (in the save, since items are remote only) (2026-09-24: slot 60
   holds the count, seen by the user, build step 7)
 - [ ] Items sent while disconnected are received on connect
+- [ ] Room messages (`PrintJSON`) are shown to the player, or `NoText` is sent (review 18)
+- [ ] Connect carries the `uuid` kept in Archipelago's `common.json` and the targeted Archipelago version (review 19)
+- [ ] A refusal without error codes stops the retries; `InvalidPacket` is logged (review 20)
+- [ ] A failed or refused attempt closes its connection (review 2)
 
 ## World (the apworld)
 
 - [x] `worlds/bug_fables/` with `__init__.py`, and an `__init__.py` in every subfolder holding `.py` files
-      (including `test/`) (2026-09-27: both present; `test/` is the only subfolder with `.py` files)
-- [x] A game info doc `en_Bug Fables.md` and a setup doc, both listed in the `WebWorld`'s tutorials (2026-09-27: read in `web_world.py`; 384 tests pass at 0.6.7)
+      (2026-09-29: `logic/` and `test/`, each with its `__init__.py`)
+- [x] A game info doc `en_Bug Fables.md`, found through the `WebWorld`'s `game_info_languages`, and a setup doc
+      listed in its tutorials (2026-09-29: read in `web_world.py`)
 - [x] A `World` subclass with a unique `game`, and a `WebWorld` instance (2026-09-27: read in `world.py`; 384 tests pass at 0.6.7)
 - [x] `item_name_to_id`, `location_name_to_id` and `create_item` (2026-09-27: read in `world.py` and `items.py`; 384 tests pass at 0.6.7)
-- [x] An origin region ("Menu" by default), always reachable (2026-09-27: read in `world.py`; 384 tests pass at 0.6.7)
+- [x] An origin region ("Menu" by default), always reachable (2026-09-29: named in `world.py`, made in `regions.py`;
+      a random start isn't in the logic yet, labelled experimental, build step 15)
+- [x] No pool item placed by hand, no `eval`, no `yaml.load` (2026-09-29: none in the apworld, searched)
+- [x] An item any rule uses is progression (2026-09-29: `TestClassifications`, which reads each rule's
+      `item_dependencies()`, passes)
+- [ ] One id per item name (the story's "Leif" event shares its name with the real item; review 3)
+- [ ] The encouraged features: option groups, presets, a bug report page, rich-text option texts (review 8)
 - [x] At least one location, and **an item pool exactly equal in size to the location count** (2026-09-27:
   asserted by `test_logic.py`, which passes)
 - [x] `multiworld.completion_condition[player]` is set (2026-09-27: through `set_completion_rule`, read in `rules.py`)

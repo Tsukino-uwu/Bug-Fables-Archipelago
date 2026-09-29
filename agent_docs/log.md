@@ -1529,4 +1529,18 @@ Newest last. What was tried, what happened, what the user said.
   reading `Main.py`'s order (Known issues; not seen in a seed).
 - **Docs:** build step 24's rules 1-4 and 9; How it works §11, regions and rules in short and in depth, when to make a
   region; the region-size and Warp passages made to agree; room-logic.md's model.
-- **Next session:** `gh run list` first; then Next 43.1 (the shop fallback's bugs), one step at a time.
+- **The rule, widened twice:** "we should do all standards & recommendations that Archipelago mentions" and "we
+  should read and take a look at everything/anything Archipelago. don't skip/assume": both in `CLAUDE.md` (149 lines).
+  I had called four docs "not applicable" (running from source, containers, triage, code of conduct) and the website's
+  API "probably not"; the user's correction was right: read, then write down why not.
+- **The full review** (the user: "have we done a full review of our project?" No: the audit only looked for rebuilt
+  features). Seven readers, one area each: the world API, the options, style and tests, the client and the protocol,
+  the Rule Builder with entrance randomization, the shared cache and the website's API, every remaining doc with the
+  generic player guides, and APQuest with MultiClient.Net's docs; every doc diffed against `main`. Findings in
+  `archipelago-review.md`, the order in Next 43. Checked myself before writing: the two "Leif" items, the shop test
+  that asserts nothing, the connect attempt left logged in, the event hooks after login, the entrance randomizer's
+  step, no `eval`/`yaml`/hand placement. New bugs in Known issues. The checklist corrected (`logic/`, the game info
+  page, Menu's home) and extended. Not verified: `main`'s new `quantity` yaml key (the tools' safety check failed
+  while the user's VPN was off).
+- **Next session:** `gh run list` first; push when told (the user: after the review); then Next 43, item 1, one step
+  at a time; the slot_data question (item 15) is the user's.

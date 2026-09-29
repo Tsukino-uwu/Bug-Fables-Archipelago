@@ -367,28 +367,32 @@ be wrong.
    without the game, every sphere's items arriving (`development.md`, "Play-testing the logic"). Next: the game
    connects to such a room (its data package is 2.18 MB), then a seed played through. It matters most for the
    experimental options (build steps 12 and 15).
-43. **Archipelago's way, everywhere: the audit** (2026-09-29, after the rule in How it works §8). Each place we built
-   something Archipelago or MultiClient.Net already provides, read in both codebases; each becomes a step of its own,
-   in this order (the logic's own rules were the first, build step 29):
-   1. **The shop fallback's two bugs** (Known issues): add its rule with Archipelago's `add_item_rule`, and set back to
-      normal only the shops the option itself excluded.
-   2. **Tests the way `tests.md` says:** the test base in `test/bases.py` (in `test/__init__.py` it is deprecated), and
-      Archipelago's own generic tests (ids, item counts, slot_data, the manifest) run on this world in CI.
-   3. **`World.world_version`** instead of reading `archipelago.json` ourselves (`data_tables.py`).
-   4. **`Region.add_locations`** instead of our loop in `locations.py`.
-   5. **In the mod:** the library's `SetGoalAchieved` instead of a goal packet built by hand (`ApConnection.SendGoal`),
-      its `Locations.AllLocations` instead of `SeedData.ScoutedLocations`, its `GetRaceModeAsync` for the keepalive read.
-   6. **The library's `ColorUtils` palettes** for the item colours: one mapping instead of three copies.
-   7. **The server's own `/send_location`** instead of `dev-scripts/send-as-player.py`.
-   8. **Location and item groups:** a "Shops" location group for `exclude_locations`, and groups for players' hints.
-   9. **slot_data's option values** through `options.as_dict` (the mod's names for them change with it).
-   10. **The entrance randomizer:** Archipelago's `randomize_entrances` in place of `doors.py`, with the room mapping
-      (build step 12).
-
-   **Kept, because Archipelago has nothing for them:** closing a dead socket (the library's `Disconnect` closes only a
-   live one), the offline record of checks sent, reconnecting and its backoff, the compression switch (the net40
-   library never turns it on), the received count in the save, the enemy shuffle, the pool's make-room step, the
-   DeathLink panel row (a switch mid-seed, the user's choice), and our slot_data reader (it tolerates missing keys).
+43. **Archipelago's way, everywhere: the full review** (2026-09-29, after the rule in How it works §8). Everything
+   Archipelago publishes for a world and a client, read against the project: every doc (0.6.7, diffed against
+   `main`), the generic player guides, APQuest and MultiClient.Net's docs. The evidence for each item is in
+   [archipelago-review.md](archipelago-review.md), same numbers. Each is a step of its own, in this order:
+    - **Bugs:** 1. the shop fallback (Known issues); 2. failed connect attempts left open, one more client on the
+      slot per retry (Known issues); 3. two items named "Leif" (Known issues); 4. a shop test that can't fail;
+      5. respawning checks leaving the outbox before the server confirms them.
+    - **Required:** 6. the door shuffle in `connect_entrances`; 7. `style.md` (brackets, a trailing blank line, long
+      Markdown lines).
+    - **The apworld and the website:** 8. option groups, presets, reST option texts with rich text, a bug report
+      page, the WebWorld's `game`; 9. `topology_present`; 10. location and item groups; 11. `World.world_version`,
+      `Region.add_locations`, `options.as_dict`; 12. `start_inventory_from_pool`; 13. the Rule Builder's
+      `OptionFilter` for Jump, `__str__` and `@override` on our rules, a caching benchmark; 14. Universal Tracker and
+      PopTracker; 15. **the user's decision:** slot_data's same-in-every-seed tables against "only what's
+      necessary".
+    - **Tests:** 16. the base in `test/bases.py` and Archipelago's generic tests in CI; 17. test hygiene (no repeated
+      default runs, plain `TestCase` where no multiworld is used, options written out, `assertAccessDependency`).
+    - **The client:** 18. room messages shown in game (or `NoText`), the Text Client meanwhile; 19. the Connect
+      packet (a kept `uuid`, the right version, DeathLink's tag, hooks before connecting); 20. the rest (a refusal
+      with no codes, `InvalidPacket`, the library's `SetGoalAchieved`, `AllLocations`, `GetRaceModeAsync`,
+      `ColorUtils` and Analyzers, `ClientPlaying`).
+    - **Docs and process:** 21. the player docs against Archipelago's own guides; 22. `development.md` (Python and a
+      venv, `--log_network`, a local WebHost preview, `/send_location`, the world maintainer's duties).
+    - **With the room mapping:** 23. Archipelago's entrance randomizer in place of `doors.py` (build step 12), and
+      what to prepare for it.
+    - **Kept** (Archipelago has nothing for them) **and doesn't apply** (with why): on the review page.
 
 **Known issues:**
 
@@ -396,7 +400,15 @@ be wrong.
   seed): `rules.fall_back_from_filler_only` runs in `pre_fill`, after Archipelago has applied a player's
   `exclude_locations` and the local and non-local item rules (`Main.py`, 121 and 137-140). It assigns `item_rule`
   outright, which drops those item rules on the shops, and it sets every shop back to normal, which undoes a player's
-  own exclusion of a shop. Only when Filler Only falls back (too few filler items in the room). Next 43.1.
+  own exclusion of a shop. Only when Filler Only falls back (too few filler items in the room). Also: a player's
+  `priority_locations` on a shop, and plando aimed at one, are dropped without a word. Next 43, item 1.
+- **Failed connect attempts are left open** (found by the full review, 2026-09-29; read in the code): if reading
+  slot_data fails right after a successful login (`ApConnection.cs`), that logged-in connection is neither kept nor
+  closed, and the retry logs in again, so every retry adds a client on the slot. A mod and an apworld of different
+  versions would set it off. Refused and timed-out attempts also leave their sockets open. Next 43, item 2.
+- **Two items named "Leif"** (found by the full review, 2026-09-29; read in the code): with the story's party, the
+  story event *Leif Joins* makes an event item "Leif" with no id, while the real member item "Leif" has one;
+  Archipelago's `world api.md` requires one id per item name. Next 43, item 3.
 
 - **Found by the review for build step 28 (2026-09-29), each confirmed in the code; `docs/reviewing.md` lists them for
   reviewers:**
