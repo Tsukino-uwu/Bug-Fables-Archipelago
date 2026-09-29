@@ -1335,5 +1335,11 @@ Newest last. What was tried, what happened, what the user said.
 - **The save crystal's reach was far too long:** a jump near a crystal became a save prompt. The console's new `radii`
   measured an NPC's talk radius as 1.6 and a crystal's own as 0. The reach is now the game's NPC test at 1.6
   (6addc75). Seen: "perfect now ... not in the way for regular gameplay".
+- **Not seen in game yet**, though their hooks are in the identical patch dump:
+  - a DeathLink round trip;
+  - the warp/travel buttons;
+  - a dropped connection still queuing checks (verified in the code only);
+  - a normal save staying vanilla.
+- **Closed:** the game and the server, with RandomizerEnabled and DevCommandFile back as they were.
 - **Waiting on the user:** a push.
 
