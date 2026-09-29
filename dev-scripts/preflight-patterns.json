@@ -207,5 +207,107 @@
     "writelines"
   ],
   "apworld_denied_members": ["generate_output", "settings", "settings_key", "stage_generate_output", "zip_path"],
-  "apworld_manifest_keys": ["authors", "game", "minimum_ap_version", "world_version"]
+  "apworld_manifest_keys": ["authors", "game", "minimum_ap_version", "world_version"],
+  "mod_denied": {
+    "runs programs": "System\\.Diagnostics\\.Process\\b|\\bProcess\\b|\\bProcessStartInfo\\b",
+    "web requests": "\\bWebClient\\b|\\bHttpClient\\b|\\bHttpWebRequest\\b|\\bWebRequest\\b|\\bUnityWebRequest\\w*|\\bWWW\\b",
+    "raw sockets": "System\\.Net\\.Sockets\\b|\\bTcpClient\\b|\\bUdpClient\\b|\\bTcpListener\\b|\\bnew\\s+Socket\\s*\\(",
+    "loads code": "\\bAssembly\\.(?:Load|LoadFrom|LoadFile|UnsafeLoadFrom|ReflectionOnlyLoad)\\b|\\bExecuteAssembly\\b|\\bAssemblyResolve\\b|\\bActivator\\.CreateInstance\\b",
+    "native code": "\\bDllImport\\b|\\bextern\\s+(?:static\\s+)?[\\w<>\\[\\]]+\\s+\\w+\\s*\\(|\\bMarshal\\.|\\bGetDelegateForFunctionPointer\\b|\\bunsafe\\b",
+    "the registry": "\\bRegistry\\b|Microsoft\\.Win32|\\bPlayerPrefs\\b",
+    "hidden payloads": "\\bFromBase64String\\b|\\bGetManifestResourceStream\\b",
+    "opens a web page": "\\bApplication\\.OpenURL\\b",
+    "who or where the player is": "\\bSystemInfo\\.(?:deviceUniqueIdentifier|deviceName)\\b|\\bEnvironment\\.(?:UserName|MachineName|GetEnvironmentVariable|SetEnvironmentVariable|GetFolderPath|Exit)\\b",
+    "data that picks a type": "\\bTypeNameHandling\\b",
+    "code written at run time": "\\bCSharpCodeProvider\\b|System\\.CodeDom|\\bDynamicMethod\\b|\\bILGenerator\\b|\\bAssemblyBuilder\\b",
+    "screen capture": "\\bScreenCapture\\b"
+  },
+  "mod_capabilities": {
+    "writes files": "\\bFile\\.(?:Delete|Move|Copy|Write\\w*|Append\\w*|Create\\w*|Replace|Open|OpenWrite)\\b|\\bDirectory\\.(?:Create\\w*|Delete|Move)\\b|\\bnew\\s+(?:FileStream|StreamWriter)\\b",
+    "reads files": "\\bFile\\.(?:Read\\w*|OpenRead|OpenText|Exists)\\b|\\bDirectory\\.(?:GetFiles|EnumerateFiles|GetDirectories|Exists)\\b|\\bnew\\s+StreamReader\\b",
+    "connects to a server": "\\bArchipelagoSessionFactory\\b",
+    "finds code by name": "\\bType\\.GetType\\s*\\(|\\bAccessTools\\.(?:TypeByName|AllTypes)\\b|\\.Assembly\\.GetType\\s*\\(|\\bAppDomain\\.CurrentDomain\\.GetAssemblies\\b",
+    "uses the clipboard": "\\bGUIUtility\\.systemCopyBuffer\\b"
+  },
+  "ps1_denied": {
+    "runs text as code": "\\bInvoke-Expression\\b|\\biex\\b|\\[scriptblock\\]::Create",
+    "hidden payloads": "-EncodedCommand\\b|-enc\\b|FromBase64String",
+    "downloads": "\\bInvoke-WebRequest\\b|\\biwr\\b|\\bInvoke-RestMethod\\b|\\birm\\b|\\bcurl\\b|\\bwget\\b|DownloadString|DownloadFile|Net\\.WebClient|Start-BitsTransfer",
+    "compiles code": "\\bAdd-Type\\b",
+    "changes system settings": "\\bSet-ExecutionPolicy\\b|HKLM:|HKCU:|Registry::",
+    "starts detached programs": "\\bStart-Process\\b"
+  },
+  "ps1_capabilities": {
+    "runs programs": "(?:^|[;|({])\\s*&\\s*\\S|^\\s*(?:git|dotnet|gh|python|py|pwsh|powershell)\\b",
+    "writes files": "\\b(?:Set-Content|Add-Content|Out-File|Copy-Item|Move-Item|New-Item|Remove-Item|Rename-Item)\\b|\\[System\\.IO\\.File\\]::(?:Write|Append|Copy|Move|Delete)|\\.LastWriteTimeUtc\\s*=",
+    "talks to GitHub": "(?:^|[;|({&])\\s*(?:&\\s*)?(?:\\$git|git)\\s+(?:push|fetch|pull|ls-remote)\\b|(?:^|[;|({&])\\s*(?:&\\s*)?gh\\s"
+  },
+  "sh_denied": {
+    "downloads": "\\bcurl\\b|\\bwget\\b|/dev/tcp",
+    "runs text as code": "\\beval\\b|\\|\\s*(?:ba)?sh\\b|\\bsource\\s+<\\(",
+    "hidden payloads": "\\bbase64\\b"
+  },
+  "script_denied_modules": [
+    "code",
+    "codeop",
+    "ctypes",
+    "ftplib",
+    "http",
+    "marshal",
+    "pickle",
+    "requests",
+    "shelve",
+    "smtplib",
+    "socket",
+    "telnetlib",
+    "urllib",
+    "webbrowser",
+    "winreg",
+    "xmlrpc"
+  ],
+  "script_denied_builtins": ["__import__", "breakpoint", "compile", "eval", "exec"],
+  "script_denied_methods": [
+    "execl",
+    "execle",
+    "execlp",
+    "execv",
+    "execve",
+    "execvp",
+    "getoutput",
+    "getstatusoutput",
+    "popen",
+    "spawnl",
+    "spawnle",
+    "spawnlp",
+    "spawnv",
+    "spawnve",
+    "spawnvp",
+    "startfile",
+    "system"
+  ],
+  "script_capability_modules": {
+    "runs programs": ["subprocess"],
+    "connects to a server": ["websockets"],
+    "loads a script by path": ["importlib"],
+    "writes files": ["shutil", "tempfile"]
+  },
+  "script_capability_calls": {
+    "writes files": [
+      "*.write_text",
+      "*.write_bytes",
+      "*.unlink",
+      "*.mkdir",
+      "*.rmdir",
+      "*.touch",
+      "os.remove",
+      "os.unlink",
+      "os.makedirs",
+      "os.mkdir",
+      "os.rename",
+      "os.replace",
+      "os.rmdir",
+      "os.chmod"
+    ],
+    "unpickles Archipelago's own output": ["*.restricted_loads"]
+  }
 }

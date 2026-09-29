@@ -2327,6 +2327,26 @@ So it gets the strictest rules, read from its syntax tree, not by searching text
   name inside, the manifest has exactly its four keys, and the player docs, which the website renders, hold no
   raw HTML or script link.
 
+**The mod's and the scripts' rules (2026-09-29):**
+- **Mod source:** the C# is read with its comments blanked but its strings kept, since a name in a string can
+  still be reached. Twelve kinds of call are refused outright, among them starting programs, web requests, raw
+  sockets, loading code, native calls, the registry, base64 payloads, opening web pages, reading who the player is,
+  JSON that picks its own type, and code written at run time. None appears today. What the mod does touch beyond
+  the game is listed file by file in `docs/capabilities.md`:
+  - the one server connection;
+  - the randomizer's own saves;
+  - the clipboard, on paste and copy;
+  - finding game types by name;
+  - the dev build's dump tools, which never ship.
+
+  Reflection on a type named in the code (Harmony's everyday tool) is not listed: the target is in plain sight.
+- **Dev scripts and hooks:**
+  - Python is read from its syntax tree: no `eval`, no `exec`, no `shell=True`, no pickle, sockets or web modules.
+  - PowerShell and shell are read with comments blanked: no running text as code, no encoded commands, no downloads,
+    no compiling, no system settings.
+  - What each script does (runs programs, writes files, talks to GitHub, connects to a local test server) is listed
+    per script, so anyone about to run one can see what it will do.
+
 **Where it runs so far:**
 - **Every commit:** the pre-commit hook, quiet unless something fails.
 - **Every push** (`.githooks/pre-push`): preflight on each pushed commit, and `--history` on everything new in the
@@ -2341,13 +2361,15 @@ history, free text), the test plants a real violation and checks that the sectio
 non-zero. It works in a throwaway clone outside the repo, with its link back to the repo removed. The clone holds what
 the next commit contains (HEAD plus everything staged), or, from pre-push, exactly the commit being pushed:
 1. **A clean baseline** in all three modes, so a failure afterwards is the plant's doing.
-2. **One fixture per kind of violation** (46 on 2026-09-29): a bidi override in a doc, a homoglyph in code, every
+2. **One fixture per kind of violation** (53 on 2026-09-29): a bidi override in a doc, a homoglyph in code, every
    credential format at once (each must be named), a home path inside the DLL, a library changed by one byte, a
    symlink, a submodule, a stale host row, a secret committed and then removed, and more. The fake credentials and
    paths are assembled at run time, so the test file holds none itself.
 3. **The hooks for real:** a normal commit carrying a credential is refused, and so is a gate change mixed with mod
    code. A commit made past the hooks is refused at push, and the test remote stays unchanged.
-4. **Coverage is total:** a section without a fixture in a mode it runs in fails the test.
+4. **Coverage is total:** a section without a fixture in a mode it runs in fails the test, and so does a credential
+   format or denied kind of call in the patterns file with no sample.
+5. **What must pass, passes:** a denied call that only sits in a comment must not trip the mod's section.
 
 It takes about 25 s. **Tested the other way round (2026-09-29):** with the Secrets section made blind on purpose,
 all four of its fixtures failed the test. Writing the test also caught its own slips: a sample written out whole
@@ -2375,8 +2397,9 @@ character, no game file, and no binary other than the release DLLs. It first fla
   exempt by their exact git hash (`history_reviewed` in the patterns file), each with its reason, so a different
   file can't hide behind the exemption.
 
-**Status:** in progress (2026-09-29). Built: the sections above, the apworld's included, in pre-commit, pre-push and
-the release guard, and their test. Next: the mod's and the dev scripts' rules, the DLL checks, and CI.
+**Status:** in progress (2026-09-29). Built: the sections above (files, apworld, mod source, scripts), in pre-commit,
+pre-push and the release guard, and their test. Next: the checks on the compiled DLL itself, the workflows and
+dependencies, and CI.
 
 *Code: `dev-scripts/preflight.py`, `dev-scripts/preflight-patterns.json`; `docs/capabilities.md`;
 `dev-scripts/negative-test-preflight.py`; `.githooks/pre-commit`, `.githooks/pre-push`, `.githooks/commit-msg`,

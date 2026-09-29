@@ -776,6 +776,155 @@ def apworld_data(ctx, out):
                'the player docs hold no raw HTML or script links')
 
 
+CS_TOKENS = re.compile(r'@"(?:""|[^"])*"|"(?:\\.|[^"\\\n])*"|\'(?:\\.|[^\'\\\n])+\'|//[^\n]*|/\*.*?\*/', re.S)
+PS_TOKENS = re.compile(r"'(?:''|[^'])*'|\"(?:`.|[^\"`])*\"|<#.*?#>|#[^\n]*", re.S)
+SH_TOKENS = re.compile(r"'[^']*'|\"(?:\\.|[^\"\\])*\"|(?<![\w$])#[^\n]*", re.S)
+
+
+def without_comments(text, tokens, comment_starts):
+    """Comments blanked (line numbers kept); strings kept, since a name in a string can still be reached."""
+    return tokens.sub(lambda m: re.sub(r'[^\n]', ' ', m.group(0)) if m.group(0).startswith(comment_starts)
+                      else m.group(0), text)
+
+
+def line_of(text, pos):
+    return text.count('\n', 0, pos) + 1
+
+
+def capability_rows(ctx, heading):
+    """(path, capability) pairs listed under a heading of docs/capabilities.md, and those missing a reason."""
+    rows, reasonless = set(), []
+    for key, cells in ctx.capabilities().get(heading, []):
+        if len(cells) < 3 or not cells[-1]:
+            reasonless.append(key)
+        rows.add((key, cells[1] if len(cells) > 1 else ''))
+    return rows, reasonless
+
+
+def compare_capabilities(out, heading, found, rows, reasonless, what):
+    unlisted = sorted(found - rows)
+    stale = sorted(rows - found)
+    if unlisted:
+        out.fail(f'{what} doing something not listed in {CAPABILITIES}, "{heading}"',
+                 [f'{p}: {c}' for p, c in unlisted])
+    if stale:
+        out.fail(f'rows in {CAPABILITIES}, "{heading}", that the code no longer matches: remove them',
+                 [f'{p}: {c}' for p, c in stale])
+    if reasonless:
+        out.fail(f'rows in "{heading}" without a reason', reasonless)
+    return not (unlisted or stale or reasonless)
+
+
+@section('Mod source')
+def mod_source(ctx, out):
+    denied = {k: re.compile(v, re.M) for k, v in ctx.patterns['mod_denied'].items()}
+    kinds = {k: re.compile(v, re.M) for k, v in ctx.patterns['mod_capabilities'].items()}
+    heading = 'Mod: what the code touches'
+    rows, reasonless = capability_rows(ctx, heading)
+    bad, found, count = [], set(), 0
+    for f in ctx.files:
+        if not (f.path.startswith('mod/') and f.path.endswith('.cs')):
+            continue
+        count += 1
+        code = without_comments(f.text, CS_TOKENS, ('//', '/*'))
+        for name, rx in denied.items():
+            bad += [f'{f.path}:{line_of(code, m.start())}: {m.group(0).strip()} ({name})' for m in rx.finditer(code)]
+        if re.search(r'[A-Za-z_]\\u[0-9A-Fa-f]{4}|\\u[0-9A-Fa-f]{4}[A-Za-z_]', re.sub(r'"(?:\\.|[^"\\\n])*"', '', code)):
+            bad.append(f'{f.path}: a \\u escape outside a string (an identifier spelled in escapes)')
+        found |= {(f.path, k) for k, rx in kinds.items() if rx.search(code)}
+    if count < 50:
+        out.fail(f'only {count} mod source file(s) read: the listing is wrong')
+        return
+    if bad:
+        out.fail('the mod reaches for something it must never do on a player\'s machine', bad)
+    ok = compare_capabilities(out, heading, found, rows, reasonless, 'mod files')
+    if ok and not bad:
+        out.ok(f'{count} C# files: none of {len(denied)} denied kinds of call; the {len(found)} things they touch '
+               f'beyond the game are all listed')
+
+
+def python_findings(f, tree, p):
+    """(denied, capabilities) of one dev script or hook helper, read from its syntax tree."""
+    bad, caps = [], set()
+    modules = {}
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            modules.update({(a.asname or a.name): a.name for a in node.names})
+        elif isinstance(node, ast.ImportFrom) and node.module:
+            modules.update({(a.asname or a.name): f'{node.module}.{a.name}' for a in node.names})
+    for module in modules.values():
+        if module.split('.')[0] in p['script_denied_modules']:
+            bad.append(f'{f.path}: imports {module}')
+        caps |= {cap for cap, mods in p['script_capability_modules'].items() if module.split('.')[0] in mods}
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        func = node.func
+        if isinstance(func, ast.Name) and func.id in p['script_denied_builtins']:
+            bad.append(f'{f.path}:{node.lineno}: {func.id}()')
+        if isinstance(func, ast.Name):
+            caps |= {cap for cap, names in p['script_capability_calls'].items() if f'*.{func.id}' in names}
+        if isinstance(func, ast.Attribute):
+            owner = modules.get(func.value.id, '') if isinstance(func.value, ast.Name) else ''
+            if func.attr in p['script_denied_methods'] and owner.split('.')[0] in ('os', 'subprocess', ''):
+                bad.append(f'{f.path}:{node.lineno}: .{func.attr}()')
+            for cap, names in p['script_capability_calls'].items():
+                if f'{owner}.{func.attr}' in names or f'*.{func.attr}' in names:
+                    caps.add(cap)
+        if any(k.arg == 'shell' and not (isinstance(k.value, ast.Constant) and k.value.value is False)
+               for k in node.keywords):
+            bad.append(f'{f.path}:{node.lineno}: shell=True (a command line the shell re-reads)')
+        mode = node.args[1] if len(node.args) > 1 else next((k.value for k in node.keywords if k.arg == 'mode'), None)
+        if isinstance(func, ast.Name) and func.id == 'open' and isinstance(mode, ast.Constant) \
+                and re.search(r'[wax+]', str(mode.value)):
+            caps.add('writes files')
+    return bad, caps
+
+
+@section('Dev scripts and hooks')
+def dev_scripts(ctx, out):
+    p = ctx.patterns
+    ps_denied = {k: re.compile(v, re.M | re.I) for k, v in p['ps1_denied'].items()}
+    ps_caps = {k: re.compile(v, re.M | re.I) for k, v in p['ps1_capabilities'].items()}
+    sh_denied = {k: re.compile(v, re.M) for k, v in p['sh_denied'].items()}
+    heading = 'Dev scripts and hooks: what they touch'
+    rows, reasonless = capability_rows(ctx, heading)
+    bad, found, count = [], set(), 0
+    for f in ctx.files:
+        path = f.path
+        if not (path.startswith(('dev-scripts/', '.githooks/')) and not f.binary):
+            continue
+        if path.endswith('.py'):
+            count += 1
+            try:
+                tree = ast.parse(f.text, path)
+            except SyntaxError as e:
+                bad.append(f'{path}: does not parse ({e})')
+                continue
+            b, caps = python_findings(f, tree, p)
+            bad += b
+            found |= {(path, c) for c in caps}
+        elif path.endswith('.ps1'):
+            count += 1
+            code = without_comments(f.text, PS_TOKENS, ('#', '<#'))
+            for name, rx in ps_denied.items():
+                bad += [f'{path}:{line_of(code, m.start())}: {m.group(0).strip()} ({name})' for m in rx.finditer(code)]
+            found |= {(path, k) for k, rx in ps_caps.items() if rx.search(code)}
+        elif path.startswith('.githooks/') and (path.endswith('.sh') or '.' not in path.rsplit('/', 1)[-1]):
+            count += 1
+            code = without_comments(f.text, SH_TOKENS, ('#',))
+            for name, rx in sh_denied.items():
+                bad += [f'{path}:{line_of(code, m.start())}: {m.group(0).strip()} ({name})' for m in rx.finditer(code)]
+    if count < 15:
+        out.fail(f'only {count} script(s) read: the listing is wrong')
+        return
+    if bad:
+        out.fail('a script does something no script here may do', bad)
+    ok = compare_capabilities(out, heading, found, rows, reasonless, 'scripts')
+    if ok and not bad:
+        out.ok(f'{count} scripts and hooks: nothing denied; the {len(found)} things they do beyond reading are all listed')
+
+
 @section('Commit messages', modes=('history',))
 def commit_messages(ctx, out):
     rules = {name: re.compile(rx) for name, rx in ctx.patterns['secrets'].items()}
@@ -806,10 +955,14 @@ def load_patterns(files):
     expected = {'about', 'kinds', 'binaries', 'libraries', 'code_non_ascii', 'secrets', 'personal_paths', 'game_paths',
                 'decompiler_markers', 'not_addresses', 'own_github_owners', 'history_reviewed', 'apworld_imports',
                 'apworld_modules', 'apworld_builtins', 'apworld_dunders', 'apworld_denied_attributes',
-                'apworld_denied_members', 'apworld_manifest_keys'}
+                'apworld_denied_members', 'apworld_manifest_keys', 'mod_denied', 'mod_capabilities', 'ps1_denied',
+                'ps1_capabilities', 'sh_denied', 'script_denied_modules', 'script_denied_builtins',
+                'script_denied_methods', 'script_capability_modules', 'script_capability_calls'}
     if set(patterns) != expected:
         raise Unreadable(f'{PATTERNS} keys differ from what preflight reads: {sorted(set(patterns) ^ expected)}')
-    for rx in list(patterns['secrets'].values()) + patterns['game_paths'] + patterns['decompiler_markers']:
+    for rx in list(patterns['secrets'].values()) + patterns['game_paths'] + patterns['decompiler_markers'] + [
+            rx for key in ('mod_denied', 'mod_capabilities', 'ps1_denied', 'ps1_capabilities', 'sh_denied')
+            for rx in patterns[key].values()]:
         re.compile(rx)
     return patterns
 

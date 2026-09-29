@@ -121,6 +121,38 @@ def personal_samples(patterns):
     return [p + 'someone' for p in patterns['personal_paths']]
 
 
+# One line of code for each kind of call the patterns file denies; a kind without a sample fails the test.
+MOD_SAMPLES = {
+    'runs programs': 'System.Diagnostics.Process.Start("x");',
+    'web requests': 'var w = new WebClient();',
+    'raw sockets': 'var t = new TcpClient();',
+    'loads code': 'Assembly.LoadFrom("x.dll");',
+    'native code': '[DllImport("x.dll")] static extern int Planted(int a);',
+    'the registry': 'Microsoft.Win32.Registry.GetValue("a", "b", null);',
+    'hidden payloads': 'Convert.FromBase64String("QQ==");',
+    'opens a web page': 'Application.OpenURL("x");',
+    'who or where the player is': 'var u = Environment.UserName;',
+    'data that picks a type': 'var s = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };',
+    'code written at run time': 'var d = new DynamicMethod("x", null, null);',
+    'screen capture': 'ScreenCapture.CaptureScreenshot("x.png");',
+}
+PS1_SAMPLES = {
+    'runs text as code': 'Invoke-Expression $x',
+    'hidden payloads': 'powershell -EncodedCommand AAAA',
+    'downloads': 'Invoke-WebRequest $u',
+    'compiles code': 'Add-Type -TypeDefinition $src',
+    'changes system settings': 'Set-ExecutionPolicy Bypass',
+    'starts detached programs': 'Start-Process notepad',
+}
+SH_SAMPLES = {
+    'downloads': 'curl -s "$u" -o x',
+    'runs text as code': 'eval "$x"',
+    'hidden payloads': 'printf x | base64 -d',
+}
+SAMPLED = {'secrets': secret_samples, 'mod_denied': lambda: MOD_SAMPLES, 'ps1_denied': lambda: PS1_SAMPLES,
+           'sh_denied': lambda: SH_SAMPLES}
+
+
 def patterns_of(clone):
     import json
     return json.loads(clone.read('dev-scripts/preflight-patterns.json'))
@@ -316,6 +348,45 @@ def fixtures():
         c.replace('apworld/bug_fables/archipelago.json', b'"game"', b'"extra": 1, "game"')
         c.append('apworld/bug_fables/docs/setup_en.md', 'see <img src=x> and [this](java' + 'script:alert)')
 
+    @add('every denied kind of call in the mod', 'Mod source',
+         names=tuple(f'({k})' for k in MOD_SAMPLES) + ('a \\u escape outside a string',))
+    def _(c):
+        body = '\n'.join('        ' + line for line in MOD_SAMPLES.values())
+        c.write('mod/BugFablesAP/Planted.cs', 'class Planted\n{\n    void Run()\n    {\n' + body + '\n    }\n}\n'
+                'class Planted\\u0041 { }\n')
+
+    @add('a denied call only in a comment', 'Mod source', expect='PASS')
+    def _(c):
+        c.write('mod/BugFablesAP/Planted.cs', '// ' + MOD_SAMPLES['runs programs'] + '\n/* '
+                + MOD_SAMPLES['web requests'] + ' */\nclass Planted { }\n')
+
+    @add('a mod file doing something unlisted', 'Mod source', names=('Planted.cs: writes files',))
+    def _(c):
+        c.write('mod/BugFablesAP/Planted.cs', 'class Planted { void Run() { System.IO.File.WriteAllText("x", "y"); } }\n')
+
+    @add('a mod row no code matches', 'Mod source', names=('Nowhere.cs: writes files',))
+    def _(c):
+        c.replace('docs/capabilities.md', b'| `mod/BugFablesAP/Core/ApConnection.cs` |',
+                  b'| `mod/BugFablesAP/Nowhere.cs` | writes files | nothing |\n| `mod/BugFablesAP/Core/ApConnection.cs` |')
+
+    @add('every denied kind of call in a script', 'Dev scripts and hooks',
+         names=tuple(f'({k})' for k in PS1_SAMPLES) + tuple(f'({k})' for k in SH_SAMPLES)
+         + ('imports pickle', 'eval()', '.system()', 'shell=True'))
+    def _(c):
+        c.write('dev-scripts/planted.ps1', '\n'.join(PS1_SAMPLES.values()) + '\n')
+        c.write('.githooks/planted.sh', '\n'.join(SH_SAMPLES.values()) + '\n')
+        c.write('dev-scripts/planted.py', 'import os\nimport pickle\nimport subprocess\n'
+                'eval("1")\nos.system("x")\nsubprocess.run("x", shell=True)\n')
+
+    @add('a script doing something unlisted', 'Dev scripts and hooks', names=('planted.py: runs programs',))
+    def _(c):
+        c.write('dev-scripts/planted.py', 'import subprocess\n')
+
+    @add('a script row no code matches', 'Dev scripts and hooks', names=('nowhere.py: runs programs',))
+    def _(c):
+        c.replace('docs/capabilities.md', b'| `dev-scripts/preflight.py` |',
+                  b'| `dev-scripts/nowhere.py` | runs programs | nothing |\n| `dev-scripts/preflight.py` |')
+
     # History: a violation committed and removed again is gone from the tree, not from what was published.
     def committed_then_removed(rel, data):
         def plant(c):
@@ -466,7 +537,9 @@ def main():
                 continue
             status, lines = report.get(fx.section, (set(), []))
             missing = [n for n in fx.names if not any(n in l for l in lines)]
-            if fx.expect not in status:
+            if fx.expect == 'PASS' and status != {'PASS'}:
+                h.say('FAIL', f'{fx.name}: "{fx.section}" did not pass: it flags what it must let through', lines[:6])
+            elif fx.expect not in status:
                 h.say('FAIL', f'{fx.name}: "{fx.section}" did not report {fx.expect}: the gate is blind to it', lines[:6])
             elif missing:
                 h.say('FAIL', f'{fx.name}: "{fx.section}" failed but did not name every planted case', missing)
@@ -480,6 +553,14 @@ def main():
             print('== The hooks, for real ==')
             hooks_test(c, base, h)
             print('== Coverage ==')
+            patterns = patterns_of(c)
+            unsampled = [f'{key}: {kind}' for key, samples in SAMPLED.items()
+                         for kind in sorted(set(patterns[key]) ^ set(samples()))]
+            if unsampled:
+                h.say('FAIL', 'kinds in the patterns file with no sample here, or samples of kinds it no longer has',
+                      unsampled)
+            else:
+                h.say('PASS', 'every credential format and denied kind of call in the patterns file has a sample')
             listed = subprocess.run([sys.executable, '-B', c.path('dev-scripts/preflight.py'), '--list-sections'],
                                     capture_output=True, env=env()).stdout.decode().splitlines()
             pairs = {(name, mode) for line in listed for modes, name in [line.split('\t')] for mode in modes.split(',')}
