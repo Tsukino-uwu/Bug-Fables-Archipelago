@@ -40,6 +40,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 26. [Build step 26: the tutorial leaf, an item the story puts in the bag](#build-step-26-the-tutorial-leaf-an-item-the-story-puts-in-the-bag)
 27. [Build step 27: a found pickup is gone in every save](#build-step-27-a-found-pickup-is-gone-in-every-save)
 28. [Build step 28: nothing unpublishable in the repo or a release](#build-step-28-nothing-unpublishable-in-the-repo-or-a-release)
+29. [Build step 29: the logic in Python, one module per area, the Rule Builder's way](#build-step-29-the-logic-in-python-one-module-per-area-the-rule-builders-way)
 
 **How it works**
 
@@ -2602,6 +2603,18 @@ game (the mod guide's step 34).
 `dev-scripts/negative-test-preflight.py`; `.githooks/pre-commit`, `.githooks/pre-push`, `.githooks/commit-msg`,
 `.githooks/python.sh`; `dev-scripts/verify-release.py`; `.github/workflows/preflight.yml`, and the guard, publish
 and verify jobs in `.github/workflows/release.yml`; `.claude/settings.json`, `.claude/hooks/agent-guard.py`.*
+
+## Build step 29: the logic in Python, one module per area, the Rule Builder's way
+
+**Why (2026-09-29):** the project follows Archipelago's own way in everything (How it works §8). Archipelago's Rule
+Builder is "intended to be written first in Python", and APQuest keeps its regions, locations and rules in Python. Ours
+were JSON (`data/locations.json`) in a format of our own, turned into rules by a function of our own.
+
+**The gate first:** the preflight's list of names the apworld may take from Archipelago gains the Rule Builder's `Rule`,
+so the world can register its own rules the way the Rule Builder's doc shows (a change to the gate is a commit of its
+own).
+
+**Status:** in progress (2026-09-29): the gate widened.
 
 # How it works
 

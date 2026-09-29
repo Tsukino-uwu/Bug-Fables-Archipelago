@@ -101,7 +101,7 @@
       "Tutorial"
     ],
     "Options": ["Choice", "DefaultOnToggle", "PerGameCommonOptions", "Range", "Toggle"],
-    "rule_builder.rules": ["Has", "HasAllCounts"],
+    "rule_builder.rules": ["Has", "HasAllCounts", "Rule"],
     "test.bases": ["WorldTestBase"],
     "worlds.AutoWorld": ["WebWorld", "World"]
   },
