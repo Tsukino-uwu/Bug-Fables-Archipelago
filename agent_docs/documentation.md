@@ -45,6 +45,7 @@ anyone curious about the process, or thinking of doing the same for another game
 29. [Save crystals by the confirm button, as an NPC is talked to](#29-save-crystals-by-the-confirm-button-as-an-npc-is-talked-to)
 30. [Healing crystals: every save crystal yellow](#30-healing-crystals-every-save-crystal-yellow)
 31. [Auto-save between rooms: a death costs one room](#31-auto-save-between-rooms-a-death-costs-one-room)
+32. [A release DLL anyone with the game can rebuild, byte for byte](#32-a-release-dll-anyone-with-the-game-can-rebuild-byte-for-byte)
 
 ## Where it stands
 
@@ -1919,3 +1920,60 @@ Archipelago is enabled, or with *Use on normal saves* (step 18). Save crystals w
 **Status:** built (2026-09-28), not yet seen in game.
 
 *Code: `AutoSave.cs`; `DeathLinkGame.Busy`; the row in `ApMenu.cs` and `ApMenu.Rows.cs`.*
+
+## 32. A release DLL anyone with the game can rebuild, byte for byte
+
+The mod's DLL is the one file in a release that GitHub can't build: compiling it needs the game's own
+`Assembly-CSharp.dll`, which never enters the repo. So it's built on the maintainer's machine and committed. That
+leaves a question a player or a reviewer is right to ask: **is the committed DLL really what the committed source
+makes?** A hash written next to it can't answer that, because whoever built the DLL also wrote the hash. What can
+answer it is a build anyone who owns the game can repeat and get the same bytes.
+
+**Measured first (2026-09-29):** each published DLL rebuilt from its own commit, in a fresh folder:
+
+| Release | Rebuilt | Result |
+|---|---|---|
+| v0.1.0 | from its tag | identical to the published DLL |
+| v0.2.0 | from its tag, on two different .NET SDKs (10.0.401 and 10.0.302) | identical |
+| the DLL committed on 2026-09-28 | from the commit that added it (`a43d9da`) | identical |
+
+One thing it showed: that last DLL's record named the commit *before* it, because the build ran on a working copy
+with its changes not yet committed. The bytes were right; the record pointed at the wrong commit.
+
+**Then the build was pinned,** so the same inputs stay the same:
+- **Every package at one exact version, with its content hash:** `BepInEx.Core` was `5.4.*` (any 5.4 release), now
+  5.4.21. A lock file, `packages.lock.json`, holds every package's hash, and a restore that would change anything
+  fails.
+- **Each package from one feed only** (`nuget.config`): BepInEx's packages from BepInEx's feed, everything else from
+  nuget.org, so a same-named package on the other feed can never be picked.
+- **One SDK** (`global.json`), recorded in each build.
+- **No build files from outside the repo** (`Directory.Build.props`): MSBuild otherwise picks up build files from
+  every folder above the project and from per-user folders.
+
+With the pins the DLL came out byte-identical to the build before them, so they changed nothing in it.
+
+**How a release DLL is built now** (`dev-scripts/build-release.ps1`). It refuses to stage one unless every check
+passes:
+1. **Only committed code.** Tracked files must have no uncommitted changes, and the build runs in fresh clones of
+   HEAD, so nothing that isn't committed can reach the compiler.
+2. **Built twice, in two clean clones at different paths, and both come out byte-identical.** No path, time or
+   machine state goes into it.
+3. **Only the two known packages run code during the build:** packages with build scripts or analyzers must be
+   exactly `BepInEx.Core` and `NETStandard.Library`.
+4. **The three libraries don't change silently.** They must match the committed copies, unless the change is
+   deliberate (`-NewLibraries`).
+5. **Unchanged sources rebuild the committed DLL exactly.** If none of the build's inputs changed since the committed
+   DLL was built, the new DLL must be byte-identical to it, or the committed one isn't what these sources make.
+6. **The old checks:** no dev tool in the DLL, and exactly the shipped files.
+
+`release/built-from.txt` then records the full commit, the SDK and the game's `Assembly-CSharp.dll` hash (which game
+build it was compiled against), next to each input's hash and each DLL's.
+
+**What this proves, and to whom.** It makes the maintainer sure. Someone else can't see the build machine, so for
+them it proves nothing until they rebuild from the tag with their own copy of the game and compare the hash (the
+recipe is in `docs/reviewing.md`), or decompile the DLL and read it.
+
+**Status:** built (2026-09-29). The three rebuilds and the unchanged pinned build were measured on this machine.
+
+*Code: `dev-scripts/build-release.ps1`; `mod/BugFablesAP/BugFablesAP.csproj`, `packages.lock.json`; `nuget.config`,
+`global.json`, `Directory.Build.props`.*

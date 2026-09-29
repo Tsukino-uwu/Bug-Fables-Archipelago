@@ -15,6 +15,10 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <BugFablesDir Condition="'$(BugFablesDir)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Bug Fables</BugFablesDir>
     <GameManaged>$(BugFablesDir)\Bug Fables_Data\Managed</GameManaged>
+    <!-- Every package pinned with its content hash; a restore that would change the graph fails. To update one on
+         purpose: dotnet restore -p:RestoreLockedMode=false, then commit packages.lock.json. -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <RestoreLockedMode>true</RestoreLockedMode>
   </PropertyGroup>
 
   <!-- The dev tools (Dev/) are in the Debug build only: the release build compiles without them. -->
@@ -26,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BepInEx.Core" Version="5.4.*" />
+    <PackageReference Include="BepInEx.Core" Version="5.4.21" />
     <!-- The game's Unity version. -->
     <PackageReference Include="UnityEngine.Modules" Version="2018.4.12" IncludeAssets="compile" />
     <!-- Only downloaded: the net40 build is referenced below, since its websocket-sharp can compress in this Mono. -->
