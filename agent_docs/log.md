@@ -1,7 +1,8 @@
 # Session log
 
-Newest last. What was tried, what happened, what the user said. A new entry gets its line in Contents too (the
-pre-commit `doc-coverage.py` refuses a mismatch).
+Newest last. What was tried, what happened, what the user said. Each entry's heading is `## YYYY-MM-DD: title`,
+nothing between the date and the colon, and gets its line in Contents too (the pre-commit `doc-coverage.py` refuses
+either one wrong).
 
 ## Contents
 
@@ -14,36 +15,36 @@ pre-commit `doc-coverage.py` refuses a mismatch).
 - [2026-09-24: step 3, the chapter table and the gated doors](#2026-09-24-step-3-the-chapter-table-and-the-gated-doors)
 - [2026-09-24: what starts the gate events; MapDump](#2026-09-24-what-starts-the-gate-events-mapdump)
 - [2026-09-24: first pickup test; dev console; a logic bug found by it](#2026-09-24-first-pickup-test-dev-console-a-logic-bug-found-by-it)
-- [2026-09-25: what this session taught us (summary, the user closing the chat)](#2026-09-25-what-this-session-taught-us-summary-the-user-closing-the-chat)
-- [2026-09-25 (later): open world, QoL page, discoveries, warp](#2026-09-25-later-open-world-qol-page-discoveries-warp)
-- [2026-09-25 (end of session): open town, shops, party rehearsal (the user closing the chat)](#2026-09-25-end-of-session-open-town-shops-party-rehearsal-the-user-closing-the-chat)
-- [2026-09-25 (afternoon): full medal stock, the intro skipped, item shops, the caravan, first shuffled door](#2026-09-25-afternoon-full-medal-stock-the-intro-skipped-item-shops-the-caravan-first-shuffled-door)
-- [2026-09-25 (evening): doors both ways and shuffled, the Detector for every check, one party member (the user closing the chat)](#2026-09-25-evening-doors-both-ways-and-shuffled-the-detector-for-every-check-one-party-member-the-user-closing-the-chat)
-- [2026-09-25 (night): lean comments, licences, the grant paths checked](#2026-09-25-night-lean-comments-licences-the-grant-paths-checked)
+- [2026-09-25: what this session taught us](#2026-09-25-what-this-session-taught-us)
+- [2026-09-25: open world, QoL page, discoveries, warp](#2026-09-25-open-world-qol-page-discoveries-warp)
+- [2026-09-25: open town, shops, party rehearsal](#2026-09-25-open-town-shops-party-rehearsal)
+- [2026-09-25: full medal stock, the intro skipped, item shops, the caravan, first shuffled door](#2026-09-25-full-medal-stock-the-intro-skipped-item-shops-the-caravan-first-shuffled-door)
+- [2026-09-25: doors both ways and shuffled, the Detector for every check, one party member](#2026-09-25-doors-both-ways-and-shuffled-the-detector-for-every-check-one-party-member)
+- [2026-09-25: lean comments, licences, the grant paths checked](#2026-09-25-lean-comments-licences-the-grant-paths-checked)
 - [2026-09-26: enemy shuffle and enemy scaling designed](#2026-09-26-enemy-shuffle-and-enemy-scaling-designed)
-- [2026-09-26 (later): the panel tidied, Use on normal saves, letters going missing](#2026-09-26-later-the-panel-tidied-use-on-normal-saves-letters-going-missing)
-- [2026-09-26 (release): the first pre-release set up](#2026-09-26-release-the-first-pre-release-set-up)
+- [2026-09-26: the panel tidied, Use on normal saves, letters going missing](#2026-09-26-the-panel-tidied-use-on-normal-saves-letters-going-missing)
+- [2026-09-26: the first pre-release set up](#2026-09-26-the-first-pre-release-set-up)
 - [2026-09-27: Uncap FPS, and the hitches](#2026-09-27-uncap-fps-and-the-hitches)
-- [2026-09-27 (release): v0.2.0](#2026-09-27-release-v020)
-- [2026-09-27 (planning): Sprint and Early Jump](#2026-09-27-planning-sprint-and-early-jump)
-- [2026-09-27 (evening): We Owe Ya! does nothing when received early](#2026-09-27-evening-we-owe-ya-does-nothing-when-received-early)
-- [2026-09-27 (night): the whole-project refactor, and three Uncap FPS reports](#2026-09-27-night-the-whole-project-refactor-and-three-uncap-fps-reports)
+- [2026-09-27: release v0.2.0](#2026-09-27-release-v020)
+- [2026-09-27: planning Sprint and Early Jump](#2026-09-27-planning-sprint-and-early-jump)
+- [2026-09-27: We Owe Ya! does nothing when received early](#2026-09-27-we-owe-ya-does-nothing-when-received-early)
+- [2026-09-27: the whole-project refactor, and three Uncap FPS reports](#2026-09-27-the-whole-project-refactor-and-three-uncap-fps-reports)
 - [2026-09-28: a link to the concepts doc, and The Beast at level 17](#2026-09-28-a-link-to-the-concepts-doc-and-the-beast-at-level-17)
-- [2026-09-28 (later): save crystals without a move, DeathLink, auto-save](#2026-09-28-later-save-crystals-without-a-move-deathlink-auto-save)
-- [2026-09-28 (night): Uncap FPS as ten pips, the boat, Leif's boss, traps](#2026-09-28-night-uncap-fps-as-ten-pips-the-boat-leifs-boss-traps)
-- [2026-09-28 (night): the fuzzer joins the tests](#2026-09-28-night-the-fuzzer-joins-the-tests)
-- [2026-09-28 (night, later): outside criticism, seven reviewers, part 1 of the fixes](#2026-09-28-night-later-outside-criticism-seven-reviewers-part-1-of-the-fixes)
-- [2026-09-28 (morning): playtesting the start of a new file](#2026-09-28-morning-playtesting-the-start-of-a-new-file)
-- [2026-09-28 (day): three projects compared, the cleanup plan](#2026-09-28-day-three-projects-compared-the-cleanup-plan)
+- [2026-09-28: save crystals without a move, DeathLink, auto-save](#2026-09-28-save-crystals-without-a-move-deathlink-auto-save)
+- [2026-09-28: Uncap FPS as ten pips, the boat, Leif's boss, traps](#2026-09-28-uncap-fps-as-ten-pips-the-boat-leifs-boss-traps)
+- [2026-09-28: the fuzzer joins the tests](#2026-09-28-the-fuzzer-joins-the-tests)
+- [2026-09-28: outside criticism, seven reviewers, part 1 of the fixes](#2026-09-28-outside-criticism-seven-reviewers-part-1-of-the-fixes)
+- [2026-09-28: playtesting the start of a new file](#2026-09-28-playtesting-the-start-of-a-new-file)
+- [2026-09-28: three projects compared, the cleanup plan](#2026-09-28-three-projects-compared-the-cleanup-plan)
 - [2026-09-29: the cleanup plan finished](#2026-09-29-the-cleanup-plan-finished)
-- [2026-09-29 (afternoon): the preflight, the reviewing page, and a hole it found](#2026-09-29-afternoon-the-preflight-the-reviewing-page-and-a-hole-it-found)
-- [2026-09-29 (later): the agent's guard, the cache fix, the TLS probe](#2026-09-29-later-the-agents-guard-the-cache-fix-the-tls-probe)
+- [2026-09-29: the preflight, the reviewing page, and a hole it found](#2026-09-29-the-preflight-the-reviewing-page-and-a-hole-it-found)
+- [2026-09-29: the agent's guard, the cache fix, the TLS probe](#2026-09-29-the-agents-guard-the-cache-fix-the-tls-probe)
 - [2026-09-29: the Logic Test apworld, judged](#2026-09-29-the-logic-test-apworld-judged)
-- [2026-09-29 (evening): Archipelago's way, the logic in Python, the rules for writing it](#2026-09-29-evening-archipelagos-way-the-logic-in-python-the-rules-for-writing-it)
-- [2026-09-29 (night): the concepts doc's second round](#2026-09-29-night-the-concepts-docs-second-round)
-- [2026-09-29 (night, later): the animation warnings on a normal save](#2026-09-29-night-later-the-animation-warnings-on-a-normal-save)
-- [2026-09-29 (night, later still): six questions, disguised traps, Vi's flight](#2026-09-29-night-later-still-six-questions-disguised-traps-vis-flight)
-- [2026-09-29 (night, last): Room Swap, Uncap FPS Off by default](#2026-09-29-night-last-room-swap-uncap-fps-off-by-default)
+- [2026-09-29: Archipelago's way, the logic in Python, the rules for writing it](#2026-09-29-archipelagos-way-the-logic-in-python-the-rules-for-writing-it)
+- [2026-09-29: the concepts doc's second round](#2026-09-29-the-concepts-docs-second-round)
+- [2026-09-29: the animation warnings on a normal save](#2026-09-29-the-animation-warnings-on-a-normal-save)
+- [2026-09-29: six questions, disguised traps, Vi's flight](#2026-09-29-six-questions-disguised-traps-vis-flight)
+- [2026-09-29: Room Swap, Uncap FPS Off by default](#2026-09-29-room-swap-uncap-fps-off-by-default)
 
 ## 2026-09-24: the project starts
 
@@ -413,7 +414,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
   same target (open as if finished, nothing collected, artifacts as the goal) is reached one gate at a time. The
   user hasn't finished the game: endgame facts stay out of chat, in MEASURED's spoiler sections.
 
-## 2026-09-25: what this session taught us (summary, the user closing the chat)
+## 2026-09-25: what this session taught us
 
 - **Wiki pages are leads, the data decides.** The user pasted the wiki's crystal berry and medal pages (facts only,
   CC BY-SA row in licensing.md); every entry was matched to the entity dump, ScriptDump or code. All chapter 1
@@ -440,7 +441,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
   open. Test on a fresh file through chapter 1 (Leif's chain). Also pending: the Mushroom spot's landmark name,
   AdoptSeed is still on in the user's config, MapDump too.
 
-## 2026-09-25 (later): open world, QoL page, discoveries, warp
+## 2026-09-25: open world, QoL page, discoveries, warp
 
 - **Crystal berry spot showing the seed's item** (confirmed by the user, screenshot): the berry model stood over the
   item sprite. Wrong theory 1: the sprite sat in the ground and spun (true, fixed, but not the cause). Wrong theory 2:
@@ -464,7 +465,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
 - Pending: the town door hold to Leif instead of the first boss (asked, not answered); the Warp's landing spot; the
   fall-room test in Snakemouth.
 
-## 2026-09-25 (end of session): open town, shops, party rehearsal (the user closing the chat)
+## 2026-09-25: open town, shops, party rehearsal
 
 - **Open world, one gate at a time, seen on screen:** the town (its arrival scene removed, the real door kept; Event60
   needs a companion who joins after the first boss, so the scene goes rather than the town waiting), the plaza's
@@ -497,7 +498,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
 - **Next:** Merab's full stock (22 with duplicates, the mod owning the stock), Shades on the same system (13, all 50),
   permanent purchases, item shops and the caravan; map fast travel; a two-player test; the Warp's landing spot.
 
-## 2026-09-25 (afternoon): full medal stock, the intro skipped, item shops, the caravan, first shuffled door
+## 2026-09-25: full medal stock, the intro skipped, item shops, the caravan, first shuffled door
 
 - **Merab's full stock (seen):** 22 copies from a new game (TP Plus and Ambusher twice, each its own check). "One copy
   fewer than expected" was unworkable (a fresh file holds 10 of 22), so the save keeps a bit per copy bought
@@ -533,7 +534,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
   EntityDump to write positions); the generator shuffling doors (coupled first); Placeholders for every spot; Shades's
   shop once all 50 crystal berries are locations.
 
-## 2026-09-25 (evening): doors both ways and shuffled, the Detector for every check, one party member (the user closing the chat)
+## 2026-09-25: doors both ways and shuffled, the Detector for every check, one party member
 
 - **Entrance randomizer.** A rewritten door now keeps its own walk-in (`data[4]`) and takes the other door's arrival
   camera and jump (read in `TransferMap`). EntityDump writes positions; `door-graph.py` pairs each door with the door the
@@ -576,7 +577,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
 - **Next:** the scan's open list before those scenes come up; the Starting Party Member option in the apworld; Placeholders
   for every spot; a two-member start to see Leif join after the spider.
 
-## 2026-09-25 (night): lean comments, licences, the grant paths checked
+## 2026-09-25: lean comments, licences, the grant paths checked
 
 - **Comments trimmed to the new CLAUDE.md rule** (the user asked for leaner comments): about 1,300 comment lines in
   `mod/`, `apworld/` and `dev-scripts/` down to about 430. The code is unchanged: a script compared every file
@@ -769,7 +770,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
 - **Ideas recorded:** progressive items (Next 23), *Use on normal saves* (Next 24, off by default), consumable keys
   (Next 25), plus the Boat Ticket (21) and healing crystals (22) from Discord.
 
-## 2026-09-26 (later): the panel tidied, Use on normal saves, letters going missing
+## 2026-09-26: the panel tidied, Use on normal saves, letters going missing
 
 - **The main page lost its Quality of life and Gameplay links** (the user: "so AP looks clean"); the two pages are
   reached from Settings only. **Use on normal saves** (Next 24) is built in their place under Achievements
@@ -810,7 +811,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
 - **The checkout's link restored** (the user said to, 2026-09-26): `worlds/bug_fables` is a junction to
   `apworld/bug_fables` again; the tests pass through it (276).
 
-## 2026-09-26 (release): the first pre-release set up
+## 2026-09-26: the first pre-release set up
 
 - **The user asked for** a WIP pre-release, v0.1.0, made the MeshGhost (TEVI) way: the DLL built locally and
   committed with a hash file, a hand-run release workflow, three separate downloads. Their calls, in order: the
@@ -992,7 +993,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
   vanilla more than we already do". Measured with everything installed at 240: 3599 frames in 15 s, median 4.11 ms,
   worst 13 ms, no collections. The player guide got Uncap FPS and the stutter fix.
 
-## 2026-09-27 (release): v0.2.0
+## 2026-09-27: release v0.2.0
 
 - **The user asked for v0.2.0** with what `main` has, before playing chapters 5-7 on a vanilla save. Both versions
   bumped; highlights written from the 127 commits since v0.1.0. `release.ps1` found the committed DLL stale (CI had
@@ -1016,7 +1017,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
   `flagvar[53]`); the Explorer Permit split per gate as a yaml choice, Vanilla or Split, Split the default once
   built (the game stays vanilla until then); key items shown without browsing as a Quality of life row.
 
-## 2026-09-27 (planning): Sprint and Early Jump
+## 2026-09-27: planning Sprint and Early Jump
 
 - **Ideas, nothing built (Next 33-34).** The user began with "dash, faster base movement, turbo dash, start with
   dash" and "early jump (off/on/early)". Read in code: the game's only dash is Kabbu's horn dash (a second tap of the
@@ -1036,7 +1037,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
   scene, scripted fight, scene, second fight, scene. A turn-back is cut only in the same change that fixes its gate
   and logic. Every scene is still read and sorted by hand.
 
-## 2026-09-27 (evening): We Owe Ya! does nothing when received early
+## 2026-09-27: We Owe Ya! does nothing when received early
 
 - **The report:** a tester (a three-game room, Bug Fables with the entrance randomizer on) received We Owe Ya! from
   another game and saw it do nothing. Read in code: the medal picks a random helper only from those whose story or
@@ -1049,7 +1050,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
 - **A refactor was planned and set aside:** the user asked for "whole project refactor" as general work while they
   play chapters 5-7; a plan (apworld split proved by a seed diff, mod helpers and folders, docs tidy) waits for a go.
 
-## 2026-09-27 (night): the whole-project refactor, and three Uncap FPS reports
+## 2026-09-27: the whole-project refactor, and three Uncap FPS reports
 
 - **Asked for:** "whole project refactor", as general work while the user plays chapters 5-7; the user left the
   scope to the agent and asked what's best for behaviour. Decided: nothing a seed or the plugin does changes; bugs
@@ -1144,7 +1145,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
   right as medals go on and off). The damage in a fight is still to test; the user will do it another time.
 - **Unpushed at the end of the session:** 11 commits on `main`, from `b3b48bf` to the medals-screen status.
 
-## 2026-09-28 (later): save crystals without a move, DeathLink, auto-save
+## 2026-09-28: save crystals without a move, DeathLink, auto-save
 
 - **The question first** (the user): with DeathLink, does a death lose flags? Answered from the code: a death goes back
   to the last save, so story and cutscene flags since then are lost; items come back from the server (the save's
@@ -1174,7 +1175,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
   agreed: "a guaranteed death either way"). The two new Gameplay rows had no left/right arrows (one list per page);
   fixed with the move.
 
-## 2026-09-28 (night): Uncap FPS as ten pips, the boat, Leif's boss, traps
+## 2026-09-28: Uncap FPS as ten pips, the boat, Leif's boss, traps
 
 - **Uncap FPS, ten pips like the volume rows** (the user, after a tester on a 180 Hz monitor): Off, 90, 100, 120, 144,
   165, 180, 240, 360, Monitor (the display's refresh rate with VSync; a 60 Hz display keeps the game's own). At 180 Hz
@@ -1201,7 +1202,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
   interact with (a stone, a statue; not the automatic ones) and over undug dig spots holding a check, with the Detector
   on; the 12 berry dig spots as checks, an idea, respawning to measure first.
 
-## 2026-09-28 (night): the fuzzer joins the tests
+## 2026-09-28: the fuzzer joins the tests
 
 - **Asked:** are we using the Archipelago-fuzzer? No, only the tests and hand-generated seeds. The user: use it
   regularly, and **whenever the tests run, the fuzzer runs too**; 1000 or 10000 seeds are quick. Its `fuzz.py` 0.6.2
@@ -1212,7 +1213,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
   copy of an ordinary item or berries gives way, only once no duplicate is left. `TestSmallPool` failed before the
   fix; after it 0 of 10000, and 0 of 2000 with APQuest.
 
-## 2026-09-28 (night, later): outside criticism, seven reviewers, part 1 of the fixes
+## 2026-09-28: outside criticism, seven reviewers, part 1 of the fixes
 
 - **What happened:** the Tevi dev suggested Harmony attributes over hand-written `harmony.Patch` calls; a long-time
   Bug Fables modder left the AP server calling the project's code bad and its docs full of "accuracy errors ... and
@@ -1235,7 +1236,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
 - **Open, asked the user:** Enemy Shuffle across the whole game vs "never harder than the logic"; medal-shop stock
   available from a new file; dropping "(the user, date)" from the guides.
 
-## 2026-09-28 (morning): playtesting the start of a new file
+## 2026-09-28: playtesting the start of a new file
 
 - **In game with the user, a local server and fresh seeds.** The login race fix and per-system guards ran clean.
 - **The Crunchy Leaf** was in the bag on a new file before any check: the mod's own opening skip redoes Event16's
@@ -1259,7 +1260,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
   comments, dev tools out of the release). Open questions to the user: Enemy Shuffle across the whole game, medal-shop
   stock from a new file, "(the user, date)" in the guides.
 
-## 2026-09-28 (day): three projects compared, the cleanup plan
+## 2026-09-28: three projects compared, the cleanup plan
 
 - **What happened:** after the "bad code" comments with nothing named, the user asked how the project compares with
   hand-written ones: Tevi's mod and apworld, and the Pokémon Crystal apworld on both its branches. Five read-only
@@ -1386,7 +1387,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
 - **Closed:** the game and the server, with RandomizerEnabled and DevCommandFile back as they were.
 - **Waiting on the user:** a push.
 
-## 2026-09-29 (afternoon): the preflight, the reviewing page, and a hole it found
+## 2026-09-29: the preflight, the reviewing page, and a hole it found
 
 - **The user asked** for a preflight like MeshGhost's, and tests, "to make sure nothing malicious can ever be in the
   repo", so that the project follows the Archipelago Discord's Developer Code of Conduct. They take full
@@ -1439,7 +1440,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
     since adding rows is the user's decision.
 
 
-## 2026-09-29 (later): the agent's guard, the cache fix, the TLS probe
+## 2026-09-29: the agent's guard, the cache fix, the TLS probe
 
 - **The user's answers:** GitHub settings, all four (on, read back, f4a43f3). A guard for the coding agent: yes. The
   cache bug: patch it in the mod for now ("how are things reported upstream? manually by me?"). TLS: measure first.
@@ -1534,7 +1535,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
 - **Next session:** read `gh run list` first; the push at the end of this session is the new `fuzz` and `build`
   jobs' first run (`pwsh` on Linux untried). Then the game in a Logic Test room (Next 42).
 
-## 2026-09-29 (evening): Archipelago's way, the logic in Python, the rules for writing it
+## 2026-09-29: Archipelago's way, the logic in Python, the rules for writing it
 
 - **Asked:** the user's general rules for writing logic, for `apimplementation.md` ("An item/ability should NEVER say
   what it can reach"; "A location should ALWAYS say what is required to reach it"; a need is "similar to the
@@ -1614,7 +1615,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
 - **Next session:** `gh run list` first; push when told (the user: after the review); then Next 43, item 1, one step
   at a time. The text client is Next 9, after the review's bugs. Now and then: look at #143 and #141.
 
-## 2026-09-29 (night): the concepts doc's second round
+## 2026-09-29: the concepts doc's second round
 
 - **The user's list, answered in MeshGhost's `programming-concepts.md`** (their choice: all of it into the doc, each
   term where it fits, two new parts). About 70 words they had seen the agent write while working on Bug Fables, or
@@ -1631,7 +1632,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
   `apimplementation.md`'s preflight step is corrected too), MeshGhost's hooks (one, its own scan, not preflight), and
   prefixes returning false: HarmonyX, which BepInEx ships, still runs the other prefixes, unlike upstream Harmony.
 
-## 2026-09-29 (night, later): the animation warnings on a normal save
+## 2026-09-29: the animation warnings on a normal save
 
 - **The user pasted** "Animator.GotoState: State could not be found" / "Invalid Layer Index '-1'" from the console,
   playing chapter 5 on a normal save with *Use on normal saves* on. The log: about 70 pairs in the Barren Lands, the
@@ -1643,7 +1644,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
   reload waiting for a fight to end. Not yet seen: the next Barren Lands walk shows whether `[anim]` lines replace the
   warnings, and names what the game asks for.
 
-## 2026-09-29 (night, later still): six questions, disguised traps, Vi's flight
+## 2026-09-29: six questions, disguised traps, Vi's flight
 
 - **The licence:** "Tsukino" or "Tsukino-uwu"? Archipelago's docs (0.6.7 and `main`) say nothing about a world's
   licence or its holder; `authors` is "a list of strings" (on `main`, shown on the Supported Games page); the only
@@ -1673,7 +1674,7 @@ pre-commit `doc-coverage.py` refuses a mismatch).
   already fixed in step 24, and the one-change fix settled it. Kabbu and Leif during a flight, asked: "they look the
   same as Vi".
 
-## 2026-09-29 (night, last): Room Swap, Uncap FPS Off by default
+## 2026-09-29: Room Swap, Uncap FPS Off by default
 
 - **Uncap FPS back to Off by default** (the user). A config that already stores a value keeps it (no migration, as
   on 2026-09-28), so the user's own Monitor stays. Built and staged, not copied in: the user was playing vanilla.

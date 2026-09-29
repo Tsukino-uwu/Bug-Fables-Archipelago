@@ -1,6 +1,6 @@
 """Refuses a commit when a feature's handle isn't written up: every yaml option, player setting and slot_data key
 must be named in a process guide, every Debug setting in development.md, every source file in code-map.md; and when
-log.md's Contents list doesn't match its entries."""
+a log.md heading isn't 'YYYY-MM-DD: title' in date order, or its Contents list doesn't match the entries."""
 import ast
 import re
 import subprocess
@@ -65,6 +65,15 @@ def anchor(heading, seen):
 
 log = read(DOCS + "log.md")
 headings = [h for h in re.findall(r"^## (.+)$", log, re.M) if h != "Contents"]
+last_date = ""
+for h in headings:
+    dated = re.match(r"(\d{4}-\d{2}-\d{2}): \S", h)
+    if not dated:
+        missing.append(f"log.md heading: write it as 'YYYY-MM-DD: title', nothing between date and colon: {h}")
+    elif dated.group(1) < last_date:
+        missing.append(f"log.md heading: dated before the entry above it (newest last): {h}")
+    else:
+        last_date = dated.group(1)
 seen = {}
 wanted = [f"- [{h}](#{anchor(h, seen)})" for h in headings]
 contents = log.split("## Contents", 1)[-1].split("\n## ", 1)[0]
