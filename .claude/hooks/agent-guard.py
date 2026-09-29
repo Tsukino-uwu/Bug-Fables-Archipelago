@@ -1,7 +1,7 @@
 """Claude Code runs this before every shell command and file edit its agent makes in this repo (.claude/settings.json).
-It refuses what would get past the git hooks, and makes the agent ask before it changes what the gates allow, before
-a commit that changes the gate itself, and before a push. A guard against the agent's slips, not a wall: pre-push and
-CI check everything again, and the settings may run nothing but this file (preflight, Dev scripts and hooks)."""
+It refuses what would get past the git hooks, and makes the agent ask before it changes what the gates allow (or this
+guard), by an edit or in a commit. Everyday work asks nothing. A guard against the agent's slips, not a wall: pre-push
+and CI check everything again, and the settings may run nothing but this file (preflight, Dev scripts and hooks)."""
 import json
 import os
 import re
@@ -10,10 +10,7 @@ import subprocess
 import sys
 
 # What the gates allow is the user's call; .claude/ is this guard, .git/ holds the clone's hooks and their setting.
-EDIT_ASKS = ('docs/capabilities.md', 'dev-scripts/preflight-patterns.json', '.claude/', '.git/')
-# A commit holding any of these changes what is checked (commit-msg keeps them in commits of their own).
-GATE = re.compile(r'(docs/capabilities\.md|dev-scripts/(preflight|negative-test-preflight|dotnet_metadata)'
-                  r'|\.githooks/|\.github/|\.claude/)')
+ASKED = ('docs/capabilities.md', 'dev-scripts/preflight-patterns.json', '.claude/', '.git/')
 ARMING = re.compile(r'git config (--local )?(--get )?core\.hookspath( \.githooks)?', re.I)
 RUNS_ITS_ARGUMENT = {'-c', '-command', '/c', 'eval', 'iex', 'invoke-expression'}
 CONTROL = {';', '&&', '||', '|', '&', '(', ')', ';;', '|&'}
@@ -24,6 +21,11 @@ def answer(decision, reason):
     print(json.dumps({'hookSpecificOutput': {'hookEventName': 'PreToolUse', 'permissionDecision': decision,
                                              'permissionDecisionReason': 'agent-guard: ' + reason}}))
     sys.exit(0)
+
+
+def asked(rel):
+    rel = rel.lower()
+    return any(rel == p or (p.endswith('/') and rel.startswith(p)) for p in ASKED)
 
 
 def in_repo(path, root):
@@ -123,24 +125,28 @@ def asks(command, root):
                 w in ('-f', '-F', '--field', '--raw-field', '--input') or (w in ('-X', '--method') and i + 1 < len(seg)
                 and seg[i + 1].upper() != 'GET') for i, w in enumerate(seg)):
             return 'gh api writing to GitHub puts changes there past the git hooks'
-        sub = git_subcommand(seg)
-        if sub == 'push':
-            return 'a push publishes; push only when the user says so, in that message'
-        if sub == 'commit':
-            gate = changed_gate_files(root)
-            if gate:
-                return ('this commit may change what the gates check or allow, which is the user\'s call: '
-                        + ', '.join(gate[:6]))
+        if git_subcommand(seg) == 'commit':
+            # A script can write these without an edit to ask about; the commit is the last place to catch it.
+            changed = changed_asked_files(root)
+            if changed:
+                return ('this commit may change what the gates allow, or this guard, which is the user\'s call: '
+                        + ', '.join(changed[:6]))
     return None
 
 
-def changed_gate_files(root):
+def changed_asked_files(root):
     r = subprocess.run(['git', '-C', root, 'status', '--porcelain=v1', '-z', '--untracked-files=all'],
                        capture_output=True, timeout=20)
     if r.returncode != 0:
         return ['(git status failed, so what the commit holds is unknown)']
-    paths = [entry[3:] for entry in r.stdout.decode('utf-8', 'replace').split('\0') if len(entry) > 3]
-    return [p for p in paths if GATE.match(p)]
+    entries, paths = r.stdout.decode('utf-8', 'replace').split('\0'), []
+    while entries:
+        entry = entries.pop(0)
+        if len(entry) > 3:
+            paths.append(entry[3:])
+            if 'R' in entry[:2] or 'C' in entry[:2]:
+                paths.append(entries.pop(0))
+    return [p for p in paths if asked(p)]
 
 
 def main():
@@ -149,9 +155,7 @@ def main():
     root = os.environ.get('CLAUDE_PROJECT_DIR') or os.getcwd()
     if tool in ('Edit', 'Write', 'MultiEdit', 'NotebookEdit'):
         rel = in_repo(given.get('file_path') or given.get('notebook_path') or '', root)
-        hit = rel is not None and next((p for p in EDIT_ASKS if rel.lower() == p or
-                                        (p.endswith('/') and rel.lower().startswith(p))), None)
-        if hit:
+        if rel is not None and asked(rel):
             answer('ask', f'{rel} decides what the gates allow or how the hooks run; changing it is the user\'s call')
     elif tool in ('Bash', 'PowerShell'):
         command = given.get('command', '')

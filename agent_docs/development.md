@@ -18,11 +18,12 @@ Once per clone: `git config core.hooksPath .githooks`. The hooks need Python 3.1
   its tag.
 
 **Working with Claude Code:** `.claude/settings.json` runs `.claude/hooks/agent-guard.py` before each shell command
-and file edit the agent makes. It refuses anything that gets past the hooks. It asks you first before:
+and file edit the agent makes. It refuses anything that gets past the hooks, without asking you. It asks you first only before:
 - an edit to `docs/capabilities.md`, the patterns file, `.claude/` or `.git/`;
-- a commit while a gate file has changed;
-- a push;
+- a commit that may carry one of those;
 - a `gh api` write.
+
+Its prompts start with `agent-guard:`; any other prompt is Claude Code's own.
 
 It needs `py -3` or `python3`; if it can't run, it refuses. `/hooks` in Claude Code shows it.
 

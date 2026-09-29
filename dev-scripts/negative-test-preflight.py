@@ -697,9 +697,10 @@ def main():
                           ('history', lambda: c.preflight('--history', f'{base}~1..{base}')),
                           ('text', lambda: c.preflight('--text-stdin', 'baseline', stdin=b'plain release notes\n'))):
             code, report = run()
-            # A committed DLL older than its sources is expected between releases: that one warning is allowed.
+            # A committed DLL older than its sources is expected between releases: those two warnings are allowed.
+            between_releases = {'Release staging': 'fine between releases', 'Shipped DLL reach': 'DLL predates'}
             bad = [n for n, (st, lines) in report.items() if 'FAIL' in st or ('WARN' in st and not (
-                n == 'Release staging' and any('fine between releases' in line for line in lines)))]
+                n in between_releases and any(between_releases[n] in line for line in lines)))]
             baselines[mode] = report
             if code != 0 or bad or not report:
                 h.say('FAIL', f'{mode}: the clean clone does not pass, so fixtures prove nothing: {", ".join(bad)}',
@@ -845,8 +846,8 @@ GUARD_CASES = [
     ('PowerShell', "git commit -m @'\nrefuses --no-verify\n'@", None),
     ('Bash', 'git log --oneline -n 5', None),
     ('Bash', 'git stash push -m wip', None),
-    ('Bash', 'git push origin main', 'ask'),
-    ('PowerShell', 'git status; if ($?) { git push }', 'ask'),
+    ('Bash', 'git push origin main', None),
+    ('PowerShell', 'git status; if ($?) { git push }', None),
     ('Bash', 'cat .git/config', 'ask'),
     ('Bash', 'gh api repos/o/r/contents/x -X PUT -f message=m', 'ask'),
     ('Bash', 'gh api -X GET repos/o/r', None),
@@ -889,15 +890,17 @@ def agent_guard_test(c, base, h):
 
     wrong = [f'{tool} {given!r}: {got}, not {want}' for tool, given, want in GUARD_CASES
              for got in [decide(tool, given)] if got != want]
-    c.append('dev-scripts/preflight.py', '# planted\n')
-    got = decide('Bash', 'git commit -q -m "a harmless-looking change"')
-    if got != 'ask':
-        wrong.append(f'a commit while preflight.py is changed: {got}, not ask')
-    c.git('checkout', '-q', '--', 'dev-scripts/preflight.py')
+    # A commit asks only when it may carry what the user decides, whoever wrote it; other gate work asks nothing.
+    for path, want in (('docs/capabilities.md', 'ask'), ('dev-scripts/preflight.py', None)):
+        c.append(path, '\n')
+        got = decide('Bash', 'git commit -q -m "a harmless-looking change"')
+        if got != want:
+            wrong.append(f'a commit while {path} is changed: {got}, not {want}')
+        c.git('checkout', '-q', '--', path)
     if wrong:
         h.say('FAIL', 'the guard answers wrongly', wrong)
     else:
-        h.say('PASS', f'the guard refuses, asks and lets through as it should ({len(GUARD_CASES) + 1} cases)')
+        h.say('PASS', f'the guard refuses, asks and lets through as it should ({len(GUARD_CASES) + 2} cases)')
 
     command = json.loads(c.read('.claude/settings.json'))['hooks']['PreToolUse'][0]['hooks'][0]['command']
     sh = git_sh()

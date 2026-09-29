@@ -2553,9 +2553,11 @@ here (`.claude/settings.json`).
 - **It asks the user first** before:
   - an edit to `docs/capabilities.md`, the patterns file, `.claude/` (the guard itself, and the local settings that
     could switch it off) or `.git/`;
-  - a commit while any gate file has changed, which also covers a file a script wrote rather than an edit;
-  - a push, since pushing is only on the user's word;
+  - a commit that may carry one of those, which also covers a file a script wrote rather than an edit;
   - a `gh api` call that writes, since that changes GitHub without passing a hook.
+- **Everyday work asks nothing** (the user, 2026-09-29: "I don't want to constantly have to confirm things"). The
+  first version also asked before every commit touching any gate file and before every push. That was a prompt per
+  commit of gate work, and one on each push the user had already asked for, so both went the same day.
 - **It fails closed.** If it can't run (no Python, a crash, input it can't read), the settings' command exits 2 and
   Claude Code refuses the action.
 - **It stays small.** It calls `py -3` or `python3` directly, about 0.3 s a call: the hooks' own finder would double
@@ -2564,7 +2566,8 @@ here (`.claude/settings.json`).
   preflight's "Dev scripts and hooks" holds `.claude/settings.json` to `ask` and `deny` rules and the one listed
   command; the guard script is read like every dev script. A file `.claude/settings.local.json` is left out of git.
 - **Proven:** the harness plants settings that do more (their own `env`, an allow list, another event, another
-  command), and runs the guard on 35 cases plus a commit with the gate changed. Staging a guard missing its
+  command), and runs the guard on 37 cases, among them a commit carrying `docs/capabilities.md` (asks) and one
+  carrying only `preflight.py` (doesn't). Staging a guard missing its
   `--no-verify` check, and a command that exits 1 instead of 2, made both tests fail (2026-09-29).
 - **Not a wall.** A determined script can still get round it. Pre-push, CI and the release checks are what catch that,
   and a weakened gate still shows up as a commit of its own.

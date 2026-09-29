@@ -96,7 +96,7 @@ preflight checks that the shipped DLL holds none of its types.
 
 **If you open this repo in Claude Code**, its `.claude/settings.json` runs `.claude/hooks/agent-guard.py` before each
 shell command and file edit the agent makes. It refuses commands that would get past the git hooks, and asks you
-before a change to what the gates allow, a push, or a write through `gh api`. It reads the command it's given, runs
+before a change to what the gates allow (by an edit or in a commit), or a write through `gh api`. It reads the command it's given, runs
 only `git status`, and changes nothing. The preflight holds the settings to that one command and to rules that ask
 or refuse, never ones that allow more. Other editors ignore the folder.
 
