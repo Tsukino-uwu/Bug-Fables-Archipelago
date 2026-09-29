@@ -172,6 +172,11 @@ runs. `Dev/Plugin.Dev.cs` holds the [Debug] settings, the console, probes and du
 (`DevAwakeEarly`, `DevAfterTick`...). FrameRate's measurements work the same way. A build without `Dev/` still compiles,
 and the calls into it vanish.
 
+**Lines kept to 120 characters** (2026-09-29, the limit `.editorconfig` states). A pass of line breaks and indentation
+only, proven by the compiled code: a Release and a Debug build without debug info came out byte-identical before and
+after (the builds are deterministic, so any difference would show). 903 lines were over 120; 144 are left, each a
+single string that only splitting would shorten, which changes the compiled code.
+
 **The seed's data in one record** (2026-09-28). What a login reads from `slot_data` moves from about 30
 separate fields on the connection into one immutable `SeedData`. **How "changed nothing" is proven:** the Debug setting
 `SeedDump` writes everything the mod read from the seed, one sorted line per entry, once a login brings it. It is taken

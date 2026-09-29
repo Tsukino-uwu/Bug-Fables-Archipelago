@@ -1307,3 +1307,22 @@ Newest last. What was tried, what happened, what the user said.
     showed compression on after its hooks moved.
   - The connection's table properties stay as forwards (about 80 readers).
 - **Next:** the wrap-and-trim pass (long lines, lean comments), proven by an identical Release DLL with no debug info.
+
+## 2026-09-29: the cleanup plan finished
+
+- **The weekly usage cap** stopped three wrapping agents midway overnight. Their partial edits were checked before use:
+  Release and Debug builds without debug info came out byte-identical to the reference (144A1E6A..., AB400200...).
+  Committed (c9f93a8), then finished (0ceefc9).
+- **The wrap-and-trim pass:**
+  - The apworld has no line over 120 (5cbdc8a: snapshot identical, fuzzer 0 of 10000).
+  - In the mod, 903 lines were over 120 and 144 are left, each a single string: 134 interpolated log lines and 10
+    plain literals. Splitting one would change the compiled code, and the identical-DLL proof would be lost.
+  - The setting descriptions were reflowed as whole joined texts (6ce29aa).
+  - A first attempt at splitting single literals left stubs like `+ "normal "` and read worse than a long line: it was
+    reverted.
+  - Comments were not trimmed beyond the traces: that would be an editorial pass with no mechanical proof.
+- **The user asked** what changing the compiled code would do. Nothing a player sees: the proof is what's kept.
+- **Waiting on the user:**
+  - a play-through of the Harmony change (phase 4) and the dev-tools split, on the dev build;
+  - a push.
+
