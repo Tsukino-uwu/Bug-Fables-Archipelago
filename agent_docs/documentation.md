@@ -1713,7 +1713,7 @@ place it counts frames instead of time first.
   re-decides interpolation every physics step, so the switch is undone before a flight starts. So the fix is the
   test, one change: the leader isn't interpolated while flying, in the same one decision (checked before the
   player's `LateUpdate`). If the slow motion stays, the cause is elsewhere and the change comes out. **Seen on screen
-  (2026-09-29, Monitor at 240 Hz):** "fly works now".
+  (2026-09-29, Monitor at 240 Hz):** "fly works now"; Kabbu and Leif following her, "they look the same as Vi".
 - **Random shakes re-rolled once per 1/60 s.** Some effects jump to a new random offset every frame, a blur at 240
   (seen: shaky text in conversations sharp at 60, blurry at 240). Their timing was already right; only the re-roll
   was per frame. Now, while the row is on, the offset holds between ticks: `FontEffects` (shaky and glitchy letters;
