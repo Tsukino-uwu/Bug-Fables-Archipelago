@@ -1565,5 +1565,8 @@ Newest last. What was tried, what happened, what the user said.
   once released; I first said #142 would retire our dead-socket close too, but its diff touches only the
   `System.Net.WebSockets` helper, which our net40 build doesn't use (the user's "those are fixes we won't have to
   worry about later?" prompted the check). Review items 24-28, Next 43.
+- **Posted upstream by the user:** MultiClient.Net #143 (2026-09-29), the cache bug, from the plain draft with their
+  own opening line ("Everything here was found with AI/LLM (opus5.5) ..."); I advised against linking our repo or
+  our fix (it would still point them at AI code). Our patch stays until a release fixes it.
 - **Next session:** `gh run list` first; push when told (the user: after the review); then Next 43, item 1, one step
-  at a time. The text client is Next 9, after the review's bugs.
+  at a time. The text client is Next 9, after the review's bugs. Now and then: look at #143 and #141.

@@ -152,7 +152,9 @@ After the slot_data decision, each kept item was checked again for a way Archipe
     returns its input unchanged, and the read uses the checksum uncleaned. No issue or pull request mentions it (six
     searches, 2026-09-29), and the file hasn't changed since 2024-05-27; PR #124 touches the same file but not this.
     Decided (the user, 2026-09-29): if reported, a text-only issue the user posts; never code from us. Our patch stays
-    until a fixed release. The draft is below.
+    until a fixed release. **Reported:** the user posted it as
+    [#143](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net/issues/143) (2026-09-29), from the draft below
+    with their own opening line.
 28. **One of our workarounds has a fix waiting upstream** (checked in each pull request's diff, 2026-09-29): #141,
     opened by someone else, turns on websocket-sharp's compression in the websocket-sharp helper and the DLL our net40
     build uses (`DLLs/websocket-sharp.dll`), so our compression switch can go once a release carries it and we have

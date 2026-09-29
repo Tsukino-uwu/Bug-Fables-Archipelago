@@ -398,7 +398,7 @@ be wrong.
       what to prepare for it.
     - **A second look at what we kept:** 24. the enemy shuffle in `generate_basic`; 25. items through the library's
       queue (to check first); 26. Archipelago's DeathLink yaml option, the panel switch kept too (decided
-      2026-09-29); 27. the library's cache bug: a text-only issue, drafted, posted by the user if they decide to;
+      2026-09-29); 27. the library's cache bug: reported by the user as MultiClient.Net #143, our patch until a fix;
       28. upstream #141, which would retire our compression switch once released (#142 doesn't cover our net40 build).
     - **Kept** (Archipelago has nothing for them) **and doesn't apply** (with why): on the review page.
 
@@ -431,9 +431,9 @@ be wrong.
     certificate. Next: a connection to archipelago.gg with it on, run once the user says so.
   - **MultiClient.Net 6.7.1's cache path used the server's game name and checksum unsanitised** (its
     `GetFileSystemSafeFileName` returns its input). **Fixed in the mod (2026-09-29, the mod guide's step 34): two
-    patches make both a plain file name; not yet seen in game.** Not reported upstream yet: checked again
-    (2026-09-29), nobody has reported or fixed it; a text-only issue is drafted (the review page, item 27), for the
-    user to post if they decide to. Never code from us in another project.
+    patches make both a plain file name; not yet seen in game.** Reported upstream by the user as MultiClient.Net
+    [#143](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net/issues/143) (2026-09-29; text only, never
+    code from us). Our patch stays until a release carries a fix.
 - **Horn rules:** written as `abilities: ["Horn Slash"]` since the horn became an item (build step 21): locations
   11, 19, 25, 30 and 32, and 31 through the Den's entrance (build step 13). Not location 2: the horn tutorial cuts its
   grass itself and played through with Leif alone (2026-09-25). **Upper Snakemouth, when it gets locations:** the big door in the door room stays shut until flag 14 (its closed
