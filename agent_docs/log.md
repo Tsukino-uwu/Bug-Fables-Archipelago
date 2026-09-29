@@ -1439,3 +1439,6 @@ Newest last. What was tried, what happened, what the user said.
   over the 68 commits and the harness. **The first CI run of the preflight, all green:** on Python 3.11 and 3.13 the
   tree, all history (28-39 s) and the harness (76 fixtures, total coverage), plus the libraries byte for byte against
   NuGet's package; `ci.yml` on 3.11-3.13. Read in the job logs, not just from the ticks.
+- **Upstream:** the user decided not to send the MultiClient.Net report for now ("unsure if they would appreciate AI
+  code or not"). The mod's patch stays the fix. Left for next time: the in-game checks (steps 33 and 34), and the
+  `[tls]` lines from a connection to archipelago.gg (`TlsProbe` is on in the game's config).
