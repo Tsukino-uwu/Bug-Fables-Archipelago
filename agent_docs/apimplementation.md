@@ -2356,6 +2356,10 @@ So it gets the strictest rules, read from its syntax tree, not by searching text
   - the dev build's dump tools, which never ship.
 
   Reflection on a type named in the code (Harmony's everyday tool) is not listed: the target is in plain sight.
+
+  **Text from the server is read in one place only (2026-09-29):** a player, item, location or game name, or the
+  seed's name, read anywhere but `Core/ServerText.cs` fails. So no new text path can skip its cleaning (the mod
+  guide, step 33).
 - **Dev scripts and hooks:**
   - Python is read from its syntax tree: no `eval`, no `exec`, no `shell=True`, no pickle, sockets or web modules.
   - PowerShell and shell are read with comments blanked: no running text as code, no encoded commands, no downloads,
@@ -2467,7 +2471,7 @@ history, free text), the test plants a real violation and checks that the sectio
 non-zero. It works in a throwaway clone outside the repo, with its link back to the repo removed. The clone holds what
 the next commit contains (HEAD plus everything staged), or, from pre-push, exactly the commit being pushed:
 1. **A clean baseline** in all three modes, so a failure afterwards is the plant's doing.
-2. **One fixture per kind of violation** (70 on 2026-09-29): a bidi override in a doc, a homoglyph in code, every
+2. **One fixture per kind of violation** (72 on 2026-09-29): a bidi override in a doc, a homoglyph in code, every
    credential format at once (each must be named), a home path inside the DLL, a library changed by one byte, a
    symlink, a submodule, a stale host row, a secret committed and then removed, and more. The fake credentials and
    paths are assembled at run time, so the test file holds none itself.
@@ -2475,7 +2479,9 @@ the next commit contains (HEAD plus everything staged), or, from pre-push, exact
    code. A commit made past the hooks is refused at push, and the test remote stays unchanged.
 4. **Coverage is total:** a section without a fixture in a mode it runs in fails the test, and so does a credential
    format or denied kind of call in the patterns file with no sample.
-5. **What must pass, passes:** a denied call that only sits in a comment must not trip the mod's section.
+5. **What must pass, passes:** a denied call that only sits in a comment must not trip the mod's section, and a
+   tree put back to the DLL's own sources must not count as stale. The staleness fixtures start from that tree:
+   between releases the real one is legitimately newer, which would hide what they plant.
 
 It takes about 25 s. **Tested the other way round (2026-09-29):** with the Secrets section made blind on purpose,
 all four of its fixtures failed the test. Writing the test also caught its own slips: a sample written out whole

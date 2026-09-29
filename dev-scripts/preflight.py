@@ -823,6 +823,8 @@ def compare_capabilities(out, heading, found, rows, reasonless, what):
 def mod_source(ctx, out):
     denied = {k: re.compile(v, re.M) for k, v in ctx.patterns['mod_denied'].items()}
     kinds = {k: re.compile(v, re.M) for k, v in ctx.patterns['mod_capabilities'].items()}
+    # Text the server decides reaches the game only through one cleaner (the game runs |commands| in text it shows).
+    raw_text, cleaner = re.compile(ctx.patterns['mod_server_text']['reads']), ctx.patterns['mod_server_text']['only_in']
     heading = 'Mod: what the code touches'
     rows, reasonless = capability_rows(ctx, heading)
     bad, found, count = [], set(), 0
@@ -836,6 +838,9 @@ def mod_source(ctx, out):
         if re.search(r'[A-Za-z_]\\u[0-9A-Fa-f]{4}|\\u[0-9A-Fa-f]{4}[A-Za-z_]', re.sub(r'"(?:\\.|[^"\\\n])*"', '', code)):
             bad.append(f'{f.path}: a \\u escape outside a string (an identifier spelled in escapes)')
         found |= {(f.path, k) for k, rx in kinds.items() if rx.search(code)}
+        if f.path != cleaner:
+            bad += [f'{f.path}:{line_of(code, m.start())}: {m.group(0)} read raw: text from the server goes through '
+                    f'{cleaner.rsplit("/", 1)[-1]}' for m in raw_text.finditer(code)]
     if count < 50:
         out.fail(f'only {count} mod source file(s) read: the listing is wrong')
         return
@@ -1612,7 +1617,7 @@ def load_patterns(files):
                 'ps1_capabilities', 'sh_denied', 'script_denied_modules', 'script_denied_builtins',
                 'script_denied_methods', 'script_capability_modules', 'script_capability_calls', 'dll_assembly_refs',
                 'dll_denied', 'dll_denied_names', 'dll_capabilities', 'dll_synthesized_members', 'dll_compiler_types',
-                'workflows', 'dependencies', 'capability_tables'}
+                'workflows', 'dependencies', 'capability_tables', 'mod_server_text'}
     if set(patterns) != expected:
         raise Unreadable(f'{PATTERNS} keys differ from what preflight reads: {sorted(set(patterns) ^ expected)}')
     for rx in list(patterns['secrets'].values()) + patterns['game_paths'] + patterns['decompiler_markers'] + [

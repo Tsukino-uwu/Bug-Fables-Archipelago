@@ -223,6 +223,7 @@
     "code written at run time": "\\bCSharpCodeProvider\\b|System\\.CodeDom|\\bDynamicMethod\\b|\\bILGenerator\\b|\\bAssemblyBuilder\\b",
     "screen capture": "\\bScreenCapture\\b"
   },
+  "mod_server_text": {"reads": "\\.Player\\??\\.(?:Name|Alias)\\b|\\.ItemDisplayName\\b|\\.ItemGame\\b|\\.LocationDisplayName\\b|\\.LocationGame\\b|RoomState\\.Seed\\b|(?<!GameStrings)\\.ItemName\\b(?!\\s*\\()|\\.LocationName\\b(?!\\s*\\()", "only_in": "mod/BugFablesAP/Core/ServerText.cs"},
   "mod_capabilities": {
     "writes files": "\\bFile\\.(?:Delete|Move|Copy|Write\\w*|Append\\w*|Create\\w*|Replace|Open|OpenWrite)\\b|\\bDirectory\\.(?:Create\\w*|Delete|Move)\\b|\\bnew\\s+(?:FileStream|StreamWriter)\\b",
     "reads files": "\\bFile\\.(?:Read\\w*|OpenRead|OpenText|Exists)\\b|\\bDirectory\\.(?:GetFiles|EnumerateFiles|GetDirectories|Exists)\\b|\\bnew\\s+StreamReader\\b",

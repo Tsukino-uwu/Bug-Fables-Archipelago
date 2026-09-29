@@ -175,6 +175,18 @@ def patch_bytes(c, rel, old, new):
     c.write(rel, data.replace(old, new, 1))
 
 
+def make_fresh(c):
+    """Puts back the build inputs of the commit built-from.txt names, so the committed DLL is current: between releases
+    the real tree is legitimately newer, which would hide what the staleness fixtures plant."""
+    commit = re.search(r'^commit: (\w+)', c.read('release/built-from.txt').decode(), re.M).group(1)
+    inputs = ['mod/BugFablesAP', 'global.json', 'nuget.config', 'Directory.Build.props']
+    then = set(c.git('ls-tree', '-r', '--name-only', commit, '--', *inputs).stdout.decode().split('\n')) - {''}
+    now = set(c.git('ls-files', '--', *inputs).stdout.decode().split('\n')) - {''}
+    for gone in sorted(now - then):
+        c.git('rm', '-q', '--', gone)
+    c.git('checkout', commit, '--', *inputs)
+
+
 def metadata_of(c):
     sys.path.insert(0, c.path('dev-scripts'))
     import dotnet_metadata
@@ -371,6 +383,11 @@ def fixtures():
         c.write('mod/BugFablesAP/Planted.cs', 'class Planted\n{\n    void Run()\n    {\n' + body + '\n    }\n}\n'
                 'class Planted\\u0041 { }\n')
 
+    @add('a server name read raw', 'Mod source', names=('.Player.Name read raw', 'RoomState.Seed read raw'))
+    def _(c):
+        c.write('mod/BugFablesAP/Planted.cs', 'class Planted { string A(dynamic i, dynamic s) => i.Player.Name '
+                '+ s.RoomState.Seed; }\n')
+
     @add('a denied call only in a comment', 'Mod source', expect='PASS')
     def _(c):
         c.write('mod/BugFablesAP/Planted.cs', '// ' + MOD_SAMPLES['runs programs'] + '\n/* '
@@ -411,13 +428,19 @@ def fixtures():
     def _(c):
         c.write('release/mod/extra.txt', 'x\n')
 
+    @add('the DLL\'s own sources are not stale', 'Release staging', expect='PASS', args=('--release',))
+    def _(c):
+        make_fresh(c)
+
     @add('sources changed since the DLL was built', 'Release staging', expect='WARN')
     def _(c):
+        make_fresh(c)
         c.append('mod/BugFablesAP/Core/Plugin.cs', '// changed')
 
     @add('a release with a stale DLL', 'Release staging', args=('--release',),
          names=('the committed DLL is older than its sources',))
     def _(c):
+        make_fresh(c)
         c.append('mod/BugFablesAP/Core/Plugin.cs', '// changed')
 
     @add('data after the last section', 'Shipped DLL structure', names=('bytes after the last section',))
@@ -642,7 +665,9 @@ def main():
                           ('history', lambda: c.preflight('--history', f'{base}~1..{base}')),
                           ('text', lambda: c.preflight('--text-stdin', 'baseline', stdin=b'plain release notes\n'))):
             code, report = run()
-            bad = [n for n, (st, _) in report.items() if st & {'FAIL', 'WARN'}]
+            # A committed DLL older than its sources is expected between releases: that one warning is allowed.
+            bad = [n for n, (st, lines) in report.items() if 'FAIL' in st or ('WARN' in st and not (
+                n == 'Release staging' and any('fine between releases' in line for line in lines)))]
             baselines[mode] = report
             if code != 0 or bad or not report:
                 h.say('FAIL', f'{mode}: the clean clone does not pass, so fixtures prove nothing: {", ".join(bad)}',
