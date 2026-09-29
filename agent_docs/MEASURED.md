@@ -512,6 +512,13 @@ slot of each can hold the mod's own state in the game's own save, with no new fo
   `GetKey` maps action 4 (confirm) to `joykeys[0]`, 5 (cancel) to `[1]`, 6 to `[2]`, 7 to `[3]`, 8 to `[4]` and
   9 to `[5]`. A first read of `joykeys[4]/[5]` as confirm/cancel was wrong; on screen, Start acted as "done".
 - **The game never reads typed text** (no `Input.inputString` anywhere); its name entry is a letter grid.
+- **Action 9 (Enter; Back on a gamepad) does six things** (2026-09-29, code read; the first seen by the user, the
+  rest not): in the field, the "help" (`PlayerControl.GetInput`, `PlayerControl.cs:341`: a party member talks about
+  what's in front, its `tattleid`, when flag 10 is set and Kabbu is in the party); in the pause menu, it opens window
+  6 (`PauseMenu.cs:383`), acts on the medal list on page 0 (`:687`), acts on the music list (`:895`) and toggles the
+  map's icons with action 7 (`:1399`); in the start menu, on an empty save slot with two or more secrets unlocked,
+  it starts a new file through menu 3 (`StartMenu.cs:631`). All through `MainManager.GetKey(9)`, so rebinding action
+  9 moves all six. For the in-game text client's key (`documentation.md`, step 2).
 
 ## Key-item grant sources, raw (2026-09-24) — SPOILERS for the whole game
 

@@ -103,7 +103,13 @@ A few decisions made first, because they shape everything after:
     kind), with hints and the server's other commands typed from the text line. Built the Archipelago way: the client
     library's message log (the server's `PrintJSON`), its kinds as the filter's categories (item sent, hint, join,
     leave, chat, goal, release, collect, countdown and the rest), its message parts for the colours, and `Say` for
-    chat and commands.
+    chat and commands. **The key and the menu** (2026-09-29, the user): Enter opens the text line in the field (the
+    overworld) and in battles; Enter again sends and closes it, and Enter on an empty line just closes it. No
+    gamepad button: typing needs a keyboard anyway. In the field this replaces the game's own use of Enter there
+    (action 9, the "help": a party member talks about what's in front; `MEASURED.md`, Input); in the pause and start
+    menus Enter keeps the game's uses. A **Chat menu** in the Archipelago panel holds the chat's on/off switch, the
+    filters and its other options; with the chat off, Enter is the game's everywhere, and with Archipelago off
+    nothing changes (vanilla stays vanilla).
   - **Item names are coloured the way Archipelago's clients colour them** (`NetUtils.py`): progression plum
     `#AF99EF`, useful slateblue `#6D8BE8`, trap salmon `#FA8072`, filler cyan `#00EEEE`.
 - **Read what others already solved.** We read the TEVI randomizer (another Unity mod), Pokémon Emerald's

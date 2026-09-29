@@ -87,7 +87,8 @@ be wrong.
    (2026-09-26), v0.2.0 (2026-09-27). The next one: `dev-scripts/release.ps1 -Version vX.Y.Z` after bumping both versions.
 9. **The chat feed**, then the in-game text client (see the design list in the mod guide, step 2), so players never
    need the Launcher's Text Client (2026-09-29: DeathLinks shown too, a filter per kind of message, hints and
-   commands from the text line). It is the answer to Next 43, item 18.
+   commands from the text line, Enter to type in the field and in battles, a Chat menu in the panel). It is the
+   answer to Next 43, item 18.
 10. **A "Quality of life" page in the Archipelago panel** (2026-09-25): on/off rows that speed the game
    up and make it smoother: skips first, others later. Battle tutorials next (the mod guide, step 10).
 11. **Map fast travel, built (2026-09-26; the mod guide, step 10), seen travelling to the Outskirts** (planned
