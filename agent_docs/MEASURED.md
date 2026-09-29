@@ -1233,7 +1233,9 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   map AI and was asked for its dig animations; also from a lone Leif acting other members' parts (build step 13).
   The game's own scenes show it too (2026-09-28, the log): Upper Snakemouth's boss scene (`Event182`) on a normal save,
   Archipelago off so `AnimGuard` off (no `[anim]` skips logged), two pairs each time the scene started; the mod animates
-  nothing there. So vanilla warns as well; the guard only quiets it with Archipelago on.
+  nothing there. So vanilla warns as well. Again in the Barren Lands (2026-09-29, the log): a normal save with *Use on
+  normal saves* on, the guard then off with Archipelago; about 70 pairs between Barren Lands CD, the Abandoned City
+  and the rock. The guard now also runs with that row on; its `[anim]` lines will name the source.
 - **An enemy's "outgrown" level, from its EXP** (2026-09-26, the enemy table dump and `MainManager.GetEXP`, for
   enemy scaling): a fight's EXP per enemy is `base - (level - 1) * 2.5`, clamped, so each enemy stops giving EXP near
   level `base / 2.5 + 1`. Ordinary enemies climb steadily through the game: Seedling 3.8, Cordyceps Ant 4.6, Underling

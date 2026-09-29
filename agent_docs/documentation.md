@@ -1130,7 +1130,8 @@ Layer Index '-1'"), 68 times in one session, and play nothing. Every character's
 `EntityControl.SetAnim`, which calls `Animator.CrossFadeInFixedTime(name, time)` with no layer. `AnimGuard.cs`
 swaps those two calls for a check: a state found on any layer plays as before; a missing one is skipped (what the
 game did anyway) and logged once per controller (`[anim] BeeBoss(Clone) (BeeBoss) has no state 'Walk'`), which is
-also the list for mapping a missing animation to the closest one later. Only while Archipelago is enabled. **Tested
+also the list for mapping a missing animation to the closest one later. Only while Archipelago is enabled, or with
+*Use on normal saves* (step 18). **Tested
 (2026-09-26):** with a Bee Boss look walking like an Underling, the count stayed at 68 and one `[anim]` line appeared
 instead. **The game's direct `anim.Play("name")` calls** (about 30: battles, events, the map, menus) all end in
 Unity's `Animator.Play(string, int, float)`, so a prefix there gives them the same check (the asked layer, or any
@@ -1140,7 +1141,8 @@ it.
 **Unity's glow-colour error, handled like the animation warnings (2026-09-26):** a light in Rubber Prison's cell
 block has a material without the glow colour the game's `GlowTrigger` reads, so Unity logged an error on arrival
 (harmless: the value is only written back to the same missing property). `GlowGuard.cs` swaps the three reads for one
-that checks first and reads black, logging each material once; only while Archipelago is enabled.
+that checks first and reads black, logging each material once; only while Archipelago is enabled, or with *Use on
+normal saves* (step 18).
 
 **A member added mid-map meets the enemy-only walls (2026-09-26):** after adding Kabbu on Outskirts East,
 walls only enemies should bump into blocked the party. A map load tells those walls to ignore each character, and the
@@ -1468,18 +1470,22 @@ deliberate exception to "vanilla stays vanilla" that only the project owner coul
   long value already did.
 - **What it turns on, with Archipelago off:** the Settings rows to both pages (step 8), Fast text, the scenes Skip
   cutscenes skips or speeds by, Travel (Warp to Start goes to the game's own start), Medal prices, Difficulty,
-  Detector, Enemy scaling, the EXP and berry multipliers (step 19), Uncap FPS (step 24) and skipping the game's
-  5-second forced collection (step 25).
+  Detector, Enemy scaling, the EXP and berry multipliers (step 19), Uncap FPS (step 24), skipping the game's
+  5-second forced collection (step 25), and the guards against missing animations and glow colours (step 11).
+  **Added (2026-09-29):** the user saw the animation warnings on a normal save with the row on, in the Barren Lands,
+  where the game warns on its own; asked, they chose the guards follow the row. Nothing changes on screen.
 - **What it never turns on:** anything tied to a seed. The intro skip (its end sends the first check and makes the
   seed's start), items, checks, the shuffles, the Detector's check beeps, boss prizes paid on any difficulty (they are
   checks), Item animation (only items from the server), and the achievement guard.
 - **How:** one `settingsOn` in `Plugin.cs` (Archipelago enabled, or this row) goes to the modules behind the two pages
   in place of the Archipelago switch: `MedalAssist` (which keeps the Archipelago switch for boss prizes),
-  `EnemyScaling`, `InGameSettings`, `Multipliers`, `FrameRate`, `ClockCleanup`, the Travel buttons, and `QualityOfLife.SettingsOn` (fast text, the scene list, and
+  `EnemyScaling`, `InGameSettings`, `Multipliers`, `FrameRate`, `ClockCleanup`, `AnimGuard`, `GlowGuard`, the Travel
+  buttons, and `QualityOfLife.SettingsOn` (fast text, the scene list, and
   `ShopSwap`'s prices). The seed's start and the entrance randomizer's forced Warp answer only with Archipelago
   enabled, so a normal save never warps to a seed's start.
 
-**Status:** built (2026-09-26), the build succeeds, not yet seen in game.
+**Status:** built (2026-09-26), the build succeeds; the guards joined (2026-09-29), the build succeeds, not yet
+seen in game.
 
 ## 19. EXP and berry multipliers: bars like the volume rows
 

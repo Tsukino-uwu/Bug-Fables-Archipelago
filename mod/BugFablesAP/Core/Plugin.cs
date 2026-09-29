@@ -69,8 +69,6 @@ namespace BugFablesAP
             ItemSwap.Enable(Log, connection, () => randomizerEnabled.Value);
             KeptOpen.Enable(Log, connection, () => randomizerEnabled.Value);
             EnemyShuffle.Enable(Log, connection, () => randomizerEnabled.Value);
-            AnimGuard.Enable(Log, () => randomizerEnabled.Value);
-            GlowGuard.Enable(Log, () => randomizerEnabled.Value);
             difficulty = Config.Bind("Archipelago", "Difficulty", "Normal", new ConfigDescription(
                 "Normal leaves it to the game; Hard acts as if the Hard Mode medal were equipped; Hardest as if the "
                 + "save had the HARDEST code, never written into the save. In a seed, boss prize medals are paid out "
@@ -91,6 +89,8 @@ namespace BugFablesAP
                 + "Nothing tied to a seed does (items, checks, the shuffles, the intro skip). Off (the default) keeps "
                 + "normal saves vanilla. Switch it in the Archipelago panel.");
             Func<bool> settingsOn = () => randomizerEnabled.Value || ApMenu.NormalSaves.Value;
+            AnimGuard.Enable(Log, settingsOn);
+            GlowGuard.Enable(Log, settingsOn);
             MedalAssist.Enable(Log, () => randomizerEnabled.Value, settingsOn, () => difficulty.Value == "Hard",
                 () => difficulty.Value == "Hardest", () => detector.Value);
             QualityOfLife.Enable(Log, Config, () => randomizerEnabled.Value);

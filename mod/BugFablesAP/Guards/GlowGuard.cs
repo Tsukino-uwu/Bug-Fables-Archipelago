@@ -14,17 +14,17 @@ namespace BugFablesAP
     // property, so a material without it gets black instead, silently; each one is logged once.
     internal static class GlowGuard
     {
-        private static Func<bool> randomizerOn;
+        private static Func<bool> settingsOn;
         private static ManualLogSource log;
         private static readonly HashSet<string> reported = new HashSet<string>();
 
         private static readonly MethodInfo GetColorByName = AccessTools.Method(typeof(Material),
             nameof(Material.GetColor), new[] { typeof(string) });
 
-        internal static void Enable(ManualLogSource logger, Func<bool> randomizerEnabled)
+        internal static void Enable(ManualLogSource logger, Func<bool> settingsEnabled)
         {
             log = logger;
-            randomizerOn = randomizerEnabled;
+            settingsOn = settingsEnabled;
             if (GetColorByName == null)
             {
                 log.LogError("[glow] NOT installed (Material.GetColor not found); a light without a glow colour keeps logging an error.");
@@ -57,7 +57,7 @@ namespace BugFablesAP
         // Same stack as Material.GetColor(string): the material, the property name.
         private static Color GetColor(Material material, string name)
         {
-            if (randomizerOn == null || !randomizerOn() || material == null || material.HasProperty(name))
+            if (settingsOn == null || !settingsOn() || material == null || material.HasProperty(name))
             {
                 return material.GetColor(name);
             }

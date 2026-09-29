@@ -1587,3 +1587,15 @@ Newest last. What was tried, what happened, what the user said.
 - **A fact-check agent found three errors:** the preflight test's fixture count (76 now, not 72; the stale 72 in
   `apimplementation.md`'s preflight step is corrected too), MeshGhost's hooks (one, its own scan, not preflight), and
   prefixes returning false: HarmonyX, which BepInEx ships, still runs the other prefixes, unlike upstream Harmony.
+
+## 2026-09-29 (night, later): the animation warnings on a normal save
+
+- **The user pasted** "Animator.GotoState: State could not be found" / "Invalid Layer Index '-1'" from the console,
+  playing chapter 5 on a normal save with *Use on normal saves* on. The log: about 70 pairs in the Barren Lands, the
+  Archipelago mod disabled, so `AnimGuard` (then gated on Archipelago only) was off. The game's own warnings, as in
+  Upper Snakemouth's boss scene on 2026-09-28; nothing of the mod's plays there.
+- **Asked** whether the guards should follow the row, given "we shouldn't try to change vanilla more than we already
+  do" (2026-09-27). The user: yes, follow the row; "the ap mod can be used with vanilla, if toggled for it so".
+  `AnimGuard` and `GlowGuard` now take `settingsOn` (mod guide step 18). The build succeeds; copied in, the game's
+  reload waiting for a fight to end. Not yet seen: the next Barren Lands walk shows whether `[anim]` lines replace the
+  warnings, and names what the game asks for.

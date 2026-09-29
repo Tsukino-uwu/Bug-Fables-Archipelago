@@ -14,7 +14,7 @@ namespace BugFablesAP
     // on screen and the log stays clean; each missing state is logged once per controller.
     internal static class AnimGuard
     {
-        private static Func<bool> randomizerOn;
+        private static Func<bool> settingsOn;
         private static ManualLogSource log;
         private static readonly HashSet<string> reported = new HashSet<string>();
 
@@ -22,10 +22,10 @@ namespace BugFablesAP
             nameof(Animator.CrossFadeInFixedTime),
             new[] { typeof(string), typeof(float) });
 
-        internal static void Enable(ManualLogSource logger, Func<bool> randomizerEnabled)
+        internal static void Enable(ManualLogSource logger, Func<bool> settingsEnabled)
         {
             log = logger;
-            randomizerOn = randomizerEnabled;
+            settingsOn = settingsEnabled;
             if (CrossFade == null)
             {
                 log.LogError("[anim] NOT installed (Animator.CrossFadeInFixedTime not found); missing animation states keep warning.");
@@ -49,7 +49,7 @@ namespace BugFablesAP
             [HarmonyPrefix]
             private static bool BeforePlay(Animator __instance, string stateName, int layer)
             {
-                if (randomizerOn == null || !randomizerOn() || __instance == null || __instance.layerCount == 0)
+                if (settingsOn == null || !settingsOn() || __instance == null || __instance.layerCount == 0)
                 {
                     return true;
                 }
@@ -121,7 +121,7 @@ namespace BugFablesAP
         // Same stack as Animator.CrossFadeInFixedTime(string, float): the animator, the state, the duration.
         private static void Play(Animator anim, string state, float duration)
         {
-            if (randomizerOn == null || !randomizerOn() || HasStateOnAnyLayer(anim, Animator.StringToHash(state)))
+            if (settingsOn == null || !settingsOn() || HasStateOnAnyLayer(anim, Animator.StringToHash(state)))
             {
                 anim.CrossFadeInFixedTime(state, duration);
                 return;
