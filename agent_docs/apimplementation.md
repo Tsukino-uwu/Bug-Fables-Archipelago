@@ -2845,6 +2845,10 @@ rebuilding archipelago inside the game just to connect/work with archipelago". A
 wrong, it drifts as Archipelago changes, and nobody who knows Archipelago can read it. **Recommendations too**
 (2026-09-29, the user: "we should do all standards & recommendations that Archipelago mentions"): what the docs call
 "should", "recommended" or "encouraged" (option groups, presets, a bug report page) is done like a requirement.
+**Read all of it** (2026-09-29, the user: "we should read and take a look at everything/anything Archipelago. don't
+skip/assume"): every doc, every generic guide and the reference world, APQuest, including the ones that look meant for
+someone else (the world maintainer's duties, the website's API); what doesn't apply is written down as not applying,
+with why.
 
 **The connection: a library.** Writing all of the above by hand is possible, but libraries exist for most languages;
 the protocol doc lists them. For C# (Unity, BepInEx) it's **Archipelago.MultiClient.Net**. It handles:
