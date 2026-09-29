@@ -63,7 +63,7 @@ Both earlier releases pass (v0.1.0 and v0.2.0, checked 2026-09-29).
 
 **The apworld** runs on whichever machine generates, the archipelago.gg website's included, and Archipelago imports
 it on every start.
-- It imports only the names the preflight lists: 30 from Archipelago and Python's standard library, plus
+- It imports only the names the preflight lists: 36 from Archipelago and Python's standard library, plus
   `json.loads`, `logging` and `pkgutil.get_data`.
 - It reads its own data files, which ship inside it, and nothing else.
 - It writes no file, opens no connection, runs no program and evaluates no text as code.

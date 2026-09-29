@@ -45,6 +45,7 @@ either one wrong).
 - [2026-09-29: the animation warnings on a normal save](#2026-09-29-the-animation-warnings-on-a-normal-save)
 - [2026-09-29: six questions, disguised traps, Vi's flight](#2026-09-29-six-questions-disguised-traps-vis-flight)
 - [2026-09-29: Room Swap, Uncap FPS Off by default](#2026-09-29-room-swap-uncap-fps-off-by-default)
+- [2026-09-30: Archipelago's entrance randomizer, rooms as regions, Decoupled, plando](#2026-09-30-archipelagos-entrance-randomizer-rooms-as-regions-decoupled-plando)
 
 ## 2026-09-24: the project starts
 
@@ -1688,3 +1689,26 @@ either one wrong).
   shape test in 50 of 50 seeds, dropping the part rule breaks the parts test in 93 of 100, ignoring fixed links 85
   of 100. 458 tests, the Logic Test check and the fuzzer (0 of 10000) pass; seeds generated alone and with APQuest.
   Not yet seen in game.
+
+## 2026-09-30: Archipelago's entrance randomizer, rooms as regions, Decoupled, plando
+
+- **The log got an index** (the user: it will be the longest file; "easy to read, and also easier to search/grep"),
+  and its headings lost their time words (the user: "later, morning, end of session… there is already a date").
+  `doc-coverage.py` now refuses a heading that isn't `date: title` in date order, or missing from the index.
+- **"Can we just implement proper archipelago entrance rando now … remove doors.py"** (the user; "whatever
+  Archipelago does", and the rule never to reinvent it). Archipelago's randomizer shuffles `Entrance`s and no door was
+  one, so first every map became a region and every door an entrance, the big regions' needs kept on each spot as
+  `reach`; 2100 random item states under 7 option sets reached exactly the same spots before and after. Then
+  `randomize_entrances` replaced `doors.py`, its pairings the same `door_targets`, a test proving the mod does what the
+  logic proved. The preflight's import list was widened for it (the user's call).
+- **Maps nothing leads into:** the reachability test found `SnakemouthEmpty`, `TestRoom` and `UndergroundBar`; the
+  user: the first two look empty/test maps, the bar is reached by talking to someone in town (now a one-way transfer).
+- **Room Swap was wrong twice**, found by the same test once the swap ran on the region graph: a one-way fixed door
+  (19 of 39, drops mostly) let an area be entered on its far side (seed 6), and a gated door moving with its room could
+  close the only way on (seed 4, the Golden Path door). Fixed by joining only two-way fixed doors and checking each try
+  as Archipelago's randomizer checks (13 of 200 tries failed before, 0 after).
+- **Decoupled** added (build step 31), and **connection plando** (build step 32) after the user asked why not now and
+  then set the direction: "we should try to support all available things archipelago has/does, that includes plando"
+  (written into CLAUDE.md's Archipelago rule and §8; Next 46 holds the sweep of the other optional features).
+- Every step: 496 tests, the Logic Test check and the fuzzer (0 of 10000) pass; plando seeds generated through
+  Archipelago's Generate in each mode, alone and with APQuest. Nothing seen in game yet: the user is playing vanilla.
