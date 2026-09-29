@@ -6,7 +6,9 @@ param(
     [int] $Jobs = [Environment]::ProcessorCount,
     [string[]] $With = @()  # other worlds in every fuzzed room, by folder name (e.g. apquest)
 )
-# Not 'Stop': Windows PowerShell turns a Python warning on stderr into a terminating error. Exit codes decide.
+# Not 'Stop': Windows PowerShell turns a Python warning on stderr into a terminating error. Exit codes decide. Set here,
+# since a host may start with another (CI runs this under pwsh on Linux).
+$ErrorActionPreference = 'Continue'
 $env:SKIP_REQUIREMENTS_UPDATE = '1'
 Push-Location $Archipelago
 try {
@@ -24,9 +26,10 @@ try {
     }
 
     Write-Host "== Fuzzer: $Runs seeds"
-    $games = @('-g', 'bug_fables') + ($With | ForEach-Object { '-g', $_ })
+    $games = @('-g', 'bug_fables')
+    foreach ($world in $With) { $games += '-g', $world }
     python fuzz.py -r $Runs -j $Jobs -n 1 @games --skip-output | Select-Object -Last 1
-    $report = Get-Content -Raw 'fuzz_output\report.json' | ConvertFrom-Json
+    $report = Get-Content -Raw 'fuzz_output/report.json' | ConvertFrom-Json
     $stats = $report.stats
     foreach ($game in $report.errors.PSObject.Properties) {
         # One line per error kind: player names differ per run, so they are folded out.
@@ -38,5 +41,6 @@ try {
     Write-Host ("Tests: {0}" -f $(if ($testsFailed) { 'FAILED' } else { 'passed' }))
     Write-Host "Logic Test check: $logicTest"
     if ($testsFailed -or $logicTest -eq 'FAILED' -or $stats.failure -gt 0 -or $stats.timeout -gt 0) { exit 1 }
+    exit 0
 }
 finally { Pop-Location }

@@ -152,7 +152,8 @@ The tests check the option sets we thought of; the [Archipelago-fuzzer](https://
 generates seeds from random yamls and catches the rare combination that fails. **Whenever the tests run, the fuzzer
 runs too** (2026-09-28); 10000 seeds take a few minutes.
 
-1. Once: copy its `fuzz.py` (and `hooks/`) to the root of your Archipelago checkout.
+1. Once: copy its `fuzz.py` (and `hooks/`) to the root of your Archipelago checkout. We use commit `53686ba`
+   (`fuzz.py` 0.6.2, 2026-06-09); CI pins the same one.
 2. `dev-scripts/test-apworld.ps1 -Archipelago <your checkout>` runs the tests, the Logic Test check (next section),
    then the fuzzer (`fuzz.py -r 10000 -n 1 -g bug_fables --skip-output`: one Bug Fables yaml per seed), and prints each
    error with its count. `-With apquest` puts another world in every room; `-Runs` changes the count. It fails unless
@@ -162,6 +163,13 @@ runs too** (2026-09-28); 10000 seeds take a few minutes.
    A new run replaces `fuzz_output`, so copy anything you still need first.
 
 Exit code 1 only means some runs failed. The goal is 0 failures in 10000.
+
+**CI runs the same script on every push** (since 2026-09-29): `ci.yml`'s `fuzz` job installs the fuzzer and the
+Logic Test at the commits it pins, runs `test-apworld.ps1` under `pwsh` on Linux, and stops after 30 minutes. A failed
+run keeps `fuzz_output` as the artifact `fuzz-failures` for 14 days: download it and regenerate a run as in step 3.
+**Nobody waits on CI** (the user, 2026-09-29): after a push, work goes on. GitHub emails whoever pushed when a run
+fails, and the agent reads `gh run list` once when a session starts and fixes anything red first. Only `release.ps1`
+waits for green, on purpose.
 
 ## Play-testing the logic: the Logic Test apworld
 
@@ -185,7 +193,7 @@ arrive. Every location becomes a check you must do, shops included, and nothing 
 
 1. Once: copy `worlds/logic_test` from palex00's fork (branch `logic-test-apworld`) into your Archipelago checkout's
    `worlds/`, never into this repo. We use commit `795f13b` (world 0.4.0, 2026-09-28); its own 27 tests pass at our
-   tag 0.6.7 (2026-09-29). Read a newer commit before using it (`licensing.md`).
+   tag 0.6.7 (2026-09-29). CI pins the same one. Read a newer commit before using it (`licensing.md`).
 2. `test-apworld.ps1` runs `dev-scripts/logic-test-check.py` whenever `worlds/logic_test` is there. The Logic Test's
    second generation must equal the seed we generated. When they differ, the tool fills the gaps from whatever is left
    over without a word, and a stall could come from the mismatch instead of the logic. The check compares the copy's

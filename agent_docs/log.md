@@ -1474,3 +1474,10 @@ Newest last. What was tried, what happened, what the user said.
     event, so it would read as an early key (from `compute_spheres`).
   - **Its data package:** 2,184,957 bytes after inflating, sent to every client in the room. Next: the game
     connects to such a room, then a seed played through.
+- **CI, the user's call:** the Crystal dev runs tests and fuzzing on every commit and acts only on the failure email.
+  We do the same: `ci.yml` gains a `fuzz` job (`test-apworld.ps1` under `pwsh`, the fuzzer at `53686ba`, the Logic
+  Test at `795f13b`, 30-minute limit, failed runs kept as an artifact), and the build moves out of the 3.13 leg into
+  its own job. No one waits on CI after a push; `gh run list` once when a session starts (the agent's memory).
+  Actions are free on standard runners for a public repo (GitHub's billing docs, 2026-09-29). `test-apworld.ps1`
+  now sets its own error preference and builds the `-g` list with a loop, for `pwsh` on Linux. Not run on
+  Linux yet: no `pwsh` here, so the first push is its first run. Locally: 0 of 10000.

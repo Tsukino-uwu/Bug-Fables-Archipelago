@@ -450,7 +450,8 @@ key is refused; with the check switched off, it fails.
 We wrote **tests**, including one that proves the gate really needs the permit. To make sure that test
 could fail, we removed the rule on purpose, watched the test fail, and put the rule back. Archipelago's
 own test suite passes for it too. Since 2026-09-28 every apworld change is also fuzzed: 10000 seeds from random
-yamls (`development.md`, "Fuzzing the apworld"), which finds the option combinations no test thought of. A change
+yamls (`development.md`, "Fuzzing the apworld"), which finds the option combinations no test thought of; since
+2026-09-29 CI fuzzes every push too (build step 17). A change
 meant to alter nothing (a refactor) is also proven with a seed snapshot: fixed seeds before and after, whose slot_data
 and spoilers must come out identical (`development.md`, "Proving a refactor changed nothing").
 
@@ -1829,9 +1830,13 @@ BepInEx is not bundled; the player installs it first.
    at a press-Enter prompt with no one to press it), runs our tests, and generates three presets
    (default, every experimental option on, every location toggle off) with APQuest as a second game. The whole suite
    takes about 3 seconds, so the matrix splits by Python version, not by test file: every job pays the install.
-   The 3.13 leg also builds the apworld (`Launcher.py "Build APWorlds" -- "Bug Fables"`, with our `LICENSE` copied
-   in) and the template (`Launcher.py "Generate Template Options" -- --skip_open_folder`), then generates once more
-   the way a player would: the built `.apworld` in `custom_worlds`, the template as the yaml, no loose world.
+   A `build` job of its own (on 3.13) builds the apworld (`Launcher.py "Build APWorlds" -- "Bug Fables"`, with our
+   `LICENSE` copied in) and the template (`Launcher.py "Generate Template Options" -- --skip_open_folder`), then
+   generates once more the way a player would: the built `.apworld` in `custom_worlds`, the template as the yaml, no
+   loose world. Until 2026-09-29 those were extra steps of the 3.13 leg, and a changed matrix would have stopped them
+   without a word, until the release found no files. A `fuzz` job runs `test-apworld.ps1` as we do locally: the
+   tests, the Logic Test check and 10000 fuzzed seeds, with the fuzzer and the Logic Test at pinned commits
+   (`development.md`, "Fuzzing the apworld"). No one waits on CI after a push; a failure arrives by email.
 4. **The release** (`.github/workflows/release.yml`, run by hand): a guard first (the version is `vX.Y.Z` and
    matches `Plugin.cs` and `world_version`; the tag is free; nothing unpublishable in the highlights or in any commit
    subject the generated notes will publish, checked by the preflight's text rules since 2026-09-29, build step 28),
