@@ -30,7 +30,7 @@ namespace BugFablesAP
         {
             MainManager mm = MainManager.instance;
             ArchipelagoSession session = connection.Session;
-            string seed = session?.RoomState.Seed;
+            string seed = ServerText.SeedOf(session);
             if (mm == null || MainManager.map == null || mm.flagstring == null || mm.flagvar == null
                 || string.IsNullOrEmpty(seed))
             {
@@ -74,7 +74,7 @@ namespace BugFablesAP
                 : session == null ? "not connected"
                 : matches == null ? "no save in play"
                 : matches == false
-                    ? $"this save belongs to seed {mm.flagstring[SeedSlot]}, not {session.RoomState.Seed}"
+                    ? $"this save belongs to seed {mm.flagstring[SeedSlot]}, not {ServerText.SeedOf(session)}"
                 : connection.ItemKinds == null
                     ? "the seed's item table isn't loaded" // skipping would count the item as given
                 : Busy(mm);
@@ -115,14 +115,14 @@ namespace BugFablesAP
                 if (waitingAt != given)
                 {
                     log.LogInfo(
-                        $"[recv] item {given + 1} ({item.ItemDisplayName}) waits: the bag and storage are both full");
+                        $"[recv] item {given + 1} ({item.ShownItem()}) waits: the bag and storage are both full");
                     waitingAt = given;
                 }
                 return; // no room yet: try again next frame, in order
             }
             mm.flagvar[CountSlot] = given + 1;
-            log.LogInfo($"[recv] item {given + 1} of {received.Count}: {item.ItemDisplayName} from {item.Player.Name} "
-                + $"({item.LocationDisplayName}): {outcome}");
+            log.LogInfo($"[recv] item {given + 1} of {received.Count}: {item.ShownItem()} from {item.ShownPlayer()} "
+                + $"({item.ShownLocation()}): {outcome}");
             ShowIfWanted(item, given);
         }
 
@@ -136,7 +136,7 @@ namespace BugFablesAP
             for (int i = 0; i < given; i++)
             {
                 ItemInfo item = received[i];
-                if (item.ItemGame == ApConnection.Game && connection.ItemKinds != null
+                if (item.ShownGame() == ApConnection.Game && connection.ItemKinds != null
                     && connection.ItemKinds.TryGetValue(item.ItemId, out int kind) && kind == wanted)
                 {
                     yield return ItemIds.GameId(item.ItemId, kind);
@@ -169,14 +169,14 @@ namespace BugFablesAP
             ItemSwap.DescribeOurs(item.ItemId, kind, out string name, out UnityEngine.Sprite sprite,
                 out UnityEngine.Color? color);
             color = ItemSwap.StarburstColor(item.Flags) ?? color;
-            HoldUps.Received(ItemSwap.FromText(name, item.Flags, item.Player.Name), sprite, color,
+            HoldUps.Received(ItemSwap.FromText(name, item.Flags, item.ShownPlayer()), sprite, color,
                 ItemSwap.ArticleOf(item.ItemId, kind));
         }
 
         // Returns what happened, or null when the item must wait.
         private string Give(MainManager mm, ItemInfo item)
         {
-            if (item.ItemGame != ApConnection.Game || item.ItemId < ItemIds.Base)
+            if (item.ShownGame() != ApConnection.Game || item.ItemId < ItemIds.Base)
             {
                 return "not a Bug Fables item, skipped";
             }

@@ -102,7 +102,7 @@ This is what the mod does with what they send, what it checks, and what it doesn
 
 | What arrives | Where it goes | Checked on arrival | Known gaps |
 |---|---|---|---|
-| **Player and item names** | The "You got X's item" boxes, shop names and descriptions, and pickups. The last one shown is also kept in the save | **Not checked** | See the first gap below. **Being fixed first.** |
+| **Player and item names**, and the seed's name | The "You got X's item" boxes, shop names and descriptions, and pickups. The last one shown, and the seed's name, are also kept in the save | Since 2026-09-29, all through one class (`Core/ServerText.cs`): the game's command mark `|`, the save's separators, and control and format characters are dropped, and each string is kept to 100 characters. The preflight refuses a raw read anywhere else | See the first gap below: fixed, not yet seen in game |
 | **slot_data** (the seed's settings, at login) | The mod's features: which spots are locations, doors, enemies, the starting member, the goal | Read whole before anything uses it. A value of the wrong type fails the login, which is retried, and a missing setting turns its feature off | **Values are not range-checked.** An out-of-range flag or medal number throws an error; in per-frame code it is caught and logged, inside a game hook it is not. Enemy ids, the starting member and dialogue flags go to the game unchecked |
 | **Received items** | The bag, key items, medals, berries, party members | The received count in the save is bounds-checked, and unknown item ids and kinds are skipped | Item numbers have no upper bound: an out-of-range one is added, and then its "You got" box fails |
 | **DeathLink** | A Game Over, only when the player turned DeathLink on (on the map, back to the last save) | Joined with any death already waiting | Who sent it isn't checked; anyone in the room with DeathLink on can send one, as DeathLink is meant to work. The waiting list has no limit |
@@ -110,12 +110,12 @@ This is what the mod does with what they send, what it checks, and what it doesn
 
 **Gaps outside that table**, found in the same reading:
 
-1. **Names can hold game text commands.** Bug Fables' text engine runs commands written between `|` marks (colours,
-   but also setting story flags, money, giving items, moving the party). It reads a substituted name as more text to
-   run (`MainManager.SetText`, the `string` command). So a player or item name containing such a command would run it
-   in the game of whoever receives or sees that item. A name holding the save file's own separators could also
-   corrupt the save when it is next loaded. Typed input in the mod's menu is already stripped of `|`; names from the
-   server are not yet. **This is the first fix after this page.**
+1. **Names could hold game text commands (fixed 2026-09-29).** Bug Fables' text engine runs commands written
+   between `|` marks (colours, but also setting story flags, money, giving items, moving the party). It reads a
+   substituted name as more text to run (`MainManager.SetText`, the `string` command). So until then a player or
+   item name containing such a command would have run it in the game of whoever received or saw that item. A name
+   holding the save file's own separators could also have corrupted the save when it was next loaded. Every such
+   string now goes through `Core/ServerText.cs` first (the mod guide, step 33); the game shows it but can't run it.
 2. **wss:// accepts any certificate.** websocket-sharp's default certificate check accepts everything, and the mod
    doesn't change it. When a bare address is typed, MultiClient.Net tries wss:// first and falls back to plain ws://
    if that fails. On a network you don't trust, the room password (sent at login) could be read or the connection

@@ -8,6 +8,7 @@ Sources are grouped in folders under `mod/BugFablesAP/`; the namespace is `BugFa
 
 | File | What it does | Notes |
 |---|---|---|
+| [`ServerText.cs`](../mod/BugFablesAP/Core/ServerText.cs) | Every string the server or another game decides, made safe before the game shows or saves it: no `|` commands, no save separators, 100 characters at most. | [documentation § 33. Text from the server, shown safely](documentation.md#33-text-from-the-server-shown-safely) |
 | [`BugFablesAP.csproj`](../mod/BugFablesAP/BugFablesAP.csproj) | The build: the game DLL by HintPath, the net40 library references, every package at one exact version, restored locked. | [documentation § 32. A release DLL anyone with the game can rebuild](documentation.md#32-a-release-dll-anyone-with-the-game-can-rebuild-byte-for-byte)<br>[documentation § 4. Get a mod loader running](documentation.md#4-get-a-mod-loader-running)<br>[apimplementation § Build step 5](apimplementation.md#build-step-5-a-compressed-connection)<br>[development § The mod](development.md#the-mod) |
 | [`packages.lock.json`](../mod/BugFablesAP/packages.lock.json) | Every package the build restores, with its content hash; a restore that would change one fails. | [documentation § 32. A release DLL anyone with the game can rebuild](documentation.md#32-a-release-dll-anyone-with-the-game-can-rebuild-byte-for-byte) |
 

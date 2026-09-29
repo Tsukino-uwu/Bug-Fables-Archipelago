@@ -46,6 +46,7 @@ anyone curious about the process, or thinking of doing the same for another game
 30. [Healing crystals: every save crystal yellow](#30-healing-crystals-every-save-crystal-yellow)
 31. [Auto-save between rooms: a death costs one room](#31-auto-save-between-rooms-a-death-costs-one-room)
 32. [A release DLL anyone with the game can rebuild, byte for byte](#32-a-release-dll-anyone-with-the-game-can-rebuild-byte-for-byte)
+33. [Text from the server, shown safely](#33-text-from-the-server-shown-safely)
 
 ## Where it stands
 
@@ -1980,3 +1981,38 @@ recipe is in `docs/reviewing.md`), or decompile the DLL and read it.
 
 *Code: `dev-scripts/build-release.ps1`; `mod/BugFablesAP/BugFablesAP.csproj`, `packages.lock.json`; `nuget.config`,
 `global.json`, `Directory.Build.props`.*
+
+## 33. Text from the server, shown safely
+
+**Found by the review (2026-09-29, apimplementation.md build step 28):** the names that reach the game from outside
+went into its text as they came. They are other players' names, other games' item names, and the seed's name, which
+the save keeps. Two things in the game's own code make that unsafe:
+- **The text engine runs commands written between `|` marks.** Colours, but also setting story flags, changing money,
+  giving items, moving the party. It reads a substituted string as more text to run: the `string` command puts
+  `flagstring[n]` into the line and steps back to parse it (`MainManager.SetText`, `MEASURED.md`). So a player called
+  `|flag,500,true|` would have set flag 500 in the game of anyone who received an item from them.
+- **A save splits on `|SPLIT|`, the not sign and line breaks.** The seed's name and the last item name shown are
+  saved (`flagstring[5]` and `[0]`), so either of those inside a name would shift the save's fields on the next load.
+
+**The fix (2026-09-29):** one class, `ServerText`. Every string the server or another game decides is read through it
+before the game shows or saves it:
+- player names, item and location names, game names, the seed;
+- `|`, the not sign, and control and format characters are dropped;
+- a string is kept to 100 characters.
+
+A normal name is unchanged, and so is every seed name Archipelago makes, so saves already tied to a seed still match.
+Comparisons go through it too (whether an item is Bug Fables'), so there is one reading of each value. The preflight
+refuses a raw read anywhere else in the mod, so a new text path can't go around it (apimplementation.md, build
+step 28).
+
+**What to check in the game:**
+- another player's item on the ground, on a shelf, and in its "You got" box;
+- an item received from another player;
+- a shop slot holding another player's item.
+
+Each still shows the right names, colours and descriptions, as before.
+
+**Status:** built (2026-09-29), not yet seen in game.
+
+*Code: `Core/ServerText.cs`; its callers in `ItemSwap.cs`, `ItemSwap.Looks.cs`, `ItemReceiver.cs`, `LocationChecks.cs`,
+`ApConnection.cs`.*

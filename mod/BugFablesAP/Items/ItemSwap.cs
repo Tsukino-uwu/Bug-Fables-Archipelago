@@ -306,7 +306,7 @@ namespace BugFablesAP
                 shownArticle = ArticleOf(info.ItemId, KindOf(info));
                 if (info.Player.Slot != connection.OwnSlot)
                 {
-                    name = info.Player.Name + "'s " + name;
+                    name = info.ShownPlayer() + "'s " + name;
                     if (QualityOfLife.IconMode == "AllPlayers")
                     {
                         sprite = ApIcon.Get();
@@ -318,7 +318,7 @@ namespace BugFablesAP
             {
                 // Another game's item: the drawn Archipelago icon, on Archipelago's classification colours
                 // (NetUtils.py): progression, useful, trap, filler.
-                name = info.Player.Name + "'s " + info.ItemDisplayName;
+                name = info.ShownPlayer() + "'s " + info.ShownItem();
                 sprite = QualityOfLife.IconMode == "Off" ? null : ApIcon.Get();
                 color = ClassColor(info.Flags);
             }
@@ -455,7 +455,7 @@ namespace BugFablesAP
 
         private static bool IsOurs(ScoutedItemInfo info)
         {
-            return info.ItemGame == ApConnection.Game && info.ItemId >= ItemIds.Base;
+            return info.ShownGame() == ApConnection.Game && info.ItemId >= ItemIds.Base;
         }
 
         private static Color Hex(int rgb)

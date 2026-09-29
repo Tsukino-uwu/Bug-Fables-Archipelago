@@ -1501,3 +1501,21 @@ For the first version, measure and record:
   maps" (seen in play: "5-10+ sec"). The dimmer is `transitionobj[0]`, a lone object named `Dimmer` with a
   `SpriteRenderer` (`:8880-8900`). Used by `ItemReceiver.cs` (`FadeAllButDone`). After the tail was ignored, the same wait was about 870 frames:
   the fade from opaque to 2% at speed 0.02 takes about 194 sixtieths (0.98^n), about 3 s.
+
+## Text commands inside a substituted string, and the save's separators (2026-09-29, code read; not seen in game)
+
+- **A substituted string is read again for commands.** `SetText`'s `string`, `sstring`, `menu` and `call` commands put
+  `flagstring[n]` (or a menu or dialogue line) into the text being parsed, then step back one (`k--`), so parsing runs
+  on through the inserted text (`MainManager.cs:12683-12705`). Any `|command|` inside it runs. The game's own `lore`
+  command relies on this (`:13704`).
+- **Commands that change the game** (each a `case Commands.X` in the same parser):
+  - `flag` does `flags[n] = v` (`:12455-12464`), and `money` adds and clamps to 0-999 (`:12574-12590`).
+  - Also among them: `setvar` (`:11419`), `giveitem` (`:11457`), `save` (`:12349`), `additem` (`:12552`), `warp` and
+    `transfer` (`:13262-13263`), `loadmap` (`:13272`), `event` (`:13636`), `addquest` (`:13714`), `addprize`
+    (`:13750`).
+- **The save's separators:**
+  - `flagstring` is written joined by `|SPLIT|` (`:7059-7066`), and read back by turning `|SPLIT|` into the not sign
+    (U+00AC) and splitting on it (`:17282`).
+  - The save file itself is split into lines (`:17034`, `:17040`).
+  - So `|SPLIT|`, the not sign or a line break inside a saved string shifts the fields on the next load.
+- Used by `ServerText.cs`.

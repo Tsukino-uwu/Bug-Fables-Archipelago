@@ -364,10 +364,10 @@ be wrong.
 
 - **Found by the review for build step 28 (2026-09-29), each confirmed in the code; `docs/reviewing.md` lists them for
   reviewers:**
-  - **Names from the server run as game text commands.** Player and item names go into the game's text unescaped. The
-    game runs `|...|` commands inside a substituted string (`MainManager.cs:12688-12704`), among them `flag` and
-    `money`, and the save's separators could break a save. Next: strip them from every server string the game shows
-    or saves. This fix comes first.
+  - **Names from the server ran as game text commands.** Player and item names went into the game's text unescaped;
+    the game runs `|...|` commands inside a substituted string (`MainManager.cs:12688-12704`), among them `flag` and
+    `money`, and the save's separators could break a save. **Fixed (2026-09-29, the mod guide's step 33): every server
+    string goes through `ServerText`; not yet seen in game.**
   - **wss:// accepts any certificate** (websocket-sharp's default, `return true`), and a bare address falls back to
     plain ws://, password included. What to do is the user's decision: Mono in Unity may hold no root certificates, so
     checking them could turn every connection into ws://. Measure that first.

@@ -267,7 +267,7 @@ namespace BugFablesAP
 
         private void ResetDone(ArchipelagoSession s)
         {
-            string seed = s.RoomState.Seed;
+            string seed = ServerText.SeedOf(s);
             lock (doneLock)
             {
                 done.Clear();
@@ -306,8 +306,8 @@ namespace BugFablesAP
                     }
                     scouts = task.Result;
                     Post("[swap] scouted " + string.Join(", ", task.Result.Values
-                        .Select(i => i.LocationId + " = " + i.ItemDisplayName + " (" + i.ItemGame + ", for "
-                            + i.Player.Name + ")")
+                        .Select(i => i.LocationId + " = " + i.ShownItem() + " (" + i.ShownGame() + ", for "
+                            + i.ShownPlayer() + ")")
                         .ToArray()));
                 }
                 catch (Exception e)

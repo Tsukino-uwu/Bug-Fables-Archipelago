@@ -133,7 +133,7 @@ namespace BugFablesAP
             // item is named alone, in its class colour (whose it is, the description says).
             if (info != null && info.Player.Slot != connection.OwnSlot)
             {
-                name = ClassText(IsOurs(info) ? name.Substring(info.Player.Name.Length + 3) : info.ItemDisplayName,
+                name = ClassText(IsOurs(info) ? name.Substring(info.ShownPlayer().Length + 3) : info.ShownItem(),
                     info.Flags) + Black;
             }
             description = "An Archipelago item.";
@@ -155,12 +155,12 @@ namespace BugFablesAP
                 description = text ?? description;
                 if (info.Player.Slot != connection.OwnSlot)
                 {
-                    description = $"For {info.Player.Name}: " + description;
+                    description = $"For {info.ShownPlayer()}: " + description;
                 }
             }
             else
             {
-                description = $"{ClassWord(info.Flags)} item for {info.Player.Name} ({info.ItemGame}).";
+                description = $"{ClassWord(info.Flags)} item for {info.ShownPlayer()} ({info.ShownGame()}).";
             }
         }
 
@@ -267,8 +267,8 @@ namespace BugFablesAP
             {
                 return false;
             }
-            string item = IsOurs(info) ? name.Substring(info.Player.Name.Length + 3) : info.ItemDisplayName;
-            name = PlayerText(info.Player.Name) + Black + "'s " + ClassText(item, info.Flags);
+            string item = IsOurs(info) ? name.Substring(info.ShownPlayer().Length + 3) : info.ShownItem();
+            name = PlayerText(info.ShownPlayer()) + Black + "'s " + ClassText(item, info.Flags);
             return true;
         }
 

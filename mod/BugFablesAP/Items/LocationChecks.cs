@@ -171,7 +171,7 @@ namespace BugFablesAP
                 }
             }
             // Respawning pickups send their own check (ItemSwap); queued per seed.
-            foreach (long id in connection.TakeRespawnChecks(session.RoomState.Seed))
+            foreach (long id in connection.TakeRespawnChecks(ServerText.SeedOf(session)))
             {
                 log.LogInfo($"[check] location {id} is done (respawning pickup taken) on {Where()}: sending");
                 (finished ?? (finished = new List<long>())).Add(id);
