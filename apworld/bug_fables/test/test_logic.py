@@ -177,25 +177,19 @@ class TestOldBookChain(BugFablesTestBase):
 
 
 class TestClassifications(BugFablesTestBase):
-    # Progression exactly when a rule needs it: too few locks items behind themselves, too many skews fill.
+    # Progression exactly when a rule needs it: too few locks items behind themselves, too many skews fill. Read from
+    # the resolved rules (Archipelago's item_dependencies) in a seed where every member, move and Jump is an item and
+    # every category is in, so each rule names everything it can ever need.
+    options = {"starting_party_member": "vi", "shuffle_field_moves": True, "shuffle_jump": True,
+               "shuffle_discoveries": True}
+
     def test_items_rules_use_are_progression_and_only_those(self) -> None:
-        from ..abilities import ABILITIES
-        from ..data_tables import ITEMS, LOCATIONS, REGIONS, STORY_EVENTS
+        from ..data_tables import ITEMS, STORY_EVENTS
         used: set[str] = set()
-
-        def named(data) -> list[str]:
-            # Rules name abilities; each is its item and its holder.
-            abilities = data.abilities + data.moves
-            return (list(data.requires) + list(data.members) + [ABILITIES[a].item for a in abilities]
-                    + [ABILITIES[a].holder for a in abilities if ABILITIES[a].holder])
-
-        for region in REGIONS:
-            for exit_data in region.exits:
-                used.update(named(exit_data))
-        for spot in LOCATIONS + STORY_EVENTS:
-            used.update(named(spot))
-        # Shuffle Jump's blanket rule: every spot not marked no_jump needs it.
-        used.add("Jump")
+        spots = (*self.multiworld.get_locations(self.player), *self.multiworld.get_entrances(self.player))
+        for spot in spots:
+            if hasattr(spot.access_rule, "item_dependencies"):
+                used.update(spot.access_rule.item_dependencies())
         # Leif is both: the story's event with Starting Party Member off, an item with it on.
         event_items = {event.item for event in STORY_EVENTS} - {item.name for item in ITEMS} | {"Artifact"}
         real_items_used = used - event_items

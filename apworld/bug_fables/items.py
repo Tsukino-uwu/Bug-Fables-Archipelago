@@ -7,11 +7,11 @@ from BaseClasses import Item, ItemClassification
 
 from .abilities import item_copies
 from .data_tables import ITEM_KIND, ITEM_NAME_TO_ID, ITEMS, MONEY_KIND, vanilla_item
+from .data_types import GAME
 
 if TYPE_CHECKING:
     from .world import BugFablesWorld
 
-GAME = "Bug Fables"
 CLASSIFICATIONS = {
     "progression": ItemClassification.progression,
     "useful": ItemClassification.useful,

@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from . import BugFablesTestBase
 from ..data_tables import LOCATIONS, vanilla_item
-from ..data_types import Location
+from ..data_types import Item
 
 
 class TestLocationNames(BugFablesTestBase):
@@ -30,13 +30,8 @@ class TestOptionCounts(BugFablesTestBase):
 
 
 class TestDataRecords(TestCase):
-    # A misspelt key in the data would otherwise be ignored, and its rule silently lost.
+    # A misspelt key in a data file would otherwise be ignored. (The logic is Python: a misspelt keyword fails itself.)
     def test_unknown_key_refused(self) -> None:
-        entry = {"name": "Test Spot", "id": 999, "region": "Menu", "source": {"flag": 1},
-                 "requirse": ["Explorer Permit"]}
+        entry = {"name": "Test Item", "game_id": 999, "kind": 0, "classification": "filler", "paddnig": True}
         with self.assertRaises(ValueError):
-            Location.from_json(entry)
-
-    def test_unknown_source_key_refused(self) -> None:
-        with self.assertRaises(ValueError):
-            Location.from_json({"name": "Test Spot", "id": 999, "region": "Menu", "source": {"flga": 1}})
+            Item.from_json(entry)

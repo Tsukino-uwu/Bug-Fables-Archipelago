@@ -76,8 +76,8 @@ are in `CLAUDE.md`: the logic may be more cautious than the game, never less, an
 2. **Checked on screen by the user**, one area at a time, with the dev console to test what the draft can't know:
    warp in through each entrance, and try each way across without the ability or without Jump. Record what was seen,
    with the date, in `MEASURED.md`.
-3. **Written into the data** (`locations.json`: areas as regions, their edges, each location's area and needs),
-   cautious where anything is unmeasured.
+3. **Written into the logic** (the area's module, `logic/<area>.py`: areas as regions, their edges with their rules,
+   each location in its area with its own rule), cautious where anything is unmeasured.
 4. **Tested:** every area reachable from every arrival once everything is collected; no arrival strands the player
    without the Warp; each measured need has a test that fails without it.
 

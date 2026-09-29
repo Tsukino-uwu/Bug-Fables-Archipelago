@@ -831,7 +831,7 @@ The rows, all On by default (2026-09-25) and active only while the Archipelago m
    and the opening's items stayed quiet. On *All*, a new file late in a seed plays a
    hold-up for every item; *Progression* or *Off* shortens that. **A quiet start** (the same day: six boxes in a
    row on a new file was "a bit much"): starting items (sent by the server itself, slot 0) and the items of the
-   opening's three checks (`quiet_locations` in `slot_data`, marked `quiet` in `locations.json`) arrive with no
+   opening's three checks (`quiet_locations` in `slot_data`, marked `quiet` in the apworld's `logic/`) arrive with no
    hold-up. A party member placed at any other location still gets its box. The opening skip used to queue its own box for Maki
    and Eetl's Gift, standing in for the gift scene it skips; it now skips that too when the check is quiet.
 7. **Shop prices** (2026-09-25: Normal by default, Half or Free). The medal table's price columns (5 for

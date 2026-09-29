@@ -1,8 +1,13 @@
-"""The world's data files as typed, frozen records, each read once when the world loads (data_tables.py)."""
+"""The world's records, typed and frozen: the logic's (written in logic/) and the data files' (data_tables.py)."""
 from __future__ import annotations
 
 from dataclasses import dataclass, fields
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from rule_builder.rules import Rule
+
+GAME = "Bug Fables"
 
 
 def _known(cls: type, data: dict[str, Any]) -> dict[str, Any]:
@@ -12,11 +17,6 @@ def _known(cls: type, data: dict[str, Any]) -> dict[str, Any]:
     if unknown:
         raise ValueError(f"bug_fables: {cls.__name__} {data.get('name', '')!r} has unknown keys {sorted(unknown)}")
     return {key: value for key, value in data.items() if key in names}
-
-
-def _tuples(known: dict[str, Any], *names: str) -> dict[str, Any]:
-    """The same fields, with these lists made tuples, so a frozen record stays unchanged."""
-    return {**known, **{name: tuple(known[name]) for name in names if name in known}}
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -127,9 +127,9 @@ class RoomStart:
         return {"map": self.map, "from": self.from_map}
 
 
-@dataclass(frozen=True, slots=True, kw_only=True)
+@dataclass(frozen=True, slots=True)
 class EntityRef:
-    """A map entity the client changes, by name (a scenery entity by its path inside the map); data/locations.json.
+    """A map entity the client changes, by name (a scenery entity by its path inside the map); in its area's module.
 
     kept_open: story blockers kept out of the way, so an area with locations never closes. kept_present: entities the
     story only makes later, made to exist from the start. scenery_hidden and scenery_present: flag-switched scenery
@@ -139,17 +139,13 @@ class EntityRef:
     map: str
     entity: str
 
-    @classmethod
-    def from_json(cls, data: dict[str, Any]) -> EntityRef:
-        return cls(**_known(cls, data))
-
     def to_slot(self) -> dict[str, Any]:
         return {"map": self.map, "entity": self.entity}
 
 
-@dataclass(frozen=True, slots=True, kw_only=True)
+@dataclass(frozen=True, slots=True)
 class FlagEntity:
-    """A map entity tied to a story flag instead of, or on top of, its own requirements; data/locations.json.
+    """A map entity tied to a story flag instead of, or on top of, its own requirements; in its area's module.
 
     present_from: made from flag instead of its own requirement. held_until: kept away until flag, on top of its own
     requirements.
@@ -159,26 +155,18 @@ class FlagEntity:
     entity: str
     flag: int
 
-    @classmethod
-    def from_json(cls, data: dict[str, Any]) -> FlagEntity:
-        return cls(**_known(cls, data))
-
     def to_slot(self) -> dict[str, Any]:
         return {"map": self.map, "entity": self.entity, "flag": self.flag}
 
 
-@dataclass(frozen=True, slots=True, kw_only=True)
+@dataclass(frozen=True, slots=True)
 class DialogueFlag:
-    """One dialogue line of an entity whose flag is repointed from flag to to (dialogue_flags, data/locations.json)."""
+    """One dialogue line of an entity whose flag is repointed from flag to to (dialogue_flags, in its area's module)."""
 
     map: str
     entity: str
     flag: int
     to: int
-
-    @classmethod
-    def from_json(cls, data: dict[str, Any]) -> DialogueFlag:
-        return cls(**_known(cls, data))
 
     def to_slot(self) -> dict[str, Any]:
         return {"map": self.map, "entity": self.entity, "flag": self.flag, "to": self.to}
@@ -273,106 +261,64 @@ class Source:
     shop: int | None = None
     medal: int | None = None
 
-    @classmethod
-    def from_json(cls, data: dict[str, Any]) -> Source:
-        known = _known(cls, data)
-        for name, record in (("give", Give), ("pickup", Pickup), ("added", Added), ("item_shop", ItemShop)):
-            if name in known:
-                known[name] = record(**_known(record, known[name]))
-        return cls(**known)
-
     def present(self) -> set[str]:
         """The fields this source has."""
         return {field.name for field in fields(self) if getattr(self, field.name) is not None}
 
 
-@dataclass(frozen=True, slots=True, kw_only=True)
-class Needs:
-    """What a spot or exit needs, read by rules.requires.
-
-    requires: the event or item names the spot itself needs once you're in the room, kept apart from what reaching the
-    room needs (so entrance rando can change one without the other); written even when the region implies it.
-    members: the party members needed only with Starting Party Member on (with it off the story's members are always
-    there). abilities: the field abilities needed (each its item and, with members as items, its holder). moves: a
-    blanket rule for unmeasured ground, the abilities' items alone, not who does them. no_jump: a location seen
-    reachable without a jump (with Shuffle Jump, every other one needs it).
-    """
-
-    requires: tuple[str, ...] = ()
-    members: tuple[str, ...] = ()
-    abilities: tuple[str, ...] = ()
-    moves: tuple[str, ...] = ()
-    no_jump: bool = False
-
-
-_NEEDS = ("requires", "members", "abilities", "moves")
-
-
-@dataclass(frozen=True, slots=True, kw_only=True)
-class Exit(Needs):
-    """A way from one region to region to, and what it needs."""
+@dataclass(frozen=True, slots=True)
+class Exit:
+    """A way from one region to region to, and the Rule Builder rule it needs (None: nothing)."""
 
     to: str
-
-    @classmethod
-    def from_json(cls, data: dict[str, Any]) -> Exit:
-        return cls(**_tuples(_known(cls, data), *_NEEDS))
+    rule: Rule | None = None
 
 
-@dataclass(frozen=True, slots=True, kw_only=True)
+@dataclass(frozen=True, slots=True)
 class Region:
-    """A region and its exits (data/locations.json)."""
+    """A region and its exits, in its area's module (logic/)."""
 
     name: str
-    exits: tuple[Exit, ...]
-
-    @classmethod
-    def from_json(cls, data: dict[str, Any]) -> Region:
-        known = _known(cls, data)
-        return cls(name=known["name"], exits=tuple(Exit.from_json(e) for e in known["exits"]))
+    exits: tuple[Exit, ...] = ()
 
 
-@dataclass(frozen=True, slots=True, kw_only=True)
-class Location(Needs):
-    """A location (data/locations.json).
+@dataclass(frozen=True, slots=True)
+class Location:
+    """A location, in its area's module (logic/).
 
-    id is added to LOCATION_ID_BASE and never reused (retired: 4). quiet marks an opening check whose item arrives with
-    no hold-up (the start of a new file). category marks a location a yaml option can leave out (quest, crystal_berry,
-    discovery, shop, item_shop; party_member, only with Starting Party Member on; story_party, a story event only with
-    it off).
+    id is added to LOCATION_ID_BASE and never reused (retired: 4). rule: what the spot itself needs once you're in its
+    region, kept apart from what reaching the region needs (so entrance rando can change one without the other);
+    written even when the region implies it. category marks a location a yaml option can leave out (quest,
+    crystal_berry, discovery, shop, item_shop; party_member, only with Starting Party Member on; story_party, a story
+    event only with it off). quiet marks an opening check whose item arrives with no hold-up (the start of a new file).
+    no_jump: seen reachable without a jump (with Shuffle Jump, every other spot needs it).
     """
 
     name: str
     id: int
     region: str
     source: Source
+    rule: Rule | None = None
     category: str | None = None
     quiet: bool = False
-
-    @classmethod
-    def from_json(cls, data: dict[str, Any]) -> Location:
-        known = _tuples(_known(cls, data), *_NEEDS)
-        return cls(**{**known, "source": Source.from_json(known["source"])})
+    no_jump: bool = False
 
 
-@dataclass(frozen=True, slots=True, kw_only=True)
-class StoryEvent(Needs):
+@dataclass(frozen=True, slots=True)
+class StoryEvent:
     """A logic-only event (no id): a story step, placed in the region where it happens, whose item other rules
-    require."""
+    require. rule, category and no_jump as for a Location."""
 
     name: str
     item: str
     region: str
     source: Source
+    rule: Rule | None = None
     category: str | None = None
-
-    @classmethod
-    def from_json(cls, data: dict[str, Any]) -> StoryEvent:
-        known = _tuples(_known(cls, data), *_NEEDS)
-        return cls(**{**known, "source": Source.from_json(known["source"])})
+    no_jump: bool = False
 
 
-@dataclass(frozen=True, slots=True, kw_only=True)
+@dataclass(frozen=True, slots=True)
 class Artifact:
     """An artifact, an event (no id): the game counts 7 artifact flags, and the goal is having enough of them."""
 
@@ -380,8 +326,3 @@ class Artifact:
     name: str
     region: str
     source: Source
-
-    @classmethod
-    def from_json(cls, data: dict[str, Any]) -> Artifact:
-        known = _known(cls, data)
-        return cls(**{**known, "source": Source.from_json(known["source"])})

@@ -1,12 +1,14 @@
-"""Item and location tables, read with pkgutil: a packaged .apworld is a zip with no file paths to open()."""
+"""The world's tables: the logic's from logic/, the rest from data/ with pkgutil (a packaged .apworld is a zip with no
+file paths to open())."""
 from __future__ import annotations
 
 import json
 import pkgutil
 from typing import Any
 
-from .data_types import (Artifact, DialogueFlag, Doors, Encounter, EntityRef, FlagEntity, Item, Location, Region,
-                         RoomStart, SavePoint, StoryEvent)
+from .data_types import Doors, Encounter, Item, Location, RoomStart, SavePoint
+from .logic import (ARTIFACTS, DIALOGUE_FLAGS, HELD_UNTIL, KEPT_OPEN, KEPT_PRESENT, LOCATIONS, PRESENT_FROM, REGIONS,
+                    SCENERY_HIDDEN, SCENERY_PRESENT, STORY_EVENTS)
 
 ITEM_ID_BASE = 7_710_000
 LOCATION_ID_BASE = 7_720_000
@@ -28,18 +30,6 @@ def _load(name: str) -> dict[str, Any]:
 
 WORLD_VERSION: str = _load_manifest()["world_version"]
 ITEMS: tuple[Item, ...] = tuple(Item.from_json(item) for item in _load("items.json")["items"])
-_LOCATION_DATA = _load("locations.json")
-LOCATIONS: tuple[Location, ...] = tuple(Location.from_json(loc) for loc in _LOCATION_DATA["locations"])
-REGIONS: tuple[Region, ...] = tuple(Region.from_json(region) for region in _LOCATION_DATA["regions"])
-ARTIFACTS: tuple[Artifact, ...] = tuple(Artifact.from_json(artifact) for artifact in _LOCATION_DATA["artifacts"])
-STORY_EVENTS: tuple[StoryEvent, ...] = tuple(StoryEvent.from_json(event) for event in _LOCATION_DATA["story_events"])
-KEPT_OPEN: tuple[EntityRef, ...] = tuple(EntityRef.from_json(e) for e in _LOCATION_DATA["kept_open"])
-KEPT_PRESENT: tuple[EntityRef, ...] = tuple(EntityRef.from_json(e) for e in _LOCATION_DATA["kept_present"])
-SCENERY_HIDDEN: tuple[EntityRef, ...] = tuple(EntityRef.from_json(e) for e in _LOCATION_DATA["scenery_hidden"])
-SCENERY_PRESENT: tuple[EntityRef, ...] = tuple(EntityRef.from_json(e) for e in _LOCATION_DATA["scenery_present"])
-HELD_UNTIL: tuple[FlagEntity, ...] = tuple(FlagEntity.from_json(e) for e in _LOCATION_DATA["held_until"])
-PRESENT_FROM: tuple[FlagEntity, ...] = tuple(FlagEntity.from_json(e) for e in _LOCATION_DATA["present_from"])
-DIALOGUE_FLAGS: tuple[DialogueFlag, ...] = tuple(DialogueFlag.from_json(e) for e in _LOCATION_DATA["dialogue_flags"])
 DOORS: Doors = Doors.from_json(_load("doors.json"))
 # Every room entered through a door: the map, and the map whose door leads in (both ways of each connection). A start
 # there lands where walking in through that door ends.

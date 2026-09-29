@@ -1,54 +1,19 @@
-"""What each spot needs, the shop policy and the goal."""
+"""Each spot's rule, the shop policy and the goal."""
 from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING
 
 from BaseClasses import Item, LocationProgressType
-from rule_builder.rules import Has, HasAllCounts
+from rule_builder.rules import Has
 
-from .abilities import ABILITIES, item_count
 from .data_tables import ARTIFACTS
-from .data_types import Needs
 from .options import ShopContents
 
 if TYPE_CHECKING:
     from .world import BugFablesWorld
 
 SHOP_CATEGORIES = ("shop", "item_shop")
-
-# The one member the story's party lacks at first.
-LATE_MEMBER = "Leif"
-
-
-def requires(world: BugFablesWorld, data: Needs, location: bool = False) -> dict[str, int]:
-    """What a spot or exit needs, as item counts: its own requires, members when members are items, and each ability's
-    member (when members are items; with the story's party, only Leif, who joins late) and its item's copies. With Jump
-    shuffled, a location or story event needs Jump unless it was seen reachable without (no_jump)."""
-    needed: dict[str, int] = {}
-    members_are_items = world.starting_member >= 0
-
-    def add(name: str, count: int = 1) -> None:
-        needed[name] = max(needed.get(name, 0), count)
-
-    for name in data.requires:
-        add(name)
-    if members_are_items:
-        for member in data.members:
-            add(member)
-    for ability in data.abilities:
-        holder = ABILITIES[ability].holder
-        if holder is not None and (members_are_items or holder == LATE_MEMBER):
-            add(holder)
-        if item_count(world, ability):
-            add(ABILITIES[ability].item, item_count(world, ability))
-    # A blanket rule for unmeasured ground: the abilities' items alone, not who does them.
-    for ability in data.moves:
-        if item_count(world, ability):
-            add(ABILITIES[ability].item, item_count(world, ability))
-    if location and world.jump_shuffled() and not data.no_jump:
-        add("Jump")
-    return needed
 
 
 def _no_progression(item: Item) -> bool:
@@ -65,9 +30,12 @@ def set_all_rules(world: BugFablesWorld) -> None:
         elif world.options.shop_contents == ShopContents.option_no_progression:
             location.item_rule = _no_progression
     for data in (*world.included_locations, *world.included_events):
-        needed = requires(world, data, location=True)
-        if needed:
-            world.set_rule(world.get_location(data.name), HasAllCounts(needed))
+        rule = data.rule
+        # With Jump shuffled, a spot needs Jump unless it was seen reachable without (no_jump).
+        if world.jump_shuffled() and not data.no_jump:
+            rule = Has("Jump") if rule is None else rule & Has("Jump")
+        if rule is not None:
+            world.set_rule(world.get_location(data.name), rule)
     # Artifacts are events with no data of their own: with Jump shuffled they wait for it like every other spot.
     if world.jump_shuffled():
         for artifact in ARTIFACTS:

@@ -421,9 +421,10 @@ be wrong.
 ## Build step 1: a first, tiny apworld
 
 The apworld started deliberately tiny: two early locations, one key item (the Explorer Permit), the gate
-it opens, and "open that gate" as a temporary goal. Items and locations live in simple JSON files, so
-growing the world is mostly adding data. It follows the layout of `worlds/apquest`, Archipelago's own
-teaching example, and writes its rules with Archipelago's Rule Builder.
+it opens, and "open that gate" as a temporary goal. Items and locations lived in simple JSON files, so
+growing the world was mostly adding data (the logic moved to Python modules, one per area, in build step 29; it is
+still mostly adding data). It follows the layout of `worlds/apquest`, Archipelago's own teaching example, and writes
+its rules with Archipelago's Rule Builder.
 
 **One file per job, as APQuest does** (2026-09-27, a refactor that changed nothing a seed contains): `world.py` holds
 only the `World` class, whose steps call module functions that take the world: `items.py` (the item class and the
@@ -446,7 +447,8 @@ of being silently ignored. A file's schema lives in its record's docstring. One 
 encounters, doors and room starts, the client's entity lists, then regions, exits, locations, story events and
 artifacts together (`rules.requires` reads exits and spots alike, through their shared `Needs` fields). The schema
 strings that headed `items.json` and `locations.json` are now those docstrings. `TestDataRecords` proves an unknown
-key is refused; with the check switched off, it fails.
+key is refused; with the check switched off, it fails. (Since build step 29 the logic's records are written in Python,
+`logic/`, where a misspelt field fails by itself; the data files left are items, doors, enemies and save points.)
 
 We wrote **tests**, including one that proves the gate really needs the permit. To make sure that test
 could fail, we removed the rule on purpose, watched the test fail, and put the rule back. Archipelago's
@@ -518,8 +520,8 @@ Archipelago's `custom_worlds` folder.
 **Status:** done; the world has since grown to 66 locations (61 by default) and 52 items (counted 2026-09-27).
 
 *Code: `apworld/bug_fables/world.py` (`BugFablesWorld`), `regions.py`, `locations.py`, `items.py`, `rules.py`, the
-data in `data/items.json` and `data/locations.json` (read by `data_tables.py`), tests in `test/test_logic.py`
-(`TestPermitGate`).*
+data in `data/items.json` (read by `data_tables.py`) and the logic in `logic/` (build step 29), tests in
+`test/test_logic.py` (`TestPermitGate`).*
 
 ## Build step 2: connect the mod to a real server
 
@@ -707,7 +709,7 @@ right after the Explorer Permit. It was added to the apworld as a third location
 **How the mod knows a location is done.** The game already remembers every finished event with a *flag* in
 the save. The probes showed which flag belongs to which location (`MEASURED.md`). So:
 
-- The apworld's `locations.json` lists each location with its flag. The apworld sends that list to the mod
+- The apworld's logic (`logic/`) lists each location with its flag. The apworld sends that list to the mod
   in `slot_data` as `location_flags`. The generator stays the only source of truth: the mod only watches the
   flags of locations the seed actually has.
 - Every frame, while a randomizer save is being played, the mod reads those few flags. When one becomes true,
@@ -889,8 +891,8 @@ from data: from the Snakemouth entrance, follow the doors without entering a dro
 (entrance, bridge room, door room, fall room, lake) is the region *Snakemouth Den*; every other Snakemouth room
 is *Snakemouth Den Underground*, whose entrance needs the story event *Leif*. Leif joins at the lake (Event14,
 flag 16), which is on the open side, so the logic can't go in circles. The first boss's treasure room is
-underground, so Artifact 1 needs Leif too. Story events like this one live in `locations.json` under
-`story_events`; a location can also list extra `requires` of its own. Tests `TestLeif` fail without the rule.
+underground, so Artifact 1 needs Leif too. Story events like this one live in their area's module (`logic/`) under
+`STORY_EVENTS`; a location can also have a rule of its own. Tests `TestLeif` fail without the rule.
 **Three kinds of rule, kept apart** (2026-09-24, with entrance rando in mind): what it takes to *reach*
 a room (on the connections into it), what a spot needs *once you're in the room* (on the location, e.g. the
 mushroom pit's Gummies need Leif's ice while its medal needs nothing), and what it takes to *cross* a room from
@@ -975,13 +977,13 @@ sent in `slot_data`, decided at generation, with no save writes. Each is checked
 one open breaks the story state, its locations are left out instead. **First case, built 2026-09-24:** after the
 first boss, Eetl turns you back outside the city (`eetlblocker1 - Duplicate`, Event12, until chapter 2's flag
 67), closing the way back to Snakemouth Den. Event12 only walks the player and sets no flags, so it's
-safe to remove. `locations.json` lists it under `kept_open`, `slot_data` carries it, and the mod's `KeptOpen`
+safe to remove. Its area's module (`logic/`) lists it under `KEPT_OPEN`, `slot_data` carries it, and the mod's `KeptOpen`
 gives that entity a marker `limit` array after the map creates it, which its prefix on `CheckIfCanExist`
 answers with "hide" (test `TestKeptOpen`). Not yet seen in game. Day/night map pairs are made reachable
 both ways (like Emerald's Shoal Cave tides). One-way drops stay as they are: the logic handles one-way
 connections.
 **Keeping ways present** (2026-09-25: no dead end in chapter 1, and the Gem opens chapter 5 whenever
-it's found). The reverse of kept open: `locations.json` lists under `kept_present` entities the story only makes
+it's found). The reverse of kept open: an area's module lists under `KEPT_PRESENT` entities the story only makes
 later, `slot_data` carries them, and the mod's `KeptOpen` gives each a marker `requires` array right after the map
 creates its entities, which its `CheckIfCanExist` prefix answers with "exists". First three: Snakemouth's big door
 to Upper Snakemouth (its model already looks open from the trapdoor fall, flag 14, per the map dump; the Peculiar
@@ -1747,7 +1749,7 @@ trip free and the ticket kept; the logic gates Metal Island on it, so Metal Isla
 2. **In the pool** (`items.json`): kind 1 (key item), game id 200, progression, with `always`: it enters once in every
    seed. When every location already holds its vanilla item (the default seed has 59 for 59), one ordinary item or
    berries with a copy left makes room, picked with the seed's random; never a medal, never an item's last copy.
-3. **The logic** (`locations.json`): a Metal Island region, reached from the Outskirts (the pier) with the Boat Ticket.
+3. **The logic** (`logic/metal_island.py`): a Metal Island region, reached from the Outskirts (the pier) with the Boat Ticket.
    No locations there yet.
 4. **The sailor** (`BoatTicket.cs`): a postfix on `MainManager.GetDialogueText` on `BugariaPier`, since every line of
    his, the first included, comes through it. His lines as approved, line by line (build step 16's
@@ -1895,11 +1897,11 @@ everything past the Outskirts gate needs all three members until the rooms there
 2. **The items** (`items.json`): Vi, Kabbu and Leif, a new kind 5 (game id 0, 1, 2; Archipelago id base + 4000 + the
    member), progression. With the option on, the starting member is start inventory (`push_precollected`), which the
    server sends the client like any item, and the other two go in the pool. With it off, none of them exists.
-3. **Two locations, whoever starts** (`locations.json`, category `party_member`, only with the option on): *Outskirts:
+3. **Two locations, whoever starts** (`logic/`, category `party_member`, only with the option on): *Outskirts:
    Outside the City, Opening* (flag 15, where Vi joins in the opening) and *Snakemouth Den: Fall Room, After the Spider*
    (flag 27, where the mod has Leif join). Two items, two spots, no filler removed. The story's "Leif Joins" event
    (category `story_party`) exists only with the option off, so Leif isn't handed out for free.
-4. **The rules** (`locations.json`, a `members` list, applied only with the option on): the way past the Outskirts gate
+4. **The rules** (`logic/`, `Member` rules, which count only with the option on): the way past the Outskirts gate
    needs Vi, Kabbu and Leif (on top of the permit), which covers the measured gates past it (the horn corridor needs
    Kabbu, the first boss needs Vi); *East Road, Stone* and *Residential District, Rooftop* need Kabbu (his horn). The
    Leif rules that already existed (droplets, the fountain rooftop) now need the item instead of the story's event.
@@ -2259,7 +2261,7 @@ their items (a Lore Book, Mistake, Bee Fly in one seed) in the bag with the thre
 
 **Status:** works, seen on screen (2026-09-28).
 
-*Code: `data/locations.json` (id 75), `data_tables.vanilla_item`, `slot_data.py` (`location_added`, the silent rule);
+*Code: `logic/outskirts.py` (id 75), `data_tables.vanilla_item`, `slot_data.py` (`location_added`, the silent rule);
 `ApConnection.cs` (`LocationAdded`), `QualityOfLife.Opening.cs` (`RunOpening`, `SeedAdded`), wired in `Plugin.cs`.*
 
 ---
@@ -2614,7 +2616,57 @@ were JSON (`data/locations.json`) in a format of our own, turned into rules by a
 so the world can register its own rules the way the Rule Builder's doc shows (a change to the gate is a commit of its
 own).
 
-**Status:** in progress (2026-09-29): the gate widened.
+**Decided with the user (2026-09-29):** one Python module per game area, not per room ("all of Snakemouth Den" in one;
+the Outskirts' corridors and Outside Snakemouth in the Outskirts, as the location names already say). A room's logic
+often reaches into its neighbours, and a tester checks an area in one sitting; one file per room would be hundreds of
+files with nearly every exit crossing into another. None of it is in the mod: the mod only follows what the generator
+decided (`slot_data`).
+
+**Built (2026-09-29):**
+
+1. **`logic/`**, one module per area: `outskirts.py`, `snakemouth_den.py`, `bugaria_city.py`, `metal_island.py`,
+   `later_chapters.py`. Each lists its `REGIONS` (each with its exits and their rules), its `LOCATIONS`,
+   `STORY_EVENTS` and `ARTIFACTS` (each with its own rule), and the entities the seed changes there (`KEPT_OPEN` and
+   the rest). A spot lives in its region's module; only exits cross from one module into another. `logic/__init__.py`
+   gathers them, `LOCATIONS` sorted by id so moving a spot between modules never changes a seed. The old JSON notes
+   became comments.
+2. **The rules are the Rule Builder's:** `Has("Explorer Permit")` for an item or a story event, `&` for "and", `|` for
+   "or". Bug Fables' own needs, the ones that depend on the options, are three rules registered the documented way
+   (`custom_rules.py`, each resolving to Archipelago's own `HasAllCounts`): `CanUse("Horn Slash")` (the ability's item
+   copies when it's an item, its member when members are items), `Member("Vi")` (only when members are items) and
+   `MoveItem("Freeze")` (the item alone, for ground not measured yet). `rules.requires` and the `Needs` fields are gone.
+3. **Menu, the origin, is made in code** (`regions.py`, as APQuest does), with its one exit to where a new game begins.
+   Jump's blanket rule stays in `rules.py`: with Shuffle Jump, every spot not marked `no_jump` also needs `Has("Jump")`.
+
+For example, the way into the droplet rooms and a spot inside them:
+
+```python
+Region("Snakemouth Den", exits=(
+    # Water droplets: Leif freezes them.
+    Exit("Snakemouth Den Underground", CanUse("Freeze")),
+)),
+...
+Location("Snakemouth Den: Mushroom Pit, Droplets", 9, "Snakemouth Den Underground",
+         Source(flag=724, pickup=Pickup(map="SnakemouthMushroomPit", type=0, item=144)),
+         rule=CanUse("Freeze")),
+```
+
+**Proven the same:** before the change, every spot's rule, every spot's reachability and every exit's rule were
+recorded on 300 random sets of items, under the defaults, the story's party, one member, moves shuffled, Jump
+shuffled and both mixes; after it, all 1306 rows came out identical.
+
+**Tests:** `test_areas.py` (every exit leads to a region; each spot sits in a region of its own module; names unique;
+every region has a way in and is reachable with everything; ids in order; every name a rule uses exists: item, story
+event, ability, member). `test_rules.py` (each custom rule under the option sets that change it; `base & (A | B)` and
+`A | B` on real states; a way that needs nothing makes the "or" free). `TestClassifications` now reads the items each
+rule uses through Archipelago's own `item_dependencies()`, in a seed where every member, move and Jump is an item. With
+`CanUse` broken on purpose (never asking for the member), 7 tests fail. 445 tests, the Logic Test check (90 of 90) and
+the fuzzer (0 of 10000, every room with APQuest) pass.
+
+**Status:** built (2026-09-29): the logic in `logic/`, its rules the Rule Builder's, proven identical to the JSON's.
+
+*Code: `logic/`, `custom_rules.py`, `data_types.py`, `data_tables.py`, `regions.py`, `rules.py`; tests `test_areas.py`,
+`test_rules.py`, `test_logic.py` (`TestClassifications`), `test_party.py`.*
 
 # How it works
 
