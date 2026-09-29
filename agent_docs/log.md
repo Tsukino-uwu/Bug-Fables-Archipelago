@@ -1431,3 +1431,7 @@ Newest last. What was tried, what happened, what the user said.
   to archipelago.gg.
 - **Not seen in game yet:** step 33 (names), step 34 (the log line `[cache] data package cache names made safe`),
   the TLS lines. The running game had not reloaded when the builds were copied in.
+- **Afterwards, the user:** the AI notice is approved as written ("looks good/accurate"). On the capability rows: asked
+  whether anything is needed now; nothing blocks, their read of the rows stays open (the guard's own row was
+  brought up to date with its narrowing). On pushing: finish first, then push in this session; waiting loses no
+  history, since the commits sit on local `main` until pushed.
