@@ -1657,7 +1657,7 @@ items), on the class-coloured backdrop of step 22.
 ## 24. Frame rates above 60: smoother, and the same game
 
 The game's settings offer 30 or 60 fps. More was wanted on a 240 Hz monitor, as a Quality of life row
-(first Off, 120, 144, 240; now ten pips with Monitor the default, below; `UncapFps` in the config), overriding the game's own frame rate and VSync while Archipelago is on, and done
+(first Off, 120, 144, 240; now ten pips, Off the default, below; `UncapFps` in the config), overriding the game's own frame rate and VSync while Archipelago is on, and done
 "properly so things don't break" (2026-09-27).
 
 **First, read how the game ties itself to frames** (`MEASURED.md`, frame rate). Most motion is scaled by frame time
@@ -1769,16 +1769,19 @@ common rates (165, 170, 200, 360, 480) had the same gap. So the row was made to 
 ten pips, the first Off, then 90, 100, 120, 144, 165, 180, 240, 360, and **Monitor** last, which is the display's own
 refresh rate (`Screen.currentResolution.refreshRate`) met with VSync, so any display is smooth without tearing. At 60 Hz
 or less Monitor keeps the game's own setting, and the row's line says so. The row stops at its ends, as the volume rows
-do. Monitor is the default (2026-09-28, once shaky text was fixed and no odd combat had been seen), so a fresh
-config runs above 60 while Archipelago is on; a config that already says Off keeps it. The first frame with the row on
-installs the frame sites (a few seconds), so on a fresh config that pause lands on the main menu. Rates above 240 are
-untested. **Seen on screen (2026-09-28):** the ten pips look and work fine.
+do. Monitor was the default for a day (2026-09-28, once shaky text was fixed and no odd combat had been seen). The
+first frame with the row on installs the frame sites (a few seconds). Rates above 240 are untested. **Seen on screen
+(2026-09-28):** the ten pips look and work fine.
+
+**Off by default again (2026-09-29, the user).** A fresh config and the panel's reset give Off, the game's own frame
+rate; Monitor stays the last pip. As before, a config that already stores a value keeps it (no migration), so a
+config that says Monitor stays at Monitor until the row is changed. Not yet seen on a fresh config.
 
 **Status:** in progress, experimental (the row says so). Seen on screen (2026-09-27) at 240: smooth, the "!" steady and
 sharp. The logic measured (`rates`); each site patched as expected (the log's `[fps] frame sites`). Not yet seen on
 screen: every site above, most of all fishing, the screw platform, the Wacka Worm, a disguised enemy and the dig skill.
 Platforms and bridges: fixed and seen (2026-09-27), a slight shimmer on them left. Vi's flight: fixed and seen
-(2026-09-29).
+(2026-09-29). Off by default again (2026-09-29): built, not yet seen on a fresh config.
 
 *Code: `FrameRate.cs`, `FrameSites.cs`, the row in `ApMenu.cs` and `QualityOfLife.cs`; the console's `display`, `fps`,
 `interp`, `camlerp`, `frames`, `trace`, `cams`, `il`, `rates` and `fpsscan` (`DevConsole.cs`).*

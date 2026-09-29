@@ -198,12 +198,12 @@ namespace BugFablesAP
                 "Which travel buttons act without their Yes / No box: Warp (warps as soon as it's picked), Map "
                 + "(confirm on an area you've been to travels there at once), Both, or Off (both ask first).",
                 new AcceptableValueList<string>(TravelValues)));
-            UncapFps = config.Bind("QualityOfLife", "UncapFps", "Monitor", new ConfigDescription(
-                "Experimental. A frame rate above the game's 30 or 60: 90 to 360, or Monitor, the default (the "
-                + "display's own refresh rate; a 60 Hz display keeps the game's own). With VSync when it divides the "
-                + "monitor's refresh rate or reaches it (no tearing), else as a limit. Motion is drawn between the "
-                + "game's physics steps, and whatever the game counts in frames still runs at 60 per second, so it "
-                + "plays as it does at 60. Off: the game's own FPS and VSync settings.",
+            UncapFps = config.Bind("QualityOfLife", "UncapFps", "Off", new ConfigDescription(
+                "Experimental. A frame rate above the game's 30 or 60: 90 to 360, or Monitor (the display's own "
+                + "refresh rate; a 60 Hz display keeps the game's own). With VSync when it divides the monitor's "
+                + "refresh rate or reaches it (no tearing), else as a limit. Motion is drawn between the game's "
+                + "physics steps, and whatever the game counts in frames still runs at 60 per second, so it plays as "
+                + "it does at 60. Off, the default: the game's own FPS and VSync settings.",
                 new AcceptableValueList<string>(UncapValues)));
             // Installed in this order, each only if the one before went in, as they depend on each other.
             // A follow-up line is fetched inside the running dialogue, not through a new SetText.
