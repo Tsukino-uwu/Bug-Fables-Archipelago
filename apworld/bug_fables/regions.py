@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING
 from BaseClasses import Region
 
 from .data_tables import DOOR_RULES, DOORS, MAPS, TRANSFERS
-from .data_types import DoorEnd
 
 if TYPE_CHECKING:
     from .world import BugFablesWorld
@@ -16,8 +15,9 @@ if TYPE_CHECKING:
 START_MAP = "BugariaOutskirtsOutsideCity"
 
 
-def door_name(end: DoorEnd) -> str:
-    return f"{end.map}: {end.door}"
+def door_name(map_name: str, door: str) -> str:
+    """A door's entrance, named where it is."""
+    return f"{map_name}: {door}"
 
 
 def create_and_connect_regions(world: BugFablesWorld) -> None:
@@ -30,7 +30,7 @@ def create_and_connect_regions(world: BugFablesWorld) -> None:
     for connection in DOORS.connections:
         for end, other in ((connection.a, connection.b), (connection.b, connection.a)):
             world.create_entrance(regions[end.map], regions[other.map], gates.get((end.map, end.door)),
-                                  name=door_name(end))
+                                  name=door_name(end.map, end.door))
     for a, b in dict.fromkeys(DOORS.fixed):
         if a != b and a in regions and b in regions:
             world.create_entrance(regions[a], regions[b], name=f"{a} to {b}")

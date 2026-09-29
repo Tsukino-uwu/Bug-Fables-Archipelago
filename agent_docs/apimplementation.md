@@ -1621,6 +1621,10 @@ own: build step 30.
 
 **Status:** in progress (experimental): every door, coupled, built, and a generated pair seen both ways, offline too (2026-09-25); every map a region and every door an entrance, and Archipelago's own entrance randomizer in place of `doors.py`, built, not yet seen in game (2026-09-30); next, sorting the other transfers and the room-by-room logic.
 
+*Code: `regions.py` (every map a region, every door an entrance), `entrances.py` (the shuffles, `door_targets`, the
+spoiler), `logic/` (`DOOR_RULES`, `TRANSFERS`, each spot's `reach`), `data/doors.json`; `DoorShuffle.cs` in the mod;
+tests `test_doors.py`, `test_areas.py`.*
+
 ---
 
 ## Build step 13: party members and moves as items (in progress)

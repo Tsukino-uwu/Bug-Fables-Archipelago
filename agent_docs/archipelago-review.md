@@ -128,11 +128,12 @@ conventions the docs and APQuest show), *main only* (not in 0.6.7 yet).
 
 ## With the room mapping
 
-23. **Archipelago's entrance randomizer** in place of `doors.py`, and what to prepare: a name for every door, as the
-    doc advises (`entrance randomization.md:232-236`); one-way doors kept as doors, not map links, so they can be
-    one-way entrances (`:238-242`); `force_creation` or `disconnect_entrance_for_randomization` for door exits
-    (`rule builder.md:64`, `entrance randomization.md:228-230`); `pairings` turned into `door_targets` (`:381-384`);
-    and Menu joined to the random start's region.
+23. **Archipelago's entrance randomizer** in place of `doors.py`: **done 2026-09-30** (build step 12), ahead of the room
+    mapping, on one region per map. Each door named where it is (`entrance randomization.md:232-236`), split with
+    `disconnect_entrance_for_randomization` (`:228-230`), placed by `randomize_entrances` in `connect_entrances`
+    (`:373-379`), `pairings` turned into `door_targets` (`:381-384`), the pairs in the spoiler's Entrances section. Still
+    to do: one-way doors kept as doors, not map links, so they can be one-way entrances (`:238-242`; today the 19
+    one-way fixed doors are plain entrances, never shuffled), and Menu joined to the random start's region.
 
 ## A second look at what we kept (2026-09-29)
 
@@ -204,7 +205,10 @@ our slot_data reader (it tolerates missing keys).
 - `running from source.md`: the Enemizer, SNI and the Linux build are for other games; the rest is item 22.
 - `network diagram`: a picture; our client is its ".NET / MultiClient.Net / BepInEx" path.
 - `mac_en.md`: the client is a Windows BepInEx mod; generation is pure Python and runs anywhere.
-- Text plando and boss plando (`plando_en.md`): no texts or bosses shuffled; connection plando comes with item 23.
+- Text plando and boss plando (`plando_en.md`): no texts or bosses shuffled.
+- Connection plando (`plando_en.md:9-11`, `Options.PlandoConnections`): optional, "Support for connection plando may
+  vary", and no doc asks a world for it; not built with item 23 (2026-09-30). A player-facing yaml option, so its own
+  build step if wanted.
 - `triage role expectations.md`, `code_of_conduct.md`, `CODEOWNERS`: Archipelago's own repository (below).
 
 ## For the main repository (written down; not planned)

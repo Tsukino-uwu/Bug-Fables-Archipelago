@@ -6,12 +6,11 @@ from typing import Any
 
 from worlds.AutoWorld import World
 
-from . import items, locations, regions, rules, slot_data, web_world
+from . import entrances, items, locations, regions, rules, slot_data, web_world
 from .data_tables import (ARTIFACTS, DOORS, ENCOUNTERS, ITEM_NAME_TO_ID, LOCATION_NAME_TO_ID, LOCATIONS, ROOM_STARTS,
                           STORY_EVENTS)
-from .doors import shuffle_coupled, shuffle_rooms
 from .enemies import shuffle_encounters
-from .options import BugFablesOptions, EnemyShuffle, EntranceRandomizer, StartingLocation, StartingPartyMember
+from .options import BugFablesOptions, EnemyShuffle, StartingLocation, StartingPartyMember
 
 
 class BugFablesWorld(World):
@@ -53,13 +52,7 @@ class BugFablesWorld(World):
         self.included_locations = [loc for loc in LOCATIONS if locations.category_on(self, loc.category)]
         # A quest's step events follow its category: without the quest's items they couldn't be reached.
         self.included_events = [event for event in STORY_EVENTS if locations.category_on(self, event.category)]
-        # Doors are decided here and sent in slot_data; the client never decides a door itself.
-        self.door_targets = []
-        if self.options.entrance_randomizer == EntranceRandomizer.option_coupled:
-            self.door_targets = shuffle_coupled(DOORS.connections, DOORS.fixed, self.random)
-        elif self.options.entrance_randomizer == EntranceRandomizer.option_room_swap:
-            self.door_targets = shuffle_rooms(DOORS.connections, DOORS.fixed, self.random)
-        # Like doors, fights are decided here; the client only replays the list.
+        # Fights are decided here; the client only replays the list.
         self.enemy_swaps = {}
         if self.options.enemy_shuffle == EnemyShuffle.option_enemies_only:
             self.enemy_swaps = shuffle_encounters(ENCOUNTERS, self.random)
@@ -77,6 +70,15 @@ class BugFablesWorld(World):
     def create_regions(self) -> None:
         regions.create_and_connect_regions(self)
         locations.create_all_locations(self)
+
+    def connect_entrances(self) -> None:
+        # Doors are decided here, on the region graph, and sent in slot_data; the client never decides a door itself.
+        self.door_pairings = entrances.shuffle(self)
+        self.door_targets = entrances.door_targets(self.door_pairings, DOORS.connections)
+
+    def write_spoiler_header(self, spoiler_handle: Any) -> None:
+        # Nothing written here: the shuffled doors go to the spoiler's own Entrances section.
+        entrances.write_spoiler(self)
 
     def create_item(self, name: str) -> items.BugFablesItem:
         return items.create_item(self, name)

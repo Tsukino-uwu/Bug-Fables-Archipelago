@@ -2,13 +2,30 @@ from collections import Counter
 from random import Random
 
 from . import BugFablesTestBase
-from ..data_tables import DOORS
+from ..data_tables import DOORS, MAPS
 from ..data_types import DoorConnection, DoorEnd
-from ..doors import arrivals, shuffle_coupled, shuffle_rooms
+from ..entrances import door_targets, room_pairs
+from ..regions import door_name
+
+Door = tuple[str, str]
 
 
 def _link(a_map: str, a_door: str, b_map: str, b_door: str) -> DoorConnection:
     return DoorConnection(a=DoorEnd(map=a_map, door=a_door), b=DoorEnd(map=b_map, door=b_door))
+
+
+def _both_ways(pairs: list[tuple[Door, Door]]) -> list[tuple[Door, Door]]:
+    return [p for x, y in pairs for p in ((x, y), (y, x))]
+
+
+def arrivals(connections, targets) -> dict[Door, Door]:
+    """Where each door leads once the mod applies the targets: the door the party arrives next to."""
+    partner: dict[Door, Door] = {}
+    for c in connections:
+        a, b = (c.a.map, c.a.door), (c.b.map, c.b.door)
+        partner[a], partner[b] = b, a
+    like = {(t["map"], t["door"]): (t["like_map"], t["like_door"]) for t in targets}
+    return {d: partner[like.get(d, d)] for d in partner}
 
 
 def _links(connections, fixed, targets) -> dict[str, set[str]]:
@@ -41,18 +58,12 @@ def _groups(links: dict[str, set[str]]) -> set[frozenset[str]]:
     return groups
 
 
-def _reachable_maps(connections, fixed, targets) -> tuple[set[str], set[str]]:
-    """(maps reached from one map, every map in the table)."""
-    maps = {end.map for c in connections for end in (c.a, c.b)}
-    reached = next(g for g in _groups(_links(connections, fixed, targets)) if min(maps) in g)
-    return reached & maps, maps
-
-
 def _shape(connections, fixed, targets) -> Counter:
-    """For each area (maps joined by fixed links): its part of the world, its door count, and the door counts of the
-    areas its doors lead into. A room swap keeps this; any other shuffle almost never does."""
+    """For each area (maps joined by fixed links both ways): its part of the world, its door count, and the door counts
+    of the areas its doors lead into. A room swap keeps this; any other shuffle almost never does."""
     maps = {end.map for c in connections for end in (c.a, c.b)}
-    area_of = {m: g for g in _groups(_links([], fixed, [])) for m in g}
+    both_ways = [(a, b) for a, b in fixed if (b, a) in set(fixed)]
+    area_of = {m: g for g in _groups(_links([], both_ways, [])) for m in g}
     area_of.update({m: frozenset([m]) for m in maps if m not in area_of})
     part_of = {m: g for g in _groups(_links(connections, fixed, [])) for m in g}
     doors = Counter(area_of[end.map] for c in connections for end in (c.a, c.b))
@@ -63,36 +74,53 @@ def _shape(connections, fixed, targets) -> Counter:
 
 
 class DoorPairTests:
-    """Every mode: doors are rewritten, only to the table's doors, and each way back leads back."""
+    """Every mode that shuffles: doors rewritten, only to the table's doors, the logic and the mod agreeing."""
 
     def test_doors_are_shuffled(self) -> None:
-        targets = self.world.fill_slot_data()["door_targets"]
-        self.assertGreater(len(targets), len(DOORS.connections))
+        self.assertGreater(len(self.world.door_targets), len(DOORS.connections))
 
     def test_every_way_back_leads_back(self) -> None:
         # Coupled: through a door, then through the door you arrive next to, is where you started.
-        arrive = arrivals(DOORS.connections, self.world.fill_slot_data()["door_targets"])
+        arrive = arrivals(DOORS.connections, self.world.door_targets)
         for door, there in arrive.items():
             self.assertEqual(arrive[there], door, f"{door} leads to {there}, which leads to {arrive[there]}")
 
     def test_targets_are_table_doors(self) -> None:
         doors = {(end.map, end.door) for c in DOORS.connections for end in (c.a, c.b)}
-        for t in self.world.fill_slot_data()["door_targets"]:
+        for t in self.world.door_targets:
             self.assertIn((t["map"], t["door"]), doors)
             self.assertIn((t["like_map"], t["like_door"]), doors)
+
+    def test_the_mod_does_what_the_logic_proved(self) -> None:
+        # Each door, rewritten as door_targets says, arrives where its entrance leads in the region graph.
+        arrive = arrivals(DOORS.connections, self.world.door_targets)
+        for x, y in self.world.door_pairings:
+            self.assertEqual(arrive[x], y)
+        for (m, d), (to_map, _) in arrive.items():
+            with self.subTest(door=door_name(m, d)):
+                entrance = self.multiworld.get_entrance(door_name(m, d), self.player)
+                self.assertEqual(entrance.connected_region.name, to_map)
+
+    def test_every_region_reachable_with_everything(self) -> None:
+        state = self.multiworld.get_all_state()
+        for name in MAPS:
+            with self.subTest(region=name):
+                self.assertTrue(state.can_reach_region(name, self.player))
+
+    def test_spoiler_lists_each_pair_once(self) -> None:
+        self.world.write_spoiler_header(None)
+        listed = [key for key in self.multiworld.spoiler.entrances if key[2] == self.player]
+        self.assertEqual(len(listed), len(DOORS.connections))
 
 
 class TestDoorsOffByDefault(BugFablesTestBase):
     def test_no_door_rewritten(self) -> None:
         self.assertEqual(self.world.fill_slot_data()["door_targets"], [])
+        self.assertEqual(self.world.door_pairings, [])
 
 
 class TestDoorsCoupled(DoorPairTests, BugFablesTestBase):
     options = {"entrance_randomizer": "coupled"}
-
-    def test_every_map_reachable(self) -> None:
-        reached, maps = _reachable_maps(DOORS.connections, DOORS.fixed, self.world.fill_slot_data()["door_targets"])
-        self.assertEqual(maps - reached, set())
 
 
 class TestDoorsRoomSwap(DoorPairTests, BugFablesTestBase):
@@ -100,34 +128,13 @@ class TestDoorsRoomSwap(DoorPairTests, BugFablesTestBase):
 
     def test_parts_stay_whole(self) -> None:
         # Parts the game joins only by boats and scenes keep their own rooms, each still reachable within its part.
-        targets = self.world.fill_slot_data()["door_targets"]
+        targets = self.world.door_targets
         self.assertEqual(_groups(_links(DOORS.connections, DOORS.fixed, targets)),
                          _groups(_links(DOORS.connections, DOORS.fixed, [])))
 
     def test_map_keeps_its_shape(self) -> None:
-        targets = self.world.fill_slot_data()["door_targets"]
-        self.assertEqual(_shape(DOORS.connections, DOORS.fixed, targets),
+        self.assertEqual(_shape(DOORS.connections, DOORS.fixed, self.world.door_targets),
                          _shape(DOORS.connections, DOORS.fixed, []))
-
-
-class TestDoorShuffleConnects(BugFablesTestBase):
-    # Two dead ends paired with each other would be cut off; the shuffle must never do that.
-    def test_dead_ends_never_stranded(self) -> None:
-        connections = [_link("Hub", f"to{n}", f"Room{n}", "out") for n in range(6)]
-        connections.append(_link("Hub", "east", "Hall", "west"))
-        connections.append(_link("Hall", "east", "Hub", "west"))
-        for seed in range(300):
-            targets = shuffle_coupled(connections, [], Random(seed))
-            reached, maps = _reachable_maps(connections, [], targets)
-            self.assertEqual(maps - reached, set(), f"seed {seed}")
-
-    def test_fixed_links_join_areas(self) -> None:
-        # Room0 and Room1 share a fixed link, so they're one area with two doors, not two dead ends.
-        connections = [_link("Hub", f"to{n}", f"Room{n}", "out") for n in range(4)]
-        for seed in range(100):
-            targets = shuffle_coupled(connections, [("Room0", "Room1")], Random(seed))
-            reached, maps = _reachable_maps(connections, [("Room0", "Room1")], targets)
-            self.assertEqual(maps - reached, set(), f"seed {seed}")
 
 
 class TestRoomSwapParts(BugFablesTestBase):
@@ -136,14 +143,14 @@ class TestRoomSwapParts(BugFablesTestBase):
         connections = [_link(f"Hub{h}", f"to{n}", f"Room{h}{n}", "out") for h in range(2) for n in range(3)]
         vanilla = _groups(_links(connections, [], []))
         for seed in range(100):
-            targets = shuffle_rooms(connections, [], Random(seed))
+            targets = door_targets(_both_ways(room_pairs(connections, [], Random(seed))), connections)
             self.assertEqual(_groups(_links(connections, [], targets)), vanilla, f"seed {seed}")
 
     def test_rooms_move_whole(self) -> None:
-        # A two-door room joined to its neighbour by a fixed link moves as one area, so the shape holds.
+        # Two halls joined by a fixed door both ways move as one area, so the shape holds.
         connections = [_link("Hub", f"to{n}", f"Room{n}", "out") for n in range(4)]
         connections += [_link("Room0", "east", "Hall", "west"), _link("Room1", "east", "Hall2", "west")]
-        fixed = [("Hall", "Hall2")]
+        fixed = [("Hall", "Hall2"), ("Hall2", "Hall")]
         for seed in range(100):
-            targets = shuffle_rooms(connections, fixed, Random(seed))
+            targets = door_targets(_both_ways(room_pairs(connections, fixed, Random(seed))), connections)
             self.assertEqual(_shape(connections, fixed, targets), _shape(connections, fixed, []), f"seed {seed}")

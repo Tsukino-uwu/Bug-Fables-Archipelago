@@ -35,8 +35,8 @@ class TestAreas(BugFablesTestBase):
         # Where the game has it, with the doors as they are (Archipelago's entrance randomizer shuffles these).
         for connection in DOORS.connections:
             for end, other in ((connection.a, connection.b), (connection.b, connection.a)):
-                with self.subTest(door=door_name(end)):
-                    entrance = self.multiworld.get_entrance(door_name(end), self.player)
+                with self.subTest(door=door_name(end.map, end.door)):
+                    entrance = self.multiworld.get_entrance(door_name(end.map, end.door), self.player)
                     self.assertEqual(entrance.parent_region.name, end.map)
                     self.assertEqual(entrance.connected_region.name, other.map)
 
