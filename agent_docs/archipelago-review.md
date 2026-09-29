@@ -148,8 +148,10 @@ drop the download and `custom_worlds` steps. The world maintainer's duties are i
 
 ## Main only (not in 0.6.7 yet)
 
-- **`quantity`**, a new top-level key in a player's yaml (`advanced_settings_en.md` on main, lines 63 and 80-82):
-  not read by me yet; to verify before saying what it does.
+- **`quantity`**, a new top-level key in a player's yaml (`advanced_settings_en.md` on main, lines 63 and 81-82):
+  "the amount of times this yaml should be used when generating", default 1; above 1 the name must use the numbering
+  keywords, and the host must allow it (`allow_quantity`, `Generate.py` on main, 43-44 and 140-146). Each copy is an
+  ordinary slot of ours, so nothing in the world or the mod changes.
 - `AP_TEST_WORLDS=bug_fables pytest` runs Archipelago's generic tests on one world (`tests.md`).
 - APQuest moved to the Rule Builder on 2026-04-18 (#5906), after our checkout.
 - `Bounce` gains `teams` and `operator` (`network protocol.md`); our DeathLink sends tags and data only.
