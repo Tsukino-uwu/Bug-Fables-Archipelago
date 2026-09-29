@@ -153,14 +153,60 @@ generates seeds from random yamls and catches the rare combination that fails. *
 runs too** (2026-09-28); 10000 seeds take a few minutes.
 
 1. Once: copy its `fuzz.py` (and `hooks/`) to the root of your Archipelago checkout.
-2. `dev-scripts/test-apworld.ps1 -Archipelago <your checkout>` runs the tests, then the fuzzer
-   (`fuzz.py -r 10000 -n 1 -g bug_fables --skip-output`: one Bug Fables yaml per seed), and prints each error with its
-   count. `-With apquest` puts another world in every room; `-Runs` changes the count. It fails unless both are clean.
+2. `dev-scripts/test-apworld.ps1 -Archipelago <your checkout>` runs the tests, the Logic Test check (next section),
+   then the fuzzer (`fuzz.py -r 10000 -n 1 -g bug_fables --skip-output`: one Bug Fables yaml per seed), and prints each
+   error with its count. `-With apquest` puts another world in every room; `-Runs` changes the count. It fails unless
+   all three are clean.
 3. Read `fuzz_output/report.json` (counts and each error with the runs that hit it). Each failed run keeps its yaml and
    log in `fuzz_output/error/bug_fables/<run>/`; regenerate it with `Generate.py --player_files_path` on that folder.
    A new run replaces `fuzz_output`, so copy anything you still need first.
 
 Exit code 1 only means some runs failed. The goal is 0 failures in 10000.
+
+## Play-testing the logic: the Logic Test apworld
+
+The tests and the fuzzer check the logic against itself. The
+[Logic Test](https://github.com/palex00/Archipelago/tree/logic-test-apworld/worlds/logic_test) apworld (gerbiljames
+and palex00) checks it against the game: you play a seed in step with the logic's spheres. It adds a slot that
+generates the room's other games a second time, reads their spheres, puts sphere i's key (`KEY_i`) at every location
+of sphere i and keeps the real items. Once every `KEY_i` is found, its client opens sphere i and that sphere's items
+arrive. Every location becomes a check you must do, shops included, and nothing arrives early.
+
+**Reading the result:**
+
+- **Stuck:** a sphere's last keys can't be reached in the game. The logic is looser than the game. In a normal seed
+  that means a seed that can't be finished, which our rules never allow: fix the logic. To carry on, send the stuck
+  location from the server console: `/send_location <slot> <location>`.
+- **An early key:** the client logs `LOGIC LEAK: KEY_j received while on sphere i`. The logic is stricter than the
+  game. Our rules allow that (the logic may be more cautious than the game), so note it and decide whether the caution
+  is wanted.
+
+**Steps:**
+
+1. Once: copy `worlds/logic_test` from palex00's fork (branch `logic-test-apworld`) into your Archipelago checkout's
+   `worlds/`, never into this repo. We use commit `795f13b` (world 0.4.0, 2026-09-28); its own 27 tests pass at our
+   tag 0.6.7 (2026-09-29). Read a newer commit before using it (`licensing.md`).
+2. `test-apworld.ps1` runs `dev-scripts/logic-test-check.py` whenever `worlds/logic_test` is there. The Logic Test's
+   second generation must equal the seed we generated. When they differ, the tool fills the gaps from whatever is left
+   over without a word, and a stall could come from the mismatch instead of the logic. The check compares the copy's
+   Bug Fables slot_data and every relocated item over five presets, both `count_events` values, three room layouts
+   and three seeds (90 generations, a few seconds). `--negative` gives the copy a wrong seed and must flag every run. It
+   also fails when the world rolls with Python's global `random` instead of `self.random` (2026-09-29, a scratch
+   patch on the start room: 24 of 60 runs flagged).
+3. Player files: yours, plus `name: LogicTest`, `game: Logic Test`, `Logic Test: {count_events: false}`. Keep
+   `count_events` off. With it on, a location behind a story event lands one sphere after the event, so reaching it
+   right after the event logs an early key although the logic is right (read from its `compute_spheres`, 2026-09-29).
+4. Generate and host as in "A local server to test against". Connect the game, then the Logic Test client: the
+   Launcher's **Logic Test Client**, or from the checkout `python -m worlds.logic_test.client --name LogicTest
+   ws://127.0.0.1:38281`. Its tab shows the sphere, the keys found and an **Open Sphere** button; in its console,
+   `/status`, `/proceed` and `/keys` (the locations still holding this sphere's keys) do the same.
+5. Play: do every check you can reach. When the client says ready, open the sphere; its items arrive from LogicTest.
+
+**Measured without the game (2026-09-29):** a default seed with spheres of 41, 22, 4 and 2 keys, hosted locally. A
+script played BugTester, and the client's own code opened each sphere. Every sphere's items arrived from the LogicTest
+slot, 69 in all. A sphere-2 key sent first was logged as a leak, and `/keys` listed sphere 1's 41 locations. **Its
+data package** holds 100,000 location names, 2.18 MB of JSON, and every client in the room is offered it. The mod
+downloading it is not yet seen.
 
 ## Proving a refactor changed nothing
 

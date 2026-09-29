@@ -359,6 +359,11 @@ be wrong.
    (an idea): real locations, a new kind (its own build step, likely a yaml option); first measure whether
    they come back on re-entering (no one-time flag, likely), since a check needs a lasting record the save already
    has a place for. Not built.
+42. **Playing the logic with the Logic Test apworld** (2026-09-29): installed in the Archipelago checkout, its
+   copy of our seed checked (`logic-test-check.py`, with the tests), and a hosted seed played through by a script
+   without the game, every sphere's items arriving (`development.md`, "Play-testing the logic"). Next: the game
+   connects to such a room (its data package is 2.18 MB), then a seed played through. It matters most for the
+   experimental options (build steps 12 and 15).
 
 **Known issues:**
 
@@ -448,6 +453,12 @@ own test suite passes for it too. Since 2026-09-28 every apworld change is also 
 yamls (`development.md`, "Fuzzing the apworld"), which finds the option combinations no test thought of. A change
 meant to alter nothing (a refactor) is also proven with a seed snapshot: fixed seeds before and after, whose slot_data
 and spoilers must come out identical (`development.md`, "Proving a refactor changed nothing").
+
+All of those check the logic against itself. **Since 2026-09-29 the logic can be tested against the game:** the Logic
+Test apworld (`development.md`, "Play-testing the logic") turns a seed into spheres played one at a time, with every
+location a check you must do. Stuck in a sphere means the logic is looser than the game; a key from a later sphere
+means it's stricter. It works only if its second generation of our world equals the real one, which it doesn't check
+itself. So `logic-test-check.py` checks it, and runs with the tests whenever the Logic Test is in the checkout.
 
 To try it, the world folder is linked into a local copy of Archipelago (run from source), and seeds are
 generated with `Generate.py`.

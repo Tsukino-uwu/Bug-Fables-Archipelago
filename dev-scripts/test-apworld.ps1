@@ -1,5 +1,5 @@
-# The apworld's tests, then the fuzzer: both, every time. Run from anywhere.
-# -Archipelago: your Archipelago checkout (the world linked in, fuzz.py at its root).
+# The apworld's tests, the Logic Test check, then the fuzzer: all, every time. Run from anywhere.
+# -Archipelago: your Archipelago checkout (the world linked in, fuzz.py at its root, worlds/logic_test copied in).
 param(
     [Parameter(Mandatory)] [string] $Archipelago,
     [int] $Runs = 10000,
@@ -16,6 +16,13 @@ try {
     python -m pytest worlds/bug_fables/test -q
     $testsFailed = $LASTEXITCODE -ne 0
 
+    $logicTest = 'skipped: no worlds/logic_test (development.md, Play-testing the logic)'
+    if (Test-Path 'worlds/logic_test') {
+        Write-Host '== Logic Test check'
+        python (Join-Path $PSScriptRoot 'logic-test-check.py')
+        $logicTest = if ($LASTEXITCODE -eq 0) { 'passed' } else { 'FAILED' }
+    }
+
     Write-Host "== Fuzzer: $Runs seeds"
     $games = @('-g', 'bug_fables') + ($With | ForEach-Object { '-g', $_ })
     python fuzz.py -r $Runs -j $Jobs -n 1 @games --skip-output | Select-Object -Last 1
@@ -29,6 +36,7 @@ try {
     }
     Write-Host ("Fuzzer: {0} of {1} failed, {2} timed out" -f $stats.failure, $stats.total, $stats.timeout)
     Write-Host ("Tests: {0}" -f $(if ($testsFailed) { 'FAILED' } else { 'passed' }))
-    if ($testsFailed -or $stats.failure -gt 0 -or $stats.timeout -gt 0) { exit 1 }
+    Write-Host "Logic Test check: $logicTest"
+    if ($testsFailed -or $logicTest -eq 'FAILED' -or $stats.failure -gt 0 -or $stats.timeout -gt 0) { exit 1 }
 }
 finally { Pop-Location }

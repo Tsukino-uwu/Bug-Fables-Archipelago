@@ -1457,3 +1457,20 @@ Newest last. What was tried, what happened, what the user said.
   sphere are logic stricter than the game, which our rules allow. The fuzzer can't tell either apart.
 - **Not measured yet:** no seed generated with it (that needs the world copied into the Archipelago checkout, the
   user's call). The mod's side is untested: its data package always names 100,000 locations.
+- **The user: add it and test with it; the local server may be started, not the game.** Copied in at commit
+  `795f13b`; its own 27 tests pass at 0.6.7.
+  - **The catch found by reading:** when its second generation differs from the real seed, it fills the gaps from
+    leftovers without a word (its `fill_hook`), so a stall could come from the mismatch. Nothing in the tool reports
+    it. `logic-test-check.py` now does: 90 of 90 generations reproduced exactly (five presets, both `count_events`,
+    three layouts, three seeds). Proven able to fail twice: a wrong copy seed (`--negative`, 18 of 18 flagged) and
+    a scratch patch rolling the start room with the global `random` (24 of 60 flagged). `test-apworld.ps1` runs it;
+    the full run: 403 tests, the check, fuzzer 0 of 10000.
+  - **Hosted and played without the game:** seed with spheres of 41, 22, 4 and 2 on a local server; a script as
+    BugTester checked each sphere's key locations, the client's own `LogicTestContext` opened each sphere. All 69
+    items arrived from the LogicTest slot, sphere by sphere; a sphere-2 key sent first was logged as `LOGIC LEAK`;
+    `/keys` listed 41 locations. The first try died on two bugs in my own script (a missing `return self`, items
+    read as lists); the server's save was deleted and the run redone from a fresh room. Server stopped, port free.
+  - **`count_events` stays off for us:** with it on, a location behind a story event lands a sphere after the
+    event, so it would read as an early key (from `compute_spheres`).
+  - **Its data package:** 2,184,957 bytes after inflating, sent to every client in the room. Next: the game
+    connects to such a room, then a seed played through.
