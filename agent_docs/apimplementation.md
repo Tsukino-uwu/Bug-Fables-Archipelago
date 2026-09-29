@@ -438,7 +438,8 @@ be wrong.
       venv, `--log_network`, a local WebHost preview, `/send_location`, the world maintainer's duties).
     - **With the room mapping:** 23. Archipelago's entrance randomizer in place of `doors.py`: done 2026-09-30
       (build step 12), ahead of the room mapping, on one region per map.
-    - **A second look at what we kept:** 24. the enemy shuffle in `generate_basic`; 25. items through the library's
+    - **A second look at what we kept:** 24. the enemy shuffle stays in `generate_early` (reversed 2026-09-30, the
+      user: it is logic, since fights that can't be fled and Tattle checks depend on it); 25. items through the library's
       queue (to check first); 26. Archipelago's DeathLink yaml option, the panel switch kept too (decided
       2026-09-29); 27. the library's cache bug: reported by the user as MultiClient.Net #143, our patch until a fix;
       28. upstream #141, which would retire our compression switch once released (#142 doesn't cover our net40 build).

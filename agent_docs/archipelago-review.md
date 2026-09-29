@@ -141,9 +141,13 @@ conventions the docs and APQuest show), *main only* (not in 0.6.7 yet).
 
 After the slot_data decision, each kept item was checked again for a way Archipelago or its library does offer.
 
-24. **The enemy shuffle belongs in `generate_basic`** (checked): "Useful for randomizing things that don't affect logic
-    … i.e. … randomizing enemies" (`AutoWorld.py:408-413`); ours runs in `generate_early` (`world.py:61-63`). Map
-    fights can always be fled, so the shuffle doesn't affect the logic.
+24. **The enemy shuffle stays in `generate_early`** (reversed 2026-09-30). `generate_basic` is "Useful for randomizing
+    things that don't affect logic … i.e. … randomizing enemies" (`AutoWorld.py:408-413`), and ours runs in
+    `generate_early` (`world.py:61-63`). The first reading was that map fights can always be fled, so the shuffle doesn't
+    affect the logic. **The user, 2026-09-30:** it is logic. Bosses and other fights that can't be fled limit what may be
+    placed there to enemies the party can beat (build step 14's party rule). *Shuffle Bestiary* checks (Next 44) would
+    follow `enemy_swaps`. So the shuffle must be decided before the rules. What doesn't touch the logic, *Music
+    Shuffle*, goes in `generate_basic` (build step 33).
 25. **Receiving items through the library's queue** (to check first): MultiClient.Net documents `ItemReceived` and
     `DequeueItem` (`docfx/helpers/helpers.md:55-68`); the mod polls `AllItemsReceived` against the count in the save
     (`ItemReceiver.cs:81-123`), and the library's queue is never read. The queue restarts each session, so it has to
