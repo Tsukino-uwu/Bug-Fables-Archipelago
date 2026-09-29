@@ -18,7 +18,8 @@ Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's 
 - **Shuffle Medal Shops** (on): medals sold in shops are locations.
 - **Shuffle Item Shops** (on): the first purchase of each item in an item shop is a location.
 - **Shop Contents** (No Progression): what shop locations may hold.
-- **Entrance Randomizer** (off, experimental): doors between areas lead somewhere else, in coupled pairs.
+- **Entrance Randomizer** (off, experimental): doors between areas lead somewhere else, in coupled pairs; or
+  Room Swap, whole rooms trading places (see below).
 - **Enemy Shuffle** (off): ordinary enemies on each map are swapped for others of the same group size.
 - **Starting Location** (off, experimental): a new file begins in any room in the game.
 - **Starting Party Member** (all three): a new file starts with the whole party; or with Vi, Kabbu or Leif alone (or one
@@ -31,6 +32,14 @@ Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's 
   pause menu's Warp is always there. New in this version.
 
 Each option's description in the yaml says what it does in full and how many checks it adds.
+
+## Room Swap
+
+Set *Entrance Randomizer* to `room_swap` (experimental, new in this version). Whole rooms trade places with rooms that
+have as many doors, in the same part of the world, so the map keeps the game's shape: only which room sits where
+changes. Turning round always takes you back where you came from. It is gentler than Coupled, where any door may lead
+to any other. As with Coupled, the logic doesn't follow the doors yet, so a seed may not be finishable; the pause
+menu's Warp gets you out of a dead end.
 
 ## Field abilities
 

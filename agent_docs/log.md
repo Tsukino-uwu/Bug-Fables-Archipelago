@@ -1629,3 +1629,18 @@ Newest last. What was tried, what happened, what the user said.
   flight code (its speed is a velocity, frame-rate free; only the rise writes the position) against the two faults
   already fixed in step 24, and the one-change fix settled it. Kabbu and Leif during a flight, asked: "they look the
   same as Vi".
+
+## 2026-09-29 (night, last): Room Swap, Uncap FPS Off by default
+
+- **Uncap FPS back to Off by default** (the user). A config that already stores a value keeps it (no migration, as
+  on 2026-09-28), so the user's own Monitor stays. Built and staged, not copied in: the user was playing vanilla.
+- **What a room shuffle is called** (the user: rooms with the same number of entrances swapping places, "like the super
+  metroid map rando"; Off / Room / Couple / Decouple, or a separate toggle?). Measured on the door table first: every
+  room swap is a coupled layout, so a separate toggle next to Coupled would do nothing visible; a decoupled room
+  swap leaves doors leading nowhere, which is just the coupled shuffle. The door graph splits into 10 parts joined only
+  by boats and scenes, so rooms swap within their part (198 of 215 areas have a partner). The user chose one option,
+  value `room_swap`, built now and tested later, with a doc section of its own: build step 30.
+- **Built:** `shuffle_rooms` in `doors.py`, no mod change. Tests that fail on purpose: the coupled shuffle breaks the
+  shape test in 50 of 50 seeds, dropping the part rule breaks the parts test in 93 of 100, ignoring fixed links 85
+  of 100. 458 tests, the Logic Test check and the fuzzer (0 of 10000) pass; seeds generated alone and with APQuest.
+  Not yet seen in game.

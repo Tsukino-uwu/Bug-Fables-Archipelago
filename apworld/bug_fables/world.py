@@ -9,7 +9,7 @@ from worlds.AutoWorld import World
 from . import items, locations, regions, rules, slot_data, web_world
 from .data_tables import (ARTIFACTS, DOORS, ENCOUNTERS, ITEM_NAME_TO_ID, LOCATION_NAME_TO_ID, LOCATIONS, ROOM_STARTS,
                           STORY_EVENTS)
-from .doors import shuffle_coupled
+from .doors import shuffle_coupled, shuffle_rooms
 from .enemies import shuffle_encounters
 from .options import BugFablesOptions, EnemyShuffle, EntranceRandomizer, StartingLocation, StartingPartyMember
 
@@ -57,6 +57,8 @@ class BugFablesWorld(World):
         self.door_targets = []
         if self.options.entrance_randomizer == EntranceRandomizer.option_coupled:
             self.door_targets = shuffle_coupled(DOORS.connections, DOORS.fixed, self.random)
+        elif self.options.entrance_randomizer == EntranceRandomizer.option_room_swap:
+            self.door_targets = shuffle_rooms(DOORS.connections, DOORS.fixed, self.random)
         # Like doors, fights are decided here; the client only replays the list.
         self.enemy_swaps = {}
         if self.options.enemy_shuffle == EnemyShuffle.option_enemies_only:

@@ -1,6 +1,7 @@
-"""The entrance randomizer's coupled shuffle.
+"""The entrance randomizer's shuffles: coupled, and the room swap.
 
-It grows the world outwards from one area, since a random pairing strands dead-end rooms joined to each other.
+The coupled shuffle grows the world outwards from one area, since a random pairing strands dead-end rooms joined to
+each other. The room swap keeps the game's map and moves whole rooms around it, so nothing can be stranded.
 """
 from __future__ import annotations
 
@@ -67,7 +68,39 @@ def shuffle_coupled(connections: Sequence[DoorConnection], fixed: Sequence[tuple
             raise RuntimeError("Bug Fables: the door shuffle ran out of open doors before every area was reached")
     random.shuffle(open_doors)
     pairs.extend(zip(open_doors[0::2], open_doors[1::2]))
+    return _targets(pairs, partner)
 
+
+def shuffle_rooms(connections: Sequence[DoorConnection], fixed: Sequence[tuple[str, str]],
+                  random: Random) -> list[dict[str, str]]:
+    """Whole areas trade places with areas of as many doors in their part of the world, as door_targets."""
+    partner = _partners(connections)
+    doors = sorted(partner)
+    maps = {m for m, _ in doors}
+    area = _areas(maps, fixed)
+    # The doors alone split the world into parts that boats and scenes join; a swap across parts would strand rooms.
+    part = _areas(maps, [*fixed, *((a[0], b[0]) for a, b in partner.items())])
+    by_area: dict[str, list[Door]] = {}
+    for d in doors:
+        by_area.setdefault(area[d[0]], []).append(d)
+    alike: dict[tuple[str, int], list[str]] = {}
+    for a in sorted(by_area):
+        alike.setdefault((part[a], len(by_area[a])), []).append(a)
+
+    # placed[d]: the door that now stands where d stood, a door of the area that took d's area's place.
+    placed: dict[Door, Door] = {}
+    for slots in alike.values():
+        rooms = list(slots)
+        random.shuffle(rooms)
+        for slot, room in zip(slots, rooms):
+            moved = list(by_area[room])
+            random.shuffle(moved)
+            placed.update(zip(by_area[slot], moved))
+    return _targets([(placed[a], placed[b]) for a, b in partner.items() if a < b], partner)
+
+
+def _targets(pairs: Sequence[tuple[Door, Door]], partner: dict[Door, Door]) -> list[dict[str, str]]:
+    """Each pair (x, y) as door_targets: x leads where y's old partner led, so you arrive next to y, and back."""
     targets = []
     for x, y in pairs:
         for door, joined in ((x, y), (y, x)):

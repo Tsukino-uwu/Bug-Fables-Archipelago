@@ -41,6 +41,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 27. [Build step 27: a found pickup is gone in every save](#build-step-27-a-found-pickup-is-gone-in-every-save)
 28. [Build step 28: nothing unpublishable in the repo or a release](#build-step-28-nothing-unpublishable-in-the-repo-or-a-release)
 29. [Build step 29: the logic in Python, one module per area, the Rule Builder's way](#build-step-29-the-logic-in-python-one-module-per-area-the-rule-builders-way)
+30. [Build step 30: Room Swap (experimental)](#build-step-30-room-swap-experimental)
 
 **How it works**
 
@@ -451,6 +452,9 @@ be wrong.
    (`disablespy` in the tutorial fights, a flag?), a place each enemy is always fought (following the enemy shuffle's
    `enemy_swaps`), bosses spied only in their own fight, the 23 missable ids (Event65's `excludeids`), and the
    auto-spy row (build step 10). A yaml option, so its own build step when built.
+45. **Room Swap (experimental)** (2026-09-29): whole rooms trade places with rooms of as many doors, a value of the
+   entrance randomizer. Built, not yet seen in game; see build step 30. Next: the user plays a seed with it; later,
+   doors matched by side.
 
 **Known issues:**
 
@@ -1558,6 +1562,9 @@ entrance in the logic (it had ten large regions), so Archipelago's generic entra
 of its room's region, and `randomize_entrances` replaces `doors.py`: coupled mode, one-ways paired only with one-ways,
 placed with the logic so the logic follows the doors, its `pairings` turned into the same `door_targets` the mod
 already reads (How it works §8; Archipelago's `entrance randomization.md`).
+
+**Room Swap** (2026-09-29), whole rooms moved instead of single doors, is a value of the same option with a step of its
+own: build step 30.
 
 **Status:** in progress (experimental): every door, coupled, built, and a generated pair seen both ways, offline too (2026-09-25); next, sorting the transfers that aren't doors, then the room-by-room logic, with Archipelago's entrance randomizer in place of `doors.py`; decoupled later.
 
@@ -2801,6 +2808,67 @@ the fuzzer (0 of 10000, every room with APQuest) pass.
 
 *Code: `logic/`, `custom_rules.py`, `data_types.py`, `data_tables.py`, `regions.py`, `rules.py`; tests `test_areas.py`,
 `test_rules.py`, `test_logic.py` (`TestClassifications`), `test_party.py`.*
+
+## Build step 30: Room Swap (experimental)
+
+Whole rooms trade places with rooms that have as many doors, so the map keeps the game's shape and only which room
+sits where changes. A value of the yaml option *Entrance Randomizer (experimental)*, `room_swap`, sharing the door table
+and `door_targets` with build step 12, but a step of its own (the user, 2026-09-29: "room swap deserves its own doc
+section separated from entrance rando").
+
+**What it is, and why it is a value of the entrance randomizer** (2026-09-29; the user asked what a shuffle like
+Super Metroid's Map Rando is called, rooms with the same number of entrances swapping places):
+
+- **A room swap is a coupled shuffle too:** each door still leads back where it came from. So *Room Swap* and
+  *Coupled* on together would look like *Coupled* alone. One option, then, each value allowing everything the one
+  before it does: *Off*, *Room Swap*, *Coupled*, later *Decoupled*. The user chose the name `room_swap`: "rooms"
+  alone says less, and Hollow Knight's randomizer uses "room randomizer" for every transition shuffled.
+- **No decoupled room swap:** a room put where a room with more doors stood leaves the neighbours' extra doors leading
+  nowhere, and pairing such loose doors is the coupled shuffle. *Coupled* and *Decoupled* keep their one meaning:
+  whether turning round takes you back.
+- Super Metroid's Map Rando lays out a new map on a grid. Bug Fables' maps are separate scenes on no grid, so the
+  swap keeps the game's own map.
+
+**The numbers first** (measured on `data/doors.json`, 2026-09-29):
+
+- **What moves is an area** as `doors.py` counts it: a map with the maps its fixed doors join (a fixed door can't be
+  rewritten, so it travels with its room). 215 areas; by doors: 72 with 1, 75 with 2, 38 with 3, 14 with 4, 7 with 5,
+  4 with 6, one each with 7, 11 and 23, two with 8.
+- **The doors alone split the world into 10 parts** (180, 22, 17, 5, 4, 4, 3, 3, 2 and 2 maps), which boats,
+  elevators and scenes join (the `Beehive` and `Factory` maps, `RubberPrison` with `GiantLair`, the `Termite` maps...).
+  A room swapped into another part strands its own part, so **rooms swap only within their part**: 198 of the 215
+  areas have a partner there; 17 stay put, mostly hubs (`SandCastleMainRoom`, 11 doors; the area of
+  `GoldenPathTunnel2`, 23).
+
+**How it was built:**
+
+1. **`shuffle_rooms`** (`doors.py`): the areas and their doors as the coupled shuffle has them; the parts are the
+   same grouping with every door added to the fixed links. Areas are grouped by part and door count and each group
+   shuffled: each area's place goes to another, whose doors take the place's doors in a random order (which side of a
+   room a door is on isn't in the table). Each of the game's pairs (d, n) becomes the pair of doors now standing at
+   d and n.
+2. **The same `door_targets`:** the pairs go through the coupled shuffle's own last step (`_targets`), so the mod
+   needed no change, and the Warp is forced on as with any `door_targets` (build step 12).
+3. **Nothing stranded, for free:** the map keeps the game's shape, so the coupled shuffle's grow-outwards pass isn't
+   needed.
+4. **Ours, not Archipelago's:** its entrance randomizer (`randomize_entrances`) pairs single entrances by group and
+   can't move a room's doors together, so this is custom work where Archipelago has none (How it works §8). Once the
+   rooms are regions (build step 24), its pairs become `Entrance` connections.
+
+**Tests** (`test_doors.py`): what every mode shares (doors rewritten, only the table's doors named, every way back
+leads back); the parts stay whole; **the map keeps its shape**: each area's part, its door count and the door counts
+of the areas its doors lead into are the game's (the coupled shuffle breaks that in 50 of 50 seeds); on small made-up
+tables over 100 seeds, two parts never trade rooms (without the part rule, broken in 93) and a fixed-joined area moves
+whole (ignoring fixed links, broken in 85). On the real table about 490 of the 508 doors are rewritten. 458 tests, the
+Logic Test check and the fuzzer (0 of 10000) pass; seeds generated alone and with APQuest (the spoiler: *Room Swap*).
+
+**Later:** doors matched by side (an exit on the right leads into a door on the left), once each door's side is read
+from the entity dump.
+
+**Status:** built, not yet seen in game (2026-09-29); experimental like build step 12: the logic doesn't follow the
+doors yet.
+
+*Code: `doors.py` (`shuffle_rooms`, `_targets`), `options.py`, `world.py`; tests `test_doors.py`.*
 
 # How it works
 

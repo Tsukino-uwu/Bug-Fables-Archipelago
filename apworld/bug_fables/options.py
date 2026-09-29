@@ -99,8 +99,12 @@ class ShopContents(Choice):
 
 class EntranceRandomizer(Choice):
     """
-    EXPERIMENTAL. Doors between areas lead somewhere else. Coupled: a door and its way back stay a pair, so turning
-    round takes you back where you came from. Every area stays reachable through doors.
+    EXPERIMENTAL. Doors between areas lead somewhere else. In both modes a door and its way back stay a pair, so
+    turning round takes you back where you came from, and every room stays reachable.
+
+    Room Swap: whole rooms trade places with rooms that have as many doors, in the same part of the world. The map
+    keeps the game's shape; only which room sits where changes.
+    Coupled: any door may lead to any other.
 
     The logic doesn't follow the doors yet: items are placed as if the doors were where the game has them, so a seed
     with this on may not be finishable (the pause menu's Warp button gets you out of a dead end). Off by default.
@@ -111,6 +115,7 @@ class EntranceRandomizer(Choice):
     display_name = "Entrance Randomizer (experimental)"
     option_off = 0
     option_coupled = 1
+    option_room_swap = 2
     default = 0
 
 
