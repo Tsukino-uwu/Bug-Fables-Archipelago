@@ -1809,14 +1809,18 @@ BepInEx is not bundled; the player installs it first.
 4. **The release** (`.github/workflows/release.yml`, run by hand): a guard first (the version is `vX.Y.Z` and
    matches `Plugin.cs` and `world_version`; the tag is free; nothing unpublishable in the highlights or in any commit
    subject the generated notes will publish, checked by the preflight's text rules since 2026-09-29, build step 28),
-   then CI and the stale gate, then the publish job zips `release/mod/BepInEx` and attaches
-   the three files. The body is the highlights (changes and new features, or nothing) plus GitHub's generated notes.
-   `softprops/action-gh-release` is pinned to a commit, since it runs with write access.
+   then CI, the preflight workflow and the stale gate, then the publish job zips `release/mod/BepInEx` and attaches
+   the three files. The body is the highlights (changes and new features, or nothing), a section on what the code
+   may do that changed since the last release, and GitHub's generated notes.
+   `softprops/action-gh-release` is pinned to a commit, since it runs with write access. Since 2026-09-29 (build
+   step 28) the files are checked against the commit before they are uploaded and again once published, and the
+   apworld and yaml carry GitHub's provenance attestation.
 5. **One command cuts it:** `dev-scripts/release.ps1 -Version v0.1.0 [-HighlightsFile notes.md]` (add `-Prerelease`
    only for a test build: a pre-release never shows as Latest, which hides it; 2026-09-26). It
    refuses unless the versions match, `main` is clean and not behind, and the tag is free. Then its preflight runs
    the stale gate; a stale DLL is rebuilt and committed on the spot, and the gate runs again. Then it pushes, waits
-   for CI to go green, dispatches the release and waits for it to publish. Running it is the go-ahead to push.
+   for CI and the preflight workflow to go green, dispatches the release and waits for it to publish. Running it
+   is the go-ahead to push.
    **The highlights' format (2026-09-27, the standard from v0.2.0 on):** short one-line bullets under
    `### Features`, `### Logic` and `### Bug Fixes` (a heading left out when empty), as other Archipelago mods write
    theirs. What a player notices only: no internal fixes, and no "update both, regenerate" line (players are assumed
@@ -2411,6 +2415,32 @@ its `-Check` (the release's gate) is now preflight with `--release`.
 - **Capabilities list:** every table in `docs/capabilities.md` is one a section checks, and every row has a
   reason. A table nothing enforced would read as if something did.
 
+**Checking a release against the repository (2026-09-29): `dev-scripts/verify-release.py`.** Given a release's
+files and the tag, it checks:
+- the mod zip holds exactly `release/mod` at the tag, byte for byte;
+- the apworld holds exactly `apworld/bug_fables`, byte for byte, but for the three things Archipelago's builder
+  adds: the licence and two version fields in the manifest;
+- the three libraries are the NuGet package's own files;
+- the yaml, which Archipelago writes from the options, carries no credential, home path or hidden character;
+- for a release made after the preflight, preflight's DLL sections pass on the zip's DLL.
+
+It needs only git and Python, no network: download the files first. **Both earlier releases pass** (v0.1.0 and
+v0.2.0, run 2026-09-29). A zip with one byte changed in a library, and an apworld with a file added, both fail.
+
+**CI and the release (2026-09-29):**
+- **Every push and pull request** (`.github/workflows/preflight.yml`), on Python 3.11 and 3.13: preflight on the
+  commit, `--history` over everything ever pushed, and the gate's own test. A second job downloads the
+  Archipelago.MultiClient.Net package from nuget.org and checks the three libraries against it.
+- **The release** waits for that workflow too. Before uploading, it checks the files against the commit: the
+  apworld is built in a job that also installs Archipelago's own dependencies from PyPI, so it is checked, not
+  trusted.
+- **Provenance:** it adds GitHub's signed provenance attestation to the apworld and the yaml, the two files CI
+  builds; `gh attestation verify` checks them. Not to the mod zip, which would suggest CI built its DLL.
+- **The notes:** they carry `docs/capabilities.md`'s diff since the last release, so a new capability is on the
+  release page whatever the highlights say.
+- **After publishing:** a last job downloads what was published and runs `verify-release.py` on it.
+- **`release.ps1`** waits for both push workflows before dispatching.
+
 **Where it runs so far:**
 - **Every commit:** the pre-commit hook, quiet unless something fails.
 - **Every push** (`.githooks/pre-push`): preflight on each pushed commit, and `--history` on everything new in the
@@ -2461,14 +2491,15 @@ character, no game file, and no binary other than the release DLLs. It first fla
   exempt by their exact git hash (`history_reviewed` in the patterns file), each with its reason, so a different
   file can't hide behind the exemption.
 
-**Status:** in progress (2026-09-29). Built: the sections above (files, apworld, mod source, scripts, the compiled
-DLL, the workflows and the dependencies), in pre-commit, pre-push, the release guard and the release build, and
-their test. Next: CI on every push, and the release checks.
+**Status:** in progress (2026-09-29). Built: the sections above, their test, `verify-release.py`, and every place
+they run (pre-commit, pre-push, CI on every push, the release). The CI half runs for the first time on the next
+push. Next: the pages for reviewers, and the GitHub settings.
 
 *Code: `dev-scripts/preflight.py`, `dev-scripts/preflight-patterns.json`, `dev-scripts/dotnet_metadata.py`;
 `docs/capabilities.md`;
 `dev-scripts/negative-test-preflight.py`; `.githooks/pre-commit`, `.githooks/pre-push`, `.githooks/commit-msg`,
-`.githooks/python.sh`; the guard in `.github/workflows/release.yml`.*
+`.githooks/python.sh`; `dev-scripts/verify-release.py`; `.github/workflows/preflight.yml`, and the guard, publish
+and verify jobs in `.github/workflows/release.yml`.*
 
 # How it works
 

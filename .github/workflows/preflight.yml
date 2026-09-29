@@ -1,0 +1,50 @@
+name: Preflight
+
+# Every push and pull request, and every release (release.yml calls this): dev-scripts/preflight.py on the commit and
+# on everything ever pushed, its own test (every section made to fail), and the three libraries against NuGet's package.
+on:
+  push:
+  pull_request:
+  workflow_call:
+
+permissions: {}
+
+jobs:
+  preflight:
+    name: Preflight on Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # The oldest and newest Python Archipelago's CI tests at the targeted tag: the syntax trees differ between them.
+        python: ['3.11', '3.13']
+    steps:
+      # All history: --history reads every commit, and the DLL checks read the commit the DLL was built from.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Every section, on this commit
+        run: python dev-scripts/preflight.py
+
+      - name: Every file and commit message ever pushed
+        run: python dev-scripts/preflight.py --history
+
+      - name: Every section can fail
+        run: python dev-scripts/negative-test-preflight.py --rev HEAD
+
+  libraries:
+    name: The libraries are NuGet's
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: The three library DLLs, byte for byte against the package on nuget.org
+        run: |
+          set -eu
+          curl -fsSL -o "$RUNNER_TEMP/mcn.nupkg" https://api.nuget.org/v3-flatcontainer/archipelago.multiclient.net/6.7.1/archipelago.multiclient.net.6.7.1.nupkg
+          python3 dev-scripts/verify-release.py --ref HEAD --nupkg "$RUNNER_TEMP/mcn.nupkg"

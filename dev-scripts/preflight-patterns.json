@@ -499,9 +499,10 @@
     "triggers": ["push", "pull_request", "workflow_call", "workflow_dispatch"],
     "runners": ["ubuntu-latest", "windows-latest", "macos-latest"],
     "job_permissions": {
-      "release.yml:publish": ["contents: write"]
+      "release.yml:publish": ["contents: write", "id-token: write", "attestations: write"],
+      "release.yml:verify": ["contents: read"]
     },
-    "release_gates": ["guard", "ci", "mod-dll"]
+    "release_gates": ["guard", "ci", "mod-dll", "preflight"]
   },
   "dependencies": {
     "nuget_sources": {

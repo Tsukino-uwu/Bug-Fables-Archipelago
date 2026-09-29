@@ -73,6 +73,11 @@ jobs:
     needs: guard
     uses: ./.github/workflows/ci.yml
 
+  # Every preflight section on this commit and on all history, the gate's own test, and the libraries against NuGet.
+  preflight:
+    needs: guard
+    uses: ./.github/workflows/preflight.yml
+
   # CI can't build the mod (it needs the game's own assembly), so the DLLs in release/mod are committed.
   mod-dll:
     name: Committed mod DLL matches its sources
@@ -88,12 +93,18 @@ jobs:
         run: ./dev-scripts/build-release.ps1 -Check
 
   publish:
-    needs: [guard, ci, mod-dll]
+    needs: [guard, ci, mod-dll, preflight]
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      # Only for the provenance attestations below.
+      id-token: write
+      attestations: write
     steps:
+      # All history: the checks below read the commit the DLL was built from, and the notes compare with the last tag.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
 
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
@@ -108,6 +119,45 @@ jobs:
           unzip -l dist/bugfables-archipelago.zip
           ls -l dist
 
+      # Before anything is uploaded: the files are exactly this commit's (the apworld was built in a job that also
+      # installed Archipelago's own dependencies from PyPI, so it is checked, not trusted).
+      - name: The downloads are this commit's
+        env:
+          REF: ${{ github.sha }}
+        run: python3 dev-scripts/verify-release.py --ref "$REF" --zip dist/bugfables-archipelago.zip --apworld dist/bug_fables.apworld --yaml dist/bug_fables.yaml
+
+      # GitHub's signed record that these two were built by this workflow from this commit. Not the mod zip: CI
+      # doesn't build its DLL (docs/reviewing.md says how that one is checked).
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: |
+            dist/bug_fables.apworld
+            dist/bug_fables.yaml
+
+      # The highlights, then what the code may do that it couldn't at the last release: docs/capabilities.md's diff.
+      - name: The release notes
+        env:
+          HIGHLIGHTS: ${{ inputs.highlights }}
+        run: |
+          set -eu
+          prev=$(git tag --sort=-v:refname | head -n 1 || true)
+          {
+            printf '%s\n\n' "$HIGHLIGHTS"
+            echo "## What the code may do: changes since ${prev:-the first release}"
+            echo
+            if [ -n "$prev" ] && git diff --quiet "$prev" HEAD -- docs/capabilities.md; then
+              echo 'None: docs/capabilities.md is unchanged.'
+            else
+              echo 'From docs/capabilities.md, which preflight holds to exactly what the code does:'
+              echo
+              echo '```diff'
+              if [ -n "$prev" ]; then git diff "$prev" HEAD -- docs/capabilities.md; else cat docs/capabilities.md; fi
+              echo '```'
+            fi
+          } > "$RUNNER_TEMP/notes.md"
+          cat "$RUNNER_TEMP/notes.md"
+          cp "$RUNNER_TEMP/notes.md" notes.md
+
       # Pinned to a commit: it runs with contents: write. v3.0.3's tag resolves to this commit.
       - uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
@@ -119,6 +169,28 @@ jobs:
             dist/bugfables-archipelago.zip
             dist/bug_fables.apworld
             dist/bug_fables.yaml
-          body: ${{ inputs.highlights }}
+          body_path: notes.md
           generate_release_notes: true
           fail_on_unmatched_files: true
+
+  # After publishing: what anyone downloads now is checked again, against the tag.
+  verify:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: The published files are the tag's
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          set -eu
+          git fetch --tags --quiet
+          gh release download "$VERSION" -D "$RUNNER_TEMP/published"
+          curl -fsSL -o "$RUNNER_TEMP/mcn.nupkg" https://api.nuget.org/v3-flatcontainer/archipelago.multiclient.net/6.7.1/archipelago.multiclient.net.6.7.1.nupkg
+          python3 dev-scripts/verify-release.py --ref "$VERSION" --zip "$RUNNER_TEMP/published/bugfables-archipelago.zip" --apworld "$RUNNER_TEMP/published/bug_fables.apworld" --yaml "$RUNNER_TEMP/published/bug_fables.yaml" --nupkg "$RUNNER_TEMP/mcn.nupkg"

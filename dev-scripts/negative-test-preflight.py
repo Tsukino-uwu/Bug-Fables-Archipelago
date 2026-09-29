@@ -484,9 +484,9 @@ def fixtures():
             '        continue-on-error: true',
             '']))
 
-    @add('a release that no longer waits for its gates', 'Workflows', names=('publish does not wait for mod-dll',))
+    @add('a release that no longer waits for its gates', 'Workflows', names=('publish does not wait for preflight',))
     def _(c):
-        c.replace('.github/workflows/release.yml', b'needs: [guard, ci, mod-dll]', b'needs: [guard, ci]')
+        c.replace('.github/workflows/release.yml', b'needs: [guard, ci, mod-dll, preflight]', b'needs: [guard, ci, mod-dll]')
 
     @add('dependencies that could drift', 'Dependencies pinned',
          names=('not one exact version', 'does not set RestoreLockedMode', 'nuget.config feeds',

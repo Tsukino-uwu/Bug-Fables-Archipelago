@@ -88,6 +88,8 @@ is left out; everything else they do is listed.
 | `dev-scripts/preflight.py` | runs programs | `git`, to read exactly what a commit holds |
 | `dev-scripts/negative-test-preflight.py` | runs programs | `git` in a throwaway clone, and preflight itself |
 | `dev-scripts/negative-test-preflight.py` | writes files | The throwaway clone, in the system's temp folder, removed afterwards |
+| `dev-scripts/verify-release.py` | runs programs | `git`, to read what a commit holds, and preflight itself, on the release's DLL |
+| `dev-scripts/verify-release.py` | writes files | The release's DLL, copied next to the zip for preflight to read, and removed again |
 | `dev-scripts/build-release.ps1` | runs programs | `git` (clean clones of HEAD) and `dotnet build` |
 | `dev-scripts/build-release.ps1` | writes files | The mod download in `release/`, and the temporary clones it builds in |
 | `dev-scripts/stage-dev.ps1` | runs programs | `dotnet build`, the dev build |

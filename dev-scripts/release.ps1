@@ -68,17 +68,22 @@ Write-Host "pushed $($sha.Substring(0, 8))"
 Step "Waiting for CI on $($sha.Substring(0, 8))"
 Start-Sleep -Seconds 20
 $deadline = (Get-Date).AddMinutes(40)
+# Both push workflows: the apworld's CI and the preflight.
+$workflows = 'ci.yml', 'preflight.yml'
 while ($true) {
-    $json = & gh run list --commit $sha --workflow ci.yml -L 5 --json status,conclusion,databaseId | Out-String
-    # Windows PowerShell hands a JSON array back as one object; ForEach-Object unrolls it.
-    $runs = @(if ($json.Trim()) { $json | ConvertFrom-Json | ForEach-Object { $_ } })
-    if ($runs.Count -gt 0 -and -not ($runs | Where-Object { $_.status -ne 'completed' })) { break }
-    if ((Get-Date) -gt $deadline) { Refuse 'CI did not finish within 40 minutes' }
+    $runs = @(foreach ($w in $workflows) {
+        $json = & gh run list --commit $sha --workflow $w -L 5 --json status,conclusion,databaseId,workflowName | Out-String
+        # Windows PowerShell hands a JSON array back as one object; ForEach-Object unrolls it.
+        if ($json.Trim()) { $json | ConvertFrom-Json | ForEach-Object { $_ } }
+    })
+    $named = @($runs | ForEach-Object workflowName | Sort-Object -Unique)
+    if ($named.Count -eq $workflows.Count -and -not ($runs | Where-Object { $_.status -ne 'completed' })) { break }
+    if ((Get-Date) -gt $deadline) { Refuse 'CI and preflight did not both finish within 40 minutes' }
     Start-Sleep -Seconds 20
 }
 $red = @($runs | Where-Object { $_.conclusion -ne 'success' })
-if ($red.Count -gt 0) { Refuse "CI is red on HEAD: gh run view $($red[0].databaseId) --log-failed" }
-Write-Host 'CI is green'
+if ($red.Count -gt 0) { Refuse "$($red[0].workflowName) is red on HEAD: gh run view $($red[0].databaseId) --log-failed" }
+Write-Host 'CI and preflight are green'
 
 Step "Dispatching release.yml for $Version"
 $ghArgs = @('workflow', 'run', 'release.yml', '-f', "version=$Version", '-f', "prerelease=$($Prerelease.IsPresent.ToString().ToLower())")
