@@ -2584,7 +2584,7 @@ history, free text), the test plants a real violation and checks that the sectio
 non-zero. It works in a throwaway clone outside the repo, with its link back to the repo removed. The clone holds what
 the next commit contains (HEAD plus everything staged), or, from pre-push, exactly the commit being pushed:
 1. **A clean baseline** in all three modes, so a failure afterwards is the plant's doing.
-2. **One fixture per kind of violation** (72 on 2026-09-29): a bidi override in a doc, a homoglyph in code, every
+2. **One fixture per kind of violation** (76 on 2026-09-29, counted from the test itself): a bidi override in a doc, a homoglyph in code, every
    credential format at once (each must be named), a home path inside the DLL, a library changed by one byte, a
    symlink, a submodule, a stale host row, a secret committed and then removed, and more. The fake credentials and
    paths are assembled at run time, so the test file holds none itself.

@@ -1570,3 +1570,20 @@ Newest last. What was tried, what happened, what the user said.
   our fix (it would still point them at AI code). Our patch stays until a release fixes it.
 - **Next session:** `gh run list` first; push when told (the user: after the review); then Next 43, item 1, one step
   at a time. The text client is Next 9, after the review's bugs. Now and then: look at #143 and #141.
+
+## 2026-09-29 (night): the concepts doc's second round
+
+- **The user's list, answered in MeshGhost's `programming-concepts.md`** (their choice: all of it into the doc, each
+  term where it fits, two new parts). About 70 words they had seen the agent write while working on Bug Fables, or
+  simply wondered about (transpiler, sed edit, heredoc, CRLF, provenance attestation, ...), plus four questions: how a
+  commit works underneath, whether names like `sed` or `Postfix` are ours, what a ROM or ISO is and how one is built,
+  and how to judge code (at a glance, AI-written, one right way or many). Each term is illustrated with its real line
+  from this repo; git's objects were read with `git cat-file` on MeshGhost itself. MeshGhost commit `6a9e33d6`,
+  488 -> 1068 lines, its preflight clean; not pushed.
+- **The user's corrections while it was written:** `Rect` does appear in our code, beside `Vector2` in
+  `Sprite.Create` (the first search had said none, so every other "none" was re-grepped); "sed edit" means an edit made
+  *by* sed (log above, 2026-09-24's `sed -i`), not something called sed being edited. Asked mid-way and added:
+  "Logger ?" (a logs section) and "inputIO ?" (the game's class for input and files; IO is input/output).
+- **A fact-check agent found three errors:** the preflight test's fixture count (76 now, not 72; the stale 72 in
+  `apimplementation.md`'s preflight step is corrected too), MeshGhost's hooks (one, its own scan, not preflight), and
+  prefixes returning false: HarmonyX, which BepInEx ships, still runs the other prefixes, unlike upstream Harmony.
