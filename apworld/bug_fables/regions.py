@@ -6,18 +6,13 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Region
 
-from .data_tables import DOOR_RULES, DOORS, MAPS, TRANSFERS
+from .data_tables import DOOR_RULES, DOORS, MAPS, TRANSFERS, door_name
 
 if TYPE_CHECKING:
     from .world import BugFablesWorld
 
 # A new game begins outside the city.
 START_MAP = "BugariaOutskirtsOutsideCity"
-
-
-def door_name(map_name: str, door: str) -> str:
-    """A door's entrance, named where it is."""
-    return f"{map_name}: {door}"
 
 
 def create_and_connect_regions(world: BugFablesWorld) -> None:

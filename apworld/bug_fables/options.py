@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle
+from Options import Choice, DefaultOnToggle, PerGameCommonOptions, PlandoConnections, Range, Toggle
 
-from .data_tables import DOORS, ENCOUNTERS, LOCATIONS, ROOM_STARTS
+from .data_tables import DOOR_NAMES, DOORS, ENCOUNTERS, LOCATIONS, ROOM_STARTS
 
 
 class ArtifactsRequired(Range):
@@ -209,6 +209,19 @@ class ShuffleJump(Toggle):
     display_name = "Shuffle Jump"
 
 
+class DoorPlando(PlandoConnections):
+    """
+    Which door leads where, with the Entrance Randomizer on Coupled or Decoupled (ignored when it's off or on Room
+    Swap). Each door is named "<map>: <door>", as the spoiler log's Entrances section lists them. entrance is the door
+    you go through, exit the door you arrive next to. direction: both (the default), entrance (only the entrance door
+    leads to the exit door) or exit (only the exit door leads back to the entrance door); Coupled always joins both
+    ways. The seed's host must have plando's "connections" turned on.
+    """
+
+    entrances = DOOR_NAMES
+    exits = DOOR_NAMES
+
+
 @dataclass
 class BugFablesOptions(PerGameCommonOptions):
     artifacts_required: ArtifactsRequired
@@ -219,6 +232,7 @@ class BugFablesOptions(PerGameCommonOptions):
     shuffle_item_shops: ShuffleItemShops
     shop_contents: ShopContents
     entrance_randomizer: EntranceRandomizer
+    plando_connections: DoorPlando
     enemy_shuffle: EnemyShuffle
     starting_location: StartingLocation
     starting_party_member: StartingPartyMember

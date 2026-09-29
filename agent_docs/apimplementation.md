@@ -458,7 +458,8 @@ be wrong.
    entrance randomizer. Built, not yet seen in game; see build step 30. Next: the user plays a seed with it; later,
    doors matched by side.
 46. **Every optional feature Archipelago offers** (2026-09-30, the user: "we should try to support all available
-   things archipelago has/does, that includes plando"): connection plando first (build step 32). Next, a sweep of the
+   things archipelago has/does, that includes plando"): connection plando built, not yet seen in game (2026-09-30,
+   build step 32). Next, a sweep of the
    rest, each read in Archipelago's own code and guides before it's built or written off: item plando proven on a seed,
    the options Archipelago provides for a world to add (`Options.py`), and boss plando once bosses are shuffled.
 

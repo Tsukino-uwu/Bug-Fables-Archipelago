@@ -1,11 +1,12 @@
 from collections import Counter
 from random import Random
+from unittest import TestCase
 
 from . import BugFablesTestBase
-from ..data_tables import DOORS, MAPS
+from ..data_tables import DOORS, MAPS, door_name
 from ..data_types import DoorConnection, DoorEnd
 from ..entrances import door_targets, room_pairs
-from ..regions import door_name
+from ..options import DoorPlando
 
 Door = tuple[str, str]
 
@@ -152,6 +153,45 @@ class TestDoorsRoomSwap(CoupledTests, BugFablesTestBase):
     def test_map_keeps_its_shape(self) -> None:
         self.assertEqual(_shape(DOORS.connections, DOORS.fixed, self.world.door_targets),
                          _shape(DOORS.connections, DOORS.fixed, []))
+
+
+CITY_GATE, LAKE = ("BugariaOutskirtsOutsideCity", "DoorBugaria"), ("SnakemouthLake", "WarpMap5")
+FIELDS, PALACE = ("NearSnakemouth", "loadingzonefields"), ("AntBridge", "loadzonepalace")
+PLANDO = [
+    # Written in another case on purpose: plando names match whatever the case.
+    {"entrance": "bugariaoutskirtsoutsidecity: doorbugaria", "exit": "SnakemouthLake: WarpMap5", "direction": "entrance"},
+    {"entrance": "NearSnakemouth: loadingzonefields", "exit": "AntBridge: loadzonepalace", "direction": "exit"},
+]
+
+
+class TestDoorPlandoCoupled(CoupledTests, BugFablesTestBase):
+    options = {"entrance_randomizer": "coupled", "plando_connections": PLANDO}
+
+    def test_each_planned_door_both_ways(self) -> None:
+        # Coupled joins a plando connection both ways, whatever its direction says.
+        for pair in ((CITY_GATE, LAKE), (LAKE, CITY_GATE), (FIELDS, PALACE), (PALACE, FIELDS)):
+            self.assertIn(pair, self.world.door_pairings)
+
+
+class TestDoorPlandoDecoupled(DoorPairTests, BugFablesTestBase):
+    options = {"entrance_randomizer": "decoupled", "plando_connections": PLANDO}
+
+    def test_each_planned_way(self) -> None:
+        # entrance: the entrance door leads to the exit door; exit: the exit door leads back to the entrance door.
+        self.assertIn((CITY_GATE, LAKE), self.world.door_pairings)
+        self.assertIn((PALACE, FIELDS), self.world.door_pairings)
+
+
+class TestDoorPlandoIgnoredWithRoomSwap(CoupledTests, BugFablesTestBase):
+    options = {"entrance_randomizer": "room_swap", "plando_connections": PLANDO}
+
+
+class TestDoorPlandoNames(TestCase):
+    def test_every_door_and_nothing_else(self) -> None:
+        self.assertIn("antbridge: loadzonepalace", DoorPlando.entrances)
+        self.assertEqual(DoorPlando.entrances, DoorPlando.exits)
+        with self.assertRaises(ValueError):
+            DoorPlando.from_any([{"entrance": "Nowhere: door", "exit": "AntBridge: loadzonepalace"}])
 
 
 class TestRoomSwapParts(BugFablesTestBase):

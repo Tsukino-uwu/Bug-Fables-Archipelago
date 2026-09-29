@@ -31,6 +31,15 @@ def _load(name: str) -> dict[str, Any]:
 WORLD_VERSION: str = _load_manifest()["world_version"]
 ITEMS: tuple[Item, ...] = tuple(Item.from_json(item) for item in _load("items.json")["items"])
 DOORS: Doors = Doors.from_json(_load("doors.json"))
+
+
+def door_name(map_name: str, door: str) -> str:
+    """A door's entrance, named where it is."""
+    return f"{map_name}: {door}"
+
+
+# Every door the entrance randomizer shuffles, by its entrance's name.
+DOOR_NAMES: frozenset[str] = frozenset(door_name(end.map, end.door) for c in DOORS.connections for end in (c.a, c.b))
 # Maps nothing leads into: an unused room and the debug room (MEASURED.md, "The door graph").
 UNUSED_MAPS = frozenset({"SnakemouthEmpty", "TestRoom"})
 # Every map a region: the door table's and those only a transfer reaches.

@@ -5,8 +5,8 @@ from rule_builder.rules import Has
 from . import BugFablesTestBase, logic_rules, rule_parts
 from ..abilities import ABILITIES
 from ..custom_rules import CanUse, Member, MoveItem
-from ..data_tables import ARTIFACTS, DOOR_RULES, DOORS, ITEMS, LOCATIONS, MAPS, STORY_EVENTS, TRANSFERS
-from ..regions import door_name
+from ..data_tables import (ARTIFACTS, DOOR_RULES, DOORS, ITEMS, LOCATIONS, MAPS, STORY_EVENTS, TRANSFERS,
+                           door_name)
 
 ALL_SPOTS = (*LOCATIONS, *STORY_EVENTS, *ARTIFACTS)
 

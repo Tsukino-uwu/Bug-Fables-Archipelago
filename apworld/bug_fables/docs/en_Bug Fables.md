@@ -42,6 +42,24 @@ changes. Turning round always takes you back where you came from. It is gentler 
 to any other. As with Coupled, the logic doesn't follow the doors yet, so a seed may not be finishable; the pause
 menu's Warp gets you out of a dead end.
 
+## Plando: choosing where doors lead
+
+With *Entrance Randomizer* on Coupled or Decoupled, `plando_connections` pins doors (new in this version). Each door is
+named by its map and its door, `MapName: DoorName`, as the spoiler log's Entrances section lists them. `entrance` is the door you go through, `exit`
+the door you arrive next to:
+
+```yaml
+plando_connections:
+  - entrance: "BugariaOutskirtsOutsideCity: DoorBugaria"
+    exit: "SnakemouthLake: WarpMap5"
+    direction: both
+```
+
+`direction` is `both` (the default), `entrance` (only the first door leads to the second) or `exit` (only the second
+leads back to the first); Coupled always joins both ways. The rest of the doors are shuffled around them. Plando's
+"connections" must be turned on where the seed is generated (Archipelago's plando guide). It's ignored with the
+Entrance Randomizer off or on Room Swap.
+
 ## Field abilities
 
 Every ability the story teaches is an item, in every seed, and the scene where the game teaches it is a check instead:
