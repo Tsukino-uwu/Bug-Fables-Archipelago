@@ -1322,7 +1322,18 @@ Newest last. What was tried, what happened, what the user said.
     reverted.
   - Comments were not trimmed beyond the traces: that would be an editorial pass with no mechanical proof.
 - **The user asked** what changing the compiled code would do. Nothing a player sees: the proof is what's kept.
-- **Waiting on the user:**
-  - a play-through of the Harmony change (phase 4) and the dev-tools split, on the dev build;
-  - a push.
+- **The play-test (local server, a default seed, the dev build)**, as the user saw it:
+  - a new file with all party members and three items arriving quietly;
+  - a picked-up medal gone from the ground;
+  - the caravan and both town shops with the seed's items;
+  - Uncap FPS fine;
+  - saving and loading with nothing replayed wrongly.
+
+  So the Harmony change, SeedData and the dev split play as before.
+- **"The replayed medal came in silently":** the user's Item animation setting was Off. The user's call: own items may
+  stay quiet, and only other players' items need a box, which All or Progression gives. No change.
+- **The save crystal's reach was far too long:** a jump near a crystal became a save prompt. The console's new `radii`
+  measured an NPC's talk radius as 1.6 and a crystal's own as 0. The reach is now the game's NPC test at 1.6
+  (6addc75). Seen: "perfect now ... not in the way for regular gameplay".
+- **Waiting on the user:** a push.
 
