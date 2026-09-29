@@ -18,8 +18,9 @@ namespace BugFablesAP
         private static Func<bool> randomizerOn;
         private static Func<bool> settingsOn;
 
-        // The game's own reach for a hit to open the prompt (NPCControl.OnTriggerEnter, SavePoint).
-        private const float Reach = 30f;
+        // Talking range as for an NPC: the game's check (distance under the entity's radius), with the radius most NPCs
+        // have, since a crystal's own is 0.
+        private const float Reach = 1.6f;
 
         private static MapControl scanned;
         private static readonly List<NPCControl> crystals = new List<NPCControl>();
@@ -106,8 +107,8 @@ namespace BugFablesAP
                 {
                     continue;
                 }
-                float d = MainManager.GetSqrDistance(npc.transform.position, player.transform.position);
-                if (d <= bestDistance)
+                float d = MainManager.GetDistance(npc.transform.position, player.transform.position, ignoreY: false);
+                if (d < bestDistance)
                 {
                     best = npc;
                     bestDistance = d;

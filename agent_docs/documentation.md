@@ -194,7 +194,8 @@ game log in at the main menu for it, with no save in play. The same login showed
 
 **Status:** done; separate guards per system built 2026-09-28, not yet seen in game; errors checked for instead of
 swallowed, built 2026-09-28 (both builds pass), not yet seen in game; hooks to attributes built 2026-09-28 (all 33
-features; the patch list and run order identical to before, 167 patches, in game), not yet played with.
+features; the patch list and run order identical to before, 167 patches, in game). Seen in a play-test (2026-09-29):
+a new file with its starting items, a pickup gone once checked, shops, Uncap FPS and saving all as before.
 
 *Code: `mod/BugFablesAP/Core/Plugin.cs` (`Plugin`, a BepInEx plugin: `Awake` sets everything up, `Tick` runs
 every frame); the project file is `BugFablesAP.csproj`.*
@@ -1849,14 +1850,19 @@ prompt each time you brush past one); always, in a seed, whether or not a move i
   bounces the crystal, plays its sound, heals if it's yellow, shows the hit sparkle, then opens the save prompt. The
   heal is in the hit, not in the prompt.
 - **The confirm button jumps next to a crystal**, because the game only talks to NPCs, and the crystal drops in and out
-  of the player's talk list. So the mod finds the nearest crystal itself, within the game's own reach (squared distance
-  30, the hit's check), on the same inside/outside view, and only when no one to talk to is in front.
+  of the player's talk list. So the mod finds the nearest crystal itself, on the same inside/outside view, and only when
+  no one to talk to is in front. **Its reach is an NPC's talking range**: the game's own test (distance under the
+  entity's radius), with 1.6, the radius nearly every NPC has, since a crystal's own is 0.
+  - The first version used the hit's reach (squared distance 30, about 5.5): a jump anywhere near a crystal became a
+    save prompt.
+  - The console's `radii` measured it (`MEASURED.md`).
+  - Seen (2026-09-29): the right distance, and out of the way of jumping.
 - **The jump's prefix** (already there for Shuffle Jump, `FieldMoves.cs`) asks first: a crystal in reach takes the
   press and runs the game's hit steps in order, the prompt last; the save is the game's own. No jump, no buzzer.
 - **The "!" over the player** while in reach, the one the game shows next to something to check.
 - Red DeadLander crystals are left alone (their hit turns a DeadLander). Only while Archipelago is enabled.
 
-**Status:** built (2026-09-28), not yet seen in game.
+**Status:** works: the range seen right on screen (2026-09-29).
 
 *Code: `SaveCrystals.cs` (`InReach`, `TryUse`, `Tick`); the call in `FieldMoves.BeforeJump`.*
 

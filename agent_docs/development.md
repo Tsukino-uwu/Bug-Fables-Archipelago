@@ -241,6 +241,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   characters. Settled a camera stuck on a removed character (2026-09-25).
 - `who`: log every character drawn as Vi, Kabbu or Leif: name, position, what it follows, whether it's a player
   character. Found a stray second player character (2026-09-25).
+- `radii`: log every entity on the map, nearest first, with its type, talk radius (`npcdata.radius`) and distance.
+  Measured the NPC talking range the save crystals now use (2026-09-29).
 - `follower <animid>`: make that character follow the party the story's way (the follower list, then `AddFollower`),
   e.g. `follower 46` (Maki) to replay the castle briefing, which needs her.
 - `addmember <0|1|2>`: with `TestStartMember`, add Vi, Kabbu or Leif to the party, standing in for receiving them.

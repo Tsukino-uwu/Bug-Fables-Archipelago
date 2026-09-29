@@ -555,6 +555,22 @@ namespace BugFablesAP
                         MainManager.AddFollower(null, followerId);
                         return $"follower {followerId} added; followers now {string.Join(",", MainManager.instance.extrafollowers.Select(f => f.ToString()).ToArray())}";
                     }
+                    case "radii":
+                    {
+                        // Each entity's talk radius (npcdata.radius, entity data column 13) and its distance now.
+                        var radiiLog = new System.Text.StringBuilder("[dev] radii:");
+                        foreach (NPCControl n in UnityEngine.Object.FindObjectsOfType<NPCControl>()
+                            .Where(n => n.gameObject.activeInHierarchy && MainManager.player != null)
+                            .OrderBy(n => MainManager.GetDistance(n.transform.position,
+                                MainManager.player.transform.position, ignoreY: false)))
+                        {
+                            float d = MainManager.GetDistance(n.transform.position, MainManager.player.transform.position,
+                                ignoreY: false);
+                            radiiLog.Append($"\n  {n.name} {n.entitytype}/{n.objecttype} radius {n.radius} distance {d:0.00}");
+                        }
+                        log.LogInfo(radiiLog.ToString());
+                        return "radii logged";
+                    }
                     case "who":
                     {
                         // Every character drawn as a party member (animid 0 Vi, 1 Kabbu, 2 Leif).

@@ -1427,6 +1427,11 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   a red crystal turns its DeadLander, any other opens the prompt with `Interact("save")` when the player is within
   squared distance 30. The prompt is `menutext[4]` with Yes / No; Yes runs the text command `Save`, which calls
   `MainManager.Save(caller.vectordata[0])`.
+- **An NPC's talking range** (`NPCControl`, every 3 frames): in the player's talk list while
+  `MainManager.GetDistance(npc, player, ignoreY: false) < radius` and on the same inside. `radius` is the entity data's
+  column 13 (`MapControl.CreateEntities`). Measured 2026-09-29 with the console's `radii` on
+  `BugariaOutskirtsOutsideCity`: nearly every NPC 1.6 (one 2.5), the shop stands (SemiNPC) 1.2, and the save crystal
+  `SaveTutorial` 0. Used by `SaveCrystals.cs`.
 - **The confirm button never reaches a crystal:** `PlayerControl` calls `npc[0].Interact(null)` only for the NPC and
   SemiNPC types, and jumps (`DoJump`, private, called only from there) otherwise; each frame it also drops a non-NPC
   `npc[0]` from its list. The "!" over the player for something to check is `entity.emoticonid = 1` with
