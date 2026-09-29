@@ -109,7 +109,18 @@ A few decisions made first, because they shape everything after:
     (action 9, the "help": a party member talks about what's in front; `MEASURED.md`, Input); in the pause and start
     menus Enter keeps the game's uses. A **Chat menu** in the Archipelago panel holds the chat's on/off switch, the
     filters and its other options; with the chat off, Enter is the game's everywhere, and with Archipelago off
-    nothing changes (vanilla stays vanilla).
+    nothing changes (vanilla stays vanilla). **While it's open, nothing reaches the game** (2026-09-29, the user): no
+    key or gamepad button acts in the game until you leave, by Enter on an empty line, Enter to send, or Esc (which
+    drops what was typed, and never opens the pause menu while the chat is open). In the field the dev console already
+    holds the game this way (`player.lockkeys` and `minipause`, as an item-get does, so the world waits too); battles
+    read their input their own way, to be read in the code before building. **The look** (2026-09-29, the user: "like
+    a twitch chat where old msgs eventually become invisible unless you press enter"): closed, the newest few lines
+    stack in the bottom-left corner with no box, in the game's font with a shadow, and each fades out a while after it
+    arrives; open, a semi-transparent dark panel shows the history (scrolled with the wheel or Page Up and Down) with
+    the typing line under it. Names, items (by class) and locations in Archipelago's colours. The Chat menu sets how
+    long lines stay (or never fade), how many show, and how dark the panel is. The chat draws its own letters in the
+    game's font (`MainManager.fonts`), never from the game's 500-letter pool, which its dialogue shares
+    (`MEASURED.md`, the text letter pool).
   - **Item names are coloured the way Archipelago's clients colour them** (`NetUtils.py`): progression plum
     `#AF99EF`, useful slateblue `#6D8BE8`, trap salmon `#FA8072`, filler cyan `#00EEEE`.
 - **Read what others already solved.** We read the TEVI randomizer (another Unity mod), Pokémon Emerald's
