@@ -1,6 +1,6 @@
-"""The entrance randomizer on the region graph: Archipelago's own (entrance_rando.py) for Coupled, and the room swap,
-a mode Archipelago has none of, connecting the same split entrances by hand. Each pairing becomes a door_targets entry,
-the doors the mod rewrites.
+"""The entrance randomizer on the region graph: Archipelago's own (entrance_rando.py) for Coupled and Decoupled, and
+the room swap, a mode Archipelago has none of, connecting the same split entrances by hand. Each pairing becomes a
+door_targets entry, the doors the mod rewrites.
 """
 from __future__ import annotations
 
@@ -104,7 +104,8 @@ def shuffle(world: BugFablesWorld) -> list[tuple[Door, Door]]:
     if mode == EntranceRandomizer.option_room_swap:
         return _swap_rooms(world, names)
     doors = {name: door for door, name in names.items()}
-    placed = randomize_entrances(world, coupled=True, target_group_lookup={0: [0]})
+    coupled = mode != EntranceRandomizer.option_decoupled
+    placed = randomize_entrances(world, coupled=coupled, target_group_lookup={0: [0]})
     return [(doors[x], doors[y]) for x, y in placed.pairings]
 
 
@@ -138,10 +139,14 @@ def _every_region_reached(world: BugFablesWorld) -> bool:
 
 
 def write_spoiler(world: BugFablesWorld) -> None:
-    """Each shuffled door in the spoiler's Entrances section, the way it now leads; a pair both ways only once."""
+    """Each shuffled door in the spoiler's Entrances section, the way it now leads; a coupled pair only once, both
+    ways."""
+    coupled = world.options.entrance_randomizer != EntranceRandomizer.option_decoupled
     listed: set[tuple[Door, Door]] = set()
     for x, y in world.door_pairings:
-        if (y, x) not in listed:
+        if not coupled:
+            world.multiworld.spoiler.set_entrance(door_name(*x), door_name(*y), "entrance", world.player)
+        elif (y, x) not in listed:
             listed.add((x, y))
             world.multiworld.spoiler.set_entrance(door_name(*x), door_name(*y), "both", world.player)
 

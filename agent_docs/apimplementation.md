@@ -42,6 +42,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 28. [Build step 28: nothing unpublishable in the repo or a release](#build-step-28-nothing-unpublishable-in-the-repo-or-a-release)
 29. [Build step 29: the logic in Python, one module per area, the Rule Builder's way](#build-step-29-the-logic-in-python-one-module-per-area-the-rule-builders-way)
 30. [Build step 30: Room Swap (experimental)](#build-step-30-room-swap-experimental)
+31. [Build step 31: Decoupled doors (experimental)](#build-step-31-decoupled-doors-experimental)
 
 **How it works**
 
@@ -69,8 +70,8 @@ be wrong.
    split into regions as build step 24 describes. Medal gifts and medal shops each get a yaml on/off toggle.
    Shops (medal shops, item shops, the caravan): see build step 11. Other kinds of location (boss prize medals,
    placeholders, journal entries, enemy drops): see build step 10.
-2. **Entrance randomizer (experimental):** every door, coupled, on Archipelago's own entrance randomizer, every map a
-   region (2026-09-30, not yet seen in game); next, sorting the other transfers into chosen and forced, and the
+2. **Entrance randomizer (experimental):** every door, coupled or decoupled (build step 31), on Archipelago's own
+   entrance randomizer, every map a region (2026-09-30, not yet seen in game); next, sorting the other transfers into chosen and forced, and the
    room-by-room logic that removes the label. See build step 12.
    **How each room gets mapped** (2026-09-27): the checklist in `room-logic.md`; the tester says what needs
    what, the agent turns it into areas and rules.
@@ -1497,7 +1498,7 @@ on its own. Such a removal is always on in a seed, never part of the *Skip cutsc
 at runtime. No room is done until its flags are listed.
 **The proof of concept, seen (2026-09-25):** one door, then a coupled swap of two connections both ways
 (the mod guide, step 13). **Every door, built (2026-09-25):** the yaml option *Entrance Randomizer (experimental)*,
-*Off* (default) or *Coupled*; decoupled later. How it was built:
+*Off* (default) or *Coupled*; decoupled later (built 2026-09-30, build step 31). How it was built:
 1. **A door table** (`data/doors.json`), exported by `dev-scripts/door-graph.py --export` from EntityDump: every
    door paired with its way back (the door the party arrives next to), 254 connections, 508 doors. Doors stay
    fixed when the mod couldn't tell them apart by name, when they have a story variant at the same spot, or when they
@@ -2883,7 +2884,7 @@ Super Metroid's Map Rando is called, rooms with the same number of entrances swa
 
 - **A room swap is a coupled shuffle too:** each door still leads back where it came from. So *Room Swap* and
   *Coupled* on together would look like *Coupled* alone. One option, then, each value allowing everything the one
-  before it does: *Off*, *Room Swap*, *Coupled*, later *Decoupled*. The user chose the name `room_swap`: "rooms"
+  before it does: *Off*, *Room Swap*, *Coupled*, *Decoupled* (build step 31). The user chose the name `room_swap`: "rooms"
   alone says less, and Hollow Knight's randomizer uses "room randomizer" for every transition shuffled.
 - **No decoupled room swap:** a room put where a room with more doors stood leaves the neighbours' extra doors leading
   nowhere, and pairing such loose doors is the coupled shuffle. *Coupled* and *Decoupled* keep their one meaning:
@@ -2951,6 +2952,28 @@ from the entity dump.
 experimental like build step 12: the rooms' own rules aren't mapped yet.
 
 *Code: `entrances.py` (`room_pairs`, `_swap_rooms`, `door_targets`), `options.py`, `world.py`; tests `test_doors.py`.*
+
+## Build step 31: Decoupled doors (experimental)
+
+A fourth value of *Entrance Randomizer (experimental)*, `decoupled`: every door may lead to any other and its way back
+is shuffled too, so turning round can take you somewhere else. Planned since build step 12 (2026-09-25: "coupled by
+default, decoupled as a choice"); the user, 2026-09-29: added now, as its own step.
+
+**How it was built (2026-09-30):**
+
+1. **Archipelago's randomizer, uncoupled:** the same split door entrances as Coupled (build step 12), and
+   `randomize_entrances(world, coupled=False, ...)`: its doc's "uncoupled randomization", nothing of ours. Every door
+   stays two-way typed, so a door is only ever paired with a door.
+2. **The same `door_targets`:** each door is rewritten on its own (x leads where y's partner leads), which is all the
+   mod ever did, so the mod needed no change; a door of the pair no longer names the other.
+3. **The spoiler** lists every door on its own (`=>`, 508 lines) instead of each pair once (`<=>`).
+
+**Tests** (`test_doors.py`): what every shuffle shares (doors rewritten, only table doors named, every region reached,
+the mod doing what the logic proved); the way back no longer always leads back; the spoiler lists every door.
+
+**Status:** built, not yet seen in game (2026-09-30); experimental like build step 12.
+
+*Code: `entrances.py` (`shuffle`, `write_spoiler`), `options.py`; tests `test_doors.py`.*
 
 # How it works
 

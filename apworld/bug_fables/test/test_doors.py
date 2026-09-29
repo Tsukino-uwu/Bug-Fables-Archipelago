@@ -79,12 +79,6 @@ class DoorPairTests:
     def test_doors_are_shuffled(self) -> None:
         self.assertGreater(len(self.world.door_targets), len(DOORS.connections))
 
-    def test_every_way_back_leads_back(self) -> None:
-        # Coupled: through a door, then through the door you arrive next to, is where you started.
-        arrive = arrivals(DOORS.connections, self.world.door_targets)
-        for door, there in arrive.items():
-            self.assertEqual(arrive[there], door, f"{door} leads to {there}, which leads to {arrive[there]}")
-
     def test_targets_are_table_doors(self) -> None:
         doors = {(end.map, end.door) for c in DOORS.connections for end in (c.a, c.b)}
         for t in self.world.door_targets:
@@ -107,10 +101,22 @@ class DoorPairTests:
             with self.subTest(region=name):
                 self.assertTrue(state.can_reach_region(name, self.player))
 
-    def test_spoiler_lists_each_pair_once(self) -> None:
+    def spoiler_entries(self) -> list[tuple[str, str, int]]:
         self.world.write_spoiler_header(None)
-        listed = [key for key in self.multiworld.spoiler.entrances if key[2] == self.player]
-        self.assertEqual(len(listed), len(DOORS.connections))
+        return [key for key in self.multiworld.spoiler.entrances if key[2] == self.player]
+
+
+class CoupledTests(DoorPairTests):
+    """Room Swap and Coupled: a door and its way back stay a pair."""
+
+    def test_every_way_back_leads_back(self) -> None:
+        # Through a door, then through the door you arrive next to, is where you started.
+        arrive = arrivals(DOORS.connections, self.world.door_targets)
+        for door, there in arrive.items():
+            self.assertEqual(arrive[there], door, f"{door} leads to {there}, which leads to {arrive[there]}")
+
+    def test_spoiler_lists_each_pair_once(self) -> None:
+        self.assertEqual(len(self.spoiler_entries()), len(DOORS.connections))
 
 
 class TestDoorsOffByDefault(BugFablesTestBase):
@@ -119,11 +125,22 @@ class TestDoorsOffByDefault(BugFablesTestBase):
         self.assertEqual(self.world.door_pairings, [])
 
 
-class TestDoorsCoupled(DoorPairTests, BugFablesTestBase):
+class TestDoorsCoupled(CoupledTests, BugFablesTestBase):
     options = {"entrance_randomizer": "coupled"}
 
 
-class TestDoorsRoomSwap(DoorPairTests, BugFablesTestBase):
+class TestDoorsDecoupled(DoorPairTests, BugFablesTestBase):
+    options = {"entrance_randomizer": "decoupled"}
+
+    def test_the_way_back_is_shuffled_too(self) -> None:
+        arrive = arrivals(DOORS.connections, self.world.door_targets)
+        self.assertTrue(any(arrive[there] != door for door, there in arrive.items()))
+
+    def test_spoiler_lists_every_door(self) -> None:
+        self.assertEqual(len(self.spoiler_entries()), 2 * len(DOORS.connections))
+
+
+class TestDoorsRoomSwap(CoupledTests, BugFablesTestBase):
     options = {"entrance_randomizer": "room_swap"}
 
     def test_parts_stay_whole(self) -> None:
