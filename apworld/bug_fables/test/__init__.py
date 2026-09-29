@@ -4,7 +4,7 @@ from BaseClasses import CollectionState, ItemClassification
 from rule_builder.rules import Rule
 from test.bases import WorldTestBase
 
-from ..data_tables import LOCATIONS, REGIONS, STORY_EVENTS
+from ..data_tables import ARTIFACTS, DOOR_RULES, LOCATIONS, STORY_EVENTS, TRANSFERS
 from ..items import BugFablesItem
 
 
@@ -18,12 +18,15 @@ def rule_parts(rule: Rule | None) -> Iterable[Rule]:
 
 
 def logic_rules() -> Iterable[tuple[str, Rule | None]]:
-    """Every rule the logic writes, with where it is: each exit, location and story event."""
-    for region in REGIONS:
-        for exit_data in region.exits:
-            yield f"{region.name} -> {exit_data.to}", exit_data.rule
+    """Every rule the logic writes, with where it is: each door gate, transfer, and spot (its own rule and its reach)."""
+    for gate in DOOR_RULES:
+        yield f"{gate.map}: {gate.door}", gate.rule
+    for transfer in TRANSFERS:
+        yield f"{transfer.from_map} to {transfer.to_map} ({transfer.name})", transfer.rule
     for spot in (*LOCATIONS, *STORY_EVENTS):
         yield spot.name, spot.rule
+    for spot in (*LOCATIONS, *STORY_EVENTS, *ARTIFACTS):
+        yield f"{spot.name} (reach)", spot.reach
 
 
 class BugFablesTestBase(WorldTestBase):

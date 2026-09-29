@@ -1,86 +1,80 @@
-"""The Outskirts: its regions and the ways out of them, its spots, and what the seed changes there."""
+"""The Outskirts: its spots, its door gates, what reaching its spots needs until the rooms are mapped, and what the seed
+changes there."""
 from __future__ import annotations
 
 from rule_builder.rules import Has
 
 from ..custom_rules import ALL_ATTACKS, WHOLE_PARTY, CanUse
-from ..data_types import Added, DialogueFlag, EntityRef, Exit, Give, ItemShop, Location, Pickup, Region, Source
+from ..data_types import Added, DialogueFlag, DoorRule, EntityRef, Give, ItemShop, Location, Pickup, Source
 
-REGIONS = (
-    Region("Bugaria Outskirts", exits=(
-        # Cautious until the rooms past the gate are measured: every member (when members are items) and every move item
-        # (when moves are).
-        Exit("Past the Outskirts Gate", Has("Explorer Permit") & WHOLE_PARTY & ALL_ATTACKS),
-        Exit("Golden Path", Has("Snakemouth Den Cleared")),
-        Exit("Bugaria City"),
-        Exit("Metal Island", Has("Boat Ticket")),
-    )),
-    Region("Past the Outskirts Gate", exits=(
-        # Grass in the second corridor and outside the cave, then the door room's horn puzzle down the trapdoor.
-        Exit("Snakemouth Den", CanUse("Horn Slash")),
-    )),
-    Region("Golden Path"),
+# Past the Explorer Permit gate (inside the Outskirts map, so not a door): cautious until the rooms past it are
+# measured, every member (when members are items) and every move item (when moves are).
+PAST_GATE = Has("Explorer Permit") & WHOLE_PARTY & ALL_ATTACKS
+GOLDEN_PATH = Has("Snakemouth Den Cleared")
+DOOR_RULES = (
+    # The game makes the Golden Path door only after the first boss (flag 41); the rocks in front are the seed's to remove.
+    DoorRule("BugariaOutskirtsOutsideCity", "LoadZoneGoldenPath", Has("Snakemouth Den Cleared")),
 )
 LOCATIONS = (
-    Location("Outskirts: Maki and Eetl's Gift", 1, "Bugaria Outskirts",
+    Location("Outskirts: Maki and Eetl's Gift", 1, "BugariaOutskirtsOutsideCity",
              Source(event=16, flag=15, give=Give(map="BugariaOutskirtsOutsideCity", type=1, item=27)), quiet=True,
              no_jump=True),
     # The horn tutorial: the scene cuts the grass itself, so it needs no member.
-    Location("Outskirts: Near Snakemouth Den, Reward", 2, "Past the Outskirts Gate",
-             Source(event=10, flag=17, give=Give(map="NearSnakemouth", type=-1, item=10))),
-    Location("Outskirts: Artis's Gift", 3, "Bugaria Outskirts",
+    Location("Outskirts: Near Snakemouth Den, Reward", 2, "NearSnakemouth",
+             Source(event=10, flag=17, give=Give(map="NearSnakemouth", type=-1, item=10)), reach=PAST_GATE),
+    Location("Outskirts: Artis's Gift", 3, "BugariaOutskirtsOutsideCity",
              Source(npc="ShwEmArtys", flag=32, give=Give(map="BugariaOutskirtsOutsideCity", type=2, item=11))),
     # Cut grass copies its own one-time flag onto the item it drops, so this is an ordinary pickup.
-    Location("Outskirts: Golden Path, Grass", 12, "Golden Path",
-             Source(flag=74, pickup=Pickup(map="BOGoldenPath", type=0, item=2))),
+    Location("Outskirts: Golden Path, Grass", 12, "BOGoldenPath",
+             Source(flag=74, pickup=Pickup(map="BOGoldenPath", type=0, item=2)), reach=GOLDEN_PATH),
     # The first boss's prize medal: the mod pays prizes as if Hard Mode were on, so it waits at Artis.
-    Location("Outskirts: Artis's Prize for Snakemouth Den", 13, "Bugaria Outskirts",
+    Location("Outskirts: Artis's Prize for Snakemouth Den", 13, "BugariaOutskirtsOutsideCity",
              Source(event=33, var=13, at_least=3, give=Give(map="BugariaOutskirtsOutsideCity", type=2, item=5)),
              rule=Has("Snakemouth Den Cleared")),
     # No gate of its own: in the game only the Outskirts rocks, removed by the seed, keep it out of reach.
-    Location("Outskirts: Ladybug Siblings' House", 14, "Bugaria Outskirts",
+    Location("Outskirts: Ladybug Siblings' House", 14, "BugariaOutskirtsOutsideCity",
              Source(flag=679, pickup=Pickup(map="BugariaOutskirtsOutsideCity", type=0, item=8)), no_jump=True),
     # Crystal berry #0, outside the cave: behind grass from the Outskirts' side (the horn), open from the cave's side,
     # which room-level logic will count.
-    Location("Outskirts: Snakemouth Den Entrance", 19, "Past the Outskirts Gate",
+    Location("Outskirts: Snakemouth Den Entrance", 19, "OutsideSnakemouth",
              Source(berry=0, pickup=Pickup(map="OutsideSnakemouth", type=3, item=0)),
              rule=CanUse("Horn Slash"),
-             category="crystal_berry"),
+             category="crystal_berry", reach=PAST_GATE),
     # A Drowsy Cake under a stone, knocked loose with Kabbu's horn.
-    Location("Outskirts: East Road, Stone", 25, "Bugaria Outskirts",
+    Location("Outskirts: East Road, Stone", 25, "BugariaOutskirtsEast1",
              Source(flag=735, pickup=Pickup(map="BugariaOutskirtsEast1", type=0, item=147)),
              rule=CanUse("Horn Slash")),
     # Crystal berry #10, on the pier by the boat.
-    Location("Outskirts: Pier", 26, "Bugaria Outskirts",
+    Location("Outskirts: Pier", 26, "BugariaPier",
              Source(berry=10, pickup=Pickup(map="BugariaPier", type=3, item=0)), category="crystal_berry"),
-    Location("Outskirts: Pier, Statue", 27, "Bugaria Outskirts",
+    Location("Outskirts: Pier, Statue", 27, "BugariaPier",
              Source(discovery=49), category="discovery"),
     # Recorded by the scene on first arriving outside Snakemouth Den.
-    Location("Outskirts: Snakemouth Den Entrance, Arrival", 28, "Past the Outskirts Gate",
-             Source(discovery=0), category="discovery"),
+    Location("Outskirts: Snakemouth Den Entrance, Arrival", 28, "OutsideSnakemouth",
+             Source(discovery=0), category="discovery", reach=PAST_GATE),
     # A Burly Tea on the right of the table by the painting; the house is open from the start.
-    Location("Outskirts: Madeleine's House, Table Right", 44, "Bugaria Outskirts",
+    Location("Outskirts: Madeleine's House, Table Right", 44, "BugariaOutskirtsOutsideCity",
              Source(flag=686, pickup=Pickup(map="BugariaOutskirtsOutsideCity", type=0, item=81))),
     # A Lore Book on the left of the same table.
-    Location("Outskirts: Madeleine's House, Table Left", 45, "Bugaria Outskirts",
+    Location("Outskirts: Madeleine's House, Table Left", 45, "BugariaOutskirtsOutsideCity",
              Source(flag=392, pickup=Pickup(map="BugariaOutskirtsOutsideCity", type=1, item=52))),
     # The caravan's shop, there from the start (in the game it comes after the first boss); first purchase a check, then
     # its own item.
-    Location("Outskirts: Caravan, Item Shop 1", 63, "Bugaria Outskirts",
+    Location("Outskirts: Caravan, Item Shop 1", 63, "BugariaOutskirtsOutsideCity",
              Source(item_shop=ItemShop(map="BugariaOutskirtsOutsideCity", keeper="Crickerly2", item=2)),
              category="item_shop", no_jump=True),
-    Location("Outskirts: Caravan, Item Shop 2", 64, "Bugaria Outskirts",
+    Location("Outskirts: Caravan, Item Shop 2", 64, "BugariaOutskirtsOutsideCity",
              Source(item_shop=ItemShop(map="BugariaOutskirtsOutsideCity", keeper="Crickerly2", item=3)),
              category="item_shop", no_jump=True),
-    Location("Outskirts: Caravan, Item Shop 3", 65, "Bugaria Outskirts",
+    Location("Outskirts: Caravan, Item Shop 3", 65, "BugariaOutskirtsOutsideCity",
              Source(item_shop=ItemShop(map="BugariaOutskirtsOutsideCity", keeper="Crickerly2", item=11)),
              category="item_shop", no_jump=True),
     # Where the story's second member joins in the opening (Event16), whoever starts.
-    Location("Outskirts: Outside the City, Opening", 66, "Bugaria Outskirts",
+    Location("Outskirts: Outside the City, Opening", 66, "BugariaOutskirtsOutsideCity",
              Source(event=16, flag=15), category="party_member", quiet=True, no_jump=True),
     # The opening puts a Crunchy Leaf in the bag for its tutorial battle (Event16, items[0].Add(0), never taken back);
     # the mod's opening skip does the same unless this is a location.
-    Location("Outskirts: Outside the City, Tutorial Battle", 75, "Bugaria Outskirts",
+    Location("Outskirts: Outside the City, Tutorial Battle", 75, "BugariaOutskirtsOutsideCity",
              Source(event=16, flag=15, added=Added(type=0, item=0)), quiet=True, no_jump=True),
 )
 KEPT_OPEN = (

@@ -1,9 +1,11 @@
 """Metal Island, over the sea from the pier. No spots yet."""
 from __future__ import annotations
 
-from ..data_types import Region
+from rule_builder.rules import Has
 
-REGIONS = (
-    # Over the sea from the pier; the sailor sails only for the Boat Ticket.
-    Region("Metal Island"),
+from ..data_types import Transfer
+
+TRANSFERS = (
+    # The sailor sails only for the Boat Ticket.
+    Transfer("boat", "BugariaPier", "MetalIsland1", Has("Boat Ticket")),
 )

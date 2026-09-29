@@ -5,7 +5,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from BaseClasses import Item, LocationProgressType
-from rule_builder.rules import Has
+from rule_builder.rules import Has, Rule
 
 from .data_tables import ARTIFACTS
 from .options import ShopContents
@@ -30,17 +30,28 @@ def set_all_rules(world: BugFablesWorld) -> None:
         elif world.options.shop_contents == ShopContents.option_no_progression:
             location.item_rule = _no_progression
     for data in (*world.included_locations, *world.included_events):
-        rule = data.rule
         # With Jump shuffled, a spot needs Jump unless it was seen reachable without (no_jump).
-        if world.jump_shuffled() and not data.no_jump:
-            rule = Has("Jump") if rule is None else rule & Has("Jump")
+        jump = Has("Jump") if world.jump_shuffled() and not data.no_jump else None
+        rule = _joined(data.reach, data.rule, jump)
         if rule is not None:
             world.set_rule(world.get_location(data.name), rule)
-    # Artifacts are events with no data of their own: with Jump shuffled they wait for it like every other spot.
-    if world.jump_shuffled():
-        for artifact in ARTIFACTS:
-            world.set_rule(world.get_location(artifact.name), Has("Jump"))
+    # Artifacts are events with no rule of their own: with Jump shuffled they wait for it like every other spot.
+    for artifact in ARTIFACTS:
+        rule = _joined(artifact.reach, Has("Jump") if world.jump_shuffled() else None)
+        if rule is not None:
+            world.set_rule(world.get_location(artifact.name), rule)
     world.set_completion_rule(Has("Artifact", count=world.artifacts_required))
+
+
+def _joined(*rules: Rule | None) -> Rule | None:
+    """The rules given, all needed; None when there are none."""
+    present = [rule for rule in rules if rule is not None]
+    if not present:
+        return None
+    joined = present[0]
+    for rule in present[1:]:
+        joined = joined & rule
+    return joined
 
 
 def fall_back_from_filler_only(world: BugFablesWorld) -> None:

@@ -1,25 +1,40 @@
-"""The regions and the exits between them: Menu, the origin, and every area's regions (logic/)."""
+"""The regions: Menu, the origin, then one per map. Every door is an entrance of its map's region, named after where it
+is; fixed doors and the transfers that aren't doors (logic/) join maps too."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
 from BaseClasses import Region
 
-from .data_tables import REGIONS
+from .data_tables import DOOR_RULES, DOORS, MAPS, TRANSFERS
+from .data_types import DoorEnd
 
 if TYPE_CHECKING:
     from .world import BugFablesWorld
 
 # A new game begins outside the city.
-START_REGION = "Bugaria Outskirts"
+START_MAP = "BugariaOutskirtsOutsideCity"
+
+
+def door_name(end: DoorEnd) -> str:
+    return f"{end.map}: {end.door}"
 
 
 def create_and_connect_regions(world: BugFablesWorld) -> None:
     menu = Region(world.origin_region_name, world.player, world.multiworld)
-    regions = {data.name: Region(data.name, world.player, world.multiworld) for data in REGIONS}
+    regions = {name: Region(name, world.player, world.multiworld) for name in MAPS}
     world.multiworld.regions += [menu, *regions.values()]
+    world.create_entrance(menu, regions[START_MAP])
 
-    world.create_entrance(menu, regions[START_REGION])
-    for data in REGIONS:
-        for exit_data in data.exits:
-            world.create_entrance(regions[data.name], regions[exit_data.to], exit_data.rule)
+    gates = {(gate.map, gate.door): gate.rule for gate in DOOR_RULES}
+    for connection in DOORS.connections:
+        for end, other in ((connection.a, connection.b), (connection.b, connection.a)):
+            world.create_entrance(regions[end.map], regions[other.map], gates.get((end.map, end.door)),
+                                  name=door_name(end))
+    for a, b in dict.fromkeys(DOORS.fixed):
+        if a != b and a in regions and b in regions:
+            world.create_entrance(regions[a], regions[b], name=f"{a} to {b}")
+    for transfer in TRANSFERS:
+        ways = ((transfer.from_map, transfer.to_map), (transfer.to_map, transfer.from_map))
+        for a, b in ways if transfer.two_way else ways[:1]:
+            world.create_entrance(regions[a], regions[b], transfer.rule, name=f"{a} to {b} ({transfer.name})")

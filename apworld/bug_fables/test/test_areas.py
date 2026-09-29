@@ -1,52 +1,60 @@
-"""The logic's area modules (logic/): how they fit together, and that every name a rule uses exists."""
+"""The logic's area modules (logic/) on the map regions: how they fit together, and that every name a rule uses
+exists."""
 from rule_builder.rules import Has
 
 from . import BugFablesTestBase, logic_rules, rule_parts
-from .. import logic
 from ..abilities import ABILITIES
 from ..custom_rules import CanUse, Member, MoveItem
-from ..data_tables import ARTIFACTS, ITEMS, LOCATIONS, REGIONS, STORY_EVENTS
-from ..regions import START_REGION
+from ..data_tables import ARTIFACTS, DOOR_RULES, DOORS, ITEMS, LOCATIONS, MAPS, STORY_EVENTS, TRANSFERS
+from ..regions import door_name
+
+ALL_SPOTS = (*LOCATIONS, *STORY_EVENTS, *ARTIFACTS)
 
 
 class TestAreas(BugFablesTestBase):
     options = {"shuffle_discoveries": True}
 
-    def test_every_exit_leads_to_a_region(self) -> None:
-        names = {region.name for region in REGIONS}
-        for area in logic.AREAS:
-            for region in area.REGIONS:
-                for exit_data in region.exits:
-                    with self.subTest(area=area.__name__, exit=f"{region.name} -> {exit_data.to}"):
-                        self.assertIn(exit_data.to, names)
+    def test_every_spot_is_in_a_map(self) -> None:
+        for spot in ALL_SPOTS:
+            with self.subTest(spot=spot.name):
+                self.assertIn(spot.region, MAPS)
 
-    def test_every_spot_is_in_a_region_of_its_own_module(self) -> None:
-        # Only exits cross from one module into another, so a room's spots are always found with the room.
-        for area in logic.AREAS:
-            own = {region.name for region in area.REGIONS}
-            spots = (*getattr(area, "LOCATIONS", ()), *getattr(area, "STORY_EVENTS", ()),
-                     *getattr(area, "ARTIFACTS", ()))
-            for spot in spots:
-                with self.subTest(area=area.__name__, spot=spot.name):
-                    self.assertIn(spot.region, own)
+    def test_every_spot_is_in_its_source_map(self) -> None:
+        # Where the game data names the spot's map, the logic must put it there.
+        for spot in ALL_SPOTS:
+            for named in (spot.source.pickup, spot.source.give, spot.source.item_shop):
+                if named is not None:
+                    with self.subTest(spot=spot.name):
+                        self.assertEqual(spot.region, named.map)
 
     def test_names_are_unique(self) -> None:
-        regions = [region.name for region in REGIONS]
-        self.assertEqual(len(regions), len(set(regions)))
-        spots = [spot.name for spot in (*LOCATIONS, *STORY_EVENTS, *ARTIFACTS)]
+        spots = [spot.name for spot in ALL_SPOTS]
         self.assertEqual(len(spots), len(set(spots)))
 
-    def test_every_region_has_a_way_in(self) -> None:
-        entered = {exit_data.to for region in REGIONS for exit_data in region.exits} | {START_REGION}
-        for region in REGIONS:
-            with self.subTest(region=region.name):
-                self.assertIn(region.name, entered)
+    def test_every_door_is_an_entrance(self) -> None:
+        # Where the game has it, with the doors as they are (Archipelago's entrance randomizer shuffles these).
+        for connection in DOORS.connections:
+            for end, other in ((connection.a, connection.b), (connection.b, connection.a)):
+                with self.subTest(door=door_name(end)):
+                    entrance = self.multiworld.get_entrance(door_name(end), self.player)
+                    self.assertEqual(entrance.parent_region.name, end.map)
+                    self.assertEqual(entrance.connected_region.name, other.map)
+
+    def test_door_gates_and_transfers_name_real_places(self) -> None:
+        doors = {(end.map, end.door) for c in DOORS.connections for end in (c.a, c.b)}
+        for gate in DOOR_RULES:
+            with self.subTest(gate=gate):
+                self.assertIn((gate.map, gate.door), doors)
+        for transfer in TRANSFERS:
+            with self.subTest(transfer=transfer.name):
+                self.assertIn(transfer.from_map, MAPS)
+                self.assertIn(transfer.to_map, MAPS)
 
     def test_every_region_reachable_with_everything(self) -> None:
         state = self.multiworld.get_all_state()
-        for region in REGIONS:
-            with self.subTest(region=region.name):
-                self.assertTrue(state.can_reach_region(region.name, self.player))
+        for name in MAPS:
+            with self.subTest(region=name):
+                self.assertTrue(state.can_reach_region(name, self.player))
 
     def test_locations_in_id_order(self) -> None:
         # Moving a spot from one module to another must never change a seed.

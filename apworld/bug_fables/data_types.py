@@ -267,31 +267,39 @@ class Source:
 
 
 @dataclass(frozen=True, slots=True)
-class Exit:
-    """A way from one region to region to, and the Rule Builder rule it needs (None: nothing)."""
+class DoorRule:
+    """A door that is itself a gate (the game makes it only from a story flag): what going through it needs, from its
+    own side. The rule is the door's exit's, so it goes with the door wherever the entrance randomizer sends it."""
 
-    to: str
-    rule: Rule | None = None
+    map: str
+    door: str
+    rule: Rule
 
 
 @dataclass(frozen=True, slots=True)
-class Region:
-    """A region and its exits, in its area's module (logic/)."""
+class Transfer:
+    """A way between two maps that isn't a door (a boat, an elevator, a scene), never shuffled. name says what it is;
+    two_way: the same way back exists, with the same rule; otherwise it only goes from from_map."""
 
     name: str
-    exits: tuple[Exit, ...] = ()
+    from_map: str
+    to_map: str
+    rule: Rule | None = None
+    two_way: bool = True
 
 
 @dataclass(frozen=True, slots=True)
 class Location:
     """A location, in its area's module (logic/).
 
-    id is added to LOCATION_ID_BASE and never reused (retired: 4). rule: what the spot itself needs once you're in its
-    region, kept apart from what reaching the region needs (so entrance rando can change one without the other);
-    written even when the region implies it. category marks a location a yaml option can leave out (quest,
-    crystal_berry, discovery, shop, item_shop; party_member, only with Starting Party Member on; story_party, a story
-    event only with it off). quiet marks an opening check whose item arrives with no hold-up (the start of a new file).
-    no_jump: seen reachable without a jump (with Shuffle Jump, every other spot needs it).
+    id is added to LOCATION_ID_BASE and never reused (retired: 4). region: the map it's in, whose region it sits in.
+    rule: what the spot itself needs once you're in its map, kept apart from what reaching it needs (so entrance rando
+    can change one without the other); written even when reach implies it. reach: what reaching the spot needs beyond
+    the doors until its room is mapped (build step 24), the stand-in its area's big region needed. category marks a
+    location a yaml option can leave out (quest, crystal_berry, discovery, shop, item_shop; party_member, only with
+    Starting Party Member on; story_party, a story event only with it off). quiet marks an opening check whose item
+    arrives with no hold-up (the start of a new file). no_jump: seen reachable without a jump (with Shuffle Jump, every
+    other spot needs it).
     """
 
     name: str
@@ -302,12 +310,13 @@ class Location:
     category: str | None = None
     quiet: bool = False
     no_jump: bool = False
+    reach: Rule | None = None
 
 
 @dataclass(frozen=True, slots=True)
 class StoryEvent:
-    """A logic-only event (no id): a story step, placed in the region where it happens, whose item other rules
-    require. rule, category and no_jump as for a Location."""
+    """A logic-only event (no id): a story step, placed in the map where it happens, whose item other rules require.
+    rule, category, no_jump and reach as for a Location."""
 
     name: str
     item: str
@@ -316,13 +325,16 @@ class StoryEvent:
     rule: Rule | None = None
     category: str | None = None
     no_jump: bool = False
+    reach: Rule | None = None
 
 
 @dataclass(frozen=True, slots=True)
 class Artifact:
-    """An artifact, an event (no id): the game counts 7 artifact flags, and the goal is having enough of them."""
+    """An artifact, an event (no id): the game counts 7 artifact flags, and the goal is having enough of them. region
+    and reach as for a Location."""
 
     number: int
     name: str
     region: str
     source: Source
+    reach: Rule | None = None

@@ -10,6 +10,6 @@ class TestBoatTicket(BugFablesTestBase):
 
     def test_metal_island_needs_the_ticket(self) -> None:
         self.collect_all_but(["Boat Ticket"])
-        self.assertFalse(self.can_reach_region("Metal Island"))
+        self.assertFalse(self.can_reach_region("MetalIsland1"))
         self.collect_by_name(["Boat Ticket"])
-        self.assertTrue(self.can_reach_region("Metal Island"))
+        self.assertTrue(self.can_reach_region("MetalIsland1"))

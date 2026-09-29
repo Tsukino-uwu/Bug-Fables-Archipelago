@@ -95,11 +95,15 @@ class TestInRoomRules(BugFablesTestBase):
         self.assertFalse(location.access_rule(state))
         self.add(state, "Leif")
         self.assertTrue(location.access_rule(state))
-        self.assertEqual(location.parent_region.name, "Snakemouth Den Underground")
+        self.assertEqual(location.parent_region.name, "SnakemouthMushroomPit")
 
     def test_pit_medal_needs_nothing_in_the_room(self) -> None:
-        location = self.world.get_location("Snakemouth Den: Mushroom Pit, Floor")
-        self.assertTrue(location.access_rule(self.state_with()))
+        # Nothing of its own: only the underground's stand-in (reach), until the room is mapped.
+        from ..data_tables import LOCATIONS
+        spot = next(loc for loc in LOCATIONS if loc.name == "Snakemouth Den: Mushroom Pit, Floor")
+        self.assertIsNone(spot.rule)
+        location = self.world.get_location(spot.name)
+        self.assertTrue(location.access_rule(self.state_with("Explorer Permit", "Leif")))
 
 
 class TestLostKid(BugFablesTestBase):
@@ -147,7 +151,7 @@ class TestChapterTwo(BugFablesTestBase):
         self.assertTrue(library.can_reach(state))
 
     def test_the_city_is_open_from_the_start(self) -> None:
-        self.assertTrue(self.multiworld.get_region("Bugaria City", self.player).can_reach(self.state_with()))
+        self.assertTrue(self.multiworld.get_region("BugariaMainPlaza", self.player).can_reach(self.state_with()))
 
     def test_chapter_two_needs_the_first_boss(self) -> None:
         start = self.world.get_location("Chapter 2 Start")
@@ -173,7 +177,7 @@ class TestOldBookChain(BugFablesTestBase):
     def test_reward_needs_the_library_delivery(self) -> None:
         reward = self.world.get_location("Bugaria City: Residential District, Old Book Delivery Reward")
         self.assertTrue(reward.can_reach(self.state_with("Chapter 2 Started", "Old Book Delivered")))
-        self.assertEqual(self.world.get_location("Old Book Delivered").parent_region.name, "Bugaria Inner City")
+        self.assertEqual(self.world.get_location("Old Book Delivered").parent_region.name, "AntPalaceLibrary")
 
 
 class TestClassifications(BugFablesTestBase):

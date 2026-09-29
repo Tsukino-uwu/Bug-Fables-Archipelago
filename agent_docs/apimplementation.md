@@ -69,9 +69,9 @@ be wrong.
    split into regions as build step 24 describes. Medal gifts and medal shops each get a yaml on/off toggle.
    Shops (medal shops, item shops, the caravan): see build step 11. Other kinds of location (boss prize medals,
    placeholders, journal entries, enemy drops): see build step 10.
-2. **Entrance randomizer (experimental):** every door, coupled, built; next, sorting the transfers that aren't doors
-   into chosen and forced, then the room-by-room logic that removes the label, on Archipelago's own entrance
-   randomizer in place of `doors.py` (2026-09-29). See build step 12.
+2. **Entrance randomizer (experimental):** every door, coupled, built; every map a region and every door an entrance
+   (2026-09-30); next, Archipelago's own entrance randomizer in place of `doors.py`, then sorting the other transfers
+   into chosen and forced and the room-by-room logic that removes the label. See build step 12.
    **How each room gets mapped** (2026-09-27): the checklist in `room-logic.md`; the tester says what needs
    what, the agent turns it into areas and rules.
 3. **Field abilities shuffled as items** (every learned ability built, build step 23) (by the game's names: Beemerang Halt, Bee Fly, Dash, Horn Dash, Beetle Dig, Icicle, Shield; `MEASURED.md`, every field ability).
@@ -1541,9 +1541,9 @@ at runtime. No room is done until its flags are listed.
    "Transfers that aren't doors"). Next: sort them into chosen and forced, reading each event.
 
 9. **Quests that cross rooms** (2026-09-25: a reward mustn't be expected when its middle steps can't be
-   reached). Today a quest is safe because its steps share one big region (the old book's residential house and the
-   palace library are both *Bugaria Inner City*) or pass on the way (the lost kid's sister waits outside the city,
-   on the way to Snakemouth). With doors shuffled neither holds. The rule before the label comes off: **every quest
+   reached). It was safe while its steps shared one big region (the old book's residential house and the palace
+   library were both *Bugaria Inner City*) or passed on the way (the lost kid's sister waits outside the city, on the
+   way to Snakemouth). With doors shuffled neither holds; since 2026-09-30 each spot sits in its own map. The rule before the label comes off: **every quest
    step in another room is a logic event in that room's region** (the sister following; the library visit is done, build step 8), and the
    reward requires the whole chain; items handed out mid-quest are already progression (build step 10). Taking the
    quest is a step too, now just "reach any board" (build step 9). Known gap today: the lost kid's reward
@@ -1563,10 +1563,41 @@ of its room's region, and `randomize_entrances` replaces `doors.py`: coupled mod
 placed with the logic so the logic follows the doors, its `pairings` turned into the same `door_targets` the mod
 already reads (How it works §8; Archipelago's `entrance randomization.md`).
 
+**Rooms as regions, done first (2026-09-30; the user: "implement proper archipelago entrance rando now … whatever
+Archipelago does").** The graph changed, not the rules. The rules stay what they were, moved to where the graph needs
+them; room-by-room rules (build step 24) replace them later.
+
+1. **One region per map:** Menu, then the 241 maps of the door table (`SnakemouthEmpty`, an unused room nothing leads
+   into, and `TestRoom`, the debug room, left out; the user: "looked like a empty/test map", "TestRoom sounds obvious")
+   and `MetalLake`,
+   `TermiteColiseum2`, `BugariaEndThrone`, reached only by transfers. 244 regions, 582 entrances.
+2. **Every door an entrance of its map's region**, named where it is, `"<map>: <door>"` (the naming the entrance
+   randomization doc recommends), connected as the game has it: 508. The 39 fixed doors are plain entrances.
+3. **The transfers that join the door graph's parts** (the doors alone split it into 10), each a `Transfer` in its
+   area's module, from the decompiled events and the dumps (read 2026-09-29): the boat (`Boat Ticket`), the Beehive
+   elevator, the submarine docks, the ant tunnels, the termite gate, the arena, the Roach Village lifts, the Golden Hills
+   elevator, the attack on the city and the ending (one-way), and the way down to the underground bar (one-way, by
+   talking to someone in the commercial district, the user). Chapters 2-7's are as cautious as those chapters. Transfers
+   inside a part the doors already join wait for the room mapping.
+4. **Where a door is itself the gate, its exit has the rule:** the Golden Path door (made only after the first boss)
+   and the palace hall's doors to the library, the war room and the mine (chapter 2). The rule goes with the door
+   wherever the shuffle sends it.
+5. **What the big regions needed became each spot's `reach`:** a spot sits in its map's region, keeps its own `rule`,
+   and gains `reach`, the old region's requirement (`PAST_GATE`, `DEN`, `UNDERGROUND`, `GOLDEN_PATH`, `INNER_CITY`,
+   `LATER_CHAPTERS`, named in their modules). In-map gates (the Permit gate, the grass, the droplets) stay there until
+   the rooms are split into areas.
+6. **Proven the same with the doors off:** before the change, which spots 300 random item states reach under 7 option
+   sets (the defaults, the story's party, each single member, moves and Jump shuffled, categories off and on); after it,
+   all 2100 came out identical.
+
+Tests (`test_areas.py`): every spot in a map and in its source's map, every door an entrance where the game has it,
+gates and transfers naming real places, every region reachable with everything (which found the three maps nothing
+leads into).
+
 **Room Swap** (2026-09-29), whole rooms moved instead of single doors, is a value of the same option with a step of its
 own: build step 30.
 
-**Status:** in progress (experimental): every door, coupled, built, and a generated pair seen both ways, offline too (2026-09-25); next, sorting the transfers that aren't doors, then the room-by-room logic, with Archipelago's entrance randomizer in place of `doors.py`; decoupled later.
+**Status:** in progress (experimental): every door, coupled, built, and a generated pair seen both ways, offline too (2026-09-25); every map a region and every door an entrance (2026-09-30, the logic proven unchanged with the doors off); next, Archipelago's entrance randomizer in place of `doors.py`, then sorting the other transfers and the room-by-room logic; decoupled later.
 
 ---
 
@@ -2320,12 +2351,13 @@ chapters 1-7 are mapped, this is how every part of it gets done (2026-09-27: "th
 randomizer and a random start stay labelled experimental until their room-level logic is done and tested.
 
 **When the first area is mapped room by room** (2026-09-29): a test for rule 4 comes with it (every one-way's rule
-holds what its way back needs), and the doors become the regions' own entrances, shuffled by Archipelago's entrance
-randomizer instead of `doors.py` (build step 12).
+holds what its way back needs). Each map is already a region with its doors as entrances (build step 12, 2026-09-30),
+so mapping a room splits its region into areas and replaces its spots' `reach` with the room's own rules.
 
 **Status:** planned (2026-09-27): the method and the checklist written (`room-logic.md`), no room mapped with it yet;
 the rules for writing it (1 to 4, and 9) and the region explainer (§11) written 2026-09-29, the logic in Python since
-build step 29. Today's logic is by large areas (the Outskirts, Snakemouth Den, Bugaria City, Later Chapters).
+build step 29. Today's rules are still by large areas, kept as each spot's `reach` over one region per map (build
+step 12, 2026-09-30).
 
 ## Build step 25: DeathLink, a panel row
 
@@ -3101,14 +3133,11 @@ so far meet, into every region that opens. Every location it reaches whose own r
 the next item. That walk, repeated as items are placed, is how Archipelago proves a seed can be finished.
 
 ```
- Menu ──> Bugaria Outskirts ──[Explorer Permit, the party, its attacks]──> Past the Outskirts Gate
-                                                                                    │ [Horn Slash]
-                                                                                    ▼
-                                                                             Snakemouth Den
-                                                                                    │ [Freeze]
-                                                                                    ▼
-                                                                       Snakemouth Den Underground
-                                                                         • Mushroom Pit, Droplets [Freeze]
+ Menu ──> BugariaOutskirtsOutsideCity ──[LoadZoneGoldenPath: Snakemouth Den Cleared]──> BOGoldenPath
+                   │ DoorSnakemouth                                                      • Golden Path, Grass
+                   ▼
+   BugariaOutskitsSnakemouthCorridor1 ──> … ──> SnakemouthLake ──> … ──> SnakemouthMushroomPit
+                                                                          • Mushroom Pit, Droplets [Freeze]
 ```
 
 **Is a region a collection of rules?** Not quite. A region is a place; the rules sit on its ways in (the exits) and on
@@ -3161,26 +3190,25 @@ Why regions at all, instead of a full rule on every spot:
 
 - **All of the logic is in the apworld; none is in the mod.** The mod only does what the generator decided
   (`slot_data`; build step 24, rule 7), so the game's side has no logic and no file per room.
+- **Every map is a region, every door an entrance** (build step 12, 2026-09-30): `regions.py` makes them from the door
+  table, named `"<map>: <door>"`, so Archipelago's entrance randomizer can shuffle them.
 - **One Python module per game area** (`logic/`, build step 29): `outskirts.py`, `snakemouth_den.py`,
-  `bugaria_city.py`, `metal_island.py`, `later_chapters.py`. Each lists its regions with their exits, and its locations
-  and story events, each with its rule. Per area, not per room: a room's logic often reaches into its neighbours, and
-  an area is tested in one sitting. Menu is made in `regions.py`.
-- **Today** (2026-09-29): 10 regions (Menu included), 9 exits, 74 locations, 4 story events and 1 artifact event, by
-  large areas until the rooms are mapped (build step 24). Adding a room is adding lines to its area's module, not code.
+  `bugaria_city.py`, `metal_island.py`, `later_chapters.py`. Each lists its locations and story events (each in its
+  map, with its own rule), its door gates (`DOOR_RULES`) and ways between maps that aren't doors (`TRANSFERS`). Per
+  area, not per room: a room's logic often reaches into its neighbours, and an area is tested in one sitting. Menu is
+  made in `regions.py`.
+- **Today** (2026-09-30): 244 regions (Menu included), 582 entrances, 74 locations, 4 story events and 1 artifact
+  event. Until the rooms are mapped (build step 24), what the old large areas needed is kept on each spot as its
+  `reach`, beside its own `rule`. Adding a room is adding lines to its area's module, not code.
 - **What a module looks like** (shortened):
 
   ```python
-  REGIONS = (
-      Region("Snakemouth Den", exits=(
-          # Water droplets: Leif freezes them.
-          Exit("Snakemouth Den Underground", CanUse("Freeze")),
-      )),
-      Region("Snakemouth Den Underground"),
-  )
+  # Every Snakemouth room with water droplets, or reached only through one: Leif freezes the droplets.
+  UNDERGROUND = DEN & CanUse("Freeze")
   LOCATIONS = (
-      Location("Snakemouth Den: Lake, Ladybug Kid's Reward", 10, "Snakemouth Den",
-               Source(event=31, flag=55, give=Give(map="SnakemouthLake", type=1, item=52)),
-               rule=Has("Leif") & Has("Snakemouth Den Cleared"), category="quest"),
+      Location("Snakemouth Den: Mushroom Pit, Droplets", 9, "SnakemouthMushroomPit",
+               Source(flag=724, pickup=Pickup(map="SnakemouthMushroomPit", type=0, item=144)),
+               rule=CanUse("Freeze"), reach=UNDERGROUND),
   )
   ```
 

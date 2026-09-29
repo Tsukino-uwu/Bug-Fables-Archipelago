@@ -7,8 +7,8 @@ import pkgutil
 from typing import Any
 
 from .data_types import Doors, Encounter, Item, Location, RoomStart, SavePoint
-from .logic import (ARTIFACTS, DIALOGUE_FLAGS, HELD_UNTIL, KEPT_OPEN, KEPT_PRESENT, LOCATIONS, PRESENT_FROM, REGIONS,
-                    SCENERY_HIDDEN, SCENERY_PRESENT, STORY_EVENTS)
+from .logic import (ARTIFACTS, DIALOGUE_FLAGS, DOOR_RULES, HELD_UNTIL, KEPT_OPEN, KEPT_PRESENT, LOCATIONS,
+                    PRESENT_FROM, SCENERY_HIDDEN, SCENERY_PRESENT, STORY_EVENTS, TRANSFERS)
 
 ITEM_ID_BASE = 7_710_000
 LOCATION_ID_BASE = 7_720_000
@@ -31,6 +31,12 @@ def _load(name: str) -> dict[str, Any]:
 WORLD_VERSION: str = _load_manifest()["world_version"]
 ITEMS: tuple[Item, ...] = tuple(Item.from_json(item) for item in _load("items.json")["items"])
 DOORS: Doors = Doors.from_json(_load("doors.json"))
+# Maps nothing leads into: an unused room and the debug room (MEASURED.md, "The door graph").
+UNUSED_MAPS = frozenset({"SnakemouthEmpty", "TestRoom"})
+# Every map a region: the door table's and those only a transfer reaches.
+MAPS: tuple[str, ...] = tuple(sorted(
+    ({end.map for c in DOORS.connections for end in (c.a, c.b)} | {m for link in DOORS.fixed for m in link}
+     | {m for t in TRANSFERS for m in (t.from_map, t.to_map)}) - UNUSED_MAPS))
 # Every room entered through a door: the map, and the map whose door leads in (both ways of each connection). A start
 # there lands where walking in through that door ends.
 ROOM_STARTS: tuple[RoomStart, ...] = tuple(sorted(
