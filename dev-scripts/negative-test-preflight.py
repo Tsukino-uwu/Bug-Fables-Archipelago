@@ -4,12 +4,14 @@ Each fixture plants one kind of violation in a throwaway clone (outside this rep
 reach this repo or a remote), runs preflight there and checks that the section named for it reports FAIL and that
 preflight exits non-zero. The clone holds what the next commit contains (HEAD plus everything staged), the way
 preflight itself reads the index; --rev tests a commit instead (what pre-push does).
-Then the hooks themselves: a real commit and a real push carrying a violation must both be refused. Coverage must be
-total: every section, in every mode it runs in, needs a fixture. Standard library only.
+Then the hooks themselves: a real commit and a real push carrying a violation must both be refused, and the coding
+agent's guard (.claude/) must refuse, ask and let through what it should. Coverage must be total: every section, in
+every mode it runs in, needs a fixture. Standard library only.
 
     python dev-scripts/negative-test-preflight.py [--rev REV] [--only REGEX] [--keep] [--quiet]
 """
 import argparse
+import json
 import os
 import re
 import shutil
@@ -411,6 +413,16 @@ def fixtures():
         c.write('dev-scripts/planted.py', 'import os\nimport pickle\nimport subprocess\n'
                 'eval("1")\nos.system("x")\nsubprocess.run("x", shell=True)\n')
 
+    @add('agent settings that do more than guard', 'Dev scripts and hooks',
+         names=('sets env', 'permissions.allow', 'a SessionStart hook', 'a command that is not the listed one'))
+    def _(c):
+        settings = json.loads(c.read('.claude/settings.json'))
+        settings['env'] = {'PLANTED': '1'}
+        settings['permissions']['allow'] = ['Bash']
+        settings['hooks']['SessionStart'] = [{'hooks': [{'type': 'command', 'command': 'echo planted'}]}]
+        settings['hooks']['PreToolUse'][0]['hooks'].append({'type': 'command', 'command': 'echo planted'})
+        c.write('.claude/settings.json', json.dumps(settings, indent=2) + '\n')
+
     @add('a script doing something unlisted', 'Dev scripts and hooks', names=('planted.py: runs programs',))
     def _(c):
         c.write('dev-scripts/planted.py', 'import subprocess\n')
@@ -703,6 +715,8 @@ def main():
         if not args.only:
             print('== The hooks, for real ==')
             hooks_test(c, base, h)
+            print('== The coding agent\'s guard ==')
+            agent_guard_test(c, base, h)
             print('== Coverage ==')
             patterns = patterns_of(c)
             unsampled = [f'{key}: {kind}' for key, samples in SAMPLED.items()
@@ -783,6 +797,104 @@ def hooks_test(c, base, h):
         h.say('PASS', 'pre-push refused a commit made past the hooks; the remote is unchanged')
     else:
         h.say('FAIL', 'pre-push let a commit with a home path reach the remote', [r.stderr.decode(errors='replace')[:300]])
+
+
+# (tool, command or repo path, what the guard must answer), in a clean clone. Commit messages may name anything.
+GUARD_CASES = [
+    ('Bash', 'git status', None),
+    ('Bash', 'git commit --no-verify -m x', 'deny'),
+    ('Bash', 'git commit --no-veri -m x', 'deny'),
+    ('Bash', 'git push --no-verify', 'deny'),
+    ('Bash', 'git commit -n -m x', 'deny'),
+    ('Bash', 'git commit -anm x', 'deny'),
+    ('Bash', 'git -C . commit -qn -m x', 'deny'),
+    ('Bash', 'git -c core.hooksPath=/dev/null commit -m x', 'deny'),
+    ('Bash', 'git config core.hooksPath /dev/null', 'deny'),
+    ('Bash', 'git config --unset core.hooksPath', 'deny'),
+    ('Bash', 'GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=core.hooksPath GIT_CONFIG_VALUE_0=x git commit -m y', 'deny'),
+    ('Bash', 'git commit-tree HEAD^{tree} -m x', 'deny'),
+    ('Bash', 'git update-ref refs/heads/main HEAD~1', 'deny'),
+    ('Bash', 'bash -c "git commit --no-verify -m x"', 'deny'),
+    ('PowerShell', 'git commit --no-ver`ify -m x', 'deny'),
+    ('PowerShell', 'powershell -Command "git commit -n -m x"', 'deny'),
+    ('PowerShell', '$env:GIT_CONFIG_COUNT = 1', 'deny'),
+    ('Bash', 'git config core.hooksPath .githooks', None),
+    ('Bash', 'git config --get core.hooksPath', None),
+    ('Bash', 'git commit -m "refuses --no-verify and commit -n"', None),
+    ('Bash', "git commit -q -F - <<'EOF'\nrefuses --no-verify, commit -n, commit-tree\nEOF", None),
+    ('PowerShell', "git commit -m @'\nrefuses --no-verify\n'@", None),
+    ('Bash', 'git log --oneline -n 5', None),
+    ('Bash', 'git stash push -m wip', None),
+    ('Bash', 'git push origin main', 'ask'),
+    ('PowerShell', 'git status; if ($?) { git push }', 'ask'),
+    ('Bash', 'cat .git/config', 'ask'),
+    ('Bash', 'gh api repos/o/r/contents/x -X PUT -f message=m', 'ask'),
+    ('Bash', 'gh api -X GET repos/o/r', None),
+    ('Edit', 'docs/capabilities.md', 'ask'),
+    ('Write', 'dev-scripts/preflight-patterns.json', 'ask'),
+    ('Edit', '.claude/settings.local.json', 'ask'),
+    ('Edit', '.git/config', 'ask'),
+    ('Edit', 'docs/reviewing.md', None),
+    ('Read', 'docs/capabilities.md', None),
+]
+
+
+def git_sh():
+    """The sh Claude Code would run the hook with: on Windows Git's own, never whatever bash PATH finds first."""
+    if os.name != 'nt':
+        return '/bin/sh'
+    top = subprocess.run(['git', '--exec-path'], capture_output=True).stdout.decode().strip()
+    for _ in range(4):
+        top = os.path.dirname(top)
+        for sh in ('bin/sh.exe', 'usr/bin/sh.exe'):
+            if os.path.isfile(os.path.join(top, sh)):
+                return os.path.join(top, sh)
+    return None
+
+
+def agent_guard_test(c, base, h):
+    """The guard refuses what gets past the hooks, asks before the gate changes or a push, lets the rest through, and
+    refuses everything when it can't run."""
+    c.git('reset', '-q', '--hard', base)
+    c.git('clean', '-q', '-fdx')
+    guard_env = dict(env(), CLAUDE_PROJECT_DIR=c.root)
+
+    def decide(tool, given):
+        tool_input = {'command': given} if tool in ('Bash', 'PowerShell') else {'file_path': c.path(given)}
+        r = subprocess.run([sys.executable, '-B', c.path('.claude/hooks/agent-guard.py')], capture_output=True,
+                           input=json.dumps({'tool_name': tool, 'tool_input': tool_input}).encode(), env=guard_env)
+        if r.returncode != 0:
+            return f'exit {r.returncode}: {r.stderr.decode(errors="replace")[-200:]}'
+        return json.loads(r.stdout)['hookSpecificOutput']['permissionDecision'] if r.stdout.strip() else None
+
+    wrong = [f'{tool} {given!r}: {got}, not {want}' for tool, given, want in GUARD_CASES
+             for got in [decide(tool, given)] if got != want]
+    c.append('dev-scripts/preflight.py', '# planted\n')
+    got = decide('Bash', 'git commit -q -m "a harmless-looking change"')
+    if got != 'ask':
+        wrong.append(f'a commit while preflight.py is changed: {got}, not ask')
+    c.git('checkout', '-q', '--', 'dev-scripts/preflight.py')
+    if wrong:
+        h.say('FAIL', 'the guard answers wrongly', wrong)
+    else:
+        h.say('PASS', f'the guard refuses, asks and lets through as it should ({len(GUARD_CASES) + 1} cases)')
+
+    command = json.loads(c.read('.claude/settings.json'))['hooks']['PreToolUse'][0]['hooks'][0]['command']
+    sh = git_sh()
+    if not sh:
+        h.say('FAIL', 'no sh found to run the settings\' hook command with')
+        return
+    outcomes = []
+    for payload, want in ((b'{"tool_name": "Bash", "tool_input": {"command": "git commit -n -m x"}}', 0),
+                          (b'not an event', 2)):
+        r = subprocess.run([sh, '-c', command], input=payload, capture_output=True, env=guard_env,
+                           cwd=os.path.dirname(c.root))
+        outcomes.append((r.returncode, want, b'"deny"' in r.stdout))
+    if outcomes[0] == (0, 0, True) and outcomes[1][0] == 2:
+        h.say('PASS', 'the settings\' hook command runs the guard from anywhere, and refuses (exit 2) when it breaks')
+    else:
+        h.say('FAIL', 'the settings\' hook command does not run the guard, or lets a broken guard through',
+              [f'exit {got}, wanted {want}, denied: {denied}' for got, want, denied in outcomes])
 
 
 if __name__ == '__main__':

@@ -188,6 +188,8 @@ Sources are grouped in folders under `mod/BugFablesAP/`; the namespace is `BugFa
 | [`Directory.Build.props`](../Directory.Build.props) | Stops MSBuild picking up build files from outside the repo. | [documentation § 32. A release DLL anyone with the game can rebuild](documentation.md#32-a-release-dll-anyone-with-the-game-can-rebuild-byte-for-byte) |
 | [`pre-push`](../.githooks/pre-push) | Runs preflight.py on each pushed commit and `--history` on everything new in the push; the gate's own test when the push changes the gate. | [apimplementation § Build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release) |
 | [`python.sh`](../.githooks/python.sh) | Finds a Python 3.11 or newer that really runs, for every hook. | [apimplementation § Build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release) |
+| [`settings.json`](../.claude/settings.json) | The coding agent's guard, for Claude Code: asks before edits to what the gates allow, and runs agent-guard.py before each shell command and edit. Preflight holds it to exactly that. | [apimplementation § Build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release) |
+| [`agent-guard.py`](../.claude/hooks/agent-guard.py) | Refuses an agent's command that would get past the git hooks; asks before a gate change, a commit carrying one, a push, or a `gh api` write. Fails closed. | [apimplementation § Build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release)<br>[development § Before the first commit](development.md#before-the-first-commit-the-hooks-and-the-preflight) |
 
 ## Preflight
 

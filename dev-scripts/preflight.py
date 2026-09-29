@@ -890,6 +890,36 @@ def python_findings(f, tree, p):
     return bad, caps
 
 
+AGENT_SETTINGS = '.claude/settings.json'
+
+
+def agent_settings_findings(f, allowed):
+    """Claude Code runs the hooks these settings name for anyone who opens the repo in it: they may run nothing but
+    the listed command, and may only make the agent ask or refuse, never allow it more."""
+    try:
+        s = strict_json(f.text)
+    except ValueError as e:
+        return [f'{f.path}: not strict JSON ({e})']
+    bad = [f'{f.path}: sets {k}, which only permissions and hooks may be' for k in sorted(set(s) - {'permissions', 'hooks'})]
+    perms = s.get('permissions', {})
+    bad += [f'{f.path}: permissions.{k}: only {", ".join(allowed["permission_lists"])} rules may be set here'
+            for k in sorted(set(perms) - set(allowed['permission_lists']))]
+    bad += [f'{f.path}: permissions.{k} is not a list of rules' for k, v in perms.items()
+            if not (isinstance(v, list) and all(isinstance(r, str) for r in v))]
+    for event, entries in s.get('hooks', {}).items():
+        if event not in allowed['hook_events']:
+            bad.append(f'{f.path}: a {event} hook: only {", ".join(allowed["hook_events"])} hooks may run')
+            continue
+        for entry in entries:
+            bad += [f'{f.path}: a {event} entry sets {k}' for k in sorted(set(entry) - {'matcher', 'hooks'})]
+            for hook in entry.get('hooks', []):
+                extra = sorted(set(hook) - {'type', 'command', 'timeout'})
+                if extra or hook.get('type') != 'command' or hook.get('command') not in allowed['hook_commands']:
+                    bad.append(f'{f.path}: a {event} hook runs a command that is not the listed one '
+                               f'(dev-scripts/preflight-patterns.json, "agent_settings"): {str(hook)[:120]}')
+    return bad
+
+
 @section('Dev scripts and hooks')
 def dev_scripts(ctx, out):
     p = ctx.patterns
@@ -899,9 +929,12 @@ def dev_scripts(ctx, out):
     heading = 'Dev scripts and hooks: what they touch'
     rows, reasonless = capability_rows(ctx, heading)
     bad, found, count = [], set(), 0
+    settings = ctx.file(AGENT_SETTINGS)
+    if settings:
+        bad += agent_settings_findings(settings, p['agent_settings'])
     for f in ctx.files:
         path = f.path
-        if not (path.startswith(('dev-scripts/', '.githooks/')) and not f.binary):
+        if not (path.startswith(('dev-scripts/', '.githooks/', '.claude/hooks/')) and not f.binary):
             continue
         if path.endswith('.py'):
             count += 1
@@ -1617,7 +1650,7 @@ def load_patterns(files):
                 'ps1_capabilities', 'sh_denied', 'script_denied_modules', 'script_denied_builtins',
                 'script_denied_methods', 'script_capability_modules', 'script_capability_calls', 'dll_assembly_refs',
                 'dll_denied', 'dll_denied_names', 'dll_capabilities', 'dll_synthesized_members', 'dll_compiler_types',
-                'workflows', 'dependencies', 'capability_tables', 'mod_server_text'}
+                'workflows', 'dependencies', 'capability_tables', 'mod_server_text', 'agent_settings'}
     if set(patterns) != expected:
         raise Unreadable(f'{PATTERNS} keys differ from what preflight reads: {sorted(set(patterns) ^ expected)}')
     for rx in list(patterns['secrets'].values()) + patterns['game_paths'] + patterns['decompiler_markers'] + [

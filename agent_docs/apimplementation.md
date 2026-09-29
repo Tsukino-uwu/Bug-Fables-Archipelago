@@ -2536,16 +2536,42 @@ confirmed in the code, listed under Known issues in "Where it stands" above.
   - `main` can't be force-pushed or deleted, so history can't be rewritten out of sight.
   - `v*` tags can't be deleted or moved, so a release always points at the commit it was checked on.
 
+**The coding agent's guard (2026-09-29, on the user's yes):** the hooks stop a commit, but an agent could still step
+around them. Claude Code runs `.claude/hooks/agent-guard.py` before each shell command and file edit its agent makes
+here (`.claude/settings.json`).
+- **It refuses** whatever gets past the git hooks: `--no-verify` (and its short forms), `git commit -n`, changing
+  `core.hooksPath` (setting it to `.githooks` is allowed), git config set through the environment, and the plumbing that
+  writes history by hand (`commit-tree`, `update-ref`). It reads each command word by word, so a commit message may
+  name any of these; `bash -c`, `powershell -Command` and the like are read inside too.
+- **It asks the user first** before:
+  - an edit to `docs/capabilities.md`, the patterns file, `.claude/` (the guard itself, and the local settings that
+    could switch it off) or `.git/`;
+  - a commit while any gate file has changed, which also covers a file a script wrote rather than an edit;
+  - a push, since pushing is only on the user's word;
+  - a `gh api` call that writes, since that changes GitHub without passing a hook.
+- **It fails closed.** If it can't run (no Python, a crash, input it can't read), the settings' command exits 2 and
+  Claude Code refuses the action.
+- **It stays small.** It calls `py -3` or `python3` directly, about 0.3 s a call: the hooks' own finder would double
+  that on every command.
+- **The settings can't grow.** Claude Code runs a repo's hooks for anyone who opens it in Claude Code, so
+  preflight's "Dev scripts and hooks" holds `.claude/settings.json` to `ask` and `deny` rules and the one listed
+  command; the guard script is read like every dev script. A file `.claude/settings.local.json` is left out of git.
+- **Proven:** the harness plants settings that do more (their own `env`, an allow list, another event, another
+  command), and runs the guard on 35 cases plus a commit with the gate changed. Staging a guard missing its
+  `--no-verify` check, and a command that exits 1 instead of 2, made both tests fail (2026-09-29).
+- **Not a wall.** A determined script can still get round it. Pre-push, CI and the release checks are what catch that,
+  and a weakened gate still shows up as a commit of its own.
+
 **Status:** built (2026-09-29): the sections above, their test, `verify-release.py`, every place they run
-(pre-commit, pre-push, CI on every push, the release) and the reviewer pages. The CI half runs for the first time on
-the next push; the GitHub settings are on. Next: the agent's guard in `.claude/settings.json`, and the review's two
-remaining findings (Known issues).
+(pre-commit, pre-push, CI on every push, the release), the reviewer pages, the GitHub settings and the agent's guard.
+The CI half runs for the first time on the next push. The guard runs from the next Claude Code session (its folder
+didn't exist when this one started). Next: the review's two remaining findings (Known issues).
 
 *Code: `dev-scripts/preflight.py`, `dev-scripts/preflight-patterns.json`, `dev-scripts/dotnet_metadata.py`;
 `docs/capabilities.md`;
 `dev-scripts/negative-test-preflight.py`; `.githooks/pre-commit`, `.githooks/pre-push`, `.githooks/commit-msg`,
 `.githooks/python.sh`; `dev-scripts/verify-release.py`; `.github/workflows/preflight.yml`, and the guard, publish
-and verify jobs in `.github/workflows/release.yml`.*
+and verify jobs in `.github/workflows/release.yml`; `.claude/settings.json`, `.claude/hooks/agent-guard.py`.*
 
 # How it works
 

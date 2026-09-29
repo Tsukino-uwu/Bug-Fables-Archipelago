@@ -17,6 +17,15 @@ Once per clone: `git config core.hooksPath .githooks`. The hooks need Python 3.1
 - `python dev-scripts/verify-release.py --ref vX.Y.Z --zip <file> --apworld <file>`: checks a release's files against
   its tag.
 
+**Working with Claude Code:** `.claude/settings.json` runs `.claude/hooks/agent-guard.py` before each shell command
+and file edit the agent makes. It refuses anything that gets past the hooks. It asks you first before:
+- an edit to `docs/capabilities.md`, the patterns file, `.claude/` or `.git/`;
+- a commit while a gate file has changed;
+- a push;
+- a `gh api` write.
+
+It needs `py -3` or `python3`; if it can't run, it refuses. `/hooks` in Claude Code shows it.
+
 When a check refuses something the code really needs (a new host, a new capability), the fix is a row in
 `docs/capabilities.md` with its reason: the maintainer's decision, never a looser pattern. What each section does:
 [apimplementation.md, build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release).

@@ -4,6 +4,8 @@
     ["README.md", "the project's front page"],
     ["LICENSE", "the licence"],
     ["CLAUDE.md", "the coding agent's working rules"],
+    [".claude/settings.json", "the coding agent's guard: what it asks before, and the one hook it runs"],
+    [".claude/hooks/agent-guard.py", "that hook"],
     [".gitignore", "what git leaves out"],
     [".gitattributes", "line endings"],
     [".editorconfig", "code style"],
@@ -224,6 +226,19 @@
     "screen capture": "\\bScreenCapture\\b"
   },
   "mod_server_text": {"reads": "\\.Player\\??\\.(?:Name|Alias)\\b|\\.ItemDisplayName\\b|\\.ItemGame\\b|\\.LocationDisplayName\\b|\\.LocationGame\\b|RoomState\\.Seed\\b|(?<!GameStrings)\\.ItemName\\b(?!\\s*\\()|\\.LocationName\\b(?!\\s*\\()", "only_in": "mod/BugFablesAP/Core/ServerText.cs"},
+  "agent_settings": {
+    "about": "What .claude/settings.json may hold: Claude Code runs its hooks for anyone who opens the repo in it.",
+    "permission_lists": [
+      "ask",
+      "deny"
+    ],
+    "hook_events": [
+      "PreToolUse"
+    ],
+    "hook_commands": [
+      "cd \"$CLAUDE_PROJECT_DIR\" && if command -v py >/dev/null 2>&1; then py -3 -B .claude/hooks/agent-guard.py; else python3 -B .claude/hooks/agent-guard.py; fi || { echo \"agent-guard could not run (it needs py -3 or python3), so nothing was checked: refusing\" >&2; exit 2; }"
+    ]
+  },
   "mod_capabilities": {
     "writes files": "\\bFile\\.(?:Delete|Move|Copy|Write\\w*|Append\\w*|Create\\w*|Replace|Open|OpenWrite)\\b|\\bDirectory\\.(?:Create\\w*|Delete|Move)\\b|\\bnew\\s+(?:FileStream|StreamWriter)\\b",
     "reads files": "\\bFile\\.(?:Read\\w*|OpenRead|OpenText|Exists)\\b|\\bDirectory\\.(?:GetFiles|EnumerateFiles|GetDirectories|Exists)\\b|\\bnew\\s+StreamReader\\b",

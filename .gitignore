@@ -27,3 +27,4 @@ scratch/
 
 # Dev builds staged by dev-scripts/stage-dev.ps1 and copied in by copy-dev.ps1, with its backups (stage/backup).
 stage/
+.claude/settings.local.json

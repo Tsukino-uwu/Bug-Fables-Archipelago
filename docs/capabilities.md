@@ -84,6 +84,7 @@ is left out; everything else they do is listed.
 
 | File | Does | Why |
 |---|---|---|
+| `.claude/hooks/agent-guard.py` | runs programs | `git status`, to see whether a commit the coding agent makes may change the gate |
 | `.githooks/doc-coverage.py` | runs programs | `git ls-files`, to list the sources every guide must name |
 | `dev-scripts/preflight.py` | runs programs | `git`, to read exactly what a commit holds |
 | `dev-scripts/negative-test-preflight.py` | runs programs | `git` in a throwaway clone, and preflight itself |
