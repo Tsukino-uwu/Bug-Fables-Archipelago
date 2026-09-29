@@ -31,8 +31,8 @@ namespace BugFablesAP
             log = logger;
             settingsOn = settings;
             Enabled = config.Bind("Gameplay", "AutoSave", false,
-                "On: walking into a new room saves the game at its entrance, once you can move (at most every 15 seconds). "
-                + "Switch it on the Gameplay page.");
+                "On: walking into a new room saves the game at its entrance, once you can move (at most every 15 "
+                + "seconds). Switch it on the Gameplay page.");
         }
 
         internal static void Tick()

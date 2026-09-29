@@ -42,36 +42,36 @@ namespace BugFablesAP
                 "Dev only. Berries to add once (the game caps at 999), then this resets to 0.");
             adoptSeed = Config.Bind("Debug", "AdoptSeed", false,
                 "Dev only. A save tied to another seed is re-tied to the connected one, its received count back to 0 "
-                + "so the new seed replays every item. The old seed's items and flags stay in the save: test files only, "
-                + "never a real game. Off by default.");
+                + "so the new seed replays every item. The old seed's items and flags stay in the save: test files "
+                + "only, never a real game. Off by default.");
             ItemReceiver.AdoptOtherSeed = () => adoptSeed.Value;
             devConsole = Config.Bind("Debug", "DevConsole", false,
                 "Dev only. F9 opens a command line: loc <n> (go to a pickup location), warp <map> [flag], "
                 + "spawn <item|key|medal> <id> [flag], flag <n> [on|off]. Can put a save in states the story never "
                 + "makes: test files only. Off by default.");
             DevConsole.InfJumpSetting = Config.Bind("Debug", "InfJump", false,
-                "Dev only, with DevConsole. Each press of jump in mid-air jumps again, to reach high places. The console's "
-                + "infjump flips it. Off by default.");
+                "Dev only, with DevConsole. Each press of jump in mid-air jumps again, to reach high places. The "
+                + "console's infjump flips it. Off by default.");
             DevConsole.OneHitSetting = Config.Bind("Debug", "OneHit", false,
-                "Dev only, with DevConsole. Every hit on an enemy does at least 99, to get through test fights. The console's "
-                + "onehit flips it. Off by default.");
+                "Dev only, with DevConsole. Every hit on an enemy does at least 99, to get through test fights. The "
+                + "console's onehit flips it. Off by default.");
             DevConsole.InfBerriesSetting = Config.Bind("Debug", "InfBerries", false,
-                "Dev only, with DevConsole. Berries stay at 999, the game's cap, for test purchases. The console's infberries "
-                + "flips it. Off by default.");
+                "Dev only, with DevConsole. Berries stay at 999, the game's cap, for test purchases. The console's "
+                + "infberries flips it. Off by default.");
             devCommandFile = Config.Bind("Debug", "DevCommandFile", "",
                 "Dev only, with DevConsole. A text file the console also reads: each line is run as a typed command, "
                 + "then the file is emptied. Lets a developer outside the game drive a test. Empty = off.");
             DevConsole.CommandFile = devCommandFile.Value;
             DoorShuffle.TestDoors = Config.Bind("Debug", "TestDoors", "",
-                "Dev only. Doors rewritten by hand: Map/Door=LikeMap/LikeDoor;... makes that door lead where the other one leads "
-                + "(entity names). Empty = off.").Value;
+                "Dev only. Doors rewritten by hand: Map/Door=LikeMap/LikeDoor;... makes that door lead where the other "
+                + "one leads (entity names). Empty = off.").Value;
             QualityOfLife.TestStart = Config.Bind("Debug", "TestStart", "",
                 "Dev only. A map name (MainManager.Maps), optionally @ the map you arrive from, e.g. "
-                + "BugariaMainPlaza@BugariaOutskirtsOutsideCity: a new file starts there, arriving through that map's door into "
-                + "it (without @, the first door found). A stand-in for a random start. Empty = off.").Value;
+                + "BugariaMainPlaza@BugariaOutskirtsOutsideCity: a new file starts there, arriving through that map's "
+                + "door into it (without @, the first door found). A stand-in for a random start. Empty = off.").Value;
             PartyMembers.DevStartMember = Config.Bind("Debug", "TestStartMember", -1,
-                "Dev only. The one party member a randomizer file has (0 Vi, 1 Kabbu, 2 Leif): the story adds nobody else; "
-                + "the console's addmember adds one. -1 = off.").Value;
+                "Dev only. The one party member a randomizer file has (0 Vi, 1 Kabbu, 2 Leif): the story adds nobody "
+                + "else; the console's addmember adds one. -1 = off.").Value;
             if (devConsole.Value)
             {
                 DevConsole.EnableGuard(Log);
@@ -84,23 +84,25 @@ namespace BugFablesAP
                 + "BepInEx/bugfablesap-scriptdump.tsv. Off by default.");
             entityDumpEnabled = Config.Bind("Debug", "EntityDump", false,
                 "Dev only. Once per launch, writes every map's entities (type, item, required and hiding flags) to "
-                + "BepInEx/bugfablesap-entitydump.tsv, and item and medal names to bugfablesap-names.tsv. Off by default.");
+                + "BepInEx/bugfablesap-entitydump.tsv, and item and medal names to bugfablesap-names.tsv. Off by "
+                + "default.");
             mapDumpEnabled = Config.Bind("Debug", "MapDump", false,
-                "Dev only. Once per launch, writes every map prefab's auto-start events, hazards and electric triggers to "
-                + "BepInEx/bugfablesap-mapdump.tsv. Off by default.");
+                "Dev only. Once per launch, writes every map prefab's auto-start events, hazards and electric triggers "
+                + "to BepInEx/bugfablesap-mapdump.tsv. Off by default.");
             spriteDumpEnabled = Config.Bind("Debug", "SpriteDump", false,
-                "Dev only. Once per load, saves the game's GUI sprite sheets as PNGs and a table of guisprites indexes to "
-                + "the BepInEx folder, to pick art for the mod's own UI. Off by default.");
+                "Dev only. Once per load, saves the game's GUI sprite sheets as PNGs and a table of guisprites indexes "
+                + "to the BepInEx folder, to pick art for the mod's own UI. Off by default.");
             varDumpEnabled = Config.Bind("Debug", "VarDump", false,
                 "Dev only. Once per load, writes every flagvar/flagstring slot the game's text uses to "
                 + "BepInEx/bugfablesap-vardump.tsv. Off by default.");
             patchDumpEnabled = Config.Bind("Debug", "PatchDump", false,
-                "Dev only. Once per load, writes every method the mod patches (target, kind, patch method, priority) to "
-                + "BepInEx/bugfablesap-patches.tsv, Uncap FPS's hooks included, to compare before and after a refactor. "
-                + "Off by default.");
+                "Dev only. Once per load, writes every method the mod patches (target, kind, patch method, priority) "
+                + "to BepInEx/bugfablesap-patches.tsv, Uncap FPS's hooks included, to compare before and after a "
+                + "refactor. Off by default.");
             seedDumpEnabled = Config.Bind("Debug", "SeedDump", false,
-                "Dev only. Once per load, when a login brings the seed, writes everything the mod read from its slot_data "
-                + "to BepInEx/bugfablesap-seed.tsv, to compare before and after a change to how it's read. Off by default.");
+                "Dev only. Once per load, when a login brings the seed, writes everything the mod read from its "
+                + "slot_data to BepInEx/bugfablesap-seed.tsv, to compare before and after a change to how it's read. "
+                + "Off by default.");
             questDumpEnabled = Config.Bind("Debug", "QuestDump", false,
                 "Dev only. Once per launch, writes every board quest's name, BoardData numbers and QuestChecks row to "
                 + "BepInEx/bugfablesap-questdump.tsv. Off by default.");

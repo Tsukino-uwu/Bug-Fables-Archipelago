@@ -61,8 +61,8 @@ namespace BugFablesAP
             DevAwakeLate();
 
             randomizerEnabled = Config.Bind("Archipelago", "RandomizerEnabled", false,
-                "Archipelago mod enabled: the game uses its own saves in the 'archipelago' folder, apart from your normal "
-                + "saves. Switch it in the Archipelago panel on the main menu.");
+                "Archipelago mod enabled: the game uses its own saves in the 'archipelago' folder, apart from your "
+                + "normal saves. Switch it in the Archipelago panel on the main menu.");
             SaveRedirect.On = randomizerEnabled.Value;
             SaveRedirect.Enable(Log);
             ItemSwap.Enable(Log, connection, () => randomizerEnabled.Value);
@@ -71,23 +71,24 @@ namespace BugFablesAP
             AnimGuard.Enable(Log, () => randomizerEnabled.Value);
             GlowGuard.Enable(Log, () => randomizerEnabled.Value);
             difficulty = Config.Bind("Archipelago", "Difficulty", "Normal", new ConfigDescription(
-                "Normal leaves it to the game; Hard acts as if the Hard Mode medal were equipped; Hardest as if the save had "
-                + "the HARDEST code, never written into the save. In a seed, boss prize medals are paid out on every setting; on a "
-                + "normal save, as in the game. "
-                + "Switch it on the Gameplay page.", new AcceptableValueList<string>(ApMenu.Difficulties)));
+                "Normal leaves it to the game; Hard acts as if the Hard Mode medal were equipped; Hardest as if the "
+                + "save had the HARDEST code, never written into the save. In a seed, boss prize medals are paid out "
+                + "on every setting; on a normal save, as in "
+                + "the game. Switch it on the Gameplay page.", new AcceptableValueList<string>(ApMenu.Difficulties)));
             detector = Config.Bind("Archipelago", "Detector", true,
                 "On acts as if the Detector medal were equipped, to help find items. Off leaves it to the medal. "
                 + "Switch it on the Quality of life page.");
             ApMenu.Difficulty = difficulty;
             ApMenu.Detector = detector;
             ApMenu.Achievements = Config.Bind("Archipelago", "Achievements", false,
-                "On lets Steam achievements unlock while Archipelago is enabled; off (the default) holds them back, as normal "
-                + "saves are kept apart. It only concerns Steam, never Archipelago. Switch it in the Archipelago panel.");
+                "On lets Steam achievements unlock while Archipelago is enabled; off (the default) holds them back, as "
+                + "normal saves are kept apart. It only concerns Steam, never Archipelago. Switch it in the "
+                + "Archipelago panel.");
             AchievementGuard.Enable(Log, () => randomizerEnabled.Value, () => ApMenu.Achievements.Value);
             ApMenu.NormalSaves = Config.Bind("Archipelago", "NormalSaves", false,
-                "On: the Quality of life and Gameplay settings also apply with Archipelago off, on normal saves. Nothing tied "
-                + "to a seed does (items, checks, the shuffles, the intro skip). Off (the default) keeps normal saves vanilla. "
-                + "Switch it in the Archipelago panel.");
+                "On: the Quality of life and Gameplay settings also apply with Archipelago off, on normal saves. "
+                + "Nothing tied to a seed does (items, checks, the shuffles, the intro skip). Off (the default) keeps "
+                + "normal saves vanilla. Switch it in the Archipelago panel.");
             Func<bool> settingsOn = () => randomizerEnabled.Value || ApMenu.NormalSaves.Value;
             MedalAssist.Enable(Log, () => randomizerEnabled.Value, settingsOn, () => difficulty.Value == "Hard",
                 () => difficulty.Value == "Hardest", () => detector.Value);

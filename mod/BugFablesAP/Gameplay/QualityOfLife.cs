@@ -157,33 +157,34 @@ namespace BugFablesAP
             randomizerOn = on;
             FastText = config.Bind("QualityOfLife", "FastText", true,
                 "Dialogue text is instant instead of letter by letter, as if the skip button were held (the game's own "
-                + "skip), but still requires a button press to proceed. Holding the skip button also moves through boxes "
-                + "much faster than the game's own hold. Lines the game marks unskippable stay as they are.");
+                + "skip), but still requires a button press to proceed. Holding the skip button also moves through "
+                + "boxes much faster than the game's own hold. Lines the game marks unskippable stay as they are.");
             SkipCutscenes = config.Bind("QualityOfLife", "SkipCutscenes", true,
-                "Scenes you don't need to watch are skipped or pass by fast (a list that grows scene by scene). The new "
-                + "game's intro is always skipped with Archipelago enabled, whatever this says.");
+                "Scenes you don't need to watch are skipped or pass by fast (a list that grows scene by scene). The "
+                + "new game's intro is always skipped with Archipelago enabled, whatever this says.");
             ItemAnimation = config.Bind("QualityOfLife", "ItemAnimation", "All", new ConfigDescription(
-                "Which items received from other players are shown held up, as when you find one: Progression (items that "
+                "Which items received from other players are shown held up, as when you find one: Progression (items "
+                + "that "
                 + "unlock something), All, or Off. They always arrive either way; your own finds are always shown.",
                 new AcceptableValueList<string>(ItemAnimations)));
             ItemColors = config.Bind("QualityOfLife", "ItemColors", "Rarity", new ConfigDescription(
-                "The colours for how much an item matters, in the \"You got\" box and the starburst behind it: Rarity, a loot "
-                + "game's ladder (filler green, useful blue, progression purple, trap red); Archipelago, its own text client's "
-                + "(plum, slate blue, cyan, salmon), darkened to read on the box; Off, the game's red text and its own "
-                + "starburst colours.",
+                "The colours for how much an item matters, in the \"You got\" box and the starburst behind it: Rarity, "
+                + "a loot game's ladder (filler green, useful blue, progression purple, trap red); Archipelago, its "
+                + "own text client's (plum, slate blue, cyan, salmon), darkened to read on the box; Off, the game's "
+                + "red text and its own starburst colours.",
                 new AcceptableValueList<string>(ItemColorValues)));
             ItemIcons = config.Bind("QualityOfLife", "ItemIcons", "OtherGames", new ConfigDescription(
-                "Which items that aren't yours show the Archipelago icon, on the ground, on shelves and when found: OtherGames "
-                + "(another game's items; another Bug Fables player's show their real sprite), AllPlayers (every item that isn't "
-                + "yours), or Off (they look like the item the game had there, a surprise).",
+                "Which items that aren't yours show the Archipelago icon, on the ground, on shelves and when found: "
+                + "OtherGames (another game's items; another Bug Fables player's show their real sprite), AllPlayers "
+                + "(every item that isn't yours), or Off (they look like the item the game had there, a surprise).",
                 new AcceptableValueList<string>(ItemIconValues)));
             ItemBackgrounds = config.Bind("QualityOfLife", "ItemBackgrounds", true,
-                "A check's item, on the ground or on a shop shelf, yours included, has the pickup's starburst behind it in its "
-                + "Archipelago class colour (progression, useful, filler, trap), so you can tell from afar whether it matters. "
-                + "Off: no backdrop until it's picked up, a surprise.");
+                "A check's item, on the ground or on a shop shelf, yours included, has the pickup's starburst behind "
+                + "it in its Archipelago class colour (progression, useful, filler, trap), so you can tell from afar "
+                + "whether it matters. Off: no backdrop until it's picked up, a surprise.");
             MedalPrices = config.Bind("Gameplay", "MedalPrices", FullPrice, new ConfigDescription(
-                "Medal shop prices, in berries and crystal berries, in tenths of the normal price: 10 normal, 5 half, 0 free. "
-                + "Any price above free is at least 1. Switch it on the Gameplay page.",
+                "Medal shop prices, in berries and crystal berries, in tenths of the normal price: 10 normal, 5 half, "
+                + "0 free. Any price above free is at least 1. Switch it on the Gameplay page.",
                 new AcceptableValueRange<int>(0, FullPrice)));
             EnemyScalingMode = config.Bind("QualityOfLife", "EnemyScaling", "PartyLevel", new ConfigDescription(
                 "How tough enemies are, wherever you meet them: PartyLevel scales every enemy to the party's level, so "
@@ -192,19 +193,20 @@ namespace BugFablesAP
                 + "Difficulty (Hard, Hardest) still applies on top. Never changes a check.",
                 new AcceptableValueList<string>(EnemyScaling.Modes)));
             Travel = config.Bind("QualityOfLife", "Travel", "Both", new ConfigDescription(
-                "Travel buttons in the pause menu, each behind a Yes / No box: Warp (back to where the game started, or to the seed's start), Map (the "
-                + "map, where confirm on an area you've been to travels to its save point), Both, or Off. Not shown in battle.",
+                "Travel buttons in the pause menu, each behind a Yes / No box: Warp (back to where the game started, "
+                + "or to the seed's start), Map (the map, where confirm on an area you've been to travels to its save "
+                + "point), Both, or Off. Not shown in battle.",
                 new AcceptableValueList<string>(TravelValues)));
             SkipConfirm = config.Bind("QualityOfLife", "SkipConfirm", "Off", new ConfigDescription(
-                "Which travel buttons act without their Yes / No box: Warp (warps as soon as it's picked), Map (confirm on an "
-                + "area you've been to travels there at once), Both, or Off (both ask first).",
+                "Which travel buttons act without their Yes / No box: Warp (warps as soon as it's picked), Map "
+                + "(confirm on an area you've been to travels there at once), Both, or Off (both ask first).",
                 new AcceptableValueList<string>(TravelValues)));
             UncapFps = config.Bind("QualityOfLife", "UncapFps", "Monitor", new ConfigDescription(
-                "Experimental. A frame rate above the game's 30 or 60: 90 to 360, or Monitor, the default (the display's own refresh rate; "
-                + "a 60 Hz display keeps the game's own). With VSync when it divides the monitor's refresh rate or reaches it (no tearing), "
-                + "else as a limit. Motion is drawn between the game's "
-                + "physics steps, and whatever the game counts in frames still runs at 60 per second, so it plays as it does at "
-                + "60. Off: the game's own FPS and VSync settings.",
+                "Experimental. A frame rate above the game's 30 or 60: 90 to 360, or Monitor, the default (the "
+                + "display's own refresh rate; a 60 Hz display keeps the game's own). With VSync when it divides the "
+                + "monitor's refresh rate or reaches it (no tearing), else as a limit. Motion is drawn between the "
+                + "game's physics steps, and whatever the game counts in frames still runs at 60 per second, so it "
+                + "plays as it does at 60. Off: the game's own FPS and VSync settings.",
                 new AcceptableValueList<string>(UncapValues)));
             // Installed in this order, each only if the one before went in, as they depend on each other.
             // A follow-up line is fetched inside the running dialogue, not through a new SetText.

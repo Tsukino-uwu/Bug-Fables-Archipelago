@@ -26,7 +26,8 @@ namespace BugFablesAP
                 "EXP from each defeated enemy times this, 1 to 10. The game still caps one battle at a level's worth. "
                 + "Switch it on the Gameplay page.", new AcceptableValueRange<int>(Min, Max)));
             Berries = config.Bind("Gameplay", "BerryMultiplier", 1, new ConfigDescription(
-                "Berries picked up in the world (lying there or dropped after a fight) times this, 1 to 10; never berries "
+                "Berries picked up in the world (lying there or dropped after a fight) times this, 1 to 10; never "
+                + "berries "
                 + "that come from a check. Switch it on the Gameplay page.", new AcceptableValueRange<int>(Min, Max)));
             if (Hooks.Install(typeof(Multipliers), "mult", "the multipliers do nothing"))
             {

@@ -25,8 +25,8 @@ namespace BugFablesAP
             log = logger;
             settingsOn = on;
             Boost = config.Bind("Gameplay", "AttackBoost", false,
-                "On: each hit a party member lands does 1 more damage, as if their attack were 1 higher. The save's stats "
-                + "don't change. Switch it on the Gameplay page.");
+                "On: each hit a party member lands does 1 more damage, as if their attack were 1 higher. The save's "
+                + "stats don't change. Switch it on the Gameplay page.");
             var demo = AccessTools.Field(typeof(BattleControl), "demomode");
             if (demo == null)
             {

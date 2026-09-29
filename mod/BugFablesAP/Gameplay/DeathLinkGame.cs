@@ -44,8 +44,8 @@ namespace BugFablesAP
             connection = conn;
             randomizerOn = on;
             Enabled = config.Bind("Archipelago", "DeathLink", false,
-                "On: when your party is defeated, everyone in the room with DeathLink on is too, and their deaths reach you. "
-                + "Switch it in the Archipelago panel on the main menu.");
+                "On: when your party is defeated, everyone in the room with DeathLink on is too, and their deaths "
+                + "reach you. Switch it in the Archipelago panel on the main menu.");
             Enabled.SettingChanged += (s, e) => connection.SetDeathLinkTag(Wanted());
             connection.DeathLinkWanted = Wanted;
             deadParty = AccessTools.Method(typeof(BattleControl), "DeadParty");
