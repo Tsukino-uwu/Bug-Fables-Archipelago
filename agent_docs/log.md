@@ -1738,3 +1738,5 @@ either one wrong).
     maps, and the spoiler differs only in the option's own line.
   - The mod builds.
   - Not yet seen in game: the user is playing vanilla.
+- **The preflight's import list gained `OptionGroup`** in a commit of its own, on the strength of the approved plan.
+  The user then confirmed it explicitly ("I meant for optiongroup"). Universal Tracker is still Next 43, item 14.
