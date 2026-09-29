@@ -1343,3 +1343,55 @@ Newest last. What was tried, what happened, what the user said.
 - **Closed:** the game and the server, with RandomizerEnabled and DevCommandFile back as they were.
 - **Waiting on the user:** a push.
 
+## 2026-09-29 (afternoon): the preflight, the reviewing page, and a hole it found
+
+- **The user asked** for a preflight like MeshGhost's, and tests, "to make sure nothing malicious can ever be in the
+  repo", so that the project follows the Archipelago Discord's Developer Code of Conduct. They take full
+  responsibility, so: strict. They also asked for a reviewing page for the Discord's new Developer Advocates and for
+  wary players. The plan was approved as written, with these decisions from the user:
+  - **The AI notice:** their own sentence, with two changes proposed for accuracy: "for the code and its
+    documentation" (the agent writes the docs too), and "AI has made no ... decisions: it suggests, I decide". The
+    record backs their point: room-logic.md was written with the user, and the user corrected Kabbu's dash names.
+    The user has the final word on this wording.
+  - **Reporting:** a GitHub private report, an issue, or a ping on the Bug Fables thread in the Discord.
+  - **All four GitHub settings**, each to be confirmed again before it is changed.
+- **Built, in this order:**
+  - **Reproducibility measured first:** v0.1.0, v0.2.0 and the committed DLL each rebuild byte for byte from their
+    own commit. v0.2.0 does on two different SDKs.
+  - **The build pinned:** exact package versions, a lock file with locked restore, each feed mapped to its packages,
+    `global.json`, and `Directory.Build.props`. `build-release.ps1` now builds twice from clean clones and refuses a
+    dirty tree or a changed library.
+  - **`preflight.py`:** 24 sections, from file kinds through credentials, home paths, hosts, the apworld's syntax tree,
+    the mod's C# and scripts, to the compiled DLL, read by `dotnet_metadata.py`. Also workflows, pins and the
+    capability list.
+  - **The harness:** 72 fixtures, the real commit, commit-msg and push refusals, and total coverage.
+  - **`verify-release.py`**, the hooks (pre-commit, pre-push, commit-msg's isolation rule), CI (`preflight.yml`),
+    and the release's checks.
+  - **The pages:** `docs/reviewing.md`, `docs/capabilities.md` and `.github/SECURITY.md`.
+- **What the checks found along the way:**
+  - **Nothing unpublishable anywhere in history** (971 commits). The three old checker blobs are exempt by hash.
+  - **The hooks were not executable in the index,** so git ignores them on Linux and macOS. `commit-msg` passed
+    silently when Python was missing.
+  - **Four first-party actions were pinned by tag only.**
+  - **The committed DLL's record named the wrong commit:** the build had run on uncommitted changes. The bytes
+    were right.
+  - **Three Harmony patches outside the game were written down nowhere:** MultiClient.Net's socket creation,
+    websocket-sharp's extension check, and Unity's `Animator.Play`. They are listed now.
+  - **The harness kept catching its own slips:** samples written out whole, fixtures aimed at a table that had moved,
+    and staleness fixtures that proved nothing on an already stale tree.
+- **Tracing server data for the reviewing page found three real gaps,** each confirmed in the code:
+  1. **Names ran as game text commands.** The game re-reads a substituted string (`MainManager.cs:12688-12704`), so
+     a slot or item name holding `|flag,N,true|` or `|money,N|` would have run it in the receiver's game, and the
+     save's separators could break a save. **Fixed** (0069b1f, mod guide step 33): every server string goes through
+     `ServerText`, and the preflight refuses a raw read elsewhere (61bca34). Copied into the game for a look; **not
+     yet seen.**
+  2. **wss:// accepts any certificate** (websocket-sharp's default callback returns true), and a bare address falls
+     back to ws://, password included. **The user's call:** Mono may have no root certificates, so measure that first.
+  3. **MultiClient.Net 6.7.1's cache "safe file name" returns its input unchanged,** so the server's game name and
+     checksum decide the cache path. **The user's call:** report it upstream, and/or patch it in the mod.
+- **Not done yet:**
+  - **The CI half** has never run: it runs on the next push, which is the user's to give.
+  - **The GitHub settings** and a `.claude/settings.json` guard wait on the user's yes.
+  - **The capabilities rows** describing today's code were written by the agent. **The user should read them**,
+    since adding rows is the user's decision.
+
