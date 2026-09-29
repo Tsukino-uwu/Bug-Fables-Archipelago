@@ -69,9 +69,9 @@ be wrong.
    split into regions as build step 24 describes. Medal gifts and medal shops each get a yaml on/off toggle.
    Shops (medal shops, item shops, the caravan): see build step 11. Other kinds of location (boss prize medals,
    placeholders, journal entries, enemy drops): see build step 10.
-2. **Entrance randomizer (experimental):** every door, coupled, built; every map a region and every door an entrance
-   (2026-09-30); next, Archipelago's own entrance randomizer in place of `doors.py`, then sorting the other transfers
-   into chosen and forced and the room-by-room logic that removes the label. See build step 12.
+2. **Entrance randomizer (experimental):** every door, coupled, on Archipelago's own entrance randomizer, every map a
+   region (2026-09-30, not yet seen in game); next, sorting the other transfers into chosen and forced, and the
+   room-by-room logic that removes the label. See build step 12.
    **How each room gets mapped** (2026-09-27): the checklist in `room-logic.md`; the tester says what needs
    what, the agent turns it into areas and rules.
 3. **Field abilities shuffled as items** (every learned ability built, build step 23) (by the game's names: Beemerang Halt, Bee Fly, Dash, Horn Dash, Beetle Dig, Icicle, Shield; `MEASURED.md`, every field ability).
@@ -434,8 +434,8 @@ be wrong.
       `ColorUtils` and Analyzers, `ClientPlaying`).
     - **Docs and process:** 21. the player docs against Archipelago's own guides; 22. `development.md` (Python and a
       venv, `--log_network`, a local WebHost preview, `/send_location`, the world maintainer's duties).
-    - **With the room mapping:** 23. Archipelago's entrance randomizer in place of `doors.py` (build step 12), and
-      what to prepare for it.
+    - **With the room mapping:** 23. Archipelago's entrance randomizer in place of `doors.py`: done 2026-09-30
+      (build step 12), ahead of the room mapping, on one region per map.
     - **A second look at what we kept:** 24. the enemy shuffle in `generate_basic`; 25. items through the library's
       queue (to check first); 26. Archipelago's DeathLink yaml option, the panel switch kept too (decided
       2026-09-29); 27. the library's cache bug: reported by the user as MultiClient.Net #143, our patch until a fix;
@@ -535,7 +535,8 @@ its rules with Archipelago's Rule Builder.
 only the `World` class, whose steps call module functions that take the world: `items.py` (the item class and the
 pool), `locations.py` (the location class, which categories a seed includes, placing locations and events),
 `regions.py` (regions and exits), `rules.py` (what each spot needs, the shop policy, the goal), `slot_data.py`
-(everything the client reads), `web_world.py`, and the two shuffles `doors.py` and `enemies.py`. `data_tables.py`
+(everything the client reads), `web_world.py`, and the two shuffles `doors.py` (since 2026-09-30 `entrances.py`) and
+`enemies.py`. `data_tables.py`
 loads the JSON and names the id scheme's kinds (`ITEM_KIND` ... `MOVE_KIND`); `options.py` has the one table from a
 location category to its yaml toggle (`CATEGORY_OPTIONS`). **How "changed nothing" was proven:** before the split, a
 script generated 13 option sets x 2 seeds and saved each seed's regions, locations, pool, the locations each
@@ -1497,7 +1498,8 @@ at runtime. No room is done until its flags are listed.
    door paired with its way back (the door the party arrives next to), 254 connections, 508 doors. Doors stay
    fixed when the mod couldn't tell them apart by name, when they have a story variant at the same spot, or when they
    lead into their own map; the table lists the map links those make.
-2. **The shuffle** (`doors.py`), in `generate_early`, with the world's own random: the same doors joined in new
+2. **The shuffle** (`doors.py`, replaced by Archipelago's own on 2026-09-30, below), in `generate_early`, with the
+   world's own random: the same doors joined in new
    pairs, x with y meaning x leads where y's old partner led (so you arrive next to y) and y where x's old partner
    led. Sent as `door_targets`, which the mod already applies.
 3. **Every area stays reachable.** A plain random pairing strands areas: two dead-end rooms joined to each other are
@@ -1556,7 +1558,7 @@ the seed stays possible, the player is stuck. The Warp to Start is that escape, 
 with a random start (build step 15). The logic never counts it (build step 24, rule 9).
 
 **Archipelago's own entrance randomizer, with the room-by-room logic** (2026-09-29, the user: "shouldn't we use
-officially made things?"): `doors.py` shuffles the door table on its own because, when it was built, no door was an
+officially made things?"): `doors.py` shuffled the door table on its own because, when it was built, no door was an
 entrance in the logic (it had ten large regions), so Archipelago's generic entrance randomizer (`entrance_rando.py`,
 `randomize_entrances`) had nothing to shuffle. Once the rooms are regions (build step 24), every door is an `Entrance`
 of its room's region, and `randomize_entrances` replaces `doors.py`: coupled mode, one-ways paired only with one-ways,
@@ -1594,10 +1596,30 @@ Tests (`test_areas.py`): every spot in a map and in its source's map, every door
 gates and transfers naming real places, every region reachable with everything (which found the three maps nothing
 leads into).
 
+**Archipelago's entrance randomizer in place of `doors.py` (2026-09-30).** `entrances.py` replaces `doors.py`, which
+is gone, its grow-outwards pass with it (Archipelago's randomizer grows the world from the start itself):
+
+1. **In `connect_entrances`**, where the doc says it belongs: each door's entrance typed two-way and split with
+   `disconnect_entrance_for_randomization`, then `randomize_entrances(world, coupled=True,
+   target_group_lookup={0: [0]})`. It places the doors with the logic, so the logic now follows the doors.
+2. **Its `pairings` become `door_targets`** (the doc: "used to populate slot data"): a pairing (x, y) means x now
+   leads to y's side, so x leads where y's partner leads in the game and you arrive next to y. The mod is unchanged.
+   A test proves the two agree: each door rewritten as `door_targets` says arrives in the map its entrance leads to in
+   the region graph, so what the generator proved is what the mod does.
+3. **The spoiler lists the shuffled doors** in its Entrances section (`spoiler.set_entrance` from
+   `write_spoiler_header`, as The Messenger does), each pair once, both ways.
+4. **The preflight's import list widened for it** (the user's call, 2026-09-29): `entrance_rando`'s two functions,
+   `BaseClasses`' `Entrance` and `EntranceType`.
+5. **Not now: `PlandoConnections`.** No Archipelago doc mentions it and nothing requires it (The Messenger has it as an
+   extra); the review page lists it under what doesn't apply.
+
+The experimental label stays: the rules inside rooms aren't mapped yet (build step 24), so a shuffled seed can still
+put the party where the game needs more than the logic knows; the Warp stays the way out.
+
 **Room Swap** (2026-09-29), whole rooms moved instead of single doors, is a value of the same option with a step of its
 own: build step 30.
 
-**Status:** in progress (experimental): every door, coupled, built, and a generated pair seen both ways, offline too (2026-09-25); every map a region and every door an entrance (2026-09-30, the logic proven unchanged with the doors off); next, Archipelago's entrance randomizer in place of `doors.py`, then sorting the other transfers and the room-by-room logic; decoupled later.
+**Status:** in progress (experimental): every door, coupled, built, and a generated pair seen both ways, offline too (2026-09-25); every map a region and every door an entrance, and Archipelago's own entrance randomizer in place of `doors.py`, built, not yet seen in game (2026-09-30); next, sorting the other transfers and the room-by-room logic.
 
 ---
 
@@ -2863,8 +2885,8 @@ Super Metroid's Map Rando is called, rooms with the same number of entrances swa
 
 **The numbers first** (measured on `data/doors.json`, 2026-09-29):
 
-- **What moves is an area** as `doors.py` counts it: a map with the maps its fixed doors join (a fixed door can't be
-  rewritten, so it travels with its room). 215 areas; by doors: 72 with 1, 75 with 2, 38 with 3, 14 with 4, 7 with 5,
+- **What moves is an area** as `doors.py` counted it: a map with the maps its fixed doors join (a fixed door can't be
+  rewritten, so it travels with its room; since 2026-09-30 only fixed doors both ways, below). 215 areas; by doors: 72 with 1, 75 with 2, 38 with 3, 14 with 4, 7 with 5,
   4 with 6, one each with 7, 11 and 23, two with 8.
 - **The doors alone split the world into 10 parts** (180, 22, 17, 5, 4, 4, 3, 3, 2 and 2 maps), which boats,
   elevators and scenes join (the `Beehive` and `Factory` maps, `RubberPrison` with `GiantLair`, the `Termite` maps...).
@@ -2874,7 +2896,8 @@ Super Metroid's Map Rando is called, rooms with the same number of entrances swa
 
 **How it was built:**
 
-1. **`shuffle_rooms`** (`doors.py`): the areas and their doors as the coupled shuffle has them; the parts are the
+1. **`shuffle_rooms`** (`doors.py`, since `entrances.py`'s `room_pairs`): the areas and their doors as the coupled
+   shuffle had them; the parts are the
    same grouping with every door added to the fixed links. Areas are grouped by part and door count and each group
    shuffled: each area's place goes to another, whose doors take the place's doors in a random order (which side of a
    room a door is on isn't in the table). Each of the game's pairs (d, n) becomes the pair of doors now standing at
@@ -2882,25 +2905,44 @@ Super Metroid's Map Rando is called, rooms with the same number of entrances swa
 2. **The same `door_targets`:** the pairs go through the coupled shuffle's own last step (`_targets`), so the mod
    needed no change, and the Warp is forced on as with any `door_targets` (build step 12).
 3. **Nothing stranded, for free:** the map keeps the game's shape, so the coupled shuffle's grow-outwards pass isn't
-   needed.
+   needed. (Wrong twice, found on 2026-09-30: below.)
 4. **Ours, not Archipelago's:** its entrance randomizer (`randomize_entrances`) pairs single entrances by group and
-   can't move a room's doors together, so this is custom work where Archipelago has none (How it works §8). Once the
-   rooms are regions (build step 24), its pairs become `Entrance` connections.
+   can't move a room's doors together (its `can_connect_to` hook refuses one pairing at a time and it never goes back),
+   so this is custom work where Archipelago has none (How it works §8).
+
+**On the region graph, and two things that were wrong (2026-09-30).** With every map a region (build step 12), the
+swap moved onto the same entrances as Archipelago's randomizer, and the first test that could check every region
+from the start found two holes:
+
+1. **`room_pairs` in `entrances.py`** connects the split door entrances by hand, the dangling exit to the target named
+   after the other door (the pattern of The Messenger's `connect_plando`), then the same `door_targets` and spoiler as
+   the coupled shuffle. The logic follows the swap.
+2. **A one-way fixed door joins nothing.** 19 of the 39 fixed doors go one way (drops in the Barren Lands, the Golden
+   Settlement's night maps, the wizard tower, the wasp kingdom). An area joined by one could be entered on its far
+   side with no way back (seed 6: five maps cut off). Areas and parts now join only fixed doors that go both ways:
+   225 areas (75 with 1 door, 79 with 2, 41 with 3, 15 with 4, 8 with 5, 3 with 6, one each with 7 and 11, two with
+   8), still 10 parts, 209 with a partner.
+3. **A gated door moves with its room.** The Golden Path door needs the first boss; seed 4 put the Outskirts where that
+   door was the only way on, with the boss behind it. Archipelago's randomizer follows the logic while it places; the
+   swap can't, so each try is checked the way the randomizer checks (everything the seed holds, every region reached)
+   and undone if it fails, up to 20 tries. Before the check 13 of 200 tries cut regions off; after it, 0 of 200.
 
 **Tests** (`test_doors.py`): what every mode shares (doors rewritten, only the table's doors named, every way back
-leads back); the parts stay whole; **the map keeps its shape**: each area's part, its door count and the door counts
-of the areas its doors lead into are the game's (the coupled shuffle breaks that in 50 of 50 seeds); on small made-up
-tables over 100 seeds, two parts never trade rooms (without the part rule, broken in 93) and a fixed-joined area moves
-whole (ignoring fixed links, broken in 85). On the real table about 490 of the 508 doors are rewritten. 458 tests, the
-Logic Test check and the fuzzer (0 of 10000) pass; seeds generated alone and with APQuest (the spoiler: *Room Swap*).
+leads back, every region reached, the spoiler listing each pair once, and **the mod doing what the logic proved**:
+each door as `door_targets` rewrites it arrives where its entrance leads in the region graph); the parts stay whole;
+**the map keeps its shape**: each area's part, its door count and the door counts of the areas its doors lead into
+are the game's (the coupled shuffle breaks that in 50 of 50 seeds); on small made-up tables over 100 seeds, two parts
+never trade rooms (without the part rule, broken in 93) and an area joined both ways moves whole (ignoring fixed
+links, broken in 85). On the real table about 490 of the 508 doors are rewritten. Seeds generated alone and with
+APQuest (the spoiler: *Room Swap*).
 
 **Later:** doors matched by side (an exit on the right leads into a door on the left), once each door's side is read
 from the entity dump.
 
-**Status:** built, not yet seen in game (2026-09-29); experimental like build step 12: the logic doesn't follow the
-doors yet.
+**Status:** built, not yet seen in game (2026-09-29); on the region graph, the logic following it (2026-09-30);
+experimental like build step 12: the rooms' own rules aren't mapped yet.
 
-*Code: `doors.py` (`shuffle_rooms`, `_targets`), `options.py`, `world.py`; tests `test_doors.py`.*
+*Code: `entrances.py` (`room_pairs`, `_swap_rooms`, `door_targets`), `options.py`, `world.py`; tests `test_doors.py`.*
 
 # How it works
 

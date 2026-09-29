@@ -93,6 +93,8 @@
     "unittest": ["TestCase"],
     "BaseClasses": [
       "CollectionState",
+      "Entrance",
+      "EntranceType",
       "Item",
       "ItemClassification",
       "Location",
@@ -100,6 +102,7 @@
       "Region",
       "Tutorial"
     ],
+    "entrance_rando": ["disconnect_entrance_for_randomization", "randomize_entrances"],
     "Options": ["Choice", "DefaultOnToggle", "PerGameCommonOptions", "Range", "Toggle"],
     "rule_builder.rules": ["Has", "HasAllCounts", "Rule"],
     "test.bases": ["WorldTestBase"],
