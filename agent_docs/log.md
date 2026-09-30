@@ -1739,3 +1739,6 @@ either one wrong).
   sent to another developer, in this log (2026-09-28); the draft upstream issue on the review page (posted as #143,
   the link stays). `docs/reviewing.md` now links `licensing.md` and `references.md`.
 - **Still in git history:** `main` can't be force-pushed, so earlier commits keep the old text.
+- **Asked, the user's answers:** notes on library behaviour our code works around (MultiClient.Net's cache names,
+  websocket-sharp's certificate check, the library's `Disconnect`) stay as they are; the game is exempt, so its facts
+  and the release notes' "base-game" fixes stay too.

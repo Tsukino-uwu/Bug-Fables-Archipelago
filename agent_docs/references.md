@@ -2,7 +2,9 @@
 
 Each one's licence is in `licensing.md`. **We take facts and approach only, never code.** Each entry says what the
 project does and what we take, never what's wrong with it (the user, 2026-09-30): a finding worth a developer's time
-goes to them directly, and never sits in this repo.
+goes to them directly, and never sits in this repo. Not covered, the user's call the same day: technical notes on a
+library behaviour our code works around (the capability rows, `docs/reviewing.md`'s gaps), and facts about the game,
+release notes' "base-game" fixes included.
 
 ## Tevi_Randomizer: a Unity Mono BepInEx Archipelago mod (read 2026-09-24, last commit 2026-07-01)
 
