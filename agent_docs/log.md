@@ -1749,7 +1749,8 @@ either one wrong).
 - **Rows that were missing, now added** (each licence read today): Archipelago's LICENSE exempts a world folder with a
   licence of its own, and several such worlds had been read with no row: `pokemon_emerald` (from 2026-09-24), `oot`
   (2026-09-29), and in today's music search `celeste_open_world`, `sa2b`, `smw`, `dkc3` (PoryGone's modified MIT:
-  no relicensing or selling), `marioland2` and `cvcotm`. Hollow Knight's RandomizerMod (LGPL-2.1), looked up
-  2026-09-29 for the term "room randomizer", also had none. The other worlds read (`sm`, `satisfactory`, `hk`,
+  no relicensing or selling), `marioland2` and `cvcotm`. Hollow Knight's RandomizerMod (LGPL-2.1): its term
+  "room randomizer" was written 2026-09-29 from an agent's memory, nothing read (checked in that session's
+  transcript); today its licence, then its README, confirmed it. The other worlds read (`sm`, `satisfactory`, `hk`,
   `messenger`, `kdl3`, `cv64`) fall under Archipelago's licence and share a row. The user then asked for
   `licensing.md` split in two: Apworlds first, then everything else.
