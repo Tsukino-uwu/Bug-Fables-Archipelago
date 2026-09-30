@@ -1080,7 +1080,7 @@ opened with them.
 linear and an open game, isn't worth it; open, metroidvania-like games work best in Archipelago). This replaces the
 "open start" yaml option planned on 2026-09-24 (skip the prologue and tutorial, optionally with Leif from the start (the new-game party `{0, 1}`, `MainManager.cs:3591`, becoming
 `{0, 1, 2}`; early cutscenes are written for two, so tested on a fresh file). A full story strip, as the Metroid
-Fusion randomizer does, isn't the plan: here every cutscene also changes the world through flags.) Leif from the
+Fusion apworld does, isn't the plan: here every cutscene also changes the world through flags.) Leif from the
 start is now *Starting Party Member* (build step 13).
 **Open world is the default, not an option** (2026-09-25: nobody picks a linear game in
 Archipelago). The target: the world open as if the story were done, nothing collected, the ending gated by the

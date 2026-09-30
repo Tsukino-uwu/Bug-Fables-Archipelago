@@ -244,7 +244,7 @@ same person wrote both. Here is what can be checked.
 - **[licensing.md](../agent_docs/licensing.md)** lists every outside project the code uses or was read for, with its
   licence and the date it was checked; a file linking someone else's GitHub project with no row there fails the
   preflight. **[references.md](../agent_docs/references.md)** says what was taken from the randomizers compared with
-  this one, and from games the maintainer knows from playing: approach and facts, never code.
+  this one, and from other apworlds the maintainer knows from playing: approach and facts, never code.
 - **Tests and generation:** the apworld's tests and the fuzzer, above. CI generates seeds with a second game on every
   push, and the release builds the apworld the way a player installs it.
 - **[The log](../agent_docs/log.md)** records each session: what was tried, what happened, what was decided.
