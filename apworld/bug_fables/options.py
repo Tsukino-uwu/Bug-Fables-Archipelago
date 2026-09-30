@@ -126,8 +126,9 @@ class EntranceRandomizer(Choice):
     Decoupled: any door may lead to any other, and the way back is shuffled too: turning round can take you somewhere
     else.
 
-    The logic doesn't follow the doors yet: items are placed as if the doors were where the game has them, so a seed
-    with this on may not be finishable (the pause menu's Warp button gets you out of a dead end). Off by default.
+    The logic follows the doors, but not yet what each room needs inside: a room can ask for more than the logic knows,
+    so a seed with this on may not be finishable (the pause menu's Warp button gets you out of a dead end). Off by
+    default.
 
     Doors in this version: {count}.
     """

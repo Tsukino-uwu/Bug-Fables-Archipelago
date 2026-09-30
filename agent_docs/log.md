@@ -52,6 +52,7 @@ either one wrong).
 - [2026-09-30: Uncap FPS, every character drawn smoothed](#2026-09-30-uncap-fps-every-character-drawn-smoothed)
 - [2026-09-30: Filler Starting Checks, and fights played by the party you have](#2026-09-30-filler-starting-checks-and-fights-played-by-the-party-you-have)
 - [2026-09-30: direct titles for the guides, the Progressive Boat and the submarine](#2026-09-30-direct-titles-for-the-guides-the-progressive-boat-and-the-submarine)
+- [2026-09-30: every room-logic plan in one place, spawns and chains added, a truly random start designed](#2026-09-30-every-room-logic-plan-in-one-place-spawns-and-chains-added-a-truly-random-start-designed)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -1902,3 +1903,36 @@ either one wrong).
   `Utils` in a test (the groups checked directly).
 - **Built:** the apworld (601 tests, Logic Test 90 of 90, fuzzer 0 of 10000 alone and with APQuest) and the mod (no
   warnings). Staged, not copied into the game. **Not seen in game:** everything here.
+
+## 2026-09-30: every room-logic plan in one place, spawns and chains added, a truly random start designed
+
+- **The user's asks:** alongside the per-room checklist, "check the spawn location of rando spawn in the map not just
+  all the entrances, to account for roadblocks/oneways with abilities or missing jump etc, or spawning in between
+  obstacles with no way to reach a check or entrance at all"; "check every cutscene chain & quest chain. To account for
+  other rooms affecting things", including requests not on the board ("the kid you give the ranger plushie to") and
+  board quests that need a scene first. Asked whether every plan lived in `room-logic.md`: it didn't. Three readers
+  found about 17 room-logic plans spread over build steps 8, 9, 12, 13, 15 and 24, §11, a Known issue and review item
+  23, some stale. The user: "should we just keep all of it in room-logic.md then? to have it all in 1 place". So every
+  plan moved there, not copied; the build steps keep their dated history and a pointer. Two sections added: where the
+  party can appear (spawn questions S1-S7 and a verdict per room), and chains (C1-C8). `docs/reviewing.md` links it
+  (the user: "to actually show that there has been a lot of thought put into how to handle/deal with logic").
+- **Found in the code about today's random start** (read, not seen): the pool never picks 12 real rooms (nine with only
+  fixed doors, three reached by scenes); a room's odds follow its door count; the mod takes the first matching door
+  (14 ambiguous pairs) and calls `TransferMap` without it, so no arrival jump or door camera; the Warp lands on the same
+  spot, so a boxed-in spawn has no way out. The game has no spawn spot per map: `LoadMap` places no one.
+- **The truly random start, decided one question at a time:** "i want random spawn to actually be random not just
+  'semi random'"; a spawn is "as if you arrived from an entrance, or where the game would put you"; both kinds in every
+  room; a yaml choice of off / save points / any room ("describe what they do"); every room "either denied or
+  confirmed"; the same rooms as the entrance randomizer. "Random spawn should only be for actual rooms, not test
+  rooms/minigames/submarine lake": read in the scenes, `TermiteColiseum2` (the tournament), `BugariaEndThrone` (the
+  ending) and `MetalLake` (the submarine's lake) are no starts; "the docks could lead to random locations for entrance
+  rando". Unused and test maps "should never be valid targets for entrance rando / random spawn or anything else. and
+  should never contain any logic or be accessible". Day and night in Golden Settlement are a one-time story window,
+  not a swap; the user's call at that room's check.
+- **Also fixed:** the Entrance Randomizer's yaml text and the player guide said the logic doesn't follow the doors;
+  since Archipelago's own randomizer (earlier today) it does, and what's missing is each room's inside.
+- **`Blank` is not an unused map** (a guess corrected by reading first): Event111 loads it mid-scene, then
+  `DesertEastmost`. So `UNUSED_MAPS` stays `SnakemouthEmpty` and `TestRoom`, and `Blank` is a scene-only room, no start.
+- **Tests:** 601 passed, Logic Test 90 of 90, fuzzer 0 of 10000 (the Entrance Randomizer's yaml text changed).
+- **Next:** a test that no table names an unused map, then the spawn table and the three Starting Location values.
+  **Not seen in game:** everything here.

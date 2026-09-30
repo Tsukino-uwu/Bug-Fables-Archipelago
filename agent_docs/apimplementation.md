@@ -1065,7 +1065,9 @@ checks. Cautious logic never makes a seed impossible; it only makes placement le
 map's prefab. So `MapDump` in the mod reads every map prefab without instantiating it: its hazards by
 type, its electric triggers, and its auto-start events (story steps the map itself starts). That gives the
 bubble shield's maps from data. Hover has no object at all; pits (`Hole` hazards) are only candidates.
-Obstacles for moves that are never shuffled (Kabbu's horn on grass, Vi's beemerang on switches) aren't gates.
+Obstacles for moves that are never shuffled (Kabbu's horn on grass, Vi's beemerang on switches) aren't gates. (No
+longer so: since 2026-09-27 the three moves can be items, build step 21, and every such obstacle is a need,
+`room-logic.md`, question 5.)
 
 **Where each story step starts.** `dev-scripts/event-triggers.py` looks in every place the game starts an
 event: talking to an entity, trigger objects, dig spots, pickups, switches, AND gates, pressure plates, locked
@@ -1171,7 +1173,8 @@ locations (bosses beaten, characters gone, quests closed, cutscene gifts skipped
 door, a guard, a story flag) is opened by the seed on its own, tested on screen, and known to the logic; key
 items and abilities become the real gates (the Peculiar Gem for Upper Snakemouth); story events and bosses stay
 as locations. The goal stays "collect N artifacts". The ending's gate is researched without spoiling it for the
-tester, who hasn't finished the game. Regions stay whole areas for now; each room's areas as regions (doors from the
+tester, who hasn't finished the game. Regions stay whole areas for now (since 2026-09-30 every map is a region, build
+step 12); each room's areas as regions (doors from the
 dump, `dev-scripts/door-graph.py`; build step 24) come as the gates open (2026-09-24; areas within a room since
 2026-09-27).
 **Areas and doors that close later are kept open** (2026-09-24), as Pokémon Emerald's apworld keeps Mirage
@@ -1578,17 +1581,9 @@ impossible", while that option is on; *Warp to start* gets the player out of a d
 back stay a pair) by default, decoupled as a choice. Order: a proof of concept (the mod rewriting a door's
 destination, seen on screen), then every door, then the room-by-room logic that removes the experimental label.
 **Every room's survey includes every flag it reads** (2026-09-28, after chapter 6 took the boat away,
-Next 40). Not a logic step of its own: gates and roadblocks are checked with everything else in the room (its doors,
-the moves it needs, its checks), because they change the logic. For each room, list every flag its objects, doors and scenes read (a thing shown, hidden or moved, a blocker
-added or removed), and for each: what sets it and when, and whether a seed can reach that. A flag that can take a way
-through away (a boat, a bridge, a door) is either kept from happening in a seed or becomes a rule; one that adds a
-roadblock is a rule. **Look across rooms, too** (2026-09-28): a flag or a follower a room needs may come
-from elsewhere, from a quest or a character who has to walk with the party from another room (the throne room needs
-Maki, from two rooms away). Each such need names the room or quest it comes from, so the rule follows it there, or,
-when it isn't a quest (a scene that happens to want a follower), the mod may remove the need for good so the room works
-on its own. Such a removal is always on in a seed, never part of the *Skip cutscenes* setting
-(2026-09-28): the logic counts on it. Decided case by case, like the rest of the logic, and fixed in the mod and the logic alike, never
-at runtime. No room is done until its flags are listed.
+Next 40), **and looks across rooms** (a follower or a quest from elsewhere: the throne room needs Maki). Not a logic
+step of its own: gates and roadblocks are checked with everything else in the room, because they change the logic.
+The survey itself, with the rule for removing a follower's need: `room-logic.md`, "Chains" (moved there 2026-09-30).
 **The proof of concept, seen (2026-09-25):** one door, then a coupled swap of two connections both ways
 (the mod guide, step 13). **Every door, built (2026-09-25):** the yaml option *Entrance Randomizer (experimental)*,
 *Off* (default) or *Coupled*; decoupled later (built 2026-09-30, build step 31). How it was built:
@@ -1627,12 +1622,10 @@ at runtime. No room is done until its flags are listed.
    once the logic follows the doors. A guard catching you is a transfer that isn't a door.
 8. **Transfers that aren't doors (decided, 2026-09-25).** The game also moves the party by the dialogue
    script commands `|transfer|` and `|warp|` (`MainManager.cs:13263-13270`) and by story events (about 88 `LoadMap`
-   calls in `EventControl`). **Entrances the player chooses** (the bar's hatch, elevators, the boat) are doors in all
-   but name: shuffled like doors, coupled with their way back where they have one, behind their own toggle at first.
-   **Places the game sends you** (caught by guards, a fall, a story scene) keep their destination: the scene expects
-   to end there, they have no way back to pair with, and a destination you didn't choose is only confusing. They
-   become one-way connections in the logic, which must make sure you can leave where they put you; some happen only
-   at some story points, and some can strand you. **The Warp button and fast travel stay outside the logic.** First
+   calls in `EventControl`). Decided: **entrances the player chooses** (the bar's hatch, elevators, the boat; the
+   submarine's docks, the user, 2026-09-30) are shuffled like doors; **places the game sends you** (caught by guards, a
+   fall, a story scene) keep their destination, since the scene expects to end there, and become one-ways in the logic.
+   The rule for each: `room-logic.md`, question 2 (moved there 2026-09-30). First
    step: list every such transfer from the data (the script dump and `event-triggers.py`), map, trigger and target.
    **Listed (2026-09-25):** ScriptDump gained a column of the moving commands on each dialogue line (7 lines,
    all `|warp|` or `|loadmap|`), and `dev-scripts/event-transfers.py` lists each event method's `LoadMap` calls and
@@ -1643,17 +1636,18 @@ at runtime. No room is done until its flags are listed.
 9. **Quests that cross rooms** (2026-09-25: a reward mustn't be expected when its middle steps can't be
    reached). It was safe while its steps shared one big region (the old book's residential house and the palace
    library were both *Bugaria Inner City*) or passed on the way (the lost kid's sister waits outside the city, on the
-   way to Snakemouth). With doors shuffled neither holds; since 2026-09-30 each spot sits in its own map. The rule before the label comes off: **every quest
-   step in another room is a logic event in that room's region** (the sister following; the library visit is done, build step 8), and the
-   reward requires the whole chain; items handed out mid-quest are already progression (build step 10). Taking the
-   quest is a step too, now just "reach any board" (build step 9). Known gap today: the lost kid's reward
-   (location 10) doesn't require the sister's step.
+   way to Snakemouth). With doors shuffled neither holds; since 2026-09-30 each spot sits in its own map. The rule
+   before the label comes off, every quest step in another room a logic event in that room's area and the reward
+   needing the whole chain, is in `room-logic.md`, "Chains" (moved there 2026-09-30). The library visit is done (build
+   step 8). Taking the quest is "reach any board" today (build step 9), which a quest's unlock can make too little
+   (the user, 2026-09-30: some quests appear only after a scene). Known gap today: the lost kid's reward (location 10)
+   doesn't require the sister's step.
 
 **The Warp is always there with the entrance randomizer** (2026-09-26: "so we never get impossible
 seeds/softlocks, even if we will check/make logic for things"). Coupled doors can always be retraced, but a one-way
 transfer (a drop, a fall, a scripted move) could land the player in a pocket whose way out needs an item not yet found:
 the seed stays possible, the player is stuck. The Warp to Start is that escape, shown whatever the Travel setting, as
-with a random start (build step 15). The logic never counts it (build step 24, rule 9).
+with a random start (build step 15). The logic never counts it (`room-logic.md`, rule 9).
 
 **Archipelago's own entrance randomizer, with the room-by-room logic** (2026-09-29, the user: "shouldn't we use
 officially made things?"): `doors.py` shuffled the door table on its own because, when it was built, no door was an
@@ -1670,7 +1664,9 @@ them; room-by-room rules (build step 24) replace them later.
 1. **One region per map:** Menu, then the 241 maps of the door table (`SnakemouthEmpty`, an unused room nothing leads
    into, and `TestRoom`, the debug room, left out; the user: "looked like a empty/test map", "TestRoom sounds obvious")
    and `MetalLake`,
-   `TermiteColiseum2`, `BugariaEndThrone`, reached only by transfers. 244 regions, 582 entrances.
+   `TermiteColiseum2`, `BugariaEndThrone`, reached only by transfers. 244 regions, 582 entrances. **Unused and test
+   maps are never part of anything** (the user, 2026-09-30): no region, no logic, never the target of a door, a
+   transfer or a spawn, never reachable (`room-logic.md`, the model).
 2. **Every door an entrance of its map's region**, named where it is, `"<map>: <door>"` (the naming the entrance
    randomization doc recommends), connected as the game has it: 508. The 39 fixed doors are plain entrances.
 3. **The transfers that join the door graph's parts** (the doors alone split it into 10), each a `Transfer` in its
@@ -1939,7 +1935,7 @@ still starts outside Bugaria, so a seed started elsewhere may not be finishable 
 - *Starting Location (experimental)*: `off / anywhere` for now (`towns`, and a named spot if players ask, later), off
   by default. **Not `random`:** Archipelago reserves that word for every Choice (any option can be set to random), so
   the generator refuses it as a value.
-- **Fully random:** beside any save point in the game, even mid-dungeon.
+- **Fully random:** beside any save point in the game, even mid-dungeon (replaced the same day by any room, below).
 - **Warp to Start goes to the seed's start**; the pause menu's map keeps fast travel to the areas you've visited.
 
 **Built (2026-09-26):**
@@ -1974,17 +1970,14 @@ marking only Rubber Prison visited; Warp to Start went there from the Outskirts.
 sailor is unchanged); coming back needs the Boat Ticket, or the Warp (the seed's start) or map travel. Nothing can be
 missed, and nothing there has to be filler: the logic already gates Metal Island on the ticket, so it never expects the
 island's checks before the ticket, and the ticket can't be placed behind its own gate. Starting there only gives an
-early look. **The rule for any start:** it's safe while every way out of it is free and every way back in is something
-the logic already gates; only a start that could be left behind for good would need its checks to be filler.
+early look. From it came **the rule for any start**: it's safe while every way out of it is free and every way back
+in is something the logic already gates (`room-logic.md`, spawn question S6, moved there 2026-09-30).
 
 **The rule that keeps every random start valid (2026-09-26: "really important for the logic"; revised 2026-09-29):**
 with a random start, **Warp to Start is always available**, whatever the Travel setting, and **the logic never counts
-it** (build step 24, rules 4 and 9). The case: once the logic starts in the start room (the room-by-room logic), a way
-back into the start may need an item lying in the start itself (the Boat Ticket on Metal Island); leaving without it
-would strand the player, and Archipelago's logic can't model giving access up. Until 2026-09-29 the Warp closed that
-case by counting in the logic. Now rule 4 does: leaving a start counts in the logic only together with what it takes
-to get back in, so the logic never expects the player to leave Metal Island without the ticket, and a player who does
-anyway has the Warp. The mod shows the Warp with a seed start even when Travel is Off or Map.
+it**; leaving a start counts in the logic only together with what it takes to get back in (`room-logic.md`, rules 4
+and 9, and spawn question S6). Until 2026-09-29 the Warp closed that case by counting in the logic. The mod shows the
+Warp with a seed start even when Travel is Off or Map.
 
 **No music between the menu and the start (2026-09-26: "as if I'm going from the start menu directly to a
 random spawn"):** the game starts the opening map's music as a new file loads. With a seed start, the mod turns any new
@@ -1999,13 +1992,49 @@ music change reaches), and its own opening music is a fade-out instead. Seen on 
 - **The mod** reads the door in the `from` map that leads into the room (`QualityOfLife.DoorInto`, the dev test start's
   reader), and arrives as the game's own door transfer does: appear, then walk in. Warp to Start lands where that walk
   ends. A save-point start (`{"map", "entity"}`) still works.
-- **Stuck starts are accepted while experimental:** item and entrance logic everywhere comes later.
+- **Stuck starts are accepted while experimental** (now `room-logic.md`, the spawns' verdict): item and entrance
+  logic everywhere comes later.
 - **Chapter 1 test**: seeds regenerated until the start was a Snakemouth Den room (seed 17,
   `SnakemouthFallRoom` from `SnakemouthDoorRoom`). **Seen (2026-09-26):** the new file arrived right where
   the trapdoor scene drops you; jumping up out of the room is one-way, and the Warp brought the party back down.
 
+**"Any room" isn't quite any room, read in the code (2026-09-30; not seen in game).** Four ways today's start falls
+short:
+
+- **12 real rooms can never be picked.** `ROOM_STARTS` is built from `doors.json`'s paired connections only (494
+  pairs over 231 maps). Nine rooms have only the table's fixed doors: `UndergroundBar`, `BarrenLandsPinkSpider`,
+  `BeehiveScannerRoom`, `GiantLairBeforeBoss2`, `GoldenPathTunnel2`, `GoldenSettlement1Night`,
+  `GoldenSettlement2Night`, `GoldenSettlement3`, `GoldenSettlement3Night`. Three are reached only by scenes:
+  `MetalLake`, `TermiteColiseum2`, `BugariaEndThrone`.
+- **The odds follow the doors:** a room has one entry per door pair, 1 to 8.
+- **The spot isn't the door's own arrival.** `DoorInto` takes the first door in the `from` map that leads in, so for
+  the 14 pairs joined by two doors the logic can't know which. The mod calls `TransferMap` without the door, so the
+  party skips the door's arrival jump and camera (`MEASURED.md`, "Save crystals, saving, Game Over and room
+  transfers"). The map's auto-start scenes aren't held either.
+- **Warp to Start lands on the same spot**, so a spawn boxed in by obstacles would have no way out at all.
+
+The checks every spawn now gets are in `room-logic.md`, "Where the party can appear".
+
+**Decided (2026-09-30), the truly random start, to build** (the user, one question at a time: "i want random spawn to
+actually be random not just 'semi random'"):
+
+- **Three values, each described in the option's text:** *Off* (the game's start), *Save Points* (beside any save
+  point, each equally likely) and *Any Room* (any room equally likely, then one of its spawns). `anywhere` stays
+  readable as *Any Room*, so older yamls and seeds still work. *Save Points* replaces the planned `towns`.
+- **Both kinds of spawn:** a door's arrival, as the game's own door does it, and wherever the game itself puts you in
+  that map (a scene's or a dialogue warp's spot); the underground bar's is where the hatch (Event61) puts you.
+- **Only actual rooms:** "random spawn should only be for actual rooms, not test rooms/minigames/submarine lake etc".
+  Read in the scenes that load them: `TermiteColiseum2` is the tournament (Event163, battles, then `TermiteColiseum1`),
+  `BugariaEndThrone` the ending (Event205, then Event204), `MetalLake` the submarine's lake (Event153). None is a start;
+  each stays in the logic as the transfer it is.
+- **The same rooms as the entrance randomizer**, with unused and test maps never part of anything (build step 12).
+- **Every room gets a verdict,** confirmed or denied at its room check ("we will have to double check every single
+  room"). The night maps wait on a way between day and night in a seed: in the story it's a one-time window (Event52
+  sets flag 85 and loads `GoldenSettlement1Night`, Event58 sets 86 and loads `GoldenSettlement1`).
+
 **Status:** in progress (experimental): `anywhere` (any room) works, seen on screen (2026-09-26): a new file starts in the seed's room;
-`towns` and the logic from the start to come; the intro is always skipped with a seed start.
+the truly random start designed (2026-09-30), to build; the logic from the start to come; the intro is always skipped
+with a seed start.
 
 ## Build step 16: the Boat Ticket, Metal Island behind a custom key item
 
@@ -2428,63 +2457,21 @@ The logic is what Archipelago uses to prove a seed can be finished, and some opt
 member, a random start in any room, a decoupled entrance randomizer, shuffled attacks, no Jump. So before the rooms of
 chapters 1-7 are mapped, this is how every part of it gets done (2026-09-27: "the logic has to be precise").
 
-**The rules** (1 to 4 the user's, 2026-09-29, "to simplify things"; How it works §11 explains regions and rules)
+**The rules, the checklist, the method and the tests: [room-logic.md](room-logic.md)**, the one place every plan for
+the room logic lives (gathered there 2026-09-30, the user: "to have it all in 1 place"). How they came about:
 
-1. **A location says what it needs; an item never says what it opens.** Every need is written on what it guards: the
-   location, the exit into a region, the story event. No item, ability or member lists what it unlocks. Which items
-   matter is read back from the rules (Archipelago's `item_dependencies`, in `TestClassifications`), so writing the
-   rule is the only step.
-2. **A need is what the vanilla game expects:** what the game asks of a player going the intended way, with no tricks,
-   skips or clever routes. The rules stay simple, players stay free to go out of logic, and every seed stays
-   completable (rule 5).
-3. **And, or, never not.** Everything one way needs is an *and* (`&`). When there are several ways, each is written
-   and any one will do (*or*, `|`): a second way into an area is a second exit into its region (the region graph does
-   the *or*); two ways to one spot inside an area are an `|` in the spot's own rule. Never a *not* on an item or a story
-   event: in Archipelago, receiving something may never make anything harder to reach (the same reason the tiered shop
-   rule was wrong, build step 11). An option may decide a rule, since it's fixed when the seed is made.
-4. **No point of no return in the logic** (the user: never expected "to go past a point of no return, where they can't
-   logically go back"). A one-way (a ledge dropped without Jump, a door with no way back, a transfer that leaves you
-   somewhere) counts in the logic only together with what it takes to get back. So the player can always retrace their
-   steps to the start, which is what Archipelago assumes of its origin region (§11). The Warp is never that way back.
-5. **The logic may demand more than the game does, never less.** A rule that asks for too much only makes a seed a
-   little stricter; a rule that asks for too little can place an item somewhere the player can't reach, and the seed
-   is impossible. Anything not yet measured is written the cautious way.
-6. **Nothing counts as known until the tester has seen it on screen.** Each need goes into `MEASURED.md` with its date.
-7. **The mod never departs from what the generator knew.** Anything it changes comes from `slot_data`, decided at
-   generation, never at runtime.
-8. **Combat stays basic:** only each member's plain attack, never a battle skill or a medal. It keeps fights simple
-   and leaves room to play out of logic for fun.
-9. **The Warp is a safety net, never logic** (the user, 2026-09-29). It always takes you back to the seed's spawn, and
-   it's forced on with a random start, the entrance randomizer, Shuffle Jump and the abilities as items, so a player
-   who leaves the logic is never stuck. The logic never counts it, nor the map's fast travel, to reach anything, the
-   start included. (Until 2026-09-29 build step 15 counted it to re-enter a random start; rule 4 does that job now.)
+- **2026-09-27:** the method and the per-room checklist written with the user (their questions: one-ways per entrance
+  and inside a room, roadblocks and ledges, what each location needs and whether you can get back, spawning anywhere);
+  combat kept basic, with who can hit what.
+- **2026-09-29:** the rules for writing it, 1 to 4 the user's ("to simplify things"), and rule 9, the Warp a safety
+  net and never logic; the region explainer (How it works §11).
+- **2026-09-30:** everything gathered into room-logic.md, from build steps 8, 9, 12, 15 and here, and two parts added
+  (the user): every place the party can appear, checked like an entrance, and every story and quest chain, checked
+  across the rooms it reaches.
 
-**The method: `room-logic.md`**, one checklist for every room:
-
-1. **A draft from the game's data:** the entity dump's objects in the map (grass, rocks, dig walls, springs, droplets,
-   fountains, wind, switches, platforms), its doors, its flag-gated doors, and the scenes that move the party.
-2. **The questions, per room:** where each entrance puts you and whether you can leave the way you came; what crossing
-   the room needs, in each direction; ledges without Jump; forced fights; scenes that move you; changes that stay
-   (a switch, a broken rock); what each location needs, and whether you can get back; story state (what changes with
-   the chapter); spawning in each part of the room; what each member manages alone.
-3. **Checked on screen by the tester**, one part of the room at a time: the tester says what needs what.
-4. **Written into the area's module by the agent** (`logic/<area>.py`, build step 29): each room split into the parts
-   you can walk around freely, each way between them one-directional with its own rule, each location in its part.
-5. **Tested:** each measured need gets a test that fails without it; every part reachable from every arrival once
-   everything is collected; no arrival strands the player.
-
-**The safeguards already in place:** the tests generate seeds across option sets and check they're beatable;
-`TestClassifications` makes an item progression the moment a rule uses it; one location per ability; the entrance
-randomizer and a random start stay labelled experimental until their room-level logic is done and tested.
-
-**When the first area is mapped room by room** (2026-09-29): a test for rule 4 comes with it (every one-way's rule
-holds what its way back needs). Each map is already a region with its doors as entrances (build step 12, 2026-09-30),
-so mapping a room splits its region into areas and replaces its spots' `reach` with the room's own rules.
-
-**Status:** planned (2026-09-27): the method and the checklist written (`room-logic.md`), no room mapped with it yet;
-the rules for writing it (1 to 4, and 9) and the region explainer (§11) written 2026-09-29, the logic in Python since
-build step 29. Today's rules are still by large areas, kept as each spot's `reach` over one region per map (build
-step 12, 2026-09-30).
+**Status:** planned (2026-09-27); the rules written 2026-09-29, the logic in Python since build step 29; every plan
+gathered into `room-logic.md` with spawns and chains added (2026-09-30). No room mapped with it yet: today's rules are
+still by large areas, kept as each spot's `reach` over one region per map (build step 12, 2026-09-30).
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -3373,7 +3360,7 @@ Island, all leading to the lake map, MetalLake.
    take the ticket; the six docks take the sub. Not the Rule Builder's `OptionFilter`: it needs the option's class,
    and `options.py` imports the data tables, which import the logic, so the logic can't import the options.
    **Apart, the logic stays cautious:** the docks sit inside the later chapters' stand-in, which holds the ticket, so
-   the logic never counts the sub alone as reaching Metal Island, though the game allows it (build step 24's rule:
+   the logic never counts the sub alone as reaching Metal Island, though the game allows it (`room-logic.md`, rule 5:
    more cautious than the game, never less).
 4. **What else the sub gates.** The ant tunnel's door into the prison needs flag 79, which only the prison itself sets
    (Event193), and before that only the sub's dock reaches the prison. So that tunnel takes the sub too, and with it
@@ -3694,8 +3681,8 @@ one of its ways in will do.
 - **Reaching a location** takes its region plus its own rule. Archipelago checks the region by itself (`world api.md`:
   entrances and locations "implicitly check for the accessibility of their parent region").
 - **The origin:** Archipelago assumes the player can always get back to the region the logic starts from. The logic
-  here leans on nothing outside the graph for that (the Warp never counts, build step 24, rule 9), so the graph itself
-  makes it true: a one-way counts only together with what it takes to get back (rule 4).
+  here leans on nothing outside the graph for that (the Warp never counts, `room-logic.md`, rule 9), so the graph
+  itself makes it true: a one-way counts only together with what it takes to get back (rule 4).
 - **Why a rule may only get easier:** the generator places items one at a time, each where the items placed so far can
   reach. That works only if having more items never shuts anything, so a rule can say "has" but never "hasn't"
   (rule 3).
@@ -3710,16 +3697,8 @@ one of its ways in will do.
 
 ### When to make a region, and why
 
-Make a new region for:
-
-- a part of a room you can't walk to freely from the rest (an obstacle, a ledge, water, a one-way drop);
-- where a door or a transfer puts you (each arrival is a place of its own);
-- where a scene moves the party;
-- a place several spots share a need in, or a place with more than one way in.
-
-Don't make one for a single spot that needs something extra where you can otherwise walk around: that's the spot's own
-rule. A spot's own rule is written even when its region already implies it, so a different way into the region (the
-entrance randomizer, a random start) can't lose it (build step 8, `TestInRoomRules`).
+When this world makes a new region inside a room, and when a spot's own rule is enough: `room-logic.md`, "The model"
+(moved there 2026-09-30).
 
 Why regions at all, instead of a full rule on every spot:
 
@@ -3731,7 +3710,7 @@ Why regions at all, instead of a full rule on every spot:
 ### How this world does it
 
 - **All of the logic is in the apworld; none is in the mod.** The mod only does what the generator decided
-  (`slot_data`; build step 24, rule 7), so the game's side has no logic and no file per room.
+  (`slot_data`; `room-logic.md`, rule 7), so the game's side has no logic and no file per room.
 - **Every map is a region, every door an entrance** (build step 12, 2026-09-30): `regions.py` makes them from the door
   table, named `"<map>: <door>"`, so Archipelago's entrance randomizer can shuffle them.
 - **One Python module per game area** (`logic/`, build step 29): `outskirts.py`, `snakemouth_den.py`,

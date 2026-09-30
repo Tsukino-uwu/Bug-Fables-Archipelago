@@ -11,5 +11,5 @@ One line per file.
 - [MEASURED.md](MEASURED.md): game facts measured by us (classes, hooks, flags, save fields), each with evidence and date.
 - [licensing.md](licensing.md): every third-party project, with its licence read from the file and what we may do with it.
 - [references.md](references.md): projects compared with ours, and other apworlds the user knows from playing; what was taken from each.
-- [room-logic.md](room-logic.md): how a room gets mapped for the logic: its areas, one-ways, needs per entrance, the questions to ask and the method. Read before any room-level logic.
+- [room-logic.md](room-logic.md): every plan for the room logic, in one place: the rules, the model, every place the party can appear, the story and quest chains across rooms, the questions per room, the method and the tests. Read before any room-level logic.
 - [log.md](log.md): dated session log. What was tried, what happened, what the user said.

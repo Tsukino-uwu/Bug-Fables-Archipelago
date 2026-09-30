@@ -178,7 +178,7 @@ runs in, in a throwaway clone:
 For each one it confirms the section fails. It also makes a real commit and a real push carrying a violation, and
 checks that both are refused.
 
-**The apworld's own tests** (149) and the fuzzer (10000 random seeds, 0 failures before every change) need an
+**The apworld's own tests** (601 on 2026-09-30) and the fuzzer (10000 random seeds, 0 failures before every change) need an
 Archipelago checkout; [development.md](../agent_docs/development.md) says how. CI runs the tests and generates seeds
 with a second game on every push; the fuzzer runs on the maintainer's machine, not in CI.
 
@@ -241,6 +241,14 @@ same person wrote both. Here is what can be checked.
   apworld or the scripts must update one of them. They are [how the mod was
   made](../agent_docs/documentation.md) and [the Archipelago side](../agent_docs/apimplementation.md).
 - **[MEASURED.md](../agent_docs/MEASURED.md)** holds the facts about the game, each with its evidence and date.
+- **[room-logic.md](../agent_docs/room-logic.md)** is how the logic is written, checked and tested, room by room:
+  - the rules it follows (the logic may ask more of the player than the game does, never less; no point of no return);
+  - the questions asked of every room, every place the party can appear, and every story and quest chain that reaches
+    across rooms;
+  - how each answer is confirmed on screen and then tested.
+
+  Each rule carries who decided it and when. Until every room has been through it, the entrance randomizer and a random
+  start stay labelled experimental.
 - **[licensing.md](../agent_docs/licensing.md)** lists every outside project the code uses or was read for, with its
   licence and the date it was checked; a file linking someone else's GitHub project with no row there fails the
   preflight. **[references.md](../agent_docs/references.md)** says what was taken from the randomizers compared with

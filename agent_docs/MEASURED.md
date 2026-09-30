@@ -1561,6 +1561,16 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   `player.lastpos = lastloadzone =` where the walk ended, and clears `roomtransition` a frame later. Cutscenes change
   maps with `LoadMap` alone. A map's auto-event starts once the player is free (`MapControl.LateUpdate`) and sets its
   flag as it starts.
+- **What the calling door adds** (2026-09-30, code read; nothing seen in game): `TransferMap`'s five-argument form takes
+  the door as `caller`, and only through it does the transfer apply the door's camera (`data[1..3]` switch on
+  `vectordata[3..6]`: the camera offset, its angle, its limits) and its arrival jump (`caller.entity.emoticonoffset.x`
+  above 0.1 jumps to the walk's end instead of walking). The two- and four-argument forms pass no caller: the camera is
+  left as it is, and the party always walks in. Used by `QualityOfLife.cs`.
+- **No map has a spawn spot of its own** (2026-09-30, code read): `LoadMap(id)` places no one. The party keeps its
+  position from the map before or, with `recreateplayers`, is made anew by `SetPlayers()` with no position given. So
+  every transfer names its own spot: a door's `vectordata[1]`, a scene's position set after `LoadMap`, a dialogue
+  line's `|warp,map,x,y,z|`. A scene that sets none (Event61, the bar's hatch, a plain `LoadMap(30)`) leaves the party
+  at the coordinates it had; where that puts it in the bar is to see in play.
 - Used by `SaveCrystals.cs`, `DeathLinkGame.cs` and `AutoSave.cs`.
 
 ## Upper Snakemouth's boss: Leif out until its beam (2026-09-28, code read; seen in play)
