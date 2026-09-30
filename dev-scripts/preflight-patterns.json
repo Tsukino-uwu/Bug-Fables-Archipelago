@@ -106,7 +106,8 @@
     "Options": ["Choice", "DefaultOnToggle", "OptionGroup", "PerGameCommonOptions", "PlandoConnections", "Range", "Toggle"],
     "rule_builder.rules": ["Has", "HasAllCounts", "Rule"],
     "test.bases": ["WorldTestBase"],
-    "worlds.AutoWorld": ["WebWorld", "World"]
+    "worlds.AutoWorld": ["WebWorld", "World"],
+    "worlds.generic.Rules": ["add_item_rule"]
   },
   "apworld_modules": {
     "json": ["loads"],
