@@ -19,7 +19,8 @@ In practice:
     side](../agent_docs/apimplementation.md)) ends with a dated **Status** line;
   - commits whose subject starts with `Seen:` record what was confirmed on screen;
   - [the log](../agent_docs/log.md) records what was tried and what the maintainer said.
-- **The one image the mod draws**, the Archipelago icon, is Archipelago's logo rebuilt from six circles in code
+- **The one picture the mod draws**, besides a plain ringed circle behind its pause-menu buttons, is the Archipelago
+  icon: Archipelago's logo rebuilt from six circles in code
   (`mod/BugFablesAP/Ui/ApIcon.cs`); its look was picked on screen.
 
 ## Checks that need only git, Python and the release
@@ -61,9 +62,9 @@ Both earlier releases pass (v0.1.0 and v0.2.0, checked 2026-09-29).
 | Build, test or release | The dev scripts | `dev-scripts/`, `.githooks/`, `.github/workflows/` |
 | Work on it with Claude Code | The agent's guard, before each command and edit the agent makes | `.claude/` |
 
-**The apworld** runs on whichever machine generates, the archipelago.gg website's included, and Archipelago imports
-it on every start.
-- It imports only the names the preflight lists: 36 from Archipelago and Python's standard library, plus
+**The apworld** runs on whichever machine generates with it in `custom_worlds` (the archipelago.gg website doesn't
+have it), and Archipelago imports it on every start.
+- It imports only the names the preflight lists: 38 from Archipelago and Python's standard library, plus
   `json.loads`, `logging` and `pkgutil.get_data`.
 - It reads its own data files, which ship inside it, and nothing else.
 - It writes no file, opens no connection, runs no program and evaluates no text as code.
@@ -97,7 +98,7 @@ preflight checks that the shipped DLL holds none of its types.
 **If you open this repo in Claude Code**, its `.claude/settings.json` runs `.claude/hooks/agent-guard.py` before each
 shell command, file edit and page fetch the agent makes. It refuses commands that would get past the git hooks, and a
 read of a GitHub project that has no licence row yet (its licence file aside), and asks you
-before a change to what the gates allow (by an edit or in a commit), or a write through `gh api`. It reads the command it's given (and, for a GitHub read, the licence list), runs
+before a change to what the gates allow (by an edit or in a commit), or a write through `gh api`. It reads the command it's given (and, for a GitHub read, the licence list and the patterns file's own owners), runs
 only `git status`, and changes nothing. The preflight holds the settings to that one command and to rules that ask
 or refuse, never ones that allow more. Other editors ignore the folder.
 
@@ -178,9 +179,10 @@ runs in, in a throwaway clone:
 For each one it confirms the section fails. It also makes a real commit and a real push carrying a violation, and
 checks that both are refused.
 
-**The apworld's own tests** (601 on 2026-09-30) and the fuzzer (10000 random seeds, 0 failures before every change) need an
-Archipelago checkout; [development.md](../agent_docs/development.md) says how. CI runs the tests and generates seeds
-with a second game on every push; the fuzzer runs on the maintainer's machine, not in CI.
+**The apworld's own tests** (621 on 2026-09-30) and the fuzzer (10000 random seeds, 0 failures before every change) need an
+Archipelago checkout; [development.md](../agent_docs/development.md) says how. CI runs the tests, the Logic Test check
+and the fuzzer (10000 seeds), builds the apworld and its yaml and generates from them as a player would, and generates
+seeds with a second game, on every push.
 
 ## The committed DLL: what is proven, and what isn't
 
@@ -225,7 +227,8 @@ same person wrote both. Here is what can be checked.
     code;
   - every release's notes carry the capability list's changes since the last release.
 
-  `git log -p -- dev-scripts/preflight*.* .githooks .github` shows every change to the gate itself.
+  `git log -p -- 'dev-scripts/preflight*' dev-scripts/negative-test-preflight.py dev-scripts/dotnet_metadata.py
+  .githooks .github .claude` shows every change to the gate itself.
 - **A copy from anywhere else.** All of this is about this repository and its releases page. A file from somewhere
   else is not covered.
 
@@ -238,11 +241,12 @@ same person wrote both. Here is what can be checked.
 ## How it's built
 
 - **Two process guides record every step, and a commit hook enforces them:** a commit that changes the mod, the
-  apworld or the scripts must update one of them. They are [how the mod was
+  apworld or the scripts must update one of them, or say `docs: no process change` in its message. They are [how the mod was
   made](../agent_docs/documentation.md) and [the Archipelago side](../agent_docs/apimplementation.md).
 - **[MEASURED.md](../agent_docs/MEASURED.md)** holds the facts about the game, each with its evidence and date.
 - **[room-logic.md](../agent_docs/room-logic.md)** is how the logic is written, checked and tested, room by room:
-  - the rules it follows (the logic may ask more of the player than the game does, never less; no point of no return);
+  - the rules it follows (the logic may ask more of the player than the game does, never less; no point of no return, unless the
+    player turns on Points of No Return);
   - the questions asked of every room, every place the party can appear, and every story and quest chain that reaches
     across rooms;
   - how each answer is confirmed on screen and then tested.
@@ -253,8 +257,8 @@ same person wrote both. Here is what can be checked.
   licence and the date it was checked; a file linking someone else's GitHub project with no row there fails the
   preflight. **[references.md](../agent_docs/references.md)** says what was taken from the randomizers compared with
   this one, and from other apworlds the maintainer knows from playing: approach and facts, never code.
-- **Tests and generation:** the apworld's tests and the fuzzer, above. CI generates seeds with a second game on every
-  push, and the release builds the apworld the way a player installs it.
+- **Tests and generation:** the apworld's tests and the fuzzer, above, both in CI on every push, with seeds generated
+  next to a second game; the release builds the apworld the way a player installs it.
 - **[The log](../agent_docs/log.md)** records each session: what was tried, what happened, what was decided.
 
 ## Reporting a problem

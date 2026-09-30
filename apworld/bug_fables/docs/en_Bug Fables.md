@@ -28,7 +28,7 @@ Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's 
 - **Starting Location** (off, experimental): a new file begins in any room in the game.
 - **Starting Party Member** (all three): a new file starts with the whole party; or with Vi, Kabbu or Leif alone (or one
   picked by the seed), and the other two are items; or Off, the story's party, with Leif joining in Snakemouth Den. With any setting but Off, the opening and the fall
-  room after the spider become locations. New in this version.
+  room after the spider become locations.
 - **Filler Starting Checks** (on): the checks a new file sends by itself when the game begins (Maki and Eetl's gift,
   the tutorial battle, and the opening spot when members are items) hold filler only, so a seed doesn't open with its
   good items. Nothing else changes; turn it off to plando an item there. With the Entrance Randomizer on Coupled or
@@ -37,15 +37,16 @@ Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's 
   the Freeze as the first copy of their progressive item); until one arrives, that attack only buzzes, and each shows in
   your key items once it does.
 - **Shuffle Jump** (off): Jump is an item for the whole party; until it arrives, the jump button only buzzes, and the
-  pause menu's Warp is always there. New in this version.
-- **Points of No Return** (off): the logic may send you somewhere only the pause menu's Warp to Start gets you out of,
+  pause menu's Warp is always there.
+- **Points of No Return** (off): the logic may send you somewhere only the pause menu's Warp gets you out of,
   a drop or a one-way door, so items can land in more places and you're expected to warp back. Off, it always leaves
-  you a way to walk back. Few one-ways are in the logic yet, so for now it changes little. New in this version.
+  you a way to walk back. No one-way in the logic has a way back for it to drop yet, so for now it changes nothing.
+  New in this version.
 - **Progressive Boat** (on): the Boat Ticket and the submarine are one item found twice, the ticket first; off, two
   items in any order (see below). New in this version.
 - **Music Shuffle** (off, under Aesthetic Options): every song plays in place of another, the same every time you play
   the seed, and the jingles (victory, game over, chapter titles) swap among themselves. The title screen, the wind,
-  water and machine sounds, and the factory elevator's music stay. Samira plays the song you pick. It changes nothing
+  water, machine and breathing sounds, and the factory elevator's music stay. Samira plays the song you pick. It changes nothing
   else. New in this version.
 
 Each option's description in the yaml says what it does in full and how many checks it adds.
