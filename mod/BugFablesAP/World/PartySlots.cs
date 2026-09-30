@@ -31,6 +31,35 @@ namespace BugFablesAP
                 "the Beast, Zommoth and the Everlasting King still name members by slot");
             Hooks.Install(typeof(ScriptedScenes), "party",
                 "the Beast's and Zommoth's scenes still name members by slot");
+            Hooks.Install(typeof(SceneLineups), "party",
+                "four later scenes still crash placing a member the party lacks");
+        }
+
+        private static readonly HashSet<string> positionLogged = new HashSet<string>();
+
+        // A scene's k-th character in line: past the party's end, the stand-in scenes use for that place (step 11),
+        // or nobody's.
+        private static ref MainManager.BattleData ScenePosition(MainManager.BattleData[] party, int k, int evt)
+        {
+            if (!On || k < party.Length)
+            {
+                return ref party[k];
+            }
+            ref MainManager.BattleData standIn = ref Nobody();
+            try
+            {
+                standIn.entity = MainManager.GetEntity(-1 - k);
+            }
+            catch (Exception e)
+            {
+                log.LogError($"[party] Event{evt}: finding the stand-in for place {k} threw: {e.GetBaseException().Message}");
+            }
+            if (positionLogged.Add($"{evt}/{k}/{party.Length}"))
+            {
+                log.LogInfo($"[party] Event{evt}: place {k} is beyond a party of {party.Length}: "
+                    + (standIn.entity != null ? $"its stand-in ({standIn.entity.name}) placed" : "no stand-in"));
+            }
+            return ref standIn;
         }
 
         private const int Beast = 69;
@@ -508,6 +537,73 @@ namespace BugFablesAP
                     code.Insert(i + 1, new CodeInstruction(OpCodes.Call, sceneElem));
                 }
                 log.LogInfo($"[party] installed in EventControl.Event{evt} (slot {k} {expected} of {expected})");
+                return code;
+            }
+        }
+
+        private static class SceneLineups
+        {
+            [HarmonyPatch(typeof(EventControl), "Event52", MethodType.Enumerator)]
+            [HarmonyTranspiler]
+            private static IEnumerable<CodeInstruction> Transpile52(IEnumerable<CodeInstruction> instructions) =>
+                Hooks.Safe(instructions, code => Edit(code, 52, 3, 0), "party");
+
+            [HarmonyPatch(typeof(EventControl), "Event122", MethodType.Enumerator)]
+            [HarmonyTranspiler]
+            private static IEnumerable<CodeInstruction> Transpile122(IEnumerable<CodeInstruction> instructions) =>
+                Hooks.Safe(instructions, code => Edit(code, 122, 2, 0), "party");
+
+            [HarmonyPatch(typeof(EventControl), "Event130", MethodType.Enumerator)]
+            [HarmonyTranspiler]
+            private static IEnumerable<CodeInstruction> Transpile130(IEnumerable<CodeInstruction> instructions) =>
+                Hooks.Safe(instructions, code => Edit(code, 130, 1, 0), "party");
+
+            [HarmonyPatch(typeof(EventControl), "Event138", MethodType.Enumerator)]
+            [HarmonyTranspiler]
+            private static IEnumerable<CodeInstruction> Transpile138(IEnumerable<CodeInstruction> instructions) =>
+                Hooks.Safe(instructions, code => Edit(code, 138, 1, 4), "party");
+
+            // playerdata[1] and [2] by place in line; Event138 also indexes by partyorder[k], a member's number.
+            private static IEnumerable<CodeInstruction> Edit(List<CodeInstruction> code, int evt, int places, int byMember)
+            {
+                FieldInfo playerdata = AccessTools.Field(typeof(MainManager), nameof(MainManager.playerdata));
+                FieldInfo partyorder = AccessTools.Field(typeof(MainManager), nameof(MainManager.partyorder));
+                List<int> reads = Enumerable.Range(2, Math.Max(0, code.Count - 2))
+                    .Where(i => code[i].opcode == OpCodes.Ldelema
+                        && Equals(code[i].operand, typeof(MainManager.BattleData))
+                        && (code[i - 1].LoadsConstant(1) || code[i - 1].LoadsConstant(2))
+                        && Reads(code[i - 2], playerdata))
+                    .ToList();
+                List<int> members = Enumerable.Range(2, Math.Max(0, code.Count - 3))
+                    .Where(i => code[i].opcode == OpCodes.Ldelem_I4 && Reads(code[i - 2], partyorder)
+                        && code[i + 1].opcode == OpCodes.Ldelema
+                        && Equals(code[i + 1].operand, typeof(MainManager.BattleData)))
+                    .ToList();
+                if (reads.Count != places || members.Count != byMember)
+                {
+                    throw new InvalidOperationException($"expected Event{evt}'s {places} places and {byMember} member reads, "
+                        + $"found {reads.Count} and {members.Count}");
+                }
+                MethodInfo position = AccessTools.Method(typeof(PartySlots), nameof(ScenePosition));
+                MethodInfo slotOfMember = AccessTools.Method(typeof(PartySlots), nameof(SlotOfMember));
+                var edits = reads.Select(i => new KeyValuePair<int, bool>(i, true))
+                    .Concat(members.Select(i => new KeyValuePair<int, bool>(i, false)))
+                    .OrderByDescending(e => e.Key);
+                foreach (KeyValuePair<int, bool> e in edits)
+                {
+                    if (e.Value)
+                    {
+                        code[e.Key].opcode = OpCodes.Ldc_I4;
+                        code[e.Key].operand = evt;
+                        code.Insert(e.Key + 1, new CodeInstruction(OpCodes.Call, position));
+                    }
+                    else
+                    {
+                        code.Insert(e.Key + 1, new CodeInstruction(OpCodes.Call, slotOfMember));
+                    }
+                }
+                log.LogInfo($"[party] installed in EventControl.Event{evt} (places {places} of {places}"
+                    + (byMember > 0 ? $", member reads {byMember} of {byMember})" : ")"));
                 return code;
             }
         }

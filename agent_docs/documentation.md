@@ -1203,8 +1203,21 @@ received member joins at the end), and those places pick the wrong member or non
   (`:12029-12030`). The five constants go through `SlotOfMember`; `GetPlayerAttack` already finds a member by number.
   To see: Kabbu first in the party (a Kabbu start that received Leif): Heavy Strike's damage follows Kabbu's attack.
 - The scripted fights that name a slot are step 36.
+- **Scenes that place the party by slot** (item 12's open reads). Several scenes read a character straight from
+  `playerdata[k].entity`, the k-th in line, since the field switch rotates who stands where:
+  - Event52 places slots 0-2 (`EventControl.cs:8491-8494`);
+  - Event122 does the same (`:20696-20698`);
+  - Event130 has Chompy follow slot 2 (`:22252`);
+  - Event138 anchors Kabbu's line on slot 1 (`:23283`).
 
-**Status:** works with Leif alone, seen on screen through chapter 1 into chapter 2 (2026-09-25); Leif joining after the spider with the story's two (Vi and Kabbu) seen (2026-09-26: he followed, could lead, and showed in the pause menu); items 5 and 6 not yet seen; the direct lookups in item 12 still open; the battle start's leader, the eaten tick and the skills' named members built (2026-09-30), not yet seen.
+  A shorter party throws there. Past the party's end the read now finds a record whose character is the stand-in
+  scenes already give that place (`GetEntity(-1 - k)`, item 11), so the scene places or anchors the stand-in. Event138
+  also lines the party up by `playerdata[partyorder[k]]`, a member's number used as a slot (`:23259-23262`); those four
+  go through `SlotOfMember`. The Beast's and Zommoth's scenes (Events 137 and 182) are cast with their fights (step 36).
+  Logged: `[party] Event52: place 2 is beyond a party of 2: its stand-in (…) placed`. All four are past the Outskirts
+  gate, where the logic still needs all three members.
+
+**Status:** works with Leif alone, seen on screen through chapter 1 into chapter 2 (2026-09-25); Leif joining after the spider with the story's two (Vi and Kabbu) seen (2026-09-26: he followed, could lead, and showed in the pause menu); items 5 and 6 not yet seen; item 12's direct reads of slots 1 and 2 (Events 52, 122, 130, 137, 138, 182, `DoAction`, `EventDialogue`), the battle start's leader, the eaten tick and the skills' named members built (2026-09-30), not yet seen; `tempfollowers[..]`, `partyorder` elsewhere and `GetExtraFollower` still open.
 
 *Code: `PartyFit.cs` (the stand-ins and the acting leader), `PartyMembers.cs` (the member guard, followers,
 Leif's joining), `PartySlots.cs` (a member's slot in fights).*

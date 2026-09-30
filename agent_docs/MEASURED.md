@@ -1124,6 +1124,11 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   - `SetCondition` for `EventStop` and `RemoveCondition` of a condition not held never touch the member's body
     (MainManager.cs:6527-6615, :6685-6710).
   Used by `PartySlots.cs`.
+- Scenes reading a party slot's character directly (IL read 2026-09-30): `<Event52>` has 3 fixed reads of slots 1-2
+  (`ldfld playerdata; ldc.i4.k; ldelema`), `<Event122>` 2, `<Event130>` 1, `<Event138>` 1 plus 4
+  `playerdata[partyorder[k]]` (`ldfld partyorder; …; ldelem.i4; ldelema`). Their `.entity` is the k-th character in
+  line: the field switch rotates `animid` across the slots and `RefreshEntities` gives each slot's character its
+  `animid` (MainManager.cs:9083). Used by `PartySlots.cs`.
 - A scripted end at 10 HP (code read 2026-09-30, not measured): with `SurviveWith10` every hit leaves the enemy at 10 HP
   or more (`BattleControl.cs:7491-7494`, except Kabbu's skill 9 used as a skill), and the Beast plays its script on
   its own turn at `hp <= 10` (:18361), the Everlasting King its phases at `hp <= 10` (:20826). An enemy's weaknesses
