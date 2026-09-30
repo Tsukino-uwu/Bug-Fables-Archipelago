@@ -280,7 +280,7 @@ namespace BugFablesAP
             {
                 ShownInScene.Add(location); // a done check's item only comes back as a replay, which keeps its box
             }
-            log.LogInfo($"[swap] location {location}: giveitem {(badge ? "medal" : "item")} {id} on {MapName()} is a location; showing '{shownName}'"
+            log.LogInfo($"[swap] location {location}: giveitem {(badge ? "medal" : "item")} {id} on {MapName()} is a location; showing '{TextFit.Joined(shownName)}'"
                 + (info == null ? " (not scouted yet)" : ""));
         }
 
@@ -356,14 +356,14 @@ namespace BugFablesAP
         private const string GotWords = "You got " + ArticleSlot;
         private const string FoundWords = "You found ";
 
-        private static void ChangeLineOnce(string from, string to)
+        private static void SetLineOnce(string to)
         {
             string line = MainManager.menutext[GotLine];
-            if (line == null || !line.Contains(from))
+            if (line == null || to == null || to == line)
             {
                 return;
             }
-            MainManager.menutext[GotLine] = line.Replace(from, to);
+            MainManager.menutext[GotLine] = to;
             MainManager.instance.StartCoroutine(RestoreLine(line));
         }
 
@@ -380,25 +380,28 @@ namespace BugFablesAP
             {
                 return false;
             }
-            MainManager.instance.flagstring[GameStrings.ItemName] = shownName;
+            MainManager.instance.flagstring[GameStrings.ItemName] = TextFit.Joined(shownName);
             if (shownArticle != null)
             {
                 MainManager.instance.flagstring[GameStrings.ItemArticle] = shownArticle;
             }
-            if (shownForOther)
+            string line = MainManager.menutext[GotLine];
+            if (line != null)
             {
-                ChangeLineOnce(GotWords, FoundWords);
+                line = shownForOther ? line.Replace(GotWords, FoundWords)
+                    : shownArticle == "" ? line.Replace(ArticleSlot, "")
+                    : line;
             }
-            else if (shownArticle == "")
-            {
-                ChangeLineOnce(ArticleSlot, "");
-            }
+            string fitted = TextFit.Fit(line, MainManager.instance.flagstring[GameStrings.ItemArticle], shownName,
+                TextFit.HoldUpRoom(), dialogue: false, out string told);
+            SetLineOnce(fitted ?? line);
             if (shownColor.HasValue)
             {
                 Recolour(shownColor.Value);
             }
-            log.LogInfo(location == DisplayOnly ? $"[swap] held up '{shownName}' (display only)"
+            log.LogInfo(location == DisplayOnly ? $"[swap] held up '{TextFit.Joined(shownName)}' (display only)"
                 : $"[swap] location {location}: kept {what} out of the inventory");
+            log.LogInfo("[fit] " + told);
             location = -1;
             swapped = true;
             return true;

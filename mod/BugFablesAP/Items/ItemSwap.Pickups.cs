@@ -57,21 +57,25 @@ namespace BugFablesAP
                 string article = info != null && IsOurs(info) ? ArticleOf(info.ItemId, KindOf(info)) : null;
                 // "You found |string,1| ...": the seed item's own article, none for a member or another player's item.
                 bool other = ForOther(info, ref name);
+                string found = MainManager.menutext[FoundLine];
                 if (other || article == "")
                 {
                     text = text.Replace(ArticleSlot, "");
+                    found = found?.Replace(ArticleSlot, "");
                 }
                 // The pickup line ends its name in the game's red ("...|string,0||color,1|!"); after a name in the
                 // Item colors that "!" looked stray, so it ends in black as the gift line does.
                 if (other && QualityOfLife.ApColors)
                 {
                     text = text.Replace(NameThenRed, NameThenBlack);
+                    found = found?.Replace(NameThenRed, NameThenBlack);
                 }
                 else if (article != null)
                 {
                     MainManager.instance.flagstring[GameStrings.ItemArticle] = article;
                 }
-                MainManager.instance.flagstring[GameStrings.ItemName] = name;
+                MainManager.instance.flagstring[GameStrings.ItemName] = TextFit.Joined(name);
+                text = FitFound(text, found, name);
                 SpriteRenderer held = caller.entity.sprite;
                 if (sprite != null && held != null)
                 {
@@ -105,8 +109,26 @@ namespace BugFablesAP
                     ShownInScene.Add(at); // a done check's item only comes back as a replay, which keeps its box
                 }
                 log.LogInfo($"[swap] location {at}: pickup (kind {kind}, id {caller.entity.animstate}, flag {caller.activationflag}) "
-                    + $"on {MapName()} is a location; showing '{name}'" + (info == null ? " (not scouted yet)" : ""));
+                    + $"on {MapName()} is a location; showing '{TextFit.Joined(name)}'" + (info == null ? " (not scouted yet)" : ""));
             }
+        }
+
+        // "You found |string,1| |color,1||string,0||color,1|!", the pickup's line.
+        private const int FoundLine = 2;
+
+        // The pickup's box wraps its text before the name is filled in, so a long name ran off it: the name goes in
+        // here and the line is fitted to the game's own wrap width, which then leaves it as it is.
+        private static string FitFound(string text, string found, string name)
+        {
+            if (found == null || !text.Contains(found))
+            {
+                log.LogInfo("[fit] the pickup's line isn't in its text, left as it is");
+                return text;
+            }
+            string fitted = TextFit.Fit(found, MainManager.instance.flagstring[GameStrings.ItemArticle], name,
+                MainManager.messagebreak, dialogue: true, out string told);
+            log.LogInfo("[fit] " + told);
+            return fitted == null ? text : text.Replace(found, fitted);
         }
 
         internal static void TickGround()

@@ -82,7 +82,7 @@ namespace BugFablesAP
         internal static void Received(string name, Sprite sprite, Color? color, string article)
         {
             waiting.Add(new Entry { Show = () => ItemSwap.ShowHeldUp(name, sprite, color, article) });
-            log.LogInfo($"[show] queued the hold-up for {name}");
+            log.LogInfo($"[show] queued the hold-up for {TextFit.Joined(name)}");
         }
 
         internal static void Tick()

@@ -619,8 +619,27 @@ namespace BugFablesAP
                             : "removemember <0 Vi | 1 Kabbu | 2 Leif>";
                     case "holdup":
                     {
-                        // holdup [member n | ap]: the permit, party member n (0 Vi, 1 Kabbu, 2 Leif), or the drawn
-                        // Archipelago icon.
+                        // holdup [member n | ap | long]: the permit, party member n (0 Vi, 1 Kabbu, 2 Leif), the drawn
+                        // Archipelago icon, or lines too wide for the box.
+                        if (parts.Length > 1 && parts[1] == "long")
+                        {
+                            // The line seen running off the box, a longer one, and ServerText's longest name with a
+                            // player and alone (no place to break: squashed).
+                            Color plum = new Color(0xAF / 255f, 0x99 / 255f, 0xEF / 255f);
+                            string longest = string.Join(" ", Enumerable.Repeat("Extremely Long Item Name", 5).ToArray())
+                                .Substring(0, ServerText.MaxLength);
+                            HoldUps.Received(ItemSwap.FromText("Poison Resistance Medal",
+                                Archipelago.MultiClient.Net.Enums.ItemFlags.NeverExclude, "BugTester"), ApIcon.Get(),
+                                plum, "a");
+                            HoldUps.Received(ItemSwap.FromText("Progressive Grappling Hook Upgrade",
+                                Archipelago.MultiClient.Net.Enums.ItemFlags.Advancement, "AVeryLongPlayerName"),
+                                ApIcon.Get(), plum, "a");
+                            HoldUps.Received(ItemSwap.FromText(longest,
+                                Archipelago.MultiClient.Net.Enums.ItemFlags.None, "BugTester"), ApIcon.Get(), plum, "");
+                            HoldUps.Received(ItemSwap.ClassText(longest,
+                                Archipelago.MultiClient.Net.Enums.ItemFlags.None), ApIcon.Get(), plum, "");
+                            return "holdup queued: four lines too wide for the box";
+                        }
                         if (parts.Length > 1 && parts[1] == "ap")
                         {
                             // The drawn icon on two of the class backdrops a real item gets (ItemSwap.Describe's plum

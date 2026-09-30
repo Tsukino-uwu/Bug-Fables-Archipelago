@@ -268,7 +268,7 @@ namespace BugFablesAP
                 return false;
             }
             string item = IsOurs(info) ? name.Substring(info.ShownPlayer().Length + 3) : info.ShownItem();
-            name = PlayerText(info.ShownPlayer()) + Black + "'s " + ClassText(item, info.Flags);
+            name = PlayerText(info.ShownPlayer()) + Black + "'s" + TextFit.Break + ClassText(item, info.Flags);
             return true;
         }
 
@@ -302,9 +302,9 @@ namespace BugFablesAP
             return $"|color,{HoldUps.ApBase + shade}|{item}";
         }
 
-        // With Item colors off, the whole name stays in the game's red, as it was.
+        // With Item colors off, the whole name stays in the game's red, as it was. A long one breaks before "from".
         internal static string FromText(string item, ItemFlags flags, string player) =>
-            ClassText(item, flags) + Black + " from " + PlayerText(player);
+            ClassText(item, flags) + Black + TextFit.Break + "from " + PlayerText(player);
 
         private static string Black => QualityOfLife.ApColors ? "|color,0|" : "";
     }

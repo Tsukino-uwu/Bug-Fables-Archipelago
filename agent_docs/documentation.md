@@ -692,7 +692,25 @@ Archipelago icon row (step 21).**
 box shows field 2 (`MEASURED.md`, "The item table's fields"); field 1 is "Desc" for every key item. Found while reading
 key items' descriptions for the Boat Ticket; not yet seen fixed in game.
 
-**Status:** works for gifts, pickups and their ground sprites, and respawning pickups seen on screen (2026-09-24, `MEASURED.md`), and crystal berry spots (2026-09-25); berry rewards and story pickups built, not yet seen in game.
+**Long names fitted to the box (2026-09-30).** Seen in play: "You got a Poison Resistance Medal from BugTester!" ran
+past both edges of the box. The game never wraps that box: it draws the line centred, at full size, however long
+(`MEASURED.md`, how a line is laid out). The pickup's box does wrap, but before the name is filled in, so a name is never
+measured there either. The user chose **two lines, squashed only if one is still too wide**:
+
+- The line is measured the way the game lays it out, letter by letter with its own `GetLetterOffset`, against the
+  box's own sprite (the pickup's: the game's wrap width).
+- If it fits, nothing changes. If not, it breaks before "from" ("You got a Poison Resistance Medal" / "from
+  BugTester!"), or after "'s" for another player's item found here. The line composers mark that one space; the mark is
+  a control character, which no server string can hold (`ServerText` drops them), and it never reaches a save.
+- The game centres the block by its widest line, so the shorter line is moved in by spaces to look centred.
+- A line still too wide on its own (a name can be 100 characters) is narrowed sideways to fit, the way the game's own
+  `clamp` does. The same goes for a long line with no place to break.
+- The log says what it decided: `[fit] <width> wide, room <room>: two lines <first> / <second>`, and `squashed` when
+  it narrowed one.
+
+Dev `holdup long` shows four such lines: the one seen, a longer one, and the longest name with a player and alone.
+
+**Status:** works for gifts, pickups and their ground sprites, and respawning pickups seen on screen (2026-09-24, `MEASURED.md`), and crystal berry spots (2026-09-25); berry rewards and story pickups built, not yet seen in game; long names fitted to the box built (2026-09-30), not yet seen.
 
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
 `Recolour` and `FirstMedalSeen` do the swapping; `PickupPrefix`, `FindPickup` and `TickGround` handle pickups); the
