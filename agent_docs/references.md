@@ -81,7 +81,7 @@ The user's own experience; nothing below was read.
 - **Traps:** Celeste's flipped screen, Zelda's freeze and chickens, OoT's disguised traps. **We take:** traps that
   annoy, never harm, and a trap that can look like a wanted item (Next 19, an idea; OoT's option was then read,
   `licensing.md`).
-- **Super Metroid Map Rando (non apworld):** rooms with the same number of entrances swap places, on a grid.
+- **Super Metroid Map Rando (not an apworld):** rooms with the same number of entrances swap places, on a grid.
   **We take:** Room Swap, on the game's own map (build step 30).
 - **Metroid Fusion's story strip.** **Not taken:** every Bug Fables cutscene also changes the world
   through flags (build step 9).
