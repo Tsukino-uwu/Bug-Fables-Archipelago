@@ -60,6 +60,10 @@ namespace BugFablesAP
                             ? "Items show how important they are before you take them."
                             : "Items show no backdrop until you take them.";
                     case DetectorRow: return "Acts like the Detector medal is always equipped, to find hidden items.";
+                    case SpyRow:
+                        return QualityOfLife.SpySpecs != null && QualityOfLife.SpySpecs.Value
+                            ? "As if Spy Specs were on: enemy HP shows, Spy is free."
+                            : "Spy as the game has it: aim, and it uses the turn.";
                     case UncapRow:
                         if (QualityOfLife.UncapFps?.Value == "Monitor")
                         {
@@ -280,6 +284,7 @@ namespace BugFablesAP
             : r == CutscenesRow ? QualityOfLife.SkipCutscenes
             : r == BackgroundsRow ? QualityOfLife.ItemBackgrounds
             : r == DetectorRow ? Detector
+            : r == SpyRow ? QualityOfLife.SpySpecs
             : null;
 
         private static string OnOff(ConfigEntry<bool> setting) => setting != null && setting.Value ? "ON" : "OFF";

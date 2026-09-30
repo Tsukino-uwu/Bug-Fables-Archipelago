@@ -48,6 +48,7 @@ read, a log or a probe.
 - [An item entity's item](#an-item-entitys-item-2026-09-30-code-read-nothing-seen-in-game)
 - [Fixed numbers in the enemies' scripts](#fixed-numbers-in-the-enemies-scripts-2026-09-30-code-read-nothing-seen-in-game)
 - [The submarine](#the-submarine-2026-09-30-code-read-the-dumps-and-the-games-text-nothing-seen-in-game)
+- [Spy Specs](#spy-specs-2026-09-30-code-read-nothing-seen-in-game)
 - [Still to measure](#still-to-measure)
 
 ## The build (2026-09-24, read from a Steam install, game not run)
@@ -1792,6 +1793,17 @@ for its own threshold. Used by `enemy-numbers.py` and `EnemyScaling.cs` (the mod
   (173, `TermiteOutside`) from anywhere else. Before flag 384 (set by its first run, `:24964`) it then looks up
   entities 15 and 16 (`:24916`), which `TermiteOutside` doesn't have (entities 0-7), and stops at `e[0].flip`.
 - Used by `later_chapters.py` (build step 36), `Submarine.cs` and `KeptOpen.cs` (the mod guide, step 37).
+
+## Spy Specs (2026-09-30, code read; nothing seen in game)
+
+- **Medal 17** (`Spy Specs`, a code gift, "All medals by source" above). The game asks for it in three places, each the
+  party-wide `BadgeIsEquipped(17)`, which is `BadgeIsEquipped(17, -1)` (`MainManager.cs:16791-16794`):
+  - `BattleControl.StartBattle` sets `scopeequipped` from it (`BattleControl.cs:858`); an enemy's HP bar shows when
+    it is spied, or `scopeequipped`, or an HP-showing medal says so (`:3148`). So it counts from a battle's start.
+  - `Tattle` (the Spy action, `:5234`): with the medal no crosshair command, the spy always succeeds, and at the end
+    `if (!hasmedal) EndPlayerTurn()` (`:5286-5287`): spying doesn't use the turn.
+  - The battle menu's command list adds a small icon (219) beside Spy (`MainManager.cs:16291`).
+- Used by `MedalAssist.cs` (the Spy Specs row, the mod guide, step 39).
 
 ## Still to measure
 

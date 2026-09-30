@@ -2079,3 +2079,9 @@ either one wrong).
   x1.5 its `Untouched` entry was based on is the hologram machine's hard rematch (flag 166), not Hard Mode, so the
   reason was a misread; the game's `minibosslist` holds 72, and every other mini-boss there scales from its chapter.
   It now does too (chapter 5); built and copied in (`CE213A9BD09A`), not yet seen.
+- **Spy Specs as a Quality of life row (the user's idea):** "similar to detector in qol, spy spec could maybe be a
+  on/off thing (the automatic spy, it does not take up a turn to spy)". Read in the game's code first: medal 17 is
+  asked for three times (a battle's start sets `scopeequipped` for every HP bar; `Tattle` skips its aim and, with the
+  medal, `EndPlayerTurn`; the command list's icon), all through the party-wide `BadgeIsEquipped`, which `MedalAssist`
+  already answers for Detector. Asked: built now, off by default (the user). The mod guide's step 39; built and copied
+  in (`B3EC6CDF7A48`), not yet seen.

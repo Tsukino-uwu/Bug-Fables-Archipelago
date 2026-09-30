@@ -85,6 +85,7 @@ anyone curious about the process, or thinking of doing the same for another game
 36. [Scripted fights cast from the members you have](#36-scripted-fights-cast-from-the-members-you-have)
 37. [The submarine's docks follow its key item](#37-the-submarines-docks-follow-its-key-item)
 38. [The Warp forced on with Points of No Return](#38-the-warp-forced-on-with-points-of-no-return)
+39. [Spy Specs: the medal's effects as a Quality of life row](#39-spy-specs-the-medals-effects-as-a-quality-of-life-row)
 
 ## Where it stands
 
@@ -2544,3 +2545,35 @@ reason, so it holds whatever the other options become.
 
 *Code: `Core/SeedData.cs` (`PointsOfNoReturn`), `Core/Plugin.cs`, `Gameplay/QualityOfLife.cs` (`WarpOn`),
 `Dev/SeedDump.cs`.*
+
+## 39. Spy Specs: the medal's effects as a Quality of life row
+
+**Asked (the user, 2026-09-30):** "similar to detector in qol, spy spec could maybe be a on/off thing (the automatic
+spy, it does not take up a turn to spy)". **Decided:** built now, off by default (an opt-in that makes fights easier,
+as Attack boost is).
+
+**What the medal does, read in the game's code first** (`MEASURED.md`, Spy Specs): the Spy Specs medal (17) is asked
+for in three places, each the party-wide `BadgeIsEquipped(17)`:
+
+- a battle's start sets `scopeequipped`, and every enemy's HP bar then shows, spied or not;
+- the Spy action skips its crosshair aim and always succeeds, and then skips `EndPlayerTurn`, so spying is free;
+- the battle menu draws a small icon beside Spy, the game's own sign that it is free.
+
+**How:** as the Detector row (step 15): `MedalAssist`'s `BadgeIsEquipped` postfix answers yes for medal 17 on
+party-wide checks while the row is on. So all three follow at once, exactly as the medal would, with nothing of the
+game's battle code copied or changed. The row, *Spy Specs: ON / OFF*, sits under Detector on the Quality of life page
+(config `[QualityOfLife] SpySpecs`, off by default), and joins that page's Reset to defaults and Disable all. Its help
+line follows the value: "As if Spy Specs were on: enemy HP shows, Spy is free." or "Spy as the game has it: aim, and
+it uses the turn." Only while Archipelago is enabled, or with *Use on normal saves* (step 18). No check and no logic
+depend on it. The HP bars follow from the next battle, since the game reads the medal as a battle starts.
+
+The page grew to twelve rows (eleven settings under the two buttons), so its rows sit a little closer, the first and
+last where they were (step 21).
+
+**To see** (the user): with the row on, a battle shows every enemy's HP, Spy needs no aiming, the icon sits beside
+Spy, and the same member can still act after spying; with it off, as the game has it.
+
+**Status:** built (2026-09-30), the build succeeds; not yet seen in game.
+
+*Code: `Gameplay/MedalAssist.cs` (`SpySpecsMedal`, the postfix), `Gameplay/QualityOfLife.cs` (`SpySpecs`),
+`Ui/ApMenu.cs` and `Ui/ApMenu.Rows.cs` (`SpyRow`), `Core/Plugin.cs`.*

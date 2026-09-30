@@ -75,7 +75,8 @@ seconds (it tidies its memory on a timer).
   yours included, has a starburst behind it in its Archipelago class colour, so you can tell from afar whether it matters; Off
   keeps it a surprise), **Detector** (On, the default, acts as if the Detector medal were equipped. With the Archipelago mod
   enabled, the Detector (row or medal) also beeps on entering a room that still has a check of any kind, and stays
-  quiet in a room with none left) and **Uncap FPS** (experimental; ten pips like the volume rows. The first, Off, is the
+  quiet in a room with none left), **Spy Specs** (Off, the default; On acts as if the Spy Specs medal were equipped:
+  every enemy's HP shows, and Spy needs no aiming and doesn't use the turn) and **Uncap FPS** (experimental; ten pips like the volume rows. The first, Off, is the
   default: the game's own 30 or 60 FPS. The last, Monitor, is your display's own refresh rate, with VSync, so no
   tearing; on a 60 Hz display it keeps the game's own setting. The ones between cap it at 90, 100, 120, 144, 165,
   180, 240 or 360, with VSync when the number divides your monitor's refresh rate or reaches it, otherwise as a limit. Motion is

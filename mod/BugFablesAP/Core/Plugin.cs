@@ -94,7 +94,8 @@ namespace BugFablesAP
             AnimGuard.Enable(Log, settingsOn);
             GlowGuard.Enable(Log, settingsOn);
             MedalAssist.Enable(Log, () => randomizerEnabled.Value, settingsOn, () => difficulty.Value == "Hard",
-                () => difficulty.Value == "Hardest", () => detector.Value);
+                () => difficulty.Value == "Hardest", () => detector.Value,
+                () => QualityOfLife.SpySpecs != null && QualityOfLife.SpySpecs.Value);
             QualityOfLife.Enable(Log, Config, () => randomizerEnabled.Value);
             QualityOfLife.SettingsOn = settingsOn;
             QualityOfLife.SeedStart = () => randomizerEnabled.Value ? connection?.Start : null;

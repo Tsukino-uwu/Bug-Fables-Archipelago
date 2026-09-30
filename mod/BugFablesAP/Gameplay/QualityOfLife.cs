@@ -43,6 +43,7 @@ namespace BugFablesAP
         internal static ConfigEntry<string> ItemIcons;
         internal static string IconMode => ItemIcons?.Value ?? "OtherGames";
         internal static ConfigEntry<bool> ItemBackgrounds;
+        internal static ConfigEntry<bool> SpySpecs;
         // Tenths of the normal price: 10 normal, 5 half, 0 free.
         internal const int FullPrice = 10;
         internal static ConfigEntry<int> MedalPrices;
@@ -106,7 +107,8 @@ namespace BugFablesAP
         // each setting's own default. Enemy scaling and Medal prices live on the Gameplay page and aren't touched.
         internal static void DisableAll()
         {
-            foreach (ConfigEntry<bool> setting in new[] { FastText, SkipCutscenes, ItemBackgrounds, ApMenu.Detector })
+            foreach (ConfigEntry<bool> setting in new[] { FastText, SkipCutscenes, ItemBackgrounds, ApMenu.Detector,
+                SpySpecs })
             {
                 if (setting != null)
                 {
@@ -142,7 +144,7 @@ namespace BugFablesAP
         internal static void ResetAll()
         {
             foreach (ConfigEntryBase setting in new ConfigEntryBase[] { FastText, Travel, SkipConfirm, SkipCutscenes,
-                ItemAnimation, ItemColors, ItemIcons, ItemBackgrounds, ApMenu.Detector, UncapFps })
+                ItemAnimation, ItemColors, ItemIcons, ItemBackgrounds, ApMenu.Detector, SpySpecs, UncapFps })
             {
                 if (setting != null)
                 {
@@ -184,6 +186,10 @@ namespace BugFablesAP
                 + "it in its class colour (progression, useful, filler, trap, as Item colors colours them; with Item "
                 + "colors Off, the game's own colour for the item's kind), so you can tell from afar whether it "
                 + "matters. Off: no backdrop until it's picked up, a surprise.");
+            SpySpecs = config.Bind("QualityOfLife", "SpySpecs", false,
+                "On acts as if the Spy Specs medal were equipped: every enemy's HP shows, and Spy needs no aiming and "
+                + "doesn't use the turn. Off (the default) leaves it to the medal. Switch it on the Quality of life "
+                + "page.");
             MedalPrices = config.Bind("Gameplay", "MedalPrices", FullPrice, new ConfigDescription(
                 "Medal shop prices, in berries and crystal berries, in tenths of the normal price: 10 normal, 5 half, "
                 + "0 free. Any price above free is at least 1. Switch it on the Gameplay page.",

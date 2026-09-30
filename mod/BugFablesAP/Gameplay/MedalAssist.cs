@@ -4,17 +4,19 @@ using HarmonyLib;
 
 namespace BugFablesAP
 {
-    // The panel's Difficulty and Detector rows: a BadgeIsEquipped postfix answers yes for party-wide checks. Hardest is
-    // flag 614, which the save must never keep from the panel: SaveFile writes the save's own value.
+    // The panel's Difficulty, Detector and Spy Specs rows: a BadgeIsEquipped postfix answers yes for party-wide checks.
+    // Hardest is flag 614, which the save must never keep from the panel: SaveFile writes the save's own value.
     internal static class MedalAssist
     {
         internal const int HardModeMedal = 11;
         internal const int DetectorMedal = 2;
+        internal const int SpySpecsMedal = 17;
 
         private static Func<bool> active;
         private static Func<bool> randomizer;
         private static Func<bool> hard;
         private static Func<bool> detector;
+        private static Func<bool> spySpecs;
         private static Func<bool> hardest;
         private static ManualLogSource log;
 
@@ -22,7 +24,7 @@ namespace BugFablesAP
         private static bool forced;
 
         internal static void Enable(ManualLogSource logger, Func<bool> randomizerOn, Func<bool> settingsOn,
-            Func<bool> hardOn, Func<bool> hardestOn, Func<bool> detectorOn)
+            Func<bool> hardOn, Func<bool> hardestOn, Func<bool> detectorOn, Func<bool> spySpecsOn)
         {
             log = logger;
             active = settingsOn;
@@ -30,7 +32,8 @@ namespace BugFablesAP
             hard = hardOn;
             hardest = hardestOn;
             detector = detectorOn;
-            if (!Hooks.Install(typeof(MedalAssist), "medals", "Difficulty and Detector do nothing"))
+            spySpecs = spySpecsOn;
+            if (!Hooks.Install(typeof(MedalAssist), "medals", "Difficulty, Detector and Spy Specs do nothing"))
             {
                 return;
             }
@@ -161,7 +164,8 @@ namespace BugFablesAP
             {
                 return;
             }
-            if ((id == HardModeMedal && (hard() || payingPrize)) || (id == DetectorMedal && detector()))
+            if ((id == HardModeMedal && (hard() || payingPrize)) || (id == DetectorMedal && detector())
+                || (id == SpySpecsMedal && spySpecs()))
             {
                 __result = true;
             }

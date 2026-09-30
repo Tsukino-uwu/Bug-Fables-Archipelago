@@ -15,8 +15,8 @@ namespace BugFablesAP
             AchievementsRow = 6, NormalSavesRow = 7, Rows = 8;
         // The Quality of life page: the two buttons side by side on top, then the settings.
         private const int ButtonsRow = 0, FastTextRow = 1, WarpRow = 2, SkipConfirmRow = 3, CutscenesRow = 4,
-            AnimationRow = 5, ColorsRow = 6, IconsRow = 7, BackgroundsRow = 8, DetectorRow = 9, UncapRow = 10,
-            QolRows = 11;
+            AnimationRow = 5, ColorsRow = 6, IconsRow = 7, BackgroundsRow = 8, DetectorRow = 9, SpyRow = 10,
+            UncapRow = 11, QolRows = 12;
         // The Gameplay page: how the game plays, under the same two buttons.
         private const int DifficultyRow = 1, ScalingRow = 2, AttackRow = 3, CrystalsRow = 4, AutoSaveRow = 5,
             MedalPricesRow = 6, ExpRow = 7, BerryRow = 8, GameplayRows = 9;
@@ -439,6 +439,7 @@ namespace BugFablesAP
                     : QualityOfLife.IconMode == "AllPlayers" ? "ALL PLAYERS" : "OFF");
                 Choice(BackgroundsRow, "Item backgrounds", OnOff(QualityOfLife.ItemBackgrounds));
                 Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
+                Choice(SpyRow, "Spy Specs", OnOff(QualityOfLife.SpySpecs));
                 Label(UncapRow, "Uncap FPS");
                 DrawPips(new[] { UncapRow }, new[] { Mathf.Max(0, Array.IndexOf(QualityOfLife.UncapValues,
                     QualityOfLife.UncapFps?.Value)) + 1 });
@@ -492,7 +493,7 @@ namespace BugFablesAP
             arrows.localPosition = Vector3.zero;
             arrows.localEulerAngles = Vector3.zero;
             foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, SkipConfirmRow, CutscenesRow,
-                    AnimationRow, ColorsRow, IconsRow, BackgroundsRow, DetectorRow, UncapRow }
+                    AnimationRow, ColorsRow, IconsRow, BackgroundsRow, DetectorRow, SpyRow, UncapRow }
                 : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, AttackRow, CrystalsRow, AutoSaveRow,
                     MedalPricesRow, ExpRow, BerryRow }
                 : new[] { ModeRow, DeathLinkRow, AchievementsRow, NormalSavesRow })
