@@ -270,7 +270,10 @@ dialogue lines, doors, map auto-start scenes, code), per room. Today `gate-table
    A Placeholder is promoted to a normal location once its requirements and name are checked, one at a time (build
    step 10).
 4. **Tested:**
-   - each measured need has a test that fails without it;
+   - each measured need has a test that fails without it, Archipelago's `assertAccessDependency`: the listed spots
+     can't be reached without the item, and no other spot depends on it;
+   - `item-gates.py`'s report, read again against the game (`development.md`, "What each item gates"): what each item
+     and each pair of items gates, where a gap or a stand-in shows;
    - every area reachable from every arrival once everything is collected;
    - rule 4, from the first area mapped (2026-09-29): every one-way's rule holds what its way back needs;
    - every confirmed spawn reaches an exit or a location with nothing;

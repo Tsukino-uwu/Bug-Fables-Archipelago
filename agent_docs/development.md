@@ -217,6 +217,35 @@ slot, 69 in all. A sphere-2 key sent first was logged as a leak, and `/keys` lis
 data package** holds 100,000 location names, 2.18 MB of JSON, and every client in the room is offered it. The mod
 downloading it is not yet seen.
 
+## What each item gates: a report to read against the game
+
+The tests prove the logic agrees with itself; this shows what it says, item by item, so a person can hold it against
+the game (the user, 2026-09-30: "exclude 1 or a few certain progression items to see what/if they break anything").
+From your Archipelago checkout, with the world linked:
+
+```sh
+python <this repo>/dev-scripts/item-gates.py [--pairs] [--option name=value ...] > item-gates.md
+```
+
+For each progression item, every location and story event lost without it; with `--pairs`, what two items lose only
+together (a rule with an *or*, where either will do). By default every member, move and Jump is an item. Story events
+are earned from the item pool, never handed out, so a chain breaks where it would in play.
+
+**Reading it:**
+
+- **An item loses less than the game needs it for:** a rule is missing, and the logic is looser than the game. The
+  report can't find this alone (a rule nobody wrote removes nothing), but it lists what each item gates, so a gap stands
+  out against what the player knows.
+- **An item loses more than the game needs:** a rule is too strict. Allowed (the logic may be more cautious than the
+  game), but it's a stand-in to replace when the room is mapped. The ability spots' story order shows up this way today.
+- **"Unreachable even with everything"** at the top: a region or rule is broken.
+
+Once a need is confirmed on screen, it gets a test the Archipelago way, `assertAccessDependency` (`docs/tests.md` in
+the checkout): the listed locations can't be reached without the item, and no other location depends on it.
+
+**First run (2026-09-30), the default above:** 79 locations and events, 13 progression items, from Jump (45 lost) to
+Bee Fly (2); no two items stand in for each other anywhere, since no rule has an *or* yet.
+
 ## Proving a refactor changed nothing
 
 `python dev-scripts/seed-snapshot.py --archipelago <your checkout> --out <folder>` generates CI's three presets, alone

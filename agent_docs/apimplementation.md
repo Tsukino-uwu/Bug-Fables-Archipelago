@@ -2469,7 +2469,10 @@ the room logic lives (gathered there 2026-09-30, the user: "to have it all in 1 
   net and never logic; the region explainer (How it works §11).
 - **2026-09-30:** everything gathered into room-logic.md, from build steps 8, 9, 12, 15 and here, and two parts added
   (the user): every place the party can appear, checked like an entrance, and every story and quest chain, checked
-  across the rooms it reaches.
+  across the rooms it reaches. Then, the user's idea ("exclude 1 or a few certain progression items to see what/if
+  they break anything"), `dev-scripts/item-gates.py`: what each progression item, and each pair, gates in the logic,
+  with events earned rather than handed out, to read against the game (`development.md`, "What each item gates").
+  Its first run: 13 progression items, from Jump (45 spots) to Bee Fly (2), no *or* anywhere yet.
 
 **Status:** planned (2026-09-27); the rules written 2026-09-29, the logic in Python since build step 29; every plan
 gathered into `room-logic.md` with spawns and chains added (2026-09-30). No room mapped with it yet: today's rules are

@@ -1934,5 +1934,13 @@ either one wrong).
 - **`Blank` is not an unused map** (a guess corrected by reading first): Event111 loads it mid-scene, then
   `DesertEastmost`. So `UNUSED_MAPS` stays `SnakemouthEmpty` and `TestRoom`, and `Blank` is a scene-only room, no start.
 - **Tests:** 601 passed, Logic Test 90 of 90, fuzzer 0 of 10000 (the Entrance Randomizer's yaml text changed).
-- **Next:** a test that no table names an unused map, then the spawn table and the three Starting Location values.
-  **Not seen in game:** everything here.
+- **Unused maps tested** (`TestUnusedMaps`, doors decoupled and a random start): it fails with the list emptied.
+- **What each item gates** (the user: "can we have some that exclude 1 or a few certain progression items to see
+  what/if they break anything … could it help us find logic issues?"). Archipelago's own way to pin one need is
+  `assertAccessDependency` (`test/bases.py`, `docs/tests.md`); for looking, `dev-scripts/item-gates.py` prints what each
+  item and each pair loses. Its `collect_all_but` would also hand out placed event items (a boss beaten without the
+  item the boss needs), so the report collects only the pool and sweeps. First run: 13 items, Jump 45 spots down to Bee
+  Fly 2; no pair stands in for each other (no *or* in any rule yet); the ability spots' story order shows as items
+  gating spots they don't need in the game (the Hideout Cell without Shield), the known cautious stand-in. What it
+  can't do alone: find a rule nobody wrote, which only shows as an item gating too little when read against the game.
+- **Next:** the spawn table and the three Starting Location values. **Not seen in game:** everything here.
