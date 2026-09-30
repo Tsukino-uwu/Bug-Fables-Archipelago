@@ -1223,7 +1223,8 @@ game's way (`SetPlayerColliders`, 0.2 s later), as receiving a party member will
 build step 18), `slot_data`'s `starting_member` takes the place of the dev `TestStartMember`, and party members arrive
 as items. A received member joins at once, the way `addmember` does. Which members the guard lets in is worked out
 from the items the save has counted, every frame, and forgotten on the title screen: kept only in memory, a member
-from one file would let the story add him early in the next. Not yet seen in play.
+from one file would let the story add him early in the next. Seen in play (2026-09-26, the Archipelago guide's build
+step 18): a Kabbu start and a Vi start from the seed, each received member joining at once.
 
 **Built (asked for again, 2026-09-27, after landing by the rock once more):** after the pitfall scene (the trapdoor into `SnakemouthFallRoom`,
 Event5), place the party as if it had just entered the fall room through one of its doors, the same arrival a random

@@ -32,6 +32,9 @@ On the game's main menu, choose **Archipelago**. The panel has:
 - **Password**: only if the room has one; leave it empty otherwise.
 - **Archipelago**: Enabled keeps randomizer saves in their own folder, apart from your normal saves.
   The main menu shows it as "Archipelago (Enabled)" or "(Disabled)".
+- **DeathLink**: Off (the default). On, when your party is defeated in a battle, everyone in the room with DeathLink
+  on is too, and their deaths reach you: in a battle, the game's Game Over menu; on the map, a Game Over and back to
+  your last save. A death waits for a free moment, never striking in a cutscene or a text box.
 - **Achievements**: Off (the default) holds Steam achievements back while the Archipelago mod is enabled, as
   normal saves are kept apart. It only concerns Steam, never Archipelago.
 - **Use on normal saves**: Off (the default) keeps normal saves vanilla. On, the Quality of life and Gameplay settings
@@ -83,7 +86,10 @@ seconds (it tidies its memory on a timer).
   medals are handed out on every setting; on a normal save, as in the game: on Hard from Artis, a missed one at the
   caravan), **Enemy scaling** (Party level, the default, scales every enemy to your level;
   Artifacts to the artifacts found; Off keeps each enemy's own stats; Difficulty applies on top), **Attack boost** (Off, the default, or +1: each hit
-  your party lands does 1 more damage), **Medal prices**
+  your party lands does 1 more damage), **Healing crystals** (Off, the default; On: the blue save crystals turn
+  yellow, so they heal HP and TP as well as saving, from the next room on), **Auto-save** (Off, the default; On:
+  walking into a new room saves at its door once you can move, at most every 15 seconds, so a defeat costs one
+  room), **Medal prices**
   (medals in any shop, a bar in tenths of the price: full, the default, is normal, half is half price, empty is free), and **EXP multiplier** and **Berry multiplier** (1x, the default,
   to 10x, a bar like the volume rows; EXP from every defeated enemy, berries picked up in the world; a battle still
   gives at most a level's worth, and a check's berries are never multiplied).

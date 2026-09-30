@@ -125,9 +125,11 @@ be wrong.
    Party members stay where the story puts them.
    The three attacks and Jump as items: built, see build steps 21 and 22. Party members as items (*Starting Party Member*): built, see build step 18.
 4. **Open world, one gate at a time** (always on, never an option; 2026-09-26): see build step 9.
-5. **To test later (2026-09-25): a two-player room.** The tester's slot plus a second one the agent drives,
-   sending items while the tester plays, to see items from another player arrive live: the hold-up on *All* and
-   *Progression*, silence for a replay after a new save or reconnect, and the multiworld names ("X's item").
+5. **A two-player room** (planned 2026-09-25): the tester's slot plus a second one the agent drives. Seen
+   (2026-09-26, build steps 18 and 19): items from another player arriving live, every class both ways, and the
+   multiworld names ("You found Other's Key!", the mod guide's step 9). Replays after a new save or a reconnect are
+   held up like any other item since 2026-09-28, the quiet start aside (the mod guide, step 9). Still to see:
+   *Item animation: Progression* holding up only progression items.
 6. **A full bag:** key items keep arriving, only ordinary items wait.
 7. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number: done, seen
    (build step 3).
@@ -1368,7 +1370,7 @@ if a Hearty Breakfast can also be found or bought (the cautious side); the cook'
 `test_near_snakemouth_exits_open_before_the_boss`. **Seen (2026-09-26):** walked into Chuck's Abode before the
 boss; resting and the save point work there (a dead end with a rest and a save, before the cave).
 
-**Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion fallback and statue, Madeleine's house, and the bar with its quest board seen on screen (2026-09-25); every board listing bounties (built 2026-09-25), Eetl's blocker, the inn, the boat's hold and chapter 2's held scenes not yet seen; the open start is always on, not an option (2026-09-26).
+**Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion fallback and statue, Madeleine's house, and the bar with its quest board seen on screen (2026-09-25); every board listing bounties (built 2026-09-25), Eetl's blocker, the inn and chapter 2's held scenes not yet seen (the boat's hold was removed, 2026-09-26); the open start is always on, not an option (2026-09-26).
 
 ---
 
