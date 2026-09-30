@@ -48,6 +48,7 @@ either one wrong).
 - [2026-09-30: Archipelago's entrance randomizer, rooms as regions, Decoupled, plando](#2026-09-30-archipelagos-entrance-randomizer-rooms-as-regions-decoupled-plando)
 - [2026-09-30: Music Shuffle, in the yaml](#2026-09-30-music-shuffle-in-the-yaml)
 - [2026-09-30: no criticism of other projects in the repo](#2026-09-30-no-criticism-of-other-projects-in-the-repo)
+- [2026-09-30: Shuffle Shop Inventories](#2026-09-30-shuffle-shop-inventories)
 
 ## 2026-09-24: the project starts
 
@@ -1762,3 +1763,30 @@ either one wrong).
   Not chosen: asking before every page fetch, and before reads outside the repo. The other worlds read (`sm`, `satisfactory`, `hk`,
   `messenger`, `kdl3`, `cv64`) fall under Archipelago's licence and share a row. The user then asked for
   `licensing.md` split in two: Apworlds first, then everything else.
+
+## 2026-09-30: Shuffle Shop Inventories
+
+- **The user's ask:** after an item shop slot's check is bought, the shop sold its vanilla item. Randomize that too,
+  and what respawning floor items come back with, without being checks.
+- **The user's rules, given while it was planned:**
+  - The pool is only those spots' own items: food and other consumables.
+  - Any spot may take another shop's or a floor item's item.
+  - "Similar to the music rando": cosmetic, no logic. Only checks and locations need logic. A later check needing a
+    certain consumable (a recipe) handles that itself.
+  - On by default: it touches no logic, and it randomizes more.
+  - The yaml says it's for restocks and respawns and touches no check or location.
+- **The name:** a search of every world's options at `0.6.7`, licence first (five new `licensing.md` rows). ALttP's
+  `shuffle_shop_inventories` is the one precedent; no world names floor items that come back. Offered with two names of
+  our own, the user chose *Shuffle Shop Inventories*.
+- **Approved with the plan:** a permutation with no shop selling an item twice; the spots are every item shop slot
+  and respawning pickup the world knows, whatever the yaml leaves out. Today that is 11: Butterfly's 5, the caravan's
+  3 and Snakemouth's 3.
+- **Found while testing:** with both rolls on the world's random, turning Music Shuffle on moved the shop roll, which
+  `TestMusicChangesNothingElse` caught. Each cosmetic roll now has its own stream. Music maps for a given seed differ
+  from before this change, and no seed promise covers them.
+- **Built:**
+  - The apworld: `shop_inventories.py`, the option and slot_data `shop_inventories`. `test-apworld.ps1` passed, with
+    0 fuzzer failures in 10000. The seed snapshots are unchanged but for the new key and the option's spoiler line.
+  - The mod: `ShopInventories.cs` swaps an entity the way the game's random-medal pickup does, read in the decompiled
+    code first. The item shop checks now match a slot by the item its keeper stocks there.
+- Copied into the game with `copy-dev.ps1`; not yet seen in game. It needs a seed generated with the new apworld.
