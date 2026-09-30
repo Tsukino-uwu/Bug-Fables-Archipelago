@@ -10,57 +10,95 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 
 ## Contents
 
+**By topic** (the steps are numbered in the order they were built; the game side of each is in the
+[mod guide](documentation.md#the-steps)):
+
+- **The logic, what needs what:** how the rules were found, [8](#build-step-8-the-logic-first-part-every-gate-read-from-the-games-data-in-progress);
+  how they're written, [24](#build-step-24-the-logic-second-part-the-rules-for-writing-it-room-by-room); the Python
+  modules, [29](#build-step-29-the-logic-third-part-python-modules-per-area-on-the-rule-builder); regions and rules
+  explained, [How it works 11](#11-the-logic-explained-regions-exits-rules-and-this-worlds-layout); the open world,
+  [9](#build-step-9-the-open-world-story-blockers-removed-in-the-logic-and-the-mod).
+- **The entrance randomizer:** [12](#build-step-12-the-entrance-randomizer-doors-shuffled-by-archipelagos-own-experimental),
+  Room Swap [30](#build-step-30-the-entrance-randomizers-room-swap-whole-rooms-trade-places-experimental), Decoupled
+  [31](#build-step-31-the-entrance-randomizers-decoupled-each-door-one-way-experimental), connection plando
+  [32](#build-step-32-the-entrance-randomizers-connection-plando-doors-pinned-in-the-yaml); in the game, the mod guide's
+  [13](documentation.md#13-the-entrance-randomizer-in-the-game-doors-rewritten-at-map-load).
+- **What goes in the item pool:** the pool's rules, [1](#build-step-1-the-apworlds-layout-item-classes-and-location-names);
+  the Boat Ticket, [16](#build-step-16-the-boat-ticket-metal-island-behind-a-custom-key-item); party members,
+  [18](#build-step-18-starting-party-member-the-other-members-shuffled-as-items) and
+  [20](#build-step-20-all-three-the-default-every-member-from-the-start-no-member-items); moves and abilities,
+  [21](#build-step-21-shuffle-field-moves-the-three-starting-moves-as-items),
+  [22](#build-step-22-shuffle-jump-jump-as-an-item) and
+  [23](#build-step-23-the-seven-learned-field-abilities-as-items-always-progressive).
+- **What counts as a location:** [6](#build-step-6-sending-checks-read-from-the-games-own-flags),
+  [10](#build-step-10-more-kinds-of-location-crystal-berries-quests-discoveries-pickups-boss-medals),
+  [11](#build-step-11-shops-as-locations-medal-shops-item-shops-the-caravan),
+  [26](#build-step-26-the-tutorials-crunchy-leaf-as-a-location-items-the-story-adds),
+  [27](#build-step-27-checked-pickups-hidden-in-every-save-new-files-too).
+- **Other yaml options:** the goal, [3](#build-step-3-the-goal-artifacts-required); Enemy Shuffle,
+  [14](#build-step-14-enemy-shuffle-which-enemies-each-fight-has-in-progress); Starting Location,
+  [15](#build-step-15-starting-location-a-new-file-starts-in-a-random-room-experimental); Music Shuffle,
+  [33](#build-step-33-music-shuffle-songs-and-jingles-swapped-per-seed); Shuffle Shop Inventories,
+  [34](#build-step-34-shuffle-shop-inventories-what-shops-restock-and-pickups-respawn-with); Filler Starting Checks,
+  [35](#build-step-35-filler-starting-checks-the-openings-automatic-checks-hold-filler).
+- **Connecting to the server:** [2](#build-step-2-the-mods-first-login-to-an-archipelago-server),
+  [4](#build-step-4-auto-connect-retries-and-a-dropped-connection),
+  [5](#build-step-5-a-compressed-websocket-connection), [7](#build-step-7-receiving-items-each-once-counted-in-the-save),
+  and How it works 1 to 7.
+- **Releases and safety:** [17](#build-step-17-releases-the-three-downloads-and-how-theyre-built),
+  [28](#build-step-28-the-preflight-nothing-unpublishable-in-the-repo-or-a-release).
+
 **How we built it**
 
-1. [Build step 1: a first, tiny apworld](#build-step-1-a-first-tiny-apworld)
-2. [Build step 2: connect the mod to a real server](#build-step-2-connect-the-mod-to-a-real-server)
-3. [Build step 3: the goal, counted in artifacts](#build-step-3-the-goal-counted-in-artifacts)
-4. [Build step 4: connecting on its own, and staying connected](#build-step-4-connecting-on-its-own-and-staying-connected)
-5. [Build step 5: a compressed connection](#build-step-5-a-compressed-connection)
-6. [Build step 6: sending checks](#build-step-6-sending-checks)
-7. [Build step 7: receiving items](#build-step-7-receiving-items)
-8. [Build step 8: logic from the game's own gates (in progress)](#build-step-8-logic-from-the-games-own-gates-in-progress)
-9. [Build step 9: keeping the world open](#build-step-9-keeping-the-world-open)
-10. [Build step 10: more kinds of location](#build-step-10-more-kinds-of-location)
-11. [Build step 11: shops](#build-step-11-shops)
-12. [Build step 12: the entrance randomizer (experimental)](#build-step-12-the-entrance-randomizer-experimental)
-13. [Build step 13: party members and moves as items (in progress)](#build-step-13-party-members-and-moves-as-items-in-progress)
-14. [Build step 14: enemy shuffle (in progress)](#build-step-14-enemy-shuffle-in-progress)
-15. [Build step 15: starting location (experimental)](#build-step-15-starting-location-experimental)
-16. [Build step 16: the Boat Ticket](#build-step-16-the-boat-ticket)
-17. [Build step 17: a release](#build-step-17-a-release)
-18. [Build step 18: Starting Party Member](#build-step-18-starting-party-member)
-19. [Build step 19: Archipelago's colours for players and items](#build-step-19-archipelagos-colours-for-players-and-items)
-20. [Build step 20: All three members from the start (the default)](#build-step-20-all-three-members-from-the-start-the-default)
-21. [Build step 21: Shuffle Field Moves](#build-step-21-shuffle-field-moves)
-22. [Build step 22: Shuffle Jump](#build-step-22-shuffle-jump)
-23. [Build step 23: every learned field ability an item](#build-step-23-every-learned-field-ability-an-item)
-24. [Build step 24: how we plan and build the logic](#build-step-24-how-we-plan-and-build-the-logic)
-25. [Build step 25: DeathLink, a panel row](#build-step-25-deathlink-a-panel-row)
-26. [Build step 26: the tutorial leaf, an item the story puts in the bag](#build-step-26-the-tutorial-leaf-an-item-the-story-puts-in-the-bag)
-27. [Build step 27: a found pickup is gone in every save](#build-step-27-a-found-pickup-is-gone-in-every-save)
-28. [Build step 28: nothing unpublishable in the repo or a release](#build-step-28-nothing-unpublishable-in-the-repo-or-a-release)
-29. [Build step 29: the logic in Python, one module per area, the Rule Builder's way](#build-step-29-the-logic-in-python-one-module-per-area-the-rule-builders-way)
-30. [Build step 30: Room Swap (experimental)](#build-step-30-room-swap-experimental)
-31. [Build step 31: Decoupled doors (experimental)](#build-step-31-decoupled-doors-experimental)
-32. [Build step 32: Connection plando](#build-step-32-connection-plando)
-33. [Build step 33: Music Shuffle](#build-step-33-music-shuffle)
-34. [Build step 34: Shuffle Shop Inventories](#build-step-34-shuffle-shop-inventories)
-35. [Build step 35: Filler Starting Checks](#build-step-35-filler-starting-checks)
+1. [Build step 1: the apworld's layout, item classes and location names](#build-step-1-the-apworlds-layout-item-classes-and-location-names)
+2. [Build step 2: the mod's first login to an Archipelago server](#build-step-2-the-mods-first-login-to-an-archipelago-server)
+3. [Build step 3: the goal, Artifacts Required](#build-step-3-the-goal-artifacts-required)
+4. [Build step 4: auto-connect, retries and a dropped connection](#build-step-4-auto-connect-retries-and-a-dropped-connection)
+5. [Build step 5: a compressed websocket connection](#build-step-5-a-compressed-websocket-connection)
+6. [Build step 6: sending checks, read from the game's own flags](#build-step-6-sending-checks-read-from-the-games-own-flags)
+7. [Build step 7: receiving items, each once, counted in the save](#build-step-7-receiving-items-each-once-counted-in-the-save)
+8. [Build step 8: the logic, first part: every gate read from the game's data (in progress)](#build-step-8-the-logic-first-part-every-gate-read-from-the-games-data-in-progress)
+9. [Build step 9: the open world, story blockers removed in the logic and the mod](#build-step-9-the-open-world-story-blockers-removed-in-the-logic-and-the-mod)
+10. [Build step 10: more kinds of location (crystal berries, quests, discoveries, pickups, boss medals)](#build-step-10-more-kinds-of-location-crystal-berries-quests-discoveries-pickups-boss-medals)
+11. [Build step 11: shops as locations (medal shops, item shops, the caravan)](#build-step-11-shops-as-locations-medal-shops-item-shops-the-caravan)
+12. [Build step 12: the entrance randomizer, doors shuffled by Archipelago's own (experimental)](#build-step-12-the-entrance-randomizer-doors-shuffled-by-archipelagos-own-experimental)
+13. [Build step 13: party members and moves as items, the design (in progress)](#build-step-13-party-members-and-moves-as-items-the-design-in-progress)
+14. [Build step 14: Enemy Shuffle, which enemies each fight has (in progress)](#build-step-14-enemy-shuffle-which-enemies-each-fight-has-in-progress)
+15. [Build step 15: Starting Location, a new file starts in a random room (experimental)](#build-step-15-starting-location-a-new-file-starts-in-a-random-room-experimental)
+16. [Build step 16: the Boat Ticket, Metal Island behind a custom key item](#build-step-16-the-boat-ticket-metal-island-behind-a-custom-key-item)
+17. [Build step 17: releases, the three downloads and how they're built](#build-step-17-releases-the-three-downloads-and-how-theyre-built)
+18. [Build step 18: Starting Party Member, the other members shuffled as items](#build-step-18-starting-party-member-the-other-members-shuffled-as-items)
+19. [Build step 19: Item colors, Archipelago's colours for players and item classes](#build-step-19-item-colors-archipelagos-colours-for-players-and-item-classes)
+20. [Build step 20: All Three (the default), every member from the start, no member items](#build-step-20-all-three-the-default-every-member-from-the-start-no-member-items)
+21. [Build step 21: Shuffle Field Moves, the three starting moves as items](#build-step-21-shuffle-field-moves-the-three-starting-moves-as-items)
+22. [Build step 22: Shuffle Jump, Jump as an item](#build-step-22-shuffle-jump-jump-as-an-item)
+23. [Build step 23: the seven learned field abilities as items (always, progressive)](#build-step-23-the-seven-learned-field-abilities-as-items-always-progressive)
+24. [Build step 24: the logic, second part: the rules for writing it, room by room](#build-step-24-the-logic-second-part-the-rules-for-writing-it-room-by-room)
+25. [Build step 25: DeathLink, a panel row, deaths sent and received](#build-step-25-deathlink-a-panel-row-deaths-sent-and-received)
+26. [Build step 26: the tutorial's Crunchy Leaf as a location (items the story adds)](#build-step-26-the-tutorials-crunchy-leaf-as-a-location-items-the-story-adds)
+27. [Build step 27: checked pickups hidden in every save, new files too](#build-step-27-checked-pickups-hidden-in-every-save-new-files-too)
+28. [Build step 28: the preflight, nothing unpublishable in the repo or a release](#build-step-28-the-preflight-nothing-unpublishable-in-the-repo-or-a-release)
+29. [Build step 29: the logic, third part: Python modules per area on the Rule Builder](#build-step-29-the-logic-third-part-python-modules-per-area-on-the-rule-builder)
+30. [Build step 30: the entrance randomizer's Room Swap, whole rooms trade places (experimental)](#build-step-30-the-entrance-randomizers-room-swap-whole-rooms-trade-places-experimental)
+31. [Build step 31: the entrance randomizer's Decoupled, each door one way (experimental)](#build-step-31-the-entrance-randomizers-decoupled-each-door-one-way-experimental)
+32. [Build step 32: the entrance randomizer's connection plando, doors pinned in the yaml](#build-step-32-the-entrance-randomizers-connection-plando-doors-pinned-in-the-yaml)
+33. [Build step 33: Music Shuffle, songs and jingles swapped per seed](#build-step-33-music-shuffle-songs-and-jingles-swapped-per-seed)
+34. [Build step 34: Shuffle Shop Inventories, what shops restock and pickups respawn with](#build-step-34-shuffle-shop-inventories-what-shops-restock-and-pickups-respawn-with)
+35. [Build step 35: Filler Starting Checks, the opening's automatic checks hold filler](#build-step-35-filler-starting-checks-the-openings-automatic-checks-hold-filler)
 
 **How it works**
 
-1. [The big picture](#1-the-big-picture)
-2. [Opening the connection](#2-opening-the-connection)
-3. [Logging in](#3-logging-in)
-4. [Sending what the player found](#4-sending-what-the-player-found)
-5. [Receiving items](#5-receiving-items)
-6. [Finishing the game](#6-finishing-the-game)
-7. [Settings from the seed: slot_data](#7-settings-from-the-seed-slot_data)
-8. [Use what Archipelago provides](#8-use-what-archipelago-provides)
-9. [How this mod does it](#9-how-this-mod-does-it)
-10. [Things that go wrong quietly](#10-things-that-go-wrong-quietly)
-11. [The logic: regions, exits and rules](#11-the-logic-regions-exits-and-rules)
+1. [The big picture: generator, seed, server, game](#1-the-big-picture-generator-seed-server-game)
+2. [Opening the connection: a websocket](#2-opening-the-connection-a-websocket)
+3. [Logging in: the packets, in order](#3-logging-in-the-packets-in-order)
+4. [Sending checks: LocationChecks](#4-sending-checks-locationchecks)
+5. [Receiving items: the index kept in the save](#5-receiving-items-the-index-kept-in-the-save)
+6. [Finishing: telling the server the goal is done](#6-finishing-telling-the-server-the-goal-is-done)
+7. [slot_data: the seed's settings, and this world's keys](#7-slot_data-the-seeds-settings-and-this-worlds-keys)
+8. [The rule: use what Archipelago provides, never reinvent it](#8-the-rule-use-what-archipelago-provides-never-reinvent-it)
+9. [How this mod does it: threads, config, custom key items](#9-how-this-mod-does-it-threads-config-custom-key-items)
+10. [Silent failures: things that go wrong quietly](#10-silent-failures-things-that-go-wrong-quietly)
+11. [The logic explained: regions, exits, rules, and this world's layout](#11-the-logic-explained-regions-exits-rules-and-this-worlds-layout)
 
 ## Where it stands
 
@@ -558,7 +596,7 @@ be wrong.
 
 # How we built it
 
-## Build step 1: a first, tiny apworld
+## Build step 1: the apworld's layout, item classes and location names
 
 The apworld started deliberately tiny: two early locations, one key item (the Explorer Permit), the gate
 it opens, and "open that gate" as a temporary goal. Items and locations lived in simple JSON files, so
@@ -664,7 +702,7 @@ Archipelago's `custom_worlds` folder.
 data in `data/items.json` (read by `data_tables.py`) and the logic in `logic/` (build step 29), tests in
 `test/test_logic.py` (`TestPermitGate`).*
 
-## Build step 2: connect the mod to a real server
+## Build step 2: the mod's first login to an Archipelago server
 
 We generated a seed with the tiny world, started a local Archipelago server (`MultiServer.py`), and had the
 mod log in from inside the running game, using the official .NET client library
@@ -682,7 +720,7 @@ computer is entered as `ws://127.0.0.1` with port `38281`. (The mod's default ad
 
 *Code: `mod/BugFablesAP/Core/ApConnection.cs` (`ConnectOnWorker`); the address settings in `Plugin.cs` (`Awake`).*
 
-## Build step 3: the goal, counted in artifacts
+## Build step 3: the goal, Artifacts Required
 
 The game shows up to 7 artifacts on the pause menu and on each save file. Reading how it draws them showed
 they aren't items at all: the game counts how many of 7 story milestones you've reached. That makes a good
@@ -715,7 +753,7 @@ slot's remaining items and logged "Team #1 has completed all of their games!".
 number), `locations.py` (`create_all_locations` adds the artifact events), test `TestArtifactsCapped`; the mod: `LocationChecks.CheckGoal`,
 `ApConnection.SendGoal`.*
 
-## Build step 4: connecting on its own, and staying connected
+## Build step 4: auto-connect, retries and a dropped connection
 
 Players enter the room's address, port and slot in an Archipelago panel on the main menu. While the
 Archipelago mod is enabled and those are filled in, **the mod connects by itself**, with no Connect button.
@@ -750,7 +788,7 @@ that library's own close call instead. See step 5, point 5.)
 `RetrySeconds` and `ScheduleRetry` (the waits), `Watchdog` (the 5-second ping, 15 seconds of silence, the
 12-second connect deadline), `MarkLost` and `KillSocket` (closing a lost socket).*
 
-## Build step 5: a compressed connection
+## Build step 5: a compressed websocket connection
 
 The Archipelago server tells every client that doesn't compress its traffic: *"your client does not support
 compressed websocket connections! It may stop working in the future."* It's only a warning today, so this
@@ -841,7 +879,7 @@ and falls back to `ws://` without saying which one worked.
 
 **Status:** works (2026-09-24): compressed on a local server and on archipelago.gg, checked on both ends.
 
-## Build step 6: sending checks
+## Build step 6: sending checks, read from the game's own flags
 
 Sending checks came before receiving items because it's easier to test: the tester can reload a save and
 redo the same find as often as needed. The test location is Artis's medal, the first medal in the game,
@@ -890,7 +928,7 @@ server's confirmation and `sent`, and the server logged `BugTester sent ... (Out
 
 **Status:** works, seen on screen (2026-09-24, local server).
 
-## Build step 7: receiving items
+## Build step 7: receiving items, each once, counted in the save
 
 Every item comes from the server, the player's own included. The server keeps a numbered list of everything
 it has sent to a slot, and replays the whole list at every login. The client's job is to give each item
@@ -969,7 +1007,7 @@ item comes once per seed, and the count in the save keeps it that way.
 
 ---
 
-## Build step 8: logic from the game's own gates (in progress)
+## Build step 8: the logic, first part: every gate read from the game's data (in progress)
 
 The logic has to tell the truth about every gate in the game, and the game has hundreds of maps. Instead of
 playing through and noting each blocked path, we read the gates out of the game's own data.
@@ -1089,7 +1127,7 @@ it, and the tests.
 
 ---
 
-## Build step 9: keeping the world open
+## Build step 9: the open world, story blockers removed in the logic and the mod
 
 The world is open by default: each gate the story would close (a blocker, a door, a guard, a story flag) is opened
 by the seed on its own, from lists in `slot_data` decided at generation, tested on screen and known to the logic.
@@ -1275,7 +1313,7 @@ boss; resting and the save point work there (a dead end with a rest and a save, 
 
 ---
 
-## Build step 10: more kinds of location
+## Build step 10: more kinds of location (crystal berries, quests, discoveries, pickups, boss medals)
 
 Beyond floor pickups and gifts, a location can be a berry reward, a crystal berry, a pickup that comes back, a story
 pickup, a quest's reward or its middle, a boss's prize medal, a journal entry, or later an enemy's first defeat.
@@ -1406,7 +1444,7 @@ measure first: how a won battle knows which map enemy started it, and whether th
 
 ---
 
-## Build step 11: shops
+## Build step 11: shops as locations (medal shops, item shops, the caravan)
 
 Every medal a shop stocks, and the first purchase of each item in an item shop, is a location. The shelf shows the
 seed's item, a purchase sends the check, and purchases are made permanent like checks, so no reload or spending
@@ -1505,7 +1543,7 @@ shop vanilla.
 
 ---
 
-## Build step 12: the entrance randomizer (experimental)
+## Build step 12: the entrance randomizer, doors shuffled by Archipelago's own (experimental)
 
 Every map-to-map door shuffled, as a yaml option labelled *experimental* until every door's logic is done. The
 apworld pairs the doors and sends the result as `door_targets` in `slot_data`; the mod rewrites each door as its
@@ -1664,7 +1702,7 @@ tests `test_doors.py`, `test_areas.py`.*
 
 ---
 
-## Build step 13: party members and moves as items (in progress)
+## Build step 13: party members and moves as items, the design (in progress)
 
 Field abilities, the basic moves and party members as items, each unusable until it arrives. Only a rehearsal is
 built so far: a dev setting that starts the game with one member.
@@ -1771,7 +1809,7 @@ item for the whole party; then every move's spot from `MEASURED.md` (where a mov
 
 **Status:** in progress: a one-member party (Leif) seen through chapter 1 into chapter 2 (2026-09-25); *Starting Party Member* built as its own step (build step 18); the three attacks and Jump built as their own steps (21, 22); field abilities not built.
 
-## Build step 14: enemy shuffle (in progress)
+## Build step 14: Enemy Shuffle, which enemies each fight has (in progress)
 
 A yaml option that changes who you fight at each place. It is not enemy checks (build step 10): nothing here is a
 location, only the fights move.
@@ -1868,7 +1906,7 @@ game (APQuest) carrying all 325 fights in `slot_data`, and **seen on screen** (2
 seed and the log (`[enemies] BugariaOutskirtsEast1:4: 30 10 -> 10 9`) said; bosses,
 `both`, `chaos` and the map look to come.
 
-## Build step 15: starting location (experimental)
+## Build step 15: Starting Location, a new file starts in a random room (experimental)
 
 A yaml option for where a new file begins. **Experimental** (ruled 2026-09-26), like the entrance
 randomizer: "random start should be fully random… random spawn is experimental just like entrance rando". The logic
@@ -1946,7 +1984,7 @@ music change reaches), and its own opening music is a fade-out instead. Seen on 
 **Status:** in progress (experimental): `anywhere` (any room) works, seen on screen (2026-09-26): a new file starts in the seed's room;
 `towns` and the logic from the start to come; the intro is always skipped with a seed start.
 
-## Build step 16: the Boat Ticket
+## Build step 16: the Boat Ticket, Metal Island behind a custom key item
 
 The first of the mod's own items (custom gates, "How this mod does it"), suggested on Discord. **Decided
 (2026-09-26):** a progression key item, always in the pool; the pier sailor sails to Metal Island only with it, the
@@ -1989,7 +2027,7 @@ got the refusal; seen on screen.
 **Status:** works both ways, seen on screen (2026-09-26); the pool and logic take effect in the next generated seed
 (the apworld tests pass, 275).
 
-## Build step 17: a release
+## Build step 17: releases, the three downloads and how they're built
 
 Three separate downloads on a GitHub release (2026-09-25/26), made the way MeshGhost makes its TEVI release.
 
@@ -2095,7 +2133,7 @@ The stale gate moved from push CI into the release workflow (2026-09-28), with `
 between releases; `-Check` passes locally, and the moved job first runs at the next release.
 The dev tools are out of the release build (2026-09-28): the gate checks it, and the Release DLL ran in game with none.
 
-## Build step 18: Starting Party Member
+## Build step 18: Starting Party Member, the other members shuffled as items
 
 The first part of build step 13 made real: a yaml option that starts a new file with one party member and makes the
 other two items. Its design (2026-09-25) and the rehearsal behind it are in build step 13; this is the
@@ -2168,7 +2206,7 @@ same day):** a new file on that seed started in the town plaza with Kabbu and Vi
 this world and from another player (2026-09-26); past the gate with a Leif start, the trapdoor and spider scenes with
 all three, Leif back in the party after (2026-09-27).
 
-## Build step 19: Archipelago's colours for players and items
+## Build step 19: Item colors, Archipelago's colours for players and item classes
 
 Archipelago's own clients colour a message the same way everywhere, so players read "whose, and how important" at a
 glance. This mod follows that standard in the game's item boxes (2026-09-26: it follows the expected
@@ -2206,7 +2244,7 @@ colour; received, "You got Kabbu from Other!" and "You got Leif from Other!" whe
 **Status:** works, seen on screen with a real second player (2026-09-26), every class and both directions; Rarity, the
 default since, seen on a gift (the icon and its text in purple).
 
-## Build step 20: All three members from the start (the default)
+## Build step 20: All Three (the default), every member from the start, no member items
 
 *Starting Party Member* gets a sixth choice, **All Three**: a new file starts with Vi, Kabbu and Leif, and no member is an
 item. It is the default (2026-09-27: "so that you can start with all 3 if you don't want to rando partners";
@@ -2238,7 +2276,7 @@ Resistance, then Sleep Resistance from the silent spot); a second file on a used
 server already holds the silent spot's item at login.
 
 
-## Build step 21: Shuffle Field Moves
+## Build step 21: Shuffle Field Moves, the three starting moves as items
 
 Vi's Beemerang, Kabbu's Horn and Leif's Ice become items (2026-09-27: "field moves on/off, and jump as its
 own on/off thing as well due to how much it impacts, both off by default"). The rules were already written in moves
@@ -2292,7 +2330,7 @@ step 29).
 Beemerang Toss from Madeleine's table; the key items in the bag (Freeze and Horn Slash with Leif's and Kabbu's party
 icons, Jump with the Archipelago icon, "Kabbu can use Horn Slash." as the description; seen in a screenshot).
 
-## Build step 22: Shuffle Jump
+## Build step 22: Shuffle Jump, Jump as an item
 
 Jump becomes one item for the whole party ("jump would just apply for any member/the whole party, unlike
 the attacks"), behind its own option, `shuffle_jump` (off).
@@ -2315,7 +2353,7 @@ the attacks"), behind its own option, `shuffle_jump` (off).
 **Status:** works, seen on screen (2026-09-27): the jump locked until its item (the Ladybug house), then free for
 the whole party; the Warp stayed in the pause menu with Travel set to Off.
 
-## Build step 23: every learned field ability an item
+## Build step 23: the seven learned field abilities as items (always, progressive)
 
 Decided (2026-09-27): every ability the story teaches is an item, **always** (not an option: "randomizing things the
 player would have found"), and the scene that teaches it is its location, as the party members' joining spots are, so
@@ -2358,7 +2396,7 @@ level without the first "wouldn't work"): Beemerang Toss then Halt, Dash then Ho
 confirmed in the running game (its log: 8 of 8, 2 of 2, 15 of 15). Not yet seen in game: a received ability working, its battle skill, the key items' text, a scene sending its check.
 Decided and still to build: without the Horn Slash the Dash only moves (Next 23), for Shuffle Field Moves.
 
-## Build step 24: how we plan and build the logic
+## Build step 24: the logic, second part: the rules for writing it, room by room
 
 The logic is what Archipelago uses to prove a seed can be finished, and some options will lean on it hard: one party
 member, a random start in any room, a decoupled entrance randomizer, shuffled attacks, no Jump. So before the rooms of
@@ -2422,7 +2460,7 @@ the rules for writing it (1 to 4, and 9) and the region explainer (§11) written
 build step 29. Today's rules are still by large areas, kept as each spot's `reach` over one region per map (build
 step 12, 2026-09-30).
 
-## Build step 25: DeathLink, a panel row
+## Build step 25: DeathLink, a panel row, deaths sent and received
 
 **What it is:** Archipelago's DeathLink, one of its "bounce" features (`docs/network protocol.md` at 0.6.7, "DeathLink"):
 a client wearing the `DeathLink` tag sends a `Bounce` with `time`, `source` and an optional `cause` when its player
@@ -2471,7 +2509,7 @@ the panel's first page in `ApMenu.cs` and `ApMenu.Rows.cs`.*
 
 ---
 
-## Build step 26: the tutorial leaf, an item the story puts in the bag
+## Build step 26: the tutorial's Crunchy Leaf as a location (items the story adds)
 
 **Why:** on a new file a Crunchy Leaf was already in the bag before any check (2026-09-28). Items are
 remote only, so it becomes a check (chosen over keeping it or taking it back).
@@ -2502,7 +2540,7 @@ their items (a Lore Book, Mistake, Bee Fly in one seed) in the bag with the thre
 
 ---
 
-## Build step 27: a found pickup is gone in every save
+## Build step 27: checked pickups hidden in every save, new files too
 
 **Why:** on a new file every pickup was back, those already found included: the game keeps "picked up" in the save,
 and a new save starts empty. Picking one up again sent and gave nothing (2026-09-28: one Meditation after
@@ -2539,7 +2577,7 @@ they exist (`MapControl.cs:1262-1265`). A postfix now turns every entity the mod
 
 ---
 
-## Build step 28: nothing unpublishable in the repo or a release
+## Build step 28: the preflight, nothing unpublishable in the repo or a release
 
 **Why (2026-09-29):** the Archipelago community's Developer Code of Conduct makes whoever publishes a project answer
 for all of it: where the code came from, what it does, and that a release holds exactly what the repository holds.
@@ -2846,7 +2884,7 @@ game (the mod guide's step 34).
 `.githooks/python.sh`; `dev-scripts/verify-release.py`; `.github/workflows/preflight.yml`, and the guard, publish
 and verify jobs in `.github/workflows/release.yml`; `.claude/settings.json`, `.claude/hooks/agent-guard.py`.*
 
-## Build step 29: the logic in Python, one module per area, the Rule Builder's way
+## Build step 29: the logic, third part: Python modules per area on the Rule Builder
 
 **Why (2026-09-29):** the project follows Archipelago's own way in everything (How it works §8). Archipelago's Rule
 Builder is "intended to be written first in Python", and APQuest keeps its regions, locations and rules in Python. Ours
@@ -2908,7 +2946,7 @@ the fuzzer (0 of 10000, every room with APQuest) pass.
 *Code: `logic/`, `custom_rules.py`, `data_types.py`, `data_tables.py`, `regions.py`, `rules.py`; tests `test_areas.py`,
 `test_rules.py`, `test_logic.py` (`TestClassifications`), `test_party.py`.*
 
-## Build step 30: Room Swap (experimental)
+## Build step 30: the entrance randomizer's Room Swap, whole rooms trade places (experimental)
 
 Whole rooms trade places with rooms that have as many doors, so the map keeps the game's shape and only which room
 sits where changes. A value of the yaml option *Entrance Randomizer (experimental)*, `room_swap`, sharing the door table
@@ -2989,7 +3027,7 @@ experimental like build step 12: the rooms' own rules aren't mapped yet.
 
 *Code: `entrances.py` (`room_pairs`, `_swap_rooms`, `door_targets`), `options.py`, `world.py`; tests `test_doors.py`.*
 
-## Build step 31: Decoupled doors (experimental)
+## Build step 31: the entrance randomizer's Decoupled, each door one way (experimental)
 
 A fourth value of *Entrance Randomizer (experimental)*, `decoupled`: every door may lead to any other and its way back
 is shuffled too, so turning round can take you somewhere else. Planned since build step 12 (2026-09-25: "coupled by
@@ -3011,7 +3049,7 @@ the mod doing what the logic proved); the way back no longer always leads back; 
 
 *Code: `entrances.py` (`shuffle`, `write_spoiler`), `options.py`; tests `test_doors.py`.*
 
-## Build step 32: Connection plando
+## Build step 32: the entrance randomizer's connection plando, doors pinned in the yaml
 
 A player's yaml can pin doors: "this door leads there". Archipelago's own plando option for it, `plando_connections`
 (`Options.PlandoConnections`, the plando guide's "Connection Plando"). Optional in the guide ("Support for connection
@@ -3045,7 +3083,7 @@ shuffle test holds with plando on.
 
 *Code: `options.py` (`DoorPlando`), `entrances.py` (`_plando`), `data_tables.py` (`DOOR_NAMES`); tests `test_doors.py`.*
 
-## Build step 33: Music Shuffle
+## Build step 33: Music Shuffle, songs and jingles swapped per seed
 
 A yaml option, off by default: every song plays in place of another, the same way every time the seed is played. No
 item, check or rule depends on it.
@@ -3119,7 +3157,7 @@ item, check or rule depends on it.
 *Code: `music.py`, `options.py` (`MusicShuffle`, `option_groups`), `web_world.py`, `world.py` (`generate_basic`),
 `slot_data.py`; the mod's `MusicShuffle.cs`; tests `test_music.py`.*
 
-## Build step 34: Shuffle Shop Inventories
+## Build step 34: Shuffle Shop Inventories, what shops restock and pickups respawn with
 
 A yaml option, **on by default**. It shuffles what item shops restock and what respawning floor items come back with,
 among themselves. The first purchase of each item in an item shop and the first pickup of a respawning item are
@@ -3183,7 +3221,7 @@ another, so the price, name, sprite and what's added stay the game's.
 *Code: `shop_inventories.py`, `options.py` (`ShuffleShopInventories`), `world.py` (`generate_basic`), `slot_data.py`;
 the mod's `ShopInventories.cs` and `ItemShops.cs`; tests `test_shop_inventories.py`.*
 
-## Build step 35: Filler Starting Checks
+## Build step 35: Filler Starting Checks, the opening's automatic checks hold filler
 
 A yaml option, **on by default**. The checks a new file sends by itself when the game begins hold filler only: no
 progression, useful or trap item. **The user's ask (2026-09-30):** "it would be a bit boring to get multiple
@@ -3263,7 +3301,7 @@ With the rule switched off, 11 of these checks fail.
 
 # How it works
 
-## 1. The big picture
+## 1. The big picture: generator, seed, server, game
 
 ```
  generator + apworld  ──(makes)──>  seed file  ──(loaded by)──>  server
@@ -3278,7 +3316,7 @@ With the rule switched off, 11 of these checks fail.
 - The **server** hosts the seed. It knows which item sits at every location.
 - The **client** lives in or next to the game. It only ever talks to the server.
 
-## 2. Opening the connection
+## 2. Opening the connection: a websocket
 
 The client opens a **websocket** to the server's address, for example `archipelago.gg:38281` or a local
 `127.0.0.1:38281`. All messages are JSON, called "packets", each with a `cmd` naming its kind.
@@ -3287,7 +3325,7 @@ The client opens a **websocket** to the server's address, for example `archipela
   write `ws://127.0.0.1:38281`. Without the prefix, a library may try the encrypted one first and time out.
 - Rooms on the website can change port, so a client must let the player edit the port.
 
-## 3. Logging in
+## 3. Logging in: the packets, in order
 
 The server speaks first. The order, from the protocol doc:
 
@@ -3314,7 +3352,7 @@ This mod turns all three on, which makes it a **"remote items"** client: picking
 it directly, and everything arrives from the server. Remote only fits a mod: it has no patched placements, so local
 items would first need each seed's scouts cached, plus a second code path.
 
-## 4. Sending what the player found
+## 4. Sending checks: LocationChecks
 
 When the player completes a location, the client sends **LocationChecks** with that location's number.
 
@@ -3323,7 +3361,7 @@ When the player completes a location, the client sends **LocationChecks** with t
 - The server then sends the item at that spot to whoever it belongs to, you included in a remote-items
   game.
 
-## 5. Receiving items
+## 5. Receiving items: the index kept in the save
 
 Items arrive in **ReceivedItems** packets. Each carries an `index`: the item's position in that player's
 list of everything ever received.
@@ -3337,12 +3375,12 @@ list of everything ever received.
 - A client must cope with **any item arriving any number of times**. Admins can send items, and starting
   inventory repeats.
 
-## 6. Finishing the game
+## 6. Finishing: telling the server the goal is done
 
 When the player reaches the goal, the client sends **StatusUpdate** with status **30** (goal reached).
 Nothing else marks a slot as finished.
 
-## 7. Settings from the seed: slot_data
+## 7. slot_data: the seed's settings, and this world's keys
 
 The apworld can hand the client a small dictionary, **slot_data**, which arrives inside Connected. It's the
 only way a setting chosen at generation (an option, a version number) reaches the game. This world puts in:
@@ -3366,7 +3404,7 @@ only way a setting chosen at generation (an option, a version number) reaches th
 
 The mod does nothing from its own knowledge of the game's locations: every table it acts on comes from here.
 
-## 8. Use what Archipelago provides
+## 8. The rule: use what Archipelago provides, never reinvent it
 
 **The rule (2026-09-29):** whatever Archipelago or its official client library already does, we use, the way its
 [docs](https://github.com/ArchipelagoMW/Archipelago/tree/main/docs) describe it (the local checkout at the targeted tag
@@ -3409,7 +3447,7 @@ the protocol doc lists them. For C# (Unity, BepInEx) it's **Archipelago.MultiCli
 Those are the parts that make each game's client different. Anything still home-made that Archipelago does provide is
 listed in "Where it stands" (Next), each replaced in a step of its own.
 
-## 9. How this mod does it
+## 9. How this mod does it: threads, config, custom key items
 
 - The login call can take several seconds, so it runs **off the game's own thread**
   (`ApConnection.Connect`). The result is handed back to the game thread through fields the game reads each
@@ -3465,7 +3503,7 @@ as mockups for the ticket (2026-09-26): emblems in the card's corner looked stuc
 they read better, but grey or brown on silver has no contrast. The ticket uses the plain card; a combined icon needs an
 emblem that contrasts with its base.
 
-## 10. Things that go wrong quietly
+## 10. Silent failures: things that go wrong quietly
 
 Most connection mistakes don't crash; they just silently do nothing, or look like they worked. The full
 list we keep is in [client-requirements.md](client-requirements.md), "Known failure modes". The ones that
@@ -3479,7 +3517,7 @@ matter first:
 - A lost connection that is only "disconnected" politely can keep a reading loop spinning in the background.
   The game just gets slower and uses more memory, with no error. Close the socket itself (build step 4).
 
-## 11. The logic: regions, exits and rules
+## 11. The logic explained: regions, exits, rules, and this world's layout
 
 ### In short
 

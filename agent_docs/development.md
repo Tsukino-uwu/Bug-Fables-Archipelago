@@ -30,7 +30,7 @@ It needs `py -3` or `python3`; if it can't run, it refuses. `/hooks` in Claude C
 
 When a check refuses something the code really needs (a new host, a new capability), the fix is a row in
 `docs/capabilities.md` with its reason: the maintainer's decision, never a looser pattern. What each section does:
-[apimplementation.md, build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release).
+[apimplementation.md, build step 28](apimplementation.md#build-step-28-the-preflight-nothing-unpublishable-in-the-repo-or-a-release).
 
 ## The mod
 

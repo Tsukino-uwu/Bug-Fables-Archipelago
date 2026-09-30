@@ -164,7 +164,7 @@ python dev-scripts/dotnet_metadata.py --selftest release/mod/BepInEx/plugins/Bug
 Each preflight section prints what it checked and how much. A section that finds nothing to check fails rather than
 passing, since "0 files scanned" would otherwise read as "0 problems". What each section refuses is data, in
 `dev-scripts/preflight-patterns.json`, and each one is explained in
-[apimplementation.md, build step 28](../agent_docs/apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release).
+[apimplementation.md, build step 28](../agent_docs/apimplementation.md#build-step-28-the-preflight-nothing-unpublishable-in-the-repo-or-a-release).
 
 **The negative test is the check on the checks.** It plants a violation for every section, in every mode each one
 runs in, in a throwaway clone:

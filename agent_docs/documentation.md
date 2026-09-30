@@ -14,42 +14,73 @@ anyone curious about the process, or thinking of doing the same for another game
 
 ## The steps
 
-1. [Check whether the game can be modded at all](#1-check-whether-the-game-can-be-modded-at-all)
-2. [Pick the design before the code](#2-pick-the-design-before-the-code)
-3. [Read the game's code](#3-read-the-games-code)
-4. [Get a mod loader running](#4-get-a-mod-loader-running)
-5. [Make changes load without restarting the game](#5-make-changes-load-without-restarting-the-game)
-6. [Watch the game while you play ("probing")](#6-watch-the-game-while-you-play-probing)
-7. [List everything, without playing everything](#7-list-everything-without-playing-everything)
-8. [An Archipelago menu inside the game](#8-an-archipelago-menu-inside-the-game)
-9. [Keep the game's own item, show the seed's](#9-keep-the-games-own-item-show-the-seeds)
-10. [Quality of life: a quicker, smoother game](#10-quality-of-life-a-quicker-smoother-game)
-11. [Playing with fewer party members: stand-ins and followers](#11-playing-with-fewer-party-members-stand-ins-and-followers)
-12. [Shops in the game](#12-shops-in-the-game)
-13. [Doors rewritten: the entrance randomizer in the game](#13-doors-rewritten-the-entrance-randomizer-in-the-game)
-14. [The Detector for every check](#14-the-detector-for-every-check)
-15. [Difficulty and the Detector: the panel's two game settings](#15-difficulty-and-the-detector-the-panels-two-game-settings)
-16. [Randomizer saves kept apart from normal saves](#16-randomizer-saves-kept-apart-from-normal-saves)
-17. [Enemy scaling: every area fair whenever you reach it](#17-enemy-scaling-every-area-fair-whenever-you-reach-it)
-18. [Use on normal saves: the settings without Archipelago](#18-use-on-normal-saves-the-settings-without-archipelago)
-19. [EXP and berry multipliers: bars like the volume rows](#19-exp-and-berry-multipliers-bars-like-the-volume-rows)
+**By topic** (the steps are numbered in the order they were built; the Archipelago side of each is in
+[apimplementation.md](apimplementation.md#contents)):
+
+- **Getting into the game's code:** [1](#1-can-the-game-be-modded-unity-mono-a-readable-dll),
+  [3](#3-reading-the-games-code-decompiling-it), [4](#4-bepinex-the-mod-loader-and-the-mods-layout); the dev tools,
+  [5](#5-hot-reload-copying-into-the-game-the-dev-console), [6](#6-probes-logging-what-the-game-does-while-you-play),
+  [7](#7-dumps-every-map-script-entity-and-sprite-listed).
+- **Items and checks in the game:** [9](#9-item-swap-a-pickup-sends-its-check-instead-of-its-vanilla-item),
+  [12](#12-shops-in-the-game-shelves-show-the-seeds-items),
+  [14](#14-the-detector-medal-beeps-for-every-check-left-in-a-room),
+  [26](#26-field-abilities-as-items-in-the-game-ability-checks-read-the-bag),
+  [35](#35-shuffle-shop-inventories-in-the-game-shelf-slots-and-pickups-swapped).
+- **The party you have:** [11](#11-missing-party-members-stand-ins-in-scenes-and-followers),
+  [36](#36-scripted-fights-cast-from-the-members-you-have).
+- **The entrance randomizer in the game:** [13](#13-the-entrance-randomizer-in-the-game-doors-rewritten-at-map-load).
+- **The Archipelago panel and its settings:** the panel, [8](#8-the-archipelago-panel-on-the-main-menu); Quality of
+  life, [10](#10-the-quality-of-life-page-fast-text-skip-cutscenes-warp-and-more),
+  [20](#20-item-colors-archipelagos-colours-in-the-you-got-box),
+  [21](#21-archipelago-icon-other-players-items-on-the-ground-and-on-shelves),
+  [22](#22-item-backgrounds-a-checks-item-class-shown-before-pickup),
+  [24](#24-uncap-fps-frame-rates-above-60-without-speeding-the-game-up); Gameplay,
+  [15](#15-difficulty-and-detector-rows-and-what-goes-in-the-panel-or-the-yaml),
+  [17](#17-enemy-scaling-each-areas-enemies-fit-when-you-reach-it), [19](#19-exp-and-berry-multipliers),
+  [27](#27-attack-boost-1-damage-on-every-hit), [29](#29-save-crystals-used-with-the-confirm-button-no-move-needed),
+  [30](#30-healing-crystals-every-save-crystal-heals), [31](#31-auto-save-between-rooms-a-death-costs-one-room); with
+  Archipelago off, [18](#18-use-on-normal-saves-the-panels-settings-with-archipelago-off).
+- **Saves:** [16](#16-randomizer-saves-in-their-own-folder), [31](#31-auto-save-between-rooms-a-death-costs-one-room).
+- **Builds and safety:** [32](#32-reproducible-builds-the-release-dll-rebuilt-byte-for-byte),
+  [33](#33-server-text-cleaned-before-the-game-shows-it), [34](#34-multiclientnets-cache-kept-in-its-own-folder);
+  speed, [25](#25-hitches-fixed-the-mods-garbage-and-the-games-5-second-collection).
+
+1. [Can the game be modded? Unity, Mono, a readable DLL](#1-can-the-game-be-modded-unity-mono-a-readable-dll)
+2. [The design, decided first: remote items, what the player sees](#2-the-design-decided-first-remote-items-what-the-player-sees)
+3. [Reading the game's code: decompiling it](#3-reading-the-games-code-decompiling-it)
+4. [BepInEx, the mod loader, and the mod's layout](#4-bepinex-the-mod-loader-and-the-mods-layout)
+5. [Hot reload, copying into the game, the dev console](#5-hot-reload-copying-into-the-game-the-dev-console)
+6. [Probes: logging what the game does while you play](#6-probes-logging-what-the-game-does-while-you-play)
+7. [Dumps: every map, script, entity and sprite listed](#7-dumps-every-map-script-entity-and-sprite-listed)
+8. [The Archipelago panel on the main menu](#8-the-archipelago-panel-on-the-main-menu)
+9. [Item swap: a pickup sends its check instead of its vanilla item](#9-item-swap-a-pickup-sends-its-check-instead-of-its-vanilla-item)
+10. [The Quality of life page: Fast text, Skip cutscenes, Warp and more](#10-the-quality-of-life-page-fast-text-skip-cutscenes-warp-and-more)
+11. [Missing party members: stand-ins in scenes, and followers](#11-missing-party-members-stand-ins-in-scenes-and-followers)
+12. [Shops in the game: shelves show the seed's items](#12-shops-in-the-game-shelves-show-the-seeds-items)
+13. [The entrance randomizer in the game: doors rewritten at map load](#13-the-entrance-randomizer-in-the-game-doors-rewritten-at-map-load)
+14. [The Detector medal beeps for every check left in a room](#14-the-detector-medal-beeps-for-every-check-left-in-a-room)
+15. [Difficulty and Detector rows, and what goes in the panel or the yaml](#15-difficulty-and-detector-rows-and-what-goes-in-the-panel-or-the-yaml)
+16. [Randomizer saves in their own folder](#16-randomizer-saves-in-their-own-folder)
+17. [Enemy scaling: each area's enemies fit when you reach it](#17-enemy-scaling-each-areas-enemies-fit-when-you-reach-it)
+18. [Use on normal saves: the panel's settings with Archipelago off](#18-use-on-normal-saves-the-panels-settings-with-archipelago-off)
+19. [EXP and berry multipliers](#19-exp-and-berry-multipliers)
 20. [Item colors: Archipelago's colours in the "You got" box](#20-item-colors-archipelagos-colours-in-the-you-got-box)
 21. [Archipelago icon: other players' items on the ground and on shelves](#21-archipelago-icon-other-players-items-on-the-ground-and-on-shelves)
-22. [Item backgrounds: how much an item matters, before you take it](#22-item-backgrounds-how-much-an-item-matters-before-you-take-it)
-23. [The Archipelago icon, drawn in the game's style](#23-the-archipelago-icon-drawn-in-the-games-style)
-24. [Frame rates above 60: smoother, and the same game](#24-frame-rates-above-60-smoother-and-the-same-game)
-25. [Hitches: the mod's garbage and the game's 5-second collection](#25-hitches-the-mods-garbage-and-the-games-5-second-collection)
-26. [Field abilities as items: the game asks the bag](#26-field-abilities-as-items-the-game-asks-the-bag)
-27. [Attack boost: +1 on every hit, the way the game adds its own](#27-attack-boost-1-on-every-hit-the-way-the-game-adds-its-own)
+22. [Item backgrounds: a check's item class shown before pickup](#22-item-backgrounds-a-checks-item-class-shown-before-pickup)
+23. [The Archipelago logo, drawn in code in the game's style](#23-the-archipelago-logo-drawn-in-code-in-the-games-style)
+24. [Uncap FPS: frame rates above 60 without speeding the game up](#24-uncap-fps-frame-rates-above-60-without-speeding-the-game-up)
+25. [Hitches fixed: the mod's garbage and the game's 5-second collection](#25-hitches-fixed-the-mods-garbage-and-the-games-5-second-collection)
+26. [Field abilities as items in the game: ability checks read the bag](#26-field-abilities-as-items-in-the-game-ability-checks-read-the-bag)
+27. [Attack boost: +1 damage on every hit](#27-attack-boost-1-damage-on-every-hit)
 28. [A Graphics page, tried and removed: render scale and MSAA](#28-a-graphics-page-tried-and-removed-render-scale-and-msaa)
-29. [Save crystals by the confirm button, as an NPC is talked to](#29-save-crystals-by-the-confirm-button-as-an-npc-is-talked-to)
-30. [Healing crystals: every save crystal yellow](#30-healing-crystals-every-save-crystal-yellow)
+29. [Save crystals used with the confirm button, no move needed](#29-save-crystals-used-with-the-confirm-button-no-move-needed)
+30. [Healing crystals: every save crystal heals](#30-healing-crystals-every-save-crystal-heals)
 31. [Auto-save between rooms: a death costs one room](#31-auto-save-between-rooms-a-death-costs-one-room)
-32. [A release DLL anyone with the game can rebuild, byte for byte](#32-a-release-dll-anyone-with-the-game-can-rebuild-byte-for-byte)
-33. [Text from the server, shown safely](#33-text-from-the-server-shown-safely)
-34. [The library's cache, kept in its own folder](#34-the-librarys-cache-kept-in-its-own-folder)
-35. [Shuffle Shop Inventories: another item on the shelf, the game's own way](#35-shuffle-shop-inventories-another-item-on-the-shelf-the-games-own-way)
-36. [Scripted fights played by the members you have](#36-scripted-fights-played-by-the-members-you-have)
+32. [Reproducible builds: the release DLL rebuilt byte for byte](#32-reproducible-builds-the-release-dll-rebuilt-byte-for-byte)
+33. [Server text cleaned before the game shows it](#33-server-text-cleaned-before-the-game-shows-it)
+34. [MultiClient.Net's cache kept in its own folder](#34-multiclientnets-cache-kept-in-its-own-folder)
+35. [Shuffle Shop Inventories in the game: shelf slots and pickups swapped](#35-shuffle-shop-inventories-in-the-game-shelf-slots-and-pickups-swapped)
+36. [Scripted fights cast from the members you have](#36-scripted-fights-cast-from-the-members-you-have)
 
 ## Where it stands
 
@@ -63,7 +94,7 @@ changes the mod, the apworld or the dev scripts is refused unless it also update
 [apimplementation.md](apimplementation.md) (or says, explicitly, that nothing about the process changed).
 That check is a small git hook, `.githooks/commit-msg`, which also keeps each subject to 72 characters with no
 attribution (its neighbour `.githooks/pre-commit` runs the preflight, which refuses anything unpublishable:
-[apimplementation.md, build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release)). Each step below ends with a short *Code:* line naming the files and methods to
+[apimplementation.md, build step 28](apimplementation.md#build-step-28-the-preflight-nothing-unpublishable-in-the-repo-or-a-release)). Each step below ends with a short *Code:* line naming the files and methods to
 read, just after its **Status:** line. Each new step also gets a line in the index above.
 
 **Titles say what a step does, and links can't break** (2026-09-30, the user: titles like "the Boat Ticket" or "six
@@ -82,7 +113,7 @@ anything between the date and the colon, and a date earlier than the entry above
 
 ---
 
-## 1. Check whether the game can be modded at all
+## 1. Can the game be modded? Unity, Mono, a readable DLL
 
 Before writing anything, we looked at what the game is made of. Bug Fables is a **Unity game built with
 Mono**, which means its code ships as a normal .NET file (`Assembly-CSharp.dll`) that can be turned back
@@ -94,7 +125,7 @@ Unity with Mono. A `GameAssembly.dll` means Unity with IL2CPP, which is harder.
 
 **Status:** done.
 
-## 2. Pick the design before the code
+## 2. The design, decided first: remote items, what the player sees
 
 A few decisions made first, because they shape everything after:
 
@@ -149,7 +180,7 @@ A few decisions made first, because they shape everything after:
 
 **Status:** done (decided 2026-09-24); the chat feed and the text client it describes aren't built yet ([apimplementation.md](apimplementation.md#where-it-stands), Next).
 
-## 3. Read the game's code
+## 3. Reading the game's code: decompiling it
 
 We used **ILSpy** to turn the game's `Assembly-CSharp.dll` back into C# source, kept on our own machine
 and never shared. Reading it answered the first big question: *how does this game hand out items?*
@@ -158,7 +189,7 @@ needs to hook in.
 
 **Status:** done.
 
-## 4. Get a mod loader running
+## 4. BepInEx, the mod loader, and the mod's layout
 
 Unity games don't load mods by themselves, so we installed **BepInEx 5**, the usual mod loader for
 Unity games. One launch of the game confirmed it worked, and showed its log file.
@@ -246,7 +277,7 @@ a new file with its starting items, a pickup gone once checked, shops, Uncap FPS
 *Code: `mod/BugFablesAP/Core/Plugin.cs` (`Plugin`, a BepInEx plugin: `Awake` sets everything up, `Tick` runs
 every frame); the project file is `BugFablesAP.csproj`.*
 
-## 5. Make changes load without restarting the game
+## 5. Hot reload, copying into the game, the dev console
 
 Restarting the game for every change is slow, so before any real feature we set up **hot reload**:
 change the mod, and it swaps itself into the running game in a second or two.
@@ -312,7 +343,7 @@ waits for; `copy-dev.ps1 -Status` prints it. One read instead of watching the lo
 
 *Code: `DevConsole.cs`.*
 
-## 6. Watch the game while you play ("probing")
+## 6. Probes: logging what the game does while you play
 
 Reading code tells you what *can* happen. Watching the game tells you what *does*. We added small,
 read-only **probes** to the mod. They never change the game, and they write to a log:
@@ -339,7 +370,7 @@ never leaves it), and lists which values changed. It's read-only and never write
 `MainManager.SetText` runs them), `SaveDiff.cs` (the two-save comparison). All off by default, switched on
 in the Debug section of the config.*
 
-## 7. List everything, without playing everything
+## 7. Dumps: every map, script, entity and sprite listed
 
 Playing the whole game to find every item would take days, so we also asked the running game directly:
 a one-off dump loaded every map's dialogue data and kept only the item and flag commands. Together with
@@ -385,7 +416,7 @@ Built, not yet seen in game.
 
 **Status:** done: the script, entity and map dumps are in use; making an entity exist early built, not yet seen in game.
 
-## 8. An Archipelago menu inside the game
+## 8. The Archipelago panel on the main menu
 
 Players need to type a room address, a slot name and maybe a password, so the mod adds **"Archipelago"** to the
 game's main menu. It opens a panel drawn with the game's own box and font, so it looks like part of the game,
@@ -519,7 +550,7 @@ turns it is covered. The lesson went into CLAUDE.md: read how the game does a th
 `AfterUpdate` for the cursor, `SetMode` for the switch); `ApMenu.cs` (the panel: `Build`, `Redraw`,
 `Navigate`, `TypeInto` for typing, `Close`).*
 
-## 9. Keep the game's own item, show the seed's
+## 9. Item swap: a pickup sends its check instead of its vanilla item
 
 With items remote only, finding a location must not give you the game's item there. The game still has to
 mark the location done, though, because that flag is how the check gets sent. So the mod leaves the scene
@@ -663,7 +694,7 @@ key items' descriptions for the Boat Ticket; not yet seen fixed in game.
 `Recolour` and `FirstMedalSeen` do the swapping; `PickupPrefix`, `FindPickup` and `TickGround` handle pickups); the
 scout is `ApConnection.Scout`.*
 
-## 10. Quality of life: a quicker, smoother game
+## 10. The Quality of life page: Fast text, Skip cutscenes, Warp and more
 
 The goal: a way to skip the intro, the tutorials and other slow parts, as a sub-menu of on/off rows
 (2026-09-25). The page isn't only for skips: a later row was planned that changes play, a pause-menu button
@@ -967,7 +998,7 @@ its default (`QualityOfLife.DisableAll` / `ResetAll`, the defaults from each set
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page),
 `WarpButton.cs` (the Warp button), `HoldUps.cs` (item animation's hold-ups).*
 
-## 11. Playing with fewer party members: stand-ins and followers
+## 11. Missing party members: stand-ins in scenes, and followers
 
 Bug Fables' scenes are written for a party of two or three, but a seed can start with one member and add the
 others as items. So every scene, talk and follower has to cope with a member who isn't there: the mod fills the
@@ -1229,7 +1260,7 @@ received member joins at the end), and those places pick the wrong member or non
 *Code: `PartyFit.cs` (the stand-ins and the acting leader), `PartyMembers.cs` (the member guard, followers,
 Leif's joining), `PartySlots.cs` (a member's slot in fights).*
 
-## 12. Shops in the game
+## 12. Shops in the game: shelves show the seed's items
 
 Shops needed their own approach because buying isn't a pickup or a gift: a medal shop is a shelf of item entities
 and a script, an item shop adds its item silently, and nothing in the save marks a purchase. So each kind of
@@ -1324,7 +1355,7 @@ Archipelago icon after it was bought (seen on screen). The slot's own item now c
 and scenery kept present), `QualityOfLife.cs` (the reshuffle choice first), `ItemSwap.cs` (`UpdateItem`, pickups
 in houses).*
 
-## 13. Doors rewritten: the entrance randomizer in the game
+## 13. The entrance randomizer in the game: doors rewritten at map load
 
 The entrance randomizer changes where doors lead. Each door in the game carries its own target, so the mod
 rewrites doors as a map loads, and a shuffled door needs its own way back.
@@ -1364,7 +1395,7 @@ coupled entrance randomizer needs those pairs: going through a shuffled door and
 
 *Code: `DoorShuffle.cs`; `dev-scripts/door-graph.py` (the pairs).*
 
-## 14. The Detector for every check
+## 14. The Detector medal beeps for every check left in a room
 
 The Detector medal beeps when a room hides something. In a seed it should beep for what matters instead: any
 of the seed's checks left in the room. That meant replacing the game's answer, not adding to it.
@@ -1391,7 +1422,7 @@ handed out there (location 16, the delivery quest), as intended; quiet in the pl
 
 *Code: `CheckDetector.cs`.*
 
-## 15. Difficulty and the Detector: the panel's two game settings
+## 15. Difficulty and Detector rows, and what goes in the panel or the yaml
 
 Two rows in the Archipelago panel change how the game plays, never where items are. Both work by answering the
 game's own "is this medal equipped?" question, so the save stays clean and the logic never changes.
@@ -1432,7 +1463,7 @@ nothing rather than risk a save.
 
 *Code: `MedalAssist.cs`.*
 
-## 16. Randomizer saves kept apart from normal saves
+## 16. Randomizer saves in their own folder
 
 With the Archipelago mod enabled, the game reads and writes its saves in a separate folder, so a randomizer
 run never touches a normal save. It had to exist before the mod granted its first item.
@@ -1446,7 +1477,7 @@ a save file, and normal saves are only reachable with the mod disabled.
 
 *Code: `SaveRedirect.cs` (the separate save folder, patching the game's five save-file functions in `InputIO`).*
 
-## 17. Enemy scaling: every area fair whenever you reach it
+## 17. Enemy scaling: each area's enemies fit when you reach it
 
 The world is always open, so a chapter 6 area can be reached during chapter 1 (and the entrance randomizer and
 a random start make that more likely). In vanilla that never happens, so its enemies would be far too strong,
@@ -1558,7 +1589,7 @@ fight + end with the scripted thing even when scaling is enabled".
 the constants still to tune by play. The 10-HP scripted end and the fixed numbers in enemy scripts built (2026-09-30),
 not yet seen.
 
-## 18. Use on normal saves: the settings without Archipelago
+## 18. Use on normal saves: the panel's settings with Archipelago off
 
 Quality of life and Gameplay are useful without a seed too. **Decided (2026-09-26):** an opt-in row, a
 deliberate exception to "vanilla stays vanilla" that only the project owner could make.
@@ -1586,7 +1617,7 @@ deliberate exception to "vanilla stays vanilla" that only the project owner coul
 **Status:** built (2026-09-26), the build succeeds; the guards joined (2026-09-29), the build succeeds, not yet
 seen in game.
 
-## 19. EXP and berry multipliers: bars like the volume rows
+## 19. EXP and berry multipliers
 
 An opt-in for a faster, easier game (Next 16 and 17 in `apimplementation.md`).
 
@@ -1675,7 +1706,7 @@ seen.
 
 *Code: `QualityOfLife.cs` (`ItemIcons`, `IconMode`), `ApMenu.cs` (`IconsRow`, `RowAt`), `ItemSwap.cs` (`Describe`), `ApIcon.cs`.*
 
-## 22. Item backgrounds: how much an item matters, before you take it
+## 22. Item backgrounds: a check's item class shown before pickup
 
 **Asked (2026-09-26):** the sprite (or the Archipelago icon) says what an item is, not whether it matters; the
 starburst a pickup grows when taken already has the class colour. So show it before: a check's item, on the ground
@@ -1723,7 +1754,7 @@ icon everywhere, crystal berry spots included, always with its backdrop, for the
 
 *Code: `ItemSwap.cs` (`Mark`, `MarkColorOf`), `QualityOfLife.cs` (`ItemBackgrounds`), `ApMenu.cs` (`BackgroundsRow`).*
 
-## 23. The Archipelago icon, drawn in the game's style
+## 23. The Archipelago logo, drawn in code in the game's style
 
 Another game's item needs a picture in Bug Fables, and today it showed the vanilla item's sprite, which read as the
 vanilla item (the tester took another player's Sword for their own). Archipelago has a logo; the question was which
@@ -1753,7 +1784,7 @@ items), on the class-coloured backdrop of step 22.
 
 *Code: `ApIcon.cs`; used by `ItemSwap.Describe`.*
 
-## 24. Frame rates above 60: smoother, and the same game
+## 24. Uncap FPS: frame rates above 60 without speeding the game up
 
 The game's settings offer 30 or 60 fps. More was wanted on a 240 Hz monitor, as a Quality of life row
 (first Off, 120, 144, 240; now ten pips, Off the default, below; `UncapFps` in the config), overriding the game's own frame rate and VSync while Archipelago is on, and done
@@ -1919,7 +1950,7 @@ built, not yet seen on a fresh config.
 `Plugin.cs`; the console's `display`, `fps`, `interp`, `camlerp`, `bodylerp`, `bodytrace`, `frames`, `trace`, `cams`,
 `il`, `rates` and `fpsscan` (`DevConsole.cs`).*
 
-## 25. Hitches: the mod's garbage and the game's 5-second collection
+## 25. Hitches fixed: the mod's garbage and the game's 5-second collection
 
 Found while measuring step 24, at 60 fps as well as at 240: an FPS counter dipping (246 to 220 at 240 fps) every few
 seconds. The ask: "I just want the fps fixed and the dips removed, and yes always on with archipelago" (2026-09-27).
@@ -1942,7 +1973,7 @@ that it's gone is still to come.
 
 *Code: `ClockCleanup.cs`; `LocationChecks.cs` and `ShopSwap.cs` (`Copies`); the console's `frames` (`FrameRate.cs`).*
 
-## 26. Field abilities as items: the game asks the bag
+## 26. Field abilities as items in the game: ability checks read the bag
 
 Every ability the story teaches became an item (the Archipelago side, build step 23). The game remembers a learned
 ability as a flag, and that flag does three jobs: it lets the party *use* the ability, it gives a battle skill, and it
@@ -1964,7 +1995,7 @@ is story state (a scene checks it; a rock or a miniboss is gone once it's set). 
 *Code: `Abilities.cs`; the receiver in `ItemReceiver.cs`, the key items in `CustomItems.cs`, the looks in
 `ItemSwap.Looks.cs`, `slot_data` `ability_items` in `ApConnection.cs`, the Warp in `QualityOfLife.cs`.*
 
-## 27. Attack boost: +1 on every hit, the way the game adds its own
+## 27. Attack boost: +1 damage on every hit
 
 An opt-in for a faster, easier game, asked for after a hard boss (2026-09-28). Enemy scaling (step 17) balances
 an area met early or late; this is for a fight that's hard at the right level.
@@ -2018,7 +2049,7 @@ seen working, and removed the same day because it cost too much for what it show
 
 **Status:** removed (2026-09-28), once it had been seen working.
 
-## 29. Save crystals by the confirm button, as an NPC is talked to
+## 29. Save crystals used with the confirm button, no move needed
 
 With Shuffle Field Moves (the Archipelago side, build step 21), the party may have no field attack for a long time, and
 the game only starts a save crystal when an attack hits it: no save and no heal until a move item arrives (a gap
@@ -2047,7 +2078,7 @@ prompt each time you brush past one); always, in a seed, whether or not a move i
 
 *Code: `SaveCrystals.cs` (`InReach`, `TryUse`, `Tick`); the call in `FieldMoves.BeforeJump`.*
 
-## 30. Healing crystals: every save crystal yellow
+## 30. Healing crystals: every save crystal heals
 
 Asked for with step 29 (2026-09-28), and suggested on Discord before (the Archipelago side, "Where it
 stands", Next 22): blue crystals only save, yellow ones save and heal.
@@ -2101,7 +2132,7 @@ Archipelago is enabled, or with *Use on normal saves* (step 18). Save crystals w
 
 *Code: `AutoSave.cs`; `DeathLinkGame.Busy`; the row in `ApMenu.cs` and `ApMenu.Rows.cs`.*
 
-## 32. A release DLL anyone with the game can rebuild, byte for byte
+## 32. Reproducible builds: the release DLL rebuilt byte for byte
 
 The mod's DLL is the one file in a release that GitHub can't build: compiling it needs the game's own
 `Assembly-CSharp.dll`, which never enters the repo. So it's built on the maintainer's machine and committed. That
@@ -2160,7 +2191,7 @@ recipe is in `docs/reviewing.md`), or decompile the DLL and read it.
 *Code: `dev-scripts/build-release.ps1`; `mod/BugFablesAP/BugFablesAP.csproj`, `packages.lock.json`; `nuget.config`,
 `global.json`, `Directory.Build.props`.*
 
-## 33. Text from the server, shown safely
+## 33. Server text cleaned before the game shows it
 
 **Found by the review (2026-09-29, apimplementation.md build step 28):** the names that reach the game from outside
 went into its text as they came. They are other players' names, other games' item names, and the seed's name, which
@@ -2195,7 +2226,7 @@ Each still shows the right names, colours and descriptions, as before.
 *Code: `Core/ServerText.cs`; its callers in `ItemSwap.cs`, `ItemSwap.Looks.cs`, `ItemReceiver.cs`, `LocationChecks.cs`,
 `ApConnection.cs`.*
 
-## 34. The library's cache, kept in its own folder
+## 34. MultiClient.Net's cache kept in its own folder
 
 **Found by the review (2026-09-29, apimplementation.md build step 28):** MultiClient.Net, the library the mod connects
 with, caches each game's item and location names. The file goes in `Archipelago\Cache\datapackage\<game>\<checksum>.json`
@@ -2236,7 +2267,7 @@ back out of the built DLL (apimplementation.md, build step 28).
 
 *Code: `Core/CachePaths.cs`, installed from `Core/Plugin.cs`.*
 
-## 35. Shuffle Shop Inventories: another item on the shelf, the game's own way
+## 35. Shuffle Shop Inventories in the game: shelf slots and pickups swapped
 
 **The idea (the user, 2026-09-30):** once an item shop slot's check is bought, or a respawning pickup's check is found,
 the spot sells or gives another spot's item, as the seed says (apimplementation.md, build step 34). It's never a check.
@@ -2283,7 +2314,7 @@ location in the same shop. A respawning pickup is known by its map and regional 
 *Code: `Items/ShopInventories.cs`, `Items/ItemShops.cs` (`LocationOf`), `Core/SeedData.cs`, `Core/ApConnection.cs`,
 `Dev/SeedDump.cs`, installed from `Core/Plugin.cs`.*
 
-## 36. Scripted fights played by the members you have
+## 36. Scripted fights cast from the members you have
 
 **The ask (2026-09-30):** fights written for the whole party must not freeze or crash when the seed's party lacks a
 member, as scenes and talks already manage with stand-ins (step 11); the example, the Beast at the end of chapter 5,

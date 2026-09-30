@@ -6,16 +6,16 @@ either one wrong).
 
 ## Contents
 
-- [2026-09-24: the project starts](#2026-09-24-the-project-starts)
+- [2026-09-24: the project starts: remote items only, BepInEx, the first connection](#2026-09-24-the-project-starts-remote-items-only-bepinex-the-first-connection)
 - [2026-09-24: code pointers in both guides, checked against the code](#2026-09-24-code-pointers-in-both-guides-checked-against-the-code)
 - [2026-09-24: build, then copy (stage-dev.ps1)](#2026-09-24-build-then-copy-stage-devps1)
 - [2026-09-24: the plan for more items, and locations named by place](#2026-09-24-the-plan-for-more-items-and-locations-named-by-place)
 - [2026-09-24: copying into the game, refused twice; copy-dev.ps1](#2026-09-24-copying-into-the-game-refused-twice-copy-devps1)
-- [2026-09-24: EntityDump run](#2026-09-24-entitydump-run)
-- [2026-09-24: step 3, the chapter table and the gated doors](#2026-09-24-step-3-the-chapter-table-and-the-gated-doors)
+- [2026-09-24: EntityDump: no key item or medal missable](#2026-09-24-entitydump-no-key-item-or-medal-missable)
+- [2026-09-24: the chapter table and the 59 gated doors](#2026-09-24-the-chapter-table-and-the-59-gated-doors)
 - [2026-09-24: what starts the gate events; MapDump](#2026-09-24-what-starts-the-gate-events-mapdump)
 - [2026-09-24: first pickup test; dev console; a logic bug found by it](#2026-09-24-first-pickup-test-dev-console-a-logic-bug-found-by-it)
-- [2026-09-25: what this session taught us](#2026-09-25-what-this-session-taught-us)
+- [2026-09-25: lessons: the wiki only a lead, layered gates, open world by default](#2026-09-25-lessons-the-wiki-only-a-lead-layered-gates-open-world-by-default)
 - [2026-09-25: open world, QoL page, discoveries, warp](#2026-09-25-open-world-qol-page-discoveries-warp)
 - [2026-09-25: open town, shops, party rehearsal](#2026-09-25-open-town-shops-party-rehearsal)
 - [2026-09-25: full medal stock, the intro skipped, item shops, the caravan, first shuffled door](#2026-09-25-full-medal-stock-the-intro-skipped-item-shops-the-caravan-first-shuffled-door)
@@ -43,7 +43,7 @@ either one wrong).
 - [2026-09-29: Archipelago's way, the logic in Python, the rules for writing it](#2026-09-29-archipelagos-way-the-logic-in-python-the-rules-for-writing-it)
 - [2026-09-29: the concepts doc's second round](#2026-09-29-the-concepts-docs-second-round)
 - [2026-09-29: the animation warnings on a normal save](#2026-09-29-the-animation-warnings-on-a-normal-save)
-- [2026-09-29: six questions, disguised traps, Vi's flight](#2026-09-29-six-questions-disguised-traps-vis-flight)
+- [2026-09-29: the licence holder, Tattle checks, disguised traps, Vi's flight](#2026-09-29-the-licence-holder-tattle-checks-disguised-traps-vis-flight)
 - [2026-09-29: Room Swap, Uncap FPS Off by default](#2026-09-29-room-swap-uncap-fps-off-by-default)
 - [2026-09-30: Archipelago's entrance randomizer, rooms as regions, Decoupled, plando](#2026-09-30-archipelagos-entrance-randomizer-rooms-as-regions-decoupled-plando)
 - [2026-09-30: Music Shuffle, in the yaml](#2026-09-30-music-shuffle-in-the-yaml)
@@ -52,7 +52,7 @@ either one wrong).
 - [2026-09-30: Uncap FPS, every character drawn smoothed](#2026-09-30-uncap-fps-every-character-drawn-smoothed)
 - [2026-09-30: Filler Starting Checks, and fights played by the party you have](#2026-09-30-filler-starting-checks-and-fights-played-by-the-party-you-have)
 
-## 2026-09-24: the project starts
+## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
 - **The user's decisions:** a separate project from their other work, built on its stricter rules. The first
   version shuffles **key items only**. **Remote items only, permanently**, after comparing it with local
@@ -329,14 +329,14 @@ either one wrong).
   job. Ours lists "deploying the mod" under "ask before touching anything outside this repo". The check judges
   each call, so a refusal can be made rare, never impossible.
 
-## 2026-09-24: EntityDump run
+## 2026-09-24: EntityDump: no key item or medal missable
 
 - `copy-dev.ps1 -DebugOn EntityDump` from the PowerShell tool passed (after the CLAUDE.md change). Game
   started by the agent (the user's yes), dump written within seconds of the main menu, game closed and
   checked gone, `EntityDump` switched back off the same way. Results in `MEASURED.md`, "World pickups and
   their gates": no floor key item or medal is missable; only 5 ordinary items are.
 
-## 2026-09-24: step 3, the chapter table and the gated doors
+## 2026-09-24: the chapter table and the 59 gated doors
 
 - `dev-scripts/gate-table.py` joins EntityDump's doors with the code's flag setters: 59 gated doors on 22
   flags (`MEASURED.md`, "Chapters"). Hypothesis recorded: event numbers follow story order.
@@ -420,7 +420,7 @@ either one wrong).
   same target (open as if finished, nothing collected, artifacts as the goal) is reached one gate at a time. The
   user hasn't finished the game: endgame facts stay out of chat, in MEASURED's spoiler sections.
 
-## 2026-09-25: what this session taught us
+## 2026-09-25: lessons: the wiki only a lead, layered gates, open world by default
 
 - **Wiki pages are leads, the data decides.** The user pasted the wiki's crystal berry and medal pages (facts only,
   CC BY-SA row in licensing.md); every entry was matched to the entity dump, ScriptDump or code. All chapter 1
@@ -1638,7 +1638,7 @@ either one wrong).
   reload waiting for a fight to end. Not yet seen: the next Barren Lands walk shows whether `[anim]` lines replace the
   warnings, and names what the game asks for.
 
-## 2026-09-29: six questions, disguised traps, Vi's flight
+## 2026-09-29: the licence holder, Tattle checks, disguised traps, Vi's flight
 
 - **The licence:** "Tsukino" or "Tsukino-uwu"? Archipelago's docs (0.6.7 and `main`) say nothing about a world's
   licence or its holder; `authors` is "a list of strings" (on `main`, shown on the Supported Games page); the only
