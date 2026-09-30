@@ -45,6 +45,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 31. [Build step 31: Decoupled doors (experimental)](#build-step-31-decoupled-doors-experimental)
 32. [Build step 32: Connection plando](#build-step-32-connection-plando)
 33. [Build step 33: Music Shuffle](#build-step-33-music-shuffle)
+34. [Build step 34: Shuffle Shop Inventories](#build-step-34-shuffle-shop-inventories)
 
 **How it works**
 
@@ -470,6 +471,10 @@ be wrong.
    Effect Shuffle** (`sfx_shuffle`, smw's name), its own step. It widens the same `PlaySound` and `StopSound` hooks to
    every sound (dialogue bleeps out), and also swaps `SoundIsPlaying`, the entity sounds and `PlayClipAtPoint`. A
    loop stopped by name (`Rumble`, 21 times) must stop the sound that replaced it.
+48. **Shuffle Shop Inventories** (2026-09-30, the user: what shops restock and respawning items come back with,
+   randomized, never checks): the apworld's side built, build step 34. Next, the mod's side; then **the game's other
+   item shops and respawning pickups** join the pool, as they become locations or as spots of their own (measured
+   first: each keeper's `data`, each item with only a regional flag).
 
 **Known issues:**
 
@@ -1279,7 +1284,8 @@ They're a yaml category, *Shuffle Crystal Berries*, on by default (some are obsc
 **Respawning pickups** (2026-09-24, always shuffled, no option): some floor items have no flag of their
 own, only a *regional* flag the game wipes on every area change, so they come back. They're locations too: the
 first pickup sends the check and gives nothing, and once the check is done the spot is the game's own again, with
-its vanilla item each time it comes back (so it stays useful locally). How it works:
+its vanilla item each time it comes back (so it stays useful locally; with *Shuffle Shop Inventories*, another
+spot's item, build step 34). How it works:
 1. The apworld marks such a location with `source.regional`, its regional flag, and `slot_data` sends it inside
    `location_pickups` (`"regional": N`, flag -1). The client recognises the pickup by map plus regional flag.
 2. The game sets nothing that stays in the save, so the check can't be read back later like a flag. The mod sends
@@ -1422,7 +1428,8 @@ lists each copy's location with its shop and medal),
 set by the purchase's swapped `giveitem`, and the stock is set from those bits and the server's checks. Test
 `TestMedalShop` pins the 22 copies in story order.
 **Item shops** (endless consumables): the first purchase of each item in each shop is a check that shows
-and gives the seed's item, then the shop sells its own item again, like respawning pickups, so restocking still works.
+and gives the seed's item, then the shop sells its own item again, like respawning pickups, so restocking still works
+(with *Shuffle Shop Inventories*, another spot's item, build step 34).
 Their own yaml toggle, *Shuffle Item Shops*, default on, apart from *Shuffle Medal Shops*. Built after the medal shops.
 **Built for Madame Butterfly's shop (2026-09-25, seen working):** five locations (*Item Shop 1* to *5*, ids 58-62), one
 per stock entry, known by map, shopkeeper and item (`location_item_shops`); each puts its own item in the pool, with
@@ -3053,7 +3060,9 @@ item, check or rule depends on it.
 2. **The roll:** in `generate_basic`, which `world api.md` gives "player-specific randomization that does not affect
    logic".
    - Each list becomes a permutation with the world's random, so every track still plays somewhere.
-   - It runs after every roll the logic depends on, so turning it on changes nothing else in the seed.
+   - It runs after every roll the logic depends on, so turning it on changes nothing else in the seed. Since build
+     step 34 it draws from a stream of its own, taken from the world's random whether it's on or not, so it and the
+     shop inventories never change each other's roll.
    - slot_data `music_map` and `jingle_map`, `{name: name played in its place}`, are empty when the option is off.
 3. **The mod** (`MusicShuffle.cs`), after reading how the game plays music.
    - **Why not swap the clip:** the game saves and replays the playing track by name, checks it by name (the victory
@@ -3094,6 +3103,67 @@ item, check or rule depends on it.
 
 *Code: `music.py`, `options.py` (`MusicShuffle`, `option_groups`), `web_world.py`, `world.py` (`generate_basic`),
 `slot_data.py`; the mod's `MusicShuffle.cs`; tests `test_music.py`.*
+
+## Build step 34: Shuffle Shop Inventories
+
+A yaml option, **on by default**. It shuffles what item shops restock and what respawning floor items come back with,
+among themselves. The first purchase of each item in an item shop and the first pickup of a respawning item are
+still checks (build steps 10 and 11). This changes only what a spot sells or gives once it isn't a check, or from the
+start in a shop that isn't a location. It never touches a check or a location.
+
+**Decided (the user, 2026-09-30):**
+- **The pool is those spots' own items:** food and other consumables, never a medal, key item or anything else. A shop
+  may sell what another shop or a floor item had, and a floor item may be what a shop sold.
+- **Like Music Shuffle: no logic tied to it.** Only checks and locations carry logic. If a later check (a recipe, a
+  delivery) needs a certain consumable, that check carries its own rule and source; a restocked or respawned item is
+  never one.
+- **Named *Shuffle Shop Inventories*** (`shuffle_shop_inventories`), ALttP's option for shuffling its shops' default
+  stock among them. That is the only precedent in the worlds at `0.6.7`, where no world names floor items that come
+  back (the search: `licensing.md`). The help text says the respawning items join it and that no check or location is
+  touched.
+- **On by default:** it touches no logic, and it randomizes more.
+
+**Chosen by the agent, open to change:**
+- **A permutation**, as Music Shuffle does: each spot takes another spot's item, so every item is still sold or found
+  as often as before.
+- **No shop sells one item twice:** the roll is taken again until none does, up to 100 tries, with a warning if one
+  ever gets through. About half of all shuffles pass on the first try.
+- **The spots are every item shop slot and respawning pickup in the locations' data, whatever the yaml leaves out.**
+  With *Shuffle Item Shops* off, the shops sell the seed's stock from the start. A new item shop or respawning pickup
+  joins when it's added as a location.
+- It stays inside CLAUDE.md's one named exception to "items are remote only": a spot whose check is done is the
+  game's own again, and the game gives its item. Only which consumable it is comes from the seed.
+
+**How it was built (2026-09-30):**
+
+1. **The spots** (`shop_inventories.py`, `SPOTS`): every location whose source is an item shop slot (map, keeper, item)
+   or a respawning pickup of an ordinary item (map, regional flag, item). Today: Madame Butterfly's 5, the caravan's 3,
+   and Snakemouth's 3.
+2. **The roll:** in `generate_basic`, like Music Shuffle's. Each roll there now has its own stream, taken from the
+   world's random whether its option is on or not. Otherwise, turning Music Shuffle on moved the shop roll (the music
+   test caught it).
+3. **slot_data `shop_inventories`:** `[{"map", "keeper" or "regional", "item", "to"}]`, one entry per spot, empty when
+   it's off. The client finds a shop slot by map, keeper and the item the game stocks there, and a pickup by map and
+   regional flag, as it finds their locations.
+
+**Tests** (`test_shop_inventories.py`):
+- off swaps nothing;
+- on, every spot appears once, the items only trade places and some move;
+- no shop sells one twice, checked on the seed and on 500 rolls;
+- with *Shuffle Item Shops* off the shops are still shuffled;
+- the same seed with it on or off gives the same slot_data otherwise (music maps included), the same item pool and
+  the same fill randomness.
+
+**Checked** (2026-09-30):
+- `test-apworld.ps1`: 538 tests pass, the Logic Test check reproduced 90 of 90, and the fuzzer failed 0 of 10000.
+- `seed-snapshot.py` on CI's three presets, alone and with APQuest, before and after: slot_data is identical but for
+  the new `shop_inventories` (11 spots in each, the preset with *Shuffle Item Shops* off included), and the spoilers
+  differ only in the option's own line, so no item moved.
+
+**Status:** the apworld's side built (2026-09-30); the mod's side next (Next 48).
+
+*Code: `shop_inventories.py`, `options.py` (`ShuffleShopInventories`), `world.py` (`generate_basic`), `slot_data.py`;
+tests `test_shop_inventories.py`.*
 
 # How it works
 

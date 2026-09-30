@@ -80,6 +80,9 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         # names; both empty when it's off.
         "music_map": world.music_map,
         "jingle_map": world.jingle_map,
+        # Shuffle Shop Inventories, [{"map", "keeper" or "regional", "item", "to"}]: what an item shop slot restocks and
+        # a respawning pickup comes back with once neither is a check; empty when it's off.
+        "shop_inventories": world.shop_inventories,
         # An item's kind, as data_tables names them (ITEM_KIND and the rest).
         "item_kinds": {str(ITEM_NAME_TO_ID[item.name]): item.kind for item in ITEMS},
     }

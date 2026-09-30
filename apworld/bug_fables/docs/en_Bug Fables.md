@@ -18,6 +18,9 @@ Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's 
 - **Shuffle Medal Shops** (on): medals sold in shops are locations.
 - **Shuffle Item Shops** (on): the first purchase of each item in an item shop is a location.
 - **Shop Contents** (No Progression): what shop locations may hold.
+- **Shuffle Shop Inventories** (on): what item shops restock and what respawning floor items come back with is
+  shuffled among themselves (food and other consumables only, each as often as before). Never a check or location:
+  the first purchase or pickup is still the check, and this changes only what comes after. New in this version.
 - **Entrance Randomizer** (off, experimental): doors between areas lead somewhere else. Coupled: a door and its way
   back stay a pair. Decoupled (new in this version): the way back is shuffled too, so turning round can take you
   somewhere else. Or Room Swap, whole rooms trading places (see below). The spoiler log lists where each door leads.

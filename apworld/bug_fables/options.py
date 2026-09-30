@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from Options import Choice, DefaultOnToggle, OptionGroup, PerGameCommonOptions, PlandoConnections, Range, Toggle
 
 from .data_tables import DOOR_NAMES, DOORS, ENCOUNTERS, LOCATIONS, ROOM_STARTS
+from .shop_inventories import SPOTS
 
 
 class ArtifactsRequired(Range):
@@ -69,9 +70,10 @@ class ShuffleMedalShops(DefaultOnToggle):
 class ShuffleItemShops(DefaultOnToggle):
     """
     The first purchase of each item in an item shop is a location: the shelf shows what's really there, and buying it
-    sends the check. After that, the shop sells its own item again, as often as you like.
+    sends the check. After that, the shop restocks it as often as you like: its own item, or with Shuffle Shop
+    Inventories on (the default) the one the seed gives that slot.
 
-    Turned off, item shops sell their own items as usual.
+    Turned off, item shops sell their own items as usual (or the seed's, with Shuffle Shop Inventories).
 
     Checks added in this version: {count}.
     """
@@ -95,6 +97,23 @@ class ShopContents(Choice):
     option_no_progression = 1
     option_filler_only = 2
     default = 1
+
+
+class ShuffleShopInventories(DefaultOnToggle):
+    """
+    What item shops restock and what respawning floor items come back with, shuffled among themselves and fixed by the
+    seed. It never touches an Archipelago check or location: the first purchase of each item in an item shop (Shuffle
+    Item Shops) and the first pickup of a respawning floor item are still checks. This only changes what they sell and
+    give after that, or from the start in a shop that isn't a location.
+
+    Only those items take part (food and other consumables): a shop may sell what another shop or a floor item had,
+    each item is still sold or found as often as before, and no shop sells the same item twice. The price is the
+    game's own for the item sold. No item, check or rule depends on it. On by default.
+
+    Shop slots and floor items in this version: {count}.
+    """
+
+    display_name = "Shuffle Shop Inventories"
 
 
 class EntranceRandomizer(Choice):
@@ -242,6 +261,7 @@ class BugFablesOptions(PerGameCommonOptions):
     shuffle_medal_shops: ShuffleMedalShops
     shuffle_item_shops: ShuffleItemShops
     shop_contents: ShopContents
+    shuffle_shop_inventories: ShuffleShopInventories
     entrance_randomizer: EntranceRandomizer
     plando_connections: DoorPlando
     enemy_shuffle: EnemyShuffle
@@ -280,3 +300,4 @@ for _category, _field in CATEGORY_OPTIONS.items():
 EntranceRandomizer.__doc__ = EntranceRandomizer.__doc__.replace("{count}", str(2 * len(DOORS.connections)))
 EnemyShuffle.__doc__ = EnemyShuffle.__doc__.replace("{count}", str(len(ENCOUNTERS)))
 StartingLocation.__doc__ = StartingLocation.__doc__.replace("{count}", str(len(ROOM_STARTS)))
+ShuffleShopInventories.__doc__ = ShuffleShopInventories.__doc__.replace("{count}", str(len(SPOTS)))

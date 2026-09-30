@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Mapping
+from random import Random
 from typing import Any
 
 from worlds.AutoWorld import World
 
-from . import entrances, items, locations, music, regions, rules, slot_data, web_world
+from . import entrances, items, locations, music, regions, rules, shop_inventories, slot_data, web_world
 from .data_tables import (ARTIFACTS, DOORS, ENCOUNTERS, ITEM_NAME_TO_ID, LOCATION_NAME_TO_ID, LOCATIONS, ROOM_STARTS,
                           STORY_EVENTS)
 from .enemies import shuffle_encounters
@@ -78,11 +79,17 @@ class BugFablesWorld(World):
 
     def generate_basic(self) -> None:
         # Archipelago's step for rolls that don't affect logic; the logic's own (doors, fights) come before the rules.
+        # Each draws from its own stream, taken whether it's on or not, so no option here changes another's roll.
+        music_random = Random(self.random.getrandbits(64))
+        shop_random = Random(self.random.getrandbits(64))
         self.music_map = {}
         self.jingle_map = {}
         if self.options.music_shuffle:
-            self.music_map = music.shuffle(music.POOL, self.random)
-            self.jingle_map = music.shuffle(music.JINGLES, self.random)
+            self.music_map = music.shuffle(music.POOL, music_random)
+            self.jingle_map = music.shuffle(music.JINGLES, music_random)
+        self.shop_inventories = []
+        if self.options.shuffle_shop_inventories:
+            self.shop_inventories = shop_inventories.shuffle(shop_inventories.SPOTS, shop_random)
 
     def write_spoiler_header(self, spoiler_handle: Any) -> None:
         # Nothing written here: the shuffled doors go to the spoiler's own Entrances section.
