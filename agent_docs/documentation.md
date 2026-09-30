@@ -1802,7 +1802,20 @@ into those below, as in the logo. Item-sized, like the party members' icons (the
 **Where it's used:** another game's item on the ground, on a shelf, at a pickup and a gift (step 21's row decides whose
 items), on the class-coloured backdrop of step 22.
 
-**Status:** works, seen on screen (2026-09-26) on hold-ups, on the Caravan's shelf and on the ground.
+**Next: thicker outlines** (the user, 2026-09-30, with screenshots of a shop shelf, the icon next to a vanilla leaf and
+egg: "it has pretty thin outlines while the vanilla items have really thick and visible ones"). Plan only; the look is
+picked on screen. Measured on the game's sprite sheet (`MEASURED.md`, item sprites' outline): the game's outline is
+about 4 to 5 sheet pixels, the icon's rim about 2.1 and its lines between circles about 1.5, so both are half as thick.
+A rim share of about 0.14 to 0.19 matches (today 0.07); a thicker rim also shrinks the circles a little, since the
+drawing is fitted to the same size. How it will be picked:
+
+1. Dev `shelflook` takes a gap share as well as a rim share (today only the rim).
+2. On a shop shelf next to vanilla items (the screenshot's leaf and egg), rims 0.14, 0.16 and 0.18 against gaps 0.05,
+   0.08 and 0.10, close up and at a distance, then as hold-ups (`holdup ap`) on the class backdrops.
+3. The user picks; `Rim` and `Gap` in `ApIcon.cs` change, and this step's status says what was seen.
+
+**Status:** works, seen on screen (2026-09-26) on hold-ups, on the Caravan's shelf and on the ground. Thicker outlines:
+planned (2026-09-30).
 
 *Code: `ApIcon.cs`; used by `ItemSwap.Describe`.*
 

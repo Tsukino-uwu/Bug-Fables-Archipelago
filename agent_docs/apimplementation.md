@@ -533,6 +533,30 @@ be wrong.
    or with the yaml option *Progressive Boat* off the two apart; the docks there only with it. Built (build step 36,
    the mod guide's step 37), not yet seen in game. Next, the user sees it: the install lines, the item's look (its
    sprite is lent until one is picked on screen), both copies arriving, the docks before and after, a crossing to each.
+52. **One world, one shape: chapter flags suspended** (the user, 2026-09-30: "The world should always be and stay in 1
+   consistent state for the player, not randomly unlocking/locking with flags changing roadblocks. Story/cutscenes are
+   fine to keep where it makes sense, but the game should be openworld and not linear"). **Deferred until the room
+   logic covers every area**, so nothing is hidden or changed before its logic exists (the user). The game has no
+   chapter number: a chapter is story flags, its end the artifact flag (41, 88, 299, 345, 347, 346, 555) and its start
+   a title-card scene's flags (`MEASURED.md`, Chapters). A flag reaches the map through every entity's `requires` and
+   `limit` (`CheckIfCanExist`), scenery (`ConditionChecker`, `FlagAnimation`), dialogue lines, map music, auto-start
+   scenes, flags written on a map's load (`MapControl.cs:630-707`) and shop stock. **The method:** room-logic.md's
+   planned flag cross-reference (doors only today, `gate-table.py`) widened to every reader of each chapter flag, then
+   each effect sorted: a roadblock that appears or goes away is held in one state by build step 9's lists, never by
+   setting or clearing the flag (build step 9 rules that out); a scene is kept where it makes sense, or held; a
+   chapter's shop stock and NPC moves are listed and decided with the user. With the world's shape held by the seed, a
+   death's reload only replays scenes (build step 25). Its own build step when built.
+53. **Bosses the server remembers** (the user's idea, 2026-09-30: "tie fake checks to bosses to track if they have been
+   defeated etc. so you won't have to re defeat bosses later"). A story boss beaten once stays beaten in every save,
+   even after a death loads one from before the fight: kept out of the map the way checked pickups are (build step
+   27), never by writing its flag; the flags its scene sets are Next 52's to answer. Two ways Archipelago provides, to
+   choose when built: **(a)** each boss a real location holding an item from the pool (`world api.md`: a location may
+   be a boss drop), a yaml category of its own, which also adds early locations (the fill error's fix, Known issues)
+   and gives Next 29's bosses goal its record; **(b)** the slot's data storage, for data "just saved for later"
+   (`network protocol.md`, `Set`). Not a location holding nothing: a location with an id holds an item, and one with
+   none is an event, which the server never hears of (`world api.md`, events). **Read (2026-09-30):** Super Metroid's
+   apworld (0.6.7, `worlds/sm/__init__.py:186-200`) makes its bosses events, a locked "Boss" item with
+   `address = None`, logic only; our "First Boss Beaten" is the same. Its own build step when built.
 
 **Known issues:**
 
@@ -1181,6 +1205,11 @@ tester, who hasn't finished the game. Regions stay whole areas for now (since 20
 step 12); each room's areas as regions (doors from the
 dump, `dev-scripts/door-graph.py`; build step 24) come as the gates open (2026-09-24; areas within a room since
 2026-09-27).
+**No gate may depend on a flag a reload can undo** (the user, 2026-09-30, asking what a death without saving costs
+with DeathLink): story flags live only in the save, so a Game Over that loads an older save undoes them (build step
+25). Every gate is held by what a reload can't undo: `slot_data`'s lists, a received item, or a checked location, as
+checked pickups are hidden (build step 27). A death then only replays scenes. Checked when each gate is built; the
+world's one shape is Next 52, a beaten boss kept beaten Next 53.
 **Areas and doors that close later are kept open** (2026-09-24), as Pokémon Emerald's apworld keeps Mirage
 Island visible: the mod makes the game's `CheckIfCanExist` answer "exists" for a list of doors and blockers
 sent in `slot_data`, decided at generation, with no save writes. Each is checked in game first; where forcing
@@ -2525,6 +2554,20 @@ isn't a Game Over, and neither sends nor receives.
 - **One at a time:** from a strike until play is back (the Game Over's menu answered, or free on the map after the
   reload), deaths that arrive join it. A waiting death is dropped if the row is switched off, or on the title screen.
 - **Logged at every decision** (`[death]`): received, waiting and for what, joined, struck and how, not sent and why.
+
+**What a death costs** (asked by the user 2026-09-28, and again 2026-09-30: "not all progression is tied to the
+seed?"). Retry, in a battle that can't be fled, loses nothing. Load, and every death on the map, goes back to the last
+save (`MEASURED.md`, Game Over):
+
+- **Kept:** items (the save's count is lower, so the server gives them again, build step 7); checks, which stay done
+  and are never sent twice; checked one-time pickups, which stay hidden (build step 27); the open world's lists, applied
+  on every map load.
+- **Lost:** the save's own story state since that save: scenes play again, a boss beaten since comes back, and a way
+  the story opened closes again.
+
+*Auto-save between rooms* (the mod guide, step 31) is the panel's answer today. The seed's answer is decided (the
+user, 2026-09-30): the open world's rule that no gate depends on a flag a reload can undo (build step 9), a world
+that keeps one shape (Next 52), and bosses the server remembers (Next 53). No flag is ever restored from the server.
 
 **Status:** built (2026-09-28), not yet seen in game or in a room.
 

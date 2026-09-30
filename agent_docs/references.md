@@ -89,3 +89,7 @@ The user's own experience; nothing below was read.
   story strip, since every Bug Fables cutscene also changes the world through flags (build step 9). **We take:**
   points of no return as *Points of No Return*, a yaml option, off by default, the Warp to Start as the way back
   (build step 37).
+- **Super Metroid (the apworld):** the user remembered its bosses as checks that track whether you've beaten them
+  (2026-09-30, asking what a death without saving costs). Its code was then read (`licensing.md`): its bosses are
+  events, logic only, which the server never hears of. **We take:** the idea, bosses the server remembers so a reload
+  never means beating one again (Next 53, an idea), on a real location or the data storage, not an event.
