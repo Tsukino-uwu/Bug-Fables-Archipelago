@@ -90,9 +90,10 @@ The user's own experience of these games and their randomizers; nothing below wa
   gate (Next 31, an idea).
 - **A Pokémon dexsanity:** each species seen is a location. **We take:** each enemy spied a location (Next 44, an
   idea).
-- **Pseudoregalia:** items showing their rarity, the progressive sword (three copies of one item, each giving the next
-  ability), and a found pickup gone for good once picked up. **We take:** the *Rarity* item colours (the mod guide,
-  step 22), progressive items (Next 23, an idea), and found pickups hidden in every save (build step 27).
+- **Pseudoregalia:** a colour or mark showing what type an item is before you pick it up, the progressive sword (three
+  copies of one item, each giving the next ability), and a found pickup gone for good once picked up. **We take:** item
+  backgrounds showing how much an item matters before you take it (the mod guide, step 22), progressive items (Next 23,
+  an idea), and found pickups hidden in every save (build step 27).
 - **Traps:** Celeste's flipped screen, Zelda's freeze and chickens, OoT's disguised traps. **We take:** traps that
   annoy, never harm, and a trap that can look like a wanted item (Next 19, an idea; OoT's option was then read,
   `licensing.md`).
