@@ -50,6 +50,7 @@ either one wrong).
 - [2026-09-30: no criticism of other projects in the repo](#2026-09-30-no-criticism-of-other-projects-in-the-repo)
 - [2026-09-30: Shuffle Shop Inventories](#2026-09-30-shuffle-shop-inventories)
 - [2026-09-30: Uncap FPS, every character drawn smoothed](#2026-09-30-uncap-fps-every-character-drawn-smoothed)
+- [2026-09-30: Filler Starting Checks, and fights played by the party you have](#2026-09-30-filler-starting-checks-and-fights-played-by-the-party-you-have)
 
 ## 2026-09-24: the project starts
 
@@ -1817,3 +1818,48 @@ either one wrong).
   1/30 s, walk, as at 60. The user: "I think it looks fine? It's pretty hard to tell compared to the leader."
 - **Not yet seen with the new drawing:** moving platforms, bridges, a knocked frozen enemy, the "!" over NPCs and
   shadows during jumps.
+
+## 2026-09-30: Filler Starting Checks, and fights played by the party you have
+
+- **The user's two asks:**
+  - a yaml on/off, on by default, so "the 3-6? starting items" are always filler ("a bit boring to get multiple
+    progression/useful items before even starting to play");
+  - stand-in party members in combat, as scenes and talks have, so a scripted fight such as the chapter 5 Beast (Vi
+    and Leif downed, Kabbu powered up) never freezes or crashes.
+- **Refined while planning (the user):**
+  - "only filler, not traps";
+  - "specifically the items you get when you connect/new save", and "not for example Leif's spider location", so
+    nothing else turns filler-only by accident.
+  - Name: *Filler Starting Checks*, chosen from three offered; no world at 0.6.7 has such an option.
+- **Filler Starting Checks** (build step 35):
+  - The opening's `quiet` locations are made excluded (Archipelago's own filler-first placement), plus a rule
+    refusing traps.
+  - The first fuzzer run failed 4 of 10000 (`FillError`), each with Coupled or Room Swap doors, one starting member,
+    moves and Jump shuffled.
+  - Archipelago's FAQ answer to a restrictive start, Jump as a local early item, left all four failing. Counting the
+    start's open spots didn't separate failures either: they came at 4 and at 35 open spots, since shops take no
+    progression by default.
+  - Measured per option set: 0 failures with the option off; 1-4% on with Coupled or Room Swap; 0 without door
+    shuffle or with Decoupled.
+  - The user chose "off with Coupled/Room Swap" (with a warning) over a tuned threshold or an option error.
+  - Then 0 of 10000, alone and with APQuest.
+  - The preflight refused `add_item_rule` (named in the approved plan: its import went in a commit of its own) and a
+    test's `Fill` import (removed: the test fills through the test base's own `test_fill`).
+- **Your question: is the Beast's scripted end a percentage or an amount?** An amount, 10 HP (`SurviveWith10`, and
+  its turn at `hp <= 10`). Scaling can never start it at once (at least 21 HP), but it shrank the real fight at low
+  levels. The user chose "scale only the HP above 10". Then "can we scale the scripted things in fights as well … or
+  what is the best way": a survey of every fixed HP number in enemy scripts (39, `enemy-numbers.py`), each classified,
+  then scaled by its enemy's ratio.
+- **Stand-ins in battle: the user chose "members present play the parts"** over temporary fighters ("more fun … instead
+  of temp filling with members you don't actually own"). Reading the game for it found, in logic today:
+  - the battle start hangs with Leif leading a party of two (a slot compared with a member number);
+  - the spider's second fight softlocks with a one-member start (Kabbu's line read from slot 1);
+  - a received member joins at the end, so with all three the Beast boosted whoever stood second.
+
+  All fixed by reading slots by member (`PartySlots.cs`), with casts for the Beast (Survivor), Zommoth (Leif sits out,
+  never the only member) and the Everlasting King (Speakers), and the scenes around them.
+- **Built and committed:** S1-S10 of the plan, each counted by exact instructions (IL read with ilspycmd into the
+  scratchpad, nothing kept). Two hazards were checked in the code:
+  - FrameSites' re-run on `DoAction`: it installs lazily, last, so safe;
+  - the two-argument `Heal` may be inlined: its literal calls are replaced rather than `Heal` patched.
+- **Not seen in game:** everything here. The build is in the game folder (`8919071FDF42`); the game wasn't running.

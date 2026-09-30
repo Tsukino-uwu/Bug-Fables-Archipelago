@@ -476,6 +476,14 @@ be wrong.
    randomized, never checks): built, not yet seen in game, build step 34. Next, the user sees it in game; then **the
    game's other item shops and respawning pickups** join the pool, as they become locations or as spots of their own
    (measured first: each keeper's `data`, each item with only a regional flag).
+49. **Filler Starting Checks** (2026-09-30, the user: the items a new file gets on connecting are filler only): built,
+   not yet seen in game, build step 35. Next, the user sees a new file's opening items.
+50. **Fights with the party the seed has** (2026-09-30, the user: stand-ins in battle, the members present playing the
+   parts; and scripted fights kept whole under enemy scaling): built, not yet seen in game. The mod guide's step 11
+   (a member's number used as a slot: the battle start's leader, the eaten tick, skills, scenes placing a missing
+   slot), step 36 (the spider's line, the Beast, Zommoth, the Everlasting King cast from the party) and step 17 (the
+   10-HP scripted end, the fixed numbers in enemy scripts). Next, the user sees each on screen; the log's install lines
+   first (`[party] installed in …`, `[scale] installed in …`, every count matched).
 
 **Known issues:**
 
