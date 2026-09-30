@@ -57,6 +57,7 @@ either one wrong).
 - [2026-09-30: long names in the item-get box, what a death costs, one world shape, the icon's outline](#2026-09-30-long-names-in-the-item-get-box-what-a-death-costs-one-world-shape-the-icons-outline)
 - [2026-09-30: a checklist of everything not yet seen in game](#2026-09-30-a-checklist-of-everything-not-yet-seen-in-game)
 - [2026-09-30: stale lines fixed, the whole repo fact-checked, the panel's letters](#2026-09-30-stale-lines-fixed-the-whole-repo-fact-checked-the-panels-letters)
+- [2026-09-30: MeshGhost compared, four of its gates brought here](#2026-09-30-meshghost-compared-four-of-its-gates-brought-here)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2106,3 +2107,34 @@ either one wrong).
 - **Session end (the user: push, then a new chat).** Open, all in `TO-CHECK.md` (local, git-ignored): the Quality of
   life page's bottom line from the title screen's Settings, the Spy Specs row's battle effects, the Wasp General as a
   dev test (`enemyfight 72`), and the rest of the checklist. The game was left running with build `5581F3683570`.
+
+## 2026-09-30: MeshGhost compared, four of its gates brought here
+
+- **Asked (the user):** look at MeshGhost for anything to move over or improve, "similar to how we cleaned up code and
+  minimized comments and added a few claude.md rules etc here"; MeshGhost is the main target, and anything useful
+  comes back here too. Why: "it feels like bug fables has better code/comments", and its documentation "is happening
+  way better ... instead of getting forgotten/stale".
+- **A read-only audit of both repos** (three agents): MeshGhost's comments are 33% of its code files' lines (here,
+  about 6-8%), thousands of them dated, attributed or pointing at docs; one hook; a preflight with its lists written
+  inline in three places; no code map, no capability list, unpinned actions and packages. MeshGhost checks three
+  things this repo only wrote down: the CLAUDE.md line cap, durations, and plain file links.
+- **The plan** (a plan file outside the repo): Part A for MeshGhost, run in a session opened there (the user's choice,
+  after the pros and cons: its own rules, memories and skills load, and edits there ask nothing); Part B here. The
+  user's decisions: this repo's commit-subject rule, per-step Status lines with the same-commit docs rule, and all four
+  extras (lean comments everywhere, copied code removed, a capability list and guard, the gates brought here). The user
+  runs Part A on Opus 5.5 at medium effort; high was suggested for the rules, the gates, the builds and the adapters.
+- **Part B, done:**
+  - `0846994`: two lines of the mod guide given dates (Monitor the default from 2026-09-28 to 2026-09-29, from
+    `526ab95` and `a43ae1e`; save crystals "far into a seed").
+  - `6979cfb`: **Line caps**, CLAUDE.md over 150 lines fails; RULE 0 says preflight refuses it (rewrapped, 150 lines).
+  - `0489526`: **Durations**, in tracked files, commit messages and release text; a figure with its number passes.
+  - `8628191`: doc-coverage.py resolves plain links to files and folders (213, all leading somewhere).
+  - `c915ac2`: the attribution and date out of a comment in the agent guard.
+  - Negative test 81 fixtures, 0 problems; `preflight.py --history` over everything passes.
+- **Mistakes of mine on the way:**
+  - The first fixtures held the phrases whole in their `names=`, so the gate flagged the test file itself; they are
+    assembled at run time now, like the credential samples.
+  - The first commit's message quoted the phrase it removed, and the history check caught it. Unpushed, so reworded
+    with a non-interactive rebase; the tree before and after is identical (`7c347bf`).
+  - Chained preflight ahead of `git add` once, so it read the old index.
+- **Not pushed** (push only when told).
