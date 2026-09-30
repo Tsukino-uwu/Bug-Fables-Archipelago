@@ -201,6 +201,20 @@ class StartingPartyMember(Choice):
     default = 5
 
 
+class FillerStartingChecks(DefaultOnToggle):
+    """
+    The checks a new file sends by itself when the game begins (Maki and Eetl's gift, the tutorial battle, and the
+    opening spot where the story's second member joins, when party members are items) hold filler only: no
+    progression, useful or trap item, so a seed doesn't open with its good items before you've played. Nothing else
+    changes, the spot in the fall room after the spider included. Turn it off to plando an item there.
+
+    With the Entrance Randomizer on Coupled or Room Swap it doesn't apply, and the generator says so: the doors can
+    leave the start with only these spots, too few to begin a seed. On by default.
+    """
+
+    display_name = "Filler Starting Checks"
+
+
 class ShuffleFieldMoves(Toggle):
     """
     The three field attacks are items too: Vi's Beemerang Toss (the first Progressive Beemerang), Kabbu's Horn Slash and
@@ -267,6 +281,7 @@ class BugFablesOptions(PerGameCommonOptions):
     enemy_shuffle: EnemyShuffle
     starting_location: StartingLocation
     starting_party_member: StartingPartyMember
+    filler_starting_checks: FillerStartingChecks
     shuffle_field_moves: ShuffleFieldMoves
     shuffle_jump: ShuffleJump
     music_shuffle: MusicShuffle

@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Item, LocationProgressType
 from rule_builder.rules import Has, Rule
+from worlds.generic.Rules import add_item_rule
 
 from .data_tables import ARTIFACTS
 from .options import ShopContents
@@ -20,7 +21,19 @@ def _no_progression(item: Item) -> bool:
     return not item.advancement
 
 
+def _no_trap(item: Item) -> bool:
+    return not item.trap
+
+
 def set_all_rules(world: BugFablesWorld) -> None:
+    # Filler Starting Checks: the opening's own checks are excluded (filler first, never progression or useful), and
+    # excluded still admits traps.
+    if world.filler_starting_checks:
+        for loc in world.included_locations:
+            if loc.quiet:
+                location = world.get_location(loc.name)
+                location.progress_type = LocationProgressType.EXCLUDED
+                add_item_rule(location, _no_trap)
     for loc in world.included_locations:
         if loc.category not in SHOP_CATEGORIES:
             continue

@@ -46,6 +46,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 32. [Build step 32: Connection plando](#build-step-32-connection-plando)
 33. [Build step 33: Music Shuffle](#build-step-33-music-shuffle)
 34. [Build step 34: Shuffle Shop Inventories](#build-step-34-shuffle-shop-inventories)
+35. [Build step 35: Filler Starting Checks](#build-step-35-filler-starting-checks)
 
 **How it works**
 
@@ -3173,6 +3174,84 @@ another, so the price, name, sprite and what's added stay the game's.
 
 *Code: `shop_inventories.py`, `options.py` (`ShuffleShopInventories`), `world.py` (`generate_basic`), `slot_data.py`;
 the mod's `ShopInventories.cs` and `ItemShops.cs`; tests `test_shop_inventories.py`.*
+
+## Build step 35: Filler Starting Checks
+
+A yaml option, **on by default**. The checks a new file sends by itself when the game begins hold filler only: no
+progression, useful or trap item. **The user's ask (2026-09-30):** "it would be a bit boring to get multiple
+progression/useful items before even starting to play the game, right when connecting/new save". Then: filler, "not
+traps"; "specifically the items you get when you connect/new save"; and "not for example Leif's spider location", so
+no other spot turns filler-only by accident.
+
+**Which checks:** the opening skip sets flag 15 and the mod sends every flag-15 location at once. Those are exactly the
+locations marked `quiet` (their items arrive with no hold-up; build step 26): *Maki and Eetl's Gift*, *Outside the
+City, Tutorial Battle*, and *Outside the City, Opening* when members are items. The option selects them by `quiet`
+alone, so *Fall Room, After the Spider* (a member's spot, not quiet) never changes. The members a new file starts with
+are start inventory, not locations: *Starting Party Member* decides them.
+
+**Archipelago's way (read at 0.6.7):**
+- A world may mark its own spot `LocationProgressType.EXCLUDED`. It then takes only items that are neither progression
+  nor useful (`BaseClasses.py`, `Location.can_fill`), filled from the filler pool before anything else (`Fill.py`,
+  "Remaining Excluded").
+- `Main.py` expects worlds to do this: a player's `priority_locations` entry on such a spot is dropped with a warning.
+  Pokémon Emerald excludes its own spots the same way (`licensing.md`).
+- Excluded still admits traps, so an item rule refuses them, added with `worlds.generic.Rules.add_item_rule` so no other
+  rule is lost. A trap drawn for one of these spots stays in the pool and lands elsewhere.
+- **Plando:** a block putting a progression, useful or trap item on one of these spots fails, as on any excluded spot.
+  The yaml text says to turn the option off for that.
+
+**The name:** no world at 0.6.7 has such an option (the search: `licensing.md`), so the user chose between names of our
+own: *Filler Starting Checks*, not "Starting Items", which is Archipelago's spoiler heading for start inventory.
+
+**How it was built (2026-09-30):**
+1. `options.py`: `FillerStartingChecks` (`DefaultOnToggle`), after *Starting Party Member*.
+2. `rules.py` `set_all_rules`: with it on, each included `quiet` location gets `EXCLUDED` and the no-trap rule.
+3. **The shops' *Filler Only* fallback is unchanged.** It counts every unfilled excluded spot, so the opening's spots
+   take their filler first, and a solo room short of filler turns the shops back to No Progression, as before. The
+   solo seed with discoveries on that had exactly enough filler for its shops (22 for 22) now falls back.
+4. No `slot_data` key and no mod change: the mod sends these checks as before.
+5. **Off with Coupled or Room Swap doors** (the user's choice, 2026-09-30). The first fuzzer run failed 4 of 10000 seeds
+   (`FillError`), each with the Entrance Randomizer on Coupled or Room Swap, one starting member and moves and Jump
+   shuffled. Measured per option set (fill only, 250-400 seeds each; failures with the option off, then on):
+   - no door shuffle, every start, category, moves and Jump mix: 0 and 0;
+   - Coupled, one member: 0 and 1-3%;
+   - Room Swap, one member: 0 and 4%;
+   - Room Swap, All Three, moves and Jump shuffled: 0 and 2 of 250;
+   - Decoupled, one member: 0 and 0.
+
+   In a failing Room Swap seed, the start with Jump reaches only the Outskirts' own seven spots, three of them the
+   opening's; shops take no progression by default, so a start can look large and still have few such spots.
+   - **Tried and dropped:** Archipelago's own answer to a restrictive start (`apworld_dev_faq.md`), Jump as a local
+     early item. It left all four seeds failing.
+   - **Also not separating failures from successes:** counting the start's open spots.
+   - **Offered:** the option stands down only when the start is tight (a threshold to tune), or an option error. The
+     user chose the simple rule. With Coupled or Room Swap the option doesn't apply to the seed, and the generator
+     says so (`generate_early`, `world.filler_starting_checks`); Decoupled keeps it.
+
+**Tests** (`test_starting_checks.py`, and `test_shops.py`):
+- by default the three are excluded, a trap is refused, and after a fill each holds plain filler;
+- no other spot is excluded;
+- with a Vi start the opening spot is filler-only and the spider spot still takes a member;
+- with the story's party two spots;
+- with it off all three take anything;
+- with Coupled or Room Swap it stands down, with Decoupled it holds;
+- the smallest pool (every optional category off) still holds plain filler for each spot;
+- the shops fall back after the opening's spots, and the "exactly enough" test pins the option off.
+
+With the rule switched off, 11 of these checks fail.
+
+**Checked** (2026-09-30):
+- `test-apworld.ps1`: 581 tests pass, the Logic Test check reproduced 90 of 90, and the fuzzer failed 0 of 10000,
+  alone and with APQuest in every room.
+- The stand-down rule re-measured without any early item: no door shuffle and Decoupled, every start, category, moves
+  and Jump mix, 0 failures either way.
+- A default seed generated through `Generate.py` with APQuest: the spoiler shows a Drowsy Cake, 15 Berries and the
+  Crunchy Leaf on the three spots, all filler.
+
+**Status:** built (2026-09-30), the tests pass; not yet seen in game.
+
+*Code: `options.py` (`FillerStartingChecks`), `world.py` (`generate_early`), `rules.py` (`set_all_rules`),
+`data_types.py` (`quiet`); tests `test_starting_checks.py`, `test_shops.py`.*
 
 # How it works
 

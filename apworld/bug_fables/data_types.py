@@ -298,7 +298,7 @@ class Location:
     the doors until its room is mapped (build step 24), the stand-in its area's big region needed. category marks a
     location a yaml option can leave out (quest, crystal_berry, discovery, shop, item_shop; party_member, only with
     Starting Party Member on; story_party, a story event only with it off). quiet marks an opening check whose item
-    arrives with no hold-up (the start of a new file). no_jump: seen reachable without a jump (with Shuffle Jump, every
+    arrives with no hold-up (the start of a new file); with Filler Starting Checks, it holds filler only. no_jump: seen reachable without a jump (with Shuffle Jump, every
     other spot needs it).
     """
 

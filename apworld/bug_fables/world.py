@@ -11,7 +11,7 @@ from . import entrances, items, locations, music, regions, rules, shop_inventori
 from .data_tables import (ARTIFACTS, DOORS, ENCOUNTERS, ITEM_NAME_TO_ID, LOCATION_NAME_TO_ID, LOCATIONS, ROOM_STARTS,
                           STORY_EVENTS)
 from .enemies import shuffle_encounters
-from .options import BugFablesOptions, EnemyShuffle, StartingLocation, StartingPartyMember
+from .options import BugFablesOptions, EnemyShuffle, EntranceRandomizer, StartingLocation, StartingPartyMember
 
 
 class BugFablesWorld(World):
@@ -32,6 +32,8 @@ class BugFablesWorld(World):
     # -1 is the story's party; 0-2 the one member a new file starts with; ALL_MEMBERS the whole party.
     starting_member: int = -1
     ALL_MEMBERS = 3
+    # Filler Starting Checks as this seed applies it (off with the doors that can shrink the start).
+    filler_starting_checks: bool = True
 
     def generate_early(self) -> None:
         wanted = self.options.artifacts_required.value
@@ -61,6 +63,17 @@ class BugFablesWorld(World):
         self.start = {}
         if self.options.starting_location == StartingLocation.option_anywhere:
             self.start = self.random.choice(ROOM_STARTS).to_slot()
+        # Coupled and Room Swap can leave the start with only the opening's spots, and a seed whose opening takes only
+        # filler then fails to generate: the option stands down for it, as Filler Only shops do.
+        self.filler_starting_checks = bool(self.options.filler_starting_checks)
+        if self.filler_starting_checks and self.options.entrance_randomizer in (
+                EntranceRandomizer.option_coupled, EntranceRandomizer.option_room_swap):
+            self.filler_starting_checks = False
+            logging.warning(
+                "Bug Fables: player %s (%s) asked for Filler Starting Checks with the Entrance Randomizer on %s, whose "
+                "doors can leave the start too small for it; this seed's opening checks may hold any item.",
+                self.player, self.player_name, self.options.entrance_randomizer.current_option_name,
+            )
 
     def moves_shuffled(self) -> bool:
         return bool(self.options.shuffle_field_moves.value)

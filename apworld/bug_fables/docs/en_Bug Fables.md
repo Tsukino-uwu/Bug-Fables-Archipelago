@@ -29,6 +29,10 @@ Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's 
 - **Starting Party Member** (all three): a new file starts with the whole party; or with Vi, Kabbu or Leif alone (or one
   picked by the seed), and the other two are items; or Off, the story's party, with Leif joining in Snakemouth Den. With any setting but Off, the opening and the fall
   room after the spider become locations. New in this version.
+- **Filler Starting Checks** (on): the checks a new file sends by itself when the game begins (Maki and Eetl's gift,
+  the tutorial battle, and the opening spot when members are items) hold filler only, so a seed doesn't open with its
+  good items. Nothing else changes; turn it off to plando an item there. With the Entrance Randomizer on Coupled or
+  Room Swap it doesn't apply, since the doors can leave the start too small. New in this version.
 - **Shuffle Field Moves** (off): Vi's Beemerang Toss, Kabbu's Horn Slash and Leif's Freeze are items too (the Toss and
   the Freeze as the first copy of their progressive item); until one arrives, that attack only buzzes, and each shows in
   your key items once it does.
