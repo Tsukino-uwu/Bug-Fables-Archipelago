@@ -12,8 +12,8 @@ namespace BugFablesAP
     // The travel buttons after the pause menu's four (Quality of life, Travel: Warp / Map / Both), each behind a
     // Yes / No box unless Skip confirm says otherwise. Warp to start: the game's own map transfer to where a new game
     // begins. Map: the game's own map window in a travel mode, where confirm on a visited area travels to its save
-    // point (the map opened any other way keeps vanilla controls). The logic never counts on either. Confirm is caught
-    // before the game would act on it.
+    // point (the map opened any other way keeps vanilla controls). The logic counts on neither, except the Warp with
+    // Points of No Return. Confirm is caught before the game would act on it.
     internal static class WarpButton
     {
         private static ManualLogSource log;
@@ -34,7 +34,7 @@ namespace BugFablesAP
         // 18 is the map shortcut, so a second travel button takes sprite 19 in a grown array.
         private const int FirstOption = 4;
         private static readonly int[] SpriteSlot = { 17, 19 };
-        // Map: the round blue map in the other buttons' style. Warp: the map item's scroll, a "return scroll".
+        // Map: the round blue map in the other buttons' style. Warp: the round leaf, or (dev) the map item's scroll.
         private const int MapIconSprite = 34;
         private const int ScrollItem = 41;
         // The scroll has no round backdrop of its own: one is drawn like the other buttons', a dark ring and a bright

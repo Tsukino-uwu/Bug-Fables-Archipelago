@@ -41,8 +41,8 @@ namespace BugFablesAP
         }
 
         // Text colours after the game's own (10 in its scene, not the code's 7), offsets from ApBase: another player
-        // (dark yellow, Archipelago's yellow darkened), then by class, Archipelago's (NetUtils.py: plum, slate blue,
-        // salmon, cyan) darkened for the near-white text box, then Rarity's (a loot game's ladder: purple, blue, red,
+        // (dark yellow, Archipelago's yellow darkened), then by class, Archipelago's (plum, slate blue, salmon,
+        // cyan) darkened for the near-white text box, then Rarity's (a loot game's ladder: purple, blue, red,
         // green), darkened too.
         internal const int Player = 0, Progression = 1, Useful = 2, Trap = 3, Filler = 4, RarityOffset = 4;
         private static readonly string[] apColors = { "B8860B", "8A63D2", "4A6BD8", "E9573F", "008B8B",

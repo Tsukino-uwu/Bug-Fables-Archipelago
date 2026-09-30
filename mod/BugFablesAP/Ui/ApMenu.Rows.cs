@@ -22,7 +22,7 @@ namespace BugFablesAP
                     case WarpRow:
                         switch (QualityOfLife.Travel?.Value)
                         {
-                            case "Off": return "No travel buttons in the pause menu.";
+                            case "Off": return "No travel buttons in the pause menu (in a seed, Warp stays).";
                             case "Warp": return "A pause menu button back to where the game started.";
                             case "Map": return "A pause menu map: pick an area you've been to and travel there.";
                             default: return "Both pause menu buttons: Warp to the start, and Map travel.";
@@ -52,7 +52,7 @@ namespace BugFablesAP
                         switch (QualityOfLife.IconMode)
                         {
                             case "AllPlayers": return "Every item that isn't yours shows the Archipelago icon.";
-                            case "Off": return "Items that aren't yours look like the game's own item there.";
+                            case "Off": return "Other games' items look like the game's own item there.";
                             default: return "Other games' items show the Archipelago icon.";
                         }
                     case BackgroundsRow:
@@ -102,7 +102,7 @@ namespace BugFablesAP
                             : "Your party hits as hard as the game makes it.";
                     case CrystalsRow:
                         return SaveCrystals.AllHeal != null && SaveCrystals.AllHeal.Value
-                            ? "Every save crystal is yellow: it heals HP and TP too. From the next room on."
+                            ? "Blue save crystals turn yellow: they heal HP and TP too. From the next room on."
                             : "Save crystals as the game has them: only yellow ones heal.";
                     case AutoSaveRow:
                         return AutoSave.Enabled != null && AutoSave.Enabled.Value

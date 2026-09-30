@@ -234,8 +234,8 @@ namespace BugFablesAP
         private const int StandIn = 0;
         internal const int EmptyLine = -90000;
 
-        // An item's itemdata[0, id, 3], a medal's badgedata[id, 6]; null for berries, which keep the default; none for
-        // a member.
+        // An item's itemdata[0, id, 3], a medal's badgedata[id, 6]; null for berries and crystal berries, which keep
+        // the default; none for a member or a field move.
         internal static string ArticleOf(long itemId, int kind)
         {
             int gameId = ItemIds.GameId(itemId, kind);

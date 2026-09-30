@@ -371,9 +371,8 @@ namespace BugFablesAP
             }
         }
 
-        // Shaky letters jump to a new random spot, and glitchy ones roll their swap, once per frame: at 240 a blur (the
-        // user). Between 1/60 s ticks both hold still; a shaky letter's position also overrides wavy, so wavy holds
-        // too.
+        // Shaky letters jump to a new random spot, and glitchy ones roll their swap, once per frame: at 240 a blur.
+        // Between 1/60 s ticks both hold still; a shaky letter's position also overrides wavy, so wavy holds too.
         private const int Shaky = 1, Wavy = 2, Glitchy = 4;
 
         [HarmonyPatch(typeof(FontEffects), "Update")]

@@ -7,8 +7,7 @@ namespace BugFablesAP
     // sprites.
     internal static class ApIcon
     {
-        // The logo's colours (Archipelago's data/icon.png), in drawing order: each later circle sits on the ones
-        // before.
+        // The logo's colours, in drawing order: each later circle sits on the ones before.
         private static readonly string[] Colors = { "C97682", "EEE391", "75C275", "767EBD", "CA94C2", "D9A07D" };
         // Where each sits, in degrees round the centre, the same order: top, upper left, upper right, lower left, lower
         // right, bottom.

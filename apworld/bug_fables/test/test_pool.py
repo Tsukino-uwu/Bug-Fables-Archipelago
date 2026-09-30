@@ -61,7 +61,7 @@ class TestBerries(BugFablesTestBase):
 
 
 class TestSmallPool(BugFablesTestBase):
-    # Found by the fuzzer: with this few locations the move items outnumber the duplicate filler copies.
+    # With this few locations the move items outnumber the duplicate filler copies.
     options = {"shuffle_field_moves": True, "shuffle_jump": True, "starting_party_member": "vi",
                "shuffle_quests": False, "shuffle_crystal_berries": False, "shuffle_discoveries": False,
                "shuffle_medal_shops": False, "shuffle_item_shops": False}

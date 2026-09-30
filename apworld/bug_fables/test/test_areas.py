@@ -9,7 +9,7 @@ from ..data_tables import (ARTIFACTS, DOOR_RULES, DOORS, ENCOUNTERS, ITEMS, LOCA
                            STORY_EVENTS, TRANSFERS, UNUSED_MAPS, door_name)
 
 ALL_SPOTS = (*LOCATIONS, *STORY_EVENTS, *ARTIFACTS)
-# The unused room and the debug room: never part of anything (the user, 2026-09-30; room-logic.md, the model).
+# The unused room and the debug room: never part of anything (room-logic.md, the model).
 UNUSED = ("SnakemouthEmpty", "TestRoom")
 
 

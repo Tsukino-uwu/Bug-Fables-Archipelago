@@ -848,7 +848,7 @@ namespace BugFablesAP
                             return "infberries: no setting";
                         }
                         InfBerriesSetting.Value = !InfBerriesSetting.Value;
-                        return "infberries " + (InfBerriesSetting.Value ? "on: berries stay at 999" : "off");
+                        return "infberries " + (InfBerriesSetting.Value ? "on: berries to 999 once per save" : "off");
                     case "infjump":
                         if (InfJumpSetting == null)
                         {

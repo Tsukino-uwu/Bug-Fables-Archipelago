@@ -115,8 +115,8 @@ def shuffle(world: BugFablesWorld) -> list[tuple[Door, Door]]:
 
 
 def _plando(world: BugFablesWorld, names: dict[Door, str], coupled: bool) -> list[tuple[Door, Door]]:
-    """The player's plando connections, connected before the randomizer places the rest (as The Messenger does);
-    Coupled joins each both ways."""
+    """The player's plando connections, connected before the randomizer places the rest; Coupled joins each both
+    ways."""
     by_name = {name.lower(): door for door, name in names.items()}
     pairings: list[tuple[Door, Door]] = []
     for connection in world.options.plando_connections:

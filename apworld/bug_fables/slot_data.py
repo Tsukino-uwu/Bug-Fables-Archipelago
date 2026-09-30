@@ -1,4 +1,4 @@
-"""slot_data: everything the client acts on. Its keys are the contract with the mod (ApConnection.cs)."""
+"""slot_data: everything the client acts on. Its keys are the contract with the mod (SeedData.cs)."""
 from __future__ import annotations
 
 from collections.abc import Callable, Iterable, Mapping

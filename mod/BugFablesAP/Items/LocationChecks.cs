@@ -6,7 +6,8 @@ using BepInEx.Logging;
 namespace BugFablesAP
 {
     // Sends a location's check when the game marks it done. The save is the outbox: a location done offline is found
-    // again at the next login. A save from another seed sends nothing.
+    // again at the next login; respawning pickups and item-shop purchases wait in memory (ApConnection). A save from
+    // another seed sends nothing.
     internal sealed class LocationChecks
     {
         private readonly ManualLogSource log;
@@ -170,10 +171,11 @@ namespace BugFablesAP
                     (finished ?? (finished = new List<long>())).Add(entry.Key);
                 }
             }
-            // Respawning pickups send their own check (ItemSwap); queued per seed.
+            // Checks queued in play (respawning pickups, item-shop purchases); queued per seed.
             foreach (long id in connection.TakeRespawnChecks(ServerText.SeedOf(session)))
             {
-                log.LogInfo($"[check] location {id} is done (respawning pickup taken) on {Where()}: sending");
+                log.LogInfo($"[check] location {id} is done (a respawning pickup or shop purchase) on {Where()}: "
+                    + "sending");
                 (finished ?? (finished = new List<long>())).Add(id);
             }
             if (finished != null)

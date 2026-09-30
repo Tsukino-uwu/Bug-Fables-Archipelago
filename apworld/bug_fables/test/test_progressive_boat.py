@@ -87,7 +87,7 @@ class TestProgressiveBoat(BugFablesTestBase):
 
 
 def _assert_hints_find(test: BugFablesTestBase, wanted: dict[str, str]) -> None:
-    # !hint takes a group's name, whatever its case, and hints every item in it (MultiServer.get_hints, 0.6.7).
+    # !hint takes a group's name, whatever its case, and hints every item in it.
     groups = {name.lower(): items for name, items in test.world.item_name_groups.items()}
     for typed, item in wanted.items():
         with test.subTest(typed=typed):

@@ -101,7 +101,7 @@ class TestFillerStartingChecksRoomSwap(BugFablesTestBase):
 
 
 class TestFillerStartingChecksDecoupled(BugFablesTestBase):
-    # Decoupled was measured with 0 failures: the option holds there.
+    # The option holds with Decoupled doors too.
     options = {"entrance_randomizer": "decoupled"}
 
     def test_holds(self) -> None:

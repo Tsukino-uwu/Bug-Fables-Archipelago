@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Enemy scaling (Quality of life): each enemy has a home level, where vanilla expects it; a fight's enemies are
+    // Enemy scaling (the Gameplay page): each enemy has a home level, where vanilla expects it; a fight's enemies are
     // scaled from their home level to the target (the party's level, or the artifacts found). Starting values, tuned
     // by play.
     internal static class EnemyScaling

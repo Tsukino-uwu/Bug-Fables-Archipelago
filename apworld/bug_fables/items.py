@@ -48,7 +48,8 @@ def create_all_items(world: BugFablesWorld) -> None:
     # The included locations' vanilla items (duplicates kept), then padding; an item whose spot is off stays vanilla.
     pool: list[Item] = [world.create_item(name) for name in
                         (vanilla_item(loc) for loc in world.included_locations) if name is not None]
-    # With a starting member, it is start inventory (the client gets it too) and the other two are in the pool.
+    # With a starting member, it is start inventory (the client gets it too) and the others are in the pool (none with
+    # All Three).
     if world.starting_member >= 0:
         for number, name in enumerate(MEMBERS):
             if world.starting_member in (number, world.ALL_MEMBERS):

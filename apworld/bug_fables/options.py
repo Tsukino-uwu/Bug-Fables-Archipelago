@@ -87,7 +87,7 @@ class ShopContents(Choice):
     the important items; this keeps them spread over the world.
 
     Anything: any item, progression included.
-    No Progression: useful and filler items only; everything that unlocks something is out in the world.
+    No Progression: no item that unlocks something (useful, filler and trap items only); those are out in the world.
     Filler Only: small items only. If the whole room has too few small items to fill every shop, this seed's shops use
     No Progression instead, and the generator says so.
     """
@@ -188,7 +188,7 @@ class StartingPartyMember(Choice):
     and the fall room after the spider) become locations, whoever starts.
 
     The logic is cautious for now: with one member, everything past the Outskirts gate needs all three members, and a
-    few spots before it need Kabbu's horn. All Three by default.
+    few spots before it need Kabbu's horn or Leif's ice. All Three by default.
     """
 
     display_name = "Starting Party Member"
@@ -247,11 +247,12 @@ class PointsOfNoReturn(Toggle):
     """
     Off: wherever the logic sends you, it leaves you a way to walk back.
 
-    On: the logic may send you somewhere only the pause menu's Warp to Start gets you out of (a drop, a one-way door, a
+    On: the logic may send you somewhere only the pause menu's Warp gets you out of (a drop, a one-way door, a
     transfer with no way back), so items can land in more places, and you're expected to warp back to the start. The
     Warp is always there with it on.
 
-    Few one-ways are in the logic until its rooms are mapped, so for now it changes little. Off by default.
+    No one-way in the logic has a way back for it to drop until its rooms are mapped, so for now it changes nothing.
+    Off by default.
     """
 
     display_name = "Points of No Return"
@@ -274,7 +275,7 @@ class MusicShuffle(Toggle):
     """
     Every song plays in place of another, the same way every time the seed is played: an area's music, a battle's, a
     boss's. The short jingles (the victory fanfare, the game over, the chapter titles) swap among themselves. The title
-    screen, the wind, water and machine sounds, and the factory elevator's music stay as they are. Samira plays the
+    screen, the wind, water, machine and breathing sounds, and the factory elevator's music stay as they are. Samira plays the
     song you pick. Nothing else changes: no item, check or rule depends on it. Off by default.
     """
 

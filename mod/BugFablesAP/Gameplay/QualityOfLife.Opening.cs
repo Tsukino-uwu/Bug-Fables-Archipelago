@@ -22,7 +22,8 @@ namespace BugFablesAP
         private static bool openingFailed; // one try per session: a failure is logged, never retried every frame
         // Dev only ([Debug] TestStart): a map the opening ends with a warp to, a stand-in for a random start.
         internal static string TestStart = null;
-        // The seed's start (Starting Location): the opening ends with a transfer beside that save point instead.
+        // The seed's start (Starting Location): the opening ends with a transfer into that room through its door (or
+        // beside a save point).
         internal static Func<KeyValuePair<string, int>?> SeedStart;
         // A room start: the map whose door leads into the start map.
         internal static Func<string> SeedStartFrom;

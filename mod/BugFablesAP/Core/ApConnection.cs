@@ -249,8 +249,9 @@ namespace BugFablesAP
             internal int Item = -1;
         }
 
-        // Respawning pickups: nothing in the save marks them, so what's done lives here (server list, updates, local
-        // checks), and offline pickups wait in the outbox tagged with their seed. Memory only; locked across threads.
+        // Respawning pickups and item-shop purchases: nothing in the save marks them, so what's done lives here (server
+        // list, updates, local checks), and offline ones wait in the outbox tagged with their seed. Memory only; locked
+        // across threads.
         private readonly object doneLock = new object();
         private readonly HashSet<long> done = new HashSet<long>();
         private readonly Dictionary<long, string> respawnOutbox = new Dictionary<long, string>();
@@ -349,7 +350,7 @@ namespace BugFablesAP
                 catch (Exception e)
                 {
                     Post("[check] sending " + string.Join(", ", ids) + " failed: " + e.GetBaseException().Message
-                        + " (sent again after the next login)");
+                        + " (a flag's check is found again at the next login)");
                 }
             });
         }
@@ -535,7 +536,7 @@ namespace BugFablesAP
             }
         }
 
-        // DeathLink (the Gameplay page's row): the tag follows the row, received deaths wait here for the game thread.
+        // DeathLink (the Archipelago panel's row): the tag follows the row, received deaths wait here for the game thread.
         internal Func<bool> DeathLinkWanted;
         private volatile DeathLinkService deathLinks;
         private string slotName;

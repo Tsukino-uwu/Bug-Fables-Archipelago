@@ -10,7 +10,8 @@ using UnityEngine;
 namespace BugFablesAP
 {
     // The panel's "Quality of life" page: rows that speed the game up without changing what it gives or where.
-    // The logic never counts on any of them. With the Archipelago mod disabled only Use on normal saves turns them on.
+    // The logic counts on none of them, except the Warp with Points of No Return. With the Archipelago mod disabled only
+    // Use on normal saves turns them on.
     internal static partial class QualityOfLife
     {
         internal static ConfigEntry<bool> FastText;
@@ -102,7 +103,7 @@ namespace BugFablesAP
         private const float IntroSpeed = 8f;
 
         // The panel's two buttons: every Quality of life row off (a choice to its "nothing extra" value), or back to
-        // each setting's own default. Enemy scaling and Shop prices live on the Gameplay page and aren't touched.
+        // each setting's own default. Enemy scaling and Medal prices live on the Gameplay page and aren't touched.
         internal static void DisableAll()
         {
             foreach (ConfigEntry<bool> setting in new[] { FastText, SkipCutscenes, ItemBackgrounds, ApMenu.Detector })
@@ -175,12 +176,14 @@ namespace BugFablesAP
             ItemIcons = config.Bind("QualityOfLife", "ItemIcons", "OtherGames", new ConfigDescription(
                 "Which items that aren't yours show the Archipelago icon, on the ground, on shelves and when found: "
                 + "OtherGames (another game's items; another Bug Fables player's show their real sprite), AllPlayers "
-                + "(every item that isn't yours), or Off (they look like the item the game had there, a surprise).",
+                + "(every item that isn't yours), or Off (another game's items look like the item the game had there, a "
+                + "surprise; another Bug Fables player's show their real sprite).",
                 new AcceptableValueList<string>(ItemIconValues)));
             ItemBackgrounds = config.Bind("QualityOfLife", "ItemBackgrounds", true,
                 "A check's item, on the ground or on a shop shelf, yours included, has the pickup's starburst behind "
-                + "it in its Archipelago class colour (progression, useful, filler, trap), so you can tell from afar "
-                + "whether it matters. Off: no backdrop until it's picked up, a surprise.");
+                + "it in its class colour (progression, useful, filler, trap, as Item colors colours them; with Item "
+                + "colors Off, the game's own colour for the item's kind), so you can tell from afar whether it "
+                + "matters. Off: no backdrop until it's picked up, a surprise.");
             MedalPrices = config.Bind("Gameplay", "MedalPrices", FullPrice, new ConfigDescription(
                 "Medal shop prices, in berries and crystal berries, in tenths of the normal price: 10 normal, 5 half, "
                 + "0 free. Any price above free is at least 1. Switch it on the Gameplay page.",
@@ -194,7 +197,7 @@ namespace BugFablesAP
             Travel = config.Bind("QualityOfLife", "Travel", "Both", new ConfigDescription(
                 "Travel buttons in the pause menu, each behind a Yes / No box: Warp (back to where the game started, "
                 + "or to the seed's start), Map (the map, where confirm on an area you've been to travels to its save "
-                + "point), Both, or Off. Not shown in battle.",
+                + "point), Both, or Off. Not shown in battle. In a seed the Warp is always there.",
                 new AcceptableValueList<string>(TravelValues)));
             SkipConfirm = config.Bind("QualityOfLife", "SkipConfirm", "Off", new ConfigDescription(
                 "Which travel buttons act without their Yes / No box: Warp (warps as soon as it's picked), Map "

@@ -35,11 +35,13 @@ namespace BugFablesAP
                 return;
             }
             // Without all three a save could keep the panel's 614, so Hardest stays off.
-            if (!Hooks.Install(typeof(HardestSaves), "medals", "Hardest does nothing"))
+            bool saves = Hooks.Install(typeof(HardestSaves), "medals", "Hardest does nothing");
+            if (!saves)
             {
                 hardest = () => false;
             }
-            log.LogInfo("[medals] installed on MainManager.BadgeIsEquipped, SaveFile, Load and SetVariables");
+            log.LogInfo("[medals] installed on MainManager.BadgeIsEquipped"
+                + (saves ? ", SaveFile, Load and SetVariables" : ""));
         }
 
         internal static void Disable()

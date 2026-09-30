@@ -8,8 +8,8 @@ using UnityEngine;
 namespace BugFablesAP
 {
     // Save crystals by the confirm button, as an NPC is talked to: the game only starts one from an attack's hitbox,
-    // which Shuffle Field Moves can take away. And the Gameplay page's Healing crystals: every crystal yellow (save and
-    // heal).
+    // which Shuffle Field Moves can take away. And the Gameplay page's Healing crystals: every save crystal but the red
+    // ones yellow (save and heal).
     internal static class SaveCrystals
     {
         internal static ConfigEntry<bool> AllHeal;
@@ -32,8 +32,8 @@ namespace BugFablesAP
             randomizerOn = on;
             settingsOn = settings;
             AllHeal = config.Bind("Gameplay", "HealingCrystals", false,
-                "On: every save crystal is yellow, so it heals HP and TP as well as saving. Off: as the game has them. "
-                + "Switch it on the Gameplay page.");
+                "On: every save crystal but the red ones is yellow, so it heals HP and TP as well as saving. Off: as "
+                + "the game has them. Switch it on the Gameplay page.");
             if (Hooks.Install(typeof(Colour), "crystals", "Healing crystals does nothing"))
             {
                 log.LogInfo(

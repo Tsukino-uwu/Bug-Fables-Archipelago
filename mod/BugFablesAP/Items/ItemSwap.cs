@@ -316,8 +316,8 @@ namespace BugFablesAP
             }
             else
             {
-                // Another game's item: the drawn Archipelago icon, on Archipelago's classification colours
-                // (NetUtils.py): progression, useful, trap, filler.
+                // Another game's item: the drawn Archipelago icon, on its class colour: progression, useful, trap,
+                // filler.
                 name = info.ShownPlayer() + "'s " + info.ShownItem();
                 sprite = QualityOfLife.IconMode == "Off" ? null : ApIcon.Get();
                 color = ClassColor(info.Flags);

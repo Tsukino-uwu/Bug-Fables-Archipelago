@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Medal shops: shelf slots whose medal is a location show and name the seed's item, prices scale with the QoL row,
+    // Medal shops: shelf slots whose medal is a location show and name the seed's item, prices scale with Medal prices,
     // and the stock is every copy not yet done (bits per copy in flagvar[7]/[8], so an offline purchase is kept).
     internal static class ShopSwap
     {
@@ -27,9 +27,11 @@ namespace BugFablesAP
             {
                 return;
             }
-            Hooks.Install(typeof(Shelves), "shop", "a shelf shows the game's own medal until the shop is opened");
-            Hooks.Install(typeof(Stock), "shop", "shops keep the game's own stock");
-            log.LogInfo("[shop] installed on NPCControl.CreateDescWindow, Interact and MainManager.UpdateShops");
+            bool shelves = Hooks.Install(typeof(Shelves), "shop",
+                "a shelf shows the game's own medal until the shop is opened");
+            bool stock = Hooks.Install(typeof(Stock), "shop", "shops keep the game's own stock");
+            log.LogInfo("[shop] installed on NPCControl.CreateDescWindow, Interact"
+                + (shelves ? ", SetBadgeShop" : "") + (stock ? ", MainManager.UpdateShops" : ""));
         }
 
         internal static void Disable()
