@@ -39,7 +39,7 @@ Its code style, read again 2026-09-28 (`main` at `0ef738f`), for a comparison wi
   into nested lambdas by its own parser.
 - **Strengths:** entrances through Archipelago's generic entrance randomizer (`connect_entrances`), and Universal
   Tracker support (a generated location table, map pages, `interpret_slot_data`).
-- **We take, later:** the generic entrance randomizer and Universal Tracker support, each as its own step.
+- **We take:** the generic entrance randomizer (build step 12); later, Universal Tracker support, as its own step.
 
 ### The Pokémon Crystal apworld: gerbiljames/Archipelago-Crystal (read 2026-09-28)
 
@@ -53,8 +53,8 @@ Two branches: `pokecrystal-develop` (world 0.20.1) and `future/6.0.0`, the next 
   resort. Rules sit on named entrances, so they travel with the entrance.
 - **Tests:** 95 methods on the old branch, 461 on the new one, plus a fuzzer in CI.
 - **Style:** the new modules are typed, documented and within 120 columns.
-- **We take:** typed frozen data (the apworld's data tables), the 120-column limit, and later option groups and
-  Universal Tracker support.
+- **We take:** typed frozen data (the apworld's data tables), the 120-column limit, option groups (the first with
+  build step 33), and later Universal Tracker support.
 
 ### The author's earlier Godot Archipelago project (2026-07, their own work, MIT)
 
@@ -66,18 +66,18 @@ item count is memory-only by design. Bug Fables saves items, so ours must be sav
 
 ## From playing other apworlds
 
-The user's own experience; nothing below was read.
+The user's own experience; anything read afterwards is marked, with its row in `licensing.md`.
 - **Pokémon Emerald:** Mirage Island is always shown; Shoal Cave switches between high and low tide each
   time you go in or out, so both versions of the cave can be reached; custom roadblocks spread Surf's reach; a
   dexsanity makes each Pokémon a location once caught, not just seen; and *Remote Items* has every item come from the
   server, so a lost save can recover. **We take:** areas and doors that close later are kept open, day/night map pairs
   reachable both ways (build step 9), one Explorer Permit per gate (Next 31, an idea), each enemy a location once
   spied, not just fought (Next 44, an idea), and items remote only, the received count in the save (How it works, §3
-  and §5; its code for Remote Items only was then read, `licensing.md`).
+  and §5; its code was then read, first for Remote Items; `licensing.md` lists each read).
 - **Pseudoregalia:** a colour or mark showing what type an item is before you pick it up, the progressive sword (three
   copies of one item, each giving the next ability), and a found pickup gone for good once picked up. **We take:** item
-  backgrounds showing how much an item matters before you take it (the mod guide, step 22), progressive items (Next 23,
-  an idea), and found pickups hidden in every save (build step 27).
+  backgrounds showing how much an item matters before you take it (the mod guide, step 22), progressive items (build
+  steps 23 and 36), and found pickups hidden in every save (build step 27).
 - **Traps:** Celeste's flipped screen, Zelda's freeze and chickens, OoT's disguised traps. **We take:** traps that
   annoy, never harm, and a trap that can look like a wanted item (Next 19, an idea; OoT's option was then read,
   `licensing.md`).
