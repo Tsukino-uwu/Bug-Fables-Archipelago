@@ -8,6 +8,8 @@ Two kinds, kept apart (the user, 2026-09-30):
   repository read, so no licence row. It may be vague: that game's way of doing a thing, in the user's words. An idea
   or a mechanic belongs to no one; code, text and art do. So this holds even for a project with no licence, whose
   repository we may never open (Pseudoregalia's, the user, 2026-09-30).
+- **The user's own work** is compared without a licence row (the user, 2026-09-30): it is theirs to use. It stays
+  unnamed, with no path.
 
 ## Compared with ours
 

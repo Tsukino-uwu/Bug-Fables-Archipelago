@@ -1,7 +1,8 @@
 # Licensing
 
 **Rule: read a project's licence from its own file before reading anything else of it.** Any project whose code,
-repository or docs we look at has a row here, always, with no exceptions (the user, 2026-09-30). A project with no row
+repository or docs we look at has a row here, always (the user, 2026-09-30), with one exception: the user's own work,
+which is theirs to use and stays unnamed (the user, 2026-09-30; `references.md`). A project with no row
 has not been checked and may not be used. Only what the user knows from playing a game or an apworld, with nothing
 read, needs no row: `references.md` keeps the two kinds apart. The test for what enters this repo is "fine in a public
 repo forever?", not "does a licence permit it?". So even a permissive licence never lets us copy source: we
