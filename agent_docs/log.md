@@ -47,6 +47,7 @@ either one wrong).
 - [2026-09-29: Room Swap, Uncap FPS Off by default](#2026-09-29-room-swap-uncap-fps-off-by-default)
 - [2026-09-30: Archipelago's entrance randomizer, rooms as regions, Decoupled, plando](#2026-09-30-archipelagos-entrance-randomizer-rooms-as-regions-decoupled-plando)
 - [2026-09-30: Music Shuffle, in the yaml](#2026-09-30-music-shuffle-in-the-yaml)
+- [2026-09-30: no criticism of other projects in the repo](#2026-09-30-no-criticism-of-other-projects-in-the-repo)
 
 ## 2026-09-24: the project starts
 
@@ -1267,12 +1268,9 @@ either one wrong).
 - **What happened:** after the "bad code" comments with nothing named, the user asked how the project compares with
   hand-written ones: Tevi's mod and apworld, and the Pokémon Crystal apworld on both its branches. Five read-only
   surveys, my own spot checks, then a sixth agent fact-checking the plan (7 wrong claims, about 12 misses, all fixed).
-- **Numbers:**
-  - Ours: 14,852 lines of C# for 74 locations, 147 tests plus the fuzzer, 83 hand-written Harmony call sites.
-  - Tevi's mod: 16,510 lines for about 1,440 locations, no tests, Harmony attributes.
-  - Crystal: 14,789 lines of Python growing to 21,384, 803 locations, 95 tests growing to 461.
-- **Verdict:** by measure the code isn't bad; it is cleaner than Tevi's mod and on par with or ahead of the
-  apworlds, except Crystal's next version on tests and typing. What an outsider sees first:
+- **Ours, measured:** 14,852 lines of C# for 74 locations, 147 tests plus the fuzzer, 83 hand-written Harmony call
+  sites.
+- **Verdict:** by measure our code isn't bad. What an outsider sees first:
   - hooks wired by hand;
   - AI traces in code, data and commits;
   - a lot of code for 74 checks;
@@ -1284,20 +1282,11 @@ either one wrong).
   - the traces out of code, data, future commit subjects, the guides and MEASURED.md;
   - every hook moved to attributes;
   - the stale gate only at release.
-- **Agents were wrong too:**
-  - Crystal's "leftover caching flag" is `rule_builder`'s own idiom.
-  - Its "stale Holes doc" names entrances that exist.
-  - Both were caught before the user sent anything.
-- **Sent by the user:** four small, verified findings to the Crystal developer:
-  - the translated docs a WebHost won't list;
-  - an `=` meant as `:`;
-  - `print("oopsie")`;
-  - a duplicate annotation.
-
-  A blunter follow-up about its long functions is drafted, not sent.
+- **Agents were wrong too:** two of their claims about another project were wrong once checked, caught before the
+  user sent anything.
 - **Done:** the stale gate moved into the release workflow (8926345), so `main` is green after the next push. Licence
-  rows for Tevi's apworld and Crystal: the licences were read first, but the rows came after the read. The findings
-  are in `references.md`.
+  rows for Tevi's apworld and Crystal: the licences were read first, but the rows came after the read. What we take
+  from each is in `references.md`.
 - **Done later the same day (phases 0-2 of the plan):**
   - Traces out of code and data (a3dd592).
   - Commit subjects kept to 72 characters with no attribution, enforced by `commit-msg`; `Seen:` defined in
@@ -1470,8 +1459,8 @@ either one wrong).
   - **Also found:** two table cells with an unescaped `|`, which split their rows on GitHub (code-map, reviewing); now
     escaped. And the harness baseline broke on the new warning, which pre-commit doesn't run and pre-push would have
     caught; fixed before any push.
-- **Upstream:** MultiClient.Net's main branch still has the bug (the file was last changed 2024-05-27). The repo has
-  no private vulnerability reporting and no SECURITY.md. A report is drafted for the user to send.
+- **Upstream:** MultiClient.Net's main branch still has the bug (the file was last changed 2024-05-27). A report is
+  drafted for the user to send.
 - **The TLS probe** (f6f5f02): the dev build's `TlsProbe` is on in the game's config. It logs what this Mono's
   certificate check decides for each wss:// server, and accepts the certificate as before. Waiting on a connection
   to archipelago.gg.
@@ -1607,7 +1596,7 @@ either one wrong).
   bug, re-checked on the user's questions ("are we sure its an issue and not something we made up?"): real in 6.7.1
   and `main`, never reported (six searches), no fix proposed (#124 only touches the file's timestamp). The user: a
   text-only issue they post themselves, "I don't want to push AI code onto other projects/repos" (kept as a standing
-  preference); the draft is on the review page, item 27. Upstream #141 (others') would retire our compression switch
+  preference; the review page, item 27). Upstream #141 (others') would retire our compression switch
   once released; I first said #142 would retire our dead-socket close too, but its diff touches only the
   `System.Net.WebSockets` helper, which our net40 build doesn't use (the user's "those are fixes we won't have to
   worry about later?" prompted the check). Review items 24-28, Next 43.
@@ -1740,3 +1729,13 @@ either one wrong).
   - Not yet seen in game: the user is playing vanilla.
 - **The preflight's import list gained `OptionGroup`** in a commit of its own, on the strength of the approved plan.
   The user then confirmed it explicitly ("I meant for optiongroup"). Universal Tracker is still Next 43, item 14.
+
+## 2026-09-30: no criticism of other projects in the repo
+
+- **The user:** "we shouldn't call other projects bad, or say that/if anything is bad in them". Blunt findings are
+  for a review the user sends a developer directly, and never sit in the repo. Now a rule in `CLAUDE.md`, its
+  reasoning at the top of `references.md`.
+- **Removed:** the weak-spot notes in `references.md`; the comparison's verdict on other projects and the findings
+  sent to another developer, in this log (2026-09-28); the draft upstream issue on the review page (posted as #143,
+  the link stays). `docs/reviewing.md` now links `licensing.md` and `references.md`.
+- **Still in git history:** `main` can't be force-pushed, so earlier commits keep the old text.

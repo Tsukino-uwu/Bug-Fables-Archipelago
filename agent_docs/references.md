@@ -1,6 +1,8 @@
 # References: other projects read for their approach
 
-Each one's licence is in `licensing.md`. **We take facts and approach only, never code.**
+Each one's licence is in `licensing.md`. **We take facts and approach only, never code.** Each entry says what the
+project does and what we take, never what's wrong with it (the user, 2026-09-30): a finding worth a developer's time
+goes to them directly, and never sits in this repo.
 
 ## Tevi_Randomizer: a Unity Mono BepInEx Archipelago mod (read 2026-09-24, last commit 2026-07-01)
 

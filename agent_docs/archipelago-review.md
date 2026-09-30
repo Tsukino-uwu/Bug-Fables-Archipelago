@@ -160,38 +160,12 @@ After the slot_data decision, each kept item was checked again for a way Archipe
     searches, 2026-09-29), and the file hasn't changed since 2024-05-27; PR #124 touches the same file but not this.
     Decided (the user, 2026-09-29): if reported, a text-only issue the user posts; never code from us. Our patch stays
     until a fixed release. **Reported:** the user posted it as
-    [#143](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net/issues/143) (2026-09-29), from the draft below
-    with their own opening line.
+    [#143](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net/issues/143) (2026-09-29).
 28. **One of our workarounds has a fix waiting upstream** (checked in each pull request's diff, 2026-09-29): #141,
     opened by someone else, turns on websocket-sharp's compression in the websocket-sharp helper and the DLL our net40
     build uses (`DLLs/websocket-sharp.dll`), so our compression switch can go once a release carries it and we have
     seen it work. #142 (releasing the socket on disconnect) changes only the `System.Net.WebSockets` helper, which
     net40 doesn't use: it would not retire our dead-socket close. Neither is merged; until then, ours stay.
-
-**The draft issue** (for <https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net/issues/new>):
-
-The user writes their own first line (saying it was found with AI); the rest, kept plain and short:
-
-> **Title:** GetFileSystemSafeFileName doesn't actually sanitize anything
->
-> In `DataPackage/FileSystemCheckSumDataPackageProvider.cs`, `GetFileSystemSafeFileName` strips the invalid
-> characters from `gameName` but returns `safeName`, which is still the original string. So nothing gets removed.
->
-> ```csharp
-> var safeName = gameName;
->
-> foreach (var c in Path.GetInvalidFileNameChars())
->     gameName = gameName.Replace(c.ToString(), string.Empty);
->
-> return safeName;
-> ```
->
-> The checksum in `TryGetDataPackage` (line 22) doesn't go through it at all.
->
-> Both come from the server, so a game name or checksum with `../` in it can point the cache read/write outside the
-> datapackage folder.
->
-> Checked 6.7.1 and main. Didn't find an existing issue or PR for it (#124 touches the same file but not this).
 
 ## Kept, because Archipelago has nothing for it
 
