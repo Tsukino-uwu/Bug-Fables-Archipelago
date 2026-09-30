@@ -22,7 +22,8 @@ file edit and page fetch the agent makes. It refuses anything that gets past the
 project with no row in `licensing.md` except its licence file, without asking you. It asks you first only before:
 - an edit to `docs/capabilities.md`, the patterns file, `.claude/` or `.git/`;
 - a commit that may carry one of those;
-- a `gh api` write.
+- a `gh api` write;
+- a shell command that reads or changes the clone's `.git/config` or `.git/hooks`.
 
 Its prompts start with `agent-guard:`; any other prompt is Claude Code's own.
 
@@ -64,7 +65,8 @@ The build and the copy into the game are separate steps. The build never writes 
      it after copying, and `copy-dev.ps1 -Status` prints only it. A reload waits for a scene, talk or battle to end,
      so check once when the tester says it's in; never poll for it.
    - `-DebugOn EntityDump,ScriptDump` / `-DebugOff GrantProbe` switch Debug settings in the mod's config
-     in the same run, and read the result back. `-ConfigSet Section.Key=Value` sets a key in any other section, for a
+     in the same run, and read the result back. `-DebugSet Key=Value` sets one that takes a number or text (one per
+     `-DebugSet`, not split at commas). `-ConfigSet Section.Key=Value` sets a key in any other section, for a
      test (`-ConfigSet Archipelago.RandomizerEnabled=true` to log in at the main menu); set it back after.
    - The copied DLL is stamped with the current time, since DevReload watches write times: copying an unchanged
      build to reload a changed `-DebugSet` did nothing until then (2026-09-25).
@@ -263,8 +265,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   its flag is cleared first so it's back.
 - `warp <map> [flag]`: go to a map by `MainManager.Maps` name or number (`warp TestRoom` included). Without a flag it
   lands once, where walking in through a door into the map ends (a second move after arrival once came after an
-  enemy had touched the party, and the battle's start froze, 2026-09-26). With a flag (or `@name`) it lands on the
-  entity, then steps beside it, unless a battle, event or dialogue has started by then.
+  enemy had touched the party, and the battle's start froze, 2026-09-26). With a flag it lands on the entity, then
+  steps beside it; with `@name` it lands at the map's origin, then steps beside the named entity; either way, not if a
+  battle, event or dialogue has started by then.
 - `spawn <item|key|medal> <id> [flag]`: drop a pickup next to you. With a pickup location's flag, on that
   location's map, it is that location. `spawn member <n> [x z]` drops party member n's look (0 Vi, 1 Kabbu, 2 Leif)
   at that offset from you, to see how a location holding him looks; it's a Crunchy Leaf underneath, given if taken.
@@ -278,8 +281,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `take <item|key> <id>`: removes one from the inventory, as the game's own `removeitem` does. Test files only.
 - `warpicon leaf|key|scroll`: the Warp button's icon (the leaf is the default), shown the next time the pause menu opens.
 - `warpcolor orange|pink|lime|<hue>`: the drawn backdrop's colour, for `warpicon scroll` (a design test).
-- `enemylook <enemy id|off>`: reloads the current map with every ordinary map enemy looking like that enemy (a
-  visual test for enemy shuffle's map look; the fights stay the seed's). Puzzle enemies keep their own look.
+- `enemylook <enemy id|off> [move]`: reloads the current map with every ordinary map enemy looking like that enemy (a
+  visual test for enemy shuffle's map look; the fights stay the seed's); with `move`, they also move like a map enemy
+  whose fight starts with that enemy. Puzzle enemies keep their own look.
 - `enemyfight <enemy id> [id...] | off`: every map fight starts with those enemy ids instead of the seed's (a test).
 - `unstick`: stops the last scene's coroutine (`Event<n>`: a stuck scene left running threw once the cleanup removed
   its stand-ins, 2026-09-26), runs the game's own end-of-cutscene cleanup, when a cutscene died and left you frozen, and ends a
@@ -299,8 +303,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   applied. `interp on|off`: Unity's rigidbody interpolation on every character on the map. `camlerp on|off`: the camera
   drawn between physics steps (`FrameRate.cs`); `bodylerp on|off`: the characters drawn the same way. A look at higher
   frame rates; frame-counted logic runs fast meanwhile.
-- `bodytrace [frames]`: from when the leader starts moving, logs each drawn frame's step share, her last step's move,
-  her place on screen drawn and true, what she stands on (name/tag/layer) and her parent, then the spread of the
+- `bodytrace [frames]`: from when the leader or a follower starts moving, logs each drawn frame's step share, her last
+  step's move, the leader's and the first follower's place on screen drawn and true, what she stands on (name/tag/layer) and her parent, then the spread of the
   frame-to-frame change of each (a steady walk, drawn smoothed, holds still).
 - `trace [frames]`: while you move with an NPC's emoticon showing, logs where the player, the NPC and its emoticon land
   on screen each drawn frame, with the camera's and the emoticon's angles. `cams`: every camera, its depth, parent and
@@ -332,6 +336,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   2 Leif), display only, the way an item from another player is shown.
 - `articles [id...]`: log the found-item line's default article, each listed item's own, and the "You got" lines.
 - `holdup ap`: the drawn Archipelago icon held up on two class backdrops (plum, cyan).
+- `holdup long`: four "You got" lines too wide for the box (the one seen, a longer one, the longest server name with a
+  player and alone), to check the fitting (the mod guide, step 9).
 - `shelflook <location id> <white|black> <rim share>`: a shop slot shows the drawn icon with that outline, to compare
   looks on a shelf; `shelflook off` puts every slot back.
 - `iteminfo`: log every item entity on the map with its sprite, pivot, size, lift and backdrop (placement checks).
@@ -348,10 +354,10 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `onehit`: flips a test boost: every hit on an enemy does at least 99 (before defence). It's the `[Debug]` setting
   `OneHit` (off in the code), so it survives reloads; `copy-dev.ps1 -DebugOn OneHit` turns it on for a dev install.
 - `infberries`: flips the berry top-up: 999 berries once per save played, when its first map loads (the `[Debug]`
-  setting `InfBerries`, off in the code, on in the dev install: `copy-dev.ps1 -DebugOn InfBerries`). Once, not on
+  setting `InfBerries`, off in the code; `copy-dev.ps1 -DebugOn InfBerries` turns it on for a dev test session). Once, not on
   every drop: a refill hid purchases from the item shops, which see a purchase as berries going down (2026-09-27).
-- `infjump`: flips jumping again in mid-air. It's the `[Debug]` setting `InfJump` (off in the code), on in the dev
-  install (`copy-dev.ps1 -DebugOn InfJump`), so it survives reloads.
+- `infjump`: flips jumping again in mid-air. It's the `[Debug]` setting `InfJump` (off in the code; `copy-dev.ps1
+  -DebugOn InfJump` turns it on for a dev test session), so it survives reloads.
 - **`TestDoors`** (`[Debug]`, not a console command): doors rewritten by hand, `Map/Door=LikeMap/LikeDoor;...` (entity
   names): that door leads where the other one leads, the entrance randomizer's proof of concept (`copy-dev.ps1 -DebugSet
   "TestDoors=BugariaOutskirtsOutsideCity/loadzone east=BugariaMainPlaza/LoadingZoneCommercial"`; empty turns it off).
@@ -384,7 +390,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 ## Every Debug setting
 
 All live under `[Debug]` in `BepInEx/config/bugfables.archipelago.cfg`, are off by default, and are switched with
-`copy-dev.ps1 -DebugOn <name>` / `-DebugOff <name>` (step 3 above). Dev installs and test files only. They exist
+`copy-dev.ps1 -DebugOn <name>` / `-DebugOff <name>`, or set with `-DebugSet Name=Value` for the ones that take a
+number or text (step 3 above). Dev installs and test files only. They exist
 only in the dev (Debug) build: every one is bound in `Dev/Plugin.Dev.cs`, and the release build leaves `Dev/` out.
 
 | Setting | What it does |

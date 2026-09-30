@@ -6,7 +6,8 @@ using UnityEngine;
 
 namespace BugFablesAP
 {
-    // Dev-only: dumps the guisprites sheets and an index table to the BepInEx folder (game art: never the repo).
+    // Dev-only: dumps the guisprites sheets and the item and medal sprites, each with an index table, to the BepInEx
+    // folder (game art: never the repo).
     internal static class SpriteDump
     {
         internal static bool TryRun(ManualLogSource log)
