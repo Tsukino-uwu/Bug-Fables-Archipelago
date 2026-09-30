@@ -5,10 +5,12 @@ from rule_builder.rules import Has
 from . import BugFablesTestBase, logic_rules, rule_parts
 from ..abilities import ABILITIES
 from ..custom_rules import CanUse, Member, MoveItem
-from ..data_tables import (ARTIFACTS, DOOR_RULES, DOORS, ITEMS, LOCATIONS, MAPS, STORY_EVENTS, TRANSFERS,
-                           door_name)
+from ..data_tables import (ARTIFACTS, DOOR_RULES, DOORS, ENCOUNTERS, ITEMS, LOCATIONS, MAPS, ROOM_STARTS, STARTS,
+                           STORY_EVENTS, TRANSFERS, UNUSED_MAPS, door_name)
 
 ALL_SPOTS = (*LOCATIONS, *STORY_EVENTS, *ARTIFACTS)
+# The unused room and the debug room: never part of anything (the user, 2026-09-30; room-logic.md, the model).
+UNUSED = ("SnakemouthEmpty", "TestRoom")
 
 
 class TestAreas(BugFablesTestBase):
@@ -74,3 +76,31 @@ class TestAreas(BugFablesTestBase):
                         self.assertIn(part.ability, ABILITIES)
                     elif isinstance(part, Member):
                         self.assertIn(part.name, members)
+
+
+class TestUnusedMaps(BugFablesTestBase):
+    # Every door shuffled both ways, a random start and enemies shuffled: none may reach an unused map.
+    options = {"entrance_randomizer": "decoupled", "starting_location": "anywhere", "enemy_shuffle": "enemies_only"}
+
+    def test_listed(self) -> None:
+        for name in UNUSED:
+            self.assertIn(name, UNUSED_MAPS)
+
+    def test_part_of_nothing(self) -> None:
+        entrances = [e for e in self.multiworld.get_entrances(self.player) if e.parent_region is not None]
+        slot = self.world.fill_slot_data()
+        uses = {
+            "region": {region.name for region in self.multiworld.get_regions(self.player)},
+            "entrance": {region.name for e in entrances for region in (e.parent_region, e.connected_region) if region},
+            "transfer": {m for t in TRANSFERS for m in (t.from_map, t.to_map)},
+            "spot": {spot.region for spot in ALL_SPOTS},
+            "encounter": {e.map for e in ENCOUNTERS},
+            "save point": {s.map for s in STARTS},
+            "room start": {m for s in ROOM_STARTS for m in (s.map, s.from_map)},
+            "door target": {t[key] for t in slot["door_targets"] for key in ("map", "like_map")},
+            "start": {slot["start"].get("map"), slot["start"].get("from")},
+        }
+        for name in UNUSED:
+            for kind, maps in uses.items():
+                with self.subTest(map=name, kind=kind):
+                    self.assertNotIn(name, maps)

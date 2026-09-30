@@ -79,7 +79,8 @@ rules work in Archipelago: `apimplementation.md`, How it works §11.
   replaces its spots' `reach` with the room's own rules.
 - **Unused and test maps are never part of anything** (the user, 2026-09-30): no region, no logic, never the target of
   a door, a transfer or a spawn, never reachable. They are `UNUSED_MAPS` (`data_tables.py`): `SnakemouthEmpty` and
-  `TestRoom`, with a test to come that no table names either. `Blank`, the only other map named like one, isn't unused:
+  `TestRoom`; `TestUnusedMaps` proves no region, entrance, transfer, spot, encounter, start or shuffled door names
+  either. `Blank`, the only other map named like one, isn't unused:
   a scene passes through it (Event111, `LoadMap(115)` then `DesertEastmost`), so it's a scene-only room, never a start
   (S1).
 

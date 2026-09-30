@@ -1666,7 +1666,9 @@ them; room-by-room rules (build step 24) replace them later.
    and `MetalLake`,
    `TermiteColiseum2`, `BugariaEndThrone`, reached only by transfers. 244 regions, 582 entrances. **Unused and test
    maps are never part of anything** (the user, 2026-09-30): no region, no logic, never the target of a door, a
-   transfer or a spawn, never reachable (`room-logic.md`, the model).
+   transfer or a spawn, never reachable (`room-logic.md`, the model). Test `TestUnusedMaps`, with every door shuffled
+   both ways and a random start: no region, entrance, transfer, spot, encounter, start or shuffled door names one; it
+   fails with the list emptied.
 2. **Every door an entrance of its map's region**, named where it is, `"<map>: <door>"` (the naming the entrance
    randomization doc recommends), connected as the game has it: 508. The 39 fixed doors are plain entrances.
 3. **The transfers that join the door graph's parts** (the doors alone split it into 10), each a `Transfer` in its
