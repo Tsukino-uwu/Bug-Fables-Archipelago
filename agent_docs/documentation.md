@@ -2025,8 +2025,8 @@ common rates (165, 170, 200, 360, 480) had the same gap. So the row was made to 
 ten pips, the first Off, then 90, 100, 120, 144, 165, 180, 240, 360, and **Monitor** last, which is the display's own
 refresh rate (`Screen.currentResolution.refreshRate`) met with VSync, so any display is smooth without tearing. At 60 Hz
 or less Monitor keeps the game's own setting, and the row's line says so. The row stops at its ends, as the volume rows
-do. Monitor was the default for a day (2026-09-28, once shaky text was fixed and no odd combat had been seen). The
-first frame with the row on installs the frame sites (a few seconds). Rates above 240 are untested. **Seen on screen
+do. Monitor was the default from 2026-09-28 (once shaky text was fixed and no odd combat had been seen) to 2026-09-29.
+The first frame with the row on installs the frame sites (a few seconds). Rates above 240 are untested. **Seen on screen
 (2026-09-28):** the ten pips look and work fine.
 
 **Off by default again (2026-09-29, the user).** A fresh config and the panel's reset give Off, the game's own frame
@@ -2148,8 +2148,8 @@ seen working, and removed the same day because it cost too much for what it show
 
 ## 29. Save crystals used with the confirm button, no move needed
 
-With Shuffle Field Moves (the Archipelago side, build step 21), the party may have no field attack for a long time, and
-the game only starts a save crystal when an attack hits it: no save and no heal until a move item arrives (a gap
+With Shuffle Field Moves (the Archipelago side, build step 21), the party may go far into a seed with no field attack,
+and the game only starts a save crystal when an attack hits it: no save and no heal until a move item arrives (a gap
 spotted 2026-09-28).
 
 **Decided (2026-09-28):** confirm next to a crystal uses it, "like talking to an NPC", not touching it (a
