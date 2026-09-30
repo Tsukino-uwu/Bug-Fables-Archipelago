@@ -2069,3 +2069,13 @@ either one wrong).
   four options (46 letters, counted in the first measurement) aren't behind the page. Copied again and confirmed by the
   new install line; the check from the title screen's Settings is still to come (`development.md` notes the race).
 - **Not pushed:** everything from `bf00b30` on (the user didn't ask this time).
+- **The decisions, asked (the user: "just give me the ask thing for all of these"):** `docs/capabilities.md` widened
+  to what the code does (paste in all four text rows, AnimGuard with *Use on normal saves*; the sprite dump's item
+  sprites and the reload status's folder too); `.claude/` added to pre-push's gate pattern (the gate's own test passes,
+  76 fixtures); the user's own work is the one exception to the licence-row rule; UnityEngine.Modules kept as noted;
+  one-ways get their way back with the room mapping. **The Wasp General:** the user, not picking either option: "The
+  beast/centipede is the real boss for chapter5, the Wasp General is more like a mini boss, its not as hard as the
+  actual boss but it was a harder fight than just normal enemies". Read in the game's code before changing it: the
+  x1.5 its `Untouched` entry was based on is the hologram machine's hard rematch (flag 166), not Hard Mode, so the
+  reason was a misread; the game's `minibosslist` holds 72, and every other mini-boss there scales from its chapter.
+  It now does too (chapter 5); built and copied in (`CE213A9BD09A`), not yet seen.
