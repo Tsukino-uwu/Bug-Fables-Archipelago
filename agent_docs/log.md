@@ -1892,9 +1892,12 @@ either one wrong).
   workarounds". So no guard: Known issues says how to re-measure as locations come. Then, as a standing rule tied to
   "follow Archipelago's standards": "i don't want any workaround/placeholder fixes for logic/location things, i want
   proper fixes/whatever archipelago itself recommends and does"; written into `apimplementation.md` §8.
-- **For the next session:** CLAUDE.md is at 152 lines, over its 150 cap (from before this session; no line reflows
-  without rewording a rule). Also open: the in-game test of the submarine (the mod guide, step 37; the build is staged,
-  not copied in), its icon picked on screen, and the fill error (Known issues).
+- **CLAUDE.md back to 150 lines** (it was 152, from before this session): the user first removed three blank lines
+  around headings, VS Code flagged them, and Archipelago's `style.md` follows Google's Markdown guide, which wants a blank
+  line before and after a heading. So the blanks stayed and two Method bullets were folded into one line each, the
+  user's yes.
+- **For the next session:** the in-game test of the submarine (the mod guide, step 37; the build is staged, not copied
+  in), its icon picked on screen, and the fill error (Known issues).
 - **The preflight refused twice, and nothing was widened:** `urllib` in the hook (a two-line percent-decode instead) and
   `Utils` in a test (the groups checked directly).
 - **Built:** the apworld (601 tests, Logic Test 90 of 90, fuzzer 0 of 10000 alone and with APQuest) and the mod (no
