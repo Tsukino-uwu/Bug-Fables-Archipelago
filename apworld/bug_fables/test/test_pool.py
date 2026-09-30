@@ -29,10 +29,12 @@ class TestPool(BugFablesTestBase):
 
     def test_each_location_puts_its_item_in_the_pool(self) -> None:
         # Every location's item is in the pool once per location holding it, except the copies the mod's own items
-        # (the Boat Ticket) take when the pool is full: one duplicated filler copy each (TestSmallPool: a last copy).
+        # (the Progressive Boat's two) take when the pool is full: one duplicated filler copy each (TestSmallPool: a
+        # last copy).
         from ..data_tables import ITEMS, LOCATIONS, vanilla_item
+        from ..items import own_copies
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
-        own = sum(1 for item in ITEMS if item.always)
+        own = sum(own_copies(self.world, item.name) for item in ITEMS)
         short = 0
         for name in {vanilla_item(loc) for loc in LOCATIONS} - {None}:
             expected = sum(1 for loc in LOCATIONS if vanilla_item(loc) == name)
@@ -66,11 +68,11 @@ class TestSmallPool(BugFablesTestBase):
 
     def test_only_ordinary_filler_gives_way(self) -> None:
         from ..data_tables import ITEM_KIND, MONEY_KIND, ITEMS, vanilla_item
-        from ..items import ITEMS_BY_NAME
+        from ..items import ITEMS_BY_NAME, own_copies
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         for item in ITEMS:
             if item.always:
-                self.assertEqual(pool.count(item.name), 1)
+                self.assertEqual(pool.count(item.name), own_copies(self.world, item.name))
         for name in {vanilla_item(loc) for loc in self.world.included_locations} - {None}:
             data = ITEMS_BY_NAME[name]
             if data.classification != "filler" or data.kind not in (ITEM_KIND, MONEY_KIND):

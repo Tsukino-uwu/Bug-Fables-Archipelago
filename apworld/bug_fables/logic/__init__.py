@@ -7,7 +7,7 @@ origin, is in regions.py.
 """
 from __future__ import annotations
 
-from ..data_types import (Artifact, DialogueFlag, DoorRule, EntityRef, FlagEntity, Location, StoryEvent,
+from ..data_types import (Artifact, DialogueFlag, DoorRule, EntityRef, FlagEntity, ItemEntity, Location, StoryEvent,
                           Transfer)
 from . import bugaria_city, later_chapters, metal_island, outskirts, snakemouth_den
 
@@ -27,4 +27,6 @@ SCENERY_HIDDEN: tuple[EntityRef, ...] = tuple(e for area in AREAS for e in getat
 SCENERY_PRESENT: tuple[EntityRef, ...] = tuple(e for area in AREAS for e in getattr(area, "SCENERY_PRESENT", ()))
 HELD_UNTIL: tuple[FlagEntity, ...] = tuple(e for area in AREAS for e in getattr(area, "HELD_UNTIL", ()))
 PRESENT_FROM: tuple[FlagEntity, ...] = tuple(e for area in AREAS for e in getattr(area, "PRESENT_FROM", ()))
+PRESENT_WITH_ITEM: tuple[ItemEntity, ...] = tuple(e for area in AREAS for e in getattr(area, "PRESENT_WITH_ITEM", ()))
+HELD_UNTIL_ITEM: tuple[ItemEntity, ...] = tuple(e for area in AREAS for e in getattr(area, "HELD_UNTIL_ITEM", ()))
 DIALOGUE_FLAGS: tuple[DialogueFlag, ...] = tuple(e for area in AREAS for e in getattr(area, "DIALOGUE_FLAGS", ()))

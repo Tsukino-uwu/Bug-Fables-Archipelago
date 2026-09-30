@@ -189,6 +189,7 @@ class TestClassifications(BugFablesTestBase):
 
     def test_items_rules_use_are_progression_and_only_those(self) -> None:
         from ..data_tables import ITEMS, STORY_EVENTS
+        from ..items import own_copies
         used: set[str] = set()
         spots = (*self.multiworld.get_locations(self.player), *self.multiworld.get_entrances(self.player))
         for spot in spots:
@@ -198,11 +199,17 @@ class TestClassifications(BugFablesTestBase):
         event_items = {event.item for event in STORY_EVENTS} - {item.name for item in ITEMS} | {"Artifact"}
         real_items_used = used - event_items
         for item in ITEMS:
+            if item.always and not own_copies(self.world, item.name):
+                continue  # the boat's items of the other Progressive Boat value (TestClassificationsSplitBoat)
             with self.subTest(item=item.name):
                 if item.name in real_items_used:
                     self.assertEqual(item.classification, "progression")
                 else:
                     self.assertNotEqual(item.classification, "progression")
+
+
+class TestClassificationsSplitBoat(TestClassifications):
+    options = {**TestClassifications.options, "progressive_boat": False}
 
 
 class TestTownMedal(BugFablesTestBase):

@@ -1,7 +1,9 @@
 {
   "items": [
     {"name": "Explorer Permit", "game_id": 27, "kind": 1, "classification": "progression"},
-    {"name": "Boat Ticket", "game_id": 200, "kind": 1, "classification": "progression", "always": 1, "_comment": "The mod's own key item (CustomItems.cs): the pier sailor sails to Metal Island only with it."},
+    {"name": "Boat Ticket", "game_id": 200, "kind": 1, "classification": "progression", "always": 1, "progressive_boat": false, "_comment": "The mod's own key item (CustomItems.cs): the pier sailor sails to Metal Island only with it. With Progressive Boat on, the Progressive Boat's first copy instead."},
+    {"name": "Subaquatic Maritime Neotransport", "game_id": 212, "kind": 1, "classification": "progression", "always": 1, "progressive_boat": false, "_comment": "The mod's own key item (CustomItems.cs), the submarine: its docks exist only with it. With Progressive Boat on, the Progressive Boat's second copy instead."},
+    {"name": "Progressive Boat", "game_id": 213, "kind": 1, "classification": "progression", "always": 2, "progressive_boat": true, "_comment": "Never in the bag itself: the mod gives each copy's key item in order, the Boat Ticket (200), then the Subaquatic Maritime Neotransport (212)."},
     {"name": "Vi", "game_id": 0, "kind": 5, "classification": "progression", "member": true},
     {"name": "Kabbu", "game_id": 1, "kind": 5, "classification": "progression", "member": true},
     {"name": "Leif", "game_id": 2, "kind": 5, "classification": "progression", "member": true},

@@ -242,6 +242,19 @@ class ShuffleJump(Toggle):
     display_name = "Shuffle Jump"
 
 
+class ProgressiveBoat(DefaultOnToggle):
+    """
+    The Boat Ticket and the submarine (the Subaquatic Maritime Neotransport) are one progressive item, found twice: the
+    first copy is the Boat Ticket, the second the submarine, so the submarine always comes after the ticket. Each shows
+    in your key items under its own name. The submarine's docks are there only once it is yours.
+
+    Off: they are two separate items, found in any order. The Boat Ticket takes you to Metal Island on the pier's boat;
+    the submarine works every dock, Metal Island's included. On by default.
+    """
+
+    display_name = "Progressive Boat"
+
+
 class MusicShuffle(Toggle):
     """
     Every song plays in place of another, the same way every time the seed is played: an area's music, a battle's, a
@@ -284,6 +297,7 @@ class BugFablesOptions(PerGameCommonOptions):
     filler_starting_checks: FillerStartingChecks
     shuffle_field_moves: ShuffleFieldMoves
     shuffle_jump: ShuffleJump
+    progressive_boat: ProgressiveBoat
     music_shuffle: MusicShuffle
 
 

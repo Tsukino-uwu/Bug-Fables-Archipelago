@@ -24,7 +24,8 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
   [32](#build-step-32-the-entrance-randomizers-connection-plando-doors-pinned-in-the-yaml); in the game, the mod guide's
   [13](documentation.md#13-the-entrance-randomizer-in-the-game-doors-rewritten-at-map-load).
 - **What goes in the item pool:** the pool's rules, [1](#build-step-1-the-apworlds-layout-item-classes-and-location-names);
-  the Boat Ticket, [16](#build-step-16-the-boat-ticket-metal-island-behind-a-custom-key-item); party members,
+  the Boat Ticket, [16](#build-step-16-the-boat-ticket-metal-island-behind-a-custom-key-item), and the submarine,
+  [36](#build-step-36-progressive-boat-the-boat-ticket-and-the-submarine-as-items); party members,
   [18](#build-step-18-starting-party-member-the-other-members-shuffled-as-items) and
   [20](#build-step-20-all-three-the-default-every-member-from-the-start-no-member-items); moves and abilities,
   [21](#build-step-21-shuffle-field-moves-the-three-starting-moves-as-items),
@@ -85,6 +86,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 33. [Build step 33: Music Shuffle, songs and jingles swapped per seed](#build-step-33-music-shuffle-songs-and-jingles-swapped-per-seed)
 34. [Build step 34: Shuffle Shop Inventories, what shops restock and pickups respawn with](#build-step-34-shuffle-shop-inventories-what-shops-restock-and-pickups-respawn-with)
 35. [Build step 35: Filler Starting Checks, the opening's automatic checks hold filler](#build-step-35-filler-starting-checks-the-openings-automatic-checks-hold-filler)
+36. [Build step 36: Progressive Boat, the Boat Ticket and the submarine as items](#build-step-36-progressive-boat-the-boat-ticket-and-the-submarine-as-items)
 
 **How it works**
 
@@ -243,7 +245,8 @@ be wrong.
    summoning, as the game itself does. Still a guard before building: each branch read, and one full-field fight.
    Its own build step when built.
 
-21. **Boat Ticket** (Discord, 2026-09-26): built, see build step 16.
+21. **Boat Ticket** (Discord, 2026-09-26): built, see build step 16. Since 2026-09-30, with *Progressive Boat* on (the
+   default), the Progressive Boat's first copy, the submarine its second (Next 51, build step 36).
 22. **Healing save crystals, an idea for later** (suggested on Discord; 2026-09-26): an item that makes the
    blue save crystals (save only) act like the yellow ones (save and heal), a nice filler or useful check. The colour
    is not baked into the art (code read, 2026-09-26): a save point is tinted in code from its entity data, yellow when
@@ -464,7 +467,8 @@ be wrong.
       Markdown lines).
     - **The apworld and the website:** 8. option groups (the first, "Aesthetic Options", came with build step 33),
       presets, reST option texts with rich text, a bug report
-      page, the WebWorld's `game`; 9. `topology_present`; 10. location and item groups; 11. `World.world_version`,
+      page, the WebWorld's `game`; 9. `topology_present`; 10. location and item groups (the first item groups,
+      *Submarine* and *Boat*, came with build step 36); 11. `World.world_version`,
       `Region.add_locations`, `options.as_dict`; 12. `start_inventory_from_pool`; 13. the Rule Builder's
       `OptionFilter` for Jump, `__str__` and `@override` on our rules, a caching benchmark; 14. Universal Tracker and
       PopTracker; 15. slot_data only what's necessary (decided 2026-09-29: the fixed tables built into the mod from
@@ -522,6 +526,11 @@ be wrong.
    slot), step 36 (the spider's line, the Beast, Zommoth, the Everlasting King cast from the party) and step 17 (the
    10-HP scripted end, the fixed numbers in enemy scripts). Next, the user sees each on screen; the log's install lines
    first (`[party] installed in …`, `[scale] installed in …`, every count matched).
+51. **The submarine as an item, the game's Surf** (2026-09-30, the user: one item that opens much of the world, as
+   Surf does in Pokémon Emerald): the *Progressive Boat*, the Boat Ticket then the Subaquatic Maritime Neotransport,
+   or with the yaml option *Progressive Boat* off the two apart; the docks there only with it. The apworld is built
+   (build step 36); next, the mod: the key item, and the docks following it (the mod guide's next step), then the user
+   sees it in game.
 
 **Known issues:**
 
@@ -543,6 +552,15 @@ be wrong.
   not seen). Every second turn it gives Kabbu a line by reading the party's second slot (`EventDialogue` case 5),
   which a party of one doesn't have, so the fight stops if the Web is still up on turn 2. Fix built, not yet seen:
   the mod guide, step 36.
+- **A fill error with *minimal* accessibility and Shuffle Jump, next to another game** (found by the fuzzer with APQuest,
+  2026-09-30: 1 of 10000). The failing pair (Bug Fables minimal, Decoupled doors, a random start, moves and Jump
+  shuffled, crystal berries and discoveries off, shops with no progression; APQuest with its Hammer) failed 4 of 400
+  seeds both before and after build step 36, so the step didn't cause it. One option changed at a time, 400 seeds
+  each: Filler Starting Checks off 1, no random start 6, no door shuffle 4, moves not shuffled 5, **Jump not shuffled
+  0, accessibility full 0**. How: for a *minimal* player, once its goal is reachable the fill stops checking access
+  for its items (`Fill.py`, 100-103, 0.6.7), and ours is reachable early (one artifact), so our progression can take
+  the last reachable spots before the other game's key item. A generation error, never an impossible seed. Next: the
+  user picks the remedy from Archipelago's list (`apworld_dev_faq.md`, "My game has a restrictive start").
 - **Two items named "Leif"** (found by the full review, 2026-09-29; read in the code): with the story's party, the
   story event *Leif Joins* makes an event item "Leif" with no id, while the real member item "Leif" has one;
   Archipelago's `world api.md` requires one id per item name. Next 43, item 3.
@@ -574,7 +592,7 @@ be wrong.
 - **Crystal berry #2 (location 20)** sits in the Underground region, which needs Leif, though the room's
   upper-left entrance needs nothing. More cautious than the game, so safe; room-level regions would split it.
 - **Landmark names** for locations 2, 22, 23, 24, 25 and 30 are still to come from the tester, and the seven ability
-  scenes' names (68-74, build step 23) are provisional.
+  scenes' names (68-74, build step 23) and the throne room's (76, build step 36) are provisional.
 - **Uncap FPS (mod guide, step 24) still speeds some things up.** Each to compare at 60 and above on screen, then
   step at the game's own rate, as the other per-frame sites are:
   - **Being hit plays too fast, for enemies and the party** (a tester, 2026-09-27, FPS unlocked). Cause not read yet;
@@ -2024,6 +2042,9 @@ Show me your ticket." (a `|line|` before the name, which wrapped mid-name at fir
 Without it (the ticket taken with the dev console's `take key 200`), the choice read "I lost my ticket!" and "Let's go!"
 got the refusal; seen on screen.
 
+**Since 2026-09-30, with *Progressive Boat* on (the default),** the ticket arrives as the Progressive Boat's first copy
+and the submarine as its second; off, the ticket is its own item, as here (build step 36).
+
 **Status:** works both ways, seen on screen (2026-09-26); the pool and logic take effect in the next generated seed
 (the apworld tests pass, 275).
 
@@ -3299,6 +3320,114 @@ With the rule switched off, 11 of these checks fail.
 *Code: `options.py` (`FillerStartingChecks`), `world.py` (`generate_early`), `rules.py` (`set_all_rules`),
 `data_types.py` (`quiet`); tests `test_starting_checks.py`, `test_shops.py`.*
 
+## Build step 36: Progressive Boat, the Boat Ticket and the submarine as items
+
+The submarine as an item: Bug Fables' own Surf, one item that opens much of the world (the user, 2026-09-30, after
+Pokémon Emerald's Surf). Always in the pool, as the Boat Ticket was; a yaml option, *Progressive Boat*, on by default,
+decides whether the two come as one progressive item or apart.
+
+**Decided with the user (2026-09-30):**
+- **One progressive item, *Progressive Boat*, two copies in every seed.** The first gives the Boat Ticket (build step
+  16), the second the **Subaquatic Maritime Neotransport**, each its own key item in the bag, as *Progressive Dash*
+  gives the Dash, then the Horn Dash (build step 23): "i want it to be progressive so it always sit behind the boat
+  ticket, but also be its own unique key item in your inventory". So Metal Island's port needs no rule of its own:
+  whoever has the sub has the ticket.
+- **The name is the game's own**, the Termite King's in the throne room ("We call it the Subaquatic Maritime
+  Neotransport!"). The queen calls it "Submarine for short".
+- **Considered and dropped:** a separate item, with the ticket required at Metal Island's port always or behind a
+  roadblock toggle as Emerald's *Extra Boulders* and *Modify Route 118* (each "aims to take some power away from Surf",
+  `worlds/pokemon_emerald/options.py`, 0.6.7). The progressive order makes both unneeded.
+- **The description, short:** "It is impossible for it to sink! ...Probably." The first sentence is the king's line,
+  the second the team's doubt. Not "travels under the water": the sub sails on the water and dives only to dodge
+  danger (the user).
+- **Hints:** "submarine" finds it.
+- **The docks appear and work only with its key item.**
+- **The yaml option *Progressive Boat*, on by default** (asked the same day, "for people who want both split up"):
+  off, the Boat Ticket and the submarine are two items in any order; "the boat ticket would be its own item that gets
+  you to metal island, and the submarine would be its own item that can also get you there and to other locations".
+
+**What the game does** (code read and the dumps, 2026-09-30; `MEASURED.md`, "The submarine"): no item, only flags. The
+Colosseum won sets 409, the throne room's scene (Event164) 379, the Termite pier's scientist and queen (Event165) 447,
+the first landing at the Bugaria pier 448, and Elizant's welcome there 350. One scene, Event153, runs all six docks:
+one each at the Termite pier, the Bugaria pier, Metal Island, the fishing village, Rubber Prison's pier and Mystery
+Island, all leading to the lake map, MetalLake.
+
+**How it was built (the apworld, 2026-09-30):**
+1. **The items** (`items.json`), each key item's Archipelago id its bag id, as every key item's is:
+   - *Boat Ticket*, 200, unchanged;
+   - *Subaquatic Maritime Neotransport*, 212, the mod's next free key item;
+   - *Progressive Boat*, 213, a number never in the bag: the mod gives each copy's key item in turn.
+
+   `always` became a count (the Progressive Boat's is 2), and each item carries `progressive_boat`: true for the
+   Progressive Boat, false for the other two. `items.own_copies` puts a seed's own set in the pool, each copy in a
+   filler slot as the ticket's was.
+2. **The option** (`options.py`): `ProgressiveBoat`, a `DefaultOnToggle`, after *Shuffle Jump*.
+3. **The rules** (`custom_rules.py`): `Boat(level)`, a rule of our own as `CanUse` is, resolved from the option: level 1
+   is one Progressive Boat or the Boat Ticket, level 2 two Progressive Boats or the submarine. `BOAT_TICKET` and
+   `SUBMARINE` name the two, so a rule says what it needs. The boat to Metal Island and the later chapters' stand-in
+   take the ticket; the six docks take the sub. Not the Rule Builder's `OptionFilter`: it needs the option's class,
+   and `options.py` imports the data tables, which import the logic, so the logic can't import the options.
+   **Apart, the logic stays cautious:** the docks sit inside the later chapters' stand-in, which holds the ticket, so
+   the logic never counts the sub alone as reaching Metal Island, though the game allows it (build step 24's rule:
+   more cautious than the game, never less).
+4. **What else the sub gates.** The ant tunnel's door into the prison needs flag 79, which only the prison itself sets
+   (Event193), and before that only the sub's dock reaches the prison. So that tunnel takes the sub too, and with it
+   everything past the prison, the Giant's Lair included. The Icicle's spot (74) takes it as the story-order stand-in's
+   caution: the story reaches it after the sub, though its path reads no sub flag.
+5. **A new location, 76, *Termite Capitol: Throne Room*** (a provisional name): the king's scene, its flag 379 the
+   check. It has the story-order rule of the abilities taught before it, and never needs the sub itself. It shows no
+   item of its own, as the teaching scenes don't (`silent_locations`).
+6. **The Termite gate, one way.** The sub made this fix necessary. From inside the plaza, before the gate was ever
+   opened from outside (flag 384), its scene loads the outside map, looks for two guards only the plaza has, and stops
+   (`EventControl.cs`, Event149). A sub landing at the Termite pier puts a party inside first, so the logic's gate now
+   goes from outside to inside only, and `held_until` keeps the inside gate away until 384.
+7. **For the mod** (`slot_data`): `submarine_item`; `present_with_item`, the six docks, made with key item 212 whatever
+   their flags; `held_until_item`, the Termite pier's scientist and queen, who show the dock off, kept away until it
+   too. The records are `ItemEntity`s in `logic/later_chapters.py`. The option itself needs no key: the mod knows each
+   item by its id.
+8. **Hints** (`world.py`): item groups *Submarine* (the Progressive Boat and the submarine's item) and *Boat* (the
+   Progressive Boat and the Boat Ticket). Read at 0.6.7: `!hint` matches what's typed against item and group names
+   together (`Utils.get_intended_text`), and a group hints every item in it (`MultiServer.py`, `get_hints`), so `!hint
+   submarine` finds it with the option on or off. On, it shows both copies: a hint can't pick out the second. A group
+   can't share an item's name (Archipelago's `test_item_name_group_conflict`).
+
+**The pool stays balanced:** on, the second copy takes a filler slot and the throne room adds one; off, the submarine's
+item does the same.
+
+**Tests** (`test_progressive_boat.py`, in place of `test_boat_ticket.py`). On:
+- two copies, both progression, and neither level's own item;
+- Metal Island with one copy;
+- the lake with two only;
+- the prison, its bridge and the Giant's Lair with two only;
+- the throne room with one, the Icicle's spot with two;
+- the throne room the one check on flag 379, and silent;
+- the `slot_data` lists exact, and the gate one way;
+- the groups *Submarine* and *Boat* holding the item (the tests may not import Archipelago's matcher, `Utils`: the
+  preflight's list of the apworld's imports).
+
+Off: each item once and no Progressive Boat; the boat with the ticket; the lake, the prison and the Giant's Lair with
+the submarine; the throne room without it; the hints. `TestClassifications` runs in both, each checking its own items.
+
+With the docks' and the tunnel's sub rule taken out, 4 of the first set fail; with the tunnel's alone, 3. With the rule
+ignoring the option, 26 tests fail.
+
+**Checked** (2026-09-30):
+- `test-apworld.ps1`: 601 tests pass, the Logic Test check reproduced 90 of 90, and the fuzzer failed 0 of 10000, alone
+  and with APQuest in every room. An earlier run with APQuest, before the option, failed 1 of 10000: the fill error in
+  Known issues, measured at the same rate without this step.
+- `seed-snapshot.py` before and after, for CI's three presets alone and with APQuest: `slot_data` gained the three keys,
+  the gate's `held_until` entry, location 76 (flag 379, silent) and `item_kinds` entries for 212 and 213; the Boat
+  Ticket's 200 is unchanged, as are `door_targets`, `enemy_swaps` and `start`. The fill moved, as a new location and
+  copy make it.
+
+**Status:** the apworld is built (2026-09-30) and the tests pass; the mod is next (the key item, and the docks following
+it), then the user sees it in game.
+
+*Code: `data/items.json`, `options.py` (`ProgressiveBoat`), `items.py` (`own_copies`), `custom_rules.py` (`Boat`,
+`BOAT_TICKET`, `SUBMARINE`), `logic/later_chapters.py`, `logic/metal_island.py`, `data_types.py` (`ItemEntity`),
+`slot_data.py`, `world.py` (`item_name_groups`); tests `test_progressive_boat.py`, `test_logic.py`
+(`TestClassificationsSplitBoat`).*
+
 # How it works
 
 ## 1. The big picture: generator, seed, server, game
@@ -3397,6 +3526,8 @@ only way a setting chosen at generation (an option, a version number) reaches th
 - `quiet_locations`, the opening's checks, whose items arrive with no hold-up (the mod guide, Item animation);
 - the open world (build step 9): `kept_open`, `kept_present`, `scenery_hidden`, `scenery_present`, `held_until`,
   `present_from` and `dialogue_flags`, the story's blockers and scenery the mod keeps the way the logic assumes;
+- `submarine_item`, `present_with_item` and `held_until_item`: the submarine is an item, and its docks are made, and
+  who shows them off kept away, by its key item in the bag (build step 36);
 - `door_targets` (the entrance randomizer), `enemy_swaps` (enemy shuffle) and `start` (the starting location);
 - `starting_member`: 0 Vi, 1 Kabbu, 2 Leif alone, 3 all three, -1 the story's party (build steps 18 and 20);
 - `shuffle_moves` and `shuffle_jump`, whether the attacks and Jump are items (build steps 21 and 22);
@@ -3460,7 +3591,8 @@ listed in "Where it stands" (Next), each replaced in a step of its own.
 **Custom gates are the mod's own items** (2026-09-26). Where the randomizer wants a gate vanilla doesn't have,
 the mod makes an item of its own, added to the game's item table at runtime (an existing sprite, its own name and
 description), and the gate is "has the item": the logic reasons about it like any key item, and the mod checks it in
-the game. The Boat Ticket is the first (Next 21); the party members as items (build step 13) are the same idea on the
+the game. The Boat Ticket is the first (Next 21), the submarine the second, by default both levels of one progressive
+item (build step 36); the party members as items (build step 13) are the same idea on the
 location side, turning a story moment vanilla never made a check into one. Each new item takes a filler slot in the
 pool, so a seed needs one to spare, which a test pins.
 

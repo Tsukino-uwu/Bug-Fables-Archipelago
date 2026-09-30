@@ -34,10 +34,12 @@ class Item:
     MONEY_ID_OFFSET for berries, CRYSTAL_ID_OFFSET for crystal berries, MEMBER_ID_OFFSET for a party member or
     MOVE_ID_OFFSET for a field move.
 
-    padding: the filler used to fill leftover locations, in any number. always: enters the pool once in every seed,
-    taking a filler slot (the mod's own items, which no location holds in vanilla). member: a party member, in the
-    pool only with Starting Party Member on (the two not starting). move: a field ability's item, in the pool as many
-    times as abilities.py says. Every other item enters the pool once per included location that holds it in vanilla.
+    padding: the filler used to fill leftover locations, in any number. always: enters the pool this many times in
+    every seed, each copy taking a filler slot (the mod's own items, which no location holds in vanilla).
+    progressive_boat: such an item only with the option Progressive Boat on (true) or off (false). member: a party
+    member, in the pool only with Starting Party Member on (the two not starting). move: a field ability's item, in the
+    pool as many times as abilities.py says. Every other item enters the pool once per included location that holds it
+    in vanilla.
     """
 
     name: str
@@ -45,7 +47,8 @@ class Item:
     kind: int
     classification: str
     padding: bool = False
-    always: bool = False
+    always: int = 0
+    progressive_boat: bool | None = None
     member: bool = False
     move: bool = False
 
@@ -157,6 +160,22 @@ class FlagEntity:
 
     def to_slot(self) -> dict[str, Any]:
         return {"map": self.map, "entity": self.entity, "flag": self.flag}
+
+
+@dataclass(frozen=True, slots=True)
+class ItemEntity:
+    """A map entity tied to one of the mod's key items (its game id) in the bag; in its area's module.
+
+    present_with_item: made while the item is in the bag, whatever its own requirement says. held_until_item: kept away
+    until the item is in the bag, on top of its own requirements.
+    """
+
+    map: str
+    entity: str
+    item: int
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"map": self.map, "entity": self.entity, "item": self.item}
 
 
 @dataclass(frozen=True, slots=True)

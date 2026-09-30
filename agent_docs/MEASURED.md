@@ -40,6 +40,7 @@ read, a log or a probe.
 - [Music and jingles](#music-and-jingles-2026-09-30-code-read-nothing-seen-in-game)
 - [An item entity's item](#an-item-entitys-item-2026-09-30-code-read-nothing-seen-in-game)
 - [Fixed numbers in the enemies' scripts](#fixed-numbers-in-the-enemies-scripts-2026-09-30-code-read-nothing-seen-in-game)
+- [The submarine](#the-submarine-2026-09-30-code-read-the-dumps-and-the-games-text-nothing-seen-in-game)
 
 ## The build (2026-09-24, read from a Steam install, game not run)
 
@@ -957,7 +958,8 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   started by `BugariaCommercial` line 32, the hatch examined); **Events 108 and 109, to `HideoutCell`** (108 is the
   garden guards catching the party, seen in play; 109 is the story's first capture, which takes the beemerang,
   flag 11, and in the cell gives dig, flag 18, `EventControl.cs` Event109; leaving the cell needs dig, seen in play; the cell also holds a `Dropplet` with no flags, which the tester thinks is
-  cosmetic, not needed to leave: unconfirmed, so the rule is dig only); **Event153, the boat** (seven harbours); **Event68**, three map
+  cosmetic, not needed to leave: unconfirmed, so the rule is dig only); **Event153, the submarine's docks** (six;
+  corrected 2026-09-30, it was written down as the boat, which is Event107: "The submarine"); **Event68**, three map
   pairs chosen by an `entrance` flag (elevators, to read); Event196, a destination from a list chosen in a menu.
 - Not yet sorted into "chosen by the player" and "the game sends you" (the decision: `apimplementation.md`, build
   step 12, item 8).
@@ -1733,3 +1735,31 @@ fixed one, read in its code:
 
 The ratio is the one enemy scaling gives the enemy whose HP the number measures: the healed one for a heal, the actor
 for its own threshold. Used by `enemy-numbers.py` and `EnemyScaling.cs` (the mod guide, step 17).
+
+## The submarine (2026-09-30, code read, the dumps and the game's text; nothing seen in game)
+
+- **No item, only story flags.** Nothing in `MainManager.Items` is the submarine. The Colosseum won sets 409
+  (Event163, `EventControl.cs:27805`). The throne room's trigger (`TermiteRoyalChamber` entity 11, requires 409, limit
+  379) starts Event164, the king's scene, which sets 379 (`:28085`). The Termite pier's scientist and queen (entities 9
+  and 10, requires 379, limit 447) start Event165 (`|hide||event,165|`), whose pier branch sets 447 (`:28130`). The
+  first landing at the Bugaria pier sets 448 (`:25451`), and Event165's other branch, Elizant's welcome there, sets 350.
+- **Its name is the game's own:** `TermiteRoyalChamber` line 19, the king: "We call it the Subaquatic Maritime
+  Neotransport! We're very proud of it." The queen: "Ehm, I like to call it Submarine for short." Line 23: "Be careful
+  with the Subaquatic Maritime Neotransport! It is the only prototype we have." (the game's text asset
+  `Data/Dialogues0/Maps`, read from `data.unity3d`.)
+- **One scene runs every dock, Event153** (`:25368`). Boarding asks "Board the submarine?" (menutext 193), sets
+  `PlayerControl.submarine` and loads the lake, `MetalLake` (map 183); landing takes the dock's index on the lake (0
+  Termite pier, 1 Metal Island, 2 Bugaria pier, 3 Rubber Prison's pier, 4 the fishing village, 5 Mystery Island).
+  Its only story reads: flag 447 (`:25370`; off, the dock starts Event165 instead) and 448 (`:25406`; off, every dock
+  but 0 and 2 refuses). No other code reads 447 or 448.
+- **The docks** (the entity dump; each `animid` 256, eventid 153): `TermitePier` 3 `Fixedsub` (requires 379),
+  `BugariaPier` 16 `Fixedsub - Duplicate`, `MetalIsland1` 9 `Fixedsub - Duplicate`, `FishingVillage` 3 `Fixedsub -
+  Duplicate - Duplicate`, `RubberPrisonPier` 2 `Fixedsub - Duplicate - Duplicate` (each requires 448), and
+  `MysteryIsland` 1 `Fixedsub` (no requirement).
+- **Past the prison:** the ant tunnels' `DoorMetalIsland` (entity 11) requires flag 78 and `DoorRubberPrison` (entity
+  16) flag 79. The one write of 79 is in Event193 on the prison's bridge (`:32078`), so before it the prison is reached
+  by the submarine only.
+- **The Termite gate from inside** (Event149, `:24818`): the scene loads the plaza (174) from area 7 and the outside
+  (173, `TermiteOutside`) from anywhere else. Before flag 384 (set by its first run, `:24964`) it then looks up
+  entities 15 and 16 (`:24916`), which `TermiteOutside` doesn't have (entities 0-7), and stops at `e[0].flip`.
+- Used by `later_chapters.py` (build step 36).

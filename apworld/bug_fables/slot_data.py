@@ -4,9 +4,10 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable, Mapping
 from typing import TYPE_CHECKING, Any
 
-from .data_tables import (DIALOGUE_FLAGS, HELD_UNTIL, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN, KEPT_PRESENT,
-                          LOCATION_NAME_TO_ID, PRESENT_FROM, SCENERY_HIDDEN, SCENERY_PRESENT, WORLD_VERSION)
-from .data_types import DialogueFlag, EntityRef, FlagEntity, Source
+from .data_tables import (DIALOGUE_FLAGS, HELD_UNTIL, HELD_UNTIL_ITEM, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN,
+                          KEPT_PRESENT, LOCATION_NAME_TO_ID, PRESENT_FROM, PRESENT_WITH_ITEM, SCENERY_HIDDEN,
+                          SCENERY_PRESENT, WORLD_VERSION)
+from .data_types import DialogueFlag, EntityRef, FlagEntity, ItemEntity, Source
 
 if TYPE_CHECKING:
     from .world import BugFablesWorld
@@ -30,7 +31,7 @@ def _pickup(source: Source) -> dict[str, Any]:
     return pickup
 
 
-def _entities(entries: Iterable[EntityRef | FlagEntity | DialogueFlag]) -> list[dict[str, Any]]:
+def _entities(entries: Iterable[EntityRef | FlagEntity | ItemEntity | DialogueFlag]) -> list[dict[str, Any]]:
     return [entry.to_slot() for entry in entries]
 
 
@@ -62,6 +63,10 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "scenery_present": _entities(SCENERY_PRESENT),
         "held_until": _entities(HELD_UNTIL),
         "present_from": _entities(PRESENT_FROM),
+        # Entities tied to one of the mod's key items in the bag: made with it whatever their own requirement, or kept
+        # away until it, on top of their own (the submarine's docks, and who shows them off).
+        "present_with_item": _entities(PRESENT_WITH_ITEM),
+        "held_until_item": _entities(HELD_UNTIL_ITEM),
         "dialogue_flags": _entities(DIALOGUE_FLAGS),
         "door_targets": world.door_targets,
         # {"map:entity": [enemy ids]}: the fight a map enemy starts instead of its own.
@@ -76,6 +81,9 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "shuffle_jump": world.jump_shuffled(),
         # Every learned ability is an item: the mod answers the game's ability checks from the items received.
         "ability_items": True,
+        # The submarine is an item (its key item, whichever item gives it): the mod answers the docks' story checks from
+        # the bag.
+        "submarine_item": True,
         # Music Shuffle, {name: name played in its place}: tracks by the game's Musics names, jingles by their sound
         # names; both empty when it's off.
         "music_map": world.music_map,

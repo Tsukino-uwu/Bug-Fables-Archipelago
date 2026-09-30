@@ -74,8 +74,9 @@ class TestShopContentsDefault(BugFablesTestBase):
 
 
 class TestShopContentsFillerOnly(BugFablesTestBase):
-    # With discoveries on, a solo seed has exactly enough filler for every shop location: the Boat Ticket takes one
-    # filler slot and the tutorial leaf adds one back. Filler Only holds (the shops are excluded).
+    # With discoveries on, a solo seed has exactly enough filler for every shop location: the Progressive Boat's two
+    # copies take two filler slots, and the tutorial leaf and the throne room add two back. Filler Only holds (the
+    # shops are excluded).
     options = {"shop_contents": "filler_only", "shuffle_discoveries": True, "starting_party_member": "off",
                "filler_starting_checks": False}
 

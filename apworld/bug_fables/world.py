@@ -24,6 +24,12 @@ class BugFablesWorld(World):
     web = web_world.BugFablesWebWorld()
     item_name_to_id = ITEM_NAME_TO_ID
     location_name_to_id = LOCATION_NAME_TO_ID
+    # The boat's items by what they are, so "!hint Submarine" finds it with Progressive Boat on or off (a group hints
+    # every copy of every item in it).
+    item_name_groups = {
+        "Submarine": {"Progressive Boat", "Subaquatic Maritime Neotransport"},
+        "Boat": {"Progressive Boat", "Boat Ticket"},
+    }
     origin_region_name = "Menu"
     options_dataclass = BugFablesOptions
     options: BugFablesOptions

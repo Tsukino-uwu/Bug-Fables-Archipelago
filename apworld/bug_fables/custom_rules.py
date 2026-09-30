@@ -57,6 +57,25 @@ class MoveItem(Rule["BugFablesWorld"], game=GAME):
         return HasAllCounts({ABILITIES[self.ability].item: count} if count else {}).resolve(world)
 
 
+# With Progressive Boat off, each level is its own item.
+BOAT_LEVELS = {1: "Boat Ticket", 2: "Subaquatic Maritime Neotransport"}
+
+
+@dataclass()
+class Boat(Rule["BugFablesWorld"], game=GAME):
+    """A way across the water, by level (1 the Boat Ticket, 2 the submarine): that many copies of the Progressive Boat
+    with the option on, the level's own item with it off."""
+
+    level: int
+
+    def _instantiate(self, world: BugFablesWorld) -> Rule.Resolved:
+        if world.options.progressive_boat:
+            return HasAllCounts({"Progressive Boat": self.level}).resolve(world)
+        return HasAllCounts({BOAT_LEVELS[self.level]: 1}).resolve(world)
+
+
 # The cautious stand-in for ground not measured yet: every member, and every attack's item.
 WHOLE_PARTY = Member("Vi") & Member("Kabbu") & Member("Leif")
 ALL_ATTACKS = MoveItem("Beemerang Toss") & MoveItem("Horn Slash") & MoveItem("Freeze")
+BOAT_TICKET = Boat(1)
+SUBMARINE = Boat(2)
