@@ -1,5 +1,5 @@
 #!/bin/sh
-# Every push: preflight over each pushed commit's tree, and --history over everything new in the push, so a commit
+# Every push: preflight over each pushed branch's tip, and --history over everything new in the push, so a commit
 # made past the other hooks still can't leave this machine. When the push changes the preflight gate itself, the
 # gate's own test runs too (dev-scripts/negative-test-preflight.py).
 root=$(git rev-parse --show-toplevel) || exit 1

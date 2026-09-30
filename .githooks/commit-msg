@@ -1,7 +1,8 @@
 #!/bin/sh
 # Every commit: a subject of at most 72 characters, with no attribution (who decided goes in log.md).
-# A change to the preflight gate (its scripts and patterns, the hooks, the workflows) is a commit of its own, never
-# mixed with mod/ or apworld/ code, so every change to what is checked stands alone in the history.
+# A change to the preflight gate (its scripts and patterns, the hooks, the workflows, the agent's guard in .claude/) is
+# a commit of its own, never mixed with mod/ or apworld/ code, so every change to what is checked stands alone in the
+# history.
 # A commit touching mod/, apworld/ or dev-scripts/ must update a process guide (agent_docs/documentation.md
 # or apimplementation.md), unless its message has this line on its own:
 #   docs: no process change
