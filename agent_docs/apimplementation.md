@@ -113,7 +113,8 @@ be wrong.
 
 1. **Every key item and medal in the pool,** on logic that follows the vanilla story order: each chapter
    entered once the chapter before is finished and the story's own keys and abilities are in hand, its rooms
-   split into regions as build step 24 describes. Medal gifts and medal shops each get a yaml on/off toggle.
+   split into regions as build step 24 describes. Medal gifts get a yaml on/off toggle, as medal shops have
+   (*Shuffle Medal Shops*, build step 11).
    Shops (medal shops, item shops, the caravan): see build step 11. Other kinds of location (boss prize medals,
    placeholders, journal entries, enemy drops): see build step 10.
 2. **Entrance randomizer (experimental):** every door, coupled or decoupled (build step 31), on Archipelago's own
@@ -122,7 +123,7 @@ be wrong.
    **How each room gets mapped** (2026-09-27): the checklist in `room-logic.md`; the tester says what needs
    what, the agent turns it into areas and rules.
 3. **Field abilities shuffled as items** (every learned ability built, build step 23) (by the game's names: Beemerang Halt, Bee Fly, Dash, Horn Dash, Beetle Dig, Icicle, Shield; `MEASURED.md`, every field ability).
-   Party members stay where the story puts them.
+   With *Starting Party Member* Off, party members stay where the story puts them.
    The three attacks and Jump as items: built, see build steps 21 and 22. Party members as items (*Starting Party Member*): built, see build step 18.
 4. **Open world, one gate at a time** (always on, never an option; 2026-09-26): see build step 9.
 5. **A two-player room** (planned 2026-09-25): the tester's slot plus a second one the agent drives. Seen
@@ -179,10 +180,11 @@ be wrong.
    with no logic, so its design and status live in the mod guide, step 17.
 16. **EXP multiplier, a panel setting** (2026-09-26): built and seen, `documentation.md` step 19. *EXP
    multiplier* on the Gameplay page, 1x to 10x (first planned as 1x-5x on Quality of life), default 1x: an opt-in for a faster, easier game. Levels still give HP, TP and MP, so it helps even without moves being shuffled. It stacks on
-   top of enemy scaling's EXP. No check and no logic depend on it. Only while Archipelago is enabled.
+   top of enemy scaling's EXP. No check and no logic depend on it. Only while Archipelago is enabled, or with *Use on
+   normal saves*.
 17. **Berry multiplier, a panel setting** (2026-09-26): built and seen, `documentation.md` step 19. *Berry
    multiplier* on the Gameplay page, 1x to 10x, default 1x, the same opt-in. Only the berries picked up in the world (lying there or dropped after a fight), never a
-   check's reward from the server. Only while Archipelago is enabled.
+   check's reward from the server. Only while Archipelago is enabled, or with *Use on normal saves*.
 18. **Random start** (2026-09-26): `anywhere` built, experimental; `towns` and named spots to come. See build
    step 15.
 19. **Traps, an idea for later** (2026-09-26; not planned yet). A trap sent to this game takes effect when
@@ -259,7 +261,7 @@ be wrong.
    instead (2026-09-28):** *Healing crystals* on the Gameplay page, `documentation.md` step 30; the heal is
    in the crystal's hit, not the prompt (`MEASURED.md`, save crystals).
 
-23. **Progressive items, an idea for later** (2026-09-26): items that unlock in a fixed order however they're
+23. **Progressive items** (2026-09-26; built, build step 23): items that unlock in a fixed order however they're
    found, as Pseudoregalia's progressive sword (three copies of one item; the first gives the sword, the second breaking
    blocks, the third the ranged attack). Archipelago counts copies of one item (`Has(item, count)`), so the logic is
    simple. Candidates: each member's field abilities in their game order, and other chains; decided when abilities
@@ -279,7 +281,7 @@ be wrong.
    Slash, speed the Dash, rocks the Horn Dash; no progressive item needs another. **With the Horn Slash received the Dash
    is the game's own again**: it cuts grass and does everything the slash does, the Horn Dash too.
    **Why it suits the logic:** grass is always "Horn Slash", never "Horn Slash or Dash"; the grass rules
-   written today (`abilities: ["Horn Slash"]`) stay right once the Dash is an item.
+   (`CanUse("Horn Slash")`) stayed right once the Dash became an item.
    **Every learned ability an item, always (2026-09-27):** Beemerang Halt, Bee Fly, Dash, Horn Dash, Beetle
    Dig, Icicle and Shield are always in the pool, not behind an option ("randomizing things the player would have
    found"); the three starting moves stay under Shuffle Field Moves ("removing things"). **Each unlock scene a location
@@ -445,7 +447,7 @@ be wrong.
    the game past that scene. First step: read the scene and the flag that removes the boat, and whether a seed can
    reach it. Not built; nothing changed while the tester plays vanilla.
 41. **A "!" over each unrecorded discovery, with the Detector on** (2026-09-28): today the Detector puts the
-   game's "!" over the leader and beeps when a room has a check left (the mod guide, step 15); this shows where. The
+   game's "!" over the leader and beeps when a room has a check left (the mod guide, step 14); this shows where. The
    "!" is the game's emoticon (`EntityControl.emoticonid`, held with `emoticoncooldown`, and `alwaysemoticon` exists).
    **Only the ones you interact with** (2026-09-28): a stone to read, a statue to look at (the pier statue,
    `HiddenEvent`, the `AncientHouseDiscovery` grass), so the player knows to walk up to it. The ones recorded by just
@@ -467,7 +469,7 @@ be wrong.
     - **Bugs:** 1. the shop fallback (Known issues); 2. failed connect attempts left open, one more client on the
       slot per retry (Known issues); 3. two items named "Leif" (Known issues); 4. a shop test that can't fail;
       5. respawning checks leaving the outbox before the server confirms them.
-    - **Required:** 6. the door shuffle in `connect_entrances`; 7. `style.md` (brackets, a trailing blank line, long
+    - **Required:** 6. the door shuffle in `connect_entrances`: done 2026-09-30 (build step 12); 7. `style.md` (brackets, a trailing blank line, long
       Markdown lines).
     - **The apworld and the website:** 8. option groups (the first, "Aesthetic Options", came with build step 33),
       presets, reST option texts with rich text, a bug report
@@ -575,7 +577,7 @@ be wrong.
 - **A party of two with Leif in front hangs every battle's start** (found planning battle stand-ins, 2026-09-30; read
   in the code, not seen). The start turns the party until the field leader is in front, comparing a slot with the
   leader's member number (`BattleControl.cs:1284`), so with Vi and Leif, or Kabbu and Leif, and Leif leading, it
-  never stops. Only with members as items (build step 18). Fixing: the mod guide, step 11.
+  never stops. Only with members as items (build step 18). Fix built, not yet seen: the mod guide, step 11.
 - **The second spider fight softlocks with a one-member start** (found the same way, 2026-09-30; read in the code,
   not seen). Every second turn it gives Kabbu a line by reading the party's second slot (`EventDialogue` case 5),
   which a party of one doesn't have, so the fight stops if the Web is still up on turn 2. Fix built, not yet seen:
@@ -614,17 +616,19 @@ be wrong.
     patches make both a plain file name; not yet seen in game.** Reported upstream by the user as MultiClient.Net
     [#143](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net/issues/143) (2026-09-29; text only, never
     code from us). Our patch stays until a release carries a fix.
-- **Horn rules:** written as `abilities: ["Horn Slash"]` since the horn became an item (build step 21): locations
+- **Horn rules:** written as `CanUse("Horn Slash")` since the horn became an item (build step 21): locations
   11, 19, 25, 30 and 32, and 31 through the Den's entrance (build step 13). Not location 2: the horn tutorial cuts its
-  grass itself and played through with Leif alone (2026-09-25). **Upper Snakemouth, when it gets locations:** the big door in the door room stays shut until flag 14 (its closed
+  grass itself and played through with Leif alone (2026-09-25). **Upper Snakemouth, when it gets room-level logic** (today its one location, 74, sits under the later chapters'
+  story-order rule, build step 23)**:** the big door in the door room stays shut until flag 14 (its closed
   halves stand until the trapdoor fall, `MEASURED.md`, scenery switched by flags), so its rule is the trapdoor (the
   door room's horn puzzle: the Horn) and the Peculiar Gem for the slot behind it (2026-09-27).
   Also location 19 (crystal berry #0 outside Snakemouth Den): the horn from the Outskirts' side, or the way round
   through the cave (2026-09-26; `MEASURED.md`): today it takes the Horn, more cautious than the game;
   room-level regions would add the cave.
-- **Crystal berry #2 (location 20)** sits in the Underground region, which needs Leif, though the room's
+- **Crystal berry #2 (location 20)** sits behind the Underground's need (its `reach`), which needs Leif, though the room's
   upper-left entrance needs nothing. More cautious than the game, so safe; room-level regions would split it.
-- **Landmark names** for locations 2, 22, 23, 24, 25 and 30 are still to come from the tester, and the seven ability
+- **Landmark names** for locations 2, 23, 25 and 30 are still to come from the tester (22 and 24 are named, build
+  step 10), and the seven ability
   scenes' names (68-74, build step 23) and the throne room's (76, build step 36) are provisional.
 - **Uncap FPS (mod guide, step 24) still speeds some things up.** Each to compare at 60 and above on screen, then
   step at the game's own rate, as the other per-frame sites are:
@@ -675,7 +679,8 @@ reads `item.kind` instead of `item["kind"]`, and a key a record doesn't have is 
 of being silently ignored. A file's schema lives in its record's docstring. One table per commit, each proven by
 `seed-snapshot.py` (identical slot_data and spoilers), the tests and the fuzzer. Done for every table: items,
 encounters, doors and room starts, the client's entity lists, then regions, exits, locations, story events and
-artifacts together (`rules.requires` reads exits and spots alike, through their shared `Needs` fields). The schema
+artifacts together (then `rules.requires` read exits and spots alike; since build step 29 they carry Rule Builder
+rules in their `rule` and `reach` fields, which `rules.set_all_rules` joins). The schema
 strings that headed `items.json` and `locations.json` are now those docstrings. `TestDataRecords` proves an unknown
 key is refused; with the check switched off, it fails. (Since build step 29 the logic's records are written in Python,
 `logic/`, where a misspelt field fails by itself; the data files left are items, doors, enemies and save points.)
@@ -712,8 +717,8 @@ Archipelago's `custom_worlds` folder.
   location). *Useful*: especially good to have; never placed on an excluded location. *Filler*: can be
   ignored; the only kind an excluded location gets. *Trap*: detrimental to receive; a yaml option may swap
   filler for traps.
-- **The pool is each location's own vanilla item** (2026-09-24, once two locations held an HP Plus medal), then
-  one of every other item, then padding for the rest (test `TestPool`, which also fails if a location's vanilla
+- **The pool is each included location's own vanilla item** (2026-09-24, once two locations held an HP Plus medal),
+  then the member, ability and the mod's own items the options add, then padding for the rest (test `TestPool`, which also fails if a location's vanilla
   item is missing from `items.json`). *Padding* is a mark in `items.json` for
   the filler that may fill leftover locations in any number (a Crunchy Leaf). A filler item without it, like
   the Hard Mode medal, is a real item and goes in once (2026-09-24; test `TestMedals`). The G-Bug Ranger Plushie
@@ -724,11 +729,11 @@ Archipelago's `custom_worlds` folder.
   when any rule in the logic uses it, even for a single location; one nothing uses is *useful*. Crystal berries
   buy medals at the crystal berry shop, so they become progression in the same change that puts that shop in
   the seed (test `TestClassifications` enforces both directions). Every medal is *useful*, except the Hard Mode medal (#11), which is *filler*: it only makes
-  fights harder, and the Archipelago panel can do the same. A test will check both directions: an item a rule uses is
-  progression, and a progression item is used by some rule.
+  fights harder, and the Archipelago panel can do the same. `TestClassifications` checks both directions: an item a
+  rule uses is progression, and a progression item is used by some rule.
 - **Logic lives on regions and locations, never on items.** An item doesn't say what it unlocks. A region's
-  exits say what they need (the gate out of the Outskirts needs the Explorer Permit), and every location
-  belongs to a region. A location needing something more than its region adds that to itself.
+  exits say what they need (the Golden Path's door needs the first boss; the permit gate, inside the Outskirts map, is
+  each spot's `reach` until the rooms are mapped), and every location belongs to a region. A location needing something more than its region adds that to itself.
 - **A location is named after where it is, never after what it gives** (2026-09-24). Once items
   are shuffled, a hint like "your Hover is at Outskirts: Explorer Permit" points at the wrong thing. The
   form is `<Area>: <Room>, <Spot>` (2026-09-24): the game's own area name; a short room name from a
@@ -747,7 +752,7 @@ Archipelago's `custom_worlds` folder.
   `TestLocationNames` fails if a location's name contains its own vanilla item's name. Renaming a location
   never changes its id or flag.
 
-**Status:** done; the world has since grown to 66 locations (61 by default) and 52 items (counted 2026-09-27).
+**Status:** done; the world has since grown to 75 locations (70 by default) and 58 items (counted 2026-09-30).
 
 *Code: `apworld/bug_fables/world.py` (`BugFablesWorld`), `regions.py`, `locations.py`, `items.py`, `rules.py`, the
 data in `data/items.json` (read by `data_tables.py`) and the logic in `logic/` (build step 29), tests in
@@ -782,7 +787,7 @@ The apworld has an option, *Artifacts Required* (1 to 7). Each artifact is an **
 the game grants it, and the goal is "have N of them". An event holds no real item; it exists so the
 generator can prove the goal is reachable. The world only includes the first artifact so far, so a request
 for more is lowered, with a warning, instead of producing a seed that can't be won. That rule has a test,
-and so does the permit gate: remove the permit rule and two tests fail.
+and so does the permit gate: remove the permit rule and the permit tests fail.
 
 One rule came out of this for every later option: **every seed can be completed from wherever it starts.**
 Whatever an area or the goal needs is written into the logic, and the mod never hands things out to patch
@@ -798,7 +803,7 @@ later. The log says what it decided: `[goal] 0 of 1 artifacts`, then `[goal] sen
 spider boss (a dev file) logged `[goal] reached, 1 of 1 artifacts` and `[goal] sent`, and the server released the
 slot's remaining items and logged "Team #1 has completed all of their games!".
 
-**Status:** in progress: the goal is in the apworld, with only the first artifact so far; the mod sends "goal reached" at the required count, seen working (2026-09-26); more artifacts come with more of the world (Next 7).
+**Status:** in progress: the goal is in the apworld, with only the first artifact so far; the mod sends "goal reached" at the required count, seen working (2026-09-26); more artifacts come with more of the world (Next 1).
 
 *Code: `apworld/bug_fables/options.py` (`ArtifactsRequired`), `world.py` (`generate_early` lowers the
 number), `locations.py` (`create_all_locations` adds the artifact events), test `TestArtifactsCapped`; the mod: `LocationChecks.CheckGoal`,
@@ -879,8 +884,9 @@ ignore.
 
 Both patched methods are **private**: `ArchipelagoSocketHelper.CreateWebSocket` in the client library, and
 `WebSocket.validateSecWebSocketExtensionsServerHeader` in websocket-sharp. Private methods can be renamed or
-changed by any library update without warning. If either one can't be found, the mod installs neither patch
-and logs `[ws] compression left off: ... not found`; the connection then works uncompressed. A changed
+changed by any library update without warning. If the check's patch can't be installed, neither is; if only the
+socket's can't, compression is never asked for. Either way the log says `[ws] NOT installed (…): …; compression left
+off`, and the connection works uncompressed. A changed
 method that keeps its name would not be caught that way, so re-test compression after updating either
 library.
 
@@ -957,14 +963,14 @@ other pickup. The file select therefore refuses randomizer files until then (202
 every check the server hasn't confirmed and sends it again with the next one.
 
 **What the log shows:** `[check] watching ...` (which locations and flags), then `[check] location ... is
-done (flag N set): sending`, `[check] sent ...`, and `[check] now checked on the server: ...`.
+done (flag N set) on <map>/<area>: sending`, `[check] sent ...`, and `[check] now checked on the server: ...`.
 
 **Tests:** the apworld checks that every location has its flag in `slot_data` (the permit's is 15, the
 medal's 32), and that the world version is written in one place only (the manifest). Both fail without the
 change. The world version went to 0.2.0.
 
 *Code: `apworld/bug_fables/slot_data.py` (`build_slot_data`), test `TestSlotData`; in the mod,
-`LocationChecks.cs` (`Tick`) and `ApConnection.cs` (`ReadLocationFlags`, `SendChecks`).*
+`LocationChecks.cs` (`Tick`), `ApConnection.cs` (`SendChecks`); `location_flags` is read in `SeedData.cs`.*
 
 **Not yet:** the game still hands out its own item at the location, the medal here. Replacing that with the
 server's item is the next step (done since: the mod guide, step 9). A save from another seed would have sent its finished locations here; build step 7 ties each save to its
@@ -1122,8 +1128,9 @@ the first boss until chapter 2 starts (flag 67), is the likely reason, still to 
 **Leif and the water droplets** (2026-09-24): a room with water droplets needs Leif to freeze them, and
 so does every room reached only through one. The dump marks droplets (`Dropplet` entities), so the split comes
 from data: from the Snakemouth entrance, follow the doors without entering a droplet room. What that reaches
-(entrance, bridge room, door room, fall room, lake) is the region *Snakemouth Den*; every other Snakemouth room
-is *Snakemouth Den Underground*, whose entrance needs the story event *Leif*. Leif joins at the lake (Event14,
+(entrance, bridge room, door room, fall room, lake) was the region *Snakemouth Den*; every other Snakemouth room
+was *Snakemouth Den Underground*, whose entrance needs the story event *Leif* (since 2026-09-30 every map is a region,
+and this split is the `DEN` and `UNDERGROUND` needs in `logic/snakemouth_den.py`). Leif joins at the lake (Event14,
 flag 16), which is on the open side, so the logic can't go in circles. The first boss's treasure room is
 underground, so Artifact 1 needs Leif too. Story events like this one live in their area's module (`logic/`) under
 `STORY_EVENTS`; a location can also have a rule of its own. Tests `TestLeif` fail without the rule.
@@ -1136,8 +1143,9 @@ rule is written even when the region already implies it, so a different way into
 **Into chapter 2** (a play-through, 2026-09-24): two more story events, each a region gate from the gate
 table. *City Opened* (Event60, flag 107, after the first boss) opens the door from outside the city into *Bugaria
 City*; *Chapter 2 Started* (Event45 at the Ant Palace, flag 67) opens the palace rooms and city districts (*Ant
-Palace*, since renamed *Bugaria Inner City*: it also holds the districts). Story events can have their own
-`requires` now (the city needs the first boss). Locations there: a Lore Book behind the library bookshelf (test
+Palace*, since renamed *Bugaria Inner City*: it also holds the districts). Story events could have their own
+`requires` then (the city needed the first boss). Since then the city needs nothing (build step 9), *City Opened* is
+gone, and chapter 2's need is `INNER_CITY` in `logic/bugaria_city.py`, a story event's own need its `rule`. Locations there: a Lore Book behind the library bookshelf (test
 `TestChapterTwo`, which fails without the gate), and the old book delivery, board quest 33, whose reward is a
 Lore Book (category quest; played through on screen). **Mid-quest items are shuffled too**
 (2026-09-24): otherwise a quest's middle stays vanilla. The same cicada hands over the old book (Quest Book, flag
@@ -1169,13 +1177,14 @@ gate (Event10, 10 berries, written in the event's code), while its "30 berries o
 ScriptDump line that belongs to an unrelated NPC who appears only much later. So a location's flag, its give and
 its region must all be traced to **the same scene**, and a give written in an event's code won't show up in the
 ScriptDump at all. The fix moved it past the gate as *Outskirts: Near Snakemouth Den, Reward* with its real give,
-and the test `test_only_two_locations_before_the_gate` now pins what the tester knows from play: before the permit,
+and the test `test_only_two_locations_before_the_gate` (since renamed `test_only_what_play_showed_before_the_gate`,
+build step 9) pinned what the tester knew from play: before the permit,
 only Maki and Eetl's gift and Artis's gift are reachable. It fails on the old data.
 
-Still to do: the one event not found, characters that block a path, the region graph built from all of
-it, and the tests.
+Still to do: the one event not found and characters that block a path. The region graph is built per map, with its
+tests (build step 12); rooms within a map wait for build step 24.
 
-**Status:** in progress: the one event not found, characters that block a path, the region graph and its tests.
+**Status:** in progress: the one event not found and characters that block a path; the region graph built per map (build step 12), rooms within a map waiting for build step 24.
 
 *Code: `dev-scripts/gate-table.py`, `dev-scripts/event-triggers.py`; the dumps in `mod/BugFablesAP/Dev/EntityDump.cs`,
 `MapDump.cs` and `ScriptDump.cs`.*
@@ -1194,7 +1203,7 @@ linear and an open game, isn't worth it; open, metroidvania-like games work best
 "open start" yaml option planned on 2026-09-24 (skip the prologue and tutorial, optionally with Leif from the start (the new-game party `{0, 1}`, `MainManager.cs:3591`, becoming
 `{0, 1, 2}`; early cutscenes are written for two, so tested on a fresh file). A full story strip, as the Metroid
 Fusion apworld does, isn't the plan: here every cutscene also changes the world through flags.) Leif from the
-start is now *Starting Party Member* (build step 13).
+start is now *Starting Party Member* (build step 18).
 **Open world is the default, not an option** (2026-09-25: nobody picks a linear game in
 Archipelago). The target: the world open as if the story were done, nothing collected, the ending gated by the
 artifact count. **Built one gate at a time, never by forcing chapters done** (decided 2026-09-25): "chapter done"
@@ -1203,7 +1212,7 @@ locations (bosses beaten, characters gone, quests closed, cutscene gifts skipped
 door, a guard, a story flag) is opened by the seed on its own, tested on screen, and known to the logic; key
 items and abilities become the real gates (the Peculiar Gem for Upper Snakemouth); story events and bosses stay
 as locations. The goal stays "collect N artifacts". The ending's gate is researched without spoiling it for the
-tester, who hasn't finished the game. Regions stay whole areas for now (since 2026-09-30 every map is a region, build
+tester, who hasn't finished the game. Regions were whole areas at first; since 2026-09-30 every map is a region (build
 step 12); each room's areas as regions (doors from the
 dump, `dev-scripts/door-graph.py`; build step 24) come as the gates open (2026-09-24; areas within a room since
 2026-09-27).
@@ -1262,8 +1271,8 @@ So the house now needs nothing. With the rocks gone the east road opened too; th
 Kabbu's horn and found a Drowsy Cake (flag 735), now a location (*Outskirts: East Road, Stone*), and picked
 up crystal berry #10 at the pier with no abilities (*Outskirts: Pier*). The miners working
 at the rocks (gone from 41 in the game) mine nothing now, so they join `kept_open`. The test
-`test_only_what_play_showed_before_the_gate` pins the locations reachable before the permit (five, with the pier's
-crystal berry). **The town door does nothing before the first boss** (seen on screen, 2026-09-25: "the
+`test_only_what_play_showed_before_the_gate` pins the locations reachable before the permit (five then, with the pier's
+crystal berry; the shops and more have joined since). **The town door does nothing before the first boss** (seen on screen, 2026-09-25: "the
 entrance does not work/do anything"), which is the held trigger. **The lists must reach a map already loaded:** after a
 plugin reload or a seed change, a map loaded before the login is built as vanilla: the rocks were seen coming
 back until the tester left and re-entered. `KeptOpen.Tick` now applies a newly arrived set of lists to the current map (the
@@ -1293,13 +1302,14 @@ shows the companion asked for on `BugariaMainPlaza` outside any scene and the le
 `blockereetl2` and its duplicate, Event12, until flag 67) kept the party in the plaza. No city map has a scene that
 starts on its own, and every other city scene trigger needs flag 67 or later (entity dump, map dump), so they join
 `kept_open` and the districts can be walked early. The palace's own blockers stay (the story goes on there). The
-districts' checks keep requiring chapter 2 in logic until they're seen working. Test `test_plaza_blockers_removed`. With the
+districts' checks came into the logic one by one as they were seen; today only the old book quest needs chapter 2. Test `test_plaza_blockers_removed`. With the
 blockers gone the exits still did nothing (seen on screen): the plaza's doors to Commercial, Residential and the theater
 require flag 67 themselves, and a `Cube` in the plaza hides at 67. The three doors join `kept_present` and the cube
 `scenery_hidden`. Lesson: an area closed "until chapter N" is closed by several things at once (blockers, doors,
 scenery); list every entity and scenery piece gated by that flag before opening it. First find
 in the open town: the Bad Book (key item 174, flag 621) outdoors in the residential district, reached with Kabbu's
-horn before chapter 2 (2026-09-25): a location in the *Bugaria City* region, open from the start. Then the
+horn before chapter 2 (2026-09-25): a location in the *Bugaria City* region then (its map's, `BugariaResidential`,
+since every map is a region), open from the start. Then the
 Bug Me Not! medal (flag 59), also outdoors in the residential district, which needed Leif's ice: the same region,
 requiring Leif (test `TestTownMedal`).
 **The bar and the quest boards** (2026-09-25). The way down to the underground bar (Shades's crystal-berry
@@ -1308,7 +1318,8 @@ flag 135. That flag also brings story characters and a scene (Event79) to the di
 it isn't set: a new `slot_data` list, `dialogue_flags` (map, entity, flag, to), repoints that one line to flag 691,
 which the new-game scene always sets. An entity picks the last line whose flag is set (`NPCControl.cs:4320-4326`), so
 the way down is always taken. The town's and the Outskirts' quest boards (requires 67) join `kept_present`; each quest
-still needs checking before the logic counts on it. Tests `TestBarAndBoards`. Not yet seen.
+still needs checking before the logic counts on it. Tests `TestBarAndBoards`. Seen (2026-09-25, `log.md`): the
+bar and both quest boards.
 **Madeleine's house on the Outskirts, open from the start** (2026-09-25). Everything tied to it is flag 390,
 set by one conversation in a later area: a locked-door check (`lockeddoor`, until 390, now `kept_open`), the real door
 (`doormadeleine`, from 390, `kept_present`) and a lock (`Base/lock (1)`, `scenery_hidden`). Inside, only her and her
@@ -1385,8 +1396,8 @@ Optional kinds each get a yaml toggle that states how many checks it adds.
 filler). Two checks can share one flag: the delivery quest pays 15 berries and a Lore Book at flag 243, so both
 are locations and are sent together. In the mod, receiving berries uses the game's own money reward (capped at
 999); at a berry location the command is turned, just before it runs, into a hand-over the item swap already
-handles (`BerryPrefix`). **The pool is now exactly the included locations' vanilla items** plus padding: an item
-whose vanilla spot isn't a location (the Plushie at the theater) stays with the game (test `TestBerries`).
+handles (`BerryPrefix`). **The pool is now the included locations' vanilla items**, plus the items the options add
+(members, abilities, the mod's own), plus padding: an item whose vanilla spot isn't a location (the Plushie at the theater) stays with the game (test `TestBerries`).
 **Crystal berries** (2026-09-24: the first thing you pick up): a counted currency (`flagvar[14]`, the
 crystal berry shop's counter), 50 berry spots each known by its `crystalbflags` index. A berry location's check is
 that index (`location_berries`), the pickup is recognised by it (`data[0]`), and all of them hold the one item
@@ -1432,7 +1443,8 @@ start Event5. Its check is the flag that event sets, and an option that skips th
 out (test `TestStoryPickup`). For a future story strip or open world, the
 mod could force such a pickup to exist (like the doors kept open) and send its check on pickup, making it
 independent of the story.
-**Hard Mode boss prize medals** (23, `MEASURED.md`) are always shuffled, with no option: every boss pays
+**Hard Mode boss prize medals** (23, `MEASURED.md`) are always paid, with no option, and each becomes a location
+when its boss is in the logic (today the first, location 13): every boss pays
 its prize as if Hard Mode were on, whatever the player's setting, so a prize can never be skipped and its
 location is simply "beat this boss". The mod does that by widening the Hard Mode test inside the game's
 own `AddPrizeMedal`, never by writing the prize slot itself. **The Archipelago panel gets a
@@ -1446,15 +1458,16 @@ missed-prize payout skips it and the game sells it at the caravan as usual (`MEA
 2026-09-24: the game keeps no other record of a typed code.** `flagstring[10]` is only the typing buffer,
 emptied as soon as the code is accepted (`EventControl.cs:2450-2455`), so flag 614 is the code's only trace,
 so the mod marks a 614 it set itself, and keeps it out of every save (chosen 2026-09-24:
-switchable, the save stays clean; the mod guide's design list, item 6).
+switchable, the save stays clean; the mod guide, step 15).
 **Built 2026-09-24 (not yet seen in game):** each tick outside battles and events, a prize slot reading "missed"
-(2) is paid through the game's own `AddPrizeMedal(slot)` with Hard Mode answered "yes" for that call, because
-most bosses test Hard Mode in their own event and write 2 directly. Artis's `Event33` then hands the prize over
+(2) is paid through the game's own `AddPrizeMedal(slot)` with Hard Mode answered "yes" for that call, because a
+boss's event can write 2 directly on Normal (the first boss's does; the others go through `AddPrizeMedal`,
+`MEASURED.md`, Hard Mode boss prizes). Artis's `Event33` then hands the prize over
 with a `giveitem` the swap handles, and the location is done when the slot reaches 3 (`location_vars`, a number
 slot instead of a flag). First location: *Outskirts: Artis's Prize for Snakemouth Den* (Quick Flea, seen
 for sale at the caravan and bought after a Normal kill: the missed-prize path, confirmed on screen).
-**Everything in, placeholders for what isn't checked (2026-09-25):** every item, medal and other spot in the
-game is added, so everything is randomized. A spot whose logic and name haven't been checked yet is a *Placeholder*:
+**Planned (2026-09-25): everything in, placeholders for what isn't checked.** Every item, medal and other spot in
+the game to be added, so everything is randomized. A spot whose logic and name haven't been checked yet is a *Placeholder*:
 "Placeholder" in its name, and it holds filler only (Archipelago's excluded type), so no progression item from any
 game lands where the logic may be wrong. Its own vanilla item still goes into the pool and lands at a checked spot.
 Each placeholder is promoted to a normal location once its requirements and name are checked, one at a time.
@@ -1514,7 +1527,8 @@ order can lock one away.
 **Medal shops (2026-09-25), being built.** Each medal a shop stocks is a location; the shelf shows the
 seed's item, buying runs the shopkeeper's `giveitem` (swapped as for a gift), and the check is the medal leaving the
 stock (`badgeshops[shop]`), which the save keeps. A done location shows as sold, so a reloaded save never charges
-twice. A *Shop prices: Normal / Half / Free* row (default Normal) scales the price columns. Merab's (berries) first:
+twice. A *Medal prices* bar on the Gameplay page (tenths of the normal price, 10 by default; the mod guide, step 10,
+item 7) scales the price columns. Merab's (berries) first:
 berries can always be earned, so no lockout. **Shades's shop takes crystal berries, a consumable** (the
 concern: consumable keys, lockout, savescumming): crystal berries are spent nowhere else (measured), and her stock
 arrives in tiers whose Normal prices add up to 18, 25, 27, 40 and 50, exactly every berry in the game. **A tiered
@@ -1635,7 +1649,7 @@ The survey itself, with the rule for removing a follower's need: `room-logic.md`
    area (maps joined by fixed doors count as one): an open door of the reached part is joined to a door of an area
    not reached yet, taking an area with more doors whenever only one open door is left; the doors left at the end
    are paired at random. Tests `TestDoors*`: every way back leads back, every map is reachable, and a hub with dead
-   ends is never stranded over 300 seeds (a plain random pairing strands 266 of them).
+   ends is never stranded over 300 seeds (a plain random pairing strands 266 of them; that test went with `doors.py`).
 4. Six seeds generated with it on, three solo and three with APQuest. **Seen (2026-09-25), one generated
    pair both ways:** the town gate led into the desert (`DesertBeforeGH`, the log: rewritten like `DesertSouthern`'s
    left exit), and the exit there back to the start in front of the gate. The logic still assumes the vanilla doors
@@ -1696,16 +1710,18 @@ already reads (How it works §8; Archipelago's `entrance randomization.md`).
 Archipelago does").** The graph changed, not the rules. The rules stay what they were, moved to where the graph needs
 them; room-by-room rules (build step 24) replace them later.
 
-1. **One region per map:** Menu, then the 241 maps of the door table (`SnakemouthEmpty`, an unused room nothing leads
+1. **One region per map:** Menu, then the 240 maps of the door table (`SnakemouthEmpty`, an unused room nothing leads
    into, and `TestRoom`, the debug room, left out; the user: "looked like a empty/test map", "TestRoom sounds obvious")
    and `MetalLake`,
-   `TermiteColiseum2`, `BugariaEndThrone`, reached only by transfers. 244 regions, 582 entrances. **Unused and test
+   `TermiteColiseum2`, `BugariaEndThrone`, reached only by transfers. 244 regions, 581 entrances (582 until the Termite gate went one way, build step 36).
+   **Unused and test
    maps are never part of anything** (the user, 2026-09-30): no region, no logic, never the target of a door, a
    transfer or a spawn, never reachable (`room-logic.md`, the model). Test `TestUnusedMaps`, with every door shuffled
    both ways and a random start: no region, entrance, transfer, spot, encounter, start or shuffled door names one; it
    fails with the list emptied.
 2. **Every door an entrance of its map's region**, named where it is, `"<map>: <door>"` (the naming the entrance
-   randomization doc recommends), connected as the game has it: 508. The 39 fixed doors are plain entrances.
+   randomization doc recommends), connected as the game has it: 508. Of the 39 fixed doors between two maps, 37 are plain entrances; the two out of
+   `SnakemouthEmpty` and `TestRoom` go with those maps.
 3. **The transfers that join the door graph's parts** (the doors alone split it into 10), each a `Transfer` in its
    area's module, from the decompiled events and the dumps (read 2026-09-29): the boat (`Boat Ticket`), the Beehive
    elevator, the submarine docks, the ant tunnels, the termite gate, the arena, the Roach Village lifts, the Golden Hills
@@ -1741,8 +1757,8 @@ is gone, its grow-outwards pass with it (Archipelago's randomizer grows the worl
    `write_spoiler_header`, as The Messenger does), each pair once, both ways.
 4. **The preflight's import list widened for it** (the user's call, 2026-09-29): `entrance_rando`'s two functions,
    `BaseClasses`' `Entrance` and `EntranceType`.
-5. **Not now: `PlandoConnections`.** No Archipelago doc mentions it and nothing requires it (The Messenger has it as an
-   extra); the review page lists it under what doesn't apply.
+5. **`PlandoConnections`: first left out** (no Archipelago doc mentions it and nothing requires it; The Messenger has
+   it as an extra), **then built the same day** (build step 32), as every optional feature is supported.
 
 The experimental label stays: the rules inside rooms aren't mapped yet (build step 24), so a shuffled seed can still
 put the party where the game needs more than the logic knows; the Warp stays the way out.
@@ -1760,8 +1776,9 @@ tests `test_doors.py`, `test_areas.py`.*
 
 ## Build step 13: party members and moves as items, the design (in progress)
 
-Field abilities, the basic moves and party members as items, each unusable until it arrives. Only a rehearsal is
-built so far: a dev setting that starts the game with one member.
+Field abilities, the basic moves and party members as items, each unusable until it arrives. This step is the design
+and the rehearsal behind it (a dev setting that starts the game with one member); each part is built in its own step:
+members (18, 20), the attacks (21), Jump (22), the learned abilities (23).
 
 **Also wanted (2026-09-25): the basic moves as items**, a yaml option apart from the abilities: Vi's
 beemerang, Kabbu's horn, Leif's freeze, and jumping, each unusable until its item arrives. Proposed: *Shuffle Basic
@@ -1852,7 +1869,8 @@ grass on the way there has to be cut with the horn (2026-09-25), so her location
 **Rules name the move, not the member (2026-09-26):** "assume horn/boomerang/ice for logic, same as
 having Kabbu/Vi/Leif", so the logic already holds for a random start, one member and missing moves before any move is
 an item. A spot or exit lists `abilities` (Horn, Beemerang, Ice, Jump); the world turns each into who has it today
-(`ABILITY_HOLDERS` in `rules.py`: Horn Kabbu, Beemerang Vi, Ice Leif; Jump the whole party, so nothing), and only when members
+(`ABILITY_HOLDERS` in `rules.py` then; since build step 29 `ABILITIES` in `abilities.py`, through `CanUse`: Horn Kabbu,
+Beemerang Vi, Ice Leif; Jump the whole party, so nothing), and only when members
 are items, as for `members`. The two horn spots (25, 32) moved from `members` to `abilities`, and location 19 (crystal
 berry #0 outside the den, behind grass from the Outskirts' side) got the Horn: cautious, since the cave's side needs
 no horn, which room-level regions will count. Location 30 (the bridge room's hidden spot, behind grass) got the Horn too
@@ -1863,7 +1881,7 @@ test `test_the_den_needs_the_horn`. Tests `TestAbilities`; three seeds with a ra
 generated. **Next, after the current tests:** the three attacks as items, one per member, and Jump as one
 item for the whole party; then every move's spot from `MEASURED.md` (where a move is needed) written as `abilities`.
 
-**Status:** in progress: a one-member party (Leif) seen through chapter 1 into chapter 2 (2026-09-25); *Starting Party Member* built as its own step (build step 18); the three attacks and Jump built as their own steps (21, 22); field abilities not built.
+**Status:** in progress: a one-member party (Leif) seen through chapter 1 into chapter 2 (2026-09-25); *Starting Party Member* built as its own step (build step 18); the three attacks and Jump built as their own steps (21, 22); the seven learned abilities built as build step 23.
 
 ## Build step 14: Enemy Shuffle, which enemies each fight has (in progress)
 
@@ -1986,7 +2004,8 @@ still starts outside Bugaria, so a seed started elsewhere may not be finishable 
    as Warp to Start lands (`WarpButton.SavePointSpot`). Warp to Start goes there too. The transfer hangs on the intro
    skip's end, so **a seed start always skips the intro**, whatever *Skip cutscenes* says (2026-09-26);
    the setting still governs every other scene.
-4. **Tests** (`test/test_start.py`): off gives `{}`; `anywhere` gives a save point from the table; the start is fixed.
+4. **Tests** (`test/test_start.py`): off gives `{}`; `anywhere` gives a room from `ROOM_STARTS`, entered through a
+   door of its `from` map; every connection gives both rooms as starts; the start is fixed.
 
 **First tries in game (2026-09-26), three failures and how each was found:**
 - **Frozen, with a `NullReferenceException` in `TransferMap`.** The transfer's first step is the game's fade to black,
@@ -2086,18 +2105,18 @@ trip free and the ticket kept; the logic gates Metal Island on it, so Metal Isla
    own name "Boat Ticket" and the description "A boat ticket. Maybe we should visit the pier." (field 2, the one
    the menus show; `MEASURED.md`, "The item table's fields"). Only with Archipelago on. Seen on screen.
 2. **In the pool** (`items.json`): kind 1 (key item), game id 200, progression, with `always`: it enters once in every
-   seed. When every location already holds its vanilla item (the default seed has 59 for 59), one ordinary item or
+   seed. When every location already holds its vanilla item (the default seed had 59 for 59 then), one ordinary item or
    berries with a copy left makes room, picked with the seed's random; never a medal, never an item's last copy.
 3. **The logic** (`logic/metal_island.py`): a Metal Island region, reached from the Outskirts (the pier) with the Boat Ticket.
    No locations there yet.
 4. **The sailor** (`BoatTicket.cs`): a postfix on `MainManager.GetDialogueText` on `BugariaPier`, since every line of
-   his, the first included, comes through it. His lines as approved, line by line (build step 16's
-   record in Next 21's history): the offer "Would you fancy traveling to Metal Island? Show me your ticket.", the
+   his, the first included, comes through it. His lines as approved, line by line (`log.md`,
+   2026-09-26): the offer "Would you fancy traveling to Metal Island? Show me your ticket.", the
    choice "Let's go!" / "Not yet!" with the ticket or "I lost my ticket!" without, the ticket checked where the fare
    was (lines 16 and 19), "...Ticket's in order. Hop on!" or "What?! No ticket, no trip! Get out of here!". The card
    Masters' discount (line 18) makes the same offer. English only.
 5. **Free boat removed** (`QualityOfLife.cs`, `ApMenu.cs`): its fare rewrite and its row.
-6. **Tests** (`test/test_boat_ticket.py`): once in the pool, progression; Metal Island unreachable without it,
+6. **Tests** (`test/test_boat_ticket.py` then; since 2026-09-30 `test_progressive_boat.py`, build step 36): once in the pool, progression; Metal Island unreachable without it,
    reachable with it. `TestPool` now allows the one filler copy the ticket takes. *Shop Contents: Filler Only* in a solo
    seed with discoveries on is now one filler short and falls back to No Progression, as it already did without
    discoveries; with other games' filler in the room it holds.
@@ -2116,8 +2135,8 @@ got the refusal; seen on screen.
 **Since 2026-09-30, with *Progressive Boat* on (the default),** the ticket arrives as the Progressive Boat's first copy
 and the submarine as its second; off, the ticket is its own item, as here (build step 36).
 
-**Status:** works both ways, seen on screen (2026-09-26); the pool and logic take effect in the next generated seed
-(the apworld tests pass, 275).
+**Status:** works both ways, seen on screen (2026-09-26). Since 2026-09-30 the ticket is the Progressive Boat's first
+copy by default (build step 36).
 
 ## Build step 17: releases, the three downloads and how they're built
 
@@ -2377,7 +2396,7 @@ own on/off thing as well due to how much it impacts, both off by default"). The 
 1. **The game's own move** (`PlayerControl.DoActionTap`, `MEASURED.md`): the leader's field attack by his `animid`;
    Vi's already waits for flag 11, Kabbu's and Leif's are always on.
 2. **The world:** option `shuffle_field_moves` (off). Three items, kind 6 (`MOVE_ID_OFFSET`), in the pool only with it
-   on. `requires` (`rules.py`) turns an ability into its member (when members are items; with the story's party only Leif, who
+   on. `requires` (`rules.py`; since build step 29 `CanUse`) turns an ability into its member (when members are items; with the story's party only Leif, who
    joins late) and, with moves shuffled, its item. **Cautious like members** (chosen): the gate's exit lists
    `moves` (all three items, not who uses them, so the story's Leif isn't pulled before the gate); the measured spots
    before it name their ability (the two horn spots; the fountain rooftop and the droplets now say Ice). `slot_data`
@@ -2459,7 +2478,7 @@ level without the first "wouldn't work"): Beemerang Toss then Halt, Dash then Ho
 2. **The ability table** (`abilities.py`): each ability by the game's name, its member, its item, its level (copies of
    the item it takes) and the option that makes its base level an item. With Shuffle Field Moves off the party starts
    with the Toss and the Freeze, so their progressive items take one copy, the upgrade. Rules name abilities, never
-   items; `rules.requires` turns them into item counts (`HasAllCounts`), and the pool puts in enough copies for the
+   items; `rules.requires` (since build step 29 `CanUse`) turns them into item counts (`HasAllCounts`), and the pool puts in enough copies for the
    highest level. Existing ids kept: the Beemerang and Freeze items were renamed, not renumbered.
 3. **The locations:** the seven scenes, each checked by its own flag (`source.flag`), in a region *Later Chapters*
    past chapter 2's start that needs everything the story used before (the permit, the Boat Ticket, the first boss,
@@ -2692,8 +2711,8 @@ A section that finds nothing to check fails rather than passing: "0 files scanne
 **The apworld's rules (2026-09-29).** The apworld is Python that runs on whichever machine generates a seed, the
 archipelago.gg website's included, and Archipelago imports it on every start, even when nobody plays Bug Fables.
 So it gets the strictest rules, read from its syntax tree, not by searching text:
-- **Apworld imports:** every name it takes from Archipelago or Python is listed in the patterns file (30 names
-  from 12 modules), and a plain `import` only for `json`, `logging` and `pkgutil`, each with the few functions it
+- **Apworld imports:** every name it takes from Archipelago or Python is listed in the patterns file (38 names
+  from 14 modules today; 30 from 12 when it was switched on), and a plain `import` only for `json`, `logging` and `pkgutil`, each with the few functions it
   may use (`json.loads`, `pkgutil.get_data`). Listing names matters because a module hands on everything it
   imported: Archipelago's `BaseClasses` can pass along a helper that runs programs.
 - **Apworld runs nothing unexpected:**
@@ -2788,7 +2807,7 @@ its `-Check` (the release's gate) is now preflight with `--release`.
 - **Workflows:** every action pinned to a full commit hash, with its version in a comment. The four first-party
   actions were pinned by tag only until then; a tag can be moved, a commit can't.
   - The workflow-level permissions are empty, and a job asks only for what the patterns file lists (today: the
-    release's publish job, to write the release).
+    release's publish job, to write the release and its attestations, and its verify job, to read it).
   - Only four triggers (push, pull request, a call from another workflow, a manual run), and only GitHub's own
     runners.
   - No secret but GitHub's own token, and no `${{ }}` inside a script, where text from outside would run as code.
@@ -2976,7 +2995,8 @@ decided (`slot_data`).
    `STORY_EVENTS` and `ARTIFACTS` (each with its own rule), and the entities the seed changes there (`KEPT_OPEN` and
    the rest). A spot lives in its region's module; only exits cross from one module into another. `logic/__init__.py`
    gathers them, `LOCATIONS` sorted by id so moving a spot between modules never changes a seed. The old JSON notes
-   became comments.
+   became comments. **Since 2026-09-30** (build step 12) no module lists `REGIONS`: every map is a region; a module
+   lists its `DOOR_RULES` and `TRANSFERS`, and a spot sits in its map's region with its area's need as `reach`.
 2. **The rules are the Rule Builder's:** `Has("Explorer Permit")` for an item or a story event, `&` for "and", `|` for
    "or". Bug Fables' own needs, the ones that depend on the options, are three rules registered the documented way
    (`custom_rules.py`, each resolving to Archipelago's own `HasAllCounts`): `CanUse("Horn Slash")` (the ability's item
@@ -2985,26 +3005,24 @@ decided (`slot_data`).
 3. **Menu, the origin, is made in code** (`regions.py`, as APQuest does), with its one exit to where a new game begins.
    Jump's blanket rule stays in `rules.py`: with Shuffle Jump, every spot not marked `no_jump` also needs `Has("Jump")`.
 
-For example, the way into the droplet rooms and a spot inside them:
+For example, the droplet rooms' need and a spot inside them (as it is today, every map a region):
 
 ```python
-Region("Snakemouth Den", exits=(
-    # Water droplets: Leif freezes them.
-    Exit("Snakemouth Den Underground", CanUse("Freeze")),
-)),
+# Every Snakemouth room with water droplets, or reached only through one: Leif freezes the droplets.
+UNDERGROUND = DEN & CanUse("Freeze")
 ...
-Location("Snakemouth Den: Mushroom Pit, Droplets", 9, "Snakemouth Den Underground",
+Location("Snakemouth Den: Mushroom Pit, Droplets", 9, "SnakemouthMushroomPit",
          Source(flag=724, pickup=Pickup(map="SnakemouthMushroomPit", type=0, item=144)),
-         rule=CanUse("Freeze")),
+         rule=CanUse("Freeze"), reach=UNDERGROUND),
 ```
 
 **Proven the same:** before the change, every spot's rule, every spot's reachability and every exit's rule were
 recorded on 300 random sets of items, under the defaults, the story's party, one member, moves shuffled, Jump
 shuffled and both mixes; after it, all 1306 rows came out identical.
 
-**Tests:** `test_areas.py` (every exit leads to a region; each spot sits in a region of its own module; names unique;
-every region has a way in and is reachable with everything; ids in order; every name a rule uses exists: item, story
-event, ability, member). `test_rules.py` (each custom rule under the option sets that change it; `base & (A | B)` and
+**Tests:** `test_areas.py` (today: every spot in a map and in its source's map; names unique; every door an entrance;
+door gates and transfers naming real places; every region reachable with everything; ids in order; every name a rule
+uses exists: item, story event, ability, member). `test_rules.py` (each custom rule under the option sets that change it; `base & (A | B)` and
 `A | B` on real states; a way that needs nothing makes the "or" free). `TestClassifications` now reads the items each
 rule uses through Archipelago's own `item_dependencies()`, in a seed where every member, move and Jump is an item. With
 `CanUse` broken on purpose (never asking for the member), 7 tests fail. 445 tests, the Logic Test check (90 of 90) and
@@ -3054,7 +3072,7 @@ Super Metroid's Map Rando is called, rooms with the same number of entrances swa
    shuffled: each area's place goes to another, whose doors take the place's doors in a random order (which side of a
    room a door is on isn't in the table). Each of the game's pairs (d, n) becomes the pair of doors now standing at
    d and n.
-2. **The same `door_targets`:** the pairs go through the coupled shuffle's own last step (`_targets`), so the mod
+2. **The same `door_targets`:** the pairs go through the coupled shuffle's own last step (`_targets` then, now `entrances.door_targets`), so the mod
    needed no change, and the Warp is forced on as with any `door_targets` (build step 12).
 3. **Nothing stranded, for free:** the map keeps the game's shape, so the coupled shuffle's grow-outwards pass isn't
    needed. (Wrong twice, found on 2026-09-30: below.)
@@ -3299,7 +3317,7 @@ traps"; "specifically the items you get when you connect/new save"; and "not for
 no other spot turns filler-only by accident.
 
 **Which checks:** the opening skip sets flag 15 and the mod sends every flag-15 location at once. Those are exactly the
-locations marked `quiet` (their items arrive with no hold-up; build step 26): *Maki and Eetl's Gift*, *Outside the
+locations marked `quiet` (their items arrive with no hold-up; the mod guide, step 10, item 6): *Maki and Eetl's Gift*, *Outside the
 City, Tutorial Battle*, and *Outside the City, Opening* when members are items. The option selects them by `quiet`
 alone, so *Fall Room, After the Spider* (a member's spot, not quiet) never changes. The members a new file starts with
 are start inventory, not locations: *Starting Party Member* decides them.
@@ -3409,7 +3427,7 @@ Island, all leading to the lake map, MetalLake.
    `always` became a count (the Progressive Boat's is 2), and each item carries `progressive_boat`: true for the
    Progressive Boat, false for the other two. `items.own_copies` puts a seed's own set in the pool, each copy in a
    filler slot as the ticket's was.
-2. **The option** (`options.py`): `ProgressiveBoat`, a `DefaultOnToggle`, after *Shuffle Jump*.
+2. **The option** (`options.py`): `ProgressiveBoat`, a `DefaultOnToggle`, after *Points of No Return*.
 3. **The rules** (`custom_rules.py`): `Boat(level)`, a rule of our own as `CanUse` is, resolved from the option: level 1
    is one Progressive Boat or the Boat Ticket, level 2 two Progressive Boats or the submarine. `BOAT_TICKET` and
    `SUBMARINE` name the two, so a rule says what it needs. The boat to Metal Island and the later chapters' stand-in
@@ -3603,7 +3621,8 @@ Nothing else marks a slot as finished.
 The apworld can hand the client a small dictionary, **slot_data**, which arrives inside Connected. It's the
 only way a setting chosen at generation (an option, a version number) reaches the game. This world puts in:
 
-- `world_version`, so a mismatched mod and apworld can be caught;
+- `world_version`, written in the login line (`[ap] logged in: … world_version …`); the mod doesn't compare it yet (a
+  refusal on a mismatch is planned, Next 43 item 15);
 - `artifacts_required`, the goal;
 - how each location is done: `location_flags` (a game flag), `location_berries` (a crystal berry),
   `location_discoveries` (a journal discovery), `location_shops` and `location_item_shops` (a shop's copy or first
@@ -3620,9 +3639,14 @@ only way a setting chosen at generation (an option, a version number) reaches th
 - `door_targets` (the entrance randomizer), `enemy_swaps` (enemy shuffle) and `start` (the starting location);
 - `starting_member`: 0 Vi, 1 Kabbu, 2 Leif alone, 3 all three, -1 the story's party (build steps 18 and 20);
 - `shuffle_moves` and `shuffle_jump`, whether the attacks and Jump are items (build steps 21 and 22);
+- `ability_items`, always true: the game's ability checks answered from the items (build step 23);
+- `points_of_no_return`: the logic counts the Warp as the way back, so the mod keeps it on (build step 37);
+- `music_map` and `jingle_map`, the songs and jingles swapped (build step 33), and `shop_inventories`, what shop slots
+  restock and respawning pickups come back with (build step 34);
 - `item_kinds`, which inventory list each of its items goes to.
 
-The mod does nothing from its own knowledge of the game's locations: every table it acts on comes from here.
+The mod does nothing from its own knowledge of the game's locations: every table it acts on comes from here. One
+exception: the opening skip names location 1 (the opening's gift) itself, for its hold-up.
 
 ## 8. The rule: use what Archipelago provides, never reinvent it
 
@@ -3679,7 +3703,7 @@ listed in "Where it stands" (Next), each replaced in a step of its own.
   frame, and log lines through a queue (`Post`, `Tick`). The game never freezes on connect.
 - Connection settings (address, port, slot, password, compression) and the Archipelago mod switch live in
   the mod's BepInEx config file (`Plugin.Awake`).
-- The client library and its JSON library sit in `BepInEx/plugins`, loaded once, and the mod itself
+- The client library, websocket-sharp and the JSON library sit in `BepInEx/plugins`, loaded once, and the mod itself
   reloads on its own during development.
 
 **Custom gates are the mod's own items** (2026-09-26). Where the randomizer wants a gate vanilla doesn't have,
@@ -3777,9 +3801,10 @@ one of its ways in will do.
   an "or" nobody has to write.
 - **Reaching a location** takes its region plus its own rule. Archipelago checks the region by itself (`world api.md`:
   entrances and locations "implicitly check for the accessibility of their parent region").
-- **The origin:** Archipelago assumes the player can always get back to the region the logic starts from. The logic
-  here leans on nothing outside the graph for that (the Warp never counts, `room-logic.md`, rule 9), so the graph
-  itself makes it true: a one-way counts only together with what it takes to get back (rule 4).
+- **The origin:** Archipelago assumes the player can always get back to the region the logic starts from. The rule
+  for that is `room-logic.md` rule 4: a one-way counts only together with what it takes to get back, and the Warp never
+  counts (rule 9), except as the way back with Points of No Return on (build step 37). Today no one-way in the logic
+  carries its way back yet: the room mapping writes each with `one_way` (build step 37).
 - **Why a rule may only get easier:** the generator places items one at a time, each where the items placed so far can
   reach. That works only if having more items never shuts anything, so a rule can say "has" but never "hasn't"
   (rule 3).
@@ -3787,9 +3812,11 @@ one of its ways in will do.
   logic-only item (*First Boss Beaten* holds "Snakemouth Den Cleared"). It's reached like any location, and from then
   on its item counts for every rule, so a rule names a story step with `Has`, as it would an item. The goal is one
   too: "has enough Artifacts".
-- **The rules are Archipelago's Rule Builder** (build step 29): `Has("Boat Ticket")`, `a & b` for "and", `a | b` for
-  "or". Needs that depend on the seed's options are Bug Fables' own registered rules: `CanUse("Horn Slash")` (the
-  ability's item when it's an item, its member when members are), `Member("Vi")` and `MoveItem("Freeze")`. When a seed
+- **The rules are Archipelago's Rule Builder** (build step 29): `Has("Explorer Permit")`, `a & b` for "and", `a | b`
+  for "or". Needs that depend on the seed's options are Bug Fables' own registered rules: `CanUse("Horn Slash")` (the
+  ability's item when it's an item, its member when members are), `Member("Vi")`, `MoveItem("Freeze")`, `Boat(1)` (the
+  Boat Ticket, or the Progressive Boat's first copy) and `WayBack(...)` (a one-way's way back, dropped with Points of
+  No Return). When a seed
   is made, each becomes Archipelago's plain item checks, so an option that makes something free drops it from the rule.
 
 ### When to make a region, and why
@@ -3815,7 +3842,7 @@ Why regions at all, instead of a full rule on every spot:
   map, with its own rule), its door gates (`DOOR_RULES`) and ways between maps that aren't doors (`TRANSFERS`). Per
   area, not per room: a room's logic often reaches into its neighbours, and an area is tested in one sitting. Menu is
   made in `regions.py`.
-- **Today** (2026-09-30): 244 regions (Menu included), 582 entrances, 74 locations, 4 story events and 1 artifact
+- **Today** (2026-09-30): 244 regions (Menu included), 581 entrances, 75 locations, 4 story events and 1 artifact
   event. Until the rooms are mapped (build step 24), what the old large areas needed is kept on each spot as its
   `reach`, beside its own `rule`. Adding a room is adding lines to its area's module, not code.
 - **What a module looks like** (shortened):
