@@ -495,8 +495,8 @@ be wrong.
   never stops. Only with members as items (build step 18). Fixing: the mod guide, step 11.
 - **The second spider fight softlocks with a one-member start** (found the same way, 2026-09-30; read in the code,
   not seen). Every second turn it gives Kabbu a line by reading the party's second slot (`EventDialogue` case 5),
-  which a party of one doesn't have, so the fight stops if the Web is still up on turn 2. To fix in the mod guide,
-  step 36.
+  which a party of one doesn't have, so the fight stops if the Web is still up on turn 2. Fix built, not yet seen:
+  the mod guide, step 36.
 - **Two items named "Leif"** (found by the full review, 2026-09-29; read in the code): with the story's party, the
   story event *Leif Joins* makes an event item "Leif" with no id, while the real member item "Leif" has one;
   Archipelago's `world api.md` requires one id per item name. Next 43, item 3.

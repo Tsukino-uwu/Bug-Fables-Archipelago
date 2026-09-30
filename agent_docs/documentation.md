@@ -49,6 +49,7 @@ anyone curious about the process, or thinking of doing the same for another game
 33. [Text from the server, shown safely](#33-text-from-the-server-shown-safely)
 34. [The library's cache, kept in its own folder](#34-the-librarys-cache-kept-in-its-own-folder)
 35. [Shuffle Shop Inventories: another item on the shelf, the game's own way](#35-shuffle-shop-inventories-another-item-on-the-shelf-the-games-own-way)
+36. [Scripted fights played by the members you have](#36-scripted-fights-played-by-the-members-you-have)
 
 ## Where it stands
 
@@ -2221,3 +2222,44 @@ location in the same shop. A respawning pickup is known by its map and regional 
 *Code: `Items/ShopInventories.cs`, `Items/ItemShops.cs` (`LocationOf`), `Core/SeedData.cs`, `Core/ApConnection.cs`,
 `Dev/SeedDump.cs`, installed from `Core/Plugin.cs`.*
 
+## 36. Scripted fights played by the members you have
+
+**The ask (2026-09-30):** fights written for the whole party must not freeze or crash when the seed's party lacks a
+member, as scenes and talks already manage with stand-ins (step 11); the example, the Beast at the end of chapter 5,
+where Vi and Leif are knocked out and Kabbu fights on powered up. **The user's choice:** the members you have play
+the parts, never a temporary member you don't own yet ("if you do the beast fight with only Vi, or just with Leif,
+it's more fun to show it that way").
+
+**Why battles need their own way:** a fight's scripted parts read `playerdata[k]` directly, k meaning member k, since
+in vanilla the party is Vi, Kabbu and Leif in that order. An array index can't be answered by a lookup patch, as
+scenes' lookups are. With members as items the party can be any of them in any order (a received member joins at the
+end), so slot k may hold someone else, or not exist, and a read past the party's end throws inside the fight's
+coroutine: the fight stops for good.
+
+**How a part is cast** (`PartySlots.cs`). Each fixed read goes through the mod, which answers with the member the part
+belongs to:
+- **Member** (the default): member k if he is in the party; else whoever stands in slot k (a scene's own small party
+  puts the member playing the part there); else nobody.
+- **Speakers** (a line the fight gives a member): member k, else a member the story doesn't have yet (as scenes cast
+  one, step 11), else the leader. Never nobody while the party has anyone, so the line is always said.
+- **Nobody:** reads find a member with no HP and no body, and writes go nowhere.
+
+Logged once per fight: `[party] EventDialogue 5: member 1's part played by member 0 (slot 0)`.
+
+**The installs** are transpilers on the fights' coroutines. Each finds its reads by their exact instructions,
+`ldfld playerdata; ldc.i4.k; ldelema BattleData`, and expects a count. The `ldelema` becomes the enumerator (`ldarg.0`)
+and a call returning a reference into the party, or to the nobody record. If the count differs, the method keeps its
+own code and the log says so. Only while Archipelago is enabled.
+
+1. **The spider's second fight** (`BattleControl.EventDialogue`, 20 fixed reads). On every second turn, case 5 gives
+   Kabbu a line if `playerdata[1].hp > 0`. The member guard makes the story's "Vi and Kabbu" a party of one with a
+   one-member start, so slot 1 doesn't exist and the fight stopped if the Web was still up on turn 2 (read in the
+   code, not seen; Known issues). Case 5 now uses Speakers: the lone member says Kabbu's line. The other cases are
+   the tutorials, and Leif's first line, which never plays in a seed; they use Member, as vanilla does with the story's
+   party. **To see:** a one-member start, the second spider fight, the Web left up for two turns: the line, then the
+   fight goes on.
+
+**Status:** item 1 built (2026-09-30), the build succeeds; not yet seen in game. The Beast, Zommoth and the Everlasting
+King are next.
+
+*Code: `World/PartySlots.cs`, installed from `Core/Plugin.cs`.*

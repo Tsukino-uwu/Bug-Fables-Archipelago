@@ -25,6 +25,160 @@ namespace BugFablesAP
             Hooks.Install(typeof(Eaten), "party", "a member eaten in a party the story never had can freeze a fight");
             Hooks.Install(typeof(SkillSlots), "party",
                 "Heavy Strike and the Vi and Leif team attack read whoever stands in the member's slot");
+            Hooks.Install(typeof(FightEvents), "party",
+                "a fight's scripted line for a member the party lacks can stop the fight");
+        }
+
+        private static bool On => randomizerOn != null && randomizerOn() && MainManager.instance?.playerdata != null;
+
+        private static int SlotOf(int member)
+        {
+            MainManager.BattleData[] party = MainManager.instance.playerdata;
+            for (int i = 0; i < party.Length; i++)
+            {
+                if (party[i].trueid == member)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        // Member k's part: member k, else whoever stands in slot k (a scene's own small party puts the member playing
+        // the part there), else nobody.
+        private static int MemberPart(int k)
+        {
+            int slot = SlotOf(k);
+            return slot >= 0 ? slot : k < MainManager.instance.playerdata.Length ? k : -1;
+        }
+
+        // A line for member k: member k, else a member the story doesn't have yet (as scenes cast him), else the
+        // leader. Never nobody while the party has anyone.
+        private static int Speaker(int k)
+        {
+            int slot = SlotOf(k);
+            if (slot >= 0)
+            {
+                return slot;
+            }
+            MainManager.BattleData[] party = MainManager.instance.playerdata;
+            for (int i = 0; i < party.Length; i++)
+            {
+                if (!PartyFit.InStoryParty(party[i].trueid))
+                {
+                    return i;
+                }
+            }
+            return SlotOfMember(MainManager.instance.partyorder[0]);
+        }
+
+        // Nobody plays the part: reads find a member with no HP and no body, writes go nowhere.
+        private static MainManager.BattleData scratch;
+
+        private static ref MainManager.BattleData Nobody()
+        {
+            scratch = default;
+            scratch.condition = new List<int[]>();
+            scratch.weakness = new List<BattleControl.AttackProperty>();
+            return ref scratch;
+        }
+
+        private static readonly Dictionary<Type, FieldInfo> idFields = new Dictionary<Type, FieldInfo>();
+        private static readonly HashSet<string> castLogged = new HashSet<string>();
+        private static BattleControl castBattle;
+
+        private static int EventId(object step)
+        {
+            Type type = step.GetType();
+            if (!idFields.TryGetValue(type, out FieldInfo field))
+            {
+                idFields[type] = field = AccessTools.Field(type, "id");
+            }
+            return field != null ? (int)field.GetValue(step) : -1;
+        }
+
+        private static void LogCast(string what, int k, int slot)
+        {
+            if (castBattle != MainManager.battle)
+            {
+                castBattle = MainManager.battle;
+                castLogged.Clear();
+            }
+            string key = what + k;
+            if (!castLogged.Add(key))
+            {
+                return;
+            }
+            string who = slot < 0 ? "nobody"
+                : $"member {MainManager.instance.playerdata[slot].trueid} (slot {slot})";
+            log.LogInfo($"[party] {what}: member {k}'s part played by {who}");
+        }
+
+        // playerdata[k] in a fight's scripted lines (EventDialogue), k a constant meaning member k.
+        private static ref MainManager.BattleData EventDialogueElem(MainManager.BattleData[] party, int k, object step)
+        {
+            if (!On)
+            {
+                return ref party[k];
+            }
+            int slot;
+            int id = -1;
+            try
+            {
+                id = EventId(step);
+                // Case 5, the spider's second fight: Kabbu's line, even with a party of one.
+                slot = id == 5 ? Speaker(k) : MemberPart(k);
+            }
+            catch (Exception e)
+            {
+                log.LogError($"[party] casting EventDialogue {id}'s member {k} threw: {e.GetBaseException().Message}");
+                slot = k < party.Length ? k : -1;
+            }
+            if (slot != k)
+            {
+                LogCast($"EventDialogue {id}", k, slot);
+            }
+            if (slot < 0)
+            {
+                return ref Nobody();
+            }
+            return ref party[slot];
+        }
+
+        private static IEnumerable<int> ConstantSlotReads(List<CodeInstruction> code)
+        {
+            FieldInfo playerdata = AccessTools.Field(typeof(MainManager), nameof(MainManager.playerdata));
+            return Enumerable.Range(2, Math.Max(0, code.Count - 2))
+                .Where(i => code[i].opcode == OpCodes.Ldelema && Equals(code[i].operand, typeof(MainManager.BattleData))
+                    && (code[i - 1].LoadsConstant(0) || code[i - 1].LoadsConstant(1) || code[i - 1].LoadsConstant(2))
+                    && Reads(code[i - 2], playerdata));
+        }
+
+        private static class FightEvents
+        {
+            [HarmonyPatch(typeof(BattleControl), "EventDialogue", MethodType.Enumerator)]
+            [HarmonyTranspiler]
+            private static IEnumerable<CodeInstruction> Transpile(IEnumerable<CodeInstruction> instructions) =>
+                Hooks.Safe(instructions, Edit, "party");
+
+            private static IEnumerable<CodeInstruction> Edit(List<CodeInstruction> code)
+            {
+                List<int> reads = ConstantSlotReads(code).ToList();
+                if (reads.Count != 20)
+                {
+                    throw new InvalidOperationException($"expected 20 fixed slot reads, found {reads.Count}");
+                }
+                MethodInfo elem = AccessTools.Method(typeof(PartySlots), nameof(EventDialogueElem));
+                foreach (int i in reads.OrderByDescending(i => i))
+                {
+                    // The ldelema becomes the step (this enumerator), then the call: changed in place.
+                    code[i].opcode = OpCodes.Ldarg_0;
+                    code[i].operand = null;
+                    code.Insert(i + 1, new CodeInstruction(OpCodes.Call, elem));
+                }
+                log.LogInfo("[party] installed in BattleControl.EventDialogue (fixed slot reads 20 of 20)");
+                return code;
+            }
         }
 
         // The slot holding this member. Without him: the number itself while it is a slot (a scene's own small party,

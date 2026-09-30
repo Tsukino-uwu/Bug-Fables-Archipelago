@@ -1102,6 +1102,12 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
     attack's `(0, true)` and `(2, true)` (:12029-12030), each `ldc.i4.k; ldc.i4.1; call GetPlayerData(int32, bool)`.
     `GetPlayerAttack(id, …)` uses the one-argument `GetPlayerData(id)`, which finds a member by `trueid`.
   Used by `PartySlots.cs`.
+- A fight's scripted lines (code read 2026-09-30, not measured): `BattleControl.CheckEvent` (:2764-2825) starts
+  `EventDialogue(5)` in the spider's second fight (enemy 0 is the spider, `animid 2`; flag 27 unset; `flagvar[11] == 2`)
+  on every even turn above 0; case 5 gives Kabbu a line if `playerdata[1].hp > 0` (:2101-2111). `EventDialogue`'s
+  coroutine has 20 fixed slot reads (`ldfld playerdata; ldc.i4.k; ldelema BattleData`: 10 of slot 0, 7 of slot 1, 3
+  of slot 2), and its parameter `id` is a field of the same name on the enumerator. An exception in it leaves
+  `inevent` set, and the turn logic only runs while `!action && !inevent` (:2944). Used by `PartySlots.cs`.
 - MainManager.GetEntity: -2 and -3 are the second and third member by position (MainManager.cs:18526-18537), -4/-5/-6 are Vi/Kabbu/Leif by name (MainManager.cs:18538-18570), 1000 + n reads map.tempfollowers[n] (MainManager.cs:18512-18515) and throws ArgumentOutOfRange when nobody is there; no caller null-checks the result. Used by `PartyFit.cs`.
 - The main menu's confirm sound: StartMenu.Update plays "Confirm" for every main-menu choice (menuid 1) before acting on it. Used by `MenuToggle.cs`.
 - On the file select (menuid 2, submenu 0), confirm on file 0-2 is StartMenu.Update's load or new-game branch (StartMenu.cs:512-535, Event22 or Event8); the save slots' boxes sort at -20 to -60 and their text at 10 (StartMenu.ShowSaves). Used by `MenuToggle.cs`.
