@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -52,9 +53,13 @@ namespace BugFablesAP
         private SpriteRenderer leaf;
         private SpriteRenderer dimmer;
         private Transform arrows;
+        private readonly List<KeyValuePair<int, GameObject>> rowArrows = new List<KeyValuePair<int, GameObject>>();
+        private GameObject scrollUp, scrollDown;
         private Transform pips;
         private Transform textRoot;
         private int row;
+        // A settings page shows VisibleRows at a time from `top`, scrolled as the game's own lists are.
+        private int top;
         private bool editing;
         private string edited;
         private string before;
@@ -216,9 +221,31 @@ namespace BugFablesAP
         private const int CursorSort = 20;
         private const string TextSort = "|sort,10|";
         private static readonly float[] RowY = { 2.65f, 2.0f, 1.35f, 0.7f, 0.05f, -0.6f, -1.25f, -1.9f };
-        // The settings pages spread their rows between the same top and bottom row, closer together the more they have.
+        // The settings pages show nine rows between the same top and bottom row, as the game's Settings list shows nine
+        // (PauseMenu, listammount 9); a page with more scrolls.
+        private const int VisibleRows = 9;
+        private int PageRows => page == Page.Qol ? QolRows : page == Page.Gameplay ? GameplayRows : Rows;
         private float RowAt(int r) => page == Page.Main ? RowY[r]
-            : RowY[0] - r * (RowY[0] - RowY[RowY.Length - 1]) / ((page == Page.Qol ? QolRows : GameplayRows) - 1);
+            : RowY[0] - (r - top) * (RowY[0] - RowY[RowY.Length - 1]) / (VisibleRows - 1);
+        private bool Shown(int r) => page == Page.Main || (r >= top && r < top + VisibleRows);
+
+        // The game's list rule (MainManager.UpdateList): the view moves only when the cursor passes its edge.
+        private void Scroll()
+        {
+            if (page == Page.Main)
+            {
+                return;
+            }
+            if (row < top)
+            {
+                top = row;
+            }
+            else if (row >= top + VisibleRows)
+            {
+                top = row - VisibleRows + 1;
+            }
+            top = Mathf.Clamp(top, 0, Mathf.Max(0, PageRows - VisibleRows));
+        }
         private const float DescribeY = -2.55f, StatusY = -3.1f;
         // Matched to the game's Settings screen: labels ~88 px in from the vine border.
         private const float LabelX = -5.15f;
@@ -297,7 +324,7 @@ namespace BugFablesAP
 
         private void Navigate()
         {
-            int rows = page == Page.Qol ? QolRows : page == Page.Gameplay ? GameplayRows : Rows;
+            int rows = PageRows;
             bool confirm = MainManager.GetKey(4, hold: false) || Input.GetKeyDown(KeyCode.Return);
             bool sideways = MainManager.GetKey(2, hold: false) || MainManager.GetKey(3, hold: false);
             bool cancel = MainManager.GetKey(5, hold: false) || Input.GetKeyDown(KeyCode.Escape);
@@ -350,12 +377,14 @@ namespace BugFablesAP
             if (MainManager.GetKey(0, hold: false))
             {
                 row = (row + rows - 1) % rows;
+                Scroll();
                 MainManager.PlayScrollSound();
                 Redraw();
             }
             else if (MainManager.GetKey(1, hold: false))
             {
                 row = (row + 1) % rows;
+                Scroll();
                 MainManager.PlayScrollSound();
                 Redraw();
             }
@@ -424,6 +453,7 @@ namespace BugFablesAP
             {
                 BuildArrows();
             }
+            LayoutArrows();
             shownStatus = status();
             if (page == Page.Qol)
             {
@@ -505,7 +535,52 @@ namespace BugFablesAP
                         Vector3.one * ArrowScale, MainManager.guisprites[1], ButtonSort);
                     arrow.transform.localEulerAngles = new Vector3(0f, 0f, side == 0 ? -90f : 90f);
                     arrow.layer = 5;
+                    rowArrows.Add(new KeyValuePair<int, GameObject>(r, arrow));
                 }
+            }
+            if (page != Page.Main)
+            {
+                scrollUp = ScrollArrow("scrollup", 180f);
+                scrollDown = ScrollArrow("scrolldown", 0f);
+            }
+        }
+
+        // The game's list arrows (MainManager.ShowItemList in the pause menu): guisprites[1] at 1.25, turned for up,
+        // 0.3 over the first row and 0.2 under the last, scaled from its 0.7 row spacing to this panel's; right of the
+        // value arrows, as the game's sit right of its list.
+        private const float GameRowGap = 0.7f, ScrollArrowX = 5.5f;
+        private static float RowScale => (RowY[0] - RowY[RowY.Length - 1]) / (VisibleRows - 1) / GameRowGap;
+
+        private GameObject ScrollArrow(string name, float turn)
+        {
+            GameObject arrow = MainManager.NewUIObject(name, arrows, Vector3.zero, Vector3.one * 1.25f * RowScale,
+                MainManager.guisprites[1], ButtonSort);
+            arrow.transform.localEulerAngles = new Vector3(0f, 0f, turn);
+            arrow.layer = 5;
+            return arrow;
+        }
+
+        // Each row's arrows follow the scroll; the list arrows show when rows are hidden above or below.
+        private void LayoutArrows()
+        {
+            foreach (KeyValuePair<int, GameObject> pair in rowArrows)
+            {
+                bool shown = Shown(pair.Key);
+                pair.Value.SetActive(shown);
+                Vector3 at = pair.Value.transform.localPosition;
+                pair.Value.transform.localPosition = new Vector3(at.x, RowAt(pair.Key) + ArrowRise, at.z);
+            }
+            if (scrollUp != null)
+            {
+                scrollUp.SetActive(top > 0);
+                scrollUp.transform.localPosition = new Vector3(ScrollArrowX,
+                    RowAt(top) + ArrowRise + 0.3f * RowScale);
+            }
+            if (scrollDown != null)
+            {
+                scrollDown.SetActive(top + VisibleRows < PageRows);
+                scrollDown.transform.localPosition = new Vector3(ScrollArrowX,
+                    RowAt(top + VisibleRows - 1) + ArrowRise - 0.2f * RowScale);
             }
         }
 
@@ -525,6 +600,10 @@ namespace BugFablesAP
             pips.localEulerAngles = Vector3.zero;
             for (int i = 0; i < rows.Length; i++)
             {
+                if (!Shown(rows[i]))
+                {
+                    continue;
+                }
                 for (int p = 0; p < Multipliers.Max; p++)
                 {
                     bool on = p < lit[i];
@@ -550,6 +629,10 @@ namespace BugFablesAP
         // The two buttons side by side at the top of a settings page; confirming one opens the Yes / No box.
         private void DrawButtons()
         {
+            if (!Shown(ButtonsRow))
+            {
+                return;
+            }
             Text("|size,0.8|" + (row == ButtonsRow && button == 0 ? "|color,1|" : "") + "Reset to defaults",
                 LabelX, RowAt(ButtonsRow));
             Text("|center||size,0.8|" + (row == ButtonsRow && button == 1 ? "|color,1|" : "") + "Disable all",
@@ -616,6 +699,10 @@ namespace BugFablesAP
 
         private void Choice(int r, string label, string value)
         {
+            if (!Shown(r))
+            {
+                return;
+            }
             Label(r, label);
             // About 8 letters fit between the arrows at 0.75; a longer value shrinks to fit.
             float size = value.Length > 8 ? 0.75f * 8f / value.Length : 0.75f;
@@ -625,6 +712,10 @@ namespace BugFablesAP
 
         private void Label(int r, string label)
         {
+            if (!Shown(r))
+            {
+                return;
+            }
             string colour = editing && r == row ? "|color,1|" : "";
             // About 15 letters fit before the arrows at 0.8; a longer label shrinks to fit.
             float size = label.Length > 15 ? 0.8f * 15f / label.Length : 0.8f;

@@ -549,6 +549,18 @@ itself, only as letters are needed. Nothing changes until a screen asks for more
 pages do. The log says it once: `[text] letter pool 500 -> 1000 slots (the game fills the new ones)`. Built, not yet
 seen.
 
+**Nine rows at a time, scrolled the game's way (2026-09-30):** the Spy Specs row (step 39) made the Quality of life
+page twelve rows, and spreading them ever closer stops being readable; the user asked for "the up/down scroll that the
+games normal "settings" menu have". **How the game does it, read first:** its Settings screen (pause window 4) shows
+`listammount` 9 rows, 0.7 apart (`PauseMenu.cs:2168`), and `MainManager.UpdateList` moves the view only when the
+cursor steps past its top or bottom row. The pause menu draws `guisprites[1]` at 1.25 as the list's arrows, turned for
+up, 0.3 over the first row while rows are hidden above and 0.2 under the last while rows are hidden below
+(`MainManager.cs:15583-15604`, `:16364-16385`). **Ours:** a settings page shows nine rows between the same top and
+bottom row as before (the Gameplay page's look, which already had nine), `Scroll` keeps the cursor's row in view by
+the game's rule, rows out of view aren't drawn, each row's value arrows follow it, and the two list arrows sit right of
+the value arrows, the game's sizes and offsets scaled from its 0.7 spacing to the panel's. Up from the top row still
+wraps to the bottom, as the panel always did. The main page is unchanged. Built, not yet seen.
+
 **Achievements (2026-09-26; built, not yet seen):** an *Achievements* row on the main page, off by default.
 While Archipelago is enabled and it's off, Steam achievements aren't unlocked, as normal saves are kept apart; the help
 line says it only concerns Steam, never Archipelago. Every achievement goes through one function,
@@ -565,7 +577,7 @@ its rotation reset, so it kept an unturned world rotation and was seen edge-on. 
 the Quality of life page with all its text inside the shop. It follows whatever turn the camera has, so any room that
 turns it is covered. The lesson went into CLAUDE.md: read how the game does a thing first.
 
-**Status:** works, seen on screen (2026-09-24): the menu entry, the panel, and the file select held back until the first login; the Quality of life and Gameplay pages seen (2026-09-26); the Achievements row built (2026-09-26), not yet seen; the letter pool grown for a long page (2026-09-30), not yet seen.
+**Status:** works, seen on screen (2026-09-24): the menu entry, the panel, and the file select held back until the first login; the Quality of life and Gameplay pages seen (2026-09-26); the Achievements row built (2026-09-26), not yet seen; the letter pool grown for a long page (2026-09-30), not yet seen; nine rows at a time with the game's scroll (2026-09-30), not yet seen.
 
 *Code: `MenuToggle.cs` (the menu entry: `BeforeSetMenuText` and `AfterSetMenuText` around the game's rebuild,
 `AfterUpdate` for the cursor, `SetMode` for the switch); `ApMenu.cs` (the panel: `Build`, `Redraw`,
@@ -1742,7 +1754,7 @@ colors.
 - **Off:** another game's item keeps the vanilla item's look (as before the icon), a surprise until found; Bug Fables
   items show their real sprite. The text always names whose it is.
 - With more rows, the Quality of life page's rows sit closer (the first and last where they were); the Gameplay page
-  followed in step 30.
+  followed in step 30. Since step 39 a page shows nine rows and scrolls instead (step 8).
 - **Shops name it too (2026-09-26):** a shop's box names another player's item in its class colour, and its
   description says whose: "A useful item for Other (APQuest).", or for another Bug Fables player's item "For
   BugTester2: " before the item's own description. First the name was "<player>'s <item>", but a shopkeeper pastes the
@@ -2567,8 +2579,9 @@ line follows the value: "As if Spy Specs were on: enemy HP shows, Spy is free." 
 it uses the turn." Only while Archipelago is enabled, or with *Use on normal saves* (step 18). No check and no logic
 depend on it. The HP bars follow from the next battle, since the game reads the medal as a battle starts.
 
-The page grew to twelve rows (eleven settings under the two buttons), so its rows sit a little closer, the first and
-last where they were (step 21).
+The page grew to twelve rows (eleven settings under the two buttons). Squeezing them closer was the first plan; the
+user asked for the game's own way instead ("not better to just add the up/down scroll that the games normal
+"settings" menu have ?"): a settings page now shows nine rows and scrolls (step 8).
 
 **To see** (the user): with the row on, a battle shows every enemy's HP, Spy needs no aiming, the icon sits beside
 Spy, and the same member can still act after spying; with it off, as the game has it.

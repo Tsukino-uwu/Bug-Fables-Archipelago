@@ -2085,3 +2085,9 @@ either one wrong).
   medal, `EndPlayerTurn`; the command list's icon), all through the party-wide `BadgeIsEquipped`, which `MedalAssist`
   already answers for Detector. Asked: built now, off by default (the user). The mod guide's step 39; built and copied
   in (`B3EC6CDF7A48`), not yet seen.
+- **Scrolling instead of squeezing (the user):** "not better to just add the up/down scroll that the games normal
+  "settings" menu have ?" Read first: the game's Settings list shows 9 rows (`listammount`), scrolls only when the
+  cursor passes an edge (`UpdateList`), and marks hidden rows with `guisprites[1]` arrows at 1.25. The panel's settings
+  pages now show nine rows at the Gameplay page's spacing and scroll the same way, with the game's arrows scaled to
+  the panel's spacing (the mod guide, step 8). Built and copied in (`8B5AC0AFB749`, after `B3EC6CDF7A48`, both while
+  the reload waited for a scene to end, so the newer one loads); not yet seen.
