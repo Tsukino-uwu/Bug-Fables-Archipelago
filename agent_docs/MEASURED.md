@@ -1553,7 +1553,11 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   at `player.lastpos` (after 3 tries `lastloadzone`), falling below `map.ylimit` too.
 - **Game Over:** `BattleControl.DeadParty` runs `GameOver` unless `MainManager.battlelossevent` is set (a scripted loss:
   the battle just ends and the story goes on). The menu: Retry, Retry after changing medals, Load, Title; in a battle
-  that can be fled only Load and Title. Retry restores `flags`, `flagvar` and `items[0]` from the battle's start. Load
+  that can be fled only Load and Title. From the battle's start, `GameOver`'s setup restores `flags` and `flagvar`
+  before the menu shows (`SetFlags`), and Retry also restores TP, each member's HP, attack, defence and `lockitems`, the
+  bag (`items[0]`) and the key items (`items[1]`) (`ReloadInitialData`; code read 2026-09-30, `BattleControl.cs:3437-3447,
+  3583-3598`; this line said `items[0]` only until then). Medals owned, money, EXP, `crystalbflags`, storage and the
+  journal stay as they are. Load
   checks `InputIO.SaveExists(saveslot)`, then `MainManager.ReloadSave()` (public): stops the battle and event
   coroutines, destroys the map and party, `StartEvent(22)`. `GameOver` and `DeadParty` are private.
 - **A door** (`DoorOtherMap`) runs `MainManager.TransferMap`, refused during `inevent`, `pause` or `minipause`; it sets

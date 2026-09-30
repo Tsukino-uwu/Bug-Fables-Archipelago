@@ -979,7 +979,9 @@ uses a slot the game already saves but never uses. Finding one took a measuremen
   opening. The old seed's items and flags stay in the save, which is why it's never for a real game.
 
 **Only when it's safe, one item per frame:** only while the player is free (no battle, dialogue, cutscene, pause
-or map change). Never during a battle, because retrying a lost battle restores the count but not key items.
+or map change). Never during a battle, because retrying a lost battle puts the count back (it restores every
+`flagvar`) and the bag and key items too, but not medals, money or storage, so their replay would give them twice
+(`MEASURED.md`, Game Over).
 
 **Medals** (2026-09-24; tested: Hard Mode, sent from Artis's location, arrived in the medals menu, seen on
 screen) go in through the game's own `MainManager.AddBadge`,

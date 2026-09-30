@@ -8,7 +8,7 @@ using UnityEngine;
 namespace BugFablesAP
 {
     // Gives the items the server sends, one per frame, only while the player is free. The given count (flagvar[60])
-    // and the seed (flagstring[5]) live in the save. Never in battle: a retry restores flagvar but not key items.
+    // and the seed (flagstring[5]) live in the save. Never in battle: a retry restores flagvar but not medals or money.
     internal sealed class ItemReceiver
     {
         internal const int CountSlot = 60;
