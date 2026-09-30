@@ -519,6 +519,29 @@ def hosts_and_addresses(ctx, out):
         out.ok(f'every host named is one of the {len(listed)} listed with a reason; no public IP address')
 
 
+@section('Line caps')
+def line_caps(ctx, out):
+    caps = ctx.patterns['line_caps']
+    counted, over, missing = [], [], []
+    for path, cap, why in caps:
+        f = ctx.file(path)
+        if f is None or f.binary:
+            missing.append(path)
+            continue
+        lines = f.text.count('\n')  # as wc -l counts
+        counted.append(f'{path}: {lines} of {cap} lines')
+        if lines > cap:
+            over.append(f'{path}: {lines} lines, over its {cap} ({why})')
+    if not caps:
+        out.fail('no capped file listed: the patterns file is wrong')
+    if missing:
+        out.fail('capped files missing from the tree', missing)
+    if over:
+        out.fail('over the cap: something comes out before anything goes in', over)
+    if caps and not (missing or over):
+        out.ok('; '.join(counted))
+
+
 @section('Licences')
 def licences(ctx, out):
     lic = ctx.file(LICENSING)
@@ -1681,7 +1704,7 @@ def load_patterns(files):
                 'ps1_capabilities', 'sh_denied', 'script_denied_modules', 'script_denied_builtins',
                 'script_denied_methods', 'script_capability_modules', 'script_capability_calls', 'dll_assembly_refs',
                 'dll_denied', 'dll_denied_names', 'dll_capabilities', 'dll_synthesized_members', 'dll_compiler_types',
-                'workflows', 'dependencies', 'capability_tables', 'mod_server_text', 'agent_settings'}
+                'workflows', 'dependencies', 'capability_tables', 'mod_server_text', 'agent_settings', 'line_caps'}
     if set(patterns) != expected:
         raise Unreadable(f'{PATTERNS} keys differ from what preflight reads: {sorted(set(patterns) ^ expected)}')
     for rx in list(patterns['secrets'].values()) + patterns['game_paths'] + patterns['decompiler_markers'] + [

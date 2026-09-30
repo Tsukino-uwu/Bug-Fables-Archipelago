@@ -6,8 +6,8 @@ An Archipelago randomizer for Bug Fables: a BepInEx 5 mod (C#, `mod/`) and an ap
 
 ## RULE 0: the 150-line cap
 
-**Run `wc -l CLAUDE.md` before adding a line. Going over 150 is a regression.** To add a rule, remove one in
-the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a one-line pointer.
+**Run `wc -l CLAUDE.md` before adding a line. Going over 150 is a regression, and preflight refuses it.** To add a
+rule, remove one in the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a one-line pointer.
 
 ## What never changes
 

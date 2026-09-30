@@ -321,6 +321,12 @@ def fixtures():
     def _(c):
         c.replace('docs/capabilities.md', b'| `github.com` |', b'| `unused.example.net` | nothing uses it |\n| `github.com` |')
 
+    @add('CLAUDE.md one line past its cap', 'Line caps', names=('CLAUDE.md',))
+    def _(c):
+        path, cap, why = patterns_of(c)['line_caps'][0]
+        data = c.read(path)
+        c.write(path, data + b'- one rule too many\n' * (cap - data.count(b'\n') + 1))
+
     @add('a project cited without a licence row', 'Licences')
     def _(c):
         c.append('agent_docs/references.md', 'see github' + '.com/someone-else/some-project')

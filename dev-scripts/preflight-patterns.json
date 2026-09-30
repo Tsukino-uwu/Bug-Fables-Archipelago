@@ -553,5 +553,8 @@
     "Mod: what the code touches",
     "Mod: patches outside the game",
     "Dev scripts and hooks: what they touch"
+  ],
+  "line_caps": [
+    ["CLAUDE.md", 150, "the coding agent's rules, read at every session's start: past the cap each rule is followed worse"]
   ]
 }
