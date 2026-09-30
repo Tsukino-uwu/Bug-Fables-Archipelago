@@ -51,6 +51,7 @@ either one wrong).
 - [2026-09-30: Shuffle Shop Inventories](#2026-09-30-shuffle-shop-inventories)
 - [2026-09-30: Uncap FPS, every character drawn smoothed](#2026-09-30-uncap-fps-every-character-drawn-smoothed)
 - [2026-09-30: Filler Starting Checks, and fights played by the party you have](#2026-09-30-filler-starting-checks-and-fights-played-by-the-party-you-have)
+- [2026-09-30: direct titles for the guides, the Progressive Boat and the submarine](#2026-09-30-direct-titles-for-the-guides-the-progressive-boat-and-the-submarine)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -1863,3 +1864,31 @@ either one wrong).
   - FrameSites' re-run on `DoAction`: it installs lazily, last, so safe;
   - the two-argument `Heal` may be inlined: its literal calls are replaced rather than `Heal` patched.
 - **Not seen in game:** everything here. The build is in the game folder (`8919071FDF42`); the game wasn't running.
+
+## 2026-09-30: direct titles for the guides, the Progressive Boat and the submarine
+
+- **The guides' titles** (the user: "6 questions, the boat ticket etc don't really say where we did logic, or what
+  section covers entrance rando, or how we randomize X thing. Especially for someone who don't know the project"). Every
+  build step, How it works section and mod-guide step retitled to say what it does, numbers kept; a By topic list
+  opens each guide's Contents; five vague log titles reworded. First, `doc-coverage.py` learned to check both guides'
+  indexes and every link into a Markdown heading: nothing checked them before (0 broken then, about 230 links to move).
+  code-map's links into the mod guide are now number-only, as its build-step links were.
+- **The submarine as an item, the game's Surf** (the user). Asked separate, progressive or a yaml toggle: "a mix of
+  option1 & 3 … progressive so it always sit behind the boat ticket, but also be its own unique key item in your
+  inventory"; no port rule then. The AP name: *Progressive Boat*. The name is the game's own (the king's line,
+  "Subaquatic Maritime Neotransport"). The description: the user picked the "...Probably." wording, corrected "the
+  submarine does travel on the water, but you can make it go underwater if enemies are nearby", then "keep it
+  short/fun": "It is impossible for it to sink! ...Probably." Also "'submarine' should also work" for hints: item
+  groups. Mid-build: "Make a yaml option for keeping the submarine as its own item … default should be with it as
+  progressive": *Progressive Boat*, on by default; ids reworked so each key item's id is its bag id (the Boat Ticket
+  keeps 200, nothing renamed after all; the Progressive Boat is 213).
+- **Found by reading first:** MEASURED had Event153 as the boat (it is the docks); flag 79 is set only inside the
+  prison, so the ant tunnel into it needs the sub; the Termite gate's scene breaks when used from inside before it was
+  opened from outside (the sub can land a party inside first), so that gate is one way and held.
+- **A fill error the fuzzer found with APQuest** (1 of 10000): measured 4 of 400 on its yaml pair before and after the
+  change, so not this step's; one option at a time, only Jump unshuffled or accessibility full made it 0. Recorded in
+  Known issues; the remedy is the user's pick from Archipelago's FAQ list.
+- **The preflight refused twice, and nothing was widened:** `urllib` in the hook (a two-line percent-decode instead) and
+  `Utils` in a test (the groups checked directly).
+- **Built:** the apworld (601 tests, Logic Test 90 of 90, fuzzer 0 of 10000 alone and with APQuest) and the mod (no
+  warnings). Staged, not copied into the game. **Not seen in game:** everything here.
