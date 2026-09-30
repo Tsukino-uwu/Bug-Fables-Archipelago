@@ -1732,4 +1732,4 @@ fixed one, read in its code:
 | :31962 | `EnemyHeavyThrow` | acts at `hp > 20` | scale |
 
 The ratio is the one enemy scaling gives the enemy whose HP the number measures: the healed one for a heal, the actor
-for its own threshold. Used by `enemy-numbers.py`; the scaling itself: the mod guide, step 17.
+for its own threshold. Used by `enemy-numbers.py` and `EnemyScaling.cs` (the mod guide, step 17).

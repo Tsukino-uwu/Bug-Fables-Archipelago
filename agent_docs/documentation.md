@@ -1529,10 +1529,27 @@ fight + end with the scripted thing even when scaling is enabled".
     holo party's thresholds, and the battle start's flat HP adjustments (Spuder −15, Zasp and Mothiva +15, Maki's team
     +10, fire areas +3). Each by the ratio of the enemy whose HP it measures.
   - **Keep:** 1 (survive at 1), 999 (an invulnerable marker), the two 10-HP scripted ends (above), and heals of 1.
-  - The scaling itself is next.
+- **Built** (2026-09-30; `EnemyScaling.ScriptNumbers`). Each number becomes `max(1, round(N × ratio))` with the ratio
+  scaling gives the enemy it measures, and stays N when scaling is off, the enemy untouched, or the ratio 1:
+  - **Heals** (`DoAction`, 19 literal amounts in 18 calls). Each literal marks itself on its way, and the call goes to
+    the mod's `ScaledHeal`, which scales only an enemy's heal and only that literal, then calls the game's `Heal`. So
+    the other branch of a `? :` (the Weevil's full heal with Heavy Strike) passes untouched. The call is replaced
+    rather than `Heal` patched: it's a one-line wrapper the runtime may inline into its callers, where a patch never
+    runs (as `BerryBounce` was, step 19, and the field attacks' tap, the Archipelago guide's build step 21).
+  - **HP set outright** (3): the store becomes a call that scales by the enemy set. Stratos's and Delilah's "7" counter
+    (2) is scaled by the reviver's ratio (a pair share their chapter).
+  - **The battle start's adjustments** (`StartBattle`, 8: HP and max HP for four cases), by the enemy the start's loop
+    is on (its hoisted `<i>`).
+  - **The holo party's AI** (`HoloVi`, 2) and `EnemyHeavyThrow` (1), by `currentEnemy`.
+
+  Each is found by its exact instructions and counted; otherwise the method keeps its code and the log says so. Logged
+  once per fight: `[scale] Stratos (111) heals 15 -> 9 (x0.58)`.
+  **To see:** a fight whose script heals, far from its home level with Party level scaling (for example `enemyfight`
+  with Kali and Kenny's ids at a low level): the heal's number is the scaled one, and the log line says so.
 
 **Status:** works, seen on screen (2026-09-26): scaled HP, defence and per-hit damage in a fight, and the bestiary;
-the constants still to tune by play. The 10-HP scripted end built (2026-09-30), not yet seen.
+the constants still to tune by play. The 10-HP scripted end and the fixed numbers in enemy scripts built (2026-09-30),
+not yet seen.
 
 ## 18. Use on normal saves: the settings without Archipelago
 

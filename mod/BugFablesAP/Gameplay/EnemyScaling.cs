@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
 using BepInEx.Logging;
 using HarmonyLib;
 using UnityEngine;
@@ -68,6 +71,277 @@ namespace BugFablesAP
             else
             {
                 Hooks.Install(typeof(Bestiary), "scale", "the bestiary shows vanilla stats");
+            }
+            Hooks.Install(typeof(ScriptNumbers), "scale", "fixed numbers in enemy scripts (heals, HP set) stay vanilla");
+        }
+
+        // The ratio enemy scaling gives this enemy now; 1 when it leaves the enemy alone.
+        internal static float RatioFor(int id)
+        {
+            if (randomizerOn == null || !randomizerOn())
+            {
+                return 1f;
+            }
+            int? target = TargetLevel();
+            int? home = HomeLevel(id);
+            return target == null || home == null ? 1f : Ratio(home.Value, target.Value);
+        }
+
+        // A number in HP units, scaled as the enemy's HP is; at least 1.
+        private static int Scaled(int n, float ratio) =>
+            Mathf.Approximately(ratio, 1f) ? n : Mathf.Max(1, Mathf.RoundToInt(n * ratio));
+
+        private static readonly HashSet<string> numbersLogged = new HashSet<string>();
+        private static BattleControl numbersBattle;
+
+        private static int LogScaled(string what, int id, int n, float ratio)
+        {
+            int scaled = Scaled(n, ratio);
+            if (MainManager.battle != numbersBattle)
+            {
+                numbersBattle = MainManager.battle;
+                numbersLogged.Clear();
+            }
+            if (scaled != n && numbersLogged.Add($"{what}/{id}/{n}"))
+            {
+                log.LogInfo($"[scale] {(MainManager.Enemies)id} ({id}) {what} {n} -> {scaled} (x{ratio:0.00})");
+            }
+            return scaled;
+        }
+
+        // The fixed numbers in enemy scripts the survey marked "scale" (MEASURED.md, "Fixed numbers in the enemies'
+        // scripts"), each by the ratio of the enemy whose HP it measures.
+        private static class ScriptNumbers
+        {
+            // A literal heal amount marks itself on its way to the call; the heal is scaled only when the one healed
+            // is an enemy, and only that literal (the other branch of a "? :", such as the enemy's max HP, passes
+            // untouched). The call is replaced rather than Heal patched: Heal(ref, int?) is a one-line wrapper the
+            // runtime may inline, where a patch never runs.
+            private static int pendingHeal = int.MinValue;
+
+            private static int HealLiteral(int n)
+            {
+                pendingHeal = n;
+                return n;
+            }
+
+            private static readonly MethodInfo GameHeal = AccessTools.Method(typeof(BattleControl), "Heal",
+                new[] { typeof(MainManager.BattleData).MakeByRefType(), typeof(int?) });
+
+            private static void ScaledHeal(BattleControl battle, ref MainManager.BattleData entity, int? ammount)
+            {
+                int literal = pendingHeal;
+                pendingHeal = int.MinValue;
+                if (literal != int.MinValue && ammount == literal && entity.battleentity != null
+                    && !entity.battleentity.CompareTag("Player"))
+                {
+                    ammount = LogScaled("heals", entity.animid, literal, RatioFor(entity.animid));
+                }
+                object[] args = { entity, ammount };
+                GameHeal.Invoke(battle, args);
+                entity = (MainManager.BattleData)args[0];
+            }
+
+            // Stratos and Delilah revive each other at 7 HP, Maki's summoned ally is set to 10.
+            private static void SetHp(ref MainManager.BattleData target, int n) =>
+                target.hp = LogScaled("is set to HP", target.animid, n, RatioFor(target.animid));
+
+            // The 7 the revive shows, by the reviver's ratio (the pair share their chapter, so their ratio).
+            private static int ByActor(int n, object step)
+            {
+                int id = PartySlots.ActingEnemy(step, out _);
+                return id < 0 ? n : LogScaled("shows", id, n, RatioFor(id));
+            }
+
+            private static readonly Dictionary<Type, FieldInfo> startIndexFields = new Dictionary<Type, FieldInfo>();
+
+            // The battle start's flat HP adjustments (Spuder, Zasp and Mothiva, Maki's team, fire areas).
+            private static int AtBattleStart(int n, object step)
+            {
+                Type type = step.GetType();
+                if (!startIndexFields.TryGetValue(type, out FieldInfo field))
+                {
+                    startIndexFields[type] = field = AccessTools.GetDeclaredFields(type)
+                        .FirstOrDefault(f => f.Name.StartsWith("<i>") && f.FieldType == typeof(int));
+                }
+                MainManager.BattleData[] enemies = MainManager.battle?.enemydata;
+                int i = field != null ? (int)field.GetValue(step) : -1;
+                if (enemies == null || i < 0 || i >= enemies.Length)
+                {
+                    return n;
+                }
+                return LogScaled("gets a start adjustment of", enemies[i].animid, n, RatioFor(enemies[i].animid));
+            }
+
+            private static readonly FieldInfo CurrentEnemy = AccessTools.Field(typeof(BattleControl), "currentEnemy");
+
+            // The holo party's AI thresholds, and EnemyHeavyThrow's.
+            private static int ForCurrentEnemy(int n)
+            {
+                BattleControl battle = MainManager.battle;
+                MainManager.BattleData[] enemies = battle?.enemydata;
+                int i = battle != null ? (int)CurrentEnemy.GetValue(battle) : -1;
+                if (enemies == null || i < 0 || i >= enemies.Length)
+                {
+                    return n;
+                }
+                return LogScaled("acts at", enemies[i].animid, n, RatioFor(enemies[i].animid));
+            }
+
+            private static int? Constant(CodeInstruction c)
+            {
+                for (int v = 2; v <= 99; v++)
+                {
+                    if (c.LoadsConstant(v))
+                    {
+                        return v;
+                    }
+                }
+                return null;
+            }
+
+            private static bool IsBranch(CodeInstruction c) => c.opcode == OpCodes.Br || c.opcode == OpCodes.Br_S;
+
+            private static CodeInstruction Call(string helper) =>
+                new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(ScriptNumbers), helper));
+
+            [HarmonyPatch(typeof(BattleControl), "DoAction", MethodType.Enumerator)]
+            [HarmonyTranspiler]
+            private static IEnumerable<CodeInstruction> TranspileDoAction(IEnumerable<CodeInstruction> instructions) =>
+                Hooks.Safe(instructions, EditDoAction, "scale");
+
+            private static IEnumerable<CodeInstruction> EditDoAction(List<CodeInstruction> code)
+            {
+                MethodInfo heal = AccessTools.Method(typeof(BattleControl), "Heal",
+                    new[] { typeof(MainManager.BattleData).MakeByRefType(), typeof(int?) });
+                ConstructorInfo nullable = AccessTools.Constructor(typeof(int?), new[] { typeof(int) });
+                FieldInfo hp = AccessTools.Field(typeof(MainManager.BattleData), nameof(MainManager.BattleData.hp));
+                // Heal(ref x, N): N right before the Nullable, or one branch of a "? :" just above it.
+                var heals = new List<int>();
+                var healCalls = new List<int>();
+                for (int h = 2; h < code.Count; h++)
+                {
+                    if (!code[h].Calls(heal) || code[h - 1].opcode != OpCodes.Newobj || !Equals(code[h - 1].operand, nullable))
+                    {
+                        continue;
+                    }
+                    int before = heals.Count;
+                    if (Constant(code[h - 2]) != null)
+                    {
+                        heals.Add(h - 2);
+                    }
+                    for (int k = h - 3; k > Math.Max(h - 14, 1); k--)
+                    {
+                        if (IsBranch(code[k]) && Constant(code[k - 1]) != null)
+                        {
+                            heals.Add(k - 1);
+                            break;
+                        }
+                    }
+                    if (heals.Count > before)
+                    {
+                        healCalls.Add(h);
+                    }
+                }
+                List<int> sets = Enumerable.Range(1, code.Count - 1)
+                    .Where(i => code[i].opcode == OpCodes.Stfld && Equals(code[i].operand, hp)
+                        && (code[i - 1].LoadsConstant(7) || code[i - 1].LoadsConstant(10)))
+                    .ToList();
+                MethodInfo counter = AccessTools.Method(typeof(BattleControl), "ShowDamageCounter",
+                    new[] { typeof(int), typeof(int), typeof(Vector3), typeof(Vector3) });
+                List<int> shown = Enumerable.Range(1, code.Count - 1)
+                    .Where(i => code[i].LoadsConstant(7) && code[i - 1].LoadsConstant(1)
+                        && code.Skip(i + 1).Take(24).Any(c => c.Calls(counter)))
+                    .ToList();
+                if (heals.Count != 19 || healCalls.Count != 18 || sets.Count != 3 || shown.Count != 2)
+                {
+                    throw new InvalidOperationException($"expected 19 heal amounts in 18 heals, 3 HP sets and 2 "
+                        + $"counters, found {heals.Count} in {healCalls.Count}, {sets.Count} and {shown.Count}");
+                }
+                var edits = heals.Select(i => new KeyValuePair<int, Action<int>>(i,
+                        at => code.Insert(at + 1, Call(nameof(HealLiteral)))))
+                    .Concat(healCalls.Select(i => new KeyValuePair<int, Action<int>>(i, at =>
+                    {
+                        code[at].opcode = OpCodes.Call;
+                        code[at].operand = AccessTools.Method(typeof(ScriptNumbers), nameof(ScaledHeal));
+                    })))
+                    .Concat(sets.Select(i => new KeyValuePair<int, Action<int>>(i, at =>
+                    {
+                        code[at].opcode = OpCodes.Call;
+                        code[at].operand = AccessTools.Method(typeof(ScriptNumbers), nameof(SetHp));
+                    })))
+                    .Concat(shown.Select(i => new KeyValuePair<int, Action<int>>(i, at => code.InsertRange(at + 1,
+                        new[] { new CodeInstruction(OpCodes.Ldarg_0), Call(nameof(ByActor)) }))));
+                foreach (KeyValuePair<int, Action<int>> e in edits.OrderByDescending(e => e.Key))
+                {
+                    e.Value(e.Key);
+                }
+                log.LogInfo("[scale] installed in BattleControl.DoAction (heal amounts 19 of 19 in 18 heals, HP sets 3 "
+                    + "of 3, counters 2 of 2)");
+                return code;
+            }
+
+            [HarmonyPatch(typeof(BattleControl), nameof(BattleControl.StartBattle), MethodType.Enumerator)]
+            [HarmonyTranspiler]
+            private static IEnumerable<CodeInstruction> TranspileStart(IEnumerable<CodeInstruction> instructions) =>
+                Hooks.Safe(instructions, EditStart, "scale");
+
+            // hp and maxhp += or -= N: ldflda, dup, ldind.i4, N, add or sub, stind.i4.
+            private static IEnumerable<CodeInstruction> EditStart(List<CodeInstruction> code)
+            {
+                FieldInfo hp = AccessTools.Field(typeof(MainManager.BattleData), nameof(MainManager.BattleData.hp));
+                FieldInfo maxhp = AccessTools.Field(typeof(MainManager.BattleData),
+                    nameof(MainManager.BattleData.maxhp));
+                List<int> sites = Enumerable.Range(3, Math.Max(0, code.Count - 5))
+                    .Where(i => Constant(code[i]) != null && code[i - 1].opcode == OpCodes.Ldind_I4
+                        && code[i - 2].opcode == OpCodes.Dup && code[i - 3].opcode == OpCodes.Ldflda
+                        && (Equals(code[i - 3].operand, hp) || Equals(code[i - 3].operand, maxhp))
+                        && (code[i + 1].opcode == OpCodes.Add || code[i + 1].opcode == OpCodes.Sub)
+                        && code[i + 2].opcode == OpCodes.Stind_I4)
+                    .ToList();
+                if (sites.Count != 8)
+                {
+                    throw new InvalidOperationException($"expected the start's 8 HP adjustments, found {sites.Count}");
+                }
+                foreach (int i in sites.OrderByDescending(i => i))
+                {
+                    code.InsertRange(i + 1, new[] { new CodeInstruction(OpCodes.Ldarg_0), Call(nameof(AtBattleStart)) });
+                }
+                log.LogInfo("[scale] installed in BattleControl.StartBattle (HP adjustments 8 of 8)");
+                return code;
+            }
+
+            [HarmonyPatch(typeof(BattleControl), "HoloVi", MethodType.Enumerator)]
+            [HarmonyTranspiler]
+            private static IEnumerable<CodeInstruction> TranspileHoloVi(IEnumerable<CodeInstruction> instructions) =>
+                Hooks.Safe(instructions, code => EditThresholds(code, "HoloVi", 2), "scale");
+
+            [HarmonyPatch(typeof(BattleControl), "EnemyHeavyThrow", MethodType.Enumerator)]
+            [HarmonyTranspiler]
+            private static IEnumerable<CodeInstruction> TranspileHeavyThrow(IEnumerable<CodeInstruction> instructions) =>
+                Hooks.Safe(instructions, code => EditThresholds(code, "EnemyHeavyThrow", 1), "scale");
+
+            // enemydata[currentEnemy].hp against N (HoloVi's 10, EnemyHeavyThrow's 20), and HoloVi's hp -= 3.
+            private static IEnumerable<CodeInstruction> EditThresholds(List<CodeInstruction> code, string where,
+                int expected)
+            {
+                FieldInfo hp = AccessTools.Field(typeof(MainManager.BattleData), nameof(MainManager.BattleData.hp));
+                List<int> sites = Enumerable.Range(3, Math.Max(0, code.Count - 4))
+                    .Where(i => Constant(code[i]) != null
+                        && ((code[i - 1].opcode == OpCodes.Ldfld && Equals(code[i - 1].operand, hp))
+                            || (code[i - 1].opcode == OpCodes.Ldind_I4 && code[i + 1].opcode == OpCodes.Sub
+                                && code[i - 3].opcode == OpCodes.Ldflda && Equals(code[i - 3].operand, hp))))
+                    .ToList();
+                if (sites.Count != expected)
+                {
+                    throw new InvalidOperationException($"expected {where}'s {expected} HP numbers, found {sites.Count}");
+                }
+                foreach (int i in sites.OrderByDescending(i => i))
+                {
+                    code.Insert(i + 1, Call(nameof(ForCurrentEnemy)));
+                }
+                log.LogInfo($"[scale] installed in BattleControl.{where} (HP numbers {expected} of {expected})");
+                return code;
             }
         }
 

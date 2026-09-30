@@ -105,7 +105,7 @@ namespace BugFablesAP
         private static readonly Dictionary<Type, FieldInfo[]> actionFields = new Dictionary<Type, FieldInfo[]>();
 
         // The enemy acting in a DoAction step, with its slot in enemydata; -1 for a member's own action.
-        private static int ActingEnemy(object step, out int actionid)
+        internal static int ActingEnemy(object step, out int actionid)
         {
             actionid = -1;
             Type type = step.GetType();
