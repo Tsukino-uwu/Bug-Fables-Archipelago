@@ -5,7 +5,9 @@ Two kinds, kept apart (the user, 2026-09-30):
   Crystal's were. Its licence is read first and it has a row in `licensing.md`. We take facts and approach only, never
   code. A project read only for one fact or a name has its row in `licensing.md` and no entry here.
 - **From playing:** how the user knows a game or an apworld works from playing it, with no code or repository read, so
-  no licence row. It may be vague: that game's way of doing a thing, in the user's words.
+  no licence row. It may be vague: that game's way of doing a thing, in the user's words. An idea or a mechanic
+  belongs to no one; code, text and art do. So this holds even for a project with no licence, whose repository we may
+  never open (Pseudoregalia's, the user, 2026-09-30).
 
 Either way, each entry says what the project does and what we take, never what's wrong with it (the user,
 2026-09-30): a finding worth a developer's time goes to them directly, and never sits in this repo. Not covered, the
@@ -88,9 +90,9 @@ The user's own experience of these games and their randomizers; nothing below wa
   gate (Next 31, an idea).
 - **A Pokémon dexsanity:** each species seen is a location. **We take:** each enemy spied a location (Next 44, an
   idea).
-- **Pseudoregalia:** the progressive sword (three copies of one item, each giving the next ability), and a found
-  pickup gone once its check is done. **We take:** progressive items (Next 23, an idea), and found pickups hidden in
-  every save (build step 27).
+- **Pseudoregalia:** items showing their rarity, the progressive sword (three copies of one item, each giving the next
+  ability), and a found pickup gone for good once picked up. **We take:** the *Rarity* item colours (the mod guide,
+  step 22), progressive items (Next 23, an idea), and found pickups hidden in every save (build step 27).
 - **Traps:** Celeste's flipped screen, Zelda's freeze and chickens, OoT's disguised traps. **We take:** traps that
   annoy, never harm, and a trap that can look like a wanted item (Next 19, an idea; OoT's option was then read,
   `licensing.md`).
