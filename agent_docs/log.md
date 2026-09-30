@@ -54,6 +54,7 @@ either one wrong).
 - [2026-09-30: direct titles for the guides, the Progressive Boat and the submarine](#2026-09-30-direct-titles-for-the-guides-the-progressive-boat-and-the-submarine)
 - [2026-09-30: every room-logic plan in one place, spawns and chains added, a truly random start designed](#2026-09-30-every-room-logic-plan-in-one-place-spawns-and-chains-added-a-truly-random-start-designed)
 - [2026-09-30: Points of No Return](#2026-09-30-points-of-no-return)
+- [2026-09-30: long names in the item-get box, what a death costs, one world shape, the icon's outline](#2026-09-30-long-names-in-the-item-get-box-what-a-death-costs-one-world-shape-the-icons-outline)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -1968,3 +1969,35 @@ either one wrong).
 - **Measured:** `item-gates.py` identical before and after with the option off, and with it on only the options line
   differs: no rule uses `WayBack` until rooms are mapped. A seed with APQuest and the option on: `slot_data` True, the
   spoiler "Points of No Return: Yes". The "on" tests fail with the option check taken out. **Not seen in game.**
+
+## 2026-09-30: long names in the item-get box, what a death costs, one world shape, the icon's outline
+
+- **CI red first:** Preflight had failed on the last three pushes. `.githooks/doc-coverage.py` had a backslash inside
+  an f-string expression, which Python 3.12 accepts and CI's 3.11 can't parse. Fixed; preflight passes on 3.11 locally.
+- **The user's four points, after play:**
+  - Flags tied to the seed, and what a death without saving costs with DeathLink ("Items are remote so no real
+    progression is lost, but not all progression is tied to the seed?").
+  - A screenshot: "You got a Poison Resistance Medal from BugTester!" running past the box.
+  - Chapter start and end flags suspended, "the world should always be and stay in 1 consistent state", once the logic
+    is everywhere.
+  - Thicker outlines on the Archipelago icon, "just a plan", with screenshots of a shelf ("the leaf & the egg are
+    vanilla items").
+- **The death question** (asked before, 2026-09-28). Answered from the code: items, checks, hidden pickups and the
+  open world's lists survive a reload; the save's own story state since that save doesn't. The user chose to solve it
+  through the open world, no flags restored ("probly option1"). They then asked whether Super Metroid makes bosses
+  checks. Read: its bosses are events, never sent. The user: "maybe we could tie fake checks to bosses to track if
+  they have been defeated". That became Next 53, on a real location or the data storage, since a location holding
+  nothing isn't Archipelago's. Also Next 52, the chapter flags, deferred. And build step 9's rule: no gate may depend
+  on a flag a reload can undo.
+- **Found while answering:** Retry restores the key items as well (`ReloadInitialData`). `MEASURED.md`, build step 7
+  and `ItemReceiver`'s comment said otherwise. The rule "no items in a battle" stands, for another reason: medals,
+  money and storage aren't restored.
+- **Long names:** the user picked "two lines, squash if needed" over one squashed line or two lines only. `TextFit`
+  measures with the game's own `GetLetterOffset`. The box's width comes from Giveitem's own "fauxmessage" sprite, so
+  no `Resources` load is needed. The composers mark the one space a line may break at, with a control character
+  `ServerText` guarantees no server string has. Dev `holdup long`. Built, copied into the game (build `AAF6371A08FC`),
+  **not seen**: the game wasn't running. `Margin` (0.6) is a first guess until seen.
+- **The icon's outline, measured** on the game's items0 dump with a script: the game's outline is a median of 4 sheet
+  pixels, 4 to 5; the icon's rim about 2.1 and its gaps 1.5. A rim share of 0.14-0.19 matches; the method to pick one
+  on screen is in the mod guide, step 23.
+- **Unpushed:** the commits from `d21bb64` on.
