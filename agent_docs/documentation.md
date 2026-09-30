@@ -1174,10 +1174,30 @@ way down the opened trapdoor), as a random start arrives. Only with Archipelago 
 scene ended without error (the patched list, `[party] Event5 placed 2 members; member slot 2 stands behind`); the
 landing spot itself not yet seen. *Code: `QualityOfLife.cs`.*
 
-**Status:** works with Leif alone, seen on screen through chapter 1 into chapter 2 (2026-09-25); Leif joining after the spider with the story's two (Vi and Kabbu) seen (2026-09-26: he followed, could lead, and showed in the pause menu); items 5 and 6 not yet seen; the direct lookups in item 12 still open.
+**Battles: a member's number used as a slot** (2026-09-30, found while planning stand-ins for scripted fights; read in
+the code, not yet seen). In vanilla the party is Vi, Kabbu and Leif in that order, so the game's code sometimes uses
+a member's number where it means a party slot. With members as items the party can be any of them in any order (a
+received member joins at the end), and those places pick the wrong member or none.
+- **The leader at a battle's start** (`BattleControl.StartBattle`, `:1282-1289`). The start turns the party until
+  slot `partypointer[0]` equals `partyorder[0]`, but `partyorder` holds member numbers: the field switch writes each
+  slot's `animid` into it (`PlayerControl.SwitchOrder`). With Vi and Leif and Leif in front it waits for slot 2 in a
+  party of two and never stops; with Kabbu and Leif and Kabbu in front it puts Leif in front.
+- **The dizzy enemy's first strike** (`:1336`): it gives the free turn to the member whose number equals the front
+  slot.
+- **The fix** (`PartySlots.cs`): a transpiler on `StartBattle`'s coroutine. Both reads go through
+  `PartySlots.SlotOfMember`, which returns the slot holding that member. Without him, the number itself while it is a
+  slot (the story's own small parties, such as the spider fight's Kabbu-first order, where the member playing his part
+  stands there), else the leader's slot. Each site is found by its exact instructions, once each; otherwise the
+  method keeps its own code and the log says so. Logged: `[party] battle start: the field leader, member 2, is slot 1
+  of 2; that slot goes in front`. Only while Archipelago is enabled.
+- **To see:** remove Kabbu (`removemember 1`), switch until Leif leads, touch an enemy: the fight opens with Leif in
+  front (before the fix, expected: the two swap places without end, which costs a restart).
+- The other places, and the scripted fights that name a slot, are the next items and step 36.
+
+**Status:** works with Leif alone, seen on screen through chapter 1 into chapter 2 (2026-09-25); Leif joining after the spider with the story's two (Vi and Kabbu) seen (2026-09-26: he followed, could lead, and showed in the pause menu); items 5 and 6 not yet seen; the direct lookups in item 12 still open; the battle start's leader fix built (2026-09-30), not yet seen.
 
 *Code: `PartyFit.cs` (the stand-ins and the acting leader), `PartyMembers.cs` (the member guard, followers,
-Leif's joining).*
+Leif's joining), `PartySlots.cs` (a member's slot in fights).*
 
 ## 12. Shops in the game
 

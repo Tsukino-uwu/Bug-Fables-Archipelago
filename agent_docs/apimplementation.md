@@ -488,6 +488,14 @@ be wrong.
   slot_data fails right after a successful login (`ApConnection.cs`), that logged-in connection is neither kept nor
   closed, and the retry logs in again, so every retry adds a client on the slot. A mod and an apworld of different
   versions would set it off. Refused and timed-out attempts also leave their sockets open. Next 43, item 2.
+- **A party of two with Leif in front hangs every battle's start** (found planning battle stand-ins, 2026-09-30; read
+  in the code, not seen). The start turns the party until the field leader is in front, comparing a slot with the
+  leader's member number (`BattleControl.cs:1284`), so with Vi and Leif, or Kabbu and Leif, and Leif leading, it
+  never stops. Only with members as items (build step 18). Fixing: the mod guide, step 11.
+- **The second spider fight softlocks with a one-member start** (found the same way, 2026-09-30; read in the code,
+  not seen). Every second turn it gives Kabbu a line by reading the party's second slot (`EventDialogue` case 5),
+  which a party of one doesn't have, so the fight stops if the Web is still up on turn 2. To fix in the mod guide,
+  step 36.
 - **Two items named "Leif"** (found by the full review, 2026-09-29; read in the code): with the story's party, the
   story event *Leif Joins* makes an event item "Leif" with no id, while the real member item "Leif" has one;
   Archipelago's `world api.md` requires one id per item name. Next 43, item 3.

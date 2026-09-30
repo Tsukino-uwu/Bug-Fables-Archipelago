@@ -1083,6 +1083,15 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 - Every EntityControl.MoveTowards overload ends in MoveTowards(Vector3, float, int, int, bool) (EntityControl.cs:4911-4960). Used by `PartyFit.cs`.
 - Scenes take the party as a list and use fixed slots p[0]..p[2] (about 110 lookups; Event83, the barkeeper's first talk, reads p[2], EventControl.cs:13055-13058); GetPartyEntities(true) returns the party in id order (MainManager.cs:9483-9503). Used by `PartyFit.cs`.
 - The horn tutorial (Event10) waits while entities[0].forcemove (EventControl.cs:2935); the trapdoor's end puts member m at the m-th scene character's position (EventControl.cs:1476-1484; in the IL the only `ldelem Vector3` after the `SetPlayers` call in `<Event5>d__30.MoveNext`, read 2026-09-26); the spider fight's end (Event6, EventControl.cs:2272-2289) sets entities[2].following = entities[1]; the droplet scene's end (Event21, EventControl.cs:4112-4114) walks GetEntity(-2) and (-3) to the player. Used by `PartyFit.cs`.
+- A battle's party slots and the leader (code read 2026-09-30, not measured): `playerdata` is in `ChangeParty` order, and
+  `ChangeParty` sets `partyorder = ids` (MainManager.cs:3786); the field switch rotates each slot's `animid` and
+  writes those member numbers into `partyorder` (PlayerControl.SwitchOrder, :1525-1532). Every battle resets
+  `partypointer` (slots) to {0, 1, 2} (BattleControl.cs:772), and `MainManager.SwitchParty(battle: true)` rotates only
+  the first `playerdata.Length` of them (MainManager.cs:18362-18410). The start then loops until `partypointer[0] ==
+  partyorder[0]`, a slot against a member number (BattleControl.cs:1282-1289; in the IL of
+  `<StartBattle>d__170.MoveNext`, the only `ldfld partyorder; ldc.i4.0; ldelem.i4`), and the dizzy first strike
+  compares `playerdata[n].trueid` with `partypointer[0]` (:1336, the only `ldfld trueid` followed by `ldsfld battle;
+  ldfld partypointer`). In vanilla slot k is always member k where these run. Used by `PartySlots.cs`.
 - MainManager.GetEntity: -2 and -3 are the second and third member by position (MainManager.cs:18526-18537), -4/-5/-6 are Vi/Kabbu/Leif by name (MainManager.cs:18538-18570), 1000 + n reads map.tempfollowers[n] (MainManager.cs:18512-18515) and throws ArgumentOutOfRange when nobody is there; no caller null-checks the result. Used by `PartyFit.cs`.
 - The main menu's confirm sound: StartMenu.Update plays "Confirm" for every main-menu choice (menuid 1) before acting on it. Used by `MenuToggle.cs`.
 - On the file select (menuid 2, submenu 0), confirm on file 0-2 is StartMenu.Update's load or new-game branch (StartMenu.cs:512-535, Event22 or Event8); the save slots' boxes sort at -20 to -60 and their text at 10 (StartMenu.ShowSaves). Used by `MenuToggle.cs`.
