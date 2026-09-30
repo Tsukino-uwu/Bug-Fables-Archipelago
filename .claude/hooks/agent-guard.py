@@ -1,7 +1,9 @@
-"""Claude Code runs this before every shell command and file edit its agent makes in this repo (.claude/settings.json).
-It refuses what would get past the git hooks, and makes the agent ask before it changes what the gates allow (or this
-guard), by an edit or in a commit. Everyday work asks nothing. A guard against the agent's slips, not a wall: pre-push
-and CI check everything again, and the settings may run nothing but this file (preflight, Dev scripts and hooks)."""
+"""Claude Code runs this before every shell command, file edit and page fetch its agent makes in this repo
+(.claude/settings.json). It refuses what would get past the git hooks, and a read of a GitHub project that has no row
+in agent_docs/licensing.md yet, its licence file aside. It makes the agent ask before it changes what the gates allow
+(or this guard), by an edit or in a commit. Everyday work asks nothing. A guard against the agent's slips, not a wall:
+pre-push and CI check everything again, and the settings may run nothing but this file (preflight, Dev scripts and
+hooks)."""
 import json
 import os
 import re
@@ -15,6 +17,15 @@ ARMING = re.compile(r'git config (--local )?(--get )?core\.hookspath( \.githooks
 RUNS_ITS_ARGUMENT = {'-c', '-command', '/c', 'eval', 'iex', 'invoke-expression'}
 CONTROL = {';', '&&', '||', '|', '&', '(', ')', ';;', '|&'}
 GIT_TAKES_VALUE = {'-c', '-C', '--git-dir', '--work-tree', '--namespace', '--config-env'}
+# A project's licence is read before anything else of it, and then it gets its row (the user, 2026-09-30).
+LICENSING, PATTERNS = 'agent_docs/licensing.md', 'dev-scripts/preflight-patterns.json'
+GITHUB_URL = re.compile(r'(?<![\w.-])(?:(?:www\.)?github\.com|raw\.githubusercontent\.com|codeload\.github\.com'
+                        r'|api\.github\.com/repos)/([\w.-]+)/([\w.-]+)([^\s\'"]*)', re.I)
+API_PATH = re.compile(r'/?repos/([\w.-]+)/([\w.-]+)(\S*)', re.I)
+SEARCHED_REPO = re.compile(r'repo:([\w.-]+)/([\w.-]+)', re.I)
+LICENCE_FILE = re.compile(r'(licen[cs]e|copying)[\w.-]*', re.I)
+FETCHERS = {'curl', 'wget', 'invoke-webrequest', 'iwr', 'invoke-restmethod', 'irm', 'start-bitstransfer'}
+GIT_FETCHES = {'clone', 'fetch', 'ls-remote', 'pull', 'archive', 'submodule'}
 
 
 def answer(decision, reason):
@@ -134,6 +145,58 @@ def asks(command, root):
     return None
 
 
+def repos_read(seg):
+    """(owner, repo, rest of the path) for each GitHub project a shell segment reads from."""
+    names = [program(w) for w in seg]
+    found, fetcher = [], any(n in FETCHERS for n in names)
+    if fetcher or git_subcommand(seg) in GIT_FETCHES or names[:1] == ['gh']:
+        found += [m.groups() for w in seg for m in GITHUB_URL.finditer(w)]
+    if fetcher:
+        found += [(m.group(1), m.group(2), '') for w in seg if 'api.github.com' in w.lower()
+                  for m in SEARCHED_REPO.finditer(w)]
+    if names[:1] == ['gh']:
+        found += [m.groups() for w in seg for m in [API_PATH.fullmatch(w)] if m]
+        found += [(m.group(1), m.group(2), '') for w in seg for m in SEARCHED_REPO.finditer(w)]
+        found += [(*seg[i + 1].split('/', 1), '') for i, w in enumerate(seg[:-1])
+                  if w in ('-R', '--repo') and seg[i + 1].count('/') == 1]
+        if len(seg) > 2 and seg[1] == 'repo' and seg[2] in ('view', 'clone', 'fork') and len(seg) > 3 \
+                and seg[3].count('/') == 1:
+            found.append((*seg[3].split('/'), ''))
+    return found
+
+
+def unlicensed(reads, root):
+    """The first project read that has no licensing.md row and isn't ours, unless all that's read is its licence."""
+    table, own = None, None
+    for owner, repo, rest in reads:
+        repo = re.sub(r'\.git$', '', repo)
+        last = rest.split('?')[0].rstrip('/').rsplit('/', 1)[-1]
+        if last and LICENCE_FILE.fullmatch(last):
+            continue
+        if table is None:
+            table, own = read_text(root, LICENSING).lower(), set()
+            try:
+                own = {o.lower() for o in json.loads(read_text(root, PATTERNS)).get('own_github_owners', [])}
+            except ValueError:
+                pass
+        if owner.lower() not in own and f'{owner}/{repo}'.lower() not in table:
+            return f'{owner}/{repo}'
+    return None
+
+
+def read_text(root, rel):
+    try:
+        with open(os.path.join(root, rel), encoding='utf-8') as f:
+            return f.read()
+    except OSError:
+        return ''
+
+
+def refuse_unlicensed(project):
+    answer('deny', f'{project} has no row in {LICENSING}. Read its licence first (gh api repos/{project}/license), '
+                   'add its row, then read the rest; or ask the user.')
+
+
 def changed_asked_files(root):
     r = subprocess.run(['git', '-C', root, 'status', '--porcelain=v1', '-z', '--untracked-files=all'],
                        capture_output=True, timeout=20)
@@ -164,9 +227,16 @@ def main():
         why = refusal(command)
         if why:
             answer('deny', why + '. Nothing may get past the hooks: fix what they refuse, or ask the user.')
+        project = unlicensed([r for seg in segments(words_of(without_bodies(command))) for r in repos_read(seg)], root)
+        if project:
+            refuse_unlicensed(project)
         why = asks(command, root)
         if why:
             answer('ask', why)
+    elif tool == 'WebFetch':
+        project = unlicensed([m.groups() for m in GITHUB_URL.finditer(given.get('url', ''))], root)
+        if project:
+            refuse_unlicensed(project)
 
 
 if __name__ == '__main__':

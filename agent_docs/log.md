@@ -1751,6 +1751,14 @@ either one wrong).
   (2026-09-29), and in today's music search `celeste_open_world`, `sa2b`, `smw`, `dkc3` (PoryGone's modified MIT:
   no relicensing or selling), `marioland2` and `cvcotm`. Hollow Knight's RandomizerMod (LGPL-2.1): its term
   "room randomizer" was written 2026-09-29 from an agent's memory, nothing read (checked in that session's
-  transcript); today its licence, then its README, confirmed it. The other worlds read (`sm`, `satisfactory`, `hk`,
+  transcript); today its licence, then its README, confirmed it.
+- **The user asked how that happened, and how often agents reach the internet unasked.** Read from every transcript
+  (124, from 2026-09-24): no web search; 74 page fetches; 363 shell commands reaching the network, mostly expected
+  (Archipelago and MultiClient.Net, licences, NuGet, CI). With no row: a websocket-sharp fork's metadata and commit
+  list (2026-09-24), and a Bug Fables docs repo's file list (2026-09-25; its entry was dropped that day, never
+  committed). The user: "a pretty big gap". **Built, the user's choice of four:** the guard refuses a GitHub read of a
+  project with no `licensing.md` row, its licence file aside (build step 28; harness 55 cases, passing), and
+  `CLAUDE.md` gains "a fact about another project is read (licence first) or asked, never written from memory".
+  Not chosen: asking before every page fetch, and before reads outside the repo. The other worlds read (`sm`, `satisfactory`, `hk`,
   `messenger`, `kdl3`, `cv64`) fall under Archipelago's licence and share a row. The user then asked for
   `licensing.md` split in two: Apworlds first, then everything else.

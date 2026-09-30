@@ -70,6 +70,7 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
 - **No addresses, names or APIs from memory.** Game code traces to the decompiled assembly, Archipelago and
   MultiClient.Net calls to their docs or source; anything suspiciously tidy is invented until confirmed. **ALWAYS
   read how the game does a thing before building or fixing ours** (the user, 2026-09-26): the proven example.
+  **A fact about another project is read (licence first) or asked, never written from memory** (the user, 2026-09-30).
 - **An apworld change is done when its tests pass** in the local Archipelago checkout (at the tag the world
   targets). A behaviour change gets a test that fails without the fix. Generate a seed with a second game
   as well: some failures only show up in a room with two different games (`agent_docs/client-requirements.md`).

@@ -10,7 +10,7 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash|PowerShell|Edit|Write|MultiEdit|NotebookEdit",
+        "matcher": "Bash|PowerShell|Edit|Write|MultiEdit|NotebookEdit|WebFetch",
         "hooks": [
           {
             "type": "command",

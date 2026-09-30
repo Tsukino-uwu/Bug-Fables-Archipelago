@@ -2779,12 +2779,16 @@ confirmed in the code, listed under Known issues in "Where it stands" above.
   - `v*` tags can't be deleted or moved, so a release always points at the commit it was checked on.
 
 **The coding agent's guard (2026-09-29, on the user's yes):** the hooks stop a commit, but an agent could still step
-around them. Claude Code runs `.claude/hooks/agent-guard.py` before each shell command and file edit its agent makes
-here (`.claude/settings.json`).
+around them. Claude Code runs `.claude/hooks/agent-guard.py` before each shell command, file edit and page fetch its
+agent makes here (`.claude/settings.json`).
 - **It refuses** whatever gets past the git hooks: `--no-verify` (and its short forms), `git commit -n`, changing
   `core.hooksPath` (setting it to `.githooks` is allowed), git config set through the environment, and the plumbing that
   writes history by hand (`commit-tree`, `update-ref`). It reads each command word by word, so a commit message may
   name any of these; `bash -c`, `powershell -Command` and the like are read inside too.
+- **It refuses a read of a GitHub project with no row in `agent_docs/licensing.md`** (2026-09-30, the user's call,
+  after a term had been written from memory and a fork's history read with no row): `gh api`, `gh repo` and `-R`,
+  `curl` and its kin, `git clone` and `fetch`, and page fetches. Only the project's licence file gets through, so the
+  licence is read and the row added before anything else of it; our own repository is exempt.
 - **It asks the user first** before:
   - an edit to `docs/capabilities.md`, the patterns file, `.claude/` (the guard itself, and the local settings that
     could switch it off) or `.git/`;
@@ -2801,8 +2805,8 @@ here (`.claude/settings.json`).
   preflight's "Dev scripts and hooks" holds `.claude/settings.json` to `ask` and `deny` rules and the one listed
   command; the guard script is read like every dev script. A file `.claude/settings.local.json` is left out of git.
 - **Proven:** the harness plants settings that do more (their own `env`, an allow list, another event, another
-  command), and runs the guard on 37 cases, among them a commit carrying `docs/capabilities.md` (asks) and one
-  carrying only `preflight.py` (doesn't). Staging a guard missing its
+  command), and runs the guard on 55 cases (2026-09-30), among them a commit carrying `docs/capabilities.md` (asks),
+  one carrying only `preflight.py` (doesn't), and reads of an unlisted project: refused, except its licence file. Staging a guard missing its
   `--no-verify` check, and a command that exits 1 instead of 2, made both tests fail (2026-09-29).
 - **Not a wall.** A determined script can still get round it. Pre-push, CI and the release checks are what catch that,
   and a weakened gate still shows up as a commit of its own.
@@ -2811,7 +2815,7 @@ here (`.claude/settings.json`).
 (pre-commit, pre-push, CI on every push, the release), the reviewer pages, the GitHub settings and the agent's guard.
 The CI half first ran on the push of 2026-09-29 (`0fc15ce`), all green: preflight on Python 3.11 and 3.13 (the tree,
 all history, the harness's 76 fixtures), the libraries byte for byte against NuGet's package, and `ci.yml`. The guard
-went live in the session that made it. Next: the TLS measurement (Known issues); the cache fix waits for a look in
+went live in the session that made it; its licence check on GitHub reads was added 2026-09-30. Next: the TLS measurement (Known issues); the cache fix waits for a look in
 game (the mod guide's step 34).
 
 *Code: `dev-scripts/preflight.py`, `dev-scripts/preflight-patterns.json`, `dev-scripts/dotnet_metadata.py`;

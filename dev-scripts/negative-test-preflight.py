@@ -820,7 +820,9 @@ def hooks_test(c, base, h):
         h.say('FAIL', 'pre-push let a commit with a home path reach the remote', [r.stderr.decode(errors='replace')[:300]])
 
 
-# (tool, command or repo path, what the guard must answer), in a clean clone. Commit messages may name anything.
+# Spelled apart, as the fixtures above are: these are the guard's test input, not places the project points to.
+GH, WEB = 'github' + '.com', 'https' + '://'
+# (tool, command, repo path or URL, what the guard must answer), in a clean clone. Commit messages may name anything.
 GUARD_CASES = [
     ('Bash', 'git status', None),
     ('Bash', 'git commit --no-verify -m x', 'deny'),
@@ -849,8 +851,26 @@ GUARD_CASES = [
     ('Bash', 'git push origin main', None),
     ('PowerShell', 'git status; if ($?) { git push }', None),
     ('Bash', 'cat .git/config', 'ask'),
-    ('Bash', 'gh api repos/o/r/contents/x -X PUT -f message=m', 'ask'),
-    ('Bash', 'gh api -X GET repos/o/r', None),
+    ('Bash', 'gh api repos/BepInEx/HarmonyX/contents/x -X PUT -f message=m', 'ask'),
+    ('Bash', 'gh api -X GET repos/BepInEx/HarmonyX', None),
+    ('Bash', 'gh api repos/BepInEx/HarmonyX/contents/README.md', None),
+    ('Bash', 'gh api repos/someone/unlisted/contents/src/main.py', 'deny'),
+    ('Bash', 'gh api repos/someone/unlisted --jq .description', 'deny'),
+    ('Bash', 'gh api repos/someone/unlisted/license --jq .content', None),
+    ('Bash', "gh api 'repos/someone/unlisted/contents/worlds/x/LICENSE?ref=dev'", None),
+    ('Bash', 'gh repo view someone/unlisted', 'deny'),
+    ('Bash', 'gh release list -R someone/unlisted', 'deny'),
+    ('Bash', 'gh api "search/issues?q=repo:someone/unlisted+crash"', 'deny'),
+    ('Bash', f'curl -s {WEB}raw.githubusercontent.com/someone/unlisted/main/README.md', 'deny'),
+    ('Bash', f'curl -s {WEB}raw.githubusercontent.com/someone/unlisted/main/LICENSE', None),
+    ('Bash', f'curl -s "{WEB}api.{GH}/search/issues?q=repo:someone/unlisted"', 'deny'),
+    ('Bash', f'curl -s {WEB}docs.{GH}/en/actions', None),
+    ('PowerShell', f'Invoke-WebRequest {WEB}{GH}/someone/unlisted/archive/main.zip -OutFile x.zip', 'deny'),
+    ('Bash', f'git clone {WEB}{GH}/someone/unlisted.git', 'deny'),
+    ('Bash', f'git commit -m "read {GH}/someone/unlisted later"', None),
+    ('WebFetch', f'{WEB}{GH}/someone/unlisted', 'deny'),
+    ('WebFetch', f'{WEB}{GH}/someone/unlisted/blob/main/LICENSE', None),
+    ('WebFetch', f'{WEB}docs.unity3d.com/ScriptReference/Time-timeScale.html', None),
     ('Edit', 'docs/capabilities.md', 'ask'),
     ('Write', 'dev-scripts/preflight-patterns.json', 'ask'),
     ('Edit', '.claude/settings.local.json', 'ask'),
@@ -874,14 +894,15 @@ def git_sh():
 
 
 def agent_guard_test(c, base, h):
-    """The guard refuses what gets past the hooks, asks before the gate changes or a push, lets the rest through, and
-    refuses everything when it can't run."""
+    """The guard refuses what gets past the hooks and a read of a GitHub project with no licence row (its licence file
+    aside), asks before the gate changes, lets the rest through, and refuses everything when it can't run."""
     c.git('reset', '-q', '--hard', base)
     c.git('clean', '-q', '-fdx')
     guard_env = dict(env(), CLAUDE_PROJECT_DIR=c.root)
 
     def decide(tool, given):
-        tool_input = {'command': given} if tool in ('Bash', 'PowerShell') else {'file_path': c.path(given)}
+        tool_input = ({'command': given} if tool in ('Bash', 'PowerShell') else {'url': given} if tool == 'WebFetch'
+                      else {'file_path': c.path(given)})
         r = subprocess.run([sys.executable, '-B', c.path('.claude/hooks/agent-guard.py')], capture_output=True,
                            input=json.dumps({'tool_name': tool, 'tool_input': tool_input}).encode(), env=guard_env)
         if r.returncode != 0:
