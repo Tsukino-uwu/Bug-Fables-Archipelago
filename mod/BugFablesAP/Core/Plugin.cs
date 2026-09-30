@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using BepInEx;
 using BepInEx.Configuration;
@@ -107,6 +108,7 @@ namespace BugFablesAP
             EnemyScaling.Enable(Log, settingsOn, () => QualityOfLife.EnemyScalingMode?.Value);
             AttackBoost.Enable(Log, Config, settingsOn);
             FrameRate.Enable(Log, settingsOn);
+            StartCoroutine(AfterEachPhysicsStep());
             ClockCleanup.Enable(Log, settingsOn);
             InGameSettings.Enable(Log, settingsOn);
             CustomItems.Enable(Log, () => randomizerEnabled.Value);
@@ -201,6 +203,22 @@ namespace BugFablesAP
         private void LateUpdate()
         {
             Guarded("music", MusicShuffle.LateTick);
+        }
+
+        private void FixedUpdate()
+        {
+            Guarded("fps", FrameRate.BeforePhysics);
+        }
+
+        // Resumes after each physics step and its trigger messages (Unity's order of execution).
+        private IEnumerator AfterEachPhysicsStep()
+        {
+            var wait = new UnityEngine.WaitForFixedUpdate();
+            while (true)
+            {
+                yield return wait;
+                Guarded("fps-step", FrameRate.AfterPhysics);
+            }
         }
 
         // Each system runs in its own guard, so one that throws every frame doesn't stop the ones after it.

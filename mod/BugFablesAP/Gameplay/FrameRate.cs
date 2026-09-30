@@ -101,10 +101,15 @@ namespace BugFablesAP
         {
             Camera.onPreCull -= BeforeDraw;
             Camera.onPostRender -= AfterDraw;
+            if (drawnShifted)
+            {
+                RestoreCamera(null);
+            }
+            bodies.Clear();
             if (active)
             {
                 active = false;
-                SetInterpolation(false);
+                NoInterpolation();
                 MainManager.ApplySettings();
             }
             harmony = null;
@@ -139,8 +144,16 @@ namespace BugFablesAP
             activeCap = cap;
             if (wasActive != nowActive)
             {
-                SmoothCamera = nowActive;
-                SetInterpolation(nowActive);
+                SmoothCamera = SmoothBodies = nowActive;
+                if (nowActive)
+                {
+                    TrackAll();
+                }
+                else
+                {
+                    bodies.Clear();
+                }
+                NoInterpolation();
                 if (!nowActive)
                 {
                     MainManager.ApplySettings();
@@ -171,6 +184,12 @@ namespace BugFablesAP
             {
                 Patch(m, transpiler: nameof(TranspileFrameCount));
             }
+            List<MethodBase> skipsFrames = Listed(FrameSkippers, m => Reads(m, (op, v) => v is MethodInfo mi
+                && mi == FrameCountGetter));
+            foreach (MethodBase m in skipsFrames)
+            {
+                Patch(m, transpiler: nameof(TranspileFrameSkip));
+            }
             List<MethodBase> fixedFramestep = Listed(PhysicsFramestep, m => Reads(m, (op, v) => op == OpCodes.Ldsfld
                 && v is FieldInfo f && f == FramestepField));
             foreach (MethodBase m in fixedFramestep)
@@ -182,15 +201,15 @@ namespace BugFablesAP
             FrameSites.Install(log, harmony, blinkers);
             log.LogInfo(
                 $"[fps] installed in {watch.ElapsedMilliseconds} ms (sites {watch.ElapsedMilliseconds - coreMs}): "
-                + $"{countsFrames.Count} of {FrameCounters.Length} methods count frames, {fixedFramestep.Count} of {PhysicsFramestep.Length} "
+                + $"{countsFrames.Count} of {FrameCounters.Length} methods count frames, {skipsFrames.Count} of {FrameSkippers.Length} skip "
+                + $"by the count, {fixedFramestep.Count} of {PhysicsFramestep.Length} "
                 + $"physics-step methods read framestep, {blinkers.Count} of {Blinkers.Length} blink");
         }
 
         // Type.Method; a star marks a coroutine (its MoveNext is patched).
         private static readonly string[] FrameCounters =
         {
-            "BattleControl.Update", "BattleControl.EnemyHeavyThrow*", "Caravan.LateUpdate", "EntityControl.DoFollow",
-                "EntityControl.Numb",
+            "BattleControl.Update", "BattleControl.EnemyHeavyThrow*", "Caravan.LateUpdate", "EntityControl.Numb",
             "EntityControl.LateUpdate", "EntityControl.UpdateVelocity", "EntityControl.UpdateCollider",
                 "EntityControl.UpdateEmoticon",
             "EntityControl.RefreshShadow", "EntityControl.OnTriggerStay", "Fader.LateUpdate", "FishAI.DoAI",
@@ -199,6 +218,9 @@ namespace BugFablesAP
                 "LightSorter.LateUpdate",
             "MapControl.LateUpdate", "NPCControl.Update", "NPCControl.LateUpdate", "PlayerControl.LateUpdate",
         };
+
+        // The opposite test, `if (Time.frameCount % n == 0) return;`: the work is skipped on the counted frames.
+        private static readonly string[] FrameSkippers = { "EntityControl.DoFollow" };
 
         private static readonly string[] PhysicsFramestep = { "EntityControl.FixedUpdate",
             "PlayerControl.OnTriggerStay", "BattleControl.UpdateEntities" };
@@ -245,6 +267,7 @@ namespace BugFablesAP
         static partial void Sample();
         static partial void Rates();
         static partial void Trace(Camera cam);
+        static partial void TraceBodies(Camera cam);
         static partial void DrawStarted();
         static partial void DrawEnded();
 
@@ -334,64 +357,17 @@ namespace BugFablesAP
 
         // ---- Motion drawn between physics steps. ----
 
+        // Unity's rigidbody interpolation isn't used: it writes the drawn pose into the transform, and the game reads it
+        // back (a platform's carrying, a frozen enemy's and Vi's per-frame writes: slow motion), and it doesn't smooth
+        // a position written in a physics step (a conveyor). Every character has None and is drawn smoothed instead
+        // (DrawBodies).
         [HarmonyPatch(typeof(EntityControl), "Start")]
         [HarmonyPostfix]
         private static void AfterEntityStart(EntityControl __instance)
         {
             if (active)
             {
-                Rigidbody body = __instance.rigid != null ? __instance.rigid : __instance.GetComponent<Rigidbody>();
-                if (body != null)
-                {
-                    body.interpolation = RigidbodyInterpolation.Interpolate;
-                }
-            }
-        }
-
-        // A platform carries whoever stands on it as its child; interpolation drew them from their own physics poses
-        // and held them back, like walking in mud (seen at 240 fps). Not interpolated while on one.
-        [HarmonyPatch(typeof(GroundDetector), "OnTriggerStay")]
-        [HarmonyPatch(typeof(GroundDetector), "OnTriggerExit")]
-        [HarmonyPostfix]
-        private static void AfterGround(GroundDetector __instance)
-        {
-            if (active && __instance.parent != null)
-            {
-                Interpolate(__instance.parent, __instance.platform != null);
-            }
-        }
-
-        // Vi's flight writes her position every frame (the rise), from the drawn pose: slow motion, as frozen enemies.
-        [HarmonyPatch(typeof(PlayerControl), "LateUpdate")]
-        [HarmonyPrefix]
-        private static void BeforePlayerLateUpdate(PlayerControl __instance)
-        {
-            EntityControl entity = __instance.entity;
-            if (active && entity != null)
-            {
-                Interpolate(entity, entity.feet != null && entity.feet.platform != null);
-            }
-        }
-
-        // One decision for every case, so none undoes another: not interpolated on a platform, while a frozen enemy
-        // (the game writes a frozen enemy's position back every frame, from the drawn pose that trails the physics
-        // one, so it dragged: slow after the first knock, fine with interpolation off), or the leader while flying.
-        private static void Interpolate(EntityControl entity, bool onPlatform)
-        {
-            Rigidbody body = entity.rigid;
-            if (body == null)
-            {
-                return;
-            }
-            NPCControl npc = entity.npcdata;
-            bool frozen = npc != null && npc.entitytype == NPCControl.NPCType.Enemy && npc.freezecooldown > 0f;
-            PlayerControl player = MainManager.player;
-            bool flying = player != null && player.flying && player.entity == entity;
-            RigidbodyInterpolation wanted = onPlatform || frozen || flying ? RigidbodyInterpolation.None
-                : RigidbodyInterpolation.Interpolate;
-            if (body.interpolation != wanted)
-            {
-                body.interpolation = wanted;
+                Track(__instance);
             }
         }
 
@@ -493,7 +469,6 @@ namespace BugFablesAP
             {
                 return;
             }
-            Interpolate(__instance.entity, __instance.entity.feet != null && __instance.entity.feet.platform != null);
             int id = __instance.GetInstanceID();
             if (lastPhysics.Count > 4096)
             {
@@ -555,14 +530,17 @@ namespace BugFablesAP
             entity.spritetransform.localPosition = startp + entity.extraoffset;
         }
 
-        private static void SetInterpolation(bool on)
+        // What the player has in the game (it never sets interpolation); an earlier build of the row (hot reload) or the
+        // console's "interp" may have changed it.
+        private static void NoInterpolation()
         {
-            foreach (EntityControl e in UnityEngine.Object.FindObjectsOfType<EntityControl>())
+            foreach (EntityControl e in Resources.FindObjectsOfTypeAll<EntityControl>())
             {
-                Rigidbody body = e.rigid != null ? e.rigid : e.GetComponent<Rigidbody>();
-                if (body != null)
+                Rigidbody body = e.gameObject.scene.IsValid() ? e.rigid != null ? e.rigid : e.GetComponent<Rigidbody>()
+                    : null;
+                if (body != null && body.interpolation != RigidbodyInterpolation.None)
                 {
-                    body.interpolation = on ? RigidbodyInterpolation.Interpolate : RigidbodyInterpolation.None;
+                    body.interpolation = RigidbodyInterpolation.None;
                 }
             }
         }
@@ -573,12 +551,189 @@ namespace BugFablesAP
         private static Vector3 prevPos, currPos;
         private static Quaternion prevRot, currRot;
         private static float lastFixedTime = -1f;
-        private static bool drawnShifted;
+        private static bool drawnShifted, cameraShifted;
         private static Vector3 savedLocalPos;
         private static Quaternion savedLocalRot;
         private static float savedTrueYaw;
         // A camera jump further than this in one step is a cut, not motion.
         private const float CutDistance = 3f;
+
+        // Every character is drawn the way the camera is: set back by the share of its last physics step's move that
+        // hasn't played yet, and put back after drawing, so the game only ever reads its true pose. The step's move is
+        // its pose right after the step (AfterPhysics) against its pose at the last draw, when nothing else runs
+        // before the step: walking, a conveyor, a knock. What the game writes every frame (a platform carrying it, Vi's
+        // rise) is drawn as it is. The move is kept in the parent's space, so it turns with a turning platform.
+        internal static bool SmoothBodies;
+        private sealed class Body
+        {
+            internal EntityControl Entity, CopyOf;
+            internal Vector3 AtDraw, AfterStep, Move, Back, Saved;
+            internal Transform MoveParent, SavedParent;
+            internal bool Drawn, Stepped;
+        }
+        private static readonly Dictionary<int, Body> bodies = new Dictionary<int, Body>();
+        private static readonly List<Body> shiftedBodies = new List<Body>();
+        private static readonly List<Body> copiers = new List<Body>();
+        private static readonly List<int> goneBodies = new List<int>();
+
+        // Whose position the game copies into this character every frame (EntityControl.Follow): Kabbu is put at Vi's
+        // while she flies; a temporary follower at the last party member's in flight, or at the leader's while
+        // digging. Drawn at the true copy, it would run ahead of the smoothed one it copies, so it takes its offset.
+        private static EntityControl CopySource(EntityControl e)
+        {
+            MainManager game = MainManager.instance;
+            PlayerControl p = MainManager.player;
+            if (e.following == null || game == null || game.pause || game.overridefollower || e.overridefollow
+                || e.dead || e.iskill || p == null || p.entity == null || e == p.entity)
+            {
+                return null;
+            }
+            bool digging = p.digging || p.startdig;
+            if (e.tempfollower)
+            {
+                if (digging)
+                {
+                    return p.entity;
+                }
+                MainManager.BattleData[] party = game.playerdata;
+                return p.flying && !p.shield && party != null && party.Length > 0 ? party[party.Length - 1].entity
+                    : null;
+            }
+            bool inParty = e.following.CompareTag("Player") || e.following.CompareTag("PFollower");
+            return inParty && !digging && p.flying && e.animid == 1 ? p.entity : null;
+        }
+
+        // A copy of a copy follows the chain (a temporary follower copying Kabbu).
+        private static Vector3 BackOf(EntityControl e, int depth)
+        {
+            if (e == null || !bodies.TryGetValue(e.GetInstanceID(), out Body b))
+            {
+                return Vector3.zero;
+            }
+            return b.CopyOf != null && depth > 0 ? BackOf(b.CopyOf, depth - 1) : b.Back;
+        }
+
+        private static void Shift(Body b, Vector3 back)
+        {
+            if (!SmoothBodies || back == Vector3.zero)
+            {
+                return;
+            }
+            Transform t = b.Entity.transform;
+            b.Saved = t.localPosition;
+            b.SavedParent = t.parent;
+            t.position = b.AtDraw - back;
+            shiftedBodies.Add(b);
+        }
+
+        private static void Track(EntityControl entity)
+        {
+            int id = entity.GetInstanceID();
+            if (!bodies.ContainsKey(id))
+            {
+                bodies[id] = new Body { Entity = entity };
+            }
+        }
+
+        // Inactive ones included: a character whose Start ran before the row turned on gets no other chance.
+        private static void TrackAll()
+        {
+            bodies.Clear();
+            foreach (EntityControl e in Resources.FindObjectsOfTypeAll<EntityControl>())
+            {
+                if (e.gameObject.scene.IsValid())
+                {
+                    Track(e);
+                }
+            }
+        }
+
+        // The plugin runs this right after each physics step and its trigger messages.
+        internal static void AfterPhysics()
+        {
+            if (!active)
+            {
+                return;
+            }
+            foreach (Body b in bodies.Values)
+            {
+                if (b.Entity != null && b.Drawn)
+                {
+                    b.AfterStep = b.Entity.transform.position;
+                    b.Stepped = true;
+                }
+            }
+        }
+
+        private static void DrawBodies(float alpha)
+        {
+            foreach (KeyValuePair<int, Body> pair in bodies)
+            {
+                Body b = pair.Value;
+                if (b.Entity == null)
+                {
+                    goneBodies.Add(pair.Key);
+                    continue;
+                }
+                Transform t = b.Entity.transform;
+                if (!t.gameObject.activeInHierarchy)
+                {
+                    b.Drawn = b.Stepped = false;
+                    b.Move = b.Back = Vector3.zero;
+                    b.CopyOf = null;
+                    continue;
+                }
+                Vector3 pos = t.position;
+                Transform parent = t.parent;
+                if (b.Stepped)
+                {
+                    Vector3 move = b.AfterStep - b.AtDraw;
+                    if (move.sqrMagnitude > CutDistance * CutDistance)
+                    {
+                        move = Vector3.zero;
+                    }
+                    b.Move = parent != null ? parent.InverseTransformVector(move) : move;
+                    b.MoveParent = parent;
+                    b.Stepped = false;
+                }
+                else if (parent != b.MoveParent)
+                {
+                    b.Move = Vector3.zero;
+                }
+                b.AtDraw = pos;
+                b.Drawn = true;
+                b.Back = b.Move == Vector3.zero ? Vector3.zero
+                    : (1f - alpha) * (parent != null ? parent.TransformVector(b.Move) : b.Move);
+                b.CopyOf = b.Entity.following != null ? CopySource(b.Entity) : null;
+                if (b.CopyOf != null)
+                {
+                    copiers.Add(b);
+                }
+                else
+                {
+                    Shift(b, b.Back);
+                }
+            }
+            foreach (Body b in copiers)
+            {
+                Shift(b, BackOf(b.CopyOf, 3));
+            }
+            copiers.Clear();
+            foreach (int id in goneBodies)
+            {
+                bodies.Remove(id);
+            }
+            goneBodies.Clear();
+        }
+
+        // A safety net: a pose still shifted when a physics step begins would be taken as true (slow motion again).
+        internal static void BeforePhysics()
+        {
+            if (drawnShifted)
+            {
+                RestoreCamera("a physics step began");
+            }
+        }
 
         private static void BeforeDraw(Camera cam)
         {
@@ -589,15 +744,26 @@ namespace BugFablesAP
             Sample();
             Rates();
             DrawStarted();
+            if (drawnShifted)
+            {
+                RestoreCamera("the main camera drew again");
+            }
+            if (!active)
+            {
+                return;
+            }
+            float alpha = Mathf.Clamp01((Time.time - Time.fixedTime) / Time.fixedDeltaTime);
+            DrawBodies(alpha);
+            drawnShifted = shiftedBodies.Count > 0;
+            if (drawnShifted)
+            {
+                lastCamera = LastCamera();
+            }
             if (!SmoothCamera)
             {
                 return;
             }
             Transform t = cam.transform;
-            if (drawnShifted)
-            {
-                RestoreCamera("the main camera drew again");
-            }
             Vector3 pos = t.position;
             Quaternion rot = t.rotation;
             if (Time.fixedTime != lastFixedTime)
@@ -619,14 +785,13 @@ namespace BugFablesAP
                 prevPos = currPos = pos;
                 prevRot = currRot = rot;
             }
-            float alpha = Mathf.Clamp01((Time.time - Time.fixedTime) / Time.fixedDeltaTime);
             savedLocalPos = t.localPosition;
             savedLocalRot = t.localRotation;
             savedTrueYaw = t.eulerAngles.y;
             lastCamera = LastCamera();
             t.position = Vector3.Lerp(prevPos, currPos, alpha);
             t.rotation = Quaternion.Slerp(prevRot, currRot, alpha);
-            drawnShifted = true;
+            drawnShifted = cameraShifted = true;
             Trace(cam);
         }
 
@@ -662,6 +827,7 @@ namespace BugFablesAP
             if (cam == MainManager.MainCamera)
             {
                 DrawEnded();
+                TraceBodies(cam);
             }
             if (!drawnShifted || (cam != lastCamera && lastCamera != null))
             {
@@ -673,20 +839,42 @@ namespace BugFablesAP
         private static void RestoreCamera(string late)
         {
             Transform t = MainManager.MainCamera != null ? MainManager.MainCamera.transform : null;
-            if (t != null)
+            if (cameraShifted && t != null)
             {
                 t.localPosition = savedLocalPos;
                 t.localRotation = savedLocalRot;
             }
-            drawnShifted = false;
+            int wrongParent = 0;
+            foreach (Body b in shiftedBodies)
+            {
+                if (b.Entity == null)
+                {
+                    continue;
+                }
+                if (b.Entity.transform.parent == b.SavedParent)
+                {
+                    b.Entity.transform.localPosition = b.Saved;
+                }
+                else
+                {
+                    wrongParent++;
+                }
+            }
             if (late != null && !lateLogged)
             {
                 lateLogged = true;
-                log.LogWarning($"[fps] the camera was still drawn-shifted when {late}; put back (the last camera, {lastCamera?.name}, didn't draw)");
+                log.LogWarning($"[fps] still drawn-shifted when {late} (camera {cameraShifted}, bodies {shiftedBodies.Count}); put back (the last camera, {lastCamera?.name}, didn't draw)");
             }
+            if (wrongParent > 0 && !parentLogged)
+            {
+                parentLogged = true;
+                log.LogWarning($"[fps] {wrongParent} drawn-shifted bodies changed parent before being put back; left where the game put them");
+            }
+            shiftedBodies.Clear();
+            drawnShifted = cameraShifted = false;
         }
 
-        private static bool lateLogged;
+        private static bool lateLogged, parentLogged;
 
         // ---- What the game counts in frames, held to 60 a second. ----
 
@@ -735,14 +923,33 @@ namespace BugFablesAP
             return tickFrame ? logicalFrame : 1;
         }
 
-        private static IEnumerable<CodeInstruction> TranspileFrameCount(IEnumerable<CodeInstruction> instructions) =>
-            Hooks.Safe(instructions, EditFrameCount, "fps");
+        // For `if (Time.frameCount % n == 0) return;`, the opposite: on the frames in between, 0, which every n divides,
+        // so they skip too and the work is done on the same ticks as at 60 (a follower's walk-or-brake, 30 a second).
+        private static int FrameCountSkip()
+        {
+            if (!active)
+            {
+                return Time.frameCount;
+            }
+            if (Time.inFixedTimeStep)
+            {
+                return logicalFrame;
+            }
+            AdvanceClock();
+            return tickFrame ? logicalFrame : 0;
+        }
 
-        private static IEnumerable<CodeInstruction> EditFrameCount(List<CodeInstruction> code)
+        private static IEnumerable<CodeInstruction> TranspileFrameCount(IEnumerable<CodeInstruction> instructions) =>
+            Hooks.Safe(instructions, code => EditFrameCount(code, nameof(FrameCount)), "fps");
+
+        private static IEnumerable<CodeInstruction> TranspileFrameSkip(IEnumerable<CodeInstruction> instructions) =>
+            Hooks.Safe(instructions, code => EditFrameCount(code, nameof(FrameCountSkip)), "fps");
+
+        private static IEnumerable<CodeInstruction> EditFrameCount(List<CodeInstruction> code, string helper)
         {
             List<CodeInstruction> reads = code.Where(i => i.Calls(FrameCountGetter)).ToList();
-            MethodInfo counter = AccessTools.Method(typeof(FrameRate), nameof(FrameCount))
-                ?? throw new MissingMethodException(nameof(FrameRate), nameof(FrameCount));
+            MethodInfo counter = AccessTools.Method(typeof(FrameRate), helper)
+                ?? throw new MissingMethodException(nameof(FrameRate), helper);
             reads.ForEach(i => i.operand = counter);
             return code;
         }

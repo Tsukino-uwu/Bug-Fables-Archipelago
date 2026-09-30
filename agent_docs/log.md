@@ -49,6 +49,7 @@ either one wrong).
 - [2026-09-30: Music Shuffle, in the yaml](#2026-09-30-music-shuffle-in-the-yaml)
 - [2026-09-30: no criticism of other projects in the repo](#2026-09-30-no-criticism-of-other-projects-in-the-repo)
 - [2026-09-30: Shuffle Shop Inventories](#2026-09-30-shuffle-shop-inventories)
+- [2026-09-30: Uncap FPS, every character drawn smoothed](#2026-09-30-uncap-fps-every-character-drawn-smoothed)
 
 ## 2026-09-24: the project starts
 
@@ -1790,3 +1791,29 @@ either one wrong).
   - The mod: `ShopInventories.cs` swaps an entity the way the game's random-medal pickup does, read in the decompiled
     code first. The item shop checks now match a slot by the item its keeper stocks there.
 - Copied into the game with `copy-dev.ps1`; not yet seen in game. It needs a seed generated with the new apworld.
+
+## 2026-09-30: Uncap FPS, every character drawn smoothed
+
+- **The user's ask:** at 240 fps "the sprite looks really bad" on moving platforms; "maybe split/decouple movement and
+  sprite". Then: "really blurry/bad, maybe shimmery, while moving around on a platform", "the same for flying and
+  anything where we have turned it off due to slow motion", and "only the party leader looks really blurry/bad".
+- **Planned and approved:** draw the uninterpolated bodies (platform, frozen, flight) between physics steps in their
+  parent's space, set before drawing and put back after, as the camera is.
+- **First build changed nothing on screen ("it still looks really bad").** The new console `bodytrace` showed why:
+  the user stood on a conveyor, not a platform. The leader had no parent and interpolation *on*, and still jumped
+  about 22 px on screen every physics step. The conveyor moves her by writing her position in the physics step,
+  which Unity's interpolation doesn't smooth. The user: the belt "just makes the effect more obvious", and platforms
+  and flight were the same.
+- **Second build, the whole split:** Unity's interpolation is off for every character. Each one is drawn set back by
+  the unplayed share of its last physics step's move, measured from its pose at the last draw to its pose right
+  after the step (a `WaitForFixedUpdate` coroutine; its place after the step's trigger messages read from Unity
+  2018.4's execution-order flowchart). The user: "the belt looks good now", "flying looks good now", but "kabbu looks
+  weird when Vi is using fly". The game copies Vi's true position into Kabbu every frame, so a copier now takes the
+  offset of the one it copies. The user: "kabbu looks good during flight now".
+- **Then the followers on the belt looked "a bit choppy"** once the leader was sharp. The trace showed them drawn
+  smoothly but changing speed every frame. `DoFollow` skips its work when `frameCount % 2 == 0`; the row's 60 Hz
+  count gives 1 between ticks, so it ran about 210 times a second instead of 30. The opposite test now gets 0 there.
+  The braking site in `FrameSites`, compensating for the same bug, came out. Measured after: walk, halve every
+  1/30 s, walk, as at 60. Waiting on the user's eye.
+- **Not yet seen with the new drawing:** moving platforms, bridges, a knocked frozen enemy, the "!" over NPCs and
+  shadows during jumps.

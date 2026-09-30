@@ -431,7 +431,9 @@ namespace BugFablesAP
                             + $"fullscreen {Screen.fullScreen} ({Screen.fullScreenMode}); game settings fps {MainManager.fps}, vsync {MainManager.vsync}; "
                             + $"Unity vSyncCount {QualitySettings.vSyncCount}, targetFrameRate {Application.targetFrameRate}; "
                             + $"measured {1f / Time.smoothDeltaTime:0.0} fps; fixedDeltaTime {Time.fixedDeltaTime}, "
-                            + $"player rigidbody interpolation {(MainManager.player != null && MainManager.player.entity != null && MainManager.player.entity.rigid != null ? MainManager.player.entity.rigid.interpolation.ToString() : "no player")}";
+                            + $"player rigidbody interpolation {(MainManager.player != null && MainManager.player.entity != null && MainManager.player.entity.rigid != null ? MainManager.player.entity.rigid.interpolation.ToString() : "no player")}, "
+                            + $"characters tracked {FrameRate.SmoothedCount} (bodylerp {(FrameRate.SmoothBodies ? "on" : "off")}), "
+                            + $"Physics.autoSyncTransforms {Physics.autoSyncTransforms}";
                         log.LogInfo("[dev] " + display);
                         return display;
                     }
@@ -528,6 +530,13 @@ namespace BugFablesAP
                     case "camlerp":
                         FrameRate.SmoothCamera = parts.Length > 1 && parts[1] == "on";
                         return "camlerp: " + (FrameRate.SmoothCamera ? "on" : "off");
+                    case "bodylerp":
+                        FrameRate.SmoothBodies = parts.Length > 1 && parts[1] == "on";
+                        return "bodylerp: " + (FrameRate.SmoothBodies ? "on" : "off")
+                            + $" ({FrameRate.SmoothedCount} characters tracked)";
+                    case "bodytrace":
+                        return FrameRate.StartBodyTrace(parts.Length > 1 && int.TryParse(parts[1], out int bodyFrames)
+                            ? bodyFrames : 120);
                     case "interp":
                     {
                         bool interpOn = parts.Length > 1 && parts[1] == "on";

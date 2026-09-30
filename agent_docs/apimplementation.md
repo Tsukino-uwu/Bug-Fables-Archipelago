@@ -524,11 +524,9 @@ be wrong.
   step at the game's own rate, as the other per-frame sites are:
   - **Being hit plays too fast, for enemies and the party** (a tester, 2026-09-27, FPS unlocked). Cause not read yet;
     with the `ShakeSprite` fix below, nothing odd was seen in combat on screen (2026-09-28; no before/after seen).
-  - **A frozen enemy shimmers slightly while it flies** after a knock (not interpolated while frozen; the slow motion
-    and the short slide are fixed and seen, mod guide, step 24).
-  - **A slight shimmer while standing on a platform or bridge** (2026-09-27, at 240). The slow motion there
-    is fixed (mod guide, step 24); the party isn't interpolated while a platform carries it, so it's drawn at physics
-    steps. Smoothing it relative to the platform is left for later.
+  - **A frozen enemy shimmering after a knock, and the leader blurry on platforms and bridges** (2026-09-27; "really
+    blurry/bad", 2026-09-30): drawn only at physics steps. Every character is now drawn smoothed (mod guide, step 24),
+    seen sharp on a conveyor and in flight (2026-09-30); platforms, bridges and a frozen enemy not yet seen with it.
   - **Bushes shaking before the leaf gang's ambush looked blurry** (2026-09-27, at 240; the swamp,
     Event128): `ShakeObject` fixed (mod guide, step 24), not yet seen. Shaky text: fixed and seen.
   - **Hits:** a character's own shake (`ShakeSprite`) was per frame and is fixed, seen without anything odd (2026-09-28); which part of a hit

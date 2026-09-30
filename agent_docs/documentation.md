@@ -1688,8 +1688,9 @@ place it counts frames instead of time first.
   second one); any other is a limit with VSync off. Without VSync at 240 on 240 Hz the frame times wobbled from 2.9 to
   5.3 ms. Re-applied after the game's own `ApplySettings`; Off calls `ApplySettings` to put the game's settings back.
   The game's own settings file is never written.
-- **Motion drawn between physics steps.** Characters get Unity's rigidbody interpolation (new ones in
-  `EntityControl.Start`); the camera is placed between its last two steps before drawing. **Pitfall, found on screen:**
+- **Motion drawn between physics steps.** The camera is placed between its last two steps before drawing, and put
+  back after. Characters at first got Unity's rigidbody interpolation; since 2026-09-30 they are drawn the camera's
+  way instead (the last pitfall below). **Pitfall, found on screen:**
   the main camera has two child cameras, 3DGUI (emoticons, the "!" over NPCs) and the HUD's GUICamera, which draw after
   it. Putting the camera back straight after its own draw left the "!" jittering against the world, on sideways walking
   only. Found by subtraction (on screen, one piece off at a time: interpolation off, still there; camera smoothing off,
@@ -1722,6 +1723,25 @@ place it counts frames instead of time first.
   test, one change: the leader isn't interpolated while flying, in the same one decision (checked before the
   player's `LateUpdate`). If the slow motion stays, the cause is elsewhere and the change comes out. **Seen on screen
   (2026-09-29, Monitor at 240 Hz):** "fly works now"; Kabbu and Leif following her, "they look the same as Vi".
+- **Pitfall, drawn at physics steps: blurry at 240** (the user, 2026-09-30). Everywhere interpolation had been
+  turned off (platforms, flight, frozen enemies) the leader looked "really blurry/bad" while moving; the party
+  following looked fine. The camera is smoothed, so a body drawn only 50 times a second jumps against it. The first
+  fix smoothed only those bodies and changed nothing on screen. The console's `bodytrace` (the leader's place on screen
+  each frame) showed why: the user was on a **conveyor**, with interpolation *on*, and the leader still jumped about
+  22 px every physics step (spread 11.3 px), because the conveyor moves her by writing her position inside the step
+  (`PlayerControl.OnTriggerStay`), which Unity's interpolation doesn't smooth. **The fix, the user's idea: split
+  movement from drawing.** Unity's interpolation is no longer used; every character has `None` (the player's in the
+  game, which never sets it) and is drawn as the camera is. Right after each physics step (a `WaitForFixedUpdate` coroutine, which Unity runs
+  after the step's trigger messages) its pose is read. Before drawing, it is set back by the share of that step's
+  move not yet played, and put back after the last camera, so the game never reads a drawn pose and the slow
+  motion can't return. The move is measured from its pose at the last draw (nothing runs between a draw and the next
+  step), so what the game writes every frame (a platform carrying it, Vi's rise) is drawn as it is. The move is kept
+  in the parent's space, for turning platforms. The same trace on the conveyor afterwards: drawn spread 4.3 px against
+  12.2 px for the true pose (the leader speeding up). Seen on screen: "the belt looks good now", flying "looks good
+  now", but Kabbu "looks weird when Vi is using fly". In flight the game puts Kabbu at Vi's true position every frame
+  (`EntityControl.Follow`), so he ran ahead of her drawn pose. A character the game copies another into every frame
+  (Kabbu in flight; a temporary follower in flight or while digging) now takes that one's offset: "kabbu looks good
+  during flight now". A safety net puts poses back before a physics step, should the last camera not draw.
 - **Random shakes re-rolled once per 1/60 s.** Some effects jump to a new random offset every frame, a blur at 240
   (seen: shaky text in conversations sharp at 60, blurry at 240). Their timing was already right; only the re-roll
   was per frame. Now, while the row is on, the offset holds between ticks: `FontEffects` (shaky and glitchy letters;
@@ -1734,6 +1754,15 @@ place it counts frames instead of time first.
 - **What the game counts in frames runs 60 times a second.** Every method that reads `Time.frameCount` (24, found by
   reading each method's IL at load) sees a 60 Hz count instead: on a frame that starts a new 1/60 s, the count; on the
   frames between, 1, which no `% n` check divides. `FrameDifference` ("once every 1/60 s") answers the same way.
+  **Pitfall, the opposite test** (2026-09-30, found with `bodytrace`): a follower's walk-or-brake decision,
+  `EntityControl.DoFollow`, *skips* its work when the count divides (`if (Time.frameCount % 2 == 0) return;`). Given 1
+  in between, it ran on every frame there: about 210 times a second at 240 against 30 at 60. The party following the
+  leader on a conveyor then started and stopped at once: "a bit choppy", the user said, once the leader was sharp. The
+  trace showed the follower's speed changing every frame, 13.2 to 3.1 to 7.7 to 0.7 within a second and a half. Such a
+  method gets 0 in between instead, which every n divides, so it skips there too. Read in context, every other site
+  does its work on the divided count or returns on `!= 0`, so only `DoFollow` has the opposite test. The site that had
+  scaled its braking (`StopForceMove`, whose only smooth brake is `DoFollow`'s) was compensating for the same bug and
+  came out. After both: walk, brake by half every 1/30 s, walk, a steady rhythm about every 0.1 s, as at 60.
 - **Frame time inside a physics step reads as it does at 60.** Code in `FixedUpdate` and trigger or collision messages
   scales by `framestep`/`TieFramerate`, which follow the render frame: at 240 fps conveyor belts, wind and the
   safe-respawn point would have run at a quarter strength. There, `TieFramerate(x)` returns `x` and `framestep` 1.
@@ -1754,7 +1783,7 @@ place it counts frames instead of time first.
   **Gameplay:** fishing's fish approach and nibble, the screw platform, the Wacka Worm, disguised enemies, wandering
   enemies' retries, dizzy enemies dropping, gate slides, the dig skill's aim in battle, Vi's hover, the map's culling
   grace. **Scenes:** the battle drop, return from digging, two scenes' turns (26, 99) and a fade, text waits. **Looks:**
-  spins, sprite turning, the dig spin, followers catching up and braking, the Watcher's eye, the battle EXP counter,
+  spins, sprite turning, the dig spin, followers catching up, the Watcher's eye, the battle EXP counter,
   damage numbers, the enemy beemerang, particles, blinking. **Left as they are** (cosmetic): random jitter, some battle
   skills' spin effects, HUD numbers counting up, fleeing losing a berry a frame sooner.
 - **How the logic is checked without the game on screen.** Every fix rests on two measures: what a frame is worth in
@@ -1788,11 +1817,15 @@ config that says Monitor stays at Monitor until the row is changed. Not yet seen
 **Status:** in progress, experimental (the row says so). Seen on screen (2026-09-27) at 240: smooth, the "!" steady and
 sharp. The logic measured (`rates`); each site patched as expected (the log's `[fps] frame sites`). Not yet seen on
 screen: every site above, most of all fishing, the screw platform, the Wacka Worm, a disguised enemy and the dig skill.
-Platforms and bridges: fixed and seen (2026-09-27), a slight shimmer on them left. Vi's flight: fixed and seen
-(2026-09-29). Off by default again (2026-09-29): built, not yet seen on a fresh config.
+Platforms and bridges: the slow motion fixed and seen (2026-09-27). Vi's flight: fixed and seen (2026-09-29). Every
+character drawn smoothed (2026-09-30): seen sharp on a conveyor and in Vi's flight, Kabbu with her; moving
+platforms, bridges and a knocked frozen enemy not yet seen with it. Followers deciding walk or brake 30 times a
+second, as at 60 (2026-09-30): measured with `bodytrace`, not yet seen. Off by default again (2026-09-29):
+built, not yet seen on a fresh config.
 
-*Code: `FrameRate.cs`, `FrameSites.cs`, the row in `ApMenu.cs` and `QualityOfLife.cs`; the console's `display`, `fps`,
-`interp`, `camlerp`, `frames`, `trace`, `cams`, `il`, `rates` and `fpsscan` (`DevConsole.cs`).*
+*Code: `FrameRate.cs`, `FrameSites.cs`, the row in `ApMenu.cs` and `QualityOfLife.cs`, the after-physics hooks in
+`Plugin.cs`; the console's `display`, `fps`, `interp`, `camlerp`, `bodylerp`, `bodytrace`, `frames`, `trace`, `cams`,
+`il`, `rates` and `fpsscan` (`DevConsole.cs`).*
 
 ## 25. Hitches: the mod's garbage and the game's 5-second collection
 

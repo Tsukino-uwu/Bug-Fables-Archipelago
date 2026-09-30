@@ -88,7 +88,7 @@ namespace BugFablesAP
             }
             var physics = new HashSet<string>(reached.Where(readsFramestep.Contains).Select(ListName));
             string result =
-                $"fpsscan: {methods.Count} methods in {watch.ElapsedMilliseconds} ms. Frame counts {Diff(countsFrames, FrameCounters)}. "
+                $"fpsscan: {methods.Count} methods in {watch.ElapsedMilliseconds} ms. Frame counts {Diff(countsFrames, FrameCounters.Concat(FrameSkippers).ToArray())}. "
                 + $"Physics framestep {Diff(physics, PhysicsFramestep)}. Blinks {Diff(blinks, Blinkers)}.";
             log.LogInfo("[dev] " + result);
             return result;
@@ -168,6 +168,106 @@ namespace BugFablesAP
             {
                 log.LogInfo("[dev] trace:" + traceLog);
             }
+        }
+
+        // ---- The console's "bodytrace [frames]": the leader's and the first follower's place on screen each drawn
+        // frame, as drawn and at their true pose, and the spread of its frame-to-frame change: at a steady walk, drawn
+        // smoothed, it should hold still.
+
+        internal static int SmoothedCount => bodies.Count;
+
+        private sealed class Traced
+        {
+            internal readonly List<float> Drawn = new List<float>(), True = new List<float>();
+        }
+
+        private static int bodyTraceLeft;
+        private static float traceFixedTime = -1f;
+        private static Vector3 traceLastLeader;
+        private static readonly System.Text.StringBuilder bodyTraceLog = new System.Text.StringBuilder();
+        private static readonly Traced tracedLeader = new Traced(), tracedFollower = new Traced();
+
+        internal static string StartBodyTrace(int frames)
+        {
+            bodyTraceLeft = frames;
+            bodyTraceLog.Length = 0;
+            foreach (Traced t in new[] { tracedLeader, tracedFollower })
+            {
+                t.Drawn.Clear();
+                t.True.Clear();
+            }
+            return $"bodytrace: {frames} frames, from when the leader or a follower moves";
+        }
+
+        private static Vector3 TruePos(EntityControl e)
+        {
+            return bodies.TryGetValue(e.GetInstanceID(), out Body b) && shiftedBodies.Contains(b)
+                ? b.SavedParent != null ? b.SavedParent.TransformPoint(b.Saved) : b.Saved
+                : e.transform.position;
+        }
+
+        private static string Place(Camera cam, EntityControl e, Traced into)
+        {
+            Vector3 truePos = TruePos(e);
+            float dx = cam.WorldToScreenPoint(e.transform.position).x;
+            float tx = cam.WorldToScreenPoint(truePos).x;
+            into.Drawn.Add(dx);
+            into.True.Add(tx);
+            float move = bodies.TryGetValue(e.GetInstanceID(), out Body b) ? b.Move.magnitude : -1f;
+            return $"drawn x {dx:0.0} true x {tx:0.0} move {move:0.000} vel {(e.rigid != null ? e.rigid.velocity.magnitude : 0f):0.00}"
+                + $"{(e.forcemove ? " walking" : "")}";
+        }
+
+        static partial void TraceBodies(Camera cam)
+        {
+            if (bodyTraceLeft <= 0 || MainManager.player == null || MainManager.player.entity == null)
+            {
+                return;
+            }
+            EntityControl leader = MainManager.player.entity;
+            MainManager.BattleData[] party = MainManager.instance.playerdata;
+            EntityControl follower = party != null && party.Length > 1 && party[1].entity != leader ? party[1].entity
+                : party != null && party.Length > 0 && party[0].entity != leader ? party[0].entity : null;
+            Vector3 leaderPos = TruePos(leader);
+            bool leaderMoved = (leaderPos - traceLastLeader).sqrMagnitude > 1e-6f;
+            traceLastLeader = leaderPos;
+            // Armed until something moves, so the trace covers a walk, not the wait for one.
+            if (tracedLeader.Drawn.Count == 0 && !leaderMoved && (leader.rigid == null
+                || leader.rigid.velocity.sqrMagnitude < 0.25f) && (follower == null || follower.rigid == null
+                || follower.rigid.velocity.sqrMagnitude < 0.25f))
+            {
+                return;
+            }
+            Collider on = MainManager.player.standingon;
+            bool stepped = Time.fixedTime != traceFixedTime;
+            traceFixedTime = Time.fixedTime;
+            bodyTraceLog.Append($"\n  dt {Time.unscaledDeltaTime * 1000f:0.0} a {(Time.time - Time.fixedTime) / Time.fixedDeltaTime:0.00} "
+                + $"step {(stepped ? 1 : 0)} | leader {Place(cam, leader, tracedLeader)}"
+                + $" on {(on != null ? on.name + "/" + on.tag : "none")} parent {(leader.transform.parent != null ? leader.transform.parent.name : "none")}"
+                + (follower != null ? $" | {follower.name} {Place(cam, follower, tracedFollower)}" : ""));
+            if (--bodyTraceLeft == 0)
+            {
+                log.LogInfo($"[dev] bodytrace (bodylerp {(SmoothBodies ? "on" : "off")}, camlerp {(SmoothCamera ? "on" : "off")}): "
+                    + $"leader drawn {Spread(tracedLeader.Drawn)}, true {Spread(tracedLeader.True)}; "
+                    + $"{(follower != null ? follower.name : "no follower")} drawn {Spread(tracedFollower.Drawn)}, true {Spread(tracedFollower.True)}"
+                    + bodyTraceLog);
+            }
+        }
+
+        private static string Spread(List<float> xs)
+        {
+            if (xs.Count < 3)
+            {
+                return "too few frames";
+            }
+            var steps = new List<float>();
+            for (int i = 1; i < xs.Count; i++)
+            {
+                steps.Add(xs[i] - xs[i - 1]);
+            }
+            float mean = steps.Average();
+            float sd = Mathf.Sqrt(steps.Select(s => (s - mean) * (s - mean)).Average());
+            return $"mean step {mean:0.00} px, spread {sd:0.00} px";
         }
 
         // ---- The console's "frames <seconds>": each frame's time, and whether a garbage collection ran. ----

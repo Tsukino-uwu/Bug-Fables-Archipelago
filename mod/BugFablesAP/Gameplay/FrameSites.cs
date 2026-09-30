@@ -251,8 +251,6 @@ namespace BugFablesAP
                 (c, i) => LoadsFloat(c[i], 15f) && At(c, i + 1).opcode == OpCodes.Newobj);
             Add(M(typeof(EntityControl), "Follow"), "followers catching up", Kind.InsertBefore, nameof(LerpT), 2,
                 LerpWithConstant(0.075f, 0.1f));
-            Add(M(typeof(EntityControl), "StopForceMove", typeof(int), typeof(bool)), "followers braking",
-                Kind.InsertBefore, nameof(LerpT), 1, LerpWithConstant(0.5f));
             Add(M(typeof(EntityControl), "AnimSpecificQuirks"), "Watcher eye", Kind.InsertBefore, nameof(LerpT), 1,
                 LerpWithConstant(0.1f));
             Add(M(typeof(BattleControl), "Update"), "battle EXP counter", Kind.InsertAfter, nameof(IntStep), 1,

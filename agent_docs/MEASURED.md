@@ -1400,7 +1400,8 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
 - **Physics steps 50 times a second** (`Time.fixedDeltaTime` 0.02, the console's `display`, 2026-09-27). The camera
   follows in `MainManager.FixedUpdate` (`RefreshCamera`: the camera's parent position, the camera's local position and
   angles, all lerps with a fixed factor); characters move by rigidbody velocity. The player's rigidbody has no
-  interpolation (`None`). Used by `FrameRate.cs`.
+  interpolation (`None`); the game's code never sets `interpolation` (none in the decompiled code, 2026-09-30).
+  Used by `FrameRate.cs`.
 - **Three cameras** (the console's `cams`, 2026-09-27): Main Camera (depth -1, parent MainCam), 3DGUI (depth 0, a child
   of Main Camera, culling mask 32768 = layer 15, where emoticons such as the "!" over NPCs draw) and GUICamera (depth 1,
   a child of Main Camera, layer 5, the HUD). The children draw after the main camera, from wherever it is. Used by
@@ -1427,6 +1428,35 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   (`GroundDetector.cs:59-66, 102-116`). Walking sets `rigid.velocity` (`EntityControl.Move`). With rigidbody
   interpolation on, the carried body was held back ("walking in mud" at 240 fps); off, it moved freely. Used by
   `FrameRate.cs`.
+- **What moves a character, and when** (2026-09-30, code read; the conveyor measured with the console's `bodytrace`):
+  - `PathPlatform` and `RotatingPlatform` (`NPCControl` objects, kinematic) set their position or angles in
+    `NPCControl.Update`, every frame (`TieFramerate`).
+  - A conveyor moves the leader in `PlayerControl.OnTriggerStay` (`transform.position += conveyor * framestep`),
+    inside the physics step, which Unity's interpolation doesn't smooth. Measured on one in Termite Industrial (collider
+    `Plane_001 (1)`, tag `Conveyor`, layer 13), interpolation on: the leader's on-screen x jumped about 22 px each
+    physics step. The leader's own walking is velocity set in `PlayerControl.LateUpdate` (`Movement`).
+  - `EntityControl.Follow` runs in `EntityControl.LateUpdate` unless paused. While Vi flies it puts Kabbu
+    (`animid` 1) at her position plus 0.2 along the camera's forward, every frame; a temporary follower at the last
+    party member's position in flight, and at the leader's while digging. Leif in flight lerps toward Vi in
+    `EntityControl.FixedUpdate` (`leiffly`). Followers otherwise walk by velocity (`DoFollow`, `MoveTowards`).
+  - An entity's emoticon (the "!") is a child of its `rotater` (`EntityControl`, where it's created).
+  - `EntityControl.DoFollow` returns early when `Time.frameCount % 2 == 0` (or `usebuffer`), so at 60 fps a follower
+    decides walk or brake 30 times a second. It walks with `MoveTowards` (sets `forcemove`; `FixedUpdate` then sets the
+    velocity, scaled by distance) and brakes with `StopForceMove(basestate, smooth: true)`, which halves the
+    horizontal velocity per call. That is the game's only smooth `StopForceMove` call. Every other `Time.frameCount`
+    test outside `EventControl` does its work on the divided count or returns on `!= 0` (all read in context).
+    Measured on a conveyor at 240 with the row's 60 Hz count: before, the follower's velocity changed every frame;
+    after the fix, every 8th frame, halving each time (2.5, 1.25, 0.63), a walk-brake rhythm about every 0.1 s.
+  Used by `FrameRate.cs` and `FrameSites.cs`.
+- **Unity's side** (2026-09-30):
+  - This game runs with `Physics.autoSyncTransforms` True (the console's `display`).
+  - Unity 2018.4's docs: "All physics calculations and updates occur immediately after FixedUpdate" (manual,
+    Order of Execution). With autoSyncTransforms false, syncing "only occurs prior to the physics simulation step"
+    (`Physics.autoSyncTransforms`). The same page's flowchart (`monobehaviour_flowchart.svg`) places OnTriggerXXX,
+    OnCollisionXXX, then `yield WaitForFixedUpdate` after the internal physics update, before Update.
+  - Checked in play: a `WaitForFixedUpdate` coroutine sees the conveyor's push and the walking of the step it follows
+    (the trace's move per step, 0.03 to 0.16 units while speeding up).
+  Used by `FrameRate.cs` and `Plugin.cs`.
 - **Text effects per frame** (2026-09-27, code read; not seen): `FontEffects.Update` moves a *shaky* letter to a new
   random offset (up to 0.025) every frame, and a *glitchy* letter rolls its swap chance every frame, so both run 4x as
   often at 240 FPS as at 60. *Wavy* follows `Time.time` and doesn't change with the frame rate. Nothing in the mod

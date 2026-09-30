@@ -264,10 +264,15 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   `maintextbox` no longer pointed at, so `unstick` now removes any such box once dialogue has ended.
 - `gui`: log what hangs under the GUI camera (name, active, renderer, children), to find what's really stuck on screen.
 - `display`: log the monitor's reported resolution and refresh rate, the window, the game's FPS and VSync settings,
-  what Unity was given (`vSyncCount`, `targetFrameRate`) and the measured frame rate.
+  what Unity was given (`vSyncCount`, `targetFrameRate`), the measured frame rate, how many characters Uncap FPS draws
+  smoothed and Unity's `Physics.autoSyncTransforms`.
 - `fps <cap>` (-1 uncapped): the frame cap for this session only, VSync off; the game's settings put theirs back when
   applied. `interp on|off`: Unity's rigidbody interpolation on every character on the map. `camlerp on|off`: the camera
-  drawn between physics steps (`FrameRate.cs`). A look at higher frame rates; frame-counted logic runs fast meanwhile.
+  drawn between physics steps (`FrameRate.cs`); `bodylerp on|off`: the characters drawn the same way. A look at higher
+  frame rates; frame-counted logic runs fast meanwhile.
+- `bodytrace [frames]`: from when the leader starts moving, logs each drawn frame's step share, her last step's move,
+  her place on screen drawn and true, what she stands on (name/tag/layer) and her parent, then the spread of the
+  frame-to-frame change of each (a steady walk, drawn smoothed, holds still).
 - `trace [frames]`: while you move with an NPC's emoticon showing, logs where the player, the NPC and its emoticon land
   on screen each drawn frame, with the camera's and the emoticon's angles. `cams`: every camera, its depth, parent and
   layer mask.
