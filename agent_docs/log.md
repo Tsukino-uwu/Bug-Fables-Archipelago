@@ -1814,6 +1814,6 @@ either one wrong).
   smoothly but changing speed every frame. `DoFollow` skips its work when `frameCount % 2 == 0`; the row's 60 Hz
   count gives 1 between ticks, so it ran about 210 times a second instead of 30. The opposite test now gets 0 there.
   The braking site in `FrameSites`, compensating for the same bug, came out. Measured after: walk, halve every
-  1/30 s, walk, as at 60. Waiting on the user's eye.
+  1/30 s, walk, as at 60. The user: "I think it looks fine? It's pretty hard to tell compared to the leader."
 - **Not yet seen with the new drawing:** moving platforms, bridges, a knocked frozen enemy, the "!" over NPCs and
   shadows during jumps.

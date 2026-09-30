@@ -1820,7 +1820,8 @@ screen: every site above, most of all fishing, the screw platform, the Wacka Wor
 Platforms and bridges: the slow motion fixed and seen (2026-09-27). Vi's flight: fixed and seen (2026-09-29). Every
 character drawn smoothed (2026-09-30): seen sharp on a conveyor and in Vi's flight, Kabbu with her; moving
 platforms, bridges and a knocked frozen enemy not yet seen with it. Followers deciding walk or brake 30 times a
-second, as at 60 (2026-09-30): measured with `bodytrace`, not yet seen. Off by default again (2026-09-29):
+second, as at 60 (2026-09-30): measured with `bodytrace`; on the conveyor, "I think it looks fine", hard to tell
+next to the leader. Off by default again (2026-09-29):
 built, not yet seen on a fresh config.
 
 *Code: `FrameRate.cs`, `FrameSites.cs`, the row in `ApMenu.cs` and `QualityOfLife.cs`, the after-physics hooks in
