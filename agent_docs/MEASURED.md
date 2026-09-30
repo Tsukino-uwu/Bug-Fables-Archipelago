@@ -1532,6 +1532,18 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
     party member's position in flight, and at the leader's while digging. Leif in flight lerps toward Vi in
     `EntityControl.FixedUpdate` (`leiffly`). Followers otherwise walk by velocity (`DoFollow`, `MoveTowards`).
   - An entity's emoticon (the "!") is a child of its `rotater` (`EntityControl`, where it's created).
+- **Scenery swung or bobbed inside physics steps** (2026-10-01, code read; the swing found with the console's `solids`):
+  `StaticModelAnim.FixedUpdate` writes the swing (`transform.eulerAngles = startangle + sin(bobspeed * t) * bobfreq *
+  bobangle`, per axis) or the bob (`transform.position`), `t` being `Time.time`, when `!nomove`, `bobspeed` isn't zero
+  (the game tests it twice) and `bobangle` isn't zero or `stopbob` is off; its texture scroll (`SetTextureOffset`) is
+  applied there too. `KeepAngle.LateUpdate` writes its object's world `eulerAngles`. The swinging platforms on
+  `RubberPrisonPier`: `218/Base/swingingplatform` (the `StaticModelAnim`), its child `CranePlatform` (tag
+  `PlatformNoClock`, a `KeepAngle`: it hangs level), which the party stands on as its children. Other classes that move
+  things in `FixedUpdate`: `Wind` (its streaks), `GlowingAura` (halos), `DummyControl` (spin, scale), `SpriteBounce`
+  (scale), `DialogueAnim`, `PromptAnim` and `FaceCamera`. Used by `FrameRate.Scenery.cs`.
+- **Unity's `Quaternion ==` is approximate** (the game's `UnityEngine.CoreModule`, decompiled 2026-10-01): equal when
+  `Dot(a, b) > 0.999999f`, rotations under about 0.162 degrees apart; `Equals` compares each component exactly. The
+  Rubber Prison's swing turns about that much in a physics step. Used by `FrameRate.Scenery.cs`.
   - `EntityControl.DoFollow` returns early when `Time.frameCount % 2 == 0` (or `usebuffer`), so at 60 fps a follower
     decides walk or brake 30 times a second. It walks with `MoveTowards` (sets `forcemove`; `FixedUpdate` then sets the
     velocity, scaled by distance) and brakes with `StopForceMove(basestate, smooth: true)`, which halves the

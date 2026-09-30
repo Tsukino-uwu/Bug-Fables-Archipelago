@@ -534,6 +534,10 @@ namespace BugFablesAP
                         FrameRate.SmoothBodies = parts.Length > 1 && parts[1] == "on";
                         return "bodylerp: " + (FrameRate.SmoothBodies ? "on" : "off")
                             + $" ({FrameRate.SmoothedCount} characters tracked)";
+                    case "scenerylerp":
+                        FrameRate.SmoothScenery = parts.Length > 1 && parts[1] == "on";
+                        return "scenerylerp: " + (FrameRate.SmoothScenery ? "on" : "off")
+                            + $" ({FrameRate.SceneryCount} swinging or bobbing things tracked)";
                     case "bodytrace":
                         return FrameRate.StartBodyTrace(parts.Length > 1 && int.TryParse(parts[1], out int bodyFrames)
                             ? bodyFrames : 120);

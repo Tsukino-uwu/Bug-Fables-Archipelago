@@ -176,6 +176,8 @@ namespace BugFablesAP
 
         internal static int SmoothedCount => bodies.Count;
 
+        internal static int SceneryCount => scenery.Count;
+
         private sealed class Traced
         {
             internal readonly List<float> Drawn = new List<float>(), True = new List<float>();
@@ -191,7 +193,7 @@ namespace BugFablesAP
         {
             bodyTraceLeft = frames;
             bodyTraceLog.Length = 0;
-            foreach (Traced t in new[] { tracedLeader, tracedFollower })
+            foreach (Traced t in new[] { tracedLeader, tracedFollower, tracedPlatform })
             {
                 t.Drawn.Clear();
                 t.True.Clear();
@@ -199,11 +201,25 @@ namespace BugFablesAP
             return $"bodytrace: {frames} frames, from when the leader or a follower moves";
         }
 
+        // Its pose read at draw, before anything was shifted: a parent drawn shifted (a swing) moves it too.
         private static Vector3 TruePos(EntityControl e)
         {
-            return bodies.TryGetValue(e.GetInstanceID(), out Body b) && shiftedBodies.Contains(b)
-                ? b.SavedParent != null ? b.SavedParent.TransformPoint(b.Saved) : b.Saved
-                : e.transform.position;
+            return bodies.TryGetValue(e.GetInstanceID(), out Body b) && b.Drawn ? b.AtDraw : e.transform.position;
+        }
+
+        // What the leader stands on, at its true pose, before this frame's shifts.
+        private static Transform tracedGround;
+        private static Vector3 tracedGroundTrue;
+        private static readonly Traced tracedPlatform = new Traced();
+
+        static partial void BeforeShifts()
+        {
+            Collider on = bodyTraceLeft > 0 && MainManager.player != null ? MainManager.player.standingon : null;
+            tracedGround = on != null ? on.transform : null;
+            if (tracedGround != null)
+            {
+                tracedGroundTrue = tracedGround.position;
+            }
         }
 
         private static string Place(Camera cam, EntityControl e, Traced into)
@@ -241,15 +257,25 @@ namespace BugFablesAP
             Collider on = MainManager.player.standingon;
             bool stepped = Time.fixedTime != traceFixedTime;
             traceFixedTime = Time.fixedTime;
+            string ground = "";
+            if (on != null && tracedGround == on.transform)
+            {
+                float gx = cam.WorldToScreenPoint(on.transform.position).x;
+                float gtx = cam.WorldToScreenPoint(tracedGroundTrue).x;
+                tracedPlatform.Drawn.Add(gx);
+                tracedPlatform.True.Add(gtx);
+                ground = $" (drawn x {gx:0.0} true x {gtx:0.0}, scenery shifted {shiftedScenery.Count})";
+            }
             bodyTraceLog.Append($"\n  dt {Time.unscaledDeltaTime * 1000f:0.0} a {(Time.time - Time.fixedTime) / Time.fixedDeltaTime:0.00} "
                 + $"step {(stepped ? 1 : 0)} | leader {Place(cam, leader, tracedLeader)}"
-                + $" on {(on != null ? on.name + "/" + on.tag : "none")} parent {(leader.transform.parent != null ? leader.transform.parent.name : "none")}"
+                + $" on {(on != null ? on.name + "/" + on.tag : "none")}{ground} parent {(leader.transform.parent != null ? leader.transform.parent.name : "none")}"
                 + (follower != null ? $" | {follower.name} {Place(cam, follower, tracedFollower)}" : ""));
             if (--bodyTraceLeft == 0)
             {
-                log.LogInfo($"[dev] bodytrace (bodylerp {(SmoothBodies ? "on" : "off")}, camlerp {(SmoothCamera ? "on" : "off")}): "
+                log.LogInfo($"[dev] bodytrace (bodylerp {(SmoothBodies ? "on" : "off")}, camlerp {(SmoothCamera ? "on" : "off")}, scenerylerp {(SmoothScenery ? "on" : "off")}): "
                     + $"leader drawn {Spread(tracedLeader.Drawn)}, true {Spread(tracedLeader.True)}; "
-                    + $"{(follower != null ? follower.name : "no follower")} drawn {Spread(tracedFollower.Drawn)}, true {Spread(tracedFollower.True)}"
+                    + $"{(follower != null ? follower.name : "no follower")} drawn {Spread(tracedFollower.Drawn)}, true {Spread(tracedFollower.True)}; "
+                    + $"ground drawn {Spread(tracedPlatform.Drawn)}, true {Spread(tracedPlatform.True)}"
                     + bodyTraceLog);
             }
         }

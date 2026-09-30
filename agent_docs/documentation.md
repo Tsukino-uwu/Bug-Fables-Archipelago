@@ -1962,6 +1962,23 @@ place it counts frames instead of time first.
   (`EntityControl.Follow`), so he ran ahead of her drawn pose. A character the game copies another into every frame
   (Kabbu in flight; a temporary follower in flight or while digging) now takes that one's offset: "kabbu looks good
   during flight now". A safety net puts poses back before a physics step, should the last camera not draw.
+- **Pitfall, scenery swung inside physics steps: the Rubber Prison's swinging platforms** (the user, 2026-10-01, at
+  240: "the platform itself + the chains get a bit blurred when its moving"). Standing on one, the console's `solids`
+  named it: `swingingplatform`, a `StaticModelAnim`, holding `CranePlatform`, which the party stands on as its
+  children. `StaticModelAnim` writes its swing and bob in `FixedUpdate`, 50 times a second, so against the smoothed
+  camera the platform jumped at each step. The party on it looked smooth only because a character's step move
+  included the swing's carry. **The fix** (`FrameRate.Scenery.cs`): every `StaticModelAnim` swinging or bobbing by the
+  game's own test is read after each physics step, in its parent's space, drawn between its last two poses as the
+  camera is, and put back after the last camera. A `KeepAngle` under it (the crane platform hanging level) is held level
+  again for the draw. A character's step move is now measured in its parent's space when the parent stayed the same,
+  so the swing carries it once, not twice; for a parent moved outside the step it measures the same as before.
+  **Pitfall inside the fix:** first seen "a bit better/sharper, but now it looks as if its stuttering a bit". Tracing
+  each frame showed the platform unsmoothed in 163 of 240 frames, snapping about 10 px at a step: an object whose last
+  two poses were equal was skipped, and Unity's `Quaternion ==` counts rotations under 0.162 degrees apart as equal
+  (read in its assembly), about what this swing turns in a step. The skip now compares exactly. **Measured after**
+  (`bodytrace`, now also tracing what the leader stands on; the console's `scenerylerp off|on` twice, standing on the
+  platform): smoothed in 237 and 238 of 240 frames; its change of on-screen speed per frame 0.07 to 0.08 px/ms drawn,
+  against 1.2 to 2.2 for its true pose; the party on it the same.
 - **Random shakes re-rolled once per 1/60 s.** Some effects jump to a new random offset every frame, a blur at 240
   (seen: shaky text in conversations sharp at 60, blurry at 240). Their timing was already right; only the re-roll
   was per frame. Now, while the row is on, the offset holds between ticks: `FontEffects` (shaky and glitchy letters;
@@ -2042,11 +2059,12 @@ character drawn smoothed (2026-09-30): seen sharp on a conveyor and in Vi's flig
 platforms, bridges and a knocked frozen enemy not yet seen with it. Followers deciding walk or brake 30 times a
 second, as at 60 (2026-09-30): measured with `bodytrace`; on the conveyor, "I think it looks fine", hard to tell
 next to the leader. Off by default again (2026-09-29):
-built, not yet seen on a fresh config.
+built, not yet seen on a fresh config. Swinging and bobbing scenery drawn smoothed (2026-10-01): measured smooth on
+the Rubber Prison's swinging platform; the first build's stutter was seen and fixed; not yet seen on screen after it.
 
-*Code: `FrameRate.cs`, `FrameSites.cs`, the row in `ApMenu.cs` and `QualityOfLife.cs`, the after-physics hooks in
-`Plugin.cs`; the console's `display`, `fps`, `interp`, `camlerp`, `bodylerp`, `bodytrace`, `frames`, `trace`, `cams`,
-`il`, `rates` and `fpsscan` (`DevConsole.cs`).*
+*Code: `FrameRate.cs`, `FrameRate.Scenery.cs`, `FrameSites.cs`, the row in `ApMenu.cs` and `QualityOfLife.cs`, the
+after-physics hooks in `Plugin.cs`; the console's `display`, `fps`, `interp`, `camlerp`, `bodylerp`, `scenerylerp`,
+`bodytrace`, `frames`, `trace`, `cams`, `il`, `rates` and `fpsscan` (`DevConsole.cs`).*
 
 ## 25. Hitches fixed: the mod's garbage and the game's 5-second collection
 

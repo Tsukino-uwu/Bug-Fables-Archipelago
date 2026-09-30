@@ -106,6 +106,7 @@ namespace BugFablesAP
                 RestoreCamera(null);
             }
             bodies.Clear();
+            scenery.Clear();
             if (active)
             {
                 active = false;
@@ -144,14 +145,16 @@ namespace BugFablesAP
             activeCap = cap;
             if (wasActive != nowActive)
             {
-                SmoothCamera = SmoothBodies = nowActive;
+                SmoothCamera = SmoothBodies = SmoothScenery = nowActive;
                 if (nowActive)
                 {
                     TrackAll();
+                    TrackAllScenery();
                 }
                 else
                 {
                     bodies.Clear();
+                    scenery.Clear();
                 }
                 NoInterpolation();
                 if (!nowActive)
@@ -270,6 +273,7 @@ namespace BugFablesAP
         static partial void TraceBodies(Camera cam);
         static partial void DrawStarted();
         static partial void DrawEnded();
+        static partial void BeforeShifts();
 
         private static bool HasBlink(MethodBase m)
         {
@@ -561,13 +565,14 @@ namespace BugFablesAP
         // hasn't played yet, and put back after drawing, so the game only ever reads its true pose. The step's move is
         // its pose right after the step (AfterPhysics) against its pose at the last draw, when nothing else runs
         // before the step: walking, a conveyor, a knock. What the game writes every frame (a platform carrying it, Vi's
-        // rise) is drawn as it is. The move is kept in the parent's space, so it turns with a turning platform.
+        // rise) is drawn as it is. The move is kept in the parent's space, so it turns with a turning platform, and
+        // measured there when the parent stayed the same: a swing moved inside the step carries it (DrawScenery).
         internal static bool SmoothBodies;
         private sealed class Body
         {
             internal EntityControl Entity, CopyOf;
-            internal Vector3 AtDraw, AfterStep, Move, Back, Saved;
-            internal Transform MoveParent, SavedParent;
+            internal Vector3 AtDraw, AfterStep, Move, Back, Saved, AtDrawLocal, AfterStepLocal;
+            internal Transform MoveParent, SavedParent, DrawParent, StepParent;
             internal bool Drawn, Stepped;
         }
         private static readonly Dictionary<int, Body> bodies = new Dictionary<int, Body>();
@@ -658,10 +663,14 @@ namespace BugFablesAP
             {
                 if (b.Entity != null && b.Drawn)
                 {
-                    b.AfterStep = b.Entity.transform.position;
+                    Transform t = b.Entity.transform;
+                    b.AfterStep = t.position;
+                    b.AfterStepLocal = t.localPosition;
+                    b.StepParent = t.parent;
                     b.Stepped = true;
                 }
             }
+            SampleScenery();
         }
 
         private static void DrawBodies(float alpha)
@@ -686,7 +695,9 @@ namespace BugFablesAP
                 Transform parent = t.parent;
                 if (b.Stepped)
                 {
-                    Vector3 move = b.AfterStep - b.AtDraw;
+                    bool sameParent = parent != null && b.DrawParent == parent && b.StepParent == parent;
+                    Vector3 move = sameParent ? parent.TransformVector(b.AfterStepLocal - b.AtDrawLocal)
+                        : b.AfterStep - b.AtDraw;
                     if (move.sqrMagnitude > CutDistance * CutDistance)
                     {
                         move = Vector3.zero;
@@ -700,6 +711,8 @@ namespace BugFablesAP
                     b.Move = Vector3.zero;
                 }
                 b.AtDraw = pos;
+                b.AtDrawLocal = t.localPosition;
+                b.DrawParent = parent;
                 b.Drawn = true;
                 b.Back = b.Move == Vector3.zero ? Vector3.zero
                     : (1f - alpha) * (parent != null ? parent.TransformVector(b.Move) : b.Move);
@@ -752,8 +765,10 @@ namespace BugFablesAP
                 return;
             }
             float alpha = Mathf.Clamp01((Time.time - Time.fixedTime) / Time.fixedDeltaTime);
+            BeforeShifts();
             DrawBodies(alpha);
-            drawnShifted = shiftedBodies.Count > 0;
+            DrawScenery(alpha);
+            drawnShifted = shiftedBodies.Count > 0 || shiftedScenery.Count > 0;
             if (drawnShifted)
             {
                 lastCamera = LastCamera();
@@ -862,8 +877,9 @@ namespace BugFablesAP
             if (late != null && !lateLogged)
             {
                 lateLogged = true;
-                log.LogWarning($"[fps] still drawn-shifted when {late} (camera {cameraShifted}, bodies {shiftedBodies.Count}); put back (the last camera, {lastCamera?.name}, didn't draw)");
+                log.LogWarning($"[fps] still drawn-shifted when {late} (camera {cameraShifted}, bodies {shiftedBodies.Count}, scenery {shiftedScenery.Count}); put back (the last camera, {lastCamera?.name}, didn't draw)");
             }
+            RestoreScenery();
             if (wrongParent > 0 && !parentLogged)
             {
                 parentLogged = true;
