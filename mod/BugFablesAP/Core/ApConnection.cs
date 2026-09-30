@@ -183,6 +183,7 @@ namespace BugFablesAP
         internal Dictionary<string, int[]> EnemySwaps => seedData?.EnemySwaps;
         internal Dictionary<string, string> MusicMap => seedData?.MusicMap;
         internal Dictionary<string, string> JingleMap => seedData?.JingleMap;
+        internal List<InventorySpot> ShopInventories => seedData?.ShopInventories;
         internal KeyValuePair<string, int>? Start => seedData?.Start;
         internal string StartFrom => seedData?.StartFrom;
         internal int ArtifactsRequired => seedData?.ArtifactsRequired ?? 0;
@@ -216,6 +217,17 @@ namespace BugFablesAP
             internal string Map;
             internal string Keeper;
             internal int Item;
+        }
+
+        // A shop slot (Keeper, by the item the map stocks there) or a respawning pickup (Regional), and the item it
+        // holds instead (To).
+        internal sealed class InventorySpot
+        {
+            internal string Map;
+            internal string Keeper;
+            internal int Regional = -1;
+            internal int Item;
+            internal int To;
         }
 
         internal sealed class DialogueFlag

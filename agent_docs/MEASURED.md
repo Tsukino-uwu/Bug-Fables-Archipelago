@@ -38,6 +38,7 @@ read, a log or a probe.
 - [Quests: to measure](#quests-to-measure-when-quests-come-into-scope)
 - [Key items: to measure](#key-items-to-measure)
 - [Music and jingles](#music-and-jingles-2026-09-30-code-read-nothing-seen-in-game)
+- [An item entity's item](#an-item-entitys-item-2026-09-30-code-read-nothing-seen-in-game)
 
 ## The build (2026-09-24, read from a Steam install, game not run)
 
@@ -1583,3 +1584,29 @@ For the first version, measure and record:
   - Every `StopSound` by name or clip ends in `StopSound(AudioClip, float)` (`:4565`), which stops the slots holding
     that clip.
 - Used by `MusicShuffle.cs`; the pool by `music.py`.
+
+## An item entity's item (2026-09-30, code read; nothing seen in game)
+
+- **Three fields hold it:** `animstate`, `itemstate` and `basestate`.
+  - `EntityControl.Start` sets `itemstate = animstate` for an item (`EntityControl.cs:608-611`).
+  - `NPCControl.Interact` (Shop case, `NPCControl.cs:4363-4366`) and `CreateDescWindow` (`:4186-4189`) copy
+    `itemstate` back into `animstate` before reading it.
+  - Some paths reset `animstate` from `basestate` (`EntityControl.cs:2937`, `:4582`).
+- **The game's own swap:** the random-medal cheat (flag 681) turns a medal pickup into another as it's taken by
+  setting `basestate`, `itemstate` and `animstate` to the new id, then calling `UpdateItem()` (`NPCControl.cs:5677-5683`).
+- **What reads it:**
+  - An item shop slot's price is `ceil(itemdata[animid, animstate, 4] * mmulti)`; its name goes to `flagstring[0]` and
+    the item to `flagvar[0]`, which the buy line's `additem` adds (`NPCControl.cs:4374-4378`).
+  - A pickup puts `animstate` in `flagvar[0]` and the name in `flagstring[0]`; its `additemtoss` adds `flagvar[0]`
+    (`:5645`, `:5670`, `:5724`).
+  - The sprite is `itemsprites[0, itemstate]` for an item (`EntityControl.UpdateItem`, `:3228`). `UpdateSprite` calls
+    `UpdateItem` whenever `animstate` changes (`:4051-4057`).
+- **Shop slots:** `MapControl.CreateEntities` makes slot n of a keeper as `Fixedshop<n>`, with `animstate = the keeper's
+  data[n]` when the keeper's `dialogues[10].x` (the slot's `animid`) is 0 (`MapControl.cs:1717-1724`). Nothing renames
+  it; `Start` only strips line breaks and marks a name containing "Fixed" as fixed (`EntityControl.cs:612-617`).
+- **Map pickups:** `CreateEntities` sets an item's `animstate` to its row's item id, `animid` to its kind (`data[0]`)
+  and `item = true` (`MapControl.cs:1681-1686`); its `regionalflag` and `activationflag` come from the row (`:1642`,
+  `:1650`).
+- **When:** `MainManager` sets `map` to the new map as it loads it (`MainManager.cs:9653`); the map's `Start` then runs
+  `CreateEntities` (`MapControl.cs:298`).
+- Used by `ShopInventories.cs` and `ItemShops.cs`.

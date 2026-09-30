@@ -472,9 +472,9 @@ be wrong.
    every sound (dialogue bleeps out), and also swaps `SoundIsPlaying`, the entity sounds and `PlayClipAtPoint`. A
    loop stopped by name (`Rumble`, 21 times) must stop the sound that replaced it.
 48. **Shuffle Shop Inventories** (2026-09-30, the user: what shops restock and respawning items come back with,
-   randomized, never checks): the apworld's side built, build step 34. Next, the mod's side; then **the game's other
-   item shops and respawning pickups** join the pool, as they become locations or as spots of their own (measured
-   first: each keeper's `data`, each item with only a regional flag).
+   randomized, never checks): built, not yet seen in game, build step 34. Next, the user sees it in game; then **the
+   game's other item shops and respawning pickups** join the pool, as they become locations or as spots of their own
+   (measured first: each keeper's `data`, each item with only a regional flag).
 
 **Known issues:**
 
@@ -3123,7 +3123,7 @@ start in a shop that isn't a location. It never touches a check or a location.
   touched.
 - **On by default:** it touches no logic, and it randomizes more.
 
-**Chosen by the agent, open to change:**
+**Approved with the plan (the user, 2026-09-30; the agent's proposals):**
 - **A permutation**, as Music Shuffle does: each spot takes another spot's item, so every item is still sold or found
   as often as before.
 - **No shop sells one item twice:** the roll is taken again until none does, up to 100 tries, with a warning if one
@@ -3160,10 +3160,13 @@ start in a shop that isn't a location. It never touches a check or a location.
   the new `shop_inventories` (11 spots in each, the preset with *Shuffle Item Shops* off included), and the spoilers
   differ only in the option's own line, so no item moved.
 
-**Status:** the apworld's side built (2026-09-30); the mod's side next (Next 48).
+**The mod** (2026-09-30; the mod guide, step 35) swaps the item the way the game itself turns one item entity into
+another, so the price, name, sprite and what's added stay the game's.
+
+**Status:** built (2026-09-30), the tests pass and the mod builds; not yet seen in game.
 
 *Code: `shop_inventories.py`, `options.py` (`ShuffleShopInventories`), `world.py` (`generate_basic`), `slot_data.py`;
-tests `test_shop_inventories.py`.*
+the mod's `ShopInventories.cs` and `ItemShops.cs`; tests `test_shop_inventories.py`.*
 
 # How it works
 

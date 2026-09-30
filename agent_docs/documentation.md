@@ -48,6 +48,7 @@ anyone curious about the process, or thinking of doing the same for another game
 32. [A release DLL anyone with the game can rebuild, byte for byte](#32-a-release-dll-anyone-with-the-game-can-rebuild-byte-for-byte)
 33. [Text from the server, shown safely](#33-text-from-the-server-shown-safely)
 34. [The library's cache, kept in its own folder](#34-the-librarys-cache-kept-in-its-own-folder)
+35. [Shuffle Shop Inventories: another item on the shelf, the game's own way](#35-shuffle-shop-inventories-another-item-on-the-shelf-the-games-own-way)
 
 ## Where it stands
 
@@ -2109,3 +2110,50 @@ back out of the built DLL (apimplementation.md, build step 28).
 **Status:** built (2026-09-29), not yet seen in game.
 
 *Code: `Core/CachePaths.cs`, installed from `Core/Plugin.cs`.*
+
+## 35. Shuffle Shop Inventories: another item on the shelf, the game's own way
+
+**The idea (the user, 2026-09-30):** once an item shop slot's check is bought, or a respawning pickup's check is found,
+the spot sells or gives another spot's item, as the seed says (apimplementation.md, build step 34). It's never a check.
+
+**How the game already does it:** a medal pickup under the random-medal cheat becomes another medal as it's taken
+(`NPCControl.CheckItem`). The game sets three fields on the entity, `basestate`, `itemstate` and `animstate`, to the
+new id and calls `UpdateItem()`. Everything after that reads those fields:
+- a shop slot's price, name and the item its buy line adds (`Interact`);
+- the description box (`CreateDescWindow`);
+- the sprite (`UpdateItem`);
+- the item a pickup adds (`CheckItem`).
+
+Both `Interact` and `CreateDescWindow` first copy `itemstate` back into `animstate`, so setting only `animstate` would
+not hold. The mod does the same three fields and the same call, so the price is the game's own for that item.
+
+**Which slot is which:** the map makes shop slot n from its keeper's list (`Fixedshop<n>`, from the keeper's
+`data[n]`), and the name stays. The mod reads a slot's stocked item from there, never from the entity, because the swap
+changes the entity. The item shop checks match slots the same way now, so a swapped slot can't pass for another
+location in the same shop. A respawning pickup is known by its map and regional flag, as before.
+
+**When:**
+- after `MapControl.CreateEntities`, before the entities start, so no frame shows the game's own item;
+- every 15 frames, for a check done during the visit or a login after the map was built;
+- a slot whose check isn't done keeps its own item, so the seed's item on the shelf and the check work as before;
+- an undone respawning pickup is left alone, since it gives nothing and shows the seed's item;
+- only with Archipelago enabled and a seed whose list isn't empty.
+
+**The guards:**
+- A slot whose name can't be read is never swapped, and its check falls back to matching by the item it holds.
+- A pickup holding something other than the seed's item for it is left alone, with a warning.
+- Every swap is logged once: `[inventories] BugariaCommercial ButterflyShopkeeper Fixedshop0: Crunchy Leaf (0)
+  restocks as Honey Drop (1) (on arrival)`.
+
+**What to check in the game:**
+- the BepInEx log at start shows `[inventories] installed on MapControl.CreateEntities`;
+- at Madame Butterfly's, after a check is bought, that slot soon shows another consumable, with its own name,
+  description and price, and buying it gives that item;
+- a slot whose check isn't done still shows the seed's item, and buying it still sends the check;
+- the Snakemouth pillar Honey Drop, after its check and an area change, shows and gives its new item;
+- with the option off, both are the game's own.
+
+**Status:** built (2026-09-30), the build succeeds; not yet seen in game.
+
+*Code: `Items/ShopInventories.cs`, `Items/ItemShops.cs` (`LocationOf`), `Core/SeedData.cs`, `Core/ApConnection.cs`,
+`Dev/SeedDump.cs`, installed from `Core/Plugin.cs`.*

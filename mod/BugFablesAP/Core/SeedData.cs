@@ -39,6 +39,8 @@ namespace BugFablesAP
         // Music Shuffle, {name: name played in its place}: tracks by the game's Musics names, jingles by sound name.
         internal readonly Dictionary<string, string> MusicMap;
         internal readonly Dictionary<string, string> JingleMap;
+        // Shuffle Shop Inventories: what an item shop slot or a respawning pickup holds once it isn't a check.
+        internal readonly List<ApConnection.InventorySpot> ShopInventories;
         // Where a new file begins (Starting Location): the map and a save point's entity index (-1 for none); null for
         // the game's own start. StartFrom: the map whose door leads in, for a start entered as if through that door.
         internal readonly KeyValuePair<string, int>? Start;
@@ -114,6 +116,14 @@ namespace BugFablesAP
                 .ToDictionary(p => p.Name, p => p.Value.Value<string>());
             JingleMap = SlotData.Object(data, "jingle_map")?.Properties()
                 .ToDictionary(p => p.Name, p => p.Value.Value<string>());
+            ShopInventories = SlotData.List(data, "shop_inventories", e => new ApConnection.InventorySpot
+            {
+                Map = e.Value<string>("map"),
+                Keeper = e.Value<string>("keeper"),
+                Regional = e.Value<int?>("regional") ?? -1,
+                Item = e.Value<int>("item"),
+                To = e.Value<int>("to"),
+            });
             JObject startData = SlotData.Object(data, "start");
             if (startData != null
                 && (startData["map"] == null || startData["entity"] == null && startData["from"] == null))

@@ -45,7 +45,8 @@ namespace BugFablesAP
                     // Once its check is done, a respawning pickup is the game's own again.
                     if (connection.IsDone(at))
                     {
-                        log.LogInfo($"[swap] location {at}: respawning pickup on {MapName()}, check already done: vanilla item");
+                        log.LogInfo($"[swap] location {at}: respawning pickup on {MapName()}, check already done: the "
+                            + $"game gives the item it holds ({caller.entity.animstate})");
                         return;
                     }
                     // The game marks nothing LocationChecks could read later, so its check goes out now.

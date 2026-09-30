@@ -34,8 +34,9 @@ namespace BugFablesAP
             }
         }
 
-        // This slot's location while its check isn't done, else -1.
-        private static long LocationOf(NPCControl npc)
+        // This slot's location while its check isn't done, else -1. Matched by the item the map stocks there, not the
+        // one it holds, which Shuffle Shop Inventories changes.
+        internal static long LocationOf(NPCControl npc)
         {
             Dictionary<long, ApConnection.ItemShopSlot> shops = connection?.LocationItemShops;
             if (shops == null || npc == null || npc.interacttype != NPCControl.Interaction.Shop || npc.entity == null
@@ -44,10 +45,12 @@ namespace BugFablesAP
                 return -1;
             }
             string map = MainManager.map.mapid.ToString();
+            int stocked = ShopInventories.ShopItemOf(npc);
+            int item = stocked >= 0 ? stocked : npc.entity.animstate;
             foreach (KeyValuePair<long, ApConnection.ItemShopSlot> entry in shops)
             {
                 if (entry.Value.Map == map && entry.Value.Keeper == npc.shopkeeper.name
-                    && entry.Value.Item == npc.entity.animstate)
+                    && entry.Value.Item == item)
                 {
                     return connection.IsDone(entry.Key) ? -1 : entry.Key;
                 }
@@ -163,8 +166,9 @@ namespace BugFablesAP
                 long at = LocationOf(npc);
                 if (at < 0)
                 {
-                    // Its check is done (or it was never one): the shop's own item, asked of the game, not remembered
-                    // (a hot reload once remembered the seed's look as the original).
+                    // Its check is done (or it was never one): the item it holds (its own, or its Shuffle Shop
+                    // Inventories restock), asked of the game, not remembered (a hot reload once remembered the seed's
+                    // look as the original).
                     Sprite own = MainManager.GetItemSprite(false, npc.entity.animstate);
                     if (npc.entity.sprite.sprite != own)
                     {

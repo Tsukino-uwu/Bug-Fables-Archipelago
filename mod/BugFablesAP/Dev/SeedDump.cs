@@ -79,6 +79,11 @@ namespace BugFablesAP
             {
                 Add("jingle_map", jingle.Key, jingle.Value);
             }
+            int s = 0;
+            foreach (ApConnection.InventorySpot spot in c.ShopInventories ?? new List<ApConnection.InventorySpot>())
+            {
+                Add("shop_inventories", s++, $"{spot.Map}|{spot.Keeper}|{spot.Regional}|{spot.Item}|{spot.To}");
+            }
             Add("start", "", c.Start.HasValue ? $"{c.Start.Value.Key}|{c.Start.Value.Value}" : "null");
             Add("start_from", "", c.StartFrom ?? "null");
             Add("own_slot", "", c.OwnSlot.ToString());

@@ -124,6 +124,7 @@ namespace BugFablesAP
             QuestBoards.Enable(Log, () => randomizerEnabled.Value);
             ShopSwap.Enable(Log, connection, () => randomizerEnabled.Value);
             ItemShops.Enable(Log, connection, () => randomizerEnabled.Value);
+            ShopInventories.Enable(Log, connection, () => randomizerEnabled.Value);
             DoorShuffle.Enable(Log, connection, () => randomizerEnabled.Value);
             WarpButton.Enable(Log, () => settingsOn() && QualityOfLife.WarpOn,
                 () => settingsOn() && QualityOfLife.MapOn,
@@ -241,6 +242,7 @@ namespace BugFablesAP
                     ("keptopen", KeptOpen.Tick),
                     ("holdups", HoldUps.Tick),
                     ("shops", ShopSwap.Tick),
+                    ("inventories", ShopInventories.Tick),
                     ("itemshops", ItemShops.Tick),
                     ("party", PartyFit.Tick),
                     ("members", PartyMembers.Tick),
