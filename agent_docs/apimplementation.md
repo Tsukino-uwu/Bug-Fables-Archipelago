@@ -449,8 +449,8 @@ be wrong.
 44. **Shuffle Bestiary: Tattle checks, an idea for later** (asked again 2026-09-29, parked since 2026-09-25 in build
    step 10): each enemy spied a location, not just fought, as Pokémon Emerald's apworld's dexsanity needs a catch. The
    bestiary has 92 entries (`librarylimit[1]`); the check is `librarystuff[1, id]` turning true, read as discoveries
-   are (`location_discoveries`). **Spy, then a death (code read 2026-09-29):** the entry is written to memory as the Tattle text closes (`BattleControl.Tattle`
-   calls `UpdateJounal(Bestiary)`, which in a battle sets `librarystuff[1, id]` at once), and `LocationChecks` runs in
+   are (`location_discoveries`). **Spy, then a death (code read 2026-09-29):** the entry is written to memory as the
+   Tattle text closes (`BattleControl.Tattle` calls `UpdateJounal(Bestiary)`, which in a battle sets `librarystuff[1, id]` at once), and `LocationChecks` runs in
    battles too, so while connected the check goes out before the fight ends and stays done whatever follows. Retry
    keeps the entry as well (`GameOver` restores flags, not the bestiary); Reload save loses it unless saved, which
    matters only if the check wasn't sent (disconnected): spy again. To measure first: what allows Spy in a battle
