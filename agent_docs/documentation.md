@@ -98,8 +98,8 @@ changes the mod, the apworld or the dev scripts is refused unless it also update
 [apimplementation.md](apimplementation.md) (or says, explicitly, that nothing about the process changed).
 That check is a small git hook, `.githooks/commit-msg`, which also keeps each subject to 72 characters with no
 attribution (its neighbour `.githooks/pre-commit` runs the preflight, which refuses anything unpublishable:
-[apimplementation.md, build step 28](apimplementation.md#build-step-28-the-preflight-nothing-unpublishable-in-the-repo-or-a-release)). Each step below ends with a short *Code:* line naming the files and methods to
-read, just after its **Status:** line. Each new step also gets a line in the index above.
+[apimplementation.md, build step 28](apimplementation.md#build-step-28-the-preflight-nothing-unpublishable-in-the-repo-or-a-release)). Each step that built code ends with a short *Code:* line naming the files and
+methods to read, just after its **Status:** line. Each new step also gets a line in the index above.
 
 **Titles say what a step does, and links can't break** (2026-09-30, the user: titles like "the Boat Ticket" or "six
 questions" didn't tell a newcomer where the logic was done, or which step covers the entrance randomizer). A step's
@@ -177,7 +177,8 @@ A few decisions made first, because they shape everything after:
     (`Font.CreateDynamicFontFromOSFont`), scaled to the game's letters: it looks different but stays readable (the
     user, 2026-09-29: better than "gf798?? received from play????"). Only a character no font has becomes "?".
   - **Item names are coloured the way Archipelago's clients colour them** (`NetUtils.py`): progression plum
-    `#AF99EF`, useful slateblue `#6D8BE8`, trap salmon `#FA8072`, filler cyan `#00EEEE`.
+    `#AF99EF`, useful slateblue `#6D8BE8`, trap salmon `#FA8072`, filler cyan `#00EEEE` (later the *Item colors*
+    row, Rarity by default, with Archipelago's colours darkened for the box: step 20).
 - **Read what others already solved.** We read the TEVI randomizer (another Unity mod), Pokémon Emerald's
   apworld, Archipelago's own docs, and notes from an earlier Archipelago project, all for ideas only,
   with each one's licence checked first.
@@ -255,8 +256,8 @@ and the calls into it vanish.
 
 **Lines kept to 120 characters** (2026-09-29, the limit `.editorconfig` states). A pass of line breaks and indentation
 only, proven by the compiled code: a Release and a Debug build without debug info came out byte-identical before and
-after (the builds are deterministic, so any difference would show). 903 lines were over 120; 144 are left, each a
-single string that only splitting would shorten, which changes the compiled code.
+after (the builds are deterministic, so any difference would show). 903 lines were over 120; 144 were left that day,
+each a single string that only splitting would shorten, which changes the compiled code.
 
 **The seed's data in one record** (2026-09-28). What a login reads from `slot_data` moves from about 30
 separate fields on the connection into one immutable `SeedData`. **How "changed nothing" is proven:** the Debug setting
@@ -345,7 +346,8 @@ waits for; `copy-dev.ps1 -Status` prints it. One read instead of watching the lo
 
 **Status:** done: hot reload, the build-and-copy scripts and the dev console are in use.
 
-*Code: `DevConsole.cs`.*
+*Code: `DevConsole.cs` (the console, the command file), `DevConsole.Warp.cs` (`loc`, `warp`, `unstick`),
+`DevConsole.Party.cs` (`spawn`), `DevConsole.Inspect.cs` (`flag`, `tree`).*
 
 ## 6. Probes: logging what the game does while you play
 
@@ -412,13 +414,14 @@ off. Doors are switched on and off every other frame (`MapControl`, by distance,
 "exists"); other objects only once, in their own `Start` (`NPCControl.cs:438`). So `KeptOpen` marks the entity
 straight after `CreateEntities`, before `Start`, with a `requires` array of its own that its prefix on
 `CheckIfCanExist` answers with "exists", the mirror of how a kept-open blocker gets a `limit` answered "hide".
-Built, not yet seen in game.
+Seen in play (2026-09-25): the town's door and the plaza's district doors, kept present (the Archipelago guide, build
+step 9).
 
 **Item and medal sprites too** (2026-09-26): `SpriteDump` also writes every item and medal sprite with its id and name
 (`bugfablesap-itemsprites.tsv`) and their sheets, so a labelled contact sheet can be made from them, to pick an icon
 (the Boat Ticket's) by pointing at it. Game art stays local, never in the repo.
 
-**Status:** done: the script, entity and map dumps are in use; making an entity exist early built, not yet seen in game.
+**Status:** done: the script, entity and map dumps are in use; making an entity exist early seen (2026-09-25).
 
 ## 8. The Archipelago panel on the main menu
 
@@ -463,8 +466,7 @@ Several things went wrong on the way, each found on screen by the tester:
 - **No sound opening or closing the panel**, where Start Game and Settings have one (noticed on screen). The
   game plays "Confirm" for every main-menu choice before acting on it, and our entry takes the press first,
   so it skipped the sound. The mod now plays the same "Confirm" on opening, and "Cancel" when backing out with
-  the cancel button, the sound the game uses leaving the file select. Choosing the panel's "Back" line plays
-  "Confirm", like any other menu choice.
+  the cancel button, the sound the game uses leaving the file select.
 
 **Lesson:** when adding to a game's own screen, find every time the game rebuilds that screen, and everything
 else that keeps running while another screen is on top of it.
@@ -497,9 +499,10 @@ arrows around the On/Off value.
 
 **The help line follows the value (2026-09-26):** on a row whose values mean different things (Difficulty,
 Item animation, Medal prices, Enemy scaling), the line under the rows describes the value now chosen, and changes as
-left/right steps through them; every step redraws the screen. On/off rows keep one line.
+left/right steps through them; every step redraws the screen. Since then most rows do; only Fast text, Skip cutscenes
+and Detector keep one line.
 
-**Three pages (2026-09-26; built, not yet seen):** the main page keeps the connection and the Archipelago
+**Three pages (2026-09-26; seen on screen):** the main page keeps the connection and the Archipelago
 on/off, plus two links, *Quality of life* and *Gameplay*. Gameplay holds how the game plays: Difficulty, Enemy scaling
 (moved from Quality of life; its config key stays under `[QualityOfLife]`, so a saved choice carries over) and
 Detector. Quality of life keeps the speed-ups, with Disable all / Reset to defaults on top (step 10). Cancel backs out
@@ -548,11 +551,11 @@ its rotation reset, so it kept an unturned world rotation and was seen edge-on. 
 the Quality of life page with all its text inside the shop. It follows whatever turn the camera has, so any room that
 turns it is covered. The lesson went into CLAUDE.md: read how the game does a thing first.
 
-**Status:** works, seen on screen (2026-09-24): the menu entry, the panel, and the file select held back until the first login.
+**Status:** works, seen on screen (2026-09-24): the menu entry, the panel, and the file select held back until the first login; the Quality of life and Gameplay pages seen (2026-09-26); the Achievements row built (2026-09-26), not yet seen.
 
 *Code: `MenuToggle.cs` (the menu entry: `BeforeSetMenuText` and `AfterSetMenuText` around the game's rebuild,
 `AfterUpdate` for the cursor, `SetMode` for the switch); `ApMenu.cs` (the panel: `Build`, `Redraw`,
-`Navigate`, `TypeInto` for typing, `Close`).*
+`Navigate`, `Close`), `ApMenu.TextEntry.cs` (`TypeInto`, typing).*
 
 ## 9. Item swap: a pickup sends its check instead of its vanilla item
 
@@ -617,7 +620,8 @@ came back from the server into key items; flag 31 never flipped, so no first-med
 **On the ground too** (seen on screen: the pickup still looked like its vanilla medal before it was touched).
 A few times a second the mod gives each pickup location on the current map the sprite of what's really there,
 placed the way the game places an item's sprite. The game redraws an item's sprite only when its item id
-changes, so the swap holds. Another game's item keeps the vanilla look until the Archipelago icon is in the mod.
+changes, so the swap holds. Another game's item kept the vanilla look until the Archipelago icon came (steps 21 and
+23).
 **Confirmed on screen (2026-09-24, screenshots):** the Snakemouth medal pickup lay on the ground as the G-Bug
 Ranger Plushie, and picking it up showed the Plushie too.
 
@@ -637,7 +641,7 @@ regional flag (the game writes `|regionalflag,N,true|` into the pickup's own tex
 (`ApConnection.QueueRespawnCheck`, sent by `LocationChecks`), and swaps the item as usual. Once the check is done
 (the server's list, its updates, or queued here), the prefix and the ground sprites leave the pickup alone, so it
 gives its vanilla item. The dev console's `loc` refuses a location with no flag (a berry or a respawning pickup) and
-points to `warp <map> @<entity>`. Built, not yet seen in game.
+points to `warp <map> @<entity>`. Seen in play (2026-09-24, `MEASURED.md`, "Respawning pickups, seen in play").
 
 **A crystal berry spot showing another item** (2026-09-25): the game sets such a spot up for its 3D berry model, with
 its sprite centred on the ground and the entity spinning (`NPCControl.cs:937-952`). Showing the seed's item there as
@@ -710,11 +714,11 @@ measured there either. The user chose **two lines, squashed only if one is still
 
 Dev `holdup long` shows four such lines: the one seen, a longer one, and the longest name with a player and alone.
 
-**Status:** works for gifts, pickups and their ground sprites, and respawning pickups seen on screen (2026-09-24, `MEASURED.md`), and crystal berry spots (2026-09-25); berry rewards and story pickups built, not yet seen in game; long names fitted to the box built (2026-09-30), not yet seen.
+**Status:** works for gifts, pickups and their ground sprites, and respawning pickups seen on screen (2026-09-24, `MEASURED.md`), and crystal berry spots (2026-09-25); berry rewards and story pickups built, not yet seen in game; the description box's field fix (2026-09-26) not yet seen; long names fitted to the box built (2026-09-30), not yet seen.
 
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
-`Recolour` and `FirstMedalSeen` do the swapping; `PickupPrefix`, `FindPickup` and `TickGround` handle pickups); the
-scout is `ApConnection.Scout`.*
+`Recolour` and `FirstMedalSeen` do the swapping); `ItemSwap.Pickups.cs` (`PickupPrefix`, `FindPickup`, `TickGround`,
+`BerryPrefix`) handles pickups; the scout is `ApConnection.Scout`.*
 
 ## 10. The Quality of life page: Fast text, Skip cutscenes, Warp and more
 
@@ -747,7 +751,7 @@ The rows, all On by default (2026-09-25) and active only while the Archipelago m
    cut out. While they're on screen (the event is running and its black backdrop exists), the mod answers each
    line's wait and runs the game at 8 times speed. The game's own end-of-event resets the speed, and the mod does
    too once the backdrop is gone. **Confirmed on screen (2026-09-25):** on a new file the slides "skipped past
-   really fast on its own"; the log shows `[qol] intro slides: passing them by`, then `over: normal speed`.
+   really fast on its own"; the log showed `[qol] intro slides: passing them by`, then `over: normal speed`.
    **Replaced (2026-09-25):** the slides are now cut out after all (item 5, the opening), and the row was folded into
    *Skip cutscenes* ("can probably just be bundled"). The speed-up stays as a fallback if the cut misses.
 3. **Free boat** (2026-09-25: nobody should have to farm berries in Archipelago). The Metal Island boat
@@ -950,7 +954,7 @@ The rows, all On by default (2026-09-25) and active only while the Archipelago m
    first battle change, and only toward easier. **Seen (2026-09-27):** flag 16 set by the dev console at the
    lake (the lake scene hadn't triggered before the spider), the mod logged the line marked said, and the next fight
    started without it. *Code: `PartyMembers.cs`.*
-   **Travel: Off / Warp / Map / Both (2026-09-26; built, not yet seen).** The Warp button's on/off became one
+   **Travel: Off / Warp / Map / Both (2026-09-26; seen on screen).** The Warp button's on/off became one
    *Travel* row (config `Travel`, default Both). `WarpButton.cs` now places the travel buttons after the game's four:
    Warp, then Map (left from the first button wraps to Map; Warp sits between, harder to hit by accident). Five fit
    two apart as before; six sit 1.7 apart (seen in screenshots: 1.8 pushed the first off the panel, 1.6 made them
@@ -1004,20 +1008,24 @@ The rows, all On by default (2026-09-25) and active only while the Archipelago m
 
 The panel got an eighth row, "Quality of life", which opens a second page in the same box; cancel comes back.
 
-**Disable all and Reset to defaults (2026-09-26; built, not yet seen).** Two buttons side by side at the top
+**Disable all and Reset to defaults (2026-09-26; both boxes seen on screen the same day; the Reset box's lost letters
+fixed, step 8, the fix not yet seen).** Two buttons side by side at the top
 of the Quality of life page (not rows in the list); left/right picks one. **Reset to defaults is on the left, where the
 cursor lands** (entering the page shouldn't put you on Disable all), Disable all on the right. Confirming one opens a
 **Yes / No box** over the page (a box, not the choice inside the menu), built with the game's own box
 (`MainManager.Create9Box`, the controls type the help box uses), the question on top and the leaf on the answer. No is
 picked first, so a stray press never wipes the settings; cancel closes the box. The question isn't repeated in the help line below.
-**The Gameplay page has the same two buttons**: Disable all there sets Difficulty Normal, Enemy
-scaling Off and Detector Off; Reset puts each back to its default. Both pages open on Reset to defaults. Disable all turns every row off (a choice row
-to its off value: Enemy scaling Off, Item animation Off, Medal prices full); Reset to defaults puts every row back to
-its default (`QualityOfLife.DisableAll` / `ResetAll`, the defaults from each setting's own config definition).
+**The Gameplay page has the same two buttons** (`ApMenu.GameplayAll`): Disable all there sets Difficulty Normal,
+Enemy scaling, Attack boost, Healing crystals and Auto-save Off, Medal prices full and both multipliers 1; Reset puts
+each back to its default. Both pages open on Reset to defaults. On the Quality of life page, Disable all turns every
+row off (a choice row to its off value: Item animation Off, Travel Off, Detector Off) and Reset to defaults puts every
+row back to its default (`QualityOfLife.DisableAll` / `ResetAll`, the defaults from each setting's own config
+definition).
 
-**Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen on screen (2026-09-25); the bridge skips and Medal prices not yet seen; replays held up and the quiet start seen on screen (2026-09-28); Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat Ticket (the Archipelago guide, build step 16), the warp itself, map travel and Skip confirm seen (2026-09-26); Skip cutscenes' Den arrival, trapdoor and spider scene seen (2026-09-27); Skip battle tutorials: Leif's first-battle line skipped, seen (2026-09-27).
+**Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen on screen (2026-09-25); the bridge skips and Medal prices not yet seen; replays held up and the quiet start seen on screen (2026-09-28); Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat Ticket (the Archipelago guide, build step 16), the warp itself, map travel and Skip confirm seen (2026-09-26); Skip cutscenes' Den arrival, trapdoor and spider scene seen (2026-09-27); Skip battle tutorials: Leif's first-battle line skipped, seen (2026-09-27); the door room's puzzle (Event4) sped up, built, not yet seen on its own.
 
-*Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `ApMenu.cs` (the second page),
+*Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `QualityOfLife.Opening.cs` (the opening),
+`QualityOfLife.Scenes.cs` (the scene skips, the first spider fight, the trapdoor), `ApMenu.cs` (the second page),
 `WarpButton.cs` (the Warp button), `HoldUps.cs` (item animation's hold-ups).*
 
 ## 11. Missing party members: stand-ins in scenes, and followers
@@ -1234,7 +1242,8 @@ How: Event5 starting on `SnakemouthDoorRoom` marks a landing due; on the first f
 the scene, the game's `TransferMap` into the same room with the spots of the door room's door into it (`DoorInto`, the
 way down the opened trapdoor), as a random start arrives. Only with Archipelago on. First seen with three members: the
 scene ended without error (the patched list, `[party] Event5 placed 2 members; member slot 2 stands behind`); the
-landing spot itself not yet seen. *Code: `QualityOfLife.cs`.*
+landing seen on screen (2026-09-27, step 10: the arrival where the trapdoor leads in). *Code:
+`QualityOfLife.Scenes.cs` (`TickTrapdoorLanding`), `QualityOfLife.Opening.cs` (`DoorInto`).*
 
 **Battles: a member's number used as a slot** (2026-09-30, found while planning stand-ins for scripted fights; read in
 the code, not yet seen). In vanilla the party is Vi, Kabbu and Leif in that order, so the game's code sometimes uses
@@ -1375,7 +1384,7 @@ Archipelago icon after it was bought (seen on screen). The slot's own item now c
 **Status:** works, seen on screen (2026-09-25): Merab's medal shop with its full stock, the reshuffle choice, Madame Butterfly's item shop, the caravan, and pickups in houses; Shades's shop not yet built as locations.
 
 *Code: `ShopSwap.cs` (medal shops and their stock), `ItemShops.cs` (item shops), `KeptOpen.cs` (the shopkeeper
-and scenery kept present), `QualityOfLife.cs` (the reshuffle choice first), `ItemSwap.cs` (`UpdateItem`, pickups
+and scenery kept present), `QualityOfLife.Opening.cs` (`RerollFirst`, the reshuffle choice first), `ItemSwap.cs` (`UpdateItem`, pickups
 in houses).*
 
 ## 13. The entrance randomizer in the game: doors rewritten at map load
@@ -1428,8 +1437,8 @@ someone to help, not only hidden items). Read first how the medal works: one sec
 objects (`NPCControl.CheckHidden`: buried crystal berries, grass hiding one, a dig spot with a medal) and the map
 (`MapControl.CheckDisc`: an unrecorded discovery) whether something is hidden; any yes sets one value,
 `map.hiddenitem = 100`, and the map's update turns that into the "!" over the leader and the beep
-(`MapControl.cs:885-896`). So nothing about the medal needs changing: a postfix on `CheckDisc` (run a second after every
-map load, discoveries or not) sets the same value when one of the seed's locations on this map isn't done. Every location
+(`MapControl.cs:885-896`). So nothing about the medal needs changing: a prefix on `CheckDisc` (run a second after every
+map load, discoveries or not) answers in its place in a seed, and sets the same value when one of the seed's locations on this map isn't done. Every location
 type has a map: pickups, gifts (quest rewards included, where the reward is handed over), shop copies and item shops
 from `slot_data`, discoveries from the map's own `discoveryids`. Done means the server has the check, or offline the save
 says so (its flag, crystal berry, journal entry, a shop copy's bought bit). Only while the Detector counts as equipped
@@ -1459,8 +1468,8 @@ build step 10).
 (Difficulty, Detector, later DeathLink, which only adds a tag to the connection). Anything that decides the
 seed (entrance rando, shuffles, goals) is a player-file (yaml) option, applied from `slot_data`.
 
-**Every panel setting applies only while Archipelago is enabled** (2026-09-24): vanilla saves play
-exactly as vanilla. Difficulty, Detector and every item swap check the switch; a Hardest flag the mod set is
+**Every panel setting applies only while Archipelago is enabled** (2026-09-24; or with *Use on normal saves*, step
+18): vanilla saves play exactly as vanilla. Difficulty, Detector and every item swap check the switch; a Hardest flag the mod set is
 cleared the moment it's switched off.
 
 **A row "Detector: On / Off" in the Archipelago panel** (2026-09-24), a help for finding items.
@@ -1472,7 +1481,8 @@ on `BadgeIsEquipped` serves both rows. It changes no save data and no logic.
 
 **Built (2026-09-24), not yet seen on screen:** the panel has eight rows now (spaced tighter so the status
 line still fits). Difficulty offers Normal, Hard and Hardest. `MedalAssist.cs`
-answers "equipped" for medal 11 (Hard) or 2 (Detector) on party-wide checks, on randomizer saves only. The
+answers "equipped" for medal 11 (Hard) or 2 (Detector) on party-wide checks, on randomizer saves only (since step 18,
+also with *Use on normal saves*). The
 medals menu equips from the medal list itself, never through that check, so it's unaffected.
 
 **Hardest** (chosen: switchable, the save stays clean): its extras read the save's HARDEST flag (614)
@@ -1555,15 +1565,16 @@ its enemies (`createentity`), after the game has applied Hard/Hardest:
   its Hard bonus by the ratio, defence by the step) and a postfix puts it back; the page's own Hard/Hardest maths runs
   on top. The field holds other text on other pages, so only a real enemy row is touched. The Dead Lander G showed
   HP 7, Defense 0 there, as in the fight.
-- Every scaled enemy is logged (`[scale] Seedling (9): home 1, target 10: hp 4 -> 10, attack +2, ...`).
+- Every scaled enemy is logged (`[scale] Seedling (9): home 1, target 10: hp 4 -> 10, hits x2.50, def … -> …, exp …
+  -> …`).
 All the constants are starting values, tuned by play.
 
 **Seen on screen (2026-09-26):** at level 1 on Party level, a map Underling shuffled into a Dead Lander G was
 logged `home 27, target 1: hp 35 -> 7, attack -3, def 1 -> 0, exp 74 -> 9`, and Spy in the fight showed HP 7, Defense 0.
 The panel row stepped through its three values (the log followed each). **How it played:** tough but fair. Leif alone at 7 HP
 (healing 1+ a turn) went to 4 HP after its first hits, then to 2. The tester judged 35 -> 7 HP and no defence balanced,
-"fair/hard" for anyone who shuffles enemies. Its attack sits at the -3 floor; if late enemies prove too harsh early,
-that floor is the first knob to try.
+"fair/hard" for anyone who shuffles enemies. Its attack then sat at the -3 floor; per-hit scaling replaced that floor
+the same day (below).
 
 **Per-hit attack felt fair (2026-09-26):** the same Dead Lander G at level 1 (hits x0.19, the dev cheat
 `onehit` off) landed 1-2 attacks at "fair damage" and died in two hits, like any other enemy there.
@@ -1624,7 +1635,8 @@ deliberate exception to "vanilla stays vanilla" that only the project owner coul
 - **What it turns on, with Archipelago off:** the Settings rows to both pages (step 8), Fast text, the scenes Skip
   cutscenes skips or speeds by, Travel (Warp to Start goes to the game's own start), Medal prices, Difficulty,
   Detector, Enemy scaling, the EXP and berry multipliers (step 19), Uncap FPS (step 24), skipping the game's
-  5-second forced collection (step 25), and the guards against missing animations and glow colours (step 11).
+  5-second forced collection (step 25), Attack boost (step 27), Healing crystals (step 30), Auto-save (step 31), and
+  the guards against missing animations and glow colours (step 11).
   **Added (2026-09-29):** the user saw the animation warnings on a normal save with the row on, in the Barren Lands,
   where the game warns on its own; asked, they chose the guards follow the row. Nothing changes on screen.
 - **What it never turns on:** anything tied to a seed. The intro skip (its end sends the first check and makes the
@@ -1632,13 +1644,14 @@ deliberate exception to "vanilla stays vanilla" that only the project owner coul
   checks), Item animation (only items from the server), and the achievement guard.
 - **How:** one `settingsOn` in `Plugin.cs` (Archipelago enabled, or this row) goes to the modules behind the two pages
   in place of the Archipelago switch: `MedalAssist` (which keeps the Archipelago switch for boss prizes),
-  `EnemyScaling`, `InGameSettings`, `Multipliers`, `FrameRate`, `ClockCleanup`, `AnimGuard`, `GlowGuard`, the Travel
-  buttons, and `QualityOfLife.SettingsOn` (fast text, the scene list, and
+  `EnemyScaling`, `InGameSettings`, `Multipliers`, `FrameRate`, `ClockCleanup`, `AnimGuard`, `GlowGuard`,
+  `AttackBoost`, `SaveCrystals` (Healing crystals only; the confirm press stays on the Archipelago switch), `AutoSave`,
+  the Travel buttons, and `QualityOfLife.SettingsOn` (fast text, the scene list, and
   `ShopSwap`'s prices). The seed's start and the entrance randomizer's forced Warp answer only with Archipelago
   enabled, so a normal save never warps to a seed's start.
 
-**Status:** built (2026-09-26), the build succeeds; the guards joined (2026-09-29), the build succeeds, not yet
-seen in game.
+**Status:** built (2026-09-26); in use on a normal save with the row on (2026-09-29, chapter 5: Uncap FPS at 240
+applied with Archipelago off). The rest of what it turns on, and the guards that joined (2026-09-29), not yet seen.
 
 ## 19. EXP and berry multipliers
 
@@ -1651,18 +1664,18 @@ An opt-in for a faster, easier game (Next 16 and 17 in `apimplementation.md`).
   two arrows, one per step, the lit ones yellow; left / right lights or clears one.
 - Only while Archipelago is enabled, or with *Use on normal saves* (step 18). No check and no logic depend on them.
 
-**How it works** (`Multipliers.cs`, the facts in `MEASURED.md`, "What the mod's code relies on"):
+**How it works** (`Multipliers.cs`, the facts in `MEASURED.md`, "EXP and berries picked up"):
 - **EXP:** a postfix on the battle's own `BattleControl.GetEXP(amount, fixedexp, enemy)`, the one call that turns each
   defeated enemy into its EXP share, after the game's Hard Mode bonus and its per-enemy caps. It multiplies that share,
   so it stacks on top of enemy scaling. The game then adds it to the battle's total, which it caps at one level's worth
-  (`neededexp`); that cap stays, so a high multiplier early mostly means a level per battle. The hologram fights
-  (flag 166) keep the game's 5.
+  (`neededexp`); that cap stays, so a high multiplier early mostly means a level per battle. A hard rematch at the
+  hologram machine (flag 166) keeps the game's 5.
 - **Berries:** a prefix on the first step of `NPCControl.BerryBounce`, the coroutine the game starts only right after a
   berry lying in the world (1, 5 or 20, from the map or dropped after a fight) has been added, and before it clamps
   money at 999. **First hooked on `BerryBounce()` itself, which never ran** (2026-09-26: 10x berries gave the
   plain amount, and the log had no berry line while the EXP lines were there): that method only builds the coroutine
   object, and a stub that small is inlined into its caller, so a patch on it is skipped. The patch is now on the
-  coroutine's `MoveNext` (`AccessTools.EnumeratorMoveNext`), reached only through the interface, and acts on state 0. It adds the
+  coroutine's `MoveNext` (`MethodType.Enumerator`), reached only through the interface, and acts on state 0. It adds the
   rest (value x (multiplier - 1)) and clamps the same way. A check's berries come from the server through the item
   grant, never this pickup, so they aren't multiplied.
 - **The bar** (`ApMenu.DrawPips`): the game draws a volume row's ten pips with `guisprites[59]` (empty, a quarter
@@ -1671,7 +1684,7 @@ An opt-in for a faster, easier game (Next 16 and 17 in `apimplementation.md`).
 - Each page's two buttons: Reset puts both back to 1x, Disable all sets 1x.
 
 **Seen on screen (2026-09-26):** EXP at 10x: a Pseudoscorpion and a Cactus logged 5 -> 50 and 7 -> 70, and the
-battle gave 100, the game's cap of a level's worth.
+battle gave 100, the game's cap of a level's worth. A berry picked up at 10x, after the move to `MoveNext`.
 
 **Status:** works, seen on screen (2026-09-26): EXP at 10x, and a berry picked up at 10x.
 
@@ -1689,15 +1702,16 @@ end). Right below Item animation, since both are about another player's items.
   found ...", "from ...") is the same either way; only the colours change. Your own finds are always the game's red.
 - The row joins Reset to defaults (back to its default: Archipelago then, Rarity since step 22) and Disable all (Off). Only while Archipelago is enabled, or
   with *Use on normal saves* (step 18), like the page's other rows.
-- The Quality of life page grows to eight rows (the last at the panel's lowest row spot, above the help line).
+- The Quality of life page grew to eight rows then (the last at the panel's lowest row spot, above the help line);
+  step 21 on added more.
 
 **Status:** built (2026-09-26); the row seen on the ten-row page (2026-09-26, step 21); not yet seen: a hold-up with it off.
 
-*Code: `QualityOfLife.cs` (`ItemColors`, `ApColors`), `ApMenu.cs` (`ColorsRow`), `ItemSwap.cs` (`PlayerText`, `ClassText`).*
+*Code: `QualityOfLife.cs` (`ItemColors`, `ApColors`), `ApMenu.cs` (`ColorsRow`), `ItemSwap.Looks.cs` (`PlayerText`, `ClassText`).*
 
 ## 21. Archipelago icon: other players' items on the ground and on shelves
 
-**Asked (2026-09-26):** once the icon was drawn (step 9, `ApIcon.cs`), use it for every other world's item,
+**Asked (2026-09-26):** once the icon was drawn (step 23, `ApIcon.cs`), use it for every other world's item,
 with a Quality of life row. The design from 2026-09-24 and 2026-09-26 (another game's item as the icon, another Bug
 Fables player's with its real sprite, a row on by default, off for a surprise) plus a mode added on top: every other
 player's item as the icon. **Archipelago icon: OTHER GAMES / ALL PLAYERS / OFF**, Other games by default, below Item
@@ -1709,8 +1723,8 @@ colors.
 - **All players:** any item that isn't yours is the icon, in its class colour.
 - **Off:** another game's item keeps the vanilla item's look (as before the icon), a surprise until found; Bug Fables
   items show their real sprite. The text always names whose it is.
-- With more rows, the Quality of life page's rows sit closer (the first and last where they were); the other pages
-  are unchanged.
+- With more rows, the Quality of life page's rows sit closer (the first and last where they were); the Gameplay page
+  followed in step 30.
 - **Shops name it too (2026-09-26):** a shop's box names another player's item in its class colour, and its
   description says whose: "A useful item for Other (APQuest).", or for another Bug Fables player's item "For
   BugTester2: " before the item's own description. First the name was "<player>'s <item>", but a shopkeeper pastes the
@@ -1773,9 +1787,10 @@ own item at the game's height with no backdrop, so a shelf shows at a glance whi
 cut through the flat starburst close behind it, and every other item is a flat sprite; so a crystal berry is its flat
 icon everywhere, crystal berry spots included, always with its backdrop, for the clarity the backdrop gives.
 
-**Status:** works, seen on the Caravan's shelf and on the ground (2026-09-26).
+**Status:** works, seen on the Caravan's shelf and on the ground (2026-09-26); with Item colors Off, the game's own
+colours by kind not yet seen.
 
-*Code: `ItemSwap.cs` (`Mark`, `MarkColorOf`), `QualityOfLife.cs` (`ItemBackgrounds`), `ApMenu.cs` (`BackgroundsRow`).*
+*Code: `ItemSwap.Looks.cs` (`Mark`, `MarkColorOf`), `QualityOfLife.cs` (`ItemBackgrounds`), `ApMenu.cs` (`BackgroundsRow`).*
 
 ## 23. The Archipelago logo, drawn in code in the game's style
 
@@ -1788,7 +1803,7 @@ that looks good but also the same style as the game". The game's round pause-men
 round a pale fill (`MEASURED.md`, the round icons' colours), and the mod already drew circles that way for the Warp
 button. So `ApIcon.cs` draws the logo itself at runtime: six overlapping circles in the logo's colours (sampled from
 your Archipelago checkout's `data/icon.png`), placed round a circle with the middle open, each later one cutting a gap
-into those below, as in the logo. Item-sized, like the party members' icons (the mod guide, step 11).
+into those below, as in the logo. Item-sized, like the party members' icons (the Archipelago guide, build step 18).
 
 **How the look was picked (on screen, eight looks):**
 1. The game's orb recipe exactly (dark ring, pale fill): pastel, with outlines too heavy at item size ("the outlines /
@@ -1796,12 +1811,13 @@ into those below, as in the logo. Item-sized, like the party members' icons (the
 2. The logo's own colours with a thinner ring, flat with no ring, and the recipe thinner and stronger: better, but on
    the red starburst of a hold-up the red circle vanished, and see-through gaps let any backdrop wash the colours out.
 3. As a sticker, the gaps and a rim round the flower filled: white (odd), white thinner, black thin (too sharp), black
-   as thick as the first white. Compared as hold-ups on the four class backdrops (dev `holdup ap`), then side by side
+   as thick as the first white. Compared as hold-ups on two class backdrops, plum and cyan (dev `holdup ap`), then side by side
    on the Caravan's shelf, close up and at a distance (dev `shelflook`). **Black, the fuller rim**, won: it reads on any
    backdrop, keeps six separate circles at a distance, and matches the game's outlined item sprites.
 
 **Where it's used:** another game's item on the ground, on a shelf, at a pickup and a gift (step 21's row decides whose
-items), on the class-coloured backdrop of step 22.
+items), on the class-coloured backdrop of step 22; and the Jump item's own look, as it belongs to no member
+(`CustomItems.cs`).
 
 **Next: thicker outlines** (the user, 2026-09-30, with screenshots of a shop shelf, the icon next to a vanilla leaf and
 egg: "it has pretty thin outlines while the vanilla items have really thick and visible ones"). Plan only; the look is
@@ -1812,7 +1828,8 @@ drawing is fitted to the same size. How it will be picked:
 
 1. Dev `shelflook` takes a gap share as well as a rim share (today only the rim).
 2. On a shop shelf next to vanilla items (the screenshot's leaf and egg), rims 0.14, 0.16 and 0.18 against gaps 0.05,
-   0.08 and 0.10, close up and at a distance, then as hold-ups (`holdup ap`) on the class backdrops.
+   0.08 and 0.10, close up and at a distance, then as hold-ups; `holdup ap` first learns the four current class
+   colours (today it shows two fixed ones).
 3. The user picks; `Rim` and `Gap` in `ApIcon.cs` change, and this step's status says what was seen.
 
 **Status:** works, seen on screen (2026-09-26) on hold-ups, on the Caravan's shelf and on the ground. Thicker outlines:
@@ -1848,7 +1865,7 @@ place it counts frames instead of time first.
   The game's own settings file is never written.
 - **Motion drawn between physics steps.** The camera is placed between its last two steps before drawing, and put
   back after. Characters at first got Unity's rigidbody interpolation; since 2026-09-30 they are drawn the camera's
-  way instead (the last pitfall below). **Pitfall, found on screen:**
+  way instead (the pitfall "drawn at physics steps", below). **Pitfall, found on screen:**
   the main camera has two child cameras, 3DGUI (emoticons, the "!" over NPCs) and the HUD's GUICamera, which draw after
   it. Putting the camera back straight after its own draw left the "!" jittering against the world, on sideways walking
   only. Found by subtraction (on screen, one piece off at a time: interpolation off, still there; camera smoothing off,
@@ -1909,8 +1926,8 @@ place it counts frames instead of time first.
   `FixedUpdate`, 50 times a second at any frame rate (seen: the swamp bridge's collapse, Event130, looked normal at 240).
   **Seen on screen (2026-09-27):** the text sharp at 240. Not
   yet seen: the bushes, a character's shake.
-- **What the game counts in frames runs 60 times a second.** Every method that reads `Time.frameCount` (24, found by
-  reading each method's IL at load) sees a 60 Hz count instead: on a frame that starts a new 1/60 s, the count; on the
+- **What the game counts in frames runs 60 times a second.** Every method that reads `Time.frameCount` (24, from a
+  fixed list the console's `fpsscan` checks; each body is read again at load) sees a 60 Hz count instead: on a frame that starts a new 1/60 s, the count; on the
   frames between, 1, which no `% n` check divides. `FrameDifference` ("once every 1/60 s") answers the same way.
   **Pitfall, the opposite test** (2026-09-30, found with `bodytrace`): a follower's walk-or-brake decision,
   `EntityControl.DoFollow`, *skips* its work when the count divides (`if (Time.frameCount % 2 == 0) return;`). Given 1
@@ -2007,7 +2024,7 @@ whether a garbage collection ran. Two clocks showed up:
 **Status:** works, measured (2026-09-27). The tester's FPS counter dipping to 220 was that stall; confirmation on screen
 that it's gone is still to come.
 
-*Code: `ClockCleanup.cs`; `LocationChecks.cs` and `ShopSwap.cs` (`Copies`); the console's `frames` (`FrameRate.cs`).*
+*Code: `ClockCleanup.cs`; `LocationChecks.cs` and `ShopSwap.cs` (`Copies`); the console's `frames` (`DevConsole.cs`, `Dev/FrameRate.Dev.cs`).*
 
 ## 26. Field abilities as items in the game: ability checks read the bag
 
@@ -2029,7 +2046,7 @@ is story state (a scene checks it; a rock or a miniboss is gone once it's set). 
 **Status:** built (2026-09-27), not yet seen in game.
 
 *Code: `Abilities.cs`; the receiver in `ItemReceiver.cs`, the key items in `CustomItems.cs`, the looks in
-`ItemSwap.Looks.cs`, `slot_data` `ability_items` in `ApConnection.cs`, the Warp in `QualityOfLife.cs`.*
+`ItemSwap.Looks.cs`, `slot_data` `ability_items` in `SeedData.cs`, the Warp in `QualityOfLife.cs`.*
 
 ## 27. Attack boost: +1 damage on every hit
 
