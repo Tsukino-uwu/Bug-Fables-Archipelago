@@ -77,7 +77,7 @@ have it), and Archipelago imports it on every start.
 - **Keeps its own saves** in a folder of its own, so normal saves are never read or written.
 - **Stores the connection settings** in its BepInEx config file, the room password included, in plain text on the
   player's own machine.
-- **Uses the clipboard** only when the player presses paste or copy in the address box.
+- **Uses the clipboard** only when the player presses paste or copy in one of the panel's text boxes.
 - **Patches five things outside the game** at run time:
   - two in the connection's libraries, to turn on compression;
   - two in MultiClient.Net's cache, to keep its file names inside its folder;

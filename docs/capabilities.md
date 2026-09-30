@@ -48,13 +48,13 @@ and preflight checks the shipped DLL holds none of it.
 | `mod/BugFablesAP/Core/SaveRedirect.cs` | reads files | Reads the randomizer's own save files, which live in a folder of their own so normal saves are never read or written |
 | `mod/BugFablesAP/Core/SaveRedirect.cs` | writes files | Writes those save files the way the game writes its own: to a temporary file first, keeping the previous one as a backup |
 | `mod/BugFablesAP/Gameplay/FrameRate.cs` | finds code by name | Finds game types by name, only in the game's own assembly, from a fixed list in the same file, to patch their frame-rate timers |
-| `mod/BugFablesAP/Ui/ApMenu.TextEntry.cs` | uses the clipboard | Pastes into or copies from the server-address box, only when the player presses paste or copy there |
+| `mod/BugFablesAP/Ui/ApMenu.TextEntry.cs` | uses the clipboard | Pastes into or copies from the panel's text boxes (address, port, slot, password), only when the player presses paste or copy there |
 | `mod/BugFablesAP/Dev/DevConsole.cs` | finds code by name | Dev build only: finds a game type, only in the game's own assembly, by the name typed into the dev console |
 | `mod/BugFablesAP/Dev/DevConsole.cs` | reads files | Dev build only: reads console commands from a file the developer names in the config (none by default) |
 | `mod/BugFablesAP/Dev/DevConsole.cs` | writes files | Dev build only: empties that command file once its commands have run |
 | `mod/BugFablesAP/Dev/DevReload.cs` | finds code by name | Dev build only: finds BepInEx's ScriptEngine among the loaded assemblies, to reload the plugin in a running game |
 | `mod/BugFablesAP/Dev/DevReload.cs` | reads files | Dev build only: hashes the plugin DLL to notice a new build |
-| `mod/BugFablesAP/Dev/DevReload.cs` | writes files | Dev build only: writes a one-line reload status next to BepInEx |
+| `mod/BugFablesAP/Dev/DevReload.cs` | writes files | Dev build only: writes a one-line reload status in the BepInEx folder |
 | `mod/BugFablesAP/Dev/EntityDump.cs` | writes files | Dev build only: dumps every map's entities, the item and medal names and the enemy table to files in the BepInEx folder |
 | `mod/BugFablesAP/Dev/MapDump.cs` | writes files | Dev build only: dumps each map's auto-start events, hazards and flag-switched scenery to a file in the BepInEx folder |
 | `mod/BugFablesAP/Dev/PatchDump.cs` | writes files | Dev build only: dumps every patch the mod made to a file in the BepInEx folder, to compare before and after a change |
@@ -62,7 +62,7 @@ and preflight checks the shipped DLL holds none of it.
 | `mod/BugFablesAP/Dev/SaveDiff.cs` | reads files | Dev build only: reads two save files and logs what changed between them |
 | `mod/BugFablesAP/Dev/ScriptDump.cs` | writes files | Dev build only: dumps the item, flag, event and transfer tokens of every dialogue line to a file in the BepInEx folder |
 | `mod/BugFablesAP/Dev/SeedDump.cs` | writes files | Dev build only: dumps every table the mod read from the seed's slot_data to a file in the BepInEx folder |
-| `mod/BugFablesAP/Dev/SpriteDump.cs` | writes files | Dev build only: saves the game's interface sprite sheets and an index as images in the BepInEx folder |
+| `mod/BugFablesAP/Dev/SpriteDump.cs` | writes files | Dev build only: saves the game's interface sprite sheets and its item and medal sprites, each with an index, as images in the BepInEx folder |
 | `mod/BugFablesAP/Dev/VarDump.cs` | writes files | Dev build only: dumps which flag slots the game's text uses to a file in the BepInEx folder |
 
 ## Mod: patches outside the game
@@ -77,7 +77,7 @@ Unity itself. Read from the shipped DLL's `[HarmonyPatch]` attributes, as `assem
 | `websocket-sharp:WebSocketSharp.WebSocket::validateSecWebSocketExtensionsServerHeader` | Accepts the server's compression reply, whose `server_max_window_bits` websocket-sharp would otherwise reject; dropping it is safe (`Core/WebSocketCompression.cs`) |
 | `Archipelago.MultiClient.Net:Archipelago.MultiClient.Net.DataPackage.FileSystemCheckSumDataPackageProvider::GetFileSystemSafeFileName` | Makes the game name and checksum the server sends a plain file name before MultiClient.Net caches its data under it; in 6.7.1 this function returns its input unchanged, so a server could pick the path (`Core/CachePaths.cs`) |
 | `Archipelago.MultiClient.Net:Archipelago.MultiClient.Net.DataPackage.FileSystemCheckSumDataPackageProvider::TryGetDataPackage` | Cleans the checksum the same way before the cache is read, which 6.7.1 never does (`Core/CachePaths.cs`) |
-| `UnityEngine.AnimationModule:UnityEngine.Animator::Play` | Skips a play of an animation state a character lacks, which would only log two Unity warnings and play nothing; only while Archipelago is on (`Guards/AnimGuard.cs`) |
+| `UnityEngine.AnimationModule:UnityEngine.Animator::Play` | Skips a play of an animation state a character lacks, which would only log two Unity warnings and play nothing; only while Archipelago is on, or with *Use on normal saves* (`Guards/AnimGuard.cs`) |
 
 ## Dev scripts and hooks: what they touch
 
