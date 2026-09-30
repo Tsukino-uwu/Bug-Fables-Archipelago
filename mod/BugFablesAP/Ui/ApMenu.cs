@@ -221,12 +221,12 @@ namespace BugFablesAP
         private const int CursorSort = 20;
         private const string TextSort = "|sort,10|";
         private static readonly float[] RowY = { 2.65f, 2.0f, 1.35f, 0.7f, 0.05f, -0.6f, -1.25f, -1.9f };
-        // The settings pages show nine rows between the same top and bottom row, as the game's Settings list shows nine
-        // (PauseMenu, listammount 9); a page with more scrolls.
-        private const int VisibleRows = 9;
+        // A settings page's rows are the game's Settings rows in the same box (MEASURED.md, a Settings row): its first
+        // row's text at 2.55, 0.7 apart. Seven show, the help and status lines staying under them; more scroll.
+        private const int VisibleRows = 7;
+        private const float GameFirstRow = 2.55f, GameRowGap = 0.7f;
         private int PageRows => page == Page.Qol ? QolRows : page == Page.Gameplay ? GameplayRows : Rows;
-        private float RowAt(int r) => page == Page.Main ? RowY[r]
-            : RowY[0] - (r - top) * (RowY[0] - RowY[RowY.Length - 1]) / (VisibleRows - 1);
+        private float RowAt(int r) => page == Page.Main ? RowY[r] : GameFirstRow - (r - top) * GameRowGap;
         private bool Shown(int r) => page == Page.Main || (r >= top && r < top + VisibleRows);
 
         // The game's list rule (MainManager.UpdateList): the view moves only when the cursor passes its edge.
@@ -531,8 +531,8 @@ namespace BugFablesAP
                 for (int side = 0; side < 2; side++)
                 {
                     GameObject arrow = MainManager.NewUIObject("arrow" + r + side, arrows,
-                        new Vector3(side == 0 ? ArrowLeftX : ArrowRightX, RowAt(r) + ArrowRise),
-                        Vector3.one * ArrowScale, MainManager.guisprites[1], ButtonSort);
+                        new Vector3(side == 0 ? LeftArrowX : RightArrowX, RowAt(r) + ArrowRise),
+                        Vector3.one * RowArrowScale, MainManager.guisprites[1], ButtonSort);
                     arrow.transform.localEulerAngles = new Vector3(0f, 0f, side == 0 ? -90f : 90f);
                     arrow.layer = 5;
                     rowArrows.Add(new KeyValuePair<int, GameObject>(r, arrow));
@@ -581,8 +581,7 @@ namespace BugFablesAP
         }
 
         // The volume rows' look (MainManager.ShowItemList, type 17): ten pips between the arrows, the lit ones the
-        // yellow hexagon, scaled from the Settings row's spacing to this panel's narrower one.
-        private const float PipScale = 0.68f;
+        // yellow hexagon, at the game's own place and size.
 
         private void DrawPips(int[] rows, int[] lit)
         {
@@ -604,8 +603,8 @@ namespace BugFablesAP
                 {
                     bool on = p < lit[i];
                     GameObject pip = MainManager.NewUIObject("pip", pips,
-                        new Vector3(ArrowLeftX + (0.7f + 0.4f * p) * PipScale, RowAt(rows[i]) + ArrowRise),
-                        Vector3.one * (on ? 1f / 3f : 1f / 4f) * PipScale,
+                        new Vector3(GamePipX + 0.4f * p, RowAt(rows[i]) + ArrowRise),
+                        Vector3.one * (on ? 1f / 3f : 1f / 4f),
                         MainManager.guisprites[on ? 42 : 59], ButtonSort + p);
                     if (on)
                     {
@@ -632,7 +631,7 @@ namespace BugFablesAP
             Text("|size,0.8|" + (row == ButtonsRow && button == 0 ? "|color,1|" : "") + "Reset to defaults",
                 LabelX, RowAt(ButtonsRow));
             Text("|center||size,0.8|" + (row == ButtonsRow && button == 1 ? "|color,1|" : "") + "Disable all",
-                ValueCenterX, RowAt(ButtonsRow));
+                ValueCenter, RowAt(ButtonsRow));
         }
 
         private void PlaceCursor()
@@ -643,7 +642,7 @@ namespace BugFablesAP
                 return;
             }
             ClosePopup();
-            float leafX = row == ButtonsRow && button == 1 ? ValueCenterX - DisableHalfWidth : LabelX;
+            float leafX = row == ButtonsRow && button == 1 ? ValueCenter - DisableHalfWidth : LabelX;
             leaf.transform.localPosition = new Vector3(leafX + LeafOffset, RowAt(row) + LeafRise, 0f);
         }
 
@@ -692,6 +691,14 @@ namespace BugFablesAP
         // screen) puts the leaf at its left edge.
         private const float ValueCenterX = 2.6f, DisableHalfWidth = 1.15f;
         private const float ArrowLeftX = 0.9f, ArrowRightX = 4.3f, ArrowRise = 0.15f, ArrowScale = 0.75f;
+        // A settings page's row is the game's Settings row (MEASURED.md, a Settings row): arrows at 1 on 0.4 and 5.4,
+        // the value centred between them, ten pips from 1.1, 0.4 apart. The main page keeps its narrower row.
+        private const float GameArrowLeftX = 0.4f, GameArrowRightX = 5.4f, GameValueX = 2.9f, GamePipX = 1.1f;
+        private bool GameRow => page != Page.Main;
+        private float LeftArrowX => GameRow ? GameArrowLeftX : ArrowLeftX;
+        private float RightArrowX => GameRow ? GameArrowRightX : ArrowRightX;
+        private float RowArrowScale => GameRow ? 1f : ArrowScale;
+        private float ValueCenter => GameRow ? GameValueX : ValueCenterX;
 
         private void Choice(int r, string label, string value)
         {
@@ -700,10 +707,11 @@ namespace BugFablesAP
                 return;
             }
             Label(r, label);
-            // About 8 letters fit between the arrows at 0.75; a longer value shrinks to fit.
-            float size = value.Length > 8 ? 0.75f * 8f / value.Length : 0.75f;
+            // About 8 letters fit between the main page's arrows at 0.75, 11 between the game's; longer shrinks to fit.
+            int fits = GameRow ? 11 : 8;
+            float size = value.Length > fits ? 0.75f * fits / value.Length : 0.75f;
             Text("|center||size," + size.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + value,
-                ValueCenterX, RowAt(r));
+                ValueCenter, RowAt(r));
         }
 
         private void Label(int r, string label)

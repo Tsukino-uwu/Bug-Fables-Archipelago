@@ -2096,3 +2096,8 @@ either one wrong).
   settings menu have them more to the side i think ?" Read: the panel's box is the Settings window's own box (same
   place and size), so the game's arrows carry over unchanged: box corners (6.5, 3.0) and (6.5, -3.1), scale 1.25.
   Built and copied in (`D163974DB237`); not yet seen.
+- **Seen (the user):** the list arrows in the corners, "yes this worked correctly".
+- **The rows at the game's own size (the user):** the value arrows and pips were drawn at 0.75 and 0.68 of the game's.
+  Read: the game's Settings row in the same box (rows 0.7 apart, arrows at 1 on x 0.4 and 5.4, the value at 2.9, pips
+  from 1.1). Nine such rows fill the box, where the panel keeps its help lines; asked, the user chose seven rows at the
+  game's size, both pages scrolling. Built and copied in (`5581F3683570`); not yet seen.

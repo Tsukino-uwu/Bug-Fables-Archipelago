@@ -1816,6 +1816,12 @@ for its own threshold. Used by `enemy-numbers.py` and `EnemyScaling.cs` (the mod
   (`MainManager.cs:15583-15604`); the down arrow at `num3 + 0.5` after nine rows 0.7 apart from 0.25, so `-5.55`,
   while rows are hidden below (`:16364-16385`). In the box: up `(6.5, 3.0)`, down `(6.5, -3.1)`, the top-right and
   bottom-right corners over the border, as the screenshots show. Used by `ApMenu.cs`.
+- **A Settings row** (`MainManager.ShowItemList`, type 17, `MainManager.cs:15619-15635`, `:15900-15935`): a `Bar`
+  at list `(1.4, num3)`, `num3` from 0.25 down 0.7 a row (scale 1 in the pause menu); its text at `(-2, -0.15)` in
+  the bar at 0.75; its two arrows (`slider0`, `slider1`) `guisprites[1]` at scale 1, at bar x 3.75 and 8.75, turned
+  -90° and 90°; a value like Mash's at bar x 6.25, `|center||size,0.75|`; a volume row's ten pips at bar x 4.45, 0.4
+  apart, `guisprites[59]` at 1/4, lit ones `guisprites[42]` at 1/3 in yellow. In the box: rows' text at
+  `2.55 - 0.7 k`, arrows at x 0.4 and 5.4, the value at 2.9, pips from 1.1. Used by `ApMenu.cs`.
 
 ## Still to measure
 

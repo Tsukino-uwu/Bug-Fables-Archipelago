@@ -563,7 +563,16 @@ screen: "the normal settings menu have them more to the side". The panel's box i
 (same type, place and size, `PauseMenu.cs:2707`), so the game's spots carry over unchanged: the box's top-right and
 bottom-right corners, over the border, at 1.25 (`MEASURED.md`, the Settings list's arrows). Up from the top row still
 wraps to the bottom, as the panel always did. The main page is unchanged. **Seen on screen (2026-09-30):** "yee the
-scroll works".
+scroll works", and the arrows in the corners: "yes this worked correctly".
+
+**The rows at the game's own size (2026-09-30):** the user, "we have scaled down the left/right arrows & the sound bar
+things in qol & gameplay as well compared to how the normal settings menu does it". They were (0.75 and 0.68 of the
+game's), to fit the panel's closer rows. In the shared box a Settings row is: rows 0.7 apart, arrows at 1 on x 0.4 and
+5.4, the value centred at 2.9, ten pips from 1.1 at the game's size (`MEASURED.md`, a Settings row). At that spacing
+nine rows fill the whole box, where the panel also keeps its help and status lines; asked, the user chose **seven rows
+at the game's size**, both pages scrolling (Gameplay by two rows), the help and status lines staying under them. The
+list arrows keep the corners just seen. A value now fits about 11 letters before it shrinks. The main page keeps its
+own narrower row. Built, not yet seen.
 
 **Achievements (2026-09-26; built, not yet seen):** an *Achievements* row on the main page, off by default.
 While Archipelago is enabled and it's off, Steam achievements aren't unlocked, as normal saves are kept apart; the help
