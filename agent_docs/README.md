@@ -10,6 +10,6 @@ One line per file.
 - [archipelago-review.md](archipelago-review.md): the full review of the project against everything Archipelago publishes (2026-09-29): each finding with its evidence, what's kept and what doesn't apply. The order of the work is `apimplementation.md`, Next 43.
 - [MEASURED.md](MEASURED.md): game facts measured by us (classes, hooks, flags, save fields), each with evidence and date.
 - [licensing.md](licensing.md): every third-party project, with its licence read from the file and what we may do with it.
-- [references.md](references.md): other randomizers read for their approach, and what was taken from each.
+- [references.md](references.md): projects compared with ours, and games the user knows from playing; what was taken from each.
 - [room-logic.md](room-logic.md): how a room gets mapped for the logic: its areas, one-ways, needs per entrance, the questions to ask and the method. Read before any room-level logic.
 - [log.md](log.md): dated session log. What was tried, what happened, what the user said.

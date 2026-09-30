@@ -1742,3 +1742,13 @@ either one wrong).
 - **Asked, the user's answers:** notes on library behaviour our code works around (MultiClient.Net's cache names,
   websocket-sharp's certificate check, the library's `Disconnect`) stay as they are; the game is exempt, so its facts
   and the release notes' "base-game" fixes stay too.
+- **Two kinds of reference, the user:** a project we read (code, repository or docs) always has a `licensing.md` row,
+  its licence read first; what the user knows from playing a game needs none. `references.md` holds only projects
+  compared with ours (Tevi, Crystal) and the play-based ones, now in a "From playing" section; a project read for
+  one fact or a name is in `licensing.md` only, "so references doesn't bloat".
+- **Rows that were missing, now added** (each licence read today): Archipelago's LICENSE exempts a world folder with a
+  licence of its own, and several such worlds had been read with no row: `pokemon_emerald` (from 2026-09-24), `oot`
+  (2026-09-29), and in today's music search `celeste_open_world`, `sa2b`, `smw`, `dkc3` (PoryGone's modified MIT:
+  no relicensing or selling), `marioland2` and `cvcotm`. Hollow Knight's RandomizerMod (LGPL-2.1), looked up
+  2026-09-29 for the term "room randomizer", also had none. The other worlds read (`sm`, `satisfactory`, `hk`,
+  `messenger`, `kdl3`, `cv64`) fall under Archipelago's own row, which now names them.
