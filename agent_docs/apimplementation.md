@@ -3550,6 +3550,11 @@ rebuilding archipelago inside the game just to connect/work with archipelago". A
 wrong, it drifts as Archipelago changes, and nobody who knows Archipelago can read it. **Recommendations too**
 (2026-09-29, the user: "we should do all standards & recommendations that Archipelago mentions"): what the docs call
 "should", "recommended" or "encouraged" (option groups, presets, a bug report page) is done like a requirement.
+**Proper fixes only** (2026-09-30, the user: "i don't want any workaround/placeholder fixes for logic/location things,
+i want proper fixes/whatever archipelago itself recommends and does"; part of this rule): a problem in the logic, the
+locations or generation gets the fix Archipelago recommends and does, never a guard or placeholder that hides it. The
+first case: the fill error with *minimal* and Shuffle Jump (Known issues) waits for more early locations, Archipelago's
+own first remedy, rather than a guard raising *minimal* to *full*.
 **Optional features too** (2026-09-30, the user: "we should try to support all available things archipelago has/does,
 that includes plando"): what Archipelago offers a world as optional, connection plando first, is supported, not
 written off as optional. **Read all of it** (2026-09-29, the user: "we should read and take a look at everything/anything Archipelago. don't

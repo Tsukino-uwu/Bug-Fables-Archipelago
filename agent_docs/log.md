@@ -1889,7 +1889,12 @@ either one wrong).
   change, so not this step's; one option at a time, only Jump unshuffled or accessibility full made it 0; Jump as an
   early local item, 1 of 400. Offered a guard (minimal raised to full with Shuffle Jump); the user: "I always want to
   guarantee a 100% generate rate", and "adding more locations is the real fix to the issue, instead of making
-  workarounds". So no guard: Known issues says how to re-measure as locations come.
+  workarounds". So no guard: Known issues says how to re-measure as locations come. Then, as a standing rule tied to
+  "follow Archipelago's standards": "i don't want any workaround/placeholder fixes for logic/location things, i want
+  proper fixes/whatever archipelago itself recommends and does"; written into `apimplementation.md` §8.
+- **For the next session:** CLAUDE.md is at 152 lines, over its 150 cap (from before this session; no line reflows
+  without rewording a rule). Also open: the in-game test of the submarine (the mod guide, step 37; the build is staged,
+  not copied in), its icon picked on screen, and the fill error (Known issues).
 - **The preflight refused twice, and nothing was widened:** `urllib` in the hook (a two-line percent-decode instead) and
   `Utils` in a test (the groups checked directly).
 - **Built:** the apworld (601 tests, Logic Test 90 of 90, fuzzer 0 of 10000 alone and with APQuest) and the mod (no
