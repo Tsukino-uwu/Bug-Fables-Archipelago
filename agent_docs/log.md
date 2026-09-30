@@ -2091,3 +2091,4 @@ either one wrong).
   pages now show nine rows at the Gameplay page's spacing and scroll the same way, with the game's arrows scaled to
   the panel's spacing (the mod guide, step 8). Built and copied in (`8B5AC0AFB749`, after `B3EC6CDF7A48`, both while
   the reload waited for a scene to end, so the newer one loads); not yet seen.
+- **Seen (the user):** "yee the scroll works". The Spy Specs row's battle effects are still to see (TO-CHECK.md).

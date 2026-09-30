@@ -559,7 +559,8 @@ up, 0.3 over the first row while rows are hidden above and 0.2 under the last wh
 bottom row as before (the Gameplay page's look, which already had nine), `Scroll` keeps the cursor's row in view by
 the game's rule, rows out of view aren't drawn, each row's value arrows follow it, and the two list arrows sit right of
 the value arrows, the game's sizes and offsets scaled from its 0.7 spacing to the panel's. Up from the top row still
-wraps to the bottom, as the panel always did. The main page is unchanged. Built, not yet seen.
+wraps to the bottom, as the panel always did. The main page is unchanged. **Seen on screen (2026-09-30):** "yee the
+scroll works".
 
 **Achievements (2026-09-26; built, not yet seen):** an *Achievements* row on the main page, off by default.
 While Archipelago is enabled and it's off, Steam achievements aren't unlocked, as normal saves are kept apart; the help
@@ -577,7 +578,7 @@ its rotation reset, so it kept an unturned world rotation and was seen edge-on. 
 the Quality of life page with all its text inside the shop. It follows whatever turn the camera has, so any room that
 turns it is covered. The lesson went into CLAUDE.md: read how the game does a thing first.
 
-**Status:** works, seen on screen (2026-09-24): the menu entry, the panel, and the file select held back until the first login; the Quality of life and Gameplay pages seen (2026-09-26); the Achievements row built (2026-09-26), not yet seen; the letter pool grown for a long page (2026-09-30), not yet seen; nine rows at a time with the game's scroll (2026-09-30), not yet seen.
+**Status:** works, seen on screen (2026-09-24): the menu entry, the panel, and the file select held back until the first login; the Quality of life and Gameplay pages seen (2026-09-26); the Achievements row built (2026-09-26), not yet seen; the letter pool grown for a long page (2026-09-30), not yet seen; nine rows at a time with the game's scroll seen (2026-09-30).
 
 *Code: `MenuToggle.cs` (the menu entry: `BeforeSetMenuText` and `AfterSetMenuText` around the game's rebuild,
 `AfterUpdate` for the cursor, `SetMode` for the switch); `ApMenu.cs` (the panel: `Build`, `Redraw`,
