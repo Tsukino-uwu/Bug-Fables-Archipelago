@@ -1508,8 +1508,15 @@ fight + end with the scripted thing even when scaling is enabled".
   adds the floor after the enemy is made; a hologram rematch has none). The bestiary shows the same numbers (the
   Beast always, the King by its data's column 23). Logged: `[scale] Centipede (69): home 17, target 1: hp 76 -> 28
   (only the HP above its scripted end at 10 scaled), …`.
-- The other fixed numbers in enemy scripts (heals, HP set outright, thresholds) come next: a survey first, then each
-  scaled by its enemy's ratio.
+- **The other fixed numbers in enemy scripts, surveyed** (2026-09-30; the user: "can we scale the scripted things in
+  fights as well, so they actually work/are fun"). `dev-scripts/enemy-numbers.py` lists every fixed HP number in
+  `BattleControl.cs` with its enemy: 39 fixed, 30 relative (a share of `maxhp`), which scale by themselves. Each was
+  read and classified in `MEASURED.md` ("Fixed numbers in the enemies' scripts").
+  - **Scale:** fixed heals (an ally's 4 to 15), an HP set outright (a revived partner at 7, a summoned ally at 10), the
+    holo party's thresholds, and the battle start's flat HP adjustments (Spuder −15, Zasp and Mothiva +15, Maki's team
+    +10, fire areas +3). Each by the ratio of the enemy whose HP it measures.
+  - **Keep:** 1 (survive at 1), 999 (an invulnerable marker), the two 10-HP scripted ends (above), and heals of 1.
+  - The scaling itself is next.
 
 **Status:** works, seen on screen (2026-09-26): scaled HP, defence and per-hit damage in a fight, and the bestiary;
 the constants still to tune by play. The 10-HP scripted end built (2026-09-30), not yet seen.

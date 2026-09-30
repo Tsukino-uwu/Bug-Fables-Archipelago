@@ -39,6 +39,7 @@ read, a log or a probe.
 - [Key items: to measure](#key-items-to-measure)
 - [Music and jingles](#music-and-jingles-2026-09-30-code-read-nothing-seen-in-game)
 - [An item entity's item](#an-item-entitys-item-2026-09-30-code-read-nothing-seen-in-game)
+- [Fixed numbers in the enemies' scripts](#fixed-numbers-in-the-enemies-scripts-2026-09-30-code-read-nothing-seen-in-game)
 
 ## The build (2026-09-24, read from a Steam install, game not run)
 
@@ -1686,3 +1687,44 @@ For the first version, measure and record:
 - **When:** `MainManager` sets `map` to the new map as it loads it (`MainManager.cs:9653`); the map's `Start` then runs
   `CreateEntities` (`MapControl.cs:298`).
 - Used by `ShopInventories.cs` and `ItemShops.cs`.
+
+## Fixed numbers in the enemies' scripts (2026-09-30, code read; nothing seen in game)
+
+Enemy scaling scales an enemy's HP (and each hit's damage), but a number written into an enemy's script stays as it is.
+`dev-scripts/enemy-numbers.py` lists every one in `BattleControl.cs` with its enemy (`case MainManager.Enemies.X` inside
+`DoAction`, else the method): 39 fixed, 30 relative (a share of `maxhp`, `HPPercent`), which scale by themselves. Each
+fixed one, read in its code:
+
+| Where (BattleControl.cs) | Enemy | What | Verdict |
+|---|---|---|---|
+| :1014 | Spuder | `hp -= 15` at the battle's start, before flag 41 on Hard (flags 613/614) | scale (HP units, after scaling) |
+| :1022 | Zasp, Mothiva | `hp += 15` with flag 606 | scale |
+| :1036 | Maki, Kina, Yin | `hp += 10` with flag 614 | scale |
+| :1067 | fire-area enemies | `hp += 3` | scale |
+| :1355 | any | `hp = 1` when a start left it at 0 | keep: survive at 1 |
+| :2792 | the spider tutorial | `hp = 999` | keep: invulnerable marker |
+| :12820, :15691 | enemies 42 and 48 | `Heal(10)` when their shield breaks | scale |
+| :14605 | Angry Plant | `Heal(heavystrike ? 1 : 1)` | keep: 1 |
+| :17519 | Pisci | `Heal(4)` on an ally | scale |
+| :18340 | Weevil | `Heal(heavystrike ? maxhp : 5)` | scale the 5 only |
+| :18361 | the Beast | `hp <= 10` | keep: its scripted end (enemy scaling keeps the 10) |
+| :19197 | Mothfly | `Heal(Clamp(maxhp × 0.075, 2 + …, 99))` | relative, with a floor: keep |
+| :20213, :20215 | Peacock Spider | `hp < 1` → `hp = 1` | keep: survive at 1 |
+| :20579 | Wasp King | `hp = 999` | keep: invulnerable marker |
+| :20793 | Wasp King | `Heal(stolen ? 4 : 5)` | scale |
+| :20826 | Everlasting King | `hp <= 10` | keep: its scripted end |
+| :21016 | Everlasting King | `Heal(3)` | scale |
+| :21658, :21686 | Carmina | `Heal(5)`; `hp = 1` | scale the 5; keep the 1 |
+| :23183 | Kali | `Heal(5)` on Kenny | scale |
+| :23794, :23796 | Bloatshroom | `hp <= 1` → `hp = 1` | keep: survive at 1 |
+| :24347, :24585 | Stratos, Delilah | the partner revived at `hp = 7` (with a counter showing 7) | scale both |
+| :24363-24364, :24609-24610 | Stratos, Delilah | `Heal(15)` on both | scale |
+| :24637 | Delilah | `Heal(6)` on Stratos | scale |
+| :25643 | Wild Chomper | `Heal(1)` each turn | keep: 1 |
+| :26339, :26340 | Maki | a summoned ally `Heal(10)`, `hp = 10` | scale |
+| :26916, :26993, :27146 | Kina, Yin, Wasp General | `Heal(6)`, `Heal(5)`, `Heal(4)` on an ally | scale |
+| :31721, :31735 | the holo party (`HoloVi`) | acts at `hp >= 10`, pays `hp -= 3` | scale |
+| :31962 | `EnemyHeavyThrow` | acts at `hp > 20` | scale |
+
+The ratio is the one enemy scaling gives the enemy whose HP the number measures: the healed one for a heal, the actor
+for its own threshold. Used by `enemy-numbers.py`; the scaling itself: the mod guide, step 17.

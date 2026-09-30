@@ -189,6 +189,7 @@ Sources are grouped in folders under `mod/BugFablesAP/`; the namespace is `BugFa
 | [`event-triggers.py`](../dev-scripts/event-triggers.py) | What starts each story event. | [MEASURED § What starts the gate events](MEASURED.md#what-starts-the-gate-events-2026-09-24-entitydump-scriptdump-with-event-lines-mapdump--spoilers)<br>[apimplementation § Build step 8](apimplementation.md#build-step-8-logic-from-the-games-own-gates-in-progress) |
 | [`gate-table.py`](../dev-scripts/gate-table.py) | Each flag-gated door, tagged with the chapter that sets its flag. | [apimplementation § Build step 8](apimplementation.md#build-step-8-logic-from-the-games-own-gates-in-progress)<br>[MEASURED § Chapters](MEASURED.md#chapters-2026-09-24-code-read-and-entitydump--spoilers-map-names) |
 | [`party-access.py`](../dev-scripts/party-access.py) | Every way the game's code reaches for a party member. | [documentation § 11. Playing with fewer party members](documentation.md#11-playing-with-fewer-party-members-stand-ins-and-followers) |
+| [`enemy-numbers.py`](../dev-scripts/enemy-numbers.py) | Every fixed HP number in the enemies' scripts (heals, HP set outright, thresholds), with its enemy, for enemy scaling. | [MEASURED § Fixed numbers in the enemies' scripts](MEASURED.md#fixed-numbers-in-the-enemies-scripts-2026-09-30-code-read-nothing-seen-in-game)<br>[documentation § 17. Enemy scaling](documentation.md#17-enemy-scaling-every-area-fair-whenever-you-reach-it) |
 
 ## Hooks
 
