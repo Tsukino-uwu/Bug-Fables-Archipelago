@@ -1123,6 +1123,12 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   - `SetCondition` for `EventStop` and `RemoveCondition` of a condition not held never touch the member's body
     (MainManager.cs:6527-6615, :6685-6710).
   Used by `PartySlots.cs`.
+- A scripted end at 10 HP (code read 2026-09-30, not measured): with `SurviveWith10` every hit leaves the enemy at 10 HP
+  or more (`BattleControl.cs:7491-7494`, except Kabbu's skill 9 used as a skill), and the Beast plays its script on
+  its own turn at `hp <= 10` (:18361), the Everlasting King its phases at `hp <= 10` (:20826). An enemy's weaknesses
+  are the enemy table's column 23, `N{Prop{Prop{` (MainManager.cs:6387-6398); the King's holds `SurviveWith10`, the
+  Beast gets it from `Event137` after the fight starts (EventControl.cs:23137). The Beast's HP is 76 (seen in
+  vanilla, `log.md`, 2026-09-28). Used by `EnemyScaling.cs`.
 - MainManager.GetEntity: -2 and -3 are the second and third member by position (MainManager.cs:18526-18537), -4/-5/-6 are Vi/Kabbu/Leif by name (MainManager.cs:18538-18570), 1000 + n reads map.tempfollowers[n] (MainManager.cs:18512-18515) and throws ArgumentOutOfRange when nobody is there; no caller null-checks the result. Used by `PartyFit.cs`.
 - The main menu's confirm sound: StartMenu.Update plays "Confirm" for every main-menu choice (menuid 1) before acting on it. Used by `MenuToggle.cs`.
 - On the file select (menuid 2, submenu 0), confirm on file 0-2 is StartMenu.Update's load or new-game branch (StartMenu.cs:512-535, Event22 or Event8); the save slots' boxes sort at -20 to -60 and their text at 10 (StartMenu.ShowSaves). Used by `MenuToggle.cs`.

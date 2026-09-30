@@ -1494,8 +1494,25 @@ that floor is the first knob to try.
 **Per-hit attack felt fair (2026-09-26):** the same Dead Lander G at level 1 (hits x0.19, the dev cheat
 `onehit` off) landed 1-2 attacks at "fair damage" and died in two hits, like any other enemy there.
 
+**A scripted end at 10 HP keeps the whole fight** (2026-09-30). **The user asked** whether the Beast's scripted end
+is a percentage or an amount of HP, "so we don't start the fight and instantly get the scripted end", and wanted "a
+fight + end with the scripted thing even when scaling is enabled".
+- **Read in the code:** it's an amount. `SurviveWith10` floors every hit at 10 HP (`BattleControl.cs:7491-7494`), and
+  the Beast's own turn plays its script at `hp <= 10` (`:18361`); the Everlasting King's phases start the same way
+  (`:20826`, the floor in its data). Scaling alone could never start it at once (the Beast has 76 HP, at least 21 after
+  scaling), but at level 1 the real fight shrank from 66 HP to 11.
+- **The user's choice:** only the HP above the 10 scales, `10 + round((hp − 10) × ratio)`, and the game's 10 isn't
+  patched. The Beast at level 1 has 28 HP, 18 of them before its script, as other enemies' HP scales; then the game's
+  own finale. At its home level (17) it keeps 76; at 27, 106.
+- **Which fights:** an enemy whose data has `SurviveWith10` (the King), and the Beast while its scene runs (`Event137`
+  adds the floor after the enemy is made; a hologram rematch has none). The bestiary shows the same numbers (the
+  Beast always, the King by its data's column 23). Logged: `[scale] Centipede (69): home 17, target 1: hp 76 -> 28
+  (only the HP above its scripted end at 10 scaled), …`.
+- The other fixed numbers in enemy scripts (heals, HP set outright, thresholds) come next: a survey first, then each
+  scaled by its enemy's ratio.
+
 **Status:** works, seen on screen (2026-09-26): scaled HP, defence and per-hit damage in a fight, and the bestiary;
-the constants still to tune by play.
+the constants still to tune by play. The 10-HP scripted end built (2026-09-30), not yet seen.
 
 ## 18. Use on normal saves: the settings without Archipelago
 

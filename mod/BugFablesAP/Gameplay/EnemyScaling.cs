@@ -123,6 +123,16 @@ namespace BugFablesAP
 
         private static float Ratio(int home, int target) => (target + Base) / (home + Base);
 
+        // A boss whose script ends the fight at 10 HP (SurviveWith10, the game's own number): the Everlasting King from
+        // its data, the Beast from its scene. Only the HP above the 10 scales, so the fight before the script keeps its
+        // share and the scripted end is the game's.
+        private const int ScriptedEnd = 10;
+        private const int TheBeast = 69;
+
+        private static int ScaledHp(int hp, float ratio, bool scriptedEnd) => scriptedEnd && hp > ScriptedEnd
+            ? ScriptedEnd + Mathf.Max(1, Mathf.RoundToInt((hp - ScriptedEnd) * ratio))
+            : Mathf.Max(1, Mathf.RoundToInt(hp * ratio));
+
         // The bestiary page reads the raw enemy table (PauseMenu's own copy), not GetEnemyData: the shown enemy's row
         // is swapped for a scaled one while the page's text is built, then put back. The field holds other text
         // elsewhere.
@@ -163,7 +173,8 @@ namespace BugFablesAP
                     return;
                 }
                 float ratio = Ratio(home.Value, target.Value);
-                f[1] = Mathf.Max(1, Mathf.RoundToInt(hp * ratio)).ToString();
+                bool scriptedEnd = id == TheBeast || (f.Length > 23 && f[23].Contains("SurviveWith10"));
+                f[1] = ScaledHp(hp, ratio, scriptedEnd).ToString();
                 f[36] = Mathf.RoundToInt(hardHp * ratio).ToString();
                 if (def >= 0)
                 {
@@ -230,7 +241,9 @@ namespace BugFablesAP
                 return;
             }
             float ratio = Ratio(home.Value, target.Value);
-            int hp = Mathf.Max(1, Mathf.RoundToInt(__result.hp * ratio));
+            bool scriptedEnd = (id == TheBeast && MainManager.lastevent == 137 && MainManager.instance.inevent)
+                || (__result.weakness != null && __result.weakness.Contains(BattleControl.AttackProperty.SurviveWith10));
+            int hp = ScaledHp(__result.hp, ratio, scriptedEnd);
             // A defence of -1 means "shown as ?", left alone; otherwise never below 0.
             int def = __result.def < 0 ? __result.def : Mathf.Max(0, __result.def + diff / LevelsPerDefence);
             int exp = __result.exp;
@@ -246,7 +259,8 @@ namespace BugFablesAP
                 exp = MainManager.GetEXP(baseExp, asIf, (MainManager.Enemies)__result.animid);
             }
             log.LogInfo(
-                $"[scale] {(MainManager.Enemies)id} ({id}): home {home}, target {target}: hp {__result.hp} -> {hp}, "
+                $"[scale] {(MainManager.Enemies)id} ({id}): home {home}, target {target}: hp {__result.hp} -> {hp}"
+                + (scriptedEnd ? $" (only the HP above its scripted end at {ScriptedEnd} scaled)" : "") + ", "
                 + $"hits x{ratio:0.00}, def {__result.def} -> {def}, exp {__result.exp} -> {exp}");
             __result.hp = hp;
             __result.maxhp = hp;
