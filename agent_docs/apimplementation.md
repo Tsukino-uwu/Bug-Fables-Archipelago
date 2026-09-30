@@ -560,8 +560,12 @@ be wrong.
   0, accessibility full 0**. How: for a *minimal* player, once its goal is reachable the fill stops checking access
   for its items (`Fill.py`, 100-103, 0.6.7), and ours is reachable early (one artifact), so our progression can take
   the last reachable spots before the other game's key item. A generation error, never an impossible seed. Measured
-  and not kept: Jump as a local early item with *minimal* and Shuffle Jump, 1 of 400 on the same pair. Next: the user
-  picks the remedy from Archipelago's list (`apworld_dev_faq.md`, "My game has a restrictive start").
+  and not kept: Jump as a local early item with *minimal* and Shuffle Jump, 1 of 400 on the same pair. **Decided
+  (the user, 2026-09-30): the fix is more locations, not a workaround.** A 100% generate rate is always the aim; the
+  real fix is Archipelago's first remedy (`apworld_dev_faq.md`, "My game has a restrictive start"): more early spots,
+  those needing no Jump above all (the room mapping, Next 2), and a goal past chapter 1. Until then a fuzzer or CI
+  `FillError` with *minimal* and Shuffle Jump is this issue. Re-measured as locations come: the failing pair over 400
+  seeds (its yaml options above), done at 0 there and 0 of 10000 fuzzed.
 - **Two items named "Leif"** (found by the full review, 2026-09-29; read in the code): with the story's party, the
   story event *Leif Joins* makes an event item "Leif" with no id, while the real member item "Leif" has one;
   Archipelago's `world api.md` requires one id per item name. Next 43, item 3.

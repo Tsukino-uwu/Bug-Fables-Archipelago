@@ -1886,8 +1886,10 @@ either one wrong).
   prison, so the ant tunnel into it needs the sub; the Termite gate's scene breaks when used from inside before it was
   opened from outside (the sub can land a party inside first), so that gate is one way and held.
 - **A fill error the fuzzer found with APQuest** (1 of 10000): measured 4 of 400 on its yaml pair before and after the
-  change, so not this step's; one option at a time, only Jump unshuffled or accessibility full made it 0. Recorded in
-  Known issues; the remedy is the user's pick from Archipelago's FAQ list.
+  change, so not this step's; one option at a time, only Jump unshuffled or accessibility full made it 0; Jump as an
+  early local item, 1 of 400. Offered a guard (minimal raised to full with Shuffle Jump); the user: "I always want to
+  guarantee a 100% generate rate", and "adding more locations is the real fix to the issue, instead of making
+  workarounds". So no guard: Known issues says how to re-measure as locations come.
 - **The preflight refused twice, and nothing was widened:** `urllib` in the hook (a two-line percent-decode instead) and
   `Utils` in a test (the groups checked directly).
 - **Built:** the apworld (601 tests, Logic Test 90 of 90, fuzzer 0 of 10000 alone and with APQuest) and the mod (no
