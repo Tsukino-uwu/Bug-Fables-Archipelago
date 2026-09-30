@@ -66,23 +66,22 @@ item count is memory-only by design. Bug Fables saves items, so ours must be sav
 
 ## From playing other apworlds
 
-The user's own experience of these apworlds; nothing below was read. The one exception is Super Metroid's Map Rando.
-- **Pokémon Emerald's apworld:** Mirage Island is always shown; Shoal Cave switches between high and low tide each
+The user's own experience; nothing below was read.
+- **Pokémon Emerald:** Mirage Island is always shown; Shoal Cave switches between high and low tide each
   time you go in or out, so both versions of the cave can be reached; custom roadblocks spread Surf's reach; a
   dexsanity makes each Pokémon a location once caught, not just seen; and *Remote Items* has every item come from the
   server, so a lost save can recover. **We take:** areas and doors that close later are kept open, day/night map pairs
   reachable both ways (build step 9), one Explorer Permit per gate (Next 31, an idea), each enemy a location once
   spied, not just fought (Next 44, an idea), and items remote only, the received count in the save (How it works, §3
   and §5; its code for Remote Items only was then read, `licensing.md`).
-- **Pseudoregalia's apworld:** a colour or mark showing what type an item is before you pick it up, the progressive
-  sword (three copies of one item, each giving the next ability), and a found pickup gone for good once picked up.
-  **We take:** item backgrounds showing how much an item matters before you take it (the mod guide, step 22),
-  progressive items (Next 23, an idea), and found pickups hidden in every save (build step 27).
-- **Traps, in the Celeste, Zelda and OoT apworlds:** Celeste's flipped screen, Zelda's freeze and chickens, OoT's
-  disguised traps. **We take:** traps that
+- **Pseudoregalia:** a colour or mark showing what type an item is before you pick it up, the progressive sword (three
+  copies of one item, each giving the next ability), and a found pickup gone for good once picked up. **We take:** item
+  backgrounds showing how much an item matters before you take it (the mod guide, step 22), progressive items (Next 23,
+  an idea), and found pickups hidden in every save (build step 27).
+- **Traps:** Celeste's flipped screen, Zelda's freeze and chickens, OoT's disguised traps. **We take:** traps that
   annoy, never harm, and a trap that can look like a wanted item (Next 19, an idea; OoT's option was then read,
   `licensing.md`).
-- **Super Metroid's Map Rando (the exception):** rooms with the same number of entrances swap places, on a grid.
+- **Super Metroid Map Rando (non apworld):** rooms with the same number of entrances swap places, on a grid.
   **We take:** Room Swap, on the game's own map (build step 30).
-- **The Metroid Fusion apworld's story strip.** **Not taken:** every Bug Fables cutscene also changes the world
+- **Metroid Fusion's story strip.** **Not taken:** every Bug Fables cutscene also changes the world
   through flags (build step 9).
