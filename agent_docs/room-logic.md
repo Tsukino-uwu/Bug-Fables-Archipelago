@@ -2,7 +2,7 @@
 
 **Every plan for how the logic is written, checked and tested, room by room, lives here and only here** (gathered
 2026-09-30, the user: "to have it all in 1 place"). `apimplementation.md` keeps the history of each decision (build
-steps 8, 9, 12, 15 and 24 point here), and `MEASURED.md` keeps the game facts (listed at the end); neither holds a plan
+steps 8, 12, 15, 24, 36 and 37 point here), and `MEASURED.md` keeps the game facts (listed at the end); neither holds a plan
 of its own. Written with the user, 2026-09-27, and grown since.
 
 The logic is what Archipelago uses to prove a seed can be finished, and some options lean on it hard: **one party
@@ -78,7 +78,7 @@ rules work in Archipelago: `apimplementation.md`, How it works §11.
   way back is part of the plain rule instead, and stays with the option on.
 - **A need names what the game checks:** an ability (the game's names, `abilities.py`, written `CanUse(...)`: the
   ability names its member), a member for a fight (`Member(...)`, question 8), a basic move (`MoveItem(...)`), a key
-  item, a story event (`Has(...)`). Never what an item opens (rule 1). "Only before flag Y" is a *not*, which a rule
+  item, a story event (`Has(...)`; the boat's two levels `Boat(1)` and `Boat(2)`). Never what an item opens (rule 1). "Only before flag Y" is a *not*, which a rule
   can never say (rule 3): see [Chains](#chains-what-other-rooms-do-to-this-one), question C5.
 - **Several ways, each written:** two ways into an area are two edges into it; two ways to one spot inside an area are
   an `|` in the spot's rule (rule 3).
@@ -140,8 +140,9 @@ confirmation on screen. Denied ones leave the start pool; a room with no working
 word. Unchecked ones stay in while Starting Location is experimental (stuck starts are accepted until then); the label
 comes off when none is left unchecked.
 
-**The logic starts where the spawn is:** Menu is joined to the spawn's area (`archipelago-review.md`, item 23), so the
-start table names the exact spawn, never just a pair of maps.
+**The logic is to start where the spawn is** (planned, `archipelago-review.md`, item 23): Menu joined to the spawn's
+area, so the start table names the exact spawn, never just a pair of maps. Today Menu always joins the game's own start
+(`regions.py`).
 
 ## Chains: what other rooms do to this one
 

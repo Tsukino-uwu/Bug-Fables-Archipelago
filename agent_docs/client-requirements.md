@@ -11,18 +11,21 @@ date.** "It should work" doesn't count, and neither does a green build for anyth
   server, `apimplementation.md` build step 5)
 - [x] Reconnects when the connection is lost mid-play (2026-09-24: drop, retry and reconnect on a local server, build
   step 4)
-- [ ] The port in saved connection info can be changed (hosted rooms can lose their reserved port)
+- [x] The port in saved connection info can be changed (hosted rooms can lose their reserved port) (2026-09-24: a
+  Port row of its own in the Archipelago panel, seen on screen; `documentation.md` step 8)
 - [x] Sends `StatusUpdate` (goal) when the player completes their goal. Use StatusUpdate, not an event (2026-09-26:
   the first artifact reached in play, `[goal] sent: 1 of 1 artifacts`; the server logged the release and "Team #1 has
   completed all of their games")
 - [x] Sends a location check when one is detected in the game (2026-09-24: seen by the user, build step 6)
-- [ ] Checks made while offline are sent on connect, recovered from the save's own flags
+- [x] Checks made while offline are sent on connect, recovered from the save's own flags (2026-09-24: a save with
+  flag 15 already set sent its check on load, seen, and the server logged it; build step 6)
 - [ ] Items can be given on demand, at any time
 - [ ] Any item can be received any number of times, beyond the game's normal quantities
 - [ ] Items with no player or location attached (admin or server commands) are handled
 - [x] Keeps a received-item index for resyncing (in the save, since items are remote only) (2026-09-24: slot 60
   holds the count, seen by the user, build step 7)
-- [ ] Items sent while disconnected are received on connect
+- [x] Items sent while disconnected are received on connect (2026-09-24: two items the server already held arrived
+  at the next login, seen on screen; build step 7)
 - [ ] Room messages (`PrintJSON`) are shown to the player, or `NoText` is sent (review 18)
 - [ ] Connect carries the `uuid` kept in Archipelago's `common.json` and the targeted Archipelago version (review 19)
 - [ ] A refusal without error codes stops the retries; `InvalidPacket` is logged (review 20)
@@ -73,7 +76,7 @@ its docs or source to settle; don't assume it.
 | An outbox not tagged with its seed | An offline check from one seed gets sent into a different seed |
 | An option deciding whether a location id EXISTS | The build knows ids the seed doesn't, and scouting them hits the disconnect above |
 | An access rule silently attached to nothing | A valid-looking seed where the gate doesn't exist. Check the spoiler's playthrough spheres |
-| Only `DisconnectAsync` on a dead MultiClient.Net socket (this game's Mono, 2026-09-24) | `State` stays `Open`, so the library's receive loop spins: lag and ~2.5 MB/s of memory, no error. Abort the `ClientWebSocket` |
+| Only `DisconnectAsync` on a dead MultiClient.Net socket (this game's Mono, 2026-09-24) | `State` stays `Open`, so the library's receive loop spins: lag and ~2.5 MB/s of memory, no error. Close the socket itself: `ClientWebSocket.Abort` on the netstandard build, websocket-sharp's `Close` on the net40 build we ship (build steps 4 and 5) |
 | websocket-sharp compression switched on as it stands (MultiClient.Net 6.7.1 net40) | Every handshake refused: MultiServer always answers `server_max_window_bits=11`. Strip it before websocket-sharp's check (upstream #141) |
 | MultiClient.Net's net40 Newtonsoft.Json in a Mono without Reflection.Emit (`Supports SRE: False`) | Login times out silently; the socket's error event shows `PlatformNotSupportedException` in `DynamicMethod`. Ship the netstandard2.0 Newtonsoft.Json |
 | Sending on the game thread with websocket-sharp | Every send pings first and waits for the pong, up to 5 s: stutter, or a freeze while the server is gone |
