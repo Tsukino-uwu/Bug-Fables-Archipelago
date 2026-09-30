@@ -2259,7 +2259,48 @@ own code and the log says so. Only while Archipelago is enabled.
    party. **To see:** a one-member start, the second spider fight, the Web left up for two turns: the line, then the
    fight goes on.
 
-**Status:** item 1 built (2026-09-30), the build succeeds; not yet seen in game. The Beast, Zommoth and the Everlasting
-King are next.
+2. **The Beast** (enemy 69, the game's `Centipede`, end of chapter 5). The scene (`Event137`) adds a 10-HP floor, and
+   at 10 HP the Beast's own turn plays the script (`DoAction`, `case Centipede`, `BattleControl.cs:18358-18472`):
+   - it revives slot 1;
+   - it hits the slots `{0, 2, 1}` in turn;
+   - it knocks out slots 0 and 2;
+   - slot 1 says Kabbu's three lines (`commondialogue[166-168]`), is left at 1 HP, then gets Attack Up for good, is
+     healed and can't use items.
 
-*Code: `World/PartySlots.cs`, installed from `Core/Plugin.cs`.*
+   The scene reads and restores slot 1's `lockitems` around the fight. **The cast** (Survivor): Kabbu's part goes to
+   Kabbu, else the leader; Vi's and Leif's to their own member if he's there and not already cast, else nobody. So with
+   Vi alone, Vi is revived, boosted and says the lines, and nobody is knocked out; with Vi and Leif, Vi fights on and
+   Leif falls; with all three in any order, each plays himself. The scene uses the same cast, so the fight and the
+   scene agree on who survived. What changes in the fight's code:
+   - the revive's slot;
+   - the one `GetSingleTarget(int)` call: a part nobody plays is no target, and the hit's own `hp > 0` check skips it;
+   - `ClearStatus(ref playerdata[hits])`;
+   - the two knock-outs, a null-safe `StartDeath`;
+   - the survivor's animation stores.
+3. **Zommoth** (enemy 96, Upper Snakemouth). The scene (`Event182`) freezes slot 2 for the fight (`EventStop`), and
+   the fight wakes it with the beam: `RemoveCondition`, animation 116, then `cantmove` and animation 13. **The cast**:
+   Leif's part is Leif, or nobody, and never the party's only member (no one sits out rather than the only fighter
+   frozen). Freezing nobody only adds to a list the fight never reads; its four animation stores are null-safe.
+4. **The Everlasting King** (enemy 91). At 10 HP it heals, revives the party and plays an exchange: lines 199 and 200 by
+   slots 0 and 1, later 201 and 202 by slots 1 and 2 (`BattleControl.cs:20826-20895`). **The cast** (Speakers): a
+   missing member's line goes to someone other than the one he answers, so an exchange stays two voices when it can.
+
+**The install** (`ScriptedFights`, a transpiler on `DoAction`'s coroutine) counts everything it changes before it
+changes anything:
+- 29 fixed `ldelema` reads and 2 by value (`ldelem`), all cast by the acting enemy (read from the enumerator's `entity`
+  and `actionid`);
+- every other enemy uses Member, which for three members in any order is each member playing himself;
+- the Beast's revive, target, status and knock-outs;
+- 6 animation stores.
+
+`ScriptedScenes` does the two scenes (3 reads of slot 1 in `Event137`, 1 of slot 2 in `Event182`). Logged once per
+fight: `[party] the Beast: member 1's part played by member 0 (slot 0)`.
+
+**To see** (warps only when the user asks; `onehit` is a dev cheat, so ask before turning it on): at the Beast's map, `flag
+359 off` replays the scene. Try all three in arrival order, Vi alone, Vi and Leif, Kabbu and Leif. Bring it to 10 HP:
+who is revived, who says the lines, who falls (nobody when alone), the boost, and the scene ending. Zommoth: Leif frozen
+until the beam, or with Leif missing nobody frozen. The King: who speaks each line.
+
+**Status:** items 1 to 4 built (2026-09-30), the build succeeds; not yet seen in game.
+
+*Code: `World/PartySlots.cs` (`FightEvents`, `ScriptedFights`, `ScriptedScenes`), installed from `Core/Plugin.cs`.*

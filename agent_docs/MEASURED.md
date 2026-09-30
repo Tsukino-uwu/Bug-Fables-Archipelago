@@ -1108,6 +1108,21 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   coroutine has 20 fixed slot reads (`ldfld playerdata; ldc.i4.k; ldelema BattleData`: 10 of slot 0, 7 of slot 1, 3
   of slot 2), and its parameter `id` is a field of the same name on the enumerator. An exception in it leaves
   `inevent` set, and the turn logic only runs while `!action && !inevent` (:2944). Used by `PartySlots.cs`.
+- The scripted fights' fixed slots (code and IL read 2026-09-30, not measured):
+  - `<DoAction>d__400.MoveNext` has 29 fixed `ldfld playerdata; ldc.i4.k; ldelema BattleData` reads (8 of slot 0, 13 of
+    1, 8 of 2) and 2 by value (`ldelem`, the Beast's boost and Zommoth's unfreeze). The step's hoisted `entity` and
+    `actionid` name the acting enemy (`enemydata[actionid].animid`, the enemy id).
+  - The Beast's script (`case Centipede`, 69) holds its only `RevivePlayer(1, 5, false)`, BattleControl's only
+    `GetSingleTarget(int)` call, followed by `playerdata[playertargetID].hp > 0`, its only `ClearStatus(ref
+    playerdata[<hits>])`, and the two `StartDeath()` after a fixed read.
+  - Six animation stores follow a fixed read: the Beast's slot 1 `overrideanim`/`animstate 9`, and Zommoth's (96) slot
+    2 `overrideanim`/`animstate` 116 and 13.
+  - The Everlasting King is 91, Zommoth 96 (`MainManager.Enemies`).
+  - `Event137` reads slot 1 three times (`lockitems`, :23124, :23183, :23213); `Event182` reads slot 2 once
+    (`SetCondition(EventStop, ref playerdata[2], 99999)`, :30669).
+  - `SetCondition` for `EventStop` and `RemoveCondition` of a condition not held never touch the member's body
+    (MainManager.cs:6527-6615, :6685-6710).
+  Used by `PartySlots.cs`.
 - MainManager.GetEntity: -2 and -3 are the second and third member by position (MainManager.cs:18526-18537), -4/-5/-6 are Vi/Kabbu/Leif by name (MainManager.cs:18538-18570), 1000 + n reads map.tempfollowers[n] (MainManager.cs:18512-18515) and throws ArgumentOutOfRange when nobody is there; no caller null-checks the result. Used by `PartyFit.cs`.
 - The main menu's confirm sound: StartMenu.Update plays "Confirm" for every main-menu choice (menuid 1) before acting on it. Used by `MenuToggle.cs`.
 - On the file select (menuid 2, submenu 0), confirm on file 0-2 is StartMenu.Update's load or new-game branch (StartMenu.cs:512-535, Event22 or Event8); the save slots' boxes sort at -20 to -60 and their text at 10 (StartMenu.ShowSaves). Used by `MenuToggle.cs`.
