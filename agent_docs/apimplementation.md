@@ -3141,7 +3141,8 @@ The server speaks first. The order, from the protocol doc:
 | your starting inventory | on: the server sends it on connect |
 
 This mod turns all three on, which makes it a **"remote items"** client: picking something up never gives
-it directly, and everything arrives from the server.
+it directly, and everything arrives from the server. Remote only fits a mod: it has no patched placements, so local
+items would first need each seed's scouts cached, plus a second code path.
 
 ## 4. Sending what the player found
 

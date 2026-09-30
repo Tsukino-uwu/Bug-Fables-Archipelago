@@ -61,17 +61,6 @@ Two branches: `pokecrystal-develop` (world 0.20.1) and `future/6.0.0`, the next 
 - **We take:** typed frozen data (the apworld's data tables), the 120-column limit, and later option groups and
   Universal Tracker support.
 
-### Pokémon Emerald's apworld `remote_items` option (read 2026-09-24, local checkout at `0.6.7`)
-
-- With it off, your own items are patched into the ROM at their locations (`rom.py`). With it on, the
-  client adds your own world's items to `items_handling` via `ConnectUpdate` (`client.py`), and every item
-  comes from the server. Race mode forces it on.
-- **The received count lives in the save** (`client.py`, `handle_received_items`). The client hands the game
-  one item plus the new count, and the game keeps both. That's why the option's description promises
-  recovery after a lost save and co-op on one slot.
-- Why remote only fits a mod better: a mod has no patched placements, so local mode would first need
-  scouts cached per seed plus a second code path.
-
 ### The author's earlier Godot Archipelago project (2026-07, their own work, MIT)
 
 Its implementation notes (all 14 client-to-server packets, all 12 server-to-client packets, and 9 of 9 client
@@ -84,10 +73,12 @@ item count is memory-only by design. Bug Fables saves items, so ours must be sav
 
 The user's own experience of these games and their randomizers; nothing below was read.
 - **Pokémon Emerald's apworld:** Mirage Island is always shown; Shoal Cave switches between high and low tide each
-  time you go in or out, so both versions of the cave can be reached; custom roadblocks spread Surf's reach; and a
-  dexsanity makes each Pokémon a location once caught, not just seen. **We take:** areas and doors that close later are
-  kept open, day/night map pairs reachable both ways (build step 9), one Explorer Permit per gate (Next 31, an idea),
-  and each enemy a location once spied, not just fought (Next 44, an idea).
+  time you go in or out, so both versions of the cave can be reached; custom roadblocks spread Surf's reach; a
+  dexsanity makes each Pokémon a location once caught, not just seen; and *Remote Items* has every item come from the
+  server, so a lost save can recover. **We take:** areas and doors that close later are kept open, day/night map pairs
+  reachable both ways (build step 9), one Explorer Permit per gate (Next 31, an idea), each enemy a location once
+  spied, not just fought (Next 44, an idea), and items remote only, the received count in the save (How it works, §3
+  and §5; its code was then read, `licensing.md`).
 - **Pseudoregalia:** a colour or mark showing what type an item is before you pick it up, the progressive sword (three
   copies of one item, each giving the next ability), and a found pickup gone for good once picked up. **We take:** item
   backgrounds showing how much an item matters before you take it (the mod guide, step 22), progressive items (Next 23,
