@@ -1845,7 +1845,7 @@ either one wrong).
   - Then 0 of 10000, alone and with APQuest.
   - The preflight refused `add_item_rule` (named in the approved plan: its import went in a commit of its own) and a
     test's `Fill` import (removed: the test fills through the test base's own `test_fill`).
-- **Your question: is the Beast's scripted end a percentage or an amount?** An amount, 10 HP (`SurviveWith10`, and
+- **The user's question: is the Beast's scripted end a percentage or an amount?** An amount, 10 HP (`SurviveWith10`, and
   its turn at `hp <= 10`). Scaling can never start it at once (at least 21 HP), but it shrank the real fight at low
   levels. The user chose "scale only the HP above 10". Then "can we scale the scripted things in fights as well … or
   what is the best way": a survey of every fixed HP number in enemy scripts (39, `enemy-numbers.py`), each classified,
