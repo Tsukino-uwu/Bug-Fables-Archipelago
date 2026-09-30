@@ -119,10 +119,8 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
 
 ## Method
 
-- **A diagnostic can break what it measures.** Probes and debug logging are off by default. Re-run with
-  them off before believing a result.
-- **Never log the value you just wrote as proof it worked.** Read it back through a real getter. After a
-  scripted edit, grep the result.
+- **A diagnostic can break what it measures:** probes and debug logs stay off; believe a result only with them off.
+- **Never log the value you just wrote as proof it worked:** read it back through a real getter; grep a scripted edit.
 - **Two guessed fixes failing the same way is a signal:** isolate by subtraction; never try a third guess.
 - **Log what a guard decided, not just what happened.** Almost every Archipelago failure fails silently or
   reports success (`agent_docs/client-requirements.md`, failure modes).
