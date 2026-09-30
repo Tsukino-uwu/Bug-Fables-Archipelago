@@ -55,6 +55,7 @@ either one wrong).
 - [2026-09-30: every room-logic plan in one place, spawns and chains added, a truly random start designed](#2026-09-30-every-room-logic-plan-in-one-place-spawns-and-chains-added-a-truly-random-start-designed)
 - [2026-09-30: Points of No Return](#2026-09-30-points-of-no-return)
 - [2026-09-30: long names in the item-get box, what a death costs, one world shape, the icon's outline](#2026-09-30-long-names-in-the-item-get-box-what-a-death-costs-one-world-shape-the-icons-outline)
+- [2026-09-30: a checklist of everything not yet seen in game](#2026-09-30-a-checklist-of-everything-not-yet-seen-in-game)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2001,3 +2002,34 @@ either one wrong).
   pixels, 4 to 5; the icon's rim about 2.1 and its gaps 1.5. A rim share of 0.14-0.19 matches; the method to pick one
   on screen is in the mod guide, step 23.
 - **Unpushed:** the commits from `d21bb64` on.
+
+## 2026-09-30: a checklist of everything not yet seen in game
+
+- **Asked (the user):** "Make a list in a temporary md file at the root of the repo, for everything that is
+  unseen/untested/not confirmed yet that I have to visually check, i want this done before we continue adding more
+  checks or working on anything else."
+- **Local only** (the user's choice): `TO-CHECK.md` at the root, listed in `.git/info/exclude`, never committed. The
+  guides' Status lines stay the record. A pass ticks its box with the date and, in the same go, marks that step's
+  Status line seen. The file is deleted once every box is ticked.
+- **Gathered from** every Status line in both guides that says "not yet", "still to" or "to come", plus the Known
+  issues, the unticked client boxes, and this log from 2026-09-26 on. It is grouped by setup:
+  - the panel, on any save;
+  - a normal save with *Use on normal saves*;
+  - Uncap FPS at 240;
+  - seed A: the defaults with Music Shuffle and Points of No Return, a second Bug Fables slot and APQuest;
+  - one-member starts;
+  - Progressive Boat off;
+  - a random start;
+  - the entrance randomizer's seeds;
+  - other rooms: Logic Test, archipelago.gg's TLS probe, DeathLink.
+
+  The decisions waiting on the user are a list of their own. Cross-checked: every such step is on it except mod 4 (no
+  trigger), mod 12 and AP 14 (their unseen parts aren't built).
+- **Stale lines found, not fixed yet** (the list comes first, the user):
+  - AP 9's Status still lists "the boat's hold", removed 2026-09-26.
+  - Next 5 expects "silence for a replay"; replays have shown their boxes since 2026-09-28.
+  - AP 4 quotes `Open -> Aborted`, from the old library.
+  - Mod 11's "the seed decides the start ... not yet seen in play" looks covered by AP 18, seen 2026-09-26.
+  - `setup_en.md` never names the DeathLink, Healing crystals and Auto-save rows.
+- **Next:** the checklist, top to bottom, in a new chat (the user). Pushed on the user's word; the entry above's
+  "Unpushed" commits were already on `origin` by then.
