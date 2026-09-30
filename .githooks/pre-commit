@@ -1,7 +1,7 @@
 #!/bin/sh
 # Every commit: dev-scripts/preflight.py over exactly what is staged (docs/reviewing.md says what each section
-# refuses), then doc-coverage.py: every yaml option, setting, slot_data key and source file must be written up, and
-# log.md's Contents must match its entries.
+# refuses), then doc-coverage.py: every yaml option, setting, slot_data key and source file must be written up, the
+# Contents of log.md and both guides must match their headings, and every link into a heading must lead to one.
 root=$(git rev-parse --show-toplevel) || exit 1
 . "$root/.githooks/python.sh"
 

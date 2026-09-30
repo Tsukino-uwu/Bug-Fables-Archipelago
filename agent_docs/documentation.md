@@ -66,6 +66,13 @@ attribution (its neighbour `.githooks/pre-commit` runs the preflight, which refu
 [apimplementation.md, build step 28](apimplementation.md#build-step-28-nothing-unpublishable-in-the-repo-or-a-release)). Each step below ends with a short *Code:* line naming the files and methods to
 read, just after its **Status:** line. Each new step also gets a line in the index above.
 
+**Titles say what a step does, and links can't break** (2026-09-30, the user: titles like "the Boat Ticket" or "six
+questions" didn't tell a newcomer where the logic was done, or which step covers the entrance randomizer). A step's
+title names what it adds or decides, and the yaml option or panel row by its own name; its number never changes, as
+prose everywhere cites "build step 16" or "the mod guide, step 11". So a title can be reworded at any time, the
+pre-commit's `doc-coverage.py` checks both guides' indexes against their headings, as it does the log's, and resolves
+every link into a Markdown heading anywhere in the repo, refusing one that leads nowhere.
+
 **The session log's index** (2026-09-29, the user: the log will become the longest file, and an index makes it
 "easy to read, and also easier to search/grep"): `log.md` opens with a Contents list, one line per entry with its
 link. The pre-commit's `doc-coverage.py` works out each heading's link the way GitHub does and refuses a commit whose

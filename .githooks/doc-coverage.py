@@ -1,7 +1,9 @@
 """Refuses a commit when a feature's handle isn't written up: every yaml option, player setting and slot_data key
-must be named in a process guide, every Debug setting in development.md, every source file in code-map.md; and when
-a log.md heading isn't 'YYYY-MM-DD: title' in date order, or its Contents list doesn't match the entries."""
+must be named in a process guide, every Debug setting in development.md, every source file in code-map.md; when
+a log.md heading isn't 'YYYY-MM-DD: title' in date order, or a Contents list (log.md's, and the two guides') doesn't
+match its headings; and when a link into a Markdown heading leads nowhere."""
 import ast
+import os
 import re
 import subprocess
 import sys
@@ -39,7 +41,8 @@ for key in keys:
     if squash(key) not in guides:
         missing.append(f"slot_data key {key}: name it in a guide")
 
-files = subprocess.run(["git", "ls-files", "mod", "apworld", "dev-scripts"], capture_output=True, text=True).stdout.split()
+tracked = [p for p in subprocess.run(["git", "ls-files", "-z"], capture_output=True, text=True).stdout.split("\0") if p]
+files = [p for p in tracked if p.split("/", 1)[0] in ("mod", "apworld", "dev-scripts")]
 for path in files:
     if not path.endswith(".cs"):
         continue
@@ -62,6 +65,55 @@ def anchor(heading, seen):
     seen[slug] = count + 1
     return slug if count == 0 else f"{slug}-{count}"
 
+
+def prose(text):
+    """The text without fenced code blocks or code spans, where a heading or link is only an example."""
+    return re.sub(r"`[^`\n]*`", "", re.sub(r"^```.*?^```", "", text, flags=re.M | re.S))
+
+
+def headings(text):
+    """(level, title, anchor) of every heading, in order; a link in a title counts as its text."""
+    seen = {}
+    return [(len(hashes), title, anchor(re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", title), seen))
+            for hashes, title in re.findall(r"^(#{1,6}) (.+?)\s*$", re.sub(r"^```.*?^```", "", text, flags=re.M | re.S),
+                                            re.M)]
+
+
+# Each guide's Contents: one numbered line per numbered '## ' heading, its text (the list's number standing for an
+# 'N. ' of its own) and its link, in order.
+for guide, section in (("apimplementation.md", "## Contents"), ("documentation.md", "## The steps")):
+    text = read(DOCS + guide)
+    wanted = [f"[{re.sub(r'^\d+\. ', '', title)}](#{slug})" for level, title, slug in headings(text)
+              if level == 2 and re.match(r"(Build step \d+:|\d+\.) ", title)]
+    listed = re.findall(r"^\d+\. (\[.+\]\(#[^)]+\))$", text.split(section, 1)[-1].split("\n## ", 1)[0], re.M)
+    if listed != wanted:
+        absent = [line for line in wanted if line not in listed]
+        extra = [line for line in listed if line not in wanted]
+        missing += [f"{guide} Contents: add this line: {line}" for line in absent]
+        missing += [f"{guide} Contents: no heading has this line: {line}" for line in extra]
+        if not absent and not extra:
+            missing.append(f"{guide} Contents: the lines are out of the headings' order")
+
+# Every link into a heading of a tracked Markdown file leads to one.
+markdown = {p for p in tracked if p.endswith(".md")}
+anchors = {}
+for path in sorted(markdown):
+    for target, fragment in re.findall(r"\]\(([^()\s#]*)#([^()\s]+)\)", prose(read(path))):
+        if "://" in target:
+            continue
+        dest = path
+        if target:
+            target = re.sub(r"%([0-9A-Fa-f]{2})", lambda m: chr(int(m.group(1), 16)), target)
+            dest = os.path.normpath(os.path.join(os.path.dirname(path), target)).replace("\\", "/")
+        if not dest.endswith(".md"):
+            continue
+        if dest not in markdown:
+            missing.append(f"{path}: links to {target}#{fragment}, which isn't a tracked file")
+            continue
+        if dest not in anchors:
+            anchors[dest] = {slug for _, _, slug in headings(read(dest))}
+        if fragment not in anchors[dest]:
+            missing.append(f"{path}: links to {dest}#{fragment}, and no heading there has that anchor")
 
 log = read(DOCS + "log.md")
 headings = [h for h in re.findall(r"^## (.+)$", log, re.M) if h != "Contents"]
