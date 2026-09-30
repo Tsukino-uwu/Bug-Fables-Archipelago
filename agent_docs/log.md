@@ -2103,3 +2103,6 @@ either one wrong).
   game's size, both pages scrolling. Built and copied in (`5581F3683570`); not yet seen.
 - **Seen (the user):** the rows at the game's size, "yee it works, feels a bit cramped but its how the game does it so
   fits in better". Kept as the game has it: matching the game's own screens wins over roomier rows.
+- **Session end (the user: push, then a new chat).** Open, all in `TO-CHECK.md` (local, git-ignored): the Quality of
+  life page's bottom line from the title screen's Settings, the Spy Specs row's battle effects, the Wasp General as a
+  dev test (`enemyfight 72`), and the rest of the checklist. The game was left running with build `5581F3683570`.
