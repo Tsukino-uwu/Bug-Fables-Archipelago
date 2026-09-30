@@ -535,6 +535,19 @@ every other one until the frame ends (`MEASURED.md`, the text letter pool); behi
 Settings list holds many, so a redraw ran the pool dry. Disable all's shorter question just fitted. `TextPool.Free`
 frees every letter and replaces `DestroyText` everywhere in the mod, and left / right in the box redraws only the box.
 
+**The status line cut short (2026-09-30):** on the Quality of life page opened from the main menu's Settings, the
+bottom line lost its end, "Cancel goes back to Sett", "Setti" or "Settin", only with Fast text, Detector or Uncap FPS
+highlighted (the user's screenshots; the Gameplay page never). Those three have the longest help lines on the page
+with the most rows. The console's `letters`, sent with the page open, counted **500 of 500 taken**: about 300 by the
+page, 135 by the Settings screen's hidden boxes and bars, 46 by the main menu's four options still drawn. A text that
+asks for more than are free just ends, and the status line is drawn last. Freeing everything first (`TextPool.Free`)
+can't help: the rest belongs to the screens underneath. **The fix, read in the game's code first:** `GetEmptyLetter`
+makes a letter with the game's own `NewLetter` for any empty slot of the pool array (`MEASURED.md`, the text letter
+pool), so `TextPool.Reserve` lengthens the array to 1000 when the panel builds, and the game fills the new slots
+itself, only as letters are needed. Nothing changes until a screen asks for more than 500, which only the panel's
+pages do. The log says it once: `[text] letter pool 500 -> 1000 slots (the game fills the new ones)`. Built, not yet
+seen.
+
 **Achievements (2026-09-26; built, not yet seen):** an *Achievements* row on the main page, off by default.
 While Archipelago is enabled and it's off, Steam achievements aren't unlocked, as normal saves are kept apart; the help
 line says it only concerns Steam, never Archipelago. Every achievement goes through one function,
@@ -551,7 +564,7 @@ its rotation reset, so it kept an unturned world rotation and was seen edge-on. 
 the Quality of life page with all its text inside the shop. It follows whatever turn the camera has, so any room that
 turns it is covered. The lesson went into CLAUDE.md: read how the game does a thing first.
 
-**Status:** works, seen on screen (2026-09-24): the menu entry, the panel, and the file select held back until the first login; the Quality of life and Gameplay pages seen (2026-09-26); the Achievements row built (2026-09-26), not yet seen.
+**Status:** works, seen on screen (2026-09-24): the menu entry, the panel, and the file select held back until the first login; the Quality of life and Gameplay pages seen (2026-09-26); the Achievements row built (2026-09-26), not yet seen; the letter pool grown for a long page (2026-09-30), not yet seen.
 
 *Code: `MenuToggle.cs` (the menu entry: `BeforeSetMenuText` and `AfterSetMenuText` around the game's rebuild,
 `AfterUpdate` for the cursor, `SetMode` for the switch); `ApMenu.cs` (the panel: `Build`, `Redraw`,

@@ -1,3 +1,6 @@
+using System.Reflection;
+using BepInEx.Logging;
+using HarmonyLib;
 using UnityEngine;
 
 namespace BugFablesAP
@@ -7,6 +10,31 @@ namespace BugFablesAP
     // ends; a redraw in the same frame then runs the pool dry and letters go missing. This frees every one.
     internal static class TextPool
     {
+        // A panel page on top of a screen that keeps its own text (Settings, hidden, and the main menu) needs more
+        // than 500 letters.
+        internal const int PanelLetters = 1000;
+        private static readonly FieldInfo pool = AccessTools.Field(typeof(MainManager), "letterpool");
+
+        // The game's GetEmptyLetter makes a letter (NewLetter) for any empty slot, so a longer array is filled by the
+        // game itself, only as letters are needed.
+        internal static void Reserve(ManualLogSource log)
+        {
+            TextMesh[] letters = pool?.GetValue(null) as TextMesh[];
+            if (letters == null)
+            {
+                log?.LogError("[text] the game's letter pool wasn't found; a long panel page may lose its last letters");
+                return;
+            }
+            if (letters.Length >= PanelLetters)
+            {
+                return;
+            }
+            var grown = new TextMesh[PanelLetters];
+            System.Array.Copy(letters, grown, letters.Length);
+            pool.SetValue(null, grown);
+            log?.LogInfo($"[text] letter pool {letters.Length} -> {PanelLetters} slots (the game fills the new ones)");
+        }
+
         internal static void Free(Transform parent)
         {
             if (parent == null)

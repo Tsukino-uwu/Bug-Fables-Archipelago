@@ -63,7 +63,10 @@ The build and the copy into the game are separate steps. The build never writes 
    - **Which build runs, in one line:** DevReload writes `BepInEx/bugfablesap-reload.txt`: `loaded <hash>` (the same
      12 digits copy-dev prints for a copy), `waiting for the scene/talk/battle to end`, or `reloading`. copy-dev prints
      it after copying, and `copy-dev.ps1 -Status` prints only it. A reload waits for a scene, talk or battle to end,
-     so check once when the tester says it's in; never poll for it.
+     so check once when the tester says it's in; never poll for it. **Two copies during one reload fool it**
+     (2026-09-30): a copy of the old build, then the new one while the reload ran, left the old code running under a
+     `loaded <new hash>` line, since the new instance hashes the file on disk when it starts. When it matters, confirm
+     with a log line only the new build writes (an install line that changed), and copy only after a build succeeds.
    - `-DebugOn EntityDump,ScriptDump` / `-DebugOff GrantProbe` switch Debug settings in the mod's config
      in the same run, and read the result back. `-DebugSet Key=Value` sets one that takes a number or text (one per
      `-DebugSet`, not split at commas). `-ConfigSet Section.Key=Value` sets a key in any other section, for a

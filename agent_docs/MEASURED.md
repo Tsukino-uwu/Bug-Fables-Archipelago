@@ -1436,9 +1436,14 @@ hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0
 
 ## The text letter pool (2026-09-26, code read; the symptom seen in play)
 
-- **Every drawn letter comes from one pool of 500** `TextMesh`es (`MainManager.letterpool`, made at start-up).
-  `GetEmptyLetter` hands out the first whose text is `""`, or **null when none is free**: `SetText` then skips that
-  letter silently, so the text just ends early.
+- **Every drawn letter comes from one pool of 500** `TextMesh`es (`MainManager.letterpool`, a private static array
+  made in `LoadEssentials`, `MainManager.cs:3060-3064`, each by the private `NewLetter`, `:3290`).
+  `GetEmptyLetter` (`:14630`) hands out the first whose text is `""`, **makes one with `NewLetter` for a slot that is
+  null**, or returns **null when none is free**: `SetText` then skips that letter silently, so the text just ends
+  early. So a longer array is filled by the game itself, one letter as each is needed.
+- **Measured (2026-09-30, the console's `letters` with the Quality of life page open from the main menu's
+  Settings):** 500 of 500 taken, about 300 by the page, 135 by the Settings screen's hidden boxes, bars and buttons, 46
+  by the main menu's four options; the page's last line lost its end.
 - **`DestroyText(parent)` frees only every other letter at once.** For each `Text` holder it steps forward through the
   holder's children and moves each freed letter back under `MainManager.instance`, which shifts the next child into the
   index it just left. The skipped letters keep their text until the holder is destroyed at the frame's end. A redraw

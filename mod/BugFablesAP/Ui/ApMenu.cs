@@ -103,6 +103,7 @@ namespace BugFablesAP
 
         private void Build()
         {
+            TextPool.Reserve(log);
             if (inGame)
             {
                 // Only the Settings screen's two boxes (its list lives inside them) are hidden: the pause menu's own

@@ -56,6 +56,7 @@ either one wrong).
 - [2026-09-30: Points of No Return](#2026-09-30-points-of-no-return)
 - [2026-09-30: long names in the item-get box, what a death costs, one world shape, the icon's outline](#2026-09-30-long-names-in-the-item-get-box-what-a-death-costs-one-world-shape-the-icons-outline)
 - [2026-09-30: a checklist of everything not yet seen in game](#2026-09-30-a-checklist-of-everything-not-yet-seen-in-game)
+- [2026-09-30: stale lines fixed, the whole repo fact-checked, the panel's letters](#2026-09-30-stale-lines-fixed-the-whole-repo-fact-checked-the-panels-letters)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2033,3 +2034,38 @@ either one wrong).
   - `setup_en.md` never names the DeathLink, Healing crystals and Auto-save rows.
 - **Next:** the checklist, top to bottom, in a new chat (the user). Pushed on the user's word; the entry above's
   "Unpushed" commits were already on `origin` by then.
+
+## 2026-09-30: stale lines fixed, the whole repo fact-checked, the panel's letters
+
+- **Asked (the user):** fix the five stale lines found making the checklist "and anything else that is stale, and then
+  also fact check the whole repo afterwards".
+- **The five:** four were stale and fixed. AP 4's `Open -> Aborted` wasn't: a dated measurement, with the library
+  change noted beside it. Next 5 was more stale than it looked: the live items and "Other's Key!" names were seen
+  2026-09-26, so only *Item animation: Progression* is left.
+- **The fact-check:** nine reviewers read everything against the code, each finding verified before it was fixed
+  (the decompiled game for `MEASURED.md`'s). Fixed, in separate commits: the code's own text (help lines, config
+  texts, log lines, comments; Healing crystals said "every crystal", the red ones stay), both guides (names, counts,
+  code lines, Status lines against their bodies: several things were seen but still listed unseen, a few the reverse),
+  the explainer's slot_data list, three client boxes ticked with 2026-09-24 evidence, the review page, room-logic.md,
+  the code map, development.md, licensing.md (every package the build uses now has its row; UnityEngine.Modules
+  states no licence), references.md, the README's status (later chapters' checks), the game page, the reviewer page,
+  the hook headers, `MEASURED.md` (wrong game facts: a retry restores key items; flag 43 is Samira's; giveitem's third
+  argument is a line; recounted crystal berries; its last section is now "Still to measure", as CLAUDE.md says) and
+  two CLAUDE.md pointers. Tests, the Logic Test check and the fuzzer passed (0 of 10000); the mod builds.
+- **Left for the user** (TO-CHECK.md, "Waiting on you"): `docs/capabilities.md` narrower than the code (paste in all
+  four text rows; AnimGuard with *Use on normal saves*); pre-push's gate list without `.claude/`; the "no exceptions"
+  licence rule and the user's own earlier project; UnityEngine.Modules' missing licence; no one-way carrying its way
+  back yet. Also found, not changed: enemy 72 (the Wasp General) sits in both `BossChapter` and `Untouched`, so its
+  chapter entry is dead; queued respawn and shop checks are dropped when a send fails (known, Next 43 item 5).
+- **The user's report mid-way:** the Quality of life page's bottom line cut short ("Sett", "Setti", "Settin") with Fast
+  text, Detector or Uncap FPS highlighted, never on Gameplay. **How it was found:** the cut moved with the help line's
+  length, a fixed budget; the console's `letters`, sent with the page open, counted 500 of 500 taken (about 300 the
+  page, 135 the Settings screen's hidden text, 46 the main menu's options). The game's `GetEmptyLetter` makes a letter
+  for any empty slot itself, so `TextPool.Reserve` lengthens the pool to 1000 when the panel builds (the mod guide,
+  step 8). **A mistake of mine on the way:** a failed build, then `copy-dev` anyway, copied the old build and started a
+  reload; the fixed one landed during it, and the new instance reported `loaded E50551E17E86` while running the old
+  code. The user then said "it looks correct everywhere now", but no `[text]` line was logged, `letters` still showed a
+  500 pool, and the shop's install line had its old wording: the old code, checked in game, where the title menu's
+  four options (46 letters, counted in the first measurement) aren't behind the page. Copied again and confirmed by the
+  new install line; the check from the title screen's Settings is still to come (`development.md` notes the race).
+- **Not pushed:** everything from `bf00b30` on (the user didn't ask this time).
