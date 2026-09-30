@@ -2101,3 +2101,5 @@ either one wrong).
   Read: the game's Settings row in the same box (rows 0.7 apart, arrows at 1 on x 0.4 and 5.4, the value at 2.9, pips
   from 1.1). Nine such rows fill the box, where the panel keeps its help lines; asked, the user chose seven rows at the
   game's size, both pages scrolling. Built and copied in (`5581F3683570`); not yet seen.
+- **Seen (the user):** the rows at the game's size, "yee it works, feels a bit cramped but its how the game does it so
+  fits in better". Kept as the game has it: matching the game's own screens wins over roomier rows.
