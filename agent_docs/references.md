@@ -5,9 +5,9 @@ Two kinds, kept apart (the user, 2026-09-30):
   Crystal's were. Its licence is read first and it has a row in `licensing.md`. We take facts and approach only, never
   code. A project read only for one fact or a name has its row in `licensing.md` and no entry here.
 - **From playing other apworlds:** how the user knows another apworld works from playing it, with no code or
-  repository read, so no licence row. It may be vague: that game's way of doing a thing, in the user's words. An idea or a mechanic
-  belongs to no one; code, text and art do. So this holds even for a project with no licence, whose repository we may
-  never open (Pseudoregalia's, the user, 2026-09-30).
+  repository read, so no licence row. It may be vague: that game's way of doing a thing, in the user's words. An idea
+  or a mechanic belongs to no one; code, text and art do. So this holds even for a project with no licence, whose
+  repository we may never open (Pseudoregalia's, the user, 2026-09-30).
 
 ## Compared with ours
 
@@ -74,15 +74,15 @@ The user's own experience of these apworlds; nothing below was read. The one exc
   reachable both ways (build step 9), one Explorer Permit per gate (Next 31, an idea), each enemy a location once
   spied, not just fought (Next 44, an idea), and items remote only, the received count in the save (How it works, §3
   and §5; its code for Remote Items only was then read, `licensing.md`).
-- **Pseudoregalia's apworld:** a colour or mark showing what type an item is before you pick it up, the progressive sword (three
-  copies of one item, each giving the next ability), and a found pickup gone for good once picked up. **We take:** item
-  backgrounds showing how much an item matters before you take it (the mod guide, step 22), progressive items (Next 23,
-  an idea), and found pickups hidden in every save (build step 27).
+- **Pseudoregalia's apworld:** a colour or mark showing what type an item is before you pick it up, the progressive
+  sword (three copies of one item, each giving the next ability), and a found pickup gone for good once picked up.
+  **We take:** item backgrounds showing how much an item matters before you take it (the mod guide, step 22),
+  progressive items (Next 23, an idea), and found pickups hidden in every save (build step 27).
 - **Traps, in the Celeste, Zelda and OoT apworlds:** Celeste's flipped screen, Zelda's freeze and chickens, OoT's
   disguised traps. **We take:** traps that
   annoy, never harm, and a trap that can look like a wanted item (Next 19, an idea; OoT's option was then read,
   `licensing.md`).
-- **Super Metroid's Map Rando (the exception):** rooms with the same number of entrances swap places, on a grid. **We take:** Room
-  Swap, on the game's own map (build step 30).
+- **Super Metroid's Map Rando (the exception):** rooms with the same number of entrances swap places, on a grid.
+  **We take:** Room Swap, on the game's own map (build step 30).
 - **The Metroid Fusion apworld's story strip.** **Not taken:** every Bug Fables cutscene also changes the world
   through flags (build step 9).
