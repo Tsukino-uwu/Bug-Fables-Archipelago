@@ -447,8 +447,8 @@ be wrong.
       28. upstream #141, which would retire our compression switch once released (#142 doesn't cover our net40 build).
     - **Kept** (Archipelago has nothing for them) **and doesn't apply** (with why): on the review page.
 44. **Shuffle Bestiary: Tattle checks, an idea for later** (asked again 2026-09-29, parked since 2026-09-25 in build
-   step 10): each enemy spied a location, as Pokémon Emerald's apworld has a dexsanity. The bestiary has 92 entries (`librarylimit[1]`); the
-   check is `librarystuff[1, id]` turning true, read as discoveries are (`location_discoveries`). **Spy, then a
+   step 10): each enemy spied a location, as Pokémon Emerald's apworld has a dexsanity. The bestiary has 92 entries
+   (`librarylimit[1]`); the check is `librarystuff[1, id]` turning true, read as discoveries are (`location_discoveries`). **Spy, then a
    death (code read 2026-09-29):** the entry is written to memory as the Tattle text closes (`BattleControl.Tattle`
    calls `UpdateJounal(Bestiary)`, which in a battle sets `librarystuff[1, id]` at once), and `LocationChecks` runs in
    battles too, so while connected the check goes out before the fight ends and stays done whatever follows. Retry
