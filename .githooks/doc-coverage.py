@@ -1,7 +1,7 @@
 """Refuses a commit when a feature's handle isn't written up: every yaml option, player setting and slot_data key
 must be named in a process guide, every Debug setting in development.md, every source file in code-map.md; when
 a log.md heading isn't 'YYYY-MM-DD: title' in date order, or a Contents list (log.md's, and the two guides') doesn't
-match its headings; and when a link into a Markdown heading leads nowhere."""
+match its headings; and when a link to a file, a folder or a Markdown heading leads nowhere."""
 import ast
 import os
 import re
@@ -114,6 +114,22 @@ for path in sorted(markdown):
             anchors[dest] = {slug for _, _, slug in headings(read(dest))}
         if fragment not in anchors[dest]:
             missing.append(f"{path}: links to {dest}#{fragment}, and no heading there has that anchor")
+
+# Every plain link, one with no heading, leads to a tracked file or a folder holding one.
+folders = set()
+for p in tracked:
+    while "/" in p:
+        p = p.rsplit("/", 1)[0]
+        folders.add(p)
+known = set(tracked) | folders
+for path in sorted(markdown):
+    for target in re.findall(r"\]\(([^()\s#]+)\)", prose(read(path))):
+        if re.match(r"[a-z][a-z0-9+.-]*:", target, re.I):
+            continue
+        target = re.sub(r"%([0-9A-Fa-f]{2})", lambda m: chr(int(m.group(1), 16)), target)
+        dest = os.path.normpath(os.path.join(os.path.dirname(path), target)).replace("\\", "/").rstrip("/")
+        if dest not in known:
+            missing.append(f"{path}: links to {target}, which isn't a tracked file or folder")
 
 log = read(DOCS + "log.md")
 headings = [h for h in re.findall(r"^## (.+)$", log, re.M) if h != "Contents"]

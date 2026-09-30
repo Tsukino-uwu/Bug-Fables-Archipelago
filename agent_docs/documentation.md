@@ -107,7 +107,8 @@ questions" didn't tell a newcomer where the logic was done, or which step covers
 title names what it adds or decides, and the yaml option or panel row by its own name; its number never changes, as
 prose everywhere cites "build step 16" or "the mod guide, step 11". So a title can be reworded at any time, the
 pre-commit's `doc-coverage.py` checks both guides' indexes against their headings, as it does the log's, and resolves
-every link into a Markdown heading anywhere in the repo, refusing one that leads nowhere.
+every link into a Markdown heading anywhere in the repo, refusing one that leads nowhere. Since 2026-09-30 it resolves
+every plain link to a file or folder too, as MeshGhost's preflight does: all 213 led somewhere on the first run.
 
 **The session log's index** (2026-09-29, the user: the log will become the longest file, and an index makes it
 "easy to read, and also easier to search/grep"): `log.md` opens with a Contents list, one line per entry with its
