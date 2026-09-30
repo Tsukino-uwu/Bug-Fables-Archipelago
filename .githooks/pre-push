@@ -22,7 +22,7 @@ while read -r local_ref local_sha remote_ref remote_sha; do
     run_python -B "$root/dev-scripts/preflight.py" --history $new --quiet || status=1
     # shellcheck disable=SC2086
     if git log --format= --name-only $new |
-        grep -qE '^(dev-scripts/(preflight|negative-test-preflight|dotnet_metadata)|\.githooks/|\.github/)'; then
+        grep -qE '^(dev-scripts/(preflight|negative-test-preflight|dotnet_metadata)|\.githooks/|\.github/|\.claude/)'; then
         run_python -B "$root/dev-scripts/negative-test-preflight.py" --rev "$local_sha" --quiet || status=1
     fi
 done
