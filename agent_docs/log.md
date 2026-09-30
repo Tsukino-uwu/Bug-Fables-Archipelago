@@ -1751,4 +1751,5 @@ either one wrong).
   (2026-09-29), and in today's music search `celeste_open_world`, `sa2b`, `smw`, `dkc3` (PoryGone's modified MIT:
   no relicensing or selling), `marioland2` and `cvcotm`. Hollow Knight's RandomizerMod (LGPL-2.1), looked up
   2026-09-29 for the term "room randomizer", also had none. The other worlds read (`sm`, `satisfactory`, `hk`,
-  `messenger`, `kdl3`, `cv64`) fall under Archipelago's own row, which now names them.
+  `messenger`, `kdl3`, `cv64`) fall under Archipelago's licence and share a row. The user then asked for
+  `licensing.md` split in two: Apworlds first, then everything else.
