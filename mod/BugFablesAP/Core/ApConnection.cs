@@ -178,6 +178,8 @@ namespace BugFablesAP
         internal List<Blocker> SceneryPresent => seedData?.SceneryPresent;
         internal List<Blocker> HeldUntil => seedData?.HeldUntil;
         internal List<Blocker> PresentFrom => seedData?.PresentFrom;
+        internal List<Blocker> PresentWithItem => seedData?.PresentWithItem;
+        internal List<Blocker> HeldUntilItem => seedData?.HeldUntilItem;
         internal List<DialogueFlag> DialogueFlags => seedData?.DialogueFlags;
         internal List<DoorShuffle.Target> DoorTargets => seedData?.DoorTargets;
         internal Dictionary<string, int[]> EnemySwaps => seedData?.EnemySwaps;
@@ -243,6 +245,8 @@ namespace BugFablesAP
             internal string Map;
             internal string Entity;
             internal int Flag = -1;
+            // One of the mod's key items (present_with_item, held_until_item).
+            internal int Item = -1;
         }
 
         // Respawning pickups: nothing in the save marks them, so what's done lives here (server list, updates, local

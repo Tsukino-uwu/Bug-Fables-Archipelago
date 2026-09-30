@@ -7,7 +7,7 @@ in a shuffled shop or finishing a quest sends a check instead, and the item ther
 place. Every item, your own included, arrives from the server and is given to you through the game's own item system.
 
 This is an early version. It covers the start of the game: the Bugaria Outskirts, Snakemouth Den, the open parts of
-Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's shop outside the city, and the Golden Path, plus the seven scenes in later chapters where the game teaches a field ability. More chapters come later.
+Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's shop outside the city, and the Golden Path, plus the seven scenes in later chapters where the game teaches a field ability and the one where the Termite King hands over the submarine. More chapters come later.
 
 ## Options
 
@@ -38,6 +38,8 @@ Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's 
   your key items once it does.
 - **Shuffle Jump** (off): Jump is an item for the whole party; until it arrives, the jump button only buzzes, and the
   pause menu's Warp is always there. New in this version.
+- **Progressive Boat** (on): the Boat Ticket and the submarine are one item found twice, the ticket first; off, two
+  items in any order (see below). New in this version.
 - **Music Shuffle** (off, under Aesthetic Options): every song plays in place of another, the same every time you play
   the seed, and the jingles (victory, game over, chapter titles) swap among themselves. The title screen, the wind,
   water and machine sounds, and the factory elevator's music stay. Samira plays the song you pick. It changes nothing
@@ -79,6 +81,18 @@ items, in the game's own order: **Progressive Beemerang** (the Toss, then the Ha
 then the Horn Dash) and **Progressive Freeze** (the Freeze, then the Icicle). An ability works once its item arrives,
 wherever you are in the story, and its battle skill comes with it. The logic for chapters 2 to 7 is cautious for now:
 each teaching scene counts as reachable only once every ability taught before it is yours.
+
+## The boat and the submarine
+
+The Boat Ticket and the submarine, the Termite Kingdom's **Subaquatic Maritime Neotransport**, are items in every
+seed. With the option *Progressive Boat* on (the default) they are one item, **Progressive Boat**, found twice: the first
+copy is the Boat Ticket, the second the submarine. Off, they are two items found in any order. The pier's sailor takes
+you to Metal Island only with the ticket. The submarine's docks are there only once it is yours, wherever you are in
+the story, and it sails to every one of them, Metal Island's included. The scene where the Termite King hands it over
+is a check instead.
+
+To hint it, `!hint Submarine` (or `!hint Boat` for the ticket) works either way. With the progressive item it shows
+where both copies are, since a hint can't tell the two apart.
 
 ## Good to know
 

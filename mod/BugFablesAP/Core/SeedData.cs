@@ -32,6 +32,10 @@ namespace BugFablesAP
         internal readonly List<ApConnection.Blocker> SceneryPresent;
         internal readonly List<ApConnection.Blocker> HeldUntil;
         internal readonly List<ApConnection.Blocker> PresentFrom;
+        // Entities tied to one of the mod's key items (Blocker.Item) in the bag: the submarine's docks, and who shows
+        // them off.
+        internal readonly List<ApConnection.Blocker> PresentWithItem;
+        internal readonly List<ApConnection.Blocker> HeldUntilItem;
         internal readonly List<ApConnection.DialogueFlag> DialogueFlags;
         internal readonly List<DoorShuffle.Target> DoorTargets;
         // {"map:entity index": enemy ids}: the fight a map enemy starts instead of its own (Enemy Shuffle).
@@ -54,6 +58,7 @@ namespace BugFablesAP
         internal readonly bool MovesShuffled;
         internal readonly bool JumpShuffled;
         internal readonly bool AbilityItems;
+        internal readonly bool SubmarineItem;
 
         internal SeedData(Dictionary<string, object> data, int ownSlot)
         {
@@ -78,6 +83,8 @@ namespace BugFablesAP
             SceneryPresent = SlotData.List(data, "scenery_present", ReadBlocker);
             HeldUntil = SlotData.List(data, "held_until", ReadBlocker);
             PresentFrom = SlotData.List(data, "present_from", ReadBlocker);
+            PresentWithItem = SlotData.List(data, "present_with_item", ReadBlocker);
+            HeldUntilItem = SlotData.List(data, "held_until_item", ReadBlocker);
             DialogueFlags = SlotData.List(data, "dialogue_flags", e => new ApConnection.DialogueFlag
             {
                 Map = e.Value<string>("map"),
@@ -146,6 +153,8 @@ namespace BugFablesAP
                 && jumpOn;
             AbilityItems = data != null && data.TryGetValue("ability_items", out object abilities)
                 && abilities is bool abilitiesOn && abilitiesOn;
+            SubmarineItem = data != null && data.TryGetValue("submarine_item", out object submarine)
+                && submarine is bool submarineOn && submarineOn;
             ArtifactsRequired = data != null && data.TryGetValue("artifacts_required", out object required)
                 && required != null
                 ? Convert.ToInt32(required) : 0;
@@ -167,6 +176,7 @@ namespace BugFablesAP
                 Map = e.Value<string>("map"),
                 Entity = e.Value<string>("entity"),
                 Flag = e["flag"] != null ? e.Value<int>("flag") : -1,
+                Item = e["item"] != null ? e.Value<int>("item") : -1,
             };
         }
     }

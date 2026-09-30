@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BepInEx.Logging;
 
 namespace BugFablesAP
@@ -13,6 +14,22 @@ namespace BugFablesAP
         private const int TicketLooksLike = 176;
         private const string TicketName = "Boat Ticket";
         private const string TicketDescription = "A boat ticket. Maybe we should visit the pier.";
+
+        // The submarine: the game's own name for it (the Termite King's), and a look lent until one is chosen on screen.
+        internal const int Submarine = 212;
+        private const int SubmarineLooksLike = 159;
+        private const string SubmarineName = "Subaquatic Maritime Neotransport";
+        private const string SubmarineDescription = "It is impossible for it to sink! ...Probably.";
+
+        // The Progressive Boat is never in the bag: each copy gives the Boat Ticket, then the submarine (NextBoat). Its
+        // row only names and draws it where the item is shown, as one look for both copies.
+        internal const int ProgressiveBoat = 213;
+        private const string ProgressiveName = "Progressive Boat";
+        private const string ProgressiveDescription = "The Boat Ticket, then the Subaquatic Maritime Neotransport.";
+
+        // The key item a Progressive Boat copy gives: the ticket first, then the submarine.
+        internal static int NextBoat(List<int> bag) =>
+            bag.Contains(BoatTicket) ? Submarine : BoatTicket;
 
         // Field moves (Shuffle Field Moves / Shuffle Jump) as key items, so the bag shows which ones work:
         // 201 Beemerang, 202 Horn, 203 Ice (each its member's party icon), 204 Jump (the Archipelago icon, the whole
@@ -37,7 +54,14 @@ namespace BugFablesAP
                 return;
             }
             AddMoves();
-            if (MainManager.itemdata[0, BoatTicket, 0] == TicketName)
+            Add(BoatTicket, TicketName, TicketDescription, TicketLooksLike);
+            Add(Submarine, SubmarineName, SubmarineDescription, SubmarineLooksLike);
+            Add(ProgressiveBoat, ProgressiveName, ProgressiveDescription, TicketLooksLike);
+        }
+
+        private static void Add(int id, string name, string description, int looksLike)
+        {
+            if (MainManager.itemdata[0, id, 0] == name)
             {
                 return;
             }
@@ -45,12 +69,12 @@ namespace BugFablesAP
             // one the menus show; field 1 holds "Desc" for key items, as the game's own do).
             for (int field = 0; field < MainManager.itemdata.GetLength(2); field++)
             {
-                MainManager.itemdata[0, BoatTicket, field] = MainManager.itemdata[0, TicketLooksLike, field];
+                MainManager.itemdata[0, id, field] = MainManager.itemdata[0, TicketLooksLike, field];
             }
-            MainManager.itemdata[0, BoatTicket, 0] = TicketName;
-            MainManager.itemdata[0, BoatTicket, 2] = TicketDescription;
-            MainManager.itemsprites[0, BoatTicket] = MainManager.itemsprites[0, TicketLooksLike];
-            log.LogInfo($"[items] the {TicketName} added as item {BoatTicket}, looking like item {TicketLooksLike}");
+            MainManager.itemdata[0, id, 0] = name;
+            MainManager.itemdata[0, id, 2] = description;
+            MainManager.itemsprites[0, id] = MainManager.itemsprites[0, looksLike];
+            log.LogInfo($"[items] the {name} added as item {id}, looking like item {looksLike}");
         }
 
         private static void AddMoves()

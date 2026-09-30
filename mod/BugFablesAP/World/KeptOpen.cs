@@ -16,6 +16,10 @@ namespace BugFablesAP
         private static readonly HashSet<int[]> markers = new HashSet<int[]>();
         // Marker `requires` arrays answering "exists"; set before the entity's own Start, which would switch it off.
         private static readonly HashSet<int[]> presentMarkers = new HashSet<int[]>();
+        // Marker `requires` arrays of entities tied to one of the mod's key items: the item, and the requires the game
+        // checks once it is in the bag (none, or the entity's own).
+        private static readonly Dictionary<int[], KeyValuePair<int, int[]>> itemMarkers =
+            new Dictionary<int[], KeyValuePair<int, int[]>>();
 
         internal static void Enable(ManualLogSource logger, ApConnection conn, Func<bool> on)
         {
@@ -219,6 +223,41 @@ namespace BugFablesAP
                     log.LogInfo($"[open] {map}: {npc.name} held until flag {held.Flag} ({(waiting ? "not set: kept away" : "set: as the game has it")})");
                 }
             }
+            // present_with_item: made with the key item in the bag, whatever its own requires; held_until_item: kept
+            // away until the key item, on top of its own requires.
+            foreach (ApConnection.Blocker with in (connection.PresentWithItem ?? new List<ApConnection.Blocker>())
+                .Where(b => b.Map == map && b.Item >= 0))
+            {
+                TieToItem(__instance, map, with, false);
+            }
+            foreach (ApConnection.Blocker until in (connection.HeldUntilItem ?? new List<ApConnection.Blocker>())
+                .Where(b => b.Map == map && b.Item >= 0))
+            {
+                TieToItem(__instance, map, until, true);
+            }
+        }
+
+        private static void TieToItem(MapControl map, string mapName, ApConnection.Blocker tie, bool keepOwn)
+        {
+            foreach (NPCControl npc in map.GetComponentsInChildren<NPCControl>(true).Where(n => n.name == tie.Entity))
+            {
+                int[] own = keepOwn ? npc.requires ?? new int[0] : new int[0];
+                var marker = new[] { -1 };
+                itemMarkers[marker] = new KeyValuePair<int, int[]>(tie.Item, own);
+                npc.requires = marker;
+                bool hidden = MainManager.CheckIfCanExist(marker, npc.limit, npc.regionalflag);
+                if (npc.entity != null)
+                {
+                    npc.entity.iskill = hidden;
+                }
+                log.LogInfo($"[open] {mapName}: {npc.name} {(keepOwn ? "held until" : "present with")} key item {tie.Item} ({(HasKeyItem(tie.Item) ? "in the bag" : "not in the bag")}: {(hidden ? "kept away" : "present")})");
+            }
+        }
+
+        private static bool HasKeyItem(int id)
+        {
+            List<int>[] items = MainManager.instance?.items;
+            return items != null && items.Length > 1 && items[1].Contains(id);
         }
 
         // scenery_hidden: a marker limit before ConditionChecker.Start, so its own check answers "hide".
@@ -318,8 +357,19 @@ namespace BugFablesAP
         [HarmonyPatch(typeof(MainManager), nameof(MainManager.CheckIfCanExist), typeof(int[]), typeof(int[]),
             typeof(int))]
         [HarmonyPrefix]
-        private static bool BeforeCheck(int[] requires, int[] limit, ref bool __result)
+        private static bool BeforeCheck(ref int[] requires, int[] limit, ref bool __result)
         {
+            if (requires != null && itemMarkers.TryGetValue(requires, out KeyValuePair<int, int[]> tied))
+            {
+                if (randomizerOn == null || !randomizerOn() || !HasKeyItem(tied.Key))
+                {
+                    __result = true;
+                    return false;
+                }
+                // With the item, the game's own check on what the marker stands for.
+                requires = tied.Value;
+                return true;
+            }
             if (creating && requires != null && lastMade != null && lastMade.npcdata != null
                 && ReferenceEquals(requires, lastMade.npcdata.requires)
                 && randomizerOn != null && randomizerOn() && KeptPresentHere(lastMade.name))

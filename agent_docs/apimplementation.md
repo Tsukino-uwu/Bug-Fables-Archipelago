@@ -528,9 +528,9 @@ be wrong.
    first (`[party] installed in …`, `[scale] installed in …`, every count matched).
 51. **The submarine as an item, the game's Surf** (2026-09-30, the user: one item that opens much of the world, as
    Surf does in Pokémon Emerald): the *Progressive Boat*, the Boat Ticket then the Subaquatic Maritime Neotransport,
-   or with the yaml option *Progressive Boat* off the two apart; the docks there only with it. The apworld is built
-   (build step 36); next, the mod: the key item, and the docks following it (the mod guide's next step), then the user
-   sees it in game.
+   or with the yaml option *Progressive Boat* off the two apart; the docks there only with it. Built (build step 36,
+   the mod guide's step 37), not yet seen in game. Next, the user sees it: the install lines, the item's look (its
+   sprite is lent until one is picked on screen), both copies arriving, the docks before and after, a crossing to each.
 
 **Known issues:**
 
@@ -3420,8 +3420,8 @@ ignoring the option, 26 tests fail.
   Ticket's 200 is unchanged, as are `door_targets`, `enemy_swaps` and `start`. The fill moved, as a new location and
   copy make it.
 
-**Status:** the apworld is built (2026-09-30) and the tests pass; the mod is next (the key item, and the docks following
-it), then the user sees it in game.
+**Status:** built (2026-09-30), the apworld's tests pass and the mod builds (its side:
+[the mod guide, step 37](documentation.md#37-the-submarines-docks-follow-its-key-item)); not yet seen in game.
 
 *Code: `data/items.json`, `options.py` (`ProgressiveBoat`), `items.py` (`own_copies`), `custom_rules.py` (`Boat`,
 `BOAT_TICKET`, `SUBMARINE`), `logic/later_chapters.py`, `logic/metal_island.py`, `data_types.py` (`ItemEntity`),

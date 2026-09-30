@@ -25,7 +25,8 @@ anyone curious about the process, or thinking of doing the same for another game
   [12](#12-shops-in-the-game-shelves-show-the-seeds-items),
   [14](#14-the-detector-medal-beeps-for-every-check-left-in-a-room),
   [26](#26-field-abilities-as-items-in-the-game-ability-checks-read-the-bag),
-  [35](#35-shuffle-shop-inventories-in-the-game-shelf-slots-and-pickups-swapped).
+  [35](#35-shuffle-shop-inventories-in-the-game-shelf-slots-and-pickups-swapped), the submarine,
+  [37](#37-the-submarines-docks-follow-its-key-item).
 - **The party you have:** [11](#11-missing-party-members-stand-ins-in-scenes-and-followers),
   [36](#36-scripted-fights-cast-from-the-members-you-have).
 - **The entrance randomizer in the game:** [13](#13-the-entrance-randomizer-in-the-game-doors-rewritten-at-map-load).
@@ -81,6 +82,7 @@ anyone curious about the process, or thinking of doing the same for another game
 34. [MultiClient.Net's cache kept in its own folder](#34-multiclientnets-cache-kept-in-its-own-folder)
 35. [Shuffle Shop Inventories in the game: shelf slots and pickups swapped](#35-shuffle-shop-inventories-in-the-game-shelf-slots-and-pickups-swapped)
 36. [Scripted fights cast from the members you have](#36-scripted-fights-cast-from-the-members-you-have)
+37. [The submarine's docks follow its key item](#37-the-submarines-docks-follow-its-key-item)
 
 ## Where it stands
 
@@ -2396,3 +2398,60 @@ until the beam, or with Leif missing nobody frozen. The King: who speaks each li
 **Status:** items 1 to 4 built (2026-09-30), the build succeeds; not yet seen in game.
 
 *Code: `World/PartySlots.cs` (`FightEvents`, `ScriptedFights`, `ScriptedScenes`), installed from `Core/Plugin.cs`.*
+
+## 37. The submarine's docks follow its key item
+
+The game side of the Archipelago guide's build step 36: the submarine, the Subaquatic Maritime Neotransport, is an
+item. **The user's ask (2026-09-30):** "you need the item for it to appear/be useable". The docks appear and sail only
+with it, wherever the story is, and the story's own scenes keep playing.
+
+**What the game does** (read first, `MEASURED.md`, "The submarine"): no item, only flags. Six docks, one scene
+(`Event153`). A dock exists by its entity's `requires` (flag 379 at the Termite pier, 448 elsewhere, none on Mystery
+Island). Boarding first reads flag 447, and without it plays the Termite pier's introduction (`Event165`) instead.
+Landing reads 448, and without it every dock but the Termite and Bugaria piers refuses.
+
+**How the mod does it:**
+1. **The key items** (`CustomItems.cs`), written into the game's item table as the Boat Ticket is:
+   - 212, the Subaquatic Maritime Neotransport, the description "It is impossible for it to sink! ...Probably." (the
+     king's line, then the team's doubt), and the Big Gear's look (item 159), lent until the user picks one on screen;
+   - 213, the Progressive Boat, the ticket's look: never in the bag, only a row so a hold-up, a shelf or a spot on the
+     ground can name and draw it, one look for both copies, as the progressive abilities have one each.
+2. **Receiving** (`ItemReceiver.cs`): a Progressive Boat copy adds the next of the Boat Ticket (200) and the submarine
+   (212) not yet in the bag (`CustomItems.NextBoat`), so a new file's replay gives them in the same order. With the yaml
+   option off, the two arrive as their own key items, as any key item does.
+3. **The docks exist by the item** (`KeptOpen.cs`, slot_data `present_with_item`): each dock's `requires` becomes a
+   marker array. The game's own existence check (`MainManager.CheckIfCanExist`, the one place it decides) answers
+   "hidden" without key item 212 in the bag. With it, the check runs on no requirement, so the dock is there whatever
+   the story's flags. The Termite pier's scientist and queen (`held_until_item`) keep their own requirement, the throne
+   room's flag, and also wait for the item, so their introduction never shows off a dock that isn't there. Logged per
+   entity: `[open] BugariaPier: Fixedsub - Duplicate present with key item 212 (in the bag: present)`.
+4. **Boarding and landing without the story** (`Submarine.cs`): a transpiler on `Event153`'s coroutine turns its two
+   story reads, `flags[447]` and `flags[448]`, into "the flag, or key item 212 in the bag", the same instruction swap
+   as the abilities' (step 26). It counts the reads first and logs `[submarine] installed in Event153: 2 of 2 story
+   reads answered from the bag`; any other count is an error in the log. No flag is written: the scenes that set them
+   still do, as the game does.
+
+Only while Archipelago is enabled, and only in a seed whose `slot_data` says `submarine_item`: an older seed's docks
+follow the story.
+
+**Out of the story's order** (read in the code; each to be seen):
+- **The item before the story:** the Bugaria pier's dock is there, boarding asks as usual, and every dock lands. The
+  first landing at the Rubber Prison plays its arrival scene (`Event185`, which sets no flag). The first landing at
+  the Bugaria pier sets 448 and plays Elizant's welcome, as in the story: 100 berries, and flag 350, which opens the
+  Termacade (nothing in the logic uses it).
+- **The story before the item:** the throne-room scene plays and sends its check (location 76). The Termite pier's
+  dock, scientist and queen wait for the item; they appear at the next load of the map once it arrives.
+
+**To see** (the user; warps only when asked):
+- the log's install lines (`2 of 2`, the docks' `[open]` lines) and the item's look in the Key Items menu;
+- both Progressive Boat copies from `send-as-player.py`, one at a time: the Boat Ticket, then the submarine;
+- the Bugaria pier's dock absent before the submarine and there after (`take key 212` to remove it again);
+- a crossing to each dock, the Rubber Prison's and the Bugaria pier's first landings included;
+- the Termite pier, and the plaza's gate from inside before it was opened from outside (kept away);
+- the throne-room scene sending its check.
+
+**Status:** built (2026-09-30), the build succeeds; not yet seen in game.
+
+*Code: `Items/CustomItems.cs` (`Submarine`, `ProgressiveBoat`, `NextBoat`), `Items/ItemReceiver.cs` (`Give`),
+`World/KeptOpen.cs` (`TieToItem`, `BeforeCheck`), `World/Submarine.cs`, `Core/SeedData.cs`, installed from
+`Core/Plugin.cs`.*

@@ -122,6 +122,7 @@ namespace BugFablesAP
             DeathLinkGame.Enable(Log, Config, connection, () => randomizerEnabled.Value);
             AutoSave.Enable(Log, Config, settingsOn);
             Abilities.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
+            Submarine.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             CheckDetector.Enable(Log, connection, () => randomizerEnabled.Value);
             CrystalBerryTotal.Enable(Log, connection, () => randomizerEnabled.Value);
             QuestBoards.Enable(Log, () => randomizerEnabled.Value);

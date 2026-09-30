@@ -29,7 +29,7 @@ namespace BugFablesAP
                 int i = 0;
                 foreach (ApConnection.Blocker b in list ?? Enumerable.Empty<ApConnection.Blocker>())
                 {
-                    Add(table, i++, $"{b.Map}|{b.Entity}|{b.Flag}");
+                    Add(table, i++, b.Item >= 0 ? $"{b.Map}|{b.Entity}|item {b.Item}" : $"{b.Map}|{b.Entity}|{b.Flag}");
                 }
             }
 
@@ -57,6 +57,8 @@ namespace BugFablesAP
             Blockers("scenery_present", c.SceneryPresent);
             Blockers("held_until", c.HeldUntil);
             Blockers("present_from", c.PresentFrom);
+            Blockers("present_with_item", c.PresentWithItem);
+            Blockers("held_until_item", c.HeldUntilItem);
             int d = 0;
             foreach (ApConnection.DialogueFlag f in c.DialogueFlags ?? new List<ApConnection.DialogueFlag>())
             {
@@ -92,6 +94,7 @@ namespace BugFablesAP
             Add("shuffle_moves", "", FieldMoves.MovesShuffled.ToString());
             Add("shuffle_jump", "", FieldMoves.JumpShuffled.ToString());
             Add("ability_items", "", Abilities.AbilityItems.ToString());
+            Add("submarine_item", "", (c.Seed?.SubmarineItem ?? false).ToString());
             rows.Sort(StringComparer.Ordinal);
             string outPath = Path.Combine(Paths.BepInExRootPath, "bugfablesap-seed.tsv");
             File.WriteAllLines(outPath, rows);

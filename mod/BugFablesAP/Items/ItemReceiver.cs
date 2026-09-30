@@ -186,6 +186,16 @@ namespace BugFablesAP
                 return "unknown to this world's item list, skipped";
             }
             int gameId = ItemIds.GameId(item.ItemId, kind);
+            if (kind == ItemIds.KeyItemKind && gameId == CustomItems.ProgressiveBoat)
+            {
+                // A copy is the next level: the Boat Ticket, then the submarine; each is its own key item in the bag.
+                int key = CustomItems.NextBoat(mm.items[1]);
+                if (!mm.items[1].Contains(key))
+                {
+                    mm.items[1].Add(key);
+                }
+                return $"Progressive Boat: key item {key} added";
+            }
             if (kind == ItemIds.KeyItemKind)
             {
                 mm.items[1].Add(gameId);

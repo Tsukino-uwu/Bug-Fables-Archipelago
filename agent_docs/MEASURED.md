@@ -1762,4 +1762,4 @@ for its own threshold. Used by `enemy-numbers.py` and `EnemyScaling.cs` (the mod
 - **The Termite gate from inside** (Event149, `:24818`): the scene loads the plaza (174) from area 7 and the outside
   (173, `TermiteOutside`) from anywhere else. Before flag 384 (set by its first run, `:24964`) it then looks up
   entities 15 and 16 (`:24916`), which `TermiteOutside` doesn't have (entities 0-7), and stops at `e[0].flip`.
-- Used by `later_chapters.py` (build step 36).
+- Used by `later_chapters.py` (build step 36), `Submarine.cs` and `KeptOpen.cs` (the mod guide, step 37).
