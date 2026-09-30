@@ -83,13 +83,11 @@ item count is memory-only by design. Bug Fables saves items, so ours must be sav
 ## From playing
 
 The user's own experience of these games and their randomizers; nothing below was read.
-- **Pokémon Emerald:** Mirage Island is always shown, and Shoal Cave switches between high and low tide each time you
-  go in or out, so both versions of the cave can be reached. **We take:** areas and doors that close later are kept
-  open, and day/night map pairs reachable both ways (build step 9).
-- **Pokémon Emerald randomizers:** custom roadblocks that spread Surf's reach. **We take:** one Explorer Permit per
-  gate (Next 31, an idea).
-- **A Pokémon dexsanity:** each species seen is a location. **We take:** each enemy spied a location (Next 44, an
-  idea).
+- **Pokémon Emerald's apworld:** Mirage Island is always shown; Shoal Cave switches between high and low tide each
+  time you go in or out, so both versions of the cave can be reached; custom roadblocks spread Surf's reach; and a
+  dexsanity makes each Pokédex entry a location. **We take:** areas and doors that close later are kept open, day/night
+  map pairs reachable both ways (build step 9), one Explorer Permit per gate (Next 31, an idea), and each enemy spied a
+  location (Next 44, an idea).
 - **Pseudoregalia:** a colour or mark showing what type an item is before you pick it up, the progressive sword (three
   copies of one item, each giving the next ability), and a found pickup gone for good once picked up. **We take:** item
   backgrounds showing how much an item matters before you take it (the mod guide, step 22), progressive items (Next 23,

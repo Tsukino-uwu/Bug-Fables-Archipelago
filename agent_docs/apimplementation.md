@@ -292,7 +292,7 @@ be wrong.
    so only the first fits today's 5 listed discoveries. Five of the rewards are crystal berries (43-47). Still to find:
    the library's region and any story flag the librarian needs; how the mod turns `EventControl.GiveItem` into a check.
 31. **The Explorer Permit split, an idea for later** (2026-09-27): one permit per gate, so one item never
-   opens four areas (as custom roadblocks spread Surf's reach in Pokemon Emerald randomizers). The gates (`MEASURED.md`,
+   opens four areas (as custom roadblocks spread Surf's reach in Pokémon Emerald's apworld). The gates (`MEASURED.md`,
    "What the Explorer Permit opens"): the Outskirts gate, the Rubber Prison's `PrisonDoor` (the locked-door routine's
    list, index 16), and B.O.S.S. and the Cave of Trials (the wiki's word; which item they take is measured in game as
    the first part of this step, before they're gated). The names: Snakemouth, Prison, Lab and Trial Permit; proposed: the Explorer
@@ -447,7 +447,7 @@ be wrong.
       28. upstream #141, which would retire our compression switch once released (#142 doesn't cover our net40 build).
     - **Kept** (Archipelago has nothing for them) **and doesn't apply** (with why): on the review page.
 44. **Shuffle Bestiary: Tattle checks, an idea for later** (asked again 2026-09-29, parked since 2026-09-25 in build
-   step 10): each enemy spied a location, as a Pokemon dexsanity. The bestiary has 92 entries (`librarylimit[1]`); the
+   step 10): each enemy spied a location, as Pokémon Emerald's apworld has a dexsanity. The bestiary has 92 entries (`librarylimit[1]`); the
    check is `librarystuff[1, id]` turning true, read as discoveries are (`location_discoveries`). **Spy, then a
    death (code read 2026-09-29):** the entry is written to memory as the Tattle text closes (`BattleControl.Tattle`
    calls `UpdateJounal(Bestiary)`, which in a battle sets `librarystuff[1, id]` at once), and `LocationChecks` runs in
@@ -1092,7 +1092,7 @@ as locations. The goal stays "collect N artifacts". The ending's gate is researc
 tester, who hasn't finished the game. Regions stay whole areas for now; each room's areas as regions (doors from the
 dump, `dev-scripts/door-graph.py`; build step 24) come as the gates open (2026-09-24; areas within a room since
 2026-09-27).
-**Areas and doors that close later are kept open** (2026-09-24), as Pokémon Emerald keeps Mirage
+**Areas and doors that close later are kept open** (2026-09-24), as Pokémon Emerald's apworld keeps Mirage
 Island visible: the mod makes the game's `CheckIfCanExist` answer "exists" for a list of doors and blockers
 sent in `slot_data`, decided at generation, with no save writes. Each is checked in game first; where forcing
 one open breaks the story state, its locations are left out instead. **First case, built 2026-09-24:** after the
@@ -1101,7 +1101,7 @@ first boss, Eetl turns you back outside the city (`eetlblocker1 - Duplicate`, Ev
 safe to remove. Its area's module (`logic/`) lists it under `KEPT_OPEN`, `slot_data` carries it, and the mod's `KeptOpen`
 gives that entity a marker `limit` array after the map creates it, which its prefix on `CheckIfCanExist`
 answers with "hide" (test `TestKeptOpen`). Not yet seen in game. Day/night map pairs are made reachable
-both ways (like Emerald's Shoal Cave tides). One-way drops stay as they are: the logic handles one-way
+both ways (like the Emerald apworld's Shoal Cave tides). One-way drops stay as they are: the logic handles one-way
 connections.
 **Keeping ways present** (2026-09-25: no dead end in chapter 1, and the Gem opens chapter 5 whenever
 it's found). The reverse of kept open: an area's module lists under `KEPT_PRESENT` entities the story only makes
