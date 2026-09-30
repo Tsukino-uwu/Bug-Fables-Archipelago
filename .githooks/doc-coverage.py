@@ -83,7 +83,7 @@ def headings(text):
 # 'N. ' of its own) and its link, in order.
 for guide, section in (("apimplementation.md", "## Contents"), ("documentation.md", "## The steps")):
     text = read(DOCS + guide)
-    wanted = [f"[{re.sub(r'^\d+\. ', '', title)}](#{slug})" for level, title, slug in headings(text)
+    wanted = ["[" + re.sub(r"^\d+\. ", "", title) + f"](#{slug})" for level, title, slug in headings(text)
               if level == 2 and re.match(r"(Build step \d+:|\d+\.) ", title)]
     listed = re.findall(r"^\d+\. (\[.+\]\(#[^)]+\))$", text.split(section, 1)[-1].split("\n## ", 1)[0], re.M)
     if listed != wanted:
