@@ -78,7 +78,7 @@ The user's own experience of these games and their randomizers; nothing below wa
   server, so a lost save can recover. **We take:** areas and doors that close later are kept open, day/night map pairs
   reachable both ways (build step 9), one Explorer Permit per gate (Next 31, an idea), each enemy a location once
   spied, not just fought (Next 44, an idea), and items remote only, the received count in the save (How it works, §3
-  and §5; its code was then read, `licensing.md`).
+  and §5; its code for Remote Items only was then read, `licensing.md`).
 - **Pseudoregalia:** a colour or mark showing what type an item is before you pick it up, the progressive sword (three
   copies of one item, each giving the next ability), and a found pickup gone for good once picked up. **We take:** item
   backgrounds showing how much an item matters before you take it (the mod guide, step 22), progressive items (Next 23,
