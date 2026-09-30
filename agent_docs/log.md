@@ -1733,8 +1733,8 @@ either one wrong).
 ## 2026-09-30: no criticism of other projects in the repo
 
 - **The user:** "we shouldn't call other projects bad, or say that/if anything is bad in them". Blunt findings are
-  for a review the user sends a developer directly, and never sit in the repo. Now a rule in `CLAUDE.md`, its
-  reasoning at the top of `references.md`.
+  for a review the user sends a developer directly, and never sit in the repo. Now a rule in `CLAUDE.md`, with the
+  exceptions below.
 - **Removed:** the weak-spot notes in `references.md`; the comparison's verdict on other projects and the findings
   sent to another developer, in this log (2026-09-28); the draft upstream issue on the review page (posted as #143,
   the link stays). `docs/reviewing.md` now links `licensing.md` and `references.md`.
