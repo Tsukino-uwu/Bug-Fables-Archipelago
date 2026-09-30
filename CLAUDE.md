@@ -27,7 +27,7 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
   gets its own step** when it adds a yaml option or panel setting, a new kind of location, or changes how the game
   plays in a seed; everything else joins the step it belongs to, or one the user merges it into. **In doubt, its own
   step:** the user can merge it later, while an unwanted merge goes unnoticed. Say so in the commit message. The
-  pre-commit `doc-coverage.py` refuses an option, setting, `slot_data` key or source file no guide or code map names.
+  pre-commit `doc-coverage.py` refuses an option, setting, `slot_data` key or source file the docs don't name.
 - **The root `README.md` never goes stale either.** Its "Status" line and its intro (how it works) must agree with the
   steps' Status lines and with the code. A commit that changes either one updates the README in the
   same commit. Check all three against each other when a session starts, and fact-check the README against
@@ -79,7 +79,7 @@ the same edit. The rule lives here and its reasoning in `agent_docs/`, behind a 
 ## What may enter the repo
 
 - **Nothing goes in that couldn't be published, or could harm whoever runs it** ("fine in a public repo forever?", not
-  "does a licence permit it?"). `dev-scripts/preflight.py` enforces it: pre-commit, pre-push, CI, release (step 28).
+  "does a licence permit it?"). `preflight.py` enforces it: pre-commit, pre-push, CI, release (build step 28).
 - **Never commit the game's files:** no `Assembly-CSharp.dll`, decompiled output, assets or saves. The build
   references the game DLL via `HintPath` to the user's own install. Decompiled source is read for facts only
   and lives in the gitignored `decompiled/`.
