@@ -45,9 +45,9 @@ namespace BugFablesAP
             { 90, 7 }, { 91, 7 }, { 92, 7 }, { 93, 7 }, { 94, 7 }, { 111, 7 }, { 112, 7 }, { 113, 7 }, { 114, 7 },
             { 115, 7 },
         };
-        // Scripted fights left as they are: the intro spider (can't be won), the tutorials and test fights, and the
-        // ids the game itself leaves out of Hard Mode's x1.5 (the keys and tablet, the Wasp General).
-        private static readonly HashSet<int> Untouched = new HashSet<int> { 2, 11, 12, 18, 110, 101, 102, 103, 72 };
+        // Left as they are: the intro spider (can't be won), the tutorials and test fights, and the Everlasting King's
+        // keys and tablet (parts of his fight).
+        private static readonly HashSet<int> Untouched = new HashSet<int> { 2, 11, 12, 18, 110, 101, 102, 103 };
         // The artifact flags, one per chapter end, and the level of the areas vanilla opens after that many.
         private static readonly int[] ArtifactFlags = { 41, 88, 299, 345, 347, 346, 555 };
         private static readonly int[] ArtifactLevel = { 1, 6, 9, 13, 16, 19, 23, 27 };

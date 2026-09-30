@@ -1555,8 +1555,12 @@ the game, so nothing is from memory; everything is from the game's own data:
    the Barren Lands ~20, Rubber Prison ~23.6), so the game's own tuning is the curve.
 2. **A boss's home level comes from its chapter** (the story event that starts its fight; bosses have flat EXP), one
    level per chapter from that curve: 3, 8, 11, 14, 17, 21, 26 for chapters 1-7. A summoned part takes its boss's.
-   The intro spider (can't be won), tutorial and test fights, and the ids the game itself leaves out of Hard Mode's
-   x1.5 are left alone.
+   The intro spider (can't be won), tutorial and test fights, and the Everlasting King's keys and tablet (parts of his
+   fight) are left alone. **Corrected (2026-09-30):** this list first held the ids the game leaves out of a x1.5 read
+   as Hard Mode's; that x1.5 is the hologram machine's hard rematch (flag 166, `MainManager.cs:6282`), and it also
+   kept the Wasp General (72) unscaled. The user: "the Wasp General is more like a mini boss, its not as hard as the
+   actual boss but it was a harder fight than just normal enemies"; the game's own `minibosslist` holds it, and every
+   other mini-boss there scales from its chapter, so it does too (chapter 5).
 3. **Artifacts' target:** the level of the areas vanilla opens after that many artifacts: 1, 6, 9, 13, 16, 19, 23, 27.
 
 **How it works** (built 2026-09-26): `EnemyScaling.cs`, a postfix on `MainManager.GetEnemyData` when a fight builds
@@ -1634,7 +1638,7 @@ fight + end with the scripted thing even when scaling is enabled".
 
 **Status:** works, seen on screen (2026-09-26): scaled HP, defence and per-hit damage in a fight, and the bestiary;
 the constants still to tune by play. The 10-HP scripted end and the fixed numbers in enemy scripts built (2026-09-30),
-not yet seen.
+not yet seen; the Wasp General scaled as a mini-boss (2026-09-30), not yet seen.
 
 ## 18. Use on normal saves: the panel's settings with Archipelago off
 
