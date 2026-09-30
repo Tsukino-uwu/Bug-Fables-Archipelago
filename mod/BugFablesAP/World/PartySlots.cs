@@ -22,6 +22,9 @@ namespace BugFablesAP
             randomizerOn = on;
             Hooks.Install(typeof(BattleStart), "party",
                 "a party of two with Leif in front never finishes loading a battle");
+            Hooks.Install(typeof(Eaten), "party", "a member eaten in a party the story never had can freeze a fight");
+            Hooks.Install(typeof(SkillSlots), "party",
+                "Heavy Strike and the Vi and Leif team attack read whoever stands in the member's slot");
         }
 
         // The slot holding this member. Without him: the number itself while it is a slot (a scene's own small party,
@@ -79,6 +82,98 @@ namespace BugFablesAP
             return slot;
         }
 
+        private static BattleControl eatenLogged;
+        private static BattleControl skillLogged;
+
+        // An eaten member's HP, read by his number.
+        private static int EatenSlot(int member)
+        {
+            int slot = SlotOfMember(member);
+            if (slot != member && MainManager.battle != eatenLogged)
+            {
+                eatenLogged = MainManager.battle;
+                log.LogInfo($"[party] eaten: member {member} read from slot {slot}");
+            }
+            return slot;
+        }
+
+        // A skill that names its member (Heavy Strike: Kabbu; the Vi and Leif team attack) by his number.
+        private static int SkillSlot(int member)
+        {
+            int slot = SlotOfMember(member);
+            if (slot != member && MainManager.battle != skillLogged)
+            {
+                skillLogged = MainManager.battle;
+                log.LogInfo($"[party] a skill's member {member} is slot {slot}");
+            }
+            return slot;
+        }
+
+        private static bool Reads(CodeInstruction i, FieldInfo field) =>
+            (i.opcode == OpCodes.Ldfld || i.opcode == OpCodes.Ldsfld) && Equals(i.operand, field);
+
+        private static FieldInfo TrueId => AccessTools.Field(typeof(MainManager.BattleData),
+            nameof(MainManager.BattleData.trueid));
+
+        private static class Eaten
+        {
+            [HarmonyPatch(typeof(BattleControl), "AdvanceTurnEntity")]
+            [HarmonyTranspiler]
+            private static IEnumerable<CodeInstruction> Transpile(IEnumerable<CodeInstruction> instructions) =>
+                Hooks.Safe(instructions, Edit, "party");
+
+            // playerdata[t.trueid].hp, twice in the Eaten tick (the other trueid reads name a medal's wearer).
+            private static IEnumerable<CodeInstruction> Edit(List<CodeInstruction> code)
+            {
+                List<int> reads = Enumerable.Range(1, Math.Max(0, code.Count - 2))
+                    .Where(i => code[i - 1].opcode == OpCodes.Ldarg_1 && Reads(code[i], TrueId)
+                        && code[i + 1].opcode == OpCodes.Ldelema)
+                    .ToList();
+                if (reads.Count != 2)
+                {
+                    throw new InvalidOperationException($"expected the eaten tick's two reads, found {reads.Count}");
+                }
+                MethodInfo eatenSlot = AccessTools.Method(typeof(PartySlots), nameof(EatenSlot));
+                foreach (int i in reads.OrderByDescending(i => i))
+                {
+                    code.Insert(i + 1, new CodeInstruction(OpCodes.Call, eatenSlot));
+                }
+                log.LogInfo("[party] installed in BattleControl.AdvanceTurnEntity (the eaten tick 2 of 2)");
+                return code;
+            }
+        }
+
+        private static class SkillSlots
+        {
+            [HarmonyPatch(typeof(BattleControl), "DoAction", MethodType.Enumerator)]
+            [HarmonyTranspiler]
+            private static IEnumerable<CodeInstruction> Transpile(IEnumerable<CodeInstruction> instructions) =>
+                Hooks.Safe(instructions, Edit, "party");
+
+            // GetPlayerData(k, frombattleentity: true) with a constant k finds slot k (its battleid), meaning member k.
+            private static IEnumerable<CodeInstruction> Edit(List<CodeInstruction> code)
+            {
+                MethodInfo getPlayerData = AccessTools.Method(typeof(MainManager), nameof(MainManager.GetPlayerData),
+                    new[] { typeof(int), typeof(bool) });
+                List<int> members = Enumerable.Range(0, Math.Max(0, code.Count - 2))
+                    .Where(i => (code[i].LoadsConstant(0) || code[i].LoadsConstant(1) || code[i].LoadsConstant(2))
+                        && code[i + 1].LoadsConstant(1) && code[i + 2].Calls(getPlayerData))
+                    .ToList();
+                if (members.Count != 5)
+                {
+                    throw new InvalidOperationException(
+                        $"expected Heavy Strike's three and the team attack's two, found {members.Count}");
+                }
+                MethodInfo skillSlot = AccessTools.Method(typeof(PartySlots), nameof(SkillSlot));
+                foreach (int i in members.OrderByDescending(i => i))
+                {
+                    code.Insert(i + 1, new CodeInstruction(OpCodes.Call, skillSlot));
+                }
+                log.LogInfo("[party] installed in BattleControl.DoAction (a skill's named member 5 of 5)");
+                return code;
+            }
+        }
+
         private static class BattleStart
         {
             [HarmonyPatch(typeof(BattleControl), nameof(BattleControl.StartBattle), MethodType.Enumerator)]
@@ -91,8 +186,7 @@ namespace BugFablesAP
                 FieldInfo partyorder = AccessTools.Field(typeof(MainManager), nameof(MainManager.partyorder));
                 FieldInfo partypointer = AccessTools.Field(typeof(BattleControl), nameof(BattleControl.partypointer));
                 FieldInfo battle = AccessTools.Field(typeof(MainManager), nameof(MainManager.battle));
-                FieldInfo trueid = AccessTools.Field(typeof(MainManager.BattleData),
-                    nameof(MainManager.BattleData.trueid));
+                FieldInfo trueid = TrueId;
                 // while (battle.partypointer[0] != instance.partyorder[0]): partyorder[0] read.
                 List<int> leader = Enumerable.Range(2, Math.Max(0, code.Count - 2))
                     .Where(i => code[i].opcode == OpCodes.Ldelem_I4 && code[i - 1].LoadsConstant(0)
@@ -123,9 +217,6 @@ namespace BugFablesAP
                     + "the first strike 1 of 1)");
                 return code;
             }
-
-            private static bool Reads(CodeInstruction i, FieldInfo field) =>
-                (i.opcode == OpCodes.Ldfld || i.opcode == OpCodes.Ldsfld) && Equals(i.operand, field);
         }
     }
 }

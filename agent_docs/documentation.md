@@ -1192,9 +1192,18 @@ received member joins at the end), and those places pick the wrong member or non
   of 2; that slot goes in front`. Only while Archipelago is enabled.
 - **To see:** remove Kabbu (`removemember 1`), switch until Leif leads, touch an enemy: the fight opens with Leif in
   front (before the fix, expected: the two swap places without end, which costs a restart).
-- The other places, and the scripted fights that name a slot, are the next items and step 36.
+- **A member being eaten** (`BattleControl.AdvanceTurnEntity`, `:3259`, `:3270`): each turn the Pitcher drains the
+  member it swallowed, reading `playerdata[t.trueid].hp`, his number as a slot. With Kabbu and Leif, Leif eaten reads
+  slot 2 of two and throws, and the fight stops. Only the Pitcher eats (enemy 98: its bounty and the rematch machine;
+  enemy shuffle never moves a boss). Both reads go through `SlotOfMember` (the other two `trueid` reads there name a
+  medal's wearer and stay). To see: `removemember 0`, `enemyfight 98`, let Leif be eaten; the drain ticks on.
+- **Skills that name their member** (`DoAction`): Heavy Strike reads Kabbu as `GetPlayerData(1, frombattleentity:
+  true)` (`:11545`, `:11566`), which finds slot 1, and the Vi and Leif team attack reads `GetPlayerData(0/2, true)`
+  (`:12029-12030`). The five constants go through `SlotOfMember`; `GetPlayerAttack` already finds a member by number.
+  To see: Kabbu first in the party (a Kabbu start that received Leif): Heavy Strike's damage follows Kabbu's attack.
+- The scripted fights that name a slot are step 36.
 
-**Status:** works with Leif alone, seen on screen through chapter 1 into chapter 2 (2026-09-25); Leif joining after the spider with the story's two (Vi and Kabbu) seen (2026-09-26: he followed, could lead, and showed in the pause menu); items 5 and 6 not yet seen; the direct lookups in item 12 still open; the battle start's leader fix built (2026-09-30), not yet seen.
+**Status:** works with Leif alone, seen on screen through chapter 1 into chapter 2 (2026-09-25); Leif joining after the spider with the story's two (Vi and Kabbu) seen (2026-09-26: he followed, could lead, and showed in the pause menu); items 5 and 6 not yet seen; the direct lookups in item 12 still open; the battle start's leader, the eaten tick and the skills' named members built (2026-09-30), not yet seen.
 
 *Code: `PartyFit.cs` (the stand-ins and the acting leader), `PartyMembers.cs` (the member guard, followers,
 Leif's joining), `PartySlots.cs` (a member's slot in fights).*
@@ -2211,3 +2220,4 @@ location in the same shop. A respawning pickup is known by its map and regional 
 
 *Code: `Items/ShopInventories.cs`, `Items/ItemShops.cs` (`LocationOf`), `Core/SeedData.cs`, `Core/ApConnection.cs`,
 `Dev/SeedDump.cs`, installed from `Core/Plugin.cs`.*
+

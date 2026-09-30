@@ -1092,6 +1092,16 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   `<StartBattle>d__170.MoveNext`, the only `ldfld partyorder; ldc.i4.0; ldelem.i4`), and the dizzy first strike
   compares `playerdata[n].trueid` with `partypointer[0]` (:1336, the only `ldfld trueid` followed by `ldsfld battle;
   ldfld partypointer`). In vanilla slot k is always member k where these run. Used by `PartySlots.cs`.
+- Other places a fight uses a member's number as a slot (code read 2026-09-30, not measured):
+  - The eaten tick in `BattleControl.AdvanceTurnEntity(ref BattleData t, ref bool delay)` reads
+    `playerdata[t.trueid].hp` twice (:3259, :3270). In the IL these are the only `ldarg.1; ldfld trueid; ldelema`; the
+    method's other two `trueid` reads are `BadgeIsEquipped` arguments. Only enemy 98 (the Pitcher) eats (`Eat`, :25374).
+  - `MainManager.GetPlayerData(int id, bool frombattleentity)` with `true` finds the member whose
+    `battleentity.battleid == id`, and `battleid` is the slot (BattleControl.cs:1132), so a constant id there is a slot.
+    `DoAction` has five: Heavy Strike's `GetPlayerData(1, true)` three times (:11545, :11566) and the Vi and Leif team
+    attack's `(0, true)` and `(2, true)` (:12029-12030), each `ldc.i4.k; ldc.i4.1; call GetPlayerData(int32, bool)`.
+    `GetPlayerAttack(id, …)` uses the one-argument `GetPlayerData(id)`, which finds a member by `trueid`.
+  Used by `PartySlots.cs`.
 - MainManager.GetEntity: -2 and -3 are the second and third member by position (MainManager.cs:18526-18537), -4/-5/-6 are Vi/Kabbu/Leif by name (MainManager.cs:18538-18570), 1000 + n reads map.tempfollowers[n] (MainManager.cs:18512-18515) and throws ArgumentOutOfRange when nobody is there; no caller null-checks the result. Used by `PartyFit.cs`.
 - The main menu's confirm sound: StartMenu.Update plays "Confirm" for every main-menu choice (menuid 1) before acting on it. Used by `MenuToggle.cs`.
 - On the file select (menuid 2, submenu 0), confirm on file 0-2 is StartMenu.Update's load or new-game branch (StartMenu.cs:512-535, Event22 or Event8); the save slots' boxes sort at -20 to -60 and their text at 10 (StartMenu.ShowSaves). Used by `MenuToggle.cs`.
