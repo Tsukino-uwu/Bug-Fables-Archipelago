@@ -58,6 +58,7 @@ either one wrong).
 - [2026-09-30: a checklist of everything not yet seen in game](#2026-09-30-a-checklist-of-everything-not-yet-seen-in-game)
 - [2026-09-30: stale lines fixed, the whole repo fact-checked, the panel's letters](#2026-09-30-stale-lines-fixed-the-whole-repo-fact-checked-the-panels-letters)
 - [2026-09-30: MeshGhost compared, four of its gates brought here](#2026-09-30-meshghost-compared-four-of-its-gates-brought-here)
+- [2026-10-01: the Rubber Prison's swinging platforms smoothed at 240](#2026-10-01-the-rubber-prisons-swinging-platforms-smoothed-at-240)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2138,3 +2139,23 @@ either one wrong).
     with a non-interactive rebase; the tree before and after is identical (`7c347bf`).
   - Chained preflight ahead of `git add` once, so it read the old index.
 - **Not pushed** (push only when told).
+
+## 2026-10-01: the Rubber Prison's swinging platforms smoothed at 240
+
+- **Asked (the user):** "swinging platforms at the rubber prison look bad at 240fps"; standing on one, "the platform
+  itself + the chains get a bit blurred when its moving".
+- **Found by reading, then measuring:** the game's `FixedUpdate` movers, read in the decompiled code, pointed at
+  `StaticModelAnim` (its swing and bob written 50 times a second). The console's `solids`, sent through the command
+  file with the user standing on a platform, confirmed it: `swingingplatform` (`StaticModelAnim`) holding
+  `CranePlatform` (a `KeepAngle`), the party its children. `bodytrace`: the party drawn smooth (spread 0.80 px against
+  4.30 true), since a character's step move included the swing's carry; the platform itself not smoothed at all.
+- **The fix:** such scenery drawn between its last two physics steps, as the camera is; `KeepAngle` held level for the
+  draw; a character's step move measured in its parent's space, so the swing carries it once. `scenerylerp` added to
+  the console, and `bodytrace` traces what the leader stands on.
+- **Wrong on the first try:** the user saw it "a bit better/sharper, but now it looks as if its stuttering a bit".
+  Per-frame, the platform went unsmoothed in 163 of 240 frames, snapping about 10 px: my skip for an unmoved object used
+  Unity's `Quaternion ==`, which counts under 0.162 degrees as equal (read in `UnityEngine.CoreModule`), about this
+  swing's turn per step. Exact comparison: smoothed in 237 and 238 of 240 frames (`47a77f2`). The user: "yee the
+  platform & the chain look good now".
+- **Seen on the way, not acted on:** the game measured 682 fps under VSync while its window was likely covered; other
+  `FixedUpdate` movers (wind streaks, halos, some effects) listed in `MEASURED.md`, not smoothed.

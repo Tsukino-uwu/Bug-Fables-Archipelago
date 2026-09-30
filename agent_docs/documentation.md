@@ -1978,7 +1978,8 @@ place it counts frames instead of time first.
   (read in its assembly), about what this swing turns in a step. The skip now compares exactly. **Measured after**
   (`bodytrace`, now also tracing what the leader stands on; the console's `scenerylerp off|on` twice, standing on the
   platform): smoothed in 237 and 238 of 240 frames; its change of on-screen speed per frame 0.07 to 0.08 px/ms drawn,
-  against 1.2 to 2.2 for its true pose; the party on it the same.
+  against 1.2 to 2.2 for its true pose; the party on it the same. **Seen on screen (2026-10-01):** "the platform & the
+  chain look good now".
 - **Random shakes re-rolled once per 1/60 s.** Some effects jump to a new random offset every frame, a blur at 240
   (seen: shaky text in conversations sharp at 60, blurry at 240). Their timing was already right; only the re-roll
   was per frame. Now, while the row is on, the offset holds between ticks: `FontEffects` (shaky and glitchy letters;
@@ -2059,8 +2060,9 @@ character drawn smoothed (2026-09-30): seen sharp on a conveyor and in Vi's flig
 platforms, bridges and a knocked frozen enemy not yet seen with it. Followers deciding walk or brake 30 times a
 second, as at 60 (2026-09-30): measured with `bodytrace`; on the conveyor, "I think it looks fine", hard to tell
 next to the leader. Off by default again (2026-09-29):
-built, not yet seen on a fresh config. Swinging and bobbing scenery drawn smoothed (2026-10-01): measured smooth on
-the Rubber Prison's swinging platform; the first build's stutter was seen and fixed; not yet seen on screen after it.
+built, not yet seen on a fresh config. Swinging and bobbing scenery drawn smoothed (2026-10-01): measured and seen
+on the Rubber Prison's swinging platform, the party standing on it; other bobbing scenery (boats, floating things)
+not yet seen.
 
 *Code: `FrameRate.cs`, `FrameRate.Scenery.cs`, `FrameSites.cs`, the row in `ApMenu.cs` and `QualityOfLife.cs`, the
 after-physics hooks in `Plugin.cs`; the console's `display`, `fps`, `interp`, `camlerp`, `bodylerp`, `scenerylerp`,
