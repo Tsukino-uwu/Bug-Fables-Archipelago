@@ -17,7 +17,7 @@ ARMING = re.compile(r'git config (--local )?(--get )?core\.hookspath( \.githooks
 RUNS_ITS_ARGUMENT = {'-c', '-command', '/c', 'eval', 'iex', 'invoke-expression'}
 CONTROL = {';', '&&', '||', '|', '&', '(', ')', ';;', '|&'}
 GIT_TAKES_VALUE = {'-c', '-C', '--git-dir', '--work-tree', '--namespace', '--config-env'}
-# A project's licence is read before anything else of it, and then it gets its row (the user, 2026-09-30).
+# A project's licence is read before anything else of it, and then it gets its row.
 LICENSING, PATTERNS = 'agent_docs/licensing.md', 'dev-scripts/preflight-patterns.json'
 GITHUB_URL = re.compile(r'(?<![\w.-])(?:(?:www\.)?github\.com|raw\.githubusercontent\.com|codeload\.github\.com'
                         r'|api\.github\.com/repos)/([\w.-]+)/([\w.-]+)([^\s\'"]*)', re.I)
