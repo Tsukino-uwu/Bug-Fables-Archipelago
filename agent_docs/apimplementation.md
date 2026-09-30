@@ -2825,6 +2825,11 @@ its `-Check` (the release's gate) is now preflight with `--release`.
 **Taken from MeshGhost's preflight (2026-09-30):** rules this project wrote down but nothing checked.
 - **Line caps:** `CLAUDE.md` stays within its 150 lines (its RULE 0), counted the way `wc -l` counts. The cap and
   its reason are `line_caps` in the patterns file.
+- **Durations:** no span of time where a date belongs (CLAUDE.md: cite dates, never durations), in any tracked file,
+  in any commit message (`--history`), or in release notes and subjects (`--text-stdin`). The phrases are `durations`
+  in the patterns file. A figure with its number ("2-3 years old") is a measurement, and passes. On its first run it
+  found two lines in the mod guide, reworded with their dates, and one commit message quoting a phrase it had just
+  removed, reworded before it was pushed.
 
 **Checking a release against the repository (2026-09-29): `dev-scripts/verify-release.py`.** Given a release's
 files and the tag, it checks:
@@ -2967,8 +2972,9 @@ agent makes here (`.claude/settings.json`).
 (pre-commit, pre-push, CI on every push, the release), the reviewer pages, the GitHub settings and the agent's guard.
 The CI half first ran on the push of 2026-09-29 (`0fc15ce`), all green: preflight on Python 3.11 and 3.13 (the tree,
 all history, the harness's 76 fixtures), the libraries byte for byte against NuGet's package, and `ci.yml`. The guard
-went live in the session that made it; its licence check on GitHub reads was added 2026-09-30. Line caps added
-2026-09-30. Next: the TLS measurement (Known issues); the cache fix waits for a look in game (the mod guide's step 34).
+went live in the session that made it; its licence check on GitHub reads was added 2026-09-30. Line caps and
+Durations added 2026-09-30. Next: the TLS measurement (Known issues); the cache fix waits for a look in game (the mod
+guide's step 34).
 
 *Code: `dev-scripts/preflight.py`, `dev-scripts/preflight-patterns.json`, `dev-scripts/dotnet_metadata.py`;
 `docs/capabilities.md`;

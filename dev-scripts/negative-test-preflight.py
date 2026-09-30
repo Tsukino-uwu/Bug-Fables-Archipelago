@@ -327,6 +327,15 @@ def fixtures():
         data = c.read(path)
         c.write(path, data + b'- one rule too many\n' * (cap - data.count(b'\n') + 1))
 
+    # Spans of time are assembled at run time, so this file never holds one itself.
+    @add('a vague span of time in a doc', 'Durations', names=('docs/reviewing.md',))
+    def _(c):
+        c.append('docs/reviewing.md', 'This took ' + 'week' + 's of work.')
+
+    @add('a vague span of time in a commit message', 'Durations', mode='history', names=('weeks' + ' ago',))
+    def _(c):
+        c.git('-c', 'core.hooksPath=.git/hooks', 'commit', '-q', '--allow-empty', '-m', 'broke ' + 'weeks' + ' ago')
+
     @add('a project cited without a licence row', 'Licences')
     def _(c):
         c.append('agent_docs/references.md', 'see github' + '.com/someone-else/some-project')
@@ -607,6 +616,13 @@ def fixtures():
     F.append(Fixture('text: a home path', 'Personal paths and names', 'text',
                      lambda c: 'built in ' + personal_samples(patterns_of(c))[0]))
     F.append(Fixture('text: an unlisted host', 'Hosts and addresses', 'text', 'see https' + '://unlisted.example.org'))
+    F.append(Fixture('text: every kind of vague span of time', 'Durations', 'text',
+                     '\n'.join(['stuck on it for ' + 'months', 'broke ' + 'weeks' + ' ago', 'fixed th' + 'is year',
+                                'hours' + ' of reading', 'a long' + ' time', 'over the' + ' years']),
+                     names=('for ' + 'months', 'weeks' + ' ago', 'th' + 'is year', 'hours' + ' of', 'long' + ' time',
+                            'over the' + ' years')))
+    F.append(Fixture('text: a figure with its number', 'Durations', 'text',
+                     'a save 2-3 ' + 'years' + ' old, and three ' + 'days' + ' later', expect='PASS'))
     return F
 
 

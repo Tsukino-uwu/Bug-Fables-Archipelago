@@ -39,6 +39,7 @@ QUOTED_HOST = re.compile(r'["\']((?:[a-z0-9-]+\.)+(?:com|net|org|io|gg|dev|app|x
 DOTTED_QUAD = re.compile(r'(?<![\d.])(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?![\d.])')
 GITHUB_REPO = re.compile(r'github\.com/([A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)')
 RESERVED = re.compile(r'(?i)^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$')
+FIGURE = re.compile(r'(?:\d|\b(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve))[\s-]*\Z', re.I)
 BUILTIN_NAMES = set(dir(builtins))
 
 
@@ -540,6 +541,29 @@ def line_caps(ctx, out):
         out.fail('over the cap: something comes out before anything goes in', over)
     if caps and not (missing or over):
         out.ok('; '.join(counted))
+
+
+@section('Durations', modes=('tree', 'history', 'text'))
+def durations(ctx, out):
+    rules = [(re.compile(rx, re.I), why) for rx, why in ctx.patterns['durations']]
+    if ctx.history:
+        sources, what = [(f'commit {sha[:10]}', msg) for sha, msg in ctx.messages], 'commit message(s)'
+    else:
+        sources, what = [(f.path, f.text) for f in ctx.texts()], 'file(s)'
+    hits = []
+    for where, text in sources:
+        for n, line in enumerate(text.split('\n'), 1):
+            for rx, why in rules:
+                for m in rx.finditer(line):
+                    # A figure with its number ("2-3 years old") is a measurement, not a vague span.
+                    if not FIGURE.search(line[:m.start()]):
+                        hits.append(f'{where}:{n}: "{m.group(0)}" ({why})')
+    if not sources:
+        out.fail(f'no {what} read: the listing is wrong')
+    elif hits:
+        out.fail('a span of time where a date belongs: give the date, or the figure with its number', hits)
+    else:
+        out.ok(f'{len(sources)} {what}: every span of time is a date or a figure with its number')
 
 
 @section('Licences')
@@ -1704,10 +1728,12 @@ def load_patterns(files):
                 'ps1_capabilities', 'sh_denied', 'script_denied_modules', 'script_denied_builtins',
                 'script_denied_methods', 'script_capability_modules', 'script_capability_calls', 'dll_assembly_refs',
                 'dll_denied', 'dll_denied_names', 'dll_capabilities', 'dll_synthesized_members', 'dll_compiler_types',
-                'workflows', 'dependencies', 'capability_tables', 'mod_server_text', 'agent_settings', 'line_caps'}
+                'workflows', 'dependencies', 'capability_tables', 'mod_server_text', 'agent_settings', 'line_caps',
+                'durations'}
     if set(patterns) != expected:
         raise Unreadable(f'{PATTERNS} keys differ from what preflight reads: {sorted(set(patterns) ^ expected)}')
     for rx in list(patterns['secrets'].values()) + patterns['game_paths'] + patterns['decompiler_markers'] + [
+            rx for rx, why in patterns['durations']] + [
             rx for key in ('mod_denied', 'mod_capabilities', 'ps1_denied', 'ps1_capabilities', 'sh_denied')
             for rx in patterns[key].values()]:
         re.compile(rx)

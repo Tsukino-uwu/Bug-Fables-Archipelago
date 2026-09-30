@@ -556,5 +556,12 @@
   ],
   "line_caps": [
     ["CLAUDE.md", 150, "the coding agent's rules, read at every session's start: past the cap each rule is followed worse"]
+  ],
+  "durations": [
+    ["\\bfor (?:a |an |the last |the past )?(?:hour|day|week|month|year|decade)s?\\b", "a span of time where a date belongs"],
+    ["\\b(?:hour|day|week|month|year|decade)s? (?:ago|later|earlier|old|behind)\\b", "counted from a moment the text doesn't date"],
+    ["\\b(?:that|this) (?:week|month|year|decade)s?\\b", "named from the day it was written, wrong on any later day"],
+    ["\\b(?:hour|day|week|month|year|decade)s of\\b", "a span of time where a date belongs"],
+    ["\\blong-?standing\\b|\\blong time\\b|\\bdecades\\b|\\bover the years\\b", "a span of time with no figure"]
   ]
 }
