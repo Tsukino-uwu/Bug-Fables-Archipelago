@@ -59,6 +59,7 @@ namespace BugFablesAP
         internal readonly bool JumpShuffled;
         internal readonly bool AbilityItems;
         internal readonly bool SubmarineItem;
+        internal readonly bool PointsOfNoReturn;
 
         internal SeedData(Dictionary<string, object> data, int ownSlot)
         {
@@ -155,6 +156,8 @@ namespace BugFablesAP
                 && abilities is bool abilitiesOn && abilitiesOn;
             SubmarineItem = data != null && data.TryGetValue("submarine_item", out object submarine)
                 && submarine is bool submarineOn && submarineOn;
+            PointsOfNoReturn = data != null && data.TryGetValue("points_of_no_return", out object noReturn)
+                && noReturn is bool noReturnOn && noReturnOn;
             ArtifactsRequired = data != null && data.TryGetValue("artifacts_required", out object required)
                 && required != null
                 ? Convert.ToInt32(required) : 0;

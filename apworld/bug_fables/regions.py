@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Region
 
+from .custom_rules import one_way
 from .data_tables import DOOR_RULES, DOORS, MAPS, TRANSFERS, door_name
 
 if TYPE_CHECKING:
@@ -31,5 +32,6 @@ def create_and_connect_regions(world: BugFablesWorld) -> None:
             world.create_entrance(regions[a], regions[b], name=f"{a} to {b}")
     for transfer in TRANSFERS:
         ways = ((transfer.from_map, transfer.to_map), (transfer.to_map, transfer.from_map))
+        rule = transfer.rule if transfer.way_back is None else one_way(transfer.rule, transfer.way_back)
         for a, b in ways if transfer.two_way else ways[:1]:
-            world.create_entrance(regions[a], regions[b], transfer.rule, name=f"{a} to {b} ({transfer.name})")
+            world.create_entrance(regions[a], regions[b], rule, name=f"{a} to {b} ({transfer.name})")

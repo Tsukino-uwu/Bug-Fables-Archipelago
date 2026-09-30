@@ -83,5 +83,9 @@ The user's own experience; nothing below was read.
   `licensing.md`).
 - **Super Metroid Map Rando (not an apworld):** rooms with the same number of entrances swap places, on a grid.
   **We take:** Room Swap, on the game's own map (build step 30).
-- **Metroid Fusion's story strip.** **Not taken:** every Bug Fables cutscene also changes the world
-  through flags (build step 9).
+- **Metroid Fusion:** its story strip, and points of no return in its logic: "you can jump down into a room to get an
+  item with no way to get out forcing you to warp back to spawn"; the user finds the constant warping makes for pretty
+  gameplay, and it "does open up for the logic to place things in more/weird places" (2026-09-30). **Not taken:** the
+  story strip, since every Bug Fables cutscene also changes the world through flags (build step 9). **We take:**
+  points of no return as *Points of No Return*, a yaml option, off by default, the Warp to Start as the way back
+  (build step 37).

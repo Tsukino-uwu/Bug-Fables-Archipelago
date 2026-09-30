@@ -58,8 +58,8 @@ seconds (it tidies its memory on a timer).
 
 - **Quality of life**: **Fast text** (dialogue is instant, and holding skip races through it; On), **Travel** (Off,
   Warp, Map or Both, the default: the Warp is a pause-menu button back to where the game began, or to the seed's
-  start; Map is fast travel from the pause menu's map to areas you've visited; both ask Yes / No; the Warp is always there with a random start, the Entrance Randomizer or Shuffle Jump,
-  whatever this says), **Skip confirm**
+  start; Map is fast travel from the pause menu's map to areas you've visited; both ask Yes / No; in a seed the Warp
+  is always there, whatever this says), **Skip confirm**
   (Off, the default, Warp, Map or Both: which travel buttons go at once, without the Yes / No), **Skip cutscenes**
   (On: scenes you don't need to watch are skipped or pass by fast. The new game's intro, tutorial battle included, is
   always skipped with the Archipelago mod enabled: Vi joins and the first check is sent), **Item

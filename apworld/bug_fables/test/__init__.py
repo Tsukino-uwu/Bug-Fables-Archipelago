@@ -9,12 +9,13 @@ from ..items import BugFablesItem
 
 
 def rule_parts(rule: Rule | None) -> Iterable[Rule]:
-    """A rule and every rule inside it (the children of an And or an Or), unresolved."""
+    """A rule and every rule inside it (the children of an And or an Or, a WayBack's child), unresolved."""
     if rule is None:
         return
     yield rule
     for child in getattr(rule, "children", ()):
         yield from rule_parts(child)
+    yield from rule_parts(getattr(rule, "child", None))
 
 
 def logic_rules() -> Iterable[tuple[str, Rule | None]]:
@@ -23,6 +24,7 @@ def logic_rules() -> Iterable[tuple[str, Rule | None]]:
         yield f"{gate.map}: {gate.door}", gate.rule
     for transfer in TRANSFERS:
         yield f"{transfer.from_map} to {transfer.to_map} ({transfer.name})", transfer.rule
+        yield f"{transfer.from_map} to {transfer.to_map} ({transfer.name}, way back)", transfer.way_back
     for spot in (*LOCATIONS, *STORY_EVENTS):
         yield spot.name, spot.rule
     for spot in (*LOCATIONS, *STORY_EVENTS, *ARTIFACTS):

@@ -298,13 +298,15 @@ class DoorRule:
 @dataclass(frozen=True, slots=True)
 class Transfer:
     """A way between two maps that isn't a door (a boat, an elevator, a scene), never shuffled. name says what it is;
-    two_way: the same way back exists, with the same rule; otherwise it only goes from from_map."""
+    two_way: the same way back exists, with the same rule; otherwise it only goes from from_map, and way_back is what
+    getting back from to_map needs (room-logic.md, rule 4; dropped with Points of No Return)."""
 
     name: str
     from_map: str
     to_map: str
     rule: Rule | None = None
     two_way: bool = True
+    way_back: Rule | None = None
 
 
 @dataclass(frozen=True, slots=True)

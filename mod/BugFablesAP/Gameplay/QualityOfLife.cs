@@ -16,11 +16,13 @@ namespace BugFablesAP
         internal static ConfigEntry<bool> FastText;
         internal static readonly string[] TravelValues = { "Off", "Warp", "Map", "Both" };
         internal static ConfigEntry<string> Travel;
-        // Always on with a random start, door shuffle, Shuffle Jump or ability items: a way out the logic never counts.
+        // Always on with a random start, door shuffle, Shuffle Jump, ability items or Points of No Return: a way out the
+        // logic never counts, except with Points of No Return, where it is the way back to the start.
         internal static bool WarpOn => (Travel != null && (Travel.Value == "Warp" || Travel.Value == "Both"))
             || (SeedStart?.Invoke()).HasValue || (EntrancesShuffled?.Invoke() ?? false) || FieldMoves.JumpShuffled
-            || Abilities.AbilityItems;
+            || Abilities.AbilityItems || (PointsOfNoReturn?.Invoke() ?? false);
         internal static Func<bool> EntrancesShuffled;
+        internal static Func<bool> PointsOfNoReturn;
         internal static bool MapOn => Travel != null && (Travel.Value == "Map" || Travel.Value == "Both");
         // Which travel buttons go without their Yes / No box (the same four values as Travel).
         internal static ConfigEntry<string> SkipConfirm;

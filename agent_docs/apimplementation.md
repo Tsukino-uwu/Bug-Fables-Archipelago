@@ -17,7 +17,8 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
   how they're written, [24](#build-step-24-the-logic-second-part-the-rules-for-writing-it-room-by-room); the Python
   modules, [29](#build-step-29-the-logic-third-part-python-modules-per-area-on-the-rule-builder); regions and rules
   explained, [How it works 11](#11-the-logic-explained-regions-exits-rules-and-this-worlds-layout); the open world,
-  [9](#build-step-9-the-open-world-story-blockers-removed-in-the-logic-and-the-mod).
+  [9](#build-step-9-the-open-world-story-blockers-removed-in-the-logic-and-the-mod); Points of No Return, the Warp as
+  the way back, [37](#build-step-37-points-of-no-return-the-warp-counted-as-the-way-back).
 - **The entrance randomizer:** [12](#build-step-12-the-entrance-randomizer-doors-shuffled-by-archipelagos-own-experimental),
   Room Swap [30](#build-step-30-the-entrance-randomizers-room-swap-whole-rooms-trade-places-experimental), Decoupled
   [31](#build-step-31-the-entrance-randomizers-decoupled-each-door-one-way-experimental), connection plando
@@ -87,6 +88,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 34. [Build step 34: Shuffle Shop Inventories, what shops restock and pickups respawn with](#build-step-34-shuffle-shop-inventories-what-shops-restock-and-pickups-respawn-with)
 35. [Build step 35: Filler Starting Checks, the opening's automatic checks hold filler](#build-step-35-filler-starting-checks-the-openings-automatic-checks-hold-filler)
 36. [Build step 36: Progressive Boat, the Boat Ticket and the submarine as items](#build-step-36-progressive-boat-the-boat-ticket-and-the-submarine-as-items)
+37. [Build step 37: Points of No Return, the Warp counted as the way back](#build-step-37-points-of-no-return-the-warp-counted-as-the-way-back)
 
 **How it works**
 
@@ -2472,7 +2474,9 @@ the room logic lives (gathered there 2026-09-30, the user: "to have it all in 1 
   across the rooms it reaches. Then, the user's idea ("exclude 1 or a few certain progression items to see what/if
   they break anything"), `dev-scripts/item-gates.py`: what each progression item, and each pair, gates in the logic,
   with events earned rather than handed out, to read against the game (`development.md`, "What each item gates").
-  Its first run: 13 progression items, from Jump (45 spots) to Bee Fly (2), no *or* anywhere yet.
+  Its first run: 13 progression items, from Jump (45 spots) to Bee Fly (2), no *or* anywhere yet. And an option the user
+  asked for, *Points of No Return* (build step 37): off by default; with it on, rule 4's way back is dropped and the
+  Warp counts as the way back to the start.
 
 **Status:** planned (2026-09-27); the rules written 2026-09-29, the logic in Python since build step 29; every plan
 gathered into `room-logic.md` with spawns and chains added (2026-09-30). No room mapped with it yet: today's rules are
@@ -3424,6 +3428,47 @@ ignoring the option, 26 tests fail.
 `BOAT_TICKET`, `SUBMARINE`), `logic/later_chapters.py`, `logic/metal_island.py`, `data_types.py` (`ItemEntity`),
 `slot_data.py`, `world.py` (`item_name_groups`); tests `test_progressive_boat.py`, `test_logic.py`
 (`TestClassificationsSplitBoat`).*
+
+## Build step 37: Points of No Return, the Warp counted as the way back
+
+A yaml option, off by default, that lets the logic send the player where only the Warp gets them out (the user,
+2026-09-30: "you are expected to get stuck somewhere, but you can always proceed if you keep going"; off by default
+because "relying on and constantly using 'warp'" isn't fun for everyone). From the user's own play of Metroid Fusion:
+jump down into a room for an item with no way out, then warp back to the start; it lets the logic place items "in
+more/weird places" (`references.md`).
+
+**Why it fits Archipelago:** its logic unfolds from the origin region, and `world api.md` (0.6.7, lines 280-281) says
+"AP assumes that a player will always be able to return to this starting region by resetting the game ('Save and
+quit')". Bug Fables' own reset, loading a save, puts you back at the crystal you saved at; Warp to Start is the one way
+back to the start. `apworld_dev_faq.md` (line 185) lists making the reset part of the logic, with players warned, as a
+way to handle what can't be undone. So with the option on, the Warp is counted as the way back to the start, and as
+nothing else: never a way in.
+
+**Decided (2026-09-30):** built now, named *Points of No Return*, off by default, and the Warp forced on with it, as
+for a random start and the entrance randomizer.
+
+**Built (2026-09-30):**
+
+1. **The option** (`options.py`, `PointsOfNoReturn`), and `slot_data` `points_of_no_return`.
+2. **`WayBack`** (`custom_rules.py`), a rule of Bug Fables' own like `Boat`: what getting back from a one-way needs,
+   its child rule with the option off, nothing with it on. `one_way(rule, way_back)` writes a one-way with its way
+   back, never joined by hand, so the option drops only the way back. A one-way transfer carries it as `way_back`
+   (`data_types.py`), joined in `regions.py`. Nothing uses it yet: no room is mapped, so today the option changes no
+   seed's logic (`item-gates.py`'s report identical before and after). The room mapping writes every one-way with it,
+   except where the Warp can't be used (`room-logic.md`, rules 4 and 9, question 20, C9).
+   The preflight allows `Has`, `HasAllCounts` and `Rule` from the Rule Builder, so `WayBack` is a plain `Rule` with a
+   `child` field, and "nothing" is an empty `HasAllCounts`, as `Member` already writes it.
+3. **The mod:** the Warp is forced on with it (the mod guide, step 38).
+4. **Tests** (`test_points_of_no_return.py`): off by default and in `slot_data`; the way back needed with it off,
+   nothing with it on; a one-way needs its own rule and its way back off, only its own rule on. The two "on" tests fail
+   with the option check taken out. The test helpers follow a `WayBack`'s child and a transfer's `way_back`, so a
+   misspelt name inside one is still caught.
+
+**Status:** built (2026-09-30), the tests pass and the mod builds; changes no seed until rooms are mapped; not yet seen
+in game (a seed with it on and Travel Off, the Warp in the pause menu).
+
+*Code: `options.py` (`PointsOfNoReturn`), `custom_rules.py` (`WayBack`, `one_way`), `data_types.py` (`Transfer`),
+`regions.py`, `slot_data.py`; tests `test_points_of_no_return.py`, `test/__init__.py` (`rule_parts`, `logic_rules`).*
 
 # How it works
 

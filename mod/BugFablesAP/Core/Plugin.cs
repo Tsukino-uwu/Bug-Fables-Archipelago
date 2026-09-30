@@ -104,6 +104,7 @@ namespace BugFablesAP
             QualityOfLife.SeedKnown = () => connection != null && connection.SeedKnown;
             QualityOfLife.EntrancesShuffled = () => randomizerEnabled.Value && connection?.DoorTargets != null
                 && connection.DoorTargets.Count > 0;
+            QualityOfLife.PointsOfNoReturn = () => randomizerEnabled.Value && (connection?.Seed?.PointsOfNoReturn ?? false);
             Multipliers.Enable(Log, Config, settingsOn);
             EnemyScaling.Enable(Log, settingsOn, () => QualityOfLife.EnemyScalingMode?.Value);
             AttackBoost.Enable(Log, Config, settingsOn);

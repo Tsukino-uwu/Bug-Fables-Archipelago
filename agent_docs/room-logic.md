@@ -42,6 +42,9 @@ rules work in Archipelago: `apimplementation.md`, How it works §11.
    logically go back"). A one-way (a ledge dropped without Jump, a door with no way back, a transfer that leaves you
    somewhere) counts in the logic only together with what it takes to get back. So the player can always retrace their
    steps to the start, which is what Archipelago assumes of its origin region. The Warp is never that way back.
+   **Unless the player turns on Points of No Return** (the user, 2026-09-30, off by default): then a one-way counts on
+   its own need, and the Warp to Start is the way back, as Archipelago's "save and quit" is for its origin (`world
+   api.md`). Every one-way is written with `one_way(rule, way_back)`, so the option drops only the way back.
 5. **The logic may demand more than the game does, never less.** A rule that asks for too much only makes a seed a
    little stricter; a rule that asks for too little can place an item somewhere the player can't reach, and the seed
    is impossible. Anything not yet measured is written the cautious way.
@@ -54,6 +57,8 @@ rules work in Archipelago: `apimplementation.md`, How it works §11.
    it's forced on with a random start, the entrance randomizer, Shuffle Jump and the abilities as items, so a player
    who leaves the logic is never stuck. The logic never counts it, nor the map's fast travel, to reach anything, the
    start included. (Until 2026-09-29 build step 15 counted it to re-enter a random start; rule 4 does that job now.)
+   With Points of No Return on, the Warp counts as the way back to the start and nothing else: never a way in, and the
+   map's fast travel still never counts. The Warp is forced on with it too.
 
 ## The model
 
@@ -67,7 +72,10 @@ rules work in Archipelago: `apimplementation.md`, How it works §11.
 - **A spot's own rule is written even when its area already implies it,** so a different way into the area (the
   entrance randomizer, a random start) can't lose it (learned in build step 8; test `TestInRoomRules`).
 - **Each edge between areas is one-directional**, with its own requirement. A two-way path is two edges. A path with
-  no edge back is a one-way, and it counts in the logic only together with what it takes to get back (rule 4).
+  no edge back is a one-way, and it counts in the logic only together with what it takes to get back (rule 4). It's
+  written `one_way(rule, way_back)` (`custom_rules.py`), never with the two joined by hand, so Points of No Return can
+  drop the way back; a one-way transfer carries it as its `way_back`. Where the Warp can't be used (question 20, C9), the
+  way back is part of the plain rule instead, and stays with the option on.
 - **A need names what the game checks:** an ability (the game's names, `abilities.py`, written `CanUse(...)`: the
   ability names its member), a member for a fight (`Member(...)`, question 8), a basic move (`MoveItem(...)`), a key
   item, a story event (`Has(...)`). Never what an item opens (rule 1). "Only before flag Y" is a *not*, which a rule
@@ -181,6 +189,8 @@ step (the user, 2026-09-30: "check every cutscene chain & quest chain, to accoun
   yet.
 - **C8. Is taking it a step of its own?** Reaching a board isn't enough when the quest's unlock needs a scene, a flag
   or a visited area: the unlock is a need of the "taken" step.
+- **C9. Does warping out in the middle of it break it** (a follower left behind, a scene half done)? Then the one-ways
+  along that step keep their way back as a plain rule, so Points of No Return never counts on the Warp there.
 
 **The room side** (2026-09-28, after chapter 6 took the boat away): for each room, list every flag its objects, doors,
 scenery and scenes read (a thing shown, hidden or moved, a blocker added or removed), and for each: what sets it and
@@ -241,6 +251,9 @@ dialogue lines, doors, map auto-start scenes, code), per room. Today `gate-table
 18. The Warp is on in every randomized mode: the player's way out of a dead end, never the logic's (rule 9).
 19. Every door here the door table couldn't pair, and every one on `MEASURED.md`'s "To check in play" list: which way
    can it be crossed?
+20. Wherever a one-way leaves you, can the pause menu open, so the Warp works? It's hidden in battle and refused while a
+   scene or dialogue runs. Where it can't be used (a scene that can't be paused), the way back is part of the one-way's
+   plain rule, never `WayBack`, so Points of No Return can't count on the Warp there.
 
 ## How a room gets mapped
 

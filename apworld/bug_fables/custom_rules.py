@@ -74,6 +74,24 @@ class Boat(Rule["BugFablesWorld"], game=GAME):
         return HasAllCounts({BOAT_LEVELS[self.level]: 1}).resolve(world)
 
 
+@dataclass()
+class WayBack(Rule["BugFablesWorld"], game=GAME):
+    """What getting back from a one-way needs (room-logic.md, rule 4): its child rule, or nothing with Points of No
+    Return on, where the Warp to Start is the way back."""
+
+    child: Rule[BugFablesWorld]
+
+    def _instantiate(self, world: BugFablesWorld) -> Rule.Resolved:
+        if world.options.points_of_no_return:
+            return HasAllCounts({}).resolve(world)
+        return self.child.resolve(world)
+
+
+def one_way(rule: Rule | None, way_back: Rule) -> Rule:
+    """A one-way's rule: its own need, and what it takes to get back (WayBack), never joined beforehand."""
+    return WayBack(way_back) if rule is None else rule & WayBack(way_back)
+
+
 # The cautious stand-in for ground not measured yet: every member, and every attack's item.
 WHOLE_PARTY = Member("Vi") & Member("Kabbu") & Member("Leif")
 ALL_ATTACKS = MoveItem("Beemerang Toss") & MoveItem("Horn Slash") & MoveItem("Freeze")

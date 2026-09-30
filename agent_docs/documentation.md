@@ -32,6 +32,7 @@ anyone curious about the process, or thinking of doing the same for another game
 - **The entrance randomizer in the game:** [13](#13-the-entrance-randomizer-in-the-game-doors-rewritten-at-map-load).
 - **The Archipelago panel and its settings:** the panel, [8](#8-the-archipelago-panel-on-the-main-menu); Quality of
   life, [10](#10-the-quality-of-life-page-fast-text-skip-cutscenes-warp-and-more),
+  [38](#38-the-warp-forced-on-with-points-of-no-return),
   [20](#20-item-colors-archipelagos-colours-in-the-you-got-box),
   [21](#21-archipelago-icon-other-players-items-on-the-ground-and-on-shelves),
   [22](#22-item-backgrounds-a-checks-item-class-shown-before-pickup),
@@ -83,6 +84,7 @@ anyone curious about the process, or thinking of doing the same for another game
 35. [Shuffle Shop Inventories in the game: shelf slots and pickups swapped](#35-shuffle-shop-inventories-in-the-game-shelf-slots-and-pickups-swapped)
 36. [Scripted fights cast from the members you have](#36-scripted-fights-cast-from-the-members-you-have)
 37. [The submarine's docks follow its key item](#37-the-submarines-docks-follow-its-key-item)
+38. [The Warp forced on with Points of No Return](#38-the-warp-forced-on-with-points-of-no-return)
 
 ## Where it stands
 
@@ -2455,3 +2457,24 @@ follow the story.
 *Code: `Items/CustomItems.cs` (`Submarine`, `ProgressiveBoat`, `NextBoat`), `Items/ItemReceiver.cs` (`Give`),
 `World/KeptOpen.cs` (`TieToItem`, `BeforeCheck`), `World/Submarine.cs`, `Core/SeedData.cs`, installed from
 `Core/Plugin.cs`.*
+
+## 38. The Warp forced on with Points of No Return
+
+The game side of the Archipelago guide's build step 37. With *Points of No Return* on, the logic may leave the player
+where only the pause menu's Warp to Start gets them out, so the Warp must always be there, whatever the Travel setting
+says (the user, 2026-09-30: forced "similar to how it is for entrance, spawn etc").
+
+**How the mod does it:** `SeedData` reads `slot_data` `points_of_no_return`; `Plugin.cs` hands it to `QualityOfLife`
+as `PointsOfNoReturn`, only while Archipelago is enabled; `QualityOfLife.WarpOn` adds it to the cases that force the
+Warp on (a seed start, shuffled doors, Shuffle Jump, the abilities as items). A seed with no such key reads it as off,
+so older seeds play as before. The dev seed dump lists it.
+
+In today's seeds the abilities are always items, which already forces the Warp on; this case keeps it on by its own
+reason, so it holds whatever the other options become.
+
+**To see** (the user): with a seed made with it on and Travel set to Off, the Warp is in the pause menu.
+
+**Status:** built (2026-09-30), the build succeeds; not yet seen in game.
+
+*Code: `Core/SeedData.cs` (`PointsOfNoReturn`), `Core/Plugin.cs`, `Gameplay/QualityOfLife.cs` (`WarpOn`),
+`Dev/SeedDump.cs`.*

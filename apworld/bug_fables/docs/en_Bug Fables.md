@@ -38,6 +38,9 @@ Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's 
   your key items once it does.
 - **Shuffle Jump** (off): Jump is an item for the whole party; until it arrives, the jump button only buzzes, and the
   pause menu's Warp is always there. New in this version.
+- **Points of No Return** (off): the logic may send you somewhere only the pause menu's Warp to Start gets you out of,
+  a drop or a one-way door, so items can land in more places and you're expected to warp back. Off, it always leaves
+  you a way to walk back. Few one-ways are in the logic yet, so for now it changes little. New in this version.
 - **Progressive Boat** (on): the Boat Ticket and the submarine are one item found twice, the ticket first; off, two
   items in any order (see below). New in this version.
 - **Music Shuffle** (off, under Aesthetic Options): every song plays in place of another, the same every time you play

@@ -53,6 +53,7 @@ either one wrong).
 - [2026-09-30: Filler Starting Checks, and fights played by the party you have](#2026-09-30-filler-starting-checks-and-fights-played-by-the-party-you-have)
 - [2026-09-30: direct titles for the guides, the Progressive Boat and the submarine](#2026-09-30-direct-titles-for-the-guides-the-progressive-boat-and-the-submarine)
 - [2026-09-30: every room-logic plan in one place, spawns and chains added, a truly random start designed](#2026-09-30-every-room-logic-plan-in-one-place-spawns-and-chains-added-a-truly-random-start-designed)
+- [2026-09-30: Points of No Return](#2026-09-30-points-of-no-return)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -1944,3 +1945,26 @@ either one wrong).
   gating spots they don't need in the game (the Hideout Cell without Shield), the known cautious stand-in. What it
   can't do alone: find a rule nobody wrote, which only shows as an item gating too little when read against the game.
 - **Next:** the spawn table and the three Starting Location values. **Not seen in game:** everything here.
+
+## 2026-09-30: Points of No Return
+
+- **The user's idea:** "if we map out logic properly, would it be possible to have a on/off yaml setting for this? like
+  'you are expected to get stuck somewhere, but you can always proceed if you keep going'", off by default ("I don't
+  think relying on and constantly use 'warp' is fun gameplay wise"), from playing Metroid Fusion ("you can jump down
+  into a room to get an item with no way to get out forcing you to warp back to spawn"). Answered: not a dumb idea.
+  Archipelago's `world api.md` assumes the player can always get back to the origin "by resetting the game ('Save and
+  quit')", and in Bug Fables the Warp to Start is that reset (a loaded save goes back to its crystal); the dev FAQ
+  accepts making the reset part of the logic. Asked when and what to call it: "Build the option now", "Points of No
+  Return"; then "if point of no return is enabled, 'warp' will be forced similar to how it is for entrance, spawn etc".
+  Metroid Fusion: "we won't read/check anything, put it in references.md 'playing'".
+- **Built:** the option; `WayBack`/`one_way`, a one-way written as its own need and its way back, the way back dropped
+  with the option on; a transfer's `way_back`; the Warp forced on in the mod. The preflight allows only `Has`,
+  `HasAllCounts` and `Rule` from the Rule Builder, so `WayBack` is a plain `Rule` with a `child` and "nothing" an empty
+  `HasAllCounts`, not the Rule Builder's `WrapperRule` and `True_` (the list not widened). The test helper `rule_parts`
+  now follows a `child`, else a misspelt name inside a `WayBack` would go unchecked.
+- **Found while reading:** in every current seed the Warp is already forced on (`ability_items` is always sent), so the
+  setup guide's "with a random start, the Entrance Randomizer or Shuffle Jump" undersold it: now "in a seed the Warp is
+  always there".
+- **Measured:** `item-gates.py` identical before and after with the option off, and with it on only the options line
+  differs: no rule uses `WayBack` until rooms are mapped. A seed with APQuest and the option on: `slot_data` True, the
+  spoiler "Points of No Return: Yes". The "on" tests fail with the option check taken out. **Not seen in game.**

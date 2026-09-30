@@ -79,6 +79,8 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         # Field moves as items: the three attacks, and Jump (the mod then keeps the Warp on).
         "shuffle_moves": world.moves_shuffled(),
         "shuffle_jump": world.jump_shuffled(),
+        # Points of No Return: the logic counts the Warp as the way back to the start, so the mod keeps it on.
+        "points_of_no_return": bool(world.options.points_of_no_return.value),
         # Every learned ability is an item: the mod answers the game's ability checks from the items received.
         "ability_items": True,
         # The submarine is an item (its key item, whichever item gives it): the mod answers the docks' story checks from

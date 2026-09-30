@@ -243,6 +243,20 @@ class ShuffleJump(Toggle):
     display_name = "Shuffle Jump"
 
 
+class PointsOfNoReturn(Toggle):
+    """
+    Off: wherever the logic sends you, it leaves you a way to walk back.
+
+    On: the logic may send you somewhere only the pause menu's Warp to Start gets you out of (a drop, a one-way door, a
+    transfer with no way back), so items can land in more places, and you're expected to warp back to the start. The
+    Warp is always there with it on.
+
+    Few one-ways are in the logic until its rooms are mapped, so for now it changes little. Off by default.
+    """
+
+    display_name = "Points of No Return"
+
+
 class ProgressiveBoat(DefaultOnToggle):
     """
     The Boat Ticket and the submarine (the Subaquatic Maritime Neotransport) are one progressive item, found twice: the
@@ -298,6 +312,7 @@ class BugFablesOptions(PerGameCommonOptions):
     filler_starting_checks: FillerStartingChecks
     shuffle_field_moves: ShuffleFieldMoves
     shuffle_jump: ShuffleJump
+    points_of_no_return: PointsOfNoReturn
     progressive_boat: ProgressiveBoat
     music_shuffle: MusicShuffle
 
