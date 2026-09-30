@@ -49,6 +49,7 @@ read, a log or a probe.
 - [Fixed numbers in the enemies' scripts](#fixed-numbers-in-the-enemies-scripts-2026-09-30-code-read-nothing-seen-in-game)
 - [The submarine](#the-submarine-2026-09-30-code-read-the-dumps-and-the-games-text-nothing-seen-in-game)
 - [Spy Specs](#spy-specs-2026-09-30-code-read-nothing-seen-in-game)
+- [The Settings list's arrows](#the-settings-lists-arrows-2026-09-30-code-read-the-games-screen-in-the-users-screenshots)
 - [Still to measure](#still-to-measure)
 
 ## The build (2026-09-24, read from a Steam install, game not run)
@@ -1804,6 +1805,17 @@ for its own threshold. Used by `enemy-numbers.py` and `EnemyScaling.cs` (the mod
     `if (!hasmedal) EndPlayerTurn()` (`:5286-5287`): spying doesn't use the turn.
   - The battle menu's command list adds a small icon (219) beside Spy (`MainManager.cs:16291`).
 - Used by `MedalAssist.cs` (the Spy Specs row, the mod guide, step 39).
+
+## The Settings list's arrows (2026-09-30, code read; the game's screen in the user's screenshots)
+
+- **The Settings window** (pause window 4, `PauseMenu.cs:2702-2710`): `boxes[0]` is `Create9Box((0, -1), 13.5 x 7.25,
+  type 1)`, the Archipelago panel's own box, and its list (`ShowItemList(17)`, `listammount` 9) is placed at
+  `(-4.75, 2.45)` in it (`:2167-2172`).
+- **The list's arrows** (`MainManager.ShowItemList`, the pause menu's branch): `guisprites[1]` at scale 1.25, x 11.25
+  in the list for window 4; the up arrow turned 180° at `y 0.25 + 0.3` while rows are hidden above
+  (`MainManager.cs:15583-15604`); the down arrow at `num3 + 0.5` after nine rows 0.7 apart from 0.25, so `-5.55`,
+  while rows are hidden below (`:16364-16385`). In the box: up `(6.5, 3.0)`, down `(6.5, -3.1)`, the top-right and
+  bottom-right corners over the border, as the screenshots show. Used by `ApMenu.cs`.
 
 ## Still to measure
 

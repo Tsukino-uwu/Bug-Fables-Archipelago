@@ -545,15 +545,13 @@ namespace BugFablesAP
             }
         }
 
-        // The game's list arrows (MainManager.ShowItemList in the pause menu): guisprites[1] at 1.25, turned for up,
-        // 0.3 over the first row and 0.2 under the last, scaled from its 0.7 row spacing to this panel's; right of the
-        // value arrows, as the game's sit right of its list.
-        private const float GameRowGap = 0.7f, ScrollArrowX = 5.5f;
-        private static float RowScale => (RowY[0] - RowY[RowY.Length - 1]) / (VisibleRows - 1) / GameRowGap;
+        // The game's list arrows where its Settings screen puts them in the same box (MEASURED.md, the Settings list's
+        // arrows): the top-right and bottom-right corners, guisprites[1] at 1.25, turned for up.
+        private static readonly Vector3 ScrollUpAt = new Vector3(6.5f, 3f), ScrollDownAt = new Vector3(6.5f, -3.1f);
 
         private GameObject ScrollArrow(string name, float turn)
         {
-            GameObject arrow = MainManager.NewUIObject(name, arrows, Vector3.zero, Vector3.one * 1.25f * RowScale,
+            GameObject arrow = MainManager.NewUIObject(name, arrows, Vector3.zero, Vector3.one * 1.25f,
                 MainManager.guisprites[1], ButtonSort);
             arrow.transform.localEulerAngles = new Vector3(0f, 0f, turn);
             arrow.layer = 5;
@@ -573,14 +571,12 @@ namespace BugFablesAP
             if (scrollUp != null)
             {
                 scrollUp.SetActive(top > 0);
-                scrollUp.transform.localPosition = new Vector3(ScrollArrowX,
-                    RowAt(top) + ArrowRise + 0.3f * RowScale);
+                scrollUp.transform.localPosition = ScrollUpAt;
             }
             if (scrollDown != null)
             {
                 scrollDown.SetActive(top + VisibleRows < PageRows);
-                scrollDown.transform.localPosition = new Vector3(ScrollArrowX,
-                    RowAt(top + VisibleRows - 1) + ArrowRise - 0.2f * RowScale);
+                scrollDown.transform.localPosition = ScrollDownAt;
             }
         }
 

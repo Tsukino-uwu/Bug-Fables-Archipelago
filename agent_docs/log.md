@@ -2092,3 +2092,7 @@ either one wrong).
   the panel's spacing (the mod guide, step 8). Built and copied in (`8B5AC0AFB749`, after `B3EC6CDF7A48`, both while
   the reload waited for a scene to end, so the newer one loads); not yet seen.
 - **Seen (the user):** "yee the scroll works". The Spy Specs row's battle effects are still to see (TO-CHECK.md).
+- **The list arrows moved to the game's spots (the user, with screenshots of the game's Settings):** "the normal
+  settings menu have them more to the side i think ?" Read: the panel's box is the Settings window's own box (same
+  place and size), so the game's arrows carry over unchanged: box corners (6.5, 3.0) and (6.5, -3.1), scale 1.25.
+  Built and copied in (`D163974DB237`); not yet seen.

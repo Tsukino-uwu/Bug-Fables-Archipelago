@@ -557,8 +557,11 @@ cursor steps past its top or bottom row. The pause menu draws `guisprites[1]` at
 up, 0.3 over the first row while rows are hidden above and 0.2 under the last while rows are hidden below
 (`MainManager.cs:15583-15604`, `:16364-16385`). **Ours:** a settings page shows nine rows between the same top and
 bottom row as before (the Gameplay page's look, which already had nine), `Scroll` keeps the cursor's row in view by
-the game's rule, rows out of view aren't drawn, each row's value arrows follow it, and the two list arrows sit right of
-the value arrows, the game's sizes and offsets scaled from its 0.7 spacing to the panel's. Up from the top row still
+the game's rule, rows out of view aren't drawn, and each row's value arrows follow it. **The list arrows:** first
+placed right of the value arrows and scaled to the panel's spacing; the user, with screenshots of the game's Settings
+screen: "the normal settings menu have them more to the side". The panel's box is the Settings screen's own box
+(same type, place and size, `PauseMenu.cs:2707`), so the game's spots carry over unchanged: the box's top-right and
+bottom-right corners, over the border, at 1.25 (`MEASURED.md`, the Settings list's arrows). Up from the top row still
 wraps to the bottom, as the panel always did. The main page is unchanged. **Seen on screen (2026-09-30):** "yee the
 scroll works".
 
