@@ -2273,4 +2273,13 @@ either one wrong).
     uncap fps?": "yee add it for the next chat"): the row patches only the game's frame counts; `HoldUps` (30 free
     frames, 3 in a burst, a 5-frame settle) and `AutoSave` (20) still count rendered frames, so at 240 FPS they wait
     a quarter as long. Count them in sixtieths with `FrameRate.Tick60`, as the game's sites do (the mod guide, step
-    24); nothing wrong seen on screen yet.
+    24); nothing wrong seen on screen yet;
+  - **the save crystal's icon:** the user changed the game page's line to a "?" over the player ("as if talking to a
+    npc"; their edit, left uncommitted for them); the mod guide (step 29) and `SaveCrystals.cs` say "!". The code
+    shows the game's emoticon 1, the one it puts over the player next to something to check; which glyph that is,
+    only the screen says. Ask, then make all three agree.
+- **The setup page made easier to read (the user: "can we make these into bullet points"):** the two settings pages,
+  each a single paragraph, now a "Settings in the game" section, a heading per page, a bullet per setting with its
+  default first and each value its own sub-bullet; the text boxes' keys moved up to the panel they belong to. No
+  fact changed; the order follows the panel (`ApMenu.cs`), Fast text's and Skip cutscenes' "On" read as defaults
+  (`QualityOfLife.cs`).
