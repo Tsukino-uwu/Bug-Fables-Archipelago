@@ -2215,3 +2215,13 @@ either one wrong).
     choosing the two version fields, which 0.6.7 already has; reworded to say so.
   - A slip of mine: a `git fetch` in the Archipelago checkout, to read main, without asking first. It wrote only its
     `FETCH_HEAD`; the checkout is still at 0.6.7, unchanged.
+  - The Archipelago guide (two agents, 20 findings, all held): the trap ideas' "Mistake medal" is an item, and `inice`
+    is an ice map's look, the ice block is `Freeze`'s `icecube`; priority on an excluded shop gets a warning in the
+    generator's log (Filler Only); the FAQ's first remedy is a local early item, more locations its first
+    alternative (Known issues and §8); excluded locations take traps too; the server's deflate has three settings;
+    build step 8's flag design marked superseded; `KeptOpen` answers "hide" for blockers; build step 10's Status (the
+    missed-prize path seen 2026-09-24, received berries 2026-09-28); connection plando is in the player's plando
+    guide; Leif's abilities need Leif with the story's party; starting members and the opening's checks get no box
+    since 2026-09-28; Vi's toss gated on flag 41, then 11; Artis's two checks were locations already; a DeathLink
+    bounce reaches the sender too; the preflight's import rule (bare calls only, tables still built at import); Room
+    Swap's connecting is `_swap_rooms`.

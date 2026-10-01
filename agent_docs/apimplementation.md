@@ -194,19 +194,19 @@ be wrong.
    2026-09-30 (replacing the planned `towns`), to build. See build step 15.
 19. **Traps, an idea for later** (2026-09-26; not planned yet). A trap sent to this game takes effect when
    the server delivers it, after any open text box, like any received item. Held up at pickup: its own icon on a red
-   starburst. One icon per trap, so the player knows what's coming. Examples: the Mistake medal poisons
+   starburst. One icon per trap, so the player knows what's coming. Examples: a Mistake (the item) poisons
    the party at the start of the next fight (dropped, below: traps never harm); a crystal berry (or something icy) freezes the player in an ice block
    for 1-3 seconds. Each trap: only with Archipelago on, never a soft-lock (a freeze always ends, even in a scene),
    nothing written to the save the game wouldn't write, never in logic. The game's own effects to reuse (code read
    2026-09-26, not yet measured): fight conditions (`MainManager.BattleCondition`: Poison, Freeze, Numb, Sleep,
    Inked, Sticky and more), map hazards (`Hazards.cs`, three `HazardAction` kinds, likely the knockback), falling
-   off a map (put back at `lastpos`, `PlayerControl.cs:688-691`), and ice (`EntityControl.inice`, set by ice maps).
+   off a map (put back at `lastpos`, `PlayerControl.cs:688-691`), and ice (`EntityControl.Freeze`, the ice block).
    **Traps annoy, never harm** (2026-09-28, after Celeste's flipped screen and Zelda's freeze and chickens):
    a trap never changes how a fight or a run goes, so no debuffs, no lost turns, nothing that can bring a Game Over
    (with DeathLink that would kill the whole room). Each wears off on its own: a few seconds or a timer on the
    overworld, cosmetic only in a fight. Ideas: frozen in an ice block for 1-3 s, reversed controls, a flipped camera,
-   slippery movement (the game has no slippery floor, code read 2026-09-28: `EntityControl.inice` is the ice block, so
-   it would be the mod's own), a silly look for the party in one fight. A lost turn (`EventStop`, `MEASURED.md`) was
+   slippery movement (the game has no slippery floor, code read 2026-09-28: `EntityControl.inice`, set on ice maps, only
+   gives a character its icy look, so it would be the mod's own), a silly look for the party in one fight. A lost turn (`EventStop`, `MEASURED.md`) was
    considered and dropped for this reason; the game's own conditions are never touched.
    First measure how each is applied. A yaml option (how many traps), so its own build step when built.
    **Frozen in an ice block, code read 2026-09-29 (not measured):** nothing in the game freezes the player on the
@@ -580,7 +580,8 @@ be wrong.
   `exclude_locations` and the local and non-local item rules (`Main.py`, 121 and 137-140). It assigns `item_rule`
   outright, which drops those item rules on the shops, and it sets every shop back to normal, which undoes a player's
   own exclusion of a shop. Only when Filler Only falls back (too few filler items in the room). Also: a player's
-  `priority_locations` on a shop, and plando aimed at one, are dropped without a word. Next 43, item 1.
+  `priority_locations` on a shop is dropped (under Filler Only with a warning in the generator's log, under No
+  Progression silently), and plando aimed at one fails silently. Next 43, item 1.
 - **Failed connect attempts are left open** (found by the full review, 2026-09-29; read in the code): if reading
   slot_data fails right after a successful login (`ApConnection.cs`), that logged-in connection is neither kept nor
   closed, and the retry logs in again, so every retry adds a client on the slot. A mod and an apworld of different
@@ -603,7 +604,8 @@ be wrong.
   the last reachable spots before the other game's key item. A generation error, never an impossible seed. Measured
   and not kept: Jump as a local early item with *minimal* and Shuffle Jump, 1 of 400 on the same pair. **Decided
   (the user, 2026-09-30): the fix is more locations, not a workaround.** A 100% generate rate is always the aim; the
-  real fix is Archipelago's first remedy (`apworld_dev_faq.md`, "My game has a restrictive start"): more early spots,
+  real fix is the first of Archipelago's alternatives to a local early item (`apworld_dev_faq.md`, "My game has a
+  restrictive start"): more early spots,
   those needing no Jump above all (the room mapping, Next 2), and a goal past chapter 1. Until then a fuzzer or CI
   `FillError` with *minimal* and Shuffle Jump is this issue. Re-measured as locations come: the failing pair over 400
   seeds (its yaml options above), done at 0 there and 0 of 10000 fuzzed.
@@ -727,7 +729,7 @@ Archipelago's `custom_worlds` folder.
 
 - **Items are classified the Archipelago way.** *Progression*: anything logic depends on (it unlocks a
   location). *Useful*: especially good to have; never placed on an excluded location. *Filler*: can be
-  ignored; the only kind an excluded location gets. *Trap*: detrimental to receive; a yaml option may swap
+  ignored; with traps, the only kinds an excluded location gets. *Trap*: detrimental to receive; a yaml option may swap
   filler for traps.
 - **The pool is each included location's own vanilla item** (2026-09-24, once two locations held an HP Plus medal),
   then the member, ability and the mod's own items the options add, then padding for the rest (test `TestPool`, which also fails if a location's vanilla
@@ -868,8 +870,8 @@ Newtonsoft.Json 11.0.1 (the netstandard2.0 copy bundled in the same package; see
 
 **1. Find out what "compressed" means here.** Websockets have a standard compression add-on called
 *permessage-deflate*. The client offers it when it connects, and the server accepts or declines. The
-server's code shows it looks only for that add-on, and it's set up with one extra setting,
-`server_max_window_bits=11` ([`MultiServer.py`, tag 0.6.7](https://github.com/ArchipelagoMW/Archipelago/blob/0.6.7/MultiServer.py#L57-L58)).
+server's code shows it looks only for that add-on, set up with both window sizes at 11 and a memory level, and the
+one its answer always carries is `server_max_window_bits=11` ([`MultiServer.py`, tag 0.6.7](https://github.com/ArchipelagoMW/Archipelago/blob/0.6.7/MultiServer.py#L56-L60)).
 
 **2. Check what the client library can do.** The library comes in several builds, one per kind of .NET. The
 build we'd used runs on .NET's own websocket, and the version of .NET inside this game has no compression
@@ -1097,7 +1099,9 @@ playing through and noting each blocked path, we read the gates out of the game'
 What it showed, for the design:
 
 - **Some doors need an ability's flag** (dig, bubble shield). So a received ability item has to turn on the
-  game's own flag, which every door and move already checks, rather than the mod faking the ability.
+  game's own flag, which every door and move already checks, rather than the mod faking the ability. (No longer so:
+  since 2026-09-27 the key item in the bag answers the game's ability checks and the flags stay the game's, build
+  step 23.)
 - **Some doors vanish later in the story.** Logic can only say "reachable from here on", never "until
   chapter N", so each of those is judged by hand: an alternate version of the same map (day and night), or
   a place that really closes, whose locations then need another way in or must not be locations.
@@ -1234,7 +1238,7 @@ with DeathLink): story flags live only in the save, so a Game Over that loads an
 checked pickups are hidden (build step 27). A death then only replays scenes. Checked when each gate is built; the
 world's one shape is Next 52, a beaten boss kept beaten Next 53.
 **Areas and doors that close later are kept open** (2026-09-24), as Pokémon Emerald's apworld keeps Mirage
-Island visible: the mod makes the game's `CheckIfCanExist` answer "exists" for a list of doors and blockers
+Island visible: the mod makes the game's `CheckIfCanExist` answer "hide" for a list of blockers
 sent in `slot_data`, decided at generation, with no save writes. Each is checked in game first; where forcing
 one open breaks the story state, its locations are left out instead. **First case, built 2026-09-24:** after the
 first boss, Eetl turns you back outside the city (`eetlblocker1 - Duplicate`, Event12, until chapter 2's flag
@@ -1530,7 +1534,7 @@ enemies on 124 maps (some are one spot in different story states, swapped by fla
 measure first: how a won battle knows which map enemy started it, and whether the mod has to keep what's done
 (like respawning pickups, since nothing in the save marks a single map enemy beaten).
 
-**Status:** in progress: respawning pickups (2026-09-24), the missed-prize path and discoveries (2026-09-25) seen on screen, crystal berry spots too (the mod guide, step 9); berries, the lost kid's reward and the prize payout not yet seen in game; Placeholders planned; bestiary, recipes and enemy checks parked.
+**Status:** in progress: respawning pickups and the game's missed-prize path (2026-09-24), discoveries (2026-09-25) seen on screen, crystal berry spots too (the mod guide, step 9), received berries too (2026-09-28, build step 27); a berry location's hand-over, the lost kid's reward and the prize payout not yet seen in game; Placeholders planned; bestiary, recipes and enemy checks parked.
 
 *Code: `options.py` (`CATEGORY_OPTIONS`, `category_count`), `locations.py` (`category_on`), `slot_data.py`
 (`location_berries`, `location_discoveries`, `location_vars`, `location_pickups`); in the mod `LocationChecks.cs`,
@@ -1781,8 +1785,8 @@ is gone, its grow-outwards pass with it (Archipelago's randomizer grows the worl
    `write_spoiler_header`, as The Messenger does), each pair once, both ways.
 4. **The preflight's import list widened for it** (the user's call, 2026-09-29): `entrance_rando`'s two functions,
    `BaseClasses`' `Entrance` and `EntranceType`.
-5. **`PlandoConnections`: first left out** (no Archipelago doc mentions it and nothing requires it; The Messenger has
-   it as an extra), **then built the same day** (build step 32), as every optional feature is supported.
+5. **`PlandoConnections`: first left out** (no developer doc mentions it, only the player's plando guide, where
+   "support for connection plando may vary", and nothing requires it; The Messenger has it as an extra), **then built the same day** (build step 32), as every optional feature is supported.
 
 The experimental label stays: the rules inside rooms aren't mapped yet (build step 24), so a shuffled seed can still
 put the party where the game needs more than the logic knows; the Warp stays the way out.
@@ -1894,8 +1898,8 @@ grass on the way there has to be cut with the horn (2026-09-25), so her location
 having Kabbu/Vi/Leif", so the logic already holds for a random start, one member and missing moves before any move is
 an item. A spot or exit lists `abilities` (Horn, Beemerang, Ice, Jump); the world turns each into who has it today
 (`ABILITY_HOLDERS` in `rules.py` then; since build step 29 `ABILITIES` in `abilities.py`, through `CanUse`: Horn Kabbu,
-Beemerang Vi, Ice Leif; Jump the whole party, so nothing), and only when members
-are items, as for `members`. The two horn spots (25, 32) moved from `members` to `abilities`, and location 19 (crystal
+Beemerang Vi, Ice Leif; Jump the whole party, so nothing), only when members
+are items, as for `members` (since build step 29, with the story's party Leif too, who joins late). The two horn spots (25, 32) moved from `members` to `abilities`, and location 19 (crystal
 berry #0 outside the den, behind grass from the Outskirts' side) got the Horn: cautious, since the cave's side needs
 no horn, which room-level regions will count. Location 30 (the bridge room's hidden spot, behind grass) got the Horn too
 (2026-09-26). Both sit in regions that need all three members today, so the Horn changes nothing yet; it keeps the
@@ -2428,15 +2432,15 @@ Explorer Permit, so a late permit makes him late; with All Three nothing waits o
 
 **First play (2026-09-27):** all three were there, but no member showed a box and Leif appeared a moment
 after the start. No box: the members are start inventory, which the server has at login, and the receiver showed no
-box for what it had at login. Since 2026-09-28 replays are held up too (the mod guide, step on Item animation), so the
-starting members get their boxes on a new file. Leif late: items are given only while the player is free, after the opening skip and a map
+box for what it had at login. Since 2026-09-28 replays are held up too (the mod guide, step on Item animation), but starting
+items are quiet, so the starting members still arrive with no box. Leif late: items are given only while the player is free, after the opening skip and a map
 change. Now, with All Three, the opening's own party change adds whoever the story hasn't reached yet, so Leif is
 there from the first frame; his item then finds him already in.
 
 **Status:** works, seen on screen (2026-09-27): a new file starts with all three at once (log: the opening done
 with party 0, 1, 2; Leif's item found him already in). On a fresh seed both opening spots showed their box (Poison
-Resistance, then Sleep Resistance from the silent spot); a second file on a used seed shows only the gift's, since the
-server already holds the silent spot's item at login.
+Resistance, then Sleep Resistance from the silent spot); a second file on a used seed showed only the gift's, since the
+server already held the silent spot's item at login. Since 2026-09-28 the opening's checks are quiet: no box for either.
 
 *Code: as build step 18 (`StartingPartyMember`'s `all_three`, the default); tests `test_party.py`
 (`TestStartAllThree`).*
@@ -2449,7 +2453,7 @@ own on/off thing as well due to how much it impacts, both off by default"). The 
 (build step 13), so the logic only learns that a move is also an item.
 
 1. **The game's own move** (`PlayerControl.DoActionTap`, `MEASURED.md`): the leader's field attack by his `animid`;
-   Vi's already waits for flag 11, Kabbu's and Leif's are always on.
+   Vi's is allowed before flag 41 and after it with flag 11 (set early), Kabbu's and Leif's are always on.
 2. **The world:** option `shuffle_field_moves` (off). Three items, kind 6 (`MOVE_ID_OFFSET`), in the pool only with it
    on. `requires` (`rules.py`; since build step 29 `CanUse`) turns an ability into its member (when members are items; with the story's party only Leif, who
    joins late) and, with moves shuffled, its item. **Cautious like members** (chosen): the gate's exit lists
@@ -2508,7 +2512,7 @@ the attacks"), behind its own option, `shuffle_jump` (off).
 2. **Cautious logic** (chosen): with it on, every location and story event (artifacts included) needs Jump
    except those seen reachable without it, marked `no_jump` in the data. **Measured on screen (2026-09-27, the
    starting map and the town):** the ladybug siblings' house item needs no jump; Madeleine's house does, and so do
-   the Hard Mode NPC's gifts and the inn's item (neither a location yet); the plaza statue discovery (not a location
+   Artis's two checks (the Hard Mode NPC) and the inn's item (not a location yet); the plaza statue discovery (not a location
    yet), the caravan and the Commercial District's two shops need nothing; the underground bar needs the Horn (grass);
    the inn review quest's completion needs nothing (if quest completions become locations). The two opening checks
    need nothing either (they happen on their own). Jump lands in one of those spots, or in another game.
@@ -2602,7 +2606,7 @@ still by large areas, kept as each spot's `reach` over one region per map (build
 
 **What it is:** Archipelago's DeathLink, one of its "bounce" features (`docs/network protocol.md` at 0.6.7, "DeathLink"):
 a client wearing the `DeathLink` tag sends a `Bounce` with `time`, `source` and an optional `cause` when its player
-dies, and the server passes it to every other client wearing the tag. Each game decides what "die" means.
+dies, and the server passes it to every client on the team wearing the tag, the sender's own included. Each game decides what "die" means.
 
 **Decided (2026-09-28):**
 - **A row in the Archipelago panel, *DeathLink*, ON / OFF, off by default; not a yaml option**, so a player can change
@@ -2787,7 +2791,8 @@ So it gets the strictest rules, read from its syntax tree, not by searching text
   - No attribute that writes files, runs programs or opens connections, on any object.
   - No world hook that is handed files or settings to write (`generate_output`, `settings`).
   - Annotations are only type expressions. Archipelago evaluates option annotations as code.
-  - Nothing runs at import but definitions.
+  - No bare call at a module's top level, and no `while`, `with` or `try` there; assignments, `for` and `if` may
+    still build tables at import, as `data_tables.py` and `options.py` do.
   - A lookup by a computed name (`getattr(x, name)`) must be listed in `docs/capabilities.md` with where the name
     comes from. There are four.
 - **Apworld data and docs:** the data files are strict JSON (no repeated key, no `NaN`) with no hidden attribute
@@ -3166,8 +3171,8 @@ Super Metroid's Map Rando is called, rooms with the same number of entrances swa
 swap moved onto the same entrances as Archipelago's randomizer, and the first test that could check every region
 from the start found two holes:
 
-1. **`room_pairs` in `entrances.py`** connects the split door entrances by hand, the dangling exit to the target named
-   after the other door (the pattern of The Messenger's `connect_plando`), then the same `door_targets` and spoiler as
+1. **`_swap_rooms` in `entrances.py`** connects the split door entrances by hand for the pairs `room_pairs` draws
+   (`_connect`), the dangling exit to the target named after the other door (the pattern of The Messenger's `connect_plando`), then the same `door_targets` and spoiler as
    the coupled shuffle. The logic follows the swap.
 2. **A one-way fixed door joins nothing.** 19 of the 39 fixed doors go one way (drops in the Barren Lands, the Golden
    Settlement's night maps, the wizard tower, the wasp kingdom). An area joined by one could be entered on its far
@@ -3743,8 +3748,9 @@ wrong, it drifts as Archipelago changes, and nobody who knows Archipelago can re
 **Proper fixes only** (2026-09-30, the user: "i don't want any workaround/placeholder fixes for logic/location things,
 i want proper fixes/whatever archipelago itself recommends and does"; part of this rule): a problem in the logic, the
 locations or generation gets the fix Archipelago recommends and does, never a guard or placeholder that hides it. The
-first case: the fill error with *minimal* and Shuffle Jump (Known issues) waits for more early locations, Archipelago's
-own first remedy, rather than a guard raising *minimal* to *full*.
+first case: the fill error with *minimal* and Shuffle Jump (Known issues) waits for more early locations, the first of
+Archipelago's alternatives once its first remedy, a local early item, was measured and dropped, rather than a guard
+raising *minimal* to *full*.
 **Optional features too** (2026-09-30, the user: "we should try to support all available things archipelago has/does,
 that includes plando"): what Archipelago offers a world as optional, connection plando first, is supported, not
 written off as optional. **Read all of it** (2026-09-29, the user: "we should read and take a look at everything/anything Archipelago. don't
