@@ -2377,6 +2377,17 @@ either one wrong).
     in the guide, step 10) and three MEASURED.md pointers, `WarpButton.cs`'s colour history (already in step 10) and
     its "Diagnostic (map travel threw...)", `EnemyScaling.cs`'s survey pointer, `Abilities.cs`'s "measured read".
     Built: 0 warnings.
+  - F7's possible bug in `WarpButton.cs`, read through, not fixed: `BuildWindow` shrinks the old page for 0.2 s before
+    it builds window 0, and the Update prefix meanwhile sees the old page's array. Its guard (`Length < 19 ||
+    sprites[16] == null`) holds for page 2: its 20-long array never fills 15-19. The map's doesn't: one per area plus
+    one (26), a marker at area + 1 for each visited area only, parented to the map. With area 15 (`GiantLair`) visited,
+    `AddButtons` runs on the map's array: it moves markers 12-15 into the button row, puts the two icons on the map and
+    writes them over markers 16 and 18, until window 0's own array arrives; with any of areas 12-14 not visited, it
+    throws at `sprites[13 + n]` once (it sets `builtFor` before the loop). Vanilla reads the same array then too
+    (`IconAnim`), with a null check per slot. The fix to try once seen: take the array only when slots 13-16 are
+    window 0's own (`menuicon0`-`3`). On TO-CHECK.md, with the round trips to try.
+  - Copied in with `copy-dev.ps1` (build `7BD96C922BF6`, backup `20261002-001616`), the frame counters (mod 24) and
+    this session's text fixes; the game wasn't running, so it loads at the next launch.
 
 ## 2026-10-01: text logic or the Rule Builder, for the trackers
 
