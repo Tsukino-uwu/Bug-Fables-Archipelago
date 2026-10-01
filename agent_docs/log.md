@@ -62,6 +62,7 @@ either one wrong).
 - [2026-10-01: a stale check against the code, then a fact check](#2026-10-01-a-stale-check-against-the-code-then-a-fact-check)
 - [2026-10-01: text logic or the Rule Builder, for the trackers](#2026-10-01-text-logic-or-the-rule-builder-for-the-trackers)
 - [2026-10-01: an unlisted project's licence needs the user's yes too](#2026-10-01-an-unlisted-projects-licence-needs-the-users-yes-too)
+- [2026-10-01: both trackers planned, nothing built](#2026-10-01-both-trackers-planned-nothing-built)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2370,3 +2371,19 @@ either one wrong).
   with Git for Windows' `cmd` first on PATH it passes.
 - **The two rows** were committed without the user's yes, so the guard counted them as permitted; asked, the user
   said they stay ("this is fine"), and so does the guard seeing only GitHub reads, not clones already on disk.
+
+## 2026-10-01: both trackers planned, nothing built
+
+- **Asked and read:** the user asked whether text logic would serve the trackers better than the Rule Builder. It
+  wouldn't: Universal Tracker runs our rules, and PopTracker needs an export either way (`to_dict`).
+  PopTracker's `PACKS.md` and `AUTOTRACKING.md`, and Universal Tracker's map guide, were read with the user's yes;
+  the facts are in `archipelago-review.md` item 14.
+- **Found on the way:** Room Swap keeps the game's door graph, so a fixed layout of slots can show each room where
+  it now sits; Coupled/Decoupled can't be laid out. No room coordinates exist anywhere. Committed PNGs are refused
+  by preflight, so any map picture would be drawn by code at build time.
+- **Decided (the user):** full support for both trackers; Universal Tracker with no yaml, always showing everything
+  in logic; the PopTracker pack in its own folder, with a code-drawn map and an optional fog of war. Details in
+  `archipelago-review.md` item 14. The plans are local files: one ignored in this clone's root, one in the pack's
+  folder.
+- **Still open:** whether Universal Tracker gets the map tab too (the user first said it shows nothing visual).
+- **The user said:** plans only for now; neither tracker is being built yet.

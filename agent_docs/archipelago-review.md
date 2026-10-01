@@ -83,6 +83,13 @@ review (2026-09-29); the files have moved since, the claims checked again 2026-0
     nothing redraws a map per seed. Universal Tracker's map tab reads the same PopTracker JSON, takes all logic from
     the apworld, and with entrance tracking colours each door pin and shows where it leads once found; it advises
     against shipping map images in an apworld (its `docs/map-integration.md`).
+    **Decided (the user, 2026-10-01), plans only for now:** full support for both, every feature their docs offer.
+    Universal Tracker generates with no yaml (options and the seed's choices from slot_data) and always shows every
+    location in logic: no deferred entrances. The PopTracker pack lives in its own folder, its own repo later, never
+    here: a map drawn by code (no AI art, no game art, its look picked by the user on screen), Room Swap rooms shown
+    in their new slot, Coupled/Decoupled rooms at their normal place with no lines, and an optional fog of war (on by
+    default) that only PopTracker has. The mod would write three data storage keys for them (rooms visited, the
+    current room, doors taken). The step-by-step plans are local files, not in the repo.
 15. **slot_data: only what's necessary.** *Recommended:* "to not waste resources, it should be limited to data that
     is absolutely necessary"; for locations "it is preferable to use LocationScouts"; "the most common usage of slot
     data is sending option results" (`world api.md:878-887`). Ours sends seven entity tables (nine since build step
