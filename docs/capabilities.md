@@ -87,7 +87,7 @@ is left out; everything else they do is listed.
 | File | Does | Why |
 |---|---|---|
 | `.claude/hooks/agent-guard.py` | runs programs | `git status`, to see whether a commit the coding agent makes may carry a change the maintainer decides: this list, the patterns file, or the guard itself |
-| `.githooks/doc-coverage.py` | runs programs | `git ls-files`, to list the sources every guide must name |
+| `.githooks/doc-coverage.py` | runs programs | `git ls-files`, to list the sources every guide must name, the Markdown files whose links it checks, and the files and folders a link may lead to |
 | `dev-scripts/preflight.py` | runs programs | `git`, to read exactly what a commit holds |
 | `dev-scripts/negative-test-preflight.py` | runs programs | `git` in a throwaway clone, and preflight itself |
 | `dev-scripts/negative-test-preflight.py` | writes files | The throwaway clone, in the system's temp folder, removed afterwards |
