@@ -2243,3 +2243,29 @@ either one wrong).
   - **The user, mid-way:** "should we include code-map.md in docs/reviewing.md?" Recommended yes: the reviewer page
     pointed to the capability list for what reaches beyond the game, and to nothing for the game patches, the mod's
     main job. A one-line link added beside the capability pointer.
+  - **The capability list widened (the user, asked):** "yee widen it then i guess, i want it to cover everything. but
+    i also don't want to have to say yes to every single prompt i do." The gap, explained first: preflight holds the
+    list to the apworld, the mod and the Python and PowerShell scripts; the four shell hooks are checked only for
+    denied things (their `git` and Python runs have no rows), and the workflows' own section never compares them
+    to the list (the `curl` of the NuGet package, `gh release download`, three other repositories checked out, six
+    pinned actions, PyPI installs, the release published). **The plan, not built yet:** an `sh_capabilities` pattern
+    (runs programs, talks to GitHub, writes files) read in the shell hooks, rows for the four hooks; a new table,
+    "CI workflows: what they reach", checked from the Workflows section (uses actions, checks out other
+    repositories, runs programs, downloads packages, talks to GitHub, publishes to GitHub), each action and
+    repository named in its row; `capability_tables` and `load_patterns`'s keys; negative-test fixtures for an
+    unlisted hook program, an unnamed action and a stale row; build step 28. Drafted in a scratch clone, so the
+    guard asks only three times: the patterns file, the list, the commit.
+- **Stopped at the user's word** ("lets stop and pause here. continue in another chat"); the three running agents
+  stopped with it, their findings lost. **Still to do:**
+  - verify and fix the first half of MEASURED.md, reported but not checked (lines as of `713bb24`): `:123` cites
+    `NPCControl.cs:818, :1349` (the BeetleGrass case; the berry's own are `:940`, `:1378`); `:156-164` the permit's
+    `giveitem` is appended by Event16's code (`EventControl.cs:3687`), not in the dialogue; `:323-326` `flagvar[0]`
+    isn't stale, `CheckItem` writes it for berries too (`NPCControl.cs:5645`); `:235` is `MainManager.cs:4084`;
+    `:243` is `StartMenu.cs:792`; `:463` against `:487` (quest 23, a bounty, with flag 146); `:460-461` are
+    `:13714` and `:13840`; `:541` action 9 at `PauseMenu.cs:895` acts in the Settings list, not a music list;
+    `:600` is `MapControl.cs:1631`; `:644` is `EventControl.cs:4964`; `:666-667` the first spider fight is Event6's
+    (`:1702`), not Event5's; `:689-690` flag 13 is Event4's own (`:1215`); `:714` the player's forced walk is 250
+    frames, 375 in a scene (`EntityControl.cs:4951`); `:856` no "Key items" section; `:977` 87 calls in events (one
+    in `ColiseumEnd`); `:1036-1037` flag 135 is quest 6's completion in Event77, not a story scene;
+  - run again: MEASURED.md from line 1064, the mod's config texts, help lines and code comments, and the code map;
+  - build the capability check above (the scratch clone is gone with this session: start from `main`).
