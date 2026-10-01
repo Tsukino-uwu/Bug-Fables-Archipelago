@@ -27,8 +27,9 @@ rules work in Archipelago: `apimplementation.md`, How it works §11.
 
 1. **A location says what it needs; an item never says what it opens.** Every need is written on what it guards: the
    location, the exit into a region, the story event. No item, ability or member lists what it unlocks. Which items
-   matter is read back from the rules (Archipelago's `item_dependencies`, in `TestClassifications`), so writing the
-   rule is the only step.
+   matter is read back from the rules (Archipelago's `item_dependencies`, in `TestClassifications`, which fails unless
+   exactly the items rules use are marked progression in `data/items.json`), so the rule decides and the item's class
+   follows it.
 2. **A need is what the vanilla game expects:** what the game asks of a player going the intended way, with no tricks,
    skips or clever routes. The rules stay simple, players stay free to go out of logic, and every seed stays
    completable (rule 5).
@@ -44,7 +45,8 @@ rules work in Archipelago: `apimplementation.md`, How it works §11.
    steps to the start, which is what Archipelago assumes of its origin region. The Warp is never that way back.
    **Unless the player turns on Points of No Return** (the user, 2026-09-30, off by default): then a one-way counts on
    its own need, and the Warp to Start is the way back, as Archipelago's "save and quit" is for its origin (`world
-   api.md`). Every one-way is written with `one_way(rule, way_back)`, so the option drops only the way back.
+   api.md`). Every one-way is written with `one_way(rule, way_back)`, so the option drops only the way back (none has
+   its way back written yet: build step 37).
 5. **The logic may demand more than the game does, never less.** A rule that asks for too much only makes a seed a
    little stricter; a rule that asks for too little can place an item somewhere the player can't reach, and the seed
    is impossible. Anything not yet measured is written the cautious way.
@@ -77,7 +79,8 @@ rules work in Archipelago: `apimplementation.md`, How it works §11.
   drop the way back; a one-way transfer carries it as its `way_back`. Where the Warp can't be used (question 20, C9), the
   way back is part of the plain rule instead, and stays with the option on.
 - **A need names what the game checks:** an ability (the game's names, `abilities.py`, written `CanUse(...)`: the
-  ability names its member), a member for a fight (`Member(...)`, question 8), a basic move (`MoveItem(...)`), a key
+  ability names its member), a member for a fight (`Member(...)`, question 8), a basic move's item alone only as the
+  blanket rule for ground not yet measured (`MoveItem(...)`, in `ALL_ATTACKS`), a key
   item, a story event (`Has(...)`; the boat's two levels `Boat(1)` and `Boat(2)`). Never what an item opens (rule 1). "Only before flag Y" is a *not*, which a rule
   can never say (rule 3): see [Chains](#chains-what-other-rooms-do-to-this-one), question C5.
 - **Several ways, each written:** two ways into an area are two edges into it; two ways to one spot inside an area are
@@ -104,12 +107,13 @@ one-way (the user, 2026-09-30: "check the spawn location … not just all the en
   with the door's camera (`MEASURED.md`, "Doors paired with their way back", and "Save crystals, saving, Game Over and
   room transfers": what the calling door adds).
 - **Where a transfer that isn't a door puts the party:** a scene's `LoadMap` and the position it sets, a dialogue
-  line's `|warp,map,x,y,z|`, being caught (the hideout cell), the trapdoor (`MEASURED.md`, "Transfers that aren't
-  doors"). The game has no default spot per map: each transfer names its own, and one that names none leaves the party
-  at the coordinates it had (the same section, "No map has a spawn spot of its own").
-- **A save point's spot** (Starting Location's save-point value).
-- **The random start:** a door's arrival or a transfer's spot in any actual room (the user, 2026-09-30: both kinds, "actually
-  random, not semi random"). As built today it isn't yet a door's arrival (build step 15).
+  line's `|warp,map,x,y,z|`, being caught (the hideout cell) (`MEASURED.md`, "Transfers that aren't doors"), the
+  trapdoor (`MEASURED.md`, "Chapters", Leif's joining chain). The game has no default spot per map: each transfer names
+  its own, and one that names none leaves the party at the coordinates it had (`MEASURED.md`, "Save crystals, saving,
+  Game Over and room transfers": "No map has a spawn spot of its own").
+- **A save point's spot** (Starting Location's *Save Points* value, designed, build step 15).
+- **The random start:** a door's arrival or a transfer's spot in any actual room (the user, 2026-09-30: both kinds, "i
+  want random spawn to actually be random not just 'semi random'"). As built today it isn't yet a door's arrival (build step 15).
 - **Where Warp to Start lands:** the start's own spot.
 - **Where a fall or a hazard puts you back** (`lastpos`), **and where a loaded save puts you:** never a way through or
   out (question 17).
@@ -160,7 +164,7 @@ step (the user, 2026-09-30: "check every cutscene chain & quest chain, to accoun
   Ranger Plushie). Found in the dialogue data, not in the board table.
 - **Followers who walk with the party from another room** (the throne room needs Maki, from two rooms away).
 - **Joining scenes:** Leif's, Event4 → 5 → 6 → 18 → 14; each expects the one before, and a file that skipped part of it
-  crashes entering its middle (`MEASURED.md`, "Chapters").
+  crashes entering its middle, with one exception seen (`MEASURED.md`, "Chapters").
 - **Scenes that hold each other in order:** chapter 2's opening, the first boss, the follower, the swap on the palace
   bridge, the briefing (build step 9).
 
@@ -230,8 +234,8 @@ dialogue lines, doors, map auto-start scenes, code), per room. Today `gate-table
 8. Is there a fight you can't avoid? It must be winnable with the members' plain attacks (rule 8): an enemy in the air
    needs Vi, a burrowed one Leif, one that can be flipped over Kabbu, expected even where the others could win without
    him (the user, 2026-09-27; the five are in `MEASURED.md`, "Who can hit what").
-9. Does a scene move you? A cutscene can put the party somewhere else in the same map (the trapdoor) or on another
-   map: from which area, to which, once or every time, on what flag. It's an edge like any other, often a one-way.
+9. Does a scene move you? A cutscene can put the party somewhere else in the same map or on another map (the
+   trapdoor: the door room to the fall room): from which area, to which, once or every time, on what flag. It's an edge like any other, often a one-way.
 10. Does anything change once and stay changed (a switch that stays down, a bridge lowered, a rock broken)? That's an
    event in the logic, reachable from wherever it can be triggered, and it may open a way in both directions.
 
@@ -296,7 +300,7 @@ dialogue lines, doors, map auto-start scenes, code), per room. Today `gate-table
      game, an *early key* that it's stricter; it matters most for the experimental options.
 
 **The safeguards already in place:** the tests generate seeds across option sets and check they're beatable;
-`TestClassifications` makes an item progression the moment a rule uses it; one location per ability; the entrance
+`TestClassifications` fails unless exactly the items rules use are marked progression; one location per ability; the entrance
 randomizer and a random start stay labelled experimental until their room-level logic is done and tested.
 
 ## Not in the logic, on purpose

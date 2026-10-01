@@ -59,6 +59,7 @@ either one wrong).
 - [2026-09-30: stale lines fixed, the whole repo fact-checked, the panel's letters](#2026-09-30-stale-lines-fixed-the-whole-repo-fact-checked-the-panels-letters)
 - [2026-09-30: MeshGhost compared, four of its gates brought here](#2026-09-30-meshghost-compared-four-of-its-gates-brought-here)
 - [2026-10-01: the Rubber Prison's swinging platforms smoothed at 240](#2026-10-01-the-rubber-prisons-swinging-platforms-smoothed-at-240)
+- [2026-10-01: a stale check against the code, then a fact check](#2026-10-01-a-stale-check-against-the-code-then-a-fact-check)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2159,3 +2160,47 @@ either one wrong).
   platform & the chain look good now".
 - **Seen on the way, not acted on:** the game measured 682 fps under VSync while its window was likely covered; other
   `FixedUpdate` movers (wind streaks, halos, some effects) listed in `MEASURED.md`, not smoothed.
+
+## 2026-10-01: a stale check against the code, then a fact check
+
+- **Asked (the user):** "do a stale check & afterwards a fact check"; stale meaning "docs, if they haven't kept up
+  with the code, or could be docs that don't mention things yet".
+- **The stale check:** six read-only agents, one per part (the mod guide in two halves, the Archipelago guide in two,
+  the player and reviewer docs, the dev docs and records), each finding checked in the code before it was fixed. All
+  six stopped once at the session limit and were resumed where they were. Fixed, in separate commits:
+  - the mod guide (`01d3536`): nine rows where the user chose seven; the pips at 0.68 when they are the game's size;
+    the VSync rule (a cap at or above the refresh rate syncs too); the platform, frozen-enemy and flight fixes still
+    described as current though every character stopped being interpolated 2026-09-30; Spy Specs missing from steps
+    15 and 18; the main page's rows; the Warp's destination and the Points of No Return exception; Status lines behind
+    the log (the swinging platform, the Spy Specs row, Free boat and the warp seen); *Code:* lines for nine steps;
+  - the Archipelago guide (`2db7a55`): Next 10, 11 and 18 behind their steps; Next 54 and 55 added (Points of No
+    Return, Spy Specs); the wrong test named for the Plushie; build step 17's gate and release build as they are since
+    2026-09-29; build step 28's hooks, fixture count (81) and the negative test's time (39 s, measured today, against
+    "about 25 s"); *Code:* lines for build steps 9-11 and 14-23; three steps added to By topic;
+  - *Item animation*'s config text and help lines said "from other players" though it decides for every received item
+    since 2026-09-28 (`d84efb2`, built, not yet seen; on TO-CHECK.md);
+  - the gate headers pointed at `docs/reviewing.md` for what each section refuses, which points at build step 28
+    (`54e8153`, the negative test run first: 0 problems); `release.yml`'s comment on the text rules (`546acb5`);
+  - the player docs (`adb4793`): save crystals by the confirm button, the cfg-only Compression setting;
+  - the code map, development.md, MEASURED.md's pointers and licensing.md (`565c02f`): rows behind their files, console
+    commands described wrong (`bodytrace` never logged a layer; `script` logs commands only), and 29 transitive build
+    packages with no licensing row, each licence read from the package in the NuGet cache (23 at 4.3.0 and the two
+    `Microsoft.NETCore` at 1.1.0 under Microsoft's .NET Library terms, the four at 4.7.0 MIT; none shipped);
+  - `docs/capabilities.md`: doc-coverage's `git ls-files` reason, short since the plain-link check (`cc6fbaa`).
+- **The user, mid-way:** "new in this version" goes stale at the next release; "New in 0.3.0" stays accurate. "We
+  are at v0.2.0 right now, so anything past that will be included whenever i do a v0.3.0 release later on." The game
+  page's ten labels renamed, each checked absent from v0.2.0, and the rule written into build step 17 (`f805962`). The
+  yaml's "in this version" counts stay: the apworld fills them for the version it ships with.
+- **A slip of mine:** one batch of code-map rows went through a Python script instead of Edit; checked after (ten rows
+  changed as meant, links resolve, UTF-8 intact), the rest done with Edit.
+- **Left as they are:** steps 2, 23 and 28 of the mod guide in no topic of its By topic list (the design, the logo, a
+  removed page); build steps 13 and 24 with no *Code:* line (a design and a plan).
+- **The fact check, part done:** eight read-only agents, one per part; some split their share among helpers. Two
+  reported: the dev docs and records (11 findings, all checked and fixed: websocket-sharp has one patched method, not
+  two; the trapdoor changes maps; `TestClassifications` checks the classes in `items.json`, it doesn't set them; two
+  wrong MEASURED.md citations in room-logic.md; `one_way` written nowhere yet; a misquoted line of the user's;
+  `addleif` stays in memory until the game saves), and `client-requirements.md` with `archipelago-review.md` (5
+  findings, not yet checked: "32 of 88 worlds" counts folders, not worlds; style items filed as required; three more
+  marked unsure). **Stopped at the user's word** ("approaching the 5hour usage cap"): the mod guide, the Archipelago
+  guide, both halves of MEASURED.md, the player docs and code text, and the code map. Each agent's transcript is kept,
+  so each can be resumed where it stopped.
