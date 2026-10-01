@@ -2821,7 +2821,7 @@ So it gets the strictest rules, read from its syntax tree, not by searching text
   - PowerShell and shell are read with comments blanked: no running text as code, no encoded commands, no downloads,
     no compiling, no system settings.
   - What each script does (runs programs, writes files, talks to GitHub, connects to a local test server) is listed
-    per script, so anyone about to run one can see what it will do.
+    per script, so anyone about to run one can see what it will do. The git hooks too, since 2026-10-01 (below).
 
 **The compiled DLL itself (2026-09-29).** The mod's DLL is the one file nobody can rebuild without the game, so
 it is read directly, the way the .NET runtime reads it: `dev-scripts/dotnet_metadata.py` parses its PE headers,
@@ -2884,6 +2884,7 @@ its `-Check` (the release's gate) is now preflight with `--release`.
   - No secret but GitHub's own token, and no `${{ }}` inside a script, where text from outside would run as code.
   - No `continue-on-error` and no YAML anchors.
   - The release's publish job must wait for every gate.
+  - What each workflow reaches is in the capability list, each action and repository by name (2026-10-01, below).
 - **Dependencies pinned:**
   - Every package at one exact version, and the lock file agreeing with the project, a content hash for each.
     The SDK adds `NETStandard.Library` itself, so that one is listed by version in the patterns file.
@@ -2904,6 +2905,23 @@ its `-Check` (the release's gate) is now preflight with `--release`.
 - **Plain links** (in `.githooks/doc-coverage.py`, run by the pre-commit hook): every plain link in a tracked Markdown
   file leads to a tracked file or a folder holding one, as links into a heading already had to. All 213 led
   somewhere on its first run.
+
+**The list covers the hooks and the workflows too (2026-10-01).** A fact check found the capability list, which
+calls itself exactly what the code does, silent on two things. The four shell hooks were read only for denied calls,
+so their `git` and Python runs had no rows. The Workflows section never compared the workflows with the list: six
+pinned actions, three other repositories checked out, PyPI installs, the NuGet package's download, `gh release
+download`, the release published. The user: "i want it to cover everything".
+- **The hooks:** `sh_capabilities` in the patterns file (runs programs, talks to GitHub, writes files), read with
+  comments blanked as the PowerShell scripts are, and a row for each of the four hooks. A redirect counts only where
+  a word starts, so the `>` inside a message's text doesn't.
+- **The workflows:** a sixth table, "CI workflows: what they reach", checked from the Workflows section. Uses
+  actions, checks out other repositories, runs programs (any `run:` step), downloads packages and talks to GitHub
+  (`workflow_capabilities`, read in the scripts), publishes to GitHub (a job with a write permission). Each action
+  and each repository must be named in its row, in backticks; a name the workflow no longer uses fails too.
+- **Three fixtures:** a hook doing all three things with no row; a workflow using an action its row doesn't name
+  and calling `gh`; rows nothing matches (a workflow that doesn't exist, an action no longer used). With the name check
+  blinded on purpose, the last two failed the test.
+- **Drafted in a scratch clone**, so the guard asked only three times: the patterns file, the list, the commit.
 
 **Checking a release against the repository (2026-09-29): `dev-scripts/verify-release.py`.** Given a release's
 files and the tag, it checks:
@@ -2947,7 +2965,7 @@ history, free text), the test plants a real violation and checks that the sectio
 non-zero. It works in a throwaway clone outside the repo, with its link back to the repo removed. The clone holds what
 the next commit contains (HEAD plus everything staged), or, from pre-push, exactly the commit being pushed:
 1. **A clean baseline** in all three modes, so a failure afterwards is the plant's doing.
-2. **One fixture per kind of violation** (76 on 2026-09-29, 81 on 2026-09-30, counted from the test itself): a bidi override in a doc, a homoglyph in code, every
+2. **One fixture per kind of violation** (76 on 2026-09-29, 81 on 2026-09-30, 84 on 2026-10-01, counted from the test itself): a bidi override in a doc, a homoglyph in code, every
    credential format at once (each must be named), a home path inside the DLL, a library changed by one byte, a
    symlink, a submodule, a stale host row, a secret committed and then removed, and more. The fake credentials and
    paths are assembled at run time, so the test file holds none itself.
@@ -2959,7 +2977,7 @@ the next commit contains (HEAD plus everything staged), or, from pre-push, exact
    tree put back to the DLL's own sources must not count as stale. The staleness fixtures start from that tree:
    between releases the real one is legitimately newer, which would hide what they plant.
 
-It took about 25 s on 2026-09-29, and 39 s on 2026-10-01 with 81 fixtures. **Tested the other way round (2026-09-29):** with the Secrets section made blind on purpose,
+It took about 25 s on 2026-09-29, 39 s on 2026-10-01 with 81 fixtures, and 46 s the same day with 84. **Tested the other way round (2026-09-29):** with the Secrets section made blind on purpose,
 all four of its fixtures failed the test. Writing the test also caught its own slips: a sample written out whole
 (preflight flagged the test file itself), a name git on Windows refuses to hold, and a fixture that stopped reaching
 its section when a second table was added below it. A plant that changes nothing now stops the test.
@@ -3050,7 +3068,8 @@ agent makes here (`.claude/settings.json`).
 The CI half first ran on the push of 2026-09-29 (`0fc15ce`), all green: preflight on Python 3.11 and 3.13 (the tree,
 all history, the harness's fixtures), the libraries byte for byte against NuGet's package, and `ci.yml`. The guard
 went live in the session that made it; its licence check on GitHub reads was added 2026-09-30. Line caps and
-Durations added 2026-09-30, the harness then at 81 fixtures. Next: the TLS measurement (Known issues); the cache
+Durations added 2026-09-30, the harness then at 81 fixtures. The capability list widened to the git hooks and the
+workflows (2026-10-01), the harness at 84. Next: the TLS measurement (Known issues); the cache
 fix waits for a look in game (the mod guide's step 34).
 
 *Code: `dev-scripts/preflight.py`, `dev-scripts/preflight-patterns.json`, `dev-scripts/dotnet_metadata.py`;

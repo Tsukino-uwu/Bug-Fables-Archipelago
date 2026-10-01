@@ -447,6 +447,11 @@ def fixtures():
         c.replace('docs/capabilities.md', b'| `dev-scripts/preflight.py` |',
                   b'| `dev-scripts/nowhere.py` | runs programs | nothing |\n| `dev-scripts/preflight.py` |')
 
+    @add('a hook doing what it has no row for', 'Dev scripts and hooks',
+         names=('planted.sh: runs programs', 'planted.sh: talks to GitHub', 'planted.sh: writes files'))
+    def _(c):
+        c.write('.githooks/planted.sh', 'git status\ngh repo view\nprintf x > planted.txt\n')
+
     @add('a DLL that is not its record', 'Release staging', names=('the DLL changed without its record',))
     def _(c):
         c.write(DLL, c.read(DLL) + b'\0' * 16)
@@ -557,6 +562,20 @@ def fixtures():
     @add('a release that no longer waits for its gates', 'Workflows', names=('publish does not wait for preflight',))
     def _(c):
         c.replace('.github/workflows/release.yml', b'needs: [guard, ci, mod-dll, preflight]', b'needs: [guard, ci, mod-dll]')
+
+    @add('a workflow reaching what its rows do not name', 'Workflows',
+         names=('actions/cache (uses actions), which its row does not name', 'preflight.yml: talks to GitHub'))
+    def _(c):
+        c.replace('.github/workflows/preflight.yml', b'      - name: Every section, on this commit',
+                  b'      - uses: actions/cache@' + b'0' * 40 + b' # v4.0.0\n\n      - run: gh release list\n\n'
+                  b'      - name: Every section, on this commit')
+
+    @add('workflow rows nothing matches', 'Workflows',
+         names=('nowhere.yml: runs programs', 'names someone/gone-action, which it no longer uses'))
+    def _(c):
+        c.replace('docs/capabilities.md', b'| `.github/workflows/ci.yml` | uses actions | ',
+                  b'| `.github/workflows/nowhere.yml` | runs programs | nothing |\n'
+                  b'| `.github/workflows/ci.yml` | uses actions | `someone/gone-action`, ')
 
     @add('dependencies that could drift', 'Dependencies pinned',
          names=('not one exact version', 'does not set RestoreLockedMode', 'nuget.config feeds',

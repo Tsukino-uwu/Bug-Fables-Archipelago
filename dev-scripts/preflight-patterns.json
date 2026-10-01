@@ -268,6 +268,11 @@
     "runs text as code": "\\beval\\b|\\|\\s*(?:ba)?sh\\b|\\bsource\\s+<\\(",
     "hidden payloads": "\\bbase64\\b"
   },
+  "sh_capabilities": {
+    "runs programs": "(?:^|[;&|({!]|\\$\\(|\\b(?:then|else|do|if|elif|while|until)\\b)\\s*(?:\\w+=\\S*\\s+)*(?:git|gh|dotnet|python3?|py|pwsh|run_python|\"\\$(?:@|\\w+)\")(?=[\\s;)]|$)",
+    "talks to GitHub": "(?:^|[;&|({!]|\\$\\(|\\b(?:then|else|do|if|elif|while|until)\\b)\\s*(?:git(?:\\s+-[Cc]\\s+\\S+)*\\s+(?:push|fetch|pull|ls-remote|clone)\\b|gh\\s)",
+    "writes files": "(?:^|(?<=[\\s;&|(]))[0-9]?>>?\\s*(?!&|/dev/null\\b)[\"$\\w./~-]|(?:^|[;&|({!]|\\$\\(|\\b(?:then|else|do)\\b)\\s*(?:rm|cp|mv|mkdir|touch|tee|ln|chmod|truncate)\\s"
+  },
   "script_denied_modules": [
     "code",
     "codeop",
@@ -525,6 +530,10 @@
     },
     "release_gates": ["guard", "ci", "mod-dll", "preflight"]
   },
+  "workflow_capabilities": {
+    "downloads packages": "\\bpip3?\\s+install\\b|\\bModuleUpdate\\.py\\b|\\bcurl\\b|\\bwget\\b|\\bnpm\\s+(?:install|ci)\\b|\\bdotnet\\s+(?:restore|tool\\s+install)\\b|\\b(?:Invoke-WebRequest|iwr|Invoke-RestMethod|irm)\\b",
+    "talks to GitHub": "(?:^|[;&|({!]|\\$\\(|\\b(?:then|else|do|if|elif|while|until)\\b)\\s*(?:git(?:\\s+-[Cc]\\s+\\S+)*\\s+(?:push|fetch|pull|ls-remote|clone)\\b|gh\\s)"
+  },
   "dependencies": {
     "nuget_sources": {
       "nuget.org": "https://api.nuget.org/v3/index.json",
@@ -552,7 +561,8 @@
     "Apworld: reflection by name",
     "Mod: what the code touches",
     "Mod: patches outside the game",
-    "Dev scripts and hooks: what they touch"
+    "Dev scripts and hooks: what they touch",
+    "CI workflows: what they reach"
   ],
   "line_caps": [
     ["CLAUDE.md", 150, "the coding agent's rules, read at every session's start: past the cap each rule is followed worse"]

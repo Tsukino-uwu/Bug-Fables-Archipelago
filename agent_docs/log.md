@@ -2299,6 +2299,13 @@ either one wrong).
     section, not "Every Debug setting"; two rows' links to steps 10 and 15, which never name them. Rows added for
     `.gitattributes`, `.gitignore` and `docs/reviewing.md`. And one of my own fixes above, corrected: Event4 is the
     scene the switches start, Event5 the trapdoor scene (as the mod and its guide name them).
+- **The capability list widened, as planned** (build step 28): `sh_capabilities` reads what the four shell hooks do,
+  each with its row; a sixth table, "CI workflows: what they reach", is checked from the Workflows section, each
+  action and repository named in its row (12 rows: six actions, three other repositories, PyPI and the NuGet package,
+  `git fetch` and `gh`, the release published). One false positive on the first run: python.sh "writes files", from the
+  `>` in its message text `<path to python>" >&2`; a redirect now counts only where a word starts. Three fixtures (84
+  in all; the full test 46 s), and with the name check blinded the two workflow fixtures failed the test. Drafted and
+  committed in a scratch clone first, so the hooks ran on it there; the repo's copy diffed equal to the clone's.
 - **The mod's own frame counters under Uncap FPS, counted in sixtieths** (the mod guide, step 24): `HoldUps` (30, 3,
   and the 5 after each) and `AutoSave` (20) now count only on a frame that starts a new 1/60 s. Built with
   `FrameRate.OnTick`, the test the game's sites use (`IntStep`), not a difference of `Tick60` values as the plan said:

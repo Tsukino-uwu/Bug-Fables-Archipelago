@@ -975,6 +975,7 @@ def dev_scripts(ctx, out):
     ps_denied = {k: re.compile(v, re.M | re.I) for k, v in p['ps1_denied'].items()}
     ps_caps = {k: re.compile(v, re.M | re.I) for k, v in p['ps1_capabilities'].items()}
     sh_denied = {k: re.compile(v, re.M) for k, v in p['sh_denied'].items()}
+    sh_caps = {k: re.compile(v, re.M) for k, v in p['sh_capabilities'].items()}
     heading = 'Dev scripts and hooks: what they touch'
     rows, reasonless = capability_rows(ctx, heading)
     bad, found, count = [], set(), 0
@@ -1006,6 +1007,7 @@ def dev_scripts(ctx, out):
             code = without_comments(f.text, SH_TOKENS, ('#',))
             for name, rx in sh_denied.items():
                 bad += [f'{path}:{line_of(code, m.start())}: {m.group(0).strip()} ({name})' for m in rx.finditer(code)]
+            found |= {(path, k) for k, rx in sh_caps.items() if rx.search(code)}
     if count < 15:
         out.fail(f'only {count} script(s) read: the listing is wrong')
         return
@@ -1536,12 +1538,16 @@ def yaml_code(line):
 @section('Workflows')
 def workflows(ctx, out):
     w = ctx.patterns['workflows']
-    bad, jobs_seen = [], {}
+    reach = {k: re.compile(v, re.M) for k, v in ctx.patterns['workflow_capabilities'].items()}
+    heading = 'CI workflows: what they reach'
+    rows, reasonless = capability_rows(ctx, heading)
+    bad, jobs_seen, found, names = [], {}, set(), {}
     files = [f for f in ctx.files if f.path.startswith('.github/workflows/')]
     for f in files:
         top, job, section_key, scalar, script = None, None, None, None, False
         top_permissions, triggers, needs = None, [], {}
         job_permissions = {}
+        actions, repositories, scripts, runs = set(), set(), [], False
         for n, raw in enumerate(f.text.split('\n'), 1):
             where = f'{f.path}:{n}'
             indent = len(raw) - len(raw.lstrip(' '))
@@ -1551,6 +1557,8 @@ def workflows(ctx, out):
                 if not raw.strip() or indent > scalar:
                     if script and '${{' in raw:
                         bad.append(f'{where}: an expression inside a script (pass it through env:, where it is data)')
+                    if script:
+                        scripts.append(raw)
                     continue
                 scalar = None
             line = yaml_code(raw)
@@ -1562,6 +1570,11 @@ def workflows(ctx, out):
             value = (key_match.group(2) or '').strip() if key_match else ''
             if re.match(r'^[|>][-+]?$', value):
                 scalar, script = indent + (2 if body.startswith('- ') else 0), key == 'run'
+            elif key == 'run' and value:
+                scripts.append(value)
+            runs |= key == 'run'
+            if key == 'repository' and value:
+                repositories.add(value.strip('\'"'))
             outside_quotes = re.sub(r"'[^']*'|\"[^\"]*\"", '', line)
             if re.search(r'(?:^|[\s\[{,:-])[&*][A-Za-z_]', outside_quotes):
                 bad.append(f'{where}: a YAML anchor or alias (a hidden copy of other text)')
@@ -1587,6 +1600,7 @@ def workflows(ctx, out):
             elif top == 'jobs' and section_key == 'permissions' and indent == 6 and key:
                 job_permissions[job].append(f'{key}: {value}')
             if key == 'uses' and value and not value.startswith('./'):
+                actions.add('/'.join(value.split('@')[0].split('/')[:2]))
                 if not re.fullmatch(r'[\w.-]+/[\w./-]+@[0-9a-f]{40}', value):
                     bad.append(f'{where}: {value} is not pinned to a full commit hash')
                 elif not re.search(r'#\s*v\d', raw):
@@ -1609,14 +1623,38 @@ def workflows(ctx, out):
             missing = sorted(set(w['release_gates']) - set(needs.get('publish', [])))
             if missing:
                 bad.append(f'{f.path}: publish does not wait for {", ".join(missing)}')
+        # What the workflow reaches beyond this repository, for its rows; each action and repository by name.
+        script = '\n'.join(scripts)
+        kinds = {'uses actions': actions, 'checks out other repositories': repositories}
+        kinds = {k: v for k, v in kinds.items() if v}
+        kinds.update({k: None for k, rx in reach.items() if rx.search(script)})
+        if runs:
+            kinds['runs programs'] = None
+        if any('write' in g for grants in job_permissions.values() for g in grants):
+            kinds['publishes to GitHub'] = None
+        found |= {(f.path, k) for k in kinds}
+        names.update({(f.path, k): v for k, v in kinds.items() if v is not None})
     if len(files) < 2 or len(jobs_seen) < 4:
         out.fail(f'only {len(files)} workflows and {len(jobs_seen)} jobs read: the listing is wrong')
-    elif bad:
+        return
+    if bad:
         out.fail('a workflow could run something other than what this repo says, or with more rights', bad)
-    else:
+    listed = compare_capabilities(out, heading, found, rows, reasonless, 'workflows')
+    why = {(key, cells[1]): cells[-1] for key, cells in ctx.capabilities().get(heading, []) if len(cells) > 2}
+    unnamed = []
+    for (path, kind), used in sorted(names.items()):
+        if (path, kind) not in why:
+            continue
+        named = set(re.findall(r'`([\w.-]+/[\w.-]+)`', why[(path, kind)]))
+        unnamed += [f'{path}: {u} ({kind}), which its row does not name' for u in sorted(used - named)]
+        unnamed += [f'{path}: its "{kind}" row names {u}, which it no longer uses' for u in sorted(named - used)]
+    if unnamed:
+        out.fail(f'every action and repository a workflow reaches is named in its row in {CAPABILITIES}', unnamed)
+    if listed and not (bad or unnamed):
         out.ok(f'{len(files)} workflows, {len(jobs_seen)} jobs: every action pinned to a commit, no permissions but '
                f'the listed ones, only known triggers and GitHub\'s runners, no secrets, no expression inside a script; '
-               f'publish waits for {", ".join(w["release_gates"])}')
+               f'publish waits for {", ".join(w["release_gates"])}; the {len(found)} things they reach are all '
+               f'listed, each action and repository by name')
 
 
 @section('Dependencies pinned')
@@ -1727,16 +1765,17 @@ def load_patterns(files):
                 'decompiler_markers', 'not_addresses', 'own_github_owners', 'history_reviewed', 'apworld_imports',
                 'apworld_modules', 'apworld_builtins', 'apworld_dunders', 'apworld_denied_attributes',
                 'apworld_denied_members', 'apworld_manifest_keys', 'mod_denied', 'mod_capabilities', 'ps1_denied',
-                'ps1_capabilities', 'sh_denied', 'script_denied_modules', 'script_denied_builtins',
+                'ps1_capabilities', 'sh_denied', 'sh_capabilities', 'script_denied_modules', 'script_denied_builtins',
                 'script_denied_methods', 'script_capability_modules', 'script_capability_calls', 'dll_assembly_refs',
                 'dll_denied', 'dll_denied_names', 'dll_capabilities', 'dll_synthesized_members', 'dll_compiler_types',
-                'workflows', 'dependencies', 'capability_tables', 'mod_server_text', 'agent_settings', 'line_caps',
-                'durations'}
+                'workflows', 'workflow_capabilities', 'dependencies', 'capability_tables', 'mod_server_text',
+                'agent_settings', 'line_caps', 'durations'}
     if set(patterns) != expected:
         raise Unreadable(f'{PATTERNS} keys differ from what preflight reads: {sorted(set(patterns) ^ expected)}')
     for rx in list(patterns['secrets'].values()) + patterns['game_paths'] + patterns['decompiler_markers'] + [
             rx for rx, why in patterns['durations']] + [
-            rx for key in ('mod_denied', 'mod_capabilities', 'ps1_denied', 'ps1_capabilities', 'sh_denied')
+            rx for key in ('mod_denied', 'mod_capabilities', 'ps1_denied', 'ps1_capabilities', 'sh_denied',
+                           'sh_capabilities', 'workflow_capabilities')
             for rx in patterns[key].values()]:
         re.compile(rx)
     return patterns

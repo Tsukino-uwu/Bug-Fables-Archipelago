@@ -17,7 +17,7 @@ Every place a file in this repository points to, in code, docs or build files. L
 |---|---|
 | `github.com` | This repository and its releases, the projects cited in the docs, and the workflow actions |
 | `archipelago.gg` | Archipelago's site, and the mod's default server address (`Core/Plugin.cs`), which the player can change |
-| `api.nuget.org` | The NuGet feed the mod's libraries are restored from at build time (`nuget.config`) |
+| `api.nuget.org` | The NuGet feed the mod's libraries are restored from at build time (`nuget.config`), and the package CI checks the three shipped libraries against |
 | `nuget.bepinex.dev` | BepInEx's own package feed, for its packages only (`nuget.config`) |
 | `steam://rungameid` | Starting the game through Steam, in a dev log entry |
 
@@ -82,12 +82,17 @@ row the committed DLL predates stands while today's source makes that patch.
 
 ## Dev scripts and hooks: what they touch
 
-These run on the maintainer's machine (and on yours, if you run them); nothing here ships to players. Reading files
-is left out; everything else they do is listed.
+These run on the maintainer's machine (and on yours, if you run them); nothing here ships to players. The git hooks
+run by themselves on each commit and push, once a clone arms them (`git config core.hooksPath .githooks`). Reading
+files is left out; everything else they do is listed.
 
 | File | Does | Why |
 |---|---|---|
 | `.claude/hooks/agent-guard.py` | runs programs | `git status`, to see whether a commit the coding agent makes may carry a change the maintainer decides: this list, the patterns file, or the guard itself |
+| `.githooks/pre-commit` | runs programs | `git`, to find the repository, then Python: preflight and doc-coverage on what is staged |
+| `.githooks/commit-msg` | runs programs | `git`, to list what is staged, and Python, to count the subject's characters |
+| `.githooks/pre-push` | runs programs | `git`, to list what each push carries, then Python: preflight on each pushed tip and on its new history, and the gate's own test when the push changes the gate |
+| `.githooks/python.sh` | runs programs | `git config`, for a Python this clone names, then each Python it tries, once, to see that it runs and is 3.11 or newer |
 | `.githooks/doc-coverage.py` | runs programs | `git ls-files`, to list the sources every guide must name, the Markdown files whose links it checks, and the files and folders a link may lead to |
 | `dev-scripts/preflight.py` | runs programs | `git`, to read exactly what a commit holds |
 | `dev-scripts/negative-test-preflight.py` | runs programs | `git` in a throwaway clone, preflight itself, and the agent guard: directly, and through the settings' hook command under `sh -c` |
@@ -111,3 +116,24 @@ is left out; everything else they do is listed.
 | `dev-scripts/event-transfers.py` | loads a script by path | Loads `gate-table.py`, next to it, to share its reader |
 | `dev-scripts/enemy-table.py` | writes files | `--export` writes `data/enemies.json` for the apworld |
 | `dev-scripts/save-points.py` | writes files | `--export` writes `data/starts.json` for the apworld |
+
+## CI workflows: what they reach
+
+These run on GitHub's own runners, never on a player's or a reviewer's machine: on every push and pull request, and
+when the maintainer starts a release. Each action and each other repository is named in its row; each action is pinned
+to a commit, each repository to a tag or a commit.
+
+| Workflow | Does | Why |
+|---|---|---|
+| `.github/workflows/ci.yml` | uses actions | `actions/checkout`, `actions/setup-python` and `actions/upload-artifact`: the code, Python, and the built apworld and yaml kept for the release (and a failed fuzz run's files) |
+| `.github/workflows/ci.yml` | checks out other repositories | `ArchipelagoMW/Archipelago` at the tag the world targets, to test and build the apworld inside it; `Eijebong/Archipelago-fuzzer`, for its fuzzer; `palex00/Archipelago`, only its Logic Test world's folder |
+| `.github/workflows/ci.yml` | runs programs | Archipelago's own install, its tests (`pytest`), its generator and its apworld builder, and `dev-scripts/test-apworld.ps1` (the Logic Test check and the fuzzer) |
+| `.github/workflows/ci.yml` | downloads packages | Archipelago's requirements from PyPI (`pip install`, `ModuleUpdate.py`), the way Archipelago's own CI installs them |
+| `.github/workflows/preflight.yml` | uses actions | `actions/checkout` and `actions/setup-python` |
+| `.github/workflows/preflight.yml` | runs programs | Preflight on the commit and on all history, its negative test, and `dev-scripts/verify-release.py` |
+| `.github/workflows/preflight.yml` | downloads packages | Archipelago.MultiClient.Net 6.7.1's package from NuGet (`curl`), to compare the three shipped library DLLs with it byte for byte |
+| `.github/workflows/release.yml` | uses actions | `actions/checkout`, `actions/download-artifact` (the apworld and yaml CI built), `actions/attest-build-provenance` and `softprops/action-gh-release` |
+| `.github/workflows/release.yml` | runs programs | The version and text checks (preflight on the highlights and the commit subjects), `dev-scripts/build-release.ps1 -Check` (the DLL's stale gate), `zip`, and `dev-scripts/verify-release.py` before and after publishing |
+| `.github/workflows/release.yml` | downloads packages | The same NuGet package, to check the published files against it |
+| `.github/workflows/release.yml` | talks to GitHub | `git fetch --tags` and `gh release download`, to check what was published against its tag |
+| `.github/workflows/release.yml` | publishes to GitHub | The publish job, the only one with write permissions: the release, its tag and its three files (`softprops/action-gh-release`), and the provenance attestations for the apworld and the yaml (`actions/attest-build-provenance`) |

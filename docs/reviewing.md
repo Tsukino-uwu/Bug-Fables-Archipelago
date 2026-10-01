@@ -93,8 +93,12 @@ preflight and CI check them against the package on nuget.org.
 **The dev tools** (`Dev/`) are compiled only into the maintainer's build. The release build leaves `Dev/` out, and the
 preflight checks that the shipped DLL holds none of its types.
 
-**The dev scripts** run only when someone runs them. What each one does beyond reading files is listed in
-[capabilities.md](capabilities.md).
+**The dev scripts** run only when someone runs them, and the git hooks on each commit and push once a clone arms
+them. What each one does beyond reading files is listed in [capabilities.md](capabilities.md).
+
+**The CI workflows** run on GitHub's runners, not on your machine. The actions and other repositories each one uses,
+the packages it downloads and what it publishes are listed in [capabilities.md](capabilities.md) too, each action and
+repository by name.
 
 **If you open this repo in Claude Code**, its `.claude/settings.json` runs `.claude/hooks/agent-guard.py` before each
 shell command, file edit and page fetch the agent makes. It refuses commands that would get past the git hooks, and a
@@ -145,8 +149,9 @@ This is what the mod does with what they send, what it checks, and what it doesn
 reason:
 - the hosts it names;
 - the apworld's lookups by name;
-- what each mod file and each dev script touches;
-- the mod's patches outside the game.
+- what each mod file, each dev script and each git hook touches;
+- the mod's patches outside the game;
+- what each CI workflow reaches: the actions and other repositories it uses, packages, GitHub.
 
 It is **exact**: the preflight fails on something the code does that isn't listed, and on a row nothing matches any
 more. So `git log -p docs/capabilities.md` is the full history of every capability the project gained or dropped. The
