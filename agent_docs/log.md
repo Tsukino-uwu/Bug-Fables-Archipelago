@@ -63,6 +63,7 @@ either one wrong).
 - [2026-10-01: text logic or the Rule Builder, for the trackers](#2026-10-01-text-logic-or-the-rule-builder-for-the-trackers)
 - [2026-10-01: an unlisted project's licence needs the user's yes too](#2026-10-01-an-unlisted-projects-licence-needs-the-users-yes-too)
 - [2026-10-01: both trackers planned, nothing built](#2026-10-01-both-trackers-planned-nothing-built)
+- [2026-10-02: other Bug Fables apworlds](#2026-10-02-other-bug-fables-apworlds)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2433,3 +2434,13 @@ either one wrong).
   folder.
 - **Still open:** whether Universal Tracker gets the map tab too (the user first said it shows nothing visual).
 - **The user said:** plans only for now; neither tracker is being built yet.
+
+## 2026-10-02: other Bug Fables apworlds
+
+- **Asked:** whether this project is better than two others the user knows of, a standalone randomizer and a
+  modding framework, both said to plan apworlds. Not answered: neither has a row in `licensing.md`, so neither was read.
+- **Corrected (the user):** an agent said three "Bug Fables" apworlds would force players to pick one and the projects
+  to coordinate. Wrong: Archipelago allows several apworlds for one game, each with its own thread in its Discord, and
+  nobody owns a game.
+- **Measured, still true:** one Archipelago install loads one world per game name (`worlds/AutoWorld.py` at 0.6.7
+  raises "already registered"), and ours is "Bug Fables". It only matters to someone who installs two at once.
