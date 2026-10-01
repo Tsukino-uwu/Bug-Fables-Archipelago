@@ -2388,6 +2388,11 @@ either one wrong).
     window 0's own (`menuicon0`-`3`). On TO-CHECK.md, with the round trips to try.
   - Copied in with `copy-dev.ps1` (build `7BD96C922BF6`, backup `20261002-001616`), the frame counters (mod 24) and
     this session's text fixes; the game wasn't running, so it loads at the next launch.
+  - **The user asked** "are we done with everything ? everything written down ?": two gaps found and closed, the Warp
+    button's bug added to Known issues (only the log and the local TO-CHECK.md had it) and this bullet. The fact check
+    itself is done. **Still to do:** the user's checks on TO-CHECK.md (the two pause-menu round trips, the mod's own
+    waits at 240, the Item animation and Detector help lines read whole); the Warp fix once the round trip is seen.
+    Not done this session: the session-start re-read of both guides in full (read only where touched).
 
 ## 2026-10-01: text logic or the Rule Builder, for the trackers
 

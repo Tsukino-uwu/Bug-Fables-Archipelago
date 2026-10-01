@@ -594,6 +594,12 @@ be wrong.
   not seen). Every second turn it gives Kabbu a line by reading the party's second slot (`EventDialogue` case 5),
   which a party of one doesn't have, so the fight stops if the Web is still up on turn 2. Fix built, not yet seen:
   the mod guide, step 36.
+- **The travel buttons can land on the pause menu's map as it closes** (found by the fact check, 2026-10-02; read in
+  the code, not seen). Back from the map to the main page, the game builds the page 0.2 s later, and until then the
+  Warp button's prefix sees the map's markers in place of the page's icons. With area 15 visited, it moves markers
+  into the button row and puts the Warp and Map icons on the closing map; with one of areas 12-14 not visited, it
+  throws once instead. Only with the Warp or Map row on; page 2 can't set it off. The fix to try once seen: take the
+  array only when its slots 13-16 are the main page's own icons. The mod guide, step 10.
 - **A fill error with *minimal* accessibility and Shuffle Jump, next to another game** (found by the fuzzer with APQuest,
   2026-09-30: 1 of 10000). The failing pair (Bug Fables minimal, Decoupled doors, a random start, moves and Jump
   shuffled, crystal berries and discoveries off, shops with no progression; APQuest with its Hammer) failed 4 of 400
