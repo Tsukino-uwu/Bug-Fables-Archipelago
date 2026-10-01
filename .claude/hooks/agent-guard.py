@@ -1,7 +1,8 @@
 """Claude Code runs this before every shell command, file edit and page fetch its agent makes in this repo
-(.claude/settings.json). It refuses what would get past the git hooks, and a read of a GitHub project that has no row
-in agent_docs/licensing.md yet, its licence file aside. It makes the agent ask before it changes what the gates allow
-(or this guard), by an edit or in a commit. Everyday work asks nothing. A guard against the agent's slips, not a wall:
+(.claude/settings.json). It refuses what would get past the git hooks. It makes the agent ask before it reads any of a
+GitHub project with no row in agent_docs/licensing.md as committed, its licence included, and before a commit adds
+one; and before it changes what the gates allow (or this guard), by an edit or in a commit. Everyday work asks
+nothing. A guard against the agent's slips, not a wall:
 pre-push and CI check everything again, and the settings may run nothing but this file (preflight, Dev scripts and
 hooks)."""
 import json
@@ -17,13 +18,12 @@ ARMING = re.compile(r'git config (--local )?(--get )?core\.hookspath( \.githooks
 RUNS_ITS_ARGUMENT = {'-c', '-command', '/c', 'eval', 'iex', 'invoke-expression'}
 CONTROL = {';', '&&', '||', '|', '&', '(', ')', ';;', '|&'}
 GIT_TAKES_VALUE = {'-c', '-C', '--git-dir', '--work-tree', '--namespace', '--config-env'}
-# A project's licence is read before anything else of it, and then it gets its row.
+# Reading a project is the user's call until its linked row is committed; the agent's uncommitted row permits nothing.
 LICENSING, PATTERNS = 'agent_docs/licensing.md', 'dev-scripts/preflight-patterns.json'
 GITHUB_URL = re.compile(r'(?<![\w.-])(?:(?:www\.)?github\.com|raw\.githubusercontent\.com|codeload\.github\.com'
                         r'|api\.github\.com/repos)/([\w.-]+)/([\w.-]+)([^\s\'"]*)', re.I)
 API_PATH = re.compile(r'/?repos/([\w.-]+)/([\w.-]+)(\S*)', re.I)
 SEARCHED_REPO = re.compile(r'repo:([\w.-]+)/([\w.-]+)', re.I)
-LICENCE_FILE = re.compile(r'(licen[cs]e|copying)[\w.-]*', re.I)
 FETCHERS = {'curl', 'wget', 'invoke-webrequest', 'iwr', 'invoke-restmethod', 'irm', 'start-bitstransfer'}
 GIT_FETCHES = {'clone', 'fetch', 'ls-remote', 'pull', 'archive', 'submodule'}
 
@@ -142,6 +142,10 @@ def asks(command, root):
             if changed:
                 return ('this commit may change what the gates allow, or this guard, which is the user\'s call: '
                         + ', '.join(changed[:6]))
+            added = sorted(projects_in(read_text(root, LICENSING)) - projects_in(committed(root, LICENSING)))
+            if added:
+                return (f'this commit adds {", ".join(added[:6])} to {LICENSING}, which permits reading it; '
+                        'that is the user\'s call')
     return None
 
 
@@ -165,22 +169,24 @@ def repos_read(seg):
     return found
 
 
+def projects_in(text):
+    """owner/repo, lower case, of every GitHub link in a text."""
+    return {f'{owner}/{re.sub(r"[.]git$", "", repo)}'.lower() for owner, repo, _ in GITHUB_URL.findall(text)}
+
+
 def unlicensed(reads, root):
-    """The first project read that has no licensing.md row and isn't ours, unless all that's read is its licence."""
-    table, own = None, None
-    for owner, repo, rest in reads:
-        repo = re.sub(r'\.git$', '', repo)
-        last = rest.split('?')[0].rstrip('/').rsplit('/', 1)[-1]
-        if last and LICENCE_FILE.fullmatch(last):
-            continue
-        if table is None:
-            table, own = read_text(root, LICENSING).lower(), set()
+    """The first project read that has no linked row in the committed licensing.md and isn't ours."""
+    permitted, own = None, None
+    for owner, repo, _ in reads:
+        if permitted is None:
+            permitted, own = projects_in(committed(root, LICENSING)), set()
             try:
                 own = {o.lower() for o in json.loads(read_text(root, PATTERNS)).get('own_github_owners', [])}
             except ValueError:
                 pass
-        if owner.lower() not in own and f'{owner}/{repo}'.lower() not in table:
-            return f'{owner}/{repo}'
+        project = f'{owner}/{re.sub(r"[.]git$", "", repo)}'
+        if owner.lower() not in own and project.lower() not in permitted:
+            return project
     return None
 
 
@@ -192,9 +198,15 @@ def read_text(root, rel):
         return ''
 
 
-def refuse_unlicensed(project):
-    answer('deny', f'{project} has no row in {LICENSING}. Read its licence first (gh api repos/{project}/license), '
-                   'add its row, then read the rest; or ask the user.')
+def committed(root, rel):
+    """A file as HEAD has it; empty when git can't say, so nothing counts as permitted."""
+    r = subprocess.run(['git', '-C', root, 'show', f'HEAD:{rel}'], capture_output=True, timeout=20)
+    return r.stdout.decode('utf-8', 'replace') if r.returncode == 0 else ''
+
+
+def ask_unlicensed(project):
+    answer('ask', f'{project} has no row in {LICENSING} as committed. Reading any of it, its licence included, is '
+                  'the user\'s call.')
 
 
 def changed_asked_files(root):
@@ -229,14 +241,14 @@ def main():
             answer('deny', why + '. Nothing may get past the hooks: fix what they refuse, or ask the user.')
         project = unlicensed([r for seg in segments(words_of(without_bodies(command))) for r in repos_read(seg)], root)
         if project:
-            refuse_unlicensed(project)
+            ask_unlicensed(project)
         why = asks(command, root)
         if why:
             answer('ask', why)
     elif tool == 'WebFetch':
         project = unlicensed([m.groups() for m in GITHUB_URL.finditer(given.get('url', ''))], root)
         if project:
-            refuse_unlicensed(project)
+            ask_unlicensed(project)
 
 
 if __name__ == '__main__':

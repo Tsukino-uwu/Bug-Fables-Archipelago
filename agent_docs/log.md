@@ -61,6 +61,7 @@ either one wrong).
 - [2026-10-01: the Rubber Prison's swinging platforms smoothed at 240](#2026-10-01-the-rubber-prisons-swinging-platforms-smoothed-at-240)
 - [2026-10-01: a stale check against the code, then a fact check](#2026-10-01-a-stale-check-against-the-code-then-a-fact-check)
 - [2026-10-01: text logic or the Rule Builder, for the trackers](#2026-10-01-text-logic-or-the-rule-builder-for-the-trackers)
+- [2026-10-01: an unlisted project's licence needs the user's yes too](#2026-10-01-an-unlisted-projects-licence-needs-the-users-yes-too)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2355,3 +2356,17 @@ either one wrong).
   PopTracker's own format needs an export whichever way the rules are written. The Rule Builder's docs name
   exporting through `to_dict` as the intended way (`archipelago-review.md`, item 14, carries the citations).
 - The user wants both trackers supported. It is item 14 of Next 43; nothing built yet.
+
+## 2026-10-01: an unlisted project's licence needs the user's yes too
+
+- **What happened:** for the tracker question, the agent fetched PopTracker's and Universal Tracker's licences (the
+  guard let a licence file through), added both rows itself, and then read their docs. The user hadn't given
+  permission: "taking a peek at the licence is the same as going/looking at the repo".
+- **The fix (the user's call):** the guard now asks before any read of a GitHub project with no linked row in
+  `licensing.md` as committed, the licence included, and before a commit that adds a project to `licensing.md`. A
+  row the agent writes permits nothing until the user lets its commit through. Harness: 59 guard cases, 0 problems.
+  CLAUDE.md, `licensing.md`, `development.md`, build step 28, `reviewing.md` and the code map say the same.
+- **Measured on the way:** the harness's "no sh found" was PowerShell's PATH finding devkitPro's msys2 git first;
+  with Git for Windows' `cmd` first on PATH it passes.
+- **Open:** the two rows were committed without the user's yes, so the guard now counts them as permitted; their
+  Checked column says so. The user decides whether they stay.

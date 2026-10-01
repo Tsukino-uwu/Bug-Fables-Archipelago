@@ -101,9 +101,9 @@ the packages it downloads and what it publishes are listed in [capabilities.md](
 repository by name.
 
 **If you open this repo in Claude Code**, its `.claude/settings.json` runs `.claude/hooks/agent-guard.py` before each
-shell command, file edit and page fetch the agent makes. It refuses commands that would get past the git hooks, and a
-read of a GitHub project that has no licence row yet (its licence file aside), and asks you
-before a change to what the gates allow (by an edit or in a commit), or a write through `gh api`. It reads the command it's given (and, for a GitHub read, the licence list and the patterns file's own owners), runs
+shell command, file edit and page fetch the agent makes. It refuses commands that would get past the git hooks, and
+asks you before any read of a GitHub project that has no committed licence row (its licence included), a commit that
+adds one, a change to what the gates allow (by an edit or in a commit), or a write through `gh api`. It reads the command it's given (and, for a GitHub read, the licence list and the patterns file's own owners), runs
 only `git status`, and changes nothing. The preflight holds the settings to that one command and to rules that ask
 or refuse, never ones that allow more. Other editors ignore the folder.
 

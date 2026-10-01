@@ -895,22 +895,23 @@ GUARD_CASES = [
     ('Bash', 'gh api repos/BepInEx/HarmonyX/contents/x -X PUT -f message=m', 'ask'),
     ('Bash', 'gh api -X GET repos/BepInEx/HarmonyX', None),
     ('Bash', 'gh api repos/BepInEx/HarmonyX/contents/README.md', None),
-    ('Bash', 'gh api repos/someone/unlisted/contents/src/main.py', 'deny'),
-    ('Bash', 'gh api repos/someone/unlisted --jq .description', 'deny'),
-    ('Bash', 'gh api repos/someone/unlisted/license --jq .content', None),
-    ('Bash', "gh api 'repos/someone/unlisted/contents/worlds/x/LICENSE?ref=dev'", None),
-    ('Bash', 'gh repo view someone/unlisted', 'deny'),
-    ('Bash', 'gh release list -R someone/unlisted', 'deny'),
-    ('Bash', 'gh api "search/issues?q=repo:someone/unlisted+crash"', 'deny'),
-    ('Bash', f'curl -s {WEB}raw.githubusercontent.com/someone/unlisted/main/README.md', 'deny'),
-    ('Bash', f'curl -s {WEB}raw.githubusercontent.com/someone/unlisted/main/LICENSE', None),
-    ('Bash', f'curl -s "{WEB}api.{GH}/search/issues?q=repo:someone/unlisted"', 'deny'),
+    ('Bash', 'gh api repos/someone/unlisted/contents/src/main.py', 'ask'),
+    ('Bash', 'gh api repos/someone/unlisted --jq .description', 'ask'),
+    ('Bash', 'gh api repos/someone/unlisted/license --jq .content', 'ask'),
+    ('Bash', "gh api 'repos/someone/unlisted/contents/worlds/x/LICENSE?ref=dev'", 'ask'),
+    ('Bash', 'gh repo view someone/unlisted', 'ask'),
+    ('Bash', 'gh release list -R someone/unlisted', 'ask'),
+    ('Bash', 'gh api "search/issues?q=repo:someone/unlisted+crash"', 'ask'),
+    ('Bash', f'curl -s {WEB}raw.githubusercontent.com/someone/unlisted/main/README.md', 'ask'),
+    ('Bash', f'curl -s {WEB}raw.githubusercontent.com/someone/unlisted/main/LICENSE', 'ask'),
+    ('Bash', f'curl -s "{WEB}api.{GH}/search/issues?q=repo:someone/unlisted"', 'ask'),
     ('Bash', f'curl -s {WEB}docs.{GH}/en/actions', None),
-    ('PowerShell', f'Invoke-WebRequest {WEB}{GH}/someone/unlisted/archive/main.zip -OutFile x.zip', 'deny'),
-    ('Bash', f'git clone {WEB}{GH}/someone/unlisted.git', 'deny'),
+    ('PowerShell', f'Invoke-WebRequest {WEB}{GH}/someone/unlisted/archive/main.zip -OutFile x.zip', 'ask'),
+    ('Bash', f'git clone {WEB}{GH}/someone/unlisted.git', 'ask'),
     ('Bash', f'git commit -m "read {GH}/someone/unlisted later"', None),
-    ('WebFetch', f'{WEB}{GH}/someone/unlisted', 'deny'),
-    ('WebFetch', f'{WEB}{GH}/someone/unlisted/blob/main/LICENSE', None),
+    ('Bash', 'git commit -n -m "gh api repos/someone/unlisted"', 'deny'),
+    ('WebFetch', f'{WEB}{GH}/someone/unlisted', 'ask'),
+    ('WebFetch', f'{WEB}{GH}/someone/unlisted/blob/main/LICENSE', 'ask'),
     ('WebFetch', f'{WEB}docs.unity3d.com/ScriptReference/Time-timeScale.html', None),
     ('Edit', 'docs/capabilities.md', 'ask'),
     ('Write', 'dev-scripts/preflight-patterns.json', 'ask'),
@@ -935,8 +936,9 @@ def git_sh():
 
 
 def agent_guard_test(c, base, h):
-    """The guard refuses what gets past the hooks and a read of a GitHub project with no licence row (its licence file
-    aside), asks before the gate changes, lets the rest through, and refuses everything when it can't run."""
+    """The guard refuses what gets past the hooks, asks before any read of a GitHub project with no committed licence
+    row (its licence included), a commit adding one, and the gate changes, lets the rest through, and refuses
+    everything when it can't run."""
     c.git('reset', '-q', '--hard', base)
     c.git('clean', '-q', '-fdx')
     guard_env = dict(env(), CLAUDE_PROJECT_DIR=c.root)
@@ -953,16 +955,21 @@ def agent_guard_test(c, base, h):
     wrong = [f'{tool} {given!r}: {got}, not {want}' for tool, given, want in GUARD_CASES
              for got in [decide(tool, given)] if got != want]
     # A commit asks only when it may carry what the user decides, whoever wrote it; other gate work asks nothing.
-    for path, want in (('docs/capabilities.md', 'ask'), ('dev-scripts/preflight.py', None)):
-        c.append(path, '\n')
+    # A licence row permits reading its project only once the user lets the commit adding it through.
+    row = f'| [Unlisted]({WEB}{GH}/someone/unlisted) | MIT | today | nothing |\n'
+    for path, text, want in (('docs/capabilities.md', '\n', 'ask'), ('dev-scripts/preflight.py', '\n', None),
+                             ('agent_docs/licensing.md', '\n', None), ('agent_docs/licensing.md', row, 'ask')):
+        c.append(path, text)
         got = decide('Bash', 'git commit -q -m "a harmless-looking change"')
         if got != want:
-            wrong.append(f'a commit while {path} is changed: {got}, not {want}')
+            wrong.append(f'a commit while {path} gains {text.strip() or "a blank line"}: {got}, not {want}')
+        if text == row and decide('Bash', 'gh api repos/someone/unlisted/license') != 'ask':
+            wrong.append('an uncommitted licence row permits reading its project')
         c.git('checkout', '-q', '--', path)
     if wrong:
         h.say('FAIL', 'the guard answers wrongly', wrong)
     else:
-        h.say('PASS', f'the guard refuses, asks and lets through as it should ({len(GUARD_CASES) + 2} cases)')
+        h.say('PASS', f'the guard refuses, asks and lets through as it should ({len(GUARD_CASES) + 5} cases)')
 
     command = json.loads(c.read('.claude/settings.json'))['hooks']['PreToolUse'][0]['hooks'][0]['command']
     sh = git_sh()

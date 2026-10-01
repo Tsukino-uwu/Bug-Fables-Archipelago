@@ -3036,11 +3036,13 @@ agent makes here (`.claude/settings.json`).
   `core.hooksPath` (setting it to `.githooks` is allowed), git config set through the environment, and the plumbing that
   writes history by hand (`commit-tree`, `update-ref`). It reads each command word by word, so a commit message may
   name any of these; `bash -c`, `powershell -Command` and the like are read inside too.
-- **It refuses a read of a GitHub project with no row in `agent_docs/licensing.md`** (2026-09-30, the user's call,
-  after a term had been written from memory and a fork's history read with no row): `gh api`, `gh repo` and `-R`,
-  `curl` and its kin, `git clone`, `fetch`, `pull` and the like, and page fetches. Only the project's licence file gets
-  through, so the licence is read and the row added before anything else of it; the user's own work (the owners in
-  `own_github_owners`) is exempt.
+- **It asks before any read of a GitHub project with no linked row in `agent_docs/licensing.md` as committed**:
+  `gh api`, `gh repo` and `-R`, `curl` and its kin, `git clone`, `fetch`, `pull` and the like, and page fetches. The
+  user's own work (the owners in `own_github_owners`) is exempt. First (2026-09-30, the user's call, after a term had
+  been written from memory and a fork's history read with no row) it refused such a read, the licence file aside, and
+  the agent then added the row itself. The user, 2026-10-01, after PopTracker's licence was read that way: a peek at
+  the licence is a look at the project, so every read asks, the licence included; and a row counts only as committed,
+  so a commit that adds a project asks too.
 - **It asks the user first** before:
   - an edit to `docs/capabilities.md`, the patterns file, `.claude/` (the guard itself, and the local settings that
     could switch it off) or `.git/`, and a shell command naming the clone's `.git/config` or `.git/hooks`;
@@ -3057,8 +3059,9 @@ agent makes here (`.claude/settings.json`).
   preflight's "Dev scripts and hooks" holds `.claude/settings.json` to `ask` and `deny` rules and the one listed
   command; the guard script is read like every dev script. A file `.claude/settings.local.json` is left out of git.
 - **Proven:** the harness plants settings that do more (their own `env`, an allow list, another event, another
-  command), and runs the guard on 55 cases (2026-09-30), among them a commit carrying `docs/capabilities.md` (asks),
-  one carrying only `preflight.py` (doesn't), and reads of an unlisted project: refused, except its licence file. Staging a guard missing its
+  command), and runs the guard on 59 cases (2026-10-01), among them a commit carrying `docs/capabilities.md` (asks),
+  one carrying only `preflight.py` (doesn't), reads of an unlisted project, its licence included (ask), a commit
+  adding a row (asks) and a read while that row is uncommitted (asks). Staging a guard missing its
   `--no-verify` check, and a command that exits 1 instead of 2, made both tests fail (2026-09-29).
 - **Not a wall.** A determined script can still get round it. Pre-push, CI and the release checks are what catch that,
   and a weakened gate still shows up as a commit of its own.

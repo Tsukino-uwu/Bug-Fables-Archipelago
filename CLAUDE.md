@@ -83,10 +83,10 @@ rule, remove one in the same edit. The rule lives here and its reasoning in `age
 - **Never commit the game's files:** no `Assembly-CSharp.dll`, decompiled output, assets or saves. The build
   references the game DLL via `HintPath` to the user's own install. Decompiled source is read for facts only
   and lives in the gitignored `decompiled/`.
-- **Read a project's licence before its source**, and add a row to `agent_docs/licensing.md`. A project
-  with no row hasn't been checked, so don't use it. Reading is fine; copying source is not. **Never call another
-  project bad or list its flaws in the repo** (the user, 2026-09-30): blunt findings go to its developer directly.
-  Not covered: notes on a library behaviour our code works around, and facts about the game.
+- **A project with no row in `agent_docs/licensing.md` is off limits, its licence included, until the user says
+  yes** (the user, 2026-10-01); then its licence first, then its row. Reading is fine; copying source is not. **Never
+  call another project bad or list its flaws in the repo** (the user, 2026-09-30): blunt findings go to its
+  developer directly. Not covered: notes on a library behaviour our code works around, and facts about the game.
 - **No personal username, home path or machine detail in any tracked file, prose included:** "your Bug Fables install".
   **`docs/capabilities.md` is what the code may do:** widening it or the preflight's patterns is the user's call, never
   a way to make a check pass. `git config core.hooksPath .githooks` once per clone; never `--no-verify`.
