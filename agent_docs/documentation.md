@@ -25,6 +25,7 @@ anyone curious about the process, or thinking of doing the same for another game
   [12](#12-shops-in-the-game-shelves-show-the-seeds-items),
   [14](#14-the-detector-medal-beeps-for-every-check-left-in-a-room),
   [26](#26-field-abilities-as-items-in-the-game-ability-checks-read-the-bag),
+  [29](#29-save-crystals-used-with-the-confirm-button-no-move-needed),
   [35](#35-shuffle-shop-inventories-in-the-game-shelf-slots-and-pickups-swapped), the submarine,
   [37](#37-the-submarines-docks-follow-its-key-item).
 - **The party you have:** [11](#11-missing-party-members-stand-ins-in-scenes-and-followers),
@@ -40,7 +41,7 @@ anyone curious about the process, or thinking of doing the same for another game
   [24](#24-uncap-fps-frame-rates-above-60-without-speeding-the-game-up); Gameplay,
   [15](#15-difficulty-and-detector-rows-and-what-goes-in-the-panel-or-the-yaml),
   [17](#17-enemy-scaling-each-areas-enemies-fit-when-you-reach-it), [19](#19-exp-and-berry-multipliers),
-  [27](#27-attack-boost-1-damage-on-every-hit), [29](#29-save-crystals-used-with-the-confirm-button-no-move-needed),
+  [27](#27-attack-boost-1-damage-on-every-hit),
   [30](#30-healing-crystals-every-save-crystal-heals), [31](#31-auto-save-between-rooms-a-death-costs-one-room); with
   Archipelago off, [18](#18-use-on-normal-saves-the-panels-settings-with-archipelago-off).
 - **Saves:** [16](#16-randomizer-saves-in-their-own-folder), [31](#31-auto-save-between-rooms-a-death-costs-one-room).
@@ -178,13 +179,13 @@ A few decisions made first, because they shape everything after:
     Other games' names can hold characters the game's fonts lack: each is checked as the game checks its own
     (`GetCharacterInfo`), and a missing one is drawn in a fallback font made from the computer's own fonts
     (`Font.CreateDynamicFontFromOSFont`), scaled to the game's letters: it looks different but stays readable (the
-    user, 2026-09-29: better than "gf798?? received from play????"). Only a character no font has becomes "?".
+    user, 2026-09-29: better than "gf798?? recieved from play????"). Only a character no font has becomes "?".
   - **Item names are coloured the way Archipelago's clients colour them** (`NetUtils.py`): progression plum
     `#AF99EF`, useful slateblue `#6D8BE8`, trap salmon `#FA8072`, filler cyan `#00EEEE` (later the *Item colors*
     row, Rarity by default, with Archipelago's colours darkened for the box: step 20).
 - **Read what others already solved.** We read the TEVI randomizer (another Unity mod), Pokémon Emerald's
   apworld, Archipelago's own docs, and notes from an earlier Archipelago project, all for ideas only,
-  with each one's licence checked first.
+  with each one's licence checked first, except Emerald's own: read 2026-09-30, after its code (`licensing.md`).
 
 **Status:** done (decided 2026-09-24); the chat feed and the text client it describes aren't built yet ([apimplementation.md](apimplementation.md#where-it-stands), Next).
 
@@ -205,9 +206,10 @@ Unity games. One launch of the game confirmed it worked, and showed its log file
 **Where the code lives** (2026-09-27, a refactor that changed nothing the plugin does): one project, its sources in
 folders by job under `mod/BugFablesAP/`: `Core` (the plugin, the connection), `Items` (checks sent, items received,
 what a location shows), `World` (doors, enemies, the open world, the party), `Ui`, `Gameplay` (panel settings that
-change play), `Guards` (quiet fixes for the game's own warnings) and `Dev` (the console, probes and dumps). The
-namespace stays `BugFablesAP` everywhere, so a move never touches code. **How "changed nothing" is proven:** build
-before and after, decompile both DLLs with ILSpy, and diff the output; a pure move comes out identical.
+change play), `Guards` (quiet fixes for the game's own warnings, Steam achievements held back, its 5-second
+collection skipped) and `Dev` (the console, probes and dumps). The namespace stays `BugFablesAP` everywhere, so a move
+never touches code. **How "changed nothing" is proven:** build before and after, decompile both DLLs with ILSpy, and
+diff the output; a pure move comes out identical.
 
 **Each system runs on its own** (an outside review, 2026-09-28). Every frame the plugin runs about 20 systems in turn
 (the connection, checks, received items, shops, the party...). They used to share one error guard, so a system that
@@ -508,8 +510,8 @@ arrows around the On/Off value.
 
 **The help line follows the value (2026-09-26):** on a row whose values mean different things (Difficulty,
 Item animation, Medal prices, Enemy scaling), the line under the rows describes the value now chosen, and changes as
-left/right steps through them; every step redraws the screen. Since then most rows do; only Fast text, Skip cutscenes
-and Detector keep one line.
+left/right steps through them; every step redraws the screen. Since then most rows do; only Fast text, Skip cutscenes,
+Detector and the main page's Archipelago on/off keep one line.
 
 **Three pages (2026-09-26; seen on screen):** the main page keeps the connection and the Archipelago
 on/off, plus two links, *Quality of life* and *Gameplay*. Gameplay holds how the game plays: Difficulty, Enemy scaling
@@ -855,10 +857,11 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    (2026-09-26):** flag 22 and discovery 0 reset (dev), walked in from the cave's side: no scene, the pop-up.
    **The Tattle tutorial in the bridge room** (Event2, 2026-09-26): Vi and Kabbu walk, one line (map line 1,
    no item, flag, event or transfer command in the script dump), then flag 10, which also hides its trigger
-   (`TattleTutorial`); skipped like the bridge message. Built.
+   (`TattleTutorial`); skipped like the bridge message. Built. **Seen (2026-09-26/27, the log).**
    **The door room's puzzle solved** (Event4, 2026-09-26: "can we speed up this cutscene?"): it places the
    two rocks, destroys entities 0 and 1, sets flag 13 and drops the Mushroom whose pickup starts the trapdoor scene
-   (`EntityControl.CreateItem`), so it is fast-forwarded, like the rope. Built. The trapdoor scene (Event5) itself stays
+   (`EntityControl.CreateItem`), so it is fast-forwarded, like the rope. Built. **Seen at speed (2026-09-26/27, the
+   log).** The trapdoor scene (Event5) itself stays
    at normal speed until it has been seen with three members.
    **The trapdoor scene** (Event5, 2026-09-27, once it had been seen with three): skipped, since the mod's
    trapdoor landing (step 11) now does its other half. What it leaves is flag 14 (location 11's check) and the party in
@@ -961,8 +964,8 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    TestPlayer") waited for a cutscene to end, then played; the item probe saw nothing added. The box read "You got a
    Explorer Permit": `giveitem` always uses the game's default article (`menutext[125]`), while a picked-up item uses
    its own (`itemdata[0, id, 3]`, a medal's `badgedata[id, 6]`, `NPCControl.cs:5670-5690`). Hold-ups and location swaps
-   now set the item's own article. Not yet seen. A hold-up now waits for half a second of free time in a row, not one free
-   frame: a chain of scenes and fights (the spider fights) can leave a free frame between links.
+   now set the item's own article. Not yet seen. A hold-up now waits for 30 free frames in a row (half a second at
+   60 FPS), not one free frame: a chain of scenes and fights (the spider fights) can leave a free frame between links.
    **Seen (2026-09-25):** three queued test hold-ups waited through the spider fights' chain, then played one after
    another, reading "You got the Explorer Permit from TestPlayer!" (the game's own article for it). Each was followed
    by an empty box: an empty follow-up line is still shown as a box waiting for a press. The follow-up is now the
@@ -999,7 +1002,7 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    they get their own row (*Item prices*), as their prices sit on another scale.
 8. **Skip battle tutorials: read, and Leif's line skipped (2026-09-27).** A battle's scripted moments are
    `BattleControl.EventDialogue` cases, started by `CheckEvent` or by an enemy's own action. The only real tutorial is
-   the fight against Maki in the opening (case 0 and 1, enemy `MakiTutorial`, while flag 15 is unset), which the
+   the fight against Maki in the opening (cases 0, 1 and 2, enemy `MakiTutorial`, while flag 15 is unset), which the
    opening skip already removes. The spider's first fight ends at once (item 5). What's left: case 3, Leif's one line in
    the first battle after he joins (flag 16 set, 24 not; it sets 24; `SetMaxOptions` reads 15 and 16, not 24), and
    story lines inside boss fights (cases 7, 8 in the first boss; others later), which stay. **Leif's line is always
@@ -1078,7 +1081,7 @@ row off (a choice row to its off value: Item animation Off, Travel Off, Detector
 row back to its default (`QualityOfLife.DisableAll` / `ResetAll`, the defaults from each setting's own config
 definition).
 
-**Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen on screen (2026-09-25); the bridge skips and Medal prices not yet seen; replays held up and the quiet start seen on screen (2026-09-28); Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat Ticket (the Archipelago guide, build step 16), the warp itself, map travel and Skip confirm seen (2026-09-26); Skip cutscenes' Den arrival, trapdoor and spider scene seen (2026-09-27); Skip battle tutorials: Leif's first-battle line skipped, seen (2026-09-27); the door room's puzzle (Event4) sped up, built, not yet seen on its own.
+**Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen on screen (2026-09-25); the bridge skips and Medal prices not yet seen; replays held up and the quiet start seen on screen (2026-09-28); Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat Ticket (the Archipelago guide, build step 16), the warp itself, map travel and Skip confirm seen (2026-09-26); Skip cutscenes' Den arrival seen (2026-09-26), the Tattle tutorial and the door room's puzzle (Event4) at speed (2026-09-26/27), the trapdoor and spider scene (2026-09-27); Skip battle tutorials: Leif's first-battle line skipped, seen (2026-09-27).
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `QualityOfLife.Opening.cs` (the opening),
 `QualityOfLife.Scenes.cs` (the scene skips, the first spider fight, the trapdoor), `ApMenu.cs` (the second page),
@@ -2306,8 +2309,8 @@ with its changes not yet committed. The bytes were right; the record pointed at 
 - **Every package at one exact version, with its content hash:** `BepInEx.Core` was `5.4.*` (any 5.4 release), now
   5.4.21. A lock file, `packages.lock.json`, holds every package's hash, and a restore that would change anything
   fails.
-- **Each package from one feed only** (`nuget.config`): BepInEx's packages from BepInEx's feed, everything else from
-  nuget.org, so a same-named package on the other feed can never be picked.
+- **Each package from one feed only** (`nuget.config`): BepInEx's packages and `UnityEngine.Modules` from BepInEx's
+  feed, everything else from nuget.org, so a same-named package on the other feed can never be picked.
 - **One SDK** (`global.json`), recorded in each build.
 - **No build files from outside the repo** (`Directory.Build.props`): MSBuild otherwise picks up build files from
   every folder above the project and from per-user folders.

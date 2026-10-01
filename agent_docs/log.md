@@ -2225,3 +2225,10 @@ either one wrong).
     since 2026-09-28; Vi's toss gated on flag 41, then 11; Artis's two checks were locations already; a DeathLink
     bounce reaches the sender too; the preflight's import rule (bare calls only, tables still built at import); Room
     Swap's connecting is `_swap_rooms`.
+  - The mod guide (one agent, 10 findings, all held): step 29 has no panel row, so it moved from Gameplay to items
+    and checks in By topic; Emerald's licence was read after its code; the user's quote respelled back to the log's;
+    `Guards` also holds the achievement guard and the clock cleanup; the main page's on/off row keeps one help line;
+    the Maki tutorial runs case 2 too; the Tattle tutorial and the door room's puzzle were seen (log, 2026-09-26/27),
+    though step 10's Status said not; the Den arrival seen 2026-09-26; `UnityEngine.Modules` also comes from
+    BepInEx's feed. **Also found, not changed:** a hold-up waits 30 rendered frames, so with Uncap FPS at 240 the
+    "half a second" between chained scenes is an eighth; the text now says frames.
