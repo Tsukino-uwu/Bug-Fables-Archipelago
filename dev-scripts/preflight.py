@@ -2,10 +2,12 @@
 
 Reads what git holds, never the working copy: the index by default (what the next commit contains), one commit with
 --rev, every commit with --history, or free text with --text-stdin. Standard library only, so a reviewer needs
-nothing but Python and git. docs/reviewing.md explains every section; dev-scripts/preflight-patterns.json holds what
-each one refuses. Exit 0 when every section passes, 1 on any FAIL (a WARN never fails).
+nothing but Python and git. agent_docs/apimplementation.md (build step 28) explains every section;
+dev-scripts/preflight-patterns.json holds what each one refuses. Exit 0 when every section passes, 1 on any FAIL (a
+WARN never fails).
 
     python dev-scripts/preflight.py [--rev REV | --history [RANGE] | --text-stdin LABEL] [--ci] [--quiet]
+        [--release] [--dll FILE --dll-commit REV] [--only SECTION ...] [--timing] [--list-sections] [--repo DIR]
 """
 import argparse
 import ast

@@ -158,7 +158,7 @@ All with Python 3.11 or newer and git; nothing else, no game:
 ```sh
 python dev-scripts/preflight.py                  # every section, on the checked-out commit
 python dev-scripts/preflight.py --history        # every file and commit message ever pushed
-python dev-scripts/negative-test-preflight.py    # proves each section can fail (about 25 s)
+python dev-scripts/negative-test-preflight.py    # proves each section can fail (39 s on 2026-10-01)
 python dev-scripts/dotnet_metadata.py --selftest release/mod/BepInEx/plugins/BugFablesAP/*.dll
 ```
 
@@ -177,7 +177,8 @@ runs in, in a throwaway clone:
 - a workflow that runs untrusted text.
 
 For each one it confirms the section fails. It also makes a real commit and a real push carrying a violation, and
-checks that both are refused.
+checks that both are refused, and runs the coding agent's guard (`.claude/`) on what it must refuse, ask about and
+let through.
 
 **The apworld's own tests** (621 on 2026-09-30) and the fuzzer (10000 random seeds, 0 failures before every change) need an
 Archipelago checkout; [development.md](../agent_docs/development.md) says how. CI runs the tests, the Logic Test check
