@@ -2,8 +2,8 @@
 
 An [Archipelago](https://archipelago.gg) randomizer for *Bug Fables: The Everlasting Sapling*.
 
-**Status:** early work in progress. Its checks cover the start of the game (chapter 1), plus the scenes in later
-chapters where a field ability is taught and the submarine is handed over.
+**Status:** early work in progress. Its checks cover the start of the game (chapter 1, and a few in Bugaria once
+chapter 2 begins), plus the scenes in later chapters where a field ability is taught and the submarine is handed over.
 
 This project has been made with the help of AI (an LLM), for the code and its documentation. This repo will never
 contain any AI art, and AI has made no design, logic or naming decisions: it suggests, I decide.

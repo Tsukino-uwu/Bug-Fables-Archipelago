@@ -36,8 +36,8 @@ python dev-scripts/verify-release.py --ref vX.Y.Z --zip rel/bugfables-archipelag
 
 It checks:
 - **The mod zip** holds exactly the files of `release/mod` at that tag, byte for byte.
-- **The apworld** holds exactly `apworld/bug_fables`, byte for byte, except for the three things Archipelago's
-  builder adds: the licence, and two version fields in `archipelago.json`.
+- **The apworld** holds exactly `apworld/bug_fables`, byte for byte, except for the repository's licence, which CI
+  copies in before building, and the two version fields Archipelago's builder adds to `archipelago.json`.
 - **The three library DLLs** are the NuGet package's own files.
 - **For a release made after 2026-09-29,** the mod DLL passes the preflight's DLL checks (below).
 
@@ -78,13 +78,14 @@ have it), and Archipelago imports it on every start.
 - **Stores the connection settings** in its BepInEx config file, the room password included, in plain text on the
   player's own machine.
 - **Uses the clipboard** only when the player presses paste or copy in one of the panel's text boxes.
-- **Patches five things outside the game** at run time:
+- **Patches five things outside the game** at run time (v0.2.0 patches three; the cache's two came 2026-09-29):
   - two in the connection's libraries, to turn on compression;
   - two in MultiClient.Net's cache, to keep its file names inside its folder;
   - one Unity call, to skip a missing animation.
 
 [capabilities.md](capabilities.md) lists each of these file by file. The preflight holds that list to exactly what
-the source does and what the compiled DLL calls.
+the source does and what the compiled DLL calls. Everything else the mod does is patch the game's own code: the
+[code map](../agent_docs/code-map.md) says what each source file does and links the notes behind it.
 
 **The libraries** (Archipelago.MultiClient.Net, websocket-sharp, Newtonsoft.Json) are NuGet's files, unchanged; the
 preflight and CI check them against the package on nuget.org.

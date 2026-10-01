@@ -56,7 +56,7 @@ and preflight checks the shipped DLL holds none of it.
 | `mod/BugFablesAP/Dev/DevReload.cs` | reads files | Dev build only: hashes the plugin DLL to notice a new build |
 | `mod/BugFablesAP/Dev/DevReload.cs` | writes files | Dev build only: writes a one-line reload status in the BepInEx folder |
 | `mod/BugFablesAP/Dev/EntityDump.cs` | writes files | Dev build only: dumps every map's entities, the item and medal names and the enemy table to files in the BepInEx folder |
-| `mod/BugFablesAP/Dev/MapDump.cs` | writes files | Dev build only: dumps each map's auto-start events, hazards and flag-switched scenery to a file in the BepInEx folder |
+| `mod/BugFablesAP/Dev/MapDump.cs` | writes files | Dev build only: dumps each map's auto-start events and hazards to one file, and its flag-switched scenery to another, in the BepInEx folder |
 | `mod/BugFablesAP/Dev/PatchDump.cs` | writes files | Dev build only: dumps every patch the mod made to a file in the BepInEx folder, to compare before and after a change |
 | `mod/BugFablesAP/Dev/QuestDump.cs` | writes files | Dev build only: dumps every board quest to a file in the BepInEx folder |
 | `mod/BugFablesAP/Dev/SaveDiff.cs` | reads files | Dev build only: reads two save files and logs what changed between them |
@@ -69,7 +69,8 @@ and preflight checks the shipped DLL holds none of it.
 
 The mod changes the game's own code at run time with Harmony, as every BepInEx mod does; those patches are its
 purpose and are read in `code-map.md`. These are the only ones that change code that isn't the game's: a library or
-Unity itself. Read from the shipped DLL's `[HarmonyPatch]` attributes, as `assembly:type::method`.
+Unity itself. Read from the shipped DLL's `[HarmonyPatch]` attributes, as `assembly:type::method`; between releases, a
+row the committed DLL predates stands while today's source makes that patch.
 
 | Target | Why |
 |---|---|
@@ -89,11 +90,11 @@ is left out; everything else they do is listed.
 | `.claude/hooks/agent-guard.py` | runs programs | `git status`, to see whether a commit the coding agent makes may carry a change the maintainer decides: this list, the patterns file, or the guard itself |
 | `.githooks/doc-coverage.py` | runs programs | `git ls-files`, to list the sources every guide must name, the Markdown files whose links it checks, and the files and folders a link may lead to |
 | `dev-scripts/preflight.py` | runs programs | `git`, to read exactly what a commit holds |
-| `dev-scripts/negative-test-preflight.py` | runs programs | `git` in a throwaway clone, and preflight itself |
+| `dev-scripts/negative-test-preflight.py` | runs programs | `git` in a throwaway clone, preflight itself, and the agent guard: directly, and through the settings' hook command under `sh -c` |
 | `dev-scripts/negative-test-preflight.py` | writes files | The throwaway clone, in the system's temp folder, removed afterwards |
-| `dev-scripts/verify-release.py` | runs programs | `git`, to read what a commit holds, and preflight itself, on the release's DLL |
+| `dev-scripts/verify-release.py` | runs programs | `git`, to read what a commit holds, and preflight itself, on the release's DLL and on the yaml's text |
 | `dev-scripts/verify-release.py` | writes files | The release's DLL, copied next to the zip for preflight to read, and removed again |
-| `dev-scripts/build-release.ps1` | runs programs | `git` (clean clones of HEAD) and `dotnet build` |
+| `dev-scripts/build-release.ps1` | runs programs | `git` (clean clones of HEAD), `dotnet build`, and Python for preflight |
 | `dev-scripts/build-release.ps1` | writes files | The mod download in `release/`, and the temporary clones it builds in |
 | `dev-scripts/stage-dev.ps1` | runs programs | `dotnet build`, the dev build |
 | `dev-scripts/stage-dev.ps1` | writes files | The dev build, staged in the gitignored `stage/` folder |
@@ -102,7 +103,7 @@ is left out; everything else they do is listed.
 | `dev-scripts/release.ps1` | talks to GitHub | Pushes `main`, then starts and watches the release workflow with `gh` |
 | `dev-scripts/test-apworld.ps1` | runs programs | `python`: the apworld's tests and the fuzzer, in your Archipelago checkout |
 | `dev-scripts/seed-snapshot.py` | runs programs | Archipelago's generator, in your Archipelago checkout |
-| `dev-scripts/seed-snapshot.py` | writes files | The player files it generates with, and each case's slot data and spoiler, in the folder given with `--out` |
+| `dev-scripts/seed-snapshot.py` | writes files | Each case's slot data and spoiler, in the folder given with `--out`; the player files and the generator's output in a temporary folder, removed afterwards |
 | `dev-scripts/seed-snapshot.py` | unpickles Archipelago's own output | Reads a generated seed file with Archipelago's own restricted loader |
 | `dev-scripts/send-as-player.py` | connects to a server | A local test server (`127.0.0.1`), logged into as a second player |
 | `dev-scripts/door-graph.py` | loads a script by path | Loads `gate-table.py`, next to it, to share its reader |

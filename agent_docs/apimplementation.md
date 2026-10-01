@@ -2908,8 +2908,8 @@ its `-Check` (the release's gate) is now preflight with `--release`.
 **Checking a release against the repository (2026-09-29): `dev-scripts/verify-release.py`.** Given a release's
 files and the tag, it checks:
 - the mod zip holds exactly `release/mod` at the tag, byte for byte;
-- the apworld holds exactly `apworld/bug_fables`, byte for byte, but for the three things Archipelago's builder
-  adds: the licence and two version fields in the manifest;
+- the apworld holds exactly `apworld/bug_fables`, byte for byte, but for the licence, which CI copies in before
+  building, and the two version fields Archipelago's builder adds to the manifest;
 - the three libraries are the NuGet package's own files;
 - the yaml, which Archipelago writes from the options, carries no credential, home path or hidden character;
 - for a release made after the preflight, preflight's DLL sections pass on the zip's DLL.

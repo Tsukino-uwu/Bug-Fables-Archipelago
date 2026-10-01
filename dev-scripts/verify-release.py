@@ -8,8 +8,8 @@ git, never the network. Standard library only.
     python dev-scripts/verify-release.py --ref HEAD --nupkg archipelago.multiclient.net.6.7.1.nupkg
 
 - The mod zip must hold exactly the files of release/mod at the ref, byte for byte.
-- The apworld must hold exactly apworld/bug_fables at the ref, byte for byte, but for what Archipelago's builder adds:
-  the licence (bug_fables/LICENSE, the repo's LICENSE) and two version fields in archipelago.json.
+- The apworld must hold exactly apworld/bug_fables at the ref, byte for byte, but for the licence CI copies in
+  (bug_fables/LICENSE, the repo's LICENSE) and the two version fields Archipelago's builder adds to archipelago.json.
 - The three library DLLs (in the zip, or at the ref) must be the NuGet package's own files.
 - When the ref has a preflight, its DLL sections run on the zip's DLL too.
 """

@@ -2232,3 +2232,14 @@ either one wrong).
     though step 10's Status said not; the Den arrival seen 2026-09-26; `UnityEngine.Modules` also comes from
     BepInEx's feed. **Also found, not changed:** a hold-up waits 30 rendered frames, so with Uncap FPS at 240 the
     "half a second" between chained scenes is an eighth; the text now says frames.
+  - The README, player docs, option texts, reviewer page and capability list (one agent; the player docs and option
+    texts check out): the README's "(chapter 1)" leaves out four checks behind chapter 2's start; CI copies the
+    licence into the apworld, Archipelago's builder adds only the two version fields (reviewer page, build step 28,
+    `verify-release.py`); v0.2.0 patches three things outside the game, the cache's two came after; capability
+    rows: MapDump writes two files, three scripts run more programs than their rows named, seed-snapshot's player
+    files go to a temporary folder, a patch row the committed DLL predates stands between releases. **Left for the
+    user:** the shell hooks and the workflows run programs and fetch the NuGet package, and the capability list,
+    which calls itself "exactly what the code does", has no rows for them.
+  - **The user, mid-way:** "should we include code-map.md in docs/reviewing.md?" Recommended yes: the reviewer page
+    pointed to the capability list for what reaches beyond the game, and to nothing for the game patches, the mod's
+    main job. A one-line link added beside the capability pointer.
