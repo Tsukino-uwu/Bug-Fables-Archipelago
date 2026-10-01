@@ -948,7 +948,8 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
 6. **Item animation** (2026-09-25): a discovery showed nothing of what it found, and items from other
    players arrive silently. Your own finds always get the hold-up (pickups already did; a discovery recorded in play
    now does too); the row, *Item animation: All / Progression / Off* decides which items from other players do
-   (default All, chosen once bursts were fast with the skip button held). The hold-up is the game's own `giveitem`, run on a key item stand-in (an ordinary item's
+   (default All, chosen once bursts were fast with the skip button held). Since 2026-09-28 it decides for every
+   received item, replays of your own included; only what a scene already showed is never shown twice (step 9). The hold-up is the game's own `giveitem`, run on a key item stand-in (an ordinary item's
    `giveitem` does nothing when the bag is full, `MainManager.cs:11499`), held up by the leader; the item swap shows
    the chosen item and keeps the stand-in out, as for a location's gift, in a new display-only mode. The follow-up line
    `giveitem` always shows is an empty one the mod answers for a reserved number. Hold-ups wait in a queue for the

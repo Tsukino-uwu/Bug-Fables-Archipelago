@@ -39,9 +39,9 @@ namespace BugFablesAP
                     case AnimationRow:
                         switch (QualityOfLife.ItemAnimation?.Value)
                         {
-                            case "Progression": return "Only items from others that unlock something are held up.";
-                            case "Off": return "Items from others arrive without being held up.";
-                            default: return "Every item from another player is held up as it arrives.";
+                            case "Progression": return "Only received items that unlock something are held up.";
+                            case "Off": return "Received items arrive without being held up.";
+                            default: return "Every received item is held up as it arrives.";
                         }
                     case ColorsRow:
                         return QualityOfLife.RarityColors

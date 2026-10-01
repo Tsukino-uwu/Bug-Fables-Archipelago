@@ -165,9 +165,9 @@ namespace BugFablesAP
                 "Scenes you don't need to watch are skipped or pass by fast (a list that grows scene by scene). The "
                 + "new game's intro is always skipped with Archipelago enabled, whatever this says.");
             ItemAnimation = config.Bind("QualityOfLife", "ItemAnimation", "All", new ConfigDescription(
-                "Which items received from other players are shown held up, as when you find one: Progression (items "
-                + "that "
-                + "unlock something), All, or Off. They always arrive either way; your own finds are always shown.",
+                "Which received items are shown held up, as when you find one: Progression (items that unlock "
+                + "something), All, or Off. Replays on a new file or a reconnect count too; your own finds a scene "
+                + "already showed aren't shown twice. They always arrive either way.",
                 new AcceptableValueList<string>(ItemAnimations)));
             ItemColors = config.Bind("QualityOfLife", "ItemColors", "Rarity", new ConfigDescription(
                 "The colours for how much an item matters, in the \"You got\" box and the starburst behind it: Rarity, "
