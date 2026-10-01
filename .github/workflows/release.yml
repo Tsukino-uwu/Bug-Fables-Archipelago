@@ -50,7 +50,7 @@ jobs:
             echo "::error::tag $VERSION already exists"; exit 1
           fi
 
-      # preflight's text rules: no home path, credential, hidden character or unlisted host.
+      # preflight's text rules: no home path, credential, hidden character, unlisted host or vague span of time.
       - name: Nothing unpublishable in the release body
         env:
           HIGHLIGHTS: ${{ inputs.highlights }}
