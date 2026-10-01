@@ -33,6 +33,7 @@ anyone curious about the process, or thinking of doing the same for another game
 - **The Archipelago panel and its settings:** the panel, [8](#8-the-archipelago-panel-on-the-main-menu); Quality of
   life, [10](#10-the-quality-of-life-page-fast-text-skip-cutscenes-warp-and-more),
   [38](#38-the-warp-forced-on-with-points-of-no-return),
+  [39](#39-spy-specs-the-medals-effects-as-a-quality-of-life-row),
   [20](#20-item-colors-archipelagos-colours-in-the-you-got-box),
   [21](#21-archipelago-icon-other-players-items-on-the-ground-and-on-shelves),
   [22](#22-item-backgrounds-a-checks-item-class-shown-before-pickup),
@@ -229,7 +230,7 @@ same setup copied into every feature. Now each is marked with Harmony's attribut
   - An optional hook gets a nested group of its own.
   - Hooks that depend on each other are separate groups installed in order, each only if the one before went in.
   - SaveRedirect's group is `required`: without every redirect a randomizer save could land beside the normal ones,
-    so a missing target still stops the plugin loading.
+    so a missing target still stops the plugin loading. CachePaths' group is too (step 34).
 - **Order.** Where one target carries several of our hooks of a kind, their run order can matter (ItemSwap's pickup
   prefix before its berry prefix): such hooks are separate groups installed in that order. A hook that must run last
   says so with `[HarmonyPriority(Priority.Last)]`.
@@ -282,7 +283,8 @@ features; the patch list and run order identical to before, 167 patches, in game
 a new file with its starting items, a pickup gone once checked, shops, Uncap FPS and saving all as before.
 
 *Code: `mod/BugFablesAP/Core/Plugin.cs` (`Plugin`, a BepInEx plugin: `Awake` sets everything up, `Tick` runs
-every frame); the project file is `BugFablesAP.csproj`.*
+every frame); `Core/Hooks.cs` (`Install`, `Create`, `Safe`, `UninstallAll`); `Core/SeedData.cs`; the dev build's
+half in `Dev/Plugin.Dev.cs`, `PatchDump.cs` and `SeedDump.cs`; the project file is `BugFablesAP.csproj`.*
 
 ## 5. Hot reload, copying into the game, the dev console
 
@@ -425,6 +427,9 @@ step 9).
 
 **Status:** done: the script, entity and map dumps are in use; making an entity exist early seen (2026-09-25).
 
+*Code: `Dev/ScriptDump.cs`, `EntityDump.cs`, `MapDump.cs` and `SpriteDump.cs`; making an entity exist early,
+`World/KeptOpen.cs` (`BeforeCreate`, `AfterNewEntity`, `AfterCreate`, its `CheckIfCanExist` prefix).*
+
 ## 8. The Archipelago panel on the main menu
 
 Players need to type a room address, a slot name and maybe a password, so the mod adds **"Archipelago"** to the
@@ -434,6 +439,8 @@ mod reads the keyboard itself. Backspace, Ctrl+V to paste and Ctrl+C to copy all
 **the Archipelago mod** (enabled or disabled), which keeps randomizer saves in their own folder so normal saves are never touched.
 Its rows, top to bottom (order chosen 2026-09-24): Address, Port, Slot, Password, Difficulty, Detector,
 **Archipelago** (the mod on/off, just "Archipelago"; the config's `RandomizerEnabled`). No Back row: cancel backs out, as the hint box says.
+Today (the moves are below): Address, Port, Slot, Password, Archipelago, DeathLink (the Archipelago guide, build
+step 25), Achievements and *Use on normal saves* (step 18).
 Under them, one line explains the highlighted row (2026-09-24: "Detector" alone didn't say it means
 the medal), then the connection's state. The game's text colour 5 draws light blue here, not grey, and a long
 coloured line looked tilted, so both lines are plain black. The choice rows use the settings screen's own
@@ -556,8 +563,8 @@ games normal "settings" menu have". **How the game does it, read first:** its Se
 `listammount` 9 rows, 0.7 apart (`PauseMenu.cs:2168`), and `MainManager.UpdateList` moves the view only when the
 cursor steps past its top or bottom row. The pause menu draws `guisprites[1]` at 1.25 as the list's arrows, turned for
 up, 0.3 over the first row while rows are hidden above and 0.2 under the last while rows are hidden below
-(`MainManager.cs:15583-15604`, `:16364-16385`). **Ours:** a settings page shows nine rows between the same top and
-bottom row as before (the Gameplay page's look, which already had nine), `Scroll` keeps the cursor's row in view by
+(`MainManager.cs:15583-15604`, `:16364-16385`). **Ours:** a settings page showed nine rows (seven since, the next
+paragraph) between the same top and bottom row as before (the Gameplay page's look, which already had nine), `Scroll` keeps the cursor's row in view by
 the game's rule, rows out of view aren't drawn, and each row's value arrows follow it. **The list arrows:** first
 placed right of the value arrows and scaled to the panel's spacing; the user, with screenshots of the game's Settings
 screen: "the normal settings menu have them more to the side". The panel's box is the Settings screen's own box
@@ -595,8 +602,10 @@ turns it is covered. The lesson went into CLAUDE.md: read how the game does a th
 **Status:** works, seen on screen (2026-09-24): the menu entry, the panel, and the file select held back until the first login; the Quality of life and Gameplay pages seen (2026-09-26); the Achievements row built (2026-09-26), not yet seen; the letter pool grown for a long page (2026-09-30), not yet seen; the game's scroll, its list arrows and its row sizes on the settings pages seen (2026-09-30).
 
 *Code: `MenuToggle.cs` (the menu entry: `BeforeSetMenuText` and `AfterSetMenuText` around the game's rebuild,
-`AfterUpdate` for the cursor, `SetMode` for the switch); `ApMenu.cs` (the panel: `Build`, `Redraw`,
-`Navigate`, `Close`), `ApMenu.TextEntry.cs` (`TypeInto`, typing).*
+`AfterUpdate` for the cursor, `SetMode` for the switch, `HoldBackFile` and `ShowPopup` for the file select);
+`ApMenu.cs` (the panel: `Build`, `Redraw`, `Navigate`, `Scroll`, `Close`), `ApMenu.Rows.cs` (`Describe`, `Step`),
+`ApMenu.TextEntry.cs` (`TypeInto`, typing); `InGameSettings.cs` (the pages in game); `TextPool.cs` (`Free`,
+`Reserve`); `AchievementGuard.cs`.*
 
 ## 9. Item swap: a pickup sends its check instead of its vanilla item
 
@@ -759,14 +768,15 @@ Dev `holdup long` shows four such lines: the one seen, a longer one, and the lon
 
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
 `Recolour` and `FirstMedalSeen` do the swapping); `ItemSwap.Pickups.cs` (`PickupPrefix`, `FindPickup`, `TickGround`,
-`BerryPrefix`) handles pickups; the scout is `ApConnection.Scout`.*
+`BerryPrefix`) handles pickups; `ItemSwap.Looks.cs` (`LookOf`, the articles) and `HoldUps.AddApColors`; long names,
+`TextFit.cs` (`Fit`, `HoldUpRoom`); the scout is `ApConnection.Scout`.*
 
 ## 10. The Quality of life page: Fast text, Skip cutscenes, Warp and more
 
 The goal: a way to skip the intro, the tutorials and other slow parts, as a sub-menu of on/off rows
 (2026-09-25). The page isn't only for skips: a later row was planned that changes play, a pause-menu button
 back to the seed's start. Such a row is fine in the panel as long as it never changes where items are, and the
-logic never counts on it.
+logic never counts on it (one exception since 2026-09-30: the Warp with *Points of No Return*, step 38).
 
 The first job was finding out what a "skip" can safely do, so a search through the decompiled game
 came before any code. Two findings shaped everything:
@@ -792,7 +802,8 @@ The rows, all On by default (2026-09-25) and active only while the Archipelago m
    cut out. While they're on screen (the event is running and its black backdrop exists), the mod answers each
    line's wait and runs the game at 8 times speed. The game's own end-of-event resets the speed, and the mod does
    too once the backdrop is gone. **Confirmed on screen (2026-09-25):** on a new file the slides "skipped past
-   really fast on its own"; the log showed `[qol] intro slides: passing them by`, then `over: normal speed`.
+   really fast on its own"; the log showed `[qol] intro slides: passing them by`, then `over: normal speed` (the lines
+read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal speed` since).
    **Replaced (2026-09-25):** the slides are now cut out after all (item 5, the opening), and the row was folded into
    *Skip cutscenes* ("can probably just be bundled"). The speed-up stays as a fallback if the cut misses.
 3. **Free boat** (2026-09-25: nobody should have to farm berries in Archipelago). The Metal Island boat
@@ -801,7 +812,7 @@ The rows, all On by default (2026-09-25) and active only while the Archipelago m
    `|checkmoney,N,20||money,-N|`, and a free trip back. The line a prompt jumps to is read inside the running
    dialogue through `MainManager.GetDialogueText(id)`, not through a new `SetText`, so a postfix there drops the two
    money commands from those two lines. It changes no reachability: with it off, the fare can always be earned in
-   battle. Built, not yet seen.
+   battle. Built; seen (2026-09-26), then removed for the Boat Ticket (the Archipelago guide, build step 16).
 4. **Warp button** (2026-09-25: a fifth pause-menu button, "warp to start", with a yes/no before it
    acts). The pause menu's row is window 0: `maxoptions` icons (4, or 2 in battle, so the button never shows there),
    made as `sprites[13 + n]`; confirm opens window `option + 1`, and the labels are `menutext[10 + option]` and
@@ -810,20 +821,22 @@ The rows, all On by default (2026-09-25) and active only while the Archipelago m
    `IconAnim` is handed exactly the four icons and indexes them by option, so the fifth option ran off the end
    ("got a lot of errors"); a prefix now hands it five, and the game animates the fifth like the others. On Yes
    (No is preselected), the menu closes the game's way (`PrepareExit`) and the game's own `TransferMap` takes the
-   party to the Outskirts, beside the save point where a new game begins. **The icon** ("look at how the
+   party to the Outskirts, beside the save point where a new game begins (since *Starting Location*, to the seed's
+   start when it has one). **The icon** ("look at how the
    other menu buttons do things, and do the same"): a tinted Settings icon with the map item on top looked wrong, so
    a new dev dump, `SpriteDump`, saved the game's GUI sheets and a table of `guisprites` indexes (into the BepInEx
    folder, never the repo), and a contact sheet of them showed a round icon in the same style, `guisprites[34]`
    (a blue map). The button is now made exactly like the other four: one sprite, no tint, no overlay. A plugin
    reload with the menu open had left the old icon behind the new one; unloading now removes it. Title "Warp".
    **Seen on screen (2026-09-25, screenshot):** five matching icons, "Warp" above them, the description line,
-   and the Yes / No box with No preselected ("this looks good"). The warp itself is still to see. **A second
+   and the Yes / No box with No preselected ("this looks good"). The warp itself was seen 2026-09-26. **A second
    IndexOutOfRange, the mod's own this time:** coming back to the main page from another, the menu briefly still holds
    that page's shorter sprite array (8 to 12 long; window 0's is 19), and the button's per-frame check read slot 16 of
    it. It now checks the length first. Lesson: a prefix on a menu's `Update` sees every page's state, not just the one
    it was written for.
    **The logic never counts on the warp** (2026-09-25): it's fast travel and a way out when stuck, but a
-   seed must not assume players teleport out, so every one-way drop still needs a real way back in the logic.
+   seed must not assume players teleport out, so every one-way drop still needs a real way back in the logic. The
+   one exception, since 2026-09-30: with *Points of No Return* the Warp is that way back (step 38).
 5. **Skip cutscenes** (2026-09-25: scenes and fluff that give no checks, starting with the two at the
    Snakemouth bridge). **The intro is no longer part of it (2026-09-26):** with Archipelago enabled the
    opening is always skipped, since a random start and a starting party member both need it gone, and the row is what
@@ -1047,7 +1060,8 @@ The rows, all On by default (2026-09-25) and active only while the Archipelago m
    did, through the one method both share (`Go`), so the two can't drift apart; its log line says when no box was
    shown. An area not visited still gets the buzzer. Config `[QualityOfLife] SkipConfirm`.
 
-The panel got an eighth row, "Quality of life", which opens a second page in the same box; cancel comes back.
+The panel got an eighth row, "Quality of life", which opens a second page in the same box; cancel comes back (the
+pages are reached from Settings since 2026-09-26, step 8).
 
 **Disable all and Reset to defaults (2026-09-26; both boxes seen on screen the same day; the Reset box's lost letters
 fixed, step 8, the fix not yet seen).** Two buttons side by side at the top
@@ -1213,7 +1227,8 @@ its flag 158 is unset: the same scene later takes bounties and gives their rewar
    since a direct index can't be intercepted: `playerdata[1]`/`[2]` (Events 52, 122, 130, 137, 138, 182, all past
    chapter 1, and `BattleControl.DoAction`/`EventDialogue`, to confirm they check the party's size), `tempfollowers[..]`
    (11 events; they read story companions, and break only for a removed party member, so far only Event14, now skipped),
-   `partyorder` (Events 6, 54, 138) and `GetExtraFollower` (Event223).
+   `partyorder` (Events 6, 54, 138) and `GetExtraFollower` (Event223). The `playerdata[1]`/`[2]` reads are patched
+   where they're read since 2026-09-30 (below, and step 36).
    **Seen (2026-09-25):** the droplet scene replayed to its end with no crash, and the log shows item 9 at work in
    it and in the switch scene (Event23): "the leader (Player 0, member 2) acts member 0's part".
 13. **Every member present acts, not only the leader** (2026-09-26, with Vi and Leif in the spider scene:
@@ -1328,10 +1343,11 @@ received member joins at the end), and those places pick the wrong member or non
   Logged: `[party] Event52: place 2 is beyond a party of 2: its stand-in (…) placed`. All four are past the Outskirts
   gate, where the logic still needs all three members.
 
-**Status:** works with Leif alone, seen on screen through chapter 1 into chapter 2 (2026-09-25); Leif joining after the spider with the story's two (Vi and Kabbu) seen (2026-09-26: he followed, could lead, and showed in the pause menu); items 5 and 6 not yet seen; item 12's direct reads of slots 1 and 2 (Events 52, 122, 130, 137, 138, 182, `DoAction`, `EventDialogue`), the battle start's leader, the eaten tick and the skills' named members built (2026-09-30), not yet seen; `tempfollowers[..]`, `partyorder` elsewhere and `GetExtraFollower` still open.
+**Status:** works with Leif alone, seen on screen through chapter 1 into chapter 2 (2026-09-25); Leif joining after the spider with the story's two (Vi and Kabbu) seen (2026-09-26: he followed, could lead, and showed in the pause menu); items 5 and 6, and item 10's lake walked past with a two-member start, not yet seen; item 12's direct reads of slots 1 and 2 (Events 52, 122, 130, 137, 138, 182, `DoAction`, `EventDialogue`), the battle start's leader, the eaten tick and the skills' named members built (2026-09-30), not yet seen; `tempfollowers[..]`, `partyorder` elsewhere and `GetExtraFollower` still open.
 
 *Code: `PartyFit.cs` (the stand-ins and the acting leader), `PartyMembers.cs` (the member guard, followers,
-Leif's joining), `PartySlots.cs` (a member's slot in fights).*
+Leif's joining), `PartySlots.cs` (a member's slot in fights), `AnimGuard.cs` and `GlowGuard.cs` (the guards);
+`dev-scripts/party-access.py` (item 12).*
 
 ## 12. Shops in the game: shelves show the seed's items
 
@@ -1518,12 +1534,12 @@ On acts as if the Detector medal (#2) were equipped; Off leaves it to the game (
 **Default: On.**
 All three of its effects ask one question, `BadgeIsEquipped(2)` (objects `NPCControl.cs:1344`, discoveries
 `MapControl.cs:408`, music `MusicSpinner.cs:54`), and Hard is the same question for medal #11, so one patch
-on `BadgeIsEquipped` serves both rows. It changes no save data and no logic.
+on `BadgeIsEquipped` serves both rows (and Spy Specs, medal #17, since step 39). It changes no save data and no logic.
 
 **Built (2026-09-24), not yet seen on screen:** the panel has eight rows now (spaced tighter so the status
 line still fits). Difficulty offers Normal, Hard and Hardest. `MedalAssist.cs`
-answers "equipped" for medal 11 (Hard) or 2 (Detector) on party-wide checks, on randomizer saves only (since step 18,
-also with *Use on normal saves*). The
+answers "equipped" for medal 11 (Hard) or 2 (Detector) on party-wide checks (since step 39 also 17, Spy Specs), on
+randomizer saves only (since step 18, also with *Use on normal saves*). The
 medals menu equips from the medal list itself, never through that check, so it's unaffected.
 
 **Hardest** (chosen: switchable, the save stays clean): its extras read the save's HARDEST flag (614)
@@ -1668,6 +1684,9 @@ fight + end with the scripted thing even when scaling is enabled".
 the constants still to tune by play. The 10-HP scripted end and the fixed numbers in enemy scripts built (2026-09-30),
 not yet seen; the Wasp General scaled as a mini-boss (2026-09-30), not yet seen.
 
+*Code: `EnemyScaling.cs` (`AfterGetEnemyData`, `Damage`, `Bestiary`, `ScriptNumbers`); the row in `ApMenu.cs` and
+`ApMenu.Rows.cs` (`ScalingRow`), its config in `QualityOfLife.cs` (`EnemyScalingMode`).*
+
 ## 18. Use on normal saves: the panel's settings with Archipelago off
 
 Quality of life and Gameplay are useful without a seed too. **Decided (2026-09-26):** an opt-in row, a
@@ -1679,7 +1698,7 @@ deliberate exception to "vanilla stays vanilla" that only the project owner coul
   long value already did.
 - **What it turns on, with Archipelago off:** the Settings rows to both pages (step 8), Fast text, the scenes Skip
   cutscenes skips or speeds by, Travel (Warp to Start goes to the game's own start), Medal prices, Difficulty,
-  Detector, Enemy scaling, the EXP and berry multipliers (step 19), Uncap FPS (step 24), skipping the game's
+  Detector, Spy Specs (step 39), Enemy scaling, the EXP and berry multipliers (step 19), Uncap FPS (step 24), skipping the game's
   5-second forced collection (step 25), Attack boost (step 27), Healing crystals (step 30), Auto-save (step 31), and
   the guards against missing animations and glow colours (step 11).
   **Added (2026-09-29):** the user saw the animation warnings on a normal save with the row on, in the Barren Lands,
@@ -1697,6 +1716,9 @@ deliberate exception to "vanilla stays vanilla" that only the project owner coul
 
 **Status:** built (2026-09-26); in use on a normal save with the row on (2026-09-29, chapter 5: Uncap FPS at 240
 applied with Archipelago off). The rest of what it turns on, and the guards that joined (2026-09-29), not yet seen.
+
+*Code: `Plugin.cs` (`settingsOn`, handed to each module above); the row in `ApMenu.cs` and `ApMenu.Rows.cs`
+(`NormalSavesRow`).*
 
 ## 19. EXP and berry multipliers
 
@@ -1725,13 +1747,17 @@ An opt-in for a faster, easier game (Next 16 and 17 in `apimplementation.md`).
   grant, never this pickup, so they aren't multiplied.
 - **The bar** (`ApMenu.DrawPips`): the game draws a volume row's ten pips with `guisprites[59]` (empty, a quarter
   size) and `guisprites[42]` coloured yellow (lit, a third), 0.4 apart from 0.7 past the left arrow
-  (`MainManager.ShowItemList`, type 17). The panel's arrows sit closer, so the same layout is scaled by 0.68.
+  (`MainManager.ShowItemList`, type 17). First scaled by 0.68 to fit the panel's closer rows; since 2026-09-30 drawn
+  at the game's own place and size, as the rows are (step 8).
 - Each page's two buttons: Reset puts both back to 1x, Disable all sets 1x.
 
 **Seen on screen (2026-09-26):** EXP at 10x: a Pseudoscorpion and a Cactus logged 5 -> 50 and 7 -> 70, and the
 battle gave 100, the game's cap of a level's worth. A berry picked up at 10x, after the move to `MoveNext`.
 
 **Status:** works, seen on screen (2026-09-26): EXP at 10x, and a berry picked up at 10x.
+
+*Code: `Multipliers.cs` (`AfterGetExp`, `BeforeBerryStep`); the rows in `ApMenu.cs` (`DrawPips`) and
+`ApMenu.Rows.cs`.*
 
 ## 20. Item colors: Archipelago's colours in the "You got" box
 
@@ -1769,7 +1795,7 @@ colors.
 - **Off:** another game's item keeps the vanilla item's look (as before the icon), a surprise until found; Bug Fables
   items show their real sprite. The text always names whose it is.
 - With more rows, the Quality of life page's rows sit closer (the first and last where they were); the Gameplay page
-  followed in step 30. Since step 39 a page shows nine rows and scrolls instead (step 8).
+  followed in step 30. Since step 39 a page shows seven rows at the game's size and scrolls instead (step 8).
 - **Shops name it too (2026-09-26):** a shop's box names another player's item in its class colour, and its
   description says whose: "A useful item for Other (APQuest).", or for another Bug Fables player's item "For
   BugTester2: " before the item's own description. First the name was "<player>'s <item>", but a shopkeeper pastes the
@@ -1885,7 +1911,7 @@ planned (2026-09-30).
 ## 24. Uncap FPS: frame rates above 60 without speeding the game up
 
 The game's settings offer 30 or 60 fps. More was wanted on a 240 Hz monitor, as a Quality of life row
-(first Off, 120, 144, 240; now ten pips, Off the default, below; `UncapFps` in the config), overriding the game's own frame rate and VSync while Archipelago is on, and done
+(first Off, 120, 144, 240; now ten pips, Off the default, below; `UncapFps` in the config), overriding the game's own frame rate and VSync while Archipelago is on (or with *Use on normal saves*, step 18), and done
 "properly so things don't break" (2026-09-27).
 
 **First, read how the game ties itself to frames** (`MEASURED.md`, frame rate). Most motion is scaled by frame time
@@ -1904,8 +1930,8 @@ and the game's settings; `fps <cap>` and `interp on|off` let the tester compare 
 
 **How the row works** (`FrameRate.cs`). Four read-only audits of the game's code, one per share of files, listed every
 place it counts frames instead of time first.
-- **The cap.** A cap that divides the monitor's refresh rate is met with VSync (240 on 240 Hz: every refresh; 120: every
-  second one); any other is a limit with VSync off. Without VSync at 240 on 240 Hz the frame times wobbled from 2.9 to
+- **The cap.** A cap that divides the monitor's refresh rate, or reaches it, is met with VSync (240 on 240 Hz: every
+  refresh; 120: every second one; 240 on 180 Hz: every refresh); any other is a limit with VSync off. Without VSync at 240 on 240 Hz the frame times wobbled from 2.9 to
   5.3 ms. Re-applied after the game's own `ApplySettings`; Off calls `ApplySettings` to put the game's settings back.
   The game's own settings file is never written.
 - **Motion drawn between physics steps.** The camera is placed between its last two steps before drawing, and put
@@ -1923,7 +1949,8 @@ place it counts frames instead of time first.
   platform, the console's `interp off` (sent through the command file); on screen: "I can move around freely now". **The
   fix:** after the game's ground check (`GroundDetector.OnTriggerStay` / `OnTriggerExit`), a body standing on a
   platform isn't interpolated, and is again once off it. Seen on screen (2026-09-27): normal speed on the platform,
-  with a slight shimmer there only (drawn at physics steps); sharp again on the ground.
+  with a slight shimmer there only (drawn at physics steps); sharp again on the ground. Replaced 2026-09-30: no
+  character is interpolated any more (the pitfall "drawn at physics steps", below).
 - **Pitfall, a knocked frozen enemy: two faults stacked.** Seen at 240: knocking an enemy in ice looked slow,
   then "stops short". **First fault, frame order:** the knock (`NPCControl.Dizzy`) sets the block's speed flat and hops
   it a frame later; in between, the frozen enemy's own check reads no vertical speed as landed and cancels the slide
@@ -1934,7 +1961,8 @@ place it counts frames instead of time first.
   under interpolation, so it dragged. The first test with `interp off` showed nothing because the slide was cancelled
   anyway; after the first fix: "worked for 1 hit, then it became slow", and with `interp off` it moved properly. Fixed
   as the platforms: not interpolated while frozen, one decision for both cases so neither undoes the other. **Seen on
-  screen (2026-09-27):** knocked around properly, every time.
+  screen (2026-09-27):** knocked around properly, every time. The first fix stays; the second was replaced 2026-09-30,
+  when interpolation went for every character (below).
 - **Pitfall, Vi's flight in slow motion** (the user, 2026-09-29, at 240). While Vi flies, `PlayerControl.LateUpdate`
   lifts her by writing her whole position every frame (the rise), read from the drawn pose, which trails the physics
   one under interpolation: the frozen enemy's second fault again. Her flying speed itself is a velocity, the same at
@@ -1943,6 +1971,7 @@ place it counts frames instead of time first.
   test, one change: the leader isn't interpolated while flying, in the same one decision (checked before the
   player's `LateUpdate`). If the slow motion stays, the cause is elsewhere and the change comes out. **Seen on screen
   (2026-09-29, Monitor at 240 Hz):** "fly works now"; Kabbu and Leif following her, "they look the same as Vi".
+  Replaced 2026-09-30 with the rest (below).
 - **Pitfall, drawn at physics steps: blurry at 240** (the user, 2026-09-30). Everywhere interpolation had been
   turned off (platforms, flight, frozen enemies) the leader looked "really blurry/bad" while moving; the party
   following looked fine. The camera is smoothed, so a body drawn only 50 times a second jumps against it. The first
@@ -2019,7 +2048,7 @@ place it counts frames instead of time first.
   flip at most once per renderer each 1/60 s. A cutscene's `FloorToInt(a) % n == 0` on a time-driven `a` counts once
   per whole value. Text waits round up to whole sixtieths, as a 60 fps frame does.
   **Gameplay:** fishing's fish approach and nibble, the screw platform, the Wacka Worm, disguised enemies, wandering
-  enemies' retries, dizzy enemies dropping, gate slides, the dig skill's aim in battle, Vi's hover, the map's culling
+  enemies' retries, enemies settling to their height, dizzy enemies dropping, gate slides, the dig skill's aim in battle, Vi's hover, the map's culling
   grace. **Scenes:** the battle drop, return from digging, two scenes' turns (26, 99) and a fade, text waits. **Looks:**
   spins, sprite turning, the dig spin, followers catching up, the Watcher's eye, the battle EXP counter,
   damage numbers, the enemy beemerang, particles, blinking. **Left as they are** (cosmetic): random jitter, some battle
@@ -2056,8 +2085,9 @@ config that says Monitor stays at Monitor until the row is changed. Not yet seen
 sharp. The logic measured (`rates`); each site patched as expected (the log's `[fps] frame sites`). Not yet seen on
 screen: every site above, most of all fishing, the screw platform, the Wacka Worm, a disguised enemy and the dig skill.
 Platforms and bridges: the slow motion fixed and seen (2026-09-27). Vi's flight: fixed and seen (2026-09-29). Every
-character drawn smoothed (2026-09-30): seen sharp on a conveyor and in Vi's flight, Kabbu with her; moving
-platforms, bridges and a knocked frozen enemy not yet seen with it. Followers deciding walk or brake 30 times a
+character drawn smoothed (2026-09-30): seen sharp on a conveyor and in Vi's flight, Kabbu with her, and on the
+Rubber Prison's swinging platform (2026-10-01); bridges, a knocked frozen enemy, the "!" over NPCs and shadows during
+jumps not yet seen with it. Followers deciding walk or brake 30 times a
 second, as at 60 (2026-09-30): measured with `bodytrace`; on the conveyor, "I think it looks fine", hard to tell
 next to the leader. Off by default again (2026-09-29):
 built, not yet seen on a fresh config. Swinging and bobbing scenery drawn smoothed (2026-10-01): measured and seen
@@ -2066,7 +2096,8 @@ not yet seen.
 
 *Code: `FrameRate.cs`, `FrameRate.Scenery.cs`, `FrameSites.cs`, the row in `ApMenu.cs` and `QualityOfLife.cs`, the
 after-physics hooks in `Plugin.cs`; the console's `display`, `fps`, `interp`, `camlerp`, `bodylerp`, `scenerylerp`,
-`bodytrace`, `frames`, `trace`, `cams`, `il`, `rates` and `fpsscan` (`DevConsole.cs`).*
+`bodytrace`, `frames`, `trace`, `cams`, `il`, `rates` and `fpsscan` (`DevConsole.cs`, the traces and scans in
+`Dev/FrameRate.Dev.cs`).*
 
 ## 25. Hitches fixed: the mod's garbage and the game's 5-second collection
 
@@ -2210,7 +2241,8 @@ no logic depend on it.
   heal. A prefix on `NPCControl.SetUp` sets it for every save crystal except the red ones, so the game's own code does
   the rest: the colour, the heal on a hit, and step 29's confirm. `data` is the map's entity data, never saved.
 - **Switching it takes effect in the next room**, when the map's crystals are built again (said in the row's help).
-- **The Gameplay page grew a row:** its rows now spread between the same top and bottom row as Quality of life's do.
+- **The Gameplay page grew a row:** its rows then spread between the same top and bottom row as Quality of life's
+  did (since 2026-09-30 both pages show seven rows at the game's spacing and scroll, step 8).
   Each row with a value gets its left/right arrows from one list per page; *Healing crystals* and *Auto-save* were
   first missing from it (caught 2026-09-28, before anyone saw it).
 - Reset sets Off; Disable all sets Off.
@@ -2616,12 +2648,13 @@ depend on it. The HP bars follow from the next battle, since the game reads the 
 
 The page grew to twelve rows (eleven settings under the two buttons). Squeezing them closer was the first plan; the
 user asked for the game's own way instead ("not better to just add the up/down scroll that the games normal
-"settings" menu have ?"): a settings page now shows nine rows and scrolls (step 8).
+"settings" menu have ?"): a settings page now scrolls, seven rows at the game's own size (step 8).
 
 **To see** (the user): with the row on, a battle shows every enemy's HP, Spy needs no aiming, the icon sits beside
 Spy, and the same member can still act after spying; with it off, as the game has it.
 
-**Status:** built (2026-09-30), the build succeeds; not yet seen in game.
+**Status:** built (2026-09-30); the row seen on its page while the scrolling was checked (2026-09-30); its battle
+effects not yet seen.
 
 *Code: `Gameplay/MedalAssist.cs` (`SpySpecsMedal`, the postfix), `Gameplay/QualityOfLife.cs` (`SpySpecs`),
 `Ui/ApMenu.cs` and `Ui/ApMenu.Rows.cs` (`SpyRow`), `Core/Plugin.cs`.*
