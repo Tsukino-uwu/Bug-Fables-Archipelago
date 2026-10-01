@@ -11,15 +11,16 @@ Once per clone: `git config core.hooksPath .githooks`. The hooks need Python 3.1
 
 - `python dev-scripts/preflight.py`: every section on what is staged; the hooks run it on every commit and push.
   `--history` checks every commit ever made; `--text-stdin LABEL` checks text such as release notes.
-- `python dev-scripts/negative-test-preflight.py`: proves every section can still fail (about 25 s). Run it after any
-  change to the preflight.
+- `python dev-scripts/negative-test-preflight.py`: proves every section can still fail (39 s on 2026-10-01). Run it
+  after any change to the preflight.
 - `python dev-scripts/dotnet_metadata.py --selftest <dll>`: reads a .NET assembly and prints what it found.
 - `python dev-scripts/verify-release.py --ref vX.Y.Z --zip <file> --apworld <file>`: checks a release's files against
   its tag.
 
 **Working with Claude Code:** `.claude/settings.json` runs `.claude/hooks/agent-guard.py` before each shell command,
 file edit and page fetch the agent makes. It refuses anything that gets past the hooks, and any read of a GitHub
-project with no row in `licensing.md` except its licence file, without asking you. It asks you first only before:
+project with no row in `licensing.md` that isn't your own (`own_github_owners`) except its licence file, without
+asking you. It asks you first only before:
 - an edit to `docs/capabilities.md`, the patterns file, `.claude/` or `.git/`;
 - a commit that may carry one of those;
 - a `gh api` write;
@@ -161,9 +162,9 @@ runs too** (2026-09-28); 10000 seeds take a few minutes.
 1. Once: copy its `fuzz.py` (and `hooks/`) to the root of your Archipelago checkout. We use commit `53686ba`
    (`fuzz.py` 0.6.2, 2026-06-09); CI pins the same one.
 2. `dev-scripts/test-apworld.ps1 -Archipelago <your checkout>` runs the tests, the Logic Test check (next section),
-   then the fuzzer (`fuzz.py -r 10000 -n 1 -g bug_fables --skip-output`: one Bug Fables yaml per seed), and prints each
-   error with its count. `-With apquest` puts another world in every room; `-Runs` changes the count. It fails unless
-   all three are clean.
+   then the fuzzer (`fuzz.py -r 10000 -j <cores> -n 1 -g bug_fables --skip-output`: one Bug Fables yaml per seed), and
+   prints each error with its count. `-With apquest` puts another world in every room; `-Runs` changes the count,
+   `-Jobs` the processes (every core by default). It fails unless all three are clean.
 3. Read `fuzz_output/report.json` (counts and each error with the runs that hit it). Each failed run keeps its yaml and
    log in `fuzz_output/error/bug_fables/<run>/`; regenerate it with `Generate.py --player_files_path` on that folder.
    A new run replaces `fuzz_output`, so copy anything you still need first.
@@ -204,7 +205,8 @@ arrive. Every location becomes a check you must do, shops included, and nothing 
    second generation must equal the seed we generated. When they differ, the tool fills the gaps from whatever is left
    over without a word, and a stall could come from the mismatch instead of the logic. The check compares the copy's
    Bug Fables slot_data and every relocated item over five presets, both `count_events` values, three room layouts
-   and three seeds (90 generations, a few seconds). `--negative` gives the copy a wrong seed and must flag every run. It
+   and three seeds (90 generations, a few seconds; `--seeds N` changes the three). `--negative` gives the copy a wrong
+   seed and must flag every run. It
    also fails when the world rolls with Python's global `random` instead of `self.random` (2026-09-29, a scratch
    patch on the start room: 24 of 60 runs flagged).
 3. Player files: yours, plus `name: LogicTest`, `game: Logic Test`, `Logic Test: {count_events: false}`. Keep
@@ -265,12 +267,14 @@ Set `DevConsole = true` under `[Debug]` (`copy-dev.ps1 -DebugOn DevConsole`). In
 line at the bottom of the screen; Enter runs, Escape closes. The player is frozen while it's open.
 
 - `loc <n>`: go to pickup location n (the apworld's id, e.g. `loc 5`) and stand next to it. If it was taken,
-  its flag is cleared first so it's back.
+  its flag is cleared first so it's back. A location with no flag of its own (a crystal berry, a respawning pickup)
+  is refused, naming the `warp <map> @<entity>` to use instead.
 - `warp <map> [flag]`: go to a map by `MainManager.Maps` name or number (`warp TestRoom` included). Without a flag it
   lands once, where walking in through a door into the map ends (a second move after arrival once came after an
   enemy had touched the party, and the battle's start froze, 2026-09-26). With a flag it lands on the entity, then
   steps beside it; with `@name` it lands at the map's origin, then steps beside the named entity; either way, not if a
-  battle, event or dialogue has started by then.
+  battle, event or dialogue has started by then. Before arriving it marks the map's auto-start cutscenes seen (their
+  flags set in the save), since out of story order they can crash; `loc` and `enemylook` warp the same way.
 - `spawn <item|key|medal> <id> [flag]`: drop a pickup next to you. With a pickup location's flag, on that
   location's map, it is that location. `spawn member <n> [x z]` drops party member n's look (0 Vi, 1 Kabbu, 2 Leif)
   at that offset from you, to see how a location holding him looks; it's a Crunchy Leaf underneath, given if taken.
@@ -305,10 +309,11 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `fps <cap>` (-1 uncapped): the frame cap for this session only, VSync off; the game's settings put theirs back when
   applied. `interp on|off`: Unity's rigidbody interpolation on every character on the map. `camlerp on|off`: the camera
   drawn between physics steps (`FrameRate.cs`); `bodylerp on|off`: the characters drawn the same way; `scenerylerp
-  on|off`: swinging and bobbing scenery drawn the same way (`FrameRate.Scenery.cs`). A look at higher frame rates;
-  frame-counted logic runs fast meanwhile.
+  on|off`: swinging and bobbing scenery drawn the same way (`FrameRate.Scenery.cs`). All three come on with Uncap FPS;
+  the console turns one off to compare, until the row is next switched. `fps` is a look at higher frame rates without
+  the row; frame-counted logic runs fast meanwhile.
 - `bodytrace [frames]`: from when the leader or a follower starts moving, logs each drawn frame's step share, her last
-  step's move, the leader's and the first follower's place on screen drawn and true, what she stands on (name/tag/layer),
+  step's move, the leader's and the first follower's place on screen drawn and true, what she stands on (name/tag),
   its place drawn and true and how much scenery is drawn shifted, and her parent, then the spread of the
   frame-to-frame change of each (a steady walk, drawn smoothed, holds still).
 - `trace [frames]`: while you move with an NPC's emoticon showing, logs where the player, the NPC and its emoticon land
@@ -325,7 +330,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `frames [seconds]` (5 by default): logs the frame count, median and slow frames with their times, the camera's draw
   time and garbage collections. A collection is marked on the frame before the slow one it causes.
 - `nudge <x> <y> <z>`: shift the party by that much on the current map.
-- `script <map>`: log a map's dialogue table, row by row. `pos <map> <index...>`: log those entities' start positions
+- `script <map>`: log each row of a map's dialogue table that has `|command|`s, its commands only (`line` gives a
+  row's text). `pos <map> <index...>`: log those entities' start positions
   from the map's entity table. `prices <medal id...>`: log each medal's price columns (berries and crystal berries).
 - `markcolor <progression|useful|trap|filler> <hex>`: a class's starburst colour, live (a design test).
   `markclass <entity> <class>` draws one slot's backdrop as that class; `markclass off` puts them back.
@@ -402,12 +408,12 @@ only in the dev (Debug) build: every one is bound in `Dev/Plugin.Dev.cs`, and th
 | Setting | What it does |
 |---|---|
 | `DevConsole` | F9 opens the dev console (section above). |
-| `DevCommandFile` | With `DevConsole`: a text file whose lines are run as console commands, then emptied, so a test can be driven from outside the game. |
+| `DevCommandFile` | With `DevConsole`: a text file whose lines are run as console commands, then emptied, so a test can be driven from outside the game. Blank lines and lines starting with `#` are skipped; a queued `loc` or `warp` waits until the player is free. |
 | `InfJump`, `OneHit`, `InfBerries` | With `DevConsole`: jump again in mid-air; every hit on an enemy does at least 99; 999 berries once per save played. The console's `infjump`, `onehit` and `infberries` flip them. |
 | `AdoptSeed` | A save tied to another seed is re-tied to the connected one and replays every item (section "A local server to test against"). |
 | `TestStart`, `TestStartMember`, `TestDoors` | A new file's start map, its one party member, doors rewritten by hand (Dev console section). |
 | `GiveMoney` | Berries to add once (capped at 999), then back to 0. |
-| `GrantProbe`, `TextProbe` | Log every key item added and flag flipped / every dialogue line with an item command, with the map. |
+| `GrantProbe`, `TextProbe` | Log every key item added or removed, quest board change and flip of `flags`, `regionalflags` or `crystalbflags` / every dialogue line with an item command, with the map. |
 | `TlsProbe` | For each `wss://` connection, logs what this Mono's own certificate check decided (policy errors, the chain it built, each chain status), then accepts the certificate as websocket-sharp always does, so connecting is unchanged. |
 | `SaveDiff` | Two save file names, `a.dat\|b.dat`: once per load, logs what differs between them. |
 | `PatchDump` | Every method the mod patches (target, kind, patch method, priority), Uncap FPS's hooks included, sorted, to `bugfablesap-patches.tsv`, once per load: diff it before and after a change to how hooks are installed. The log also gets the run order wherever one target has several of the mod's hooks of a kind. |
