@@ -474,8 +474,8 @@ be wrong.
     - **Bugs:** 1. the shop fallback (Known issues); 2. failed connect attempts left open, one more client on the
       slot per retry (Known issues); 3. two items named "Leif" (Known issues); 4. a shop test that can't fail;
       5. respawning checks leaving the outbox before the server confirms them.
-    - **Required:** 6. the door shuffle in `connect_entrances`: done 2026-09-30 (build step 12); 7. `style.md` (brackets, a trailing blank line, long
-      Markdown lines).
+    - **Required:** 6. the door shuffle in `connect_entrances`: done 2026-09-30 (build step 12). **Recommended,
+      the style guide:** 7. `style.md` (brackets, a trailing blank line, long Markdown lines).
     - **The apworld and the website:** 8. option groups (the first, "Aesthetic Options", came with build step 33),
       presets, reST option texts with rich text, a bug report
       page, the WebWorld's `game`; 9. `topology_present`; 10. location and item groups (the first item groups,

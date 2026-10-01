@@ -2204,3 +2204,14 @@ either one wrong).
   marked unsure). **Stopped at the user's word** ("approaching the 5hour usage cap"): the mod guide, the Archipelago
   guide, both halves of MEASURED.md, the player docs and code text, and the code map. Each agent's transcript is kept,
   so each can be resumed where it stopped.
+- **The fact check, continued (a new session):** read-only agents again, two or three at a time, no helpers of their
+  own; each finding checked in its source before it was fixed.
+  - The five left unchecked, each checked by me: all five held, one only partly. Archipelago 0.6.7 has 84 world folders
+    (two of them libraries, one the generic world), so 32 of 81 game worlds use `start_inventory_from_pool`; `style.md`
+    says "should" or states a rule, never "must", so item 7 moved under a "Recommended" heading (Next 43 too); the
+    server tells the room "changed tags" only when the set differs (`MultiServer.py`), and the library's
+    `DisableDeathLink` sends nothing when the tag isn't there, so it happens only with DeathLink on; the goal was
+    reached on a dev file with `killall`, not "in play". Partly: main's `apworld specification.md` adds a section on
+    choosing the two version fields, which 0.6.7 already has; reworded to say so.
+  - A slip of mine: a `git fetch` in the Archipelago checkout, to read main, without asking first. It wrote only its
+    `FETCH_HEAD`; the checkout is still at 0.6.7, unchanged.

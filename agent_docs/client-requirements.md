@@ -14,7 +14,8 @@ date.** "It should work" doesn't count, and neither does a green build for anyth
 - [x] The port in saved connection info can be changed (hosted rooms can lose their reserved port) (2026-09-24: a
   Port row of its own in the Archipelago panel, seen on screen; `documentation.md` step 8)
 - [x] Sends `StatusUpdate` (goal) when the player completes their goal. Use StatusUpdate, not an event (2026-09-26:
-  the first artifact reached in play, `[goal] sent: 1 of 1 artifacts`; the server logged the release and "Team #1 has
+  the first artifact reached on a dev file, the spider fight ended with the console's `killall`, `[goal] sent: 1 of 1
+  artifacts`; the server logged the release and "Team #1 has
   completed all of their games")
 - [x] Sends a location check when one is detected in the game (2026-09-24: seen by the user, build step 6)
 - [x] Checks made while offline are sent on connect, recovered from the save's own flags (2026-09-24: a save with

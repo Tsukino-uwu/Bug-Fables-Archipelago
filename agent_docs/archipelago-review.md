@@ -41,6 +41,11 @@ review (2026-09-29); the files have moved since, the claims checked again 2026-0
    `World.connect_entrances`" (`entrance randomization.md:371-378`); ours runs in `generate_early` (`world.py:56-59`).
    It can move now: `door_targets` is only read in `fill_slot_data`. **Done 2026-09-30** (build step 12): `world.py`
    shuffles the doors in `connect_entrances`.
+
+## Recommended: the style guide
+
+`style.md` says "should" or gives a plain rule, never "must", and `world api.md:21` only points to it.
+
 7. **`style.md`:** closing brackets on the line of the last element (`data_tables.py:36-38`,
    `logic/__init__.py:15-16, 18-19`; `style.md:22-23`); a blank line at the end of `data_tables.py` (`style.md:7`);
    11 Markdown lines over 120 characters in the player docs (`en_Bug Fables.md:10, 25`; `setup_en.md:61, 67, 72, 73,
@@ -60,7 +65,7 @@ review (2026-09-29); the files have moved since, the claims checked again 2026-0
 11. **Archipelago's helpers:** `World.world_version` (not reading `archipelago.json` ourselves, `data_tables.py:15-19`);
     `Region.add_locations` (`locations.py:31-33`); option values in slot_data through `options.as_dict`
     (`apquest/world.py:83-86`; ours by hand at `slot_data.py:75-76`, and the mod checks bools, `SeedData.cs:126-129`).
-12. **`start_inventory_from_pool`** (a convention: 32 of 88 worlds at 0.6.7; `world api.md:626-627`).
+12. **`start_inventory_from_pool`** (a convention: 32 of the 81 game worlds at 0.6.7; `world api.md:627`).
 13. **The Rule Builder:** Jump's blanket rule as an `OptionFilter` (`rule builder.md:80, 92, 103-110`; ours an `if` in
     `rules.py:35-42`); `__str__` on our rules (three then, five since: `CanUse`, `Member`, `MoveItem`, `Boat`, `WayBack`), so they print their argument (`:501, 506`); `@override` on
     `_instantiate` (`:206`); benchmark `CachedRuleBuilderWorld` and record the decision (`:177`; `apquest/rules.py`,
@@ -107,8 +112,8 @@ review (2026-09-29); the files have moved since, the claims checked again 2026-0
 19. **Connect:** a `uuid` kept in Archipelago's `common.json` (`network protocol.md:298`, `shared_cache.md:12`; the
     library makes a new one each time); the targeted Archipelago version, not the library's default 0.6.0
     (`network protocol.md:299`); the DeathLink tag in Connect, with `ConnectUpdate` only for changes (the room is told
-    "changed tags" on every reconnect today); the event hooks attached before connecting (MultiClient.Net's
-    `docfx/index.md:20-21`; ours after, `ApConnection.cs:443-457`).
+    "changed tags" at every login with DeathLink on, `MultiServer.py:1990-1996`); the event hooks attached before
+    connecting (MultiClient.Net's `docfx/index.md:20-21`; ours after, `ApConnection.cs:443-457`).
 20. **The rest of the protocol and the library:** a refusal with no error codes is retried forever (`:480-491`;
     `errors` is optional, `network protocol.md:121`); `InvalidPacket` is never logged (`:230-231`); the library's
     `SetGoalAchieved`, `Locations.AllLocations`, `GetRaceModeAsync` and `ColorUtils` (the earlier audit); its optional
@@ -208,4 +213,5 @@ drop the download and `custom_worlds` steps. The world maintainer's duties are i
 - `AP_TEST_WORLDS=bug_fables pytest` runs Archipelago's generic tests on one world (`tests.md`).
 - APQuest moved to the Rule Builder on 2026-04-18 (#5906), after our checkout.
 - `Bounce` gains `teams` and `operator` (`network protocol.md`); our DeathLink sends tags and data only.
-- `apworld specification.md` adds minimum and maximum version guidance; ours sets the minimum only.
+- `apworld specification.md` adds a section on choosing `minimum_ap_version` and `maximum_ap_version` (both fields
+  are in 0.6.7 already): most worlds need only the minimum, as ours sets.
