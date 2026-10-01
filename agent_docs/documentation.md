@@ -125,8 +125,9 @@ anything between the date and the colon, and a date earlier than the entry above
 
 Before writing anything, we looked at what the game is made of. Bug Fables is a **Unity game built with
 Mono**, which means its code ships as a normal .NET file (`Assembly-CSharp.dll`) that can be turned back
-into readable code. That's the easiest case there is. We also checked that nobody had already made a
-Bug Fables randomizer.
+into readable code. That's the easiest case there is. We didn't check whether anyone had already started or
+made a Bug Fables randomizer: we assumed nobody had started on an apworld, and built this one without looking
+at any other.
 
 *How to tell for your own game:* an `Assembly-CSharp.dll` in the game's `_Data/Managed` folder means
 Unity with Mono. A `GameAssembly.dll` means Unity with IL2CPP, which is harder.

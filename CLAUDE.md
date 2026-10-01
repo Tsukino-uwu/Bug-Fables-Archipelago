@@ -147,4 +147,4 @@ rule, remove one in the same edit. The rule lives here and its reasoning in `age
 - **Archipelago's docs, before any Archipelago work** (the rule above): `adding games.md` (the hard requirements),
   `world api.md`, `rule builder.md`, `entrance randomization.md`, `tests.md`, `style.md` and `apworld specification.md`
   (package with the "Build APWorlds" component, no hand-written `version`); `worlds/apquest` is the structural reference.
-- **`agent_docs/references.md`** before borrowing an approach from another randomizer.
+- **`agent_docs/references.md`** before borrowing from another randomizer. **Never look at another Bug Fables one.**

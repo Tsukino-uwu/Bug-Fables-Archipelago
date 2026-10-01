@@ -11,6 +11,10 @@ Two kinds, kept apart (the user, 2026-09-30):
 - **The user's own work** is compared without a licence row (the user, 2026-09-30): it is theirs to use. It stays
   unnamed, with no path.
 
+**Another Bug Fables project is never looked at** (the user, 2026-10-02): a randomizer, a modding framework or any
+other. Not read, not compared with ours, not borrowed from, ever: no row in `licensing.md` and no entry here of either
+kind. This project was built blind and ran into nothing that needed them. They stay unnamed.
+
 ## Compared with ours
 
 ### Tevi_Randomizer: a Unity Mono BepInEx Archipelago mod (read 2026-09-24, last commit 2026-07-01)

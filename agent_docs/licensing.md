@@ -11,6 +11,7 @@ read, needs no row: `references.md` keeps the two kinds apart. The test for what
 repo forever?", not "does a licence permit it?". So even a permissive licence never lets us copy source: we
 read for facts and write our own. **And an author's wishes count as much as their licence** (the user, 2026-09-25):
 when an author objects to their work being used here, we don't use it, even where it's technically allowed.
+**Another Bug Fables project never gets a row**, not even with a yes (the user, 2026-10-02; `references.md`).
 
 ## Apworlds
 
