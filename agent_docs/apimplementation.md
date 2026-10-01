@@ -2263,6 +2263,9 @@ BepInEx is not bundled; the player installs it first.
    theirs. What a player notices only: no internal fixes, and no "update both, regenerate" line (players are assumed
    to be on the latest version). A fix to the base game's own bug says so ("a base-game stutter"). GitHub adds the
    Full Changelog link below.
+   **New features in the player docs (the user, 2026-10-01):** labelled with the release they come in, "New in
+   0.3.0", never "new in this version", which stops being true at the next release; a label with its version stays
+   accurate however old it gets.
 
 6. **Rehearsed before the first run (2026-09-26):** every CI step on a fresh clone of Archipelago `0.6.7`: the
    tests, the three two-game presets, Build APWorlds (its manifest gained `version` and `compatible_version` on its

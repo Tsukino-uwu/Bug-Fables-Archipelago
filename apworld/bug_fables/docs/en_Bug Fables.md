@@ -7,7 +7,7 @@ in a shuffled shop or finishing a quest sends a check instead, and the item ther
 place. Every item, your own included, arrives from the server and is given to you through the game's own item system.
 
 This is an early version. It covers the start of the game: the Bugaria Outskirts, Snakemouth Den, the open parts of
-Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's shop outside the city, and the Golden Path, plus the seven scenes in later chapters where the game teaches a field ability and the one where the Termite King hands over the submarine (both new in this version). More chapters come later.
+Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's shop outside the city, and the Golden Path, plus the seven scenes in later chapters where the game teaches a field ability and the one where the Termite King hands over the submarine (both new in 0.3.0). More chapters come later.
 
 ## Options
 
@@ -20,9 +20,9 @@ Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's 
 - **Shop Contents** (No Progression): what shop locations may hold.
 - **Shuffle Shop Inventories** (on): what item shops restock and what respawning floor items come back with is
   shuffled among themselves (food and other consumables only, each as often as before). Never a check or location:
-  the first purchase or pickup is still the check, and this changes only what comes after. New in this version.
+  the first purchase or pickup is still the check, and this changes only what comes after. New in 0.3.0.
 - **Entrance Randomizer** (off, experimental): doors between areas lead somewhere else. Coupled: a door and its way
-  back stay a pair. Decoupled (new in this version): the way back is shuffled too, so turning round can take you
+  back stay a pair. Decoupled (new in 0.3.0): the way back is shuffled too, so turning round can take you
   somewhere else. Or Room Swap, whole rooms trading places (see below). The spoiler log lists where each door leads.
 - **Enemy Shuffle** (off): ordinary enemies on each map are swapped for others of the same group size.
 - **Starting Location** (off, experimental): a new file begins in any room in the game.
@@ -32,28 +32,28 @@ Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's 
 - **Filler Starting Checks** (on): the checks a new file sends by itself when the game begins (Maki and Eetl's gift,
   the tutorial battle, and the opening spot when members are items) hold filler only, so a seed doesn't open with its
   good items. Nothing else changes; turn it off to plando an item there. With the Entrance Randomizer on Coupled or
-  Room Swap it doesn't apply, since the doors can leave the start too small. New in this version.
+  Room Swap it doesn't apply, since the doors can leave the start too small. New in 0.3.0.
 - **Shuffle Field Moves** (off): Vi's Beemerang Toss, Kabbu's Horn Slash and Leif's Freeze are items too (the Toss and
-  the Freeze as the first copy of their progressive item, new in this version); until one arrives, that attack only buzzes, and each shows in
+  the Freeze as the first copy of their progressive item, new in 0.3.0); until one arrives, that attack only buzzes, and each shows in
   your key items once it does.
 - **Shuffle Jump** (off): Jump is an item for the whole party; until it arrives, the jump button only buzzes, and the
   pause menu's Warp is always there.
 - **Points of No Return** (off): the logic may send you somewhere only the pause menu's Warp gets you out of,
   a drop or a one-way door, so items can land in more places and you're expected to warp back. Off, it always leaves
   you a way to walk back. No one-way in the logic has a way back for it to drop yet, so for now it changes nothing.
-  New in this version.
+  New in 0.3.0.
 - **Progressive Boat** (on): the Boat Ticket and the submarine are one item found twice, the ticket first; off, two
-  items in any order (see below). New in this version.
+  items in any order (see below). New in 0.3.0.
 - **Music Shuffle** (off, under Aesthetic Options): every song plays in place of another, the same every time you play
   the seed, and the jingles (victory, game over, chapter titles) swap among themselves. The title screen, the wind,
   water, machine and breathing sounds, and the factory elevator's music stay. Samira plays the song you pick. It changes nothing
-  else. New in this version.
+  else. New in 0.3.0.
 
 Each option's description in the yaml says what it does in full and how many checks it adds.
 
 ## Room Swap
 
-Set *Entrance Randomizer* to `room_swap` (experimental, new in this version). Whole rooms trade places with rooms that
+Set *Entrance Randomizer* to `room_swap` (experimental, new in 0.3.0). Whole rooms trade places with rooms that
 have as many doors, in the same part of the world, so the map keeps the game's shape: only which room sits where
 changes. Turning round always takes you back where you came from. It is gentler than Coupled, where any door may lead
 to any other. As with Coupled, the logic follows the doors but not yet what each room needs inside, so a seed may not
@@ -61,7 +61,7 @@ be finishable; the pause menu's Warp gets you out of a dead end.
 
 ## Plando: choosing where doors lead
 
-With *Entrance Randomizer* on Coupled or Decoupled, `plando_connections` pins doors (new in this version). Each door is
+With *Entrance Randomizer* on Coupled or Decoupled, `plando_connections` pins doors (new in 0.3.0). Each door is
 named by its map and its door, `MapName: DoorName`, as the spoiler log's Entrances section lists them. `entrance` is the door you go through, `exit`
 the door you arrive next to:
 
@@ -84,7 +84,7 @@ the Beemerang Halt, Bee Fly, the Dash, the Horn Dash, Beetle Dig, the Icicle and
 items, in the game's own order: **Progressive Beemerang** (the Toss, then the Halt), **Progressive Dash** (the Dash,
 then the Horn Dash) and **Progressive Freeze** (the Freeze, then the Icicle). An ability works once its item arrives,
 wherever you are in the story, and its battle skill comes with it. The logic for chapters 2 to 7 is cautious for now:
-each teaching scene counts as reachable only once every ability taught before it is yours. New in this version.
+each teaching scene counts as reachable only once every ability taught before it is yours. New in 0.3.0.
 
 ## The boat and the submarine
 
