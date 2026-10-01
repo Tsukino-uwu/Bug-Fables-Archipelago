@@ -2347,6 +2347,19 @@ either one wrong).
     "once per launch" resets on hot reload; Detector's help line (it beeps for any check in a seed); `DevConsole.cs:649`
     (Rarity's colours by default). Plus about 20 comments carrying provenance or past attempts (the lean-comment rule),
     listed in the agent's report: ApMenu.cs:690, WarpButton.cs:42, EnemyScaling.cs:112, Abilities.cs:107 the clearest.
+- **The fact check, continued (a fourth session, 2026-10-02, the user's list; each finding read in `decompiled/` by
+  me, no agents):**
+  - MEASURED.md from line 1064: F1-F7 fixed as checked above (F5's two characters are Vi and Kabbu by name; F6 about
+    420 `GetEntity` calls, a few null-checked; F7's arrays: window 1 11, window 3 8, the controls page 12). F8-F18 all
+    held and fixed: Vi's hold-tap waits on `beemerang`, Kabbu's and Leif's on `actionroutine`; `EnemyCheck` runs for
+    story fights too (its random swap only outside an event, and 50 or 99 always becomes `{50, 99}`); hologram mode
+    skips Zommoth's scripted moves and revives, the Everlasting King's lines and revives, and the Wasp King's scripted
+    exit (a win instead); the King removes its own `SurviveWith10` at its last phase; Event3 is the cooking scene (two
+    Abomihoneys, a copy of the cook in the stage), only Event6 sets `disablespy`/`tempdata`; Event120 reads no
+    `battleresult`, Event85 does; Kabbu's base Flip at `:11551`, `:11570` (Heavy Strike's at `:11545`, `:11566`);
+    Event61 drops the party in at one spot (a second line, `:1038`, also called it a plain `LoadMap`); each loop-point
+    line is `end;start`; Mothfly's heal is capped at the healed one's `maxhp`; flag 281 still set nowhere, and
+    `snakemouth_den.py` keys the three pickups on their regional flags.
 
 ## 2026-10-01: text logic or the Rule Builder, for the trackers
 

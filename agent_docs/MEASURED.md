@@ -1035,7 +1035,8 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   starting stock 0 (45), 1 (55), 7 (35), 12, 30, 86, 84, 87, 88 (30 each), 81 (45).
 - **The way down to Shades's shop (the underground bar, map 30)** (2026-09-25, entity dump, ScriptDump, code): no door;
   `HideoutEntrance` on `BugariaCommercial` is examined (Check). Its lines: default 27 (sets flag 8), with flag 8 line
-  30, with flag 135 line 32, which starts Event61, a plain `LoadMap(30)` with no party lookups. Flag 135 is set when quest 6
+  30, with flag 135 line 32, which starts Event61: `LoadMap(30)` with the party remade and placed, no fixed party slot
+  read (`EventControl.cs:9865-9872`). Flag 135 is set when quest 6
   (UndergroundBar) is completed, in Event77 (`EventControl.cs:12698`). The tester asked for it set on a test file to reach the shop.
 - **Shops (`badgeshops[0]` is Merab's, `[1]` Shades's, for crystal berries):** new game (`MainManager.cs:4010`)
   Merab 0, 1, 7, 12, 30, 86, 84, 87, 88, 81 and Shades 19, 6, 9, 43, 42 (both open later in the story); Event73
@@ -1073,10 +1074,10 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 - A shop slot's description box, CreateDescWindow(shop), reads the medal's name and description from badgedata[id, 0] and [id, 1]; NPCControl.Interact copies the name into the buy prompt's text and the price into flagvar[1] (NPCControl.cs:4183-4228, 4360-4372). Used by `ShopSwap.cs`.
 - UpdateShops rebuilds the shelf pool from badgeshops on every map start and after each purchase (MainManager.cs:4087, MapControl.cs:343, NPCControl.cs:1528); the game's own shoppool command writes badgeshops (MainManager.cs:11638-11657); the money command clamps to 0-999 (MainManager.cs:12580-12590). Used by `ShopSwap.cs`.
 - Map entity table rows (Data/EntityData/<map id>) are fields split by '}': field 0 the entity type (`entitytype`, an `NPCType`), field 1 the object type (`objecttype`, e.g. DoorOtherMap), field 60 the data count followed by the data values (61 = the target map for a door), field 71 the vectordata count followed by x,y,z triples from 72 (MapControl.cs:1473-1474, :1540-1566). Used by `QualityOfLife.Opening.cs`.
-- MainManager's private static `currentdialogue` and `diagstring` (List<string>) are the line being shown and the lines so far; holding skip only works when they match (on the newest line), a box is open, no prompt/list, not |noskip| (MainManager.cs:2749, :2799, :5125-5140). Used by `QualityOfLife.cs`.
+- MainManager's private static `currentdialogue` and `diagstring` (List<string>) are the line being shown and the lines so far; holding skip only works when they match (on the newest line), a box is open, no prompt/list, not |noskip| (the fields MainManager.cs:2749, :2747; the test :5125-5141). Used by `QualityOfLife.cs`.
 - The intro slides' fades are per-frame lerps scaled by Time.smoothDeltaTime (MainManager.TieFramerate, MainManager.cs:9567), so Time.timeScale speeds them; the game itself uses timeScale 2.5 for cooking (MainManager.cs:5546), and EndEvent resets timeScale to 1 (EventControl.cs:184). Used by `QualityOfLife.cs`.
 - A hold-up's Giveitem shows its follow-up line via GetDialogueText(redirect) (MainManager.cs:11592); |end| sets `end`, which skips the final wait for a press (MainManager.cs:11909-11910, :14171); a negative id reads commondialogue (MainManager.cs:10186); each slide line waits for a press at its end (MainManager.cs:14169-14174). Used by `QualityOfLife.Scenes.cs`.
-- Event8 (new game): its first step after the slides is ChangeParty({1}, fromscratch: true, destroyoldentity: false), Kabbu alone (EventControl.cs:2740-2755); its end is HUD back, ResetCamera, the building's music, EndEvent, fade-in (EventControl.cs:2858-2866); after its slides it stands Kabbu 2.5 left of entity 4 (EventControl.cs:2770); the slides' backdrop NewSolidColor("back") is made at EventControl.cs:2655 and lives through 2656-2735. Used by `QualityOfLife.Opening.cs`.
+- Event8 (new game): its first step after the slides is ChangeParty({1}, fromscratch: true, destroyoldentity: false), Kabbu alone (EventControl.cs:2740-2755); its end is HUD back, ResetCamera, the building's music, EndEvent (EventControl.cs:2857-2866), with no fade-in there: it fades in earlier (:2742, or :2780 when flagvar[0] is 0); after its slides it stands Kabbu 2.5 left of entity 4 (EventControl.cs:2770); the slides' backdrop NewSolidColor("back") is made at EventControl.cs:2655 and lives through 2656-2735. Used by `QualityOfLife.Opening.cs`.
 - Event16's end points the camera at the new leader (EventControl.cs:3795); the starting house's exit only hands the camera back to the player for insides that centre on themselves (MapControl.cs:1373). Used by `QualityOfLife.Opening.cs`.
 - Bridge scenes: Event0 (bridge message) is party/camera moves, three lines, flag 11, and flag 11 hides its trigger BridgeMessage (limit 11) (EventControl.cs:274-333); Event1 (rope) plays the bridge's Fall animation, fixes it fallen, then flags 7 and 11 (EventControl.cs:334-407); Event83 barkeeper's first talk sets flag 158, and its else branch handles bounties (EventControl.cs:13052-13080). Used by `QualityOfLife.cs`.
 - Shopkeeper prompts are |prompt,map,Y,N,target1..targetN,text1..textN| (MainManager.cs:12213-12222). Used by `QualityOfLife.Opening.cs`.
@@ -1089,14 +1090,14 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 - A pickup's touch starts in NPCControl.OnTriggerEnter, an Enter trigger: standing on an item doesn't take it again, stepping off and back on does (NPCControl.cs:4516). Used by `DevConsole.cs`.
 - A pickup's touchcooldown is waited out by CheckItem (NPCControl.cs:5608) and counted down each frame (NPCControl.cs:2802); 90 holds it about 1.5 s. Used by `DevConsole.Warp.cs`.
 - Every hit's damage ends in BattleControl.DoDamage(attacker, ref target, amount, property, overrides, block); the other overloads lead there. The game tells the party from enemies by the target's "Player" tag (BattleControl.cs:7283, :7295). Used by `DevConsole.cs`.
-- EntityControl.Jump is the normal jump (height and sound, EntityControl.cs:4598, via PlayerControl.DoJump); the player's own jump only fires on the ground (PlayerControl.cs:372); a jump sets jumpcooldown to 30 frames, longer than the whole jump (measured in the log 2026-09-24). Used by `DevConsole.cs`.
-- Map entity table Data/EntityData/<map id>: rows split on '}', fields 6-8 the start position, field 194 the activationflag, as MapControl.CreateEntities reads them (MapControl.cs:1477-1640, :1661). Used by `DevConsole.Warp.cs`, `WarpButton.cs`.
+- EntityControl.Jump(float) is the normal jump: it sets the upward velocity, offgroundframes 20 and jumpcooldown 30 (EntityControl.cs:4598-4607); the sound is PlayerControl.DoJump's (PlayerControl.cs:1555). The player's own jump fires on the ground, or within 3 frames of leaving it while jumpcooldown is 0 (PlayerControl.cs:372); jumpcooldown's 30 frames outlast the whole jump (measured in the log 2026-09-24). Used by `DevConsole.cs`.
+- Map entity table Data/EntityData/<map id>: rows split on '}', fields 6-8 the start position, field 194 the activationflag, as MapControl.CreateEntities reads them (MapControl.cs:1477-1640; the activationflag :1650, the start position :1661). Used by `DevConsole.Warp.cs`, `WarpButton.cs`.
 - MainManager.TransferMap ends by walking the party to its target and waits for that walk (MainManager.cs:17610-17624): a target over water is never reached, the transition never ends, and the game keeps respawning the party there (seen at SnakemouthLake, 2026-09-24). Used by `DevConsole.Warp.cs`.
 - Water raycasts as ground; water, spikes and pits carry the game's Hazards component. Used by `DevConsole.Warp.cs`.
 - A map's auto-start cutscenes (MapControl.autoevent, pairs of (flag, event)) run on arrival while their flag is off (MapControl.cs:874-883); arriving out of story order, Event21 on SnakemouthUndergrondDoor crashed and left the game "in an event" (2026-09-24). Used by `DevConsole.Warp.cs`.
 - Resets for what a dead cutscene leaves: MainManager.ResetCamera (MainManager.cs:7398), MapControl.RestoreLimit (MapControl.cs:1432), MainManager.ChangeMusic() for the map's own music (MainManager.cs:4873); Event31 left all three broken (2026-09-24). Used by `DevConsole.Warp.cs`.
 - PlayTransition 4 ends on a black dimmer (MainManager.cs, Transition case 4 -> 0); PlayTransition 1 fades in and removes it. The boat scene (Event107) parents the party to the boat with LockRigid(true) and undoes both at its end (unparent, LockRigid(false), fade in). Used by `DevConsole.Warp.cs`.
-- The trapdoor scene turns the party's gravity off and forces an animation (EventControl.cs:1334-1335). Used by `DevConsole.Warp.cs`.
+- The trapdoor scene (Event5) turns gravity off and sets overrideanim and overrridejump for both its characters, Vi and Kabbu (EventControl.cs:1292-1296), then gives Vi her fall animation, 107 (:1334-1335). Used by `DevConsole.Warp.cs`.
 - The game's dialogue end turns off message and the waits, and shrinks and removes the box (MainManager.cs:14185-14204). The private field `textbox` holds only the letters ("Text: ...", MainManager.cs:10677, :10814); the speech box is the Textbox prefab kept in maintextbox (MainManager.cs:10781), and an orphan "Textbox(Clone)" can stay under the GUI camera after dialogue ends. Used by `DevConsole.Warp.cs`.
 - The found-item line (read in game, 2026-09-26, `articles`): Giveitem shows menutext[106], `You got |string,1| |color,1||string,0||color,0|!` (menutext[110] `You got |currency,var,0|!` for the other case, MainManager.cs:11528-11539, :11564); flagstring[1] is the article, menutext[125] `a` by default, else the item's itemdata[0, id, 3] with no trailing space (`a` for Crunchy Leaf, Mushroom, Danger Shroom, Bad Book; `the` for Explorer Permit and Overdue Book). So a blank article leaves two spaces unless the line's own space goes too. A world pickup's line is menutext[2], `You found |string,1| |color,1||string,0||color,1|!` (NPCControl.cs:5650-5693; its "!" is red), with the article flagstring[1] set from the item picked up. Used by `ItemSwap.cs`.
 - How a line is laid out (code read 2026-09-30): Giveitem draws `|sort,1||center||halfline|` + menutext[106] with the three-argument SetText, which has no line width (MainManager.cs:11564, :10074), so a long line runs past the box (seen 2026-09-30: "You got a Poison Resistance Medal from BugTester!" past both edges). A letter advances `GetLetterOffset(c, font, size.x)` (public, :9776), a space 0.3 x size.x, a `|command|` nothing (:13942-13946, :14025); at a Japanese, Russian or Korean letter the font turns 3, 4 or 5 and stays so (:13962-13979). `|line|` starts the next line at the left, 0.7 x size.y lower (:11738-11760); `|center|` moves the whole block by half its widest line, so the lines of a block start at the same x (:14027-14036). The engine's own shrink for a long substituted string is `|string,N,clamp,max,mult|`, which wraps it in `|sizemulti,mult,1|...|size,x,y|`, narrowing only (:12694-12697). The dialogue box wraps at `messagebreak` (9.75 in English, 10.5 otherwise, set each frame, :7236) with `OrganizeLines` (:9915-10018), which runs before `|string,N|` is filled in, so a name in a pickup's line is never measured (NPCControl.cs:5724). The game runs in the en-US culture (:2861), so a number in a command is written with a point. Used by `TextFit.cs`.
@@ -1166,12 +1167,12 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   are the enemy table's column 23, `N{Prop{Prop{` (MainManager.cs:6387-6398); the King's holds `SurviveWith10`, the
   Beast gets it from `Event137` after the fight starts (EventControl.cs:23137). The Beast's HP is 76 (seen in
   vanilla, `log.md`, 2026-09-28). Used by `EnemyScaling.cs`.
-- MainManager.GetEntity: -2 and -3 are the second and third member by position (MainManager.cs:18526-18537), -4/-5/-6 are Vi/Kabbu/Leif by name (MainManager.cs:18538-18570), 1000 + n reads map.tempfollowers[n] (MainManager.cs:18512-18515) and throws ArgumentOutOfRange when nobody is there; no caller null-checks the result. Used by `PartyFit.cs`.
+- MainManager.GetEntity: -2 and -3 are the second and third member by position (MainManager.cs:18526-18537), -4/-5/-6 are Vi/Kabbu/Leif by name (MainManager.cs:18538-18570), 1000 + n reads map.tempfollowers[n] (MainManager.cs:18512-18515) and throws ArgumentOutOfRange when nobody is there; of about 420 callers, only a few null-check the result (GetPartyEntities, MainManager.cs:9498; Event1, EventControl.cs:336). Used by `PartyFit.cs`.
 - The main menu's confirm sound: StartMenu.Update plays "Confirm" for every main-menu choice (menuid 1) before acting on it. Used by `MenuToggle.cs`.
 - On the file select (menuid 2, submenu 0), confirm on file 0-2 is StartMenu.Update's load or new-game branch (StartMenu.cs:512-535, Event22 or Event8); the save slots' boxes sort at -20 to -60 and their text at 10 (StartMenu.ShowSaves). Used by `MenuToggle.cs`.
 - Closing the game's Settings from the title resets maxoptions to 3 (PauseMenu.cs:1811). Used by `MenuToggle.cs`.
 - MainManager.Create9Box box type 1 is the game's orange box; ButtonSprite draws its label with no sort of its own, so the label text must carry |sort,N| to show over a box. Used by `MenuToggle.cs`.
-- Pause menu window 0: maxoptions icons (4, or 2 in battle) built in BuildWindow as sprites[13 + n] with guisprites[74 + n] via NewUIObject (PauseMenu.cs:2378-2497, :2493-2497); window 0's sprites array is 19 long (:2404), other pages' 8 to 12 (PauseMenu.cs:2235-2678); confirm opens window option + 1 (:374-380); labels are menutext[10 + option] and [50 + option] (UpdateText); IconAnim gets {13, 14, 15, 16} and indexes by option (PauseMenu.cs:351); PrepareExit shrinks the boxes and DestroyPause follows 0.25 s later (PauseMenu.cs:1839). Used by `WarpButton.cs`.
+- Pause menu window 0: maxoptions icons (4, or 2 in battle) built in BuildWindow as sprites[13 + n] with guisprites[74 + n] via NewUIObject (PauseMenu.cs:2378-2497, :2493-2497); window 0's sprites array is 19 long (:2404), window 1's 11, window 2's 20 (only 0-10 and 12-14 filled), window 3's 8, the controls page's 12 (PauseMenu.cs:2235-2678), and the map's (window 6) one per area plus one, a marker at area + 1 for each visited area (:2779); BuildWindow shrinks the old page's boxes for 0.2 s before it builds the new one, so for that long `sprites` is still the old page's (:2348-2368); confirm opens window option + 1 (:374-380); labels are menutext[10 + option] and [50 + option] (UpdateText); IconAnim gets {13, 14, 15, 16} and indexes by option (PauseMenu.cs:351); PrepareExit shrinks the boxes and DestroyPause follows 0.25 s later (PauseMenu.cs:1839). Used by `WarpButton.cs`.
 - The game's menu cursor sprite is MainManager.cursorsprite[0], set up as at MainManager.cs:14822 (sort, layer 5, SpriteBounce.MessageBounce). Used by `WarpButton.cs`.
 - A new game begins on the Outskirts: Event8 loads map 16 (EventControl.cs:2636). Used by `WarpButton.cs`.
 - guisprites[34] is a round blue map icon in the pause-menu icon style (from SpriteDump's sheet). Used by `WarpButton.cs`.
@@ -1205,7 +1206,7 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 - Cut grass that drops an item copies its own one-time flag onto the drop (NPCControl.cs:5981-5983), so a grass drop is an ordinary pickup location (location id 12). Used by `logic/outskirts.py`.
 - The Lore Book behind the Ant Palace library bookshelf is flag 71 (play-through log, 2026-09-24) (location id 15). Used by `logic/bugaria_city.py`.
 - A ground crystal berry's map data holds its index in data[3], copied to data[0] at load (NPCControl.cs:938); a berry dropped from cut grass has the index in the grass's data[1], carried by the drop in data[0] (NPCControl.cs:5967-5972) (location ids 19, 21). Used by `logic/outskirts.py`, `logic/snakemouth_den.py`.
-- Flag 281 (one of the three respawning Snakemouth pickups' hiding flags) is set by nothing found in the code, the map scripts or the entities (2026-09-24); MEASURED.md only records it reading False in play (location ids 22, 23, 24). Used by `logic/snakemouth_den.py`.
+- Flag 281 (one of the three respawning Snakemouth pickups' hiding flags) is set by nothing found in the code, the map scripts or the entities (2026-09-24, again 2026-10-02) and read False in play, so each of the three is hidden only by its regional flag (24, 29, 28), which `logic/snakemouth_den.py` keys them on (location ids 22, 23, 24). Used by `logic/snakemouth_den.py`.
 - Entities behind pickup locations: `SnakemouthUndergrondDoor` entity 6 (HoneyDrop, id 22) and entity 20 (`CrunchyLeaf - Duplicate`, holding a Mushroom, id 23); `SnakemouthUndergroundRightB` entity 11 (CrunchyLeaf, id 24); `BugariaOutskirtsEast1` entity 38 (a Drowsy Cake under a stone, flag 735, id 25); `BugariaResidential` entity 39 (`badbook`, id 32) and entity 10 (`BugMeNot - Duplicate`, flag 59, id 33); Madeleine's house (inside 2) entity 71 (`tea`, Burly Tea, x 36, id 44) and entity 54 (`lorebookmadeleine`, Lore Book, x 33.6, activationflag 392, id 45) (EntityData / entity dump). Used by `logic/snakemouth_den.py`, `logic/outskirts.py`, `logic/bugaria_city.py`.
 - The pier statue's dialogue line 63 runs `|discovery,49|` (ScriptDump; `BugariaPier`'s own discovery list is 49, MapDump); examining it set flag 654 in the play log (2026-09-25) (location id 27). Used by `logic/outskirts.py`.
 - Discovery sources: Event11 (arrival outside Snakemouth) is `OutsideSnakemouth`'s autoevent 22:11 (MapDump) and records discovery 0 (EventControl.cs:3095); Event6 (fall room EventTrigger, data 6, limit 27) records discovery 1 at its end (EventControl.cs:2293); Event13 (entity `HiddenEvent` on `SnakemouthBridgeRoom`) records discovery 2 (EventControl.cs:3278); Event27, started by cutting the grass entity `AncientHouseDiscovery` (BeetleGrass) on `SnakemouthUndergrondDoor`, records discovery 3 (EventControl.cs:5001) (location ids 28-31). Used by `logic/outskirts.py`, `logic/snakemouth_den.py`.
@@ -1216,7 +1217,7 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 - Event12 (the "turn back" blockers) only walks the player and sets no flags (kept_open eetlblocker1 - Duplicate, MM). Used by `logic/outskirts.py`, `logic/bugaria_city.py`.
 - The town's arrival-scene trigger is `DoorBugaria - Duplicate` on `BugariaOutskirtsOutsideCity` (an EventTrigger starting Event60, hidden by 107); the real door `DoorBugaria` is a DoorOtherMap to map 9 requiring 107 (kept_open / kept_present). Used by `logic/outskirts.py`.
 - On `BugariaOutskirtsOutsideCity`, `MiningAnt` and `MinerAntWalk` (miners at the rocks), `Crickerly1` (talk only) and `FuzzyMoth` all have limit 41; `LaydbugGirl` and `LaydbugBoy` require 41, with everyday lines 100 ("Dib, please don't do anything reckless") and 101 ("I'm not a kid anymore, Leby!"); their other lines answer to the lost-brother quest's flags (kept_open / kept_present). Used by `logic/outskirts.py`.
-- The field attack is `PlayerControl.DoActionTap`, by the leader's `playerdata[0].animid` (0 Vi's beemerang, only while `!flags[41] || flags[11]`; 1 Kabbu's horn; 2 Leif's ice), started from a tap or from `DoActionHold`; the jump is `PlayerControl.DoJump`, called only by the jump button (PlayerControl.cs:372-392, 1008-1100, 1549); the game's refusal sound is `MainManager.PlayBuzzer()` ("Buzzer", used by the pause menu). Read 2026-09-27. **A Harmony prefix on `DoActionTap` itself never runs** (seen 2026-09-27: no refusal logged while attacks worked): it only builds the coroutine, and the runtime inlines it into its callers; its `MoveNext` is patched instead. `DoActionTap` clears `actionroutine` only at its end (PlayerControl.cs:1224), and `DoActionHold` starts a tap only while it is null. The game's items end at 186 (`MainManager.Items`), so 200-204 are free for the mod's own. **The game's names for the three field attacks** (its `Skills` text, English, read with the dev `textsearch`, 2026-09-27): line 34 "Beemerang Toss" (Vi), 37 "Horn Slash" (Kabbu), 40 "Freeze" (Leif); the list has no entry for jumping. Used by `FieldMoves.cs`, `CustomItems.cs`, `data/items.json`.
+- The field attack is `PlayerControl.DoActionTap`, by the leader's `playerdata[0].animid` (0 Vi's beemerang, only while `!flags[41] || flags[11]`; 1 Kabbu's horn; 2 Leif's ice), started from a tap or from `DoActionHold`; the jump is `PlayerControl.DoJump`, called only by the jump button (PlayerControl.cs:372-392, 1008-1100, 1549); the game's refusal sound is `MainManager.PlayBuzzer()` ("Buzzer", used by the pause menu). Read 2026-09-27. **A Harmony prefix on `DoActionTap` itself never runs** (seen 2026-09-27: no refusal logged while attacks worked): it only builds the coroutine, and the runtime inlines it into its callers; its `MoveNext` is patched instead. `DoActionTap` clears `actionroutine` only at its end (PlayerControl.cs:1224), and `DoActionHold` starts Kabbu's or Leif's tap only while it is null (Vi's only while no beemerang is out, `:1272`). The game's items end at 186 (`MainManager.Items`), so 200-204 are free for the mod's own. **The game's names for the three field attacks** (its `Skills` text, English, read with the dev `textsearch`, 2026-09-27): line 34 "Beemerang Toss" (Vi), 37 "Horn Slash" (Kabbu), 40 "Freeze" (Leif); the list has no entry for jumping. Used by `FieldMoves.cs`, `CustomItems.cs`, `data/items.json`.
 - `SnakemouthFallRoom`'s `JumpShroom` (the bounce mushroom up to the pitfall room) requires 41 like `LoadingZoneDoorRoom` (kept_present). Used by `logic/snakemouth_den.py`.
 - `OutsideSnakemouth` (seen on screen, 2026-09-26): the arrival discovery (0) is reached from either side; the crystal berry (#0, location 19) and the dig spot (`Mound - Duplicate`, entity 12, hidden by flag 683) is reached from the cave's side, and from the Outskirts' side only by cutting the grass across the middle (entities 2-8, `BeetleGrass`). Both need the horn from the Outskirts' side, or the way round through the cave (the dig spot is no location yet). Used by `logic/outskirts.py`.
 - The palace's own blockers `makiblocker1` and `makiblocker2` stay in place: the story goes on there (kept_open MM). Used by `logic/bugaria_city.py`.
@@ -1231,8 +1232,10 @@ step 14).
 - **One entry point:** every fight goes through `BattleControl.StartBattle(int[] enemyids, int stageid, int adv,
   string music, NPCControl calledfrom, bool canescape)` (`BattleControl.cs:718`). A map enemy passes itself as
   `calledfrom` with its `battleids` (`NPCControl.cs:5947`, `canescape: true`). A story fight passes `calledfrom:
-  null` with a literal id array from its event. The game's own random swap (`EnemyCheck`, `:703-716`) runs only for
-  map fights (`calledfrom == null || calledfrom.eventid <= 0`), then `StartData` snapshots the ids for a retry.
+  null` with a literal id array from its event. The game's own `EnemyCheck` (`:703-716`) runs for every fight but a
+  respawning map enemy's (`calledfrom == null || calledfrom.eventid <= 0`, `:743`), story fights included: outside an
+  event it swaps a few ids for 32 at random, and any fight with 50 or 99 becomes `{50, 99}`. Then `StartData`
+  snapshots the ids for a retry.
 - **The running event's id** is `MainManager.lastevent`: set first thing in `EventControl.StartEvent`, -1 in
   `EndEvent` (`EventControl.cs:76`, `:177`).
 - **Scripted fights: 69 `StartBattle` calls in `EventControl.cs`** (listed with `grep -n "StartBattle("`). One event
@@ -1252,18 +1255,24 @@ step 14).
   stage, not the boss's own), with `canescape: true`. Its only per-boss setup is a switch: the id group (2 → {13};
   41 → {20, 20, 41}; 72 → {27, 26, 72}; -1 → {3, 15}; -2 → {113, 114, 115}; 23/51 and 85/86 as pairs) and the music,
   plus one flag reset for the first boss (`flagvar[11] = 0`, `flags[37] = false`). It runs with `flags[162]`
-  (hologram mode), which changes only the look, EXP and fleeing money (`BattleControl.cs:974`, `:6487`, `:30333`,
-  `:30411`; `MainManager.cs:6294`), not any enemy's actions.
+  (hologram mode), which changes the look, EXP and fleeing money (`BattleControl.cs:974`, `:6487`, `:30333`,
+  `:30411`; `MainManager.cs:6294`) and skips some bosses' story parts: Zommoth's scripted moves, revives and Leif's
+  rejoin (`:23321-23563`), the Everlasting King's lines and revives at a phase (`:20828`, `:20857`), and the Wasp King's exit
+  from the fight at its defeat, a win instead (`EventDialogue` 17, `:2618-2632`).
 - **Events that reach into the running fight** (a swap there needs care):
-  - Event137 (id 69) adds `SurviveWith10` to `enemydata[0]` (`EventControl.cs:23137`). Only enemy 69's own action
-    removes it (`BattleControl.cs:18361-18470`), so another enemy in that slot could never die. **Not swappable.**
+  - Event137 (id 69) adds `SurviveWith10` to `enemydata[0]` (`EventControl.cs:23137`). Only an enemy's own script
+    removes it, each from itself: the Beast's (`BattleControl.cs:18361-18470`) and the Everlasting King's at its last
+    phase (`:20899`). So another enemy in that slot could never die. **Not swappable.**
   - Event182 (id 96) freezes `playerdata[2]` with `EventStop` and calls `SetLastTurns()` (`:30665-30671`), a
     scripted fight. **Not swappable until read.**
   - Event40 (three fights) and Event224 reach into the stage (`battlemap.transform.GetChild(...)`, `:6313`,
     `:37599`); keeping the event's own stage keeps that safe.
-  - Event3 and Event6 (tutorial fights) move entities into the stage and set `tempdata` / `disablespy`.
+  - Event3, the cooking scene, starts one fight (two Abomihoneys, `{48, 48}`, `:893`) and puts a copy of the cook
+    into its stage (`:899-902`); Event6 (the spider tutorial's two fights, `:1702`, `:1935`) sets `disablespy` in
+    both and `tempdata` in the second.
   - Event173 calls `StartData({23, 51}, ...)` itself (`:29004`, `:29251`), overwriting the retry snapshot.
-  - Events that test `battleresult` for a scripted loss or a retry: 30, 40, 90, 120, 156, 163, 192, 207, 210, 224.
+  - Events that test `battleresult` (a scripted loss, a retry, a prize): 30, 40, 85 (the rematch machine), 90, 156,
+    163, 192, 207, 210, 224.
 - **Code tied to an enemy's id** (from the survey, not each read): `eventondeath` (column 26) sends a defeat into
   `EventDialogue` (`BattleControl.cs:1972`, `:30719-30731`); setup by id at `:976+` (VenusBoss's extra entity,
   fixed positions for BeeBoss, SandWyrmTail, Pitcher); `GetEnemyData` swaps some ids' data (`MainManager.cs:
@@ -1302,8 +1311,8 @@ step 14).
   - So for the base attacks: a flier needs Vi, the Sandworm needs Leif, and a Random one needs whichever position it
     takes.
   - **Kabbu flips** (2026-09-27, code read; the tester's rule of thumb the same day: Leif hits the burrowed, Kabbu the
-    ones to flip over, Vi the ones in the air). Kabbu's base attack carries `AttackProperty.Flip` (`BattleControl.cs:11545`,
-    `:11551`). "Flip" is the tester's word for it: Kabbu's attack knocks the enemy over, and then its defence is reduced
+    ones to flip over, Vi the ones in the air). Kabbu's base attack carries `AttackProperty.Flip` (`BattleControl.cs:11551`,
+    `:11570`; Heavy Strike's hits `:11545`, `:11566`). "Flip" is the tester's word for it: Kabbu's attack knocks the enemy over, and then its defence is reduced
     (in the code, a flipped enemy's defence is 0: `TrueDef`, `:3131`). Which enemies it works on: those with `Flip`
     among their weaknesses (enemy data column 23, `{`-separated after a count; EntityDump's `weakness` column, run
     2026-09-27 on the test machine): only **five**, all Ground, all defence 2: Cactiling 4, Inichas 8, Acornling 16,
@@ -1625,8 +1634,8 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
 - **No map has a spawn spot of its own** (2026-09-30, code read): `LoadMap(id)` places no one. The party keeps its
   position from the map before or, with `recreateplayers`, is made anew by `SetPlayers()` with no position given. So
   every transfer names its own spot: a door's `vectordata[1]`, a scene's position set after `LoadMap`, a dialogue
-  line's `|warp,map,x,y,z|`. A scene that sets none (Event61, the bar's hatch, a plain `LoadMap(30)`) leaves the party
-  at the coordinates it had; where that puts it in the bar is to see in play.
+  line's `|warp,map,x,y,z|`. The bar's hatch (Event61) sets one after `LoadMap(30, recreateplayers: true)`: each member
+  dropped in at (-20.34, 9, 0.53), one unit higher per member (`EventControl.cs:9865-9872`).
 - Used by `SaveCrystals.cs`, `DeathLinkGame.cs` and `AutoSave.cs`.
 
 ## Upper Snakemouth's boss: Leif out until its beam (2026-09-28, code read; seen in play)
@@ -1680,7 +1689,7 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
     `MainManager.Musics` names. There are 75 (`:298-375`).
   - Music loads from `Audio/Music/<name>`; a map's tracks are `MapControl.music`, chosen by `musicflags`
     (`MapControl.cs:433-461`).
-- **Loop points:** `Data/LoopPoints`, one `start;end` line per track (`LoopPoint`, `:7655-7668`). `LoopMusic`, run in
+- **Loop points:** `Data/LoopPoints`, one `end;start` line per track (`LoopPoint`, `:7655-7668`). `LoopMusic`, run in
   `FixedUpdate`, sends the player back to the second value once it passes a non-zero first (`:7671-7684`).
 - **What reads the playing track back.** None of these would survive a swapped clip:
   - The victory fanfare `BattleWon` plays only when the music is `Battle0` or `Battle6` (`BattleControl.cs:4069`).
@@ -1760,7 +1769,7 @@ fixed one, read in its code:
 | :17519 | Pisci | `Heal(4)` on an ally | scale |
 | :18340 | Weevil | `Heal(heavystrike ? maxhp : 5)` | scale the 5 only |
 | :18361 | the Beast | `hp <= 10` | keep: its scripted end (enemy scaling keeps the 10) |
-| :19197 | Mothfly | `Heal(Clamp(maxhp × 0.075, 2 + …, 99))` | relative, with a floor: keep |
+| :19197 | Mothfly | `Heal(Clamp(maxhp × 0.075, 2 + …, maxhp))`, the healed one's `maxhp` | relative, with a floor: keep |
 | :20213, :20215 | Peacock Spider | `hp < 1` → `hp = 1` | keep: survive at 1 |
 | :20579 | Wasp King | `hp = 999` | keep: invulnerable marker |
 | :20793 | Wasp King | `Heal(stolen ? 4 : 5)` | scale |
