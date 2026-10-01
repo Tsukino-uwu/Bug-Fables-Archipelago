@@ -109,8 +109,7 @@ namespace BugFablesAP
             return scaled;
         }
 
-        // The fixed numbers in enemy scripts the survey marked "scale" (MEASURED.md, "Fixed numbers in the enemies'
-        // scripts"), each by the ratio of the enemy whose HP it measures.
+        // The fixed numbers in enemy scripts that scale, each by the ratio of the enemy whose HP it measures.
         private static class ScriptNumbers
         {
             // A literal heal amount marks itself on its way to the call; the heal is scaled only when the one healed

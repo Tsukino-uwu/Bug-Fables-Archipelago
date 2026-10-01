@@ -2360,6 +2360,23 @@ either one wrong).
     Event61 drops the party in at one spot (a second line, `:1038`, also called it a plain `LoadMap`); each loop-point
     line is `end;start`; Mothfly's heal is capped at the healed one's `maxhp`; flag 281 still set nowhere, and
     `snakemouth_den.py` keys the three pickups on their regional flags.
+  - The mod's config texts, help lines and comments, the nine findings: eight held, one didn't. Held: `giveitem` sets
+    the given item's own article (`MainManager.cs:11545`, `:11554`), so the "You got a Explorer Permit" of 2026-09-25
+    came from the hold-up's stand-in, item 0 (a Crunchy Leaf, "a"); the guide said "default article" in step 10's Item
+    animation, not step 9; Item animation's All skips starting items, the opening's checks and scene-shown finds
+    (help line and cfg text); a stop by slot (`StopSound(int)`) bypasses the hooked overload; the pickup text goes on
+    past `|additemtoss|` (a tutorial or an event); infjump's comment (the game's coyote frames, the same velocity, one
+    jump); all eight dumps run again after a hot reload, so the four "once per launch" now say "once per load"; the
+    Detector beeps for any check left in a seed (help line and cfg text); `holdup ap`'s plum and cyan are
+    Archipelago's, Rarity is the default. **Didn't hold:** `EnemyScaling.cs`'s `animid` comments: `GetEnemyData` does
+    read another row for the five fire and ice variants, but each one's column 25 points at that same row
+    (`bugfablesap-enemies.tsv`), so `animid` is the row read; recorded in MEASURED.md. Also fixed from F8:
+    `FieldMoves.cs`'s comment on the hold-tap.
+  - Lean comments (the agent's list was lost with its session, so scanned again: dates, line numbers, provenance, past
+    tense): 15 comments in 11 files reworded or trimmed, among them `ApMenu.cs`'s "measured on screen" (the width now
+    in the guide, step 10) and three MEASURED.md pointers, `WarpButton.cs`'s colour history (already in step 10) and
+    its "Diagnostic (map travel threw...)", `EnemyScaling.cs`'s survey pointer, `Abilities.cs`'s "measured read".
+    Built: 0 warnings.
 
 ## 2026-10-01: text logic or the Rule Builder, for the trackers
 

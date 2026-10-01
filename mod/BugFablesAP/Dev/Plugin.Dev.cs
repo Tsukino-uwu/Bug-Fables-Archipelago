@@ -84,14 +84,14 @@ namespace BugFablesAP
                 "Dev only. Two save file names separated by |, e.g. 'save2backup.dat|save2.dat'. Once per load, logs "
                 + "what changed between them (read-only). Empty = off.");
             scriptDumpEnabled = Config.Bind("Debug", "ScriptDump", false,
-                "Dev only. Once per launch, writes the item and flag command tokens of every map's dialogue lines to "
+                "Dev only. Once per load, writes the item and flag command tokens of every map's dialogue lines to "
                 + "BepInEx/bugfablesap-scriptdump.tsv. Off by default.");
             entityDumpEnabled = Config.Bind("Debug", "EntityDump", false,
-                "Dev only. Once per launch, writes every map's entities (type, item, required and hiding flags) to "
+                "Dev only. Once per load, writes every map's entities (type, item, required and hiding flags) to "
                 + "BepInEx/bugfablesap-entitydump.tsv, and item and medal names to bugfablesap-names.tsv. Off by "
                 + "default.");
             mapDumpEnabled = Config.Bind("Debug", "MapDump", false,
-                "Dev only. Once per launch, writes every map prefab's auto-start events, hazards and electric triggers "
+                "Dev only. Once per load, writes every map prefab's auto-start events, hazards and electric triggers "
                 + "to BepInEx/bugfablesap-mapdump.tsv. Off by default.");
             spriteDumpEnabled = Config.Bind("Debug", "SpriteDump", false,
                 "Dev only. Once per load, saves the game's GUI sprite sheets as PNGs and a table of guisprites indexes "
@@ -108,7 +108,7 @@ namespace BugFablesAP
                 + "slot_data to BepInEx/bugfablesap-seed.tsv, to compare before and after a change to how it's read. "
                 + "Off by default.");
             questDumpEnabled = Config.Bind("Debug", "QuestDump", false,
-                "Dev only. Once per launch, writes every board quest's name, BoardData numbers and QuestChecks row to "
+                "Dev only. Once per load, writes every board quest's name, BoardData numbers and QuestChecks row to "
                 + "BepInEx/bugfablesap-questdump.tsv. Off by default.");
             if (textProbeEnabled.Value)
             {

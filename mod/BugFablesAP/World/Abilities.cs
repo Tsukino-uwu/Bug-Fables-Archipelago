@@ -104,8 +104,8 @@ namespace BugFablesAP
             randomizerOn = on;
             // Patched by hand: which methods read the flags is found by reading their code, not known ahead.
             harmony = Hooks.Create("abilities");
-            // Where each measured read is (the unlock scenes): the field's uses, the thrown Beemerang's hold
-            // (flag 21 only; NPCControl's other reads are story state), and the skill lists.
+            // Where the reads are: the field's uses, the thrown Beemerang's hold (flag 21 only; NPCControl's other
+            // reads are story state), and the skill lists.
             int field = Install(Methods(typeof(PlayerControl)), keyForFlag.Keys.ToArray(), nameof(TranspileAll));
             int halt = Install(Methods(typeof(NPCControl)), new[] { 21 }, nameof(TranspileHalt));
             int skills = Install(new MethodBase[] { AccessTools.Method(typeof(MainManager), "RefreshSkills") },

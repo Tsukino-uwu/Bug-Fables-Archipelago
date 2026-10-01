@@ -123,7 +123,8 @@ namespace BugFablesAP
         }
 
         // The game clears actionroutine only at a tap's end; the caller stores the refused one after this step, and the
-        // hold path starts a tap only while it's null. Cleared a frame later, as a finished tap leaves it.
+        // hold path starts Kabbu's or Leif's tap only while it's null. Cleared a frame later, as a finished tap leaves
+        // it.
         private static readonly FieldInfo actionRoutine = AccessTools.Field(typeof(PlayerControl), "actionroutine");
 
         private static System.Collections.IEnumerator ClearActionRoutine(PlayerControl player)

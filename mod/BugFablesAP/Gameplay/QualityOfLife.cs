@@ -77,7 +77,7 @@ namespace BugFablesAP
             // The door room's puzzle solved: it moves the rocks, removes two entities and drops the trapdoor's
             // Mushroom, so fast-forwarded.
             new Scene { Map = "SnakemouthDoorRoom", Event = 4, Flags = null },
-            // The trapdoor: fast-forwarded, not skipped (a skip showed no opening or fall, just a teleport); the
+            // The trapdoor: fast-forwarded, not skipped (a skip would show no opening or fall, just a teleport); the
             // trapdoor landing below then places the party.
             new Scene { Map = "SnakemouthDoorRoom", Event = 5, Flags = null },
             // The spider: two battles, party changes, flag 27 and discovery 1, so fast-forwarded (the battles at normal
@@ -166,8 +166,8 @@ namespace BugFablesAP
                 + "new game's intro is always skipped with Archipelago enabled, whatever this says.");
             ItemAnimation = config.Bind("QualityOfLife", "ItemAnimation", "All", new ConfigDescription(
                 "Which received items are shown held up, as when you find one: Progression (items that unlock "
-                + "something), All, or Off. Replays on a new file or a reconnect count too; your own finds a scene "
-                + "already showed aren't shown twice. They always arrive either way.",
+                + "something), All, or Off. Replays on a new file or a reconnect count too; starting items never do, "
+                + "and your own finds a scene already showed aren't shown twice. They always arrive either way.",
                 new AcceptableValueList<string>(ItemAnimations)));
             ItemColors = config.Bind("QualityOfLife", "ItemColors", "Rarity", new ConfigDescription(
                 "The colours for how much an item matters, in the \"You got\" box and the starburst behind it: Rarity, "

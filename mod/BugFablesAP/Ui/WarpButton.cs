@@ -37,11 +37,8 @@ namespace BugFablesAP
         // Map: the round blue map in the other buttons' style. Warp: the round leaf, or (dev) the map item's scroll.
         private const int MapIconSprite = 34;
         private const int ScrollItem = 41;
-        // The scroll has no round backdrop of its own: one is drawn like the other buttons', a dark ring and a bright
-        // fill of one vibrant colour (teal blended into the green and blue beside it). Being chosen: orange or pink.
-        // The game's own recipe, measured on its round icons: ring at full saturation and brightness 0.51, fill at
-        // saturation 0.34 and full brightness, the fill's hue 0.01 lower. Orange at 0.08: the game's sprite 31 (0.05)
-        // read salmon at this fill, gold is 0.14.
+        // The scroll has no round backdrop of its own: one is drawn in the game's recipe for its round icons, a ring at
+        // full saturation and brightness 0.51, a fill at saturation 0.34 and full brightness, its hue 0.01 lower.
         private static Color RingColor, FillColor;
         // Lime: the row's biggest gap on the colour wheel, between gold and green.
         private static float hue = LimeHue;
@@ -249,7 +246,7 @@ namespace BugFablesAP
             return true;
         }
 
-        // Diagnostic (map travel threw every frame): the first failure's exception and what the map window holds.
+        // The first exception PauseMenu.Update throws, logged with what the map window holds.
         private static bool failureLogged;
 
         [HarmonyPatch(typeof(PauseMenu), "Update")]
@@ -440,10 +437,10 @@ namespace BugFablesAP
         {
             mapTravel = true;
             // The map reads option as the chosen area and draws toward its marker every frame: the pause menu's option
-            // (this button's) pointed at a marker that didn't exist. -1 is the map's own "none yet".
+            // (this button's) points at a marker that may not exist. -1 is the map's own "none yet".
             optionField.SetValue(menu, -1);
             // The area you stand in is visited. A new file starts in area 0 and the game marks an area only on a change
-            // of area (UpdateArea), so the start was never marked: the same one field UpdateArea writes.
+            // of area (UpdateArea), so the start isn't marked: the same one field UpdateArea writes.
             int here = MainManager.instance.areaid;
             if (here >= 0 && here < MainManager.areanames.Length && !MainManager.instance.librarystuff[4, here])
             {

@@ -215,8 +215,8 @@ namespace BugFablesAP
             {
                 standIns[member] = EntityControl.CreateNewEntity("apstandin" + member, member,
                     MainManager.player.transform.position);
-                // A new character gets its body only in Start, a frame later; a scene using it at once crashed. Start
-                // keeps this one.
+                // A new character gets its body only in Start, a frame later; a scene using it at once would throw.
+                // Start keeps this one.
                 EntityControl made = standIns[member];
                 if (made.rigid == null)
                 {

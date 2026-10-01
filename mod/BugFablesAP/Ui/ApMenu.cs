@@ -221,8 +221,8 @@ namespace BugFablesAP
         private const int CursorSort = 20;
         private const string TextSort = "|sort,10|";
         private static readonly float[] RowY = { 2.65f, 2.0f, 1.35f, 0.7f, 0.05f, -0.6f, -1.25f, -1.9f };
-        // A settings page's rows are the game's Settings rows in the same box (MEASURED.md, a Settings row): its first
-        // row's text at 2.55, 0.7 apart. Seven show, the help and status lines staying under them; more scroll.
+        // A settings page's rows are the game's Settings rows in the same box: its first row's text at 2.55, 0.7
+        // apart. Seven show, the help and status lines staying under them; more scroll.
         private const int VisibleRows = 7;
         private const float GameFirstRow = 2.55f, GameRowGap = 0.7f;
         private int PageRows => page == Page.Qol ? QolRows : page == Page.Gameplay ? GameplayRows : Rows;
@@ -545,8 +545,8 @@ namespace BugFablesAP
             }
         }
 
-        // The game's list arrows where its Settings screen puts them in the same box (MEASURED.md, the Settings list's
-        // arrows): the top-right and bottom-right corners, guisprites[1] at 1.25, turned for up.
+        // The game's list arrows where its Settings screen puts them in the same box: the top-right and bottom-right
+        // corners, guisprites[1] at 1.25, turned for up.
         private static readonly Vector3 ScrollUpAt = new Vector3(6.5f, 3f), ScrollDownAt = new Vector3(6.5f, -3.1f);
 
         private GameObject ScrollArrow(string name, float turn)
@@ -687,12 +687,11 @@ namespace BugFablesAP
             leaf.sortingOrder = CursorSort;
         }
 
-        // The second button's label, centred over the values like them; its half width (about 2.3 at 0.8, measured on
-        // screen) puts the leaf at its left edge.
+        // The second button's label, centred over the values like them; its half width puts the leaf at its left edge.
         private const float ValueCenterX = 2.6f, DisableHalfWidth = 1.15f;
         private const float ArrowLeftX = 0.9f, ArrowRightX = 4.3f, ArrowRise = 0.15f, ArrowScale = 0.75f;
-        // A settings page's row is the game's Settings row (MEASURED.md, a Settings row): arrows at 1 on 0.4 and 5.4,
-        // the value centred between them, ten pips from 1.1, 0.4 apart. The main page keeps its narrower row.
+        // A settings page's row is the game's Settings row: arrows at 1 on 0.4 and 5.4, the value centred between them,
+        // ten pips from 1.1, 0.4 apart. The main page keeps its narrower row.
         private const float GameArrowLeftX = 0.4f, GameArrowRightX = 5.4f, GameValueX = 2.9f, GamePipX = 1.1f;
         private bool GameRow => page != Page.Main;
         private float LeftArrowX => GameRow ? GameArrowLeftX : ArrowLeftX;

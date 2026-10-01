@@ -35,7 +35,7 @@ namespace BugFablesAP
         private static bool shownForOther;
         private static Sprite shownSprite;
         private static Color? shownColor;
-        // Giveitem always uses the default article (menutext[125]); a picked-up item has its own.
+        // Giveitem and a pickup set the vanilla item's article; the seed's item needs its own.
         private static string shownArticle;
         private static string pendingArticle;
         private static bool swapped;
@@ -87,7 +87,8 @@ namespace BugFablesAP
                 return;
             }
             descWindowField = AccessTools.Field(typeof(NPCControl), "descwindow");
-            // World pickups don't use |giveitem|: CheckItem hands SetText a text ending in |additemtoss,<kind>,var,0|.
+            // World pickups don't use |giveitem|: CheckItem hands SetText a text with |additemtoss,<kind>,var,0|, then
+            // any tutorial or event.
             // Two groups, installed in this order: the pickup prefix runs before the berry prefix.
             Hooks.Install(typeof(Pickups), "swap", "a pickup in the world would give its vanilla item");
             Hooks.Install(typeof(Berries), "swap", "berries at a location would be given as berries");

@@ -1276,7 +1276,9 @@ step 14).
 - **Code tied to an enemy's id** (from the survey, not each read): `eventondeath` (column 26) sends a defeat into
   `EventDialogue` (`BattleControl.cs:1972`, `:30719-30731`); setup by id at `:976+` (VenusBoss's extra entity,
   fixed positions for BeeBoss, SandWyrmTail, Pitcher); `GetEnemyData` swaps some ids' data (`MainManager.cs:
-  6157-6191`); `NPCControl.StartBattle` forces "Battle3" music for ids 25-28 (`NPCControl.cs:5932`).
+  6157-6191`: when it makes their entity, the fire and ice variants 105-109 read row 57, 61 or 58; each one's column 25
+  points at the same row, so `animid` ends as the row read, `bugfablesap-enemies.tsv` of 2026-09-27, read 2026-10-02;
+  used by `EnemyScaling.cs`); `NPCControl.StartBattle` forces "Battle3" music for ids 25-28 (`NPCControl.cs:5932`).
 - **Map enemies' encounters** (2026-09-26, EntityDump with its new `battleids` column, run at the title screen): 327
   `Enemy` entities on 124 maps, every one with an encounter. Sizes: 74 of one enemy, 183 of two, 66 of three, 4 of
   four. 59 distinct enemy ids, **none from `bosslist` or `minibosslist`**. NPC and Object rows also fill

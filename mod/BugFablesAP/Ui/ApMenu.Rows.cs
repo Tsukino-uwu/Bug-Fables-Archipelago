@@ -41,7 +41,7 @@ namespace BugFablesAP
                         {
                             case "Progression": return "Only received items that unlock something are held up.";
                             case "Off": return "Received items arrive without being held up.";
-                            default: return "Every received item is held up as it arrives.";
+                            default: return "Received items are held up as they arrive, except starting items.";
                         }
                     case ColorsRow:
                         return QualityOfLife.RarityColors
@@ -59,7 +59,7 @@ namespace BugFablesAP
                         return QualityOfLife.ItemBackgrounds == null || QualityOfLife.ItemBackgrounds.Value
                             ? "Items show how important they are before you take them."
                             : "Items show no backdrop until you take them.";
-                    case DetectorRow: return "Acts like the Detector medal is always equipped, to find hidden items.";
+                    case DetectorRow: return "As if the Detector medal were on; in a seed it beeps for any check left.";
                     case SpyRow:
                         return QualityOfLife.SpySpecs != null && QualityOfLife.SpySpecs.Value
                             ? "As if Spy Specs were on: enemy HP shows, Spy is free."

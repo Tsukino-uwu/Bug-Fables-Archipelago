@@ -218,8 +218,8 @@ namespace BugFablesAP
             return swapped;
         }
 
-        // Every PlaySound and StopSound ends in these two; stopping swaps the same way, so the game's own stop by name
-        // ("Gameover") stops the jingle it started.
+        // Every PlaySound, and every StopSound by name or clip, ends in these two (a stop by slot needs no swap);
+        // stopping swaps the same way, so the game's own stop by name ("Gameover") stops the jingle it started.
         private static class JingleHooks
         {
             [HarmonyPatch(typeof(MainManager), nameof(MainManager.PlaySound), typeof(AudioClip), typeof(int),

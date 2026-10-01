@@ -59,7 +59,8 @@ namespace BugFablesAP
         internal static BepInEx.Configuration.ConfigEntry<bool> OneHitSetting;
         private static bool oneHit => OneHitSetting != null && OneHitSetting.Value;
 
-        // infjump: the game's own jump fires only on the ground, so one press never jumps twice.
+        // infjump, in mid-air: the game's own jump also fires in the first 3 frames off the ground, at the same
+        // velocity, so a press there still jumps once.
         internal static BepInEx.Configuration.ConfigEntry<bool> InfJumpSetting;
         private static bool infJump => InfJumpSetting != null && InfJumpSetting.Value;
         internal static BepInEx.Configuration.ConfigEntry<bool> InfBerriesSetting;
@@ -627,8 +628,8 @@ namespace BugFablesAP
                         // Archipelago icon, or lines too wide for the box.
                         if (parts.Length > 1 && parts[1] == "long")
                         {
-                            // The line seen running off the box, a longer one, and ServerText's longest name with a
-                            // player and alone (no place to break: squashed).
+                            // A line that runs off the box, a longer one, and ServerText's longest name with a player
+                            // and alone (no place to break: squashed).
                             Color plum = new Color(0xAF / 255f, 0x99 / 255f, 0xEF / 255f);
                             string longest = string.Join(" ", Enumerable.Repeat("Extremely Long Item Name", 5).ToArray())
                                 .Substring(0, ServerText.MaxLength);
@@ -646,8 +647,8 @@ namespace BugFablesAP
                         }
                         if (parts.Length > 1 && parts[1] == "ap")
                         {
-                            // The drawn icon on two of the class backdrops a real item gets (ItemSwap.Describe's plum
-                            // and cyan).
+                            // The drawn icon on Archipelago's progression and filler backdrops (plum and cyan; Rarity,
+                            // the default, has its own).
                             foreach (Color backdrop in new[] { new Color(0xAF / 255f, 0x99 / 255f, 0xEF / 255f),
                                 new Color(0f, 0xEE / 255f, 0xEE / 255f) })
                             {
@@ -806,7 +807,7 @@ namespace BugFablesAP
                             }
                             taken++;
                             // Holder names carry their whole text (the font preloader's is every glyph the game has),
-                            // and BepInEx's console broke writing that: only the owner's name, cut short and plain.
+                            // which BepInEx's console can't write: only the owner's name, cut short and plain.
                             Transform t = letter.transform.parent;
                             string owner = t == null ? "(none)" : t.parent != null ? t.parent.name : t.name;
                             owner = new string(owner.Where(c => c >= ' ' && c < 127).Take(40).ToArray());

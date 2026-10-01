@@ -77,7 +77,8 @@ namespace BugFablesAP
                 + "on every setting; on a normal save, as in "
                 + "the game. Switch it on the Gameplay page.", new AcceptableValueList<string>(ApMenu.Difficulties)));
             detector = Config.Bind("Archipelago", "Detector", true,
-                "On acts as if the Detector medal were equipped, to help find items. Off leaves it to the medal. "
+                "On acts as if the Detector medal were equipped; in a seed it beeps for any check left in the room. "
+                + "Off leaves it to the medal. "
                 + "Switch it on the Quality of life page.");
             ApMenu.Difficulty = difficulty;
             ApMenu.Detector = detector;

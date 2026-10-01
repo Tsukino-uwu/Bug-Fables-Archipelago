@@ -962,9 +962,10 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    went out, and after the fight chain the swap held up the seed's Mushroom for that location and kept the stand-in
    out. **Seen (2026-09-25):** a test hold-up from the new console command `holdup` ("Explorer Permit from
    TestPlayer") waited for a cutscene to end, then played; the item probe saw nothing added. The box read "You got a
-   Explorer Permit": `giveitem` always uses the game's default article (`menutext[125]`), while a picked-up item uses
-   its own (`itemdata[0, id, 3]`, a medal's `badgedata[id, 6]`, `NPCControl.cs:5670-5690`). Hold-ups and location swaps
-   now set the item's own article. Not yet seen. A hold-up now waits for 30 free frames in a row (half a second at
+   Explorer Permit": `giveitem`, like a pickup, sets the article of the item it gives (`itemdata[0, id, 3]`, a medal's
+   `badgedata[id, 6]`; `MainManager.cs:11545`, `:11554`), and a hold-up gives the stand-in, item 0, whose article is
+   "a". Hold-ups and location swaps
+   now set the shown item's own article. Not yet seen. A hold-up now waits for 30 free frames in a row (half a second at
    60 FPS; under Uncap FPS counted in sixtieths of a second, step 24), not one free frame: a chain of scenes and fights (the spider fights) can leave a free frame between links.
    **Seen (2026-09-25):** three queued test hold-ups waited through the spider fights' chain, then played one after
    another, reading "You got the Explorer Permit from TestPlayer!" (the game's own article for it). Each was followed
@@ -1070,7 +1071,8 @@ pages are reached from Settings since 2026-09-26, step 8).
 **Disable all and Reset to defaults (2026-09-26; both boxes seen on screen the same day; the Reset box's lost letters
 fixed, step 8, the fix not yet seen).** Two buttons side by side at the top
 of the Quality of life page (not rows in the list); left/right picks one. **Reset to defaults is on the left, where the
-cursor lands** (entering the page shouldn't put you on Disable all), Disable all on the right. Confirming one opens a
+cursor lands** (entering the page shouldn't put you on Disable all), Disable all on the right, its label about 2.3
+wide at size 0.8 (measured on screen), so the leaf sits 1.15 left of its centre. Confirming one opens a
 **Yes / No box** over the page (a box, not the choice inside the menu), built with the game's own box
 (`MainManager.Create9Box`, the controls type the help box uses), the question on top and the leaf on the answer. No is
 picked first, so a stray press never wipes the settings; cancel closes the box. The question isn't repeated in the help line below.

@@ -457,7 +457,7 @@ namespace BugFablesAP
 
         // A knocked ice block (a frozen enemy, a pushed rock) slides by icevel until a frame sees it with no vertical
         // speed, which reads as landed. The knock sets its speed flat and hops it a frame later: at 60 a physics step
-        // (gravity) comes between, at 240 usually not, so the slide was cancelled at once and stopped short. A cancel
+        // (gravity) comes between, at 240 usually not, so the slide is cancelled at once and stops short. A cancel
         // in a frame no physics step came before is undone; one right after a step (a real landing) stands.
         private static readonly AccessTools.FieldRef<NPCControl, Vector3> iceVelocity =
             AccessTools.FieldRefAccess<NPCControl, Vector3>("icevel");

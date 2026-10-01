@@ -64,7 +64,7 @@ namespace BugFablesAP
                     found = found?.Replace(ArticleSlot, "");
                 }
                 // The pickup line ends its name in the game's red ("...|string,0||color,1|!"); after a name in the
-                // Item colors that "!" looked stray, so it ends in black as the gift line does.
+                // Item colors that "!" reads as stray, so it ends in black as the gift line does.
                 if (other && QualityOfLife.ApColors)
                 {
                     text = text.Replace(NameThenRed, NameThenBlack);
