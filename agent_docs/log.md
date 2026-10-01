@@ -2268,4 +2268,9 @@ either one wrong).
     frames, 375 in a scene (`EntityControl.cs:4951`); `:856` no "Key items" section; `:977` 87 calls in events (one
     in `ColiseumEnd`); `:1036-1037` flag 135 is quest 6's completion in Event77, not a story scene;
   - run again: MEASURED.md from line 1064, the mod's config texts, help lines and code comments, and the code map;
-  - build the capability check above (the scratch clone is gone with this session: start from `main`).
+  - build the capability check above (the scratch clone is gone with this session: start from `main`);
+  - **the mod's own frame counters under Uncap FPS** (the user, after asking "don't we match the game when doing
+    uncap fps?": "yee add it for the next chat"): the row patches only the game's frame counts; `HoldUps` (30 free
+    frames, 3 in a burst, a 5-frame settle) and `AutoSave` (20) still count rendered frames, so at 240 FPS they wait
+    a quarter as long. Count them in sixtieths with `FrameRate.Tick60`, as the game's sites do (the mod guide, step
+    24); nothing wrong seen on screen yet.
