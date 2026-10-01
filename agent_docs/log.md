@@ -2442,7 +2442,7 @@ either one wrong).
   repositories (the user, 2026-10-02).
 - **Decided (the user):** no other Bug Fables project is ever compared with ours or looked at: everything here was
   built blind and ran into no issues, so there is no reason to. An agent had twice offered to read them. Now a rule in
-  CLAUDE.md, `references.md` and `licensing.md`; the one mention, in build step 9's enemy-drops idea, was removed.
+  CLAUDE.md, `references.md` and `licensing.md`; the one mention, in build step 10's enemy-drops idea, was removed.
 - **Corrected (the user):** an agent said three "Bug Fables" apworlds would force players to pick one and the projects
   to coordinate. Wrong: Archipelago allows several apworlds for one game, each with its own thread in its Discord, and
   nobody owns a game.
