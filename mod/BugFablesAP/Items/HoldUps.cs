@@ -17,12 +17,14 @@ namespace BugFablesAP
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
         private static readonly List<Entry> waiting = new List<Entry>();
+        // Counted in sixtieths of a second, as the game's own frame counts are under Uncap FPS.
         private static int settle;
         // A chain of scenes and fights can leave a lone free frame between links: the first of a burst waits for
         // FreeFor.
         private const int FreeFor = 30;
         private const int NextFor = 3;
-        private static int freeFrames;
+        private const int SettleFor = 5;
+        private static int freeTicks;
         private static bool inBurst;
         private static bool showing;
         private static bool speeding;
@@ -88,16 +90,17 @@ namespace BugFablesAP
         internal static void Tick()
         {
             Speed();
+            bool tick = FrameRate.OnTick;
             if (settle > 0)
             {
-                settle--;
+                settle -= tick ? 1 : 0;
                 return;
             }
             MainManager mm = MainManager.instance;
             bool busy = mm == null || ItemReceiver.Busy(mm, onScreen: true) != null;
             if (waiting.Count == 0 || busy || randomizerOn == null || !randomizerOn())
             {
-                freeFrames = 0;
+                freeTicks = 0;
                 if (!busy)
                 {
                     showing = false;
@@ -108,13 +111,14 @@ namespace BugFablesAP
                 }
                 return;
             }
-            if (++freeFrames < (inBurst ? NextFor : FreeFor))
+            freeTicks += tick ? 1 : 0;
+            if (freeTicks < (inBurst ? NextFor : FreeFor))
             {
                 return;
             }
-            freeFrames = 0;
+            freeTicks = 0;
             inBurst = true;
-            settle = 5;
+            settle = SettleFor;
             showing = true;
             Entry next = waiting[0];
             waiting.RemoveAt(0);

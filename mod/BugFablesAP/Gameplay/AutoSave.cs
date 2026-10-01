@@ -15,14 +15,15 @@ namespace BugFablesAP
         private static Func<bool> settingsOn;
 
         private const float MinSeconds = 15f;
-        // Free this many frames in a row first: a map's auto-event starts once the player is free and sets its flag as
-        // it starts, so a save a frame too early could hold that flag and skip the scene on a reload.
-        private const int SettleFrames = 20;
+        // Free this many sixtieths of a second in a row first (counted as the game's frame counts are under Uncap FPS):
+        // a map's auto-event starts once the player is free and sets its flag as it starts, so a save a frame too early
+        // could hold that flag and skip the scene on a reload.
+        private const int SettleTicks = 20;
 
         private static bool wasTransferring;
         private static MapControl arrivedIn;
         private static bool armed;
-        private static int freeFrames;
+        private static int freeTicks;
         private static float lastSave = -MinSeconds;
         private static string waitingFor;
 
@@ -45,7 +46,7 @@ namespace BugFablesAP
                 if (On())
                 {
                     armed = true;
-                    freeFrames = 0;
+                    freeTicks = 0;
                     waitingFor = null;
                 }
             }
@@ -64,17 +65,18 @@ namespace BugFablesAP
             if (DeathLinkGame.Busy)
             {
                 Wait("a received death (never saved over)");
-                freeFrames = 0;
+                freeTicks = 0;
                 return;
             }
             if (mm == null || player == null || MainManager.battle != null || transferring || mm.intransition
                 || mm.inbattle
                 || !MainManager.FreePlayer() || player.entity == null || !player.entity.onground)
             {
-                freeFrames = 0;
+                freeTicks = 0;
                 return;
             }
-            if (++freeFrames < SettleFrames)
+            freeTicks += FrameRate.OnTick ? 1 : 0;
+            if (freeTicks < SettleTicks)
             {
                 return;
             }

@@ -965,7 +965,7 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    Explorer Permit": `giveitem` always uses the game's default article (`menutext[125]`), while a picked-up item uses
    its own (`itemdata[0, id, 3]`, a medal's `badgedata[id, 6]`, `NPCControl.cs:5670-5690`). Hold-ups and location swaps
    now set the item's own article. Not yet seen. A hold-up now waits for 30 free frames in a row (half a second at
-   60 FPS), not one free frame: a chain of scenes and fights (the spider fights) can leave a free frame between links.
+   60 FPS; under Uncap FPS counted in sixtieths of a second, step 24), not one free frame: a chain of scenes and fights (the spider fights) can leave a free frame between links.
    **Seen (2026-09-25):** three queued test hold-ups waited through the spider fights' chain, then played one after
    another, reading "You got the Explorer Permit from TestPlayer!" (the game's own article for it). Each was followed
    by an empty box: an empty follow-up line is still shown as a box waiting for a press. The follow-up is now the
@@ -2034,6 +2034,12 @@ place it counts frames instead of time first.
   does its work on the divided count or returns on `!= 0`, so only `DoFollow` has the opposite test. The site that had
   scaled its braking (`StopForceMove`, whose only smooth brake is `DoFollow`'s) was compensating for the same bug and
   came out. After both: walk, brake by half every 1/30 s, walk, a steady rhythm about every 0.1 s, as at 60.
+- **The mod's own frame counts, counted the same way** (2026-10-01; the user: "don't we match the game when doing
+  uncap fps?"). The row had patched only the game's counts. The hold-ups' waits (30 free frames before the first of a
+  burst, 3 before each of the rest, 5 after each one shows; step 10) and the auto-save's 20 free frames (step 31)
+  still counted rendered frames, so at 240 they waited a quarter as long: the half second between chained scenes an
+  eighth. Each now counts only on a frame that starts a new 1/60 s (`FrameRate.OnTick`), as a game counter's 1 does;
+  with the row off that is every frame, as before. Nothing wrong had been seen on screen.
 - **Frame time inside a physics step reads as it does at 60.** Code in `FixedUpdate` and trigger or collision messages
   scales by `framestep`/`TieFramerate`, which follow the render frame: at 240 fps conveyor belts, wind and the
   safe-respawn point would have run at a quarter strength. There, `TieFramerate(x)` returns `x` and `framestep` 1.
@@ -2096,10 +2102,11 @@ second, as at 60 (2026-09-30): measured with `bodytrace`; on the conveyor, "I th
 next to the leader. Off by default again (2026-09-29):
 built, not yet seen on a fresh config. Swinging and bobbing scenery drawn smoothed (2026-10-01): measured and seen
 on the Rubber Prison's swinging platform, the party standing on it; other bobbing scenery (boats, floating things)
-not yet seen.
+not yet seen. The mod's own frame counts (hold-ups, auto-save) counted in sixtieths (2026-10-01): built, not yet
+seen.
 
 *Code: `FrameRate.cs`, `FrameRate.Scenery.cs`, `FrameSites.cs`, the row in `ApMenu.cs` and `QualityOfLife.cs`, the
-after-physics hooks in `Plugin.cs`; the console's `display`, `fps`, `interp`, `camlerp`, `bodylerp`, `scenerylerp`,
+after-physics hooks in `Plugin.cs`, the waits in `HoldUps.cs` and `AutoSave.cs`; the console's `display`, `fps`, `interp`, `camlerp`, `bodylerp`, `scenerylerp`,
 `bodytrace`, `frames`, `trace`, `cams`, `il`, `rates` and `fpsscan` (`DevConsole.cs`, the traces and scans in
 `Dev/FrameRate.Dev.cs`).*
 
@@ -2273,7 +2280,8 @@ Archipelago is enabled, or with *Use on normal saves* (step 18). Save crystals w
   randomizer-save redirect catches it like every save.
 - **When:** a door's transfer holds `roomtransition` until the party has walked in, then sets `lastloadzone`, where
   the walk ended. When it clears in a new map, the save waits until the player has been free for 20 frames in a row
-  (no scene, text box, menu, battle or transition, on the ground). A map's auto-event starts as soon as the player is
+  (a third of a second at 60 FPS, counted in sixtieths under Uncap FPS, step 24; no scene, text box, menu, battle or
+  transition, on the ground). A map's auto-event starts as soon as the player is
   free and sets its flag as it starts, so saving on the first free frame could store that flag and skip the scene on a
   reload; if a scene starts, the save waits until it ends. Cutscene map changes aren't doors and don't save.
 - **Where:** at the room's entrance (`lastloadzone`), where a reload puts the party.

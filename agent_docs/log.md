@@ -2293,3 +2293,9 @@ either one wrong).
     27 is unset, `BattleControl.cs:2790`); flag 13 is Event4's own; the forced walk 250 frames, 375 in a scene; the
     flags 241-243 pointer named the wrong section; one of the 88 `LoadMap` calls is `ColiseumEnd`'s; flag 135 is quest
     6's completion.
+- **The mod's own frame counters under Uncap FPS, counted in sixtieths** (the mod guide, step 24): `HoldUps` (30, 3,
+  and the 5 after each) and `AutoSave` (20) now count only on a frame that starts a new 1/60 s. Built with
+  `FrameRate.OnTick`, the test the game's sites use (`IntStep`), not a difference of `Tick60` values as the plan said:
+  both read the same clock, but a difference would count a long frame as several sixtieths where the game's counters
+  count one, and would change the waits with the row off (every frame counts, as before). Built, not seen; on
+  TO-CHECK.md. A slip of mine: one rename in `AutoSave.cs` went through `sed`, not Edit; checked in the diff after.
