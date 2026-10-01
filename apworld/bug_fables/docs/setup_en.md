@@ -96,4 +96,5 @@ seconds (it tidies its memory on a timer).
   gives at most a level's worth, and a check's berries are never multiplied).
 
 Select a row and press confirm to type into it: Backspace deletes, **Ctrl+V pastes**, Ctrl+C copies, Enter
-keeps it, Escape undoes. The same settings are saved in `BepInEx/config/bugfables.archipelago.cfg`.
+keeps it, Escape undoes. The same settings are saved in `BepInEx/config/bugfables.archipelago.cfg`. One setting is
+only there: `Compression` under `[Connection]` (on, as the server asks); turn it off only if connecting keeps failing.

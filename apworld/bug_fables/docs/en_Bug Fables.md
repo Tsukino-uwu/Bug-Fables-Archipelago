@@ -7,7 +7,7 @@ in a shuffled shop or finishing a quest sends a check instead, and the item ther
 place. Every item, your own included, arrives from the server and is given to you through the game's own item system.
 
 This is an early version. It covers the start of the game: the Bugaria Outskirts, Snakemouth Den, the open parts of
-Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's shop outside the city, and the Golden Path, plus the seven scenes in later chapters where the game teaches a field ability and the one where the Termite King hands over the submarine. More chapters come later.
+Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's shop outside the city, and the Golden Path, plus the seven scenes in later chapters where the game teaches a field ability and the one where the Termite King hands over the submarine (both new in this version). More chapters come later.
 
 ## Options
 
@@ -34,7 +34,7 @@ Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's 
   good items. Nothing else changes; turn it off to plando an item there. With the Entrance Randomizer on Coupled or
   Room Swap it doesn't apply, since the doors can leave the start too small. New in this version.
 - **Shuffle Field Moves** (off): Vi's Beemerang Toss, Kabbu's Horn Slash and Leif's Freeze are items too (the Toss and
-  the Freeze as the first copy of their progressive item); until one arrives, that attack only buzzes, and each shows in
+  the Freeze as the first copy of their progressive item, new in this version); until one arrives, that attack only buzzes, and each shows in
   your key items once it does.
 - **Shuffle Jump** (off): Jump is an item for the whole party; until it arrives, the jump button only buzzes, and the
   pause menu's Warp is always there.
@@ -84,7 +84,7 @@ the Beemerang Halt, Bee Fly, the Dash, the Horn Dash, Beetle Dig, the Icicle and
 items, in the game's own order: **Progressive Beemerang** (the Toss, then the Halt), **Progressive Dash** (the Dash,
 then the Horn Dash) and **Progressive Freeze** (the Freeze, then the Icicle). An ability works once its item arrives,
 wherever you are in the story, and its battle skill comes with it. The logic for chapters 2 to 7 is cautious for now:
-each teaching scene counts as reachable only once every ability taught before it is yours.
+each teaching scene counts as reachable only once every ability taught before it is yours. New in this version.
 
 ## The boat and the submarine
 
@@ -102,6 +102,8 @@ where both copies are, since a hint can't tell the two apart.
 
 - **We Owe Ya!** calls a helper into battle only from those you have unlocked in the story or a side quest.
   Received early, it does nothing until then.
+- **Save crystals** are used with the confirm button when you stand next to one (a "!" shows over you), so you can
+  save without a field attack, as with *Shuffle Field Moves*. Hitting one still works.
 
 ## What is the goal?
 
