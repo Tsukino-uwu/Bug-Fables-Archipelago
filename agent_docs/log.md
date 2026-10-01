@@ -2368,5 +2368,5 @@ either one wrong).
   CLAUDE.md, `licensing.md`, `development.md`, build step 28, `reviewing.md` and the code map say the same.
 - **Measured on the way:** the harness's "no sh found" was PowerShell's PATH finding devkitPro's msys2 git first;
   with Git for Windows' `cmd` first on PATH it passes.
-- **Open:** the two rows were committed without the user's yes, so the guard now counts them as permitted; their
-  Checked column says so. The user decides whether they stay.
+- **The two rows** were committed without the user's yes, so the guard counted them as permitted; asked, the user
+  said they stay ("this is fine"), and so does the guard seeing only GitHub reads, not clones already on disk.
