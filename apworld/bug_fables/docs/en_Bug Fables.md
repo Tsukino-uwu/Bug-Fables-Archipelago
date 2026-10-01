@@ -102,8 +102,8 @@ where both copies are, since a hint can't tell the two apart.
 
 - **We Owe Ya!** calls a helper into battle only from those you have unlocked in the story or a side quest.
   Received early, it does nothing until then.
-- **Save crystals** are used with the confirm button when you stand next to one (a "!" shows over you), so you can
-  save without a field attack, as with *Shuffle Field Moves*. Hitting one still works.
+- **Save crystals** can be used with the confirm button when you stand next to one (a "?" shows over you, as when
+  examining a statue), so you can save without a field attack, as with *Shuffle Field Moves*. Hitting one still works.
 
 ## What is the goal?
 

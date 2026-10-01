@@ -2224,10 +2224,11 @@ prompt each time you brush past one); always, in a seed, whether or not a move i
   - Seen (2026-09-29): the right distance, and out of the way of jumping.
 - **The jump's prefix** (already there for Shuffle Jump, `FieldMoves.cs`) asks first: a crystal in reach takes the
   press and runs the game's hit steps in order, the prompt last; the save is the game's own. No jump, no buzzer.
-- **The "!" over the player** while in reach, the one the game shows next to something to check.
+- **The "?" over the player** while in reach, the one the game shows next to something to check, such as a discovery
+  (seen 2026-10-01).
 - Red DeadLander crystals are left alone (their hit turns a DeadLander). Only while Archipelago is enabled.
 
-**Status:** works: the range seen right on screen (2026-09-29).
+**Status:** works: the range seen right on screen (2026-09-29), the "?" over the player (2026-10-01).
 
 *Code: `SaveCrystals.cs` (`InReach`, `TryUse`, `Tick`); the call in `FieldMoves.BeforeJump`.*
 

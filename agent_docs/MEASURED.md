@@ -1589,8 +1589,8 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   `SaveTutorial` 0. Used by `SaveCrystals.cs`.
 - **The confirm button never reaches a crystal:** `PlayerControl` calls `npc[0].Interact(null)` only for the NPC and
   SemiNPC types, and jumps (`DoJump`, private, called only from there) otherwise; each frame it also drops a non-NPC
-  `npc[0]` from its list. The "!" over the player for something to check is `entity.emoticonid = 1` with
-  `emoticoncooldown = 2`.
+  `npc[0]` from its list. The icon over the player for something to check is `entity.emoticonid = 1` with
+  `emoticoncooldown = 2`: a "?", the same as at a discovery (seen by the user, 2026-10-01, at a save crystal).
 - **The game's own word** (`textsearch crystal`, 2026-09-28): "ancient crystal"; the yellow one "will heal our HP and
   TP too. Try smacking it sometime." (SnakemouthFallRoom:19). No name for a save crystal as such.
 - **Saving:** `MainManager.Save(pos)` is only `InputIO.Save(pos)`: `SaveFile` builds the text (line 0 the position given,

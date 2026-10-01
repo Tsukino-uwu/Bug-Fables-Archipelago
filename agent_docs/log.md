@@ -2274,10 +2274,11 @@ either one wrong).
     frames, 3 in a burst, a 5-frame settle) and `AutoSave` (20) still count rendered frames, so at 240 FPS they wait
     a quarter as long. Count them in sixtieths with `FrameRate.Tick60`, as the game's sites do (the mod guide, step
     24); nothing wrong seen on screen yet;
-  - **the save crystal's icon:** the user changed the game page's line to a "?" over the player ("as if talking to a
-    npc"; their edit, left uncommitted for them); the mod guide (step 29) and `SaveCrystals.cs` say "!". The code
-    shows the game's emoticon 1, the one it puts over the player next to something to check; which glyph that is,
-    only the screen says. Ask, then make all three agree.
+- **The save crystal's icon, settled:** the user changed the game page's line to a "?" over the player ("as if
+  talking to a npc"), where the mod guide (step 29) and `SaveCrystals.cs` said "!". The code shows the game's emoticon
+  1, the one it puts over the player next to something to check, not the talking one (over the NPC). Asked: "It shows
+  up as a ? in game, the same as if interacting with a discovery"; the wording "as if interacting with a statue or
+  something then". All three say "?" now, and `MEASURED.md` records the glyph as seen.
 - **The setup page made easier to read (the user: "can we make these into bullet points"):** the two settings pages,
   each a single paragraph, now a "Settings in the game" section, a heading per page, a bullet per setting with its
   default first and each value its own sub-bullet; the text boxes' keys moved up to the panel they belong to. No

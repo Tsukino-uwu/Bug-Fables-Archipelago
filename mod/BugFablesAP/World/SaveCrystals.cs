@@ -117,7 +117,7 @@ namespace BugFablesAP
             return best;
         }
 
-        // The "!" the game shows over the player next to something to check.
+        // The "?" the game shows over the player next to something to check.
         internal static void Tick()
         {
             if (cooldown > 0f)
