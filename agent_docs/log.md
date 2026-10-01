@@ -2284,3 +2284,12 @@ either one wrong).
   default first and each value its own sub-bullet; the text boxes' keys moved up to the panel they belong to. No
   fact changed; the order follows the panel (`ApMenu.cs`), Fast text's and Skip cutscenes' "On" read as defaults
   (`QualityOfLife.cs`).
+- **The fact check, finished (a third session, the user's list):**
+  - MEASURED.md's first half, the 16 findings left unchecked: all held in `decompiled/`. Seven citations off by a few
+    lines or at the wrong case (the berry's presence at `NPCControl.cs:940`, `:1378`, the beetle grass's `:818`
+    kept beside it); the permit's `giveitem` appended by Event16's code, not in the map's dialogue; `flagvar[0]` not
+    stale (`CheckItem` writes it for every pickup); bounty 23 has accept flag 146, which no code reads; action 9 at
+    `PauseMenu.cs:895` leaves the Settings list; the first spider fight is Event6's (999 HP and 99 defence while flag
+    27 is unset, `BattleControl.cs:2790`); flag 13 is Event4's own; the forced walk 250 frames, 375 in a scene; the
+    flags 241-243 pointer named the wrong section; one of the 88 `LoadMap` calls is `ColiseumEnd`'s; flag 135 is quest
+    6's completion.

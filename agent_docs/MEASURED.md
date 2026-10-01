@@ -120,8 +120,8 @@ Read from code only; nothing observed running yet.
   - money: `showmoney = 1`, `money = Clamp(money + n, 0, 999)`: the same two lines.
   - medal: `badges.Add({id, -2})`, which is the game's `AddBadge` (`:16974`); the mod calls `AddBadge`.
   - crystal berry: `flagvar[14]++` (the shop currency) **and** `crystalbflags[n] = true`. The mod does only the
-    first. `crystalbflags[n]` marks berry location n as found (the pickup's presence, `NPCControl.cs:818`, `:1349`),
-    so a received berry must not set it. **Consequence:** the game's own berry total, `CrystalBerryAmmount()`
+    first. `crystalbflags[n]` marks berry location n as found (the pickup's presence, `NPCControl.cs:940`, `:1378`;
+    a beetle grass hiding one, `:818`, `:1349`), so a received berry must not set it. **Consequence:** the game's own berry total, `CrystalBerryAmmount()`
     (`:10212`, counts `crystalbflags`), counts berry *locations checked*, not berries received. It is shown by the
     `|cberrytotal|` text command (`:12744`) and unlocks the "all 50 berries" logbook entry (`:4343`).
   - flags: the game's `|flag,n,v|` command is a plain `flags[n] = v` (`:12462`), and `EventControl` alone
@@ -161,7 +161,8 @@ throttled to changes.
     ends `|giveitem,1,27,13|` (type 1 key item, id 27, then dialogue line 13), with `caller=none`. GrantProbe
     logged `KEYITEM +1 id=27` at frame 31685, and `flag[15]` False -> True at frame 34349. That's the same
     order and about the same gap (~2,660 frames) as the first run. **So the grant and flag 15 happen at
-    separate moments:** the `giveitem` is in the dialogue, and flag 15 is set in code when `Event16` ends.
+    separate moments:** `Event16`'s code appends the `giveitem` to dialogue line 12 (`EventControl.cs:3687`), and
+    sets flag 15 when it ends (`:3818`).
     The local grant happened because sending checks doesn't exist yet. Log kept only in that session's
     scratchpad.
 - **The first medal, captured (2026-09-24, same run):** Artis's dialogue (`caller=ShwEmArtys`) on
@@ -232,7 +233,7 @@ throttled to changes.
   - line 6 (the items, `items[0]@items[1]@items[2]`): the key items are still just `27`;
   - line 14 (regional flags): the treasure room's wipe;
   - line 10 (a 5-row true/false table): only `[4,0]`. That's `librarystuff[4, area]`, which `UpdateArea` sets
-    on entering an area (`MainManager.cs:4083`).
+    on entering an area (`MainManager.cs:4084`).
 
   **So the treasure is a story moment, and flag 41 carries it.**
 - **The artifacts are a count of story flags, not items** (the first one seen on screen in the pause menu and
@@ -240,7 +241,7 @@ throttled to changes.
   **41, 88, 299, 345, 347, 346, 555**, one artifact each (7 in all, `StartMenu.psprite` has 7 icons). The pause
   menu draws that many (`PauseMenu.cs:2398`). The save stores the count as `LoadData.progression`
   (`MainManager.cs:17167`, field 15 of its line), and the file select draws that many icons
-  (`StartMenu.cs:789`). **Having an artifact = its flag being set**: usable as checks, or as a "collect N"
+  (`StartMenu.cs:792`). **Having an artifact = its flag being set**: usable as checks, or as a "collect N"
   goal.
 - **The save file's layout, as far as seen:** 18 lines, where line 6 is the three item lists joined by `@`,
   line 10 is `librarystuff` (5 rows), line 11 the 750 `flags`, and line 14 the 100 `regionalflags`. Other
@@ -322,7 +323,8 @@ throttled to changes.
   kept, not which book, so Lore Books are interchangeable and any milestone is count-based.
 - **A second crystal berry:** on `SnakemouthLake`, `crystalbflag[1]` flipped (frame 111883), with no
   tutorial flag this time. The script was `|additemtoss,3,var,0|` with `caller=tempitem`, and `flagvar[0]`
-  read 1 (HoneyDrop), **a stale value left from an earlier pickup**. `flagvar[0]` means nothing for crystal
+  read 1 (HoneyDrop): `CheckItem` writes the pickup's `animstate` there for every item, berries too
+  (`NPCControl.cs:5645`), but `additemtoss` adds nothing for type 3. `flagvar[0]` means nothing for crystal
   berries; their `crystalbflags` index is their identity. `flag[25]` flipped earlier on that map, unrelated.
 - **A second ground pickup:** a Crunchy Leaf (id 0) on `BugariaOutskirtsSnakemouthCorridor2` with
   `regionalflag,13`, so it respawns. `regionalflag[5]` flipped there too, with no item script. Both maps are
@@ -457,11 +459,11 @@ slot of each can hold the mod's own state in the game's own save, with no new fo
 - **How many, and how they arrive** (2026-09-25, code read). `BoardQuests` has 63 entries after `None`; 9 never show
   on a board (11-17 the chapter entries, 26 Leif, 30 Bee), so 54 board quests, 5 of them the bar's bounties. A quest
   joins the open list when its row in the `Data/QuestChecks` table is met (flags, or a visited area as a negative
-  number, `MainManager.CheckQuests`, `:4027`), or by a dialogue command (`|addquest|`, `|addboard|`, `:13715`,
-  `:13839`).
+  number, `MainManager.CheckQuests`, `:4027`), or by a dialogue command (`|addquest|`, `|addboard|`, `:13714`,
+  `:13840`).
 - **Every board quest, dumped** (2026-09-25, `QuestDump` in the running game, joined with EntityDump and the code).
-  `BoardData` column 3 is the flag taking the quest sets (none for the bounties and a few others, whose NPCs check the
-  quest lists instead); column 5 is its difficulty, 1 to 3. The unlock is its `QuestChecks` row (negative: a visited
+  `BoardData` column 3 is the flag taking the quest sets (none for four of the five bounties and a few others, whose
+  NPCs check the quest lists instead; the fifth, 23, has 146, which no code reads); column 5 is its difficulty, 1 to 3. The unlock is its `QuestChecks` row (negative: a visited
   area; 0: never automatic, a dialogue adds it). **No accept flag does anything outside its own quest:** most are read
   only by the quest's NPCs; the code's five (131, 186, 187, 197, 423) are the quest's own state, checked while it runs
   (the chefs' dish checks, `EventControl.cs:574-597`) and cleared when it ends. Maps are where an entity requires,
@@ -538,7 +540,7 @@ slot of each can hold the mod's own state in the game's own save, with no new fo
 - **Action 9 (Enter; Back on a gamepad) does six things** (2026-09-29, code read; the first seen by the user, the
   rest not): in the field, the "help" (`PlayerControl.GetInput`, `PlayerControl.cs:341`: a party member talks about
   what's in front, its `tattleid`, when flag 10 is set and Kabbu is in the party); in the pause menu, it opens window
-  6 (`PauseMenu.cs:383`), acts on the medal list on page 0 (`:687`), acts on the music list (`:895`) and toggles the
+  6 (`PauseMenu.cs:383`), acts on the medal list on page 0 (`:687`), leaves the Settings list (`:895`) and toggles the
   map's icons with action 7 (`:1399`); in the start menu, on an empty save slot with two or more secrets unlocked,
   it starts a new file through menu 3 (`StartMenu.cs:631`). All through `MainManager.GetKey(9)`, so rebinding action
   9 moves all six. For the in-game text client's key (`documentation.md`, step 2).
@@ -597,7 +599,7 @@ The output stays in the BepInEx folder.
 - **Indoor pickups (seen on screen, 2026-09-24):** the pickup with flag 686 on
   `BugariaOutskirtsOutsideCity` is inside a building (an *inside*) that isn't open in chapter 1, next to a
   second item; seen after the dev console's `loc` put the party by it. It couldn't be picked up, since the warp
-  hadn't entered the inside the way its door does. **An entity's `insideid` (field 178, `MapControl.cs:1609`)
+  hadn't entered the inside the way its door does. **An entity's `insideid` (field 178, `MapControl.cs:1631`)
   says which inside it's in; -1 is outdoors.** EntityDump now writes it. An indoor pickup is gated by its
   inside's door (`DoorSameMap`), not only by its map.
 - **The ladybug siblings are Leby (the sister) and Dib (the lost kid at the lake)** (seen in play, 2026-09-24).
@@ -641,7 +643,7 @@ The output stays in the BepInEx folder.
 - **Seen in play (2026-09-24):** the first boss beaten on Normal wrote its slot as missed; talking to Artis
   then gave nothing, and the caravan (open after flag 41) offered a medal: **Quick Flea, medal 5 = `prizeids[0]`**,
   which the tester bought. Confirmed: a missed prize is sold at the caravan. Event26 writes a Normal kill's slot
-  directly (`flagvar[13] = 2`, `EventControl.cs:4962`), not through `AddPrizeMedal`. It is the only boss event that
+  directly (`flagvar[13] = 2`, `EventControl.cs:4964`), not through `AddPrizeMedal`. It is the only boss event that
   does: the other `BadgeIsEquipped(11) || flags[614]` tests in `EventControl.cs` only add a Logbook entry
   (corrected 2026-09-28 from "eight boss events test Hard Mode themselves like this"; searched: every
   `BadgeIsEquipped(11)` in `EventControl.cs`).
@@ -663,9 +665,9 @@ The output stays in the BepInEx folder.
   Side events added late carry high numbers, so the rule errs toward a later chapter, the safe direction.
 - **Leif's joining chain, played through with the event log on** (2026-09-24): Event4 on
   `SnakemouthDoorRoom` (the trapdoor, started by the map: a rock-and-pressure-plate puzzle's AND gate; flag 13) →
-  Event5, started by picking up the Mushroom the trapdoor scene creates (`tempitem`, data {0,5,1}; flag 14; the
-  first spider fight, scripted so damage can't win it) → Event6, the `SnakemouthFallRoom` trigger (flag 27: Leif
-  follows, not yet in the party) → Event18 on `SnakemouthLake`, a switch (flag 29) → Event14, the lake's
+  Event5, started by picking up the Mushroom the trapdoor scene creates (`tempitem`, data {0,5,1}; flag 14) →
+  Event6, the `SnakemouthFallRoom` trigger (the first spider fight, scripted so damage can't win it,
+  `EventControl.cs:1702`; flag 27: Leif follows, not yet in the party) → Event18 on `SnakemouthLake`, a switch (flag 29) → Event14, the lake's
   `MothEvent` trigger (flag 16: Leif joins the party; then flag 24). Seen on screen as a full member: in the
   pause menu and usable in battle. Each step expects the one before: a file that skipped part of the chain
   crashes entering its middle. **One exception seen** (2026-09-26, Vi and Kabbu, a new file): a dev warp
@@ -687,7 +689,7 @@ The output stays in the BepInEx folder.
     from the den without the horn.
   - **Kabbu's horn (puzzles):** `SnakemouthDoorRoom` from the bridge side is a chain of horn steps: cut grass to reach a
     trampoline, knock a rock down onto a vine, push two rocks onto switches, which starts the trapdoor scene (its
-    starter, `MushroomItem`, requires flag 13, presumably the switches' flag: not measured). Coming up from the trapdoor
+    starter, `MushroomItem`, requires flag 13, which the trapdoor scene, Event4, sets itself: `EventControl.cs:1215`). Coming up from the trapdoor
     without the horn is presumably one-way for the same reason (the tester's reading, not tried). The bridge room's
     hidden-spot discovery (discovery 2, location 30) is behind grass too.
   - **Vi's beemerang (range):** `SnakemouthBridgeRoom`'s bridge comes down when its rope is hit; from the right only the
@@ -711,7 +713,7 @@ The output stays in the BepInEx folder.
 - **A blocked walk-in ends in a teleport** (seen 2026-09-25, the game's own behaviour): entering
   `SnakemouthUndergroundRightB` the "wrong", one-way way, the gate blocked the walk-in, the party stood still for a
   moment, then was put past the gate; after that the switch could be hit and the way back used. A forced walk
-  (`MoveTowards`) has a timer (500 frames for the player, 0.75 of it in a scene, `EntityControl.cs:4951`); when it runs
+  (`MoveTowards`) has a timer (250 frames for the player, 375 in a scene, `EntityControl.cs:4951`); when it runs
   out the character is moved straight to the target, with smoke (`EntityControl.cs:3692-3701`). So a door whose walk-in
   point is behind a barrier can still be entered. The logic doesn't count on it (more cautious than the game is allowed).
 - **Ability flags, confirmed as reads in `PlayerControl.cs`:** 11 (beemerang, with `!flags[41]`), 699
@@ -853,7 +855,7 @@ on many maps from the first dungeon on, so a pit doesn't mean hover.
   (`LibraryShelf.cs:27`) and the reading list (`MainManager.cs:15372`), and by no game text (VarDump). **No count
   reward: the Lore Book is useful, not progression.**
 - **A delivery quest's reward is a Lore Book**: on `BugariaResidential` a cicada ("Oh, you delivered it!") gave
-  `giveitem` of item 52, then flag 243 (quest 33 done; see "Key items" above for flags 241-243).
+  `giveitem` of item 52, then flag 243 (quest 33 done; see "Observed in the running game" above for flags 241-243).
 
 ## All crystal berries (2026-09-24, entity dump and ScriptDump, matched to the Bug Fables wiki)
 
@@ -974,7 +976,7 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
 - **Dialogue lines:** 7 lines move the party with `|warp,<map>[,x,y,z]|` or `|loadmap|` (`MainManager.cs:13262-13280`):
   `BOLostSandsEntrance` 10, `DefiantRoot2` 38, `FarGrasslandsOutsideCave` 3, `Swamplands8` 4 and 7, `TermiteMainPlaza`
   65, `BarrenLandsPinkSpider` 18. None uses `|transfer|`.
-- **Story events:** 88 `LoadMap` calls in 63 of `EventControl`'s event methods; 20-odd reload the current map. What
+- **Story events:** 87 `LoadMap` calls in 63 of `EventControl`'s event methods (and one in `ColiseumEnd`); 20-odd reload the current map. What
   starts each: `event-triggers.py` on the listed events. Among them: **Event61, the bar's hatch** (to `UndergroundBar`,
   started by `BugariaCommercial` line 32, the hatch examined); **Events 108 and 109, to `HideoutCell`** (108 is the
   garden guards catching the party, seen in play; 109 is the story's first capture, which takes the beemerang,
@@ -1033,8 +1035,8 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   starting stock 0 (45), 1 (55), 7 (35), 12, 30, 86, 84, 87, 88 (30 each), 81 (45).
 - **The way down to Shades's shop (the underground bar, map 30)** (2026-09-25, entity dump, ScriptDump, code): no door;
   `HideoutEntrance` on `BugariaCommercial` is examined (Check). Its lines: default 27 (sets flag 8), with flag 8 line
-  30, with flag 135 line 32, which starts Event61, a plain `LoadMap(30)` with no party lookups. Flag 135 is set by a story
-  scene (`EventControl.cs:12698`). The tester asked for it set on a test file to reach the shop.
+  30, with flag 135 line 32, which starts Event61, a plain `LoadMap(30)` with no party lookups. Flag 135 is set when quest 6
+  (UndergroundBar) is completed, in Event77 (`EventControl.cs:12698`). The tester asked for it set on a test file to reach the shop.
 - **Shops (`badgeshops[0]` is Merab's, `[1]` Shades's, for crystal berries):** new game (`MainManager.cs:4010`)
   Merab 0, 1, 7, 12, 30, 86, 84, 87, 88, 81 and Shades 19, 6, 9, 43, 42 (both open later in the story); Event73
   (chapter 2's end) Merab +21, 22, 48; Event99 (chapter 3's end) Merab +33, 56, 74, Shades +0, 49; Event118
