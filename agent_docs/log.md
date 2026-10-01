@@ -2293,6 +2293,12 @@ either one wrong).
     27 is unset, `BattleControl.cs:2790`); flag 13 is Event4's own; the forced walk 250 frames, 375 in a scene; the
     flags 241-243 pointer named the wrong section; one of the 88 `LoadMap` calls is `ColiseumEnd`'s; flag 135 is quest
     6's completion.
+  - The code map (one agent; every link resolves, 165 rows read): six findings, all held. The csproj's libraries are
+    not all net40 (Newtonsoft.Json is netstandard2.0's); `ItemIds.cs` converts one way only; Event16 is refused in
+    `QualityOfLife.Scenes.cs`, and the skip table lives in `QualityOfLife.cs`; `DevCheats.cs` linked to the console
+    section, not "Every Debug setting"; two rows' links to steps 10 and 15, which never name them. Rows added for
+    `.gitattributes`, `.gitignore` and `docs/reviewing.md`. And one of my own fixes above, corrected: Event4 is the
+    scene the switches start, Event5 the trapdoor scene (as the mod and its guide name them).
 - **The mod's own frame counters under Uncap FPS, counted in sixtieths** (the mod guide, step 24): `HoldUps` (30, 3,
   and the 5 after each) and `AutoSave` (20) now count only on a frame that starts a new 1/60 s. Built with
   `FrameRate.OnTick`, the test the game's sites use (`IntStep`), not a difference of `Tick60` values as the plan said:

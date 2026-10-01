@@ -688,9 +688,9 @@ The output stays in the BepInEx folder.
     (left); the crystal berry (location 19, x -9.9) and the dig spot `Mound` (x -24) are on the cave side, reachable
     from the den without the horn.
   - **Kabbu's horn (puzzles):** `SnakemouthDoorRoom` from the bridge side is a chain of horn steps: cut grass to reach a
-    trampoline, knock a rock down onto a vine, push two rocks onto switches, which starts the trapdoor scene (its
-    starter, `MushroomItem`, requires flag 13, which the trapdoor scene, Event4, sets itself: `EventControl.cs:1215`). Coming up from the trapdoor
-    without the horn is presumably one-way for the same reason (the tester's reading, not tried). The bridge room's
+    trampoline, knock a rock down onto a vine, push two rocks onto switches, which starts Event4: it sets flag 13
+    itself (`EventControl.cs:1215`) and drops the Mushroom whose pickup (`MushroomItem`, which requires flag 13)
+    starts the trapdoor scene, Event5. Coming up from the trapdoor without the horn is presumably one-way for the same reason (the tester's reading, not tried). The bridge room's
     hidden-spot discovery (discovery 2, location 30) is behind grass too.
   - **Vi's beemerang (range):** `SnakemouthBridgeRoom`'s bridge comes down when its rope is hit; from the right only the
     beemerang reaches it, from the left Leif's move hit it (so presumably any member's; Kabbu's not tried). The room's
