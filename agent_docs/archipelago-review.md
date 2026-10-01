@@ -71,6 +71,13 @@ review (2026-09-29); the files have moved since, the claims checked again 2026-0
     `_instantiate` (`:206`); benchmark `CachedRuleBuilderWorld` and record the decision (`:177`; `apquest/rules.py`,
     main only).
 14. **Trackers:** Universal Tracker support (`interpret_slot_data`) and a PopTracker pack (`other_en.md:31-37`).
+    Read 2026-10-01 (licences in `licensing.md`): Universal Tracker runs the apworld's own rules ("using the actual
+    generation logic", `other_en.md:37`); anything random not from the yaml or items comes back from slot_data
+    through `interpret_slot_data` or `re_gen_passthrough`, and its `/explain` uses the Rule Builder's explanations
+    (its `docs/apworld-integration.md` and `re-gen-passthrough.md`, branch `tracker`). PopTracker reads only its
+    pack's JSON `access_rules` and Lua (`doc/PACKS.md`, "Rules"), so a pack's logic is exported: the Rule Builder
+    "is intended to be written first in Python [...]. To facilitate exporting the rules to a client or tracker,
+    rules have a `to_dict` method" (`rule builder.md:368`). Rules written as text would need the same export.
 15. **slot_data: only what's necessary.** *Recommended:* "to not waste resources, it should be limited to data that
     is absolutely necessary"; for locations "it is preferable to use LocationScouts"; "the most common usage of slot
     data is sending option results" (`world api.md:878-887`). Ours sends seven entity tables (nine since build step

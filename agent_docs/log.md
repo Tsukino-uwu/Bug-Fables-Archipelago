@@ -60,6 +60,7 @@ either one wrong).
 - [2026-09-30: MeshGhost compared, four of its gates brought here](#2026-09-30-meshghost-compared-four-of-its-gates-brought-here)
 - [2026-10-01: the Rubber Prison's swinging platforms smoothed at 240](#2026-10-01-the-rubber-prisons-swinging-platforms-smoothed-at-240)
 - [2026-10-01: a stale check against the code, then a fact check](#2026-10-01-a-stale-check-against-the-code-then-a-fact-check)
+- [2026-10-01: text logic or the Rule Builder, for the trackers](#2026-10-01-text-logic-or-the-rule-builder-for-the-trackers)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2344,3 +2345,13 @@ either one wrong).
     "once per launch" resets on hot reload; Detector's help line (it beeps for any check in a seed); `DevConsole.cs:649`
     (Rarity's colours by default). Plus about 20 comments carrying provenance or past attempts (the lean-comment rule),
     listed in the agent's report: ApMenu.cs:690, WarpButton.cs:42, EnemyScaling.cs:112, Abilities.cs:107 the clearest.
+
+## 2026-10-01: text logic or the Rule Builder, for the trackers
+
+- The user asked whether we tokenize the logic, and whether the Rule Builder could support Universal Tracker and
+  PopTracker as well as text logic would. We don't tokenize: rules are Rule Builder objects in `logic/`.
+- Read (licences first, rows added to `licensing.md`): Universal Tracker's two integration docs and PopTracker's
+  `PACKS.md`, plus `rule builder.md`'s Serialization section. Universal Tracker runs the apworld's own rules, and
+  PopTracker's own format needs an export whichever way the rules are written. The Rule Builder's docs name
+  exporting through `to_dict` as the intended way (`archipelago-review.md`, item 14, carries the citations).
+- The user wants both trackers supported. It is item 14 of Next 43; nothing built yet.
