@@ -78,6 +78,11 @@ review (2026-09-29); the files have moved since, the claims checked again 2026-0
     pack's JSON `access_rules` and Lua (`doc/PACKS.md`, "Rules"), so a pack's logic is exported: the Rule Builder
     "is intended to be written first in Python [...]. To facilitate exporting the rules to a client or tracker,
     rules have a `to_dict` method" (`rule builder.md:368`). Rules written as text would need the same export.
+    Maps (read 2026-10-01): a PopTracker map is one fixed image, its pins at fixed `x`/`y`; Lua can hide or show pins
+    and zoom, pan or switch tabs, but has no access to the UI beyond that (`PACKS.md`, Maps, Locations, Ui Hints), so
+    nothing redraws a map per seed. Universal Tracker's map tab reads the same PopTracker JSON, takes all logic from
+    the apworld, and with entrance tracking colours each door pin and shows where it leads once found; it advises
+    against shipping map images in an apworld (its `docs/map-integration.md`).
 15. **slot_data: only what's necessary.** *Recommended:* "to not waste resources, it should be limited to data that
     is absolutely necessary"; for locations "it is preferable to use LocationScouts"; "the most common usage of slot
     data is sending option results" (`world api.md:878-887`). Ours sends seven entity tables (nine since build step
