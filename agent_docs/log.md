@@ -2312,3 +2312,35 @@ either one wrong).
   both read the same clock, but a difference would count a long frame as several sixtieths where the game's counters
   count one, and would change the waits with the row off (every frame counts, as before). Built, not seen; on
   TO-CHECK.md. A slip of mine: one rename in `AutoSave.cs` went through `sed`, not Edit; checked in the diff after.
+- **Stopped at the user's word** ("lets pause here for now, and continue in another chat"). The negative test passed
+  on the repo's HEAD after the capability commit (`cf2c691`). The plugin with the frame counters is built, not yet
+  copied into the game. **Still to do:**
+  - **MEASURED.md from line 1064** (one agent, 18 findings; its line numbers ran a few lines low, so find each by its
+    text). Checked and held, not yet fixed: F1 `currentdialogue`/`diagstring` are `MainManager.cs:2749`, `:2747`, the
+    skip test `:5141` (not `:2799`); F2 Event8's end has no fade-in (HUD `:2857`, then ResetCamera, music, EndEvent to
+    `:2866`; its fade-in comes before, `:2742` or `:2780`); F3 `Jump(float)` sets velocity, `offgroundframes` and
+    `jumpcooldown = 30` (`EntityControl.cs:4593-4607`), the sound is `DoJump`'s (`PlayerControl.cs:1555`), and the
+    player's jump also fires within 3 frames of leaving the ground (`:372`); F4 activationflag is read at
+    `MapControl.cs:1650` (`:1661` is the start position, keep it); F5 Event5 turns gravity off and sets
+    `overrideanim`/`overrridejump` for every member at `EventControl.cs:1292-1296` (`:1334-1335` is the leader's
+    animation); F6 some callers do null-check `GetEntity` (`MainManager.cs:9498`, `EventControl.cs:336`); F7 window 2's
+    sprites array is 20 long (`PauseMenu.cs:2584`), the map's one per area plus one (`:2779`). **F7 may be a bug, not
+    only a doc line:** `WarpButton.cs:217-221` assumes another page's array is shorter than window 0's 19; coming back
+    from window 2, `AddButtons` could run on window 2's array, whose `sprites[15]` and `[16]` it never fills (it fills
+    0, 1, 4, 5, 12-14, 24-28 and more): a null there throws inside the pause menu's prefix. Read further, then ask
+    the user to open page 2 of the pause menu and come back, with the Warp row on. Unchecked: F8 (Vi's tap guarded by
+    `beemerang`, not `actionroutine`), F9 (EnemyCheck runs for story fights with `calledfrom` null), F10 (flag 162's
+    hologram changes Zommoth's and the Everlasting King's scripts), F11 (the Everlasting King removes `SurviveWith10`,
+    `BattleControl.cs:20899`), F12 (Event3 is the cooking scene), F13 (Event120 doesn't read battleresult; Event85
+    does), F14 (Kabbu's base attack `:11551`, `:11570`), F15 (Event61 places the party, `EventControl.cs:9871`), F16
+    LoopPoints' first value is the loop's end, F17 Mothfly's heal is clamped to maxhp, not 99, F18 flag 281's "Used by
+    `logic/snakemouth_den.py`" (that file keys on regional flags).
+  - **The mod's config texts, help lines and comments** (one agent, 79 files, 9 findings, none checked yet):
+    `ItemSwap.cs:38` (giveitem does set the item's own article, `MainManager.cs:11545`, `:11554`; the mod guide's
+    step 9 says the same wrong thing); `ApMenu.Rows.cs:44` Item animation All (starting items, the opening's quiet
+    checks and scene-shown items get no box, `ItemReceiver.cs:153-158`); `EnemyScaling.cs:531` and `:362` (animid isn't
+    the row read for five variants, `MainManager.cs:6157-6191`); `MusicShuffle.cs:221` (`StopSound(int)` stops by slot);
+    `ItemSwap.cs:90` (text2 follows the additemtoss); `DevConsole.cs:62` (the coyote-time jump, as F3); `Plugin.Dev.cs`
+    "once per launch" resets on hot reload; Detector's help line (it beeps for any check in a seed); `DevConsole.cs:649`
+    (Rarity's colours by default). Plus about 20 comments carrying provenance or past attempts (the lean-comment rule),
+    listed in the agent's report: ApMenu.cs:690, WarpButton.cs:42, EnemyScaling.cs:112, Abilities.cs:107 the clearest.
