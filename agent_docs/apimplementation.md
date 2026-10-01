@@ -26,7 +26,8 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
   [13](documentation.md#13-the-entrance-randomizer-in-the-game-doors-rewritten-at-map-load).
 - **What goes in the item pool:** the pool's rules, [1](#build-step-1-the-apworlds-layout-item-classes-and-location-names);
   the Boat Ticket, [16](#build-step-16-the-boat-ticket-metal-island-behind-a-custom-key-item), and the submarine,
-  [36](#build-step-36-progressive-boat-the-boat-ticket-and-the-submarine-as-items); party members,
+  [36](#build-step-36-progressive-boat-the-boat-ticket-and-the-submarine-as-items); party members and moves, the
+  design, [13](#build-step-13-party-members-and-moves-as-items-the-design-in-progress); party members,
   [18](#build-step-18-starting-party-member-the-other-members-shuffled-as-items) and
   [20](#build-step-20-all-three-the-default-every-member-from-the-start-no-member-items); moves and abilities,
   [21](#build-step-21-shuffle-field-moves-the-three-starting-moves-as-items),
@@ -47,6 +48,9 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
   [4](#build-step-4-auto-connect-retries-and-a-dropped-connection),
   [5](#build-step-5-a-compressed-websocket-connection), [7](#build-step-7-receiving-items-each-once-counted-in-the-save),
   and How it works 1 to 7.
+- **Shared with other players:** Item colors,
+  [19](#build-step-19-item-colors-archipelagos-colours-for-players-and-item-classes); DeathLink,
+  [25](#build-step-25-deathlink-a-panel-row-deaths-sent-and-received).
 - **Releases and safety:** [17](#build-step-17-releases-the-three-downloads-and-how-theyre-built),
   [28](#build-step-28-the-preflight-nothing-unpublishable-in-the-repo-or-a-release).
 
@@ -141,7 +145,8 @@ be wrong.
    commands from the text line, Enter to type in the field and in battles, a Chat menu in the panel). It is the
    answer to Next 43, item 18.
 10. **A "Quality of life" page in the Archipelago panel** (2026-09-25): on/off rows that speed the game
-   up and make it smoother: skips first, others later. Battle tutorials next (the mod guide, step 10).
+   up and make it smoother: skips first, others later. Battle tutorials skipped too, seen 2026-09-27 (the mod guide,
+   step 10).
 11. **Map fast travel, built (2026-09-26; the mod guide, step 10), seen travelling to the Outskirts** (planned
    2026-09-25), apart from the Warp to Start button. On the pause menu's map
    (window 6, which lists areas), pick an area you've been to and confirm (Yes / No) to travel to its save point
@@ -149,9 +154,9 @@ be wrong.
    `MainManager.UpdateArea`). The logic never counts on it, like the warp. **One row with the warp
    (2026-09-26):** the Warp button's on/off becomes *Travel: Off / Warp / Map / Both* (Warp to Start only, map fast
    travel only, or both), so the two are set together. **The look (2026-09-26):** alone, either button
-   looks like the Warp button does now; with Both, the two get different background colours. Map's icon: proposed a
-   map icon always (so the button says what it does), still undecided. Both means a sixth button in the pause menu:
-   it must fit and look good there, seen on screen before it counts as done. **The order:** both sit to
+   looks like the Warp button does now; with Both, the two get different background colours. The icons, decided and
+   seen (2026-09-26, the mod guide's step 10): Map the round blue map, Warp the scroll; Both makes six buttons, 1.7
+   apart, seen fitting in the pause menu. **The order:** both sit to
    the right of the game's buttons, Warp first, Map last. Left from the first button wraps round to Map for quick
    access, and Warp sits in between, so it's reached by accident less often. **How it's picked (2026-09-26):** on the pause menu's map, target a
    visited area and press confirm: a "Travel to <area>?" Yes / No box (No first). Confirm flips an area's description
@@ -185,8 +190,8 @@ be wrong.
 17. **Berry multiplier, a panel setting** (2026-09-26): built and seen, `documentation.md` step 19. *Berry
    multiplier* on the Gameplay page, 1x to 10x, default 1x, the same opt-in. Only the berries picked up in the world (lying there or dropped after a fight), never a
    check's reward from the server. Only while Archipelago is enabled, or with *Use on normal saves*.
-18. **Random start** (2026-09-26): `anywhere` built, experimental; `towns` and named spots to come. See build
-   step 15.
+18. **Random start** (2026-09-26): `anywhere` built, experimental; *Save Points* and *Any Room* designed
+   2026-09-30 (replacing the planned `towns`), to build. See build step 15.
 19. **Traps, an idea for later** (2026-09-26; not planned yet). A trap sent to this game takes effect when
    the server delivers it, after any open text box, like any received item. Held up at pickup: its own icon on a red
    starburst. One icon per trap, so the player knows what's coming. Examples: the Mistake medal poisons
@@ -561,6 +566,12 @@ be wrong.
    none is an event, which the server never hears of (`world api.md`, events). **Read (2026-09-30):** Super Metroid's
    apworld (0.6.7, `worlds/sm/__init__.py:186-200`) makes its bosses events, a locked "Boss" item with
    `address = None`, logic only; our "First Boss Beaten" is the same. Its own build step when built.
+54. **Points of No Return** (2026-09-30, the user: the Warp counted as the way back from a one-way): built, build step
+   37 (the mod guide's step 38); it changes no seed until rooms are mapped (Next 2). Next, the user sees a seed with it
+   on and Travel Off, the Warp still in the pause menu.
+55. **Spy Specs, a panel setting** (2026-09-30, the user's idea): built, the mod guide's step 39, a Quality of life
+   row, off by default, as if the medal were equipped. No check and no logic depend on it. The row seen on its page;
+   next, the user sees its battle effects.
 
 **Known issues:**
 
@@ -636,7 +647,8 @@ be wrong.
     with the `ShakeSprite` fix below, nothing odd was seen in combat on screen (2026-09-28; no before/after seen).
   - **A frozen enemy shimmering after a knock, and the leader blurry on platforms and bridges** (2026-09-27; "really
     blurry/bad", 2026-09-30): drawn only at physics steps. Every character is now drawn smoothed (mod guide, step 24),
-    seen sharp on a conveyor and in flight (2026-09-30); platforms, bridges and a frozen enemy not yet seen with it.
+    seen sharp on a conveyor and in flight (2026-09-30); the Rubber Prison's swinging platforms, drawn smoothed too,
+    seen smooth with the party on one (2026-10-01); bridges and a frozen enemy not yet seen with it.
   - **Bushes shaking before the leaf gang's ambush looked blurry** (2026-09-27, at 240; the swamp,
     Event128): `ShakeObject` fixed (mod guide, step 24), not yet seen. Shaky text: fixed and seen.
   - **Hits:** a character's own shake (`ShakeSprite`) was per frame and is fixed, seen without anything odd (2026-09-28); which part of a hit
@@ -1381,7 +1393,11 @@ if a Hearty Breakfast can also be found or bought (the cautious side); the cook'
 `test_near_snakemouth_exits_open_before_the_boss`. **Seen (2026-09-26):** walked into Chuck's Abode before the
 boss; resting and the save point work there (a dead end with a rest and a save, before the cave).
 
-**Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion fallback and statue, Madeleine's house, and the bar with its quest board seen on screen (2026-09-25); every board listing bounties (built 2026-09-25), Eetl's blocker, the inn and chapter 2's held scenes not yet seen (the boat's hold was removed, 2026-09-26); the open start is always on, not an option (2026-09-26).
+**Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion fallback and statue, Madeleine's house, and the bar with its quest board seen on screen (2026-09-25); the exits near Snakemouth Den seen (2026-09-26); every board listing bounties (built 2026-09-25), Eetl's blocker, the inn and chapter 2's held scenes not yet seen (the boat's hold was removed, 2026-09-26); the open start is always on, not an option (2026-09-26).
+
+*Code: the lists in `logic/*.py` (`KEPT_OPEN`, `KEPT_PRESENT`, `SCENERY_HIDDEN`, `SCENERY_PRESENT`, `HELD_UNTIL`,
+`PRESENT_FROM`, `HELD_UNTIL_ITEM`, `DIALOGUE_FLAGS`, gathered in `logic/__init__.py`), sent by `slot_data.py`; in the
+mod `KeptOpen.cs`, `PartyFit.cs` (the follower fallback) and `QuestBoards.cs`.*
 
 ---
 
@@ -1397,7 +1413,7 @@ filler). Two checks can share one flag: the delivery quest pays 15 berries and a
 are locations and are sent together. In the mod, receiving berries uses the game's own money reward (capped at
 999); at a berry location the command is turned, just before it runs, into a hand-over the item swap already
 handles (`BerryPrefix`). **The pool is now the included locations' vanilla items**, plus the items the options add
-(members, abilities, the mod's own), plus padding: an item whose vanilla spot isn't a location (the Plushie at the theater) stays with the game (test `TestBerries`).
+(members, abilities, the mod's own), plus padding: an item whose vanilla spot isn't a location (the Plushie at the theater) stays with the game (test `TestPermitGate.test_pool_is_the_locations_items`).
 **Crystal berries** (2026-09-24: the first thing you pick up): a counted currency (`flagvar[14]`, the
 crystal berry shop's counter), 50 berry spots each known by its `crystalbflags` index. A berry location's check is
 that index (`location_berries`), the pickup is recognised by it (`data[0]`), and all of them hold the one item
@@ -1516,6 +1532,10 @@ measure first: how a won battle knows which map enemy started it, and whether th
 
 **Status:** in progress: respawning pickups (2026-09-24), the missed-prize path and discoveries (2026-09-25) seen on screen, crystal berry spots too (the mod guide, step 9); berries, the lost kid's reward and the prize payout not yet seen in game; Placeholders planned; bestiary, recipes and enemy checks parked.
 
+*Code: `options.py` (`CATEGORY_OPTIONS`, `category_count`), `locations.py` (`category_on`), `slot_data.py`
+(`location_berries`, `location_discoveries`, `location_vars`, `location_pickups`); in the mod `LocationChecks.cs`,
+`ItemSwap.Pickups.cs` (`BerryPrefix`) and `CrystalBerryTotal.cs`.*
+
 ---
 
 ## Build step 11: shops as locations (medal shops, item shops, the caravan)
@@ -1615,6 +1635,10 @@ shop joins only with *Shuffle Crystal Berries* on, and *Shuffle Crystal Berries*
 shop vanilla.
 
 **Status:** in progress: Merab's medal shop (her full stock of 22 from a new game, seen 2026-09-25; the mod guide, step 12), Madame Butterfly's item shop and the caravan seen on screen (2026-09-25); Shades's shop not built (it waits for all 50 crystal berries as locations); the other item shops to follow.
+
+*Code: `options.py` (`ShuffleMedalShops`, `ShuffleItemShops`, `ShopContents`), `rules.py` (`SHOP_CATEGORIES`,
+`fall_back_from_filler_only`), `slot_data.py` (`location_shops`, `location_item_shops`); in the mod `ShopSwap.cs`
+and `ItemShops.cs`; tests `test_shops.py`.*
 
 ---
 
@@ -1980,6 +2004,9 @@ game (APQuest) carrying all 325 fights in `slot_data`, and **seen on screen** (2
 seed and the log (`[enemies] BugariaOutskirtsEast1:4: 30 10 -> 10 9`) said; bosses,
 `both`, `chaos` and the map look to come.
 
+*Code: `options.py` (`EnemyShuffle`), `enemies.py` (`shuffle_encounters`), `data/enemies.json` (from
+`dev-scripts/enemy-table.py`), `world.py` (`generate_early`); in the mod `EnemyShuffle.cs`; tests `test_enemies.py`.*
+
 ## Build step 15: Starting Location, a new file starts in a random room (experimental)
 
 A yaml option for where a new file begins. **Experimental** (ruled 2026-09-26), like the entrance
@@ -2042,7 +2069,8 @@ music change reaches), and its own opening music is a fade-out instead. Seen on 
 
 **Any room, not just save points (2026-09-26: "an actual random area ... somewhere in a dungeon"):**
 - **Values:** off / towns / random as proposed, but Archipelago reserves `random`, so `anywhere` is the fully random one;
-  `towns` is still to come (the save-point table, `data/starts.json`, stays for it).
+  `towns` is still to come (the save-point table, `data/starts.json`, stays for it; replaced 2026-09-30 by the
+  designed *Save Points*, below).
 - **The pool** (`ROOM_STARTS` in `data_tables.py`): every room entered through a door, both ways of each connection in
   `doors.json`. `slot_data` `start` is `{"map", "from"}`: the room, and the map whose door leads in.
 - **The mod** reads the door in the `from` map that leads into the room (`QualityOfLife.DoorInto`, the dev test start's
@@ -2092,6 +2120,10 @@ actually be random not just 'semi random'"):
 the truly random start designed (2026-09-30), to build; the logic from the start to come; the intro is always skipped
 with a seed start.
 
+*Code: `options.py` (`StartingLocation`), `data_tables.py` (`ROOM_STARTS`, `STARTS`), `data/starts.json` (from
+`dev-scripts/save-points.py`), `world.py` (`generate_early`); in the mod `QualityOfLife.Opening.cs` (`DoorInto`,
+`SeedStartDoor`) and `WarpButton.cs` (`SavePointSpot`); tests `test_start.py`.*
+
 ## Build step 16: the Boat Ticket, Metal Island behind a custom key item
 
 The first of the mod's own items (custom gates, "How this mod does it"), suggested on Discord. **Decided
@@ -2108,7 +2140,8 @@ trip free and the ticket kept; the logic gates Metal Island on it, so Metal Isla
    seed. When every location already holds its vanilla item (the default seed had 59 for 59 then), one ordinary item or
    berries with a copy left makes room, picked with the seed's random; never a medal, never an item's last copy.
 3. **The logic** (`logic/metal_island.py`): a Metal Island region, reached from the Outskirts (the pier) with the Boat Ticket.
-   No locations there yet.
+   No locations there yet. Since 2026-09-30 every map is a region, and the boat a transfer from `BugariaPier` to
+   `MetalIsland1` needing one Progressive Boat (or the Boat Ticket with *Progressive Boat* off).
 4. **The sailor** (`BoatTicket.cs`): a postfix on `MainManager.GetDialogueText` on `BugariaPier`, since every line of
    his, the first included, comes through it. His lines as approved, line by line (`log.md`,
    2026-09-26): the offer "Would you fancy traveling to Metal Island? Show me your ticket.", the
@@ -2137,6 +2170,9 @@ and the submarine as its second; off, the ticket is its own item, as here (build
 
 **Status:** works both ways, seen on screen (2026-09-26). Since 2026-09-30 the ticket is the Progressive Boat's first
 copy by default (build step 36).
+
+*Code: `data/items.json`, `logic/metal_island.py`; in the mod `CustomItems.cs` and `BoatTicket.cs`; tests
+`test_progressive_boat.py`.*
 
 ## Build step 17: releases, the three downloads and how they're built
 
@@ -2170,7 +2206,10 @@ BepInEx is not bundled; the player installs it first.
    `release/mod/` (with no debug info: the pdb isn't shipped, and its path would put the build machine's folders into
    the DLL; checked with `strings`), and writes `release/built-from.txt`: each source file's git blob hash (line endings normalised, so
    a Windows and a Linux checkout agree) and each shipped DLL's SHA-256. `.gitignore` lets exactly those four DLLs in.
-2. **A stale gate.** `build-release.ps1 -Check` recomputes both lists and fails if they differ. It runs when
+   Since 2026-09-29 it builds HEAD in two clean clones that must come out byte for byte the same (the mod guide,
+   step 32).
+2. **A stale gate.** `build-release.ps1 -Check` recomputes both lists and fails if they differ (since 2026-09-29 it
+   runs preflight's release sections instead: Release staging and the three DLL sections, build step 28). It runs when
    releasing: a job in the release workflow and `release.ps1`'s preflight. It ran on every push at first, which kept
    `main` red between releases, where a DLL older than its sources is expected; moved on 2026-09-28. Tried both ways (2026-09-26): a probe line in a `.cs` file
    failed it, naming the file; removing it passed.
@@ -2181,13 +2220,14 @@ BepInEx is not bundled; the player installs it first.
    - a `Config.Bind("Debug", ...)` outside `Dev/`;
    - a `[Debug]` setting on by default, for dev installs;
    - one of `Dev/`'s own types, or a "Dev only" text, found in the built DLL. `-Check` repeats that last check on the
-     committed DLL.
+     committed DLL. Since 2026-09-29 preflight's DLL sections do it, refusing any of `Dev/`'s types and any name or
+     string the source lacks, on the fresh build and in `-Check`.
 
    Tried both ways (2026-09-28). A probe `[Debug]` bind in a feature file failed it, naming the key and file. The first
    version of the check counted every file as in `Dev/`, because PowerShell's `-match` ignores case and the checkout
    sat under a folder named `dev`; it is case-sensitive now. The release DLL went from 389,632 to 308,224 bytes, and it
    loaded in game (`copy-dev -Layout Release`) with no dev line in the log and every feature installed.
-3. **CI** (`.github/workflows/ci.yml`, every push, and called by the release): the apworld on a
+3. **CI** (`.github/workflows/ci.yml`, every push and pull request, and called by the release): the apworld on a
    Python matrix (3.11, 3.12, 3.13, what Archipelago's own CI tests at 0.6.7). Each leg checks out Archipelago
    `0.6.7`, installs it the way Archipelago's own `unittests.yml` does (then sets `SKIP_REQUIREMENTS_UPDATE=1`: on the first
    run, 2026-09-26, two worlds' pins clashed over `typing-extensions` on Python 3.12 and 3.13, and `Launcher.py` stopped
@@ -2204,7 +2244,8 @@ BepInEx is not bundled; the player installs it first.
 4. **The release** (`.github/workflows/release.yml`, run by hand): a guard first (the version is `vX.Y.Z` and
    matches `Plugin.cs` and `world_version`; the tag is free; nothing unpublishable in the highlights or in any commit
    subject the generated notes will publish, checked by the preflight's text rules since 2026-09-29, build step 28),
-   then CI, the preflight workflow and the stale gate, then the publish job zips `release/mod/BepInEx` and attaches
+   then CI, the preflight workflow and the stale gate, then the publish job zips `release/mod`'s `BepInEx` and
+   `README.txt` and attaches
    the three files. The body is the highlights (changes and new features, or nothing), a section on what the code
    may do that changed since the last release, and GitHub's generated notes.
    `softprops/action-gh-release` is pinned to a commit, since it runs with write access. Since 2026-09-29 (build
@@ -2243,6 +2284,9 @@ the downloads fetched back: the zip's DLL matches `built-from.txt` and reports 0
 The stale gate moved from push CI into the release workflow (2026-09-28), with `release/` rebuilt, so `main` is green
 between releases; `-Check` passes locally, and the moved job first runs at the next release.
 The dev tools are out of the release build (2026-09-28): the gate checks it, and the Release DLL ran in game with none.
+
+*Code: `dev-scripts/build-release.ps1`, `release.ps1` and `verify-release.py`; `.github/workflows/ci.yml` and
+`release.yml`.*
 
 ## Build step 18: Starting Party Member, the other members shuffled as items
 
@@ -2317,6 +2361,9 @@ same day):** a new file on that seed started in the town plaza with Kabbu and Vi
 this world and from another player (2026-09-26); past the gate with a Leif start, the trapdoor and spider scenes with
 all three, Leif back in the party after (2026-09-27).
 
+*Code: `options.py` (`StartingPartyMember`), `world.py` (`generate_early`), `items.py`, `slot_data.py`
+(`starting_member`); in the mod `PartyMembers.cs`; tests `test_party.py`.*
+
 ## Build step 19: Item colors, Archipelago's colours for players and item classes
 
 Archipelago's own clients colour a message the same way everywhere, so players read "whose, and how important" at a
@@ -2355,6 +2402,8 @@ colour; received, "You got Kabbu from Other!" and "You got Leif from Other!" whe
 **Status:** works, seen on screen with a real second player (2026-09-26), every class and both directions; Rarity, the
 default since, seen on a gift (the icon and its text in purple).
 
+*Code: `HoldUps.cs` (the colours, `AddApColors`), the row in `QualityOfLife.cs` (`ItemColors`).*
+
 ## Build step 20: All Three (the default), every member from the start, no member items
 
 *Starting Party Member* gets a sixth choice, **All Three**: a new file starts with Vi, Kabbu and Leif, and no member is an
@@ -2385,6 +2434,9 @@ there from the first frame; his item then finds him already in.
 with party 0, 1, 2; Leif's item found him already in). On a fresh seed both opening spots showed their box (Poison
 Resistance, then Sleep Resistance from the silent spot); a second file on a used seed shows only the gift's, since the
 server already holds the silent spot's item at login.
+
+*Code: as build step 18 (`StartingPartyMember`'s `all_three`, the default); tests `test_party.py`
+(`TestStartAllThree`).*
 
 
 ## Build step 21: Shuffle Field Moves, the three starting moves as items
@@ -2441,6 +2493,9 @@ step 29).
 Beemerang Toss from Madeleine's table; the key items in the bag (Freeze and Horn Slash with Leif's and Kabbu's party
 icons, Jump with the Archipelago icon, "Kabbu can use Horn Slash." as the description; seen in a screenshot).
 
+*Code: `options.py` (`ShuffleFieldMoves`), `rules.py`; in the mod `FieldMoves.cs` and `CustomItems.cs`; tests
+`test_moves.py`.*
+
 ## Build step 22: Shuffle Jump, Jump as an item
 
 Jump becomes one item for the whole party ("jump would just apply for any member/the whole party, unlike
@@ -2463,6 +2518,9 @@ the attacks"), behind its own option, `shuffle_jump` (off).
 
 **Status:** works, seen on screen (2026-09-27): the jump locked until its item (the Ladybug house), then free for
 the whole party; the Warp stayed in the pause menu with Travel set to Off.
+
+*Code: `options.py` (`ShuffleJump`), `slot_data.py` (`shuffle_jump`); in the mod `FieldMoves.cs`; tests
+`test_moves.py` (`TestJump`).*
 
 ## Build step 23: the seven learned field abilities as items (always, progressive)
 
@@ -2506,6 +2564,9 @@ level without the first "wouldn't work"): Beemerang Toss then Halt, Dash then Ho
 **Status:** built (2026-09-27): the logic and pool tested, the mod built, its patch counts taken from the game's IL and
 confirmed in the running game (its log: 8 of 8, 2 of 2, 15 of 15). Not yet seen in game: a received ability working, its battle skill, the key items' text, a scene sending its check.
 Decided and still to build: without the Horn Slash the Dash only moves (Next 23), for Shuffle Field Moves.
+
+*Code: `abilities.py` (`item_count`, `item_copies`), `slot_data.py` (`ability_items`); in the mod `Abilities.cs` and
+`CustomItems.cs` (ids 205-211); tests `test_abilities.py`.*
 
 ## Build step 24: the logic, second part: the rules for writing it, room by room
 
@@ -2691,7 +2752,8 @@ A section that finds nothing to check fails rather than passing: "0 files scanne
 - **Index sanity:** plain files only (no links, submodules or conflicts), names that work on every system, no two
   paths differing only in case.
 - **Known kinds only:** every file matches a kind in the patterns file ("a C# file of the mod", "a player doc"); a
-  file of any other kind fails.
+  file of any other kind fails. `.gitattributes` may set only `text`, `eol` and `binary`, nothing that changes what git
+  stores or shows.
 - **Binaries:** the only binary files are the four release DLLs, each a .NET assembly, and the three libraries are
   byte for byte the files NuGet ships.
 - **Hidden characters:** no invisible, bidirectional or control character anywhere. Those can make code read
@@ -2704,8 +2766,9 @@ A section that finds nothing to check fails rather than passing: "0 files scanne
 - **Game files:** no game assembly, asset, save or decompiled code.
 - **Hosts and addresses:** every host named anywhere is in the capabilities list with a reason, and no public IP
   address appears (the four-part version numbers that look like one are listed by name).
-- **Licences:** every project cited has its row in `licensing.md`, and the release carries the licence and every
-  shipped library's notice.
+- **Licences:** every project cited has its row in `licensing.md` (the user's own work, the owners in
+  `own_github_owners` in the patterns file, needs none), and the release carries the licence and every shipped
+  library's notice.
 - **Commit messages** (`--history` only): no credential, home path or hidden character in any message.
 
 **The apworld's rules (2026-09-29).** The apworld is Python that runs on whichever machine generates a seed, the
@@ -2738,7 +2801,7 @@ So it gets the strictest rules, read from its syntax tree, not by searching text
   - the randomizer's own saves;
   - the clipboard, on paste and copy;
   - finding game types by name;
-  - the dev build's dump tools, which never ship.
+  - the dev build's tools (dumps, the console's command file, hot reload's status, the save diff), which never ship.
 
   Reflection on a type named in the code (Harmony's everyday tool) is not listed: the target is in plain sight.
 
@@ -2830,6 +2893,9 @@ its `-Check` (the release's gate) is now preflight with `--release`.
   in the patterns file. A figure with its number ("2-3 years old") is a measurement, and passes. On its first run it
   found two lines in the mod guide, reworded with their dates, and one commit message quoting a phrase it had just
   removed, reworded before it was pushed.
+- **Plain links** (in `.githooks/doc-coverage.py`, run by the pre-commit hook): every plain link in a tracked Markdown
+  file leads to a tracked file or a folder holding one, as links into a heading already had to. All 213 led
+  somewhere on its first run.
 
 **Checking a release against the repository (2026-09-29): `dev-scripts/verify-release.py`.** Given a release's
 files and the tag, it checks:
@@ -2858,9 +2924,11 @@ v0.2.0, run 2026-09-29). A zip with one byte changed in a library, and an apworl
 - **`release.ps1`** waits for both push workflows before dispatching.
 
 **Where it runs so far:**
-- **Every commit:** the pre-commit hook, quiet unless something fails.
-- **Every push** (`.githooks/pre-push`): preflight on each pushed commit, and `--history` on everything new in the
-  push. A commit made past the other hooks is caught here, before it leaves the machine. When the push changes the
+- **Every commit:** the pre-commit hook, quiet unless something fails: preflight, then `.githooks/doc-coverage.py`
+  (the docs name every option, setting, `slot_data` key and source file; the indexes match their headings; every
+  link, plain or into a heading, leads somewhere; the mod guide, "Keeping this guide honest").
+- **Every push** (`.githooks/pre-push`): preflight on each pushed branch's tip, and `--history` on everything new in
+  the push. A commit made past the other hooks is caught here, before it leaves the machine. When the push changes the
   gate itself, the gate's own test (below) runs too.
 - **Every release:** the release guard runs its text rules on the release notes and on every commit subject the
   notes will publish. This replaced a separate pattern list.
@@ -2871,7 +2939,7 @@ history, free text), the test plants a real violation and checks that the sectio
 non-zero. It works in a throwaway clone outside the repo, with its link back to the repo removed. The clone holds what
 the next commit contains (HEAD plus everything staged), or, from pre-push, exactly the commit being pushed:
 1. **A clean baseline** in all three modes, so a failure afterwards is the plant's doing.
-2. **One fixture per kind of violation** (76 on 2026-09-29, counted from the test itself): a bidi override in a doc, a homoglyph in code, every
+2. **One fixture per kind of violation** (76 on 2026-09-29, 81 on 2026-09-30, counted from the test itself): a bidi override in a doc, a homoglyph in code, every
    credential format at once (each must be named), a home path inside the DLL, a library changed by one byte, a
    symlink, a submodule, a stale host row, a secret committed and then removed, and more. The fake credentials and
    paths are assembled at run time, so the test file holds none itself.
@@ -2883,7 +2951,7 @@ the next commit contains (HEAD plus everything staged), or, from pre-push, exact
    tree put back to the DLL's own sources must not count as stale. The staleness fixtures start from that tree:
    between releases the real one is legitimately newer, which would hide what they plant.
 
-It takes about 25 s. **Tested the other way round (2026-09-29):** with the Secrets section made blind on purpose,
+It took about 25 s on 2026-09-29, and 39 s on 2026-10-01 with 81 fixtures. **Tested the other way round (2026-09-29):** with the Secrets section made blind on purpose,
 all four of its fixtures failed the test. Writing the test also caught its own slips: a sample written out whole
 (preflight flagged the test file itself), a name git on Windows refuses to hold, and a fixture that stopped reaching
 its section when a second table was added below it. A plant that changes nothing now stops the test.
@@ -2893,8 +2961,8 @@ its section when a second table was added below it. A plant that changes nothing
   stand-in, which only prints an install hint, so each candidate is tried before use. A clone can name its own with
   `git config preflight.python <path>`.
 - **`commit-msg` fails closed.** Its subject-length check used to pass silently when no Python answered.
-- **A change to the gate is a commit of its own.** The preflight's files, the hooks and the workflows can't be
-  committed together with mod or apworld code, so every change to what is checked stands alone in the history.
+- **A change to the gate is a commit of its own.** The preflight's files, the hooks, the workflows and the agent's
+  guard (`.claude/`) can't be committed together with mod or apworld code, so every change to what is checked stands alone in the history.
 
 **Switched on (2026-09-29):** the first run took 0.4 s over 162 files. It caught the hooks not being executable, the old
 pattern list and hook spelling out home paths, and two slips in its own code: a real zero-width character where an
@@ -2944,11 +3012,12 @@ agent makes here (`.claude/settings.json`).
   name any of these; `bash -c`, `powershell -Command` and the like are read inside too.
 - **It refuses a read of a GitHub project with no row in `agent_docs/licensing.md`** (2026-09-30, the user's call,
   after a term had been written from memory and a fork's history read with no row): `gh api`, `gh repo` and `-R`,
-  `curl` and its kin, `git clone` and `fetch`, and page fetches. Only the project's licence file gets through, so the
-  licence is read and the row added before anything else of it; our own repository is exempt.
+  `curl` and its kin, `git clone`, `fetch`, `pull` and the like, and page fetches. Only the project's licence file gets
+  through, so the licence is read and the row added before anything else of it; the user's own work (the owners in
+  `own_github_owners`) is exempt.
 - **It asks the user first** before:
   - an edit to `docs/capabilities.md`, the patterns file, `.claude/` (the guard itself, and the local settings that
-    could switch it off) or `.git/`;
+    could switch it off) or `.git/`, and a shell command naming the clone's `.git/config` or `.git/hooks`;
   - a commit that may carry one of those, which also covers a file a script wrote rather than an edit;
   - a `gh api` call that writes, since that changes GitHub without passing a hook.
 - **Everyday work asks nothing** (the user, 2026-09-29: "I don't want to constantly have to confirm things"). The
@@ -2971,15 +3040,15 @@ agent makes here (`.claude/settings.json`).
 **Status:** built (2026-09-29): the sections above, their test, `verify-release.py`, every place they run
 (pre-commit, pre-push, CI on every push, the release), the reviewer pages, the GitHub settings and the agent's guard.
 The CI half first ran on the push of 2026-09-29 (`0fc15ce`), all green: preflight on Python 3.11 and 3.13 (the tree,
-all history, the harness's 76 fixtures), the libraries byte for byte against NuGet's package, and `ci.yml`. The guard
+all history, the harness's fixtures), the libraries byte for byte against NuGet's package, and `ci.yml`. The guard
 went live in the session that made it; its licence check on GitHub reads was added 2026-09-30. Line caps and
-Durations added 2026-09-30. Next: the TLS measurement (Known issues); the cache fix waits for a look in game (the mod
-guide's step 34).
+Durations added 2026-09-30, the harness then at 81 fixtures. Next: the TLS measurement (Known issues); the cache
+fix waits for a look in game (the mod guide's step 34).
 
 *Code: `dev-scripts/preflight.py`, `dev-scripts/preflight-patterns.json`, `dev-scripts/dotnet_metadata.py`;
 `docs/capabilities.md`;
-`dev-scripts/negative-test-preflight.py`; `.githooks/pre-commit`, `.githooks/pre-push`, `.githooks/commit-msg`,
-`.githooks/python.sh`; `dev-scripts/verify-release.py`; `.github/workflows/preflight.yml`, and the guard, publish
+`dev-scripts/negative-test-preflight.py`; `.githooks/pre-commit`, `.githooks/doc-coverage.py`, `.githooks/pre-push`,
+`.githooks/commit-msg`, `.githooks/python.sh`; `dev-scripts/verify-release.py`; `.github/workflows/preflight.yml`, and the guard, publish
 and verify jobs in `.github/workflows/release.yml`; `.claude/settings.json`, `.claude/hooks/agent-guard.py`.*
 
 ## Build step 29: the logic, third part: Python modules per area on the Rule Builder
