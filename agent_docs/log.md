@@ -64,6 +64,7 @@ either one wrong).
 - [2026-10-01: an unlisted project's licence needs the user's yes too](#2026-10-01-an-unlisted-projects-licence-needs-the-users-yes-too)
 - [2026-10-01: both trackers planned, nothing built](#2026-10-01-both-trackers-planned-nothing-built)
 - [2026-10-02: other Bug Fables apworlds](#2026-10-02-other-bug-fables-apworlds)
+- [2026-10-02: the fog maze shuffled, travel through doors, respawn loops ended](#2026-10-02-the-fog-maze-shuffled-travel-through-doors-respawn-loops-ended)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2453,3 +2454,36 @@ either one wrong).
   nobody owns a game.
 - **Measured, still true:** one Archipelago install loads one world per game name (`worlds/AutoWorld.py` at 0.6.7
   raises "already registered"), and ours is "Bug Fables". It only matters to someone who installs two at once.
+
+## 2026-10-02: the fog maze shuffled, travel through doors, respawn loops ended
+
+- **Reported (the user):**
+  - "the fog maze entrances on the way to the termite kingdom don't seem to be randomized during entrance rando". In
+    the game, "the fog maze just sends you back every now and then unless you walk the right path".
+  - Map travel to the swamp, then a jump into the water by the crystal: an endless respawn loop.
+  - A shuffled door "in chapter2 i think" did the same with a hazard. Both times the pause menu wouldn't open: "right
+    now it is possible to actually softlock yourself hard".
+- **Found (EntityDump, code read):**
+  - The fog maze's wrong turns are one-way `return...` load zones. `door-graph.py` kept only mutual pairs, so every
+    one-way door stayed vanilla.
+  - The respawn goes to `lastpos`, and to `lastloadzone` only from the 5th quick try and only while a direction is
+    held. Map travel's 2-argument `TransferMap` made a guessed spot beside the save point into both.
+- **Decided (the user):**
+  - Archipelago's one-way entrances for every one-way door, not only the fog maze's; each candidate read first. Two
+    turned out to be a missed ladder pair, and two parked at height 99.
+  - "any warp/map/teleport, always acts as if you are coming in from an entrance".
+  - The checks go into `TO-CHECK.md`.
+- **Built, three commits:**
+  - the respawn-loop guard (the mod guide, step 40; `hazardloop` to test it);
+  - map travel and Warp to Start through a door (step 10; `door-graph.py --travel`, `travel <area>`);
+  - one-way doors shuffled (the Archipelago guide, build step 38).
+- **Tried and dropped:**
+  - Requiring each travel door's way back to have no flags. It sent Warp to the far side of the Outskirts and changed
+    nothing about the ground.
+  - A separate `travel-doors.py`. Preflight refused a new script loading another by path, a `docs/capabilities.md` row
+    and the user's call, so it became a mode of `door-graph.py`.
+- **Checked:**
+  - 639 tests and the fuzzer (0 of 10000) pass; doors-off seeds are byte-identical before and after.
+  - Six seeds generated with APQuest show the one-ways in the spoiler.
+  - The mod builds, debug and release, and the dev build is copied in.
+  - Nothing is seen in game yet.
