@@ -127,7 +127,7 @@ Before writing anything, we looked at what the game is made of. Bug Fables is a 
 Mono**, which means its code ships as a normal .NET file (`Assembly-CSharp.dll`) that can be turned back
 into readable code. That's the easiest case there is. We didn't check whether anyone had already started or
 made a Bug Fables randomizer: we assumed nobody had started on an apworld, and built this one without ever
-reading, looking at or using any other, the docs included.
+reading, looking at or using any other, not even its public docs.
 
 *How to tell for your own game:* an `Assembly-CSharp.dll` in the game's `_Data/Managed` folder means
 Unity with Mono. A `GameAssembly.dll` means Unity with IL2CPP, which is harder.
