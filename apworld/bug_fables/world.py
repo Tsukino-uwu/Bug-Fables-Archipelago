@@ -8,8 +8,8 @@ from typing import Any
 from worlds.AutoWorld import World
 
 from . import entrances, items, locations, music, regions, rules, shop_inventories, slot_data, web_world
-from .data_tables import (ARTIFACTS, DOORS, ENCOUNTERS, ITEM_NAME_TO_ID, LOCATION_NAME_TO_ID, LOCATIONS, ROOM_STARTS,
-                          STORY_EVENTS)
+from .data_tables import (ARTIFACTS, DOORS, ENCOUNTERS, ITEM_NAME_TO_ID, LOCATION_NAME_TO_ID, LOCATIONS, ONE_WAYS,
+                          ROOM_STARTS, STORY_EVENTS)
 from .enemies import shuffle_encounters
 from .options import BugFablesOptions, EnemyShuffle, EntranceRandomizer, StartingLocation, StartingPartyMember
 
@@ -94,7 +94,10 @@ class BugFablesWorld(World):
     def connect_entrances(self) -> None:
         # Doors are decided here, on the region graph, and sent in slot_data; the client never decides a door itself.
         self.door_pairings = entrances.shuffle(self)
-        self.door_targets = entrances.door_targets(self.door_pairings, DOORS.connections)
+        # With the doors off nothing is rewritten, a one-way's story copies included.
+        shuffled = self.options.entrance_randomizer != EntranceRandomizer.option_off
+        self.door_targets = entrances.door_targets(self.door_pairings, DOORS.connections,
+                                                   ONE_WAYS if shuffled else ())
 
     def generate_basic(self) -> None:
         # Archipelago's step for rolls that don't affect logic; the logic's own (doors, fights) come before the rules.

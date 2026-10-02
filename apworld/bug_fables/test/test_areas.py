@@ -1,12 +1,13 @@
 """The logic's area modules (logic/) on the map regions: how they fit together, and that every name a rule uses
 exists."""
+from BaseClasses import EntranceType
 from rule_builder.rules import Has
 
 from . import BugFablesTestBase, logic_rules, rule_parts
 from ..abilities import ABILITIES
 from ..custom_rules import CanUse, Member, MoveItem
-from ..data_tables import (ARTIFACTS, DOOR_RULES, DOORS, ENCOUNTERS, ITEMS, LOCATIONS, MAPS, ROOM_STARTS, STARTS,
-                           STORY_EVENTS, TRANSFERS, UNUSED_MAPS, door_name)
+from ..data_tables import (ARTIFACTS, DOOR_RULES, DOORS, ENCOUNTERS, ITEMS, LOCATIONS, MAPS, ONE_WAYS, ROOM_STARTS,
+                           STARTS, STORY_EVENTS, TRANSFERS, UNUSED_MAPS, door_name)
 
 ALL_SPOTS = (*LOCATIONS, *STORY_EVENTS, *ARTIFACTS)
 # The unused room and the debug room: never part of anything (room-logic.md, the model).
@@ -41,6 +42,15 @@ class TestAreas(BugFablesTestBase):
                     entrance = self.multiworld.get_entrance(door_name(end.map, end.door), self.player)
                     self.assertEqual(entrance.parent_region.name, end.map)
                     self.assertEqual(entrance.connected_region.name, other.map)
+
+    def test_every_one_way_door_is_a_one_way_entrance(self) -> None:
+        # A fog maze's wrong turn or a drop: an entrance where the game has it, one-way for Archipelago's randomizer.
+        for door in ONE_WAYS:
+            with self.subTest(door=door_name(door.map, door.door)):
+                entrance = self.multiworld.get_entrance(door_name(door.map, door.door), self.player)
+                self.assertEqual(entrance.parent_region.name, door.map)
+                self.assertEqual(entrance.connected_region.name, door.to)
+                self.assertEqual(entrance.randomization_type, EntranceType.ONE_WAY)
 
     def test_door_gates_and_transfers_name_real_places(self) -> None:
         doors = {(end.map, end.door) for c in DOORS.connections for end in (c.a, c.b)}
@@ -97,6 +107,7 @@ class TestUnusedMaps(BugFablesTestBase):
             "encounter": {e.map for e in ENCOUNTERS},
             "save point": {s.map for s in STARTS},
             "room start": {m for s in ROOM_STARTS for m in (s.map, s.from_map)},
+            "one-way door": {m for w in ONE_WAYS for m in (w.map, w.to)},
             "door target": {t[key] for t in slot["door_targets"] for key in ("map", "like_map")},
             "start": {slot["start"].get("map"), slot["start"].get("from")},
         }

@@ -22,8 +22,9 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 - **The entrance randomizer:** [12](#build-step-12-the-entrance-randomizer-doors-shuffled-by-archipelagos-own-experimental),
   Room Swap [30](#build-step-30-the-entrance-randomizers-room-swap-whole-rooms-trade-places-experimental), Decoupled
   [31](#build-step-31-the-entrance-randomizers-decoupled-each-door-one-way-experimental), connection plando
-  [32](#build-step-32-the-entrance-randomizers-connection-plando-doors-pinned-in-the-yaml); in the game, the mod guide's
-  [13](documentation.md#13-the-entrance-randomizer-in-the-game-doors-rewritten-at-map-load).
+  [32](#build-step-32-the-entrance-randomizers-connection-plando-doors-pinned-in-the-yaml), one-way doors (the fog
+  maze) [38](#build-step-38-one-way-doors-in-the-entrance-randomizer-the-forsaken-lands-fog-maze); in the game, the
+  mod guide's [13](documentation.md#13-the-entrance-randomizer-in-the-game-doors-rewritten-at-map-load).
 - **What goes in the item pool:** the pool's rules, [1](#build-step-1-the-apworlds-layout-item-classes-and-location-names);
   the Boat Ticket, [16](#build-step-16-the-boat-ticket-metal-island-behind-a-custom-key-item), and the submarine,
   [36](#build-step-36-progressive-boat-the-boat-ticket-and-the-submarine-as-items); party members and moves, the
@@ -93,6 +94,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 35. [Build step 35: Filler Starting Checks, the opening's automatic checks hold filler](#build-step-35-filler-starting-checks-the-openings-automatic-checks-hold-filler)
 36. [Build step 36: Progressive Boat, the Boat Ticket and the submarine as items](#build-step-36-progressive-boat-the-boat-ticket-and-the-submarine-as-items)
 37. [Build step 37: Points of No Return, the Warp counted as the way back](#build-step-37-points-of-no-return-the-warp-counted-as-the-way-back)
+38. [Build step 38: one-way doors in the entrance randomizer (the Forsaken Lands' fog maze)](#build-step-38-one-way-doors-in-the-entrance-randomizer-the-forsaken-lands-fog-maze)
 
 **How it works**
 
@@ -122,8 +124,10 @@ be wrong.
    Shops (medal shops, item shops, the caravan): see build step 11. Other kinds of location (boss prize medals,
    placeholders, journal entries, enemy drops): see build step 10.
 2. **Entrance randomizer (experimental):** every door, coupled or decoupled (build step 31), on Archipelago's own
-   entrance randomizer, every map a region (2026-09-30, not yet seen in game); next, sorting the other transfers into chosen and forced, and the
-   room-by-room logic that removes the label. See build step 12.
+   entrance randomizer, every map a region (2026-09-30, not yet seen in game); the one-way doors (the fog maze's
+   wrong turns, drops) shuffled among themselves (2026-10-02, build step 38); next, sorting the other transfers into
+   chosen and forced, the doors still fixed (Known issues), and the room-by-room logic that removes the label. See
+   build step 12.
    **How each room gets mapped** (2026-09-27): the checklist in `room-logic.md`; the tester says what needs
    what, the agent turns it into areas and rules.
 3. **Field abilities shuffled as items** (every learned ability built, build step 23) (by the game's names: Beemerang Halt, Bee Fly, Dash, Horn Dash, Beetle Dig, Icicle, Shield; `MEASURED.md`, every field ability).
@@ -605,6 +609,16 @@ be wrong.
   respawn-loop guard (the mod guide, step 40) now ends any such loop with the Warp, and logs the last door walked
   through and whether `door_targets` had rewritten it. The next loop names the door, which then gets its own fix.
   Not yet seen with the guard.
+- **Some doors are still never shuffled** (build step 38, 2026-10-02). These keep their destination in every mode:
+  - story copies that have pairs: the Golden Settlement by day and night, the Beehive's entrance before and after
+    flag 160;
+  - doors whose name another door on the map shares: `GoldenPathTunnel2`, `WaspKingdomOutside`. The mod finds doors
+    by name;
+  - `TermiteIndustrial`'s pair inside its own map, three doors of one name.
+
+  Each needs the mod to tell the copies apart (by entity index) before it can be shuffled. The Sand Castle's two
+  right-hand basement doors are left out entirely (parked at height 99): whether they can be reached at all is to see
+  in play.
 - **A fill error with *minimal* accessibility and Shuffle Jump, next to another game** (found by the fuzzer with APQuest,
   2026-09-30: 1 of 10000). The failing pair (Bug Fables minimal, Decoupled doors, a random start, moves and Jump
   shuffled, crystal berries and discoveries off, shops with no progression; APQuest with its Hammer) failed 4 of 400
@@ -1676,7 +1690,8 @@ The survey itself, with the rule for removing a follower's need: `room-logic.md`
 1. **A door table** (`data/doors.json`), exported by `dev-scripts/door-graph.py --export` from EntityDump: every
    door paired with its way back (the door the party arrives next to), 254 connections, 508 doors. Doors stay
    fixed when the mod couldn't tell them apart by name, when they have a story variant at the same spot, or when they
-   lead into their own map; the table lists the map links those make.
+   lead into their own map; the table lists the map links those make. (Since build step 38: 255 connections, 510
+   doors, and the one-way doors in a list of their own, shuffled too.)
 2. **The shuffle** (`doors.py`, replaced by Archipelago's own on 2026-09-30, below), in `generate_early`, with the
    world's own random: the same doors joined in new
    pairs, x with y meaning x leads where y's old partner led (so you arrive next to y) and y where x's old partner
@@ -1750,7 +1765,7 @@ them; room-by-room rules (build step 24) replace them later.
 1. **One region per map:** Menu, then the 240 maps of the door table (`SnakemouthEmpty`, an unused room nothing leads
    into, and `TestRoom`, the debug room, left out; the user: "looked like a empty/test map", "TestRoom sounds obvious")
    and `MetalLake`,
-   `TermiteColiseum2`, `BugariaEndThrone`, reached only by transfers. 244 regions, 581 entrances (582 until the Termite gate went one way, build step 36).
+   `TermiteColiseum2`, `BugariaEndThrone`, reached only by transfers. 244 regions, 581 entrances (582 until the Termite gate went one way, build step 36; 584 since the one-way doors, build step 38).
    **Unused and test
    maps are never part of anything** (the user, 2026-09-30): no region, no logic, never the target of a door, a
    transfer or a spawn, never reachable (`room-logic.md`, the model). Test `TestUnusedMaps`, with every door shuffled
@@ -1758,7 +1773,8 @@ them; room-by-room rules (build step 24) replace them later.
    fails with the list emptied.
 2. **Every door an entrance of its map's region**, named where it is, `"<map>: <door>"` (the naming the entrance
    randomization doc recommends), connected as the game has it: 508. Of the 39 fixed doors between two maps, 37 are plain entrances; the two out of
-   `SnakemouthEmpty` and `TestRoom` go with those maps.
+   `SnakemouthEmpty` and `TestRoom` go with those maps. (Since build step 38: 510 doors, the 17 one-way doors are
+   one-way entrances named the same way, and 21 fixed links are left.)
 3. **The transfers that join the door graph's parts** (the doors alone split it into 10), each a `Transfer` in its
    area's module, from the decompiled events and the dumps (read 2026-09-29): the boat (`Boat Ticket`), the Beehive
    elevator, the submarine docks, the ant tunnels, the termite gate, the arena, the Roach Village lifts, the Golden Hills
@@ -3224,6 +3240,10 @@ never trade rooms (without the part rule, broken in 93) and an area joined both 
 links, broken in 85). On the real table about 490 of the 508 doors are rewritten. Seeds generated alone and with
 APQuest (the spoiler: *Room Swap*).
 
+**The one-way doors stay as they are** (build step 38, 2026-10-02): rooms move whole, and a fog maze's wrong turn
+still leads into the room it did. Only a one-way's story copy is rewritten, to follow its door. Test
+`test_one_ways_stay_as_they_are`.
+
 **Later:** doors matched by side (an exit on the right leads into a door on the left), once each door's side is read
 from the entity dump.
 
@@ -3653,6 +3673,107 @@ in game (a seed with it on and Travel Off, the Warp in the pause menu).
 *Code: `options.py` (`PointsOfNoReturn`), `custom_rules.py` (`WayBack`, `one_way`), `data_types.py` (`Transfer`),
 `regions.py`, `slot_data.py`; tests `test_points_of_no_return.py`, `test/__init__.py` (`rule_parts`, `logic_rules`).*
 
+## Build step 38: one-way doors in the entrance randomizer (the Forsaken Lands' fog maze)
+
+**Seen (the user, 2026-10-02):** "the fog maze entrances on the way to the termite kingdom don't seem to be randomized
+during entrance rando". In the game, "the fog maze just sends you back every now and then unless you walk the right
+path".
+
+**What the maze is** (the EntityDump, read 2026-10-02; `MEASURED.md`, "The Forsaken Lands' fog maze"):
+
+- Each wrong turn is an invisible load zone at a room's edge, named `return…`, and no door leads back to where it
+  lands. There are 12 of them in 8 `BarrenLands*` maps.
+- Four lead into their own map: walk off one edge and you're back at the room's entrance.
+- One spot, `BarrenLandsCD`'s left edge, is two copies switched by flag 384, the Termite gate's first opening from
+  outside (build step 36): back to `BarrenLandsEntrance` before it, a shortcut to `BarrenLandsCloud` after.
+- The right path is ordinary doors in pairs, already shuffled.
+
+**Why they stayed as they were:** `door-graph.py --export` kept only mutual pairs as `connections` and put every other
+door's map link in `fixed`. The shuffle never touched `fixed`, so every one-way door kept its destination in every mode.
+
+**Decided (the user, 2026-10-02):**
+
+- Archipelago's own way: each one-way door is a one-way entrance (`EntranceType.ONE_WAY`), which `randomize_entrances`
+  pairs only with one-ways (`BaseClasses.Entrance.can_connect_to`; `entrance randomization.md`, 0.6.7: "one-ways are
+  only randomized with other one-ways"). A wrong turn still sends you somewhere, just a different somewhere per seed.
+- Every one-way door, not only the fog maze's. Each candidate was read first, since some were listed as "to check in
+  play" (`MEASURED.md`, "Doors paired with their way back").
+
+**How it was built:**
+
+1. **The door table** (`door-graph.py --export`, `data/doors.json`):
+   - **A new list, `one_way`**, `{map, door, to, copies}`: a door with a unique name and no door back within reach of
+     where it lands, self-loops included. A story copy at the same spot counts only when every copy is one-way: the
+     one present first (no required flag) is the door, and the others follow it.
+   - **19 one-ways, 17 in play** (the other 2 are on the unused maps):
+     - the 12 fog edges;
+     - the pink spider's room, in from `BarrenLandsMushrooms` and out to `BarrenLandsPumpkins`;
+     - the underground bar's exit (its way in is the hatch, a transfer);
+     - the wizard's basement drop (flag 449, like the tower's door beside it, which no rule gates either);
+     - `GiantLairBeforeBoss2`'s left ladder down, which lands 26 units from any ladder up.
+   - **One missed pair:** `GiantLairBeforeBoss: loadzoneup` and `GiantLairBeforeBoss2: loadzoneright`. The way back
+     lands 11.3 from the ladder (the ladder's height), past the 10 the pairing allowed. With 12 the export gains exactly
+     that pair and loses none: 255 connections, 510 doors. Measuring flat instead would have broken 10 real pairs.
+   - **Parked doors are left out:** a load zone at height 90 or more. The game parks unused objects at 99 to 9999, and
+     the Sand Castle's two right-hand basement doors are the only load zones there; nothing in the code moves them.
+     Their link left `fixed` too: the logic no longer counts a way it can't prove (more cautious, never less).
+   - **`fixed` keeps 22 links:** story copies that have pairs (the Golden Settlement by day and night, the Beehive),
+     names two doors share (`GoldenPathTunnel2`, `WaspKingdomOutside`), `TermiteIndustrial`'s in-map pair.
+2. **Regions** (`regions.py`): each one-way is an entrance of its map, named where it is (`"<map>: <door>"`, as every
+   door), to the map it leads into, and one-way typed (Archipelago's default for an `Entrance`). It replaces the plain
+   link `fixed` made, so the logic with the doors off is the same graph.
+3. **The shuffle** (`entrances.py`), Coupled and Decoupled:
+   - each one-way is split with `disconnect_entrance_for_randomization(..., one_way_target_name=...)`, the
+     function's required name for a one-way's target;
+   - the target is named for its landing, `"<to> as from <map>: <door>"`. That's apart from the door's own name,
+     since coupled, Archipelago never joins an exit to a target of its own name, and a one-way may keep its own
+     landing;
+   - a pairing (x, y) of one-ways means x now lands where y did;
+   - Room Swap leaves them connected as the game has them: rooms move whole, and a one-way still leads into the room
+     it did.
+4. **`door_targets`:**
+   - a one-way x rewritten like y itself (the mod copies y's destination and landing), so the mod needed no change;
+   - a story copy always gets an entry following its door, even when the door keeps its own landing, in every mode
+     that rewrites (Room Swap too). So `BarrenLandsCD`'s left edge leads one place whatever the Termite gate.
+   - That also ends an untrue link: `fixed` used to join `BarrenLandsCD` to `BarrenLandsCloud` with no rule, though
+     the game has it only from flag 384.
+5. **The spoiler** lists each one-way once, `=>`, to its landing's name.
+6. **Plando** (build step 32):
+   - `DoorPlando`'s entrances gain the one-way doors, its exits their landings;
+   - Archipelago's own `can_connect` refuses a one-way with a two-way;
+   - a one-way connection is joined one way only, whatever its direction, as The Messenger joins a one-way
+     (`connect_plando`).
+
+**Tests** (`test_doors.py`, `test_areas.py`):
+
+- **The table:** the exact 17 one-ways and the twin's copy, the ladder pair, the parked doors in no list, landings
+  named apart.
+- **Coupled and Decoupled, plando too:** every one-way paired once, only with a one-way, one-way typed (fails with the
+  split taken out: 7 tests). The mod lands each one-way and copy where its entrance leads in the region graph. The copy
+  follows its door. Spoiler counts.
+- **Room Swap:** the one-ways stay as they are.
+- **Plando:** a planned fog edge in both modes; a one-way and a two-way refused both ways round.
+- **Every one-way an entrance** where the game has it, and no unused map among them.
+
+**Checked (2026-10-02):**
+
+- `test-apworld.ps1`: 639 tests pass, the Logic Test check reproduces 90 of 90 generations, the fuzzer 0 failures in
+  10000.
+- 244 regions, 584 entrances.
+- Six seeds generated through Archipelago's Generate, with APQuest in the room:
+  - Coupled: 17 one-way `=>` lines beside the 255 pairs. One wrong turn led into the city's commercial district, as
+    the bar's exit does: the pool is the whole game's.
+  - Decoupled: 527 lines.
+  - Room Swap: no one-way line.
+  - A one-way plando under Coupled and Decoupled, and alone: the planned fog edge lands where the yaml says.
+
+**Status:** built (2026-10-02), the tests and the fuzzer pass and seeds generate alone and with APQuest; not yet seen in
+game.
+
+*Code: `dev-scripts/door-graph.py` (`export`, `FAR`, `PARKED`), `data/doors.json`, `data_types.py` (`OneWayDoor`),
+`data_tables.py` (`ONE_WAYS`, `one_way_landing`), `regions.py`, `entrances.py`, `world.py`, `options.py`
+(`DoorPlando`); tests `test_doors.py`, `test_areas.py`.*
+
 # How it works
 
 ## 1. The big picture: generator, seed, server, game
@@ -3961,7 +4082,7 @@ Why regions at all, instead of a full rule on every spot:
   map, with its own rule), its door gates (`DOOR_RULES`) and ways between maps that aren't doors (`TRANSFERS`). Per
   area, not per room: a room's logic often reaches into its neighbours, and an area is tested in one sitting. Menu is
   made in `regions.py`.
-- **Today** (2026-09-30): 244 regions (Menu included), 581 entrances, 75 locations, 4 story events and 1 artifact
+- **Today** (2026-09-30; entrances 2026-10-02): 244 regions (Menu included), 584 entrances, 75 locations, 4 story events and 1 artifact
   event. Until the rooms are mapped (build step 24), what the old large areas needed is kept on each spot as its
   `reach`, beside its own `rule`. Adding a room is adding lines to its area's module, not code.
 - **What a module looks like** (shortened):

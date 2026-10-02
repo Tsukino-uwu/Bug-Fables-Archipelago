@@ -6,7 +6,7 @@ import json
 import pkgutil
 from typing import Any
 
-from .data_types import Doors, Encounter, Item, Location, RoomStart, SavePoint
+from .data_types import Doors, Encounter, Item, Location, OneWayDoor, RoomStart, SavePoint
 from .logic import (ARTIFACTS, DIALOGUE_FLAGS, DOOR_RULES, HELD_UNTIL, HELD_UNTIL_ITEM, KEPT_OPEN, KEPT_PRESENT,
                     LOCATIONS, PRESENT_FROM, PRESENT_WITH_ITEM, SCENERY_HIDDEN, SCENERY_PRESENT, STORY_EVENTS,
                     TRANSFERS)
@@ -39,13 +39,28 @@ def door_name(map_name: str, door: str) -> str:
     return f"{map_name}: {door}"
 
 
-# Every door the entrance randomizer shuffles, by its entrance's name.
+# Every two-way door the entrance randomizer shuffles, by its entrance's name.
 DOOR_NAMES: frozenset[str] = frozenset(door_name(end.map, end.door) for c in DOORS.connections for end in (c.a, c.b))
 # Maps nothing leads into: an unused room and the debug room (MEASURED.md, "The door graph").
 UNUSED_MAPS = frozenset({"SnakemouthEmpty", "TestRoom"})
+# Every one-way door, those of unused maps left out.
+ONE_WAYS: tuple[OneWayDoor, ...] = tuple(w for w in DOORS.one_way
+                                         if w.map not in UNUSED_MAPS and w.to not in UNUSED_MAPS)
+
+
+def one_way_landing(door: OneWayDoor) -> str:
+    """A one-way door's landing, the entrance randomizer's target: named apart from the door, so a one-way may keep its
+    own landing (coupled, the randomizer never joins an exit to a target of its own name)."""
+    return f"{door.to} as from {door_name(door.map, door.door)}"
+
+
+# The one-way doors and their landings, by name.
+ONE_WAY_NAMES: frozenset[str] = frozenset(door_name(w.map, w.door) for w in ONE_WAYS)
+ONE_WAY_LANDINGS: frozenset[str] = frozenset(one_way_landing(w) for w in ONE_WAYS)
 # Every map a region: the door table's and those only a transfer reaches.
 MAPS: tuple[str, ...] = tuple(sorted(
-    ({end.map for c in DOORS.connections for end in (c.a, c.b)} | {m for link in DOORS.fixed for m in link}
+    ({end.map for c in DOORS.connections for end in (c.a, c.b)} | {m for w in ONE_WAYS for m in (w.map, w.to)}
+     | {m for link in DOORS.fixed for m in link}
      | {m for t in TRANSFERS for m in (t.from_map, t.to_map)}) - UNUSED_MAPS))
 # Every room entered through a door: the map, and the map whose door leads in (both ways of each connection). A start
 # there lands where walking in through that door ends.

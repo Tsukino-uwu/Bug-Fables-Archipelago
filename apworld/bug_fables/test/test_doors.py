@@ -2,13 +2,32 @@ from collections import Counter
 from random import Random
 from unittest import TestCase
 
+from BaseClasses import EntranceType
+
 from . import BugFablesTestBase
-from ..data_tables import DOORS, MAPS, door_name
+from ..data_tables import DOORS, MAPS, ONE_WAYS, door_name, one_way_landing
 from ..data_types import DoorConnection, DoorEnd
 from ..entrances import door_targets, room_pairs
 from ..options import DoorPlando
 
 Door = tuple[str, str]
+ONE_WAY_DOORS = {(w.map, w.door) for w in ONE_WAYS}
+# The game's one-way doors (MEASURED.md, the fog maze): the Forsaken Lands' wrong turns, the pink spider's room, the
+# underground bar's exit, the wizard's basement drop and a Giant's Lair ladder.
+EXPECTED_ONE_WAYS = {
+    ("BarrenLandsEntrance", "returnloadzoneright"), ("BarrenLandsCD", "returnloadzoneleft"),
+    ("BarrenLandsCD", "returnloadzone"), ("BarrenLandsBeefly", "returnloadzone"),
+    ("BarrenLandsTanks", "returnloadzone"), ("BarrenLandsTanks", "returnzonenorth"),
+    ("BarrenLandsPumpkins", "returnloadzone"), ("BarrenLandsCloud", "returnzone"),
+    ("BarrenLandsRock", "returnzoneright"), ("BarrenLandsRock", "returnzonesouth"),
+    ("BarrenLandsSideGPT", "returnzone left"), ("BarrenLandsSideGPT", "returnzone south"),
+    ("BarrenLandsMushrooms", "loadzonepinkspider"), ("BarrenLandsPinkSpider", "loadzonepumpkin - Duplicate"),
+    ("UndergroundBar", "LoadZone"), ("FarGrasslandsWizard", "loadzonebasement"),
+    ("GiantLairBeforeBoss2", "loadzoneleft"),
+}
+# The fog maze's left edge in BarrenLandsCD: two copies at one spot, the second there once the Termite gate is open.
+TWIN = ("BarrenLandsCD", "returnloadzoneleft")
+TWIN_COPY = "returnloadzoneleft - Duplicate"
 
 
 def _link(a_map: str, a_door: str, b_map: str, b_door: str) -> DoorConnection:
@@ -27,6 +46,13 @@ def arrivals(connections, targets) -> dict[Door, Door]:
         partner[a], partner[b] = b, a
     like = {(t["map"], t["door"]): (t["like_map"], t["like_door"]) for t in targets}
     return {d: partner[like.get(d, d)] for d in partner}
+
+
+def one_way_lands(one_ways, targets) -> dict[Door, str]:
+    """The map each one-way door, its story copies included, lands in once the mod applies the targets."""
+    to = {(w.map, w.door): w.to for w in one_ways}
+    like = {(t["map"], t["door"]): (t["like_map"], t["like_door"]) for t in targets}
+    return {(w.map, name): to[like.get((w.map, name), (w.map, w.door))] for w in one_ways for name in (w.door, *w.copies)}
 
 
 def _links(connections, fixed, targets) -> dict[str, set[str]]:
@@ -77,24 +103,46 @@ def _shape(connections, fixed, targets) -> Counter:
 class DoorPairTests:
     """Every mode that shuffles: doors rewritten, only to the table's doors, the logic and the mod agreeing."""
 
+    # How many spoiler lines the one-way doors add: one each, unless the mode leaves them as they are.
+    one_way_lines = len(ONE_WAYS)
+
     def test_doors_are_shuffled(self) -> None:
         self.assertGreater(len(self.world.door_targets), len(DOORS.connections))
 
     def test_targets_are_table_doors(self) -> None:
-        doors = {(end.map, end.door) for c in DOORS.connections for end in (c.a, c.b)}
+        doors = {(end.map, end.door) for c in DOORS.connections for end in (c.a, c.b)} | ONE_WAY_DOORS
+        copies = {(w.map, copy) for w in ONE_WAYS for copy in w.copies}
         for t in self.world.door_targets:
-            self.assertIn((t["map"], t["door"]), doors)
+            self.assertIn((t["map"], t["door"]), doors | copies)
             self.assertIn((t["like_map"], t["like_door"]), doors)
 
     def test_the_mod_does_what_the_logic_proved(self) -> None:
-        # Each door, rewritten as door_targets says, arrives where its entrance leads in the region graph.
-        arrive = arrivals(DOORS.connections, self.world.door_targets)
+        # Each door, rewritten as door_targets says, arrives where its entrance leads in the region graph; a one-way
+        # door, and its story copies, land where its entrance leads.
+        targets = self.world.door_targets
+        arrive = arrivals(DOORS.connections, targets)
+        lands = one_way_lands(ONE_WAYS, targets)
+        to = {(w.map, w.door): w.to for w in ONE_WAYS}
         for x, y in self.world.door_pairings:
-            self.assertEqual(arrive[x], y)
+            if x in ONE_WAY_DOORS:
+                self.assertEqual(lands[x], to[y])
+            else:
+                self.assertEqual(arrive[x], y)
         for (m, d), (to_map, _) in arrive.items():
             with self.subTest(door=door_name(m, d)):
                 entrance = self.multiworld.get_entrance(door_name(m, d), self.player)
                 self.assertEqual(entrance.connected_region.name, to_map)
+        for w in ONE_WAYS:
+            entrance = self.multiworld.get_entrance(door_name(w.map, w.door), self.player)
+            for name in (w.door, *w.copies):
+                with self.subTest(door=door_name(w.map, name)):
+                    self.assertEqual(lands[(w.map, name)], entrance.connected_region.name)
+
+    def test_story_copies_follow_their_door(self) -> None:
+        # The fog maze's left edge in BarrenLandsCD leads one place whatever the Termite gate: its copy always has an
+        # entry, the same as its door's.
+        like = {(t["map"], t["door"]): (t["like_map"], t["like_door"]) for t in self.world.door_targets}
+        self.assertEqual(like[(TWIN[0], TWIN_COPY)], like.get(TWIN, TWIN))
 
     def test_every_region_reachable_with_everything(self) -> None:
         state = self.multiworld.get_all_state()
@@ -117,7 +165,22 @@ class CoupledTests(DoorPairTests):
             self.assertEqual(arrive[there], door, f"{door} leads to {there}, which leads to {arrive[there]}")
 
     def test_spoiler_lists_each_pair_once(self) -> None:
-        self.assertEqual(len(self.spoiler_entries()), len(DOORS.connections))
+        self.assertEqual(len(self.spoiler_entries()), len(DOORS.connections) + self.one_way_lines)
+
+
+class OneWayTests:
+    """Coupled and Decoupled: the one-way doors are Archipelago's one-way entrances, paired only with one another."""
+
+    def test_one_ways_are_shuffled_among_themselves(self) -> None:
+        taken = Counter(x for x, _ in self.world.door_pairings if x in ONE_WAY_DOORS)
+        self.assertEqual(set(taken), ONE_WAY_DOORS)
+        self.assertEqual(set(taken.values()), {1})
+        for x, y in self.world.door_pairings:
+            with self.subTest(door=door_name(*x)):
+                self.assertEqual(x in ONE_WAY_DOORS, y in ONE_WAY_DOORS)
+                if x in ONE_WAY_DOORS:
+                    entrance = self.multiworld.get_entrance(door_name(*x), self.player)
+                    self.assertEqual(entrance.randomization_type, EntranceType.ONE_WAY)
 
 
 class TestDoorsOffByDefault(BugFablesTestBase):
@@ -126,11 +189,11 @@ class TestDoorsOffByDefault(BugFablesTestBase):
         self.assertEqual(self.world.door_pairings, [])
 
 
-class TestDoorsCoupled(CoupledTests, BugFablesTestBase):
+class TestDoorsCoupled(OneWayTests, CoupledTests, BugFablesTestBase):
     options = {"entrance_randomizer": "coupled"}
 
 
-class TestDoorsDecoupled(DoorPairTests, BugFablesTestBase):
+class TestDoorsDecoupled(OneWayTests, DoorPairTests, BugFablesTestBase):
     options = {"entrance_randomizer": "decoupled"}
 
     def test_the_way_back_is_shuffled_too(self) -> None:
@@ -138,11 +201,21 @@ class TestDoorsDecoupled(DoorPairTests, BugFablesTestBase):
         self.assertTrue(any(arrive[there] != door for door, there in arrive.items()))
 
     def test_spoiler_lists_every_door(self) -> None:
-        self.assertEqual(len(self.spoiler_entries()), 2 * len(DOORS.connections))
+        self.assertEqual(len(self.spoiler_entries()), 2 * len(DOORS.connections) + len(ONE_WAYS))
 
 
 class TestDoorsRoomSwap(CoupledTests, BugFablesTestBase):
     options = {"entrance_randomizer": "room_swap"}
+    one_way_lines = 0
+
+    def test_one_ways_stay_as_they_are(self) -> None:
+        # Rooms move whole; a one-way still leads into the room it did, and only its story copies are rewritten.
+        self.assertFalse(any(x in ONE_WAY_DOORS for x, _ in self.world.door_pairings))
+        for w in ONE_WAYS:
+            with self.subTest(door=door_name(w.map, w.door)):
+                entrance = self.multiworld.get_entrance(door_name(w.map, w.door), self.player)
+                self.assertEqual(entrance.connected_region.name, w.to)
+                self.assertNotIn((w.map, w.door), {(t["map"], t["door"]) for t in self.world.door_targets})
 
     def test_parts_stay_whole(self) -> None:
         # Parts the game joins only by boats and scenes keep their own rooms, each still reachable within its part.
@@ -157,14 +230,19 @@ class TestDoorsRoomSwap(CoupledTests, BugFablesTestBase):
 
 CITY_GATE, LAKE = ("BugariaOutskirtsOutsideCity", "DoorBugaria"), ("SnakemouthLake", "WarpMap5")
 FIELDS, PALACE = ("NearSnakemouth", "loadingzonefields"), ("AntBridge", "loadzonepalace")
+# A fog maze's wrong turn sent where another one lands.
+TANKS_NORTH, ENTRANCE_RIGHT = ("BarrenLandsTanks", "returnzonenorth"), ("BarrenLandsEntrance", "returnloadzoneright")
+ENTRANCE_RIGHT_LANDING = "BarrenLandsEntrance as from BarrenLandsEntrance: returnloadzoneright"
 PLANDO = [
     # Written in another case on purpose: plando names match whatever the case.
     {"entrance": "bugariaoutskirtsoutsidecity: doorbugaria", "exit": "SnakemouthLake: WarpMap5", "direction": "entrance"},
     {"entrance": "NearSnakemouth: loadingzonefields", "exit": "AntBridge: loadzonepalace", "direction": "exit"},
+    # No direction: both, which a one-way can't go; it goes its one way.
+    {"entrance": "barrenlandstanks: returnzonenorth", "exit": ENTRANCE_RIGHT_LANDING},
 ]
 
 
-class TestDoorPlandoCoupled(CoupledTests, BugFablesTestBase):
+class TestDoorPlandoCoupled(OneWayTests, CoupledTests, BugFablesTestBase):
     options = {"entrance_randomizer": "coupled", "plando_connections": PLANDO}
 
     def test_each_planned_door_both_ways(self) -> None:
@@ -172,26 +250,66 @@ class TestDoorPlandoCoupled(CoupledTests, BugFablesTestBase):
         for pair in ((CITY_GATE, LAKE), (LAKE, CITY_GATE), (FIELDS, PALACE), (PALACE, FIELDS)):
             self.assertIn(pair, self.world.door_pairings)
 
+    def test_planned_one_way(self) -> None:
+        self.assertIn((TANKS_NORTH, ENTRANCE_RIGHT), self.world.door_pairings)
 
-class TestDoorPlandoDecoupled(DoorPairTests, BugFablesTestBase):
+
+class TestDoorPlandoDecoupled(OneWayTests, DoorPairTests, BugFablesTestBase):
     options = {"entrance_randomizer": "decoupled", "plando_connections": PLANDO}
 
     def test_each_planned_way(self) -> None:
         # entrance: the entrance door leads to the exit door; exit: the exit door leads back to the entrance door.
         self.assertIn((CITY_GATE, LAKE), self.world.door_pairings)
         self.assertIn((PALACE, FIELDS), self.world.door_pairings)
+        self.assertIn((TANKS_NORTH, ENTRANCE_RIGHT), self.world.door_pairings)
 
 
 class TestDoorPlandoIgnoredWithRoomSwap(CoupledTests, BugFablesTestBase):
     options = {"entrance_randomizer": "room_swap", "plando_connections": PLANDO}
+    one_way_lines = 0
 
 
 class TestDoorPlandoNames(TestCase):
     def test_every_door_and_nothing_else(self) -> None:
         self.assertIn("antbridge: loadzonepalace", DoorPlando.entrances)
-        self.assertEqual(DoorPlando.entrances, DoorPlando.exits)
+        self.assertIn("antbridge: loadzonepalace", DoorPlando.exits)
+        self.assertIn("barrenlandstanks: returnzonenorth", DoorPlando.entrances)
+        self.assertIn(ENTRANCE_RIGHT_LANDING.lower(), DoorPlando.exits)
+        self.assertEqual(len(DoorPlando.entrances), 2 * len(DOORS.connections) + len(ONE_WAYS))
+        self.assertEqual(len(DoorPlando.exits), 2 * len(DOORS.connections) + len(ONE_WAYS))
         with self.assertRaises(ValueError):
             DoorPlando.from_any([{"entrance": "Nowhere: door", "exit": "AntBridge: loadzonepalace"}])
+
+    def test_one_way_and_two_way_never_mix(self) -> None:
+        # A one-way door can't arrive next to a door, nor a door take a one-way's landing: Archipelago's can_connect.
+        for entrance, exit_ in (("BarrenLandsTanks: returnzonenorth", "AntBridge: loadzonepalace"),
+                                ("AntBridge: loadzonepalace", ENTRANCE_RIGHT_LANDING)):
+            with self.subTest(entrance=entrance), self.assertRaises(ValueError):
+                DoorPlando.from_any([{"entrance": entrance, "exit": exit_}])
+
+
+class TestOneWayTable(TestCase):
+    def test_the_game_s_one_way_doors(self) -> None:
+        self.assertEqual(ONE_WAY_DOORS, EXPECTED_ONE_WAYS)
+        copies = {(w.map, w.door): w.copies for w in ONE_WAYS if w.copies}
+        self.assertEqual(copies, {TWIN: (TWIN_COPY,)})
+
+    def test_landings_are_named_apart_from_their_doors(self) -> None:
+        # Coupled, Archipelago never joins an exit to a target of its own name: apart, a one-way may keep its landing.
+        for w in ONE_WAYS:
+            self.assertNotEqual(one_way_landing(w), door_name(w.map, w.door))
+
+    def test_ladder_pair_is_a_connection(self) -> None:
+        # Its way back lands 11.3 from it, once just past the pairing distance.
+        ends = {frozenset({(c.a.map, c.a.door), (c.b.map, c.b.door)}) for c in DOORS.connections}
+        self.assertIn(frozenset({("GiantLairBeforeBoss", "loadzoneup"), ("GiantLairBeforeBoss2", "loadzoneright")}), ends)
+
+    def test_parked_doors_are_in_no_list(self) -> None:
+        # The Sand Castle's two right-hand basement doors sit at height 99, out of reach.
+        parked = {("SandCastleBasement", "loadzoneright"), ("SandCastleMainRoom", "loadzonebasementright")}
+        doors = {(end.map, end.door) for c in DOORS.connections for end in (c.a, c.b)} | ONE_WAY_DOORS
+        self.assertFalse(parked & doors)
+        self.assertNotIn(("SandCastleBasement", "SandCastleMainRoom"), DOORS.fixed)
 
 
 class TestRoomSwapParts(BugFablesTestBase):

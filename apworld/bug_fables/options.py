@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from Options import Choice, DefaultOnToggle, OptionGroup, PerGameCommonOptions, PlandoConnections, Range, Toggle
 
-from .data_tables import DOOR_NAMES, DOORS, ENCOUNTERS, LOCATIONS, ROOM_STARTS
+from .data_tables import DOOR_NAMES, DOORS, ENCOUNTERS, LOCATIONS, ONE_WAY_LANDINGS, ONE_WAY_NAMES, ROOM_STARTS
 from .shop_inventories import SPOTS
 
 
@@ -288,11 +288,19 @@ class DoorPlando(PlandoConnections):
     Swap). Each door is named "<map>: <door>", as the spoiler log's Entrances section lists them. entrance is the door
     you go through, exit the door you arrive next to. direction: both (the default), entrance (only the entrance door
     leads to the exit door) or exit (only the exit door leads back to the entrance door); Coupled always joins both
-    ways. The seed's host must have plando's "connections" turned on.
+    ways. A one-way door (a fog maze's wrong turn, a drop) takes another one-way's landing instead, named
+    "<where it lands> as from <map>: <door>" as the spoiler lists it, and only goes one way, whatever the direction.
+    The seed's host must have plando's "connections" turned on.
     """
 
-    entrances = DOOR_NAMES
-    exits = DOOR_NAMES
+    entrances = DOOR_NAMES | ONE_WAY_NAMES
+    exits = DOOR_NAMES | ONE_WAY_LANDINGS
+
+    @classmethod
+    def can_connect(cls, entrance: str, exit: str) -> bool:
+        # A one-way door goes only to a one-way's landing, and a door only next to a door.
+        return ((entrance.lower() in {name.lower() for name in ONE_WAY_NAMES})
+                == (exit.lower() in {name.lower() for name in ONE_WAY_LANDINGS}))
 
 
 @dataclass

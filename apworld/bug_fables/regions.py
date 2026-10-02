@@ -1,5 +1,5 @@
 """The regions: Menu, the origin, then one per map. Every door is an entrance of its map's region, named after where it
-is; fixed doors and the transfers that aren't doors (logic/) join maps too."""
+is, a one-way door too; fixed doors and the transfers that aren't doors (logic/) join maps too."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import Region
 
 from .custom_rules import one_way
-from .data_tables import DOOR_RULES, DOORS, MAPS, TRANSFERS, door_name
+from .data_tables import DOOR_RULES, DOORS, MAPS, ONE_WAYS, TRANSFERS, door_name
 
 if TYPE_CHECKING:
     from .world import BugFablesWorld
@@ -27,6 +27,9 @@ def create_and_connect_regions(world: BugFablesWorld) -> None:
         for end, other in ((connection.a, connection.b), (connection.b, connection.a)):
             world.create_entrance(regions[end.map], regions[other.map], gates.get((end.map, end.door)),
                                   name=door_name(end.map, end.door))
+    for door in ONE_WAYS:
+        world.create_entrance(regions[door.map], regions[door.to], gates.get((door.map, door.door)),
+                              name=door_name(door.map, door.door))
     for a, b in dict.fromkeys(DOORS.fixed):
         if a != b and a in regions and b in regions:
             world.create_entrance(regions[a], regions[b], name=f"{a} to {b}")

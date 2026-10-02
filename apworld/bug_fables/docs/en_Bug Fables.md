@@ -24,6 +24,8 @@ Bugaria with Merab's medal shop and Madame Butterfly's item shop, the caravan's 
 - **Entrance Randomizer** (off, experimental): doors between areas lead somewhere else. Coupled: a door and its way
   back stay a pair. Decoupled (new in 0.3.0): the way back is shuffled too, so turning round can take you
   somewhere else. Or Room Swap, whole rooms trading places (see below). The spoiler log lists where each door leads.
+  With Coupled or Decoupled, one-way doors (the Forsaken Lands' fog maze's wrong turns, drops, the underground bar's
+  exit) are shuffled too, only among themselves: each now lands where another one did. New in 0.3.0.
 - **Enemy Shuffle** (off): ordinary enemies on each map are swapped for others of the same group size.
 - **Starting Location** (off, experimental): a new file begins in any room in the game.
 - **Starting Party Member** (all three): a new file starts with the whole party; or with Vi, Kabbu or Leif alone (or one
@@ -56,7 +58,7 @@ Each option's description in the yaml says what it does in full and how many che
 Set *Entrance Randomizer* to `room_swap` (experimental, new in 0.3.0). Whole rooms trade places with rooms that
 have as many doors, in the same part of the world, so the map keeps the game's shape: only which room sits where
 changes. Turning round always takes you back where you came from. It is gentler than Coupled, where any door may lead
-to any other. As with Coupled, the logic follows the doors but not yet what each room needs inside, so a seed may not
+to any other. One-way doors, like the fog maze's wrong turns, still lead where they do in the game. As with Coupled, the logic follows the doors but not yet what each room needs inside, so a seed may not
 be finishable; the pause menu's Warp gets you out of a dead end.
 
 ## Plando: choosing where doors lead
@@ -73,7 +75,10 @@ plando_connections:
 ```
 
 `direction` is `both` (the default), `entrance` (only the first door leads to the second) or `exit` (only the second
-leads back to the first); Coupled always joins both ways. The rest of the doors are shuffled around them. Plando's
+leads back to the first); Coupled always joins both ways. A one-way door's `exit` is another one-way's landing, named
+as the spoiler log lists it, e.g. `"BarrenLandsEntrance as from BarrenLandsEntrance: returnloadzoneright"`; it
+only goes one way, whatever the direction, and can't be paired with a two-way door. The rest of the doors are
+shuffled around them. Plando's
 "connections" must be turned on where the seed is generated (Archipelago's plando guide). It's ignored with the
 Entrance Randomizer off or on Room Swap.
 

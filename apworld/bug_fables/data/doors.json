@@ -2540,68 +2540,140 @@
     "map": "BugariaEndBridge",
     "door": "loadzoneplaza - Duplicate"
    }
+  },
+  {
+   "a": {
+    "map": "GiantLairBeforeBoss",
+    "door": "loadzoneup"
+   },
+   "b": {
+    "map": "GiantLairBeforeBoss2",
+    "door": "loadzoneright"
+   }
+  }
+ ],
+ "one_way": [
+  {
+   "map": "TestRoom",
+   "door": "loading zone",
+   "to": "AntTunnels",
+   "copies": []
+  },
+  {
+   "map": "SnakemouthEmpty",
+   "door": "WarpOut",
+   "to": "SnakemouthDoorRoom",
+   "copies": []
+  },
+  {
+   "map": "UndergroundBar",
+   "door": "LoadZone",
+   "to": "BugariaCommercial",
+   "copies": []
+  },
+  {
+   "map": "FarGrasslandsWizard",
+   "door": "loadzonebasement",
+   "to": "WizardTowerBasement",
+   "copies": []
+  },
+  {
+   "map": "BarrenLandsEntrance",
+   "door": "returnloadzoneright",
+   "to": "BarrenLandsEntrance",
+   "copies": []
+  },
+  {
+   "map": "BarrenLandsCD",
+   "door": "returnloadzoneleft",
+   "to": "BarrenLandsEntrance",
+   "copies": [
+    "returnloadzoneleft - Duplicate"
+   ]
+  },
+  {
+   "map": "BarrenLandsCD",
+   "door": "returnloadzone",
+   "to": "BarrenLandsCD",
+   "copies": []
+  },
+  {
+   "map": "BarrenLandsBeefly",
+   "door": "returnloadzone",
+   "to": "BarrenLandsCD",
+   "copies": []
+  },
+  {
+   "map": "BarrenLandsPinkSpider",
+   "door": "loadzonepumpkin - Duplicate",
+   "to": "BarrenLandsPumpkins",
+   "copies": []
+  },
+  {
+   "map": "BarrenLandsTanks",
+   "door": "returnloadzone",
+   "to": "BarrenLandsCloud",
+   "copies": []
+  },
+  {
+   "map": "BarrenLandsTanks",
+   "door": "returnzonenorth",
+   "to": "BarrenLandsCD",
+   "copies": []
+  },
+  {
+   "map": "BarrenLandsMushrooms",
+   "door": "loadzonepinkspider",
+   "to": "BarrenLandsPinkSpider",
+   "copies": []
+  },
+  {
+   "map": "BarrenLandsPumpkins",
+   "door": "returnloadzone",
+   "to": "BarrenLandsCloud",
+   "copies": []
+  },
+  {
+   "map": "BarrenLandsCloud",
+   "door": "returnzone",
+   "to": "BarrenLandsCloud",
+   "copies": []
+  },
+  {
+   "map": "BarrenLandsRock",
+   "door": "returnzoneright",
+   "to": "BarrenLandsPumpkins",
+   "copies": []
+  },
+  {
+   "map": "BarrenLandsRock",
+   "door": "returnzonesouth",
+   "to": "BarrenLandsRock",
+   "copies": []
+  },
+  {
+   "map": "BarrenLandsSideGPT",
+   "door": "returnzone left",
+   "to": "BarrenLandsCD",
+   "copies": []
+  },
+  {
+   "map": "BarrenLandsSideGPT",
+   "door": "returnzone south",
+   "to": "BarrenLandsCD",
+   "copies": []
+  },
+  {
+   "map": "GiantLairBeforeBoss2",
+   "door": "loadzoneleft",
+   "to": "GiantLairBeforeBoss",
+   "copies": []
   }
  ],
  "fixed": [
   [
-   "BarrenLandsBeefly",
-   "BarrenLandsCD"
-  ],
-  [
-   "BarrenLandsCD",
-   "BarrenLandsCD"
-  ],
-  [
-   "BarrenLandsCD",
-   "BarrenLandsCloud"
-  ],
-  [
-   "BarrenLandsCD",
-   "BarrenLandsEntrance"
-  ],
-  [
-   "BarrenLandsCloud",
-   "BarrenLandsCloud"
-  ],
-  [
-   "BarrenLandsEntrance",
-   "BarrenLandsEntrance"
-  ],
-  [
-   "BarrenLandsMushrooms",
-   "BarrenLandsPinkSpider"
-  ],
-  [
-   "BarrenLandsPinkSpider",
-   "BarrenLandsPumpkins"
-  ],
-  [
-   "BarrenLandsPumpkins",
-   "BarrenLandsCloud"
-  ],
-  [
-   "BarrenLandsRock",
-   "BarrenLandsPumpkins"
-  ],
-  [
-   "BarrenLandsRock",
-   "BarrenLandsRock"
-  ],
-  [
-   "BarrenLandsSideGPT",
-   "BarrenLandsCD"
-  ],
-  [
    "BarrenLandsSideGPT",
    "GoldenPathTunnel2"
-  ],
-  [
-   "BarrenLandsTanks",
-   "BarrenLandsCD"
-  ],
-  [
-   "BarrenLandsTanks",
-   "BarrenLandsCloud"
   ],
   [
    "BeehiveMainArea",
@@ -2618,18 +2690,6 @@
   [
    "BeehiveScannerRoom",
    "BeehiveOutside"
-  ],
-  [
-   "FarGrasslandsWizard",
-   "WizardTowerBasement"
-  ],
-  [
-   "GiantLairBeforeBoss",
-   "GiantLairBeforeBoss2"
-  ],
-  [
-   "GiantLairBeforeBoss2",
-   "GiantLairBeforeBoss"
   ],
   [
    "GoldenPathTunnel",
@@ -2684,28 +2744,8 @@
    "GoldenSettlement1"
   ],
   [
-   "SandCastleBasement",
-   "SandCastleMainRoom"
-  ],
-  [
-   "SandCastleMainRoom",
-   "SandCastleBasement"
-  ],
-  [
-   "SnakemouthEmpty",
-   "SnakemouthDoorRoom"
-  ],
-  [
    "TermiteIndustrial",
    "TermiteIndustrial"
-  ],
-  [
-   "TestRoom",
-   "AntTunnels"
-  ],
-  [
-   "UndergroundBar",
-   "BugariaCommercial"
   ],
   [
    "WaspKingdomMainHall",

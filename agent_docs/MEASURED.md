@@ -25,6 +25,7 @@ read, a log or a probe.
 - [Respawning pickups, seen in play](#respawning-pickups-seen-in-play-2026-09-24-with-the-dev-log)
 - [The door graph](#the-door-graph-2026-09-25-dev-scriptsdoor-graphpy-on-the-entitydump)
 - [Doors paired with their way back](#doors-paired-with-their-way-back-2026-09-25-a-new-entitydump-with-positions-door-graphpy)
+- [The Forsaken Lands' fog maze, and the other one-way doors](#the-forsaken-lands-fog-maze-and-the-other-one-way-doors-2026-10-02-entitydump-and-code-read)
 - [Transfers that aren't doors](#transfers-that-arent-doors-2026-09-25-scriptdumps-transfer-column-dev-scriptsevent-transferspy)
 - [What the Explorer Permit opens](#what-the-explorer-permit-opens-2026-09-24-code-read-and-scriptdump-the-wiki-lists-four-uses)
 - [All medals by source](#all-medals-by-source-2026-09-24-entity-dump-scriptdump-code-read-matched-to-the-bug-fables-wiki)
@@ -953,7 +954,8 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
 ## Doors paired with their way back (2026-09-25, a new EntityDump with positions, `door-graph.py`)
 
 - **A door's way back is the door the party arrives next to**: on the target map, the door leading back whose start
-  position (entity fields 6-8) is nearest, in 3D, to the arrival point (`vectordata[1]`), within 10 units.
+  position (entity fields 6-8) is nearest, in 3D, to the arrival point (`vectordata[1]`), within 10 units (12 since
+  2026-10-02: `GiantLairBeforeBoss2`'s right ladder lands 11.3 below the ladder back up; 12 adds exactly that pair).
 - **531 of 567 doors pair mutually** (each is the other's pair). **8 pair one way only, 28 don't pair.**
 - **Story variants are one door:** doors on one map within 1 unit of each other (Golden Settlement's day and night
   copies, flags 85/86; the night one leads to the night map). **Two doors can share a name** on one map
@@ -964,12 +966,48 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   (9 doors: `SnakemouthDoorRoom`/`SnakemouthFallRoom` fall-room doors, `UndergroundBar`'s exit, `DefiantRoot1`'s well
   and back, `FarGrasslandsWizard`'s basement, `GiantLairBeforeBoss`/`2`'s ladders). The arrival jump is the door
   entity's `emoticonoffset.x` (field 175).
-- **To check in play (later, like `SnakemouthEmpty`):** `GoldenSettlement2`'s `Neo`, `beeguard`, `sign`,
-  `sign - Duplicate`, `farmer ant outside` (all lead to `GoldenSettlement1`'s farm door: story blockers that turn you
-  back?); `TermiteIndustrial`'s `NEARloadzoneback` (doors into their own map); `GiantLairBeforeBoss2`'s two ladders
-  down, one ladder up; the Barren Lands `return...` zones (arrival 25-75 units from any door: one-way, a maze's
-  "wrong way"?) and those leading into their own map; `SandCastleBasement` <-> `SandCastleMainRoom`'s basement doors
-  (no door within 10 units of the arrival).
+- **To check in play (later, like `SnakemouthEmpty`):**
+  - `GoldenSettlement2`'s `Neo`, `beeguard`, `sign`, `sign - Duplicate`, `farmer ant outside`: all lead to
+    `GoldenSettlement1`'s farm door. Story blockers that turn you back?
+  - `TermiteIndustrial`'s `NEARloadzoneback`: doors into their own map.
+  - `SandCastleBasement` <-> `SandCastleMainRoom`'s right-hand basement doors: both at height 99 (below). Can they be
+    reached at all?
+
+  Settled on 2026-10-02 (next section, and the next one): the Barren Lands `return...` zones are the fog maze's wrong
+  turns, and of `GiantLairBeforeBoss2`'s ladders, the right one pairs with the ladder up while the left one is one-way.
+
+## The Forsaken Lands' fog maze, and the other one-way doors (2026-10-02, EntityDump and code read)
+
+The game's name for the `BarrenLands*` maps is the Forsaken Lands (the names dump: the Squash, "native to the
+Forsaken Lands"). Used by `door-graph.py` and `entrances.py`.
+
+- **What the user sees:** "the fog maze just sends you back every now and then unless you walk the right path".
+- **Each wrong turn is a `DoorOtherMap` at a room's edge, named `return...`, with no door back near where it lands.**
+  There are 12 in 8 maps.
+  - **Four lead into their own map**, landing at that room's own entrance: `BarrenLandsEntrance`'s right
+    edge, `BarrenLandsCD`'s and `BarrenLandsCloud`'s bottom edges, `BarrenLandsRock`'s south edge.
+  - **The others send you to an earlier room**, landing next to one of its doors: for example, `BarrenLandsTanks`' bottom
+    edge to the top of `BarrenLandsCloud`, and `BarrenLandsSideGPT`'s two edges to `BarrenLandsCD`.
+  - **The right path is ordinary doors in pairs.**
+- **`BarrenLandsCD`'s left edge is two copies at one spot:**
+  - `returnloadzoneleft`, hidden by flag 384, back to `BarrenLandsEntrance`'s right edge;
+  - `returnloadzoneleft - Duplicate`, which needs 384, a shortcut to `BarrenLandsCloud`'s right side.
+  - 384 is set when the Termite gate is first opened from outside (Event149).
+- **The other one-way doors:**
+  - **The pink spider's room:** in from `BarrenLandsMushrooms`. Out through `loadzonepumpkin - Duplicate`, which lands
+    in `BarrenLandsPumpkins` next to its door to `BarrenLandsMushrooms`, as if you'd come that way.
+  - **The underground bar's exit:** lands in `BugariaCommercial`, 21.8 from the nearest door. Its way in is the
+    hatch, a transfer.
+  - **The wizard's basement:** `FarGrasslandsWizard`'s `loadzonebasement`, flag 449, skips the walk (a drop). The
+    basement's only door goes to `WizardTowerStairs`.
+  - **`GiantLairBeforeBoss2`'s left ladder down:** lands 26 units from the one ladder up.
+- **The ladder pair:** `GiantLairBeforeBoss`'s `loadzoneup` and `GiantLairBeforeBoss2`'s `loadzoneright`. Up lands 1.4
+  from the right ladder; down lands 11.3 from the ladder up, the ladder's height. A pair, once the pairing reaches 12.
+- **Parked load zones:** `SandCastleBasement`'s `loadzoneright` and `SandCastleMainRoom`'s `loadzonebasementright`
+  sit at height 99, mirrors of the left-hand pair at 0.
+  - They're the only load zones at 60 or above.
+  - The game puts objects meant to stay out of reach at 99 to 9999 (AND gates, jump springs, a `dummy`).
+  - Nothing in the decompiled code names either door or moves them.
 
 ## Transfers that aren't doors (2026-09-25, ScriptDump's transfer column, `dev-scripts/event-transfers.py`)
 
