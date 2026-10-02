@@ -582,6 +582,13 @@ namespace BugFablesAP
             MainManager.instance.StartCoroutine(TravelWhenUnpaused(kind, area));
         }
 
+        // Warp to Start's own path without the pause menu, for the respawn-loop guard (a loop never lets the menu open).
+        internal static void WarpToStart(string why)
+        {
+            log.LogWarning($"[warp] warp to start: {why}, on {MainManager.map?.mapid}");
+            MainManager.instance.StartCoroutine(TravelWhenUnpaused(Kind.Warp, -1));
+        }
+
         private static void CloseConfirm()
         {
             if (confirmBox != null)

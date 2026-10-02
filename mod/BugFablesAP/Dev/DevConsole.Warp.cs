@@ -155,6 +155,47 @@ namespace BugFablesAP
         }
 
         // The game's private end-of-event cleanup: clears inevent and minipause and resets the player.
+        // The respawn-loop guard's test: lastpos and lastloadzone above the middle of the nearest water or hole, so the
+        // next fall there loops.
+        private static string HazardLoop()
+        {
+            PlayerControl player = MainManager.player;
+            if (player == null)
+            {
+                return "hazardloop: no player";
+            }
+            Hazards nearest = null;
+            Bounds area = default(Bounds);
+            float best = float.MaxValue;
+            foreach (Hazards hazard in UnityEngine.Object.FindObjectsOfType<Hazards>())
+            {
+                Collider c = hazard.GetComponent<Collider>();
+                if (c == null)
+                {
+                    c = hazard.GetComponentInChildren<Collider>();
+                }
+                if (c == null || (hazard.type != Hazards.Type.Water && hazard.type != Hazards.Type.Hole))
+                {
+                    continue;
+                }
+                float d = (c.bounds.ClosestPoint(player.transform.position) - player.transform.position).sqrMagnitude;
+                if (d < best)
+                {
+                    best = d;
+                    nearest = hazard;
+                    area = c.bounds;
+                }
+            }
+            if (nearest == null)
+            {
+                return "hazardloop: no water or hole on this map";
+            }
+            Vector3 spot = new Vector3(area.center.x, area.max.y + 1f, area.center.z);
+            player.lastpos = spot;
+            player.lastloadzone = spot;
+            return $"lastpos and lastloadzone now above {nearest.name} ({nearest.type}) at {spot}: fall in to loop";
+        }
+
         private static string Unstick()
         {
             System.Reflection.MethodInfo end = HarmonyLib.AccessTools.Method(typeof(EventControl), "EndEvent",

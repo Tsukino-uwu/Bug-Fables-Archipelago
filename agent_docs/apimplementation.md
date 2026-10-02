@@ -600,6 +600,11 @@ be wrong.
   into the button row and puts the Warp and Map icons on the closing map; with one of areas 12-14 not visited, it
   throws once instead. Only with the Warp or Map row on; page 2 can't set it off. The fix to try once seen: take the
   array only when its slots 13-16 are the main page's own icons. The mod guide, step 10.
+- **A shuffled door left the party respawning in a hazard forever** (seen by the user, 2026-10-02: "one of the
+  entrances in chapter 2 i think", the pause menu out of reach, so a hard softlock). Which door is unknown. The
+  respawn-loop guard (the mod guide, step 40) now ends any such loop with the Warp, and logs the last door walked
+  through and whether `door_targets` had rewritten it. The next loop names the door, which then gets its own fix.
+  Not yet seen with the guard.
 - **A fill error with *minimal* accessibility and Shuffle Jump, next to another game** (found by the fuzzer with APQuest,
   2026-09-30: 1 of 10000). The failing pair (Bug Fables minimal, Decoupled doors, a random start, moves and Jump
   shuffled, crystal berries and discoveries off, shops with no progression; APQuest with its Hammer) failed 4 of 400

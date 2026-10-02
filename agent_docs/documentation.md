@@ -47,7 +47,8 @@ anyone curious about the process, or thinking of doing the same for another game
 - **Saves:** [16](#16-randomizer-saves-in-their-own-folder), [31](#31-auto-save-between-rooms-a-death-costs-one-room).
 - **Builds and safety:** [32](#32-reproducible-builds-the-release-dll-rebuilt-byte-for-byte),
   [33](#33-server-text-cleaned-before-the-game-shows-it), [34](#34-multiclientnets-cache-kept-in-its-own-folder);
-  speed, [25](#25-hitches-fixed-the-mods-garbage-and-the-games-5-second-collection).
+  speed, [25](#25-hitches-fixed-the-mods-garbage-and-the-games-5-second-collection); never stuck for good,
+  [40](#40-no-respawn-loop-a-fall-that-only-leads-back-into-itself-ends-with-the-warp).
 
 1. [Can the game be modded? Unity, Mono, a readable DLL](#1-can-the-game-be-modded-unity-mono-a-readable-dll)
 2. [The design, decided first: remote items, what the player sees](#2-the-design-decided-first-remote-items-what-the-player-sees)
@@ -88,6 +89,7 @@ anyone curious about the process, or thinking of doing the same for another game
 37. [The submarine's docks follow its key item](#37-the-submarines-docks-follow-its-key-item)
 38. [The Warp forced on with Points of No Return](#38-the-warp-forced-on-with-points-of-no-return)
 39. [Spy Specs: the medal's effects as a Quality of life row](#39-spy-specs-the-medals-effects-as-a-quality-of-life-row)
+40. [No respawn loop: a fall that only leads back into itself ends with the Warp](#40-no-respawn-loop-a-fall-that-only-leads-back-into-itself-ends-with-the-warp)
 
 ## Where it stands
 
@@ -2674,3 +2676,69 @@ effects not yet seen.
 
 *Code: `Gameplay/MedalAssist.cs` (`SpySpecsMedal`, the postfix), `Gameplay/QualityOfLife.cs` (`SpySpecs`),
 `Ui/ApMenu.cs` and `Ui/ApMenu.Rows.cs` (`SpyRow`), `Core/Plugin.cs`.*
+
+## 40. No respawn loop: a fall that only leads back into itself ends with the Warp
+
+**Seen (the user, 2026-10-02):**
+
+- Map travel to the swamp, then a jump into the water next to the crystal: the party came back over the water, fell
+  in again, and again, forever.
+- A shuffled door, probably in chapter 2, did the same with a hazard.
+- Both times the pause menu wouldn't open, so the Warp, the safety net for every dead end (the Archipelago guide's
+  build step 12), couldn't be reached: a hard softlock.
+
+**How the game puts the party back, read first** (`MEASURED.md`, "Save crystals, saving, Game Over and room
+transfers"):
+
+- Water, a hole or spikes run `Hazards.HazardAction`, which puts the party at `player.lastpos`. Falling below the
+  map's floor does the same, in `PlayerControl.LateUpdate`.
+- A door's transfer sets `lastpos` and `lastloadzone` to where its walk-in ends.
+- Walking in a `Respawn` zone moves `lastpos` along.
+- The game's own way out of a bad `lastpos`: from the 5th respawn in quick succession it uses `lastloadzone` instead,
+  but only while a direction is held.
+
+So when both spots are over water, or nobody holds a direction, nothing ends the loop. A respawn holds the game paused
+(`minipause`) while it runs, so the pause menu stays out of reach.
+
+**Decided (2026-10-02, the user):** fix the landings at their source (map travel arriving through a door, step 10),
+and make sure nothing can lock the game hard again.
+
+**How the mod does it** (`Guards/RespawnLoop.cs`, with Archipelago on or *Use on normal saves*, step 18):
+
+1. **What counts as a loop.** Every respawn is counted: a prefix on `Hazards.HazardAction`, and on
+   `PlayerControl.LateUpdate` the frame the party is below the floor.
+   - Standing on ground for half a second, outside a respawn or a transfer, starts the count again. Real play always
+     stands somewhere between two falls; a loop never does.
+   - The game's own counter (`respawntries`) isn't used: it resets itself when its fallback fires.
+2. **Six in a row is a loop**, one past the game's own fallback, so the game's way is tried first. The guard waits for
+   that respawn to finish, then runs Warp to Start's own path (`WarpButton.WarpToStart`), without the pause menu.
+   - The Warp arrives through a door, so `lastpos` and `lastloadzone` are set where the game itself sets them.
+   - A second loop within 15 seconds only logs an error, so a bad landing can never warp back and forth.
+3. **A walk-in that never ends.** A transfer waits for the party's walk-in, and a walk toward a spot over water never
+   ends: the screen stays dark, the game paused (the console's `unstick` was written for it).
+   - One still going after 8 seconds is stopped with the game's own `StopForceMove`, and the transfer then finishes
+     as usual.
+   - A door's walk-in takes a second or two.
+4. **The log names the cause:**
+   - from the third respawn in a row, each one;
+   - on a loop: the map, `lastpos`, `lastloadzone`, whether a transfer was running;
+   - the last transfer: from where, through which door, and whether `door_targets` had rewritten it
+     (`DoorShuffle.Rewrote`).
+
+   The next loop the user meets says which door caused it.
+
+**Testing it:** once map travel lands through doors, the swamp no longer loops. So the dev console's `hazardloop`
+sets `lastpos` and `lastloadzone` above the middle of the nearest water or hole (`development.md`, the dev console),
+and the next fall there loops on purpose.
+
+**To see** (the user):
+
+- after `hazardloop`, a fall into the water ends with the warp to the start, after the 6th respawn;
+- falling in a few times with a moment on ground between still respawns as the game does, with no warp;
+- in a shuffled seed, the chapter-2 area again: any loop ends in a warp, and the log names the door.
+
+**Status:** built (2026-10-02), the build succeeds (the release build too, without `hazardloop`); not yet seen in
+game.
+
+*Code: `Guards/RespawnLoop.cs`, `Ui/WarpButton.cs` (`WarpToStart`), `World/DoorShuffle.cs` (`Rewrote`),
+`Core/Plugin.cs`, `Dev/DevConsole.Warp.cs` (`hazardloop`).*

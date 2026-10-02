@@ -94,6 +94,7 @@ namespace BugFablesAP
             Func<bool> settingsOn = () => randomizerEnabled.Value || ApMenu.NormalSaves.Value;
             AnimGuard.Enable(Log, settingsOn);
             GlowGuard.Enable(Log, settingsOn);
+            RespawnLoop.Enable(Log, settingsOn);
             MedalAssist.Enable(Log, () => randomizerEnabled.Value, settingsOn, () => difficulty.Value == "Hard",
                 () => difficulty.Value == "Hardest", () => detector.Value,
                 () => QualityOfLife.SpySpecs != null && QualityOfLife.SpySpecs.Value);
@@ -273,6 +274,7 @@ namespace BugFablesAP
                     ("crystals", SaveCrystals.Tick),
                     ("deathlink", DeathLinkGame.Tick),
                     ("autosave", AutoSave.Tick),
+                    ("respawn", RespawnLoop.Tick),
                     ("fps", FrameRate.Tick),
                 };
                 AddDevSteps(list);

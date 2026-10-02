@@ -285,6 +285,7 @@ namespace BugFablesAP
                     case "discovery": return Discovery(parts);
                     case "textsearch": return TextSearch(parts);
                     case "unstick": return Unstick();
+                    case "hazardloop": return HazardLoop();
                     case "take":
                     {
                         // As the game's own |removeitem,kind,id| does: items[kind].Remove(id). Test files only.

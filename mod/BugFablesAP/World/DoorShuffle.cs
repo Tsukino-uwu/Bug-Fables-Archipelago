@@ -29,6 +29,11 @@ namespace BugFablesAP
         // Dev only ([Debug] TestDoors); off in the release build, which never sets it.
         internal static string TestDoors = null;
 
+        // "map/door" of every door rewritten so far, for the respawn-loop guard's log.
+        private static readonly HashSet<string> rewritten = new HashSet<string>();
+
+        internal static bool Rewrote(string map, string door) => rewritten.Contains(map + "/" + door);
+
         internal static void Enable(ManualLogSource logger, ApConnection conn, Func<bool> on)
         {
             log = logger;
@@ -110,6 +115,7 @@ namespace BugFablesAP
                         door.entity.emoticonoffset =
                             new Vector3(jump, door.entity.emoticonoffset.y, door.entity.emoticonoffset.z);
                     }
+                    rewritten.Add(map + "/" + t.Door);
                     log.LogInfo($"[doors] {map}: {t.Door} now leads where {t.LikeMap}/{t.LikeDoor} leads (map {(MainManager.Maps)data[0]}, appear {vectors[1]}, jump {jump}, own walk {ownWalk})");
                 }
             }

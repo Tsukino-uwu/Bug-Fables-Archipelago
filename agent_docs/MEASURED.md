@@ -1614,6 +1614,26 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   it; `insideid` is reset to -1.
 - **Death is only a party wipe in battle.** Hazards and falls never cost HP: `Hazards.HazardAction` puts the party back
   at `player.lastpos` (after 3 tries `lastloadzone`), falling below `map.ylimit` too.
+- **Where the party comes back, in detail** (2026-10-02, code read; a loop seen by the user the same day, map travel
+  to the swamp then a jump into the water by the crystal). Used by `RespawnLoop.cs`.
+  - **The hazard's respawn:** `Hazards.OnTriggerEnter` starts `HazardAction` for the player only, during `minipause`
+    too (it skips only others then). `HazardAction` holds `minipause` while it runs (unless one was already on, then
+    it's instant). It puts the party at `player.lastpos`. When `respawntries > 3` **and** `player.movecd >= 10` (a
+    direction held for 10 frames), it uses `player.lastloadzone` instead and resets `respawntries` to 0.
+  - **`respawntries`** goes up by one per respawn and back to 0 after 60 frames (`respawncooldown`, counted only
+    outside `minipause`) with no new one. It's private, one per hazard.
+  - **Below the floor:** `PlayerControl.LateUpdate` sets the position to `lastpos` when it's below `map.ylimit` (-50;
+    -150 on a map with a hole), with no fade and no `minipause`.
+  - **Where `lastpos` is set:**
+    - a `Respawn`-tagged trigger: its `vectordata[0]`, or the player's spot after 15 frames on ground inside it;
+    - the end of `TransferMap`: `lastpos` and `lastloadzone` both to where the walk-in ends;
+    - loading a save;
+    - some scenes.
+  - **The 2-argument `TransferMap(map, pos)`** arrives at `pos` with no walk, so whatever spot was given becomes
+    `lastpos` and `lastloadzone`. Map travel landed beside a save point that way.
+  - **`TransferMap` waits on the walk-in** (`while (player.entity.forcemove)`) with no time limit, so a walk to a spot
+    it can't reach (over water) never ends and the transfer holds `minipause` (`DevConsole.Warp.cs`, `unstick`).
+  - **Not yet seen:** which of these the chapter-2 door's loop was.
 - **Game Over:** `BattleControl.DeadParty` runs `GameOver` unless `MainManager.battlelossevent` is set (a scripted loss:
   the battle just ends and the story goes on). The menu: Retry, Retry after changing medals, Load, Title; in a battle
   that can be fled only Load and Title. From the battle's start, `GameOver`'s setup restores `flags` and `flagvar`

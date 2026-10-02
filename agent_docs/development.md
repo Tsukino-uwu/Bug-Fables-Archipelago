@@ -304,6 +304,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   `unstick` did what the game's own dialogue end does (2026-09-25). The speech box itself stayed on screen after two tries (removing the text's
   holder, then `maintextbox`); the new `gui` command showed a `Textbox(Clone)` under the GUI camera that
   `maintextbox` no longer pointed at, so `unstick` now removes any such box once dialogue has ended.
+- `hazardloop`: sets where the game puts the party back after a fall (`lastpos` and `lastloadzone`) above the middle of
+  the nearest water or hole, so the next fall there loops: the respawn-loop guard's test (documentation.md, step 40).
 - `gui`: log what hangs under the GUI camera (name, active, renderer, children), to find what's really stuck on screen.
 - `display`: log the monitor's reported resolution and refresh rate, the window, the game's FPS and VSync settings,
   what Unity was given (`vSyncCount`, `targetFrameRate`), the measured frame rate, how many characters Uncap FPS draws
