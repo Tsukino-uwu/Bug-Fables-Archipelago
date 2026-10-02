@@ -394,16 +394,9 @@ namespace BugFablesAP
                             log.LogInfo($"[qol] the seed's start (Starting Location): transferring to {map}, entering from {SeedStartFrom?.Invoke()}");
                             return;
                         }
-                        if (seeded.Value.Value < 0)
-                        {
-                            transferring = false;
-                            log.LogError($"[qol] the seed's start {map} (from {SeedStartFrom?.Invoke()}): no door found; staying at the game's start");
-                            return;
-                        }
-                        // A save-point start: beside it, as Warp to Start lands.
-                        Vector3 spot = WarpButton.SavePointSpot(map, seeded.Value.Value);
-                        MainManager.instance.StartCoroutine(MainManager.TransferMap((int)map, spot));
-                        log.LogInfo($"[qol] the seed's start (Starting Location): transferring to {map}, beside save point {seeded.Value.Value}, at {spot}");
+                        // Every start arrives through a door; a save-point start (not built) will send its door too.
+                        transferring = false;
+                        log.LogError($"[qol] the seed's start {map} (from {SeedStartFrom?.Invoke()}, entity {seeded.Value.Value}): no door to arrive through; staying at the game's start");
                         return;
                     }
                     // The game's own transfer to a door's spots; the console's warp steps beside the save point.

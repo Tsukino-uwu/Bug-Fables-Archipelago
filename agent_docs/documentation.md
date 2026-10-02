@@ -827,7 +827,7 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    ("got a lot of errors"); a prefix now hands it five, and the game animates the fifth like the others. On Yes
    (No is preselected), the menu closes the game's way (`PrepareExit`) and the game's own `TransferMap` takes the
    party to the Outskirts, beside the save point where a new game begins (since *Starting Location*, to the seed's
-   start when it has one). **The icon** ("look at how the
+   start when it has one; since 2026-10-02 through a door, as map travel below). **The icon** ("look at how the
    other menu buttons do things, and do the same"): a tinted Settings icon with the map item on top looked wrong, so
    a new dev dump, `SpriteDump`, saved the game's GUI sheets and a table of `guisprites` indexes (into the BepInEx
    folder, never the repo), and a contact sheet of them showed a round icon in the same style, `guisprites[34]`
@@ -1061,6 +1061,30 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    party beside the start's save point ("a good location"); then back and forth between the Outskirts and Defiant Root
    (after a dev warp there), both working. The other areas' spots are starting choices, checked as they're
    reached.
+   **Through a door, since 2026-10-02.** The swamp's spot looped (the user):
+   - map travel there, then a jump into the water by the crystal: the party came back over the water, again and again,
+     with the pause menu out of reach.
+   - The cause, read in the code (`MEASURED.md`, "Where the party comes back"): the travel used `TransferMap(map,
+     spot)`. Its spot, beside a save point, was the mod's guess, and the game took it as the place to put the party
+     back after a fall. The swamp's crystal sits low by the water.
+
+   The user's fix: "any warp/map/teleport, always acts as if you are coming in from an entrance".
+   - Map travel and Warp to Start now arrive the way a door does, `TransferMap(map, here, appear, walk to)` read from a
+     real door's entity data (`QualityOfLife.DoorInto`, which gained a door name). The game itself then sets where a
+     fall comes back, where the walk-in ends.
+   - Each destination's door is in `AreaDoors`, the Outskirts (area 0) also Warp's. `dev-scripts/door-graph.py
+     --travel` picks it from the entity dump, and `--travel --check` checks the table. It's a mode of the door tool,
+     not a script of its own: a new script loading another by path is a new row in `docs/capabilities.md`, the user's
+     call. The rule: of the doors into the map, the one whose walk-in ends nearest
+     the old save point, among doors with no camera change or jump on arrival (a transfer without the door can't copy
+     those) and no flags of their own (a door that exists only in some story state may land on scenery that does
+     too).
+   - Its first version also asked the way back to have no flags. That sent Warp to the far side of the Outskirts (the
+     city gate's way back needs flag 107) and changed nothing about the ground, so it went.
+   - A seed's room start arrives with its walk too (it used to land on the walk's end), and the save-point start
+     (designed, not built) logs an error instead of landing beside a save point.
+   - The dev console's `travel <area>` runs the same path to any area, visited or not, to check every spot.
+   - The respawn-loop guard (step 40) catches any loop left.
    **Skip confirm: Off / Warp / Map / Both (2026-09-26; seen on screen the same day: on Map, map travel went at once and Warp still asked),** an add-on to *Travel*, so its
    row sits right below it (the two belong together, not split apart). Warp: picking the Warp button warps at
    once; Map: confirm on a visited area in the travel map goes there at once; Off (the default) keeps both boxes.
@@ -1086,11 +1110,12 @@ row off (a choice row to its off value: Item animation Off, Travel Off, Detector
 row back to its default (`QualityOfLife.DisableAll` / `ResetAll`, the defaults from each setting's own config
 definition).
 
-**Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen on screen (2026-09-25); the bridge skips and Medal prices not yet seen; replays held up and the quiet start seen on screen (2026-09-28); Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat Ticket (the Archipelago guide, build step 16), the warp itself, map travel and Skip confirm seen (2026-09-26); Skip cutscenes' Den arrival seen (2026-09-26), the Tattle tutorial and the door room's puzzle (Event4) at speed (2026-09-26/27), the trapdoor and spider scene (2026-09-27); Skip battle tutorials: Leif's first-battle line skipped, seen (2026-09-27).
+**Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen on screen (2026-09-25); the bridge skips and Medal prices not yet seen; replays held up and the quiet start seen on screen (2026-09-28); Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat Ticket (the Archipelago guide, build step 16), the warp itself, map travel and Skip confirm seen (2026-09-26); Skip cutscenes' Den arrival seen (2026-09-26), the Tattle tutorial and the door room's puzzle (Event4) at speed (2026-09-26/27), the trapdoor and spider scene (2026-09-27); Skip battle tutorials: Leif's first-battle line skipped, seen (2026-09-27); map travel and Warp to Start through a door built (2026-10-02), the build succeeds and `door-graph.py --travel --check` passes, not yet seen.
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `QualityOfLife.Opening.cs` (the opening),
 `QualityOfLife.Scenes.cs` (the scene skips, the first spider fight, the trapdoor), `ApMenu.cs` (the second page),
-`WarpButton.cs` (the Warp button), `HoldUps.cs` (item animation's hold-ups).*
+`WarpButton.cs` (the travel buttons, `AreaDoors`), `HoldUps.cs` (item animation's hold-ups);
+`dev-scripts/door-graph.py` (`--travel`).*
 
 ## 11. Missing party members: stand-ins in scenes, and followers
 

@@ -22,8 +22,7 @@ namespace BugFablesAP
         private static bool openingFailed; // one try per session: a failure is logged, never retried every frame
         // Dev only ([Debug] TestStart): a map the opening ends with a warp to, a stand-in for a random start.
         internal static string TestStart = null;
-        // The seed's start (Starting Location): the opening ends with a transfer into that room through its door (or
-        // beside a save point).
+        // The seed's start (Starting Location): the opening ends with a transfer into that room through its door.
         internal static Func<KeyValuePair<string, int>?> SeedStart;
         // A room start: the map whose door leads into the start map.
         internal static Func<string> SeedStartFrom;
@@ -60,7 +59,8 @@ namespace BugFablesAP
 
         // Arriving as if through a door: data[0] the map, vectordata[1] where the party appears, [2] where it walks.
         // Read from the entity table of the map left behind; fields split by '}', data count at 60, vectordata at 71.
-        internal static Vector3[] DoorInto(MainManager.Maps target, string fromMap)
+        // A door name picks one door where the map has several into the target.
+        internal static Vector3[] DoorInto(MainManager.Maps target, string fromMap, string door = null)
         {
             foreach (MainManager.Maps map in Enum.GetValues(typeof(MainManager.Maps)))
             {
@@ -73,9 +73,23 @@ namespace BugFablesAP
                 {
                     continue;
                 }
+                string[] names = null;
+                if (door != null)
+                {
+                    TextAsset nameTable = Resources.Load<TextAsset>("Data/EntityData/Names/" + (int)map + "names");
+                    if (nameTable == null)
+                    {
+                        continue;
+                    }
+                    names = nameTable.ToString().Split('\n');
+                }
                 string[] lines = table.ToString().Split('\n');
                 for (int i = 0; i < lines.Length - 1; i++)
                 {
+                    if (names != null && (i >= names.Length || names[i].Trim() != door))
+                    {
+                        continue;
+                    }
                     string[] f = lines[i].Split('}');
                     if (f.Length < 81 || f[1].Trim() != "DoorOtherMap" || f[60].Trim() == "0" || f[61]
                         .Trim() != ((int)target).ToString())
@@ -96,7 +110,7 @@ namespace BugFablesAP
                             float.Parse(f[73 + k * 3].Trim(), System.Globalization.CultureInfo.InvariantCulture),
                             float.Parse(f[74 + k * 3].Trim(), System.Globalization.CultureInfo.InvariantCulture));
                     }
-                    log.LogInfo($"[qol] arriving in {target} through {map}'s door (entity {i}): appear at {v[1]}, walk to {v[2]}");
+                    log.LogInfo($"[qol] arriving in {target} through {map}'s door (entity {i}{(door != null ? " " + door : "")}): appear at {v[1]}, walk to {v[2]}");
                     return v;
                 }
             }

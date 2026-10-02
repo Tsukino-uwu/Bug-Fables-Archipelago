@@ -286,6 +286,9 @@ namespace BugFablesAP
                     case "textsearch": return TextSearch(parts);
                     case "unstick": return Unstick();
                     case "hazardloop": return HazardLoop();
+                    case "travel":
+                        return parts.Length > 1 && int.TryParse(parts[1], out int travelArea)
+                            ? WarpButton.TravelTo(travelArea) : "travel <area>";
                     case "take":
                     {
                         // As the game's own |removeitem,kind,id| does: items[kind].Remove(id). Test files only.

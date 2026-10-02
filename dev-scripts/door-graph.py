@@ -3,18 +3,54 @@
 One row per door: from map, door entity, to map, required flags, hiding flags, back, pair, distance.
 "back" NONE means no door leads back; a pair is "mutual" when each door is the other's pair.
 
+--travel prints the door each travel destination arrives through (WarpButton.cs's AreaDoors), --travel --check
+compares it with the file.
+
     python dev-scripts/door-graph.py <bugfablesap-entitydump.tsv> [<map name prefix>] [<decompiled folder>]
     python dev-scripts/door-graph.py <bugfablesap-entitydump.tsv> --export apworld/bug_fables/data/doors.json
+    python dev-scripts/door-graph.py <bugfablesap-entitydump.tsv> --travel [--check]
 """
 import collections
 import csv
 import importlib.util
 import json
 import math
+import re
 import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+WARP_BUTTON = HERE.parent / "mod" / "BugFablesAP" / "Ui" / "WarpButton.cs"
+
+# Each travel destination, by area id: its map, and the save point travel used to land beside. Area 0 is the
+# Outskirts, where a new game begins (Warp to Start's too).
+TRAVEL = {
+    0: ("BugariaOutskirtsOutsideCity", 1),
+    1: ("BugariaMainPlaza", 6),
+    2: ("SnakemouthFallRoom", 0),
+    3: ("DesertCaravanMap", 0),
+    4: ("GoldenHillsDungeonEntrance", 0),
+    5: ("GoldenHillsCableCar", 0),
+    6: ("GoldenSettlement1", 1),
+    7: ("BarrenLandsEntrance", 0),
+    8: ("FarGrasslands1", 5),
+    9: ("SwamplandsBridge", 6),
+    10: ("DefiantRoot1", 0),
+    11: ("SandCastleMainRoom", 0),
+    12: ("BeehiveMainArea", 3),
+    13: ("HoneyFactoryEntrance", 4),
+    14: ("RubberPrisonPier", 0),
+    15: ("GiantLairEntrance", 5),
+    16: ("MysteryIsland", 0),
+    17: ("MetalIsland1", 1),
+    18: ("TermiteMainPlaza", 0),
+    19: ("WaspKingdom2", 5),
+    20: ("HideoutWestStorage", 9),
+    21: ("StreamMountain5", 1),
+    22: ("ChomperCave1", 1),
+    23: ("FishingVillage", 2),
+    24: ("UpperSnekMiddleRoom", 2),
+}
 
 
 def map_names(decompiled: Path) -> list[str]:
@@ -110,15 +146,55 @@ def export(doors: list[dict], pairs: dict, out: Path) -> None:
           file=sys.stderr)
 
 
+def travel(doors: list[dict], positions: dict[tuple[str, int], tuple[float, float, float] | None]) -> dict:
+    """For each travel destination: of the doors into its map, the one whose walk-in ends nearest the save point travel
+    used to land beside, among doors that are plain (no camera change or jump on arrival, which a transfer without the
+    door can't copy) and unflagged (a door that exists only in some story state may land on scenery that does too)."""
+    picked = {}
+    for area, (target, save) in TRAVEL.items():
+        spot = positions[(target, save)]
+        best = None
+        for d in doors:
+            vectors = [point(v) for v in (d["vectordata"] or "").split()]
+            # data[1..3] switch the camera on arrival; data[4] is the walk into the door, on the map left behind.
+            if (d["to"] != target or d["map"] == target or len(vectors) < 3 or any(d["data"][1:4]) or d["jump"] != 0
+                    or d["requires"] or d["limit"]):
+                continue
+            far = distance(vectors[2], spot)
+            if best is None or far < best[3]:
+                best = (target, d["map"], d["name"], far)
+        if best is None:
+            sys.exit(f"area {area} ({target}): no plain, unflagged door leads in")
+        picked[area] = best
+    return picked
+
+
+def check_travel(picked: dict) -> None:
+    text = WARP_BUTTON.read_text(encoding="utf-8")
+    found = {int(a): (m, f, d) for a, m, f, d in re.findall(
+        r'\{\s*(\d+),\s*Door\(MainManager\.Maps\.(\w+),\s*"([^"]+)",\s*"([^"]+)"\)\s*\}', text)}
+    wanted = {area: p[:3] for area, p in picked.items()}
+    if found != wanted:
+        for area in sorted(set(found) | set(wanted)):
+            if found.get(area) != wanted.get(area):
+                print(f"area {area}: WarpButton.cs has {found.get(area)}, the dump gives {wanted.get(area)}")
+        sys.exit(1)
+    print(f"WarpButton.cs's {len(found)} travel doors match the dump")
+
+
 def main() -> None:
     dump = Path(sys.argv[1])
+    travelling = len(sys.argv) > 2 and sys.argv[2] == "--travel"
     out = Path(sys.argv[3]) if len(sys.argv) > 3 and sys.argv[2] == "--export" else None
-    prefix = sys.argv[2] if len(sys.argv) > 2 and out is None else ""
-    decompiled = Path(sys.argv[3]) if len(sys.argv) > 3 and out is None else HERE.parent / "decompiled"
+    prefix = sys.argv[2] if len(sys.argv) > 2 and out is None and not travelling else ""
+    decompiled = (Path(sys.argv[3]) if len(sys.argv) > 3 and out is None and not travelling
+                  else HERE.parent / "decompiled")
     names = map_names(decompiled)
 
     doors = []
+    positions = {}
     for r in csv.DictReader(dump.open(encoding="utf-8"), delimiter="\t"):
+        positions[(r["map"], int(r["index"]))] = point(r.get("position"))
         if r["objecttype"] != "DoorOtherMap" or not r["data"].split():
             continue
         target = int(r["data"].split()[0])
@@ -127,7 +203,18 @@ def main() -> None:
             "to": names[target] if 0 <= target < len(names) else f"?{target}",
             "requires": flags(r["requires"]), "limit": hiding(r["limit"]),
             "vectordata": r.get("vectordata"), "position": point(r.get("position")),
+            "data": [int(v) for v in r["data"].split()], "jump": float(r.get("jump") or 0),
         })
+
+    if travelling:
+        picked = travel(doors, positions)
+        if len(sys.argv) > 3 and sys.argv[3] == "--check":
+            check_travel(picked)
+            return
+        for area, (target, from_map, door, far) in sorted(picked.items()):
+            print(f'            {{ {area}, Door(MainManager.Maps.{target}, "{from_map}", "{door}") }},'
+                  f'  // {far:.1f} from the save point')
+        return
 
     leading_to = collections.defaultdict(list)  # (from, to) -> door names
     for d in doors:

@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Reflection;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -11,9 +10,10 @@ namespace BugFablesAP
 {
     // The travel buttons after the pause menu's four (Quality of life, Travel: Warp / Map / Both), each behind a
     // Yes / No box unless Skip confirm says otherwise. Warp to start: the game's own map transfer to where a new game
-    // begins. Map: the game's own map window in a travel mode, where confirm on a visited area travels to its save
-    // point (the map opened any other way keeps vanilla controls). The logic counts on neither, except the Warp with
-    // Points of No Return. Confirm is caught before the game would act on it.
+    // begins. Map: the game's own map window in a travel mode, where confirm on a visited area travels there (the map
+    // opened any other way keeps vanilla controls). Both arrive as walking in through a door, so the party lands where
+    // the game itself puts it, and a fall afterwards comes back there. The logic counts on neither, except the Warp
+    // with Points of No Return. Confirm is caught before the game would act on it.
     internal static class WarpButton
     {
         private static ManualLogSource log;
@@ -98,42 +98,49 @@ namespace BugFablesAP
         }
         private const float RingShare = 0.14f;
         private static Sprite backdrop;
-        // By its save point: entity 1 (SaveTutorial) before flag 41, entity 22 (SaveAfterTutorial) after.
-        private const MainManager.Maps StartMap = MainManager.Maps.BugariaOutskirtsOutsideCity;
 
-        // Each area's travel spot: a save point at its entrance or hub (starting choices; the Outskirts use the start).
-        private static readonly Dictionary<int, KeyValuePair<MainManager.Maps, int>> AreaSpots =
-            new Dictionary<int, KeyValuePair<MainManager.Maps, int>>
+        // A travel destination: walking into the map through a door from the map next to it, as that door does.
+        private struct Arrival
         {
-            { 1, Spot(MainManager.Maps.BugariaMainPlaza, 6) },
-            { 2, Spot(MainManager.Maps.SnakemouthFallRoom, 0) },
-            { 3, Spot(MainManager.Maps.DesertCaravanMap, 0) },
-            { 4, Spot(MainManager.Maps.GoldenHillsDungeonEntrance, 0) },
-            { 5, Spot(MainManager.Maps.GoldenHillsCableCar, 0) },
-            { 6, Spot(MainManager.Maps.GoldenSettlement1, 1) },
-            { 7, Spot(MainManager.Maps.BarrenLandsEntrance, 0) },
-            { 8, Spot(MainManager.Maps.FarGrasslands1, 5) },
-            { 9, Spot(MainManager.Maps.SwamplandsBridge, 6) },
-            { 10, Spot(MainManager.Maps.DefiantRoot1, 0) },
-            { 11, Spot(MainManager.Maps.SandCastleMainRoom, 0) },
-            { 12, Spot(MainManager.Maps.BeehiveMainArea, 3) },
-            { 13, Spot(MainManager.Maps.HoneyFactoryEntrance, 4) },
-            { 14, Spot(MainManager.Maps.RubberPrisonPier, 0) },
-            { 15, Spot(MainManager.Maps.GiantLairEntrance, 5) },
-            { 16, Spot(MainManager.Maps.MysteryIsland, 0) },
-            { 17, Spot(MainManager.Maps.MetalIsland1, 1) },
-            { 18, Spot(MainManager.Maps.TermiteMainPlaza, 0) },
-            { 19, Spot(MainManager.Maps.WaspKingdom2, 5) },
-            { 20, Spot(MainManager.Maps.HideoutWestStorage, 9) },
-            { 21, Spot(MainManager.Maps.StreamMountain5, 1) },
-            { 22, Spot(MainManager.Maps.ChomperCave1, 1) },
-            { 23, Spot(MainManager.Maps.FishingVillage, 2) },
-            { 24, Spot(MainManager.Maps.UpperSnekMiddleRoom, 2) },
+            internal MainManager.Maps Map;
+            internal string From;
+            internal string Door;
+        }
+
+        private static Arrival Door(MainManager.Maps map, string from, string door) =>
+            new Arrival { Map = map, From = from, Door = door };
+
+        // Each area's travel spot, the Outskirts (0) also Warp to Start's: the door into its entrance or hub whose
+        // walk-in ends nearest the area's save point. Picked and checked by dev-scripts/door-graph.py --travel.
+        private static readonly Dictionary<int, Arrival> AreaDoors = new Dictionary<int, Arrival>
+        {
+            { 0, Door(MainManager.Maps.BugariaOutskirtsOutsideCity, "BugariaMainPlaza", "loadingzoneexit") },
+            { 1, Door(MainManager.Maps.BugariaMainPlaza, "BugariaCommercial", "DoorPlaza") },
+            { 2, Door(MainManager.Maps.SnakemouthFallRoom, "SnakemouthLake", "DoorFallRoom") },
+            { 3, Door(MainManager.Maps.DesertCaravanMap, "DesertSandPitArea", "loadzone caravan area") },
+            { 4, Door(MainManager.Maps.GoldenHillsDungeonEntrance, "GoldenSettlement1", "loadzone dungeon") },
+            { 5, Door(MainManager.Maps.GoldenHillsCableCar, "GoldenPathTunnel", "loadzonegoldenhills") },
+            { 6, Door(MainManager.Maps.GoldenSettlement1, "GoldenSettlementEntrance", "LoadZoneSettlement") },
+            { 7, Door(MainManager.Maps.BarrenLandsEntrance, "BarrenLandsSideGPT", "loadzone right") },
+            { 8, Door(MainManager.Maps.FarGrasslands1, "FarGrasslands2", "loadzone right") },
+            { 9, Door(MainManager.Maps.SwamplandsBridge, "Swamplands4", "loadzone left") },
+            { 10, Door(MainManager.Maps.DefiantRoot1, "DefiantRoot3", "loadzone") },
+            { 11, Door(MainManager.Maps.SandCastleMainRoom, "SandCastleEntrance", "loadzone right") },
+            { 12, Door(MainManager.Maps.BeehiveMainArea, "BeehiveThroneRoom", "loadzone") },
+            { 13, Door(MainManager.Maps.HoneyFactoryEntrance, "HoneyFactoryCore", "loadzone") },
+            { 14, Door(MainManager.Maps.RubberPrisonPier, "RubberPrisonGiantLairBridge", "loadzoneshortcut") },
+            { 15, Door(MainManager.Maps.GiantLairEntrance, "GiantLairDeadLands1", "loadzone") },
+            { 16, Door(MainManager.Maps.MysteryIsland, "MysteryIslandInside", "loadzone") },
+            { 17, Door(MainManager.Maps.MetalIsland1, "MetalIsland2", "loadzoneoutside") },
+            { 18, Door(MainManager.Maps.TermiteMainPlaza, "TermiteRoyalChamber", "loadzone") },
+            { 19, Door(MainManager.Maps.WaspKingdom2, "WaspKingdom3", "loadzone") },
+            { 20, Door(MainManager.Maps.HideoutWestStorage, "HideoutGarden", "loadzonestorage") },
+            { 21, Door(MainManager.Maps.StreamMountain5, "StreamMountain4", "loadzone boss") },
+            { 22, Door(MainManager.Maps.ChomperCave1, "ChomperCaves3", "loadzone") },
+            { 23, Door(MainManager.Maps.FishingVillage, "FarGrasslandsOutsideVillage", "loadzonevillage") },
+            { 24, Door(MainManager.Maps.UpperSnekMiddleRoom, "UpperSnekPlatformRoom", "loadzone") },
         };
         private const int OutskirtsArea = 0;
-
-        private static KeyValuePair<MainManager.Maps, int> Spot(MainManager.Maps map, int entity) =>
-            new KeyValuePair<MainManager.Maps, int>(map, entity);
 
         private static readonly List<Kind> buttons = new List<Kind>();
         private static readonly List<SpriteRenderer> icons = new List<SpriteRenderer>();
@@ -466,7 +473,7 @@ namespace BugFablesAP
                 return true;
             }
             if (area >= MainManager.areanames.Length || !MainManager.instance.librarystuff[4, area]
-                || (area != OutskirtsArea && !AreaSpots.ContainsKey(area)))
+                || !AreaDoors.ContainsKey(area))
             {
                 MainManager.PlayBuzzer();
                 return false;
@@ -614,48 +621,46 @@ namespace BugFablesAP
                 log.LogWarning("[warp] not now: an event, dialogue or battle started; nothing done");
                 yield break;
             }
-            MainManager.Maps map = StartMap;
-            int entity = MainManager.instance.flags[GameFlags.FirstBossBeaten] ? 22 : 1;
-            // Warp to Start goes to the seed's start when it has one (Starting Location); map travel keeps its spots.
-            KeyValuePair<string, int>? seeded = QualityOfLife.SeedStart?.Invoke();
-            if (kind == Kind.Warp && seeded.HasValue && Enum.IsDefined(typeof(MainManager.Maps), seeded.Value.Key))
+            Arrival to = AreaDoors[kind == Kind.Map ? area : OutskirtsArea];
+            MainManager.Maps map = to.Map;
+            Vector3[] door = null;
+            // Warp to Start goes to the seed's start when it has one (Starting Location), through its door.
+            KeyValuePair<string, int>? seeded = kind == Kind.Warp ? QualityOfLife.SeedStart?.Invoke() : null;
+            if (seeded.HasValue && Enum.IsDefined(typeof(MainManager.Maps), seeded.Value.Key))
             {
-                map = (MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), seeded.Value.Key);
-                entity = seeded.Value.Value;
-            }
-            if (kind == Kind.Map && area != OutskirtsArea)
-            {
-                map = AreaSpots[area].Key;
-                entity = AreaSpots[area].Value;
-            }
-            // A room start has no save point: where walking in through its door ends.
-            Vector3[] entry = kind == Kind.Warp && seeded.HasValue ? QualityOfLife.SeedStartDoor(map) : null;
-            Vector3 target = entry != null ? entry[2] : SavePointSpot(map, entity);
-            log.LogInfo($"[warp] to {map} at {target}");
-            yield return MainManager.TransferMap((int)map, target);
-        }
-
-        // Entity table fields 6-8, then a step toward the camera so the party lands beside the save point, not in it.
-        internal static Vector3 SavePointSpot(MainManager.Maps map, int entity)
-        {
-            TextAsset data = Resources.Load<TextAsset>("Data/EntityData/" + (int)map);
-            string[] lines = data == null ? new string[0] : data.ToString().Split('\n');
-            if (entity < lines.Length)
-            {
-                string[] f = lines[entity].Split('}');
-                if (f.Length > 8 && ReadFloat(f[6], out float x) && ReadFloat(f[7], out float y)
-                    && ReadFloat(f[8], out float z))
+                var start = (MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), seeded.Value.Key);
+                door = QualityOfLife.SeedStartDoor(start);
+                if (door != null)
                 {
-                    return new Vector3(x, y + 0.5f, z - 2f);
+                    map = start;
+                }
+                else
+                {
+                    log.LogWarning($"[warp] the seed's start {start} has no door to arrive through; to the game's start instead");
                 }
             }
-            log.LogWarning($"[warp] the save point's spot on {map} wasn't found; landing at the map's origin");
-            return Vector3.zero;
+            if (door == null)
+            {
+                door = QualityOfLife.DoorInto(map, to.From, to.Door);
+            }
+            if (door == null)
+            {
+                log.LogError($"[warp] no door {to.From}/{to.Door} into {map} found; nothing done");
+                yield break;
+            }
+            log.LogInfo($"[warp] to {map}, walking in from {door[1]} to {door[2]}");
+            yield return MainManager.TransferMap((int)map, MainManager.player.transform.position, door[1], door[2]);
         }
 
-        // As the game's Convert.ToSingle reads its entity data, under the en-US culture it sets at start.
-        private static bool ReadFloat(string text, out float value) =>
-            float.TryParse(text, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.CurrentCulture,
-                out value);
+        // Dev only (console `travel`): map travel's own path to any area, visited or not.
+        internal static string TravelTo(int area)
+        {
+            if (!AreaDoors.ContainsKey(area) || area >= MainManager.areanames.Length)
+            {
+                return $"travel <area>: 0 to {AreaDoors.Count - 1}";
+            }
+            MainManager.instance.StartCoroutine(TravelWhenUnpaused(Kind.Map, area));
+            return $"travelling to area {area} ({MainManager.areanames[area]}) through {AreaDoors[area].From}/{AreaDoors[area].Door}";
+        }
     }
 }

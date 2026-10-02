@@ -306,6 +306,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   `maintextbox` no longer pointed at, so `unstick` now removes any such box once dialogue has ended.
 - `hazardloop`: sets where the game puts the party back after a fall (`lastpos` and `lastloadzone`) above the middle of
   the nearest water or hole, so the next fall there loops: the respawn-loop guard's test (documentation.md, step 40).
+- `travel <area>`: map travel's own path to area n (0 the Outskirts to 24), visited or not, arriving through the door
+  `WarpButton.cs`'s `AreaDoors` names: to check every travel spot (documentation.md, step 10).
 - `gui`: log what hangs under the GUI camera (name, active, renderer, children), to find what's really stuck on screen.
 - `display`: log the monitor's reported resolution and refresh rate, the window, the game's FPS and VSync settings,
   what Unity was given (`vSyncCount`, `targetFrameRate`), the measured frame rate, how many characters Uncap FPS draws

@@ -1630,7 +1630,8 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
     - loading a save;
     - some scenes.
   - **The 2-argument `TransferMap(map, pos)`** arrives at `pos` with no walk, so whatever spot was given becomes
-    `lastpos` and `lastloadzone`. Map travel landed beside a save point that way.
+    `lastpos` and `lastloadzone`. Map travel landed beside a save point that way until 2026-10-02. Since then it, and
+    Warp to Start, use the 4-argument form with a real door's appear and walk-to spots. Used by `WarpButton.cs`.
   - **`TransferMap` waits on the walk-in** (`while (player.entity.forcemove)`) with no time limit, so a walk to a spot
     it can't reach (over water) never ends and the transfer holds `minipause` (`DevConsole.Warp.cs`, `unstick`).
   - **Not yet seen:** which of these the chapter-2 door's loop was.
