@@ -2445,6 +2445,9 @@ either one wrong).
   CLAUDE.md, `references.md` and `licensing.md`; the one mention, in build step 10's enemy-drops idea, was removed.
 - **The user said:** they have never been read, looked at or used in any way while making this project, not even
   their public docs if any, and never will be. `references.md` and step 1 of `documentation.md` now say so.
+- **Corrected (the user):** an agent first wrote "not even for our public docs"; the user meant their public docs, not
+  ours. Both places now say "not even their public docs", in the plural, as the user asked, after step 1's first
+  rewording read oddly.
 - **Corrected (the user):** an agent said three "Bug Fables" apworlds would force players to pick one and the projects
   to coordinate. Wrong: Archipelago allows several apworlds for one game, each with its own thread in its Discord, and
   nobody owns a game.
