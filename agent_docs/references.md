@@ -12,9 +12,9 @@ Two kinds, kept apart (the user, 2026-09-30):
   unnamed, with no path.
 
 **Another Bug Fables project is never looked at** (the user, 2026-10-02): a randomizer, a modding framework or any
-other. None has ever been read, looked at or used in any way while making this project, not even its public docs if
-it has any, and none ever will be. Not compared with ours, not borrowed from: no row in `licensing.md` and no entry
-here of either kind. This project was built blind and ran into nothing that needed them. They stay unnamed.
+other. Other Bug Fables projects were never read, looked at or used in any way while making this one, not even their
+public docs, and never will be. Not compared with ours, not borrowed from: no row in `licensing.md` and no entry here
+of either kind. This project was built blind and ran into nothing that needed them. They stay unnamed.
 
 ## Compared with ours
 
