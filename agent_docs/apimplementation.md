@@ -616,7 +616,8 @@ be wrong.
     by name;
   - `TermiteIndustrial`'s pair inside its own map, three doors of one name.
 
-  Each needs the mod to tell the copies apart (by entity index) before it can be shuffled. The Sand Castle's two
+  Each needs the mod to tell the copies apart (by entity index) before it can be shuffled. **Decided (the user,
+  2026-10-02): later, one entrance or room at a time.** The Sand Castle's two
   right-hand basement doors are left out entirely (parked at height 99): whether they can be reached at all is to see
   in play.
 - **A fill error with *minimal* accessibility and Shuffle Jump, next to another game** (found by the fuzzer with APQuest,
