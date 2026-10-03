@@ -67,6 +67,7 @@ either one wrong).
 - [2026-10-02: the fog maze shuffled, travel through doors, respawn loops ended](#2026-10-02-the-fog-maze-shuffled-travel-through-doors-respawn-loops-ended)
 - [2026-10-03: map travel through a door, seen](#2026-10-03-map-travel-through-a-door-seen)
 - [2026-10-03: boss prizes on Normal, seeds only](#2026-10-03-boss-prizes-on-normal-seeds-only)
+- [2026-10-03: Universal Tracker with no yaml, and the seed's options in one dict](#2026-10-03-universal-tracker-with-no-yaml-and-the-seeds-options-in-one-dict)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2516,3 +2517,36 @@ either one wrong).
 - **Read, not built:** were the payout ever widened, a payout made on the caravan's own map would leave its shelf
   showing a medal now waiting at Artis (`CaravanMedalSet` picks it at map load); the game's own
   `NPCControl.SetBadgeShop(true)` would refresh it.
+
+## 2026-10-03: Universal Tracker with no yaml, and the seed's options in one dict
+
+- **Asked (the user):** the local `UNIVERSAL-TRACKER-PLAN.md`, planned first, then built. Universal Tracker's docs were
+  re-read (they had gained `explain_rule`, `explain_more` and fuzzer hooks since 2026-10-01), with its `TrackerCore.py`:
+  it reruns only `generate_early` to `generate_basic`, drops precollected items with an id, and with
+  `ut_can_gen_without_yaml` regenerates from an empty yaml with the slot_data as `re_gen_passthrough`.
+- **Decided (the user), asked one at a time:**
+  - the map tab and the mod's data storage keys wait for the PopTracker pack's map (it is only a plan);
+  - Universal Tracker v0.3.4 in the checkout's `custom_worlds`, and its hook in CI too (capabilities widened);
+  - `/explain`: the user asked "what is the standard for how to handle this ?". Answer: `rule builder.md` gives
+    resolving to built-ins and a custom `Resolved` as equals, no "should", and APQuest has no custom rules. Chosen:
+    the standard, nothing added;
+  - the mod reads its options from a new `options` dict, as its own step first (build step 39);
+  - the list in story order by area, then by name. The old plan's premise, ids in game order, was wrong: they're in the
+    order the checks were added;
+  - four test-only names allowed in the preflight (`setup_multiworld`, `call_all`, `exclusion_rules`, `json.dumps`);
+  - old seeds: "never any intentional fallback/support for old versions of the apworld, yaml or the mod. people are
+    expected to use the latest release for all of them" (How it works §7).
+- **Found on the way (a Plan agent's review, each checked in the code):** the Filler Only fallback undid a player's
+  exclusions (Next 43 item 1, fixed with its item-rule twin); the preflight refuses `setattr`, so the options are rebuilt
+  as `MultiWorld.set_options` builds them; Universal Tracker fails every fuzz run without a `Players` folder; its `Hook`
+  and `YamllessHook` are the same for this world; its class-level cache grows inside the fuzzer's workers.
+- **Built and checked:** build steps 39-41, in seven commits. `seed-snapshot.py`: 39 changed only the four keys and
+  `options`, everything after changed nothing. Every regeneration case failed with the passthrough ignored, and so did
+  19 of 20 hook runs. Finally: 670 tests, the Logic Test 90 of 90, the fuzzer and Universal Tracker's hook each 0
+  failures in 10000. The mod builds and is copied in.
+- **Mistakes caught:** `copy-dev.ps1` first copied the old staged DLL: `dotnet build` alone doesn't stage, and
+  `stage-dev.ps1` does (`development.md`, step 1 of the loop); found by the hash matching the game's last load. A quote
+  of `other_en.md` written from memory was replaced by its real words. The preflight refused `<location>` in the
+  player guide as raw HTML.
+- **Not seen yet:** the mod reading `options` in game (moves, Jump, the Warp, the goal) and Universal Tracker itself
+  (`TO-CHECK.md`, groups 4, 7 and 11). Not pushed: CI's new `tracker` job hasn't run.
