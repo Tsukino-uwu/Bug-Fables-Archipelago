@@ -2252,7 +2252,8 @@ BepInEx is not bundled; the player installs it first.
    `Assembly-CSharp.dll`, which never enters the repo. `dev-scripts/build-release.ps1` builds Release and stages
    `release/mod/` (with no debug info: the pdb isn't shipped, and its path would put the build machine's folders into
    the DLL; checked with `strings`), and writes `release/built-from.txt`: each source file's git blob hash (line endings normalised, so
-   a Windows and a Linux checkout agree) and each shipped DLL's SHA-256. `.gitignore` lets exactly those four DLLs in.
+   a Windows and a Linux checkout agree) and each shipped DLL's SHA-256, written with LF line endings like every file
+   (since 2026-10-04, `.gitattributes`' `eol=lf`). `.gitignore` lets exactly those four DLLs in.
    Since 2026-09-29 it builds HEAD in two clean clones that must come out byte for byte the same (the mod guide,
    step 32).
 2. **A stale gate.** `build-release.ps1 -Check` recomputes both lists and fails if they differ (since 2026-09-29 it

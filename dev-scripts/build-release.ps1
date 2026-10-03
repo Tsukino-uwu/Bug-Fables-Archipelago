@@ -192,7 +192,8 @@ try {
 
     $lines = @('# Written by dev-scripts/build-release.ps1; checked by its -Check at release.', "commit: $head",
         "sdk: $($a.Sdk)", "game: Assembly-CSharp.dll sha256 $(Get-Sha256 $gameDll)") + $sources + @(Get-DllLines)
-    $lines | Set-Content -Path $builtFrom -Encoding ascii
+    # LF, as .gitattributes keeps every file (Set-Content would write CRLF on Windows).
+    [System.IO.File]::WriteAllText($builtFrom, ($lines -join "`n") + "`n", [System.Text.Encoding]::ASCII)
 }
 finally {
     if (Test-Path $tmp) { Remove-Item -Recurse -Force $tmp }
