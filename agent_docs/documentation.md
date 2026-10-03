@@ -259,6 +259,17 @@ same setup copied into every feature. Now each is marked with Harmony's attribut
 - After each batch of the 33 features, the list and the run order were identical.
 - Two hot reloads in a row gave the same 167 patches each time, with none left from the load before.
 
+**Unloading guarded too, and nothing put back as the game closes** (2026-10-04). A game log ended in a
+`NullReferenceException` in the game's `MainManager.ApplySettings` as the game closed with Uncap FPS on: Uncap FPS
+puts the game's frame settings back through it (step 24), and the audio sources it also sets were already gone. The
+throw stopped the plugin's unloading at that step, so the hooks never came off and no "unloaded" line was written.
+- **Each unload step runs through the frame's guard** (`Guarded`): one that throws is logged with its stack, and the
+  rest still run, the hooks above all, which a hot reload must not leave beside the new instance's.
+- **A closing game puts nothing back.** Unity's `Application.quitting` (in the game's Unity 2018.4, read in its
+  `UnityEngine.CoreModule`) sets `Plugin.Quitting` and logs `[quit] the game is closing`. Uncap FPS then skips
+  putting back the camera, the characters' interpolation and the game's settings; a hot reload still puts them back.
+- **To see:** close the game with Uncap FPS on; I read the log for the `[quit]` line, then "unloaded.", with no error.
+
 **The dev tools in their own half** (2026-09-28). `Plugin` is a partial class. `Plugin.cs` holds what every build
 runs. `Dev/Plugin.Dev.cs` holds the [Debug] settings, the console, probes and dumps, reached through partial methods
 (`DevAwakeEarly`, `DevAfterTick`...). FrameRate's measurements work the same way. A build without `Dev/` still compiles,
@@ -287,7 +298,8 @@ game log in at the main menu for it, with no save in play. The same login showed
 **Status:** done; separate guards per system built 2026-09-28, not yet seen in game; errors checked for instead of
 swallowed, built 2026-09-28 (both builds pass), not yet seen in game; hooks to attributes built 2026-09-28 (all 33
 features; the patch list and run order identical to before, 167 patches, in game). Seen in a play-test (2026-09-29):
-a new file with its starting items, a pickup gone once checked, shops, Uncap FPS and saving all as before.
+a new file with its starting items, a pickup gone once checked, shops, Uncap FPS and saving all as before. Unloading
+guarded and nothing put back at closing, built 2026-10-04 (both builds pass), not yet seen in the log.
 
 *Code: `mod/BugFablesAP/Core/Plugin.cs` (`Plugin`, a BepInEx plugin: `Awake` sets everything up, `Tick` runs
 every frame); `Core/Hooks.cs` (`Install`, `Create`, `Safe`, `UninstallAll`); `Core/SeedData.cs`; the dev build's
@@ -1971,8 +1983,8 @@ and the game's settings; `fps <cap>` and `interp on|off` let the tester compare 
 place it counts frames instead of time first.
 - **The cap.** A cap that divides the monitor's refresh rate, or reaches it, is met with VSync (240 on 240 Hz: every
   refresh; 120: every second one; 240 on 180 Hz: every refresh); any other is a limit with VSync off. Without VSync at 240 on 240 Hz the frame times wobbled from 2.9 to
-  5.3 ms. Re-applied after the game's own `ApplySettings`; Off calls `ApplySettings` to put the game's settings back.
-  The game's own settings file is never written.
+  5.3 ms. Re-applied after the game's own `ApplySettings`; Off calls `ApplySettings` to put the game's settings back,
+  except while the game is closing (step 4, 2026-10-04). The game's own settings file is never written.
 - **Motion drawn between physics steps.** The camera is placed between its last two steps before drawing, and put
   back after. Characters at first got Unity's rigidbody interpolation; since 2026-09-30 they are drawn the camera's
   way instead (the pitfall "drawn at physics steps", below). **Pitfall, found on screen:**

@@ -2609,5 +2609,10 @@ either one wrong).
   in the game's own HarmonyX 2.9.0 that a finalizer shares the prefix's `__state`, and in its BepInEx that a stored
   "true" under a value list falls back to the first value (Off). The build succeeds; the plugin copied in, the game
   was closed, so nothing seen yet.
-- **Noticed, not changed:** the last log ends with a `NullReferenceException` in `MainManager.ApplySettings`, from
-  `FrameRate.Disable` in `Plugin.OnDestroy` as the game closed. Told the user.
+- **Noticed:** the last log ends with a `NullReferenceException` in `MainManager.ApplySettings`, from
+  `FrameRate.Disable` in `Plugin.OnDestroy` as the game closed. Told the user, who said: "yee do that, dumb to leave
+  warnings/errors laying around".
+- **Fixed (mod guide, step 4):** the throw had also stopped the unloading there (no hooks off, no "unloaded" line).
+  Read first: `ApplySettings` sets every audio source's volume without checking each is alive, and the game's Unity
+  (2018.4.12f1) has `Application.quitting`. Each unload step now runs through `Guarded`; `Application.quitting` sets
+  `Plugin.Quitting`, and FrameRate then puts nothing back. Both builds pass; the next quit's log is the check.

@@ -15,6 +15,8 @@ namespace BugFablesAP
         public const string Version = "0.2.0";
 
         internal static ManualLogSource Log;
+        // Set as the game starts closing: a closing game needs nothing put back for a hot reload.
+        internal static bool Quitting { get; private set; }
 
         private ConfigEntry<string> server;
         private ConfigEntry<string> port;
@@ -43,6 +45,7 @@ namespace BugFablesAP
         {
             Log = Logger;
             Hooks.Init(Log);
+            UnityEngine.Application.quitting += MarkQuitting;
             DevAwakeEarly();
             // A server on this computer needs the ws:// prefix; a bare localhost:38281 times out.
             server = Config.Bind("Connection", "Address", "archipelago.gg",
@@ -287,22 +290,30 @@ namespace BugFablesAP
             DevAfterTick();
         }
 
+        private static void MarkQuitting()
+        {
+            Quitting = true;
+            Log?.LogInfo("[quit] the game is closing: nothing is put back for a hot reload");
+        }
+
         private void OnDestroy()
         {
-            DevDestroy();
-            MenuToggle.Disable();
+            UnityEngine.Application.quitting -= MarkQuitting;
+            // Each step on its own: one that throws must not keep the rest, the hooks above all, from coming off.
+            Guarded("unload", () => DevDestroy());
+            Guarded("unload", MenuToggle.Disable);
             // A hot reload must not leave the old instance's socket open next to the new one.
-            connection?.Disconnect();
-            MedalAssist.Disable();
-            FrameRate.Disable();
-            SaveCrystals.Disable();
-            QualityOfLife.Disable();
-            WarpButton.Disable();
-            HoldUps.Clear();
-            PartyFit.Disable();
-            ShopSwap.Disable();
-            MusicShuffle.Disable();
-            Hooks.UninstallAll();
+            Guarded("unload", () => connection?.Disconnect());
+            Guarded("unload", MedalAssist.Disable);
+            Guarded("unload", FrameRate.Disable);
+            Guarded("unload", SaveCrystals.Disable);
+            Guarded("unload", QualityOfLife.Disable);
+            Guarded("unload", WarpButton.Disable);
+            Guarded("unload", HoldUps.Clear);
+            Guarded("unload", PartyFit.Disable);
+            Guarded("unload", ShopSwap.Disable);
+            Guarded("unload", MusicShuffle.Disable);
+            Guarded("unload", Hooks.UninstallAll);
             Log?.LogInfo($"{Name} {Version} unloaded.");
         }
     }

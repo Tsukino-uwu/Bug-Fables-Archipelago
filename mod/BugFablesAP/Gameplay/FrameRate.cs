@@ -101,7 +101,8 @@ namespace BugFablesAP
         {
             Camera.onPreCull -= BeforeDraw;
             Camera.onPostRender -= AfterDraw;
-            if (drawnShifted)
+            // A closing game has nothing to put back, and the audio sources ApplySettings sets are already gone.
+            if (drawnShifted && !Plugin.Quitting)
             {
                 RestoreCamera(null);
             }
@@ -110,8 +111,11 @@ namespace BugFablesAP
             if (active)
             {
                 active = false;
-                NoInterpolation();
-                MainManager.ApplySettings();
+                if (!Plugin.Quitting)
+                {
+                    NoInterpolation();
+                    MainManager.ApplySettings();
+                }
             }
             harmony = null;
         }

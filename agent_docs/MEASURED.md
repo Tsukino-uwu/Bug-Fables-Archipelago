@@ -1559,7 +1559,10 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   a child of Main Camera, layer 5, the HUD). The children draw after the main camera, from wherever it is. Used by
   `FrameRate.cs`.
 - **`MainManager.ApplySettings()`** (static, no arguments) applies FPS and VSync with the rest of the settings; the
-  settings screen calls it. Used by `FrameRate.cs`.
+  settings screen calls it. It first sets the volume of every `music` and `sounds` audio source, null-checking the
+  arrays but not their members, so it throws once those are destroyed: the game's log showed a
+  `NullReferenceException` in it from the plugin's unloading as the game closed (2026-10-03, code read 2026-10-04).
+  Used by `FrameRate.cs`.
 - **The game forces a collection every 5 seconds:** `MainManager.DoClock` (the play-time clock, once a second) calls
   `Resources.UnloadUnusedAssets()` then `GC.Collect()` when `clocksec % 5 == 0` and no room transition is on. Leaving a
   map does the same when no event is running. Measured cost on the test machine: two slow frames, about 45 and 66 ms,
