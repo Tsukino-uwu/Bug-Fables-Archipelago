@@ -15,6 +15,7 @@ from worlds.generic.Rules import exclusion_rules
 
 from . import entrance_graph, generate_like_main
 from .test_doors import PLANDO
+from ..data_tables import TRACKER_ORDER
 from ..world import BugFablesWorld
 
 # Universal Tracker's TrackerCore.TMain: these steps, its exclusions after set_rules, nothing after generate_basic.
@@ -110,6 +111,41 @@ class TestTrackerRebuildsTheSeed(TestCase):
                     self.assert_same_seed(real, rebuilt, seed)
 
 
+class TestTrackerExplains(TestCase):
+    """What Universal Tracker's /explain and /get_logical_path do with this world (its TrackerClient.py, v0.3.4), on a
+    door-shuffled seed rebuilt from its slot_data: every rule explains itself, and every path walks real entrances."""
+
+    def test_rules_and_paths(self) -> None:
+        real = generate_like_main({"entrance_randomizer": "coupled", "plando_connections": PLANDO}, 5)
+        world = regenerate(as_sent(real.fill_slot_data()), 105)
+        progression = [item.name for item in real.multiworld.itempool if item.player == 1 and item.advancement]
+        state = CollectionState(world.multiworld)
+        for name in progression[::2]:
+            state.collect(world.create_item(name), prevent_sweep=True)
+        state.sweep_for_advancements(locations=[loc for loc in world.get_locations() if loc.address is None])
+        rules = [*(loc.access_rule for loc in world.get_locations()),
+                 *(entrance.access_rule for region in world.get_regions() for entrance in region.entrances
+                   if entrance.parent_region)]
+        for rule in rules:
+            if hasattr(rule, "explain_json"):
+                for parts in (rule.explain_json(state), rule.explain_json()):
+                    self.assertTrue(parts)
+                    self.assertTrue(all(isinstance(part.get("text"), str) for part in parts))
+            else:
+                self.assertIsInstance(rule(state), bool)
+        reachable = [loc for loc in world.get_locations() if loc.address is not None and loc.can_reach(state)]
+        self.assertTrue(reachable)
+        for location in reachable:
+            # get_logical_path's walk: state.path back from the location's region, (region, entrance) by name.
+            step, names = state.path.get(location.parent_region, (str(location.parent_region), None)), []
+            while step:
+                name, step = step
+                names.append(str(name))
+            for entrance in names[::-1][1::2]:
+                with self.subTest(location=location.name, entrance=entrance):
+                    world.get_entrance(entrance)
+
+
 class TestTrackerHooks(TestCase):
     def test_no_yaml_needed(self) -> None:
         # Universal Tracker skips its own first generation and regenerates from the slot_data it is handed back.
@@ -122,6 +158,17 @@ class TestTrackerHooks(TestCase):
         for changed in ({**slot_data, "world_version": "0.0.1"}, {k: v for k, v in slot_data.items() if k != "options"}):
             with self.subTest(keys=sorted(set(slot_data) ^ set(changed))), self.assertRaises(ValueError):
                 regenerate(changed, 3)
+
+    def test_the_list_in_story_order(self) -> None:
+        # Areas as the story reaches them, each one's spots by name; an entrance or anything unknown after them all.
+        world = generate_like_main({}, 1)
+        order = sorted((loc.name for loc in world.get_locations() if loc.address is not None),
+                       key=lambda name: world.custom_ut_sort("", name))
+        self.assertTrue(order[0].startswith("Outskirts: "))
+        outskirts = [name for name in order if name.startswith("Outskirts: ")]
+        self.assertEqual(outskirts, sorted(outskirts))
+        self.assertLess(order.index("Outskirts: Pier"), order.index("Bugaria City: Commercial District, Medal Shop 1"))
+        self.assertEqual(world.custom_ut_sort("BugariaPier", "BugariaPier: loadzone"), len(TRACKER_ORDER))
 
     def test_another_game_s_passthrough_is_not_read(self) -> None:
         multiworld = setup_multiworld(BugFablesWorld, steps=(), seed=4, options={"entrance_randomizer": "coupled"})

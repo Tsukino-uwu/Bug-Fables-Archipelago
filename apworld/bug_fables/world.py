@@ -10,7 +10,7 @@ from worlds.AutoWorld import World
 from . import (entrances, items, locations, music, regions, rules, shop_inventories, slot_data, universal_tracker,
                web_world)
 from .data_tables import (ARTIFACTS, DOORS, ENCOUNTERS, ITEM_NAME_TO_ID, LOCATION_NAME_TO_ID, LOCATIONS, ONE_WAYS,
-                          ROOM_STARTS, STORY_EVENTS)
+                          ROOM_STARTS, STORY_EVENTS, TRACKER_ORDER)
 from .enemies import shuffle_encounters
 from .options import BugFablesOptions, EnemyShuffle, EntranceRandomizer, StartingLocation, StartingPartyMember
 
@@ -51,6 +51,10 @@ class BugFablesWorld(World):
     def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
         # Returned whole: Universal Tracker then regenerates the world with it as re_gen_passthrough.
         return slot_data
+
+    def custom_ut_sort(self, region_label: str, location_label: str) -> int:
+        # Universal Tracker's list in the story's order (TRACKER_ORDER); anything else, such as an entrance, last.
+        return TRACKER_ORDER.get(location_label, len(TRACKER_ORDER))
 
     def generate_early(self) -> None:
         self.passthrough = universal_tracker.passthrough(self)

@@ -9,7 +9,7 @@ from typing import Any
 from .data_types import Doors, Encounter, Item, Location, OneWayDoor, RoomStart, SavePoint
 from .logic import (ARTIFACTS, DIALOGUE_FLAGS, DOOR_RULES, HELD_UNTIL, HELD_UNTIL_ITEM, KEPT_OPEN, KEPT_PRESENT,
                     LOCATIONS, PRESENT_FROM, PRESENT_WITH_ITEM, SCENERY_HIDDEN, SCENERY_PRESENT, STORY_EVENTS,
-                    TRANSFERS)
+                    TRACKER_ORDER, TRANSFERS)
 
 ITEM_ID_BASE = 7_710_000
 LOCATION_ID_BASE = 7_720_000

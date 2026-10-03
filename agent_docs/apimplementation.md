@@ -56,7 +56,8 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
   [28](#build-step-28-the-preflight-nothing-unpublishable-in-the-repo-or-a-release).
 - **slot_data and trackers:** the seed's options in one `options` dict,
   [39](#build-step-39-the-seeds-options-in-slot_data-one-options-dict-the-mod-reads); Universal Tracker,
-  [40](#build-step-40-universal-tracker-the-seed-rebuilt-from-slot_data-with-no-yaml); every key,
+  [40](#build-step-40-universal-tracker-the-seed-rebuilt-from-slot_data-with-no-yaml) and
+  [41](#build-step-41-universal-trackers-list-order-and-explanations); every key,
   [How it works 7](#7-slot_data-the-seeds-settings-and-this-worlds-keys).
 
 **How we built it**
@@ -101,6 +102,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 38. [Build step 38: one-way doors in the entrance randomizer (the Forsaken Lands' fog maze)](#build-step-38-one-way-doors-in-the-entrance-randomizer-the-forsaken-lands-fog-maze)
 39. [Build step 39: the seed's options in slot_data, one `options` dict the mod reads](#build-step-39-the-seeds-options-in-slot_data-one-options-dict-the-mod-reads)
 40. [Build step 40: Universal Tracker, the seed rebuilt from slot_data with no yaml](#build-step-40-universal-tracker-the-seed-rebuilt-from-slot_data-with-no-yaml)
+41. [Build step 41: Universal Tracker's list order and explanations](#build-step-41-universal-trackers-list-order-and-explanations)
 
 **How it works**
 
@@ -3934,6 +3936,58 @@ seen in Universal Tracker itself (the user connecting it with no yaml to a door-
 (`_split`, `pairings_from_targets`, `replay`); the player guide's "Tracking your seed"; tests `test_tracker.py`,
 `test_doors.py` (`DoorPairTests`, `TestDoorTargetsReadBack`), `test/__init__.py` (`entrance_graph`);
 `dev-scripts/tracker_fuzz_hook.py`, `dev-scripts/test-apworld.ps1`.*
+
+## Build step 41: Universal Tracker's list order and explanations
+
+**Why:** the rest of what Universal Tracker's docs offer a world (`docs/apworld-integration.md`, `re-gen-passthrough.md`,
+branch `tracker`, read 2026-10-03), each built or decided, none left as a gap.
+
+**Decided (the user, 2026-10-03):**
+
+- **The list's order:** "areas in story order, then name". The old plan assumed the location ids follow the game; they
+  follow the order the checks were added, so the order comes from the logic's areas instead.
+- **`/explain`: Archipelago's standard.** `rule builder.md` (0.6.7) gives two equal ways to write a custom rule: its own
+  `Resolved` class, whose explanation "can be overridden", or resolving to the built-in rules "instead of needing to
+  define your own" (its `ComplicatedFilter` example), which explain themselves. Ours resolve to built-ins (`CanUse`,
+  `Member`, `MoveItem`, `Boat`, `WayBack`), neither way is a "should", Universal Tracker's default `/explain` "will use
+  the rule builder api", and APQuest (`main`) has no custom rules. So nothing is added; an override only where the
+  output reads wrong.
+
+**How it was built:**
+
+1. **`custom_ut_sort`** (`world.py`), used when Universal Tracker's `sorting_method` is `apworld`, its default:
+   `TRACKER_ORDER` (`logic/__init__.py`) ranks each location by its area in `AREAS`' order (the Outskirts, Snakemouth
+   Den, Bugaria City, Metal Island, the later chapters) and by name within the area, so a room's spots sit together.
+   Anything else Universal Tracker passes, such as an unconnected entrance's line, goes last.
+2. **What `/explain` and `/get_logical_path` print** (read in its `TrackerClient.py`, v0.3.4): each spot's and door's
+   `access_rule.explain_json(state)`, the built-ins' own lines, e.g. "Missing some of (Missing: Kabbu x1, Horn Slash
+   x1)"; a spot with no rule prints "Location has a default access rule"; a door with none prints `True` or `False`.
+   Both commands need its client, so the test does what they do instead (`TestTrackerExplains`, on a Coupled seed with
+   plando rebuilt from its slot_data): every rule explains itself, with a state and without, and each reachable
+   location's path, walked from `state.path` as `/get_logical_path` walks it, names real entrances.
+3. **The rest of its docs, each decided:**
+   - `location_id_to_alias`, for "a generically named location": our names are fixed and never change meaning per
+     seed (a shop's numbered copies are always the same copies), so there is nothing to alias.
+   - `glitches_item_name`, for spots reachable in the game though not in logic ("glitched" logic): our logic has no
+     such rules; adding some is a logic decision.
+   - `explain_rule`, `get_logical_path`, `explain_path`, `explain_spot`, `explain_more` and their sub-commands: the
+     defaults read right so far; an override waits for the user's look at them.
+   - Deferred entrances and events (`found_entrances_datastorage_key`, `reconnect_found_entrances`,
+     `enforce_deferred_connections`): decided against on 2026-10-01, since every location in logic is always shown.
+   - `disable_ut`: not set.
+   - Its client integration (`docs/client-integration.md`): for clients built on Archipelago's CommonClient; ours is a
+     BepInEx mod. Tracker addons are installed by the player.
+   - The map tab (`tracker_world`, `docs/map-integration.md`) and the mod's data storage keys: once the PopTracker
+     pack has its map (the user, 2026-10-03). It will need a host.yaml setting for the pack's path, a `settings`
+     member the preflight refuses today.
+4. **Tests** (`test_tracker.py`): the list starts with the Outskirts, sorted by name within it, the Outskirts before
+   Bugaria City, an entrance last; and the explanations above.
+
+**Status:** built (2026-10-03), the tests pass; not yet seen in Universal Tracker (the list's order, `/explain` on a few
+spots and `/get_logical_path` through shuffled doors).
+
+*Code: `world.py` (`custom_ut_sort`), `logic/__init__.py` (`TRACKER_ORDER`), `data_tables.py`; tests
+`test_tracker.py` (`TestTrackerExplains`, `test_the_list_in_story_order`).*
 
 # How it works
 
