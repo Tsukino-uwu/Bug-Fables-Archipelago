@@ -166,12 +166,35 @@ runs too** (2026-09-28); 10000 seeds take a few minutes.
 2. `dev-scripts/test-apworld.ps1 -Archipelago <your checkout>` runs the tests, the Logic Test check (next section),
    then the fuzzer (`fuzz.py -r 10000 -j <cores> -n 1 -g bug_fables --skip-output`: one Bug Fables yaml per seed), and
    prints each error with its count. `-With apquest` puts another world in every room; `-Runs` changes the count,
-   `-Jobs` the processes (every core by default). It fails unless all three are clean.
+   `-Jobs` the processes (every core by default). With Universal Tracker in the checkout it then runs its fuzzer hook
+   (below). It fails unless every part is clean.
 3. Read `fuzz_output/report.json` (counts and each error with the runs that hit it). Each failed run keeps its yaml and
    log in `fuzz_output/error/bug_fables/<run>/`; regenerate it with `Generate.py --player_files_path` on that folder.
    A new run replaces `fuzz_output`, so copy anything you still need first.
 
 Exit code 1 only means some runs failed. The goal is 0 failures in 10000.
+
+**Universal Tracker's fuzzer hook** (since 2026-10-03; the Archipelago guide's build step 40). Universal Tracker ships a
+hook for this fuzzer that regenerates each seed from its slot_data, with no yaml, as Universal Tracker does, and checks
+sphere by sphere that it puts the same locations in logic as the real generation (its `docs/apworld-integration.md`,
+"Fuzzer hooks").
+
+1. Once: put `tracker.apworld` from Universal Tracker's release v0.3.4 (2026-09-23; CI pins the same) in your
+   checkout's `custom_worlds`, and make a `Players` folder at the checkout's root. Universal Tracker requires its
+   players folder, and with no window open it fails every run when the folder is missing.
+2. `test-apworld.ps1` then runs a second pass: `fuzz.py -r 10000 -j <cores> -n 1 -g bug_fables --hook
+   tracker_fuzz_hook:Hook`, with `dev-scripts` on `PYTHONPATH`. No `--skip-output`: the hook reads the seed it made.
+   No `-With`: it skips rooms with another world. It fails on any failure, timeout or ignored run, since the hook files
+   a failed generation as ignored. Its report and failed runs are in `fuzz_output_tracker`; `-TrackerRuns` changes its
+   count, `-TrackerOnly` runs only this pass.
+3. `tracker_fuzz_hook.py` is Universal Tracker's own `YamllessHook`, emptying `TrackerCore`'s cache of the worlds it
+   regenerated before each run: the cache is a class-level list, and fuzz.py's workers live for the whole run.
+   Measured (2026-10-03, 1000 runs on 12 workers, 30 s): without it each worker grew from 229 to 290 MB; with it, it
+   stays at 238. Its `Hook` takes the same yaml-less branch for this world (`TrackerCore.initalize_tracker_core`), so
+   only `YamllessHook` runs.
+
+Seen failing (2026-10-03): with the passthrough ignored, 19 of 20 runs failed, each log naming a location "in server
+logic but not expected in UT".
 
 **CI runs the same script on every push** (since 2026-09-29): `ci.yml`'s `fuzz` job installs the fuzzer and the
 Logic Test at the commits it pins, runs `test-apworld.ps1` under `pwsh` on Linux, and stops after 30 minutes. A failed

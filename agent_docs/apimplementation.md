@@ -3911,16 +3911,29 @@ The map tab and the mod's data storage keys wait for the PopTracker pack's map.
    version or missing `options` is refused, and another game's passthrough is never read. **Every case failed with the
    passthrough ignored** (the defaults too: the shop inventories roll their own).
 
-**Checked (2026-10-03):** the tests pass; `seed-snapshot.py` identical before and after (a real generation has no
-passthrough).
+4. **Universal Tracker's own fuzzer hook** (`dev-scripts/tracker_fuzz_hook.py`, `test-apworld.ps1`; `development.md`,
+   "Fuzzing the apworld"): with Universal Tracker v0.3.4 in the Archipelago checkout (the user's yes, 2026-10-03), a
+   second fuzzer pass runs its `YamllessHook`, which regenerates every fuzzed seed with Universal Tracker's own code
+   and checks each sphere against the real generation. Our subclass only empties Universal Tracker's class-level cache
+   of regenerated worlds before each run, since fuzz.py's workers live for the whole run. Its `Hook` takes the same
+   yaml-less branch for this world, so only `YamllessHook` runs.
 
-**Status:** built (2026-10-03), the tests pass and seeds are unchanged; next, Universal Tracker's own fuzzer hook, and
-the user connecting Universal Tracker with no yaml to a door-shuffled seed.
+**Checked (2026-10-03):**
+
+- The tests pass; `seed-snapshot.py` identical before and after (a real generation has no passthrough).
+- `test-apworld.ps1`: 668 tests, the Logic Test check 90 of 90, the fuzzer 0 failures in 10000, and Universal Tracker's
+  hook 0 failures, 0 timeouts and 0 ignored in 10000.
+- The hook fails when it should: with the passthrough ignored, 19 of 20 runs failed, each log naming a location "in
+  server logic but not expected in UT".
+
+**Status:** built (2026-10-03), the tests, the fuzzer and Universal Tracker's hook pass and seeds are unchanged; not yet
+seen in Universal Tracker itself (the user connecting it with no yaml to a door-shuffled seed).
 
 *Code: `universal_tracker.py` (`passthrough`, `apply_options`), `world.py` (`ut_can_gen_without_yaml`,
 `interpret_slot_data`, the passthrough in `generate_early`, `connect_entrances` and `generate_basic`), `entrances.py`
 (`_split`, `pairings_from_targets`, `replay`); the player guide's "Tracking your seed"; tests `test_tracker.py`,
-`test_doors.py` (`DoorPairTests`, `TestDoorTargetsReadBack`), `test/__init__.py` (`entrance_graph`).*
+`test_doors.py` (`DoorPairTests`, `TestDoorTargetsReadBack`), `test/__init__.py` (`entrance_graph`);
+`dev-scripts/tracker_fuzz_hook.py`, `dev-scripts/test-apworld.ps1`.*
 
 # How it works
 

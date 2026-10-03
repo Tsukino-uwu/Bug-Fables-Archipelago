@@ -106,7 +106,8 @@ files is left out; everything else they do is listed.
 | `dev-scripts/copy-dev.ps1` | writes files | Copies the staged plugin into your Bug Fables install and sets config keys, keeping a backup of each file it replaces |
 | `dev-scripts/release.ps1` | runs programs | `git`, `gh` and the build script, to cut a release |
 | `dev-scripts/release.ps1` | talks to GitHub | Pushes `main`, then starts and watches the release workflow with `gh` |
-| `dev-scripts/test-apworld.ps1` | runs programs | `python`: the apworld's tests and the fuzzer, in your Archipelago checkout |
+| `dev-scripts/test-apworld.ps1` | runs programs | `python`: the apworld's tests, the fuzzer, and the fuzzer again with Universal Tracker's hook (`tracker_fuzz_hook.py`), in your Archipelago checkout |
+| `dev-scripts/test-apworld.ps1` | writes files | Renames the fuzzer's output folders in your Archipelago checkout (`fuzz_output`, `fuzz_output_tracker`), so the second pass keeps the first one's results |
 | `dev-scripts/seed-snapshot.py` | runs programs | Archipelago's generator, in your Archipelago checkout |
 | `dev-scripts/seed-snapshot.py` | writes files | Each case's slot data and spoiler, in the folder given with `--out`; the player files and the generator's output in a temporary folder, removed afterwards |
 | `dev-scripts/seed-snapshot.py` | unpickles Archipelago's own output | Reads a generated seed file with Archipelago's own restricted loader |
