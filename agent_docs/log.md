@@ -2643,4 +2643,6 @@ either one wrong).
   rendered as one paragraph with "34." as plain text. Now indented by 4 (a script; the docs' text identical before and
   after, only list markers became real). Then 287 lines over 120 reflowed by a script, proven by rendering every doc
   with markdown-it before and after: identical HTML in all 19. CLAUDE.md kept at 150 lines: two lines trimmed without
-  changing a word's meaning; its line 18 is still 126 and needs the user's call (a line to spare, or a shorter rule).
+  changing a word's meaning. Its line 18 (126) needed the user's call; they chose both shortenings offered: the
+  versions aside to "(our version's: the checkout at the targeted tag)", and "never our own" dropped as the clause
+  after it says it. 0 lint findings in all 21 docs.
