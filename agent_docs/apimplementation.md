@@ -54,6 +54,9 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
   [25](#build-step-25-deathlink-a-panel-row-deaths-sent-and-received).
 - **Releases and safety:** [17](#build-step-17-releases-the-three-downloads-and-how-theyre-built),
   [28](#build-step-28-the-preflight-nothing-unpublishable-in-the-repo-or-a-release).
+- **slot_data and trackers:** the seed's options in one `options` dict,
+  [39](#build-step-39-the-seeds-options-in-slot_data-one-options-dict-the-mod-reads); every key,
+  [How it works 7](#7-slot_data-the-seeds-settings-and-this-worlds-keys).
 
 **How we built it**
 
@@ -95,6 +98,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 36. [Build step 36: Progressive Boat, the Boat Ticket and the submarine as items](#build-step-36-progressive-boat-the-boat-ticket-and-the-submarine-as-items)
 37. [Build step 37: Points of No Return, the Warp counted as the way back](#build-step-37-points-of-no-return-the-warp-counted-as-the-way-back)
 38. [Build step 38: one-way doors in the entrance randomizer (the Forsaken Lands' fog maze)](#build-step-38-one-way-doors-in-the-entrance-randomizer-the-forsaken-lands-fog-maze)
+39. [Build step 39: the seed's options in slot_data, one `options` dict the mod reads](#build-step-39-the-seeds-options-in-slot_data-one-options-dict-the-mod-reads)
 
 **How it works**
 
@@ -475,7 +479,8 @@ be wrong.
    Archipelago publishes for a world and a client, read against the project: every doc (0.6.7, diffed against
    `main`), the generic player guides, APQuest and MultiClient.Net's docs. The evidence for each item is in
    [archipelago-review.md](archipelago-review.md), same numbers. Each is a step of its own, in this order:
-    - **Bugs:** 1. the shop fallback (Known issues); 2. failed connect attempts left open, one more client on the
+    - **Bugs:** 1. the shop fallback: its two bugs fixed 2026-10-03 (build step 11), priority and plando on a shop
+      still in Known issues; 2. failed connect attempts left open, one more client on the
       slot per retry (Known issues); 3. two items named "Leif" (Known issues); 4. a shop test that can't fail;
       5. respawning checks leaving the outbox before the server confirms them.
     - **Required:** 6. the door shuffle in `connect_entrances`: done 2026-09-30 (build step 12). **Recommended,
@@ -484,7 +489,7 @@ be wrong.
       presets, reST option texts with rich text, a bug report
       page, the WebWorld's `game`; 9. `topology_present`; 10. location and item groups (the first item groups,
       *Submarine* and *Boat*, came with build step 36); 11. `World.world_version`,
-      `Region.add_locations`, `options.as_dict`; 12. `start_inventory_from_pool`; 13. the Rule Builder's
+      `Region.add_locations`, `options.as_dict` (done 2026-10-03, build step 39: slot_data's `options`); 12. `start_inventory_from_pool`; 13. the Rule Builder's
       `OptionFilter` for Jump, `__str__` and `@override` on our rules, a caching benchmark; 14. Universal Tracker and
       PopTracker; 15. slot_data only what's necessary (decided 2026-09-29: the fixed tables built into the mod from
       the apworld's data, the seed's locations from the server, a world-version check on connect).
@@ -579,13 +584,10 @@ be wrong.
 
 **Known issues:**
 
-- **Shop Contents' fallback has two bugs** (found by the audit, 2026-09-29; read in the code, not yet seen in a
-  seed): `rules.fall_back_from_filler_only` runs in `pre_fill`, after Archipelago has applied a player's
-  `exclude_locations` and the local and non-local item rules (`Main.py`, 121 and 137-140). It assigns `item_rule`
-  outright, which drops those item rules on the shops, and it sets every shop back to normal, which undoes a player's
-  own exclusion of a shop. Only when Filler Only falls back (too few filler items in the room). Also: a player's
+- **Shop Contents and the player's own placements** (found by the audit, 2026-09-29): a player's
   `priority_locations` on a shop is dropped (under Filler Only with a warning in the generator's log, under No
-  Progression silently), and plando aimed at one fails silently. Next 43, item 1.
+  Progression silently), and plando aimed at one fails silently. The fallback's two bugs (an excluded shop set back to
+  normal, item rules replaced) were fixed on 2026-10-03 (build step 11). Next 43, item 1.
 - **Failed connect attempts are left open** (found by the full review, 2026-09-29; read in the code): if reading
   slot_data fails right after a successful login (`ApConnection.cs`), that logged-in connection is neither kept nor
   closed, and the retry logs in again, so every retry adds a client on the slot. A mod and an apworld of different
@@ -833,7 +835,8 @@ One rule came out of this for every later option: **every seed can be completed 
 Whatever an area or the goal needs is written into the logic, and the mod never hands things out to patch
 a gap.
 
-**The mod reports the goal (2026-09-26).** It reads `artifacts_required` from `slot_data` and each frame compares it
+**The mod reports the goal (2026-09-26).** It reads `artifacts_required` from `slot_data` (inside `options` since
+build step 39) and each frame compares it
 with the game's own count, `MainManager.SaveProgressIcons()` (the seven artifact flags; `MEASURED.md`). Once the count
 is reached it sends Archipelago's `StatusUpdate` with `ClientGoal`, the way `adding games.md` asks (never an event),
 through MultiClient.Net 6.7.1's `StatusUpdatePacket`. It's sent once per login while reached, so a send lost with the
@@ -1634,7 +1637,12 @@ generation failed. In `pre_fill`, once every world's items exist, the room's exc
 excluded spots; if short, this world's shops take No Progression instead, with a warning naming the player. 18 seeds
 (solo, with APQuest, with discoveries, each Shop Contents) generated; the fallback fired solo and with APQuest (18
 filler for 22 spots), not with discoveries on (22 for 22). Tests
-`TestShopContents*`. **The caravan is there from the start**, built with the item shops. **Reloads refund currency** (the tester
+`TestShopContents*`. **Its two bugs fixed (2026-10-03, Next 43 item 1):** the fallback runs after Archipelago has
+applied the player's own exclusions and item rules (`Main.py`, 120-140), so it now leaves a shop the player excluded
+excluded, and adds the No Progression rule with `add_item_rule` beside the item rules already there (local and
+non-local items) instead of replacing them. It records that it fell back (`shops_fell_back`), which slot_data's
+`options` sends as No Progression (build step 39). Tests `TestShopFallbackKeepsThePlayersRules`: both failed with the
+old loop. **The caravan is there from the start**, built with the item shops. **Reloads refund currency** (the tester
 caught this: buy, reload, keep the check and the berries), so purchases are made **permanent like checks**: spending
 is tallied on the server (per-slot storage), each save brought in line on load (crystal berries exactly: received
 minus spent; ordinary berries: the save's own paid record against the server's tally, the higher wins), and a
@@ -2485,7 +2493,7 @@ own on/off thing as well due to how much it impacts, both off by default"). The 
    joins late) and, with moves shuffled, its item. **Cautious like members** (chosen): the gate's exit lists
    `moves` (all three items, not who uses them, so the story's Leif isn't pulled before the gate); the measured spots
    before it name their ability (the two horn spots; the fountain rooftop and the droplets now say Ice). `slot_data`
-   `shuffle_moves`.
+   `shuffle_moves` (since build step 39, `options` `shuffle_field_moves`).
 3. **The mod** (`FieldMoves.cs`): a prefix on `DoActionTap` refuses the leader's move until its item has been counted
    (recomputed every frame from the save's counted items, as members are), with the game's own
    `MainManager.PlayBuzzer()` (a short "can't" sound). Only with Archipelago on and the seed saying so. A
@@ -2543,7 +2551,8 @@ the attacks"), behind its own option, `shuffle_jump` (off).
    the inn review quest's completion needs nothing (if quest completions become locations). The two opening checks
    need nothing either (they happen on their own). Jump lands in one of those spots, or in another game.
 3. **The Warp is forced on** with it (like a random start or the entrance randomizer), the way out of a spot
-   you can't jump out of: `QualityOfLife.WarpOn` reads `FieldMoves.JumpShuffled` from `slot_data` `shuffle_jump`.
+   you can't jump out of: `QualityOfLife.WarpOn` reads `FieldMoves.JumpShuffled` from `slot_data` `shuffle_jump`
+   (inside `options` since build step 39).
 4. **The mod:** a prefix on `DoJump` refuses the jump with the buzzer until the item is counted. Jump's box shows the
    Archipelago icon (it belongs to no member).
 5. **Tests** (`test_moves.py`, `TestJump`): the measured spots are reachable with nothing; Madeleine's house and the
@@ -3653,7 +3662,8 @@ for a random start and the entrance randomizer.
 
 **Built (2026-09-30):**
 
-1. **The option** (`options.py`, `PointsOfNoReturn`), and `slot_data` `points_of_no_return`.
+1. **The option** (`options.py`, `PointsOfNoReturn`), and `slot_data` `points_of_no_return` (inside `options` since
+   build step 39).
 2. **`WayBack`** (`custom_rules.py`), a rule of Bug Fables' own like `Boat`: what getting back from a one-way needs,
    its child rule with the option off, nothing with it on. `one_way(rule, way_back)` writes a one-way with its way
    back, never joined by hand, so the option drops only the way back. A one-way transfer carries it as `way_back`
@@ -3775,6 +3785,63 @@ game.
 `data_tables.py` (`ONE_WAYS`, `one_way_landing`), `regions.py`, `entrances.py`, `world.py`, `options.py`
 (`DoorPlando`); tests `test_doors.py`, `test_areas.py`.*
 
+## Build step 39: the seed's options in slot_data, one `options` dict the mod reads
+
+**Why:** Universal Tracker (Next 43 item 14; build step 40) rebuilds a seed from its slot_data with no yaml, so every
+option that shapes the seed's locations, doors, rules and goal must be in it. Its docs say how: "store all options that
+affect generation in your slot data", through `options.as_dict(...)`, "Take care not to include options that don't
+affect generation and aren't useful for the game client" (Universal Tracker's `docs/apworld-integration.md`, branch
+`tracker`, read 2026-10-03). That is also review item 11's `options.as_dict`, the way Archipelago gives option
+values (`Options.py` 0.6.7, `CommonOptions.as_dict`). slot_data had four option copies written by hand
+(`artifacts_required`, `shuffle_moves`, `shuffle_jump`, `points_of_no_return`), and no `progressive_boat` at all.
+
+**Decided (the user, 2026-10-03):** the mod reads its option values from the new dict, and the copies go, the state
+item 15 already decided; its own step, ahead of Universal Tracker. And no support for older versions (How it works §7):
+the mod reads only the new keys.
+
+**How it was built:**
+
+1. **`options`** (`slot_data.py`): `options_for_slot` is `as_dict` over `SLOT_OPTIONS`, toggles as JSON booleans
+   (`toggles_as_bools`), with three values as this seed applied them, since a tracker must see what the seed did, not
+   what the yaml asked:
+   - `artifacts_required` capped to the artifacts this version includes (build step 3);
+   - `filler_starting_checks` off where Coupled or Room Swap stood it down (build step 35);
+   - `shop_contents` No Progression when Filler Only fell back in `pre_fill` (build step 11), which a tracker never
+     runs.
+   `SLOT_OPTIONS` is the location categories, Shop Contents, the entrance randomizer, Filler Starting Checks, the field
+   moves, Jump, Points of No Return, Progressive Boat, the goal and the player's `exclude_locations`. `NOT_SENT` names
+   every other option and why: its result is already in slot_data (enemy shuffle, starting location and member, music,
+   shop inventories, plando connections), fill only, or the server's.
+2. **The fallback's two bugs** (Next 43 item 1), found on the way: a tracker rebuilding a fallen-back seed would see
+   the player's excluded shop excluded while the seed had set it back. Fixed in build step 11.
+3. **The mod** (`SeedData.cs`, `SlotData.cs`): `On` and `Number` read a JSON boolean or integer inside `options`;
+   `MovesShuffled`, `JumpShuffled`, `PointsOfNoReturn` and `ArtifactsRequired` come from there. With no `options`, the
+   main menu's status line says the seed comes from an older apworld and to use the latest release of everything
+   (`ApConnection.cs`), and the log says its goal and option rules won't apply.
+4. **Tests:**
+   - `TestOptionsSent`: `SLOT_OPTIONS` and `NOT_SENT` don't overlap and together are every option, so a new option
+     must be sent or say why not.
+   - `TestOptionsInSlotData`: JSON booleans, numbers, a sorted location list; the four copies gone.
+   - The applied values: the goal capped (`TestArtifactsCapped`), Filler Starting Checks off under Coupled,
+     `shop_contents` 1 after the fallback and 2 without one.
+   - `generate_like_main` (`test/__init__.py`): a world built step by step as `Main.py` builds it, the player's
+     exclusions applied right after `set_rules` with Archipelago's `exclusion_rules`, which `WorldTestBase` never
+     applies. Its four names joined the preflight's apworld list in a commit of their own (the user's yes).
+
+**Checked (2026-10-03):**
+
+- `seed-snapshot.py` before and after, CI's three presets alone and with APQuest: in every slot_data only the four
+  copies left and `options` arrived; every other key and every spoiler identical.
+- The tests pass, the fallback's two fail with the old loop, and the mod builds.
+
+**Status:** built (2026-10-03), the tests pass and the mod builds; not yet seen in game (a fresh seed with Shuffle
+Field Moves, Shuffle Jump and Points of No Return on: the moves refused, the jump refused, the Warp in the pause menu,
+and the goal sent).
+
+*Code: `slot_data.py` (`SLOT_OPTIONS`, `NOT_SENT`, `options_for_slot`), `rules.py` (`fall_back_from_filler_only`),
+`world.py` (`shops_fell_back`); in the mod `SeedData.cs`, `SlotData.cs` (`On`, `Number`), `ApConnection.cs`; tests
+`test_slot_data.py`, `test_shops.py`, `test_starting_checks.py`, `test/__init__.py` (`generate_like_main`).*
+
 # How it works
 
 ## 1. The big picture: generator, seed, server, game
@@ -3863,7 +3930,13 @@ only way a setting chosen at generation (an option, a version number) reaches th
 
 - `world_version`, written in the login line (`[ap] logged in: … world_version …`); the mod doesn't compare it yet (a
   refusal on a mismatch is planned, Next 43 item 15);
-- `artifacts_required`, the goal;
+- `options` (build step 39): the options as this seed applied them, from Archipelago's `options.as_dict`, toggles as
+  JSON booleans. The mod reads the goal (`artifacts_required`, capped to what the world includes), whether the
+  attacks and Jump are items (`shuffle_field_moves`, `shuffle_jump`, build steps 21 and 22) and Points of No Return
+  (`points_of_no_return`: the logic counts the Warp as the way back, so the mod keeps it on, build step 37). The rest
+  is there so a tracker can rebuild the seed: the location categories, Shop Contents (No Progression after its
+  fallback), the entrance randomizer, Filler Starting Checks as it stood, Progressive Boat and the player's
+  `exclude_locations`. `slot_data.py` names every other option and why it isn't sent;
 - how each location is done: `location_flags` (a game flag), `location_berries` (a crystal berry),
   `location_discoveries` (a journal discovery), `location_shops` and `location_item_shops` (a shop's copy or first
   purchase), `location_vars` (a number reaching a value, a boss prize);
@@ -3878,15 +3951,18 @@ only way a setting chosen at generation (an option, a version number) reaches th
   who shows them off kept away, by its key item in the bag (build step 36);
 - `door_targets` (the entrance randomizer), `enemy_swaps` (enemy shuffle) and `start` (the starting location);
 - `starting_member`: 0 Vi, 1 Kabbu, 2 Leif alone, 3 all three, -1 the story's party (build steps 18 and 20);
-- `shuffle_moves` and `shuffle_jump`, whether the attacks and Jump are items (build steps 21 and 22);
 - `ability_items`, always true: the game's ability checks answered from the items (build step 23);
-- `points_of_no_return`: the logic counts the Warp as the way back, so the mod keeps it on (build step 37);
 - `music_map` and `jingle_map`, the songs and jingles swapped (build step 33), and `shop_inventories`, what shop slots
   restock and respawning pickups come back with (build step 34);
 - `item_kinds`, which inventory list each of its items goes to.
 
 The mod does nothing from its own knowledge of the game's locations: every table it acts on comes from here. One
 exception: the opening skip names location 1 (the opening's gift) itself, for its hold-up.
+
+**No support for older versions** (the user, 2026-10-03): "never any intentional fallback/support for old versions of
+the apworld, yaml or the mod. people are expected to use the latest release for all of them." When a key moves, the
+mod reads only the new one. A seed with no `options` connects, and the main menu's status line says it comes from an
+older apworld and to use the latest release of everything.
 
 ## 8. The rule: use what Archipelago provides, never reinvent it
 

@@ -15,7 +15,7 @@ namespace BugFablesAP
         private static ManualLogSource log;
         private static Func<bool> randomizerOn;
 
-        // From slot_data (shuffle_moves, shuffle_jump); false with no seed.
+        // From slot_data's options (shuffle_field_moves, shuffle_jump); false with no seed.
         private static Func<SeedData> seed;
         internal static bool MovesShuffled => seed?.Invoke()?.MovesShuffled ?? false;
         internal static bool JumpShuffled => seed?.Invoke()?.JumpShuffled ?? false;

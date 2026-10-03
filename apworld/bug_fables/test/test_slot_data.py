@@ -1,4 +1,36 @@
+from unittest import TestCase
+
 from . import BugFablesTestBase
+from ..options import BugFablesOptions
+from ..slot_data import NOT_SENT, SLOT_OPTIONS
+
+
+class TestOptionsSent(TestCase):
+    # A new option must be sent in "options" or say why not: Universal Tracker regenerates the seed from what's sent.
+    def test_every_option_is_sent_or_has_a_reason(self) -> None:
+        self.assertFalse(set(SLOT_OPTIONS) & set(NOT_SENT))
+        self.assertEqual(set(SLOT_OPTIONS) | set(NOT_SENT), set(BugFablesOptions.type_hints))
+        self.assertEqual(len(SLOT_OPTIONS), len(set(SLOT_OPTIONS)))
+
+
+class TestOptionsInSlotData(BugFablesTestBase):
+    options = {"exclude_locations": ["Outskirts: Pier, Statue", "Outskirts: Pier"]}
+
+    def test_options_as_json_values(self) -> None:
+        # The mod reads toggles as JSON booleans, choices and ranges as numbers, location sets as sorted lists.
+        options = self.world.fill_slot_data()["options"]
+        self.assertEqual(list(options), list(SLOT_OPTIONS))
+        self.assertIs(options["shuffle_quests"], True)
+        self.assertIs(options["shuffle_discoveries"], False)
+        self.assertIs(options["progressive_boat"], True)
+        self.assertEqual(options["shop_contents"], 1)
+        self.assertEqual(options["entrance_randomizer"], 0)
+        self.assertEqual(options["exclude_locations"], ["Outskirts: Pier", "Outskirts: Pier, Statue"])
+
+    def test_option_copies_are_gone(self) -> None:
+        data = self.world.fill_slot_data()
+        for key in ("artifacts_required", "shuffle_moves", "shuffle_jump", "points_of_no_return"):
+            self.assertNotIn(key, data)
 
 
 class TestSlotData(BugFablesTestBase):

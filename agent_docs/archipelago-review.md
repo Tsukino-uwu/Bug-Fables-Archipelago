@@ -19,7 +19,9 @@ review (2026-09-29); the files have moved since, the claims checked again 2026-0
    applied a player's `exclude_locations` (`Main.py:121`) and the local and non-local item rules (`Main.py:137-140`);
    it assigns `item_rule` outright and sets every shop back to normal. Also: `priority_locations` on a shop is dropped
    (Filler Only: `Main.py:130-134`; No Progression: the item rule, `Fill.py:584`), and plando aimed at a shop fails
-   silently (`force: silent`, `plando_en.md:82`); neither is written anywhere a player would read.
+   silently (`force: silent`, `plando_en.md:82`); neither is written anywhere a player would read. **The fallback's two
+   bugs fixed 2026-10-03** (build step 11): it leaves the player's excluded shops excluded and adds its item rule
+   beside theirs; priority and plando on a shop are still open.
 2. **Failed connect attempts left open** (checked). If reading slot_data fails right after a successful login
    (`ApConnection.cs:435`), the logged-in connection is neither kept nor closed, and the retry (`:502-506`) logs in
    again: one more client on the slot per retry. Refused (`:477-486`) and timed-out (`:487-491`) attempts leave their
@@ -65,6 +67,8 @@ review (2026-09-29); the files have moved since, the claims checked again 2026-0
 11. **Archipelago's helpers:** `World.world_version` (not reading `archipelago.json` ourselves, `data_tables.py:15-19`);
     `Region.add_locations` (`locations.py:31-33`); option values in slot_data through `options.as_dict`
     (`apquest/world.py:83-86`; ours by hand at `slot_data.py:75-76`, and the mod checks bools, `SeedData.cs:126-129`).
+    **`options.as_dict` done 2026-10-03** (build step 39): slot_data's `options`, toggles as booleans, nested as
+    Universal Tracker's docs write it, read by the mod; `world_version` and `add_locations` still to do.
 12. **`start_inventory_from_pool`** (a convention: 32 of the 81 game worlds at 0.6.7; `world api.md:627`).
 13. **The Rule Builder:** Jump's blanket rule as an `OptionFilter` (`rule builder.md:80, 92, 103-110`; ours an `if` in
     `rules.py:35-42`); `__str__` on our rules (three then, five since: `CanUse`, `Member`, `MoveItem`, `Boat`, `WayBack`), so they print their argument (`:501, 506`); `@override` on

@@ -8,7 +8,7 @@ from ..custom_rules import WayBack, one_way
 
 class TestPointsOfNoReturnOff(BugFablesTestBase):
     def test_off_by_default(self) -> None:
-        self.assertFalse(self.world.fill_slot_data()["points_of_no_return"])
+        self.assertIs(self.world.fill_slot_data()["options"]["points_of_no_return"], False)
 
     def test_the_way_back_is_needed(self) -> None:
         rule = WayBack(Has("Jump")).resolve(self.world)
@@ -26,7 +26,7 @@ class TestPointsOfNoReturnOn(BugFablesTestBase):
     options = {"points_of_no_return": True}
 
     def test_in_slot_data(self) -> None:
-        self.assertTrue(self.world.fill_slot_data()["points_of_no_return"])
+        self.assertIs(self.world.fill_slot_data()["options"]["points_of_no_return"], True)
 
     def test_the_way_back_needs_nothing(self) -> None:
         self.assertTrue(WayBack(Has("Jump")).resolve(self.world)(self.state_with()))

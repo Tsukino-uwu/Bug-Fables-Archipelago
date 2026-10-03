@@ -82,6 +82,9 @@ def fall_back_from_filler_only(world: BugFablesWorld) -> None:
         "excluded locations; this seed's shops use No Progression instead.",
         world.player, world.player_name, excludable, excluded,
     )
+    # The player's own exclusions stay, and the rule joins the item rules already there (local and non-local items).
     for location in shops:
-        location.progress_type = LocationProgressType.DEFAULT
-        location.item_rule = _no_progression
+        if location.name not in world.options.exclude_locations.value:
+            location.progress_type = LocationProgressType.DEFAULT
+        add_item_rule(location, _no_progression)
+    world.shops_fell_back = True

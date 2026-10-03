@@ -56,7 +56,7 @@ class TestArtifactsCapped(BugFablesTestBase):
 
     def test_goal_lowered_to_what_exists(self) -> None:
         self.assertEqual(self.world.artifacts_required, 1)
-        self.assertEqual(self.world.fill_slot_data()["artifacts_required"], 1)
+        self.assertEqual(self.world.fill_slot_data()["options"]["artifacts_required"], 1)
 
     def test_still_beatable(self) -> None:
         self.collect_by_name("Explorer Permit")

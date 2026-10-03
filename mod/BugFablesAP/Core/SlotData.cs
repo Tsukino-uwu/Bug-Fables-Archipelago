@@ -25,5 +25,17 @@ namespace BugFablesAP
             return slotData != null && slotData.TryGetValue(key, out object raw) && raw is JArray list
                 ? list.Select(read).ToList() : null;
         }
+
+        // A JSON boolean inside a dict such as "options"; false when it isn't one.
+        internal static bool On(JObject dict, string key)
+        {
+            return dict?[key] is JValue value && value.Type == JTokenType.Boolean && (bool)value;
+        }
+
+        // A JSON integer inside a dict such as "options"; missing when it isn't one.
+        internal static int Number(JObject dict, string key, int missing)
+        {
+            return dict?[key] is JValue value && value.Type == JTokenType.Integer ? (int)value : missing;
+        }
     }
 }

@@ -17,9 +17,9 @@ class TestMovesOffByDefault(BugFablesTestBase):
             self.assertNotIn(move, pool)
         self.assertEqual(pool.count("Progressive Beemerang"), 1)
         self.assertEqual(pool.count("Progressive Freeze"), 1)
-        data = self.world.fill_slot_data()
-        self.assertFalse(data["shuffle_moves"])
-        self.assertFalse(data["shuffle_jump"])
+        options = self.world.fill_slot_data()["options"]
+        self.assertIs(options["shuffle_field_moves"], False)
+        self.assertIs(options["shuffle_jump"], False)
 
     def test_nothing_needs_a_move_item(self) -> None:
         self.collect_by_name("Explorer Permit")
@@ -34,7 +34,7 @@ class TestFieldMoves(BugFablesTestBase):
         pool = _pool(self)
         self.assertEqual([pool.count(move) for move in MOVES], [2, 1, 2])
         self.assertNotIn("Jump", pool)
-        self.assertTrue(self.world.fill_slot_data()["shuffle_moves"])
+        self.assertIs(self.world.fill_slot_data()["options"]["shuffle_field_moves"], True)
 
     def test_past_the_gate_needs_every_move(self) -> None:
         self.collect_by_name("Explorer Permit")
@@ -74,7 +74,7 @@ class TestJump(BugFablesTestBase):
 
     def test_jump_in_the_pool(self) -> None:
         self.assertEqual(_pool(self).count("Jump"), 1)
-        self.assertTrue(self.world.fill_slot_data()["shuffle_jump"])
+        self.assertIs(self.world.fill_slot_data()["options"]["shuffle_jump"], True)
 
     def test_measured_spots_need_no_jump(self) -> None:
         # Seen reachable without a jump: the opening, the ladybug siblings' house, the caravan and the town's shops.

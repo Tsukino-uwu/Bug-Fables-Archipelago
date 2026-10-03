@@ -1,11 +1,31 @@
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
+from typing import Any
 
 from BaseClasses import CollectionState, ItemClassification
 from rule_builder.rules import Rule
 from test.bases import WorldTestBase
+from test.general import setup_multiworld
+from worlds.AutoWorld import call_all
+from worlds.generic.Rules import exclusion_rules
 
 from ..data_tables import ARTIFACTS, DOOR_RULES, LOCATIONS, STORY_EVENTS, TRANSFERS
 from ..items import BugFablesItem
+from ..world import BugFablesWorld
+
+MAIN_STEPS = ("generate_early", "create_regions", "create_items", "set_rules", "connect_entrances", "generate_basic",
+              "pre_fill")
+
+
+def generate_like_main(options: Mapping[str, Any], seed: int,
+                       steps: tuple[str, ...] = MAIN_STEPS) -> BugFablesWorld:
+    """A solo world built step by step as Main.py builds it, the player's exclusions applied right after set_rules
+    (WorldTestBase never applies them)."""
+    multiworld = setup_multiworld(BugFablesWorld, steps=(), seed=seed, options=dict(options))
+    for step in steps:
+        call_all(multiworld, step)
+        if step == "set_rules":
+            exclusion_rules(multiworld, 1, multiworld.worlds[1].options.exclude_locations.value)
+    return multiworld.worlds[1]
 
 
 def rule_parts(rule: Rule | None) -> Iterable[Rule]:

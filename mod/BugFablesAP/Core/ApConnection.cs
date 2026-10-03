@@ -487,6 +487,14 @@ namespace BugFablesAP
                     Post($"[ap] logged in: slot {ok.Slot}, team {ok.Team}, world_version {version}, "
                         + $"{attempt.Items.AllItemsReceived.Count} items received so far, "
                         + $"{attempt.Locations.AllLocationsChecked.Count} of {attempt.Locations.AllLocations.Count} locations checked");
+                    // No support for older versions: the apworld, the yaml and the mod are used at their latest release.
+                    if (parsed.OptionsMissing)
+                    {
+                        status = $"Connected as {slot}, but this seed comes from an older apworld: use the latest "
+                            + "release of everything and generate a new seed.";
+                        Post("[ap] slot_data has no options: a seed from an older apworld; its goal and option rules "
+                            + "won't apply");
+                    }
                     // A bare address tries wss:// then ws://: only the socket knows which connected.
                     WebSocket socket = WebSocketOf(attempt);
                     string extensions = socket?.Extensions;

@@ -40,6 +40,8 @@ class BugFablesWorld(World):
     ALL_MEMBERS = 3
     # Filler Starting Checks as this seed applies it (off with the doors that can shrink the start).
     filler_starting_checks: bool = True
+    # Shop Contents' Filler Only fell back to No Progression (pre_fill, rules.fall_back_from_filler_only).
+    shops_fell_back: bool = False
 
     def generate_early(self) -> None:
         wanted = self.options.artifacts_required.value

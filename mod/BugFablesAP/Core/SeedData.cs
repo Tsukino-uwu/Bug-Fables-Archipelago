@@ -49,6 +49,8 @@ namespace BugFablesAP
         // the game's own start. StartFrom: the map whose door leads in, for a start entered as if through that door.
         internal readonly KeyValuePair<string, int>? Start;
         internal readonly string StartFrom;
+        // slot_data's "options", the options as the seed applied them; none means a seed from an older apworld.
+        internal readonly bool OptionsMissing;
         // The goal: this many artifacts, as the game counts them. 0 when slot_data has none.
         internal readonly int ArtifactsRequired;
         internal readonly int OwnSlot;
@@ -148,19 +150,16 @@ namespace BugFablesAP
             StartingMemberGiven = data != null && data.TryGetValue("starting_member", out member) && member != null;
             StartingMember = StartingMemberGiven ? Convert.ToInt32(member) : -1;
             ItemKinds = SlotData.ByLocation(data, "item_kinds", v => v.Value<int>());
-            MovesShuffled = data != null && data.TryGetValue("shuffle_moves", out object moves) && moves is bool movesOn
-                && movesOn;
-            JumpShuffled = data != null && data.TryGetValue("shuffle_jump", out object jump) && jump is bool jumpOn
-                && jumpOn;
             AbilityItems = data != null && data.TryGetValue("ability_items", out object abilities)
                 && abilities is bool abilitiesOn && abilitiesOn;
             SubmarineItem = data != null && data.TryGetValue("submarine_item", out object submarine)
                 && submarine is bool submarineOn && submarineOn;
-            PointsOfNoReturn = data != null && data.TryGetValue("points_of_no_return", out object noReturn)
-                && noReturn is bool noReturnOn && noReturnOn;
-            ArtifactsRequired = data != null && data.TryGetValue("artifacts_required", out object required)
-                && required != null
-                ? Convert.ToInt32(required) : 0;
+            JObject options = SlotData.Object(data, "options");
+            OptionsMissing = options == null;
+            MovesShuffled = SlotData.On(options, "shuffle_field_moves");
+            JumpShuffled = SlotData.On(options, "shuffle_jump");
+            PointsOfNoReturn = SlotData.On(options, "points_of_no_return");
+            ArtifactsRequired = SlotData.Number(options, "artifacts_required", 0);
         }
 
         // Every location whose item a find shows, in the order they were scouted before.

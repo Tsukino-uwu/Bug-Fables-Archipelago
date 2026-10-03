@@ -8,9 +8,47 @@ from .data_tables import (DIALOGUE_FLAGS, HELD_UNTIL, HELD_UNTIL_ITEM, ITEM_NAME
                           KEPT_PRESENT, LOCATION_NAME_TO_ID, PRESENT_FROM, PRESENT_WITH_ITEM, SCENERY_HIDDEN,
                           SCENERY_PRESENT, WORLD_VERSION)
 from .data_types import DialogueFlag, EntityRef, FlagEntity, ItemEntity, Source
+from .options import ShopContents
 
 if TYPE_CHECKING:
     from .world import BugFablesWorld
+
+# The options slot_data's "options" carries: what the mod acts on, and what Universal Tracker's regeneration needs to
+# build the same locations, doors, rules, exclusions and goal.
+SLOT_OPTIONS: tuple[str, ...] = (
+    "artifacts_required", "shuffle_quests", "shuffle_crystal_berries", "shuffle_discoveries", "shuffle_medal_shops",
+    "shuffle_item_shops", "shop_contents", "entrance_randomizer", "filler_starting_checks", "shuffle_field_moves",
+    "shuffle_jump", "points_of_no_return", "progressive_boat", "exclude_locations")
+# Every other option, and why it isn't sent.
+NOT_SENT: dict[str, str] = {
+    "enemy_shuffle": "its result is enemy_swaps",
+    "starting_location": "its result is start",
+    "starting_party_member": "its result is starting_member",
+    "music_shuffle": "its result is music_map and jingle_map",
+    "shuffle_shop_inventories": "its result is shop_inventories",
+    "plando_connections": "its doors are in door_targets",
+    "progression_balancing": "fill only",
+    "accessibility": "fill only",
+    "local_items": "fill only",
+    "non_local_items": "fill only",
+    "priority_locations": "fill only",
+    "item_links": "fill only",
+    "plando_items": "fill only",
+    "start_inventory": "the server sends its items",
+    "start_hints": "the server's",
+    "start_location_hints": "the server's",
+}
+
+
+def options_for_slot(world: BugFablesWorld) -> dict[str, Any]:
+    """SLOT_OPTIONS as this seed applied them: the goal as capped, Filler Starting Checks as it stood, and Shop Contents
+    after its fallback. Toggles as JSON booleans."""
+    options = world.options.as_dict(*SLOT_OPTIONS, toggles_as_bools=True)
+    options["artifacts_required"] = world.artifacts_required
+    options["filler_starting_checks"] = world.filler_starting_checks
+    if world.shops_fell_back:
+        options["shop_contents"] = ShopContents.option_no_progression
+    return options
 
 
 def _by_location(world: BugFablesWorld, key: str, value: Callable[[Source], Any] | None = None) -> dict[str, Any]:
@@ -38,7 +76,9 @@ def _entities(entries: Iterable[EntityRef | FlagEntity | ItemEntity | DialogueFl
 def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
     return {
         "world_version": WORLD_VERSION,
-        "artifacts_required": world.artifacts_required,
+        # The options as this seed applied them (SLOT_OPTIONS): the goal, field moves, Jump, Points of No Return and the
+        # rest Universal Tracker regenerates from.
+        "options": options_for_slot(world),
         "location_flags": _by_location(world, "flag"),
         "location_berries": _by_location(world, "berry"),
         "location_discoveries": _by_location(world, "discovery"),
@@ -76,11 +116,6 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "start": world.start,
         # The one member a new file starts with (0 Vi, 1 Kabbu, 2 Leif); 3 all three; -1 is the story's party.
         "starting_member": world.starting_member,
-        # Field moves as items: the three attacks, and Jump (the mod then keeps the Warp on).
-        "shuffle_moves": world.moves_shuffled(),
-        "shuffle_jump": world.jump_shuffled(),
-        # Points of No Return: the logic counts the Warp as the way back to the start, so the mod keeps it on.
-        "points_of_no_return": bool(world.options.points_of_no_return.value),
         # Every learned ability is an item: the mod answers the game's ability checks from the items received.
         "ability_items": True,
         # The submarine is an item (its key item, whichever item gives it): the mod answers the docks' story checks from

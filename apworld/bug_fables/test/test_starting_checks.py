@@ -91,6 +91,10 @@ class TestFillerStartingChecksCoupled(BugFablesTestBase):
             with self.subTest(location=name):
                 self.assertEqual(self.world.get_location(name).progress_type, LocationProgressType.DEFAULT)
 
+    def test_slot_data_sends_it_as_applied(self) -> None:
+        # Universal Tracker rebuilds the exclusions from slot_data: it must see the option off, as the seed applied it.
+        self.assertIs(self.world.fill_slot_data()["options"]["filler_starting_checks"], False)
+
 
 class TestFillerStartingChecksRoomSwap(BugFablesTestBase):
     options = {"entrance_randomizer": "room_swap"}

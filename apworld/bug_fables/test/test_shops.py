@@ -1,4 +1,10 @@
-from . import BugFablesTestBase
+from unittest import TestCase
+
+from BaseClasses import LocationProgressType
+from worlds.generic.Rules import add_item_rule
+
+from . import BugFablesTestBase, generate_like_main
+from ..rules import fall_back_from_filler_only
 
 
 class TestMedalShop(BugFablesTestBase):
@@ -81,9 +87,10 @@ class TestShopContentsFillerOnly(BugFablesTestBase):
                "filler_starting_checks": False}
 
     def test_just_enough_filler_with_discoveries(self) -> None:
-        from BaseClasses import LocationProgressType
         shop = self.world.get_location("Bugaria City: Commercial District, Medal Shop 1")
         self.assertEqual(shop.progress_type, LocationProgressType.EXCLUDED)
+        self.assertFalse(self.world.shops_fell_back)
+        self.assertEqual(self.world.fill_slot_data()["options"]["shop_contents"], 2)
 
 
 class TestShopContentsFillerOnlyAfterStartingChecks(BugFablesTestBase):
@@ -92,7 +99,6 @@ class TestShopContentsFillerOnlyAfterStartingChecks(BugFablesTestBase):
     options = {"shop_contents": "filler_only", "shuffle_discoveries": True, "starting_party_member": "off"}
 
     def test_opening_first_then_shops_fall_back(self) -> None:
-        from BaseClasses import LocationProgressType
         shop = self.world.get_location("Bugaria City: Commercial District, Medal Shop 1")
         self.assertEqual(shop.progress_type, LocationProgressType.DEFAULT)
         self.assertFalse(shop.item_rule(self.world.create_item("Explorer Permit")))
@@ -105,11 +111,38 @@ class TestShopContentsFillerOnlyFallsBack(BugFablesTestBase):
     options = {"shop_contents": "filler_only"}
 
     def test_shops_fall_back_to_no_progression(self) -> None:
-        from BaseClasses import LocationProgressType
         shop = self.world.get_location("Bugaria City: Commercial District, Medal Shop 1")
         self.assertEqual(shop.progress_type, LocationProgressType.DEFAULT)
         self.assertFalse(shop.item_rule(self.world.create_item("Explorer Permit")))
         self.assertTrue(shop.item_rule(self.world.create_item("TP Plus")))
+
+    def test_slot_data_sends_the_fallback(self) -> None:
+        # Universal Tracker never runs pre_fill: slot_data tells it the shops ended up No Progression.
+        self.assertTrue(self.world.shops_fell_back)
+        self.assertEqual(self.world.fill_slot_data()["options"]["shop_contents"], 1)
+
+
+class TestShopFallbackKeepsThePlayersRules(TestCase):
+    # The fallback runs after Archipelago applied the player's exclusions (and, with other players, item locality): it
+    # must leave both in place.
+    def test_an_excluded_shop_stays_excluded(self) -> None:
+        excluded = "Bugaria City: Commercial District, Medal Shop 2"
+        world = generate_like_main({"shop_contents": "filler_only", "exclude_locations": [excluded]}, seed=1)
+        self.assertTrue(world.shops_fell_back)
+        self.assertEqual(world.get_location(excluded).progress_type, LocationProgressType.EXCLUDED)
+        other = world.get_location("Bugaria City: Commercial District, Medal Shop 1")
+        self.assertEqual(other.progress_type, LocationProgressType.DEFAULT)
+
+    def test_an_item_rule_already_there_stays(self) -> None:
+        world = generate_like_main({"shop_contents": "filler_only"}, seed=1, steps=(
+            "generate_early", "create_regions", "create_items", "set_rules", "connect_entrances", "generate_basic"))
+        shop = world.get_location("Bugaria City: Commercial District, Medal Shop 1")
+        add_item_rule(shop, lambda item: item.name != "TP Plus")
+        fall_back_from_filler_only(world)
+        self.assertTrue(world.shops_fell_back)
+        self.assertFalse(shop.item_rule(world.create_item("TP Plus")))
+        self.assertFalse(shop.item_rule(world.create_item("Explorer Permit")))
+        self.assertTrue(shop.item_rule(world.create_item("Ambusher")))
 
 
 class TestShopContentsAnything(BugFablesTestBase):

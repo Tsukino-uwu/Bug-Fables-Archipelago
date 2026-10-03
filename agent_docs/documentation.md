@@ -49,6 +49,7 @@ anyone curious about the process, or thinking of doing the same for another game
   [33](#33-server-text-cleaned-before-the-game-shows-it), [34](#34-multiclientnets-cache-kept-in-its-own-folder);
   speed, [25](#25-hitches-fixed-the-mods-garbage-and-the-games-5-second-collection); never stuck for good,
   [40](#40-no-respawn-loop-a-fall-that-only-leads-back-into-itself-ends-with-the-warp).
+- **Reading the seed:** the options from slot_data's `options`, [41](#41-the-seeds-options-read-from-slot_datas-options).
 
 1. [Can the game be modded? Unity, Mono, a readable DLL](#1-can-the-game-be-modded-unity-mono-a-readable-dll)
 2. [The design, decided first: remote items, what the player sees](#2-the-design-decided-first-remote-items-what-the-player-sees)
@@ -90,6 +91,7 @@ anyone curious about the process, or thinking of doing the same for another game
 38. [The Warp forced on with Points of No Return](#38-the-warp-forced-on-with-points-of-no-return)
 39. [Spy Specs: the medal's effects as a Quality of life row](#39-spy-specs-the-medals-effects-as-a-quality-of-life-row)
 40. [No respawn loop: a fall that only leads back into itself ends with the Warp](#40-no-respawn-loop-a-fall-that-only-leads-back-into-itself-ends-with-the-warp)
+41. [The seed's options read from slot_data's `options`](#41-the-seeds-options-read-from-slot_datas-options)
 
 ## Where it stands
 
@@ -2656,10 +2658,11 @@ The game side of the Archipelago guide's build step 37. With *Points of No Retur
 where only the pause menu's Warp to Start gets them out, so the Warp must always be there, whatever the Travel setting
 says (the user, 2026-09-30: forced "similar to how it is for entrance, spawn etc").
 
-**How the mod does it:** `SeedData` reads `slot_data` `points_of_no_return`; `Plugin.cs` hands it to `QualityOfLife`
-as `PointsOfNoReturn`, only while Archipelago is enabled; `QualityOfLife.WarpOn` adds it to the cases that force the
-Warp on (a seed start, shuffled doors, Shuffle Jump, the abilities as items). A seed with no such key reads it as off,
-so older seeds play as before. The dev seed dump lists it.
+**How the mod does it:** `SeedData` reads `slot_data` `points_of_no_return` (inside `options` since step 41);
+`Plugin.cs` hands it to `QualityOfLife` as `PointsOfNoReturn`, only while Archipelago is enabled;
+`QualityOfLife.WarpOn` adds it to the cases that force the Warp on (a seed start, shuffled doors, Shuffle Jump, the
+abilities as items). A seed with no `options` reads it as off, and the status line says the seed comes from an older
+apworld (step 41: no support for older versions). The dev seed dump lists it.
 
 In today's seeds the abilities are always items, which already forces the Warp on; this case keeps it on by its own
 reason, so it holds whatever the other options become.
@@ -2770,3 +2773,36 @@ game.
 
 *Code: `Guards/RespawnLoop.cs`, `Ui/WarpButton.cs` (`WarpToStart`), `World/DoorShuffle.cs` (`Rewrote`),
 `Core/Plugin.cs`, `Dev/DevConsole.Warp.cs` (`hazardloop`).*
+
+## 41. The seed's options read from slot_data's `options`
+
+The game side of the Archipelago guide's build step 39. The apworld now sends the options as the seed applied them in
+one dict, `options`, which Universal Tracker also rebuilds the seed from, and no longer writes the four top-level copies
+the mod read.
+
+**How the mod does it:** `SeedData` takes `options` (a JSON object, as every nested slot_data value arrives) and reads
+four values from it with two small helpers in `SlotData.cs`: `On` for a JSON boolean, `Number` for a JSON integer.
+`shuffle_field_moves` and `shuffle_jump` (the field moves and Jump as items, the Archipelago guide's build steps 21
+and 22), `points_of_no_return` (the Warp forced on, step 38) and `artifacts_required` (the goal). Everything
+that used them reads them through `SeedData` as before, so nothing else changed.
+
+**No support for older versions** (the user, 2026-10-03: "people are expected to use the latest release for all of
+them"): the old keys are never read. A seed with no `options` still connects, and the main menu's status line says
+"this seed comes from an older apworld: use the latest release of everything and generate a new seed"; the log adds
+that its goal and option rules won't apply.
+
+**Proof the move changed nothing:** the dev seed dump keeps its labels (`shuffle_moves`, `shuffle_jump`,
+`points_of_no_return`, `artifacts_required`), so a dump of a new seed reads exactly as one of an old seed with the same
+options did.
+
+**To see** (the user), on a fresh seed with Shuffle Field Moves, Shuffle Jump and Points of No Return on, Travel set
+to Off:
+
+- each attack refused with the short "can't" sound until its item arrives, and the jump refused until Jump arrives;
+- the Warp in the pause menu;
+- the goal sent once the artifact is in hand (`[goal]` in the log).
+
+**Status:** built (2026-10-03), the build succeeds; not yet seen in game.
+
+*Code: `Core/SeedData.cs` (`OptionsMissing`, the four values), `Core/SlotData.cs` (`On`, `Number`),
+`Core/ApConnection.cs` (the status line), `World/FieldMoves.cs`, `Items/LocationChecks.cs`.*

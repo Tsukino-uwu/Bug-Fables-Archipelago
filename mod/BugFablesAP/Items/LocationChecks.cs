@@ -190,7 +190,7 @@ namespace BugFablesAP
         {
             int required = connection.ArtifactsRequired;
             int have = MainManager.SaveProgressIcons();
-            string state = required <= 0 ? "slot_data has no artifacts_required: never sent"
+            string state = required <= 0 ? "slot_data's options have no artifacts_required: never sent"
                 : have < required ? $"{have} of {required} artifacts" : $"reached, {have} of {required} artifacts";
             if (state != lastGoalState)
             {
