@@ -65,6 +65,7 @@ either one wrong).
 - [2026-10-01: both trackers planned, nothing built](#2026-10-01-both-trackers-planned-nothing-built)
 - [2026-10-02: other Bug Fables apworlds](#2026-10-02-other-bug-fables-apworlds)
 - [2026-10-02: the fog maze shuffled, travel through doors, respawn loops ended](#2026-10-02-the-fog-maze-shuffled-travel-through-doors-respawn-loops-ended)
+- [2026-10-03: map travel through a door, seen](#2026-10-03-map-travel-through-a-door-seen)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2487,3 +2488,15 @@ either one wrong).
   - Six seeds generated with APQuest show the one-ways in the spoiler.
   - The mod builds, debug and release, and the dev build is copied in.
   - Nothing is seen in game yet.
+
+## 2026-10-03: map travel through a door, seen
+
+- **Seen (the user):** every map travel destination, tested one by one: "All map fast travel locations work properly
+  now, no weird things happening anymore when we start from a entrance instead of random spawn next to crystals".
+- **How it was found** (2026-10-02 entry): the swamp loop's respawn spot was read back to map travel's 2-argument
+  `TransferMap`, whose guessed spot beside the save point became `lastpos` and `lastloadzone`. The user's rule, "any
+  warp/map/teleport, always acts as if you are coming in from an entrance", made every travel arrive through a real
+  door's walk-in, so the game sets the respawn spot itself. Its first door rule (a way back with no flags) was dropped.
+- **The user said:** only map travel is confirmed; entrances, one-way doors and the rest are checked later. Still open
+  in `TO-CHECK.md`: the swamp's water jump, Warp to Start's door, the respawn-loop guard and normal falls, and every
+  entrance randomizer check, the one-way doors among them.

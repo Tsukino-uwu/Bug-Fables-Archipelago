@@ -1085,6 +1085,8 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
      (designed, not built) logs an error instead of landing beside a save point.
    - The dev console's `travel <area>` runs the same path to any area, visited or not, to check every spot.
    - The respawn-loop guard (step 40) catches any loop left.
+   - **Seen (the user, 2026-10-03):** every map travel destination, one by one: "All map fast travel locations work
+     properly now", nothing odd since arriving through a door "instead of random spawn next to crystals".
    **Skip confirm: Off / Warp / Map / Both (2026-09-26; seen on screen the same day: on Map, map travel went at once and Warp still asked),** an add-on to *Travel*, so its
    row sits right below it (the two belong together, not split apart). Warp: picking the Warp button warps at
    once; Map: confirm on a visited area in the travel map goes there at once; Off (the default) keeps both boxes.
@@ -1110,7 +1112,7 @@ row off (a choice row to its off value: Item animation Off, Travel Off, Detector
 row back to its default (`QualityOfLife.DisableAll` / `ResetAll`, the defaults from each setting's own config
 definition).
 
-**Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen on screen (2026-09-25); the bridge skips and Medal prices not yet seen; replays held up and the quiet start seen on screen (2026-09-28); Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat Ticket (the Archipelago guide, build step 16), the warp itself, map travel and Skip confirm seen (2026-09-26); Skip cutscenes' Den arrival seen (2026-09-26), the Tattle tutorial and the door room's puzzle (Event4) at speed (2026-09-26/27), the trapdoor and spider scene (2026-09-27); Skip battle tutorials: Leif's first-battle line skipped, seen (2026-09-27); map travel and Warp to Start through a door built (2026-10-02), the build succeeds and `door-graph.py --travel --check` passes, not yet seen.
+**Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen on screen (2026-09-25); the bridge skips and Medal prices not yet seen; replays held up and the quiet start seen on screen (2026-09-28); Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat Ticket (the Archipelago guide, build step 16), the warp itself, map travel and Skip confirm seen (2026-09-26); Skip cutscenes' Den arrival seen (2026-09-26), the Tattle tutorial and the door room's puzzle (Event4) at speed (2026-09-26/27), the trapdoor and spider scene (2026-09-27); Skip battle tutorials: Leif's first-battle line skipped, seen (2026-09-27); map travel and Warp to Start through a door built (2026-10-02), map travel's seen at every destination (2026-10-03); Warp to Start's door and the swamp's water jump not yet seen.
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `QualityOfLife.Opening.cs` (the opening),
 `QualityOfLife.Scenes.cs` (the scene skips, the first spider fight, the trapdoor), `ApMenu.cs` (the second page),
