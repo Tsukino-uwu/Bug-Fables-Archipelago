@@ -89,7 +89,8 @@ rule, remove one in the same edit. The rule lives here and its reasoning in `age
   developer directly. Not covered: notes on a library behaviour our code works around, and facts about the game.
 - **No personal username, home path or machine detail in any tracked file, prose included:** "your Bug Fables install".
   **`docs/capabilities.md` is what the code may do:** widening it or the preflight's patterns is the user's call, never
-  a way to make a check pass. `git config core.hooksPath .githooks` once per clone; never `--no-verify`.
+  a way to make a check pass; **ask them when either blocks Archipelago's standard way, never code around it** (the
+  user, 2026-10-03: welcome). `git config core.hooksPath .githooks` once per clone; never `--no-verify`.
 - **A dated fact is true as of its date.** Archipelago, MultiClient.Net and the game all change without this
   repo changing, so re-check before a new use. Cite dates, never durations.
 
@@ -113,8 +114,7 @@ rule, remove one in the same edit. The rule lives here and its reasoning in `age
 - **After about 3 failed live attempts, stop and table the results (config against outcome)**, then try the
   combination you haven't tested. Each attempt costs the user a game launch.
 - **Test instructions use up/down/left/right**, never compass points.
-- **Agent memory is for the user, not the project.** Decisions, measurements and status go in
-  `agent_docs/` or the code, where the next session and a human can see them.
+- **Agent memory is for the user, not the project:** decisions, measurements and status go in `agent_docs/` or the code.
 - **Before a session ends, add a dated entry to `agent_docs/log.md`:** what was tried, what happened, what the user said.
 
 ## Method
