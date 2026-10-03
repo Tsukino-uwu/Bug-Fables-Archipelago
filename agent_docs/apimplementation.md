@@ -57,7 +57,8 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 - **slot_data and trackers:** the seed's options in one `options` dict,
   [39](#build-step-39-the-seeds-options-in-slot_data-one-options-dict-the-mod-reads); Universal Tracker,
   [40](#build-step-40-universal-tracker-the-seed-rebuilt-from-slot_data-with-no-yaml) and
-  [41](#build-step-41-universal-trackers-list-order-and-explanations); every key,
+  [41](#build-step-41-universal-trackers-list-order-and-explanations), explained in
+  [How it works 12](#12-universal-tracker-how-its-implemented); every key,
   [How it works 7](#7-slot_data-the-seeds-settings-and-this-worlds-keys).
 
 **How we built it**
@@ -117,6 +118,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 9. [How this mod does it: threads, config, custom key items](#9-how-this-mod-does-it-threads-config-custom-key-items)
 10. [Silent failures: things that go wrong quietly](#10-silent-failures-things-that-go-wrong-quietly)
 11. [The logic explained: regions, exits, rules, and this world's layout](#11-the-logic-explained-regions-exits-rules-and-this-worlds-layout)
+12. [Universal Tracker: how it's implemented](#12-universal-tracker-how-its-implemented)
 
 ## Where it stands
 
@@ -4327,3 +4329,62 @@ Why regions at all, instead of a full rule on every spot:
 - **Checking it:** a test for each measured need, which fails without the rule; `test_areas.py` for how the modules
   fit together; the Logic Test apworld, to play a seed's logic without the game (Next 42); and Archipelago's
   `Utils.visualize_regions`, which draws the whole region graph as a PlantUML diagram.
+
+## 12. Universal Tracker: how it's implemented
+
+### In short
+
+Universal Tracker is a tracker for any Archipelago game: it shows which of the player's locations are in logic right
+now. It has no logic of its own for Bug Fables. It runs our apworld instead: it builds the player's world inside
+itself, with the same regions, doors and rules the generator used, and asks those rules what the items the player has
+received can reach (the walk in How it works 11).
+
+The hard part is building the *same* world. The generator made choices at random (which door leads where, which member
+starts, which fights are swapped), and Universal Tracker doesn't have the seed's random. So the world sends every
+choice in slot_data, and when Universal Tracker rebuilds the world, the world takes each one from there instead of
+rolling it:
+
+```
+generation:         yaml ──> the world rolls doors, party, fights ──> slot_data ──> server
+Universal Tracker:  server ──> slot_data ──> the world takes the rolls ──> the same regions, doors and rules
+                                                       + the items received ──> the locations in logic
+```
+
+No yaml is needed: everything that shapes the world is in slot_data.
+
+### In depth
+
+- **What Universal Tracker runs** (its `TrackerCore.py`, v0.3.4): the world's own steps, `generate_early` through
+  `generate_basic`, never fill or `fill_slot_data`; then Archipelago's `exclusion_rules`. It drops the start inventory
+  (items with an id), since the server sends those as received items. Each time items arrive, it sweeps the regions
+  from the origin as the generator does and lists the reachable locations the server says are still missing.
+- **Telling it no yaml is needed:** `ut_can_gen_without_yaml = True`, and a static `interpret_slot_data` that hands the
+  slot_data back. On connecting, Universal Tracker then builds the world from an empty yaml (every option at its
+  default), with `multiworld.re_gen_passthrough["Bug Fables"]` set to the slot_data (`universal_tracker.passthrough`).
+- **What slot_data carries for it** (How it works 7):
+  - `options`, the options as the seed applied them (build step 39). `generate_early` builds the world's options from
+    them first (`universal_tracker.apply_options`), so every location, rule and exclusion comes out the same.
+  - the seed's rolls: `starting_member`, `enemy_swaps` and `start` in `generate_early`, before anything depends on them;
+    `door_targets` in `connect_entrances`; the music and shop inventories in `generate_basic`. With them taken, the
+    rebuilt world's slot_data is the seed's, key for key.
+- **The doors** (build step 40): `door_targets` is the table the mod rewrites doors from. `entrances.replay` reads it
+  back into the pairings it was written from and connects each door as Archipelago's entrance randomizer connected it.
+  So the tracker follows exactly what the game does, and slot_data carries nothing extra for it. Every door is
+  connected from the start and nothing waits to be found (no deferred entrances), since the tracker always shows
+  everything in logic.
+- **What it can't recompute is sent as applied:** Shop Contents' Filler Only fallback runs in `pre_fill` and counts the
+  whole room's items, which Universal Tracker never sees, so `options` sends No Progression when it fell back.
+- **Refused:** a seed from another world version, or with no `options` (no support for older versions, How it works
+  7). Universal Tracker then shows that the world couldn't be generated, the reason in its log.
+- **Explaining:** `/explain` prints each rule's `explain_json`, which Archipelago's Rule Builder gives every resolved
+  rule; our custom rules resolve to built-in rules, so they explain themselves as item lists (build step 41).
+  `/get_logical_path` walks the doors from the origin to a spot. `custom_ut_sort` orders the list by area as the story
+  reaches them, then by name.
+- **How it's checked:**
+  - `test_tracker.py` rebuilds seeds the way Universal Tracker does, without it, over 18 option sets: the rebuilt world
+    must match the seed's slot_data, entrances, locations and exclusions, and reach the same locations with the same
+    items. With the passthrough ignored, every case fails.
+  - Universal Tracker's own fuzzer hook, run by `test-apworld.ps1` and CI over 10000 random seeds, regenerates each one
+    with its own code and compares every sphere with the real generation (`development.md`, "Fuzzing the apworld").
+- **Not built yet:** the map tab, which loads the PopTracker pack's maps, and the mod's data storage keys it would
+  follow. Both wait for the pack's map.
