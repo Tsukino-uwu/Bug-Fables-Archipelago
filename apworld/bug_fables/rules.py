@@ -5,16 +5,20 @@ import logging
 from typing import TYPE_CHECKING
 
 from BaseClasses import Item, LocationProgressType
+from rule_builder.options import OptionFilter
 from rule_builder.rules import Has, Rule
 from worlds.generic.Rules import add_item_rule
 
 from .data_tables import ARTIFACTS
-from .options import ShopContents
+from .data_types import Artifact, Location, StoryEvent
+from .options import ShopContents, ShuffleJump
 
 if TYPE_CHECKING:
     from .world import BugFablesWorld
 
 SHOP_CATEGORIES = ("shop", "item_shop")
+# Jump's blanket rule: with Shuffle Jump on, a spot needs Jump unless it was seen reachable without (no_jump).
+JUMP = Has("Jump", options=[OptionFilter(ShuffleJump, 1)], filtered_resolution=True)
 
 
 def _no_progression(item: Item) -> bool:
@@ -42,18 +46,19 @@ def set_all_rules(world: BugFablesWorld) -> None:
             location.progress_type = LocationProgressType.EXCLUDED
         elif world.options.shop_contents == ShopContents.option_no_progression:
             location.item_rule = _no_progression
-    for data in (*world.included_locations, *world.included_events):
-        # With Jump shuffled, a spot needs Jump unless it was seen reachable without (no_jump).
-        jump = Has("Jump") if world.jump_shuffled() and not data.no_jump else None
-        rule = _joined(data.reach, data.rule, jump)
+    for spot in (*world.included_locations, *world.included_events, *ARTIFACTS):
+        rule = spot_rule(spot)
         if rule is not None:
-            world.set_rule(world.get_location(data.name), rule)
-    # Artifacts are events with no rule of their own: with Jump shuffled they wait for it like every other spot.
-    for artifact in ARTIFACTS:
-        rule = _joined(artifact.reach, Has("Jump") if world.jump_shuffled() else None)
-        if rule is not None:
-            world.set_rule(world.get_location(artifact.name), rule)
+            world.set_rule(world.get_location(spot.name), rule)
     world.set_completion_rule(Has("Artifact", count=world.artifacts_required))
+
+
+def spot_rule(spot: Location | StoryEvent | Artifact) -> Rule | None:
+    """A spot's whole rule, the same in every seed (the options resolve it), so the PopTracker pack exports this one:
+    its reach, its own rule, and JUMP. An artifact has no rule of its own and always waits for Jump."""
+    if isinstance(spot, Artifact):
+        return _joined(spot.reach, JUMP)
+    return _joined(spot.reach, spot.rule, None if spot.no_jump else JUMP)
 
 
 def _joined(*rules: Rule | None) -> Rule | None:

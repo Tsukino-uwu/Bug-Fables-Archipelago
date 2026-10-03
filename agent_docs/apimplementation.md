@@ -58,7 +58,8 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
   [39](#build-step-39-the-seeds-options-in-slot_data-one-options-dict-the-mod-reads); Universal Tracker,
   [40](#build-step-40-universal-tracker-the-seed-rebuilt-from-slot_data-with-no-yaml) and
   [41](#build-step-41-universal-trackers-list-order-and-explanations), explained in
-  [How it works 12](#12-universal-tracker-how-its-implemented); every key,
+  [How it works 12](#12-universal-tracker-how-its-implemented); the PopTracker pack,
+  [42](#build-step-42-the-poptracker-pack-first-part-its-own-repo-the-logic-exported-from-the-apworld); every key,
   [How it works 7](#7-slot_data-the-seeds-settings-and-this-worlds-keys).
 
 **How we built it**
@@ -104,6 +105,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 39. [Build step 39: the seed's options in slot_data, one `options` dict the mod reads](#build-step-39-the-seeds-options-in-slot_data-one-options-dict-the-mod-reads)
 40. [Build step 40: Universal Tracker, the seed rebuilt from slot_data with no yaml](#build-step-40-universal-tracker-the-seed-rebuilt-from-slot_data-with-no-yaml)
 41. [Build step 41: Universal Tracker's list order and explanations](#build-step-41-universal-trackers-list-order-and-explanations)
+42. [Build step 42: the PopTracker pack, first part: its own repo, the logic exported from the apworld](#build-step-42-the-poptracker-pack-first-part-its-own-repo-the-logic-exported-from-the-apworld)
 
 **How it works**
 
@@ -496,9 +498,9 @@ be wrong.
       page, the WebWorld's `game`; 9. `topology_present`; 10. location and item groups (the first item groups,
       *Submarine* and *Boat*, came with build step 36); 11. `World.world_version`,
       `Region.add_locations`, `options.as_dict` (done 2026-10-03, build step 39: slot_data's `options`); 12. `start_inventory_from_pool`; 13. the Rule Builder's
-      `OptionFilter` for Jump, `__str__` and `@override` on our rules, a caching benchmark; 14. Universal Tracker and
+      `OptionFilter` for Jump (done 2026-10-03, build step 42), `__str__` and `@override` on our rules, a caching benchmark; 14. Universal Tracker and
       PopTracker (Universal Tracker with no yaml built 2026-10-03, build step 40; its map tab and the mod's data
-      storage keys wait for the PopTracker pack's map); 15. slot_data only what's necessary (decided 2026-09-29: the fixed tables built into the mod from
+      storage keys wait for the PopTracker pack's map; the pack started 2026-10-03, build step 42); 15. slot_data only what's necessary (decided 2026-09-29: the fixed tables built into the mod from
       the apworld's data, the seed's locations from the server, a world-version check on connect).
     - **Tests:** 16. the base in `test/bases.py` and Archipelago's generic tests in CI; 17. test hygiene (no repeated
       default runs, plain `TestCase` where no multiworld is used, options written out, `assertAccessDependency`).
@@ -3154,7 +3156,8 @@ decided (`slot_data`).
    copies when it's an item, its member when members are items), `Member("Vi")` (only when members are items) and
    `MoveItem("Freeze")` (the item alone, for ground not measured yet). `rules.requires` and the `Needs` fields are gone.
 3. **Menu, the origin, is made in code** (`regions.py`, as APQuest does), with its one exit to where a new game begins.
-   Jump's blanket rule stays in `rules.py`: with Shuffle Jump, every spot not marked `no_jump` also needs `Has("Jump")`.
+   Jump's blanket rule stays in `rules.py`: with Shuffle Jump, every spot not marked `no_jump` also needs `Has("Jump")`
+   (since build step 42 written as `JUMP`, an `OptionFilter` on Shuffle Jump).
 
 For example, the droplet rooms' need and a spot inside them (as it is today, every map a region):
 
@@ -3677,8 +3680,10 @@ for a random start and the entrance randomizer.
    (`data_types.py`), joined in `regions.py`. Nothing uses it yet: no room is mapped, so today the option changes no
    seed's logic (`item-gates.py`'s report identical before and after). The room mapping writes every one-way with it,
    except where the Warp can't be used (`room-logic.md`, rules 4 and 9, question 20, C9).
-   The preflight allows `Has`, `HasAllCounts` and `Rule` from the Rule Builder, so `WayBack` is a plain `Rule` with a
-   `child` field, and "nothing" is an empty `HasAllCounts`, as `Member` already writes it.
+   The preflight then allowed only `Has`, `HasAllCounts` and `Rule` from the Rule Builder, so `WayBack` was a plain
+   `Rule` with a `child` field, and "nothing" an empty `HasAllCounts`. Since build step 42 (2026-10-03, the user's yes
+   to widening the preflight) it is Archipelago's own `WrapperRule`, which serializes its child, and "nothing" is
+   `True_()`.
 3. **The mod:** the Warp is forced on with it (the mod guide, step 38).
 4. **Tests** (`test_points_of_no_return.py`): off by default and in `slot_data`; the way back needed with it off,
    nothing with it on; a one-way needs its own rule and its way back off, only its own rule on. The two "on" tests fail
@@ -3990,6 +3995,55 @@ spots and `/get_logical_path` through shuffled doors).
 
 *Code: `world.py` (`custom_ut_sort`), `logic/__init__.py` (`TRACKER_ORDER`), `data_tables.py`; tests
 `test_tracker.py` (`TestTrackerExplains`, `test_the_list_in_story_order`).*
+
+## Build step 42: the PopTracker pack, first part: its own repo, the logic exported from the apworld
+
+**Why:** PopTracker is the other tracker Archipelago's player docs name (`worlds/generic/docs/other_en.md`), and the
+user wants it fully supported (2026-10-01): a pack that follows a seed, with a map drawn by code, rooms placed where
+Room Swap put them, and fog of war. Its plan is the pack's own `PLAN.md`.
+
+**Decided (the user, 2026-10-03):**
+- **Its own repo** (MIT, like this one), never inside this one. Each of its steps is still written up here, in this
+  guide, since it's the Archipelago side of the project.
+- **The logic is generated from the apworld, never written by hand.** The pack's export imports this apworld through
+  your Archipelago checkout (where `development.md` links it in as `worlds/bug_fables`) and writes each rule with Rule
+  Builder's `to_dict`. That's what `rule builder.md`'s Serialization section gives it for: "to facilitate exporting the
+  rules to a client or tracker", the dumping "left up to the world dev". A pack ported by hand drifts from the apworld;
+  a generated one can't.
+- **How it's checked:** PopTracker's own `pack-checker`, which validates a pack against PopTracker's schemas (the
+  Crystal pack's CI runs its action), and **parity tests with lupa**.
+- **Why lupa:** Archipelago has no standard for testing a tracker's Lua. Its core runs no Lua (its `.lua` files are
+  emulator connectors that run inside BizHawk), and its docs don't cover PopTracker packs. The Crystal pack has no Lua
+  tests either: pack-checker only, its logic ported by hand. Ours is generated, so its Lua can be run beside the
+  apworld's own logic and compared. lupa is a Python package that embeds Lua, so one Python test can generate seeds
+  with Archipelago and ask both, the apworld and the pack's Lua, what's reachable with the same items. It runs Lua 5.4,
+  the version PopTracker's own `.luarc.json` example sets. MIT, and only a test dependency: the pack stays MIT.
+
+**How it was built:**
+
+1. **Every rule serializes** (this repo). Rule Builder's `to_dict` writes a rule's fields as they are, so a custom
+   rule holding another rule needs Archipelago's `WrapperRule`, which writes its child as a rule dict too. `WayBack`
+   was a plain `Rule` with a `child`, since the preflight then allowed only `Has`, `HasAllCounts` and `Rule` (build
+   step 37). On the user's yes it now allows `WrapperRule` and `True_` too: `WayBack` is a `WrapperRule`, and "needs
+   nothing" is `True_()` in every custom rule (an empty `HasAllCounts` resolved to the same). `Boat` and `WayBack`
+   stay custom rules that read an option: `rule builder.md`'s own `ComplicatedFilter` example does the same.
+2. **One rule per spot** (`rules.py`, `spot_rule`): its reach, its own rule and Jump, the same in every seed, with
+   the options resolving it. Jump's blanket rule is `JUMP`, `Has("Jump")` with an `OptionFilter` on Shuffle Jump and
+   `filtered_resolution=True` (`rule builder.md`'s own example of a need one setting skips; `archipelago-review.md`
+   item 13), where it used to be added by an `if` only when the option was on. The preflight allows `OptionFilter` too
+   now, on the same yes. `set_all_rules` sets this rule and the pack exports it: one source. The entrances the same
+   way (`regions.py`, `logic_entrances`): every entrance with its rule, as the game has it, which
+   `create_and_connect_regions` makes and the pack exports.
+3. **Tests** (`test_rule_export.py`): every rule the logic writes, every spot's whole rule and every entrance's rule
+   goes through `to_dict`, JSON and `from_dict` unchanged, and a one-way keeps its way back's child (this fails with
+   `WayBack` as a plain `Rule`); `logic_entrances` is exactly the world's entrances.
+4. **The pack's repo:** started, with its plan, licence and working notes. The export is next.
+
+**Status:** in progress (2026-10-03): this repo's half is built and the tests pass; the pack's export is next.
+
+*Code: `rules.py` (`spot_rule`, `JUMP`), `regions.py` (`logic_entrances`, `MENU`), `custom_rules.py` (`WayBack`);
+tests `test_rule_export.py`;
+`dev-scripts/preflight-patterns.json` (`apworld_imports`).*
 
 # How it works
 

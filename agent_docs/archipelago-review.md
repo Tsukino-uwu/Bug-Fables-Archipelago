@@ -71,7 +71,7 @@ review (2026-09-29); the files have moved since, the claims checked again 2026-0
     Universal Tracker's docs write it, read by the mod; `world_version` and `add_locations` still to do.
 12. **`start_inventory_from_pool`** (a convention: 32 of the 81 game worlds at 0.6.7; `world api.md:627`).
 13. **The Rule Builder:** Jump's blanket rule as an `OptionFilter` (`rule builder.md:80, 92, 103-110`; ours an `if` in
-    `rules.py:35-42`); `__str__` on our rules (three then, five since: `CanUse`, `Member`, `MoveItem`, `Boat`, `WayBack`), so they print their argument (`:501, 506`); `@override` on
+    `rules.py:35-42`; **done 2026-10-03**, build step 42: `rules.py`'s `JUMP`, on the user's yes to the preflight); `__str__` on our rules (three then, five since: `CanUse`, `Member`, `MoveItem`, `Boat`, `WayBack`), so they print their argument (`:501, 506`); `@override` on
     `_instantiate` (`:206`); benchmark `CachedRuleBuilderWorld` and record the decision (`:177`; `apquest/rules.py`,
     main only).
 14. **Trackers:** Universal Tracker support (`interpret_slot_data`) and a PopTracker pack (`other_en.md:31-37`).

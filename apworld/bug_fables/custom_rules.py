@@ -7,7 +7,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from rule_builder.rules import HasAllCounts, Rule
+from rule_builder.rules import Has, HasAllCounts, Rule, True_, WrapperRule
 
 from .abilities import ABILITIES, item_count
 from .data_types import GAME
@@ -33,7 +33,7 @@ class CanUse(Rule["BugFablesWorld"], game=GAME):
             needed[data.holder] = 1
         if item_count(world, self.ability):
             needed[data.item] = item_count(world, self.ability)
-        return HasAllCounts(needed).resolve(world)
+        return (HasAllCounts(needed) if needed else True_()).resolve(world)
 
 
 @dataclass()
@@ -43,7 +43,7 @@ class Member(Rule["BugFablesWorld"], game=GAME):
     name: str
 
     def _instantiate(self, world: BugFablesWorld) -> Rule.Resolved:
-        return HasAllCounts({self.name: 1} if world.starting_member >= 0 else {}).resolve(world)
+        return (Has(self.name) if world.starting_member >= 0 else True_()).resolve(world)
 
 
 @dataclass()
@@ -54,7 +54,7 @@ class MoveItem(Rule["BugFablesWorld"], game=GAME):
 
     def _instantiate(self, world: BugFablesWorld) -> Rule.Resolved:
         count = item_count(world, self.ability)
-        return HasAllCounts({ABILITIES[self.ability].item: count} if count else {}).resolve(world)
+        return (Has(ABILITIES[self.ability].item, count) if count else True_()).resolve(world)
 
 
 # With Progressive Boat off, each level is its own item.
@@ -70,20 +70,18 @@ class Boat(Rule["BugFablesWorld"], game=GAME):
 
     def _instantiate(self, world: BugFablesWorld) -> Rule.Resolved:
         if world.options.progressive_boat:
-            return HasAllCounts({"Progressive Boat": self.level}).resolve(world)
-        return HasAllCounts({BOAT_LEVELS[self.level]: 1}).resolve(world)
+            return Has("Progressive Boat", self.level).resolve(world)
+        return Has(BOAT_LEVELS[self.level]).resolve(world)
 
 
 @dataclass()
-class WayBack(Rule["BugFablesWorld"], game=GAME):
+class WayBack(WrapperRule["BugFablesWorld"], game=GAME):
     """What getting back from a one-way needs (room-logic.md, rule 4): its child rule, or nothing with Points of No
     Return on, where the Warp to Start is the way back."""
 
-    child: Rule[BugFablesWorld]
-
     def _instantiate(self, world: BugFablesWorld) -> Rule.Resolved:
         if world.options.points_of_no_return:
-            return HasAllCounts({}).resolve(world)
+            return True_().resolve(world)
         return self.child.resolve(world)
 
 

@@ -31,7 +31,7 @@ class BugFablesWorld(World):
         "Submarine": {"Progressive Boat", "Subaquatic Maritime Neotransport"},
         "Boat": {"Progressive Boat", "Boat Ticket"},
     }
-    origin_region_name = "Menu"
+    origin_region_name = regions.MENU
     options_dataclass = BugFablesOptions
     options: BugFablesOptions
 
@@ -108,9 +108,6 @@ class BugFablesWorld(World):
 
     def moves_shuffled(self) -> bool:
         return bool(self.options.shuffle_field_moves.value)
-
-    def jump_shuffled(self) -> bool:
-        return bool(self.options.shuffle_jump.value)
 
     def create_regions(self) -> None:
         regions.create_and_connect_regions(self)
