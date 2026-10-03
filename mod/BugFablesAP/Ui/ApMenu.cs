@@ -469,7 +469,7 @@ namespace BugFablesAP
                     : QualityOfLife.IconMode == "AllPlayers" ? "ALL PLAYERS" : "OFF");
                 Choice(BackgroundsRow, "Item backgrounds", OnOff(QualityOfLife.ItemBackgrounds));
                 Choice(DetectorRow, "Detector", Detector == null || Detector.Value ? "ON" : "OFF");
-                Choice(SpyRow, "Spy Specs", OnOff(QualityOfLife.SpySpecs));
+                Choice(SpyRow, "Spy Specs", (QualityOfLife.SpySpecs?.Value ?? "Off").ToUpperInvariant());
                 Label(UncapRow, "Uncap FPS");
                 DrawPips(new[] { UncapRow }, new[] { Mathf.Max(0, Array.IndexOf(QualityOfLife.UncapValues,
                     QualityOfLife.UncapFps?.Value)) + 1 });

@@ -2689,8 +2689,9 @@ for in three places, each the party-wide `BadgeIsEquipped(17)`:
 
 **How:** as the Detector row (step 15): `MedalAssist`'s `BadgeIsEquipped` postfix answers yes for medal 17 on
 party-wide checks while the row is on. So all three follow at once, exactly as the medal would, with nothing of the
-game's battle code copied or changed. The row, *Spy Specs: ON / OFF*, sits under Detector on the Quality of life page
-(config `[QualityOfLife] SpySpecs`, off by default), and joins that page's Reset to defaults and Disable all. Its help
+game's battle code copied or changed. The row, *Spy Specs: ON / OFF* (four values since 2026-10-04, below), sits
+under Detector on the Quality of life page (config `[QualityOfLife] SpySpecs`, off by default), and joins that page's
+Reset to defaults and Disable all. Its help
 line follows the value: "As if Spy Specs were on: enemy HP shows, Spy is free." or "Spy as the game has it: aim, and
 it uses the turn." Only while Archipelago is enabled, or with *Use on normal saves* (step 18). No check and no logic
 depend on it. The HP bars follow from the next battle, since the game reads the medal as a battle starts.
@@ -2699,14 +2700,29 @@ The page grew to twelve rows (eleven settings under the two buttons). Squeezing 
 user asked for the game's own way instead ("not better to just add the up/down scroll that the games normal
 "settings" menu have ?"): a settings page now scrolls, seven rows at the game's own size (step 8).
 
-**To see** (the user): with the row on, a battle shows every enemy's HP, Spy needs no aiming, the icon sits beside
-Spy, and the same member can still act after spying; with it off, as the game has it.
+**Split in four (2026-10-04, the user):** "split up the spy specs into off/hp/free(free turn+no aim)/both". The row
+now reads *Spy Specs: OFF / HP / FREE / BOTH* (config `[QualityOfLife] SpySpecs` holds `Off`, `HP`, `Free` or
+`Both`), and its help line follows the value. HP is every enemy's HP bar; Free is Spy with no aim and the turn kept,
+which the game ties to one answer (`Tattle` asks once and both hang on it), so they stay together. The icon beside Spy
+goes with Free, the game's sign that spying is free. Both is the medal, as the row's ON was.
 
-**Status:** built (2026-09-30); the row seen on its page while the scrolling was checked (2026-09-30); its battle
-effects not yet seen.
+**How the halves are told apart:** still the one `BadgeIsEquipped` postfix, which now asks who is asking. Three small
+hooks mark it for their own run: `StartBattle`'s step (its `MoveNext`) for HP, `Tattle`'s step for Free, and
+`ShowItemList` (the battle menu's icon) for Free; each puts the outer mark back as it ends, so a nested call can't
+clear it. An ask from anywhere else gets yes only with Both. If those hooks can't go in, the log says so and only Both
+works. The log names each yes: `[medals] Spy Specs: every enemy's HP bar shows this battle` and `[medals] Spy Specs:
+Spy with no aim, keeping the turn`. A config that stored the old ON or OFF reads Off now (BepInEx falls back to a
+list's first value), so ON has to be picked again as BOTH.
 
-*Code: `Gameplay/MedalAssist.cs` (`SpySpecsMedal`, the postfix), `Gameplay/QualityOfLife.cs` (`SpySpecs`),
-`Ui/ApMenu.cs` and `Ui/ApMenu.Rows.cs` (`SpyRow`), `Core/Plugin.cs`.*
+**To see** (the user): in a battle after picking each value, HP shows every enemy's HP and Spy as the game has it;
+Free has Spy with no aiming, the icon beside it, and the same member able to act after spying, while unspied enemies
+show no HP; Both is all of it; Off is as the game has it.
+
+**Status:** built (2026-09-30), split in four (2026-10-04), the build succeeds; the row seen on its page while the
+scrolling was checked (2026-09-30); its battle effects not yet seen.
+
+*Code: `Gameplay/MedalAssist.cs` (`SpySpecsMedal`, the postfix, `SpyAsks`), `Gameplay/QualityOfLife.cs` (`SpySpecs`,
+`SpyHp`, `SpyFree`), `Ui/ApMenu.cs` and `Ui/ApMenu.Rows.cs` (`SpyRow`), `Core/Plugin.cs`.*
 
 ## 40. No respawn loop: a fall that only leads back into itself ends with the Warp
 

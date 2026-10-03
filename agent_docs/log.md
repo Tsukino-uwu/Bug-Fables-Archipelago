@@ -69,6 +69,7 @@ either one wrong).
 - [2026-10-03: boss prizes on Normal, seeds only](#2026-10-03-boss-prizes-on-normal-seeds-only)
 - [2026-10-03: Universal Tracker with no yaml, and the seed's options in one dict](#2026-10-03-universal-tracker-with-no-yaml-and-the-seeds-options-in-one-dict)
 - [2026-10-03: the PopTracker pack started, every rule exported](#2026-10-03-the-poptracker-pack-started-every-rule-exported)
+- [2026-10-04: Spy Specs split in four](#2026-10-04-spy-specs-split-in-four)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2595,3 +2596,18 @@ either one wrong).
     holds a check (no data of its own in the dump either).
   - The user: "good enough until we actually have/add checks everywhere".
 - **Mistake caught:** a PopTracker reload didn't pick up a new map image; a restart did.
+
+## 2026-10-04: Spy Specs split in four
+
+- **Asked (the user):** "split up the spy specs into off/hp/free(free turn+no aim)/both", and the checks added to
+  TO-CHECK.md.
+- **Read first:** the game asks for medal 17 in three places only: `StartBattle` (the HP bars, its one write of
+  `scopeequipped`), `Tattle` (one answer, `hasmedal`, for both the skipped aim and the kept turn, so those two can't
+  be had apart without changing its code; the user's grouping matches) and `ShowItemList` (the icon beside Spy).
+- **Built:** the row's values Off, HP, Free, Both; the one `BadgeIsEquipped` postfix answers per who is asking, marked
+  by a prefix and finalizer on each of the three (`StartBattle`'s and `Tattle`'s `MoveNext`, `ShowItemList`). Checked
+  in the game's own HarmonyX 2.9.0 that a finalizer shares the prefix's `__state`, and in its BepInEx that a stored
+  "true" under a value list falls back to the first value (Off). The build succeeds; the plugin copied in, the game
+  was closed, so nothing seen yet.
+- **Noticed, not changed:** the last log ends with a `NullReferenceException` in `MainManager.ApplySettings`, from
+  `FrameRate.Disable` in `Plugin.OnDestroy` as the game closed. Told the user.

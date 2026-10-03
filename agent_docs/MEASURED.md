@@ -1898,6 +1898,11 @@ for its own threshold. Used by `enemy-numbers.py` and `EnemyScaling.cs` (the mod
   - `Tattle` (the Spy action, `:5234`): with the medal no crosshair command, the spy always succeeds, and at the end
     `if (!hasmedal) EndPlayerTurn()` (`:5286-5287`): spying doesn't use the turn.
   - The battle menu's command list adds a small icon (219) beside Spy (`MainManager.cs:16291`).
+- **Where each ask runs** (2026-10-04, code read): the battle start's is in `public static IEnumerator StartBattle(int[],
+  int, int, string, NPCControl, bool)` (`BattleControl.cs:718`), the only write of `scopeequipped`; Spy's is in
+  `private IEnumerator Tattle()` (`:5221`), its first step, kept in the local `hasmedal`, which both the skipped aim and
+  the skipped `EndPlayerTurn` read, so those two can't be had apart without changing its code; the icon's is in
+  `public static void ShowItemList(int, Vector2, bool, bool)` (`MainManager.cs:15336`). No other code asks for 17.
 - Used by `MedalAssist.cs` (the Spy Specs row, the mod guide, step 39).
 
 ## The Settings list's arrows (2026-09-30, code read; the game's screen in the user's screenshots)

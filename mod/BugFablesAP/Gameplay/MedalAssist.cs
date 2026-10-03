@@ -4,7 +4,8 @@ using HarmonyLib;
 
 namespace BugFablesAP
 {
-    // The panel's Difficulty, Detector and Spy Specs rows: a BadgeIsEquipped postfix answers yes for party-wide checks.
+    // The panel's Difficulty, Detector and Spy Specs rows: a BadgeIsEquipped postfix answers yes for party-wide checks
+    // (Spy Specs by where it's asked).
     // Hardest is flag 614, which the save must never keep from the panel: SaveFile writes the save's own value.
     internal static class MedalAssist
     {
@@ -16,7 +17,8 @@ namespace BugFablesAP
         private static Func<bool> randomizer;
         private static Func<bool> hard;
         private static Func<bool> detector;
-        private static Func<bool> spySpecs;
+        private static Func<bool> spyHp;
+        private static Func<bool> spyFree;
         private static Func<bool> hardest;
         private static ManualLogSource log;
 
@@ -24,7 +26,7 @@ namespace BugFablesAP
         private static bool forced;
 
         internal static void Enable(ManualLogSource logger, Func<bool> randomizerOn, Func<bool> settingsOn,
-            Func<bool> hardOn, Func<bool> hardestOn, Func<bool> detectorOn, Func<bool> spySpecsOn)
+            Func<bool> hardOn, Func<bool> hardestOn, Func<bool> detectorOn, Func<bool> spyHpOn, Func<bool> spyFreeOn)
         {
             log = logger;
             active = settingsOn;
@@ -32,7 +34,8 @@ namespace BugFablesAP
             hard = hardOn;
             hardest = hardestOn;
             detector = detectorOn;
-            spySpecs = spySpecsOn;
+            spyHp = spyHpOn;
+            spyFree = spyFreeOn;
             if (!Hooks.Install(typeof(MedalAssist), "medals", "Difficulty, Detector and Spy Specs do nothing"))
             {
                 return;
@@ -43,8 +46,10 @@ namespace BugFablesAP
             {
                 hardest = () => false;
             }
+            bool spy = Hooks.Install(typeof(SpyAsks), "medals", "Spy Specs' HP and Free do nothing (Both still works)");
             log.LogInfo("[medals] installed on MainManager.BadgeIsEquipped"
-                + (saves ? ", SaveFile, Load and SetVariables" : ""));
+                + (saves ? ", SaveFile, Load and SetVariables" : "")
+                + (spy ? ", StartBattle's and Tattle's MoveNext and ShowItemList" : ""));
         }
 
         internal static void Disable()
@@ -165,9 +170,66 @@ namespace BugFablesAP
                 return;
             }
             if ((id == HardModeMedal && (hard() || payingPrize)) || (id == DetectorMedal && detector())
-                || (id == SpySpecsMedal && spySpecs()))
+                || (id == SpySpecsMedal && SpyOn()))
             {
                 __result = true;
+            }
+        }
+
+        // Spy Specs in halves, by where the game asks: a battle's start (every enemy's HP bar), or the Spy action (no
+        // aim, the turn kept) and the battle menu's icon beside Spy. Anywhere else only with both, as the medal.
+        private enum SpyAsk { Elsewhere, BattleStart, Spy, Menu }
+        private static SpyAsk spyAsk;
+
+        private static bool SpyOn()
+        {
+            bool on = spyAsk == SpyAsk.BattleStart ? spyHp()
+                : spyAsk == SpyAsk.Elsewhere ? spyHp() && spyFree()
+                : spyFree();
+            if (on && spyAsk == SpyAsk.BattleStart)
+            {
+                log.LogInfo("[medals] Spy Specs: every enemy's HP bar shows this battle");
+            }
+            else if (on && spyAsk == SpyAsk.Spy)
+            {
+                log.LogInfo("[medals] Spy Specs: Spy with no aim, keeping the turn");
+            }
+            return on;
+        }
+
+        // Each sets who is asking for its own run and puts the outer one back, so a nested call can't clear it.
+        private static class SpyAsks
+        {
+            [HarmonyPatch(typeof(BattleControl), nameof(BattleControl.StartBattle), MethodType.Enumerator)]
+            [HarmonyPrefix]
+            private static void BeforeStart(out SpyAsk __state) => Enter(SpyAsk.BattleStart, out __state);
+
+            [HarmonyPatch(typeof(BattleControl), nameof(BattleControl.StartBattle), MethodType.Enumerator)]
+            [HarmonyFinalizer]
+            private static void AfterStart(SpyAsk __state) => spyAsk = __state;
+
+            [HarmonyPatch(typeof(BattleControl), "Tattle", MethodType.Enumerator)]
+            [HarmonyPrefix]
+            private static void BeforeSpy(out SpyAsk __state) => Enter(SpyAsk.Spy, out __state);
+
+            [HarmonyPatch(typeof(BattleControl), "Tattle", MethodType.Enumerator)]
+            [HarmonyFinalizer]
+            private static void AfterSpy(SpyAsk __state) => spyAsk = __state;
+
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.ShowItemList), typeof(int),
+                typeof(UnityEngine.Vector2), typeof(bool), typeof(bool))]
+            [HarmonyPrefix]
+            private static void BeforeList(out SpyAsk __state) => Enter(SpyAsk.Menu, out __state);
+
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.ShowItemList), typeof(int),
+                typeof(UnityEngine.Vector2), typeof(bool), typeof(bool))]
+            [HarmonyFinalizer]
+            private static void AfterList(SpyAsk __state) => spyAsk = __state;
+
+            private static void Enter(SpyAsk asking, out SpyAsk outer)
+            {
+                outer = spyAsk;
+                spyAsk = asking;
             }
         }
     }

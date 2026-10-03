@@ -588,8 +588,8 @@ be wrong.
    37 (the mod guide's step 38); it changes no seed until rooms are mapped (Next 2). Next, the user sees a seed with it
    on and Travel Off, the Warp still in the pause menu.
 55. **Spy Specs, a panel setting** (2026-09-30, the user's idea): built, the mod guide's step 39, a Quality of life
-   row, off by default, as if the medal were equipped. No check and no logic depend on it. The row seen on its page;
-   next, the user sees its battle effects.
+   row, off by default; since 2026-10-04 in halves (Off, HP, Free, Both; Both is the medal). No check and no logic
+   depend on it. The row seen on its page; next, the user sees each value's battle effects.
 
 **Known issues:**
 

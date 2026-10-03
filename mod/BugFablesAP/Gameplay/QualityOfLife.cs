@@ -43,7 +43,11 @@ namespace BugFablesAP
         internal static ConfigEntry<string> ItemIcons;
         internal static string IconMode => ItemIcons?.Value ?? "OtherGames";
         internal static ConfigEntry<bool> ItemBackgrounds;
-        internal static ConfigEntry<bool> SpySpecs;
+        // The Spy Specs medal in halves: HP (every enemy's HP bar), Free (Spy needs no aim and keeps the turn), or Both.
+        internal static readonly string[] SpySpecsValues = { "Off", "HP", "Free", "Both" };
+        internal static ConfigEntry<string> SpySpecs;
+        internal static bool SpyHp => SpySpecs != null && (SpySpecs.Value == "HP" || SpySpecs.Value == "Both");
+        internal static bool SpyFree => SpySpecs != null && (SpySpecs.Value == "Free" || SpySpecs.Value == "Both");
         // Tenths of the normal price: 10 normal, 5 half, 0 free.
         internal const int FullPrice = 10;
         internal static ConfigEntry<int> MedalPrices;
@@ -107,13 +111,16 @@ namespace BugFablesAP
         // each setting's own default. Enemy scaling and Medal prices live on the Gameplay page and aren't touched.
         internal static void DisableAll()
         {
-            foreach (ConfigEntry<bool> setting in new[] { FastText, SkipCutscenes, ItemBackgrounds, ApMenu.Detector,
-                SpySpecs })
+            foreach (ConfigEntry<bool> setting in new[] { FastText, SkipCutscenes, ItemBackgrounds, ApMenu.Detector })
             {
                 if (setting != null)
                 {
                     setting.Value = false;
                 }
+            }
+            if (SpySpecs != null)
+            {
+                SpySpecs.Value = "Off";
             }
             if (ItemAnimation != null)
             {
@@ -186,10 +193,11 @@ namespace BugFablesAP
                 + "it in its class colour (progression, useful, filler, trap, as Item colors colours them; with Item "
                 + "colors Off, the game's own colour for the item's kind), so you can tell from afar whether it "
                 + "matters. Off: no backdrop until it's picked up, a surprise.");
-            SpySpecs = config.Bind("QualityOfLife", "SpySpecs", false,
-                "On acts as if the Spy Specs medal were equipped: every enemy's HP shows, and Spy needs no aiming and "
-                + "doesn't use the turn. Off (the default) leaves it to the medal. Switch it on the Quality of life "
-                + "page.");
+            SpySpecs = config.Bind("QualityOfLife", "SpySpecs", "Off", new ConfigDescription(
+                "The Spy Specs medal's effects, in halves: HP (every enemy's HP bar shows), Free (Spy needs no aiming, "
+                + "always works and doesn't use the turn), Both (as if the medal were equipped), or Off (the default; "
+                + "left to the medal). Switch it on the Quality of life page.",
+                new AcceptableValueList<string>(SpySpecsValues)));
             MedalPrices = config.Bind("Gameplay", "MedalPrices", FullPrice, new ConfigDescription(
                 "Medal shop prices, in berries and crystal berries, in tenths of the normal price: 10 normal, 5 half, "
                 + "0 free. Any price above free is at least 1. Switch it on the Gameplay page.",

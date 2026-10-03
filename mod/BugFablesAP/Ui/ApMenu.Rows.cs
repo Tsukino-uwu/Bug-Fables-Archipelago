@@ -61,9 +61,13 @@ namespace BugFablesAP
                             : "Items show no backdrop until you take them.";
                     case DetectorRow: return "As if the Detector medal were on; in a seed it beeps for any check left.";
                     case SpyRow:
-                        return QualityOfLife.SpySpecs != null && QualityOfLife.SpySpecs.Value
-                            ? "As if Spy Specs were on: enemy HP shows, Spy is free."
-                            : "Spy as the game has it: aim, and it uses the turn.";
+                        switch (QualityOfLife.SpySpecs?.Value)
+                        {
+                            case "HP": return "Every enemy's HP shows; Spy as the game has it.";
+                            case "Free": return "Spy needs no aiming and doesn't use the turn.";
+                            case "Both": return "As if Spy Specs were on: enemy HP shows, Spy is free.";
+                            default: return "Spy as the game has it: aim, and it uses the turn.";
+                        }
                     case UncapRow:
                         if (QualityOfLife.UncapFps?.Value == "Monitor")
                         {
@@ -206,6 +210,10 @@ namespace BugFablesAP
                 {
                     Cycle(QualityOfLife.SkipConfirm, QualityOfLife.TravelValues, by);
                 }
+                else if (r == SpyRow && QualityOfLife.SpySpecs != null)
+                {
+                    Cycle(QualityOfLife.SpySpecs, QualityOfLife.SpySpecsValues, by);
+                }
                 else if (r == UncapRow && QualityOfLife.UncapFps != null)
                 {
                     StepThrough(QualityOfLife.UncapFps, QualityOfLife.UncapValues, by);
@@ -284,7 +292,6 @@ namespace BugFablesAP
             : r == CutscenesRow ? QualityOfLife.SkipCutscenes
             : r == BackgroundsRow ? QualityOfLife.ItemBackgrounds
             : r == DetectorRow ? Detector
-            : r == SpyRow ? QualityOfLife.SpySpecs
             : null;
 
         private static string OnOff(ConfigEntry<bool> setting) => setting != null && setting.Value ? "ON" : "OFF";
