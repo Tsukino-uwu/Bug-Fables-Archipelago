@@ -1,8 +1,8 @@
 name: CI
 
 # Every push, and every release (release.yml calls this): the apworld's tests on a Python matrix, the apworld and its
-# yaml built and used as a player would, and the fuzzer with the Logic Test check. The mod DLL's stale gate runs only
-# in release.yml: between releases, a committed DLL older than its sources is expected.
+# yaml built and used as a player would, the fuzzer with the Logic Test check, and Universal Tracker's fuzzer hook. The
+# mod DLL's stale gate runs only in release.yml: between releases, a committed DLL older than its sources is expected.
 on:
   push:
   pull_request:
@@ -15,6 +15,8 @@ env:
   # fuzz.py 0.6.2 and the Logic Test world 0.4.0: the commits development.md names.
   FUZZER_COMMIT: '53686ba34f9e8852cbe1970666a5f56fd6abf75a'
   LOGIC_TEST_COMMIT: '795f13ba445bb09ceb0991c417eb2612dbbd9a2c'
+  # Universal Tracker v0.3.4's commit: its release's tracker.apworld, which development.md names, holds this folder.
+  TRACKER_COMMIT: 'b33d2eafaf94e64de90fc7cd71bc915524816eb2'
 
 jobs:
   apworld:
@@ -210,5 +212,72 @@ jobs:
         with:
           name: fuzz-failures
           path: Archipelago/fuzz_output/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  # test-apworld.ps1 -TrackerOnly: 10000 fuzzed seeds, each regenerated from its slot_data with no yaml as Universal
+  # Tracker does, and checked sphere by sphere. Its own job, beside the fuzz job, so both fit release.ps1's wait.
+  tracker:
+    name: Universal Tracker's fuzzer hook
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: bug_fables_ap
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ArchipelagoMW/Archipelago
+          ref: ${{ env.AP_TAG }}
+          path: Archipelago
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: Eijebong/Archipelago-fuzzer
+          ref: ${{ env.FUZZER_COMMIT }}
+          path: fuzzer
+
+      # Only Universal Tracker's folder, from its fork of all of Archipelago.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: FarisTheAncient/Archipelago
+          ref: ${{ env.TRACKER_COMMIT }}
+          path: tracker
+          sparse-checkout: worlds/tracker
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: |
+            Archipelago/requirements.txt
+            Archipelago/ci-requirements.txt
+            Archipelago/worlds/*/requirements.txt
+
+      # Players: Universal Tracker's players folder, which it requires and a fresh checkout doesn't have.
+      - name: Install Archipelago with the world, Universal Tracker and the fuzzer
+        working-directory: Archipelago
+        run: |
+          cp -r ../bug_fables_ap/apworld/bug_fables worlds/bug_fables
+          cp -r ../tracker/worlds/tracker worlds/tracker
+          cp ../fuzzer/fuzz.py fuzz.py
+          mkdir -p Players
+          python -m pip install --upgrade pip
+          pip install -r ci-requirements.txt
+          python ModuleUpdate.py --yes --force
+          echo "SKIP_REQUIREMENTS_UPDATE=1" >> "$GITHUB_ENV"
+          SKIP_REQUIREMENTS_UPDATE=1 python Launcher.py --update_settings
+
+      - name: Universal Tracker's fuzzer hook
+        shell: pwsh
+        working-directory: Archipelago
+        run: ../bug_fables_ap/dev-scripts/test-apworld.ps1 -Archipelago . -TrackerOnly
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: failure()
+        with:
+          name: tracker-fuzz-failures
+          path: Archipelago/fuzz_output_tracker/
           if-no-files-found: ignore
           retention-days: 14

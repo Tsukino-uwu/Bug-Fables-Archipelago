@@ -127,8 +127,8 @@ to a commit, each repository to a tag or a commit.
 | Workflow | Does | Why |
 |---|---|---|
 | `.github/workflows/ci.yml` | uses actions | `actions/checkout`, `actions/setup-python` and `actions/upload-artifact`: the code, Python, and the built apworld and yaml kept for the release (and a failed fuzz run's files) |
-| `.github/workflows/ci.yml` | checks out other repositories | `ArchipelagoMW/Archipelago` at the tag the world targets, to test and build the apworld inside it; `Eijebong/Archipelago-fuzzer`, for its fuzzer; `palex00/Archipelago`, only its Logic Test world's folder |
-| `.github/workflows/ci.yml` | runs programs | Archipelago's own install, its tests (`pytest`), its generator and its apworld builder, and `dev-scripts/test-apworld.ps1` (the Logic Test check and the fuzzer) |
+| `.github/workflows/ci.yml` | checks out other repositories | `ArchipelagoMW/Archipelago` at the tag the world targets, to test and build the apworld inside it; `Eijebong/Archipelago-fuzzer`, for its fuzzer; `palex00/Archipelago`, only its Logic Test world's folder; `FarisTheAncient/Archipelago`, only its Universal Tracker world's folder, for its fuzzer hook |
+| `.github/workflows/ci.yml` | runs programs | Archipelago's own install, its tests (`pytest`), its generator and its apworld builder, and `dev-scripts/test-apworld.ps1` (the Logic Test check, the fuzzer, and Universal Tracker's fuzzer hook) |
 | `.github/workflows/ci.yml` | downloads packages | Archipelago's requirements from PyPI (`pip install`, `ModuleUpdate.py`), the way Archipelago's own CI installs them |
 | `.github/workflows/preflight.yml` | uses actions | `actions/checkout` and `actions/setup-python` |
 | `.github/workflows/preflight.yml` | runs programs | Preflight on the commit and on all history, its negative test, and `dev-scripts/verify-release.py` |
