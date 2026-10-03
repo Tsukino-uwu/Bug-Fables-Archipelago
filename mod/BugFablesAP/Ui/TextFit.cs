@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using UnityEngine;
@@ -9,7 +10,8 @@ namespace BugFablesAP
     internal static class TextFit
     {
         // The one space a line may break at. ServerText drops control characters, so no server string holds it.
-        internal const char Break = '\u0001';
+        // A string, not a char: the release check can trace a string the compiler merges into the literals beside it.
+        internal const string Break = "\u0001";
         private const string NameSlot = "|string,0|", ArticleSlot = "|string,1|";
         private const float Space = 0.3f;
         // The item-get box's text keeps this far in from each side of its sprite.
@@ -19,7 +21,7 @@ namespace BugFablesAP
         private const string Cyrillic = "\\p{IsCyrillic}";
         private const string Korean = "\\p{IsHangulJamo}|\\p{IsHangulSyllables}|\\p{IsHangulCompatibilityJamo}";
 
-        internal static string Joined(string text) => text?.Replace(Break, ' ');
+        internal static string Joined(string text) => text?.Replace(Break, " ");
 
         // The line with its article and name filled in and fitted to room; null leaves the game's line as it is.
         internal static string Fit(string line, string article, string name, float room, bool dialogue,
@@ -35,7 +37,7 @@ namespace BugFablesAP
             string after = line.Substring(at + NameSlot.Length);
             string whole = before + Joined(name) + after;
             float width = Width(whole, dialogue);
-            int cut = name.IndexOf(Break);
+            int cut = name.IndexOf(Break, StringComparison.Ordinal);
             if (width <= room)
             {
                 told = $"{width:0.0} wide, room {room:0.0}: one line";
@@ -46,7 +48,7 @@ namespace BugFablesAP
                 told = $"{width:0.0} wide, room {room:0.0}: one line, squashed";
                 return Squash(whole, width, room);
             }
-            string first = before + name.Substring(0, cut), second = name.Substring(cut + 1) + after;
+            string first = before + name.Substring(0, cut), second = name.Substring(cut + Break.Length) + after;
             float firstWidth = Width(first, dialogue), secondWidth = Width(second, dialogue);
             float firstShown = Mathf.Min(firstWidth, room), secondShown = Mathf.Min(secondWidth, room);
             // The game centres the whole block by its widest line, so the shorter one is moved in by spaces.

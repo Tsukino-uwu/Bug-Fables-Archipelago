@@ -2904,7 +2904,9 @@ Four sections read it:
 - **The DLL says only what its source says:** read against the sources of the commit it was built from.
   - Every type, method, field and called member name, and every one of its 1,237 strings, must come from that
     source. The strings are matched to the literals, the pieces of interpolated strings, and the constants the
-    compiler joins.
+    compiler joins. Char literals aren't pieces, and the compiler joins a `const char` into the string beside it
+    too, so a character joined to text is a one-character `const string` (`TextFit.Break`, since a release build
+    refused `'s\x01` on 2026-10-04).
   - The names the compiler makes up (`<Run>b__3_0`, tuple fields, operators) are allowed only by exact name or
     when built from a source name.
   - None of `Dev/`'s types may be in it.
