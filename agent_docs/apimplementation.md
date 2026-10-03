@@ -4058,15 +4058,30 @@ Room Swap put them, and fog of war. Its plan is the pack's own `PLAN.md`.
 7. **The world map** (the user, 2026-10-03/04: "like on the map in game", then each area's rooms too): a World tab
    with one pin per area where the game's pause map puts it, with the lines the game draws between areas, all
    drawn by code from the numbers in `PauseMenu.cs` (`MEASURED.md`, the pause-menu map). The first try was turned
-   180°; the user's screenshot of the pause map gave the right way round. Each area with checks has its own tab, a pin
-   per room, for now in a grid; an area pin shows its rooms' checks through PopTracker's section `ref`. Each map's area
-   is the game's own (`MapControl.areaid`, from the mod's map dump), so a room can sit in an area its location names
-   don't say.
+   180°; the user's screenshot of the pause map gave the right way round. Each area with checks has its own tab; an
+   area pin shows its rooms' checks through PopTracker's section `ref`. Each map's area is the game's own
+   (`MapControl.areaid`, from the mod's map dump), so a room can sit in an area its location names don't say.
+8. **Each area's rooms, placed from the game's own door data** (the user's pick of three, 2026-10-03: the game's
+   data first, a hand table to nudge later). The mod's entity dump gives each door's spot in its room and where it
+   lands in the next (`MEASURED.md`, the map entity table); a room goes where its arrival point meets the door that
+   leads there, so a door on a room's right leads to a room on its right. What the user's screenshots showed, and the
+   rule each became:
+   - lines through rooms and to nowhere: only the logic's doors count (the apworld's `doors.json`; the dump also
+     lists signs and NPCs that move you between maps), and each pair of rooms gets one line, door to door;
+   - one-way doors (the fog maze) loop anywhere: a ring at the door, no line;
+   - a room entered from inside another (a house, a hall's back-wall door): a small box at its door;
+   - rooms that can't sit side by side (Bugaria City's districts loop left and right, as the user knows it from
+     playing; stacked floors): a pair of matching coloured rings, one at each door;
+   - test and cutscene maps (`TestRoom`, `Blank`, `SnakemouthEmpty`): only the logic's maps are drawn.
+   Night and story versions of a room (Golden Settlement at night, Bugaria City under attack) are their own maps in
+   the logic; a tab of their own waits until one holds a check. The user, 2026-10-04: good enough until there are
+   checks everywhere.
 
-**Status:** in progress (2026-10-03): built, the tests pass (this repo's, and the pack's: parity on 200 seeds,
-pack-checker strict). Seen in PopTracker 0.35.4 (2026-10-03): the pack loads, the colours with no items are the
-ones the Lua predicted, a room's popup lists its checks, and a clicked pin clears. Not yet seen: every item held,
-auto-tracking. The map, the icons and the pin names are placeholders; their look is the next part.
+**Status:** in progress (2026-10-04): built, the tests pass (this repo's, and the pack's: parity on 200 seeds,
+pack-checker strict). Seen in PopTracker 0.35.4: the pack loads, the colours with no items are the ones the Lua
+predicted, a room's popup lists its checks, a clicked pin clears (2026-10-03); the world map like the pause map, and
+each area's rooms (2026-10-04). Not yet seen: every item held, auto-tracking. Still placeholders: the icons, the
+area names (the game's `AreaNames` text not read yet) and the room names.
 
 *Code: `rules.py` (`spot_rule`, `JUMP`), `regions.py` (`logic_entrances`, `MENU`), `custom_rules.py` (`WayBack`);
 tests `test_rule_export.py`;

@@ -2579,3 +2579,19 @@ either one wrong).
   gate in a commit of its own and doc-coverage read the working tree's code map. The export first dropped Leif from
   the tracked items, since story-party seeds also have a "Leif" event. Two edits were made by script, not Edit.
 - **Not seen yet:** the pack in PopTracker (v0.35.4 installed): the pins, logic colours, the item grid, auto-tracking.
+- **Later the same session (2026-10-04): the map.** Seen first: the colours as the Lua predicted. The user compared it
+  with the Pokémon Crystal pack's map, then asked for the game's own: "like on the map in game outskirts is 1 spot",
+  then the rooms too, "world map as a baseline, then tie the individual rooms together". Built from game data, each
+  step shown on screen and corrected:
+  - the world map from `PauseMenu.MapSetup`'s numbers came out turned 180°; the user's screenshot of the pause map
+    fitted every pip within a few pixels once flipped, and its lines (`SetMapLines`) were added;
+  - rooms placed where their doors meet (the mod's entity dump): the user's screenshots showed lines through rooms and
+    lines ending nowhere. Causes found in the data, not guessed: the dump lists signs and NPCs as doors (only
+    `doors.json`'s doors count now), lines were drawn twice and to arrival points (now once, door to door), the fog
+    maze's one-way doors loop anywhere (a ring), and Bugaria City's districts form a ring (matching coloured rings),
+    which the user confirmed from playing: left and right loop the town, up goes to the palace;
+  - the user asked to leave out `SnakemouthEmpty`, `Blank` and `TestRoom`: exactly the maps that aren't regions of
+    the apworld, so only the logic's maps are drawn. A day/night split of Golden Settlement: held until a night map
+    holds a check (no data of its own in the dump either).
+  - The user: "good enough until we actually have/add checks everywhere".
+- **Mistake caught:** a PopTracker reload didn't pick up a new map image; a restart did.
