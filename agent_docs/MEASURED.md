@@ -1446,6 +1446,15 @@ hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0
   from another window and no marker there, it threw a NullReferenceException every frame (the diagnostic: window 6,
   option 5, markers 1-25 all null).
 - Used by `WarpButton.cs` (map travel).
+- **Where each area's marker sits** (2026-10-03/04, code read and the user's screenshot): `MapSetup` places it at a fixed
+  `(x, z)` on the map object for each `MainManager.Areas` value (`PauseMenu.cs:2786-2864`; e.g. the Outskirts
+  `(0.92, 2.11)`, the Honey Factory `(5.32, -2.73)`). On screen **+x is to the left and +z down**, one scale for both:
+  fitted to the user's screenshot of a save with 22 areas visited, every marker within a few pixels of
+  `(999 - 112.4 x, 504 + 112 z)` at 2000 px wide. `SetMapLines` (`PauseMenu.cs:2913-3062`) draws 23 lines, each
+  between two visited areas; none goes to the Fishing Village. Each map's area is its prefab's `MapControl.areaid`,
+  a field set in the game's data, not in code (`MapControl.cs:62`), written by the mod's `MapDump` for all 246 maps
+  (2026-09-26). Area names are `Data/Dialogues<language>/AreaNames` (`MainManager.cs:3399`), not read yet. Used by
+  the PopTracker pack's world map (its `data/area_pips.json`, `data/map_areas.json`).
 
 ## Fades, and a light's glow colour (2026-09-26, code read; both seen in the log)
 

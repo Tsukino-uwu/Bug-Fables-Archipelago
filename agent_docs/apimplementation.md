@@ -4055,6 +4055,13 @@ Room Swap put them, and fog of war. Its plan is the pack's own `PLAN.md`.
    included) and random item sets, and asks both the apworld and the Lua which locations are reachable. The other
    compares each custom rule, with every argument, one by one: a rule the logic doesn't use yet (`WayBack`) is still
    checked. Breaking a rule in the Lua fails them (four breaks tried, each caught).
+7. **The world map** (the user, 2026-10-03/04: "like on the map in game", then each area's rooms too): a World tab
+   with one pin per area where the game's pause map puts it, with the lines the game draws between areas, all
+   drawn by code from the numbers in `PauseMenu.cs` (`MEASURED.md`, the pause-menu map). The first try was turned
+   180°; the user's screenshot of the pause map gave the right way round. Each area with checks has its own tab, a pin
+   per room, for now in a grid; an area pin shows its rooms' checks through PopTracker's section `ref`. Each map's area
+   is the game's own (`MapControl.areaid`, from the mod's map dump), so a room can sit in an area its location names
+   don't say.
 
 **Status:** in progress (2026-10-03): built, the tests pass (this repo's, and the pack's: parity on 200 seeds,
 pack-checker strict). Seen in PopTracker 0.35.4 (2026-10-03): the pack loads, the colours with no items are the
