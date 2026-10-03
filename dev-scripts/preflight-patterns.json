@@ -9,6 +9,7 @@
     [".gitignore", "what git leaves out"],
     [".gitattributes", "line endings"],
     [".editorconfig", "code style"],
+    [".markdownlint.json", "the Markdown style editors check"],
     ["nuget.config", "the package feeds, and which packages each may serve"],
     ["global.json", "the .NET SDK every build uses"],
     ["Directory.Build.props", "keeps build files from outside the repo out of the build"],
