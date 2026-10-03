@@ -68,6 +68,7 @@ either one wrong).
 - [2026-10-03: map travel through a door, seen](#2026-10-03-map-travel-through-a-door-seen)
 - [2026-10-03: boss prizes on Normal, seeds only](#2026-10-03-boss-prizes-on-normal-seeds-only)
 - [2026-10-03: Universal Tracker with no yaml, and the seed's options in one dict](#2026-10-03-universal-tracker-with-no-yaml-and-the-seeds-options-in-one-dict)
+- [2026-10-03: the PopTracker pack started, every rule exported](#2026-10-03-the-poptracker-pack-started-every-rule-exported)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2550,3 +2551,31 @@ either one wrong).
   player guide as raw HTML.
 - **Not seen yet:** the mod reading `options` in game (moves, Jump, the Warp, the goal) and Universal Tracker itself
   (`TO-CHECK.md`, groups 4, 7 and 11). Not pushed: CI's new `tracker` job hasn't run.
+
+## 2026-10-03: the PopTracker pack started, every rule exported
+
+- **Asked (the user):** "we are done adding UT right?" Not quite: build steps 39-41 are built; its map tab waits for the
+  pack's map, and the mod's data storage keys (`UNIVERSAL-TRACKER-PLAN.md`, Step E) aren't built. Then: start the
+  PopTracker pack, its own repo, from its `PLAN.md`.
+- **Decided (the user):** the apworld comes from this checkout through your Archipelago checkout; MIT; the pack's steps
+  written here as build steps, lupa's reason included. On how to test the Lua, the user asked "what is the standard
+  for how archipelago does it?": none (its core runs no Lua; Rule Builder leaves the export to the world dev). Then
+  "how does the pokemon crystal archipelago poptracker do it?": PopTracker's `pack-checker-action` in CI, no Lua tests,
+  logic ported by hand. Chosen: pack-checker and lupa parity. Every licence read first, on the user's yes, rows
+  committed before reading on (crystal-ap-tracker, pack-checker and its action, lupa; PopTracker's schemas turned out
+  to be in its own repo). The user, twice: the preflight may widen whenever it stands between us and Archipelago's
+  standard way; ask, never code around it (now in CLAUDE.md).
+- **Found:** `WayBack` couldn't serialize, a plain `Rule` holding a rule because the preflight then allowed only `Has`,
+  `HasAllCounts` and `Rule`; the one workaround the docs record as forced by the gate. `OptionFilter` on `Boat` and
+  `WayBack` would need `options.py` split (it imports `data_tables`, which imports `logic/`, which imports
+  `custom_rules`); they stay custom rules that read an option, as Rule Builder's own `ComplicatedFilter` example does.
+  PopTracker has no checks-list widget, so the first map is a placeholder drawn by code.
+- **Built and checked:** build step 42. Here: `spot_rule`, `logic_entrances`, `WayBack` on `WrapperRule`, `True_`,
+  `JUMP` as an `OptionFilter` (the review's item 13); 681 tests, the fuzzer and Universal Tracker's pass 0 failures in
+  10000 each, a room with APQuest 0 in 1000. The pack: the export, the Lua, parity on 200 seeds (77000 comparisons),
+  pack-checker strict. Four rules broken in the Lua on purpose, each caught once the rule-by-rule test was added
+  (`WayBack` slipped through the seed test alone: no rule uses it yet).
+- **Mistakes caught:** a commit filtered its hook output, so a refused commit looked done; the hooks then asked for the
+  gate in a commit of its own and doc-coverage read the working tree's code map. The export first dropped Leif from
+  the tracked items, since story-party seeds also have a "Leif" event. Two edits were made by script, not Edit.
+- **Not seen yet:** the pack in PopTracker (v0.35.4 installed): the pins, logic colours, the item grid, auto-tracking.

@@ -4037,9 +4037,27 @@ Room Swap put them, and fog of war. Its plan is the pack's own `PLAN.md`.
 3. **Tests** (`test_rule_export.py`): every rule the logic writes, every spot's whole rule and every entrance's rule
    goes through `to_dict`, JSON and `from_dict` unchanged, and a one-way keeps its way back's child (this fails with
    `WayBack` as a plain `Rule`); `logic_entrances` is exactly the world's entrances.
-4. **The pack's repo:** started, with its plan, licence and working notes. The export is next.
+4. **The export** (the pack's `tools/export.py`): imports the apworld from your Archipelago checkout, never writing
+   into it, and writes every entrance, location and story event with its rule's `to_dict`, plus the tables the
+   custom rules read (`ABILITIES`, the boat's levels, the members, which option each category follows). It refuses
+   a rule the pack's Lua can't evaluate, or an option filter on an option slot_data doesn't carry. The data goes in as
+   a generated Lua table, since a pack's Lua can't read a JSON file of its own. Beside it: the items every rule can
+   need, one pin per room with a check (one section per check, named as the location), and a placeholder map and
+   icons drawn by code, a PNG written with the standard library (never AI art or game art; the look is the user's
+   pick later).
+5. **The Lua** (`scripts/logic.lua`): evaluates each rule dict, the custom rules as their `_instantiate` resolves
+   them and an option filter against slot_data's `options`, and sweeps regions as Archipelago does: through
+   entrances, collecting story events where reached, until nothing changes. A door's destination comes from
+   `door_targets`. The starting members count as held, since they're start inventory. `autotracking.lua` takes
+   slot_data on connect, then the items and checks as they arrive.
+6. **Its tests** (`tools/test.ps1`): the export, then the parity tests, then `pack-checker` in strict mode against
+   PopTracker's own schemas at a pinned commit. One parity test generates seeds with random options (every door mode
+   included) and random item sets, and asks both the apworld and the Lua which locations are reachable. The other
+   compares each custom rule, with every argument, one by one: a rule the logic doesn't use yet (`WayBack`) is still
+   checked. Breaking a rule in the Lua fails them (four breaks tried, each caught).
 
-**Status:** in progress (2026-10-03): this repo's half is built and the tests pass; the pack's export is next.
+**Status:** in progress (2026-10-03): built, the tests pass (this repo's, and the pack's: parity on 200 seeds,
+pack-checker strict); not yet seen in PopTracker.
 
 *Code: `rules.py` (`spot_rule`, `JUMP`), `regions.py` (`logic_entrances`, `MENU`), `custom_rules.py` (`WayBack`);
 tests `test_rule_export.py`;
