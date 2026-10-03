@@ -2493,6 +2493,8 @@ either one wrong).
 
 - **Seen (the user):** every map travel destination, tested one by one: "All map fast travel locations work properly
   now, no weird things happening anymore when we start from a entrance instead of random spawn next to crystals".
+  Through the pause menu's map, with the Yes / No box before each travel, so map travel since the hooks moved
+  (2026-09-29) is seen too; the Warp button since then is not.
 - **How it was found** (2026-10-02 entry): the swamp loop's respawn spot was read back to map travel's 2-argument
   `TransferMap`, whose guessed spot beside the save point became `lastpos` and `lastloadzone`. The user's rule, "any
   warp/map/teleport, always acts as if you are coming in from an entrance", made every travel arrive through a real

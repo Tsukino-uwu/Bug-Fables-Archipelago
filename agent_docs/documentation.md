@@ -1085,7 +1085,8 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
      (designed, not built) logs an error instead of landing beside a save point.
    - The dev console's `travel <area>` runs the same path to any area, visited or not, to check every spot.
    - The respawn-loop guard (step 40) catches any loop left.
-   - **Seen (the user, 2026-10-03):** every map travel destination, one by one: "All map fast travel locations work
+   - **Seen (the user, 2026-10-03):** every map travel destination, one by one, from the pause menu's map with its
+     Yes / No box: "All map fast travel locations work
      properly now", nothing odd since arriving through a door "instead of random spawn next to crystals".
    **Skip confirm: Off / Warp / Map / Both (2026-09-26; seen on screen the same day: on Map, map travel went at once and Warp still asked),** an add-on to *Travel*, so its
    row sits right below it (the two belong together, not split apart). Warp: picking the Warp button warps at
