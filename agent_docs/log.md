@@ -66,6 +66,7 @@ either one wrong).
 - [2026-10-02: other Bug Fables apworlds](#2026-10-02-other-bug-fables-apworlds)
 - [2026-10-02: the fog maze shuffled, travel through doors, respawn loops ended](#2026-10-02-the-fog-maze-shuffled-travel-through-doors-respawn-loops-ended)
 - [2026-10-03: map travel through a door, seen](#2026-10-03-map-travel-through-a-door-seen)
+- [2026-10-03: boss prizes on Normal, seeds only](#2026-10-03-boss-prizes-on-normal-seeds-only)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2502,3 +2503,16 @@ either one wrong).
 - **The user said:** only map travel is confirmed; entrances, one-way doors and the rest are checked later. Still open
   in `TO-CHECK.md`: the swamp's water jump, Warp to Start's door, the respawn-loop guard and normal falls, and every
   entrance randomizer check, the one-way doors among them.
+
+## 2026-10-03: boss prizes on Normal, seeds only
+
+- **Asked (the user):** "normal difficulty should also get the hard mode reward items from the npc, so they are free
+  to obtain and not in the caravan shop costing berries".
+- **Found:** the game's config read `RandomizerEnabled = false`, `NormalSaves = true`, `Difficulty = Normal`: the
+  caravan medal was on a normal save. `MedalAssist.PayPrizes` runs only with Archipelago enabled, as decided on
+  2026-09-27. In a seed it already pays a missed prize at Artis on every setting (build step 10), not yet seen in game.
+- **Decided (the user):** seeds only, no code change; the 2026-09-27 decision stands. `TO-CHECK.md` gained a later
+  boss's prize in a seed, and the first boss's entry now also checks the caravan and the log line.
+- **Read, not built:** were the payout ever widened, a payout made on the caravan's own map would leave its shelf
+  showing a medal now waiting at Artis (`CaravanMedalSet` picks it at map load); the game's own
+  `NPCControl.SetBadgeShop(true)` would refresh it.
