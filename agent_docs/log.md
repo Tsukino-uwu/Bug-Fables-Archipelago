@@ -2616,3 +2616,7 @@ either one wrong).
   Read first: `ApplySettings` sets every audio source's volume without checking each is alive, and the game's Unity
   (2018.4.12f1) has `Application.quitting`. Each unload step now runs through `Guarded`; `Application.quitting` sets
   `Plugin.Quitting`, and FrameRate then puts nothing back. Both builds pass; the next quit's log is the check.
+- **Line endings:** every commit printed "LF will be replaced by CRLF" for files in the working copy. The repository
+  holds LF throughout; Git for Windows' machine-wide `core.autocrlf=true` wanted CRLF in the working copy, while the
+  tools write LF (116 files LF, 78 CRLF). `.gitattributes` now says `* text=auto eol=lf` and `.editorconfig` says
+  `end_of_line = lf`; the working copy was re-checked out from the index, and the commit changed no file's content.
