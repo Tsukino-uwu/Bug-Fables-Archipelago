@@ -4057,7 +4057,9 @@ Room Swap put them, and fog of war. Its plan is the pack's own `PLAN.md`.
    checked. Breaking a rule in the Lua fails them (four breaks tried, each caught).
 
 **Status:** in progress (2026-10-03): built, the tests pass (this repo's, and the pack's: parity on 200 seeds,
-pack-checker strict); not yet seen in PopTracker.
+pack-checker strict). Seen in PopTracker 0.35.4 (2026-10-03): the pack loads, the colours with no items are the
+ones the Lua predicted, a room's popup lists its checks, and a clicked pin clears. Not yet seen: every item held,
+auto-tracking. The map, the icons and the pin names are placeholders; their look is the next part.
 
 *Code: `rules.py` (`spot_rule`, `JUMP`), `regions.py` (`logic_entrances`, `MENU`), `custom_rules.py` (`WayBack`);
 tests `test_rule_export.py`;
