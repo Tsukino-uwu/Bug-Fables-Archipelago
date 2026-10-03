@@ -55,7 +55,8 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 - **Releases and safety:** [17](#build-step-17-releases-the-three-downloads-and-how-theyre-built),
   [28](#build-step-28-the-preflight-nothing-unpublishable-in-the-repo-or-a-release).
 - **slot_data and trackers:** the seed's options in one `options` dict,
-  [39](#build-step-39-the-seeds-options-in-slot_data-one-options-dict-the-mod-reads); every key,
+  [39](#build-step-39-the-seeds-options-in-slot_data-one-options-dict-the-mod-reads); Universal Tracker,
+  [40](#build-step-40-universal-tracker-the-seed-rebuilt-from-slot_data-with-no-yaml); every key,
   [How it works 7](#7-slot_data-the-seeds-settings-and-this-worlds-keys).
 
 **How we built it**
@@ -99,6 +100,7 @@ The explainer follows Archipelago's own [network protocol doc](https://github.co
 37. [Build step 37: Points of No Return, the Warp counted as the way back](#build-step-37-points-of-no-return-the-warp-counted-as-the-way-back)
 38. [Build step 38: one-way doors in the entrance randomizer (the Forsaken Lands' fog maze)](#build-step-38-one-way-doors-in-the-entrance-randomizer-the-forsaken-lands-fog-maze)
 39. [Build step 39: the seed's options in slot_data, one `options` dict the mod reads](#build-step-39-the-seeds-options-in-slot_data-one-options-dict-the-mod-reads)
+40. [Build step 40: Universal Tracker, the seed rebuilt from slot_data with no yaml](#build-step-40-universal-tracker-the-seed-rebuilt-from-slot_data-with-no-yaml)
 
 **How it works**
 
@@ -3841,6 +3843,54 @@ and the goal sent).
 *Code: `slot_data.py` (`SLOT_OPTIONS`, `NOT_SENT`, `options_for_slot`), `rules.py` (`fall_back_from_filler_only`),
 `world.py` (`shops_fell_back`); in the mod `SeedData.cs`, `SlotData.cs` (`On`, `Number`), `ApConnection.cs`; tests
 `test_slot_data.py`, `test_shops.py`, `test_starting_checks.py`, `test/__init__.py` (`generate_like_main`).*
+
+## Build step 40: Universal Tracker, the seed rebuilt from slot_data with no yaml
+
+**Why:** Universal Tracker is the tracker Archipelago's player docs name beside PopTracker: it shows "what locations
+are currently in-logic or not, using the actual generation logic" (`worlds/generic/docs/other_en.md`, 0.6.7, the
+Universal Tracker section; review item 14). It regenerates the player's world inside itself and asks the world's own
+rules what the items received reach. Anything random that isn't a yaml option or an item must come
+back from slot_data, or it rolls its own: with the doors shuffled, its doors wouldn't be the seed's.
+
+**What it does** (its `docs/apworld-integration.md`, `re-gen-passthrough.md` and `TrackerCore.py`, branch `tracker`,
+read 2026-10-03; release v0.3.4, 2026-09-23, `minimum_ap_version` 0.6.2):
+
+- It reruns only `generate_early`, `create_regions`, `create_items`, `set_rules`, `connect_entrances` and
+  `generate_basic` (`TrackerCore.TMain`), never `pre_fill`, fill or `fill_slot_data`. After `set_rules` it applies
+  Archipelago's `exclusion_rules` with the slot's `exclude_locations`.
+- A world with `ut_can_gen_without_yaml = True` and a static `interpret_slot_data` that returns the slot_data needs no
+  yaml: Universal Tracker writes one with every option at its default and regenerates the world alone, with
+  `multiworld.re_gen_passthrough["Bug Fables"]` set to the slot_data (after JSON, as the server sent it) and
+  `generation_is_fake` set.
+- It drops precollected items that have an id: the server sends those as received items.
+
+**Decided (the user, 2026-10-01 and 2026-10-03):** full support, every feature its docs offer that applies; no yaml;
+every location in logic always shown, so no deferred entrances (every door connected from slot_data from the start).
+The map tab and the mod's data storage keys wait for the PopTracker pack's map.
+
+**How it was built:**
+
+1. **The door replay** (`entrances.py`), the doors rebuilt from `door_targets` alone, the table the mod rewrites doors
+   from, so the tracker follows exactly what the game does and slot_data carries nothing new:
+   - `pairings_from_targets` reads `door_targets` back into its pairings, `door_targets`' inverse: a two-way door
+     leads to the partner of the door it's rewritten like, a one-way takes the landing of the one-way it's rewritten
+     like, a door with no entry is as the game has it, a story copy is never read. It refuses a door the world doesn't
+     shuffle, two doors sent to one place, or a door rewritten like one of another kind.
+   - `replay` splits the doors as the shuffle does (`_split`, moved out of `shuffle` unchanged: the one-ways only for
+     Coupled and Decoupled) and connects each pairing as Archipelago's randomizer connects it (`_connect`, as Room
+     Swap and plando do). It refuses to leave a door unconnected, which Universal Tracker would list as unconnected
+     with everything behind it.
+   - Tests (`test_doors.py`): in every mode that shuffles, plando included, `door_targets` reads back into the seed's
+     pairings, and a world built up to `set_rules` and replayed has the seed's entrances exactly (name, region, where
+     it leads, randomization type). Any pairing reads back (200 random Decoupled, Coupled and Room Swap layouts);
+     no entries is the game's own doors; a malformed table is refused.
+   - `seed-snapshot.py` identical before and after: splitting draws nothing from the seed's random.
+
+**Status:** in progress (2026-10-03): the door replay built, the tests pass and seeds are unchanged; Universal
+Tracker's own hooks next.
+
+*Code: `entrances.py` (`_split`, `pairings_from_targets`, `replay`); tests `test_doors.py` (`DoorPairTests`,
+`TestDoorTargetsReadBack`).*
 
 # How it works
 

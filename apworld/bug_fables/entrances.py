@@ -1,12 +1,13 @@
 """The entrance randomizer on the region graph: Archipelago's own (entrance_rando.py) for Coupled and Decoupled, and
 the room swap, a mode Archipelago has none of, connecting the same split entrances by hand. Each pairing becomes a
 door_targets entry, the doors the mod rewrites. One-way doors (a fog maze's wrong turns, drops) are Archipelago's
-one-way entrances, paired only with one another; the room swap leaves them as they are.
+one-way entrances, paired only with one another; the room swap leaves them as they are. replay reads a seed's
+door_targets back into the same graph with no roll, for Universal Tracker.
 """
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from random import Random
 from typing import TYPE_CHECKING
 
@@ -110,23 +111,82 @@ def shuffle(world: BugFablesWorld) -> list[tuple[Door, Door]]:
                         "Randomizer on Coupled or Decoupled; they're ignored.", world.player, world.player_name)
     if mode == EntranceRandomizer.option_off:
         return []
-    names = {(end.map, end.door): door_name(end.map, end.door) for c in DOORS.connections for end in (c.a, c.b)}
-    for name in names.values():
-        entrance = world.get_entrance(name)
-        entrance.randomization_type = EntranceType.TWO_WAY
-        disconnect_entrance_for_randomization(entrance)
+    names = _split(world)
     if mode == EntranceRandomizer.option_room_swap:
         return _swap_rooms(world, names)
-    for w in ONE_WAYS:
-        entrance = world.get_entrance(door_name(w.map, w.door))
-        entrance.randomization_type = EntranceType.ONE_WAY
-        disconnect_entrance_for_randomization(entrance, one_way_target_name=one_way_landing(w))
     doors = {name: door for door, name in names.items()}
     doors |= {name: (w.map, w.door) for w in ONE_WAYS for name in (door_name(w.map, w.door), one_way_landing(w))}
     coupled = mode != EntranceRandomizer.option_decoupled
     planned = _plando(world, names, coupled)
     placed = randomize_entrances(world, coupled=coupled, target_group_lookup={0: [0]})
     return planned + [(doors[x], doors[y]) for x, y in placed.pairings]
+
+
+def _split(world: BugFablesWorld) -> dict[Door, str]:
+    """Splits the door entrances the mode shuffles, as Archipelago's randomizer needs them: every two-way door, and the
+    one-ways except with Room Swap, which leaves them as they are. Returns each two-way door's entrance name."""
+    names = {(end.map, end.door): door_name(end.map, end.door) for c in DOORS.connections for end in (c.a, c.b)}
+    for name in names.values():
+        entrance = world.get_entrance(name)
+        entrance.randomization_type = EntranceType.TWO_WAY
+        disconnect_entrance_for_randomization(entrance)
+    if world.options.entrance_randomizer != EntranceRandomizer.option_room_swap:
+        for w in ONE_WAYS:
+            entrance = world.get_entrance(door_name(w.map, w.door))
+            entrance.randomization_type = EntranceType.ONE_WAY
+            disconnect_entrance_for_randomization(entrance, one_way_target_name=one_way_landing(w))
+    return names
+
+
+def pairings_from_targets(targets: Sequence[Mapping[str, str]], connections: Sequence[DoorConnection],
+                          one_ways: Sequence[OneWayDoor] = ()) -> list[tuple[Door, Door]]:
+    """door_targets read back into the pairings it was written from: each door with the door it leads to, a one-way
+    with the one-way whose landing it takes. A door with no entry is as the game has it, and a one-way's story copies
+    are never read. one_ways: those the mode shuffles (none with Room Swap)."""
+    partner = _partners(connections)
+    one_way = {(w.map, w.door) for w in one_ways}
+    copies = {(w.map, copy) for w in ONE_WAYS for copy in w.copies}
+    like_of = {(t["map"], t["door"]): (t["like_map"], t["like_door"]) for t in targets}
+    unknown = set(like_of) - set(partner) - one_way - copies
+    if unknown:
+        raise ValueError(f"Bug Fables: door_targets names doors this world doesn't shuffle: {sorted(unknown)}")
+    pairings: list[tuple[Door, Door]] = []
+    taken: set[Door] = set()
+    for x in (*sorted(partner), *sorted(one_way)):
+        like = like_of.get(x, x)
+        if (x in one_way) != (like in one_way) or (like not in one_way and like not in partner):
+            raise ValueError(f"Bug Fables: door_targets sends {x} like {like}, a door of another kind")
+        y = like if x in one_way else partner[like]
+        if y in taken:
+            raise ValueError(f"Bug Fables: door_targets sends two doors to {y}")
+        taken.add(y)
+        pairings.append((x, y))
+    return pairings
+
+
+def replay(world: BugFablesWorld, targets: Sequence[Mapping[str, str]]) -> list[tuple[Door, Door]]:
+    """The seed's doors as its door_targets says, connected with no roll (Universal Tracker rebuilding a seed from its
+    slot_data): split as shuffle() splits them, each pairing connected as the randomizer connected it. Raises if a door
+    is left unconnected. Returns the pairings."""
+    mode = world.options.entrance_randomizer
+    if mode == EntranceRandomizer.option_off:
+        if targets:
+            raise ValueError("Bug Fables: door_targets rewrites doors, but the Entrance Randomizer is off")
+        return []
+    names = _split(world)
+    one_ways = ONE_WAYS if mode != EntranceRandomizer.option_room_swap else ()
+    pairings = pairings_from_targets(targets, DOORS.connections, one_ways)
+    landing = {(w.map, w.door): w for w in one_ways}
+    for x, y in pairings:
+        if x in landing:
+            _connect(world, door_name(*x), landing[y].to, one_way_landing(landing[y]))
+        else:
+            _connect(world, names[x], y[0], names[y])
+    left = [name for name in (*names.values(), *(door_name(*door) for door in landing))
+            if world.get_entrance(name).connected_region is None]
+    if left:
+        raise ValueError(f"Bug Fables: door_targets leaves doors unconnected: {left}")
+    return pairings
 
 
 def _plando(world: BugFablesWorld, names: dict[Door, str], coupled: bool) -> list[tuple[Door, Door]]:

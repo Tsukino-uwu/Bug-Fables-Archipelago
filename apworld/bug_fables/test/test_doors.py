@@ -4,11 +4,12 @@ from unittest import TestCase
 
 from BaseClasses import EntranceType
 
-from . import BugFablesTestBase
+from . import BugFablesTestBase, generate_like_main
 from ..data_tables import DOORS, MAPS, ONE_WAYS, door_name, one_way_landing
 from ..data_types import DoorConnection, DoorEnd
-from ..entrances import door_targets, room_pairs
+from ..entrances import _partners, door_targets, pairings_from_targets, replay, room_pairs
 from ..options import DoorPlando
+from ..world import BugFablesWorld
 
 Door = tuple[str, str]
 ONE_WAY_DOORS = {(w.map, w.door) for w in ONE_WAYS}
@@ -100,11 +101,33 @@ def _shape(connections, fixed, targets) -> Counter:
     return Counter((part_of[min(a)], doors[a], tuple(sorted(leads[a]))) for a in doors)
 
 
+def entrance_graph(world: BugFablesWorld) -> set[tuple[str, str, str | None, EntranceType]]:
+    """Every entrance: its name, where it is, where it leads, and how the randomizer treats it."""
+    return {(e.name, e.parent_region.name, e.connected_region.name if e.connected_region else None,
+             e.randomization_type) for e in world.multiworld.get_entrances(world.player)}
+
+
+BEFORE_DOORS = ("generate_early", "create_regions", "create_items", "set_rules")
+
+
 class DoorPairTests:
     """Every mode that shuffles: doors rewritten, only to the table's doors, the logic and the mod agreeing."""
 
     # How many spoiler lines the one-way doors add: one each, unless the mode leaves them as they are.
     one_way_lines = len(ONE_WAYS)
+    # The one-ways the mode shuffles.
+    shuffled_one_ways = ONE_WAYS
+
+    def test_door_targets_read_back_into_the_pairings(self) -> None:
+        # Universal Tracker rebuilds the doors from door_targets alone, the same table the mod rewrites doors from.
+        read = pairings_from_targets(self.world.door_targets, DOORS.connections, self.shuffled_one_ways)
+        self.assertEqual(set(read), set(self.world.door_pairings))
+        self.assertEqual(len(read), len(set(self.world.door_pairings)))
+
+    def test_replay_builds_the_same_doors(self) -> None:
+        rebuilt = generate_like_main(self.options, seed=7, steps=BEFORE_DOORS)
+        replay(rebuilt, self.world.door_targets)
+        self.assertEqual(entrance_graph(rebuilt), entrance_graph(self.world))
 
     def test_doors_are_shuffled(self) -> None:
         self.assertGreater(len(self.world.door_targets), len(DOORS.connections))
@@ -207,6 +230,7 @@ class TestDoorsDecoupled(OneWayTests, DoorPairTests, BugFablesTestBase):
 class TestDoorsRoomSwap(CoupledTests, BugFablesTestBase):
     options = {"entrance_randomizer": "room_swap"}
     one_way_lines = 0
+    shuffled_one_ways = ()
 
     def test_one_ways_stay_as_they_are(self) -> None:
         # Rooms move whole; a one-way still leads into the room it did, and only its story copies are rewritten.
@@ -267,6 +291,54 @@ class TestDoorPlandoDecoupled(OneWayTests, DoorPairTests, BugFablesTestBase):
 class TestDoorPlandoIgnoredWithRoomSwap(CoupledTests, BugFablesTestBase):
     options = {"entrance_randomizer": "room_swap", "plando_connections": PLANDO}
     one_way_lines = 0
+    shuffled_one_ways = ()
+
+
+class TestDoorTargetsReadBack(TestCase):
+    """pairings_from_targets undoes door_targets for any pairing a mode can make."""
+
+    def test_any_pairing_reads_back(self) -> None:
+        doors = sorted(_partners(DOORS.connections))
+        one_ways = sorted(ONE_WAY_DOORS)
+        for seed in range(200):
+            random = Random(seed)
+            with self.subTest(seed=seed):
+                # Decoupled: any door to any door, the one-ways among themselves.
+                ys, landings = doors[:], one_ways[:]
+                random.shuffle(ys)
+                random.shuffle(landings)
+                pairings = [*zip(doors, ys), *zip(one_ways, landings)]
+                targets = door_targets(pairings, DOORS.connections, ONE_WAYS)
+                self.assertEqual(set(pairings_from_targets(targets, DOORS.connections, ONE_WAYS)), set(pairings))
+                # Coupled: doors in pairs, each leading to the other.
+                matched = doors[:]
+                random.shuffle(matched)
+                pairs = _both_ways(list(zip(matched[::2], matched[1::2])))
+                pairings = [*pairs, *zip(one_ways, landings)]
+                targets = door_targets(pairings, DOORS.connections, ONE_WAYS)
+                self.assertEqual(set(pairings_from_targets(targets, DOORS.connections, ONE_WAYS)), set(pairings))
+                # Room Swap: whole areas trade places, the one-ways stay, their story copies still listed.
+                pairings = _both_ways(room_pairs(DOORS.connections, DOORS.fixed, random))
+                targets = door_targets(pairings, DOORS.connections, ONE_WAYS)
+                self.assertEqual(set(pairings_from_targets(targets, DOORS.connections)), set(pairings))
+
+    def test_no_targets_is_the_game_s_own_doors(self) -> None:
+        partner = _partners(DOORS.connections)
+        read = pairings_from_targets([], DOORS.connections, ONE_WAYS)
+        self.assertEqual(set(read), {(x, partner[x]) for x in partner} | {(w, w) for w in ONE_WAY_DOORS})
+
+    def test_a_malformed_table_is_refused(self) -> None:
+        door, other = sorted(_partners(DOORS.connections))[:2]
+        one_way = sorted(ONE_WAY_DOORS)[0]
+
+        def target(x: Door, like: Door) -> dict[str, str]:
+            return {"map": x[0], "door": x[1], "like_map": like[0], "like_door": like[1]}
+
+        for targets in ([target(("NoSuchMap", "door"), door)],  # a door the world doesn't have
+                        [target(door, other), target(other, other)],  # two doors to one place
+                        [target(door, one_way)]):  # a door like a one-way
+            with self.subTest(targets=targets), self.assertRaises(ValueError):
+                pairings_from_targets(targets, DOORS.connections, ONE_WAYS)
 
 
 class TestDoorPlandoNames(TestCase):
