@@ -57,8 +57,8 @@ review (2026-09-29); the files have moved since, the claims checked again 2026-0
 
 8. **The WebWorld** (`web_world.py`): option groups (`adding games.md:149-150`; the first, "Aesthetic Options", came
    with build step 33), presets (`:151-152`; CI's three option
-   sets are a start), option texts in reST with `rich_text_options_doc = True` (`world api.md:59-61`, `options api.md:96-98`;
-   the value lists at `options.py:87-90, 123-126, 156-161` need reformatting first), a bug report page
+   sets are a start), option texts in reST with `rich_text_options_doc = True` (`world api.md:59-61`, `options
+   api.md:96-98`; the value lists at `options.py:87-90, 123-126, 156-161` need reformatting first), a bug report page
    (`adding games.md:148`), and `game` set as APQuest does (`apquest/web_world.py:9-11`).
 9. **`topology_present = True`**: our exits are gated, and it puts the paths into the spoiler (`world api.md:487`,
    `AutoWorld.py:283-284`; ours is left False).
@@ -71,9 +71,10 @@ review (2026-09-29); the files have moved since, the claims checked again 2026-0
     Universal Tracker's docs write it, read by the mod; `world_version` and `add_locations` still to do.
 12. **`start_inventory_from_pool`** (a convention: 32 of the 81 game worlds at 0.6.7; `world api.md:627`).
 13. **The Rule Builder:** Jump's blanket rule as an `OptionFilter` (`rule builder.md:80, 92, 103-110`; ours an `if` in
-    `rules.py:35-42`; **done 2026-10-03**, build step 42: `rules.py`'s `JUMP`, on the user's yes to the preflight); `__str__` on our rules (three then, five since: `CanUse`, `Member`, `MoveItem`, `Boat`, `WayBack`), so they print their argument (`:501, 506`); `@override` on
-    `_instantiate` (`:206`); benchmark `CachedRuleBuilderWorld` and record the decision (`:177`; `apquest/rules.py`,
-    main only).
+    `rules.py:35-42`; **done 2026-10-03**, build step 42: `rules.py`'s `JUMP`, on the user's yes to the
+    preflight); `__str__` on our rules (three then, five since: `CanUse`, `Member`, `MoveItem`, `Boat`, `WayBack`), so
+    they print their argument (`:501, 506`); `@override` on `_instantiate` (`:206`); benchmark `CachedRuleBuilderWorld`
+    and record the decision (`:177`; `apquest/rules.py`, main only).
 14. **Trackers:** Universal Tracker support (`interpret_slot_data`) and a PopTracker pack (`other_en.md:31-37`).
     Read 2026-10-01 (licences in `licensing.md`): Universal Tracker runs the apworld's own rules ("using the actual
     generation logic", `other_en.md:37`); anything random not from the yaml or items comes back from slot_data
@@ -102,10 +103,10 @@ review (2026-09-29); the files have moved since, the claims checked again 2026-0
 15. **slot_data: only what's necessary.** *Recommended:* "to not waste resources, it should be limited to data that
     is absolutely necessary"; for locations "it is preferable to use LocationScouts"; "the most common usage of slot
     data is sending option results" (`world api.md:878-887`). Ours sends seven entity tables (nine since build step
-    36), `ability_items` and `item_kinds` (and since build step 36 `submarine_item`), the same in every seed (`slot_data.py:59-65, 78, 80`), and every location's detection data
-    (`:41-57`), all fixed per location id. Measured (2026-09-29, doors shuffled): 65 KB, 56 KB of it the seed's own
-    door shuffle, 3.3 KB the same-in-every-seed tables. **Decided (the user, 2026-09-29): follow it, and fix what
-    it risks properly:**
+    36), `ability_items` and `item_kinds` (and since build step 36 `submarine_item`), the same in every seed
+    (`slot_data.py:59-65, 78, 80`), and every location's detection data (`:41-57`), all fixed per location id. Measured
+    (2026-09-29, doors shuffled): 65 KB, 56 KB of it the seed's own door shuffle, 3.3 KB the same-in-every-seed
+    tables. **Decided (the user, 2026-09-29): follow it, and fix what it risks properly:**
     - slot_data keeps the world version, the option results (`options.as_dict`, item 11) and the seed's own rolls
       (doors, enemies, the start, a random starting member);
     - the fixed tables (each location's detection, the entity lists, item kinds) are built into the mod from the
@@ -168,8 +169,8 @@ review (2026-09-29); the files have moved since, the claims checked again 2026-0
 23. **Archipelago's entrance randomizer** in place of `doors.py`: **done 2026-09-30** (build step 12), ahead of the room
     mapping, on one region per map. Each door named where it is (`entrance randomization.md:232-236`), split with
     `disconnect_entrance_for_randomization` (`:228-230`), placed by `randomize_entrances` in `connect_entrances`
-    (`:373-379`), `pairings` turned into `door_targets` (`:381-384`), the pairs in the spoiler's Entrances section. Still
-    to do: one-way doors kept as doors, not map links, so they can be one-way entrances (`:238-242`; today the 17
+    (`:373-379`), `pairings` turned into `door_targets` (`:381-384`), the pairs in the spoiler's Entrances section.
+    Still to do: one-way doors kept as doors, not map links, so they can be one-way entrances (`:238-242`; today the 17
     one-way fixed doors are plain entrances, never shuffled), and Menu joined to the random start's region. Connection
     plando (`plando_en.md:283-318`, `Options.PlandoConnections`): optional in the guide ("Support for connection plando
     may vary"), built all the same (2026-09-30, the user: every optional feature, plando included; build step 32).
@@ -180,11 +181,11 @@ After the slot_data decision, each kept item was checked again for a way Archipe
 
 24. **The enemy shuffle stays in `generate_early`** (reversed 2026-09-30). `generate_basic` is "Useful for randomizing
     things that don't affect logic … i.e. … randomizing enemies" (`AutoWorld.py:408-413`), and ours runs in
-    `generate_early` (`world.py:61-63`). The first reading was that map fights can always be fled, so the shuffle doesn't
-    affect the logic. **The user, 2026-09-30:** it is logic. Bosses and other fights that can't be fled limit what may be
-    placed there to enemies the party can beat (build step 14's party rule). *Shuffle Bestiary* checks (Next 44) would
-    follow `enemy_swaps`. So the shuffle must be decided before the rules. What doesn't touch the logic, *Music
-    Shuffle*, goes in `generate_basic` (build step 33).
+    `generate_early` (`world.py:61-63`). The first reading was that map fights can always be fled, so the shuffle
+    doesn't affect the logic. **The user, 2026-09-30:** it is logic. Bosses and other fights that can't be fled limit
+    what may be placed there to enemies the party can beat (build step 14's party rule). *Shuffle Bestiary* checks
+    (Next 44) would follow `enemy_swaps`. So the shuffle must be decided before the rules. What doesn't touch the
+    logic, *Music Shuffle*, goes in `generate_basic` (build step 33).
 25. **Receiving items through the library's queue** (to check first): MultiClient.Net documents `ItemReceived` and
     `DequeueItem` (`docfx/helpers/helpers.md:55-68`); the mod polls `AllItemsReceived` against the count in the save
     (`ItemReceiver.cs:81-123`), and the library's queue is never read. The queue restarts each session, so it has to
@@ -192,11 +193,11 @@ After the slot_data decision, each kept item was checked again for a way Archipe
 26. **DeathLink: Archipelago's yaml option too.** Decided (the user, 2026-09-29): both. Archipelago's `DeathLink`
     option (`DeathLinkMixin`, `Options.py:1495-1498, 1726-1728`) sets it for the seed and turns the panel switch on or
     off at login; the panel switch stays, to change it mid-seed.
-27. **The library's cache bug, reported upstream** (checked in its source, 6.7.1 and `main`): `GetFileSystemSafeFileName`
-    returns its input unchanged, and the read uses the checksum uncleaned. No issue or pull request mentions it (six
-    searches, 2026-09-29), and the file hasn't changed since 2024-05-27; PR #124 touches the same file but not this.
-    Decided (the user, 2026-09-29): if reported, a text-only issue the user posts; never code from us. Our patch stays
-    until a fixed release. **Reported:** the user posted it as
+27. **The library's cache bug, reported upstream** (checked in its source, 6.7.1
+    and `main`): `GetFileSystemSafeFileName` returns its input unchanged, and the read uses the checksum uncleaned. No
+    issue or pull request mentions it (six searches, 2026-09-29), and the file hasn't changed since 2024-05-27; PR #124
+    touches the same file but not this. Decided (the user, 2026-09-29): if reported, a text-only issue the user posts;
+    never code from us. Our patch stays until a fixed release. **Reported:** the user posted it as
     [#143](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Net/issues/143) (2026-09-29).
 28. **One of our workarounds has a fix waiting upstream** (checked in each pull request's diff, 2026-09-29): #141,
     opened by someone else, turns on websocket-sharp's compression in the websocket-sharp helper and the DLL our net40
@@ -206,9 +207,9 @@ After the slot_data decision, each kept item was checked again for a way Archipe
 
 ## Kept, because Archipelago has nothing for it
 
-Closing a dead socket ourselves (the library's `Disconnect` closes only a live one; #142 doesn't cover net40, item 28); the offline
-record of checks sent; reconnecting with a backoff; the compression switch (the net40 library never turns it on;
-until #141, item 28); the received count in the save (the library's index resets each session; its queue, item 25);
+Closing a dead socket ourselves (the library's `Disconnect` closes only a live one; #142 doesn't cover net40, item 28);
+the offline record of checks sent; reconnecting with a backoff; the compression switch (the net40 library never turns it
+on; until #141, item 28); the received count in the save (the library's index resets each session; its queue, item 25);
 the Harmony fix for the library's cache file names (until a fixed release, item 27); the enemy shuffle itself (its
 step, item 24); the pool's make-room step; the DeathLink panel switch, next to Archipelago's yaml option (item 26);
 our slot_data reader (it tolerates missing keys).

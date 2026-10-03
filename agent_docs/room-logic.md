@@ -2,8 +2,8 @@
 
 **Every plan for how the logic is written, checked and tested, room by room, lives here and only here** (gathered
 2026-09-30, the user: "to have it all in 1 place"). `apimplementation.md` keeps the history of each decision (build
-steps 8, 12, 15, 24, 36 and 37 point here), and `MEASURED.md` keeps the game facts (listed at the end); neither holds a plan
-of its own. Written with the user, 2026-09-27, and grown since.
+steps 8, 12, 15, 24, 36 and 37 point here), and `MEASURED.md` keeps the game facts (listed at the end); neither holds a
+plan of its own. Written with the user, 2026-09-27, and grown since.
 
 The logic is what Archipelago uses to prove a seed can be finished, and some options lean on it hard: **one party
 member** (random party), **a random start** (any actual room in the game), **the entrance randomizer** (any door may
@@ -76,13 +76,14 @@ rules work in Archipelago: `apimplementation.md`, How it works §11.
 - **Each edge between areas is one-directional**, with its own requirement. A two-way path is two edges. A path with
   no edge back is a one-way, and it counts in the logic only together with what it takes to get back (rule 4). It's
   written `one_way(rule, way_back)` (`custom_rules.py`), never with the two joined by hand, so Points of No Return can
-  drop the way back; a one-way transfer carries it as its `way_back`. Where the Warp can't be used (question 20, C9), the
-  way back is part of the plain rule instead, and stays with the option on.
+  drop the way back; a one-way transfer carries it as its `way_back`. Where the Warp can't be used (question 20, C9),
+  the way back is part of the plain rule instead, and stays with the option on.
 - **A need names what the game checks:** an ability (the game's names, `abilities.py`, written `CanUse(...)`: the
   ability names its member), a member for a fight (`Member(...)`, question 8), a basic move's item alone only as the
   blanket rule for ground not yet measured (`MoveItem(...)`, in `ALL_ATTACKS`), a key
-  item, a story event (`Has(...)`; the boat's two levels `Boat(1)` and `Boat(2)`). Never what an item opens (rule 1). "Only before flag Y" is a *not*, which a rule
-  can never say (rule 3): see [Chains](#chains-what-other-rooms-do-to-this-one), question C5.
+  item, a story event (`Has(...)`; the boat's two levels `Boat(1)` and `Boat(2)`). Never what an item opens (rule 1).
+  "Only before flag Y" is a *not*, which a rule can never say (rule 3): see
+  [Chains](#chains-what-other-rooms-do-to-this-one), question C5.
 - **Several ways, each written:** two ways into an area are two edges into it; two ways to one spot inside an area are
   an `|` in the spot's rule (rule 3).
 - **Where it stands today** (2026-09-30): each map is one region with its doors as entrances (build step 12), and what
@@ -113,7 +114,8 @@ one-way (the user, 2026-09-30: "check the spawn location … not just all the en
   Game Over and room transfers": "No map has a spawn spot of its own").
 - **A save point's spot** (Starting Location's *Save Points* value, designed, build step 15).
 - **The random start:** a door's arrival or a transfer's spot in any actual room (the user, 2026-09-30: both kinds, "i
-  want random spawn to actually be random not just 'semi random'"). As built today it isn't yet a door's arrival (build step 15).
+  want random spawn to actually be random not just 'semi random'"). As built today it isn't yet a door's arrival (build
+  step 15).
 - **Where Warp to Start lands:** the start's own spot.
 - **Where a fall or a hazard puts you back** (`lastpos`), **and where a loaded save puts you:** never a way through or
   out (question 17).
@@ -235,9 +237,10 @@ dialogue lines, doors, map auto-start scenes, code), per room. Today `gate-table
    needs Vi, a burrowed one Leif, one that can be flipped over Kabbu, expected even where the others could win without
    him (the user, 2026-09-27; the five are in `MEASURED.md`, "Who can hit what").
 9. Does a scene move you? A cutscene can put the party somewhere else in the same map or on another map (the
-   trapdoor: the door room to the fall room): from which area, to which, once or every time, on what flag. It's an edge like any other, often a one-way.
+   trapdoor: the door room to the fall room): from which area, to which, once or every time, on what flag. It's an edge
+   like any other, often a one-way.
 10. Does anything change once and stay changed (a switch that stays down, a bridge lowered, a rock broken)? That's an
-   event in the logic, reachable from wherever it can be triggered, and it may open a way in both directions.
+    event in the logic, reachable from wherever it can be triggered, and it may open a way in both directions.
 
 **Each location**
 
@@ -245,20 +248,20 @@ dialogue lines, doors, map auto-start scenes, code), per room. Today `gate-table
 12. Can you get back from it and leave the map with what reaching it took? If not, the way back is an edge too.
 13. Does it need something only when you arrive from a particular entrance?
 14. Is it there only in some story states (an NPC present from a flag, a pickup that respawns)? See
-   [Chains](#chains-what-other-rooms-do-to-this-one).
+    [Chains](#chains-what-other-rooms-do-to-this-one).
 
 **The whole room**
 
 15. Every place the party can appear in it: see [Where the party can appear](#where-the-party-can-appear).
 16. With one member only: which of the above does each member manage alone? A scene that needs a member who isn't
-   there waits: held in the game, and a rule in the logic for any check it gives (build step 13).
+    there waits: held in the game, and a rule in the logic for any check it gives (build step 13).
 17. Does falling (a pit, water) put you back somewhere? A respawn never counts as a way through or out.
 18. The Warp is on in every randomized mode: the player's way out of a dead end, never the logic's (rule 9).
 19. Every door here the door table couldn't pair, and every one on `MEASURED.md`'s "To check in play" list: which way
-   can it be crossed?
+    can it be crossed?
 20. Wherever a one-way leaves you, can the pause menu open, so the Warp works? It's hidden in battle and refused while a
-   scene or dialogue runs. Where it can't be used (a scene that can't be paused), the way back is part of the one-way's
-   plain rule, never `WayBack`, so Points of No Return can't count on the Warp there.
+    scene or dialogue runs. Where it can't be used (a scene that can't be paused), the way back is part of the one-way's
+    plain rule, never `WayBack`, so Points of No Return can't count on the Warp there.
 
 ## How a room gets mapped
 
@@ -300,8 +303,8 @@ dialogue lines, doors, map auto-start scenes, code), per room. Today `gate-table
      game, an *early key* that it's stricter; it matters most for the experimental options.
 
 **The safeguards already in place:** the tests generate seeds across option sets and check they're beatable;
-`TestClassifications` fails unless exactly the items rules use are marked progression; one location per ability; the entrance
-randomizer and a random start stay labelled experimental until their room-level logic is done and tested.
+`TestClassifications` fails unless exactly the items rules use are marked progression; one location per ability; the
+entrance randomizer and a random start stay labelled experimental until their room-level logic is done and tested.
 
 ## Not in the logic, on purpose
 
@@ -316,5 +319,5 @@ randomizer and a random start stay labelled experimental until their room-level 
 In `MEASURED.md`, by section: "The door graph" and "Doors paired with their way back" (every door and its arrival);
 "Transfers that aren't doors"; "Chapters" (Leif's chain, what each ability opens, a blocked walk-in, the flag-gated
 doors); "The quest board" (every board quest, its accept flag and unlock); "Battles, for enemy shuffle" (who can hit
-what); "Frame rate" (walking up versus jumping); "Save crystals, saving, Game Over and room transfers" (where a fall or a
-save puts you); "The submarine".
+what); "Frame rate" (walking up versus jumping); "Save crystals, saving, Game Over and room transfers" (where a fall or
+a save puts you); "The submarine".

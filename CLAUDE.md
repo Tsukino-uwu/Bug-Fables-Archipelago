@@ -29,9 +29,9 @@ rule, remove one in the same edit. The rule lives here and its reasoning in `age
   step:** the user can merge it later, while an unwanted merge goes unnoticed. Say so in the commit message. The
   pre-commit `doc-coverage.py` refuses an option, setting, `slot_data` key or source file the docs don't name.
 - **The root `README.md` never goes stale either.** Its "Status" line and its intro (how it works) must agree with the
-  steps' Status lines and with the code. A commit that changes either one updates the README in the
-  same commit. Check all three against each other when a session starts, and fact-check the README against
-  the code, never against an older doc. It stays minimal, links only (like MeshGhost's); player docs live in `apworld/bug_fables/docs/`, same rule.
+  steps' Status lines and with the code. A commit that changes either one updates the README in the same commit. Check
+  all three against each other when a session starts, and fact-check the README against the code, never against an older
+  doc. It stays minimal, links only (like MeshGhost's); player docs live in `apworld/bug_fables/docs/`, same rule.
 - **Items are remote only.** A pickup grants nothing locally; it sends its check. Every item, the player's
   own included, arrives from the server. No local-items mode (decided 2026-09-24). One named exception: a
   respawning pickup whose check is done is the game's own again (`apimplementation.md`, build step 10).
@@ -52,14 +52,14 @@ rule, remove one in the same edit. The rule lives here and its reasoning in `age
 - **Every seed can be completed from wherever it starts** (the user, 2026-09-24). Whatever an area or goal
   needs (key items, party members, abilities) is a rule in the logic, never something the mod hands out to
   patch a gap. That holds for a random start too, and the world is always open.
-- **A generated seed is NEVER impossible** (the user, 2026-09-24): every item is reachable in logic, and the
-  game never makes it harder than the logic. Two halves. **(1) The logic tells the truth:** Archipelago proves
-  a seed only by the logic, so every gate the game has (a story flag, an ability check) goes into the
-  apworld; the logic may be more cautious than the game, never less. **(2) The mod never departs from what
-  the generator knew:** anything it changes comes from `slot_data` or from tables built from the same apworld
-  (checked by world version on connect), decided at design time, never at runtime. **Named allowances (the user, 2026-09-25/26):** an unchecked
-  "Placeholder" location holds filler only; the entrance randomizer and a random start are options labelled
-  experimental until the room-by-room logic is done (`apimplementation.md`, build steps 12 and 15).
+- **A generated seed is NEVER impossible** (the user, 2026-09-24): every item is reachable in logic, and the game never
+  makes it harder than the logic. Two halves. **(1) The logic tells the truth:** Archipelago proves a seed only by the
+  logic, so every gate the game has (a story flag, an ability check) goes into the apworld; the logic may be more
+  cautious than the game, never less. **(2) The mod never departs from what the generator knew:** anything it changes
+  comes from `slot_data` or from tables built from the same apworld (checked by world version on connect), decided at
+  design time, never at runtime. **Named allowances (the user, 2026-09-25/26):** an unchecked "Placeholder" location
+  holds filler only; the entrance randomizer and a random start are options labelled experimental until the room-by-room
+  logic is done (`apimplementation.md`, build steps 12 and 15).
 
 ## Who verifies what
 
@@ -115,7 +115,7 @@ rule, remove one in the same edit. The rule lives here and its reasoning in `age
   combination you haven't tested. Each attempt costs the user a game launch.
 - **Test instructions use up/down/left/right**, never compass points.
 - **Agent memory is for the user, not the project:** decisions, measurements and status go in `agent_docs/` or the code.
-- **Before a session ends, add a dated entry to `agent_docs/log.md`:** what was tried, what happened, what the user said.
+- **Before a session ends, add a dated `agent_docs/log.md` entry:** what was tried, what happened, what the user said.
 
 ## Method
 
@@ -146,5 +146,5 @@ rule, remove one in the same edit. The rule lives here and its reasoning in `age
 
 - **Archipelago's docs, before any Archipelago work** (the rule above): `adding games.md` (the hard requirements),
   `world api.md`, `rule builder.md`, `entrance randomization.md`, `tests.md`, `style.md` and `apworld specification.md`
-  (package with the "Build APWorlds" component, no hand-written `version`); `worlds/apquest` is the structural reference.
+  (package with the "Build APWorlds" component, no handwritten `version`); `worlds/apquest` is the structural reference.
 - **`agent_docs/references.md`** before borrowing from another randomizer. **Never look at another Bug Fables one.**

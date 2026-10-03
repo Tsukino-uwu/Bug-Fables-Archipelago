@@ -8,49 +8,67 @@ read, a log or a probe.
 ## Contents
 
 - [The build](#the-build-2026-09-24-read-from-a-steam-install-game-not-run)
-- [How the game grants items](#how-the-game-grants-items-2026-09-24-read-from-assembly-csharpdll-decompiled-with-ilspycmd-1011)
+- [How the game grants
+  items](#how-the-game-grants-items-2026-09-24-read-from-assembly-csharpdll-decompiled-with-ilspycmd-1011)
 - [Observed in the running game](#observed-in-the-running-game-2026-09-24-grantprobe-a-new-game-played-through)
 - [Save files](#save-files-2026-09-24-decompiled-inputiomanagerinputiocs)
 - [Free save slots for the mod](#free-save-slots-for-the-mod-2026-09-24)
 - [The main menu](#the-main-menu-2026-09-24-decompiled-startmenucs)
 - [The quest board](#the-quest-board-2026-09-24)
 - [Input](#input-2026-09-24)
-- [Key-item grant sources, raw — SPOILERS for the whole game](#key-item-grant-sources-raw-2026-09-24--spoilers-for-the-whole-game)
+- [Key-item grant sources, raw — SPOILERS for the whole
+  game](#key-item-grant-sources-raw-2026-09-24--spoilers-for-the-whole-game)
 - [World pickups and their gates](#world-pickups-and-their-gates-2026-09-24-entitydump)
 - [Hard Mode boss prize medals](#hard-mode-boss-prize-medals-2026-09-24-code-read-the-missed-prize-path-seen-in-play)
 - [Chapters — SPOILERS: map names](#chapters-2026-09-24-code-read-and-entitydump--spoilers-map-names)
-- [What starts the gate events — SPOILERS](#what-starts-the-gate-events-2026-09-24-entitydump-scriptdump-with-event-lines-mapdump--spoilers)
+- [What starts the gate events —
+  SPOILERS](#what-starts-the-gate-events-2026-09-24-entitydump-scriptdump-with-event-lines-mapdump--spoilers)
 - [Lore Books at the library](#lore-books-at-the-library-2026-09-24-seen-in-a-play-through)
 - [All crystal berries](#all-crystal-berries-2026-09-24-entity-dump-and-scriptdump-matched-to-the-bug-fables-wiki)
 - [Respawning pickups, seen in play](#respawning-pickups-seen-in-play-2026-09-24-with-the-dev-log)
 - [The door graph](#the-door-graph-2026-09-25-dev-scriptsdoor-graphpy-on-the-entitydump)
-- [Doors paired with their way back](#doors-paired-with-their-way-back-2026-09-25-a-new-entitydump-with-positions-door-graphpy)
-- [The Forsaken Lands' fog maze, and the other one-way doors](#the-forsaken-lands-fog-maze-and-the-other-one-way-doors-2026-10-02-entitydump-and-code-read)
-- [Transfers that aren't doors](#transfers-that-arent-doors-2026-09-25-scriptdumps-transfer-column-dev-scriptsevent-transferspy)
-- [What the Explorer Permit opens](#what-the-explorer-permit-opens-2026-09-24-code-read-and-scriptdump-the-wiki-lists-four-uses)
-- [All medals by source](#all-medals-by-source-2026-09-24-entity-dump-scriptdump-code-read-matched-to-the-bug-fables-wiki)
+- [Doors paired with their way
+  back](#doors-paired-with-their-way-back-2026-09-25-a-new-entitydump-with-positions-door-graphpy)
+- [The Forsaken Lands' fog maze, and the other one-way
+  doors](#the-forsaken-lands-fog-maze-and-the-other-one-way-doors-2026-10-02-entitydump-and-code-read)
+- [Transfers that aren't
+  doors](#transfers-that-arent-doors-2026-09-25-scriptdumps-transfer-column-dev-scriptsevent-transferspy)
+- [What the Explorer Permit
+  opens](#what-the-explorer-permit-opens-2026-09-24-code-read-and-scriptdump-the-wiki-lists-four-uses)
+- [All medals by
+  source](#all-medals-by-source-2026-09-24-entity-dump-scriptdump-code-read-matched-to-the-bug-fables-wiki)
 - [We Owe Ya!'s helpers](#we-owe-yas-helpers-2026-09-27-code-read-a-testers-report)
-- [What the mod's code relies on](#what-the-mods-code-relies-on-code-read-2026-09-24-and-2026-09-25-moved-here-from-code-comments-2026-09-25)
-- [Battles, for enemy shuffle — SPOILERS: boss ids](#battles-for-enemy-shuffle-2026-09-26-code-read-a-swapped-fight-seen-in-play--spoilers-boss-ids)
+- [What the mod's code relies
+  on](#what-the-mods-code-relies-on-code-read-2026-09-24-and-2026-09-25-moved-here-from-code-comments-2026-09-25)
+- [Battles, for enemy shuffle — SPOILERS: boss
+  ids](#battles-for-enemy-shuffle-2026-09-26-code-read-a-swapped-fight-seen-in-play--spoilers-boss-ids)
 - [How the game draws a frame](#how-the-game-draws-a-frame-2026-09-28-measured-in-the-running-game-and-code-read)
-- [The round pause-menu icons' colours](#the-round-pause-menu-icons-colours-2026-09-26-sampled-from-the-spritedump-sheet)
-- [Visited areas and the pause-menu map](#visited-areas-and-the-pause-menu-map-2026-09-26-code-read-and-the-mods-diagnostic)
+- [The round pause-menu icons'
+  colours](#the-round-pause-menu-icons-colours-2026-09-26-sampled-from-the-spritedump-sheet)
+- [Visited areas and the pause-menu
+  map](#visited-areas-and-the-pause-menu-map-2026-09-26-code-read-and-the-mods-diagnostic)
 - [Fades, and a light's glow colour](#fades-and-a-lights-glow-colour-2026-09-26-code-read-both-seen-in-the-log)
 - [Enemy-only walls](#enemy-only-walls-2026-09-26-code-read-and-the-consoles-solids-the-symptom-seen-in-play)
 - [EXP and berries picked up](#exp-and-berries-picked-up-2026-09-26-code-read)
 - [The text letter pool](#the-text-letter-pool-2026-09-26-code-read-the-symptom-seen-in-play)
 - [The item table's fields](#the-item-tables-fields-2026-09-26-code-read)
 - [Frame rate](#frame-rate-2026-09-27-code-read-the-consoles-display-on-the-test-machine)
-- [Save crystals, saving, Game Over and room transfers](#save-crystals-saving-game-over-and-room-transfers-2026-09-28-code-read-the-crystals-range-seen-2026-09-29)
-- [Upper Snakemouth's boss: Leif out until its beam](#upper-snakemouths-boss-leif-out-until-its-beam-2026-09-28-code-read-seen-in-play)
-- [A dimmer fade-out never finishes early](#a-dimmer-fade-out-never-finishes-early-2026-09-28-code-read-the-delay-seen-in-play)
-- [Text commands inside a substituted string, and the save's separators](#text-commands-inside-a-substituted-string-and-the-saves-separators-2026-09-29-code-read-not-seen-in-game)
+- [Save crystals, saving, Game Over and room
+  transfers](#save-crystals-saving-game-over-and-room-transfers-2026-09-28-code-read-the-crystals-range-seen-2026-09-29)
+- [Upper Snakemouth's boss: Leif out until its
+  beam](#upper-snakemouths-boss-leif-out-until-its-beam-2026-09-28-code-read-seen-in-play)
+- [A dimmer fade-out never finishes
+  early](#a-dimmer-fade-out-never-finishes-early-2026-09-28-code-read-the-delay-seen-in-play)
+- [Text commands inside a substituted string, and the save's
+  separators](#text-commands-inside-a-substituted-string-and-the-saves-separators-2026-09-29-code-read-not-seen-in-game)
 - [Music and jingles](#music-and-jingles-2026-09-30-code-read-nothing-seen-in-game)
 - [An item entity's item](#an-item-entitys-item-2026-09-30-code-read-nothing-seen-in-game)
-- [Fixed numbers in the enemies' scripts](#fixed-numbers-in-the-enemies-scripts-2026-09-30-code-read-nothing-seen-in-game)
+- [Fixed numbers in the enemies'
+  scripts](#fixed-numbers-in-the-enemies-scripts-2026-09-30-code-read-nothing-seen-in-game)
 - [The submarine](#the-submarine-2026-09-30-code-read-the-dumps-and-the-games-text-nothing-seen-in-game)
 - [Spy Specs](#spy-specs-2026-09-30-code-read-nothing-seen-in-game)
-- [The Settings list's arrows](#the-settings-lists-arrows-2026-09-30-code-read-the-games-screen-in-the-users-screenshots)
+- [The Settings list's
+  arrows](#the-settings-lists-arrows-2026-09-30-code-read-the-games-screen-in-the-users-screenshots)
 - [Still to measure](#still-to-measure)
 
 ## The build (2026-09-24, read from a Steam install, game not run)
@@ -83,9 +101,9 @@ Read from code only; nothing observed running yet.
 - **The inventory is `MainManager.instance.items`, a `List<int>[]` of length 3** (`MainManager.cs:2217`,
   allocated at `:3426`). Grants add to `items[0]` (ordinary items) and `items[1]` (key items).
   `items[2]` is storage (see "Observed in the running game").
-- **Items and key items share one id space: the `MainManager.Items` enum, `None` = -1 then 0 to 186** (`MainManager.cs:1002`).
-  An item is a key item because it was added to `items[1]`, not because of its id. Examples of names:
-  `ExplorerPermit` 27, `FlowerKey` 54, `DesertKey` 92, `YinKey` 105, `YangKey` 106, `SandCastleBossKey` 115
+- **Items and key items share one id space: the `MainManager.Items` enum, `None` = -1 then 0 to 186**
+  (`MainManager.cs:1002`). An item is a key item because it was added to `items[1]`, not because of its id. Examples of
+  names: `ExplorerPermit` 27, `FlowerKey` 54, `DesertKey` 92, `YinKey` 105, `YangKey` 106, `SandCastleBossKey` 115
   (the enum starts at `None = -1`, so `CrunchyLeaf` is 0; a first reading listed these one too high,
   and the probe's live cast, 27 = ExplorerPermit, caught it on 2026-09-24).
   The full key-item list is not yet measured.
@@ -98,9 +116,9 @@ Read from code only; nothing observed running yet.
     2026-09-24:** the third number is `redirect`, the dialogue line to continue with afterwards
     (`GetDialogueText(redirect)`), and the optional fourth is the entity the item sprite rises over. Earlier
     entries read the third number as an entity, which was wrong. With `flags[681]` set, every medal but #11
-    becomes `GetRandomMedal()`. The item name goes to `flagstring[0]` for the "You got" box (`menutext[106]`). The type is -1 money, 0 item, 1 key item,
-    2 medal (`badges`), or 3 crystal berry (`crystalbflags`). Adds with `items[type].Add(id)` when the type
-    is below 2.
+    becomes `GetRandomMedal()`. The item name goes to `flagstring[0]` for the "You got" box (`menutext[106]`). The type
+    is -1 money, 0 item, 1 key item, 2 medal (`badges`), or 3 crystal berry (`crystalbflags`). Adds
+    with `items[type].Add(id)` when the type is below 2.
   - **`Additemtoss`** (`:12517`): world pickups. `NPCControl.CheckItem` (`NPCControl.cs:5588`) builds
     `|additemtoss,<entity.animid>,var,0|` with the id in `flagvar[0]`. `animid` is the same type code (0 item,
     1 key item, 2 medal, 3 crystal berry).
@@ -122,9 +140,10 @@ Read from code only; nothing observed running yet.
   - medal: `badges.Add({id, -2})`, which is the game's `AddBadge` (`:16974`); the mod calls `AddBadge`.
   - crystal berry: `flagvar[14]++` (the shop currency) **and** `crystalbflags[n] = true`. The mod does only the
     first. `crystalbflags[n]` marks berry location n as found (the pickup's presence, `NPCControl.cs:940`, `:1378`;
-    a beetle grass hiding one, `:818`, `:1349`), so a received berry must not set it. **Consequence:** the game's own berry total, `CrystalBerryAmmount()`
-    (`:10212`, counts `crystalbflags`), counts berry *locations checked*, not berries received. It is shown by the
-    `|cberrytotal|` text command (`:12744`) and unlocks the "all 50 berries" logbook entry (`:4343`).
+    a beetle grass hiding one, `:818`, `:1349`), so a received berry must not set it. **Consequence:** the game's own
+    berry total, `CrystalBerryAmmount()` (`:10212`, counts `crystalbflags`), counts berry *locations checked*, not
+    berries received. It is shown by the `|cberrytotal|` text command (`:12744`) and unlocks the "all 50 berries"
+    logbook entry (`:4343`).
   - flags: the game's `|flag,n,v|` command is a plain `flags[n] = v` (`:12462`), and `EventControl` alone
     sets a literal flag directly 338 times.
 - **Open question for location identity:** most key-item grants live in the dialogue text assets, not the
@@ -171,9 +190,9 @@ throttled to changes.
   line 45. An NPC talk started it, not an event. Right after, `flag[31]` flipped (frame 40171), then `flag[32]`
   (40278, about 107 frames later). **`flag[30]` flipped before this talk** (frame 38697), so it isn't part of
   the medal. In the first run it came after 31 and 32, so 30 belongs to something else nearby. Flag 31 fits
-  "first medal ever" (see above). **Flag 32 is Artis's medal:** confirmed 2026-09-24 by reloading a save from before him and talking to him
-  again. Flag 31 flipped (frame 2279), then flag 32 (2419), the same order as both first runs, and the mod sent
-  location 7720003 from flag 32.
+  "first medal ever" (see above). **Flag 32 is Artis's medal:** confirmed 2026-09-24 by reloading a save from before him
+  and talking to him again. Flag 31 flipped (frame 2279), then flag 32 (2419), the same order as both first runs, and
+  the mod sent location 7720003 from flag 32.
   GrantProbe doesn't watch `badges`, so no item line appeared.
   - **`Event17` (`:3824`) is the gate the permit opens.** It sets `flags[28] = true`. Observed live: when the
     permit was shown (frame 21527), `flag[28]` flipped, **and the permit stayed in `items[1]`**. It
@@ -182,8 +201,9 @@ throttled to changes.
     confirmed it hadn't been used yet), so they belong to something else there.
 - **An NPC reward, first TextProbe capture:** on `NearSnakemouth`, the reward script ended
   `|giveitem,-1,10,6|`: type -1 (money), amount 10, then dialogue line 6 (`redirect`, `temp[3]`); no entity
-  argument (the entity is a 5th, `id3`, read only when present, `MainManager.cs:11484-11487`). `caller=none`, so an event started it. **`flag[17]` flipped
-  right after** on the same map. Same shape as the permit: a grant plus a completion flag.
+  argument (the entity is a 5th, `id3`, read only when present, `MainManager.cs:11484-11487`). `caller=none`, so an
+  event started it. **`flag[17]` flipped right after** on the same map. Same shape as the permit: a grant plus a
+  completion flag.
 - **A ground pickup, captured:** `|regionalflag,7,true||additemtoss,0,var,0|` on `NearSnakemouth`, with
   `caller=tempitem` (the pickup object). It was an ordinary item (type 0), with the id in `flagvar[0]`; later
   captures log that id. GrantProbe logged `regionalflag[7] False -> True` at frame 17763.
@@ -253,8 +273,8 @@ throttled to changes.
   logic that door is "both sides done", with no key item.
 - **A crystal berry given by a character** (for handing over the first artifact, seen in play): on
   `AntPalace2`, `caller=none`, the script was `…|giveitem,3,5,16,-4|` (type 3 crystal berry, berry **5**, then
-  line 16, over entity -4), and `crystalbflag[5]` flipped (frame 46414). **Found or given, a crystal berry's identity is its
-  `crystalbflags` index, and a `giveitem,3,<n>` names that index directly**, so the full berry list can come
+  line 16, over entity -4), and `crystalbflag[5]` flipped (frame 46414). **Found or given, a crystal berry's identity is
+  its `crystalbflags` index, and a `giveitem,3,<n>` names that index directly**, so the full berry list can come
   from the dialogue dump plus the code.
 - **The second key item: `id=41 (Map)`** added to `items[1]` on `AntPalace2` (frame 52686, during an event).
   It matches the dialogue dump's `AntPalace2` line 14 → `giveitem,1,41`, so the dump named it before it happened.
@@ -285,8 +305,9 @@ throttled to changes.
   consumes it once; the received-item count in the save keeps a reload from giving it back.
 - **`flag[349]` toggles on and off** at the `BugariaCommercial` shops (frames 31742–32369): temporary shop
   screen state, not progress. `flag[180]` flipped there too.
-- **A key item from a conversation:** `KEYITEM +1 id=25` on `BugariaTheater` (`GBugRangerPlushie`: the enum literal in the IL is 25, checked 2026-09-24; an earlier note called it "the doll", and `MothivaDoll` is 57) (frame 719,
-  `message=True`), then `flag[58]` when the dialogue was confirmed (frame 2157). The dump predicted it
+- **A key item from a conversation:** `KEYITEM +1 id=25` on `BugariaTheater` (`GBugRangerPlushie`: the enum literal in
+  the IL is 25, checked 2026-09-24; an earlier note called it "the doll", and `MothivaDoll` is 57) (frame
+  719, `message=True`), then `flag[58]` when the dialogue was confirmed (frame 2157). The dump predicted it
   (`BugariaTheater` line 7 → `giveitem,1,25`). **Location: flag 58.**
 - **A multi-step quest, measured step by step:** the quest book (id 93) was handed over with `flag[241]`, then
   delivered in `AntPalaceLibrary` with `flag[242]` and `KEYITEM -1 id=93` in the same frame (9030). The quest was
@@ -303,14 +324,14 @@ throttled to changes.
 - **Journal rewards (partly measured; the first reading was wrong).** 20 berries in `AntPalaceLibrary`
   (`|giveitem,-1,20,-11|`, `caller=none`); the NPC spoke of 5 discoveries both times (seen in play). `Event156`'s
   `10 × (thisdecimal + 1)` payout (`EventControl.cs:26186`) was first taken for it; it belongs to a hologram minigame.
-  **The payer, found (2026-09-27, code read; the event seen running in the event log 2026-09-24): `Event189`** (`EventControl.cs:31243`), the
-  librarian in `AntPalaceLibrary`. The first talk only introduces it (sets `flag[579]`). Each later talk counts the
-  set Discovery bools (`librarylimit[0]` = 50) and pays every milestone not yet paid: milestone j (1-10) at 5 × j
-  discoveries, while `flagvar[53]` < j, then `flagvar[53]++`. So **`flagvar[53]` = milestones claimed (0-10)**.
-  Rewards in order (`rewards` array; below 0 berries, 1000s crystal berry, 2000s key item, else medal): 20 berries,
-  crystal berry 43, crystal berry 44, 25 berries, medal 69, 30 berries, crystal berries 45, 46, 47, key item 83
-  (game names not yet read). Paid through `EventControl.GiveItem`. No such track for the Bestiary or Recipes: their
-  completion only unlocks Logbook entries (below).
+  **The payer, found (2026-09-27, code read; the event seen running in the event log 2026-09-24): `Event189`**
+  (`EventControl.cs:31243`), the librarian in `AntPalaceLibrary`. The first talk only introduces it (sets `flag[579]`).
+  Each later talk counts the set Discovery bools (`librarylimit[0]` = 50) and pays every milestone not yet paid:
+  milestone j (1-10) at 5 × j discoveries, while `flagvar[53]` < j, then `flagvar[53]++`. So **`flagvar[53]` =
+  milestones claimed (0-10)**. Rewards in order (`rewards` array; below 0 berries, 1000s crystal berry, 2000s key item,
+  else medal): 20 berries, crystal berry 43, crystal berry 44, 25 berries, medal 69, 30 berries, crystal berries 45, 46,
+  47, key item 83 (game names not yet read). Paid through `EventControl.GiveItem`. No such track for the Bestiary or
+  Recipes: their completion only unlocks Logbook entries (below).
   **Measured:** the journal is `librarystuff`, 5 rows (`MainManager.Library`: Discovery, Bestiary, Recipes,
   Logbook, Map). Completing Discovery / Bestiary / Recipes unlocks Logbook entries 10 / 9 / 8, and nearly
   finishing the Logbook sets `flag[63]` (`MainManager.cs:4294–4371`, counts via `HowManyTrue(GetLibraryBools(n))`
@@ -464,11 +485,11 @@ slot of each can hold the mod's own state in the game's own save, with no new fo
   `:13840`).
 - **Every board quest, dumped** (2026-09-25, `QuestDump` in the running game, joined with EntityDump and the code).
   `BoardData` column 3 is the flag taking the quest sets (none for four of the five bounties and a few others, whose
-  NPCs check the quest lists instead; the fifth, 23, has 146, which no code reads); column 5 is its difficulty, 1 to 3. The unlock is its `QuestChecks` row (negative: a visited
-  area; 0: never automatic, a dialogue adds it). **No accept flag does anything outside its own quest:** most are read
-  only by the quest's NPCs; the code's five (131, 186, 187, 197, 423) are the quest's own state, checked while it runs
-  (the chefs' dish checks, `EventControl.cs:574-597`) and cleared when it ends. Maps are where an entity requires,
-  hides on or talks by that flag.
+  NPCs check the quest lists instead; the fifth, 23, has 146, which no code reads); column 5 is its difficulty, 1 to 3.
+  The unlock is its `QuestChecks` row (negative: a visited area; 0: never automatic, a dialogue adds it). **No accept
+  flag does anything outside its own quest:** most are read only by the quest's NPCs; the code's five (131, 186, 187,
+  197, 423) are the quest's own state, checked while it runs (the chefs' dish checks, `EventControl.cs:574-597`) and
+  cleared when it ends. Maps are where an entity requires, hides on or talks by that flag.
 
   | Id | Quest | Accept flag | Unlock | Maps using the flag |
   |---|---|---|---|---|
@@ -594,7 +615,8 @@ The output stays in the BepInEx folder.
   picked up (`NPCControl.cs:5714`). Berries are tracked by `crystalbflags` instead (1 has a flag too).
 - **Hiding flags (`limit`):** every one-time pickup lists its own `activationflag` there, which is how it
   stays gone once collected. **Only 5 pickups, all ordinary items, are hidden by some other flag** (each has
-  no flag of its own and one other `limit` flag, 14 or 281, so that flag alone hides it): the only floor missables. No floor key item or medal is missable.
+  no flag of its own and one other `limit` flag, 14 or 281, so that flag alone hides it): the only floor missables. No
+  floor key item or medal is missable.
 - **Required flags (`requires`):** only 10 pickups have any (4 key items, 1 medal, 4 items, 1 berry). Most
   pickups are gated by the map they lie on, not by a flag of their own.
 - **Indoor pickups (seen on screen, 2026-09-24):** the pickup with flag 686 on
@@ -613,8 +635,8 @@ The output stays in the BepInEx folder.
   boss); what opens the way (a quest, an ability) is unknown. Not a location until that's found.
 - **Houses outside the city** (`BugariaOutskirtsOutsideCity`, 2026-09-24): the ladybug siblings' house
   (`DoorLadybug`, inside 1) has no gate flags; its Mistake (flag 679) was found in play after the first boss, and
-  the tester remembers it locked earlier (to check on an earlier save). The other house (`doormadeleine`, inside 2, with a
-  Lore Book and Burly Tea) needs flag 390, set by dialogue on `Swamplands8` line 4; a `lockeddoor` character
+  the tester remembers it locked earlier (to check on an earlier save). The other house (`doormadeleine`, inside 2, with
+  a Lore Book and Burly Tea) needs flag 390, set by dialogue on `Swamplands8` line 4; a `lockeddoor` character
   stands there until then. Seen on screen after the first boss: that house is locked, with a pop-up saying so.
 - **Doors:** 567 `DoorOtherMap` entities, 59 of them with required or hiding flags. Those are the map graph
   and its story gates, for the regions.
@@ -668,20 +690,21 @@ The output stays in the BepInEx folder.
   `SnakemouthDoorRoom` (the trapdoor, started by the map: a rock-and-pressure-plate puzzle's AND gate; flag 13) →
   Event5, started by picking up the Mushroom the trapdoor scene creates (`tempitem`, data {0,5,1}; flag 14) →
   Event6, the `SnakemouthFallRoom` trigger (the first spider fight, scripted so damage can't win it,
-  `EventControl.cs:1702`; flag 27: Leif follows, not yet in the party) → Event18 on `SnakemouthLake`, a switch (flag 29) → Event14, the lake's
-  `MothEvent` trigger (flag 16: Leif joins the party; then flag 24). Seen on screen as a full member: in the
-  pause menu and usable in battle. Each step expects the one before: a file that skipped part of the chain
-  crashes entering its middle. **One exception seen** (2026-09-26, Vi and Kabbu, a new file): a dev warp
+  `EventControl.cs:1702`; flag 27: Leif follows, not yet in the party) → Event18 on `SnakemouthLake`, a switch (flag 29)
+  → Event14, the lake's `MothEvent` trigger (flag 16: Leif joins the party; then flag 24). Seen on screen as a full
+  member: in the pause menu and usable in battle. Each step expects the one before: a file that skipped part of the
+  chain crashes entering its middle. **One exception seen** (2026-09-26, Vi and Kabbu, a new file): a dev warp
   into `SnakemouthFallRoom` through the trapdoor's way down, with flags 13 and 14 still off, played Event6 to its end
-  with no error, and Leif joined (the mod's join after flag 27). **The spider scene can be entered from the lake side too**
-  (seen the same day): the web holding Leif has no collision, and walking far enough right from
+  with no error, and Leif joined (the mod's join after flag 27). **The spider scene can be entered from the lake side
+  too** (seen the same day): the web holding Leif has no collision, and walking far enough right from
   `DoorLakeRoom` starts Event6 as usual (its trigger, entity 2, sits between the lake door and the trapdoor's landing).
 - **The party's basic moves** (seen in play, 2026-09-24, matching `PlayerControl.cs`): Vi (bee) throws the
   beemerang, which hits and grabs at range (flag 11, on from the start; Event109 takes it away in the bandit
   hideout and gives it back); Kabbu (beetle) uses the horn, a knock-up and melee hit that also cuts grass (always on);
   Leif (moth) freezes, droplets included (always on, once he has joined). Vi and Kabbu are in the party from a new game,
   so while the party is vanilla only Leif gates anything.
-- **Where a move is needed** (seen in play, 2026-09-25, most of it playing Leif alone; the maps from the Detector's log):
+- **Where a move is needed** (seen in play, 2026-09-25, most of it playing Leif alone; the maps from the Detector's
+  log):
   - **Kabbu's horn (grass):** the way down to Shades's shop; the Strong Start medal's spot in `DesertBeforeGH` (flag
     415: grass, then something to hit; whether another member's move does the hit is untested); the way to Snakemouth
     Den, both `BugariaOutskirtsSnakemouthCorridor2` (after the grass tutorial) and `OutsideSnakemouth`. On
@@ -691,8 +714,9 @@ The output stays in the BepInEx folder.
   - **Kabbu's horn (puzzles):** `SnakemouthDoorRoom` from the bridge side is a chain of horn steps: cut grass to reach a
     trampoline, knock a rock down onto a vine, push two rocks onto switches, which starts Event4: it sets flag 13
     itself (`EventControl.cs:1215`) and drops the Mushroom whose pickup (`MushroomItem`, which requires flag 13)
-    starts the trapdoor scene, Event5. Coming up from the trapdoor without the horn is presumably one-way for the same reason (the tester's reading, not tried). The bridge room's
-    hidden-spot discovery (discovery 2, location 30) is behind grass too.
+    starts the trapdoor scene, Event5. Coming up from the trapdoor without the horn is presumably one-way for the same
+    reason (the tester's reading, not tried). The bridge room's hidden-spot discovery (discovery 2, location 30) is
+    behind grass too.
   - **Vi's beemerang (range):** `SnakemouthBridgeRoom`'s bridge comes down when its rope is hit; from the right only the
     beemerang reaches it, from the left Leif's move hit it (so presumably any member's; Kabbu's not tried). The room's
     Tattle tutorial (Event2) ran with stand-ins and finished (flag 10); its hint (Event0) is skipped by Skip cutscenes.
@@ -701,8 +725,8 @@ The output stays in the BepInEx folder.
     spots (locations 29, 67) need no Beemerang. With Kabbu and Leif and no Vi, the mod gives Vi's place to Leif
     (`PartyMembers`), so Leif fights beside Kabbu against the Leif in the web: not yet played.
   - **Vi's beemerang (enemies in the air):** the lake's fight, in Leif's joining scene (Event14 on `SnakemouthLake`:
-    `ChangeParty({0, 1, 2})`, flag 16, then two of enemy 1 that can't be fled, `EventControl.cs:3462-3466`); in chapter 1
-    only the beemerang hits them. Whether Kabbu or Leif learn such a move later is unknown. Moot while the mod skips
+    `ChangeParty({0, 1, 2})`, flag 16, then two of enemy 1 that can't be fled, `EventControl.cs:3462-3466`); in chapter
+    1 only the beemerang hits them. Whether Kabbu or Leif learn such a move later is unknown. Moot while the mod skips
     that scene (since 2026-09-25).
     **The first boss too** (seen 2026-09-26, Leif alone, OneHit off): in the spider boss fight (Event26, battle 13)
     Leif couldn't hit the enemies in the air and lost. **The spider itself goes up into the air during the fight, and
@@ -716,7 +740,8 @@ The output stays in the BepInEx folder.
   moment, then was put past the gate; after that the switch could be hit and the way back used. A forced walk
   (`MoveTowards`) has a timer (250 frames for the player, 375 in a scene, `EntityControl.cs:4951`); when it runs
   out the character is moved straight to the target, with smoke (`EntityControl.cs:3692-3701`). So a door whose walk-in
-  point is behind a barrier can still be entered. The logic doesn't count on it (more cautious than the game is allowed).
+  point is behind a barrier can still be entered. The logic doesn't count on it (more cautious than the game is
+  allowed).
 - **Ability flags, confirmed as reads in `PlayerControl.cs`:** 11 (beemerang, with `!flags[41]`), 699
   (Dash), 39 (Horn Dash, the Dash's upgrade: its hitbox breaks rocks), 171 (big icicle), 19 (hover), 18 (dig), 20
   (bubble shield). **The game's names** (its text, the console's `textsearch`, 2026-09-27): *Dash* (`Skills` 49, "Press
@@ -739,17 +764,18 @@ The output stays in the BepInEx folder.
   | Leif | Icicle | press twice | flag 171 | Event180 |
   | Leif | Shield | hold | flag 20 | Event95 |
 
-  Where each scene runs: "The unlock scenes, read", below (first from the game's own text: the Dash learned at `BOLostSandsEntrance`,
-  the Horn Dash at `SwamplandsBridge`). **Beemerang Halt in play** (seen 2026-09-27): holding the action button
-  keeps the Beemerang in place to spin things, which is how some bridges are activated; so a spot behind such a
-  mechanism needs the Halt, not just the Toss. **What each opens, for the logic** (the game's text, and seen in play,
-  2026-09-27): Shield, walking on hazardous terrain (its deflecting attacks is comfort only); Beetle Dig, going under
-  some roadblocks and the dig spots; Freeze, freezing droplets and water fountains ("freeze enemies and liquids"; the
-  droplet rooms already need it). The game has exactly two freezable objects, `ObjectTypes.Dropplet` and
+  Where each scene runs: "The unlock scenes, read", below (first from the game's own text: the Dash learned
+  at `BOLostSandsEntrance`, the Horn Dash at `SwamplandsBridge`). **Beemerang Halt in play** (seen 2026-09-27): holding
+  the action button keeps the Beemerang in place to spin things, which is how some bridges are activated; so a spot
+  behind such a mechanism needs the Halt, not just the Toss. **What each opens, for the logic** (the game's text, and
+  seen in play, 2026-09-27): Shield, walking on hazardous terrain (its deflecting attacks is comfort only); Beetle Dig,
+  going under some roadblocks and the dig spots; Freeze, freezing droplets and water fountains ("freeze enemies and
+  liquids"; the droplet rooms already need it). The game has exactly two freezable objects, `ObjectTypes.Dropplet` and
   `ObjectTypes.Geizer` (the fountains), reacting to Freeze's hitbox (tag `Icecle`); the Geizer also to the Icicle
-  (`Icefall`) (`NPCControl.cs:4779, 4829`; seen in play: droplets in Snakemouth Den, a fountain in town). Bee Fly, crossing large gaps (not yet unlocked in play); Icicle, platforms on
-  water, dropped by a second tap during the Freeze (`PlayerControl.cs:1164`), so chained on Freeze as the Dash is on the
-  Horn Slash. Used by `abilities.py` and `Abilities.cs` (build step 23).
+  (`Icefall`) (`NPCControl.cs:4779, 4829`; seen in play: droplets in Snakemouth Den, a fountain in town). Bee Fly,
+  crossing large gaps (not yet unlocked in play); Icicle, platforms on water, dropped by a second tap during the Freeze
+  (`PlayerControl.cs:1164`), so chained on Freeze as the Dash is on the Horn Slash. Used by `abilities.py`
+  and `Abilities.cs` (build step 23).
 - **The unlock scenes, read** (2026-09-27, code read with the entity, script and map dumps; nothing seen in game):
   - *Beemerang Halt*, flag 21, `Event55` (`EventControl.cs:8989`, its only setter): the end of the Wacka Worm
     minigame at the festival on `GoldenSettlement2`, only when won (`flagvar[1] >= 15`; the win also sets flag 96,
@@ -870,17 +896,17 @@ AntPalace2 (gift, dialogue line 15), #6 BOGoldenPath (dig), #7 GoldenSettlement2
 GoldenHillsDungeonLeftMain, #10 BugariaPier, #12 AntPalace2 (gift, line 48), #14 DesertCaravanMap (dig), #15
 DefiantRoot1 and a code gift, #16 FactoryProcessingPuzzle3, #17 FactoryStorageMaze, #18 code gift, #20 HideoutRightA
 (dig), #21 DesertRoachVillage (dig), #22 GoldenSettlementEntrance (dig), #23 SandCastleBasement, #24
-SandCastleRockRoom, #25 AntPalaceLibrary (gift, line 27), #26 FarGrasslands2, #27 Swamplands5 (dig), #28 TermitePier,
-#29 BugariaMainPlaza (dig), #30 BugariaOutskirtsOutsideCity (dig), #31 FarGrasslands1 (dig), #32 SnakemouthBridgeRoom
-(requires flag 41), #33 TermiteRoyalChamber, #34 AntMinesBreakRoom (dig), #35 BeehiveMainArea (gift, line 64), #36
-MetalIsland1, #37 WizardTowerBasement, #39 code gift, #40 GoldenPitcher2, #41 FishingVillage (gift, line 11), #42
-UpperSnekPressurePlateRoom, #48 GiantLairFridgeInside, #49 GiantLairDeadLands1 (dig).
+SandCastleRockRoom, #25 AntPalaceLibrary (gift, line 27), #26 FarGrasslands2, #27 Swamplands5 (dig), #28
+TermitePier, #29 BugariaMainPlaza (dig), #30 BugariaOutskirtsOutsideCity (dig), #31 FarGrasslands1 (dig), #32
+SnakemouthBridgeRoom (requires flag 41), #33 TermiteRoyalChamber, #34 AntMinesBreakRoom (dig), #35 BeehiveMainArea
+(gift, line 64), #36 MetalIsland1, #37 WizardTowerBasement, #39 code gift, #40 GoldenPitcher2, #41 FishingVillage (gift,
+line 11), #42 UpperSnekPressurePlateRoom, #48 GiantLairFridgeInside, #49 GiantLairDeadLands1 (dig).
 
 **Chapter 1 per the wiki, matched:** #0 (behind a bush outside the cave), #1 (cut the bush by the sign, lake room's far
 left), #2 (behind the large mushroom; seen in play: upper-left entrance free, from below Leif), #5 (the Queen, for the
-Ancient Mask). **Later:** #3 behind Chuck's house needs a large boulder smashed (chapter 5; the Horn Dash, to confirm);
-#32 in the bridge room needs Vi's fly (hover) over two pillars and the beemerang on a vine (chapter 6), as the tester
-guessed. The wiki is a lead, not proof: each entry is checked against the data or on screen before it's logic.
+Ancient Mask). **Later:** #3 behind Chuck's house needs a large boulder smashed (chapter 5; the Horn Dash, to
+confirm); #32 in the bridge room needs Vi's fly (hover) over two pillars and the beemerang on a vine (chapter 6), as the
+tester guessed. The wiki is a lead, not proof: each entry is checked against the data or on screen before it's logic.
 
 ## Respawning pickups, seen in play (2026-09-24, with the dev log)
 
@@ -904,12 +930,13 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   (`data` 1 23) that starts **Event23**, which sets the switch's own `activationflag` (`EventControl.cs`, Event23:
   `flags[call.activationflag] = true`): **flag 33** in `SnakemouthUndergroundLeftB`, **flag 34** in
   `SnakemouthUndergroundRightB`. On `SnakemouthUndergrondDoor`, the `DoorEvent` trigger requires **both 33 and 34**
-  and is hidden by **35**, the middle door opened (seen 2026-09-24, "Observed in the running game"). The log confirmed Event23 started by
-  RightB's Big Switch when it was hit in play. Past the lowered barrier, the path leads back and **drops down into the big-door room** (seen in play): a
-  one-way way back, for the room-level graph. The ledge above the drop can't be climbed to from the big-door
-  room: it's reached only from the switch room, through the lowered barrier (seen in play). The left and right
-  switches can be done in either order; both are needed to open the middle door, which leads on to the first boss.
-  The Crunchy Leaf behind the pillar needs nothing once you're in its room (seen in play).
+  and is hidden by **35**, the middle door opened (seen 2026-09-24, "Observed in the running game"). The log confirmed
+  Event23 started by RightB's Big Switch when it was hit in play. Past the lowered barrier, the path leads back
+  and **drops down into the big-door room** (seen in play): a one-way way back, for the room-level graph. The ledge
+  above the drop can't be climbed to from the big-door room: it's reached only from the switch room, through the lowered
+  barrier (seen in play). The left and right switches can be done in either order; both are needed to open the middle
+  door, which leads on to the first boss. The Crunchy Leaf behind the pillar needs nothing once you're in its room (seen
+  in play).
 
 ## The door graph (2026-09-25, `dev-scripts/door-graph.py` on the EntityDump)
 
@@ -919,11 +946,11 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   `SnakemouthEmpty` holds nothing but that exit and no door leads in: an unused room, left out of the graph (seen
   in play, warped there 2026-09-25; walking out led to the door room).
 - **The door room's `DoorLoadZone` leads to Upper Snakemouth (`UpperSnekEntrance`) and requires only flag 41** in
-  the data. Seen in play, on a file past the first boss (chapter 2 started): the party walked through into the later area
-  (2026-09-25). **What really gates it** (seen 2026-09-25): in normal play the way back to the cave is
+  the data. Seen in play, on a file past the first boss (chapter 2 started): the party walked through into the later
+  area (2026-09-25). **What really gates it** (seen 2026-09-25): in normal play the way back to the cave is
   closed after the first boss (Eetl's blocker outside the city until flag 67; from 67 a `guard` and a `sign` on
-  `NearSnakemouth`, which no flag removes; seen closed after the first boss, 2026-09-25, playing Leif alone). **And past the
-  door, a slot needs a key item even with the door open:** `UpperSnekEntrance`'s `slot` is a `LockedDoor`
+  `NearSnakemouth`, which no flag removes; seen closed after the first boss, 2026-09-25, playing Leif alone). **And past
+  the door, a slot needs a key item even with the door open:** `UpperSnekEntrance`'s `slot` is a `LockedDoor`
   (hidden by 517) whose `dialogues[0].y` is 11, and Event59's key list at index 11 is **key item 116, the Peculiar
   Gem** (`SnakemouthKey`; names dump), given in code by **Event117** (`EventControl.cs:19958`, chapter 4 by the
   event-number rule). Seen on screen: the slot refused them (Event59 twice in the log). So Upper Snakemouth's locations
@@ -931,8 +958,8 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   `keycard1`/`keycard2` on `UpperSnekMiddleRoom` index 12 (item 160, the Lab Card), and the gear slots on
   `UpperSnekBeforeBoss` indices 13-15 (items 157-159; 157 is the Small Gear).
 - **Paired on paper, one-way in play:** the big-door room's `WarpRightUp` <-> `SnakemouthUndergroundRightB`'s
-  `DoorMainRoom`. Leaving Right B puts the party on the ledge above the big-door room; the party dropped down in play and
-  can't climb back to `WarpRightUp` (see "Respawning pickups, seen in play"). The left side has the same shape
+  `DoorMainRoom`. Leaving Right B puts the party on the ledge above the big-door room; the party dropped down in play
+  and can't climb back to `WarpRightUp` (see "Respawning pickups, seen in play"). The left side has the same shape
   (`WarpLeftUp` <-> `SnakemouthUndergroundLeftB`), where the Mushroom spot and crystal berry #2 are (upper left).
   So the dump gives the doors, and play decides which way each can be crossed.
 - **Story-gated doors:** the door room -> fall room door (`LoadZoneFallRoom`) requires flag 41 (the first boss); in
@@ -947,9 +974,10 @@ guessed. The wiki is a lead, not proof: each entry is checked against the data o
   hides or moves an object by its own `requires`/`limit`, `FlagAnimation` plays an animation by flags; 328 such
   objects in all maps). In `SnakemouthDoorRoom` the big door's closed halves (`Base/Door`, `Door (1)`) and the
   trapdoor models are hidden from **flag 14** (the trapdoor fall), and the open halves (`Door (2)`, `Door (3)`) shown
-  from 14 (seen 2026-09-25: the trapdoor scene opens the trapdoor and the big door). So the door looks open from 14, while its load zone (`DoorLoadZone`) waits for 41. On
-  `UpperSnekEntrance`, the round door (`Base/CircleDoor`) is hidden and the Gem shown in the slot from **517**.
-  In `SnakemouthUndergrondDoor` the middle door's models switch at **35**; the switch rooms' `Gate`s at 33 / 34.
+  from 14 (seen 2026-09-25: the trapdoor scene opens the trapdoor and the big door). So the door looks open from 14,
+  while its load zone (`DoorLoadZone`) waits for 41. On `UpperSnekEntrance`, the round door (`Base/CircleDoor`) is
+  hidden and the Gem shown in the slot from **517**. In `SnakemouthUndergrondDoor` the middle door's models switch
+  at **35**; the switch rooms' `Gate`s at 33 / 34.
 
 ## Doors paired with their way back (2026-09-25, a new EntityDump with positions, `door-graph.py`)
 
@@ -986,8 +1014,8 @@ Forsaken Lands"). Used by `door-graph.py` and `entrances.py`.
   There are 12 in 8 maps.
   - **Four lead into their own map**, landing at that room's own entrance: `BarrenLandsEntrance`'s right
     edge, `BarrenLandsCD`'s and `BarrenLandsCloud`'s bottom edges, `BarrenLandsRock`'s south edge.
-  - **The others send you to an earlier room**, landing next to one of its doors: for example, `BarrenLandsTanks`' bottom
-    edge to the top of `BarrenLandsCloud`, and `BarrenLandsSideGPT`'s two edges to `BarrenLandsCD`.
+  - **The others send you to an earlier room**, landing next to one of its doors: for example, `BarrenLandsTanks`'
+    bottom edge to the top of `BarrenLandsCloud`, and `BarrenLandsSideGPT`'s two edges to `BarrenLandsCD`.
   - **The right path is ordinary doors in pairs.**
 - **`BarrenLandsCD`'s left edge is two copies at one spot:**
   - `returnloadzoneleft`, hidden by flag 384, back to `BarrenLandsEntrance`'s right edge;
@@ -1014,14 +1042,15 @@ Forsaken Lands"). Used by `door-graph.py` and `entrances.py`.
 - **Dialogue lines:** 7 lines move the party with `|warp,<map>[,x,y,z]|` or `|loadmap|` (`MainManager.cs:13262-13280`):
   `BOLostSandsEntrance` 10, `DefiantRoot2` 38, `FarGrasslandsOutsideCave` 3, `Swamplands8` 4 and 7, `TermiteMainPlaza`
   65, `BarrenLandsPinkSpider` 18. None uses `|transfer|`.
-- **Story events:** 87 `LoadMap` calls in 63 of `EventControl`'s event methods (and one in `ColiseumEnd`); 20-odd reload the current map. What
-  starts each: `event-triggers.py` on the listed events. Among them: **Event61, the bar's hatch** (to `UndergroundBar`,
-  started by `BugariaCommercial` line 32, the hatch examined); **Events 108 and 109, to `HideoutCell`** (108 is the
-  garden guards catching the party, seen in play; 109 is the story's first capture, which takes the beemerang,
-  flag 11, and in the cell gives dig, flag 18, `EventControl.cs` Event109; leaving the cell needs dig, seen in play; the cell also holds a `Dropplet` with no flags, which the tester thinks is
-  cosmetic, not needed to leave: unconfirmed, so the rule is dig only); **Event153, the submarine's docks** (six;
-  corrected 2026-09-30, it was written down as the boat, which is Event107: "The submarine"); **Event68**, three map
-  pairs chosen by an `entrance` flag (elevators, to read); Event196, a destination from a list chosen in a menu.
+- **Story events:** 87 `LoadMap` calls in 63 of `EventControl`'s event methods (and one in `ColiseumEnd`); 20-odd reload
+  the current map. What starts each: `event-triggers.py` on the listed events. Among them: **Event61, the bar's hatch**
+  (to `UndergroundBar`, started by `BugariaCommercial` line 32, the hatch examined); **Events 108 and 109,
+  to `HideoutCell`** (108 is the garden guards catching the party, seen in play; 109 is the story's first capture, which
+  takes the beemerang, flag 11, and in the cell gives dig, flag 18, `EventControl.cs` Event109; leaving the cell needs
+  dig, seen in play; the cell also holds a `Dropplet` with no flags, which the tester thinks is cosmetic, not needed to
+  leave: unconfirmed, so the rule is dig only); **Event153, the submarine's docks** (six; corrected 2026-09-30, it was
+  written down as the boat, which is Event107: "The submarine"); **Event68**, three map pairs chosen by an `entrance`
+  flag (elevators, to read); Event196, a destination from a list chosen in a menu.
 - Not yet sorted into "chosen by the player" and "the game sends you" (the decision: `apimplementation.md`, build
   step 12, item 8).
 
@@ -1075,7 +1104,8 @@ Forsaken Lands"). Used by `door-graph.py` and `entrances.py`.
   `HideoutEntrance` on `BugariaCommercial` is examined (Check). Its lines: default 27 (sets flag 8), with flag 8 line
   30, with flag 135 line 32, which starts Event61: `LoadMap(30)` with the party remade and placed, no fixed party slot
   read (`EventControl.cs:9865-9872`). Flag 135 is set when quest 6
-  (UndergroundBar) is completed, in Event77 (`EventControl.cs:12698`). The tester asked for it set on a test file to reach the shop.
+  (UndergroundBar) is completed, in Event77 (`EventControl.cs:12698`). The tester asked for it set on a test file to
+  reach the shop.
 - **Shops (`badgeshops[0]` is Merab's, `[1]` Shades's, for crystal berries):** new game (`MainManager.cs:4010`)
   Merab 0, 1, 7, 12, 30, 86, 84, 87, 88, 81 and Shades 19, 6, 9, 43, 42 (both open later in the story); Event73
   (chapter 2's end) Merab +21, 22, 48; Event99 (chapter 3's end) Merab +33, 56, 74, Shades +0, 49; Event118
@@ -1108,54 +1138,149 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 
 ### Shops, the Quality of life page, dialogue
 
-- A medal shop slot is an NPCControl with interacttype Shop, whose entity has animid 2 (medal) and animstate = the medal id, made by the shopkeeper's SetBadgeShop from avaliablebadgepool; the shopkeeper's dialogues[9].x is its badgeshops index, and its private field `shopitems` (EntityControl[]) holds the shelf's slot entities (NPCControl.cs:1504-1580). Used by `ShopSwap.cs`.
-- A shop slot's description box, CreateDescWindow(shop), reads the medal's name and description from badgedata[id, 0] and [id, 1]; NPCControl.Interact copies the name into the buy prompt's text and the price into flagvar[1] (NPCControl.cs:4183-4228, 4360-4372). Used by `ShopSwap.cs`.
-- UpdateShops rebuilds the shelf pool from badgeshops on every map start and after each purchase (MainManager.cs:4087, MapControl.cs:343, NPCControl.cs:1528); the game's own shoppool command writes badgeshops (MainManager.cs:11638-11657); the money command clamps to 0-999 (MainManager.cs:12580-12590). Used by `ShopSwap.cs`.
-- Map entity table rows (Data/EntityData/<map id>) are fields split by '}': field 0 the entity type (`entitytype`, an `NPCType`), field 1 the object type (`objecttype`, e.g. DoorOtherMap), field 60 the data count followed by the data values (61 = the target map for a door), field 71 the vectordata count followed by x,y,z triples from 72 (MapControl.cs:1473-1474, :1540-1566). Used by `QualityOfLife.Opening.cs`. A door's second vectordata triple is where it lands in the target map: `dev-scripts/door-graph.py` pairs each door with the door back within 12 units of it, which built `doors.json`. The PopTracker pack's room layout reads the same two points, the door's own position and that landing (its `tools/rooms.py`, 2026-10-04).
-- MainManager's private static `currentdialogue` and `diagstring` (List<string>) are the line being shown and the lines so far; holding skip only works when they match (on the newest line), a box is open, no prompt/list, not |noskip| (the fields MainManager.cs:2749, :2747; the test :5125-5141). Used by `QualityOfLife.cs`.
-- The intro slides' fades are per-frame lerps scaled by Time.smoothDeltaTime (MainManager.TieFramerate, MainManager.cs:9567), so Time.timeScale speeds them; the game itself uses timeScale 2.5 for cooking (MainManager.cs:5546), and EndEvent resets timeScale to 1 (EventControl.cs:184). Used by `QualityOfLife.cs`.
-- A hold-up's Giveitem shows its follow-up line via GetDialogueText(redirect) (MainManager.cs:11592); |end| sets `end`, which skips the final wait for a press (MainManager.cs:11909-11910, :14171); a negative id reads commondialogue (MainManager.cs:10186); each slide line waits for a press at its end (MainManager.cs:14169-14174). Used by `QualityOfLife.Scenes.cs`.
-- Event8 (new game): its first step after the slides is ChangeParty({1}, fromscratch: true, destroyoldentity: false), Kabbu alone (EventControl.cs:2740-2755); its end is HUD back, ResetCamera, the building's music, EndEvent (EventControl.cs:2857-2866), with no fade-in there: it fades in earlier (:2742, or :2780 when flagvar[0] is 0); after its slides it stands Kabbu 2.5 left of entity 4 (EventControl.cs:2770); the slides' backdrop NewSolidColor("back") is made at EventControl.cs:2655 and lives through 2656-2735. Used by `QualityOfLife.Opening.cs`.
-- Event16's end points the camera at the new leader (EventControl.cs:3795); the starting house's exit only hands the camera back to the player for insides that centre on themselves (MapControl.cs:1373). Used by `QualityOfLife.Opening.cs`.
-- Bridge scenes: Event0 (bridge message) is party/camera moves, three lines, flag 11, and flag 11 hides its trigger BridgeMessage (limit 11) (EventControl.cs:274-333); Event1 (rope) plays the bridge's Fall animation, fixes it fallen, then flags 7 and 11 (EventControl.cs:334-407); Event83 barkeeper's first talk sets flag 158, and its else branch handles bounties (EventControl.cs:13052-13080). Used by `QualityOfLife.cs`.
-- Shopkeeper prompts are |prompt,map,Y,N,target1..targetN,text1..textN| (MainManager.cs:12213-12222). Used by `QualityOfLife.Opening.cs`.
-- Holding skip: inputcooldown is 16 after a box, 10 when a new dialogue opens (MainManager.cs:5147, :10738), 4 while a box is typing (:5151), counted down one per frame (:7298). Used by `QualityOfLife.cs`.
+- A medal shop slot is an NPCControl with interacttype Shop, whose entity has animid 2 (medal) and animstate = the medal
+  id, made by the shopkeeper's SetBadgeShop from avaliablebadgepool; the shopkeeper's dialogues[9].x is its badgeshops
+  index, and its private field `shopitems` (EntityControl[]) holds the shelf's slot entities (NPCControl.cs:1504-1580).
+  Used by `ShopSwap.cs`.
+- A shop slot's description box, CreateDescWindow(shop), reads the medal's name and description from badgedata[id, 0]
+  and [id, 1]; NPCControl.Interact copies the name into the buy prompt's text and the price into flagvar[1]
+  (NPCControl.cs:4183-4228, 4360-4372). Used by `ShopSwap.cs`.
+- UpdateShops rebuilds the shelf pool from badgeshops on every map start and after each purchase (MainManager.cs:4087,
+  MapControl.cs:343, NPCControl.cs:1528); the game's own shoppool command writes badgeshops
+  (MainManager.cs:11638-11657); the money command clamps to 0-999 (MainManager.cs:12580-12590). Used by `ShopSwap.cs`.
+- Map entity table rows (`Data/EntityData/<map id>`) are fields split by '}': field 0 the entity type (`entitytype`,
+  an `NPCType`), field 1 the object type (`objecttype`, e.g. DoorOtherMap), field 60 the data count followed by the data
+  values (61 = the target map for a door), field 71 the vectordata count followed by x,y,z triples from 72
+  (MapControl.cs:1473-1474, :1540-1566). Used by `QualityOfLife.Opening.cs`. A door's second vectordata triple is where
+  it lands in the target map: `dev-scripts/door-graph.py` pairs each door with the door back within 12 units of it,
+  which built `doors.json`. The PopTracker pack's room layout reads the same two points, the door's own position and
+  that landing (its `tools/rooms.py`, 2026-10-04).
+- MainManager's private static `currentdialogue` and `diagstring` (`List<string>`) are the line being shown and the
+  lines so far; holding skip only works when they match (on the newest line), a box is open, no prompt/list,
+  not |noskip| (the fields MainManager.cs:2749, :2747; the test :5125-5141). Used by `QualityOfLife.cs`.
+- The intro slides' fades are per-frame lerps scaled by Time.smoothDeltaTime (MainManager.TieFramerate,
+  MainManager.cs:9567), so Time.timeScale speeds them; the game itself uses timeScale 2.5 for cooking
+  (MainManager.cs:5546), and EndEvent resets timeScale to 1 (EventControl.cs:184). Used by `QualityOfLife.cs`.
+- A hold-up's Giveitem shows its follow-up line via GetDialogueText(redirect) (MainManager.cs:11592); |end| sets `end`,
+  which skips the final wait for a press (MainManager.cs:11909-11910, :14171); a negative id reads commondialogue
+  (MainManager.cs:10186); each slide line waits for a press at its end (MainManager.cs:14169-14174). Used
+  by `QualityOfLife.Scenes.cs`.
+- Event8 (new game): its first step after the slides is ChangeParty({1}, fromscratch: true, destroyoldentity: false),
+  Kabbu alone (EventControl.cs:2740-2755); its end is HUD back, ResetCamera, the building's music, EndEvent
+  (EventControl.cs:2857-2866), with no fade-in there: it fades in earlier (:2742, or :2780 when flagvar[0] is 0); after
+  its slides it stands Kabbu 2.5 left of entity 4 (EventControl.cs:2770); the slides' backdrop NewSolidColor("back") is
+  made at EventControl.cs:2655 and lives through 2656-2735. Used by `QualityOfLife.Opening.cs`.
+- Event16's end points the camera at the new leader (EventControl.cs:3795); the starting house's exit only hands the
+  camera back to the player for insides that centre on themselves (MapControl.cs:1373). Used
+  by `QualityOfLife.Opening.cs`.
+- Bridge scenes: Event0 (bridge message) is party/camera moves, three lines, flag 11, and flag 11 hides its trigger
+  BridgeMessage (limit 11) (EventControl.cs:274-333); Event1 (rope) plays the bridge's Fall animation, fixes it fallen,
+  then flags 7 and 11 (EventControl.cs:334-407); Event83 barkeeper's first talk sets flag 158, and its else branch
+  handles bounties (EventControl.cs:13052-13080). Used by `QualityOfLife.cs`.
+- Shopkeeper prompts are |prompt,map,Y,N,target1..targetN,text1..textN| (MainManager.cs:12213-12222). Used
+  by `QualityOfLife.Opening.cs`.
+- Holding skip: inputcooldown is 16 after a box, 10 when a new dialogue opens (MainManager.cs:5147, :10738), 4 while a
+  box is typing (:5151), counted down one per frame (:7298). Used by `QualityOfLife.cs`.
 
 ### The connection, the dev console, the party, the menus
 
-- The game's berry sprite for a money giveitem, by amount: itemsprites[0, 186] for 20 or more, [0, 6] under 5, else [0, 7] (MainManager.cs:11506). Used by `ItemIds.cs`.
-- The game's money reward code adds berries clamped to 0..999 and sets showmoney = 1 to show the counter (MainManager.cs:11534); the money script command does the same (MainManager.cs:12580-12590). Used by `DevCheats.cs`, `DevConsole.cs`.
-- A pickup's touch starts in NPCControl.OnTriggerEnter, an Enter trigger: standing on an item doesn't take it again, stepping off and back on does (NPCControl.cs:4516). Used by `DevConsole.cs`.
-- A pickup's touchcooldown is waited out by CheckItem (NPCControl.cs:5608) and counted down each frame (NPCControl.cs:2802); 90 holds it about 1.5 s. Used by `DevConsole.Warp.cs`.
-- Every hit's damage ends in BattleControl.DoDamage(attacker, ref target, amount, property, overrides, block); the other overloads lead there. The game tells the party from enemies by the target's "Player" tag (BattleControl.cs:7283, :7295). Used by `DevConsole.cs`.
-- EntityControl.Jump(float) is the normal jump: it sets the upward velocity, offgroundframes 20 and jumpcooldown 30 (EntityControl.cs:4598-4607); the sound is PlayerControl.DoJump's (PlayerControl.cs:1555). The player's own jump fires on the ground, or within 3 frames of leaving it while jumpcooldown is 0 (PlayerControl.cs:372); jumpcooldown's 30 frames outlast the whole jump (measured in the log 2026-09-24). Used by `DevConsole.cs`.
-- Map entity table Data/EntityData/<map id>: rows split on '}', fields 6-8 the start position, field 194 the activationflag, as MapControl.CreateEntities reads them (MapControl.cs:1477-1640; the activationflag :1650, the start position :1661). Used by `DevConsole.Warp.cs`, `WarpButton.cs`.
-- MainManager.TransferMap ends by walking the party to its target and waits for that walk (MainManager.cs:17610-17624): a target over water is never reached, the transition never ends, and the game keeps respawning the party there (seen at SnakemouthLake, 2026-09-24). Used by `DevConsole.Warp.cs`.
+- The game's berry sprite for a money giveitem, by amount: itemsprites[0, 186] for 20 or more, [0, 6] under 5, else [0,
+  7] (MainManager.cs:11506). Used by `ItemIds.cs`.
+- The game's money reward code adds berries clamped to 0..999 and sets showmoney = 1 to show the counter
+  (MainManager.cs:11534); the money script command does the same (MainManager.cs:12580-12590). Used
+  by `DevCheats.cs`, `DevConsole.cs`.
+- A pickup's touch starts in NPCControl.OnTriggerEnter, an Enter trigger: standing on an item doesn't take it again,
+  stepping off and back on does (NPCControl.cs:4516). Used by `DevConsole.cs`.
+- A pickup's touchcooldown is waited out by CheckItem (NPCControl.cs:5608) and counted down each frame
+  (NPCControl.cs:2802); 90 holds it about 1.5 s. Used by `DevConsole.Warp.cs`.
+- Every hit's damage ends in BattleControl.DoDamage(attacker, ref target, amount, property, overrides, block); the other
+  overloads lead there. The game tells the party from enemies by the target's "Player" tag (BattleControl.cs:7283,
+  :7295). Used by `DevConsole.cs`.
+- EntityControl.Jump(float) is the normal jump: it sets the upward velocity, offgroundframes 20 and jumpcooldown 30
+  (EntityControl.cs:4598-4607); the sound is PlayerControl.DoJump's (PlayerControl.cs:1555). The player's own jump fires
+  on the ground, or within 3 frames of leaving it while jumpcooldown is 0 (PlayerControl.cs:372); jumpcooldown's 30
+  frames outlast the whole jump (measured in the log 2026-09-24). Used by `DevConsole.cs`.
+- Map entity table `Data/EntityData/<map id>`: rows split on '}', fields 6-8 the start position, field 194 the
+  activationflag, as MapControl.CreateEntities reads them (MapControl.cs:1477-1640; the activationflag :1650, the start
+  position :1661). Used by `DevConsole.Warp.cs`, `WarpButton.cs`.
+- MainManager.TransferMap ends by walking the party to its target and waits for that walk (MainManager.cs:17610-17624):
+  a target over water is never reached, the transition never ends, and the game keeps respawning the party there (seen
+  at SnakemouthLake, 2026-09-24). Used by `DevConsole.Warp.cs`.
 - Water raycasts as ground; water, spikes and pits carry the game's Hazards component. Used by `DevConsole.Warp.cs`.
-- A map's auto-start cutscenes (MapControl.autoevent, pairs of (flag, event)) run on arrival while their flag is off (MapControl.cs:874-883); arriving out of story order, Event21 on SnakemouthUndergrondDoor crashed and left the game "in an event" (2026-09-24). Used by `DevConsole.Warp.cs`.
-- Resets for what a dead cutscene leaves: MainManager.ResetCamera (MainManager.cs:7398), MapControl.RestoreLimit (MapControl.cs:1432), MainManager.ChangeMusic() for the map's own music (MainManager.cs:4873); Event31 left all three broken (2026-09-24). Used by `DevConsole.Warp.cs`.
-- PlayTransition 4 ends on a black dimmer (MainManager.cs, Transition case 4 -> 0); PlayTransition 1 fades in and removes it. The boat scene (Event107) parents the party to the boat with LockRigid(true) and undoes both at its end (unparent, LockRigid(false), fade in). Used by `DevConsole.Warp.cs`.
-- The trapdoor scene (Event5) turns gravity off and sets overrideanim and overrridejump for both its characters, Vi and Kabbu (EventControl.cs:1292-1296), then gives Vi her fall animation, 107 (:1334-1335). Used by `DevConsole.Warp.cs`.
-- The game's dialogue end turns off message and the waits, and shrinks and removes the box (MainManager.cs:14185-14204). The private field `textbox` holds only the letters ("Text: ...", MainManager.cs:10677, :10814); the speech box is the Textbox prefab kept in maintextbox (MainManager.cs:10781), and an orphan "Textbox(Clone)" can stay under the GUI camera after dialogue ends. Used by `DevConsole.Warp.cs`.
-- The found-item line (read in game, 2026-09-26, `articles`): Giveitem shows menutext[106], `You got |string,1| |color,1||string,0||color,0|!` (menutext[110] `You got |currency,var,0|!` for the other case, MainManager.cs:11528-11539, :11564); flagstring[1] is the article, menutext[125] `a` by default, else the item's itemdata[0, id, 3] with no trailing space (`a` for Crunchy Leaf, Mushroom, Danger Shroom, Bad Book; `the` for Explorer Permit and Overdue Book). So a blank article leaves two spaces unless the line's own space goes too. A world pickup's line is menutext[2], `You found |string,1| |color,1||string,0||color,1|!` (NPCControl.cs:5650-5693; its "!" is red), with the article flagstring[1] set from the item picked up. Used by `ItemSwap.cs`.
-- How a line is laid out (code read 2026-09-30): Giveitem draws `|sort,1||center||halfline|` + menutext[106] with the three-argument SetText, which has no line width (MainManager.cs:11564, :10074), so a long line runs past the box (seen 2026-09-30: "You got a Poison Resistance Medal from BugTester!" past both edges). A letter advances `GetLetterOffset(c, font, size.x)` (public, :9776), a space 0.3 x size.x, a `|command|` nothing (:13942-13946, :14025); at a Japanese, Russian or Korean letter the font turns 3, 4 or 5 and stays so (:13962-13979). `|line|` starts the next line at the left, 0.7 x size.y lower (:11738-11760); `|center|` moves the whole block by half its widest line, so the lines of a block start at the same x (:14027-14036). The engine's own shrink for a long substituted string is `|string,N,clamp,max,mult|`, which wraps it in `|sizemulti,mult,1|...|size,x,y|`, narrowing only (:12694-12697). The dialogue box wraps at `messagebreak` (9.75 in English, 10.5 otherwise, set each frame, :7236) with `OrganizeLines` (:9915-10018), which runs before `|string,N|` is filled in, so a name in a pickup's line is never measured (NPCControl.cs:5724). The game runs in the en-US culture (:2861), so a number in a command is written with a point. Used by `TextFit.cs`.
-- Item entities' placement (read in game, 2026-09-26, `iteminfo` on the Caravan's shelf, Madeleine's and the Ladybugs'): an item sprite is pivoted at its centre and lifted by half its height (`spritetransform` y 0.5 for the usual 0.5-extent item sprites); shelf slots stand at one height. The pickup starburst `guisprites[85]` ("gui_85") is 212 x 207, pivoted at its centre, extents 1.4. Used by `ItemSwap.cs`, `ItemSwap.Looks.cs`.
+- A map's auto-start cutscenes (MapControl.autoevent, pairs of (flag, event)) run on arrival while their flag is off
+  (MapControl.cs:874-883); arriving out of story order, Event21 on SnakemouthUndergrondDoor crashed and left the game
+  "in an event" (2026-09-24). Used by `DevConsole.Warp.cs`.
+- Resets for what a dead cutscene leaves: MainManager.ResetCamera (MainManager.cs:7398), MapControl.RestoreLimit
+  (MapControl.cs:1432), MainManager.ChangeMusic() for the map's own music (MainManager.cs:4873); Event31 left all three
+  broken (2026-09-24). Used by `DevConsole.Warp.cs`.
+- PlayTransition 4 ends on a black dimmer (MainManager.cs, Transition case 4 -> 0); PlayTransition 1 fades in and
+  removes it. The boat scene (Event107) parents the party to the boat with LockRigid(true) and undoes both at its end
+  (unparent, LockRigid(false), fade in). Used by `DevConsole.Warp.cs`.
+- The trapdoor scene (Event5) turns gravity off and sets overrideanim and overrridejump for both its characters, Vi and
+  Kabbu (EventControl.cs:1292-1296), then gives Vi her fall animation, 107 (:1334-1335). Used by `DevConsole.Warp.cs`.
+- The game's dialogue end turns off message and the waits, and shrinks and removes the box (MainManager.cs:14185-14204).
+  The private field `textbox` holds only the letters ("Text: ...", MainManager.cs:10677, :10814); the speech box is the
+  Textbox prefab kept in maintextbox (MainManager.cs:10781), and an orphan "Textbox(Clone)" can stay under the GUI
+  camera after dialogue ends. Used by `DevConsole.Warp.cs`.
+- The found-item line (read in game, 2026-09-26, `articles`): Giveitem shows menutext[106], `You
+  got |string,1| |color,1||string,0||color,0|!` (menutext[110] `You got |currency,var,0|!` for the other case,
+  MainManager.cs:11528-11539, :11564); flagstring[1] is the article, menutext[125] `a` by default, else the item's
+  itemdata[0, id, 3] with no trailing space (`a` for Crunchy Leaf, Mushroom, Danger Shroom, Bad Book; `the` for Explorer
+  Permit and Overdue Book). So a blank article leaves two spaces unless the line's own space goes too. A world pickup's
+  line is menutext[2], `You found |string,1| |color,1||string,0||color,1|!` (NPCControl.cs:5650-5693; its "!" is red),
+  with the article flagstring[1] set from the item picked up. Used by `ItemSwap.cs`.
+- How a line is laid out (code read 2026-09-30): Giveitem draws `|sort,1||center||halfline|` + menutext[106] with the
+  three-argument SetText, which has no line width (MainManager.cs:11564, :10074), so a long line runs past the box (seen
+  2026-09-30: "You got a Poison Resistance Medal from BugTester!" past both edges). A letter
+  advances `GetLetterOffset(c, font, size.x)` (public, :9776), a space 0.3 x size.x, a `|command|` nothing
+  (:13942-13946, :14025); at a Japanese, Russian or Korean letter the font turns 3, 4 or 5 and stays so
+  (:13962-13979). `|line|` starts the next line at the left, 0.7 x size.y lower (:11738-11760); `|center|` moves the
+  whole block by half its widest line, so the lines of a block start at the same x (:14027-14036). The engine's own
+  shrink for a long substituted string is `|string,N,clamp,max,mult|`, which wraps it
+  in `|sizemulti,mult,1|...|size,x,y|`, narrowing only (:12694-12697). The dialogue box wraps at `messagebreak` (9.75 in
+  English, 10.5 otherwise, set each frame, :7236) with `OrganizeLines` (:9915-10018), which runs before `|string,N|` is
+  filled in, so a name in a pickup's line is never measured (NPCControl.cs:5724). The game runs in the en-US culture
+  (:2861), so a number in a command is written with a point. Used by `TextFit.cs`.
+- Item entities' placement (read in game, 2026-09-26, `iteminfo` on the Caravan's shelf, Madeleine's and the Ladybugs'):
+  an item sprite is pivoted at its centre and lifted by half its height (`spritetransform` y 0.5 for the
+  usual 0.5-extent item sprites); shelf slots stand at one height. The pickup starburst `guisprites[85]` ("gui_85") is
+  212 x 207, pivoted at its centre, extents 1.4. Used by `ItemSwap.cs`, `ItemSwap.Looks.cs`.
 - Item sprites' outline (measured 2026-09-30, a script on the `SpriteDump` of `items0`, items 0-39, rows and columns at
   40, 50 and 60% of each sprite, the run of dark opaque pixels in from each edge): pure black, a median of 4 sheet
   pixels, quartiles 4 and 5, the Crunchy Leaf 6. The Crunchy Leaf's rect is 61 x 63, and the drawn Archipelago icon's
   128 pixels span its larger side, so an icon pixel is about half a sheet pixel: the icon's rim (share 0.07) is about
   2.1 sheet pixels and its lines between circles (0.05) about 1.5, half the game's. Used by `ApIcon.cs`.
-- The GUI camera can be turned (read in game, 2026-09-26, `menuinfo` in `BugariaCommercial`, the shop building): at (-5.6, 3.0, 6.0), rotation (5, 90, 0), orthographic, near 0.3; outside it has no turn. The game's own letters carry the camera's rotation; an object attached with `.parent =` keeps its world rotation, so it must set `localEulerAngles` to zero or it's seen edge-on there. Used by `ApMenu.cs`, `WarpButton.cs`.
-- The text palette (read in game, 2026-09-26, `palette`): `|color,n|` indexes MainManager.textcolors, which the scene sets to 10 colours, not the code's 7 (MainManager.cs:2318): 0 000000, 1 EE0B0B (item names), 2 00E700, 3 0000FF, 4 FFFFFF, 5 A9F1FF, 6 FFD500, 7 7C7C7C, 8 00CC01, 9 FFA400. An index past the end throws IndexOutOfRange and the line stops there. Used by `HoldUps.cs`.
-- A party member's icons, by member number (trueid 0 Vi, 1 Kabbu, 2 Leif): the pause menu's party row shows guisprites[94 + trueid] ("PlayerIcon", PauseMenu.cs:2486) and elsewhere guisprites[5 + trueid] (PauseMenu.cs:1906, :2541); each member's colour is charcolor[trueid], a Color[3] (MainManager.cs:2329). The party icon is about 2.7 times an item sprite's size (2.85 x 2.56 against the Crunchy Leaf); scaled down to it, seen on screen in a hold-up (2026-09-26). Used by `ItemSwap.Looks.cs`, `CustomItems.cs`.
-- MainManager.SetPlayers(positions) places member j at newentitypos[j] (MainManager.cs:9416-9439), so a list shorter than the party throws IndexOutOfRange. Used by `PartyFit.cs`.
-- A scene that reloads the map with recreateplayers (Event45's throne room, LoadMap) remakes the party characters, so references to the old ones go null. Used by `PartyFit.cs`.
-- EntityControl.LateUpdate (EntityControl.cs:3672) runs after the scene's step and the entity's own updates, just before drawing: the place to force a renderer off. Used by `PartyFit.cs`.
-- Every EntityControl.MoveTowards overload ends in MoveTowards(Vector3, float, int, int, bool) (EntityControl.cs:4911-4960). Used by `PartyFit.cs`.
-- Scenes take the party as a list and use fixed slots p[0]..p[2] (about 110 lookups; Event83, the barkeeper's first talk, reads p[2], EventControl.cs:13055-13058); GetPartyEntities(true) returns the party in id order (MainManager.cs:9483-9503). Used by `PartyFit.cs`.
-- The horn tutorial (Event10) waits while entities[0].forcemove (EventControl.cs:2935); the trapdoor's end puts member m at the m-th scene character's position (EventControl.cs:1476-1484; in the IL the only `ldelem Vector3` after the `SetPlayers` call in `<Event5>d__30.MoveNext`, read 2026-09-26); the spider fight's end (Event6, EventControl.cs:2272-2289) sets entities[2].following = entities[1]; the droplet scene's end (Event21, EventControl.cs:4112-4114) walks GetEntity(-2) and (-3) to the player. Used by `PartyFit.cs`.
-- A battle's party slots and the leader (code read 2026-09-30, not measured): `playerdata` is in `ChangeParty` order, and
-  `ChangeParty` sets `partyorder = ids` (MainManager.cs:3786); the field switch rotates each slot's `animid` and
+- The GUI camera can be turned (read in game, 2026-09-26, `menuinfo` in `BugariaCommercial`, the shop building): at
+  (-5.6, 3.0, 6.0), rotation (5, 90, 0), orthographic, near 0.3; outside it has no turn. The game's own letters carry
+  the camera's rotation; an object attached with `.parent =` keeps its world rotation, so it must set `localEulerAngles`
+  to zero or it's seen edge-on there. Used by `ApMenu.cs`, `WarpButton.cs`.
+- The text palette (read in game, 2026-09-26, `palette`): `|color,n|` indexes MainManager.textcolors, which the scene
+  sets to 10 colours, not the code's 7 (MainManager.cs:2318): 0 000000, 1 EE0B0B (item names), 2 00E700, 3 0000FF, 4
+  FFFFFF, 5 A9F1FF, 6 FFD500, 7 7C7C7C, 8 00CC01, 9 FFA400. An index past the end throws IndexOutOfRange and the line
+  stops there. Used by `HoldUps.cs`.
+- A party member's icons, by member number (trueid 0 Vi, 1 Kabbu, 2 Leif): the pause menu's party row shows
+  guisprites[94 + trueid] ("PlayerIcon", PauseMenu.cs:2486) and elsewhere guisprites[5 + trueid] (PauseMenu.cs:1906,
+  :2541); each member's colour is charcolor[trueid], a Color[3] (MainManager.cs:2329). The party icon is about 2.7 times
+  an item sprite's size (2.85 x 2.56 against the Crunchy Leaf); scaled down to it, seen on screen in a hold-up
+  (2026-09-26). Used by `ItemSwap.Looks.cs`, `CustomItems.cs`.
+- MainManager.SetPlayers(positions) places member j at newentitypos[j] (MainManager.cs:9416-9439), so a list shorter
+  than the party throws IndexOutOfRange. Used by `PartyFit.cs`.
+- A scene that reloads the map with recreateplayers (Event45's throne room, LoadMap) remakes the party characters, so
+  references to the old ones go null. Used by `PartyFit.cs`.
+- EntityControl.LateUpdate (EntityControl.cs:3672) runs after the scene's step and the entity's own updates, just before
+  drawing: the place to force a renderer off. Used by `PartyFit.cs`.
+- Every EntityControl.MoveTowards overload ends in MoveTowards(Vector3, float, int, int, bool)
+  (EntityControl.cs:4911-4960). Used by `PartyFit.cs`.
+- Scenes take the party as a list and use fixed slots p[0]..p[2] (about 110 lookups; Event83, the barkeeper's first
+  talk, reads p[2], EventControl.cs:13055-13058); GetPartyEntities(true) returns the party in id order
+  (MainManager.cs:9483-9503). Used by `PartyFit.cs`.
+- The horn tutorial (Event10) waits while entities[0].forcemove (EventControl.cs:2935); the trapdoor's end puts member m
+  at the m-th scene character's position (EventControl.cs:1476-1484; in the IL the only `ldelem Vector3` after
+  the `SetPlayers` call in `<Event5>d__30.MoveNext`, read 2026-09-26); the spider fight's end (Event6,
+  EventControl.cs:2272-2289) sets entities[2].following = entities[1]; the droplet scene's end (Event21,
+  EventControl.cs:4112-4114) walks GetEntity(-2) and (-3) to the player. Used by `PartyFit.cs`.
+- A battle's party slots and the leader (code read 2026-09-30, not measured): `playerdata` is in `ChangeParty` order,
+  and `ChangeParty` sets `partyorder = ids` (MainManager.cs:3786); the field switch rotates each slot's `animid` and
   writes those member numbers into `partyorder` (PlayerControl.SwitchOrder, :1525-1532). Every battle resets
   `partypointer` (slots) to {0, 1, 2} (BattleControl.cs:772), and `MainManager.SwitchParty(battle: true)` rotates only
   the first `playerdata.Length` of them (MainManager.cs:18362-18410). The start then loops until `partypointer[0] ==
@@ -1205,61 +1330,167 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
   are the enemy table's column 23, `N{Prop{Prop{` (MainManager.cs:6387-6398); the King's holds `SurviveWith10`, the
   Beast gets it from `Event137` after the fight starts (EventControl.cs:23137). The Beast's HP is 76 (seen in
   vanilla, `log.md`, 2026-09-28). Used by `EnemyScaling.cs`.
-- MainManager.GetEntity: -2 and -3 are the second and third member by position (MainManager.cs:18526-18537), -4/-5/-6 are Vi/Kabbu/Leif by name (MainManager.cs:18538-18570), 1000 + n reads map.tempfollowers[n] (MainManager.cs:18512-18515) and throws ArgumentOutOfRange when nobody is there; of about 420 callers, only a few null-check the result (GetPartyEntities, MainManager.cs:9498; Event1, EventControl.cs:336). Used by `PartyFit.cs`.
-- The main menu's confirm sound: StartMenu.Update plays "Confirm" for every main-menu choice (menuid 1) before acting on it. Used by `MenuToggle.cs`.
-- On the file select (menuid 2, submenu 0), confirm on file 0-2 is StartMenu.Update's load or new-game branch (StartMenu.cs:512-535, Event22 or Event8); the save slots' boxes sort at -20 to -60 and their text at 10 (StartMenu.ShowSaves). Used by `MenuToggle.cs`.
+- MainManager.GetEntity: -2 and -3 are the second and third member by position (MainManager.cs:18526-18537), -4/-5/-6
+  are Vi/Kabbu/Leif by name (MainManager.cs:18538-18570), 1000 + n reads map.tempfollowers[n]
+  (MainManager.cs:18512-18515) and throws ArgumentOutOfRange when nobody is there; of about 420 callers, only a few
+  null-check the result (GetPartyEntities, MainManager.cs:9498; Event1, EventControl.cs:336). Used by `PartyFit.cs`.
+- The main menu's confirm sound: StartMenu.Update plays "Confirm" for every main-menu choice (menuid 1) before acting on
+  it. Used by `MenuToggle.cs`.
+- On the file select (menuid 2, submenu 0), confirm on file 0-2 is StartMenu.Update's load or new-game branch
+  (StartMenu.cs:512-535, Event22 or Event8); the save slots' boxes sort at -20 to -60 and their text at 10
+  (StartMenu.ShowSaves). Used by `MenuToggle.cs`.
 - Closing the game's Settings from the title resets maxoptions to 3 (PauseMenu.cs:1811). Used by `MenuToggle.cs`.
-- MainManager.Create9Box box type 1 is the game's orange box; ButtonSprite draws its label with no sort of its own, so the label text must carry |sort,N| to show over a box. Used by `MenuToggle.cs`.
-- Pause menu window 0: maxoptions icons (4, or 2 in battle) built in BuildWindow as sprites[13 + n] with guisprites[74 + n] via NewUIObject (PauseMenu.cs:2378-2497, :2493-2497); window 0's sprites array is 19 long (:2404), window 1's 11, window 2's 20 (only 0-10 and 12-14 filled), window 3's 8, the controls page's 12 (PauseMenu.cs:2235-2678), and the map's (window 6) one per area plus one, a marker at area + 1 for each visited area (:2779); BuildWindow shrinks the old page's boxes for 0.2 s before it builds the new one, so for that long `sprites` is still the old page's (:2348-2368); confirm opens window option + 1 (:374-380); labels are menutext[10 + option] and [50 + option] (UpdateText); IconAnim gets {13, 14, 15, 16} and indexes by option (PauseMenu.cs:351); PrepareExit shrinks the boxes and DestroyPause follows 0.25 s later (PauseMenu.cs:1839). Used by `WarpButton.cs`.
-- The game's menu cursor sprite is MainManager.cursorsprite[0], set up as at MainManager.cs:14822 (sort, layer 5, SpriteBounce.MessageBounce). Used by `WarpButton.cs`.
+- MainManager.Create9Box box type 1 is the game's orange box; ButtonSprite draws its label with no sort of its own, so
+  the label text must carry |sort,N| to show over a box. Used by `MenuToggle.cs`.
+- Pause menu window 0: maxoptions icons (4, or 2 in battle) built in BuildWindow as sprites[13 + n] with guisprites[74 +
+  n] via NewUIObject (PauseMenu.cs:2378-2497, :2493-2497); window 0's sprites array is 19 long (:2404), window 1's 11,
+  window 2's 20 (only 0-10 and 12-14 filled), window 3's 8, the controls page's 12 (PauseMenu.cs:2235-2678), and the
+  map's (window 6) one per area plus one, a marker at area + 1 for each visited area (:2779); BuildWindow shrinks the
+  old page's boxes for 0.2 s before it builds the new one, so for that long `sprites` is still the old page's
+  (:2348-2368); confirm opens window option + 1 (:374-380); labels are menutext[10 + option] and [50 + option]
+  (UpdateText); IconAnim gets {13, 14, 15, 16} and indexes by option (PauseMenu.cs:351); PrepareExit shrinks the boxes
+  and DestroyPause follows 0.25 s later (PauseMenu.cs:1839). Used by `WarpButton.cs`.
+- The game's menu cursor sprite is MainManager.cursorsprite[0], set up as at MainManager.cs:14822 (sort, layer 5,
+  SpriteBounce.MessageBounce). Used by `WarpButton.cs`.
 - A new game begins on the Outskirts: Event8 loads map 16 (EventControl.cs:2636). Used by `WarpButton.cs`.
-- guisprites[34] is a round blue map icon in the pause-menu icon style (from SpriteDump's sheet). Used by `WarpButton.cs`.
-- MultiClient.Net 6.7.1 net40: every send first checks websocket-sharp's IsAlive, which pings and blocks up to 5 s for the pong (WebSocket.ping, WaitTime); websocket-sharp's Close sends a close frame and waits up to 5 s for the answer. Used by `ApConnection.cs`.
-- MultiClient.Net 6.7.1 keeps every location check the server hasn't confirmed and resends them with the next send: each `LocationChecks` packet is every checked location except `serverConfirmedChecks`, which fills from the server's `Connected` and `RoomUpdate` packets (`Helpers/LocationCheckHelper.cs` at tag v6.7.1, `GetLocationChecksPacket`; read 2026-09-25). Used by `ApConnection.cs`.
-- Scouting with HintCreationPolicy.None creates no hints; a hint-creating scout would announce the seed's placements. Used by `ApConnection.cs`.
+- guisprites[34] is a round blue map icon in the pause-menu icon style (from SpriteDump's sheet). Used
+  by `WarpButton.cs`.
+- MultiClient.Net 6.7.1 net40: every send first checks websocket-sharp's IsAlive, which pings and blocks up to 5 s for
+  the pong (WebSocket.ping, WaitTime); websocket-sharp's Close sends a close frame and waits up to 5 s for the answer.
+  Used by `ApConnection.cs`.
+- MultiClient.Net 6.7.1 keeps every location check the server hasn't confirmed and resends them with the next send:
+  each `LocationChecks` packet is every checked location except `serverConfirmedChecks`, which fills from the
+  server's `Connected` and `RoomUpdate` packets (`Helpers/LocationCheckHelper.cs` at tag
+  v6.7.1, `GetLocationChecksPacket`; read 2026-09-25). Used by `ApConnection.cs`.
+- Scouting with HintCreationPolicy.None creates no hints; a hint-creating scout would announce the seed's placements.
+  Used by `ApConnection.cs`.
 - ArchipelagoSocketHelper tries wss:// first for a bare address and falls back to ws://. Used by `ApConnection.cs`.
-- MultiClient.Net 6.7.1 caches each game's data package at `<LocalApplicationData>\Archipelago\Cache\datapackage\<game>\<checksum>.json` (`DataPackage.FileSystemCheckSumDataPackageProvider`, an internal class). Its private `GetFileSystemSafeFileName(string gameName)` strips invalid characters into its parameter but returns the unchanged original; `TryGetDataPackage(string game, string checksum, out GameData)` builds its path with the raw checksum; in both, `Path.Combine` runs outside the `try`. Game and checksum are the server's: RoomInfo's `games` and `datapackage_checksums` for reading, the DataPackage reply's game keys and each `Checksum` for writing (`DataPackage.DataPackageCache`). Read in the shipped DLL, decompiled 2026-09-29. Used by `CachePaths.cs`.
-- HarmonyX 2.7.0 (compiled against) and 2.9.0 (in `BepInEx/core`) both have `HarmonyPatch(string assemblyQualifiedDeclaringType, string methodName)`; 2.9.0 resolves it with `Type.GetType(name, true)`, which throws when the type is missing (`HarmonyMethod.GetDeclaringType` at tag v2.9.0; 2.7.0's constructors from its NuGet DLL; 2026-09-29). Used by `CachePaths.cs`.
-- slot_data location_shops: {location id: {shop, medal}}, one location per copy a medal shop ever stocks, done when the save marks that copy bought (ShopSwap). Used by `SeedData.cs` (parsed there; `ApConnection.cs` passes it on).
+- MultiClient.Net 6.7.1 caches each game's data package
+  at `<LocalApplicationData>\Archipelago\Cache\datapackage\<game>\<checksum>.json`
+  (`DataPackage.FileSystemCheckSumDataPackageProvider`, an internal class). Its
+  private `GetFileSystemSafeFileName(string gameName)` strips invalid characters into its parameter but returns the
+  unchanged original; `TryGetDataPackage(string game, string checksum, out GameData)` builds its path with the raw
+  checksum; in both, `Path.Combine` runs outside the `try`. Game and checksum are the server's: RoomInfo's `games`
+  and `datapackage_checksums` for reading, the DataPackage reply's game keys and each `Checksum` for writing
+  (`DataPackage.DataPackageCache`). Read in the shipped DLL, decompiled 2026-09-29. Used by `CachePaths.cs`.
+- HarmonyX 2.7.0 (compiled against) and 2.9.0 (in `BepInEx/core`) both have `HarmonyPatch(string
+  assemblyQualifiedDeclaringType, string methodName)`; 2.9.0 resolves it with `Type.GetType(name, true)`, which throws
+  when the type is missing (`HarmonyMethod.GetDeclaringType` at tag v2.9.0; 2.7.0's constructors from its NuGet DLL;
+  2026-09-29). Used by `CachePaths.cs`.
+- slot_data location_shops: {location id: {shop, medal}}, one location per copy a medal shop ever stocks, done when the
+  save marks that copy bought (ShopSwap). Used by `SeedData.cs` (parsed there; `ApConnection.cs` passes it on).
 
 ### Map data, doors, dumps and probes, hot reload
 
-- Interacting with an item shop slot (`Fixedshop<n>`, an item entity: animid 0, animstate the item id) puts the price in `flagvar[1]` and the item's name in `flagstring[0]`, then opens the shopkeeper's buy talk; looking at a slot opens its description box from `itemdata[0, id, 0]` and `[.., 2]`. The `additem` command only adds to the bag list, with no item-get box (NPCControl.cs:4374-4378, NPCControl.cs:4220-4226, MainManager.cs:12570-12571). Used by `ItemShops.cs`.
-- A map's entity table (`Data/EntityData/<map id>`, one line per entity, fields split by `}`) holds an entity's `data` count at field 60 (values from 61) and its `vectordata` count at field 71 (each vector three fields from 72); names are in `Data/EntityData/Names/<map id>names`, one per line in the same order (MapControl.CreateEntities, MapControl.cs:1540-1566, MapControl.cs:1454). Used by `DoorShuffle.cs`.
-- A door's `data[4] == 1` means TransferMap skips the walk into the door (`vectordata[0]`): a hole or a ladder. Used by `DoorShuffle.cs`.
-- Grass that drops an item picks one `vectordata` entry at random and drops item x of it, so a grass entity's `vectordata` is its item list (NPCControl.cs:5976-5983). Used by `EntityDump.cs`.
-- `GlowTrigger` components are the electric triggers, which the bubble shield also blocks (GlowTrigger.cs:189); `Hazards` type `WalkableSpike` is what the bubble shield walks over (Hazards.cs:207). Map prefabs load from Resources `Prefabs/Maps/<map>` (MainManager.cs:9652); dialogue tables from `Data/Dialogues<lang>/Maps/<map>` (MainManager.cs:2981) . Used by `MapDump.cs`, `ScriptDump.cs`.
-- Dialogue commands that move the party to another map: `transfer` and `warp` take a map id (or varN) and an optional position; `loadmap` reloads a map (MainManager.cs:13262-13280). Used by `ScriptDump.cs`.
-- `MapControl.autoevent` holds (flag, event) pairs: the map starts the event once while the flag is off, then sets the flag; these are story steps no entity or dialogue starts (MapControl.cs:874-883). Used by `MapDump.cs`.
-- Loading a save allocates new `flags`/`regionalflags`/`crystalbflags` arrays of the same length, so a watcher must compare array identity, not length, or a load reads as mass flag flips (MainManager.cs:17274). Used by `GrantProbe.cs`.
-- ScriptEngine's FileSystemWatcher can't run in this game: its Mono throws NotImplementedException from `new FileSystemWatcher(path)` inside ScriptEngine.Awake (2026-09-24), so DevReload polls the DLL and sets ScriptEngine's private `shouldReload`, field names read from ScriptEngine.dll r11.1 with ilspycmd. Used by `DevReload.cs`.
-- A hot reload during a scene, conversation or battle orphaned the stand-ins the old plugin made for a running scene (the spider fight, 2026-09-25), so DevReload waits for a free moment. Used by `DevReload.cs`.
-- World pickups pass the item id to SetText as `var,0`: NPCControl.CheckItem puts it in `flagvar[0]` first. Used by `TextProbe.cs`.
-- The plugin is built with a Windows ("full") pdb: ScriptEngine reads the plugin through Mono.Cecil with symbols and can't read a portable pdb, so the plugin would silently never load (measured in the author's other project, 2026-08-28). Used by `BugFablesAP.csproj`.
-- A dig spot (DigSpot) starts an event only when data[0] >= 2; data[0] = 0 buries an item, 1 a crystal berry (NPCControl.cs:5396-5420). Used by `dev-scripts/event-triggers.py`.
+- Interacting with an item shop slot (`Fixedshop<n>`, an item entity: animid 0, animstate the item id) puts the price
+  in `flagvar[1]` and the item's name in `flagstring[0]`, then opens the shopkeeper's buy talk; looking at a slot opens
+  its description box from `itemdata[0, id, 0]` and `[.., 2]`. The `additem` command only adds to the bag list, with no
+  item-get box (NPCControl.cs:4374-4378, NPCControl.cs:4220-4226, MainManager.cs:12570-12571). Used by `ItemShops.cs`.
+- A map's entity table (`Data/EntityData/<map id>`, one line per entity, fields split by `}`) holds an entity's `data`
+  count at field 60 (values from 61) and its `vectordata` count at field 71 (each vector three fields from 72); names
+  are in `Data/EntityData/Names/<map id>names`, one per line in the same order (MapControl.CreateEntities,
+  MapControl.cs:1540-1566, MapControl.cs:1454). Used by `DoorShuffle.cs`.
+- A door's `data[4] == 1` means TransferMap skips the walk into the door (`vectordata[0]`): a hole or a ladder. Used
+  by `DoorShuffle.cs`.
+- Grass that drops an item picks one `vectordata` entry at random and drops item x of it, so a grass
+  entity's `vectordata` is its item list (NPCControl.cs:5976-5983). Used by `EntityDump.cs`.
+- `GlowTrigger` components are the electric triggers, which the bubble shield also blocks
+  (GlowTrigger.cs:189); `Hazards` type `WalkableSpike` is what the bubble shield walks over (Hazards.cs:207). Map
+  prefabs load from Resources `Prefabs/Maps/<map>` (MainManager.cs:9652); dialogue tables
+  from `Data/Dialogues<lang>/Maps/<map>` (MainManager.cs:2981) . Used by `MapDump.cs`, `ScriptDump.cs`.
+- Dialogue commands that move the party to another map: `transfer` and `warp` take a map id (or varN) and an optional
+  position; `loadmap` reloads a map (MainManager.cs:13262-13280). Used by `ScriptDump.cs`.
+- `MapControl.autoevent` holds (flag, event) pairs: the map starts the event once while the flag is off, then sets the
+  flag; these are story steps no entity or dialogue starts (MapControl.cs:874-883). Used by `MapDump.cs`.
+- Loading a save allocates new `flags`/`regionalflags`/`crystalbflags` arrays of the same length, so a watcher must
+  compare array identity, not length, or a load reads as mass flag flips (MainManager.cs:17274). Used
+  by `GrantProbe.cs`.
+- ScriptEngine's FileSystemWatcher can't run in this game: its Mono throws NotImplementedException from `new
+  FileSystemWatcher(path)` inside ScriptEngine.Awake (2026-09-24), so DevReload polls the DLL and sets ScriptEngine's
+  private `shouldReload`, field names read from ScriptEngine.dll r11.1 with ilspycmd. Used by `DevReload.cs`.
+- A hot reload during a scene, conversation or battle orphaned the stand-ins the old plugin made for a running scene
+  (the spider fight, 2026-09-25), so DevReload waits for a free moment. Used by `DevReload.cs`.
+- World pickups pass the item id to SetText as `var,0`: NPCControl.CheckItem puts it in `flagvar[0]` first. Used
+  by `TextProbe.cs`.
+- The plugin is built with a Windows ("full") pdb: ScriptEngine reads the plugin through Mono.Cecil with symbols and
+  can't read a portable pdb, so the plugin would silently never load (measured in the author's other project,
+  2026-08-28). Used by `BugFablesAP.csproj`.
+- A dig spot (DigSpot) starts an event only when data[0] >= 2; data[0] = 0 buries an item, 1 a crystal berry
+  (NPCControl.cs:5396-5420). Used by `dev-scripts/event-triggers.py`.
 
 ### The world's locations, from the data file's notes
 
-- Event10 (the horn tutorial near Snakemouth, which sets flag 17) is started by the `Woodboring` EventTrigger on `NearSnakemouth` (EventControl.cs:2915); its 10 berries are `giveitem,-1,10,6` written in the event's code (EventControl.cs:3040) (location id 2). Used by `logic/outskirts.py`.
-- Cut grass that drops an item copies its own one-time flag onto the drop (NPCControl.cs:5981-5983), so a grass drop is an ordinary pickup location (location id 12). Used by `logic/outskirts.py`.
-- The Lore Book behind the Ant Palace library bookshelf is flag 71 (play-through log, 2026-09-24) (location id 15). Used by `logic/bugaria_city.py`.
-- A ground crystal berry's map data holds its index in data[3], copied to data[0] at load (NPCControl.cs:938); a berry dropped from cut grass has the index in the grass's data[1], carried by the drop in data[0] (NPCControl.cs:5967-5972) (location ids 19, 21). Used by `logic/outskirts.py`, `logic/snakemouth_den.py`.
-- Flag 281 (one of the three respawning Snakemouth pickups' hiding flags) is set by nothing found in the code, the map scripts or the entities (2026-09-24, again 2026-10-02) and read False in play, so each of the three is hidden only by its regional flag (24, 29, 28), which `logic/snakemouth_den.py` keys them on (location ids 22, 23, 24). Used by `logic/snakemouth_den.py`.
-- Entities behind pickup locations: `SnakemouthUndergrondDoor` entity 6 (HoneyDrop, id 22) and entity 20 (`CrunchyLeaf - Duplicate`, holding a Mushroom, id 23); `SnakemouthUndergroundRightB` entity 11 (CrunchyLeaf, id 24); `BugariaOutskirtsEast1` entity 38 (a Drowsy Cake under a stone, flag 735, id 25); `BugariaResidential` entity 39 (`badbook`, id 32) and entity 10 (`BugMeNot - Duplicate`, flag 59, id 33); Madeleine's house (inside 2) entity 71 (`tea`, Burly Tea, x 36, id 44) and entity 54 (`lorebookmadeleine`, Lore Book, x 33.6, activationflag 392, id 45) (EntityData / entity dump). Used by `logic/snakemouth_den.py`, `logic/outskirts.py`, `logic/bugaria_city.py`.
-- The pier statue's dialogue line 63 runs `|discovery,49|` (ScriptDump; `BugariaPier`'s own discovery list is 49, MapDump); examining it set flag 654 in the play log (2026-09-25) (location id 27). Used by `logic/outskirts.py`.
-- Discovery sources: Event11 (arrival outside Snakemouth) is `OutsideSnakemouth`'s autoevent 22:11 (MapDump) and records discovery 0 (EventControl.cs:3095); Event6 (fall room EventTrigger, data 6, limit 27) records discovery 1 at its end (EventControl.cs:2293); Event13 (entity `HiddenEvent` on `SnakemouthBridgeRoom`) records discovery 2 (EventControl.cs:3278); Event27, started by cutting the grass entity `AncientHouseDiscovery` (BeetleGrass) on `SnakemouthUndergrondDoor`, records discovery 3 (EventControl.cs:5001) (location ids 28-31). Used by `logic/outskirts.py`, `logic/snakemouth_den.py`.
-- Event38 (the plaza statue discovery) asks for party members by name and sets no story flag (kept_present StatueDesc). Used by `logic/bugaria_city.py`.
-- Merab's buy is her line 39, `giveitem,2,var,0`; the later stock entries are added at EventControl.cs:11960-11962 (Event73), :16952-16954 (Event99), :20562-20563 (Event120), :24279-24281 (Event142), and We Owe Ya! by `MapControl.HelperMedalCheck` (flag 716, MapControl.cs:355-361). Entry 18 is the second TP Plus copy (after entry 2), entry 19 the second Ambusher (after entry 6) (location ids 34-43 and 46-57; 44 and 45 are Madeleine's house). Used by `logic/bugaria_city.py`.
-- Madame Butterfly is `ButterflyShopkeeper`, entity 10 on `BugariaCommercial`; the caravan's keeper is `Crickerly2`, entity 33 on `BugariaOutskirtsOutsideCity`; each stock entry is a `Fixedshop<n>` slot (the keeper's data, entity dump) (location ids 58-65). Used by `logic/bugaria_city.py`, `logic/outskirts.py`.
-- After the first boss, a ladybug girl outside the city starts the lost-kid quest (her flag 54); the kid then waits at the lake (story event First Boss Beaten). Used by `logic/snakemouth_den.py`.
-- Event12 (the "turn back" blockers) only walks the player and sets no flags (kept_open eetlblocker1 - Duplicate, MM). Used by `logic/outskirts.py`, `logic/bugaria_city.py`.
-- The town's arrival-scene trigger is `DoorBugaria - Duplicate` on `BugariaOutskirtsOutsideCity` (an EventTrigger starting Event60, hidden by 107); the real door `DoorBugaria` is a DoorOtherMap to map 9 requiring 107 (kept_open / kept_present). Used by `logic/outskirts.py`.
-- On `BugariaOutskirtsOutsideCity`, `MiningAnt` and `MinerAntWalk` (miners at the rocks), `Crickerly1` (talk only) and `FuzzyMoth` all have limit 41; `LaydbugGirl` and `LaydbugBoy` require 41, with everyday lines 100 ("Dib, please don't do anything reckless") and 101 ("I'm not a kid anymore, Leby!"); their other lines answer to the lost-brother quest's flags (kept_open / kept_present). Used by `logic/outskirts.py`.
-- The field attack is `PlayerControl.DoActionTap`, by the leader's `playerdata[0].animid` (0 Vi's beemerang, only while `!flags[41] || flags[11]`; 1 Kabbu's horn; 2 Leif's ice), started from a tap or from `DoActionHold`; the jump is `PlayerControl.DoJump`, called only by the jump button (PlayerControl.cs:372-392, 1008-1100, 1549); the game's refusal sound is `MainManager.PlayBuzzer()` ("Buzzer", used by the pause menu). Read 2026-09-27. **A Harmony prefix on `DoActionTap` itself never runs** (seen 2026-09-27: no refusal logged while attacks worked): it only builds the coroutine, and the runtime inlines it into its callers; its `MoveNext` is patched instead. `DoActionTap` clears `actionroutine` only at its end (PlayerControl.cs:1224), and `DoActionHold` starts Kabbu's or Leif's tap only while it is null (Vi's only while no beemerang is out, `:1272`). The game's items end at 186 (`MainManager.Items`), so 200-204 are free for the mod's own. **The game's names for the three field attacks** (its `Skills` text, English, read with the dev `textsearch`, 2026-09-27): line 34 "Beemerang Toss" (Vi), 37 "Horn Slash" (Kabbu), 40 "Freeze" (Leif); the list has no entry for jumping. Used by `FieldMoves.cs`, `CustomItems.cs`, `data/items.json`.
-- `SnakemouthFallRoom`'s `JumpShroom` (the bounce mushroom up to the pitfall room) requires 41 like `LoadingZoneDoorRoom` (kept_present). Used by `logic/snakemouth_den.py`.
-- `OutsideSnakemouth` (seen on screen, 2026-09-26): the arrival discovery (0) is reached from either side; the crystal berry (#0, location 19) and the dig spot (`Mound - Duplicate`, entity 12, hidden by flag 683) is reached from the cave's side, and from the Outskirts' side only by cutting the grass across the middle (entities 2-8, `BeetleGrass`). Both need the horn from the Outskirts' side, or the way round through the cave (the dig spot is no location yet). Used by `logic/outskirts.py`.
-- The palace's own blockers `makiblocker1` and `makiblocker2` stay in place: the story goes on there (kept_open MM). Used by `logic/bugaria_city.py`.
-- The Outskirts rocks' removal leaves `LoadZoneGoldenPath` still waiting for flag 41 on its own (scenery_hidden Base/BlockingRocks). Used by `logic/outskirts.py`.
+- Event10 (the horn tutorial near Snakemouth, which sets flag 17) is started by the `Woodboring` EventTrigger
+  on `NearSnakemouth` (EventControl.cs:2915); its 10 berries are `giveitem,-1,10,6` written in the event's code
+  (EventControl.cs:3040) (location id 2). Used by `logic/outskirts.py`.
+- Cut grass that drops an item copies its own one-time flag onto the drop (NPCControl.cs:5981-5983), so a grass drop is
+  an ordinary pickup location (location id 12). Used by `logic/outskirts.py`.
+- The Lore Book behind the Ant Palace library bookshelf is flag 71 (play-through log, 2026-09-24) (location id 15). Used
+  by `logic/bugaria_city.py`.
+- A ground crystal berry's map data holds its index in data[3], copied to data[0] at load (NPCControl.cs:938); a berry
+  dropped from cut grass has the index in the grass's data[1], carried by the drop in data[0] (NPCControl.cs:5967-5972)
+  (location ids 19, 21). Used by `logic/outskirts.py`, `logic/snakemouth_den.py`.
+- Flag 281 (one of the three respawning Snakemouth pickups' hiding flags) is set by nothing found in the code, the map
+  scripts or the entities (2026-09-24, again 2026-10-02) and read False in play, so each of the three is hidden only by
+  its regional flag (24, 29, 28), which `logic/snakemouth_den.py` keys them on (location ids 22, 23, 24). Used
+  by `logic/snakemouth_den.py`.
+- Entities behind pickup locations: `SnakemouthUndergrondDoor` entity 6 (HoneyDrop, id 22) and entity 20 (`CrunchyLeaf -
+  Duplicate`, holding a Mushroom, id 23); `SnakemouthUndergroundRightB` entity 11 (CrunchyLeaf,
+  id 24); `BugariaOutskirtsEast1` entity 38 (a Drowsy Cake under a stone, flag 735, id 25); `BugariaResidential` entity
+  39 (`badbook`, id 32) and entity 10 (`BugMeNot - Duplicate`, flag 59, id 33); Madeleine's house (inside 2) entity 71
+  (`tea`, Burly Tea, x 36, id 44) and entity 54 (`lorebookmadeleine`, Lore Book, x 33.6, activationflag 392, id 45)
+  (EntityData / entity dump). Used by `logic/snakemouth_den.py`, `logic/outskirts.py`, `logic/bugaria_city.py`.
+- The pier statue's dialogue line 63 runs `|discovery,49|` (ScriptDump; `BugariaPier`'s own discovery list is 49,
+  MapDump); examining it set flag 654 in the play log (2026-09-25) (location id 27). Used by `logic/outskirts.py`.
+- Discovery sources: Event11 (arrival outside Snakemouth) is `OutsideSnakemouth`'s autoevent 22:11 (MapDump) and records
+  discovery 0 (EventControl.cs:3095); Event6 (fall room EventTrigger, data 6, limit 27) records discovery 1 at its end
+  (EventControl.cs:2293); Event13 (entity `HiddenEvent` on `SnakemouthBridgeRoom`) records discovery 2
+  (EventControl.cs:3278); Event27, started by cutting the grass entity `AncientHouseDiscovery` (BeetleGrass)
+  on `SnakemouthUndergrondDoor`, records discovery 3 (EventControl.cs:5001) (location ids 28-31). Used
+  by `logic/outskirts.py`, `logic/snakemouth_den.py`.
+- Event38 (the plaza statue discovery) asks for party members by name and sets no story flag (kept_present StatueDesc).
+  Used by `logic/bugaria_city.py`.
+- Merab's buy is her line 39, `giveitem,2,var,0`; the later stock entries are added at EventControl.cs:11960-11962
+  (Event73), :16952-16954 (Event99), :20562-20563 (Event120), :24279-24281 (Event142), and We Owe Ya!
+  by `MapControl.HelperMedalCheck` (flag 716, MapControl.cs:355-361). Entry 18 is the second TP Plus copy (after
+  entry 2), entry 19 the second Ambusher (after entry 6) (location ids 34-43 and 46-57; 44 and 45 are Madeleine's
+  house). Used by `logic/bugaria_city.py`.
+- Madame Butterfly is `ButterflyShopkeeper`, entity 10 on `BugariaCommercial`; the caravan's keeper is `Crickerly2`,
+  entity 33 on `BugariaOutskirtsOutsideCity`; each stock entry is a `Fixedshop<n>` slot (the keeper's data, entity dump)
+  (location ids 58-65). Used by `logic/bugaria_city.py`, `logic/outskirts.py`.
+- After the first boss, a ladybug girl outside the city starts the lost-kid quest (her flag 54); the kid then waits at
+  the lake (story event First Boss Beaten). Used by `logic/snakemouth_den.py`.
+- Event12 (the "turn back" blockers) only walks the player and sets no flags (kept_open eetlblocker1 - Duplicate, MM).
+  Used by `logic/outskirts.py`, `logic/bugaria_city.py`.
+- The town's arrival-scene trigger is `DoorBugaria - Duplicate` on `BugariaOutskirtsOutsideCity` (an EventTrigger
+  starting Event60, hidden by 107); the real door `DoorBugaria` is a DoorOtherMap to map 9 requiring 107 (kept_open /
+  kept_present). Used by `logic/outskirts.py`.
+- On `BugariaOutskirtsOutsideCity`, `MiningAnt` and `MinerAntWalk` (miners at the rocks), `Crickerly1` (talk only)
+  and `FuzzyMoth` all have limit 41; `LaydbugGirl` and `LaydbugBoy` require 41, with everyday lines 100 ("Dib, please
+  don't do anything reckless") and 101 ("I'm not a kid anymore, Leby!"); their other lines answer to the lost-brother
+  quest's flags (kept_open / kept_present). Used by `logic/outskirts.py`.
+- The field attack is `PlayerControl.DoActionTap`, by the leader's `playerdata[0].animid` (0 Vi's beemerang, only
+  while `!flags[41] || flags[11]`; 1 Kabbu's horn; 2 Leif's ice), started from a tap or from `DoActionHold`; the jump
+  is `PlayerControl.DoJump`, called only by the jump button (PlayerControl.cs:372-392, 1008-1100, 1549); the game's
+  refusal sound is `MainManager.PlayBuzzer()` ("Buzzer", used by the pause menu). Read 2026-09-27. **A Harmony prefix
+  on `DoActionTap` itself never runs** (seen 2026-09-27: no refusal logged while attacks worked): it only builds the
+  coroutine, and the runtime inlines it into its callers; its `MoveNext` is patched instead. `DoActionTap`
+  clears `actionroutine` only at its end (PlayerControl.cs:1224), and `DoActionHold` starts Kabbu's or Leif's tap only
+  while it is null (Vi's only while no beemerang is out, `:1272`). The game's items end at 186 (`MainManager.Items`), so
+  200-204 are free for the mod's own. **The game's names for the three field attacks** (its `Skills` text, English, read
+  with the dev `textsearch`, 2026-09-27): line 34 "Beemerang Toss" (Vi), 37 "Horn Slash" (Kabbu), 40 "Freeze" (Leif);
+  the list has no entry for jumping. Used by `FieldMoves.cs`, `CustomItems.cs`, `data/items.json`.
+- `SnakemouthFallRoom`'s `JumpShroom` (the bounce mushroom up to the pitfall room) requires 41
+  like `LoadingZoneDoorRoom` (kept_present). Used by `logic/snakemouth_den.py`.
+- `OutsideSnakemouth` (seen on screen, 2026-09-26): the arrival discovery (0) is reached from either side; the crystal
+  berry (#0, location 19) and the dig spot (`Mound - Duplicate`, entity 12, hidden by flag 683) is reached from the
+  cave's side, and from the Outskirts' side only by cutting the grass across the middle (entities 2-8, `BeetleGrass`).
+  Both need the horn from the Outskirts' side, or the way round through the cave (the dig spot is no location yet). Used
+  by `logic/outskirts.py`.
+- The palace's own blockers `makiblocker1` and `makiblocker2` stay in place: the story goes on there (kept_open MM).
+  Used by `logic/bugaria_city.py`.
+- The Outskirts rocks' removal leaves `LoadZoneGoldenPath` still waiting for flag 41 on its own (scenery_hidden
+  Base/BlockingRocks). Used by `logic/outskirts.py`.
 
 ## Battles, for enemy shuffle (2026-09-26, code read; a swapped fight seen in play) — SPOILERS: boss ids
 
@@ -1295,8 +1526,8 @@ step 14).
   plus one flag reset for the first boss (`flagvar[11] = 0`, `flags[37] = false`). It runs with `flags[162]`
   (hologram mode), which changes the look, EXP and fleeing money (`BattleControl.cs:974`, `:6487`, `:30333`,
   `:30411`; `MainManager.cs:6294`) and skips some bosses' story parts: Zommoth's scripted moves, revives and Leif's
-  rejoin (`:23321-23563`), the Everlasting King's lines and revives at a phase (`:20828`, `:20857`), and the Wasp King's exit
-  from the fight at its defeat, a win instead (`EventDialogue` 17, `:2618-2632`).
+  rejoin (`:23321-23563`), the Everlasting King's lines and revives at a phase (`:20828`, `:20857`), and the Wasp King's
+  exit from the fight at its defeat, a win instead (`EventDialogue` 17, `:2618-2632`).
 - **Events that reach into the running fight** (a swap there needs care):
   - Event137 (id 69) adds `SurviveWith10` to `enemydata[0]` (`EventControl.cs:23137`). Only an enemy's own script
     removes it, each from itself: the Beast's (`BattleControl.cs:18361-18470`) and the Everlasting King's at its last
@@ -1351,15 +1582,16 @@ step 14).
   - So for the base attacks: a flier needs Vi, the Sandworm needs Leif, and a Random one needs whichever position it
     takes.
   - **Kabbu flips** (2026-09-27, code read; the tester's rule of thumb the same day: Leif hits the burrowed, Kabbu the
-    ones to flip over, Vi the ones in the air). Kabbu's base attack carries `AttackProperty.Flip` (`BattleControl.cs:11551`,
-    `:11570`; Heavy Strike's hits `:11545`, `:11566`). "Flip" is the tester's word for it: Kabbu's attack knocks the enemy over, and then its defence is reduced
-    (in the code, a flipped enemy's defence is 0: `TrueDef`, `:3131`). Which enemies it works on: those with `Flip`
-    among their weaknesses (enemy data column 23, `{`-separated after a count; EntityDump's `weakness` column, run
-    2026-09-27 on the test machine): only **five**, all Ground, all defence 2: Cactiling 4, Inichas 8, Acornling 16,
-    Wasp Bomber 26 (also `ToppleFirst`) and Madesphy 68. The logic expects Kabbu for them even where the others
-    could get through the defence (2026-09-27; `room-logic.md`, question 8). The code also has `ToppleFirst` (Wasp Bomber, Heavy Drone B-33 46),
-    `ToppleAirOnly` (Venus' Guardian 24) and `FlyOnFlip` (The Everlasting King 91, TANGYBUG 110); what they change in
-    play is not seen.
+    ones to flip over, Vi the ones in the air). Kabbu's base attack carries `AttackProperty.Flip`
+    (`BattleControl.cs:11551`, `:11570`; Heavy Strike's hits `:11545`, `:11566`). "Flip" is the tester's word for it:
+    Kabbu's attack knocks the enemy over, and then its defence is reduced (in the code, a flipped enemy's defence is
+    0: `TrueDef`, `:3131`). Which enemies it works on: those with `Flip` among their weaknesses (enemy data column
+    23, `{`-separated after a count; EntityDump's `weakness` column, run 2026-09-27 on the test machine): only **five**,
+    all Ground, all defence 2: Cactiling 4, Inichas 8, Acornling 16, Wasp Bomber 26 (also `ToppleFirst`) and
+    Madesphy 68. The logic expects Kabbu for them even where the others could get through the defence
+    (2026-09-27; `room-logic.md`, question 8). The code also has `ToppleFirst` (Wasp Bomber, Heavy Drone
+    B-33 46), `ToppleAirOnly` (Venus' Guardian 24) and `FlyOnFlip` (The Everlasting King 91, TANGYBUG 110); what they
+    change in play is not seen.
 - **Where enemy stats are shown** (2026-09-26, code read): in a fight, the bar over a spied enemy (or with the scope
   medal) shows its live `hp`, `maxhp` and defence (`TrueDef`) (`BattleControl.cs:3148-3163`), so changed numbers show
   there as they are. The pause menu's bestiary page works out HP and defence from the raw `enemydata` row plus the
@@ -1415,8 +1647,8 @@ step 14).
   cameras into a `RenderTexture` of 1920x1080 times the factor (whatever the screen's size), the world camera's `rect`
   shrunk to the factor, shown on that quad (bilinear). **The quad's shader is `Custom/CRT`** (the console's `cams`,
   2026-09-28): a CRT-TV look (curved, inset picture, vertical colour stripes, darker), the minigames' look; seen
-  on screen at 200% when the mod first drew through that quad. Called with 0 on start and after a minigame, with 2 by some
-  minigames. Settings save `downsample` and FXAA.
+  on screen at 200% when the mod first drew through that quad. Called with 0 on start and after a minigame, with 2 by
+  some minigames. Settings save `downsample` and FXAA.
 - **Screen positions are viewport-relative:** every conversion the game makes is `WorldToViewportPoint` (0 to 1),
   none in pixels, so a larger render texture moves nothing.
 - **Resolutions:** the game's list runs 1024x576 to 3840x2160; fullscreen is a bool passed to `Screen.SetResolution`.
@@ -1446,8 +1678,8 @@ hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0
   from another window and no marker there, it threw a NullReferenceException every frame (the diagnostic: window 6,
   option 5, markers 1-25 all null).
 - Used by `WarpButton.cs` (map travel).
-- **Where each area's marker sits** (2026-10-03/04, code read and the user's screenshot): `MapSetup` places it at a fixed
-  `(x, z)` on the map object for each `MainManager.Areas` value (`PauseMenu.cs:2786-2864`; e.g. the Outskirts
+- **Where each area's marker sits** (2026-10-03/04, code read and the user's screenshot): `MapSetup` places it at a
+  fixed `(x, z)` on the map object for each `MainManager.Areas` value (`PauseMenu.cs:2786-2864`; e.g. the Outskirts
   `(0.92, 2.11)`, the Honey Factory `(5.32, -2.73)`). On screen **+x is to the left and +z down**, one scale for both:
   fitted to the user's screenshot of a save with 22 areas visited, every marker within a few pixels of
   `(999 - 112.4 x, 504 + 112 z)` at 2000 px wide. `SetMapLines` (`PauseMenu.cs:2913-3062`) draws 23 lines, each
@@ -1481,12 +1713,13 @@ hue about 0.01 below the ring's. Hues: red 0.99, gold 0.14, amber 0.11, orange 0
 
 ## EXP and berries picked up (2026-09-26, code read)
 
-- **A battle's EXP** is summed per defeated enemy: `num = Clamp(GetEXP(exp, fixedexp, animid), 0, hologram ? 5 : neededexp)`,
-  then `expreward = Clamp(expreward + num, 0, neededexp)`: one battle never gives more than a level's worth.
-  `BattleControl.GetEXP(int, bool, Enemies)` (private) returns 0 at level 27 or with flag 613, adds 15% for Hard Mode
-  (medal 11 or flag 614) and 50% for medal 42, returns at most 5 with flag 166 (the rematch machine's hard option, set inside a flag-162 hologram fight, `EventControl.cs:13702-13707`; corrected 2026-09-28 from "hologram fights"), the amount itself
-  when `fixedexp`, else caps it at 20 (Chomper Brute, Toe Biter and enemies 87-89) or 15.
-  `EndBattleWon(addexp)` adds the raw `exp` of enemies still standing, without `GetEXP`.
+- **A battle's EXP** is summed per defeated enemy: `num = Clamp(GetEXP(exp, fixedexp, animid), 0, hologram ? 5 :
+  neededexp)`, then `expreward = Clamp(expreward + num, 0, neededexp)`: one battle never gives more than a level's
+  worth. `BattleControl.GetEXP(int, bool, Enemies)` (private) returns 0 at level 27 or with flag 613, adds 15% for Hard
+  Mode (medal 11 or flag 614) and 50% for medal 42, returns at most 5 with flag 166 (the rematch machine's hard option,
+  set inside a flag-162 hologram fight, `EventControl.cs:13702-13707`; corrected 2026-09-28 from "hologram fights"), the
+  amount itself when `fixedexp`, else caps it at 20 (Chomper Brute, Toe Biter and enemies 87-89)
+  or 15. `EndBattleWon(addexp)` adds the raw `exp` of enemies still standing, without `GetEXP`.
 - **A berry picked up in the world** (`NPCControl.CheckItem`, items MoneySmall, MoneyMedium, MoneyBig) adds 1, 5 or 20,
   then calls `StartCoroutine(BerryBounce())` (its only caller) and clamps money to 0-999. Berries dropped after a fight
   are the same pickups (`EntityControl` spits them from `spitmoney`). A Harmony prefix on `BerryBounce()` itself never
@@ -1547,8 +1780,8 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   `TieFramerate(data[1]) / 80 * (rate / 60)`, with rate = `targetFrameRate` (VSync off) or the monitor's refresh
   rate (VSync on). Right at any fixed cap with VSync off; negative, so the bar drains, at uncapped (-1); with VSync on
   it is off by refresh / actual fps (4x on a 240 Hz monitor at 60).
-- **Read on the test machine with the console's `display` (VSync off, 60fps, windowed):** current resolution 3840x2160 @ 240 Hz, window
-  1280x720, `vSyncCount` 0, `targetFrameRate` 60, measured 60.6 fps.
+- **Read on the test machine with the console's `display` (VSync off, 60fps, windowed):** current resolution 3840x2160 @
+  240 Hz, window 1280x720, `vSyncCount` 0, `targetFrameRate` 60, measured 60.6 fps.
 - **Physics steps 50 times a second** (`Time.fixedDeltaTime` 0.02, the console's `display`, 2026-09-27). The camera
   follows in `MainManager.FixedUpdate` (`RefreshCamera`: the camera's parent position, the camera's local position and
   angles, all lerps with a fixed factor); characters move by rigidbody velocity. The player's rigidbody has no
@@ -1629,8 +1862,8 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   often at 240 FPS as at 60. *Wavy* follows `Time.time` and doesn't change with the frame rate. Nothing in the mod
   handles `FontEffects` yet. The same per-frame re-roll: `MainManager.ShakeObject` (a coroutine, one random offset per
   frame, its length in frames via `TieFramerate`; the leaf gang's ambush shakes two bushes with it, `Event128`,
-  `EventControl.cs:21712-21714`) and `EntityControl.ShakeSprite` (its length via `framestep`), both called on hits and in
-  scenes; the camera's `screenshake` is rolled in `RefreshCamera`, run from `MainManager.FixedUpdate` (50 a second).
+  `EventControl.cs:21712-21714`) and `EntityControl.ShakeSprite` (its length via `framestep`), both called on hits and
+  in scenes; the camera's `screenshake` is rolled in `RefreshCamera`, run from `MainManager.FixedUpdate` (50 a second).
   Seen on screen: the text blurry at 240 and sharp at 60. Used by `FrameRate.cs`.
 
 ## Save crystals, saving, Game Over and room transfers (2026-09-28, code read; the crystal's range seen 2026-09-29)
@@ -1656,10 +1889,11 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   `emoticoncooldown = 2`: a "?", the same as at a discovery (seen by the user, 2026-10-01, at a save crystal).
 - **The game's own word** (`textsearch crystal`, 2026-09-28): "ancient crystal"; the yellow one "will heal our HP and
   TP too. Try smacking it sometime." (SnakemouthFallRoom:19). No name for a save crystal as such.
-- **Saving:** `MainManager.Save(pos)` is only `InputIO.Save(pos)`: `SaveFile` builds the text (line 0 the position given,
-  or the player's; line 1 each member's HP as it is; line 2 `map.name`, the map id), then `save{slot}t.dat`, the old
-  `save{slot}.dat` moved to `save{slot}backup.dat`, the temp renamed. Synchronous, no UI of its own, no precondition;
-  the game has no "can't save here" flag. The mod's `SaveRedirect` prefix on `InputIO.Save` catches every caller.
+- **Saving:** `MainManager.Save(pos)` is only `InputIO.Save(pos)`: `SaveFile` builds the text (line 0 the position
+  given, or the player's; line 1 each member's HP as it is; line 2 `map.name`, the map id), then `save{slot}t.dat`, the
+  old `save{slot}.dat` moved to `save{slot}backup.dat`, the temp renamed. Synchronous, no UI of its own, no
+  precondition; the game has no "can't save here" flag. The mod's `SaveRedirect` prefix on `InputIO.Save` catches every
+  caller.
 - **Loading:** `Event22` loads `mapid` and puts the party at the saved position; `lastpos` and `lastloadzone` are set to
   it; `insideid` is reset to -1.
 - **Death is only a party wipe in battle.** Hazards and falls never cost HP: `Hazards.HazardAction` puts the party back
@@ -1690,9 +1924,9 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   the battle just ends and the story goes on). The menu: Retry, Retry after changing medals, Load, Title; in a battle
   that can be fled only Load and Title. From the battle's start, `GameOver`'s setup restores `flags` and `flagvar`
   before the menu shows (`SetFlags`), and Retry also restores TP, each member's HP, attack, defence and `lockitems`, the
-  bag (`items[0]`) and the key items (`items[1]`) (`ReloadInitialData`; code read 2026-09-30, `BattleControl.cs:3437-3447,
-  3583-3598`; this line said `items[0]` only until then). Medals owned, money, EXP, `crystalbflags`, storage and the
-  journal stay as they are. Load
+  bag (`items[0]`) and the key items (`items[1]`) (`ReloadInitialData`; code read
+  2026-09-30, `BattleControl.cs:3437-3447, 3583-3598`; this line said `items[0]` only until then). Medals owned, money,
+  EXP, `crystalbflags`, storage and the journal stay as they are. Load
   checks `InputIO.SaveExists(saveslot)`, then `MainManager.ReloadSave()` (public): stops the battle and event
   coroutines, destroys the map and party, `StartEvent(22)`. `GameOver` and `DeadParty` are private.
 - **A door** (`DoorOtherMap`) runs `MainManager.TransferMap`, refused during `inevent`, `pause` or `minipause`; it sets
@@ -1732,8 +1966,8 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   The game's own `FreePlayer` ignores `intransition`, so the player walks around meanwhile.
 - Seen: after the opening skip's fade-in (speed 0.02), received items waited about 2800 frames on "busy: changing
   maps" (seen in play: "5-10+ sec"). The dimmer is `transitionobj[0]`, a lone object named `Dimmer` with a
-  `SpriteRenderer` (`:8880-8900`). Used by `ItemReceiver.cs` (`FadeAllButDone`). After the tail was ignored, the same wait was about 870 frames:
-  the fade from opaque to 2% at speed 0.02 takes about 194 sixtieths (0.98^n), about 3 s.
+  `SpriteRenderer` (`:8880-8900`). Used by `ItemReceiver.cs` (`FadeAllButDone`). After the tail was ignored, the same
+  wait was about 870 frames: the fade from opaque to 2% at speed 0.02 takes about 194 sixtieths (0.98^n), about 3 s.
 
 ## Text commands inside a substituted string, and the save's separators (2026-09-29, code read; not seen in game)
 
@@ -1770,7 +2004,8 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   - The level-up return checks `LevelUp` (`:31041`).
   - The track is saved by name or clip and replayed later:
     - the retry state (`BattleControl.cs:608`, `:1513`);
-    - the map track after a battle (`:754`, replayed at `:31051`, resumed at its time with `keepmusicafterbattle`, `:31049`);
+    - the map track after a battle (`:754`, replayed at `:31051`, resumed at its time
+      with `keepmusicafterbattle`, `:31049`);
     - `EventControl.cs:754`, `MainManager.cs:10106`, `:12100`;
     - the mono-audio switch (`:16724-16733`).
 - **Samira's list** (`samiramusics`, in the save, `:7000-7015`):
@@ -1784,7 +2019,8 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
 - **Outside the player:**
   - The factory elevator crossfades `Dungeon2` and `Dungeon2b` (`seamless`, `EventControl.cs:17047-17051`) through a
     sound slot (`MainManager.cs:4700-4756`).
-  - A music zone plays its own track on its entity and fades the main player out (`NPCControl.cs:882-890`, `:2016-2020`).
+  - A music zone plays its own track on its entity and fades the main player out
+    (`NPCControl.cs:882-890`, `:2016-2020`).
   - The game never sets `mute` on any source (no `.mute` in the code).
 - **Jingles are sounds at music volume:**
   - `BattleWon` (`BattleControl.cs:4091`) and `Gameover` (`:3493`, stopped by name at `:3533`).
@@ -1805,7 +2041,8 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
     `itemstate` back into `animstate` before reading it.
   - Some paths reset `animstate` from `basestate` (`EntityControl.cs:2937`, `:4582`).
 - **The game's own swap:** the random-medal cheat (flag 681) turns a medal pickup into another as it's taken by
-  setting `basestate`, `itemstate` and `animstate` to the new id, then calling `UpdateItem()` (`NPCControl.cs:5677-5683`).
+  setting `basestate`, `itemstate` and `animstate` to the new id, then calling `UpdateItem()`
+  (`NPCControl.cs:5677-5683`).
 - **What reads it:**
   - An item shop slot's price is `ceil(itemdata[animid, animstate, 4] * mmulti)`; its name goes to `flagstring[0]` and
     the item to `flagvar[0]`, which the buy line's `additem` adds (`NPCControl.cs:4374-4378`).
@@ -1901,11 +2138,12 @@ for its own threshold. Used by `enemy-numbers.py` and `EnemyScaling.cs` (the mod
   - `Tattle` (the Spy action, `:5234`): with the medal no crosshair command, the spy always succeeds, and at the end
     `if (!hasmedal) EndPlayerTurn()` (`:5286-5287`): spying doesn't use the turn.
   - The battle menu's command list adds a small icon (219) beside Spy (`MainManager.cs:16291`).
-- **Where each ask runs** (2026-10-04, code read): the battle start's is in `public static IEnumerator StartBattle(int[],
-  int, int, string, NPCControl, bool)` (`BattleControl.cs:718`), the only write of `scopeequipped`; Spy's is in
-  `private IEnumerator Tattle()` (`:5221`), its first step, kept in the local `hasmedal`, which both the skipped aim and
-  the skipped `EndPlayerTurn` read, so those two can't be had apart without changing its code; the icon's is in
-  `public static void ShowItemList(int, Vector2, bool, bool)` (`MainManager.cs:15336`). No other code asks for 17.
+- **Where each ask runs** (2026-10-04, code read): the battle start's is in `public static IEnumerator
+  StartBattle(int[], int, int, string, NPCControl, bool)` (`BattleControl.cs:718`), the only write of `scopeequipped`;
+  Spy's is in `private IEnumerator Tattle()` (`:5221`), its first step, kept in the local `hasmedal`, which both the
+  skipped aim and the skipped `EndPlayerTurn` read, so those two can't be had apart without changing its code; the
+  icon's is in `public static void ShowItemList(int, Vector2, bool, bool)` (`MainManager.cs:15336`). No other code asks
+  for 17.
 - Used by `MedalAssist.cs` (the Spy Specs row, the mod guide, step 39).
 
 ## The Settings list's arrows (2026-09-30, code read; the game's screen in the user's screenshots)
@@ -1943,7 +2181,8 @@ are marked "per the wiki".
 1. The list of key items and their ids.
 
 Answered since: where the goal is detected (the artifacts are story flags that `SaveProgressIcons` counts, "Observed
-in the running game"; the mod's goal sent and seen 2026-09-26), how a key item is granted (no single function: three text commands, `GiveItem` and `items[1].Add`;
-"How the game grants items" and "Key-item grant sources, raw"), each place that grants one (the same), how the save
-stores key items ("Observed in the running game", the save's lines), where the received-item count lives ("Free save
-slots for the mod"), and the item popup the mod reuses (the found-item line, "What the mod's code relies on").
+in the running game"; the mod's goal sent and seen 2026-09-26), how a key item is granted (no single function: three
+text commands, `GiveItem` and `items[1].Add`; "How the game grants items" and "Key-item grant sources, raw"), each place
+that grants one (the same), how the save stores key items ("Observed in the running game", the save's lines), where the
+received-item count lives ("Free save slots for the mod"), and the item popup the mod reuses (the found-item line, "What
+the mod's code relies on").

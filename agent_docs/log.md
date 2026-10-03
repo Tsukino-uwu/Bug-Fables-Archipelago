@@ -444,7 +444,7 @@ either one wrong).
 - **Wiki pages are leads, the data decides.** The user pasted the wiki's crystal berry and medal pages (facts only,
   CC BY-SA row in licensing.md); every entry was matched to the entity dump, ScriptDump or code. All chapter 1
   medals were already locations. Next by story order: chapter 2's city medals.
-- **Naming:** "by the <thing>" when a room has several of a landmark (the user). A berry inside a bush is "Bush".
+- **Naming:** "by the \<thing>" when a room has several of a landmark (the user). A berry inside a bush is "Bush".
 - **Explorer Permit** also opens a Rubber Prison door (code); B.O.S.S. and the Cave of Trials are the wiki's word.
 - **Respawning pickups** are locations with no option: first pickup sends the check, later ones are vanilla. Seen
   working in play. The mod keeps what's done in memory (server list plus a queue tagged with the save's seed).
@@ -512,8 +512,8 @@ either one wrong).
 - **Shops:** Merab's medal shop as locations works end to end (shelf sprites, name swap, check from the stock, item
   back); shelves show 5 (Merab) and 4 spread wider (Shades) after several tries the user judged; *Shop prices* row;
   *Shop Contents* yaml (default No Progression, since shops soak up good items, as in Tevi). **Crystal berries:** spent
-  only at Shades, whose whole stock costs exactly 50; a tiered logic rule was proposed and was wrong (the user asked what
-  happens when the stock grows); decided: every Shades item needs all 50, full stock from the start, purchases
+  only at Shades, whose whole stock costs exactly 50; a tiered logic rule was proposed and was wrong (the user asked
+  what happens when the stock grows); decided: every Shades item needs all 50, full stock from the start, purchases
   permanent (the user caught that reloads refund currency). Duplicate stock copies are separate locations; item shops'
   first purchases will be checks, then vanilla.
 - **Dev tools added:** `unstick` also lifts fades, frees parked party bodies, closes a dead dialogue and removes a
@@ -534,10 +534,10 @@ either one wrong).
   the server but not paid in this save is charged on load (seen in the log, 0 berries, forgiven).
 - **Shop Contents: Filler Only** falls back to No Progression with a warning when the room lacks filler (the user's
   choice): a solo seed has 17 filler for 22 shop spots.
-- **The intro, seen after eight tries:** Event16 (Maki, Vi joining, the tutorial battle, the permit) skipped with the mod
-  doing what it leaves; then Event8 cut before its slides (`NewSolidColor("back")`); a black screen was tried and
-  dropped ("looks dumb"). Wrong turns: waiting for the trigger (the user stood clear), the trigger surviving to start the
-  scene again (crash), the talk after the slides, the house showing before the warp, the house's music. Skip intro
+- **The intro, seen after eight tries:** Event16 (Maki, Vi joining, the tutorial battle, the permit) skipped with the
+  mod doing what it leaves; then Event8 cut before its slides (`NewSolidColor("back")`); a black screen was tried and
+  dropped ("looks dumb"). Wrong turns: waiting for the trigger (the user stood clear), the trigger surviving to start
+  the scene again (crash), the talk after the slides, the house showing before the warp, the house's music. Skip intro
   folded into Skip cutscenes (six rows). Rule changed (the user): a scene giving an item may be skipped if the item
   stays obtainable.
 - **Test start** (`TestStart`, dev): a new file starts at the town gate, arriving as if through the Outskirts door
@@ -562,22 +562,22 @@ either one wrong).
 ## 2026-09-25: doors both ways and shuffled, the Detector for every check, one party member
 
 - **Entrance randomizer.** A rewritten door now keeps its own walk-in (`data[4]`) and takes the other door's arrival
-  camera and jump (read in `TransferMap`). EntityDump writes positions; `door-graph.py` pairs each door with the door the
-  party arrives next to (3D distance, doors told apart by entity index, story variants as one door): 531 of 567 pair both
-  ways, the rest listed in `MEASURED.md` to check in play. Seen: one door, then a hand-made coupled swap both ways. The
-  generator's option *Entrance Randomizer (experimental)* shuffles 508 doors, growing the world from one area so none is
-  stranded (a plain random pairing stranded areas in 20 of 20 seeds; tests). Seen: a generated pair both ways, offline
-  too, and a seed full of desert rooms (checked: that seed was the most desert-heavy of 300; the shuffle is fair).
-  Transfers that aren't doors listed (ScriptDump's transfer column, `event-transfers.py`); decided (the user): chosen
-  entrances shuffle like doors later, forced sends (the hideout's guards, which need dig to leave) stay and become
-  one-way logic.
+  camera and jump (read in `TransferMap`). EntityDump writes positions; `door-graph.py` pairs each door with the door
+  the party arrives next to (3D distance, doors told apart by entity index, story variants as one door): 531 of 567 pair
+  both ways, the rest listed in `MEASURED.md` to check in play. Seen: one door, then a hand-made coupled swap both ways.
+  The generator's option *Entrance Randomizer (experimental)* shuffles 508 doors, growing the world from one area so
+  none is stranded (a plain random pairing stranded areas in 20 of 20 seeds; tests). Seen: a generated pair both ways,
+  offline too, and a seed full of desert rooms (checked: that seed was the most desert-heavy of 300; the shuffle is
+  fair). Transfers that aren't doors listed (ScriptDump's transfer column, `event-transfers.py`); decided (the user):
+  chosen entrances shuffle like doors later, forced sends (the hideout's guards, which need dig to leave) stay and
+  become one-way logic.
 - **The Detector for every check** (the user): the medal's own "!" and beep when a room still holds any check (items,
   gifts, quest rewards, shops, discoveries), quiet when done; the game's own hidden-item checks off in a seed. Seen.
 - **Pickups in houses flashed their own item on the way in:** a timing guess failed; measured instead (the game redraws
   them in `EntityControl.UpdateItem`); a postfix there fixed it. Seen.
 - **One starting member (dev `TestStartMember`, Leif), played through chapter 1 and into chapter 2.** The intro skip had
-  always left the party under the house (hidden by the test start's warp); the camera took five tries, settled by the new
-  console command `cam` (it followed a character destroyed at the frame's end). Then, one by one: stand-ins in
+  always left the party under the house (hidden by the test start's warp); the camera took five tries, settled by the
+  new console command `cam` (it followed a character destroyed at the frame's end). Then, one by one: stand-ins in
   conversations (Artis), arriving at once, weightless, never following the real player (`PartyMover`), with a physics
   body when made, hidden in `LateUpdate`; a scene's end handing over to the real party; no duplicate Leif (the story
   follower, then a stray player character left by `SetPlayers()`, found with the new `who`); Leif's lake scene always
@@ -596,11 +596,11 @@ either one wrong).
   the repo.
 - **My slips:** scripted edits mangled escapes twice more; a reload landed mid-scene (the reload guard followed); two
   wrong guesses (gravity, `RefreshInsides`) before measuring.
-- **Dev install state at the end:** `TestStartMember = 2`, `TestStart` empty, `TestDoors` empty, `InfJump` and `OneHit` on,
-  `DevCommandFile` in this session's scratchpad (point it at the next one), AdoptSeed on; the server was hosting a solo
-  seed from the scratchpad.
-- **Next:** the scan's open list before those scenes come up; the Starting Party Member option in the apworld; Placeholders
-  for every spot; a two-member start to see Leif join after the spider.
+- **Dev install state at the end:** `TestStartMember = 2`, `TestStart` empty, `TestDoors` empty, `InfJump` and `OneHit`
+  on, `DevCommandFile` in this session's scratchpad (point it at the next one), AdoptSeed on; the server was hosting a
+  solo seed from the scratchpad.
+- **Next:** the scan's open list before those scenes come up; the Starting Party Member option in the apworld;
+  Placeholders for every spot; a two-member start to see Leif join after the spider.
 
 ## 2026-09-25: lean comments, licences, the grant paths checked
 
@@ -633,13 +633,13 @@ either one wrong).
 - **Later the same night** (the user agreed to both): the save rule reworded to what the game and the mod do; the
   berry total counts berries received in a seed (`CrystalBerryTotal.cs`, `flagvar[69]`, the last free slot), built,
   not yet seen in game. The data files' notes trimmed (34 KB to 9 KB, data identical); the open items they held are
-  Known issues now, among them a Kabbu/horn rule owed once party members become items. Correction by the user: the horn tutorial
-  (location 2) was never a soft-lock; Leif alone passed it once stand-ins were fixed. The old note was stale, and I
-  had copied it into the Known issues without checking it against documentation.md, which had the newer result. The user asked whether notes
-  are findable now that they aren't in the code: not well enough, so `code-map.md` (every source file, linked to its
-  doc sections), a contents list for MEASURED.md, and a CLAUDE.md line to look a file up there first. The map's
-  gaps: `HoldUps.cs`, `PartyMembers.cs`, the test files and `DevCheats.cs` are never named in the docs, and the two
-  guides' big sections ("Where it stands", documentation step 10) have no subheadings to link to.
+  Known issues now, among them a Kabbu/horn rule owed once party members become items. Correction by the user: the horn
+  tutorial (location 2) was never a soft-lock; Leif alone passed it once stand-ins were fixed. The old note was stale,
+  and I had copied it into the Known issues without checking it against documentation.md, which had the newer result.
+  The user asked whether notes are findable now that they aren't in the code: not well enough, so `code-map.md` (every
+  source file, linked to its doc sections), a contents list for MEASURED.md, and a CLAUDE.md line to look a file up
+  there first. The map's gaps: `HoldUps.cs`, `PartyMembers.cs`, the test files and `DevCheats.cs` are never named in the
+  docs, and the two guides' big sections ("Where it stands", documentation step 10) have no subheadings to link to.
 - **Comment review, second pass:** three agents read every remaining comment against its code. 14 no longer matched
   the code after the first trim (among them the world's description on the site, which said only key items are
   shuffled), 9 sat on the wrong line; all fixed, code identical. The library's resend of unconfirmed checks was
@@ -650,7 +650,8 @@ either one wrong).
   as a main point. To keep it from happening again (the user: too vague to judge alone, and not every small step):
   CLAUDE.md's test for an own step (a yaml option or panel setting, a new kind of location, or a change to how the
   game plays in a seed), and `.githooks/doc-coverage.py` in pre-commit. Its first run found `location_shops`,
-  `RandomizerEnabled` and six Debug settings written up nowhere; development.md now has every Debug setting in one table.
+  `RandomizerEnabled` and six Debug settings written up nowhere; development.md now has every Debug setting in one
+  table.
 - **Quests measured in game** (the user gave permission to start the game): `QuestDump` ran at the title screen,
   the game was closed after (nothing left running), and the dump switched off again. 63 quests; no accept flag does
   more than its own quest, so all quests open on the board from a new file is safe for the save (the user's plan:
@@ -887,35 +888,38 @@ either one wrong).
   are hidden away); `release.yml` now defaults to a full release. The user trimmed the root README's intro.
 - **Idea logged (the user, 2026-09-26), not built:** after the pitfall scene, land the party as if it entered the fall
   room through a door, as the random start does (`documentation.md`, step 11, before its Status line).
-- **Skip confirm (the user, 2026-09-26), seen by the user on Map: map travel with no box (log: `Skip confirm: no Yes / No box`), Warp still asked:** a Quality of life row, Off / Warp / Map / Both (default
-  Off), right below Travel (the user: keep the two together); Warp or a visited area on the travel map then goes at
-  once, without the Yes / No box (`documentation.md`, step 10, the Travel item; first written as its own step 20, folded
-  in: the user, an add-on to Travel). Built, staged and copied in for hot reload.
+- **Skip confirm (the user, 2026-09-26), seen by the user on Map: map travel with no box (log: `Skip confirm: no Yes /
+  No box`), Warp still asked:** a Quality of life row, Off / Warp / Map / Both (default Off), right below Travel (the
+  user: keep the two together); Warp or a visited area on the travel map then goes at once, without the Yes / No box
+  (`documentation.md`, step 10, the Travel item; first written as its own step 20, folded in: the user, an add-on to
+  Travel). Built, staged and copied in for hot reload.
 - **Goal reporting built (Next 7, build step 3):** `artifacts_required` from slot_data against the game's own
   `SaveProgressIcons()`, `StatusUpdate` `ClientGoal` once per login while reached (MultiClient.Net 6.7.1's
   `StatusUpdatePacket`, checked by reflection on the DLL). Seen: `[goal] 0 of 1 artifacts` on a save without it; the
   send still to see (the first artifact, after the spider boss). README and the game page no longer say it's missing.
 - **Maki left in the building after the opening skip** (the user): flag 15 hides him only on a map load; the scene
-  destroys him, so the skip now does too (`documentation.md`, step 10, item 5 (9)). Seen by the user on a new file: Maki gone.
+  destroys him, so the skip now does too (`documentation.md`, step 10, item 5 (9)). Seen by the user on a new file: Maki
+  gone.
 - **Skip battle tutorials** (the user asked whether it was done): only the first, inside the opening; the later
   tutorial fights are still planned. Test server: a fresh BugTester seed hosted from the scratchpad; left up with the
   game (the user: keep them up).
-- **The goal seen** (the user, Leif alone, a dev file): the spider fight first lost (Leif can't hit the spider in the air;
-  OneHit was off: now always on in dev, the user). An F6 reload mid-fight (the user's choice, to load the new `killall`)
-  crashed the scene after the fight (Event26's own references to the old stand-ins): the reason DevReload waits, seen
-  again. `unstick`, re-entered the room, `killall` (HP 0, the death check only ran after an attack), and the scene ended:
-  `[goal] sent: 1 of 1 artifacts`, the server released the slot and logged the team's games complete.
+- **The goal seen** (the user, Leif alone, a dev file): the spider fight first lost (Leif can't hit the spider in the
+  air; OneHit was off: now always on in dev, the user). An F6 reload mid-fight (the user's choice, to load the
+  new `killall`) crashed the scene after the fight (Event26's own references to the old stand-ins): the reason DevReload
+  waits, seen again. `unstick`, re-entered the room, `killall` (HP 0, the death check only ran after an attack), and the
+  scene ended: `[goal] sent: 1 of 1 artifacts`, the server released the slot and logged the team's games complete.
 - **A frozen battle start** (the user, in `SnakemouthDoorRoom` after a dev warp): the warp moved the party twice (the
   map's origin, then beside a door), an enemy touched the party, and the fight's leaf transition never finished; no
   exception logged. At the same moment the server was restarted for a new seed and the mod re-applied the seed's room
-  lists mid-battle-start. Which of the two stopped the battle's start isn't proven; the user's reading: the warp's second move while the
-  enemy's hit was starting the fight. Only a game restart got out.
-  The plain warp now lands once (through a door into the map); the step aside refuses during a battle, event or dialogue.
+  lists mid-battle-start. Which of the two stopped the battle's start isn't proven; the user's reading: the warp's
+  second move while the enemy's hit was starting the fight. Only a game restart got out.
+  The plain warp now lands once (through a door into the map); the step aside refuses during a battle, event or
+  dialogue.
 - **Seen (the user): Leif joins after the spider with Vi and Kabbu**, on a new file with no dev start: warped into the
-  fall room (the trapdoor scene skipped), Event6 played, the mod added Leif (flag 16), no error; he followed, could lead,
-  and showed in the pause menu. AdoptSeed and TestStartMember turned off (the user: every item comes from the server
-  anyway); the fourth test seed is hosted with release and collect off. New dev command `removemember`, for trying Vi
-  and Leif next.
+  fall room (the trapdoor scene skipped), Event6 played, the mod added Leif (flag 16), no error; he followed, could
+  lead, and showed in the pause menu. AdoptSeed and TestStartMember turned off (the user: every item comes from the
+  server anyway); the fourth test seed is hosted with release and collect off. New dev command `removemember`, for
+  trying Vi and Leif next.
 - **Session end (the user, 2026-09-26: stop here, commit, push; continue in another chat).** Done and seen this
   session: Skip confirm (under Travel), Maki gone after the opening skip, goal reporting (StatusUpdate at the first
   artifact, the server released and finished the slot), Leif joining after the spider with Vi and Kabbu, and with Vi
@@ -947,7 +951,7 @@ either one wrong).
   is running on the three-slot test seed, server up.
 - **2026-09-26, the rest of that chat.** Rarity colours seen on a gift and the Caravan's shelf. Fixed, each seen by the
   user: a bought Bug Fables item's starburst turned teal (it now keeps its class colour); a shopkeeper's line ran off
-  its bubble with "<player>'s <item>" in it (shops name the item alone, the owner in the description); a bought
+  its bubble with "\<player>'s \<item>" in it (shops name the item alone, the owner in the description); a bought
   Caravan slot kept the Archipelago icon after a hot reload (the slot's own sprite now comes from the game); the
   pickup line's red "!" after a coloured name (black now). **The blank settings pages were the shop, not the hot
   reloads:** the shop turns the GUI camera 90 degrees and the panel's text, attached without resetting its rotation,
@@ -966,10 +970,10 @@ either one wrong).
   the user:** Vi's arrival box from a silent location (`slot_data` `silent_locations`); Chuck's Abode and the corridor
   shortcut open near Snakemouth; Skip cutscenes grew: the arrival outside the den (discovery recorded the game's way),
   the Tattle tutorial, the door-room puzzle and the spider scene at speed, the trapdoor at speed then ended on the
-  black screen with a door arrival into the fall room (a full skip looked like a teleport, the user; at speed the scene's
-  own landing swung the camera left), the scripted first spider fight ended at once, only the Leif in the web shown,
-  Leif's first-battle line always skipped. **New options:** *All Three* (Starting Party Member, now the default; Leif
-  joins in the opening's own party change), *Shuffle Field Moves* and *Shuffle Jump* (both off; cautious logic; the
+  black screen with a door arrival into the fall room (a full skip looked like a teleport, the user; at speed the
+  scene's own landing swung the camera left), the scripted first spider fight ended at once, only the Leif in the web
+  shown, Leif's first-battle line always skipped. **New options:** *All Three* (Starting Party Member, now the default;
+  Leif joins in the opening's own party change), *Shuffle Field Moves* and *Shuffle Jump* (both off; cautious logic; the
   game's buzzer; the moves as key items 201-204 with the game's names Beemerang Toss, Horn Slash, Freeze, read with the
   new dev `textsearch`; Warp forced with Jump). **Bugs of mine the user caught:** a leftover dev `TestStartMember = 2`
   overrode a story-party seed (a seed now always decides); a Harmony prefix on `DoActionTap` never ran (inlined; the
@@ -989,9 +993,9 @@ either one wrong).
   (Off/120/144/240, off by default, "properly so things don't break", kept experimental until confirmed). It's "a kinda
   for fun qol feature", for playing chapters 5-7, vanilla saves included (Use on normal saves), and they care a lot
   about fps and frame pacing. Documentation steps 24 (Uncap FPS) and 25 (hitches).
-- **Looked before building:** the console's `display`/`fps`/`interp`/`camlerp` let the user compare one change at a time.
-  240 as is looked the same (physics at 50 Hz, camera in FixedUpdate); characters interpolated looked worse ("like motion
-  blur"); camera drawn between steps as well looked "better/sharper", against 60 "a really big difference".
+- **Looked before building:** the console's `display`/`fps`/`interp`/`camlerp` let the user compare one change at a
+  time. 240 as is looked the same (physics at 50 Hz, camera in FixedUpdate); characters interpolated looked worse ("like
+  motion blur"); camera drawn between steps as well looked "better/sharper", against 60 "a really big difference".
 - **Dips (246 to 220) at 60 and 240:** measured with `frames`, not guessed. Every ~1.8 s the mod's own garbage (68 KB a
   frame from the check tick rebuilding shop lists), found by timing and counting each plugin job's allocations; fixed.
   Every 5.00 s the game's clock forcing an unload and a collection; pinging the server every 30 s instead of 5 ruled
@@ -999,10 +1003,10 @@ either one wrong).
 - **Four read-only audit agents** listed every per-frame site in the game (per file group). New finds beyond the known
   frame counts: framestep/TieFramerate inside physics steps (weaker at high fps), constant per-frame counters, lerps
   and spins, and FloorToInt(a) % n toggles in scenes.
-- **The "!" over NPCs blurred on sideways walking at 240.** Tearing was a wrong theory (VSync at refresh divisors went in
-  anyway: frame times had wobbled 2.9-5.3 ms). A screen-position trace showed the bubble exactly on its NPC; the user's
-  A/B (vanilla 60: not seen) and subtraction (interpolation off: still there; camera smoothing off: gone) pointed at
-  the camera; `cams` showed 3DGUI and GUICamera as children drawn after the main camera. Fixed by putting the camera
+- **The "!" over NPCs blurred on sideways walking at 240.** Tearing was a wrong theory (VSync at refresh divisors went
+  in anyway: frame times had wobbled 2.9-5.3 ms). A screen-position trace showed the bubble exactly on its NPC; the
+  user's A/B (vanilla 60: not seen) and subtraction (interpolation off: still there; camera smoothing off: gone) pointed
+  at the camera; `cams` showed 3DGUI and GUICamera as children drawn after the main camera. Fixed by putting the camera
   back after the frame's last camera; the user: "stays steady and sharp".
 - **Two self-inflicted breakages, both from HarmonyX in this game:** Harmony's `GetOriginalInstructions` needs
   `System.Reflection.Emit.ILGeneration` (aborted `Awake`, restart needed); a transpiler using `CodeInstruction.labels`
@@ -1124,7 +1128,8 @@ either one wrong).
   not fourteen; the game's own names and descriptions; combat logic stays basic (room to play out of logic). The Dash
   without the Horn Slash only moves, decided, not built. A reader agent read the seven scenes: Dash is taught in
   chapter 3 at Lost Sands (`Event221`), not chapter 1. The patch points were counted in the game's IL, not its C#
-  (RefreshSkills has 15 reads, the C# suggested 14); the running game logged 8/8, 2/2, 15/15. Nothing seen on screen yet.
+  (RefreshSkills has 15 reads, the C# suggested 14); the running game logged 8/8, 2/2, 15/15. Nothing seen on screen
+  yet.
 - **A knocked frozen enemy, two stacked faults, how it was found:** the user at 240: slow, then "stops short". The
   console's `interp off` first changed nothing; the knock code then showed a frame-order fault (the slide cancelled in
   frames with no physics step between the flat push and the hop). With that fixed: "it worked for 1 hit, and then it
@@ -1151,7 +1156,8 @@ either one wrong).
   items), then won. HP 76, Defense 1, 25 EXP; party level 17 (Vi 3 atk/-1 def, Kabbu and Leif 2/0), 18 after. Enemy
   scaling was on Party level, but no `[scale]` line: at home level there is nothing to scale. **Not vanilla after
   all:** the user found the Hard Hits medal equipped ("raises enemy attack", on since a save 2-3 years old), so the
-  boss hit harder than intended. The chapter 5 home level matched a real playthrough. The user plans to turn scaling off.
+  boss hit harder than intended. The chapter 5 home level matched a real playthrough. The user plans to turn scaling
+  off.
 - **Asked for, then dropped:** an *Attack boost: Off / +1* row. Read first: nearly every attack and skill reads `atk`
   per hit, so +1 attack is +1 on every hit (+33-50% at attack 2-3). Dropped once scaling showed the fight was at level.
   The user also declined a log line for why scaling skipped an enemy.
@@ -1207,7 +1213,8 @@ either one wrong).
   the old 120 and 144 tore and only 240 synced, with nothing saying so. **Monitor is the default** (the user); a config
   that already stores a value keeps it (the user: no migration). Held back at first for the Known issues; the user said
   shaky text is fixed and seen, and nothing odd in combat with the hit fix (no before/after). Built, hot-reloaded, the
-  log shows every pip applied (Monitor as 240 on the user's screen); the user then confirmed the pips look and work fine.
+  log shows every pip applied (Monitor as 240 on the user's screen); the user then confirmed the pips look and work
+  fine.
 - **A slip:** the first copy put the old plugin back: `dotnet build` without `stage-dev.ps1`, and `copy-dev.ps1` copies
   the stage. The user saw no pips; `copy-dev.ps1`'s "game: loaded" hash and time showed it. Always stage first.
 - **The tester's `<RI.Hid>` errors:** the game's controller reading; the user's controller batteries died and
@@ -1247,8 +1254,8 @@ either one wrong).
 - **Seven read-only agents:** a style review, three audits of `MEASURED.md` against the decompiled code, and three
   neutral reviewers (code only, docs only, docs against code). Audits: about 245 claims, 37 problems (14 wrong, 21
   misleading, 2 unsupported), mostly low; the medium ones were "everywhere/only" claims from an incomplete search.
-  Docs-vs-code: 18 claims, game facts exact, A-. Code: mod B, apworld B. Docs: C+ players, B contributors, B- credibility
-  ("the user" about 595 times reads as an AI transcript).
+  Docs-vs-code: 18 claims, game facts exact, A-. Code: mod B, apworld B. Docs: C+ players, B contributors, B-
+  credibility ("the user" about 595 times reads as an AI transcript).
 - **Agents were wrong too, so each finding was re-read in the code before a fix:** the style review said the
   timestamped Harmony ids were unneeded (our hot-reload measurement says otherwise); an audit called a branch of
   flag 699 live that looks dead on new files; the event-trigger audit double-counted one starter and named the wrong
@@ -1339,7 +1346,8 @@ either one wrong).
 - **Phase 4 under way:**
   - `PatchDump` baseline in game: 167 patches, HarmonyX 2.9.0.0 (6c5bb82). A copy is in `stage/patches-baseline.tsv`
     (gitignored). To rebuild it, use the commit before 2b7b935.
-  - `Core/Hooks.cs` with AchievementGuard (2b7b935), then batches 1 to 10 (through 078cdeb). All 33 features are moved, and each dump is identical to the baseline.
+  - `Core/Hooks.cs` with AchievementGuard (2b7b935), then batches 1 to 10 (through 078cdeb). All 33 features are moved,
+    and each dump is identical to the baseline.
   - The dump also logs the run order where one target has several of ours. Its reference is
     `stage/patches-order.txt` (19 targets), identical after each batch.
   - The game is started through `steam://rungameid/1082710`, the dump is read, and the game is closed each time. With
@@ -1451,7 +1459,6 @@ either one wrong).
   - **The GitHub settings** and a `.claude/settings.json` guard wait on the user's yes.
   - **The capabilities rows** describing today's code were written by the agent. **The user should read them**,
     since adding rows is the user's decision.
-
 
 ## 2026-09-29: the agent's guard, the cache fix, the TLS probe
 
@@ -1781,9 +1788,9 @@ either one wrong).
   committed). The user: "a pretty big gap". **Built, the user's choice of four:** the guard refuses a GitHub read of a
   project with no `licensing.md` row, its licence file aside (build step 28; harness 55 cases, passing), and
   `CLAUDE.md` gains "a fact about another project is read (licence first) or asked, never written from memory".
-  Not chosen: asking before every page fetch, and before reads outside the repo. The other worlds read (`sm`, `satisfactory`, `hk`,
-  `messenger`, `kdl3`, `cv64`) fall under Archipelago's licence and share a row. The user then asked for
-  `licensing.md` split in two: Apworlds first, then everything else.
+  Not chosen: asking before every page fetch, and before reads outside the repo. The other worlds read
+  (`sm`, `satisfactory`, `hk`, `messenger`, `kdl3`, `cv64`) fall under Archipelago's licence and share a row. The user
+  then asked for `licensing.md` split in two: Apworlds first, then everything else.
 
 ## 2026-09-30: Shuffle Shop Inventories
 
@@ -1911,8 +1918,8 @@ either one wrong).
   "follow Archipelago's standards": "i don't want any workaround/placeholder fixes for logic/location things, i want
   proper fixes/whatever archipelago itself recommends and does"; written into `apimplementation.md` §8.
 - **CLAUDE.md back to 150 lines** (it was 152, from before this session): the user first removed three blank lines
-  around headings, VS Code flagged them, and Archipelago's `style.md` follows Google's Markdown guide, which wants a blank
-  line before and after a heading. So the blanks stayed and two Method bullets were folded into one line each, the
+  around headings, VS Code flagged them, and Archipelago's `style.md` follows Google's Markdown guide, which wants a
+  blank line before and after a heading. So the blanks stayed and two Method bullets were folded into one line each, the
   user's yes.
 - **For the next session:** the in-game test of the submarine (the mod guide, step 37; the build is staged, not copied
   in), its icon picked on screen, and the fill error (Known issues).
@@ -2539,9 +2546,9 @@ either one wrong).
   - old seeds: "never any intentional fallback/support for old versions of the apworld, yaml or the mod. people are
     expected to use the latest release for all of them" (How it works §7).
 - **Found on the way (a Plan agent's review, each checked in the code):** the Filler Only fallback undid a player's
-  exclusions (Next 43 item 1, fixed with its item-rule twin); the preflight refuses `setattr`, so the options are rebuilt
-  as `MultiWorld.set_options` builds them; Universal Tracker fails every fuzz run without a `Players` folder; its `Hook`
-  and `YamllessHook` are the same for this world; its class-level cache grows inside the fuzzer's workers.
+  exclusions (Next 43 item 1, fixed with its item-rule twin); the preflight refuses `setattr`, so the options are
+  rebuilt as `MultiWorld.set_options` builds them; Universal Tracker fails every fuzz run without a `Players` folder;
+  its `Hook` and `YamllessHook` are the same for this world; its class-level cache grows inside the fuzzer's workers.
 - **Built and checked:** build steps 39-41, in seven commits. `seed-snapshot.py`: 39 changed only the four keys and
   `options`, everything after changed nothing. Every regeneration case failed with the passthrough ignored, and so did
   19 of 20 hook runs. Finally: 670 tests, the Logic Test 90 of 90, the fuzzer and Universal Tracker's hook each 0
@@ -2620,3 +2627,20 @@ either one wrong).
   holds LF throughout; Git for Windows' machine-wide `core.autocrlf=true` wanted CRLF in the working copy, while the
   tools write LF (116 files LF, 78 CRLF). `.gitattributes` now says `* text=auto eol=lf` and `.editorconfig` says
   `end_of_line = lf`; the working copy was re-checked out from the index, and the commit changed no file's content.
+- **Asked (the user):** "fix both, push, then watch actions": the preflight's two warnings and the editor's Markdown
+  lint warnings.
+- **The preflight's warnings:** the release DLL predated the source. Rebuilding it, the release build's own check
+  refused the fresh DLL: `"'s" + TextFit.Break` with `Break` a `const char` compiles to the string `'s\x01`, which no
+  source literal spells (the check reads string literals, not char literals). `Break` became a one-character
+  `const string`; the next release build passed (two clean builds identical, 0 warnings) and `release/` was committed.
+  `build-release.ps1` then wrote `built-from.txt` with CRLF (`Set-Content`), now LF.
+- **Markdown:** markdownlint-cli2 0.23.2 (the extension's version) over all 21 docs: 9,342 findings by default.
+  `.markdownlint.json` keeps the docs' 120 wrap and switches off what is house style and renders right (lists after a
+  line, `|---|` tables, numbering that runs across sections, bold lead-ins, two top-level parts in one guide).
+  Real bugs fixed: placeholders such as `<item>` GitHub drops from the page (escaped), two lines starting `#29`, double
+  blank lines, bare code fences. **The big one:** items numbered 10+ indented their content by 3, but their text
+  starts at 4, so after a blank line a paragraph fell out of the list; in apimplementation.md's list, items 34-55 then
+  rendered as one paragraph with "34." as plain text. Now indented by 4 (a script; the docs' text identical before and
+  after, only list markers became real). Then 287 lines over 120 reflowed by a script, proven by rendering every doc
+  with markdown-it before and after: identical HTML in all 19. CLAUDE.md kept at 150 lines: two lines trimmed without
+  changing a word's meaning; its line 18 is still 126 and needs the user's call (a line to spare, or a shorter rule).

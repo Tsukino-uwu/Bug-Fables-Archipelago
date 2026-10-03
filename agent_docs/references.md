@@ -92,8 +92,8 @@ The user's own experience; anything read afterwards is marked, with its row in `
   **We take:** Room Swap, on the game's own map (build step 30).
 - **Metroid Fusion:** its story strip, and points of no return in its logic: "you can jump down into a room to get an
   item with no way to get out forcing you to warp back to spawn"; the user finds the constant warping makes for pretty
-  bad gameplay, though it "does open up for the logic to place things in more/weird places" (2026-09-30). **Not taken:** the
-  story strip, since every Bug Fables cutscene also changes the world through flags (build step 9). **We take:**
+  bad gameplay, though it "does open up for the logic to place things in more/weird places" (2026-09-30). **Not taken:**
+  the story strip, since every Bug Fables cutscene also changes the world through flags (build step 9). **We take:**
   points of no return as *Points of No Return*, a yaml option, off by default, the Warp to Start as the way back
   (build step 37).
 - **Super Metroid (the apworld):** the user remembered its bosses as checks that track whether you've beaten them

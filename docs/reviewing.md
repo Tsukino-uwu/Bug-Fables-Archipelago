@@ -103,9 +103,10 @@ repository by name.
 **If you open this repo in Claude Code**, its `.claude/settings.json` runs `.claude/hooks/agent-guard.py` before each
 shell command, file edit and page fetch the agent makes. It refuses commands that would get past the git hooks, and
 asks you before any read of a GitHub project that has no committed licence row (its licence included), a commit that
-adds one, a change to what the gates allow (by an edit or in a commit), or a write through `gh api`. It reads the command it's given (and, for a GitHub read, the licence list and the patterns file's own owners), runs
-only `git status`, and changes nothing. The preflight holds the settings to that one command and to rules that ask
-or refuse, never ones that allow more. Other editors ignore the folder.
+adds one, a change to what the gates allow (by an edit or in a commit), or a write through `gh api`. It reads the
+command it's given (and, for a GitHub read, the licence list and the patterns file's own owners), runs only `git
+status`, and changes nothing. The preflight holds the settings to that one command and to rules that ask or refuse,
+never ones that allow more. Other editors ignore the folder.
 
 ## Where a server's data goes
 
@@ -171,7 +172,8 @@ python dev-scripts/dotnet_metadata.py --selftest release/mod/BepInEx/plugins/Bug
 Each preflight section prints what it checked and how much. A section that finds nothing to check fails rather than
 passing, since "0 files scanned" would otherwise read as "0 problems". What each section refuses is data, in
 `dev-scripts/preflight-patterns.json`, and each one is explained in
-[apimplementation.md, build step 28](../agent_docs/apimplementation.md#build-step-28-the-preflight-nothing-unpublishable-in-the-repo-or-a-release).
+[apimplementation.md, build step
+28](../agent_docs/apimplementation.md#build-step-28-the-preflight-nothing-unpublishable-in-the-repo-or-a-release).
 
 **The negative test is the check on the checks.** It plants a violation for every section, in every mode each one
 runs in, in a throwaway clone:
@@ -186,10 +188,10 @@ For each one it confirms the section fails. It also makes a real commit and a re
 checks that both are refused, and runs the coding agent's guard (`.claude/`) on what it must refuse, ask about and
 let through.
 
-**The apworld's own tests** (621 on 2026-09-30) and the fuzzer (10000 random seeds, 0 failures before every change) need an
-Archipelago checkout; [development.md](../agent_docs/development.md) says how. CI runs the tests, the Logic Test check
-and the fuzzer (10000 seeds), builds the apworld and its yaml and generates from them as a player would, and generates
-seeds with a second game, on every push.
+**The apworld's own tests** (621 on 2026-09-30) and the fuzzer (10000 random seeds, 0 failures before every change) need
+an Archipelago checkout; [development.md](../agent_docs/development.md) says how. CI runs the tests, the Logic Test
+check and the fuzzer (10000 seeds), builds the apworld and its yaml and generates from them as a player would, and
+generates seeds with a second game, on every push.
 
 ## The committed DLL: what is proven, and what isn't
 
@@ -248,12 +250,12 @@ same person wrote both. Here is what can be checked.
 ## How it's built
 
 - **Two process guides record every step, and a commit hook enforces them:** a commit that changes the mod, the
-  apworld or the scripts must update one of them, or say `docs: no process change` in its message. They are [how the mod was
-  made](../agent_docs/documentation.md) and [the Archipelago side](../agent_docs/apimplementation.md).
+  apworld or the scripts must update one of them, or say `docs: no process change` in its message. They are [how the mod
+  was made](../agent_docs/documentation.md) and [the Archipelago side](../agent_docs/apimplementation.md).
 - **[MEASURED.md](../agent_docs/MEASURED.md)** holds the facts about the game, each with its evidence and date.
 - **[room-logic.md](../agent_docs/room-logic.md)** is how the logic is written, checked and tested, room by room:
-  - the rules it follows (the logic may ask more of the player than the game does, never less; no point of no return, unless the
-    player turns on Points of No Return);
+  - the rules it follows (the logic may ask more of the player than the game does, never less; no point of no return,
+    unless the player turns on Points of No Return);
   - the questions asked of every room, every place the party can appear, and every story and quest chain that reaches
     across rooms;
   - how each answer is confirmed on screen and then tested.

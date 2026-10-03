@@ -34,7 +34,8 @@ It needs `py -3` or `python3`; if it can't run, it refuses. `/hooks` in Claude C
 
 When a check refuses something the code really needs (a new host, a new capability), the fix is a row in
 `docs/capabilities.md` with its reason: the maintainer's decision, never a looser pattern. What each section does:
-[apimplementation.md, build step 28](apimplementation.md#build-step-28-the-preflight-nothing-unpublishable-in-the-repo-or-a-release).
+[apimplementation.md, build step
+28](apimplementation.md#build-step-28-the-preflight-nothing-unpublishable-in-the-repo-or-a-release).
 
 ## The mod
 
@@ -45,7 +46,9 @@ When a check refuses something the code really needs (a new host, a new capabili
 is built by `dev-scripts/build-release.ps1` (documentation.md, step 32).
 
 The code style is in `.editorconfig`, which most editors apply: 4-space indents, braces on their own line, and lines
-up to 120 characters (the limit core Archipelago's `ruff.toml` sets for Python).
+up to 120 characters (the limit core Archipelago's `ruff.toml` sets for Python). The docs follow `.markdownlint.json`,
+which the markdownlint extension checks: lines up to 120 as well, tables and code blocks exempt. An item numbered 10 or
+more indents its content by 4, where its text starts: with 3, a paragraph after a blank line falls out of the list.
 
 ## Trying it in the running game: build, then copy
 
@@ -147,7 +150,7 @@ needs no one playing it (2026-09-26, both directions seen on screen this way):
 2. Host it as usual.
 3. To have Other find your items, from the checkout: `PYTHONPATH=. python <this repo>/dev-scripts/send-as-player.py
    Other APQuest "Bottom Left Chest"`. It logs in as Other and checks those locations (Archipelago's `Connect` and
-   `LocationChecks`); your game gets "You got <item> from Other!". A location is checked once: the same one twice sends
+   `LocationChecks`); your game gets "You got \<item> from Other!". A location is checked once: the same one twice sends
    nothing.
 
 ## The apworld's tests
@@ -315,22 +318,23 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `killall`: in a battle, every enemy's HP to 0; the battle's own death check ends them after the next action (a boss
   a test party can't hit, such as the spider in the air). Test files only.
 - `take <item|key> <id>`: removes one from the inventory, as the game's own `removeitem` does. Test files only.
-- `warpicon leaf|key|scroll`: the Warp button's icon (the leaf is the default), shown the next time the pause menu opens.
+- `warpicon leaf|key|scroll`: the Warp button's icon (the leaf is the default), shown the next time the pause menu
+  opens.
 - `warpcolor orange|pink|lime|<hue>`: the drawn backdrop's colour, for `warpicon scroll` (a design test).
 - `enemylook <enemy id|off> [move]`: reloads the current map with every ordinary map enemy looking like that enemy (a
   visual test for enemy shuffle's map look; the fights stay the seed's); with `move`, they also move like a map enemy
   whose fight starts with that enemy. Puzzle enemies keep their own look.
 - `enemyfight <enemy id> [id...] | off`: every map fight starts with those enemy ids instead of the seed's (a test).
 - `unstick`: stops the last scene's coroutine (`Event<n>`: a stuck scene left running threw once the cleanup removed
-  its stand-ins, 2026-09-26), runs the game's own end-of-cutscene cleanup, when a cutscene died and left you frozen, and ends a
-  map transfer stuck walking to a spot it can't reach. It also takes the party off anything a scene parked it on
+  its stand-ins, 2026-09-26), runs the game's own end-of-cutscene cleanup, when a cutscene died and left you frozen, and
+  ends a map transfer stuck walking to a spot it can't reach. It also takes the party off anything a scene parked it on
   and lifts a leftover fade: the boat scene crashed mid-fade and left a black screen with music playing, which the
   cleanup alone didn't clear (2026-09-25; the screen was seen coming back).
   It also resets the party's bodies (gravity, physics, forced animation), and closes a dialogue that died mid-line:
   the game kept thinking a box was open (`message`) after a city NPC's line threw, which froze the player until
-  `unstick` did what the game's own dialogue end does (2026-09-25). The speech box itself stayed on screen after two tries (removing the text's
-  holder, then `maintextbox`); the new `gui` command showed a `Textbox(Clone)` under the GUI camera that
-  `maintextbox` no longer pointed at, so `unstick` now removes any such box once dialogue has ended.
+  `unstick` did what the game's own dialogue end does (2026-09-25). The speech box itself stayed on screen after two
+  tries (removing the text's holder, then `maintextbox`); the new `gui` command showed a `Textbox(Clone)` under the GUI
+  camera that `maintextbox` no longer pointed at, so `unstick` now removes any such box once dialogue has ended.
 - `hazardloop`: sets where the game puts the party back after a fall (`lastpos` and `lastloadzone`) above the middle of
   the nearest water or hole, so the next fall there loops: the respawn-loop guard's test (documentation.md, step 40).
 - `travel <area>`: map travel's own path to area n (0 the Outskirts to 24), visited or not, arriving through the door
@@ -372,10 +376,10 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `items`: list every pickup that exists on the current map right now (kind, id, flag, distance), in the log.
 - `tree`: log the nearest pickup's whole object tree: each object, whether it's active, and its renderers, on or
   off. Settles what's really on screen when a visual fix doesn't take.
-- `addleif`: add Leif to the party on a file where he hasn't joined (test files; in memory until the game next saves). `ChangeParty({0, 1, 2},
-  fromscratch: true)` rebuilds the party list, then `SetPlayers` makes all three characters where the party stands.
-  The 2026-09-24 try failed because without `fromscratch` the game's copy loop never runs (`for m < 0`) and the list
-  comes out empty. First run (2026-09-25): three members, three characters, no errors.
+- `addleif`: add Leif to the party on a file where he hasn't joined (test files; in memory until the game next
+  saves). `ChangeParty({0, 1, 2}, fromscratch: true)` rebuilds the party list, then `SetPlayers` makes all three
+  characters where the party stands. The 2026-09-24 try failed because without `fromscratch` the game's copy loop never
+  runs (`for m < 0`) and the list comes out empty. First run (2026-09-25): three members, three characters, no errors.
 - `holdup [member n]`: queue a test hold-up (the Explorer Permit "from TestPlayer", or party member n: 0 Vi, 1 Kabbu,
   2 Leif), display only, the way an item from another player is shown.
 - `articles [id...]`: log the found-item line's default article, each listed item's own, and the "You got" lines.
@@ -398,8 +402,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `onehit`: flips a test boost: every hit on an enemy does at least 99 (before defence). It's the `[Debug]` setting
   `OneHit` (off in the code), so it survives reloads; `copy-dev.ps1 -DebugOn OneHit` turns it on for a dev install.
 - `infberries`: flips the berry top-up: 999 berries once per save played, when its first map loads (the `[Debug]`
-  setting `InfBerries`, off in the code; `copy-dev.ps1 -DebugOn InfBerries` turns it on for a dev test session). Once, not on
-  every drop: a refill hid purchases from the item shops, which see a purchase as berries going down (2026-09-27).
+  setting `InfBerries`, off in the code; `copy-dev.ps1 -DebugOn InfBerries` turns it on for a dev test session). Once,
+  not on every drop: a refill hid purchases from the item shops, which see a purchase as berries going down
+  (2026-09-27).
 - `infjump`: flips jumping again in mid-air. It's the `[Debug]` setting `InfJump` (off in the code; `copy-dev.ps1
   -DebugOn InfJump` turns it on for a dev test session), so it survives reloads.
 - **`TestDoors`** (`[Debug]`, not a console command): doors rewritten by hand, `Map/Door=LikeMap/LikeDoor;...` (entity

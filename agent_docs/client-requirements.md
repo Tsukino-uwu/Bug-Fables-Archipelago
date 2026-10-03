@@ -38,8 +38,10 @@ date.** "It should work" doesn't count, and neither does a green build for anyth
       (2026-09-29: `logic/` and `test/`, each with its `__init__.py`)
 - [x] A game info doc `en_Bug Fables.md`, found through the `WebWorld`'s `game_info_languages`, and a setup doc
       listed in its tutorials (2026-09-29: read in `web_world.py`)
-- [x] A `World` subclass with a unique `game`, and a `WebWorld` instance (2026-09-27: read in `world.py`; 384 tests pass at 0.6.7)
-- [x] `item_name_to_id`, `location_name_to_id` and `create_item` (2026-09-27: read in `world.py` and `items.py`; 384 tests pass at 0.6.7)
+- [x] A `World` subclass with a unique `game`, and a `WebWorld` instance (2026-09-27: read in `world.py`; 384 tests pass
+  at 0.6.7)
+- [x] `item_name_to_id`, `location_name_to_id` and `create_item` (2026-09-27: read in `world.py` and `items.py`; 384
+  tests pass at 0.6.7)
 - [x] An origin region ("Menu" by default), always reachable (2026-09-29: named in `world.py`, made in `regions.py`;
       a random start isn't in the logic yet, labelled experimental, build step 15)
 - [x] No pool item placed by hand, no `eval`, no `yaml.load` (2026-09-29: none in the apworld, searched)
@@ -50,7 +52,8 @@ date.** "It should work" doesn't count, and neither does a green build for anyth
 - [x] At least one location, and **an item pool exactly equal in size to the location count** (2026-09-27:
   asserted by `test_logic.py`, which passes)
 - [x] `multiworld.completion_condition[player]` is set (2026-09-27: through `set_completion_rule`, read in `rules.py`)
-- [x] Items and regions are added with `append`/`extend`/`+=`, never `=` (2026-09-27: read in `regions.py`, `locations.py` and `items.py`; 384 tests pass at 0.6.7)
+- [x] Items and regions are added with `append`/`extend`/`+=`, never `=` (2026-09-27: read
+  in `regions.py`, `locations.py` and `items.py`; 384 tests pass at 0.6.7)
 - [x] Only `self.random` is used, never Python's `random` (2026-09-27: the door and enemy shuffles take it as an
   argument; no module-level `random` call)
 - [x] Packaged with the "Build APWorlds" launcher component into a lowercase `bug_fables.apworld` (2026-09-26: CI
