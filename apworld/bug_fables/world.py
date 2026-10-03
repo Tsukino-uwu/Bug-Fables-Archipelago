@@ -7,7 +7,8 @@ from typing import Any
 
 from worlds.AutoWorld import World
 
-from . import entrances, items, locations, music, regions, rules, shop_inventories, slot_data, web_world
+from . import (entrances, items, locations, music, regions, rules, shop_inventories, slot_data, universal_tracker,
+               web_world)
 from .data_tables import (ARTIFACTS, DOORS, ENCOUNTERS, ITEM_NAME_TO_ID, LOCATION_NAME_TO_ID, LOCATIONS, ONE_WAYS,
                           ROOM_STARTS, STORY_EVENTS)
 from .enemies import shuffle_encounters
@@ -42,8 +43,19 @@ class BugFablesWorld(World):
     filler_starting_checks: bool = True
     # Shop Contents' Filler Only fell back to No Progression (pre_fill, rules.fall_back_from_filler_only).
     shops_fell_back: bool = False
+    # Universal Tracker regenerates a seed from its slot_data with no yaml; passthrough is that slot_data while it does.
+    ut_can_gen_without_yaml = True
+    passthrough: Mapping[str, Any] | None = None
+
+    @staticmethod
+    def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
+        # Returned whole: Universal Tracker then regenerates the world with it as re_gen_passthrough.
+        return slot_data
 
     def generate_early(self) -> None:
+        self.passthrough = universal_tracker.passthrough(self)
+        if self.passthrough is not None:
+            universal_tracker.apply_options(self, self.passthrough)
         wanted = self.options.artifacts_required.value
         available = len(ARTIFACTS)
         if wanted > available:
@@ -54,7 +66,10 @@ class BugFablesWorld(World):
             )
         self.artifacts_required = min(wanted, available)
         choice = self.options.starting_party_member
-        if choice == StartingPartyMember.option_random_member:
+        # The seed's own rolls, with Universal Tracker: the party here, before the locations and rules depend on it.
+        if self.passthrough is not None:
+            self.starting_member = self.passthrough["starting_member"]
+        elif choice == StartingPartyMember.option_random_member:
             self.starting_member = self.random.randrange(len(items.MEMBERS))
         elif choice == StartingPartyMember.option_all_three:
             self.starting_member = self.ALL_MEMBERS
@@ -65,11 +80,15 @@ class BugFablesWorld(World):
         self.included_events = [event for event in STORY_EVENTS if locations.category_on(self, event.category)]
         # Fights are decided here; the client only replays the list.
         self.enemy_swaps = {}
-        if self.options.enemy_shuffle == EnemyShuffle.option_enemies_only:
+        if self.passthrough is not None:
+            self.enemy_swaps = dict(self.passthrough["enemy_swaps"])
+        elif self.options.enemy_shuffle == EnemyShuffle.option_enemies_only:
             self.enemy_swaps = shuffle_encounters(ENCOUNTERS, self.random)
         # The start too: a room picked here, sent in slot_data; empty is the game's own start.
         self.start = {}
-        if self.options.starting_location == StartingLocation.option_anywhere:
+        if self.passthrough is not None:
+            self.start = dict(self.passthrough["start"])
+        elif self.options.starting_location == StartingLocation.option_anywhere:
             self.start = self.random.choice(ROOM_STARTS).to_slot()
         # Coupled and Room Swap can leave the start with only the opening's spots, and a seed whose opening takes only
         # filler then fails to generate: the option stands down for it, as Filler Only shops do.
@@ -94,6 +113,11 @@ class BugFablesWorld(World):
         locations.create_all_locations(self)
 
     def connect_entrances(self) -> None:
+        if self.passthrough is not None:
+            # Universal Tracker: the seed's own doors, from the door_targets the mod rewrites doors from.
+            self.door_targets = list(self.passthrough["door_targets"])
+            self.door_pairings = entrances.replay(self, self.door_targets)
+            return
         # Doors are decided here, on the region graph, and sent in slot_data; the client never decides a door itself.
         self.door_pairings = entrances.shuffle(self)
         # With the doors off nothing is rewritten, a one-way's story copies included.
@@ -102,6 +126,12 @@ class BugFablesWorld(World):
                                                    ONE_WAYS if shuffled else ())
 
     def generate_basic(self) -> None:
+        if self.passthrough is not None:
+            # Universal Tracker: the seed's own, so the rebuilt world's slot_data is the seed's, key for key.
+            self.music_map = dict(self.passthrough["music_map"])
+            self.jingle_map = dict(self.passthrough["jingle_map"])
+            self.shop_inventories = list(self.passthrough["shop_inventories"])
+            return
         # Archipelago's step for rolls that don't affect logic; the logic's own (doors, fights) come before the rules.
         # Each draws from its own stream, taken whether it's on or not, so no option here changes another's roll.
         music_random = Random(self.random.getrandbits(64))

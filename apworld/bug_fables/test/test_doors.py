@@ -4,12 +4,11 @@ from unittest import TestCase
 
 from BaseClasses import EntranceType
 
-from . import BugFablesTestBase, generate_like_main
+from . import BugFablesTestBase, entrance_graph, generate_like_main
 from ..data_tables import DOORS, MAPS, ONE_WAYS, door_name, one_way_landing
 from ..data_types import DoorConnection, DoorEnd
 from ..entrances import _partners, door_targets, pairings_from_targets, replay, room_pairs
 from ..options import DoorPlando
-from ..world import BugFablesWorld
 
 Door = tuple[str, str]
 ONE_WAY_DOORS = {(w.map, w.door) for w in ONE_WAYS}
@@ -99,12 +98,6 @@ def _shape(connections, fixed, targets) -> Counter:
     for (m, _), (to, _) in arrivals(connections, targets).items():
         leads[area_of[m]].append(doors[area_of[to]])
     return Counter((part_of[min(a)], doors[a], tuple(sorted(leads[a]))) for a in doors)
-
-
-def entrance_graph(world: BugFablesWorld) -> set[tuple[str, str, str | None, EntranceType]]:
-    """Every entrance: its name, where it is, where it leads, and how the randomizer treats it."""
-    return {(e.name, e.parent_region.name, e.connected_region.name if e.connected_region else None,
-             e.randomization_type) for e in world.multiworld.get_entrances(world.player)}
 
 
 BEFORE_DOORS = ("generate_early", "create_regions", "create_items", "set_rules")

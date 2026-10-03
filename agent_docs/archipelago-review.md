@@ -94,6 +94,11 @@ review (2026-09-29); the files have moved since, the claims checked again 2026-0
     in their new slot, Coupled/Decoupled rooms at their normal place with no lines, and an optional fog of war (on by
     default) that only PopTracker has. The mod would write three data storage keys for them (rooms visited, the
     current room, doors taken). The step-by-step plans are local files, not in the repo.
+    **Universal Tracker with no yaml built 2026-10-03** (build step 40): its docs re-read that day (they had gained
+    `explain_rule`, `explain_more` and fuzzer hooks since 2026-10-01). Decided then (the user): `/explain` as
+    Archipelago's standard has it (our rules resolve to built-in rules, which explain themselves; `rule builder.md`,
+    the `ComplicatedFilter` example), so item 13's `__str__` is no longer tied to it; the map tab and the mod's keys
+    wait for the PopTracker pack's map.
 15. **slot_data: only what's necessary.** *Recommended:* "to not waste resources, it should be limited to data that
     is absolutely necessary"; for locations "it is preferable to use LocationScouts"; "the most common usage of slot
     data is sending option results" (`world api.md:878-887`). Ours sends seven entity tables (nine since build step

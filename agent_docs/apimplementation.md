@@ -493,7 +493,8 @@ be wrong.
       *Submarine* and *Boat*, came with build step 36); 11. `World.world_version`,
       `Region.add_locations`, `options.as_dict` (done 2026-10-03, build step 39: slot_data's `options`); 12. `start_inventory_from_pool`; 13. the Rule Builder's
       `OptionFilter` for Jump, `__str__` and `@override` on our rules, a caching benchmark; 14. Universal Tracker and
-      PopTracker; 15. slot_data only what's necessary (decided 2026-09-29: the fixed tables built into the mod from
+      PopTracker (Universal Tracker with no yaml built 2026-10-03, build step 40; its map tab and the mod's data
+      storage keys wait for the PopTracker pack's map); 15. slot_data only what's necessary (decided 2026-09-29: the fixed tables built into the mod from
       the apworld's data, the seed's locations from the server, a world-version check on connect).
     - **Tests:** 16. the base in `test/bases.py` and Archipelago's generic tests in CI; 17. test hygiene (no repeated
       default runs, plain `TestCase` where no multiworld is used, options written out, `assertAccessDependency`).
@@ -3885,12 +3886,41 @@ The map tab and the mod's data storage keys wait for the PopTracker pack's map.
      it leads, randomization type). Any pairing reads back (200 random Decoupled, Coupled and Room Swap layouts);
      no entries is the game's own doors; a malformed table is refused.
    - `seed-snapshot.py` identical before and after: splitting draws nothing from the seed's random.
+2. **Universal Tracker's hooks** (`world.py`, `universal_tracker.py`):
+   - `ut_can_gen_without_yaml = True`, and a static `interpret_slot_data` that hands the slot_data back, so Universal
+     Tracker regenerates with it.
+   - `generate_early` reads the passthrough (`universal_tracker.passthrough`). With one, it first sets the options from
+     slot_data's `options`, every other option at its default as in the empty yaml (`apply_options`). The options
+     object is built the way Archipelago builds it (`MultiWorld.set_options`: the dataclass from each option's
+     `from_any`), with no lookup by a computed name. It then takes the seed's own rolls instead of rolling: the
+     starting member (before the locations and rules that depend on it), the enemy swaps and the start.
+   - `connect_entrances` takes `door_targets` verbatim and replays it; `generate_basic` takes the music, jingles and
+     shop inventories. So the rebuilt world's slot_data is the seed's, key for key.
+   - **Refused** (no support for older versions, How it works §7): a seed whose `world_version` isn't this apworld's,
+     or with no `options`. Universal Tracker shows its "not able to be generated" line, the reason in its log.
+   - `generation_is_fake` is never read: Universal Tracker always regenerates this world with the passthrough, which
+     carries every roll. `disable_ut` isn't set.
+3. **Tests** (`test_tracker.py`, no Universal Tracker needed): `regenerate` mirrors `TrackerCore.TMain` (default
+   options, the slot_data through JSON as the passthrough, its six steps through `call_all`, Archipelago's
+   `exclusion_rules` after `set_rules`, precollected items with an id dropped). 18 cases, two seeds each: the defaults,
+   the three door modes, plando in each, Filler Only fallen back and held, the fallback with excluded locations, each
+   party start, field moves and Jump, seven artifacts, the boat apart, Points of No Return, minimal accessibility, a
+   start inventory. In each, against the seed built as `Main.py` builds it: the whole slot_data, every entrance, every
+   location with its exclusion, the door pairings, and the locations reached with nothing, with all progression and
+   with six random handfuls of it (the seed's start inventory sent as the server sends it). Also: a different
+   version or missing `options` is refused, and another game's passthrough is never read. **Every case failed with the
+   passthrough ignored** (the defaults too: the shop inventories roll their own).
 
-**Status:** in progress (2026-10-03): the door replay built, the tests pass and seeds are unchanged; Universal
-Tracker's own hooks next.
+**Checked (2026-10-03):** the tests pass; `seed-snapshot.py` identical before and after (a real generation has no
+passthrough).
 
-*Code: `entrances.py` (`_split`, `pairings_from_targets`, `replay`); tests `test_doors.py` (`DoorPairTests`,
-`TestDoorTargetsReadBack`).*
+**Status:** built (2026-10-03), the tests pass and seeds are unchanged; next, Universal Tracker's own fuzzer hook, and
+the user connecting Universal Tracker with no yaml to a door-shuffled seed.
+
+*Code: `universal_tracker.py` (`passthrough`, `apply_options`), `world.py` (`ut_can_gen_without_yaml`,
+`interpret_slot_data`, the passthrough in `generate_early`, `connect_entrances` and `generate_basic`), `entrances.py`
+(`_split`, `pairings_from_targets`, `replay`); the player guide's "Tracking your seed"; tests `test_tracker.py`,
+`test_doors.py` (`DoorPairTests`, `TestDoorTargetsReadBack`), `test/__init__.py` (`entrance_graph`).*
 
 # How it works
 
@@ -3984,9 +4014,11 @@ only way a setting chosen at generation (an option, a version number) reaches th
   JSON booleans. The mod reads the goal (`artifacts_required`, capped to what the world includes), whether the
   attacks and Jump are items (`shuffle_field_moves`, `shuffle_jump`, build steps 21 and 22) and Points of No Return
   (`points_of_no_return`: the logic counts the Warp as the way back, so the mod keeps it on, build step 37). The rest
-  is there so a tracker can rebuild the seed: the location categories, Shop Contents (No Progression after its
-  fallback), the entrance randomizer, Filler Starting Checks as it stood, Progressive Boat and the player's
-  `exclude_locations`. `slot_data.py` names every other option and why it isn't sent;
+  is there so Universal Tracker can rebuild the seed (build step 40): the location categories, Shop Contents (No
+  Progression after its fallback), the entrance randomizer, Filler Starting Checks as it stood, Progressive Boat and
+  the player's `exclude_locations`. `slot_data.py` names every other option and why it isn't sent. Universal Tracker
+  takes the seed's rolls from the keys below as they are: `door_targets`, `enemy_swaps`, `start`, `starting_member`,
+  `music_map`, `jingle_map` and `shop_inventories`;
 - how each location is done: `location_flags` (a game flag), `location_berries` (a crystal berry),
   `location_discoveries` (a journal discovery), `location_shops` and `location_item_shops` (a shop's copy or first
   purchase), `location_vars` (a number reaching a value, a boss prize);

@@ -1,7 +1,7 @@
 from collections.abc import Iterable, Mapping
 from typing import Any
 
-from BaseClasses import CollectionState, ItemClassification
+from BaseClasses import CollectionState, EntranceType, ItemClassification
 from rule_builder.rules import Rule
 from test.bases import WorldTestBase
 from test.general import setup_multiworld
@@ -26,6 +26,12 @@ def generate_like_main(options: Mapping[str, Any], seed: int,
         if step == "set_rules":
             exclusion_rules(multiworld, 1, multiworld.worlds[1].options.exclude_locations.value)
     return multiworld.worlds[1]
+
+
+def entrance_graph(world: BugFablesWorld) -> set[tuple[str, str, str | None, EntranceType]]:
+    """Every entrance: its name, where it is, where it leads, and how the randomizer treats it."""
+    return {(e.name, e.parent_region.name, e.connected_region.name if e.connected_region else None,
+             e.randomization_type) for e in world.multiworld.get_entrances(world.player)}
 
 
 def rule_parts(rule: Rule | None) -> Iterable[Rule]:

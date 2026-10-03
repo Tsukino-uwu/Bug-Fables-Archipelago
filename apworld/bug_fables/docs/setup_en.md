@@ -56,6 +56,21 @@ doesn't know the seed, so choosing a file (or a new game) on the file select pla
 first. After that, a dropped connection doesn't stop play: pickups still hold the seed's items, and their
 checks are sent when the connection comes back.
 
+## Tracking your seed
+
+[Universal Tracker](https://github.com/FarisTheAncient/Archipelago/releases?q=Tracker) lists which of your locations
+are in logic, using this apworld's own rules. Bug Fables needs no yaml for it: it rebuilds your seed from the room,
+shuffled doors included, and shows every location your items reach.
+
+1. Download `tracker.apworld` from Universal Tracker's latest release and put it in your Archipelago's
+   `custom_worlds` folder, next to `bug_fables.apworld`.
+2. Open **Universal Tracker** from the Archipelago Launcher and connect to the room with your slot name.
+3. Its tab lists the locations in logic. `/explain` followed by a location's name says what it needs, and
+   `/get_logical_path` with a location's name which way leads there.
+
+It uses the `bug_fables.apworld` installed next to it, which must be the release the room was generated with: with
+another, it shows an error instead of a list.
+
 ## Settings in the game
 
 **Quality of life** and **Gameplay** are two more pages, at the top of the game's own **Settings** (from the pause
