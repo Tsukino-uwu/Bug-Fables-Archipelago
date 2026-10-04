@@ -4338,7 +4338,9 @@ flags in `MEASURED.md`, the ant tunnels). The ride (`Event49`) then goes both wa
 `GoldenSettlementEntrance`, `DefiantRoot2`, `BarrenLandsAntTunnel` and `FGCave` to `AntTunnels`, one-way. The hub's
 way back out needs that end's flag, set only by having been there, so it reaches nothing new and isn't listed. Metal
 Island and the Rubber Prison keep their earlier, more cautious two-way transfers (`LATER_CHAPTERS`). From the hub the
-palace is a plain door.
+palace is a plain door. **Seen the same day:** coming up into the palace hall boxed the party in, inside the mine
+shaft's railing (`Base/mineblock`) with no way back down (`MineLoadZone`), both until chapter 2 (flag 67). The railing
+is hidden and the door kept present, and the logic's chapter-2 rule on that door is gone.
 
 **The game side:** `slot_data` sends `free_ant_tunnels: true`; the mod reads every miner's price as 0 (the mod guide,
 step 42).

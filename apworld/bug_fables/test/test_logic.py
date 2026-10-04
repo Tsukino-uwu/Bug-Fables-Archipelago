@@ -228,3 +228,9 @@ class TestAntTunnels(BugFablesTestBase):
 
     def test_miners_free(self) -> None:
         self.assertTrue(self.world.fill_slot_data()["free_ant_tunnels"])
+
+    def test_palace_mine_open(self) -> None:
+        # Coming up from the tunnels, the railing and the missing door boxed the party in until chapter 2.
+        data = self.world.fill_slot_data()
+        self.assertIn({"map": "AntPalace1", "entity": "MineLoadZone"}, data["kept_present"])
+        self.assertIn({"map": "AntPalace1", "entity": "Base/mineblock"}, data["scenery_hidden"])

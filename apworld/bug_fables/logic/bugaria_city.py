@@ -9,11 +9,10 @@ from ..data_types import (DialogueFlag, DoorRule, EntityRef, FlagEntity, Give, I
                           StoryEvent, Transfer)
 
 DOOR_RULES = (
-    # The palace hall's doors to the library, the war room and the mine are made only from chapter 2 (flag 67); the
-    # plaza's are kept present by the seed.
+    # The palace hall's doors to the library and the war room are made only from chapter 2 (flag 67); the plaza's are
+    # kept present by the seed, and so is the mine's (below).
     DoorRule("AntPalace1", "Loadzonelibrary", Has("Chapter 2 Started")),
     DoorRule("AntPalace1", "loadzonewarroom", Has("Chapter 2 Started")),
-    DoorRule("AntPalace1", "MineLoadZone", Has("Chapter 2 Started")),
 )
 TRANSFERS = (
     # Down to the underground bar by talking to someone in the commercial district (Event61), open from the start (the
@@ -182,6 +181,9 @@ KEPT_OPEN = (
     EntityRef("BugariaMainPlaza", "blockereetl2 - Duplicate"),
 )
 KEPT_PRESENT = (
+    # The way down to the ant tunnels, made only from chapter 2 (flag 67): the tunnels lead up here, so it stays open
+    # (the user, 2026-10-04).
+    EntityRef("AntPalace1", "MineLoadZone"),
     # The plaza statue, a journal discovery the game makes only from chapter 2.
     EntityRef("BugariaMainPlaza", "StatueDesc"),
     # The inn portrait, a journal discovery, also only from chapter 2.
@@ -197,6 +199,8 @@ KEPT_PRESENT = (
     EntityRef("BugariaMainPlaza", "loadingzone theater"),
 )
 SCENERY_HIDDEN = (
+    # The railing round the mine shaft until chapter 2 (flag 67), which boxed in a party coming up from the tunnels.
+    EntityRef("AntPalace1", "Base/mineblock"),
     # Plaza scenery hidden from chapter 2, likely a wall across the way into town.
     EntityRef("BugariaMainPlaza", "Cube"),
 )

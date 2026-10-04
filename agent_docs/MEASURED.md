@@ -1972,7 +1972,8 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   hidden from it. Her scene, `Event48`, sets `flagvar[0]` to the area's price (Golden Way 15, Defiant Root 25, Barren
   Lands 35, Far Grasslands 50, Rubber Prison 60, Metal Island 100); the first talk with any miner is an introduction
   (flag 81); after it she offers the dig, checks `money` against `flagvar[0]`, charges `|money,-N|` and sets the
-  area's flag. Used by `AntTunnels.cs`.
+  area's flag. Up in `AntPalace1`, the way down (`MineLoadZone`) is made from flag 67 and the shaft's railing
+  (`Base/mineblock`) stands until 67: seen 2026-10-04, a party riding up stood boxed in. Used by `AntTunnels.cs`.
 - **The Golden Settlement's desert gate** (2026-10-04, MapDump's flag scenery and code read; seen in play): on
   `GoldenSettlementEntrance` the shut gate is `Base/DesertGate/WoodenGate2` and `(1)` until flag 83, the open one
   `Base/WoodenGate2 (2)` and `(3)` from 83; `gateswitch` (a Switch, an attack hits it) starts `Event50`, which swings it.
