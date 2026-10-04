@@ -4341,6 +4341,9 @@ Island and the Rubber Prison keep their earlier, more cautious two-way transfers
 palace is a plain door. **Seen the same day:** coming up into the palace hall boxed the party in, inside the mine
 shaft's railing (`Base/mineblock`) with no way back down (`MineLoadZone`), both until chapter 2 (flag 67). The railing
 is hidden and the door kept present, and the logic's chapter-2 rule on that door is gone.
+The hall's library door too (the user: "remove the library blocker as well"): `Loadzonelibrary` kept present, its
+blocker `makiblocker1` (Event12, until 67) kept away, its door rule gone; the library's location and the Old Book's
+delivery keep their cautious chapter-2 stand-in (`INNER_CITY`) until the room is mapped.
 
 **The game side:** `slot_data` sends `free_ant_tunnels: true`; the mod reads every miner's price as 0 (the mod guide,
 step 42).

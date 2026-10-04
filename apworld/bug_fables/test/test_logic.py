@@ -234,3 +234,8 @@ class TestAntTunnels(BugFablesTestBase):
         data = self.world.fill_slot_data()
         self.assertIn({"map": "AntPalace1", "entity": "MineLoadZone"}, data["kept_present"])
         self.assertIn({"map": "AntPalace1", "entity": "Base/mineblock"}, data["scenery_hidden"])
+
+    def test_palace_library_open(self) -> None:
+        data = self.world.fill_slot_data()
+        self.assertIn({"map": "AntPalace1", "entity": "Loadzonelibrary"}, data["kept_present"])
+        self.assertIn({"map": "AntPalace1", "entity": "makiblocker1"}, data["kept_open"])
