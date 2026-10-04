@@ -795,8 +795,8 @@ never measured there either. The user chose **two lines, squashed only if one is
 Dev `holdup long` shows four such lines: the one seen, a longer one, and the longest name with a player and alone.
 
 **Status:** works for gifts, pickups and their ground sprites, and respawning pickups seen on screen
-(2026-09-24, `MEASURED.md`), and crystal berry spots (2026-09-25); berry rewards and story pickups built, not yet seen
-in game; the description box's field fix (2026-09-26) seen on a key item's pickup (2026-10-04); long names fitted to
+(2026-09-24, `MEASURED.md`), crystal berry spots (2026-09-25), and a berry reward and a story pickup (the trapdoor
+Mushroom, 2026-10-04); the description box's field fix (2026-09-26) seen on a key item's pickup (2026-10-04); long names fitted to
 the box (2026-09-30), seen with `holdup long`'s four lines (2026-10-04: broken before "from", the shorter line
 centred, every one inside the box) and on a real find ("You found OtherPlayerQuest's / Health Upgrade!", broken after
 "'s", 2026-10-04).
@@ -2045,7 +2045,8 @@ first`), as the user asked. A thicker rim shrinks the circles, since the flower 
 to an item's size; making it bigger is the next knob if wanted.
 
 **Status:** works, seen on screen (2026-09-26) on hold-ups, on the Caravan's shelf and on the ground. Thicker outlines:
-picked on a shop shelf (2026-10-04); the new icon on the ground, in hold-ups and as Jump's key item not yet seen.
+picked on a shop shelf (2026-10-04); the new icon seen on the ground and in hold-ups (2026-10-04), as Jump's key item
+not yet.
 
 *Code: `ApIcon.cs`; used by `ItemSwap.Describe`.*
 

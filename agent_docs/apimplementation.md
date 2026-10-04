@@ -1634,7 +1634,8 @@ measure first: how a won battle knows which map enemy started it, and whether th
 
 **Status:** in progress: respawning pickups and the game's missed-prize path (2026-09-24), discoveries (2026-09-25) seen
 on screen, crystal berry spots too (the mod guide, step 9), received berries too (2026-09-28, build step 27); a berry
-location's hand-over, the lost kid's reward and the prize payout not yet seen in game; Placeholders planned; bestiary,
+location's hand-over too (2026-10-04, *Outskirts: Near Snakemouth Den, Reward*); the lost kid's reward and the prize
+payout not yet seen in game; Placeholders planned; bestiary,
 recipes and enemy checks parked.
 
 *Code: `options.py` (`CATEGORY_OPTIONS`, `category_count`), `locations.py` (`category_on`), `slot_data.py`
