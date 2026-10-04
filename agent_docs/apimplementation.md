@@ -636,6 +636,11 @@ be wrong.
 
 **Known issues:**
 
+- **The Rubber Prison's checkpoint corridor from the yard** (2026-10-04): in the game its gates may be shut from the
+  yard's side, so it never leads on; the logic still lets the yard reach the spike room through it (as before
+  2026-10-04). It needs the corridor split into two areas, the yard's and the spike room's (`room-logic.md`, the
+  model), which the apworld can't do yet (each map is one region); until then the prison's spots wait for the later
+  chapters. Build step 9.
 - **The Lost Sands gate claimed open** (seen 2026-10-04): on `BOLostSandsEntrance` a guard (`antguardclosed`) keeps
   the desert closed until flag 130 (Event74, the palace scene after chapter 2), but the door data has no gate there,
   so the logic counts the desert as open. To fix the open-world way: the closed guard kept away (build step 9).
@@ -1535,9 +1540,11 @@ the logic yet (`MEASURED.md`, the Flower Key); her sale became a location the sa
 `TestPrisonYardRock`; `MEASURED.md`, the Rubber Prison yard's rock). **Its checkpoint corridor, one-way both ways**
 (the user: "this entrance is potentially a oneway if the door is closed ... the other side of this room is also a
 oneway if you don't have the explorer permit to go back / a basic attack to hit the switches"): from the yard the
-logic never lets it lead on (`False_`, Archipelago's own); across to the yard from the far side it needs any attack
-for the switches (`ANY_ATTACK`); back to the spike room its prison door needs the Explorer Permit (corrected by the
-user: "the permit is for opening the door for the other entrance"). Test `TestPrisonCorridor`. Now `kept_present` from the start, the rule gone; location 12's beetle
+should never lead on; across to the yard from the far side it needs any attack for the switches (`ANY_ATTACK`); back
+to the spike room its prison door needs the Explorer Permit (corrected by the user: "the permit is for opening the door
+for the other entrance"). Test `TestPrisonCorridor`. **The yard side isn't written yet:** a never-passable door
+(`False_`) is skipped by Archipelago's `create_entrance`, and forced into being it broke the decoupled entrance
+randomizer (the batched run, 2026-10-04); it needs the corridor split into two areas (Known issues). Now `kept_present` from the start, the rule gone; location 12's beetle
 grass takes Kabbu's horn, so it needs `Horn Slash` of its own (the boss had implied it). Tests `TestGoldenPath`.
 
 **Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion

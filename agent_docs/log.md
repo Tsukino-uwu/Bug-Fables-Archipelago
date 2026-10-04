@@ -2765,5 +2765,8 @@ either one wrong).
   present entities.
 - **Mob drops:** the prison's key wasp dropped key 161 with flag 584, set only when taken (seen). Enemysanity (Next 58)
   worked out on paper: 37 free flags, so the respawning pickups' flag-less path; 255 always-present enemies.
-- **Open:** the batched tests and fuzzer before the push; a new seed for locations 77 and 78; enemysanity, tickets
-  (Next 57) and the red house undecided. Nothing pushed.
+- **Enemysanity built** (the user: an on/off option, every enemy kept present since "should never have anything be
+  missable"; names "Area: Room, Enemy N"): 325 locations with fixed ids, the drop made with the game's `CreateItem`,
+  its check on pickup with no save flag. Not yet seen in game; the held sprite before the fight not built.
+- **Open:** a new seed for locations 77, 78 and Enemysanity; tickets (Next 57) and the red house undecided. Pushed
+  after the batched tests, at the user's word.

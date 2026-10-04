@@ -247,16 +247,13 @@ class TestAntTunnels(BugFablesTestBase):
 
 
 class TestPrisonCorridor(BugFablesTestBase):
-    # Switch gates: never on from the yard; across to the yard with an attack; back through its prison door with
-    # the permit.
+    # Switch gates: across to the yard with an attack; back through its prison door with the permit.
     options = {"shuffle_field_moves": True}
 
     def test_corridor_rules(self) -> None:
         from ..data_tables import door_name
         def entrance(map_name: str, door: str):
             return self.multiworld.get_entrance(door_name(map_name, door), self.player)
-        everything = self.state_with("Explorer Permit", "Progressive Beemerang")
-        self.assertFalse(entrance("RubberPrisonPier", "loadzoneleft").access_rule(everything))
         across = entrance("RubberPrisonCheckpointCorridor", "loadzoneexit")
         self.assertFalse(across.access_rule(self.state_with()))
         self.assertTrue(across.access_rule(self.state_with("Progressive Beemerang")))

@@ -1,15 +1,15 @@
 """Rubber Prison (the game's area 14, MapControl.areaid): its dock. Its rooms aren't mapped yet."""
 from __future__ import annotations
 
-from rule_builder.rules import False_, Has
+from rule_builder.rules import Has
 
 from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY
 from ..data_types import DoorRule, EntityRef, ItemEntity, Transfer
 
 # The checkpoint corridor's gates open and shut by switches (the user, 2026-10-04: "has to be considered a oneway").
+# From the yard its gates may be shut (their switch on that side comes only from flag 79), so it never leads on; that
+# needs the corridor split into two areas (room-logic.md), not yet possible: Known issues.
 DOOR_RULES = (
-    # From the yard its gates may be shut, and their switch on that side comes only from flag 79: never a way on.
-    DoorRule("RubberPrisonPier", "loadzoneleft", False_()),
     # Across to the yard from the far side: the switches take an attack.
     DoorRule("RubberPrisonCheckpointCorridor", "loadzoneexit", ANY_ATTACK),
     # Back to the spike room: its prison door (until flag 538) opens with the Explorer Permit.
