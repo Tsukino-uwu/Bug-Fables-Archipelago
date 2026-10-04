@@ -2864,8 +2864,8 @@ they exist (`MapControl.cs:1262-1265`). A postfix now turns every entity the mod
 (found pickups and the open world's blockers alike), and a pickup hidden live gets the same marker. **Seen
 (2026-09-28):** no flash going in and out of the houses.
 
-**Status:** works, seen on screen (2026-09-28): a floor item, on the next entry into its room; a crystal berry not yet
-seen.
+**Status:** works, seen on screen (2026-09-28): a floor item, on the next entry into its room; a crystal berry seen
+(2026-10-04: the pier's, taken, then gone on a new file of the same seed).
 
 *Code: `KeptOpen.cs` (`AfterCreate`, the found pickups), `ItemSwap.Pickups.cs` (`IsPickup`, now shared).*
 
