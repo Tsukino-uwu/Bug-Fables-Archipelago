@@ -99,17 +99,34 @@ namespace BugFablesAP
                         QueryTriggerInteraction.Ignore)
                         .Any(c => MainManager.player == null
                         || !c.transform.IsChildOf(MainManager.player.transform.root));
-                    // Water raycasts as ground: hazards (water, spikes, pits) carry the Hazards component.
-                    bool ground = Physics.Raycast(spot + Vector3.up, Vector3.down, out RaycastHit hit, 4f, ~0,
-                        QueryTriggerInteraction.Collide)
-                        && hit.collider.GetComponentInParent<Hazards>() == null && !hit.collider.isTrigger;
-                    if (!blocked && ground)
+                    if (!blocked && SafeGround(spot))
                     {
                         return spot;
                     }
                 }
             }
             return null;
+        }
+
+        // Solid ground under the spot. Water raycasts as ground: hazards (water, spikes, pits) carry Hazards.
+        private static bool SafeGround(Vector3 spot) =>
+            Physics.Raycast(spot + Vector3.up, Vector3.down, out RaycastHit hit, 4f, ~0, QueryTriggerInteraction.Collide)
+            && hit.collider.GetComponentInParent<Hazards>() == null && !hit.collider.isTrigger;
+
+        // A landing over water, a hole or spikes respawns forever (seen 2026-10-04: beside a docked sub, and a door's
+        // arrival on Mystery Island): the first safe side of a save point or a door instead, or null.
+        private static Vector3? SafeLanding(MapControl map)
+        {
+            if (SafeGround(MainManager.player.transform.position))
+            {
+                return null;
+            }
+            return map.GetComponentsInChildren<NPCControl>(true)
+                .Where(e => e.gameObject.activeInHierarchy && (e.objecttype == NPCControl.ObjectTypes.SavePoint
+                    || e.objecttype == NPCControl.ObjectTypes.DoorOtherMap))
+                .OrderBy(e => e.objecttype == NPCControl.ObjectTypes.SavePoint ? 0 : 1)
+                .Select(e => ClearSpot(e.transform.position))
+                .FirstOrDefault(spot => spot.HasValue);
         }
 
         // Entity table: fields 6-8 are the start position, field 194 the activationflag.
@@ -428,8 +445,16 @@ namespace BugFablesAP
                 : MainManager.instance.message ? "a dialogue" : null;
             if (landed || busy != null)
             {
+                string moved = "";
+                Vector3? safe = landed ? SafeLanding(map) : null;
+                if (safe.HasValue)
+                {
+                    MainManager.player.transform.position = safe.Value;
+                    MainManager.TeleportFollowers(true);
+                    moved = "; the door's arrival was over water, a hole or spikes, so moved to safe ground";
+                }
                 lastResult = "arrived on " + map.mapid
-                    + (landed ? ", through a door into it" : $"; not stepped aside: {busy} started on arrival");
+                    + (landed ? ", through a door into it" + moved : $"; not stepped aside: {busy} started on arrival");
                 shownAt = Time.realtimeSinceStartup;
                 log.LogInfo("[dev] " + lastResult);
                 pendingMap = -1;
@@ -466,11 +491,17 @@ namespace BugFablesAP
                 Vector3? spot = ClearSpot(target.transform.position);
                 if (!spot.HasValue)
                 {
-                    // No safe side: stand on the entity's own spot, so the tester sees where it is.
-                    spot = target.transform.position + Vector3.up * 0.5f;
-                    where += "; no safe spot beside it, so on its own spot";
+                    // No safe side (a docked sub sits on water): a save point's or a door's safe side, else its own
+                    // spot only when that is safe ground.
+                    spot = SafeLanding(map) ?? (SafeGround(target.transform.position + Vector3.up * 0.5f)
+                        ? target.transform.position + Vector3.up * 0.5f : (Vector3?)null);
+                    where += spot.HasValue ? "; no safe spot beside it, so the nearest safe ground"
+                        : "; no safe ground found, left where the warp landed";
                 }
-                MainManager.player.transform.position = spot.Value;
+                if (spot.HasValue)
+                {
+                    MainManager.player.transform.position = spot.Value;
+                }
                 if (target.objecttype == NPCControl.ObjectTypes.Item)
                 {
                     target.touchcooldown = Mathf.Max(target.touchcooldown, 90f);

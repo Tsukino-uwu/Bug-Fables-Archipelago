@@ -307,6 +307,10 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   steps beside it; with `@name` it lands at the map's origin, then steps beside the named entity; either way, not if a
   battle, event or dialogue has started by then. Before arriving it marks the map's auto-start cutscenes seen (their
   flags set in the save), since out of story order they can crash; `loc` and `enemylook` warp the same way.
+  **Never onto water, a hole or spikes** (2026-10-04: beside a docked sub and on Mystery Island's door arrival, the
+  party landed over water and respawned in a loop until the respawn guard sent it to the start): once landed, a warp
+  checks the ground under the party and moves it beside a save point or a door when it isn't safe, and an `@name`
+  warp with no safe side to its entity uses that too, never the entity's own spot over water.
 - `spawn <item|key|medal> <id> [flag]`: drop a pickup next to you. With a pickup location's flag, on that
   location's map, it is that location. With `@<location id>` in place of the flag, it gets the starburst a check there
   draws, from that location's scout (looks only; taking it gives the spawned item): a class or kind's colour seen
