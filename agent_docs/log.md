@@ -2811,8 +2811,8 @@ either one wrong).
   checked … assume we are starting/checking everything from scratch logic wise".
 - **Built:** `room-checklist.md` in `agent_docs/` (the preflight refuses a root `.md`; the user: "add it in agent
   docs, but it becomes a frozen history file after its done instead of deleted"), 244 rooms, every box unchecked,
-  from the game's `Maps` list and each map's area in the map dump (2026-09-26), by area in the logic modules' order. `TestRoom` and `SnakemouthEmpty` listed apart as not rooms;
-  `Blank` kept with its scene-only note.
+  from the game's `Maps` list and each map's area in the map dump (2026-09-26), by area in the logic modules' order.
+  `TestRoom` and `SnakemouthEmpty` listed apart as not rooms; `Blank` kept with its scene-only note.
 - **How rooms get checked:** the user first asked for every field ability and every way to an item ("beemerang or fly
   to reach an item that is intended to reach with beemerang"), then proposed a yaml setting instead: "simple = expects
   only whatever the vanilla game minimally does … advanced = simple + boolean so the logic can expect you to reach
