@@ -1,5 +1,5 @@
 # Written by dev-scripts/build-release.ps1; checked by its -Check at release.
-commit: 7cb43f77707230cbb3a5ea968b28e72fb1b9468e
+commit: e8ce618398a5404c2851ad7ff24e3e1167795dd9
 sdk: 10.0.401
 game: Assembly-CSharp.dll sha256 e76da3282d6cdcb1fe9b54eb1673931019f99ee009d495437a625a4d1e6021b0
 Directory.Build.props: 44e8100ed647a81b0f3a03c3f25931f8288c6fa1
@@ -33,7 +33,7 @@ mod/BugFablesAP/Guards/AchievementGuard.cs: 9b156c7cf95a210195d1bc57e5482fd8c3d6
 mod/BugFablesAP/Guards/AnimGuard.cs: ce87617187f132581882938518aa58502dd99dc5
 mod/BugFablesAP/Guards/ClockCleanup.cs: 557c784509fb09522cfce2143290c45d436261b0
 mod/BugFablesAP/Guards/GlowGuard.cs: 6d2163af7fea075ca0c49e0f80070084ed6635f1
-mod/BugFablesAP/Guards/RespawnLoop.cs: efeea2a0aa559f470d66d34ad6cece236a45941e
+mod/BugFablesAP/Guards/RespawnLoop.cs: 7ca308b56fbd0fa7c7fa386472bba6c1941d3e78
 mod/BugFablesAP/Items/BoatTicket.cs: 2e1725c1bf94ede6e169081d7721fa4849b0a340
 mod/BugFablesAP/Items/CrystalBerryTotal.cs: bf023a01cd82d16c19c06dbeccc73e6adb2fd5b1
 mod/BugFablesAP/Items/CustomItems.cs: e526dc536d8306e0bf180c4352a5dd90b9c87da8
@@ -56,20 +56,20 @@ mod/BugFablesAP/Ui/InGameSettings.cs: f0e6d1d5631bb6633dcb3903fa53e770d60c4784
 mod/BugFablesAP/Ui/MenuToggle.cs: 88ba21d08ad08c83dcb594b7237175b8b35cd604
 mod/BugFablesAP/Ui/TextFit.cs: db50b0438a991905afdccc929136679936efd062
 mod/BugFablesAP/Ui/TextPool.cs: 536c951e73173c538c4b05f1f42e25376d34a39b
-mod/BugFablesAP/Ui/WarpButton.cs: c418b3e8a6c0a5a908d0457ea864ad108df135fa
+mod/BugFablesAP/Ui/WarpButton.cs: f1f00c47bb5455e044278d92e7a7897e8531d45b
 mod/BugFablesAP/World/Abilities.cs: 283ac8a35c235a1d79423445b733aa64a3657240
 mod/BugFablesAP/World/DoorShuffle.cs: e86884f1eb3819a6e0d875d388e646c21e1d51d6
 mod/BugFablesAP/World/EnemyShuffle.cs: df0d64770b02250228f94b5b39e1adc59e0b694c
 mod/BugFablesAP/World/FieldMoves.cs: b23e6095273a05f7d14dc058273ec95772eaa625
 mod/BugFablesAP/World/KeptOpen.cs: 3b4053dc74d60cbdf5f46e2e323c69f79ae17dd3
-mod/BugFablesAP/World/MusicShuffle.cs: 0477ecea3cde79a1321cee2262897f1dd46b2eec
+mod/BugFablesAP/World/MusicShuffle.cs: 08c7d423acda9b0087fbfc7bda547720d6dd3ab8
 mod/BugFablesAP/World/PartyFit.cs: 1baafffdf72519e908d4bfe50ce019a1edb3fc9e
 mod/BugFablesAP/World/PartyMembers.cs: 3d8a081798052fe60448e599da7a12aa6a4c89e0
 mod/BugFablesAP/World/PartySlots.cs: 79aecc898cd977323a18d8759903c52f21a334f1
 mod/BugFablesAP/World/SaveCrystals.cs: 5083f46984e471bb6c2dd778e68e1235c1d450bd
 mod/BugFablesAP/World/Submarine.cs: 04bb532383fdbb0f16076dfdc3a4a3ed17cd9ed1
 nuget.config: 3525aa692254165194b39b5291b0157dae704a63
-BugFablesAP.dll: 1f041b3558ce0d49fc440c332f8f9bf91e94077243f82165bf330e7b6e7155c1
+BugFablesAP.dll: 424bf334182161d24d2c7199b8e2b069e065eb7820caf7f6afc6d623673aafae
 Archipelago.MultiClient.Net.dll: 4d4f49b1528cf88b00fc07c69ff27d16cb1eeff52c0636009befd87f4e9dde5b
 websocket-sharp.dll: 5f59b27b01d6d6d0ea6ae2258e2639d80bc4ccedc0c16917cdd73e0b30e07f58
 Newtonsoft.Json.dll: 0cc6b1d3f4e8c938edfe1f02f2167d1cbf596a4df6ac0dbd82fe89ed67e45eb0
