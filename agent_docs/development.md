@@ -374,6 +374,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   method by any feature fails with it until the game restarts (the mod guide, step 24). `CodeInstruction.labels` isn't
   usable in this game's HarmonyX, and neither is Harmony's `GetOriginalInstructions` (it needs
   `System.Reflection.Emit.ILGeneration`); `PatchProcessor.ReadMethodBody` works.
+- `audioprobe`: on or off; while on, logs each audio source played while disabled (Unity's "Can not play a disabled
+  audio source" names nothing): its object's path, whether the object or the component is off, its clip, the map. Found
+  the infinite jump firing in battles (2026-10-04, `infjump` below). Off with a reload.
 - `frames [seconds]` (5 by default): logs the frame count, median and slow frames with their times, the camera's draw
   time and garbage collections. A collection is marked on the frame before the slow one it causes.
 - `nudge <x> <y> <z>`: shift the party by that much on the current map.
@@ -430,7 +433,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   not on every drop: a refill hid purchases from the item shops, which see a purchase as berries going down
   (2026-09-27).
 - `infjump`: flips jumping again in mid-air. It's the `[Debug]` setting `InfJump` (off in the code; `copy-dev.ps1
-  -DebugOn InfJump` turns it on for a dev test session), so it survives reloads.
+  -DebugOn InfJump` turns it on for a dev test session), so it survives reloads. Only while the field player is active:
+  in battles it's off and never on the ground, so each press of jump played its sound on a disabled source (three to
+  nine warnings a fight, found with `audioprobe`, 2026-10-04; none after).
 - **`TestDoors`** (`[Debug]`, not a console command): doors rewritten by hand, `Map/Door=LikeMap/LikeDoor;...` (entity
   names): that door leads where the other one leads, the entrance randomizer's proof of concept (`copy-dev.ps1 -DebugSet
   "TestDoors=BugariaOutskirtsOutsideCity/loadzone east=BugariaMainPlaza/LoadingZoneCommercial"`; empty turns it off).

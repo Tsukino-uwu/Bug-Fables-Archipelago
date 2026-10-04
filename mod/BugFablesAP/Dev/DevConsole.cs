@@ -93,8 +93,9 @@ namespace BugFablesAP
                 return;
             }
             EntityControl e = MainManager.player.entity;
-            // Not jumpcooldown: it outlasts the whole jump, so it never runs out in mid-air.
-            if (MainManager.FreePlayer() && !e.onground)
+            // Not jumpcooldown: it outlasts the whole jump, so it never runs out in mid-air. The field player is off
+            // during battles, never on the ground: jumping it there played its sound on a disabled source.
+            if (MainManager.FreePlayer() && e.gameObject.activeInHierarchy && !e.onground)
             {
                 e.Jump();
                 e.PlaySoundSimple("Jump");
@@ -466,6 +467,8 @@ namespace BugFablesAP
                         Application.targetFrameRate = cap;
                         return $"fps: vSyncCount 0, targetFrameRate {Application.targetFrameRate}";
                     }
+                    case "audioprobe":
+                        return AudioProbe.Toggle(log);
                     case "frames":
                         return FrameRate.StartSample(parts.Length > 1 && float.TryParse(parts[1], out float secs) ? secs
                             : 5f);
