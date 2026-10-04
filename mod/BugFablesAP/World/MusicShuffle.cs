@@ -178,8 +178,12 @@ namespace BugFablesAP
             if (following != null)
             {
                 Remember();
-                voice.Stop();
-                voice.clip = null;
+                // Unity has already destroyed it when the game is quitting.
+                if (voice != null)
+                {
+                    voice.Stop();
+                    voice.clip = null;
+                }
                 following = null;
                 playedId = -1;
             }

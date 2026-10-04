@@ -3500,6 +3500,8 @@ item, check or rule depends on it.
    - It acts only with Archipelago enabled and a seed whose map isn't empty.
    - A name the game doesn't have plays the game's own track, logged once.
    - Every switch is logged (`[music] Field0 plays as Battle4`).
+   - Unloading on quit leaves the second AudioSource alone, since Unity has already destroyed it (it threw when the
+     user closed the window, 2026-10-04).
 7. **The preflight's import list** gained `OptionGroup` from `Options`, in a commit of its own.
 
 **Tests** (`test_music.py`):

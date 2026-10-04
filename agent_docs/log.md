@@ -71,6 +71,7 @@ either one wrong).
 - [2026-10-03: the PopTracker pack started, every rule exported](#2026-10-03-the-poptracker-pack-started-every-rule-exported)
 - [2026-10-04: Spy Specs split in four](#2026-10-04-spy-specs-split-in-four)
 - [2026-10-04: TO-CHECK worked through, four fixes found in play](#2026-10-04-to-check-worked-through-four-fixes-found-in-play)
+- [2026-10-04: the icon's look, five fixes, the logic split by area](#2026-10-04-the-icons-look-five-fixes-the-logic-split-by-area)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2690,3 +2691,26 @@ either one wrong).
 - **Still open:** the Achievements row, the pause map's area-15 case, Medal prices, Difficulty, Attack boost, Healing
   crystals and Auto-save (the user: slow to test on purpose, ticked when met in play); the swamp's water jump; Seed A's
   story checks (boss prizes, the inn, chapter 2's scenes, bounties, the goal); groups 2, 3, 5, 9 to 12.
+
+## 2026-10-04: the icon's look, five fixes, the logic split by area
+
+- **Picked on screen with the user:** the Archipelago icon's thicker look (rim 0.22, lines 0.16, the circles spread to
+  0.70, colours ×1.2), after a dozen looks side by side on shop shelves next to a leaf and two medals. Dropped on the
+  way: a carved round middle ("looks unnatural"), thinner inner lines ("look off"), inner lines shaded in each circle's
+  colour ("weird/transparent ish"), and 15% and 7% bigger ("still a bit to big"). The user asked why every look needed a
+  rebuild: only code changes do, so `shelflook` was widened to take any look by name and numbers, live. The thin first
+  look is kept as `first`.
+- **Fixed, each found in play:** a flower behind Madame Butterfly's shelf cutting into a starburst (the whole shelf a
+  step forward, the user's idea); the submarine's name running past the Key Items list (narrowed in lists, the user's
+  choice); the factory's two songs joined the music shuffle (the elevator's seamless crossfade made a plain fade, seen);
+  a random start behind the desert border's shut gate falling forever (starts never at a door the game hasn't made;
+  the gate opened, the user's choice; the guard's warp now falls back to the game's own start).
+- **The logic split into the game's 25 areas** (the user: "better to make them all now, rather than moving things
+  later"), proven by `seed-snapshot.py` to change no seed.
+- **Decided (the user):** the boat stays beside the submarine; console items are held up; every door and flag gets
+  opened or marked one-way as its area is mapped; tools of any licence may be used outside the repo; test warps land
+  next door, since a dev warp into a room doesn't start its music.
+- **Mistakes caught:** a commit's refusal hidden by my output filter (seen only from the unchanged hash); I made the
+  icon the default before the user had picked it ("i never said i was done/happy with it"), reverted.
+- **Open for the next session:** TO-CHECK.md, from group 9 (the entrance randomizer) on; the dev warp's music; a
+  play-any-track command. Nothing pushed.
