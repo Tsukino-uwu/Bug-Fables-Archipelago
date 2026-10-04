@@ -393,8 +393,8 @@ door re-entered the room mid-transfer, and the game's own transfer threw in its 
 (2026-10-04): three apworld changes in a row (the Golden Path door, its blocker, its tunnel) shown in the running game
 with no new seed or file.
 
-*Code: `DevConsole.cs` (the console, the command file, `liveslot`), `LiveSlotData.cs`, `DevConsole.Warp.cs` (`loc`, `warp`, `unstick`),
-`DevConsole.Party.cs` (`spawn`), `DevConsole.Inspect.cs` (`flag`, `tree`).*
+*Code: `DevConsole.cs` (the console, the command file, `liveslot`), `LiveSlotData.cs`, `DevConsole.Warp.cs` (`loc`,
+`warp`, `unstick`), `DevConsole.Party.cs` (`spawn`), `DevConsole.Inspect.cs` (`flag`, `tree`).*
 
 ## 6. Probes: logging what the game does while you play
 
@@ -628,11 +628,12 @@ list arrows keep the corners just seen. A value now fits about 11 letters before
 own narrower row. **Seen on screen (2026-09-30):** "yee it works, feels a bit cramped but its how the game does it so
 fits in better": kept as the game has it.
 
-**Achievements (2026-09-26; seen held back 2026-10-04, the first boss on Seed A, achievement 5):** an *Achievements* row on the main page, off by default.
-While Archipelago is enabled and it's off, Steam achievements aren't unlocked, as normal saves are kept apart; the help
-line says it only concerns Steam, never Archipelago. Every achievement goes through one function,
-`InputIO.Achivement(id)` (the game's spelling), which asks Steam and sets it; `AchievementGuard.cs` skips it and logs
-each id held back once. With Archipelago disabled the game unlocks as usual (vanilla stays vanilla).
+**Achievements (2026-09-26; seen held back 2026-10-04, the first boss on Seed A, achievement 5):** an
+*Achievements* row on the main page, off by default. While Archipelago is enabled and it's off, Steam achievements
+aren't unlocked, as normal saves are kept apart; the help line says it only concerns Steam, never Archipelago. Every
+achievement goes through one function, `InputIO.Achivement(id)` (the game's spelling), which asks Steam and sets it;
+`AchievementGuard.cs` skips it and logs each id held back once. With Archipelago disabled the game unlocks as usual
+(vanilla stays vanilla).
 
 **Text gone inside shops (2026-09-26):** in the shop building the Quality of life and Gameplay pages showed
 their arrows and no text, while the game's Settings list was fine. Wrong theories first: the letter pool running dry
@@ -816,10 +817,10 @@ Dev `holdup long` shows four such lines: the one seen, a longer one, and the lon
 
 **Status:** works for gifts, pickups and their ground sprites, and respawning pickups seen on screen
 (2026-09-24, `MEASURED.md`), crystal berry spots (2026-09-25), and a berry reward and a story pickup (the trapdoor
-Mushroom, 2026-10-04); the description box's field fix (2026-09-26) seen on a key item's pickup (2026-10-04); long names fitted to
-the box (2026-09-30), seen with `holdup long`'s four lines (2026-10-04: broken before "from", the shorter line
-centred, every one inside the box) and on a real find ("You found OtherPlayerQuest's / Health Upgrade!", broken after
-"'s", 2026-10-04).
+Mushroom, 2026-10-04); the description box's field fix (2026-09-26) seen on a key item's pickup (2026-10-04); long
+names fitted to the box (2026-09-30), seen with `holdup long`'s four lines (2026-10-04: broken before "from", the
+shorter line centred, every one inside the box) and on a real find ("You found OtherPlayerQuest's / Health Upgrade!",
+broken after "'s", 2026-10-04).
 
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
 `Recolour` and `FirstMedalSeen` do the swapping); `ItemSwap.Pickups.cs` (`PickupPrefix`, `FindPickup`, `TickGround`,
@@ -1666,9 +1667,8 @@ those flags are the save's own. If any of the three hooks (save, load, new game)
 nothing rather than risk a save.
 
 **Status:** the Detector row's effect seen on screen through step 14 (the Detector beeping for checks left in a room,
-2026-09-25); Difficulty (Hard, Hardest) built (2026-09-24), not yet seen on screen, waived by the user (2026-10-04: assumed fine
-until an issue shows); the Detector's reworded help
-line seen whole (2026-10-04).
+2026-09-25); Difficulty (Hard, Hardest) built (2026-09-24), not yet seen on screen, waived by the user (2026-10-04:
+assumed fine until an issue shows); the Detector's reworded help line seen whole (2026-10-04).
 
 *Code: `MedalAssist.cs`.*
 
