@@ -51,11 +51,12 @@ if (-not (Preflight)) {
     Step 'Rebuilding the stale mod DLL'
     & powershell -NoProfile -ExecutionPolicy Bypass -File $buildRelease -GameDir $GameDir
     if ($LASTEXITCODE -ne 0) { Refuse 'build-release.ps1 failed' }
-    if (-not (Preflight)) { Refuse 'preflight still fails after the rebuild (stale, or a [Debug] setting on by default); see above' }
+    # Committed first: the preflight checks the committed DLL, so a check before the commit still sees the old one.
     & $git add -- release
     & $git commit -q -m "Release prep: mod DLL rebuilt from current sources for $Version"
     if ($LASTEXITCODE -ne 0) { Refuse 'commit of the rebuilt DLL failed' }
     Write-Host 'committed the rebuilt DLL'
+    if (-not (Preflight)) { Refuse 'preflight still fails after the rebuild (stale, or a [Debug] setting on by default); see above' }
 }
 Write-Host 'preflight clean'
 
