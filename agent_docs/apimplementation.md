@@ -1897,7 +1897,11 @@ The survey itself, with the rule for removing a follower's need: `room-logic.md`
    calls in `EventControl`). Decided: **entrances the player chooses** (the bar's hatch, elevators, the boat; the
    submarine's docks, the user, 2026-09-30) are shuffled like doors; **places the game sends you** (caught by guards, a
    fall, a story scene) keep their destination, since the scene expects to end there, and become one-ways in the logic.
-   The rule for each: `room-logic.md`, question 2 (moved there 2026-09-30). First
+   **Seen with decoupled doors (2026-10-04):** the trapdoor still dropped into the fall room and the first boss's scene
+   still ended on the Golden Path, the doors around them shuffled. **Kept as it is (the user, 2026-10-04: "we just leave
+   it as it is, if its not considered within logic anyway"):** weighed against returning the party to the scene's room
+   afterwards or shuffling the landing; a one-time trip the logic never counts can't make a seed impossible, only move
+   the player somewhere early. The rule for each: `room-logic.md`, question 2 (moved there 2026-09-30). First
    step: list every such transfer from the data (the script dump and `event-triggers.py`), map, trigger and target.
    **Listed (2026-09-25):** ScriptDump gained a column of the moving commands on each dialogue line (7 lines,
    all `|warp|` or `|loadmap|`), and `dev-scripts/event-transfers.py` lists each event method's `LoadMap` calls and
