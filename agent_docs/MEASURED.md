@@ -1960,8 +1960,9 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   line's `|warp,map,x,y,z|`. The bar's hatch (Event61) sets one after `LoadMap(30, recreateplayers: true)`: each member
   dropped in at (-20.34, 9, 0.53), one unit higher per member (`EventControl.cs:9865-9872`).
 - **The Golden Path** (2026-10-04, EntityDump and code read): `LoadZoneGoldenPath` on `BugariaOutskirtsOutsideCity`
-  requires flag 41. Inside `BOGoldenPath`, `Loadzonetunnel` (onward) requires 67, and `blocker` (Event12) stands at that
-  tunnel until 67; `loadzonecave` (the Hermit's cave) has no flag. Beetle grass (`ObjectTypes.BeetleGrass`) is cut
+  requires flag 41. Inside `BOGoldenPath`, `Loadzonetunnel` (onward) requires 67, and `blocker` (Event12) stands until 67, placed at
+  the tunnel's door but spanning the path to `loadzonecave` (the Hermit's cave, no flag) too: seen 2026-10-04, it
+  turned the party back on the way to the cave. Beetle grass (`ObjectTypes.BeetleGrass`) is cut
   only by a hit tagged `BeetleHorn` or `BeetleDash`, Kabbu's (`NPCControl.cs`, the BeetleGrass case).
 - **Eetl's blocker has two triggers** (2026-10-04, EntityDump and code read; seen in play): on
   `BugariaOutskirtsOutsideCity`, `eetlblocker1 - Duplicate` (41) stands from flag 41 and `eetlblocker1` (40) from flag

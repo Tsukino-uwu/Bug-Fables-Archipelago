@@ -1498,8 +1498,8 @@ have to check every entrance/door anyway along with every single flag in the gam
 up or mark them as oneways": every door and flag gets that verdict as its area is mapped (`room-logic.md`).
 **The Golden Path door (2026-10-04, the user: "can we open the entrance where im standing").** The game makes
 `LoadZoneGoldenPath` only from flag 41 (the first boss), and the logic had a `DoorRule` for it. Past it is one room
-(`BOGoldenPath`: location 12, a dig spot, the Hermit's cave); its tunnel onward needs 67 and its blocker stands only at
-that tunnel (`MEASURED.md`, the Golden Path). Now `kept_present` from the start, the rule gone; location 12's beetle
+(`BOGoldenPath`: location 12, a dig spot, the Hermit's cave); its tunnel onward needs 67. Its blocker (Event12, until 67)
+turned out to span the way to the cave too, so it is kept away (`MEASURED.md`, the Golden Path). Now `kept_present` from the start, the rule gone; location 12's beetle
 grass takes Kabbu's horn, so it needs `Horn Slash` of its own (the boss had implied it). Tests `TestGoldenPath`.
 
 **Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion

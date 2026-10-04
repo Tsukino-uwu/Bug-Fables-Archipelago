@@ -100,6 +100,9 @@ KEPT_OPEN = (
     EntityRef("BugariaOutskirtsOutsideCity", "eetlblocker1 - Duplicate"),
     # The same scene's second trigger, from flag 114 (Eetl following the party, Event63) until 67.
     EntityRef("BugariaOutskirtsOutsideCity", "eetlblocker1"),
+    # The Golden Path's blocker (Event12) until chapter 2: it spans the path to the Hermit's cave too, not only the
+    # tunnel, which needs flag 67 of its own.
+    EntityRef("BOGoldenPath", "blocker"),
     # The save tutorial (Event19): its actors leave at the first boss, its trigger only at its own flag 30, so a file
     # that skipped the opening walked into it with no one there.
     EntityRef("BugariaOutskirtsOutsideCity", "SaveEventTrigger"),
