@@ -1,5 +1,5 @@
 # Written by dev-scripts/build-release.ps1; checked by its -Check at release.
-commit: c9797bd5f700a98b3307253d826516386d339042
+commit: 7cb43f77707230cbb3a5ea968b28e72fb1b9468e
 sdk: 10.0.401
 game: Assembly-CSharp.dll sha256 e76da3282d6cdcb1fe9b54eb1673931019f99ee009d495437a625a4d1e6021b0
 Directory.Build.props: 44e8100ed647a81b0f3a03c3f25931f8288c6fa1
@@ -39,9 +39,9 @@ mod/BugFablesAP/Items/CrystalBerryTotal.cs: bf023a01cd82d16c19c06dbeccc73e6adb2f
 mod/BugFablesAP/Items/CustomItems.cs: e526dc536d8306e0bf180c4352a5dd90b9c87da8
 mod/BugFablesAP/Items/HoldUps.cs: e609090fba3373594a33cc206aa7004fdd18a229
 mod/BugFablesAP/Items/ItemReceiver.cs: 4466b3a27483ccf2fc0b1ae6b5299f17a78b76e1
-mod/BugFablesAP/Items/ItemShops.cs: f53643e99afb960e34e9b1431fd0882ca005cb78
+mod/BugFablesAP/Items/ItemShops.cs: 7945e494a46e506bf71f10f070f88e9cc244ed94
 mod/BugFablesAP/Items/ItemSwap.cs: b3b4a482a437de003a82d8a04948c992df518088
-mod/BugFablesAP/Items/ItemSwap.Looks.cs: 203fd20f4339aea90598d41e7dffc36d79c4eb42
+mod/BugFablesAP/Items/ItemSwap.Looks.cs: 2ce4d64cfc30cb02fc88a4a4ebf899b642a14f0a
 mod/BugFablesAP/Items/ItemSwap.Pickups.cs: 41dc1e58e13daf7b6df16785add19381c7c09187
 mod/BugFablesAP/Items/LocationChecks.cs: b1c8442555d966335f3d0e55e07a555059da3e72
 mod/BugFablesAP/Items/QuestBoards.cs: 77a5746f26ad8b413581a755226e624ffe20dcdd
@@ -69,7 +69,7 @@ mod/BugFablesAP/World/PartySlots.cs: 79aecc898cd977323a18d8759903c52f21a334f1
 mod/BugFablesAP/World/SaveCrystals.cs: 5083f46984e471bb6c2dd778e68e1235c1d450bd
 mod/BugFablesAP/World/Submarine.cs: 04bb532383fdbb0f16076dfdc3a4a3ed17cd9ed1
 nuget.config: 3525aa692254165194b39b5291b0157dae704a63
-BugFablesAP.dll: ebb0b2174d9250e10ae4b134551b3130daf50da23b9484f4879b307121677ab3
+BugFablesAP.dll: 1f041b3558ce0d49fc440c332f8f9bf91e94077243f82165bf330e7b6e7155c1
 Archipelago.MultiClient.Net.dll: 4d4f49b1528cf88b00fc07c69ff27d16cb1eeff52c0636009befd87f4e9dde5b
 websocket-sharp.dll: 5f59b27b01d6d6d0ea6ae2258e2639d80bc4ccedc0c16917cdd73e0b30e07f58
 Newtonsoft.Json.dll: 0cc6b1d3f4e8c938edfe1f02f2167d1cbf596a4df6ac0dbd82fe89ed67e45eb0
