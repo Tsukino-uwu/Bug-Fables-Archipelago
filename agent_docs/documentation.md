@@ -1157,9 +1157,9 @@ Ticket (the Archipelago guide, build step 16), the warp itself, map travel and S
 cutscenes' Den arrival seen (2026-09-26), the Tattle tutorial and the door room's puzzle (Event4) at speed
 (2026-09-26/27), the trapdoor and spider scene (2026-09-27); Skip battle tutorials: Leif's first-battle line skipped,
 seen (2026-09-27); map travel and Warp to Start through a door built (2026-10-02), map travel's seen at every
-destination (2026-10-03); the Warp button since the hooks moved and Warp to Start through the city gate seen
-(2026-10-04); the swamp's water jump not yet seen; the Reset box's letters and Item animation's reworded help lines
-seen (2026-10-04).
+destination (2026-10-03); the Warp button since the hooks moved, Warp to Start through the city gate and through a
+seed start's door seen (2026-10-04); the swamp's water jump not yet seen; the Reset box's letters and Item animation's
+reworded help lines seen (2026-10-04).
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `QualityOfLife.Opening.cs` (the opening),
 `QualityOfLife.Scenes.cs` (the scene skips, the first spider fight, the trapdoor), `ApMenu.cs` (the second page),
@@ -2922,7 +2922,8 @@ to Off:
 - the Warp in the pause menu;
 - the goal sent once the artifact is in hand (`[goal]` in the log).
 
-**Status:** built (2026-10-03), the build succeeds; not yet seen in game.
+**Status:** built (2026-10-03); seen (2026-10-04): the attacks and the jump refused until each item arrived, read
+from `options`; the Warp with Travel Off (Points of No Return's seed). The goal from `options` not yet seen.
 
 *Code: `Core/SeedData.cs` (`OptionsMissing`, the four values), `Core/SlotData.cs` (`On`, `Number`),
 `Core/ApConnection.cs` (the status line), `World/FieldMoves.cs`, `Items/LocationChecks.cs`.*

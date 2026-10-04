@@ -2206,8 +2206,8 @@ actually be random not just 'semi random'"):
   sets flag 85 and loads `GoldenSettlement1Night`, Event58 sets 86 and loads `GoldenSettlement1`).
 
 **Status:** in progress (experimental): `anywhere` (any room) works, seen on screen (2026-09-26): a new file starts in
-the seed's room; the truly random start designed (2026-09-30), to build; the logic from the start to come; the intro is
-always skipped with a seed start.
+the seed's room; the Warp back to it through its door, with Travel Off and on Map, seen (2026-10-04); the truly random
+start designed (2026-09-30), to build; the logic from the start to come; the intro is always skipped with a seed start.
 
 *Code: `options.py` (`StartingLocation`), `data_tables.py` (`ROOM_STARTS`, `STARTS`), `data/starts.json` (from
 `dev-scripts/save-points.py`), `world.py` (`generate_early`); in the mod `QualityOfLife.Opening.cs` (`DoorInto`,
