@@ -384,6 +384,10 @@ re-enters the room through a door. A dev tool for test files: the server still h
 and stepped the party into the void beside it. It now matches only an entity that's present, and otherwise lands by
 the save point or a door, saying `(<name> isn't present yet)`.
 
+**A queued warp waits out a transfer** (2026-10-04): a `liveslot` sent while the party was still walking in through a
+door re-entered the room mid-transfer, and the game's own transfer threw in its fade (`NullReferenceException` in
+`TransferMap`, twice). Queued `loc`, `warp` and `liveslot` now also wait while `MainManager.roomtransition` is set.
+
 **Status:** done: hot reload, the build-and-copy scripts and the dev console are in use; `liveslot` seen working
 (2026-10-04): three apworld changes in a row (the Golden Path door, its blocker, its tunnel) shown in the running game
 with no new seed or file.

@@ -183,10 +183,12 @@ namespace BugFablesAP
             TickInfJump();
             TickInfBerries();
             HoldLoopSpot();
-            // A queued warp waits for the player to be free rather than failing with "not now".
-            bool warpWaits = queued.Count > 0 && (queued.Peek().StartsWith("loc") || queued.Peek().StartsWith("warp"))
+            // A queued warp (liveslot re-enters the room with one) waits for the player to be free rather than failing
+            // with "not now"; one started mid-transfer overlapped the game's own and threw in its fade.
+            bool warpWaits = queued.Count > 0 && (queued.Peek().StartsWith("loc") || queued.Peek().StartsWith("warp")
+                    || queued.Peek().StartsWith("liveslot"))
                 && (MainManager.player == null || MainManager.instance.inevent || MainManager.instance.message
-                    || MainManager.instance.minipause || MainManager.instance.pause);
+                    || MainManager.instance.minipause || MainManager.instance.pause || MainManager.roomtransition);
             if (queued.Count > 0 && pendingMap < 0 && !open && !warpWaits)
             {
                 string command = queued.Dequeue();
