@@ -1431,7 +1431,9 @@ shows the companion asked for on `BugariaMainPlaza` outside any scene and the le
 starts on its own, and every other city scene trigger needs flag 67 or later (entity dump, map dump), so they join
 `kept_open` and the districts can be walked early. The palace's own blockers stay (the story goes on there). The
 districts' checks came into the logic one by one as they were seen; today only the old book quest needs chapter 2.
-Test `test_plaza_blockers_removed`. With the blockers gone the exits still did nothing (seen on screen): the plaza's
+A fourth, `MakiBlock` (a dialogue trigger from the bridge scene, flag 66, until 67), had Maki turn the party back
+toward the palace; kept away too (2026-10-04, the user: "lets remove this block"). Test
+`test_plaza_blockers_removed`. With the blockers gone the exits still did nothing (seen on screen): the plaza's
 doors to Commercial, Residential and the theater require flag 67 themselves, and a `Cube` in the plaza hides at 67. The
 three doors join `kept_present` and the cube `scenery_hidden`. Lesson: an area closed "until chapter N" is closed by
 several things at once (blockers, doors, scenery); list every entity and scenery piece gated by that flag before opening
@@ -1562,8 +1564,9 @@ boss had implied it). Tests `TestGoldenPath`.
 
 **Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion
 fallback and statue, Madeleine's house, and the bar with its quest board seen on screen (2026-09-25); the exits near
-Snakemouth Den seen (2026-09-26); every board listing bounties (built 2026-09-25), Eetl's blocker, the inn and chapter
-2's held scenes not yet seen (the boat's hold was removed, 2026-09-26); the open start is always on, not an option
+Snakemouth Den seen (2026-09-26); Eetl's blocker seen gone (2026-10-04); Maki's plaza block kept away (2026-10-04,
+in the log, not yet seen); every board listing bounties (built 2026-09-25), the inn and chapter 2's held scenes not yet
+seen (the boat's hold was removed, 2026-09-26); the open start is always on, not an option
 (2026-09-26); the desert border's gate seen broken from a new file, the door both ways with no fall (2026-10-04;
 its guard still stands, left to the story); the Golden Path door, the way to the Hermit's cave and the tunnel onward
 seen open from a new file (2026-10-04); the Golden Settlement's desert gate and its wall seen open

@@ -216,7 +216,7 @@ class TestOutskirtsRocks(BugFablesTestBase):
 
     def test_plaza_blockers_removed(self) -> None:
         kept = self.world.fill_slot_data()["kept_open"]
-        for entity in ("MM", "blockereetl2", "blockereetl2 - Duplicate"):
+        for entity in ("MM", "blockereetl2", "blockereetl2 - Duplicate", "MakiBlock"):
             with self.subTest(entity=entity):
                 self.assertIn({"map": "BugariaMainPlaza", "entity": entity}, kept)
         data = self.world.fill_slot_data()

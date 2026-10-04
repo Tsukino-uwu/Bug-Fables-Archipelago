@@ -184,6 +184,8 @@ KEPT_OPEN = (
     EntityRef("BugariaMainPlaza", "blockereetl2"),
     # The third plaza blocker.
     EntityRef("BugariaMainPlaza", "blockereetl2 - Duplicate"),
+    # Maki turning the party back toward the palace, from the bridge scene (flag 66) until the briefing (67).
+    EntityRef("BugariaMainPlaza", "MakiBlock"),
 )
 KEPT_PRESENT = (
     # The way down to the ant tunnels, made only from chapter 2 (flag 67): the tunnels lead up here, so it stays open
