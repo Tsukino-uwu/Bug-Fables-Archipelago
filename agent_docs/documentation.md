@@ -2020,6 +2020,10 @@ a vanilla leaf, then on Bugaria's medal shelf beside two medals and the leaf, ea
    "i like the middle one, where it actually has a proper gap/hole in the middle now".
 3. Thicker "to match other items", then "a bit more like the medal": rim 0.20 / gaps 0.14 / spread 0.68 against rim
    **0.22 / gaps 0.16 / spread 0.70**, the user's pick "for now".
+4. Tried after the pick and dropped (2026-10-04): thinner lines between the circles (0.10, 0.12, 0.14 with the circles
+   pulled in to keep the middle): "they just look off". Then those lines in a dark shade of each circle's colour, as
+   the game draws a sprite's inner lines (the mushroom's spots, the leaf's veins), the edge and the middle still
+   black: "it just looks weird/transparent ish", the overlaps reading as see-through. The black lines stay.
 
 `ApIcon.Look` holds a look's five shares: `Current` (rim 0.22, gap 0.16, middle 0.07, radius 0.39, distance 0.70) is
 the icon everywhere; `First` (0.07, 0.05, 0.07, 0.39, 0.60, the look since 2026-09-26) is kept to go back to or test
