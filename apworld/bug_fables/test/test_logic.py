@@ -28,6 +28,8 @@ class TestPermitGate(BugFablesTestBase):
                                      "Outskirts: Ladybug Siblings' House", "Outskirts: East Road, Boulder",
                                      "Outskirts: Pier, Behind the Dock", "Bugaria City: Residential District, Rooftop",
                                      "Outskirts: Golden Path, Grass by the Dirt Spot",
+                                     "Ant Palace: Library, Behind the Bookshelf",
+                                     "Bugaria City: Residential District, Old Book Delivery Start",
                                      "Outskirts: Madeleine's House, Table Right",
                                      "Outskirts: Madeleine's House, Table Left"}
                          | {f"Bugaria City: Commercial District, Medal Shop {n}" for n in range(1, 23)}
@@ -139,13 +141,9 @@ class TestBossPrize(BugFablesTestBase):
 
 
 class TestChapterTwo(BugFablesTestBase):
-    # The library needs flag 67, whose palace scene needs the companion who joins after the first boss.
-    def test_library_needs_the_city_and_chapter_two(self) -> None:
-        library = self.world.get_location("Ant Palace: Library, Behind the Bookshelf")
-        state = self.state_with()
-        self.assertFalse(library.can_reach(state))
-        self.add(state, "Chapter 2 Started")
-        self.assertTrue(library.can_reach(state))
+    # The game makes the library door only from flag 67; the seed opens it from the start.
+    def test_library_open_from_the_start(self) -> None:
+        self.assertTrue(self.can_reach_location("Ant Palace: Library, Behind the Bookshelf"))
 
     def test_the_city_is_open_from_the_start(self) -> None:
         self.assertTrue(self.multiworld.get_region("BugariaMainPlaza", self.player).can_reach(self.state_with()))

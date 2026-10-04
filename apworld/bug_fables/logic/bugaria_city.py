@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from rule_builder.rules import Has
 
-from ..custom_rules import INNER_CITY, LATER_CHAPTERS, SUBMARINE, CanUse
+from ..custom_rules import LATER_CHAPTERS, SUBMARINE, CanUse
 from ..data_types import (DialogueFlag, DoorRule, EntityRef, FlagEntity, Give, ItemShop, Location, Pickup, Source,
                           StoryEvent, Transfer)
 
@@ -35,21 +35,20 @@ TRANSFERS = (
 LOCATIONS = (
     # A Lore Book hidden behind a bookshelf.
     Location("Ant Palace: Library, Behind the Bookshelf", 15, "AntPalaceLibrary",
-             Source(flag=71, pickup=Pickup(map="AntPalaceLibrary", type=1, item=52)), reach=INNER_CITY),
+             Source(flag=71, pickup=Pickup(map="AntPalaceLibrary", type=1, item=52))),
     # Board quest 33's reward, from a cicada in a residential house once the old book (Quest Book) is delivered.
     Location("Bugaria City: Residential District, Old Book Delivery Reward 1", 16, "BugariaResidential",
              Source(flag=243, give=Give(map="BugariaResidential", type=1, item=52)),
              rule=Has("Old Book Delivered"),
-             category="quest", reach=INNER_CITY),
+             category="quest"),
     # The same cicada hands over the old book once the quest is taken.
     Location("Bugaria City: Residential District, Old Book Delivery Start", 17, "BugariaResidential",
-             Source(flag=241, give=Give(map="BugariaResidential", type=1, item=93)), category="quest",
-             reach=INNER_CITY),
+             Source(flag=241, give=Give(map="BugariaResidential", type=1, item=93)), category="quest"),
     # The same reward also pays 15 berries: two checks on one flag, sent together.
     Location("Bugaria City: Residential District, Old Book Delivery Reward 2", 18, "BugariaResidential",
              Source(flag=243, give=Give(map="BugariaResidential", type=-1, item=15)),
              rule=Has("Old Book Delivered"),
-             category="quest", reach=INNER_CITY),
+             category="quest"),
     # The Bad Book, outdoors on top of a house, reached past grass that Kabbu's horn cuts.
     Location("Bugaria City: Residential District, Rooftop", 32, "BugariaResidential",
              Source(flag=621, pickup=Pickup(map="BugariaResidential", type=1, item=174)),
@@ -160,7 +159,7 @@ STORY_EVENTS = (
     StoryEvent("Old Book Delivered", "Old Book Delivered", "AntPalaceLibrary",
                Source(flag=242),
                rule=Has("Quest Book"),
-               category="quest", reach=INNER_CITY),
+               category="quest"),
     # Chapter 2's title card in the palace, started in the hall (Chapter1StartEvent); it lines up the companion who
     # joins after the first boss, so it needs the first boss.
     StoryEvent("Chapter 2 Start", "Chapter 2 Started", "AntPalace1",
