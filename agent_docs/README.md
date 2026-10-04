@@ -25,4 +25,6 @@ One line per file.
 - [room-logic.md](room-logic.md): every plan for the room logic, in one place: the rules, the model, every place the
   party can appear, the story and quest chains across rooms, the questions per room, the method and the tests. Read
   before any room-level logic.
+- [room-checklist.md](room-checklist.md): every room in the game, by area, ticked as each is mapped; a frozen record
+  once all are done.
 - [log.md](log.md): dated session log. What was tried, what happened, what the user said.

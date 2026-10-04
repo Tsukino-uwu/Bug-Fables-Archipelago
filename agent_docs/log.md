@@ -75,6 +75,7 @@ either one wrong).
 - [2026-10-04: every location named by the user, quests opened from the start](#2026-10-04-every-location-named-by-the-user-quests-opened-from-the-start)
 - [2026-10-04: TO-CHECK cut down, liveslot, the world opened room by room](#2026-10-04-to-check-cut-down-liveslot-the-world-opened-room-by-room)
 - [2026-10-04: the last checks, Extra Roadblocks, shuffled-door scenes](#2026-10-04-the-last-checks-extra-roadblocks-shuffled-door-scenes)
+- [2026-10-05: a checklist of every room](#2026-10-05-a-checklist-of-every-room)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2802,3 +2803,19 @@ either one wrong).
   property's lambda in `EnemyDrops.cs` (now a loop), and `release.ps1` re-checked the rebuilt DLL before committing it
   (now after). Then CI's fuzzers split into five shards of 2000 each (the user: "nice when actions can take 3-5min"),
   committed after the release, not yet pushed.
+
+## 2026-10-05: a checklist of every room
+
+- **The user's ask:** "a list of every single room in the whole game" at the root, "something we can go from top to
+  bottom", fine to push, removed "once we are done with all the rooms". Then: "it should include rooms we have already
+  checked … assume we are starting/checking everything from scratch logic wise".
+- **Built:** `room-checklist.md` in `agent_docs/` (the preflight refuses a root `.md`; the user: "add it in agent
+  docs, but it becomes a frozen history file after its done instead of deleted"), 244 rooms, every box unchecked,
+  from the game's `Maps` list and each map's area in the map dump (2026-09-26), by area in the logic modules' order. `TestRoom` and `SnakemouthEmpty` listed apart as not rooms;
+  `Blank` kept with its scene-only note.
+- **How rooms get checked:** the user first asked for every field ability and every way to an item ("beemerang or fly
+  to reach an item that is intended to reach with beemerang"), then proposed a yaml setting instead: "simple = expects
+  only whatever the vanilla game minimally does … advanced = simple + boolean so the logic can expect you to reach
+  things in multiple ways or with hard tricks". Settled: "we start/plan for just basic/vanilla". Rule 2 unchanged; the
+  advanced setting is only this note for now. Fly and no Jump (the user: Fly "kinda breaks the 'no jump'"): with
+  vanilla logic Fly never stands in for Jump; for the advanced setting, decided when it's built.

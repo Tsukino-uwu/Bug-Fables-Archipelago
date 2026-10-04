@@ -265,6 +265,9 @@ dialogue lines, doors, map auto-start scenes, code), per room. Today `gate-table
 
 ## How a room gets mapped
 
+Every room, in the order they're worked through, is in [`room-checklist.md`](room-checklist.md) (2026-10-05, every
+box unchecked: each room is mapped from scratch, vanilla only).
+
 1. **A draft from the data.** The entity dump lists every object in the map by type: `BeetleGrass`, `PushRock`,
    `DigWall`, `DigSpot`, `BreakableRock`, `JumpSpring`, `Dropplet`, `Geizer`, `WindPusher`, `Switch`,
    `RotatingPlatform`, `PathPlatform`, `TempPlatform`, plus the doors (`door-graph.py`), the flag-gated doors
