@@ -98,7 +98,8 @@ namespace BugFablesAP
             }
         }
 
-        [HarmonyPatch(typeof(EntityControl), "Death", MethodType.Enumerator)]
+        [HarmonyPatch(typeof(EntityControl), "Death", new[] { typeof(bool) })]
+        [HarmonyPatch(MethodType.Enumerator)]
         [HarmonyPrefix]
         private static void BeforeDeathStep(object __instance)
         {
@@ -121,7 +122,8 @@ namespace BugFablesAP
         }
 
         // At its death's end, where the game drops its own items.
-        [HarmonyPatch(typeof(EntityControl), "Death", MethodType.Enumerator)]
+        [HarmonyPatch(typeof(EntityControl), "Death", new[] { typeof(bool) })]
+        [HarmonyPatch(MethodType.Enumerator)]
         [HarmonyPostfix]
         private static void AfterDeathStep(object __instance, bool __result)
         {

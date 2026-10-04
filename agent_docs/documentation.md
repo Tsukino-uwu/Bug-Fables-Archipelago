@@ -3032,7 +3032,11 @@ load, just before `MapControl.CreateEntities`: every `checkmoney` and `money` pr
 followed by "berr" in the same lines to 0, so what she says matches what she charges. The log names the lines and the
 price (`[sales] BeehiveBalcony: lines 20, 21 free (price 150 to 0)`).
 
-**Status:** built (2026-10-04), the build succeeds; not yet seen in game.
+**The hook named no overload** (found 2026-10-04 in the log: "NOT installed (EnemyDrops): Ambiguous match found"): the
+game has `Death()`, which only starts `Death(true)`, and `Death(bool)`, which does the work and whose state the drop
+reads; both patches now name `Death(bool)`. After the hot reload: "Enemysanity installed".
+
+**Status:** built (2026-10-04), installing since the overload fix (the log, 2026-10-04); not yet seen in game.
 
 *Code: `World/FreeSales.cs`, `Core/SeedData.cs` (`FreeSales`).*
 
@@ -3053,7 +3057,11 @@ guaranteed pickup made by the public `EntityControl.CreateItem` (`MEASURED.md`, 
 
 Not yet: the held item drawn on the enemy before the fight (the game draws it for two kinds only).
 
-**Status:** built (2026-10-04), the build succeeds; not yet seen in game.
+**The hook named no overload** (found 2026-10-04 in the log: "NOT installed (EnemyDrops): Ambiguous match found"): the
+game has `Death()`, which only starts `Death(true)`, and `Death(bool)`, which does the work and whose state the drop
+reads; both patches now name `Death(bool)`. After the hot reload: "Enemysanity installed".
+
+**Status:** built (2026-10-04), installing since the overload fix (the log, 2026-10-04); not yet seen in game.
 
 *Code: `World/EnemyDrops.cs`, `World/KeptOpen.cs` (`KeepPresent`), `Items/ItemSwap.Pickups.cs`, `Core/SeedData.cs`
 (`LocationEnemies`).*

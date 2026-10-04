@@ -642,6 +642,13 @@ be wrong.
   2026-10-04). It needs the corridor split into two areas, the yard's and the spike room's (`room-logic.md`, the
   model), which the apworld can do since build step 48 (`MAP_AREAS`); until it's written the prison's spots wait for
   the later chapters. Build step 9.
+- **Story scenes reached out of order freeze** (seen 2026-10-04, decoupled doors, a new file): the trigger `eventgl`
+  on `RubberPrisonGiantLairBridge` (until flag 568) starts Event194, whose first branch talks to `vanessa` (entity 11,
+  made only from flag 79): absent, the scene froze (freed with the dev `unstick`; it froze again on the next step there).
+  Played with a stand-in, it would set 346 and on the next visit play chapter 5's title and load the Giant's Lair
+  (`LoadMap(232)`). Options (the user, later): hold the trigger until its actor exists, or a stand-in where a scene
+  changes nothing beyond itself; first a sweep for every scene trigger naming an entity absent on a new file. Build
+  step 12.
 - **The Lost Sands gate claimed open** (seen 2026-10-04): on `BOLostSandsEntrance` a guard (`antguardclosed`) keeps
   the desert closed until flag 130 (Event74, the palace scene after chapter 2), but the door data has no gate there,
   so the logic counts the desert as open. To fix the open-world way: the closed guard kept away (build step 9).
