@@ -69,7 +69,21 @@ namespace BugFablesAP
         internal static long LocationOf(NPCControl npc) =>
             npc != null && drops.TryGetValue(npc, out long at) ? at : -1;
 
-        internal static List<KeyValuePair<NPCControl, long>> Live => drops.Where(d => d.Key != null).ToList();
+        internal static List<KeyValuePair<NPCControl, long>> Live
+        {
+            get
+            {
+                var live = new List<KeyValuePair<NPCControl, long>>();
+                foreach (KeyValuePair<NPCControl, long> drop in drops)
+                {
+                    if (drop.Key != null)
+                    {
+                        live.Add(drop);
+                    }
+                }
+                return live;
+            }
+        }
 
         // Every listed enemy exists from the start: none is missable.
         [HarmonyPatch(typeof(MapControl), "CreateEntities")]
