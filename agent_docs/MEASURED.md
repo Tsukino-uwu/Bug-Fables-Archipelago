@@ -1975,6 +1975,15 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   enemies hold one: `RubberPrisonPier`'s `ShwKEY wasp` (key 161, flag 584) and `UpperSnekRiverPuzzle`'s
   `ShwKEYZombeetle` (key 160, flag 526). **Seen 2026-10-04:** beating the wasp left `tempitem kind 1 id 161 flag 584`
   and eight berries; flag 584 stayed False until the key was taken, then True.
+- **Free story flags are few** (2026-10-04, a scan): of `flags`' 750, 713 appear in the decompiled code (`flags[N]`),
+  a dialogue's `flag,N` (ScriptDump), an entity's `requires`, `limit`, `activationflag` or dialogue condition
+  (EntityDump) or flag-switched scenery (MapDump), leaving 37 (22, 36, 89, 144-148, 195, 277, 310-314, 333, 407,
+  453, 505, 506, 588, 590-592, 672, 698, 708, 718, 741-749); the scan may still miss a text-only use. Not enough for a
+  flag per map enemy (327 rows).
+- **A dropped key is an ordinary pickup to the mod** (2026-10-04, code read): `ItemSwap.Pickups` matches any item
+  entity by map and `activationflag` when its line is shown, its ground scan finds entities made after the map
+  loads, and `LocationChecks` watches the flag; so a held key's drop needs only a location entry
+  `{map, flag}`.
 - **The Rubber Prison yard's rock** (2026-10-04, EntityDump and code read; reported by the user): `rock`
   (`BreakableRock`) on `RubberPrisonPier`, just inside the left door from `RubberPrisonCheckpointCorridor`, until flag
   589; a breakable rock breaks only on a hit tagged `BeetleDash` (Horn Dash) or, with conditions, `BeetleHorn`

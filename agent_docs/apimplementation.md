@@ -623,8 +623,12 @@ be wrong.
 58. **Enemysanity** (an idea, 2026-10-04, the user: "each enemy, not boss, drops an item/has a location ... would also
     allow people to see what item the enemy has before fighting it"): the game's own held-key drop works for any map
     enemy (`MEASURED.md`, a map enemy's drops), so each could carry a guaranteed, flagged drop the pickup swap shows,
-    held visibly before the fight (the mod drawing it for most enemies). Open: a free flag per enemy, the option, the
-    location count. Not decided.
+    held visibly before the fight (the mod drawing it for most enemies). **Findings the same day:** only 37 story flags
+    are free, so no flag per enemy; instead the respawning pickups' flag-less path (check sent on pickup, done-ness
+    from the server): each enemy a location keyed `map:entity` (as Enemy Shuffle keys them), a drop added on a won
+    fight while its check isn't done, the swap showing the seed's item, the enemy respawning as ever. The two held keys
+    are plain pickups to the mod already (`MEASURED.md`). Open: the option, which enemies (not bosses, no `eventid`),
+    the held sprite for most kinds, the location count. Not decided.
 
 **Known issues:**
 
