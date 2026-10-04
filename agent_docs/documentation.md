@@ -371,9 +371,17 @@ ends a stuck walk now.
 line to `BepInEx/bugfablesap-reload.txt`, the loaded build's hash (as `copy-dev.ps1` prints it) or what a new copy
 waits for; `copy-dev.ps1 -Status` prints it. One read instead of watching the log.
 
-**Status:** done: hot reload, the build-and-copy scripts and the dev console are in use.
+**An apworld change, live** (2026-10-04, the user: "i want to hotswap/live edit things, for faster dev"). Hot
+reload swaps the mod, but what the apworld decides (blockers, flags, gives) reaches the game only through a seed's
+`slot_data`, so every apworld fix meant a new seed and a new file. Now `dev-scripts/live-slot-data.py` generates the
+player file twice with the apworld on disk and keeps the keys both seeds agree on: what the apworld decides, never what
+a seed rolls. The console's `liveslot` lays that file over the login's `slot_data`, rebuilds the seed's tables and
+re-enters the room through a door. A dev tool for test files: the server still holds the seed's items and locations.
 
-*Code: `DevConsole.cs` (the console, the command file), `DevConsole.Warp.cs` (`loc`, `warp`, `unstick`),
+**Status:** done: hot reload, the build-and-copy scripts and the dev console are in use; `liveslot` built
+(2026-10-04), the build succeeds, not yet used in game.
+
+*Code: `DevConsole.cs` (the console, the command file, `liveslot`), `LiveSlotData.cs`, `DevConsole.Warp.cs` (`loc`, `warp`, `unstick`),
 `DevConsole.Party.cs` (`spawn`), `DevConsole.Inspect.cs` (`flag`, `tree`).*
 
 ## 6. Probes: logging what the game does while you play

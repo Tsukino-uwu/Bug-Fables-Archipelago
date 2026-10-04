@@ -281,6 +281,14 @@ namespace BugFablesAP
                 {
                     case "loc": return Loc(parts);
                     case "warp": return Warp(parts);
+                    case "liveslot":
+                    {
+                        string applied = LiveSlotData.Apply(connection, parts.Length > 1
+                            ? string.Join(" ", parts.Skip(1).ToArray()) : LiveSlotData.DefaultPath);
+                        // The room again, through a door, so its entities are set up from the new tables.
+                        return MainManager.map == null || !applied.StartsWith("liveslot: applied") ? applied
+                            : applied + "; " + Warp(new[] { "warp", MainManager.CurrentMap().ToString() });
+                    }
                     case "spawn": return Spawn(parts);
                     case "flag": return Flag(parts);
                     case "discovery": return Discovery(parts);

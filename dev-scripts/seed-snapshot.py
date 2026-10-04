@@ -36,6 +36,10 @@ def generate(archipelago: Path, options: dict, with_apquest: bool, seed: int, wo
         "name: BugTester\ngame: Bug Fables\nBug Fables: " + json.dumps(options) + "\n", encoding="utf-8")
     if with_apquest:
         (players / "aq.yaml").write_text("name: QuestTester\ngame: APQuest\nAPQuest: {}\n", encoding="utf-8")
+    return run_generate(archipelago, players, out, seed)
+
+
+def run_generate(archipelago: Path, players: Path, out: Path, seed: int) -> Path:
     env = dict(os.environ, SKIP_REQUIREMENTS_UPDATE="1")
     subprocess.run([sys.executable, "Generate.py", "--player_files_path", str(players), "--outputpath", str(out),
                     "--seed", str(seed), "--spoiler", "3"], cwd=archipelago, env=env, check=True,

@@ -56,6 +56,7 @@ and preflight checks the shipped DLL holds none of it.
 | `mod/BugFablesAP/Dev/DevReload.cs` | reads files | Dev build only: hashes the plugin DLL to notice a new build |
 | `mod/BugFablesAP/Dev/DevReload.cs` | writes files | Dev build only: writes a one-line reload status in the BepInEx folder |
 | `mod/BugFablesAP/Dev/EntityDump.cs` | writes files | Dev build only: dumps every map's entities, the item and medal names and the enemy table to files in the BepInEx folder |
+| `mod/BugFablesAP/Dev/LiveSlotData.cs` | reads files | Dev build only: reads the live slot_data file in the BepInEx folder that `live-slot-data.py` writes |
 | `mod/BugFablesAP/Dev/MapDump.cs` | writes files | Dev build only: dumps each map's auto-start events and hazards to one file, and its flag-switched scenery to another, in the BepInEx folder |
 | `mod/BugFablesAP/Dev/PatchDump.cs` | writes files | Dev build only: dumps every patch the mod made to a file in the BepInEx folder, to compare before and after a change |
 | `mod/BugFablesAP/Dev/QuestDump.cs` | writes files | Dev build only: dumps every board quest to a file in the BepInEx folder |
@@ -112,6 +113,8 @@ files is left out; everything else they do is listed.
 | `dev-scripts/seed-snapshot.py` | writes files | Each case's slot data and spoiler, in the folder given with `--out`; the player files and the generator's output in a temporary folder, removed afterwards |
 | `dev-scripts/seed-snapshot.py` | unpickles Archipelago's own output | Reads a generated seed file with Archipelago's own restricted loader |
 | `dev-scripts/send-as-player.py` | connects to a server | A local test server (`127.0.0.1`), logged into as a second player |
+| `dev-scripts/live-slot-data.py` | loads a script by path | Loads `seed-snapshot.py`, next to it, to share its generate and decode |
+| `dev-scripts/live-slot-data.py` | writes files | The file given with `--out`; the player file and the generator's output in a temporary folder, removed afterwards |
 | `dev-scripts/door-graph.py` | loads a script by path | Loads `gate-table.py`, next to it, to share its reader |
 | `dev-scripts/door-graph.py` | writes files | `--export` writes `data/doors.json` for the apworld |
 | `dev-scripts/event-transfers.py` | loads a script by path | Loads `gate-table.py`, next to it, to share its reader |

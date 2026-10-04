@@ -159,6 +159,11 @@ namespace BugFablesAP
         internal SeedData Seed => seedData;
         private volatile SeedData seedData;
         internal bool SeedKnown => seedData != null;
+        // The login's slot_data as the server sent it, for the dev console's `liveslot`.
+        internal Dictionary<string, object> SlotDataAtLogin { get; private set; }
+
+        // Dev only (`liveslot`): the seed's tables rebuilt from slot_data patched by the apworld on disk.
+        internal void UseSeed(SeedData seed) => seedData = seed;
 
         internal Dictionary<long, int> LocationFlags => seedData?.LocationFlags;
         internal Dictionary<long, Give> LocationGives => seedData?.LocationGives;
@@ -453,6 +458,7 @@ namespace BugFablesAP
                     // Parsed whole before anything is published: a malformed slot_data changes nothing.
                     var parsed = new SeedData(ok.SlotData, ok.Slot);
                     seedData = parsed;
+                    SlotDataAtLogin = ok.SlotData;
                     // Published last, with a fence: the game thread never sees a live session with the seed's tables
                     // unread.
                     Interlocked.Exchange(ref session, attempt);
