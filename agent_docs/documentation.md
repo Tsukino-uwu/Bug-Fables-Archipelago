@@ -2008,8 +2008,26 @@ drawing is fitted to the same size. How it will be picked:
    colours (today it shows two fixed ones).
 3. The user picks; `Rim` and `Gap` in `ApIcon.cs` change, and this step's status says what was seen.
 
+**Thicker outlines, picked on screen (2026-10-04).** `shelflook` first gained a gap share, then every share (rim,
+gap, the middle's outline, circle radius and spread) and `#n` for a medal shelf's slots, so each look was a console
+line with no rebuild (the user asked why every change needed one: only code changes do). On the Caravan's shelf beside
+a vanilla leaf, then on Bugaria's medal shelf beside two medals and the leaf, each on its class backdrop:
+
+1. Rim 0.16, gaps 0.08: about the leaf's outline, but the flower shrank and the open middle closed to a pinhole.
+2. The middle carved as a fixed round hole: "the middle circle looks unnatural now". Dropped: the middle's edge must
+   be the circles' arcs. So the outline round the middle became its own share, kept at 0.07, and the circles spread
+   wider (0.64 to 0.70) to keep the middle as open as the first look's while the gaps thickened. The user, comparing:
+   "i like the middle one, where it actually has a proper gap/hole in the middle now".
+3. Thicker "to match other items", then "a bit more like the medal": rim 0.20 / gaps 0.14 / spread 0.68 against rim
+   **0.22 / gaps 0.16 / spread 0.70**, the user's pick "for now".
+
+`ApIcon.Look` holds a look's five shares: `Current` (rim 0.22, gap 0.16, middle 0.07, radius 0.39, distance 0.70) is
+the icon everywhere; `First` (0.07, 0.05, 0.07, 0.39, 0.60, the look since 2026-09-26) is kept to go back to or test
+against (`shelflook #n black first`), as the user asked. A thicker rim shrinks the circles, since the flower is fitted
+to an item's size; making it bigger is the next knob if wanted.
+
 **Status:** works, seen on screen (2026-09-26) on hold-ups, on the Caravan's shelf and on the ground. Thicker outlines:
-planned (2026-09-30).
+picked on a shop shelf (2026-10-04); the new icon on the ground, in hold-ups and as Jump's key item not yet seen.
 
 *Code: `ApIcon.cs`; used by `ItemSwap.Describe`.*
 

@@ -12,36 +12,61 @@ namespace BugFablesAP
         // Where each sits, in degrees round the centre, the same order: top, upper left, upper right, lower left, lower
         // right, bottom.
         private static readonly float[] Angles = { 90f, 152f, 28f, 208f, 332f, 270f };
-        // Shares of the icon's half width, from the logo: circle radius, distance from the centre (leaving the middle
-        // open), the gap cut round a circle, and the outline round the whole flower.
-        private const float Radius = 0.39f, Distance = 0.6f, Gap = 0.05f, Rim = 0.07f;
         private const int Size = 128, Samples = 3;
         private static readonly System.Collections.Generic.Dictionary<string, Sprite> sprites =
             new System.Collections.Generic.Dictionary<string, Sprite>();
 
-        // Sized like an item sprite, for a hold-up or a pickup.
-        internal static Sprite Get() => Get(Rim, Color.black);
-
-        // Dev (console `shelflook`): another outline, to compare.
-        internal static Sprite Get(float rimShare, Color outline)
+        // A look, in shares of the icon's half width: the outline round the flower, the gap cut round a circle, the
+        // outline round the open middle, the circles' radius and their distance from the centre.
+        internal sealed class Look
         {
-            string key = rimShare + "/" + outline;
+            internal readonly float Rim, Gap, Middle, Radius, Distance;
+
+            internal Look(float rim, float gap, float middle, float radius, float distance)
+            {
+                Rim = rim;
+                Gap = gap;
+                Middle = middle;
+                Radius = radius;
+                Distance = distance;
+            }
+
+            public override string ToString() =>
+                $"rim {Rim}, gap {Gap}, middle {Middle}, radius {Radius}, distance {Distance}";
+        }
+
+        // In use: outlines as heavy as the game's medals, the circles spread so the middle stays open. The first look,
+        // thin-lined, is kept to go back to.
+        internal static readonly Look Current = new Look(0.22f, 0.16f, 0.07f, 0.39f, 0.7f);
+        internal static readonly Look First = new Look(0.07f, 0.05f, 0.07f, 0.39f, 0.6f);
+
+        // Sized like an item sprite, for a hold-up or a pickup.
+        internal static Sprite Get() => Get(Current, Color.black);
+
+        // Dev (console `shelflook`): any look, to compare.
+        internal static Sprite Get(Look look, Color outline)
+        {
+            float rimShare = look.Rim, gapShare = look.Gap, middleShare = look.Middle, radiusShare = look.Radius,
+                distanceShare = look.Distance;
+            string key = look + "/" + outline;
             if (sprites.TryGetValue(key, out Sprite made))
             {
                 return made;
             }
-            float half = Size / 2f, scale = half / (Radius + Distance + rimShare);
+            float half = Size / 2f, scale = half / (radiusShare + distanceShare + rimShare);
             var centres = new Vector2[Colors.Length];
             var fills = new Color[Colors.Length];
             for (int i = 0; i < Colors.Length; i++)
             {
                 float a = Angles[i] * Mathf.Deg2Rad;
-                centres[i] = new Vector2(half + Mathf.Cos(a) * Distance * scale,
-                    half + Mathf.Sin(a) * Distance * scale);
+                centres[i] = new Vector2(half + Mathf.Cos(a) * distanceShare * scale,
+                    half + Mathf.Sin(a) * distanceShare * scale);
                 int rgb = System.Convert.ToInt32(Colors[i], 16);
                 fills[i] = new Color(((rgb >> 16) & 0xFF) / 255f, ((rgb >> 8) & 0xFF) / 255f, (rgb & 0xFF) / 255f);
             }
-            float r = Radius * scale, gap = Gap * scale, rim = rimShare * scale;
+            float r = radiusShare * scale, gap = gapShare * scale, rim = rimShare * scale, mid = middleShare * scale;
+            float ring = distanceShare * scale;
+            var middle = new Vector2(half, half);
             var pixels = new Color[Size * Size];
             for (int y = 0; y < Size; y++)
             {
@@ -54,8 +79,10 @@ namespace BugFablesAP
                     {
                         for (int sx = 0; sx < Samples; sx++)
                         {
-                            sum += At(new Vector2(x + (sx + 0.5f) / Samples, y + (sy + 0.5f) / Samples), centres, fills,
-                                r, gap, rim, outline);
+                            var p = new Vector2(x + (sx + 0.5f) / Samples, y + (sy + 0.5f) / Samples);
+                            // Inside the ring of centres is the open middle, outlined by its own share.
+                            sum += At(p, centres, fills, r, gap,
+                                Vector2.Distance(p, middle) < ring ? mid : rim, outline);
                         }
                     }
                     Color c = sum / (Samples * Samples);

@@ -248,6 +248,26 @@ namespace BugFablesAP
             }
         }
 
+        // Dev (console `shelflook #n`): this map's shelf slots that are locations, left to right on screen.
+        internal static List<long> ShelfOnScreen()
+        {
+            var found = new List<KeyValuePair<float, long>>();
+            if (MainManager.map != null && MainManager.MainCamera != null)
+            {
+                foreach (NPCControl npc in MainManager.map.GetComponentsInChildren<NPCControl>(true))
+                {
+                    long at = LocationOf(npc);
+                    if (at >= 0)
+                    {
+                        found.Add(new KeyValuePair<float, long>(
+                            MainManager.MainCamera.WorldToScreenPoint(npc.transform.position).x, at));
+                    }
+                }
+            }
+            found.Sort((a, b) => a.Key.CompareTo(b.Key));
+            return found.ConvertAll(f => f.Value);
+        }
+
         // Among the shelf's live slots of the same medal, the k-th stands for that medal's k-th copy not yet done.
         private static long LocationOf(NPCControl npc)
         {

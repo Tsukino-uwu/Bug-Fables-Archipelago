@@ -696,8 +696,9 @@ namespace BugFablesAP
                     }
                     case "shelflook":
                     {
-                        // shelflook <location id> <white|black> <rim share> | shelflook off: a shop slot shows the
-                        // drawn icon so.
+                        // shelflook <location id|#n> <white|black> <current|first|rim [gap] [middle] [radius]
+                        // [distance]> (shares of the icon's half width) | <location id|#n> item|medal <id> | off: a
+                        // shop slot shows the drawn icon so, or a vanilla sprite beside it to compare.
                         if (parts.Length > 1 && parts[1] == "off")
                         {
                             ItemSwap.DevLooks.Clear();
@@ -705,13 +706,47 @@ namespace BugFablesAP
                         }
                         if (parts.Length < 4)
                         {
-                            return "shelflook <location id> <white|black> <rim share> | shelflook off";
+                            return "shelflook <location id|#n> <white|black> <current|first|rim [gap] [middle] [radius] "
+                                + "[distance]> | <location id|#n> item|medal <id> | off";
                         }
-                        long at = LocationIdBase + long.Parse(parts[1]);
-                        ItemSwap.DevLooks[at] =
-                            ApIcon.Get(float.Parse(parts[3], System.Globalization.CultureInfo.InvariantCulture),
-                            parts[2] == "white" ? Color.white : Color.black);
-                        return $"shelflook: location {at} shows the icon, {parts[2]} outline {parts[3]}";
+                        long at;
+                        if (parts[1].StartsWith("#"))
+                        {
+                            // #n: the n-th medal shelf slot from the left on screen.
+                            List<long> shelf = ShopSwap.ShelfOnScreen();
+                            int n = int.Parse(parts[1].Substring(1));
+                            if (n < 1 || n > shelf.Count)
+                            {
+                                return $"shelflook: this shelf has {shelf.Count} slots that are locations";
+                            }
+                            at = shelf[n - 1];
+                        }
+                        else
+                        {
+                            at = LocationIdBase + long.Parse(parts[1]);
+                        }
+                        if (parts[2] == "item" || parts[2] == "medal")
+                        {
+                            // Medals' sprites are the second row, as the game's medal list draws them.
+                            ItemSwap.DevLooks[at] = MainManager.itemsprites[parts[2] == "medal" ? 1 : 0,
+                                int.Parse(parts[3])];
+                            return $"shelflook: location {at} shows {parts[2]} {parts[3]}'s sprite";
+                        }
+                        var invariant = System.Globalization.CultureInfo.InvariantCulture;
+                        ApIcon.Look current = ApIcon.Current, look;
+                        float Share(int i, float otherwise) =>
+                            parts.Length > i ? float.Parse(parts[i], invariant) : otherwise;
+                        if (parts[3] == "current" || parts[3] == "first")
+                        {
+                            look = parts[3] == "first" ? ApIcon.First : current;
+                        }
+                        else
+                        {
+                            look = new ApIcon.Look(Share(3, current.Rim), Share(4, current.Gap),
+                                Share(5, current.Middle), Share(6, current.Radius), Share(7, current.Distance));
+                        }
+                        ItemSwap.DevLooks[at] = ApIcon.Get(look, parts[2] == "white" ? Color.white : Color.black);
+                        return $"shelflook: location {at} shows the icon, {parts[2]}: {look}";
                     }
                     case "iteminfo":
                     {
