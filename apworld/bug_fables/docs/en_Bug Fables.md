@@ -18,7 +18,7 @@ hands over the submarine (both new in 0.3.0). More chapters come later.
 - **Shuffle Crystal Berries** (on): crystal berry spots are locations and crystal berries are items.
 - **Shuffle Discoveries** (off): recording a journal discovery sends a check.
 - **Enemysanity** (off): every enemy on the map is a location; winning its fight drops the check as an item to pick
-  up. Every one stays on its map whatever the story, so none can be missed.
+  up. Every one stays on its map whatever the story, so none can be missed. New in 0.3.0.
 - **Shuffle Medal Shops** (on): medals sold in shops are locations.
 - **Shuffle Item Shops** (on): the first purchase of each item in an item shop is a location.
 - **Shop Contents** (No Progression): what shop locations may hold.
@@ -52,7 +52,7 @@ hands over the submarine (both new in 0.3.0). More chapters come later.
   items in any order (see below). New in 0.3.0.
 - **Extra Roadblocks** (none): obstacles the game puts up later in the story, there from the start instead, each
   crossed both ways with its ability. *Snakemouth Barrier*: the gate before Snakemouth Den, with its guard and sign;
-  Beetle Dig takes you under it. Without it, the way stays open all game.
+  Beetle Dig takes you under it. Without it, the way stays open all game. New in 0.3.0.
 - **Music Shuffle** (off, under Aesthetic Options): every song plays in place of another, the same every time you play
   the seed, and the jingles (victory, game over, chapter titles) swap among themselves. The title screen, the wind,
   water, machine and breathing sounds, and the factory elevator's music stay. Samira plays the song you pick. It changes

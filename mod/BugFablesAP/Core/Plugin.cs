@@ -12,7 +12,7 @@ namespace BugFablesAP
     {
         public const string Guid = "bugfables.archipelago";
         public const string Name = "Bug Fables Archipelago";
-        public const string Version = "0.2.0";
+        public const string Version = "0.3.0";
 
         internal static ManualLogSource Log;
         // Set as the game starts closing: a closing game needs nothing put back for a hot reload.
