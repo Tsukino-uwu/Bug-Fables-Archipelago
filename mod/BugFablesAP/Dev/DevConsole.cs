@@ -696,18 +696,18 @@ namespace BugFablesAP
                     }
                     case "shelflook":
                     {
-                        // shelflook <location id|#n> <white|black> <current|first|rim [gap] [middle] [radius]
-                        // [distance]> (shares of the icon's half width) | <location id|#n> item|medal <id> | off: a
-                        // shop slot shows the drawn icon so, or a vanilla sprite beside it to compare.
+                        // shelflook <location id|#n> <white|black> [current|first] [rim=.. gap=.. middle=.. radius=..
+                        // distance=.. scale=.. sat=..] (ApIcon.Look) | <location id|#n> item|medal <id> | off: a shop
+                        // slot shows the drawn icon so, or a vanilla sprite beside it to compare.
                         if (parts.Length > 1 && parts[1] == "off")
                         {
                             ItemSwap.DevLooks.Clear();
                             return "shelflook: every slot back to the seed's item";
                         }
-                        if (parts.Length < 4)
+                        if (parts.Length < 3)
                         {
-                            return "shelflook <location id|#n> <white|black> <current|first|rim [gap] [middle] [radius] "
-                                + "[distance]> | <location id|#n> item|medal <id> | off";
+                            return "shelflook <location id|#n> <white|black> [current|first] [rim=.. gap=.. middle=.. "
+                                + "radius=.. distance=.. scale=.. sat=..] | <location id|#n> item|medal <id> | off";
                         }
                         long at;
                         if (parts[1].StartsWith("#"))
@@ -732,19 +732,18 @@ namespace BugFablesAP
                                 int.Parse(parts[3])];
                             return $"shelflook: location {at} shows {parts[2]} {parts[3]}'s sprite";
                         }
-                        var invariant = System.Globalization.CultureInfo.InvariantCulture;
-                        ApIcon.Look current = ApIcon.Current, look;
-                        float Share(int i, float otherwise) =>
-                            parts.Length > i ? float.Parse(parts[i], invariant) : otherwise;
-                        if (parts[3] == "current" || parts[3] == "first")
+                        // A named look (current by default), each key=value after it overriding one of its numbers.
+                        ApIcon.Look start = parts.Contains("first") ? ApIcon.First : ApIcon.Current;
+                        var set = new Dictionary<string, float>();
+                        foreach (string part in parts.Skip(3).Where(p => p.Contains("=")))
                         {
-                            look = parts[3] == "first" ? ApIcon.First : current;
+                            string[] kv = part.Split('=');
+                            set[kv[0]] = float.Parse(kv[1], System.Globalization.CultureInfo.InvariantCulture);
                         }
-                        else
-                        {
-                            look = new ApIcon.Look(Share(3, current.Rim), Share(4, current.Gap),
-                                Share(5, current.Middle), Share(6, current.Radius), Share(7, current.Distance));
-                        }
+                        float Get(string name, float otherwise) => set.TryGetValue(name, out float v) ? v : otherwise;
+                        var look = new ApIcon.Look(Get("rim", start.Rim), Get("gap", start.Gap),
+                            Get("middle", start.Middle), Get("radius", start.Radius), Get("distance", start.Distance),
+                            Get("scale", start.Scale), Get("sat", start.Saturation));
                         ItemSwap.DevLooks[at] = ApIcon.Get(look, parts[2] == "white" ? Color.white : Color.black);
                         return $"shelflook: location {at} shows the icon, {parts[2]}: {look}";
                     }

@@ -17,27 +17,31 @@ namespace BugFablesAP
             new System.Collections.Generic.Dictionary<string, Sprite>();
 
         // A look, in shares of the icon's half width: the outline round the flower, the gap cut round a circle, the
-        // outline round the open middle, the circles' radius and their distance from the centre.
+        // outline round the open middle, the circles' radius and their distance from the centre; then the drawn size
+        // (1 an item's) and the circles' colour strength (1 the logo's).
         internal sealed class Look
         {
-            internal readonly float Rim, Gap, Middle, Radius, Distance;
+            internal readonly float Rim, Gap, Middle, Radius, Distance, Scale, Saturation;
 
-            internal Look(float rim, float gap, float middle, float radius, float distance)
+            internal Look(float rim, float gap, float middle, float radius, float distance, float scale = 1f,
+                float saturation = 1f)
             {
                 Rim = rim;
                 Gap = gap;
                 Middle = middle;
                 Radius = radius;
                 Distance = distance;
+                Scale = scale;
+                Saturation = saturation;
             }
 
-            public override string ToString() =>
-                $"rim {Rim}, gap {Gap}, middle {Middle}, radius {Radius}, distance {Distance}";
+            public override string ToString() => $"rim {Rim}, gap {Gap}, middle {Middle}, radius {Radius}, "
+                + $"distance {Distance}, scale {Scale}, sat {Saturation}";
         }
 
-        // In use: outlines as heavy as the game's medals, the circles spread so the middle stays open. The first look,
-        // thin-lined, is kept to go back to.
-        internal static readonly Look Current = new Look(0.22f, 0.16f, 0.07f, 0.39f, 0.7f);
+        // In use: outlines as heavy as the game's medals, the circles spread so the middle stays open, the colours a
+        // little stronger than the logo's. The first look, thin-lined, is kept to go back to.
+        internal static readonly Look Current = new Look(0.22f, 0.16f, 0.07f, 0.39f, 0.7f, 1f, 1.2f);
         internal static readonly Look First = new Look(0.07f, 0.05f, 0.07f, 0.39f, 0.6f);
 
         // Sized like an item sprite, for a hold-up or a pickup.
@@ -63,6 +67,11 @@ namespace BugFablesAP
                     half + Mathf.Sin(a) * distanceShare * scale);
                 int rgb = System.Convert.ToInt32(Colors[i], 16);
                 fills[i] = new Color(((rgb >> 16) & 0xFF) / 255f, ((rgb >> 8) & 0xFF) / 255f, (rgb & 0xFF) / 255f);
+                if (look.Saturation != 1f)
+                {
+                    Color.RGBToHSV(fills[i], out float hue, out float saturation, out float value);
+                    fills[i] = Color.HSVToRGB(hue, Mathf.Clamp01(saturation * look.Saturation), value);
+                }
             }
             float r = radiusShare * scale, gap = gapShare * scale, rim = rimShare * scale, mid = middleShare * scale;
             float ring = distanceShare * scale;
@@ -94,7 +103,7 @@ namespace BugFablesAP
             texture.Apply();
             Vector3 item = MainManager.itemsprites[0, 0].bounds.size;
             made = Sprite.Create(texture, new Rect(0f, 0f, Size, Size), new Vector2(0.5f, 0.5f),
-                Size / Mathf.Max(item.x, item.y));
+                Size / Mathf.Max(item.x, item.y) / look.Scale);
             sprites[key] = made;
             return made;
         }

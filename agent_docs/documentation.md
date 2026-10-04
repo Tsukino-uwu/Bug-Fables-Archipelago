@@ -2024,10 +2024,14 @@ a vanilla leaf, then on Bugaria's medal shelf beside two medals and the leaf, ea
    pulled in to keep the middle): "they just look off". Then those lines in a dark shade of each circle's colour, as
    the game draws a sprite's inner lines (the mushroom's spots, the leaf's veins), the edge and the middle still
    black: "it just looks weird/transparent ish", the overlaps reading as see-through. The black lines stay.
+5. Size and colour (2026-10-04, two new numbers on a look: `scale`, the drawn size, and `sat`, the circles' colour
+   strength in HSV). 15% bigger: "i like the current size more than the large ones". Colours ×1.5: "looks to vibrant";
+   **×1.2**, at today's size, the user's pick "for now".
 
-`ApIcon.Look` holds a look's five shares: `Current` (rim 0.22, gap 0.16, middle 0.07, radius 0.39, distance 0.70) is
-the icon everywhere; `First` (0.07, 0.05, 0.07, 0.39, 0.60, the look since 2026-09-26) is kept to go back to or test
-against (`shelflook #n black first`), as the user asked. A thicker rim shrinks the circles, since the flower is fitted
+`ApIcon.Look` holds a look's five shares, its size and its colour strength: `Current` (rim 0.22, gap 0.16, middle
+0.07, radius 0.39, distance 0.70, scale 1, colours ×1.2) is the icon everywhere; `First` (0.07, 0.05, 0.07, 0.39,
+0.60, scale 1, colours ×1, the look since 2026-09-26) is kept to go back to or test against (`shelflook #n black
+first`), as the user asked. A thicker rim shrinks the circles, since the flower is fitted
 to an item's size; making it bigger is the next knob if wanted.
 
 **Status:** works, seen on screen (2026-09-26) on hold-ups, on the Caravan's shelf and on the ground. Thicker outlines:

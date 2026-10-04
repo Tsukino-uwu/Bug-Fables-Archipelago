@@ -391,13 +391,14 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `holdup ap`: the drawn Archipelago icon held up on two class backdrops (plum, cyan).
 - `holdup long`: four "You got" lines too wide for the box (the one seen, a longer one, the longest server name with a
   player and alone), to check the fitting (the mod guide, step 9).
-- `shelflook <slot> <white|black> <look>`: a shop slot shows the drawn icon in that look, to compare looks on a shelf.
-  `<slot>` is a location id, or `#n` for a medal shelf's n-th slot from the left on screen. `<look>` is `current` (the
-  icon in use), `first` (the thin first look, kept to go back to), or shares of the icon's half width: `rim [gap]
-  [middle] [radius] [distance]` (the outline round the flower, the lines between circles, the outline round the open
-  middle, the circles' size and spread; each left out is the current look's). `shelflook <slot> item|medal <id>`
-  shows a vanilla item's or medal's sprite there instead, beside it; `shelflook off` puts every slot back. Every change
-  shows at once, with no rebuild (documentation.md, step 23).
+- `shelflook <slot> <white|black> [current|first] [key=value ...]`: a shop slot shows the drawn icon in that look, to
+  compare looks on a shelf. `<slot>` is a location id, or `#n` for a medal shelf's n-th slot from the left on screen.
+  The look is `current` (the icon in use, the default) or `first` (the thin first look, kept to go back to), each
+  number overridable: `rim`, `gap`, `middle`, `radius`, `distance` (shares of the icon's half width: the outline round
+  the flower, the lines between circles, the outline round the open middle, the circles' size and spread), `scale`
+  (the drawn size) and `sat` (the colours' strength), e.g. `shelflook #2 black current sat=1.2`. `shelflook <slot>
+  item|medal <id>` shows a vanilla item's or medal's sprite there instead, beside it; `shelflook off` puts every slot
+  back. Every change shows at once, with no rebuild (documentation.md, step 23).
 - `iteminfo`: log every item entity on the map with its sprite, pivot, size, lift and backdrop (placement checks).
 - `mark <size> <raise>`: the Item backgrounds starburst's size and the lift it and its item get, live.
 - `letters`: count the game's 500 text letters that are taken, by owner (to spot a leak).
