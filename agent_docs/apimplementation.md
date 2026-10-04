@@ -2795,7 +2795,8 @@ level without the first "wouldn't work"): Beemerang Toss then Halt, Dash then Ho
 
 **Status:** built (2026-09-27): the logic and pool tested, the mod built, its patch counts taken from the game's IL and
 confirmed in the running game (its log: 8 of 8, 2 of 2, 15 of 15). Seen (2026-10-04): a received ability working (Bee
-Fly), its battle skill, the key items' text. Not yet seen: a scene sending its check. Decided and still to build:
+Fly), its battle skill, the key items' text; a scene sending its check (2026-10-04: the Dash's, Event221 at the Lost
+Sands' entrance, location 69, its flags 88 and 138 set by hand on a test file). Decided and still to build:
 without the Horn Slash the Dash only moves (Next 23), for Shuffle Field Moves.
 
 *Code: `abilities.py` (`item_count`, `item_copies`), `slot_data.py` (`ability_items`); in the mod `Abilities.cs` and
