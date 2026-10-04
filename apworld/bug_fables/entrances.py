@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import CollectionState, Entrance, EntranceType, Region
 from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances
 
-from .data_tables import DOORS, ONE_WAYS, door_name, one_way_landing
+from .data_tables import DOORS, ONE_WAYS, door_name, door_region, one_way_landing
 from .data_types import DoorConnection, OneWayDoor
 from .options import EntranceRandomizer
 
@@ -181,7 +181,7 @@ def replay(world: BugFablesWorld, targets: Sequence[Mapping[str, str]]) -> list[
         if x in landing:
             _connect(world, door_name(*x), landing[y].to, one_way_landing(landing[y]))
         else:
-            _connect(world, names[x], y[0], names[y])
+            _connect(world, names[x], door_region(*y), names[y])
     left = [name for name in (*names.values(), *(door_name(*door) for door in landing))
             if world.get_entrance(name).connected_region is None]
     if left:
@@ -214,10 +214,11 @@ def _plando(world: BugFablesWorld, names: dict[Door, str], coupled: bool) -> lis
         if coupled or connection.direction in ("exit", "both"):
             ways.append((exit_, entrance))
         for x, y in ways:
-            if world.get_entrance(names[x]).connected_region is not None or _free_target(world, y[0], names[y]) is None:
+            if (world.get_entrance(names[x]).connected_region is not None
+                    or _free_target(world, door_region(*y), names[y]) is None):
                 raise ValueError(f"Bug Fables: player {world.player_name}'s plando connection {connection.entrance} "
                                  f"to {connection.exit} uses a door another one already uses")
-            _connect(world, names[x], y[0], names[y])
+            _connect(world, names[x], door_region(*y), names[y])
             pairings.append((x, y))
     return pairings
 
@@ -231,7 +232,7 @@ def _swap_rooms(world: BugFablesWorld, names: dict[Door, str]) -> list[tuple[Doo
     for _ in range(ROOM_SWAP_TRIES):
         pairs = room_pairs(DOORS.connections, DOORS.fixed, world.random)
         pairings = [p for x, y in pairs for p in ((x, y), (y, x))]
-        made = [_connect(world, names[x], y[0], names[y]) for x, y in pairings]
+        made = [_connect(world, names[x], door_region(*y), names[y]) for x, y in pairings]
         if _every_region_reached(world):
             return pairings
         for source, region, target in made:
@@ -267,18 +268,18 @@ def write_spoiler(world: BugFablesWorld) -> None:
             world.multiworld.spoiler.set_entrance(door_name(*x), door_name(*y), "both", world.player)
 
 
-def _connect(world: BugFablesWorld, exit_name: str, target_map: str,
+def _connect(world: BugFablesWorld, exit_name: str, target_region: str,
              target_name: str) -> tuple[Entrance, Region, Entrance]:
-    """Connects a split door to the target named after another door, as Archipelago's randomizer does; returns what
-    it took to undo it."""
+    """Connects a split door to the target named after another door, in that door's region, as Archipelago's
+    randomizer does; returns what it took to undo it."""
     source = world.get_entrance(exit_name)
-    region = world.get_region(target_map)
-    target = _free_target(world, target_map, target_name)
+    region = world.get_region(target_region)
+    target = _free_target(world, target_region, target_name)
     region.entrances.remove(target)
     source.connect(region)
     return source, region, target
 
 
-def _free_target(world: BugFablesWorld, map_name: str, name: str) -> Entrance | None:
-    """The split door's target in its map, while nothing is connected to it yet."""
-    return next((e for e in world.get_region(map_name).entrances if e.name == name and e.parent_region is None), None)
+def _free_target(world: BugFablesWorld, region: str, name: str) -> Entrance | None:
+    """The split door's target in its region, while nothing is connected to it yet."""
+    return next((e for e in world.get_region(region).entrances if e.name == name and e.parent_region is None), None)

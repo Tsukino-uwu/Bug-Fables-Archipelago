@@ -117,6 +117,7 @@ this file and that doc disagree, that doc is right.
 45. [Build step 45: the ant tunnels, the miners dig for free](#build-step-45-the-ant-tunnels-the-miners-dig-for-free)
 46. [Build step 46: Beette's sale, a free location](#build-step-46-beettes-sale-a-free-location)
 47. [Build step 47: Enemysanity, every map enemy a location](#build-step-47-enemysanity-every-map-enemy-a-location)
+48. [Build step 48: Extra Roadblocks, and a map split into areas](#build-step-48-extra-roadblocks-and-a-map-split-into-areas)
 
 **How it works**
 
@@ -639,8 +640,8 @@ be wrong.
 - **The Rubber Prison's checkpoint corridor from the yard** (2026-10-04): in the game its gates may be shut from the
   yard's side, so it never leads on; the logic still lets the yard reach the spike room through it (as before
   2026-10-04). It needs the corridor split into two areas, the yard's and the spike room's (`room-logic.md`, the
-  model), which the apworld can't do yet (each map is one region); until then the prison's spots wait for the later
-  chapters. Build step 9.
+  model), which the apworld can do since build step 48 (`MAP_AREAS`); until it's written the prison's spots wait for
+  the later chapters. Build step 9.
 - **The Lost Sands gate claimed open** (seen 2026-10-04): on `BOLostSandsEntrance` a guard (`antguardclosed`) keeps
   the desert closed until flag 130 (Event74, the palace scene after chapter 2), but the door data has no gate there,
   so the logic counts the desert as open. To fix the open-world way: the closed guard kept away (build step 9).
@@ -1517,8 +1518,9 @@ been opened"; seen closed after the first boss). The Explorer Permit opens the O
 gone from flag 28), but the game closes the way twice more (the map dump's flag-scenery list, the entity dump): a second
 gate, `Base/Gate/SnekGate (1)`, shown from the first boss (41) until chapter 2 (67), and from 67 for good a gate by the
 cave on `NearSnakemouth` (`map1v4 (1)/snakemouthgate` and its `Gate`) with a `guard` and his `sign` in front of the door
-to the cave. The scenery is `scenery_hidden`, the guard and sign `kept_open`; the permit's own gate stays. And its
-gatekeeper (`FxdColGatekeeper`, who opens it for the permit) leaves at the spider scene (limit 27), so a file that got
+to the cave. The scenery is `scenery_hidden`, the guard and sign `kept_open` (unless *Extra Roadblocks* puts them up
+from the start, build step 48); the permit's own gate stays. And its gatekeeper (`FxdColGatekeeper`, who opens it for
+the permit) leaves at the spider scene (limit 27), so a file that got
 past the gate another way (a dev warp, seen; a random start inside) could never open it: he is `kept_present` (the
 user: "the npc should always be here, and open the gate with the permit"). The logic already counted the cave open
 past the permit, so only the mod changes. Test `TestSnakemouthGateStaysOpen`.
@@ -4464,6 +4466,46 @@ later chapters (`LATER_CHAPTERS`) until its room is mapped (`room-logic.md`), th
 
 *Code: `enemysanity.py`, `data_types.py` (`Encounter`, `Source.enemy`), `options.py` (`EnemySanity`), `slot_data.py`
 (`location_enemies`), `dev-scripts/enemy-table.py`, `data/enemies.json`; tests `test_enemysanity.py`.*
+
+## Build step 48: Extra Roadblocks, and a map split into areas
+
+**Asked (the user, 2026-10-04):** the gate by Snakemouth Den that the game puts up from chapter 2 "requires dig to get
+across. i think we should have it disabled by default but allow it to be added as an obstacle in the yaml, similar to
+how pokemon emerald add the custom roadblocks". Seen on screen first: with flag 67 set for one visit and the seed's
+removal lifted, the gate stood on `NearSnakemouth` with the guard and his sign beside it.
+
+**How Emerald does it** (`worlds/pokemon_emerald/options.py`, 0.6.7, read 2026-10-04): an obstacle it adds is a toggle
+of its own (*Extra Boulders*), the ones it removes one list (*Remove Roadblocks*). **Decided (the user):** one list for
+the added ones, *Extra Roadblocks* (`extra_roadblocks`, an `OptionSet`), its first entry *Snakemouth Barrier*; there
+from the start when chosen (a roadblock is held in one state, build step 9), the guard and sign beside it; off by
+default, and then the way stays open all game (build step 9).
+
+**The logic needs a map split in two.** Each map was one region, but the barrier cuts `NearSnakemouth`: the door toward
+the cave (`loading zone cave`, to the corridor) behind it, everything else in front. A rule on that door covers going
+in; coming back through it lands behind the barrier, and with shuffled doors that arrival can come from any door, which
+no door rule says. So a map may now hold **areas** (`Area` in `data_types.py`, `MAP_AREAS` in its area's module): an
+area is a region of its own (`"<map> (<name>)"`) holding its doors, joined to its map's region both ways by its rule.
+`door_region` says which region a door stands in, and the regions, the entrance randomizer (its targets, plando, the
+room swap) and Universal Tracker's replay all go by it. A new obstacle is then data: the map, the doors behind it, what
+crosses it, and its pieces; reachability, the shuffled doors and the seed's proof follow.
+
+**The rule** is `CanUse("Beetle Dig")` behind Rule Builder's own option filter (`OptionFilter(ExtraRoadblocks, "Snakemouth
+Barrier", "contains")`, `filtered_resolution=True`): free when the roadblock isn't chosen. The option class lives in
+`roadblocks.py`, since `options.py` reads the data tables, which read the logic. **The pieces** (`Roadblock`): the gate
+and its door as scenery, the guard and sign as entities; chosen, `slot_data` lists them in `scenery_present` and
+`kept_present`, otherwise in `scenery_hidden` and `kept_open` as before. The mod needed no change.
+
+**Checked:** `test_roadblocks.py` (off: pieces away, the crossing free; on: pieces standing, the crossing needing Dig
+both ways, the cave door and its arrival behind the barrier; decoupled: the area reachable with everything), failing
+without the change. Nine seeds with APQuest, the barrier on, doors off, coupled and decoupled: all generate; in one,
+Beetle Dig in sphere 3 and the den's Artifact in sphere 4. **Owed:** the PopTracker pack's export (a new region and an
+option filter with `contains`).
+
+**Status:** built (2026-10-04), not yet seen in game.
+
+*Code: `roadblocks.py` (`ExtraRoadblocks`), `data_types.py` (`Area`, `Roadblock`), `logic/outskirts.py`
+(`ROADBLOCKS`, `MAP_AREAS`), `logic/__init__.py`, `data_tables.py` (`REGIONS`, `door_region`), `regions.py`,
+`entrances.py`, `slot_data.py`; tests `test_roadblocks.py`.*
 
 # How it works
 

@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from Options import Choice, DefaultOnToggle, OptionGroup, PerGameCommonOptions, PlandoConnections, Range, Toggle
 
 from .data_tables import DOOR_NAMES, DOORS, ENCOUNTERS, LOCATIONS, ONE_WAY_LANDINGS, ONE_WAY_NAMES, ROOM_STARTS
+from .roadblocks import ExtraRoadblocks
 from .shop_inventories import SPOTS
 
 
@@ -336,6 +337,7 @@ class BugFablesOptions(PerGameCommonOptions):
     shuffle_jump: ShuffleJump
     points_of_no_return: PointsOfNoReturn
     progressive_boat: ProgressiveBoat
+    extra_roadblocks: ExtraRoadblocks
     music_shuffle: MusicShuffle
 
 

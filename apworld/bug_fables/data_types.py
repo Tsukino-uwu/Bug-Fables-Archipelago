@@ -341,6 +341,32 @@ class DoorRule:
 
 
 @dataclass(frozen=True, slots=True)
+class Area:
+    """Part of a map cut off from the rest by something in the room: its own region, holding its doors. rule is what
+    crossing between it and the rest of the map needs, both ways."""
+
+    map: str
+    name: str
+    doors: tuple[str, ...]
+    rule: Rule
+
+    @property
+    def region(self) -> str:
+        return f"{self.map} ({self.name})"
+
+
+@dataclass(frozen=True, slots=True)
+class Roadblock:
+    """An Extra Roadblocks choice: the game's own obstacle, its pieces shown (scenery_present, kept_present) from the
+    start when chosen, hidden and kept away (scenery_hidden, kept_open) otherwise. Its Area's rule says what crosses
+    it."""
+
+    name: str
+    scenery: tuple[EntityRef, ...]
+    npcs: tuple[EntityRef, ...]
+
+
+@dataclass(frozen=True, slots=True)
 class Transfer:
     """A way between two maps that isn't a door (a boat, an elevator, a scene), never shuffled. name says what it is;
     two_way: the same way back exists, with the same rule; otherwise it only goes from from_map, and way_back is what

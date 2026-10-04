@@ -9,8 +9,8 @@ from typing import Any
 from .data_types import Doors, Encounter, Item, Location, OneWayDoor, RoomStart, SavePoint
 from .enemysanity import enemy_locations
 from .logic import (ARTIFACTS, DIALOGUE_FLAGS, DOOR_RULES, FREE_SALES, HELD_UNTIL, HELD_UNTIL_ITEM, KEPT_OPEN, KEPT_PRESENT,
-                    LOCATIONS, PRESENT_FROM, PRESENT_WITH_ITEM, SCENERY_HIDDEN, SCENERY_PRESENT, STORY_EVENTS,
-                    TRACKER_ORDER, TRANSFERS)
+                    LOCATIONS, MAP_AREAS, PRESENT_FROM, PRESENT_WITH_ITEM, ROADBLOCKS, SCENERY_HIDDEN, SCENERY_PRESENT,
+                    STORY_EVENTS, TRACKER_ORDER, TRANSFERS)
 
 ITEM_ID_BASE = 7_710_000
 LOCATION_ID_BASE = 7_720_000
@@ -63,6 +63,16 @@ MAPS: tuple[str, ...] = tuple(sorted(
     ({end.map for c in DOORS.connections for end in (c.a, c.b)} | {m for w in ONE_WAYS for m in (w.map, w.to)}
      | {m for link in DOORS.fixed for m in link}
      | {m for t in TRANSFERS for m in (t.from_map, t.to_map)}) - UNUSED_MAPS))
+# Every region past Menu: the maps, then the parts of a map a roadblock cuts off.
+REGIONS: tuple[str, ...] = (*MAPS, *(area.region for area in MAP_AREAS))
+_AREA_OF_DOOR: dict[tuple[str, str], str] = {(area.map, door): area.region for area in MAP_AREAS for door in area.doors}
+
+
+def door_region(map_name: str, door: str) -> str:
+    """The region a door stands in: its map's, or the map area's that holds it."""
+    return _AREA_OF_DOOR.get((map_name, door), map_name)
+
+
 # Every room entered through a door: the map, and the map whose door leads in (both ways of each connection). A start
 # there lands where walking in through that door ends, at the room's own door back: never one the game makes only from
 # a story flag (absent on a new file, so the landing is over nothing) unless the seed keeps it present.

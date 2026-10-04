@@ -5,7 +5,7 @@ from unittest import TestCase
 from BaseClasses import EntranceType
 
 from . import BugFablesTestBase, entrance_graph, generate_like_main
-from ..data_tables import DOORS, MAPS, ONE_WAYS, door_name, one_way_landing
+from ..data_tables import DOORS, ONE_WAYS, REGIONS, door_name, door_region, one_way_landing
 from ..data_types import DoorConnection, DoorEnd
 from ..entrances import _partners, door_targets, pairings_from_targets, replay, room_pairs
 from ..options import DoorPlando
@@ -144,10 +144,10 @@ class DoorPairTests:
                 self.assertEqual(lands[x], to[y])
             else:
                 self.assertEqual(arrive[x], y)
-        for (m, d), (to_map, _) in arrive.items():
+        for (m, d), (to_map, to_door) in arrive.items():
             with self.subTest(door=door_name(m, d)):
                 entrance = self.multiworld.get_entrance(door_name(m, d), self.player)
-                self.assertEqual(entrance.connected_region.name, to_map)
+                self.assertEqual(entrance.connected_region.name, door_region(to_map, to_door))
         for w in ONE_WAYS:
             entrance = self.multiworld.get_entrance(door_name(w.map, w.door), self.player)
             for name in (w.door, *w.copies):
@@ -162,7 +162,7 @@ class DoorPairTests:
 
     def test_every_region_reachable_with_everything(self) -> None:
         state = self.multiworld.get_all_state()
-        for name in MAPS:
+        for name in REGIONS:
             with self.subTest(region=name):
                 self.assertTrue(state.can_reach_region(name, self.player))
 

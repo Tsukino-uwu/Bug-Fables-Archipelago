@@ -50,6 +50,9 @@ hands over the submarine (both new in 0.3.0). More chapters come later.
   New in 0.3.0.
 - **Progressive Boat** (on): the Boat Ticket and the submarine are one item found twice, the ticket first; off, two
   items in any order (see below). New in 0.3.0.
+- **Extra Roadblocks** (none): obstacles the game puts up later in the story, there from the start instead, each
+  crossed both ways with its ability. *Snakemouth Barrier*: the gate before Snakemouth Den, with its guard and sign;
+  Beetle Dig takes you under it. Without it, the way stays open all game.
 - **Music Shuffle** (off, under Aesthetic Options): every song plays in place of another, the same every time you play
   the seed, and the jingles (victory, game over, chapter titles) swap among themselves. The title screen, the wind,
   water, machine and breathing sounds, and the factory elevator's music stay. Samira plays the song you pick. It changes

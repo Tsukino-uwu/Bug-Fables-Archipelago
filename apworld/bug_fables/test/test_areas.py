@@ -6,8 +6,8 @@ from rule_builder.rules import Has
 from . import BugFablesTestBase, logic_rules, rule_parts
 from ..abilities import ABILITIES
 from ..custom_rules import CanUse, Member, MoveItem
-from ..data_tables import (ARTIFACTS, DOOR_RULES, DOORS, ENCOUNTERS, ITEMS, LOCATIONS, MAPS, ONE_WAYS, ROOM_STARTS,
-                           STARTS, STORY_EVENTS, TRANSFERS, UNUSED_MAPS, door_name)
+from ..data_tables import (ARTIFACTS, DOOR_RULES, DOORS, ENCOUNTERS, ITEMS, LOCATIONS, MAPS, ONE_WAYS, REGIONS,
+                           ROOM_STARTS, STARTS, STORY_EVENTS, TRANSFERS, UNUSED_MAPS, door_name, door_region)
 
 ALL_SPOTS = (*LOCATIONS, *STORY_EVENTS, *ARTIFACTS)
 # The unused room and the debug room: never part of anything (room-logic.md, the model).
@@ -35,13 +35,14 @@ class TestAreas(BugFablesTestBase):
         self.assertEqual(len(spots), len(set(spots)))
 
     def test_every_door_is_an_entrance(self) -> None:
-        # Where the game has it, with the doors as they are (Archipelago's entrance randomizer shuffles these).
+        # Where the game has it, with the doors as they are (Archipelago's entrance randomizer shuffles these); a door a
+        # roadblock cuts off stands in its map area's region.
         for connection in DOORS.connections:
             for end, other in ((connection.a, connection.b), (connection.b, connection.a)):
                 with self.subTest(door=door_name(end.map, end.door)):
                     entrance = self.multiworld.get_entrance(door_name(end.map, end.door), self.player)
-                    self.assertEqual(entrance.parent_region.name, end.map)
-                    self.assertEqual(entrance.connected_region.name, other.map)
+                    self.assertEqual(entrance.parent_region.name, door_region(end.map, end.door))
+                    self.assertEqual(entrance.connected_region.name, door_region(other.map, other.door))
 
     def test_every_one_way_door_is_a_one_way_entrance(self) -> None:
         # A fog maze's wrong turn or a drop: an entrance where the game has it, one-way for Archipelago's randomizer.
@@ -64,7 +65,7 @@ class TestAreas(BugFablesTestBase):
 
     def test_every_region_reachable_with_everything(self) -> None:
         state = self.multiworld.get_all_state()
-        for name in MAPS:
+        for name in REGIONS:
             with self.subTest(region=name):
                 self.assertTrue(state.can_reach_region(name, self.player))
 

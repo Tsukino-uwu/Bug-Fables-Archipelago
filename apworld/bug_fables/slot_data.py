@@ -5,8 +5,8 @@ from collections.abc import Callable, Iterable, Mapping
 from typing import TYPE_CHECKING, Any
 
 from .data_tables import (DIALOGUE_FLAGS, FREE_SALES, HELD_UNTIL, HELD_UNTIL_ITEM, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN,
-                          KEPT_PRESENT, LOCATION_NAME_TO_ID, PRESENT_FROM, PRESENT_WITH_ITEM, SCENERY_HIDDEN,
-                          SCENERY_PRESENT, WORLD_VERSION)
+                          KEPT_PRESENT, LOCATION_NAME_TO_ID, PRESENT_FROM, PRESENT_WITH_ITEM, ROADBLOCKS,
+                          SCENERY_HIDDEN, SCENERY_PRESENT, WORLD_VERSION)
 from .data_types import DialogueFlag, EntityRef, FlagEntity, FreeSale, ItemEntity, Source
 from .options import ShopContents
 
@@ -18,7 +18,8 @@ if TYPE_CHECKING:
 SLOT_OPTIONS: tuple[str, ...] = (
     "artifacts_required", "shuffle_quests", "shuffle_crystal_berries", "shuffle_discoveries", "enemy_sanity",
     "shuffle_medal_shops", "shuffle_item_shops", "shop_contents", "entrance_randomizer", "filler_starting_checks",
-    "shuffle_field_moves", "shuffle_jump", "points_of_no_return", "progressive_boat", "exclude_locations")
+    "shuffle_field_moves", "shuffle_jump", "points_of_no_return", "progressive_boat", "extra_roadblocks",
+    "exclude_locations")
 # Every other option, and why it isn't sent.
 NOT_SENT: dict[str, str] = {
     "enemy_shuffle": "its result is enemy_swaps",
@@ -74,6 +75,10 @@ def _entities(entries: Iterable[EntityRef | FlagEntity | ItemEntity | DialogueFl
 
 
 def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
+    # Extra Roadblocks: a chosen one's pieces stand from the start, the others' are kept away all game.
+    chosen = world.options.extra_roadblocks.value
+    up = [block for block in ROADBLOCKS if block.name in chosen]
+    down = [block for block in ROADBLOCKS if block.name not in chosen]
     return {
         "world_version": WORLD_VERSION,
         # The options as this seed applied them (SLOT_OPTIONS): the goal, field moves, Jump, Points of No Return and the
@@ -100,10 +105,10 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "location_gives": _by_location(world, "give", lambda source: source.give.to_slot()),
         "location_pickups": _by_location(world, "pickup", _pickup),
         # Story blockers the client keeps away, so an area the logic counts as reachable never closes.
-        "kept_open": _entities(KEPT_OPEN),
-        "kept_present": _entities(KEPT_PRESENT),
-        "scenery_hidden": _entities(SCENERY_HIDDEN),
-        "scenery_present": _entities(SCENERY_PRESENT),
+        "kept_open": _entities((*KEPT_OPEN, *(npc for block in down for npc in block.npcs))),
+        "kept_present": _entities((*KEPT_PRESENT, *(npc for block in up for npc in block.npcs))),
+        "scenery_hidden": _entities((*SCENERY_HIDDEN, *(piece for block in down for piece in block.scenery))),
+        "scenery_present": _entities((*SCENERY_PRESENT, *(piece for block in up for piece in block.scenery))),
         "held_until": _entities(HELD_UNTIL),
         "present_from": _entities(PRESENT_FROM),
         # Entities tied to one of the mod's key items in the bag: made with it whatever their own requirement, or kept
