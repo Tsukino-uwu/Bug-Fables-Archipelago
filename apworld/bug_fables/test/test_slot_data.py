@@ -109,6 +109,13 @@ class TestKeptOpen(BugFablesTestBase):
     def test_eetls_blocker_is_kept_open(self) -> None:
         kept = self.world.fill_slot_data()["kept_open"]
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "eetlblocker1 - Duplicate"}, kept)
+        # The same scene's second trigger, standing while Eetl follows the party.
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "eetlblocker1"}, kept)
+
+    def test_save_tutorial_trigger_is_kept_away(self) -> None:
+        # Its actors leave at the first boss but its trigger stays until the scene's own flag, so it played to no one.
+        kept = self.world.fill_slot_data()["kept_open"]
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "SaveEventTrigger"}, kept)
 
     def test_plaza_discoveries_open_before_the_briefing(self) -> None:
         # The statue and inn portrait exist only from flag 67; before it a stand-in turns the player away.

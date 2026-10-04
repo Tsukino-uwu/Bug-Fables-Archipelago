@@ -1328,7 +1328,11 @@ first boss, Eetl turns you back outside the city (`eetlblocker1 - Duplicate`, Ev
 67), closing the way back to Snakemouth Den. Event12 only walks the player and sets no flags, so it's
 safe to remove. Its area's module (`logic/`) lists it under `KEPT_OPEN`, `slot_data` carries it, and the
 mod's `KeptOpen` gives that entity a marker `limit` array after the map creates it, which its prefix
-on `CheckIfCanExist` answers with "hide" (test `TestKeptOpen`). Not yet seen in game. Day/night map pairs are made
+on `CheckIfCanExist` answers with "hide" (test `TestKeptOpen`). **Seen (2026-10-04): a second trigger**, `eetlblocker1`,
+stands from flag 114 (Eetl following the party) and turned the party back; kept away too (`MEASURED.md`, save crystals). **The save tutorial too** (2026-10-04, the user: "we can just remove event19 all
+together"): its trigger outlives its actors (`MEASURED.md`, save crystals), so after the first boss it played to no
+one; `SaveEventTrigger` is kept away the same way (test `test_save_tutorial_trigger_is_kept_away`), so Event19 never
+plays in a seed and the spider scene's own crystal lesson stays. Day/night map pairs are made
 reachable both ways (like the Emerald apworld's Shoal Cave tides). One-way drops stay as they are: the logic handles
 one-way connections.
 **Keeping ways present** (2026-09-25: no dead end in chapter 1, and the Gem opens chapter 5 whenever

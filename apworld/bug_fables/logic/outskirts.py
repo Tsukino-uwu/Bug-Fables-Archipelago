@@ -101,6 +101,11 @@ KEPT_OPEN = (
     EntityRef("BugariaOutskirtsOutsideCity", "MinerAntWalk"),
     # Eetl turns the party back from the first boss until chapter 2, cutting off Snakemouth Den.
     EntityRef("BugariaOutskirtsOutsideCity", "eetlblocker1 - Duplicate"),
+    # The same scene's second trigger, from flag 114 (Eetl following the party, Event63) until 67.
+    EntityRef("BugariaOutskirtsOutsideCity", "eetlblocker1"),
+    # The save tutorial (Event19): its actors leave at the first boss, its trigger only at its own flag 30, so a file
+    # that skipped the opening walked into it with no one there.
+    EntityRef("BugariaOutskirtsOutsideCity", "SaveEventTrigger"),
     # Turns the party back from Chuck's Abode until the first boss ('the cave first'); nothing inside waits on the
     # story.
     EntityRef("NearSnakemouth", "BlockLeft"),

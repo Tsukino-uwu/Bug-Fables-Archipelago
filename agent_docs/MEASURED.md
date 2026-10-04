@@ -1959,6 +1959,17 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   every transfer names its own spot: a door's `vectordata[1]`, a scene's position set after `LoadMap`, a dialogue
   line's `|warp,map,x,y,z|`. The bar's hatch (Event61) sets one after `LoadMap(30, recreateplayers: true)`: each member
   dropped in at (-20.34, 9, 0.53), one unit higher per member (`EventControl.cs:9865-9872`).
+- **Eetl's blocker has two triggers** (2026-10-04, EntityDump and code read; seen in play): on
+  `BugariaOutskirtsOutsideCity`, `eetlblocker1 - Duplicate` (41) stands from flag 41 and `eetlblocker1` (40) from flag
+  114, both until 67, both starting `Event12` (a line, then a walk back). Flag 114 is set by `Event63`, where Eetl
+  starts following the party (`extrafollowers.Add(30)`). **Seen 2026-10-04:** with only the first kept away, the second
+  turned the party back while Eetl followed.
+- **The save tutorial outside the city** (2026-10-04, code read, EntityDump; seen in play): `Event19` has a ladybug and
+  an ant (entities 13 `LadybugK` and 14 `shielderant`) hit the crystal `SaveTutorial` (1), heals, opens the save menu
+  and sets flag 30 (`EventControl.cs`, `Event19`). Its trigger `SaveEventTrigger` (15) stands until flag 30; the three
+  actors only until flag 41 (the first boss). Flag 30 means "the save tutorial was seen": `Event6`, the spider scene,
+  plays its own crystal lesson while 30 is unset and then sets it. **Seen 2026-10-04:** a file that skipped the opening
+  and beat the first boss walked into the trigger, and the scene played with none of its actors there.
 - Used by `SaveCrystals.cs`, `DeathLinkGame.cs` and `AutoSave.cs`.
 
 ## Upper Snakemouth's boss: Leif out until its beam (2026-09-28, code read; seen in play)
