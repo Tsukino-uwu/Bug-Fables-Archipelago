@@ -2026,7 +2026,8 @@ a vanilla leaf, then on Bugaria's medal shelf beside two medals and the leaf, ea
    black: "it just looks weird/transparent ish", the overlaps reading as see-through. The black lines stay.
 5. Size and colour (2026-10-04, two new numbers on a look: `scale`, the drawn size, and `sat`, the circles' colour
    strength in HSV). 15% bigger: "i like the current size more than the large ones". Colours ×1.5: "looks to vibrant";
-   **×1.2**, at today's size, the user's pick "for now".
+   **×1.2**, at today's size, the user's pick "for now". Then 7% bigger, since the thick lines leave the circles
+   smaller than the first look's: "still looks/feels a bit to big". The size stays at 1.
 
 `ApIcon.Look` holds a look's five shares, its size and its colour strength: `Current` (rim 0.22, gap 0.16, middle
 0.07, radius 0.39, distance 0.70, scale 1, colours ×1.2) is the icon everywhere; `First` (0.07, 0.05, 0.07, 0.39,
