@@ -1960,6 +1960,15 @@ own item at the game's height with no backdrop, so a shelf shows at a glance whi
 cut through the flat starburst close behind it, and every other item is a flat sprite; so a crystal berry is its flat
 icon everywhere, crystal berry spots included, always with its backdrop, for the clarity the backdrop gives.
 
+**Scenery cutting into a backdrop (2026-10-04):** at Madame Butterfly's shelf (`BugariaCommercial`,
+`ButterflyShopkeeper`) a flower behind the shelf cut into the second slot's starburst (the user's screenshot). The game
+draws no backdrop behind a shelf item (its own starburst only appears in the hold-up, `NPCControl.cs:5646`), so there
+was nothing of its to copy. Pulling the backdrop from 0.05 to 0.01 behind its item still clipped. The user's idea,
+kept: every slot of that shelf a small step toward the camera together, so no one item sticks out: 0.1, through each
+slot's sprite holder depth (which the backdrop rides on), for the shop's own items and restocks too. Seen clear the
+same day, the row even on the shelf. `ItemShops.ShelvesForward` lists such shelves; dev `shelfforward` tunes a step
+live, and dev `mark` takes the backdrop's depth as well.
+
 **Status:** works, seen on the Caravan's shelf and on the ground (2026-09-26); with Item colors Off, the game's own
 colours by kind seen (2026-10-04): medals orange on the Caravan's shelf and Madeleine's table, an item teal beside
 them, and a key item pink (a dev pickup drawn from the pier's checked spot, its Progressive Boat, through `spawn key 27

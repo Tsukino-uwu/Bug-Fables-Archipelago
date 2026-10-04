@@ -823,14 +823,37 @@ namespace BugFablesAP
                     }
                     case "mark":
                     {
-                        // mark <scale> <raise>: the backdrop behind a check's item, live.
+                        // mark <scale> <raise> [behind]: the backdrop behind a check's item, live.
                         if (parts.Length < 3)
                         {
-                            return $"mark <scale> <raise> (now {ItemSwap.MarkScale} {ItemSwap.MarkRaise})";
+                            return $"mark <scale> <raise> [behind] (now {ItemSwap.MarkScale} {ItemSwap.MarkRaise} "
+                                + $"{ItemSwap.MarkBehind})";
                         }
-                        ItemSwap.MarkScale = float.Parse(parts[1], System.Globalization.CultureInfo.InvariantCulture);
-                        ItemSwap.MarkRaise = float.Parse(parts[2], System.Globalization.CultureInfo.InvariantCulture);
-                        return $"mark now scale {ItemSwap.MarkScale}, raise {ItemSwap.MarkRaise}";
+                        var invariantMark = System.Globalization.CultureInfo.InvariantCulture;
+                        ItemSwap.MarkScale = float.Parse(parts[1], invariantMark);
+                        ItemSwap.MarkRaise = float.Parse(parts[2], invariantMark);
+                        if (parts.Length > 3)
+                        {
+                            ItemSwap.MarkBehind = float.Parse(parts[3], invariantMark);
+                        }
+                        return $"mark now scale {ItemSwap.MarkScale}, raise {ItemSwap.MarkRaise}, behind "
+                            + ItemSwap.MarkBehind;
+                    }
+                    case "shelfforward":
+                    {
+                        // shelfforward <step>: this map's shelves in ItemShops.ShelvesForward, live.
+                        string here = MainManager.map != null ? MainManager.map.mapid.ToString() : "";
+                        var shelves = ItemShops.ShelvesForward.Keys.Where(k => k.Key == here).ToList();
+                        if (parts.Length < 2 || shelves.Count == 0)
+                        {
+                            return "shelfforward <step>: no listed shelf on this map";
+                        }
+                        float step = float.Parse(parts[1], System.Globalization.CultureInfo.InvariantCulture);
+                        foreach (var shelf in shelves)
+                        {
+                            ItemShops.ShelvesForward[shelf] = step;
+                        }
+                        return $"shelfforward: {shelves.Count} shelf on {here} now {step} toward the camera";
                     }
                     case "letters":
                     {

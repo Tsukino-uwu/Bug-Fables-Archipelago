@@ -400,7 +400,10 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   item|medal <id>` shows a vanilla item's or medal's sprite there instead, beside it; `shelflook off` puts every slot
   back. Every change shows at once, with no rebuild (documentation.md, step 23).
 - `iteminfo`: log every item entity on the map with its sprite, pivot, size, lift and backdrop (placement checks).
-- `mark <size> <raise>`: the Item backgrounds starburst's size and the lift it and its item get, live.
+- `mark <size> <raise> [behind]`: the Item backgrounds starburst's size, the lift it and its item get, and how far
+  behind the item it sits, live.
+- `shelfforward <step>`: how far this map's listed item shop shelf (`ItemShops.ShelvesForward`) sits toward the
+  camera, every slot together, live (documentation.md, step 22).
 - `letters`: count the game's 500 text letters that are taken, by owner (to spot a leak).
   **Never log a text holder's own name:** it carries its whole text, and the game's font preloader's is every glyph it
   has. Logging it once (2026-09-26) broke BepInEx's console writer (`ConsoleEncoding.ReadByteBuffer`

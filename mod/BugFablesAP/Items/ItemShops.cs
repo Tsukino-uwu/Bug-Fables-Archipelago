@@ -16,6 +16,14 @@ namespace BugFablesAP
         private static ApConnection connection;
         private static Func<bool> randomizerOn;
 
+        // Shelves whose scenery behind reaches into a check's backdrop: every slot a step toward the camera, the row kept
+        // even. {(map, shopkeeper): step}; dev `shelfforward` tunes it.
+        internal static readonly Dictionary<KeyValuePair<string, string>, float> ShelvesForward =
+            new Dictionary<KeyValuePair<string, string>, float>
+            {
+                { new KeyValuePair<string, string>("BugariaCommercial", "ButterflyShopkeeper"), 0.1f },
+            };
+
         // pending: the slot whose buy talk is open; watching: a purchase to confirm by the berries paid.
         private static long pending = -1;
         private static long watching = -1;
@@ -163,6 +171,7 @@ namespace BugFablesAP
                 {
                     continue;
                 }
+                Forward(npc);
                 long at = LocationOf(npc);
                 if (at < 0)
                 {
@@ -183,6 +192,22 @@ namespace BugFablesAP
                     npc.entity.sprite.sprite = sprite;
                 }
                 ItemSwap.Mark(npc.entity, ItemSwap.MarkColorOf(at));
+            }
+        }
+
+        // The slot's sprite, and the backdrop on it, a step toward the camera: its holder's local depth, which Mark
+        // keeps.
+        private static void Forward(NPCControl npc)
+        {
+            Transform held = npc.entity.spritetransform;
+            if (held == null || npc.shopkeeper == null || !ShelvesForward.TryGetValue(
+                new KeyValuePair<string, string>(MainManager.map.mapid.ToString(), npc.shopkeeper.name), out float step))
+            {
+                return;
+            }
+            if (held.localPosition.z != -step)
+            {
+                held.localPosition = new Vector3(held.localPosition.x, held.localPosition.y, -step);
             }
         }
     }

@@ -20,8 +20,7 @@ namespace BugFablesAP
         // Big enough to show round the item, the item and it raised together so its bottom stays near the item's old
         // base (items are lifted half their height), and close behind, so it doesn't slide off seen at an angle. Dev
         // `mark` tunes them.
-        internal static float MarkScale = 0.6f, MarkRaise = 0.3f;
-        private const float MarkBehind = 0.05f;
+        internal static float MarkScale = 0.6f, MarkRaise = 0.3f, MarkBehind = 0.05f;
 
         internal static void Mark(EntityControl entity, Color? color)
         {
