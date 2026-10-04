@@ -2797,8 +2797,9 @@ pier's dock absent before the submarine and there after (from the next load of t
 Seen 2026-10-04: the Progressive Boat's copies in order (the Boat Ticket, then the submarine), the throne-room scene
 sending its check, and the Termite pier: its dock, scientist and queen away before the submarine and there after (the
 next load of the map), the introduction (Event165) then boarding (Event153); crossings from the Termite pier by Metal
-Lake to the Bugaria pier, whose first landing played Elizant's welcome (flags 448 and 350 read back set). The Rubber
-Prison's first landing, and the plaza's gate from inside, not yet seen.
+Lake to the Bugaria pier, whose first landing played Elizant's welcome (flags 448 and 350 read back set), and to the
+Rubber Prison, whose first landing played its arrival (Event185, started by the dock scene directly, so not in the
+event log; seen on screen). The plaza's gate from inside not yet seen.
 
 *Code: `Items/CustomItems.cs` (`Submarine`, `ProgressiveBoat`, `NextBoat`, the list narrowing),
 `Items/ItemReceiver.cs` (`Give`), `World/KeptOpen.cs` (`TieToItem`, `BeforeCheck`), `World/Submarine.cs`,
