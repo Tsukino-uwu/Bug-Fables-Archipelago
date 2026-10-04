@@ -1509,6 +1509,14 @@ cautious side); the cook's own gates to check in code before the rule is written
 Test `test_near_snakemouth_exits_open_before_the_boss`. **Seen (2026-09-26):** walked into Chuck's Abode before the
 boss; resting and the save point work there (a dead end with a rest and a save, before the cave).
 
+**The way to Snakemouth Den never closes again** (2026-10-04, the user: "its not allowed to be closed after it has
+been opened"; seen closed after the first boss). The Explorer Permit opens the Outskirts gate (`Base/Gate/SnekGate`,
+gone from flag 28), but the game closes the way twice more (the map dump's flag-scenery list, the entity dump): a second
+gate, `Base/Gate/SnekGate (1)`, shown from the first boss (41) until chapter 2 (67), and from 67 for good a gate by the
+cave on `NearSnakemouth` (`map1v4 (1)/snakemouthgate` and its `Gate`) with a `guard` and his `sign` in front of the door
+to the cave. The scenery is `scenery_hidden`, the guard and sign `kept_open`; the permit's own gate stays. The logic
+already counted the cave open past the permit, so only the mod changes. Test `TestSnakemouthGateStaysOpen`.
+
 **The desert border's gate (2026-10-04).** A random start fell forever behind the shut gate between the Lost Sands and
 the Far Grasslands (build step 15). The game makes the border's door to the Far Grasslands (`loadzonefg`) and breaks the
 gate only from flag 348 (chapter 5): the entity dump and the map dump name the door (`requires 348`), the intact gate
@@ -1554,7 +1562,8 @@ Snakemouth Den seen (2026-09-26); every board listing bounties (built 2026-09-25
 (2026-09-26); the desert border's gate seen broken from a new file, the door both ways with no fall (2026-10-04;
 its guard still stands, left to the story); the Golden Path door, the way to the Hermit's cave and the tunnel onward
 seen open from a new file (2026-10-04); the Golden Settlement's desert gate and its wall seen open
-(2026-10-04).
+(2026-10-04); the way to Snakemouth Den kept open after the permit built (2026-10-04), its second gate gone in the
+log, not yet seen.
 
 *Code: the lists in `logic/*.py` (`KEPT_OPEN`, `KEPT_PRESENT`, `SCENERY_HIDDEN`, `SCENERY_PRESENT`, `HELD_UNTIL`,
 `PRESENT_FROM`, `HELD_UNTIL_ITEM`, `DIALOGUE_FLAGS`, gathered in `logic/__init__.py`), sent by `slot_data.py`; in the
@@ -1692,8 +1701,8 @@ measure first: how a won battle knows which map enemy started it, and whether th
 
 **Status:** in progress: respawning pickups and the game's missed-prize path (2026-09-24), discoveries (2026-09-25) seen
 on screen, crystal berry spots too (the mod guide, step 9), received berries too (2026-09-28, build step 27); a berry
-location's hand-over too (2026-10-04, *Outskirts: Near Snakemouth Den, Reward*); the lost kid's reward and the prize
-payout not yet seen in game; Placeholders planned; bestiary,
+location's hand-over too (2026-10-04, *Outskirts: Near Snakemouth Den, Reward*); the prize payout seen (2026-10-04, Artis
+on Normal handed the seed's item for the first boss); the lost kid's reward not yet seen in game; Placeholders planned; bestiary,
 recipes and enemy checks parked.
 
 *Code: `options.py` (`CATEGORY_OPTIONS`, `category_count`), `locations.py` (`category_on`), `slot_data.py`

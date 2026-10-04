@@ -111,6 +111,10 @@ KEPT_OPEN = (
     EntityRef("NearSnakemouth", "BlockLeft"),
     # Turns the party back from the shortcut to the first corridor until the first boss.
     EntityRef("NearSnakemouth", "BlockRight"),
+    # The guard who closes the way to the cave from chapter 2 (flag 67) on, for good.
+    EntityRef("NearSnakemouth", "guard"),
+    # His sign.
+    EntityRef("NearSnakemouth", "sign"),
     # The Crickerly who stands there before the caravan opens.
     EntityRef("BugariaOutskirtsOutsideCity", "Crickerly1"),
     # A moth waiting for the rocks to be cleared; gone with the rocks.
@@ -144,6 +148,12 @@ SCENERY_HIDDEN = (
     # The rock pile that cuts the Outskirts off until the first boss; the Golden Path exit behind it still waits for the
     # boss on its own.
     EntityRef("BugariaOutskirtsOutsideCity", "Base/BlockingRocks"),
+    # The Snakemouth Den gate closed again from the first boss (41) until chapter 2 (67); the Explorer Permit's own gate
+    # (until flag 28) stays.
+    EntityRef("BugariaOutskirtsOutsideCity", "Base/Gate/SnekGate (1)"),
+    # The gate by the cave that closes it from chapter 2 on, and its door.
+    EntityRef("NearSnakemouth", "map1v4 (1)/snakemouthgate"),
+    EntityRef("NearSnakemouth", "map1v4 (1)/snakemouthgate/Gate"),
 )
 SCENERY_PRESENT = (
     # The caravan's stall.

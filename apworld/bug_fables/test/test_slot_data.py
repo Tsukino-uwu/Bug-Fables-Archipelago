@@ -179,6 +179,24 @@ class TestKeptPresent(BugFablesTestBase):
                 self.assertIn({"map": "NearSnakemouth", "entity": door}, data["kept_present"])
 
 
+class TestSnakemouthGateStaysOpen(BugFablesTestBase):
+    # Once the Explorer Permit opens it, the way to Snakemouth Den never closes: not at the first boss, not in chapter 2.
+    def test_later_gates_removed(self) -> None:
+        data = self.world.fill_slot_data()
+        for scenery in ({"map": "BugariaOutskirtsOutsideCity", "entity": "Base/Gate/SnekGate (1)"},
+                        {"map": "NearSnakemouth", "entity": "map1v4 (1)/snakemouthgate"},
+                        {"map": "NearSnakemouth", "entity": "map1v4 (1)/snakemouthgate/Gate"}):
+            with self.subTest(scenery=scenery["entity"]):
+                self.assertIn(scenery, data["scenery_hidden"])
+        for npc in ("guard", "sign"):
+            with self.subTest(npc=npc):
+                self.assertIn({"map": "NearSnakemouth", "entity": npc}, data["kept_open"])
+
+    def test_permit_gate_kept(self) -> None:
+        self.assertNotIn({"map": "BugariaOutskirtsOutsideCity", "entity": "Base/Gate/SnekGate"},
+                         self.world.fill_slot_data()["scenery_hidden"])
+
+
 class TestOutskirtsRocks(BugFablesTestBase):
     # The Outskirts rocks go from the start, so the town opens without its early scenes (arrival, plaza blockers).
     def test_rocks_are_removed(self) -> None:
