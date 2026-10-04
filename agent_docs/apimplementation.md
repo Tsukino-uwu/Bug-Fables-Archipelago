@@ -825,7 +825,9 @@ Archipelago's `custom_worlds` folder.
   Leby and Dib) (2026-09-24). Never the item, the flag or a mechanic ("Beemerang" goes stale once
   abilities are shuffled), Title Case, one word per kind of landmark everywhere. The test
   `TestLocationNames` fails if a location's name contains its own vanilla item's name. Renaming a location
-  never changes its id or flag.
+  never changes its id or flag. **Every name, new or renamed, is the user's to approve before it goes in**
+  (2026-10-04): names had been made up without asking (2, 23, 25, 30, 68-74 and 76 among them). Propose them, the
+  game's own name for the spot first, and wait for a yes.
 
 **Status:** done; the world has since grown to 75 locations (70 by default) and 58 items (counted 2026-09-30).
 

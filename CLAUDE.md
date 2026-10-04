@@ -131,8 +131,8 @@ rule, remove one in the same edit. The rule lives here and its reasoning in `age
 
 - **`agent_docs/client-requirements.md` is the checklist:** Archipelago's hard requirements for a client and
   a world, plus the known failure modes. Tick an item only with its evidence and date.
-- **A location is named after where it is, never after what it gives** (`apimplementation.md`, build
-  step 1; enforced by `TestLocationNames`).
+- **A location is named after where it is, never after what it gives** (`apimplementation.md`, build step 1;
+  `TestLocationNames`). **Every name needs the user's yes first: ask, never make one up** (the user, 2026-10-04).
 - **`agent_docs/MEASURED.md`** holds game facts, your measurements among them (class, method, field, flag, hook, save
   field), each with its evidence and date. What a source says but we haven't measured waits in its last section.
 - **Comments are lean** (the user, 2026-09-25). One line, only where the code can't say it (a game quirk, a
