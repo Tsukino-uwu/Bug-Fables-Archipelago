@@ -379,6 +379,10 @@ player file twice with the apworld on disk and keeps the keys both seeds agree o
 a seed rolls. The console's `liveslot` lays that file over the login's `slot_data`, rebuilds the seed's tables and
 re-enters the room through a door. A dev tool for test files: the server still holds the seed's items and locations.
 
+**A warp beside an entity the story hasn't made yet** (2026-10-04): `warp <map> @<name>` matched the inactive entity
+and stepped the party into the void beside it. It now matches only an entity that's present, and otherwise lands by
+the save point or a door, saying `(<name> isn't present yet)`.
+
 **Status:** done: hot reload, the build-and-copy scripts and the dev console are in use; `liveslot` seen working
 (2026-10-04): three apworld changes in a row (the Golden Path door, its blocker, its tunnel) shown in the running game
 with no new seed or file.

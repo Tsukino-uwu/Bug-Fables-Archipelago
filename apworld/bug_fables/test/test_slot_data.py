@@ -276,3 +276,9 @@ class TestSettlementDesertGate(BugFablesTestBase):
             self.assertIn({"map": "GoldenSettlementEntrance", "entity": path}, data["scenery_hidden"])
         for path in ("Base/WoodenGate2 (2)", "Base/WoodenGate2 (3)"):
             self.assertIn({"map": "GoldenSettlementEntrance", "entity": path}, data["scenery_present"])
+
+
+class TestFlowerKeySeller(BugFablesTestBase):
+    # The game makes her only after chapter 3; the seed keeps her on the balcony from the start.
+    def test_beette_present(self) -> None:
+        self.assertIn({"map": "BeehiveBalcony", "entity": "smug bee"}, self.world.fill_slot_data()["kept_present"])

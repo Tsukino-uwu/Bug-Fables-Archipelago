@@ -438,20 +438,27 @@ namespace BugFablesAP
                 return;
             }
             List<NPCControl> entities = map.GetComponentsInChildren<NPCControl>(true).ToList();
-            NPCControl target = pendingName != null ? entities.FirstOrDefault(e => e.name == pendingName)
-                : pendingFlag >= 0 ? entities.FirstOrDefault(e => e.activationflag == pendingFlag) : null;
+            // Only an entity that's really there: one the story hasn't made yet sits inactive, often in the void.
+            NPCControl target = pendingName != null
+                ? entities.FirstOrDefault(e => e.name == pendingName && e.gameObject.activeInHierarchy)
+                : pendingFlag >= 0
+                    ? entities.FirstOrDefault(e => e.activationflag == pendingFlag && e.gameObject.activeInHierarchy)
+                    : null;
             string where = target != null ? "by " + (pendingName ?? "the entity with flag " + pendingFlag) : null;
             if (pendingName != null && target == null)
             {
-                where = $"(nothing named {pendingName} here)";
+                where = entities.Any(e => e.name == pendingName)
+                    ? $"({pendingName} isn't present yet)" : $"(nothing named {pendingName} here)";
             }
             pendingName = null;
             if (target == null)
             {
-                target = entities.FirstOrDefault(e => e.objecttype == NPCControl.ObjectTypes.SavePoint)
-                    ?? entities.FirstOrDefault(e => e.objecttype == NPCControl.ObjectTypes.DoorOtherMap);
-                where = target != null ? "by " + target.name
-                    + (pendingFlag >= 0 ? $" (nothing with flag {pendingFlag} here)" : "") : "at the map's origin";
+                target = entities.FirstOrDefault(e => e.objecttype == NPCControl.ObjectTypes.SavePoint
+                        && e.gameObject.activeInHierarchy)
+                    ?? entities.FirstOrDefault(e => e.objecttype == NPCControl.ObjectTypes.DoorOtherMap
+                        && e.gameObject.activeInHierarchy);
+                where = (where != null ? where + "; " : "") + (target != null ? "by " + target.name
+                    + (pendingFlag >= 0 ? $" (nothing with flag {pendingFlag} here)" : "") : "at the map's origin");
             }
             if (target != null)
             {

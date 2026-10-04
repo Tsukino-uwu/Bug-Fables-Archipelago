@@ -1511,7 +1511,11 @@ wait for the later chapters (`LATER_CHAPTERS`), so the logic promises nothing ne
 **The Golden Settlement's desert gate** (the same day, met walking in): its switch swung it open, but an invisible
 wall behind it stands until the desert side has been reached (flag 170). The logic already counted that door open, so
 the game was stricter: the gate is shown open from the start and the wall hidden (`logic/golden_settlement.py`; test
-`TestSettlementDesertGate`; `MEASURED.md`, the Golden Settlement's desert gate). No attack is needed for the switch. Now `kept_present` from the start, the rule gone; location 12's beetle
+`TestSettlementDesertGate`; `MEASURED.md`, the Golden Settlement's desert gate). No attack is needed for the switch.
+**Beette, the Flower Key's seller** (the same day, the user: "make it appear always if required"): the `smug bee` on
+`BeehiveBalcony`, made only after chapter 3 (flag 299), is kept present (`logic/bee_kingdom_hive.py`, test
+`TestFlowerKeySeller`). Her sale is still the game's own, not a location; the key and the red house it opens aren't in
+the logic yet (`MEASURED.md`, the Flower Key). Now `kept_present` from the start, the rule gone; location 12's beetle
 grass takes Kabbu's horn, so it needs `Horn Slash` of its own (the boss had implied it). Tests `TestGoldenPath`.
 
 **Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion
