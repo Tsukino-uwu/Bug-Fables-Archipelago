@@ -218,7 +218,7 @@ class TestCaravan(BugFablesTestBase):
         data = self.world.fill_slot_data()
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "Crickerly2"}, data["kept_present"])
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "Crickerly1"}, data["kept_open"])
-        self.assertEqual(data["scenery_present"], [{"map": "BugariaOutskirtsOutsideCity", "entity": "Base/Stall"}])
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "Base/Stall"}, data["scenery_present"])
         caravan = [e for e in data["location_item_shops"].values() if e["keeper"] == "Crickerly2"]
         self.assertEqual(sorted(e["item"] for e in caravan), [2, 3, 11])
 

@@ -2938,9 +2938,16 @@ user's falls then logged "play" twelve times in a row (on ground 0.14 to 0.34 s,
   user jumped in, came back over the water at once (free 0.00 s) five times more, and was warped to the start; the
   respawns during the warp's transfer weren't counted.
 
+**When the start is the loop (2026-10-04).** A seed's random start landed behind the desert border's shut gate (the
+Archipelago guide, build step 15): the guard warped the party to the start, which looped again, and the guard then only
+logged "a loop again ... not warping again" while the party kept falling. Now a loop back within 15 s of the guard's
+warp warps once more, to the **game's own start** outside the city (`WarpToStart(..., gameStart: true)`, which passes
+over the seed's start); only a loop after that is left to the log. The start itself is fixed at its source too (no
+start lands at a door the game hasn't made yet).
+
 **Status:** built (2026-10-02); seen (2026-10-04): the guard ends the swamp's original loop and a `hazardloop` loop with
 the warp after the 6th respawn, and normal falls never warp (after the fix above). Still to see: a loop met in a
-shuffled seed, naming its door.
+shuffled seed, naming its door; the fallback to the game's start (built 2026-10-04).
 
 *Code: `Guards/RespawnLoop.cs`, `Ui/WarpButton.cs` (`WarpToStart`), `World/DoorShuffle.cs` (`Rewrote`),
 `Core/Plugin.cs`, `Dev/DevConsole.Warp.cs` (`hazardloop`, `oldtravel`).*

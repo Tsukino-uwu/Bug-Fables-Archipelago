@@ -589,11 +589,13 @@ namespace BugFablesAP
             MainManager.instance.StartCoroutine(TravelWhenUnpaused(kind, area));
         }
 
-        // Warp to Start's own path without the pause menu, for the respawn-loop guard (a loop never lets the menu open).
-        internal static void WarpToStart(string why)
+        // Warp to Start's own path without the pause menu, for the respawn-loop guard (a loop never lets the menu open);
+        // gameStart passes over a seed's start, for a loop that the seed's start itself leads back into.
+        internal static void WarpToStart(string why, bool gameStart = false)
         {
-            log.LogWarning($"[warp] warp to start: {why}, on {MainManager.map?.mapid}");
-            MainManager.instance.StartCoroutine(TravelWhenUnpaused(Kind.Warp, -1));
+            log.LogWarning($"[warp] warp to {(gameStart ? "the game's start" : "start")}: {why}, on "
+                + MainManager.map?.mapid);
+            MainManager.instance.StartCoroutine(TravelWhenUnpaused(Kind.Warp, -1, gameStart));
         }
 
         private static void CloseConfirm()
@@ -606,7 +608,7 @@ namespace BugFablesAP
             }
         }
 
-        private static IEnumerator TravelWhenUnpaused(Kind kind, int area)
+        private static IEnumerator TravelWhenUnpaused(Kind kind, int area, bool gameStart = false)
         {
             // PrepareExit shrinks the boxes; DestroyPause follows 0.25 s later and clears pause.
             float since = Time.realtimeSinceStartup;
@@ -625,7 +627,7 @@ namespace BugFablesAP
             MainManager.Maps map = to.Map;
             Vector3[] door = null;
             // Warp to Start goes to the seed's start when it has one (Starting Location), through its door.
-            KeyValuePair<string, int>? seeded = kind == Kind.Warp ? QualityOfLife.SeedStart?.Invoke() : null;
+            KeyValuePair<string, int>? seeded = kind == Kind.Warp && !gameStart ? QualityOfLife.SeedStart?.Invoke() : null;
             if (seeded.HasValue && Enum.IsDefined(typeof(MainManager.Maps), seeded.Value.Key))
             {
                 var start = (MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), seeded.Value.Key);

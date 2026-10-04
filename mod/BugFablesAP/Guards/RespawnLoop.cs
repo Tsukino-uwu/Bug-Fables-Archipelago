@@ -34,6 +34,7 @@ namespace BugFablesAP
         private static float freeSince = -1f;
         private static float walkingSince = -1f;
         private static float warpedAt = -100f;
+        private static bool fellBack;
         private static string lastTransfer = "none since the game started";
 
         internal static void Enable(ManualLogSource logger, Func<bool> enabled)
@@ -134,16 +135,28 @@ namespace BugFablesAP
             inARow = 0;
             if (now - warpedAt < Rearm)
             {
-                log.LogError($"[respawn] a loop again {now - warpedAt:0} s after the last warp; not warping again, {where}");
+                // The start itself led back into a loop (a seed's start can): once to the game's own start instead.
+                if (fellBack)
+                {
+                    log.LogError($"[respawn] a loop again {now - warpedAt:0} s after the game's start; not warping "
+                        + $"again, {where}");
+                    return;
+                }
+                log.LogWarning($"[respawn] a loop again {now - warpedAt:0} s after the warp, {where}; to the game's "
+                    + "own start instead");
+                fellBack = true;
+                warpedAt = now;
+                MainManager.instance.StartCoroutine(WarpWhenRespawned(gameStart: true));
                 return;
             }
+            fellBack = false;
             warpedAt = now;
             log.LogWarning($"[respawn] loop ({how}): {Limit} in a row with no play between ({between}), {where}; "
                 + "warping to the start");
-            MainManager.instance.StartCoroutine(WarpWhenRespawned());
+            MainManager.instance.StartCoroutine(WarpWhenRespawned(gameStart: false));
         }
 
-        private static IEnumerator WarpWhenRespawned()
+        private static IEnumerator WarpWhenRespawned(bool gameStart)
         {
             // The hazard's own respawn holds minipause until it's done.
             float since = Time.realtimeSinceStartup;
@@ -151,7 +164,7 @@ namespace BugFablesAP
             {
                 yield return null;
             }
-            WarpButton.WarpToStart("a respawn loop");
+            WarpButton.WarpToStart("a respawn loop", gameStart);
         }
 
         [HarmonyPatch(typeof(Hazards), "HazardAction")]

@@ -1003,6 +1003,13 @@ tester guessed. The wiki is a lead, not proof: each entry is checked against the
 
   Settled on 2026-10-02 (next section, and the next one): the Barren Lands `return...` zones are the fog maze's wrong
   turns, and of `GiantLairBeforeBoss2`'s ladders, the right one pairs with the ladder up while the left one is one-way.
+- **Doors made only from a story flag** (2026-10-04, the EntityDump's `requires`; `door-graph.py --export` lists them in
+  `doors.json`'s `gated`): 35 of the shuffled doors, absent on a new file until their flag. Arriving through one's pair
+  before then lands where the door would be, over nothing. Seen at the desert border: `DesertFGBorder`'s `loadzonefg`
+  (to `FarGrasslands1`) requires 348 (chapter 5); the same flag swaps its scenery, `Base/Gate` (limit 348) for
+  `Base/GateBroken` (requires 348), and brings chapter 5's scene there (Maki, Kina, Yin, `makievent`, requires 348,
+  limit 322); the guard `bulkbee1` and `futes - Duplicate` stand there only before it. Used by `data_tables.py`
+  (`ROOM_STARTS`) and `logic/lost_sands.py`.
 
 ## The Forsaken Lands' fog maze, and the other one-way doors (2026-10-02, EntityDump and code read)
 

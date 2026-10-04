@@ -1469,6 +1469,18 @@ cautious side); the cook's own gates to check in code before the rule is written
 Test `test_near_snakemouth_exits_open_before_the_boss`. **Seen (2026-09-26):** walked into Chuck's Abode before the
 boss; resting and the save point work there (a dead end with a rest and a save, before the cave).
 
+**The desert border's gate (2026-10-04).** A random start fell forever behind the shut gate between the Lost Sands and
+the Far Grasslands (build step 15). The game makes the border's door to the Far Grasslands (`loadzonefg`) and breaks the
+gate only from flag 348 (chapter 5): the entity dump and the map dump name the door (`requires 348`), the intact gate
+`Base/Gate` (until 348) and `Base/GateBroken` (from 348). The logic already had the door as always passable (no
+`DoorRule`), so the game was stricter than the logic. **Decided (the user):** open it, "this one is a softlock if it
+stays a oneway so i think we should just open it up", as the mod opens everything else: the door `kept_present`, the
+intact gate hidden and the broken one shown (`logic/lost_sands.py`); flag 348 itself is never set. The guards and
+chapter 5's own scene there are left to the story. An exception, on the user's word, to Next 52's "nothing opens before
+its logic exists"; the logic already counted the door open. **And the rule from here (the user, 2026-10-04):** "we will
+have to check every entrance/door anyway along with every single flag in the game ... so we should either open things
+up or mark them as oneways": every door and flag gets that verdict as its area is mapped (`room-logic.md`).
+
 **Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion
 fallback and statue, Madeleine's house, and the bar with its quest board seen on screen (2026-09-25); the exits near
 Snakemouth Den seen (2026-09-26); every board listing bounties (built 2026-09-25), Eetl's blocker, the inn and chapter
@@ -2212,8 +2224,21 @@ actually be random not just 'semi random'"):
   room"). The night maps wait on a way between day and night in a seed: in the story it's a one-time window (Event52
   sets flag 85 and loads `GoldenSettlement1Night`, Event58 sets 86 and loads `GoldenSettlement1`).
 
+**A start at a door the game hasn't made yet (found 2026-10-04).** A seed started at the desert border
+(`DesertFGBorder`) as if through Far Grasslands' door: the party fell below the map, the respawn-loop guard warped it to
+the start, which was the same spot, and so on (the user: "this is a softlock/oneway. while the door is closed", with a
+screenshot of the shut gate and its guard). `gate-table.py` named it: the border's door back (`loadzonefg`) requires flag
+348, set in chapter 5, so on a new file it doesn't exist and its landing lies behind the shut gate over nothing. Every
+start lands at the room's own door back, so the rule is: **never a landing door the game makes only from a story flag,
+unless the seed keeps it present.** `door-graph.py --export` now writes `gated` into `data/doors.json` (35 doors with
+their flags; the rest of the table re-exported byte-identical), and `ROOM_STARTS` leaves out such starts (471 of them
+left). The desert gate itself was opened in the same change (build step 9), so that start came back, safely. Test
+`test_never_lands_at_a_door_the_game_hides`: it failed on many starts with the rule off, the palace hall from the library
+among them (flag 67).
+
 **Status:** in progress (experimental): `anywhere` (any room) works, seen on screen (2026-09-26): a new file starts in
-the seed's room; the Warp back to it through its door, with Travel Off and on Map, seen (2026-10-04); the truly random
+the seed's room; the Warp back to it through its door, with Travel Off and on Map, seen (2026-10-04); no start at a door
+the game hides on a new file (2026-10-04), not yet seen in a new seed; the truly random
 start designed (2026-09-30), to build; the logic from the start to come; the intro is always skipped with a seed start.
 
 *Code: `options.py` (`StartingLocation`), `data_tables.py` (`ROOM_STARTS`, `STARTS`), `data/starts.json` (from

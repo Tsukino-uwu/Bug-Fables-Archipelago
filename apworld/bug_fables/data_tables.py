@@ -63,10 +63,13 @@ MAPS: tuple[str, ...] = tuple(sorted(
      | {m for link in DOORS.fixed for m in link}
      | {m for t in TRANSFERS for m in (t.from_map, t.to_map)}) - UNUSED_MAPS))
 # Every room entered through a door: the map, and the map whose door leads in (both ways of each connection). A start
-# there lands where walking in through that door ends.
+# there lands where walking in through that door ends, at the room's own door back: never one the game makes only from
+# a story flag (absent on a new file, so the landing is over nothing) unless the seed keeps it present.
+_PRESENT_FROM_START: frozenset[tuple[str, str]] = frozenset((e.map, e.entity) for e in KEPT_PRESENT)
 ROOM_STARTS: tuple[RoomStart, ...] = tuple(sorted(
     {RoomStart(map=end.map, from_map=other.map) for c in DOORS.connections for end, other in ((c.a, c.b), (c.b, c.a))
-     if end.map != other.map}))
+     if end.map != other.map
+     and ((end.map, end.door) not in DOORS.gated or (end.map, end.door) in _PRESENT_FROM_START)}))
 # Every save point (map, entity index). Unused today (a random start picks from ROOM_STARTS); kept for named start
 # spots, a planned option.
 STARTS: tuple[SavePoint, ...] = tuple(SavePoint.from_json(s) for s in _load("starts.json")["starts"])

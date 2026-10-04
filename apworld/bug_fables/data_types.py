@@ -124,19 +124,22 @@ class Doors:
     connections: every mutual door pair, the two-way doors the entrance randomizer shuffles. one_way: the doors with
     no way back, which it shuffles among themselves. fixed: (map, destination map) links of the doors left out (not a
     door the mod can find by map and name, or a pair with a story variant); the maps they join both ways count as one
-    area.
+    area. gated: {(map, door): its required flags} for the doors the game makes only from story flags, absent on a new
+    file.
     """
 
     connections: tuple[DoorConnection, ...]
     one_way: tuple[OneWayDoor, ...]
     fixed: tuple[tuple[str, str], ...]
+    gated: dict[tuple[str, str], tuple[int, ...]]
 
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> Doors:
         known = _known(cls, {key: value for key, value in data.items() if key != "_about"})
         return cls(connections=tuple(DoorConnection.from_json(c) for c in known["connections"]),
                    one_way=tuple(OneWayDoor.from_json(w) for w in known["one_way"]),
-                   fixed=tuple((a, b) for a, b in known["fixed"]))
+                   fixed=tuple((a, b) for a, b in known["fixed"]),
+                   gated={(m, door): tuple(flags) for m, door, flags in known["gated"]})
 
 
 @dataclass(frozen=True, slots=True, kw_only=True, order=True)
