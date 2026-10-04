@@ -7,6 +7,7 @@ import pkgutil
 from typing import Any
 
 from .data_types import Doors, Encounter, Item, Location, OneWayDoor, RoomStart, SavePoint
+from .enemysanity import enemy_locations
 from .logic import (ARTIFACTS, DIALOGUE_FLAGS, DOOR_RULES, FREE_SALES, HELD_UNTIL, HELD_UNTIL_ITEM, KEPT_OPEN, KEPT_PRESENT,
                     LOCATIONS, PRESENT_FROM, PRESENT_WITH_ITEM, SCENERY_HIDDEN, SCENERY_PRESENT, STORY_EVENTS,
                     TRACKER_ORDER, TRANSFERS)
@@ -75,6 +76,9 @@ ROOM_STARTS: tuple[RoomStart, ...] = tuple(sorted(
 STARTS: tuple[SavePoint, ...] = tuple(SavePoint.from_json(s) for s in _load("starts.json")["starts"])
 # Every map enemy (map, entity index) and the enemy ids its fight starts with.
 ENCOUNTERS: tuple[Encounter, ...] = tuple(Encounter.from_json(e) for e in _load("enemies.json")["encounters"])
+# Enemysanity's spots join the hand-written ones (by id, as the logic orders them).
+ENEMY_LOCATIONS: tuple[Location, ...] = enemy_locations(ENCOUNTERS, LOCATIONS, MAPS)
+LOCATIONS = tuple(sorted(LOCATIONS + ENEMY_LOCATIONS, key=lambda loc: loc.id))
 
 # An item's kind: where the game puts it. Ordinary items and key items share the base range.
 ITEM_KIND = 0

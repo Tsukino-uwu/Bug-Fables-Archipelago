@@ -116,6 +116,7 @@ this file and that doc disagree, that doc is right.
 44. [Build step 44: every quest available from the start, none of it done for you](#build-step-44-every-quest-available-from-the-start-none-of-it-done-for-you)
 45. [Build step 45: the ant tunnels, the miners dig for free](#build-step-45-the-ant-tunnels-the-miners-dig-for-free)
 46. [Build step 46: Beette's sale, a free location](#build-step-46-beettes-sale-a-free-location)
+47. [Build step 47: Enemysanity, every map enemy a location](#build-step-47-enemysanity-every-map-enemy-a-location)
 
 **How it works**
 
@@ -4410,6 +4411,33 @@ location 78); tests not run yet (batched before the push).
 
 *Code: `logic/bee_kingdom_hive.py`, `data_types.py` (`FreeSale`), `slot_data.py` (`free_sales`), `data/items.json`
 (Flower Key); tests `test_slot_data.py`.*
+
+## Build step 47: Enemysanity, every map enemy a location
+
+**Asked (the user, 2026-10-04):** "lets make a on/off enemy sanity yaml option ... so we can look at enemy
+location/placements with the room-logic.md when adding new locations". Worked out first as Next 58 from the game's own
+held-key drop (`MEASURED.md`, a map enemy's drops).
+
+**The option:** *Enemysanity* (`enemy_sanity`, off), a location category (`enemy`) like the other toggles, sent in
+`slot_data`'s `options` for Universal Tracker.
+
+**The locations:** one per map enemy in `data/enemies.json` (325), built by `enemysanity.py`. The export
+(`enemy-table.py`) now adds each enemy's area, its first enemy's game name, its story flags and a **location id that a
+re-export keeps** (from 1000; a new enemy gets the next free one). **Names (the user's pattern):** "Area: Room, Enemy
+N", the room as the map's own named spots call it, else the map's name until the room is named (a rename keeps the
+id); N counts that enemy within the room. **Never missable (the user):** every one is kept present whatever its
+`requires` or `limit` (25 the story removes, 27 it adds later; no two share a spot). **Logic:** each waits for the
+later chapters (`LATER_CHAPTERS`) until its room is mapped (`room-logic.md`), the cautious stand-in.
+
+**slot_data:** `location_enemies`, `{location id: "map:entity"}` (the key Enemy Shuffle uses); the mod guide's step
+44 does the rest.
+
+**Tests:** `test_enemysanity.py` (off: none; on: every map enemy, the names, the ids).
+
+**Status:** built (2026-10-04), not yet seen in game.
+
+*Code: `enemysanity.py`, `data_types.py` (`Encounter`, `Source.enemy`), `options.py` (`EnemySanity`), `slot_data.py`
+(`location_enemies`), `dev-scripts/enemy-table.py`, `data/enemies.json`; tests `test_enemysanity.py`.*
 
 # How it works
 

@@ -169,6 +169,7 @@ namespace BugFablesAP
         internal Dictionary<long, Give> LocationGives => seedData?.LocationGives;
         internal Dictionary<long, int[]> LocationAdded => seedData?.LocationAdded;
         internal Dictionary<long, Pickup> LocationPickups => seedData?.LocationPickups;
+        internal Dictionary<long, string> LocationEnemies => seedData?.LocationEnemies;
         internal Dictionary<long, int[]> LocationVars => seedData?.LocationVars;
         internal Dictionary<long, int> LocationBerries => seedData?.LocationBerries;
         internal Dictionary<long, int> LocationDiscoveries => seedData?.LocationDiscoveries;

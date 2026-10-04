@@ -55,6 +55,18 @@ class ShuffleDiscoveries(Toggle):
     display_name = "Shuffle Discoveries"
 
 
+class EnemySanity(Toggle):
+    """
+    Every enemy on the map is a location: winning its fight drops the check as an item to pick up. Every one stays on
+    its map whatever the story, so none can be missed. Bosses aren't map enemies, so they're not included. Off by
+    default.
+
+    Checks added in this version: {count}.
+    """
+
+    display_name = "Enemysanity"
+
+
 class ShuffleMedalShops(DefaultOnToggle):
     """
     Medals sold in shops are locations: the shelf shows what's really there, and buying it sends the check.
@@ -309,6 +321,7 @@ class BugFablesOptions(PerGameCommonOptions):
     shuffle_quests: ShuffleQuests
     shuffle_crystal_berries: ShuffleCrystalBerries
     shuffle_discoveries: ShuffleDiscoveries
+    enemy_sanity: EnemySanity
     shuffle_medal_shops: ShuffleMedalShops
     shuffle_item_shops: ShuffleItemShops
     shop_contents: ShopContents
@@ -337,6 +350,7 @@ CATEGORY_OPTIONS: dict[str, str] = {
     "quest": "shuffle_quests",
     "crystal_berry": "shuffle_crystal_berries",
     "discovery": "shuffle_discoveries",
+    "enemy": "enemy_sanity",
     "shop": "shuffle_medal_shops",
     "item_shop": "shuffle_item_shops",
 }

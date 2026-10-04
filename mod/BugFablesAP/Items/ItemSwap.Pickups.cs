@@ -39,7 +39,13 @@ namespace BugFablesAP
                 {
                     return;
                 }
-                bool respawning = connection.LocationPickups[at].Regional >= 0;
+                bool enemyDrop = EnemyDrops.LocationOf(caller) >= 0;
+                if (enemyDrop)
+                {
+                    // No flag marks it taken: its check goes out now, done or not (a done one sends nothing new).
+                    connection.QueueRespawnCheck(at, MainManager.instance.flagstring[ItemReceiver.SeedSlot]);
+                }
+                bool respawning = !enemyDrop && connection.LocationPickups[at].Regional >= 0;
                 if (respawning)
                 {
                     // Once its check is done, a respawning pickup is the game's own again.
@@ -146,6 +152,21 @@ namespace BugFablesAP
             string mapName = map.mapid.ToString();
             NPCControl[] entities = null;
             HideFoundElsewhere(pickups, map, mapName, ref entities);
+            // Enemysanity's drops: the seed's item on each, as on a pickup.
+            foreach (KeyValuePair<NPCControl, long> drop in EnemyDrops.Live)
+            {
+                Describe(drop.Value, out _, out Sprite dropSprite, out _);
+                EntityControl dropped = drop.Key.entity;
+                if (dropSprite == null || dropped == null || dropped.sprite == null)
+                {
+                    continue;
+                }
+                if (dropped.sprite.sprite != dropSprite)
+                {
+                    dropped.sprite.sprite = dropSprite;
+                }
+                Mark(dropped, MarkColorOf(drop.Value));
+            }
             foreach (KeyValuePair<long, ApConnection.Pickup> entry in pickups)
             {
                 if (entry.Value.Map != mapName || (entry.Value.Regional >= 0 && connection.IsDone(entry.Key)))
@@ -278,6 +299,11 @@ namespace BugFablesAP
 
         private static long FindPickup(NPCControl caller)
         {
+            long enemy = EnemyDrops.LocationOf(caller);
+            if (enemy >= 0)
+            {
+                return enemy;
+            }
             Dictionary<long, ApConnection.Pickup> pickups = connection.LocationPickups;
             string map = MapName();
             if (!randomizerOn() || pickups == null || map == null)

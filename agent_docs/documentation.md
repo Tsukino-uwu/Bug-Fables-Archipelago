@@ -95,6 +95,7 @@ anyone curious about the process, or thinking of doing the same for another game
 41. [The seed's options read from slot_data's `options`](#41-the-seeds-options-read-from-slot_datas-options)
 42. [The ant tunnels' miners dig for free](#42-the-ant-tunnels-miners-dig-for-free)
 43. [A free seller: the price in their lines made 0](#43-a-free-seller-the-price-in-their-lines-made-0)
+44. [Enemysanity: an enemy's won fight drops its check](#44-enemysanity-an-enemys-won-fight-drops-its-check)
 
 ## Where it stands
 
@@ -3034,3 +3035,25 @@ price (`[sales] BeehiveBalcony: lines 20, 21 free (price 150 to 0)`).
 **Status:** built (2026-10-04), the build succeeds; not yet seen in game.
 
 *Code: `World/FreeSales.cs`, `Core/SeedData.cs` (`FreeSales`).*
+
+## 44. Enemysanity: an enemy's won fight drops its check
+
+The game side of the Archipelago guide's build step 47. The game already drops a held key from two map enemies, a
+guaranteed pickup made by the public `EntityControl.CreateItem` (`MEASURED.md`, a map enemy's drops). For each enemy in
+`location_enemies` (keyed `map:entity`, the entity being `NPCControl.mapid`, as Enemy Shuffle keys it):
+
+1. **Kept present:** as the map builds its entities, a listed enemy with a `requires` or `limit` gets the kept-present
+   marker (`KeptOpen.KeepPresent`), so no story flag removes it.
+2. **The drop:** `EntityControl.Death`'s coroutine is watched (its first step notes the enemy and where it stood, its
+   last makes the drop), and while the location isn't done on the server a key-item pickup with no timer is made there
+   the game's way. No save flag: only 37 story flags are free (`MEASURED.md`).
+3. **The pickup:** `ItemSwap` finds the drop as a location (`EnemyDrops.LocationOf`), shows the seed's item on the
+   ground and in its line, and sends the check at once, as a respawning pickup's is (`QueueRespawnCheck`); the game's
+   own item is never given.
+
+Not yet: the held item drawn on the enemy before the fight (the game draws it for two kinds only).
+
+**Status:** built (2026-10-04), the build succeeds; not yet seen in game.
+
+*Code: `World/EnemyDrops.cs`, `World/KeptOpen.cs` (`KeepPresent`), `Items/ItemSwap.Pickups.cs`, `Core/SeedData.cs`
+(`LocationEnemies`).*

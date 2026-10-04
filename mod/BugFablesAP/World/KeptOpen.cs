@@ -320,6 +320,18 @@ namespace BugFablesAP
         }
 
         // Hidden by the mod now and on every later rebuild of the map: the game's own existence check answers "gone".
+        // Made to exist whatever its requires and limit, as the kept-present list does (Enemysanity's enemies).
+        internal static void KeepPresent(NPCControl npc)
+        {
+            var marker = new[] { -1 };
+            presentMarkers.Add(marker);
+            npc.requires = marker;
+            if (npc.entity != null)
+            {
+                npc.entity.iskill = false;
+            }
+        }
+
         internal static void KeepAway(NPCControl npc)
         {
             var marker = new[] { -1 };

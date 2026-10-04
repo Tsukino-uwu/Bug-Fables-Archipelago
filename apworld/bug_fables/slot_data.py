@@ -16,9 +16,9 @@ if TYPE_CHECKING:
 # The options slot_data's "options" carries: what the mod acts on, and what Universal Tracker's regeneration needs to
 # build the same locations, doors, rules, exclusions and goal.
 SLOT_OPTIONS: tuple[str, ...] = (
-    "artifacts_required", "shuffle_quests", "shuffle_crystal_berries", "shuffle_discoveries", "shuffle_medal_shops",
-    "shuffle_item_shops", "shop_contents", "entrance_randomizer", "filler_starting_checks", "shuffle_field_moves",
-    "shuffle_jump", "points_of_no_return", "progressive_boat", "exclude_locations")
+    "artifacts_required", "shuffle_quests", "shuffle_crystal_berries", "shuffle_discoveries", "enemy_sanity",
+    "shuffle_medal_shops", "shuffle_item_shops", "shop_contents", "entrance_randomizer", "filler_starting_checks",
+    "shuffle_field_moves", "shuffle_jump", "points_of_no_return", "progressive_boat", "exclude_locations")
 # Every other option, and why it isn't sent.
 NOT_SENT: dict[str, str] = {
     "enemy_shuffle": "its result is enemy_swaps",
@@ -82,6 +82,9 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "location_flags": _by_location(world, "flag"),
         "location_berries": _by_location(world, "berry"),
         "location_discoveries": _by_location(world, "discovery"),
+        # Enemysanity: {location id: "map:entity"}, the map enemy whose won fight drops the check; empty when it's off.
+        # The client keeps each one present whatever the story's flags.
+        "location_enemies": _by_location(world, "enemy"),
         # One location per copy a shop ever stocks; a shop's copies are its locations in id order.
         "location_shops": _by_location(world, "shop", lambda source: {"shop": source.shop, "medal": source.medal}),
         "location_item_shops": _by_location(world, "item_shop", lambda source: source.item_shop.to_slot()),

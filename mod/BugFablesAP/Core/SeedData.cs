@@ -18,6 +18,8 @@ namespace BugFablesAP
         internal readonly Dictionary<long, int[]> LocationVars;
         internal readonly Dictionary<long, int> LocationBerries;
         internal readonly Dictionary<long, int> LocationDiscoveries;
+        // Enemysanity: {location id: "map:entity"}, the map enemy whose won fight drops the check.
+        internal readonly Dictionary<long, string> LocationEnemies;
         // Checks that show no item of their own: the receiver shows the player's own item from them.
         internal readonly HashSet<long> SilentLocations;
         // The opening's checks: their items arrive with no hold-up.
@@ -105,6 +107,7 @@ namespace BugFablesAP
             LocationAdded = SlotData.ByLocation(data, "location_added",
                 v => new[] { v.Value<int>("type"), v.Value<int>("item") });
             LocationDiscoveries = SlotData.ByLocation(data, "location_discoveries", v => v.Value<int>());
+            LocationEnemies = SlotData.ByLocation(data, "location_enemies", v => v.Value<string>());
             List<long> silent = SlotData.List(data, "silent_locations", e => e.Value<long>());
             SilentLocations = silent != null ? new HashSet<long>(silent) : null;
             List<long> quiet = SlotData.List(data, "quiet_locations", e => e.Value<long>());
@@ -177,7 +180,8 @@ namespace BugFablesAP
                 .Concat(LocationDiscoveries?.Keys ?? Enumerable.Empty<long>())
                 .Concat(LocationShops?.Keys ?? Enumerable.Empty<long>())
                 .Concat(LocationItemShops?.Keys ?? Enumerable.Empty<long>())
-                .Concat(LocationPickups?.Keys ?? Enumerable.Empty<long>()).Distinct().ToList();
+                .Concat(LocationPickups?.Keys ?? Enumerable.Empty<long>())
+                .Concat(LocationEnemies?.Keys ?? Enumerable.Empty<long>()).Distinct().ToList();
 
         private static ApConnection.Blocker ReadBlocker(JToken e)
         {
