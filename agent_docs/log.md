@@ -70,6 +70,7 @@ either one wrong).
 - [2026-10-03: Universal Tracker with no yaml, and the seed's options in one dict](#2026-10-03-universal-tracker-with-no-yaml-and-the-seeds-options-in-one-dict)
 - [2026-10-03: the PopTracker pack started, every rule exported](#2026-10-03-the-poptracker-pack-started-every-rule-exported)
 - [2026-10-04: Spy Specs split in four](#2026-10-04-spy-specs-split-in-four)
+- [2026-10-04: TO-CHECK worked through, four fixes found in play](#2026-10-04-to-check-worked-through-four-fixes-found-in-play)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2646,3 +2647,46 @@ either one wrong).
   changing a word's meaning. Its line 18 (126) needed the user's call; they chose both shortenings offered: the
   versions aside to "(our version's: the checkout at the targeted tag)", and "never our own" dropped as the clause
   after it says it. 0 lint findings in all 21 docs.
+
+## 2026-10-04: TO-CHECK worked through, four fixes found in play
+
+- **Asked (the user):** "lets start biting of checkboxes here" (the local `TO-CHECK.md`). The game and the local server
+  started on the user's yes; three probes found on in the config (GrantProbe, TextProbe, TlsProbe) were switched off
+  first.
+- **Seen, by group:** group 1's panel lines and letters, the letter pool, Spy Specs' four values and its battle effects
+  (Both waived by the user), long names, Item colors off, the Warp button and Warp to Start through the city gate,
+  normal falls and the respawn-loop guard; group 4 on Seed A: the opening's filler checks, the bridge and door-room
+  scenes, the trapdoor's check, a key item's description, the Boat Ticket as the first boat, the fanfare swapped, items
+  from the console and from BugTester2, Item animation on Progression, Bee Fly received, the Archipelago icon's values,
+  server text, a dropped connection (checks picked up offline sent on reconnect) and a login with a save loaded; groups
+  6, 7 and 8 on a second seed (the boat items apart, moves and Jump shuffled, a random start in the Honey Factory) with
+  two APQuest items plando'd in for the icon-off, other-games'-names and long-find checks.
+- **Fixed, each found in play:**
+  - **Music Shuffle's silent names.** The pier kept its own song (the user: "might just be coincidence?"); the mod's
+    guard had logged `[music] Beetle not found`. A dev command, `musiccheck`, loaded every name of the game's list as
+    the game does: `Beetle`, `Giant2`, `Giant3` have no clip. They left the pool; a test fails with them back. The next
+    seed's pier played shuffled music. The game's own "75 - 8" for Samira matches: her five dropped plus these three.
+  - **Normal falls warped.** The respawn guard wanted half a second standing between falls. Two tries warped the user;
+    the first logged only the count, so the guard's line gained what it measured, and the second showed it: free over
+    1 s, on ground 0.14 to 0.39 s (jumping straight back in). Play is now "touched ground, free half a second".
+    Twelve falls then logged "play". The loop tests were made faithful on the way: `hazardloop` was undone by the
+    game's `Respawn` zones moving `lastpos` as the user walked, so it now holds the spot; `oldtravel` replays the old
+    map travel's landing, which gave the swamp's original loop, and the guard ended it. Respawns during the guard's own
+    warp are no longer counted (an error line showed it counting them).
+  - **A console item had no box.** The quiet start treated every slot-0 item as a starting item; the protocol doc
+    (`network protocol.md`, 0.6.7) gives the cheat console location -1 and start inventory -2. The user chose to hold
+    console items up.
+  - **The submarine's name ran past the Key Items list.** The game fits no list row; the user chose the full name,
+    narrowed in lists with the game's own `|sizemulti,0.7,1|`.
+- **Decided (the user):** the boat stays beside the submarine, never cleared for it (Next 40). Tools of any licence may
+  be used as long as they never enter the repo (the licence-row rule is about other projects' code).
+- **Mistakes caught:** I first told the user "Swamplands: Bridge" (holding the APQuest player's Shield) was a pickup on
+  the ground there; it is the Horn Dash scene, read from the spoiler without checking the location's kind. I first
+  said the swamp's map travel repeated the original loop; the user corrected it (the loop came from the old landing
+  beside the crystal). A Unity
+  `JobTempAlloc` warning and a 15 s connection drop came while my 10000-run fuzzer had every core; neither came back
+  after it ended: run the fuzzer with fewer jobs while the user plays. A first plando used `from_pool: false` and left
+  two items unplaced; regenerated from the pool.
+- **Still open:** the Achievements row, the pause map's area-15 case, Medal prices, Difficulty, Attack boost, Healing
+  crystals and Auto-save (the user: slow to test on purpose, ticked when met in play); the swamp's water jump; Seed A's
+  story checks (boss prizes, the inn, chapter 2's scenes, bounties, the goal); groups 2, 3, 5, 9 to 12.

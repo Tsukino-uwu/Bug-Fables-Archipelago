@@ -798,7 +798,8 @@ Dev `holdup long` shows four such lines: the one seen, a longer one, and the lon
 (2026-09-24, `MEASURED.md`), and crystal berry spots (2026-09-25); berry rewards and story pickups built, not yet seen
 in game; the description box's field fix (2026-09-26) seen on a key item's pickup (2026-10-04); long names fitted to
 the box (2026-09-30), seen with `holdup long`'s four lines (2026-10-04: broken before "from", the shorter line
-centred, every one inside the box).
+centred, every one inside the box) and on a real find ("You found OtherPlayerQuest's / Health Upgrade!", broken after
+"'s", 2026-10-04).
 
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
 `Recolour` and `FirstMedalSeen` do the swapping); `ItemSwap.Pickups.cs` (`PickupPrefix`, `FindPickup`, `TickGround`,
@@ -1909,8 +1910,8 @@ launch: late in a day of about forty hot reloads the settings pages showed their
 brought it back; no error was logged, and the letter pool had 487 of 500 free).
 
 **Status:** works, seen on screen (2026-09-26): Other games on the ground and on a shelf; All players seen on a shelf
-(2026-10-04); Off seen keeping a Bug Fables player's sprite, the text naming them (2026-10-04); Off on another game's
-item on the ground not yet seen.
+(2026-10-04); Off seen keeping a Bug Fables player's sprite, the text naming them, and another game's item with the
+vanilla look on a shelf and the ground (2026-10-04).
 
 *Code: `QualityOfLife.cs` (`ItemIcons`, `IconMode`), `ApMenu.cs` (`IconsRow`, `RowAt`), `ItemSwap.cs`
 (`Describe`), `ApIcon.cs`.*
@@ -2536,7 +2537,8 @@ back out of the built DLL (apimplementation.md, build step 28).
 - the cache folder holds a `Bug Fables` folder with a `<checksum>.json` in it.
 
 **Status:** built (2026-09-29); the log line, connecting and the cache folder checked (2026-10-04: no `NOT installed`,
-a new `Bug Fables\<checksum>.json` at the seed's first login); another game's item name in game not yet seen.
+a new `Bug Fables\<checksum>.json` at the seed's first login); another game's item name seen on a shelf (2026-10-04,
+"A filler item for OtherPlayerQuest (APQuest)").
 
 *Code: `Core/CachePaths.cs`, installed from `Core/Plugin.cs`.*
 
