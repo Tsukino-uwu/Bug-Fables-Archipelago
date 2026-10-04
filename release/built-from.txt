@@ -1,5 +1,5 @@
 # Written by dev-scripts/build-release.ps1; checked by its -Check at release.
-commit: 0a18f947084de646289c9891fe8e27593c49bbac
+commit: ec51e990b5087299c6fcc4bb1844d19750ec2452
 sdk: 10.0.401
 game: Assembly-CSharp.dll sha256 e76da3282d6cdcb1fe9b54eb1673931019f99ee009d495437a625a4d1e6021b0
 Directory.Build.props: 44e8100ed647a81b0f3a03c3f25931f8288c6fa1
@@ -33,7 +33,7 @@ mod/BugFablesAP/Guards/AchievementGuard.cs: 9b156c7cf95a210195d1bc57e5482fd8c3d6
 mod/BugFablesAP/Guards/AnimGuard.cs: ce87617187f132581882938518aa58502dd99dc5
 mod/BugFablesAP/Guards/ClockCleanup.cs: 557c784509fb09522cfce2143290c45d436261b0
 mod/BugFablesAP/Guards/GlowGuard.cs: 6d2163af7fea075ca0c49e0f80070084ed6635f1
-mod/BugFablesAP/Guards/RespawnLoop.cs: 9a14d900bef71b0f5e5700bbe5c2c9f0e5dd9d55
+mod/BugFablesAP/Guards/RespawnLoop.cs: efeea2a0aa559f470d66d34ad6cece236a45941e
 mod/BugFablesAP/Items/BoatTicket.cs: 2e1725c1bf94ede6e169081d7721fa4849b0a340
 mod/BugFablesAP/Items/CrystalBerryTotal.cs: bf023a01cd82d16c19c06dbeccc73e6adb2fd5b1
 mod/BugFablesAP/Items/CustomItems.cs: 8c45858c50981a7e0d4232438fc6f21613f4385f
@@ -69,7 +69,7 @@ mod/BugFablesAP/World/PartySlots.cs: 79aecc898cd977323a18d8759903c52f21a334f1
 mod/BugFablesAP/World/SaveCrystals.cs: 5083f46984e471bb6c2dd778e68e1235c1d450bd
 mod/BugFablesAP/World/Submarine.cs: 04bb532383fdbb0f16076dfdc3a4a3ed17cd9ed1
 nuget.config: 3525aa692254165194b39b5291b0157dae704a63
-BugFablesAP.dll: 6c80c3e1aa52cb398df2024d45eeed4ff50bd1bf19b5b647bbd82723a2780264
+BugFablesAP.dll: 09d231851aed6f9ebd7413d54d0d9e46af5a1b85dc23fb79fbc60844fb2989a2
 Archipelago.MultiClient.Net.dll: 4d4f49b1528cf88b00fc07c69ff27d16cb1eeff52c0636009befd87f4e9dde5b
 websocket-sharp.dll: 5f59b27b01d6d6d0ea6ae2258e2639d80bc4ccedc0c16917cdd73e0b30e07f58
 Newtonsoft.Json.dll: 0cc6b1d3f4e8c938edfe1f02f2167d1cbf596a4df6ac0dbd82fe89ed67e45eb0
