@@ -154,8 +154,8 @@ be wrong.
 5. **A two-player room** (planned 2026-09-25): the tester's slot plus a second one the agent drives. Seen
    (2026-09-26, build steps 18 and 19): items from another player arriving live, every class both ways, and the
    multiworld names ("You found Other's Key!", the mod guide's step 9). Replays after a new save or a reconnect are
-   held up like any other item since 2026-09-28, the quiet start aside (the mod guide, step 9). Still to see:
-   *Item animation: Progression* holding up only progression items.
+   held up like any other item since 2026-09-28, the quiet start aside (the mod guide, step 9). *Item animation:
+   Progression* holding up only progression items: seen 2026-10-04.
 6. **A full bag:** key items keep arriving, only ordinary items wait.
 7. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number: done, seen
    (build step 3).
@@ -2657,9 +2657,9 @@ level without the first "wouldn't work"): Beemerang Toss then Halt, Dash then Ho
    is beatable and gains exactly the seven locations; a room with APQuest generates.
 
 **Status:** built (2026-09-27): the logic and pool tested, the mod built, its patch counts taken from the game's IL and
-confirmed in the running game (its log: 8 of 8, 2 of 2, 15 of 15). Not yet seen in game: a received ability working, its
-battle skill, the key items' text, a scene sending its check. Decided and still to build: without the Horn Slash the
-Dash only moves (Next 23), for Shuffle Field Moves.
+confirmed in the running game (its log: 8 of 8, 2 of 2, 15 of 15). Seen (2026-10-04): a received ability working (Bee
+Fly), its battle skill, the key items' text. Not yet seen: a scene sending its check. Decided and still to build:
+without the Horn Slash the Dash only moves (Next 23), for Shuffle Field Moves.
 
 *Code: `abilities.py` (`item_count`, `item_copies`), `slot_data.py` (`ability_items`); in the mod `Abilities.cs` and
 `CustomItems.cs` (ids 205-211); tests `test_abilities.py`.*

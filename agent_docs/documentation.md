@@ -1908,8 +1908,9 @@ Fables player's and your own items; the page with ten rows, every row and both h
 launch: late in a day of about forty hot reloads the settings pages showed their arrows but no text, and a restart
 brought it back; no error was logged, and the letter pool had 487 of 500 free).
 
-**Status:** works, seen on screen (2026-09-26): Other games on the ground and on a shelf; All players and Off not yet
-seen.
+**Status:** works, seen on screen (2026-09-26): Other games on the ground and on a shelf; All players seen on a shelf
+(2026-10-04); Off seen keeping a Bug Fables player's sprite, the text naming them (2026-10-04); Off on another game's
+item on the ground not yet seen.
 
 *Code: `QualityOfLife.cs` (`ItemIcons`, `IconMode`), `ApMenu.cs` (`IconsRow`, `RowAt`), `ItemSwap.cs`
 (`Describe`), `ApIcon.cs`.*
@@ -2254,7 +2255,8 @@ is story state (a scene checks it; a rock or a miniboss is gone once it's set). 
 - **Seven key items** (205-211) with the game's own names and field descriptions from `skilldata`; the battle skill
   rides on the same key item (fourteen would be bloat).
 
-**Status:** built (2026-09-27), not yet seen in game.
+**Status:** built (2026-09-27); seen (2026-10-04): Bee Fly, received from another slot, worked on the field and its
+battle skill showed; Dash and Bee Fly in Key Items with the game's names and text.
 
 *Code: `Abilities.cs`; the receiver in `ItemReceiver.cs`, the key items in `CustomItems.cs`, the looks in
 `ItemSwap.Looks.cs`, `slot_data` `ability_items` in `SeedData.cs`, the Warp in `QualityOfLife.cs`.*
@@ -2489,7 +2491,8 @@ step 28).
 
 Each still shows the right names, colours and descriptions, as before.
 
-**Status:** built (2026-09-29), not yet seen in game.
+**Status:** built (2026-09-29); seen (2026-10-04): another Bug Fables player's name and items as before on the ground,
+on a shelf (its description naming them), in the "You got" box and in the hold-ups.
 
 *Code: `Core/ServerText.cs`; its callers in `ItemSwap.cs`, `ItemSwap.Looks.cs`, `ItemReceiver.cs`, `LocationChecks.cs`,
 `ApConnection.cs`.*
@@ -2532,7 +2535,8 @@ back out of the built DLL (apimplementation.md, build step 28).
 - connecting to a room still works, and other games' item names still show;
 - the cache folder holds a `Bug Fables` folder with a `<checksum>.json` in it.
 
-**Status:** built (2026-09-29), not yet seen in game.
+**Status:** built (2026-09-29); the log line, connecting and the cache folder checked (2026-10-04: no `NOT installed`,
+a new `Bug Fables\<checksum>.json` at the seed's first login); another game's item name in game not yet seen.
 
 *Code: `Core/CachePaths.cs`, installed from `Core/Plugin.cs`.*
 
