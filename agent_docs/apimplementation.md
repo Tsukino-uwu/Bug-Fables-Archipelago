@@ -4244,8 +4244,10 @@ game's own song through the fade, and a fade in step between two unrelated songs
 
 **Tests:** `test_factory_songs_are_shuffled` (both in `music_map`, the pool 67): it failed with the old list restored.
 
-**Status:** built (2026-10-04), the tests pass; not yet seen in game (the factory elevator, both ways, in a seed with
-Music Shuffle on: a plain fade into each swapped song, no trace of the game's own).
+**Status:** built (2026-10-04), the tests pass; seen in game the same day: in a seed with the factory's songs swapped
+(Dungeon2 as Inside0, Dungeon2b as Field1), each elevator ride, up and down, faded plainly into the other swapped song,
+the log's `seamless switch made a plain fade` each time. The user walked in from the storage maze: a dev warp straight
+into the room left the last room's song playing (a dev tool's gap, not the shuffle's).
 
 *Code: `music.py` (`KEPT`), `World/MusicShuffle.cs` (`KeepSeamless`, `SoundHooks`); tests `test_music.py`.*
 
