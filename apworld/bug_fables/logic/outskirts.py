@@ -121,6 +121,9 @@ KEPT_OPEN = (
     EntityRef("BugariaOutskirtsOutsideCity", "FuzzyMoth"),
 )
 KEPT_PRESENT = (
+    # The gatekeeper who opens the Snakemouth Den gate for the Explorer Permit; he leaves at the spider scene (flag 27),
+    # which a file that got past the gate another way can reach first.
+    EntityRef("BugariaOutskirtsOutsideCity", "FxdColGatekeeper"),
     # The door into Madeleine's house; she and her butler stay away, so none of her story starts early.
     EntityRef("BugariaOutskirtsOutsideCity", "doormadeleine"),
     # The Outskirts quest board, likewise.

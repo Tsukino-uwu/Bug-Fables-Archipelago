@@ -1514,8 +1514,11 @@ been opened"; seen closed after the first boss). The Explorer Permit opens the O
 gone from flag 28), but the game closes the way twice more (the map dump's flag-scenery list, the entity dump): a second
 gate, `Base/Gate/SnekGate (1)`, shown from the first boss (41) until chapter 2 (67), and from 67 for good a gate by the
 cave on `NearSnakemouth` (`map1v4 (1)/snakemouthgate` and its `Gate`) with a `guard` and his `sign` in front of the door
-to the cave. The scenery is `scenery_hidden`, the guard and sign `kept_open`; the permit's own gate stays. The logic
-already counted the cave open past the permit, so only the mod changes. Test `TestSnakemouthGateStaysOpen`.
+to the cave. The scenery is `scenery_hidden`, the guard and sign `kept_open`; the permit's own gate stays. And its
+gatekeeper (`FxdColGatekeeper`, who opens it for the permit) leaves at the spider scene (limit 27), so a file that got
+past the gate another way (a dev warp, seen; a random start inside) could never open it: he is `kept_present` (the
+user: "the npc should always be here, and open the gate with the permit"). The logic already counted the cave open
+past the permit, so only the mod changes. Test `TestSnakemouthGateStaysOpen`.
 
 **The desert border's gate (2026-10-04).** A random start fell forever behind the shut gate between the Lost Sands and
 the Far Grasslands (build step 15). The game makes the border's door to the Far Grasslands (`loadzonefg`) and breaks the
@@ -1562,7 +1565,7 @@ Snakemouth Den seen (2026-09-26); every board listing bounties (built 2026-09-25
 (2026-09-26); the desert border's gate seen broken from a new file, the door both ways with no fall (2026-10-04;
 its guard still stands, left to the story); the Golden Path door, the way to the Hermit's cave and the tunnel onward
 seen open from a new file (2026-10-04); the Golden Settlement's desert gate and its wall seen open
-(2026-10-04); the way to Snakemouth Den kept open after the permit built (2026-10-04), its second gate gone in the
+(2026-10-04); the way to Snakemouth Den kept open after the permit and its gatekeeper kept built (2026-10-04), both in the
 log, not yet seen.
 
 *Code: the lists in `logic/*.py` (`KEPT_OPEN`, `KEPT_PRESENT`, `SCENERY_HIDDEN`, `SCENERY_PRESENT`, `HELD_UNTIL`,

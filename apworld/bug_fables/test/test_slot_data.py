@@ -196,6 +196,11 @@ class TestSnakemouthGateStaysOpen(BugFablesTestBase):
         self.assertNotIn({"map": "BugariaOutskirtsOutsideCity", "entity": "Base/Gate/SnekGate"},
                          self.world.fill_slot_data()["scenery_hidden"])
 
+    def test_gatekeeper_always_there(self) -> None:
+        # He leaves at the spider scene (flag 27); without him the permit could never open the gate.
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "FxdColGatekeeper"},
+                      self.world.fill_slot_data()["kept_present"])
+
 
 class TestOutskirtsRocks(BugFablesTestBase):
     # The Outskirts rocks go from the start, so the town opens without its early scenes (arrival, plaza blockers).
