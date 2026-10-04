@@ -14,7 +14,6 @@ LOCATIONS = (
              & CanUse("Horn Dash"), reach=LATER_CHAPTERS),
 )
 TRANSFERS = (
-    # One way: from inside, the gate only opens once it has been opened from outside (flag 384; termite_capitol's
-    # HELD_UNTIL).
-    Transfer("gate", "TermiteOutside", "TermiteMainPlaza", LATER_CHAPTERS, two_way=False),
+    # Both ways: from inside the mod opens it as if it had been opened from outside (termite_gate_from_inside).
+    Transfer("gate", "TermiteOutside", "TermiteMainPlaza", LATER_CHAPTERS),
 )

@@ -3842,7 +3842,14 @@ Island, all leading to the lake map, MetalLake.
 6. **The Termite gate, one way.** The sub made this fix necessary. From inside the plaza, before the gate was ever
    opened from outside (flag 384), its scene loads the outside map, looks for two guards only the plaza has, and stops
    (`EventControl.cs`, Event149). A sub landing at the Termite pier puts a party inside first, so the logic's gate now
-   goes from outside to inside only, and `held_until` keeps the inside gate away until 384.
+   goes from outside to inside only, and `held_until` keeps the inside gate away until 384. **Opened from inside
+   instead (2026-10-04, the user: "can we open it ?", after seeing it closed):** Event149 read whole: with 384 set it
+   only rumbles, fades and loads the other side, from either side; its first opening adds the guards' talk, the
+   welcome cinematic and the escort follower's (96) release, and sets nothing but 384. So the mod
+   (`TermiteGate.cs`, `slot_data`'s `termite_gate_from_inside`) marks 384 and releases 96 as the scene starts inside
+   before 384, and the scene takes the opened gate's way through; the hold is gone and the logic's gate is two-way
+   again (test `test_the_termite_gate_opens_both_ways`). Seen the same day: in and out through the gate from a file
+   that had never opened it from outside.
 7. **For the mod** (`slot_data`): `submarine_item`; `present_with_item`, the six docks, made with key item 212 whatever
    their flags; `held_until_item`, the Termite pier's scientist and queen, who show the dock off, kept away until it
    too. The records are `ItemEntity`s in each dock's area module under `logic/` (`logic/later_chapters.py` until

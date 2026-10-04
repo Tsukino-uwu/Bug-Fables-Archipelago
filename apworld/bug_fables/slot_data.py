@@ -133,6 +133,9 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "submarine_item": True,
         # The ant tunnels' miners dig for free: each shortcut opens once its far end is reached (the user, 2026-10-04).
         "free_ant_tunnels": True,
+        # The Termite gate opens from inside before it was ever opened from outside: the client marks it opened (flag
+        # 384) as its scene starts there (the user, 2026-10-04).
+        "termite_gate_from_inside": True,
         # Music Shuffle, {name: name played in its place}: tracks by the game's Musics names, jingles by their sound
         # names; both empty when it's off.
         "music_map": world.music_map,

@@ -126,6 +126,7 @@ namespace BugFablesAP
             PartyMembers.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             FieldMoves.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             AntTunnels.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
+            TermiteGate.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             FreeSales.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             EnemyDrops.Enable(Log, connection, () => randomizerEnabled.Value);
             SaveCrystals.Enable(Log, Config, () => randomizerEnabled.Value, settingsOn);

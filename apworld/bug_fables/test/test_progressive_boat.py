@@ -74,13 +74,14 @@ class TestProgressiveBoat(BugFablesTestBase):
         self.assertEqual({(e["map"], e["entity"]) for e in data["present_with_item"] if e["item"] == 212}, DOCKS)
         self.assertEqual({(e["map"], e["entity"], e["item"]) for e in data["held_until_item"]},
                          {("TermitePier", "FixedScientist", 212), ("TermitePier", "FixedQueen", 212)})
-        self.assertIn({"map": "TermiteMainPlaza", "entity": "gate", "flag": 384}, data["held_until"])
+        self.assertNotIn({"map": "TermiteMainPlaza", "entity": "gate", "flag": 384}, data["held_until"])
+        self.assertTrue(data["termite_gate_from_inside"])
 
-    def test_the_termite_gate_opens_from_outside_only(self) -> None:
-        # From inside, before it was opened from outside, the gate's scene stops (and the sub can land a party inside).
+    def test_the_termite_gate_opens_both_ways(self) -> None:
+        # From inside the client opens it (termite_gate_from_inside), so a party the sub landed inside can walk out.
         plaza = self.multiworld.get_region("TermiteMainPlaza", self.player)
-        self.assertFalse(any(exit_.connected_region.name == "TermiteOutside" and "(gate)" in exit_.name
-                             for exit_ in plaza.exits))
+        self.assertTrue(any(exit_.connected_region.name == "TermiteOutside" and "(gate)" in exit_.name
+                            for exit_ in plaza.exits))
 
     def test_hints_find_it_by_what_it_is(self) -> None:
         _assert_hints_find(self, {"submarine": BOAT, "boat": BOAT})

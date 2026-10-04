@@ -3,7 +3,7 @@ what the seed changes there. Its rooms aren't mapped yet."""
 from __future__ import annotations
 
 from ..custom_rules import LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, CanUse
-from ..data_types import FlagEntity, ItemEntity, Location, Source, Transfer
+from ..data_types import ItemEntity, Location, Source, Transfer
 
 LOCATIONS = (
     # The Termite King hands over the submarine after the Colosseum (flag 379); never behind the sub itself. The later
@@ -26,8 +26,5 @@ HELD_UNTIL_ITEM = (
     ItemEntity("TermitePier", "FixedScientist", SUBMARINE_KEY),
     ItemEntity("TermitePier", "FixedQueen", SUBMARINE_KEY),
 )
-# Opened from inside before it was ever opened from outside (flag 384), the gate's scene looks for guards the other
-# side doesn't have and stops, and the sub can land a party inside first.
-HELD_UNTIL = (
-    FlagEntity("TermiteMainPlaza", "gate", 384),
-)
+# The gate opens from inside too (slot_data's termite_gate_from_inside): the mod marks it opened (flag 384) as its scene
+# starts there, so the scene takes the opened gate's way through instead of looking for the outside guards.

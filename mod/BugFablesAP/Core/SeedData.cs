@@ -65,6 +65,8 @@ namespace BugFablesAP
         internal readonly bool SubmarineItem;
         // The ant tunnels' miners dig for free.
         internal readonly bool FreeAntTunnels;
+        // The Termite gate opens from inside before it was ever opened from outside.
+        internal readonly bool TermiteGateFromInside;
         // {map: dialogue lines}: sellers' lines whose price reads 0.
         internal readonly Dictionary<string, int[]> FreeSales;
         internal readonly bool PointsOfNoReturn;
@@ -165,6 +167,8 @@ namespace BugFablesAP
                 .ToDictionary(g => g.Key, g => g.SelectMany(e => e["lines"].Values<int>()).ToArray());
             FreeAntTunnels = data != null && data.TryGetValue("free_ant_tunnels", out object tunnels)
                 && tunnels is bool tunnelsFree && tunnelsFree;
+            TermiteGateFromInside = data != null && data.TryGetValue("termite_gate_from_inside", out object gate)
+                && gate is bool gateOpens && gateOpens;
             JObject options = SlotData.Object(data, "options");
             OptionsMissing = options == null;
             MovesShuffled = SlotData.On(options, "shuffle_field_moves");
