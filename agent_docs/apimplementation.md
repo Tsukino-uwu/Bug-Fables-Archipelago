@@ -620,6 +620,11 @@ be wrong.
     yaml option, beside build step 45's free miners, where each tunnel shortcut opens from an item instead (one ticket
     per tunnel, six, or one progressive ticket), like the Boat Ticket. Each ticket gates its tunnel, so each is
     progression; each needs a name (the user's) and an icon. Not decided.
+58. **Enemysanity** (an idea, 2026-10-04, the user: "each enemy, not boss, drops an item/has a location ... would also
+    allow people to see what item the enemy has before fighting it"): the game's own held-key drop works for any map
+    enemy (`MEASURED.md`, a map enemy's drops), so each could carry a guaranteed, flagged drop the pickup swap shows,
+    held visibly before the fight (the mod drawing it for most enemies). Open: a free flag per enemy, the option, the
+    location count. Not decided.
 
 **Known issues:**
 

@@ -1964,6 +1964,17 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   the tunnel's door but spanning the path to `loadzonecave` (the Hermit's cave, no flag) too: seen 2026-10-04, it
   turned the party back on the way to the cave. Beetle grass (`ObjectTypes.BeetleGrass`) is cut
   only by a hit tagged `BeetleHorn` or `BeetleDash`, Kabbu's (`NPCControl.cs`, the BeetleGrass case).
+- **A map enemy's drops, and the held key** (2026-10-04, code read by a search agent; seen in play): a map enemy's
+  `vectordata` is its drop table, each entry (x item id, y marker). On a won battle (`BattleControl.cs` ~30985,
+  `caller.entity.Death`), `EntityControl.Death` (~5351-5434) drops berries, then, unless the enemy has an `eventid` or a
+  path behaviour, picks one entry at random (a negative pick drops nothing); an entry with y = -2 is always picked and
+  spawns a key item (kind 1) that never despawns and carries `activationflag = limit[0]`; any other entry spawns an
+  ordinary item for 600 frames (y > 0: only while `flags[y]`). Winning sets no flag; picking the key up does
+  (`NPCControl.CheckItem`), and the enemy, whose `limit` is that flag, stops spawning. A name containing `ShwKEY` sets
+  `showitem`, and only WaspDriller and Zombeetle draw the held item (`EntityControl.cs` ~552, ~2465). Two of the 327 map
+  enemies hold one: `RubberPrisonPier`'s `ShwKEY wasp` (key 161, flag 584) and `UpperSnekRiverPuzzle`'s
+  `ShwKEYZombeetle` (key 160, flag 526). **Seen 2026-10-04:** beating the wasp left `tempitem kind 1 id 161 flag 584`
+  and eight berries; flag 584 stayed False until the key was taken, then True.
 - **The Rubber Prison yard's rock** (2026-10-04, EntityDump and code read; reported by the user): `rock`
   (`BreakableRock`) on `RubberPrisonPier`, just inside the left door from `RubberPrisonCheckpointCorridor`, until flag
   589; a breakable rock breaks only on a hit tagged `BeetleDash` (Horn Dash) or, with conditions, `BeetleHorn`
