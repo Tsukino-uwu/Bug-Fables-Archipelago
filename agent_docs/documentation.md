@@ -2800,7 +2800,8 @@ next load of the map), the introduction (Event165) then boarding (Event153); cro
 Lake to the Bugaria pier, whose first landing played Elizant's welcome (flags 448 and 350 read back set), and to the
 Rubber Prison, whose first landing played its arrival (Event185, started by the dock scene directly, so not in the
 event log; seen on screen); the plaza's gate from inside, first kept away (seen closed), then opened from inside
-(`TermiteGate.cs`, the Archipelago guide's build step 36, item 6): seen both ways.
+(`TermiteGate.cs`, the Archipelago guide's build step 36, item 6): seen both ways; the fishing village's and Mystery
+Island's docks, nothing special on leaving and coming back. Every dock seen.
 
 *Code: `Items/CustomItems.cs` (`Submarine`, `ProgressiveBoat`, `NextBoat`, the list narrowing),
 `Items/ItemReceiver.cs` (`Give`), `World/KeptOpen.cs` (`TieToItem`, `BeforeCheck`), `World/Submarine.cs`,

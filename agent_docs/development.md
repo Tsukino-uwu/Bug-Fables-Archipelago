@@ -310,7 +310,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   **Never onto water, a hole or spikes** (2026-10-04: beside a docked sub and on Mystery Island's door arrival, the
   party landed over water and respawned in a loop until the respawn guard sent it to the start): once landed, a warp
   checks the ground under the party and moves it beside a save point or a door when it isn't safe, and an `@name`
-  warp with no safe side to its entity uses that too, never the entity's own spot over water.
+  warp with no safe side to its entity uses that too, never the entity's own spot over water. **A sub dock** (`warp
+  <map> @Fixedsub...`) and a plain warp to Mystery Island land where the sub's own landing puts the party (the dock
+  scene's six spots, Event153; seen on Mystery Island 2026-10-04, the user: "this is where i arrived").
 - `spawn <item|key|medal> <id> [flag]`: drop a pickup next to you. With a pickup location's flag, on that
   location's map, it is that location. With `@<location id>` in place of the flag, it gets the starburst a check there
   draws, from that location's scout (looks only; taking it gives the spawned item): a class or kind's colour seen

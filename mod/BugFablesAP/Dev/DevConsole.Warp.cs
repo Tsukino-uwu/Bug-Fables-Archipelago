@@ -62,6 +62,19 @@ namespace BugFablesAP
         private static string pendingName;
         private static bool landed;
 
+        // Where the sub's own landing puts the party at each dock (Event153): a warp to a dock, or to Mystery Island,
+        // whose door's arrival is over water, lands there.
+        private static readonly Dictionary<MainManager.Maps, Vector3> DockLandings =
+            new Dictionary<MainManager.Maps, Vector3>
+            {
+                { MainManager.Maps.TermitePier, new Vector3(35.5f, -3f, 7.2f) },
+                { MainManager.Maps.MetalIsland1, new Vector3(-13.5f, -0.5f, -38.65f) },
+                { MainManager.Maps.BugariaPier, new Vector3(20.8f, 0f, -5.25f) },
+                { MainManager.Maps.RubberPrisonPier, new Vector3(0f, 0f, -2.85f) },
+                { MainManager.Maps.FishingVillage, new Vector3(5f, 0f, -15.5f) },
+                { MainManager.Maps.MysteryIsland, new Vector3(-24.45f, -0.3f, -29.45f) },
+            };
+
         private static string StartWarp(MainManager.Maps map, int flag)
         {
             if (MainManager.player == null || MainManager.instance.inevent || MainManager.instance.message)
@@ -76,6 +89,15 @@ namespace BugFablesAP
             // ends over water. FinishWarp guards the item, then steps aside once the transition is over.
             Vector3? at = flag >= 0 ? StartPosition(map, flag) : null;
             guarded = false;
+            bool toDock = flag < 0 && DockLandings.ContainsKey(map)
+                && (pendingName != null ? pendingName.StartsWith("Fixedsub") : map == MainManager.Maps.MysteryIsland);
+            if (toDock)
+            {
+                pendingName = null;
+                landed = true;
+                MainManager.instance.StartCoroutine(MainManager.TransferMap((int)map, DockLandings[map]));
+                return "warping to " + map + " (where the sub lands)" + skipped;
+            }
             // A plain warp lands once, where walking in through a door into the map ends; a second move after arrival
             // could come after an enemy had already touched the party.
             Vector3[] door = at.HasValue || pendingName != null ? null : QualityOfLife.DoorInto(map, null);
