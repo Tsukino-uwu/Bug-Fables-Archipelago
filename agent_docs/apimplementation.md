@@ -4345,6 +4345,9 @@ The hall's library door too (the user: "remove the library blocker as well"): `L
 blocker `makiblocker1` (Event12, until 67) kept away, its door rule gone. The library's location (15) and the Old Book quest (16-18 and its delivery) had `INNER_CITY`
 only for that door: the reader's lines have no chapter gate (her item menu takes key item 93 and sets flag 242), so the
 stand-in is gone and the whole quest is in logic from the start (the user: "why are we using the placeholder ?").
+And the war room door opposite (the user: "open the other path as well"): `loadzonewarroom` kept present, its
+blocker `makiblocker2` kept away; inside, two NPCs and a medal from after the ending (flag 555). The hall has no door
+rule left.
 
 **The game side:** `slot_data` sends `free_ant_tunnels: true`; the mod reads every miner's price as 0 (the mod guide,
 step 42).

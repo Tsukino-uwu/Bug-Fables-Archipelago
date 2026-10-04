@@ -5,13 +5,12 @@ from __future__ import annotations
 from rule_builder.rules import Has
 
 from ..custom_rules import LATER_CHAPTERS, SUBMARINE, CanUse
-from ..data_types import (DialogueFlag, DoorRule, EntityRef, FlagEntity, Give, ItemShop, Location, Pickup, Source,
+from ..data_types import (DialogueFlag, EntityRef, FlagEntity, Give, ItemShop, Location, Pickup, Source,
                           StoryEvent, Transfer)
 
 DOOR_RULES = (
-    # The palace hall's door to the war room is made only from chapter 2 (flag 67); the plaza's are kept present by
-    # the seed, and so are the mine's and the library's (below).
-    DoorRule("AntPalace1", "loadzonewarroom", Has("Chapter 2 Started")),
+    # The palace hall's doors (the plaza's, the mine's, the library's and the war room's) are all kept present by the
+    # seed (below).
 )
 TRANSFERS = (
     # Down to the underground bar by talking to someone in the commercial district (Event61), open from the start (the
@@ -169,6 +168,8 @@ STORY_EVENTS = (
 KEPT_OPEN = (
     # Turns the party back from the library door until chapter 2 (Event12).
     EntityRef("AntPalace1", "makiblocker1"),
+    # And from the war room door.
+    EntityRef("AntPalace1", "makiblocker2"),
     # A stand-in in front of the inn portrait until chapter 2 ('Let's hurry to the castle').
     EntityRef("BugariaMainPlaza", "Discovery Pre Briefing"),
     # The same stand-in in front of the plaza statue.
@@ -186,6 +187,8 @@ KEPT_PRESENT = (
     EntityRef("AntPalace1", "MineLoadZone"),
     # The library door, made only from chapter 2 (flag 67) (the user, 2026-10-04); its blocker is kept away.
     EntityRef("AntPalace1", "Loadzonelibrary"),
+    # The war room door, opposite, likewise (the user, 2026-10-04).
+    EntityRef("AntPalace1", "loadzonewarroom"),
     # The plaza statue, a journal discovery the game makes only from chapter 2.
     EntityRef("BugariaMainPlaza", "StatueDesc"),
     # The inn portrait, a journal discovery, also only from chapter 2.
