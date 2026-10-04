@@ -818,8 +818,9 @@ Archipelago's `custom_worlds` folder.
   not "On Top of the House by the Fountain", found too descriptive, 2026-09-25). Not a sentence and not a hint at how to
   get it ("On Top of a Pillar", "Under a Rock" are too much). **When a room has more than one of that landmark, add
   `by the <Thing>`** after it, naming something a player can see next to it: `Snakemouth Den: Lake, Bush by the
-  Sign` (2026-09-24: this is how to tell apart which bush, rock or pillar). It says where the spot is,
-  never what to do there: the berry is inside that bush, so "Bush" is right. Gifts are `<Area>: <Who>'s Gift`
+  Sign` (2026-09-24: this is how to tell apart which bush, rock or pillar). A spot with no landmark of its own is
+  just `by the <Thing>`: `Outskirts: Snakemouth Den Entrance, by the Cave` (the user, 2026-10-04). It says where the
+  spot is, never what to do there: the berry is inside that bush, so "Bush" is right. Gifts are `<Area>: <Who>'s Gift`
   or `<Who>'s Reward`, like `Outskirts: Maki and Eetl's Gift`. A character's name only when players will remember it
   (main and recurring ones); a minor one is described instead ("Ladybug Kid's Reward", "Ladybug Siblings' House", for
   Leby and Dib) (2026-09-24). Never the item, the flag or a mechanic ("Beemerang" goes stale once
@@ -4516,7 +4517,7 @@ the next item. That walk, repeated as items are placed, is how Archipelago prove
 
 ```text
  Menu ──> BugariaOutskirtsOutsideCity ──[LoadZoneGoldenPath: Snakemouth Den Cleared]──> BOGoldenPath
-                   │ DoorSnakemouth                                                      • Golden Path, Grass
+                   │ DoorSnakemouth                                                      • Golden Path, Grass by the Dirt Spot
                    ▼
    BugariaOutskitsSnakemouthCorridor1 ──> … ──> SnakemouthLake ──> … ──> SnakemouthMushroomPit
                                                                           • Mushroom Pit, Droplets [Freeze]

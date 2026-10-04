@@ -27,7 +27,7 @@ LOCATIONS = (
     Location("Outskirts: Artis's Gift", 3, "BugariaOutskirtsOutsideCity",
              Source(npc="ShwEmArtys", flag=32, give=Give(map="BugariaOutskirtsOutsideCity", type=2, item=11))),
     # Cut grass copies its own one-time flag onto the item it drops, so this is an ordinary pickup.
-    Location("Outskirts: Golden Path, Grass", 12, "BOGoldenPath",
+    Location("Outskirts: Golden Path, Grass by the Dirt Spot", 12, "BOGoldenPath",
              Source(flag=74, pickup=Pickup(map="BOGoldenPath", type=0, item=2)), reach=GOLDEN_PATH),
     # The first boss's prize medal: the mod pays prizes as if Hard Mode were on, so it waits at Artis.
     Location("Outskirts: Artis's Prize for Snakemouth Den", 13, "BugariaOutskirtsOutsideCity",
@@ -38,7 +38,7 @@ LOCATIONS = (
              Source(flag=679, pickup=Pickup(map="BugariaOutskirtsOutsideCity", type=0, item=8)), no_jump=True),
     # Crystal berry #0, outside the cave: behind grass from the Outskirts' side (the horn), open from the cave's side,
     # which room-level logic will count.
-    Location("Outskirts: Snakemouth Den Entrance", 19, "OutsideSnakemouth",
+    Location("Outskirts: Snakemouth Den Entrance, by the Cave", 19, "OutsideSnakemouth",
              Source(berry=0, pickup=Pickup(map="OutsideSnakemouth", type=3, item=0)),
              rule=CanUse("Horn Slash"),
              category="crystal_berry", reach=PAST_GATE),

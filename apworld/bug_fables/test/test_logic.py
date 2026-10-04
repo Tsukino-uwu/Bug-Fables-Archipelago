@@ -119,7 +119,7 @@ class TestLostKid(BugFablesTestBase):
 class TestGoldenPath(BugFablesTestBase):
     # The Golden Path's door opens with the first boss (flag 41).
     def test_golden_path_needs_the_first_boss(self) -> None:
-        location = self.world.get_location("Outskirts: Golden Path, Grass")
+        location = self.world.get_location("Outskirts: Golden Path, Grass by the Dirt Spot")
         state = self.state_with()
         self.assertFalse(location.can_reach(state))
         self.add(state, "Snakemouth Den Cleared")

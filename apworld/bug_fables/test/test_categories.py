@@ -40,16 +40,16 @@ class TestCrystalBerries(BugFablesTestBase):
     # A crystal berry spot is known by its index, not a flag; its item is the one Crystal Berry item.
     def test_berry_zero_known_by_its_index(self) -> None:
         data = self.world.fill_slot_data()
-        berry = str(self.world.location_name_to_id["Outskirts: Snakemouth Den Entrance"])
+        berry = str(self.world.location_name_to_id["Outskirts: Snakemouth Den Entrance, by the Cave"])
         self.assertEqual(data["location_berries"][berry], 0)
         self.assertEqual(data["location_pickups"][berry]["berry"], 0)
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         self.assertIn("Crystal Berry", pool)
 
     def test_berry_zero_needs_the_permit(self) -> None:
-        self.assertFalse(self.can_reach_location("Outskirts: Snakemouth Den Entrance"))
+        self.assertFalse(self.can_reach_location("Outskirts: Snakemouth Den Entrance, by the Cave"))
         self.collect_by_name("Explorer Permit")
-        self.assertTrue(self.can_reach_location("Outskirts: Snakemouth Den Entrance"))
+        self.assertTrue(self.can_reach_location("Outskirts: Snakemouth Den Entrance, by the Cave"))
 
 
 class TestCrystalBerriesOff(BugFablesTestBase):
@@ -58,7 +58,7 @@ class TestCrystalBerriesOff(BugFablesTestBase):
 
     def test_berries_left_out(self) -> None:
         names = {loc.name for loc in self.multiworld.get_locations(self.player)}
-        self.assertNotIn("Outskirts: Snakemouth Den Entrance", names)
+        self.assertNotIn("Outskirts: Snakemouth Den Entrance, by the Cave", names)
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         self.assertNotIn("Crystal Berry", pool)
         self.assertEqual(self.world.fill_slot_data()["location_berries"], {})
