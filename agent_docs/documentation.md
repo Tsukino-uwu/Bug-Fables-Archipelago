@@ -2721,11 +2721,24 @@ follow the story.
 - the Termite pier, and the plaza's gate from inside before it was opened from outside (kept away);
 - the throne-room scene sending its check.
 
-**Status:** built (2026-09-30), the build succeeds; not yet seen in game.
+**The name in the Key Items list (2026-10-04):** "Subaquatic Maritime Neotransport" ran past the list's right edge
+(the user's screenshot). The game draws a list's rows with no fitting (`MainManager.ShowItemList`, its row's
+`SetText`); its only fitting is `|sizemulti,0.7,1|` on the rows of long-worded languages. Asked, the user chose to
+keep the full name everywhere and narrow it in lists only: a prefix on `ShowItemList` swaps the name for one between
+`|sizemulti,0.7,1|` and `|sizemulti,1.4286,1|` (the command multiplies the current size, so the selected item's
+"name - Worth..." header after it keeps its size), and a finalizer puts it back. Seen fitting the same day.
 
-*Code: `Items/CustomItems.cs` (`Submarine`, `ProgressiveBoat`, `NextBoat`), `Items/ItemReceiver.cs` (`Give`),
-`World/KeptOpen.cs` (`TieToItem`, `BeforeCheck`), `World/Submarine.cs`, `Core/SeedData.cs`, installed from
-`Core/Plugin.cs`.*
+**The boat stays (the user, 2026-10-04):** with the submarine the boat still runs, both docked side by side; never a
+boat flag cleared for the submarine (the Archipelago guide, Next 40).
+
+**Status:** built (2026-09-30); seen (2026-10-04): the item's look and text in Key Items, its name fitted, the Bugaria
+pier's dock absent before the submarine and there after (from the next load of the map), a crossing to Metal Island.
+The Progressive Boat's copies in order, the Rubber Prison's and the Bugaria pier's first landings, the Termite pier and
+the throne-room scene not yet seen.
+
+*Code: `Items/CustomItems.cs` (`Submarine`, `ProgressiveBoat`, `NextBoat`, the list narrowing),
+`Items/ItemReceiver.cs` (`Give`), `World/KeptOpen.cs` (`TieToItem`, `BeforeCheck`), `World/Submarine.cs`,
+`Core/SeedData.cs`, installed from `Core/Plugin.cs`.*
 
 ## 38. The Warp forced on with Points of No Return
 

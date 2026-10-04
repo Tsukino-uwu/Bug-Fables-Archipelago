@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BepInEx.Logging;
+using HarmonyLib;
 
 namespace BugFablesAP
 {
@@ -20,6 +21,10 @@ namespace BugFablesAP
         private const int SubmarineLooksLike = 159;
         private const string SubmarineName = "Subaquatic Maritime Neotransport";
         private const string SubmarineDescription = "It is impossible for it to sink! ...Probably.";
+        // The game draws a list's rows unfitted, and this name is wider than the Key Items list: while a list is
+        // built it is narrowed as the game narrows a long-worded language's rows (0.7), back to full size after it,
+        // since a description header ("name - Worth...") follows it.
+        private const string NarrowSubmarine = "|sizemulti,0.7,1|" + SubmarineName + "|sizemulti,1.4286,1|";
 
         // The Progressive Boat is never in the bag: each copy gives the Boat Ticket, then the submarine (NextBoat). Its
         // row only names and draws it where the item is shown, as one look for both copies.
@@ -44,6 +49,35 @@ namespace BugFablesAP
         {
             log = logger;
             randomizerOn = randomizerEnabled;
+            if (Hooks.Install(typeof(ListHooks), "items", "the submarine's name runs past the Key Items list"))
+            {
+                log.LogInfo("[items] installed on MainManager.ShowItemList (the submarine's name narrowed in lists)");
+            }
+        }
+
+        private static class ListHooks
+        {
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.ShowItemList))]
+            [HarmonyPrefix]
+            private static void BeforeList(out bool __state)
+            {
+                __state = MainManager.itemdata != null && MainManager.itemdata[0, Submarine, 0] == SubmarineName;
+                if (__state)
+                {
+                    MainManager.itemdata[0, Submarine, 0] = NarrowSubmarine;
+                }
+            }
+
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.ShowItemList))]
+            [HarmonyFinalizer]
+            private static Exception AfterList(Exception __exception, bool __state)
+            {
+                if (__state && MainManager.itemdata != null)
+                {
+                    MainManager.itemdata[0, Submarine, 0] = SubmarineName;
+                }
+                return __exception;
+            }
         }
 
         internal static void Tick()

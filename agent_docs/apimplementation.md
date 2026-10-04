@@ -477,7 +477,11 @@ be wrong.
     takes the boat away (wasps attack it). In a seed the pier's boat should always be available, since the logic
     (build step 16) gates Metal Island on the Boat Ticket and the pier only. Until then the logic is less cautious than
     the game past that scene. First step: read the scene and the flag that removes the boat, and whether a seed can
-    reach it. Not built; nothing changed while the tester plays vanilla.
+    reach it. Not built; nothing changed while the tester plays vanilla. **The submarine never replaces the boat
+    (decided by the user, 2026-10-04,** after seeing both docked at the Bugaria pier and at the far end): first planned
+    to take the boat away once the submarine arrives, but "both fit/work together without overlapping so you can still
+    use both"; the boat stays as a feature, never a boat flag cleared for the submarine. That is what the mod does
+    today (the docks follow the submarine in the bag, build step 36; nothing touches the boat).
 41. **A "!" over each unrecorded discovery, with the Detector on** (2026-09-28): today the Detector puts the
     game's "!" over the leader and beeps when a room has a check left (the mod guide, step 14); this shows where. The
     "!" is the game's emoticon (`EntityControl.emoticonid`, held with `emoticoncooldown`, and `alwaysemoticon` exists).
@@ -3712,7 +3716,9 @@ ignoring the option, 26 tests fail.
   copy make it.
 
 **Status:** built (2026-09-30), the apworld's tests pass and the mod builds (its side:
-[the mod guide, step 37](documentation.md#37-the-submarines-docks-follow-its-key-item)); not yet seen in game.
+[the mod guide, step 37](documentation.md#37-the-submarines-docks-follow-its-key-item)); with *Progressive Boat* off,
+the Boat Ticket and the submarine seen arriving apart, the submarine first, the docks following it alone (2026-10-04);
+the Progressive Boat's second copy not yet seen.
 
 *Code: `data/items.json`, `options.py` (`ProgressiveBoat`), `items.py` (`own_copies`), `custom_rules.py` (`Boat`,
 `BOAT_TICKET`, `SUBMARINE`), `logic/later_chapters.py`, `logic/metal_island.py`, `data_types.py` (`ItemEntity`),
