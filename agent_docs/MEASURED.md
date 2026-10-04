@@ -1980,6 +1980,12 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   (EntityDump) or flag-switched scenery (MapDump), leaving 37 (22, 36, 89, 144-148, 195, 277, 310-314, 333, 407,
   453, 505, 506, 588, 590-592, 672, 698, 708, 718, 741-749); the scan may still miss a text-only use. Not enough for a
   flag per map enemy (327 rows).
+- **Which map enemies can drop, and the hook** (2026-10-04, EntityDump and code read): of 327 Enemy rows, 307 have
+  no `eventid` (the death drop runs only then); of those, 255 have no `requires` or `limit` (always there, over 101
+  maps), 27 come with a story flag, 25 leave with one (21 at flag 79, the Rubber Prison's turn). The game's -2 entry
+  reads `npcdata.limit[0]`, which an enemy without a limit lacks; `EntityControl.CreateItem(startpos, itemtype,
+  itemid, direction, timer)` is public static, so a drop can be made the game's way (`RandomItemBounce`,
+  `TempIgnoreColision`, `LateVelocity`, timer -1) without touching the enemy's table.
 - **A dropped key is an ordinary pickup to the mod** (2026-10-04, code read): `ItemSwap.Pickups` matches any item
   entity by map and `activationflag` when its line is shown, its ground scan finds entities made after the map
   loads, and `LocationChecks` watches the flag; so a held key's drop needs only a location entry
