@@ -34,7 +34,8 @@ namespace BugFablesAP
             log = logger;
             connection = conn;
             randomizerOn = randomizerEnabled;
-            Hooks.Install(typeof(JingleHooks), "music", "jingles play as the game has them");
+            Hooks.Install(typeof(SoundHooks), "music",
+                "jingles play as the game has them, and the factory elevator's crossfade sounds the game's own song");
         }
 
         internal static void Disable()
@@ -218,10 +219,39 @@ namespace BugFablesAP
             return swapped;
         }
 
-        // Every PlaySound, and every StopSound by name or clip, ends in these two (a stop by slot needs no swap);
-        // stopping swaps the same way, so the game's own stop by name ("Gameover") stops the jingle it started.
-        private static class JingleHooks
+        // A seamless change starts the next song on a sound slot in step with the playing one and fades across: made for
+        // the factory's two versions of one song (the elevator, its only use). With either swapped it is a plain fade,
+        // which the voice follows; else that slot would sound the game's own song.
+        private static bool KeepSeamless(AudioClip next, int id)
         {
+            Dictionary<string, string> tracks = connection?.MusicMap;
+            if (tracks == null || tracks.Count == 0 || randomizerOn == null || !randomizerOn())
+            {
+                return true;
+            }
+            AudioClip playing = MainManager.music != null && id >= 0 && id < MainManager.music.Length
+                ? MainManager.music[id].clip : null;
+            bool Swapped(AudioClip clip) =>
+                clip != null && tracks.TryGetValue(clip.name, out string played) && played != clip.name;
+            return !Swapped(next) && !Swapped(playing);
+        }
+
+        // Every PlaySound, and every StopSound by name or clip, ends in the last two (a stop by slot needs no swap);
+        // stopping swaps the same way, so the game's own stop by name ("Gameover") stops the jingle it started.
+        private static class SoundHooks
+        {
+            [HarmonyPatch(typeof(MainManager), nameof(MainManager.ChangeMusic), typeof(AudioClip), typeof(float),
+                typeof(int), typeof(bool))]
+            [HarmonyPrefix]
+            private static void BeforeChangeMusic(AudioClip musicclip, int id, ref bool seamless)
+            {
+                if (seamless && !KeepSeamless(musicclip, id))
+                {
+                    seamless = false;
+                    log.LogInfo($"[music] {musicclip?.name}: the seamless switch made a plain fade (shuffled)");
+                }
+            }
+
             [HarmonyPatch(typeof(MainManager), nameof(MainManager.PlaySound), typeof(AudioClip), typeof(int),
                 typeof(float), typeof(float), typeof(bool))]
             [HarmonyPrefix]

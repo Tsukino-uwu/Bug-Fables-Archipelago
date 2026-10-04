@@ -20,10 +20,17 @@ class TestMusicShuffle(BugFablesTestBase):
         self.assertEqual(sorted(music_map.values()), sorted(POOL))
 
     def test_kept_tracks_never_move(self) -> None:
-        # Title plays before the client connects; the elevator's pair crossfades outside the music player.
+        # Title plays before the client connects; the ambience beds are sound, not songs.
         music_map = self.world.fill_slot_data()["music_map"]
         self.assertFalse(KEPT & (set(music_map) | set(music_map.values())))
         self.assertEqual(set(POOL) | KEPT | NO_CLIP, set(TRACKS))
+
+    def test_factory_songs_are_shuffled(self) -> None:
+        # The elevator's crossfade between them becomes a plain fade in the mod, so both can move.
+        music_map = self.world.fill_slot_data()["music_map"]
+        self.assertIn("Dungeon2", music_map)
+        self.assertIn("Dungeon2b", music_map)
+        self.assertEqual(len(POOL), 67)
 
     def test_names_with_no_clip_never_play(self) -> None:
         # The game has no clip for these three (dev console `musiccheck`); the pier was given Beetle and stayed itself.

@@ -15,9 +15,9 @@ TRACKS: tuple[str, ...] = (
     "TeamSnek",
 )
 
-# Title plays before the client connects; the four ambience beds are sound, not songs (Samira leaves them out too);
-# the factory elevator crossfades Dungeon2 and Dungeon2b on a sound slot, outside the music player.
-KEPT: frozenset[str] = frozenset({"Title", "Wind", "Water", "MachineHum", "Breathing", "Dungeon2", "Dungeon2b"})
+# Title plays before the client connects; the four ambience beds are sound, not songs (Samira leaves them out too).
+# The factory's Dungeon2 and Dungeon2b are shuffled: the mod makes the elevator's crossfade between them a plain fade.
+KEPT: frozenset[str] = frozenset({"Title", "Wind", "Water", "MachineHum", "Breathing"})
 
 # Names in the game's list with no clip behind them: one played in a track's place would leave it playing as itself.
 NO_CLIP: frozenset[str] = frozenset({"Beetle", "Giant2", "Giant3"})

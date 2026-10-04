@@ -2028,7 +2028,9 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
     (`:5205-5226`). `SamiraStop` removes them (`:5012-5018`).
 - **Outside the player:**
   - The factory elevator crossfades `Dungeon2` and `Dungeon2b` (`seamless`, `EventControl.cs:17047-17051`) through a
-    sound slot (`MainManager.cs:4700-4756`).
+    sound slot (`MainManager.cs:4700-4756`): the next clip starts on the slot at the playing clip's time, the player
+    fades down as it comes up, then takes the clip at the slot's time. The game's only seamless change (read
+    2026-10-04). Used by `MusicShuffle.cs`.
   - A music zone plays its own track on its entity and fades the main player out
     (`NPCControl.cs:882-890`, `:2016-2020`).
   - The game never sets `mute` on any source (no `.mute` in the code).

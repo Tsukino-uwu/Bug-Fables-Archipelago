@@ -46,7 +46,9 @@ this file and that doc disagree, that doc is right.
 - **Other yaml options:** the goal, [3](#build-step-3-the-goal-artifacts-required); Enemy Shuffle,
   [14](#build-step-14-enemy-shuffle-which-enemies-each-fight-has-in-progress); Starting Location,
   [15](#build-step-15-starting-location-a-new-file-starts-in-a-random-room-experimental); Music Shuffle,
-  [33](#build-step-33-music-shuffle-songs-and-jingles-swapped-per-seed); Shuffle Shop Inventories,
+  [33](#build-step-33-music-shuffle-songs-and-jingles-swapped-per-seed) and the factory's songs,
+  [43](#build-step-43-music-shuffle-the-honey-factorys-two-songs-the-elevators-crossfade-a-plain-fade); Shuffle Shop
+  Inventories,
   [34](#build-step-34-shuffle-shop-inventories-what-shops-restock-and-pickups-respawn-with); Filler Starting Checks,
   [35](#build-step-35-filler-starting-checks-the-openings-automatic-checks-hold-filler).
 - **Connecting to the server:** [2](#build-step-2-the-mods-first-login-to-an-archipelago-server),
@@ -110,6 +112,7 @@ this file and that doc disagree, that doc is right.
 40. [Build step 40: Universal Tracker, the seed rebuilt from slot_data with no yaml](#build-step-40-universal-tracker-the-seed-rebuilt-from-slot_data-with-no-yaml)
 41. [Build step 41: Universal Tracker's list order and explanations](#build-step-41-universal-trackers-list-order-and-explanations)
 42. [Build step 42: the PopTracker pack, first part: its own repo, the logic exported from the apworld](#build-step-42-the-poptracker-pack-first-part-its-own-repo-the-logic-exported-from-the-apworld)
+43. [Build step 43: Music Shuffle, the Honey Factory's two songs, the elevator's crossfade a plain fade](#build-step-43-music-shuffle-the-honey-factorys-two-songs-the-elevators-crossfade-a-plain-fade)
 
 **How it works**
 
@@ -561,7 +564,7 @@ be wrong.
     hooks to every sound (dialogue bleeps out), and also swaps `SoundIsPlaying`, the entity sounds and
     `PlayClipAtPoint`. A loop stopped by name (`Rumble`, 21 times) must stop the sound that replaced it.
 48. **Shuffle Shop Inventories** (2026-09-30, the user: what shops restock and respawning items come back with,
-    randomized, never checks): built, not yet seen in game, build step 34. Next, the user sees it in game; then **the
+    randomized, never checks): built, a shop's restocks seen (2026-10-04), build step 34. Next, **the
     game's other item shops and respawning pickups** join the pool, as they become locations or as spots of their own
     (measured first: each keeper's `data`, each item with only a regional flag).
 49. **Filler Starting Checks** (2026-09-30, the user: the items a new file gets on connecting are filler only): built,
@@ -3413,7 +3416,8 @@ item, check or rule depends on it.
 1. **The pool** (`music.py`): the game's 75 track names less seven that stay put (`MEASURED.md`, "Music and jingles"):
    - the title, which plays before the client connects (saving_princess leaves its title out for the same reason);
    - the four ambience beds Samira leaves out of her list;
-   - the factory elevator's pair, which the game crossfades on a sound slot, outside the music player.
+   - the factory elevator's pair, which the game crossfades on a sound slot, outside the music player (in the pool
+     since build step 43, the crossfade made a plain fade when shuffled).
 
    **And three names with no clip (2026-10-04):** `Beetle`, `Giant2` and `Giant3` are in the game's list but load
    nothing. Found in play: the first seed seen with the shuffle gave the pier `Beetle`, and the pier played its own
@@ -3531,7 +3535,9 @@ start in a shop that isn't a location. It never touches a check or a location.
 **The mod** (2026-09-30; the mod guide, step 35) swaps the item the way the game itself turns one item entity into
 another, so the price, name, sprite and what's added stay the game's.
 
-**Status:** built (2026-09-30), the tests pass and the mod builds; not yet seen in game.
+**Status:** built (2026-09-30), the tests pass and the mod builds; seen in game (2026-10-04) at Madame Butterfly's:
+each bought check's slot restocked as another consumable, one bought and received as shown. A respawning pickup's
+new item not yet seen.
 
 *Code: `shop_inventories.py`, `options.py` (`ShuffleShopInventories`), `world.py` (`generate_basic`), `slot_data.py`;
 the mod's `ShopInventories.cs` and `ItemShops.cs`; tests `test_shop_inventories.py`.*
@@ -4161,6 +4167,40 @@ area names (the game's `AreaNames` text not read yet) and the room names.
 *Code: `rules.py` (`spot_rule`, `JUMP`), `regions.py` (`logic_entrances`, `MENU`), `custom_rules.py` (`WayBack`);
 tests `test_rule_export.py`;
 `dev-scripts/preflight-patterns.json` (`apworld_imports`).*
+
+## Build step 43: Music Shuffle, the Honey Factory's two songs, the elevator's crossfade a plain fade
+
+**Asked (the user, 2026-10-04):** "any reason to not include those 7?", the tracks build step 33 keeps out of the pool.
+The answer, track by track:
+
+- **The title:** it plays before the mod knows the seed. In the pool, the song meant to replace it would only play on
+  the title screen after connecting, so one song would go unheard in the run. Kept out.
+- **The four ambience beds** (`Wind`, `Water`, `MachineHum`, `Breathing`): sound, not songs. An area would play wind
+  instead of music. Kept out, as Samira's list keeps them out.
+- **The factory's `Dungeon2` and `Dungeon2b`:** real songs, kept out only for how the elevator switches between them.
+  **Added (the user's choice).**
+
+**How the elevator switches them (read first):** `EventControl.cs:17047-17051` (the factory's storage elevator) calls
+`ChangeMusic(name, 0.025, 0, seamless: true)`, the game's only seamless change. `SwitchMusic`'s seamless branch starts
+the next clip on a free sound slot at the playing clip's time, fades the music player down while the slot comes up,
+then hands the clip to the player at the slot's time (`MainManager.cs:4694-4775`): made for two versions of one song in
+step. Under the shuffle the player is muted and the mod's voice plays the swapped song, so that slot would sound the
+game's own song through the fade, and a fade in step between two unrelated songs means nothing.
+
+**Built:**
+
+1. **The pool** (`music.py`): `Dungeon2` and `Dungeon2b` leave `KEPT`; the pool is 67 tracks.
+2. **The mod** (`MusicShuffle.cs`, `KeepSeamless`): a prefix on `MainManager.ChangeMusic(AudioClip, float, int, bool)`
+   turns `seamless` off when the playing song or the next one is swapped, and logs it (`[music] ...: the seamless
+   switch made a plain fade`). The player then fades out and switches as for any other change, and the voice follows.
+   With either song unswapped (a seed without the option, or a song shuffled onto itself) the game's crossfade stays.
+
+**Tests:** `test_factory_songs_are_shuffled` (both in `music_map`, the pool 67): it failed with the old list restored.
+
+**Status:** built (2026-10-04), the tests pass; not yet seen in game (the factory elevator, both ways, in a seed with
+Music Shuffle on: a plain fade into each swapped song, no trace of the game's own).
+
+*Code: `music.py` (`KEPT`), `World/MusicShuffle.cs` (`KeepSeamless`, `SoundHooks`); tests `test_music.py`.*
 
 # How it works
 
