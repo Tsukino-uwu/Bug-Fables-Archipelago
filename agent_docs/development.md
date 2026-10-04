@@ -209,7 +209,10 @@ failed run keeps `fuzz_output_tracker` as `tracker-fuzz-failures-<shard>`. **Bot
 (since 2026-10-04, the user: ten minutes a push was too slow): side by side, each draws its own seeds (fuzz.py's
 `random.randint`, unseeded), so 10000 each as before; only the first fuzz shard also runs the tests and the Logic Test
 check (the others pass `-FuzzOnly`). Five, not ten: each shard spends about a minute on setup, and a free account runs
-20 jobs at once.
+20 jobs at once. **When seeds get heavier** (more locations, the room-by-room areas, the entrance randomizer; a seed
+took about 0.2 s on CI's 4 cores, 2026-10-04): more shards first; fewer seeds per push with the full 10000 only at
+release is the user's call, since the rule is 10000 every run (the user: "might eventually want to split it up more or
+run smaller").
 **Nobody waits on CI** (the user, 2026-09-29): after a push, work goes on. GitHub emails whoever pushed when a run
 fails, and the agent reads `gh run list` once when a session starts and fixes anything red first. Only `release.ps1`
 waits for green, on purpose.

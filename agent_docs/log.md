@@ -2796,4 +2796,9 @@ either one wrong).
 - **Mistakes:** I ran the test suite during dev twice after the user had asked for tests only at push time (memory
   updated); my own "rescue" warp put the user back in the water.
 - **Open:** the full suite + fuzzer before the next push; the PopTracker export for the new area and option; the scene
-  sweep for out-of-order freezes; InfJump is on in the config (asked, no answer yet). Nothing pushed.
+  sweep for out-of-order freezes; InfJump is on in the config (asked, no answer yet).
+- **v0.3.0 released** (the user's highlights, trimmed by them): the full suite, the Logic Test check and both fuzzers
+  clean (0 of 10000 each) before the push. Two refusals on the way, both fixed: the release check couldn't trace a
+  property's lambda in `EnemyDrops.cs` (now a loop), and `release.ps1` re-checked the rebuilt DLL before committing it
+  (now after). Then CI's fuzzers split into five shards of 2000 each (the user: "nice when actions can take 3-5min"),
+  committed after the release, not yet pushed.
