@@ -1130,9 +1130,11 @@ the swap test. On loading, the save tied itself to the seed, and both arrived in
 player was free (seen on screen). Talking to Artis again showed the plushie but gave no second one: each
 item comes once per seed, and the count in the save keeps it that way.
 
-**Status:** works, seen on screen (2026-09-24): items and medals, each once; crystal berries built, not yet seen in
-game; the full-bag rule not built yet (Next 6); nothing given before the seed's tables are read: built 2026-09-28, not
-yet seen.
+**Status:** works, seen on screen (2026-09-24): items and medals, each once; crystal berries seen (2026-10-04, the
+count up by one from the server console); the same item three times and items from the server console seen
+(2026-10-04); a login with a save loaded seen (2026-10-04: 9 items listed at login, 9 in the save, the 10th arriving);
+the full-bag rule not built yet (Next 6); nothing given before the seed's tables are read: built 2026-09-28, not yet
+seen.
 
 *Code: `mod/BugFablesAP/Items/ItemReceiver.cs`: `CountSlot` and `SeedSlot` (the two save slots),
 `SaveMatchesSeed`, `Tick` (one item per frame), `Busy` (is the player free), `Give` (where each item goes).

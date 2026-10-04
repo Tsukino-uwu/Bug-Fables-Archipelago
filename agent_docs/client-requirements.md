@@ -20,9 +20,12 @@ date.** "It should work" doesn't count, and neither does a green build for anyth
 - [x] Sends a location check when one is detected in the game (2026-09-24: seen by the user, build step 6)
 - [x] Checks made while offline are sent on connect, recovered from the save's own flags (2026-09-24: a save with
   flag 15 already set sent its check on load, seen, and the server logged it; build step 6)
-- [ ] Items can be given on demand, at any time
-- [ ] Any item can be received any number of times, beyond the game's normal quantities
-- [ ] Items with no player or location attached (admin or server commands) are handled
+- [x] Items can be given on demand, at any time (2026-10-04: the server console's `/send` and `/send_multiple`
+  mid-play, each arriving at once, seen on screen; build step 7)
+- [ ] Any item can be received any number of times, beyond the game's normal quantities (2026-10-04: the same item
+  three times in a row arrived, seen; beyond the bag's limit waits on the full bag, Next 6)
+- [x] Items with no player or location attached (admin or server commands) are handled (2026-10-04: a Crystal Berry
+  and three Mushrooms from the cheat console arrived, each with its hold-up, seen on screen; build step 7)
 - [x] Keeps a received-item index for resyncing (in the save, since items are remote only) (2026-09-24: slot 60
   holds the count, seen by the user, build step 7)
 - [x] Items sent while disconnected are received on connect (2026-09-24: two items the server already held arrived

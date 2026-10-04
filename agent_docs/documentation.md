@@ -1025,6 +1025,11 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    opening's three checks (`quiet_locations` in `slot_data`, marked `quiet` in the apworld's `logic/`) arrive with no
    hold-up. A party member placed at any other location still gets its box. The opening skip used to queue its own box
    for Maki and Eetl's Gift, standing in for the gift scene it skips; it now skips that too when the check is quiet.
+   **An item from the server console is held up (2026-10-04, the user's choice):** a `/send` also comes from slot 0,
+   so the quiet start kept it silent too (seen: a Crystal Berry arrived with no box). Archipelago's protocol tells
+   them apart (`network protocol.md`, 0.6.7: location `-1` is `Cheat Console`, `-2` is `Server`, "typically Remote
+   Start Inventory"), so only `-2` stays quiet now. Seen the same day: three Mushrooms from `/send_multiple`, a box
+   each.
 7. **Shop prices** (2026-09-25: Normal by default, Half or Free). The medal table's price columns (5 for
    berries, 7 for crystal berries) are scaled in memory, from a kept copy, and put back when the row is Normal or the
    mod is off. The logic never counts on it. **Now a bar on the Gameplay page (2026-09-26):** 0 to 10 pips
@@ -1152,8 +1157,9 @@ Ticket (the Archipelago guide, build step 16), the warp itself, map travel and S
 cutscenes' Den arrival seen (2026-09-26), the Tattle tutorial and the door room's puzzle (Event4) at speed
 (2026-09-26/27), the trapdoor and spider scene (2026-09-27); Skip battle tutorials: Leif's first-battle line skipped,
 seen (2026-09-27); map travel and Warp to Start through a door built (2026-10-02), map travel's seen at every
-destination (2026-10-03); Warp to Start's door and the swamp's water jump not yet seen; the Reset box's letters and
-Item animation's reworded help lines seen (2026-10-04).
+destination (2026-10-03); the Warp button since the hooks moved and Warp to Start through the city gate seen
+(2026-10-04); the swamp's water jump not yet seen; the Reset box's letters and Item animation's reworded help lines
+seen (2026-10-04).
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `QualityOfLife.Opening.cs` (the opening),
 `QualityOfLife.Scenes.cs` (the scene skips, the first spider fight, the trapdoor), `ApMenu.cs` (the second page),

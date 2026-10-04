@@ -13,6 +13,8 @@ namespace BugFablesAP
     {
         internal const int CountSlot = 60;
         internal const int SeedSlot = 5;
+        // Archipelago's own location for an item sent with the server's /send.
+        private const long CheatConsole = -1;
 
         private readonly ManualLogSource log;
         private readonly ApConnection connection;
@@ -145,12 +147,12 @@ namespace BugFablesAP
         }
 
         // Every received item gets a hold-up per the Item animation setting, replays included, except an item a scene
-        // just showed at its check (ItemSwap.ShownInScene), starting items (slot 0, the server) and the opening's
-        // checks.
+        // just showed at its check (ItemSwap.ShownInScene), starting items (the server's location -2; its -1, the
+        // cheat console's /send, is held up) and the opening's checks.
         private void ShowIfWanted(ItemInfo item, int index)
         {
             bool own = item.Player.Slot == connection.OwnSlot;
-            if (item.Player.Slot == 0
+            if ((item.Player.Slot == 0 && item.LocationId != CheatConsole)
                 || (own && connection.QuietLocations != null && connection.QuietLocations.Contains(item.LocationId)))
             {
                 return;
