@@ -3886,7 +3886,8 @@ ignoring the option, 26 tests fail.
 **Status:** built (2026-09-30), the apworld's tests pass and the mod builds (its side:
 [the mod guide, step 37](documentation.md#37-the-submarines-docks-follow-its-key-item)); with *Progressive Boat* off,
 the Boat Ticket and the submarine seen arriving apart, the submarine first, the docks following it alone (2026-10-04);
-the Progressive Boat's second copy not yet seen.
+the throne room's check seen (2026-10-04: the king's scene sent location 76, its item held up after it; flags 386
+and 409 set by hand on a test file); the Progressive Boat's second copy not yet seen.
 
 *Code: `data/items.json`, `options.py` (`ProgressiveBoat`), `items.py` (`own_copies`), `custom_rules.py` (`Boat`,
 `BOAT_TICKET`, `SUBMARINE`, `SUBMARINE_KEY`), the docks' area modules in `logic/`, `data_types.py` (`ItemEntity`),
