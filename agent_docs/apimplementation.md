@@ -908,8 +908,9 @@ that the game stays smooth is still to come. When the server came back, the mod 
 within about 6 seconds. (Since build step 5 the socket is a different library's, and the mod closes it with
 that library's own close call instead. See step 5, point 5.)
 
-**Status:** works: refusal, retry and reconnect tested on a local server, the drop measured (2026-09-24); the tester's
-on-screen check that the game stays smooth is still to come.
+**Status:** works: refusal, retry and reconnect tested on a local server, the drop measured (2026-09-24); seen smooth
+by the tester (2026-10-04): the server down about two minutes, no stutter, two checks picked up meanwhile queued and
+sent on the reconnect, which came by itself.
 
 *Code: `Plugin.cs` (`AutoConnect`); `ApConnection.cs`: `ConnectOnWorker` (refused or retry),
 `RetrySeconds` and `ScheduleRetry` (the waits), `Watchdog` (the 5-second ping, 15 seconds of silence, the
@@ -3756,8 +3757,9 @@ for a random start and the entrance randomizer.
    with the option check taken out. The test helpers follow a `WayBack`'s child and a transfer's `way_back`, so a
    misspelt name inside one is still caught.
 
-**Status:** built (2026-09-30), the tests pass and the mod builds; changes no seed until rooms are mapped; not yet seen
-in game (a seed with it on and Travel Off, the Warp in the pause menu).
+**Status:** built (2026-09-30), the tests pass and the mod builds; changes no seed until rooms are mapped; seen in game
+(2026-10-04): a seed with it on and Travel Off keeps the Warp in the pause menu, though abilities as items force it on
+in every seed today, so the option's own part isn't singled out yet (the mod guide, step 38).
 
 *Code: `options.py` (`PointsOfNoReturn`), `custom_rules.py` (`WayBack`, `one_way`), `data_types.py` (`Transfer`),
 `regions.py`, `slot_data.py`; tests `test_points_of_no_return.py`, `test/__init__.py` (`rule_parts`, `logic_rules`).*

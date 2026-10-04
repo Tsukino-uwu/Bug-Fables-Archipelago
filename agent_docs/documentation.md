@@ -2744,7 +2744,8 @@ reason, so it holds whatever the other options become.
 
 **To see** (the user): with a seed made with it on and Travel set to Off, the Warp is in the pause menu.
 
-**Status:** built (2026-09-30), the build succeeds; not yet seen in game.
+**Status:** built (2026-09-30); seen (2026-10-04): with it on and Travel OFF, the Warp is in the pause menu. That
+can't single out this option yet: abilities as items force the Warp on in every seed today (`WarpOn`).
 
 *Code: `Core/SeedData.cs` (`PointsOfNoReturn`), `Core/Plugin.cs`, `Gameplay/QualityOfLife.cs` (`WarpOn`),
 `Dev/SeedDump.cs`.*
