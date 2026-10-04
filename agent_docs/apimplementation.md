@@ -1353,8 +1353,8 @@ first boss, Eetl turns you back outside the city (`eetlblocker1 - Duplicate`, Ev
 safe to remove. Its area's module (`logic/`) lists it under `KEPT_OPEN`, `slot_data` carries it, and the
 mod's `KeptOpen` gives that entity a marker `limit` array after the map creates it, which its prefix
 on `CheckIfCanExist` answers with "hide" (test `TestKeptOpen`). **Seen (2026-10-04): a second trigger**, `eetlblocker1`,
-stands from flag 114 (Eetl following the party) and turned the party back; kept away too (`MEASURED.md`, save crystals). **The save tutorial too** (2026-10-04, the user: "we can just remove event19 all
-together"): its trigger outlives its actors (`MEASURED.md`, save crystals), so after the first boss it played to no
+stands from flag 114 (Eetl following the party) and turned the party back; kept away too (`MEASURED.md`, save
+crystals). **The save tutorial too** (2026-10-04, the user: "we can just remove event19 all together"): its trigger outlives its actors (`MEASURED.md`, save crystals), so after the first boss it played to no
 one; `SaveEventTrigger` is kept away the same way (test `test_save_tutorial_trigger_is_kept_away`), so Event19 never
 plays in a seed and the spider scene's own crystal lesson stays. Day/night map pairs are made
 reachable both ways (like the Emerald apworld's Shoal Cave tides). One-way drops stay as they are: the logic handles
@@ -1555,8 +1555,8 @@ should never lead on; across to the yard from the far side it needs any attack f
 to the spike room its prison door needs the Explorer Permit (corrected by the user: "the permit is for opening the door
 for the other entrance"). Test `TestPrisonCorridor`. **The yard side isn't written yet:** a never-passable door
 (`False_`) is skipped by Archipelago's `create_entrance`, and forced into being it broke the decoupled entrance
-randomizer (the batched run, 2026-10-04); it needs the corridor split into two areas (Known issues). Now `kept_present` from the start, the rule gone; location 12's beetle
-grass takes Kabbu's horn, so it needs `Horn Slash` of its own (the boss had implied it). Tests `TestGoldenPath`.
+randomizer (the batched run, 2026-10-04); it needs the corridor split into two areas (Known issues). Now
+`kept_present` from the start, the rule gone; location 12's beetle grass takes Kabbu's horn, so it needs `Horn Slash` of its own (the boss had implied it). Tests `TestGoldenPath`.
 
 **Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion
 fallback and statue, Madeleine's house, and the bar with its quest board seen on screen (2026-09-25); the exits near
@@ -1705,9 +1705,9 @@ measure first: how a won battle knows which map enemy started it, and whether th
 
 **Status:** in progress: respawning pickups and the game's missed-prize path (2026-09-24), discoveries (2026-09-25) seen
 on screen, crystal berry spots too (the mod guide, step 9), received berries too (2026-09-28, build step 27); a berry
-location's hand-over too (2026-10-04, *Outskirts: Near Snakemouth Den, Reward*); the prize payout seen (2026-10-04, Artis
-on Normal handed the seed's item for the first boss); the lost kid's reward not yet seen in game; Placeholders planned; bestiary,
-recipes and enemy checks parked.
+location's hand-over too (2026-10-04, *Outskirts: Near Snakemouth Den, Reward*); the prize payout seen (2026-10-04,
+Artis on Normal handed the seed's item for the first boss); the lost kid's reward not yet seen in game; Placeholders
+planned; bestiary, recipes and enemy checks parked.
 
 *Code: `options.py` (`CATEGORY_OPTIONS`, `category_count`), `locations.py` (`category_on`), `slot_data.py`
 (`location_berries`, `location_discoveries`, `location_vars`, `location_pickups`); in the mod `LocationChecks.cs`,
@@ -4388,8 +4388,8 @@ palace is a plain door. **Seen the same day:** coming up into the palace hall bo
 shaft's railing (`Base/mineblock`) with no way back down (`MineLoadZone`), both until chapter 2 (flag 67). The railing
 is hidden and the door kept present, and the logic's chapter-2 rule on that door is gone.
 The hall's library door too (the user: "remove the library blocker as well"): `Loadzonelibrary` kept present, its
-blocker `makiblocker1` (Event12, until 67) kept away, its door rule gone. The library's location (15) and the Old Book quest (16-18 and its delivery) had `INNER_CITY`
-only for that door: the reader's lines have no chapter gate (her item menu takes key item 93 and sets flag 242), so the
+blocker `makiblocker1` (Event12, until 67) kept away, its door rule gone. The library's location (15) and the Old
+Book quest (16-18 and its delivery) had `INNER_CITY` only for that door: the reader's lines have no chapter gate (her item menu takes key item 93 and sets flag 242), so the
 stand-in is gone and the whole quest is in logic from the start (the user: "why are we using the placeholder ?").
 And the war room door opposite (the user: "open the other path as well"): `loadzonewarroom` kept present, its
 blocker `makiblocker2` kept away; inside, two NPCs and a medal from after the ending (flag 555). The hall has no door
