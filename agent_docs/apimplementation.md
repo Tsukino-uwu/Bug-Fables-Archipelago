@@ -4348,6 +4348,10 @@ stand-in is gone and the whole quest is in logic from the start (the user: "why 
 And the war room door opposite (the user: "open the other path as well"): `loadzonewarroom` kept present, its
 blocker `makiblocker2` kept away; inside, two NPCs and a medal from after the ending (flag 555). The hall has no door
 rule left.
+**Location 77, *Ant Palace: War Room, Table*** (the user: "we should make that medal always appear on the table",
+the name theirs): the table's `royal medal`, Royal Calling (medal 80, flag 717), made only after the ending (555), is
+kept present from the start and is a location; Royal Calling joins the item table (useful: a battle skill, no gate).
+Applied live it shows on the table, but the running seed's server doesn't know location 77: its check needs a new seed.
 
 **The game side:** `slot_data` sends `free_ant_tunnels: true`; the mod reads every miner's price as 0 (the mod guide,
 step 42).

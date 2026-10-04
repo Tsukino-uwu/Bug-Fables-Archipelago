@@ -28,7 +28,7 @@ class TestPermitGate(BugFablesTestBase):
                                      "Outskirts: Ladybug Siblings' House", "Outskirts: East Road, Boulder",
                                      "Outskirts: Pier, Behind the Dock", "Bugaria City: Residential District, Rooftop",
                                      "Outskirts: Golden Path, Grass by the Dirt Spot",
-                                     "Ant Palace: Library, Behind the Bookshelf",
+                                     "Ant Palace: Library, Behind the Bookshelf", "Ant Palace: War Room, Table",
                                      "Bugaria City: Residential District, Old Book Delivery Start",
                                      "Outskirts: Madeleine's House, Table Right",
                                      "Outskirts: Madeleine's House, Table Left"}
@@ -239,3 +239,8 @@ class TestAntTunnels(BugFablesTestBase):
         self.assertIn({"map": "AntPalace1", "entity": "makiblocker1"}, data["kept_open"])
         self.assertIn({"map": "AntPalace1", "entity": "loadzonewarroom"}, data["kept_present"])
         self.assertIn({"map": "AntPalace1", "entity": "makiblocker2"}, data["kept_open"])
+
+    def test_war_room_medal_from_the_start(self) -> None:
+        # The game makes it only after the ending; the seed puts it on the table from the start, as a location.
+        self.assertIn({"map": "AntPalaceWarRoom", "entity": "royal medal"}, self.world.fill_slot_data()["kept_present"])
+        self.assertTrue(self.can_reach_location("Ant Palace: War Room, Table"))

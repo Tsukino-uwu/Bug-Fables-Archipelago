@@ -35,6 +35,10 @@ LOCATIONS = (
     # A Lore Book hidden behind a bookshelf.
     Location("Ant Palace: Library, Behind the Bookshelf", 15, "AntPalaceLibrary",
              Source(flag=71, pickup=Pickup(map="AntPalaceLibrary", type=1, item=52))),
+    # Royal Calling on the war room's table; the game makes it only after the ending (flag 555), the seed from the
+    # start (the user, 2026-10-04).
+    Location("Ant Palace: War Room, Table", 77, "AntPalaceWarRoom",
+             Source(flag=717, pickup=Pickup(map="AntPalaceWarRoom", type=2, item=80))),
     # Board quest 33's reward, from a cicada in a residential house once the old book (Quest Book) is delivered.
     Location("Bugaria City: Residential District, Old Book Delivery Reward 1", 16, "BugariaResidential",
              Source(flag=243, give=Give(map="BugariaResidential", type=1, item=52)),
@@ -189,6 +193,8 @@ KEPT_PRESENT = (
     EntityRef("AntPalace1", "Loadzonelibrary"),
     # The war room door, opposite, likewise (the user, 2026-10-04).
     EntityRef("AntPalace1", "loadzonewarroom"),
+    # The medal on the war room's table, made only after the ending (flag 555): location 77.
+    EntityRef("AntPalaceWarRoom", "royal medal"),
     # The plaza statue, a journal discovery the game makes only from chapter 2.
     EntityRef("BugariaMainPlaza", "StatueDesc"),
     # The inn portrait, a journal discovery, also only from chapter 2.
