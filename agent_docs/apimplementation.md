@@ -891,7 +891,8 @@ the spider boss (a dev file) logged `[goal] reached, 1 of 1 artifacts` and `[goa
 slot's remaining items and logged "Team #1 has completed all of their games!".
 
 **Status:** in progress: the goal is in the apworld, with only the first artifact so far; the mod sends "goal reached"
-at the required count, seen working (2026-09-26); more artifacts come with more of the world (Next 1).
+at the required count, seen working (2026-09-26), and again read from `slot_data`'s `options` (2026-10-04: the
+first boss, `[goal] sent`, the server's "completed their goal"); more artifacts come with more of the world (Next 1).
 
 *Code: `apworld/bug_fables/options.py` (`ArtifactsRequired`), `world.py` (`generate_early` lowers the
 number), `locations.py` (`create_all_locations` adds the artifact events), test `TestArtifactsCapped`; the
