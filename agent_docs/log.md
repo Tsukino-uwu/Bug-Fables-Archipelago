@@ -73,6 +73,7 @@ either one wrong).
 - [2026-10-04: TO-CHECK worked through, four fixes found in play](#2026-10-04-to-check-worked-through-four-fixes-found-in-play)
 - [2026-10-04: the icon's look, five fixes, the logic split by area](#2026-10-04-the-icons-look-five-fixes-the-logic-split-by-area)
 - [2026-10-04: every location named by the user, quests opened from the start](#2026-10-04-every-location-named-by-the-user-quests-opened-from-the-start)
+- [2026-10-04: TO-CHECK cut down, liveslot, the world opened room by room](#2026-10-04-to-check-cut-down-liveslot-the-world-opened-room-by-room)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2740,3 +2741,29 @@ either one wrong).
 - **Open for the next session:** the Lost Sands gate; the swamp bridge; the starburst; quests one at a time from the
   ladybug quest (build step 44); Madeleine's house locked again with her quests opened; regenerate the PopTracker pack
   for the new names (its own repo). Nothing pushed.
+
+## 2026-10-04: TO-CHECK cut down, liveslot, the world opened room by room
+
+- **TO-CHECK:** 97 open boxes felt overwhelming "when most things actually work already"; cut to a short watch list
+  (stuck seed or harmed save), the rest assumed working until seen broken. Seen today: the trapdoor Mushroom, a berry
+  reward, the new icon, a crystal berry staying gone on a new file, the desert gate, the goal. The user asked for test
+  runs once before a push, not between changes.
+- **The goal released everything:** beating the first boss completed the seed's one-artifact goal, and the local
+  server's `release_mode: auto` sent all 72 items; later servers run `--release_mode goal --collect_mode goal`.
+- **liveslot** (the user: "i want to hotswap/live edit things"): an apworld change now shows in the running game with
+  no new seed or file. First tries failed: `copy-dev.ps1` copies the staged build, so a plain `dotnet build` changed
+  nothing (use `stage-dev.ps1`); commands sent mid-reload reached the old plugin; one sent mid-transfer threw in the
+  game's fade, so queued warps and liveslot now wait out `MainManager.roomtransition`.
+- **Opened, one report at a time, each seen live:** Eetl's second blocker (a second trigger from flag 114, found when
+  the first fix didn't hold), the save tutorial, the Golden Path door, its blocker (it spanned the way to the cave, not
+  just the tunnel, as first assumed), its tunnel, the settlement's desert gate and its invisible wall, free ant tunnel
+  miners, the palace's mine shaft (riding up boxed the party in), library and war room, Beette, the prison yard's rock.
+  The Rubber Prison corridor got rules from the user's account (corrected once: the permit is for the far door).
+- **New locations, names the user's:** 77 *Ant Palace: War Room, Table* (Royal Calling), 78 *Bee Kingdom Hive:
+  Balcony, Beette's Sale* (the Flower Key, free). Both need a new seed: the running server doesn't know them.
+- **The void:** a `@name` warp to an entity the story hadn't made yet landed the user in the void; it now matches only
+  present entities.
+- **Mob drops:** the prison's key wasp dropped key 161 with flag 584, set only when taken (seen). Enemysanity (Next 58)
+  worked out on paper: 37 free flags, so the respawning pickups' flag-less path; 255 always-present enemies.
+- **Open:** the batched tests and fuzzer before the push; a new seed for locations 77 and 78; enemysanity, tickets
+  (Next 57) and the red house undecided. Nothing pushed.
