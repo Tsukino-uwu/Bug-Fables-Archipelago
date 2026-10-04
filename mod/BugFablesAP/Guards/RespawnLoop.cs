@@ -9,8 +9,8 @@ namespace BugFablesAP
     // The game puts the party back after water, a hole or spikes, and below the map's floor, at player.lastpos (from the
     // 5th quick try at lastloadzone, but only while a direction is held). When that spot isn't solid ground the party
     // falls in again forever, and the pause menu, so the Warp, never opens. With Archipelago on (or Use on normal saves),
-    // six respawns in a row with no standing on ground between them end with Warp to Start; a transfer whose walk-in
-    // never ends is stopped.
+    // six respawns in a row with no play between them end with Warp to Start; a transfer whose walk-in never ends is
+    // stopped.
     internal static class RespawnLoop
     {
         private static ManualLogSource log;
@@ -18,16 +18,20 @@ namespace BugFablesAP
 
         // The game's own fallback comes at the 5th quick respawn; failing once more after it is a loop.
         private const int Limit = 6;
-        // Standing this long on ground between two respawns is play, not a loop.
-        private const float Stood = 0.5f;
+        // Play between two respawns touches ground and is free this long; a loop over water never touches ground, one
+        // on spikes is hit again at once. Jumping straight back in stood 0.14 s, free over 1 s.
+        private const float Free = 0.5f;
         // A loop this soon after the last warp only logs, so a bad landing never warps back and forth.
         private const float Rearm = 15f;
         // A door's walk-in takes a second or two; one still going after this never ends (a target over water).
         private const float StuckWalk = 8f;
 
         private static int inARow;
-        private static bool stood = true;
+        private static bool touched = true;
         private static float groundSince = -1f;
+        // The longest stand on ground since the last respawn, and when that respawn handed the party back.
+        private static float longestStand;
+        private static float freeSince = -1f;
         private static float walkingSince = -1f;
         private static float warpedAt = -100f;
         private static string lastTransfer = "none since the game started";
@@ -69,7 +73,16 @@ namespace BugFablesAP
             {
                 walkingSince = -1f;
             }
-            if (MainManager.instance.minipause || MainManager.roomtransition || !player.entity.onground)
+            if (MainManager.instance.minipause || MainManager.roomtransition)
+            {
+                groundSince = -1f;
+                return;
+            }
+            if (freeSince < 0f)
+            {
+                freeSince = now;
+            }
+            if (!player.entity.onground)
             {
                 groundSince = -1f;
                 return;
@@ -78,10 +91,8 @@ namespace BugFablesAP
             {
                 groundSince = now;
             }
-            else if (now - groundSince >= Stood)
-            {
-                stood = true;
-            }
+            touched = true;
+            longestStand = Mathf.Max(longestStand, now - groundSince);
         }
 
         private static void Respawned(string how)
@@ -90,11 +101,26 @@ namespace BugFablesAP
             {
                 return;
             }
-            inARow = stood ? 1 : inARow + 1;
-            stood = false;
-            groundSince = -1f;
-            if (inARow < 3)
+            if (MainManager.roomtransition)
             {
+                // A transfer, the guard's own warp among them, puts the party at its door; a respawn meanwhile is
+                // the old room's last.
+                log.LogInfo($"[respawn] {how} during a room transfer: not counted ({inARow} in a row)");
+                return;
+            }
+            float now = Time.realtimeSinceStartup;
+            float free = freeSince < 0f ? 0f : now - freeSince;
+            bool play = touched && free >= Free;
+            string between = (touched ? $"on ground {longestStand:0.00} s at most" : "never on ground")
+                + $", free {free:0.00} s" + (play ? ": play" : $": counted (play touches ground and is free {Free} s)");
+            inARow = play ? 1 : inARow + 1;
+            touched = false;
+            groundSince = -1f;
+            longestStand = 0f;
+            freeSince = -1f;
+            if (inARow < 2)
+            {
+                log.LogInfo($"[respawn] {how}: 1 in a row ({between})");
                 return;
             }
             PlayerControl player = MainManager.player;
@@ -102,18 +128,18 @@ namespace BugFablesAP
                 + $"transfer running {MainManager.roomtransition}, last transfer {lastTransfer}";
             if (inARow < Limit)
             {
-                log.LogInfo($"[respawn] {how}: {inARow} respawns in a row without standing on ground, {where}");
+                log.LogInfo($"[respawn] {how}: {inARow} in a row with no play between ({between}), {where}");
                 return;
             }
             inARow = 0;
-            float now = Time.realtimeSinceStartup;
             if (now - warpedAt < Rearm)
             {
                 log.LogError($"[respawn] a loop again {now - warpedAt:0} s after the last warp; not warping again, {where}");
                 return;
             }
             warpedAt = now;
-            log.LogWarning($"[respawn] loop ({how}): {Limit} respawns in a row without standing on ground, {where}; warping to the start");
+            log.LogWarning($"[respawn] loop ({how}): {Limit} in a row with no play between ({between}), {where}; "
+                + "warping to the start");
             MainManager.instance.StartCoroutine(WarpWhenRespawned());
         }
 

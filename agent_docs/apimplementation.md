@@ -632,7 +632,8 @@ be wrong.
   entrances in chapter 2 i think", the pause menu out of reach, so a hard softlock). Which door is unknown. The
   respawn-loop guard (the mod guide, step 40) now ends any such loop with the Warp, and logs the last door walked
   through and whether `door_targets` had rewritten it. The next loop names the door, which then gets its own fix.
-  Not yet seen with the guard.
+  The guard is seen ending the swamp's original loop (2026-10-04, the mod guide, step 40); not yet met in a shuffled
+  seed.
 - **Some doors are still never shuffled** (build step 38, 2026-10-02). These keep their destination in every mode:
   - story copies that have pairs: the Golden Settlement by day and night, the Beehive's entrance before and after
     flag 160;

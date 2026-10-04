@@ -337,8 +337,11 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   `unstick` did what the game's own dialogue end does (2026-09-25). The speech box itself stayed on screen after two
   tries (removing the text's holder, then `maintextbox`); the new `gui` command showed a `Textbox(Clone)` under the GUI
   camera that `maintextbox` no longer pointed at, so `unstick` now removes any such box once dialogue has ended.
-- `hazardloop`: sets where the game puts the party back after a fall (`lastpos` and `lastloadzone`) above the middle of
-  the nearest water or hole, so the next fall there loops: the respawn-loop guard's test (documentation.md, step 40).
+- `hazardloop`: sets where the game puts the party back after a fall (`lastpos` and `lastloadzone`) 3 above the nearest
+  point of water or a hole with no ground over it, and holds it until the next fall's respawn starts (walking in a
+  `Respawn` zone would move it back), so that fall loops: the respawn-loop guard's test (documentation.md, step 40).
+- `oldtravel <map> <entity>`: map travel's landing from before 2026-10-02, beside that save point through the game's
+  2-argument `TransferMap`; `oldtravel SwamplandsBridge 6` gives the swamp's original respawn loop (step 40).
 - `travel <area>`: map travel's own path to area n (0 the Outskirts to 24), visited or not, arriving through the door
   `WarpButton.cs`'s `AreaDoors` names: to check every travel spot (documentation.md, step 10).
 - `gui`: log what hangs under the GUI camera (name, active, renderer, children), to find what's really stuck on screen.

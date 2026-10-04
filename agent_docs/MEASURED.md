@@ -1913,10 +1913,16 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
     - the end of `TransferMap`: `lastpos` and `lastloadzone` both to where the walk-in ends;
     - loading a save;
     - some scenes.
+  - **A fall's timings, measured** (2026-10-04, the respawn guard's log; `RespawnLoop.cs`): jumping straight back into
+    the river in Snakemouth Den's bridge room, the party was free 1.03 to 1.57 s between respawns and on ground only
+    0.14 to 0.39 s at a stretch. A loop over water never touched ground and was free 0.00 to 0.03 s (the swamp's old
+    landing, and a spot 1 above the river): the water is touched while the respawn still runs, so the game repeats it
+    at once.
   - **The 2-argument `TransferMap(map, pos)`** arrives at `pos` with no walk, so whatever spot was given becomes
-    `lastpos` and `lastloadzone`. Map travel landed beside a save point that way until 2026-10-02. Since then it, and
-    Warp to Start, use the 4-argument form with a real door's appear and walk-to spots; map travel that way seen at
-    every destination with nothing odd (the user, 2026-10-03). Used by `WarpButton.cs`.
+    `lastpos` and `lastloadzone`. Map travel landed beside a save point that way until 2026-10-02 (the dev console's
+    `oldtravel` replays it; at the swamp's crystal, `SwamplandsBridge` entity 6, it loops, seen 2026-10-04). Since
+    then it, and Warp to Start, use the 4-argument form with a real door's appear and walk-to spots; map travel that
+    way seen at every destination with nothing odd (the user, 2026-10-03). Used by `WarpButton.cs`.
   - **`TransferMap` waits on the walk-in** (`while (player.entity.forcemove)`) with no time limit, so a walk to a spot
     it can't reach (over water) never ends and the transfer holds `minipause` (`DevConsole.Warp.cs`, `unstick`).
   - **Not yet seen:** which of these the chapter-2 door's loop was.

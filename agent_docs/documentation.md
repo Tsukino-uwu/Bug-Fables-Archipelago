@@ -1145,8 +1145,8 @@ every row back to its default (`QualityOfLife.DisableAll` / `ResetAll`, the defa
 definition).
 
 **Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen on screen
-(2026-09-25); the bridge skips seen (2026-10-04: the message skipped, the rope at speed), the bridge staying fallen and
-Medal prices not yet seen; replays held up and the quiet start seen on screen
+(2026-09-25); the bridge skips seen (2026-10-04: the message skipped, the rope at speed, the bridge still down on
+coming back); Medal prices not yet seen; replays held up and the quiet start seen on screen
 (2026-09-28); Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat
 Ticket (the Archipelago guide, build step 16), the warp itself, map travel and Skip confirm seen (2026-09-26); Skip
 cutscenes' Den arrival seen (2026-09-26), the Tattle tutorial and the door room's puzzle (Event4) at speed
@@ -2821,9 +2821,13 @@ and make sure nothing can lock the game hard again.
 
 1. **What counts as a loop.** Every respawn is counted: a prefix on `Hazards.HazardAction`, and on
    `PlayerControl.LateUpdate` the frame the party is below the floor.
-   - Standing on ground for half a second, outside a respawn or a transfer, starts the count again. Real play always
-     stands somewhere between two falls; a loop never does.
+   - **Play between two respawns starts the count again:** the party touched ground and was free (no respawn or
+     transfer running) for half a second. A loop over water never touches ground; one on spikes is hit again at once.
+     (Built first as half a second *standing*; replaced 2026-10-04, below.)
+   - A respawn while a room transfer runs isn't counted: the transfer puts the party at its door, and the guard's own
+     warp is one.
    - The game's own counter (`respawntries`) isn't used: it resets itself when its fallback fires.
+   - Each respawn logs the decision: how long the party was on ground at most, how long free, play or counted.
 2. **Six in a row is a loop**, one past the game's own fallback, so the game's way is tried first. The guard waits for
    that respawn to finish, then runs Warp to Start's own path (`WarpButton.WarpToStart`), without the pause menu.
    - The Warp arrives through a door, so `lastpos` and `lastloadzone` are set where the game itself sets them.
@@ -2851,11 +2855,33 @@ and the next fall there loops on purpose.
 - falling in a few times with a moment on ground between still respawns as the game does, with no warp;
 - in a shuffled seed, the chapter-2 area again: any loop ends in a warp, and the log names the door.
 
-**Status:** built (2026-10-02), the build succeeds (the release build too, without `hazardloop`); not yet seen in
-game.
+**Normal falls warped, found and fixed (2026-10-04).** The user jumped into the river in Snakemouth Den's bridge room a
+few times, and the sixth fall warped them to the start. Twice: the first time the guard logged only "6 in a row
+without standing on ground", so its log line gained what it measured, and the user fell in again. The numbers: free
+1.03 to 1.57 s between falls, but at most 0.14 to 0.39 s on ground, since the user jumped straight back in. Half a
+second of *standing* was the wrong test; touching ground at all, with half a second free, is the right one: the same
+user's falls then logged "play" twelve times in a row (on ground 0.14 to 0.34 s, free 1.05 to 1.23 s).
+
+**The loop tests, made faithful (2026-10-04):**
+
+- `hazardloop` first put the spot over the middle of the water's box, and walking to the water undid it: standing
+  15 frames in a `Respawn` zone moves `lastpos` to where you stand (`MEASURED.md`, save crystals and room transfers),
+  and a box's middle can be over land. It now picks the nearest point inside the water with no ground above it (the
+  game's own ground layers, 8 and 13), and holds it until the fall's respawn starts.
+- At 1 above the water the party touched it while the respawn still ran, and the game repeated the respawn at once;
+  the guard caught it and warped, but kept counting the respawns during its own warp's transfer (an error line, "a
+  loop again 1 s after the last warp", until the walk-in ended). Those are no longer counted, and the spot is 3 above.
+- `oldtravel <map> <entity>` replays map travel's landing from before 2026-10-02 (beside a save point, through the
+  2-argument `TransferMap`). At the swamp's crystal (`oldtravel SwamplandsBridge 6`) it gives the original loop: the
+  user jumped in, came back over the water at once (free 0.00 s) five times more, and was warped to the start; the
+  respawns during the warp's transfer weren't counted.
+
+**Status:** built (2026-10-02); seen (2026-10-04): the guard ends the swamp's original loop and a `hazardloop` loop with
+the warp after the 6th respawn, and normal falls never warp (after the fix above). Still to see: a loop met in a
+shuffled seed, naming its door.
 
 *Code: `Guards/RespawnLoop.cs`, `Ui/WarpButton.cs` (`WarpToStart`), `World/DoorShuffle.cs` (`Rewrote`),
-`Core/Plugin.cs`, `Dev/DevConsole.Warp.cs` (`hazardloop`).*
+`Core/Plugin.cs`, `Dev/DevConsole.Warp.cs` (`hazardloop`, `oldtravel`).*
 
 ## 41. The seed's options read from slot_data's `options`
 

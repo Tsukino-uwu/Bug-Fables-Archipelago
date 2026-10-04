@@ -164,8 +164,11 @@ namespace BugFablesAP
             {
                 return "hazardloop: no player";
             }
+            // The spot nearest you that is inside the water or hole with no ground above it (the game's ground test,
+            // layers 8 and 13), 3 above its top: a party put there falls straight in once its respawn is over (1 above,
+            // it touched the water during the respawn, which the game then repeats at once).
             Hazards nearest = null;
-            Bounds area = default(Bounds);
+            Vector3 spot = default(Vector3);
             float best = float.MaxValue;
             foreach (Hazards hazard in UnityEngine.Object.FindObjectsOfType<Hazards>())
             {
@@ -178,22 +181,86 @@ namespace BugFablesAP
                 {
                     continue;
                 }
-                float d = (c.bounds.ClosestPoint(player.transform.position) - player.transform.position).sqrMagnitude;
-                if (d < best)
+                Bounds area = c.bounds;
+                // ClosestPoint needs a convex shape; a non-convex mesh is taken by its box.
+                bool shaped = !(c is MeshCollider mesh) || mesh.convex;
+                for (int i = 0; i <= 10; i++)
                 {
-                    best = d;
-                    nearest = hazard;
-                    area = c.bounds;
+                    for (int j = 0; j <= 10; j++)
+                    {
+                        float x = Mathf.Lerp(area.min.x, area.max.x, i / 10f);
+                        float z = Mathf.Lerp(area.min.z, area.max.z, j / 10f);
+                        var inside = new Vector3(x, area.max.y - 0.05f, z);
+                        var above = new Vector3(x, area.max.y + 3f, z);
+                        if ((shaped && (c.ClosestPoint(inside) - inside).sqrMagnitude > 0.0001f)
+                            || Physics.Raycast(above + Vector3.up, Vector3.down, 4.1f, GroundLayers))
+                        {
+                            continue;
+                        }
+                        float d = (above - player.transform.position).sqrMagnitude;
+                        if (d < best)
+                        {
+                            best = d;
+                            nearest = hazard;
+                            spot = above;
+                        }
+                    }
                 }
             }
             if (nearest == null)
             {
-                return "hazardloop: no water or hole on this map";
+                return "hazardloop: no water or hole on this map with open air above it";
             }
-            Vector3 spot = new Vector3(area.center.x, area.max.y + 1f, area.center.z);
-            player.lastpos = spot;
-            player.lastloadzone = spot;
-            return $"lastpos and lastloadzone now above {nearest.name} ({nearest.type}) at {spot}: fall in to loop";
+            loopSpot = spot;
+            return $"lastpos and lastloadzone held above {nearest.name} ({nearest.type}) at {spot} until your next fall: "
+                + "fall in to loop";
+        }
+
+        // Map travel's landing before it arrived through doors: beside a save point (entity table fields 6-8, a step
+        // toward the camera) through the game's 2-argument TransferMap, which makes that spot lastpos and
+        // lastloadzone. At the swamp's crystal that spot was over water: the respawn loop the guard was built for.
+        private static string OldTravel(string[] parts)
+        {
+            int entity = -1;
+            if (parts.Length < 3 || !Enum.IsDefined(typeof(MainManager.Maps), parts[1])
+                || !int.TryParse(parts[2], out entity))
+            {
+                return "oldtravel <map name> <save point entity>, e.g. oldtravel SwamplandsBridge 6";
+            }
+            var map = (MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), parts[1]);
+            TextAsset data = Resources.Load<TextAsset>("Data/EntityData/" + (int)map);
+            string[] lines = data == null ? new string[0] : data.ToString().Split('\n');
+            string[] f = entity < lines.Length ? lines[entity].Split('}') : new string[0];
+            // As the game's Convert.ToSingle reads its entity data, under the culture it sets at start.
+            if (f.Length <= 8 || !float.TryParse(f[6], out float x) || !float.TryParse(f[7], out float y)
+                || !float.TryParse(f[8], out float z))
+            {
+                return $"oldtravel: no entity {entity} with a position on {map}";
+            }
+            var target = new Vector3(x, y + 0.5f, z - 2f);
+            MainManager.instance.StartCoroutine(MainManager.TransferMap((int)map, target));
+            return $"oldtravel: to {map} at {target}, beside entity {entity}, the old way";
+        }
+
+        // The game's ground layers, as its own ground tests use them (8 and 13).
+        private const int GroundLayers = (1 << 8) | (1 << 13);
+        private static Vector3? loopSpot;
+
+        // Walking in a Respawn zone moves lastpos to where you stand, so the spot is held until the fall's respawn runs.
+        private static void HoldLoopSpot()
+        {
+            PlayerControl player = MainManager.player;
+            if (loopSpot == null || player == null)
+            {
+                return;
+            }
+            if (MainManager.instance.minipause || MainManager.roomtransition)
+            {
+                loopSpot = null;
+                return;
+            }
+            player.lastpos = loopSpot.Value;
+            player.lastloadzone = loopSpot.Value;
         }
 
         private static string Unstick()

@@ -182,6 +182,7 @@ namespace BugFablesAP
             PollFile();
             TickInfJump();
             TickInfBerries();
+            HoldLoopSpot();
             // A queued warp waits for the player to be free rather than failing with "not now".
             bool warpWaits = queued.Count > 0 && (queued.Peek().StartsWith("loc") || queued.Peek().StartsWith("warp"))
                 && (MainManager.player == null || MainManager.instance.inevent || MainManager.instance.message
@@ -286,6 +287,7 @@ namespace BugFablesAP
                     case "textsearch": return TextSearch(parts);
                     case "unstick": return Unstick();
                     case "hazardloop": return HazardLoop();
+                    case "oldtravel": return OldTravel(parts);
                     case "travel":
                         return parts.Length > 1 && int.TryParse(parts[1], out int travelArea)
                             ? WarpButton.TravelTo(travelArea) : "travel <area>";
