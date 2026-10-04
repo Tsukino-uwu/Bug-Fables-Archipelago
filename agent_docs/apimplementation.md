@@ -3184,8 +3184,9 @@ v0.2.0, run 2026-09-29). A zip with one byte changed in a library, and an apworl
   trusted.
 - **Provenance:** it adds GitHub's signed provenance attestation to the apworld and the yaml, the two files CI
   builds; `gh attestation verify` checks them. Not to the mod zip, which would suggest CI built its DLL.
-- **The notes:** they carry `docs/capabilities.md`'s diff since the last release, so a new capability is on the
-  release page whatever the highlights say.
+- **The notes:** the highlights only, then GitHub's Full Changelog link (the user, 2026-10-04, after v0.3.0's page
+  carried all of `docs/capabilities.md` as a diff: "looks ugly/bloated"). Until then they carried that file's diff
+  since the last release; a capability's history is now `git log -p` on it, or a `git diff` between two tags.
 - **After publishing:** a last job downloads what was published and runs `verify-release.py` on it.
 - **`release.ps1`** waits for both push workflows before dispatching.
 

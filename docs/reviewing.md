@@ -155,8 +155,8 @@ reason:
 - what each CI workflow reaches: the actions and other repositories it uses, packages, GitHub.
 
 It is **exact**: the preflight fails on something the code does that isn't listed, and on a row nothing matches any
-more. So `git log -p docs/capabilities.md` is the full history of every capability the project gained or dropped. The
-notes of each release after 2026-09-29 carry that file's changes since the release before.
+more. So `git log -p docs/capabilities.md` is the full history of every capability the project gained or dropped:
+between two releases, `git diff v0.2.0 v0.3.0 -- docs/capabilities.md` (the release pages list features only).
 
 ## Run the gates yourself
 
@@ -234,7 +234,7 @@ same person wrote both. Here is what can be checked.
   project makes that visible, not impossible:
   - a change to the preflight, its patterns, the hooks or the workflows can't share a commit with mod or apworld
     code;
-  - every release's notes carry the capability list's changes since the last release.
+  - the capability list's changes between two releases are one `git diff` between their tags.
 
   `git log -p -- 'dev-scripts/preflight*' dev-scripts/negative-test-preflight.py dev-scripts/dotnet_metadata.py
   .githooks .github .claude` shows every change to the gate itself.

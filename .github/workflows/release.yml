@@ -134,27 +134,14 @@ jobs:
             dist/bug_fables.apworld
             dist/bug_fables.yaml
 
-      # The highlights, then what the code may do that it couldn't at the last release: docs/capabilities.md's diff.
+      # The highlights only (the user, 2026-10-04: features, logic and bug fixes, then GitHub's Full Changelog link);
+      # what the code may do is docs/capabilities.md, whose history is git log -p on it.
       - name: The release notes
         env:
           HIGHLIGHTS: ${{ inputs.highlights }}
         run: |
           set -eu
-          prev=$(git tag --sort=-v:refname | head -n 1 || true)
-          {
-            printf '%s\n\n' "$HIGHLIGHTS"
-            echo "## What the code may do: changes since ${prev:-the first release}"
-            echo
-            if [ -n "$prev" ] && git diff --quiet "$prev" HEAD -- docs/capabilities.md; then
-              echo 'None: docs/capabilities.md is unchanged.'
-            else
-              echo 'From docs/capabilities.md, which preflight holds to exactly what the code does:'
-              echo
-              echo '```diff'
-              if [ -n "$prev" ]; then git diff "$prev" HEAD -- docs/capabilities.md; else cat docs/capabilities.md; fi
-              echo '```'
-            fi
-          } > "$RUNNER_TEMP/notes.md"
+          printf '%s\n' "$HIGHLIGHTS" > "$RUNNER_TEMP/notes.md"
           cat "$RUNNER_TEMP/notes.md"
           cp "$RUNNER_TEMP/notes.md" notes.md
 
