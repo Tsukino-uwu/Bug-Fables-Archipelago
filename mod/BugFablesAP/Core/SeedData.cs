@@ -63,6 +63,8 @@ namespace BugFablesAP
         internal readonly bool SubmarineItem;
         // The ant tunnels' miners dig for free.
         internal readonly bool FreeAntTunnels;
+        // {map: dialogue lines}: sellers' lines whose price reads 0.
+        internal readonly Dictionary<string, int[]> FreeSales;
         internal readonly bool PointsOfNoReturn;
 
         internal SeedData(Dictionary<string, object> data, int ownSlot)
@@ -156,6 +158,8 @@ namespace BugFablesAP
                 && abilities is bool abilitiesOn && abilitiesOn;
             SubmarineItem = data != null && data.TryGetValue("submarine_item", out object submarine)
                 && submarine is bool submarineOn && submarineOn;
+            FreeSales = SlotData.List(data, "free_sales", e => e)?.GroupBy(e => e.Value<string>("map"))
+                .ToDictionary(g => g.Key, g => g.SelectMany(e => e["lines"].Values<int>()).ToArray());
             FreeAntTunnels = data != null && data.TryGetValue("free_ant_tunnels", out object tunnels)
                 && tunnels is bool tunnelsFree && tunnelsFree;
             JObject options = SlotData.Object(data, "options");

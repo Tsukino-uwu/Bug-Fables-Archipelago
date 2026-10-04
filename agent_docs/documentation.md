@@ -94,6 +94,7 @@ anyone curious about the process, or thinking of doing the same for another game
 40. [No respawn loop: a fall that only leads back into itself ends with the Warp](#40-no-respawn-loop-a-fall-that-only-leads-back-into-itself-ends-with-the-warp)
 41. [The seed's options read from slot_data's `options`](#41-the-seeds-options-read-from-slot_datas-options)
 42. [The ant tunnels' miners dig for free](#42-the-ant-tunnels-miners-dig-for-free)
+43. [A free seller: the price in their lines made 0](#43-a-free-seller-the-price-in-their-lines-made-0)
 
 ## Where it stands
 
@@ -3016,3 +3017,16 @@ Off Archipelago the prices are the game's.
 berries in the bag.
 
 *Code: `World/AntTunnels.cs`, `Core/SeedData.cs` (`FreeAntTunnels`).*
+
+## 43. A free seller: the price in their lines made 0
+
+The game side of the Archipelago guide's build step 46. Beette's price isn't a variable like the miners': her lines
+write it out, the offer as text ("150 berries for the house") and the sale as commands (`|checkmoney,150,22|`,
+`|money,-150|`). With `free_sales` in the seed and Archipelago on, the listed lines are rewritten as their map's lines
+load, just before `MapControl.CreateEntities`: every `checkmoney` and `money` price to 0, and each of those prices
+followed by "berr" in the same lines to 0, so what she says matches what she charges. The log names the lines and the
+price (`[sales] BeehiveBalcony: lines 20, 21 free (price 150 to 0)`).
+
+**Status:** built (2026-10-04), the build succeeds; not yet seen in game.
+
+*Code: `World/FreeSales.cs`, `Core/SeedData.cs` (`FreeSales`).*

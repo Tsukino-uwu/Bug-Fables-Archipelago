@@ -126,6 +126,7 @@ namespace BugFablesAP
             PartyMembers.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             FieldMoves.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             AntTunnels.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
+            FreeSales.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             SaveCrystals.Enable(Log, Config, () => randomizerEnabled.Value, settingsOn);
             DeathLinkGame.Enable(Log, Config, connection, () => randomizerEnabled.Value);
             AutoSave.Enable(Log, Config, settingsOn);

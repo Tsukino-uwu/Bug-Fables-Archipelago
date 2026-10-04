@@ -214,6 +214,18 @@ class DialogueFlag:
         return {"map": self.map, "entity": self.entity, "flag": self.flag, "to": self.to}
 
 
+@dataclass(frozen=True, slots=True)
+class FreeSale:
+    """A seller's dialogue lines whose price the client makes 0 (free_sales, in its area's module): the price commands
+    (checkmoney, money) and the price as the lines write it ("150 berries")."""
+
+    map: str
+    lines: tuple[int, ...]
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"map": self.map, "lines": list(self.lines)}
+
+
 @dataclass(frozen=True, slots=True, kw_only=True)
 class SavePoint:
     """A save point (data/starts.json): its map and entity index."""

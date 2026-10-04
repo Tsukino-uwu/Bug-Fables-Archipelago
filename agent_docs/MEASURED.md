@@ -1964,6 +1964,10 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   the tunnel's door but spanning the path to `loadzonecave` (the Hermit's cave, no flag) too: seen 2026-10-04, it
   turned the party back on the way to the cave. Beetle grass (`ObjectTypes.BeetleGrass`) is cut
   only by a hit tagged `BeetleHorn` or `BeetleDash`, Kabbu's (`NPCControl.cs`, the BeetleGrass case).
+- **The Rubber Prison yard's rock** (2026-10-04, EntityDump and code read; reported by the user): `rock`
+  (`BreakableRock`) on `RubberPrisonPier`, just inside the left door from `RubberPrisonCheckpointCorridor`, until flag
+  589; a breakable rock breaks only on a hit tagged `BeetleDash` (Horn Dash) or, with conditions, `BeetleHorn`
+  (`NPCControl.cs`, the BreakableRock case).
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

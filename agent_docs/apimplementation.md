@@ -115,6 +115,7 @@ this file and that doc disagree, that doc is right.
 43. [Build step 43: Music Shuffle, the Honey Factory's two songs, the elevator's crossfade a plain fade](#build-step-43-music-shuffle-the-honey-factorys-two-songs-the-elevators-crossfade-a-plain-fade)
 44. [Build step 44: every quest available from the start, none of it done for you](#build-step-44-every-quest-available-from-the-start-none-of-it-done-for-you)
 45. [Build step 45: the ant tunnels, the miners dig for free](#build-step-45-the-ant-tunnels-the-miners-dig-for-free)
+46. [Build step 46: Beette's sale, a free location](#build-step-46-beettes-sale-a-free-location)
 
 **How it works**
 
@@ -1515,7 +1516,10 @@ the game was stricter: the gate is shown open from the start and the wall hidden
 **Beette, the Flower Key's seller** (the same day, the user: "make it appear always if required"): the `smug bee` on
 `BeehiveBalcony`, made only after chapter 3 (flag 299), is kept present (`logic/bee_kingdom_hive.py`, test
 `TestFlowerKeySeller`). Her sale is still the game's own, not a location; the key and the red house it opens aren't in
-the logic yet (`MEASURED.md`, the Flower Key). Now `kept_present` from the start, the rule gone; location 12's beetle
+the logic yet (`MEASURED.md`, the Flower Key); her sale became a location the same day (build step 46).
+**The Rubber Prison yard's rock** (the user: "it makes you get stuck/softlocked normally"): `rock` just inside
+`RubberPrisonPier`'s left door, broken only by Horn Dash, until flag 589, is kept away (`logic/rubber_prison.py`, test
+`TestPrisonYardRock`; `MEASURED.md`, the Rubber Prison yard's rock). Now `kept_present` from the start, the rule gone; location 12's beetle
 grass takes Kabbu's horn, so it needs `Horn Slash` of its own (the boss had implied it). Tests `TestGoldenPath`.
 
 **Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion
@@ -4366,6 +4370,29 @@ step 42).
 the bag, applied live; tests not run yet (batched before the push).
 
 *Code: `logic/bugaria_city.py` (`TRANSFERS`), `slot_data.py` (`free_ant_tunnels`); tests `test_logic.py`.*
+
+## Build step 46: Beette's sale, a free location
+
+**Asked (the user, 2026-10-04):** "probly better to just make it free ? and give the key as a location ?". Beette sells
+the Flower Key (the plaza's red house) on the balcony for 150 berries, from chapter 3's end (`MEASURED.md`, the Flower
+Key). Now she is there from the start (build step 9), her sale is location 78, *Bee Kingdom Hive: Balcony, Beette's
+Sale* (the name the user's), done at her next line's flag 228, and the Flower Key is in the pool as its vanilla item.
+
+**Free:** a new `slot_data` key, `free_sales` (`[{"map", "lines"}]`, from each area's `FREE_SALES`, `FreeSale` in
+`data_types.py`): her lines 20 (the offer, "150 berries for the house") and 21 (`checkmoney,150` / `money,-150`). The
+mod makes the price 0 in both (the mod guide, step 43).
+
+**The logic:** the location waits for the later chapters (`LATER_CHAPTERS`), as the hive's rooms aren't mapped. The
+Flower Key is `useful` for now: nothing in the logic needs it until the red house's spots are locations, and then it
+becomes progression (`TestClassifications` holds the two together).
+
+**Tests:** `TestFlowerKeySeller` (Beette present; the sale free and a location with its give).
+
+**Status:** built (2026-10-04), not yet seen in game; its check needs a new seed (the running one's server has no
+location 78); tests not run yet (batched before the push).
+
+*Code: `logic/bee_kingdom_hive.py`, `data_types.py` (`FreeSale`), `slot_data.py` (`free_sales`), `data/items.json`
+(Flower Key); tests `test_slot_data.py`.*
 
 # How it works
 

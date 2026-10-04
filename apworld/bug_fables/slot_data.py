@@ -4,10 +4,10 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable, Mapping
 from typing import TYPE_CHECKING, Any
 
-from .data_tables import (DIALOGUE_FLAGS, HELD_UNTIL, HELD_UNTIL_ITEM, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN,
+from .data_tables import (DIALOGUE_FLAGS, FREE_SALES, HELD_UNTIL, HELD_UNTIL_ITEM, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN,
                           KEPT_PRESENT, LOCATION_NAME_TO_ID, PRESENT_FROM, PRESENT_WITH_ITEM, SCENERY_HIDDEN,
                           SCENERY_PRESENT, WORLD_VERSION)
-from .data_types import DialogueFlag, EntityRef, FlagEntity, ItemEntity, Source
+from .data_types import DialogueFlag, EntityRef, FlagEntity, FreeSale, ItemEntity, Source
 from .options import ShopContents
 
 if TYPE_CHECKING:
@@ -69,7 +69,7 @@ def _pickup(source: Source) -> dict[str, Any]:
     return pickup
 
 
-def _entities(entries: Iterable[EntityRef | FlagEntity | ItemEntity | DialogueFlag]) -> list[dict[str, Any]]:
+def _entities(entries: Iterable[EntityRef | FlagEntity | ItemEntity | DialogueFlag | FreeSale]) -> list[dict[str, Any]]:
     return [entry.to_slot() for entry in entries]
 
 
@@ -108,6 +108,8 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "present_with_item": _entities(PRESENT_WITH_ITEM),
         "held_until_item": _entities(HELD_UNTIL_ITEM),
         "dialogue_flags": _entities(DIALOGUE_FLAGS),
+        # Sellers' lines the client makes free ([{"map", "lines"}]): their price commands and written price to 0.
+        "free_sales": _entities(FREE_SALES),
         "door_targets": world.door_targets,
         # {"map:entity": [enemy ids]}: the fight a map enemy starts instead of its own.
         "enemy_swaps": world.enemy_swaps,

@@ -282,3 +282,15 @@ class TestFlowerKeySeller(BugFablesTestBase):
     # The game makes her only after chapter 3; the seed keeps her on the balcony from the start.
     def test_beette_present(self) -> None:
         self.assertIn({"map": "BeehiveBalcony", "entity": "smug bee"}, self.world.fill_slot_data()["kept_present"])
+
+    def test_beette_sale_free_and_a_location(self) -> None:
+        data = self.world.fill_slot_data()
+        self.assertIn({"map": "BeehiveBalcony", "lines": [20, 21]}, data["free_sales"])
+        sale = str(self.world.location_name_to_id["Bee Kingdom Hive: Balcony, Beette's Sale"])
+        self.assertEqual(data["location_gives"][sale], {"map": "BeehiveBalcony", "type": 1, "item": 54})
+
+
+class TestPrisonYardRock(BugFablesTestBase):
+    # Only Horn Dash breaks it, and it sits right inside a door, so it is kept away.
+    def test_rock_kept_away(self) -> None:
+        self.assertIn({"map": "RubberPrisonPier", "entity": "rock"}, self.world.fill_slot_data()["kept_open"])
