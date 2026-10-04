@@ -104,7 +104,7 @@
       "Tutorial"
     ],
     "entrance_rando": ["disconnect_entrance_for_randomization", "randomize_entrances"],
-    "Options": ["Choice", "DefaultOnToggle", "OptionGroup", "PerGameCommonOptions", "PlandoConnections", "Range", "Toggle"],
+    "Options": ["Choice", "DefaultOnToggle", "OptionGroup", "OptionSet", "PerGameCommonOptions", "PlandoConnections", "Range", "Toggle"],
     "rule_builder.options": ["OptionFilter"],
     "rule_builder.rules": ["False_", "Has", "HasAllCounts", "Rule", "True_", "WrapperRule"],
     "test.bases": ["WorldTestBase"],
