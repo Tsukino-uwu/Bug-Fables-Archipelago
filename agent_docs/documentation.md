@@ -1145,7 +1145,8 @@ every row back to its default (`QualityOfLife.DisableAll` / `ResetAll`, the defa
 definition).
 
 **Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen on screen
-(2026-09-25); the bridge skips and Medal prices not yet seen; replays held up and the quiet start seen on screen
+(2026-09-25); the bridge skips seen (2026-10-04: the message skipped, the rope at speed), the bridge staying fallen and
+Medal prices not yet seen; replays held up and the quiet start seen on screen
 (2026-09-28); Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat
 Ticket (the Archipelago guide, build step 16), the warp itself, map travel and Skip confirm seen (2026-09-26); Skip
 cutscenes' Den arrival seen (2026-09-26), the Tattle tutorial and the door room's puzzle (Event4) at speed
@@ -2784,7 +2785,8 @@ show no HP; Both is all of it; Off is as the game has it.
 
 **Status:** built (2026-09-30), split in four (2026-10-04), the build succeeds; the row seen on its page while the
 scrolling was checked (2026-09-30); its four values and their help lines seen (2026-10-04, the old ON read as OFF);
-its battle effects not yet seen.
+HP's, Free's and Off's battle effects seen (2026-10-04, HP and Free each with its log line); Both waived by the user
+("'both' should just work"), not seen.
 
 *Code: `Gameplay/MedalAssist.cs` (`SpySpecsMedal`, the postfix, `SpyAsks`), `Gameplay/QualityOfLife.cs` (`SpySpecs`,
 `SpyHp`, `SpyFree`), `Ui/ApMenu.cs` and `Ui/ApMenu.Rows.cs` (`SpyRow`), `Core/Plugin.cs`.*

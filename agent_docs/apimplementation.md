@@ -602,7 +602,7 @@ be wrong.
     on and Travel Off, the Warp still in the pause menu.
 55. **Spy Specs, a panel setting** (2026-09-30, the user's idea): built, the mod guide's step 39, a Quality of life
     row, off by default; since 2026-10-04 in halves (Off, HP, Free, Both; Both is the medal). No check and no logic
-    depend on it. The row seen on its page; next, the user sees each value's battle effects.
+    depend on it. Seen (2026-10-04): the row and HP's, Free's and Off's battle effects; Both waived by the user.
 
 **Known issues:**
 
@@ -3457,8 +3457,9 @@ item, check or rule depends on it.
 - `seed-snapshot.py` on CI's three presets, alone and with APQuest, before and after the change: only the two empty
   maps and the option's spoiler line are new.
 
-**Status:** built (2026-09-30); area music seen swapped (2026-10-04); three names with no clip taken out of the pool
-(2026-10-04), not yet seen in a new seed; the jingles, the title music and Samira not yet seen.
+**Status:** built (2026-09-30); area music and the victory fanfare heard swapped (2026-10-04); three names with no clip
+taken out of the pool (2026-10-04), not yet seen in a new seed; game over, a chapter title, the title music and Samira
+not yet seen.
 
 *Code: `music.py`, `options.py` (`MusicShuffle`, `option_groups`), `web_world.py`, `world.py` (`generate_basic`),
 `slot_data.py`; the mod's `MusicShuffle.cs`; tests `test_music.py`.*
