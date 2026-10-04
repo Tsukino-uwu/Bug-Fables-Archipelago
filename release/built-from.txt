@@ -1,5 +1,5 @@
 # Written by dev-scripts/build-release.ps1; checked by its -Check at release.
-commit: 353b3421150d03d6f7c4c46f0231d4591187d90b
+commit: c9797bd5f700a98b3307253d826516386d339042
 sdk: 10.0.401
 game: Assembly-CSharp.dll sha256 e76da3282d6cdcb1fe9b54eb1673931019f99ee009d495437a625a4d1e6021b0
 Directory.Build.props: 44e8100ed647a81b0f3a03c3f25931f8288c6fa1
@@ -48,7 +48,7 @@ mod/BugFablesAP/Items/QuestBoards.cs: 77a5746f26ad8b413581a755226e624ffe20dcdd
 mod/BugFablesAP/Items/ShopInventories.cs: b9616c9e8c5909d91dacf75a65b0ce5671e317ec
 mod/BugFablesAP/Items/ShopSwap.cs: d10d49eecf70f1de570afd49698ed4033f96e5b2
 mod/BugFablesAP/packages.lock.json: 0734dd0d0e966bf4c19d63be4c4d3a60d11cc186
-mod/BugFablesAP/Ui/ApIcon.cs: 1213186fc6f437c4ef6072f31c3d538c3d671744
+mod/BugFablesAP/Ui/ApIcon.cs: 83670427f906fe6059f9c3d620c4787471cde7cc
 mod/BugFablesAP/Ui/ApMenu.cs: cc80bdc3efa0032f8fb781dc110f3f4d77d9c521
 mod/BugFablesAP/Ui/ApMenu.Rows.cs: d39a17243b675f3974f7e330a1968cf6c831f51f
 mod/BugFablesAP/Ui/ApMenu.TextEntry.cs: cc0a669cb1625bc3d368e8abc5edc68072a54f6a
@@ -69,7 +69,7 @@ mod/BugFablesAP/World/PartySlots.cs: 79aecc898cd977323a18d8759903c52f21a334f1
 mod/BugFablesAP/World/SaveCrystals.cs: 5083f46984e471bb6c2dd778e68e1235c1d450bd
 mod/BugFablesAP/World/Submarine.cs: 04bb532383fdbb0f16076dfdc3a4a3ed17cd9ed1
 nuget.config: 3525aa692254165194b39b5291b0157dae704a63
-BugFablesAP.dll: d118dc5450a6fd6a4865d213a61bd94eb4c59069a2b8d23b8219bee8ae591e13
+BugFablesAP.dll: ebb0b2174d9250e10ae4b134551b3130daf50da23b9484f4879b307121677ab3
 Archipelago.MultiClient.Net.dll: 4d4f49b1528cf88b00fc07c69ff27d16cb1eeff52c0636009befd87f4e9dde5b
 websocket-sharp.dll: 5f59b27b01d6d6d0ea6ae2258e2639d80bc4ccedc0c16917cdd73e0b30e07f58
 Newtonsoft.Json.dll: 0cc6b1d3f4e8c938edfe1f02f2167d1cbf596a4df6ac0dbd82fe89ed67e45eb0
