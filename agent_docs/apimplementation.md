@@ -617,6 +617,11 @@ be wrong.
 
 **Known issues:**
 
+- **The Lost Sands gate claimed open** (seen 2026-10-04): on `BOLostSandsEntrance` a guard (`antguardclosed`) keeps
+  the desert closed until flag 130 (Event74, the palace scene after chapter 2), but the door data has no gate there,
+  so the logic counts the desert as open. To fix the open-world way: the closed guard kept away (build step 9).
+- **The swamp bridge is to stay up** (the user, 2026-10-04): its collapse (Event130 on `SwamplandsBridge`, flag
+  336) never to happen. What 336 and 337 change is to read first, then the logic of both sides.
 - **Shop Contents and the player's own placements** (found by the audit, 2026-09-29): a player's
   `priority_locations` on a shop is dropped (under Filler Only with a warning in the generator's log, under No
   Progression silently), and plando aimed at one fails silently. The fallback's two bugs (an excluded shop set back to
@@ -702,9 +707,6 @@ be wrong.
   room-level regions would add the cave.
 - **Crystal berry #2 (location 20)** sits behind the Underground's need (its `reach`), which needs Leif, though the
   room's upper-left entrance needs nothing. More cautious than the game, so safe; room-level regions would split it.
-- **Landmark names** for locations 2, 23, 25 and 30 are still to come from the tester (22 and 24 are named, build
-  step 10), and the seven ability
-  scenes' names (68-74, build step 23) and the throne room's (76, build step 36) are provisional.
 - **Uncap FPS (mod guide, step 24) still speeds some things up.** Each to compare at 60 and above on screen, then
   step at the game's own rate, as the other per-frame sites are:
   - **Being hit plays too fast, for enemies and the party** (a tester, 2026-09-27, FPS unlocked). Cause not read yet;
@@ -822,7 +824,7 @@ Archipelago's `custom_worlds` folder.
   not "On Top of the House by the Fountain", found too descriptive, 2026-09-25). Not a sentence and not a hint at how to
   get it ("On Top of a Pillar", "Under a Rock" are too much). **When a room has more than one of that landmark, add
   `by the <Thing>`** after it, naming something a player can see next to it: `Snakemouth Den: Lake, Bush by the
-  Sign` (2026-09-24: this is how to tell apart which bush, rock or pillar). A spot with no landmark of its own is
+  Tablet` (2026-09-24: this is how to tell apart which bush, rock or pillar). A spot with no landmark of its own is
   just `by the <Thing>`: `Outskirts: Snakemouth Den Entrance, by the Cave` (the user, 2026-10-04). It says where the
   spot is, never what to do there: the berry is inside that bush, so "Bush" is right. Gifts are `<Area>: <Who>'s Gift`
   or `<Who>'s Reward`, like `Outskirts: Maki and Eetl's Gift`. A character's name only when players will remember it
@@ -831,8 +833,10 @@ Archipelago's `custom_worlds` folder.
   abilities are shuffled), Title Case, one word per kind of landmark everywhere. The test
   `TestLocationNames` fails if a location's name contains its own vanilla item's name. Renaming a location
   never changes its id or flag. **Every name, new or renamed, is the user's to approve before it goes in**
-  (2026-10-04): names had been made up without asking (2, 23, 25, 30, 68-74 and 76 among them). Propose them, the
-  game's own name for the spot first, and wait for a yes.
+  (2026-10-04): names had been made up without asking (2, 23, 25, 30, 68-74 and 76 among them). The same day the
+  user went through them in game, warped to each, and named them: from their description of what's next to the spot,
+  shaped into this form (no hunting for the game's word for a landmark), the area always the game's `AreaNames`
+  entry (*Bandit Hideout*, *Wild Swamplands*, *Forsaken Lands* had been wrong). Propose, then wait for a yes.
 
 **Status:** done; the world has since grown to 75 locations (70 by default) and 58 items (counted 2026-09-30).
 
@@ -1243,7 +1247,7 @@ there: a Lore Book behind the library bookshelf (test `TestChapterTwo`, which fa
 delivery, board quest 33, whose reward is a Lore Book (category quest; played through on screen). **Mid-quest items are
 shuffled too** (2026-09-24): otherwise a quest's middle stays vanilla. The same cicada hands over the old book (Quest
 Book, flag 241), which becomes its own location (*Old Book Delivery Start*); the Quest Book is a progression item, and
-the reward (*Old Book Delivery Reward*, flag 243) requires it (test `TestMidQuestItem`). **The quest's middle step is
+the reward (*Old Book Delivery Reward 1*, flag 243) requires it (test `TestMidQuestItem`). **The quest's middle step is
 its own event** (2026-09-25: book from the cicada, handed to a reader in the palace library, back for both
 rewards): *Old Book Delivered* (flag 242, the library) needs the book, and both rewards need that event (test
 `TestOldBookChain`), so a room-level world can't expect the rewards without the library. A step event carries its
@@ -1269,7 +1273,7 @@ the start. Its entry mixed two sources. Its check (flag 17) is set by a scene on
 gate (Event10, 10 berries, written in the event's code), while its "30 berries on the Outskirts" came from a
 ScriptDump line that belongs to an unrelated NPC who appears only much later. So a location's flag, its give and
 its region must all be traced to **the same scene**, and a give written in an event's code won't show up in the
-ScriptDump at all. The fix moved it past the gate as *Outskirts: Near Snakemouth Den, Reward* with its real give,
+ScriptDump at all. The fix moved it past the gate as *Outskirts: Near Snakemouth Den, Horn Tutorial* with its real give,
 and the test `test_only_two_locations_before_the_gate` (since renamed `test_only_what_play_showed_before_the_gate`,
 build step 9) pinned what the tester knew from play: before the permit,
 only Maki and Eetl's gift and Artis's gift are reachable. It fails on the old data.
@@ -1362,8 +1366,8 @@ after). Rocks and house were chosen now, the town as a later gate of its own. Th
 **Seen (2026-09-25), chapter 1 file:** the rocks were gone, the tester walked into the house (the ladybug
 siblings, who come with flag 41, weren't there) and took its item: the seed's Crystal Berry, check sent from flag 679.
 So the house now needs nothing. With the rocks gone the east road opened too; there the tester knocked a stone with
-Kabbu's horn and found a Drowsy Cake (flag 735), now a location (*Outskirts: East Road, Stone*), and picked
-up crystal berry #10 at the pier with no abilities (*Outskirts: Pier*). The miners working
+Kabbu's horn and found a Drowsy Cake (flag 735), now a location (*Outskirts: East Road, Boulder*), and picked
+up crystal berry #10 at the pier with no abilities (*Outskirts: Pier, Behind the Dock*). The miners working
 at the rocks (gone from 41 in the game) mine nothing now, so they join `kept_open`. The test
 `test_only_what_play_showed_before_the_gate` pins the locations reachable before the permit (five then, with the pier's
 crystal berry; the shops and more have joined since). **The town door does nothing before the first boss** (seen on
@@ -1604,10 +1608,11 @@ Where each discovery is came from four sources: `|discovery,N|` in map dialogue 
 `UpdateJounal` calls in events (which event sets which), a few set from story flags in code, and each map's own
 list (`MapControl.discoveryids`, MapDump). The five in regions the logic already has are locations: the pier
 statue (49), the arrival outside Snakemouth (0, Event11), the spider fight (1, Event6), the bridge room's hidden
-spot (2, Event13) and the Underground Door Room's grass (3, Event27). **First check seen:** the tester had examined
-the pier statue before the option existed; joining the new seed, the mod found discovery 49 recorded and sent
-*Outskirts: Pier, Statue*. **First discovery seen live** (2026-09-25): the tester examined the bridge room's hidden
-spot, Event13 recorded discovery 2, and the check went out with the seed's item back. Tests `TestDiscoveriesOn`,
+spot (2, Event13) and the Underground Door Room's statue (3, Event27; once called its grass, corrected
+2026-10-04). **First check seen:** the tester had examined the pier statue before the option existed; joining the
+new seed, the mod found discovery 49 recorded and sent *Outskirts: Pier, Ship's Wheel* (then *Pier, Statue*).
+**First discovery seen live** (2026-09-25): the tester examined the bridge room's hidden spot, Event13 recorded
+discovery 2, and the check went out with the seed's item back. Tests `TestDiscoveriesOn`,
 `TestDiscoveriesOffByDefault`. **Parked:** *Shuffle Bestiary* (Next 44; an entry
 comes only from Spy in battle or from Event65's catch-up NPC, who sells entries for enemies already fought, 19
 berries, 49 for bosses, except the 23 in `excludeids`, which are the missable ones; seeing an enemy on the map
@@ -2441,7 +2446,7 @@ everything past the Outskirts gate needs all three members until the rooms there
    (category `story_party`) exists only with the option off, so Leif isn't handed out for free.
 4. **The rules** (`logic/`, `Member` rules, which count only with the option on): the way past the Outskirts gate
    needs Vi, Kabbu and Leif (on top of the permit), which covers the measured gates past it (the horn corridor needs
-   Kabbu, the first boss needs Vi); *East Road, Stone* and *Residential District, Rooftop* need Kabbu (his horn). The
+   Kabbu, the first boss needs Vi); *East Road, Boulder* and *Residential District, Rooftop* need Kabbu (his horn). The
    Leif rules that already existed (droplets, the fountain rooftop) now need the item instead of the story's event.
 5. **slot_data** `starting_member`: -1 for Off, else 0 Vi, 1 Kabbu, 2 Leif.
 6. **The mod** (`ApConnection.cs`, `PartyMembers.cs`, `ItemReceiver.cs`, `ItemSwap.cs`): the seed's
@@ -2677,7 +2682,7 @@ level without the first "wouldn't work"): Beemerang Toss then Halt, Dash then Ho
    past chapter 2's start that needs everything the story used before (the permit, the Boat Ticket, the first boss,
    the party and its attacks). Until chapters 2-7 get room-level logic, each needs every ability taught before it
    (story order): more cautious than the game. They show no item of their own (`silent_locations`). Their names are
-   provisional (Known issues). 7 locations and 7 items: the pool stays balanced in every option set.
+   the user's (2026-10-04, build step 1). 7 locations and 7 items: the pool stays balanced in every option set.
 4. **Combat stays basic**: no fight needs a battle skill or a medal in the logic, only each member's plain
    attack. It keeps enemies and bosses simple, and leaves room to play out of logic for fun (Kabbu with a medal that
    hits fliers might beat the spider the logic gives to Vi).
@@ -3259,7 +3264,7 @@ For example, the droplet rooms' need and a spot inside them (as it is today, eve
 # Every Snakemouth room with water droplets, or reached only through one: Leif freezes the droplets.
 UNDERGROUND = DEN & CanUse("Freeze")
 ...
-Location("Snakemouth Den: Mushroom Pit, Droplets", 9, "SnakemouthMushroomPit",
+Location("Snakemouth Den: Mushroom Pit, Mushroom by the Droplets", 9, "SnakemouthMushroomPit",
          Source(flag=724, pickup=Pickup(map="SnakemouthMushroomPit", type=0, item=144)),
          rule=CanUse("Freeze"), reach=UNDERGROUND),
 ```
@@ -3730,9 +3735,10 @@ Island, all leading to the lake map, MetalLake.
    (Event193), and before that only the sub's dock reaches the prison. So that tunnel takes the sub too, and with it
    everything past the prison, the Giant's Lair included. The Icicle's spot (74) takes it as the story-order stand-in's
    caution: the story reaches it after the sub, though its path reads no sub flag.
-5. **A new location, 76, *Termite Capitol: Throne Room*** (a provisional name): the king's scene, its flag 379 the
-   check. It has the story-order rule of the abilities taught before it, and never needs the sub itself. It shows no
-   item of its own, as the teaching scenes don't (`silent_locations`).
+5. **A new location, 76, *Termite Capitol: Termite King's Reward*** (first *Throne Room*; the user's name,
+   2026-10-04): the king's scene, its flag 379 the check. It has the story-order rule of the abilities taught
+   before it, and never needs the sub itself. It shows no item of its own, as the teaching scenes don't
+   (`silent_locations`).
 6. **The Termite gate, one way.** The sub made this fix necessary. From inside the plaza, before the gate was ever
    opened from outside (flag 384), its scene loads the outside map, looks for two guards only the plaza has, and stops
    (`EventControl.cs`, Event149). A sub landing at the Termite pier puts a party inside first, so the logic's gate now
@@ -4559,7 +4565,7 @@ the next item. That walk, repeated as items are placed, is how Archipelago prove
                    │ DoorSnakemouth                                                      • Golden Path, Grass by the Dirt Spot
                    ▼
    BugariaOutskitsSnakemouthCorridor1 ──> … ──> SnakemouthLake ──> … ──> SnakemouthMushroomPit
-                                                                          • Mushroom Pit, Droplets [Freeze]
+                                                                          • Mushroom Pit, Mushroom by the Droplets [Freeze]
 ```
 
 **Is a region a collection of rules?** Not quite. A region is a place; the rules sit on its ways in (the exits) and on
@@ -4623,7 +4629,7 @@ Why regions at all, instead of a full rule on every spot:
   # Every Snakemouth room with water droplets, or reached only through one: Leif freezes the droplets.
   UNDERGROUND = DEN & CanUse("Freeze")
   LOCATIONS = (
-      Location("Snakemouth Den: Mushroom Pit, Droplets", 9, "SnakemouthMushroomPit",
+      Location("Snakemouth Den: Mushroom Pit, Mushroom by the Droplets", 9, "SnakemouthMushroomPit",
                Source(flag=724, pickup=Pickup(map="SnakemouthMushroomPit", type=0, item=144)),
                rule=CanUse("Freeze"), reach=UNDERGROUND),
   )

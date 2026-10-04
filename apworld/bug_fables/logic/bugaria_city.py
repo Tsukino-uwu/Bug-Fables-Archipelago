@@ -30,10 +30,10 @@ TRANSFERS = (
 )
 LOCATIONS = (
     # A Lore Book hidden behind a bookshelf.
-    Location("Ant Palace: Library, Bookshelf", 15, "AntPalaceLibrary",
+    Location("Ant Palace: Library, Behind the Bookshelf", 15, "AntPalaceLibrary",
              Source(flag=71, pickup=Pickup(map="AntPalaceLibrary", type=1, item=52)), reach=INNER_CITY),
     # Board quest 33's reward, from a cicada in a residential house once the old book (Quest Book) is delivered.
-    Location("Bugaria City: Residential District, Old Book Delivery Reward", 16, "BugariaResidential",
+    Location("Bugaria City: Residential District, Old Book Delivery Reward 1", 16, "BugariaResidential",
              Source(flag=243, give=Give(map="BugariaResidential", type=1, item=52)),
              rule=Has("Old Book Delivered"),
              category="quest", reach=INNER_CITY),
@@ -42,7 +42,7 @@ LOCATIONS = (
              Source(flag=241, give=Give(map="BugariaResidential", type=1, item=93)), category="quest",
              reach=INNER_CITY),
     # The same reward also pays 15 berries: two checks on one flag, sent together.
-    Location("Bugaria City: Residential District, Old Book Delivery Berries", 18, "BugariaResidential",
+    Location("Bugaria City: Residential District, Old Book Delivery Reward 2", 18, "BugariaResidential",
              Source(flag=243, give=Give(map="BugariaResidential", type=-1, item=15)),
              rule=Has("Old Book Delivered"),
              category="quest", reach=INNER_CITY),

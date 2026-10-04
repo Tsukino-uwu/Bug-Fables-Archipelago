@@ -72,6 +72,7 @@ either one wrong).
 - [2026-10-04: Spy Specs split in four](#2026-10-04-spy-specs-split-in-four)
 - [2026-10-04: TO-CHECK worked through, four fixes found in play](#2026-10-04-to-check-worked-through-four-fixes-found-in-play)
 - [2026-10-04: the icon's look, five fixes, the logic split by area](#2026-10-04-the-icons-look-five-fixes-the-logic-split-by-area)
+- [2026-10-04: every location named by the user, quests opened from the start](#2026-10-04-every-location-named-by-the-user-quests-opened-from-the-start)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2714,3 +2715,28 @@ either one wrong).
   icon the default before the user had picked it ("i never said i was done/happy with it"), reverted.
 - **Open for the next session:** TO-CHECK.md, from group 9 (the entrance randomizer) on; the dev warp's music; a
   play-any-track command. Nothing pushed.
+
+## 2026-10-04: every location named by the user, quests opened from the start
+
+- **The user named the locations in game:** asked for the full list ("i think you have named someone without me"),
+  then warped to each and described what is next to it; I shaped it into `<Area>: <Room>, <Spot>` and waited for a
+  yes. New rule (CLAUDE.md): every location name needs the user's yes. They said not to hunt for the game's word
+  for a landmark ("its me talking about what to call a spot"), and to test once per batch, not per rename.
+  Renamed: 2, 5, 8, 9, 12, 15, 16, 18, 19, 20, 21, 22, 23, 25, 26, 27, 30, 31, 71, 72, 73, 76 (20 and 23
+  "under the Glowing Cap": the test refused "Mushroom" on 23, which holds one). Kept: the rest
+  they saw; 1, 3 and 75 kept unseen ("these are fine"). Three area prefixes were wrong against `AreaNames`
+  (Bandit Hideout, Wild Swamplands, Forsaken Lands). Location 31 was described everywhere as cutting grass: it is
+  examining the old statue (the trigger's type label read "BeetleGrass"; the user's on-screen test settled it).
+- **A logic lie found from a question:** "how does the quest start?" Reading it showed the lost kid's quest joins the
+  boards only at chapter 5 (flag 348), while location 10 asked only for Leif and the first boss. Held out of seeds
+  (`pending`, build step 44). The user's rule: every quest available from the start, every step of it the game's.
+- **Mistakes:** I reverted the ladybug siblings to vanilla without asking how the user's "revert" fit the open-world
+  goal (they wanted quests available, not nothing open); put back. A `git checkout` of the guide also discarded two
+  of my own uncommitted rename edits, redone. A sed over `grep -l` hit `.pyc` caches and a `log.md` entry, both put
+  back.
+- **Found in play, logged:** a location's starburst vanishing behind a see-through wall (to measure); the Lost Sands
+  gate closed by a guard while the logic counts it open (Known issues); the swamp bridge to stay up, its collapse never
+  playing (the user's call, Known issues).
+- **Open for the next session:** the Lost Sands gate; the swamp bridge; the starburst; quests one at a time from the
+  ladybug quest (build step 44); Madeleine's house locked again with her quests opened; regenerate the PopTracker pack
+  for the new names (its own repo). Nothing pushed.

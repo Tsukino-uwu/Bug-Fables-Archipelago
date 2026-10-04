@@ -3,7 +3,7 @@ from . import BugFablesTestBase
 BOAT = "Progressive Boat"
 TICKET = "Boat Ticket"
 SUBMARINE = "Subaquatic Maritime Neotransport"
-THRONE_ROOM = "Termite Capitol: Throne Room"
+THRONE_ROOM = "Termite Capitol: Termite King's Reward"
 ICICLE = "Upper Snakemouth: Entrance"
 DOCKS = {("TermitePier", "Fixedsub"), ("BugariaPier", "Fixedsub - Duplicate"), ("MetalIsland1", "Fixedsub - Duplicate"),
          ("FishingVillage", "Fixedsub - Duplicate - Duplicate"),

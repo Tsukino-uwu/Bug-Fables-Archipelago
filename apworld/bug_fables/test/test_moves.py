@@ -1,7 +1,7 @@
 from . import BugFablesTestBase
 
 MOVES = ["Progressive Beemerang", "Horn Slash", "Progressive Freeze"]
-PAST_THE_GATE = "Outskirts: Near Snakemouth Den, Reward"
+PAST_THE_GATE = "Outskirts: Near Snakemouth Den, Horn Tutorial"
 
 
 def _pool(test: BugFablesTestBase) -> list[str]:
@@ -44,7 +44,7 @@ class TestFieldMoves(BugFablesTestBase):
         self.assertTrue(self.can_reach_location(PAST_THE_GATE))
 
     def test_a_horn_spot_needs_the_horn(self) -> None:
-        spot = "Outskirts: East Road, Stone"
+        spot = "Outskirts: East Road, Boulder"
         self.assertFalse(self.can_reach_location(spot))
         self.collect_by_name("Horn Slash")
         self.assertTrue(self.can_reach_location(spot))

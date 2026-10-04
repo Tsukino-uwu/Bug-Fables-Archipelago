@@ -14,7 +14,7 @@ class TestOptionsSent(TestCase):
 
 
 class TestOptionsInSlotData(BugFablesTestBase):
-    options = {"exclude_locations": ["Outskirts: Pier, Statue", "Outskirts: Pier"]}
+    options = {"exclude_locations": ["Outskirts: Pier, Ship's Wheel", "Outskirts: Pier, Behind the Dock"]}
 
     def test_options_as_json_values(self) -> None:
         # The mod reads toggles as JSON booleans, choices and ranges as numbers, location sets as sorted lists.
@@ -25,7 +25,8 @@ class TestOptionsInSlotData(BugFablesTestBase):
         self.assertIs(options["progressive_boat"], True)
         self.assertEqual(options["shop_contents"], 1)
         self.assertEqual(options["entrance_randomizer"], 0)
-        self.assertEqual(options["exclude_locations"], ["Outskirts: Pier", "Outskirts: Pier, Statue"])
+        self.assertEqual(options["exclude_locations"],
+                         ["Outskirts: Pier, Behind the Dock", "Outskirts: Pier, Ship's Wheel"])
 
     def test_option_copies_are_gone(self) -> None:
         data = self.world.fill_slot_data()
@@ -75,7 +76,7 @@ class TestPickups(BugFablesTestBase):
     # A missing pickup entry gives the vanilla item; a wrong flag swaps an unrelated pickup.
     def test_pickups_are_in_slot_data(self) -> None:
         pickups = self.world.fill_slot_data()["location_pickups"]
-        medal = str(self.world.location_name_to_id["Snakemouth Den: Underground Door Room"])
+        medal = str(self.world.location_name_to_id["Snakemouth Den: Underground Door Room, Behind the Wall"])
         self.assertEqual(pickups[medal], {"map": "SnakemouthUndergrondDoor", "flag": 60})
 
     def test_pickups_are_not_gives(self) -> None:
@@ -99,7 +100,7 @@ class TestStoryPickup(BugFablesTestBase):
 
     def test_ordinary_pickups_have_no_event(self) -> None:
         pickups = self.world.fill_slot_data()["location_pickups"]
-        medal = str(self.world.location_name_to_id["Snakemouth Den: Underground Door Room"])
+        medal = str(self.world.location_name_to_id["Snakemouth Den: Underground Door Room, Behind the Wall"])
         self.assertNotIn("event", pickups[medal])
 
 

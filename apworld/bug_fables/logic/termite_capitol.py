@@ -7,8 +7,8 @@ from ..data_types import FlagEntity, ItemEntity, Location, Source, Transfer
 
 LOCATIONS = (
     # The Termite King hands over the submarine after the Colosseum (flag 379); never behind the sub itself. The later
-    # chapters' story-order stand-in; the name is provisional.
-    Location("Termite Capitol: Throne Room", 76, "TermiteRoyalChamber",
+    # chapters' story-order stand-in.
+    Location("Termite Capitol: Termite King's Reward", 76, "TermiteRoyalChamber",
              Source(event=164, flag=379),
              rule=CanUse("Beemerang Halt") & CanUse("Dash") & CanUse("Shield") & CanUse("Beetle Dig")
              & CanUse("Horn Dash") & CanUse("Bee Fly"), reach=LATER_CHAPTERS),

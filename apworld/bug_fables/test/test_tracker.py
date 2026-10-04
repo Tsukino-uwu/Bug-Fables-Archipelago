@@ -23,7 +23,7 @@ TRACKER_STEPS = ("generate_early", "create_regions", "create_items", "set_rules"
 DOORS_PRESET = {"entrance_randomizer": "coupled", "enemy_shuffle": "enemies_only", "starting_location": "anywhere",
                 "shuffle_discoveries": True}
 SHOP, OPENING, PIER = ("Bugaria City: Commercial District, Medal Shop 2", "Outskirts: Maki and Eetl's Gift",
-                       "Outskirts: Pier, Statue")
+                       "Outskirts: Pier, Ship's Wheel")
 CASES: dict[str, dict[str, Any]] = {
     "defaults": {},
     "coupled": DOORS_PRESET,
@@ -167,7 +167,8 @@ class TestTrackerHooks(TestCase):
         self.assertTrue(order[0].startswith("Outskirts: "))
         outskirts = [name for name in order if name.startswith("Outskirts: ")]
         self.assertEqual(outskirts, sorted(outskirts))
-        self.assertLess(order.index("Outskirts: Pier"), order.index("Bugaria City: Commercial District, Medal Shop 1"))
+        self.assertLess(order.index("Outskirts: Pier, Behind the Dock"),
+                        order.index("Bugaria City: Commercial District, Medal Shop 1"))
         self.assertEqual(world.custom_ut_sort("BugariaPier", "BugariaPier: loadzone"), len(TRACKER_ORDER))
 
     def test_another_game_s_passthrough_is_not_read(self) -> None:

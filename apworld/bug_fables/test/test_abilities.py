@@ -36,7 +36,7 @@ class TestLearnedAbilities(BugFablesTestBase):
 
     def test_story_order(self) -> None:
         # Until chapters 2-7 get room-level logic, an unlock spot needs every ability taught before it.
-        spot = "Swamplands: Bridge"
+        spot = "Wild Swamplands: Bridge, Boulder"
         self.collect_by_name(["Explorer Permit", "Progressive Boat"])
         self.collect(self.get_items_by_name("Progressive Beemerang"))
         self.collect(self.get_items_by_name("Progressive Dash")[0])
@@ -47,7 +47,7 @@ class TestLearnedAbilities(BugFablesTestBase):
 
     def test_the_horn_dash_is_the_second_copy(self) -> None:
         # Bee Fly's spot comes after the Horn Dash's: it takes both copies of the Progressive Dash.
-        spot = "Barren Lands: Fly Spot"
+        spot = "Forsaken Lands: Broken Bridge"
         self.collect_by_name(["Explorer Permit", "Progressive Boat", "Progressive Beemerang", "Shield", "Beetle Dig"])
         first, second = self.get_items_by_name("Progressive Dash")
         self.collect(first)

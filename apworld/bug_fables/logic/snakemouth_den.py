@@ -13,15 +13,15 @@ DEN = PAST_GATE & CanUse("Horn Slash")
 # Every Snakemouth room with water droplets, or reached only through one: Leif freezes the droplets.
 UNDERGROUND = DEN & CanUse("Freeze")
 LOCATIONS = (
-    Location("Snakemouth Den: Underground Door Room", 5, "SnakemouthUndergrondDoor",
+    Location("Snakemouth Den: Underground Door Room, Behind the Wall", 5, "SnakemouthUndergrondDoor",
              Source(flag=60, pickup=Pickup(map="SnakemouthUndergrondDoor", type=2, item=9)), reach=UNDERGROUND),
     Location("Snakemouth Den: Bridge Room, Pillar", 6, "SnakemouthBridgeRoom",
              Source(flag=651, pickup=Pickup(map="SnakemouthBridgeRoom", type=0, item=13)), reach=DEN),
     Location("Snakemouth Den: Lake, Pillar", 7, "SnakemouthLake",
              Source(flag=23, pickup=Pickup(map="SnakemouthLake", type=2, item=0)), reach=DEN),
-    Location("Snakemouth Den: Mushroom Pit, Floor", 8, "SnakemouthMushroomPit",
+    Location("Snakemouth Den: Mushroom Pit, Mushroom by the Ledge", 8, "SnakemouthMushroomPit",
              Source(flag=42, pickup=Pickup(map="SnakemouthMushroomPit", type=2, item=7)), reach=UNDERGROUND),
-    Location("Snakemouth Den: Mushroom Pit, Droplets", 9, "SnakemouthMushroomPit",
+    Location("Snakemouth Den: Mushroom Pit, Mushroom by the Droplets", 9, "SnakemouthMushroomPit",
              Source(flag=724, pickup=Pickup(map="SnakemouthMushroomPit", type=0, item=144)),
              rule=CanUse("Freeze"), reach=UNDERGROUND),
     Location("Snakemouth Den: Lake, Ladybug Kid's Reward", 10, "SnakemouthLake",
@@ -32,18 +32,18 @@ LOCATIONS = (
              Source(event=5, flag=14, pickup=Pickup(map="SnakemouthDoorRoom", type=0, item=13, story=True)),
              rule=CanUse("Horn Slash"), reach=DEN),
     # Crystal berry #2: from the room's upper-left entrance it needs nothing, from below it needs Leif.
-    Location("Snakemouth Den: Underground Door Room, Upper Left", 20, "SnakemouthUndergrondDoor",
+    Location("Snakemouth Den: Underground Door Room, Left under the Glowing Cap", 20, "SnakemouthUndergrondDoor",
              Source(berry=2, pickup=Pickup(map="SnakemouthUndergrondDoor", type=3, item=0)), category="crystal_berry",
              reach=UNDERGROUND),
-    # Crystal berry #1, from the bush by the sign on the lake room's far left.
-    Location("Snakemouth Den: Lake, Bush by the Sign", 21, "SnakemouthLake",
+    # Crystal berry #1, from the bush by the tablet on the lake room's far left.
+    Location("Snakemouth Den: Lake, Bush by the Tablet", 21, "SnakemouthLake",
              Source(berry=1, pickup=Pickup(map="SnakemouthLake", type=3, item=0)), category="crystal_berry",
              reach=DEN),
     # A respawning pickup: hidden only by a regional flag, so it comes back; the game's own again once checked.
-    Location("Snakemouth Den: Underground Door Room, Pillar", 22, "SnakemouthUndergrondDoor",
+    Location("Snakemouth Den: Underground Door Room, Pillar by the Droplets", 22, "SnakemouthUndergrondDoor",
              Source(regional=24, pickup=Pickup(map="SnakemouthUndergrondDoor", type=0, item=1)), reach=UNDERGROUND),
     # A respawning pickup; its entity is named 'CrunchyLeaf - Duplicate' but holds a Mushroom.
-    Location("Snakemouth Den: Underground Door Room, Floor 2", 23, "SnakemouthUndergrondDoor",
+    Location("Snakemouth Den: Underground Door Room, Right under the Glowing Cap", 23, "SnakemouthUndergrondDoor",
              Source(regional=29, pickup=Pickup(map="SnakemouthUndergrondDoor", type=0, item=13)), reach=UNDERGROUND),
     # A respawning pickup, out of sight behind a pillar.
     Location("Snakemouth Den: Underground Bridge Room, Behind Pillar", 24, "SnakemouthUndergroundRightB",
@@ -51,13 +51,13 @@ LOCATIONS = (
     # Recorded at the end of the spider fights after the trapdoor, before Leif joins.
     Location("Snakemouth Den: Fall Room, Spider Fight", 29, "SnakemouthFallRoom",
              Source(discovery=1), category="discovery", reach=DEN),
-    # Recorded by examining a hidden spot in the bridge room, behind grass.
-    Location("Snakemouth Den: Bridge Room, Hidden Spot", 30, "SnakemouthBridgeRoom",
+    # Recorded by examining the warning sign hidden behind the bridge room's bushes.
+    Location("Snakemouth Den: Bridge Room, Sign behind the Bushes", 30, "SnakemouthBridgeRoom",
              Source(discovery=2),
              rule=CanUse("Horn Slash"),
              category="discovery", reach=DEN),
-    # Recorded by cutting one patch of grass with Kabbu's horn.
-    Location("Snakemouth Den: Underground Door Room, Grass", 31, "SnakemouthUndergrondDoor",
+    # Recorded by examining the old statue the first time.
+    Location("Snakemouth Den: Underground Door Room, Statue", 31, "SnakemouthUndergrondDoor",
              Source(discovery=3), category="discovery", reach=UNDERGROUND),
     # Where the mod has Leif join (the spider scene over, flag 27), whoever starts.
     Location("Snakemouth Den: Fall Room, After the Spider", 67, "SnakemouthFallRoom",

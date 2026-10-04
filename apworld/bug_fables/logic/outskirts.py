@@ -22,7 +22,7 @@ LOCATIONS = (
              Source(event=16, flag=15, give=Give(map="BugariaOutskirtsOutsideCity", type=1, item=27)), quiet=True,
              no_jump=True),
     # The horn tutorial: the scene cuts the grass itself, so it needs no member.
-    Location("Outskirts: Near Snakemouth Den, Reward", 2, "NearSnakemouth",
+    Location("Outskirts: Near Snakemouth Den, Horn Tutorial", 2, "NearSnakemouth",
              Source(event=10, flag=17, give=Give(map="NearSnakemouth", type=-1, item=10)), reach=PAST_GATE),
     Location("Outskirts: Artis's Gift", 3, "BugariaOutskirtsOutsideCity",
              Source(npc="ShwEmArtys", flag=32, give=Give(map="BugariaOutskirtsOutsideCity", type=2, item=11))),
@@ -43,13 +43,13 @@ LOCATIONS = (
              rule=CanUse("Horn Slash"),
              category="crystal_berry", reach=PAST_GATE),
     # A Drowsy Cake under a stone, knocked loose with Kabbu's horn.
-    Location("Outskirts: East Road, Stone", 25, "BugariaOutskirtsEast1",
+    Location("Outskirts: East Road, Boulder", 25, "BugariaOutskirtsEast1",
              Source(flag=735, pickup=Pickup(map="BugariaOutskirtsEast1", type=0, item=147)),
              rule=CanUse("Horn Slash")),
     # Crystal berry #10, on the pier by the boat.
-    Location("Outskirts: Pier", 26, "BugariaPier",
+    Location("Outskirts: Pier, Behind the Dock", 26, "BugariaPier",
              Source(berry=10, pickup=Pickup(map="BugariaPier", type=3, item=0)), category="crystal_berry"),
-    Location("Outskirts: Pier, Statue", 27, "BugariaPier",
+    Location("Outskirts: Pier, Ship's Wheel", 27, "BugariaPier",
              Source(discovery=49), category="discovery"),
     # Recorded by the scene on first arriving outside Snakemouth Den.
     Location("Outskirts: Snakemouth Den Entrance, Arrival", 28, "OutsideSnakemouth",

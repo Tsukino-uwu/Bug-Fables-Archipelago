@@ -1452,8 +1452,10 @@ Facts the mod's hooks depend on, with their place in the decompiled source. Each
 - Discovery sources: Event11 (arrival outside Snakemouth) is `OutsideSnakemouth`'s autoevent 22:11 (MapDump) and records
   discovery 0 (EventControl.cs:3095); Event6 (fall room EventTrigger, data 6, limit 27) records discovery 1 at its end
   (EventControl.cs:2293); Event13 (entity `HiddenEvent` on `SnakemouthBridgeRoom`) records discovery 2
-  (EventControl.cs:3278); Event27, started by cutting the grass entity `AncientHouseDiscovery` (BeetleGrass)
-  on `SnakemouthUndergrondDoor`, records discovery 3 (EventControl.cs:5001) (location ids 28-31). Used
+  (EventControl.cs:3278); Event27, started by examining the old statue (entity `AncientHouseDiscovery`, object
+  type BeetleGrass, interact Event, at 4:0:-3.04; corrected 2026-10-04: seen by the user, a piece of grass there
+  only drops berries) on `SnakemouthUndergrondDoor`, records discovery 3 the first time, with the team's lines about
+  the roaches' statue (map line 5; after, line 6 "An old statue.") (EventControl.cs:5001) (location ids 28-31). Used
   by `logic/outskirts.py`, `logic/snakemouth_den.py`.
 - Event38 (the plaza statue discovery) asks for party members by name and sets no story flag (kept_present StatueDesc).
   Used by `logic/bugaria_city.py`.

@@ -25,8 +25,8 @@ class TestPermitGate(BugFablesTestBase):
                      if loc.address is not None}
         self.assertEqual(reachable, {"Outskirts: Maki and Eetl's Gift", "Outskirts: Outside the City, Tutorial Battle",
                                      "Outskirts: Artis's Gift",
-                                     "Outskirts: Ladybug Siblings' House", "Outskirts: East Road, Stone",
-                                     "Outskirts: Pier", "Bugaria City: Residential District, Rooftop",
+                                     "Outskirts: Ladybug Siblings' House", "Outskirts: East Road, Boulder",
+                                     "Outskirts: Pier, Behind the Dock", "Bugaria City: Residential District, Rooftop",
                                      "Outskirts: Madeleine's House, Table Right",
                                      "Outskirts: Madeleine's House, Table Left"}
                          | {f"Bugaria City: Commercial District, Medal Shop {n}" for n in range(1, 23)}
@@ -34,9 +34,9 @@ class TestPermitGate(BugFablesTestBase):
                          | {f"Outskirts: Caravan, Item Shop {n}" for n in range(1, 4)})
 
     def test_reward_near_snakemouth_needs_the_permit(self) -> None:
-        self.assertFalse(self.can_reach_location("Outskirts: Near Snakemouth Den, Reward"))
+        self.assertFalse(self.can_reach_location("Outskirts: Near Snakemouth Den, Horn Tutorial"))
         self.collect_by_name("Explorer Permit")
-        self.assertTrue(self.can_reach_location("Outskirts: Near Snakemouth Den, Reward"))
+        self.assertTrue(self.can_reach_location("Outskirts: Near Snakemouth Den, Horn Tutorial"))
 
     def test_pool_is_the_locations_items(self) -> None:
         # An item whose vanilla spot isn't a location yet stays out of the pool.
@@ -67,7 +67,7 @@ class TestLeif(BugFablesTestBase):
     options = {"starting_party_member": "off"}
     # Rooms with water droplets need Leif to freeze them.
     def test_droplet_room_needs_leif(self) -> None:
-        location = self.world.get_location("Snakemouth Den: Underground Door Room")
+        location = self.world.get_location("Snakemouth Den: Underground Door Room, Behind the Wall")
         state = self.state_with("Explorer Permit")
         self.assertFalse(location.can_reach(state))
         self.add(state, "Leif")
@@ -83,14 +83,14 @@ class TestLeif(BugFablesTestBase):
     def test_leif_joins_before_the_droplet_rooms(self) -> None:
         self.collect_by_name("Explorer Permit")
         self.assertTrue(self.can_reach_location("Leif Joins"))
-        self.assertTrue(self.can_reach_location("Snakemouth Den: Underground Door Room"))
+        self.assertTrue(self.can_reach_location("Snakemouth Den: Underground Door Room, Behind the Wall"))
 
 
 class TestInRoomRules(BugFablesTestBase):
     options = {"starting_party_member": "off"}
     # A spot's own needs are written on the location, so entrance rando can't lose them.
     def test_gummies_need_leif_in_the_room(self) -> None:
-        location = self.world.get_location("Snakemouth Den: Mushroom Pit, Droplets")
+        location = self.world.get_location("Snakemouth Den: Mushroom Pit, Mushroom by the Droplets")
         state = self.state_with("Explorer Permit")
         self.assertFalse(location.access_rule(state))
         self.add(state, "Leif")
@@ -100,7 +100,7 @@ class TestInRoomRules(BugFablesTestBase):
     def test_pit_medal_needs_nothing_in_the_room(self) -> None:
         # Nothing of its own: only the underground's stand-in (reach), until the room is mapped.
         from ..data_tables import LOCATIONS
-        spot = next(loc for loc in LOCATIONS if loc.name == "Snakemouth Den: Mushroom Pit, Floor")
+        spot = next(loc for loc in LOCATIONS if loc.name == "Snakemouth Den: Mushroom Pit, Mushroom by the Ledge")
         self.assertIsNone(spot.rule)
         location = self.world.get_location(spot.name)
         self.assertTrue(location.access_rule(self.state_with("Explorer Permit", "Leif")))
@@ -134,7 +134,7 @@ class TestBossPrize(BugFablesTestBase):
 class TestChapterTwo(BugFablesTestBase):
     # The library needs flag 67, whose palace scene needs the companion who joins after the first boss.
     def test_library_needs_the_city_and_chapter_two(self) -> None:
-        library = self.world.get_location("Ant Palace: Library, Bookshelf")
+        library = self.world.get_location("Ant Palace: Library, Behind the Bookshelf")
         state = self.state_with()
         self.assertFalse(library.can_reach(state))
         self.add(state, "Chapter 2 Started")
@@ -154,7 +154,7 @@ class TestChapterTwo(BugFablesTestBase):
 class TestMidQuestItem(BugFablesTestBase):
     # Mid-quest items are shuffled, so the delivery's reward needs the old book.
     def test_reward_needs_the_quest_book(self) -> None:
-        reward = self.world.get_location("Bugaria City: Residential District, Old Book Delivery Reward")
+        reward = self.world.get_location("Bugaria City: Residential District, Old Book Delivery Reward 1")
         state = self.state_with("Chapter 2 Started")
         self.assertFalse(reward.can_reach(state))
         # The sweep takes it to the library step.
@@ -165,7 +165,7 @@ class TestMidQuestItem(BugFablesTestBase):
 class TestOldBookChain(BugFablesTestBase):
     # The reward waits for the library step, not just the book, so a room-level world can't skip the library.
     def test_reward_needs_the_library_delivery(self) -> None:
-        reward = self.world.get_location("Bugaria City: Residential District, Old Book Delivery Reward")
+        reward = self.world.get_location("Bugaria City: Residential District, Old Book Delivery Reward 1")
         self.assertTrue(reward.can_reach(self.state_with("Chapter 2 Started", "Old Book Delivered")))
         self.assertEqual(self.world.get_location("Old Book Delivered").parent_region.name, "AntPalaceLibrary")
 

@@ -51,7 +51,7 @@ class TestBerries(BugFablesTestBase):
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         self.assertIn("10 Berries", pool)
         gives = self.world.fill_slot_data()["location_gives"]
-        reward = str(self.world.location_name_to_id["Outskirts: Near Snakemouth Den, Reward"])
+        reward = str(self.world.location_name_to_id["Outskirts: Near Snakemouth Den, Horn Tutorial"])
         self.assertEqual(gives[reward], {"map": "NearSnakemouth", "type": -1, "item": 10})
 
     def test_berries_have_their_own_ids(self) -> None:

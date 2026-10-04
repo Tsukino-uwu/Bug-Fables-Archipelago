@@ -6,9 +6,9 @@ from ..custom_rules import LATER_CHAPTERS, CanUse
 from ..data_types import Location, Source, Transfer
 
 LOCATIONS = (
-    # Where the game teaches Bee Fly (flag 19); the later chapters' story-order stand-in, every ability taught before
-    # it. The name is provisional.
-    Location("Barren Lands: Fly Spot", 73, "BarrenLandsBeefly",
+    # Where the game teaches Bee Fly (flag 19): escorting the queen to the termites, she orders Vi to fly the broken
+    # bridge. The later chapters' story-order stand-in, every ability taught before it.
+    Location("Forsaken Lands: Broken Bridge", 73, "BarrenLandsBeefly",
              Source(event=150, flag=19),
              rule=CanUse("Beemerang Halt") & CanUse("Dash") & CanUse("Shield") & CanUse("Beetle Dig")
              & CanUse("Horn Dash"), reach=LATER_CHAPTERS),

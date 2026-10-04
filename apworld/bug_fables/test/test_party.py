@@ -34,7 +34,7 @@ class TestPartyOff(BugFablesTestBase):
             self.assertNotIn(self.world.location_name_to_id.get(name), silent)
 
     def test_horn_spots_need_no_member(self) -> None:
-        self.assertTrue(self.can_reach_location("Outskirts: East Road, Stone"))
+        self.assertTrue(self.can_reach_location("Outskirts: East Road, Boulder"))
 
 
 class _StartWith:
@@ -71,12 +71,12 @@ class _StartWith:
         self.collect_by_name("Explorer Permit")
         others = [member for member in MEMBERS if member != self.start]
         self.collect_by_name(others[0])
-        self.assertFalse(self.can_reach_location("Outskirts: Near Snakemouth Den, Reward"))
+        self.assertFalse(self.can_reach_location("Outskirts: Near Snakemouth Den, Horn Tutorial"))
         self.collect_by_name(others[1])
-        self.assertTrue(self.can_reach_location("Outskirts: Near Snakemouth Den, Reward"))
+        self.assertTrue(self.can_reach_location("Outskirts: Near Snakemouth Den, Horn Tutorial"))
 
     def test_horn_spots_need_kabbu(self) -> None:
-        spots = ["Outskirts: East Road, Stone", "Bugaria City: Residential District, Rooftop"]
+        spots = ["Outskirts: East Road, Boulder", "Bugaria City: Residential District, Rooftop"]
         for spot in spots:
             self.assertEqual(self.can_reach_location(spot), self.start == "Kabbu")
         self.collect_by_name("Kabbu")
@@ -157,8 +157,8 @@ class TestStartAllThree(BugFablesTestBase):
 
     def test_nothing_waits_on_a_member(self) -> None:
         self.collect_by_name("Explorer Permit")
-        self.assertTrue(self.can_reach_location("Outskirts: Near Snakemouth Den, Reward"))
-        self.assertTrue(self.can_reach_location("Outskirts: East Road, Stone"))
+        self.assertTrue(self.can_reach_location("Outskirts: Near Snakemouth Den, Horn Tutorial"))
+        self.assertTrue(self.can_reach_location("Outskirts: East Road, Boulder"))
 
     def test_pool_matches_locations(self) -> None:
         pool = [item for item in self.multiworld.itempool if item.player == self.player]

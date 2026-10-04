@@ -16,7 +16,7 @@ class TestQuestsOff(BugFablesTestBase):
         self.assertNotIn(str(self.world.location_name_to_id[QUEST_REWARD]), gives)
 
 
-QUEST_REWARD = "Bugaria City: Residential District, Old Book Delivery Reward"
+QUEST_REWARD = "Bugaria City: Residential District, Old Book Delivery Reward 1"
 LOST_KID = "Snakemouth Den: Lake, Ladybug Kid's Reward"
 
 
@@ -82,7 +82,7 @@ class TestDiscoveriesOffByDefault(BugFablesTestBase):
     # Shuffle Discoveries is opt-in: by default no discovery is a location and the client watches none.
     def test_no_discovery_locations(self) -> None:
         names = {loc.name for loc in self.multiworld.get_locations(self.player)}
-        self.assertNotIn("Outskirts: Pier, Statue", names)
+        self.assertNotIn("Outskirts: Pier, Ship's Wheel", names)
         self.assertEqual(self.world.fill_slot_data()["location_discoveries"], {})
 
 
@@ -90,11 +90,11 @@ class TestDiscoveriesOn(BugFablesTestBase):
     options = {"shuffle_discoveries": True}
 
     def test_pier_statue_is_discovery_49(self) -> None:
-        pier = str(self.world.location_name_to_id["Outskirts: Pier, Statue"])
+        pier = str(self.world.location_name_to_id["Outskirts: Pier, Ship's Wheel"])
         self.assertEqual(self.world.fill_slot_data()["location_discoveries"][pier], 49)
 
     def test_pier_statue_open_from_the_start(self) -> None:
-        self.assertTrue(self.can_reach_location("Outskirts: Pier, Statue"))
+        self.assertTrue(self.can_reach_location("Outskirts: Pier, Ship's Wheel"))
 
     def test_snakemouth_arrival_needs_the_permit(self) -> None:
         self.assertFalse(self.can_reach_location("Outskirts: Snakemouth Den Entrance, Arrival"))
