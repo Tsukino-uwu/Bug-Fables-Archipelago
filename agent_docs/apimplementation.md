@@ -634,6 +634,12 @@ be wrong.
     to be present/reachable ... should never have anything be missable"): each of the 25 is kept present past its
     flag, or, where that would break a scene, left out of the seed. Open: the option, the held sprite for most kinds,
     the location count. Not decided.
+59. **Include Story Rooms** (decided 2026-10-04, the user; to build): a yaml option (`include_story_rooms`) for the
+    entrance randomizer, **off by default until the out-of-order scenes are handled** (Known issues), then the default
+    may flip. Off, a story version of a room (the attacked plaza `BugariaPlazaAttack`, the city's ending rooms, the
+    castle attack and the like) keeps its doors as the game has them, reached only the way the story reaches it; on,
+    shuffled like any door. Found in play: a chapter 1 file walked into the attacked plaza through a shuffled door.
+    First: list the story-version maps (the map list and the scenes that load them). Its own build step.
 
 **Known issues:**
 
