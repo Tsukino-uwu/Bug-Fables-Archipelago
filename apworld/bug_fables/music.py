@@ -19,7 +19,10 @@ TRACKS: tuple[str, ...] = (
 # the factory elevator crossfades Dungeon2 and Dungeon2b on a sound slot, outside the music player.
 KEPT: frozenset[str] = frozenset({"Title", "Wind", "Water", "MachineHum", "Breathing", "Dungeon2", "Dungeon2b"})
 
-POOL: tuple[str, ...] = tuple(track for track in TRACKS if track not in KEPT)
+# Names in the game's list with no clip behind them: one played in a track's place would leave it playing as itself.
+NO_CLIP: frozenset[str] = frozenset({"Beetle", "Giant2", "Giant3"})
+
+POOL: tuple[str, ...] = tuple(track for track in TRACKS if track not in KEPT and track not in NO_CLIP)
 
 # The short pieces the game plays as sounds at music volume: the victory fanfare, the game over, the chapter titles
 # (ch1-ch7) and two arrivals. They swap among themselves.

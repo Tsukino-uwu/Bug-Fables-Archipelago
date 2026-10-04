@@ -1,7 +1,7 @@
 from typing import Any
 
 from . import BugFablesTestBase
-from ..music import JINGLES, KEPT, POOL, TRACKS
+from ..music import JINGLES, KEPT, NO_CLIP, POOL, TRACKS
 
 
 class TestMusicOffByDefault(BugFablesTestBase):
@@ -23,7 +23,12 @@ class TestMusicShuffle(BugFablesTestBase):
         # Title plays before the client connects; the elevator's pair crossfades outside the music player.
         music_map = self.world.fill_slot_data()["music_map"]
         self.assertFalse(KEPT & (set(music_map) | set(music_map.values())))
-        self.assertEqual(set(POOL) | KEPT, set(TRACKS))
+        self.assertEqual(set(POOL) | KEPT | NO_CLIP, set(TRACKS))
+
+    def test_names_with_no_clip_never_play(self) -> None:
+        # The game has no clip for these three (dev console `musiccheck`); the pier was given Beetle and stayed itself.
+        music_map = self.world.fill_slot_data()["music_map"]
+        self.assertFalse({"Beetle", "Giant2", "Giant3"} & set(music_map.values()))
 
     def test_tracks_move(self) -> None:
         music_map = self.world.fill_slot_data()["music_map"]

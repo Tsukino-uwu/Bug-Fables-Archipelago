@@ -12,7 +12,7 @@ namespace BugFablesAP
         {
             if (parts.Length < 3)
             {
-                return "spawn <item|key|medal> <id> [flag] | spawn member <n> [x z]";
+                return "spawn <item|key|medal> <id> [flag | @location] | spawn member <n> [x z]";
             }
             if (parts[1].ToLowerInvariant() == "member")
             {
@@ -20,7 +20,9 @@ namespace BugFablesAP
             }
             int kind = parts[1].ToLowerInvariant() == "medal" ? 2 : parts[1].ToLowerInvariant() == "key" ? 1 : 0;
             int id = int.Parse(parts[2]);
-            int flag = parts.Length > 3 ? int.Parse(parts[3]) : -1;
+            // @location: the starburst a check there draws, from its scout (looks only; taking it gives the item).
+            long markAs = parts.Length > 3 && parts[3].StartsWith("@") ? long.Parse(parts[3].Substring(1)) : -1;
+            int flag = parts.Length > 3 && markAs < 0 ? int.Parse(parts[3]) : -1;
             if (MainManager.player == null || MainManager.map == null)
             {
                 return "not now: no player";
@@ -31,6 +33,13 @@ namespace BugFablesAP
             if (flag >= 0)
             {
                 MainManager.instance.flags[flag] = false;
+            }
+            if (markAs >= 0)
+            {
+                Color? color = ItemSwap.MarkColorOf(markAs);
+                ItemSwap.Mark(item.entity, color);
+                return $"spawned {parts[1]} {id} marked as location {markAs}: " + (color == null
+                    ? "no scout or Item backgrounds off, no mark" : "#" + ColorUtility.ToHtmlStringRGB(color.Value));
             }
             return $"spawned {parts[1]} {id}" + (flag >= 0 ? $" with flag {flag}" : "") + " next to you";
         }

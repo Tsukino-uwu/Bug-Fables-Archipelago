@@ -833,6 +833,19 @@ namespace BugFablesAP
                         log.LogInfo("[dev] text colours: " + string.Join(", ", MainManager.instance.textcolors
                             .Select((c, i) => i + " " + ColorUtility.ToHtmlStringRGB(c)).ToArray()));
                         return "palette logged";
+                    case "musiccheck":
+                    {
+                        // Every MainManager.Musics name loaded as the game loads a track (Audio/Music); with names
+                        // given, those as sounds (Audio/Sounds), where the jingles are.
+                        bool sounds = parts.Length > 1;
+                        string[] names = sounds ? parts.Skip(1).ToArray() : Enum.GetNames(typeof(MainManager.Musics));
+                        string folder = sounds ? "Audio/Sounds/" : "Audio/Music/";
+                        string[] none = names.Where(n => Resources.Load<AudioClip>(folder + n) == null).ToArray();
+                        log.LogInfo($"[dev] musiccheck: {names.Length - none.Length} of {names.Length} in {folder} "
+                            + "have a clip; none for: "
+                            + (none.Length == 0 ? "(every one has)" : string.Join(", ", none)));
+                        return $"musiccheck: {none.Length} of {names.Length} without a clip";
+                    }
                     case "articles":
                     {
                         // The found-item line's article: the default (menutext[125]) and each item's own (itemdata[0,

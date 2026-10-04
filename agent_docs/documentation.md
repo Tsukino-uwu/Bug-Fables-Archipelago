@@ -796,8 +796,9 @@ Dev `holdup long` shows four such lines: the one seen, a longer one, and the lon
 
 **Status:** works for gifts, pickups and their ground sprites, and respawning pickups seen on screen
 (2026-09-24, `MEASURED.md`), and crystal berry spots (2026-09-25); berry rewards and story pickups built, not yet seen
-in game; the description box's field fix (2026-09-26) not yet seen; long names fitted to the box (2026-09-30), seen
-with `holdup long`'s four lines (2026-10-04: broken before "from", the shorter line centred, every one inside the box).
+in game; the description box's field fix (2026-09-26) seen on a key item's pickup (2026-10-04); long names fitted to
+the box (2026-09-30), seen with `holdup long`'s four lines (2026-10-04: broken before "from", the shorter line
+centred, every one inside the box).
 
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
 `Recolour` and `FirstMedalSeen` do the swapping); `ItemSwap.Pickups.cs` (`PickupPrefix`, `FindPickup`, `TickGround`,
@@ -1865,8 +1866,8 @@ end). Right below Item animation, since both are about another player's items.
 - The Quality of life page grew to eight rows then (the last at the panel's lowest row spot, above the help line);
   step 21 on added more.
 
-**Status:** built (2026-09-26); the row seen on the ten-row page (2026-09-26, step 21); not yet seen: a hold-up with it
-off.
+**Status:** built (2026-09-26); the row seen on the ten-row page (2026-09-26, step 21); a hold-up with it off seen
+(2026-10-04): the whole "Explorer Permit from TestPlayer" in the game's red, the wording unchanged.
 
 *Code: `QualityOfLife.cs` (`ItemColors`, `ApColors`), `ApMenu.cs` (`ColorsRow`), `ItemSwap.Looks.cs`
 (`PlayerText`, `ClassText`).*
@@ -1951,7 +1952,9 @@ cut through the flat starburst close behind it, and every other item is a flat s
 icon everywhere, crystal berry spots included, always with its backdrop, for the clarity the backdrop gives.
 
 **Status:** works, seen on the Caravan's shelf and on the ground (2026-09-26); with Item colors Off, the game's own
-colours by kind not yet seen.
+colours by kind seen (2026-10-04): medals orange on the Caravan's shelf and Madeleine's table, an item teal beside
+them, and a key item pink (a dev pickup drawn from the pier's checked spot, its Progressive Boat, through `spawn key 27
+@7720026`).
 
 *Code: `ItemSwap.Looks.cs` (`Mark`, `MarkColorOf`), `QualityOfLife.cs` (`ItemBackgrounds`), `ApMenu.cs`
 (`BackgroundsRow`).*

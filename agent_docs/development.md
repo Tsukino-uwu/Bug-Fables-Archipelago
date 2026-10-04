@@ -308,7 +308,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   battle, event or dialogue has started by then. Before arriving it marks the map's auto-start cutscenes seen (their
   flags set in the save), since out of story order they can crash; `loc` and `enemylook` warp the same way.
 - `spawn <item|key|medal> <id> [flag]`: drop a pickup next to you. With a pickup location's flag, on that
-  location's map, it is that location. `spawn member <n> [x z]` drops party member n's look (0 Vi, 1 Kabbu, 2 Leif)
+  location's map, it is that location. With `@<location id>` in place of the flag, it gets the starburst a check there
+  draws, from that location's scout (looks only; taking it gives the spawned item): a class or kind's colour seen
+  where no check of it is left. `spawn member <n> [x z]` drops party member n's look (0 Vi, 1 Kabbu, 2 Leif)
   at that offset from you, to see how a location holding him looks; it's a Crunchy Leaf underneath, given if taken.
 - `flag <n> [on|off]`: show or set a story flag.
 - `textsearch <word>`: every text file the game loads from `Resources/Data`, searched case-insensitively; up to 200
@@ -398,6 +400,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `menuinfo`: with an Archipelago panel open, its text pieces and letters, one of its letters beside one of the game's
   Settings letters in the GUI camera's own frame (position, rotation, layer, sort, visible), and the camera itself.
 - `palette`: log the game's text colours by index (`|color,n|`), Archipelago's added ones included.
+- `musiccheck [name...]`: load every `MainManager.Musics` name as the game loads a track (`Audio/Music`) and log which
+  have no clip; with names, those from `Audio/Sounds`, where the jingles are. Found the three silent track names
+  (2026-10-04, `MEASURED.md`, music and jingles).
 - `colortry <hex...>`: queue a trap's "You got" line in each colour given, to compare them on screen.
 - `onehit`: flips a test boost: every hit on an enemy does at least 99 (before defence). It's the `[Debug]` setting
   `OneHit` (off in the code), so it survives reloads; `copy-dev.ps1 -DebugOn OneHit` turns it on for a dev install.

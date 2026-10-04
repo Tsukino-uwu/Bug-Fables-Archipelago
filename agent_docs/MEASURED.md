@@ -1997,6 +1997,10 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
     `MainManager.Musics` names. There are 75 (`:298-375`).
   - Music loads from `Audio/Music/<name>`; a map's tracks are `MapControl.music`, chosen by `musicflags`
     (`MapControl.cs:433-461`).
+  - **Three names have no clip** (measured 2026-10-04, dev console `musiccheck`, each name loaded as the game loads a
+    track): 72 of the 75 load; `Beetle`, `Giant2` and `Giant3` come back empty. Seen first as a seed's pier, given
+    `Beetle`, staying itself (`[music] Beetle not found`). With `FixSamira`'s five (below) that is the 8 her count
+    leaves out. The 11 jingles all load from `Audio/Sounds`. Used by `music.py` (`NO_CLIP`).
 - **Loop points:** `Data/LoopPoints`, one `end;start` line per track (`LoopPoint`, `:7655-7668`). `LoopMusic`, run in
   `FixedUpdate`, sends the player back to the second value once it passes a non-zero first (`:7671-7684`).
 - **What reads the playing track back.** None of these would survive a swapped clip:

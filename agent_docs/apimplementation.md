@@ -3407,6 +3407,12 @@ item, check or rule depends on it.
    - the four ambience beds Samira leaves out of her list;
    - the factory elevator's pair, which the game crossfades on a sound slot, outside the music player.
 
+   **And three names with no clip (2026-10-04):** `Beetle`, `Giant2` and `Giant3` are in the game's list but load
+   nothing. Found in play: the first seed seen with the shuffle gave the pier `Beetle`, and the pier played its own
+   song (the user: "the pier didn't randomize its music"; the mod's guard logged `[music] Beetle not found`). Measured
+   for every name with the new dev command `musiccheck` (`development.md`): only those three. They left the pool
+   (`NO_CLIP`), so every pool track now has a clip to play. The pool is 65 tracks.
+
    The jingles are 11 sounds the game plays at music volume.
 2. **The roll:** in `generate_basic`, which `world api.md` gives "player-specific randomization that does not affect
    logic".
@@ -3441,6 +3447,7 @@ item, check or rule depends on it.
 **Tests** (`test_music.py`):
 - off swaps nothing;
 - on, every pool track plays exactly once, the kept tracks never move, and the jingles swap among themselves;
+- the three names with no clip never play in a track's place (it failed with them back in the pool, 2026-10-04);
 - the same seed with the option on or off gives the same slot_data otherwise, the same item pool and the same fill
   randomness. It failed with the roll moved to the start of `generate_early`.
 
@@ -3450,8 +3457,8 @@ item, check or rule depends on it.
 - `seed-snapshot.py` on CI's three presets, alone and with APQuest, before and after the change: only the two empty
   maps and the option's spoiler line are new.
 
-**Status:** built (2026-09-30); area music seen swapped (2026-10-04); the jingles, the title music and Samira not yet
-seen.
+**Status:** built (2026-09-30); area music seen swapped (2026-10-04); three names with no clip taken out of the pool
+(2026-10-04), not yet seen in a new seed; the jingles, the title music and Samira not yet seen.
 
 *Code: `music.py`, `options.py` (`MusicShuffle`, `option_groups`), `web_world.py`, `world.py` (`generate_basic`),
 `slot_data.py`; the mod's `MusicShuffle.cs`; tests `test_music.py`.*
