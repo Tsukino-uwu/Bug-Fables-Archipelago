@@ -628,7 +628,7 @@ list arrows keep the corners just seen. A value now fits about 11 letters before
 own narrower row. **Seen on screen (2026-09-30):** "yee it works, feels a bit cramped but its how the game does it so
 fits in better": kept as the game has it.
 
-**Achievements (2026-09-26; built, not yet seen):** an *Achievements* row on the main page, off by default.
+**Achievements (2026-09-26; seen held back 2026-10-04, the first boss on Seed A, achievement 5):** an *Achievements* row on the main page, off by default.
 While Archipelago is enabled and it's off, Steam achievements aren't unlocked, as normal saves are kept apart; the help
 line says it only concerns Steam, never Archipelago. Every achievement goes through one function,
 `InputIO.Achivement(id)` (the game's spelling), which asks Steam and sets it; `AchievementGuard.cs` skips it and logs
