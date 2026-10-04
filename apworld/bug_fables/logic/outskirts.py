@@ -6,17 +6,13 @@ from rule_builder.rules import Has
 
 from ..custom_rules import (ALL_ATTACKS, BOAT_TICKET, LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, WHOLE_PARTY,
                             CanUse)
-from ..data_types import (Added, DialogueFlag, DoorRule, EntityRef, Give, ItemEntity, ItemShop, Location, Pickup,
+from ..data_types import (Added, DialogueFlag, EntityRef, Give, ItemEntity, ItemShop, Location, Pickup,
                           Source, Transfer)
 
 # Past the Explorer Permit gate (inside the Outskirts map, so not a door): cautious until the rooms past it are
 # measured, every member (when members are items) and every move item (when moves are).
 PAST_GATE = Has("Explorer Permit") & WHOLE_PARTY & ALL_ATTACKS
-GOLDEN_PATH = Has("Snakemouth Den Cleared")
-DOOR_RULES = (
-    # The game makes the Golden Path door only after the first boss (flag 41); the rocks in front are the seed's to remove.
-    DoorRule("BugariaOutskirtsOutsideCity", "LoadZoneGoldenPath", Has("Snakemouth Den Cleared")),
-)
+DOOR_RULES = ()
 LOCATIONS = (
     Location("Outskirts: Maki and Eetl's Gift", 1, "BugariaOutskirtsOutsideCity",
              Source(event=16, flag=15, give=Give(map="BugariaOutskirtsOutsideCity", type=1, item=27)), quiet=True,
@@ -26,9 +22,10 @@ LOCATIONS = (
              Source(event=10, flag=17, give=Give(map="NearSnakemouth", type=-1, item=10)), reach=PAST_GATE),
     Location("Outskirts: Artis's Gift", 3, "BugariaOutskirtsOutsideCity",
              Source(npc="ShwEmArtys", flag=32, give=Give(map="BugariaOutskirtsOutsideCity", type=2, item=11))),
-    # Cut grass copies its own one-time flag onto the item it drops, so this is an ordinary pickup.
+    # Cut grass copies its own one-time flag onto the item it drops, so this is an ordinary pickup. Only Kabbu's horn
+    # cuts it.
     Location("Outskirts: Golden Path, Grass by the Dirt Spot", 12, "BOGoldenPath",
-             Source(flag=74, pickup=Pickup(map="BOGoldenPath", type=0, item=2)), reach=GOLDEN_PATH),
+             Source(flag=74, pickup=Pickup(map="BOGoldenPath", type=0, item=2)), rule=CanUse("Horn Slash")),
     # The first boss's prize medal: the mod pays prizes as if Hard Mode were on, so it waits at Artis.
     Location("Outskirts: Artis's Prize for Snakemouth Den", 13, "BugariaOutskirtsOutsideCity",
              Source(event=33, var=13, at_least=3, give=Give(map="BugariaOutskirtsOutsideCity", type=2, item=5)),
@@ -123,6 +120,8 @@ KEPT_PRESENT = (
     EntityRef("BugariaOutskirtsOutsideCity", "QuestBoard"),
     # The real door into the city, which the game makes only after the arrival scene (removed).
     EntityRef("BugariaOutskirtsOutsideCity", "DoorBugaria"),
+    # The Golden Path door, made only after the first boss (flag 41); past it the tunnel waits for chapter 2 (67).
+    EntityRef("BugariaOutskirtsOutsideCity", "LoadZoneGoldenPath"),
     # The way into Chuck's Abode, made only after the first boss.
     EntityRef("NearSnakemouth", "loadingzonechuck"),
     # The shortcut back to the first corridor, made only after the first boss.

@@ -1959,6 +1959,10 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   every transfer names its own spot: a door's `vectordata[1]`, a scene's position set after `LoadMap`, a dialogue
   line's `|warp,map,x,y,z|`. The bar's hatch (Event61) sets one after `LoadMap(30, recreateplayers: true)`: each member
   dropped in at (-20.34, 9, 0.53), one unit higher per member (`EventControl.cs:9865-9872`).
+- **The Golden Path** (2026-10-04, EntityDump and code read): `LoadZoneGoldenPath` on `BugariaOutskirtsOutsideCity`
+  requires flag 41. Inside `BOGoldenPath`, `Loadzonetunnel` (onward) requires 67, and `blocker` (Event12) stands at that
+  tunnel until 67; `loadzonecave` (the Hermit's cave) has no flag. Beetle grass (`ObjectTypes.BeetleGrass`) is cut
+  only by a hit tagged `BeetleHorn` or `BeetleDash`, Kabbu's (`NPCControl.cs`, the BeetleGrass case).
 - **Eetl's blocker has two triggers** (2026-10-04, EntityDump and code read; seen in play): on
   `BugariaOutskirtsOutsideCity`, `eetlblocker1 - Duplicate` (41) stands from flag 41 and `eetlblocker1` (40) from flag
   114, both until 67, both starting `Event12` (a line, then a walk back). Flag 114 is set by `Event63`, where Eetl

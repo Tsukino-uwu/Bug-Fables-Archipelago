@@ -27,6 +27,7 @@ class TestPermitGate(BugFablesTestBase):
                                      "Outskirts: Artis's Gift",
                                      "Outskirts: Ladybug Siblings' House", "Outskirts: East Road, Boulder",
                                      "Outskirts: Pier, Behind the Dock", "Bugaria City: Residential District, Rooftop",
+                                     "Outskirts: Golden Path, Grass by the Dirt Spot",
                                      "Outskirts: Madeleine's House, Table Right",
                                      "Outskirts: Madeleine's House, Table Left"}
                          | {f"Bugaria City: Commercial District, Medal Shop {n}" for n in range(1, 23)}
@@ -107,13 +108,13 @@ class TestInRoomRules(BugFablesTestBase):
 
 
 class TestGoldenPath(BugFablesTestBase):
-    # The Golden Path's door opens with the first boss (flag 41).
-    def test_golden_path_needs_the_first_boss(self) -> None:
-        location = self.world.get_location("Outskirts: Golden Path, Grass by the Dirt Spot")
-        state = self.state_with()
-        self.assertFalse(location.can_reach(state))
-        self.add(state, "Snakemouth Den Cleared")
-        self.assertTrue(location.can_reach(state))
+    # The game makes the door only after the first boss (flag 41); the seed opens it from the start.
+    def test_door_present_from_the_start(self) -> None:
+        self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "LoadZoneGoldenPath"},
+                      self.world.fill_slot_data()["kept_present"])
+
+    def test_grass_reachable_from_the_start(self) -> None:
+        self.assertTrue(self.can_reach_location("Outskirts: Golden Path, Grass by the Dirt Spot"))
 
 
 class TestBossPrize(BugFablesTestBase):
