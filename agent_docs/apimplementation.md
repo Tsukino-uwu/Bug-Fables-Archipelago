@@ -1502,7 +1502,11 @@ up or mark them as oneways": every door and flag gets that verdict as its area i
 turned out to span the way to the cave too, so it is kept away (`MEASURED.md`, the Golden Path). **The tunnel too**
 (the user, the same day: "yes open it, and keep it open from the start"): `Loadzonetunnel` kept present. It joins
 rooms the logic already had (the Golden Hills on to the Barren Lands and the Lost Sands); their few locations still
-wait for the later chapters (`LATER_CHAPTERS`), so the logic promises nothing new past it until those rooms are mapped. Now `kept_present` from the start, the rule gone; location 12's beetle
+wait for the later chapters (`LATER_CHAPTERS`), so the logic promises nothing new past it until those rooms are mapped.
+**The Golden Settlement's desert gate** (the same day, met walking in): its switch swung it open, but an invisible
+wall behind it stands until the desert side has been reached (flag 170). The logic already counted that door open, so
+the game was stricter: the gate is shown open from the start and the wall hidden (`logic/golden_settlement.py`; test
+`TestSettlementDesertGate`; `MEASURED.md`, the Golden Settlement's desert gate). No attack is needed for the switch. Now `kept_present` from the start, the rule gone; location 12's beetle
 grass takes Kabbu's horn, so it needs `Horn Slash` of its own (the boss had implied it). Tests `TestGoldenPath`.
 
 **Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion

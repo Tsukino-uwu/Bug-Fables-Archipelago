@@ -266,3 +266,13 @@ class TestMadeleinesHouse(BugFablesTestBase):
         names = ["Outskirts: Maki and Eetl's Gift", "Outskirts: Outside the City, Opening",
                  "Outskirts: Outside the City, Tutorial Battle"]
         self.assertEqual(quiet, sorted(self.world.location_name_to_id[name] for name in names))
+
+
+class TestSettlementDesertGate(BugFablesTestBase):
+    # The gate opens only from its switch, and an invisible wall stands behind it until the desert side is reached.
+    def test_gate_open_and_wall_gone(self) -> None:
+        data = self.world.fill_slot_data()
+        for path in ("Base/Cube", "Base/DesertGate/WoodenGate2", "Base/DesertGate/WoodenGate2 (1)"):
+            self.assertIn({"map": "GoldenSettlementEntrance", "entity": path}, data["scenery_hidden"])
+        for path in ("Base/WoodenGate2 (2)", "Base/WoodenGate2 (3)"):
+            self.assertIn({"map": "GoldenSettlementEntrance", "entity": path}, data["scenery_present"])

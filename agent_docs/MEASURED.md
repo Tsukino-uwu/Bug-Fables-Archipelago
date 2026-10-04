@@ -1964,6 +1964,12 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   the tunnel's door but spanning the path to `loadzonecave` (the Hermit's cave, no flag) too: seen 2026-10-04, it
   turned the party back on the way to the cave. Beetle grass (`ObjectTypes.BeetleGrass`) is cut
   only by a hit tagged `BeetleHorn` or `BeetleDash`, Kabbu's (`NPCControl.cs`, the BeetleGrass case).
+- **The Golden Settlement's desert gate** (2026-10-04, MapDump's flag scenery and code read; seen in play): on
+  `GoldenSettlementEntrance` the shut gate is `Base/DesertGate/WoodenGate2` and `(1)` until flag 83, the open one
+  `Base/WoodenGate2 (2)` and `(3)` from 83; `gateswitch` (a Switch, an attack hits it) starts `Event50`, which swings it.
+  Behind it `Base/Cube`, an invisible wall, stands until flag 170, set on first entering `DesertDRSouthEntrance` from
+  the desert (`MapControl.cs`). **Seen 2026-10-04:** the gate swung open by its switch, the wall still stopped the
+  party.
 - **Eetl's blocker has two triggers** (2026-10-04, EntityDump and code read; seen in play): on
   `BugariaOutskirtsOutsideCity`, `eetlblocker1 - Duplicate` (41) stands from flag 41 and `eetlblocker1` (40) from flag
   114, both until 67, both starting `Event12` (a line, then a walk back). Flag 114 is set by `Event63`, where Eetl
