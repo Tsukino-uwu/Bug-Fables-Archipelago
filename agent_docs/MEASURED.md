@@ -1964,6 +1964,15 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   the tunnel's door but spanning the path to `loadzonecave` (the Hermit's cave, no flag) too: seen 2026-10-04, it
   turned the party back on the way to the cave. Beetle grass (`ObjectTypes.BeetleGrass`) is cut
   only by a hit tagged `BeetleHorn` or `BeetleDash`, Kabbu's (`NPCControl.cs`, the BeetleGrass case).
+- **The ant tunnels** (2026-10-04, code read, EntityDump, MapDump): the hub `AntTunnels` has one `EventTrigger`
+  door per far end, each starting `Event49` (the ride, both ways) and each made from its flag: Golden Hills 76, Defiant
+  Root 75, Termite (the Barren Lands) 77, Metal Island 78, Rubber Prison 79, Far Grasslands 80; its `Covers` hide and
+  `CaveEntrances` show from the same flags. Each far end (`GoldenSettlementEntrance`, `DefiantRoot2`,
+  `BarrenLandsAntTunnel`, `MetalIsland2`, `FGCave`) has a miner, Diana, until its flag, and a `Base/AntTunnelRock`
+  hidden from it. Her scene, `Event48`, sets `flagvar[0]` to the area's price (Golden Way 15, Defiant Root 25, Barren
+  Lands 35, Far Grasslands 50, Rubber Prison 60, Metal Island 100); the first talk with any miner is an introduction
+  (flag 81); after it she offers the dig, checks `money` against `flagvar[0]`, charges `|money,-N|` and sets the
+  area's flag. Used by `AntTunnels.cs`.
 - **The Golden Settlement's desert gate** (2026-10-04, MapDump's flag scenery and code read; seen in play): on
   `GoldenSettlementEntrance` the shut gate is `Base/DesertGate/WoodenGate2` and `(1)` until flag 83, the open one
   `Base/WoodenGate2 (2)` and `(3)` from 83; `gateswitch` (a Switch, an attack hits it) starts `Event50`, which swings it.

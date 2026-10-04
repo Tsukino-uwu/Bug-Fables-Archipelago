@@ -61,6 +61,8 @@ namespace BugFablesAP
         internal readonly bool JumpShuffled;
         internal readonly bool AbilityItems;
         internal readonly bool SubmarineItem;
+        // The ant tunnels' miners dig for free.
+        internal readonly bool FreeAntTunnels;
         internal readonly bool PointsOfNoReturn;
 
         internal SeedData(Dictionary<string, object> data, int ownSlot)
@@ -154,6 +156,8 @@ namespace BugFablesAP
                 && abilities is bool abilitiesOn && abilitiesOn;
             SubmarineItem = data != null && data.TryGetValue("submarine_item", out object submarine)
                 && submarine is bool submarineOn && submarineOn;
+            FreeAntTunnels = data != null && data.TryGetValue("free_ant_tunnels", out object tunnels)
+                && tunnels is bool tunnelsFree && tunnelsFree;
             JObject options = SlotData.Object(data, "options");
             OptionsMissing = options == null;
             MovesShuffled = SlotData.On(options, "shuffle_field_moves");

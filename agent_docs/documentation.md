@@ -93,6 +93,7 @@ anyone curious about the process, or thinking of doing the same for another game
 39. [Spy Specs: the medal's effects as a Quality of life row](#39-spy-specs-the-medals-effects-as-a-quality-of-life-row)
 40. [No respawn loop: a fall that only leads back into itself ends with the Warp](#40-no-respawn-loop-a-fall-that-only-leads-back-into-itself-ends-with-the-warp)
 41. [The seed's options read from slot_data's `options`](#41-the-seeds-options-read-from-slot_datas-options)
+42. [The ant tunnels' miners dig for free](#42-the-ant-tunnels-miners-dig-for-free)
 
 ## Where it stands
 
@@ -2997,3 +2998,16 @@ from `options`; the Warp with Travel Off (Points of No Return's seed). The goal 
 
 *Code: `Core/SeedData.cs` (`OptionsMissing`, the four values), `Core/SlotData.cs` (`On`, `Number`),
 `Core/ApConnection.cs` (the status line), `World/FieldMoves.cs`, `Items/LocationChecks.cs`.*
+
+## 42. The ant tunnels' miners dig for free
+
+The game side of the Archipelago guide's build step 45. Every far end's miner runs one scene, `Event48`, which stores
+its area's price in `flagvar[0]`, then shows it, checks the berries and charges from there. With `free_ant_tunnels` in
+the seed and Archipelago on, a transpiler sends each of the six stored prices through `AntTunnels.Price`, which answers
+0, so the dig costs nothing and still opens the tunnel the game's way (its flag, its scene). The log says which way each
+price went (`[tunnels] the miner's price N: free in this seed`), and the install line counts the prices found (6 of 6).
+Off Archipelago the prices are the game's.
+
+**Status:** built (2026-10-04), the build succeeds; not yet seen in game.
+
+*Code: `World/AntTunnels.cs`, `Core/SeedData.cs` (`FreeAntTunnels`).*

@@ -22,6 +22,12 @@ TRANSFERS = (
     # The tunnel's prison door needs flag 79, set only inside the prison, which the sub alone reaches before it.
     Transfer("ant tunnel", "AntTunnels", "RubberPrisonGiantLairBridge", LATER_CHAPTERS & SUBMARINE),
     Transfer("ant tunnel", "AntTunnels", "MetalIsland2", LATER_CHAPTERS),
+    # Each far end's miner opens its shortcut to the tunnel hub, for free in a seed (free_ant_tunnels); the hub's way
+    # back out needs that end's flag, set only by having been there, so the way out adds nothing and isn't listed.
+    Transfer("ant tunnel", "GoldenSettlementEntrance", "AntTunnels", two_way=False),
+    Transfer("ant tunnel", "DefiantRoot2", "AntTunnels", two_way=False),
+    Transfer("ant tunnel", "BarrenLandsAntTunnel", "AntTunnels", two_way=False),
+    Transfer("ant tunnel", "FGCave", "AntTunnels", two_way=False),
     # Chapter 3's end, back in the palace after the attack on the city.
     Transfer("story", "BugariaCastleAttack", "AntPalace2", LATER_CHAPTERS, two_way=False),
     # The ending: the city's end, the throne, and back to the plaza.

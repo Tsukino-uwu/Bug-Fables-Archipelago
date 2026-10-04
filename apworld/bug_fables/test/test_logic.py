@@ -217,3 +217,14 @@ class TestTownMedal(BugFablesTestBase):
         self.assertFalse(self.can_reach_location(name))
         self.collect_by_name(["Explorer Permit", "Leif"])
         self.assertTrue(self.can_reach_location(name))
+
+
+class TestAntTunnels(BugFablesTestBase):
+    # A far end's free miner opens the way to the tunnel hub, so reaching the far end reaches the hub.
+    def test_far_ends_lead_to_the_hub(self) -> None:
+        names = {e.name for e in self.multiworld.get_region("AntTunnels", self.player).entrances}
+        for far in ("GoldenSettlementEntrance", "DefiantRoot2", "BarrenLandsAntTunnel", "FGCave"):
+            self.assertIn(f"{far} to AntTunnels (ant tunnel)", names)
+
+    def test_miners_free(self) -> None:
+        self.assertTrue(self.world.fill_slot_data()["free_ant_tunnels"])

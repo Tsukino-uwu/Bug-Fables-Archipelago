@@ -121,6 +121,8 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         # The submarine is an item (its key item, whichever item gives it): the mod answers the docks' story checks from
         # the bag.
         "submarine_item": True,
+        # The ant tunnels' miners dig for free: each shortcut opens once its far end is reached (the user, 2026-10-04).
+        "free_ant_tunnels": True,
         # Music Shuffle, {name: name played in its place}: tracks by the game's Musics names, jingles by their sound
         # names; both empty when it's off.
         "music_map": world.music_map,

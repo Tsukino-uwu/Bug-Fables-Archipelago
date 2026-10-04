@@ -114,6 +114,7 @@ this file and that doc disagree, that doc is right.
 42. [Build step 42: the PopTracker pack, first part: its own repo, the logic exported from the apworld](#build-step-42-the-poptracker-pack-first-part-its-own-repo-the-logic-exported-from-the-apworld)
 43. [Build step 43: Music Shuffle, the Honey Factory's two songs, the elevator's crossfade a plain fade](#build-step-43-music-shuffle-the-honey-factorys-two-songs-the-elevators-crossfade-a-plain-fade)
 44. [Build step 44: every quest available from the start, none of it done for you](#build-step-44-every-quest-available-from-the-start-none-of-it-done-for-you)
+45. [Build step 45: the ant tunnels, the miners dig for free](#build-step-45-the-ant-tunnels-the-miners-dig-for-free)
 
 **How it works**
 
@@ -614,6 +615,10 @@ be wrong.
 56. **Every quest available from the start** (2026-10-04, the user): one quest at a time, the lost kid's first (its
     reward, location 10, held back until then); Madeleine's house then locked as in the game, her two quests
     opened. See build step 44.
+57. **Ant tunnel tickets** (a possible future plan, 2026-10-04, the user: "log down B as a possible future plan"): a
+    yaml option, beside build step 45's free miners, where each tunnel shortcut opens from an item instead (one ticket
+    per tunnel, six, or one progressive ticket), like the Boat Ticket. Each ticket gates its tunnel, so each is
+    progression; each needs a name (the user's) and an icon. Not decided.
 
 **Known issues:**
 
@@ -4321,6 +4326,28 @@ open once Bugaria City is visited) was played through (build step 9) and stays i
 
 *Code: `data_types.py` (`Location.pending`), `world.py` (`included_locations`), `options.py` (`category_count`),
 `logic/snakemouth_den.py`; tests `test_categories.py`.*
+
+## Build step 45: the ant tunnels, the miners dig for free
+
+**Asked (the user, 2026-10-04):** "can we make them open for free/0 berries ? but you still need to reach them ?"
+(their option A; tickets, option B, are Next 57). In the game the tunnel hub (`AntTunnels`, under the Ant Palace) has
+one door per far end, each made from that end's flag, set by paying that end's miner, Diana (`Event48`; the prices and
+flags in `MEASURED.md`, the ant tunnels). The ride (`Event49`) then goes both ways.
+
+**The logic:** each far end leads to the hub once reached, since that's where the (now free) miner is:
+`GoldenSettlementEntrance`, `DefiantRoot2`, `BarrenLandsAntTunnel` and `FGCave` to `AntTunnels`, one-way. The hub's
+way back out needs that end's flag, set only by having been there, so it reaches nothing new and isn't listed. Metal
+Island and the Rubber Prison keep their earlier, more cautious two-way transfers (`LATER_CHAPTERS`). From the hub the
+palace is a plain door.
+
+**The game side:** `slot_data` sends `free_ant_tunnels: true`; the mod reads every miner's price as 0 (the mod guide,
+step 42).
+
+**Tests:** `TestAntTunnels` (the four ways in, the key).
+
+**Status:** built (2026-10-04), not yet seen in game; tests not run yet (batched before the push).
+
+*Code: `logic/bugaria_city.py` (`TRANSFERS`), `slot_data.py` (`free_ant_tunnels`); tests `test_logic.py`.*
 
 # How it works
 
