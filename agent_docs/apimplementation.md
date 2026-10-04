@@ -1581,8 +1581,8 @@ decoupled doors: Eetl, the bridge with Maki, the briefing), before it not yet tr
 its guard still stands, left to the story); the Golden Path door, the way to the Hermit's cave and the tunnel onward
 seen open from a new file (2026-10-04); the Golden Settlement's desert gate and its wall seen open
 (2026-10-04); the way to Snakemouth Den kept open after the permit and its gatekeeper kept: seen (2026-10-04, past
-the first boss, the gatekeeper took the permit and the gate opened); chapter 2's gate, guard and sign gone not yet
-seen.
+the first boss, the gatekeeper took the permit and the gate opened); chapter 2's gate, guard and sign seen gone
+(2026-10-04, flag 67 read back set on the file).
 
 *Code: the lists in `logic/*.py` (`KEPT_OPEN`, `KEPT_PRESENT`, `SCENERY_HIDDEN`, `SCENERY_PRESENT`, `HELD_UNTIL`,
 `PRESENT_FROM`, `HELD_UNTIL_ITEM`, `DIALOGUE_FLAGS`, gathered in `logic/__init__.py`), sent by `slot_data.py`; in the
