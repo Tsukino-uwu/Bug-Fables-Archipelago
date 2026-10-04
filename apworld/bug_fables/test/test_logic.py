@@ -244,3 +244,22 @@ class TestAntTunnels(BugFablesTestBase):
         # The game makes it only after the ending; the seed puts it on the table from the start, as a location.
         self.assertIn({"map": "AntPalaceWarRoom", "entity": "royal medal"}, self.world.fill_slot_data()["kept_present"])
         self.assertTrue(self.can_reach_location("Ant Palace: War Room, Table"))
+
+
+class TestPrisonCorridor(BugFablesTestBase):
+    # Switch gates: never on from the yard; across to the yard with an attack; back through its prison door with
+    # the permit.
+    options = {"shuffle_field_moves": True}
+
+    def test_corridor_rules(self) -> None:
+        from ..data_tables import door_name
+        def entrance(map_name: str, door: str):
+            return self.multiworld.get_entrance(door_name(map_name, door), self.player)
+        everything = self.state_with("Explorer Permit", "Progressive Beemerang")
+        self.assertFalse(entrance("RubberPrisonPier", "loadzoneleft").access_rule(everything))
+        across = entrance("RubberPrisonCheckpointCorridor", "loadzoneexit")
+        self.assertFalse(across.access_rule(self.state_with()))
+        self.assertTrue(across.access_rule(self.state_with("Progressive Beemerang")))
+        back = entrance("RubberPrisonCheckpointCorridor", "loadzoneforward")
+        self.assertFalse(back.access_rule(self.state_with()))
+        self.assertTrue(back.access_rule(self.state_with("Explorer Permit")))

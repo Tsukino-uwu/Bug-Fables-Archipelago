@@ -1968,6 +1968,11 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   (`BreakableRock`) on `RubberPrisonPier`, just inside the left door from `RubberPrisonCheckpointCorridor`, until flag
   589; a breakable rock breaks only on a hit tagged `BeetleDash` (Horn Dash) or, with conditions, `BeetleHorn`
   (`NPCControl.cs`, the BreakableRock case).
+- **The Rubber Prison's checkpoint corridor** (2026-10-04, EntityDump and code read; the user's account of play): its
+  gates (`gate1 - Duplicate` and its copy, `ANDBlock`s) open and shut by switches; from the yard's side the only
+  switch (`switch - Duplicate - Duplicate`, entity 8) exists from flag 79, the far side's two have no flag. The `PrisonDoor` (entity 6, until flag 538) by the
+  way to the spike room opens with the Explorer Permit (the user, 2026-10-04). A switch
+  takes the Beemerang, a hit tagged `BeetleHorn`/`BeetleDash`, or ice (`Icefall`/`Icecle`) (`NPCControl.cs`, Switch).
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

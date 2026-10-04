@@ -1519,7 +1519,12 @@ the game was stricter: the gate is shown open from the start and the wall hidden
 the logic yet (`MEASURED.md`, the Flower Key); her sale became a location the same day (build step 46).
 **The Rubber Prison yard's rock** (the user: "it makes you get stuck/softlocked normally"): `rock` just inside
 `RubberPrisonPier`'s left door, broken only by Horn Dash, until flag 589, is kept away (`logic/rubber_prison.py`, test
-`TestPrisonYardRock`; `MEASURED.md`, the Rubber Prison yard's rock). Now `kept_present` from the start, the rule gone; location 12's beetle
+`TestPrisonYardRock`; `MEASURED.md`, the Rubber Prison yard's rock). **Its checkpoint corridor, one-way both ways**
+(the user: "this entrance is potentially a oneway if the door is closed ... the other side of this room is also a
+oneway if you don't have the explorer permit to go back / a basic attack to hit the switches"): from the yard the
+logic never lets it lead on (`False_`, Archipelago's own); across to the yard from the far side it needs any attack
+for the switches (`ANY_ATTACK`); back to the spike room its prison door needs the Explorer Permit (corrected by the
+user: "the permit is for opening the door for the other entrance"). Test `TestPrisonCorridor`. Now `kept_present` from the start, the rule gone; location 12's beetle
 grass takes Kabbu's horn, so it needs `Horn Slash` of its own (the boss had implied it). Tests `TestGoldenPath`.
 
 **Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion

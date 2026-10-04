@@ -93,6 +93,8 @@ def one_way(rule: Rule | None, way_back: Rule) -> Rule:
 # The cautious stand-in for ground not measured yet: every member, and every attack's item.
 WHOLE_PARTY = Member("Vi") & Member("Kabbu") & Member("Leif")
 ALL_ATTACKS = MoveItem("Beemerang Toss") & MoveItem("Horn Slash") & MoveItem("Freeze")
+# A switch takes any of the three: the Beemerang, a hit tagged BeetleHorn or BeetleDash, or ice (NPCControl, Switch).
+ANY_ATTACK = CanUse("Beemerang Toss") | CanUse("Horn Slash") | CanUse("Freeze")
 BOAT_TICKET = Boat(1)
 SUBMARINE = Boat(2)
 # The submarine's key item in the bag, the Subaquatic Maritime Neotransport (CustomItems.cs), whichever item gives it.
