@@ -31,13 +31,14 @@ class TestPool(BugFablesTestBase):
         # Every location's item is in the pool once per location holding it, except the copies the mod's own items
         # (the Progressive Boat's two) take when the pool is full: one duplicated filler copy each (TestSmallPool: a
         # last copy).
-        from ..data_tables import ITEMS, LOCATIONS, vanilla_item
+        from ..data_tables import ITEMS, vanilla_item
         from ..items import own_copies
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         own = sum(own_copies(self.world, item.name) for item in ITEMS)
         short = 0
-        for name in {vanilla_item(loc) for loc in LOCATIONS} - {None}:
-            expected = sum(1 for loc in LOCATIONS if vanilla_item(loc) == name)
+        included = self.world.included_locations
+        for name in {vanilla_item(loc) for loc in included} - {None}:
+            expected = sum(1 for loc in included if vanilla_item(loc) == name)
             with self.subTest(item=name):
                 self.assertGreaterEqual(pool.count(name), 1)
                 short += max(0, expected - pool.count(name))

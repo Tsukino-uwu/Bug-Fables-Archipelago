@@ -343,7 +343,7 @@ class Location:
     location a yaml option can leave out (quest, crystal_berry, discovery, shop, item_shop; party_member, only with
     Starting Party Member on; story_party, a story event only with it off). quiet marks an opening check whose item
     arrives with no hold-up (the start of a new file); with Filler Starting Checks, it holds filler only. no_jump: seen reachable without a jump (with Shuffle Jump, every
-    other spot needs it).
+    other spot needs it). pending: a quest not yet gone through (build step 44), out of every seed and vanilla.
     """
 
     name: str
@@ -355,6 +355,7 @@ class Location:
     quiet: bool = False
     no_jump: bool = False
     reach: Rule | None = None
+    pending: bool = False
 
 
 @dataclass(frozen=True, slots=True)

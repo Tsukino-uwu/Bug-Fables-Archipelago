@@ -113,6 +113,7 @@ this file and that doc disagree, that doc is right.
 41. [Build step 41: Universal Tracker's list order and explanations](#build-step-41-universal-trackers-list-order-and-explanations)
 42. [Build step 42: the PopTracker pack, first part: its own repo, the logic exported from the apworld](#build-step-42-the-poptracker-pack-first-part-its-own-repo-the-logic-exported-from-the-apworld)
 43. [Build step 43: Music Shuffle, the Honey Factory's two songs, the elevator's crossfade a plain fade](#build-step-43-music-shuffle-the-honey-factorys-two-songs-the-elevators-crossfade-a-plain-fade)
+44. [Build step 44: every quest available from the start, none of it done for you](#build-step-44-every-quest-available-from-the-start-none-of-it-done-for-you)
 
 **How it works**
 
@@ -610,6 +611,9 @@ be wrong.
 55. **Spy Specs, a panel setting** (2026-09-30, the user's idea): built, the mod guide's step 39, a Quality of life
     row, off by default; since 2026-10-04 in halves (Off, HP, Free, Both; Both is the medal). No check and no logic
     depend on it. Seen (2026-10-04): the row and HP's, Free's and Off's battle effects; Both waived by the user.
+56. **Every quest available from the start** (2026-10-04, the user): one quest at a time, the lost kid's first (its
+    reward, location 10, held back until then); Madeleine's house then locked as in the game, her two quests
+    opened. See build step 44.
 
 **Known issues:**
 
@@ -4255,6 +4259,41 @@ the log's `seamless switch made a plain fade` each time. The user walked in from
 into the room left the last room's song playing (a dev tool's gap, not the shuffle's).
 
 *Code: `music.py` (`KEPT`), `World/MusicShuffle.cs` (`KeepSeamless`, `SoundHooks`); tests `test_music.py`.*
+
+## Build step 44: every quest available from the start, none of it done for you
+
+**The rule (the user, 2026-10-04):** the game is open, metroidvania-like, but never "every flag done": as finished as
+it can be while leaving everything undone. For quests: **open only the gate that makes a quest available; every step
+of the quest itself is the game's.** Nothing is accepted, started or completed for you.
+
+- **A board quest** joins the boards' open list from the start, the game's own way (its `QuestChecks` row met, or the
+  game's own add). Taking it stays the player's: the game sets its own "taken" flag.
+- **A quest waiting for a cutscene** is added directly; the cutscene doesn't play. Anything else that cutscene sets up
+  and the quest needs (an NPC present, a door) is opened on its own, one entity at a time, as build step 9 does.
+- **A quest an NPC gives** (not on a board, such as the Golden Path cave's): the NPC is there from the start (kept
+  present if the story brings them later); talking starts it, as in the game.
+- **Followers** join when the game itself starts the quest. Faked flags crashed the lost kid's scene twice (build
+  step 10), so a follower is never added by the mod.
+- **The logic** of each quest's locations needs all of it: reaching the board or the NPC, every place the quest sends
+  you, and what each step needs.
+- **When a gate's cutscene also changes the world**, the user decides.
+
+**One quest at a time.** Each is read (what makes it available, each step, any follower), then gets its logic and a
+test, then is seen on screen. **A quest not yet gone through is out of every seed** (`pending` on its locations: no
+location, its item vanilla), so the logic never claims a quest the game keeps closed.
+
+**Found the same day:** the lost kid's reward (location 10) claimed only Leif and the first boss, but in the game his
+quest (board quest 5, *LadybugQuest*) joins the boards only at chapter 5's start (flag 348, `Event120`), then Leby
+follows (flag 54) and Dib waits at the lake. Shuffle Quests is on by default, so a seed could have put a needed item
+there out of reach. Location 10 is `pending` until this quest is opened. The Old Book delivery (16-18, board quest 33,
+open once Bugaria City is visited) was played through (build step 9) and stays in.
+
+**Tests:** `TestPendingQuest` (location 10 out of the seed, not in `location_gives`): fails without `pending`.
+
+**Status:** started (2026-10-04): the rule written, location 10 held back; no quest opened yet.
+
+*Code: `data_types.py` (`Location.pending`), `world.py` (`included_locations`), `options.py` (`category_count`),
+`logic/snakemouth_den.py`; tests `test_categories.py`.*
 
 # How it works
 

@@ -49,9 +49,9 @@ rule, remove one in the same edit. The rule lives here and its reasoning in `age
   the server replays everything. That makes lost-save recovery work.
 - **"In a seed" and "connected" are different states.** A dropped socket keeps randomizer rules in force:
   checks queue, and no pickup falls back to its vanilla item.
-- **Every seed can be completed from wherever it starts** (the user, 2026-09-24). Whatever an area or goal
-  needs (key items, party members, abilities) is a rule in the logic, never something the mod hands out to
-  patch a gap. That holds for a random start too, and the world is always open.
+- **Every seed can be completed from wherever it starts** (the user, 2026-09-24). Whatever an area or goal needs (key
+  items, party members, abilities) is a rule in the logic, never handed out by the mod to patch a gap, random start too.
+  **The world is open, never done for you:** each quest available from the start, none of it begun (build step 44).
 - **A generated seed is NEVER impossible** (the user, 2026-09-24): every item is reachable in logic, and the game never
   makes it harder than the logic. Two halves. **(1) The logic tells the truth:** Archipelago proves a seed only by the
   logic, so every gate the game has (a story flag, an ability check) goes into the apworld; the logic may be more

@@ -344,7 +344,7 @@ CATEGORY_OPTIONS: dict[str, str] = {
 
 def category_count(category: str) -> int:
     """How many locations an option's category adds, straight from the location data."""
-    return sum(1 for location in LOCATIONS if location.category == category)
+    return sum(1 for location in LOCATIONS if location.category == category and not location.pending)
 
 
 # Counted from the data so the numbers players see never go stale.

@@ -7,19 +7,33 @@ class TestQuestsOff(BugFablesTestBase):
 
     def test_quest_locations_left_out(self) -> None:
         names = {loc.name for loc in self.multiworld.get_locations(self.player)}
-        self.assertNotIn("Snakemouth Den: Lake, Ladybug Kid's Reward", names)
+        self.assertNotIn(QUEST_REWARD, names)
         from ..data_tables import vanilla_item
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         expected = sum(1 for loc in self.world.included_locations if vanilla_item(loc) == "Lore Book")
         self.assertEqual(pool.count("Lore Book"), expected)
         gives = self.world.fill_slot_data()["location_gives"]
-        self.assertNotIn(str(self.world.location_name_to_id["Snakemouth Den: Lake, Ladybug Kid's Reward"]), gives)
+        self.assertNotIn(str(self.world.location_name_to_id[QUEST_REWARD]), gives)
+
+
+QUEST_REWARD = "Bugaria City: Residential District, Old Book Delivery Reward"
+LOST_KID = "Snakemouth Den: Lake, Ladybug Kid's Reward"
 
 
 class TestQuestsOnByDefault(BugFablesTestBase):
     def test_quest_location_included(self) -> None:
         names = {loc.name for loc in self.multiworld.get_locations(self.player)}
-        self.assertIn("Snakemouth Den: Lake, Ladybug Kid's Reward", names)
+        self.assertIn(QUEST_REWARD, names)
+
+
+class TestPendingQuest(BugFablesTestBase):
+    # The lost kid's quest joins the board only in chapter 5 in the game; until it's opened from the start (build step
+    # 44), its reward is out of every seed and stays vanilla.
+    def test_lost_kid_left_out(self) -> None:
+        names = {loc.name for loc in self.multiworld.get_locations(self.player)}
+        self.assertNotIn(LOST_KID, names)
+        gives = self.world.fill_slot_data()["location_gives"]
+        self.assertNotIn(str(self.world.location_name_to_id[LOST_KID]), gives)
 
 
 class TestMidQuestItemQuestsOff(BugFablesTestBase):

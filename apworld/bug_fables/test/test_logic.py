@@ -106,16 +106,6 @@ class TestInRoomRules(BugFablesTestBase):
         self.assertTrue(location.access_rule(self.state_with("Explorer Permit", "Leif")))
 
 
-class TestLostKid(BugFablesTestBase):
-    # The lost kid appears after the first boss and his cutscene moves all three party members, so he needs Leif.
-    def test_reward_needs_the_first_boss_and_leif(self) -> None:
-        location = self.world.get_location("Snakemouth Den: Lake, Ladybug Kid's Reward")
-        state = self.state_with("Explorer Permit", "Leif")
-        self.assertFalse(location.can_reach(state))
-        self.add(state, "Snakemouth Den Cleared")
-        self.assertTrue(location.can_reach(state))
-
-
 class TestGoldenPath(BugFablesTestBase):
     # The Golden Path's door opens with the first boss (flag 41).
     def test_golden_path_needs_the_first_boss(self) -> None:

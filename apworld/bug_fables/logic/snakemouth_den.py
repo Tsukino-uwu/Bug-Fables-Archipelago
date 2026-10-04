@@ -27,7 +27,7 @@ LOCATIONS = (
     Location("Snakemouth Den: Lake, Ladybug Kid's Reward", 10, "SnakemouthLake",
              Source(event=31, flag=55, give=Give(map="SnakemouthLake", type=1, item=52)),
              rule=Has("Leif") & Has("Snakemouth Den Cleared"),
-             category="quest", reach=DEN),
+             category="quest", reach=DEN, pending=True),
     Location("Snakemouth Den: Door Room, Trapdoor", 11, "SnakemouthDoorRoom",
              Source(event=5, flag=14, pickup=Pickup(map="SnakemouthDoorRoom", type=0, item=13, story=True)),
              rule=CanUse("Horn Slash"), reach=DEN),

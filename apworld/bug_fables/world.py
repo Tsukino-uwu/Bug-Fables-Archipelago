@@ -79,7 +79,8 @@ class BugFablesWorld(World):
             self.starting_member = self.ALL_MEMBERS
         elif choice != StartingPartyMember.option_off:
             self.starting_member = choice.value - StartingPartyMember.option_vi
-        self.included_locations = [loc for loc in LOCATIONS if locations.category_on(self, loc.category)]
+        self.included_locations = [loc for loc in LOCATIONS
+                                   if not loc.pending and locations.category_on(self, loc.category)]
         # A quest's step events follow its category: without the quest's items they couldn't be reached.
         self.included_events = [event for event in STORY_EVENTS if locations.category_on(self, event.category)]
         # Fights are decided here; the client only replays the list.
