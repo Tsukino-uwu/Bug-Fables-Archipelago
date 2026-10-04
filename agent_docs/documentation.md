@@ -2794,8 +2794,10 @@ boat flag cleared for the submarine (the Archipelago guide, Next 40).
 
 **Status:** built (2026-09-30); seen (2026-10-04): the item's look and text in Key Items, its name fitted, the Bugaria
 pier's dock absent before the submarine and there after (from the next load of the map), a crossing to Metal Island.
-The Progressive Boat's copies in order, the Rubber Prison's and the Bugaria pier's first landings, the Termite pier and
-the throne-room scene not yet seen.
+Seen 2026-10-04: the Progressive Boat's copies in order (the Boat Ticket, then the submarine), the throne-room scene
+sending its check, and the Termite pier: its dock, scientist and queen away before the submarine and there after (the
+next load of the map), the introduction (Event165) then boarding (Event153). The Rubber Prison's and the Bugaria pier's
+first landings, and the plaza's gate from inside, not yet seen.
 
 *Code: `Items/CustomItems.cs` (`Submarine`, `ProgressiveBoat`, `NextBoat`, the list narrowing),
 `Items/ItemReceiver.cs` (`Give`), `World/KeptOpen.cs` (`TieToItem`, `BeforeCheck`), `World/Submarine.cs`,

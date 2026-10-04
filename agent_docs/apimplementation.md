@@ -3887,7 +3887,8 @@ ignoring the option, 26 tests fail.
 [the mod guide, step 37](documentation.md#37-the-submarines-docks-follow-its-key-item)); with *Progressive Boat* off,
 the Boat Ticket and the submarine seen arriving apart, the submarine first, the docks following it alone (2026-10-04);
 the throne room's check seen (2026-10-04: the king's scene sent location 76, its item held up after it; flags 386
-and 409 set by hand on a test file); the Progressive Boat's second copy not yet seen.
+and 409 set by hand on a test file); the Progressive Boat's copies seen in order (2026-10-04: the first the Boat
+Ticket, key item 200, the second the submarine, 212).
 
 *Code: `data/items.json`, `options.py` (`ProgressiveBoat`), `items.py` (`own_copies`), `custom_rules.py` (`Boat`,
 `BOAT_TICKET`, `SUBMARINE`, `SUBMARINE_KEY`), the docks' area modules in `logic/`, `data_types.py` (`ItemEntity`),
