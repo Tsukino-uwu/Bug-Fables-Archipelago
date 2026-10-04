@@ -839,6 +839,11 @@ namespace BugFablesAP
                         return $"mark now scale {ItemSwap.MarkScale}, raise {ItemSwap.MarkRaise}, behind "
                             + ItemSwap.MarkBehind;
                     }
+                    case "areas":
+                        // The game's area names by number (MapControl.areaid), as the pause map shows them.
+                        log.LogInfo("[dev] areas: " + string.Join("; ", MainManager.areanames
+                            .Select((name, i) => i + " " + name).ToArray()));
+                        return $"areas: {MainManager.areanames.Length} logged";
                     case "shelfforward":
                     {
                         // shelfforward <step>: this map's shelves in ItemShops.ShelvesForward, live.

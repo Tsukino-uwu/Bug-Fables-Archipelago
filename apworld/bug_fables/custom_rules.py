@@ -95,3 +95,11 @@ WHOLE_PARTY = Member("Vi") & Member("Kabbu") & Member("Leif")
 ALL_ATTACKS = MoveItem("Beemerang Toss") & MoveItem("Horn Slash") & MoveItem("Freeze")
 BOAT_TICKET = Boat(1)
 SUBMARINE = Boat(2)
+# The submarine's key item in the bag, the Subaquatic Maritime Neotransport (CustomItems.cs), whichever item gives it.
+SUBMARINE_KEY = 212
+# The Ant Palace's rooms and the city districts, once the big Inner City region: chapter 2 (flag 67).
+INNER_CITY = Has("Chapter 2 Started")
+# Chapters 2-7 until they get room-level logic: past chapter 2's start, with everything the story used before (the
+# permit, the Boat Ticket, the first boss, the whole party and its attacks). More cautious than the game.
+LATER_CHAPTERS = (INNER_CITY & Has("Explorer Permit") & BOAT_TICKET & Has("Snakemouth Den Cleared")
+                  & WHOLE_PARTY & ALL_ATTACKS)

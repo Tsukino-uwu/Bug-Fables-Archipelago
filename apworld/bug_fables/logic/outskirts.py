@@ -4,8 +4,10 @@ from __future__ import annotations
 
 from rule_builder.rules import Has
 
-from ..custom_rules import ALL_ATTACKS, WHOLE_PARTY, CanUse
-from ..data_types import Added, DialogueFlag, DoorRule, EntityRef, Give, ItemShop, Location, Pickup, Source
+from ..custom_rules import (ALL_ATTACKS, BOAT_TICKET, LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, WHOLE_PARTY,
+                            CanUse)
+from ..data_types import (Added, DialogueFlag, DoorRule, EntityRef, Give, ItemEntity, ItemShop, Location, Pickup,
+                          Source, Transfer)
 
 # Past the Explorer Permit gate (inside the Outskirts map, so not a door): cautious until the rooms past it are
 # measured, every member (when members are items) and every move item (when moves are).
@@ -76,6 +78,16 @@ LOCATIONS = (
     # the mod's opening skip does the same unless this is a location.
     Location("Outskirts: Outside the City, Tutorial Battle", 75, "BugariaOutskirtsOutsideCity",
              Source(event=16, flag=15, added=Added(type=0, item=0)), quiet=True, no_jump=True),
+)
+TRANSFERS = (
+    # The sailor sails only for the Boat Ticket (with Progressive Boat on, its first copy).
+    Transfer("boat", "BugariaPier", "MetalIsland1", BOAT_TICKET),
+    # Every dock takes the submarine (and the Boat Ticket, inside the later chapters' stand-in).
+    Transfer("submarine", "BugariaPier", "MetalLake", LATER_CHAPTERS & SUBMARINE),
+)
+# The submarine's docks exist with its key item in the bag, whatever the story's flags (448 here).
+PRESENT_WITH_ITEM = (
+    ItemEntity("BugariaPier", "Fixedsub - Duplicate", SUBMARINE_KEY),
 )
 KEPT_OPEN = (
     # The locked-door check at Madeleine's house; the house is open from the start.

@@ -4,12 +4,10 @@ from __future__ import annotations
 
 from rule_builder.rules import Has
 
-from ..custom_rules import CanUse
+from ..custom_rules import INNER_CITY, LATER_CHAPTERS, SUBMARINE, CanUse
 from ..data_types import (DialogueFlag, DoorRule, EntityRef, FlagEntity, Give, ItemShop, Location, Pickup, Source,
                           StoryEvent, Transfer)
 
-# The Ant Palace's rooms and the city districts, once the big Inner City region: chapter 2 (flag 67).
-INNER_CITY = Has("Chapter 2 Started")
 DOOR_RULES = (
     # The palace hall's doors to the library, the war room and the mine are made only from chapter 2 (flag 67); the
     # plaza's are kept present by the seed.
@@ -21,6 +19,14 @@ TRANSFERS = (
     # Down to the underground bar by talking to someone in the commercial district (Event61), open from the start (the
     # line is repointed below); the way back up is a door.
     Transfer("way down", "BugariaCommercial", "UndergroundBar", two_way=False),
+    # The tunnel's prison door needs flag 79, set only inside the prison, which the sub alone reaches before it.
+    Transfer("ant tunnel", "AntTunnels", "RubberPrisonGiantLairBridge", LATER_CHAPTERS & SUBMARINE),
+    Transfer("ant tunnel", "AntTunnels", "MetalIsland2", LATER_CHAPTERS),
+    # Chapter 3's end, back in the palace after the attack on the city.
+    Transfer("story", "BugariaCastleAttack", "AntPalace2", LATER_CHAPTERS, two_way=False),
+    # The ending: the city's end, the throne, and back to the plaza.
+    Transfer("story", "BugariaEndBridge", "BugariaEndThrone", LATER_CHAPTERS, two_way=False),
+    Transfer("story", "BugariaEndThrone", "BugariaMainPlaza", LATER_CHAPTERS, two_way=False),
 )
 LOCATIONS = (
     # A Lore Book hidden behind a bookshelf.

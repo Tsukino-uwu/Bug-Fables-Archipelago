@@ -3244,7 +3244,28 @@ now reads the items each rule uses through Archipelago's own `item_dependencies(
 and Jump is an item. With `CanUse` broken on purpose (never asking for the member), 7 tests fail. 445 tests, the Logic
 Test check (90 of 90) and the fuzzer (0 of 10000, every room with APQuest) pass.
 
-**Status:** built (2026-09-29): the logic in `logic/`, its rules the Rule Builder's, proven identical to the JSON's.
+**Every game area its module (2026-10-04).** Asked whether to plan a file per area, the user chose to create them all
+now: "better to make them all now, rather than moving things later". The areas are the game's own 25 (`MapControl
+.areaid`, each map's area in the map dump; their names `MainManager.areanames`, logged by the new dev command `areas`):
+`outskirts` 0, `bugaria_city` 1 (Ant Kingdom City), `snakemouth_den` 2, `lost_sands` 3, `golden_hills` 4,
+`golden_path` 5, `golden_settlement` 6, `forsaken_lands` 7, `far_grasslands` 8, `wild_swamplands` 9, `defiant_root` 10,
+`ancient_castle` 11, `bee_kingdom_hive` 12, `honey_factory` 13, `rubber_prison` 14, `giants_lair` 15, `metal_lake` 16,
+`metal_island` 17, `termite_capitol` 18, `wasp_kingdom_hive` 19, `bandit_hideout` 20, `stream_mountain` 21,
+`chomper_caves` 22, `fishing_village` 23, `upper_snakemouth` 24. The four old names stayed.
+
+- **What goes where:** an area's module holds what's on its maps: a spot by its map, a way between maps by where it
+  starts, a changed entity by its map. One exception: *Lost Sands: Entrance* sits on an Outskirts map at the desert's
+  border (`BOLostSandsEntrance`, area 0) and stays with the area its name gives, where the tracker lists it.
+- **`later_chapters.py` is gone.** Its spots, ways and docks went to their areas (the boat from the pier to the
+  Outskirts' with them); its shared rules, `LATER_CHAPTERS` and `SUBMARINE_KEY`, joined `custom_rules.py` with
+  `INNER_CITY` (which `bugaria_city.py` had defined, a cycle once that module used `LATER_CHAPTERS`).
+- **`AREAS`'s order** (Universal Tracker's list order, build step 41): the three the story starts with, then by area
+  number.
+- **Proof** (`seed-snapshot.py`, before and after): every spoiler byte-identical; slot_data identical but for
+  `present_with_item`'s order, a list the mod reads as a set. The tests pass (683).
+
+**Status:** built (2026-09-29): the logic in `logic/`, its rules the Rule Builder's, proven identical to the JSON's;
+since 2026-10-04 a module for each of the game's 25 areas, proven to change no seed.
 
 *Code: `logic/`, `custom_rules.py`, `data_types.py`, `data_tables.py`, `regions.py`, `rules.py`; tests `test_areas.py`,
 `test_rules.py`, `test_logic.py` (`TestClassifications`), `test_party.py`.*
@@ -3684,7 +3705,8 @@ Island, all leading to the lake map, MetalLake.
    goes from outside to inside only, and `held_until` keeps the inside gate away until 384.
 7. **For the mod** (`slot_data`): `submarine_item`; `present_with_item`, the six docks, made with key item 212 whatever
    their flags; `held_until_item`, the Termite pier's scientist and queen, who show the dock off, kept away until it
-   too. The records are `ItemEntity`s in `logic/later_chapters.py`. The option itself needs no key: the mod knows each
+   too. The records are `ItemEntity`s in each dock's area module under `logic/` (`logic/later_chapters.py` until
+   2026-10-04, build step 29). The option itself needs no key: the mod knows each
    item by its id.
 8. **Hints** (`world.py`): item groups *Submarine* (the Progressive Boat and the submarine's item) and *Boat* (the
    Progressive Boat and the Boat Ticket). Read at 0.6.7: `!hint` matches what's typed against item and group names
@@ -3727,7 +3749,7 @@ the Boat Ticket and the submarine seen arriving apart, the submarine first, the 
 the Progressive Boat's second copy not yet seen.
 
 *Code: `data/items.json`, `options.py` (`ProgressiveBoat`), `items.py` (`own_copies`), `custom_rules.py` (`Boat`,
-`BOAT_TICKET`, `SUBMARINE`), `logic/later_chapters.py`, `logic/metal_island.py`, `data_types.py` (`ItemEntity`),
+`BOAT_TICKET`, `SUBMARINE`, `SUBMARINE_KEY`), the docks' area modules in `logic/`, `data_types.py` (`ItemEntity`),
 `slot_data.py`, `world.py` (`item_name_groups`); tests `test_progressive_boat.py`, `test_logic.py`
 (`TestClassificationsSplitBoat`).*
 
@@ -4516,8 +4538,8 @@ Why regions at all, instead of a full rule on every spot:
   (`slot_data`; `room-logic.md`, rule 7), so the game's side has no logic and no file per room.
 - **Every map is a region, every door an entrance** (build step 12, 2026-09-30): `regions.py` makes them from the door
   table, named `"<map>: <door>"`, so Archipelago's entrance randomizer can shuffle them.
-- **One Python module per game area** (`logic/`, build step 29): `outskirts.py`, `snakemouth_den.py`,
-  `bugaria_city.py`, `metal_island.py`, `later_chapters.py`. Each lists its locations and story events (each in its
+- **One Python module per game area** (`logic/`, build step 29): one for each of the game's 25 areas, from
+  `outskirts.py` to `upper_snakemouth.py`. Each lists its locations and story events (each in its
   map, with its own rule), its door gates (`DOOR_RULES`) and ways between maps that aren't doors (`TRANSFERS`). Per
   area, not per room: a room's logic often reaches into its neighbours, and an area is tested in one sitting. Menu is
   made in `regions.py`.

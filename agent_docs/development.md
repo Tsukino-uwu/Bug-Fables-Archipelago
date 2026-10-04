@@ -389,6 +389,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   2 Leif), display only, the way an item from another player is shown.
 - `articles [id...]`: log the found-item line's default article, each listed item's own, and the "You got" lines.
 - `holdup ap`: the drawn Archipelago icon held up on two class backdrops (plum, cyan).
+- `areas`: log the game's area names by number (`MainManager.areanames`, the numbers maps carry as
+  `MapControl.areaid`), the logic's one module per area (apimplementation.md, build step 29).
 - `holdup long`: four "You got" lines too wide for the box (the one seen, a longer one, the longest server name with a
   player and alone), to check the fitting (the mod guide, step 9).
 - `shelflook <slot> <white|black> [current|first] [key=value ...]`: a shop slot shows the drawn icon in that look, to

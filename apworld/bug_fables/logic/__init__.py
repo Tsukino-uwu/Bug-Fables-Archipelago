@@ -9,9 +9,18 @@ from __future__ import annotations
 
 from ..data_types import (Artifact, DialogueFlag, DoorRule, EntityRef, FlagEntity, ItemEntity, Location, StoryEvent,
                           Transfer)
-from . import bugaria_city, later_chapters, metal_island, outskirts, snakemouth_den
+from . import (ancient_castle, bandit_hideout, bee_kingdom_hive, bugaria_city, chomper_caves, defiant_root,
+               far_grasslands, fishing_village, forsaken_lands, giants_lair, golden_hills, golden_path,
+               golden_settlement, honey_factory, lost_sands, metal_island, metal_lake, outskirts, rubber_prison,
+               snakemouth_den, stream_mountain, termite_capitol, upper_snakemouth, wasp_kingdom_hive,
+               wild_swamplands)
 
-AREAS = (outskirts, snakemouth_den, bugaria_city, metal_island, later_chapters)
+# One per game area (MapControl.areaid, named after its AreaNames entry): the first three as the story starts, then
+# by area number. An area's module holds what's on its maps.
+AREAS = (outskirts, snakemouth_den, bugaria_city, lost_sands, golden_hills, golden_path, golden_settlement,
+         forsaken_lands, far_grasslands, wild_swamplands, defiant_root, ancient_castle, bee_kingdom_hive, honey_factory,
+         rubber_prison, giants_lair, metal_lake, metal_island, termite_capitol, wasp_kingdom_hive, bandit_hideout,
+         stream_mountain, chomper_caves, fishing_village, upper_snakemouth)
 
 DOOR_RULES: tuple[DoorRule, ...] = tuple(rule for area in AREAS for rule in getattr(area, "DOOR_RULES", ()))
 TRANSFERS: tuple[Transfer, ...] = tuple(t for area in AREAS for t in getattr(area, "TRANSFERS", ()))
