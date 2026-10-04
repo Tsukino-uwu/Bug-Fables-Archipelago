@@ -552,16 +552,16 @@ be wrong.
     build step 32). Next, a sweep of the
     rest, each read in Archipelago's own code and guides before it's built or written off: item plando proven on a seed,
     the options Archipelago provides for a world to add (`Options.py`), and boss plando once bosses are shuffled.
-47. **Music Shuffle** (2026-09-30, the user: in the yaml): built, not yet seen in game, build step 33. Next, **Sound
-    Effect Shuffle** (`sfx_shuffle`, smw's name), its own step. It widens the same `PlaySound` and `StopSound` hooks to
-    every sound (dialogue bleeps out), and also swaps `SoundIsPlaying`, the entity sounds and `PlayClipAtPoint`. A
-    loop stopped by name (`Rumble`, 21 times) must stop the sound that replaced it.
+47. **Music Shuffle** (2026-09-30, the user: in the yaml): built, area music seen (2026-10-04), build step 33. Next,
+    **Sound Effect Shuffle** (`sfx_shuffle`, smw's name), its own step. It widens the same `PlaySound` and `StopSound`
+    hooks to every sound (dialogue bleeps out), and also swaps `SoundIsPlaying`, the entity sounds and
+    `PlayClipAtPoint`. A loop stopped by name (`Rumble`, 21 times) must stop the sound that replaced it.
 48. **Shuffle Shop Inventories** (2026-09-30, the user: what shops restock and respawning items come back with,
     randomized, never checks): built, not yet seen in game, build step 34. Next, the user sees it in game; then **the
     game's other item shops and respawning pickups** join the pool, as they become locations or as spots of their own
     (measured first: each keeper's `data`, each item with only a regional flag).
 49. **Filler Starting Checks** (2026-09-30, the user: the items a new file gets on connecting are filler only): built,
-    not yet seen in game, build step 35. Next, the user sees a new file's opening items.
+    seen in game (2026-10-04), build step 35.
 50. **Fights with the party the seed has** (2026-09-30, the user: stand-ins in battle, the members present playing the
     parts; and scripted fights kept whole under enemy scaling): built, not yet seen in game. The mod guide's step 11
     (a member's number used as a slot: the battle start's leader, the eaten tick, skills, scenes placing a missing
@@ -3450,7 +3450,8 @@ item, check or rule depends on it.
 - `seed-snapshot.py` on CI's three presets, alone and with APQuest, before and after the change: only the two empty
   maps and the option's spoiler line are new.
 
-**Status:** built, not yet seen in game (2026-09-30).
+**Status:** built (2026-09-30); area music seen swapped (2026-10-04); the jingles, the title music and Samira not yet
+seen.
 
 *Code: `music.py`, `options.py` (`MusicShuffle`, `option_groups`), `web_world.py`, `world.py` (`generate_basic`),
 `slot_data.py`; the mod's `MusicShuffle.cs`; tests `test_music.py`.*
@@ -3592,7 +3593,8 @@ With the rule switched off, 11 of these checks fail.
 - A default seed generated through `Generate.py` with APQuest: the spoiler shows a Drowsy Cake, 15 Berries and the
   Crunchy Leaf on the three spots, all filler.
 
-**Status:** built (2026-09-30), the tests pass; not yet seen in game.
+**Status:** built (2026-09-30), the tests pass; seen in game (2026-10-04): a new file's three opening checks went out at
+the start holding filler, as the spoiler placed them.
 
 *Code: `options.py` (`FillerStartingChecks`), `world.py` (`generate_early`), `rules.py` (`set_all_rules`),
 `data_types.py` (`quiet`); tests `test_starting_checks.py`, `test_shops.py`.*

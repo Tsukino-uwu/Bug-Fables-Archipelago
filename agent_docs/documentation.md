@@ -578,8 +578,9 @@ can't help: the rest belongs to the screens underneath. **The fix, read in the g
 makes a letter with the game's own `NewLetter` for any empty slot of the pool array (`MEASURED.md`, the text letter
 pool), so `TextPool.Reserve` lengthens the array to 1000 when the panel builds, and the game fills the new slots
 itself, only as letters are needed. Nothing changes until a screen asks for more than 500, which only the panel's
-pages do. The log says it once: `[text] letter pool 500 -> 1000 slots (the game fills the new ones)`. Built, not yet
-seen.
+pages do. The log says it once: `[text] letter pool 500 -> 1000 slots (the game fills the new ones)`. **Seen on screen
+(2026-10-04):** opened from the title screen's Settings, the line whole with Fast text, Detector and Uncap FPS each
+highlighted, and the log's line once.
 
 **Nine rows at a time, scrolled the game's way (2026-09-30):** the Spy Specs row (step 39) made the Quality of life
 page twelve rows, and spreading them ever closer stops being readable; the user asked for "the up/down scroll that the
@@ -625,8 +626,9 @@ turns it is covered. The lesson went into CLAUDE.md: read how the game does a th
 
 **Status:** works, seen on screen (2026-09-24): the menu entry, the panel, and the file select held back until the first
 login; the Quality of life and Gameplay pages seen (2026-09-26); the Achievements row built (2026-09-26), not yet seen;
-the letter pool grown for a long page (2026-09-30), not yet seen; the game's scroll, its list arrows and its row sizes
-on the settings pages seen (2026-09-30).
+the letter pool grown for a long page (2026-09-30), seen (2026-10-04); the game's scroll, its list arrows and its row
+sizes on the settings pages seen (2026-09-30); the leaf level with the main page's last row and its help line level,
+seen (2026-10-04).
 
 *Code: `MenuToggle.cs` (the menu entry: `BeforeSetMenuText` and `AfterSetMenuText` around the game's rebuild,
 `AfterUpdate` for the cursor, `SetMode` for the switch, `HoldBackFile` and `ShowPopup` for the file select);
@@ -794,8 +796,8 @@ Dev `holdup long` shows four such lines: the one seen, a longer one, and the lon
 
 **Status:** works for gifts, pickups and their ground sprites, and respawning pickups seen on screen
 (2026-09-24, `MEASURED.md`), and crystal berry spots (2026-09-25); berry rewards and story pickups built, not yet seen
-in game; the description box's field fix (2026-09-26) not yet seen; long names fitted to the box built (2026-09-30), not
-yet seen.
+in game; the description box's field fix (2026-09-26) not yet seen; long names fitted to the box (2026-09-30), seen
+with `holdup long`'s four lines (2026-10-04: broken before "from", the shorter line centred, every one inside the box).
 
 *Code: `ItemSwap.cs` (`Enable` finds the routine, `Transpile` rewrites it; `Decide`, `DescWindow`,
 `Recolour` and `FirstMedalSeen` do the swapping); `ItemSwap.Pickups.cs` (`PickupPrefix`, `FindPickup`, `TickGround`,
@@ -1127,9 +1129,9 @@ The panel got an eighth row, "Quality of life", which opens a second page in the
 pages are reached from Settings since 2026-09-26, step 8).
 
 **Disable all and Reset to defaults (2026-09-26; both boxes seen on screen the same day; the Reset box's lost letters
-fixed, step 8, the fix not yet seen).** Two buttons side by side at the top
-of the Quality of life page (not rows in the list); left/right picks one. **Reset to defaults is on the left, where the
-cursor lands** (entering the page shouldn't put you on Disable all), Disable all on the right, its label about 2.3
+fixed, step 8, the fix seen 2026-10-04: "Yes" and "No" whole through left / right).** Two buttons side by side at the
+top of the Quality of life page (not rows in the list); left/right picks one. **Reset to defaults is on the left, where
+the cursor lands** (entering the page shouldn't put you on Disable all), Disable all on the right, its label about 2.3
 wide at size 0.8 (measured on screen), so the leaf sits 1.15 left of its centre. Confirming one opens a
 **Yes / No box** over the page (a box, not the choice inside the menu), built with the game's own box
 (`MainManager.Create9Box`, the controls type the help box uses), the question on top and the leaf on the answer. No is
@@ -1148,7 +1150,8 @@ Ticket (the Archipelago guide, build step 16), the warp itself, map travel and S
 cutscenes' Den arrival seen (2026-09-26), the Tattle tutorial and the door room's puzzle (Event4) at speed
 (2026-09-26/27), the trapdoor and spider scene (2026-09-27); Skip battle tutorials: Leif's first-battle line skipped,
 seen (2026-09-27); map travel and Warp to Start through a door built (2026-10-02), map travel's seen at every
-destination (2026-10-03); Warp to Start's door and the swamp's water jump not yet seen.
+destination (2026-10-03); Warp to Start's door and the swamp's water jump not yet seen; the Reset box's letters and
+Item animation's reworded help lines seen (2026-10-04).
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `QualityOfLife.Opening.cs` (the opening),
 `QualityOfLife.Scenes.cs` (the scene skips, the first spider fight, the trapdoor), `ApMenu.cs` (the second page),
@@ -1634,7 +1637,8 @@ those flags are the save's own. If any of the three hooks (save, load, new game)
 nothing rather than risk a save.
 
 **Status:** the Detector row's effect seen on screen through step 14 (the Detector beeping for checks left in a room,
-2026-09-25); Difficulty (Hard, Hardest) built (2026-09-24), not yet seen on screen.
+2026-09-25); Difficulty (Hard, Hardest) built (2026-09-24), not yet seen on screen; the Detector's reworded help
+line seen whole (2026-10-04).
 
 *Code: `MedalAssist.cs`.*
 
@@ -2178,7 +2182,8 @@ The first frame with the row on installs the frame sites (a few seconds). Rates 
 
 **Off by default again (2026-09-29, the user).** A fresh config and the panel's reset give Off, the game's own frame
 rate; Monitor stays the last pip. As before, a config that already stores a value keeps it (no migration), so a
-config that says Monitor stays at Monitor until the row is changed. Not yet seen on a fresh config.
+config that says Monitor stays at Monitor until the row is changed. **Seen (2026-10-04):** the panel's Reset to
+defaults puts the row at OFF.
 
 **Status:** in progress, experimental (the row says so). Seen on screen (2026-09-27) at 240: smooth, the "!" steady and
 sharp. The logic measured (`rates`); each site patched as expected (the log's `[fps] frame sites`). Not yet seen on
@@ -2186,13 +2191,12 @@ screen: every site above, most of all fishing, the screw platform, the Wacka Wor
 Platforms and bridges: the slow motion fixed and seen (2026-09-27). Vi's flight: fixed and seen (2026-09-29). Every
 character drawn smoothed (2026-09-30): seen sharp on a conveyor and in Vi's flight, Kabbu with her, and on the
 Rubber Prison's swinging platform (2026-10-01); bridges, a knocked frozen enemy, the "!" over NPCs and shadows during
-jumps not yet seen with it. Followers deciding walk or brake 30 times a
-second, as at 60 (2026-09-30): measured with `bodytrace`; on the conveyor, "I think it looks fine", hard to tell
-next to the leader. Off by default again (2026-09-29):
-built, not yet seen on a fresh config. Swinging and bobbing scenery drawn smoothed (2026-10-01): measured and seen
-on the Rubber Prison's swinging platform, the party standing on it; other bobbing scenery (boats, floating things)
-not yet seen. The mod's own frame counts (hold-ups, auto-save) counted in sixtieths (2026-10-01): built, not yet
-seen.
+jumps not yet seen with it. Followers deciding walk or brake 30 times a second, as at 60 (2026-09-30): measured with
+`bodytrace`; on the conveyor, "I think it looks fine", hard to tell next to the leader. Off by default again
+(2026-09-29): seen after the panel's Reset to defaults (2026-10-04). Swinging and bobbing scenery drawn smoothed
+(2026-10-01): measured and seen on the Rubber Prison's swinging platform, the party standing on it; other bobbing
+scenery (boats, floating things) not yet seen. The mod's own frame counts (hold-ups, auto-save) counted in sixtieths
+(2026-10-01): built, not yet seen.
 
 *Code: `FrameRate.cs`, `FrameRate.Scenery.cs`, `FrameSites.cs`, the row in `ApMenu.cs` and `QualityOfLife.cs`, the
 after-physics hooks in `Plugin.cs`, the waits in `HoldUps.cs` and `AutoSave.cs`; the
@@ -2776,7 +2780,8 @@ Free has Spy with no aiming, the icon beside it, and the same member able to act
 show no HP; Both is all of it; Off is as the game has it.
 
 **Status:** built (2026-09-30), split in four (2026-10-04), the build succeeds; the row seen on its page while the
-scrolling was checked (2026-09-30); its battle effects not yet seen.
+scrolling was checked (2026-09-30); its four values and their help lines seen (2026-10-04, the old ON read as OFF);
+its battle effects not yet seen.
 
 *Code: `Gameplay/MedalAssist.cs` (`SpySpecsMedal`, the postfix, `SpyAsks`), `Gameplay/QualityOfLife.cs` (`SpySpecs`,
 `SpyHp`, `SpyFree`), `Ui/ApMenu.cs` and `Ui/ApMenu.Rows.cs` (`SpyRow`), `Core/Plugin.cs`.*
