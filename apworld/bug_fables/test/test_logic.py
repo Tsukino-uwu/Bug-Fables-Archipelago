@@ -113,6 +113,9 @@ class TestGoldenPath(BugFablesTestBase):
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "LoadZoneGoldenPath"},
                       self.world.fill_slot_data()["kept_present"])
 
+    def test_tunnel_present_from_the_start(self) -> None:
+        self.assertIn({"map": "BOGoldenPath", "entity": "Loadzonetunnel"}, self.world.fill_slot_data()["kept_present"])
+
     def test_blocker_kept_away(self) -> None:
         self.assertIn({"map": "BOGoldenPath", "entity": "blocker"}, self.world.fill_slot_data()["kept_open"])
 

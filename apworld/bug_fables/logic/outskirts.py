@@ -125,6 +125,8 @@ KEPT_PRESENT = (
     EntityRef("BugariaOutskirtsOutsideCity", "DoorBugaria"),
     # The Golden Path door, made only after the first boss (flag 41); past it the tunnel waits for chapter 2 (67).
     EntityRef("BugariaOutskirtsOutsideCity", "LoadZoneGoldenPath"),
+    # The Golden Path's tunnel onward, made only from chapter 2 (flag 67) (the user, 2026-10-04: open from the start).
+    EntityRef("BOGoldenPath", "Loadzonetunnel"),
     # The way into Chuck's Abode, made only after the first boss.
     EntityRef("NearSnakemouth", "loadingzonechuck"),
     # The shortcut back to the first corridor, made only after the first boss.

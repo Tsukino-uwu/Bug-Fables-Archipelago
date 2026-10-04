@@ -1499,7 +1499,10 @@ up or mark them as oneways": every door and flag gets that verdict as its area i
 **The Golden Path door (2026-10-04, the user: "can we open the entrance where im standing").** The game makes
 `LoadZoneGoldenPath` only from flag 41 (the first boss), and the logic had a `DoorRule` for it. Past it is one room
 (`BOGoldenPath`: location 12, a dig spot, the Hermit's cave); its tunnel onward needs 67. Its blocker (Event12, until 67)
-turned out to span the way to the cave too, so it is kept away (`MEASURED.md`, the Golden Path). Now `kept_present` from the start, the rule gone; location 12's beetle
+turned out to span the way to the cave too, so it is kept away (`MEASURED.md`, the Golden Path). **The tunnel too**
+(the user, the same day: "yes open it, and keep it open from the start"): `Loadzonetunnel` kept present. It joins
+rooms the logic already had (the Golden Hills on to the Barren Lands and the Lost Sands); their few locations still
+wait for the later chapters (`LATER_CHAPTERS`), so the logic promises nothing new past it until those rooms are mapped. Now `kept_present` from the start, the rule gone; location 12's beetle
 grass takes Kabbu's horn, so it needs `Horn Slash` of its own (the boss had implied it). Tests `TestGoldenPath`.
 
 **Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion
