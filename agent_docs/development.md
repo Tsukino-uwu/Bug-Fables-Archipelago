@@ -201,11 +201,15 @@ logic but not expected in UT".
 
 **CI runs the same script on every push** (since 2026-09-29): `ci.yml`'s `fuzz` job installs the fuzzer and the
 Logic Test at the commits it pins, runs `test-apworld.ps1` under `pwsh` on Linux, and stops after 30 minutes. A failed
-run keeps `fuzz_output` as the artifact `fuzz-failures` for 14 days: download it and regenerate a run as in step 3.
-Beside it (since 2026-10-03), the `tracker` job puts Universal Tracker's `worlds/tracker` in at the commit v0.3.4 was
-released from (`TRACKER_COMMIT`; the same files as the release's `tracker.apworld`, line endings aside, compared
+run keeps `fuzz_output` as the artifact `fuzz-failures-<shard>` for 14 days: download it and regenerate a run as in
+step 3. Beside it (since 2026-10-03), the `tracker` job puts Universal Tracker's `worlds/tracker` in at the commit v0.3.4
+was released from (`TRACKER_COMMIT`; the same files as the release's `tracker.apworld`, line endings aside, compared
 2026-10-03), makes the `Players` folder, and runs `test-apworld.ps1 -TrackerOnly`, also stopping after 30 minutes; a
-failed run keeps `fuzz_output_tracker` as `tracker-fuzz-failures`.
+failed run keeps `fuzz_output_tracker` as `tracker-fuzz-failures-<shard>`. **Both run as five shards of 2000 seeds**
+(since 2026-10-04, the user: ten minutes a push was too slow): side by side, each draws its own seeds (fuzz.py's
+`random.randint`, unseeded), so 10000 each as before; only the first fuzz shard also runs the tests and the Logic Test
+check (the others pass `-FuzzOnly`). Five, not ten: each shard spends about a minute on setup, and a free account runs
+20 jobs at once.
 **Nobody waits on CI** (the user, 2026-09-29): after a push, work goes on. GitHub emails whoever pushed when a run
 fails, and the agent reads `gh run list` once when a session starts and fixes anything red first. Only `release.ps1`
 waits for green, on purpose.

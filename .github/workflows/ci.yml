@@ -148,13 +148,18 @@ jobs:
           path: dist/
           if-no-files-found: error
 
-  # test-apworld.ps1, as run locally: the tests, the Logic Test check, then 10000 fuzzed seeds. One Python: the
-  # matrix covers all three.
+  # test-apworld.ps1, as run locally: the tests, the Logic Test check, then 10000 fuzzed seeds, in five shards of 2000
+  # that run side by side (each draws its own seeds); the first also runs the tests and the Logic Test check. One
+  # Python: the matrix covers all three.
   fuzz:
-    name: Fuzzer and Logic Test check
+    name: Fuzzer shard ${{ matrix.shard }} of 5${{ matrix.shard == 1 && ', tests and Logic Test check' || '' }}
     runs-on: ubuntu-latest
     # Inside release.ps1's 40-minute wait for CI.
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -201,26 +206,32 @@ jobs:
           echo "SKIP_REQUIREMENTS_UPDATE=1" >> "$GITHUB_ENV"
           SKIP_REQUIREMENTS_UPDATE=1 python Launcher.py --update_settings
 
-      - name: Tests, the Logic Test check and the fuzzer
+      - name: The fuzzer (shard 1 adds the tests and the Logic Test check)
         shell: pwsh
         working-directory: Archipelago
-        run: ../bug_fables_ap/dev-scripts/test-apworld.ps1 -Archipelago .
+        env:
+          SHARD: ${{ matrix.shard }}
+        run: ../bug_fables_ap/dev-scripts/test-apworld.ps1 -Archipelago . -Runs 2000 -FuzzOnly:($env:SHARD -ne '1')
 
       # Each failed run's yaml and log, to regenerate locally (development.md, Fuzzing the apworld).
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: failure()
         with:
-          name: fuzz-failures
+          name: fuzz-failures-${{ matrix.shard }}
           path: Archipelago/fuzz_output/
           if-no-files-found: ignore
           retention-days: 14
 
   # test-apworld.ps1 -TrackerOnly: 10000 fuzzed seeds, each regenerated from its slot_data with no yaml as Universal
-  # Tracker does, and checked sphere by sphere. Its own job, beside the fuzz job, so both fit release.ps1's wait.
+  # Tracker does, and checked sphere by sphere, in five shards of 2000 beside the fuzz shards.
   tracker:
-    name: Universal Tracker's fuzzer hook
+    name: Universal Tracker's fuzzer hook, shard ${{ matrix.shard }} of 5
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -272,12 +283,12 @@ jobs:
       - name: Universal Tracker's fuzzer hook
         shell: pwsh
         working-directory: Archipelago
-        run: ../bug_fables_ap/dev-scripts/test-apworld.ps1 -Archipelago . -TrackerOnly
+        run: ../bug_fables_ap/dev-scripts/test-apworld.ps1 -Archipelago . -TrackerOnly -TrackerRuns 2000
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: failure()
         with:
-          name: tracker-fuzz-failures
+          name: tracker-fuzz-failures-${{ matrix.shard }}
           path: Archipelago/fuzz_output_tracker/
           if-no-files-found: ignore
           retention-days: 14

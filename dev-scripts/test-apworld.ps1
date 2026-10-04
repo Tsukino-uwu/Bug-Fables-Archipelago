@@ -2,14 +2,16 @@
 # anywhere.
 # -Archipelago: your Archipelago checkout (the world linked in, fuzz.py at its root, worlds/logic_test copied in, and
 # Universal Tracker in custom_worlds or worlds/tracker with a Players folder for the tracker pass).
-# -TrackerOnly: only the tracker pass (CI's tracker job).
+# -TrackerOnly: only the tracker pass (CI's tracker shards).
+# -FuzzOnly: the first pass's fuzzer without the tests and the Logic Test check (CI's fuzz shards after the first).
 param(
     [Parameter(Mandatory)] [string] $Archipelago,
     [int] $Runs = 10000,
     [int] $TrackerRuns = 10000,
     [int] $Jobs = [Environment]::ProcessorCount,
     [string[]] $With = @(),  # other worlds in every fuzzed room, by folder name (e.g. apquest)
-    [switch] $TrackerOnly
+    [switch] $TrackerOnly,
+    [switch] $FuzzOnly
 )
 # Not 'Stop': Windows PowerShell turns a Python warning on stderr into a terminating error. Exit codes decide. Set here,
 # since a host may start with another (CI runs this under pwsh on Linux).
@@ -34,12 +36,15 @@ try {
     $failed = $false
 
     if (-not $TrackerOnly) {
-        Write-Host '== Tests'
-        python -m pytest worlds/bug_fables/test -q
-        $testsFailed = $LASTEXITCODE -ne 0
-
-        $logicTest = 'skipped: no worlds/logic_test (development.md, Play-testing the logic)'
-        if (Test-Path 'worlds/logic_test') {
+        $testsFailed = $false
+        $logicTest = 'skipped: -FuzzOnly'
+        if (-not $FuzzOnly) {
+            Write-Host '== Tests'
+            python -m pytest worlds/bug_fables/test -q
+            $testsFailed = $LASTEXITCODE -ne 0
+            $logicTest = 'skipped: no worlds/logic_test (development.md, Play-testing the logic)'
+        }
+        if (-not $FuzzOnly -and (Test-Path 'worlds/logic_test')) {
             Write-Host '== Logic Test check'
             python (Join-Path $PSScriptRoot 'logic-test-check.py')
             $logicTest = if ($LASTEXITCODE -eq 0) { 'passed' } else { 'FAILED' }
@@ -53,7 +58,7 @@ try {
         $stats = $report.stats
         Show-FuzzErrors $report
         Write-Host ("Fuzzer: {0} of {1} failed, {2} timed out" -f $stats.failure, $stats.total, $stats.timeout)
-        Write-Host ("Tests: {0}" -f $(if ($testsFailed) { 'FAILED' } else { 'passed' }))
+        Write-Host ("Tests: {0}" -f $(if ($FuzzOnly) { 'skipped: -FuzzOnly' } elseif ($testsFailed) { 'FAILED' } else { 'passed' }))
         Write-Host "Logic Test check: $logicTest"
         $failed = $testsFailed -or $logicTest -eq 'FAILED' -or $stats.failure -gt 0 -or $stats.timeout -gt 0
     }
