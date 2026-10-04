@@ -378,8 +378,9 @@ player file twice with the apworld on disk and keeps the keys both seeds agree o
 a seed rolls. The console's `liveslot` lays that file over the login's `slot_data`, rebuilds the seed's tables and
 re-enters the room through a door. A dev tool for test files: the server still holds the seed's items and locations.
 
-**Status:** done: hot reload, the build-and-copy scripts and the dev console are in use; `liveslot` built
-(2026-10-04), the build succeeds, not yet used in game.
+**Status:** done: hot reload, the build-and-copy scripts and the dev console are in use; `liveslot` seen working
+(2026-10-04): three apworld changes in a row (the Golden Path door, its blocker, its tunnel) shown in the running game
+with no new seed or file.
 
 *Code: `DevConsole.cs` (the console, the command file, `liveslot`), `LiveSlotData.cs`, `DevConsole.Warp.cs` (`loc`, `warp`, `unstick`),
 `DevConsole.Party.cs` (`spawn`), `DevConsole.Inspect.cs` (`flag`, `tree`).*

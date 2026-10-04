@@ -1510,7 +1510,8 @@ fallback and statue, Madeleine's house, and the bar with its quest board seen on
 Snakemouth Den seen (2026-09-26); every board listing bounties (built 2026-09-25), Eetl's blocker, the inn and chapter
 2's held scenes not yet seen (the boat's hold was removed, 2026-09-26); the open start is always on, not an option
 (2026-09-26); the desert border's gate seen broken from a new file, the door both ways with no fall (2026-10-04;
-its guard still stands, left to the story).
+its guard still stands, left to the story); the Golden Path door, the way to the Hermit's cave and the tunnel onward
+seen open from a new file (2026-10-04).
 
 *Code: the lists in `logic/*.py` (`KEPT_OPEN`, `KEPT_PRESENT`, `SCENERY_HIDDEN`, `SCENERY_PRESENT`, `HELD_UNTIL`,
 `PRESENT_FROM`, `HELD_UNTIL_ITEM`, `DIALOGUE_FLAGS`, gathered in `logic/__init__.py`), sent by `slot_data.py`; in the
