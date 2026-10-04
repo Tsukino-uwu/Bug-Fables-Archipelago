@@ -3008,6 +3008,7 @@ the seed and Archipelago on, a transpiler sends each of the six stored prices th
 price went (`[tunnels] the miner's price N: free in this seed`), and the install line counts the prices found (6 of 6).
 Off Archipelago the prices are the game's.
 
-**Status:** built (2026-10-04), the build succeeds; not yet seen in game.
+**Status:** works, seen on screen (2026-10-04): the Golden Way's miner asked "0 berries for this tunnel!" with 0
+berries in the bag.
 
 *Code: `World/AntTunnels.cs`, `Core/SeedData.cs` (`FreeAntTunnels`).*

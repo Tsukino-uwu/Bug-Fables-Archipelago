@@ -4345,7 +4345,8 @@ step 42).
 
 **Tests:** `TestAntTunnels` (the four ways in, the key).
 
-**Status:** built (2026-10-04), not yet seen in game; tests not run yet (batched before the push).
+**Status:** works, seen on screen (2026-10-04): the Golden Way's miner asked "0 berries for this tunnel!" with none in
+the bag, applied live; tests not run yet (batched before the push).
 
 *Code: `logic/bugaria_city.py` (`TRANSFERS`), `slot_data.py` (`free_ant_tunnels`); tests `test_logic.py`.*
 
