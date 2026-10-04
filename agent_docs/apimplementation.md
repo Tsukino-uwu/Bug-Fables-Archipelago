@@ -1581,9 +1581,9 @@ boss had implied it). Tests `TestGoldenPath`.
 fallback and statue, Madeleine's house, and the bar with its quest board seen on screen (2026-09-25); the exits near
 Snakemouth Den seen (2026-09-26); Eetl's blocker seen gone (2026-10-04); Maki's plaza block kept away (2026-10-04,
 in the log, not yet seen); chapter 2's held scenes seen in order after the first boss (2026-10-04,
-decoupled doors: Eetl, the bridge with Maki, the briefing), before it not yet tried; every board listing bounties
-(built 2026-09-25) and the inn not yet seen (the boat's hold was removed, 2026-09-26); the open start is always on, not an option
-(2026-09-26); the desert border's gate seen broken from a new file, the door both ways with no fall (2026-10-04;
+decoupled doors: Eetl, the bridge with Maki, the briefing), before it not yet tried; every board listing bounties (built
+2026-09-25) and the inn not yet seen (the boat's hold was removed, 2026-09-26); the open start is always on, not an
+option (2026-09-26); the desert border's gate seen broken from a new file, the door both ways with no fall (2026-10-04;
 its guard still stands, left to the story); the Golden Path door, the way to the Hermit's cave and the tunnel onward
 seen open from a new file (2026-10-04); the Golden Settlement's desert gate and its wall seen open
 (2026-10-04); the way to Snakemouth Den kept open after the permit and its gatekeeper kept: seen (2026-10-04, past
@@ -1905,11 +1905,12 @@ The survey itself, with the rule for removing a follower's need: `room-logic.md`
    submarine's docks, the user, 2026-09-30) are shuffled like doors; **places the game sends you** (caught by guards, a
    fall, a story scene) keep their destination, since the scene expects to end there, and become one-ways in the logic.
    **Seen with decoupled doors (2026-10-04):** the trapdoor still dropped into the fall room and the first boss's scene
-   still ended on the Golden Path, and chapter 2's briefing still took the party into the throne room, whose own door then
-   led where the seed put it (`DesertEntrance`, as the spoiler says); the doors around them shuffled. **Kept as it is (the user, 2026-10-04: "we just leave
-   it as it is, if its not considered within logic anyway"):** weighed against returning the party to the scene's room
-   afterwards or shuffling the landing; a one-time trip the logic never counts can't make a seed impossible, only move
-   the player somewhere early. The rule for each: `room-logic.md`, question 2 (moved there 2026-09-30). First
+   still ended on the Golden Path, and chapter 2's briefing still took the party into the throne room, whose own door
+   then led where the seed put it (`DesertEntrance`, as the spoiler says); the doors around them shuffled. **Kept as it
+   is (the user, 2026-10-04: "we just leave it as it is, if its not considered within logic anyway"):** weighed against
+   returning the party to the scene's room afterwards or shuffling the landing; a one-time trip the logic never counts
+   can't make a seed impossible, only move the player somewhere early. The rule for each: `room-logic.md`, question 2
+   (moved there 2026-09-30). First
    step: list every such transfer from the data (the script dump and `event-triggers.py`), map, trigger and target.
    **Listed (2026-09-25):** ScriptDump gained a column of the moving commands on each dialogue line (7 lines,
    all `|warp|` or `|loadmap|`), and `dev-scripts/event-transfers.py` lists each event method's `LoadMap` calls and
