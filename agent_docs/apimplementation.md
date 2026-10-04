@@ -628,8 +628,10 @@ be wrong.
     from the server): each enemy a location keyed `map:entity` (as Enemy Shuffle keys them), a drop added on a won
     fight while its check isn't done, the swap showing the seed's item, the enemy respawning as ever. The two held keys
     are plain pickups to the mod already (`MEASURED.md`). The drop made with the game's public `CreateItem`; 255 enemies
-    always there, 25 the story removes (missable unless handled), 27 it adds later. Open: the option, the missable ones,
-    the held sprite for most kinds, the location count. Not decided.
+    always there, 25 the story removes, 27 it adds later. **Nothing may be missable** (the user: "a location always have
+    to be present/reachable ... should never have anything be missable"): each of the 25 is kept present past its
+    flag, or, where that would break a scene, left out of the seed. Open: the option, the held sprite for most kinds,
+    the location count. Not decided.
 
 **Known issues:**
 
