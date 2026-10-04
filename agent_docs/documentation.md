@@ -1646,7 +1646,8 @@ those flags are the save's own. If any of the three hooks (save, load, new game)
 nothing rather than risk a save.
 
 **Status:** the Detector row's effect seen on screen through step 14 (the Detector beeping for checks left in a room,
-2026-09-25); Difficulty (Hard, Hardest) built (2026-09-24), not yet seen on screen; the Detector's reworded help
+2026-09-25); Difficulty (Hard, Hardest) built (2026-09-24), not yet seen on screen, waived by the user (2026-10-04: assumed fine
+until an issue shows); the Detector's reworded help
 line seen whole (2026-10-04).
 
 *Code: `MedalAssist.cs`.*
@@ -2236,7 +2237,8 @@ defaults puts the row at OFF.
 
 **Status:** in progress, experimental (the row says so). Seen on screen (2026-09-27) at 240: smooth, the "!" steady and
 sharp. The logic measured (`rates`); each site patched as expected (the log's `[fps] frame sites`). Not yet seen on
-screen: every site above, most of all fishing, the screw platform, the Wacka Worm, a disguised enemy and the dig skill.
+screen: every site above, most of all fishing, the screw platform, the Wacka Worm, a disguised enemy and the dig skill;
+waived by the user (2026-10-04: assumed fine until an issue shows).
 Platforms and bridges: the slow motion fixed and seen (2026-09-27). Vi's flight: fixed and seen (2026-09-29). Every
 character drawn smoothed (2026-09-30): seen sharp on a conveyor and in Vi's flight, Kabbu with her, and on the
 Rubber Prison's swinging platform (2026-10-01); bridges, a knocked frozen enemy, the "!" over NPCs and shadows during
@@ -2271,7 +2273,7 @@ whether a garbage collection ran. Two clocks showed up:
    afterwards: one collection (47 ms) instead of four double stalls.
 
 **Status:** works, measured (2026-09-27). The tester's FPS counter dipping to 220 was that stall; confirmation on screen
-that it's gone is still to come.
+that it's gone waived by the user (2026-10-04: assumed fine until an issue shows).
 
 *Code: `ClockCleanup.cs`; `LocationChecks.cs` and `ShopSwap.cs` (`Copies`); the console's `frames`
 (`DevConsole.cs`, `Dev/FrameRate.Dev.cs`).*
