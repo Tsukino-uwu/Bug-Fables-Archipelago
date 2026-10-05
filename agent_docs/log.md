@@ -2917,3 +2917,6 @@ either one wrong).
   200 solo seeds; the user: expected while so little is in logic. A Known issue; pushed with it.
 - **East Road 2 corrected:** the user: the top door "can't drop down", it's across the water; back only on the ice.
   The crank's way up is now a one-way with the ice as its way back.
+- **Stopped for the day** at Snakemouth Den's first room (`SnakemouthBridgeRoom`, warped in, not yet described). The
+  Outskirts' 18 rooms are mapped. Next: Snakemouth Den, from the bridge room; then the rest of the checklist; the
+  quest, enemy and discovery passes after every room. The fill error with Jump and moves shuffled stays a Known issue.
