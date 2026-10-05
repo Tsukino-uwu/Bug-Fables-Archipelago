@@ -11,14 +11,14 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**3 of 244 done.**
+**4 of 244 done.**
 
 ## Outskirts
 
 - [x] NearSnakemouth (1)
 - [x] OutsideSnakemouth (2)
 - [x] BugariaOutskirtsOutsideCity (16)
-- [ ] BugariaOutskitsSnakemouthCorridor1 (17)
+- [x] BugariaOutskitsSnakemouthCorridor1 (17)
 - [ ] BugariaOutskirtsSnakemouthCorridor2 (18)
 - [ ] ChucksAbode (27)
 - [ ] GoldenPathTunnel (35)

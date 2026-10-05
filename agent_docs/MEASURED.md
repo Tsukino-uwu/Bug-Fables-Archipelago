@@ -2291,6 +2291,9 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   scene (event 11, flag 22, `MapControl` starts it on load whatever the door), so either door records it (the user's
   read, matched in code). The dig spot `Mound` buries a Spicy Berry (item 2) behind flag 683: dug with Beetle Dig, the
   flag went off to on (read with the console), and the berry was granted locally, no check sent. Now location 79.
+- **`BugariaOutskitsSnakemouthCorridor1` (17):** between its two ends, two gaps (right side) and two ledges (left
+  side): crossing needs Jump, both ways. Its door to Seedling Haven needs nothing to walk out of, but reaching the other
+  two doors from it, or it from them, needs Jump and Icicle.
 
 ## Still to measure
 

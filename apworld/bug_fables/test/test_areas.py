@@ -173,3 +173,23 @@ class TestOutsideSnakemouth(BugFablesTestBase):
         self.collect_by_name(["Horn Slash", "Kabbu"])
         self.assertTrue(self.crossing(middle, side))
         self.assertTrue(self.crossing(side, middle))
+
+
+class TestFirstCorridor(BugFablesTestBase):
+    # Corridor1: its left end past gaps and ledges (Jump), its Seedling Haven door across water (Jump and Icicle).
+    options = {"shuffle_jump": True, "shuffle_field_moves": True}
+    MAP = "BugariaOutskitsSnakemouthCorridor1"
+
+    def crossing(self, a: str, b: str) -> bool:
+        return self.multiworld.get_entrance(f"{a} to {b}", self.player).access_rule(self.multiworld.state)
+
+    def test_crossings(self) -> None:
+        left, haven = f"{self.MAP} (Left)", f"{self.MAP} (Haven Door)"
+        ways = ((self.MAP, left), (left, self.MAP), (self.MAP, haven), (haven, self.MAP))
+        for a, b in ways:
+            self.assertFalse(self.crossing(a, b))
+        self.collect_by_name(["Jump"])
+        self.assertTrue(self.crossing(self.MAP, left) and self.crossing(left, self.MAP))
+        self.assertFalse(self.crossing(self.MAP, haven))
+        self.collect_by_name(["Progressive Freeze", "Progressive Freeze", "Leif"])
+        self.assertTrue(self.crossing(self.MAP, haven) and self.crossing(haven, self.MAP))

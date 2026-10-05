@@ -171,6 +171,10 @@ MAP_AREAS = (
          out=one_way(None, CanUse("Jump"))),
     # The corridor's side, past the grass: Kabbu's horn cuts through, both ways.
     Area("OutsideSnakemouth", "Corridor Side", ("loading zone outside",), CanUse("Horn Slash")),
+    # The first corridor: two gaps and two ledges between its two ends, crossed only with Jump, both ways.
+    Area("BugariaOutskitsSnakemouthCorridor1", "Left", ("DoorSnakemouth",), CanUse("Jump")),
+    # Its door to Seedling Haven, across water: Jump and Leif's Icicle, both ways.
+    Area("BugariaOutskitsSnakemouthCorridor1", "Haven Door", ("loadzonehaven",), CanUse("Jump") & CanUse("Icicle")),
 )
 SCENERY_PRESENT = (
     # The caravan's stall.

@@ -2846,3 +2846,5 @@ either one wrong).
 - **The dig spot:** the user dug it (a Spicy Berry; flag 683 went on, no check, granted locally) and named it
   *Outskirts: Snakemouth Den Entrance, Dig Spot* (location 79). A survey of the entity dump: fourteen more dig spots
   bury a one-time item and aren't locations.
+- **`BugariaOutskitsSnakemouthCorridor1`:** Jump across (two gaps, two ledges), Jump and Icicle to and from the
+  Seedling Haven door. Areas `Left` and `Haven Door`. Ticked, 4 of 244.
