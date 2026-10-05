@@ -120,7 +120,10 @@ one-way (the user, 2026-09-30: "check the spawn location … not just all the en
 - **Where a fall or a hazard puts you back** (`lastpos`), **and where a loaded save puts you:** never a way through or
   out (question 17).
 - **Past a blocked walk-in:** when a door's walk-in point is behind a barrier, the game moves the party past it after a
-  timer (`MEASURED.md`, "Chapters", "A blocked walk-in ends in a teleport"). Never counted.
+  timer (`MEASURED.md`, "Chapters", "A blocked walk-in ends in a teleport"). **Counted as a one-way** where it pushes
+  the party through (the user, 2026-10-05: "the ones that just push you trough normally are probly fine to keep"),
+  written `one_way(...)` with the barrier's need as its way back (the first: the Explorer Permit gate, an `Area`'s
+  `out`). Where the party gets stuck instead, the mod opens the way (a door, a flag), decided per room.
 
 **The questions, per spawn:**
 
@@ -313,7 +316,7 @@ entrance randomizer and a random start stay labelled experimental until their ro
 
 - Battle skills and medals: combat stays basic (rule 8), which leaves room to play out of logic.
 - The Warp and the map's fast travel as a way in (rule 9).
-- Tricks, skips and clever routes (rule 2), a blocked walk-in's teleport among them.
+- Tricks, skips and clever routes (rule 2).
 - Anything seen to work only sometimes: the logic follows what always works.
 - Unused and test maps (the model).
 

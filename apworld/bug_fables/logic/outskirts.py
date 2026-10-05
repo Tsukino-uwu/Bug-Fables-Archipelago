@@ -6,7 +6,7 @@ from rule_builder.options import OptionFilter
 from rule_builder.rules import Has
 
 from ..custom_rules import (ALL_ATTACKS, BOAT_TICKET, LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, WHOLE_PARTY,
-                            CanUse)
+                            CanUse, one_way)
 from ..data_types import (Added, Area, DialogueFlag, EntityRef, Give, ItemEntity, ItemShop, Location, Pickup,
                           Roadblock, Source, Transfer)
 from ..roadblocks import ExtraRoadblocks
@@ -163,8 +163,10 @@ ROADBLOCKS = (
               npcs=(EntityRef("NearSnakemouth", "guard"), EntityRef("NearSnakemouth", "sign"))),
 )
 MAP_AREAS = (
-    # Behind the Explorer Permit gate: only the door to Snakemouth Den's corridor.
-    Area("BugariaOutskirtsOutsideCity", "Past the Gate", ("DoorSnakemouth",), Has("Explorer Permit")),
+    # Behind the Explorer Permit gate: only the door to Snakemouth Den's corridor. Arriving through it, the game walks
+    # the party into the closed gate and then moves it past: a one-way out, the permit its way back.
+    Area("BugariaOutskirtsOutsideCity", "Past the Gate", ("DoorSnakemouth",), Has("Explorer Permit"),
+         out=one_way(None, Has("Explorer Permit"))),
     # Behind the barrier: only the door into the cave.
     Area("NearSnakemouth", "Cave Side", ("loading zone cave",),
          CanUse("Beetle Dig", options=[OptionFilter(ExtraRoadblocks, SNAKEMOUTH_BARRIER, "contains")],

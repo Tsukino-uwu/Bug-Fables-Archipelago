@@ -2831,3 +2831,8 @@ either one wrong).
   Madeleine's house need Jump, the gate needs the Explorer Permit, the caravan and the stump need nothing. The logic
   already had all of it but the gate, which was only on the spots past it: now the area "Past the Gate", test
   `TestExplorerPermitGate`. Tests not run yet (run before the push).
+- **The entrances, one by one:** the user asked to arrive "from the entrance of the door/room i want", not next door:
+  the console's new `warp <map> from <map>` makes the door's own transfer. Its safe-ground move sent the party to the
+  crystal ("no need to teleport me to the save crystal"): skipped on door warps. City, Golden Path and east road:
+  nothing needed. From the corridor the game pushes the party past the closed gate; the user: count such walk-ins as
+  one-ways, fix the ones that leave you stuck. Now `room-logic.md`'s rule, and the gate's `Area` has a one-way `out`.

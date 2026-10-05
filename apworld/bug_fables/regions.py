@@ -59,6 +59,7 @@ def logic_entrances() -> list[LogicEntrance]:
         for a, b in ways if transfer.two_way else ways[:1]:
             entrances.append(LogicEntrance(f"{a} to {b} ({transfer.name})", a, b, rule))
     for area in MAP_AREAS:
-        for a, b in ((area.map, area.region), (area.region, area.map)):
-            entrances.append(LogicEntrance(f"{a} to {b}", a, b, area.rule))
+        entrances.append(LogicEntrance(f"{area.map} to {area.region}", area.map, area.region, area.rule))
+        out = area.rule if area.out is None else area.out
+        entrances.append(LogicEntrance(f"{area.region} to {area.map}", area.region, area.map, out))
     return entrances

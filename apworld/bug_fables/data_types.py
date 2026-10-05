@@ -343,12 +343,14 @@ class DoorRule:
 @dataclass(frozen=True, slots=True)
 class Area:
     """Part of a map cut off from the rest by something in the room: its own region, holding its doors. rule is what
-    crossing between it and the rest of the map needs, both ways."""
+    crossing between it and the rest of the map needs, both ways; out, when given, is what leaving it needs instead
+    (a one-way out, written with one_way)."""
 
     map: str
     name: str
     doors: tuple[str, ...]
     rule: Rule
+    out: Rule | None = None
 
     @property
     def region(self) -> str:

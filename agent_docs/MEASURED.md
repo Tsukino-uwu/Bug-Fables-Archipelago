@@ -2267,6 +2267,10 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
 - **`BugariaOutskirtsOutsideCity` (16):** Artis's Hard Mode gift and Madeleine's house (both table pickups) need Jump.
   The gate towards Snakemouth Den (`DoorSnakemouth`) needs the Explorer Permit. The caravan's shop and the ladybug
   siblings' stump need nothing: the stump's side is walked up. Nothing else in the room needs anything.
+  **Its four entrances** (each arrived through as the game's door does, the console's `warp ... from ...`): from the
+  city, the Golden Path and the east road, the room is crossed with nothing. From Snakemouth Den's corridor
+  (`DoorSnakemouth`), the walk-in's target is on the town side of the closed gate: the party walks into it and the
+  game moves it past, so that arrival is a one-way onto the town side.
 
 ## Still to measure
 

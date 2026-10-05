@@ -2836,7 +2836,8 @@ the room logic lives (gathered there 2026-09-30, the user: "to have it all in 1 
 gathered into `room-logic.md` with spawns and chains added (2026-09-30). No room mapped with it yet: today's rules are
 still by large areas, kept as each spot's `reach` over one region per map (build step 12, 2026-09-30). The
 first room mapped (2026-10-05, seen by the user): `BugariaOutskirtsOutsideCity`, the Explorer Permit gate an area of
-its own; the rest of `room-checklist.md` to go.
+its own, its pushed-through walk-in a one-way out (an `Area`'s `out`; a blocked walk-in that pushes the party
+through counts as a one-way since, the user); the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

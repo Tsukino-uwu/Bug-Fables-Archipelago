@@ -134,3 +134,15 @@ class TestExplorerPermitGate(BugFablesTestBase):
         self.collect_by_name(["Explorer Permit"])
         for entrance in crossings:
             self.assertTrue(entrance.access_rule(self.multiworld.state))
+
+
+class TestExplorerPermitGateOneWay(BugFablesTestBase):
+    # Arriving from the corridor, the game moves the party past the gate: with Points of No Return on, leaving is free.
+    options = {"points_of_no_return": True}
+
+    def test_leaving_free(self) -> None:
+        gate = TestExplorerPermitGate.PAST
+        out = self.multiworld.get_entrance(f"{gate} to BugariaOutskirtsOutsideCity", self.player)
+        self.assertTrue(out.access_rule(self.multiworld.state))
+        into = self.multiworld.get_entrance(f"BugariaOutskirtsOutsideCity to {gate}", self.player)
+        self.assertFalse(into.access_rule(self.multiworld.state))
