@@ -17,6 +17,9 @@ hands over the submarine (both new in 0.3.0). More chapters come later.
 - **Shuffle Quests** (on): quest rewards are locations.
 - **Shuffle Crystal Berries** (on): crystal berry spots are locations and crystal berries are items.
 - **Shuffle Discoveries** (off): recording a journal discovery sends a check.
+- **Shuffle Hidden Items** (off): items you can't see until you find them, inside grass or a bush or inside something
+  you hit, are locations.
+- **Shuffle Dig Spots** (off): the mounds Kabbu digs up are locations.
 - **Enemysanity** (off): every enemy on the map is a location; winning its fight drops the check as an item to pick
   up. Every one stays on its map whatever the story, so none can be missed. New in 0.3.0.
 - **Shuffle Medal Shops** (on): medals sold in shops are locations.

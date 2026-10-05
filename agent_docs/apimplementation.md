@@ -118,6 +118,7 @@ this file and that doc disagree, that doc is right.
 46. [Build step 46: Beette's sale, a free location](#build-step-46-beettes-sale-a-free-location)
 47. [Build step 47: Enemysanity, every map enemy a location](#build-step-47-enemysanity-every-map-enemy-a-location)
 48. [Build step 48: Extra Roadblocks, and a map split into areas](#build-step-48-extra-roadblocks-and-a-map-split-into-areas)
+49. [Build step 49: hidden items and dig spots, two location toggles](#build-step-49-hidden-items-and-dig-spots-two-location-toggles)
 
 **How it works**
 
@@ -4554,6 +4555,27 @@ generates as before with nothing up. The gate, guard and sign are in `SCENERY_HI
 *Code: `roadblocks.py` (`ExtraRoadblocks`), `data_types.py` (`Area`, `Roadblock`), `logic/outskirts.py`
 (`ROADBLOCKS`, `MAP_AREAS`), `logic/__init__.py`, `data_tables.py` (`REGIONS`, `door_region`), `regions.py`,
 `entrances.py`, `slot_data.py`; tests `test_roadblocks.py`.*
+
+## Build step 49: hidden items and dig spots, two location toggles
+
+**Asked (the user, 2026-10-05, mapping rooms):** "a yaml option to not include invisible items (things inside a
+bush/grass) similar to how pokemon emerald has hidden items in/out of logic in the yaml". **How Emerald does it**
+(`worlds/pokemon_emerald/options.py` and `__init__.py`, 0.6.7, read 2026-10-05): *Randomize Hidden Items*, a `Toggle`
+off by default that adds the hidden items' location category; off, they're the game's own.
+
+**Decided (the user):** hidden is "anything you can't visually see": "like hidden inside grass, or inside a thing you
+need to hit for the item to appear"; dig spots are visible, so "a 2nd on/off for dig spots specifically"; both off, as
+Emerald. Two categories in `CATEGORY_OPTIONS`, as the others: `hidden_item` (*Shuffle Hidden Items*,
+`shuffle_hidden_items`) and `dig_spot` (*Shuffle Dig Spots*, `shuffle_dig_spots`), both sent in `slot_data`'s
+`options`. Off, a category's locations aren't made and their pickups aren't in `location_pickups`, so the mod leaves
+them to the game; the mod needed no change. The first ones: locations 12 (grass) and 25 (a boulder) hidden, 79 a dig
+spot; more join as rooms are mapped (the dig spots: build step 10). Test: `test_categories.py` (`TestHiddenAndDigOff`,
+`TestHiddenAndDigOn`).
+
+**Status:** built (2026-10-05), not yet seen in game.
+
+*Code: `options.py` (`ShuffleHiddenItems`, `ShuffleDigSpots`, `CATEGORY_OPTIONS`), `slot_data.py` (`SLOT_OPTIONS`),
+`logic/outskirts.py`; tests `test_categories.py`.*
 
 # How it works
 

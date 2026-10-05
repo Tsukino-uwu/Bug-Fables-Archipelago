@@ -100,3 +100,28 @@ class TestDiscoveriesOn(BugFablesTestBase):
         self.assertFalse(self.can_reach_location("Outskirts: Snakemouth Den Entrance, Arrival"))
         self.collect_by_name("Explorer Permit")
         self.assertTrue(self.can_reach_location("Outskirts: Snakemouth Den Entrance, Arrival"))
+
+
+HIDDEN = ("Outskirts: Golden Path, Grass by the Dirt Spot", "Outskirts: East Road, Boulder")
+DIG = "Outskirts: Snakemouth Den Entrance, Dig Spot"
+
+
+class TestHiddenAndDigOff(BugFablesTestBase):
+    # Both off by default: hidden items and dig spots stay the game's own, and out of slot_data's pickups.
+    def test_left_out(self) -> None:
+        names = {loc.name for loc in self.multiworld.get_locations(self.player)}
+        pickups = self.world.fill_slot_data()["location_pickups"]
+        for name in (*HIDDEN, DIG):
+            with self.subTest(location=name):
+                self.assertNotIn(name, names)
+                self.assertNotIn(str(self.world.location_name_to_id[name]), pickups)
+
+
+class TestHiddenAndDigOn(BugFablesTestBase):
+    options = {"shuffle_hidden_items": True, "shuffle_dig_spots": True}
+
+    def test_included(self) -> None:
+        names = {loc.name for loc in self.multiworld.get_locations(self.player)}
+        for name in (*HIDDEN, DIG):
+            with self.subTest(location=name):
+                self.assertIn(name, names)

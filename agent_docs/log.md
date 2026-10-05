@@ -2850,3 +2850,6 @@ either one wrong).
   Seedling Haven door. Areas `Left` and `Haven Door`. Ticked, 4 of 244.
 - **`BugariaOutskirtsSnakemouthCorridor2`:** the horn across the middle grass, nothing else; its two grass pickups
   respawn. Ticked, 5 of 244.
+- **Hidden items and dig spots:** the user asked for an Emerald-like toggle for items you can't see; read Emerald's
+  *Randomize Hidden Items* first. Decided: two toggles, *Shuffle Hidden Items* (in grass, or inside something you hit)
+  and *Shuffle Dig Spots*, both off. Build step 49.

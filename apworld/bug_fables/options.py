@@ -56,6 +56,28 @@ class ShuffleDiscoveries(Toggle):
     display_name = "Shuffle Discoveries"
 
 
+class ShuffleHiddenItems(Toggle):
+    """
+    Items you can't see until you find them, inside grass or a bush, or inside something you hit to make them appear,
+    are locations: finding one sends a check. Turned off, they stay the game's own. Off by default.
+
+    Checks added in this version: {count}.
+    """
+
+    display_name = "Shuffle Hidden Items"
+
+
+class ShuffleDigSpots(Toggle):
+    """
+    The mounds Kabbu digs up with Beetle Dig are locations: digging one up sends a check. Turned off, they stay the
+    game's own. Off by default.
+
+    Checks added in this version: {count}.
+    """
+
+    display_name = "Shuffle Dig Spots"
+
+
 class EnemySanity(Toggle):
     """
     Every enemy on the map is a location: winning its fight drops the check as an item to pick up. Every one stays on
@@ -322,6 +344,8 @@ class BugFablesOptions(PerGameCommonOptions):
     shuffle_quests: ShuffleQuests
     shuffle_crystal_berries: ShuffleCrystalBerries
     shuffle_discoveries: ShuffleDiscoveries
+    shuffle_hidden_items: ShuffleHiddenItems
+    shuffle_dig_spots: ShuffleDigSpots
     enemy_sanity: EnemySanity
     shuffle_medal_shops: ShuffleMedalShops
     shuffle_item_shops: ShuffleItemShops
@@ -352,6 +376,8 @@ CATEGORY_OPTIONS: dict[str, str] = {
     "quest": "shuffle_quests",
     "crystal_berry": "shuffle_crystal_berries",
     "discovery": "shuffle_discoveries",
+    "hidden_item": "shuffle_hidden_items",
+    "dig_spot": "shuffle_dig_spots",
     "enemy": "enemy_sanity",
     "shop": "shuffle_medal_shops",
     "item_shop": "shuffle_item_shops",

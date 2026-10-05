@@ -26,7 +26,8 @@ LOCATIONS = (
     # Cut grass copies its own one-time flag onto the item it drops, so this is an ordinary pickup. Only Kabbu's horn
     # cuts it.
     Location("Outskirts: Golden Path, Grass by the Dirt Spot", 12, "BOGoldenPath",
-             Source(flag=74, pickup=Pickup(map="BOGoldenPath", type=0, item=2)), rule=CanUse("Horn Slash")),
+             Source(flag=74, pickup=Pickup(map="BOGoldenPath", type=0, item=2)), rule=CanUse("Horn Slash"),
+             category="hidden_item"),
     # The first boss's prize medal: the mod pays prizes as if Hard Mode were on, so it waits at Artis.
     Location("Outskirts: Artis's Prize for Snakemouth Den", 13, "BugariaOutskirtsOutsideCity",
              Source(event=33, var=13, at_least=3, give=Give(map="BugariaOutskirtsOutsideCity", type=2, item=5)),
@@ -41,7 +42,7 @@ LOCATIONS = (
     # A Drowsy Cake under a stone, knocked loose with Kabbu's horn.
     Location("Outskirts: East Road, Boulder", 25, "BugariaOutskirtsEast1",
              Source(flag=735, pickup=Pickup(map="BugariaOutskirtsEast1", type=0, item=147)),
-             rule=CanUse("Horn Slash")),
+             rule=CanUse("Horn Slash"), category="hidden_item"),
     # Crystal berry #10, on the pier by the boat.
     Location("Outskirts: Pier, Behind the Dock", 26, "BugariaPier",
              Source(berry=10, pickup=Pickup(map="BugariaPier", type=3, item=0)), category="crystal_berry"),
@@ -53,7 +54,7 @@ LOCATIONS = (
     # A dig spot copies its own one-time flag onto the item it digs up, as cut grass does: an ordinary pickup.
     Location("Outskirts: Snakemouth Den Entrance, Dig Spot", 79, "OutsideSnakemouth",
              Source(flag=683, pickup=Pickup(map="OutsideSnakemouth", type=0, item=2)), rule=CanUse("Beetle Dig"),
-             no_jump=True, reach=PAST_GATE),
+             category="dig_spot", no_jump=True, reach=PAST_GATE),
     # A Burly Tea on the right of the table by the painting; the house is open from the start.
     Location("Outskirts: Madeleine's House, Table Right", 44, "BugariaOutskirtsOutsideCity",
              Source(flag=686, pickup=Pickup(map="BugariaOutskirtsOutsideCity", type=0, item=81))),

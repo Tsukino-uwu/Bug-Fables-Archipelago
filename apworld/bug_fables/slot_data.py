@@ -16,7 +16,8 @@ if TYPE_CHECKING:
 # The options slot_data's "options" carries: what the mod acts on, and what Universal Tracker's regeneration needs to
 # build the same locations, doors, rules, exclusions and goal.
 SLOT_OPTIONS: tuple[str, ...] = (
-    "artifacts_required", "shuffle_quests", "shuffle_crystal_berries", "shuffle_discoveries", "enemy_sanity",
+    "artifacts_required", "shuffle_quests", "shuffle_crystal_berries", "shuffle_discoveries", "shuffle_hidden_items",
+    "shuffle_dig_spots", "enemy_sanity",
     "shuffle_medal_shops", "shuffle_item_shops", "shop_contents", "entrance_randomizer", "filler_starting_checks",
     "shuffle_field_moves", "shuffle_jump", "points_of_no_return", "progressive_boat", "extra_roadblocks",
     "exclude_locations")
