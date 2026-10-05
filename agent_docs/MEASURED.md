@@ -2334,8 +2334,9 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   water: Icicle and Jump, there and back. The HP Plus medal (flag 137), inside the waterfall on the lower ground:
   Icicle and the Beemerang.
 - **`BugariaOutskirtsEast2` (56):** left to right needs nothing. The way up to the Lost Sands' door: the crank between
-  the two side doors turned with the Beemerang Halt, or Icicle platforms across the water and Jump; coming down is a
-  drop (the crank can't be turned from the top). The Tangy Berry dig spot (flag 669): Icicle and Jump, there and back.
+  the two side doors turned with the Beemerang Halt, or Icicle platforms across the water and Jump. **Corrected the same
+  day (the user): no drop down.** The top is across the water; the crank can't be turned from there, so the way back is
+  only the ice, and a party arriving there without it is stuck. The Tangy Berry dig spot (flag 669): Icicle and Jump, there and back.
 - **`BOLostSandsEntrance` (57):** a guard (`antguardclosed`, lim 130) blocks the north door to the desert until flag
   130 (Gen and Eri's chapter 3 story), seen on screen; the logic had no rule on that door. Kept open now (the guard
   away, `antguardopen` present, `Base/WoodenGate2` hidden, `(2)` shown, as 130 leaves them; the flag itself never

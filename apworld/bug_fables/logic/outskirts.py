@@ -13,7 +13,10 @@ from ..data_types import (Added, Area, DialogueFlag, EntityRef, Give, ItemEntity
 # (when members are items) and every move item (when moves are).
 PAST_GATE = Has("Explorer Permit") & WHOLE_PARTY & ALL_ATTACKS
 DOOR_RULES = ()
-EAST2_UP = CanUse("Beemerang Halt") | (CanUse("Icicle") & CanUse("Jump"))
+# East Road 2's water before its top door: crossed on Icicle platforms either way, or from below only by turning the
+# crank with the Beemerang Halt, which leaves the top with no way back but the ice.
+EAST2_ICE = CanUse("Icicle") & CanUse("Jump")
+EAST2_UP = EAST2_ICE | one_way(CanUse("Beemerang Halt"), EAST2_ICE)
 # GoldenPathTunnel2's climb from its bottom door to its top one: Icicle, the Horn Dash, Bee Fly, Jump, and an attack for
 # its lever.
 TUNNEL2_UP = CanUse("Jump") & CanUse("Icicle") & CanUse("Horn Dash") & CanUse("Bee Fly") & ANY_ATTACK
@@ -258,9 +261,8 @@ MAP_AREAS = (
     Area("BugariaOutskirtsEast1", "Lower", (), one_way(None, CanUse("Jump")), out=CanUse("Jump")),
     Area("BugariaOutskirtsEast1", "Cave Door", ("loadzonecave",), CanUse("Horn Slash"),
          to="BugariaOutskirtsEast1 (Lower)"),
-    # The second East Road's way up to the Lost Sands: the crank turned with the Beemerang Halt, or Icicle platforms
-    # across the water and Jump. The crank can't be turned from the top, so coming down is a drop.
-    Area("BugariaOutskirtsEast2", "Top", ("loadzonenorth",), EAST2_UP, out=one_way(None, EAST2_UP)),
+    # The second East Road's top door, across water from the rest (EAST2_UP; back down only on the ice).
+    Area("BugariaOutskirtsEast2", "Top", ("loadzonenorth",), EAST2_UP, out=EAST2_ICE),
     # GoldenPathTunnel2's top, with its door down to the tunnel's upper ledge (its two doors share a name: by index).
     Area("GoldenPathTunnel2", "Top", ("loadzonebarrenlands - Duplicate#9",), TUNNEL2_UP,
          out=one_way(None, TUNNEL2_UP)),

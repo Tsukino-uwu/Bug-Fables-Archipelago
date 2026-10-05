@@ -2915,3 +2915,5 @@ either one wrong).
   count, names saying what they give ("Crystal Berry Dig Spot", renamed "Dig Spot" by the user), six items the
   new locations hand out missing from `items.json`. All fixed. Left: a fill error with Jump and moves shuffled, 25 of
   200 solo seeds; the user: expected while so little is in logic. A Known issue; pushed with it.
+- **East Road 2 corrected:** the user: the top door "can't drop down", it's across the water; back only on the ice.
+  The crank's way up is now a one-way with the ice as its way back.
