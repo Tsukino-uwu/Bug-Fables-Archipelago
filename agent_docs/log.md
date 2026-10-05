@@ -2907,3 +2907,4 @@ either one wrong).
   house, behind the fence: Dig only). Locations 91-93.
 - **Same-named doors, seen:** both halves of the `name#row` lookup seen working with `TestDoors` (the live door and
   the row read); a coupled seed's spoiler shuffles all three new pairs. `TestDoors` off again.
+- **`GoldenPathTunnel2`** ticked, 17 of 244.
