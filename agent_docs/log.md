@@ -2853,3 +2853,6 @@ either one wrong).
 - **Hidden items and dig spots:** the user asked for an Emerald-like toggle for items you can't see; read Emerald's
   *Randomize Hidden Items* first. Decided: two toggles, *Shuffle Hidden Items* (in grass, or inside something you hit)
   and *Shuffle Dig Spots*, both off. Build step 49.
+- **Respawning grass pickups:** I twice called them "not locations"; the user: "only the first time you find it,
+  afterwards vanilla/respawning" (build step 10's rule). Rechecked every grass patch in the rooms done: two drop an
+  item, now locations 80 and 81, named by the user, both hidden items.

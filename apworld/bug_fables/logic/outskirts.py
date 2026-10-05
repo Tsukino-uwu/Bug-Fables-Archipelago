@@ -55,6 +55,14 @@ LOCATIONS = (
     Location("Outskirts: Snakemouth Den Entrance, Dig Spot", 79, "OutsideSnakemouth",
              Source(flag=683, pickup=Pickup(map="OutsideSnakemouth", type=0, item=2)), rule=CanUse("Beetle Dig"),
              category="dig_spot", no_jump=True, reach=PAST_GATE),
+    # Respawning pickups in grass: hidden only by a regional flag, so they come back; the game's own again once checked.
+    # Only Kabbu's horn cuts grass.
+    Location("Outskirts: Snakemouth Den Path, Grass on the Left", 80, "BugariaOutskirtsSnakemouthCorridor2",
+             Source(regional=13, pickup=Pickup(map="BugariaOutskirtsSnakemouthCorridor2", type=0, item=0)),
+             rule=CanUse("Horn Slash"), category="hidden_item", no_jump=True, reach=PAST_GATE),
+    Location("Outskirts: Near Snakemouth Den, Grass by the Cave Door", 81, "NearSnakemouth",
+             Source(regional=7, pickup=Pickup(map="NearSnakemouth", type=0, item=1)),
+             rule=CanUse("Horn Slash"), category="hidden_item", no_jump=True, reach=PAST_GATE),
     # A Burly Tea on the right of the table by the painting; the house is open from the start.
     Location("Outskirts: Madeleine's House, Table Right", 44, "BugariaOutskirtsOutsideCity",
              Source(flag=686, pickup=Pickup(map="BugariaOutskirtsOutsideCity", type=0, item=81))),

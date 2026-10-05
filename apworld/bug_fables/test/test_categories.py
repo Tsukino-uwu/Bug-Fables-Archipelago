@@ -102,7 +102,8 @@ class TestDiscoveriesOn(BugFablesTestBase):
         self.assertTrue(self.can_reach_location("Outskirts: Snakemouth Den Entrance, Arrival"))
 
 
-HIDDEN = ("Outskirts: Golden Path, Grass by the Dirt Spot", "Outskirts: East Road, Boulder")
+HIDDEN = ("Outskirts: Golden Path, Grass by the Dirt Spot", "Outskirts: East Road, Boulder",
+          "Outskirts: Snakemouth Den Path, Grass on the Left", "Outskirts: Near Snakemouth Den, Grass by the Cave Door")
 DIG = "Outskirts: Snakemouth Den Entrance, Dig Spot"
 
 

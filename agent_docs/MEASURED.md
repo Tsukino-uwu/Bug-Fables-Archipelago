@@ -2297,7 +2297,10 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   Nothing in it is a location or reads a story flag (the dump: no item, flag or `requires`; its enemies' regional
   flags only).
 - **`BugariaOutskirtsSnakemouthCorridor2` (18):** grass across the middle needs Kabbu's horn, both ways; nothing else.
-  Two grass patches drop respawning pickups (regional flags 5 and 13), not locations.
+  Of its grass, only entity 13 (x -26, regional flag 13, vector data 0:0:0) drops an item, a Crunchy Leaf; entity 11
+  sets regional flag 5 and drops nothing. A grass patch's item is its vector data's x (-1: none). Location 80.
+- **`NearSnakemouth`'s `HoneyGrass`** (x -49.5, by the cave door, regional flag 7) drops a Honey Drop (item 1): location
+  81. No other grass in rooms 1, 2, 16, 17 or 18 drops anything (the dump, 2026-10-05).
 
 ## Still to measure
 

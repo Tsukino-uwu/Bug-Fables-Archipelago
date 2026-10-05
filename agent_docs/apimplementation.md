@@ -4568,8 +4568,8 @@ need to hit for the item to appear"; dig spots are visible, so "a 2nd on/off for
 Emerald. Two categories in `CATEGORY_OPTIONS`, as the others: `hidden_item` (*Shuffle Hidden Items*,
 `shuffle_hidden_items`) and `dig_spot` (*Shuffle Dig Spots*, `shuffle_dig_spots`), both sent in `slot_data`'s
 `options`. Off, a category's locations aren't made and their pickups aren't in `location_pickups`, so the mod leaves
-them to the game; the mod needed no change. The first ones: locations 12 (grass) and 25 (a boulder) hidden, 79 a dig
-spot; more join as rooms are mapped (the dig spots: build step 10). Test: `test_categories.py` (`TestHiddenAndDigOff`,
+them to the game; the mod needed no change. The first ones: locations 12, 80 and 81 (grass; 80 and 81 respawn, a location the first time) and 25
+(a boulder) hidden, 79 a dig spot; more join as rooms are mapped (the dig spots: build step 10). Test: `test_categories.py` (`TestHiddenAndDigOff`,
 `TestHiddenAndDigOn`).
 
 **Status:** built (2026-10-05), not yet seen in game.
