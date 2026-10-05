@@ -6,6 +6,8 @@ as it is, a frozen record.
 - **Tick a room** when it's mapped as [`room-logic.md`](room-logic.md#how-a-room-gets-mapped)
   describes: drafted from the data, seen on screen, written into the logic, tested.
 - **Everything starts unchecked,** rooms with logic already written included: every room is checked from scratch.
+- **A room ticked with "for the quest pass"** is mapped except for a quest or chain in it, gone through after every
+  room (`room-logic.md`, "How a room gets mapped"): those notes are the quest pass's list.
 - **Vanilla only:** what the vanilla game expects (`room-logic.md`, rule 2), with every field ability considered and
   every way checked without Jump too.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
@@ -20,17 +22,17 @@ as it is, a frozen record.
 - [x] BugariaOutskirtsOutsideCity (16)
 - [x] BugariaOutskitsSnakemouthCorridor1 (17)
 - [x] BugariaOutskirtsSnakemouthCorridor2 (18)
-- [x] ChucksAbode (27)
+- [x] ChucksAbode (27) — for the quest pass: Chuck's quest
 - [x] GoldenPathTunnel (35)
 - [x] BOGoldenPath (36)
-- [x] BugariaPier (54)
+- [x] BugariaPier (54) — for the quest pass: the quest board (on the dock, Jump)
 - [x] BugariaOutskirtsEast1 (55)
 - [x] BugariaOutskirtsEast2 (56)
 - [x] BOLostSandsEntrance (57)
 - [x] Blank (115) — scene-only (Event111), never a start
 - [x] BugariaAssociationAttack (130) — story-only, out of the shuffle
-- [x] SeedlingHaven (136)
-- [x] CaveOfTrials (185)
+- [x] SeedlingHaven (136) — for the quest pass: the Seedling King bounty and its Crystal Fruit
+- [x] CaveOfTrials (185) — for the quest pass: the altar (the Mysterious Piece), the trials and their two items
 - [ ] GoldenPathTunnel2 (200)
 - [ ] HermitCave (227)
 
