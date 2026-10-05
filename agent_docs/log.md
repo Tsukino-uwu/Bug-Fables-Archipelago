@@ -2905,3 +2905,5 @@ either one wrong).
   Kingdom's outside, TermiteIndustrial's story copies). The user: fix it now.
 - **Room 16's dig spots:** the user found the raised crystal berry #30 needs Jump; named it and the other two (below the
   house, behind the fence: Dig only). Locations 91-93.
+- **Same-named doors, seen:** both halves of the `name#row` lookup seen working with `TestDoors` (the live door and
+  the row read); a coupled seed's spoiler shuffles all three new pairs. `TestDoors` off again.

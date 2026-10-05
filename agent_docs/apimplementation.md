@@ -2027,7 +2027,8 @@ Such a door is now named `name#row`, its line in the map's entity table: `door-g
 standing on the row's starting spot (the game makes entities in table order but keeps no row; doors never move). Three
 pairs joined the shuffle (Tunnel2's two, the Wasp Kingdom's outside to its main hall), and the outside's other door
 became a one-way; TermiteIndustrial's copies stay out, one spot. Seen: a `TestDoors` rewrite of Tunnel2's `#10` led out
-by that door only, its same-named neighbour untouched (the user).
+by that door only, its same-named neighbour untouched, and East Road 2's left door rewritten as `#9` landed on the
+Golden Path tunnel's upper ledge (the user). A coupled seed's spoiler pairs all three with other rooms.
 
 **Room Swap** (2026-09-29), whole rooms moved instead of single doors, is a value of the same option with a step of its
 own: build step 30.
