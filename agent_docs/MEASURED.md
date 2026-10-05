@@ -2321,6 +2321,8 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   (with the Boat Ticket) and the quest board need Jump. Its only item is that berry. **The boat back from Metal Island
   lands on the dock, up top:** from there without Jump, the captain (to sail again) and a drop to the berry, with no way
   back up; or across the house and down to the ground (the door, the discovery).
+  **The submarine lands below the house, on the ground:** the door and the discovery need nothing; the berry, the quest
+  board and the captain need Jump.
 
 ## Still to measure
 
