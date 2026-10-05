@@ -2869,3 +2869,6 @@ either one wrong).
   8 of 244.
 - **`BugariaPier`:** Jump for crystal berry #10, the boat's captain and the quest board (noted for the quest pass);
   the discovery and the submarine need nothing. Ticked, 9 of 244.
+- **The boat back:** the user sailed with a spawned Boat Ticket: the boat lands on the dock, up top. The dock is now an
+  area (Jump up, a drop down), and the boat leaves from and lands in it (`Transfer.from_area`); its Jump moved from the
+  boat's rule to the dock.

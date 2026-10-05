@@ -54,7 +54,8 @@ def logic_entrances() -> list[LogicEntrance]:
         if a != b and a in MAPS and b in MAPS:
             entrances.append(LogicEntrance(f"{a} to {b}", a, b, None))
     for transfer in TRANSFERS:
-        ways = ((transfer.from_map, transfer.to_map), (transfer.to_map, transfer.from_map))
+        start = transfer.from_map if transfer.from_area is None else f"{transfer.from_map} ({transfer.from_area})"
+        ways = ((start, transfer.to_map), (transfer.to_map, start))
         rule = transfer.rule if transfer.way_back is None else one_way(transfer.rule, transfer.way_back)
         for a, b in ways if transfer.two_way else ways[:1]:
             entrances.append(LogicEntrance(f"{a} to {b} ({transfer.name})", a, b, rule))

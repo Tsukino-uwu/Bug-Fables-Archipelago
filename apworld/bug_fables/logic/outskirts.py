@@ -116,9 +116,9 @@ LOCATIONS = (
              Source(event=16, flag=15, added=Added(type=0, item=0)), quiet=True, no_jump=True),
 )
 TRANSFERS = (
-    # The sailor sails only for the Boat Ticket (with Progressive Boat on, its first copy), up a ledge (Jump). One rule
-    # both ways, so the way back asks for Jump too until Metal Island is mapped (stricter than the game).
-    Transfer("boat", "BugariaPier", "MetalIsland1", BOAT_TICKET & CanUse("Jump")),
+    # The sailor sails only for the Boat Ticket (with Progressive Boat on, its first copy), from the dock, where the
+    # boat back lands too.
+    Transfer("boat", "BugariaPier", "MetalIsland1", BOAT_TICKET, from_area="Dock"),
     # Every dock takes the submarine (and the Boat Ticket, inside the later chapters' stand-in).
     Transfer("submarine", "BugariaPier", "MetalLake", LATER_CHAPTERS & SUBMARINE),
 )
@@ -218,6 +218,8 @@ MAP_AREAS = (
     Area("BOGoldenPath", "Right", ("LoadZoneBugaria",), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
     # Its door to the Hermit's cave, across water: Icicle platforms and Jump, both ways.
     Area("BOGoldenPath", "Left", ("loadzonecave",), CanUse("Icicle") & CanUse("Jump")),
+    # The pier's dock, where the boat leaves and lands: up a ledge (Jump), dropped from through the house.
+    Area("BugariaPier", "Dock", (), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
     # The Golden Path tunnel: the Forsaken Lands' door past a big boulder only the Horn Dash breaks, both ways.
     Area("GoldenPathTunnel", "Left", ("loadzonebarrenlands",), CanUse("Horn Dash")),
     # The Golden Hills' door up top: ice frozen, knocked into place with the horn, and jumped on; dropped down from.

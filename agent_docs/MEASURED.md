@@ -2318,7 +2318,9 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   2's wasps, Neolith and seedlings from 67 to 73).
 - **`BugariaPier` (54):** the door, the save crystal, the submarine dock and the Ship's Wheel discovery (`statuediscovery`,
   dialogue line 63: `discovery,49`, flag 654) need nothing. Crystal berry #10 behind the dock, the boat's captain
-  (with the Boat Ticket) and the quest board need Jump. Its only item is that berry.
+  (with the Boat Ticket) and the quest board need Jump. Its only item is that berry. **The boat back from Metal Island
+  lands on the dock, up top:** from there without Jump, the captain (to sail again) and a drop to the berry, with no way
+  back up; or across the house and down to the ground (the door, the discovery).
 
 ## Still to measure
 
