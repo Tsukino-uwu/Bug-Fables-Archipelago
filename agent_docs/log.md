@@ -2875,3 +2875,5 @@ either one wrong).
 - **`BugariaOutskirtsEast1`:** four parts (top, right past a gap, lower ground, the cave door in grass); location 25
   now the horn and Jump; the dig spot and the HP Plus medal in the waterfall named by the user, locations 88 and 89
   (the medal a hidden item, the user's call). Ticked, 10 of 244.
+- **Enemies after rooms too:** the user: Enemysanity's locations and their reachability wait, like quests. Written into
+  `room-logic.md`.
