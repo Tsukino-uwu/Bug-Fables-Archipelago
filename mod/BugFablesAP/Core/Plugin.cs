@@ -141,8 +141,11 @@ namespace BugFablesAP
             ItemShops.Enable(Log, connection, () => randomizerEnabled.Value);
             ShopInventories.Enable(Log, connection, () => randomizerEnabled.Value);
             DoorShuffle.Enable(Log, connection, () => randomizerEnabled.Value);
-            WarpButton.Enable(Log, () => settingsOn() && QualityOfLife.WarpOn,
-                () => settingsOn() && QualityOfLife.MapOn,
+            // A story-only map: no Warp or map travel, as the game gives no way out mid-scene there.
+            Func<bool> noTravelHere = () => MainManager.map != null
+                && (connection?.Seed?.NoTravelMaps.Contains(MainManager.map.mapid.ToString()) ?? false);
+            WarpButton.Enable(Log, () => settingsOn() && QualityOfLife.WarpOn && !noTravelHere(),
+                () => settingsOn() && QualityOfLife.MapOn && !noTravelHere(),
                 () => QualityOfLife.SkipWarpConfirm, () => QualityOfLife.SkipMapConfirm);
             MenuToggle.Enable(Log, randomizerEnabled, server, port, slot, password,
                 () => connection.Status,

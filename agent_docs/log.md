@@ -2889,3 +2889,5 @@ either one wrong).
 - **`BugariaAssociationAttack`:** one door to the plaza attack map, Event119's landing, nothing else reachable. The user:
   story-only copies out of the shuffle and the starts (`STORY_ONLY_MAPS`, the four attack maps); the post-game copies
   decided when reached. A plain and a coupled entrance-rando seed generate. Ticked, 14 of 244.
+- **Warp in story maps:** the user: warping out mid-attack could softlock the chain for good. Decided: no Warp or map
+  travel on the story-only maps (`no_travel_maps` in slot_data, read by the mod). Not seen in game yet.

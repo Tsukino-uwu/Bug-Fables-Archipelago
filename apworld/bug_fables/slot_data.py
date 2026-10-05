@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any
 
 from .data_tables import (DIALOGUE_FLAGS, FREE_SALES, HELD_UNTIL, HELD_UNTIL_ITEM, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN,
                           KEPT_PRESENT, LOCATION_NAME_TO_ID, PRESENT_FROM, PRESENT_WITH_ITEM, ROADBLOCKS,
-                          SCENERY_HIDDEN, SCENERY_PRESENT, WORLD_VERSION)
+                          SCENERY_HIDDEN, SCENERY_PRESENT, STORY_ONLY_MAPS, WORLD_VERSION)
 from .data_types import DialogueFlag, EntityRef, FlagEntity, FreeSale, ItemEntity, Source
 from .options import ShopContents
 
@@ -96,6 +96,8 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "location_item_shops": _by_location(world, "item_shop", lambda source: source.item_shop.to_slot()),
         # Done when a number slot reaches a value, not a flag (a boss prize handed over).
         "location_vars": _by_location(world, "var", lambda source: {"var": source.var, "at_least": source.at_least}),
+        # Story-only maps: the pause menu offers no Warp or map travel there, as the game gives no way out mid-scene.
+        "no_travel_maps": sorted(STORY_ONLY_MAPS),
         # Checks that show no item of their own (only a story flag): the client shows the player's own item there.
         "silent_locations": sorted(LOCATION_NAME_TO_ID[loc.name] for loc in world.included_locations
                                    if loc.source.present() <= {"event", "flag", "added"}),

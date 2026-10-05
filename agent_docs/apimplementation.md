@@ -2013,6 +2013,10 @@ the city's rooms (`STORY_ONLY_MAPS` in `data_tables.py`: maps 130, 123, 124, 125
 discovery, and a shuffled door into them led to a dead end of scene characters. Their door pairs join the fixed links
 when the door table loads, so they're never shuffled (Room Swap leaves them too) and never a start; the story's own
 transfer still reaches them. The post-game copies (240-242) are decided when they're mapped. Test `TestStoryOnlyMaps`.
+**No Warp or map travel there** (the user: warping out mid-attack could never be undone, since the story's landing runs
+once and the maps only lead to each other; "disable warp + map, when inside the story maps ? so nothing can get
+broken"): `slot_data`'s `no_travel_maps` lists them, and the mod's pause menu offers neither button on those maps
+(`Plugin.cs`, `SeedData.NoTravelMaps`), as the game gives no way out mid-scene.
 
 **Room Swap** (2026-09-29), whole rooms moved instead of single doors, is a value of the same option with a step of its
 own: build step 30.

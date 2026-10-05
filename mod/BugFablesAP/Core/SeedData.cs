@@ -40,6 +40,8 @@ namespace BugFablesAP
         internal readonly List<ApConnection.Blocker> HeldUntilItem;
         internal readonly List<ApConnection.DialogueFlag> DialogueFlags;
         internal readonly List<DoorShuffle.Target> DoorTargets;
+        // Story-only maps: no Warp or map travel there. Empty for a seed from an older apworld.
+        internal readonly HashSet<string> NoTravelMaps;
         // {"map:entity index": enemy ids}: the fight a map enemy starts instead of its own (Enemy Shuffle).
         internal readonly Dictionary<string, int[]> EnemySwaps;
         // Music Shuffle, {name: name played in its place}: tracks by the game's Musics names, jingles by sound name.
@@ -122,6 +124,8 @@ namespace BugFablesAP
                 Keeper = v.Value<string>("keeper"),
                 Item = v.Value<int>("item"),
             });
+            NoTravelMaps = new HashSet<string>(SlotData.List(data, "no_travel_maps", e => e.Value<string>())
+                ?? new List<string>());
             DoorTargets = SlotData.List(data, "door_targets", e => new DoorShuffle.Target
             {
                 Map = e.Value<string>("map"),
