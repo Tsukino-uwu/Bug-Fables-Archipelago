@@ -2843,3 +2843,6 @@ either one wrong).
 - **`OutsideSnakemouth`:** the ledge by the den's door (Jump up, dropped down), the grass to the corridor (the horn),
   the berry and the dig spot in between. Written as the areas `Cave Ledge` and `Corridor Side`. The dig spot's flag
   683 is in no location: asked the user what it gives. Ticked, 3 of 244.
+- **The dig spot:** the user dug it (a Spicy Berry; flag 683 went on, no check, granted locally) and named it
+  *Outskirts: Snakemouth Den Entrance, Dig Spot* (location 79). A survey of the entity dump: fourteen more dig spots
+  bury a one-time item and aren't locations.

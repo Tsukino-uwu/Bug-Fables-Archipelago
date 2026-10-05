@@ -50,6 +50,10 @@ LOCATIONS = (
     # Recorded by the map's auto-start scene on arriving through either door; placed in the middle, the cautious way.
     Location("Outskirts: Snakemouth Den Entrance, Arrival", 28, "OutsideSnakemouth",
              Source(discovery=0), category="discovery", no_jump=True, reach=PAST_GATE),
+    # A dig spot copies its own one-time flag onto the item it digs up, as cut grass does: an ordinary pickup.
+    Location("Outskirts: Snakemouth Den Entrance, Dig Spot", 79, "OutsideSnakemouth",
+             Source(flag=683, pickup=Pickup(map="OutsideSnakemouth", type=0, item=2)), rule=CanUse("Beetle Dig"),
+             no_jump=True, reach=PAST_GATE),
     # A Burly Tea on the right of the table by the painting; the house is open from the start.
     Location("Outskirts: Madeleine's House, Table Right", 44, "BugariaOutskirtsOutsideCity",
              Source(flag=686, pickup=Pickup(map="BugariaOutskirtsOutsideCity", type=0, item=81))),

@@ -1724,6 +1724,12 @@ enemies on 124 maps (some are one spot in different story states, swapped by fla
 measure first: how a won battle knows which map enemy started it, and whether the mod has to keep what's done
 (like respawning pickups, since nothing in the save marks a single map enemy beaten).
 
+**Dig spots (2026-10-05, found mapping `OutsideSnakemouth`):** a dig spot that buries an item (`data[0]` 0) copies its
+own one-time flag onto the item it drops, as cut grass does (`NPCControl`, `DigSpot`), so it's an ordinary pickup
+location with Beetle Dig as its rule. The first, *Outskirts: Snakemouth Den Entrance, Dig Spot* (a Spicy Berry, flag
+683), dug in a seed before it was a location: no check, the item granted locally. Fifteen such spots with a flag in
+the entity dump, the other fourteen not yet locations (a survey, 2026-10-05; `MEASURED.md`, "World pickups").
+
 **Status:** in progress: respawning pickups and the game's missed-prize path (2026-09-24), discoveries (2026-09-25) seen
 on screen, crystal berry spots too (the mod guide, step 9), received berries too (2026-09-28, build step 27); a berry
 location's hand-over too (2026-10-04, *Outskirts: Near Snakemouth Den, Reward*); the prize payout seen (2026-10-04,
