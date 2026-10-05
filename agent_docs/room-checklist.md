@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**17 of 244 done.**
+**18 of 244 done.**
 
 ## Outskirts
 
@@ -34,7 +34,7 @@ as it is, a frozen record.
 - [x] SeedlingHaven (136) — for the quest pass: the Seedling King bounty and its Crystal Fruit
 - [x] CaveOfTrials (185) — for the quest pass: the altar (the Mysterious Piece), the trials and their two items
 - [x] GoldenPathTunnel2 (200)
-- [ ] HermitCave (227)
+- [x] HermitCave (227) — for the quest pass: the hermit's quest (54, started by talking, no board)
 
 ## Snakemouth Den
 

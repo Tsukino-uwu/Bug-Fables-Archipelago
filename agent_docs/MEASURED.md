@@ -2362,6 +2362,9 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   the Golden Path tunnel's upper ledge): Jump, Icicle, the Horn Dash, Bee Fly and an attack for a lever; dropped down
   from (the user). Its `Fixedlifecast` sits at (100, 999, 100), off the map: the Life Cast's only reachable spot is the
   tunnel's ledge. Its grass drops `MoneySmall` only.
+- **`HermitCave` (227):** nothing needed in or out (the user); no item. Talking to the hermit (line 4, Event195) adds
+  board quest 54 as taken with no board (`ChangeBoardQuest(54, 1)`) and sets flag 576; a girl appears and a red flower
+  goes from flag 578: for the quest pass.
 
 ## Still to measure
 

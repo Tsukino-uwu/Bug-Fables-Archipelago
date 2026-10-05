@@ -2908,3 +2908,5 @@ either one wrong).
 - **Same-named doors, seen:** both halves of the `name#row` lookup seen working with `TestDoors` (the live door and
   the row read); a coupled seed's spoiler shuffles all three new pairs. `TestDoors` off again.
 - **`GoldenPathTunnel2`** ticked, 17 of 244.
+- **`HermitCave`:** nothing needed; the hermit starts quest 54 by talking (Event195, no board). Ticked for the quest
+  pass; the Outskirts' rooms all done, 18 of 244.
