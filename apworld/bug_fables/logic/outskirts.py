@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from rule_builder.rules import False_, Has
 
-from ..custom_rules import (ALL_ATTACKS, BOAT_TICKET, LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, WHOLE_PARTY,
+from ..custom_rules import (ALL_ATTACKS, ANY_ATTACK, BOAT_TICKET, LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, WHOLE_PARTY,
                             CanUse, one_way)
 from ..data_types import (Added, Area, DialogueFlag, EntityRef, Give, ItemEntity, ItemShop, Location, Pickup,
                           Source, Transfer)
@@ -14,6 +14,9 @@ from ..data_types import (Added, Area, DialogueFlag, EntityRef, Give, ItemEntity
 PAST_GATE = Has("Explorer Permit") & WHOLE_PARTY & ALL_ATTACKS
 DOOR_RULES = ()
 EAST2_UP = CanUse("Beemerang Halt") | (CanUse("Icicle") & CanUse("Jump"))
+# GoldenPathTunnel2's climb from its bottom door to its top one: Icicle, the Horn Dash, Bee Fly, Jump, and an attack for
+# its lever.
+TUNNEL2_UP = CanUse("Jump") & CanUse("Icicle") & CanUse("Horn Dash") & CanUse("Bee Fly") & ANY_ATTACK
 # The Golden Path tunnel's way up: ice frozen, knocked into place with the horn, then jumped on (the vanilla way;
 # Freeze alone is a harder jump the logic doesn't count, the user, 2026-10-05).
 ICE_CLIMB = CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump")
@@ -237,8 +240,8 @@ MAP_AREAS = (
     Area("BOGoldenPath", "Right", ("LoadZoneBugaria",), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
     # Its door to the Hermit's cave, across water: Icicle platforms and Jump, both ways.
     Area("BOGoldenPath", "Left", ("loadzonecave",), CanUse("Icicle") & CanUse("Jump")),
-    # The first East Road: its right door past a gap (Jump), its lower ground down ledges (a drop; Jump back up), and the
-    # Cave of Trials' door down there inside grass (the horn, both ways).
+    # The first East Road: its right door past a gap (Jump), its lower ground down ledges (a drop; Jump back up), and
+    # the Cave of Trials' door down there inside grass (the horn, both ways).
     Area("BugariaOutskirtsEast1", "Right", ("loadzone right",), CanUse("Jump")),
     Area("BugariaOutskirtsEast1", "Lower", (), one_way(None, CanUse("Jump")), out=CanUse("Jump")),
     Area("BugariaOutskirtsEast1", "Cave Door", ("loadzonecave",), CanUse("Horn Slash"),
@@ -246,6 +249,9 @@ MAP_AREAS = (
     # The second East Road's way up to the Lost Sands: the crank turned with the Beemerang Halt, or Icicle platforms
     # across the water and Jump. The crank can't be turned from the top, so coming down is a drop.
     Area("BugariaOutskirtsEast2", "Top", ("loadzonenorth",), EAST2_UP, out=one_way(None, EAST2_UP)),
+    # GoldenPathTunnel2's top, with its door down to the tunnel's upper ledge (a fixed link: its doors share a name).
+    Area("GoldenPathTunnel2", "Top", (), TUNNEL2_UP, out=one_way(None, TUNNEL2_UP),
+         links=("GoldenPathTunnel",)),
     # The pier's dock, where the boat leaves and lands: up a ledge (Jump), dropped from through the house.
     Area("BugariaPier", "Dock", (), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
     # The Golden Path tunnel: the Forsaken Lands' door past a big boulder only the Horn Dash breaks, both ways.

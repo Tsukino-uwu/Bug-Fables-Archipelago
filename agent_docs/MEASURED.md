@@ -2355,6 +2355,10 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
 - **`CaveOfTrials` (185):** nothing needed in or out (the user). Its altar (`hole`, line 11) opens the trials with the
   Mysterious Piece (Event156, flag 411); the Explorer Permit is refused (seen). Two items on slabs, a Tangy Berry (flag
   507) and a Dark Cherry (508), with copies from flags 503 and 504: behind the altar, for the quest/chain pass.
+- **`GoldenPathTunnel2` (200):** its bottom door (to `BarrenLandsSideGPT`) needs nothing. Up to its top door (down to
+  the Golden Path tunnel's upper ledge): Jump, Icicle, the Horn Dash, Bee Fly and an attack for a lever; dropped down
+  from (the user). Its `Fixedlifecast` sits at (100, 999, 100), off the map: the Life Cast's only reachable spot is the
+  tunnel's ledge. Its grass drops `MoneySmall` only.
 
 ## Still to measure
 

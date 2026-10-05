@@ -2900,3 +2900,6 @@ either one wrong).
 - **`CaveOfTrials`:** nothing needed in or out. The altar wants the Mysterious Piece from Neolith (Event156); the user
   tried the Explorer Permit: refused, which overturns the wiki's word. The trials and their two items wait for the
   quest/chain pass. Ticked, 16 of 244.
+- **`GoldenPathTunnel2`:** the climb up (Jump, Icicle, Horn Dash, Bee Fly, an attack) and a drop down; written, not
+  ticked. Asked why its doors aren't shuffled: they share a name, and only three maps have that (Tunnel2, the Wasp
+  Kingdom's outside, TermiteIndustrial's story copies). The user: fix it now.
