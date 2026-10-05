@@ -2895,3 +2895,5 @@ either one wrong).
   (items 6 and 7 are `MoneySmall`/`MoneyMedium`): not a location. The console's `@grassitem` warp failed three times:
   the culling fix alone didn't do it; a diagnostic plus a trip out of the area (wiping regional flag 22, set by cutting
   it earlier) did. Ticked, 15 of 244.
+- **The Crystal Fruit:** the Seedling King's prize (item 118), seen in the bag; granted locally, no location yet. Noted
+  for the quest pass, with the other bounties.

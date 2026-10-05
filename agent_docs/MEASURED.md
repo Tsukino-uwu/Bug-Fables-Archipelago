@@ -2344,7 +2344,9 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   quest board in it or in 123-125 (the dump); its caravan (`Crickerly`, from flag 41) and medal slot sell the vanilla
   way, the shop locations being the regular caravan's.
 - **`SeedlingHaven` (136):** a dead end with a save crystal; nothing needed in or out (the user). The Seedling King
-  (lim 143) is one of Event124's five bounties; beating him gives an item: for the quest pass. **A grass patch's drop
+  (lim 143) is one of Event124's five bounties; beating him gives the Crystal Fruit (item 118, `SeedlingCrystal`,
+  seen in the user's bag), granted locally in a seed today, no location: for the quest pass, with the other four
+  bounties' prizes. **A grass patch's drop
   is one entry of its vector data at random** (`NPCControl.CutGrass`), and any grass may add a `MoneySmall` 12% of the
   time. `grassitem` here lists items 6, 7 and 77: `MoneySmall`, `MoneyMedium` (berries, the money) and a Tangy Berry,
   so it drops berries mostly; seen dropping only money (the user). Not a location.
