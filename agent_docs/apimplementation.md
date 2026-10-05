@@ -2016,7 +2016,8 @@ transfer still reaches them. The post-game copies (240-242) are decided when the
 **No Warp or map travel there** (the user: warping out mid-attack could never be undone, since the story's landing runs
 once and the maps only lead to each other; "disable warp + map, when inside the story maps ? so nothing can get
 broken"): `slot_data`'s `no_travel_maps` lists them, and the mod's pause menu offers neither button on those maps
-(`Plugin.cs`, `SeedData.NoTravelMaps`), as the game gives no way out mid-scene.
+(`Plugin.cs`, `SeedData.NoTravelMaps`), as the game gives no way out mid-scene. Seen 2026-10-05: on map 130 both
+buttons gone (the user), with the Warp forced on by Shuffle Jump and the ability items.
 
 **Room Swap** (2026-09-29), whole rooms moved instead of single doors, is a value of the same option with a step of its
 own: build step 30.
