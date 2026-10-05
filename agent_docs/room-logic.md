@@ -306,6 +306,10 @@ every discovery's spot and need against the mapped rooms.
 2. **Checked on screen by the user**, one area at a time, with the dev console to test what the draft can't know:
    warp in through each entrance and at each spawn, and try each way across without the ability or without Jump.
    Record what was seen, with the date, in `MEASURED.md`.
+   **Reading the user's descriptions** (the user, 2026-10-05, after a misread "top"): a room is on even ground unless
+   jumping up or falling down is said; "top" and "upper" mean the top of the screen, never height. A one-way with no up
+   or down said is a mechanism usable from one side only (a crank, water to cross), not a ledge: write it by what blocks
+   the way back, and ask which when unclear.
 3. **Written into the logic** (the area's module, `logic/<area>.py`: areas as regions, their edges with their rules,
    each location in its area with its own rule), cautious where anything is unmeasured, replacing the spots' `reach`.
    A Placeholder is promoted to a normal location once its requirements and name are checked, one at a time (build
