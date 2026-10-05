@@ -1082,7 +1082,9 @@ Forsaken Lands"). Used by `door-graph.py` and `entrances.py`.
 - **B.O.S.S. and the Cave of Trials, not yet confirmed:** both maps have a key-item prompt (`HBsLab` line 50,
   `CaveOfTrials` line 11). Which item they accept is decided by a dialogue command ScriptDump doesn't keep, so the
   permit there is the wiki's word only. Until measured, every B.O.S.S. and Cave of Trials location requires the
-  permit: cautious, never wrong.
+  permit: cautious, never wrong. **The Cave of Trials, measured 2026-10-05: the permit is refused** ("the key does not
+  fit", the user); its opening scene, Event156, sets the Mysterious Piece (item 109, `TrialKey`, from Neolith) into
+  the altar, so that's its key. Line 12's `checkvar,0,27` is the permit's own refusal.
 
 ## All medals by source (2026-09-24, entity dump, ScriptDump, code read, matched to the Bug Fables wiki)
 
@@ -2350,6 +2352,9 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   is one entry of its vector data at random** (`NPCControl.CutGrass`), and any grass may add a `MoneySmall` 12% of the
   time. `grassitem` here lists items 6, 7 and 77: `MoneySmall`, `MoneyMedium` (berries, the money) and a Tangy Berry,
   so it drops berries mostly; seen dropping only money (the user). Not a location.
+- **`CaveOfTrials` (185):** nothing needed in or out (the user). Its altar (`hole`, line 11) opens the trials with the
+  Mysterious Piece (Event156, flag 411); the Explorer Permit is refused (seen). Two items on slabs, a Tangy Berry (flag
+  507) and a Dark Cherry (508), with copies from flags 503 and 504: behind the altar, for the quest/chain pass.
 
 ## Still to measure
 

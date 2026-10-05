@@ -2897,3 +2897,6 @@ either one wrong).
   it earlier) did. Ticked, 15 of 244.
 - **The Crystal Fruit:** the Seedling King's prize (item 118), seen in the bag; granted locally, no location yet. Noted
   for the quest pass, with the other bounties.
+- **`CaveOfTrials`:** nothing needed in or out. The altar wants the Mysterious Piece from Neolith (Event156); the user
+  tried the Explorer Permit: refused, which overturns the wiki's word. The trials and their two items wait for the
+  quest/chain pass. Ticked, 16 of 244.

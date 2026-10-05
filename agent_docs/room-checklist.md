@@ -11,7 +11,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**15 of 244 done.**
+**16 of 244 done.**
 
 ## Outskirts
 
@@ -30,7 +30,7 @@ as it is, a frozen record.
 - [x] Blank (115) — scene-only (Event111), never a start
 - [x] BugariaAssociationAttack (130) — story-only, out of the shuffle
 - [x] SeedlingHaven (136)
-- [ ] CaveOfTrials (185)
+- [x] CaveOfTrials (185)
 - [ ] GoldenPathTunnel2 (200)
 - [ ] HermitCave (227)
 
