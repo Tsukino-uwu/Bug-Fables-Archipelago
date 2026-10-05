@@ -644,6 +644,16 @@ The output stays in the BepInEx folder.
 - **Not in this dump:** the one key item and one medal without an `activationflag` still need judging.
   Items given by NPCs and events are in the `ScriptDump` and code lists above.
 
+**Dig spots that bury a one-time item** (2026-10-05, EntityDump; `data` = 0, type, item; the flag is copied onto the
+item, `NPCControl`, `DigSpot`): `OutsideSnakemouth` `Mound - Duplicate` (0 2, flag 683, location 79);
+`BugariaCommercial` `MoundHidden` (1 52, 388); `BugariaOutskirtsOutsideCity` `digspotinhideout` (0 64, 487) and
+`blackcherryspot` (0 121, 642); `GoldenHillsCableCar` `digmound` (0 121, 397); `GoldenPathTunnel` `digspotinhideout -
+Duplicate` (1 52, 488); `GoldenHillsPath3` `diggablespot` (1 52, 380); `BugariaOutskirtsEast1` `DarkCherry - Duplicate`
+(0 121, 633); `BugariaOutskirtsEast2` `TangyBerry` (0 77, 669); `DesertDREastEntrance` `digspot` (0 121, 398);
+`FarGrasslandsLake` `DarkCherry` (0 121, 632); `Swamplands2` `Mound` (0 31, 737); `WaspKingdomPrison` `digspot` (0 121,
+369); `AbandonedCity` `lorebookspot` (1 52, 499); `MysteryIsland` `digspot` (0 121, 653). With no flag (repeat every
+visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeBoss`, and `TestRoom`'s test mound.
+
 ## Hard Mode boss prize medals (2026-09-24, code read; the missed-prize path seen in play)
 
 - **Hard Mode is on** when medal 11 is equipped (`BadgeIsEquipped(11)`, Artis's medal) or flag 614 is set
