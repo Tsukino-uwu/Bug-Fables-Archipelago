@@ -2271,6 +2271,10 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   city, the Golden Path and the east road, the room is crossed with nothing. From Snakemouth Den's corridor
   (`DoorSnakemouth`), the walk-in's target is on the town side of the closed gate: the party walks into it and the
   game moves it past, so that arrival is a one-way onto the town side.
+- **`NearSnakemouth` (1):** with the Snakemouth Barrier up (an Extra Roadblocks test seed), the horn tutorial's scene
+  moved the party past the gate. With it gone, every spot and door is reached from each of the three entrances with
+  nothing. The horn tutorial replayed (flag 17 cleared, arriving from the cave's side): it ran, and the room stayed
+  fully reachable after it.
 
 ## Still to measure
 

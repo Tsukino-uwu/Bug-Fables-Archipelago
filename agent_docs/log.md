@@ -2836,3 +2836,7 @@ either one wrong).
   crystal ("no need to teleport me to the save crystal"): skipped on door warps. City, Golden Path and east road:
   nothing needed. From the corridor the game pushes the party past the closed gate; the user: count such walk-ins as
   one-ways, fix the ones that leave you stuck. Now `room-logic.md`'s rule, and the gate's `Area` has a one-way `out`.
+- **`NearSnakemouth`:** with the barrier up, the horn tutorial's scene moved the party past it; the user: "always have
+  the snakemouth barrier removed and not available as an optional roadblock", then kept the option, empty. A new seed
+  without it, the save kept with `AdoptSeed`. Every spot and door reached from all three entrances with nothing; the
+  tutorial replayed from the cave's side (flag 17 cleared) without breaking the room. Ticked, 2 of 244.

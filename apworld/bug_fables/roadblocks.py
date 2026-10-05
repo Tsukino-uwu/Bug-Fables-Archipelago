@@ -10,10 +10,8 @@ class ExtraRoadblocks(OptionSet):
     Obstacles the game puts up later in the story, there from the start instead, each needing its ability to cross,
     both ways. Without one, the way it would block stays open all game.
 
-    Snakemouth Barrier: the gate before Snakemouth Den, with its guard and sign; Beetle Dig takes you under it.
-
-    None by default.
+    None yet: the Snakemouth Barrier was one until the horn tutorial was seen to move the party past it.
     """
 
     display_name = "Extra Roadblocks"
-    valid_keys = ["Snakemouth Barrier"]
+    valid_keys: list[str] = []

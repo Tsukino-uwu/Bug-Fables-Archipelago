@@ -46,13 +46,13 @@ hands over the submarine (both new in 0.3.0). More chapters come later.
   pause menu's Warp is always there.
 - **Points of No Return** (off): the logic may send you somewhere only the pause menu's Warp gets you out of,
   a drop or a one-way door, so items can land in more places and you're expected to warp back. Off, it always leaves
-  you a way to walk back. No one-way in the logic has a way back for it to drop yet, so for now it changes nothing.
-  New in 0.3.0.
+  you a way to walk back. So far one one-way counts: from Snakemouth Den's corridor past the Explorer Permit gate,
+  which the game walks you through. New in 0.3.0.
 - **Progressive Boat** (on): the Boat Ticket and the submarine are one item found twice, the ticket first; off, two
   items in any order (see below). New in 0.3.0.
 - **Extra Roadblocks** (none): obstacles the game puts up later in the story, there from the start instead, each
-  crossed both ways with its ability. *Snakemouth Barrier*: the gate before Snakemouth Den, with its guard and sign;
-  Beetle Dig takes you under it. Without it, the way stays open all game. New in 0.3.0.
+  crossed both ways with its ability. None to choose yet: the *Snakemouth Barrier* was taken out after 0.3.0, since
+  the horn tutorial moves you past it; the gate before Snakemouth Den stays away all game. New in 0.3.0.
 - **Music Shuffle** (off, under Aesthetic Options): every song plays in place of another, the same every time you play
   the seed, and the jingles (victory, game over, chapter titles) swap among themselves. The title screen, the wind,
   water, machine and breathing sounds, and the factory elevator's music stay. Samira plays the song you pick. It changes

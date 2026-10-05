@@ -2,14 +2,12 @@
 changes there."""
 from __future__ import annotations
 
-from rule_builder.options import OptionFilter
 from rule_builder.rules import Has
 
 from ..custom_rules import (ALL_ATTACKS, BOAT_TICKET, LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, WHOLE_PARTY,
                             CanUse, one_way)
 from ..data_types import (Added, Area, DialogueFlag, EntityRef, Give, ItemEntity, ItemShop, Location, Pickup,
-                          Roadblock, Source, Transfer)
-from ..roadblocks import ExtraRoadblocks
+                          Source, Transfer)
 
 # Past the Explorer Permit gate (the "Past the Gate" area): cautious until the rooms past it are measured, every member
 # (when members are items) and every move item (when moves are).
@@ -19,7 +17,8 @@ LOCATIONS = (
     Location("Outskirts: Maki and Eetl's Gift", 1, "BugariaOutskirtsOutsideCity",
              Source(event=16, flag=15, give=Give(map="BugariaOutskirtsOutsideCity", type=1, item=27)), quiet=True,
              no_jump=True),
-    # The horn tutorial: the scene cuts the grass itself, so it needs no member.
+    # The horn tutorial: the scene cuts the grass itself, so it needs no member. The room needs nothing (seen); reach
+    # stands in for the corridors around it, not yet mapped.
     Location("Outskirts: Near Snakemouth Den, Horn Tutorial", 2, "NearSnakemouth",
              Source(event=10, flag=17, give=Give(map="NearSnakemouth", type=-1, item=10)), reach=PAST_GATE),
     Location("Outskirts: Artis's Gift", 3, "BugariaOutskirtsOutsideCity",
@@ -113,6 +112,9 @@ KEPT_OPEN = (
     EntityRef("NearSnakemouth", "BlockLeft"),
     # Turns the party back from the shortcut to the first corridor until the first boss.
     EntityRef("NearSnakemouth", "BlockRight"),
+    # The guard at the gate before the cave (from chapter 2, flag 67), and his sign: away all game, as the gate is.
+    EntityRef("NearSnakemouth", "guard"),
+    EntityRef("NearSnakemouth", "sign"),
     # The Crickerly who stands there before the caravan opens.
     EntityRef("BugariaOutskirtsOutsideCity", "Crickerly1"),
     # A moth waiting for the rocks to be cleared; gone with the rocks.
@@ -152,25 +154,16 @@ SCENERY_HIDDEN = (
     # The Snakemouth Den gate closed again from the first boss (41) until chapter 2 (67); the Explorer Permit's own gate
     # (until flag 28) stays.
     EntityRef("BugariaOutskirtsOutsideCity", "Base/Gate/SnekGate (1)"),
-)
-# The gate by the cave that the game puts up from chapter 2 (flag 67) for good, the guard beside it and his sign; Beetle
-# Dig goes under it. Without the roadblock the way stays open all game.
-SNAKEMOUTH_BARRIER = "Snakemouth Barrier"
-ROADBLOCKS = (
-    Roadblock(SNAKEMOUTH_BARRIER,
-              scenery=(EntityRef("NearSnakemouth", "map1v4 (1)/snakemouthgate"),
-                       EntityRef("NearSnakemouth", "map1v4 (1)/snakemouthgate/Gate")),
-              npcs=(EntityRef("NearSnakemouth", "guard"), EntityRef("NearSnakemouth", "sign"))),
+    # The gate before the cave that the game puts up from chapter 2 (flag 67) for good. Never up in a seed: the horn
+    # tutorial's scene moves the party past it (the user, 2026-10-05).
+    EntityRef("NearSnakemouth", "map1v4 (1)/snakemouthgate"),
+    EntityRef("NearSnakemouth", "map1v4 (1)/snakemouthgate/Gate"),
 )
 MAP_AREAS = (
     # Behind the Explorer Permit gate: only the door to Snakemouth Den's corridor. Arriving through it, the game walks
     # the party into the closed gate and then moves it past: a one-way out, the permit its way back.
     Area("BugariaOutskirtsOutsideCity", "Past the Gate", ("DoorSnakemouth",), Has("Explorer Permit"),
          out=one_way(None, Has("Explorer Permit"))),
-    # Behind the barrier: only the door into the cave.
-    Area("NearSnakemouth", "Cave Side", ("loading zone cave",),
-         CanUse("Beetle Dig", options=[OptionFilter(ExtraRoadblocks, SNAKEMOUTH_BARRIER, "contains")],
-                filtered_resolution=True)),
 )
 SCENERY_PRESENT = (
     # The caravan's stall.

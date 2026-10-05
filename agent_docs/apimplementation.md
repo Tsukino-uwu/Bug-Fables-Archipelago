@@ -4535,7 +4535,14 @@ without the change. Nine seeds with APQuest, the barrier on, doors off, coupled 
 Beetle Dig in sphere 3 and the den's Artifact in sphere 4. **Owed:** the PopTracker pack's export (a new region and an
 option filter with `contains`).
 
-**Status:** built (2026-10-04), not yet seen in game.
+**The Snakemouth Barrier taken out** (the user, 2026-10-05, seen on screen with it up): the horn tutorial's scene
+moves the party past the gate, so it never held. Asked whether to drop the option with it: "Keep it, empty", ready for
+the next roadblock. `valid_keys` is empty, so Archipelago accepts any value and an old yaml naming the barrier
+generates as before with nothing up. The gate, guard and sign are in `SCENERY_HIDDEN` and `KEPT_OPEN` for good, and the
+`Cave Side` area is gone; `Area` and `Roadblock` stay. Test: `test_roadblocks.py` (a yaml naming it puts nothing up, no
+`Cave Side` region).
+
+**Status:** built (2026-10-04); its one roadblock seen in game and taken out (2026-10-05), the option kept empty.
 
 *Code: `roadblocks.py` (`ExtraRoadblocks`), `data_types.py` (`Area`, `Roadblock`), `logic/outskirts.py`
 (`ROADBLOCKS`, `MAP_AREAS`), `logic/__init__.py`, `data_tables.py` (`REGIONS`, `door_region`), `regions.py`,
