@@ -2311,6 +2311,11 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   way counted); dropped down from. The upper left (Tunnel2's door; the Life Cast, item 72, flag 462, needing nothing)
   can't be climbed to from the room; dropping from it lands in the left part. The mushroom spring (lim 39) and two black
   covers (`Base/Black (1)`, `(2)`, hidden by 39) never change in a seed: receiving the Horn Dash doesn't set 39.
+- **`BOGoldenPath` (36):** three parts. From the middle (the tunnel's door) up ledges to the right (the Outskirts' door)
+  needs Jump; down needs nothing. The left (the Hermit's cave door) is across water: Icicle and Jump, both ways. The
+  grass with location 12 sits below the right's ledges: the horn, no Jump. Crystal berry #6's mound is on the right:
+  Bee Fly and Beetle Dig. Nothing else (the dump: other grass empty, the save crystal under the map at y -50, chapter
+  2's wasps, Neolith and seedlings from 67 to 73).
 
 ## Still to measure
 

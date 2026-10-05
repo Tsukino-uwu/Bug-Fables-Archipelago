@@ -2864,3 +2864,6 @@ either one wrong).
   and Jump, upper left only from Tunnel2). Four new locations named by the user (83-86). Asked how Archipelago does it:
   `world api.md`, regions hold locations, entrances are one-directional; so `Location.area` and `Area.to`. The Life
   Cast's second spot in Tunnel2 shares flag 462 and isn't swapped yet. Not ticked: the user hasn't said it's done.
+- **`BOGoldenPath`:** Jump up to the right, Icicle and Jump to the left, the horn for location 12; crystal berry #6
+  (Bee Fly and Beetle Dig, on the right) named *Outskirts: Golden Path, Crystal Berry Dig Spot*, location 87. Ticked,
+  8 of 244.

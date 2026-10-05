@@ -30,7 +30,11 @@ LOCATIONS = (
     # cuts it.
     Location("Outskirts: Golden Path, Grass by the Dirt Spot", 12, "BOGoldenPath",
              Source(flag=74, pickup=Pickup(map="BOGoldenPath", type=0, item=2)), rule=CanUse("Horn Slash"),
-             category="hidden_item"),
+             category="hidden_item", no_jump=True),
+    # Crystal berry #6, dug up in a mound on the right side, flown to with Vi.
+    Location("Outskirts: Golden Path, Crystal Berry Dig Spot", 87, "BOGoldenPath",
+             Source(berry=6, pickup=Pickup(map="BOGoldenPath", type=3, item=0)),
+             rule=CanUse("Bee Fly") & CanUse("Beetle Dig"), category="crystal_berry", no_jump=True, area="Right"),
     # The first boss's prize medal: the mod pays prizes as if Hard Mode were on, so it waits at Artis.
     Location("Outskirts: Artis's Prize for Snakemouth Den", 13, "BugariaOutskirtsOutsideCity",
              Source(event=33, var=13, at_least=3, give=Give(map="BugariaOutskirtsOutsideCity", type=2, item=5)),
@@ -208,6 +212,10 @@ MAP_AREAS = (
     Area("BugariaOutskitsSnakemouthCorridor1", "Haven Door", ("loadzonehaven",), CanUse("Jump") & CanUse("Icicle")),
     # The second corridor: grass across the middle, cut with Kabbu's horn, both ways.
     Area("BugariaOutskirtsSnakemouthCorridor2", "Left", ("DoorSnakemouth",), CanUse("Horn Slash")),
+    # The Golden Path: its Outskirts door up ledges from the middle (Jump), dropped down from.
+    Area("BOGoldenPath", "Right", ("LoadZoneBugaria",), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
+    # Its door to the Hermit's cave, across water: Icicle platforms and Jump, both ways.
+    Area("BOGoldenPath", "Left", ("loadzonecave",), CanUse("Icicle") & CanUse("Jump")),
     # The Golden Path tunnel: the Forsaken Lands' door past a big boulder only the Horn Dash breaks, both ways.
     Area("GoldenPathTunnel", "Left", ("loadzonebarrenlands",), CanUse("Horn Dash")),
     # The Golden Hills' door up top: ice frozen, knocked into place with the horn, and jumped on; dropped down from.

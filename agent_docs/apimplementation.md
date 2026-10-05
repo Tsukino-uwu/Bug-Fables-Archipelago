@@ -2846,7 +2846,7 @@ first room mapped (2026-10-05, seen by the user): `BugariaOutskirtsOutsideCity`,
 its own, its pushed-through walk-in a one-way out (an `Area`'s `out`; a blocked walk-in that pushes the party
 through counts as a one-way since, the user); then `NearSnakemouth` (needs nothing) and `OutsideSnakemouth` (a
 ledge and grass as areas), the first corridor (Jump; Jump and Icicle to Seedling Haven's door) and the second (the horn), Chuck's Abode (its berry
-behind a rock, the Horn Dash), the Golden Path tunnel (four parts), 7 of 244. Locations now sit in the part of the room they're in (`Location.area`, as
+behind a rock, the Horn Dash), the Golden Path tunnel (four parts), the Golden Path (Jump, Icicle), 8 of 244. Locations now sit in the part of the room they're in (`Location.area`, as
 Archipelago's regions hold locations, `world api.md`), and an area may join another (`Area.to`) by 2026-10-05; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
