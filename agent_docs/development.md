@@ -444,6 +444,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `colortry <hex...>`: queue a trap's "You got" line in each colour given, to compare them on screen.
 - `onehit`: flips a test boost: every hit on an enemy does at least 99 (before defence). It's the `[Debug]` setting
   `OneHit` (off in the code), so it survives reloads; `copy-dev.ps1 -DebugOn OneHit` turns it on for a dev install.
+- `bumpkill`: flips a test boost: every field enemy you touch dies with no battle, through the game's own bump check
+  (`NPCControl.CheckBump`, the medal that kills weak enemies on contact) made to always pass. The `[Debug]` setting
+  `BumpKill`, kept like `OneHit`. Whether a bump kill sends an Enemysanity check: not checked.
 - `infberries`: flips the berry top-up: 999 berries once per save played, when its first map loads (the `[Debug]`
   setting `InfBerries`, off in the code; `copy-dev.ps1 -DebugOn InfBerries` turns it on for a dev test session). Once,
   not on every drop: a refill hid purchases from the item shops, which see a purchase as berries going down
@@ -492,7 +495,7 @@ only in the dev (Debug) build: every one is bound in `Dev/Plugin.Dev.cs`, and th
 |---|---|
 | `DevConsole` | F9 opens the dev console (section above). |
 | `DevCommandFile` | With `DevConsole`: a text file whose lines are run as console commands, then emptied, so a test can be driven from outside the game. Blank lines and lines starting with `#` are skipped; a queued `loc` or `warp` waits until the player is free. |
-| `InfJump`, `OneHit`, `InfBerries` | With `DevConsole`: jump again in mid-air; every hit on an enemy does at least 99; 999 berries once per save played. The console's `infjump`, `onehit` and `infberries` flip them. |
+| `InfJump`, `OneHit`, `BumpKill`, `InfBerries` | With `DevConsole`: jump again in mid-air; every hit on an enemy does at least 99; field enemies die on touch; 999 berries once per save played. The console's `infjump`, `onehit`, `bumpkill` and `infberries` flip them. |
 | `AdoptSeed` | A save tied to another seed is re-tied to the connected one and replays every item (section "A local server to test against"). |
 | `TestStart`, `TestStartMember`, `TestDoors` | A new file's start map, its one party member, doors rewritten by hand (Dev console section). |
 | `GiveMoney` | Berries to add once (capped at 999), then back to 0. |

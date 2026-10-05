@@ -38,7 +38,8 @@ namespace BugFablesAP
         {
             log = logger;
             if (Hooks.Install(typeof(PickupHold), "dev", "warps can't hold off pickups")
-                && Hooks.Install(typeof(OneHitHook), "dev", "onehit does nothing"))
+                && Hooks.Install(typeof(OneHitHook), "dev", "onehit does nothing")
+                && Hooks.Install(typeof(BumpKillHook), "dev", "bumpkill does nothing"))
             {
                 Hooks.Install(typeof(EventLog), "dev", "started events aren't logged");
             }
@@ -58,6 +59,9 @@ namespace BugFablesAP
         // Kept in the config so it survives reloads; "onehit" flips it.
         internal static BepInEx.Configuration.ConfigEntry<bool> OneHitSetting;
         private static bool oneHit => OneHitSetting != null && OneHitSetting.Value;
+        // bumpkill: every field enemy you touch dies as the game's bump medal kills a weak one, with no battle.
+        internal static BepInEx.Configuration.ConfigEntry<bool> BumpKillSetting;
+        private static bool bumpKill => BumpKillSetting != null && BumpKillSetting.Value;
 
         // infjump, in mid-air: the game's own jump also fires in the first 3 frames off the ground, at the same
         // velocity, so a press there still jumps once.
@@ -119,6 +123,16 @@ namespace BugFablesAP
                 {
                     damageammount = Math.Max(damageammount, 99);
                 }
+            }
+        }
+
+        private static class BumpKillHook
+        {
+            [HarmonyPatch(typeof(NPCControl), "CheckBump")]
+            [HarmonyPostfix]
+            private static void BumpKill(ref bool __result)
+            {
+                __result |= bumpKill;
             }
         }
 
@@ -955,6 +969,13 @@ namespace BugFablesAP
                         }
                         InfJumpSetting.Value = !InfJumpSetting.Value;
                         return "infjump " + (infJump ? "on: press jump in mid-air to jump again" : "off");
+                    case "bumpkill":
+                        if (BumpKillSetting == null)
+                        {
+                            return "bumpkill: no setting";
+                        }
+                        BumpKillSetting.Value = !BumpKillSetting.Value;
+                        return "bumpkill " + (bumpKill ? "on: field enemies die on touch, no battle" : "off");
                     case "onehit":
                         if (OneHitSetting == null)
                         {

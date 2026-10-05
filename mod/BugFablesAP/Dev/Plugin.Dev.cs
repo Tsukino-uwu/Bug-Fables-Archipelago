@@ -59,6 +59,9 @@ namespace BugFablesAP
             DevConsole.OneHitSetting = Config.Bind("Debug", "OneHit", false,
                 "Dev only, with DevConsole. Every hit on an enemy does at least 99, to get through test fights. The "
                 + "console's onehit flips it. Off by default.");
+            DevConsole.BumpKillSetting = Config.Bind("Debug", "BumpKill", false,
+                "Dev only, with DevConsole. Every field enemy you touch dies with no battle, as the game's bump medal "
+                + "kills a weak one. The console's bumpkill flips it. Off by default.");
             DevConsole.InfBerriesSetting = Config.Bind("Debug", "InfBerries", false,
                 "Dev only, with DevConsole. Berries set to 999, the game's cap, once per save played, for test "
                 + "purchases. The console's infberries flips it. Off by default.");
