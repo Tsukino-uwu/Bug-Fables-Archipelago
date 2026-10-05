@@ -2859,7 +2859,8 @@ through counts as a one-way since, the user); then `NearSnakemouth` (needs nothi
 ledge and grass as areas), the first corridor (Jump; Jump and Icicle to Seedling Haven's door) and the second (the horn), Chuck's Abode (its berry
 behind a rock, the Horn Dash), the Golden Path tunnel (four parts), the Golden Path (Jump, Icicle), the pier (its dock an area: Jump
 up, the boat leaving and landing there, `Transfer.from_area`), the first East Road (four parts), the second (the crank or Icicle; an ability used for what
-it's made for counts, rule 2), the Lost Sands' entrance (its guard's gate kept open), 12 of 244. A fixed (unshuffled) door link can stand in an area (`Area.links`):
+it's made for counts, rule 2), the Lost Sands' entrance (its guard's gate kept open), `Blank`, the attack map (story-only), Seedling Haven, 15 of
+244. A fixed (unshuffled) door link can stand in an area (`Area.links`):
 the Golden Path tunnel's upper ledge, joined to Tunnel2, which no seed could reach without it (2026-10-05, a
 generation failure) Locations now sit in the part of the room they're in (`Location.area`, as
 Archipelago's regions hold locations, `world api.md`), and an area may join another (`Area.to`) by 2026-10-05; the rest of `room-checklist.md` to go.

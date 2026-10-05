@@ -2891,3 +2891,7 @@ either one wrong).
   decided when reached. A plain and a coupled entrance-rando seed generate. Ticked, 14 of 244.
 - **Warp in story maps:** the user: warping out mid-attack could softlock the chain for good. Decided: no Warp or map
   travel on the story-only maps (`no_travel_maps` in slot_data, read by the mod). Seen: both buttons gone on map 130.
+- **`SeedlingHaven`:** a dead end; the Seedling King is a bounty (quest pass). The grass by him drops money mostly
+  (items 6 and 7 are `MoneySmall`/`MoneyMedium`): not a location. The console's `@grassitem` warp failed three times:
+  the culling fix alone didn't do it; a diagnostic plus a trip out of the area (wiping regional flag 22, set by cutting
+  it earlier) did. Ticked, 15 of 244.

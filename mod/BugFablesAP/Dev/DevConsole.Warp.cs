@@ -450,6 +450,13 @@ namespace BugFablesAP
         private static float unlockAt = -1f;
         private static bool guarded;
 
+        // Why an entity counts as absent: its object's state, the game's existence test and its regional flag.
+        private static string Presence(NPCControl e) =>
+            $"activeSelf {e.gameObject.activeSelf}, inHierarchy {e.gameObject.activeInHierarchy}, gone by flags "
+            + $"{MainManager.CheckIfCanExist(e.requires, e.limit, e.regionalflag)}, regional {e.regionalflag}="
+            + (e.regionalflag > -1 ? MainManager.instance.regionalflags[e.regionalflag].ToString() : "-")
+            + $", at {e.transform.position}";
+
         private static void FinishWarp()
         {
             if (unlockAt > 0f && Time.realtimeSinceStartup >= unlockAt)
@@ -516,9 +523,11 @@ namespace BugFablesAP
                 return;
             }
             List<NPCControl> entities = map.GetComponentsInChildren<NPCControl>(true).ToList();
-            // Only an entity that's really there: one the story hasn't made yet sits inactive, often in the void.
+            // Only an entity that's really there: one the story hasn't made yet sits inactive, often in the void. One the
+            // game culled for being far from the camera is inactive too, yet its flags let it exist.
             NPCControl target = pendingName != null
-                ? entities.FirstOrDefault(e => e.name == pendingName && e.gameObject.activeInHierarchy)
+                ? entities.FirstOrDefault(e => e.name == pendingName && (e.gameObject.activeInHierarchy
+                    || !MainManager.CheckIfCanExist(e.requires, e.limit, e.regionalflag)))
                 : pendingFlag >= 0
                     ? entities.FirstOrDefault(e => e.activationflag == pendingFlag && e.gameObject.activeInHierarchy)
                     : null;
@@ -526,7 +535,8 @@ namespace BugFablesAP
             if (pendingName != null && target == null)
             {
                 where = entities.Any(e => e.name == pendingName)
-                    ? $"({pendingName} isn't present yet)" : $"(nothing named {pendingName} here)";
+                    ? $"({pendingName} isn't present yet: {Presence(entities.First(e => e.name == pendingName))})"
+                    : $"(nothing named {pendingName} here)";
             }
             pendingName = null;
             if (target == null)

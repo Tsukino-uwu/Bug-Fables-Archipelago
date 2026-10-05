@@ -320,6 +320,10 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   warp with no safe side to its entity uses that too, never the entity's own spot over water. **A sub dock** (`warp
   <map> @Fixedsub...`) and a plain warp to Mystery Island land where the sub's own landing puts the party (the dock
   scene's six spots, Event153; seen on Mystery Island 2026-10-04, the user: "this is where i arrived").
+  An `@name` entity counts as there when it's active or when the game's own existence test (`CheckIfCanExist`: its
+  flags and regional flag) lets it be, since the game culls entities far from the camera (2026-10-05: Seedling
+  Haven's grass, 45 units from the save crystal). When it isn't, the message says why (active state, the test, its
+  regional flag).
 - `warp <map> from <map> [door]`: arrive as the named map's door into this one does: appear at the door's spot and
   walk in, with no safe-ground move (the appear spot is often off the ground). The door's name picks one where there
   are several. Seen 2026-10-05, each entrance of the room outside the city.
