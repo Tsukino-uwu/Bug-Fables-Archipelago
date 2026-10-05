@@ -2867,3 +2867,5 @@ either one wrong).
 - **`BOGoldenPath`:** Jump up to the right, Icicle and Jump to the left, the horn for location 12; crystal berry #6
   (Bee Fly and Beetle Dig, on the right) named *Outskirts: Golden Path, Crystal Berry Dig Spot*, location 87. Ticked,
   8 of 244.
+- **`BugariaPier`:** Jump for crystal berry #10, the boat's captain and the quest board (noted for the quest pass);
+  the discovery and the submarine need nothing. Ticked, 9 of 244.

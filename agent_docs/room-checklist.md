@@ -11,7 +11,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**8 of 244 done.**
+**9 of 244 done.**
 
 ## Outskirts
 
@@ -23,7 +23,7 @@ as it is, a frozen record.
 - [x] ChucksAbode (27)
 - [x] GoldenPathTunnel (35)
 - [x] BOGoldenPath (36)
-- [ ] BugariaPier (54)
+- [x] BugariaPier (54)
 - [ ] BugariaOutskirtsEast1 (55)
 - [ ] BugariaOutskirtsEast2 (56)
 - [ ] BOLostSandsEntrance (57)

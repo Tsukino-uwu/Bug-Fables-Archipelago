@@ -2316,6 +2316,9 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   grass with location 12 sits below the right's ledges: the horn, no Jump. Crystal berry #6's mound is on the right:
   Bee Fly and Beetle Dig. Nothing else (the dump: other grass empty, the save crystal under the map at y -50, chapter
   2's wasps, Neolith and seedlings from 67 to 73).
+- **`BugariaPier` (54):** the door, the save crystal, the submarine dock and the Ship's Wheel discovery (`statuediscovery`,
+  dialogue line 63: `discovery,49`, flag 654) need nothing. Crystal berry #10 behind the dock, the boat's captain
+  (with the Boat Ticket) and the quest board need Jump. Its only item is that berry.
 
 ## Still to measure
 

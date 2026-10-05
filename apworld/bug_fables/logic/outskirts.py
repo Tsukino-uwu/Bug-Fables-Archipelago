@@ -52,9 +52,10 @@ LOCATIONS = (
              rule=CanUse("Horn Slash"), category="hidden_item"),
     # Crystal berry #10, on the pier by the boat.
     Location("Outskirts: Pier, Behind the Dock", 26, "BugariaPier",
-             Source(berry=10, pickup=Pickup(map="BugariaPier", type=3, item=0)), category="crystal_berry"),
+             Source(berry=10, pickup=Pickup(map="BugariaPier", type=3, item=0)), rule=CanUse("Jump"),
+             category="crystal_berry"),
     Location("Outskirts: Pier, Ship's Wheel", 27, "BugariaPier",
-             Source(discovery=49), category="discovery"),
+             Source(discovery=49), category="discovery", no_jump=True),
     # Recorded by the map's auto-start scene on arriving through either door; placed in the middle, the cautious way.
     Location("Outskirts: Snakemouth Den Entrance, Arrival", 28, "OutsideSnakemouth",
              Source(discovery=0), category="discovery", no_jump=True, reach=PAST_GATE),
@@ -115,8 +116,9 @@ LOCATIONS = (
              Source(event=16, flag=15, added=Added(type=0, item=0)), quiet=True, no_jump=True),
 )
 TRANSFERS = (
-    # The sailor sails only for the Boat Ticket (with Progressive Boat on, its first copy).
-    Transfer("boat", "BugariaPier", "MetalIsland1", BOAT_TICKET),
+    # The sailor sails only for the Boat Ticket (with Progressive Boat on, its first copy), up a ledge (Jump). One rule
+    # both ways, so the way back asks for Jump too until Metal Island is mapped (stricter than the game).
+    Transfer("boat", "BugariaPier", "MetalIsland1", BOAT_TICKET & CanUse("Jump")),
     # Every dock takes the submarine (and the Boat Ticket, inside the later chapters' stand-in).
     Transfer("submarine", "BugariaPier", "MetalLake", LATER_CHAPTERS & SUBMARINE),
 )
