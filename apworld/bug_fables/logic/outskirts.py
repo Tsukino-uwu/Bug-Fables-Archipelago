@@ -175,6 +175,8 @@ MAP_AREAS = (
     Area("BugariaOutskitsSnakemouthCorridor1", "Left", ("DoorSnakemouth",), CanUse("Jump")),
     # Its door to Seedling Haven, across water: Jump and Leif's Icicle, both ways.
     Area("BugariaOutskitsSnakemouthCorridor1", "Haven Door", ("loadzonehaven",), CanUse("Jump") & CanUse("Icicle")),
+    # The second corridor: grass across the middle, cut with Kabbu's horn, both ways.
+    Area("BugariaOutskirtsSnakemouthCorridor2", "Left", ("DoorSnakemouth",), CanUse("Horn Slash")),
 )
 SCENERY_PRESENT = (
     # The caravan's stall.

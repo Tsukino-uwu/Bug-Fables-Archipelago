@@ -193,3 +193,18 @@ class TestFirstCorridor(BugFablesTestBase):
         self.assertFalse(self.crossing(self.MAP, haven))
         self.collect_by_name(["Progressive Freeze", "Progressive Freeze", "Leif"])
         self.assertTrue(self.crossing(self.MAP, haven) and self.crossing(haven, self.MAP))
+
+
+class TestSecondCorridor(BugFablesTestBase):
+    # Corridor2: grass across the middle (the horn), both ways.
+    options = {"shuffle_field_moves": True}
+    MAP = "BugariaOutskirtsSnakemouthCorridor2"
+
+    def test_crossing_needs_horn(self) -> None:
+        ways = [self.multiworld.get_entrance(name, self.player)
+                for name in (f"{self.MAP} to {self.MAP} (Left)", f"{self.MAP} (Left) to {self.MAP}")]
+        for way in ways:
+            self.assertFalse(way.access_rule(self.multiworld.state))
+        self.collect_by_name(["Horn Slash", "Kabbu"])
+        for way in ways:
+            self.assertTrue(way.access_rule(self.multiworld.state))

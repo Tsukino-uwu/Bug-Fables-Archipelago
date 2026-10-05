@@ -2848,3 +2848,5 @@ either one wrong).
   bury a one-time item and aren't locations.
 - **`BugariaOutskitsSnakemouthCorridor1`:** Jump across (two gaps, two ledges), Jump and Icicle to and from the
   Seedling Haven door. Areas `Left` and `Haven Door`. Ticked, 4 of 244.
+- **`BugariaOutskirtsSnakemouthCorridor2`:** the horn across the middle grass, nothing else; its two grass pickups
+  respawn. Ticked, 5 of 244.

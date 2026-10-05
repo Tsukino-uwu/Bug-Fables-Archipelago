@@ -2293,7 +2293,11 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   flag went off to on (read with the console), and the berry was granted locally, no check sent. Now location 79.
 - **`BugariaOutskitsSnakemouthCorridor1` (17):** between its two ends, two gaps (right side) and two ledges (left
   side): crossing needs Jump, both ways. Its door to Seedling Haven needs nothing to walk out of, but reaching the other
-  two doors from it, or it from them, needs Jump and Icicle.
+  two doors from it, or it from them, needs Jump and Icicle (the user: "top/right, going up/down across the water").
+  Nothing in it is a location or reads a story flag (the dump: no item, flag or `requires`; its enemies' regional
+  flags only).
+- **`BugariaOutskirtsSnakemouthCorridor2` (18):** grass across the middle needs Kabbu's horn, both ways; nothing else.
+  Two grass patches drop respawning pickups (regional flags 5 and 13), not locations.
 
 ## Still to measure
 
