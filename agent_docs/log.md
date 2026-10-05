@@ -2865,7 +2865,7 @@ either one wrong).
   `world api.md`, regions hold locations, entrances are one-directional; so `Location.area` and `Area.to`. The Life
   Cast's second spot in Tunnel2 shares flag 462 and isn't swapped yet. Not ticked: the user hasn't said it's done.
 - **`BOGoldenPath`:** Jump up to the right, Icicle and Jump to the left, the horn for location 12; crystal berry #6
-  (Bee Fly and Beetle Dig, on the right) named *Outskirts: Golden Path, Crystal Berry Dig Spot*, location 87. Ticked,
+  (Bee Fly and Beetle Dig, on the right) named *Outskirts: Golden Path, Dig Spot*, location 87. Ticked,
   8 of 244.
 - **`BugariaPier`:** Jump for crystal berry #10, the boat's captain and the quest board (noted for the quest pass);
   the discovery and the submarine need nothing. Ticked, 9 of 244.
@@ -2910,3 +2910,8 @@ either one wrong).
 - **`GoldenPathTunnel2`** ticked, 17 of 244.
 - **`HermitCave`:** nothing needed; the hermit starts quest 54 by talking (Event195, no board). Ticked for the quest
   pass; the Outskirts' rooms all done, 18 of 244.
+- **Before the push:** the suite found today's knock-ons: tests naming the now-optional locations 12 and 25, the
+  Wasp Kingdom's new one-way, the rule export versus Archipelago skipping always-false entrances, the shop fallback
+  count, names saying what they give ("Crystal Berry Dig Spot", renamed "Dig Spot" by the user), six items the
+  new locations hand out missing from `items.json`. All fixed. Left: a fill error with Jump and moves shuffled, 25 of
+  200 solo seeds; the user: expected while so little is in logic. A Known issue; pushed with it.

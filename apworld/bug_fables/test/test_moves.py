@@ -27,7 +27,7 @@ class TestMovesOffByDefault(BugFablesTestBase):
 
 
 class TestFieldMoves(BugFablesTestBase):
-    options = {"shuffle_field_moves": True}
+    options = {"shuffle_field_moves": True, "shuffle_hidden_items": True}
 
     def test_three_moves_in_the_pool(self) -> None:
         # The attack, then for the two progressive ones its upgrade.

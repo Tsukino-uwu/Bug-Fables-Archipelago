@@ -17,7 +17,7 @@ class TestPartyDefault(BugFablesTestBase):
 
 
 class TestPartyOff(BugFablesTestBase):
-    options = {"starting_party_member": "off"}
+    options = {"starting_party_member": "off", "shuffle_hidden_items": True}
 
     def test_story_party(self) -> None:
         self.assertEqual(self.world.fill_slot_data()["starting_member"], -1)
@@ -90,17 +90,17 @@ class _StartWith:
 
 
 class TestStartVi(_StartWith, BugFablesTestBase):
-    options = {"starting_party_member": "vi"}
+    options = {"starting_party_member": "vi", "shuffle_hidden_items": True}
     start = "Vi"
 
 
 class TestStartKabbu(_StartWith, BugFablesTestBase):
-    options = {"starting_party_member": "kabbu"}
+    options = {"starting_party_member": "kabbu", "shuffle_hidden_items": True}
     start = "Kabbu"
 
 
 class TestStartLeif(_StartWith, BugFablesTestBase):
-    options = {"starting_party_member": "leif"}
+    options = {"starting_party_member": "leif", "shuffle_hidden_items": True}
     start = "Leif"
 
 
@@ -115,7 +115,7 @@ class TestStartRandomMember(BugFablesTestBase):
 
 class TestAbilities(BugFablesTestBase):
     # Rules name a field move; until moves are items, each attack is its member's and Jump the whole party's.
-    options = {"starting_party_member": "leif"}
+    options = {"starting_party_member": "leif", "shuffle_hidden_items": True}
 
     def test_each_attack_needs_its_member(self) -> None:
         for ability, member in (("Horn Slash", "Kabbu"), ("Beemerang Toss", "Vi"), ("Freeze", "Leif")):
@@ -140,7 +140,7 @@ class TestAbilities(BugFablesTestBase):
 
 
 class TestStartAllThree(BugFablesTestBase):
-    options = {"starting_party_member": "all_three"}
+    options = {"starting_party_member": "all_three", "shuffle_hidden_items": True}
 
     def test_all_three_are_start_inventory(self) -> None:
         self.assertEqual(self.world.fill_slot_data()["starting_member"], 3)

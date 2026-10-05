@@ -36,7 +36,7 @@ LOCATIONS = (
              Source(flag=74, pickup=Pickup(map="BOGoldenPath", type=0, item=2)), rule=CanUse("Horn Slash"),
              category="hidden_item", no_jump=True),
     # Crystal berry #6, dug up in a mound on the right side, flown to with Vi.
-    Location("Outskirts: Golden Path, Crystal Berry Dig Spot", 87, "BOGoldenPath",
+    Location("Outskirts: Golden Path, Dig Spot", 87, "BOGoldenPath",
              Source(berry=6, pickup=Pickup(map="BOGoldenPath", type=3, item=0)),
              rule=CanUse("Bee Fly") & CanUse("Beetle Dig"), category="crystal_berry", no_jump=True, area="Right"),
     # The first boss's prize medal: the mod pays prizes as if Hard Mode were on, so it waits at Artis.
@@ -107,7 +107,7 @@ LOCATIONS = (
              Source(regional=7, pickup=Pickup(map="NearSnakemouth", type=0, item=1)),
              rule=CanUse("Horn Slash"), category="hidden_item", no_jump=True, reach=PAST_GATE),
     # Crystal berry #30, dug up on a raised spot outside the city (Jump).
-    Location("Outskirts: Outside the City, Crystal Berry Dig Spot", 91, "BugariaOutskirtsOutsideCity",
+    Location("Outskirts: Outside the City, Dig Spot", 91, "BugariaOutskirtsOutsideCity",
              Source(berry=30, pickup=Pickup(map="BugariaOutskirtsOutsideCity", type=3, item=0)),
              rule=CanUse("Jump") & CanUse("Beetle Dig"), category="crystal_berry"),
     # A Dark Cherry dug up below the house.

@@ -25,9 +25,9 @@ class TestPermitGate(BugFablesTestBase):
                      if loc.address is not None}
         self.assertEqual(reachable, {"Outskirts: Maki and Eetl's Gift", "Outskirts: Outside the City, Tutorial Battle",
                                      "Outskirts: Artis's Gift",
-                                     "Outskirts: Ladybug Siblings' House", "Outskirts: East Road, Boulder",
+                                     "Outskirts: Ladybug Siblings' House",
                                      "Outskirts: Pier, Behind the Dock", "Bugaria City: Residential District, Rooftop",
-                                     "Outskirts: Golden Path, Grass by the Dirt Spot",
+                                     "Outskirts: Golden Path Tunnel, Behind the Boulder",
                                      "Ant Palace: Library, Behind the Bookshelf", "Ant Palace: War Room, Table",
                                      "Bugaria City: Residential District, Old Book Delivery Start",
                                      "Outskirts: Madeleine's House, Table Right",
@@ -110,7 +110,9 @@ class TestInRoomRules(BugFablesTestBase):
 
 
 class TestGoldenPath(BugFablesTestBase):
-    # The game makes the door only after the first boss (flag 41); the seed opens it from the start.
+    # The game makes the door only after the first boss (flag 41); the seed opens it from the start. The grass spot is
+    # a hidden item.
+    options = {"shuffle_hidden_items": True}
     def test_door_present_from_the_start(self) -> None:
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "LoadZoneGoldenPath"},
                       self.world.fill_slot_data()["kept_present"])

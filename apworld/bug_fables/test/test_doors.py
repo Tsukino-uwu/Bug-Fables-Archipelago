@@ -15,6 +15,8 @@ ONE_WAY_DOORS = {(w.map, w.door) for w in ONE_WAYS}
 # The game's one-way doors (MEASURED.md, the fog maze): the Forsaken Lands' wrong turns, the pink spider's room, the
 # underground bar's exit, the wizard's basement drop and a Giant's Lair ladder.
 EXPECTED_ONE_WAYS = {
+    # Its map holds a second door of the same name, which leads back from the main hall: this one has no way back.
+    ("WaspKingdomOutside", "loadzoneinside#14"),
     ("BarrenLandsEntrance", "returnloadzoneright"), ("BarrenLandsCD", "returnloadzoneleft"),
     ("BarrenLandsCD", "returnloadzone"), ("BarrenLandsBeefly", "returnloadzone"),
     ("BarrenLandsTanks", "returnloadzone"), ("BarrenLandsTanks", "returnzonenorth"),

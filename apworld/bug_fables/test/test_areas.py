@@ -216,8 +216,10 @@ class TestGoldenPathTunnel(BugFablesTestBase):
     MAP = "GoldenPathTunnel"
 
     def test_upper_left_never_from_inside(self) -> None:
-        up = self.multiworld.get_entrance(f"{self.MAP} (Left) to {self.MAP} (Upper Left)", self.player)
-        self.assertFalse(up.access_rule(self.multiworld.get_all_state()))
+        # No way up exists, so Archipelago makes no entrance for it: only Tunnel2's door leads in.
+        ways_in = {e.parent_region.name for e in self.multiworld.get_region(f"{self.MAP} (Upper Left)",
+                                                                            self.player).entrances}
+        self.assertEqual(ways_in, {"GoldenPathTunnel2 (Top)"})
 
     def test_life_cast_in_the_upper_left(self) -> None:
         location = self.multiworld.get_location("Outskirts: Golden Path Tunnel, Upper Ledge", self.player)

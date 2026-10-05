@@ -45,4 +45,6 @@ class TestExportedEntrancesAreTheWorlds(BugFablesTestBase):
     def test_every_entrance(self) -> None:
         made = {(e.name, e.parent_region.name, e.connected_region.name)
                 for e in self.multiworld.get_entrances(self.player)}
-        self.assertEqual(made, {(e.name, e.from_map, e.to_map) for e in logic_entrances()})
+        # Archipelago never makes an entrance whose rule can't ever pass (AutoWorld.create_entrance).
+        possible = [e for e in logic_entrances() if e.rule is None or not e.rule.resolve(self.world).always_false]
+        self.assertEqual(made, {(e.name, e.from_map, e.to_map) for e in possible})

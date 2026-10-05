@@ -281,7 +281,9 @@ box unchecked: each room is mapped from scratch, vanilla only). **Quests wait un
 multiple rooms sometimes"): a room is done without its quests, which are then gone through one by one as chains.
 **Enemy locations wait too** (the user, 2026-10-05: "similar to how we are waiting with quests, lets do the same for
 enemy locations/reachability"): Enemysanity's spots and what reaching each enemy needs are gone through after the
-rooms, room by room.
+rooms, room by room. **So do discoveries** (the user, 2026-10-05: "similar to the quest and enemy things, we might have
+to do the same with discoveries ( if i miss any while we are mapping out rooms )"): one sweep after the rooms checks
+every discovery's spot and need against the mapped rooms.
 
 1. **A draft from the data.** The entity dump lists every object in the map by type: `BeetleGrass`, `PushRock`,
    `DigWall`, `DigSpot`, `BreakableRock`, `JumpSpring`, `Dropplet`, `Geizer`, `WindPusher`, `Switch`,
