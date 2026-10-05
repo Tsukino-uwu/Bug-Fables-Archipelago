@@ -2858,3 +2858,5 @@ either one wrong).
   item, now locations 80 and 81, named by the user, both hidden items.
 - **`ChucksAbode`:** crystal berry #3 needs the Horn Dash (the big rock); the user named it *Outskirts: Chuck's Abode,
   Behind the House*, location 82. The rest needs nothing. Ticked, 6 of 244.
+- **Quests after rooms:** at Chuck's quest, the user: map every room first, then each quest on its own, since quests
+  span rooms. Written into `room-logic.md`.
