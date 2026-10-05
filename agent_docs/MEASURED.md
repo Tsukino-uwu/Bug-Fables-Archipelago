@@ -2323,6 +2323,11 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   back up; or across the house and down to the ground (the door, the discovery).
   **The submarine lands below the house, on the ground:** the door and the discovery need nothing; the berry, the quest
   board and the captain need Jump.
+- **`BugariaOutskirtsEast1` (55):** left door to right door, Jump, both ways; neither door is blocked. Down the ledges
+  to the lower ground is a drop, Jump back up. The Cave of Trials' door down there sits inside grass: the horn, in and
+  out. The Drowsy Cake on the stone (location 25): the horn and Jump. The Dark Cherry dig spot (flag 633), across
+  water: Icicle and Jump, there and back. The HP Plus medal (flag 137), inside the waterfall on the lower ground:
+  Icicle and the Beemerang.
 
 ## Still to measure
 

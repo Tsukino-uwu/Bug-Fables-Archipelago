@@ -49,7 +49,15 @@ LOCATIONS = (
     # A Drowsy Cake under a stone, knocked loose with Kabbu's horn.
     Location("Outskirts: East Road, Boulder", 25, "BugariaOutskirtsEast1",
              Source(flag=735, pickup=Pickup(map="BugariaOutskirtsEast1", type=0, item=147)),
-             rule=CanUse("Horn Slash"), category="hidden_item"),
+             rule=CanUse("Horn Slash") & CanUse("Jump"), category="hidden_item"),
+    # A Dark Cherry dug up across the water: Icicle platforms and Jump, there and back.
+    Location("Outskirts: East Road, Dig Spot", 88, "BugariaOutskirtsEast1",
+             Source(flag=633, pickup=Pickup(map="BugariaOutskirtsEast1", type=0, item=121)),
+             rule=CanUse("Icicle") & CanUse("Jump") & CanUse("Beetle Dig"), category="dig_spot"),
+    # The HP Plus medal, hidden inside the waterfall on the lower ground: Icicle, then the Beemerang to grab it.
+    Location("Outskirts: East Road, Inside the Waterfall", 89, "BugariaOutskirtsEast1",
+             Source(flag=137, pickup=Pickup(map="BugariaOutskirtsEast1", type=2, item=0)),
+             rule=CanUse("Icicle") & CanUse("Beemerang Toss"), category="hidden_item", no_jump=True, area="Lower"),
     # Crystal berry #10, on the pier by the boat.
     Location("Outskirts: Pier, Behind the Dock", 26, "BugariaPier",
              Source(berry=10, pickup=Pickup(map="BugariaPier", type=3, item=0)), rule=CanUse("Jump"),
@@ -218,6 +226,12 @@ MAP_AREAS = (
     Area("BOGoldenPath", "Right", ("LoadZoneBugaria",), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
     # Its door to the Hermit's cave, across water: Icicle platforms and Jump, both ways.
     Area("BOGoldenPath", "Left", ("loadzonecave",), CanUse("Icicle") & CanUse("Jump")),
+    # The first East Road: its right door past a gap (Jump), its lower ground down ledges (a drop; Jump back up), and the
+    # Cave of Trials' door down there inside grass (the horn, both ways).
+    Area("BugariaOutskirtsEast1", "Right", ("loadzone right",), CanUse("Jump")),
+    Area("BugariaOutskirtsEast1", "Lower", (), one_way(None, CanUse("Jump")), out=CanUse("Jump")),
+    Area("BugariaOutskirtsEast1", "Cave Door", ("loadzonecave",), CanUse("Horn Slash"),
+         to="BugariaOutskirtsEast1 (Lower)"),
     # The pier's dock, where the boat leaves and lands: up a ledge (Jump), dropped from through the house.
     Area("BugariaPier", "Dock", (), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
     # The Golden Path tunnel: the Forsaken Lands' door past a big boulder only the Horn Dash breaks, both ways.

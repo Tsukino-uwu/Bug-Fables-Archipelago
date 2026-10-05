@@ -2847,7 +2847,7 @@ its own, its pushed-through walk-in a one-way out (an `Area`'s `out`; a blocked 
 through counts as a one-way since, the user); then `NearSnakemouth` (needs nothing) and `OutsideSnakemouth` (a
 ledge and grass as areas), the first corridor (Jump; Jump and Icicle to Seedling Haven's door) and the second (the horn), Chuck's Abode (its berry
 behind a rock, the Horn Dash), the Golden Path tunnel (four parts), the Golden Path (Jump, Icicle), the pier (its dock an area: Jump
-up, the boat leaving and landing there, `Transfer.from_area`), 9 of 244. Locations now sit in the part of the room they're in (`Location.area`, as
+up, the boat leaving and landing there, `Transfer.from_area`), the first East Road (four parts), 10 of 244. Locations now sit in the part of the room they're in (`Location.area`, as
 Archipelago's regions hold locations, `world api.md`), and an area may join another (`Area.to`) by 2026-10-05; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
