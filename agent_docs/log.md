@@ -2840,3 +2840,6 @@ either one wrong).
   the snakemouth barrier removed and not available as an optional roadblock", then kept the option, empty. A new seed
   without it, the save kept with `AdoptSeed`. Every spot and door reached from all three entrances with nothing; the
   tutorial replayed from the cave's side (flag 17 cleared) without breaking the room. Ticked, 2 of 244.
+- **`OutsideSnakemouth`:** the ledge by the den's door (Jump up, dropped down), the grass to the corridor (the horn),
+  the berry and the dig spot in between. Written as the areas `Cave Ledge` and `Corridor Side`. The dig spot's flag
+  683 is in no location: asked the user what it gives. Ticked, 3 of 244.

@@ -2275,6 +2275,11 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   moved the party past the gate. With it gone, every spot and door is reached from each of the three entrances with
   nothing. The horn tutorial replayed (flag 17 cleared, arriving from the cave's side): it ran, and the room stayed
   fully reachable after it.
+- **`OutsideSnakemouth` (2):** from the den's door (left), a small ledge is dropped from freely and climbed back only
+  with Jump. Below it, the crystal berry (location 19) and the dig spot need nothing. The grass between there and the
+  corridor's door (right) needs Kabbu's horn, both ways. The arrival discovery (location 28) is the map's auto-start
+  scene (event 11, flag 22, `MapControl` starts it on load whatever the door), so either door records it (the user's
+  read, matched in code). The dig spot `Mound` buries an item behind flag 683, which no location uses yet.
 
 ## Still to measure
 

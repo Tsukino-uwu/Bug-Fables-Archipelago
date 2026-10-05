@@ -34,12 +34,10 @@ LOCATIONS = (
     # No gate of its own: in the game only the Outskirts rocks, removed by the seed, keep it out of reach.
     Location("Outskirts: Ladybug Siblings' House", 14, "BugariaOutskirtsOutsideCity",
              Source(flag=679, pickup=Pickup(map="BugariaOutskirtsOutsideCity", type=0, item=8)), no_jump=True),
-    # Crystal berry #0, outside the cave: behind grass from the Outskirts' side (the horn), open from the cave's side,
-    # which room-level logic will count.
+    # Crystal berry #0, in the middle of the room outside the cave (its areas below).
     Location("Outskirts: Snakemouth Den Entrance, by the Cave", 19, "OutsideSnakemouth",
              Source(berry=0, pickup=Pickup(map="OutsideSnakemouth", type=3, item=0)),
-             rule=CanUse("Horn Slash"),
-             category="crystal_berry", reach=PAST_GATE),
+             category="crystal_berry", no_jump=True, reach=PAST_GATE),
     # A Drowsy Cake under a stone, knocked loose with Kabbu's horn.
     Location("Outskirts: East Road, Boulder", 25, "BugariaOutskirtsEast1",
              Source(flag=735, pickup=Pickup(map="BugariaOutskirtsEast1", type=0, item=147)),
@@ -49,9 +47,9 @@ LOCATIONS = (
              Source(berry=10, pickup=Pickup(map="BugariaPier", type=3, item=0)), category="crystal_berry"),
     Location("Outskirts: Pier, Ship's Wheel", 27, "BugariaPier",
              Source(discovery=49), category="discovery"),
-    # Recorded by the scene on first arriving outside Snakemouth Den.
+    # Recorded by the map's auto-start scene on arriving through either door; placed in the middle, the cautious way.
     Location("Outskirts: Snakemouth Den Entrance, Arrival", 28, "OutsideSnakemouth",
-             Source(discovery=0), category="discovery", reach=PAST_GATE),
+             Source(discovery=0), category="discovery", no_jump=True, reach=PAST_GATE),
     # A Burly Tea on the right of the table by the painting; the house is open from the start.
     Location("Outskirts: Madeleine's House, Table Right", 44, "BugariaOutskirtsOutsideCity",
              Source(flag=686, pickup=Pickup(map="BugariaOutskirtsOutsideCity", type=0, item=81))),
@@ -164,6 +162,11 @@ MAP_AREAS = (
     # the party into the closed gate and then moves it past: a one-way out, the permit its way back.
     Area("BugariaOutskirtsOutsideCity", "Past the Gate", ("DoorSnakemouth",), Has("Explorer Permit"),
          out=one_way(None, Has("Explorer Permit"))),
+    # Outside the cave: the door into the den stands on a small ledge, dropped from freely, climbed only with Jump.
+    Area("OutsideSnakemouth", "Cave Ledge", ("LoadingZoneInside",), CanUse("Jump"),
+         out=one_way(None, CanUse("Jump"))),
+    # The corridor's side, past the grass: Kabbu's horn cuts through, both ways.
+    Area("OutsideSnakemouth", "Corridor Side", ("loading zone outside",), CanUse("Horn Slash")),
 )
 SCENERY_PRESENT = (
     # The caravan's stall.

@@ -146,3 +146,30 @@ class TestExplorerPermitGateOneWay(BugFablesTestBase):
         self.assertTrue(out.access_rule(self.multiworld.state))
         into = self.multiworld.get_entrance(f"BugariaOutskirtsOutsideCity to {gate}", self.player)
         self.assertFalse(into.access_rule(self.multiworld.state))
+
+
+class TestOutsideSnakemouth(BugFablesTestBase):
+    # The den's door on a ledge (Jump up, a drop down), the corridor's side past grass (the horn), the berry between.
+    options = {"shuffle_jump": True, "shuffle_field_moves": True}
+
+    def crossing(self, a: str, b: str) -> bool:
+        return self.multiworld.get_entrance(f"{a} to {b}", self.player).access_rule(self.multiworld.state)
+
+    def test_doors_in_their_areas(self) -> None:
+        for door, area in (("LoadingZoneInside", "Cave Ledge"), ("loading zone outside", "Corridor Side")):
+            with self.subTest(door=door):
+                entrance = self.multiworld.get_entrance(door_name("OutsideSnakemouth", door), self.player)
+                self.assertEqual(entrance.parent_region.name, f"OutsideSnakemouth ({area})")
+
+    def test_crossings(self) -> None:
+        ledge, side, middle = "OutsideSnakemouth (Cave Ledge)", "OutsideSnakemouth (Corridor Side)", "OutsideSnakemouth"
+        for a, b in ((middle, ledge), (ledge, middle), (middle, side), (side, middle)):
+            with self.subTest(way=f"{a} to {b}"):
+                self.assertFalse(self.crossing(a, b))
+        self.collect_by_name(["Jump"])
+        self.assertTrue(self.crossing(middle, ledge))
+        self.assertTrue(self.crossing(ledge, middle))
+        self.assertFalse(self.crossing(middle, side))
+        self.collect_by_name(["Horn Slash", "Kabbu"])
+        self.assertTrue(self.crossing(middle, side))
+        self.assertTrue(self.crossing(side, middle))
