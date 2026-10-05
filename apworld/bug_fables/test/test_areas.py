@@ -228,3 +228,18 @@ class TestGoldenPathTunnel(BugFablesTestBase):
         self.assertFalse(way.access_rule(self.multiworld.state))
         self.collect_by_name(["Progressive Dash", "Progressive Dash", "Kabbu"])
         self.assertTrue(way.access_rule(self.multiworld.state))
+
+
+class TestStoryOnlyMaps(BugFablesTestBase):
+    # Chapter 3's attack copies: never a shuffled door, never a start, still joined to each other.
+    options = {"entrance_randomizer": "coupled"}
+
+    def test_out_of_shuffle_and_starts(self) -> None:
+        from ..data_tables import DOOR_NAMES, ROOM_STARTS, STORY_ONLY_MAPS
+        for name in DOOR_NAMES:
+            self.assertNotIn(name.split(": ")[0], STORY_ONLY_MAPS)
+        for start in ROOM_STARTS:
+            self.assertNotIn(start.map, STORY_ONLY_MAPS)
+
+    def test_still_joined(self) -> None:
+        self.multiworld.get_entrance("BugariaPlazaAttack to BugariaAssociationAttack", self.player)

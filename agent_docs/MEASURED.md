@@ -2338,6 +2338,11 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
 - **`Blank` (115):** seen with a plain warp: black, empty, in the void (the user). One entity (an empty NPC slot), no
   door, save point or item. Only Event111 loads it, as a backdrop for a flashback (`LoadMap(115)`, the "Sad" song,
   three characters placed), then moves on: never a start (starts come only from doors; it has none).
+- **`BugariaAssociationAttack` (130):** chapter 3's copy of the area outside the city. Two ways in: its one door, from
+  the plaza attack map (123), and Event119's landing at about (2, 0, -1.6), where control comes back. From either,
+  only that door is reached; the town's cast stands around (the user). No item, dig spot, grass item, discovery or
+  quest board in it or in 123-125 (the dump); its caravan (`Crickerly`, from flag 41) and medal slot sell the vanilla
+  way, the shop locations being the regular caravan's.
 
 ## Still to measure
 

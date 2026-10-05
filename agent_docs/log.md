@@ -2886,3 +2886,6 @@ either one wrong).
 - **The gate seen open** from both doors on the new seed; `BOLostSandsEntrance` ticked, 12 of 244.
 - **`Blank`:** warped in on the user's ask "to confirm is really a unused/test room": black and empty; a backdrop for
   Event111's flashback, no doors, never a start. Ticked, 13 of 244.
+- **`BugariaAssociationAttack`:** one door to the plaza attack map, Event119's landing, nothing else reachable. The user:
+  story-only copies out of the shuffle and the starts (`STORY_ONLY_MAPS`, the four attack maps); the post-game copies
+  decided when reached. A plain and a coupled entrance-rando seed generate. Ticked, 14 of 244.

@@ -92,6 +92,9 @@ rules work in Archipelago: `apimplementation.md`, How it works §11.
 - **Where it stands today** (2026-09-30): each map is one region with its doors as entrances (build step 12), and what
   the old large areas needed is kept on each spot as its `reach`. Mapping a room splits its region into areas and
   replaces its spots' `reach` with the room's own rules.
+- **Story-only copies of rooms stay out of the shuffle** (the user, 2026-10-05): rooms there for one scene (chapter 3's
+  attack maps, `STORY_ONLY_MAPS`) keep their doors as the game has them and are never a start; the logic keeps them
+  only as the story reaches them.
 - **Unused and test maps are never part of anything** (the user, 2026-09-30): no region, no logic, never the target of
   a door, a transfer or a spawn, never reachable. They are `UNUSED_MAPS` (`data_tables.py`): `SnakemouthEmpty` and
   `TestRoom`; `TestUnusedMaps` proves no region, entrance, transfer, spot, encounter, start or shuffled door names

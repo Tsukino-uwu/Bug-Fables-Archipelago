@@ -2008,6 +2008,12 @@ is gone, its grow-outwards pass with it (Archipelago's randomizer grows the worl
 The experimental label stays: the rules inside rooms aren't mapped yet (build step 24), so a shuffled seed can still
 put the party where the game needs more than the logic knows; the Warp stays the way out.
 
+**Story-only rooms out of the shuffle** (the user, 2026-10-05, mapping the attack on the city): chapter 3's copies of
+the city's rooms (`STORY_ONLY_MAPS` in `data_tables.py`: maps 130, 123, 124, 125) hold no location, quest or
+discovery, and a shuffled door into them led to a dead end of scene characters. Their door pairs join the fixed links
+when the door table loads, so they're never shuffled (Room Swap leaves them too) and never a start; the story's own
+transfer still reaches them. The post-game copies (240-242) are decided when they're mapped. Test `TestStoryOnlyMaps`.
+
 **Room Swap** (2026-09-29), whole rooms moved instead of single doors, is a value of the same option with a step of its
 own: build step 30.
 

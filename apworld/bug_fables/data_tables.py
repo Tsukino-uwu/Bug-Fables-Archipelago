@@ -32,7 +32,20 @@ def _load(name: str) -> dict[str, Any]:
 
 WORLD_VERSION: str = _load_manifest()["world_version"]
 ITEMS: tuple[Item, ...] = tuple(Item.from_json(item) for item in _load("items.json")["items"])
-DOORS: Doors = Doors.from_json(_load("doors.json"))
+# Story-only copies of rooms, there for one scene (chapter 3's attack on the city): their doors are never shuffled and
+# they're never a start, so their door pairs join the fixed links (the user, 2026-10-05).
+STORY_ONLY_MAPS = frozenset({"BugariaAssociationAttack", "BugariaPlazaAttack", "BugariaBridgeAttack",
+                             "BugariaCastleAttack"})
+
+
+def _story_doors_fixed(doors: Doors) -> Doors:
+    story = [c for c in doors.connections if c.a.map in STORY_ONLY_MAPS or c.b.map in STORY_ONLY_MAPS]
+    links = tuple((end.map, other.map) for c in story for end, other in ((c.a, c.b), (c.b, c.a)))
+    return Doors(connections=tuple(c for c in doors.connections if c not in story), one_way=doors.one_way,
+                 fixed=(*doors.fixed, *links), gated=doors.gated)
+
+
+DOORS: Doors = _story_doors_fixed(Doors.from_json(_load("doors.json")))
 
 
 def door_name(map_name: str, door: str) -> str:
