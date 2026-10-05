@@ -116,3 +116,21 @@ class TestUnusedMaps(BugFablesTestBase):
             for kind, maps in uses.items():
                 with self.subTest(map=name, kind=kind):
                     self.assertNotIn(name, maps)
+
+
+class TestExplorerPermitGate(BugFablesTestBase):
+    # The gate outside the city stands between the Outskirts and Snakemouth Den's corridor, both ways.
+    PAST = "BugariaOutskirtsOutsideCity (Past the Gate)"
+
+    def test_corridor_door_behind_it(self) -> None:
+        door = self.multiworld.get_entrance(door_name("BugariaOutskirtsOutsideCity", "DoorSnakemouth"), self.player)
+        self.assertEqual(door.parent_region.name, self.PAST)
+
+    def test_crossing_needs_permit(self) -> None:
+        crossings = [self.multiworld.get_entrance(name, self.player) for name in (
+            f"BugariaOutskirtsOutsideCity to {self.PAST}", f"{self.PAST} to BugariaOutskirtsOutsideCity")]
+        for entrance in crossings:
+            self.assertFalse(entrance.access_rule(self.multiworld.state))
+        self.collect_by_name(["Explorer Permit"])
+        for entrance in crossings:
+            self.assertTrue(entrance.access_rule(self.multiworld.state))

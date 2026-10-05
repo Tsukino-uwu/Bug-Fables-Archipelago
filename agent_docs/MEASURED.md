@@ -69,6 +69,7 @@ read, a log or a probe.
 - [Spy Specs](#spy-specs-2026-09-30-code-read-nothing-seen-in-game)
 - [The Settings list's
   arrows](#the-settings-lists-arrows-2026-09-30-code-read-the-games-screen-in-the-users-screenshots)
+- [Rooms seen on screen](#rooms-seen-on-screen-2026-10-05-the-user-every-ability-in-hand)
 - [Still to measure](#still-to-measure)
 
 ## The build (2026-09-24, read from a Steam install, game not run)
@@ -2258,6 +2259,14 @@ for its own threshold. Used by `enemy-numbers.py` and `EnemyScaling.cs` (the mod
   -90° and 90°; a value like Mash's at bar x 6.25, `|center||size,0.75|`; a volume row's ten pips at bar x 4.45, 0.4
   apart, `guisprites[59]` at 1/4, lit ones `guisprites[42]` at 1/3 in yellow. In the box: rows' text at
   `2.55 - 0.7 k`, arrows at x 0.4 and 5.4, the value at 2.9, pips from 1.1. Used by `ApMenu.cs`.
+
+## Rooms seen on screen (2026-10-05, the user, every ability in hand)
+
+Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), vanilla only.
+
+- **`BugariaOutskirtsOutsideCity` (16):** Artis's Hard Mode gift and Madeleine's house (both table pickups) need Jump.
+  The gate towards Snakemouth Den (`DoorSnakemouth`) needs the Explorer Permit. The caravan's shop and the ladybug
+  siblings' stump need nothing: the stump's side is walked up. Nothing else in the room needs anything.
 
 ## Still to measure
 

@@ -11,8 +11,8 @@ from ..data_types import (Added, Area, DialogueFlag, EntityRef, Give, ItemEntity
                           Roadblock, Source, Transfer)
 from ..roadblocks import ExtraRoadblocks
 
-# Past the Explorer Permit gate (inside the Outskirts map, so not a door): cautious until the rooms past it are
-# measured, every member (when members are items) and every move item (when moves are).
+# Past the Explorer Permit gate (the "Past the Gate" area): cautious until the rooms past it are measured, every member
+# (when members are items) and every move item (when moves are).
 PAST_GATE = Has("Explorer Permit") & WHOLE_PARTY & ALL_ATTACKS
 DOOR_RULES = ()
 LOCATIONS = (
@@ -163,6 +163,8 @@ ROADBLOCKS = (
               npcs=(EntityRef("NearSnakemouth", "guard"), EntityRef("NearSnakemouth", "sign"))),
 )
 MAP_AREAS = (
+    # Behind the Explorer Permit gate: only the door to Snakemouth Den's corridor.
+    Area("BugariaOutskirtsOutsideCity", "Past the Gate", ("DoorSnakemouth",), Has("Explorer Permit")),
     # Behind the barrier: only the door into the cave.
     Area("NearSnakemouth", "Cave Side", ("loading zone cave",),
          CanUse("Beetle Dig", options=[OptionFilter(ExtraRoadblocks, SNAKEMOUTH_BARRIER, "contains")],

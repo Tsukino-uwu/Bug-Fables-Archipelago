@@ -76,6 +76,7 @@ either one wrong).
 - [2026-10-04: TO-CHECK cut down, liveslot, the world opened room by room](#2026-10-04-to-check-cut-down-liveslot-the-world-opened-room-by-room)
 - [2026-10-04: the last checks, Extra Roadblocks, shuffled-door scenes](#2026-10-04-the-last-checks-extra-roadblocks-shuffled-door-scenes)
 - [2026-10-05: a checklist of every room](#2026-10-05-a-checklist-of-every-room)
+- [2026-10-05: the first room mapped](#2026-10-05-the-first-room-mapped)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2819,3 +2820,14 @@ either one wrong).
   things in multiple ways or with hard tricks". Settled: "we start/plan for just basic/vanilla". Rule 2 unchanged; the
   advanced setting is only this note for now. Fly and no Jump (the user: Fly "kinda breaks the 'no jump'"): with
   vanilla logic Fly never stands in for Jump; for the advanced setting, decided when it's built.
+
+## 2026-10-05: the first room mapped
+
+- **Asked to start:** a draft of `NearSnakemouth` (1) from the entity dump (doors, the barrier, grass, one flying enemy;
+  open questions: which side of the barrier the horn tutorial and Chuck's door sit). Not yet seen.
+- **A test seed:** every ability in the start inventory (field moves and Jump shuffled to make them items), the
+  Snakemouth Barrier up, hosted locally.
+- **The user checked `BugariaOutskirtsOutsideCity` instead** ("thats it for this room"): Artis's Hard Mode gift and
+  Madeleine's house need Jump, the gate needs the Explorer Permit, the caravan and the stump need nothing. The logic
+  already had all of it but the gate, which was only on the spots past it: now the area "Past the Gate", test
+  `TestExplorerPermitGate`. Tests not run yet (run before the push).
