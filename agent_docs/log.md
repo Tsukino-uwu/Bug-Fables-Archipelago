@@ -2883,3 +2883,4 @@ either one wrong).
 - **`BOLostSandsEntrance`:** the guard blocks the desert until flag 130, with no rule in the logic: a real hole. Kept
   open (open world, build step 9). Regenerating for it failed: *Golden Path Tunnel, Upper Ledge* unreachable, because
   Tunnel2's doors share a name, so they're a fixed map link that ignored areas. `Area.links` fixes it.
+- **The gate seen open** from both doors on the new seed; `BOLostSandsEntrance` ticked, 12 of 244.

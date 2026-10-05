@@ -2334,7 +2334,7 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
 - **`BOLostSandsEntrance` (57):** a guard (`antguardclosed`, lim 130) blocks the north door to the desert until flag
   130 (Gen and Eri's chapter 3 story), seen on screen; the logic had no rule on that door. Kept open now (the guard
   away, `antguardopen` present, `Base/WoodenGate2` hidden, `(2)` shown, as 130 leaves them; the flag itself never
-  set). With it open, nothing is needed across the room (the user).
+  set). With it open, nothing is needed across the room, seen from both doors (the user).
 
 ## Still to measure
 
