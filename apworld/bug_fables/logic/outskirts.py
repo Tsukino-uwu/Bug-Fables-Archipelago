@@ -167,6 +167,8 @@ KEPT_OPEN = (
     # The guard at the gate before the cave (from chapter 2, flag 67), and his sign: away all game, as the gate is.
     EntityRef("NearSnakemouth", "guard"),
     EntityRef("NearSnakemouth", "sign"),
+    # The guard who keeps the gate to the Lost Sands shut until chapter 3 (flag 130): the gate is open from the start.
+    EntityRef("BOLostSandsEntrance", "antguardclosed"),
     # The Crickerly who stands there before the caravan opens.
     EntityRef("BugariaOutskirtsOutsideCity", "Crickerly1"),
     # A moth waiting for the rocks to be cleared; gone with the rocks.
@@ -190,6 +192,8 @@ KEPT_PRESENT = (
     EntityRef("NearSnakemouth", "loadingzonechuck"),
     # The shortcut back to the first corridor, made only after the first boss.
     EntityRef("NearSnakemouth", "loadingzonefields"),
+    # The same guard stood aside by the open gate, as from flag 130.
+    EntityRef("BOLostSandsEntrance", "antguardopen"),
     # The caravan's shopkeeper, made while the map builds its entities so the game builds its shop slots.
     EntityRef("BugariaOutskirtsOutsideCity", "Crickerly2"),
     # A ladybug sibling outside their house; their other lines answer to the lost-brother quest's own flags.
@@ -210,6 +214,8 @@ SCENERY_HIDDEN = (
     # tutorial's scene moves the party past it (the user, 2026-10-05).
     EntityRef("NearSnakemouth", "map1v4 (1)/snakemouthgate"),
     EntityRef("NearSnakemouth", "map1v4 (1)/snakemouthgate/Gate"),
+    # The closed gate to the Lost Sands (hidden from flag 130).
+    EntityRef("BOLostSandsEntrance", "Base/WoodenGate2"),
 )
 MAP_AREAS = (
     # Behind the Explorer Permit gate: only the door to Snakemouth Den's corridor. Arriving through it, the game walks
@@ -247,12 +253,14 @@ MAP_AREAS = (
     # The Golden Hills' door up top: ice frozen, knocked into place with the horn, and jumped on; dropped down from.
     Area("GoldenPathTunnel", "Top Right", ("loadzonegoldenhills",), ICE_CLIMB, out=one_way(None, ICE_CLIMB)),
     # Tunnel2's door, high on the left: no way up from inside the room, only a drop to the left part, never back.
-    Area("GoldenPathTunnel", "Upper Left", ("loadzonegpt2",), False_(), out=one_way(None, False_()),
-         to="GoldenPathTunnel (Left)"),
+    Area("GoldenPathTunnel", "Upper Left", (), False_(), out=one_way(None, False_()), to="GoldenPathTunnel (Left)",
+         links=("GoldenPathTunnel2",)),
 )
 SCENERY_PRESENT = (
     # The caravan's stall.
     EntityRef("BugariaOutskirtsOutsideCity", "Base/Stall"),
+    # The open gate to the Lost Sands (shown from flag 130).
+    EntityRef("BOLostSandsEntrance", "Base/WoodenGate2 (2)"),
 )
 DIALOGUE_FLAGS = (
     # The caravan husband's welcome and sell menu; before the first boss he only talks about the rocks.

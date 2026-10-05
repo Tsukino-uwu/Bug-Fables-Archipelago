@@ -2880,3 +2880,6 @@ either one wrong).
 - **`BugariaOutskirtsEast2`:** up to the Lost Sands by the crank (Beemerang Halt) or Icicle and Jump; the user: Icicle
   is "made for" crossing water, so rule 2 now counts an ability used for its purpose. The dig spot named *Outskirts:
   East Road to the Pier, Dig Spot*, location 90. Ticked, 11 of 244.
+- **`BOLostSandsEntrance`:** the guard blocks the desert until flag 130, with no rule in the logic: a real hole. Kept
+  open (open world, build step 9). Regenerating for it failed: *Golden Path Tunnel, Upper Ledge* unreachable, because
+  Tunnel2's doors share a name, so they're a fixed map link that ignored areas. `Area.links` fixes it.

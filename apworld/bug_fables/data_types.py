@@ -352,6 +352,7 @@ class Area:
     rule: Rule
     out: Rule | None = None
     to: str | None = None
+    links: tuple[str, ...] = ()  # the maps whose fixed (unshuffled) door link stands in this area, not in its map's own
 
     @property
     def region(self) -> str:
