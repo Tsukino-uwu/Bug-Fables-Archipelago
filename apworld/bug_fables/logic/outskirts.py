@@ -2,7 +2,7 @@
 changes there."""
 from __future__ import annotations
 
-from rule_builder.rules import Has
+from rule_builder.rules import False_, Has
 
 from ..custom_rules import (ALL_ATTACKS, BOAT_TICKET, LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, WHOLE_PARTY,
                             CanUse, one_way)
@@ -13,6 +13,9 @@ from ..data_types import (Added, Area, DialogueFlag, EntityRef, Give, ItemEntity
 # (when members are items) and every move item (when moves are).
 PAST_GATE = Has("Explorer Permit") & WHOLE_PARTY & ALL_ATTACKS
 DOOR_RULES = ()
+# The Golden Path tunnel's way up: ice frozen, knocked into place with the horn, then jumped on (the vanilla way;
+# Freeze alone is a harder jump the logic doesn't count, the user, 2026-10-05).
+ICE_CLIMB = CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump")
 LOCATIONS = (
     Location("Outskirts: Maki and Eetl's Gift", 1, "BugariaOutskirtsOutsideCity",
              Source(event=16, flag=15, give=Give(map="BugariaOutskirtsOutsideCity", type=1, item=27)), quiet=True,
@@ -64,6 +67,21 @@ LOCATIONS = (
     Location("Outskirts: Chuck's Abode, Behind the House", 82, "ChucksAbode",
              Source(berry=3, pickup=Pickup(map="ChucksAbode", type=3, item=0)), rule=CanUse("Horn Dash"),
              category="crystal_berry", no_jump=True, reach=PAST_GATE),
+    # The Golden Path tunnel (its areas below).
+    Location("Outskirts: Golden Path Tunnel, On Top of the Stump", 83, "GoldenPathTunnel",
+             Source(flag=725, pickup=Pickup(map="GoldenPathTunnel", type=0, item=88)),
+             rule=CanUse("Jump") & CanUse("Beemerang Toss"), area="Top Right"),
+    # Dottle's ball, a key item.
+    Location("Outskirts: Golden Path Tunnel, Behind the Boulder", 84, "GoldenPathTunnel",
+             Source(flag=82, pickup=Pickup(map="GoldenPathTunnel", type=1, item=24)), no_jump=True),
+    # The Life Cast. Its flag is shared with a second spot in GoldenPathTunnel2 (one medal, two spots), which the mod,
+    # matching pickups by map, doesn't swap yet.
+    Location("Outskirts: Golden Path Tunnel, Upper Ledge", 85, "GoldenPathTunnel",
+             Source(flag=462, pickup=Pickup(map="GoldenPathTunnel", type=2, item=72)), no_jump=True, area="Upper Left"),
+    # In a hidden room, walked into through the wall between the two doors on the right.
+    Location("Outskirts: Golden Path Tunnel, Hidden Room Dig Spot", 86, "GoldenPathTunnel",
+             Source(flag=488, pickup=Pickup(map="GoldenPathTunnel", type=1, item=52)), rule=CanUse("Beetle Dig"),
+             category="dig_spot", no_jump=True),
     Location("Outskirts: Near Snakemouth Den, Grass by the Cave Door", 81, "NearSnakemouth",
              Source(regional=7, pickup=Pickup(map="NearSnakemouth", type=0, item=1)),
              rule=CanUse("Horn Slash"), category="hidden_item", no_jump=True, reach=PAST_GATE),
@@ -190,6 +208,13 @@ MAP_AREAS = (
     Area("BugariaOutskitsSnakemouthCorridor1", "Haven Door", ("loadzonehaven",), CanUse("Jump") & CanUse("Icicle")),
     # The second corridor: grass across the middle, cut with Kabbu's horn, both ways.
     Area("BugariaOutskirtsSnakemouthCorridor2", "Left", ("DoorSnakemouth",), CanUse("Horn Slash")),
+    # The Golden Path tunnel: the Forsaken Lands' door past a big boulder only the Horn Dash breaks, both ways.
+    Area("GoldenPathTunnel", "Left", ("loadzonebarrenlands",), CanUse("Horn Dash")),
+    # The Golden Hills' door up top: ice frozen, knocked into place with the horn, and jumped on; dropped down from.
+    Area("GoldenPathTunnel", "Top Right", ("loadzonegoldenhills",), ICE_CLIMB, out=one_way(None, ICE_CLIMB)),
+    # Tunnel2's door, high on the left: no way up from inside the room, only a drop to the left part, never back.
+    Area("GoldenPathTunnel", "Upper Left", ("loadzonegpt2",), False_(), out=one_way(None, False_()),
+         to="GoldenPathTunnel (Left)"),
 )
 SCENERY_PRESENT = (
     # The caravan's stall.

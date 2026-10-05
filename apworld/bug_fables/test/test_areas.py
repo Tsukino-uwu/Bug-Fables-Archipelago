@@ -208,3 +208,23 @@ class TestSecondCorridor(BugFablesTestBase):
         self.collect_by_name(["Horn Slash", "Kabbu"])
         for way in ways:
             self.assertTrue(way.access_rule(self.multiworld.state))
+
+
+class TestGoldenPathTunnel(BugFablesTestBase):
+    # The tunnel: the boulder (Horn Dash), the ice up top, the upper left only from Tunnel2.
+    options = {"shuffle_jump": True, "shuffle_field_moves": True}
+    MAP = "GoldenPathTunnel"
+
+    def test_upper_left_never_from_inside(self) -> None:
+        up = self.multiworld.get_entrance(f"{self.MAP} (Left) to {self.MAP} (Upper Left)", self.player)
+        self.assertFalse(up.access_rule(self.multiworld.get_all_state()))
+
+    def test_life_cast_in_the_upper_left(self) -> None:
+        location = self.multiworld.get_location("Outskirts: Golden Path Tunnel, Upper Ledge", self.player)
+        self.assertEqual(location.parent_region.name, f"{self.MAP} (Upper Left)")
+
+    def test_boulder_needs_horn_dash(self) -> None:
+        way = self.multiworld.get_entrance(f"{self.MAP} to {self.MAP} (Left)", self.player)
+        self.assertFalse(way.access_rule(self.multiworld.state))
+        self.collect_by_name(["Progressive Dash", "Progressive Dash", "Kabbu"])
+        self.assertTrue(way.access_rule(self.multiworld.state))

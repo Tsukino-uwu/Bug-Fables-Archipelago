@@ -29,7 +29,7 @@ def category_on(world: BugFablesWorld, category: str | None) -> bool:
 
 def create_all_locations(world: BugFablesWorld) -> None:
     for loc in world.included_locations:
-        region = world.get_region(loc.region)
+        region = world.get_region(loc.region if loc.area is None else f"{loc.region} ({loc.area})")
         region.locations.append(BugFablesLocation(world.player, loc.name, LOCATION_NAME_TO_ID[loc.name], region))
 
     for event in world.included_events:

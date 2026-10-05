@@ -344,13 +344,14 @@ class DoorRule:
 class Area:
     """Part of a map cut off from the rest by something in the room: its own region, holding its doors. rule is what
     crossing between it and the rest of the map needs, both ways; out, when given, is what leaving it needs instead
-    (a one-way out, written with one_way)."""
+    (a one-way out, written with one_way). to: the region it joins, when not its map's own (another area's)."""
 
     map: str
     name: str
     doors: tuple[str, ...]
     rule: Rule
     out: Rule | None = None
+    to: str | None = None
 
     @property
     def region(self) -> str:
@@ -406,6 +407,7 @@ class Location:
     no_jump: bool = False
     reach: Rule | None = None
     pending: bool = False
+    area: str | None = None  # the part of its map (an Area's name) whose region it's placed in; None: the map's own
 
 
 @dataclass(frozen=True, slots=True)

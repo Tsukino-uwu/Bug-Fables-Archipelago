@@ -2303,6 +2303,14 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   81. No other grass in rooms 1, 2, 16, 17 or 18 drops anything (the dump, 2026-10-05).
 - **`ChucksAbode` (27):** crystal berry #3 behind the house needs the Horn Dash, to break the big rock (`rock`,
   `BreakableRock`); everything else (Chuck, the save crystal, the door) needs nothing.
+- **`GoldenPathTunnel` (35):** four parts. The bottom right (the Outskirts' door; Dottle's ball, item 24, flag 82, and
+  a hidden room's dig spot, a Lore Book, flag 488, walked into through the wall between the two right doors) needs
+  nothing. A big boulder between it and the left (the Forsaken Lands' door) needs the Horn Dash, both ways. The top
+  right (the Golden Hills' door; the Dart on the stump, item 88, flag 725, Jump and the Beemerang) is reached by
+  freezing ice, knocking it into place with the horn and jumping on it (Freeze alone works but is harder; the vanilla
+  way counted); dropped down from. The upper left (Tunnel2's door; the Life Cast, item 72, flag 462, needing nothing)
+  can't be climbed to from the room; dropping from it lands in the left part. The mushroom spring (lim 39) and two black
+  covers (`Base/Black (1)`, `(2)`, hidden by 39) never change in a seed: receiving the Horn Dash doesn't set 39.
 
 ## Still to measure
 

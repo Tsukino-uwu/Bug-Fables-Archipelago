@@ -2860,3 +2860,7 @@ either one wrong).
   Behind the House*, location 82. The rest needs nothing. Ticked, 6 of 244.
 - **Quests after rooms:** at Chuck's quest, the user: map every room first, then each quest on its own, since quests
   span rooms. Written into `room-logic.md`.
+- **`GoldenPathTunnel`:** four parts (bottom right, left past the Horn Dash boulder, top right by ice, freeze and horn
+  and Jump, upper left only from Tunnel2). Four new locations named by the user (83-86). Asked how Archipelago does it:
+  `world api.md`, regions hold locations, entrances are one-directional; so `Location.area` and `Area.to`. The Life
+  Cast's second spot in Tunnel2 shares flag 462 and isn't swapped yet. Not ticked: the user hasn't said it's done.
