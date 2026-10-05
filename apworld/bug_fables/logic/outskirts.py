@@ -106,6 +106,18 @@ LOCATIONS = (
     Location("Outskirts: Near Snakemouth Den, Grass by the Cave Door", 81, "NearSnakemouth",
              Source(regional=7, pickup=Pickup(map="NearSnakemouth", type=0, item=1)),
              rule=CanUse("Horn Slash"), category="hidden_item", no_jump=True, reach=PAST_GATE),
+    # Crystal berry #30, dug up on a raised spot outside the city (Jump).
+    Location("Outskirts: Outside the City, Crystal Berry Dig Spot", 91, "BugariaOutskirtsOutsideCity",
+             Source(berry=30, pickup=Pickup(map="BugariaOutskirtsOutsideCity", type=3, item=0)),
+             rule=CanUse("Jump") & CanUse("Beetle Dig"), category="crystal_berry"),
+    # A Dark Cherry dug up below the house.
+    Location("Outskirts: Outside the City, Dig Spot Below the House", 92, "BugariaOutskirtsOutsideCity",
+             Source(flag=642, pickup=Pickup(map="BugariaOutskirtsOutsideCity", type=0, item=121)),
+             rule=CanUse("Beetle Dig"), category="dig_spot", no_jump=True),
+    # A Danger Spud behind a fence: Beetle Dig goes under the fence, then digs it up.
+    Location("Outskirts: Outside the City, Dig Spot Behind the Fence", 93, "BugariaOutskirtsOutsideCity",
+             Source(flag=487, pickup=Pickup(map="BugariaOutskirtsOutsideCity", type=0, item=64)),
+             rule=CanUse("Beetle Dig"), category="dig_spot", no_jump=True),
     # A Burly Tea on the right of the table by the painting; the house is open from the start.
     Location("Outskirts: Madeleine's House, Table Right", 44, "BugariaOutskirtsOutsideCity",
              Source(flag=686, pickup=Pickup(map="BugariaOutskirtsOutsideCity", type=0, item=81))),
@@ -249,9 +261,9 @@ MAP_AREAS = (
     # The second East Road's way up to the Lost Sands: the crank turned with the Beemerang Halt, or Icicle platforms
     # across the water and Jump. The crank can't be turned from the top, so coming down is a drop.
     Area("BugariaOutskirtsEast2", "Top", ("loadzonenorth",), EAST2_UP, out=one_way(None, EAST2_UP)),
-    # GoldenPathTunnel2's top, with its door down to the tunnel's upper ledge (a fixed link: its doors share a name).
-    Area("GoldenPathTunnel2", "Top", (), TUNNEL2_UP, out=one_way(None, TUNNEL2_UP),
-         links=("GoldenPathTunnel",)),
+    # GoldenPathTunnel2's top, with its door down to the tunnel's upper ledge (its two doors share a name: by index).
+    Area("GoldenPathTunnel2", "Top", ("loadzonebarrenlands - Duplicate#9",), TUNNEL2_UP,
+         out=one_way(None, TUNNEL2_UP)),
     # The pier's dock, where the boat leaves and lands: up a ledge (Jump), dropped from through the house.
     Area("BugariaPier", "Dock", (), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
     # The Golden Path tunnel: the Forsaken Lands' door past a big boulder only the Horn Dash breaks, both ways.
@@ -259,8 +271,8 @@ MAP_AREAS = (
     # The Golden Hills' door up top: ice frozen, knocked into place with the horn, and jumped on; dropped down from.
     Area("GoldenPathTunnel", "Top Right", ("loadzonegoldenhills",), ICE_CLIMB, out=one_way(None, ICE_CLIMB)),
     # Tunnel2's door, high on the left: no way up from inside the room, only a drop to the left part, never back.
-    Area("GoldenPathTunnel", "Upper Left", (), False_(), out=one_way(None, False_()), to="GoldenPathTunnel (Left)",
-         links=("GoldenPathTunnel2",)),
+    Area("GoldenPathTunnel", "Upper Left", ("loadzonegpt2",), False_(), out=one_way(None, False_()),
+         to="GoldenPathTunnel (Left)"),
 )
 SCENERY_PRESENT = (
     # The caravan's stall.

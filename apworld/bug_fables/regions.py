@@ -50,10 +50,9 @@ def logic_entrances() -> list[LogicEntrance]:
     for door in ONE_WAYS:
         entrances.append(LogicEntrance(door_name(door.map, door.door), door_region(door.map, door.door), door.to,
                                        gates.get((door.map, door.door))))
-    linked = {(area.map, other): area.region for area in MAP_AREAS for other in area.links}
     for a, b in dict.fromkeys(DOORS.fixed):
         if a != b and a in MAPS and b in MAPS:
-            entrances.append(LogicEntrance(f"{a} to {b}", linked.get((a, b), a), linked.get((b, a), b), None))
+            entrances.append(LogicEntrance(f"{a} to {b}", a, b, None))
     for transfer in TRANSFERS:
         start = transfer.from_map if transfer.from_area is None else f"{transfer.from_map} ({transfer.from_area})"
         ways = ((start, transfer.to_map), (transfer.to_map, start))

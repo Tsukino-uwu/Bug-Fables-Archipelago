@@ -2903,3 +2903,5 @@ either one wrong).
 - **`GoldenPathTunnel2`:** the climb up (Jump, Icicle, Horn Dash, Bee Fly, an attack) and a drop down; written, not
   ticked. Asked why its doors aren't shuffled: they share a name, and only three maps have that (Tunnel2, the Wasp
   Kingdom's outside, TermiteIndustrial's story copies). The user: fix it now.
+- **Room 16's dig spots:** the user found the raised crystal berry #30 needs Jump; named it and the other two (below the
+  house, behind the fence: Dig only). Locations 91-93.

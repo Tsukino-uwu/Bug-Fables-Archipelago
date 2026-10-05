@@ -462,6 +462,7 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - **`TestDoors`** (`[Debug]`, not a console command): doors rewritten by hand, `Map/Door=LikeMap/LikeDoor;...` (entity
   names): that door leads where the other one leads, the entrance randomizer's proof of concept (`copy-dev.ps1 -DebugSet
   "TestDoors=BugariaOutskirtsOutsideCity/loadzone east=BugariaMainPlaza/LoadingZoneCommercial"`; empty turns it off).
+  A door whose name its map shares with another is written `name#row`, as in `doors.json`.
 - `line <map> <n> [n...]`: log the full text of a map's dialogue lines (the same table `script` reads), e.g. to find
   every line that mentions something (2026-09-25: the Outskirts lines about the rocks).
 - `cam`: log what the camera follows (its target, or "DESTROYED"), the player, offsets, limits and the party with its

@@ -84,8 +84,7 @@ namespace BugFablesAP
                 string map = __instance.mapid.ToString();
                 foreach (Target t in Targets().Where(t => t.Map == map))
                 {
-                    NPCControl door = __instance.GetComponentsInChildren<NPCControl>(true)
-                        .FirstOrDefault(n => n.name == t.Door && n.objecttype == NPCControl.ObjectTypes.DoorOtherMap);
+                    NPCControl door = Find(__instance, t.Door);
                     if (door == null)
                     {
                         log.LogWarning($"[doors] {map}: no door {t.Door} to rewrite");
@@ -121,8 +120,45 @@ namespace BugFablesAP
             }
         }
 
-        private static bool Read(string mapName, string doorName, out int[] data, out Vector3[] vectors, out float jump)
+        // A door's name in door_targets: its entity name, or "name#row" where its map has two doors of that name, the
+        // row being its line in the map's entity table.
+        private static string Split(string door, out int row)
         {
+            int hash = door.LastIndexOf('#');
+            row = -1;
+            if (hash > 0 && int.TryParse(door.Substring(hash + 1), out int parsed))
+            {
+                row = parsed;
+                return door.Substring(0, hash);
+            }
+            return door;
+        }
+
+        // The live door: by name, or for a "name#row" door the one of that name standing on its row's starting spot (the
+        // game makes entities in table order, but keeps no row; doors never move).
+        private static NPCControl Find(MapControl map, string door)
+        {
+            string name = Split(door, out int row);
+            List<NPCControl> named = map.GetComponentsInChildren<NPCControl>(true)
+                .Where(n => n.name == name && n.objecttype == NPCControl.ObjectTypes.DoorOtherMap).ToList();
+            if (row < 0)
+            {
+                return named.FirstOrDefault();
+            }
+            TextAsset table = Resources.Load<TextAsset>("Data/EntityData/" + (int)map.mapid);
+            string[] lines = table == null ? new string[0] : table.ToString().Split('\n');
+            string[] f = row < lines.Length ? lines[row].Split('}') : new string[0];
+            if (f.Length <= 8)
+            {
+                return null;
+            }
+            var spot = new Vector3(Parse(f[6]), Parse(f[7]), Parse(f[8]));
+            return named.OrderBy(n => (n.transform.position - spot).sqrMagnitude).FirstOrDefault();
+        }
+
+        private static bool Read(string mapName, string door, out int[] data, out Vector3[] vectors, out float jump)
+        {
+            string doorName = Split(door, out int row);
             data = new int[0];
             vectors = new Vector3[0];
             jump = 0f;
@@ -145,7 +181,7 @@ namespace BugFablesAP
             string[] nameLines = names.ToString().Split('\n');
             for (int i = 0; i < lines.Length - 1 && i < nameLines.Length; i++)
             {
-                if (nameLines[i].Trim() != doorName)
+                if (nameLines[i].Trim() != doorName || (row >= 0 && i != row))
                 {
                     continue;
                 }
