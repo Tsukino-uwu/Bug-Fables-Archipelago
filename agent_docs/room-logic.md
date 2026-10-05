@@ -32,7 +32,10 @@ rules work in Archipelago: `apimplementation.md`, How it works §11.
    follows it.
 2. **A need is what the vanilla game expects:** what the game asks of a player going the intended way, with no tricks,
    skips or clever routes. The rules stay simple, players stay free to go out of logic, and every seed stays
-   completable (rule 5).
+   completable (rule 5). **An ability used for what it's made for counts too,** even where the vanilla game hands it
+   out later than the way it opens (the user, 2026-10-05, Icicle platforms across East Road 2's water beside the crank:
+   "its nothing hard to excecute or do, and its that the ice platform is made for anyway (crossing water)"). Written
+   as a second way, `|`.
 3. **And, or, never not.** Everything one way needs is an *and* (`&`). When there are several ways, each is written
    and any one will do (*or*, `|`): a second way into an area is a second exit into its region (the region graph does
    the *or*); two ways to one spot inside an area are an `|` in the spot's own rule. Never a *not* on an item or a story

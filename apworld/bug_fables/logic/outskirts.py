@@ -13,6 +13,7 @@ from ..data_types import (Added, Area, DialogueFlag, EntityRef, Give, ItemEntity
 # (when members are items) and every move item (when moves are).
 PAST_GATE = Has("Explorer Permit") & WHOLE_PARTY & ALL_ATTACKS
 DOOR_RULES = ()
+EAST2_UP = CanUse("Beemerang Halt") | (CanUse("Icicle") & CanUse("Jump"))
 # The Golden Path tunnel's way up: ice frozen, knocked into place with the horn, then jumped on (the vanilla way;
 # Freeze alone is a harder jump the logic doesn't count, the user, 2026-10-05).
 ICE_CLIMB = CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump")
@@ -58,6 +59,10 @@ LOCATIONS = (
     Location("Outskirts: East Road, Inside the Waterfall", 89, "BugariaOutskirtsEast1",
              Source(flag=137, pickup=Pickup(map="BugariaOutskirtsEast1", type=2, item=0)),
              rule=CanUse("Icicle") & CanUse("Beemerang Toss"), category="hidden_item", no_jump=True, area="Lower"),
+    # A Tangy Berry dug up across the water: Icicle platforms and Jump, there and back.
+    Location("Outskirts: East Road to the Pier, Dig Spot", 90, "BugariaOutskirtsEast2",
+             Source(flag=669, pickup=Pickup(map="BugariaOutskirtsEast2", type=0, item=77)),
+             rule=CanUse("Icicle") & CanUse("Jump") & CanUse("Beetle Dig"), category="dig_spot"),
     # Crystal berry #10, on the pier by the boat.
     Location("Outskirts: Pier, Behind the Dock", 26, "BugariaPier",
              Source(berry=10, pickup=Pickup(map="BugariaPier", type=3, item=0)), rule=CanUse("Jump"),
@@ -232,6 +237,9 @@ MAP_AREAS = (
     Area("BugariaOutskirtsEast1", "Lower", (), one_way(None, CanUse("Jump")), out=CanUse("Jump")),
     Area("BugariaOutskirtsEast1", "Cave Door", ("loadzonecave",), CanUse("Horn Slash"),
          to="BugariaOutskirtsEast1 (Lower)"),
+    # The second East Road's way up to the Lost Sands: the crank turned with the Beemerang Halt, or Icicle platforms
+    # across the water and Jump. The crank can't be turned from the top, so coming down is a drop.
+    Area("BugariaOutskirtsEast2", "Top", ("loadzonenorth",), EAST2_UP, out=one_way(None, EAST2_UP)),
     # The pier's dock, where the boat leaves and lands: up a ledge (Jump), dropped from through the house.
     Area("BugariaPier", "Dock", (), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
     # The Golden Path tunnel: the Forsaken Lands' door past a big boulder only the Horn Dash breaks, both ways.

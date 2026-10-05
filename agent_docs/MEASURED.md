@@ -2328,6 +2328,9 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   out. The Drowsy Cake on the stone (location 25): the horn and Jump. The Dark Cherry dig spot (flag 633), across
   water: Icicle and Jump, there and back. The HP Plus medal (flag 137), inside the waterfall on the lower ground:
   Icicle and the Beemerang.
+- **`BugariaOutskirtsEast2` (56):** left to right needs nothing. The way up to the Lost Sands' door: the crank between
+  the two side doors turned with the Beemerang Halt, or Icicle platforms across the water and Jump; coming down is a
+  drop (the crank can't be turned from the top). The Tangy Berry dig spot (flag 669): Icicle and Jump, there and back.
 
 ## Still to measure
 
