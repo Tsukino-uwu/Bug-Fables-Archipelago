@@ -632,8 +632,8 @@ The output stays in the BepInEx folder.
   #32 (`VinedItem`, bridge room) sits up on the vines at the far side and only exists after the first boss
   (requires flag 41). Seen in play: not reachable in chapter 1; very likely needs **hover** to get onto the
   platforms/pillars, then the beemerang to grab it (hover not yet confirmed). Waits until hover is in the logic.
-  #3 (`ChucksAbode`) lies behind the house, out of reach in normal play (seen 2026-09-24, after the first
-  boss); what opens the way (a quest, an ability) is unknown. Not a location until that's found.
+  #3 (`ChucksAbode`) lies behind the house, past a big rock that only the Horn Dash breaks (seen 2026-10-05):
+  location 82.
 - **Houses outside the city** (`BugariaOutskirtsOutsideCity`, 2026-09-24): the ladybug siblings' house
   (`DoorLadybug`, inside 1) has no gate flags; its Mistake (flag 679) was found in play after the first boss, and
   the tester remembers it locked earlier (to check on an earlier save). The other house (`doormadeleine`, inside 2, with
@@ -2301,6 +2301,8 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   sets regional flag 5 and drops nothing. A grass patch's item is its vector data's x (-1: none). Location 80.
 - **`NearSnakemouth`'s `HoneyGrass`** (x -49.5, by the cave door, regional flag 7) drops a Honey Drop (item 1): location
   81. No other grass in rooms 1, 2, 16, 17 or 18 drops anything (the dump, 2026-10-05).
+- **`ChucksAbode` (27):** crystal berry #3 behind the house needs the Horn Dash, to break the big rock (`rock`,
+  `BreakableRock`); everything else (Chuck, the save crystal, the door) needs nothing.
 
 ## Still to measure
 

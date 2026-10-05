@@ -2856,3 +2856,5 @@ either one wrong).
 - **Respawning grass pickups:** I twice called them "not locations"; the user: "only the first time you find it,
   afterwards vanilla/respawning" (build step 10's rule). Rechecked every grass patch in the rooms done: two drop an
   item, now locations 80 and 81, named by the user, both hidden items.
+- **`ChucksAbode`:** crystal berry #3 needs the Horn Dash (the big rock); the user named it *Outskirts: Chuck's Abode,
+  Behind the House*, location 82. The rest needs nothing. Ticked, 6 of 244.

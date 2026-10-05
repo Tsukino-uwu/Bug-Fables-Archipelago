@@ -60,6 +60,10 @@ LOCATIONS = (
     Location("Outskirts: Snakemouth Den Path, Grass on the Left", 80, "BugariaOutskirtsSnakemouthCorridor2",
              Source(regional=13, pickup=Pickup(map="BugariaOutskirtsSnakemouthCorridor2", type=0, item=0)),
              rule=CanUse("Horn Slash"), category="hidden_item", no_jump=True, reach=PAST_GATE),
+    # Crystal berry #3, behind Chuck's house, past a big rock only the Horn Dash breaks.
+    Location("Outskirts: Chuck's Abode, Behind the House", 82, "ChucksAbode",
+             Source(berry=3, pickup=Pickup(map="ChucksAbode", type=3, item=0)), rule=CanUse("Horn Dash"),
+             category="crystal_berry", no_jump=True, reach=PAST_GATE),
     Location("Outskirts: Near Snakemouth Den, Grass by the Cave Door", 81, "NearSnakemouth",
              Source(regional=7, pickup=Pickup(map="NearSnakemouth", type=0, item=1)),
              rule=CanUse("Horn Slash"), category="hidden_item", no_jump=True, reach=PAST_GATE),
