@@ -42,11 +42,16 @@ namespace BugFablesAP
         {
             if (parts.Length < 2)
             {
-                return "warp <map> [flag]";
+                return "warp <map> [flag | @name | from <map> [door]]";
             }
             MainManager.Maps map = int.TryParse(parts[1], out int number)
                 ? (MainManager.Maps)number
                 : (MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), parts[1], true);
+            // from <map> [door]: arrive as that map's door into this one does, appearing at its spot and walking in.
+            if (parts.Length > 3 && parts[2] == "from")
+            {
+                return WarpThroughDoor(map, parts[3], parts.Length > 4 ? string.Join(" ", parts.Skip(4).ToArray()) : null);
+            }
             // @<name>: land at the map's origin, then step beside the named entity, so a trigger starts on walking in,
             // not mid-warp.
             if (parts.Length > 2 && parts[2].StartsWith("@"))
@@ -61,6 +66,8 @@ namespace BugFablesAP
 
         private static string pendingName;
         private static bool landed;
+        // The door's own walk-in: its appear spot is often off the ground, so no safe-landing move.
+        private static bool throughDoor;
 
         // Where the sub's own landing puts the party at each dock (Event153): a warp to a dock, or to Mystery Island,
         // whose door's arrival is over water, lands there.
@@ -89,6 +96,7 @@ namespace BugFablesAP
             // ends over water. FinishWarp guards the item, then steps aside once the transition is over.
             Vector3? at = flag >= 0 ? StartPosition(map, flag) : null;
             guarded = false;
+            throughDoor = false;
             bool toDock = flag < 0 && DockLandings.ContainsKey(map)
                 && (pendingName != null ? pendingName.StartsWith("Fixedsub") : map == MainManager.Maps.MysteryIsland);
             if (toDock)
@@ -107,6 +115,28 @@ namespace BugFablesAP
             return "warping to " + map + (landed ? " (through a door into it)" : "") + skipped;
         }
 
+        private static string WarpThroughDoor(MainManager.Maps map, string fromMap, string door)
+        {
+            if (MainManager.player == null || MainManager.instance.inevent || MainManager.instance.message)
+            {
+                return "not now: no player, or an event or dialogue is running";
+            }
+            Vector3[] v = QualityOfLife.DoorInto(map, fromMap, door);
+            if (v == null)
+            {
+                return $"no door from {fromMap}{(door != null ? " named " + door : "")} into {map}";
+            }
+            string skipped = SkipAutoEvents(map);
+            pendingMap = (int)map;
+            pendingFlag = -1;
+            pendingName = null;
+            pendingSince = Time.realtimeSinceStartup;
+            landed = true;
+            throughDoor = true;
+            MainManager.instance.StartCoroutine(MainManager.TransferMap((int)map, MainManager.player.transform.position,
+                v[1], v[2]));
+            return $"warping to {map} through {fromMap}'s door{(door != null ? " " + door : "")}" + skipped;
+        }
 
         // A spot beside the entity with room for the party and safe ground below; null when none is.
         internal static Vector3? ClearSpot(Vector3 at)
@@ -468,7 +498,7 @@ namespace BugFablesAP
             if (landed || busy != null)
             {
                 string moved = "";
-                Vector3? safe = landed ? SafeLanding(map) : null;
+                Vector3? safe = landed && !throughDoor ? SafeLanding(map) : null;
                 if (safe.HasValue)
                 {
                     MainManager.player.transform.position = safe.Value;
@@ -482,6 +512,7 @@ namespace BugFablesAP
                 pendingMap = -1;
                 pendingName = null;
                 landed = false;
+                throughDoor = false;
                 return;
             }
             List<NPCControl> entities = map.GetComponentsInChildren<NPCControl>(true).ToList();
