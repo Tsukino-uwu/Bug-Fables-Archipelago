@@ -2884,3 +2884,5 @@ either one wrong).
   open (open world, build step 9). Regenerating for it failed: *Golden Path Tunnel, Upper Ledge* unreachable, because
   Tunnel2's doors share a name, so they're a fixed map link that ignored areas. `Area.links` fixes it.
 - **The gate seen open** from both doors on the new seed; `BOLostSandsEntrance` ticked, 12 of 244.
+- **`Blank`:** warped in on the user's ask "to confirm is really a unused/test room": black and empty; a backdrop for
+  Event111's flashback, no doors, never a start. Ticked, 13 of 244.

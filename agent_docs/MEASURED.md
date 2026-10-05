@@ -2335,6 +2335,9 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   130 (Gen and Eri's chapter 3 story), seen on screen; the logic had no rule on that door. Kept open now (the guard
   away, `antguardopen` present, `Base/WoodenGate2` hidden, `(2)` shown, as 130 leaves them; the flag itself never
   set). With it open, nothing is needed across the room, seen from both doors (the user).
+- **`Blank` (115):** seen with a plain warp: black, empty, in the void (the user). One entity (an empty NPC slot), no
+  door, save point or item. Only Event111 loads it, as a backdrop for a flashback (`LoadMap(115)`, the "Sad" song,
+  three characters placed), then moves on: never a start (starts come only from doors; it has none).
 
 ## Still to measure
 
