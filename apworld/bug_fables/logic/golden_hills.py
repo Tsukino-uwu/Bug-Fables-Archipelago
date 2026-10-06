@@ -2,7 +2,7 @@
 yet."""
 from __future__ import annotations
 
-from rule_builder.rules import False_, Has
+from rule_builder.rules import Has
 
 from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, one_way
 from ..data_types import Area, EntityRef, Location, Pickup, Source, StoryEvent, Transfer
@@ -51,6 +51,10 @@ LOCATIONS = (
              rule=CanUse("Jump") & CanUse("Beemerang Halt") & CanUse("Horn Slash"), category="hidden_item"),
 )
 STORY_EVENTS = (
+    # The upper hall's lever, up in its upper right only (any attack, flag 127, Event50): the barrier goes and the
+    # platform keeps running.
+    StoryEvent("Golden Hills: Upper Hall, Lever Hit", "Upper Hall Lever Hit", "GoldenHillsDungeonUpperMain",
+               Source(flag=127), rule=ANY_ATTACK, area="Upper Right"),
     # The upper hall's two shrines (Event72), each fed its own offering, which it keeps (flags 125, 126); a wrong one
     # starts a fight. Together they open the boss door's gate. The left one is behind grass (the horn).
     StoryEvent("Golden Hills: Upper Hall, Sun Offering", "Upper Hall Sun Shrine Fed", "GoldenHillsDungeonUpperMain",
@@ -85,11 +89,10 @@ MAP_AREAS = (
     # drop to the left side.
     Area("GoldenHillsDungeonLeftMain", "Top Left", ("load zone crank half",), WOODEN_CRANK & CanUse("Beemerang Halt"),
          out=one_way(None, WOODEN_CRANK & CanUse("Beemerang Halt")), to="GoldenHillsDungeonLeftMain (Left)"),
-    # The upper hall's upper right (its upper right door and the Moon shrine), behind a barrier its lever lowers (any
-    # attack, flag 127, Event50), starting a platform that stays, boarded from below with Jump: the lever is only up
-    # there, so nothing from below first; down without Jump, no way back up.
-    Area("GoldenHillsDungeonUpperMain", "Upper Right", ("loadzonehigh",), False_(),
-         out=ANY_ATTACK & one_way(None, CanUse("Jump"))),
+    # The upper hall's upper right (its upper right door and the Moon shrine), behind a barrier its lever lowers (up
+    # there only), starting a platform that stays: down once the lever is hit; up on the platform with Jump.
+    Area("GoldenHillsDungeonUpperMain", "Upper Right", ("loadzonehigh",), Has("Upper Hall Lever Hit") & CanUse("Jump"),
+         out=Has("Upper Hall Lever Hit") & one_way(None, CanUse("Jump"))),
     # Its top door (to the boss), behind a gate both shrines open; arriving while shut, a pocket with only that door.
     Area("GoldenHillsDungeonUpperMain", "Boss Door", ("loadzoneboss",),
          Has("Upper Hall Sun Shrine Fed") & Has("Upper Hall Moon Shrine Fed")),

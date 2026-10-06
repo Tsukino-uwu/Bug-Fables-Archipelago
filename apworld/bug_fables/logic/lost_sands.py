@@ -58,15 +58,18 @@ LOCATIONS = (
     Location("Lost Sands: Roach Village, Dig Spot", 124, "DesertRoachVillage",
              Source(berry=21, pickup=Pickup(map="DesertRoachVillage", type=3, item=0)), rule=CanUse("Beetle Dig"),
              category="crystal_berry", no_jump=True),
-    # The oasis's top right, reached only through its cave door: the Crimson Ore in the cave, and the Berry Jam on a
-    # sandpile below it, dropped to (back up by the platform, as for the area).
+    # The oasis's top right, through its cave door or up its platform: the Crimson Ore in the cave, and the Berry Jam on
+    # a sandpile below it, dropped to (back up by the platform, as for the area).
     Location("Lost Sands: Oasis, Crimson Cave", 125, "DesertOasis",
              Source(flag=319, pickup=Pickup(map="DesertOasis", type=1, item=98)), no_jump=True, area="Top Right"),
     Location("Lost Sands: Oasis, On Top of the Sandpile", 126, "DesertOasis",
              Source(flag=733, pickup=Pickup(map="DesertOasis", type=0, item=173)),
-             rule=one_way(None, CanUse("Jump") & ANY_ATTACK), no_jump=True, area="Top Right"),
+             rule=one_way(None, Has("Oasis Platform Running") & CanUse("Jump")), no_jump=True, area="Top Right"),
 )
 STORY_EVENTS = (
+    # The oasis's platform switch, up in its top right only (any attack, flag 255); the platform then keeps running.
+    StoryEvent("Lost Sands: Oasis, Platform Switch Hit", "Oasis Platform Running", "DesertOasis", Source(flag=255),
+               rule=ANY_ATTACK, area="Top Right"),
     # The south trench's bridge, knocked over by the horn from the left side (flag 282); it stays down.
     StoryEvent("Lost Sands: South Trench, Bridge Knocked Down", "South Trench Bridge Down", "DesertTrenchSouth",
                Source(flag=282), rule=CanUse("Horn Slash"), area="Left"),
@@ -150,10 +153,10 @@ MAP_AREAS = (
     # The oasis's bottom door, past a gate dug under (Beetle Dig); from it, out by digging or jumping.
     Area("DesertOasis", "Bottom", ("loadzonesouth",), CanUse("Beetle Dig"),
          out=CanUse("Beetle Dig") | CanUse("Jump")),
-    # Its top right (the cave door), up high: a drop down; back up on the platform its switch starts (any attack, and
-    # it keeps running), boarded with Jump. The switch is only up there, so nothing reaches it from below first.
-    Area("DesertOasis", "Top Right", ("loadzone cave",), False_(),
-         out=one_way(None, CanUse("Jump") & ANY_ATTACK)),
+    # Its top right (the cave door), up high: down by a drop, or on the platform once its switch is hit (up there
+    # only); back up on the platform, boarded with Jump.
+    Area("DesertOasis", "Top Right", ("loadzone cave",), Has("Oasis Platform Running") & CanUse("Jump"),
+         out=one_way(None, Has("Oasis Platform Running") & CanUse("Jump"))),
     # The oasis entrance's right side (the oasis door), past spikes the bubble shield crosses, or flown over (Bee
     # Fly), both ways; back left, also its red bounce pad (kept present), a one-way.
     Area("DesertOasisEntrance", "Right", ("loadzoneside",), CanUse("Shield") | CanUse("Bee Fly"),

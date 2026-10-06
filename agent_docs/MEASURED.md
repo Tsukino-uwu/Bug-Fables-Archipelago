@@ -880,7 +880,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     Dig), left by digging or Jump. The top right (the cave door, height 14) reached only through that door: the Crimson
     Ore (flag 319, `Items:98`, the Ore Wanted quest's) in the cave; a switch (any attack) starts the moving platform,
     which keeps running after leaving the room, boarded from below with Jump; down without it, a drop. The Berry Jam
-    (flag 733) on a sandpile below the cave, walked to from the top right or the platform, a drop from there.
+    (flag 733) on a sandpile below the cave, walked to from the top right or the platform, a drop from there. The
+    switch (flag 255) only from up there (the user, 2026-10-07): from below, the platform with it hit and Jump.
     **`DesertOasisEntrance` (2026-10-06, the user):** the top and bottom doors (the left side) free between them; to
     the right side (the oasis door) the bubble shield over spikes, or Bee Fly, both ways; back, also a red bounce pad sends the party left with
     nothing, a one-way without the shield. The pad (`mush`) is there only until flag 300, set by Event105 (chapter 4);

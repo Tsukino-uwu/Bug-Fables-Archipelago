@@ -3257,3 +3257,8 @@ either one wrong).
   their screenshot; id 137), the room "Crank Path" (mine, not objected to). Waiting on the user's "done".
   The user asked about the uncounted drop from the middle door: written now as a one-way with Jump (its way back Jump
   and Halt), so Points of No Return counts it.
+- **The user: "do the logic for me properly"** (I had dropped ways they described as redundant). Rechecked the
+  session's rooms: two more, both written as "never from below" where the user had said a platform, once its switch
+  is hit, takes Jump back up (`DesertOasis`, `GoldenHillsDungeonUpperMain`). The user: basic attack and Jump, the
+  switch only from the top. Now events in the upper areas ("Oasis, Platform Switch Hit", "Upper Hall, Lever Hit",
+  names I proposed twice, unopposed), the way up the event and Jump, the ways down counted with them.
