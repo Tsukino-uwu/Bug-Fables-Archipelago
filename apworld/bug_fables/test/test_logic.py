@@ -307,6 +307,22 @@ class TestBadlands(BugFablesTestBase):
         self.assertTrue(self.can_reach_location(spot))
 
 
+class TestBookArea(BugFablesTestBase):
+    # The north half takes Horn Dash or Bee Fly from the south, either one.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_either_crosses(self) -> None:
+        spot = "Lost Sands: Book Area, Under the Book"
+        self.collect_all_but(["Progressive Dash", "Bee Fly"])
+        self.assertFalse(self.can_reach_location(spot))
+        self.collect_by_name("Bee Fly")
+        self.assertTrue(self.can_reach_location(spot))
+        self.remove_by_name("Bee Fly")
+        self.assertFalse(self.can_reach_location(spot))
+        self.collect(self.get_items_by_name("Progressive Dash"))
+        self.assertTrue(self.can_reach_location(spot))
+
+
 class TestBarCorner(BugFablesTestBase):
     # The way down to the underground bar is behind the commercial district's grass, and the bar's door comes back up
     # behind it too: the horn both ways.

@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**51 of 244 done.**
+**52 of 244 done.**
 
 ## Outskirts
 
@@ -83,7 +83,7 @@ as it is, a frozen record.
 - [x] DesertEntrance (4)
 - [x] DesertBadlands (5) — for the quest pass: the Rusty Key's sale (DefiantRootWell line 3), the hideout door's
   stand-in
-- [ ] DesertBookArea (6)
+- [x] DesertBookArea (6)
 - [ ] DesertRockFormation (7)
 - [ ] DesertTrenchSouth (8)
 - [ ] DesertDREastEntrance (76)

@@ -23,6 +23,9 @@ LOCATIONS = (
     Location("Lost Sands: Badlands, Rock Ledge", 115, "DesertBadlands",
              Source(flag=729, pickup=Pickup(map="DesertBadlands", type=0, item=65)),
              rule=CanUse("Jump") & CanUse("Beemerang Toss")),
+    # Under the giant book, hidden until the boulder breaks; free from the book area's north half.
+    Location("Lost Sands: Book Area, Under the Book", 116, "DesertBookArea",
+             Source(flag=730, pickup=Pickup(map="DesertBookArea", type=0, item=128)), no_jump=True, area="North"),
 )
 TRANSFERS = (
     # Chapter 3's end: the attack on the city.
@@ -44,6 +47,9 @@ MAP_AREAS = (
     Area("DesertEntrance", "Ledge", ("WarpBookZone",), False_(), out=one_way(None, False_())),
     # The badlands' door to the bandit hideout, up two ledges (Jump) behind a grate the Rusty Key opens (flag 258);
     # arriving while it's shut, the game pushes the party past it, and the ledges drop back down freely.
+    # The book area's north half (its top and right doors): the boulder broken (Horn Dash) or the sand pit flown over
+    # (Bee Fly), both ways.
+    Area("DesertBookArea", "North", ("warp north", "WarpPuzzle"), CanUse("Horn Dash") | CanUse("Bee Fly")),
     Area("DesertBadlands", "Hideout Door", ("loadzone hideout",), CanUse("Jump") & RUSTY_KEY,
          out=one_way(None, CanUse("Jump") & RUSTY_KEY)),
 )

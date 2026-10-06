@@ -3072,3 +3072,7 @@ either one wrong).
   Ledge" (Baked Yam, Jump and the Beemerang), ids 114-115; the hideout door its own area (Jump and the Rusty Key,
   pushed past while shut), the key a later-chapters stand-in until its sale at the Defiant Root well is a location.
   Ticked, 51 of 244. Next: `DesertBookArea` (6).
+- **`DesertBookArea`:** two halves (bottom and left; top, right and the item) joined by Horn Dash or Bee Fly, both
+  ways; a new location, the user's name "Under the Book" (Succulent Cookies, id 116). A tricky jump across the sand
+  pit, both ways, noted in `MEASURED.md` as a trick for a harder logic option later. Ticked, 52 of 244. Next:
+  `DesertRockFormation` (7).

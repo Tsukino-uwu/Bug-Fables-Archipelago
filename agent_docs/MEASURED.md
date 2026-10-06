@@ -838,6 +838,11 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     (`hideoutlock`, Event59 key list index 5 = item 111, gone from flag 258); arriving through it while shut pushes the
     party past, and the ledges drop down freely. The key and flag 239 both come from its purchase at the Defiant Root
     well (line 3, 30 berries).
+    **`DesertBookArea` (2026-10-06, the user):** two halves: the bottom and left doors free between them, the top and
+    right doors and the Succulent Cookies under the giant book (flag 730, hidden until the boulder breaks) free between
+    them; across, either way, the boulder broken by Horn Dash (`blockingrock`, flag 417, which also moves the book
+    scenery) or the sand pit flown over (Bee Fly). **A trick:** a tricky jump crosses the sand pit with Jump alone,
+    both ways: not in the basic logic, kept for a harder logic option later (the user).
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

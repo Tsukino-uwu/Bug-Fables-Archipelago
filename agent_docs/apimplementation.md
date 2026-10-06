@@ -2939,8 +2939,8 @@ underground bar (free in and out by its bounce pad), the palace hall (free), the
 bookshelf's Lore Book without Jump), the war room (its table's medal, Jump), the miners' break room (a new
 location: its dig spot's berry, Beetle Dig), the attacked plaza (free), the attacked bridge (free), the attacked palace (free), the ending's plaza, bridge and throne room (free, played through), 49 of 244;
 Lost Sands from 2026-10-06: the entrance (four ground doors free; the ledge door to the book area a drop only), the
-badlands (two new locations; the hideout door Jump and the Rusty Key, a stand-in until its sale is a location), 51 of
-244; the rest of `room-checklist.md` to go.
+badlands (two new locations; the hideout door Jump and the Rusty Key, a stand-in until its sale is a location), the book
+area (two halves joined by Horn Dash or Bee Fly; a new location under the book), 52 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
