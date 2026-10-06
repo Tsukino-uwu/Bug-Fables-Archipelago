@@ -3227,3 +3227,5 @@ either one wrong).
   needed, then set back on. Crank spot "Behind the Bushes" (the user's description), with Next 62. Ticked, 80 of 244.
   The user: the crank pickup from either door with Jump and Halt; the slot, at the bottom, is only for the upper
   door (I first read it as needing the slot from below).
+- **`GoldenHillsDungeonBoss`:** the door free; the boss fight (Event73) up two ledges, Jump; the party stays in the
+  room afterwards. The fight's needs to test later (the user); noted for the enemy pass.

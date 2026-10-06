@@ -953,6 +953,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   crank its slot makes (flag 128): with the slot emptied (`flag 128 off`), no crank until one is placed. From the
   upper door, a drop. The Wooden Crank pickup from either door with Jump and Beemerang Halt, the slot (by the lower
   door) not needed for it, only for the upper door.
+  **`GoldenHillsDungeonBoss` (2026-10-06):** its door free both ways; the Venus' Guardian fight (`Event73`, battle 24,
+  until flag 88, which it sets with 76) up two ledges, Jump; afterwards the party stays in the room. The fight's own
+  needs untested (the user: test it properly later). No items.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
