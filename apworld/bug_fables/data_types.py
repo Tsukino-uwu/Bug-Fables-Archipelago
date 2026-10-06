@@ -414,7 +414,7 @@ class Location:
 @dataclass(frozen=True, slots=True)
 class StoryEvent:
     """A logic-only event (no id): a story step, placed in the map where it happens, whose item other rules require.
-    rule, category, no_jump and reach as for a Location."""
+    rule, category, no_jump, reach and area as for a Location."""
 
     name: str
     item: str
@@ -424,6 +424,7 @@ class StoryEvent:
     category: str | None = None
     no_jump: bool = False
     reach: Rule | None = None
+    area: str | None = None
 
 
 @dataclass(frozen=True, slots=True)

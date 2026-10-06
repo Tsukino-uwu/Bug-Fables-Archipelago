@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from rule_builder.rules import Has
 
-from ..custom_rules import CanUse
-from ..data_types import Artifact, EntityRef, FlagEntity, Give, Location, Pickup, Source, StoryEvent
+from ..custom_rules import ANY_ATTACK, CanUse
+from ..data_types import Area, Artifact, EntityRef, FlagEntity, Give, Location, Pickup, Source, StoryEvent
 from .outskirts import PAST_GATE
 
 # Grass in the second corridor and outside the cave, then the door room's horn puzzle down the trapdoor.
@@ -15,8 +15,10 @@ UNDERGROUND = DEN & CanUse("Freeze")
 LOCATIONS = (
     Location("Snakemouth Den: Underground Door Room, Behind the Wall", 5, "SnakemouthUndergrondDoor",
              Source(flag=60, pickup=Pickup(map="SnakemouthUndergrondDoor", type=2, item=9)), reach=UNDERGROUND),
+    # On a pillar by the bounce pad (no Jump needed), grabbed with the Beemerang.
     Location("Snakemouth Den: Bridge Room, Pillar", 6, "SnakemouthBridgeRoom",
-             Source(flag=651, pickup=Pickup(map="SnakemouthBridgeRoom", type=0, item=13)), reach=DEN),
+             Source(flag=651, pickup=Pickup(map="SnakemouthBridgeRoom", type=0, item=13)),
+             rule=CanUse("Beemerang Toss"), no_jump=True),
     Location("Snakemouth Den: Lake, Pillar", 7, "SnakemouthLake",
              Source(flag=23, pickup=Pickup(map="SnakemouthLake", type=2, item=0)), reach=DEN),
     Location("Snakemouth Den: Mushroom Pit, Mushroom by the Ledge", 8, "SnakemouthMushroomPit",
@@ -55,7 +57,11 @@ LOCATIONS = (
     Location("Snakemouth Den: Bridge Room, Sign behind the Bushes", 30, "SnakemouthBridgeRoom",
              Source(discovery=2),
              rule=CanUse("Horn Slash"),
-             category="discovery", reach=DEN),
+             category="discovery", no_jump=True, area="Left"),
+    # Crystal berry #32, on the vine above the pillars: hovered to with Bee Fly, knocked down with the Beemerang.
+    Location("Snakemouth Den: Bridge Room, Vine above the Pillars", 94, "SnakemouthBridgeRoom",
+             Source(berry=32, pickup=Pickup(map="SnakemouthBridgeRoom", type=3, item=0)), category="crystal_berry",
+             rule=CanUse("Bee Fly") & CanUse("Beemerang Toss"), no_jump=True),
     # Recorded by examining the old statue the first time.
     Location("Snakemouth Den: Underground Door Room, Statue", 31, "SnakemouthUndergrondDoor",
              Source(discovery=3), category="discovery", reach=UNDERGROUND),
@@ -64,6 +70,12 @@ LOCATIONS = (
              Source(event=6, flag=27), category="party_member", reach=DEN),
 )
 STORY_EVENTS = (
+    # The bridge's rope, hit from either bank (up a ledge, Jump): only the Beemerang reaches it from the right, any
+    # attack from the left. It stays down (flag 7).
+    StoryEvent("Snakemouth Den: Bridge Room, Bridge Lowered from the Right", "Snakemouth Bridge Lowered",
+               "SnakemouthBridgeRoom", Source(event=1, flag=7), rule=CanUse("Jump") & CanUse("Beemerang Toss")),
+    StoryEvent("Snakemouth Den: Bridge Room, Bridge Lowered from the Left", "Snakemouth Bridge Lowered",
+               "SnakemouthBridgeRoom", Source(event=1, flag=7), rule=CanUse("Jump") & ANY_ATTACK, area="Left"),
     # At the lake, reachable without passing any water droplet, so Leif comes before everything that needs him.
     StoryEvent("Leif Joins", "Leif", "SnakemouthLake",
                Source(event=14, flag=16), category="story_party", reach=DEN),
@@ -75,11 +87,19 @@ ARTIFACTS = (
     Artifact(1, "Artifact 1", "SnakemouthTreasureRoom",
              Source(event=26, flag=41), reach=UNDERGROUND),
 )
+MAP_AREAS = (
+    # The bridge room's left bank, with the door room's door: across the river on the lowered bridge (Jump), both ways.
+    Area("SnakemouthBridgeRoom", "Left", ("LoadingZoneDoorRoom",),
+         CanUse("Jump") & Has("Snakemouth Bridge Lowered")),
+)
 KEPT_OPEN = (
     # Turns the party back until the first boss; with the way up kept present it has nothing left to guard.
     EntityRef("SnakemouthFallRoom", "blocker"),
 )
 KEPT_PRESENT = (
+    # Crystal berry #32 and the vine it hangs in, made only after the first boss.
+    EntityRef("SnakemouthBridgeRoom", "coilyvine"),
+    EntityRef("SnakemouthBridgeRoom", "VinedItem"),
     # The big door to Upper Snakemouth; the Peculiar Gem slot right behind it still locks the way.
     EntityRef("SnakemouthDoorRoom", "DoorLoadZone"),
     # The bounce mushroom back up to the pitfall room, so the trapdoor is never a dead end.

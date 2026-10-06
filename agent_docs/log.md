@@ -77,6 +77,7 @@ either one wrong).
 - [2026-10-04: the last checks, Extra Roadblocks, shuffled-door scenes](#2026-10-04-the-last-checks-extra-roadblocks-shuffled-door-scenes)
 - [2026-10-05: a checklist of every room](#2026-10-05-a-checklist-of-every-room)
 - [2026-10-05: the first room mapped](#2026-10-05-the-first-room-mapped)
+- [2026-10-06: Snakemouth Den's bridge room](#2026-10-06-snakemouth-dens-bridge-room)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -2920,3 +2921,23 @@ either one wrong).
 - **Stopped for the day** at Snakemouth Den's first room (`SnakemouthBridgeRoom`, warped in, not yet described). The
   Outskirts' 18 rooms are mapped. Next: Snakemouth Den, from the bridge room; then the rest of the checklist; the
   quest, enemy and discovery passes after every room. The fill error with Jump and moves shuffled stays a Known issue.
+
+## 2026-10-06: Snakemouth Den's bridge room
+
+- **A test seed** with every ability in the start inventory, no entrance shuffle, hosted locally.
+- **`SnakemouthBridgeRoom`:** from the right, both bounce pads need no Jump, the pillar's Mushroom (location 6) the
+  Beemerang; the rope Jump and the Beemerang. From the left (flag 7 cleared to retry), Jump and any basic attack, and
+  the scene moves the party right; the user: still expect Jump, since the bridge needs it either way. Written as the
+  banks (area `Left`) and the bridge as two events ("Bridge Lowered from the Right/Left", names the user's), which
+  needed `StoryEvent.area`.
+- **Crystal berry #32:** shown by flag 41: Bee Fly and the Beemerang, no Jump; the other attacks can't reach the vine.
+  The user: make it appear from the start (`KEPT_PRESENT`, the vine and the berry). Named *Bridge Room, Vine above the
+  Pillars*, location 94. Seen present on a new file.
+- **Flag 41 finished the seed:** a new seed adopted by a save with flag 41 on met the one-artifact goal at once and
+  released everything (149 hold-ups queued). The user: no hold-up spam in dev; `QuietBursts` added. Taken berries
+  can't be retried: console `berry <n> off` added.
+- **No starburst on the vine berry:** the user guessed the vine. Dev `iteminfo` showed the backdrop present but not
+  drawn, the Mushroom's drawn; a `Mark` log never fired, so the stale one wasn't Mark's to fix. The cause:
+  `ShowAsSprite` switching off every renderer under a berry's sprite each pass. Spared; seen after a fresh room load.
+  Every crystal berry check had lost its starburst.
+- **The bridge room ticked**, 19 of 244. Next: `SnakemouthDoorRoom` (12).

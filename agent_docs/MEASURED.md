@@ -630,8 +630,10 @@ The output stays in the BepInEx folder.
 - **Crystal berries around Snakemouth** (2026-09-24, seen in play after dev warps): #2 in the underground door room is
   reachable in chapter 1 from the room's upper-left entrance with nothing, from below only with Leif (a droplet);
   #32 (`VinedItem`, bridge room) sits up on the vines at the far side and only exists after the first boss
-  (requires flag 41). Seen in play: not reachable in chapter 1; very likely needs **hover** to get onto the
-  platforms/pillars, then the beemerang to grab it (hover not yet confirmed). Waits until hover is in the logic.
+  (requires flag 41). Seen 2026-10-06 with flag 41 set: Bee Fly (hover) over the pillars and the Beemerang on the
+  vine, no Jump, from the room's right side: location 94, kept present from the start. The vine also lets go for the
+  horn, the Dash and Icicle (`NPCControl.cs`, CoiledObject), but it hangs too far away for them: only the Beemerang
+  reaches it (the user, seen).
   #3 (`ChucksAbode`) lies behind the house, past a big rock that only the Horn Dash breaks (seen 2026-10-05):
   location 82.
 - **Houses outside the city** (`BugariaOutskirtsOutsideCity`, 2026-09-24): the ladybug siblings' house
@@ -731,6 +733,11 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   - **Vi's beemerang (range):** `SnakemouthBridgeRoom`'s bridge comes down when its rope is hit; from the right only the
     beemerang reaches it, from the left Leif's move hit it (so presumably any member's; Kabbu's not tried). The room's
     Tattle tutorial (Event2) ran with stand-ins and finished (flag 10); its hint (Event0) is skipped by Skip cutscenes.
+    **Mapped on screen (2026-10-06):** the rope is up a ledge on each bank: Jump and the Beemerang from the right, Jump
+    and any basic attack from the left (close enough there); Event1 then sets flag 7, the bridge stays down, and a hit
+    from the left moves the party to the right bank. Getting onto and across the bridge takes Jump. Both bounce pads
+    work without Jump, so the right bank never traps; the pillar's Mushroom (location 6) is grabbed with the Beemerang
+    from there. The hidden sign (discovery 2) is behind grass on the left bank: the horn.
   - **Not needed: the spider scene's second fight** (Event6, enemies 2 and 12; seen 2026-09-27): it is won by
     beating Leif in the web (enemy 12), whom ground attacks reach; only the spider is in the air. So the fall room's
     spots (locations 29, 67) need no Beemerang. With Kabbu and Leif and no Vi, the mod gives Vi's place to Leif
@@ -1973,9 +1980,9 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   line's `|warp,map,x,y,z|`. The bar's hatch (Event61) sets one after `LoadMap(30, recreateplayers: true)`: each member
   dropped in at (-20.34, 9, 0.53), one unit higher per member (`EventControl.cs:9865-9872`).
 - **The Golden Path** (2026-10-04, EntityDump and code read): `LoadZoneGoldenPath` on `BugariaOutskirtsOutsideCity`
-  requires flag 41. Inside `BOGoldenPath`, `Loadzonetunnel` (onward) requires 67, and `blocker` (Event12) stands until 67, placed at
-  the tunnel's door but spanning the path to `loadzonecave` (the Hermit's cave, no flag) too: seen 2026-10-04, it
-  turned the party back on the way to the cave. Beetle grass (`ObjectTypes.BeetleGrass`) is cut
+  requires flag 41. Inside `BOGoldenPath`, `Loadzonetunnel` (onward) requires 67, and `blocker` (Event12) stands
+  until 67, placed at the tunnel's door but spanning the path to `loadzonecave` (the Hermit's cave, no flag) too:
+  seen 2026-10-04, it turned the party back on the way to the cave. Beetle grass (`ObjectTypes.BeetleGrass`) is cut
   only by a hit tagged `BeetleHorn` or `BeetleDash`, Kabbu's (`NPCControl.cs`, the BeetleGrass case).
 - **A map enemy's drops, and the held key** (2026-10-04, code read by a search agent; seen in play): a map enemy's
   `vectordata` is its drop table, each entry (x item id, y marker). On a won battle (`BattleControl.cs` ~30985,
@@ -2009,9 +2016,10 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   (`NPCControl.cs`, the BreakableRock case).
 - **The Rubber Prison's checkpoint corridor** (2026-10-04, EntityDump and code read; the user's account of play): its
   gates (`gate1 - Duplicate` and its copy, `ANDBlock`s) open and shut by switches; from the yard's side the only
-  switch (`switch - Duplicate - Duplicate`, entity 8) exists from flag 79, the far side's two have no flag. The `PrisonDoor` (entity 6, until flag 538) by the
-  way to the spike room opens with the Explorer Permit (the user, 2026-10-04). A switch
-  takes the Beemerang, a hit tagged `BeetleHorn`/`BeetleDash`, or ice (`Icefall`/`Icecle`) (`NPCControl.cs`, Switch).
+  switch (`switch - Duplicate - Duplicate`, entity 8) exists from flag 79, the far side's two have no flag. The
+  `PrisonDoor` (entity 6, until flag 538) by the way to the spike room opens with the Explorer Permit (the user,
+  2026-10-04). A switch takes the Beemerang, a hit tagged `BeetleHorn`/`BeetleDash`, or ice (`Icefall`/`Icecle`)
+  (`NPCControl.cs`, Switch).
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`
@@ -2336,7 +2344,8 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
 - **`BugariaOutskirtsEast2` (56):** left to right needs nothing. The way up to the Lost Sands' door: the crank between
   the two side doors turned with the Beemerang Halt, or Icicle platforms across the water and Jump. **Corrected the same
   day (the user): no drop down.** The top is across the water; the crank can't be turned from there, so the way back is
-  only the ice, and a party arriving there without it is stuck. The Tangy Berry dig spot (flag 669): Icicle and Jump, there and back.
+  only the ice, and a party arriving there without it is stuck. The Tangy Berry dig spot (flag 669): Icicle and Jump,
+  there and back.
 - **`BOLostSandsEntrance` (57):** a guard (`antguardclosed`, lim 130) blocks the north door to the desert until flag
   130 (Gen and Eri's chapter 3 story), seen on screen; the logic had no rule on that door. Kept open now (the guard
   away, `antguardopen` present, `Base/WoodenGate2` hidden, `(2)` shown, as 130 leaves them; the flag itself never

@@ -2882,7 +2882,10 @@ it's made for counts, rule 2), the Lost Sands' entrance (its guard's gate kept o
 of Trials (its altar for the quest pass), GoldenPathTunnel2 (its climb), the Hermit's cave, 18 of 244 (the Outskirts done; East Road 2's top corrected the same day: across water, not a drop); room 16's three dig spots added. A fixed (unshuffled) door link can stand in an area (`Area.links`):
 the Golden Path tunnel's upper ledge, joined to Tunnel2, which no seed could reach without it (2026-10-05, a
 generation failure) Locations now sit in the part of the room they're in (`Location.area`, as
-Archipelago's regions hold locations, `world api.md`), and an area may join another (`Area.to`) by 2026-10-05; the rest of `room-checklist.md` to go.
+Archipelago's regions hold locations, `world api.md`), and an area may join another (`Area.to`) by 2026-10-05.
+Snakemouth Den from 2026-10-06: the bridge room (its banks two areas; the bridge a room event either bank can set, so
+a story event may sit in an area too, `StoryEvent.area`; its vine berry location 94, kept present from the start),
+19 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

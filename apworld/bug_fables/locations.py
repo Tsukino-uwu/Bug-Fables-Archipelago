@@ -33,7 +33,7 @@ def create_all_locations(world: BugFablesWorld) -> None:
         region.locations.append(BugFablesLocation(world.player, loc.name, LOCATION_NAME_TO_ID[loc.name], region))
 
     for event in world.included_events:
-        world.get_region(event.region).add_event(
+        world.get_region(event.region if event.area is None else f"{event.region} ({event.area})").add_event(
             event.name, event.item, location_type=BugFablesLocation, item_type=BugFablesItem
         )
 
