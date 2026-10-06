@@ -882,7 +882,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     which keeps running after leaving the room, boarded from below with Jump; down without it, a drop. The Berry Jam
     (flag 733) on a sandpile below the cave, walked to from the top right or the platform, a drop from there.
     **`DesertOasisEntrance` (2026-10-06, the user):** the top and bottom doors (the left side) free between them; to
-    the right side (the oasis door) the bubble shield, over spikes; back, a red bounce pad sends the party left with
+    the right side (the oasis door) the bubble shield over spikes, or Bee Fly, both ways; back, also a red bounce pad sends the party left with
     nothing, a one-way without the shield. The pad (`mush`) is there only until flag 300, set by Event105 (chapter 4).
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity

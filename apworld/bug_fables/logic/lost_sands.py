@@ -141,7 +141,7 @@ MAP_AREAS = (
     # it keeps running), boarded with Jump. The switch is only up there, so nothing reaches it from below first.
     Area("DesertOasis", "Top Right", ("loadzone cave",), False_(),
          out=one_way(None, CanUse("Jump") & ANY_ATTACK)),
-    # The oasis entrance's right side (the oasis door), past spikes the bubble shield crosses, both ways. Its bounce
-    # pad back to the left goes at chapter 4 (flag 300, Event105), so its one-way isn't counted.
-    Area("DesertOasisEntrance", "Right", ("loadzoneside",), CanUse("Shield")),
+    # The oasis entrance's right side (the oasis door), past spikes the bubble shield crosses, or flown over (Bee
+    # Fly), both ways. Its bounce pad back to the left goes at chapter 4 (flag 300, Event105): its one-way isn't counted.
+    Area("DesertOasisEntrance", "Right", ("loadzoneside",), CanUse("Shield") | CanUse("Bee Fly")),
 )
