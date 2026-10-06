@@ -2941,7 +2941,8 @@ location: its dig spot's berry, Beetle Dig), the attacked plaza (free), the atta
 Lost Sands from 2026-10-06: the entrance (four ground doors free; the ledge door to the book area a drop only), the
 badlands (two new locations; the hideout door Jump and the Rusty Key, a stand-in until its sale is a location), the book
 area (two halves joined by Horn Dash or Bee Fly; a new location under the book), the rock formation (a new location: the
-Tardigrade Idol, Jump, Freeze and the horn), 53 of 244; the rest of `room-checklist.md` to go.
+Tardigrade Idol, Jump, Freeze and the horn), the south trench (its left side across a gap, by the bridge the horn knocks
+over or Bee Fly; a new location on the top-left ledge, Jump), 54 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

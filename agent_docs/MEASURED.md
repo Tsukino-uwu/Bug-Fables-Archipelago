@@ -846,6 +846,10 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     **`DesertRockFormation` (2026-10-06, the user):** nothing needed between its three doors; the Tardigrade Shield
     (flag 343, high on the idol) takes Jump, Freeze and the horn, and taking it records the Tardigrade Idol discovery
     (31).
+    **`DesertTrenchSouth` (2026-10-06, the user):** the right and top-right doors free between them; the left side
+    (the left door) across a gap, by the bridge (`bridge1`, a switch, flag 282) knocked over from the left by the horn,
+    then crossed both ways without Jump, or flown over (Bee Fly) either way. The top-left door and the Agaric Shroom
+    (flag 713) on a ledge over the left side: a drop down, Jump back up.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

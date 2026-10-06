@@ -3086,3 +3086,8 @@ either one wrong).
   adopted to it. Dev settings: `OneHit` off (story rooms, the user's ask), `InfJump`, `BumpKill`, `QuietBursts` on,
   `AdoptSeed` off; the command file is still `bed6439d-.../scratchpad/cmds.txt`. Locations added today (95-117) and
   the Termacade need the suite and the fuzzer before the push (not run during dev, as asked).
+- **`DesertTrenchSouth`:** the right and top-right doors free between them; the left side across a gap, by the bridge
+  the horn knocks over from the left (an event, "Bridge Knocked Down", the user's name) or by Bee Fly (the user's
+  addition), both ways; the top-left door and the mushroom on a ledge, a drop down, Jump back up. A new location, the
+  user's name "South Trench, Ledge Mushroom" (Agaric Shroom, flag 713, id 118). Ticked, 54 of 244. Next:
+  `DesertDREastEntrance` (76).

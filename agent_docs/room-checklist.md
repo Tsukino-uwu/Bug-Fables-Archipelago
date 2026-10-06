@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**53 of 244 done.**
+**54 of 244 done.**
 
 ## Outskirts
 
@@ -85,7 +85,7 @@ as it is, a frozen record.
   stand-in
 - [x] DesertBookArea (6)
 - [x] DesertRockFormation (7) — for the discovery sweep: the Tardigrade Idol (31), on taking the medal
-- [ ] DesertTrenchSouth (8)
+- [x] DesertTrenchSouth (8)
 - [ ] DesertDREastEntrance (76)
 - [ ] DesertFGBorder (77)
 - [ ] DesertDRSouthEntrance (78)

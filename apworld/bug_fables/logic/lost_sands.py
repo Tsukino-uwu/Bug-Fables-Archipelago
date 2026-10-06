@@ -2,10 +2,10 @@
 seed changes there, mapped room by room (room-checklist.md)."""
 from __future__ import annotations
 
-from rule_builder.rules import False_
+from rule_builder.rules import False_, Has
 
 from ..custom_rules import LATER_CHAPTERS, CanUse, one_way
-from ..data_types import Area, EntityRef, Location, Pickup, Source, Transfer
+from ..data_types import Area, EntityRef, Location, Pickup, Source, StoryEvent, Transfer
 
 # The Rusty Key, bought at the Defiant Root well (line 3, which also sets flag 239, making the hideout door): not an
 # item yet, so the later chapters' stand-in until its sale is a location.
@@ -30,6 +30,14 @@ LOCATIONS = (
     Location("Lost Sands: Rock Formation, Tardigrade Idol", 117, "DesertRockFormation",
              Source(flag=343, pickup=Pickup(map="DesertRockFormation", type=2, item=51)),
              rule=CanUse("Jump") & CanUse("Freeze") & CanUse("Horn Slash")),
+    # On the south trench's top-left ledge: a drop from its door, Jump from the left side.
+    Location("Lost Sands: South Trench, Ledge Mushroom", 118, "DesertTrenchSouth",
+             Source(flag=713, pickup=Pickup(map="DesertTrenchSouth", type=0, item=96)), no_jump=True, area="Ledge"),
+)
+STORY_EVENTS = (
+    # The south trench's bridge, knocked over by the horn from the left side (flag 282); it stays down.
+    StoryEvent("Lost Sands: South Trench, Bridge Knocked Down", "South Trench Bridge Down", "DesertTrenchSouth",
+               Source(flag=282), rule=CanUse("Horn Slash"), area="Left"),
 )
 TRANSFERS = (
     # Chapter 3's end: the attack on the city.
@@ -51,9 +59,16 @@ MAP_AREAS = (
     Area("DesertEntrance", "Ledge", ("WarpBookZone",), False_(), out=one_way(None, False_())),
     # The badlands' door to the bandit hideout, up two ledges (Jump) behind a grate the Rusty Key opens (flag 258);
     # arriving while it's shut, the game pushes the party past it, and the ledges drop back down freely.
+    Area("DesertBadlands", "Hideout Door", ("loadzone hideout",), CanUse("Jump") & RUSTY_KEY,
+         out=one_way(None, CanUse("Jump") & RUSTY_KEY)),
     # The book area's north half (its top and right doors): the boulder broken (Horn Dash) or the sand pit flown over
     # (Bee Fly), both ways.
     Area("DesertBookArea", "North", ("warp north", "WarpPuzzle"), CanUse("Horn Dash") | CanUse("Bee Fly")),
-    Area("DesertBadlands", "Hideout Door", ("loadzone hideout",), CanUse("Jump") & RUSTY_KEY,
-         out=one_way(None, CanUse("Jump") & RUSTY_KEY)),
+    # The south trench's left side, across a gap from its right and top-right doors: flown over (Bee Fly) or on the
+    # bridge, knocked over from the left by the horn.
+    Area("DesertTrenchSouth", "Left", ("loadzone left",), CanUse("Bee Fly") | Has("South Trench Bridge Down"),
+         out=CanUse("Bee Fly") | CanUse("Horn Slash")),
+    # Its top-left door and the mushroom, on a ledge over the left side: a drop down, Jump back up.
+    Area("DesertTrenchSouth", "Ledge", ("loadzone north2",), CanUse("Jump"), out=one_way(None, CanUse("Jump")),
+         to="DesertTrenchSouth (Left)"),
 )

@@ -340,6 +340,18 @@ class TestTardigradeIdol(BugFablesTestBase):
         self.assertTrue(self.can_reach_location(spot))
 
 
+class TestSouthTrenchBridge(BugFablesTestBase):
+    # The south trench's bridge falls only to the horn.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_needs_horn(self) -> None:
+        event = "Lost Sands: South Trench, Bridge Knocked Down"
+        self.collect_all_but(["Horn Slash"])
+        self.assertFalse(self.can_reach_location(event))
+        self.collect_by_name("Horn Slash")
+        self.assertTrue(self.can_reach_location(event))
+
+
 class TestBarCorner(BugFablesTestBase):
     # The way down to the underground bar is behind the commercial district's grass, and the bar's door comes back up
     # behind it too: the horn both ways.
