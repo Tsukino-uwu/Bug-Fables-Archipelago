@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**43 of 244 done.**
+**44 of 244 done.**
 
 ## Outskirts
 
@@ -71,7 +71,7 @@ as it is, a frozen record.
   27; Bad Books, 35 berries each); for the discovery sweep: the portrait and the librarian's
 - [x] AntPalaceWarRoom (37) — for the quest pass: the old ant (flags 701, 709)
 - [x] AntMinesBreakRoom (73)
-- [ ] BugariaPlazaAttack (123)
+- [x] BugariaPlazaAttack (123) — for the discovery sweep: discoveries 4 and 5
 - [ ] BugariaBridgeAttack (124)
 - [ ] BugariaCastleAttack (125)
 - [ ] BugariaEndPlaza (240)

@@ -3052,3 +3052,6 @@ either one wrong).
   written. Ticked, 42 of 244. Next: `AntMinesBreakRoom` (73).
 - **`AntMinesBreakRoom`:** nothing needed; a new location, the user's name "Bugaria City: Ant Tunnels, Break Room Dig
   Spot" (crystal berry #34, Beetle Dig, id 113). Ticked, 43 of 244. Next: `BugariaPlazaAttack` (123).
+- **Story rooms visited, not ticked unseen** (the user: "even if they are not in the shuffle, we need to logically
+  account for crossing/doing the rooms normally"). `BugariaPlazaAttack`: free across, as its fixed links have it; two
+  discoveries. Ticked, 44 of 244. Next: `BugariaBridgeAttack` (124).
