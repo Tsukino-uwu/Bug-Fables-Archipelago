@@ -3136,4 +3136,6 @@ either one wrong).
   No items; the logic explained at the user's ask; the user: done. Ticked, 64 of 244. Next: `DesertWestDunes` (98).
 - **The oasis entrance's bounce pad:** the user: "can't we just make it so the red bounce pad is always there?" Kept
   present (`KEPT_PRESENT`, whose marker answers "exists" past the pad's own limit flag 300); its one-way now counts
-  with Points of No Return. Not seen yet: needs a seed with it (or `liveslot`) and flag 300 on.
+  with Points of No Return. Seen: `live-slot-data.py`, `liveslot`, `flag 300 on`, warped in from the oasis; the user:
+  "the red bounce pad is here". Flag 300 turned back off. `liveslot` also sent the day's new locations (114-126),
+  which the running seed doesn't have.
