@@ -27,16 +27,16 @@ LOCATIONS = (
     Location("Golden Path: Crank Path, Boulder Platform", 137, "GoldenHillsPath2",
              Source(flag=726, pickup=Pickup(map="GoldenHillsPath2", type=0, item=50)),
              rule=CanUse("Jump") & CanUse("Beemerang Halt"), area="Left"),
-    # The settlement entrance's snail shop, kept present from the start (in the game it comes after the Golden Hills
-    # boss, flag 88, where the caravan's stall stood): first purchase a check, then its own item.
-    Location("Golden Path: Settlement Entrance, Snail Shop 1", 138, "GoldenSettlementEntrance",
-             Source(item_shop=ItemShop(map="GoldenSettlementEntrance", keeper="snailguy", item=40)),
+    # The settlement entrance's caravan stall, kept present for good (in the game it leaves after the Golden Hills boss,
+    # flag 88, and the snail's shop takes its spot): first purchase a check, then its own item.
+    Location("Golden Path: Settlement Entrance, Caravan Shop 1", 138, "GoldenSettlementEntrance",
+             Source(item_shop=ItemShop(map="GoldenSettlementEntrance", keeper="Crickerly", item=2)),
              category="item_shop", no_jump=True),
-    Location("Golden Path: Settlement Entrance, Snail Shop 2", 139, "GoldenSettlementEntrance",
-             Source(item_shop=ItemShop(map="GoldenSettlementEntrance", keeper="snailguy", item=46)),
+    Location("Golden Path: Settlement Entrance, Caravan Shop 2", 139, "GoldenSettlementEntrance",
+             Source(item_shop=ItemShop(map="GoldenSettlementEntrance", keeper="Crickerly", item=147)),
              category="item_shop", no_jump=True),
-    Location("Golden Path: Settlement Entrance, Snail Shop 3", 140, "GoldenSettlementEntrance",
-             Source(item_shop=ItemShop(map="GoldenSettlementEntrance", keeper="snailguy", item=147)),
+    Location("Golden Path: Settlement Entrance, Caravan Shop 3", 140, "GoldenSettlementEntrance",
+             Source(item_shop=ItemShop(map="GoldenSettlementEntrance", keeper="Crickerly", item=11)),
              category="item_shop", no_jump=True),
     # Crystal berry #22, dug up in the middle of the settlement entrance.
     Location("Golden Path: Settlement Entrance, Dig Spot", 141, "GoldenSettlementEntrance",
@@ -60,21 +60,21 @@ MAP_AREAS = (
     # then Tanjerin); coming out of it, the game pushes the party through the rock.
     Area("GoldenSettlementEntrance", "Minigame Door", ("loadzone minigame",), HORN_QUEST, out=True_()),
 )
-# The snail's shop there from the start, the caravan's stall that stood in its place kept away (the user, 2026-10-07;
-# the caravan's other stalls to be decided one at a time).
+# The caravan's stall there for good, the snail's shop that takes its spot after the boss kept away (the user,
+# 2026-10-07: the snail's goods overlapped; the caravan's other stalls to be decided one at a time).
 KEPT_PRESENT = (
-    EntityRef("GoldenSettlementEntrance", "snailguy"),
-)
-KEPT_OPEN = (
     EntityRef("GoldenSettlementEntrance", "Crickerly"),
     EntityRef("GoldenSettlementEntrance", "Husband"),
     EntityRef("GoldenSettlementEntrance", "CaravanBadge - Duplicate"),
 )
+KEPT_OPEN = (
+    EntityRef("GoldenSettlementEntrance", "snailguy"),
+)
 SCENERY_PRESENT = (
-    EntityRef("GoldenSettlementEntrance", "Base/snailmerchant"),
+    EntityRef("GoldenSettlementEntrance", "Base/Stall"),
 )
 SCENERY_HIDDEN = (
-    EntityRef("GoldenSettlementEntrance", "Base/Stall"),
+    EntityRef("GoldenSettlementEntrance", "Base/snailmerchant"),
 )
 TRANSFERS = (
     # The crank path's high middle door down to its right side with Jump alone, a drop; up again with Jump and Halt (the

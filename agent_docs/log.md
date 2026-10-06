@@ -3268,6 +3268,12 @@ either one wrong).
 - **`GoldenSettlementEntrance`:** the doors free (the desert gate already kept open since 2026-10-04); berry #22's dig
   spot. The snail's shop and the caravan's stall share one spot (their goods within a step); the user: the snail
   always here, the caravan's other stalls one at a time later (each stall is its own shop, map and keeper). Names, the
-  user's: "Settlement Entrance, Snail Shop 1-3" (ids 138-140), "Settlement Entrance, Dig Spot" (141). The minigame
+  user's: "Settlement Entrance, Snail Shop 1-3" (ids 138-140), "Settlement Entrance, Dig Spot" (141).
+  Then the snail kept present: the caravan's goods still lay on top. My first fix never reached the game (copied
+  without `stage-dev.ps1`: the same hash); the user: use the caravan instead. Caravan kept present, the snail away:
+  the snail's goods still showed, as goods are made in a second pass; hidden right after `CreateEntities` (caught only
+  a room already loaded) and then in each good's `Start` (caught the fresh load, seen in the log). The user: "now its
+  just 3 items". Shop slots renamed "Caravan Shop 1-3" to match. Their "an Archipelago item" text with the game's
+  sprite (and berry #22's 3D look): the hosted seed predates these locations, so the scout has no item for them. The minigame
   door's rock (until flag 275, the horn quest and Tanjerin): arriving from it pushes the party through; the user:
   gated behind the quest (a stand-in), as the minigame room holds only Wacka Worm replays and a late scene.

@@ -464,6 +464,13 @@ straight after `CreateEntities`, before `Start`, with a `requires` array of its 
 Seen in play (2026-09-25): the town's door and the plaza's district doors, kept present (the Archipelago guide, build
 step 9).
 
+**A kept-away shopkeeper's goods go too** (2026-10-07): a shop's goods (`Fixedshop0`, ...) are made in a second pass
+of `CreateEntities`, each pointing back to its keeper (`shopkeeper`), and their own check asks nothing; keeping only
+the keeper away left the goods laid out (seen: the snail's goods on top of the caravan's stall). So `KeptOpen` hides
+the goods of a kept-away keeper twice: right after `CreateEntities`, for a room the seed's lists reach already loaded,
+and in each good's own `Start`, for a room loaded fresh (the first alone missed that case; seen in the log). Seen: the
+settlement entrance's caravan stall with its three goods only.
+
 **Item and medal sprites too** (2026-09-26): `SpriteDump` also writes every item and medal sprite with its id and name
 (`bugfablesap-itemsprites.tsv`) and their sheets, so a labelled contact sheet can be made from them, to pick an icon
 (the Boat Ticket's) by pointing at it. Game art stays local, never in the repo.
@@ -471,7 +478,7 @@ step 9).
 **Status:** done: the script, entity and map dumps are in use; making an entity exist early seen (2026-09-25).
 
 *Code: `Dev/ScriptDump.cs`, `EntityDump.cs`, `MapDump.cs` and `SpriteDump.cs`; making an entity exist early,
-`World/KeptOpen.cs` (`BeforeCreate`, `AfterNewEntity`, `AfterCreate`, its `CheckIfCanExist` prefix).*
+`World/KeptOpen.cs` (`BeforeCreate`, `AfterNewEntity`, `AfterCreate`, its `CheckIfCanExist` prefix, `ShopGoods`).*
 
 ## 8. The Archipelago panel on the main menu
 

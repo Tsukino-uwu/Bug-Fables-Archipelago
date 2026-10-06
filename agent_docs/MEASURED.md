@@ -978,7 +978,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   flag 275: the horn quest in `GoldenSettlement3` sets 274, then Tanjerin's second copy here sets 275); arriving
   from it, the party is pushed through the rock. The caravan's stall (`Base/Stall`, Crickerly, her husband, the medal
   seller; until flag 88) and the snail's shop (`Base/snailmerchant`, `snailguy`; from 88: Numbnail Dart, Sleep Bomb,
-  Drowsy Cake) share one spot, their goods within a step. The minigame room: Wacka Worm replays for 10 berries, and a
+  Drowsy Cake) share one spot, their goods within a step. A shop's goods are made in a second pass of
+  `CreateEntities` (`MapControl.cs:1708`, from its keeper's check), each with `shopkeeper` pointing back. The minigame room: Wacka Worm replays for 10 berries, and a
   mayor's scene late (flags 557-559).
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity

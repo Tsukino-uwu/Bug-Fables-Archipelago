@@ -32,6 +32,7 @@ namespace BugFablesAP
             }
             Hooks.Install(typeof(NewEntities), "open", "a kept-present shopkeeper's shop is built without it");
             Hooks.Install(typeof(Insides), "open", "an entity kept away flashes when entering or leaving a house");
+            Hooks.Install(typeof(ShopGoods), "open", "a kept-away shopkeeper's goods stay laid out");
             bool scenery = Hooks.Install(typeof(Scenery), "open",
                 "scenery the seed removes (the Outskirts rocks) will stay");
             log.LogInfo($"[open] installed on MapControl.CreateEntities and MainManager.CheckIfCanExist{(scenery ? " and ConditionChecker.Start" : "")}");
@@ -137,6 +138,14 @@ namespace BugFablesAP
                         npc.entity.iskill = true;
                     }
                     log.LogInfo($"[open] {map}: {npc.name} kept out of the way (the seed keeps this area open)");
+                    // A shopkeeper's goods are laid out after every entity exists, each pointing back to it.
+                    foreach (NPCControl good in __instance.GetComponentsInChildren<NPCControl>(true)
+                        .Where(g => g.shopkeeper == npc && g.entity != null))
+                    {
+                        good.entity.iskill = true;
+                        good.gameObject.SetActive(false);
+                        log.LogInfo($"[open] {map}: {good.name}, {npc.name}'s goods, kept out of the way");
+                    }
                 }
             }
             foreach (ApConnection.Blocker way in (connection.KeptPresent ?? new List<ApConnection.Blocker>())
@@ -340,6 +349,28 @@ namespace BugFablesAP
             if (npc.entity != null)
             {
                 npc.entity.iskill = true;
+            }
+        }
+
+        // A shopkeeper's goods ask nothing of their own when they start: those of a kept-away shopkeeper go too.
+        private static class ShopGoods
+        {
+            [HarmonyPatch(typeof(NPCControl), "Start")]
+            [HarmonyPostfix]
+            private static void AfterStart(NPCControl __instance)
+            {
+                NPCControl keeper = __instance.shopkeeper;
+                if (__instance.interacttype != NPCControl.Interaction.Shop || keeper == null || keeper.limit == null
+                    || !markers.Contains(keeper.limit) || randomizerOn == null || !randomizerOn())
+                {
+                    return;
+                }
+                if (__instance.entity != null)
+                {
+                    __instance.entity.iskill = true;
+                }
+                __instance.gameObject.SetActive(false);
+                log.LogInfo($"[open] {__instance.name}, {keeper.name}'s goods, kept out of the way as they start");
             }
         }
 
