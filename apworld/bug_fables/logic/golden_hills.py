@@ -45,8 +45,9 @@ MAP_AREAS = (
     Area("GoldenHillsDungeonEntrance", "Top Right", ("loadzone topright",), WOODEN_CRANK & CanUse("Beemerang Halt"),
          out=one_way(None, WOODEN_CRANK & CanUse("Beemerang Halt"))),
     # The left hall: its far left side (the crank room's door) across from the right door over turning bridges (the
-    # fixed cranks, Beemerang Halt) and platforms (Jump), both ways.
-    Area("GoldenHillsDungeonLeftMain", "Left", ("loadzonecrankleft",), CanUse("Jump") & CanUse("Beemerang Halt")),
+    # fixed cranks, Beemerang Halt) and platforms (Jump), or flown across (Bee Fly), both ways.
+    Area("GoldenHillsDungeonLeftMain", "Left", ("loadzonecrankleft",),
+         (CanUse("Jump") & CanUse("Beemerang Halt")) | CanUse("Bee Fly")),
     # Its top left door, up the platform its Wooden Crank slot works (flag 110) with Beemerang Halt; down from it a
     # drop to the left side.
     Area("GoldenHillsDungeonLeftMain", "Top Left", ("load zone crank half",), WOODEN_CRANK & CanUse("Beemerang Halt"),

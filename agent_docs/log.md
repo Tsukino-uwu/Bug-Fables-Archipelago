@@ -3198,3 +3198,5 @@ either one wrong).
   `GoldenHillsLowerRightCrank` (49).
 - **Back in `GoldenHillsDungeonRightCrank`** (the user asked): everything in it is doable with Bee Fly alone; added as
   a second way.
+- **Bee Fly, rechecked in the Golden Hills rooms done** (the user: "might have forgotten to include fly"): the
+  entrance nothing; the left hall across between its left and right doors, added.

@@ -921,7 +921,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   there), seen with every crank flag reset (109, 113, 117, 118, 663): no crank below to ride back up without the Big
   Crank. `Event68` loads the other map itself (no door).
   **`GoldenHillsDungeonLeftMain` (2026-10-06):** crystal berry #9 (height 11, by the right door) Jump; across the
-  room, between all three doors, Jump and Beemerang Halt (its fixed bridge cranks); the top left door up the platform
+  room, between all three doors, Jump and Beemerang Halt (its fixed bridge cranks), or Bee Fly alone between the left
+  and right doors (rechecked the same day); the top left door up the platform
   its slot works (flag 110), with a spawned Wooden Crank and Halt, a drop down to the left side. Every slot's lock
   reads code 2, the Wooden Crank, and `Event59` removes it (all but code 16): three slots (flags 109, 110, 128) and
   three cranks (flags 112, 116, 129) in the dungeon, one of each in the Rubber Prison (565, 561).
