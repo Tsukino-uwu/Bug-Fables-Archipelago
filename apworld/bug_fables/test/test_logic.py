@@ -431,6 +431,23 @@ class TestGoldenHillsBorderLedge(BugFablesTestBase):
         self.assertTrue(self.can_reach_location(spot))
 
 
+class TestOasis(BugFablesTestBase):
+    # The bottom door is dug under; the sandpile's way back up takes Jump and a switch hit.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_needs(self) -> None:
+        for spot, missing in (("Lost Sands: Oasis, On Top of the Sandpile", ("Jump",)),
+                              ("Lost Sands: Oasis, On Top of the Sandpile",
+                               ("Beemerang Toss", "Horn Slash", "Progressive Freeze"))):
+            with self.subTest(spot=spot, missing=missing):
+                state = CollectionState(self.multiworld)
+                self.collect_all_but(list(missing), state)
+                self.assertFalse(state.can_reach(spot, "Location", self.player))
+        self.collect_all_but([])
+        self.assertTrue(self.can_reach_location("Lost Sands: Oasis, On Top of the Sandpile"))
+        self.assertTrue(self.can_reach_location("Lost Sands: Oasis, Crimson Cave"))
+
+
 class TestBarCorner(BugFablesTestBase):
     # The way down to the underground bar is behind the commercial district's grass, and the bar's door comes back up
     # behind it too: the horn both ways.

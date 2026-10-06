@@ -876,6 +876,11 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     high ledge on the left: grass cut (the horn), Jump, then a bridge the horn lowers (`@Bridge1`, flag 690).
     **`DesertRoachVillage` (2026-10-06, the user):** nothing needed between its three doors; crystal berry #21's dig
     spot needs only Beetle Dig. The hawk (flags 300-302, key item 105 in line 1) for the quest pass.
+    **`DesertOasis` (2026-10-06, the user):** the left door free; the bottom door behind a gate dug under (Beetle
+    Dig), left by digging or Jump. The top right (the cave door, height 14) reached only through that door: the Crimson
+    Ore (flag 319, `Items:98`, the Ore Wanted quest's) in the cave; a switch (any attack) starts the moving platform,
+    which keeps running after leaving the room, boarded from below with Jump; down without it, a drop. The Berry Jam
+    (flag 733) on a sandpile below the cave, walked to from the top right or the platform, a drop from there.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

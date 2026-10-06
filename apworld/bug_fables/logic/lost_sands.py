@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from rule_builder.rules import False_, Has
 
-from ..custom_rules import LATER_CHAPTERS, CanUse, one_way
+from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, one_way
 from ..data_types import Area, EntityRef, Location, Pickup, Source, StoryEvent, Transfer
 
 # The Rusty Key, bought at the Defiant Root well (line 3, which also sets flag 239, making the hideout door): not an
@@ -55,6 +55,13 @@ LOCATIONS = (
     Location("Lost Sands: Roach Village, Dig Spot", 124, "DesertRoachVillage",
              Source(berry=21, pickup=Pickup(map="DesertRoachVillage", type=3, item=0)), rule=CanUse("Beetle Dig"),
              category="crystal_berry", no_jump=True),
+    # The oasis's top right, reached only through its cave door: the Crimson Ore in the cave, and the Berry Jam on a
+    # sandpile below it, dropped to (back up by the platform, as for the area).
+    Location("Lost Sands: Oasis, Crimson Cave", 125, "DesertOasis",
+             Source(flag=319, pickup=Pickup(map="DesertOasis", type=1, item=98)), no_jump=True, area="Top Right"),
+    Location("Lost Sands: Oasis, On Top of the Sandpile", 126, "DesertOasis",
+             Source(flag=733, pickup=Pickup(map="DesertOasis", type=0, item=173)),
+             rule=one_way(None, CanUse("Jump") & ANY_ATTACK), no_jump=True, area="Top Right"),
 )
 STORY_EVENTS = (
     # The south trench's bridge, knocked over by the horn from the left side (flag 282); it stays down.
@@ -127,4 +134,11 @@ MAP_AREAS = (
     Area("DesertSandPitArea", "Right", ("loadzone right",),
          CanUse("Bee Fly") | (Has("Sand Pit Right Bridge Down") & Has("Sand Pit Top Right Bridge Down")),
          to="DesertSandPitArea (Top Right)"),
+    # The oasis's bottom door, past a gate dug under (Beetle Dig); from it, out by digging or jumping.
+    Area("DesertOasis", "Bottom", ("loadzonesouth",), CanUse("Beetle Dig"),
+         out=CanUse("Beetle Dig") | CanUse("Jump")),
+    # Its top right (the cave door), up high: a drop down; back up on the platform its switch starts (any attack, and
+    # it keeps running), boarded with Jump. The switch is only up there, so nothing reaches it from below first.
+    Area("DesertOasis", "Top Right", ("loadzone cave",), False_(),
+         out=one_way(None, CanUse("Jump") & ANY_ATTACK)),
 )

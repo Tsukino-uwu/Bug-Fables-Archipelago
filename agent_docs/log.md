@@ -3124,3 +3124,8 @@ either one wrong).
 - **`DesertRoachVillage`:** nothing between its doors; a new location, the user's name "Roach Village, Dig Spot"
   (crystal berry #21, Beetle Dig, id 124); the hawk for the quest pass. The user asked if anything else was there:
   nothing. Ticked, 62 of 244. Next: `DesertOasis` (96).
+- **`DesertOasis`:** the left door free, the bottom one Beetle Dig in (Dig or Jump out); the top right only from its
+  cave door, a drop down, back up by the platform (its switch stays on) and Jump. Two new locations, the user's names:
+  "Crimson Cave" (the Crimson Ore, flag 319, id 125; the user: named for the crystals beside it, not the item) and "On
+  Top of the Sandpile" (Berry Jam, flag 733, id 126). The ore's name found by `textsearch ore@` (`Items:98`); it is
+  the Ore Wanted quest's, useful until the quest pass. Waiting on the user's "done".
