@@ -3204,3 +3204,8 @@ either one wrong).
 - **`GoldenHillsLowerRightCrank`:** the crank takes Jump, Freeze, the horn and Beemerang Halt (an ice block escorted
   over spinning platforms); Bee Fly replaces only Jump, so left out (the user). Named "Top Right Ledge", with Next 62;
   the Chomper with Halt alone, for the enemy pass. Ticked, 77 of 244.
+- **`GoldenHillsDungeonLeftCrankHalf`:** everything Jump and Beemerang Halt; the crank half's Venus Bud fight (Event70)
+  needs Vi; picking up the half merged it into the Big Crank. A Burly Berry bush: I called it "not a location"; the
+  user corrected me, a fixed drop with a regional flag (7) is a respawning pickup, a hidden item. The left crank
+  room's Magic Seed bush (regional 0) was missed the same way. The user: sweep for missed respawning and static items
+  after the rooms (now in `room-logic.md`). `onehit` on again at the user's ask.

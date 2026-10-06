@@ -285,7 +285,10 @@ rooms, room by room. **A normal field enemy never blocks a way** (the user, 2026
 around; only mini-boss, boss and scene fights stand in the path. What side of the room an enemy is on matters only in
 the enemy pass. **So do discoveries** (the user, 2026-10-05: "similar to the quest and enemy things, we might have
 to do the same with discoveries ( if i miss any while we are mapping out rooms )"): one sweep after the rooms checks
-every discovery's spot and need against the mapped rooms.
+every discovery's spot and need against the mapped rooms. **And respawning and static items** (the user,
+2026-10-06, after a fixed-drop bush with a regional flag was first missed: "in case we have missed any
+static/respawning items anywhere"): a sweep of the entity dump for every pickup and fixed-drop bush (one-time or
+regional flag) against the locations.
 
 1. **A draft from the data.** The entity dump lists every object in the map by type: `BeetleGrass`, `PushRock`,
    `DigWall`, `DigSpot`, `BreakableRock`, `JumpSpring`, `Dropplet`, `Geizer`, `WindPusher`, `Switch`,
