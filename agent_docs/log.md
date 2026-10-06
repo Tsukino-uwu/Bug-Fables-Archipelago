@@ -3055,3 +3055,5 @@ either one wrong).
 - **Story rooms visited, not ticked unseen** (the user: "even if they are not in the shuffle, we need to logically
   account for crossing/doing the rooms normally"). `BugariaPlazaAttack`: free across, as its fixed links have it; two
   discoveries. Ticked, 44 of 244. Next: `BugariaBridgeAttack` (124).
+- **`BugariaBridgeAttack`:** free across. The user asked if the attacked plaza's discoveries were missable: no, 4 and
+  5 are the statue and the inn portrait in every copy of the plaza. Ticked, 45 of 244. Next: `BugariaCastleAttack`.
