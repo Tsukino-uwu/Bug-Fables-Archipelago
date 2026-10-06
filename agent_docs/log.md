@@ -3255,3 +3255,5 @@ either one wrong).
   No other items (the medal with the quest); the user: done. Ticked, 85 of 244. Next: `GoldenHillsPath2` (38).
 - **`GoldenHillsPath2`:** between its doors Jump and Halt; the Sweet Dew named "Boulder Platform" (the user, from
   their screenshot; id 137), the room "Crank Path" (mine, not objected to). Waiting on the user's "done".
+  The user asked about the uncounted drop from the middle door: written now as a one-way with Jump (its way back Jump
+  and Halt), so Points of No Return counts it.

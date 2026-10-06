@@ -32,8 +32,8 @@ MAP_AREAS = (
     # The crank path: its left side (the door toward the settlement) across from the right door by its fixed cranks
     # (Beemerang Halt) and Jump, both ways.
     Area("GoldenHillsPath2", "Left", ("loadzonesettlement",), CanUse("Jump") & CanUse("Beemerang Halt")),
-    # Its high middle door (to the pitcher path), reached from the left side, the same; down from it to the right side
-    # with Jump alone is a drop, not counted (the way over the left covers it).
+    # Its high middle door (to the pitcher path): up the same way (Jump and Halt, over the left side); down to the right
+    # side with Jump alone, a drop, back up with Jump and Halt.
     Area("GoldenHillsPath2", "Top Middle", ("loadzonepitcherarea",), CanUse("Jump") & CanUse("Beemerang Halt"),
-         to="GoldenHillsPath2 (Left)"),
+         out=CanUse("Jump") & one_way(None, CanUse("Jump") & CanUse("Beemerang Halt"))),
 )
