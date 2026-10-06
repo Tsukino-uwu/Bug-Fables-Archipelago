@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**79 of 244 done.**
+**80 of 244 done.**
 
 ## Outskirts
 
@@ -115,7 +115,7 @@ as it is, a frozen record.
 - [x] GoldenHillsLowerRightCrank (49) — its crank spot with Next 62; for the enemy pass: the Chomper, Beemerang Halt alone
 - [x] GoldenHillsDungeonLeftCrankHalf (50) — its crank half with Next 62 (Vi for the Venus Buds)
 - [x] GoldenHillsDungeonUpperMain (51) — for the quest pass: the mole cricket (flags 130 to 577), the offerings' chain
-- [ ] GoldenHillsDungeonUpperSide (52)
+- [x] GoldenHillsDungeonUpperSide (52) — its crank spot with Next 62
 - [ ] GoldenHillsDungeonBoss (53)
 - [ ] GoldenPitcher1 (203)
 - [ ] GoldenPitcher2 (205)

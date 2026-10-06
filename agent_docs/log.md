@@ -3222,3 +3222,6 @@ either one wrong).
   (they didn't want "Given"). Waiting on the user's "done".
   The user: the platform back up to the upper right needs Jump; so down from there is a one-way without it.
   The logic explained at the user's ask; the user: done. Ticked, 79 of 244. Next: `GoldenHillsDungeonUpperSide` (52).
+- **`GoldenHillsDungeonUpperSide`:** the upper door and the crank take Jump and Beemerang Halt on the crank the slot
+  makes ("beemerang" meant Halt, asked); the save had the slot filled (flag 128), emptied to check: the Wooden Crank is
+  needed, then set back on. Crank spot "Behind the Bushes" (the user's description), with Next 62. Ticked, 80 of 244.

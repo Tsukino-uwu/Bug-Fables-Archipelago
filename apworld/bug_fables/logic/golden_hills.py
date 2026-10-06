@@ -86,4 +86,9 @@ MAP_AREAS = (
     # Its top door (to the boss), behind a gate both shrines open; arriving while shut, a pocket with only that door.
     Area("GoldenHillsDungeonUpperMain", "Boss Door", ("loadzoneboss",),
          Has("Upper Hall Sun Shrine Fed") & Has("Upper Hall Moon Shrine Fed")),
+    # The upper side room's upper door: up with Jump and a platform turned by the crank its slot makes (the Wooden
+    # Crank, flag 128, with Beemerang Halt); down a drop.
+    Area("GoldenHillsDungeonUpperSide", "Upper Door", ("loadzonehigh",),
+         WOODEN_CRANK & CanUse("Jump") & CanUse("Beemerang Halt"),
+         out=one_way(None, WOODEN_CRANK & CanUse("Jump") & CanUse("Beemerang Halt"))),
 )

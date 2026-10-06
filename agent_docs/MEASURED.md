@@ -948,6 +948,10 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   grass, the horn) wants the Sun Offering (55, flag 125), the upper right one the Moon Offering (56, flag 126); a wrong
   one starts a fight; each opens part of the boss door's gate, both needed, staying open. With spawned offerings. From
   the boss door while shut: a pocket, not pushed, back out only. The offerings are given in `GoldenSettlement2`.
+  **`GoldenHillsDungeonUpperSide` (2026-10-06):** from the lower door, up to the upper door and the Wooden Crank (flag
+  129, behind yellow bushes on a platform at the top right): Jump and a platform turned with Beemerang Halt by the
+  crank its slot makes (flag 128): with the slot emptied (`flag 128 off`), no crank until one is placed. From the
+  upper door, a drop.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
