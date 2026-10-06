@@ -3286,3 +3286,4 @@ either one wrong).
   the old server stopped; the user started a new file. Seen on it: the caravan's three goods with their seed items'
   starbursts and icons, the desert gate shut from the settlement side. The user: done. Ticked, 87 of 244. Next:
   `GoldenHillsPath3` (44).
+  Unticked: I warped on (and posted the next room's draft) before the user was done; back in the room.
