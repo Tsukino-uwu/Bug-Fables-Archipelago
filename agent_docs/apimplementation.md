@@ -2944,7 +2944,8 @@ area (two halves joined by Horn Dash or Bee Fly; a new location under the book),
 Tardigrade Idol, Jump, Freeze and the horn), the south trench (its left side across a gap, by the bridge the horn knocks
 over or Bee Fly; a new location on the top-left ledge, Jump), the Defiant Root entrance (its left side, Bee Fly, or
 the crank and Beemerang Halt leaving it; a new dig spot behind a rock, Horn Dash), the Far Grasslands border (free, the
-gate kept open), the Defiant Root's south entrance (free), 57 of 244; the rest of `room-checklist.md` to go.
+gate kept open), the Defiant Root's south entrance (free), the badge alcove (its left door a drop only; two new locations, a ledge medal
+with Jump and a grass drop with the horn), 58 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

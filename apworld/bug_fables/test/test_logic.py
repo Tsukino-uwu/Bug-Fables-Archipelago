@@ -367,6 +367,22 @@ class TestDefiantRootEntrance(BugFablesTestBase):
         self.assertTrue(self.can_reach_location(spot))
 
 
+class TestBadgeAlcove(BugFablesTestBase):
+    # The ledge's medal takes Jump, the grass by the right door the horn.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_needs(self) -> None:
+        for spot, missing in (("Lost Sands: Badge Alcove, Platform on the Upper Left", "Jump"),
+                              ("Lost Sands: Badge Alcove, Grass by the Right Door", "Horn Slash")):
+            with self.subTest(spot=spot):
+                state = CollectionState(self.multiworld)
+                self.collect_all_but([missing], state)
+                self.assertFalse(state.can_reach(spot, "Location", self.player))
+        self.collect_all_but([])
+        self.assertTrue(self.can_reach_location("Lost Sands: Badge Alcove, Platform on the Upper Left"))
+        self.assertTrue(self.can_reach_location("Lost Sands: Badge Alcove, Grass by the Right Door"))
+
+
 class TestBarCorner(BugFablesTestBase):
     # The way down to the underground bar is behind the commercial district's grass, and the bar's door comes back up
     # behind it too: the horn both ways.

@@ -37,6 +37,13 @@ LOCATIONS = (
     Location("Lost Sands: Defiant Root Entrance, Dig Spot", 119, "DesertDREastEntrance",
              Source(flag=398, pickup=Pickup(map="DesertDREastEntrance", type=0, item=121)),
              rule=CanUse("Horn Dash") & CanUse("Beetle Dig"), no_jump=True, area="Left"),
+    # Meditation on a small platform on the badge alcove's ledge: Jump.
+    Location("Lost Sands: Badge Alcove, Platform on the Upper Left", 120, "DesertBadgeAlcove",
+             Source(flag=262, pickup=Pickup(map="DesertBadgeAlcove", type=2, item=56)), rule=CanUse("Jump"),
+             area="Ledge"),
+    Location("Lost Sands: Badge Alcove, Grass by the Right Door", 121, "DesertBadgeAlcove",
+             Source(flag=210, pickup=Pickup(map="DesertBadgeAlcove", type=0, item=90)), rule=CanUse("Horn Slash"),
+             category="hidden_item", no_jump=True),
 )
 STORY_EVENTS = (
     # The south trench's bridge, knocked over by the horn from the left side (flag 282); it stays down.
@@ -79,4 +86,6 @@ MAP_AREAS = (
     # left by the crank (the horn) and Beemerang Halt; the crank resets on leaving the room.
     Area("DesertDREastEntrance", "Left", ("loadzoneDR",), CanUse("Bee Fly"),
          out=CanUse("Bee Fly") | (CanUse("Horn Slash") & CanUse("Beemerang Halt"))),
+    # The badge alcove's left door, on a ledge: a drop down to the rest, with no way back up from inside the room.
+    Area("DesertBadgeAlcove", "Ledge", ("loadzone left",), False_(), out=one_way(None, False_())),
 )

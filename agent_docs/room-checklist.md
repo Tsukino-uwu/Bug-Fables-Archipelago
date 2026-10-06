@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**57 of 244 done.**
+**58 of 244 done.**
 
 ## Outskirts
 
@@ -89,7 +89,7 @@ as it is, a frozen record.
 - [x] DesertDREastEntrance (76)
 - [x] DesertFGBorder (77)
 - [x] DesertDRSouthEntrance (78) — for the quest pass: every caravan shop, checked with the quests (the user)
-- [ ] DesertBadgeAlcove (79)
+- [x] DesertBadgeAlcove (79)
 - [ ] DesertCaravanMap (80)
 - [ ] DesertSandPitArea (81)
 - [ ] DesertBeforeGH (82)

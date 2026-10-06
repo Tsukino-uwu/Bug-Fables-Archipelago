@@ -858,6 +858,10 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     Bulk Bee still stands there, talking as if the gate were shut, out of the way. No items.
     **`DesertDRSouthEntrance` (2026-10-06, the user):** nothing needed between its three doors; a caravan NPC stands
     there but not the shop itself. No items.
+    **`DesertBadgeAlcove` (2026-10-06, the user):** the top and right doors free between them, cut off from the left;
+    the left door on a ledge, a drop down to the rest with no way back up inside the room. Meditation (flag 262) on a
+    small platform on the ledge, Jump; the grass by the right door (flag 210, its vector data 90, a Succulent Berry),
+    the horn.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
