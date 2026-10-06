@@ -3190,3 +3190,7 @@ either one wrong).
   the user "Left Crank Room, Atop the Hill" ("autumn" is all of Golden Hills, so not in the name); its location waits
   for Next 62, since a crank in the pool before the mod keeps it could be used up. Waiting on the user's "done".
   The user: done, the door itself free. Ticked, 75 of 244. Next: `GoldenHillsDungeonRightCrank` (48).
+- **`GoldenHillsDungeonRightCrank`:** every need for the room (shield, Freeze, horn, Jump, Beemerang, Halt). The
+  candy (flag 727) wasn't seen at first; the user asked to make it always visible; I asked why first: it wasn't
+  hidden, just on a tiny stump behind a flower among thorns (warped by it, then the Beemerang). Names, the user's:
+  "Stump behind the Flower" (id 128) and "Far Right Ledge" (the crank half, with Next 62).

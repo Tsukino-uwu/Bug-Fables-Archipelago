@@ -10,12 +10,20 @@ from ..data_types import Area, EntityRef, Location, Pickup, Source, Transfer
 WOODEN_CRANK = LATER_CHAPTERS
 # The Big Crank (key item 60), the same way.
 BIG_CRANK = LATER_CHAPTERS
+# Across the right crank room, all of it (the user: assume every need for the room).
+RIGHT_CRANK_ROOM = (CanUse("Shield") & CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump")
+                    & CanUse("Beemerang Toss") & CanUse("Beemerang Halt"))
 
 LOCATIONS = (
     # Crystal berry #9, high over the left hall's flytraps by its right door: Jump.
     Location("Golden Hills: Left Hall, above the Flytraps", 127, "GoldenHillsDungeonLeftMain",
              Source(berry=9, pickup=Pickup(map="GoldenHillsDungeonLeftMain", type=3, item=0)), rule=CanUse("Jump"),
              category="crystal_berry"),
+    # A Hustle Candy on a small stump behind a flower, in the thorns midway across the right crank room; the room's
+    # every need, as the user asked (the shield over the thorns, the Beemerang to grab it).
+    Location("Golden Hills: Right Crank Room, Stump behind the Flower", 128, "GoldenHillsDungeonRightCrank",
+             Source(flag=727, pickup=Pickup(map="GoldenHillsDungeonRightCrank", type=0, item=178)),
+             rule=RIGHT_CRANK_ROOM),
 )
 TRANSFERS = (
     # The middle platform (Event68, loading the other map): up once the Big Crank is in its slot (flag 118; placing it
