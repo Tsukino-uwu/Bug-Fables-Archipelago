@@ -88,7 +88,7 @@ as it is, a frozen record.
 - [x] DesertTrenchSouth (8)
 - [x] DesertDREastEntrance (76)
 - [x] DesertFGBorder (77)
-- [x] DesertDRSouthEntrance (78)
+- [x] DesertDRSouthEntrance (78) — for the quest pass: every caravan shop, checked with the quests (the user)
 - [ ] DesertBadgeAlcove (79)
 - [ ] DesertCaravanMap (80)
 - [ ] DesertSandPitArea (81)

@@ -3099,3 +3099,4 @@ either one wrong).
   shut but stands out of the way; no items. Ticked, 56 of 244. Next: `DesertDRSouthEntrance` (78).
 - **`DesertDRSouthEntrance`:** nothing needed between its three doors; a caravan NPC there, not the shop. Ticked, 57
   of 244. Next: `DesertBadgeAlcove` (79).
+- **Caravan shops:** the user: check every one later, alongside the quests (noted on the checklist).
