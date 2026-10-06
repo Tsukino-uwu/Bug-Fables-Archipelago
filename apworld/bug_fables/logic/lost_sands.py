@@ -142,6 +142,6 @@ MAP_AREAS = (
     Area("DesertOasis", "Top Right", ("loadzone cave",), False_(),
          out=one_way(None, CanUse("Jump") & ANY_ATTACK)),
     # The oasis entrance's right side (the oasis door), past spikes the bubble shield crosses, or flown over (Bee
-    # Fly), both ways. Its bounce pad back to the left goes at chapter 4 (flag 300, Event105): its one-way isn't counted.
+    # Fly), both ways. Its bounce pad back left goes at chapter 4 (flag 300, Event105): that one-way isn't counted.
     Area("DesertOasisEntrance", "Right", ("loadzoneside",), CanUse("Shield") | CanUse("Bee Fly")),
 )
