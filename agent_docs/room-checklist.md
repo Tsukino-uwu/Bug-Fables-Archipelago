@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**77 of 244 done.**
+**78 of 244 done.**
 
 ## Outskirts
 
@@ -113,7 +113,7 @@ as it is, a frozen record.
 - [x] GoldenHillsDungeonCrankLeft (47) — its crank spot added with the Wooden Crank step (Next 62)
 - [x] GoldenHillsDungeonRightCrank (48) — for the quest pass: the butler (Butler Missing!, Event103); its crank half with Next 62
 - [x] GoldenHillsLowerRightCrank (49) — its crank spot with Next 62; for the enemy pass: the Chomper, Beemerang Halt alone
-- [ ] GoldenHillsDungeonLeftCrankHalf (50)
+- [x] GoldenHillsDungeonLeftCrankHalf (50) — its crank half with Next 62 (Vi for the Venus Buds)
 - [ ] GoldenHillsDungeonUpperMain (51)
 - [ ] GoldenHillsDungeonUpperSide (52)
 - [ ] GoldenHillsDungeonBoss (53)

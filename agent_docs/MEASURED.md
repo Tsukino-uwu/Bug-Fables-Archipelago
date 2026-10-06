@@ -935,6 +935,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   **`GoldenHillsLowerRightCrank` (2026-10-06):** one door; its Wooden Crank (flag 116) on the top right ledge: Jump,
   and an ice block (Freeze) pushed by the horn across platforms Beemerang Halt spins; Bee Fly only stands in for Jump,
   so not counted (the user). Its Chomper reached with Beemerang Halt alone (for the enemy pass).
+  **`GoldenHillsDungeonLeftCrankHalf` (2026-10-06):** one door; everything up its fixed cranks, Jump and Beemerang
+  Halt: Back Support (flag 121) behind a bush on the far left, the Burly Berry bush by a crank (`Cutgrass Item`, its
+  drop list only item 3, regional flag 7: it regrows), and the Big Crank Bottom Half (flag 117) at the top, where
+  approaching starts a Venus Bud fight (`Event70`, until flag 122) only Vi hits (in the air). Taking the half with the
+  top half held merged them into the Big Crank. The flagged grass (73, drop list `-1`) runs its region trigger;
+  nothing seen to change.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

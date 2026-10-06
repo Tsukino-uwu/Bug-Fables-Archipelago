@@ -46,6 +46,7 @@
     {"name": "Helper Boost", "game_id": 90, "kind": 2, "classification": "useful"},
     {"name": "Tardigrade Shield", "game_id": 51, "kind": 2, "classification": "useful"},
     {"name": "Strong Start", "game_id": 23, "kind": 2, "classification": "useful"},
+    {"name": "Back Support", "game_id": 36, "kind": 2, "classification": "useful"},
     {"name": "Venom Ribbon", "game_id": 168, "kind": 1, "classification": "useful", "_comment": "A Termacade prize; what it's for waits for the quest pass (the user, 2026-10-06: useful for now)."},
     {"name": "Shocking Ribbon", "game_id": 169, "kind": 1, "classification": "useful", "_comment": "A Termacade prize; what it's for waits for the quest pass (the user, 2026-10-06: useful for now)."},
     {"name": "Drowsy Ribbon", "game_id": 170, "kind": 1, "classification": "useful", "_comment": "A Termacade prize; what it's for waits for the quest pass (the user, 2026-10-06: useful for now)."},

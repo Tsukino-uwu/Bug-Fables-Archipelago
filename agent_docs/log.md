@@ -3209,3 +3209,7 @@ either one wrong).
   user corrected me, a fixed drop with a regional flag (7) is a respawning pickup, a hidden item. The left crank
   room's Magic Seed bush (regional 0) was missed the same way. The user: sweep for missed respawning and static items
   after the rooms (now in `room-logic.md`). `onehit` on again at the user's ask.
+  Names, the user's: "Grass by the Crank" (Burly Berry, id 130), "Behind the Bush" (Back Support, id 129), "Top of
+  the Hill" (the crank half, with Next 62). Merged items: the user chose the whole only (the Big Crank, the Sand Castle
+  Key), worried about a crash mid-merge; told that received items are replayed from the save count anyway. Nothing
+  else in the room; the user: done. Ticked, 78 of 244.

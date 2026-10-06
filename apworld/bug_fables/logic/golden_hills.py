@@ -24,6 +24,14 @@ LOCATIONS = (
     Location("Golden Hills: Right Crank Room, Stump behind the Flower", 128, "GoldenHillsDungeonRightCrank",
              Source(flag=727, pickup=Pickup(map="GoldenHillsDungeonRightCrank", type=0, item=178)),
              rule=RIGHT_CRANK_ROOM),
+    # The left crank half room: everything up its fixed cranks, Jump and Beemerang Halt.
+    Location("Golden Hills: Left Crank Half Room, Behind the Bush", 129, "GoldenHillsDungeonLeftCrankHalf",
+             Source(flag=121, pickup=Pickup(map="GoldenHillsDungeonLeftCrankHalf", type=2, item=36)),
+             rule=CanUse("Jump") & CanUse("Beemerang Halt")),
+    # A respawning Burly Berry in grass by a crank (regional flag 7): the game's own again once checked.
+    Location("Golden Hills: Left Crank Half Room, Grass by the Crank", 130, "GoldenHillsDungeonLeftCrankHalf",
+             Source(regional=7, pickup=Pickup(map="GoldenHillsDungeonLeftCrankHalf", type=0, item=3)),
+             rule=CanUse("Jump") & CanUse("Beemerang Halt") & CanUse("Horn Slash"), category="hidden_item"),
 )
 TRANSFERS = (
     # The middle platform (Event68, loading the other map): up once the Big Crank is in its slot (flag 118; placing it
