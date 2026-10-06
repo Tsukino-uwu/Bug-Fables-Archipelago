@@ -12,11 +12,13 @@ WOODEN_CRANK = LATER_CHAPTERS
 BIG_CRANK = LATER_CHAPTERS
 
 TRANSFERS = (
-    # The middle platform, once the Big Crank is in its slot (flag 118; placing it starts the Mothiva and Zasp fight,
-    # Event67) and turned with Beemerang Halt; back down by Beemerang Halt on a crank up there (the same rule, cautious:
-    # the way down without the Big Crank placed isn't measured).
+    # The middle platform (Event68, loading the other map): up once the Big Crank is in its slot (flag 118; placing it
+    # starts the Mothiva and Zasp fight, Event67) and turned with Beemerang Halt; down by Beemerang Halt on the upper
+    # room's own crank, always there, with nothing below to come back up by without the Big Crank.
     Transfer("elevator", "GoldenHillsDungeonEntrance", "GoldenHillsDungeonUpperMain",
-             BIG_CRANK & CanUse("Beemerang Halt")),
+             BIG_CRANK & CanUse("Beemerang Halt"), two_way=False, way_back=CanUse("Beemerang Halt")),
+    Transfer("elevator", "GoldenHillsDungeonUpperMain", "GoldenHillsDungeonEntrance", CanUse("Beemerang Halt"),
+             two_way=False, way_back=BIG_CRANK & CanUse("Beemerang Halt")),
 )
 KEPT_OPEN = (
     # The dungeon's arrival scene (Event62): it sets only its own flag, 111, read by nothing else (the user: skip it).

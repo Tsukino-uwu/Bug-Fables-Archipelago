@@ -917,7 +917,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   Crank, flag 109), the middle one 60 (the Big Crank, flag 118), read from `Event59`'s table. The top right door: up
   the small platform, the Wooden Crank and Beemerang Halt (with the cranks spawned); down from it a drop. The Big
   Crank's slot starts the Mothiva and Zasp fight (`Event67`), then its middle platform, turned with Beemerang Halt
-  (`Event68`), rides up to the room above; back down by Beemerang Halt on a crank up there.
+  (`Event68`), rides up to the room above; back down by Beemerang Halt on the upper room's crank (no flags, always
+  there), seen with every crank flag reset (109, 113, 117, 118, 663): no crank below to ride back up without the Big
+  Crank. `Event68` loads the other map itself (no door).
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

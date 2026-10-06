@@ -3174,3 +3174,6 @@ either one wrong).
   The Big Crank starts the Mothiva and Zasp fight (OneHit off: a real one; `killall` ended it at the user's ask),
   then its platform (Beemerang Halt) rides up, back down by Halt on a crank up there: the elevator's stand-in now
   the Big Crank and Beemerang Halt, both ways. The fight noted for the enemy pass.
+  Every crank flag reset, the user rode down from the upper room by its own crank (Halt only), with no way back up
+  below: the elevator split into its two directions. A bare `warp GoldenHillsDungeonUpperMain` left the user stuck
+  behind a save crystal ("don't move me away from entrances randomly"): door arrivals only from now on.
