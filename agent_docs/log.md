@@ -3252,3 +3252,4 @@ either one wrong).
   plus Jump, for the quest pass.
 - **A slip fixed:** the Defiant Root Entrance's dig spot (id 119, 2026-10-06) lacked `category="dig_spot"`, which every
   other non-berry dig spot has (Shuffle Dig Spots, off by default); added.
+  No other items (the medal with the quest); the user: done. Ticked, 85 of 244. Next: `GoldenHillsPath2` (38).
