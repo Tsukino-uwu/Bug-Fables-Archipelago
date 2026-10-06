@@ -2986,3 +2986,13 @@ either one wrong).
 - **Open bug: the Beemerang did nothing** after the first boss scene (sent to `BOGoldenPath`) and a warp back; no
   buzzer, and no `[moves]` refusal in the log, so not the item lock. Horn and Freeze worked; reloading the save
   fixed it. Not chased; read the log while it's broken if it comes back.
+- **`SnakemouthUndergroundRightB`:** the leaf behind the pillar (location 24) free from the bottom; the top (big
+  switch, high door) up by the bridge switch, Jump, Freeze and the horn, a free drop down; the high door gated by the
+  big switch, pushed past while shut. Four tick-box questions confirmed it. Ticked, 27 of 244. Next:
+  `SnakemouthUndergroundLeftA` (24).
+- **"Holds Aphid Egg, not Crunchy Leaf", every 15 frames:** the user asked if mixing seeds did it. The game's toss
+  reuses the taken pickup for the item thrown out of a full bag (`tossed`); `ShopInventories` now skips those.
+- **Full bag and storage** (the user asked what happens): a received bag item waited and held up the whole queue,
+  key items included. Offered: the game's throw-away prompt (1), key items skipping ahead (2), a message (3). The user
+  first said 1 and 2; told that 2 then has nothing left to do and needs a second count in the save, chose 1 alone.
+  The item drops at the party's feet (`CreateItem`); every bag item is filler (new test). Built, not yet seen.

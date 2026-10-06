@@ -2906,7 +2906,8 @@ high door to `SnakemouthTop` a drop), the fall room (its door-room door on a led
 top, with Leif's scene, up by a switch and platforms), the underground door room (five parts; its big door an event
 needing the two side rooms' switches, theirs cautious until mapped), the mushroom pit (its bottom door a drop down,
 Jump back up), the treasure room (the Spider fight: Vi), the right
-underground room (Jump and an attack across, both ways), 26 of 244; the rest of `room-checklist.md` to go.
+underground room (Jump and an attack across, both ways), the right bridge room (its top up by Jump, Freeze and the
+horn; its high door gated by the big switch), 27 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
