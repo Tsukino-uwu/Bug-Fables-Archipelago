@@ -3277,3 +3277,8 @@ either one wrong).
   sprite (and berry #22's 3D look): the hosted seed predates these locations, so the scout has no item for them. The minigame
   door's rock (until flag 275, the horn quest and Tanjerin): arriving from it pushes the party through; the user:
   gated behind the quest (a stand-in), as the minigame room holds only Wacka Worm replays and a late scene.
+- **The settlement's desert gate:** with flag 83 off, and on a new file, the seed's open gate (written 2026-10-04)
+  let the user through. The user: the door is blocked "until you come from that entrance specifically so you can hit
+  the lever behind the door and open it", and they never asked for it kept open: that was my reading of 2026-10-04,
+  now corrected. The gate is the game's, its lever an event in the desert door's area ("Desert Gate Opened", my
+  name, to confirm), the wall still hidden. Then a new seed and save, at the user's ask.

@@ -1614,9 +1614,9 @@ wait for the later chapters (`LATER_CHAPTERS`), so the logic promises nothing ne
 wall behind it stands until the desert side has been reached (flag 170). The logic already counted that door open, so
 the game was stricter: the gate is shown open from the start and the wall hidden (`logic/golden_settlement.py`; test
 `TestSettlementDesertGate`; `MEASURED.md`, the Golden Settlement's desert gate). No attack is needed for the switch.
-**Reversed 2026-10-07** (the user: "its supposed to be locked until you hit the switch from inside that entrance"):
-the gate is the game's again, its lever (any attack, the desert side only) an event the door needs both ways; the
-wall stays hidden.
+**Corrected 2026-10-07:** keeping the gate open was my reading, never the user's ask; the user: the door is blocked
+"until you come from that entrance specifically so you can hit the lever behind the door and open it". The gate is the
+game's again, its lever (any attack, the desert side only) an event the door needs both ways; the wall stays hidden.
 **Beette, the Flower Key's seller** (the same day, the user: "make it appear always if required"): the `smug bee` on
 `BeehiveBalcony`, made only after chapter 3 (flag 299), is kept present (`logic/bee_kingdom_hive.py`, test
 `TestFlowerKeySeller`). Her sale is still the game's own, not a location; the key and the red house it opens weren't in
@@ -2994,7 +2994,8 @@ horn; across Jump; three new locations; its medal with the CableCar quest), 85 o
 Beemerang Halt; a new location), 86 of 244; the settlement entrance (the caravan's stall kept present for good and the
 snail's shop that takes its spot kept away, the user's choice after the snail's goods overlapped, its three items new
 locations; a new dig spot; the minigame
-door behind the horn quest, a stand-in; in progress); the rest of `room-checklist.md` to go.
+door behind the horn quest, a stand-in; the desert door behind its gate's lever, hit from the desert side; in
+progress); the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

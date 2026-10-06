@@ -2297,7 +2297,8 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   `Base/WoodenGate2 (2)` and `(3)` from 83; `gateswitch` (a Switch, an attack hits it) starts `Event50`, which swings it.
   Behind it `Base/Cube`, an invisible wall, stands until flag 170, set on first entering `DesertDRSouthEntrance` from
   the desert (`MapControl.cs`). **Seen 2026-10-04:** the gate swung open by its switch, the wall still stopped the
-  party.
+  party. **2026-10-07 (the user):** the lever is behind the gate, reached only through the desert door, with a basic
+  attack.
 - **Eetl's blocker has two triggers** (2026-10-04, EntityDump and code read; seen in play): on
   `BugariaOutskirtsOutsideCity`, `eetlblocker1 - Duplicate` (41) stands from flag 41 and `eetlblocker1` (40) from flag
   114, both until 67, both starting `Event12` (a line, then a walk back). Flag 114 is set by `Event63`, where Eetl

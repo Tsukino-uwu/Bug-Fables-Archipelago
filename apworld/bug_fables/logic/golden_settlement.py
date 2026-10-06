@@ -11,8 +11,7 @@ LOCATIONS = (
              Source(event=55, flag=21), reach=LATER_CHAPTERS),
 )
 # The invisible wall behind the gate to the desert, which stands until the desert side has been reached (flag 170),
-# gone. The gate itself stays the game's: shut until its lever is hit from the desert side (the user, 2026-10-07,
-# reversing 2026-10-04's open gate).
+# gone. The gate itself stays the game's: shut until its lever is hit from the desert side (the user, 2026-10-07).
 SCENERY_HIDDEN = (
     EntityRef("GoldenSettlementEntrance", "Base/Cube"),
 )
