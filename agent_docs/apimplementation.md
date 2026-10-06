@@ -2967,7 +2967,7 @@ down from the right), the southern desert (its right door the shield or Bee Fly;
 scorpion's room (free), the eastmost room (free), 72 of 244: Lost Sands done; Golden Hills from 2026-10-06: the
 dungeon's entrance (its top right door the Wooden Crank and Beemerang Halt, its elevator the Big Crank and Halt up,
 Halt down; its arrival scene kept away, the user's ask), 73 of 244; the left hall (across Jump and Beemerang Halt,
-its top left door the Wooden Crank and Halt; a new location: its berry, Jump), 74 of 244; the rest of `room-checklist.md` to go.
+its top left door the Wooden Crank and Halt; a new location: its berry, Jump), the left crank room (its door free; its crank spot with Next 62), 75 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

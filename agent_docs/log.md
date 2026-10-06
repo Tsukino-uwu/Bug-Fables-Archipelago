@@ -3189,3 +3189,4 @@ either one wrong).
 - **`GoldenHillsDungeonCrankLeft`:** one door; the crank at the top takes Beemerang Halt, Jump and the horn. Named by
   the user "Left Crank Room, Atop the Hill" ("autumn" is all of Golden Hills, so not in the name); its location waits
   for Next 62, since a crank in the pool before the mod keeps it could be used up. Waiting on the user's "done".
+  The user: done, the door itself free. Ticked, 75 of 244. Next: `GoldenHillsDungeonRightCrank` (48).

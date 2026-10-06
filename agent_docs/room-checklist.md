@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**74 of 244 done.**
+**75 of 244 done.**
 
 ## Outskirts
 
@@ -110,7 +110,7 @@ as it is, a frozen record.
 
 - [x] GoldenHillsDungeonEntrance (45) — for the enemy pass: the Mothiva and Zasp fight (Event67, on placing the Big Crank)
 - [x] GoldenHillsDungeonLeftMain (46)
-- [ ] GoldenHillsDungeonCrankLeft (47)
+- [x] GoldenHillsDungeonCrankLeft (47) — its crank spot added with the Wooden Crank step (Next 62)
 - [ ] GoldenHillsDungeonRightCrank (48)
 - [ ] GoldenHillsLowerRightCrank (49)
 - [ ] GoldenHillsDungeonLeftCrankHalf (50)
