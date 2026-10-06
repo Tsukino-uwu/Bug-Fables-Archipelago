@@ -3185,3 +3185,4 @@ either one wrong).
   asked how A Link to the Past handles keys: read in `worlds/alttp` (small keys counted, worst case per door; big keys
   one, never used up). The user chose the big-key way: the crank never used up in a seed, one in the pool (Next 62,
   to build once the crank rooms are mapped).
+  The user: done. Ticked, 74 of 244. Next: `GoldenHillsDungeonCrankLeft` (47).
