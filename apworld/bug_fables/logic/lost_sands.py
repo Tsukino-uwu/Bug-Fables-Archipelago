@@ -26,6 +26,10 @@ LOCATIONS = (
     # Under the giant book, hidden until the boulder breaks; free from the book area's north half.
     Location("Lost Sands: Book Area, Under the Book", 116, "DesertBookArea",
              Source(flag=730, pickup=Pickup(map="DesertBookArea", type=0, item=128)), no_jump=True, area="North"),
+    # The Tardigrade Shield on the rock formation's idol, high up: Jump, Freeze and the horn.
+    Location("Lost Sands: Rock Formation, Tardigrade Idol", 117, "DesertRockFormation",
+             Source(flag=343, pickup=Pickup(map="DesertRockFormation", type=2, item=51)),
+             rule=CanUse("Jump") & CanUse("Freeze") & CanUse("Horn Slash")),
 )
 TRANSFERS = (
     # Chapter 3's end: the attack on the city.

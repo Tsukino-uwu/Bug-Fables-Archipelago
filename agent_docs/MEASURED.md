@@ -843,6 +843,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     them; across, either way, the boulder broken by Horn Dash (`blockingrock`, flag 417, which also moves the book
     scenery) or the sand pit flown over (Bee Fly). **A trick:** a tricky jump crosses the sand pit with Jump alone,
     both ways: not in the basic logic, kept for a harder logic option later (the user).
+    **`DesertRockFormation` (2026-10-06, the user):** nothing needed between its three doors; the Tardigrade Shield
+    (flag 343, high on the idol) takes Jump, Freeze and the horn, and taking it records the Tardigrade Idol discovery
+    (31).
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

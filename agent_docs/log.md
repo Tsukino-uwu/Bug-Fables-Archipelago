@@ -3076,3 +3076,6 @@ either one wrong).
   ways; a new location, the user's name "Under the Book" (Succulent Cookies, id 116). A tricky jump across the sand
   pit, both ways, noted in `MEASURED.md` as a trick for a harder logic option later. Ticked, 52 of 244. Next:
   `DesertRockFormation` (7).
+- **`DesertRockFormation`:** free between its doors; a new location, the user's name "Tardigrade Idol" (Tardigrade
+  Shield, Jump, Freeze and the horn, id 117), whose pickup records discovery 31. Ticked, 53 of 244. Next:
+  `DesertTrenchSouth` (8).

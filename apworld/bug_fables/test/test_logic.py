@@ -1,3 +1,5 @@
+from BaseClasses import CollectionState
+
 from . import BugFablesTestBase
 
 
@@ -320,6 +322,21 @@ class TestBookArea(BugFablesTestBase):
         self.remove_by_name("Bee Fly")
         self.assertFalse(self.can_reach_location(spot))
         self.collect(self.get_items_by_name("Progressive Dash"))
+        self.assertTrue(self.can_reach_location(spot))
+
+
+class TestTardigradeIdol(BugFablesTestBase):
+    # Jump, Freeze and the horn, each needed.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_needs_each(self) -> None:
+        spot = "Lost Sands: Rock Formation, Tardigrade Idol"
+        for missing in ("Jump", "Progressive Freeze", "Horn Slash"):
+            with self.subTest(missing=missing):
+                state = CollectionState(self.multiworld)
+                self.collect_all_but([missing], state)
+                self.assertFalse(state.can_reach(spot, "Location", self.player))
+        self.collect_all_but([])
         self.assertTrue(self.can_reach_location(spot))
 
 
