@@ -3145,3 +3145,4 @@ either one wrong).
   item 113, the Sand Castle Key (from 105 and 106 in `Event109`). The user, with the key spawned: the lock needs
   nothing, the door Jump in, nothing out; arriving from the castle while it's shut (flag 280 off, twice) lands in
   front, not stuck. Written as a door rule, the key a later-chapters stand-in. Flag 280 left off. Waiting on "done".
+  No items; the key chain for the quest pass; the user: done. Ticked, 66 of 244. Next: `DesertMountain` (108).
