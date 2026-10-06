@@ -3001,3 +3001,6 @@ either one wrong).
 - **`SnakemouthUndergroundLeftB`:** no items; its top (big switch, high door) up by Jump, Freeze and the horn, a
   free drop down; the high door's gate pushed the party past with flag 33 cleared (seen). Both big switches mapped,
   so the cautious `UNDERGROUND` stand-in is gone. Ticked, 29 of 244. Next: `SnakemouthTop` (184).
+- **`SnakemouthTop`:** nothing to go in or out; its Sophie Petal (key item 127, flag 421) is in neither the
+  locations nor the items. `textsearch sophie` tied it to Doctor Isau's request in `DefiantRoot1`; the user: progression
+  (the quest's reward a location). Ticked for the quest pass, 30 of 244. Next: `UpperSnekEntrance` (208).

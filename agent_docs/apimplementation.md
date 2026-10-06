@@ -2908,7 +2908,8 @@ needing the two side rooms' switches, theirs cautious until mapped), the mushroo
 Jump back up), the treasure room (the Spider fight: Vi), the right
 underground room (Jump and an attack across, both ways), the right bridge room (its top up by Jump, Freeze and the
 horn; its high door gated by the big switch), the first left room (its high door by Jump, Freeze and the horn), the upper left room
-(the same, its high door gated by the big switch), 29 of 244; the rest of `room-checklist.md` to go.
+(the same, its high door gated by the big switch), the top (nothing to go in or out; its Sophie Petal for the quest
+pass), 30 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
