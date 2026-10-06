@@ -3133,3 +3133,4 @@ either one wrong).
 - **`DesertOasisEntrance`:** the left side's two doors free; the right side the bubble shield. Its bounce pad back
   left is a one-way without the shield, and gone from chapter 4 (flag 300 by Event105), so not counted even with
   Points of No Return: the shield both ways. The user: Bee Fly too, both ways; added. Waiting on the user's "done".
+  No items; the logic explained at the user's ask; the user: done. Ticked, 64 of 244. Next: `DesertWestDunes` (98).
