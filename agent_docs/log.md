@@ -3236,3 +3236,4 @@ either one wrong).
   The lower door free both ways; no other items; the user: done. Ticked, 82 of 244. Next: `GoldenPitcher2` (205).
 - **`GoldenPitcher2`:** the lower door free; berry #40 and the top left door Jump and Beemerang Halt, a drop down from
   the door. The berry named "Upper Pitcher Path, Right Ledge" (the user's pick, id 133). Waiting on the user's "done".
+  The user: done. Ticked, 83 of 244. Next: `PitcherPlantArena` (239).

@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**82 of 244 done.**
+**83 of 244 done.**
 
 ## Outskirts
 
@@ -118,7 +118,7 @@ as it is, a frozen record.
 - [x] GoldenHillsDungeonUpperSide (52) — its crank spot with Next 62
 - [x] GoldenHillsDungeonBoss (53) — for the enemy pass: the Venus' Guardian fight (Event73, Jump up to it; its needs untested)
 - [x] GoldenPitcher1 (203)
-- [ ] GoldenPitcher2 (205)
+- [x] GoldenPitcher2 (205)
 - [ ] PitcherPlantArena (239)
 
 ## Golden Path
