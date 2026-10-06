@@ -2980,7 +2980,7 @@ Halt down; its arrival scene kept away, the user's ask), 73 of 244; the left hal
 its top left door the Wooden Crank and Halt; a new location: its berry, Jump), the left crank room (its door free; its crank spot with Next 62), 75 of 244; the right crank room (its every need for both spots; a new location, the
 candy on a stump), the lower right crank room (its door free; its crank spot with Next 62), 77 of 244; the left crank half room (two new locations, Jump and
 Beemerang Halt; its crank half with Next 62), 78 of 244; the upper hall (its boss door behind two shrines' offerings,
-two events, a stand-in for the offerings; its upper right only from its own door; in progress); the rest of `room-checklist.md` to go.
+two events, a stand-in for the offerings; its upper right only from its own door), 79 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

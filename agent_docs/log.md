@@ -3221,3 +3221,4 @@ either one wrong).
   its own door, its lever lowering the barrier for good. Events named by the user "Sun Offering" and "Moon Offering"
   (they didn't want "Given"). Waiting on the user's "done".
   The user: the platform back up to the upper right needs Jump; so down from there is a one-way without it.
+  The logic explained at the user's ask; the user: done. Ticked, 79 of 244. Next: `GoldenHillsDungeonUpperSide` (52).
