@@ -3166,3 +3166,6 @@ either one wrong).
   done. Ticked, 71 of 244. Next: `DesertEastmost` (113), Lost Sands' last.
 - **`DesertEastmost`:** nothing needed, no items; I called its `zasp` entity "a wasp standing there", the user saw
   none: a scene actor. Ticked, 72 of 244: Lost Sands done. Next: `GoldenHillsDungeonEntrance` (45).
+- **`GoldenHillsDungeonEntrance`:** the bottom, left and lower right doors free; the arrival scene (Event62) played on
+  the way left and, reset (`flag 111 off`), from the left too, changing nothing. The user: skip it if it touches
+  nothing else; it sets only flag 111, read only by its own triggers: both kept away (`KEPT_OPEN`).

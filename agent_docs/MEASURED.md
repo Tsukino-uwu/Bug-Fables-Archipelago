@@ -910,6 +910,11 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     items. Its Scorpion scene (`Event111`, flags 303 to 298) didn't play.
     **`DesertEastmost` (2026-10-06, the user):** nothing needed between its three doors; no items. Its `zasp` entry
     (no flags) wasn't seen: a scene's actor, kept hidden.
+- **Golden Hills, room by room** (the user, in-game):
+  **`GoldenHillsDungeonEntrance` (2026-10-06):** the bottom, left and lower right doors free between them. Its
+  arrival scene (`Event62`, two triggers, until flag 111) plays from either side and changes nothing: it sets only
+  flag 111, which nothing else reads (code and `textsearch ,111,`). The locks: the right one key item 58 (the Wooden
+  Crank, flag 109), the middle one 60 (the Big Crank, flag 118), read from `Event59`'s table.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
