@@ -3118,3 +3118,5 @@ either one wrong).
   Waiting on the user's "done".
   The user's screenshot with every bridge down matched it; the user: done. Ticked, 60 of 244. Next:
   `DesertBeforeGH` (82).
+- **`DesertBeforeGH`:** nothing between its doors; a new location, the user's name "Golden Hills Border, Left Ledge"
+  (Strong Start, flag 415, the horn and Jump, id 123; placed by their screenshot). Waiting on the user's "done".

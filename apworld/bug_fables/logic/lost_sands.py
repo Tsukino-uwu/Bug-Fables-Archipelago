@@ -48,6 +48,10 @@ LOCATIONS = (
     Location("Lost Sands: Caravan Camp, Dig Spot", 122, "DesertCaravanMap",
              Source(berry=14, pickup=Pickup(map="DesertCaravanMap", type=3, item=0)),
              rule=CanUse("Jump") & CanUse("Bee Fly") & CanUse("Beetle Dig"), category="crystal_berry"),
+    # Strong Start on a high ledge: grass cut (the horn), Jump, and a bridge the horn lowers (flag 690).
+    Location("Lost Sands: Golden Hills Border, Left Ledge", 123, "DesertBeforeGH",
+             Source(flag=415, pickup=Pickup(map="DesertBeforeGH", type=2, item=23)),
+             rule=CanUse("Horn Slash") & CanUse("Jump")),
 )
 STORY_EVENTS = (
     # The south trench's bridge, knocked over by the horn from the left side (flag 282); it stays down.

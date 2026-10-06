@@ -872,6 +872,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     middle's lower one and the bottom's, joins left and bottom with no Jump. The top-left door: nothing from it. The
     top-right and right doors: one bridge each, together joining them, no Jump. Bee Fly crosses everything. The user's
     sketch (the bridges after falling) placed them.
+    **`DesertBeforeGH` (2026-10-06, the user):** nothing needed between its three doors; Strong Start (flag 415) on a
+    high ledge on the left: grass cut (the horn), Jump, then a bridge the horn lowers (`@Bridge1`, flag 690).
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
