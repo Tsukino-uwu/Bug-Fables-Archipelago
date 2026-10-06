@@ -82,6 +82,9 @@ STORY_EVENTS = (
                Source(flag=204), rule=CanUse("Horn Slash"), area="Right"),
     StoryEvent("Lost Sands: Sand Pit, Top Right Bridge Knocked Down", "Sand Pit Top Right Bridge Down",
                "DesertSandPitArea", Source(flag=205), rule=CanUse("Horn Slash"), area="Top Right"),
+    # The thorn field's bridge, knocked down by the horn from its high right side (flag 261); it stays down.
+    StoryEvent("Lost Sands: Thorn Field, Bridge Knocked Down", "Thorn Field Bridge Down", "DesertJumpPuzzle",
+               Source(flag=261), rule=CanUse("Horn Slash"), area="Right"),
 )
 TRANSFERS = (
     # Chapter 3's end: the attack on the city.
@@ -164,4 +167,9 @@ MAP_AREAS = (
     # Its left side (the roach village door): dropped to from the middle, back up with Jump and Bee Fly.
     Area("DesertTrenchMiddle", "Left", ("loadzone village",), one_way(None, CanUse("Jump") & CanUse("Bee Fly")),
          out=CanUse("Jump") & CanUse("Bee Fly"), to="DesertTrenchMiddle (Middle)"),
+    # The thorn field's right door, up high: from the left, the thorns crossed (the bubble shield) or the bridge, then
+    # Jump; down from it a free drop, back up the same way.
+    Area("DesertJumpPuzzle", "Right", ("loadzone right",),
+         CanUse("Jump") & (CanUse("Shield") | Has("Thorn Field Bridge Down")),
+         out=one_way(None, CanUse("Jump") & (CanUse("Shield") | Has("Thorn Field Bridge Down")))),
 )

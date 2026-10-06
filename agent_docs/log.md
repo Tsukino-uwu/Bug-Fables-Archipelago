@@ -3154,3 +3154,6 @@ either one wrong).
   door) only through its door, drops to both sides; the left side up to the middle with Jump and Bee Fly. No items.
   Waiting on the user's "done".
   The user: done. Ticked, 68 of 244. Next: `DesertJumpPuzzle` (110).
+- **`DesertJumpPuzzle`:** left to right the shield and Jump, or Jump with the bridge (horn, from the right, stays
+  down); right to left a drop. The event's name: the user asked what the game calls the hazard; `textsearch thorn`
+  found the room's own line ("And their thorns."): "Thorn Field, Bridge Knocked Down". Waiting on the user's "done".

@@ -900,6 +900,10 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     free between them, its top door past a gate dug under (Beetle Dig) both ways; no way up to the middle or the left.
     The middle (the high bottom-left door, `loadzone south2`) reached only through that door, a drop down to either
     side. The left (the roach village door) back up to the middle with Jump and Bee Fly. No items.
+    **`DesertJumpPuzzle` (2026-10-06, the user):** from the left door to the high right one, the thorns (the bubble
+    shield) and Jump; from the right, down freely, a one-way without Jump. A bridge (`bridge1`, flag 261) knocked
+    down by the horn from the right, staying down, lets Jump alone cross from the left. The room's own line calls the
+    hazard thorns ("And their thorns.", `DesertJumpPuzzle:0`). No items.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
