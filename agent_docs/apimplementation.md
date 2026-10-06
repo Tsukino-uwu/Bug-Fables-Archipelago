@@ -653,8 +653,9 @@ be wrong.
 61. **The ending when the goal is reached** (proposed 2026-10-06, the user; to build, its own step): "we should
     send/use the ending cutscene when/if reaching the goal maybe ? so you get a proper 'the game is done' instead of
     just 'Ohh items got sent out, nothing special happened'"; "not the 2 rooms, you had to pass, but the credits/ending
-    scene itself and afterwards showing 'the end'". First: how the game starts its credits, and what it leaves behind
-    (the title, the save), so the save is never harmed.
+    scene itself and afterwards showing 'the end'". Two ways (the user): put the party in the ending's plaza
+    (`BugariaEndPlaza`) and let the ending play out, or the credits alone. First: how the game starts its credits, and
+    what it leaves behind (the title, the save), so the save is never harmed.
 
 **Known issues:**
 
