@@ -656,6 +656,13 @@ be wrong.
     scene itself and afterwards showing 'the end'". Two ways (the user): put the party in the ending's plaza
     (`BugariaEndPlaza`) and let the ending play out, or the credits alone. First: how the game starts its credits, and
     what it leaves behind (the title, the save), so the save is never harmed.
+62. **The Wooden Crank, never used up** (decided 2026-10-06, the user; to build, its own step). In the game a crank
+    slot's lock (`Event59`) takes the Wooden Crank (key item 58) away; the game has four, three in the Golden Hills
+    dungeon for its three slots and one in the Rubber Prison for its one. Like A Link to the Past's big keys, not its
+    counted small keys (read in `worlds/alttp`, 0.6.8): in a seed the mod leaves the crank in the bag when placed
+    (the slot's own flag still set), so the pool holds one Wooden Crank and every slot needs only it; the other crank
+    pickups become ordinary locations. The user: "Option2 is probly better ... i don't think the cranks unlock that
+    many locations/things anyway". Built once the rooms holding the cranks are mapped; until then a stand-in.
 
 **Known issues:**
 
@@ -2956,7 +2963,8 @@ top door dug under), the thorn field (its high right door Jump and the bubble sh
 down from the right), the southern desert (its right door the shield or Bee Fly; its top door a drop only), the
 scorpion's room (free), the eastmost room (free), 72 of 244: Lost Sands done; Golden Hills from 2026-10-06: the
 dungeon's entrance (its top right door the Wooden Crank and Beemerang Halt, its elevator the Big Crank and Halt up,
-Halt down; its arrival scene kept away, the user's ask), 73 of 244; the rest of `room-checklist.md` to go.
+Halt down; its arrival scene kept away, the user's ask), 73 of 244; the left hall (across Jump and Beemerang Halt,
+its top left door the Wooden Crank and Halt; a new location: its berry, Jump; in progress); the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

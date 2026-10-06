@@ -448,6 +448,17 @@ class TestOasis(BugFablesTestBase):
         self.assertTrue(self.can_reach_location("Lost Sands: Oasis, Crimson Cave"))
 
 
+class TestLeftHallBerry(BugFablesTestBase):
+    # Crystal berry #9 takes Jump.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True, "shuffle_crystal_berries": True}
+
+    def test_needs_jump(self) -> None:
+        spot = "Golden Hills: Left Hall, above the Flytraps"
+        state = CollectionState(self.multiworld)
+        self.collect_all_but(["Jump"], state)
+        self.assertFalse(state.can_reach(spot, "Location", self.player))
+
+
 class TestBarCorner(BugFablesTestBase):
     # The way down to the underground bar is behind the commercial district's grass, and the bar's door comes back up
     # behind it too: the horn both ways.

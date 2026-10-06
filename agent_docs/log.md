@@ -3179,3 +3179,9 @@ either one wrong).
   behind a save crystal ("don't move me away from entrances randomly"): door arrivals only from now on.
   No items; the user: done. Ticked, 73 of 244 (the scene's skip applied by `liveslot`, its triggers logged away, not
   yet confirmed on screen). Next: `GoldenHillsDungeonLeftMain` (46).
+- **`GoldenHillsDungeonLeftMain`:** across, Jump and Beemerang Halt; berry #9 Jump, the user's name "Left Hall, above
+  the Flytraps" (id 127); the top left door the Wooden Crank (spawned, seen raising it) and Halt, a drop down.
+- **The Wooden Crank, consumed in the game** (`Event59` removes it; three slots, three cranks in the dungeon). The user
+  asked how A Link to the Past handles keys: read in `worlds/alttp` (small keys counted, worst case per door; big keys
+  one, never used up). The user chose the big-key way: the crank never used up in a seed, one in the pool (Next 62,
+  to build once the crank rooms are mapped).

@@ -920,6 +920,11 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (`Event68`), rides up to the room above; back down by Beemerang Halt on the upper room's crank (no flags, always
   there), seen with every crank flag reset (109, 113, 117, 118, 663): no crank below to ride back up without the Big
   Crank. `Event68` loads the other map itself (no door).
+  **`GoldenHillsDungeonLeftMain` (2026-10-06):** crystal berry #9 (height 11, by the right door) Jump; across the
+  room, between all three doors, Jump and Beemerang Halt (its fixed bridge cranks); the top left door up the platform
+  its slot works (flag 110), with a spawned Wooden Crank and Halt, a drop down to the left side. Every slot's lock
+  reads code 2, the Wooden Crank, and `Event59` removes it (all but code 16): three slots (flags 109, 110, 128) and
+  three cranks (flags 112, 116, 129) in the dungeon, one of each in the Rubber Prison (565, 561).
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
