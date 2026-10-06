@@ -3230,3 +3230,6 @@ either one wrong).
 - **`GoldenHillsDungeonBoss`:** the door free; the boss fight (Event73) up two ledges, Jump; the party stays in the
   room afterwards. The fight's needs to test later (the user); noted for the enemy pass.
   The user: done. Ticked, 81 of 244. Next: `GoldenPitcher1` (203).
+- **`GoldenPitcher1`:** the Burly Bomb free from the lower door, a normal location (the user asked about "hidden
+  item"; that option is for items unseen until found, off by default), named "Pitcher Path, Behind the Thorns" (the
+  user's "Behind the Thorns", id 132); the top right door Jump, the horn and Halt, a drop down.

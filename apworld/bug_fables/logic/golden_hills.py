@@ -34,6 +34,9 @@ LOCATIONS = (
     Location("Golden Hills: Left Crank Room, Grass by the Crank", 131, "GoldenHillsDungeonCrankLeft",
              Source(regional=0, pickup=Pickup(map="GoldenHillsDungeonCrankLeft", type=0, item=11)),
              rule=CanUse("Beemerang Halt") & CanUse("Jump") & CanUse("Horn Slash"), category="hidden_item"),
+    # A Burly Bomb lying behind thorns on the pitcher path, free from its lower door.
+    Location("Golden Hills: Pitcher Path, Behind the Thorns", 132, "GoldenPitcher1",
+             Source(flag=714, pickup=Pickup(map="GoldenPitcher1", type=0, item=172)), no_jump=True),
     # The left crank half room: everything up its fixed cranks, Jump and Beemerang Halt.
     Location("Golden Hills: Left Crank Half Room, Behind the Bush", 129, "GoldenHillsDungeonLeftCrankHalf",
              Source(flag=121, pickup=Pickup(map="GoldenHillsDungeonLeftCrankHalf", type=2, item=36)),
@@ -86,6 +89,10 @@ MAP_AREAS = (
     # Its top door (to the boss), behind a gate both shrines open; arriving while shut, a pocket with only that door.
     Area("GoldenHillsDungeonUpperMain", "Boss Door", ("loadzoneboss",),
          Has("Upper Hall Sun Shrine Fed") & Has("Upper Hall Moon Shrine Fed")),
+    # The pitcher path's top right door, up a ledge: Jump, the horn and Beemerang Halt; down a drop.
+    Area("GoldenPitcher1", "Top Right", ("Loadzoneup",),
+         CanUse("Jump") & CanUse("Horn Slash") & CanUse("Beemerang Halt"),
+         out=one_way(None, CanUse("Jump") & CanUse("Horn Slash") & CanUse("Beemerang Halt"))),
     # The upper side room's upper door: up with Jump and a platform turned by the crank its slot makes (the Wooden
     # Crank, flag 128, with Beemerang Halt); down a drop.
     Area("GoldenHillsDungeonUpperSide", "Upper Door", ("loadzonehigh",),
