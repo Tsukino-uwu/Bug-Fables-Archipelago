@@ -2941,3 +2941,11 @@ either one wrong).
   `ShowAsSprite` switching off every renderer under a berry's sprite each pass. Spared; seen after a fresh room load.
   Every crystal berry check had lost its starburst.
 - **The bridge room ticked**, 19 of 244. Next: `SnakemouthDoorRoom` (12).
+- **The user, again:** no tests or quick checks during dev (a Python import of the world's tables counted); the
+  suite and the fuzzer once, before a push.
+- **`SnakemouthDoorRoom`:** the puzzle Jump and the horn; the trapdoor (flag 14) an event, "Trapdoor Opened" (the
+  user's name), opening the hole down. Each entrance tried: the bridge door free; the big door shut until flag 14,
+  its walk-in left the party behind it until it moved a little: the user, open it and leave the trapdoor shut
+  (scenery hidden and shown from the start; both trapdoor scenes still played with it open); the hole, with flags 13
+  and 14 cleared, pushed the party up through; the high door to `SnakemouthTop` a drop, back up with the horn and
+  Bee Fly. Ticked, 20 of 244. Next: `SnakemouthFallRoom` (13).

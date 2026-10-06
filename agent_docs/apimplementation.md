@@ -2885,7 +2885,8 @@ generation failure) Locations now sit in the part of the room they're in (`Locat
 Archipelago's regions hold locations, `world api.md`), and an area may join another (`Area.to`) by 2026-10-05.
 Snakemouth Den from 2026-10-06: the bridge room (its banks two areas; the bridge a room event either bank can set, so
 a story event may sit in an area too, `StoryEvent.area`; its vine berry location 94, kept present from the start),
-19 of 244; the rest of `room-checklist.md` to go.
+the door room (the trapdoor an event opening the hole down; the big door kept open, its walk-in stuck behind it; the
+high door to `SnakemouthTop` a drop), 20 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

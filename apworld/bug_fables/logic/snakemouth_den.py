@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from rule_builder.rules import Has
 
-from ..custom_rules import ANY_ATTACK, CanUse
+from ..custom_rules import ANY_ATTACK, CanUse, one_way
 from ..data_types import Area, Artifact, EntityRef, FlagEntity, Give, Location, Pickup, Source, StoryEvent
 from .outskirts import PAST_GATE
 
@@ -12,6 +12,11 @@ from .outskirts import PAST_GATE
 DEN = PAST_GATE & CanUse("Horn Slash")
 # Every Snakemouth room with water droplets, or reached only through one: Leif freezes the droplets.
 UNDERGROUND = DEN & CanUse("Freeze")
+# The door room's puzzle: grass cut, Jump onto the stone hung on a vine, hit it down, and the horn knocks both stones
+# onto the plates; the trapdoor Mushroom appears.
+TRAPDOOR = CanUse("Jump") & CanUse("Horn Slash")
+# Its high door to SnakemouthTop: grass cut, then Bee Fly across; dropped down from freely.
+TOP_LEDGE = CanUse("Horn Slash") & CanUse("Bee Fly")
 LOCATIONS = (
     Location("Snakemouth Den: Underground Door Room, Behind the Wall", 5, "SnakemouthUndergrondDoor",
              Source(flag=60, pickup=Pickup(map="SnakemouthUndergrondDoor", type=2, item=9)), reach=UNDERGROUND),
@@ -32,7 +37,7 @@ LOCATIONS = (
              category="quest", reach=DEN, pending=True),
     Location("Snakemouth Den: Door Room, Trapdoor", 11, "SnakemouthDoorRoom",
              Source(event=5, flag=14, pickup=Pickup(map="SnakemouthDoorRoom", type=0, item=13, story=True)),
-             rule=CanUse("Horn Slash"), reach=DEN),
+             rule=TRAPDOOR),
     # Crystal berry #2: from the room's upper-left entrance it needs nothing, from below it needs Leif.
     Location("Snakemouth Den: Underground Door Room, Left under the Glowing Cap", 20, "SnakemouthUndergrondDoor",
              Source(berry=2, pickup=Pickup(map="SnakemouthUndergrondDoor", type=3, item=0)), category="crystal_berry",
@@ -76,6 +81,9 @@ STORY_EVENTS = (
                "SnakemouthBridgeRoom", Source(event=1, flag=7), rule=CanUse("Jump") & CanUse("Beemerang Toss")),
     StoryEvent("Snakemouth Den: Bridge Room, Bridge Lowered from the Left", "Snakemouth Bridge Lowered",
                "SnakemouthBridgeRoom", Source(event=1, flag=7), rule=CanUse("Jump") & ANY_ATTACK, area="Left"),
+    # Taking the trapdoor Mushroom (flag 14) opens the hole down to the fall room.
+    StoryEvent("Snakemouth Den: Door Room, Trapdoor Opened", "Snakemouth Trapdoor Opened", "SnakemouthDoorRoom",
+               Source(event=5, flag=14), rule=TRAPDOOR),
     # At the lake, reachable without passing any water droplet, so Leif comes before everything that needs him.
     StoryEvent("Leif Joins", "Leif", "SnakemouthLake",
                Source(event=14, flag=16), category="story_party", reach=DEN),
@@ -91,6 +99,10 @@ MAP_AREAS = (
     # The bridge room's left bank, with the door room's door: across the river on the lowered bridge (Jump), both ways.
     Area("SnakemouthBridgeRoom", "Left", ("LoadingZoneDoorRoom",),
          CanUse("Jump") & Has("Snakemouth Bridge Lowered")),
+    # The door room's hole down: shut until the trapdoor; walked in from freely.
+    Area("SnakemouthDoorRoom", "Trapdoor", ("LoadZoneFallRoom",), Has("Snakemouth Trapdoor Opened"),
+         out=one_way(None, Has("Snakemouth Trapdoor Opened"))),
+    Area("SnakemouthDoorRoom", "High Door", ("New Entity16",), TOP_LEDGE, out=one_way(None, TOP_LEDGE)),
 )
 KEPT_OPEN = (
     # Turns the party back until the first boss; with the way up kept present it has nothing left to guard.
@@ -106,6 +118,16 @@ KEPT_PRESENT = (
     EntityRef("SnakemouthFallRoom", "JumpShroom"),
     # The door at the top of the bounce mushroom.
     EntityRef("SnakemouthFallRoom", "LoadingZoneDoorRoom"),
+)
+SCENERY_HIDDEN = (
+    # The door room's big door, shut until the trapdoor (flag 14): open from the start, since arriving through it left
+    # the party stuck behind it.
+    EntityRef("SnakemouthDoorRoom", "Base/Door"),
+    EntityRef("SnakemouthDoorRoom", "Base/Door (1)"),
+)
+SCENERY_PRESENT = (
+    EntityRef("SnakemouthDoorRoom", "Base/Door (2)"),
+    EntityRef("SnakemouthDoorRoom", "Base/Door (3)"),
 )
 PRESENT_FROM = (
     # The way back down to the fall room, made from the trapdoor instead of the first boss; not from the start, since

@@ -730,6 +730,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     starts the trapdoor scene, Event5. Coming up from the trapdoor without the horn is presumably one-way for the same
     reason (the tester's reading, not tried). The bridge room's hidden-spot discovery (discovery 2, location 30) is
     behind grass too.
+    **Mapped on screen (2026-10-06):** the puzzle takes Jump and the horn (grass cut, Jump onto the stone hung on the
+    vine, hit it down, both stones knocked onto the plates). The bridge-room door works both ways with nothing. The big
+    door (to `UpperSnekEntrance`) is scenery shut until flag 14 (`Base/Door`, `(1)`; open `(2)`, `(3)` from 14):
+    arriving through it the party stood behind it until moving a little, then got through. Kept open from the start
+    (the user); with it open, Event4's drop and Event5's fall still played. The hole down is shut until flag 14 too.
+    The high door to `SnakemouthTop` takes the horn (grass) and Bee Fly (across) to reach; dropped down from freely.
   - **Vi's beemerang (range):** `SnakemouthBridgeRoom`'s bridge comes down when its rope is hit; from the right only the
     beemerang reaches it, from the left Leif's move hit it (so presumably any member's; Kabbu's not tried). The room's
     Tattle tutorial (Event2) ran with stand-ins and finished (flag 10); its hint (Event0) is skipped by Skip cutscenes.
