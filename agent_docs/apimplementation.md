@@ -4706,7 +4706,10 @@ description; a flag-less prize bought went back to the stand's own; a once-only 
 there: Prize 9 showed Prize 4's seed item, because Prize 4's own item (the Tangy Berry) is Prize 9's seed item and its
 name had already been swapped; every look is now read before any is swapped, and the row then showed right.
 
-**Status:** built (2026-10-06); the prize stand seen working, the gift not yet seen.
+**The gift seen** (2026-10-06): with flag 351 cleared, the greeter's line showed the seed's Burly Berry and gave no
+tokens. The same line records the Termacade discovery (42), a location of its own once discoveries are swept.
+
+**Status:** built (2026-10-06); the prize stand and the gift seen working.
 
 *Code: `options.py` (`ShuffleTermacade`), `data_types.py` (`Source.tokens`, `Source.prize`, `Location.filler`),
 `data_tables.py` (`TOKEN_KIND`, `vanilla_item`), `rules.py`, `slot_data.py` (`location_prizes`, a give's `npc`),

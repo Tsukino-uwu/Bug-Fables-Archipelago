@@ -57,7 +57,8 @@ as it is, a frozen record.
 
 - [x] AntTunnels (3) — for the quest pass: its NPCs, if any give a quest
 - [x] BugariaMainPlaza (9) — for the quest pass: the quest board
-- [x] BugariaCommercial (10) — for the quest pass: the Lore Book dig spot (flag 388); the Termacade (Next 60)
+- [x] BugariaCommercial (10) — for the quest pass: the Lore Book dig spot (flag 388); for the discovery sweep:
+  the Termacade (discovery 42, the greeter's first talk, needing nothing)
 - [ ] BugariaTheater (26)
 - [ ] BugariaResidential (28)
 - [ ] UndergroundBar (30)
