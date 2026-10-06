@@ -804,6 +804,10 @@ namespace BugFablesAP
                                     + $" color {mark.GetComponent<SpriteRenderer>().material.color}"
                                     + $" layer {mark.gameObject.layer}/{e.sprite.gameObject.layer}"
                                     + $" item rot {e.sprite.transform.eulerAngles} item scale {e.sprite.transform.lossyScale}"
+                                    + $" queue item {e.sprite.material.shader.name}/{e.sprite.material.renderQueue}"
+                                    + $"/{e.sprite.sortingOrder} back {mark.GetComponent<SpriteRenderer>().material.shader.name}"
+                                    + $"/{mark.GetComponent<SpriteRenderer>().material.renderQueue}"
+                                    + $"/{mark.GetComponent<SpriteRenderer>().sortingOrder}"
                                     : ""));
                         }
                         log.LogInfo(info.ToString());

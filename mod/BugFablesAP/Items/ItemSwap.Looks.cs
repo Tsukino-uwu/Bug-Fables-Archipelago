@@ -71,6 +71,12 @@ namespace BugFablesAP
                 mark.localPosition = at;
             }
             SpriteRenderer renderer = mark.GetComponent<SpriteRenderer>();
+            // Drawn with its item: in the see-through queue a faded wall (FaderRange) could cover it but not the item.
+            int queue = entity.sprite.sharedMaterial.renderQueue;
+            if (renderer.material.renderQueue != queue)
+            {
+                renderer.material.renderQueue = queue;
+            }
             if (renderer.material.color != color.Value)
             {
                 renderer.material.color = color.Value;

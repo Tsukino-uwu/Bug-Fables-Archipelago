@@ -1987,6 +1987,13 @@ sprite itself, the backdrop included; `Mark` doesn't switch one back on. Not the
 (now with each backdrop's drawn state) showed the berry's backdrop there but not drawn, the Mushroom's drawn. Fixed by
 sparing the backdrop; seen on the vine berry after a fresh room load, the same day.
 
+**Lost behind a faded wall (found 2026-10-06, Snakemouth Den's broken house):** walls that fade as the party comes
+near (the game's `FaderRange`) showed the item through them but not its backdrop, depending on distance. Dev
+`iteminfo` (now with each one's shader and render queue) showed why: the item draws in the game's sprite queue (2450,
+before anything see-through), the backdrop in Unity's default sprite queue (3000), the same queue as the faded wall,
+where draw order goes by distance. So the backdrop now takes its item's queue, and shows and hides with it. Seen
+inside the house, the same day.
+
 **Scenery cutting into a backdrop (2026-10-04):** at Madame Butterfly's shelf (`BugariaCommercial`,
 `ButterflyShopkeeper`) a flower behind the shelf cut into the second slot's starburst (the user's screenshot). The game
 draws no backdrop behind a shelf item (its own starburst only appears in the hold-up, `NPCControl.cs:5646`), so there
