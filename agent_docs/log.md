@@ -3162,3 +3162,5 @@ either one wrong).
   only (written as landing on the left side, the top door being nearer it). No items. Waiting on the user's "done".
   The user: both the left and top doors on the left side, as written; no items; done. Ticked, 70 of 244. Next:
   `DesertScorpion` (112).
+- **`DesertScorpion`:** nothing needed; no items; its Scorpion fight (Event111) noted for the enemy pass. The user:
+  done. Ticked, 71 of 244. Next: `DesertEastmost` (113), Lost Sands' last.

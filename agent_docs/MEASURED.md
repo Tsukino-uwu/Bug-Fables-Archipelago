@@ -906,6 +906,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     hazard thorns ("And their thorns.", `DesertJumpPuzzle:0`). No items.
     **`DesertSouthern` (2026-10-06, the user):** the left door free; the right door past thorns, the bubble shield or
     Bee Fly, both ways; the top door on a ledge, a drop down with no way up inside the room. No items.
+    **`DesertScorpion` (2026-10-06, the user):** nothing needed between its three doors or to the save point. No
+    items. Its Scorpion scene (`Event111`, flags 303 to 298) didn't play.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
