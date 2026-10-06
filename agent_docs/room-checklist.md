@@ -123,7 +123,7 @@ as it is, a frozen record.
 
 ## Golden Path
 
-- [ ] GoldenHillsCableCar (29)
+- [ ] GoldenHillsCableCar (29) — for the quest pass: the CableCar quest (its NPC, Event91, the cranks), then the Super Block+ medal (flag 534, Jump)
 - [ ] GoldenHillsPath2 (38)
 - [ ] GoldenSettlementEntrance (39)
 - [ ] GoldenHillsPath3 (44)

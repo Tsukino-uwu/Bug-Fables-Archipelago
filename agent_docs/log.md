@@ -78,6 +78,7 @@ either one wrong).
 - [2026-10-05: a checklist of every room](#2026-10-05-a-checklist-of-every-room)
 - [2026-10-05: the first room mapped](#2026-10-05-the-first-room-mapped)
 - [2026-10-06: Snakemouth Den's bridge room](#2026-10-06-snakemouth-dens-bridge-room)
+- [2026-10-07: Golden Path](#2026-10-07-golden-path)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -3241,3 +3242,13 @@ either one wrong).
   for the quest pass with the other bounties.
   The user: the fight gives the Crystal Fang; what it needs, tested later (noted on the checklist).
   Nothing else; the user: done. Ticked, 84 of 244: Golden Hills done. Next: `GoldenHillsCableCar` (29).
+
+## 2026-10-07: Golden Path
+
+- **`GoldenHillsCableCar`:** the right door a drop, back by Jump or the horn's bounce pad; berry #8 the horn; the dig
+  spot Jump; the Clear Water bush the horn (a hidden item, the user); across Jump. Names, the user's: "Cable Car
+  Station, High Ledge / Dig Spot / Bush by the Save Crystal" (ids 134-136). The cranes are the CableCar board quest
+  (found in `MEASURED.md`'s quest table: accept flag 182; `Event91` sets 183, the cranks); the medal up top with it,
+  plus Jump, for the quest pass.
+- **A slip fixed:** the Defiant Root Entrance's dig spot (id 119, 2026-10-06) lacked `category="dig_spot"`, which every
+  other non-berry dig spot has (Shuffle Dig Spots, off by default); added.

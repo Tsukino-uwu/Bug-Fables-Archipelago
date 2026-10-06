@@ -39,7 +39,7 @@ LOCATIONS = (
     # Behind a rock Horn Dash breaks, on the Defiant Root entrance's left side.
     Location("Lost Sands: Defiant Root Entrance, Dig Spot", 119, "DesertDREastEntrance",
              Source(flag=398, pickup=Pickup(map="DesertDREastEntrance", type=0, item=121)),
-             rule=CanUse("Horn Dash") & CanUse("Beetle Dig"), no_jump=True, area="Left"),
+             rule=CanUse("Horn Dash") & CanUse("Beetle Dig"), category="dig_spot", no_jump=True, area="Left"),
     # Meditation on a small platform on the badge alcove's ledge: Jump.
     Location("Lost Sands: Badge Alcove, Platform on the Upper Left", 120, "DesertBadgeAlcove",
              Source(flag=262, pickup=Pickup(map="DesertBadgeAlcove", type=2, item=56)), rule=CanUse("Jump"),

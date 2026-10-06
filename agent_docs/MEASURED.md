@@ -963,6 +963,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   **`PitcherPlantArena` (2026-10-06):** the door and the save point free; walking further in starts the pitcher's
   bounty fight (`Event124`, until flag 494), nothing needed to reach it; it gives the Crystal Fang (the user). No
   items lying in the room.
+- **Golden Path, room by room** (the user, in-game):
+  **`GoldenHillsCableCar` (2026-10-07):** from the right door (up high) a drop; back up by Jump, or by the horn
+  (grass) and a bounce pad. Crystal berry #8 the horn, by that pad; the dig spot (flag 397) Jump; the Clear Water bush
+  (drop list only item 12, regional flag 0, between the green bounce pad and the save crystal) the horn; across to
+  the left door Jump. The Super Block+ medal (flag 534, height 28) on the cable cars: the CableCar board quest (7,
+  accept flag 182, its NPC's `Event91` setting 183, which makes the cranks), then Jump.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
