@@ -119,7 +119,7 @@ as it is, a frozen record.
 - [x] GoldenHillsDungeonBoss (53) — for the enemy pass: the Venus' Guardian fight (Event73, Jump up to it; its needs untested)
 - [x] GoldenPitcher1 (203)
 - [x] GoldenPitcher2 (205)
-- [ ] PitcherPlantArena (239) — for the quest pass: the pitcher's bounty fight (Event124, flag 494), with the other bounties
+- [ ] PitcherPlantArena (239) — for the quest pass: the pitcher's bounty fight (Event124, flag 494), with the other bounties: it gives the Crystal Fang; what the fight needs, tested then (the user)
 
 ## Golden Path
 

@@ -3239,3 +3239,4 @@ either one wrong).
   The user: done. Ticked, 83 of 244. Next: `PitcherPlantArena` (239).
 - **`PitcherPlantArena`:** the door and save point free; walking in starts the pitcher's bounty fight (Event124), noted
   for the quest pass with the other bounties.
+  The user: the fight gives the Crystal Fang; what it needs, tested later (noted on the checklist).
