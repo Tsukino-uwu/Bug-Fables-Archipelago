@@ -3153,3 +3153,4 @@ either one wrong).
 - **`DesertTrenchMiddle`:** the right side's three doors free, the top one Beetle Dig; the middle (the high bottom-left
   door) only through its door, drops to both sides; the left side up to the middle with Jump and Bee Fly. No items.
   Waiting on the user's "done".
+  The user: done. Ticked, 68 of 244. Next: `DesertJumpPuzzle` (110).

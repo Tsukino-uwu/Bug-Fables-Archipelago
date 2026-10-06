@@ -2952,7 +2952,7 @@ village (free; a new location: its dig spot's berry, Beetle Dig), the oasis (its
 reached only from its cave door, back up by a platform; two new locations), the oasis entrance (its right side the bubble shield or Bee Fly, both ways; its bounce pad back kept present for good, the user's ask), the west dunes (free), the sand castle's front (the castle door the Sand Castle Key and Jump, a stand-in until
 the key chain is gone through), the mountain (free; its bridge without Jump a bit tricky, counted by the user's
 call), the trench's middle (three sides: the middle a drop to either, the left back up with Jump and Bee Fly, the
-top door dug under; in progress), 67 of 244; the rest of `room-checklist.md` to go.
+top door dug under), 68 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
