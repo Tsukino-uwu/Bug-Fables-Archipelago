@@ -3130,3 +3130,6 @@ either one wrong).
   Top of the Sandpile" (Berry Jam, flag 733, id 126). The ore's name found by `textsearch ore@` (`Items:98`); it is
   the Ore Wanted quest's, useful until the quest pass. Waiting on the user's "done".
   Nothing else in it; the user: done. Ticked, 63 of 244. Next: `DesertOasisEntrance` (97).
+- **`DesertOasisEntrance`:** the left side's two doors free; the right side the bubble shield. Its bounce pad back
+  left is a one-way without the shield, and gone from chapter 4 (flag 300 by Event105), so not counted even with
+  Points of No Return: the shield both ways. Waiting on the user's "done".
