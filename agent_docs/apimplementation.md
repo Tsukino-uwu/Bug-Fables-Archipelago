@@ -1614,6 +1614,9 @@ wait for the later chapters (`LATER_CHAPTERS`), so the logic promises nothing ne
 wall behind it stands until the desert side has been reached (flag 170). The logic already counted that door open, so
 the game was stricter: the gate is shown open from the start and the wall hidden (`logic/golden_settlement.py`; test
 `TestSettlementDesertGate`; `MEASURED.md`, the Golden Settlement's desert gate). No attack is needed for the switch.
+**Reversed 2026-10-07** (the user: "its supposed to be locked until you hit the switch from inside that entrance"):
+the gate is the game's again, its lever (any attack, the desert side only) an event the door needs both ways; the
+wall stays hidden.
 **Beette, the Flower Key's seller** (the same day, the user: "make it appear always if required"): the `smug bee` on
 `BeehiveBalcony`, made only after chapter 3 (flag 299), is kept present (`logic/bee_kingdom_hive.py`, test
 `TestFlowerKeySeller`). Her sale is still the game's own, not a location; the key and the red house it opens weren't in

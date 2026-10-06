@@ -10,14 +10,9 @@ LOCATIONS = (
     Location("Golden Settlement: Festival, Wacka Worm Game", 68, "GoldenSettlement2",
              Source(event=55, flag=21), reach=LATER_CHAPTERS),
 )
-# The gate to the desert (the user, 2026-10-04): open from the start, and the invisible wall behind it, which stands
-# until the desert side has been reached (flag 170), gone.
+# The invisible wall behind the gate to the desert, which stands until the desert side has been reached (flag 170),
+# gone. The gate itself stays the game's: shut until its lever is hit from the desert side (the user, 2026-10-07,
+# reversing 2026-10-04's open gate).
 SCENERY_HIDDEN = (
     EntityRef("GoldenSettlementEntrance", "Base/Cube"),
-    EntityRef("GoldenSettlementEntrance", "Base/DesertGate/WoodenGate2"),
-    EntityRef("GoldenSettlementEntrance", "Base/DesertGate/WoodenGate2 (1)"),
-)
-SCENERY_PRESENT = (
-    EntityRef("GoldenSettlementEntrance", "Base/WoodenGate2 (2)"),
-    EntityRef("GoldenSettlementEntrance", "Base/WoodenGate2 (3)"),
 )

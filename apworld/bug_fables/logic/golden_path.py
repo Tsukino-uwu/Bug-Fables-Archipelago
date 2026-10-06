@@ -2,10 +2,10 @@
 (room-checklist.md)."""
 from __future__ import annotations
 
-from rule_builder.rules import True_
+from rule_builder.rules import Has, True_
 
-from ..custom_rules import LATER_CHAPTERS, CanUse, one_way
-from ..data_types import Area, EntityRef, ItemShop, Location, Pickup, Source, Transfer
+from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, one_way
+from ..data_types import Area, EntityRef, ItemShop, Location, Pickup, Source, StoryEvent, Transfer
 
 # The beetle's horn quest in the settlement (GoldenSettlement3, line 34, flag 274), then Tanjerin by the settlement
 # entrance's minigame door (flag 275): not gone through yet, so the later chapters' stand-in until the quest pass.
@@ -43,6 +43,11 @@ LOCATIONS = (
              Source(berry=22, pickup=Pickup(map="GoldenSettlementEntrance", type=3, item=0)), rule=CanUse("Beetle Dig"),
              category="crystal_berry", no_jump=True),
 )
+STORY_EVENTS = (
+    # The settlement entrance's desert gate lever (`gateswitch`, any attack, flag 83, Event50), on the desert side only.
+    StoryEvent("Golden Path: Settlement Entrance, Desert Gate Opened", "Settlement Desert Gate Open",
+               "GoldenSettlementEntrance", Source(flag=83), rule=ANY_ATTACK, area="Desert Door"),
+)
 MAP_AREAS = (
     # The cable car station's right door (to the tunnel), up high: down a drop; back up by Jump, or the bounce pad past
     # grass (the horn).
@@ -59,6 +64,8 @@ MAP_AREAS = (
     # The settlement entrance's minigame door, behind a rock (`Base/Big Plain Rock`) gone at flag 275 (the horn quest,
     # then Tanjerin); coming out of it, the game pushes the party through the rock.
     Area("GoldenSettlementEntrance", "Minigame Door", ("loadzone minigame",), HORN_QUEST, out=True_()),
+    # Its door to the desert, behind a gate its lever opens from the desert side only; staying open, both ways after.
+    Area("GoldenSettlementEntrance", "Desert Door", ("loadzone desert",), Has("Settlement Desert Gate Open")),
 )
 # The caravan's stall there for good, the snail's shop that takes its spot after the boss kept away (the user,
 # 2026-10-07: the snail's goods overlapped; the caravan's other stalls to be decided one at a time).

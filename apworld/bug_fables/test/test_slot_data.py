@@ -292,13 +292,12 @@ class TestMadeleinesHouse(BugFablesTestBase):
 
 
 class TestSettlementDesertGate(BugFablesTestBase):
-    # The gate opens only from its switch, and an invisible wall stands behind it until the desert side is reached.
-    def test_gate_open_and_wall_gone(self) -> None:
+    # The invisible wall behind the gate goes; the gate stays the game's, opened by its lever from the desert side.
+    def test_wall_gone_gate_kept(self) -> None:
         data = self.world.fill_slot_data()
-        for path in ("Base/Cube", "Base/DesertGate/WoodenGate2", "Base/DesertGate/WoodenGate2 (1)"):
-            self.assertIn({"map": "GoldenSettlementEntrance", "entity": path}, data["scenery_hidden"])
-        for path in ("Base/WoodenGate2 (2)", "Base/WoodenGate2 (3)"):
-            self.assertIn({"map": "GoldenSettlementEntrance", "entity": path}, data["scenery_present"])
+        self.assertIn({"map": "GoldenSettlementEntrance", "entity": "Base/Cube"}, data["scenery_hidden"])
+        for path in ("Base/DesertGate/WoodenGate2", "Base/DesertGate/WoodenGate2 (1)"):
+            self.assertNotIn({"map": "GoldenSettlementEntrance", "entity": path}, data["scenery_hidden"])
 
 
 class TestFlowerKeySeller(BugFablesTestBase):
