@@ -308,6 +308,7 @@ namespace BugFablesAP
                     }
                     case "spawn": return Spawn(parts);
                     case "flag": return Flag(parts);
+                    case "berry": return Berry(parts);
                     case "discovery": return Discovery(parts);
                     case "textsearch": return TextSearch(parts);
                     case "unstick": return Unstick();
@@ -796,7 +797,14 @@ namespace BugFablesAP
                                 : $"{sp.name} pivot {sp.pivot} rect {sp.rect.size} bounds c{sp.bounds.center} e{sp.bounds.extents}")
                                 + $"; spritetransform {(e.spritetransform != null ? e.spritetransform.localPosition.ToString() : "none")}"
                                 + $"; sprite local {e.sprite.transform.localPosition} parent {(e.sprite.transform.parent != null ? e.sprite.transform.parent.name : "none")}"
-                                + (mark != null ? $"; apback {mark.localPosition}" : ""));
+                                + (mark != null ? $"; apback {mark.localPosition}" : "")
+                                + (mark != null
+                                    ? $" world scale {mark.lossyScale} active {mark.gameObject.activeInHierarchy}"
+                                    + $" drawn {mark.GetComponent<SpriteRenderer>().enabled}"
+                                    + $" color {mark.GetComponent<SpriteRenderer>().material.color}"
+                                    + $" layer {mark.gameObject.layer}/{e.sprite.gameObject.layer}"
+                                    + $" item rot {e.sprite.transform.eulerAngles} item scale {e.sprite.transform.lossyScale}"
+                                    : ""));
                         }
                         log.LogInfo(info.ToString());
                         return "item info logged";

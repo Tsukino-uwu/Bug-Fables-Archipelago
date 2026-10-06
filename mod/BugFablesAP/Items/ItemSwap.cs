@@ -52,12 +52,12 @@ namespace BugFablesAP
                 return;
             }
             // The game re-activates the model's object every frame while the sprite is enabled, never its renderers,
-            // so the renderers are what get switched off.
+            // so the renderers are what get switched off; never the starburst Mark adds under the sprite.
             if (entity.spritetransform != null)
             {
                 foreach (Renderer r in entity.spritetransform.GetComponentsInChildren<Renderer>(true))
                 {
-                    if (r != entity.sprite && r.enabled)
+                    if (r != entity.sprite && r.enabled && r.gameObject.name != MarkName)
                     {
                         r.enabled = false;
                     }

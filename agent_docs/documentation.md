@@ -1981,6 +1981,12 @@ own item at the game's height with no backdrop, so a shelf shows at a glance whi
 cut through the flat starburst close behind it, and every other item is a flat sprite; so a crystal berry is its flat
 icon everywhere, crystal berry spots included, always with its backdrop, for the clarity the backdrop gives.
 
+**Then crystal berries lost it (found 2026-10-06, Snakemouth Den's vine berry):** a berry's flat icon is put back on
+every pass (the game shows its model again), and that put-back switched off every renderer under the sprite but the
+sprite itself, the backdrop included; `Mark` doesn't switch one back on. Not the vine, as first thought: dev `iteminfo`
+(now with each backdrop's drawn state) showed the berry's backdrop there but not drawn, the Mushroom's drawn. Fixed by
+sparing the backdrop; seen on the vine berry after a fresh room load, the same day.
+
 **Scenery cutting into a backdrop (2026-10-04):** at Madame Butterfly's shelf (`BugariaCommercial`,
 `ButterflyShopkeeper`) a flower behind the shelf cut into the second slot's starburst (the user's screenshot). The game
 draws no backdrop behind a shelf item (its own starburst only appears in the hold-up, `NPCControl.cs:5646`), so there
