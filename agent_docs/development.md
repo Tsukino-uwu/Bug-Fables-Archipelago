@@ -333,6 +333,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   where no check of it is left. `spawn member <n> [x z]` drops party member n's look (0 Vi, 1 Kabbu, 2 Leif)
   at that offset from you, to see how a location holding him looks; it's a Crunchy Leaf underneath, given if taken.
 - `flag <n> [on|off]`: show or set a story flag.
+- `berry <n> [on|off]`: show or set a crystal berry's taken mark (`crystalbflags`); off brings it back on the next
+  room load.
 - `liveslot [file]`: lays `BepInEx/bugfablesap-live.json` (or the file named) over the login's `slot_data`, rebuilds
   the seed's tables and re-enters the room, logging which keys differ from the seed. Write the file with
   `python dev-scripts/live-slot-data.py --archipelago <checkout> --yaml <the seed's player file> --out <that path>`:
@@ -502,6 +504,7 @@ only in the dev (Debug) build: every one is bound in `Dev/Plugin.Dev.cs`, and th
 | `DevCommandFile` | With `DevConsole`: a text file whose lines are run as console commands, then emptied, so a test can be driven from outside the game. Blank lines and lines starting with `#` are skipped; a queued `loc` or `warp` waits until the player is free. |
 | `InfJump`, `OneHit`, `BumpKill`, `InfBerries` | With `DevConsole`: jump again in mid-air; every hit on an enemy does at least 99; field enemies die on touch; 999 berries once per save played. The console's `infjump`, `onehit`, `bumpkill` and `infberries` flip them. |
 | `AdoptSeed` | A save tied to another seed is re-tied to the connected one and replays every item (section "A local server to test against"). |
+| `QuietBursts` | Items arriving several at once (a goal's release, a new seed's replay) get no hold-up; one arriving alone still does. |
 | `TestStart`, `TestStartMember`, `TestDoors` | A new file's start map, its one party member, doors rewritten by hand (Dev console section). |
 | `GiveMoney` | Berries to add once (capped at 999), then back to 0. |
 | `GrantProbe`, `TextProbe` | Log every key item added or removed, quest board change and flip of `flags`, `regionalflags` or `crystalbflags` / every dialogue line with an item command, with the map. |

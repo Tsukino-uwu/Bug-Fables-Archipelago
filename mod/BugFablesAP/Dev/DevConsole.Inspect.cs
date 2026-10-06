@@ -167,6 +167,22 @@ namespace BugFablesAP
             return $"flags[{n}] = {MainManager.instance.flags[n]}";
         }
 
+        // A crystal berry's taken mark, read or set like a flag; off brings its pickup back on the next room load.
+        private static string Berry(string[] parts)
+        {
+            if (parts.Length < 2)
+            {
+                return "berry <n> [on|off]";
+            }
+            int n = int.Parse(parts[1]);
+            if (parts.Length > 2)
+            {
+                MainManager.instance.crystalbflags[n] = parts[2].ToLowerInvariant() == "on" || parts[2] == "true"
+                    || parts[2] == "1";
+            }
+            return $"crystalbflags[{n}] = {MainManager.instance.crystalbflags[n]}";
+        }
+
         // Every text file the game loads from Resources/Data, searched for a word (case-insensitive); matches go to the
         // log.
         private static string TextSearch(string[] parts)

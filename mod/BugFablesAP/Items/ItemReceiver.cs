@@ -66,6 +66,9 @@ namespace BugFablesAP
 
         // Dev only ([Debug] AdoptSeed); off in the release build, which never sets it.
         internal static System.Func<bool> AdoptOtherSeed = null;
+        // Dev only ([Debug] QuietBursts), as AdoptOtherSeed. quietUntil: the end of the batch being given quietly.
+        internal static System.Func<bool> QuietBursts = null;
+        private int quietUntil;
 
         internal void Tick(bool randomizerOn)
         {
@@ -125,7 +128,19 @@ namespace BugFablesAP
             mm.flagvar[CountSlot] = given + 1;
             log.LogInfo($"[recv] item {given + 1} of {received.Count}: {item.ShownItem()} from {item.ShownPlayer()} "
                 + $"({item.ShownLocation()}): {outcome}");
-            ShowIfWanted(item, given);
+            if (given == 0)
+            {
+                quietUntil = 0;
+            }
+            if (QuietBursts != null && QuietBursts() && received.Count - given > 1 && quietUntil < received.Count)
+            {
+                quietUntil = received.Count;
+                log.LogInfo($"[recv] QuietBursts: items {given + 1} to {quietUntil} given with no hold-up");
+            }
+            if (given >= quietUntil)
+            {
+                ShowIfWanted(item, given);
+            }
         }
 
         private System.Collections.Generic.IEnumerable<int> MembersGiven(ReadOnlyCollection<ItemInfo> received,

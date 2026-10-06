@@ -21,6 +21,7 @@ namespace BugFablesAP
         private ConfigEntry<bool> spriteDumpEnabled;
         private ConfigEntry<string> saveDiff;
         private ConfigEntry<bool> adoptSeed;
+        private ConfigEntry<bool> quietBursts;
         private ConfigEntry<bool> devConsole;
         private ConfigEntry<string> devCommandFile;
         private ConfigEntry<int> giveMoney;
@@ -49,6 +50,10 @@ namespace BugFablesAP
                 + "so the new seed replays every item. The old seed's items and flags stay in the save: test files "
                 + "only, never a real game. Off by default.");
             ItemReceiver.AdoptOtherSeed = () => adoptSeed.Value;
+            quietBursts = Config.Bind("Debug", "QuietBursts", false,
+                "Dev only. Items that arrive several at once (a goal's release, a new seed's replay) are given with no "
+                + "hold-up; one arriving alone still gets its own. Off by default.");
+            ItemReceiver.QuietBursts = () => quietBursts.Value;
             devConsole = Config.Bind("Debug", "DevConsole", false,
                 "Dev only. F9 opens a command line: loc <n> (go to a pickup location), warp <map> [flag], "
                 + "spawn <item|key|medal> <id> [flag], flag <n> [on|off]. Can put a save in states the story never "
