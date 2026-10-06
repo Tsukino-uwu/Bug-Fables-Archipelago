@@ -3265,3 +3265,9 @@ either one wrong).
   The crank path's middle door to the left door: Jump and Halt both ways (the user); now a direct link (the area joins
   the left side), the drop to the right side a transfer inside the room (an Area has one link).
   The user: done. Ticked, 86 of 244. Next: `GoldenSettlementEntrance` (39).
+- **`GoldenSettlementEntrance`:** the doors free (the desert gate already kept open since 2026-10-04); berry #22's dig
+  spot. The snail's shop and the caravan's stall share one spot (their goods within a step); the user: the snail
+  always here, the caravan's other stalls one at a time later (each stall is its own shop, map and keeper). Names, the
+  user's: "Settlement Entrance, Snail Shop 1-3" (ids 138-140), "Settlement Entrance, Dig Spot" (141). The minigame
+  door's rock (until flag 275, the horn quest and Tanjerin): arriving from it pushes the party through; the user:
+  gated behind the quest (a stand-in), as the minigame room holds only Wacka Worm replays and a late scene.

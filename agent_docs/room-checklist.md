@@ -125,7 +125,7 @@ as it is, a frozen record.
 
 - [x] GoldenHillsCableCar (29) — for the quest pass: the CableCar quest (its NPC, Event91, the cranks), then the Super Block+ medal (flag 534, Jump)
 - [x] GoldenHillsPath2 (38) — for the quest pass: the sleepy NPC (the CableCar quest, until flag 182)
-- [ ] GoldenSettlementEntrance (39)
+- [ ] GoldenSettlementEntrance (39) — for the quest pass: the horn quest and Tanjerin (the minigame door's rock, flags 274-275); the caravan's other stalls, one at a time (the user)
 - [ ] GoldenHillsPath3 (44)
 - [ ] GoldenSMinigame (114)
 
