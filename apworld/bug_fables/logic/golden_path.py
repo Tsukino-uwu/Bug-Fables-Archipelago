@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from ..custom_rules import CanUse, one_way
-from ..data_types import Area, Location, Pickup, Source
+from ..data_types import Area, Location, Pickup, Source, Transfer
 
 LOCATIONS = (
     # The cable car station: crystal berry #8 up on its right, by the bounce pad past grass (the horn).
@@ -32,8 +32,13 @@ MAP_AREAS = (
     # The crank path: its left side (the door toward the settlement) across from the right door by its fixed cranks
     # (Beemerang Halt) and Jump, both ways.
     Area("GoldenHillsPath2", "Left", ("loadzonesettlement",), CanUse("Jump") & CanUse("Beemerang Halt")),
-    # Its high middle door (to the pitcher path): up the same way (Jump and Halt, over the left side); down to the right
-    # side with Jump alone, a drop, back up with Jump and Halt.
+    # Its high middle door (to the pitcher path), to and from the left side with Jump and Halt, both ways.
     Area("GoldenHillsPath2", "Top Middle", ("loadzonepitcherarea",), CanUse("Jump") & CanUse("Beemerang Halt"),
-         out=CanUse("Jump") & one_way(None, CanUse("Jump") & CanUse("Beemerang Halt"))),
+         to="GoldenHillsPath2 (Left)"),
+)
+TRANSFERS = (
+    # The crank path's high middle door down to its right side with Jump alone, a drop; up again with Jump and Halt (the
+    # way back). An Area has one link, so this second one, inside the room, is a transfer.
+    Transfer("drop", "GoldenHillsPath2", "GoldenHillsPath2", CanUse("Jump"), two_way=False,
+             way_back=CanUse("Jump") & CanUse("Beemerang Halt"), from_area="Top Middle"),
 )

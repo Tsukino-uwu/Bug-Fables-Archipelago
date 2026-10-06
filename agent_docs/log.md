@@ -3262,3 +3262,5 @@ either one wrong).
   is hit, takes Jump back up (`DesertOasis`, `GoldenHillsDungeonUpperMain`). The user: basic attack and Jump, the
   switch only from the top. Now events in the upper areas ("Oasis, Platform Switch Hit", "Upper Hall, Lever Hit",
   names I proposed twice, unopposed), the way up the event and Jump, the ways down counted with them.
+  The crank path's middle door to the left door: Jump and Halt both ways (the user); now a direct link (the area joins
+  the left side), the drop to the right side a transfer inside the room (an Area has one link).
