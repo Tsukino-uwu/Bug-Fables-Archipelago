@@ -667,7 +667,8 @@ be wrong.
     "Golden Hills: Left Crank Room, Atop the Hill" (`GoldenHillsDungeonCrankLeft`, flag 112, Beemerang Halt, Jump and
     the horn; the user's name); "Golden Hills: Right Crank Room, Far Right Ledge" (`GoldenHillsDungeonRightCrank`,
     the Big Crank Top Half, key item 59, flag 113; the bubble shield, Freeze, the horn, Jump, the Beemerang and
-    Beemerang Halt, or Bee Fly alone; the user's name). The Big Crank (60) is made from two halves, so its halves are designed here too.
+    Beemerang Halt, or Bee Fly alone; the user's name); "Golden Hills: Lower Right Crank Room, Top Right Ledge"
+    (`GoldenHillsLowerRightCrank`, flag 116; Jump, Freeze, the horn and Beemerang Halt; the user's name). The Big Crank (60) is made from two halves, so its halves are designed here too.
 
 **Known issues:**
 
@@ -2970,7 +2971,7 @@ scorpion's room (free), the eastmost room (free), 72 of 244: Lost Sands done; Go
 dungeon's entrance (its top right door the Wooden Crank and Beemerang Halt, its elevator the Big Crank and Halt up,
 Halt down; its arrival scene kept away, the user's ask), 73 of 244; the left hall (across Jump and Beemerang Halt,
 its top left door the Wooden Crank and Halt; a new location: its berry, Jump), the left crank room (its door free; its crank spot with Next 62), 75 of 244; the right crank room (its every need for both spots; a new location, the
-candy on a stump), 76 of 244; the rest of `room-checklist.md` to go.
+candy on a stump), the lower right crank room (its door free; its crank spot with Next 62), 77 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

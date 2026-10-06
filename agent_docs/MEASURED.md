@@ -932,6 +932,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   ledge at the far right: the bubble shield (maybe not needed), Freeze, the horn, Jump, the Beemerang and Halt, all
   counted (the user); or Bee Fly alone, for everything in the room (the user). The Hustle Candy (flag 727) on a small stump behind a flower among thorns midway: hard to spot,
   grabbed with the Beemerang; `warp ... @Item - Stump` found no safe spot beside it.
+  **`GoldenHillsLowerRightCrank` (2026-10-06):** one door; its Wooden Crank (flag 116) on the top right ledge: Jump,
+  and an ice block (Freeze) pushed by the horn across platforms Beemerang Halt spins; Bee Fly only stands in for Jump,
+  so not counted (the user). Its Chomper reached with Beemerang Halt alone (for the enemy pass).
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

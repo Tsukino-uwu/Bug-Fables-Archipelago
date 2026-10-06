@@ -3201,3 +3201,6 @@ either one wrong).
 - **Bee Fly, rechecked in the Golden Hills rooms done** (the user: "might have forgotten to include fly"): the
   entrance nothing; the left hall across between its left and right doors, added.
   The left crank room: nothing for Bee Fly. Recheck done.
+- **`GoldenHillsLowerRightCrank`:** the crank takes Jump, Freeze, the horn and Beemerang Halt (an ice block escorted
+  over spinning platforms); Bee Fly replaces only Jump, so left out (the user). Named "Top Right Ledge", with Next 62;
+  the Chomper with Halt alone, for the enemy pass. Ticked, 77 of 244.
