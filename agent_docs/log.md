@@ -3079,3 +3079,10 @@ either one wrong).
 - **`DesertRockFormation`:** free between its doors; a new location, the user's name "Tardigrade Idol" (Tardigrade
   Shield, Jump, Freeze and the horn, id 117), whose pickup records discovery 31. Ticked, 53 of 244. Next:
   `DesertTrenchSouth` (8).
+- **Handoff (2026-10-06, the user moved to a new chat; game and server left running):** 53 of 244 ticked. In
+  progress: `DesertTrenchSouth` (8), its draft posted (four doors, the left ledge door at height 4, the bridge switch
+  until flag 282, an Agaric Shroom on the ledge, flag 713, not a location yet), no answers yet. The server hosts
+  `AP_58485522247768212275.zip` (this session's scratchpad `out/`, its player file in `players/`), the test save
+  adopted to it. Dev settings: `OneHit` off (story rooms, the user's ask), `InfJump`, `BumpKill`, `QuietBursts` on,
+  `AdoptSeed` off; the command file is still `bed6439d-.../scratchpad/cmds.txt`. Locations added today (95-117) and
+  the Termacade need the suite and the fuzzer before the push (not run during dev, as asked).
