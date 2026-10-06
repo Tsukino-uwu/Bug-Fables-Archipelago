@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from rule_builder.rules import False_, Has
 
-from ..custom_rules import ANY_ATTACK, CanUse, Member, one_way
+from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, Member, one_way
 from ..data_types import Area, Artifact, EntityRef, FlagEntity, Give, Location, Pickup, Source, StoryEvent
 from .outskirts import PAST_GATE
 
@@ -95,6 +95,10 @@ STORY_EVENTS = (
                Source(flag=33), rule=ANY_ATTACK, area="Top"),
     StoryEvent("Snakemouth Den: Upper Right Room, Switch Hit", "Snakemouth Right Switch",
                "SnakemouthUndergroundRightB", Source(flag=34), rule=ANY_ATTACK, area="Top"),
+    # The Peculiar Gem in the upper entrance's slot (a LockedDoor, gone after flag 517), reached by Jump. The game gives
+    # the gem in a chapter 4 scene (Event117), not yet an item: the later chapters' stand-in until it is.
+    StoryEvent("Snakemouth Den: Upper Entrance, Gem Placed", "Snakemouth Gem Placed", "UpperSnekEntrance",
+               Source(flag=517), rule=CanUse("Jump") & LATER_CHAPTERS),
     StoryEvent("Snakemouth Den: Underground Door Room, Big Door Opened", "Snakemouth Big Door Opened",
                "SnakemouthUndergrondDoor", Source(event=24, flag=35),
                rule=Has("Snakemouth Left Switch") & Has("Snakemouth Right Switch"), no_jump=True, area="Middle"),
@@ -158,6 +162,10 @@ MAP_AREAS = (
     Area("SnakemouthUndergroundLeftB", "Top", (), DROPLETS_HORN, out=one_way(None, DROPLETS_HORN)),
     Area("SnakemouthUndergroundLeftB", "High Door", ("LoadingZoneDoor",), Has("Snakemouth Left Switch"),
          out=one_way(None, Has("Snakemouth Left Switch")), to="SnakemouthUndergroundLeftB (Top)"),
+    # The upper entrance's top door, shut until the gem is placed; arriving through it while shut, the game pushes the
+    # party past.
+    Area("UpperSnekEntrance", "Top Door", ("door north",), Has("Snakemouth Gem Placed"),
+         out=one_way(None, Has("Snakemouth Gem Placed"))),
     Area("SnakemouthUndergroundRightB", "High Door", ("DoorMainRoom",), Has("Snakemouth Right Switch"),
          out=one_way(None, Has("Snakemouth Right Switch")), to="SnakemouthUndergroundRightB (Top)"),
 )

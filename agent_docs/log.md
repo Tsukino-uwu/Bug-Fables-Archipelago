@@ -3004,3 +3004,7 @@ either one wrong).
 - **`SnakemouthTop`:** nothing to go in or out; its Sophie Petal (key item 127, flag 421) is in neither the
   locations nor the items. `textsearch sophie` tied it to Doctor Isau's request in `DefiantRoot1`; the user: progression
   (the quest's reward a location). Ticked for the quest pass, 30 of 244. Next: `UpperSnekEntrance` (208).
+- **`UpperSnekEntrance`:** the room and its bottom door free; the gem slot needs Jump; its top door pushed the party
+  past while shut (seen), so leaving that way needs the gem placed. A story event, "Gem Placed" (the user's name),
+  flag 517, Jump and the later chapters' stand-in (the gem is Event117's, chapter 4, not yet an item). Ticked, 31 of
+  244: Snakemouth Den done. Next: `AntTunnels` (3).

@@ -777,6 +777,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     **`SnakemouthTop` (2026-10-06, the user):** one door, to the door room's high door; in, out and the Sophie Petal
     (key item 127, gone after flag 421, EntityDump) need nothing. The petal is Doctor Isau's request on `DefiantRoot1`
     ("Have you found the Sophie Petal in Snakemouth Den?", picked from key items; dev `textsearch sophie`).
+    **`UpperSnekEntrance` (2026-10-06, the user):** the bottom door (the door room's big door) and the room itself need
+    nothing; the gem slot takes Jump to use. The top door (to `UpperSnekTransition`) is shut until the gem is placed
+    (flag 517): arriving through it, the party was pushed past it, so leaving that way needs the gem placed.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
