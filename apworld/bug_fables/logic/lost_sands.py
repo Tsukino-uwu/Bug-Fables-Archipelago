@@ -44,6 +44,10 @@ LOCATIONS = (
     Location("Lost Sands: Badge Alcove, Grass by the Right Door", 121, "DesertBadgeAlcove",
              Source(flag=210, pickup=Pickup(map="DesertBadgeAlcove", type=0, item=90)), rule=CanUse("Horn Slash"),
              category="hidden_item", no_jump=True),
+    # Crystal berry #14, dug up on a high ledge over the caravan camp: Jump and Bee Fly up.
+    Location("Lost Sands: Caravan Camp, Dig Spot", 122, "DesertCaravanMap",
+             Source(berry=14, pickup=Pickup(map="DesertCaravanMap", type=3, item=0)),
+             rule=CanUse("Jump") & CanUse("Bee Fly") & CanUse("Beetle Dig"), category="crystal_berry"),
 )
 STORY_EVENTS = (
     # The south trench's bridge, knocked over by the horn from the left side (flag 282); it stays down.

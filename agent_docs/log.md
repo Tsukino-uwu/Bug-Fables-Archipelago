@@ -3106,3 +3106,5 @@ either one wrong).
   call). Ticked and warped on before the user said the room was done: unticked, back in the room (the user: "i didn't
   say i was done with the room yet").
   Nothing else in it (every dump read again); the user: done. Ticked, 58 of 244. Next: `DesertCaravanMap` (80).
+- **`DesertCaravanMap`:** nothing between its doors; a new location, the user's name "Caravan Camp, Dig Spot" (crystal
+  berry #14, Jump, Bee Fly and Beetle Dig, id 122). Waiting on the user's "done".

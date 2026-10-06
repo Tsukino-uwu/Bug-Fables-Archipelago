@@ -383,6 +383,21 @@ class TestBadgeAlcove(BugFablesTestBase):
         self.assertTrue(self.can_reach_location("Lost Sands: Badge Alcove, Grass by the Right Door"))
 
 
+class TestCaravanCampDig(BugFablesTestBase):
+    # Jump, Bee Fly and Beetle Dig, each needed.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_needs_each(self) -> None:
+        spot = "Lost Sands: Caravan Camp, Dig Spot"
+        for missing in ("Jump", "Bee Fly", "Beetle Dig"):
+            with self.subTest(missing=missing):
+                state = CollectionState(self.multiworld)
+                self.collect_all_but([missing], state)
+                self.assertFalse(state.can_reach(spot, "Location", self.player))
+        self.collect_all_but([])
+        self.assertTrue(self.can_reach_location(spot))
+
+
 class TestBarCorner(BugFablesTestBase):
     # The way down to the underground bar is behind the commercial district's grass, and the bar's door comes back up
     # behind it too: the horn both ways.
