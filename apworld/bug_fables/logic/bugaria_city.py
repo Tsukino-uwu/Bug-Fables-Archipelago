@@ -113,14 +113,14 @@ LOCATIONS = (
              Source(flag=243, give=Give(map="BugariaResidential", type=-1, item=15)),
              rule=Has("Old Book Delivered"),
              category="quest"),
-    # The Bad Book, outdoors on top of a house, reached past grass that Kabbu's horn cuts.
+    # The Bad Book, outdoors on top of a house, reached past grass that Kabbu's horn cuts; no Jump.
     Location("Bugaria City: Residential District, Rooftop", 32, "BugariaResidential",
              Source(flag=621, pickup=Pickup(map="BugariaResidential", type=1, item=174)),
-             rule=CanUse("Horn Slash")),
-    # On top of a house by the fountain; reaching it needs Leif's ice.
+             rule=CanUse("Horn Slash"), no_jump=True),
+    # On top of a house by the fountain: Leif's ice and Jump.
     Location("Bugaria City: Residential District, Fountain Rooftop", 33, "BugariaResidential",
              Source(flag=59, pickup=Pickup(map="BugariaResidential", type=2, item=18)),
-             rule=CanUse("Freeze")),
+             rule=CanUse("Jump") & CanUse("Freeze")),
     # Merab's medal shop, full stock from a new game: one location per copy she ever stocks, done by a per-copy bit in
     # the save.
     Location("Bugaria City: Commercial District, Medal Shop 1", 34, "BugariaCommercial",

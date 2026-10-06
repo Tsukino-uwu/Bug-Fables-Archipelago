@@ -249,6 +249,25 @@ class TestMainPlaza(BugFablesTestBase):
         self.assertTrue(self.can_reach_location(spot))
 
 
+class TestResidentialRooftops(BugFablesTestBase):
+    # The Bad Book's rooftop takes only the horn (no Jump); the fountain's takes Jump and Freeze.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_rooftop_needs_only_the_horn(self) -> None:
+        spot = "Bugaria City: Residential District, Rooftop"
+        self.collect_by_name("Explorer Permit")
+        self.assertFalse(self.can_reach_location(spot))
+        self.collect_by_name("Horn Slash")
+        self.assertTrue(self.can_reach_location(spot))
+
+    def test_fountain_rooftop_needs_jump_and_freeze(self) -> None:
+        spot = "Bugaria City: Residential District, Fountain Rooftop"
+        self.collect_by_name(["Explorer Permit", "Jump"])
+        self.assertFalse(self.can_reach_location(spot))
+        self.collect(self.get_items_by_name("Progressive Freeze"))
+        self.assertTrue(self.can_reach_location(spot))
+
+
 class TestTheater(BugFablesTestBase):
     # The spinner gives its crystal berry only to the horn; the plushie is a plain sale.
     options = {"shuffle_field_moves": True, "shuffle_jump": True, "shuffle_crystal_berries": True}

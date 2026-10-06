@@ -800,6 +800,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     the right: each `BeetleHorn` hit spins it, and past its limit it spits out its item (`itemtype` 3, `flag` the
     berry), only while that berry isn't taken; the hidden-item medal (badge 2) counts it. Seen: picked up,
     `crystalbflags[13]` then true (dev `berry 13`).
+    **`BugariaResidential` (2026-10-06, the user):** free between its two doors and to the cicada's house; the Bad
+    Book's rooftop (location 32) takes the horn (grass) and no Jump; the fountain rooftop (location 33) takes Jump and
+    Freeze. The rest (the moth house from flag 130, the quests) waits for the quest pass.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

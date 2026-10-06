@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**35 of 244 done.**
+**36 of 244 done.**
 
 ## Outskirts
 
@@ -60,7 +60,7 @@ as it is, a frozen record.
 - [x] BugariaCommercial (10) — for the quest pass: the Lore Book dig spot (flag 388); for the discovery sweep:
   the Termacade (discovery 42, the greeter's first talk, needing nothing)
 - [x] BugariaTheater (26) — for the quest pass: Chubee's play (the stage takes Jump; 30 berries, line 63)
-- [ ] BugariaResidential (28)
+- [x] BugariaResidential (28) — for the quest pass: the Old Book delivery, the moth house (flag 130)
 - [ ] UndergroundBar (30)
 - [ ] AntPalace1 (31)
 - [ ] AntPalace2 (32)

@@ -3034,3 +3034,6 @@ either one wrong).
   out; found from the user's "hit a thing a few times", then `berry 13` on). The user: a crystal berry, not a hidden
   item. Chubee's stage takes Jump, her play's 30 berries for the quest pass. Ticked, 35 of 244. Next:
   `BugariaResidential` (28).
+- **`BugariaResidential`:** free across and to the cicada's house; the Bad Book's rooftop the horn without Jump, the
+  fountain rooftop Jump and Freeze (tests `TestResidentialRooftops`). Quests and the moth house for the quest pass.
+  Ticked, 36 of 244. Next: `UndergroundBar` (30).
