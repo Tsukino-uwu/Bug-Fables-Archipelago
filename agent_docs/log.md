@@ -3196,3 +3196,5 @@ either one wrong).
   "Stump behind the Flower" (id 128) and "Far Right Ledge" (the crank half, with Next 62).
   No other items (the butler for the quest pass); the user: done. Ticked, 76 of 244. Next:
   `GoldenHillsLowerRightCrank` (49).
+- **Back in `GoldenHillsDungeonRightCrank`** (the user asked): everything in it is doable with Bee Fly alone; added as
+  a second way.

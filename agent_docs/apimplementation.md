@@ -667,7 +667,7 @@ be wrong.
     "Golden Hills: Left Crank Room, Atop the Hill" (`GoldenHillsDungeonCrankLeft`, flag 112, Beemerang Halt, Jump and
     the horn; the user's name); "Golden Hills: Right Crank Room, Far Right Ledge" (`GoldenHillsDungeonRightCrank`,
     the Big Crank Top Half, key item 59, flag 113; the bubble shield, Freeze, the horn, Jump, the Beemerang and
-    Beemerang Halt; the user's name). The Big Crank (60) is made from two halves, so its halves are designed here too.
+    Beemerang Halt, or Bee Fly alone; the user's name). The Big Crank (60) is made from two halves, so its halves are designed here too.
 
 **Known issues:**
 
