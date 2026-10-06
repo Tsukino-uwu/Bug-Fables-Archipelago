@@ -3048,3 +3048,5 @@ either one wrong).
   Next: `AntPalaceLibrary` (34).
 - **`AntPalaceLibrary`:** nothing needed; the bookshelf's Lore Book (location 15) now `no_jump`. Turn-ins and
   discoveries for later. Ticked, 41 of 244. Next: `AntPalaceWarRoom` (37).
+- **`AntPalaceWarRoom`:** free in and out and to its NPCs; the table's Royal Calling (location 77) takes Jump, now
+  written. Ticked, 42 of 244. Next: `AntMinesBreakRoom` (73).

@@ -816,6 +816,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     **`AntPalaceLibrary` (2026-10-06, the user):** nothing needed for anything, the Lore Book behind the bookshelf
     (location 15) included. The librarian's turn-ins (Lore Books, crystal berry #25 at line 27; Bad Books, 35 berries
     each) and the discoveries are for the later passes.
+    **`AntPalaceWarRoom` (2026-10-06, the user):** in and out and its NPCs free; the Royal Calling on the table
+    (location 77) takes Jump.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

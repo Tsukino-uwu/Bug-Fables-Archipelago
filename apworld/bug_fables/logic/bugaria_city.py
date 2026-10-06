@@ -96,10 +96,10 @@ LOCATIONS = (
     # A Lore Book hidden behind a bookshelf; no Jump.
     Location("Ant Palace: Library, Behind the Bookshelf", 15, "AntPalaceLibrary",
              Source(flag=71, pickup=Pickup(map="AntPalaceLibrary", type=1, item=52)), no_jump=True),
-    # Royal Calling on the war room's table; the game makes it only after the ending (flag 555), the seed from the
-    # start (the user, 2026-10-04).
+    # Royal Calling on the war room's table, up by Jump; the game makes it only after the ending (flag 555), the seed
+    # from the start (the user, 2026-10-04).
     Location("Ant Palace: War Room, Table", 77, "AntPalaceWarRoom",
-             Source(flag=717, pickup=Pickup(map="AntPalaceWarRoom", type=2, item=80))),
+             Source(flag=717, pickup=Pickup(map="AntPalaceWarRoom", type=2, item=80)), rule=CanUse("Jump")),
     # Board quest 33's reward, from a cicada in a residential house once the old book (Quest Book) is delivered.
     Location("Bugaria City: Residential District, Old Book Delivery Reward 1", 16, "BugariaResidential",
              Source(flag=243, give=Give(map="BugariaResidential", type=1, item=52)),
