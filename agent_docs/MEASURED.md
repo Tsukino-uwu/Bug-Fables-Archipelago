@@ -863,7 +863,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     small platform on the ledge, Jump; the grass by the right door (flag 210, its vector data 90, a Succulent Berry),
     the horn.
     **`DesertCaravanMap` (2026-10-06, the user):** nothing needed between its two doors; crystal berry #14's dig spot
-    (`dirtmound`, height 8, the upper left) takes Jump and Bee Fly up, and Beetle Dig.
+    (`dirtmound`, height 8, the upper left): the sand funnel flown over (Bee Fly), then rocks jumped up (Jump), and
+    Beetle Dig.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
