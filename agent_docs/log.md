@@ -3134,3 +3134,6 @@ either one wrong).
   left is a one-way without the shield, and gone from chapter 4 (flag 300 by Event105), so not counted even with
   Points of No Return: the shield both ways. The user: Bee Fly too, both ways; added. Waiting on the user's "done".
   No items; the logic explained at the user's ask; the user: done. Ticked, 64 of 244. Next: `DesertWestDunes` (98).
+- **The oasis entrance's bounce pad:** the user: "can't we just make it so the red bounce pad is always there?" Kept
+  present (`KEPT_PRESENT`, whose marker answers "exists" past the pad's own limit flag 300); its one-way now counts
+  with Points of No Return. Not seen yet: needs a seed with it (or `liveslot`) and flag 300 on.

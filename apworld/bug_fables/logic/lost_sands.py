@@ -88,6 +88,8 @@ TRANSFERS = (
 # chapter 5 (flag 348), and a start or a shuffled door arriving there before landed behind it, falling forever.
 KEPT_PRESENT = (
     EntityRef("DesertFGBorder", "loadzonefg"),
+    # The oasis entrance's red bounce pad, gone from chapter 4 (flag 300) in the game, kept for good (the user).
+    EntityRef("DesertOasisEntrance", "mush"),
 )
 SCENERY_HIDDEN = (
     EntityRef("DesertFGBorder", "Base/Gate"),
@@ -142,6 +144,7 @@ MAP_AREAS = (
     Area("DesertOasis", "Top Right", ("loadzone cave",), False_(),
          out=one_way(None, CanUse("Jump") & ANY_ATTACK)),
     # The oasis entrance's right side (the oasis door), past spikes the bubble shield crosses, or flown over (Bee
-    # Fly), both ways. Its bounce pad back left goes at chapter 4 (flag 300, Event105): that one-way isn't counted.
-    Area("DesertOasisEntrance", "Right", ("loadzoneside",), CanUse("Shield") | CanUse("Bee Fly")),
+    # Fly), both ways; back left, also its red bounce pad (kept present), a one-way.
+    Area("DesertOasisEntrance", "Right", ("loadzoneside",), CanUse("Shield") | CanUse("Bee Fly"),
+         out=CanUse("Shield") | CanUse("Bee Fly") | one_way(None, CanUse("Shield") | CanUse("Bee Fly"))),
 )

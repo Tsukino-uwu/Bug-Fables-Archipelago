@@ -2949,7 +2949,7 @@ with Jump and a grass drop with the horn), the caravan camp (free; a new locatio
 and Beetle Dig), the sand pit (its doors joined through the middle by eight bridges the horn knocks over, five
 events, or Bee Fly), the Golden Hills border (free; a new location: its ledge medal, the horn and Jump), the roach
 village (free; a new location: its dig spot's berry, Beetle Dig), the oasis (its bottom door dug under; its top right
-reached only from its cave door, back up by a platform; two new locations), the oasis entrance (its right side the bubble shield or Bee Fly, both ways), 64 of 244; the rest of `room-checklist.md` to go.
+reached only from its cave door, back up by a platform; two new locations), the oasis entrance (its right side the bubble shield or Bee Fly, both ways; its bounce pad back kept present for good, the user's ask), 64 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

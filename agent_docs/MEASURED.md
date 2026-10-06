@@ -883,7 +883,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     (flag 733) on a sandpile below the cave, walked to from the top right or the platform, a drop from there.
     **`DesertOasisEntrance` (2026-10-06, the user):** the top and bottom doors (the left side) free between them; to
     the right side (the oasis door) the bubble shield over spikes, or Bee Fly, both ways; back, also a red bounce pad sends the party left with
-    nothing, a one-way without the shield. The pad (`mush`) is there only until flag 300, set by Event105 (chapter 4).
+    nothing, a one-way without the shield. The pad (`mush`) is there only until flag 300, set by Event105 (chapter 4);
+    the user: keep it there for good (`KEPT_PRESENT`), so its one-way counts with Points of No Return.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
