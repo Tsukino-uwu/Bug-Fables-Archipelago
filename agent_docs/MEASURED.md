@@ -782,6 +782,10 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     (flag 517): arriving through it, the party was pushed past it, so leaving that way needs the gem placed.
     **`AntTunnels` (2026-10-06, the user):** nothing to cross between the palace door and the break room door; each
     tunnel entrance (EventTriggers, flags 75-80, EntityDump) only needs its flag to appear. No items.
+    **`BugariaMainPlaza` (2026-10-06, the user):** its five doors are open to each other; the statue's discovery and the
+    quest board need nothing. The red house takes the Flower Key; its roof's Charge Up (medal 52, flag 230) takes only
+    that, the bounce pads working without Jump. The mound (crystal berry #29, `DigSpot` data `1 29`) takes only Beetle
+    Dig. Sleeping at the inn needs nothing; the Honey Drop that appears each time (Jump to reach) is no location.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

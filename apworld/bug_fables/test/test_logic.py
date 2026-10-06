@@ -230,6 +230,25 @@ class TestTownMedal(BugFablesTestBase):
         self.assertTrue(self.can_reach_location(name))
 
 
+class TestMainPlaza(BugFablesTestBase):
+    # The red house's roof takes only the Flower Key (its bounce pads work without Jump); the mound, only Beetle Dig.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True, "shuffle_crystal_berries": True}
+
+    def test_rooftop_needs_the_flower_key(self) -> None:
+        spot = "Bugaria City: Main Plaza, Red House Rooftop"
+        self.collect_by_name("Explorer Permit")
+        self.assertFalse(self.can_reach_location(spot))
+        self.collect_by_name("Flower Key")
+        self.assertTrue(self.can_reach_location(spot))
+
+    def test_dig_spot_needs_beetle_dig(self) -> None:
+        spot = "Bugaria City: Main Plaza, Dig Spot"
+        self.collect_by_name("Explorer Permit")
+        self.assertFalse(self.can_reach_location(spot))
+        self.collect_by_name("Beetle Dig")
+        self.assertTrue(self.can_reach_location(spot))
+
+
 class TestAntTunnels(BugFablesTestBase):
     # A far end's free miner opens the way to the tunnel hub, so reaching the far end reaches the hub.
     def test_far_ends_lead_to_the_hub(self) -> None:

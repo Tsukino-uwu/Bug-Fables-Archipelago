@@ -3010,3 +3010,7 @@ either one wrong).
   244: Snakemouth Den done. Next: `AntTunnels` (3).
 - **`AntTunnels`:** nothing to cross; each tunnel entrance only its flag (75-80), as the logic already had. Its NPCs
   left for the quest pass. Ticked, 32 of 244. Next: `BugariaMainPlaza` (9).
+- **`BugariaMainPlaza`:** doors, statue discovery and quest board free. Two new locations, the user's names: "Red
+  House Rooftop" (Charge Up, flag 230, the Flower Key only, the bounce pads without Jump; the key now progression) and
+  "Dig Spot" (crystal berry #29, Beetle Dig), ids 95 and 96, tests `TestMainPlaza`. The inn's Honey Drop comes back
+  every sleep: no location. Ticked for the quest pass (the board), 33 of 244. Next: `BugariaCommercial` (10).

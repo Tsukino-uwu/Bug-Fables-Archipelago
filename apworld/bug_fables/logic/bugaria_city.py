@@ -32,6 +32,14 @@ TRANSFERS = (
     Transfer("story", "BugariaEndThrone", "BugariaMainPlaza", LATER_CHAPTERS, two_way=False),
 )
 LOCATIONS = (
+    # Charge Up on the red house's roof: the Flower Key opens the house (flag 229), its bounce pads need no Jump.
+    Location("Bugaria City: Main Plaza, Red House Rooftop", 95, "BugariaMainPlaza",
+             Source(flag=230, pickup=Pickup(map="BugariaMainPlaza", type=2, item=52)), rule=Has("Flower Key"),
+             no_jump=True),
+    # Crystal berry #29, dug up from the mound at the top of the plaza.
+    Location("Bugaria City: Main Plaza, Dig Spot", 96, "BugariaMainPlaza",
+             Source(berry=29, pickup=Pickup(map="BugariaMainPlaza", type=3, item=0)), rule=CanUse("Beetle Dig"),
+             category="crystal_berry", no_jump=True),
     # A Lore Book hidden behind a bookshelf.
     Location("Ant Palace: Library, Behind the Bookshelf", 15, "AntPalaceLibrary",
              Source(flag=71, pickup=Pickup(map="AntPalaceLibrary", type=1, item=52))),

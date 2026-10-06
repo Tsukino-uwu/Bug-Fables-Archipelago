@@ -1580,8 +1580,9 @@ the game was stricter: the gate is shown open from the start and the wall hidden
 `TestSettlementDesertGate`; `MEASURED.md`, the Golden Settlement's desert gate). No attack is needed for the switch.
 **Beette, the Flower Key's seller** (the same day, the user: "make it appear always if required"): the `smug bee` on
 `BeehiveBalcony`, made only after chapter 3 (flag 299), is kept present (`logic/bee_kingdom_hive.py`, test
-`TestFlowerKeySeller`). Her sale is still the game's own, not a location; the key and the red house it opens aren't in
-the logic yet (`MEASURED.md`, the Flower Key); her sale became a location the same day (build step 46).
+`TestFlowerKeySeller`). Her sale is still the game's own, not a location; the key and the red house it opens weren't in
+the logic yet (`MEASURED.md`, the Flower Key); her sale became a location the same day (build step 46), and the red
+house's roof one on 2026-10-06 (the main plaza, room by room), the key progression with it.
 **The Rubber Prison yard's rock** (the user: "it makes you get stuck/softlocked normally"): `rock` just inside
 `RubberPrisonPier`'s left door, broken only by Horn Dash, until flag 589, is kept away (`logic/rubber_prison.py`, test
 `TestPrisonYardRock`; `MEASURED.md`, the Rubber Prison yard's rock). **Its checkpoint corridor, one-way both ways**
@@ -2910,7 +2911,8 @@ underground room (Jump and an attack across, both ways), the right bridge room (
 horn; its high door gated by the big switch), the first left room (its high door by Jump, Freeze and the horn), the upper left room
 (the same, its high door gated by the big switch), the top (nothing to go in or out; its Sophie Petal for the quest
 pass), the upper entrance (its top door shut until the gem is placed, Jump and a stand-in for the gem), 31 of 244;
-Bugaria City from 2026-10-06: the ant tunnels (nothing to cross; each tunnel only its flag), 32 of 244; the rest of `room-checklist.md` to go.
+Bugaria City from 2026-10-06: the ant tunnels (nothing to cross; each tunnel only its flag), the main plaza (two new
+locations: the red house's roof, the Flower Key, and the dig spot's berry, Beetle Dig), 33 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
