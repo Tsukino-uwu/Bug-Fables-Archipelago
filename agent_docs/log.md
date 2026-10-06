@@ -3200,3 +3200,4 @@ either one wrong).
   a second way.
 - **Bee Fly, rechecked in the Golden Hills rooms done** (the user: "might have forgotten to include fly"): the
   entrance nothing; the left hall across between its left and right doors, added.
+  The left crank room: nothing for Bee Fly. Recheck done.
