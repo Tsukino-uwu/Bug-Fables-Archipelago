@@ -3234,3 +3234,5 @@ either one wrong).
   item"; that option is for items unseen until found, off by default), named "Pitcher Path, Behind the Thorns" (the
   user's "Behind the Thorns", id 132); the top right door Jump, the horn and Halt, a drop down.
   The lower door free both ways; no other items; the user: done. Ticked, 82 of 244. Next: `GoldenPitcher2` (205).
+- **`GoldenPitcher2`:** the lower door free; berry #40 and the top left door Jump and Beemerang Halt, a drop down from
+  the door. The berry named "Upper Pitcher Path, Right Ledge" (the user's pick, id 133). Waiting on the user's "done".

@@ -2984,7 +2984,8 @@ candy on a stump), the lower right crank room (its door free; its crank spot wit
 Beemerang Halt; its crank half with Next 62), 78 of 244; the upper hall (its boss door behind two shrines' offerings,
 two events, a stand-in for the offerings; its upper right only from its own door), 79 of 244; the upper side room (its upper door and crank the Wooden Crank
 in its slot, Jump and Halt), the boss room (free; its fight up two ledges, Jump), 81 of 244; the pitcher path (its top door Jump, the horn and
-Halt; a new location behind thorns), 82 of 244; the rest of `room-checklist.md` to go.
+Halt; a new location behind thorns), 82 of 244; the upper pitcher path (its top left door Jump and Halt; a new
+location: its berry, Jump and Halt; in progress); the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
