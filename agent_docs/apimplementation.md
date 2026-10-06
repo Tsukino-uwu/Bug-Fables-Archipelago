@@ -2896,7 +2896,8 @@ the door room (the trapdoor an event opening the hole down; the big door kept op
 high door to `SnakemouthTop` a drop), the fall room (its door-room door on a ledge: Jump up, a drop down), the lake (its
 top, with Leif's scene, up by a switch and platforms), the underground door room (five parts; its big door an event
 needing the two side rooms' switches, theirs cautious until mapped), the mushroom pit (its bottom door a drop down,
-Jump back up), the treasure room (the Spider fight: Vi), 25 of 244; the rest of `room-checklist.md` to go.
+Jump back up), the treasure room (the Spider fight: Vi), the right
+underground room (Jump and an attack across, both ways), 26 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

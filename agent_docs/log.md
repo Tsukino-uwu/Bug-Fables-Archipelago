@@ -2981,3 +2981,8 @@ either one wrong).
   scene sends the party to `BOGoldenPath` (not in the logic yet). Past flag 41, seen empty. The user: bosses not
   shuffled yet, but every mode (enemies, bosses, both, chaos) must mix later, so a boss spot's rule follows the fight
   placed there (Enemy Shuffle's next steps). Ticked, 25 of 244. Next: `SnakemouthUndergroundRightA` (22).
+- **`SnakemouthUndergroundRightA`:** no items; Jump and an attack (switches, moving and rotating platforms, two
+  ledges) between its two doors, both ways. Ticked, 26 of 244. Next: `SnakemouthUndergroundRightB` (23).
+- **Open bug: the Beemerang did nothing** after the first boss scene (sent to `BOGoldenPath`) and a warp back; no
+  buzzer, and no `[moves]` refusal in the log, so not the item lock. Horn and Freeze worked; reloading the save
+  fixed it. Not chased; read the log while it's broken if it comes back.

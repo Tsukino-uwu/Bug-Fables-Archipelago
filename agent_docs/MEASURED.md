@@ -761,6 +761,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     **`SnakemouthTreasureRoom` (2026-10-06, the user):** in and out need nothing; past flag 41 an empty dead end. The
     Spider fight (`MaskEvent`, limit 41, Event26) needs Vi, the one who hits it in the air. The scene ends on
     `BOGoldenPath` (`event-transfers.py`), not yet in the logic.
+    **`SnakemouthUndergroundRightA` (2026-10-06, the user):** from the left door to `UndergroundRightB`'s door, the
+    same both ways: switches (an attack) and moving platforms (Jump), two small ledges (Jump), then a switch (an
+    attack) and the rotating platform (Jump). No locations; the grass by the sign hides nothing (EntityDump).
   - **Vi's beemerang (range):** `SnakemouthBridgeRoom`'s bridge comes down when its rope is hit; from the right only the
     beemerang reaches it, from the left Leif's move hit it (so presumably any member's; Kabbu's not tried). The room's
     Tattle tutorial (Event2) ran with stand-ins and finished (flag 10); its hint (Event0) is skipped by Skip cutscenes.

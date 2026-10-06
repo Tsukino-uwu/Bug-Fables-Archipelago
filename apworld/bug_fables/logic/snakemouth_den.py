@@ -143,6 +143,9 @@ MAP_AREAS = (
          to="SnakemouthUndergrondDoor (Middle)"),
     # The mushroom pit's bottom door: up the bounce mushrooms (Jump), dropped down to from the top freely.
     Area("SnakemouthMushroomPit", "Bottom", ("WarpDoorRoom",), one_way(None, CanUse("Jump")), out=CanUse("Jump")),
+    # The right underground room's far door: switches (any attack) move platforms and a rotating one, with ledges
+    # between (Jump), the same both ways.
+    Area("SnakemouthUndergroundRightA", "Right", ("WarpNext",), CanUse("Jump") & ANY_ATTACK),
 )
 KEPT_OPEN = (
     # Turns the party back until the first boss; with the way up kept present it has nothing left to guard.
