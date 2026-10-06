@@ -2998,3 +2998,6 @@ either one wrong).
   The item drops at the party's feet (`CreateItem`); every bag item is filler (new test). Built, not yet seen.
 - **`SnakemouthUndergroundLeftA`:** no items; up to its high left door Jump, Freeze and the horn, a free drop back.
   Ticked, 28 of 244. Next: `SnakemouthUndergroundLeftB` (25).
+- **`SnakemouthUndergroundLeftB`:** no items; its top (big switch, high door) up by Jump, Freeze and the horn, a
+  free drop down; the high door's gate pushed the party past with flag 33 cleared (seen). Both big switches mapped,
+  so the cautious `UNDERGROUND` stand-in is gone. Ticked, 29 of 244. Next: `SnakemouthTop` (184).

@@ -771,6 +771,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     switch (an attack).
     **`SnakemouthUndergroundLeftA` (2026-10-06, the user):** from the right door (to `SnakemouthUndergrondDoor`) up to
     the left door (to `UndergroundLeftB`) takes Jump, Freeze and the horn; down from it a free drop. No items.
+    **`SnakemouthUndergroundLeftB` (2026-10-06, seen):** from the low door (to `UndergroundLeftA`) up to the top (the big
+    switch, flag 33, and the high door) takes Jump, Freeze and the horn; down is a free drop. The high door's gate
+    opens on the big switch (an attack): arriving through it with flag 33 cleared, the party was pushed past the gate.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

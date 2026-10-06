@@ -10,8 +10,6 @@ from .outskirts import PAST_GATE
 
 # Grass in the second corridor and outside the cave, then the door room's horn puzzle down the trapdoor.
 DEN = PAST_GATE & CanUse("Horn Slash")
-# Every Snakemouth room with water droplets, or reached only through one: Leif freezes the droplets.
-UNDERGROUND = DEN & CanUse("Freeze")
 # The door room's puzzle: grass cut, Jump onto the stone hung on a vine, hit it down, and the horn knocks both stones
 # onto the plates; the trapdoor Mushroom appears.
 TRAPDOOR = CanUse("Jump") & CanUse("Horn Slash")
@@ -21,8 +19,8 @@ TOP_LEDGE = CanUse("Horn Slash") & CanUse("Bee Fly")
 LAKE_UP = CanUse("Jump") & CanUse("Beemerang Toss")
 # The underground door room's droplets: frozen (Freeze) and jumped on (Jump), up to its middle and its left.
 DROPLETS = CanUse("Jump") & CanUse("Freeze")
-# The side rooms' climbs, droplets and the horn: the right bridge room's (after its bridge's switch) and the first
-# left room's.
+# The side rooms' climbs, droplets and the horn: the right bridge room's (after its bridge's switch) and both left
+# rooms'.
 DROPLETS_HORN = DROPLETS & CanUse("Horn Slash")
 LOCATIONS = (
     Location("Snakemouth Den: Underground Door Room, Behind the Wall", 5, "SnakemouthUndergrondDoor",
@@ -91,10 +89,10 @@ STORY_EVENTS = (
                "SnakemouthBridgeRoom", Source(event=1, flag=7), rule=CanUse("Jump") & CanUse("Beemerang Toss")),
     StoryEvent("Snakemouth Den: Bridge Room, Bridge Lowered from the Left", "Snakemouth Bridge Lowered",
                "SnakemouthBridgeRoom", Source(event=1, flag=7), rule=CanUse("Jump") & ANY_ATTACK, area="Left"),
-    # The two big switches up the underground's side rooms (flags 33, 34), cautious until those rooms are mapped; with
-    # both, the underground door room's big door opens (Event24, flag 35).
+    # The two big switches at the top of the underground's side rooms (flags 33, 34), any attack; with both, the
+    # underground door room's big door opens (Event24, flag 35).
     StoryEvent("Snakemouth Den: Upper Left Room, Switch Hit", "Snakemouth Left Switch", "SnakemouthUndergroundLeftB",
-               Source(flag=33), reach=UNDERGROUND),
+               Source(flag=33), rule=ANY_ATTACK, area="Top"),
     StoryEvent("Snakemouth Den: Upper Right Room, Switch Hit", "Snakemouth Right Switch",
                "SnakemouthUndergroundRightB", Source(flag=34), rule=ANY_ATTACK, area="Top"),
     StoryEvent("Snakemouth Den: Underground Door Room, Big Door Opened", "Snakemouth Big Door Opened",
@@ -155,6 +153,11 @@ MAP_AREAS = (
     # Its high door, behind a gate the big switch opens; arriving through it while shut, the game pushes the party past.
     # The first left room's left door, up high: Jump, Freeze and the horn; dropped down from freely.
     Area("SnakemouthUndergroundLeftA", "Left", ("LoadingZoneNext",), DROPLETS_HORN, out=one_way(None, DROPLETS_HORN)),
+    # The upper left room's top, with the big switch, the same: up by Jump, Freeze and the horn, dropped down from; its
+    # high door gated by the big switch, as the right bridge room's.
+    Area("SnakemouthUndergroundLeftB", "Top", (), DROPLETS_HORN, out=one_way(None, DROPLETS_HORN)),
+    Area("SnakemouthUndergroundLeftB", "High Door", ("LoadingZoneDoor",), Has("Snakemouth Left Switch"),
+         out=one_way(None, Has("Snakemouth Left Switch")), to="SnakemouthUndergroundLeftB (Top)"),
     Area("SnakemouthUndergroundRightB", "High Door", ("DoorMainRoom",), Has("Snakemouth Right Switch"),
          out=one_way(None, Has("Snakemouth Right Switch")), to="SnakemouthUndergroundRightB (Top)"),
 )
