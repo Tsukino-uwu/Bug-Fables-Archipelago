@@ -3116,3 +3116,5 @@ either one wrong).
   each door one edge, five bridge events, the user's names (asked, then "the preview sounds right"); the user asked
   whether per entrance or from the middle was better: from the middle, one rule per door instead of every pair.
   Waiting on the user's "done".
+  The user's screenshot with every bridge down matched it; the user: done. Ticked, 60 of 244. Next:
+  `DesertBeforeGH` (82).

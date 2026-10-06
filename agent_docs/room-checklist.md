@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**59 of 244 done.**
+**60 of 244 done.**
 
 ## Outskirts
 
@@ -92,7 +92,7 @@ as it is, a frozen record.
 - [x] DesertBadgeAlcove (79)
 - [x] DesertCaravanMap (80) — for the enemy pass: the caravan robbery scene (Event93, until flag 201), its fight
   needing logic once bosses and enemies are shuffled
-- [ ] DesertSandPitArea (81)
+- [x] DesertSandPitArea (81)
 - [ ] DesertBeforeGH (82)
 - [ ] DesertRoachVillage (95)
 - [ ] DesertOasis (96)
