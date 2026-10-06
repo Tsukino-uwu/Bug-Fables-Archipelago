@@ -93,9 +93,9 @@ LOCATIONS = (
     Location("Bugaria City: Theater, Right Side Spinner", 112, "BugariaTheater",
              Source(berry=13, pickup=Pickup(map="BugariaTheater", type=3, item=0)), rule=CanUse("Horn Slash"),
              category="crystal_berry", no_jump=True),
-    # A Lore Book hidden behind a bookshelf.
+    # A Lore Book hidden behind a bookshelf; no Jump.
     Location("Ant Palace: Library, Behind the Bookshelf", 15, "AntPalaceLibrary",
-             Source(flag=71, pickup=Pickup(map="AntPalaceLibrary", type=1, item=52))),
+             Source(flag=71, pickup=Pickup(map="AntPalaceLibrary", type=1, item=52)), no_jump=True),
     # Royal Calling on the war room's table; the game makes it only after the ending (flag 555), the seed from the
     # start (the user, 2026-10-04).
     Location("Ant Palace: War Room, Table", 77, "AntPalaceWarRoom",

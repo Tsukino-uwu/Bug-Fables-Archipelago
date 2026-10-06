@@ -3046,3 +3046,5 @@ either one wrong).
 - **`AntBridge`:** free across; discovery 11 from an NPC, Maki's and Kina's quest NPCs, no items. The user: I warped
   them out of the throne room before they'd said it was done; wait for their "done" every time. Ticked, 40 of 244.
   Next: `AntPalaceLibrary` (34).
+- **`AntPalaceLibrary`:** nothing needed; the bookshelf's Lore Book (location 15) now `no_jump`. Turn-ins and
+  discoveries for later. Ticked, 41 of 244. Next: `AntPalaceWarRoom` (37).

@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**40 of 244 done.**
+**41 of 244 done.**
 
 ## Outskirts
 
@@ -67,7 +67,8 @@ as it is, a frozen record.
 - [x] AntPalace2 (32) — for the quest pass: crystal berries #5 (line 15) and #12 (line 48, after flag 130), story
   rewards, the guard and the queen up two ledges (Jump); for the discovery sweep: its four discoveries
 - [x] AntBridge (33) — for the quest pass: Maki's and Kina's quest; for the discovery sweep: discovery 11 (line 1)
-- [ ] AntPalaceLibrary (34)
+- [x] AntPalaceLibrary (34) — for the quest pass: the librarian's turn-ins (Lore Books, crystal berry #25 at line
+  27; Bad Books, 35 berries each); for the discovery sweep: the portrait and the librarian's
 - [ ] AntPalaceWarRoom (37)
 - [ ] AntMinesBreakRoom (73)
 - [ ] BugariaPlazaAttack (123)
