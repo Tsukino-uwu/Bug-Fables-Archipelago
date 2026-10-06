@@ -2949,3 +2949,7 @@ either one wrong).
   (scenery hidden and shown from the start; both trapdoor scenes still played with it open); the hole, with flags 13
   and 14 cleared, pushed the party up through; the high door to `SnakemouthTop` a drop, back up with the horn and
   Bee Fly. Ticked, 20 of 244. Next: `SnakemouthFallRoom` (13).
+- **The user: "warp me first, guess after"** when moving to the next room (kept as a preference).
+- **`SnakemouthFallRoom`:** the lake door free both ways; the door room's door on the bounce mushroom's ledge, a
+  free drop down, Jump back up; the spider scene starts from either side and every member hits the web. Ticked, 21
+  of 244. Next: `SnakemouthLake` (14).

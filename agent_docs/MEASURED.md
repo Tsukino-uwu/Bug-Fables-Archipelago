@@ -736,6 +736,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     arriving through it the party stood behind it until moving a little, then got through. Kept open from the start
     (the user); with it open, Event4's drop and Event5's fall still played. The hole down is shut until flag 14 too.
     The high door to `SnakemouthTop` takes the horn (grass) and Bee Fly (across) to reach; dropped down from freely.
+    **`SnakemouthFallRoom` (2026-10-06, seen):** the spider scene starts from either side; its fight needs nothing
+    particular, every member can hit the web. The door room's door sits on the bounce mushroom's ledge: Jump to get
+    back up there, a free drop down from it.
   - **Vi's beemerang (range):** `SnakemouthBridgeRoom`'s bridge comes down when its rope is hit; from the right only the
     beemerang reaches it, from the left Leif's move hit it (so presumably any member's; Kabbu's not tried). The room's
     Tattle tutorial (Event2) ran with stand-ins and finished (flag 10); its hint (Event0) is skipped by Skip cutscenes.

@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**20 of 244 done.**
+**21 of 244 done.**
 
 ## Outskirts
 
@@ -40,7 +40,7 @@ as it is, a frozen record.
 
 - [x] SnakemouthBridgeRoom (11)
 - [x] SnakemouthDoorRoom (12)
-- [ ] SnakemouthFallRoom (13)
+- [x] SnakemouthFallRoom (13)
 - [ ] SnakemouthLake (14)
 - [ ] SnakemouthUndergrondDoor (19)
 - [ ] SnakemouthMushroomPit (20)

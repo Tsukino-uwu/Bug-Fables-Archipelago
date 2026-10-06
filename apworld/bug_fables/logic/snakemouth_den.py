@@ -57,7 +57,7 @@ LOCATIONS = (
              Source(regional=28, pickup=Pickup(map="SnakemouthUndergroundRightB", type=0, item=0)), reach=UNDERGROUND),
     # Recorded at the end of the spider fights after the trapdoor, before Leif joins.
     Location("Snakemouth Den: Fall Room, Spider Fight", 29, "SnakemouthFallRoom",
-             Source(discovery=1), category="discovery", reach=DEN),
+             Source(discovery=1), category="discovery", no_jump=True),
     # Recorded by examining the warning sign hidden behind the bridge room's bushes.
     Location("Snakemouth Den: Bridge Room, Sign behind the Bushes", 30, "SnakemouthBridgeRoom",
              Source(discovery=2),
@@ -72,7 +72,7 @@ LOCATIONS = (
              Source(discovery=3), category="discovery", reach=UNDERGROUND),
     # Where the mod has Leif join (the spider scene over, flag 27), whoever starts.
     Location("Snakemouth Den: Fall Room, After the Spider", 67, "SnakemouthFallRoom",
-             Source(event=6, flag=27), category="party_member", reach=DEN),
+             Source(event=6, flag=27), category="party_member", no_jump=True),
 )
 STORY_EVENTS = (
     # The bridge's rope, hit from either bank (up a ledge, Jump): only the Beemerang reaches it from the right, any
@@ -103,6 +103,9 @@ MAP_AREAS = (
     Area("SnakemouthDoorRoom", "Trapdoor", ("LoadZoneFallRoom",), Has("Snakemouth Trapdoor Opened"),
          out=one_way(None, Has("Snakemouth Trapdoor Opened"))),
     Area("SnakemouthDoorRoom", "High Door", ("New Entity16",), TOP_LEDGE, out=one_way(None, TOP_LEDGE)),
+    # The fall room's door up to the door room, by the bounce mushroom: up a ledge (Jump), dropped down from.
+    Area("SnakemouthFallRoom", "Mushroom Ledge", ("LoadingZoneDoorRoom",), CanUse("Jump"),
+         out=one_way(None, CanUse("Jump"))),
 )
 KEPT_OPEN = (
     # Turns the party back until the first boss; with the way up kept present it has nothing left to guard.
