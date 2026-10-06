@@ -3282,3 +3282,7 @@ either one wrong).
   the lever behind the door and open it", and they never asked for it kept open: that was my reading of 2026-10-04,
   now corrected. The gate is the game's, its lever an event in the desert door's area ("Desert Gate Opened", my
   name, to confirm), the wall still hidden. Then a new seed and save, at the user's ask.
+- **New seed** `AP_63157247147940960355` (this session's scratchpad `out/`, the same player file), hosted on 38281,
+  the old server stopped; the user started a new file. Seen on it: the caravan's three goods with their seed items'
+  starbursts and icons, the desert gate shut from the settlement side. The user: done. Ticked, 87 of 244. Next:
+  `GoldenHillsPath3` (44).
