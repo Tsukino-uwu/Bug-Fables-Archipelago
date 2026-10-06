@@ -2947,8 +2947,8 @@ the crank and Beemerang Halt leaving it; a new dig spot behind a rock, Horn Dash
 gate kept open), the Defiant Root's south entrance (free), the badge alcove (its left door a drop only; two new locations, a ledge medal
 with Jump and a grass drop with the horn), the caravan camp (free; a new location: its dig spot's berry, Jump, Bee Fly
 and Beetle Dig), the sand pit (its doors joined through the middle by eight bridges the horn knocks over, five
-events, or Bee Fly), the Golden Hills border (free; a new location: its ledge medal, the horn and Jump; in
-progress), 60 of 244; the rest of `room-checklist.md` to go.
+events, or Bee Fly), the Golden Hills border (free; a new location: its ledge medal, the horn and Jump), 61 of
+244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

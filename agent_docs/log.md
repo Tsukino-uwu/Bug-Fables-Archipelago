@@ -3120,3 +3120,4 @@ either one wrong).
   `DesertBeforeGH` (82).
 - **`DesertBeforeGH`:** nothing between its doors; a new location, the user's name "Golden Hills Border, Left Ledge"
   (Strong Start, flag 415, the horn and Jump, id 123; placed by their screenshot). Waiting on the user's "done".
+  Nothing else in it (every dump); the user: done. Ticked, 61 of 244. Next: `DesertRoachVillage` (95).
