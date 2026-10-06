@@ -432,7 +432,7 @@ class TestGoldenHillsBorderLedge(BugFablesTestBase):
 
 
 class TestOasis(BugFablesTestBase):
-    # The bottom door is dug under; the sandpile's way back up takes Jump and a switch hit.
+    # The sandpile's way back up takes Jump and a switch hit.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
     def test_needs(self) -> None:
