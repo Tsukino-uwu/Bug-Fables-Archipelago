@@ -65,7 +65,7 @@ as it is, a frozen record.
   for all 50 crystal berries as locations (build step 11)
 - [x] AntPalace1 (31)
 - [x] AntPalace2 (32) — for the quest pass: crystal berries #5 (line 15) and #12 (line 48, after flag 130), story
-  rewards; for the discovery sweep: its four discoveries
+  rewards, the guard and the queen up two ledges (Jump); for the discovery sweep: its four discoveries
 - [ ] AntBridge (33)
 - [ ] AntPalaceLibrary (34)
 - [ ] AntPalaceWarRoom (37)
