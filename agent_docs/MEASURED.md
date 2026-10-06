@@ -865,6 +865,13 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     **`DesertCaravanMap` (2026-10-06, the user):** nothing needed between its two doors; crystal berry #14's dig spot
     (`dirtmound`, height 8, the upper left): the sand funnel flown over (Bee Fly), then rocks jumped up (Jump), and
     Beetle Dig.
+    **`DesertSandPitArea` (2026-10-06, the user, door by door with the bridges reset):** eight bridges over the pit
+    (`bridge1`-`bridge8`, switches, flags 202-209), each knocked over by the horn from one side, staying down after
+    leaving. From the bottom: one bridge, then three more around the middle, reached over small platforms (Jump), to
+    the top doors. From the left: two bridges, one leading up and over platforms to the middle; the other, with the
+    middle's lower one and the bottom's, joins left and bottom with no Jump. The top-left door: nothing from it. The
+    top-right and right doors: one bridge each, together joining them, no Jump. Bee Fly crosses everything. The user's
+    sketch (the bridges after falling) placed them.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

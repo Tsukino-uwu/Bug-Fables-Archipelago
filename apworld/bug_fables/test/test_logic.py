@@ -398,6 +398,24 @@ class TestCaravanCampDig(BugFablesTestBase):
         self.assertTrue(self.can_reach_location(spot))
 
 
+class TestSandPitBridges(BugFablesTestBase):
+    # Every bridge falls only to the horn; the middle's also need Jump to reach.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_needs(self) -> None:
+        bridges = ("Bottom Bridge", "Middle Bridges", "Left Bridges", "Right Bridge", "Top Right Bridge")
+        for bridge in bridges:
+            event = f"Lost Sands: Sand Pit, {bridge} Knocked Down"
+            for missing in ("Horn Slash", "Jump") if bridge == "Middle Bridges" else ("Horn Slash",):
+                with self.subTest(event=event, missing=missing):
+                    state = CollectionState(self.multiworld)
+                    self.collect_all_but([missing], state)
+                    self.assertFalse(state.can_reach(event, "Location", self.player))
+        self.collect_all_but([])
+        for bridge in bridges:
+            self.assertTrue(self.can_reach_location(f"Lost Sands: Sand Pit, {bridge} Knocked Down"))
+
+
 class TestBarCorner(BugFablesTestBase):
     # The way down to the underground bar is behind the commercial district's grass, and the bar's door comes back up
     # behind it too: the horn both ways.

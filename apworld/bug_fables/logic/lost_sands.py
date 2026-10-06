@@ -53,6 +53,18 @@ STORY_EVENTS = (
     # The south trench's bridge, knocked over by the horn from the left side (flag 282); it stays down.
     StoryEvent("Lost Sands: South Trench, Bridge Knocked Down", "South Trench Bridge Down", "DesertTrenchSouth",
                Source(flag=282), rule=CanUse("Horn Slash"), area="Left"),
+    # The sand pit's eight bridges, each knocked over by the horn from one side (flags 202-209) and staying down.
+    StoryEvent("Lost Sands: Sand Pit, Bottom Bridge Knocked Down", "Sand Pit Bottom Bridge Down", "DesertSandPitArea",
+               Source(flag=202), rule=CanUse("Horn Slash"), area="Bottom"),
+    # Three around the middle, reached over small platforms: the top doors' two and the lower left one.
+    StoryEvent("Lost Sands: Sand Pit, Middle Bridges Knocked Down", "Sand Pit Middle Bridges Down", "DesertSandPitArea",
+               Source(flag=209), rule=CanUse("Horn Slash") & CanUse("Jump")),
+    StoryEvent("Lost Sands: Sand Pit, Left Bridges Knocked Down", "Sand Pit Left Bridges Down", "DesertSandPitArea",
+               Source(flag=208), rule=CanUse("Horn Slash"), area="Left"),
+    StoryEvent("Lost Sands: Sand Pit, Right Bridge Knocked Down", "Sand Pit Right Bridge Down", "DesertSandPitArea",
+               Source(flag=204), rule=CanUse("Horn Slash"), area="Right"),
+    StoryEvent("Lost Sands: Sand Pit, Top Right Bridge Knocked Down", "Sand Pit Top Right Bridge Down",
+               "DesertSandPitArea", Source(flag=205), rule=CanUse("Horn Slash"), area="Top Right"),
 )
 TRANSFERS = (
     # Chapter 3's end: the attack on the city.
@@ -92,4 +104,20 @@ MAP_AREAS = (
          out=CanUse("Bee Fly") | (CanUse("Horn Slash") & CanUse("Beemerang Halt"))),
     # The badge alcove's left door, on a ledge: a drop down to the rest, with no way back up from inside the room.
     Area("DesertBadgeAlcove", "Ledge", ("loadzone left",), False_(), out=one_way(None, False_())),
+    # The sand pit: the map's own region is its middle platforms, holding no door; each door joins it over bridges
+    # (each way the same once they're down), and Bee Fly crosses everything.
+    Area("DesertSandPitArea", "Bottom", ("loadzone book area",),
+         CanUse("Bee Fly") | Has("Sand Pit Bottom Bridge Down")),
+    # Up its upper bridge and over platforms (Jump), or along the lower bridges with the middle's one (no Jump).
+    Area("DesertSandPitArea", "Left", ("loadzone mountain",),
+         CanUse("Bee Fly")
+         | (Has("Sand Pit Left Bridges Down") & (CanUse("Jump") | Has("Sand Pit Middle Bridges Down")))),
+    Area("DesertSandPitArea", "Top Left", ("loadzone caravan area",),
+         CanUse("Bee Fly") | (Has("Sand Pit Middle Bridges Down") & CanUse("Jump"))),
+    Area("DesertSandPitArea", "Top Right", ("loadzone scorpion",),
+         CanUse("Bee Fly") | (Has("Sand Pit Middle Bridges Down") & CanUse("Jump"))),
+    # The right door reaches only the top right one, over two bridges, one knocked over from each side.
+    Area("DesertSandPitArea", "Right", ("loadzone right",),
+         CanUse("Bee Fly") | (Has("Sand Pit Right Bridge Down") & Has("Sand Pit Top Right Bridge Down")),
+         to="DesertSandPitArea (Top Right)"),
 )

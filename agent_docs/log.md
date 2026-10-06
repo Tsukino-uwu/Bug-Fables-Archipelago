@@ -3111,3 +3111,8 @@ either one wrong).
   The robbery scene (Event93, until flag 201) didn't play and blocked nothing; the user: it plays as in vanilla, only
   its fight needs logic later (noted for the enemy pass).
   The user: done. Ticked, 59 of 244. Next: `DesertSandPitArea` (81).
+- **`DesertSandPitArea`:** mapped door by door, the bridges reset (`flag 202`-`209 off`) before each `warp ... from`
+  arrival; the user's sketch showed where the bridges land. Written from the middle (the map's own region, no door),
+  each door one edge, five bridge events, the user's names (asked, then "the preview sounds right"); the user asked
+  whether per entrance or from the middle was better: from the middle, one rule per door instead of every pair.
+  Waiting on the user's "done".
