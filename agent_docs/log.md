@@ -3063,3 +3063,6 @@ either one wrong).
   King intermission fight; `OneHit` killed it (99 x 3) and the scene froze. `unstick` from the command file waited
   behind the queued warp to `BugariaEndPlaza`, which waits for a free player, and the hot reload waits for the scene
   to end. The user restarted the game. Fixed: `unstick` now jumps the file queue and drops waiting warps.
+- **The ending's three rooms:** played through by the user (with `OneHit` off for story rooms, at their ask): nothing
+  needed in the plaza or on the bridge, the throne room the ending and credits. The user's idea, the ending's credits
+  on reaching the goal: Next 61, for later. Ticked, 49 of 244: Bugaria City done. Next: `DesertEntrance` (4).

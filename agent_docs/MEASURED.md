@@ -826,6 +826,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     **`BugariaBridgeAttack` (2026-10-06, the user):** nothing needed to cross; no items, no discoveries.
     **`BugariaCastleAttack` (2026-10-06, the user):** nothing needed to cross from its door to the trigger (Event120,
     which ends in `AntPalace2`); no items, no discoveries.
+    **`BugariaEndPlaza`, `BugariaEndBridge`, `BugariaEndThrone` (2026-10-06, the user):** the ending played through
+    from the plaza: nothing needed in the plaza or on the bridge; the throne room is the ending's scene and the credits.
+    No items in any of the three (EntityDump).
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
