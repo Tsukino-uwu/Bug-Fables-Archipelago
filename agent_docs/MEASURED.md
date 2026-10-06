@@ -764,6 +764,15 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     **`SnakemouthUndergroundRightA` (2026-10-06, the user):** from the left door to `UndergroundRightB`'s door, the
     same both ways: switches (an attack) and moving platforms (Jump), two small ledges (Jump), then a switch (an
     attack) and the rotating platform (Jump). No locations; the grass by the sign hides nothing (EntityDump).
+    **`SnakemouthUndergroundRightB` (2026-10-06, the user):** from the bottom door the Crunchy Leaf behind the pillar
+    (location 24) needs nothing; up to the top (the big switch, flag 34, and the high door) takes a switch on the
+    rotating bridge (an attack), Jump, Freeze and the horn; down from the top is free. The high door has a gate the big
+    switch opens: arriving through it while shut, the game pushes the party past it, so leaving that way needs the
+    switch (an attack).
+  - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
+    an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
+    (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
+    Crunchy Leaf spot "holding" an Aphid Egg. Used by `ShopInventories.cs`.
   - **Vi's beemerang (range):** `SnakemouthBridgeRoom`'s bridge comes down when its rope is hit; from the right only the
     beemerang reaches it, from the left Leif's move hit it (so presumably any member's; Kabbu's not tried). The room's
     Tattle tutorial (Event2) ran with stand-ins and finished (flag 10); its hint (Event0) is skipped by Skip cutscenes.

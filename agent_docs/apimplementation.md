@@ -165,7 +165,8 @@ be wrong.
    multiworld names ("You found Other's Key!", the mod guide's step 9). Replays after a new save or a reconnect are
    held up like any other item since 2026-09-28, the quiet start aside (the mod guide, step 9). *Item animation:
    Progression* holding up only progression items: seen 2026-10-04.
-6. **A full bag:** key items keep arriving, only ordinary items wait.
+6. **A full bag:** never holds up the queue; a bag item that doesn't fit drops at the party's feet (build step 7):
+   built, not yet seen.
 7. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number: done, seen
    (build step 3).
 8. **A release: three separate downloads** (2026-09-25): built, see build step 17; v0.1.0 out
@@ -1160,12 +1161,20 @@ unequipped, like any medal found. The game numbers medals separately from items,
 so a medal's Archipelago id is offset by 1000 (`data_tables.py`, `item_id`; the mod's `ItemIds.cs`), and
 `item_kinds` marks it kind 2.
 
-**Where items go:** key items to key items, ordinary items to the bag, then storage when the bag is full. If
-both are full, the item waits until there's room (items are given strictly in order, so the count stays right).
-**Decided (2026-09-24), not yet built:** a full bag must never block progress. Key items keep
-arriving, and only the ordinary items that don't fit are held until there's room. That needs a count that
-can skip past a held item.
-The same operations the game's own code uses put them there.
+**Where items go:** key items to key items, ordinary items to the bag, then storage when the bag is full. The same
+operations the game's own code uses put them there. Items are given strictly in order, so the count stays right.
+
+**A full bag never blocks the queue** (2026-10-06). A bag item with the bag and storage both full used to wait for
+room, and every item behind it waited too, key items and medals included. Decided 2026-09-24: never block progress,
+then by letting key items skip past a held item, which needs a second count in the save. **Decided again (the user,
+2026-10-06):** the game's own way instead. Thrown-away consumables are expected, but key items and medals must always
+be taken, full bag or not. **How the game does it** (`MEASURED.md`, the full bag's toss): taking a floor item with a
+full bag asks what to throw out, the new item or one from the bag, and whichever it is drops to the floor as a
+pickup; an NPC's `giveitem` gives nothing with a full bag, the scenes check for room first. **Built:** with both full,
+the receiver drops the bag item at the party's feet with the game's `EntityControl.CreateItem`, as a bush drops its
+item (no despawn timer), and counts it given; taking it brings up the game's own throw-away prompt. A thrown item is
+lost on leaving the room, as in the game. Every bag item is filler (`TestBagItemsAreFiller`, in `test_logic.py`), so
+nothing useful is ever at stake. Built, not yet seen in game.
 
 **Crystal berries** (2026-09-25) raise the game's berry counter, the one the pause menu shows and
 Shades's shop spends. The game also keeps a *total found*, which it counts from the berry spots picked up; a
@@ -1200,7 +1209,7 @@ item comes once per seed, and the count in the save keeps it that way.
 **Status:** works, seen on screen (2026-09-24): items and medals, each once; crystal berries seen (2026-10-04, the
 count up by one from the server console); the same item three times and items from the server console seen
 (2026-10-04); a login with a save loaded seen (2026-10-04: 9 items listed at login, 9 in the save, the 10th arriving);
-the full-bag rule not built yet (Next 6); nothing given before the seed's tables are read: built 2026-09-28, not yet
+a full bag's drop at the party's feet built 2026-10-06, not yet seen; nothing given before the seed's tables are read: built 2026-09-28, not yet
 seen.
 
 *Code: `mod/BugFablesAP/Items/ItemReceiver.cs`: `CountSlot` and `SeedSlot` (the two save slots),
@@ -3757,11 +3766,15 @@ start in a shop that isn't a location. It never touches a check or a location.
   differ only in the option's own line, so no item moved.
 
 **The mod** (2026-09-30; the mod guide, step 35) swaps the item the way the game itself turns one item entity into
-another, so the price, name, sprite and what's added stay the game's.
+another, so the price, name, sprite and what's added stay the game's. **A tossed pickup is left alone**
+(2026-10-06): taking an item with a full bag and throwing a bag item out puts the thrown item into the same floor
+entity (the game's toss, `MEASURED.md`), which the mod first took for a respawning pickup holding the wrong item and
+warned about every 15 frames. Only a consumable is ever thrown out: a check's pickup gives nothing there, and a key
+item or medal the server sends never needs room (the user: those must always be picked up, full bag or not).
 
 **Status:** built (2026-09-30), the tests pass and the mod builds; seen in game (2026-10-04) at Madame Butterfly's:
 each bought check's slot restocked as another consumable, one bought and received as shown. A respawning pickup's
-new item not yet seen.
+new item seen (2026-10-06): `SnakemouthUndergroundRightB`'s Crunchy Leaf came back as a Honey Drop, taken and received.
 
 *Code: `shop_inventories.py`, `options.py` (`ShuffleShopInventories`), `world.py` (`generate_basic`), `slot_data.py`;
 the mod's `ShopInventories.cs` and `ItemShops.cs`; tests `test_shop_inventories.py`.*
@@ -4628,6 +4641,7 @@ build step 10). Test: `test_categories.py` (`TestHiddenAndDigOff`, `TestHiddenAn
 
 *Code: `options.py` (`ShuffleHiddenItems`, `ShuffleDigSpots`, `CATEGORY_OPTIONS`), `slot_data.py` (`SLOT_OPTIONS`),
 `logic/outskirts.py`; tests `test_categories.py`.*
+
 
 # How it works
 

@@ -43,9 +43,10 @@ namespace BugFablesAP
             npc.interacttype == NPCControl.Interaction.Shop && npc.entity != null && npc.entity.item
             && npc.entity.animid == 0 && npc.shopkeeper != null;
 
+        // A tossed pickup holds what the player threw out of a full bag in exchange (MainManager.SetText), not its own.
         private static bool IsRespawning(NPCControl npc) =>
             npc.objecttype == NPCControl.ObjectTypes.Item && npc.entity != null && npc.entity.animid == 0
-            && npc.activationflag <= 0 && npc.regionalflag >= 0;
+            && npc.activationflag <= 0 && npc.regionalflag >= 0 && !npc.tossed;
 
         // After the map builds its entities, before their Start: no frame shows the game's own item.
         [HarmonyPatch(typeof(MapControl), "CreateEntities")]

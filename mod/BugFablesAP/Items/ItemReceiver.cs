@@ -120,7 +120,7 @@ namespace BugFablesAP
                 if (waitingAt != given)
                 {
                     log.LogInfo(
-                        $"[recv] item {given + 1} ({item.ShownItem()}) waits: the bag and storage are both full");
+                        $"[recv] item {given + 1} ({item.ShownItem()}) waits: the bag and storage are both full, no party to drop it by");
                     waitingAt = given;
                 }
                 return; // no room yet: try again next frame, in order
@@ -265,6 +265,14 @@ namespace BugFablesAP
             {
                 mm.items[2].Add(gameId);
                 return "bag full: added to storage";
+            }
+            // Both full: dropped at the party's feet as a bush drops its item; taking it brings up the game's own
+            // throw-away prompt, so the queue never waits behind it. Only filler goes in the bag.
+            if (MainManager.player != null && MainManager.map != null)
+            {
+                EntityControl.CreateItem(MainManager.player.transform.position + Vector3.up * 0.5f, 0, gameId,
+                    MainManager.RandomItemBounce(4f, 12f), -1);
+                return "bag and storage full: dropped at the party's feet";
             }
             return null;
         }

@@ -209,6 +209,17 @@ class TestClassificationsSplitBoat(TestClassifications):
     options = {**TestClassifications.options, "progressive_boat": False}
 
 
+class TestBagItemsAreFiller(BugFablesTestBase):
+    # With the bag and storage full the client drops a received bag item at the party's feet, where the game's own
+    # throw-away prompt may lose it: only filler may ever go in the bag.
+    def test_bag_items_are_filler(self) -> None:
+        from ..data_tables import ITEM_KIND, ITEMS
+        for item in ITEMS:
+            if item.kind == ITEM_KIND:
+                with self.subTest(item=item.name):
+                    self.assertEqual(item.classification, "filler")
+
+
 class TestTownMedal(BugFablesTestBase):
     options = {"starting_party_member": "off"}
     # The Bug Me Not! medal needs Leif's ice; the town itself is open.
