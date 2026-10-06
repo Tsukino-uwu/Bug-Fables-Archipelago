@@ -850,6 +850,10 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     (the left door) across a gap, by the bridge (`bridge1`, a switch, flag 282) knocked over from the left by the horn,
     then crossed both ways without Jump, or flown over (Bee Fly) either way. The top-left door and the Agaric Shroom
     (flag 713) on a ledge over the left side: a drop down, Jump back up.
+    **`DesertDREastEntrance` (2026-10-06, the user):** the right and bottom doors free between them, the left door free
+    from the left side; left to right takes the crank (the horn) and Beemerang Halt, or Bee Fly; right to left Bee Fly
+    only (no crank on the right; the crank resets on leaving the room). The dig spot (Dark Cherries, flag 398) behind
+    the rock (Horn Dash), on the left side.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

@@ -33,6 +33,10 @@ LOCATIONS = (
     # On the south trench's top-left ledge: a drop from its door, Jump from the left side.
     Location("Lost Sands: South Trench, Ledge Mushroom", 118, "DesertTrenchSouth",
              Source(flag=713, pickup=Pickup(map="DesertTrenchSouth", type=0, item=96)), no_jump=True, area="Ledge"),
+    # Behind a rock Horn Dash breaks, on the Defiant Root entrance's left side.
+    Location("Lost Sands: Defiant Root Entrance, Dig Spot", 119, "DesertDREastEntrance",
+             Source(flag=398, pickup=Pickup(map="DesertDREastEntrance", type=0, item=121)),
+             rule=CanUse("Horn Dash") & CanUse("Beetle Dig"), no_jump=True, area="Left"),
 )
 STORY_EVENTS = (
     # The south trench's bridge, knocked over by the horn from the left side (flag 282); it stays down.
@@ -71,4 +75,8 @@ MAP_AREAS = (
     # Its top-left door and the mushroom, on a ledge over the left side: a drop down, Jump back up.
     Area("DesertTrenchSouth", "Ledge", ("loadzone north2",), CanUse("Jump"), out=one_way(None, CanUse("Jump")),
          to="DesertTrenchSouth (Left)"),
+    # The Defiant Root entrance's left side (the door to the Defiant Root): flown over (Bee Fly) from the right, or
+    # left by the crank (the horn) and Beemerang Halt; the crank resets on leaving the room.
+    Area("DesertDREastEntrance", "Left", ("loadzoneDR",), CanUse("Bee Fly"),
+         out=CanUse("Bee Fly") | (CanUse("Horn Slash") & CanUse("Beemerang Halt"))),
 )

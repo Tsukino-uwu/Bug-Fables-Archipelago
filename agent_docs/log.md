@@ -3091,3 +3091,7 @@ either one wrong).
   addition), both ways; the top-left door and the mushroom on a ledge, a drop down, Jump back up. A new location, the
   user's name "South Trench, Ledge Mushroom" (Agaric Shroom, flag 713, id 118). Ticked, 54 of 244. Next:
   `DesertDREastEntrance` (76).
+- **`DesertDREastEntrance`:** the right and bottom doors free; the left side Bee Fly from the right, the crank (horn)
+  and Beemerang Halt or Bee Fly from the left (the crank resets on leaving). A new location, the user's name "Defiant
+  Root Entrance, Dig Spot" (Dark Cherries, flag 398, Horn Dash and Beetle Dig, id 119). Ticked, 55 of 244. Next:
+  `DesertFGBorder` (77).

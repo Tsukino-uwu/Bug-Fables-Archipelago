@@ -352,6 +352,21 @@ class TestSouthTrenchBridge(BugFablesTestBase):
         self.assertTrue(self.can_reach_location(event))
 
 
+class TestDefiantRootEntrance(BugFablesTestBase):
+    # The dig spot behind the rock: Horn Dash and Beetle Dig, each needed.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_needs_each(self) -> None:
+        spot = "Lost Sands: Defiant Root Entrance, Dig Spot"
+        for missing in ("Horn Dash", "Beetle Dig"):
+            with self.subTest(missing=missing):
+                state = CollectionState(self.multiworld)
+                self.collect_all_but([missing], state)
+                self.assertFalse(state.can_reach(spot, "Location", self.player))
+        self.collect_all_but([])
+        self.assertTrue(self.can_reach_location(spot))
+
+
 class TestBarCorner(BugFablesTestBase):
     # The way down to the underground bar is behind the commercial district's grass, and the bar's door comes back up
     # behind it too: the horn both ways.
