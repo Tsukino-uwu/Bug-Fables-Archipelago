@@ -3110,3 +3110,4 @@ either one wrong).
   berry #14, Jump, Bee Fly and Beetle Dig, id 122). Waiting on the user's "done".
   The robbery scene (Event93, until flag 201) didn't play and blocked nothing; the user: it plays as in vanilla, only
   its fight needs logic later (noted for the enemy pass).
+  The user: done. Ticked, 59 of 244. Next: `DesertSandPitArea` (81).
