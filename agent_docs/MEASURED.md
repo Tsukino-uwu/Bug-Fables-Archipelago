@@ -944,7 +944,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   nothing seen to change.
   **`GoldenHillsDungeonUpperMain` (2026-10-06):** the lower right door free; the platform down Beemerang Halt. The
   upper right (its door and a shrine) behind a barrier: from that door a lever (any attack, flag 127, `Event50`, Gate4)
-  lowers it and starts a platform, staying. Two shrines (`Event72`, `pickitem` of key items): the left one (behind
+  lowers it and starts a platform, staying, boarded from below with Jump. Two shrines (`Event72`, `pickitem` of key items): the left one (behind
   grass, the horn) wants the Sun Offering (55, flag 125), the upper right one the Moon Offering (56, flag 126); a wrong
   one starts a fight; each opens part of the boss door's gate, both needed, staying open. With spawned offerings. From
   the boss door while shut: a pocket, not pushed, back out only. The offerings are given in `GoldenSettlement2`.

@@ -3220,3 +3220,4 @@ either one wrong).
   a wrong offering starts a fight, each right one opens part of the boss gate, both needed. The upper right only from
   its own door, its lever lowering the barrier for good. Events named by the user "Sun Offering" and "Moon Offering"
   (they didn't want "Given"). Waiting on the user's "done".
+  The user: the platform back up to the upper right needs Jump; so down from there is a one-way without it.

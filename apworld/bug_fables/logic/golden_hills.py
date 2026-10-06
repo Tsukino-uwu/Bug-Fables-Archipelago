@@ -79,8 +79,10 @@ MAP_AREAS = (
     Area("GoldenHillsDungeonLeftMain", "Top Left", ("load zone crank half",), WOODEN_CRANK & CanUse("Beemerang Halt"),
          out=one_way(None, WOODEN_CRANK & CanUse("Beemerang Halt")), to="GoldenHillsDungeonLeftMain (Left)"),
     # The upper hall's upper right (its upper right door and the Moon shrine), behind a barrier its lever lowers (any
-    # attack, flag 127, Event50), starting a platform that stays: the lever is only up there, so nothing from below.
-    Area("GoldenHillsDungeonUpperMain", "Upper Right", ("loadzonehigh",), False_(), out=ANY_ATTACK),
+    # attack, flag 127, Event50), starting a platform that stays, boarded from below with Jump: the lever is only up
+    # there, so nothing from below first; down without Jump, no way back up.
+    Area("GoldenHillsDungeonUpperMain", "Upper Right", ("loadzonehigh",), False_(),
+         out=ANY_ATTACK & one_way(None, CanUse("Jump"))),
     # Its top door (to the boss), behind a gate both shrines open; arriving while shut, a pocket with only that door.
     Area("GoldenHillsDungeonUpperMain", "Boss Door", ("loadzoneboss",),
          Has("Upper Hall Sun Shrine Fed") & Has("Upper Hall Moon Shrine Fed")),
