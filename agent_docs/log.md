@@ -3028,3 +3028,9 @@ either one wrong).
   to its own after buying, a once-only one showed Sold Out. A collision seen (Prize 9 showing Prize 4's seed item: one
   prize's own item is another's seed item), fixed by reading every look first. The user: a full bag refusing an item
   slot is fine; prices belong to the slots. Dev console `tokens [n]` added; `QuestDump` also writes the prize table.
+- **`BugariaTheater`:** in and out free; two new locations, the user's names: "Moth's Sale" (the G-Bug Ranger
+  Plushie, 40 berries, flag 58; the plushie had been in the pool with no spot of its own) and "Right Side Spinner"
+  (crystal berry #13, one of the two with no known source: a `MusicSpinner` the horn spins until it spits the berry
+  out; found from the user's "hit a thing a few times", then `berry 13` on). The user: a crystal berry, not a hidden
+  item. Chubee's stage takes Jump, her play's 30 berries for the quest pass. Ticked, 35 of 244. Next:
+  `BugariaResidential` (28).

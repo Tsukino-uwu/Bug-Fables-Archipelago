@@ -794,6 +794,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     its building is scenery, `Model/TermiteArcade` from 350, `Model/Base/EmptyLotFence` until it (MapDump). The
     greeter (`termiteoutside`, lines 92-93) gives 15 tokens once (`var,1,15`, `giveitem,1,110`, flag 351, discovery 42);
     the token count is `flagvar[27]` (`Showtokens`, the prize stand spends it, Event at `EventControl.cs:20662`).
+    **`BugariaTheater` (2026-10-06, the user):** in and out free; the moth and the spinner need nothing to reach,
+    the stage (Chubee) needs Jump. A moth sells the G-Bug Ranger Plushie for 40 berries (line 7, `giveitem,1,25`,
+    flag 58). Crystal berry #13 (the one no data or literal grant placed) comes from a `MusicSpinner`, scenery on
+    the right: each `BeetleHorn` hit spins it, and past its limit it spits out its item (`itemtype` 3, `flag` the
+    berry), only while that berry isn't taken; the hidden-item medal (badge 2) counts it. Seen: picked up,
+    `crystalbflags[13]` then true (dev `berry 13`).
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
@@ -975,7 +981,7 @@ on many maps from the first dungeon on, so a pit doesn't mean hover.
 **39 of the 50 are placed by data** (ground pickups: index in `data[3]`; dig spots with `data[0] = 1`: index in
 `data[1]`; cut grass with `data[1] > -1`; dialogue `giveitem,3,N`). Code gives #15 (also in data), #18 and #39
 (`giveitem,3` in Events 93, 105 and 71), #11 and #19 (`GiveItem(3, …)` in Events 210 and 217) and #43-47 (Event189's
-discovery rewards). #13 and #38: no literal grant found by either pattern (corrected 2026-09-30 from "41 by data, 9
+discovery rewards). #13 (the theater's `MusicSpinner`, found 2026-10-06) and #38: no literal grant found by either pattern (corrected 2026-09-30 from "41 by data, 9
 from code with computed values, per the wiki"). By index: #0 OutsideSnakemouth
 (ground), #1 SnakemouthLake (grass), #2 SnakemouthUndergrondDoor, #3 ChucksAbode, #4 GoldenSettlement2, #5
 AntPalace2 (gift, dialogue line 15), #6 BOGoldenPath (dig), #7 GoldenSettlement2 (dig), #8 GoldenHillsCableCar, #9

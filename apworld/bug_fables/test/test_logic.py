@@ -249,6 +249,19 @@ class TestMainPlaza(BugFablesTestBase):
         self.assertTrue(self.can_reach_location(spot))
 
 
+class TestTheater(BugFablesTestBase):
+    # The spinner gives its crystal berry only to the horn; the plushie is a plain sale.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True, "shuffle_crystal_berries": True}
+
+    def test_spinner_needs_the_horn(self) -> None:
+        spot = "Bugaria City: Theater, Right Side Spinner"
+        self.collect_by_name("Explorer Permit")
+        self.assertTrue(self.can_reach_location("Bugaria City: Theater, Moth's Sale"))
+        self.assertFalse(self.can_reach_location(spot))
+        self.collect_by_name("Horn Slash")
+        self.assertTrue(self.can_reach_location(spot))
+
+
 class TestBarCorner(BugFablesTestBase):
     # The way down to the underground bar is behind the commercial district's grass, and the bar's door comes back up
     # behind it too: the horn both ways.

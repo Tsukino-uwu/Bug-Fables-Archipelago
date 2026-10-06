@@ -2927,7 +2927,8 @@ horn; its high door gated by the big switch), the first left room (its high door
 pass), the upper entrance (its top door shut until the gem is placed, Jump and a stand-in for the gem), 31 of 244;
 Bugaria City from 2026-10-06: the ant tunnels (nothing to cross; each tunnel only its flag), the main plaza (two new
 locations: the red house's roof, the Flower Key, and the dig spot's berry, Beetle Dig), the commercial district (its
-bar corner behind grass, the horn; the arcade kept open), 34 of 244; the rest of `room-checklist.md` to go.
+bar corner behind grass, the horn; the arcade kept open), the theater (two new locations: the moth's plushie sale
+and the spinner's crystal berry, the horn), 35 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

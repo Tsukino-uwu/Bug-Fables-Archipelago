@@ -86,6 +86,13 @@ LOCATIONS = (
     Location("Bugaria City: Main Plaza, Dig Spot", 96, "BugariaMainPlaza",
              Source(berry=29, pickup=Pickup(map="BugariaMainPlaza", type=3, item=0)), rule=CanUse("Beetle Dig"),
              category="crystal_berry", no_jump=True),
+    # The G-Bug Ranger Plushie, sold by a moth for 40 berries (line 7); flag 58 once bought.
+    Location("Bugaria City: Theater, Moth's Sale", 111, "BugariaTheater",
+             Source(flag=58, give=Give(map="BugariaTheater", type=1, item=25)), no_jump=True),
+    # Crystal berry #13, spat out by the spinner on the right once the horn has spun it fast enough (MusicSpinner).
+    Location("Bugaria City: Theater, Right Side Spinner", 112, "BugariaTheater",
+             Source(berry=13, pickup=Pickup(map="BugariaTheater", type=3, item=0)), rule=CanUse("Horn Slash"),
+             category="crystal_berry", no_jump=True),
     # A Lore Book hidden behind a bookshelf.
     Location("Ant Palace: Library, Behind the Bookshelf", 15, "AntPalaceLibrary",
              Source(flag=71, pickup=Pickup(map="AntPalaceLibrary", type=1, item=52))),
