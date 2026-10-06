@@ -3169,3 +3169,5 @@ either one wrong).
 - **`GoldenHillsDungeonEntrance`:** the bottom, left and lower right doors free; the arrival scene (Event62) played on
   the way left and, reset (`flag 111 off`), from the left too, changing nothing. The user: skip it if it touches
   nothing else; it sets only flag 111, read only by its own triggers: both kept away (`KEPT_OPEN`).
+  The cranks spawned (`spawn key 58`, `60`): the top right door takes the Wooden Crank's platform and Beemerang Halt,
+  a drop down; the crank a later-chapters stand-in until its room is mapped.

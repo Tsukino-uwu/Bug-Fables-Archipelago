@@ -914,7 +914,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   **`GoldenHillsDungeonEntrance` (2026-10-06):** the bottom, left and lower right doors free between them. Its
   arrival scene (`Event62`, two triggers, until flag 111) plays from either side and changes nothing: it sets only
   flag 111, which nothing else reads (code and `textsearch ,111,`). The locks: the right one key item 58 (the Wooden
-  Crank, flag 109), the middle one 60 (the Big Crank, flag 118), read from `Event59`'s table.
+  Crank, flag 109), the middle one 60 (the Big Crank, flag 118), read from `Event59`'s table. The top right door: up
+  the small platform, the Wooden Crank and Beemerang Halt (with the cranks spawned); down from it a drop.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
