@@ -8,9 +8,15 @@ from ..data_types import Area, EntityRef, Transfer
 # The Wooden Crank (key item 58), found in the dungeon: not an item yet, so the later chapters' stand-in until its
 # room is mapped.
 WOODEN_CRANK = LATER_CHAPTERS
+# The Big Crank (key item 60), the same way.
+BIG_CRANK = LATER_CHAPTERS
 
 TRANSFERS = (
-    Transfer("elevator", "GoldenHillsDungeonEntrance", "GoldenHillsDungeonUpperMain", LATER_CHAPTERS),
+    # The middle platform, once the Big Crank is in its slot (flag 118; placing it starts the Mothiva and Zasp fight,
+    # Event67) and turned with Beemerang Halt; back down by Beemerang Halt on a crank up there (the same rule, cautious:
+    # the way down without the Big Crank placed isn't measured).
+    Transfer("elevator", "GoldenHillsDungeonEntrance", "GoldenHillsDungeonUpperMain",
+             BIG_CRANK & CanUse("Beemerang Halt")),
 )
 KEPT_OPEN = (
     # The dungeon's arrival scene (Event62): it sets only its own flag, 111, read by nothing else (the user: skip it).

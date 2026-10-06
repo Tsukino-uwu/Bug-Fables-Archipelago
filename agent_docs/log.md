@@ -3171,3 +3171,6 @@ either one wrong).
   nothing else; it sets only flag 111, read only by its own triggers: both kept away (`KEPT_OPEN`).
   The cranks spawned (`spawn key 58`, `60`): the top right door takes the Wooden Crank's platform and Beemerang Halt,
   a drop down; the crank a later-chapters stand-in until its room is mapped.
+  The Big Crank starts the Mothiva and Zasp fight (OneHit off: a real one; `killall` ended it at the user's ask),
+  then its platform (Beemerang Halt) rides up, back down by Halt on a crank up there: the elevator's stand-in now
+  the Big Crank and Beemerang Halt, both ways. The fight noted for the enemy pass.

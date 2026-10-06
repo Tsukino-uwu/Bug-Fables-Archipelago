@@ -108,7 +108,7 @@ as it is, a frozen record.
 
 ## Golden Hills
 
-- [ ] GoldenHillsDungeonEntrance (45)
+- [ ] GoldenHillsDungeonEntrance (45) — for the enemy pass: the Mothiva and Zasp fight (Event67, on placing the Big Crank)
 - [ ] GoldenHillsDungeonLeftMain (46)
 - [ ] GoldenHillsDungeonCrankLeft (47)
 - [ ] GoldenHillsDungeonRightCrank (48)
