@@ -24,6 +24,10 @@ LOCATIONS = (
     Location("Golden Hills: Right Crank Room, Stump behind the Flower", 128, "GoldenHillsDungeonRightCrank",
              Source(flag=727, pickup=Pickup(map="GoldenHillsDungeonRightCrank", type=0, item=178)),
              rule=RIGHT_CRANK_ROOM),
+    # A respawning Magic Seed in grass by a crank in the left crank room (regional flag 0): the room's every need.
+    Location("Golden Hills: Left Crank Room, Grass by the Crank", 131, "GoldenHillsDungeonCrankLeft",
+             Source(regional=0, pickup=Pickup(map="GoldenHillsDungeonCrankLeft", type=0, item=11)),
+             rule=CanUse("Beemerang Halt") & CanUse("Jump") & CanUse("Horn Slash"), category="hidden_item"),
     # The left crank half room: everything up its fixed cranks, Jump and Beemerang Halt.
     Location("Golden Hills: Left Crank Half Room, Behind the Bush", 129, "GoldenHillsDungeonLeftCrankHalf",
              Source(flag=121, pickup=Pickup(map="GoldenHillsDungeonLeftCrankHalf", type=2, item=36)),

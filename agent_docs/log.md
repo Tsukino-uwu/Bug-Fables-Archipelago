@@ -3213,3 +3213,5 @@ either one wrong).
   the Hill" (the crank half, with Next 62). Merged items: the user chose the whole only (the Big Crank, the Sand Castle
   Key), worried about a crash mid-merge; told that received items are replayed from the save count anyway. Nothing
   else in the room; the user: done. Ticked, 78 of 244.
+- **Back in `GoldenHillsDungeonCrankLeft`:** its Magic Seed bush takes the room's every need; the user's name "Grass by
+  the Crank" (id 131).

@@ -927,7 +927,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   reads code 2, the Wooden Crank, and `Event59` removes it (all but code 16): three slots (flags 109, 110, 128) and
   three cranks (flags 112, 116, 129) in the dungeon, one of each in the Rubber Prison (565, 561).
   **`GoldenHillsDungeonCrankLeft` (2026-10-06):** one door; its Wooden Crank (flag 112) at the top, on leaves under a
-  bare tree, up its fixed cranks: Beemerang Halt, Jump and the horn.
+  bare tree, up its fixed cranks: Beemerang Halt, Jump and the horn. Its Magic Seed bush (`grasswithseed`, drop list
+  only item 11, regional flag 0), missed at first, the same (seen the same day).
   **`GoldenHillsDungeonRightCrank` (2026-10-06):** one door; the Big Crank Top Half (key item 59, flag 113) on a
   ledge at the far right: the bubble shield (maybe not needed), Freeze, the horn, Jump, the Beemerang and Halt, all
   counted (the user); or Bee Fly alone, for everything in the room (the user). The Hustle Candy (flag 727) on a small stump behind a flower among thorns midway: hard to spot,
