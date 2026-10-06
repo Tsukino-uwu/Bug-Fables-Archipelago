@@ -650,6 +650,11 @@ be wrong.
     only be able to contain filler items": each prize a location Archipelago keeps to filler (an excluded location,
     `LocationProgressType.EXCLUDED`), its prize (Empower+ and the rest) in the pool, so no token farming is ever
     required. The arcade itself is open from the start (build step 9). Built: build step 50.
+61. **The ending when the goal is reached** (proposed 2026-10-06, the user; to build, its own step): "we should
+    send/use the ending cutscene when/if reaching the goal maybe ? so you get a proper 'the game is done' instead of
+    just 'Ohh items got sent out, nothing special happened'"; "not the 2 rooms, you had to pass, but the credits/ending
+    scene itself and afterwards showing 'the end'". First: how the game starts its credits, and what it leaves behind
+    (the title, the save), so the save is never harmed.
 
 **Known issues:**
 
