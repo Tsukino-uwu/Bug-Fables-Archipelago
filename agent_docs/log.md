@@ -3194,3 +3194,5 @@ either one wrong).
   candy (flag 727) wasn't seen at first; the user asked to make it always visible; I asked why first: it wasn't
   hidden, just on a tiny stump behind a flower among thorns (warped by it, then the Beemerang). Names, the user's:
   "Stump behind the Flower" (id 128) and "Far Right Ledge" (the crank half, with Next 62).
+  No other items (the butler for the quest pass); the user: done. Ticked, 76 of 244. Next:
+  `GoldenHillsLowerRightCrank` (49).

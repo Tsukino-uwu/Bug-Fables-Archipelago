@@ -2970,7 +2970,7 @@ scorpion's room (free), the eastmost room (free), 72 of 244: Lost Sands done; Go
 dungeon's entrance (its top right door the Wooden Crank and Beemerang Halt, its elevator the Big Crank and Halt up,
 Halt down; its arrival scene kept away, the user's ask), 73 of 244; the left hall (across Jump and Beemerang Halt,
 its top left door the Wooden Crank and Halt; a new location: its berry, Jump), the left crank room (its door free; its crank spot with Next 62), 75 of 244; the right crank room (its every need for both spots; a new location, the
-candy on a stump; in progress); the rest of `room-checklist.md` to go.
+candy on a stump), 76 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
