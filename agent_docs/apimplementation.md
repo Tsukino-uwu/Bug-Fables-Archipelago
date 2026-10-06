@@ -2875,13 +2875,16 @@ still by large areas, kept as each spot's `reach` over one region per map (build
 first room mapped (2026-10-05, seen by the user): `BugariaOutskirtsOutsideCity`, the Explorer Permit gate an area of
 its own, its pushed-through walk-in a one-way out (an `Area`'s `out`; a blocked walk-in that pushes the party
 through counts as a one-way since, the user); then `NearSnakemouth` (needs nothing) and `OutsideSnakemouth` (a
-ledge and grass as areas), the first corridor (Jump; Jump and Icicle to Seedling Haven's door) and the second (the horn), Chuck's Abode (its berry
-behind a rock, the Horn Dash), the Golden Path tunnel (four parts), the Golden Path (Jump, Icicle), the pier (its dock an area: Jump
-up, the boat leaving and landing there, `Transfer.from_area`), the first East Road (four parts), the second (the crank or Icicle; an ability used for what
-it's made for counts, rule 2), the Lost Sands' entrance (its guard's gate kept open), `Blank`, the attack map (story-only), Seedling Haven, the Cave
-of Trials (its altar for the quest pass), GoldenPathTunnel2 (its climb), the Hermit's cave, 18 of 244 (the Outskirts done; East Road 2's top corrected the same day: across water, not a drop); room 16's three dig spots added. A fixed (unshuffled) door link can stand in an area (`Area.links`):
-the Golden Path tunnel's upper ledge, joined to Tunnel2, which no seed could reach without it (2026-10-05, a
-generation failure) Locations now sit in the part of the room they're in (`Location.area`, as
+ledge and grass as areas), the first corridor (Jump; Jump and Icicle to Seedling Haven's door) and the second (the
+horn), Chuck's Abode (its berry behind a rock, the Horn Dash), the Golden Path tunnel (four parts), the Golden Path
+(Jump, Icicle), the pier (its dock an area: Jump up, the boat leaving and landing there, `Transfer.from_area`), the
+first East Road (four parts), the second (the crank or Icicle; an ability used for what it's made for counts, rule
+2), the Lost Sands' entrance (its guard's gate kept open), `Blank`, the attack map (story-only), Seedling Haven, the
+Cave of Trials (its altar for the quest pass), GoldenPathTunnel2 (its climb), the Hermit's cave, 18 of 244 (the
+Outskirts done; East Road 2's top corrected the same day: across water, not a drop); room 16's three dig spots
+added. A fixed (unshuffled) door link can stand in an area (`Area.links`): the Golden Path tunnel's upper ledge,
+joined to Tunnel2, which no seed could reach without it (2026-10-05, a generation failure). Locations now sit in the
+part of the room they're in (`Location.area`, as
 Archipelago's regions hold locations, `world api.md`), and an area may join another (`Area.to`) by 2026-10-05.
 Snakemouth Den from 2026-10-06: the bridge room (its banks two areas; the bridge a room event either bank can set, so
 a story event may sit in an area too, `StoryEvent.area`; its vine berry location 94, kept present from the start),
@@ -4609,9 +4612,9 @@ need to hit for the item to appear"; dig spots are visible, so "a 2nd on/off for
 Emerald. Two categories in `CATEGORY_OPTIONS`, as the others: `hidden_item` (*Shuffle Hidden Items*,
 `shuffle_hidden_items`) and `dig_spot` (*Shuffle Dig Spots*, `shuffle_dig_spots`), both sent in `slot_data`'s
 `options`. Off, a category's locations aren't made and their pickups aren't in `location_pickups`, so the mod leaves
-them to the game; the mod needed no change. The first ones: locations 12, 80 and 81 (grass; 80 and 81 respawn, a location the first time) and 25
-(a boulder) hidden, 79 a dig spot; more join as rooms are mapped (the dig spots: build step 10). Test: `test_categories.py` (`TestHiddenAndDigOff`,
-`TestHiddenAndDigOn`).
+them to the game; the mod needed no change. The first ones: locations 12, 80 and 81 (grass; 80 and 81 respawn, a
+location the first time) and 25 (a boulder) hidden, 79 a dig spot; more join as rooms are mapped (the dig spots:
+build step 10). Test: `test_categories.py` (`TestHiddenAndDigOff`, `TestHiddenAndDigOn`).
 
 **Status:** built (2026-10-05), not yet seen in game.
 
