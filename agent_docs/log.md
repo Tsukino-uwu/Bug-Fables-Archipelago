@@ -3043,3 +3043,6 @@ either one wrong).
 - **`AntPalace1`:** nothing needed anywhere, as the logic had. Ticked, 38 of 244. Next: `AntPalace2` (32).
 - **`AntPalace2`:** one door, no items; its berries #5 and #12 are story rewards (`textsearch giveitem,3,5,` and
   `,12,`), with its discoveries left for later. Ticked, 39 of 244. Next: `AntBridge` (33).
+- **`AntBridge`:** free across; discovery 11 from an NPC, Maki's and Kina's quest NPCs, no items. The user: I warped
+  them out of the throne room before they'd said it was done; wait for their "done" every time. Ticked, 40 of 244.
+  Next: `AntPalaceLibrary` (34).

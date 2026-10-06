@@ -811,6 +811,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     guard and the queen takes Jump. Its two crystal berries are story rewards
     (dev `textsearch`): #5 at line 15 ("Here, you've earned this.", a chapter scene) and #12 at line 48 (the Royal
     Guard after flag 130); its discoveries (ant, bee; termite and wasp from 370) are checked.
+    **`AntBridge` (2026-10-06, the user):** nothing needed across, both ways; an NPC there gives a discovery when
+    talked to (discovery 11, line 1). No items; Maki's and Kina's quest NPCs stand here.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
