@@ -3108,3 +3108,5 @@ either one wrong).
   Nothing else in it (every dump read again); the user: done. Ticked, 58 of 244. Next: `DesertCaravanMap` (80).
 - **`DesertCaravanMap`:** nothing between its doors; a new location, the user's name "Caravan Camp, Dig Spot" (crystal
   berry #14, Jump, Bee Fly and Beetle Dig, id 122). Waiting on the user's "done".
+  The robbery scene (Event93, until flag 201) didn't play and blocked nothing; the user: it plays as in vanilla, only
+  its fight needs logic later (noted for the enemy pass).

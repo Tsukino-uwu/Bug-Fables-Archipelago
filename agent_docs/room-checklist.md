@@ -90,7 +90,8 @@ as it is, a frozen record.
 - [x] DesertFGBorder (77)
 - [x] DesertDRSouthEntrance (78) — for the quest pass: every caravan shop, checked with the quests (the user)
 - [x] DesertBadgeAlcove (79)
-- [ ] DesertCaravanMap (80)
+- [ ] DesertCaravanMap (80) — for the enemy pass: the caravan robbery scene (Event93, until flag 201), its fight
+  needing logic once bosses and enemies are shuffled
 - [ ] DesertSandPitArea (81)
 - [ ] DesertBeforeGH (82)
 - [ ] DesertRoachVillage (95)
