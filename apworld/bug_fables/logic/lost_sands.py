@@ -172,4 +172,8 @@ MAP_AREAS = (
     Area("DesertJumpPuzzle", "Right", ("loadzone right",),
          CanUse("Jump") & (CanUse("Shield") | Has("Thorn Field Bridge Down")),
          out=one_way(None, CanUse("Jump") & (CanUse("Shield") | Has("Thorn Field Bridge Down")))),
+    # The southern desert's right door, past thorns: the bubble shield or Bee Fly, both ways.
+    Area("DesertSouthern", "Right", ("loadzone right",), CanUse("Shield") | CanUse("Bee Fly")),
+    # Its top door (to the roach village), on a ledge: a drop down to the left side, no way back up inside the room.
+    Area("DesertSouthern", "Ledge", ("loadzone north",), False_(), out=one_way(None, False_())),
 )

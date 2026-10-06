@@ -3158,3 +3158,5 @@ either one wrong).
   down); right to left a drop. The event's name: the user asked what the game calls the hazard; `textsearch thorn`
   found the room's own line ("And their thorns."): "Thorn Field, Bridge Knocked Down". Waiting on the user's "done".
   No items; the user: done. Ticked, 69 of 244. Next: `DesertSouthern` (111).
+- **`DesertSouthern`:** the left door free, the right one the shield or Bee Fly both ways, the top one a ledge drop
+  only (written as landing on the left side, the top door being nearer it). No items. Waiting on the user's "done".

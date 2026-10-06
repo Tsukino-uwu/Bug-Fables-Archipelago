@@ -904,6 +904,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     shield) and Jump; from the right, down freely, a one-way without Jump. A bridge (`bridge1`, flag 261) knocked
     down by the horn from the right, staying down, lets Jump alone cross from the left. The room's own line calls the
     hazard thorns ("And their thorns.", `DesertJumpPuzzle:0`). No items.
+    **`DesertSouthern` (2026-10-06, the user):** the left door free; the right door past thorns, the bubble shield or
+    Bee Fly, both ways; the top door on a ledge, a drop down with no way up inside the room. No items.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
