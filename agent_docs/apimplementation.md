@@ -2994,8 +2994,8 @@ horn; across Jump; three new locations; its medal with the CableCar quest), 85 o
 Beemerang Halt; a new location), 86 of 244; the settlement entrance (the caravan's stall kept present for good and the
 snail's shop that takes its spot kept away, the user's choice after the snail's goods overlapped, its three items new
 locations; a new dig spot; the minigame
-door behind the horn quest, a stand-in; the desert door behind its gate's lever, hit from the desert side; in
-progress), 86 of 244; the rest of `room-checklist.md` to go.
+door behind the horn quest, a stand-in; the desert door behind its gate's lever, hit from the desert side), 87 of
+244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
