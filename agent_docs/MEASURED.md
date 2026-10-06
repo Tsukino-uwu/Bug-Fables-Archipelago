@@ -960,6 +960,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   door up a ledge: Jump, the horn and Beemerang Halt, a drop down.
   **`GoldenPitcher2` (2026-10-06):** the lower door free; crystal berry #40 (right ledge) and the top left door (to the
   arena) each Jump and Beemerang Halt; from that door a drop down.
+  **`PitcherPlantArena` (2026-10-06):** the door and the save point free; walking further in starts the pitcher's
+  bounty fight (`Event124`, until flag 494), nothing needed to reach it. No items.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

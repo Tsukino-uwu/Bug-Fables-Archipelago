@@ -3237,3 +3237,5 @@ either one wrong).
 - **`GoldenPitcher2`:** the lower door free; berry #40 and the top left door Jump and Beemerang Halt, a drop down from
   the door. The berry named "Upper Pitcher Path, Right Ledge" (the user's pick, id 133). Waiting on the user's "done".
   The user: done. Ticked, 83 of 244. Next: `PitcherPlantArena` (239).
+- **`PitcherPlantArena`:** the door and save point free; walking in starts the pitcher's bounty fight (Event124), noted
+  for the quest pass with the other bounties.
