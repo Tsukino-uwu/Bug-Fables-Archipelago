@@ -3160,3 +3160,5 @@ either one wrong).
   No items; the user: done. Ticked, 69 of 244. Next: `DesertSouthern` (111).
 - **`DesertSouthern`:** the left door free, the right one the shield or Bee Fly both ways, the top one a ledge drop
   only (written as landing on the left side, the top door being nearer it). No items. Waiting on the user's "done".
+  The user: both the left and top doors on the left side, as written; no items; done. Ticked, 70 of 244. Next:
+  `DesertScorpion` (112).
