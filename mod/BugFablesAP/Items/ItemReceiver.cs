@@ -225,6 +225,12 @@ namespace BugFablesAP
                 mm.flagvar[CrystalBerryTotal.ReceivedSlot]++;
                 return $"added a crystal berry (count now {mm.flagvar[GameVars.CrystalBerries]}, received {mm.flagvar[CrystalBerryTotal.ReceivedSlot]})";
             }
+            if (kind == ItemIds.TokenKind)
+            {
+                // flagvar[27]: the Termacade's tokens, as the Game Tokens item's own text adds them (the game caps it).
+                mm.flagvar[GameVars.Tokens] += gameId;
+                return $"added {gameId} tokens (now {mm.flagvar[GameVars.Tokens]})";
+            }
             if (kind == ItemIds.MoneyKind)
             {
                 mm.showmoney = 1f;

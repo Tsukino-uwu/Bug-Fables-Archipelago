@@ -335,6 +335,13 @@ namespace BugFablesAP
                         // The game's own full heal (HP and TP, the whole party), as the rematch machine uses.
                         MainManager.Heal();
                         return "party healed";
+                    case "tokens":
+                        // The Termacade's token count; the game caps it at 9999 each frame.
+                        if (parts.Length > 1)
+                        {
+                            MainManager.instance.flagvar[GameVars.Tokens] = int.Parse(parts[1]);
+                        }
+                        return $"tokens: {MainManager.instance.flagvar[GameVars.Tokens]}";
                     case "killall":
                     {
                         // HP to 0 only: the battle's own CheckDead, after the next action, ends them the game's way.

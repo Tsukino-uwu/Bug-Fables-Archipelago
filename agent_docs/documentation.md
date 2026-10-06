@@ -96,6 +96,7 @@ anyone curious about the process, or thinking of doing the same for another game
 42. [The ant tunnels' miners dig for free](#42-the-ant-tunnels-miners-dig-for-free)
 43. [A free seller: the price in their lines made 0](#43-a-free-seller-the-price-in-their-lines-made-0)
 44. [Enemysanity: an enemy's won fight drops its check](#44-enemysanity-an-enemys-won-fight-drops-its-check)
+45. [The Termacade: tokens, the gift and the prize stand](#45-the-termacade-tokens-the-gift-and-the-prize-stand)
 
 ## Where it stands
 
@@ -3084,3 +3085,28 @@ reads; both patches now name `Death(bool)`. After the hot reload: "Enemysanity i
 
 *Code: `World/EnemyDrops.cs`, `World/KeptOpen.cs` (`KeepPresent`), `Items/ItemSwap.Pickups.cs`, `Core/SeedData.cs`
 (`LocationEnemies`).*
+
+## 45. The Termacade: tokens, the gift and the prize stand
+
+The game side of the Archipelago guide's build step 50.
+
+1. **Tokens from the server:** the receiver adds a token item's amount to `flagvar[27]`, where the game keeps them
+   (it caps them at 9999 itself); the hold-up shows the Game Tokens sprite.
+2. **The gift:** a give in `location_gives` may name its `npc`; `ItemSwap` then swaps that `giveitem` only when the
+   description box it opens belongs to that character. The greeter's does; the arcade's score rewards open none inside
+   the arcade, so they stay the game's own.
+3. **A prize bought:** Event121 runs `giveitem` only after taking the tokens, so the give swap itself is the purchase.
+   A prize with a flag is sent when the flag is set; one sold again and again has none, so its check is queued at the
+   swap (`QueueRespawnCheck`), and once done the stand sells its own prize again (`ItemSwap.SellsItsOwnAgain`).
+4. **The list:** `Termacade.cs` puts the seed's name, description and sprite into the game's own item and medal tables
+   for each undone prize while `ShowItemList` builds list 26, and puts the game's back after it (a finalizer). Every
+   look is read before any is swapped.
+
+Not changed: with a full bag, Event121 refuses a prize in an item slot whatever the seed put there (the game's own
+check); the "buy it?" question names the stand's own prize.
+
+**Status:** built (2026-10-06); the list, a flag-less and a once-only purchase seen working (2026-10-06).
+
+*Code: `Items/Termacade.cs`, `Items/ItemSwap.cs` (`FindLocation`, `IsFlaglessPrize`), `Items/ItemReceiver.cs`,
+`Items/ItemSwap.Looks.cs`, `Core/ItemIds.cs` (`TokenKind`), `Core/GameSlots.cs` (`GameVars.Tokens`),
+`Core/SeedData.cs` (`LocationPrizes`, `Give.Npc`), `Dev/QuestDump.cs` (the prize dump).*

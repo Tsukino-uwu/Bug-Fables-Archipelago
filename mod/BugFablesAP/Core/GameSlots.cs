@@ -22,6 +22,8 @@ namespace BugFablesAP
         internal const int ShopPrice = 1;
         // The crystal berry shop's currency.
         internal const int CrystalBerries = 14;
+        // The Termacade's tokens.
+        internal const int Tokens = 27;
     }
 
     internal static class GameStrings

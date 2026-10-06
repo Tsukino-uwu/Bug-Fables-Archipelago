@@ -26,6 +26,8 @@ namespace BugFablesAP
         internal readonly HashSet<long> QuietLocations;
         internal readonly Dictionary<long, int[]> LocationShops;
         internal readonly Dictionary<long, ApConnection.ItemShopSlot> LocationItemShops;
+        // The Termacade's prize stand: {location: its row in the stand}.
+        internal readonly Dictionary<long, int> LocationPrizes;
         internal readonly Dictionary<long, int> ItemKinds;
         internal readonly List<ApConnection.Blocker> KeptOpen;
         internal readonly List<ApConnection.Blocker> KeptPresent;
@@ -81,6 +83,7 @@ namespace BugFablesAP
                 Map = v.Value<string>("map"),
                 Type = v.Value<int>("type"),
                 Item = v.Value<int>("item"),
+                Npc = v.Value<string>("npc"),
             });
             LocationPickups = SlotData.ByLocation(data, "location_pickups", v => new ApConnection.Pickup
             {
@@ -124,6 +127,7 @@ namespace BugFablesAP
                 Keeper = v.Value<string>("keeper"),
                 Item = v.Value<int>("item"),
             });
+            LocationPrizes = SlotData.ByLocation(data, "location_prizes", v => v.Value<int>());
             NoTravelMaps = new HashSet<string>(SlotData.List(data, "no_travel_maps", e => e.Value<string>())
                 ?? new List<string>());
             DoorTargets = SlotData.List(data, "door_targets", e => new DoorShuffle.Target
@@ -188,6 +192,7 @@ namespace BugFablesAP
                 .Concat(LocationDiscoveries?.Keys ?? Enumerable.Empty<long>())
                 .Concat(LocationShops?.Keys ?? Enumerable.Empty<long>())
                 .Concat(LocationItemShops?.Keys ?? Enumerable.Empty<long>())
+                .Concat(LocationPrizes?.Keys ?? Enumerable.Empty<long>())
                 .Concat(LocationPickups?.Keys ?? Enumerable.Empty<long>())
                 .Concat(LocationEnemies?.Keys ?? Enumerable.Empty<long>()).Distinct().ToList();
 

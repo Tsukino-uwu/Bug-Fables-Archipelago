@@ -3020,3 +3020,11 @@ either one wrong).
   kept present, two miners away; through `liveslot` the NPCs came but no building ("i don't see the arcade building"),
   which was scenery (`Model/TermiteArcade`, MapDump): shown, the lot's fence hidden, then "yee it works now". The
   greeter's 15 tokens and the prize stand: decided (Next 60), a step of its own. Ticked, 34 of 244.
+- **The Termacade, built (build step 50, mod guide step 45):** the user's design: the greeter's 15 tokens a filler
+  location ("Arcade Gift", always in), the tokens a server item; every prize a location kept to filler (excluded), its
+  prize in the pool, behind *Shuffle Termacade* (on); the ribbons useful until the quest pass. How the game gives
+  tokens was found by `textsearch addvar,27`: the Game Tokens item's own text adds them. A new seed (the old one
+  predated the locations), adopted by the test file. Seen: the list shows the seed's items; a flag-less prize went back
+  to its own after buying, a once-only one showed Sold Out. A collision seen (Prize 9 showing Prize 4's seed item: one
+  prize's own item is another's seed item), fixed by reading every look first. The user: a full bag refusing an item
+  slot is fine; prices belong to the slots. Dev console `tokens [n]` added; `QuestDump` also writes the prize table.

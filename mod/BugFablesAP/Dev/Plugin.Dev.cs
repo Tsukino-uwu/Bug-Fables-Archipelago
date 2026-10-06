@@ -117,7 +117,8 @@ namespace BugFablesAP
                 + "Off by default.");
             questDumpEnabled = Config.Bind("Debug", "QuestDump", false,
                 "Dev only. Once per load, writes every board quest's name, BoardData numbers and QuestChecks row to "
-                + "BepInEx/bugfablesap-questdump.tsv. Off by default.");
+                + "BepInEx/bugfablesap-questdump.tsv, and the Termacade's prizes to bugfablesap-termacade.tsv. Off by "
+                + "default.");
             if (textProbeEnabled.Value)
             {
                 TextProbe.Enable(Log);

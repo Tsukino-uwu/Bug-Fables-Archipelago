@@ -116,6 +116,20 @@ class ShuffleItemShops(DefaultOnToggle):
     display_name = "Shuffle Item Shops"
 
 
+class ShuffleTermacade(DefaultOnToggle):
+    """
+    The Termacade's prize stand, in Bugaria's commercial district: the first purchase of each prize is a location, and
+    its prizes (Empower+ and the other medals, the ribbons) are in the item pool. Prize locations only ever hold filler,
+    so no token farming is ever needed for progress.
+
+    Turned off, the stand sells its own prizes as usual.
+
+    Checks added in this version: {count}.
+    """
+
+    display_name = "Shuffle Termacade"
+
+
 class ShopContents(Choice):
     """
     What shop locations may hold, when shops are shuffled. Shops put many easy checks in one place, which can soak up
@@ -349,6 +363,7 @@ class BugFablesOptions(PerGameCommonOptions):
     enemy_sanity: EnemySanity
     shuffle_medal_shops: ShuffleMedalShops
     shuffle_item_shops: ShuffleItemShops
+    shuffle_termacade: ShuffleTermacade
     shop_contents: ShopContents
     shuffle_shop_inventories: ShuffleShopInventories
     entrance_randomizer: EntranceRandomizer
@@ -381,6 +396,7 @@ CATEGORY_OPTIONS: dict[str, str] = {
     "enemy": "enemy_sanity",
     "shop": "shuffle_medal_shops",
     "item_shop": "shuffle_item_shops",
+    "termacade": "shuffle_termacade",
 }
 
 

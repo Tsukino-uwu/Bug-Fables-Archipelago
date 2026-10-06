@@ -135,11 +135,14 @@ MEMBER_ID_OFFSET = 4_000
 # Field moves: game_id 0 Beemerang (Vi), 1 Horn (Kabbu), 2 Ice (Leif), 3 Jump (the whole party).
 MOVE_KIND = 6
 MOVE_ID_OFFSET = 5_000
+# Termacade tokens: game_id is the amount.
+TOKEN_KIND = 7
+TOKEN_ID_OFFSET = 6_000
 
 
 def item_id(item: Item) -> int:
     offset = {MEDAL_KIND: MEDAL_ID_OFFSET, MONEY_KIND: MONEY_ID_OFFSET, CRYSTAL_KIND: CRYSTAL_ID_OFFSET,
-              MEMBER_KIND: MEMBER_ID_OFFSET, MOVE_KIND: MOVE_ID_OFFSET}.get(item.kind, 0)
+              MEMBER_KIND: MEMBER_ID_OFFSET, MOVE_KIND: MOVE_ID_OFFSET, TOKEN_KIND: TOKEN_ID_OFFSET}.get(item.kind, 0)
     return ITEM_ID_BASE + offset + item.game_id
 
 
@@ -161,6 +164,8 @@ def vanilla_item(location: Location) -> str | None:
     """The name of the item the game hands out at a location, or None."""
     source = location.source
     handed = source.give or source.pickup or source.added
+    if source.tokens is not None:
+        return next(item.name for item in ITEMS if item.kind == TOKEN_KIND and item.game_id == source.tokens)
     if handed is not None:
         give_type, give_item = handed.type, handed.item
     elif source.item_shop is not None:

@@ -18,7 +18,8 @@ if TYPE_CHECKING:
 SLOT_OPTIONS: tuple[str, ...] = (
     "artifacts_required", "shuffle_quests", "shuffle_crystal_berries", "shuffle_discoveries", "shuffle_hidden_items",
     "shuffle_dig_spots", "enemy_sanity",
-    "shuffle_medal_shops", "shuffle_item_shops", "shop_contents", "entrance_randomizer", "filler_starting_checks",
+    "shuffle_medal_shops", "shuffle_item_shops", "shuffle_termacade", "shop_contents", "entrance_randomizer",
+    "filler_starting_checks",
     "shuffle_field_moves", "shuffle_jump", "points_of_no_return", "progressive_boat", "extra_roadblocks",
     "exclude_locations")
 # Every other option, and why it isn't sent.
@@ -94,6 +95,8 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         # One location per copy a shop ever stocks; a shop's copies are its locations in id order.
         "location_shops": _by_location(world, "shop", lambda source: {"shop": source.shop, "medal": source.medal}),
         "location_item_shops": _by_location(world, "item_shop", lambda source: source.item_shop.to_slot()),
+        # The Termacade's prize stand: {location id: its row in the stand}; empty with Shuffle Termacade off.
+        "location_prizes": _by_location(world, "prize"),
         # Done when a number slot reaches a value, not a flag (a boss prize handed over).
         "location_vars": _by_location(world, "var", lambda source: {"var": source.var, "at_least": source.at_least}),
         # Story-only maps: the pause menu offers no Warp or map travel there, as the game gives no way out mid-scene.
@@ -105,7 +108,9 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "quiet_locations": sorted(LOCATION_NAME_TO_ID[loc.name] for loc in world.included_locations if loc.quiet),
         # Items the story puts straight into the bag at a location: the client leaves them out.
         "location_added": _by_location(world, "added", lambda source: source.added.to_slot()),
-        "location_gives": _by_location(world, "give", lambda source: source.give.to_slot()),
+        # A give with "npc" is that character's only: another giveitem of the same item on the map stays the game's.
+        "location_gives": _by_location(world, "give", lambda source: {**source.give.to_slot(),
+                                                                      **({"npc": source.npc} if source.npc else {})}),
         "location_pickups": _by_location(world, "pickup", _pickup),
         # Story blockers the client keeps away, so an area the logic counts as reachable never closes.
         "kept_open": _entities((*KEPT_OPEN, *(npc for block in down for npc in block.npcs))),

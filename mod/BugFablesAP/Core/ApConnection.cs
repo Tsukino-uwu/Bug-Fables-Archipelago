@@ -177,6 +177,7 @@ namespace BugFablesAP
         internal HashSet<long> QuietLocations => seedData?.QuietLocations;
         internal Dictionary<long, int[]> LocationShops => seedData?.LocationShops;
         internal Dictionary<long, ItemShopSlot> LocationItemShops => seedData?.LocationItemShops;
+        internal Dictionary<long, int> LocationPrizes => seedData?.LocationPrizes;
         internal Dictionary<long, int> ItemKinds => seedData?.ItemKinds;
         internal List<Blocker> KeptOpen => seedData?.KeptOpen;
         internal List<Blocker> KeptPresent => seedData?.KeptPresent;
@@ -206,6 +207,8 @@ namespace BugFablesAP
             internal string Map;
             internal int Type;
             internal int Item;
+            // Only this character's giveitem; null for any on the map.
+            internal string Npc;
         }
 
         internal sealed class Pickup

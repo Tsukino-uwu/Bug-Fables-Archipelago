@@ -152,6 +152,7 @@ namespace BugFablesAP
                 int gameId = ItemIds.GameId(info.ItemId, kind);
                 string text = kind == ItemIds.MedalKind ? TableCell(MainManager.badgedata, gameId, 1)
                     : kind == ItemIds.MoneyKind ? gameId + " berries."
+                    : kind == ItemIds.TokenKind ? gameId + " tokens for the Termacade."
                     : kind == ItemIds.CrystalKind
                         ? (MainManager.menutext?.Length > 112 ? MainManager.menutext[112] + "." : null)
                     : kind == ItemIds.MemberKind ? PartyMembers.Name(gameId) + " joins the party."
@@ -194,12 +195,15 @@ namespace BugFablesAP
                 bool medal = kind == ItemIds.MedalKind;
                 bool money = kind == ItemIds.MoneyKind;
                 bool crystal = kind == ItemIds.CrystalKind;
+                bool tokens = kind == ItemIds.TokenKind;
                 sprite = crystal ? MainManager.guisprites[83] : money ? ItemIds.BerrySprite(gameId)
+                    : tokens ? MainManager.GetItemSprite(false, ItemIds.GameTokens)
                     : MainManager.GetItemSprite(medal, gameId);
                 name = crystal ? MainManager.menutext[112] : money ? gameId + " Berries"
+                    : tokens ? gameId + " Tokens"
                     : medal ? MainManager.GetBadgeName(gameId) : MainManager.itemdata[0, gameId, 0];
                 color = medal ? new Color(1f, 0.5f, 0f)
-                    : kind == ItemIds.KeyItemKind ? new Color(1f, 0.3f, 0.4f)
+                    : kind == ItemIds.KeyItemKind || tokens ? new Color(1f, 0.3f, 0.4f)
                     : new Color(0f, 0.7f, 0.7f);
             }
         }
@@ -246,7 +250,7 @@ namespace BugFablesAP
             int gameId = ItemIds.GameId(itemId, kind);
             return kind == ItemIds.MedalKind ? TableCell(MainManager.badgedata, gameId, 6)
                 : kind == ItemIds.MemberKind || kind == ItemIds.MoveKind ? ""
-                : kind == ItemIds.MoneyKind || kind == ItemIds.CrystalKind ? null
+                : kind == ItemIds.MoneyKind || kind == ItemIds.CrystalKind || kind == ItemIds.TokenKind ? null
                 : TableCell(MainManager.itemdata, 0, gameId, 3);
         }
 

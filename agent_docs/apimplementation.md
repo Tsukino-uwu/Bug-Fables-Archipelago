@@ -119,6 +119,7 @@ this file and that doc disagree, that doc is right.
 47. [Build step 47: Enemysanity, every map enemy a location](#build-step-47-enemysanity-every-map-enemy-a-location)
 48. [Build step 48: Extra Roadblocks, and a map split into areas](#build-step-48-extra-roadblocks-and-a-map-split-into-areas)
 49. [Build step 49: hidden items and dig spots, two location toggles](#build-step-49-hidden-items-and-dig-spots-two-location-toggles)
+50. [Build step 50: the Termacade, its gift and prize stand](#build-step-50-the-termacade-its-gift-and-prize-stand)
 
 **How it works**
 
@@ -648,7 +649,7 @@ be wrong.
     prize stand:** "everything that is in the token prize shop to be in the pool. but the token shop itself should
     only be able to contain filler items": each prize a location Archipelago keeps to filler (an excluded location,
     `LocationProgressType.EXCLUDED`), its prize (Empower+ and the rest) in the pool, so no token farming is ever
-    required. The arcade itself is open from the start (build step 9).
+    required. The arcade itself is open from the start (build step 9). Built: build step 50.
 
 **Known issues:**
 
@@ -4668,6 +4669,48 @@ build step 10). Test: `test_categories.py` (`TestHiddenAndDigOff`, `TestHiddenAn
 
 *Code: `options.py` (`ShuffleHiddenItems`, `ShuffleDigSpots`, `CATEGORY_OPTIONS`), `slot_data.py` (`SLOT_OPTIONS`),
 `logic/outskirts.py`; tests `test_categories.py`.*
+
+## Build step 50: the Termacade, its gift and prize stand
+
+**Asked and decided (the user, 2026-10-06; Next 60):** the greeter's 15 tokens a location, "a filler location", with
+the tokens an item "similar to how we do it for the 15 & 30 berries", always in; and "everything that is in the token
+prize shop to be in the pool. but the token shop itself should only be able to contain filler items", behind its own
+toggle, on by default. Names, the user's: *Bugaria City: Termacade, Arcade Gift* and *Prize 1* to *Prize 13* in the
+stand's order. The ribbons, whose use isn't known yet, useful until the quest pass.
+
+**How the game does it** (`MEASURED.md`, the commercial district): the token count is `flagvar[27]`. The greeter's line
+sets variable 1 to 15 and runs `giveitem,1,110`, the Game Tokens key item, whose own item text carries
+`|addvar,27,v1|`: giving the item adds the tokens. The arcade's score rewards give the same item on the same map. The
+prize stand is `Data/Termacade` (`termacadeprize`: kind, item, price, once only, its flag), listed by `ShowItemList`'s
+list 26 and sold by Event121, which takes the tokens, sets a once-only prize's flag and then runs `giveitem` with the
+prize. Thirteen prizes (the dev `QuestDump` now writes them to `bugfablesap-termacade.tsv`): four items sold again and
+again, five medals, three ribbons and Helper Boost once each (flags 310-314, 590-592, 718).
+
+**Built:**
+1. **A token kind** (7, ids from 6000; `15 Tokens`, filler), given by the receiver into `flagvar[27]`.
+2. **The gift**, location 97: `Source(flag=351, npc="termiteoutside", give=..., tokens=15)`; `tokens` makes its vanilla
+   item the token item, and `npc` goes into its `location_gives` entry, so only the greeter's `giveitem` is swapped,
+   never a score reward's.
+3. **The prizes**, locations 98-110, category `termacade` (*Shuffle Termacade*, `shuffle_termacade`): `Source(prize=row,
+   give=...)`, with the flag where the prize has one; slot_data `location_prizes` (`{location: row}`).
+4. **Kept to filler:** a location's `filler` marks it `LocationProgressType.EXCLUDED`, Archipelago's own way (`world
+   api.md`: "will prevent progression and useful items from being placed at excluded locations"), the gift and every
+   prize.
+5. **The new items:** Bag of Flour and Spicy Fries (filler), the five medals and Helper Boost (useful), the three
+   ribbons (useful for now).
+6. **Tests** (`test_termacade.py`): the gift and prizes excluded and holding excludable items, the prizes' items and
+   15 Tokens in the pool, `location_prizes` and the gift's give with its npc; off, the gift alone and no prize items.
+
+**Seen** (2026-10-06, a new seed adopted by the test file): the list showed each prize's seed item and its
+description; a flag-less prize bought went back to the stand's own; a once-only one bought showed Sold Out. A bug seen
+there: Prize 9 showed Prize 4's seed item, because Prize 4's own item (the Tangy Berry) is Prize 9's seed item and its
+name had already been swapped; every look is now read before any is swapped, and the row then showed right.
+
+**Status:** built (2026-10-06); the prize stand seen working, the gift not yet seen.
+
+*Code: `options.py` (`ShuffleTermacade`), `data_types.py` (`Source.tokens`, `Source.prize`, `Location.filler`),
+`data_tables.py` (`TOKEN_KIND`, `vanilla_item`), `rules.py`, `slot_data.py` (`location_prizes`, a give's `npc`),
+`logic/bugaria_city.py`, `data/items.json`; tests `test_termacade.py`. The mod: the guide's step 45.*
 
 
 # How it works

@@ -306,7 +306,9 @@ class Source:
     flagvar[var] reaches at_least; slot_data location_vars), berry (a crystal berry's crystalbflags index;
     location_berries), regional (a respawning pickup's regional flag), discovery (a journal discovery), shop and medal
     (a medal shop's badgeshops index and the medal; one location per copy it ever stocks), enemy (a map enemy,
-    "map:entity", whose won fight drops the check: Enemysanity; location_enemies).
+    "map:entity", whose won fight drops the check: Enemysanity; location_enemies). tokens: the give hands out this many
+    Termacade tokens (its Game Tokens item adds them), so the vanilla item is that many tokens. prize: the Termacade
+    prize stand's row (Data/Termacade, Event121; location_prizes), its first purchase the check.
     """
 
     flag: int | None = None
@@ -324,6 +326,8 @@ class Source:
     shop: int | None = None
     medal: int | None = None
     enemy: str | None = None
+    tokens: int | None = None
+    prize: int | None = None
 
     def present(self) -> set[str]:
         """The fields this source has."""
@@ -398,6 +402,7 @@ class Location:
     Starting Party Member on; story_party, a story event only with it off). quiet marks an opening check whose item
     arrives with no hold-up (the start of a new file); with Filler Starting Checks, it holds filler only. no_jump: seen reachable without a jump (with Shuffle Jump, every
     other spot needs it). pending: a quest not yet gone through (build step 44), out of every seed and vanilla.
+    filler: Archipelago keeps it to filler (an excluded location): the Termacade's gift and prizes.
     """
 
     name: str
@@ -411,6 +416,7 @@ class Location:
     reach: Rule | None = None
     pending: bool = False
     area: str | None = None  # the part of its map (an Area's name) whose region it's placed in; None: the map's own
+    filler: bool = False
 
 
 @dataclass(frozen=True, slots=True)

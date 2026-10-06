@@ -24,6 +24,9 @@ hands over the submarine (both new in 0.3.0). More chapters come later.
   up. Every one stays on its map whatever the story, so none can be missed. New in 0.3.0.
 - **Shuffle Medal Shops** (on): medals sold in shops are locations.
 - **Shuffle Item Shops** (on): the first purchase of each item in an item shop is a location.
+- **Shuffle Termacade** (on): the first purchase of each prize at the Termacade's prize stand is a location. Prize
+  locations only ever hold filler, and the prizes themselves (medals, ribbons) are found elsewhere, so you never have
+  to win tokens for progress. The arcade's welcome gift is always a location.
 - **Shop Contents** (No Progression): what shop locations may hold.
 - **Shuffle Shop Inventories** (on): what item shops restock and what respawning floor items come back with is
   shuffled among themselves (food and other consumables only, each as often as before). Never a check or location:

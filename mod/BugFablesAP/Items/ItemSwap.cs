@@ -204,7 +204,7 @@ namespace BugFablesAP
         // type is 2 for a medal, 0 for items and key items.
         public static void DescWindow(NPCControl caller, int type, int id)
         {
-            Decide(type == 2, id);
+            Decide(type == 2, id, caller != null ? caller.name : null);
             if (location < 0)
             {
                 caller.CreateDescWindow(type, id);
@@ -218,7 +218,7 @@ namespace BugFablesAP
         {
             if (!decided || decidedBadge != badge || decidedId != id)
             {
-                Decide(badge, id); // no NPC: no description box came first
+                Decide(badge, id, null); // no NPC: no description box came first
             }
             decided = false; // the next Giveitem decides afresh
             return location == -1 ? MainManager.GetItemSprite(badge, id)
@@ -249,13 +249,13 @@ namespace BugFablesAP
             return flags[index] || skip;
         }
 
-        private static void Decide(bool badge, int id)
+        private static void Decide(bool badge, int id, string npc)
         {
             decided = true;
             decidedBadge = badge;
             decidedId = id;
             swapped = false;
-            location = FindLocation(badge, id);
+            location = FindLocation(badge, id, npc);
             shownSprite = null;
             shownColor = null;
             shownName = null;
@@ -402,6 +402,12 @@ namespace BugFablesAP
             }
             log.LogInfo(location == DisplayOnly ? $"[swap] held up '{TextFit.Joined(shownName)}' (display only)"
                 : $"[swap] location {location}: kept {what} out of the inventory");
+            if (IsFlaglessPrize(location))
+            {
+                // Event121 gives a prize only once its tokens are paid: the purchase itself.
+                connection.QueueRespawnCheck(location, MainManager.instance.flagstring[ItemReceiver.SeedSlot]);
+                log.LogInfo($"[swap] location {location}: a Termacade prize bought: check queued");
+            }
             log.LogInfo("[fit] " + told);
             location = -1;
             swapped = true;
@@ -439,7 +445,7 @@ namespace BugFablesAP
         private static void ShowOwnDescription(NPCControl caller, ScoutedItemInfo info)
         {
             if (info == null || !IsOurs(info) || KindOf(info) == ItemIds.MoneyKind
-                || KindOf(info) == ItemIds.CrystalKind
+                || KindOf(info) == ItemIds.CrystalKind || KindOf(info) == ItemIds.TokenKind
                 || KindOf(info) == ItemIds.MemberKind || KindOf(info) == ItemIds.MoveKind)
             {
                 return; // berries have no description box, as in the game's own money giveitem; a member or move has
@@ -470,7 +476,7 @@ namespace BugFablesAP
         // Checks whose item a scene just showed on screen: that item's arrival gets no second box (ItemReceiver).
         internal static readonly HashSet<long> ShownInScene = new HashSet<long>();
 
-        private static long FindLocation(bool badge, int id)
+        private static long FindLocation(bool badge, int id, string npc)
         {
             Dictionary<long, ApConnection.Give> gives = connection.LocationGives;
             string map = MapName();
@@ -489,7 +495,8 @@ namespace BugFablesAP
             {
                 ApConnection.Give give = entry.Value;
                 bool sameKind = badge ? give.Type == 2 : give.Type == 0 || give.Type == 1;
-                if (sameKind && give.Item == id && give.Map == map)
+                if (sameKind && give.Item == id && give.Map == map && (give.Npc == null || give.Npc == npc)
+                    && !SellsItsOwnAgain(entry.Key))
                 {
                     return connection.LocationShops != null && connection.LocationShops.ContainsKey(entry.Key)
                         ? ShopSwap.Buy(entry.Key) : entry.Key;
@@ -497,6 +504,13 @@ namespace BugFablesAP
             }
             return -1;
         }
+
+        // A Termacade prize sold again and again has no flag: done, the stand sells its own prize.
+        private static bool IsFlaglessPrize(long at) =>
+            connection.LocationPrizes != null && connection.LocationPrizes.ContainsKey(at)
+            && (connection.LocationFlags == null || !connection.LocationFlags.ContainsKey(at));
+
+        private static bool SellsItsOwnAgain(long at) => IsFlaglessPrize(at) && connection.IsDone(at);
 
         private static string MapName()
         {

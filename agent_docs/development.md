@@ -344,6 +344,7 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   matching lines go to the log with their file and line number (the game's own names for things, 2026-09-27).
 - `discovery <n> [on|off]`: show or set a journal discovery (no pop-up), to replay a scene that records one.
 - `heal`: the game's own full heal (HP and TP, the whole party). Test files only.
+- `tokens [n]`: show or set the Termacade's token count (`flagvar[27]`). Test files only.
 - `killall`: in a battle, every enemy's HP to 0; the battle's own death check ends them after the next action (a boss
   a test party can't hit, such as the spider in the air). Test files only.
 - `take <item|key> <id>`: removes one from the inventory, as the game's own `removeitem` does. Test files only.
@@ -512,5 +513,5 @@ only in the dev (Debug) build: every one is bound in `Dev/Plugin.Dev.cs`, and th
 | `SaveDiff` | Two save file names, `a.dat\|b.dat`: once per load, logs what differs between them. |
 | `PatchDump` | Every method the mod patches (target, kind, patch method, priority), Uncap FPS's hooks included, sorted, to `bugfablesap-patches.tsv`, once per load: diff it before and after a change to how hooks are installed. The log also gets the run order wherever one target has several of the mod's hooks of a kind. |
 | `SeedDump` | Once per load, when a login brings the seed: everything the mod read from its slot_data, one sorted line per entry, to `bugfablesap-seed.tsv`, to diff before and after a change to how slot_data is read. |
-| `QuestDump` | Every board quest's name, its `BoardData` numbers (column 3: the flag taking it sets) and its `QuestChecks` row, to `bugfablesap-questdump.tsv`. |
+| `QuestDump` | Every board quest's name, its `BoardData` numbers (column 3: the flag taking it sets) and its `QuestChecks` row, to `bugfablesap-questdump.tsv`; and the Termacade's prizes (kind, item, price, once only, flag) to `bugfablesap-termacade.tsv`. |
 | `EntityDump`, `ScriptDump`, `MapDump`, `VarDump`, `SpriteDump` | Write the game's entities, dialogue commands, map events, script slots or GUI, item and medal sprites (`bugfablesap-guisprites.tsv`, `bugfablesap-itemsprites.tsv` and their sheets) to `bugfablesap-*.tsv` / `.png` in the BepInEx folder. A labelled contact sheet can be made from a table and its sheet (game art: kept local, never the repo). |
