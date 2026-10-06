@@ -2985,7 +2985,8 @@ Beemerang Halt; its crank half with Next 62), 78 of 244; the upper hall (its bos
 two events, a stand-in for the offerings; its upper right only from its own door), 79 of 244; the upper side room (its upper door and crank the Wooden Crank
 in its slot, Jump and Halt), the boss room (free; its fight up two ledges, Jump), 81 of 244; the pitcher path (its top door Jump, the horn and
 Halt; a new location behind thorns), 82 of 244; the upper pitcher path (its top left door Jump and Halt; a new
-location: its berry, Jump and Halt), 83 of 244; the rest of `room-checklist.md` to go.
+location: its berry, Jump and Halt), the pitcher plant arena (free; its bounty for the quest pass), 84 of 244:
+Golden Hills done; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
