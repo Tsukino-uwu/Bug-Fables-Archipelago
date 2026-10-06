@@ -3105,3 +3105,4 @@ either one wrong).
   screenshot) and "Grass by the Right Door" (a Succulent Berry, flag 210, the horn, id 121, a hidden item, the user's
   call). Ticked and warped on before the user said the room was done: unticked, back in the room (the user: "i didn't
   say i was done with the room yet").
+  Nothing else in it (every dump read again); the user: done. Ticked, 58 of 244. Next: `DesertCaravanMap` (80).
