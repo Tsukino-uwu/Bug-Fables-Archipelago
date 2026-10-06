@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**85 of 244 done.**
+**86 of 244 done.**
 
 ## Outskirts
 
@@ -124,7 +124,7 @@ as it is, a frozen record.
 ## Golden Path
 
 - [x] GoldenHillsCableCar (29) — for the quest pass: the CableCar quest (its NPC, Event91, the cranks), then the Super Block+ medal (flag 534, Jump)
-- [ ] GoldenHillsPath2 (38)
+- [x] GoldenHillsPath2 (38) — for the quest pass: the sleepy NPC (the CableCar quest, until flag 182)
 - [ ] GoldenSettlementEntrance (39)
 - [ ] GoldenHillsPath3 (44)
 - [ ] GoldenSMinigame (114)

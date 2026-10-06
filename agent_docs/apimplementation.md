@@ -2988,7 +2988,7 @@ Halt; a new location behind thorns), 82 of 244; the upper pitcher path (its top 
 location: its berry, Jump and Halt), the pitcher plant arena (free; its bounty for the quest pass), 84 of 244:
 Golden Hills done; Golden Path from 2026-10-07: the cable car station (its right door a drop, back by Jump or the
 horn; across Jump; three new locations; its medal with the CableCar quest), 85 of 244; the crank path (between its doors Jump and
-Beemerang Halt; a new location; in progress); the rest of `room-checklist.md` to go.
+Beemerang Halt; a new location), 86 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
