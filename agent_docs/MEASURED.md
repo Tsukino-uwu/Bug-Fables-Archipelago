@@ -951,7 +951,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   **`GoldenHillsDungeonUpperSide` (2026-10-06):** from the lower door, up to the upper door and the Wooden Crank (flag
   129, behind yellow bushes on a platform at the top right): Jump and a platform turned with Beemerang Halt by the
   crank its slot makes (flag 128): with the slot emptied (`flag 128 off`), no crank until one is placed. From the
-  upper door, a drop; the crank from there Jump and Beemerang Halt, without the slot.
+  upper door, a drop. The Wooden Crank pickup from either door with Jump and Beemerang Halt, the slot (by the lower
+  door) not needed for it, only for the upper door.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

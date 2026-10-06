@@ -3225,5 +3225,5 @@ either one wrong).
 - **`GoldenHillsDungeonUpperSide`:** the upper door and the crank take Jump and Beemerang Halt on the crank the slot
   makes ("beemerang" meant Halt, asked); the save had the slot filled (flag 128), emptied to check: the Wooden Crank is
   needed, then set back on. Crank spot "Behind the Bushes" (the user's description), with Next 62. Ticked, 80 of 244.
-  The user: the crank spot from either door with Jump and Halt (from the upper door without the slot's crank): it
-  goes in the upper door's area.
+  The user: the crank pickup from either door with Jump and Halt; the slot, at the bottom, is only for the upper
+  door (I first read it as needing the slot from below).
