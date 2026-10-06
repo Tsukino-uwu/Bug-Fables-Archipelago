@@ -3229,3 +3229,4 @@ either one wrong).
   door (I first read it as needing the slot from below).
 - **`GoldenHillsDungeonBoss`:** the door free; the boss fight (Event73) up two ledges, Jump; the party stays in the
   room afterwards. The fight's needs to test later (the user); noted for the enemy pass.
+  The user: done. Ticked, 81 of 244. Next: `GoldenPitcher1` (203).

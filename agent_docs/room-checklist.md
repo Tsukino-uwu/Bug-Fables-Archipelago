@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**80 of 244 done.**
+**81 of 244 done.**
 
 ## Outskirts
 
@@ -116,7 +116,7 @@ as it is, a frozen record.
 - [x] GoldenHillsDungeonLeftCrankHalf (50) — its crank half with Next 62 (Vi for the Venus Buds)
 - [x] GoldenHillsDungeonUpperMain (51) — for the quest pass: the mole cricket (flags 130 to 577), the offerings' chain
 - [x] GoldenHillsDungeonUpperSide (52) — its crank spot with Next 62
-- [ ] GoldenHillsDungeonBoss (53) — for the enemy pass: the Venus' Guardian fight (Event73, Jump up to it; its needs untested)
+- [x] GoldenHillsDungeonBoss (53) — for the enemy pass: the Venus' Guardian fight (Event73, Jump up to it; its needs untested)
 - [ ] GoldenPitcher1 (203)
 - [ ] GoldenPitcher2 (205)
 - [ ] PitcherPlantArena (239)
