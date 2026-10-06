@@ -807,6 +807,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     high door without Jump. Walking in records a discovery, in Shades' scene (Event80, the `shades event` trigger
     until flag 141).
     **`AntPalace1` (2026-10-06, the user):** nothing needed anywhere in the hall, between its five doors.
+    **`AntPalace2` (2026-10-06, the user):** one door, no items in the room. Its two crystal berries are story rewards
+    (dev `textsearch`): #5 at line 15 ("Here, you've earned this.", a chapter scene) and #12 at line 48 (the Royal
+    Guard after flag 130); its discoveries (ant, bee; termite and wasp from 370) are checked.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

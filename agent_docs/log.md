@@ -3041,3 +3041,5 @@ either one wrong).
   user asked whether Shades' shop was in the logic: designed (build step 11) but waiting, on purpose, for all 50
   crystal berries as locations (10 so far). Ticked, 37 of 244. Next: `AntPalace1` (31).
 - **`AntPalace1`:** nothing needed anywhere, as the logic had. Ticked, 38 of 244. Next: `AntPalace2` (32).
+- **`AntPalace2`:** one door, no items; its berries #5 and #12 are story rewards (`textsearch giveitem,3,5,` and
+  `,12,`), with its discoveries left for later. Ticked, 39 of 244. Next: `AntBridge` (33).

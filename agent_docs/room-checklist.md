@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**38 of 244 done.**
+**39 of 244 done.**
 
 ## Outskirts
 
@@ -64,7 +64,8 @@ as it is, a frozen record.
 - [x] UndergroundBar (30) — for the discovery sweep: the one recorded on entering (Event80); Shades' shop waits
   for all 50 crystal berries as locations (build step 11)
 - [x] AntPalace1 (31)
-- [ ] AntPalace2 (32)
+- [x] AntPalace2 (32) — for the quest pass: crystal berries #5 (line 15) and #12 (line 48, after flag 130), story
+  rewards; for the discovery sweep: its four discoveries
 - [ ] AntBridge (33)
 - [ ] AntPalaceLibrary (34)
 - [ ] AntPalaceWarRoom (37)
