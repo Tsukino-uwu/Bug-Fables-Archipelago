@@ -3008,3 +3008,5 @@ either one wrong).
   past while shut (seen), so leaving that way needs the gem placed. A story event, "Gem Placed" (the user's name),
   flag 517, Jump and the later chapters' stand-in (the gem is Event117's, chapter 4, not yet an item). Ticked, 31 of
   244: Snakemouth Den done. Next: `AntTunnels` (3).
+- **`AntTunnels`:** nothing to cross; each tunnel entrance only its flag (75-80), as the logic already had. Its NPCs
+  left for the quest pass. Ticked, 32 of 244. Next: `BugariaMainPlaza` (9).
