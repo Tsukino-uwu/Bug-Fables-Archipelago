@@ -894,7 +894,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     **`DesertMountain` (2026-10-06, the user):** the right and bottom doors and the save point free; the bridge to
     the left (cave) door is easier with Jump but reachable without it, a bit tricky: the user counts it free ("people
     wouldn't use that setting if they didn't want things to be more challenging"), unlike the book area's sand pit
-    jump, kept for a harder logic. No items.
+    jump, kept for a harder logic (the user: "a tricky jump vs a tricky way to get up without a jump are
+    different"). No items.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

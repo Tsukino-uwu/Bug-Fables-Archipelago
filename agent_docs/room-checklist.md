@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**66 of 244 done.**
+**67 of 244 done.**
 
 ## Outskirts
 
@@ -99,7 +99,7 @@ as it is, a frozen record.
 - [x] DesertOasisEntrance (97)
 - [x] DesertWestDunes (98)
 - [x] DesertSandCastle (107) — for the quest pass: the Sand Castle Key chain (the Heaven and Earth Keys, Event109)
-- [ ] DesertMountain (108)
+- [x] DesertMountain (108)
 - [ ] DesertTrenchMiddle (109)
 - [ ] DesertJumpPuzzle (110)
 - [ ] DesertSouthern (111)
