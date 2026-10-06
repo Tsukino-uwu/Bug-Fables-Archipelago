@@ -3057,3 +3057,5 @@ either one wrong).
   discoveries. Ticked, 44 of 244. Next: `BugariaBridgeAttack` (124).
 - **`BugariaBridgeAttack`:** free across. The user asked if the attacked plaza's discoveries were missable: no, 4 and
   5 are the statue and the inn portrait in every copy of the plaza. Ticked, 45 of 244. Next: `BugariaCastleAttack`.
+- **`BugariaCastleAttack`:** free to its trigger (Event120 to the throne room). Ticked, 46 of 244. Next:
+  `BugariaEndPlaza` (240).

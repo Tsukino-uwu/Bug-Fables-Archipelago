@@ -2931,7 +2931,7 @@ bar corner behind grass, the horn; the arcade kept open), the theater (two new l
 and the spinner's crystal berry, the horn), the residential district (its rooftops: the horn; Jump and Freeze), the
 underground bar (free in and out by its bounce pad), the palace hall (free), the throne room (no items; two story berries later), the palace bridge (free), the library (free, its
 bookshelf's Lore Book without Jump), the war room (its table's medal, Jump), the miners' break room (a new
-location: its dig spot's berry, Beetle Dig), the attacked plaza (free), the attacked bridge (free), 45 of 244; the rest of `room-checklist.md` to go.
+location: its dig spot's berry, Beetle Dig), the attacked plaza (free), the attacked bridge (free), the attacked palace (free), 46 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

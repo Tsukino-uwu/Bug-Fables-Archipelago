@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**45 of 244 done.**
+**46 of 244 done.**
 
 ## Outskirts
 
@@ -73,7 +73,7 @@ as it is, a frozen record.
 - [x] AntMinesBreakRoom (73)
 - [x] BugariaPlazaAttack (123)
 - [x] BugariaBridgeAttack (124)
-- [ ] BugariaCastleAttack (125)
+- [x] BugariaCastleAttack (125)
 - [ ] BugariaEndPlaza (240)
 - [ ] BugariaEndBridge (241)
 - [ ] BugariaEndThrone (242)
