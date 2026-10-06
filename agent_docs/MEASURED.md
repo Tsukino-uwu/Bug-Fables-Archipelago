@@ -969,6 +969,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (drop list only item 12, regional flag 0, between the green bounce pad and the save crystal) the horn; across to
   the left door Jump. The Super Block+ medal (flag 534, height 28) on the cable cars: the CableCar board quest (7,
   accept flag 182, its NPC's `Event91` setting 183, which makes the cranks), then Jump.
+  **`GoldenHillsPath2` (2026-10-07):** between all three doors, Jump and Beemerang Halt (its fixed cranks); from the
+  high middle door, down to the right door with Jump alone, a drop. The Sweet Dew (flag 726) on a wooden platform
+  between boulders on the left side, Jump and Halt.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

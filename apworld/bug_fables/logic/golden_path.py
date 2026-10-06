@@ -17,6 +17,10 @@ LOCATIONS = (
     Location("Golden Path: Cable Car Station, Bush by the Save Crystal", 136, "GoldenHillsCableCar",
              Source(regional=0, pickup=Pickup(map="GoldenHillsCableCar", type=0, item=12)), rule=CanUse("Horn Slash"),
              category="hidden_item", no_jump=True),
+    # A Sweet Dew on a wooden platform between boulders, on the crank path's left side.
+    Location("Golden Path: Crank Path, Boulder Platform", 137, "GoldenHillsPath2",
+             Source(flag=726, pickup=Pickup(map="GoldenHillsPath2", type=0, item=50)),
+             rule=CanUse("Jump") & CanUse("Beemerang Halt"), area="Left"),
 )
 MAP_AREAS = (
     # The cable car station's right door (to the tunnel), up high: down a drop; back up by Jump, or the bounce pad past
@@ -25,4 +29,11 @@ MAP_AREAS = (
          out=one_way(None, CanUse("Jump") | CanUse("Horn Slash"))),
     # Its left side (the door to the second path): Jump across, both ways.
     Area("GoldenHillsCableCar", "Left", ("loadzonepath",), CanUse("Jump")),
+    # The crank path: its left side (the door toward the settlement) across from the right door by its fixed cranks
+    # (Beemerang Halt) and Jump, both ways.
+    Area("GoldenHillsPath2", "Left", ("loadzonesettlement",), CanUse("Jump") & CanUse("Beemerang Halt")),
+    # Its high middle door (to the pitcher path), reached from the left side, the same; down from it to the right side
+    # with Jump alone is a drop, not counted (the way over the left covers it).
+    Area("GoldenHillsPath2", "Top Middle", ("loadzonepitcherarea",), CanUse("Jump") & CanUse("Beemerang Halt"),
+         to="GoldenHillsPath2 (Left)"),
 )

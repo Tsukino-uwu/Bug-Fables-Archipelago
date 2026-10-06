@@ -3253,3 +3253,5 @@ either one wrong).
 - **A slip fixed:** the Defiant Root Entrance's dig spot (id 119, 2026-10-06) lacked `category="dig_spot"`, which every
   other non-berry dig spot has (Shuffle Dig Spots, off by default); added.
   No other items (the medal with the quest); the user: done. Ticked, 85 of 244. Next: `GoldenHillsPath2` (38).
+- **`GoldenHillsPath2`:** between its doors Jump and Halt; the Sweet Dew named "Boulder Platform" (the user, from
+  their screenshot; id 137), the room "Crank Path" (mine, not objected to). Waiting on the user's "done".
