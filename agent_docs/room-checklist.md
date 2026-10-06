@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**61 of 244 done.**
+**62 of 244 done.**
 
 ## Outskirts
 
@@ -94,7 +94,7 @@ as it is, a frozen record.
   needing logic once bosses and enemies are shuffled
 - [x] DesertSandPitArea (81)
 - [x] DesertBeforeGH (82)
-- [ ] DesertRoachVillage (95)
+- [x] DesertRoachVillage (95) — for the quest pass: the hawk (flags 300-302), key item 105 (line 1)
 - [ ] DesertOasis (96)
 - [ ] DesertOasisEntrance (97)
 - [ ] DesertWestDunes (98)

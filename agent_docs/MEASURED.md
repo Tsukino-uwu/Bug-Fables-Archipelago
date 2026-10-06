@@ -874,6 +874,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     sketch (the bridges after falling) placed them.
     **`DesertBeforeGH` (2026-10-06, the user):** nothing needed between its three doors; Strong Start (flag 415) on a
     high ledge on the left: grass cut (the horn), Jump, then a bridge the horn lowers (`@Bridge1`, flag 690).
+    **`DesertRoachVillage` (2026-10-06, the user):** nothing needed between its three doors; crystal berry #21's dig
+    spot needs only Beetle Dig. The hawk (flags 300-302, key item 105 in line 1) for the quest pass.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

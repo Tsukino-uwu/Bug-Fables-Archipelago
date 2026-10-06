@@ -52,6 +52,9 @@ LOCATIONS = (
     Location("Lost Sands: Golden Hills Border, Left Ledge", 123, "DesertBeforeGH",
              Source(flag=415, pickup=Pickup(map="DesertBeforeGH", type=2, item=23)),
              rule=CanUse("Horn Slash") & CanUse("Jump")),
+    Location("Lost Sands: Roach Village, Dig Spot", 124, "DesertRoachVillage",
+             Source(berry=21, pickup=Pickup(map="DesertRoachVillage", type=3, item=0)), rule=CanUse("Beetle Dig"),
+             category="crystal_berry", no_jump=True),
 )
 STORY_EVENTS = (
     # The south trench's bridge, knocked over by the horn from the left side (flag 282); it stays down.
