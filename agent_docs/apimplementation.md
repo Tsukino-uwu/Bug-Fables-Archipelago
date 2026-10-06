@@ -671,8 +671,9 @@ be wrong.
     (`GoldenHillsLowerRightCrank`, flag 116; Jump, Freeze, the horn and Beemerang Halt; the user's name); "Golden
     Hills: Left Crank Half Room, Top of the Hill" (`GoldenHillsDungeonLeftCrankHalf`, the Big Crank Bottom Half, key
     item 61, flag 117; Jump, Beemerang Halt, and Vi for the Venus Buds' scene fight, Event70; the user's name);
-    "Golden Hills: Upper Side Room, Behind the Bushes" (`GoldenHillsDungeonUpperSide`, flag 129; the Wooden Crank
-    placed in its room's slot, Jump and Beemerang Halt; the user's description).
+    "Golden Hills: Upper Side Room, Behind the Bushes" (`GoldenHillsDungeonUpperSide`, flag 129; in its "Upper Door"
+    area, with Jump and Beemerang Halt: from the lower door that adds the Wooden Crank in the room's slot; the user's
+    description).
     **Merged items, the whole only** (the user, 2026-10-06: "think making it only the whole item makes it easier logic
     wise"): the pool holds the Big Crank (60), not its halves (59, 61), and the Sand Castle Key (113), not the Heaven
     and Earth Keys (105, 106); the halves' and the keys' spots hold any item, filler making up the count. The user's
