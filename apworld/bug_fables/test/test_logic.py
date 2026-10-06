@@ -241,6 +241,13 @@ class TestMainPlaza(BugFablesTestBase):
         self.collect_by_name("Flower Key")
         self.assertTrue(self.can_reach_location(spot))
 
+    def test_break_room_dig_spot_needs_beetle_dig(self) -> None:
+        spot = "Bugaria City: Ant Tunnels, Break Room Dig Spot"
+        self.collect_by_name("Explorer Permit")
+        self.assertFalse(self.can_reach_location(spot))
+        self.collect_by_name("Beetle Dig")
+        self.assertTrue(self.can_reach_location(spot))
+
     def test_dig_spot_needs_beetle_dig(self) -> None:
         spot = "Bugaria City: Main Plaza, Dig Spot"
         self.collect_by_name("Explorer Permit")

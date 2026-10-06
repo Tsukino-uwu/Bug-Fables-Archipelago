@@ -3050,3 +3050,5 @@ either one wrong).
   discoveries for later. Ticked, 41 of 244. Next: `AntPalaceWarRoom` (37).
 - **`AntPalaceWarRoom`:** free in and out and to its NPCs; the table's Royal Calling (location 77) takes Jump, now
   written. Ticked, 42 of 244. Next: `AntMinesBreakRoom` (73).
+- **`AntMinesBreakRoom`:** nothing needed; a new location, the user's name "Bugaria City: Ant Tunnels, Break Room Dig
+  Spot" (crystal berry #34, Beetle Dig, id 113). Ticked, 43 of 244. Next: `BugariaPlazaAttack` (123).

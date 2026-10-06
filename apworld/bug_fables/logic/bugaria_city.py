@@ -93,6 +93,10 @@ LOCATIONS = (
     Location("Bugaria City: Theater, Right Side Spinner", 112, "BugariaTheater",
              Source(berry=13, pickup=Pickup(map="BugariaTheater", type=3, item=0)), rule=CanUse("Horn Slash"),
              category="crystal_berry", no_jump=True),
+    # Crystal berry #34, dug up in the miners' break room off the ant tunnels.
+    Location("Bugaria City: Ant Tunnels, Break Room Dig Spot", 113, "AntMinesBreakRoom",
+             Source(berry=34, pickup=Pickup(map="AntMinesBreakRoom", type=3, item=0)), rule=CanUse("Beetle Dig"),
+             category="crystal_berry", no_jump=True),
     # A Lore Book hidden behind a bookshelf; no Jump.
     Location("Ant Palace: Library, Behind the Bookshelf", 15, "AntPalaceLibrary",
              Source(flag=71, pickup=Pickup(map="AntPalaceLibrary", type=1, item=52)), no_jump=True),

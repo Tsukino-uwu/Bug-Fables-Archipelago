@@ -818,6 +818,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     each) and the discoveries are for the later passes.
     **`AntPalaceWarRoom` (2026-10-06, the user):** in and out and its NPCs free; the Royal Calling on the table
     (location 77) takes Jump.
+    **`AntMinesBreakRoom` (2026-10-06, the user):** nothing needed in or out or inside; its dig spot (crystal berry
+    #34, `DigSpot` data `1 34`) takes only Beetle Dig.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
