@@ -803,6 +803,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     **`BugariaResidential` (2026-10-06, the user):** free between its two doors and to the cicada's house; the Bad
     Book's rooftop (location 32) takes the horn (grass) and no Jump; the fountain rooftop (location 33) takes Jump and
     Freeze. The rest (the moth house from flag 130, the quests) waits for the quest pass.
+    **`UndergroundBar` (2026-10-06, the user):** everything reachable and in and out free: the bounce pad reaches the
+    high door without Jump. Walking in records a discovery, in Shades' scene (Event80, the `shades event` trigger
+    until flag 141).
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
