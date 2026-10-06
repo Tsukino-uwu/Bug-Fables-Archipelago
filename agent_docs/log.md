@@ -3103,4 +3103,5 @@ either one wrong).
 - **`DesertBadgeAlcove`:** the top and right doors free, cut off from the left; the left door's ledge a drop only. Two
   new locations, the user's names: "Platform on the Upper Left" (Meditation, flag 262, Jump, id 120; named from their
   screenshot) and "Grass by the Right Door" (a Succulent Berry, flag 210, the horn, id 121, a hidden item, the user's
-  call). Ticked, 58 of 244. Next: `DesertCaravanMap` (80).
+  call). Ticked and warped on before the user said the room was done: unticked, back in the room (the user: "i didn't
+  say i was done with the room yet").
