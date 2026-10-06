@@ -806,6 +806,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     **`UndergroundBar` (2026-10-06, the user):** everything reachable and in and out free: the bounce pad reaches the
     high door without Jump. Walking in records a discovery, in Shades' scene (Event80, the `shades event` trigger
     until flag 141).
+    **`AntPalace1` (2026-10-06, the user):** nothing needed anywhere in the hall, between its five doors.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

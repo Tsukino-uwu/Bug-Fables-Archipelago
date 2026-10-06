@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**37 of 244 done.**
+**38 of 244 done.**
 
 ## Outskirts
 
@@ -63,7 +63,7 @@ as it is, a frozen record.
 - [x] BugariaResidential (28) — for the quest pass: the Old Book delivery, the moth house (flag 130)
 - [x] UndergroundBar (30) — for the discovery sweep: the one recorded on entering (Event80); Shades' shop waits
   for all 50 crystal berries as locations (build step 11)
-- [ ] AntPalace1 (31)
+- [x] AntPalace1 (31)
 - [ ] AntPalace2 (32)
 - [ ] AntBridge (33)
 - [ ] AntPalaceLibrary (34)

@@ -3040,3 +3040,4 @@ either one wrong).
 - **`UndergroundBar`:** in and out free (the bounce pad without Jump); a discovery on entering, for the sweep. The
   user asked whether Shades' shop was in the logic: designed (build step 11) but waiting, on purpose, for all 50
   crystal berries as locations (10 so far). Ticked, 37 of 244. Next: `AntPalace1` (31).
+- **`AntPalace1`:** nothing needed anywhere, as the logic had. Ticked, 38 of 244. Next: `AntPalace2` (32).
