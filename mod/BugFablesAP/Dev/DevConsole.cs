@@ -173,6 +173,24 @@ namespace BugFablesAP
                 System.IO.File.WriteAllText(CommandFile, "");
                 foreach (string l in lines.Select(x => x.Trim()).Where(x => x.Length > 0 && !x.StartsWith("#")))
                 {
+                    if (l == "unstick")
+                    {
+                        // A frozen scene never frees the player, so a waiting warp would hold unstick back forever.
+                        string[] rest = queued.Where(c => !c.StartsWith("loc") && !c.StartsWith("warp")
+                            && !c.StartsWith("liveslot")).ToArray();
+                        int dropped = queued.Count - rest.Length;
+                        queued.Clear();
+                        queued.Enqueue(l);
+                        foreach (string c in rest)
+                        {
+                            queued.Enqueue(c);
+                        }
+                        if (dropped > 0)
+                        {
+                            log.LogInfo($"[dev] unstick goes first: {dropped} waiting warp(s) dropped");
+                        }
+                        continue;
+                    }
                     queued.Enqueue(l);
                 }
             }

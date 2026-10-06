@@ -3059,3 +3059,7 @@ either one wrong).
   5 are the statue and the inn portrait in every copy of the plaza. Ticked, 45 of 244. Next: `BugariaCastleAttack`.
 - **`BugariaCastleAttack`:** free to its trigger (Event120 to the throne room). Ticked, 46 of 244. Next:
   `BugariaEndPlaza` (240).
+- **A frozen scene, and `unstick` stuck behind a warp:** walking up the attacked palace started Event120 and the Wasp
+  King intermission fight; `OneHit` killed it (99 x 3) and the scene froze. `unstick` from the command file waited
+  behind the queued warp to `BugariaEndPlaza`, which waits for a free player, and the hot reload waits for the scene
+  to end. The user restarted the game. Fixed: `unstick` now jumps the file queue and drops waiting warps.
