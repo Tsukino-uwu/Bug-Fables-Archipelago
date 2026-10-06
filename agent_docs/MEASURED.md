@@ -769,6 +769,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     rotating bridge (an attack), Jump, Freeze and the horn; down from the top is free. The high door has a gate the big
     switch opens: arriving through it while shut, the game pushes the party past it, so leaving that way needs the
     switch (an attack).
+    **`SnakemouthUndergroundLeftA` (2026-10-06, the user):** from the right door (to `SnakemouthUndergrondDoor`) up to
+    the left door (to `UndergroundLeftB`) takes Jump, Freeze and the horn; down from it a free drop. No items.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

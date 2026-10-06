@@ -21,8 +21,9 @@ TOP_LEDGE = CanUse("Horn Slash") & CanUse("Bee Fly")
 LAKE_UP = CanUse("Jump") & CanUse("Beemerang Toss")
 # The underground door room's droplets: frozen (Freeze) and jumped on (Jump), up to its middle and its left.
 DROPLETS = CanUse("Jump") & CanUse("Freeze")
-# The right bridge room's way up: the bridge's switch, then the bounce mushroom, droplets and the horn.
-RIGHTB_UP = DROPLETS & CanUse("Horn Slash")
+# The side rooms' climbs, droplets and the horn: the right bridge room's (after its bridge's switch) and the first
+# left room's.
+DROPLETS_HORN = DROPLETS & CanUse("Horn Slash")
 LOCATIONS = (
     Location("Snakemouth Den: Underground Door Room, Behind the Wall", 5, "SnakemouthUndergrondDoor",
              Source(flag=60, pickup=Pickup(map="SnakemouthUndergrondDoor", type=2, item=9)), no_jump=True,
@@ -150,8 +151,10 @@ MAP_AREAS = (
     Area("SnakemouthUndergroundRightA", "Right", ("WarpNext",), CanUse("Jump") & ANY_ATTACK),
     # The right bridge room's top, with the big switch: up by a switch on the rotating bridge (an attack), a bounce
     # mushroom and droplets (Jump, Freeze) and the horn; dropped down from freely.
-    Area("SnakemouthUndergroundRightB", "Top", (), RIGHTB_UP, out=one_way(None, RIGHTB_UP)),
+    Area("SnakemouthUndergroundRightB", "Top", (), DROPLETS_HORN, out=one_way(None, DROPLETS_HORN)),
     # Its high door, behind a gate the big switch opens; arriving through it while shut, the game pushes the party past.
+    # The first left room's left door, up high: Jump, Freeze and the horn; dropped down from freely.
+    Area("SnakemouthUndergroundLeftA", "Left", ("LoadingZoneNext",), DROPLETS_HORN, out=one_way(None, DROPLETS_HORN)),
     Area("SnakemouthUndergroundRightB", "High Door", ("DoorMainRoom",), Has("Snakemouth Right Switch"),
          out=one_way(None, Has("Snakemouth Right Switch")), to="SnakemouthUndergroundRightB (Top)"),
 )
