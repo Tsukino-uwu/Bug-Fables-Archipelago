@@ -896,6 +896,10 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     wouldn't use that setting if they didn't want things to be more challenging"), unlike the book area's sand pit
     jump, kept for a harder logic (the user: "a tricky jump vs a tricky way to get up without a jump are
     different"). No items.
+    **`DesertTrenchMiddle` (2026-10-06, the user):** three sides. The right (the bottom, bottom-right and right doors)
+    free between them, its top door past a gate dug under (Beetle Dig) both ways; no way up to the middle or the left.
+    The middle (the high bottom-left door, `loadzone south2`) reached only through that door, a drop down to either
+    side. The left (the roach village door) back up to the middle with Jump and Bee Fly. No items.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

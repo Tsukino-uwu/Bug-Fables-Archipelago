@@ -155,4 +155,13 @@ MAP_AREAS = (
     # Fly), both ways; back left, also its red bounce pad (kept present), a one-way.
     Area("DesertOasisEntrance", "Right", ("loadzoneside",), CanUse("Shield") | CanUse("Bee Fly"),
          out=CanUse("Shield") | CanUse("Bee Fly") | one_way(None, CanUse("Shield") | CanUse("Bee Fly"))),
+    # The trench's middle: its right side (the map's own region: the bottom, bottom-right and right doors) and its top
+    # door, past a gate dug under both ways.
+    Area("DesertTrenchMiddle", "Top", ("loadzone north",), CanUse("Beetle Dig")),
+    # Its middle, up high (the bottom-left door, to the south trench's ledge): drops down to either side, and no way
+    # up from the right.
+    Area("DesertTrenchMiddle", "Middle", ("loadzone south2",), False_(), out=one_way(None, False_())),
+    # Its left side (the roach village door): dropped to from the middle, back up with Jump and Bee Fly.
+    Area("DesertTrenchMiddle", "Left", ("loadzone village",), one_way(None, CanUse("Jump") & CanUse("Bee Fly")),
+         out=CanUse("Jump") & CanUse("Bee Fly"), to="DesertTrenchMiddle (Middle)"),
 )

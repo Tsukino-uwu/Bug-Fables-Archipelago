@@ -3150,3 +3150,6 @@ either one wrong).
   count it (Shuffle Jump players want the challenge). No logic change. Waiting on the user's "done".
   The user: a tricky jump and a tricky way up without Jump are different (the first stays a trick, the second
   counts). No items; done. Ticked, 67 of 244. Next: `DesertTrenchMiddle` (109).
+- **`DesertTrenchMiddle`:** the right side's three doors free, the top one Beetle Dig; the middle (the high bottom-left
+  door) only through its door, drops to both sides; the left side up to the middle with Jump and Bee Fly. No items.
+  Waiting on the user's "done".
