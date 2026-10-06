@@ -925,6 +925,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   its slot works (flag 110), with a spawned Wooden Crank and Halt, a drop down to the left side. Every slot's lock
   reads code 2, the Wooden Crank, and `Event59` removes it (all but code 16): three slots (flags 109, 110, 128) and
   three cranks (flags 112, 116, 129) in the dungeon, one of each in the Rubber Prison (565, 561).
+  **`GoldenHillsDungeonCrankLeft` (2026-10-06):** one door; its Wooden Crank (flag 112) at the top, on leaves under a
+  bare tree, up its fixed cranks: Beemerang Halt, Jump and the horn.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

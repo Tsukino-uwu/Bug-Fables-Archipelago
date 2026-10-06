@@ -662,7 +662,10 @@ be wrong.
     counted small keys (read in `worlds/alttp`, 0.6.8): in a seed the mod leaves the crank in the bag when placed
     (the slot's own flag still set), so the pool holds one Wooden Crank and every slot needs only it; the other crank
     pickups become ordinary locations. The user: "Option2 is probly better ... i don't think the cranks unlock that
-    many locations/things anyway". Built once the rooms holding the cranks are mapped; until then a stand-in.
+    many locations/things anyway". Built once the rooms holding the cranks are mapped; until then a stand-in. The
+    crank spots, mapped (each added with this step, since a crank item before the mod change could be used up):
+    "Golden Hills: Left Crank Room, Atop the Hill" (`GoldenHillsDungeonCrankLeft`, flag 112, Beemerang Halt, Jump and
+    the horn; the user's name).
 
 **Known issues:**
 

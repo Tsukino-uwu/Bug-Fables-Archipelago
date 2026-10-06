@@ -3186,3 +3186,6 @@ either one wrong).
   one, never used up). The user chose the big-key way: the crank never used up in a seed, one in the pool (Next 62,
   to build once the crank rooms are mapped).
   The user: done. Ticked, 74 of 244. Next: `GoldenHillsDungeonCrankLeft` (47).
+- **`GoldenHillsDungeonCrankLeft`:** one door; the crank at the top takes Beemerang Halt, Jump and the horn. Named by
+  the user "Left Crank Room, Atop the Hill" ("autumn" is all of Golden Hills, so not in the name); its location waits
+  for Next 62, since a crank in the pool before the mod keeps it could be used up. Waiting on the user's "done".
