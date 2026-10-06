@@ -3095,3 +3095,5 @@ either one wrong).
   and Beemerang Halt or Bee Fly from the left (the crank resets on leaving). A new location, the user's name "Defiant
   Root Entrance, Dig Spot" (Dark Cherries, flag 398, Horn Dash and Beetle Dig, id 119). Ticked, 55 of 244. Next:
   `DesertFGBorder` (77).
+- **`DesertFGBorder`:** nothing needed between its doors with the gate kept open; the Bulk Bee talks as if it were
+  shut but stands out of the way; no items. Ticked, 56 of 244. Next: `DesertDRSouthEntrance` (78).
