@@ -2890,7 +2890,8 @@ Snakemouth Den from 2026-10-06: the bridge room (its banks two areas; the bridge
 a story event may sit in an area too, `StoryEvent.area`; its vine berry location 94, kept present from the start),
 the door room (the trapdoor an event opening the hole down; the big door kept open, its walk-in stuck behind it; the
 high door to `SnakemouthTop` a drop), the fall room (its door-room door on a ledge: Jump up, a drop down), the lake (its
-top, with Leif's scene, up by a switch and platforms), 22 of 244; the rest of `room-checklist.md` to go.
+top, with Leif's scene, up by a switch and platforms), the underground door room (five parts; its big door an event
+needing the two side rooms' switches, theirs cautious until mapped), 23 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

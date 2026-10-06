@@ -744,6 +744,16 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     one-way once down. The medal on its pillar (location 7): the Beemerang, too far for anything else. The berry bush
     by the tablet (location 21): Jump and the horn. Three grass patches drop a random item from their list (one
     Aphid Egg among them), and any grass may drop berries: no locations.
+    **`SnakemouthUndergrondDoor` (2026-10-06, seen):** the bottom (lake door, statue: nothing) is below the middle
+    (the right door, the broken house's medal, location 5, the save points, the big door): up by the droplets, Jump
+    and Freeze; down a drop. The pillar's Honey Drop (location 22) the same. The left (its door, both items under the
+    glowing cap) is up from the middle by Jump and Freeze, a drop back. The two top doors can't be reached inside the
+    room: top left drops by the left door, top right by the right door. The big door (`DoorEvent`, Event24) opens on
+    flags 33 and 34, the two big switches of `UndergroundLeftB` and `UndergroundRightB` (EntityDump), and sets 35;
+    behind it, the mushroom pit's door. Arriving from the pit while it's shut, the game pushes the party past it,
+    every time (three tries). The broken house fades as the party comes near (`FaderRange`: its renderers switched to
+    `Fade3D`, see-through); a ground item draws with "Sprites/Bumped Diffuse with Shadows" in queue 2450 (dev
+    `iteminfo`, 2026-10-06), so it shows through a faded wall. Used by `ItemSwap.Looks.cs`.
   - **Vi's beemerang (range):** `SnakemouthBridgeRoom`'s bridge comes down when its rope is hit; from the right only the
     beemerang reaches it, from the left Leif's move hit it (so presumably any member's; Kabbu's not tried). The room's
     Tattle tutorial (Event2) ran with stand-ins and finished (flag 10); its hint (Event0) is skipped by Skip cutscenes.

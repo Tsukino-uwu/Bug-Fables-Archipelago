@@ -2960,3 +2960,15 @@ either one wrong).
   pick from that grass's item list (Honey Drop, Crunchy Leaf, Aphid Egg), not a location. A tick-box question, "from
   the fall-room door without Jump, what can you reach?", placed the spots; the user liked it: now in
   `room-logic.md`. Ticked, 22 of 244. Next: `SnakemouthUndergrondDoor` (19).
+- **`SnakemouthUndergrondDoor`:** the bottom (statue, free), the middle (right door, broken house medal, the big
+  door) and the left (glowing cap's two items) joined by droplets, Jump and Freeze up, drops down; the two top doors
+  a drop only. Two tick-box questions placed the right door with the middle. The big door opens on the two side
+  rooms' big switches (flags 33, 34): three events, the user's names, the switches cautious until their rooms are
+  mapped. From the pit with the door shut, pushed through three times out of three: a one-way.
+- **The broken house's starburst** came and went with distance while its walls were faded. Dev `iteminfo` (shaders
+  and queues added) showed the item in queue 2450 and the starburst in 3000 with the faded wall; the starburst now
+  takes its item's queue. The user: "yes it works now". A readout taken soon after the reload still showed 3000;
+  not chased, since it worked once the pass caught up.
+- **Stopped for the day** (the user) after `SnakemouthUndergrondDoor`, 23 of 244. Next: `SnakemouthMushroomPit`
+  (20), through the big door. Dev cheats left as the user asked today: InfJump and BumpKill on, OneHit on,
+  QuietBursts on. Tests and the fuzzer wait for the push.
