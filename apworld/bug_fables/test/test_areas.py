@@ -119,6 +119,16 @@ class TestUnusedMaps(BugFablesTestBase):
                     self.assertNotIn(name, maps)
 
 
+class TestSandCastleDoor(BugFablesTestBase):
+    # The castle door is up a step: Jump, whatever else is held.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_needs_jump(self) -> None:
+        door = self.multiworld.get_entrance(door_name("DesertSandCastle", "loadzone castle"), self.player)
+        self.collect_all_but(["Jump"])
+        self.assertFalse(door.access_rule(self.multiworld.state))
+
+
 class TestExplorerPermitGate(BugFablesTestBase):
     # The gate outside the city stands between the Outskirts and Snakemouth Den's corridor, both ways.
     PAST = "BugariaOutskirtsOutsideCity (Past the Gate)"

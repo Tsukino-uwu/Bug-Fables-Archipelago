@@ -3141,3 +3141,7 @@ either one wrong).
   left side". Flag 300 turned back off. `liveslot` also sent the day's new locations (114-126),
   which the running seed doesn't have.
 - **`DesertWestDunes`:** nothing needed, no items; the user: done. Ticked, 65 of 244. Next: `DesertSandCastle` (107).
+- **`DesertSandCastle`:** the castle door had no rule (the logic counted it open). The lock read from `Event59`: key
+  item 113, the Sand Castle Key (from 105 and 106 in `Event109`). The user, with the key spawned: the lock needs
+  nothing, the door Jump in, nothing out; arriving from the castle while it's shut (flag 280 off, twice) lands in
+  front, not stuck. Written as a door rule, the key a later-chapters stand-in. Flag 280 left off. Waiting on "done".

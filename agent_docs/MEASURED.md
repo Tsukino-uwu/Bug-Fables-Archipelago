@@ -886,6 +886,11 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     nothing, a one-way without the shield. The pad (`mush`) is there only until flag 300, set by Event105 (chapter 4);
     the user: keep it there for good (`KEPT_PRESENT`), so its one-way counts with Points of No Return. Seen there with
     flag 300 on (`liveslot`, 2026-10-06), and bouncing the party to the left side.
+    **`DesertSandCastle` (2026-10-06, the user, with the key spawned):** the bottom door and the lock free; the lock
+    (`keycheck`, `Event59`, `dialogues[0].y` 6, so key item 113, the Sand Castle Key, taken away) plays `Event112`,
+    which sets flag 280 and makes the castle door; into it Jump, out of it free. Arriving from the castle with flag 280
+    off (`warp ... from SandCastleEntrance`, twice) lands a little in front of the lock, not stuck, the castle shut
+    behind. The key is made in `Event109` from the Heaven Key (105) and the Earth Key (106), both taken.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

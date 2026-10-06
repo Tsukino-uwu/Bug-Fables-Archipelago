@@ -5,11 +5,14 @@ from __future__ import annotations
 from rule_builder.rules import False_, Has
 
 from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, one_way
-from ..data_types import Area, EntityRef, Location, Pickup, Source, StoryEvent, Transfer
+from ..data_types import Area, DoorRule, EntityRef, Location, Pickup, Source, StoryEvent, Transfer
 
 # The Rusty Key, bought at the Defiant Root well (line 3, which also sets flag 239, making the hideout door): not an
 # item yet, so the later chapters' stand-in until its sale is a location.
 RUSTY_KEY = LATER_CHAPTERS
+# The Sand Castle Key (113), made from the Heaven Key (105, the roach village) and the Earth Key (106, Astotheles) in
+# Event109: not items yet, so the later chapters' stand-in until the chain is gone through in the quest pass.
+SAND_CASTLE_KEY = LATER_CHAPTERS
 
 LOCATIONS = (
     # Where the game teaches the Dash (flag 699); the later chapters' story-order stand-in. Its map is the Outskirts'
@@ -86,6 +89,11 @@ TRANSFERS = (
 )
 # The border gate to the Far Grasslands, open from the start: the game makes its door and breaks the gate only in
 # chapter 5 (flag 348), and a start or a shuffled door arriving there before landed behind it, falling forever.
+# The castle door, made only once the Sand Castle Key opens the lock in front of it (Event59, then Event112, flag 280),
+# and up a step (Jump). Coming out of it while the castle is shut lands in front of it, free to walk away.
+DOOR_RULES = (
+    DoorRule("DesertSandCastle", "loadzone castle", SAND_CASTLE_KEY & CanUse("Jump")),
+)
 KEPT_PRESENT = (
     EntityRef("DesertFGBorder", "loadzonefg"),
     # The oasis entrance's red bounce pad, gone from chapter 4 (flag 300) in the game, kept for good (the user).
