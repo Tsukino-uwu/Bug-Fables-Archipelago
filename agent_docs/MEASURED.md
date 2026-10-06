@@ -832,6 +832,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     **`DesertEntrance` (2026-10-06, the user):** nothing needed between its four ground doors (the Outskirts, the
     badlands, the south trench, the middle trench); the book area's door is up a ledge no way inside the room reaches,
     a drop down only. No items.
+    **`DesertBadlands` (2026-10-06, the user):** the entrance and the rock formation's doors free between them; the HP
+    Plus on the center pillar (flag 413) takes Jump and Bee Fly, the Baked Yam on the rock ledge (flag 729) Jump and
+    the Beemerang. The hideout door (made from flag 239) is up two ledges (Jump) behind a grate the Rusty Key opens
+    (`hideoutlock`, Event59 key list index 5 = item 111, gone from flag 258); arriving through it while shut pushes the
+    party past, and the ledges drop down freely. The key and flag 239 both come from its purchase at the Defiant Root
+    well (line 3, 30 berries).
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

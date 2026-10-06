@@ -31,6 +31,7 @@
     {"name": "Danger Spud", "game_id": 64, "kind": 0, "classification": "filler"},
     {"name": "Tangy Berry", "game_id": 77, "kind": 0, "classification": "filler"},
     {"name": "Bag of Flour", "game_id": 68, "kind": 0, "classification": "filler"},
+    {"name": "Baked Yam", "game_id": 65, "kind": 0, "classification": "filler"},
     {"name": "Spicy Fries", "game_id": 66, "kind": 0, "classification": "filler"},
     {"name": "Empower+", "game_id": 31, "kind": 2, "classification": "useful"},
     {"name": "Enfeeble+", "game_id": 38, "kind": 2, "classification": "useful"},

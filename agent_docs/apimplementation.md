@@ -2938,7 +2938,8 @@ and the spinner's crystal berry, the horn), the residential district (its roofto
 underground bar (free in and out by its bounce pad), the palace hall (free), the throne room (no items; two story berries later), the palace bridge (free), the library (free, its
 bookshelf's Lore Book without Jump), the war room (its table's medal, Jump), the miners' break room (a new
 location: its dig spot's berry, Beetle Dig), the attacked plaza (free), the attacked bridge (free), the attacked palace (free), the ending's plaza, bridge and throne room (free, played through), 49 of 244;
-Lost Sands from 2026-10-06: the entrance (four ground doors free; the ledge door to the book area a drop only), 50 of
+Lost Sands from 2026-10-06: the entrance (four ground doors free; the ledge door to the book area a drop only), the
+badlands (two new locations; the hideout door Jump and the Rusty Key, a stand-in until its sale is a location), 51 of
 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received

@@ -3068,3 +3068,7 @@ either one wrong).
   on reaching the goal: Next 61, for later. Ticked, 49 of 244: Bugaria City done. Next: `DesertEntrance` (4).
 - **`DesertEntrance`:** four ground doors free; the north ledge door (to `DesertBookArea`) a drop only, confirmed by
   arriving through it (the user's screenshot on the ledge). Ticked, 50 of 244. Next: `DesertBadlands` (5).
+- **`DesertBadlands`:** two new locations, the user's names: "Center Pillar" (HP Plus, Jump and Bee Fly) and "Rock
+  Ledge" (Baked Yam, Jump and the Beemerang), ids 114-115; the hideout door its own area (Jump and the Rusty Key,
+  pushed past while shut), the key a later-chapters stand-in until its sale at the Defiant Root well is a location.
+  Ticked, 51 of 244. Next: `DesertBookArea` (6).
