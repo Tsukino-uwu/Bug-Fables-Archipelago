@@ -3146,3 +3146,5 @@ either one wrong).
   nothing, the door Jump in, nothing out; arriving from the castle while it's shut (flag 280 off, twice) lands in
   front, not stuck. Written as a door rule, the key a later-chapters stand-in. Flag 280 left off. Waiting on "done".
   No items; the key chain for the quest pass; the user: done. Ticked, 66 of 244. Next: `DesertMountain` (108).
+- **`DesertMountain`:** every door free; the bridge to the left door is tricky without Jump, and the user chose to
+  count it (Shuffle Jump players want the challenge). No logic change. Waiting on the user's "done".

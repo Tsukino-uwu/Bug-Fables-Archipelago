@@ -2950,7 +2950,8 @@ and Beetle Dig), the sand pit (its doors joined through the middle by eight brid
 events, or Bee Fly), the Golden Hills border (free; a new location: its ledge medal, the horn and Jump), the roach
 village (free; a new location: its dig spot's berry, Beetle Dig), the oasis (its bottom door dug under; its top right
 reached only from its cave door, back up by a platform; two new locations), the oasis entrance (its right side the bubble shield or Bee Fly, both ways; its bounce pad back kept present for good, the user's ask), the west dunes (free), the sand castle's front (the castle door the Sand Castle Key and Jump, a stand-in until
-the key chain is gone through), 66 of 244; the rest of `room-checklist.md` to go.
+the key chain is gone through), the mountain (free; its bridge without Jump a bit tricky, counted by the user's
+call; in progress), 66 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
