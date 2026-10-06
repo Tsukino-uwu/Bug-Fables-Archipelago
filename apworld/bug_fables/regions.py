@@ -9,7 +9,7 @@ from BaseClasses import Region
 
 from .custom_rules import one_way
 from .data_tables import (DOOR_RULES, DOORS, MAP_AREAS, MAPS, ONE_WAYS, REGIONS, TRANSFERS, door_name,
-                          door_region)
+                          door_region, landing_region)
 
 if TYPE_CHECKING:
     from rule_builder.rules import Rule
@@ -48,8 +48,8 @@ def logic_entrances() -> list[LogicEntrance]:
             entrances.append(LogicEntrance(door_name(end.map, end.door), door_region(end.map, end.door),
                                            door_region(other.map, other.door), gates.get((end.map, end.door))))
     for door in ONE_WAYS:
-        entrances.append(LogicEntrance(door_name(door.map, door.door), door_region(door.map, door.door), door.to,
-                                       gates.get((door.map, door.door))))
+        entrances.append(LogicEntrance(door_name(door.map, door.door), door_region(door.map, door.door),
+                                       landing_region(door), gates.get((door.map, door.door))))
     for a, b in dict.fromkeys(DOORS.fixed):
         if a != b and a in MAPS and b in MAPS:
             entrances.append(LogicEntrance(f"{a} to {b}", a, b, None))

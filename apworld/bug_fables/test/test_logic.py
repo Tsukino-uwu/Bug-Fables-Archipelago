@@ -249,6 +249,23 @@ class TestMainPlaza(BugFablesTestBase):
         self.assertTrue(self.can_reach_location(spot))
 
 
+class TestBarCorner(BugFablesTestBase):
+    # The way down to the underground bar is behind the commercial district's grass, and the bar's door comes back up
+    # behind it too: the horn both ways.
+    options = {"shuffle_field_moves": True}
+
+    def test_the_bar_needs_the_horn(self) -> None:
+        self.collect_by_name("Explorer Permit")
+        self.assertTrue(self.can_reach_region("BugariaCommercial"))
+        self.assertFalse(self.can_reach_region("UndergroundBar"))
+        self.collect_by_name("Horn Slash")
+        self.assertTrue(self.can_reach_region("UndergroundBar"))
+
+    def test_the_bar_door_lands_behind_the_grass(self) -> None:
+        entrance = self.multiworld.get_entrance("UndergroundBar: LoadZone", self.player)
+        self.assertEqual(entrance.connected_region.name, "BugariaCommercial (Bar Corner)")
+
+
 class TestAntTunnels(BugFablesTestBase):
     # A far end's free miner opens the way to the tunnel hub, so reaching the far end reaches the hub.
     def test_far_ends_lead_to_the_hub(self) -> None:

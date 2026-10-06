@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**33 of 244 done.**
+**34 of 244 done.**
 
 ## Outskirts
 
@@ -57,7 +57,7 @@ as it is, a frozen record.
 
 - [x] AntTunnels (3) — for the quest pass: its NPCs, if any give a quest
 - [x] BugariaMainPlaza (9) — for the quest pass: the quest board
-- [ ] BugariaCommercial (10)
+- [x] BugariaCommercial (10) — for the quest pass: the Lore Book dig spot (flag 388); the Termacade (Next 60)
 - [ ] BugariaTheater (26)
 - [ ] BugariaResidential (28)
 - [ ] UndergroundBar (30)

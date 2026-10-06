@@ -5,7 +5,7 @@ from unittest import TestCase
 from BaseClasses import EntranceType
 
 from . import BugFablesTestBase, entrance_graph, generate_like_main
-from ..data_tables import DOORS, ONE_WAYS, REGIONS, door_name, door_region, one_way_landing
+from ..data_tables import DOORS, ONE_WAYS, REGIONS, door_name, door_region, landing_region, one_way_landing
 from ..data_types import DoorConnection, DoorEnd
 from ..entrances import _partners, door_targets, pairings_from_targets, replay, room_pairs
 from ..options import DoorPlando
@@ -233,7 +233,7 @@ class TestDoorsRoomSwap(CoupledTests, BugFablesTestBase):
         for w in ONE_WAYS:
             with self.subTest(door=door_name(w.map, w.door)):
                 entrance = self.multiworld.get_entrance(door_name(w.map, w.door), self.player)
-                self.assertEqual(entrance.connected_region.name, w.to)
+                self.assertEqual(entrance.connected_region.name, landing_region(w))
                 self.assertNotIn((w.map, w.door), {(t["map"], t["door"]) for t in self.world.door_targets})
 
     def test_parts_stay_whole(self) -> None:

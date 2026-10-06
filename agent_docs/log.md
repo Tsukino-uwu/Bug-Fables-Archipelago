@@ -3014,3 +3014,9 @@ either one wrong).
   House Rooftop" (Charge Up, flag 230, the Flower Key only, the bounce pads without Jump; the key now progression) and
   "Dig Spot" (crystal berry #29, Beetle Dig), ids 95 and 96, tests `TestMainPlaza`. The inn's Honey Drop comes back
   every sleep: no location. Ticked for the quest pass (the board), 33 of 244. Next: `BugariaCommercial` (10).
+- **`BugariaCommercial`:** free across; the bar corner (way down, a dig spot, the bar's door back up) behind grass,
+  the horn both ways. A one-way door always landed in its map's own region, so `Area.landings` and `landing_region`
+  were added (regions and the entrance randomizer). The user: "make it so the arcade is always here": nine entities
+  kept present, two miners away; through `liveslot` the NPCs came but no building ("i don't see the arcade building"),
+  which was scenery (`Model/TermiteArcade`, MapDump): shown, the lot's fence hidden, then "yee it works now". The
+  greeter's 15 tokens and the prize stand: decided (Next 60), a step of its own. Ticked, 34 of 244.

@@ -6,7 +6,7 @@ import json
 import pkgutil
 from typing import Any
 
-from .data_types import Doors, Encounter, Item, Location, OneWayDoor, RoomStart, SavePoint
+from .data_types import Area, Doors, Encounter, Item, Location, OneWayDoor, RoomStart, SavePoint
 from .enemysanity import enemy_locations
 from .logic import (ARTIFACTS, DIALOGUE_FLAGS, DOOR_RULES, FREE_SALES, HELD_UNTIL, HELD_UNTIL_ITEM, KEPT_OPEN, KEPT_PRESENT,
                     LOCATIONS, MAP_AREAS, PRESENT_FROM, PRESENT_WITH_ITEM, ROADBLOCKS, SCENERY_HIDDEN, SCENERY_PRESENT,
@@ -84,6 +84,20 @@ _AREA_OF_DOOR: dict[tuple[str, str], str] = {(area.map, door): area.region for a
 def door_region(map_name: str, door: str) -> str:
     """The region a door stands in: its map's, or the map area's that holds it."""
     return _AREA_OF_DOOR.get((map_name, door), map_name)
+
+
+_AREA_OF_LANDING: dict[tuple[str, str], Area] = {landing: area for area in MAP_AREAS for landing in area.landings}
+for _w in ONE_WAYS:
+    if (_w.map, _w.door) in _AREA_OF_LANDING and _AREA_OF_LANDING[(_w.map, _w.door)].map != _w.to:
+        raise ValueError(f"bug_fables: {_w.map}/{_w.door} lands in {_w.to}, not in its landing's area")
+if set(_AREA_OF_LANDING) - {(w.map, w.door) for w in ONE_WAYS}:
+    raise ValueError("bug_fables: an area takes the landing of a door that is no one-way")
+
+
+def landing_region(door: OneWayDoor) -> str:
+    """The region a one-way door lands in: its target map's, or the map area's that takes its landing."""
+    area = _AREA_OF_LANDING.get((door.map, door.door))
+    return door.to if area is None else area.region
 
 
 # Every room entered through a door: the map, and the map whose door leads in (both ways of each connection). A start

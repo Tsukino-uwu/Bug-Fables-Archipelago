@@ -7,7 +7,8 @@ from . import BugFablesTestBase, logic_rules, rule_parts
 from ..abilities import ABILITIES
 from ..custom_rules import CanUse, Member, MoveItem
 from ..data_tables import (ARTIFACTS, DOOR_RULES, DOORS, ENCOUNTERS, ITEMS, LOCATIONS, MAPS, ONE_WAYS, REGIONS,
-                           ROOM_STARTS, STARTS, STORY_EVENTS, TRANSFERS, UNUSED_MAPS, door_name, door_region)
+                           ROOM_STARTS, STARTS, STORY_EVENTS, TRANSFERS, UNUSED_MAPS, door_name, door_region,
+                           landing_region)
 
 ALL_SPOTS = (*LOCATIONS, *STORY_EVENTS, *ARTIFACTS)
 # The unused room and the debug room: never part of anything (room-logic.md, the model).
@@ -50,7 +51,7 @@ class TestAreas(BugFablesTestBase):
             with self.subTest(door=door_name(door.map, door.door)):
                 entrance = self.multiworld.get_entrance(door_name(door.map, door.door), self.player)
                 self.assertEqual(entrance.parent_region.name, door.map)
-                self.assertEqual(entrance.connected_region.name, door.to)
+                self.assertEqual(entrance.connected_region.name, landing_region(door))
                 self.assertEqual(entrance.randomization_type, EntranceType.ONE_WAY)
 
     def test_door_gates_and_transfers_name_real_places(self) -> None:

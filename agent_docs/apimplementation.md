@@ -642,6 +642,13 @@ be wrong.
     castle attack and the like) keeps its doors as the game has them, reached only the way the story reaches it; on,
     shuffled like any door. Found in play: a chapter 1 file walked into the attacked plaza through a shuffled door.
     First: list the story-version maps (the map list and the scenes that load them). Its own build step.
+60. **The Termacade** (decided 2026-10-06, the user; to build, its own step). **The greeter's gift** (`termiteoutside`
+    on `BugariaCommercial`, flag 351, 15 tokens, the token count `flagvar[27]`): a location, "Arcade Gift" (the user's
+    word), its 15 tokens a filler item from the server, "similar to how we do it for the 15 & 30 berries". **The token
+    prize stand:** "everything that is in the token prize shop to be in the pool. but the token shop itself should
+    only be able to contain filler items": each prize a location Archipelago keeps to filler (an excluded location,
+    `LocationProgressType.EXCLUDED`), its prize (Empower+ and the rest) in the pool, so no token farming is ever
+    required. The arcade itself is open from the start (build step 9).
 
 **Known issues:**
 
@@ -1595,6 +1602,12 @@ for the other entrance"). Test `TestPrisonCorridor`. **The yard side isn't writt
 randomizer (the batched run, 2026-10-04); it needs the corridor split into two areas (Known issues). Now `kept_present`
 from the start, the rule gone; location 12's beetle grass takes Kabbu's horn, so it needs `Horn Slash` of its own (the
 boss had implied it). Tests `TestGoldenPath`.
+**The arcade, always there** (the user, 2026-10-06: "we should make it so the arcade is always here"): on
+`BugariaCommercial`, the arcade's door, sign, games, helper and exchanger are made only from flag 350 (Elizant's
+welcome after the first submarine landing), and two miners stand in that corner until it. The nine are kept present
+and the two miners kept away, and its building (`Model/TermiteArcade`, from 350) shown and the empty lot's fence
+(`Model/Base/EmptyLotFence`, until 350) hidden (`logic/bugaria_city.py`). Seen through `liveslot` (2026-10-06, the
+user: "yee it works now").
 
 **Status:** in progress: the Outskirts rocks, the fall room both ways, the town and its districts, the plaza's companion
 fallback and statue, Madeleine's house, and the bar with its quest board seen on screen (2026-09-25); the exits near
@@ -2912,7 +2925,8 @@ horn; its high door gated by the big switch), the first left room (its high door
 (the same, its high door gated by the big switch), the top (nothing to go in or out; its Sophie Petal for the quest
 pass), the upper entrance (its top door shut until the gem is placed, Jump and a stand-in for the gem), 31 of 244;
 Bugaria City from 2026-10-06: the ant tunnels (nothing to cross; each tunnel only its flag), the main plaza (two new
-locations: the red house's roof, the Flower Key, and the dig spot's berry, Beetle Dig), 33 of 244; the rest of `room-checklist.md` to go.
+locations: the red house's roof, the Flower Key, and the dig spot's berry, Beetle Dig), the commercial district (its
+bar corner behind grass, the horn; the arcade kept open), 34 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -4621,11 +4635,18 @@ generates as before with nothing up. The gate, guard and sign are in `SCENERY_HI
 `Cave Side` area is gone; `Area` and `Roadblock` stay. Test: `test_roadblocks.py` (a yaml naming it puts nothing up, no
 `Cave Side` region).
 
+**A one-way door landing in an area** (2026-10-06, `BugariaCommercial`): the underground bar's door up lands behind
+the commercial district's grass, which takes the horn, but a one-way door always landed in its map's own region, so
+the logic had it arrive on the open side. An `Area` now lists the one-way doors that land in it (`landings`), and
+`landing_region` gives a one-way's landing region to the region builder and the entrance randomizer alike; a landing
+named for an area of another map, or for a door that is no one-way, refuses to load. The door tests compare each
+one-way with its landing region.
+
 **Status:** built (2026-10-04); its one roadblock seen in game and taken out (2026-10-05), the option kept empty.
 
 *Code: `roadblocks.py` (`ExtraRoadblocks`), `data_types.py` (`Area`, `Roadblock`), `logic/outskirts.py`
-(`ROADBLOCKS`, `MAP_AREAS`), `logic/__init__.py`, `data_tables.py` (`REGIONS`, `door_region`), `regions.py`,
-`entrances.py`, `slot_data.py`; tests `test_roadblocks.py`.*
+(`ROADBLOCKS`, `MAP_AREAS`), `logic/__init__.py`, `data_tables.py` (`REGIONS`, `door_region`, `landing_region`),
+`regions.py`, `entrances.py`, `slot_data.py`; tests `test_roadblocks.py`, `test_areas.py`, `test_doors.py`.*
 
 ## Build step 49: hidden items and dig spots, two location toggles
 

@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import CollectionState, Entrance, EntranceType, Region
 from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances
 
-from .data_tables import DOORS, ONE_WAYS, door_name, door_region, one_way_landing
+from .data_tables import DOORS, ONE_WAYS, door_name, door_region, landing_region, one_way_landing
 from .data_types import DoorConnection, OneWayDoor
 from .options import EntranceRandomizer
 
@@ -179,7 +179,7 @@ def replay(world: BugFablesWorld, targets: Sequence[Mapping[str, str]]) -> list[
     landing = {(w.map, w.door): w for w in one_ways}
     for x, y in pairings:
         if x in landing:
-            _connect(world, door_name(*x), landing[y].to, one_way_landing(landing[y]))
+            _connect(world, door_name(*x), landing_region(landing[y]), one_way_landing(landing[y]))
         else:
             _connect(world, names[x], door_region(*y), names[y])
     left = [name for name in (*names.values(), *(door_name(*door) for door in landing))
@@ -201,10 +201,10 @@ def _plando(world: BugFablesWorld, names: dict[Door, str], coupled: bool) -> lis
         if connection.entrance.lower() in one_ways:
             x, y = one_ways[connection.entrance.lower()], landings[connection.exit.lower()]
             if (world.get_entrance(door_name(x.map, x.door)).connected_region is not None
-                    or _free_target(world, y.to, one_way_landing(y)) is None):
+                    or _free_target(world, landing_region(y), one_way_landing(y)) is None):
                 raise ValueError(f"Bug Fables: player {world.player_name}'s plando connection {connection.entrance} "
                                  f"to {connection.exit} uses a door another one already uses")
-            _connect(world, door_name(x.map, x.door), y.to, one_way_landing(y))
+            _connect(world, door_name(x.map, x.door), landing_region(y), one_way_landing(y))
             pairings.append(((x.map, x.door), (y.map, y.door)))
             continue
         entrance, exit_ = by_name[connection.entrance.lower()], by_name[connection.exit.lower()]

@@ -5,7 +5,7 @@ from __future__ import annotations
 from rule_builder.rules import Has
 
 from ..custom_rules import LATER_CHAPTERS, SUBMARINE, CanUse
-from ..data_types import (DialogueFlag, EntityRef, FlagEntity, Give, ItemShop, Location, Pickup, Source,
+from ..data_types import (Area, DialogueFlag, EntityRef, FlagEntity, Give, ItemShop, Location, Pickup, Source,
                           StoryEvent, Transfer)
 
 DOOR_RULES = (
@@ -14,8 +14,8 @@ DOOR_RULES = (
 )
 TRANSFERS = (
     # Down to the underground bar by talking to someone in the commercial district (Event61), open from the start (the
-    # line is repointed below); the way back up is a door.
-    Transfer("way down", "BugariaCommercial", "UndergroundBar", two_way=False),
+    # line is repointed below), behind the grass; the way back up is a door.
+    Transfer("way down", "BugariaCommercial", "UndergroundBar", two_way=False, from_area="Bar Corner"),
     # The tunnel's prison door needs flag 79, set only inside the prison, which the sub alone reaches before it.
     Transfer("ant tunnel", "AntTunnels", "RubberPrisonGiantLairBridge", LATER_CHAPTERS & SUBMARINE),
     Transfer("ant tunnel", "AntTunnels", "MetalIsland2", LATER_CHAPTERS),
@@ -178,6 +178,9 @@ STORY_EVENTS = (
                rule=Has("Snakemouth Den Cleared")),
 )
 KEPT_OPEN = (
+    # The miners where the arcade opens from flag 350 (after the first submarine landing): the arcade is kept present.
+    EntityRef("BugariaCommercial", "MinerAnt"),
+    EntityRef("BugariaCommercial", "Fixedminingant"),
     # Turns the party back from the library door until chapter 2 (Event12).
     EntityRef("AntPalace1", "makiblocker1"),
     # And from the war room door.
@@ -196,6 +199,17 @@ KEPT_OPEN = (
     EntityRef("BugariaMainPlaza", "MakiBlock"),
 )
 KEPT_PRESENT = (
+    # The arcade, its door, sign, games and helpers, made only from flag 350: there from the start (the user,
+    # 2026-10-06).
+    EntityRef("BugariaCommercial", "arcadedoor"),
+    EntityRef("BugariaCommercial", "arcadesign"),
+    EntityRef("BugariaCommercial", "termiteoutside"),
+    EntityRef("BugariaCommercial", "Fixedtermiteexchanger"),
+    EntityRef("BugariaCommercial", "termitegamehelper"),
+    EntityRef("BugariaCommercial", "dungeongame"),
+    EntityRef("BugariaCommercial", "kartgame"),
+    EntityRef("BugariaCommercial", "score check"),
+    EntityRef("BugariaCommercial", "beegame"),
     # The way down to the ant tunnels, made only from chapter 2 (flag 67): the tunnels lead up here, so it stays open
     # (the user, 2026-10-04).
     EntityRef("AntPalace1", "MineLoadZone"),
@@ -220,6 +234,8 @@ KEPT_PRESENT = (
     EntityRef("BugariaMainPlaza", "loadingzone theater"),
 )
 SCENERY_HIDDEN = (
+    # The empty lot's fence, there until the arcade opens (flag 350): the arcade is kept present.
+    EntityRef("BugariaCommercial", "Model/Base/EmptyLotFence"),
     # The railing round the mine shaft until chapter 2 (flag 67), which boxed in a party coming up from the tunnels.
     EntityRef("AntPalace1", "Base/mineblock"),
     # Plaza scenery hidden from chapter 2, likely a wall across the way into town.
@@ -238,4 +254,15 @@ DIALOGUE_FLAGS = (
     # The way down to the underground bar; its own flag (135) has many other story effects, so the line is repointed
     # instead.
     DialogueFlag("BugariaCommercial", "HideoutEntrance", 135, 691),
+)
+
+SCENERY_PRESENT = (
+    # The arcade's building, made only from flag 350, with its door and games (KEPT_PRESENT).
+    EntityRef("BugariaCommercial", "Model/TermiteArcade"),
+)
+
+MAP_AREAS = (
+    # The commercial district's corner above its plaza door, behind grass (the horn), both ways: the way down to the
+    # underground bar, a dig spot, and where the bar's door comes back up.
+    Area("BugariaCommercial", "Bar Corner", (), CanUse("Horn Slash"), landings=(("UndergroundBar", "LoadZone"),)),
 )
