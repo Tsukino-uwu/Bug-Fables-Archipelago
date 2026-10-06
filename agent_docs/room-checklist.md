@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**23 of 244 done.**
+**24 of 244 done.**
 
 ## Outskirts
 
@@ -43,7 +43,7 @@ as it is, a frozen record.
 - [x] SnakemouthFallRoom (13)
 - [x] SnakemouthLake (14) — for the quest pass: the ladybug kid (location 10)
 - [x] SnakemouthUndergrondDoor (19)
-- [ ] SnakemouthMushroomPit (20)
+- [x] SnakemouthMushroomPit (20)
 - [ ] SnakemouthTreasureRoom (21)
 - [ ] SnakemouthUndergroundRightA (22)
 - [ ] SnakemouthUndergroundRightB (23)

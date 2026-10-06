@@ -34,10 +34,9 @@ LOCATIONS = (
              Source(flag=23, pickup=Pickup(map="SnakemouthLake", type=2, item=0)),
              rule=CanUse("Beemerang Toss"), no_jump=True),
     Location("Snakemouth Den: Mushroom Pit, Mushroom by the Ledge", 8, "SnakemouthMushroomPit",
-             Source(flag=42, pickup=Pickup(map="SnakemouthMushroomPit", type=2, item=7)), reach=UNDERGROUND),
+             Source(flag=42, pickup=Pickup(map="SnakemouthMushroomPit", type=2, item=7)), no_jump=True),
     Location("Snakemouth Den: Mushroom Pit, Mushroom by the Droplets", 9, "SnakemouthMushroomPit",
-             Source(flag=724, pickup=Pickup(map="SnakemouthMushroomPit", type=0, item=144)),
-             rule=CanUse("Freeze"), reach=UNDERGROUND),
+             Source(flag=724, pickup=Pickup(map="SnakemouthMushroomPit", type=0, item=144)), rule=DROPLETS),
     Location("Snakemouth Den: Lake, Ladybug Kid's Reward", 10, "SnakemouthLake",
              Source(event=31, flag=55, give=Give(map="SnakemouthLake", type=1, item=52)),
              rule=Has("Leif") & Has("Snakemouth Den Cleared"),
@@ -142,6 +141,8 @@ MAP_AREAS = (
          to="SnakemouthUndergrondDoor (Left)"),
     Area("SnakemouthUndergrondDoor", "Top Right", ("WarpRightUp",), False_(), out=one_way(None, False_()),
          to="SnakemouthUndergrondDoor (Middle)"),
+    # The mushroom pit's bottom door: up the bounce mushrooms (Jump), dropped down to from the top freely.
+    Area("SnakemouthMushroomPit", "Bottom", ("WarpDoorRoom",), one_way(None, CanUse("Jump")), out=CanUse("Jump")),
 )
 KEPT_OPEN = (
     # Turns the party back until the first boss; with the way up kept present it has nothing left to guard.

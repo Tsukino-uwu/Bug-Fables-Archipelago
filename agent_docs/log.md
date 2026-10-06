@@ -2972,3 +2972,8 @@ either one wrong).
 - **Stopped for the day** (the user) after `SnakemouthUndergrondDoor`, 23 of 244. Next: `SnakemouthMushroomPit`
   (20), through the big door. Dev cheats left as the user asked today: InfJump and BumpKill on, OneHit on,
   QuietBursts on. Tests and the fuzzer wait for the push.
+- **`SnakemouthMushroomPit`:** from the bottom door nothing without Jump (the bounce mushrooms); from the top door
+  the ledge medal needs nothing and the bottom is a free drop; the droplet item Jump and Freeze. I called the
+  `CordycepsGuardian` entity a mini-boss from its name; it's a plain field enemy. The user: normal field enemies never
+  block a way, only mini-boss, boss and scene fights (now in `room-logic.md`). Ticked, 24 of 244. Next:
+  `SnakemouthTreasureRoom` (21).

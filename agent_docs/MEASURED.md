@@ -754,6 +754,10 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     every time (three tries). The broken house fades as the party comes near (`FaderRange`: its renderers switched to
     `Fade3D`, see-through); a ground item draws with "Sprites/Bumped Diffuse with Shadows" in queue 2450 (dev
     `iteminfo`, 2026-10-06), so it shows through a faded wall. Used by `ItemSwap.Looks.cs`.
+    **`SnakemouthMushroomPit` (2026-10-06, seen):** from the bottom door (to `SnakemouthUndergrondDoor`) nothing is
+    reached without Jump: up the bounce mushrooms (six `JumpSpring`s, EntityDump) takes it. From the top door (to
+    `SnakemouthTreasureRoom`) the medal on its mushroom ledge (location 8) needs nothing, and the bottom door is a
+    free way down. The item by the droplet (location 9): Jump and Freeze.
   - **Vi's beemerang (range):** `SnakemouthBridgeRoom`'s bridge comes down when its rope is hit; from the right only the
     beemerang reaches it, from the left Leif's move hit it (so presumably any member's; Kabbu's not tried). The room's
     Tattle tutorial (Event2) ran with stand-ins and finished (flag 10); its hint (Event0) is skipped by Skip cutscenes.
