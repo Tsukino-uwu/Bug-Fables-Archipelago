@@ -2,14 +2,20 @@
 yet."""
 from __future__ import annotations
 
-from ..custom_rules import LATER_CHAPTERS, CanUse, one_way
-from ..data_types import Area, EntityRef, Location, Pickup, Source, Transfer
+from rule_builder.rules import False_, Has
+
+from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, one_way
+from ..data_types import Area, EntityRef, Location, Pickup, Source, StoryEvent, Transfer
 
 # The Wooden Crank (key item 58), found in the dungeon: not an item yet, so the later chapters' stand-in until its
 # room is mapped. In a seed it won't be used up (apimplementation.md, Next 62), so one is enough for every slot.
 WOODEN_CRANK = LATER_CHAPTERS
 # The Big Crank (key item 60), the same way.
 BIG_CRANK = LATER_CHAPTERS
+# The Sun and Moon Offerings (key items 55, 56), given in the Golden Settlement (GoldenSettlement2, lines 45, 67, 77):
+# not items yet, so the later chapters' stand-in until that chain is gone through in the quest pass.
+SUN_OFFERING = LATER_CHAPTERS
+MOON_OFFERING = LATER_CHAPTERS
 # Across the right crank room, all of it (the user: assume every need for the room), or Bee Fly alone.
 RIGHT_CRANK_ROOM = (CanUse("Shield") & CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump")
                     & CanUse("Beemerang Toss") & CanUse("Beemerang Halt")) | CanUse("Bee Fly")
@@ -36,6 +42,14 @@ LOCATIONS = (
     Location("Golden Hills: Left Crank Half Room, Grass by the Crank", 130, "GoldenHillsDungeonLeftCrankHalf",
              Source(regional=7, pickup=Pickup(map="GoldenHillsDungeonLeftCrankHalf", type=0, item=3)),
              rule=CanUse("Jump") & CanUse("Beemerang Halt") & CanUse("Horn Slash"), category="hidden_item"),
+)
+STORY_EVENTS = (
+    # The upper hall's two shrines (Event72), each fed its own offering, which it keeps (flags 125, 126); a wrong one
+    # starts a fight. Together they open the boss door's gate. The left one is behind grass (the horn).
+    StoryEvent("Golden Hills: Upper Hall, Sun Offering", "Upper Hall Sun Shrine Fed", "GoldenHillsDungeonUpperMain",
+               Source(flag=125), rule=CanUse("Horn Slash") & SUN_OFFERING),
+    StoryEvent("Golden Hills: Upper Hall, Moon Offering", "Upper Hall Moon Shrine Fed", "GoldenHillsDungeonUpperMain",
+               Source(flag=126), rule=MOON_OFFERING, area="Upper Right"),
 )
 TRANSFERS = (
     # The middle platform (Event68, loading the other map): up once the Big Crank is in its slot (flag 118; placing it
@@ -64,4 +78,10 @@ MAP_AREAS = (
     # drop to the left side.
     Area("GoldenHillsDungeonLeftMain", "Top Left", ("load zone crank half",), WOODEN_CRANK & CanUse("Beemerang Halt"),
          out=one_way(None, WOODEN_CRANK & CanUse("Beemerang Halt")), to="GoldenHillsDungeonLeftMain (Left)"),
+    # The upper hall's upper right (its upper right door and the Moon shrine), behind a barrier its lever lowers (any
+    # attack, flag 127, Event50), starting a platform that stays: the lever is only up there, so nothing from below.
+    Area("GoldenHillsDungeonUpperMain", "Upper Right", ("loadzonehigh",), False_(), out=ANY_ATTACK),
+    # Its top door (to the boss), behind a gate both shrines open; arriving while shut, a pocket with only that door.
+    Area("GoldenHillsDungeonUpperMain", "Boss Door", ("loadzoneboss",),
+         Has("Upper Hall Sun Shrine Fed") & Has("Upper Hall Moon Shrine Fed")),
 )

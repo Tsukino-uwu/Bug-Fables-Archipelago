@@ -3215,3 +3215,8 @@ either one wrong).
   else in the room; the user: done. Ticked, 78 of 244.
 - **Back in `GoldenHillsDungeonCrankLeft`:** its Magic Seed bush takes the room's every need; the user's name "Grass by
   the Crank" (id 131).
+- **`GoldenHillsDungeonUpperMain`:** from the boss door while shut, a pocket (not pushed). The shrines' item read from
+  `Event72` (`pickitem`, 55 left, 56 right; textsearch found nothing as the prompt isn't in the map's text); spawned:
+  a wrong offering starts a fight, each right one opens part of the boss gate, both needed. The upper right only from
+  its own door, its lever lowering the barrier for good. Events named by the user "Sun Offering" and "Moon Offering"
+  (they didn't want "Given"). Waiting on the user's "done".

@@ -942,6 +942,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   approaching starts a Venus Bud fight (`Event70`, until flag 122) only Vi hits (in the air). Taking the half with the
   top half held merged them into the Big Crank. The flagged grass (73, drop list `-1`) runs its region trigger;
   nothing seen to change.
+  **`GoldenHillsDungeonUpperMain` (2026-10-06):** the lower right door free; the platform down Beemerang Halt. The
+  upper right (its door and a shrine) behind a barrier: from that door a lever (any attack, flag 127, `Event50`, Gate4)
+  lowers it and starts a platform, staying. Two shrines (`Event72`, `pickitem` of key items): the left one (behind
+  grass, the horn) wants the Sun Offering (55, flag 125), the upper right one the Moon Offering (56, flag 126); a wrong
+  one starts a fight; each opens part of the boss door's gate, both needed, staying open. With spawned offerings. From
+  the boss door while shut: a pocket, not pushed, back out only. The offerings are given in `GoldenSettlement2`.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
