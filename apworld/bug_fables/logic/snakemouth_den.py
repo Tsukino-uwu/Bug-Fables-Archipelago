@@ -17,6 +17,8 @@ UNDERGROUND = DEN & CanUse("Freeze")
 TRAPDOOR = CanUse("Jump") & CanUse("Horn Slash")
 # Its high door to SnakemouthTop: grass cut, then Bee Fly across; dropped down from freely.
 TOP_LEDGE = CanUse("Horn Slash") & CanUse("Bee Fly")
+# The lake's way up to its top: the switch on a pillar (the Beemerang), then platforms (Jump).
+LAKE_UP = CanUse("Jump") & CanUse("Beemerang Toss")
 LOCATIONS = (
     Location("Snakemouth Den: Underground Door Room, Behind the Wall", 5, "SnakemouthUndergrondDoor",
              Source(flag=60, pickup=Pickup(map="SnakemouthUndergrondDoor", type=2, item=9)), reach=UNDERGROUND),
@@ -24,8 +26,10 @@ LOCATIONS = (
     Location("Snakemouth Den: Bridge Room, Pillar", 6, "SnakemouthBridgeRoom",
              Source(flag=651, pickup=Pickup(map="SnakemouthBridgeRoom", type=0, item=13)),
              rule=CanUse("Beemerang Toss"), no_jump=True),
+    # Alone on a pillar, too far for anything but the Beemerang.
     Location("Snakemouth Den: Lake, Pillar", 7, "SnakemouthLake",
-             Source(flag=23, pickup=Pickup(map="SnakemouthLake", type=2, item=0)), reach=DEN),
+             Source(flag=23, pickup=Pickup(map="SnakemouthLake", type=2, item=0)),
+             rule=CanUse("Beemerang Toss"), no_jump=True),
     Location("Snakemouth Den: Mushroom Pit, Mushroom by the Ledge", 8, "SnakemouthMushroomPit",
              Source(flag=42, pickup=Pickup(map="SnakemouthMushroomPit", type=2, item=7)), reach=UNDERGROUND),
     Location("Snakemouth Den: Mushroom Pit, Mushroom by the Droplets", 9, "SnakemouthMushroomPit",
@@ -45,7 +49,7 @@ LOCATIONS = (
     # Crystal berry #1, from the bush by the tablet on the lake room's far left.
     Location("Snakemouth Den: Lake, Bush by the Tablet", 21, "SnakemouthLake",
              Source(berry=1, pickup=Pickup(map="SnakemouthLake", type=3, item=0)), category="crystal_berry",
-             reach=DEN),
+             rule=CanUse("Jump") & CanUse("Horn Slash")),
     # A respawning pickup: hidden only by a regional flag, so it comes back; the game's own again once checked.
     Location("Snakemouth Den: Underground Door Room, Pillar by the Droplets", 22, "SnakemouthUndergrondDoor",
              Source(regional=24, pickup=Pickup(map="SnakemouthUndergrondDoor", type=0, item=1)), reach=UNDERGROUND),
@@ -86,7 +90,7 @@ STORY_EVENTS = (
                Source(event=5, flag=14), rule=TRAPDOOR),
     # At the lake, reachable without passing any water droplet, so Leif comes before everything that needs him.
     StoryEvent("Leif Joins", "Leif", "SnakemouthLake",
-               Source(event=14, flag=16), category="story_party", reach=DEN),
+               Source(event=14, flag=16), category="story_party", area="Top"),
     # The boss fight's flag flips in the treasure room.
     StoryEvent("First Boss Beaten", "Snakemouth Den Cleared", "SnakemouthTreasureRoom",
                Source(event=26, flag=41), reach=UNDERGROUND),
@@ -106,6 +110,9 @@ MAP_AREAS = (
     # The fall room's door up to the door room, by the bounce mushroom: up a ledge (Jump), dropped down from.
     Area("SnakemouthFallRoom", "Mushroom Ledge", ("LoadingZoneDoorRoom",), CanUse("Jump"),
          out=one_way(None, CanUse("Jump"))),
+    # The lake's top, with Leif's scene and the door to the underground door room: up platforms (Jump) past a pillar the
+    # switch below lowers (the Beemerang); jumped down from (Jump), back up only that way.
+    Area("SnakemouthLake", "Top", ("WarpMap5",), LAKE_UP, out=one_way(CanUse("Jump"), LAKE_UP)),
 )
 KEPT_OPEN = (
     # Turns the party back until the first boss; with the way up kept present it has nothing left to guard.

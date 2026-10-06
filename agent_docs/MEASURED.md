@@ -739,6 +739,11 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     **`SnakemouthFallRoom` (2026-10-06, seen):** the spider scene starts from either side; its fight needs nothing
     particular, every member can hit the web. The door room's door sits on the bounce mushroom's ledge: Jump to get
     back up there, a free drop down from it.
+    **`SnakemouthLake` (2026-10-06, seen):** its top holds only the door to `SnakemouthUndergrondDoor` and Leif's scene;
+    up from below takes the Beemerang (a switch on a pillar, flag 29) and Jump (platforms), down from it Jump, a
+    one-way once down. The medal on its pillar (location 7): the Beemerang, too far for anything else. The berry bush
+    by the tablet (location 21): Jump and the horn. Three grass patches drop a random item from their list (one
+    Aphid Egg among them), and any grass may drop berries: no locations.
   - **Vi's beemerang (range):** `SnakemouthBridgeRoom`'s bridge comes down when its rope is hit; from the right only the
     beemerang reaches it, from the left Leif's move hit it (so presumably any member's; Kabbu's not tried). The room's
     Tattle tutorial (Event2) ran with stand-ins and finished (flag 10); its hint (Event0) is skipped by Skip cutscenes.

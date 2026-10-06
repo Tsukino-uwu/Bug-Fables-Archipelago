@@ -310,6 +310,11 @@ every discovery's spot and need against the mapped rooms.
    jumping up or falling down is said; "top" and "upper" mean the top of the screen, never height. A one-way with no up
    or down said is a mechanism usable from one side only (a crank, water to cross), not a ledge: write it by what blocks
    the way back, and ask which when unclear.
+   **Checking what each entrance reaches** (the user, 2026-10-06, `SnakemouthLake`: "a good way for you to double
+   check with me what is reachable from X entrance"): where a description leaves a spot's area unclear, ask one
+   tick-box question per entrance and missing ability: "Coming in from *the door* without *the ability*: what can
+   you reach?", one option per location, switch and door in the room, plus "Nothing past the door". The ticks place
+   each spot in its area at once, with no round of follow-ups.
 3. **Written into the logic** (the area's module, `logic/<area>.py`: areas as regions, their edges with their rules,
    each location in its area with its own rule), cautious where anything is unmeasured, replacing the spots' `reach`.
    A Placeholder is promoted to a normal location once its requirements and name are checked, one at a time (build

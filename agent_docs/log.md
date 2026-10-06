@@ -2953,3 +2953,10 @@ either one wrong).
 - **`SnakemouthFallRoom`:** the lake door free both ways; the door room's door on the bounce mushroom's ledge, a
   free drop down, Jump back up; the spider scene starts from either side and every member hits the web. Ticked, 21
   of 244. Next: `SnakemouthLake` (14).
+- **The user: a room said done means warp to the next one** (kept as a preference).
+- **`SnakemouthLake`:** the top (Leif's scene and the underground door room's door) up by the switch on a pillar
+  (the Beemerang) and platforms (Jump), down by Jump, a one-way once down; first written as a free drop, corrected by
+  the user. The medal: the Beemerang; the berry bush: Jump and the horn. Asked "found an egg from a bush": a random
+  pick from that grass's item list (Honey Drop, Crunchy Leaf, Aphid Egg), not a location. A tick-box question, "from
+  the fall-room door without Jump, what can you reach?", placed the spots; the user liked it: now in
+  `room-logic.md`. Ticked, 22 of 244. Next: `SnakemouthUndergrondDoor` (19).
