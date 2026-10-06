@@ -3140,3 +3140,4 @@ either one wrong).
   "the red bounce pad is here"; told "seen" too early (the bounce untried), warped back: "it works, sends me to the
   left side". Flag 300 turned back off. `liveslot` also sent the day's new locations (114-126),
   which the running seed doesn't have.
+- **`DesertWestDunes`:** nothing needed, no items; the user: done. Ticked, 65 of 244. Next: `DesertSandCastle` (107).
