@@ -3097,3 +3097,5 @@ either one wrong).
   `DesertFGBorder` (77).
 - **`DesertFGBorder`:** nothing needed between its doors with the gate kept open; the Bulk Bee talks as if it were
   shut but stands out of the way; no items. Ticked, 56 of 244. Next: `DesertDRSouthEntrance` (78).
+- **`DesertDRSouthEntrance`:** nothing needed between its three doors; a caravan NPC there, not the shop. Ticked, 57
+  of 244. Next: `DesertBadgeAlcove` (79).
