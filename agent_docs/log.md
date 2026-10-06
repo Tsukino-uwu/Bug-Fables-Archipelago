@@ -2977,3 +2977,7 @@ either one wrong).
   `CordycepsGuardian` entity a mini-boss from its name; it's a plain field enemy. The user: normal field enemies never
   block a way, only mini-boss, boss and scene fights (now in `room-logic.md`). Ticked, 24 of 244. Next:
   `SnakemouthTreasureRoom` (21).
+- **`SnakemouthTreasureRoom`:** in and out need nothing; the Spider fight needs Vi (hits it in the air), and the
+  scene sends the party to `BOGoldenPath` (not in the logic yet). Past flag 41, seen empty. The user: bosses not
+  shuffled yet, but every mode (enemies, bosses, both, chaos) must mix later, so a boss spot's rule follows the fight
+  placed there (Enemy Shuffle's next steps). Ticked, 25 of 244. Next: `SnakemouthUndergroundRightA` (22).

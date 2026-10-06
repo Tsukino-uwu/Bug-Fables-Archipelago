@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from rule_builder.rules import False_, Has
 
-from ..custom_rules import ANY_ATTACK, CanUse, one_way
+from ..custom_rules import ANY_ATTACK, CanUse, Member, one_way
 from ..data_types import Area, Artifact, EntityRef, FlagEntity, Give, Location, Pickup, Source, StoryEvent
 from .outskirts import PAST_GATE
 
@@ -103,13 +103,13 @@ STORY_EVENTS = (
     # At the lake, reachable without passing any water droplet, so Leif comes before everything that needs him.
     StoryEvent("Leif Joins", "Leif", "SnakemouthLake",
                Source(event=14, flag=16), category="story_party", area="Top"),
-    # The boss fight's flag flips in the treasure room.
+    # The Spider fight, walking into the treasure room: Vi's attack hits it in the air. Bosses aren't shuffled yet.
     StoryEvent("First Boss Beaten", "Snakemouth Den Cleared", "SnakemouthTreasureRoom",
-               Source(event=26, flag=41), reach=UNDERGROUND),
+               Source(event=26, flag=41), rule=Member("Vi")),
 )
 ARTIFACTS = (
     Artifact(1, "Artifact 1", "SnakemouthTreasureRoom",
-             Source(event=26, flag=41), reach=UNDERGROUND),
+             Source(event=26, flag=41), reach=Member("Vi")),
 )
 MAP_AREAS = (
     # The bridge room's left bank, with the door room's door: across the river on the lowered bridge (Jump), both ways.

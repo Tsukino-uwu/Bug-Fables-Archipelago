@@ -758,6 +758,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     reached without Jump: up the bounce mushrooms (six `JumpSpring`s, EntityDump) takes it. From the top door (to
     `SnakemouthTreasureRoom`) the medal on its mushroom ledge (location 8) needs nothing, and the bottom door is a
     free way down. The item by the droplet (location 9): Jump and Freeze.
+    **`SnakemouthTreasureRoom` (2026-10-06, the user):** in and out need nothing; past flag 41 an empty dead end. The
+    Spider fight (`MaskEvent`, limit 41, Event26) needs Vi, the one who hits it in the air. The scene ends on
+    `BOGoldenPath` (`event-transfers.py`), not yet in the logic.
   - **Vi's beemerang (range):** `SnakemouthBridgeRoom`'s bridge comes down when its rope is hit; from the right only the
     beemerang reaches it, from the left Leif's move hit it (so presumably any member's; Kabbu's not tried). The room's
     Tattle tutorial (Event2) ran with stand-ins and finished (flag 10); its hint (Event0) is skipped by Skip cutscenes.
