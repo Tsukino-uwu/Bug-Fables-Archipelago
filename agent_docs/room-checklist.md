@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**49 of 244 done.**
+**50 of 244 done.**
 
 ## Outskirts
 
@@ -80,7 +80,7 @@ as it is, a frozen record.
 
 ## Lost Sands
 
-- [ ] DesertEntrance (4)
+- [x] DesertEntrance (4)
 - [ ] DesertBadlands (5)
 - [ ] DesertBookArea (6)
 - [ ] DesertRockFormation (7)

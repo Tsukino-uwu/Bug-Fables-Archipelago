@@ -829,6 +829,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     **`BugariaEndPlaza`, `BugariaEndBridge`, `BugariaEndThrone` (2026-10-06, the user):** the ending played through
     from the plaza: nothing needed in the plaza or on the bridge; the throne room is the ending's scene and the credits.
     No items in any of the three (EntityDump).
+    **`DesertEntrance` (2026-10-06, the user):** nothing needed between its four ground doors (the Outskirts, the
+    badlands, the south trench, the middle trench); the book area's door is up a ledge no way inside the room reaches,
+    a drop down only. No items.
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a

@@ -1,9 +1,11 @@
 """Lost Sands (the game's area 3, MapControl.areaid): its spots, its ways between maps that aren't doors, and what the
-seed changes there. Its rooms aren't mapped yet."""
+seed changes there, mapped room by room (room-checklist.md)."""
 from __future__ import annotations
 
-from ..custom_rules import LATER_CHAPTERS, CanUse
-from ..data_types import EntityRef, Location, Source, Transfer
+from rule_builder.rules import False_
+
+from ..custom_rules import LATER_CHAPTERS, CanUse, one_way
+from ..data_types import Area, EntityRef, Location, Source, Transfer
 
 LOCATIONS = (
     # Where the game teaches the Dash (flag 699); the later chapters' story-order stand-in. Its map is the Outskirts'
@@ -26,4 +28,8 @@ SCENERY_HIDDEN = (
 )
 SCENERY_PRESENT = (
     EntityRef("DesertFGBorder", "Base/GateBroken"),
+)
+MAP_AREAS = (
+    # The entrance's door to the book area, up a ledge: no way up from inside the room, only a drop down.
+    Area("DesertEntrance", "Ledge", ("WarpBookZone",), False_(), out=one_way(None, False_())),
 )

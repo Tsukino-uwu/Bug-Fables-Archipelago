@@ -3066,3 +3066,5 @@ either one wrong).
 - **The ending's three rooms:** played through by the user (with `OneHit` off for story rooms, at their ask): nothing
   needed in the plaza or on the bridge, the throne room the ending and credits. The user's idea, the ending's credits
   on reaching the goal: Next 61, for later. Ticked, 49 of 244: Bugaria City done. Next: `DesertEntrance` (4).
+- **`DesertEntrance`:** four ground doors free; the north ledge door (to `DesertBookArea`) a drop only, confirmed by
+  arriving through it (the user's screenshot on the ledge). Ticked, 50 of 244. Next: `DesertBadlands` (5).
