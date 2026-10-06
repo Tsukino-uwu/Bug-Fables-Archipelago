@@ -3164,3 +3164,5 @@ either one wrong).
   `DesertScorpion` (112).
 - **`DesertScorpion`:** nothing needed; no items; its Scorpion fight (Event111) noted for the enemy pass. The user:
   done. Ticked, 71 of 244. Next: `DesertEastmost` (113), Lost Sands' last.
+- **`DesertEastmost`:** nothing needed, no items; I called its `zasp` entity "a wasp standing there", the user saw
+  none: a scene actor. Ticked, 72 of 244: Lost Sands done. Next: `GoldenHillsDungeonEntrance` (45).

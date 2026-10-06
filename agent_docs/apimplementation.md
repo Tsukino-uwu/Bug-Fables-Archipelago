@@ -2954,7 +2954,7 @@ the key chain is gone through), the mountain (free; its bridge without Jump a bi
 call), the trench's middle (three sides: the middle a drop to either, the left back up with Jump and Bee Fly, the
 top door dug under), the thorn field (its high right door Jump and the bubble shield, or the bridge the horn knocks
 down from the right), the southern desert (its right door the shield or Bee Fly; its top door a drop only), the
-scorpion's room (free), 71 of 244; the rest of `room-checklist.md` to go.
+scorpion's room (free), the eastmost room (free), 72 of 244: Lost Sands done; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

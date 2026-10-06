@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**71 of 244 done.**
+**72 of 244 done.**
 
 ## Outskirts
 
@@ -104,7 +104,7 @@ as it is, a frozen record.
 - [x] DesertJumpPuzzle (110)
 - [x] DesertSouthern (111)
 - [x] DesertScorpion (112) — for the enemy pass: the Scorpion fight (Event111, flags 303 to 298)
-- [ ] DesertEastmost (113)
+- [x] DesertEastmost (113)
 
 ## Golden Hills
 
