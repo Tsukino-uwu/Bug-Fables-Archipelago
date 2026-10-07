@@ -1150,6 +1150,13 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   SnekGate (1)`, hidden from its flag) that a lever on its own side opens for good: `switchleft` (activationflag
   362) and `switchright` (361), `Event136` setting the lever's flag; data[4] 0, so any basic attack. Seen from both
   doors. The miners talk only; the grass hides nothing; no items.
+  **`FarGrasslands1`, the crossroads (2026-10-08, the user and the dumps):** its four doors (left to
+  `FarGrasslands2`, right to `FarGrasslands3`, top right to `FarGrasslandsLake`, bottom to `DesertFGBorder`) and the
+  save crystal free. The dig spot (`digspot`, data `1 31`: crystal berry #31) reached with nothing, Beetle Dig. The
+  arrival scene (`Event125`, trigger until 323) sets 322 and 323 and makes Maki a follower (`AddFollower`): he fights
+  alongside in this area and the swamp, never outside it, and in vanilla leaves when the swamp bridge falls (the user);
+  that bridge is to stay up (`apimplementation.md`, Known issues), so for the swamp's mapping. The wasp twin (638 until
+  639) for the quest pass; the grass hides nothing.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

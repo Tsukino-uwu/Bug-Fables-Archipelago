@@ -3450,3 +3450,7 @@ either one wrong).
   (the horn), the middle a dead end without them. Gate events named by the user ("Border Cave, Left/Right Gate
   Opened"); the ant tunnel's transfer now starts from the top area. The user: done. Ticked, 112 of 244. Next:
   `FarGrasslands1` (137).
+- **`FarGrasslands1`, the crossroads:** free (the user); the dig spot's crystal berry #31 a new location, named by the
+  user. The arrival scene makes Maki a follower: the user, a bonus never in the logic, but kept from the swamp's boss
+  and the Wasp Kingdom, written beside the swamp bridge's Known issue. The user: done. Ticked, 113 of 244. Next:
+  `FarGrasslandsOutsideCave` (138).

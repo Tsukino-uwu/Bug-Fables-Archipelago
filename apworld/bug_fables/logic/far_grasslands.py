@@ -5,8 +5,14 @@ from __future__ import annotations
 from rule_builder.rules import Has
 
 from ..custom_rules import ANY_ATTACK, CanUse
-from ..data_types import Area, Source, StoryEvent
+from ..data_types import Area, Location, Pickup, Source, StoryEvent
 
+LOCATIONS = (
+    # Crystal berry #31 dug up at the crossroads (the first Far Grasslands room), reached with nothing: Beetle Dig.
+    Location("Far Grasslands: Crossroads, Dig Spot", 170, "FarGrasslands1",
+             Source(berry=31, pickup=Pickup(map="FarGrasslands1", type=3, item=0)), rule=CanUse("Beetle Dig"),
+             category="crystal_berry", no_jump=True),
+)
 STORY_EVENTS = (
     # The border cave's two gates, each opened for good by its lever on the far side (Event136 sets the lever's
     # activationflag, which hides that side's SnekGate): a basic attack (the user, 2026-10-07).
