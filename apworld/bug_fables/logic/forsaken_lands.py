@@ -5,7 +5,7 @@ from __future__ import annotations
 from rule_builder.rules import Has
 
 from ..custom_rules import LATER_CHAPTERS, CanUse, one_way
-from ..data_types import Area, EntityRef, Location, Source, StoryEvent, Transfer
+from ..data_types import Area, EntityRef, Location, Pickup, Source, StoryEvent, Transfer
 
 LOCATIONS = (
     # Where the game teaches Bee Fly (flag 19): escorting the queen to the termites, she orders Vi to fly the broken
@@ -14,6 +14,9 @@ LOCATIONS = (
              Source(event=150, flag=19),
              rule=CanUse("Beemerang Halt") & CanUse("Dash") & CanUse("Shield") & CanUse("Beetle Dig")
              & CanUse("Horn Dash"), reach=LATER_CHAPTERS, area="Left"),
+    # A Plumpling Pie behind the mine cart in the ant tunnel's room by the Termite gate: nothing needed (the user).
+    Location("Forsaken Lands: Ant Tunnel, Behind the Mine Cart", 159, "BarrenLandsAntTunnel",
+             Source(flag=739, pickup=Pickup(map="BarrenLandsAntTunnel", type=0, item=180)), no_jump=True),
 )
 # The broken bridge room's ruler, knocked down from its upper right (Event146, flag 382): a switch only Kabbu's horn
 # hits (its data[4] 1, NPCControl), the bridge then joining the upper right and the left.

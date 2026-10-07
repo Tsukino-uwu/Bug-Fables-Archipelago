@@ -3392,3 +3392,7 @@ either one wrong).
   First written with the right side as one part; the user then added the ledge, and where the flight and the drops
   land (two tick questions) put the ledge as the map's region. Event name the user's ("Ruler Knocked Down"). The user:
   done. Ticked, 100 of 244. Next: `BarrenLandsAntTunnel` (181).
+- **`BarrenLandsAntTunnel`:** free (the user). The dump's `Item Pie` (animid 180, flag 739) was no location yet: the
+  game's text names item 180 the Plumpling Pie (my enum count was off by two; `items.json` and the text agree). The
+  user found it behind a mine cart and named it ("Ant Tunnel, Behind the Mine Cart"); the Pie joined `items.json` as
+  filler. The running seed predates it. The user: done. Ticked, 101 of 244. Next: `BarrenLandsMiniboss` (182).

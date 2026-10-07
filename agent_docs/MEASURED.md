@@ -1072,6 +1072,10 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   between the upper right and the left, both ways. The grass (`data[1]` -1) hides nothing. The hungry termite
   (`brothertermite`, 475 until 476, wants item 145, lines 8-10) for the quest pass; Ironnail and a Plumpling for the
   enemy pass.
+  **`BarrenLandsAntTunnel` (2026-10-07, the user and the dumps):** its one door and everything in it free. A Plumpling
+  Pie (`Item Pie`: animid 180, the game's item 180, "Plumpling Pie" in its text; data[0] 0, an item; activation and
+  limit flag 739) lies behind the mine cart. Diana (until 77, `Event48`) opens the tunnel to the hub (the rock
+  `Base/AntTunnelRock` gone from 77), free in a seed (`free_ant_tunnels`); the miner talks only.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
