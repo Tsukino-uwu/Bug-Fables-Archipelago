@@ -3421,3 +3421,8 @@ either one wrong).
   from above). Two new locations from the dump: the Lore Book dig spot and a grass patch whose vectordata drops a
   Magic Seed on regional flag 10 (`CutGrass` read). Names the user's ("Dig Spot", then "Grass by the Fountain" over
   "By the Fountain"). The user: done. Ticked, 106 of 244. Next: `BarrenLandsPumpkins` (193).
+- **`BarrenLandsPumpkins`, the pumpkin patch:** the user's ways, three parts; the high door's way down first written as
+  needing Horn Dash (the drop behind the boulders), then a free drop to the near side at the user's word. A grass patch
+  dropping a Squash (regional 7) a new location ("Grass in the Top Right"), the Squash a new filler item. The user
+  asked for a hidden-item check like the other passes: the item sweep in `room-logic.md` now names grass drops, berries
+  under grass, dig spots and scene drops. The user: done. Ticked, 107 of 244. Next: `BarrenLandsCloud` (194).

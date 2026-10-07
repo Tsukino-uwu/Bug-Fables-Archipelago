@@ -32,6 +32,10 @@ LOCATIONS = (
     Location("Forsaken Lands: Abandoned City, Grass by the Fountain", 162, "AbandonedCity",
              Source(regional=10, pickup=Pickup(map="AbandonedCity", type=0, item=11)),
              rule=CanUse("Bee Fly") & CanUse("Horn Slash"), category="hidden_item", no_jump=True),
+    # A respawning Squash in grass in the pumpkin room's top right (regional flag 7): the horn (the user, 2026-10-07).
+    Location("Forsaken Lands: Pumpkin Patch, Grass in the Top Right", 163, "BarrenLandsPumpkins",
+             Source(regional=7, pickup=Pickup(map="BarrenLandsPumpkins", type=0, item=125)), rule=CanUse("Horn Slash"),
+             category="hidden_item", no_jump=True, area="Top Right"),
 )
 # The broken bridge room's ruler, knocked down from its upper right (Event146, flag 382): a switch only Kabbu's horn
 # hits (its data[4] 1, NPCControl), the bridge then joining the upper right and the left.
@@ -49,6 +53,8 @@ TRANSFERS = (
     Transfer("drop", "BarrenLandsBeefly", "BarrenLandsBeefly", two_way=False,
              way_back=CanUse("Bee Fly") & Has("Broken Bridge Ruler Down"), from_area="Upper Right"),
 )
+# Up to the pumpkin room's high right door from its top right.
+_PUMPKIN_RIGHT_DOOR = CanUse("Horn Dash") & CanUse("Horn Slash") & CanUse("Jump") & CanUse("Bee Fly")
 MAP_AREAS = (
     # The CD room's raised strip (its left and right edges, where the side room's left edge lands too) over its floor
     # (the top and bottom doors): a drop down, Jump back up the ledges.
@@ -71,6 +77,15 @@ MAP_AREAS = (
     Area("BarrenLandsMushrooms", "Left", ("loadzonepinkspider",), CanUse("Beetle Dig")),
     # The Abandoned City's top (its door to the tent): Jump up from the bottom, a drop down (the user, 2026-10-07).
     Area("AbandonedCity", "Top", ("loadzonetent",), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
+    # The pumpkin room (the user, 2026-10-07): its bottom and left doors the map's own region; its top right (the wrong
+    # turn up top, by the boulders) up with Jump, the horn and Bee Fly, down with Bee Fly; its high right door (to the
+    # rock room) from there: Horn Dash through the boulders, the horn to knock a stone over, Jump onto it, Bee Fly over
+    # the gap. From that door, a drop to the top right's near side needs nothing; one behind the boulders is a trap
+    # without Horn Dash, never a way the logic counts. Both drops one-way.
+    Area("BarrenLandsPumpkins", "Top Right", ("returnloadzone",),
+         CanUse("Jump") & CanUse("Horn Slash") & CanUse("Bee Fly"), out=CanUse("Bee Fly")),
+    Area("BarrenLandsPumpkins", "Right Door", ("loadzoneright - Duplicate",), _PUMPKIN_RIGHT_DOOR,
+         out=one_way(None, _PUMPKIN_RIGHT_DOOR), to="BarrenLandsPumpkins (Top Right)"),
 )
 # Patton's lab, opened by the escort to the termites (flag 376): open from the start (the user, 2026-10-07), its door
 # entity there and its slab gone, as the game has them from 376.

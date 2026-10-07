@@ -1108,6 +1108,14 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   drops item 11, a Magic Seed, with that regional flag) needs Bee Fly to reach and the horn; the other grass hides
   nothing. The hooded mothflies (until 454), the Venus healer (from 130) and Rebecca's scene (701 until 709, quest
   pass) give nothing here.
+  **`BarrenLandsPumpkins`, the pumpkin patch (2026-10-07, the user and the dumps):** the bottom door (to
+  `BarrenLandsMushrooms`, where the pink spider's one-way lands) and the left door (to `BarrenLandsCloud`) free between
+  them. The top right (the wrong turn up top, `returnloadzone`) up with Jump, the horn and Bee Fly, down with Bee Fly.
+  The high right door (to `BarrenLandsRock`) from there: Horn Dash through the boulders (`breakrock`s), the horn to
+  knock a stone (`PushRock`) over, Jump onto it, Bee Fly over the gap; from the door two one-way drops, to the top
+  right's near side (free) or behind the boulders (a trap without Horn Dash). A grass patch in the top right (regional
+  flag 7, vectordata x 125: a Squash) needs the horn. The gray mushroom (gone from 384) and the crate (from 452) not
+  seen in place; the other grass hides nothing; the enemies for the enemy pass.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
