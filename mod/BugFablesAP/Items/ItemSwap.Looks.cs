@@ -248,9 +248,11 @@ namespace BugFablesAP
         internal static string ArticleOf(long itemId, int kind)
         {
             int gameId = ItemIds.GameId(itemId, kind);
+            // Never the vanilla give's own: Game Tokens' article is their count, which stayed before a swapped-in item.
             return kind == ItemIds.MedalKind ? TableCell(MainManager.badgedata, gameId, 6)
                 : kind == ItemIds.MemberKind || kind == ItemIds.MoveKind ? ""
-                : kind == ItemIds.MoneyKind || kind == ItemIds.CrystalKind || kind == ItemIds.TokenKind ? null
+                : kind == ItemIds.MoneyKind || kind == ItemIds.TokenKind ? ""
+                : kind == ItemIds.CrystalKind ? MainManager.menutext?[DefaultArticle]
                 : TableCell(MainManager.itemdata, 0, gameId, 3);
         }
 

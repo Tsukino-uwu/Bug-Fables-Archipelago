@@ -351,6 +351,8 @@ namespace BugFablesAP
         // (Giveitem reads menutext[106] right after this), then the game's text is put back.
         private const int GotLine = 106;
         private const string ArticleSlot = "|string,1| ";
+        // The article the game sets before every give (MainManager.SetText's giveitem), its own crystal berries' too.
+        private const int DefaultArticle = 125;
         private const string NameThenRed = "|string,0||color,1|", NameThenBlack = "|string,0||color,0|";
 
         // Another player's item, found here: "You found <player>'s <item>!", so it isn't taken for your own.

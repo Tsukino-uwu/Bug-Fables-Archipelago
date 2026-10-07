@@ -4794,7 +4794,10 @@ there: Prize 9 showed Prize 4's seed item, because Prize 4's own item (the Tangy
 name had already been swapped; every look is now read before any is swapped, and the row then showed right.
 
 **The gift seen** (2026-10-06): with flag 351 cleared, the greeter's line showed the seed's Burly Berry and gave no
-tokens. The same line records the Termacade discovery (42), a location of its own once discoveries are swept.
+tokens. **A count left behind** (2026-10-07, the user): a Crystal Berry there read "You got 15 Crystal Berry!": Game
+Tokens' article is the count, and a crystal berry, berries or tokens kept the give's own article. Now a crystal berry
+takes the game's usual one (`menutext[125]`, set before every give) and berries and tokens none (their names carry the
+number). **Seen:** "You got a Crystal Berry!". The same line records the Termacade discovery (42), a location of its own once discoveries are swept.
 
 **Status:** built (2026-10-06); the prize stand and the gift seen working.
 
