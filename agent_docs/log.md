@@ -3467,3 +3467,11 @@ either one wrong).
 - **`FarGrasslands2`, the west path:** the user's ways (the top door Jump, a drop down). Crystal berry #26 a new
   location, named from the user's screenshot ("On the Tree Root", the room "West Path"); the money-only grass left out
   by precedent. The user: done. Ticked, 116 of 244. Next: `FarGrasslandsLake` (141).
+- **`FarGrasslandsLake`, the lake:** the user's ways; three new locations (names the user's), the Hot Drink a new filler
+  item. Maki turned the user back from the top: the Wasp Kingdom's front gate, which the logic counted open. At the
+  user's ask its door and grate were opened and the turn-back removed: walking through pushed the party past the far
+  side's gate into the patrol's see area, a catch loop (`Event138` returns to `lastpos`), freed by `unstick` then a
+  `nudge` onto the door. The user chose to keep the gate shut: a `DoorRule` of `False_` on both ends, the turn-back
+  still kept away. Arriving at the lake through the gate pushes the party past the grate, no trap; the far side's
+  arrival to be reworked when `WaspKingdomOutside` is mapped (its checklist row). The user: done. Ticked, 117 of 244.
+  Next: `FarGrasslandsOutsideVillage` (142).

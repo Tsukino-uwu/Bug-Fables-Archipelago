@@ -3046,7 +3046,9 @@ location: a dig spot's crystal berry), 113 of 244; outside the border cave (its 
 Beetle Dig), 114 of 244; outside the wizard's tower (the tower side Shield or Bee Fly; the hole a one-way in, the horn;
 the front door shut both ways until the wizard unlocks it, a door rule on both ends; a new location: the Lookout Rock's
 discovery, Jump or the tower's stairs), 115 of 244; the west path (its top door Jump; a new location: a crystal berry on
-the tree root), 116 of 244; the rest of `room-checklist.md` to go.
+the tree root), 116 of 244; the lake (the Wasp Kingdom's front gate kept shut, impassable until after the story, Maki's
+turn-back before it kept away; three new locations: a Lore Book, a Hot Drink, a new filler item, and a dig spot, Icicle
+or Bee Fly), 117 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

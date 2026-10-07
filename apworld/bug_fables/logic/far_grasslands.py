@@ -2,10 +2,10 @@
 being mapped."""
 from __future__ import annotations
 
-from rule_builder.rules import CanReachRegion, Has
+from rule_builder.rules import CanReachRegion, False_, Has
 
 from ..custom_rules import ANY_ATTACK, CanUse, one_way
-from ..data_types import Area, DoorRule, Location, Pickup, Source, StoryEvent
+from ..data_types import Area, DoorRule, EntityRef, Location, Pickup, Source, StoryEvent
 
 LOCATIONS = (
     # Crystal berry #31 dug up at the crossroads (the first Far Grasslands room), reached with nothing: Beetle Dig.
@@ -21,6 +21,15 @@ LOCATIONS = (
     Location("Far Grasslands: West Path, On the Tree Root", 172, "FarGrasslands2",
              Source(berry=26, pickup=Pickup(map="FarGrasslands2", type=3, item=0)), category="crystal_berry",
              no_jump=True),
+    # The lake (the user, 2026-10-08): a Lore Book behind a flower and a Hot Drink beside a tree, nothing needed; Dark
+    # Cherries dug up in the middle, reached with Icicle or Bee Fly.
+    Location("Far Grasslands: Lake, Behind the Flower", 173, "FarGrasslandsLake",
+             Source(flag=460, pickup=Pickup(map="FarGrasslandsLake", type=1, item=52)), no_jump=True),
+    Location("Far Grasslands: Lake, Beside the Tree", 174, "FarGrasslandsLake",
+             Source(flag=736, pickup=Pickup(map="FarGrasslandsLake", type=0, item=177)), no_jump=True),
+    Location("Far Grasslands: Lake, Dig Spot", 175, "FarGrasslandsLake",
+             Source(flag=632, pickup=Pickup(map="FarGrasslandsLake", type=0, item=121)),
+             rule=(CanUse("Icicle") | CanUse("Bee Fly")) & CanUse("Beetle Dig"), category="dig_spot", no_jump=True),
 )
 STORY_EVENTS = (
     # The border cave's two gates, each opened for good by its lever on the far side (Event136 sets the lever's
@@ -40,6 +49,11 @@ DOOR_RULES = (
     DoorRule("FarGrasslandsWizard", "loadzonetower", Has("Wizard Tower Door Unlocked")),
     DoorRule("WizardTowerStairs", "loadzoneoutside", Has("Wizard Tower Door Unlocked")),
     DoorRule("FarGrasslandsWizard", "loadzonebasement", CanUse("Horn Slash")),
+    # The Wasp Kingdom's front gate between the lake and outside the hive: in the game its door (both ends) is there
+    # only from peace with the wasps (flag 555, after the story), a grate and a gate shutting it until then. Kept shut
+    # (the user, 2026-10-08: opened, its far side lands inside the wasps' patrol, which catches the party in a loop).
+    DoorRule("FarGrasslandsLake", "loadzonewasp", False_()),
+    DoorRule("WaspKingdomOutside", "loadzonesouth", False_()),
 )
 MAP_AREAS = (
     # The border cave (the user, 2026-10-07): its bottom door the map's own region; the ant tunnel's miner at the top past
@@ -59,4 +73,10 @@ MAP_AREAS = (
     # The second grasslands room (west of the crossroads): its top door up a ledge, Jump; a drop down (the user,
     # 2026-10-08).
     Area("FarGrasslands2", "Top", ("loadzone north",), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
+)
+# Maki's turn-back before the Wasp Kingdom's front gate at the lake (Event12, spoken by the follower), there until the
+# swamp bridge falls (336), which the seed never lets happen: kept away (the user, 2026-10-08). Past it there is only
+# the gate's grate.
+KEPT_OPEN = (
+    EntityRef("FarGrasslandsLake", "blocker"),
 )

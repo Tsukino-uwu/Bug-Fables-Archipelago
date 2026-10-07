@@ -1175,6 +1175,15 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   `FarGrasslands4`, y 6) Jump up a ledge, a drop down. Three grass patches (regional 9-11) drop only berries, the money
   (items 6 and 7): not locations, as at Seedling Haven. A Mantidfly, a flowering plant and a jumping spider for the
   enemy pass.
+  **`FarGrasslandsLake`, the lake (2026-10-08, the user, the dumps and two warps):** from the bottom door (to
+  `FarGrasslands1`) the Lore Book behind a flower (flag 460) and the Hot Drink beside a tree (item 177, flag 736) need
+  nothing; the dig spot in the middle (`DarkCherry`, data `0 0 121`: Dark Cherries, flag 632) Icicle or Bee Fly, then
+  Beetle Dig. The Wasp Kingdom's front gate at the top (`loadzonewasp`, requires 555) is shut by `Base/grate` (hidden
+  from 555, no animation); before it `blocker` (`Event12`, until 336) turns the party back, spoken by the follower
+  (Maki here). Opened as a test, its far side (`WaspKingdomOutside`'s `loadzonesouth`, requires 555, its own gate hidden
+  from 555) pushed the party past that gate into the patrol's `see area` (`Event138`, until 347), which puts the party
+  back at `lastpos`, inside itself: a loop, freed by `unstick` then `nudge` onto the door. Arriving here through the gate
+  pushes the party past the grate, no trap. The one grass drops only money.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

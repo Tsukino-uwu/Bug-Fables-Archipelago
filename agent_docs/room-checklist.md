@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**116 of 244 done.**
+**117 of 244 done.**
 
 ## Outskirts
 
@@ -174,7 +174,7 @@ as it is, a frozen record.
 - [x] FarGrasslandsOutsideCave (138) — for the quest pass: Riz (from flag 509)
 - [x] FarGrasslandsWizard (139)
 - [x] FarGrasslands2 (140)
-- [ ] FarGrasslandsLake (141)
+- [x] FarGrasslandsLake (141)
 - [ ] FarGrasslandsOutsideVillage (142)
 - [ ] FarGrasslands3 (143)
 - [ ] FGOutsideSwamplands (146)
@@ -297,7 +297,9 @@ as it is, a frozen record.
 
 ## Wasp Kingdom Hive
 
-- [ ] WaspKingdomOutside (147)
+- [ ] WaspKingdomOutside (147) — to do when mapped (the user, 2026-10-08): rework its bottom door's arrival (the gate
+  from the lake) so a party can enter or start there; today it lands past its gate inside the patrol's see area, a loop
+  (`MEASURED.md`, the lake)
 - [ ] WaspKingdom1 (163)
 - [ ] WaspKingdom2 (164)
 - [ ] WaspKingdom3 (165)
