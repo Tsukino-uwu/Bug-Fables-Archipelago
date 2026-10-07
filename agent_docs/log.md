@@ -3317,3 +3317,10 @@ either one wrong).
   starburst first: Shuffle Dig Spots off in the test player file, then the user on the old seed's file; on a new seed
   with dig spots on and a new file, the starburst seen. Bee Fly down to the bottom: counted at the user's word, then
   back to a trick for a harder logic at theirs. The user: done. Ticked, 88 of 244. Next: `GoldenSMinigame` (114).
+- **`GoldenSMinigame`, "Whack Farms":** the door free (its settlement side behind the horn quest's rock, a stand-in).
+  Playing Wacka Worm froze the user: the party guard had kept Leif in the game's Vi-alone party (`documentation.md`,
+  stand-ins, item 15). The keeper's 25-worm Heart Berry became a location; the user then asked that both Wacka Worm
+  games need Vi and the Beemerang, the NPCs staying, and, after scoring 16, a Minigame Prizes option, off: filler only
+  (build step 51; a wider minigame/arcade/card game toggle is their idea for later). A refused game first left the
+  player frozen (the line's `|event|` expects a scene to clear `minipause`); fixed, seen. The prize itself on TO-CHECK.
+  The user: done. Ticked, 89 of 244. Then the user asked to go back to the pier to look at rooms there again.

@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**88 of 244 done.**
+**89 of 244 done.**
 
 ## Outskirts
 
@@ -127,7 +127,7 @@ as it is, a frozen record.
 - [x] GoldenHillsPath2 (38) — for the quest pass: the sleepy NPC (the CableCar quest, until flag 182)
 - [x] GoldenSettlementEntrance (39) — for the quest pass: the horn quest and Tanjerin (the minigame door's rock, flags 274-275); the caravan's other stalls, one at a time (the user)
 - [x] GoldenHillsPath3 (44)
-- [ ] GoldenSMinigame (114)
+- [x] GoldenSMinigame (114) — for the quest pass: the mayor's late visit (20 worms, the Desert Key, quest 46, flags 557-559)
 
 ## Golden Settlement
 
