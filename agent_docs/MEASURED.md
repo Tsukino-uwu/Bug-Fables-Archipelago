@@ -1161,6 +1161,15 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   crystal free; the right door (to `FarGrasslands4`) behind two `BreakableRock`s (regional flags 0 and 1, so they stay
   broken once gone), Horn Dash both ways; the bottom left door (to `FarGrasslandsWizard`) by burrowing, Beetle Dig both
   ways. Riz (from 509) for the quest pass; the grass hides nothing; no items.
+  **`FarGrasslandsWizard`, outside the wizard's tower (2026-10-08, the user, the dumps and code):** the door to
+  `FarGrasslandsOutsideCave` (top left) its own part; the tower side across with the Shield or Bee Fly. There, the hole
+  (ringed with grass, the horn) drops into `WizardTowerBasement` one way: before 449 the trigger `basementevent`
+  (`Event166`, the fall, sets 449), after it the door `loadzonebasement` (requires 449). The front door
+  (`loadzonetower`, to `WizardTowerStairs`, requires 449) stays shut until the wizard in `WizardTowerAttic`, first
+  talked to, sets 450 (his line from 450 on), which hides `Base/Tower/Door` here and `Base/DoorLock` on the stairs.
+  The lookout rock on the cave door's side (`discovery`, Jump): its talk sets 546, and `CheckAchievement` (each map
+  load, the pause menu) records discovery 36, "Wizard's Tower", which entering `WizardTowerStairs` also records
+  (`MapControl`). Three signs ("STAY AWAY"...); the grass hides nothing; no items.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

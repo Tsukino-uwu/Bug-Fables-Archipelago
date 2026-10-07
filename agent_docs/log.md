@@ -3456,3 +3456,11 @@ either one wrong).
   `FarGrasslandsOutsideCave` (138).
 - **`FarGrasslandsOutsideCave`:** the user's ways: the right door Horn Dash (the rocks stay broken, still required), the
   bottom left Beetle Dig, the rest free. The user: done. Ticked, 114 of 244. Next: `FarGrasslandsWizard` (139).
+- **`FarGrasslandsWizard`, outside the wizard's tower:** the user's ways (the tower side Shield or Bee Fly, the hole the
+  horn). The tower's front door, which the logic counted open, now a `DoorRule` on both ends behind "Wizard's Tower,
+  Door Unlocked" (the wizard's flag 450, found from the stairs' `DoorLock` and the attic wizard's line). The "discovery"
+  NPC first read as party talk only; code showed flag 546 becomes discovery 36 in `CheckAchievement`, which entering
+  the stairs also records: one location, either way (the user asked; one journal mark, one check). Warps: into the
+  basement through the hole (no way back up), then out of the shut front door (pushed back out, the user: as
+  intended). Opening the door from the start offered against stranding; the user kept the game's door. The user: done.
+  Ticked, 115 of 244. Next: `FarGrasslands2` (140).
