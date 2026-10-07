@@ -1049,6 +1049,13 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   requires 376 and its slab (`PattonsHouse/PopCan (1)`, a `ConditionChecker`) is hidden from 376; the door alone left
   the party pushed past the slab (the user), both together seen working. Patton's meeting (`Event159`, 376 until 420)
   and his stat and potion conversions (lines 4-19) for the quest and sellers' passes; the diary copy text only.
+  **`BarrenLandsCD` (2026-10-07, the user and the dumps):** a floor with the top door (`loadzonenorth`) and the bottom
+  edge's wrong turn (`returnloadzone`), free between them; a raised strip (y 4) with the left edge
+  (`returnloadzoneleft`, its copy to `BarrenLandsCloud` from 384) and the right door (`loadzoneright`), free between
+  them. Down from the strip a drop; back up the side ledges Jump. Landings: `BarrenLandsSideGPT`'s `returnzone left` on
+  the strip (26.2, 4, -10), every other wrong turn on the floor. The three `BeetleGrass` block nothing (the user) and
+  hide no berry (`data[1]` -1, the berry index `NPCControl` checks). Enemies (`mimicspider`, a mothfly) for the
+  enemy pass; nothing else.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

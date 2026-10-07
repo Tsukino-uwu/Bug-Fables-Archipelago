@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**97 of 244 done.**
+**98 of 244 done.**
 
 ## Outskirts
 
@@ -149,7 +149,7 @@ as it is, a frozen record.
 
 - [x] BarrenLandsEntrance (149) — for the quest pass: Patton's meeting (Event159); for the sellers' pass: his stat and
   potion conversions
-- [ ] BarrenLandsCD (150)
+- [x] BarrenLandsCD (150)
 - [ ] TermiteOutside (173)
 - [ ] BarrenLandsBeefly (180)
 - [ ] BarrenLandsAntTunnel (181)

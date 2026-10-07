@@ -3022,8 +3022,8 @@ the Lore Book in grass, the horn, the Mothiva Doll at night, Jump, and five shop
 the festival's games, Chubee's gift, the windmill's berry and its farmer, the night scene, and a dig spot by day; the
 offerings items, build step 53), 93 of 244; the houses, by day and by night (free; nothing to place), 95 of 244; the power plant (two areas, its
 switches opening the door between them; one new location: its discovery), 96 of 244; the Forsaken Lands from 2026-10-07: the fog maze's start (free;
-Patton's lab open from the start, its door and slab as the game has them from flag 376), 97 of 244; the rest of
-`room-checklist.md` to go.
+Patton's lab open from the start, its door and slab as the game has them from flag 376), 97 of 244; the room below it (a
+raised strip, Jump back up), 98 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

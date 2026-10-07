@@ -3371,3 +3371,7 @@ either one wrong).
   ask: the door entity alone (`kept_present`) pushed the party past the slab; the game's own way, the slab hidden by
   its `ConditionChecker` from flag 376 (`bugfablesap-mapflags.tsv`), joined it (`scenery_hidden`), read back hidden
   and seen working. The rocks hide nothing. The user: done. Ticked, 97 of 244. Next: `BarrenLandsCD` (150).
+- **`BarrenLandsCD`:** the user: the left and right edges up top, the top and bottom doors on the floor, each pair free,
+  a drop down and Jump back up. Written as an `Upper` area, `BarrenLandsSideGPT`'s left wrong turn landing on it (its
+  landing spot read from the dump). The grass hides no berry. The user: done. Ticked, 98 of 244. Next:
+  `TermiteOutside` (173).
