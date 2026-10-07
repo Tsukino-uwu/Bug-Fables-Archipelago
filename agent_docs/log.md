@@ -3432,3 +3432,6 @@ either one wrong).
   Fly. Naming: my "Floating" was a guess and "Lore Book Platform" named the item, both wrong (the user); the room
   "Wind Pipes" (the game's text says "pipes"), the spot "Isolated Platform", the user's. The user: done. Ticked, 108 of
   244. Next: `BarrenLandsRock` (195).
+- **`BarrenLandsRock`, the dome overlook:** free (the user; the vista first said Jump, then not). Discovery 41 from
+  either line of the viewpoint, and a Squash in grass (regional 11): new locations. Names the user's ("Dome Overlook",
+  "Vista" over viewpoint, "Grass by the Log"). The user: done. Ticked, 109 of 244. Next: `AbandonedCityTent` (196).

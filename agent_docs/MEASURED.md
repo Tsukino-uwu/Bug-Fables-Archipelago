@@ -1126,6 +1126,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   left from the tanks room; the bottom from the pumpkin patch's wrong turn. A Lore Book (`lorebook`, flag 455) on an
   isolated platform in the bottom part, Bee Fly, just visible from the bottom landing. The game's text calls the
   scenery "pipes" (`LPipe`; the side room's party line).
+  **`BarrenLandsRock`, the dome overlook (2026-10-07, the user and the dumps):** its four doors (the top to
+  `BarrenLandsMiniboss`, the left to the pumpkin patch's high door, the wrong turns at the right and the bottom) free
+  between them. The vista up the springs (`discovery`, y 11) needs nothing (first said Jump, then not): line 1 (before
+  384, the queen speaking) or 2 records discovery 41, "Termite Kingdom", and flag 470. A grass patch by the log
+  (regional flag 11, vectordata x 125, a Squash) needs the horn; the other grass hides nothing; an Ironnail and a mimic
+  spider for the enemy pass.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

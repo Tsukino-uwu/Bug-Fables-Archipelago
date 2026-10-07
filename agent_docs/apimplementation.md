@@ -3033,7 +3033,8 @@ exit by the user's choice), 105 of 244; the Abandoned City (Jump to its top; two
 and a respawning Magic Seed in grass, Bee Fly and the horn), 106 of 244; the pumpkin patch (three parts:
 Jump, the horn and Bee Fly up; Horn Dash and the rest to its high door; a new location: a Squash in grass, a new
 filler item), 107 of 244; the wind pipes (a one-way ring of four parts, Bee Fly with Horn Dash and Jump; a new
-location: a Lore Book on an isolated platform), 108 of 244; the rest of `room-checklist.md` to go.
+location: a Lore Book on an isolated platform), 108 of 244; the dome overlook (free; two new locations: its
+vista's discovery and a Squash in grass), 109 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
