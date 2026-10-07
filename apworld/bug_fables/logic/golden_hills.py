@@ -12,10 +12,10 @@ from ..data_types import Area, EntityRef, Location, Pickup, Source, StoryEvent, 
 WOODEN_CRANK = LATER_CHAPTERS
 # The Big Crank (key item 60), the same way.
 BIG_CRANK = LATER_CHAPTERS
-# The Sun and Moon Offerings (key items 55, 56), given in the Golden Settlement (GoldenSettlement2, lines 45, 67, 77):
-# not items yet, so the later chapters' stand-in until that chain is gone through in the quest pass.
-SUN_OFFERING = LATER_CHAPTERS
-MOON_OFFERING = LATER_CHAPTERS
+# The Sun and Moon Offerings (key items 55, 56), items since the festival's farm was mapped (2026-10-07; their spots
+# in golden_settlement.py).
+SUN_OFFERING = Has("Sun Offering")
+MOON_OFFERING = Has("Moon Offering")
 # Across the right crank room, all of it (the user: assume every need for the room), or Bee Fly alone.
 RIGHT_CRANK_ROOM = (CanUse("Shield") & CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump")
                     & CanUse("Beemerang Toss") & CanUse("Beemerang Halt")) | CanUse("Bee Fly")

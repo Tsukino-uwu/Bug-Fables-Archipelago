@@ -122,6 +122,7 @@ this file and that doc disagree, that doc is right.
 50. [Build step 50: the Termacade, its gift and prize stand](#build-step-50-the-termacade-its-gift-and-prize-stand)
 51. [Build step 51: Minigame Prizes, and Wacka Worm only for Vi](#build-step-51-minigame-prizes-and-wacka-worm-only-for-vi)
 52. [Build step 52: the festival night at will, a switch NPC](#build-step-52-the-festival-night-at-will-a-switch-npc)
+53. [Build step 53: the festival's offerings as items, the contest always won](#build-step-53-the-festivals-offerings-as-items-the-contest-always-won)
 
 **How it works**
 
@@ -4910,6 +4911,41 @@ the door table and the logic to come.
 
 # How it works
 
+
+## Build step 53: the festival's offerings as items, the contest always won
+
+**Asked and decided (the user, 2026-10-07, mapping `GoldenSettlement2`):** the festival's games are locations now, not
+in the quest pass: the Wacka Worm game's prize (the Sun Offering; Vi and the Beemerang, "a required minigame in the
+base game, not an optional/hard one"), the eating contest's (the Moon Offering; the square at night first, to talk to
+Zasp), Chubee's gift after it (the Weak Stomach medal; first planned for the caravan's stall from the start, then the
+user: "just make it be Chubee's Gift (Night)"), the windmill's crystal berry (#4, the Halt's crank) and the farmer's
+reward for opening it (a Hard Seed at night, the farmer there whenever it is night). The contest always won (the
+user's pick over "a loss still gives it"). The farm's night scene (Smugbee, Kabbu's Pep Talk, which stays the game's:
+battle skills are not items) a location too. Names, the user's: *Farm, Wacka Worm Prize (Night)*, *Farm, Eating
+Contest (Night)*, *Chubee's Gift (Night)*, *Farm, Windmill*, *Farm, Farmer's Reward (Night)*, *Farm, Smugbee (Night)*,
+and the Halt lesson renamed *Farm, Wacka Worm Game (Night)*.
+
+**How the game does it** (`MEASURED.md`, the farm): the Wacka Worm win sets flag 96 and gives the Sun Offering (line
+45); the contest (`Event57`) decides `won = b <= 0f`; won, the prize is the Moon Offering (line 67, flags 100 and 101)
+and Chubee gives Weak Stomach (line 79's `checkflag,102,80`: while 102 is off; line 80 sets it); lost, Chubee takes a
+Berry Juice for the offering (line 77). A skipped gift is sold at the caravan after the fight (`Event58`, prize slot 1).
+The offerings are what the Golden Hills dungeon's shrines take.
+
+**Built:**
+1. **The locations** (152-156; 151 the night scene) in `logic/golden_settlement.py`; the contest's needs a story event
+   in the square, *Zasp's Challenge* (flag 93, `Eating Contest Entered`).
+2. **The Sun and Moon Offerings** are items (progression): the dungeon's shrine rules, a later-chapters stand-in until
+   now, need them (`logic/golden_hills.py`). Weak Stomach is an item too, useful: every medal is (the user: a drawback
+   has uses, Weak Stomach feeds the poison medals), but Hard Mode, which does nothing in a seed (filler);
+   `TestMedalsAreUseful` holds it.
+3. **The contest always won** (slot_data `contest_always_won`; `Festival.cs`, a transpiler in `Event57` passing `won`
+   through `ForceWin`).
+
+**Status:** in progress (2026-10-07): the five farm checks sent on a save that had won the contest; a forced win and
+Chubee's gift as a location not yet seen.
+
+*Code: `logic/golden_settlement.py`, `logic/golden_hills.py`, `data/items.json`, `slot_data.py`. The mod: `Festival.cs`,
+`SeedData.cs`.*
 ## 1. The big picture: generator, seed, server, game
 
 ```text

@@ -71,6 +71,8 @@ namespace BugFablesAP
         internal readonly bool FreeAntTunnels;
         // The Termite gate opens from inside before it was ever opened from outside.
         internal readonly bool TermiteGateFromInside;
+        // The festival's eating contest always won.
+        internal readonly bool ContestAlwaysWon;
         // {map: dialogue lines}: sellers' lines whose price reads 0.
         internal readonly Dictionary<string, int[]> FreeSales;
         // Day maps whose night the mod switches at will, each map's switch NPC, and scenery set as a scene leaves it.
@@ -223,6 +225,9 @@ namespace BugFablesAP
                 && tunnels is bool tunnelsFree && tunnelsFree;
             TermiteGateFromInside = data != null && data.TryGetValue("termite_gate_from_inside", out object gate)
                 && gate is bool gateOpens && gateOpens;
+            ContestAlwaysWon = data != null && data.TryGetValue("contest_always_won", out object contest)
+                && contest is bool alwaysWon && alwaysWon;
+
             JObject options = SlotData.Object(data, "options");
             OptionsMissing = options == null;
             MovesShuffled = SlotData.On(options, "shuffle_field_moves");

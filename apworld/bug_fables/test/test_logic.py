@@ -222,6 +222,18 @@ class TestBagItemsAreFiller(BugFablesTestBase):
                     self.assertEqual(item.classification, "filler")
 
 
+class TestMedalsAreUseful(BugFablesTestBase):
+    # Every medal has a use, a drawback one too (Weak Stomach feeds the poison medals): useful, or progression when a
+    # rule needs it (the user, 2026-10-07). Hard Mode does nothing in a seed (the client pays every boss prize as if it
+    # were on): filler.
+    def test_medals_are_useful(self) -> None:
+        from ..data_tables import ITEMS, MEDAL_KIND
+        for item in ITEMS:
+            if item.kind == MEDAL_KIND and item.name != "Hard Mode":
+                with self.subTest(item=item.name):
+                    self.assertIn(item.classification, ("useful", "progression"))
+
+
 class TestTownMedal(BugFablesTestBase):
     options = {"starting_party_member": "off"}
     # The Bug Me Not! medal needs Leif's ice; the town itself is open.

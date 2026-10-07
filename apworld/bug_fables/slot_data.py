@@ -157,6 +157,8 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         # The Termite gate opens from inside before it was ever opened from outside: the client marks it opened (flag
         # 384) as its scene starts there (the user, 2026-10-04).
         "termite_gate_from_inside": True,
+        # The festival's eating contest always won, its prize the Moon Offering (the user, 2026-10-07).
+        "contest_always_won": True,
         # Music Shuffle, {name: name played in its place}: tracks by the game's Musics names, jingles by their sound
         # names; both empty when it's off.
         "music_map": world.music_map,

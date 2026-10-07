@@ -2,15 +2,38 @@
 aren't mapped yet."""
 from __future__ import annotations
 
-from ..custom_rules import LATER_CHAPTERS, CanUse
-from ..data_types import (DayNight, EntityMove, EntityRef, ItemShop, Location, Pickup, SceneCamera, SceneryMove, Source,
-                          TimeSwitch)
+from rule_builder.rules import Has
+
+from ..custom_rules import CanUse
+from ..data_types import (DayNight, EntityMove, EntityRef, Give, ItemShop, Location, Pickup, SceneCamera, SceneryMove,
+                          Source, StoryEvent, TimeSwitch)
 
 LOCATIONS = (
-    # Where the game teaches Beemerang Halt (flag 21), after the mayor's Wacka Worm game, played by Vi with the
-    # Beemerang (the mod refuses it otherwise); the later chapters' story-order stand-in.
-    Location("Golden Settlement: Festival, Wacka Worm Game", 68, "GoldenSettlement2",
-             Source(event=55, flag=21), rule=CanUse("Beemerang Toss"), reach=LATER_CHAPTERS),
+    # Where the game teaches Beemerang Halt (flag 21), after the mayor's Wacka Worm game at night, played by Vi with
+    # the Beemerang (the mod refuses it otherwise).
+    Location("Golden Settlement: Farm, Wacka Worm Game (Night)", 68, "GoldenSettlement2",
+             Source(event=55, flag=21), rule=CanUse("Beemerang Toss")),
+    # Its prize, the Sun Offering (line 45, flag 96), the same game won.
+    Location("Golden Settlement: Farm, Wacka Worm Prize (Night)", 152, "GoldenSettlement2",
+             Source(flag=96, give=Give(map="GoldenSettlement2", type=1, item=55)), rule=CanUse("Beemerang Toss")),
+    # The eating contest at night, entered by talking to Zasp in the square (flag 93): always won (the mod), its prize
+    # the Moon Offering (line 67, flag 101) (the user, 2026-10-07).
+    Location("Golden Settlement: Farm, Eating Contest (Night)", 153, "GoldenSettlement2",
+             Source(flag=101, give=Give(map="GoldenSettlement2", type=1, item=56)), rule=Has("Eating Contest Entered")),
+    # Chubee after losing the contest to Leif: the Weak Stomach medal (lines 79-80, flag 102), every time as the contest
+    # is always won (the user, 2026-10-07).
+    Location("Golden Settlement: Chubee's Gift (Night)", 156, "GoldenSettlement2",
+             Source(flag=102, npc="chubee", give=Give(map="GoldenSettlement2", type=2, item=24)),
+             rule=Has("Eating Contest Entered")),
+    # Crystal berry #4 inside the windmill, open once its crank is turned with the Beemerang Halt, by day and by night.
+    Location("Golden Settlement: Farm, Windmill", 154, "GoldenSettlement2",
+             Source(berry=4, pickup=Pickup(map="GoldenSettlement2", type=3, item=0)), rule=CanUse("Beemerang Halt"),
+             category="crystal_berry", no_jump=True),
+    # The windmill farmer at night, once the windmill is open: a Hard Seed (line 21, flag 91). He stands there whenever
+    # the night is on, so the reward can't be missed.
+    Location("Golden Settlement: Farm, Farmer's Reward (Night)", 155, "GoldenSettlement2",
+             Source(flag=91, npc="farmer ant night", give=Give(map="GoldenSettlement2", type=0, item=23)),
+             rule=CanUse("Beemerang Halt"), no_jump=True),
     # A Lore Book hidden in the grass behind the square's lever platform, by day and by night alike: the horn.
     Location("Golden Settlement: Square, Grass by the Lever", 144, "GoldenSettlement1",
              Source(flag=87, pickup=Pickup(map="GoldenSettlement1", type=1, item=52)), rule=CanUse("Horn Slash"),
@@ -24,6 +47,14 @@ LOCATIONS = (
                Source(item_shop=ItemShop(map="GoldenSettlement1", keeper="shopkeeper", item=item)),
                category="item_shop", no_jump=True)
       for slot, item in enumerate((17, 48, 1, 12, 23), start=1)),
+    # The farm's night scene (Event56, flag 98): the party meets Smugbee, and Kabbu learns Pep Talk, which stays the
+    # game's (the user, 2026-10-07: a location, battle skills not items); its trigger only at night.
+    Location("Golden Settlement: Farm, Smugbee (Night)", 151, "GoldenSettlement2", Source(event=56, flag=98)),
+)
+STORY_EVENTS = (
+    # Talking to Zasp in the square at night enters Leif in the farm's eating contest (flag 93).
+    StoryEvent("Golden Settlement: Square, Zasp's Challenge", "Eating Contest Entered", "GoldenSettlement1",
+               Source(flag=93)),
 )
 # The invisible wall behind the gate to the desert, which stands until the desert side has been reached (flag 170),
 # gone. The gate itself stays the game's: shut until its lever is hit from the desert side (the user, 2026-10-07).

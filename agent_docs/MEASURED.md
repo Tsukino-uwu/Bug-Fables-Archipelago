@@ -1016,6 +1016,17 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (lines 88, 91-93) and buys the party's items (89, 98-99). Story Aria takes Queen's Dinner (item 32) as the offering
   "grand enough for Venus" (line 182 to 183, flag 393). Samira (from flag 6), the quest board (from 86), and the night's
   talkers (Layna and her pet, Bomby, Stratos and Delilah, Neolith, the shy bee, Gen and Eri, Zasp) for the quest pass.
+  **`GoldenSettlement2`, the farm (2026-10-07, the user and the lines):** the square's door free. The windmill's crank
+  (`ScrewSwitch`) turned with the Beemerang Halt opens it (gate `Base/WindmillGate` until flag 90): crystal berry #4
+  inside, by day and by night; at night the farmer (`farmer ant night`) then gives a Hard Seed (line 21, flag 91). The
+  night scene on entering (`Event56`, the `angry bee event` trigger, until flag 98): Smugbee, and Kabbu learns Pep Talk
+  (line 132, the skill unlocked by 98). The Wacka Worm game (`Event54`/`55`, the mayor's line 37): won, flag 96 and the
+  Sun Offering (line 45), then Beemerang Halt taught (flag 21; a Wacka Worm win also clears flag 90). The eating contest
+  (`Event57`, after Zasp in the square, flag 93): `won = b <= 0f`; won, the Moon Offering (line 67; flags 100, 101) and
+  Chubee's Weak Stomach (79-80, flag 102); lost (flags 99, 102), Chubee trades the offering for a Berry Juice (74-77,
+  sets 101) and the medal goes to the caravan after the fight. Left side: NPCs that send the party back to the square
+  (the sign, the bee guard, the farmer outside and Neo before the festival, a second sign after); the power plant's
+  door from flag 226 (`Base/WoodenGate2` until 226). Bomby's hat (flag 309) after the festival.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
