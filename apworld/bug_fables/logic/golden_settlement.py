@@ -17,7 +17,7 @@ LOCATIONS = (
              category="hidden_item", no_jump=True),
     # The Mothiva Doll inside the Sunset Inn, there from the festival night on (so whenever the square's switch makes it
     # night): Jump.
-    Location("Golden Settlement: Square, Sunset Inn", 145, "GoldenSettlement1",
+    Location("Golden Settlement: Square, Sunset Inn (Night)", 145, "GoldenSettlement1",
              Source(flag=106, pickup=Pickup(map="GoldenSettlement1", type=1, item=57)), rule=CanUse("Jump")),
     # The square's shop, open by day and by night: first purchase a check, then its own item.
     *(Location(f"Golden Settlement: Square, Shop {slot}", 146 + slot - 1, "GoldenSettlement1",

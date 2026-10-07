@@ -916,7 +916,8 @@ Archipelago's `custom_worlds` folder.
   spot is, never what to do there: the berry is inside that bush, so "Bush" is right. Gifts are `<Area>: <Who>'s Gift`
   or `<Who>'s Reward`, like `Outskirts: Maki and Eetl's Gift`. A character's name only when players will remember it
   (main and recurring ones); a minor one is described instead ("Ladybug Kid's Reward", "Ladybug Siblings' House", for
-  Leby and Dib) (2026-09-24). Never the item, the flag or a mechanic ("Beemerang" goes stale once
+  Leby and Dib) (2026-09-24). A spot there only by day or only at night (the festival's, build step 52) ends with
+  ` (Day)` or ` (Night)`: `Golden Settlement: Square, Sunset Inn (Night)` (the user, 2026-10-07). Never the item, the flag or a mechanic ("Beemerang" goes stale once
   abilities are shuffled), Title Case, one word per kind of landmark everywhere. The test
   `TestLocationNames` fails if a location's name contains its own vanilla item's name. Renaming a location
   never changes its id or flag. **Every name, new or renamed, is the user's to approve before it goes in**
