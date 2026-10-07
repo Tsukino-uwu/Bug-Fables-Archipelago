@@ -1144,6 +1144,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   tall grass (scenery, not a bush; flag 463), nothing needed; two grass patches each dropping a Squash once
   (`CutGrass` hands the drop the grass's `activationflag`: 678 by the tree, 677 by the tall grass), the horn. Seen:
   the user cut the one by the tree, standing at (-4.6, -10.5).
+  **`FGCave`, the border cave (2026-10-07, the user and the dumps):** four parts. The bottom door (to
+  `FarGrasslandsOutsideCave`) in the middle; the ant tunnel's Diana (until 80) at the top past grass, the horn. The
+  left door (to `BroodmotherLair`) and the right (to `WaspKingdomOutside`) each behind a gate (`Base/WoodPillar*/
+  SnekGate (1)`, hidden from its flag) that a lever on its own side opens for good: `switchleft` (activationflag
+  362) and `switchright` (361), `Event136` setting the lever's flag; data[4] 0, so any basic attack. Seen from both
+  doors. The miners talk only; the grass hides nothing; no items.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

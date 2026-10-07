@@ -3445,3 +3445,8 @@ either one wrong).
   the patch cut told apart by the user's position. Names the user's ("Tunnel Side" with my suggestion, "In the Tall
   Grass", "Grass by the Tree", "Bush by the Tall Grass"). The user: done. Ticked, 111 of 244: the Forsaken Lands done.
   Next: `FGCave` (135).
+- **`FGCave`, the border cave:** the user's ways, entered from the bottom, then the right, then the left door: each
+  side door's gate opened for good by a lever on its own side (a basic attack), the ant tunnel's miner past grass
+  (the horn), the middle a dead end without them. Gate events named by the user ("Border Cave, Left/Right Gate
+  Opened"); the ant tunnel's transfer now starts from the top area. The user: done. Ticked, 112 of 244. Next:
+  `FarGrasslands1` (137).

@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**111 of 244 done.**
+**112 of 244 done.**
 
 ## Outskirts
 
@@ -168,7 +168,7 @@ as it is, a frozen record.
 
 ## Far Grasslands
 
-- [ ] FGCave (135)
+- [x] FGCave (135)
 - [ ] FarGrasslands1 (137)
 - [ ] FarGrasslandsOutsideCave (138)
 - [ ] FarGrasslandsWizard (139)

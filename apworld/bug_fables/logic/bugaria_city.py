@@ -24,7 +24,7 @@ TRANSFERS = (
     Transfer("ant tunnel", "GoldenSettlementEntrance", "AntTunnels", two_way=False),
     Transfer("ant tunnel", "DefiantRoot2", "AntTunnels", two_way=False),
     Transfer("ant tunnel", "BarrenLandsAntTunnel", "AntTunnels", two_way=False),
-    Transfer("ant tunnel", "FGCave", "AntTunnels", two_way=False),
+    Transfer("ant tunnel", "FGCave", "AntTunnels", two_way=False, from_area="Tunnel"),
     # Chapter 3's end, back in the palace after the attack on the city.
     Transfer("story", "BugariaCastleAttack", "AntPalace2", LATER_CHAPTERS, two_way=False),
     # The ending: the city's end, the throne, and back to the plaza.
