@@ -29,6 +29,10 @@ LOCATIONS = (
     Location("Golden Settlement: Farm, Windmill", 154, "GoldenSettlement2",
              Source(berry=4, pickup=Pickup(map="GoldenSettlement2", type=3, item=0)), rule=CanUse("Beemerang Halt"),
              category="crystal_berry", no_jump=True),
+    # Crystal berry #7 dug up on the farm, by day only (the user, 2026-10-07): Beetle Dig to reach it and to dig.
+    Location("Golden Settlement: Farm, Dig Spot (Day)", 157, "GoldenSettlement2",
+             Source(berry=7, pickup=Pickup(map="GoldenSettlement2", type=3, item=0)), rule=CanUse("Beetle Dig"),
+             category="crystal_berry", no_jump=True),
     # The windmill farmer at night, once the windmill is open: a Hard Seed (line 21, flag 91). He stands there whenever
     # the night is on, so the reward can't be missed.
     Location("Golden Settlement: Farm, Farmer's Reward (Night)", 155, "GoldenSettlement2",
@@ -63,6 +67,9 @@ SCENERY_HIDDEN = (
     # The square's altar statue over the path to the Golden Hills dungeon, there until the festival's fight (flag 103,
     # Event58), swapped from the start for the moved one (below): the world open, the festival left as it is.
     EntityRef("GoldenSettlement1", "Base/Altar"),
+    # The farm's gate to the power plant, there until the Power Plant board quest is taken (flag 226): open from the
+    # start, by day and by night, with its door below (the user, 2026-10-07).
+    EntityRef("GoldenSettlement2", "Base/WoodenGate2"),
 )
 SCENERY_PRESENT = (
     EntityRef("GoldenSettlement1", "Base/Altar (1)"),
@@ -117,6 +124,7 @@ _DOOR_COPIES = {"GoldenSettlement1": ("Loadzonesouth - Duplicate", "loadzonefarm
                 "GoldenSettlement3": ("loadzone outside - Duplicate", "loadzone outside - Duplicate - Duplicate")}
 KEPT_PRESENT = (
     *(EntityRef(room, door) for room, doors in _DAY_DOORS.items() for door in doors),
+    EntityRef("GoldenSettlement2", "loadzonepp"),
     *(EntityRef(room, "Aria") for room in _DAY_DOORS),
 )
 KEPT_OPEN = (
