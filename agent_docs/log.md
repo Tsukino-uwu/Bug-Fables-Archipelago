@@ -3485,3 +3485,7 @@ either one wrong).
   The bonus then capped at Riz's vanilla HP (the user: not past the game's own difficulty). Each reload dropped the
   live seed data: `liveslot` again after every copy. Dev: `onehit` off from here. The user: done. Ticked, 118 of 244.
   Next: `FarGrasslands3` (143).
+- **`FarGrasslands3`, east of the crossroads:** first written as two parts from the user's ways; then three at the
+  user's word (the bounce pad its own part, better for the enemy pass): the drop back from the right door a one-way
+  transfer. The user also asked to note the Golden Settlement's after-festival state for later (build step 52's To
+  do). The user: done. Ticked, 119 of 244. Next: `FGOutsideSwamplands` (146).

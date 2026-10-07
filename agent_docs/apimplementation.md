@@ -3052,7 +3052,8 @@ discovery, Jump or the tower's stairs), 115 of 244; the west path (its top door 
 the tree root), 116 of 244; the lake (the Wasp Kingdom's front gate kept shut, impassable until after the story, Maki's
 turn-back before it kept away; three new locations: a Lore Book, a Hot Drink, a new filler item, and a dig spot, Icicle
 or Bee Fly), 117 of 244; outside the Fishing Village (its door Jump; Riz's fight always offered, build step 54), 118 of
-244; the rest of `room-checklist.md` to go.
+244; east of the crossroads (three parts: the horn to the bounce pad, Jump on to the right door, Jump and a drop back),
+119 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

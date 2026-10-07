@@ -1192,6 +1192,11 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   75 HP, def 0, Ground, no Flip, no summons, mini-boss music. Maki as a follower (`BattleControl.AddAI(46, 13)` in
   areas 8 and 9, the Far Grasslands clearing, or flag 594) hits for a fixed 6, piercing, plus one per medal 90
   (`AIAttack`), whatever the level. No items; the enemies for the enemy pass.
+  **`FarGrasslands3`, east of the crossroads (2026-10-08, the user and the dumps):** three parts: the left door (to
+  `FarGrasslands1`) with the rest of the room; the bounce pad (`jumpspring`, no flags) past grass, the horn; the right
+  door (to `FarGrasslandsOutsideVillage`) from the pad, Jump across platforms. From the right door back: Jump up rocks,
+  then a drop into the left part. No items (the grass hides
+  nothing); two Chompers and a jumping spider for the enemy pass.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

@@ -5,7 +5,7 @@ from __future__ import annotations
 from rule_builder.rules import CanReachRegion, False_, Has
 
 from ..custom_rules import ANY_ATTACK, CanUse, one_way
-from ..data_types import Area, DoorRule, EntityRef, Location, Pickup, Source, StoryEvent
+from ..data_types import Area, DoorRule, EntityRef, Location, Pickup, Source, StoryEvent, Transfer
 
 LOCATIONS = (
     # Crystal berry #31 dug up at the crossroads (the first Far Grasslands room), reached with nothing: Beetle Dig.
@@ -55,6 +55,11 @@ DOOR_RULES = (
     DoorRule("FarGrasslandsLake", "loadzonewasp", False_()),
     DoorRule("WaspKingdomOutside", "loadzonesouth", False_()),
 )
+TRANSFERS = (
+    # East of the crossroads: from the right door back to the left part, Jump up rocks, then a drop (the user).
+    Transfer("drop", "FarGrasslands3", "FarGrasslands3", CanUse("Jump"), two_way=False,
+             way_back=CanUse("Horn Slash") & CanUse("Jump"), from_area="Right"),
+)
 MAP_AREAS = (
     # The border cave (the user, 2026-10-07): its bottom door the map's own region; the ant tunnel's miner at the top past
     # grass, the horn both ways; its left and right doors (to the Broodmother's lair and the Wasp Kingdom) each behind a
@@ -76,6 +81,10 @@ MAP_AREAS = (
     # Outside the Fishing Village: its door down a ledge, Jump both ways (the user, 2026-10-08). Riz guards it until his
     # fight (Event176, flag 509), always offered in a seed (riz_fight_with_follower); won with plain attacks.
     Area("FarGrasslandsOutsideVillage", "Village Door", ("loadzonevillage",), CanUse("Jump")),
+    # East of the crossroads (the user, 2026-10-08): its left door and most of the room the map's own region; the
+    # bounce pad past grass, the horn; the right door from the pad, Jump across platforms (back to the left, below).
+    Area("FarGrasslands3", "Bounce Pad", (), CanUse("Horn Slash")),
+    Area("FarGrasslands3", "Right", ("loadzoneright",), CanUse("Jump"), out=False_(), to="FarGrasslands3 (Bounce Pad)"),
 )
 # Maki's turn-back before the Wasp Kingdom's front gate at the lake (Event12, spoken by the follower), there until the
 # swamp bridge falls (336), which the seed never lets happen: kept away (the user, 2026-10-08). Past it there is only
