@@ -3375,3 +3375,10 @@ either one wrong).
   a drop down and Jump back up. Written as an `Upper` area, `BarrenLandsSideGPT`'s left wrong turn landing on it (its
   landing spot read from the dump). The grass hides no berry. The user: done. Ticked, 98 of 244. Next:
   `TermiteOutside` (173).
+- **`TermiteOutside`:** the user: the bottom door free, the left behind two rocks (Horn Dash), the gate's first
+  opening reached with nothing. Its scene asks for the queen (`tempfollowers[0]`): `PartyFit`'s leader stood in, no
+  freeze (the user asked; the log's warning is the guard's decision). The gate's stand-in rule (`LATER_CHAPTERS`)
+  dropped: needing nothing both ways. Asked to skip the scene: setting 384 from the start weighed against marking it
+  as the scene starts (384 also flips `BarrenLandsCD`'s left edge, a Pumpkins mushroom, Patton's services); the user
+  chose the latter. Built in `TermiteGate.cs` with Skip cutscenes, seen; then the walk-in trigger kept away at the
+  user's ask, seen ("had to walk up to and use the gate"); the inside way, already the seed's, seen with 384 cleared.

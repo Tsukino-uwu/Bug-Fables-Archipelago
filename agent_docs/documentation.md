@@ -1011,6 +1011,19 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    spider fight with Leif and its scenes, with the discovery granted on entering or leaving the room instead. Not read
    yet: that fight is also the first boss (its prize medal, flag 41 and what gates on it), so each of those needs a
    home.
+   **The Termite gate's first opening from outside** (Event149, 2026-10-07: "could we remove/skip this gate cutscene
+   without it affecting anything else in the game?"): its first run talks outside, walks the queen off with the
+   plaza's guards and lets the escort follower (96) go, then sets flag 384; with 384 already set the same scene only
+   rumbles, fades and loads the other side. Its world must still change, so neither skipped nor fast-forwarded: the
+   gate's hook from inside (`TermiteGate.cs`, build step 36) now also marks 384 and lets 96 go as the scene starts
+   outside, with *Skip cutscenes* on. Setting 384 from the start was weighed and left: the flag also turns
+   `BarrenLandsCD`'s left edge into its shortcut, clears a mushroom on an unmapped room and opens Patton's services,
+   all earlier than the game does (the user: "option 1 is easier, and breaks less things"). **Seen (2026-10-07):**
+   384 cleared, the gate walked up to: "it just faded and put me inside". **Then its trigger** (the user: "can we stop
+   the cutscene from warping you inside?"): the trigger in front of the gate (`event`, limit 384) that starts the
+   first opening as the party walks up is kept away in a seed (`kept_open`, `logic/forsaken_lands.py`), so the gate
+   opens only when talked to, as every later time. **Seen (2026-10-07):** "had to walk up to and use the gate. didn't
+   get warped".
 6. **Item animation** (2026-09-25): a discovery showed nothing of what it found, and items from other
    players arrive silently. Your own finds always get the hold-up (pickups already did; a discovery recorded in play
    now does too); the row, *Item animation: All / Progression / Off* decides which items from other players do

@@ -1056,6 +1056,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   the strip (26.2, 4, -10), every other wrong turn on the floor. The three `BeetleGrass` block nothing (the user) and
   hide no berry (`data[1]` -1, the berry index `NPCControl` checks). Enemies (`mimicspider`, a mothfly) for the
   enemy pass; nothing else.
+  **`TermiteOutside` (2026-10-07, the user, the log and `Event149` read):** the bottom door free; the gate reached free,
+  its trigger (`event`, limit 384) running the first opening, which lands the party in the plaza; the gate then free
+  both ways. The scene moves `GetEntity(1000)`, `map.tempfollowers[0]` (the queen in the story): without her
+  `PartyFit` has the leader answer (the log's "companion 1000 asked for … the leader answers"), no freeze. The left
+  door (`loadzonecave`) behind two `BreakableRock`s, Horn Dash, both ways. The two guards talk only. In a seed the
+  trigger is kept away and the first opening skipped (`documentation.md`, step 10): the gate is used by talking to it.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

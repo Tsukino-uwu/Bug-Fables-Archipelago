@@ -4,9 +4,10 @@ using HarmonyLib;
 
 namespace BugFablesAP
 {
-    // The Termite gate from inside (Event149 on the plaza), before it was ever opened from outside: the scene's first
-    // opening looks for the outside guards and stops. In a seed that says so, the gate is marked opened (flag 384) as
-    // the scene starts, so it takes the opened gate's way through; the follower the first opening lets go goes too.
+    // The Termite gate's first opening (Event149) before flag 384. From inside (the plaza) it looks for the outside
+    // guards and stops: in a seed that says so, the gate is marked opened as the scene starts, so it takes the opened
+    // gate's way through. From outside, with Skip cutscenes, the same: no talk outside, no escort inside. Either way the
+    // follower the first opening lets go goes too.
     internal static class TermiteGate
     {
         private const int GateScene = 149;
@@ -23,9 +24,9 @@ namespace BugFablesAP
             log = logger;
             seed = seedData;
             randomizerOn = on;
-            if (Hooks.Install(typeof(TermiteGate), "gate", "the Termite gate opens from outside only"))
+            if (Hooks.Install(typeof(TermiteGate), "gate", "the Termite gate opens from outside only, with its scene"))
             {
-                log.LogInfo("[gate] installed on EventControl.StartEvent (the Termite gate from inside)");
+                log.LogInfo("[gate] installed on EventControl.StartEvent (the Termite gate's first opening)");
             }
         }
 
@@ -34,14 +35,28 @@ namespace BugFablesAP
         private static void BeforeStartEvent(int id)
         {
             MainManager mm = MainManager.instance;
-            if (id != GateScene || mm == null || MainManager.map == null
-                || MainManager.map.mapid != MainManager.Maps.TermiteMainPlaza || mm.flags[Opened])
+            if (id != GateScene || mm == null || MainManager.map == null || mm.flags[Opened])
             {
                 return;
             }
-            bool opens = randomizerOn != null && randomizerOn() && seed?.Invoke()?.TermiteGateFromInside == true;
-            log.LogInfo($"[gate] the Termite gate from inside, never opened from outside: "
-                + (opens ? "marked opened (flag 384), it lets the party through" : "left to the game"));
+            bool opens;
+            if (MainManager.map.mapid == MainManager.Maps.TermiteMainPlaza)
+            {
+                opens = randomizerOn != null && randomizerOn() && seed?.Invoke()?.TermiteGateFromInside == true;
+                log.LogInfo($"[gate] the Termite gate from inside, never opened from outside: "
+                    + (opens ? "marked opened (flag 384), it lets the party through" : "left to the game"));
+            }
+            else if (MainManager.map.mapid == MainManager.Maps.TermiteOutside)
+            {
+                opens = QualityOfLife.SkipCutscenes.Value && QualityOfLife.SettingsOn != null
+                    && QualityOfLife.SettingsOn();
+                log.LogInfo($"[gate] the Termite gate's first opening from outside: "
+                    + (opens ? "skipped (flag 384 marked), straight through" : "left to the game (Skip cutscenes off)"));
+            }
+            else
+            {
+                return;
+            }
             if (opens)
             {
                 mm.flags[Opened] = true;
