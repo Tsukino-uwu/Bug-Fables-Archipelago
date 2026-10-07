@@ -175,8 +175,8 @@ step (the user, 2026-09-30: "check every cutscene chain & quest chain, to accoun
 - **Requests that aren't on the board:** someone who wants something (the user's example: the kid given the G-Bug
   Ranger Plushie). Found in the dialogue data, not in the board table.
 - **Followers who walk with the party from another room** (the throne room needs Maki, from two rooms away).
-- **Joining scenes:** Leif's, Event4 → 5 → 6 → 18 → 14; each expects the one before, and a file that skipped part of it
-  crashes entering its middle, with one exception seen (`MEASURED.md`, "Chapters").
+- **Joining scenes:** Leif's, Event4 → 5 → 6 → 18 → 14; each expects the one before, and a file that skipped part of
+  it crashes entering its middle, with one exception seen (`MEASURED.md`, "Chapters").
 - **Scenes that hold each other in order:** chapter 2's opening, the first boss, the follower, the swap on the palace
   bridge, the briefing (build step 9).
 
