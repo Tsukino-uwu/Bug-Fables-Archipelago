@@ -1004,7 +1004,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   free without Jump (around the arena). The Lore Book (key item 52, flag 87) in the grass behind the lever's platform
   (`LoreblockGrass`): Horn Slash, by day and by night alike. The Mothiva Doll (key item 57, flag 106, from flag 85)
   inside the Sunset Inn on the left: Jump; it is traded for a Heart Berry in `DefiantRoot3` (line 126). The shop
-  (`shopkeeper`: Aphid Egg, Aphid Dew, Honey Drop, Clear Water, Hard Seed) is one shop by day and by night.
+  (`shopkeeper`: Aphid Egg, Aphid Dew, Honey Drop, Clear Water, Hard Seed) is one shop by day and by night. Kut the
+  chef (`Kut (Chef)`, no flags) is there by day and by night and needs nothing to reach (the user: for recipes and
+  quests later).
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
