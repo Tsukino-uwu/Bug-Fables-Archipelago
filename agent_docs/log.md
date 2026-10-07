@@ -3426,3 +3426,9 @@ either one wrong).
   dropping a Squash (regional 7) a new location ("Grass in the Top Right"), the Squash a new filler item. The user
   asked for a hidden-item check like the other passes: the item sweep in `room-logic.md` now names grass drops, berries
   under grass, dig spots and scene drops. The user: done. Ticked, 107 of 244. Next: `BarrenLandsCloud` (194).
+- **`BarrenLandsCloud`, the wind pipes:** the user's ring (counterclockwise only, one door per part); every landing
+  placed from the dump's arrival spots. The Lore Book (flag 455) not seen at first: live it was active; a real arrival
+  near it (the pumpkin patch's wrong turn) rather than an `@` warp, and the user found it on a platform needing Bee
+  Fly. Naming: my "Floating" was a guess and "Lore Book Platform" named the item, both wrong (the user); the room
+  "Wind Pipes" (the game's text says "pipes"), the spot "Isolated Platform", the user's. The user: done. Ticked, 108 of
+  244. Next: `BarrenLandsRock` (195).

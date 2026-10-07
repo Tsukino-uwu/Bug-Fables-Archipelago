@@ -2,7 +2,7 @@
 doors. Its rooms aren't mapped yet."""
 from __future__ import annotations
 
-from rule_builder.rules import Has
+from rule_builder.rules import False_, Has
 
 from ..custom_rules import LATER_CHAPTERS, CanUse, ItemOnHand, one_way
 from ..data_types import Area, EntityRef, Location, Pickup, Source, StoryEvent, Transfer
@@ -36,6 +36,10 @@ LOCATIONS = (
     Location("Forsaken Lands: Pumpkin Patch, Grass in the Top Right", 163, "BarrenLandsPumpkins",
              Source(regional=7, pickup=Pickup(map="BarrenLandsPumpkins", type=0, item=125)), rule=CanUse("Horn Slash"),
              category="hidden_item", no_jump=True, area="Top Right"),
+    # A Lore Book on an isolated platform by the wind pipes' bottom (the ring's bottom part): Bee Fly (the user).
+    Location("Forsaken Lands: Wind Pipes, Isolated Platform", 164, "BarrenLandsCloud",
+             Source(flag=455, pickup=Pickup(map="BarrenLandsCloud", type=1, item=52)), rule=CanUse("Bee Fly"),
+             no_jump=True, area="Bottom"),
 )
 # The broken bridge room's ruler, knocked down from its upper right (Event146, flag 382): a switch only Kabbu's horn
 # hits (its data[4] 1, NPCControl), the bridge then joining the upper right and the left.
@@ -44,12 +48,21 @@ STORY_EVENTS = (
     StoryEvent("Forsaken Lands: Broken Bridge, Ruler Knocked Down", "Broken Bridge Ruler Down", "BarrenLandsBeefly",
                Source(flag=382), rule=_HORN, area="Upper Right"),
 )
+# The cloud room, a one-way ring of four parts, each with one door (the user, 2026-10-07): the right door (the map's
+# own region) up to the top door with Jump, Horn Dash and Bee Fly; the top on to the left door, and the left on to the
+# bottom edge's wrong turn, each with Horn Dash and Bee Fly; the bottom back to the right with Bee Fly. Back to any
+# part only round the ring.
+_CLOUD_RING = CanUse("Jump") & CanUse("Horn Dash") & CanUse("Bee Fly")
+_CLOUD_STEP = CanUse("Horn Dash") & CanUse("Bee Fly")
 TRANSFERS = (
     # Both ways, needing nothing (the user, 2026-10-07): from outside its first scene (Event149) runs without the queen,
     # the leader standing in; from inside the mod opens it as if from outside (termite_gate_from_inside).
     Transfer("gate", "TermiteOutside", "TermiteMainPlaza"),
     # The broken bridge room's upper right (its door to the miniboss room) down onto its right side's ledge, a drop (on
     # down to the bottom door too): back up only by the left side and the ruler (the user, 2026-10-07).
+    # The cloud room's bottom back round to its right door (the map's own region), with Bee Fly.
+    Transfer("wind", "BarrenLandsCloud", "BarrenLandsCloud", one_way(CanUse("Bee Fly"), _CLOUD_RING), two_way=False,
+             from_area="Bottom"),
     Transfer("drop", "BarrenLandsBeefly", "BarrenLandsBeefly", two_way=False,
              way_back=CanUse("Bee Fly") & Has("Broken Bridge Ruler Down"), from_area="Upper Right"),
 )
@@ -86,6 +99,12 @@ MAP_AREAS = (
          CanUse("Jump") & CanUse("Horn Slash") & CanUse("Bee Fly"), out=CanUse("Bee Fly")),
     Area("BarrenLandsPumpkins", "Right Door", ("loadzoneright - Duplicate",), _PUMPKIN_RIGHT_DOOR,
          out=one_way(None, _PUMPKIN_RIGHT_DOOR), to="BarrenLandsPumpkins (Top Right)"),
+    Area("BarrenLandsCloud", "Top", ("loadzonenorth",), one_way(_CLOUD_RING, _CLOUD_RING), out=False_(),
+         landings=(("BarrenLandsTanks", "returnloadzone"), ("BarrenLandsCloud", "returnzone"))),
+    Area("BarrenLandsCloud", "Left", ("loadzoneleft",), one_way(_CLOUD_STEP, _CLOUD_RING), out=False_(),
+         to="BarrenLandsCloud (Top)"),
+    Area("BarrenLandsCloud", "Bottom", ("returnzone",), one_way(_CLOUD_STEP, _CLOUD_RING), out=False_(),
+         to="BarrenLandsCloud (Left)", landings=(("BarrenLandsPumpkins", "returnloadzone"),)),
 )
 # Patton's lab, opened by the escort to the termites (flag 376): open from the start (the user, 2026-10-07), its door
 # entity there and its slab gone, as the game has them from 376.

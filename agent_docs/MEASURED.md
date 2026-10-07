@@ -1116,6 +1116,16 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   right's near side (free) or behind the boulders (a trap without Horn Dash). A grass patch in the top right (regional
   flag 7, vectordata x 125: a Squash) needs the horn. The gray mushroom (gone from 384) and the crate (from 452) not
   seen in place; the other grass hides nothing; the enemies for the enemy pass.
+  **`BarrenLandsCloud`, the wind pipes (2026-10-07, the user and the dumps):** a one-way ring of four parts, one door
+  each, gone round counterclockwise: the right door (to `BarrenLandsPumpkins`) to the top door (to
+  `BarrenLandsBeefly`) Jump, Horn Dash and Bee Fly; the top to the left door (to `BarrenLandsTanks`) and the left to the
+  bottom edge's wrong turn (`returnzone`) Horn Dash and Bee Fly; the bottom back to the right Bee Fly. `WindPusher`s
+  push the player along their vector, about four times harder in the air than on the ground (`NPCControl`); those with
+  `data[0]` set blow only once that entity (a `BreakableRock`) is hit. Landings: the right door from the pumpkin patch
+  and `BarrenLandsCD`'s shortcut; the top from the broken bridge, the tanks room's and its own bottom wrong turns; the
+  left from the tanks room; the bottom from the pumpkin patch's wrong turn. A Lore Book (`lorebook`, flag 455) on an
+  isolated platform in the bottom part, Bee Fly, just visible from the bottom landing. The game's text calls the
+  scenery "pipes" (`LPipe`; the side room's party line).
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

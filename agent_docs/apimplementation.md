@@ -3032,7 +3032,8 @@ room (a ledge, Jump; one new location: crystal berry #38 from her first trade, w
 exit by the user's choice), 105 of 244; the Abandoned City (Jump to its top; two new locations: a dig spot
 and a respawning Magic Seed in grass, Bee Fly and the horn), 106 of 244; the pumpkin patch (three parts:
 Jump, the horn and Bee Fly up; Horn Dash and the rest to its high door; a new location: a Squash in grass, a new
-filler item), 107 of 244; the rest of `room-checklist.md` to go.
+filler item), 107 of 244; the wind pipes (a one-way ring of four parts, Bee Fly with Horn Dash and Jump; a new
+location: a Lore Book on an isolated platform), 108 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
