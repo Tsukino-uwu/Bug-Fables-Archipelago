@@ -1042,6 +1042,13 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   there until the door is open, then free both ways, and the Energy Converter (line 8: discovery 23, "The Power Plant",
   shown as #24; flag 458). The hole's party talk (`dialoguetrigger`, line 5, flag 457) gives nothing. The workers, the
   soldier and the door guard talk of the Code 32 alarm and the board quest (31, flags 225-226): for the quest pass.
+  **`BarrenLandsEntrance` (2026-10-07, the user and the dumps):** the fog maze's start, where every wrong way lands. Its
+  three doors (top to `GoldenPathTunnel`, left to `BarrenLandsSideGPT`, bottom to `BarrenLandsCD`) and the save crystal
+  free; the right edge (`returnloadzoneright`, inactive) only a landing. The three `BreakableRock`s hide nothing
+  (breaking one drops nothing; nothing lies near them). Patton's lab: its door (`doorpatton`, a `DoorSameMap`)
+  requires 376 and its slab (`PattonsHouse/PopCan (1)`, a `ConditionChecker`) is hidden from 376; the door alone left
+  the party pushed past the slab (the user), both together seen working. Patton's meeting (`Event159`, 376 until 420)
+  and his stat and potion conversions (lines 4-19) for the quest and sellers' passes; the diary copy text only.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

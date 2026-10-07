@@ -3367,3 +3367,7 @@ either one wrong).
   ways; the save crystal at the bottom. Written as a `Top` area behind "Power Plant, Door Opened" (the user's name),
   and the converter's discovery (23, "The Power Plant") a new location, "Power Plant, Energy Converter" (the user's).
   The board quest for the quest pass. The user: done. Ticked, 96 of 244. Next: `BarrenLandsEntrance` (149).
+- **`BarrenLandsEntrance`, the fog maze's start:** everything free (the user). Patton's lab kept open at the user's
+  ask: the door entity alone (`kept_present`) pushed the party past the slab; the game's own way, the slab hidden by
+  its `ConditionChecker` from flag 376 (`bugfablesap-mapflags.tsv`), joined it (`scenery_hidden`), read back hidden
+  and seen working. The rocks hide nothing. The user: done. Ticked, 97 of 244. Next: `BarrenLandsCD` (150).
