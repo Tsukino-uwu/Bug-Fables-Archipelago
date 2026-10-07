@@ -3475,3 +3475,13 @@ either one wrong).
   still kept away. Arriving at the lake through the gate pushes the party past the grate, no trap; the far side's
   arrival to be reworked when `WaspKingdomOutside` is mapped (its checklist row). The user: done. Ticked, 117 of 244.
   Next: `FarGrasslandsOutsideVillage` (142).
+- **`FarGrasslandsOutsideVillage`, outside the Fishing Village:** the village door Jump (the user). Riz turns the party
+  back while Maki follows, and Maki never leaves with the swamp bridge kept up: weighed passing freely, a third choice,
+  Maki leaving; the user chose the fight always offered, Maki helping (build step 54, `RizFight.cs`: the scene's
+  `HasFollower` answered "no"). Then a bonus for Riz with Maki (the user: more HP only, x1.6), and, once the user
+  noticed Maki hits for 6 whatever the level, Maki's hits scaled with enemy scaling. My first hook on the five-argument
+  `DoDamage` never ran (a one-line wrapper Mono inlines): moved to the full overload, as `onehit` is. With `onehit` on,
+  the two hooks ran in either order (Maki 6 -> 1 then 99, or 99 -> 27); `onehit` turned off at the user's ask: Maki 2.
+  The bonus then capped at Riz's vanilla HP (the user: not past the game's own difficulty). Each reload dropped the
+  live seed data: `liveslot` again after every copy. Dev: `onehit` off from here. The user: done. Ticked, 118 of 244.
+  Next: `FarGrasslands3` (143).

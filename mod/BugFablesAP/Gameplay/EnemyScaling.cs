@@ -73,6 +73,7 @@ namespace BugFablesAP
                 Hooks.Install(typeof(Bestiary), "scale", "the bestiary shows vanilla stats");
             }
             Hooks.Install(typeof(ScriptNumbers), "scale", "fixed numbers in enemy scripts (heals, HP set) stay vanilla");
+            Hooks.Install(typeof(FollowerHits), "scale", "Maki's hits stay vanilla");
         }
 
         // The ratio enemy scaling gives this enemy now; 1 when it leaves the enemy alone.
@@ -467,6 +468,44 @@ namespace BugFablesAP
                     rows[swappedRow] = originalRow;
                 }
                 swappedRow = -1;
+            }
+        }
+
+        // Maki's hit as a follower (AIAttack: a fixed 6, piercing, plus one per medal 90) scaled by the ratio its
+        // target gets, so he stays as strong against scaled enemies as in vanilla. The target's own ratio, as its HP
+        // was.
+        private static class FollowerHits
+        {
+            private static readonly FieldInfo AiParty = AccessTools.Field(typeof(BattleControl), "aiparty");
+            // The follower's battle sprite: AddAI(46) for Maki; AnimIDs counts one above it (MainManager.HasFollower).
+            private static readonly int Maki = (int)MainManager.AnimIDs.Maki - 1;
+
+            // The overload every hit ends in (the shorter ones forward to it and may be inlined); its parameters
+            // include a private nested type.
+            private static MethodBase TargetMethod() => AccessTools.Method(typeof(BattleControl), "DoDamage", new[]
+            {
+                typeof(MainManager.BattleData?), typeof(MainManager.BattleData).MakeByRefType(), typeof(int),
+                typeof(BattleControl.AttackProperty?), AccessTools.Inner(typeof(BattleControl), "DamageOverride")
+                    .MakeArrayType(), typeof(bool),
+            });
+
+            [HarmonyPrefix]
+            private static void BeforeDoDamage(BattleControl __instance, MainManager.BattleData? attacker,
+                ref MainManager.BattleData target, ref int damageammount)
+            {
+                if (attacker != null || damageammount <= 0 || AiParty == null || randomizerOn == null || !randomizerOn()
+                    || !(AiParty.GetValue(__instance) is EntityControl ai) || ai.animid != Maki)
+                {
+                    return;
+                }
+                float ratio = RatioFor(target.animid);
+                if (Mathf.Approximately(ratio, 1f))
+                {
+                    return;
+                }
+                int hit = Mathf.Max(1, Mathf.RoundToInt(damageammount * ratio));
+                log.LogInfo($"[scale] Maki's hit on {(MainManager.Enemies)target.animid}: {damageammount} -> {hit}");
+                damageammount = hit;
             }
         }
 

@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**117 of 244 done.**
+**118 of 244 done.**
 
 ## Outskirts
 
@@ -175,7 +175,7 @@ as it is, a frozen record.
 - [x] FarGrasslandsWizard (139)
 - [x] FarGrasslands2 (140)
 - [x] FarGrasslandsLake (141)
-- [ ] FarGrasslandsOutsideVillage (142)
+- [x] FarGrasslandsOutsideVillage (142) — for the enemy pass: Riz's fight (Event176, flag 509)
 - [ ] FarGrasslands3 (143)
 - [ ] FGOutsideSwamplands (146)
 - [ ] FarGrasslands4 (153)

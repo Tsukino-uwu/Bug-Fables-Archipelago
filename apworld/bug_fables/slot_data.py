@@ -162,6 +162,9 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "termite_gate_from_inside": True,
         # The festival's eating contest always won, its prize the Moon Offering (the user, 2026-10-07).
         "contest_always_won": True,
+        # Riz at the Fishing Village's door offers his fight while Maki follows (Maki never leaves, the swamp bridge kept
+        # up), Maki helping and Riz given more HP (the user, 2026-10-08).
+        "riz_fight_with_follower": True,
         # Music Shuffle, {name: name played in its place}: tracks by the game's Musics names, jingles by their sound
         # names; both empty when it's off.
         "music_map": world.music_map,

@@ -73,6 +73,9 @@ MAP_AREAS = (
     # The second grasslands room (west of the crossroads): its top door up a ledge, Jump; a drop down (the user,
     # 2026-10-08).
     Area("FarGrasslands2", "Top", ("loadzone north",), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
+    # Outside the Fishing Village: its door down a ledge, Jump both ways (the user, 2026-10-08). Riz guards it until his
+    # fight (Event176, flag 509), always offered in a seed (riz_fight_with_follower); won with plain attacks.
+    Area("FarGrasslandsOutsideVillage", "Village Door", ("loadzonevillage",), CanUse("Jump")),
 )
 # Maki's turn-back before the Wasp Kingdom's front gate at the lake (Event12, spoken by the follower), there until the
 # swamp bridge falls (336), which the seed never lets happen: kept away (the user, 2026-10-08). Past it there is only

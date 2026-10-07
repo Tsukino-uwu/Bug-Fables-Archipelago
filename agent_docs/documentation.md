@@ -1835,12 +1835,18 @@ fight + end with the scripted thing even when scaling is enabled".
   once per fight: `[scale] Stratos (111) heals 15 -> 9 (x0.58)`.
   **To see:** a fight whose script heals, far from its home level with Party level scaling (for example `enemyfight`
   with Kali and Kenny's ids at a low level): the heal's number is the scaled one, and the log line says so.
+- **Maki's hits** (2026-10-08, the user: "maki always hits really hard, unrelated to the party level"): as a follower
+  in the Far Grasslands and the swamp (`BattleControl.AddAI(46, …)` in those areas) he attacks for a fixed 6, piercing,
+  plus one per medal 90 (`AIAttack`), so scaled-down enemies fell to him in a hit or two. His hit is now scaled by the
+  ratio its target gets, as its HP was (`FollowerHits`): a prefix on the `DoDamage` overload every hit ends in, the
+  shorter one his call goes through being a one-line wrapper Mono inlines (a patch there never ran). **Seen
+  (2026-10-08):** with the dev `onehit` off, against Riz at level 1, Maki hit for 2 (6 x 0.27).
 
 **Status:** works, seen on screen (2026-09-26): scaled HP, defence and per-hit damage in a fight, and the bestiary;
 the constants still to tune by play. The 10-HP scripted end and the fixed numbers in enemy scripts built (2026-09-30),
-not yet seen; the Wasp General scaled as a mini-boss (2026-09-30), not yet seen.
+not yet seen; the Wasp General scaled as a mini-boss (2026-09-30), not yet seen. Maki's hits scaled (2026-10-08), seen.
 
-*Code: `EnemyScaling.cs` (`AfterGetEnemyData`, `Damage`, `Bestiary`, `ScriptNumbers`); the row in `ApMenu.cs` and
+*Code: `EnemyScaling.cs` (`AfterGetEnemyData`, `Damage`, `Bestiary`, `ScriptNumbers`, `FollowerHits`); the row in `ApMenu.cs` and
 `ApMenu.Rows.cs` (`ScalingRow`), its config in `QualityOfLife.cs` (`EnemyScalingMode`).*
 
 ## 18. Use on normal saves: the panel's settings with Archipelago off

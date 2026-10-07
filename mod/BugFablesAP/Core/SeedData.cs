@@ -73,6 +73,8 @@ namespace BugFablesAP
         internal readonly bool TermiteGateFromInside;
         // The festival's eating contest always won.
         internal readonly bool ContestAlwaysWon;
+        // Riz offers his fight while Maki follows, Maki helping.
+        internal readonly bool RizFightWithFollower;
         // {map: dialogue lines}: sellers' lines whose price reads 0.
         internal readonly Dictionary<string, int[]> FreeSales;
         // Day maps whose night the mod switches at will, each map's switch NPC, and scenery set as a scene leaves it.
@@ -233,6 +235,8 @@ namespace BugFablesAP
                 && gate is bool gateOpens && gateOpens;
             ContestAlwaysWon = data != null && data.TryGetValue("contest_always_won", out object contest)
                 && contest is bool alwaysWon && alwaysWon;
+            RizFightWithFollower = data != null && data.TryGetValue("riz_fight_with_follower", out object riz)
+                && riz is bool rizFights && rizFights;
 
             JObject options = SlotData.Object(data, "options");
             OptionsMissing = options == null;

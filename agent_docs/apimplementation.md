@@ -123,6 +123,7 @@ this file and that doc disagree, that doc is right.
 51. [Build step 51: Minigame Prizes, and Wacka Worm only for Vi](#build-step-51-minigame-prizes-and-wacka-worm-only-for-vi)
 52. [Build step 52: the festival night at will, a switch NPC](#build-step-52-the-festival-night-at-will-a-switch-npc)
 53. [Build step 53: the festival's offerings as items, the contest always won](#build-step-53-the-festivals-offerings-as-items-the-contest-always-won)
+54. [Build step 54: Riz always offers his fight](#build-step-54-riz-always-offers-his-fight)
 
 **How it works**
 
@@ -712,7 +713,9 @@ be wrong.
   2026-10-08): the Far Grasslands' arrival scene (Event125) makes him a follower who fights alongside in the Far
   Grasslands and the swamp, and the collapse is what removes him in vanilla. With the bridge kept up he may stay
   through the swamp (no harm to the logic, which counts only the party's own attacks), but never at the swamp's boss
-  fight, so as not to trivialise it, nor with the party in the Wasp Kingdom (its hive, the Wasp General).
+  fight, so as not to trivialise it, nor with the party in the Wasp Kingdom (its hive, the Wasp General). His hits
+  scale with enemy scaling since 2026-10-08 (build step 54), so the user may let him stay for the swamp's boss after
+  all: to decide when the swamp is mapped.
 - **Shop Contents and the player's own placements** (found by the audit, 2026-09-29): a player's
   `priority_locations` on a shop is dropped (under Filler Only with a warning in the generator's log, under No
   Progression silently), and plando aimed at one fails silently. The fallback's two bugs (an excluded shop set back to
@@ -3048,7 +3051,8 @@ the front door shut both ways until the wizard unlocks it, a door rule on both e
 discovery, Jump or the tower's stairs), 115 of 244; the west path (its top door Jump; a new location: a crystal berry on
 the tree root), 116 of 244; the lake (the Wasp Kingdom's front gate kept shut, impassable until after the story, Maki's
 turn-back before it kept away; three new locations: a Lore Book, a Hot Drink, a new filler item, and a dig spot, Icicle
-or Bee Fly), 117 of 244; the rest of `room-checklist.md` to go.
+or Bee Fly), 117 of 244; outside the Fishing Village (its door Jump; Riz's fight always offered, build step 54), 118 of
+244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -4983,6 +4987,41 @@ door both ways at night.
 
 *Code: `logic/golden_settlement.py`, `logic/golden_hills.py`, `data/items.json`, `slot_data.py`. The mod: `Festival.cs`,
 `SeedData.cs`.*
+
+## Build step 54: Riz always offers his fight
+
+**Asked and decided (the user, 2026-10-08, mapping `FarGrasslandsOutsideVillage`):** Riz guards the Fishing Village's
+door until his fight is won (flag 509). With Maki following he only turns the party back, and with the swamp bridge
+kept up (Known issues) Maki never leaves, so the village would stay closed for good. Weighed: letting the party pass
+with no fight, a third choice (fight with or without Maki), Maki leaving as the scene starts. The user's pick: Riz
+always offers the fight, and Maki helps if he follows ("easier/less complicated"); then, since Maki helps, Riz gets
+more HP (the user's pick of three: more HP only).
+
+**How the game does it** (`MEASURED.md`, outside the village): `Event176` (trigger `rizevent`, until 509) asks
+`MainManager.HasFollower(Maki)` first, before its first pause: yes, Riz's "Halt!" and the party turns back; no, from
+the left Riz's exchange and a choice (`option == 0` fights), from the village side the fight at once. The fight is
+enemy 97 (`Fisherman`, 75 HP, Ground, no Flip, no summons), the mini-boss music; won, flag 509. `EventControl.StartEvent`
+starts a scene with `StartCoroutine("Event" + id)`, which runs it up to its first pause on the spot.
+
+**Built:**
+1. **The follower check answered "no"** for that one scene (slot_data `riz_fight_with_follower`; `RizFight.cs`): a
+   prefix on `StartEvent` for 176 on this map sets a flag that a prefix on `HasFollower` reads (Maki only), cleared
+   in `StartEvent`'s postfix. Logged: `[riz] Riz's scene, Maki following: the fight offered…`.
+2. **Riz's HP x1.6 with Maki**, on top of enemy scaling (a `GetEnemyData` postfix at low priority, after scaling's),
+   never above his vanilla 75 (`enemydata` column 1) and never below what scaling gave (the user: "so it can't inf
+   scale even past the intended difficulty of the vanilla game").
+3. **Maki's hits scaled** with enemy scaling (`documentation.md`, step 17), the user's pick over a bigger Riz bonus:
+   unscaled, his fixed 6 outclassed every scaled enemy in his two areas.
+4. **The logic:** the village door is the room's own part, Jump both ways; the fight in the way is won with plain
+   attacks (`logic/far_grasslands.py`).
+
+**Seen (2026-10-08):** with Maki following, from the village side, the fight at once, Riz at 27 then 32 HP (17 and 20
+scaled, x1.6), Maki's hit 2 with the dev `onehit` off; before the seed data was loaded, the game's turn-back.
+
+**Status:** built (2026-10-08), seen.
+
+*Code: `logic/far_grasslands.py`, `slot_data.py`. The mod: `RizFight.cs`, `SeedData.cs`, `Plugin.cs`,
+`EnemyScaling.cs`.*
 
 # How it works
 

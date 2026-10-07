@@ -1184,6 +1184,14 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   from 555) pushed the party past that gate into the patrol's `see area` (`Event138`, until 347), which puts the party
   back at `lastpos`, inside itself: a loop, freed by `unstick` then `nudge` onto the door. Arriving here through the gate
   pushes the party past the grate, no trap. The one grass drops only money.
+  **`FarGrasslandsOutsideVillage`, outside the Fishing Village (2026-10-08, the user, `Event176` and the battle code):**
+  the left door (to `FarGrasslands3`) and the top right (to `FGOutsideSwamplands`) free between them; the village door
+  (bottom right) down a ledge, Jump both ways. Riz (`riz`, `rizevent`, until 509) guards it: `Event176` checks
+  `HasFollower(Maki)` first (yes: "Halt!", the party turns back); without Maki, from the left his exchange and a choice
+  ("You've got it all wrong!" fights), from the village side the fight at once (seen). Riz is enemy 97 (`Fisherman`):
+  75 HP, def 0, Ground, no Flip, no summons, mini-boss music. Maki as a follower (`BattleControl.AddAI(46, 13)` in
+  areas 8 and 9, the Far Grasslands clearing, or flag 594) hits for a fixed 6, piercing, plus one per medal 90
+  (`AIAttack`), whatever the level. No items; the enemies for the enemy pass.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
