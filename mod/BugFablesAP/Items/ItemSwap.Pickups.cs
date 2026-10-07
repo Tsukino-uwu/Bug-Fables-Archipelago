@@ -149,7 +149,7 @@ namespace BugFablesAP
             {
                 return;
             }
-            string mapName = map.mapid.ToString();
+            string mapName = DayNight.EntityMap(map.mapid.ToString());
             NPCControl[] entities = null;
             HideFoundElsewhere(pickups, map, mapName, ref entities);
             // Enemysanity's drops: the seed's item on each, as on a pickup.

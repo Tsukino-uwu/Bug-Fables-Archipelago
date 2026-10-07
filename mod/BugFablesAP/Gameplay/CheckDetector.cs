@@ -69,7 +69,7 @@ namespace BugFablesAP
                 return false;
             }
             string map = __instance.mapid.ToString();
-            long left = OnThisMap(__instance, map).FirstOrDefault(id => !Done(id));
+            long left = OnThisMap(__instance, DayNight.EntityMap(map)).FirstOrDefault(id => !Done(id));
             __instance.hiddenitem = left != 0 ? 100 : (int?)null;
             log.LogInfo(left != 0 ? $"[detector] {map}: location {left} not done yet: the Detector beeps"
                                   : $"[detector] {map}: no check left here: quiet");

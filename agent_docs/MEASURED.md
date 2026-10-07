@@ -1000,7 +1000,11 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   swapped for the moved `Base/Altar (1)` from 103 (`Event58` slides it during the fight); found with the dev `find`.
   **`GoldenSettlement1` by day (2026-10-07, the user):** the left, bottom and right doors free between them; the lever
   on the left (any attack) moves a platform up to a house with a discovery (`Event53`), reached without Jump by
-  walking up the lever's stump; the arena (`Base/Arena`, Aria on it) takes Jump.
+  walking up the lever's stump; the arena (`Base/Arena`, Aria on it) takes Jump. With the statue swapped, all four doors
+  free without Jump (around the arena). The Lore Book (key item 52, flag 87) in the grass behind the lever's platform
+  (`LoreblockGrass`): Horn Slash, by day and by night alike. The Mothiva Doll (key item 57, flag 106, from flag 85)
+  inside the Sunset Inn on the left: Jump; it is traded for a Heart Berry in `DefiantRoot3` (line 126). The shop
+  (`shopkeeper`: Aphid Egg, Aphid Dew, Honey Drop, Clear Water, Hard Seed) is one shop by day and by night.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

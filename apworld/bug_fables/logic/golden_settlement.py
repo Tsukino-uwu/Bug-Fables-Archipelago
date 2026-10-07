@@ -3,13 +3,27 @@ aren't mapped yet."""
 from __future__ import annotations
 
 from ..custom_rules import LATER_CHAPTERS, CanUse
-from ..data_types import DayNight, EntityMove, EntityRef, Location, SceneCamera, SceneryMove, Source, TimeSwitch
+from ..data_types import (DayNight, EntityMove, EntityRef, ItemShop, Location, Pickup, SceneCamera, SceneryMove, Source,
+                          TimeSwitch)
 
 LOCATIONS = (
     # Where the game teaches Beemerang Halt (flag 21), after the mayor's Wacka Worm game, played by Vi with the
     # Beemerang (the mod refuses it otherwise); the later chapters' story-order stand-in.
     Location("Golden Settlement: Festival, Wacka Worm Game", 68, "GoldenSettlement2",
              Source(event=55, flag=21), rule=CanUse("Beemerang Toss"), reach=LATER_CHAPTERS),
+    # A Lore Book hidden in the grass behind the square's lever platform, by day and by night alike: the horn.
+    Location("Golden Settlement: Square, Grass by the Lever", 144, "GoldenSettlement1",
+             Source(flag=87, pickup=Pickup(map="GoldenSettlement1", type=1, item=52)), rule=CanUse("Horn Slash"),
+             category="hidden_item", no_jump=True),
+    # The Mothiva Doll inside the Sunset Inn, there from the festival night on (so whenever the square's switch makes it
+    # night): Jump.
+    Location("Golden Settlement: Square, Sunset Inn", 145, "GoldenSettlement1",
+             Source(flag=106, pickup=Pickup(map="GoldenSettlement1", type=1, item=57)), rule=CanUse("Jump")),
+    # The square's shop, open by day and by night: first purchase a check, then its own item.
+    *(Location(f"Golden Settlement: Square, Shop {slot}", 146 + slot - 1, "GoldenSettlement1",
+               Source(item_shop=ItemShop(map="GoldenSettlement1", keeper="shopkeeper", item=item)),
+               category="item_shop", no_jump=True)
+      for slot, item in enumerate((17, 48, 1, 12, 23), start=1)),
 )
 # The invisible wall behind the gate to the desert, which stands until the desert side has been reached (flag 170),
 # gone. The gate itself stays the game's: shut until its lever is hit from the desert side (the user, 2026-10-07).

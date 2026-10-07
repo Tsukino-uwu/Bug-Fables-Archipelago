@@ -1046,7 +1046,10 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    play do. At first replays were silent (only items past the count the server had at
    login, `ApConnection.ReceivedAtLogin`, were held up), so a new file showed nothing for a check with no scene of its
    own. The one exception left: an item whose check's own scene just showed it on screen (`ItemSwap.ShownInScene`,
-   filled when a pickup or gift shows the seed's item, used up by that item's arrival). "Arrived after login" was tried
+   filled when a pickup or gift shows the seed's item, used up by that item's arrival). An item shop purchase and a
+   journal discovery queue a hold-up of their own for the seed's item, so they fill it too: one's own item bought
+   showed twice, the purchase's box then "received from" (parked 2026-10-04, reported again 2026-10-07); **seen
+   (2026-10-07):** three purchases with one box each. "Arrived after login" was tried
    first and missed a replay in a second new file of the same session: Meditation, found in the file before, came in
    with no box (2026-09-28: "I expected it to be remote"). **Seen (2026-09-28):** on the next new file Meditation
    arrived with its box, and the opening's items stayed quiet. On *All*, a new file late in a seed plays a

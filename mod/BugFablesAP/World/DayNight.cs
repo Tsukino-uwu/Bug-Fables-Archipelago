@@ -109,7 +109,8 @@ namespace BugFablesAP
         private static Pair PairOf(string map) => Pairs?.FirstOrDefault(p => p.Day == map || p.Night == map);
 
         // The map whose entity lists a map reads: a night map has its day map's entities (readdatafromothermap), so
-        // the seed names them under the day map. Scenery is each map's own.
+        // the seed names them under the day map (kept entities, pickups, gives, shops, the detector). Scenery is each
+        // map's own.
         internal static string EntityMap(string map) => Pairs?.FirstOrDefault(p => p.Night == map)?.Day ?? map;
 
         private static bool StoryNight(Pair p)

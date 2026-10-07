@@ -142,6 +142,7 @@ namespace BugFablesAP
                     if (notYetRecorded.Remove(entry.Key))
                     {
                         HoldUps.FoundAt(entry.Key, "discovery " + entry.Value);
+                        ItemSwap.ShownInScene.Add(entry.Key); // one box: one's own item comes back with none
                     }
                     if (session.Locations.AllLocationsChecked.Contains(entry.Key))
                     {

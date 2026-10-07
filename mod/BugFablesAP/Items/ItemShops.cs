@@ -52,7 +52,7 @@ namespace BugFablesAP
             {
                 return -1;
             }
-            string map = MainManager.map.mapid.ToString();
+            string map = DayNight.EntityMap(MainManager.map.mapid.ToString());
             int stocked = ShopInventories.ShopItemOf(npc);
             int item = stocked >= 0 ? stocked : npc.entity.animstate;
             foreach (KeyValuePair<long, ApConnection.ItemShopSlot> entry in shops)
@@ -151,6 +151,8 @@ namespace BugFablesAP
                 {
                     connection.QueueRespawnCheck(at, mm.flagstring[ItemReceiver.SeedSlot]);
                     HoldUps.FoundAt(at, "item shop purchase");
+                    // Its hold-up shows the item: one's own coming back from the server gets no second, as a pickup's.
+                    ItemSwap.ShownInScene.Add(at);
                     log.LogInfo(
                         $"[itemshop] location {at}: bought ({moneyBefore} -> {mm.money} berries): check queued");
                 }
@@ -201,7 +203,8 @@ namespace BugFablesAP
         {
             Transform held = npc.entity.spritetransform;
             if (held == null || npc.shopkeeper == null || !ShelvesForward.TryGetValue(
-                new KeyValuePair<string, string>(MainManager.map.mapid.ToString(), npc.shopkeeper.name), out float step))
+                new KeyValuePair<string, string>(DayNight.EntityMap(MainManager.map.mapid.ToString()), npc.shopkeeper.name),
+                out float step))
             {
                 return;
             }

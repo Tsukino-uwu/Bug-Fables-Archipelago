@@ -72,7 +72,7 @@ namespace BugFablesAP
             {
                 return;
             }
-            string mapName = map.mapid.ToString();
+            string mapName = DayNight.EntityMap(map.mapid.ToString());
             if (!spots.Exists(s => s.Map == mapName))
             {
                 return;

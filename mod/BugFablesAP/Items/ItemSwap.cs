@@ -112,7 +112,7 @@ namespace BugFablesAP
                 {
                     return;
                 }
-                string mapName = MainManager.map.mapid.ToString();
+                string mapName = DayNight.EntityMap(MainManager.map.mapid.ToString());
                 foreach (KeyValuePair<long, ApConnection.Pickup> entry in pickups)
                 {
                     if (entry.Value.Map != mapName || (entry.Value.Regional >= 0 && connection.IsDone(entry.Key))
@@ -515,7 +515,7 @@ namespace BugFablesAP
         private static string MapName()
         {
             MapControl map = MainManager.map;
-            return map == null ? null : map.mapid.ToString();
+            return map == null ? null : DayNight.EntityMap(map.mapid.ToString());
         }
     }
 }
