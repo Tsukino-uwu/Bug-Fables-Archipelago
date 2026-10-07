@@ -1370,6 +1370,12 @@ the skip list, only while its flag 158 is unset: the same scene later takes boun
     **Seen (2026-09-26):** Leif visible after the first fight, then Vi and Leif in the second (a screenshot).
     One retry went idle for a reason of mine: resetting the scene, flag 16 was cleared before 27, and the mod's "Leif
     joins after the spider" rule set 16 again in between, so Leif counted as joined. Clear 27 first.
+15. **A chosen few stay a chosen few** (2026-10-07). When every asked member is allowed, the guard also keeps a member
+    already in the party whom the story hasn't reached yet (Leif before the lake), so the opening's Vi and Kabbu keep
+    him. The Wacka Worm game asks for Vi alone (`Event54`, `ChangeParty({0})`), and Leif was kept too: the scene's
+    `EndEvent` then threw on his sprite (`UpdateSpriteMat`), the player frozen, and `unstick` threw the same way. Now a
+    party that leaves out a member the story already has is taken as chosen, and nobody is added (`[members] ... leaving
+    out 1,2: nobody added`). **Seen (2026-10-07):** the game played as Vi alone, no freeze. *Code: `PartyMembers.cs`.*
 
 **No warnings for missing animations (2026-09-26: "dumb to leave bug/errors laying around, even if its
 harmless").** A character asked for a state its controller lacks (a lone Leif acting another member's part, a swapped

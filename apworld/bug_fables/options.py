@@ -130,6 +130,17 @@ class ShuffleTermacade(DefaultOnToggle):
     display_name = "Shuffle Termacade"
 
 
+class MinigamePrizes(Toggle):
+    """
+    The prizes for a high score in a minigame (25 worms in Whack Farms' Wacka Worm game) can hold anything, and the
+    logic counts on winning them. Turned off, those locations stay but only ever hold filler. Off by default.
+
+    Locations it covers in this version: {count}.
+    """
+
+    display_name = "Minigame Prizes"
+
+
 class ShopContents(Choice):
     """
     What shop locations may hold, when shops are shuffled. Shops put many easy checks in one place, which can soak up
@@ -364,6 +375,7 @@ class BugFablesOptions(PerGameCommonOptions):
     shuffle_medal_shops: ShuffleMedalShops
     shuffle_item_shops: ShuffleItemShops
     shuffle_termacade: ShuffleTermacade
+    minigame_prizes: MinigamePrizes
     shop_contents: ShopContents
     shuffle_shop_inventories: ShuffleShopInventories
     entrance_randomizer: EntranceRandomizer
@@ -413,3 +425,4 @@ EntranceRandomizer.__doc__ = EntranceRandomizer.__doc__.replace("{count}", str(2
 EnemyShuffle.__doc__ = EnemyShuffle.__doc__.replace("{count}", str(len(ENCOUNTERS)))
 StartingLocation.__doc__ = StartingLocation.__doc__.replace("{count}", str(len(ROOM_STARTS)))
 ShuffleShopInventories.__doc__ = ShuffleShopInventories.__doc__.replace("{count}", str(len(SPOTS)))
+MinigamePrizes.__doc__ = MinigamePrizes.__doc__.replace("{count}", str(category_count("minigame")))

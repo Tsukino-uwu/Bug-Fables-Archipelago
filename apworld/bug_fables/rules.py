@@ -42,6 +42,11 @@ def set_all_rules(world: BugFablesWorld) -> None:
     for loc in world.included_locations:
         if loc.filler:
             world.get_location(loc.name).progress_type = LocationProgressType.EXCLUDED
+    # Minigame Prizes off (the default, the user, 2026-10-07): a high score's prize holds filler only.
+    if not world.options.minigame_prizes:
+        for loc in world.included_locations:
+            if loc.category == "minigame":
+                world.get_location(loc.name).progress_type = LocationProgressType.EXCLUDED
     for loc in world.included_locations:
         if loc.category not in SHOP_CATEGORIES:
             continue

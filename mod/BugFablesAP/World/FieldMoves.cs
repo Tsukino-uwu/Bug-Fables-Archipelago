@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using BepInEx.Logging;
 using HarmonyLib;
+using UnityEngine;
 
 namespace BugFablesAP
 {
@@ -57,6 +59,41 @@ namespace BugFablesAP
                 return;
             }
             log.LogInfo($"[moves] installed on PlayerControl.DoActionTap's first step (state field {tapState != null}, owner {tapOwner != null}) and DoJump");
+            Hooks.Install(typeof(WormGame), "moves", "the Wacka Worm game starts without Vi or her Beemerang");
+        }
+
+        // The Wacka Worm game (Event54, the festival's and Whack Farms') is Vi throwing the Beemerang: without her in
+        // the party or the move, it doesn't start, and Whack Farms' fee, already paid by its line, is given back.
+        private static class WormGame
+        {
+            private const int Event = 54;
+            private const int Fee = 10;
+
+            [HarmonyPatch(typeof(EventControl), nameof(EventControl.StartEvent), typeof(int), typeof(NPCControl))]
+            [HarmonyPrefix]
+            private static bool BeforeStartEvent(int id)
+            {
+                MainManager mm = MainManager.instance;
+                if (id != Event || randomizerOn == null || !randomizerOn() || MainManager.map == null
+                    || mm.playerdata == null)
+                {
+                    return true;
+                }
+                bool vi = mm.playerdata.Any(p => p.trueid == 0);
+                bool beemerang = !Locked(0);
+                if (vi && beemerang)
+                {
+                    return true;
+                }
+                bool farms = MainManager.map.mapid == MainManager.Maps.GoldenSMinigame;
+                if (farms)
+                {
+                    mm.money = Mathf.Clamp(mm.money + Fee, 0, 999);
+                }
+                log.LogInfo($"[moves] Wacka Worm refused on {MainManager.map.mapid}: Vi {(vi ? "in" : "not in")} the party, "
+                    + $"the Beemerang {(beemerang ? "usable" : "locked")}{(farms ? $"; the {Fee}-berry fee given back" : "")}");
+                return false;
+            }
         }
 
         private static readonly HashSet<string> reported = new HashSet<string>();

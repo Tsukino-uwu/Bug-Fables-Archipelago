@@ -144,6 +144,15 @@ namespace BugFablesAP
                 return;
             }
             int[] asked = ids;
+            // A party leaving out a member the story has is a chosen few (Vi alone for the Wacka Worm game, Event54):
+            // nobody added, or the scene's own setup breaks.
+            int[] left = Enumerable.Range(0, 3).Where(m => PartyFit.InStoryParty(m) && !asked.Contains(m)).ToArray();
+            if (left.Length > 0)
+            {
+                log.LogInfo($"[members] the story asked for party {string.Join(",", asked.Select(i => i.ToString()).ToArray())}, "
+                    + $"leaving out {string.Join(",", left.Select(i => i.ToString()).ToArray())}: nobody added (event {MainManager.lastevent})");
+                return;
+            }
             // With all three from the start, whoever isn't here yet joins too (the opening then has Leif at once).
             IEnumerable<int> candidates = StartMember == AllMembers ? Enumerable.Range(0, 3)
                 : mm.playerdata.Select(p => p.trueid);

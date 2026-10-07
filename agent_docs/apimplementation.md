@@ -120,6 +120,7 @@ this file and that doc disagree, that doc is right.
 48. [Build step 48: Extra Roadblocks, and a map split into areas](#build-step-48-extra-roadblocks-and-a-map-split-into-areas)
 49. [Build step 49: hidden items and dig spots, two location toggles](#build-step-49-hidden-items-and-dig-spots-two-location-toggles)
 50. [Build step 50: the Termacade, its gift and prize stand](#build-step-50-the-termacade-its-gift-and-prize-stand)
+51. [Build step 51: Minigame Prizes, and Wacka Worm only for Vi](#build-step-51-minigame-prizes-and-wacka-worm-only-for-vi)
 
 **How it works**
 
@@ -4797,6 +4798,37 @@ tokens. The same line records the Termacade discovery (42), a location of its ow
 *Code: `options.py` (`ShuffleTermacade`), `data_types.py` (`Source.tokens`, `Source.prize`, `Location.filler`),
 `data_tables.py` (`TOKEN_KIND`, `vanilla_item`), `rules.py`, `slot_data.py` (`location_prizes`, a give's `npc`),
 `logic/bugaria_city.py`, `data/items.json`; tests `test_termacade.py`. The mod: the guide's step 45.*
+
+## Build step 51: Minigame Prizes, and Wacka Worm only for Vi
+
+**Asked and decided (the user, 2026-10-07, mapping `GoldenSMinigame`):** the Wacka Worm keeper and the festival's
+mayor stay, but the game doesn't start "if Vi is not present/obtained yet"; Vi and the Beemerang are the logic for both.
+The keeper's 25-worm prize is a location, *Golden Path: Whack Farms, Minigame Prize* (the user's name). After a first
+try of 16 worms: 25 in the minute is hard, so a yaml option, off by default, under which the location only holds
+filler. **A plan, not built** (the user): the same toggle could later cover the arcade's and the card game's prizes, one
+minigame/arcade/card game option, off by default.
+
+**How the game does it** (`MEASURED.md`, the Golden Path rooms): both games are `Event54` (the keeper's line 4 after
+`|money,-10|`, the mayor's line 37), Vi alone (`ChangeParty({0})`) throwing the Beemerang at the worms (`WackaWorm`
+reads `player.beemerang`). `Event55` ends it: at the festival it teaches Beemerang Halt (flag 21) after the game, so
+Halt is never needed to play; at Whack Farms, 25 worms the first time gives a Heart Berry (`giveitem,1,83`, the key
+item pocket, flag 305), 30 the "MOREFARM" code and berries, and the mayor's late visit the Desert Key (quest 46, flag
+559, for the quest pass).
+
+**Built:**
+1. **The location**, 143: `Source(event=55, flag=305, give=Give(map="GoldenSMinigame", type=1, item=83))`, rule
+   `CanUse("Beemerang Toss")` (which holds Vi when members are items), category `minigame`. The Heart Berry joins
+   `items.json` (useful). The festival's location (68) gets the same rule.
+2. **Minigame Prizes** (`minigame_prizes`, off): off, every `minigame` location is `LocationProgressType.EXCLUDED`, as
+   the Termacade's are (step 50); the location stays either way.
+3. **The mod refuses the game** (`FieldMoves.cs`, a prefix on `StartEvent(54)`): without Vi in the party or with the
+   Beemerang locked, the scene doesn't start, and at Whack Farms the 10 berries its line already took are given back
+   (`[moves] Wacka Worm refused ...`).
+
+**Status:** built (2026-10-07); the game played without a freeze, the refusal and the prize not yet seen.
+
+*Code: `options.py` (`MinigamePrizes`), `rules.py`, `logic/golden_path.py`, `logic/golden_settlement.py`,
+`data/items.json`. The mod: `FieldMoves.cs` (`WormGame`).*
 
 # How it works
 

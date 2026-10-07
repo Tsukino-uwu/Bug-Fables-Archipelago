@@ -5,7 +5,7 @@ from __future__ import annotations
 from rule_builder.rules import Has, True_
 
 from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, one_way
-from ..data_types import Area, EntityRef, ItemShop, Location, Pickup, Source, StoryEvent, Transfer
+from ..data_types import Area, EntityRef, Give, ItemShop, Location, Pickup, Source, StoryEvent, Transfer
 
 # The beetle's horn quest in the settlement (GoldenSettlement3, line 34, flag 274), then Tanjerin by the settlement
 # entrance's minigame door (flag 275): not gone through yet, so the later chapters' stand-in until the quest pass.
@@ -51,6 +51,11 @@ LOCATIONS = (
     Location("Golden Path: Cave Path, Dig Spot", 142, "GoldenHillsPath3",
              Source(flag=380, pickup=Pickup(map="GoldenHillsPath3", type=1, item=52)),
              rule=CanUse("Horn Dash") & CanUse("Beetle Dig"), category="dig_spot", area="Left", no_jump=True),
+    # Whack Farms' first 25 worms in its Wacka Worm replay (Event55, flag 305), a Heart Berry: Vi with the Beemerang
+    # (the mod refuses the game otherwise).
+    Location("Golden Path: Whack Farms, Minigame Prize", 143, "GoldenSMinigame",
+             Source(event=55, flag=305, give=Give(map="GoldenSMinigame", type=1, item=83)),
+             rule=CanUse("Beemerang Toss"), category="minigame", no_jump=True),
 )
 STORY_EVENTS = (
     # The settlement entrance's desert gate lever (`gateswitch`, any attack, flag 83, Event50), on the desert side only.

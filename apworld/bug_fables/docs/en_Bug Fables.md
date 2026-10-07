@@ -27,6 +27,8 @@ hands over the submarine (both new in 0.3.0). More chapters come later.
 - **Shuffle Termacade** (on): the first purchase of each prize at the Termacade's prize stand is a location. Prize
   locations only ever hold filler, and the prizes themselves (medals, ribbons) are found elsewhere, so you never have
   to win tokens for progress. The arcade's welcome gift is always a location.
+- **Minigame Prizes** (off): a minigame's high-score prize (25 worms at Whack Farms) can hold anything, and the logic
+  counts on winning it. Off, it only ever holds filler. Either way, the Wacka Worm games need Vi and her Beemerang.
 - **Shop Contents** (No Progression): what shop locations may hold.
 - **Shuffle Shop Inventories** (on): what item shops restock and what respawning floor items come back with is
   shuffled among themselves (food and other consumables only, each as often as before). Never a check or location:
