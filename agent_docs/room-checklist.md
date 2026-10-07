@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**93 of 244 done.**
+**95 of 244 done.**
 
 ## Outskirts
 
@@ -140,8 +140,9 @@ as it is, a frozen record.
   Sleeper), the tough bee's Red Paint for Root Cloth (flag 444), Bomby's hat (flag 309, after the festival); for the
   discovery sweep: discovery 12 (the aphid girl, needing nothing)
 - [x] GoldenSettlement2Night (43) — the farm at night: the same room (build step 52), mapped with it
-- [ ] GoldenSettlement3 (65)
-- [ ] GoldenSettlement3Night (66)
+- [x] GoldenSettlement3 (65) — for the quest pass: Tanjerin's horn quest (flags 272-274), Kenny's Lore Book (flags 602,
+  409, 603), the card master's duels (Event106, 10 berries); for the sellers' pass: Jayde's stew (later chapter)
+- [x] GoldenSettlement3Night (66) — the houses at night: the same room (build step 52), mapped with it
 - [ ] PowerPlant (197)
 
 ## Forsaken Lands

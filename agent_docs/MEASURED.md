@@ -1030,6 +1030,11 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (the sign, the bee guard, the farmer outside and Neo before the festival, a second sign after); the power plant's
   door from flag 226 (`Base/WoodenGate2` until 226). Bomby's hat (flag 309) after the festival. The dig spot (crystal
   berry #7) by day only, Beetle Dig; the aphid girl's discovery (12) needs nothing (the user).
+  **`GoldenSettlement3`, the houses (2026-10-07, the user and the lines):** the door free; nothing lies out. Aria's
+  diary (`ariadiary`, line 1-2) is text only; the card master's duels (`Event106`, a card upgraded, later 10 berries,
+  line 24), Carmina's at night; Tanjerin's horn quest after the festival (flags 272-274, key item 112); Kenny's quest end
+  in a later chapter (flags 602, 409) gives a Lore Book (line 46, flag 603); Jayde (flags 347-555) sells stew, item
+  120, for 25 berries (lines 38-39).
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

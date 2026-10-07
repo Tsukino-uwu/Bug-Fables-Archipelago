@@ -3343,3 +3343,16 @@ either one wrong).
   medal useful but Hard Mode (the user). The power plant door kept open by day and night (the night map's own gate
   switched off, a new `scenery_off`). Fixed on the way: one box when a line sets its flag before its give. Dev:
   QuietBursts off (it hid two boxes), AdoptSeed off. The user: done. Ticked with its night map, 93 of 244.
+- **`GoldenSettlement3`, the houses:** free, nothing to place (quests and a later seller noted). The user: done for
+  now. Ticked with its night map, 95 of 244.
+- **Handoff (2026-10-07, the user: context getting high, continue in a new chat):** 95 of 244 ticked. Next:
+  `PowerPlant` (197), the last Golden Settlement room (its door from the farm now kept open). Built today and seen:
+  the festival night at will (build step 52: Aria the switch in all three rooms, one door per exit, the night statue
+  and gate handled, the first nightfall in place away from the square), the festival's games as locations and the
+  offerings items (build step 53), the square's and the farm's new locations, three one-box fixes (shop purchases,
+  discoveries, a flag set before its give) and the Termacade gift's count. Open from today: the door table still marks
+  the settlement's links fixed (step 52's To do); the sellers' pass (dialogue sellers); tests and the fuzzer before the
+  push (not run, as asked; `TestMedalsAreUseful` new). The last seed, `AP_81434407810428720732` (this session's
+  scratchpad `out/`, player file `players/BugTester.yaml` with dig spots and hidden items on), is no longer hosted (the
+  server stopped); the user's save is tied to it. Dev settings: `QuietBursts` and `AdoptSeed` off; `OneHit`,
+  `InfJump`, `BumpKill` on; the command file `bed6439d-.../scratchpad/cmds.txt`; the dev `switchhere` and `find`.

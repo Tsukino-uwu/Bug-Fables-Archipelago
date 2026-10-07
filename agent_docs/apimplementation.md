@@ -3020,7 +3020,8 @@ Beemerang, build step 51; the mayor's visit for the quest pass), 89 of 244; Gold
 square, by day and by night as one room (its night switchable, build step 52; four doors free; seven new locations:
 the Lore Book in grass, the horn, the Mothiva Doll at night, Jump, and five shop slots), 91 of 244; the farm, by day and by night (its power plant door kept open; seven new locations:
 the festival's games, Chubee's gift, the windmill's berry and its farmer, the night scene, and a dig spot by day; the
-offerings items, build step 53), 93 of 244; the rest of `room-checklist.md` to go.
+offerings items, build step 53), 93 of 244; the houses, by day and by night (free; nothing to place), 95 of 244; the
+rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
