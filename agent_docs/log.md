@@ -3408,3 +3408,5 @@ either one wrong).
   chose an item shop reached (slots sell their own item without end once bought): a new rule, `ItemOnHand`
   (`custom_rules.py`), by the shops' regions. **To do before the push:** a test for `ItemOnHand` that fails without
   it. The user: done. Ticked, 103 of 244. Next: `BarrenLandsTanks` (190).
+- **`BarrenLandsTanks`:** free between its four doors (the user); the springs have no flags; no items. The user: done.
+  Ticked, 104 of 244. Next: `BarrenLandsMushrooms` (191).

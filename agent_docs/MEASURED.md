@@ -1090,6 +1090,10 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   drops crystal berry #38 (`CreateItem` type 3, index 38), so an item worth 0 would give nothing; flag 451 after.
   Seen: an egg given, a crystal berry dropped. Layna's Nero (465 until 468) for the quest pass; the termite girl from
   675; the grass hides nothing.
+  **`BarrenLandsTanks` (2026-10-07, the user and the dumps):** its four doors (the right one to `BarrenLandsCloud`, the
+  high left one to `AbandonedCity`, the wrong turns up top to `BarrenLandsCD` and at the bottom to `BarrenLandsCloud`)
+  free between them; the two `JumpSpring`s up to the high parts have no flags, so always there. The grass hides
+  nothing; two mothflies for the enemy pass; no items.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
