@@ -3489,3 +3489,8 @@ either one wrong).
   user's word (the bounce pad its own part, better for the enemy pass): the drop back from the right door a one-way
   transfer. The user also asked to note the Golden Settlement's after-festival state for later (build step 52's To
   do). The user: done. Ticked, 119 of 244. Next: `FGOutsideSwamplands` (146).
+- **`FGOutsideSwamplands`, outside the swamp:** the user's ways (the top Jump, Icicle and Horn Dash). Its Wasp Kingdom
+  door, there only from the swamp's boss (359) and counted open by the logic: the user asked whether opening it early
+  breaks anything; the code shows nothing in the Wasp Kingdom reads 359 and the border cave already leads there, so
+  kept present with Maki's turn-back away. Through it the patrol caught the party once, no loop (vanilla's own stealth
+  entry). The user: done, and to walk into the swamp boss's room from behind unwarped. Ticked, 120 of 244.

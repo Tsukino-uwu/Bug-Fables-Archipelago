@@ -55,6 +55,7 @@ DOOR_RULES = (
     DoorRule("FarGrasslandsLake", "loadzonewasp", False_()),
     DoorRule("WaspKingdomOutside", "loadzonesouth", False_()),
 )
+_SWAMP_TOP = CanUse("Jump") & CanUse("Icicle") & CanUse("Horn Dash")
 TRANSFERS = (
     # East of the crossroads: from the right door back to the left part, Jump up rocks, then a drop (the user).
     Transfer("drop", "FarGrasslands3", "FarGrasslands3", CanUse("Jump"), two_way=False,
@@ -85,10 +86,23 @@ MAP_AREAS = (
     # bounce pad past grass, the horn; the right door from the pad, Jump across platforms (back to the left, below).
     Area("FarGrasslands3", "Bounce Pad", (), CanUse("Horn Slash")),
     Area("FarGrasslands3", "Right", ("loadzoneright",), CanUse("Jump"), out=False_(), to="FarGrasslands3 (Bounce Pad)"),
+    # Outside the swamp (the user, 2026-10-08): its bottom (the door from the Fishing Village's outside, the save
+    # crystal, the swamp's door) the map's own region; its top (the doors to the swamp's boss and the Wasp Kingdom) up
+    # with Jump, Icicle and Horn Dash; down, a drop to the boulders, then Icicle and Horn Dash.
+    Area("FGOutsideSwamplands", "Top", ("loadzoneswamp2", "loadzone wasp"), _SWAMP_TOP,
+         out=one_way(CanUse("Icicle") & CanUse("Horn Dash"), _SWAMP_TOP)),
 )
 # Maki's turn-back before the Wasp Kingdom's front gate at the lake (Event12, spoken by the follower), there until the
 # swamp bridge falls (336), which the seed never lets happen: kept away (the user, 2026-10-08). Past it there is only
 # the gate's grate.
 KEPT_OPEN = (
     EntityRef("FarGrasslandsLake", "blocker"),
+    # Outside the swamp, the same turn-back before the Wasp Kingdom door (Event12, until the swamp's boss, 359).
+    EntityRef("FGOutsideSwamplands", "blocker"),
+)
+# Outside the swamp, the Wasp Kingdom door (to the patrols' side entrance), there in the game only from the swamp's boss
+# (359): kept present from the start (the user, 2026-10-08). Nothing in the Wasp Kingdom reads 359, and the border
+# cave's right door already leads there before the boss.
+KEPT_PRESENT = (
+    EntityRef("FGOutsideSwamplands", "loadzone wasp"),
 )

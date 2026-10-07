@@ -3053,7 +3053,9 @@ the tree root), 116 of 244; the lake (the Wasp Kingdom's front gate kept shut, i
 turn-back before it kept away; three new locations: a Lore Book, a Hot Drink, a new filler item, and a dig spot, Icicle
 or Bee Fly), 117 of 244; outside the Fishing Village (its door Jump; Riz's fight always offered, build step 54), 118 of
 244; east of the crossroads (three parts: the horn to the bounce pad, Jump on to the right door, Jump and a drop back),
-119 of 244; the rest of `room-checklist.md` to go.
+119 of 244; outside the swamp (its top Jump, Icicle and Horn Dash up, a drop then Icicle and Horn Dash down; its Wasp
+Kingdom door, there in the game only after the swamp's boss, open from the start and Maki's turn-back kept away), 120 of
+244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

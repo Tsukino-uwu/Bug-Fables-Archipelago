@@ -1197,6 +1197,15 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   door (to `FarGrasslandsOutsideVillage`) from the pad, Jump across platforms. From the right door back: Jump up rocks,
   then a drop into the left part. No items (the grass hides
   nothing); two Chompers and a jumping spider for the enemy pass.
+  **`FGOutsideSwamplands`, outside the swamp (2026-10-08, the user, the dumps and code):** the bottom (the door from
+  `FarGrasslandsOutsideVillage`, the save crystal, the door into `SwamplandsEntrance`) free; the top (the doors to
+  `SwamplandsBoss` and `WaspKingdomOutside`'s right door) free between them, up with Jump, Icicle and Horn Dash, down a
+  drop to the boulders then Icicle and Horn Dash. The Wasp Kingdom door (`loadzone wasp`) exists only from 359 (the
+  swamp's boss, `Event137`), Maki's turn-back (`blocker`, `Event12`) before it until then. Only two places read 359:
+  a save-load fix-up (`Event22`, flags 98 and 699) and the boss room's talk (`Event43`); the camp scene
+  (`tentevent`, `Event148`) sets only 360, read by the second save crystal. Kept open at the user's ask; arriving
+  through it on the Wasp Kingdom side the patrol (`see area`) caught the party once, no loop (`lastpos` outside it).
+  Madeleine (375 until 389) for the quest pass; no items.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
