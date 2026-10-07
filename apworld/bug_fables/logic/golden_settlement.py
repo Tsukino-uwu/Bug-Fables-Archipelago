@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from rule_builder.rules import Has
 
-from ..custom_rules import CanUse
-from ..data_types import (DayNight, EntityMove, EntityRef, Give, ItemShop, Location, Pickup, SceneCamera, SceneryMove,
-                          Source, StoryEvent, TimeSwitch)
+from ..custom_rules import ANY_ATTACK, CanUse
+from ..data_types import (Area, DayNight, EntityMove, EntityRef, Give, ItemShop, Location, Pickup, SceneCamera,
+                          SceneryMove, Source, StoryEvent, TimeSwitch)
 
 LOCATIONS = (
     # Where the game teaches Beemerang Halt (flag 21), after the mayor's Wacka Worm game at night, played by Vi with
@@ -54,11 +54,22 @@ LOCATIONS = (
     # The farm's night scene (Event56, flag 98): the party meets Smugbee, and Kabbu learns Pep Talk, which stays the
     # game's (the user, 2026-10-07: a location, battle skills not items); its trigger only at night.
     Location("Golden Settlement: Farm, Smugbee (Night)", 151, "GoldenSettlement2", Source(event=56, flag=98)),
+    # The Energy Converter in the power plant's top area: discovery 23, "The Power Plant" (line 8).
+    Location("Golden Settlement: Power Plant, Energy Converter", 158, "PowerPlant", Source(discovery=23),
+             category="discovery", no_jump=True, area="Top"),
 )
 STORY_EVENTS = (
+    # The power plant's switches, hit in the right order from its bottom area (Event169, flag 456): the door up opens.
+    StoryEvent("Golden Settlement: Power Plant, Door Opened", "Power Plant Door Open", "PowerPlant", Source(flag=456),
+               rule=ANY_ATTACK),
     # Talking to Zasp in the square at night enters Leif in the farm's eating contest (flag 93).
     StoryEvent("Golden Settlement: Square, Zasp's Challenge", "Eating Contest Entered", "GoldenSettlement1",
                Source(flag=93)),
+)
+# The power plant's top area (its door to the Broodmother's lair), behind the door its switches open; the bottom (the
+# farm's door, the switches, the save crystal) is the map's own region.
+MAP_AREAS = (
+    Area("PowerPlant", "Top", ("loadzonebroodmother",), Has("Power Plant Door Open")),
 )
 # The invisible wall behind the gate to the desert, which stands until the desert side has been reached (flag 170),
 # gone. The gate itself stays the game's: shut until its lever is hit from the desert side (the user, 2026-10-07).

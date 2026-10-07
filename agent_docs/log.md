@@ -80,6 +80,7 @@ either one wrong).
 - [2026-10-06: Snakemouth Den's bridge room](#2026-10-06-snakemouth-dens-bridge-room)
 - [2026-10-07: Golden Path](#2026-10-07-golden-path)
 - [2026-10-07: the cave path](#2026-10-07-the-cave-path)
+- [2026-10-07: the power plant](#2026-10-07-the-power-plant)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -3357,3 +3358,12 @@ either one wrong).
   (the user asked it left on to keep testing; its own process, 29852, started from the Archipelago checkout); the
   user's save is tied to it. Dev settings: `QuietBursts` and `AdoptSeed` off; `OneHit`,
   `InfJump`, `BumpKill` on; the command file `bed6439d-.../scratchpad/cmds.txt`; the dev `switchhere` and `find`.
+
+## 2026-10-07: the power plant
+
+- **`PowerPlant`, the last Golden Settlement room:** warped in from the farm, then from `BroodmotherLair` at the user's
+  ask. The user: the right door free; the middle one a dead end until the door between the areas is open, opened from
+  the bottom by hitting the switches with a basic attack (`Event169`, a lights-out puzzle, flag 456), then free both
+  ways; the save crystal at the bottom. Written as a `Top` area behind "Power Plant, Door Opened" (the user's name),
+  and the converter's discovery (23, "The Power Plant") a new location, "Power Plant, Energy Converter" (the user's).
+  The board quest for the quest pass. The user: done. Ticked, 96 of 244. Next: `BarrenLandsEntrance` (149).

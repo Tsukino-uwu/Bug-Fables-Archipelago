@@ -1035,6 +1035,13 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   line 24), Carmina's at night; Tanjerin's horn quest after the festival (flags 272-274, key item 112); Kenny's quest end
   in a later chapter (flags 602, 409) gives a Lore Book (line 46, flag 603); Jayde (flags 347-555) sells stew, item
   120, for 25 berries (lines 38-39).
+  **`PowerPlant` (2026-10-07, the user and the lines):** two areas. The bottom holds the farm's door (`loadzoneoutside`,
+  free both ways), the save crystal and four switches (`TOGSwitch1`-`4`, `Event169`): a lights-out puzzle (a hit flips
+  its neighbours), all on slides the door up open (`mainmesh` child 0) and sets flag 456, no quest flag read; the user
+  hit them with a basic attack. The top holds the door to `BroodmotherLair` (`loadzonebroodmother`), a dead end from
+  there until the door is open, then free both ways, and the Energy Converter (line 8: discovery 23, "The Power Plant",
+  shown as #24; flag 458). The hole's party talk (`dialoguetrigger`, line 5, flag 457) gives nothing. The workers, the
+  soldier and the door guard talk of the Code 32 alarm and the board quest (31, flags 225-226): for the quest pass.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
