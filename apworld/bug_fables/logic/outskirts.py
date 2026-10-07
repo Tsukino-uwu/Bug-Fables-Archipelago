@@ -61,10 +61,11 @@ LOCATIONS = (
     Location("Outskirts: East Road, Dig Spot", 88, "BugariaOutskirtsEast1",
              Source(flag=633, pickup=Pickup(map="BugariaOutskirtsEast1", type=0, item=121)),
              rule=CanUse("Icicle") & CanUse("Jump") & CanUse("Beetle Dig"), category="dig_spot"),
-    # The HP Plus medal, hidden inside the waterfall on the lower ground: Icicle, then the Beemerang to grab it.
+    # The HP Plus medal, hidden inside the waterfall on the lower ground: the Beemerang grabs it (no ice needed, the
+    # user, 2026-10-07).
     Location("Outskirts: East Road, Inside the Waterfall", 89, "BugariaOutskirtsEast1",
              Source(flag=137, pickup=Pickup(map="BugariaOutskirtsEast1", type=2, item=0)),
-             rule=CanUse("Icicle") & CanUse("Beemerang Toss"), category="hidden_item", no_jump=True, area="Lower"),
+             rule=CanUse("Beemerang Toss"), category="hidden_item", no_jump=True, area="Lower"),
     # A Tangy Berry dug up across the water: Icicle platforms and Jump, or Bee Fly, there and back.
     Location("Outskirts: East Road to the Pier, Dig Spot", 90, "BugariaOutskirtsEast2",
              Source(flag=669, pickup=Pickup(map="BugariaOutskirtsEast2", type=0, item=77)),

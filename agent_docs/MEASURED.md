@@ -2613,7 +2613,7 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   to the lower ground is a drop, Jump back up. The Cave of Trials' door down there sits inside grass: the horn, in and
   out. The Drowsy Cake on the stone (location 25): the horn and Jump. The Dark Cherry dig spot (flag 633), across
   water: Icicle and Jump, there and back. The HP Plus medal (flag 137), inside the waterfall on the lower ground:
-  Icicle and the Beemerang.
+  the Beemerang alone (corrected 2026-10-07, the user: no Icicle).
 - **`BugariaOutskirtsEast2` (56):** left to right needs nothing. The way up to the Lost Sands' door: the crank between
   the two side doors turned with the Beemerang Halt, or Icicle platforms across the water and Jump. **Corrected the same
   day (the user): no drop down.** The top is across the water; the crank can't be turned from there, so the way back is
