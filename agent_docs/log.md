@@ -3402,3 +3402,9 @@ either one wrong).
   so, and a sweep of every `SummonEnemy` found no ticked room relying on a summoning fight (Venus' Guardian already
   for the enemy pass; the Broodmother's Midges fly, for its room). The user: done. Ticked, 102 of 244. Next:
   `BarrenLandsPinkSpider` (189).
+- **`BarrenLandsPinkSpider`:** (the user allowed `CanReachRegion` and `Or` into the preflight's apworld imports) the door free, the ledge with the sign and the hole Jump (the user). `Event167` read:
+  the hole is a pawn shop, and the first trade drops crystal berry #38, no location yet; the user gave an egg and saw
+  it. Named "Pink Spider, First Trade" (the user: a trade, not a gift, and only once). The item it takes: the user
+  chose an item shop reached (slots sell their own item without end once bought): a new rule, `ItemOnHand`
+  (`custom_rules.py`), by the shops' regions. **To do before the push:** a test for `ItemOnHand` that fails without
+  it. The user: done. Ticked, 103 of 244. Next: `BarrenLandsTanks` (190).

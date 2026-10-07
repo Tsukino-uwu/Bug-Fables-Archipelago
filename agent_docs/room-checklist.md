@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**102 of 244 done.**
+**103 of 244 done.**
 
 ## Outskirts
 
@@ -154,7 +154,8 @@ as it is, a frozen record.
 - [x] BarrenLandsBeefly (180) — for the quest pass: the hungry termite (flags 475-476, item 145)
 - [x] BarrenLandsAntTunnel (181)
 - [x] BarrenLandsMiniboss (182) — for the enemy pass: the Primal Weevil fight (Event151, summons a Weevil)
-- [ ] BarrenLandsPinkSpider (189)
+- [x] BarrenLandsPinkSpider (189) — for the quest pass: Layna's Nero (flags 465-468); for the sellers' pass: the
+  spider's later trades (berries only)
 - [ ] BarrenLandsTanks (190)
 - [ ] BarrenLandsMushrooms (191)
 - [ ] AbandonedCity (192)

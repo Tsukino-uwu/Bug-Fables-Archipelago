@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from rule_builder.rules import Has
 
-from ..custom_rules import LATER_CHAPTERS, CanUse, one_way
+from ..custom_rules import LATER_CHAPTERS, CanUse, ItemOnHand, one_way
 from ..data_types import Area, EntityRef, Location, Pickup, Source, StoryEvent, Transfer
 
 LOCATIONS = (
@@ -17,6 +17,11 @@ LOCATIONS = (
     # A Plumpling Pie behind the mine cart in the ant tunnel's room by the Termite gate: nothing needed (the user).
     Location("Forsaken Lands: Ant Tunnel, Behind the Mine Cart", 159, "BarrenLandsAntTunnel",
              Source(flag=739, pickup=Pickup(map="BarrenLandsAntTunnel", type=0, item=180)), no_jump=True),
+    # Crystal berry #38, dropped with the berries the first time an item is left at the pink spider's hole (Event167),
+    # up on the ledge by the sign: Jump, and an item to trade (the user, 2026-10-07).
+    Location("Forsaken Lands: Pink Spider, First Trade", 160, "BarrenLandsPinkSpider",
+             Source(berry=38, pickup=Pickup(map="BarrenLandsPinkSpider", type=3, item=0)),
+             rule=CanUse("Jump") & ItemOnHand(), category="crystal_berry", area="Ledge"),
 )
 # The broken bridge room's ruler, knocked down from its upper right (Event146, flag 382): a switch only Kabbu's horn
 # hits (its data[4] 1, NPCControl), the bridge then joining the upper right and the left.
@@ -49,6 +54,8 @@ MAP_AREAS = (
     Area("BarrenLandsBeefly", "Left", ("loadzonecd",), CanUse("Bee Fly"), to="BarrenLandsBeefly (Bottom)"),
     Area("BarrenLandsBeefly", "Upper Right", ("loadzoneminiboss",), Has("Broken Bridge Ruler Down"),
          to="BarrenLandsBeefly (Left)"),
+    # The pink spider's room: the ledge with her sign and hole, Jump up, a drop down (the user, 2026-10-07).
+    Area("BarrenLandsPinkSpider", "Ledge", (), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
 )
 # Patton's lab, opened by the escort to the termites (flag 376): open from the start (the user, 2026-10-07), its door
 # entity there and its slab gone, as the game has them from 376.

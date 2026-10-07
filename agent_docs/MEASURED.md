@@ -1083,6 +1083,13 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   `SummonEnemy` in its battle code; both Ground with no Flip weakness, so every member's plain attack reaches them),
   the termite guards' welcome, then flag 385; no item. The save crystal is swapped for its other copy from 385.
   The fight for the enemy pass.
+  **`BarrenLandsPinkSpider` (2026-10-07, the user and `Event167` read):** its door (`loadzonepumpkin - Duplicate`) free
+  both ways; the ledge with the sign and the hole (`interact`, y 2) Jump up, a drop down. The hole takes any ordinary
+  item (`pickitem,0`) and the spider pays its sell price (`itemdata[0, id, 4]`, halved for Tangy Berry and Black
+  Cherry) in berry drops; inside that loop, the first time (`crystalbflags[38]` and `mapflags[0]` unset) she also
+  drops crystal berry #38 (`CreateItem` type 3, index 38), so an item worth 0 would give nothing; flag 451 after.
+  Seen: an egg given, a crystal berry dropped. Layna's Nero (465 until 468) for the quest pass; the termite girl from
+  675; the grass hides nothing.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

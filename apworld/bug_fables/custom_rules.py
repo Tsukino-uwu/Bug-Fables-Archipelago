@@ -7,7 +7,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from rule_builder.rules import Has, HasAllCounts, Rule, True_, WrapperRule
+from rule_builder.rules import CanReachRegion, Has, HasAllCounts, Or, Rule, True_, WrapperRule
 
 from .abilities import ABILITIES, item_count
 from .data_types import GAME
@@ -44,6 +44,22 @@ class Member(Rule["BugFablesWorld"], game=GAME):
 
     def _instantiate(self, world: BugFablesWorld) -> Rule.Resolved:
         return (Has(self.name) if world.starting_member >= 0 else True_()).resolve(world)
+
+
+@dataclass()
+class ItemOnHand(Rule["BugFablesWorld"], game=GAME):
+    """An ordinary item to hand over: any item shop reached, whose slots sell their own item without end once bought
+    (the user, 2026-10-07). By the shop's region, so it holds with item shops left out of the seed too."""
+
+    def _instantiate(self, world: BugFablesWorld) -> Rule.Resolved:
+        from .logic import LOCATIONS
+
+        ways: list[Rule] = []
+        for location in LOCATIONS:
+            if location.category == "item_shop":
+                region = location.region if location.area is None else f"{location.region} ({location.area})"
+                ways.append(CanReachRegion(region) if location.rule is None else CanReachRegion(region) & location.rule)
+        return Or(*ways).resolve(world)
 
 
 @dataclass()

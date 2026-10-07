@@ -3027,8 +3027,9 @@ raised strip, Jump back up), 98 of 244; outside the Termite gate (the gate needi
 skipped and opened only when talked to, documentation step 10; the left door Horn Dash), 99 of 244; the broken bridge (Bee Fly across, a ruler
 bridge knocked down with the horn from the upper right, drops; the Bee Fly spot placed on the left), 100 of 244; the ant
 tunnel's room (free; one new location: a Plumpling Pie, a new filler item), 101 of 244; the Primal
-Weevil's room (free; its fight winnable with plain attacks, the summoned Weevil included), 102 of 244; the rest of
-`room-checklist.md` to go.
+Weevil's room (free; its fight winnable with plain attacks, the summoned Weevil included), 102 of 244; the pink
+spider's room (a ledge, Jump; one new location: crystal berry #38 from her first trade, with `ItemOnHand`, an item
+shop reached), 103 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
