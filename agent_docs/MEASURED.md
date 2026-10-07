@@ -1094,6 +1094,13 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   high left one to `AbandonedCity`, the wrong turns up top to `BarrenLandsCD` and at the bottom to `BarrenLandsCloud`)
   free between them; the two `JumpSpring`s up to the high parts have no flags, so always there. The grass hides
   nothing; two mothflies for the enemy pass; no items.
+  **`BarrenLandsMushrooms`, the mushroom maze (2026-10-07, the user and `Event168` read):** from the right door (to
+  `BarrenLandsPumpkins`) to the left (one way into `BarrenLandsPinkSpider`) a maze path, one part under a plank with
+  Beetle Dig. Off the path, five `lostzone` triggers (`Event168`) fade to white and put the party back at
+  `player.lastpos`, never another room. Layna's scene (`Event172`, 465 until 467) and the gray mushrooms it hides (465
+  until 468) for the quest pass; no items. The maze works both ways with Beetle Dig (seen from beside the left door).
+  The left door stays a one-way exit, never given an arrival spot (the user: the maze reads more easily from the
+  right).
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

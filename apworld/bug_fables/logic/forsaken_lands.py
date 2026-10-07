@@ -56,6 +56,9 @@ MAP_AREAS = (
          to="BarrenLandsBeefly (Left)"),
     # The pink spider's room: the ledge with her sign and hole, Jump up, a drop down (the user, 2026-10-07).
     Area("BarrenLandsPinkSpider", "Ledge", (), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
+    # The mushroom maze: from its right door to its left (to the pink spider's room) along the path, burrowing under a
+    # plank with Beetle Dig (the user, 2026-10-07).
+    Area("BarrenLandsMushrooms", "Left", ("loadzonepinkspider",), CanUse("Beetle Dig")),
 )
 # Patton's lab, opened by the escort to the termites (flag 376): open from the start (the user, 2026-10-07), its door
 # entity there and its slab gone, as the game has them from 376.

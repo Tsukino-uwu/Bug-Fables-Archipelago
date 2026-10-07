@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**104 of 244 done.**
+**105 of 244 done.**
 
 ## Outskirts
 
@@ -157,7 +157,7 @@ as it is, a frozen record.
 - [x] BarrenLandsPinkSpider (189) — for the quest pass: Layna's Nero (flags 465-468); for the sellers' pass: the
   spider's later trades (berries only)
 - [x] BarrenLandsTanks (190)
-- [ ] BarrenLandsMushrooms (191)
+- [x] BarrenLandsMushrooms (191) — for the quest pass: Layna's scene (Event172, flags 465-468)
 - [ ] AbandonedCity (192)
 - [ ] BarrenLandsPumpkins (193)
 - [ ] BarrenLandsCloud (194)
