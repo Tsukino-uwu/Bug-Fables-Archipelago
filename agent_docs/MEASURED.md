@@ -1132,6 +1132,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   384, the queen speaking) or 2 records discovery 41, "Termite Kingdom", and flag 470. A grass patch by the log
   (regional flag 11, vectordata x 125, a Squash) needs the horn; the other grass hides nothing; an Ironnail and a mimic
   spider for the enemy pass.
+  **`AbandonedCityTent` (2026-10-07, the user and `Event124` read):** its door free both ways; a few steps in, the
+  trigger (`event`, limit 454, no requirement) starts the False Monarch bounty (Event124's tent branch): the fight
+  (enemy 77, Ground, no Flip weakness, no summons, no escape), then key item 146, the Crystal Crown
+  (`GiveItem(1, 146)`), discovery 40, "Ancient City" (`librarystuff[0, 40]` set directly, no pop-up), and flag 454,
+  which also unmasks the Abandoned City's mothflies. For the quest pass with the other bounties, as the Seedling
+  King's.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

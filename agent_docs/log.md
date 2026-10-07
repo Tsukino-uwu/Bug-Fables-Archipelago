@@ -3435,3 +3435,7 @@ either one wrong).
 - **`BarrenLandsRock`, the dome overlook:** free (the user; the vista first said Jump, then not). Discovery 41 from
   either line of the viewpoint, and a Squash in grass (regional 11): new locations. Names the user's ("Dome Overlook",
   "Vista" over viewpoint, "Grass by the Log"). The user: done. Ticked, 109 of 244. Next: `AbandonedCityTent` (196).
+- **`AbandonedCityTent`:** the door free; the False Monarch bounty starts a few steps in (the user). `Event124` read: the
+  Crystal Crown (key item 146) and discovery 40 ("Ancient City") from the win, both for the quest pass with the other
+  bounties, as the Seedling King's (the user: an optional mini boss). The user: done. Ticked, 110 of 244. Next:
+  `BarrenLandsSideGPT` (199).

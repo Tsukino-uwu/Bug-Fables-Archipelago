@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**109 of 244 done.**
+**110 of 244 done.**
 
 ## Outskirts
 
@@ -162,7 +162,8 @@ as it is, a frozen record.
 - [x] BarrenLandsPumpkins (193)
 - [x] BarrenLandsCloud (194)
 - [x] BarrenLandsRock (195)
-- [ ] AbandonedCityTent (196)
+- [x] AbandonedCityTent (196) — for the quest pass: the False Monarch bounty (its Crystal Crown, key item 146, and
+  discovery 40), with the other bounties
 - [ ] BarrenLandsSideGPT (199)
 
 ## Far Grasslands
