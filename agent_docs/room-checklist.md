@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**89 of 244 done.**
+**91 of 244 done.**
 
 ## Outskirts
 
@@ -131,8 +131,11 @@ as it is, a frozen record.
 
 ## Golden Settlement
 
-- [ ] GoldenSettlement1 (40)
-- [ ] GoldenSettlement1Night (41)
+- [x] GoldenSettlement1 (40) — for the quest pass: Aria's offering (Queen's Dinner, flag 393) and the festival chain, the
+  quest board (from 86), Samira, the night's talkers, the Mothiva Doll's trade (Defiant Root); for the enemy pass: the
+  festival fight (Event58); for the discovery sweep: the balcony (Event53) and The Golden Festival (014); for the
+  sellers' pass: the mosquito girl's Berry Juice and the moth merchant's night goods; Kut the chef free day and night
+- [x] GoldenSettlement1Night (41) — the square at night: the same room (build step 52), mapped with it
 - [ ] GoldenSettlement2 (42)
 - [ ] GoldenSettlement2Night (43)
 - [ ] GoldenSettlement3 (65)

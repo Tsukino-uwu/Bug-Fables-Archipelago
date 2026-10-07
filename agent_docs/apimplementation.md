@@ -3014,7 +3014,10 @@ door behind the horn quest, a stand-in; the desert door behind its gate's lever,
 244; the cave path (across Jump and Beemerang Halt, back also Horn Slash, or Bee Fly; its bottom the Shield, back up
 Shield and Jump; its Chomper Cave door, locked until the story's Shield, kept open and its wall hidden; a new
 location: a dig spot, Horn Dash), 88 of 244; Whack Farms (free; its Wacka Worm prize a new location, Vi and the
-Beemerang, build step 51; the mayor's visit for the quest pass), 89 of 244; the rest of `room-checklist.md` to go.
+Beemerang, build step 51; the mayor's visit for the quest pass), 89 of 244; Golden Settlement from 2026-10-07: the
+square, by day and by night as one room (its night switchable, build step 52; four doors free; seven new locations:
+the Lore Book in grass, the horn, the Mothiva Doll at night, Jump, and five shop slots), 91 of 244; the rest of
+`room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
