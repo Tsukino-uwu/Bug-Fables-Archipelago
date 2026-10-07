@@ -290,7 +290,9 @@ to do the same with discoveries ( if i miss any while we are mapping out rooms )
 every discovery's spot and need against the mapped rooms. **And respawning and static items** (the user,
 2026-10-06, after a fixed-drop bush with a regional flag was first missed: "in case we have missed any
 static/respawning items anywhere"): a sweep of the entity dump for every pickup and fixed-drop bush (one-time or
-regional flag) against the locations. **And the doors** (the user, 2026-10-07: "after we are done mapping out logic
+regional flag) against the locations, hidden items included (the user, 2026-10-07): every `BeetleGrass` whose
+vectordata names an item (what `CutGrass` drops) or whose `data[1]` is a crystal berry, every `DigSpot`, and every
+item a scene drops (`EntityControl.CreateItem` in `EventControl.cs`, as the pink spider's berry). **And the doors** (the user, 2026-10-07: "after we are done mapping out logic
 for all rooms, we need to check all the unused or not randomized entrances for entrance rando"): every door the
 shuffle leaves out (`doors.json`'s `fixed`, parked or unexported doors) gone through with the user, each joining the
 shuffle unless the user agrees a reason (`apimplementation.md`, Where it stands, Next 2).
