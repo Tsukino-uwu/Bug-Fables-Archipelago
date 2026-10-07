@@ -1101,6 +1101,13 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   until 468) for the quest pass; no items. The maze works both ways with Beetle Dig (seen from beside the left door).
   The left door stays a one-way exit, never given an arrival spot (the user: the maze reads more easily from the
   right).
+  **`AbandonedCity` (2026-10-07, the user and the dumps):** the bottom door (to `BarrenLandsTanks`) and the save crystal
+  free; the top door (to the tent, y 7) Jump up, a drop down. The dig spot (`lorebookspot`, data `0 1 52`: a Lore
+  Book, flag 499) in a pit: Beetle Dig from the bottom; dropping in from above needs Beetle Dig to leave. One grass
+  patch by the fountain, midway up (`grass - Duplicate - Duplicate`, regional flag 10, vectordata x 11: `CutGrass`
+  drops item 11, a Magic Seed, with that regional flag) needs Bee Fly to reach and the horn; the other grass hides
+  nothing. The hooded mothflies (until 454), the Venus healer (from 130) and Rebecca's scene (701 until 709, quest
+  pass) give nothing here.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

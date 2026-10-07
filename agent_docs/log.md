@@ -3417,3 +3417,7 @@ either one wrong).
   the door works in entrance rando: a one-way exit, shuffled among one-ways, never a landing; they chose to keep it so.
   The user set a rule: every door shuffled unless they agree why, and a door pass after the rooms
   (`room-logic.md`). The user: done. Ticked, 105 of 244. Next: `AbandonedCity` (192).
+- **`AbandonedCity`:** the user's ways (the bottom free, the top Jump, the dig spot's pit a trap without Beetle Dig
+  from above). Two new locations from the dump: the Lore Book dig spot and a grass patch whose vectordata drops a
+  Magic Seed on regional flag 10 (`CutGrass` read). Names the user's ("Dig Spot", then "Grass by the Fountain" over
+  "By the Fountain"). The user: done. Ticked, 106 of 244. Next: `BarrenLandsPumpkins` (193).

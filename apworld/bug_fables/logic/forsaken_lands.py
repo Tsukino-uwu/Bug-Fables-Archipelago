@@ -22,6 +22,16 @@ LOCATIONS = (
     Location("Forsaken Lands: Pink Spider, First Trade", 160, "BarrenLandsPinkSpider",
              Source(berry=38, pickup=Pickup(map="BarrenLandsPinkSpider", type=3, item=0)),
              rule=CanUse("Jump") & ItemOnHand(), category="crystal_berry", area="Ledge"),
+    # A Lore Book dug up in the Abandoned City's pit, from its bottom with Beetle Dig. Dropping into the pit from above
+    # also reaches it, but leaving it needs Beetle Dig too: a trap without it, never a way the logic counts.
+    Location("Forsaken Lands: Abandoned City, Dig Spot", 161, "AbandonedCity",
+             Source(flag=499, pickup=Pickup(map="AbandonedCity", type=1, item=52)), rule=CanUse("Beetle Dig"),
+             category="dig_spot", no_jump=True),
+    # A respawning Magic Seed in grass by the fountain, midway up the room (regional flag 10): Bee Fly to reach it, the
+    # horn to cut it (the user, 2026-10-07).
+    Location("Forsaken Lands: Abandoned City, Grass by the Fountain", 162, "AbandonedCity",
+             Source(regional=10, pickup=Pickup(map="AbandonedCity", type=0, item=11)),
+             rule=CanUse("Bee Fly") & CanUse("Horn Slash"), category="hidden_item", no_jump=True),
 )
 # The broken bridge room's ruler, knocked down from its upper right (Event146, flag 382): a switch only Kabbu's horn
 # hits (its data[4] 1, NPCControl), the bridge then joining the upper right and the left.
@@ -59,6 +69,8 @@ MAP_AREAS = (
     # The mushroom maze: from its right door to its left (to the pink spider's room) along the path, burrowing under a
     # plank with Beetle Dig (the user, 2026-10-07).
     Area("BarrenLandsMushrooms", "Left", ("loadzonepinkspider",), CanUse("Beetle Dig")),
+    # The Abandoned City's top (its door to the tent): Jump up from the bottom, a drop down (the user, 2026-10-07).
+    Area("AbandonedCity", "Top", ("loadzonetent",), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
 )
 # Patton's lab, opened by the escort to the termites (flag 376): open from the start (the user, 2026-10-07), its door
 # entity there and its slab gone, as the game has them from 376.

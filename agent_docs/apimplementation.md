@@ -3029,7 +3029,8 @@ of 244; the ant tunnel's room (free; one new location: a Plumpling Pie, a new fi
 Weevil's room (free; its fight winnable with plain attacks, the summoned Weevil included), 102 of 244; the pink spider's
 room (a ledge, Jump; one new location: crystal berry #38 from her first trade, with `ItemOnHand`, an item shop reached),
 103 of 244; the tanks room (free), 104 of 244; the mushroom maze (Beetle Dig between its doors, its left one a one-way
-exit by the user's choice), 105 of 244; the rest of `room-checklist.md` to go.
+exit by the user's choice), 105 of 244; the Abandoned City (Jump to its top; two new locations: a dig spot
+and a respawning Magic Seed in grass, Bee Fly and the horn), 106 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

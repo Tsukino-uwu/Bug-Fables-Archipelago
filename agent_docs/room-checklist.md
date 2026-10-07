@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**105 of 244 done.**
+**106 of 244 done.**
 
 ## Outskirts
 
@@ -158,7 +158,7 @@ as it is, a frozen record.
   spider's later trades (berries only)
 - [x] BarrenLandsTanks (190)
 - [x] BarrenLandsMushrooms (191) — for the quest pass: Layna's scene (Event172, flags 465-468)
-- [ ] AbandonedCity (192)
+- [x] AbandonedCity (192) — for the quest pass: Rebecca's scene (flags 701-709)
 - [ ] BarrenLandsPumpkins (193)
 - [ ] BarrenLandsCloud (194)
 - [ ] BarrenLandsRock (195)
