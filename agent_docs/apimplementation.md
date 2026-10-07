@@ -160,9 +160,10 @@ be wrong.
    entrance to be randomized except maybe the story things"; "there has to be a really good reason for us to not
    randomize a specific entrance/door, they shouldn't just be disabled without me knowing about them or why"). A
    door is left out only for a reason the user has agreed to: so far chapter 3's story-only attack maps (2026-10-05)
-   and the story transfers. To join the shuffle, each set of copies as one door as the settlement's exits already
-   are (build step 52): the 15 links `doors.json` still keeps `fixed` (the Golden Settlement's day and night copies,
-   the Beehive's, `TermiteIndustrial`'s in-map pair) and the Sand Castle basement's two parked doors.
+   and the story transfers. Agreed but not built: the Golden Settlement's day and night copies, each pair one room
+   (three rooms) whose exits shuffle like any door (build step 52's To do). Not looked at yet, for the door pass
+   (`room-logic.md`): the Beehive's story copies, `TermiteIndustrial`'s in-map pair and the Sand Castle basement's two
+   parked doors.
    **How each room gets mapped** (2026-09-27): the checklist in `room-logic.md`; the tester says what needs
    what, the agent turns it into areas and rules.
 3. **Field abilities shuffled as items** (every learned ability built, build step 23) (by the game's names: Beemerang
