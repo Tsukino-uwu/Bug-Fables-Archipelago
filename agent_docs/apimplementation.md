@@ -3024,8 +3024,9 @@ offerings items, build step 53), 93 of 244; the houses, by day and by night (fre
 switches opening the door between them; one new location: its discovery), 96 of 244; the Forsaken Lands from 2026-10-07: the fog maze's start (free;
 Patton's lab open from the start, its door and slab as the game has them from flag 376), 97 of 244; the room below it (a
 raised strip, Jump back up), 98 of 244; outside the Termite gate (the gate needing nothing, its first opening
-skipped and opened only when talked to, documentation step 10; the left door Horn Dash), 99 of 244; the rest of
-`room-checklist.md` to go.
+skipped and opened only when talked to, documentation step 10; the left door Horn Dash), 99 of 244; the broken bridge (Bee Fly across, a ruler
+bridge knocked down with the horn from the upper right, drops; the Bee Fly spot placed on the left), 100 of 244; the
+rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

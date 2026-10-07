@@ -3386,3 +3386,9 @@ either one wrong).
   (limit 384), and the King's audience (Event152) reads no flag or follower, so nothing locks; at the user's ask both
   are kept away too, seen gone with 384 cleared.
   The user: done. Ticked, 99 of 244. Next: `BarrenLandsBeefly` (180).
+- **`BarrenLandsBeefly`, the broken bridge:** the user's ways: the left free, Bee Fly across to the bottom right, Jump
+  up a small ledge to the top right's wrong turn, the upper right (the miniboss door) only from itself, dropping to
+  either, and a ruler it knocks down with the horn (the switch's `data[4]`, horn hits only) bridging it to the left.
+  First written with the right side as one part; the user then added the ledge, and where the flight and the drops
+  land (two tick questions) put the ledge as the map's region. Event name the user's ("Ruler Knocked Down"). The user:
+  done. Ticked, 100 of 244. Next: `BarrenLandsAntTunnel` (181).

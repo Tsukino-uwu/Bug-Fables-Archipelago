@@ -1062,6 +1062,16 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   `PartyFit` has the leader answer (the log's "companion 1000 asked for … the leader answers"), no freeze. The left
   door (`loadzonecave`) behind two `BreakableRock`s, Horn Dash, both ways. The two guards talk only. In a seed the
   trigger is kept away and the first opening skipped (`documentation.md`, step 10): the gate is used by talking to it.
+  **`BarrenLandsBeefly`, the broken bridge (2026-10-07, the user and the dumps):** three parts. The left door
+  (`loadzonecd`) and the Bee Fly scene's trigger (`beeflyevent`, requires 347, limit 19); across the gap with Bee Fly,
+  both ways, the right side's bottom: the door to `BarrenLandsCloud` (`loadzonesouth`), where the flight lands; from it
+  Jump up a small ledge to the wrong turn up top (`returnloadzone`), a drop back down. The upper right
+  (`loadzoneminiboss`, y 7.5) unreachable from the room itself; from it a drop to either the ledge or the bottom, and
+  the ruler switch (`ruler`, limit 382, `Event146` sets 382; data[4] 1,
+  so only `BeetleHorn`/`BeetleDash` hits count, `NPCControl`) knocks `Base/Ruler` down into `Base/Ruler (1)`, a bridge
+  between the upper right and the left, both ways. The grass (`data[1]` -1) hides nothing. The hungry termite
+  (`brothertermite`, 475 until 476, wants item 145, lines 8-10) for the quest pass; Ironnail and a Plumpling for the
+  enemy pass.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
