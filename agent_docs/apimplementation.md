@@ -918,8 +918,9 @@ Archipelago's `custom_worlds` folder.
   or `<Who>'s Reward`, like `Outskirts: Maki and Eetl's Gift`. A character's name only when players will remember it
   (main and recurring ones); a minor one is described instead ("Ladybug Kid's Reward", "Ladybug Siblings' House", for
   Leby and Dib) (2026-09-24). A spot there only by day or only at night (the festival's, build step 52) ends with
-  ` (Day)` or ` (Night)`: `Golden Settlement: Square, Sunset Inn (Night)` (the user, 2026-10-07). Never the item, the flag or a mechanic ("Beemerang" goes stale once
-  abilities are shuffled), Title Case, one word per kind of landmark everywhere. The test
+  "(Day)" or "(Night)": `Golden Settlement: Square, Sunset Inn (Night)` (the user, 2026-10-07). Never the item, the
+  flag or a mechanic ("Beemerang" goes stale once abilities are shuffled), Title Case, one word per kind of landmark
+  everywhere. The test
   `TestLocationNames` fails if a location's name contains its own vanilla item's name. Renaming a location
   never changes its id or flag. **Every name, new or renamed, is the user's to approve before it goes in**
   (2026-10-04): names had been made up without asking (2, 23, 25, 30, 68-74 and 76 among them). The same day the
@@ -4801,7 +4802,8 @@ name had already been swapped; every look is now read before any is swapped, and
 tokens. **A count left behind** (2026-10-07, the user): a Crystal Berry there read "You got 15 Crystal Berry!": Game
 Tokens' article is the count, and a crystal berry, berries or tokens kept the give's own article. Now a crystal berry
 takes the game's usual one (`menutext[125]`, set before every give) and berries and tokens none (their names carry the
-number). **Seen:** "You got a Crystal Berry!". The same line records the Termacade discovery (42), a location of its own once discoveries are swept.
+number). **Seen:** "You got a Crystal Berry!". The same line records the Termacade discovery (42), a location of its
+own once discoveries are swept.
 
 **Status:** built (2026-10-06); the prize stand and the gift seen working.
 
@@ -4909,9 +4911,6 @@ the door table and the logic to come.
 *Code: `data_types.py` (`DayNight`, `TimeSwitch`, `EntityMove`, `SceneCamera`, `SceneryMove`),
 `logic/golden_settlement.py`, `slot_data.py`. The mod: `DayNight.cs`, `KeptOpen.cs` (`EntityMap`), `SeedData.cs`.*
 
-# How it works
-
-
 ## Build step 53: the festival's offerings as items, the contest always won
 
 **Asked and decided (the user, 2026-10-07, mapping `GoldenSettlement2`):** the festival's games are locations now, not
@@ -4946,6 +4945,9 @@ Chubee's gift as a location not yet seen.
 
 *Code: `logic/golden_settlement.py`, `logic/golden_hills.py`, `data/items.json`, `slot_data.py`. The mod: `Festival.cs`,
 `SeedData.cs`.*
+
+# How it works
+
 ## 1. The big picture: generator, seed, server, game
 
 ```text
