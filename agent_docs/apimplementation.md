@@ -4884,8 +4884,8 @@ regenerated and the shuffle tested. The logic: the night maps fold into their th
 
 **Seen (2026-10-07):** the switch Aria on the ground with her "!"; the arrival scene at ground level after its trigger
 and camera moved; the first nightfall the story's scene, then day and night again by the quick swap; the dungeon's way
-open by day, both ways; the farm's copied Aria at her spot by night and day; every exit of the square by day and by
-night (the bottom door, the houses, the farm, the dungeon's way).
+open by day, both ways; the farm's copied Aria at her spot by night and day; the square's bottom door and the dungeon's
+way by day and by night, the houses in at night and back by day (the farm's door not yet tried).
 
 **Status:** in progress (2026-10-07): the three switches and the one-door exits built and seen; the houses' spot by day,
 the door table and the logic to come.
