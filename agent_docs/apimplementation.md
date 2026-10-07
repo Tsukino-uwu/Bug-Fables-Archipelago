@@ -714,8 +714,9 @@ be wrong.
   Grasslands and the swamp, and the collapse is what removes him in vanilla. With the bridge kept up he may stay
   through the swamp (no harm to the logic, which counts only the party's own attacks), but never at the swamp's boss
   fight, so as not to trivialise it, nor with the party in the Wasp Kingdom (its hive, the Wasp General). His hits
-  scale with enemy scaling since 2026-10-08 (build step 54), so the user may let him stay for the swamp's boss after
-  all: to decide when the swamp is mapped.
+  scale with enemy scaling since 2026-10-08 (build step 54). **Seen (2026-10-08):** at the swamp's boss the game itself
+  sets him aside: he followed the party into `SwamplandsBoss` and left it as the boss scene (Event137) began, the room
+  having its own injured Maki until 359; the user: fine, nothing to build for the boss.
 - **Shop Contents and the player's own placements** (found by the audit, 2026-09-29): a player's
   `priority_locations` on a shop is dropped (under Filler Only with a warning in the generator's log, under No
   Progression silently), and plando aimed at one fails silently. The fallback's two bugs (an excluded shop set back to
