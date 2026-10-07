@@ -708,7 +708,11 @@ be wrong.
   the desert closed until flag 130 (Event74, the palace scene after chapter 2), but the door data has no gate there,
   so the logic counts the desert as open. To fix the open-world way: the closed guard kept away (build step 9).
 - **The swamp bridge is to stay up** (the user, 2026-10-04): its collapse (Event130 on `SwamplandsBridge`, flag
-  336) never to happen. What 336 and 337 change is to read first, then the logic of both sides.
+  336) never to happen. What 336 and 337 change is to read first, then the logic of both sides. **Maki** (the user,
+  2026-10-08): the Far Grasslands' arrival scene (Event125) makes him a follower who fights alongside in the Far
+  Grasslands and the swamp, and the collapse is what removes him in vanilla. With the bridge kept up he may stay
+  through the swamp (no harm to the logic, which counts only the party's own attacks), but never at the swamp's boss
+  fight, so as not to trivialise it, nor with the party in the Wasp Kingdom (its hive, the Wasp General).
 - **Shop Contents and the player's own placements** (found by the audit, 2026-09-29): a player's
   `priority_locations` on a shop is dropped (under Filler Only with a warning in the generator's log, under No
   Progression silently), and plando aimed at one fails silently. The fallback's two bugs (an excluded shop set back to
