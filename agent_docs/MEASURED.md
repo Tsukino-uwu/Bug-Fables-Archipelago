@@ -794,6 +794,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     its building is scenery, `Model/TermiteArcade` from 350, `Model/Base/EmptyLotFence` until it (MapDump). The
     greeter (`termiteoutside`, lines 92-93) gives 15 tokens once (`var,1,15`, `giveitem,1,110`, flag 351, discovery 42);
     the token count is `flagvar[27]` (`Showtokens`, the prize stand spends it, Event at `EventControl.cs:20662`).
+    The chef (`FlyChef`, no flags) needs nothing from the left or right door, the horn from the underground bar's door
+    (the user, 2026-10-07: for recipes and quests later).
     **`BugariaTheater` (2026-10-06, the user):** in and out free; the moth and the spinner need nothing to reach,
     the stage (Chubee) needs Jump. A moth sells the G-Bug Ranger Plushie for 40 berries (line 7, `giveitem,1,25`,
     flag 58). Crystal berry #13 (the one no data or literal grant placed) comes from a `MusicSpinner`, scenery on
