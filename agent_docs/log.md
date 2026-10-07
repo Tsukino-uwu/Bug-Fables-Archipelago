@@ -3385,3 +3385,4 @@ either one wrong).
   The user asked whether the plaza's escort mattered: Event149's plaza half only walks off `elizant` and `eventguard`
   (limit 384), and the King's audience (Event152) reads no flag or follower, so nothing locks; at the user's ask both
   are kept away too, seen gone with 384 cleared.
+  The user: done. Ticked, 99 of 244. Next: `BarrenLandsBeefly` (180).
