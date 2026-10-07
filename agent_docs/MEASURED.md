@@ -38,6 +38,7 @@ read, a log or a probe.
 - [All medals by
   source](#all-medals-by-source-2026-09-24-entity-dump-scriptdump-code-read-matched-to-the-bug-fables-wiki)
 - [We Owe Ya!'s helpers](#we-owe-yas-helpers-2026-09-27-code-read-a-testers-report)
+- [The cooks](#the-cooks-2026-10-07-code-read-and-entitydump-the-users-count)
 - [What the mod's code relies
   on](#what-the-mods-code-relies-on-code-read-2026-09-24-and-2026-09-25-moved-here-from-code-comments-2026-09-25)
 - [Battles, for enemy shuffle — SPOILERS: boss
@@ -1454,6 +1455,22 @@ Forsaken Lands"). Used by `door-graph.py` and `entrances.py`.
   `(95, 13)` (Event222); 391 → `(76, 0)`; 298 and 189 together → `(20, 13)` (298 in Event111). The shop check also
   counts flag 704, which adds no entry. Where 391 and 189 are set, and which characters these entity ids are, isn't
   read yet. Not seen in game.
+
+## The cooks (2026-10-07, code read and EntityDump; the user's count)
+
+Some items are only cooked (the user: four or five cooks and a microwave, needed for some items, for recipes and quests
+later). Fry, Kut and Kali share the cooking scene `Event3`, which picks each map's cook (`chefid`: 0
+`BugariaCommercial`, 1 `GoldenSettlement1` and its night map, 2 `DefiantRoot3`); the microwave has its own, `Event174`.
+
+| Cook | Map, entity | There |
+|---|---|---|
+| Fry | `BugariaCommercial`, `FlyChef` | always; from the left or right door nothing, from the underground bar's door the horn |
+| Kut | `GoldenSettlement1`, `Kut (Chef)` | always, by day and by night; nothing to reach |
+| Kali | `DefiantRoot3`, `kali` until flag 471, `kali - Duplicate` from it | always |
+| The bandits' cook | `HideoutRightA`, `cook` | from flag 301 |
+| The microwave | `TermiteIndustrial`, `HIDEmicrowave` (an `Event` object, `Event174`) | always |
+
+Copies of Fry and Kut stand in the ending's plaza (`BugariaEndPlaza`), a story-only map.
 
 ## What the mod's code relies on (code read 2026-09-24 and 2026-09-25; moved here from code comments 2026-09-25)
 
