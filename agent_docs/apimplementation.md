@@ -3041,8 +3041,8 @@ isolated platform), 108 of 244; the dome overlook (free; two new locations: its 
 grass), 109 of 244; the False Monarch's tent (free; its bounty for the quest pass), 110 of 244; the tunnel side (Jump,
 Horn Dash and Bee Fly to its high door; three new locations: a Lore Book in tall grass and two Squash dropped once by
 grass), 111 of 244, the Forsaken Lands done; the Far Grasslands from 2026-10-08: the border cave (each side door behind
-a gate its own lever opens; the ant tunnel's miner past grass, the horn), 112 of 244; the crossroads (free; a new location: a dig spot's crystal berry), 113 of 244; the rest of `room-checklist.md` to
-go.
+a gate its own lever opens; the ant tunnel's miner past grass, the horn), 112 of 244; the crossroads (free; a new
+location: a dig spot's crystal berry), 113 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
