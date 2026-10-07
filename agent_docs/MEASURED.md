@@ -1028,7 +1028,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   Chubee's Weak Stomach (79-80, flag 102); lost (flags 99, 102), Chubee trades the offering for a Berry Juice (74-77,
   sets 101) and the medal goes to the caravan after the fight. Left side: NPCs that send the party back to the square
   (the sign, the bee guard, the farmer outside and Neo before the festival, a second sign after); the power plant's
-  door from flag 226 (`Base/WoodenGate2` until 226). Bomby's hat (flag 309) after the festival.
+  door from flag 226 (`Base/WoodenGate2` until 226). Bomby's hat (flag 309) after the festival. The dig spot (crystal
+  berry #7) by day only, Beetle Dig; the aphid girl's discovery (12) needs nothing (the user).
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

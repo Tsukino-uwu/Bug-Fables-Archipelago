@@ -3337,3 +3337,9 @@ either one wrong).
   the night's talkers, the doll's trade, the festival fight, the balcony and festival discoveries; the cooks listed in
   `MEASURED.md` for the recipe logic. The door table still marks the settlement's links fixed (build step 52's To do).
   The user meant the two sellers by "log it for later"; the room done. Ticked with its night map, 91 of 244.
+- **`GoldenSettlement2`, the farm:** the festival's games, Chubee's gift, the windmill (berry #4 and its farmer), the
+  night scene (Smugbee; Pep Talk stays the game's) and a dig spot by day became locations, the user naming each; the
+  offerings items (progression for the dungeon's shrines) and the eating contest always won (build step 53); every
+  medal useful but Hard Mode (the user). The power plant door kept open by day and night (the night map's own gate
+  switched off, a new `scenery_off`). Fixed on the way: one box when a line sets its flag before its give. Dev:
+  QuietBursts off (it hid two boxes), AdoptSeed off. The user: done. Ticked with its night map, 93 of 244.
