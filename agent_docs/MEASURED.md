@@ -1010,6 +1010,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (`shopkeeper`: Aphid Egg, Aphid Dew, Honey Drop, Clear Water, Hard Seed) is one shop by day and by night. Kut the
   chef (`Kut (Chef)`, no flags) is there by day and by night and needs nothing to reach (the user: for recipes and
   quests later).
+  Sellers by dialogue (not shop entities; left the game's own for now, the user, 2026-10-07): the mosquito girl
+  (`MosquitoGirl`, always) sells Berry Juice for 9 berries again and again (line 2, `giveitem,0,39`); the moth merchant
+  (`MerchantMoth`, until flag 88) at night only (line 87, from 85) offers Spicy Berry 20, Numbnail Dart 10, Magic Seed 30
+  (lines 88, 91-93) and buys the party's items (89, 98-99). Story Aria takes Queen's Dinner (item 32) as the offering
+  "grand enough for Venus" (line 182 to 183, flag 393). Samira (from flag 6), the quest board (from 86), and the night's
+  talkers (Layna and her pet, Bomby, Stratos and Delilah, Neolith, the shy bee, Gen and Eri, Zasp) for the quest pass.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

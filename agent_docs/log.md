@@ -3324,3 +3324,15 @@ either one wrong).
   (build step 51; a wider minigame/arcade/card game toggle is their idea for later). A refused game first left the
   player frozen (the line's `|event|` expects a scene to clear `minipause`); fixed, seen. The prize itself on TO-CHECK.
   The user: done. Ticked, 89 of 244. Then the user asked to go back to the pier to look at rooms there again.
+- **`GoldenSettlement1`, "Square" (the user's), in progress, not ticked (the user: log it to look at later):** the
+  festival night made switchable (build step 52): Aria the switch in each of the three rooms (the farm's and the houses'
+  copied in), one door per exit, the square open at night, the statue swapped by day and slid at night, the arrival
+  scene and its camera moved down with her (the user placed every spot; `switchhere` tried them live), the words the
+  user's ("Wait for dawn"). The first nightfall: the story's scene in the square, in place elsewhere with its flag and
+  discovery, the arrival scene skipped if the night comes first. New locations, the user's names: "Square, Grass by
+  the Lever" (Lore Book, hidden item, the horn), "Square, Sunset Inn (Night)" (Mothiva Doll, Jump; (Day)/(Night) in a
+  name now the rule), "Square, Shop 1-5". All four doors free without Jump. Fixed on the way: one hold-up per item
+  shop purchase and discovery; the Termacade gift's "15" count. Left for later passes: the two dialogue sellers
+  (Berry Juice; the moth merchant's night goods), the offering (Queen's Dinner, flag 393), the quest board, Samira,
+  the night's talkers, the doll's trade, the festival fight, the balcony and festival discoveries; the cooks listed in
+  `MEASURED.md` for the recipe logic. The door table still marks the settlement's links fixed (build step 52's To do).
