@@ -3353,6 +3353,7 @@ either one wrong).
   discoveries, a flag set before its give) and the Termacade gift's count. Open from today: the door table still marks
   the settlement's links fixed (step 52's To do); the sellers' pass (dialogue sellers); tests and the fuzzer before the
   push (not run, as asked; `TestMedalsAreUseful` new). The last seed, `AP_81434407810428720732` (this session's
-  scratchpad `out/`, player file `players/BugTester.yaml` with dig spots and hidden items on), is no longer hosted (the
-  server stopped); the user's save is tied to it. Dev settings: `QuietBursts` and `AdoptSeed` off; `OneHit`,
+  scratchpad `out/`, player file `players/BugTester.yaml` with dig spots and hidden items on), is still hosted on 38281
+  (the user asked it left on to keep testing; its own process, 29852, started from the Archipelago checkout); the
+  user's save is tied to it. Dev settings: `QuietBursts` and `AdoptSeed` off; `OneHit`,
   `InfJump`, `BumpKill` on; the command file `bed6439d-.../scratchpad/cmds.txt`; the dev `switchhere` and `find`.
