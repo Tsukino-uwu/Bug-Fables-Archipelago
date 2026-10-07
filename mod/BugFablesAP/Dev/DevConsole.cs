@@ -387,22 +387,29 @@ namespace BugFablesAP
                         return $"tokens: {MainManager.instance.flagvar[GameVars.Tokens]}";
                     case "killall":
                     {
-                        // HP to 0 only: the battle's own CheckDead, after the next action, ends them the game's way.
+                        // killall [hp]: every enemy above that HP (0 by default) brought down to it. At 0 only HP is
+                        // set: the battle's own CheckDead, after the next action, ends them the game's way.
                         BattleControl battle = MainManager.battle;
                         if (battle == null || battle.enemydata == null)
                         {
                             return "killall: not in a battle";
                         }
+                        int left = 0;
+                        if (parts.Length > 1 && (!int.TryParse(parts[1], out left) || left < 0))
+                        {
+                            return "killall [hp]";
+                        }
                         int set = 0;
                         for (int i = 0; i < battle.enemydata.Length; i++)
                         {
-                            if (battle.enemydata[i].hp > 0)
+                            if (battle.enemydata[i].hp > left)
                             {
-                                battle.enemydata[i].hp = 0;
+                                battle.enemydata[i].hp = left;
                                 set++;
                             }
                         }
-                        return $"killall: {set} enemies at 0 HP; they fall after the next action";
+                        return left == 0 ? $"killall: {set} enemies at 0 HP; they fall after the next action"
+                            : $"killall: {set} enemies at {left} HP";
                     }
                     case "enemylook":
                         // A visual test: reloads the current map with every ordinary map enemy looking like one enemy.

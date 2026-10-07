@@ -345,8 +345,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `discovery <n> [on|off]`: show or set a journal discovery (no pop-up), to replay a scene that records one.
 - `heal`: the game's own full heal (HP and TP, the whole party). Test files only.
 - `tokens [n]`: show or set the Termacade's token count (`flagvar[27]`). Test files only.
-- `killall`: in a battle, every enemy's HP to 0; the battle's own death check ends them after the next action (a boss
-  a test party can't hit, such as the spider in the air). Test files only.
+- `killall [hp]`: in a battle, every enemy's HP to 0; the battle's own death check ends them after the next action (a
+  boss a test party can't hit, such as the spider in the air). With a number, every enemy above it brought down to it
+  (2026-10-08, the user: to test a scripted HP end, such as the swamp boss's at 10). Test files only.
 - `take <item|key> <id>`: removes one from the inventory, as the game's own `removeitem` does. Test files only.
 - `warpicon leaf|key|scroll`: the Warp button's icon (the leaf is the default), shown the next time the pause menu
   opens.
