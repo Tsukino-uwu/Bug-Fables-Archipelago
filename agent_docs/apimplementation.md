@@ -4823,9 +4823,13 @@ item pocket, flag 305), 30 the "MOREFARM" code and berries, and the mayor's late
    the Termacade's are (step 50); the location stays either way.
 3. **The mod refuses the game** (`FieldMoves.cs`, a prefix on `StartEvent(54)`): without Vi in the party or with the
    Beemerang locked, the scene doesn't start, and at Whack Farms the 10 berries its line already took are given back
-   (`[moves] Wacka Worm refused ...`).
+   (`[moves] Wacka Worm refused ...`). The line's `|event|` leaves `minipause` and `overridefollower` for the scene
+   to clear and skips `EndOfMessage`; with no scene the player stood frozen (seen), so the mod does both once the
+   message closes.
 
-**Status:** built (2026-10-07); the game played without a freeze, the refusal and the prize not yet seen.
+**Seen (2026-10-07):** without Vi, the keeper's game refused, the fee back, the player free after.
+
+**Status:** built (2026-10-07); the game played without a freeze and the refusal seen; the prize not yet seen.
 
 *Code: `options.py` (`MinigamePrizes`), `rules.py`, `logic/golden_path.py`, `logic/golden_settlement.py`,
 `data/items.json`. The mod: `FieldMoves.cs` (`WormGame`).*

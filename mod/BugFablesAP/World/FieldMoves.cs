@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -92,7 +93,23 @@ namespace BugFablesAP
                 }
                 log.LogInfo($"[moves] Wacka Worm refused on {MainManager.map.mapid}: Vi {(vi ? "in" : "not in")} the party, "
                     + $"the Beemerang {(beemerang ? "usable" : "locked")}{(farms ? $"; the {Fee}-berry fee given back" : "")}");
+                mm.StartCoroutine(Release());
                 return false;
+            }
+
+            // A line's |event| leaves minipause and overridefollower for the scene to clear, and skips EndOfMessage:
+            // with no scene, done here once the message closes.
+            private static IEnumerator Release()
+            {
+                MainManager mm = MainManager.instance;
+                while (mm.message)
+                {
+                    yield return null;
+                }
+                mm.minipause = false;
+                mm.overridefollower = false;
+                MainManager.EndOfMessage();
+                log.LogInfo("[moves] Wacka Worm refused: the line's end done (minipause off)");
             }
         }
 
