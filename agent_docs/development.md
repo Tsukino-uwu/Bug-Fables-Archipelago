@@ -480,6 +480,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   It redoes the map's enemy-only walls for the new characters (`MEASURED.md`, enemy-only walls).
 - `removemember <0|1|2>`: take a member out of the party; the member guard then keeps them out of the story's party
   changes (the members left are allowed, the first as the start), for trying a party the story never has.
+- `switchhere`: moves this room's day/night switch NPC to where the player stands, and keeps it there for the session
+  (day and night alike, nothing saved), to try spots without a new seed (2026-10-07, the settlement's switches).
 - `find <name>`: logs every object on the map with that name, shown or hidden: where it is, how far from the player,
   and each collider's bounds and `ConditionChecker` (2026-10-07: the settlement's `Cube` wall, out of `solids`' reach).
 - `solids`: logs every solid collider under and within 4 of the player, with its path, size, components and any

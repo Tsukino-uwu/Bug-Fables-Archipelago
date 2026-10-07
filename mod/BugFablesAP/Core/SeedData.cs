@@ -194,6 +194,8 @@ namespace BugFablesAP
                 At = Vector(e["at"]),
                 Day = e["day"].Values<string>().ToArray(),
                 Night = e["night"].Values<string>().ToArray(),
+                CopyMap = e["copy"]?.Value<string>("map"),
+                CopyEntity = e["copy"]?.Value<string>("entity"),
             });
             EntitiesMoved = SlotData.List(data, "entities_moved", e => new DayNight.Switch
             {

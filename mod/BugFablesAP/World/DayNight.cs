@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
 using BepInEx.Logging;
 using HarmonyLib;
 using UnityEngine;
@@ -30,6 +32,9 @@ namespace BugFablesAP
             // What it says, then its staying and switching choices (by day, at night); none for a plain moved entity.
             internal string[] Day;
             internal string[] Night;
+            // Another map's entity whose data row is added to this map's, named Entity (the map has none of its own).
+            internal string CopyMap;
+            internal string CopyEntity;
         }
 
         internal sealed class Camera
@@ -58,6 +63,34 @@ namespace BugFablesAP
         private static bool savedUntil;
 
         private static List<Pair> Pairs => seed?.Invoke()?.DayNightMaps;
+
+        // The dev console's trial spots for a map's switch ("map/entity"), this session only; the seed's spot otherwise.
+        internal static readonly Dictionary<string, Vector3> TrialSpots = new Dictionary<string, Vector3>();
+
+        // The dev console's switchhere: this map's switch moved to the player now, and kept there for the session.
+        internal static string MoveSwitchHere()
+        {
+            if (MainManager.map == null || MainManager.player == null)
+            {
+                return "switchhere: no map or player";
+            }
+            string map = EntityMap(MainManager.map.mapid.ToString());
+            Switch sw = seed?.Invoke()?.TimeSwitches?.FirstOrDefault(s => s.Map == map);
+            NPCControl npc = sw == null ? null : MainManager.map.GetComponentsInChildren<NPCControl>(true)
+                .FirstOrDefault(n => n.name == sw.Entity);
+            if (npc == null)
+            {
+                return "switchhere: no switch on " + map;
+            }
+            Vector3 here = MainManager.player.transform.position;
+            TrialSpots[map + "/" + sw.Entity] = here;
+            npc.transform.position = here;
+            if (npc.entity != null)
+            {
+                npc.entity.startpos = here;
+            }
+            return $"switchhere: {map}'s {sw.Entity} at {here} for this session";
+        }
 
         internal static void Enable(ManualLogSource logger, Func<SeedData> seedData, Func<bool> on)
         {
@@ -169,6 +202,73 @@ namespace BugFablesAP
             }
         }
 
+        // CreateEntities reads a map's entity rows and their names (Data/EntityData/<id> and its names file), split by
+        // line: a switch copied from another map gets that entity's row and name added to both, before the trailing
+        // empty line, so the game builds it like any other.
+        [HarmonyPatch(typeof(MapControl), "CreateEntities")]
+        [HarmonyTranspiler]
+        private static IEnumerable<CodeInstruction> Transpile(IEnumerable<CodeInstruction> instructions) =>
+            Hooks.Safe(instructions, EditCreate, "night");
+
+        private static IEnumerable<CodeInstruction> EditCreate(List<CodeInstruction> code)
+        {
+            MethodInfo split = AccessTools.Method(typeof(string), nameof(string.Split), new[] { typeof(char[]) });
+            MethodInfo add = AccessTools.Method(typeof(DayNight), nameof(AddCopies))
+                ?? throw new MissingMethodException(nameof(DayNight), nameof(AddCopies));
+            int done = 0;
+            for (int i = 0; i < code.Count && done < 2; i++)
+            {
+                if (code[i].Calls(split))
+                {
+                    code.InsertRange(i + 1, new[]
+                    {
+                        new CodeInstruction(OpCodes.Ldarg_0),
+                        new CodeInstruction(OpCodes.Ldc_I4, done),
+                        new CodeInstruction(OpCodes.Call, add),
+                    });
+                    done++;
+                }
+            }
+            log.LogInfo($"[night] {(done == 2 ? "installed" : "NOT installed")} in MapControl.CreateEntities ({done} of 2 splits: copied switches)");
+            return code;
+        }
+
+        // names: 0 the rows, 1 their names.
+        private static string[] AddCopies(string[] lines, MapControl map, int names)
+        {
+            if (randomizerOn == null || !randomizerOn() || map == null || lines == null)
+            {
+                return lines;
+            }
+            string here = EntityMap(map.mapid.ToString());
+            List<Switch> copies = (seed?.Invoke()?.TimeSwitches ?? new List<Switch>())
+                .Where(s => s.Map == here && s.CopyMap != null).ToList();
+            if (copies.Count == 0)
+            {
+                return lines;
+            }
+            List<string> result = lines.ToList();
+            foreach (Switch copy in copies)
+            {
+                int from = (int)(MainManager.Maps)Enum.Parse(typeof(MainManager.Maps), copy.CopyMap);
+                string[] sourceNames = Resources.Load<TextAsset>("Data/EntityData/Names/" + from + "names")?.ToString()
+                    .Split('\n');
+                string[] sourceRows = Resources.Load<TextAsset>("Data/EntityData/" + from)?.ToString().Split('\n');
+                int row = sourceNames == null ? -1 : Array.FindIndex(sourceNames, n => n.Trim() == copy.CopyEntity);
+                if (row < 0 || sourceRows == null || row >= sourceRows.Length)
+                {
+                    log.LogWarning($"[night] {map.mapid}: {copy.CopyEntity} NOT FOUND in {copy.CopyMap}'s entities: no switch copied");
+                    continue;
+                }
+                result.Insert(Math.Max(0, result.Count - 1), names == 1 ? copy.Entity : sourceRows[row]);
+                if (names == 1)
+                {
+                    log.LogInfo($"[night] {map.mapid}: {copy.CopyMap}'s {copy.CopyEntity} added as {copy.Entity}");
+                }
+            }
+            return result.ToArray();
+        }
+
         // On load: scenery set where a scene would leave it, and the map's switch NPC moved to its spot with the
         // nightfall or morning prompt as its only talk.
         [HarmonyPatch(typeof(MapControl), "CreateEntities")]
@@ -219,10 +319,11 @@ namespace BugFablesAP
                     log.LogWarning($"[night] {map}: switch {sw.Entity} NOT FOUND: no day/night switch here");
                     continue;
                 }
-                npc.transform.position = sw.At;
-                npc.entity.startpos = sw.At;
+                Vector3 at = TrialSpots.TryGetValue(p.Day + "/" + sw.Entity, out Vector3 trial) ? trial : sw.At;
+                npc.transform.position = at;
+                npc.entity.startpos = at;
                 npc.dialogues = new[] { new Vector3(-1f, AddPrompt(__instance, p, atNight ? sw.Night : sw.Day), 0f) };
-                log.LogInfo($"[night] {map}: {sw.Entity} is the day/night switch at {sw.At} ({(atNight ? "morning" : "nightfall")} offered)");
+                log.LogInfo($"[night] {map}: {sw.Entity} is the day/night switch at {at}{(at != sw.At ? " (a trial spot)" : "")} ({(atNight ? "morning" : "nightfall")} offered)");
             }
         }
 

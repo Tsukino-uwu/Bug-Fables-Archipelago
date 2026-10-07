@@ -4870,13 +4870,25 @@ settlement, so it is never touched.
    slid aside as the fight's scene slides it, so the dungeon's door never lands behind it.
 5. **The square open at night:** its south door kept present and the `blocker` trigger kept away. A night map's entity
    lists are read under its day map's name (`DayNight.EntityMap`), so the seed names each entity once.
+6. **One door per exit:** each exit between the three rooms is a door entity per festival state on one spot; the one
+   before the festival is kept present in every state and the nine night and after-festival copies kept away, so an
+   exit is always the same door and the night only picks the version of the room it lands in (the user: three rooms,
+   the night acting only within them; one time of day for all three).
+7. **The farm's and the houses' switches** are the square's Aria copied in (`time_switches`' `"copy"`): her entity
+   data row and name added to the room's as `CreateEntities` reads them (a transpiler after its two splits), so the
+   game builds her like any other entity. Spots tried live with the dev `switchhere`, then written in.
+
+**To do:** the door table (`door-graph.py`) marks the three rooms' links "fixed" (never shuffled), as their copies
+stand on one spot; with one door per exit, a group of copies there becomes one door, as for one-ways, then the table
+regenerated and the shuffle tested. The logic: the night maps fold into their three day rooms, room by room.
 
 **Seen (2026-10-07):** the switch Aria on the ground with her "!"; the arrival scene at ground level after its trigger
 and camera moved; the first nightfall the story's scene, then day and night again by the quick swap; the dungeon's way
-open by day, both ways.
+open by day, both ways; the farm's copied Aria at her spot by night and day; every exit of the square by day and by
+night (the bottom door, the houses, the farm, the dungeon's way).
 
-**Status:** in progress (2026-10-07): the square's switch seen working, its words the user's; the farm's and the
-houses' switches, the night rooms' walk and the logic for the night's spots to come.
+**Status:** in progress (2026-10-07): the three switches and the one-door exits built and seen; the houses' spot by day,
+the door table and the logic to come.
 
 *Code: `data_types.py` (`DayNight`, `TimeSwitch`, `EntityMove`, `SceneCamera`, `SceneryMove`),
 `logic/golden_settlement.py`, `slot_data.py`. The mod: `DayNight.cs`, `KeptOpen.cs` (`EntityMap`), `SeedData.cs`.*
