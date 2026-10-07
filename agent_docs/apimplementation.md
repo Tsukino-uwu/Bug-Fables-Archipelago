@@ -4857,8 +4857,10 @@ settlement, so it is never touched.
    on those maps, each `CheckIfCanExist` sees flag 85 set and 86 clear at night, and by day both as whether the
    festival is over; the save's values come back in a finalizer. `LoadMap` loads the version the night asks for, so
    every door, warp and scene lands right. Not saved: a session starts as the story has it.
-2. **The switch** (`time_switches`: `[{"map", "entity", "at"}]`): the entity is kept present and moved to `at`, and its
-   talk is the game's prompt shape: "Wait for nightfall" or "Wait for morning", "Keep exploring". Its yes runs the
+2. **The switch** (`time_switches`: `[{"map", "entity", "at", "day", "night"}]`): the entity is kept present and moved
+   to `at`, and its talk is the game's prompt shape with the seed's words. The user's: by day Aria's own line ("Oh? Are
+   you here for the festival? It should start as soon as the sun sets." Keep exploring. / Wait for nightfall.), at night
+   "Oh? Are you enjoying the festival? It should end at daybreak." Keep exploring. / Wait for dawn. Its yes runs the
    nightfall event: the story's own scene the first time (its speech, discovery 13, flag 85), the mod's swap after (a
    fade, the other version with the party where it stood, the line's end done).
 3. **Entities moved** (`entities_moved`: `[{"map", "entity", "at"}]`) and **a scene's fixed camera point**
@@ -4873,9 +4875,8 @@ settlement, so it is never touched.
 and camera moved; the first nightfall the story's scene, then day and night again by the quick swap; the dungeon's way
 open by day, both ways.
 
-**Status:** in progress (2026-10-07): the square's switch seen working; its words to be chosen by the user against
-Aria's own (the user: not made-up text), then the farm's and the houses' switches, the night rooms' walk and the logic
-for the night's spots.
+**Status:** in progress (2026-10-07): the square's switch seen working, its words the user's; the farm's and the
+houses' switches, the night rooms' walk and the logic for the night's spots to come.
 
 *Code: `data_types.py` (`DayNight`, `TimeSwitch`, `EntityMove`, `SceneCamera`, `SceneryMove`),
 `logic/golden_settlement.py`, `slot_data.py`. The mod: `DayNight.cs`, `KeptOpen.cs` (`EntityMap`), `SeedData.cs`.*

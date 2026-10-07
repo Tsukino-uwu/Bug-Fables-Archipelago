@@ -27,6 +27,9 @@ namespace BugFablesAP
             internal string Map;
             internal string Entity;
             internal Vector3 At;
+            // What it says, then its staying and switching choices (by day, at night); none for a plain moved entity.
+            internal string[] Day;
+            internal string[] Night;
         }
 
         internal sealed class Camera
@@ -218,21 +221,18 @@ namespace BugFablesAP
                 }
                 npc.transform.position = sw.At;
                 npc.entity.startpos = sw.At;
-                npc.dialogues = new[] { new Vector3(-1f, AddPrompt(__instance, p, atNight), 0f) };
+                npc.dialogues = new[] { new Vector3(-1f, AddPrompt(__instance, p, atNight ? sw.Night : sw.Day), 0f) };
                 log.LogInfo($"[night] {map}: {sw.Entity} is the day/night switch at {sw.At} ({(atNight ? "morning" : "nightfall")} offered)");
             }
         }
 
         // The prompt as the game writes the nightfall one (GoldenSettlement1 line 19): its yes goes to a line of its
         // own that starts the story's nightfall event, which StartEvent turns into the switch once the story had one.
-        private static int AddPrompt(MapControl map, Pair p, bool atNight)
+        private static int AddPrompt(MapControl map, Pair p, string[] words)
         {
             List<string> lines = (map.dialogues ?? new string[0]).ToList();
             int yes = lines.Count + 1;
-            string text = atNight ? "The night is still young. Shall we wait for morning?"
-                : "The sun is still up. Shall we wait for nightfall?";
-            string choice = atNight ? "Wait for morning." : "Wait for nightfall.";
-            lines.Add($"{text}|prompt,map,2.5,2,-11,{yes},@Keep exploring.,@{choice},none|");
+            lines.Add($"{words[0]}|prompt,map,2.5,2,-11,{yes},@{words[1]},@{words[2]},none|");
             lines.Add($"|event,{p.FirstEvent}|");
             map.dialogues = lines.ToArray();
             return yes - 1;

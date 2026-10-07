@@ -29,10 +29,15 @@ DAY_NIGHT = (
     DayNight("GoldenSettlement2", "GoldenSettlement2Night", 85, 86, 52),
     DayNight("GoldenSettlement3", "GoldenSettlement3Night", 85, 86, 52),
 )
+# What every switch says (the user, 2026-10-07): by day Aria's own nightfall prompt (GoldenSettlement1 line 19), word
+# for word; at night the user's.
+_DAY = ("Oh? Are you here for the festival? It should start as soon as the sun sets.", "Keep exploring.",
+        "Wait for nightfall.")
+_NIGHT = ("Oh? Are you enjoying the festival? It should end at daybreak.", "Keep exploring.", "Wait for dawn.")
 # The square's switch: Aria before the festival (her talk the nightfall prompt), moved off the arena (Jump) to the
 # ground in front of it, as far from Leif and Celia as on the arena (the user, 2026-10-07).
 TIME_SWITCHES = (
-    TimeSwitch("GoldenSettlement1", "Aria", (-1.8, 0.0, -1.8)),
+    TimeSwitch("GoldenSettlement1", "Aria", (-1.8, 0.0, -1.8), _DAY, _NIGHT),
 )
 # Leif and Celia before the festival, on the arena with Aria for the arrival scene (Event51, which talks from where they
 # stand): moved down below the arena's right side, as far apart as they stood up there (the user, 2026-10-07).

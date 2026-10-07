@@ -130,7 +130,8 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         # Sellers' lines the client makes free ([{"map", "lines"}]): their price commands and written price to 0.
         "free_sales": _entities(FREE_SALES),
         # Day maps whose night the client switches at will ([{"day", "night", "from", "until", "first_event"}]), each
-        # map's switch NPC ([{"map", "entity", "at"}]), and scenery set where a scene would leave it.
+        # map's switch NPC ([{"map", "entity", "at", "day", "night"}], each of the last two its line, then its staying
+        # and switching choices), and scenery set where a scene would leave it.
         "day_night": _entities(DAY_NIGHT),
         "time_switches": _entities(TIME_SWITCHES),
         "scenery_moved": _entities(SCENERY_MOVED),

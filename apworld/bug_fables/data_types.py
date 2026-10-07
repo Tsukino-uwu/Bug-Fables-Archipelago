@@ -196,14 +196,18 @@ class DayNight:
 
 @dataclass(frozen=True, slots=True)
 class TimeSwitch:
-    """The day/night switch NPC of a DayNight map, by entity name, kept present at `at` (x, y, z) both day and night."""
+    """The day/night switch NPC of a DayNight map, by entity name, kept present at `at` (x, y, z) both day and night.
+    day and night: what it says at each, then its two choices, staying and switching."""
 
     map: str
     entity: str
     at: tuple[float, float, float]
+    day: tuple[str, str, str]
+    night: tuple[str, str, str]
 
     def to_slot(self) -> dict[str, Any]:
-        return {"map": self.map, "entity": self.entity, "at": list(self.at)}
+        return {"map": self.map, "entity": self.entity, "at": list(self.at), "day": list(self.day),
+                "night": list(self.night)}
 
 
 @dataclass(frozen=True, slots=True)
