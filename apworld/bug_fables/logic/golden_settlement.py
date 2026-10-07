@@ -15,4 +15,10 @@ LOCATIONS = (
 # gone. The gate itself stays the game's: shut until its lever is hit from the desert side (the user, 2026-10-07).
 SCENERY_HIDDEN = (
     EntityRef("GoldenSettlementEntrance", "Base/Cube"),
+    # The square's altar statue over the path to the Golden Hills dungeon, there until the festival's fight (flag 103,
+    # Event58), swapped from the start for the moved one (below): the world open, the festival left as it is.
+    EntityRef("GoldenSettlement1", "Base/Altar"),
+)
+SCENERY_PRESENT = (
+    EntityRef("GoldenSettlement1", "Base/Altar (1)"),
 )

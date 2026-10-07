@@ -985,6 +985,22 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   `CreateEntities` (`MapControl.cs:1708`, from its keeper's check), each with `shopkeeper` pointing back. The minigame
   room: Wacka Worm replays for 10 berries, and a
   mayor's scene late (flags 557-559).
+  **The festival's day and night (2026-10-07, code and dumps; the user on screen):** the settlement has three states:
+  before the festival (no flag 85), the festival night (85, not 86), after it (86). The innkeeper's "Wait for
+  nightfall" runs `Event52`, which only sets 85 and loads `GoldenSettlement1Night`. Flag 86 is set only by `Event58`,
+  the festival's fight (lines 123/124, Vi or Kabbu picked), which also sets 102 and 103. A night map has no entity data
+  of its own (`MapControl.CreateEntities` reads `readdatafromothermap`): the day map's entities, picked by 85 and 86,
+  only the scenery differs. No code reads flag 85: 61 entities (36, 17 and 8 in `GoldenSettlement1`-`3`), three NPCs'
+  lines (the barkeeper, the moth merchant, the card master) and one wall (`GoldenSettlement1/Cube`, until 85, top left
+  by the balcony, at (-11.8, 3.2, 18.4); the user: it changes nothing). Flag 86 reaches beyond the settlement
+  (`BugariaOutskirtsOutsideCity`, `BugariaResidential`, `DefiantRoot1`, `BeehiveBalcony`, the settlement entrance).
+  About 30 NPCs exist only that night: the mayor's Wacka Worm game, Tanjerin, Carmina and Madame Butterfly, the
+  windmill farmer, Chuck, the fortune teller, Stratos and Delilah. **The altar statue** over the way to the Golden
+  Hills dungeon (whose door lands behind it: arriving from there, the party is stuck) is `Base/Altar` until flag 103,
+  swapped for the moved `Base/Altar (1)` from 103 (`Event58` slides it during the fight); found with the dev `find`.
+  **`GoldenSettlement1` by day (2026-10-07, the user):** the left, bottom and right doors free between them; the lever
+  on the left (any attack) moves a platform up to a house with a discovery (`Event53`), reached without Jump by
+  walking up the lever's stump; the arena (`Base/Arena`, Aria on it) takes Jump.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

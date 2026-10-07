@@ -426,6 +426,7 @@ namespace BugFablesAP
                     case "items": return Items();
                     case "tree": return Tree();
                     case "solids": return Solids();
+                    case "find": return Find(parts.Length > 1 ? string.Join(" ", parts.Skip(1).ToArray()) : "");
                     case "script": return Script(parts);
                     case "pos":
                     {

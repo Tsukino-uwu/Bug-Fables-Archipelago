@@ -480,6 +480,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   It redoes the map's enemy-only walls for the new characters (`MEASURED.md`, enemy-only walls).
 - `removemember <0|1|2>`: take a member out of the party; the member guard then keeps them out of the story's party
   changes (the members left are allowed, the first as the start), for trying a party the story never has.
+- `find <name>`: logs every object on the map with that name, shown or hidden: where it is, how far from the player,
+  and each collider's bounds and `ConditionChecker` (2026-10-07: the settlement's `Cube` wall, out of `solids`' reach).
 - `solids`: logs every solid collider under and within 4 of the player, with its path, size, components and any
   `ConditionChecker` switch: what an invisible wall is.
 - **`TestStartMember`** (`[Debug]`): a new randomizer file starts with that one member (0 Vi, 1 Kabbu, 2 Leif); the

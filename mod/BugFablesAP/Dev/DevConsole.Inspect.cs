@@ -60,6 +60,46 @@ namespace BugFablesAP
             return "solids logged";
         }
 
+        // Every object on the map with that name (active or not): its place, and each collider's bounds and conditions.
+        private static string Find(string name)
+        {
+            if (MainManager.map == null || string.IsNullOrEmpty(name))
+            {
+                return "find: no map or name";
+            }
+            Vector3 me = MainManager.player != null ? MainManager.player.transform.position : Vector3.zero;
+            // "find /" or "find Base/": that object's direct children instead (the map's own with "/").
+            if (name.EndsWith("/"))
+            {
+                Transform parent = name == "/" ? MainManager.map.transform : MainManager.map.transform.Find(name.TrimEnd('/'));
+                if (parent == null)
+                {
+                    return "find: no " + name;
+                }
+                var list = new System.Text.StringBuilder($"[dev] children of {name} on {MainManager.map.mapid}:");
+                for (int i = 0; i < parent.childCount; i++)
+                {
+                    Transform c = parent.GetChild(i);
+                    list.Append($"\n  {i} {c.name} active {c.gameObject.activeInHierarchy}, local {c.localPosition}, "
+                        + $"world {c.position}, colliders {c.GetComponentsInChildren<Collider>(true).Length}");
+                }
+                log.LogInfo(list.ToString());
+                return $"find {name}: {parent.childCount} children logged";
+            }
+            Transform[] hits = MainManager.map.GetComponentsInChildren<Transform>(true).Where(t => t.name == name).ToArray();
+            var sb = new System.Text.StringBuilder($"[dev] find {name} on {MainManager.map.mapid} (player at {me}): {hits.Length}");
+            foreach (Transform t in hits)
+            {
+                sb.Append($"\n  {t.name} active {t.gameObject.activeInHierarchy}, position {t.position}, {Vector3.Distance(me, t.position):0.0} away");
+                foreach (Collider c in t.GetComponentsInChildren<Collider>(true))
+                {
+                    sb.Append("\n    ").Append(Describe(c));
+                }
+            }
+            log.LogInfo(sb.ToString());
+            return $"find {name}: {hits.Length} logged";
+        }
+
         private static string Describe(Collider c)
         {
             string path = c.name;
