@@ -1076,6 +1076,13 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   Pie (`Item Pie`: animid 180, the game's item 180, "Plumpling Pie" in its text; data[0] 0, an item; activation and
   limit flag 739) lies behind the mine cart. Diana (until 77, `Event48`) opens the tunnel to the hub (the rock
   `Base/AntTunnelRock` gone from 77), free in a seed (`free_ant_tunnels`); the miner talks only.
+  **`BarrenLandsMiniboss` (2026-10-07, the user and `Event151` read):** its three doors and the save crystal free;
+  the left and bottom doors join without the fight. Between the bottom and the right door, or at once arriving from
+  the right, the trigger (`event`, limit 385) runs `Event151`: the queen's lines (`GetEntity(1000)`, the leader
+  standing in), a Primal Weevil fight (enemy 76, no escape; alone, it whistles in a Weevil, enemy 17,
+  `SummonEnemy` in its battle code; both Ground with no Flip weakness, so every member's plain attack reaches them),
+  the termite guards' welcome, then flag 385; no item. The save crystal is swapped for its other copy from 385.
+  The fight for the enemy pass.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

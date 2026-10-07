@@ -3396,3 +3396,9 @@ either one wrong).
   game's text names item 180 the Plumpling Pie (my enum count was off by two; `items.json` and the text agree). The
   user found it behind a mine cart and named it ("Ant Tunnel, Behind the Mine Cart"); the Pie joined `items.json` as
   filler. The running seed predates it. The user: done. Ticked, 101 of 244. Next: `BarrenLandsMiniboss` (182).
+- **`BarrenLandsMiniboss`:** free (the user: the fight only between the bottom and right doors, or at once from the
+  right; flag 385 cleared and in from the bottom to see it). The user asked that a fight's summons count too: the
+  Primal Weevil whistles in a Weevil, both Ground with no Flip, so nothing needed; `room-logic.md` question 8 now says
+  so, and a sweep of every `SummonEnemy` found no ticked room relying on a summoning fight (Venus' Guardian already
+  for the enemy pass; the Broodmother's Midges fly, for its room). The user: done. Ticked, 102 of 244. Next:
+  `BarrenLandsPinkSpider` (189).

@@ -245,7 +245,9 @@ dialogue lines, doors, map auto-start scenes, code), per room. Today `gate-table
 7. Does anything move you one way (wind, water, conveyors, moving or rotating platforms, a spring)?
 8. Is there a fight you can't avoid? It must be winnable with the members' plain attacks (rule 8): an enemy in the air
    needs Vi, a burrowed one Leif, one that can be flipped over Kabbu, expected even where the others could win without
-   him (the user, 2026-09-27; the five are in `MEASURED.md`, "Who can hit what").
+   him (the user, 2026-09-27; the five are in `MEASURED.md`, "Who can hit what"). **Every enemy that can be in the
+   fight counts, not only those it starts with** (the user, 2026-10-07: "has to consider every enemy that can or will
+   be in the fight itself"): read each enemy's battle code (`BattleControl.cs`) for `SummonEnemy` and add what it calls.
 9. Does a scene move you? A cutscene can put the party somewhere else in the same map or on another map (the
    trapdoor: the door room to the fall room): from which area, to which, once or every time, on what flag. It's an edge
    like any other, often a one-way.
