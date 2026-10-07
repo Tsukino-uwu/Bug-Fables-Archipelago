@@ -3310,7 +3310,8 @@ either one wrong).
   it then never ran: waiting on `intransition`, which a fade-in that throws leaves set for good. Now it waits on the
   fade sprite itself and logs what it waits on ("waits: a fade", then the warp, seen on the third file).
 - **`GoldenHillsPath3`, "Cave Path" (the user's pick of my two):** the user's ways, then three tick-box questions per
-  entrance (`MEASURED.md`). The draft's "invisible wall" was two things: the door itself (`LockedDoor`, requires flag 20,
+  entrance (`MEASURED.md`). The draft's "invisible wall" was two things: the door itself (`LockedDoor`, requires flag
+  20,
   kept present) and a wall before it (`Base/Cube`, limit 20, found with `solids` once the user still saw a barrier),
   hidden. Seen: the door entered on a new seed. The Lore Book dig spot (id 142, Horn Dash and Beetle Dig) showed no
   starburst first: Shuffle Dig Spots off in the test player file, then the user on the old seed's file; on a new seed
