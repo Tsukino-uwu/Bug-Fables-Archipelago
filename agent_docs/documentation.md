@@ -1023,7 +1023,10 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    the cutscene from warping you inside?"): the trigger in front of the gate (`event`, limit 384) that starts the
    first opening as the party walks up is kept away in a seed (`kept_open`, `logic/forsaken_lands.py`), so the gate
    opens only when talked to, as every later time. **Seen (2026-10-07):** "had to walk up to and use the gate. didn't
-   get warped".
+   get warped". **And the plaza's half:** the queen and her guard (`elizant`, `eventguard`, limit 384), whom the first
+   opening walks off, are kept away too (`logic/termite_capitol.py`), so a party reaching the plaza from inside the city
+   before the gate never finds them waiting. **Seen (2026-10-07):** 384 cleared, in from `TermiteIndustrial`: "the
+   queen is gone".
 6. **Item animation** (2026-09-25): a discovery showed nothing of what it found, and items from other
    players arrive silently. Your own finds always get the hold-up (pickups already did; a discovery recorded in play
    now does too); the row, *Item animation: All / Progression / Off* decides which items from other players do

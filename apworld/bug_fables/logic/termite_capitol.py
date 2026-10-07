@@ -3,7 +3,7 @@ what the seed changes there. Its rooms aren't mapped yet."""
 from __future__ import annotations
 
 from ..custom_rules import LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, CanUse
-from ..data_types import ItemEntity, Location, Source, Transfer
+from ..data_types import EntityRef, ItemEntity, Location, Source, Transfer
 
 LOCATIONS = (
     # The Termite King hands over the submarine after the Colosseum (flag 379); never behind the sub itself. The later
@@ -28,3 +28,9 @@ HELD_UNTIL_ITEM = (
 )
 # The gate opens from inside too (slot_data's termite_gate_from_inside): the mod marks it opened (flag 384) as its scene
 # starts there, so the scene takes the opened gate's way through instead of looking for the outside guards.
+# The queen and her guard by the plaza's gate, there until its first opening (flag 384) walks them off: kept away, as
+# that opening is skipped (the user, 2026-10-07), so a party reaching the plaza another way never finds them waiting.
+KEPT_OPEN = (
+    EntityRef("TermiteMainPlaza", "elizant"),
+    EntityRef("TermiteMainPlaza", "eventguard"),
+)

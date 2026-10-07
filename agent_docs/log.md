@@ -3382,3 +3382,6 @@ either one wrong).
   as the scene starts (384 also flips `BarrenLandsCD`'s left edge, a Pumpkins mushroom, Patton's services); the user
   chose the latter. Built in `TermiteGate.cs` with Skip cutscenes, seen; then the walk-in trigger kept away at the
   user's ask, seen ("had to walk up to and use the gate"); the inside way, already the seed's, seen with 384 cleared.
+  The user asked whether the plaza's escort mattered: Event149's plaza half only walks off `elizant` and `eventguard`
+  (limit 384), and the King's audience (Event152) reads no flag or follower, so nothing locks; at the user's ask both
+  are kept away too, seen gone with 384 cleared.
