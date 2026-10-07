@@ -3315,4 +3315,4 @@ either one wrong).
   hidden. Seen: the door entered on a new seed. The Lore Book dig spot (id 142, Horn Dash and Beetle Dig) showed no
   starburst first: Shuffle Dig Spots off in the test player file, then the user on the old seed's file; on a new seed
   with dig spots on and a new file, the starburst seen. Bee Fly down to the bottom: counted at the user's word, then
-  back to a trick for a harder logic at theirs.
+  back to a trick for a harder logic at theirs. The user: done. Ticked, 88 of 244. Next: `GoldenSMinigame` (114).
