@@ -2618,7 +2618,8 @@ Each room as mapped for the logic (`room-logic.md`, "How a room gets mapped"), v
   the two side doors turned with the Beemerang Halt, or Icicle platforms across the water and Jump. **Corrected the same
   day (the user): no drop down.** The top is across the water; the crank can't be turned from there, so the way back is
   only the ice, and a party arriving there without it is stuck. The Tangy Berry dig spot (flag 669): Icicle and Jump,
-  there and back.
+  there and back. **Added 2026-10-07 (the user):** Bee Fly crosses the room freely, both ways, and reaches the dig
+  spot.
 - **`BOLostSandsEntrance` (57):** a guard (`antguardclosed`, lim 130) blocks the north door to the desert until flag
   130 (Gen and Eri's chapter 3 story), seen on screen; the logic had no rule on that door. Kept open now (the guard
   away, `antguardopen` present, `Base/WoodenGate2` hidden, `(2)` shown, as 130 leaves them; the flag itself never

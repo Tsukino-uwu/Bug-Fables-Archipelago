@@ -13,10 +13,10 @@ from ..data_types import (Added, Area, DialogueFlag, EntityRef, Give, ItemEntity
 # (when members are items) and every move item (when moves are).
 PAST_GATE = Has("Explorer Permit") & WHOLE_PARTY & ALL_ATTACKS
 DOOR_RULES = ()
-# East Road 2's water before its top door: crossed on Icicle platforms either way, or from below only by turning the
-# crank with the Beemerang Halt, which leaves the top with no way back but the ice.
-EAST2_ICE = CanUse("Icicle") & CanUse("Jump")
-EAST2_UP = EAST2_ICE | one_way(CanUse("Beemerang Halt"), EAST2_ICE)
+# East Road 2's water before its top door: crossed on Icicle platforms or flown (Bee Fly) either way, or from below
+# only by turning the crank with the Beemerang Halt, which leaves the top with no way back but those.
+EAST2_CROSS = (CanUse("Icicle") & CanUse("Jump")) | CanUse("Bee Fly")
+EAST2_UP = EAST2_CROSS | one_way(CanUse("Beemerang Halt"), EAST2_CROSS)
 # GoldenPathTunnel2's climb from its bottom door to its top one: Icicle, the Horn Dash, Bee Fly, Jump, and an attack for
 # its lever.
 TUNNEL2_UP = CanUse("Jump") & CanUse("Icicle") & CanUse("Horn Dash") & CanUse("Bee Fly") & ANY_ATTACK
@@ -65,10 +65,10 @@ LOCATIONS = (
     Location("Outskirts: East Road, Inside the Waterfall", 89, "BugariaOutskirtsEast1",
              Source(flag=137, pickup=Pickup(map="BugariaOutskirtsEast1", type=2, item=0)),
              rule=CanUse("Icicle") & CanUse("Beemerang Toss"), category="hidden_item", no_jump=True, area="Lower"),
-    # A Tangy Berry dug up across the water: Icicle platforms and Jump, there and back.
+    # A Tangy Berry dug up across the water: Icicle platforms and Jump, or Bee Fly, there and back.
     Location("Outskirts: East Road to the Pier, Dig Spot", 90, "BugariaOutskirtsEast2",
              Source(flag=669, pickup=Pickup(map="BugariaOutskirtsEast2", type=0, item=77)),
-             rule=CanUse("Icicle") & CanUse("Jump") & CanUse("Beetle Dig"), category="dig_spot"),
+             rule=EAST2_CROSS & CanUse("Beetle Dig"), category="dig_spot"),
     # Crystal berry #10, on the pier by the boat.
     Location("Outskirts: Pier, Behind the Dock", 26, "BugariaPier",
              Source(berry=10, pickup=Pickup(map="BugariaPier", type=3, item=0)), rule=CanUse("Jump"),
@@ -261,8 +261,8 @@ MAP_AREAS = (
     Area("BugariaOutskirtsEast1", "Lower", (), one_way(None, CanUse("Jump")), out=CanUse("Jump")),
     Area("BugariaOutskirtsEast1", "Cave Door", ("loadzonecave",), CanUse("Horn Slash"),
          to="BugariaOutskirtsEast1 (Lower)"),
-    # The second East Road's top door, across water from the rest (EAST2_UP; back down only on the ice).
-    Area("BugariaOutskirtsEast2", "Top", ("loadzonenorth",), EAST2_UP, out=EAST2_ICE),
+    # The second East Road's top door, across water from the rest (EAST2_UP; back down on the ice or flying).
+    Area("BugariaOutskirtsEast2", "Top", ("loadzonenorth",), EAST2_UP, out=EAST2_CROSS),
     # GoldenPathTunnel2's top, with its door down to the tunnel's upper ledge (its two doors share a name: by index).
     Area("GoldenPathTunnel2", "Top", ("loadzonebarrenlands - Duplicate#9",), TUNNEL2_UP,
          out=one_way(None, TUNNEL2_UP)),
