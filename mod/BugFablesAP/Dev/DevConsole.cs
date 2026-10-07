@@ -221,7 +221,8 @@ namespace BugFablesAP
             bool warpWaits = queued.Count > 0 && (queued.Peek().StartsWith("loc") || queued.Peek().StartsWith("warp")
                     || queued.Peek().StartsWith("liveslot"))
                 && (MainManager.player == null || MainManager.instance.inevent || MainManager.instance.message
-                    || MainManager.instance.minipause || MainManager.instance.pause || MainManager.roomtransition);
+                    || MainManager.instance.minipause || MainManager.instance.pause || MainManager.roomtransition
+                    || MainManager.instance.intransition || QualityOfLife.OpeningBusy);
             if (queued.Count > 0 && pendingMap < 0 && !open && !warpWaits)
             {
                 string command = queued.Dequeue();

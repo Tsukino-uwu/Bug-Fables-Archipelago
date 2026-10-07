@@ -216,6 +216,9 @@ namespace BugFablesAP
 
         private static bool partyThenFade;
 
+        // The opening or a seed start still placing the party or fading in.
+        internal static bool OpeningBusy => openingPending || startPending || partyThenFade || transferring;
+
         private static int partySetFrame = -10;
 
         private static void PartyThenFade()

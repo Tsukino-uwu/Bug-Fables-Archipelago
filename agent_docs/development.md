@@ -502,7 +502,7 @@ only in the dev (Debug) build: every one is bound in `Dev/Plugin.Dev.cs`, and th
 | Setting | What it does |
 |---|---|
 | `DevConsole` | F9 opens the dev console (section above). |
-| `DevCommandFile` | With `DevConsole`: a text file whose lines are run as console commands, then emptied, so a test can be driven from outside the game. Blank lines and lines starting with `#` are skipped; a queued `loc` or `warp` waits until the player is free, and `unstick` goes first, dropping any waiting warp (2026-10-06: a frozen scene held it behind one for good). |
+| `DevCommandFile` | With `DevConsole`: a text file whose lines are run as console commands, then emptied, so a test can be driven from outside the game. Blank lines and lines starting with `#` are skipped; a queued `loc` or `warp` waits until the player is free, the opening done and no fade playing (2026-10-07: one fired between the opening's end and its fade-in, whose new fade destroyed the one the transfer waited on), and `unstick` goes first, dropping any waiting warp (2026-10-06: a frozen scene held it behind one for good). |
 | `InfJump`, `OneHit`, `BumpKill`, `InfBerries` | With `DevConsole`: jump again in mid-air; every hit on an enemy does at least 99; field enemies die on touch; 999 berries once per save played. The console's `infjump`, `onehit`, `bumpkill` and `infberries` flip them. |
 | `AdoptSeed` | A save tied to another seed is re-tied to the connected one and replays every item (section "A local server to test against"). |
 | `QuietBursts` | Items arriving several at once (a goal's release, a new seed's replay) get no hold-up; one arriving alone still does. |
