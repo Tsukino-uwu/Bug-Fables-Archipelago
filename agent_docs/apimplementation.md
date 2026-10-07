@@ -4931,7 +4931,10 @@ settlement, so it is never touched.
 
 **To do:** the door table (`door-graph.py`) marks the three rooms' links "fixed" (never shuffled), as their copies
 stand on one spot; with one door per exit, a group of copies there becomes one door, as for one-ways, then the table
-regenerated and the shuffle tested. The logic: the night maps fold into their three day rooms, room by room.
+regenerated and the shuffle tested. The logic: the night maps fold into their three day rooms, room by room. **The
+third state, after the festival** (the user, 2026-10-08: check it later on): from flag 86 the three rooms show their
+after-festival versions (other copies of doors and people, Bomby's hat, Tanjerin's quest, the caravan's later stall);
+each room to be checked in that state too, as the day and the night were.
 
 **Seen (2026-10-07):** the switch Aria on the ground with her "!"; the arrival scene at ground level after its trigger
 and camera moved; the first nightfall the story's scene, then day and night again by the quick swap; the dungeon's way
