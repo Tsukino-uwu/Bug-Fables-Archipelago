@@ -128,6 +128,7 @@ namespace BugFablesAP
             AntTunnels.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             TermiteGate.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             FreeSales.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
+            DayNight.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             EnemyDrops.Enable(Log, connection, () => randomizerEnabled.Value);
             SaveCrystals.Enable(Log, Config, () => randomizerEnabled.Value, settingsOn);
             DeathLinkGame.Enable(Log, Config, connection, () => randomizerEnabled.Value);

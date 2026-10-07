@@ -4,10 +4,12 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable, Mapping
 from typing import TYPE_CHECKING, Any
 
-from .data_tables import (DIALOGUE_FLAGS, FREE_SALES, HELD_UNTIL, HELD_UNTIL_ITEM, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN,
-                          KEPT_PRESENT, LOCATION_NAME_TO_ID, PRESENT_FROM, PRESENT_WITH_ITEM, ROADBLOCKS,
-                          SCENERY_HIDDEN, SCENERY_PRESENT, STORY_ONLY_MAPS, WORLD_VERSION)
-from .data_types import DialogueFlag, EntityRef, FlagEntity, FreeSale, ItemEntity, Source
+from .data_tables import (DAY_NIGHT, DIALOGUE_FLAGS, ENTITIES_MOVED, FREE_SALES, HELD_UNTIL, HELD_UNTIL_ITEM,
+                          ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN, KEPT_PRESENT, LOCATION_NAME_TO_ID, PRESENT_FROM,
+                          PRESENT_WITH_ITEM, ROADBLOCKS, SCENE_CAMERAS, SCENERY_HIDDEN, SCENERY_MOVED, SCENERY_PRESENT,
+                          STORY_ONLY_MAPS, TIME_SWITCHES, WORLD_VERSION)
+from .data_types import (DayNight, DialogueFlag, EntityMove, EntityRef, FlagEntity, FreeSale, ItemEntity, SceneCamera,
+                         SceneryMove, Source, TimeSwitch)
 from .options import ShopContents
 
 if TYPE_CHECKING:
@@ -72,7 +74,8 @@ def _pickup(source: Source) -> dict[str, Any]:
     return pickup
 
 
-def _entities(entries: Iterable[EntityRef | FlagEntity | ItemEntity | DialogueFlag | FreeSale]) -> list[dict[str, Any]]:
+def _entities(entries: Iterable[EntityRef | FlagEntity | ItemEntity | DialogueFlag | FreeSale | DayNight | TimeSwitch
+                                  | SceneryMove | EntityMove | SceneCamera]) -> list[dict[str, Any]]:
     return [entry.to_slot() for entry in entries]
 
 
@@ -126,6 +129,15 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "dialogue_flags": _entities(DIALOGUE_FLAGS),
         # Sellers' lines the client makes free ([{"map", "lines"}]): their price commands and written price to 0.
         "free_sales": _entities(FREE_SALES),
+        # Day maps whose night the client switches at will ([{"day", "night", "from", "until", "first_event"}]), each
+        # map's switch NPC ([{"map", "entity", "at"}]), and scenery set where a scene would leave it.
+        "day_night": _entities(DAY_NIGHT),
+        "time_switches": _entities(TIME_SWITCHES),
+        "scenery_moved": _entities(SCENERY_MOVED),
+        # Entities standing somewhere else than their own spot ([{"map", "entity", "at"}]).
+        "entities_moved": _entities(ENTITIES_MOVED),
+        # A scene's fixed camera point moved with its characters ([{"map", "event", "from", "to"}]).
+        "scene_cameras": _entities(SCENE_CAMERAS),
         "door_targets": world.door_targets,
         # {"map:entity": [enemy ids]}: the fight a map enemy starts instead of its own.
         "enemy_swaps": world.enemy_swaps,

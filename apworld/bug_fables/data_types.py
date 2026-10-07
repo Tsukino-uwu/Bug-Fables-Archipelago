@@ -178,6 +178,72 @@ class EntityRef:
 
 
 @dataclass(frozen=True, slots=True)
+class DayNight:
+    """A day map with a night version the mod switches between at will (the user, 2026-10-07): flag_from and
+    flag_until are the story's night (from the first, until the second), which the mod answers for its own night on
+    these maps without writing them; first_event is the story's own nightfall scene, played the first time."""
+
+    day: str
+    night: str
+    flag_from: int
+    flag_until: int
+    first_event: int
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"day": self.day, "night": self.night, "from": self.flag_from, "until": self.flag_until,
+                "first_event": self.first_event}
+
+
+@dataclass(frozen=True, slots=True)
+class TimeSwitch:
+    """The day/night switch NPC of a DayNight map, by entity name, kept present at `at` (x, y, z) both day and night."""
+
+    map: str
+    entity: str
+    at: tuple[float, float, float]
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"map": self.map, "entity": self.entity, "at": list(self.at)}
+
+
+@dataclass(frozen=True, slots=True)
+class EntityMove:
+    """A map entity (by name) standing at `at` (x, y, z) instead of its own spot."""
+
+    map: str
+    entity: str
+    at: tuple[float, float, float]
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"map": self.map, "entity": self.entity, "at": list(self.at)}
+
+
+@dataclass(frozen=True, slots=True)
+class SceneCamera:
+    """A scene's fixed camera point (x, y, z) on a map moved to `to`, as its characters were (EntityMove)."""
+
+    map: str
+    event: int
+    point: tuple[float, float, float]
+    to: tuple[float, float, float]
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"map": self.map, "event": self.event, "from": list(self.point), "to": list(self.to)}
+
+
+@dataclass(frozen=True, slots=True)
+class SceneryMove:
+    """Scenery set to a local position (x, y, z) on load, by its path inside the map, as a scene would leave it."""
+
+    map: str
+    entity: str
+    local: tuple[float, float, float]
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"map": self.map, "entity": self.entity, "local": list(self.local)}
+
+
+@dataclass(frozen=True, slots=True)
 class FlagEntity:
     """A map entity tied to a story flag instead of, or on top of, its own requirements; in its area's module.
 

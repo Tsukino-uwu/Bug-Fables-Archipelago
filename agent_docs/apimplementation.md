@@ -121,6 +121,7 @@ this file and that doc disagree, that doc is right.
 49. [Build step 49: hidden items and dig spots, two location toggles](#build-step-49-hidden-items-and-dig-spots-two-location-toggles)
 50. [Build step 50: the Termacade, its gift and prize stand](#build-step-50-the-termacade-its-gift-and-prize-stand)
 51. [Build step 51: Minigame Prizes, and Wacka Worm only for Vi](#build-step-51-minigame-prizes-and-wacka-worm-only-for-vi)
+52. [Build step 52: the festival night at will, a switch NPC](#build-step-52-the-festival-night-at-will-a-switch-npc)
 
 **How it works**
 
@@ -4834,6 +4835,50 @@ item pocket, flag 305), 30 the "MOREFARM" code and berries, and the mayor's late
 
 *Code: `options.py` (`MinigamePrizes`), `rules.py`, `logic/golden_path.py`, `logic/golden_settlement.py`,
 `data/items.json`. The mod: `FieldMoves.cs` (`WormGame`).*
+
+## Build step 52: the festival night at will, a switch NPC
+
+**Asked and decided (the user, 2026-10-07, mapping `GoldenSettlement1`):** the Golden Settlement's festival night is a
+window in the game (flag 85, from the nightfall scene, until the fight's 86), with about 30 NPCs of its own. One logic
+must hold for normal play and the entrance randomizer, so the night is kept open for good: day and night switch "at
+will", by an NPC in each of the three rooms (the user: one per room feels better with a shuffled entrance than one
+room to find), the same NPC everywhere, with Aria's red "!", and only that one choice. In the square that NPC is Aria
+herself (before the festival her only talk is the nightfall prompt), moved off the arena (Jump) to the ground in front
+of it, with Leif and Celia and the arrival scene moved down beside her at the distances they had; the square open by
+night as by day; the dungeon's way open from the start (the statue).
+
+**How the game does it** (`MEASURED.md`, the festival's day and night): a night map has its day map's entities and only
+its own scenery; flags 85 and 86 decide who is there, read only through data (entity requires and limits, three NPCs'
+lines, one wall), and `Event52` (the nightfall) only sets 85 and loads the night square. Flag 86 also reaches beyond the
+settlement, so it is never touched.
+
+**Built:**
+1. **The mod's own night** (`DayNight.cs`, slot_data `day_night`: `[{"day", "night", "from", "until", "first_event"}]`):
+   on those maps, each `CheckIfCanExist` sees flag 85 set and 86 clear at night, and by day both as whether the
+   festival is over; the save's values come back in a finalizer. `LoadMap` loads the version the night asks for, so
+   every door, warp and scene lands right. Not saved: a session starts as the story has it.
+2. **The switch** (`time_switches`: `[{"map", "entity", "at"}]`): the entity is kept present and moved to `at`, and its
+   talk is the game's prompt shape: "Wait for nightfall" or "Wait for morning", "Keep exploring". Its yes runs the
+   nightfall event: the story's own scene the first time (its speech, discovery 13, flag 85), the mod's swap after (a
+   fade, the other version with the party where it stood, the line's end done).
+3. **Entities moved** (`entities_moved`: `[{"map", "entity", "at"}]`) and **a scene's fixed camera point**
+   (`scene_cameras`: `[{"map", "event", "from", "to"}]`, replaced while the scene runs): the square's arrival scene
+   (`Event51`, its trigger, Leif and Celia) beside the switch Aria.
+4. **Scenery moved** (`scenery_moved`: `[{"map", "entity", "local"}]`): the night square's statue, which has no flag,
+   slid aside as the fight's scene slides it, so the dungeon's door never lands behind it.
+5. **The square open at night:** its south door kept present and the `blocker` trigger kept away. A night map's entity
+   lists are read under its day map's name (`DayNight.EntityMap`), so the seed names each entity once.
+
+**Seen (2026-10-07):** the switch Aria on the ground with her "!"; the arrival scene at ground level after its trigger
+and camera moved; the first nightfall the story's scene, then day and night again by the quick swap; the dungeon's way
+open by day, both ways.
+
+**Status:** in progress (2026-10-07): the square's switch seen working; its words to be chosen by the user against
+Aria's own (the user: not made-up text), then the farm's and the houses' switches, the night rooms' walk and the logic
+for the night's spots.
+
+*Code: `data_types.py` (`DayNight`, `TimeSwitch`, `EntityMove`, `SceneCamera`, `SceneryMove`),
+`logic/golden_settlement.py`, `slot_data.py`. The mod: `DayNight.cs`, `KeptOpen.cs` (`EntityMap`), `SeedData.cs`.*
 
 # How it works
 

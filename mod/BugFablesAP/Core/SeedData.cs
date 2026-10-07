@@ -73,6 +73,12 @@ namespace BugFablesAP
         internal readonly bool TermiteGateFromInside;
         // {map: dialogue lines}: sellers' lines whose price reads 0.
         internal readonly Dictionary<string, int[]> FreeSales;
+        // Day maps whose night the mod switches at will, each map's switch NPC, and scenery set as a scene leaves it.
+        internal readonly List<DayNight.Pair> DayNightMaps;
+        internal readonly List<DayNight.Switch> TimeSwitches;
+        internal readonly List<DayNight.Move> SceneryMoved;
+        internal readonly List<DayNight.Switch> EntitiesMoved;
+        internal readonly List<DayNight.Camera> SceneCameras;
         internal readonly bool PointsOfNoReturn;
 
         internal SeedData(Dictionary<string, object> data, int ownSlot)
@@ -173,6 +179,39 @@ namespace BugFablesAP
                 && submarine is bool submarineOn && submarineOn;
             FreeSales = SlotData.List(data, "free_sales", e => e)?.GroupBy(e => e.Value<string>("map"))
                 .ToDictionary(g => g.Key, g => g.SelectMany(e => e["lines"].Values<int>()).ToArray());
+            DayNightMaps = SlotData.List(data, "day_night", e => new DayNight.Pair
+            {
+                Day = e.Value<string>("day"),
+                Night = e.Value<string>("night"),
+                From = e.Value<int>("from"),
+                Until = e.Value<int>("until"),
+                FirstEvent = e.Value<int>("first_event"),
+            });
+            TimeSwitches = SlotData.List(data, "time_switches", e => new DayNight.Switch
+            {
+                Map = e.Value<string>("map"),
+                Entity = e.Value<string>("entity"),
+                At = Vector(e["at"]),
+            });
+            EntitiesMoved = SlotData.List(data, "entities_moved", e => new DayNight.Switch
+            {
+                Map = e.Value<string>("map"),
+                Entity = e.Value<string>("entity"),
+                At = Vector(e["at"]),
+            });
+            SceneCameras = SlotData.List(data, "scene_cameras", e => new DayNight.Camera
+            {
+                Map = e.Value<string>("map"),
+                Event = e.Value<int>("event"),
+                From = Vector(e["from"]),
+                To = Vector(e["to"]),
+            });
+            SceneryMoved = SlotData.List(data, "scenery_moved", e => new DayNight.Move
+            {
+                Map = e.Value<string>("map"),
+                Entity = e.Value<string>("entity"),
+                Local = Vector(e["local"]),
+            });
             FreeAntTunnels = data != null && data.TryGetValue("free_ant_tunnels", out object tunnels)
                 && tunnels is bool tunnelsFree && tunnelsFree;
             TermiteGateFromInside = data != null && data.TryGetValue("termite_gate_from_inside", out object gate)
@@ -195,6 +234,12 @@ namespace BugFablesAP
                 .Concat(LocationPrizes?.Keys ?? Enumerable.Empty<long>())
                 .Concat(LocationPickups?.Keys ?? Enumerable.Empty<long>())
                 .Concat(LocationEnemies?.Keys ?? Enumerable.Empty<long>()).Distinct().ToList();
+
+        private static UnityEngine.Vector3 Vector(JToken xyz)
+        {
+            float[] v = xyz.Values<float>().ToArray();
+            return new UnityEngine.Vector3(v[0], v[1], v[2]);
+        }
 
         private static ApConnection.Blocker ReadBlocker(JToken e)
         {

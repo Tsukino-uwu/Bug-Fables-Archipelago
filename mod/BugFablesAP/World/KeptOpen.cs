@@ -91,7 +91,7 @@ namespace BugFablesAP
         {
             creating = true;
             lastMade = null;
-            creatingMap = __instance.mapid.ToString();
+            creatingMap = DayNight.EntityMap(__instance.mapid.ToString());
         }
 
         private static class NewEntities
@@ -124,7 +124,7 @@ namespace BugFablesAP
             {
                 return;
             }
-            string map = __instance.mapid.ToString();
+            string map = DayNight.EntityMap(__instance.mapid.ToString());
             foreach (ApConnection.Blocker blocker in blockers.Where(b => b.Map == map))
             {
                 foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true)
