@@ -677,7 +677,8 @@ be wrong.
     wise"): the pool holds the Big Crank (60), not its halves (59, 61), and the Sand Castle Key (113), not the Heaven
     and Earth Keys (105, 106); the halves' and the keys' spots hold any item, filler making up the count. The user's
     worry, a crash between receiving the halves and the merge, wouldn't lose anything either way (received items are
-    counted in the save and replayed), but the whole is simpler. The Big Crank (60) is made from two halves, so its halves are designed here too.
+    counted in the save and replayed), but the whole is simpler. The Big Crank (60) is made from two halves, so its
+    halves are designed here too.
 
 **Known issues:**
 
@@ -1245,7 +1246,8 @@ item comes once per seed, and the count in the save keeps it that way.
 **Status:** works, seen on screen (2026-09-24): items and medals, each once; crystal berries seen (2026-10-04, the
 count up by one from the server console); the same item three times and items from the server console seen
 (2026-10-04); a login with a save loaded seen (2026-10-04: 9 items listed at login, 9 in the save, the 10th arriving);
-a full bag's drop at the party's feet built 2026-10-06, not yet seen; nothing given before the seed's tables are read: built 2026-09-28, not yet
+a full bag's drop at the party's feet built 2026-10-06, not yet seen; nothing given before the seed's tables are read:
+built 2026-09-28, not yet
 seen.
 
 *Code: `mod/BugFablesAP/Items/ItemReceiver.cs`: `CountSlot` and `SeedSlot` (the two save slots),
@@ -2953,28 +2955,34 @@ top, with Leif's scene, up by a switch and platforms), the underground door room
 needing the two side rooms' switches, theirs cautious until mapped), the mushroom pit (its bottom door a drop down,
 Jump back up), the treasure room (the Spider fight: Vi), the right
 underground room (Jump and an attack across, both ways), the right bridge room (its top up by Jump, Freeze and the
-horn; its high door gated by the big switch), the first left room (its high door by Jump, Freeze and the horn), the upper left room
+horn; its high door gated by the big switch), the first left room (its high door by Jump, Freeze and the horn), the
+upper left room
 (the same, its high door gated by the big switch), the top (nothing to go in or out; its Sophie Petal for the quest
 pass), the upper entrance (its top door shut until the gem is placed, Jump and a stand-in for the gem), 31 of 244;
 Bugaria City from 2026-10-06: the ant tunnels (nothing to cross; each tunnel only its flag), the main plaza (two new
 locations: the red house's roof, the Flower Key, and the dig spot's berry, Beetle Dig), the commercial district (its
 bar corner behind grass, the horn; the arcade kept open), the theater (two new locations: the moth's plushie sale
 and the spinner's crystal berry, the horn), the residential district (its rooftops: the horn; Jump and Freeze), the
-underground bar (free in and out by its bounce pad), the palace hall (free), the throne room (no items; two story berries later), the palace bridge (free), the library (free, its
+underground bar (free in and out by its bounce pad), the palace hall (free), the throne room (no items; two story
+berries later), the palace bridge (free), the library (free, its
 bookshelf's Lore Book without Jump), the war room (its table's medal, Jump), the miners' break room (a new
-location: its dig spot's berry, Beetle Dig), the attacked plaza (free), the attacked bridge (free), the attacked palace (free), the ending's plaza, bridge and throne room (free, played through), 49 of 244;
+location: its dig spot's berry, Beetle Dig), the attacked plaza (free), the attacked bridge (free), the attacked
+palace (free), the ending's plaza, bridge and throne room (free, played through), 49 of 244;
 Lost Sands from 2026-10-06: the entrance (four ground doors free; the ledge door to the book area a drop only), the
 badlands (two new locations; the hideout door Jump and the Rusty Key, a stand-in until its sale is a location), the book
 area (two halves joined by Horn Dash or Bee Fly; a new location under the book), the rock formation (a new location: the
 Tardigrade Idol, Jump, Freeze and the horn), the south trench (its left side across a gap, by the bridge the horn knocks
 over or Bee Fly; a new location on the top-left ledge, Jump), the Defiant Root entrance (its left side, Bee Fly, or
 the crank and Beemerang Halt leaving it; a new dig spot behind a rock, Horn Dash), the Far Grasslands border (free, the
-gate kept open), the Defiant Root's south entrance (free), the badge alcove (its left door a drop only; two new locations, a ledge medal
+gate kept open), the Defiant Root's south entrance (free), the badge alcove (its left door a drop only; two new
+locations, a ledge medal
 with Jump and a grass drop with the horn), the caravan camp (free; a new location: its dig spot's berry, Jump, Bee Fly
 and Beetle Dig), the sand pit (its doors joined through the middle by eight bridges the horn knocks over, five
 events, or Bee Fly), the Golden Hills border (free; a new location: its ledge medal, the horn and Jump), the roach
 village (free; a new location: its dig spot's berry, Beetle Dig), the oasis (its bottom door dug under; its top right
-reached only from its cave door, back up by a platform; two new locations), the oasis entrance (its right side the bubble shield or Bee Fly, both ways; its bounce pad back kept present for good, the user's ask), the west dunes (free), the sand castle's front (the castle door the Sand Castle Key and Jump, a stand-in until
+reached only from its cave door, back up by a platform; two new locations), the oasis entrance (its right side the
+bubble shield or Bee Fly, both ways; its bounce pad back kept present for good, the user's ask), the west dunes
+(free), the sand castle's front (the castle door the Sand Castle Key and Jump, a stand-in until
 the key chain is gone through), the mountain (free; its bridge without Jump a bit tricky, counted by the user's
 call), the trench's middle (three sides: the middle a drop to either, the left back up with Jump and Bee Fly, the
 top door dug under), the thorn field (its high right door Jump and the bubble shield, or the bridge the horn knocks
@@ -2982,20 +2990,27 @@ down from the right), the southern desert (its right door the shield or Bee Fly;
 scorpion's room (free), the eastmost room (free), 72 of 244: Lost Sands done; Golden Hills from 2026-10-06: the
 dungeon's entrance (its top right door the Wooden Crank and Beemerang Halt, its elevator the Big Crank and Halt up,
 Halt down; its arrival scene kept away, the user's ask), 73 of 244; the left hall (across Jump and Beemerang Halt,
-its top left door the Wooden Crank and Halt; a new location: its berry, Jump), the left crank room (its door free; its crank spot with Next 62), 75 of 244; the right crank room (its every need for both spots; a new location, the
-candy on a stump), the lower right crank room (its door free; its crank spot with Next 62), 77 of 244; the left crank half room (two new locations, Jump and
+its top left door the Wooden Crank and Halt; a new location: its berry, Jump), the left crank room (its door free; its
+crank spot with Next 62), 75 of 244; the right crank room (its every need for both spots; a new location, the
+candy on a stump), the lower right crank room (its door free; its crank spot with Next 62), 77 of 244; the left crank
+half room (two new locations, Jump and
 Beemerang Halt; its crank half with Next 62), 78 of 244; the upper hall (its boss door behind two shrines' offerings,
-two events, a stand-in for the offerings; its upper right only from its own door), 79 of 244; the upper side room (its upper door and crank the Wooden Crank
-in its slot, Jump and Halt), the boss room (free; its fight up two ledges, Jump), 81 of 244; the pitcher path (its top door Jump, the horn and
+two events, a stand-in for the offerings; its upper right only from its own door), 79 of 244; the upper side room (its
+upper door and crank the Wooden Crank
+in its slot, Jump and Halt), the boss room (free; its fight up two ledges, Jump), 81 of 244; the pitcher path (its top
+door Jump, the horn and
 Halt; a new location behind thorns), 82 of 244; the upper pitcher path (its top left door Jump and Halt; a new
 location: its berry, Jump and Halt), the pitcher plant arena (free; its bounty for the quest pass), 84 of 244:
 Golden Hills done; Golden Path from 2026-10-07: the cable car station (its right door a drop, back by Jump or the
-horn; across Jump; three new locations; its medal with the CableCar quest), 85 of 244; the crank path (between its doors Jump and
+horn; across Jump; three new locations; its medal with the CableCar quest), 85 of 244; the crank path (between its
+doors Jump and
 Beemerang Halt; a new location), 86 of 244; the settlement entrance (the caravan's stall kept present for good and the
 snail's shop that takes its spot kept away, the user's choice after the snail's goods overlapped, its three items new
 locations; a new dig spot; the minigame
 door behind the horn quest, a stand-in; the desert door behind its gate's lever, hit from the desert side), 87 of
-244; the rest of `room-checklist.md` to go.
+244; the cave path (across Jump and Beemerang Halt, back also Horn Slash, or Bee Fly; its bottom the Shield, back up
+Shield and Jump; its Chomper Cave door, locked until the story's Shield, kept open and its wall hidden; a new
+location: a dig spot, Horn Dash; in progress); the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -4782,7 +4797,6 @@ tokens. The same line records the Termacade discovery (42), a location of its ow
 *Code: `options.py` (`ShuffleTermacade`), `data_types.py` (`Source.tokens`, `Source.prize`, `Location.filler`),
 `data_tables.py` (`TOKEN_KIND`, `vanilla_item`), `rules.py`, `slot_data.py` (`location_prizes`, a give's `npc`),
 `logic/bugaria_city.py`, `data/items.json`; tests `test_termacade.py`. The mod: the guide's step 45.*
-
 
 # How it works
 

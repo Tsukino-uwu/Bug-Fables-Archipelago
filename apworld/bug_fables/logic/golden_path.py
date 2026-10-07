@@ -11,6 +11,11 @@ from ..data_types import Area, EntityRef, ItemShop, Location, Pickup, Source, St
 # entrance's minigame door (flag 275): not gone through yet, so the later chapters' stand-in until the quest pass.
 HORN_QUEST = LATER_CHAPTERS
 
+# The cave path (GoldenHillsPath3): up from its bottom to its right side, and across between its sides.
+CAVE_PATH_UP = CanUse("Shield") & CanUse("Jump")
+CAVE_PATH_TO_RIGHT = (CanUse("Jump") & CanUse("Beemerang Halt")) | CanUse("Bee Fly")
+CAVE_PATH_TO_LEFT = (CanUse("Jump") & CanUse("Beemerang Halt") & CanUse("Horn Slash")) | CanUse("Bee Fly")
+
 LOCATIONS = (
     # The cable car station: crystal berry #8 up on its right, by the bounce pad past grass (the horn).
     Location("Golden Path: Cable Car Station, High Ledge", 134, "GoldenHillsCableCar",
@@ -42,6 +47,10 @@ LOCATIONS = (
     Location("Golden Path: Settlement Entrance, Dig Spot", 141, "GoldenSettlementEntrance",
              Source(berry=22, pickup=Pickup(map="GoldenSettlementEntrance", type=3, item=0)), rule=CanUse("Beetle Dig"),
              category="crystal_berry", no_jump=True),
+    # A Lore Book dug up on the cave path's left side, under a rock only the Horn Dash breaks.
+    Location("Golden Path: Cave Path, Dig Spot", 142, "GoldenHillsPath3",
+             Source(flag=380, pickup=Pickup(map="GoldenHillsPath3", type=1, item=52)),
+             rule=CanUse("Horn Dash") & CanUse("Beetle Dig"), category="dig_spot", area="Left", no_jump=True),
 )
 STORY_EVENTS = (
     # The settlement entrance's desert gate lever (`gateswitch`, any attack, flag 83, Event50), on the desert side only.
@@ -66,6 +75,13 @@ MAP_AREAS = (
     Area("GoldenSettlementEntrance", "Minigame Door", ("loadzone minigame",), HORN_QUEST, out=True_()),
     # Its door to the desert, behind a gate its lever opens from the desert side only; staying open, both ways after.
     Area("GoldenSettlementEntrance", "Desert Door", ("loadzone desert",), Has("Settlement Desert Gate Open")),
+    # The cave path's bottom (its door to Chomper Cave) is the map's own region. Its right side: down to the bottom only
+    # with the Shield (a plain drop lands in the spikes), back up with the Shield and Jump.
+    Area("GoldenHillsPath3", "Right", ("loadzoneback",), CanUse("Shield") & CanUse("Jump"),
+         out=one_way(CanUse("Shield"), CAVE_PATH_UP)),
+    # Its left side: from the right with Jump, Halt and the horn for the grass, or Bee Fly; back without the horn.
+    Area("GoldenHillsPath3", "Left", ("loadzonesettlement",), CAVE_PATH_TO_LEFT,
+         out=CAVE_PATH_TO_RIGHT, to="GoldenHillsPath3 (Right)"),
 )
 # The caravan's stall there for good, the snail's shop that takes its spot after the boss kept away (the user,
 # 2026-10-07: the snail's goods overlapped; the caravan's other stalls to be decided one at a time).
@@ -73,6 +89,9 @@ KEPT_PRESENT = (
     EntityRef("GoldenSettlementEntrance", "Crickerly"),
     EntityRef("GoldenSettlementEntrance", "Husband"),
     EntityRef("GoldenSettlementEntrance", "CaravanBadge - Duplicate"),
+    # The cave path's door to Chomper Cave, locked until the story teaches the Shield (flag 20): open, its wall hidden
+    # (below), the Shield the logic's need (the user, 2026-10-07).
+    EntityRef("GoldenHillsPath3", "loadzonechomper"),
 )
 KEPT_OPEN = (
     EntityRef("GoldenSettlementEntrance", "snailguy"),
@@ -82,10 +101,15 @@ SCENERY_PRESENT = (
 )
 SCENERY_HIDDEN = (
     EntityRef("GoldenSettlementEntrance", "Base/snailmerchant"),
+    # The invisible wall before the cave path's Chomper Cave door, there until flag 20 (with the door, above).
+    EntityRef("GoldenHillsPath3", "Base/Cube"),
 )
 TRANSFERS = (
     # The crank path's high middle door down to its right side with Jump alone, a drop; up again with Jump and Halt (the
     # way back). An Area has one link, so this second one, inside the room, is a transfer.
     Transfer("drop", "GoldenHillsPath2", "GoldenHillsPath2", CanUse("Jump"), two_way=False,
              way_back=CanUse("Jump") & CanUse("Beemerang Halt"), from_area="Top Middle"),
+    # The cave path's left side down to its bottom with the Shield, a one-way: back up by the right side.
+    Transfer("drop", "GoldenHillsPath3", "GoldenHillsPath3", CanUse("Shield"), two_way=False,
+             way_back=CAVE_PATH_UP & CAVE_PATH_TO_LEFT, from_area="Left"),
 )

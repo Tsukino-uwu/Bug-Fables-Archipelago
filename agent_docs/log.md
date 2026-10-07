@@ -79,6 +79,7 @@ either one wrong).
 - [2026-10-05: the first room mapped](#2026-10-05-the-first-room-mapped)
 - [2026-10-06: Snakemouth Den's bridge room](#2026-10-06-snakemouth-dens-bridge-room)
 - [2026-10-07: Golden Path](#2026-10-07-golden-path)
+- [2026-10-07: the cave path](#2026-10-07-the-cave-path)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -3300,3 +3301,18 @@ either one wrong).
   The mod build in the game is staged (`stage-dev.ps1`, then `copy-dev.ps1`; copying alone ships the old build).
   Open: Next 62 (the Wooden Crank never used up, the merged items as the whole), the quest, enemy, discovery and
   respawning/static item passes; tests and the fuzzer before the push (not run during dev, as asked).
+
+## 2026-10-07: the cave path
+
+- **The seed hosted again** (`AP_63157247147940960355`); the user started a new file. My queued warp fired between the
+  opening's end and our fade-in: that fade destroyed the one `TransferMap` waited on (`transitionobj[0]`), a
+  `NullReferenceException`, the user frozen by Maki. Queued warps now also wait for the opening. On the next new file
+  it then never ran: waiting on `intransition`, which a fade-in that throws leaves set for good. Now it waits on the
+  fade sprite itself and logs what it waits on ("waits: a fade", then the warp, seen on the third file).
+- **`GoldenHillsPath3`, "Cave Path" (the user's pick of my two):** the user's ways, then three tick-box questions per
+  entrance (`MEASURED.md`). The draft's "invisible wall" was two things: the door itself (`LockedDoor`, requires flag 20,
+  kept present) and a wall before it (`Base/Cube`, limit 20, found with `solids` once the user still saw a barrier),
+  hidden. Seen: the door entered on a new seed. The Lore Book dig spot (id 142, Horn Dash and Beetle Dig) showed no
+  starburst first: Shuffle Dig Spots off in the test player file, then the user on the old seed's file; on a new seed
+  with dig spots on and a new file, the starburst seen. Bee Fly down to the bottom: counted at the user's word, then
+  back to a trick for a harder logic at theirs.

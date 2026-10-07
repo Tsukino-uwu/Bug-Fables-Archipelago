@@ -152,6 +152,25 @@ namespace BugFablesAP
         private static readonly Queue<string> queued = new Queue<string>();
         private static float lastPoll;
 
+        private static string lastWaitsOn;
+
+        // What still holds a queued warp back, or null. A fade is waited on by its sprite, not intransition: a fade-in
+        // that finds the sprite already gone throws and leaves intransition set for good.
+        private static string WarpBlocker()
+        {
+            MainManager mm = MainManager.instance;
+            Transform[] fade = mm == null ? null : mm.transitionobj;
+            return MainManager.player == null ? "no player"
+                : mm.inevent ? "an event"
+                : mm.message ? "a message"
+                : mm.minipause ? "minipause"
+                : mm.pause ? "the pause menu"
+                : MainManager.roomtransition ? "a room transfer"
+                : fade != null && fade.Length > 0 && fade[0] != null ? "a fade"
+                : QualityOfLife.OpeningBusy ? "the opening"
+                : null;
+        }
+
         private static void PollFile()
         {
             if (string.IsNullOrEmpty(CommandFile) || Time.realtimeSinceStartup - lastPoll < 0.5f)
@@ -218,11 +237,16 @@ namespace BugFablesAP
             HoldLoopSpot();
             // A queued warp (liveslot re-enters the room with one) waits for the player to be free rather than failing
             // with "not now"; one started mid-transfer overlapped the game's own and threw in its fade.
-            bool warpWaits = queued.Count > 0 && (queued.Peek().StartsWith("loc") || queued.Peek().StartsWith("warp")
+            string waitsOn = queued.Count > 0 && (queued.Peek().StartsWith("loc") || queued.Peek().StartsWith("warp")
                     || queued.Peek().StartsWith("liveslot"))
-                && (MainManager.player == null || MainManager.instance.inevent || MainManager.instance.message
-                    || MainManager.instance.minipause || MainManager.instance.pause || MainManager.roomtransition
-                    || MainManager.instance.intransition || QualityOfLife.OpeningBusy);
+                ? WarpBlocker()
+                : null;
+            if (waitsOn != lastWaitsOn && waitsOn != null)
+            {
+                log.LogInfo($"[dev] (file) {queued.Peek()} waits: {waitsOn}");
+            }
+            lastWaitsOn = waitsOn;
+            bool warpWaits = waitsOn != null;
             if (queued.Count > 0 && pendingMap < 0 && !open && !warpWaits)
             {
                 string command = queued.Dequeue();

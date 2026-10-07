@@ -883,7 +883,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     (flag 733) on a sandpile below the cave, walked to from the top right or the platform, a drop from there. The
     switch (flag 255) only from up there (the user, 2026-10-07): from below, the platform with it hit and Jump.
     **`DesertOasisEntrance` (2026-10-06, the user):** the top and bottom doors (the left side) free between them; to
-    the right side (the oasis door) the bubble shield over spikes, or Bee Fly, both ways; back, also a red bounce pad sends the party left with
+    the right side (the oasis door) the bubble shield over spikes, or Bee Fly, both ways; back, also a red bounce pad
+    sends the party left with
     nothing, a one-way without the shield. The pad (`mush`) is there only until flag 300, set by Event105 (chapter 4);
     the user: keep it there for good (`KEPT_PRESENT`), so its one-way counts with Points of No Return. Seen there with
     flag 300 on (`liveslot`, 2026-10-06), and bouncing the party to the left side.
@@ -932,7 +933,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   only item 11, regional flag 0), missed at first, the same (seen the same day).
   **`GoldenHillsDungeonRightCrank` (2026-10-06):** one door; the Big Crank Top Half (key item 59, flag 113) on a
   ledge at the far right: the bubble shield (maybe not needed), Freeze, the horn, Jump, the Beemerang and Halt, all
-  counted (the user); or Bee Fly alone, for everything in the room (the user). The Hustle Candy (flag 727) on a small stump behind a flower among thorns midway: hard to spot,
+  counted (the user); or Bee Fly alone, for everything in the room (the user). The Hustle Candy (flag 727) on a small
+  stump behind a flower among thorns midway: hard to spot,
   grabbed with the Beemerang; `warp ... @Item - Stump` found no safe spot beside it.
   **`GoldenHillsLowerRightCrank` (2026-10-06):** one door; its Wooden Crank (flag 116) on the top right ledge: Jump,
   and an ice block (Freeze) pushed by the horn across platforms Beemerang Halt spins; Bee Fly only stands in for Jump,
@@ -945,7 +947,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   nothing seen to change.
   **`GoldenHillsDungeonUpperMain` (2026-10-06):** the lower right door free; the platform down Beemerang Halt. The
   upper right (its door and a shrine) behind a barrier: from that door a lever (any attack, flag 127, `Event50`, Gate4)
-  lowers it and starts a platform, staying, boarded from below with Jump. Two shrines (`Event72`, `pickitem` of key items): the left one (behind
+  lowers it and starts a platform, staying, boarded from below with Jump. Two shrines (`Event72`, `pickitem` of key
+  items): the left one (behind
   grass, the horn) wants the Sun Offering (55, flag 125), the upper right one the Moon Offering (56, flag 126); a wrong
   one starts a fight; each opens part of the boss door's gate, both needed, staying open. With spawned offerings. From
   the boss door while shut: a pocket, not pushed, back out only. The offerings are given in `GoldenSettlement2`.
@@ -979,8 +982,21 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   from it, the party is pushed through the rock. The caravan's stall (`Base/Stall`, Crickerly, her husband, the medal
   seller; until flag 88) and the snail's shop (`Base/snailmerchant`, `snailguy`; from 88: Numbnail Dart, Sleep Bomb,
   Drowsy Cake) share one spot, their goods within a step. A shop's goods are made in a second pass of
-  `CreateEntities` (`MapControl.cs:1708`, from its keeper's check), each with `shopkeeper` pointing back. The minigame room: Wacka Worm replays for 10 berries, and a
+  `CreateEntities` (`MapControl.cs:1708`, from its keeper's check), each with `shopkeeper` pointing back. The minigame
+  room: Wacka Worm replays for 10 berries, and a
   mayor's scene late (flags 557-559).
+  **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
+  them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
+  side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
+  also Horn Slash (grass); either way Bee Fly instead. The bottom only with the Shield (a plain drop lands in the
+  spikes, the door being under the left side's platform): from the left a one-way, from the right a drop, back up
+  Shield and Jump; from the bottom, with Jump and Halt but no Shield, nothing past the door. The dig spot (key item
+  52, Lore Book, flag 380) under a rock (`Breakablerock`): Horn Dash, then Beetle Dig. The cave door
+  (`loadzonechomper`, `LockedDoor`, requires flag 20) has an invisible wall before it (`Base/Cube`, a
+  `ConditionChecker` with limit 20, found with `solids`): both gone only once the story teaches the Shield (`Event95`).
+  Seen open in a seed with the door kept present and the wall hidden. **A trick:** a drop with Bee Fly also reaches
+  the bottom door without the Shield, a one-way unless Shield and Jump climb back; kept for a harder logic (the user,
+  after counting it for a moment).
   - **A full bag's toss reuses the pickup** (`MainManager.SetText`, the item list's -2 answer, read 2026-10-06): taking
     an item with a full bag and throwing a bag item out in exchange puts the thrown item into the same floor entity
     (`animstate`, `itemstate`, `basestate`), marks it `tossed` and lets it bounce out; it isn't destroyed. Seen as a
@@ -1162,7 +1178,8 @@ on many maps from the first dungeon on, so a pit doesn't mean hover.
 **39 of the 50 are placed by data** (ground pickups: index in `data[3]`; dig spots with `data[0] = 1`: index in
 `data[1]`; cut grass with `data[1] > -1`; dialogue `giveitem,3,N`). Code gives #15 (also in data), #18 and #39
 (`giveitem,3` in Events 93, 105 and 71), #11 and #19 (`GiveItem(3, …)` in Events 210 and 217) and #43-47 (Event189's
-discovery rewards). #13 (the theater's `MusicSpinner`, found 2026-10-06) and #38: no literal grant found by either pattern (corrected 2026-09-30 from "41 by data, 9
+discovery rewards). #13 (the theater's `MusicSpinner`, found 2026-10-06) and #38: no literal grant found by either
+pattern (corrected 2026-09-30 from "41 by data, 9
 from code with computed values, per the wiki"). By index: #0 OutsideSnakemouth
 (ground), #1 SnakemouthLake (grass), #2 SnakemouthUndergrondDoor, #3 ChucksAbode, #4 GoldenSettlement2, #5
 AntPalace2 (gift, dialogue line 15), #6 BOGoldenPath (dig), #7 GoldenSettlement2 (dig), #8 GoldenHillsCableCar, #9
