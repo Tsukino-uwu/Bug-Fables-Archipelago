@@ -28,4 +28,9 @@ MAP_AREAS = (
     Area("FGCave", "Tunnel", (), CanUse("Horn Slash")),
     Area("FGCave", "Left", ("loadzonebroodmother",), Has("Border Cave Left Gate Open")),
     Area("FGCave", "Right", ("loadzone wasp",), Has("Border Cave Right Gate Open")),
+    # Outside the border cave (the user, 2026-10-08): its top door (to the cave) and save crystal the map's own region;
+    # its right door behind two rocks, Horn Dash both ways (they stay broken, by regional flags, but a file need not
+    # have broken them); its bottom left door (to the wizard's) by burrowing, Beetle Dig both ways.
+    Area("FarGrasslandsOutsideCave", "Right", ("loadzone right",), CanUse("Horn Dash")),
+    Area("FarGrasslandsOutsideCave", "Bottom Left", ("loadzonewizard",), CanUse("Beetle Dig")),
 )

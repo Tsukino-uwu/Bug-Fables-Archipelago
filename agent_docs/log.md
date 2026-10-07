@@ -3454,3 +3454,5 @@ either one wrong).
   user. The arrival scene makes Maki a follower: the user, a bonus never in the logic, but kept from the swamp's boss
   and the Wasp Kingdom, written beside the swamp bridge's Known issue. The user: done. Ticked, 113 of 244. Next:
   `FarGrasslandsOutsideCave` (138).
+- **`FarGrasslandsOutsideCave`:** the user's ways: the right door Horn Dash (the rocks stay broken, still required), the
+  bottom left Beetle Dig, the rest free. The user: done. Ticked, 114 of 244. Next: `FarGrasslandsWizard` (139).

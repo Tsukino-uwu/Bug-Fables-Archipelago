@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**113 of 244 done.**
+**114 of 244 done.**
 
 ## Outskirts
 
@@ -171,7 +171,7 @@ as it is, a frozen record.
 - [x] FGCave (135)
 - [x] FarGrasslands1 (137) — for the quest pass: the wasp twin (flags 638-639); for the swamp: Maki the follower
   (Event125)
-- [ ] FarGrasslandsOutsideCave (138)
+- [x] FarGrasslandsOutsideCave (138) — for the quest pass: Riz (from flag 509)
 - [ ] FarGrasslandsWizard (139)
 - [ ] FarGrasslands2 (140)
 - [ ] FarGrasslandsLake (141)
