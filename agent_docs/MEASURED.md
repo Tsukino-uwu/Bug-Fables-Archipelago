@@ -1170,6 +1170,11 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   The lookout rock on the cave door's side (`discovery`, Jump): its talk sets 546, and `CheckAchievement` (each map
   load, the pause menu) records discovery 36, "Wizard's Tower", which entering `WizardTowerStairs` also records
   (`MapControl`). Three signs ("STAY AWAY"...); the grass hides nothing; no items.
+  **`FarGrasslands2`, the west path (2026-10-08, the user and the dumps):** the right door (to `FarGrasslands1`) and
+  crystal berry #26 (`Fixedcrystalb`, data `3 -1 0 26`, on top of the big tree root) free; the top door (to
+  `FarGrasslands4`, y 6) Jump up a ledge, a drop down. Three grass patches (regional 9-11) drop only berries, the money
+  (items 6 and 7): not locations, as at Seedling Haven. A Mantidfly, a flowering plant and a jumping spider for the
+  enemy pass.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

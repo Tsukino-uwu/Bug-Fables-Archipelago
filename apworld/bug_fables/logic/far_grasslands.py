@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from rule_builder.rules import CanReachRegion, Has
 
-from ..custom_rules import ANY_ATTACK, CanUse
+from ..custom_rules import ANY_ATTACK, CanUse, one_way
 from ..data_types import Area, DoorRule, Location, Pickup, Source, StoryEvent
 
 LOCATIONS = (
@@ -17,6 +17,10 @@ LOCATIONS = (
     # (MapControl). One check, either way (the user, 2026-10-08).
     Location("Far Grasslands: Wizard's Tower, Lookout Rock", 171, "FarGrasslandsWizard", Source(discovery=36),
              rule=CanUse("Jump") | CanReachRegion("WizardTowerStairs"), category="discovery"),
+    # Crystal berry #26 on top of the big tree root west of the crossroads, walked up to with nothing (the user).
+    Location("Far Grasslands: West Path, On the Tree Root", 172, "FarGrasslands2",
+             Source(berry=26, pickup=Pickup(map="FarGrasslands2", type=3, item=0)), category="crystal_berry",
+             no_jump=True),
 )
 STORY_EVENTS = (
     # The border cave's two gates, each opened for good by its lever on the far side (Event136 sets the lever's
@@ -52,4 +56,7 @@ MAP_AREAS = (
     # The wizard's tower outside (the user, 2026-10-08): its door from outside the border cave the map's own region;
     # the tower side (its front door and the hole) across with the Shield or Bee Fly.
     Area("FarGrasslandsWizard", "Tower", ("loadzonetower", "loadzonebasement"), CanUse("Shield") | CanUse("Bee Fly")),
+    # The second grasslands room (west of the crossroads): its top door up a ledge, Jump; a drop down (the user,
+    # 2026-10-08).
+    Area("FarGrasslands2", "Top", ("loadzone north",), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
 )

@@ -3045,7 +3045,8 @@ a gate its own lever opens; the ant tunnel's miner past grass, the horn), 112 of
 location: a dig spot's crystal berry), 113 of 244; outside the border cave (its right door Horn Dash, its bottom left
 Beetle Dig), 114 of 244; outside the wizard's tower (the tower side Shield or Bee Fly; the hole a one-way in, the horn;
 the front door shut both ways until the wizard unlocks it, a door rule on both ends; a new location: the Lookout Rock's
-discovery, Jump or the tower's stairs), 115 of 244; the rest of `room-checklist.md` to go.
+discovery, Jump or the tower's stairs), 115 of 244; the west path (its top door Jump; a new location: a crystal berry on
+the tree root), 116 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

@@ -3464,3 +3464,6 @@ either one wrong).
   basement through the hole (no way back up), then out of the shut front door (pushed back out, the user: as
   intended). Opening the door from the start offered against stranding; the user kept the game's door. The user: done.
   Ticked, 115 of 244. Next: `FarGrasslands2` (140).
+- **`FarGrasslands2`, the west path:** the user's ways (the top door Jump, a drop down). Crystal berry #26 a new
+  location, named from the user's screenshot ("On the Tree Root", the room "West Path"); the money-only grass left out
+  by precedent. The user: done. Ticked, 116 of 244. Next: `FarGrasslandsLake` (141).
