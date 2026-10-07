@@ -22,6 +22,11 @@ namespace BugFablesAP
             internal int From;
             internal int Until;
             internal int FirstEvent;
+            // Day scenes' flags the first nightfall marks done if they haven't played.
+            internal int[] Skips;
+            // The map the first nightfall's scene belongs to, and the discovery it records.
+            internal string FirstMap;
+            internal int FirstDiscovery;
         }
 
         internal sealed class Switch
@@ -368,8 +373,26 @@ namespace BugFablesAP
             if (!MainManager.instance.flags[p.From])
             {
                 night = true;
-                log.LogInfo($"[night] the first nightfall: the story's Event{id} plays");
-                return true;
+                foreach (int skip in (p.Skips ?? new int[0]).Where(f => !MainManager.instance.flags[f]))
+                {
+                    MainManager.instance.flags[skip] = true;
+                    log.LogInfo($"[night] the first nightfall before its day scene: flag {skip} marked done");
+                }
+                if (string.IsNullOrEmpty(p.FirstMap) || EntityMap(MainManager.map.mapid.ToString()) == p.FirstMap)
+                {
+                    log.LogInfo($"[night] the first nightfall: the story's Event{id} plays");
+                    return true;
+                }
+                // Elsewhere: the night begins in place, with what the scene leaves behind but not the scene.
+                MainManager.instance.flags[p.From] = true;
+                if (p.FirstDiscovery >= 0)
+                {
+                    MainManager.UpdateJounal(MainManager.Library.Discovery, p.FirstDiscovery);
+                }
+                night = false;
+                log.LogInfo($"[night] the first nightfall away from {p.FirstMap}: flag {p.From} and discovery {p.FirstDiscovery} as Event{id} sets them, no scene");
+                MainManager.instance.StartCoroutine(Flip(p));
+                return false;
             }
             MainManager.instance.StartCoroutine(Flip(p));
             return false;

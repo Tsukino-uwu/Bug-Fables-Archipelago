@@ -38,11 +38,11 @@ SCENERY_PRESENT = (
 )
 # The festival night (flag 85 until the fight's 86) any time (the user, 2026-10-07): the mod's own night on these maps,
 # switched by an NPC in each; the first nightfall is the story's own scene (Event52: its speech, discovery 13, flag 85).
-DAY_NIGHT = (
-    DayNight("GoldenSettlement1", "GoldenSettlement1Night", 85, 86, 52),
-    DayNight("GoldenSettlement2", "GoldenSettlement2Night", 85, 86, 52),
-    DayNight("GoldenSettlement3", "GoldenSettlement3Night", 85, 86, 52),
-)
+# The square's arrival scene (Event51, flag 84) is skipped if the night comes first; from the farm or the houses the
+# first nightfall stays in the room, with the scene's flag and discovery 13 but not its speech (the user, 2026-10-07).
+DAY_NIGHT = tuple(DayNight(room, room + "Night", 85, 86, 52, skips=(84,), first_map="GoldenSettlement1",
+                           first_discovery=13)
+                  for room in ("GoldenSettlement1", "GoldenSettlement2", "GoldenSettlement3"))
 # What every switch says (the user, 2026-10-07): by day Aria's own nightfall prompt (GoldenSettlement1 line 19), word
 # for word; at night the user's.
 _DAY = ("Oh? Are you here for the festival? It should start as soon as the sun sets.", "Keep exploring.",

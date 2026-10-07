@@ -186,6 +186,9 @@ namespace BugFablesAP
                 From = e.Value<int>("from"),
                 Until = e.Value<int>("until"),
                 FirstEvent = e.Value<int>("first_event"),
+                Skips = e["skips"]?.Values<int>().ToArray() ?? new int[0],
+                FirstMap = e.Value<string>("first_map"),
+                FirstDiscovery = e["first_discovery"]?.Value<int>() ?? -1,
             });
             TimeSwitches = SlotData.List(data, "time_switches", e => new DayNight.Switch
             {

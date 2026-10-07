@@ -179,19 +179,25 @@ class EntityRef:
 
 @dataclass(frozen=True, slots=True)
 class DayNight:
-    """A day map with a night version the mod switches between at will (the user, 2026-10-07): flag_from and
-    flag_until are the story's night (from the first, until the second), which the mod answers for its own night on
-    these maps without writing them; first_event is the story's own nightfall scene, played the first time."""
+    """A day map with a night version the mod switches between at will (the user, 2026-10-07): flag_from and flag_until
+    are the story's night (from the first, until the second), which the mod answers for its own night on these maps
+    without writing them; first_event is the story's own nightfall scene, played the first time on its own map
+    (first_map); started elsewhere, the night begins in place with its flag and its discovery (first_discovery) and
+    without the scene. skips: the flags of day scenes the first nightfall marks done if they haven't played."""
 
     day: str
     night: str
     flag_from: int
     flag_until: int
     first_event: int
+    skips: tuple[int, ...] = ()
+    first_map: str = ""
+    first_discovery: int = -1
 
     def to_slot(self) -> dict[str, Any]:
         return {"day": self.day, "night": self.night, "from": self.flag_from, "until": self.flag_until,
-                "first_event": self.first_event}
+                "first_event": self.first_event, "skips": list(self.skips), "first_map": self.first_map,
+                "first_discovery": self.first_discovery}
 
 
 @dataclass(frozen=True, slots=True)

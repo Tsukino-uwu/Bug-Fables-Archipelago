@@ -4879,6 +4879,12 @@ settlement, so it is never touched.
    data row and name added to the room's as `CreateEntities` reads them (a transpiler after its two splits), so the
    game builds her like any other entity. Spots tried live with the dev `switchhere`, then written in.
 
+8. **The first nightfall away from the square** (`day_night`'s `first_map`, `first_discovery`, `skips`): from the farm
+   or the houses the night begins in place, by the quick swap, with what the story's scene leaves behind (flag 85,
+   discovery 13 by the game's `UpdateJounal`) but not its speech, which only the square's first nightfall plays (the
+   user: not taken to the square). The square's arrival scene (flag 84), if not played yet, is marked done then: it
+   had come up at night after a first nightfall in the farm (the user chose it skipped over day-only).
+
 **To do:** the door table (`door-graph.py`) marks the three rooms' links "fixed" (never shuffled), as their copies
 stand on one spot; with one door per exit, a group of copies there becomes one door, as for one-ways, then the table
 regenerated and the shuffle tested. The logic: the night maps fold into their three day rooms, room by room.
