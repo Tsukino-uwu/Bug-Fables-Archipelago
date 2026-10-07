@@ -74,6 +74,10 @@ SCENERY_HIDDEN = (
 SCENERY_PRESENT = (
     EntityRef("GoldenSettlement1", "Base/Altar (1)"),
 )
+# The night farm's own gate to the power plant, which has no flag (the day farm's goes with flag 226, above).
+SCENERY_OFF = (
+    EntityRef("GoldenSettlement2Night", "Base/WoodenGate2"),
+)
 # The festival night (flag 85 until the fight's 86) any time (the user, 2026-10-07): the mod's own night on these maps,
 # switched by an NPC in each; the first nightfall is the story's own scene (Event52: its speech, discovery 13, flag 85).
 # The square's arrival scene (Event51, flag 84) is skipped if the night comes first; from the farm or the houses the

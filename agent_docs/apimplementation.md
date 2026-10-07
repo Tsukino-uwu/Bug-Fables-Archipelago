@@ -4880,15 +4880,17 @@ settlement, so it is never touched.
    slid aside as the fight's scene slides it, so the dungeon's door never lands behind it.
 5. **The square open at night:** its south door kept present and the `blocker` trigger kept away. A night map's entity
    lists are read under its day map's name (`DayNight.EntityMap`), so the seed names each entity once.
-6. **One door per exit:** each exit between the three rooms is a door entity per festival state on one spot; the one
+6. **Scenery switched off** (`scenery_off`, step 53's night gate): a night map's own copy of something its day map
+   hides by flag.
+7. **One door per exit:** each exit between the three rooms is a door entity per festival state on one spot; the one
    before the festival is kept present in every state and the nine night and after-festival copies kept away, so an
    exit is always the same door and the night only picks the version of the room it lands in (the user: three rooms,
    the night acting only within them; one time of day for all three).
-7. **The farm's and the houses' switches** are the square's Aria copied in (`time_switches`' `"copy"`): her entity
+8. **The farm's and the houses' switches** are the square's Aria copied in (`time_switches`' `"copy"`): her entity
    data row and name added to the room's as `CreateEntities` reads them (a transpiler after its two splits), so the
    game builds her like any other entity. Spots tried live with the dev `switchhere`, then written in.
 
-8. **The first nightfall away from the square** (`day_night`'s `first_map`, `first_discovery`, `skips`): from the farm
+9. **The first nightfall away from the square** (`day_night`'s `first_map`, `first_discovery`, `skips`): from the farm
    or the houses the night begins in place, by the quick swap, with what the story's scene leaves behind (flag 85,
    discovery 13 by the game's `UpdateJounal`) but not its speech, which only the square's first nightfall plays (the
    user: not taken to the square). The square's arrival scene (flag 84), if not played yet, is marked done then: it
@@ -4940,8 +4942,15 @@ The offerings are what the Golden Hills dungeon's shrines take.
 3. **The contest always won** (slot_data `contest_always_won`; `Festival.cs`, a transpiler in `Event57` passing `won`
    through `ForceWin`).
 
-**Status:** in progress (2026-10-07): the five farm checks sent on a save that had won the contest; a forced win and
-Chubee's gift as a location not yet seen.
+4. **The farm's power plant door open** (the user): kept present by day and by night, its day gate hidden by flag and
+   the night map's own gate, which has no flag, switched off on load (slot_data `scenery_off`: `[{"map", "entity"}]`).
+
+**Seen (2026-10-07, a new save):** the Smugbee scene's item with its box; the Wacka Worm prize (the seed's item for
+the Sun Offering) and the Halt lesson's check; the contest lost on purpose, counted as won (Leif declared the
+winner), its prize the seed's item; Chubee's gift in one box; the farmer's reward; the windmill berry; the power plant
+door both ways at night.
+
+**Status:** built (2026-10-07), seen.
 
 *Code: `logic/golden_settlement.py`, `logic/golden_hills.py`, `data/items.json`, `slot_data.py`. The mod: `Festival.cs`,
 `SeedData.cs`.*

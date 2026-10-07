@@ -51,5 +51,7 @@ FREE_SALES: tuple[FreeSale, ...] = tuple(e for area in AREAS for e in getattr(ar
 DAY_NIGHT: tuple[DayNight, ...] = tuple(e for area in AREAS for e in getattr(area, "DAY_NIGHT", ()))
 TIME_SWITCHES: tuple[TimeSwitch, ...] = tuple(e for area in AREAS for e in getattr(area, "TIME_SWITCHES", ()))
 SCENERY_MOVED: tuple[SceneryMove, ...] = tuple(e for area in AREAS for e in getattr(area, "SCENERY_MOVED", ()))
+# Scenery with no flag of its own, switched off on load (a night map's copy of something its day map hides by flag).
+SCENERY_OFF: tuple[EntityRef, ...] = tuple(e for area in AREAS for e in getattr(area, "SCENERY_OFF", ()))
 ENTITIES_MOVED: tuple[EntityMove, ...] = tuple(e for area in AREAS for e in getattr(area, "ENTITIES_MOVED", ()))
 SCENE_CAMERAS: tuple[SceneCamera, ...] = tuple(e for area in AREAS for e in getattr(area, "SCENE_CAMERAS", ()))

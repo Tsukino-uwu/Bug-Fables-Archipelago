@@ -1049,7 +1049,11 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    filled when a pickup or gift shows the seed's item, used up by that item's arrival). An item shop purchase and a
    journal discovery queue a hold-up of their own for the seed's item, so they fill it too: one's own item bought
    showed twice, the purchase's box then "received from" (parked 2026-10-04, reported again 2026-10-07); **seen
-   (2026-10-07):** three purchases with one box each. "Arrived after login" was tried
+   (2026-10-07):** three purchases with one box each. A give whose line sets its flag first (`flag,91,true||break||
+   giveitem`, the farmer's reward) had its check sent before the give, so the give counted as a replay and the item
+   came in two boxes; a check found in play in the last 15 seconds now counts as that find
+   (`LocationChecks.FoundJustNow`).
+   **Seen (2026-10-07):** Chubee's gift, the same order, in one box. "Arrived after login" was tried
    first and missed a replay in a second new file of the same session: Meditation, found in the file before, came in
    with no box (2026-09-28: "I expected it to be remote"). **Seen (2026-09-28):** on the next new file Meditation
    arrived with its box, and the opening's items stayed quiet. On *All*, a new file late in a seed plays a

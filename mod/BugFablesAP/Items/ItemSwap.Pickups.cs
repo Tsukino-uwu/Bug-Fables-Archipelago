@@ -110,7 +110,7 @@ namespace BugFablesAP
                     ShowAsSprite(caller.entity, sprite);
                 }
                 text = text.Replace(FirstMedalTutorial + "|break|", "").Replace(FirstMedalTutorial, "");
-                if (!connection.IsDone(at))
+                if (!connection.IsDone(at) || LocationChecks.FoundJustNow(at))
                 {
                     ShownInScene.Add(at); // a done check's item only comes back as a replay, which keeps its box
                 }

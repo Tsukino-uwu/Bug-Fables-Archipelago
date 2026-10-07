@@ -21,6 +21,14 @@ namespace BugFablesAP
         private ArchipelagoSession goalSentFor;
         private string lastGoalState;
 
+        // When each location was found in play this session: a line that sets its flag before its giveitem has it sent
+        // first, and that give is still the find, not a replay (ItemSwap's one-box rule).
+        private static readonly Dictionary<long, float> FoundAt = new Dictionary<long, float>();
+        private const float SameScene = 15f;
+
+        internal static bool FoundJustNow(long location) =>
+            FoundAt.TryGetValue(location, out float at) && UnityEngine.Time.realtimeSinceStartup - at < SameScene;
+
         internal LocationChecks(ManualLogSource log, ApConnection connection)
         {
             this.log = log;
@@ -182,6 +190,8 @@ namespace BugFablesAP
             if (finished != null)
             {
                 connection.SendChecks(session, finished.ToArray());
+                float now = UnityEngine.Time.realtimeSinceStartup;
+                finished.ForEach(id => FoundAt[id] = now);
             }
             CheckGoal(session);
         }

@@ -1016,7 +1016,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (lines 88, 91-93) and buys the party's items (89, 98-99). Story Aria takes Queen's Dinner (item 32) as the offering
   "grand enough for Venus" (line 182 to 183, flag 393). Samira (from flag 6), the quest board (from 86), and the night's
   talkers (Layna and her pet, Bomby, Stratos and Delilah, Neolith, the shy bee, Gen and Eri, Zasp) for the quest pass.
-  **`GoldenSettlement2`, the farm (2026-10-07, the user and the lines):** the square's door free. The windmill's crank
+  **`GoldenSettlement2`, the farm (2026-10-07, the user and the lines):** the square's door and the power plant's
+  (kept open, its gate gone: the day one by flag, the night map's own switched off) free between them, by day and by
+  night; the bee guard by the left door doesn't stop the party. The windmill's crank
   (`ScrewSwitch`) turned with the Beemerang Halt opens it (gate `Base/WindmillGate` until flag 90): crystal berry #4
   inside, by day and by night; at night the farmer (`farmer ant night`) then gives a Hard Seed (line 21, flag 91). The
   night scene on entering (`Event56`, the `angry bee event` trigger, until flag 98): Smugbee, and Kabbu learns Pep Talk

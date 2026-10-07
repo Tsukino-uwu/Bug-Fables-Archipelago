@@ -42,6 +42,12 @@ namespace BugFablesAP
             internal string CopyEntity;
         }
 
+        internal sealed class EntityName
+        {
+            internal string Map;
+            internal string Entity;
+        }
+
         internal sealed class Camera
         {
             internal string Map;
@@ -309,6 +315,15 @@ namespace BugFablesAP
                     }
                 }
                 log.LogInfo($"[night] {map}: {moved.Entity} {(npc != null ? "stands at " + moved.At : "NOT FOUND")}");
+            }
+            foreach (EntityName off in (seed?.Invoke()?.SceneryOff ?? new List<EntityName>()).Where(o => o.Map == map))
+            {
+                Transform t = __instance.transform.Find(off.Entity);
+                if (t != null)
+                {
+                    t.gameObject.SetActive(false);
+                }
+                log.LogInfo($"[night] {map}: {off.Entity} {(t != null ? "switched off" : "NOT FOUND")}");
             }
             Pair p = PairOf(map);
             if (p == null || !On)

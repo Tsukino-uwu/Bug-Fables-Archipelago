@@ -6,7 +6,8 @@ from typing import TYPE_CHECKING, Any
 
 from .data_tables import (DAY_NIGHT, DIALOGUE_FLAGS, ENTITIES_MOVED, FREE_SALES, HELD_UNTIL, HELD_UNTIL_ITEM,
                           ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN, KEPT_PRESENT, LOCATION_NAME_TO_ID, PRESENT_FROM,
-                          PRESENT_WITH_ITEM, ROADBLOCKS, SCENE_CAMERAS, SCENERY_HIDDEN, SCENERY_MOVED, SCENERY_PRESENT,
+                          PRESENT_WITH_ITEM, ROADBLOCKS, SCENE_CAMERAS, SCENERY_HIDDEN, SCENERY_MOVED, SCENERY_OFF,
+                          SCENERY_PRESENT,
                           STORY_ONLY_MAPS, TIME_SWITCHES, WORLD_VERSION)
 from .data_types import (DayNight, DialogueFlag, EntityMove, EntityRef, FlagEntity, FreeSale, ItemEntity, SceneCamera,
                          SceneryMove, Source, TimeSwitch)
@@ -135,6 +136,8 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "day_night": _entities(DAY_NIGHT),
         "time_switches": _entities(TIME_SWITCHES),
         "scenery_moved": _entities(SCENERY_MOVED),
+        # Scenery with no flag of its own the client switches off on load ([{"map", "entity"}], by its path).
+        "scenery_off": _entities(SCENERY_OFF),
         # Entities standing somewhere else than their own spot ([{"map", "entity", "at"}]).
         "entities_moved": _entities(ENTITIES_MOVED),
         # A scene's fixed camera point moved with its characters ([{"map", "event", "from", "to"}]).

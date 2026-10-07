@@ -79,6 +79,7 @@ namespace BugFablesAP
         internal readonly List<DayNight.Pair> DayNightMaps;
         internal readonly List<DayNight.Switch> TimeSwitches;
         internal readonly List<DayNight.Move> SceneryMoved;
+        internal readonly List<DayNight.EntityName> SceneryOff;
         internal readonly List<DayNight.Switch> EntitiesMoved;
         internal readonly List<DayNight.Camera> SceneCameras;
         internal readonly bool PointsOfNoReturn;
@@ -214,6 +215,11 @@ namespace BugFablesAP
                 Event = e.Value<int>("event"),
                 From = Vector(e["from"]),
                 To = Vector(e["to"]),
+            });
+            SceneryOff = SlotData.List(data, "scenery_off", e => new DayNight.EntityName
+            {
+                Map = e.Value<string>("map"),
+                Entity = e.Value<string>("entity"),
             });
             SceneryMoved = SlotData.List(data, "scenery_moved", e => new DayNight.Move
             {
