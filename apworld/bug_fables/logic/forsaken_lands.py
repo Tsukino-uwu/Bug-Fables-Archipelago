@@ -48,6 +48,16 @@ LOCATIONS = (
     Location("Forsaken Lands: Dome Overlook, Grass by the Log", 166, "BarrenLandsRock",
              Source(regional=11, pickup=Pickup(map="BarrenLandsRock", type=0, item=125)), rule=CanUse("Horn Slash"),
              category="hidden_item", no_jump=True),
+    # The tunnel side's three, on its bottom (the user, 2026-10-07): a Lore Book lying in the tall
+    # grass (scenery, not a bush), nothing needed; a Squash dropped once by each of two grass patches, the horn.
+    Location("Forsaken Lands: Tunnel Side, In the Tall Grass", 167, "BarrenLandsSideGPT",
+             Source(flag=463, pickup=Pickup(map="BarrenLandsSideGPT", type=1, item=52)), no_jump=True),
+    Location("Forsaken Lands: Tunnel Side, Grass by the Tree", 168, "BarrenLandsSideGPT",
+             Source(flag=678, pickup=Pickup(map="BarrenLandsSideGPT", type=0, item=125)), rule=CanUse("Horn Slash"),
+             category="hidden_item", no_jump=True),
+    Location("Forsaken Lands: Tunnel Side, Bush by the Tall Grass", 169, "BarrenLandsSideGPT",
+             Source(flag=677, pickup=Pickup(map="BarrenLandsSideGPT", type=0, item=125)), rule=CanUse("Horn Slash"),
+             category="hidden_item", no_jump=True),
 )
 # The broken bridge room's ruler, knocked down from its upper right (Event146, flag 382): a switch only Kabbu's horn
 # hits (its data[4] 1, NPCControl), the bridge then joining the upper right and the left.
@@ -74,6 +84,7 @@ TRANSFERS = (
     Transfer("drop", "BarrenLandsBeefly", "BarrenLandsBeefly", two_way=False,
              way_back=CanUse("Bee Fly") & Has("Broken Bridge Ruler Down"), from_area="Upper Right"),
 )
+_SIDE_ROOM_UP = CanUse("Jump") & CanUse("Horn Dash") & CanUse("Bee Fly")
 # Up to the pumpkin room's high right door from its top right.
 _PUMPKIN_RIGHT_DOOR = CanUse("Horn Dash") & CanUse("Horn Slash") & CanUse("Jump") & CanUse("Bee Fly")
 MAP_AREAS = (
@@ -113,6 +124,9 @@ MAP_AREAS = (
          to="BarrenLandsCloud (Top)"),
     Area("BarrenLandsCloud", "Bottom", ("returnzone",), one_way(_CLOUD_STEP, _CLOUD_RING), out=False_(),
          to="BarrenLandsCloud (Left)", landings=(("BarrenLandsPumpkins", "returnloadzone"),)),
+    # The side room's high door (to the Golden Path tunnel): Jump, Horn Dash and Bee Fly up, a drop down (the user,
+    # 2026-10-07).
+    Area("BarrenLandsSideGPT", "Top", ("loadzone cave",), _SIDE_ROOM_UP, out=one_way(None, _SIDE_ROOM_UP)),
 )
 # Patton's lab, opened by the escort to the termites (flag 376): open from the start (the user, 2026-10-07), its door
 # entity there and its slab gone, as the game has them from 376.

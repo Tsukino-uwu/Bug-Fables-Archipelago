@@ -1138,6 +1138,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (`GiveItem(1, 146)`), discovery 40, "Ancient City" (`librarystuff[0, 40]` set directly, no pop-up), and flag 454,
   which also unmasks the Abandoned City's mothflies. For the quest pass with the other bounties, as the Seedling
   King's.
+  **`BarrenLandsSideGPT`, the tunnel side (2026-10-07, the user and the dumps):** its right door (to
+  `BarrenLandsEntrance`) and the two wrong turns (left and bottom, to `BarrenLandsCD`) free between them; the high
+  door (to `GoldenPathTunnel2`, y 6) Jump, Horn Dash and Bee Fly up, a drop down. On the bottom: a Lore Book lying in
+  tall grass (scenery, not a bush; flag 463), nothing needed; two grass patches each dropping a Squash once
+  (`CutGrass` hands the drop the grass's `activationflag`: 678 by the tree, 677 by the tall grass), the horn. Seen:
+  the user cut the one by the tree, standing at (-4.6, -10.5).
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

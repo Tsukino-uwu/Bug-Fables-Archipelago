@@ -3439,3 +3439,9 @@ either one wrong).
   Crystal Crown (key item 146) and discovery 40 ("Ancient City") from the win, both for the quest pass with the other
   bounties, as the Seedling King's (the user: an optional mini boss). The user: done. Ticked, 110 of 244. Next:
   `BarrenLandsSideGPT` (199).
+- **`BarrenLandsSideGPT`, the tunnel side:** the user's ways (the bottom free, the high door Jump, Horn Dash and Bee
+  Fly, a drop down). Three new locations: a Lore Book in tall grass (no bush, so a plain pickup) and two grass patches
+  that each drop a Squash once (their own one-time flags, `CutGrass`). Flags cleared and re-entered at the user's ask;
+  the patch cut told apart by the user's position. Names the user's ("Tunnel Side" with my suggestion, "In the Tall
+  Grass", "Grass by the Tree", "Bush by the Tall Grass"). The user: done. Ticked, 111 of 244: the Forsaken Lands done.
+  Next: `FGCave` (135).

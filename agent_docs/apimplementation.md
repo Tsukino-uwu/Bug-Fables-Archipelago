@@ -3035,7 +3035,8 @@ Jump, the horn and Bee Fly up; Horn Dash and the rest to its high door; a new lo
 filler item), 107 of 244; the wind pipes (a one-way ring of four parts, Bee Fly with Horn Dash and Jump; a new
 location: a Lore Book on an isolated platform), 108 of 244; the dome overlook (free; two new locations: its
 vista's discovery and a Squash in grass), 109 of 244; the False Monarch's tent (free; its bounty for the quest
-pass), 110 of 244; the rest of `room-checklist.md` to go.
+pass), 110 of 244; the tunnel side (Jump, Horn Dash and Bee Fly to its high door; three new locations: a Lore Book
+in tall grass and two Squash dropped once by grass), 111 of 244, the Forsaken Lands done; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
