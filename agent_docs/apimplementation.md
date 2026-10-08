@@ -125,6 +125,7 @@ this file and that doc disagree, that doc is right.
 53. [Build step 53: the festival's offerings as items, the contest always won](#build-step-53-the-festivals-offerings-as-items-the-contest-always-won)
 54. [Build step 54: Riz always offers his fight](#build-step-54-riz-always-offers-his-fight)
 55. [Build step 55: Universal Tracker's deferred entrances, shuffled doors hidden until taken](#build-step-55-universal-trackers-deferred-entrances-shuffled-doors-hidden-until-taken)
+56. [Build step 56: the PopTracker pack's export at world 0.3.0](#build-step-56-the-poptracker-packs-export-at-world-030)
 
 **How it works**
 
@@ -5171,6 +5172,26 @@ and the mod's `[doors] taken, sent to …` line.
 *Code: `universal_tracker.py` (`defer_doors`, `reconnect_doors`, `DOORS_TAKEN_KEY`), `world.py`
 (`reconnect_found_entrances`); test `test_deferred_doors.py`. The mod: `DoorShuffle.cs` (`Taken`, `NameOf`),
 `ApConnection.cs` (`DoorTaken`, `SendDoors`).*
+
+## Build step 56: the PopTracker pack's export at world 0.3.0
+
+**Why:** the pack's logic was exported at `a77eeae` (world 0.2.0, 75 locations); the world now has 498, maps split
+into areas (build step 48) and rules the export didn't know (`CanReachRegion`, `ItemOnHand`), so run at HEAD it stopped.
+Build step 48 had owed it.
+
+**Decided (the user, 2026-10-08):** the export keeps reading the randomizer's checkout (recording its commit and
+`world_version`) until the next release, then pins that release.
+
+**How it was built:**
+
+1. **`ItemOnHand` serialized as what it stands for** (`custom_rules.py`): its `to_dict` writes the `Or` of the item
+   shops' `CanReachRegion`s, the way `rule builder.md` ("Custom serialization") lets a custom rule pick its format, so
+   the pack reads only Archipelago's built-in rules; `rule_from_dict` reads it back as that `Or`.
+
+**Status:** in progress (2026-10-08): `ItemOnHand`'s serialization built, its test written (run with the suite at the
+next push).
+
+*Code: `custom_rules.py` (`ItemOnHand.to_dict`); test `test_mapped_rooms.py` (`test_serialized_as_the_item_shops`).*
 
 # How it works
 

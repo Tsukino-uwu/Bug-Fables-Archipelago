@@ -12,6 +12,19 @@ class TestItemOnHand(BugFablesTestBase):
     def test_it_waits_on_the_item_shops(self) -> None:
         self.assertEqual(set(ItemOnHand().resolve(self.world).region_dependencies()), ITEM_SHOP_ROOMS)
 
+    def test_serialized_as_the_item_shops(self) -> None:
+        # A tracker reads it as built-in rules: the Or of the item shops' regions, which reads back as the same rule.
+        data = ItemOnHand().to_dict()
+        self.assertEqual(data["rule"], "Or")
+        regions = set()
+        for child in data["children"]:
+            reach = child if child["rule"] == "CanReachRegion" else child["children"][0]
+            regions.add(reach["args"]["region_name"])
+        self.assertEqual(regions, ITEM_SHOP_ROOMS)
+        rule = self.world.rule_from_dict(data)
+        self.assertEqual(rule.to_dict(), data)
+        self.assertEqual(set(rule.resolve(self.world).region_dependencies()), ITEM_SHOP_ROOMS)
+
     def test_the_pink_spiders_trade_needs_one(self) -> None:
         rule = self.multiworld.get_location(PINK_SPIDER, self.player).access_rule
         self.assertTrue(ITEM_SHOP_ROOMS <= set(rule.region_dependencies()))

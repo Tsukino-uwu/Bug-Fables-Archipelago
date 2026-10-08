@@ -5,7 +5,7 @@ Everything else a rule says is Archipelago's own: Has for an item or story event
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from rule_builder.rules import CanReachRegion, Has, HasAllCounts, Or, Rule, True_, WrapperRule
 
@@ -51,7 +51,7 @@ class ItemOnHand(Rule["BugFablesWorld"], game=GAME):
     """An ordinary item to hand over: any item shop reached, whose slots sell their own item without end once bought
     (the user, 2026-10-07). By the shop's region, so it holds with item shops left out of the seed too."""
 
-    def _instantiate(self, world: BugFablesWorld) -> Rule.Resolved:
+    def _ways(self) -> list[Rule]:
         from .logic import LOCATIONS
 
         ways: list[Rule] = []
@@ -59,7 +59,14 @@ class ItemOnHand(Rule["BugFablesWorld"], game=GAME):
             if location.category == "item_shop":
                 region = location.region if location.area is None else f"{location.region} ({location.area})"
                 ways.append(CanReachRegion(region) if location.rule is None else CanReachRegion(region) & location.rule)
-        return Or(*ways).resolve(world)
+        return ways
+
+    def _instantiate(self, world: BugFablesWorld) -> Rule.Resolved:
+        return Or(*self._ways()).resolve(world)
+
+    # Serialized as the Or it stands for (rule builder.md, Custom serialization), so a tracker reads only built-in rules.
+    def to_dict(self) -> dict[str, Any]:
+        return Or(*self._ways(), options=self.options, filtered_resolution=self.filtered_resolution).to_dict()
 
 
 @dataclass()
