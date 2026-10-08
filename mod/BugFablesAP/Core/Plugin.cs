@@ -145,6 +145,7 @@ namespace BugFablesAP
             ShopInventories.Enable(Log, connection, () => randomizerEnabled.Value);
             Termacade.Enable(Log, connection, () => randomizerEnabled.Value);
             DoorShuffle.Enable(Log, connection, () => randomizerEnabled.Value);
+            MapTracking.Enable(Log, connection, () => randomizerEnabled.Value);
             // A story-only map: no Warp or map travel, as the game gives no way out mid-scene there.
             Func<bool> noTravelHere = () => MainManager.map != null
                 && (connection?.Seed?.NoTravelMaps.Contains(MainManager.map.mapid.ToString()) ?? false);

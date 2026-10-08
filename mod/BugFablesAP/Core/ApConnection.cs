@@ -366,18 +366,52 @@ namespace BugFablesAP
             });
         }
 
-        // The doors the player has gone through with the doors shuffled, by the apworld's entrance name: one list in data
-        // storage, read by Universal Tracker's deferred entrances and the PopTracker pack. Waiting ones go after a login.
-        private readonly HashSet<string> doorsSent = new HashSet<string>();
-        private readonly HashSet<string> doorsWaiting = new HashSet<string>();
-        private string doorsKey;
-        private string doorsRoom;
+        // Lists in data storage the trackers read, which only grow: the doors gone through with the doors shuffled, by the
+        // apworld's entrance name (Universal Tracker's deferred entrances, the PopTracker pack), and every map visited (the
+        // pack's fog of war). Each login sends them all again (update adds only what's missing); another slot or room
+        // starts empty.
+        private sealed class StoredList
+        {
+            internal readonly string Tag;
+            internal readonly string Done;
+            internal readonly HashSet<string> Sent = new HashSet<string>();
+            internal readonly HashSet<string> Waiting = new HashSet<string>();
+            internal string Key;
 
-        internal void DoorTaken(string entrance)
+            internal StoredList(string tag, string done)
+            {
+                Tag = tag;
+                Done = done;
+            }
+        }
+
+        private readonly StoredList doors = new StoredList("doors", "taken");
+        private readonly StoredList visited = new StoredList("visited", "new");
+        private string storedSession;
+
+        // The map the player is on, replaced at each load (the trackers' auto tabbing and the player's position).
+        private string mapKey;
+        private string mapNow;
+        private string mapSent;
+        private bool mapSending;
+
+        internal void DoorTaken(string entrance) => AddStored(doors, entrance);
+
+        internal void MapLoaded(string map)
+        {
+            AddStored(visited, map);
+            lock (gate)
+            {
+                mapNow = map;
+            }
+            SendMap();
+        }
+
+        private void AddStored(StoredList list, string name)
         {
             lock (gate)
             {
-                if (doorsSent.Contains(entrance) || !doorsWaiting.Add(entrance))
+                if (list.Sent.Contains(name) || !list.Waiting.Add(name))
                 {
                     return;
                 }
@@ -385,24 +419,26 @@ namespace BugFablesAP
             ArchipelagoSession s = session;
             if (s != null)
             {
-                SendDoors(s);
+                SendStored(s, list);
             }
         }
 
-        // Set's update adds each name not already in the list (network protocol.md, Set).
-        private void SendDoors(ArchipelagoSession s)
+        // Set's update adds each name not already in the list (network protocol.md, Set). One Set with its default, as
+        // Archipelago's clients send it: the library's DataStorage sends no default, and an update on a missing key makes
+        // the server drop the client.
+        private void SendStored(ArchipelagoSession s, StoredList list)
         {
             string[] names;
             string key;
             lock (gate)
             {
-                if (doorsWaiting.Count == 0 || doorsKey == null)
+                if (list.Waiting.Count == 0 || list.Key == null)
                 {
                     return;
                 }
-                names = doorsWaiting.ToArray();
-                doorsWaiting.Clear();
-                key = doorsKey;
+                names = list.Waiting.ToArray();
+                list.Waiting.Clear();
+                key = list.Key;
             }
             ThreadPool.QueueUserWorkItem(_ =>
             {
@@ -420,21 +456,88 @@ namespace BugFablesAP
                     }).Wait();
                     lock (gate)
                     {
-                        doorsSent.UnionWith(names);
+                        // A login to another room, team or slot since then keeps these out of the new one's list.
+                        if (key == list.Key)
+                        {
+                            list.Sent.UnionWith(names);
+                        }
                     }
-                    Post("[doors] taken, sent to " + key + ": " + string.Join(", ", names));
+                    Post($"[{list.Tag}] {list.Done}, sent to {key}: {string.Join(", ", names)}");
                 }
                 catch (Exception e)
                 {
                     lock (gate)
                     {
-                        if (key == doorsKey)
+                        if (key == list.Key)
                         {
-                            doorsWaiting.UnionWith(names);
+                            list.Waiting.UnionWith(names);
                         }
                     }
-                    Post("[doors] sending " + string.Join(", ", names) + " failed: " + e.GetBaseException().Message
-                        + " (sent again after the next login)");
+                    Post($"[{list.Tag}] sending {string.Join(", ", names)} failed: {e.GetBaseException().Message} "
+                        + "(sent again after the next login)");
+                }
+            });
+        }
+
+        // One write at a time, always of the newest map. The library doesn't promise two writes reach the server in order,
+        // only spaced by each one's ping: a rare stale map lasts until the next load.
+        private void SendMap()
+        {
+            lock (gate)
+            {
+                if (mapSending)
+                {
+                    return;
+                }
+                mapSending = true;
+            }
+            ThreadPool.QueueUserWorkItem(_ =>
+            {
+                while (true)
+                {
+                    ArchipelagoSession s = session;
+                    string key;
+                    string map;
+                    lock (gate)
+                    {
+                        if (s == null || mapKey == null || mapNow == null || mapNow == mapSent)
+                        {
+                            mapSending = false;
+                            return;
+                        }
+                        key = mapKey;
+                        map = mapNow;
+                    }
+                    try
+                    {
+                        // The library's write, a replace (its datastore.md); it waits only on the connection's ping.
+                        s.DataStorage[key] = map;
+                        lock (gate)
+                        {
+                            // A login since it was read sends it again, to the new session.
+                            if (ReferenceEquals(s, session) && key == mapKey)
+                            {
+                                mapSent = map;
+                            }
+                        }
+                        // A write lost with the connection (the library keeps that result to itself) goes again after
+                        // the next login.
+                        Post($"[map] now {map}, written to {key}");
+                    }
+                    catch (Exception e)
+                    {
+                        lock (gate)
+                        {
+                            mapSending = false;
+                        }
+                        Post($"[map] writing {map} failed: {e.GetBaseException().Message} "
+                            + "(written again at the next map or login)");
+                        if (!ReferenceEquals(s, session))
+                        {
+                            SendMap();
+                        }
+                        return;
+                    }
                 }
             });
         }
@@ -446,8 +549,7 @@ namespace BugFablesAP
             {
                 try
                 {
-                    s.Socket.SendPacketAsync(new StatusUpdatePacket { Status = ArchipelagoClientState.ClientGoal })
-                        .Wait();
+                    s.SetGoalAchieved();
                     Post("[goal] sent: " + why);
                 }
                 catch (Exception e)
@@ -569,19 +671,34 @@ namespace BugFablesAP
                     slotName = slot;
                     deathLinkTagged = null;
                     SetDeathLinkTag(DeathLinkWanted != null && DeathLinkWanted());
-                    // Another room starts with no door sent; the same one sends what waited while offline.
+                    // Another room, team or slot starts with nothing stored, as CommonClient tells sessions apart; the same
+                    // one sends everything again. The first login clears too: before it, the room isn't known.
                     lock (gate)
                     {
-                        string room = ServerText.SeedOf(attempt);
-                        if (room != doorsRoom)
+                        string identity = $"{ServerText.SeedOf(attempt)}|{ok.Team}|{ok.Slot}";
+                        foreach (StoredList list in new[] { doors, visited })
                         {
-                            doorsRoom = room;
-                            doorsSent.Clear();
-                            doorsWaiting.Clear();
+                            if (identity != storedSession)
+                            {
+                                list.Sent.Clear();
+                                list.Waiting.Clear();
+                            }
+                            list.Waiting.UnionWith(list.Sent);
+                            list.Sent.Clear();
                         }
-                        doorsKey = $"bug_fables_doors_{ok.Team}_{ok.Slot}";
+                        if (identity != storedSession && mapNow != null)
+                        {
+                            visited.Waiting.Add(mapNow);
+                        }
+                        storedSession = identity;
+                        doors.Key = $"bug_fables_doors_{ok.Team}_{ok.Slot}";
+                        visited.Key = $"bug_fables_visited_{ok.Team}_{ok.Slot}";
+                        mapKey = $"bug_fables_map_{ok.Team}_{ok.Slot}";
+                        mapSent = null;
                     }
-                    SendDoors(attempt);
+                    SendStored(attempt, doors);
+                    SendStored(attempt, visited);
+                    SendMap();
                     Post($"[ap] logged in: slot {ok.Slot}, team {ok.Team}, world_version {version}, "
                         + $"{attempt.Items.AllItemsReceived.Count} items received so far, "
                         + $"{attempt.Locations.AllLocationsChecked.Count} of {attempt.Locations.AllLocations.Count} locations checked");

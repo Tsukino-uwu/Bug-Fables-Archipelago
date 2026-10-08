@@ -126,6 +126,7 @@ this file and that doc disagree, that doc is right.
 54. [Build step 54: Riz always offers his fight](#build-step-54-riz-always-offers-his-fight)
 55. [Build step 55: Universal Tracker's deferred entrances, shuffled doors hidden until taken](#build-step-55-universal-trackers-deferred-entrances-shuffled-doors-hidden-until-taken)
 56. [Build step 56: the PopTracker pack's export at world 0.3.0](#build-step-56-the-poptracker-packs-export-at-world-030)
+57. [Build step 57: the maps visited and the map the player is on, for the trackers](#build-step-57-the-maps-visited-and-the-map-the-player-is-on-for-the-trackers)
 
 **How it works**
 
@@ -542,8 +543,9 @@ be wrong.
        `Region.add_locations`, `options.as_dict` (done 2026-10-03, build step 39:
        slot_data's `options`); 12. `start_inventory_from_pool`; 13. the Rule Builder's `OptionFilter` for Jump (done
        2026-10-03, build step 42), `__str__` and `@override` on our rules, a caching benchmark; 14. Universal Tracker
-       and PopTracker (Universal Tracker with no yaml built 2026-10-03, build step 40; its map tab and the mod's data
-       storage keys wait for the PopTracker pack's map; the pack started 2026-10-03, build step 42); 15. slot_data only
+       and PopTracker (Universal Tracker with no yaml built 2026-10-03, build step 40; its deferred entrances
+       2026-10-08, build step 55; the mod's data storage keys, build steps 55 and 57; its map tab waits for the
+       PopTracker pack's map; the pack started 2026-10-03, build step 42); 15. slot_data only
        what's necessary (decided 2026-09-29: the fixed tables built into the mod from the apworld's data, the seed's
        locations from the server, a world-version check on connect).
      - **Tests:** 16. the base in `test/bases.py` and Archipelago's generic tests in CI (the generic tests done
@@ -994,7 +996,9 @@ a gap.
 build step 39) and each frame compares it
 with the game's own count, `MainManager.SaveProgressIcons()` (the seven artifact flags; `MEASURED.md`). Once the count
 is reached it sends Archipelago's `StatusUpdate` with `ClientGoal`, the way `adding games.md` asks (never an event),
-through MultiClient.Net 6.7.1's `StatusUpdatePacket`. It's sent once per login while reached, so a send lost with the
+through MultiClient.Net 6.7.1's own `SetGoalAchieved()` (since 2026-10-08; before, the mod built the same
+`StatusUpdatePacket` itself, which the library's `ArchipelagoSessionActions.cs` sends; on a worker thread, as its send
+waits on the connection's ping). It's sent once per login while reached, so a send lost with the
 connection goes again at the next one, and the server keeps it. The game counts all seven flags while the logic
 knows only the ones the world includes, so the mod can see the goal reached sooner than the logic proves it, never
 later. The log says what it decided: `[goal] 0 of 1 artifacts`, then `[goal] sent: ...`. **Seen (2026-09-26):** beating
@@ -1004,6 +1008,7 @@ slot's remaining items and logged "Team #1 has completed all of their games!".
 **Status:** in progress: the goal is in the apworld, with only the first artifact so far; the mod sends "goal reached"
 at the required count, seen working (2026-09-26), and again read from `slot_data`'s `options` (2026-10-04: the
 first boss, `[goal] sent`, the server's "completed their goal"); more artifacts come with more of the world (Next 1).
+Sent through `SetGoalAchieved()` since 2026-10-08 (the same packet): not yet seen.
 
 *Code: `apworld/bug_fables/options.py` (`ArtifactsRequired`), `world.py` (`generate_early` lowers the
 number), `locations.py` (`create_all_locations` adds the artifact events), test `TestArtifactsCapped`; the
@@ -4424,7 +4429,9 @@ read 2026-10-03; release v0.3.4, 2026-09-23, `minimum_ap_version` 0.6.2):
 
 **Decided (the user, 2026-10-01 and 2026-10-03):** full support, every feature its docs offer that applies; no yaml;
 every location in logic always shown, so no deferred entrances (every door connected from slot_data from the start).
-The map tab and the mod's data storage keys wait for the PopTracker pack's map.
+The map tab and the mod's data storage keys wait for the PopTracker pack's map. **Since:** deferred entrances decided
+yes on 2026-10-06 (hiding a door hides no location in logic; build steps 41 and 55), and the mod's keys built (build
+steps 55 and 57); the map tab still waits.
 
 **How it was built:**
 
@@ -4538,8 +4545,8 @@ left as a gap.
    - Its client integration (`docs/client-integration.md`): for clients built on Archipelago's CommonClient; ours is a
      BepInEx mod. Tracker addons are installed by the player.
    - The map tab (`tracker_world`, `docs/map-integration.md`, re-read before it's built: it changes without this repo
-     changing) and the mod's data storage keys: once the PopTracker pack has its map (the user, 2026-10-03). The plan
-     for it (moved here from a local plan file, 2026-10-08):
+     changing): once the PopTracker pack has its map (the user, 2026-10-03); the mod's keys it follows are written
+     since build step 57. The plan for it (moved here from a local plan file, 2026-10-08):
      - **The pack as an external pack**, that doc's recommendation (no map images in an apworld): `tracker_world` with
        `external_pack_key`, `map_page_maps`, `map_page_locations` and `map_page_layouts` pointing into the pack; or
        its hybrid way (the JSONs in the apworld, the images outside), chosen when it's built.
@@ -4556,7 +4563,9 @@ left as a gap.
        `bug_fables_map_{team}_{player}`, which Universal Tracker fills in itself; `map_page_index`), the player's
        position icon (`location_setting_key`, the same key; `location_icon_coords` from the pack's layout), and
        `ut_map_page_hidden_locations`, `_entrances` and `_events` only where a map would show the wrong thing, never
-       to hide what's reachable.
+       to hide what's reachable. Universal Tracker passes `map_page_index` and `location_icon_coords` the key's value
+       or `""` before it's read (`None` when the server holds none; its `TrackerClient.py`, v0.3.4): an unknown value
+       keeps the tab (`-1`) and hides the icon (`None`).
 4. **Tests** (`test_tracker.py`): the list starts with the Outskirts, sorted by name within it, the Outskirts before
    Bugaria City, an entrance last; and the explanations above.
 
@@ -4612,9 +4621,7 @@ Room Swap put them, and fog of war. Its plan is the pack's own `PLAN.md`.
    custom rules read (`ABILITIES`, the boat's levels, the members, which option each category follows). It refuses
    a rule the pack's Lua can't evaluate, or an option filter on an option slot_data doesn't carry. The data goes in as
    a generated Lua table, since a pack's Lua can't read a JSON file of its own. Beside it: the items every rule can
-   need, one pin per room with a check (one section per check, named as the location), and a placeholder map and
-   icons drawn by code, a PNG written with the standard library (never AI art or game art; the look is the user's
-   pick later).
+   need, one pin per room with a check (one section per check, named as the location).
 5. **The Lua** (`scripts/logic.lua`): evaluates each rule dict, the custom rules as their `_instantiate` resolves
    them and an option filter against slot_data's `options`, and sweeps regions as Archipelago does: through
    entrances, collecting story events where reached, until nothing changes. A door's destination comes from
@@ -5154,12 +5161,21 @@ replaced 2026-10-01's "no" (build step 41).
 3. **The mod** (`DoorShuffle.cs`, `ApConnection.cs`): a prefix on `MainManager.TransferMap`, whose `caller` is the door
    walked through, names it as the apworld does (`Map: door`, or `name#row` where its map has two doors of that name)
    while the doors are shuffled in a seed; a failure there only logs (`[doors] … taken but not recorded`), never
-   stopping the door. `ApConnection.DoorTaken` adds it with one `Set` (`update`, which adds names
-   not yet in the list; `network protocol.md`, Set), off the game thread. A name goes once; one taken while offline
-   waits and goes after the next login; a login to another room starts from none. MultiClient.Net 6.7.1's
-   `Operation.Update` takes only a dictionary, so the list update is the library's own `SetPacket` with
-   `OperationType.Update` (read in its DLL's metadata, 2026-10-08). A flat list of strings, well inside the server's
-   JSON depth limit of 16 for what clients send (`NetUtils.decode`, 0.6.8).
+   stopping the door. `ApConnection.DoorTaken` adds it with one `Set` carrying its default `[]` and an `update`
+   (which adds names not yet in the list; `network protocol.md`, Set), off the game thread, whole as Archipelago's own
+   clients send a `Set`. **Why not MultiClient.Net's `DataStorage`** (its source at v6.7.1, read 2026-10-08, corrected
+   from that day's first reading): it can send an `update` with a list (`operator +` with an `OperationSpecification`,
+   `DataStorageElement.cs`), but never a default with it (`DataStorageHelper.SetValue`), and an `update` on a key not
+   there yet makes the server raise and drop the client (`MultiServer.py`, `update_container_unique` and the Set
+   handler, 0.6.8). Its way to a default, `Initialize`, is a second packet, and on net40 two sends aren't guaranteed to
+   stay in order (its socket helper calls websocket-sharp's `SendAsync` per packet). So the list is the library's own
+   `SetPacket` through its `Socket`, which its `helpers.md` and `packets.md` allow, in the one-`Set` form Archipelago's
+   own `UndertaleClient.py` sends. Each login sends the whole list again (`update` adds only
+   what's missing), and another room, team or slot starts from none, as Archipelago's CommonClient tells sessions
+   apart since 0.6.8. A flat list of strings, well inside the server's JSON depth limit of 16 for what clients send
+   (`NetUtils.decode`, 0.6.8). **The key's form**, `<game>_<what>_{team}_{slot}`, is the one several of Archipelago's
+   own clients use (`pokemon_emerald`, `cvcotm`, `smw`) and the server's own `hints_{team}_{slot}` shape; the
+   library's `Scope.Slot` (`Slot:{slot}:key`) leaves out the team, and slots repeat across teams.
 4. **Tests** (`test_deferred_doors.py`): a rebuilt Coupled seed with deferral on has every shuffled door unconnected and
    nothing else changed; Universal Tracker's partial sweep still runs; a door taken comes back with its way back, and
    every door taken gives back the seed's own graph and locations; Decoupled brings back only the door taken; a
@@ -5171,7 +5187,7 @@ and the mod's `[doors] taken, sent to …` line.
 
 *Code: `universal_tracker.py` (`defer_doors`, `reconnect_doors`, `DOORS_TAKEN_KEY`), `world.py`
 (`reconnect_found_entrances`); test `test_deferred_doors.py`. The mod: `DoorShuffle.cs` (`Taken`, `NameOf`),
-`ApConnection.cs` (`DoorTaken`, `SendDoors`).*
+`ApConnection.cs` (`DoorTaken`, `SendStored`).*
 
 ## Build step 56: the PopTracker pack's export at world 0.3.0
 
@@ -5192,6 +5208,44 @@ Build step 48 had owed it.
 next push).
 
 *Code: `custom_rules.py` (`ItemOnHand.to_dict`); test `test_mapped_rooms.py` (`test_serialized_as_the_item_shops`).*
+
+## Build step 57: the maps visited and the map the player is on, for the trackers
+
+**Why:** the PopTracker pack's fog of war needs the maps visited (its `PLAN.md`, item 6), and its following the player
+(item 9) and Universal Tracker's auto tabbing and position icon (build step 41) need the map the player is on. A
+client tells trackers such things through data storage. Archipelago has no standard key for either; the map now has
+precedents among its own clients (0.6.8): `smw`'s current level, `UndertaleClient.py`'s room per slot, TUNIC's
+current map. A list added to with `update` is the protocol's own form (`network protocol.md`, Set).
+
+**How it was built:**
+
+1. **Two keys,** the contract in the pack's `PLAN.md`: `bug_fables_visited_{team}_{slot}`, a list of map names
+   (`MapControl.mapid`, as the apworld names its maps), added to with the same one `Set` as the doors (build step 55);
+   and `bug_fables_map_{team}_{slot}`, the map now, a string replaced at each load through the library's own
+   `DataStorage[key] = map` (its `datastore.md`), one write at a time, always the newest. In every seed while
+   Archipelago is enabled, not only with the doors shuffled.
+2. **The hook** (`MapTracking.cs`): a postfix on `MapControl.CreateEntities`, which each map runs once as it's built
+   (`MapControl.Start`); the title screen is a scene of its own, so only a file's maps count. A failure only logs
+   (`[map] … loaded but not recorded`), never stopping the map. A save tied to another seed adds nothing to the slot's
+   keys (`ItemReceiver.SaveMatchesSeed`, as checks and shops are gated; the doors too since 2026-10-08).
+3. **Shared with the doors** (`ApConnection.cs`): one helper sends both lists; each login sends them whole again;
+   another room, team or slot starts empty; the map is written again after each login. The library keeps a write's
+   result to itself, so a lost one waits for the next login, and it doesn't promise two writes reach the server in
+   order (each is held only by its own ping): a rare stale map lasts until the next load.
+4. **Checked against Archipelago and MultiClient.Net** (2026-10-08, the user: "do a double check on both the
+   Archipelago & Archipelago/MultiClient.Net repo's, to make sure we are following/doing what they are doing"): a
+   read-only check of each one's source, then a skeptic on each. Changed on it: the map through the library's
+   `DataStorage` (first written as a hand-built `SetPacket`), the goal through its `SetGoalAchieved()` (build step 3),
+   sessions told apart by seed, team and slot, another seed's save kept out of the keys, and build step 55's reason
+   for its one raw `Set` corrected. Kept, each
+   for a reason the library's source gives: the raw `Set` for the lists (build step 55); the liveness `Get` (the
+   library's `GetRaceModeAsync` reuses a pending request and hides a failed send); the reflection into its socket (no
+   close for a dead connection, no public scheme or compression).
+
+**Status:** built (2026-10-08), the mod builds. Not yet seen: the mod's `[visited] new, sent to …` and `[map] now …`
+lines, and the keys on the server.
+
+*Code: the mod: `MapTracking.cs`, `ApConnection.cs` (`MapLoaded`, `SendStored`, `SendMap`), `Plugin.cs`.*
 
 # How it works
 
@@ -5572,9 +5626,9 @@ No yaml is needed: everything that shapes the world is in slot_data.
     rebuilt world's slot_data is the seed's, key for key.
 - **The doors** (build step 40): `door_targets` is the table the mod rewrites doors from. `entrances.replay` reads it
   back into the pairings it was written from and connects each door as Archipelago's entrance randomizer connected it.
-  So the tracker follows exactly what the game does, and slot_data carries nothing extra for it. Every door is
-  connected from the start and nothing waits to be found (no deferred entrances), since the tracker always shows
-  everything in logic.
+  So the tracker follows exactly what the game does, and slot_data carries nothing extra for it. With the doors
+  shuffled, each door stays unconnected until the player has gone through it, by default (its deferred entrances,
+  build step 55); every location in logic is still shown.
 - **What it can't recompute is sent as applied:** Shop Contents' Filler Only fallback runs in `pre_fill` and counts the
   whole room's items, which Universal Tracker never sees, so `options` sends No Progression when it fell back.
 - **Refused:** a seed from another world version, or with no `options` (no support for older versions, How it works
@@ -5589,5 +5643,5 @@ No yaml is needed: everything that shapes the world is in slot_data.
     items. With the passthrough ignored, every case fails.
   - Universal Tracker's own fuzzer hook, run by `test-apworld.ps1` and CI over 10000 random seeds, regenerates each one
     with its own code and compares every sphere with the real generation (`development.md`, "Fuzzing the apworld").
-- **Not built yet:** the map tab, which loads the PopTracker pack's maps, and the mod's data storage keys it would
-  follow. Both wait for the pack's map.
+- **Not built yet:** the map tab, which loads the PopTracker pack's maps (build step 41); the mod's keys it would
+  follow are written since build step 57.

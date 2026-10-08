@@ -67,6 +67,12 @@ namespace BugFablesAP
                 // Only for the trackers: a failure here must never stop the door itself.
                 try
                 {
+                    // Another seed's save adds nothing to this slot's keys (as checks and shops are gated).
+                    if (ItemReceiver.SaveMatchesSeed(connection, log) == false)
+                    {
+                        log.LogInfo($"[doors] {map.mapid}: {caller.name} not recorded, this save belongs to another seed");
+                        return;
+                    }
                     connection.DoorTaken(map.mapid + ": " + NameOf(map, caller));
                 }
                 catch (Exception e)
