@@ -201,8 +201,12 @@ namespace BugFablesAP
             int n = int.Parse(parts[1]);
             if (parts.Length > 2)
             {
-                MainManager.instance.flags[n] = parts[2].ToLowerInvariant() == "on" || parts[2] == "true"
-                    || parts[2] == "1";
+                bool on = parts[2].ToLowerInvariant() == "on" || parts[2] == "true" || parts[2] == "1";
+                if (on)
+                {
+                    GoalGuard.Allow(n);
+                }
+                MainManager.instance.flags[n] = on;
             }
             return $"flags[{n}] = {MainManager.instance.flags[n]}";
         }

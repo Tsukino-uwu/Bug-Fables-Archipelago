@@ -195,8 +195,8 @@ namespace BugFablesAP
                 }
             }
             // dialogue_flags: an entity picks the last line whose flag is set; repoint one line's flag.
-            foreach (ApConnection.DialogueFlag swap in
-                (connection.DialogueFlags ?? new List<ApConnection.DialogueFlag>()).Where(b => b.Map == map))
+            foreach (ApConnection.FlagSwap swap in
+                (connection.DialogueFlags ?? new List<ApConnection.FlagSwap>()).Where(b => b.Map == map))
             {
                 foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true)
                     .Where(n => n.name == swap.Entity && n.dialogues != null))
@@ -209,6 +209,35 @@ namespace BugFablesAP
                             log.LogInfo($"[open] {map}: {npc.name}'s line {(int)npc.dialogues[d].y} now answers to flag {swap.To} instead of {swap.From}");
                         }
                     }
+                }
+            }
+            // activation_flags: before the entity's own Start reads it (a switch hit while its flag is set) or a cut grass
+            // writes it, so a borrowed goal flag is never set.
+            foreach (ApConnection.FlagSwap swap in
+                (connection.ActivationFlags ?? new List<ApConnection.FlagSwap>()).Where(b => b.Map == map))
+            {
+                foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true)
+                    .Where(n => n.name == swap.Entity && n.activationflag == swap.From))
+                {
+                    npc.activationflag = swap.To;
+                    log.LogInfo($"[open] {map}: {npc.name}'s activation flag now {swap.To} instead of {swap.From}");
+                }
+            }
+            // limit_flags: one limit flag repointed, and whether the entity exists asked again, as CreateEntities did.
+            foreach (ApConnection.FlagSwap swap in
+                (connection.LimitFlags ?? new List<ApConnection.FlagSwap>()).Where(b => b.Map == map))
+            {
+                foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true)
+                    .Where(n => n.name == swap.Entity && n.limit != null && n.limit.Contains(swap.From)
+                        && !markers.Contains(n.limit)))
+                {
+                    npc.limit = npc.limit.Select(f => f == swap.From ? swap.To : f).ToArray();
+                    bool hidden = MainManager.CheckIfCanExist(npc.requires, npc.limit, npc.regionalflag);
+                    if (npc.entity != null)
+                    {
+                        npc.entity.iskill = hidden;
+                    }
+                    log.LogInfo($"[open] {map}: {npc.name} now there until flag {swap.To} instead of {swap.From} ({(hidden ? "set: kept away" : "not set: present")})");
                 }
             }
             // held_until: added to the entity's requires (never replacing them), so the game keeps it away until then.

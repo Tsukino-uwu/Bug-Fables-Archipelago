@@ -40,7 +40,12 @@ namespace BugFablesAP
         // them off.
         internal readonly List<ApConnection.Blocker> PresentWithItem;
         internal readonly List<ApConnection.Blocker> HeldUntilItem;
-        internal readonly List<ApConnection.DialogueFlag> DialogueFlags;
+        internal readonly List<ApConnection.FlagSwap> DialogueFlags;
+        // Entities that borrow a goal flag: their activation flag, and their limit flags, repointed.
+        internal readonly List<ApConnection.FlagSwap> ActivationFlags;
+        internal readonly List<ApConnection.FlagSwap> LimitFlags;
+        // The goal's flags, each with the events that set it; null for a seed without them, whose goal is never sent.
+        internal readonly List<ApConnection.GoalFlag> GoalFlags;
         internal readonly List<DoorShuffle.Target> DoorTargets;
         // Story-only maps: no Warp or map travel there. Empty for a seed from an older apworld.
         internal readonly HashSet<string> NoTravelMaps;
@@ -112,12 +117,13 @@ namespace BugFablesAP
             PresentFrom = SlotData.List(data, "present_from", ReadBlocker);
             PresentWithItem = SlotData.List(data, "present_with_item", ReadBlocker);
             HeldUntilItem = SlotData.List(data, "held_until_item", ReadBlocker);
-            DialogueFlags = SlotData.List(data, "dialogue_flags", e => new ApConnection.DialogueFlag
+            DialogueFlags = SlotData.List(data, "dialogue_flags", ReadSwap);
+            ActivationFlags = SlotData.List(data, "activation_flags", ReadSwap);
+            LimitFlags = SlotData.List(data, "limit_flags", ReadSwap);
+            GoalFlags = SlotData.List(data, "goal_flags", e => new ApConnection.GoalFlag
             {
-                Map = e.Value<string>("map"),
-                Entity = e.Value<string>("entity"),
-                From = e.Value<int>("flag"),
-                To = e.Value<int>("to"),
+                Flag = e.Value<int>("flag"),
+                Events = e["events"]?.Values<int>().ToArray() ?? new int[0],
             });
             LocationVars = SlotData.ByLocation(data, "location_vars",
                 v => new[] { v.Value<int>("var"), v.Value<int>("at_least") });
@@ -271,6 +277,17 @@ namespace BugFablesAP
                 Entity = e.Value<string>("entity"),
                 Flag = e["flag"] != null ? e.Value<int>("flag") : -1,
                 Item = e["item"] != null ? e.Value<int>("item") : -1,
+            };
+        }
+
+        private static ApConnection.FlagSwap ReadSwap(JToken e)
+        {
+            return new ApConnection.FlagSwap
+            {
+                Map = e.Value<string>("map"),
+                Entity = e.Value<string>("entity"),
+                From = e.Value<int>("flag"),
+                To = e.Value<int>("to"),
             };
         }
     }

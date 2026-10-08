@@ -5,7 +5,8 @@ from __future__ import annotations
 from rule_builder.rules import False_, Has
 
 from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, one_way
-from ..data_types import Area, DoorRule, EntityRef, Location, Pickup, Source, StoryEvent, Transfer
+from ..data_types import (ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, Location, Pickup, Source, StoryEvent,
+                          Transfer)
 
 # The Rusty Key, bought at the Defiant Root well (line 3, which also sets flag 239, making the hideout door): not an
 # item yet, so the later chapters' stand-in until its sale is a location.
@@ -180,4 +181,13 @@ MAP_AREAS = (
     Area("DesertSouthern", "Right", ("loadzone right",), CanUse("Shield") | CanUse("Bee Fly")),
     # Its top door (to the roach village), on a ledge: a drop down to the left side, no way back up inside the room.
     Area("DesertSouthern", "Ledge", ("loadzone north",), False_(), out=one_way(None, False_())),
+)
+
+# The book room's hidden switch, hit while flag 41 (the first boss) is set, and the gate waiting on it, there until 41:
+# as in vanilla, where 41 is set before this room, the switch stays hit and the gate never exists (build step 60).
+ACTIVATION_FLAGS = (
+    FlagSwap("DesertBookArea", "switch", 41, ALWAYS_SET),
+)
+LIMIT_FLAGS = (
+    FlagSwap("DesertBookArea", "eventtrigger", 41, ALWAYS_SET),
 )

@@ -44,7 +44,8 @@ this file and that doc disagree, that doc is right.
   [11](#build-step-11-shops-as-locations-medal-shops-item-shops-the-caravan),
   [26](#build-step-26-the-tutorials-crunchy-leaf-as-a-location-items-the-story-adds),
   [27](#build-step-27-checked-pickups-hidden-in-every-save-new-files-too).
-- **Other yaml options:** the goal, [3](#build-step-3-the-goal-artifacts-required); Enemy Shuffle,
+- **Other yaml options:** the goal, [3](#build-step-3-the-goal-artifacts-required), and its guard,
+  [60](#build-step-60-the-goal-guard-a-goal-flag-set-only-by-its-own-events); Enemy Shuffle,
   [14](#build-step-14-enemy-shuffle-which-enemies-each-fight-has-in-progress); Starting Location,
   [15](#build-step-15-starting-location-a-new-file-starts-in-a-random-room-experimental); Music Shuffle,
   [33](#build-step-33-music-shuffle-songs-and-jingles-swapped-per-seed) and the factory's songs,
@@ -130,6 +131,7 @@ this file and that doc disagree, that doc is right.
 57. [Build step 57: the maps visited and the map the player is on, for the trackers](#build-step-57-the-maps-visited-and-the-map-the-player-is-on-for-the-trackers)
 58. [Build step 58: the PopTracker pack's Archipelago interface](#build-step-58-the-poptracker-packs-archipelago-interface)
 59. [Build step 59: the wizard's tower open, its fall scene kept away](#build-step-59-the-wizards-tower-open-its-fall-scene-kept-away)
+60. [Build step 60: the goal guard, a goal flag set only by its own events](#build-step-60-the-goal-guard-a-goal-flag-set-only-by-its-own-events)
 
 **How it works**
 
@@ -185,8 +187,8 @@ be wrong.
    Progression* holding up only progression items: seen 2026-10-04.
 6. **A full bag:** never holds up the queue; a bag item that doesn't fit drops at the party's feet (build step 7):
    built, not yet seen.
-7. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number: done, seen
-   (build step 3).
+7. **Goal:** the mod counts the seed's goal flags (`goal_flags`, guarded since build step 60) and sends "goal reached"
+   at the required number: done, seen (build step 3).
 8. **A release: three separate downloads** (2026-09-25): built, see build step 17; v0.1.0 out
    (2026-09-26), v0.2.0 (2026-09-27), v0.3.0 (2026-10-04). The next one: `dev-scripts/release.ps1 -Version vX.Y.Z`
    after bumping both versions. **When (the user, 2026-10-08):** once every room's logic is mapped, which makes the
@@ -747,14 +749,6 @@ be wrong.
 
 **Known issues:**
 
-- **A borrowed story flag sends the goal** (seen 2026-10-08, `Swamplands2`): 25 entities in 13 rooms (grass,
-  switches, a pressure plate) carry flag 41, the first boss beaten and the first artifact, as their activation flag;
-  cutting or hitting one sets it, and a seed's goal of one artifact was sent and every item released. Cut grass also
-  hands 41 to its drop, so `Wild Swamplands: Lily Pad Pond, Grass in the Bottom Right` can't be sent yet. The user's
-  rule: no goal may ever be reached a way we don't intend. The fix: build step 60 (an audit first). Its readers'
-  findings, not yet checked (`log.md`, 2026-10-08): 9 hidden switches and a plate read 41 as "always on", so in a
-  seed before the first boss platforms in five rooms don't run; and 41 set early makes the first boss's fight
-  impossible to start. So the fix must keep them reading an always-set flag while never writing 41.
 - **The Rubber Prison's checkpoint corridor from the yard** (2026-10-04): in the game its gates may be shut from the
   yard's side, so it never leads on; the logic still lets the yard reach the spike room through it (as before
   2026-10-04). It needs the corridor split into two areas, the yard's and the spike room's (`room-logic.md`, the
@@ -1061,16 +1055,18 @@ is reached it sends Archipelago's `StatusUpdate` with `ClientGoal`, the way `add
 through MultiClient.Net 6.7.1's own `SetGoalAchieved()` (since 2026-10-08; before, the mod built the same
 `StatusUpdatePacket` itself, which the library's `ArchipelagoSessionActions.cs` sends; on a worker thread, as its send
 waits on the connection's ping). It's sent once per login while reached, so a send lost with the
-connection goes again at the next one, and the server keeps it. The game counts all seven flags while the logic
-knows only the ones the world includes, so the mod can see the goal reached sooner than the logic proves it, never
-later. The log says what it decided: `[goal] 0 of 1 artifacts`, then `[goal] sent: ...`. **Seen (2026-09-26):** beating
-the spider boss (a dev file) logged `[goal] reached, 1 of 1 artifacts` and `[goal] sent`, and the server released the
-slot's remaining items and logged "Team #1 has completed all of their games!".
+connection goes again at the next one, and the server keeps it. **Since build step 60 it counts only the seed's goal
+flags** (`goal_flags`, the artifacts the world includes), no longer the game's count of all seven: before, an
+artifact the logic doesn't hold could reach the goal sooner than the logic proves it. The log says what it decided:
+`[goal] 0 of 1 artifacts`, then `[goal] sent: ...`. **Seen (2026-09-26):** beating the spider boss (a dev file)
+logged `[goal] reached, 1 of 1 artifacts` and `[goal] sent`, and the server released the slot's remaining items and
+logged "Team #1 has completed all of their games!".
 
 **Status:** in progress: the goal is in the apworld, with only the first artifact so far; the mod sends "goal reached"
 at the required count, seen working (2026-09-26), and again read from `slot_data`'s `options` (2026-10-04: the
 first boss, `[goal] sent`, the server's "completed their goal"); more artifacts come with more of the world (Next 1).
-Sent through `SetGoalAchieved()` since 2026-10-08 (the same packet): not yet seen.
+Sent through `SetGoalAchieved()` since 2026-10-08 (the same packet): not yet seen. Only the seed's goal flags count
+since build step 60 (2026-10-08): not yet seen.
 
 *Code: `apworld/bug_fables/options.py` (`ArtifactsRequired`), `world.py` (`generate_early` lowers the
 number), `locations.py` (`create_all_locations` adds the artifact events), test `TestArtifactsCapped`; the
@@ -5424,6 +5420,55 @@ ingredients talk ("yee it skips the door dialouge now").
 *Code: `logic/far_grasslands.py` (`KEPT_OPEN`, `KEPT_PRESENT`, `SCENERY_HIDDEN`, `DIALOGUE_FLAGS`). The mod:
 `World/KeptOpen.cs`, unchanged.*
 
+## Build step 60: the goal guard, a goal flag set only by its own events
+
+**Found (seen 2026-10-08):** in the lily pad pond (`Swamplands2`) the user cut grass and the mod sent the goal. The seed
+needed one artifact, and the grass had set flag 41, the first boss's artifact flag: the game's developers gave 41 to 25
+entities in later rooms as a flag always set by then. In vanilla that changes nothing; in a seed those rooms can come
+before the first boss. The user: "we should make sure artifacts, or any other goals can not be accidently triggered in
+wrong or different ways. ever", and "guard/guarantee they can't trigger where we don't intend them to", for every goal,
+future ones too.
+
+**Checked:** every way each of the seven artifact flags can be set: two readers, then four checkers and a critic over
+their findings, from the game's code, the dumps and a read-only scan of the game's data file (`MEASURED.md`, "The goal
+flags"). Only flag 41 is borrowed, and only by those 25 entities: 12 grass set it when cut (three through the item they
+drop), and 13 hidden switches, a plate and lights-out switches read it as "on" (the moving platforms of five rooms stop
+without it). Otherwise each artifact flag is set only by its own events. Two more holes turned up:
+- the mod counted all seven artifacts while the logic holds only the first, so a random start beside a later artifact's
+  scene could send the goal with no wrong write at all;
+- a new file started with the secret codes (key 9 on the file select) wasn't held back before the seed was known, so
+  the seed's tables could be missing while it ran.
+
+**Built:**
+1. **Borrowed flags repointed** (the apworld's `activation_flags` and `limit_flags`, in each area's module; the mod
+   applies them as each map is built, before any entity reads its flag). The 12 grass set nothing (their activation
+   flag -1, so their drops carry none either, which also lets the pond's Honey Drop, location 182, send its check). The
+   13 switches and plates read flag 691 instead, set by every new file, so they behave as in vanilla, where 41 is set by
+   then. The book room's gate (`DesertBookArea`), fed by one of those switches and there only until 41, is there until
+   691: never, as in vanilla.
+2. **The goal counts only the seed's goal flags** (`goal_flags`: each flag with every event that sets it, built from the
+   world's artifacts and the game's own list, `ARTIFACT_WRITERS`). Today that is flag 41, set by Event26. An artifact
+   the logic doesn't hold never counts; a future goal is a new row.
+3. **A guard on those flags** (`GoalGuard`): a goal flag that turns on is kept only when one of its own events is
+   running (the game's `lastevent`, with an event in progress) or the dev console set it; anything else turns it back
+   off, logged as `[goal-guard] flag N turned on outside its events ... turned back off`. It checks before the goal is
+   counted, after each physics step, at each frame's end, and right before a save or a map's build, so a stray flag is
+   never counted, saved or built into a room. A file's flags as loaded or started are taken as they are. With the
+   repoints in place it should never fire: each firing is a bug to report.
+4. **The secret codes' new game held back** until the seed is known, like the other file choices (key 9 on an empty
+   file with two or more codes, as the game has it; `documentation.md`, step 8).
+
+The rule, in `CLAUDE.md`: a goal flag is set only by its own events, ever; a new goal joins the guard. Tests
+`TestGoalFlags` (not yet run: the suite and the fuzzer run before the next push).
+
+**Status:** built (2026-10-08), in seed `AP_70580691250444408633`; not yet seen in game.
+
+*Code: `data_tables.py` (`ARTIFACT_WRITERS`), `data_types.py` (`FlagSwap`, `ALWAYS_SET`), `ACTIVATION_FLAGS` and
+`LIMIT_FLAGS` in `logic/lost_sands.py`, `golden_settlement.py`, `wild_swamplands.py`, `ancient_castle.py`,
+`honey_factory.py`, `rubber_prison.py`, `giants_lair.py` and `upper_snakemouth.py`, `slot_data.py`. The mod:
+`Items/GoalGuard.cs`, `World/KeptOpen.cs` (the repoints), `Items/LocationChecks.cs` (`CheckGoal`), `Ui/MenuToggle.cs`
+(`HoldBackFile`).*
+
 # How it works
 
 ## 1. The big picture: generator, seed, server, game
@@ -5532,6 +5577,8 @@ only way a setting chosen at generation (an option, a version number) reaches th
 - `quiet_locations`, the opening's checks, whose items arrive with no hold-up (the mod guide, Item animation);
 - the open world (build step 9): `kept_open`, `kept_present`, `scenery_hidden`, `scenery_present`, `held_until`,
   `present_from` and `dialogue_flags`, the story's blockers and scenery the mod keeps the way the logic assumes;
+- the goal guard (build step 60): `goal_flags`, the goal's flags and the events that set them, and `activation_flags`
+  and `limit_flags`, entities that borrow a goal flag repointed;
 - `submarine_item`, `present_with_item` and `held_until_item`: the submarine is an item, and its docks are made, and
   who shows them off kept away, by its key item in the bag (build step 36);
 - `door_targets` (the entrance randomizer), `enemy_swaps` (enemy shuffle) and `start` (the starting location);

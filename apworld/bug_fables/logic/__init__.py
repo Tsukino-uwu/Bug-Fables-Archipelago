@@ -8,8 +8,9 @@ origin, is in regions.py.
 """
 from __future__ import annotations
 
-from ..data_types import (Area, Artifact, DayNight, DialogueFlag, DoorRule, EntityMove, EntityRef, FlagEntity, FreeSale,
-                          ItemEntity, Location, Roadblock, SceneCamera, SceneryMove, StoryEvent, TimeSwitch, Transfer)
+from ..data_types import (Area, Artifact, DayNight, DialogueFlag, DoorRule, EntityMove, EntityRef, FlagEntity, FlagSwap,
+                          FreeSale, ItemEntity, Location, Roadblock, SceneCamera, SceneryMove, StoryEvent, TimeSwitch,
+                          Transfer)
 from . import (ancient_castle, bandit_hideout, bee_kingdom_hive, bugaria_city, chomper_caves, defiant_root,
                far_grasslands, fishing_village, forsaken_lands, giants_lair, golden_hills, golden_path,
                golden_settlement, honey_factory, lost_sands, metal_island, metal_lake, outskirts, rubber_prison,
@@ -47,6 +48,9 @@ PRESENT_FROM: tuple[FlagEntity, ...] = tuple(e for area in AREAS for e in getatt
 PRESENT_WITH_ITEM: tuple[ItemEntity, ...] = tuple(e for area in AREAS for e in getattr(area, "PRESENT_WITH_ITEM", ()))
 HELD_UNTIL_ITEM: tuple[ItemEntity, ...] = tuple(e for area in AREAS for e in getattr(area, "HELD_UNTIL_ITEM", ()))
 DIALOGUE_FLAGS: tuple[DialogueFlag, ...] = tuple(e for area in AREAS for e in getattr(area, "DIALOGUE_FLAGS", ()))
+# Entities that borrow a goal flag: repointed so none can set it and each behaves as it would with it set.
+ACTIVATION_FLAGS: tuple[FlagSwap, ...] = tuple(e for area in AREAS for e in getattr(area, "ACTIVATION_FLAGS", ()))
+LIMIT_FLAGS: tuple[FlagSwap, ...] = tuple(e for area in AREAS for e in getattr(area, "LIMIT_FLAGS", ()))
 FREE_SALES: tuple[FreeSale, ...] = tuple(e for area in AREAS for e in getattr(area, "FREE_SALES", ()))
 DAY_NIGHT: tuple[DayNight, ...] = tuple(e for area in AREAS for e in getattr(area, "DAY_NIGHT", ()))
 TIME_SWITCHES: tuple[TimeSwitch, ...] = tuple(e for area in AREAS for e in getattr(area, "TIME_SWITCHES", ()))

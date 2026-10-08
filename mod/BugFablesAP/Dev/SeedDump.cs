@@ -32,6 +32,14 @@ namespace BugFablesAP
                     Add(table, i++, b.Item >= 0 ? $"{b.Map}|{b.Entity}|item {b.Item}" : $"{b.Map}|{b.Entity}|{b.Flag}");
                 }
             }
+            void Swaps(string table, IEnumerable<ApConnection.FlagSwap> list)
+            {
+                int i = 0;
+                foreach (ApConnection.FlagSwap f in list ?? Enumerable.Empty<ApConnection.FlagSwap>())
+                {
+                    Add(table, i++, $"{f.Map}|{f.Entity}|{f.From}|{f.To}");
+                }
+            }
 
             Each("location_flags", c.LocationFlags, v => v.ToString());
             Each("location_gives", c.LocationGives, v => $"{v.Map}|{v.Type}|{v.Item}");
@@ -59,10 +67,13 @@ namespace BugFablesAP
             Blockers("present_from", c.PresentFrom);
             Blockers("present_with_item", c.PresentWithItem);
             Blockers("held_until_item", c.HeldUntilItem);
-            int d = 0;
-            foreach (ApConnection.DialogueFlag f in c.DialogueFlags ?? new List<ApConnection.DialogueFlag>())
+            Swaps("dialogue_flags", c.DialogueFlags);
+            Swaps("activation_flags", c.ActivationFlags);
+            Swaps("limit_flags", c.LimitFlags);
+            int g = 0;
+            foreach (ApConnection.GoalFlag goal in c.GoalFlags ?? new List<ApConnection.GoalFlag>())
             {
-                Add("dialogue_flags", d++, $"{f.Map}|{f.Entity}|{f.From}|{f.To}");
+                Add("goal_flags", g++, $"{goal.Flag}|{Ints(goal.Events)}");
             }
             int t = 0;
             foreach (DoorShuffle.Target door in c.DoorTargets ?? new List<DoorShuffle.Target>())

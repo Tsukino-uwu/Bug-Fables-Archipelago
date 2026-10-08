@@ -128,11 +128,11 @@ namespace BugFablesAP
         [HarmonyPatch(typeof(StartMenu), "Update")]
         [HarmonyPrefix]
         private static bool BeforeUpdate(StartMenu __instance, int ___menuid, int ___submenu, float ___cd,
-            bool ___canselect)
+            bool ___canselect, MainManager.LoadData?[] ___savedata)
         {
             try
             {
-                if (HoldBackFile(___menuid, ___submenu, ___cd, ___canselect))
+                if (HoldBackFile(___menuid, ___submenu, ___cd, ___canselect, ___savedata))
                 {
                     return false;
                 }
@@ -156,8 +156,8 @@ namespace BugFablesAP
             return true;
         }
 
-        // With the mod on and no seed known yet, choosing a file (load or new game) gets the buzzer and a popup saying
-        // why, and the game never sees the press. The file select is frozen under the popup.
+        // With the mod on and no seed known yet, choosing a file (load, new game, or the secret codes' new game) gets the
+        // buzzer and a popup saying why, and the game never sees the press. The file select is frozen under the popup.
         private static Transform popup, popupStatus;
         private static string shownPopupStatus;
         private static int popupFrame;
@@ -165,7 +165,8 @@ namespace BugFablesAP
         // Over the save slots: their boxes sort at -20 to -60 and their text at 10.
         private const int PopupDimSort = 50, PopupBoxSort = 60, PopupTextSort = 70;
 
-        private static bool HoldBackFile(int menuid, int submenu, float cd, bool canselect)
+        private static bool HoldBackFile(int menuid, int submenu, float cd, bool canselect,
+            MainManager.LoadData?[] savedata)
         {
             if (popup != null)
             {
@@ -174,7 +175,7 @@ namespace BugFablesAP
             }
             if (!mode.Value || seedKnown() || menuid != 2 || submenu != 0 || cd > 0f || !canselect
                 || MainManager.pausemenu != null || MainManager.instance.option >= Option
-                || !MainManager.GetKey(4, hold: false))
+                || !MainManager.GetKey(4, hold: false) && !SecretNewGame(savedata))
             {
                 return false;
             }
@@ -183,6 +184,14 @@ namespace BugFablesAP
             log.LogInfo("[menu] held back file " + MainManager.instance.option
                 + ": the seed isn't known yet (no login this run)");
             return true;
+        }
+
+        // Key 9 starts the secret codes' new game, as the game has it: on an empty file, with two codes or more.
+        private static bool SecretNewGame(MainManager.LoadData?[] savedata)
+        {
+            return MainManager.GetKey(9, hold: false) && savedata != null && MainManager.instance.option < savedata.Length
+                && !savedata[MainManager.instance.option].HasValue
+                && MainManager.HowManyTrue(MainManager.secretunlocks) > 1;
         }
 
         // Box type 1 is the game's orange box.

@@ -301,6 +301,25 @@ class DialogueFlag:
         return {"map": self.map, "entity": self.entity, "flag": self.flag, "to": self.to}
 
 
+# A flag every new file sets and nothing clears: what a story flag always set by then in vanilla is repointed to.
+ALWAYS_SET = 691
+
+
+@dataclass(frozen=True, slots=True)
+class FlagSwap:
+    """A map entity's flag repointed from flag to to, on every entity of that name holding it, in its area's module:
+    its activation flag (activation_flags: what a switch or plate reads, what a cut grass or a pickup writes) or one of
+    its limit flags (limit_flags: it exists until then)."""
+
+    map: str
+    entity: str
+    flag: int
+    to: int
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"map": self.map, "entity": self.entity, "flag": self.flag, "to": self.to}
+
+
 @dataclass(frozen=True, slots=True)
 class FreeSale:
     """A seller's dialogue lines whose price the client makes 0 (free_sales, in its area's module): the price commands

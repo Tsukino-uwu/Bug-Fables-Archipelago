@@ -4,12 +4,12 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable, Mapping
 from typing import TYPE_CHECKING, Any
 
-from .data_tables import (DAY_NIGHT, DIALOGUE_FLAGS, ENTITIES_MOVED, FREE_SALES, HELD_UNTIL, HELD_UNTIL_ITEM,
-                          ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN, KEPT_PRESENT, LOCATION_NAME_TO_ID, PRESENT_FROM,
-                          PRESENT_WITH_ITEM, ROADBLOCKS, SCENE_CAMERAS, SCENERY_HIDDEN, SCENERY_MOVED, SCENERY_OFF,
-                          SCENERY_PRESENT, STORY_ONLY_MAPS, TIME_SWITCHES)
-from .data_types import (DayNight, DialogueFlag, EntityMove, EntityRef, FlagEntity, FreeSale, ItemEntity, SceneCamera,
-                         SceneryMove, Source, TimeSwitch)
+from .data_tables import (ACTIVATION_FLAGS, ARTIFACT_WRITERS, ARTIFACTS, DAY_NIGHT, DIALOGUE_FLAGS, ENTITIES_MOVED,
+                          FREE_SALES, HELD_UNTIL, HELD_UNTIL_ITEM, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN, KEPT_PRESENT,
+                          LIMIT_FLAGS, LOCATION_NAME_TO_ID, PRESENT_FROM, PRESENT_WITH_ITEM, ROADBLOCKS, SCENE_CAMERAS,
+                          SCENERY_HIDDEN, SCENERY_MOVED, SCENERY_OFF, SCENERY_PRESENT, STORY_ONLY_MAPS, TIME_SWITCHES)
+from .data_types import (DayNight, DialogueFlag, EntityMove, EntityRef, FlagEntity, FlagSwap, FreeSale, ItemEntity,
+                         SceneCamera, SceneryMove, Source, TimeSwitch)
 from .options import ShopContents
 
 if TYPE_CHECKING:
@@ -75,8 +75,8 @@ def _pickup(source: Source) -> dict[str, Any]:
     return pickup
 
 
-def _entities(entries: Iterable[EntityRef | FlagEntity | ItemEntity | DialogueFlag | FreeSale | DayNight | TimeSwitch
-                                  | SceneryMove | EntityMove | SceneCamera]) -> list[dict[str, Any]]:
+def _entities(entries: Iterable[EntityRef | FlagEntity | ItemEntity | DialogueFlag | FlagSwap | FreeSale | DayNight
+                                  | TimeSwitch | SceneryMove | EntityMove | SceneCamera]) -> list[dict[str, Any]]:
     return [entry.to_slot() for entry in entries]
 
 
@@ -129,6 +129,14 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "present_with_item": _entities(PRESENT_WITH_ITEM),
         "held_until_item": _entities(HELD_UNTIL_ITEM),
         "dialogue_flags": _entities(DIALOGUE_FLAGS),
+        # Entities that borrow a goal flag, repointed ([{"map", "entity", "flag", "to"}]): their activation flag (what a
+        # switch reads, what a cut grass sets) and their limit flags.
+        "activation_flags": _entities(ACTIVATION_FLAGS),
+        "limit_flags": _entities(LIMIT_FLAGS),
+        # The goal's flags, each with the events that set it ([{"flag", "events"}]): the client counts only these, and
+        # turns one set any other way back off.
+        "goal_flags": [{"flag": flag, "events": list(ARTIFACT_WRITERS[flag])}
+                       for flag in sorted({artifact.source.flag for artifact in ARTIFACTS})],
         # Sellers' lines the client makes free ([{"map", "lines"}]): their price commands and written price to 0.
         "free_sales": _entities(FREE_SALES),
         # Day maps whose night the client switches at will ([{"day", "night", "from", "until", "first_event", "skips",

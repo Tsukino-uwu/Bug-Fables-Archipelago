@@ -1,10 +1,11 @@
-"""Rubber Prison (the game's area 14, MapControl.areaid): its dock. Its rooms aren't mapped yet."""
+"""Rubber Prison (the game's area 14, MapControl.areaid): its dock, and what the seed changes there. Its rooms
+aren't mapped yet."""
 from __future__ import annotations
 
 from rule_builder.rules import Has
 
 from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY
-from ..data_types import DoorRule, EntityRef, ItemEntity, Transfer
+from ..data_types import ALWAYS_SET, DoorRule, EntityRef, FlagSwap, ItemEntity, Transfer
 
 # The checkpoint corridor's gates open and shut by switches (the user, 2026-10-04: "has to be considered a oneway").
 # From the yard its gates may be shut (their switch on that side comes only from flag 79), so it never leads on; that
@@ -27,4 +28,10 @@ PRESENT_WITH_ITEM = (
 # stranded the party (the user, 2026-10-04).
 KEPT_OPEN = (
     EntityRef("RubberPrisonPier", "rock"),
+)
+
+# The cells' hidden lift switch, hit while flag 41 (the first boss) is set: always on, as in vanilla, and it can never
+# set 41 (build step 60).
+ACTIVATION_FLAGS = (
+    FlagSwap("RubberPrisonCells2", "FixedSwitch", 41, ALWAYS_SET),
 )

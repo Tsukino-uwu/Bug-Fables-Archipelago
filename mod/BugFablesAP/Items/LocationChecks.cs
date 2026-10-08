@@ -196,19 +196,24 @@ namespace BugFablesAP
             CheckGoal(session);
         }
 
-        // Sent once per login while reached: the server keeps it, and a send lost with the connection goes again.
+        // Sent once per login while reached: the server keeps it, and a send lost with the connection goes again. Only the
+        // seed's goal flags count (an artifact the logic doesn't hold never does), as GoalGuard leaves them.
         private void CheckGoal(ArchipelagoSession session)
         {
             int required = connection.ArtifactsRequired;
-            int have = MainManager.SaveProgressIcons();
+            List<ApConnection.GoalFlag> goals = connection.GoalFlags;
+            bool[] flags = MainManager.instance?.flags;
+            int have = goals == null || flags == null ? 0
+                : goals.Count(g => g.Flag >= 0 && g.Flag < flags.Length && flags[g.Flag]);
             string state = required <= 0 ? "slot_data's options have no artifacts_required: never sent"
+                : goals == null ? "slot_data has no goal_flags (a seed from an older apworld): never sent"
                 : have < required ? $"{have} of {required} artifacts" : $"reached, {have} of {required} artifacts";
             if (state != lastGoalState)
             {
                 log.LogInfo("[goal] " + state);
                 lastGoalState = state;
             }
-            if (required > 0 && have >= required && !ReferenceEquals(goalSentFor, session))
+            if (required > 0 && goals != null && have >= required && !ReferenceEquals(goalSentFor, session))
             {
                 goalSentFor = session;
                 connection.SendGoal(session, $"{have} of {required} artifacts on {Where()}");

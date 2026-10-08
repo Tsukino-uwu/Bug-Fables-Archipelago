@@ -72,6 +72,7 @@ namespace BugFablesAP
             SaveRedirect.Enable(Log);
             ItemSwap.Enable(Log, connection, () => randomizerEnabled.Value);
             KeptOpen.Enable(Log, connection, () => randomizerEnabled.Value);
+            GoalGuard.Enable(Log, connection, () => randomizerEnabled.Value);
             EnemyShuffle.Enable(Log, connection, () => randomizerEnabled.Value);
             MusicShuffle.Enable(Log, connection, () => randomizerEnabled.Value);
             difficulty = Config.Bind("Archipelago", "Difficulty", "Normal", new ConfigDescription(
@@ -225,6 +226,7 @@ namespace BugFablesAP
         private void LateUpdate()
         {
             Guarded("music", MusicShuffle.LateTick);
+            Guarded("goal-guard", () => GoalGuard.Check("the frame's end"));
         }
 
         private void FixedUpdate()
@@ -240,6 +242,7 @@ namespace BugFablesAP
             {
                 yield return wait;
                 Guarded("fps-step", FrameRate.AfterPhysics);
+                Guarded("goal-guard-step", () => GoalGuard.Check("a physics step"));
             }
         }
 
@@ -272,6 +275,7 @@ namespace BugFablesAP
                     ("connect", AutoConnect),
                     ("watchdog", () => connection.Watchdog(DateTime.UtcNow)),
                     ("connection", connection.Tick),
+                    ("goalguard", () => GoalGuard.Check("the frame's start")),
                     ("checks", () => checks.Tick(randomizerEnabled.Value)),
                     ("recv", () => receiver.Tick(randomizerEnabled.Value)),
                     ("itemswap", ItemSwap.TickGround),

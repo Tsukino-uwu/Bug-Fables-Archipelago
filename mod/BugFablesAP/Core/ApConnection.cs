@@ -189,7 +189,10 @@ namespace BugFablesAP
         internal List<Blocker> PresentFrom => seedData?.PresentFrom;
         internal List<Blocker> PresentWithItem => seedData?.PresentWithItem;
         internal List<Blocker> HeldUntilItem => seedData?.HeldUntilItem;
-        internal List<DialogueFlag> DialogueFlags => seedData?.DialogueFlags;
+        internal List<FlagSwap> DialogueFlags => seedData?.DialogueFlags;
+        internal List<FlagSwap> ActivationFlags => seedData?.ActivationFlags;
+        internal List<FlagSwap> LimitFlags => seedData?.LimitFlags;
+        internal List<GoalFlag> GoalFlags => seedData?.GoalFlags;
         internal List<DoorShuffle.Target> DoorTargets => seedData?.DoorTargets;
         internal Dictionary<string, int[]> EnemySwaps => seedData?.EnemySwaps;
         internal Dictionary<string, string> MusicMap => seedData?.MusicMap;
@@ -243,12 +246,18 @@ namespace BugFablesAP
             internal int To;
         }
 
-        internal sealed class DialogueFlag
+        internal sealed class FlagSwap
         {
             internal string Map;
             internal string Entity;
             internal int From;
             internal int To;
+        }
+
+        internal sealed class GoalFlag
+        {
+            internal int Flag;
+            internal int[] Events;
         }
 
         internal sealed class Blocker

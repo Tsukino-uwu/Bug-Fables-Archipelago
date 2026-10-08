@@ -542,8 +542,10 @@ logs in, so a save played before that would hand out vanilla items. How it was b
 
 1. Find where the file select acts on a file: `StartMenu.Update`, when the file-select screen is up
    (`menuid` 2, `submenu` 0), the cursor is on one of the three files and confirm is pressed. That branch loads
-   the save (Event22) or starts a new game (Event8).
-2. A prefix on `StartMenu.Update` checks the same conditions first. With the Archipelago mod enabled and no login
+   the save (Event22) or starts a new game (Event8). A second branch starts the secret codes' new game (Event8) with
+   no confirm: key 9 on an empty file, once two or more secret codes are unlocked.
+2. A prefix on `StartMenu.Update` checks the same conditions first, for confirm and for key 9 (since 2026-10-08, the
+   Archipelago guide's build step 60). With the Archipelago mod enabled and no login
    yet this run, it plays the game's buzzer (`PlayBuzzer`), opens a popup and skips the game's `Update`, so the
    game never sees the press. The popup is a dimmer over the whole screen and the game's orange box in the
    middle, sorted above the save slots (their boxes sort at -20 to -60, their text at 10): "Not connected to
@@ -663,7 +665,7 @@ turns it is covered. The lesson went into CLAUDE.md: read how the game does a th
 login; the Quality of life and Gameplay pages seen (2026-09-26); the Achievements row built (2026-09-26), not yet seen;
 the letter pool grown for a long page (2026-09-30), seen (2026-10-04); the game's scroll, its list arrows and its row
 sizes on the settings pages seen (2026-09-30); the leaf level with the main page's last row and its help line level,
-seen (2026-10-04).
+seen (2026-10-04); the secret codes' new game (key 9) held back too (2026-10-08), not yet seen.
 
 *Code: `MenuToggle.cs` (the menu entry: `BeforeSetMenuText` and `AfterSetMenuText` around the game's rebuild,
 `AfterUpdate` for the cursor, `SetMode` for the switch, `HoldBackFile` and `ShowPopup` for the file select);

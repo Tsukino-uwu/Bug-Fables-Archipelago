@@ -70,6 +70,7 @@ read, a log or a probe.
 - [Spy Specs](#spy-specs-2026-09-30-code-read-nothing-seen-in-game)
 - [The Settings list's
   arrows](#the-settings-lists-arrows-2026-09-30-code-read-the-games-screen-in-the-users-screenshots)
+- [The goal flags](#the-goal-flags-2026-10-08-code-read-the-dumps-and-the-games-data-file-the-grass-seen-in-play)
 - [Rooms seen on screen](#rooms-seen-on-screen-2026-10-05-the-user-every-ability-in-hand)
 - [Still to measure](#still-to-measure)
 
@@ -855,9 +856,10 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     flag 239 both come from its purchase at the Defiant Root well (line 3, 30 berries).
     **`DesertBookArea` (2026-10-06, the user):** two halves: the bottom and left doors free between them, the top and
     right doors and the Succulent Cookies under the giant book (flag 730, hidden until the boulder breaks) free between
-    them; across, either way, the boulder broken by Horn Dash (`blockingrock`, flag 417, which also moves the book
-    scenery) or the sand pit flown over (Bee Fly). **A trick:** a tricky jump crosses the sand pit with Jump alone,
-    both ways: not in the basic logic, kept for a harder logic option later (the user).
+    them; across, either way, the boulder broken by Horn Dash (`blockingrock`, there until 417, which only the book's
+    fall sets, `Event158`, never played; breaking it sets no flag) or the sand pit flown over (Bee Fly). **A trick:**
+    a tricky jump crosses the sand pit with Jump alone, both ways: not in the basic logic, kept for a harder logic
+    option later (the user).
     **`DesertRockFormation` (2026-10-06, the user):** nothing needed between its three doors; the Tardigrade Shield
     (flag 343, high on the idol) takes Jump, Freeze and the horn, and taking it records the Tardigrade Idol discovery
     (31).
@@ -1500,8 +1502,8 @@ start:**
 - **149** by talking to the gates on `TermiteOutside`/`TermiteMainPlaza`, and a trigger on `TermiteOutside`.
 - **166** by a trigger on `FarGrasslandsWizard`, and dialogue on `WizardTowerAttic` line 14.
 - **194** by triggers on `RubberPrisonGiantLairBridge`/`GiantLairEntrance`.
-- **200** by `Swamplands7/archertop` and a trigger on `GiantLairSaplingPlains`. **203** is called from
-  `Event200`.
+- **200** by a trigger on `GiantLairSaplingPlains` (`Swamplands7/archertop`'s event id 200 is an enemy's respawn
+  timer, not an event: `NPCControl.cs:4024-4028`, 4357; corrected 2026-10-08). **203** is called from `Event200`.
 - **Not found:** Events 0 and 1 (the prologue: flag 11, the beemerang, is on from the start) and **Event95**
   (flag 20, the bubble shield): found since, a switch in `FactoryProcessingFirstRoom` (above). Rerun on
   2026-09-28 with every starter: 57 more found, and only one for a gate event (Event109, a switch hidden by flag 11,
@@ -2947,6 +2949,43 @@ for its own threshold. Used by `enemy-numbers.py` and `EnemyScaling.cs` (the mod
   -90° and 90°; a value like Mash's at bar x 6.25, `|center||size,0.75|`; a volume row's ten pips at bar x 4.45, 0.4
   apart, `guisprites[59]` at 1/4, lit ones `guisprites[42]` at 1/3 in yellow. In the box: rows' text at
   `2.55 - 0.7 k`, arrows at x 0.4 and 5.4, the value at 2.9, pips from 1.1. Used by `ApMenu.cs`.
+
+## The goal flags (2026-10-08, code read, the dumps and the game's data file; the grass seen in play)
+
+An audit for build step 60 (two readers, four checkers, a critic). Used by `GoalGuard.cs`.
+
+- **The game counts seven artifact flags,** 41, 88, 299, 345, 347, 346 and 555 (`SaveProgressIcons`,
+  `MainManager.cs:17377-17409`): the save line, the pause menu and the quest log use that count.
+- **Each is written by its own events only:** 41 `Event26` (`EventControl.cs:4809`), 88 `Event73` (:11957), 299
+  `Event99` (:16949), 345 `Event118` (:20042), 347 `Event142` (:24288), 346 `Event194` (:32267), 555 `Event200`
+  (:33663) and `Event203` (:34727, after clearing it at :34564; started only by `Event200`, :34224). Nothing clears
+  41. At each write `MainManager.lastevent` is that event and `inevent` is true, with no other event started between
+  (battles and `LoadMap` read `lastevent` only); `lastevent` is written only by `StartEvent` (:76) and `EndEvent`
+  (:177). `inevent` alone proves nothing: the text command `|event,true|` sets it too (`MainManager.cs:13646`).
+- **The ways a flag is written by number:** an entity's `activationflag` through `ActivateRegion` (`NPCControl.cs:
+  5182-5192`, only when it is above 0): a switch with data `0 0` when struck (4741-4745, no "already hit" check), a cut
+  grass with no item (5985-5993), money picked up; any other pickup writes it through `|flag,af,true|` (5711-5717, not
+  a crystal berry); a cut grass's drop takes the grass's `activationflag` (5981-5983). No game text sets an artifact
+  flag (a read-only scan of the game's data file: no `|flag,N|` for any of the seven; `|flag,357,true|` found 7 times
+  as a control), and only `HoneyFactoryCore`'s `|event,99|` and `TestRoom`'s `|event,203|` start an artifact event
+  from text. No scene component writes one (`ScrewPlatform`: -1, or 708 once; `MusicSpinner`: 13).
+- **25 entities carry flag 41 as their `activationflag`, and none any other artifact flag** (the entity dump): 12
+  grass, 11 in `Swamplands2` and one in `Swamplands6`, set it when cut or their drop is picked up (the cause, seen
+  2026-10-08, of the goal sent in the pond). 8 hidden switches (data `0 0 0 0 0`, under or above the floor: y -5, -10,
+  -20, 50, 9999) and `Swamplands7`'s plate (y 999) are hit only while 41 is set, every frame (`NPCControl.cs:1031`,
+  2581-2601, 702, 2280): the moving platforms of `FactoryProcessingPump`, `SandCastleBasement`, `Swamplands8`,
+  `RubberPrisonCells2` and `GiantLairBeforeBoss2` stop without it, `SandCastleEntrance`'s crystal scene (`Event157`,
+  flag 416) never plays, and `UpperSnekPressurePlateRoom`'s gate chain never completes. 4 lights-out switches
+  (`PowerPlant`'s `TOGSwitch3`, `UpperSnekSwitchPuzzle`'s 1, 4 and 8) start lit with it; both puzzles can be solved
+  from either start (every press combination tried). `DesertBookArea`'s gate (`eventtrigger`, there until 41, data
+  `158 2 6`) needs its hidden switch, so `Event158` (the book falls, flag 417) never plays in vanilla.
+- **Flag 691 is set on every new file** (`Event8`, `EventControl.cs:2599`, its only mention) and never cleared.
+- **41 set before the first boss** removes its fight's trigger (`SnakemouthTreasureRoom`'s `MaskEvent`, there until
+  41), so its prize (location 13) could never be done; it also swaps the Outskirts' and Snakemouth's save crystals for
+  ones that don't heal and moves Artis to his after-the-boss line.
+- **A file's flags arrive as a new array** on a load (`MainManager.cs:17274-17281`) and on a new file or the title
+  screen (`SetVariables`, :3607); a battle's Game Over puts its start values back in place (`BattleControl.cs:
+  3436-3446`).
 
 ## Rooms seen on screen (2026-10-05, the user, every ability in hand)
 

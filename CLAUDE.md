@@ -45,8 +45,8 @@ rule, remove one in the same edit. The rule lives here and its reasoning in `age
 - **Never corrupt a save.** The mod writes game state the way the game itself does: the same fields, the same
   caps, the game's own function where it has one (`MEASURED.md`, what `Giveitem` writes). Saves go only through
   the game's own save code. No raw writes into save files, and no new save format.
-- **The received-item count lives in the save**, next to the items it produced. A fresh save starts at 0 and
-  the server replays everything. That makes lost-save recovery work.
+- **The received-item count lives in the save**: a fresh save starts at 0 and the server replays all (lost saves).
+- **A goal flag is set only by its own events, ever** (the user, 2026-10-08): new goals join the guard (build step 60).
 - **"In a seed" and "connected" are different states.** A dropped socket keeps randomizer rules in force:
   checks queue, and no pickup falls back to its vanilla item.
 - **Every seed can be completed from wherever it starts** (the user, 2026-09-24). Whatever an area or goal needs (key

@@ -5,8 +5,8 @@ from __future__ import annotations
 from rule_builder.rules import Has
 
 from ..custom_rules import ANY_ATTACK, CanUse
-from ..data_types import (Area, DayNight, EntityMove, EntityRef, Give, ItemShop, Location, Pickup, SceneCamera,
-                          SceneryMove, Source, StoryEvent, TimeSwitch)
+from ..data_types import (ALWAYS_SET, Area, DayNight, EntityMove, EntityRef, FlagSwap, Give, ItemShop, Location, Pickup,
+                          SceneCamera, SceneryMove, Source, StoryEvent, TimeSwitch)
 
 LOCATIONS = (
     # Where the game teaches Beemerang Halt (flag 21), after the mayor's Wacka Worm game at night, played by Vi with
@@ -145,4 +145,10 @@ KEPT_PRESENT = (
 KEPT_OPEN = (
     *(EntityRef(room, door) for room, doors in _DOOR_COPIES.items() for door in doors),
     EntityRef("GoldenSettlement1", "blocker"),
+)
+
+# The power plant's lights-out switch that starts lit once flag 41 (the first boss) is set: lit, as in vanilla (build
+# step 60).
+ACTIVATION_FLAGS = (
+    FlagSwap("PowerPlant", "TOGSwitch3", 41, ALWAYS_SET),
 )

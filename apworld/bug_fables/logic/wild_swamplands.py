@@ -1,10 +1,11 @@
-"""Wild Swamplands (the game's area 9, MapControl.areaid): its spots. Its rooms aren't mapped yet."""
+"""Wild Swamplands (the game's area 9, MapControl.areaid): its spots, and what the seed changes there, mapped
+room by room (room-checklist.md)."""
 from __future__ import annotations
 
 from rule_builder.rules import Has
 
 from ..custom_rules import LATER_CHAPTERS, CanUse, Member
-from ..data_types import Area, Location, Pickup, Source, StoryEvent, Transfer
+from ..data_types import ALWAYS_SET, Area, FlagSwap, Location, Pickup, Source, StoryEvent, Transfer
 
 _UP = CanUse("Jump") | CanUse("Bee Fly")
 _TREE_DOWN = "Swamp Tree Knocked Down"
@@ -52,4 +53,16 @@ TRANSFERS = (
     # Leafbug Crossing's upper right down into the middle, a drop: back up, the tree knocked down and Jump or Bee Fly.
     Transfer("drop", "Swamplands3", "Swamplands3", two_way=False, way_back=CanUse("Horn Slash") & _UP,
              from_area="Right"),
+)
+_GRASS = ("blockgrass", "blockgrass - Duplicate", "blockgrass - Duplicate - Duplicate", "blockgrass 4", "blockgrass 5",
+          "blockgrass 7", "blockgrass 8", "blockgrass 9", "funGrass", "funGrass - Duplicate",
+          "funGrass - Duplicate - Duplicate")
+# Grass that sets flag 41 (the first boss) when cut or when its drop is picked up, which counted an artifact (seen
+# 2026-10-08): it sets nothing, as it changes nothing in vanilla, where 41 is already set. A hidden switch and a plate
+# hit while 41 is set: always on, as in vanilla (build step 60).
+ACTIVATION_FLAGS = (
+    *(FlagSwap("Swamplands2", grass, 41, -1) for grass in _GRASS),
+    FlagSwap("Swamplands6", "blockgrass - Duplicate", 41, -1),
+    FlagSwap("Swamplands7", "PressurePlate - Duplicate - Duplicate - Duplicate - Duplicate", 41, ALWAYS_SET),
+    FlagSwap("Swamplands8", "emptyswitch", 41, ALWAYS_SET),
 )

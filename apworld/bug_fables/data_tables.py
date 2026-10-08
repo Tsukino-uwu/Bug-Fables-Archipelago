@@ -10,13 +10,17 @@ from rule_builder.rules import False_
 
 from .data_types import Area, Doors, Encounter, Item, Location, OneWayDoor, RoomStart, SavePoint
 from .enemysanity import enemy_locations
-from .logic import (ARTIFACTS, DAY_NIGHT, DIALOGUE_FLAGS, DOOR_RULES, ENTITIES_MOVED, FREE_SALES, HELD_UNTIL,
-                    HELD_UNTIL_ITEM, KEPT_OPEN, KEPT_PRESENT, LOCATIONS, MAP_AREAS, PRESENT_FROM, PRESENT_WITH_ITEM,
-                    ROADBLOCKS, SCENE_CAMERAS, SCENERY_HIDDEN, SCENERY_MOVED, SCENERY_OFF, SCENERY_PRESENT,
-                    STORY_EVENTS, TIME_SWITCHES, TRACKER_ORDER, TRANSFERS)
+from .logic import (ACTIVATION_FLAGS, ARTIFACTS, DAY_NIGHT, DIALOGUE_FLAGS, DOOR_RULES, ENTITIES_MOVED, FREE_SALES,
+                    HELD_UNTIL, HELD_UNTIL_ITEM, KEPT_OPEN, KEPT_PRESENT, LIMIT_FLAGS, LOCATIONS, MAP_AREAS,
+                    PRESENT_FROM, PRESENT_WITH_ITEM, ROADBLOCKS, SCENE_CAMERAS, SCENERY_HIDDEN, SCENERY_MOVED,
+                    SCENERY_OFF, SCENERY_PRESENT, STORY_EVENTS, TIME_SWITCHES, TRACKER_ORDER, TRANSFERS)
 
 ITEM_ID_BASE = 7_710_000
 LOCATION_ID_BASE = 7_720_000
+# The game's seven artifact flags, each with every event that sets it (MEASURED.md, "Chapters"): a goal flag the client
+# finds set by anything else is turned back off (build step 60).
+ARTIFACT_WRITERS: dict[int, tuple[int, ...]] = {41: (26,), 88: (73,), 299: (99,), 345: (118,), 347: (142,),
+                                                346: (194,), 555: (200, 203)}
 
 
 def _load(name: str) -> dict[str, Any]:
