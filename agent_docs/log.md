@@ -2891,9 +2891,9 @@ either one wrong).
 - **The gate seen open** from both doors on the new seed; `BOLostSandsEntrance` ticked, 12 of 244.
 - **`Blank`:** warped in on the user's ask "to confirm is really a unused/test room": black and empty; a backdrop for
   Event111's flashback, no doors, never a start. Ticked, 13 of 244.
-- **`BugariaAssociationAttack`:** one door to the plaza attack map, Event119's landing, nothing else reachable. The user:
-  story-only copies out of the shuffle and the starts (`STORY_ONLY_MAPS`, the four attack maps); the post-game copies
-  decided when reached. A plain and a coupled entrance-rando seed generate. Ticked, 14 of 244.
+- **`BugariaAssociationAttack`:** one door to the plaza attack map, Event119's landing, nothing else reachable. The
+  user: story-only copies out of the shuffle and the starts (`STORY_ONLY_MAPS`, the four attack maps); the post-game
+  copies decided when reached. A plain and a coupled entrance-rando seed generate. Ticked, 14 of 244.
 - **Warp in story maps:** the user: warping out mid-attack could softlock the chain for good. Decided: no Warp or map
   travel on the story-only maps (`no_travel_maps` in slot_data, read by the mod). Seen: both buttons gone on map 130.
 - **`SeedlingHaven`:** a dead end; the Seedling King is a bounty (quest pass). The grass by him drops money mostly
@@ -3277,9 +3277,9 @@ either one wrong).
   the snail's goods still showed, as goods are made in a second pass; hidden right after `CreateEntities` (caught only
   a room already loaded) and then in each good's `Start` (caught the fresh load, seen in the log). The user: "now its
   just 3 items". Shop slots renamed "Caravan Shop 1-3" to match. Their "an Archipelago item" text with the game's
-  sprite (and berry #22's 3D look): the hosted seed predates these locations, so the scout has no item for them. The minigame
-  door's rock (until flag 275, the horn quest and Tanjerin): arriving from it pushes the party through; the user:
-  gated behind the quest (a stand-in), as the minigame room holds only Wacka Worm replays and a late scene.
+  sprite (and berry #22's 3D look): the hosted seed predates these locations, so the scout has no item for them. The
+  minigame door's rock (until flag 275, the horn quest and Tanjerin): arriving from it pushes the party through; the
+  user: gated behind the quest (a stand-in), as the minigame room holds only Wacka Worm replays and a late scene.
 - **The settlement's desert gate:** with flag 83 off, and on a new file, the seed's open gate (written 2026-10-04)
   let the user through. The user: the door is blocked "until you come from that entrance specifically so you can hit
   the lever behind the door and open it", and they never asked for it kept open: that was my reading of 2026-10-04,
@@ -3292,14 +3292,14 @@ either one wrong).
   Unticked: I warped on (and posted the next room's draft) before the user was done; back in the room.
   The logic explained at the user's ask; the user: done. Ticked, 87 of 244.
 - **Handoff (2026-10-07, the user stopped for now; the game closed by the user, the server stopped, none left):** 87
-  of 244 ticked. Next: `GoldenHillsPath3` (44), not yet seen: its draft (right door to the crank path, left door to the settlement
-  entrance; a low door to `ChomperCave1` made only from flag 20, the bubble shield learned in the story (`Event95`),
-  with an invisible wall `Base/Cube` until 20: the new file has 20 off though the Shield is in the bag, and the logic
-  has no rule on that door, so it counts it open, to settle with the user; the Lore Book, key item 52, flag 380, dug
-  under a breakable rock on the left; two fixed cranks; a thorn patch). The server hosts `AP_63157247147940960355.zip`
-  (session `61331d31-...` scratchpad `out/`, player file `players/BugTester.yaml`): host it again next time
-  (`python MultiServer.py <that zip> --port 38281` from the Archipelago checkout); the user's new file is on it. Dev
-  settings: `OneHit`, `InfJump`, `BumpKill`, `QuietBursts` on, `AdoptSeed` off; the command file is
+  of 244 ticked. Next: `GoldenHillsPath3` (44), not yet seen: its draft (right door to the crank path, left door to
+  the settlement entrance; a low door to `ChomperCave1` made only from flag 20, the bubble shield learned in the
+  story (`Event95`), with an invisible wall `Base/Cube` until 20: the new file has 20 off though the Shield is in the
+  bag, and the logic has no rule on that door, so it counts it open, to settle with the user; the Lore Book, key item
+  52, flag 380, dug under a breakable rock on the left; two fixed cranks; a thorn patch). The server hosts
+  `AP_63157247147940960355.zip` (session `61331d31-...` scratchpad `out/`, player file `players/BugTester.yaml`): host
+  it again next time (`python MultiServer.py <that zip> --port 38281` from the Archipelago checkout); the user's new
+  file is on it. Dev settings: `OneHit`, `InfJump`, `BumpKill`, `QuietBursts` on, `AdoptSeed` off; the command file is
   still `bed6439d-.../scratchpad/cmds.txt` (one command batch at a time: a second write overwrites an unread first).
   The mod build in the game is staged (`stage-dev.ps1`, then `copy-dev.ps1`; copying alone ships the old build).
   Open: Next 62 (the Wooden Crank never used up, the merged items as the whole), the quest, enemy, discovery and
@@ -3405,8 +3405,9 @@ either one wrong).
   for the enemy pass; the Broodmother's Midges fly, for its room). The user: done. Ticked, 102 of 244. Next:
   `BarrenLandsPinkSpider` (189).
 - **`BarrenLandsPinkSpider`:** (the user allowed `CanReachRegion` and `Or` into the preflight's apworld imports) the
-  door free, the ledge with the sign and the hole Jump (the user). `Event167` read: the hole is a pawn shop, and the first trade drops crystal berry #38, no location yet; the user gave an egg and saw
-  it. Named "Pink Spider, First Trade" (the user: a trade, not a gift, and only once). The item it takes: the user
+  door free, the ledge with the sign and the hole Jump (the user). `Event167` read: the hole is a pawn shop, and the
+  first trade drops crystal berry #38, no location yet; the user gave an egg and saw it. Named "Pink Spider, First
+  Trade" (the user: a trade, not a gift, and only once). The item it takes: the user
   chose an item shop reached (slots sell their own item without end once bought): a new rule, `ItemOnHand`
   (`custom_rules.py`), by the shops' regions. **To do before the push:** a test for `ItemOnHand` that fails without
   it. The user: done. Ticked, 103 of 244. Next: `BarrenLandsTanks` (190).
@@ -3437,9 +3438,9 @@ either one wrong).
 - **`BarrenLandsRock`, the dome overlook:** free (the user; the vista first said Jump, then not). Discovery 41 from
   either line of the viewpoint, and a Squash in grass (regional 11): new locations. Names the user's ("Dome Overlook",
   "Vista" over viewpoint, "Grass by the Log"). The user: done. Ticked, 109 of 244. Next: `AbandonedCityTent` (196).
-- **`AbandonedCityTent`:** the door free; the False Monarch bounty starts a few steps in (the user). `Event124` read: the
-  Crystal Crown (key item 146) and discovery 40 ("Ancient City") from the win, both for the quest pass with the other
-  bounties, as the Seedling King's (the user: an optional mini boss). The user: done. Ticked, 110 of 244. Next:
+- **`AbandonedCityTent`:** the door free; the False Monarch bounty starts a few steps in (the user). `Event124` read:
+  the Crystal Crown (key item 146) and discovery 40 ("Ancient City") from the win, both for the quest pass with the
+  other bounties, as the Seedling King's (the user: an optional mini boss). The user: done. Ticked, 110 of 244. Next:
   `BarrenLandsSideGPT` (199).
 - **`BarrenLandsSideGPT`, the tunnel side:** the user's ways (the bottom free, the high door Jump, Horn Dash and Bee
   Fly, a drop down). Three new locations: a Lore Book in tall grass (no bush, so a plain pickup) and two grass patches
@@ -3515,8 +3516,8 @@ either one wrong).
   fuzzer (not run, as asked). The server from the last session still runs on 38281 with seed
   `AP_81434407810428720732` (the user's save on it); each new build drops the live seed data, so `liveslot` again after
   a reload. Dev settings: `onehit` off (turned off this session), `InfJump` and `BumpKill` on, `QuietBursts` and
-  `AdoptSeed` off; the command file is the earlier session's scratchpad `cmds.txt`, the player file `players/BugTester.yaml`
-  in session f7f04659's scratchpad.
+  `AdoptSeed` off; the command file is the earlier session's scratchpad `cmds.txt`, the player file
+  `players/BugTester.yaml` in session f7f04659's scratchpad.
 - **Tests, fuzzer and push (the user, 2026-10-08):** the first run since the last push (2026-10-05, CI red on fill
   errors) found 96 failing tests across the week's mapping, most of them tests behind the logic (landings in map
   areas, door rules on one-ways, the Termacade's flagless prizes, Artis's give by npc, the shop fallback no longer
