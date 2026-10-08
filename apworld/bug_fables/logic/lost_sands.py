@@ -22,7 +22,7 @@ LOCATIONS = (
              rule=CanUse("Beemerang Halt"), reach=LATER_CHAPTERS),
     Location("Lost Sands: Badlands, Center Pillar", 114, "DesertBadlands",
              Source(flag=413, pickup=Pickup(map="DesertBadlands", type=2, item=0)),
-             rule=CanUse("Jump") & CanUse("Bee Fly")),
+             rule=CanUse("Jump") & (CanUse("Bee Fly") | CanUse("Beemerang Toss"))),
     Location("Lost Sands: Badlands, Rock Ledge", 115, "DesertBadlands",
              Source(flag=729, pickup=Pickup(map="DesertBadlands", type=0, item=65)),
              rule=CanUse("Jump") & CanUse("Beemerang Toss")),

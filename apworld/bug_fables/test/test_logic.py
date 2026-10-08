@@ -334,15 +334,21 @@ class TestTheater(BugFablesTestBase):
 
 
 class TestBadlands(BugFablesTestBase):
-    # The center pillar's medal takes Jump and Bee Fly, the rock ledge's yam Jump and the Beemerang.
+    # The center pillar's medal takes Jump and Bee Fly or the Beemerang, the rock ledge's yam Jump and the Beemerang.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
-    def test_center_pillar_needs_bee_fly(self) -> None:
-        spot = "Lost Sands: Badlands, Center Pillar"
-        self.collect_all_but(["Bee Fly"])
-        self.assertFalse(self.can_reach_location(spot))
+    def test_center_pillar_needs_bee_fly_or_the_beemerang(self) -> None:
+        # The spot's own rule: the room is also reached by doors that may need either.
+        pillar = self.multiworld.get_location("Lost Sands: Badlands, Center Pillar", self.player)
+        self.collect_all_but(["Bee Fly", "Progressive Beemerang"])
+        self.assertFalse(pillar.access_rule(self.multiworld.state))
         self.collect_by_name("Bee Fly")
-        self.assertTrue(self.can_reach_location(spot))
+        self.assertTrue(pillar.access_rule(self.multiworld.state))
+
+    def test_center_pillar_by_the_beemerang(self) -> None:
+        pillar = self.multiworld.get_location("Lost Sands: Badlands, Center Pillar", self.player)
+        self.collect_all_but(["Bee Fly"])
+        self.assertTrue(pillar.access_rule(self.multiworld.state))
 
     def test_rock_ledge_needs_the_beemerang(self) -> None:
         spot = "Lost Sands: Badlands, Rock Ledge"
