@@ -183,8 +183,10 @@ be wrong.
 7. **Goal:** the mod counts the game's artifact flags and sends "goal reached" at the required number: done, seen
    (build step 3).
 8. **A release: three separate downloads** (2026-09-25): built, see build step 17; v0.1.0 out
-   (2026-09-26), v0.2.0 (2026-09-27). The next one: `dev-scripts/release.ps1 -Version vX.Y.Z` after bumping both
-   versions.
+   (2026-09-26), v0.2.0 (2026-09-27), v0.3.0 (2026-10-04). The next one: `dev-scripts/release.ps1 -Version vX.Y.Z`
+   after bumping both versions. **When (the user, 2026-10-08):** once every room's logic is mapped, which makes the
+   game fully playable; after that the quests, the enemies and the discoveries; past that, logic tweaks and maybe new
+   features and options. So the root README carries no Status line, as the project only grows more complete.
 9. **The chat feed**, then the in-game text client (see the design list in the mod guide, step 2), so players never
    need the Launcher's Text Client (2026-09-29: DeathLinks shown too, a filter per kind of message, hints and
    commands from the text line, Enter to type in the field and in battles, a Chat menu in the panel). It is the
