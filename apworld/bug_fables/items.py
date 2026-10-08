@@ -19,7 +19,7 @@ CLASSIFICATIONS = {
     "trap": ItemClassification.trap,
 }
 ITEMS_BY_NAME = {item.name: item for item in ITEMS}
-# Only padding fills leftover slots; other filler (the Hard Mode medal) enters only as a location's vanilla item.
+# Only padding fills leftover slots; any other filler enters only as a location's vanilla item.
 PADDING = [item.name for item in ITEMS if item.padding]
 # By member number: 0 Vi, 1 Kabbu, 2 Leif.
 MEMBERS = [item.name for item in sorted((item for item in ITEMS if item.member), key=lambda item: item.game_id)]
@@ -65,8 +65,8 @@ def create_all_items(world: BugFablesWorld) -> None:
     always = [world.create_item(item.name) for item in ITEMS for _ in range(own_copies(world, item.name))]
     unfilled = len(world.multiworld.get_unfilled_locations(world.player))
     while always and len(pool) + len(always) > unfilled:
-        # Only an ordinary item or berries, never a filler medal (the Hard Mode medal). A duplicate copy first; the
-        # last copy only when none is left (few locations, many move items).
+        # Only an ordinary item or berries, never a medal or a token. A duplicate copy first; the last copy only when
+        # none is left (few locations, many move items).
         names = [item.name for item in pool]
         ordinary = [item for item in pool if item.classification == ItemClassification.filler
                     and ITEMS_BY_NAME[item.name].kind in (ITEM_KIND, MONEY_KIND)]

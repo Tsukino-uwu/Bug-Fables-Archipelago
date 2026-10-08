@@ -231,21 +231,28 @@ class TestBagItemsAreFiller(BugFablesTestBase):
                     self.assertEqual(item.classification, "filler")
 
 
-class TestMedalsAreUseful(BugFablesTestBase):
-    # Every medal has a use, a drawback one too (Weak Stomach feeds the poison medals): useful, or progression when a
-    # rule needs it (the user, 2026-10-07). Hard Mode does nothing in a seed (the client pays every boss prize as if it
-    # were on): filler.
-    def test_medals_are_useful(self) -> None:
-        from ..data_tables import ITEMS, MEDAL_KIND
+class TestKeyItemsAndMedalsAreUseful(BugFablesTestBase):
+    # Filler is only what's useless: a player wants every key item and every medal (Hard Mode and the drawback medals
+    # too), so each is useful, or progression when a rule needs it. Crystal berries buy Shades's medals: useful while
+    # her shop isn't in the seed.
+    def test_key_items_and_medals_are_useful(self) -> None:
+        from ..data_tables import ITEMS, KEY_ITEM_KIND, MEDAL_KIND
         for item in ITEMS:
-            if item.kind == MEDAL_KIND and item.name != "Hard Mode":
+            if item.kind in (KEY_ITEM_KIND, MEDAL_KIND):
                 with self.subTest(item=item.name):
                     self.assertIn(item.classification, ("useful", "progression"))
+
+    def test_crystal_berries_are_useful(self) -> None:
+        from ..data_tables import CRYSTAL_KIND, ITEMS
+        berries = [item for item in ITEMS if item.kind == CRYSTAL_KIND]
+        self.assertTrue(berries)
+        for item in berries:
+            self.assertEqual(item.classification, "useful")
 
 
 class TestTownMedal(BugFablesTestBase):
     options = {"starting_party_member": "off"}
-    # The Bug Me Not! medal needs Leif's ice; the town itself is open.
+    # The Bug Me Not! medal needs Leif's ice, or the Bee Fly item; the town itself is open.
     def test_needs_leif(self) -> None:
         name = "Bugaria City: Residential District, Fountain Rooftop"
         self.assertFalse(self.can_reach_location(name))
@@ -280,7 +287,8 @@ class TestMainPlaza(BugFablesTestBase):
 
 
 class TestResidentialRooftops(BugFablesTestBase):
-    # The Bad Book's rooftop takes only the horn (no Jump); the fountain's takes Jump and Freeze.
+    # The Bad Book's rooftop takes only the horn (no Jump); the fountain's takes Jump and Freeze, or Bee Fly alone; the
+    # banker takes Jump.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
     def test_rooftop_needs_only_the_horn(self) -> None:
@@ -295,6 +303,20 @@ class TestResidentialRooftops(BugFablesTestBase):
         self.collect_by_name(["Explorer Permit", "Jump"])
         self.assertFalse(self.can_reach_location(spot))
         self.collect(self.get_items_by_name("Progressive Freeze"))
+        self.assertTrue(self.can_reach_location(spot))
+
+    def test_fountain_rooftop_with_bee_fly_alone(self) -> None:
+        spot = "Bugaria City: Residential District, Fountain Rooftop"
+        self.collect_by_name("Explorer Permit")
+        self.assertFalse(self.can_reach_location(spot))
+        self.collect_by_name("Bee Fly")
+        self.assertTrue(self.can_reach_location(spot))
+
+    def test_banker_needs_jump(self) -> None:
+        spot = "Bugaria City: Residential District, Banker"
+        self.collect_by_name("Explorer Permit")
+        self.assertFalse(self.can_reach_location(spot))
+        self.collect_by_name("Jump")
         self.assertTrue(self.can_reach_location(spot))
 
 

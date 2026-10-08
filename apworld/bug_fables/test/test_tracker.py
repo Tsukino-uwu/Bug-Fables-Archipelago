@@ -32,10 +32,11 @@ CASES: dict[str, dict[str, Any]] = {
     "coupled plando": {"entrance_randomizer": "coupled", "plando_connections": PLANDO},
     "decoupled plando": {"entrance_randomizer": "decoupled", "plando_connections": PLANDO},
     "room swap plando": {"entrance_randomizer": "room_swap", "plando_connections": PLANDO},
-    # Short of filler without crystal berries (2026-10-08: the default seed has enough since the room mapping).
+    # Short of filler without crystal berries, and the default seed too since Crystal Berry and Hard Mode became useful
+    # (2026-10-08); discoveries and hidden items with the story's party hold.
     "filler only, fallen back": {"shop_contents": "filler_only", "shuffle_crystal_berries": False},
-    "filler only, held": {"shop_contents": "filler_only", "shuffle_discoveries": True, "starting_party_member": "off",
-                          "filler_starting_checks": False},
+    "filler only, held": {"shop_contents": "filler_only", "shuffle_discoveries": True, "shuffle_hidden_items": True,
+                          "starting_party_member": "off", "filler_starting_checks": False},
     "fallback and exclusions": {"shop_contents": "filler_only", "shuffle_crystal_berries": False,
                                 "exclude_locations": [SHOP, OPENING, PIER]},
     "random member, moves, jump": {"starting_party_member": "random_member", "shuffle_field_moves": True,

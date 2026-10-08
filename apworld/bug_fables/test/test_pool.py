@@ -10,7 +10,7 @@ class TestMedals(BugFablesTestBase):
         kinds = self.world.fill_slot_data()["item_kinds"]
         self.assertEqual(kinds[str(self.world.item_name_to_id["Poison Defender"])], 2)
 
-    def test_filler_that_isnt_padding_is_in_the_pool_once(self) -> None:
+    def test_items_that_arent_padding_are_in_the_pool_once(self) -> None:
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         self.assertEqual(pool.count("Hard Mode"), 1)
         self.assertEqual(pool.count("Poison Defender"), 1)

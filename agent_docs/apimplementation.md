@@ -699,6 +699,10 @@ be wrong.
     worry, a crash between receiving the halves and the merge, wouldn't lose anything either way (received items are
     counted in the save and replayed), but the whole is simpler. The Big Crank (60) is made from two halves, so its
     halves are designed here too.
+63. **Berries in the logic, to decide later** (2026-10-08, the user: "the whole berry plan is a thing to deal with
+    later"). Today no berry price is a rule: ordinary berries are renewable from battles (build step 11). The banker's
+    Platinum Card ("Bugaria City: Residential District, Banker", 550 berries in all) set the user weighing custom
+    items, keeping such spots free, or berries as a need in the logic; undecided.
 
 **Known issues:**
 
@@ -904,18 +908,26 @@ Archipelago's `custom_worlds` folder.
 - **The pool is each included location's own vanilla item** (2026-09-24, once two locations held an HP Plus medal),
   then the member, ability and the mod's own items the options add, then padding for the rest (test `TestPool`, which
   also fails if a location's vanilla item is missing from `items.json`). *Padding* is a mark in `items.json` for
-  the filler that may fill leftover locations in any number (a Crunchy Leaf). A filler item without it, like
+  the filler that may fill leftover locations in any number (a Crunchy Leaf). An item without it, like
   the Hard Mode medal, is a real item and goes in once (2026-09-24; test `TestMedals`). The G-Bug Ranger Plushie
   (a key item) joined as *useful* on 2026-09-24, so a test could put it on Artis's medal. Its own vanilla
   spot at the Bugaria theater isn't a location yet, so the game still hands that copy out there.
 - **Which class each item gets** (2026-09-24): **if an item can unlock even one location, at any point,
-  even if only sometimes or not always, it is progression. No ifs or maybes.** Every field ability is *progression*; a
-  key item is *progression* when any rule in the logic uses it, even for a single location; one nothing uses
-  is *useful*. Crystal berries buy medals at the crystal berry shop, so they become progression in the same change that
-  puts that shop in the seed (test `TestClassifications` enforces both directions). Every medal is *useful*, except the
-  Hard Mode medal (#11), which is *filler*: it only makes fights harder, and the Archipelago panel can do the
-  same. `TestClassifications` checks both directions: an item a rule uses is progression, and a progression item is used
-  by some rule.
+  even if only sometimes or not always, it is progression. No ifs or maybes.** The three, in the user's words
+  (2026-10-08): "filler = useless; useful = want to guarantee the player can get it at some point; progression =
+  required, unlocks 1 or more checks, always required even if it only sometimes unlock a location/check". Every field
+  ability is *progression*; a key item is *progression* when any rule in the logic uses it, even for a single location.
+  **Every key item and every medal is at least *useful*, never filler** (the user, 2026-10-08: "a key item or medal etc
+  should always be useful"), the Hard Mode medal (#11) included (filler from 2026-09-24 to 2026-10-08, since in a seed
+  it only makes fights harder; the user: useful). Crystal berries buy medals at the crystal berry shop: *useful* while
+  her shop stays vanilla (the user, 2026-10-08), *progression* in the same change that puts that shop in the seed,
+  since every spot there needs them. `TestClassifications` checks both directions: an item a rule uses is
+  progression, and a progression item is used by some rule; `TestKeyItemsAndMedalsAreUseful` holds the rest. **What
+  it changed** (a read-only review, 2026-10-08): 23 fewer filler in a default seed (22 Crystal Berry copies and Hard
+  Mode), so *Shop Contents: Filler Only* now falls back to No Progression in a default solo seed (build step 11's
+  fallback; the tests that expected it to hold now turn hidden items on); no option set fails generation. Archipelago
+  keeps a useful item off excluded spots always, and off unreachable ones only with *Accessibility: Full*
+  (`Fill.py`, `forbid_important_item_rule`, at 0.6.8).
 - **Logic lives on regions and locations, never on items.** An item doesn't say what it unlocks. A region's
   exits say what they need (the Golden Path's door needs the first boss; the permit gate, inside the Outskirts map, is
   each spot's `reach` until the rooms are mapped), and every location belongs to a region. A location needing something
@@ -1862,7 +1874,11 @@ raised the need once a later tier opens would not be monotonic, which Archipelag
 shelf from a new game.** The first stops spending order from locking anything out; the second stops a story event
 that never runs (as the open world skips or bypasses scenes) from leaving a tier's medals, and their checks, never
 appearing. The same holds for Merab's later additions when they become locations. Crystal berries become
-progression. **Also wanted (2026-09-25): Shades's counter showing 3 or 4 medals** instead of 2. The slot count is the
+progression (useful until then, the user, 2026-10-08: "progression if the shade shop contain any progression, else
+useful"; every spot there needs them, so they are progression whenever her shop is in the seed, whatever it holds:
+Archipelago's fill counts only progression, `World.collect_item` skipping any item that isn't `advancement`, read at
+0.6.8, and a spot gated by a useful item would never be reachable).
+**Also wanted (2026-09-25): Shades's counter showing 3 or 4 medals** instead of 2. The slot count is the
 shopkeeper's `data` length and each slot's place its `vectordata` entry (`NPCControl.cs:1530-1534`), so longer arrays
 with new counter positions, set before the shelf is built. Built: 4 on her counter (the mod guide, step 12).
 **Full stock from the start for both medal shops, duplicates as their own locations** (2026-09-25: "a 2nd
@@ -3076,7 +3092,8 @@ or Bee Fly), 117 of 244; outside the Fishing Village (its door Jump; Riz's fight
 119 of 244; outside the swamp (its top Jump, Icicle and Horn Dash up, a drop then Icicle and Horn Dash down; its Wasp
 Kingdom door, there in the game only after the swamp's boss, open from the start and Maki's turn-back kept away), 120 of
 244; the swamp boss's room, out of order while testing its boss (Jump and Leif across, past the boss), 121 of 244; the
-rest of `room-checklist.md` to go.
+residential district rechecked (2026-10-08: the fountain rooftop by Bee Fly alone too; a new location, the banker's
+Platinum Card, Jump, the card a new useful item), still 121; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -5079,8 +5096,8 @@ The offerings are what the Golden Hills dungeon's shrines take.
    in the square, *Zasp's Challenge* (flag 93, `Eating Contest Entered`).
 2. **The Sun and Moon Offerings** are items (progression): the dungeon's shrine rules, a later-chapters stand-in until
    now, need them (`logic/golden_hills.py`). Weak Stomach is an item too, useful: every medal is (the user: a drawback
-   has uses, Weak Stomach feeds the poison medals), but Hard Mode, which does nothing in a seed (filler);
-   `TestMedalsAreUseful` holds it.
+   has uses, Weak Stomach feeds the poison medals), Hard Mode too since 2026-10-08 (filler until then, as it does
+   nothing in a seed); `TestKeyItemsAndMedalsAreUseful` holds it.
 3. **The contest always won** (slot_data `contest_always_won`; `Festival.cs`, a transpiler in `Event57` passing `won`
    through `ForceWin`).
 

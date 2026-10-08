@@ -25,7 +25,7 @@ class Item:
 
     game_id is the MainManager.Items ordinal (the enum starts at None = -1). kind is where it goes:
     0 ordinary items, 1 key items, 2 medals (game_id is the medal id, MainManager.BadgeTypes), 3 berries (money;
-    game_id is the amount), 4 crystal berries (one item, game_id 0; the count is the currency; filler until the crystal
+    game_id is the amount), 4 crystal berries (one item, game_id 0; the count is the currency; useful until the crystal
     berry shop is in the seed, then progression, since they buy locations there), 5 party members (game_id 0 Vi,
     1 Kabbu, 2 Leif), 6 field abilities (game_id 0 Progressive Beemerang, 1 Horn Slash, 2 Progressive Freeze, 3 Jump,
     4 Progressive Dash, 5 Bee Fly, 6 Beetle Dig, 7 Shield; their names and copies are in abilities.py).

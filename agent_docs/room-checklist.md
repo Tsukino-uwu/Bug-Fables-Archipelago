@@ -60,7 +60,8 @@ as it is, a frozen record.
 - [x] BugariaCommercial (10) — for the quest pass: the Lore Book dig spot (flag 388); for the discovery sweep:
   the Termacade (discovery 42, the greeter's first talk, needing nothing)
 - [x] BugariaTheater (26) — for the quest pass: Chubee's play (the stage takes Jump; 30 berries, line 63)
-- [x] BugariaResidential (28) — for the quest pass: the Old Book delivery, the moth house (flag 130)
+- [x] BugariaResidential (28) — for the quest pass: the Old Book delivery, the moth house (flag 130); rechecked
+  2026-10-08 (the fountain rooftop by Bee Fly too, the banker a new location)
 - [x] UndergroundBar (30) — for the discovery sweep: the one recorded on entering (Event80); Shades' shop waits
   for all 50 crystal berries as locations (build step 11)
 - [x] AntPalace1 (31)
@@ -111,7 +112,8 @@ as it is, a frozen record.
 - [x] GoldenHillsDungeonEntrance (45) — for the enemy pass: the Mothiva and Zasp fight (Event67, on placing the Big Crank)
 - [x] GoldenHillsDungeonLeftMain (46)
 - [x] GoldenHillsDungeonCrankLeft (47) — its crank spot added with the Wooden Crank step (Next 62)
-- [x] GoldenHillsDungeonRightCrank (48) — for the quest pass: the butler (Butler Missing!, Event103); its crank half with Next 62
+- [x] GoldenHillsDungeonRightCrank (48) — for the quest pass: the butler (Butler Missing!, Event103); its crank half
+  with Next 62
 - [x] GoldenHillsLowerRightCrank (49) — its crank spot with Next 62; for the enemy pass: the Chomper, Beemerang Halt alone
 - [x] GoldenHillsDungeonLeftCrankHalf (50) — its crank half with Next 62 (Vi for the Venus Buds)
 - [x] GoldenHillsDungeonUpperMain (51) — for the quest pass: the mole cricket (flags 130 to 577), the offerings' chain
@@ -119,13 +121,16 @@ as it is, a frozen record.
 - [x] GoldenHillsDungeonBoss (53) — for the enemy pass: the Venus' Guardian fight (Event73, Jump up to it; its needs untested)
 - [x] GoldenPitcher1 (203)
 - [x] GoldenPitcher2 (205)
-- [x] PitcherPlantArena (239) — for the quest pass: the pitcher's bounty fight (Event124, flag 494), with the other bounties: it gives the Crystal Fang; what the fight needs, tested then (the user)
+- [x] PitcherPlantArena (239) — for the quest pass: the pitcher's bounty fight (Event124, flag 494), with the other
+  bounties: it gives the Crystal Fang; what the fight needs, tested then (the user)
 
 ## Golden Path
 
-- [x] GoldenHillsCableCar (29) — for the quest pass: the CableCar quest (its NPC, Event91, the cranks), then the Super Block+ medal (flag 534, Jump)
+- [x] GoldenHillsCableCar (29) — for the quest pass: the CableCar quest (its NPC, Event91, the cranks), then the Super
+  Block+ medal (flag 534, Jump)
 - [x] GoldenHillsPath2 (38) — for the quest pass: the sleepy NPC (the CableCar quest, until flag 182)
-- [x] GoldenSettlementEntrance (39) — for the quest pass: the horn quest and Tanjerin (the minigame door's rock, flags 274-275); the caravan's other stalls, one at a time (the user)
+- [x] GoldenSettlementEntrance (39) — for the quest pass: the horn quest and Tanjerin (the minigame door's rock, flags
+  274-275); the caravan's other stalls, one at a time (the user)
 - [x] GoldenHillsPath3 (44)
 - [x] GoldenSMinigame (114) — for the quest pass: the mayor's late visit (20 worms, the Desert Key, quest 46, flags 557-559)
 

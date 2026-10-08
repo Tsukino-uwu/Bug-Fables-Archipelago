@@ -806,6 +806,17 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     **`BugariaResidential` (2026-10-06, the user):** free between its two doors and to the cicada's house; the Bad
     Book's rooftop (location 32) takes the horn (grass) and no Jump; the fountain rooftop (location 33) takes Jump and
     Freeze. The rest (the moth house from flag 130, the quests) waits for the quest pass.
+    **Rechecked (2026-10-08, the user):** the fountain rooftop also by Bee Fly alone (picked up so); the banker
+    (`Fixedbanker - Duplicate`, entity 37, up at height 6.45) takes Jump. **The Bank of Bugaria** (the sign, line 79:
+    "50 berries for a new account!"; read in the script dump and `textsearch`): the banker's lines are 65 (first talk,
+    "Oho. First time here, aren't you?", which sets flag 253: `textsearch flag,253`), 66 from flag 253
+    (`checkmoney,50`), 68 opening the account (`money,-50`, flag 254), then 70 from 254. Flag 630 is set only at
+    line 82 and read only there and at line 70, in any text file (`textsearch flag,630` and `630,`, 2026-10-08). The
+    balance is `flagvar[26]`: a deposit (line 76) adds to it, capped at 10000; from line 70 or after a deposit, a
+    balance of 500 or more goes to line 82 (`checktrue,630,73`, then flag 630 and `giveitem,1,176`, the Platinum
+    Card), once. Interest (`MainManager.DoClock`): every 30 game minutes with flag 254 and a balance, 2% of it, 4% with
+    flag 630, at least 1 and at most 75; so in the game the doubling comes from 630, never from holding the card.
+    Used by `logic/bugaria_city.py`.
     **`UndergroundBar` (2026-10-06, the user):** everything reachable and in and out free: the bounce pad reaches the
     high door without Jump. Walking in records a discovery, in Shades' scene (Event80, the `shades event` trigger
     until flag 141).

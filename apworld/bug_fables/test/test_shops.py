@@ -80,13 +80,13 @@ class TestShopContentsDefault(BugFablesTestBase):
 
 
 class TestShopContentsFillerOnly(BugFablesTestBase):
-    # With discoveries on, a solo seed has exactly enough filler for every shop location: the Progressive Boat's two
-    # copies take two filler slots, and the tutorial leaf and the throne room add two back. Filler Only holds (the
-    # shops are excluded).
-    options = {"shop_contents": "filler_only", "shuffle_discoveries": True, "starting_party_member": "off",
-               "filler_starting_checks": False}
+    # With discoveries and hidden items on, a solo seed with the story's party has filler enough for every shop
+    # location, so Filler Only holds (the shops are excluded). Without hidden items it falls short since Crystal Berry
+    # and Hard Mode became useful (2026-10-08).
+    options = {"shop_contents": "filler_only", "shuffle_discoveries": True, "shuffle_hidden_items": True,
+               "starting_party_member": "off", "filler_starting_checks": False}
 
-    def test_just_enough_filler_with_discoveries(self) -> None:
+    def test_enough_filler_with_discoveries_and_hidden_items(self) -> None:
         shop = self.world.get_location("Bugaria City: Commercial District, Medal Shop 1")
         self.assertEqual(shop.progress_type, LocationProgressType.EXCLUDED)
         self.assertFalse(self.world.shops_fell_back)
@@ -95,8 +95,9 @@ class TestShopContentsFillerOnly(BugFablesTestBase):
 
 class TestShopContentsFillerOnlyAfterStartingChecks(BugFablesTestBase):
     # The same seed with Filler Starting Checks on: the opening's spots and the shops are all excluded, and the room
-    # has filler enough for both (since the dig spots' and grass items' locations, 2026-10-05), so nothing falls back.
-    options = {"shop_contents": "filler_only", "shuffle_discoveries": True, "starting_party_member": "off"}
+    # has filler enough for both, so nothing falls back.
+    options = {"shop_contents": "filler_only", "shuffle_discoveries": True, "shuffle_hidden_items": True,
+               "starting_party_member": "off"}
 
     def test_opening_and_shops_both_filler_only(self) -> None:
         shop = self.world.get_location("Bugaria City: Commercial District, Medal Shop 1")
@@ -107,8 +108,8 @@ class TestShopContentsFillerOnlyAfterStartingChecks(BugFablesTestBase):
 
 
 class TestShopContentsFillerOnlyFallsBack(BugFablesTestBase):
-    # A solo seed without crystal berries is short of filler (46 filler items for 56 excluded spots, 2026-10-08; the
-    # rooms mapped since 2026-10-05 gave the default seed enough): shops fall back to No Progression and still generate.
+    # A solo seed without crystal berries is short of filler, and since Crystal Berry and Hard Mode became useful
+    # (2026-10-08) the default seed is too: shops fall back to No Progression and still generate.
     options = {"shop_contents": "filler_only", "shuffle_crystal_berries": False}
 
     def test_shops_fall_back_to_no_progression(self) -> None:

@@ -121,10 +121,14 @@ LOCATIONS = (
     Location("Bugaria City: Residential District, Rooftop", 32, "BugariaResidential",
              Source(flag=621, pickup=Pickup(map="BugariaResidential", type=1, item=174)),
              rule=CanUse("Horn Slash"), no_jump=True),
-    # On top of a house by the fountain: Leif's ice and Jump.
+    # On top of a house by the fountain: Leif's ice and Jump, or Bee Fly alone.
     Location("Bugaria City: Residential District, Fountain Rooftop", 33, "BugariaResidential",
              Source(flag=59, pickup=Pickup(map="BugariaResidential", type=2, item=18)),
-             rule=CanUse("Jump") & CanUse("Freeze")),
+             rule=(CanUse("Jump") & CanUse("Freeze")) | CanUse("Bee Fly"), no_jump=True),
+    # The Bank of Bugaria's banker, up a ledge (Jump): the Platinum Card once the account (50 berries to open) holds 500.
+    # Berries aren't in the logic yet: how they will be is still to decide (apimplementation.md, Next 63).
+    Location("Bugaria City: Residential District, Banker", 176, "BugariaResidential",
+             Source(flag=630, give=Give(map="BugariaResidential", type=1, item=176)), rule=CanUse("Jump")),
     # Merab's medal shop, full stock from a new game: one location per copy she ever stocks, done by a per-copy bit in
     # the save.
     Location("Bugaria City: Commercial District, Medal Shop 1", 34, "BugariaCommercial",
