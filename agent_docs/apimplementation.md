@@ -132,6 +132,7 @@ this file and that doc disagree, that doc is right.
 58. [Build step 58: the PopTracker pack's Archipelago interface](#build-step-58-the-poptracker-packs-archipelago-interface)
 59. [Build step 59: the wizard's tower open, its fall scene kept away](#build-step-59-the-wizards-tower-open-its-fall-scene-kept-away)
 60. [Build step 60: the goal guard, a goal flag set only by its own events](#build-step-60-the-goal-guard-a-goal-flag-set-only-by-its-own-events)
+61. [Build step 61: the swamp bridge kept up, its collapse kept away](#build-step-61-the-swamp-bridge-kept-up-its-collapse-kept-away)
 
 **How it works**
 
@@ -761,12 +762,8 @@ be wrong.
   (`LoadMap(232)`). Options (the user, later): hold the trigger until its actor exists, or a stand-in where a scene
   changes nothing beyond itself; first a sweep for every scene trigger naming an entity absent on a new file. Build
   step 12.
-- **The swamp bridge is to stay up** (the user, 2026-10-04): its collapse (Event130 on `SwamplandsBridge`, flag
-  336) never to happen. What 336 and 337 change: read (2026-10-08, code and the dumps; `MEASURED.md`,
-  `SwamplandsBridge`): 336 only hides the upper bridge's models and removes the scene's leafbugs and trigger here, and
-  the lake's turn-back (already kept away); 337 is the lower bridge's switch (Kabbu's horn or Dash), and also loads
-  `ChomperCave1`'s bridge down, whose own switch sets 689: to see on screen. Next, the room's areas and both sides'
-  logic, when the mapping reaches it (the user maps each room on screen). **Maki** (the user,
+- **Maki with the swamp bridge kept up** (built: build step 61). Still to see: the small bridge's flag 337 also loads
+  `ChomperCave1`'s bridge down, whose own switch sets 689 (when that room is mapped). **Maki** (the user,
   2026-10-08): the Far Grasslands' arrival scene (Event125) makes him a follower who fights alongside in the Far
   Grasslands and the swamp, and the collapse is what removes him in vanilla. With the bridge kept up he may stay
   through the swamp (no harm to the logic, which counts only the party's own attacks), but never at the swamp's boss
@@ -5468,6 +5465,39 @@ The rule, in `CLAUDE.md`: a goal flag is set only by its own events, ever; a new
 `honey_factory.py`, `rubber_prison.py`, `giants_lair.py` and `upper_snakemouth.py`, `slot_data.py`. The mod:
 `Items/GoalGuard.cs`, `World/KeptOpen.cs` (the repoints), `Items/LocationChecks.cs` (`CheckGoal`), `Ui/MenuToggle.cs`
 (`HoldBackFile`).*
+
+## Build step 61: the swamp bridge kept up, its collapse kept away
+
+**Asked and decided (the user, 2026-10-04):** the swamp bridge's collapse (`Event130` on `SwamplandsBridge`, flag 336)
+never happens in a seed. In vanilla it drops the party to the room's bottom, by its door and the Horn Dash's lesson,
+and is what removes Maki. What 336 changes was read first (`MEASURED.md`, `SwamplandsBridge`): only this room's
+upper bridge and its walls, the scene's leafbugs and trigger, and the lake's turn-back (already kept away).
+
+**Mapped on screen (2026-10-08 and 09, the user, a vanilla file and then a seed):** the scene crashed on a file with no
+follower (it asks for the first one, Maki in vanilla); then, room by room as `room-logic.md` describes, with the
+user's own sketch of the room. Along the way the user asked: "lets remove/hide the 3 leafbug npc's that appear during
+the cutscene"; "we should always have the spring/bounce pads present" (the bottom's, made only after the swamp's
+boss, "also prevents the bottom part from becoming a deadend"); and "can you remove the invisible walls that are around
+the big bridge in the middle?", so the bottom is a drop from the bridge.
+
+**Built** (the apworld only: the mod's own lists do it):
+1. **Kept away** (`kept_open`): the collapse's trigger and its three leafbugs.
+2. **Hidden** (`scenery_hidden`): the bridge's invisible walls (`Base/BridgeWalls`), as the collapse hides them.
+3. **Kept present** (`kept_present`): the bottom's bounce pad, up to the bridge's left end.
+4. **The logic** (`logic/wild_swamplands.py`): the bridge the map's own region with both its doors; the top right (the
+   small bridge's switch, the Horn Slash) a drop from the right side, Jump back; the top door's platform from there by
+   Bee Fly, or by Jump once the small bridge is down; its red pad a drop from the top door, Jump back, sending the party
+   to the left end, whose boulder (Horn Dash) opens a pad back down; the bottom (its door, the save crystal, the lesson)
+   free both ways. The lesson's check (location 72) needs nothing: talked to, the boulder plays it even without Kabbu,
+   and arriving by the bottom door pushes the party past it. Its story-order stand-in is gone. A way inside a room
+   may now land in a part of it (`Transfer.to_area`), as this room's loop needs. Tests `TestSwampBridge`.
+
+**Status:** built (2026-10-09); seen the same day in seed `AP_70580691250444408633` through the dev `liveslot`: no scene
+and no leafbugs, the bottom's pad there and landing at the left end, the drop from the bridge to the bottom.
+
+*Code: `logic/wild_swamplands.py` (`KEPT_OPEN`, `KEPT_PRESENT`, `SCENERY_HIDDEN`, `MAP_AREAS`, `TRANSFERS`, the small
+bridge's story event), `data_types.py` and `regions.py` (`Transfer.to_area`). The mod: `World/KeptOpen.cs`,
+unchanged.*
 
 # How it works
 

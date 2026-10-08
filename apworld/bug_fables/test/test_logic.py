@@ -610,3 +610,46 @@ class TestWizardTower(BugFablesTestBase):
             with self.subTest(door=door):
                 entrance = self.multiworld.get_entrance(door_name(map_name, door), self.player)
                 self.assertTrue(entrance.access_rule(self.state_with()))
+
+
+class TestSwampBridge(BugFablesTestBase):
+    # Kept up in a seed (the user, 2026-10-04): the collapse and its leafbugs away, the bottom's bounce pad always
+    # there.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_kept_up(self) -> None:
+        data = self.world.fill_slot_data()
+        for entity in ("eventtrigger", "leafbug", "leafbug - Duplicate"):
+            self.assertIn({"map": "SwamplandsBridge", "entity": entity}, data["kept_open"])
+        self.assertIn({"map": "SwamplandsBridge", "entity": "spring - Duplicate - Duplicate"}, data["kept_present"])
+        self.assertIn({"map": "SwamplandsBridge", "entity": "Base/BridgeWalls"}, data["scenery_hidden"])
+
+    def test_top_door_from_the_right_side(self) -> None:
+        # Bee Fly, or Jump once the small bridge is knocked down; back, the small bridge and Jump.
+        up = self.multiworld.get_entrance("SwamplandsBridge (Top Right) to SwamplandsBridge (Top)", self.player)
+        down = self.multiworld.get_entrance("SwamplandsBridge (Top) to SwamplandsBridge (Top Right)", self.player)
+        bridge = "Swamp Lower Bridge Knocked Down"
+        self.assertFalse(up.access_rule(self.state_with("Jump")))
+        self.assertTrue(up.access_rule(self.state_with("Bee Fly")))
+        self.assertTrue(up.access_rule(self.state_with("Jump", bridge)))
+        self.assertFalse(down.access_rule(self.state_with("Bee Fly")))
+        self.assertTrue(down.access_rule(self.state_with("Jump", bridge)))
+
+    def test_red_pad_from_the_bridge(self) -> None:
+        # The left end's boulder, Horn Dash; the pad itself sends the party back up with nothing.
+        down = self.multiworld.get_entrance("SwamplandsBridge to SwamplandsBridge (Red Bounce Pad)", self.player)
+        up = self.multiworld.get_entrance("SwamplandsBridge (Red Bounce Pad) to SwamplandsBridge", self.player)
+        self.assertFalse(down.access_rule(self.state_with("Progressive Dash")))
+        self.assertTrue(down.access_rule(self.state_with("Progressive Dash", "Progressive Dash")))
+        self.assertTrue(up.access_rule(self.state_with()))
+
+    def test_bottom_free_both_ways(self) -> None:
+        # Dropped down to from the bridge, its walls taken away; back up by the bottom's bounce pad.
+        for name in ("SwamplandsBridge to SwamplandsBridge (Bottom)", "SwamplandsBridge (Bottom) to SwamplandsBridge"):
+            with self.subTest(entrance=name):
+                self.assertTrue(self.multiworld.get_entrance(name, self.player).access_rule(self.state_with()))
+
+    def test_boulder_needs_nothing(self) -> None:
+        boulder = self.multiworld.get_location("Wild Swamplands: Bridge, Boulder", self.player)
+        self.assertTrue(boulder.access_rule(self.state_with()))
+        self.assertEqual(boulder.parent_region.name, "SwamplandsBridge (Bottom)")

@@ -1323,7 +1323,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   the middle, free, a one-way (the bottom then still Jump or Bee Fly away); after, to and from the middle over the trunk
   with Jump or Bee Fly. One lily pad and one grass tuft (no flag 41 here); a Leafbug Clubber and Ninja for the enemy
   pass; no items.
-  **`SwamplandsBridge`, the swamp bridge (2026-10-08, code and the dumps only; not yet mapped on screen):** two
+  **`SwamplandsBridge`, the swamp bridge (2026-10-08, code and the dumps; seen on screen below):** two
   bridges. The upper one (`Base/Bridge`, `Base/BridgeWalls`, `Base/Cube`: `ConditionChecker`s hidden from 336) spans
   the room at the doors' height (y 0), from `loadzoneleft` to `loadzone right`. Its collapse is `Event130`
   (`eventtrigger` at x 19.4, until 336; `EventControl.cs:21945-22257`): the three `leafbug`s (until 336) jump, one
@@ -1332,7 +1332,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   down by a leafbug's arrow, the leafbugs leave and are destroyed, Maki stops following (`extrafollowers.Remove(46)`),
   then 336 is set. **What 336 changes, everywhere:** these three models hidden, the leafbugs and the trigger gone, and
   `FarGrasslandsLake`'s turn-back (`blocker`, `Event12`, until 336; kept away). No code reads it (its one mention sets
-  it). **337 is the lower bridge's switch:** `@Bridge1` (a `Switch` at y -5, data `1 94 0 0 1`, there until 337) is hit
+  it). **337 is the small bridge's switch:** `@Bridge1` (a `Switch` at y -5, data `1 94 0 0 1`, there until 337) is hit
   only by Kabbu's horn or his Dash (`data[4]` 1: tags `BeetleHorn`, `BeetleDash`; `NPCControl.cs:4667-4670`) and starts
   `Event94`, which swings `Base/Bridge1`'s `Bridge` down to the pose of `Bridge (1)` and sets the switch's
   `activationflag`, 337. From 337 `Base/Bridge1/Bridge` is hidden and `Bridge (1)` shown, so it stays down. No code
@@ -1340,6 +1340,24 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   sets 689 and is there until 689: from the dumps, its bridge would load raised again, its switch gone, unless the
   swamp's switch was hit. To see on screen. Also here: `eventtrigger2` at the bottom (`Event131`, until 39) teaches the
   Horn Dash and breaks the bottom `rock` (until 39); a save crystal at the bottom (one entity until 359, another from).
+  **Seen on screen (2026-10-08, the user, a vanilla file and then a seed):** with the bridge up, its left and right
+  doors are free between them. From the right side, a drop down a path to the top right (a green bounce pad, the small
+  bridge's switch, knocked down by the horn), Jump back up; from there, across to the top door's platform (to the boss),
+  by Bee Fly, or over ledges by Jump once the small bridge is down, both ways. Down a small ledge from the top door, a
+  red bounce pad (Jump back up), which sends the party up to the bridge's left end; the left end's boulder
+  (`Fixedupperrock`, no flag), broken by Horn Dash, opens a red pad landing beside the other one. The bottom (its door,
+  the save crystal, the lesson's boulder) is reached from the rest only by a drop from the bridge once its invisible
+  walls (`Base/BridgeWalls`, there until 336) are taken away (2026-10-09; with them, cut off): arriving through its door
+  pushes the party past the boulder without sticking, and the boulder can't be broken, even with Horn Dash: only talked
+  to, which starts the lesson. The collapse scene crashed on a file with no follower (`Event130` asks for entity 1000,
+  the first follower, Maki in vanilla). From the bottom door the save crystal and the boulder need nothing: talking to
+  the boulder plays the lesson, sends its check and removes it for good, even with Kabbu out of the party (2026-10-09:
+  Leif broke it in his place). The bottom's bounce pad (`spring - Duplicate - Duplicate`, made from 359, the swamp's
+  boss; kept present in a seed) sends the party to the bridge's left end, where the top door's red pad lands too: a
+  one-way up. The green pad is on the way between the top door and the right door; the top door's red pad is reached
+  only from the top door (or the left end's boulder). The user's sketch (2026-10-09): the left door's platform (its
+  boulder and pad), the bridge across to the right side, a path up from there to the top right, the small bridge across
+  to the top door's platform (its pad), and the bottom below the bridge.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

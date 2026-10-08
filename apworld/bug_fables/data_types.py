@@ -486,6 +486,7 @@ class Transfer:
     two_way: bool = True
     way_back: Rule | None = None
     from_area: str | None = None  # the part of from_map (an Area's name) it leaves from and lands back in
+    to_area: str | None = None  # the part of to_map (an Area's name) it lands in and leaves back from
 
 
 @dataclass(frozen=True, slots=True)
