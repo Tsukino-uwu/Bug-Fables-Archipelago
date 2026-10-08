@@ -747,6 +747,11 @@ be wrong.
 
 **Known issues:**
 
+- **A borrowed story flag sends the goal** (seen 2026-10-08, `Swamplands2`): 25 entities in 13 rooms (grass,
+  switches, a pressure plate) carry flag 41, the first boss beaten and the first artifact, as their activation flag;
+  cutting or hitting one sets it, and a seed's goal of one artifact was sent and every item released. Cut grass also
+  hands 41 to its drop, so `Wild Swamplands: Lily Pad Pond, Grass in the Bottom Right` can't be sent yet. The user's
+  rule: no goal may ever be reached a way we don't intend. The fix: build step 60 (an audit first).
 - **The Rubber Prison's checkpoint corridor from the yard** (2026-10-04): in the game its gates may be shut from the
   yard's side, so it never leads on; the logic still lets the yard reach the spike room through it (as before
   2026-10-04). It needs the corridor split into two areas, the yard's and the spike room's (`room-logic.md`, the
@@ -3148,7 +3153,9 @@ either door, for the enemy pass; its berries, quest and prize medal for the ques
 (free; a new location: the Mechanical Claw behind a small bush, a new useful key item, progression once Defiant Root's
 trade for it is a location; Maki and Kina's platform, Jump, for the quest pass), 127 of 244, the Far Grasslands done;
 the Wild Swamplands from 2026-10-08: the swamp's first room (free; its opening talk skipped with Skip cutscenes, the
-mod guide's step 10), 128 of 244; the rest of `room-checklist.md` to go.
+mod guide's step 10), 128 of 244; the lily pad pond (its top door Jump and the horn or Bee Fly up, the horn or Bee Fly
+down; two new locations: a dig spot up top, Beetle Dig, and a Honey Drop in grass by the bottom door, the horn; its
+Leafbug ambush for the enemy pass), 129 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**128 of 244 done.**
+**129 of 244 done.**
 
 ## Outskirts
 
@@ -197,7 +197,7 @@ as it is, a frozen record.
 ## Wild Swamplands
 
 - [x] SwamplandsEntrance (145) — its opening talk skipped with Skip cutscenes (the mod guide, step 10)
-- [ ] Swamplands2 (148)
+- [x] Swamplands2 (148) — for the enemy pass: the Leafbug ambush (Event128, until 334, from either side)
 - [ ] Swamplands3 (151)
 - [ ] SwamplandsBridge (152)
 - [x] SwamplandsBoss (154) — mapped early (2026-10-08) while testing its boss; for the quest pass: Kabbu's postgame

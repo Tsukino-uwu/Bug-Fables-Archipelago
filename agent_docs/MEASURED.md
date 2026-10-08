@@ -1299,6 +1299,19 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   until 357, data `1 0 1`: `data[2]` 1 starts it by itself) plays line 1 on entering by either door (seen both): it
   sets 357 and shows a bubble, nothing else, and nothing else reads 357. Nine grass tufts hiding nothing; a Madesphy
   for the enemy pass; no items.
+  **`Swamplands2`, the lily pad pond (2026-10-08, the user, the dumps and code):** two parts. The bottom (the door from
+  `SwamplandsEntrance`, ground level) and the top (the door to `Swamplands3`, height 6): up across water (a hazard),
+  three moving lily pads (`PathPlatform`s, height 4.65), two bounce pads and ledges blocked by grass, Jump and the
+  horn, or Jump and Bee Fly; back down the horn or Bee Fly, no Jump. The Leafbug ambush (`ambush trigger`, `Event128`,
+  until 334, touched, not by itself; it sits just inside the top door, so the walk-in from `Swamplands3` starts it at
+  once): a fight with no escape and the mini-boss music against a Leafbug Ninja, Archer and Clubber (65-67, on the
+  ground), then 334 set (its only flag); a Madesphy from 334; both ways work after (seen). A Poison Bomb dug up in the
+  top part (`Mound`, data `0 0 31`, flag 737, regional flag 6), Beetle Dig; a Honey Drop from the grass by the bottom
+  door (`funGrass` at (11, 0, -1), vectordata x 1, regional flag 6, the same as the dig spot's), the horn; its two
+  neighbours drop berries (6 and 7). **Every grass here has activation flag 41** (the first boss), set when cut
+  (`CutGrass` calls `ActivateRegion`) and handed to its drop (`tempitem.activationflag`): cutting one on a file
+  before the first boss set 41, the mod counted an artifact, and the seed's goal (one artifact) was sent (seen,
+  2026-10-08). The fix: `apimplementation.md`, build step 60.
   **`SwamplandsBridge`, the swamp bridge (2026-10-08, code and the dumps only; not yet mapped on screen):** two
   bridges. The upper one (`Base/Bridge`, `Base/BridgeWalls`, `Base/Cube`: `ConditionChecker`s hidden from 336) spans
   the room at the doors' height (y 0), from `loadzoneleft` to `loadzone right`. Its collapse is `Event130`
