@@ -1206,6 +1206,13 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (`tentevent`, `Event148`) sets only 360, read by the second save crystal. Kept open at the user's ask; arriving
   through it on the Wasp Kingdom side the patrol (`see area`) caught the party once, no loop (`lastpos` outside it).
   Madeleine (375 until 389) for the quest pass; no items.
+  **`SwamplandsBoss`, the swamp boss's room (2026-10-08, the user, `Event137` and the battle code):** the bottom door
+  (to `SwamplandsBridge`), the save crystal and the healing flower (`venus`, berries for a heal) free; the top door (to
+  `FGOutsideSwamplands`' top) across lily pads, Jump, past the boss in the middle: its trigger (`event`, until 359)
+  starts `Event137` from either side (seen from the top), the Centipede (enemy 69, 76 HP, a 10-HP scripted end:
+  Vi and Leif knocked out, Kabbu healed and boosted), which burrows (Leif), no summons. Maki, following, steps aside for
+  it; the room's own Maki (until 359) is the injured one. `kabbuevent` (555 until 645) and `Base/DigMound` (hidden
+  from 645) for the quest pass; no items.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

@@ -3056,7 +3056,8 @@ or Bee Fly), 117 of 244; outside the Fishing Village (its door Jump; Riz's fight
 244; east of the crossroads (three parts: the horn to the bounce pad, Jump on to the right door, Jump and a drop back),
 119 of 244; outside the swamp (its top Jump, Icicle and Horn Dash up, a drop then Icicle and Horn Dash down; its Wasp
 Kingdom door, there in the game only after the swamp's boss, open from the start and Maki's turn-back kept away), 120 of
-244; the rest of `room-checklist.md` to go.
+244; the swamp boss's room, out of order while testing its boss (Jump and Leif across, past the boss), 121 of 244; the
+rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

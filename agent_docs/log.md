@@ -3498,3 +3498,20 @@ either one wrong).
   (the room's injured Maki), the user: fine. At 0 HP (`killall`) the 10-HP end still fired, but Vi and Leif stood:
   enemy scaling had cut the scripted knockout (`NoExceptions`, the target's whole HP); now left unscaled, and `killall`
   takes an HP (the user: useful later). Replayed at 11 HP: Vi and Leif knocked out, Kabbu's comeback, as vanilla.
+- **`SwamplandsBoss`, mapped early** (the user, while there): the top door across lily pads, Jump, past the boss (Leif,
+  it burrows; no summons), both ways; the bottom free. The dig mound is scenery, Kabbu's grave for his old team, for
+  his postgame scene (the user). The user: done. Ticked, 121 of 244.
+- **Handoff (2026-10-08, the user: stop here, continue in a new chat):** 121 of 244 ticked. Next: `FarGrasslands4`
+  (153), then `WizardTowerBasement`, `WizardTowerStairs`, `WizardTowerAttic`, `BroodmotherLair`, `FGClearing`, then the
+  Wild Swamplands (`SwamplandsBoss` already done). Built and seen this session: Patton's lab open, the Termite gate's
+  first opening skipped and opened only by talking to it, the plaza's escort kept away, Riz's fight always offered
+  with Maki (build step 54) and Maki's hits scaled, the swamp boss's scripted knockout unscaled, `killall <hp>`.
+  Decided, still to build: the swamp bridge kept up (Maki stays; he steps aside at the swamp boss by himself),
+  `WaspKingdomOutside`'s bottom arrival reworked (its checklist row), the Golden Settlement's after-festival state
+  (build step 52's To do), the door pass and the widened item sweep after the rooms (`room-logic.md`). Open before the
+  push: tests for `ItemOnHand`, `riz_fight_with_follower`, the lake gate's `DoorRule`s, then the full suite and the
+  fuzzer (not run, as asked). The server from the last session still runs on 38281 with seed
+  `AP_81434407810428720732` (the user's save on it); each new build drops the live seed data, so `liveslot` again after
+  a reload. Dev settings: `onehit` off (turned off this session), `InfJump` and `BumpKill` on, `QuietBursts` and
+  `AdoptSeed` off; the command file is the earlier session's scratchpad `cmds.txt`, the player file `players/BugTester.yaml`
+  in session f7f04659's scratchpad.
