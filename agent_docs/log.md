@@ -82,6 +82,7 @@ either one wrong).
 - [2026-10-07: the cave path](#2026-10-07-the-cave-path)
 - [2026-10-07: the power plant](#2026-10-07-the-power-plant)
 - [2026-10-08: Archipelago 0.6.8](#2026-10-08-archipelago-068)
+- [2026-10-08: the push at `9c1ba1d`, the Far Grasslands drafts](#2026-10-08-the-push-at-9c1ba1d-the-far-grasslands-drafts)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -3594,3 +3595,13 @@ either one wrong).
   run there ended (`host.yaml` backed up first): it changed nothing, so `host.yaml` already had every 0.6.8 setting.
   The refused autosave comes only after the Logic Test's own tests (27 pass), which change a setting in memory;
   Archipelago refuses to save during tests, so nothing is written. Our scoped suite ends without it (955 passed).
+
+## 2026-10-08: the push at `9c1ba1d`, the Far Grasslands drafts
+
+- **The full run on `9c1ba1d`** (the Room Swap repair, left unrun by the last session): 958 passed, the Logic Test
+  check 90 of 90, the fuzzer 0 of 10000 and Universal Tracker's hook 0 of 10000 (0 timeouts, 0 ignored). Pushed
+  `05b9e86..9c1ba1d` (from Git Bash: the PowerShell tool's git can't reach the credential manager's prompt). CI and
+  Preflight green: 965 passed on 3.13, both fuzzers 0 of 10000 over their five shards. The Shuffle Jump and Shuffle
+  Field Moves fill error dropped from Known issues, as its entry said to once CI showed it gone.
+- **The checkout:** the run warned that `worlds/dkc3` had no `__init__.py`: only `__pycache__` folders left from before
+  0.6.8, which deleted DKC3 upstream. Removed on the user's yes.

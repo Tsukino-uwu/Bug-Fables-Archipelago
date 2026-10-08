@@ -776,18 +776,6 @@ be wrong.
   those needing no Jump above all (the room mapping, Next 2), and a goal past chapter 1. Until then a fuzzer or CI
   `FillError` with *minimal* and Shuffle Jump is this issue. Re-measured as locations come: the failing pair over 400
   seeds (its yaml options above), done at 0 there and 0 of 10000 fuzzed.
-- **A fill error with Shuffle Jump and Shuffle Field Moves, solo, any accessibility** (measured 2026-10-05: 25 of 200
-  seeds, defaults otherwise). Mapping the Outskirts put measured Jump needs on the early ways out (East Road's right
-  door, the first corridor, the Golden Path's middle), and Shuffle Hidden Items (off) took locations 12 and 25 out of
-  the default pool, so with both shuffles only the Ladybug Siblings' House takes progression at the start; a key item
-  there that opens nothing fails the fill. Archipelago's own `test_fill` hits it in the test classes with both
-  options. **Accepted for now (the user, 2026-10-05: "its fine/expected for it to break for now if it can't place
-  things as there is not a lot of things to place")**: the fix is still more early locations, as the rooms past the
-  Outskirts get their real, smaller needs; CI's fuzzer stays red with it until then. **Re-measured 2026-10-08, at
-  Archipelago 0.6.8: 0 of 200** (the same options, solo, seeds 1-200, each built to `pre_fill` and filled with
-  Archipelago's `distribute_items_restrictive` as `test_fill` does; options read back from the world), and no
-  `FillError` in 10000 fuzzed seeds that day. The rooms mapped since 2026-10-05 added early locations, and 0.6.8's
-  fill in batches (#3872) came at the same time; which one cleared it isn't told apart. To drop once CI shows it gone.
 - **Two items named "Leif"** (found by the full review, 2026-09-29; read in the code): with the story's party, the
   story event *Leif Joins* makes an event item "Leif" with no id, while the real member item "Leif" has one;
   Archipelago's `world api.md` requires one id per item name. Next 43, item 3.

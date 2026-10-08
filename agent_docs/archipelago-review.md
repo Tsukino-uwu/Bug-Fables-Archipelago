@@ -271,6 +271,7 @@ APQuest's were read on 2026-10-08, and each line is handled:
   `StrEnum` still equals, and the door plando tests pass at 0.6.8. `per_slot_randoms` removed, `get_all_state`'s
   `use_cache` deprecated: unused, our tests call `get_all_state()` bare. An empty `And()` and an empty
   `has_from_list`/`has_group` now true: none in our rules.
-- **The fill in batches (#3872) and the filler start inventory fix (#6246)**: the known fill error re-measured at 0.6.8
-  (`apimplementation.md`, Known issues): re-measured at 0.6.8 on 2026-10-08, 0 of 200 (25 of 200 at 0.6.7 on
-  2026-10-05, with fewer rooms mapped).
+- **The fill in batches (#3872) and the filler start inventory fix (#6246)**: the known fill error (Shuffle Jump with
+  Shuffle Field Moves, solo) re-measured at 0.6.8 on 2026-10-08, 0 of 200 (25 of 200 at 0.6.7 on 2026-10-05, with
+  fewer rooms mapped); dropped from `apimplementation.md`'s Known issues the same day, once CI's 10000 fuzzed seeds
+  at `9c1ba1d` came back clean.
