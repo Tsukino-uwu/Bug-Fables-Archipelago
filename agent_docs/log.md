@@ -83,6 +83,7 @@ either one wrong).
 - [2026-10-07: the power plant](#2026-10-07-the-power-plant)
 - [2026-10-08: Archipelago 0.6.8](#2026-10-08-archipelago-068)
 - [2026-10-08: the push at `9c1ba1d`](#2026-10-08-the-push-at-9c1ba1d)
+- [2026-10-08: the work that needs no game; the local plan files retired](#2026-10-08-the-work-that-needs-no-game-the-local-plan-files-retired)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -3620,3 +3621,43 @@ either one wrong).
   f7f04659's scratchpad, served on port 38281); `liveslot` wants a fresh `live-slot-data.py` file after the server and
   game are up. Dev settings unchanged: `InfJump` and `BumpKill` on, `OneHit`, `QuietBursts` and `AdoptSeed` off; the
   command file still the scratchpad `cmds.txt` of session bed6439d.
+
+## 2026-10-08: the work that needs no game; the local plan files retired
+
+- **Asked** (the user): what can be done without them or the game, and whether any of `AP-0.6.8.md`, `TO-CHECK.md`,
+  `UNIVERSAL-TRACKER-PLAN.md` and the pack's `PLAN.md` is done. A read-only audit (three agents, every item against
+  both repos) found `AP-0.6.8.md` done but two one-line notes, the Universal Tracker plan's leftovers movable into
+  build step 41, and stale lines in the rest. The user's picks: move the leftovers and delete both files, tidy
+  `TO-CHECK.md`, do all four jobs, keep exporting the pack from the checkout until the next release.
+- **Docs** (`0c99c55`): the Lost Sands gate out of Known issues (built and seen 2026-10-05) and its missing test
+  written; build step 41 holds the map tab's plan; the review names 0.6.8's hint points `RoomUpdate`; the fuzzer
+  hook's deferral claim cited to Universal Tracker's code. **Both local plan files deleted** once every item had a
+  tracked home; `TO-CHECK.md` tidied.
+- **The swamp bridge** (`936de98`): flags 336 and 337 read in `Event130`, `Event94`, the `Switch` code and the dumps
+  (`MEASURED.md`). Found on the way: `ChomperCave1`'s bridge reads 337, its own switch 689: for the screen.
+- **The trackers' keys** (`31c1ad9`, build step 57): the mod writes the maps visited and the map now. **The user, as it
+  was built:** "follow/do whatever Archipelago does as a standard", "don't re invent the wheel", "do a double check on
+  both the Archipelago & Archipelago/MultiClient.Net repo's". A workflow read each source (MultiClient.Net at
+  v6.7.1, Archipelago at 0.6.8) and a skeptic re-checked each finding. How it was found: build step 55 said the
+  library's `Operation.Update` takes only a dictionary, true but not the reason (its `+` takes any
+  `OperationSpecification`); the real reason is that its `DataStorage` never sends a default with an operation, and
+  an `update` on a missing key makes the server drop the client. Changed on it: the map through `DataStorage`, the
+  goal through `SetGoalAchieved()`, sessions by seed, team and slot (CommonClient since 0.6.8), lists sent whole at
+  each login, another seed's save kept out of the keys (doors too), a race in the lists' success path. Kept, with the
+  source's reasons: the one raw `Set` for lists, the liveness `Get`, the socket reflection. The plugin of `31c1ad9`
+  copied into the game (backup `stage\backup\20261008-154559`): the next game start runs it.
+- **Licensing:** the check agents' greps over the checkout showed lines from worlds with no row here (`mlss`, `tww`,
+  `kh2`, `wargroove`, `ladx`, `zillion`, `factorio`, `mm2`, `mm3`, `jakanddaxter`); nothing of them is used or cited.
+  The docs cite only worlds with rows, whose Use columns now name it (`pokemon_emerald`, `smw`, `cvcotm`, `tunic`,
+  `UndertaleClient.py`). Whether those greps need rows is the user's call.
+- **The pack** (build steps 56 and 58; its `a88b4ff`, `4416df9`, `9708953`): `ItemOnHand` serialized as its `Or`
+  (`c221045`), the export at world 0.3.0 (map areas, `CanReachRegion`, filters, `name#row` doors), parity per region
+  and per door with each new piece broken once and caught; PopTracker's interface read at `d2af7f1` and built its
+  way (its `ap-storage-example`): data storage, the goal, hints, DeathLinks, a new seed. Not built: `BulkUpdate`
+  (PopTracker defers logic updates itself for `ap` packs since 0.31), a hint's owner and a taken door's destination
+  on screen (picks for the user). 200 seeds, 112178 subtests and pack-checker pass.
+- **Open:** this repo's suite and fuzzer at the next push (the new tests unrun, as asked); every in-game and
+  PopTracker check in `TO-CHECK.md`; the map tab's host.yaml setting, which the preflight refuses (the user's call).
+  Found, not changed: if `SetGoalAchieved` throws while the session stays up, the goal waits for the next login
+  (`LocationChecks` marks it sent first); the tests' one warning is `pkg_resources` in Archipelago's own
+  `pokemon_emerald`, in the checkout.

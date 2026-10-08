@@ -127,6 +127,7 @@ this file and that doc disagree, that doc is right.
 55. [Build step 55: Universal Tracker's deferred entrances, shuffled doors hidden until taken](#build-step-55-universal-trackers-deferred-entrances-shuffled-doors-hidden-until-taken)
 56. [Build step 56: the PopTracker pack's export at world 0.3.0](#build-step-56-the-poptracker-packs-export-at-world-030)
 57. [Build step 57: the maps visited and the map the player is on, for the trackers](#build-step-57-the-maps-visited-and-the-map-the-player-is-on-for-the-trackers)
+58. [Build step 58: the PopTracker pack's Archipelago interface](#build-step-58-the-poptracker-packs-archipelago-interface)
 
 **How it works**
 
@@ -4658,7 +4659,8 @@ Room Swap put them, and fog of war. Its plan is the pack's own `PLAN.md`.
 pack-checker strict). Seen in PopTracker 0.35.4: the pack loads, the colours with no items are the ones the Lua
 predicted, a room's popup lists its checks, a clicked pin clears (2026-10-03); the world map like the pause map, and
 each area's rooms (2026-10-04). Not yet seen: every item held, auto-tracking. Still placeholders: the icons, the
-area names (the game's `AreaNames` text not read yet) and the room names.
+area names (the game's `AreaNames` text not read yet) and the room names. Exported again at world 0.3.0 (build step
+56) and its Archipelago interface built (build step 58), 2026-10-08.
 
 *Code: `rules.py` (`spot_rule`, `JUMP`), `regions.py` (`logic_entrances`, `MENU`), `custom_rules.py` (`WayBack`);
 tests `test_rule_export.py`;
@@ -4856,7 +4858,7 @@ and `kept_open` as before. The mod needed no change.
 both ways, the cave door and its arrival behind the barrier; decoupled: the area reachable with everything), failing
 without the change. Nine seeds with APQuest, the barrier on, doors off, coupled and decoupled: all generate; in one,
 Beetle Dig in sphere 3 and the den's Artifact in sphere 4. **Owed:** the PopTracker pack's export (a new region and an
-option filter with `contains`).
+option filter with `contains`): done 2026-10-08, build step 56.
 
 **The Snakemouth Barrier taken out** (the user, 2026-10-05, seen on screen with it up): the horn tutorial's scene
 moves the party past the gate, so it never held. Asked whether to drop the option with it: "Keep it, empty", ready for
@@ -5203,11 +5205,26 @@ Build step 48 had owed it.
 1. **`ItemOnHand` serialized as what it stands for** (`custom_rules.py`): its `to_dict` writes the `Or` of the item
    shops' `CanReachRegion`s, the way `rule builder.md` ("Custom serialization") lets a custom rule pick its format, so
    the pack reads only Archipelago's built-in rules; `rule_from_dict` reads it back as that `Or`.
+2. **The export** (the pack's `tools/export.py`): `CanReachRegion` supported; locations and story events in their map
+   area's region (`Area.region`), each still a section of its map's pin; a door's partner and a one-way's landing as
+   the region `entrances.py` connects them to (`door_region`, `landing_region`); option filters `contains` and `in`
+   (`rule_builder/options.py`, 0.6.8), each checked against the kind of option the Lua compares it for; option sets'
+   defaults as sorted lists, as slot_data sends them; the pending quest left out, as `world.py` leaves it out of
+   every seed; `world_version` from core. A rule, region or door the Lua can't follow stops the export. Doors named
+   `name#row` (two of one name in a map) are drawn too.
+3. **The Lua** (`scripts/logic.lua`): `CanReachRegion` read against the regions the sweep has reached, so a false
+   answer is asked again on its next pass, as Archipelago rechecks such an entrance.
+4. **Tests** (the pack's `tests/test_parity.py`): besides the locations, the regions reached and every entrance
+   Archipelago made, door by door, each door mode as often as the others, with Extra Roadblocks and each filter kind
+   rolled. Each new piece broken on purpose once (partners as bare maps, `contains` always true, `CanReachRegion`
+   always true): each was caught.
 
-**Status:** in progress (2026-10-08): `ItemOnHand`'s serialization built, its test written (run with the suite at the
-next push).
+**Status:** built (2026-10-08): the export at `31c1ad9`, world 0.3.0, 498 locations in 151 rooms of 22 areas; the
+pack's tests pass (200 seeds, 112178 subtests) and pack-checker; this repo's `ItemOnHand` test written, run with the
+suite at the next push. Not yet seen in PopTracker: the new rooms' pins and tabs.
 
-*Code: `custom_rules.py` (`ItemOnHand.to_dict`); test `test_mapped_rooms.py` (`test_serialized_as_the_item_shops`).*
+*Code: `custom_rules.py` (`ItemOnHand.to_dict`); test `test_mapped_rooms.py` (`test_serialized_as_the_item_shops`).
+The pack: `tools/export.py`, `scripts/logic.lua`, `tests/test_parity.py`.*
 
 ## Build step 57: the maps visited and the map the player is on, for the trackers
 
@@ -5246,6 +5263,42 @@ current map. A list added to with `update` is the protocol's own form (`network 
 lines, and the keys on the server.
 
 *Code: the mod: `MapTracking.cs`, `ApConnection.cs` (`MapLoaded`, `SendStored`, `SendMap`), `Plugin.cs`.*
+
+## Build step 58: the PopTracker pack's Archipelago interface
+
+**Why:** the rest of what PopTracker's Archipelago interface offers (`doc/AUTOTRACKING.md`), every part of it (the
+user, 2026-10-05: "support them all"): the pack's `PLAN.md`, items 7, 10 and 15-21. Read first at PopTracker's master
+`d2af7f1` (2026-10-07): its docs, its `CHANGELOG.md`, its `src/ap/` and its own `examples/ap-storage-example`.
+
+**How it was built** (the pack's `scripts/autotracking.lua`):
+
+1. **Data storage, PopTracker's way:** from the Clear handler, `SetNotify` then `Get` on the mod's three keys and
+   Archipelago's `_read_client_status_{team}_{slot}` and `_read_hints_{team}_{slot}`, one handler for both answers
+   (`Retrieved`, `SetReply`), each value's type checked, as its `ap-storage-example` does. The server notifies a
+   `_read_` key's subscribers too (`MultiServer.py`, 0.6.8), and PopTracker passes every key on (`aptracker.h`).
+2. **The goal:** a Goal item at the end of the grid, lit when the status reads PopTracker's
+   `Archipelago.ClientStatus.GOAL`.
+3. **Hints:** each of this slot's hinted checks takes the `Highlight` of its hint's status; PopTracker's states are
+   Archipelago's `HintStatus` (Unspecified, NoPriority, Avoid, Priority; found is None).
+4. **A DeathLink:** "DL" in red on the party's items for 10 seconds (`BadgeText`, `ScriptHost:AddOnFrameHandler`), a
+   first look for the user to pick on screen.
+5. **A new seed, team or slot** resets what the pack keeps from data storage, as Archipelago's CommonClient tells
+   sessions apart.
+6. **The doors:** each taken door's destination worked out in Lua from `door_targets`; showing it waits for a pick
+   on screen (sections are fixed, and a pin has no text of its own).
+7. **Not built, each for a reason:** the connect replay in one go (PopTracker defers logic updates for `ap` packs
+   itself since 0.31.0, its `CHANGELOG.md`, so `BulkUpdate` would add nothing); whose item a hint is (no place on
+   screen yet). `min_poptracker_version` 0.33.0, for `Archipelago.Seed`.
+8. **Tests** (the pack's `tests/test_autotracking.py`): the Lua with PopTracker's `Archipelago`, `Tracker`,
+   `ScriptHost` and `Highlight` stood in for as its docs describe them: the keys asked at connect, checks right at
+   connect, junk values, a new seed, every door's destination against generated Coupled, Room Swap and Decoupled
+   seeds, the goal, hints, a DeathLink and its timeout.
+
+**Status:** built (2026-10-08), the pack's tests pass (200 seeds, 112178 subtests) and pack-checker. Not yet seen in
+PopTracker: any of it.
+
+*Code: the pack: `scripts/autotracking.lua`, `scripts/logic.lua` (`bf_door_led_to`), `tools/export.py` (the Goal
+item, `region_maps`, `one_way_copies`), `tests/test_autotracking.py`, `manifest.json`.*
 
 # How it works
 
