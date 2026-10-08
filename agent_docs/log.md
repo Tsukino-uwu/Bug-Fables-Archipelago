@@ -85,6 +85,7 @@ either one wrong).
 - [2026-10-08: the push at `9c1ba1d`](#2026-10-08-the-push-at-9c1ba1d)
 - [2026-10-08: the work that needs no game; the local plan files retired](#2026-10-08-the-work-that-needs-no-game-the-local-plan-files-retired)
 - [2026-10-08: the residential recheck, the item classes, berries in the logic](#2026-10-08-the-residential-recheck-the-item-classes-berries-in-the-logic)
+- [2026-10-08: the Far Grasslands finished, the swamp begun; flag 41 sends the goal](#2026-10-08-the-far-grasslands-finished-the-swamp-begun-flag-41-sends-the-goal)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -3714,3 +3715,51 @@ either one wrong).
   fresh `live-slot-data.py` file for `liveslot`. The command file is still
   session bed6439d's scratchpad `cmds.txt`; write it with a quoted heredoc. Dev settings unchanged: `InfJump` and
   `BumpKill` on, `OneHit`, `QuietBursts` and `AdoptSeed` off.
+
+## 2026-10-08: the Far Grasslands finished, the swamp begun; flag 41 sends the goal
+
+- **Setup:** the server on the last mapping seed at the user's word ("start a server, then warp me"); later a new seed,
+  `AP_72680396662085838756` (player file `players/BugTester.yaml` in this session's scratchpad, every ability in its
+  start inventory), for the tower's change; the user started a new file on it.
+- **Rooms, 121 to 130 of 244:** `FarGrasslands4` (the user corrected the drop's landing twice and sketched the room:
+  the thorns, two boulders, the raised left), the wizard's basement, stairs and attic, the Broodmother's lair, the
+  clearing (the Far Grasslands done), `SwamplandsEntrance`, the lily pad pond (`Swamplands2`) and Leafbug Crossing
+  (`Swamplands3`). Rechecked: the Badlands' center pillar (the Beemerang too) and rock ledge (Bee Fly, or Freeze and
+  the horn too). New locations 177-182 (all named by the user) and a new item, the Mechanical Claw (useful until
+  Defiant Root's trade is a location; the user asked why not progression: told so, as for the Mothiva Doll).
+- **The wizard's tower open in a seed** (build step 59): a sweep (three readers and a checker) found the fall's scene
+  sets only 449, which makes the front door outside; the user saw the door lead out but not back in. Weighed with the
+  user: the door from the wizard's unlock, the scene from both ways in; their pick: "just remove/skip the basement
+  cutscene with the spider and then always have the tower door be open both in/out", the spider hidden too; then the
+  attic wizard's door talk skipped. All seen in the new seed.
+- **Mod fixes, built and loaded:** the respawn guard counts walking back into thorns as play (the user: "nothing the
+  guard should catch as its not a softlock"; found from the guard's own log: free 0.10-0.16 s, read in `HazardAction`
+  that a real loop is hit during the fade, so the walk was the signal), not yet seen; a check's starburst sorted just
+  behind its item every frame (the sky covered it; found in `EntityControl.UpdateGeneralAnim`'s per-frame sort), not
+  yet seen (`TO-CHECK.md`); talks that start by themselves skipped with Skip cutscenes (the swamp entrance's), seen.
+  The user's rule with it: a scene that changes the logic goes in the seed, one that is only story in the panel.
+- **Quest 31 completed untaken by the Broodmother's scene:** a sweep and a checker: cosmetic either way (`MEASURED.md`).
+- **Flag 41 sent the goal** (seen 2026-10-08): in `Swamplands2` the user cut grass, the mod sent the goal (this seed
+  needs one artifact) and the server released all 182 items; I had sent nothing. Found from the server log ("completed
+  their goal" at 21:24:16), the mod's `[goal] reached`, the seven artifact flags read on the file (only 41 set), then
+  the grass's activation flag 41 and `ActivateRegion`. The user: "we should make sure artifacts, or any other goals can
+  not be accidently triggered in wrong or different ways. ever", and "guard/guarantee they can't trigger where we don't
+  intend them to" for every goal, future ones too. 41 cleared on the file twice (the user tested the Honey Drop after,
+  which set it again). An audit (two readers; its checker stopped unfinished at the session's end) found, unchecked: 25
+  entities in 13 rooms carry 41; 12 grass write it (three through their drop); 9 hidden switches and a plate read it
+  as "always on" (in a seed before the first boss, platforms in five rooms don't run, and an Ancient Castle crystal
+  scene never plays); 4 lights-out switches start differently but stay solvable; and 41 set early makes the first
+  boss's fight (`SnakemouthTreasureRoom`'s `MaskEvent`, limit 41) impossible to start. The readers' full findings are
+  in this session's scratchpad, `flag41-audit-readers.json`.
+- **Also:** Tracker Addons installed in the checkout's `custom_worlds` at the user's word (source only, compared with
+  its tag); room graphs drawn as text in the chat from now on (the user, after I started a page); the user asked for
+  the one-hit cheat back on mid-boss.
+- **Open:** build step 60 first: the flag-41 fix (the readers' design note: keep those entities reading an always-set
+  flag, never writing 41; one guard list for every goal flag), the checker re-run on the saved findings, then the rule
+  in `CLAUDE.md` (one line, freed by saying the received-item rule in one); then a new seed and file. This repo's
+  suite and fuzzer at the next push (new tests unrun: the Badlands', `TestWizardTower`); the PopTracker pack's
+  re-export (locations 177-182, the tower's removed event).
+- **Handoff (the user: "lets stop here for now and close things down"):** 130 of 244. Next: build step 60, then
+  `SwamplandsBridge` (152). Server stopped (I started it; checked gone); the game is the user's. The plugin of
+  `daac98c` (`6E79E9FADFFB`) runs. Dev settings: `InfJump`, `BumpKill` and `OneHit` on, `QuietBursts` and `AdoptSeed`
+  off; the command file still session bed6439d's scratchpad `cmds.txt`.
