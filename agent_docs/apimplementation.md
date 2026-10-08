@@ -4483,8 +4483,12 @@ left as a gap.
      such rules; adding some is a logic decision.
    - `explain_rule`, `get_logical_path`, `explain_path`, `explain_spot`, `explain_more` and their sub-commands: the
      defaults read right so far; an override waits for the user's look at them.
-   - Deferred entrances and events (`found_entrances_datastorage_key`, `reconnect_found_entrances`,
-     `enforce_deferred_connections`): decided against on 2026-10-01, since every location in logic is always shown.
+   - Deferred entrances (`found_entrances_datastorage_key`, `reconnect_found_entrances`,
+     `enforce_deferred_connections`): **decided yes (the user, 2026-10-06)**, shuffled doors hidden until taken, by
+     default, as TUNIC does; Universal Tracker's own host.yaml setting `enforce_deferred_entrances` (its `setup.md`,
+     default `"default"`) is the player's switch, so we add none. This replaces 2026-10-01's "no", which came from a
+     misreading: hiding a door hides no location in logic. Build step 55. Deferred events (story events shown on the
+     map tab until done): with the map tab, on the same keys.
    - `disable_ut`: not set.
    - Its client integration (`docs/client-integration.md`): for clients built on Archipelago's CommonClient; ours is a
      BepInEx mod. Tracker addons are installed by the player.

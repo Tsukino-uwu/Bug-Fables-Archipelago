@@ -158,7 +158,12 @@ A few decisions made first, because they shape everything after:
     there**: a Bug Fables item (yours, or another Bug Fables player's in the same room) with the game's own
     sprite, and any other game's item as the **Archipelago icon**. To know what's there before it's found,
     the mod asks the server first, a "scout", without creating hints (`create_as_hint` 0, see
-    `client-requirements.md`).
+    `client-requirements.md`). **Seen items are never sent as hints** (the user, 2026-10-06: "way too many hints").
+    Archipelago allows it: a scout with `create_as_hint` set tells the server of a location the player has seen but not
+    checked, a free hint like ALttP's ledge items (`network protocol.md`, LocationScouts, 0.6.8), and Archipelago's
+    own `UndertaleClient.py` and `MMBN3Client.py` send `create_as_hint: 2` when their game shows an item. Here every
+    shelf and pickup shows its item, so it would hint most of the seed. Hints come only from the player asking
+    (`!hint`, `!hint_location`).
   - **A small Archipelago chat feed in the bottom-left corner.** It never stops play. It shows the items you
     send and receive, in Archipelago's own wording ("Player1 found their Hammer (Location)", "Player1 sent
     Hammer to Player2 (Location)"), and players connecting and disconnecting. It's **on by default**, with an
@@ -1852,8 +1857,8 @@ the constants still to tune by play. The 10-HP scripted end and the fixed number
 not yet seen; the Wasp General scaled as a mini-boss (2026-09-30), not yet seen. Maki's hits scaled (2026-10-08), seen.
 The swamp boss's 10-HP end and its scripted knockout seen (2026-10-08).
 
-*Code: `EnemyScaling.cs` (`AfterGetEnemyData`, `Damage`, `Bestiary`, `ScriptNumbers`, `FollowerHits`); the row in `ApMenu.cs` and
-`ApMenu.Rows.cs` (`ScalingRow`), its config in `QualityOfLife.cs` (`EnemyScalingMode`).*
+*Code: `EnemyScaling.cs` (`AfterGetEnemyData`, `Damage`, `Bestiary`, `ScriptNumbers`, `FollowerHits`); the row in
+`ApMenu.cs` and `ApMenu.Rows.cs` (`ScalingRow`), its config in `QualityOfLife.cs` (`EnemyScalingMode`).*
 
 ## 18. Use on normal saves: the panel's settings with Archipelago off
 
