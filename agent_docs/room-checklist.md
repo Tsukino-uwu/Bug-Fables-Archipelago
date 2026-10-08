@@ -189,7 +189,8 @@ as it is, a frozen record.
 - [x] WizardTowerAttic (188) — for the quest pass: the wizard's quest 52 (Find The Ingredients!, his line 4, Jump up a
   ledge); for the sellers' pass: the capsule machine (a Longleg Summoner, 10-19 berries, each time)
 - [x] BroodmotherLair (198) — for the enemy pass: the Broodmother fight (Event171, on entering by either door until 459;
-  flying, summons Midges); for the quest pass: its 40 berries (line 4), quest 31 completed even untaken, prize medal 18
+  flying, summons Midges); for the quest pass: its 40 berries (line 4), quest 31 completed even untaken (posted but
+  untaken, it stays on the boards: the user's call), prize medal 18
 - [x] FGClearing (201) — for the quest pass: Maki and Kina's quest 55 (Event207 on the platform, Jump: nine Leafbugs,
   two gifts); the Mechanical Claw's trade at DefiantRoot3 (lines 189-190, medal 61), which makes the claw progression
 

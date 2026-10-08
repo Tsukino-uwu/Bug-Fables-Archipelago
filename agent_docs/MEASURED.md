@@ -1279,7 +1279,13 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (29, flying) offscreen. After it the bee guards' line 4 gives 40 berries (`giveitem,-1,40,5`, seen as a text box),
   then quest 31 completes and prize medal 18 is added; two bee guards (`guard1`, `guard2`) stand there from 459. One
   spike hazard; no items. Taking that path without quest 31 (seen 2026-10-08): it lands in the quest list's Complete
-  tab only, never in Open or Taken.
+  tab only, never in Open or Taken. **Why** (2026-10-08, a sweep of the code and the game's text assets, checked):
+  `CompleteQuest` removes the id from Taken, adds it to Done and never looks at Open; a quest reaches Open only through
+  `CheckQuests` (each map load and event end, skipping any id already in a list), `|addquest|` or `|addboard|`; 31's
+  unlock flag is 225, set only by `BeehiveThroneRoom` line 11 (the Queen or her soldier, both from 299), and taking it
+  sets 226. So never posted, it stays Done only; posted but untaken, it stays Open and Done together, offered on every
+  board and, if taken, left in Taken for good (no other line or code completes 31; the game's per-frame clean-up of
+  Open covers only the five bounties). Cosmetic, never stuck. The berries and medal come from the scene either way.
   **`FGClearing`, the clearing (2026-10-08, the user, the dumps and code):** one door (`loadzone`, from
   `FarGrasslands4`'s top right) at the bottom, free both ways. The Mechanical Claw (`mecharm`, key item 175, flag 623)
   at the top right behind a small bush, nothing needed; its one use is `DefiantRoot3`'s trade, lines 189-190
