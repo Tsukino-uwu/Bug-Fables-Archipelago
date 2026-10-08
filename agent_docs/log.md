@@ -3291,14 +3291,15 @@ either one wrong).
   `GoldenHillsPath3` (44).
   Unticked: I warped on (and posted the next room's draft) before the user was done; back in the room.
   The logic explained at the user's ask; the user: done. Ticked, 87 of 244.
-- **Handoff (2026-10-07, the user stopped for now; the game closed by the user, the server stopped, none left):** 87 of 244 ticked. Next:
-  `GoldenHillsPath3` (44), not yet seen: its draft (right door to the crank path, left door to the settlement
+- **Handoff (2026-10-07, the user stopped for now; the game closed by the user, the server stopped, none left):** 87
+  of 244 ticked. Next: `GoldenHillsPath3` (44), not yet seen: its draft (right door to the crank path, left door to the settlement
   entrance; a low door to `ChomperCave1` made only from flag 20, the bubble shield learned in the story (`Event95`),
   with an invisible wall `Base/Cube` until 20: the new file has 20 off though the Shield is in the bag, and the logic
   has no rule on that door, so it counts it open, to settle with the user; the Lore Book, key item 52, flag 380, dug
   under a breakable rock on the left; two fixed cranks; a thorn patch). The server hosts `AP_63157247147940960355.zip`
   (session `61331d31-...` scratchpad `out/`, player file `players/BugTester.yaml`): host it again next time
-  (`python MultiServer.py <that zip> --port 38281` from the Archipelago checkout); the user's new file is on it. Dev settings: `OneHit`, `InfJump`, `BumpKill`, `QuietBursts` on, `AdoptSeed` off; the command file is
+  (`python MultiServer.py <that zip> --port 38281` from the Archipelago checkout); the user's new file is on it. Dev
+  settings: `OneHit`, `InfJump`, `BumpKill`, `QuietBursts` on, `AdoptSeed` off; the command file is
   still `bed6439d-.../scratchpad/cmds.txt` (one command batch at a time: a second write overwrites an unread first).
   The mod build in the game is staged (`stage-dev.ps1`, then `copy-dev.ps1`; copying alone ships the old build).
   Open: Next 62 (the Wooden Crank never used up, the merged items as the whole), the quest, enemy, discovery and
@@ -3403,8 +3404,8 @@ either one wrong).
   so, and a sweep of every `SummonEnemy` found no ticked room relying on a summoning fight (Venus' Guardian already
   for the enemy pass; the Broodmother's Midges fly, for its room). The user: done. Ticked, 102 of 244. Next:
   `BarrenLandsPinkSpider` (189).
-- **`BarrenLandsPinkSpider`:** (the user allowed `CanReachRegion` and `Or` into the preflight's apworld imports) the door free, the ledge with the sign and the hole Jump (the user). `Event167` read:
-  the hole is a pawn shop, and the first trade drops crystal berry #38, no location yet; the user gave an egg and saw
+- **`BarrenLandsPinkSpider`:** (the user allowed `CanReachRegion` and `Or` into the preflight's apworld imports) the
+  door free, the ledge with the sign and the hole Jump (the user). `Event167` read: the hole is a pawn shop, and the first trade drops crystal berry #38, no location yet; the user gave an egg and saw
   it. Named "Pink Spider, First Trade" (the user: a trade, not a gift, and only once). The item it takes: the user
   chose an item shop reached (slots sell their own item without end once bought): a new rule, `ItemOnHand`
   (`custom_rules.py`), by the shops' regions. **To do before the push:** a test for `ItemOnHand` that fails without
