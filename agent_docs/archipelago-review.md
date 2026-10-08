@@ -265,4 +265,5 @@ APQuest's were read on 2026-10-08, and each line is handled:
 - **`network protocol.md`**: Connect's `items_handling: null` is gone; the mod sends `AllItems`. Connect's `version`:
   the mod now names 0.6.8 (item 19).
 - **The fill in batches (#3872) and the filler start inventory fix (#6246)**: the known fill error re-measured at 0.6.8
-  (`apimplementation.md`, Known issues): to re-measure at 0.6.8.
+  (`apimplementation.md`, Known issues): re-measured at 0.6.8 on 2026-10-08, 0 of 200 (25 of 200 at 0.6.7 on
+  2026-10-05, with fewer rooms mapped).

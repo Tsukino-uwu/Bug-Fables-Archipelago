@@ -245,8 +245,8 @@ arrive. Every location becomes a check you must do, shops included, and nothing 
 **Steps:**
 
 1. Once: copy `worlds/logic_test` from palex00's fork (branch `logic-test-apworld`) into your Archipelago checkout's
-   `worlds/`, never into this repo. We use commit `795f13b` (world 0.4.0, 2026-09-28); its own 27 tests pass at our
-   tag 0.6.7 (2026-09-29). CI pins the same one. Read a newer commit before using it (`licensing.md`).
+   `worlds/`, never into this repo. We use commit `795f13b` (world 0.4.0, 2026-09-28); its own 27 tests pass at
+   0.6.7 (2026-09-29) and at our tag 0.6.8 (2026-10-08). CI pins the same one. Read a newer commit before using it (`licensing.md`).
 2. `test-apworld.ps1` runs `dev-scripts/logic-test-check.py` whenever `worlds/logic_test` is there. The Logic Test's
    second generation must equal the seed we generated. When they differ, the tool fills the gaps from whatever is left
    over without a word, and a stall could come from the mismatch instead of the logic. The check compares the copy's

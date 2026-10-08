@@ -781,7 +781,11 @@ be wrong.
   there that opens nothing fails the fill. Archipelago's own `test_fill` hits it in the test classes with both
   options. **Accepted for now (the user, 2026-10-05: "its fine/expected for it to break for now if it can't place
   things as there is not a lot of things to place")**: the fix is still more early locations, as the rooms past the
-  Outskirts get their real, smaller needs; CI's fuzzer stays red with it until then.
+  Outskirts get their real, smaller needs; CI's fuzzer stays red with it until then. **Re-measured 2026-10-08, at
+  Archipelago 0.6.8: 0 of 200** (the same options, solo, seeds 1-200, each built to `pre_fill` and filled with
+  Archipelago's `distribute_items_restrictive` as `test_fill` does; options read back from the world), and no
+  `FillError` in 10000 fuzzed seeds that day. The rooms mapped since 2026-10-05 added early locations, and 0.6.8's
+  fill in batches (#3872) came at the same time; which one cleared it isn't told apart. To drop once CI shows it gone.
 - **Two items named "Leif"** (found by the full review, 2026-09-29; read in the code): with the story's party, the
   story event *Leif Joins* makes an event item "Leif" with no id, while the real member item "Leif" has one;
   Archipelago's `world api.md` requires one id per item name. Next 43, item 3.

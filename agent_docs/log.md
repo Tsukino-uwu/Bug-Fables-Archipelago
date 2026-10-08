@@ -81,6 +81,7 @@ either one wrong).
 - [2026-10-07: Golden Path](#2026-10-07-golden-path)
 - [2026-10-07: the cave path](#2026-10-07-the-cave-path)
 - [2026-10-07: the power plant](#2026-10-07-the-power-plant)
+- [2026-10-08: Archipelago 0.6.8](#2026-10-08-archipelago-068)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -3524,3 +3525,45 @@ either one wrong).
   items; `minigame_prizes` neither sent nor listed. Room Swap failed every time: about 4 random layouts in 1000 keep
   every room reachable now; 2000 retries still failed 2 fuzzer seeds, so a layout is repaired instead (moves around
   what is cut off): 180 of 180 seeds, test `TestRoomSwapRepairs`. CI's three two-game generations run locally, fine.
+
+## 2026-10-08: Archipelago 0.6.8
+
+- **The plan** (`AP-0.6.8.md`, local; the user: "go ahead and work on this until its done"), worked beside the power
+  plant session in the same tree. The checkout was already at 0.6.8 (moved 2026-10-05).
+- **Read at 0.6.8:** every changed doc's diff from 0.6.7 (`rule builder.md`, `world api.md`, `adding games.md`,
+  `apworld specification.md`, `tests.md`, `network protocol.md`), the generic guides' and APQuest's; Archipelago's
+  LICENSE, unchanged. Three of the plan's claims corrected on reading: the JSON depth limit of 16 is on what clients
+  send, not on slot_data; `JUMP` already is `rule builder.md`'s own `filtered_resolution=True` example, so it stays;
+  `World.world_version` is in 0.6.7 too, so `minimum_ap_version` stays 0.6.7.
+- **Built:** CI on 0.6.8 with Archipelago's general tests scoped to the world (`AP_TEST_WORLDS=bug_fables`, new in
+  0.6.8; WebHost's packages installed in CI, `test/webhost` skipped and named locally without flask). Their first run
+  found a real break, fixed by the other session: WebHost unpickles options only from a module named `*options`
+  (`roadblocks.py` renamed). Connect now names 0.6.8 (the library sent 0.6.0). slot_data's `world_version` from
+  core. The player guide: `quantity`, and how to show every door in Universal Tracker. Records: the review's
+  "Main only" section, now shipped; the requirements checklist; the licence row; the DeathLink `teams` decision (build
+  step 25); seen items never made hints (the mod guide).
+- **Build step 55, Universal Tracker's deferred entrances:** read in Universal Tracker's own docs and code (v0.3.4):
+  one data storage key of names, filled in with `{team}` and `{player}`, `Get` plus `SetNotify` at connect; TUNIC's
+  way read for comparison. The doors key the pack's plan already had (`bug_fables_doors_{team}_{slot}`) serves both
+  trackers. MultiClient.Net's `Operation.Update` takes only a dictionary (its DLL's metadata read with
+  `dotnet_metadata.py`), so the list update is its own `SetPacket`. A first commit was refused by the preflight: the
+  room's seed read raw, now through `ServerText.SeedOf`. The prefix on `TransferMap` is wrapped so recording a door
+  can never stop it.
+- **The pack** (its own repo): PopTracker's Archipelago interface re-read at master `d2af7f1`; items 15-21 planned.
+  Two of the plan's items corrected: the goal comes from `_read_client_status_{team}_{slot}` (PopTracker's
+  `ClientStatus` is only for sending), and `BulkUpdate` is `Tracker.BulkUpdate`. A `.gitattributes` stops its
+  autocrlf warning.
+- **Measured at 0.6.8:** our tests with Archipelago's general ones, 954 passed (31775 subtests; `test/webhost`
+  skipped without flask); the Logic Test's own 27 pass. The Jump and Field Moves fill error, 0 of 200 solo seeds (25 of
+  200 on 2026-10-05; more rooms mapped since, and 0.6.8's batched fill, not told apart), and the other session's
+  10000 fuzzed seeds that day had none. My first measuring script claimed 0 of 200 in 4 s with a circular-import
+  error above it: `Fill` imported before the worlds. Imported after them, with the options read back from the world
+  and every location checked filled, it held. The checkout's `host.yaml` lacks 0.6.8's settings (each pytest run
+  ends with a refused autosave): `Launcher.py --update_settings` there is the user's call.
+- **Two sessions, one tree:** the other session's `7c101b8` swept in half this work's uncommitted edits (its commit
+  subject is the Room Swap repair); noted in `771629c`, nothing lost. After a message both sides commit by path and
+  hunk; mine from a temporary index where a file held both sessions' hunks. Its push carries this work.
+- **Open:** in game, step 55 (Universal Tracker showing a shuffled door only once walked through; the mod's `[doors]
+  taken` line) and Connect's 0.6.8 (the server's join line); CI's first run at 0.6.8, `test/webhost` above all. The
+  README's Status line says the checks cover chapter 1, while the tables hold 498 locations in every chapter's areas:
+  its new wording is the user's.
