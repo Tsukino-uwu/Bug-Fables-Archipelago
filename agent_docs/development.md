@@ -184,6 +184,14 @@ runs too** (2026-09-28); 10000 seeds take a few minutes.
 
 Exit code 1 only means some runs failed. The goal is 0 failures in 10000.
 
+**Tracker Addons, for checking a room's logic in the tracker** (installed 2026-10-08, the user's yes; optional): its
+`tracker_addons.apworld`, from the same repository's release `Tracker_Addons_v0.1.2`, goes next to `tracker.apworld` in
+your checkout's `custom_worlds`. It was put in with its source and metadata only, both compared with the repository at
+that tag, and the zip's `__pycache__` left out, so what runs is the source read. It adds commands to Universal
+Tracker's client: `/get_regions [filter]` (every region, a room's parts such as `WizardTowerBasement (Top Right)`
+included), `/nearest_locations <region>`, `/get_depth` (the shallowest checks in logic), `/next_progression` (what
+each item would open now) and `/glp` (`get_logical_path`). Nothing in the apworld depends on it.
+
 **Universal Tracker's fuzzer hook** (since 2026-10-03; the Archipelago guide's build step 40). Universal Tracker ships a
 hook for this fuzzer that regenerates each seed from its slot_data, with no yaml, as Universal Tracker does, and checks
 sphere by sphere that it puts the same locations in logic as the real generation (its `docs/apworld-integration.md`,
