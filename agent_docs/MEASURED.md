@@ -1278,7 +1278,16 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   escape and the bounty music: the Midge Broodmother (enemy 36, 65 HP, flying or on the ground by turns) summons Midges
   (29, flying) offscreen. After it the bee guards' line 4 gives 40 berries (`giveitem,-1,40,5`, seen as a text box),
   then quest 31 completes and prize medal 18 is added; two bee guards (`guard1`, `guard2`) stand there from 459. One
-  spike hazard; no items.
+  spike hazard; no items. Taking that path without quest 31 (seen 2026-10-08): it lands in the quest list's Complete
+  tab only, never in Open or Taken.
+  **`FGClearing`, the clearing (2026-10-08, the user, the dumps and code):** one door (`loadzone`, from
+  `FarGrasslands4`'s top right) at the bottom, free both ways. The Mechanical Claw (`mecharm`, key item 175, flag 623)
+  at the top right behind a small bush, nothing needed; its one use is `DefiantRoot3`'s trade, lines 189-190
+  (`checkvar,0,175` then `removeitem,1,175` and medal 61). The middle platform, up with Jump: Maki and Kina (from 608,
+  set at `AntBridge` by `Event207`, until 609) stand there; their talk (line 5, `event,207`) starts `Event207`'s
+  clearing branch: a fight with no escape and the mini-boss music against nine Leafbugs (Ninja 65, Archer 66,
+  Clubber 67, all on the ground), then `giveitem,1,4` and `giveitem,1,5`, 609 set, quest 55 completed. Two NPCs under
+  the ground (`yinmoth`, `Fixedleafbugforce`) for that scene. Nothing else: no enemies, grass, hazard or save crystal.
   **`SwamplandsBridge`, the swamp bridge (2026-10-08, code and the dumps only; not yet mapped on screen):** two
   bridges. The upper one (`Base/Bridge`, `Base/BridgeWalls`, `Base/Cube`: `ConditionChecker`s hidden from 336) spans
   the room at the doors' height (y 0), from `loadzoneleft` to `loadzone right`. Its collapse is `Event130`

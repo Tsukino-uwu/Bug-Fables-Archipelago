@@ -3144,8 +3144,10 @@ Fly or the Beemerang; its fall scene and wizard kept away, the tower's front doo
 the tower's stairs (the bottom free; the attic's door up, Jump, a drop down), 124 of 244; the tower's attic (free; a
 new location: a Bad Book beside the cauldron; the wizard up a ledge, Jump, and the capsule machine for the quest and
 sellers' passes), 125 of 244; the Broodmother's lair (free between its doors; its fight, which starts on entering by
-either door, for the enemy pass; its berries, quest and prize medal for the quest pass), 126 of 244; the rest of
-`room-checklist.md` to go.
+either door, for the enemy pass; its berries, quest and prize medal for the quest pass), 126 of 244; the clearing
+(free; a new location: the Mechanical Claw behind a small bush, a new useful key item, progression once Defiant Root's
+trade for it is a location; Maki and Kina's platform, Jump, for the quest pass), 127 of 244, the Far Grasslands done;
+the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

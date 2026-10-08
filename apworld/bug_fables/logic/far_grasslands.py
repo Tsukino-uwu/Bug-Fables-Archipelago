@@ -43,6 +43,9 @@ LOCATIONS = (
     # starts Event206, one remark).
     Location("Far Grasslands: Wizard's Tower Attic, Beside the Cauldron", 179, "WizardTowerAttic",
              Source(flag=620, pickup=Pickup(map="WizardTowerAttic", type=1, item=174)), no_jump=True),
+    # The clearing (the user, 2026-10-08): the Mechanical Claw at the top right behind a small bush, nothing needed.
+    Location("Far Grasslands: Clearing, Behind the Small Bush", 180, "FGClearing",
+             Source(flag=623, pickup=Pickup(map="FGClearing", type=1, item=175)), no_jump=True),
 )
 STORY_EVENTS = (
     # The border cave's two gates, each opened for good by its lever on the far side (Event136 sets the lever's

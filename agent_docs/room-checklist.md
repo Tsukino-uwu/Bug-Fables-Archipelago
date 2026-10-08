@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**126 of 244 done.**
+**127 of 244 done.**
 
 ## Outskirts
 
@@ -190,7 +190,8 @@ as it is, a frozen record.
   ledge); for the sellers' pass: the capsule machine (a Longleg Summoner, 10-19 berries, each time)
 - [x] BroodmotherLair (198) — for the enemy pass: the Broodmother fight (Event171, on entering by either door until 459;
   flying, summons Midges); for the quest pass: its 40 berries (line 4), quest 31 completed even untaken, prize medal 18
-- [ ] FGClearing (201)
+- [x] FGClearing (201) — for the quest pass: Maki and Kina's quest 55 (Event207 on the platform, Jump: nine Leafbugs,
+  two gifts); the Mechanical Claw's trade at DefiantRoot3 (lines 189-190, medal 61), which makes the claw progression
 
 ## Wild Swamplands
 
