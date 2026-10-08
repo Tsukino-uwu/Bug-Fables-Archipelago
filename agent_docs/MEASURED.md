@@ -1270,6 +1270,15 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   **`WizardTowerStairs`, the tower's stairs (2026-10-08, the user and the dumps):** the bottom (the doors to
   `WizardTowerBasement` on the left and outside at the bottom, the save crystal) free between them; the attic's door
   at the top (height 19) up with Jump, a drop down without it. No items; entering the room records discovery 36.
+  **`BroodmotherLair` (2026-10-08, the user, the dumps and code):** one part, its two doors (`loadzoneFG` from
+  `FGCave`'s left door, `LoadzoneBack` to `PowerPlant`'s top) free between them. Its trigger (`event`, `Event171`,
+  until 459, data `171 0 1`) has `data[2]` 1, so it starts by itself the moment nothing else runs (`NPCControl`'s
+  per-frame check), not on touch: entering by either door starts the scene at once (seen from the border cave's
+  side), and the map dump's auto-start list misses such triggers. The scene sets 459 first, then a fight with no
+  escape and the bounty music: the Midge Broodmother (enemy 36, 65 HP, flying or on the ground by turns) summons Midges
+  (29, flying) offscreen. After it the bee guards' line 4 gives 40 berries (`giveitem,-1,40,5`, seen as a text box),
+  then quest 31 completes and prize medal 18 is added; two bee guards (`guard1`, `guard2`) stand there from 459. One
+  spike hazard; no items.
   **`SwamplandsBridge`, the swamp bridge (2026-10-08, code and the dumps only; not yet mapped on screen):** two
   bridges. The upper one (`Base/Bridge`, `Base/BridgeWalls`, `Base/Cube`: `ConditionChecker`s hidden from 336) spans
   the room at the doors' height (y 0), from `loadzoneleft` to `loadzone right`. Its collapse is `Event130`

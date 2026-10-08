@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**125 of 244 done.**
+**126 of 244 done.**
 
 ## Outskirts
 
@@ -188,7 +188,8 @@ as it is, a frozen record.
 - [x] WizardTowerStairs (187)
 - [x] WizardTowerAttic (188) — for the quest pass: the wizard's quest 52 (Find The Ingredients!, his line 4, Jump up a
   ledge); for the sellers' pass: the capsule machine (a Longleg Summoner, 10-19 berries, each time)
-- [ ] BroodmotherLair (198)
+- [x] BroodmotherLair (198) — for the enemy pass: the Broodmother fight (Event171, on entering by either door until 459;
+  flying, summons Midges); for the quest pass: its 40 berries (line 4), quest 31 completed even untaken, prize medal 18
 - [ ] FGClearing (201)
 
 ## Wild Swamplands
