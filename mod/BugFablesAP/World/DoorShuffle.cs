@@ -64,7 +64,16 @@ namespace BugFablesAP
                 {
                     return;
                 }
-                connection.DoorTaken(map.mapid + ": " + NameOf(map, caller));
+                // Only for the trackers: a failure here must never stop the door itself.
+                try
+                {
+                    connection.DoorTaken(map.mapid + ": " + NameOf(map, caller));
+                }
+                catch (Exception e)
+                {
+                    log.LogWarning(
+                        $"[doors] {map.mapid}: {caller.name} taken but not recorded: {e.GetBaseException().Message}");
+                }
             }
         }
 

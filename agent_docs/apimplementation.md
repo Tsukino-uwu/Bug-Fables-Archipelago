@@ -5097,7 +5097,8 @@ replaced 2026-10-01's "no" (build step 41).
    compares every sphere (development.md, Fuzzing the apworld).
 3. **The mod** (`DoorShuffle.cs`, `ApConnection.cs`): a prefix on `MainManager.TransferMap`, whose `caller` is the door
    walked through, names it as the apworld does (`Map: door`, or `name#row` where its map has two doors of that name)
-   while the doors are shuffled in a seed. `ApConnection.DoorTaken` adds it with one `Set` (`update`, which adds names
+   while the doors are shuffled in a seed; a failure there only logs (`[doors] … taken but not recorded`), never
+   stopping the door. `ApConnection.DoorTaken` adds it with one `Set` (`update`, which adds names
    not yet in the list; `network protocol.md`, Set), off the game thread. A name goes once; one taken while offline
    waits and goes after the next login; a login to another room starts from none. MultiClient.Net 6.7.1's
    `Operation.Update` takes only a dictionary, so the list update is the library's own `SetPacket` with
