@@ -84,6 +84,7 @@ either one wrong).
 - [2026-10-08: Archipelago 0.6.8](#2026-10-08-archipelago-068)
 - [2026-10-08: the push at `9c1ba1d`](#2026-10-08-the-push-at-9c1ba1d)
 - [2026-10-08: the work that needs no game; the local plan files retired](#2026-10-08-the-work-that-needs-no-game-the-local-plan-files-retired)
+- [2026-10-08: the residential recheck, the item classes, berries in the logic](#2026-10-08-the-residential-recheck-the-item-classes-berries-in-the-logic)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -3668,3 +3669,39 @@ either one wrong).
 - **Pushed** (the user's ask): first the full run on `7aa3870`, 960 passed (31775 subtests), the Logic Test check 90
   of 90, the fuzzer 0 of 10000 and Universal Tracker's hook 0 of 10000 (the session's new tests among them); then
   `a31346d..7aa3870`, CI and Preflight green. The pack pushed too (`6feb6c2..9708953`; it has no CI).
+
+## 2026-10-08: the residential recheck, the item classes, berries in the logic
+
+- **Setup:** the server on the last mapping seed (`AP_81434407810428720732`, port 38281) at the user's word ("Server
+  only"); the user started the game and a new file on it. `liveslot` from a fresh `live-slot-data.py` file in this
+  session's scratchpad. My first command-file write used `printf` with a Windows path: `\U` broke it, and the game
+  ran two garbled lines (both refused); a quoted heredoc since.
+- **`BugariaResidential` rechecked** (the user: "lets do my current room first, a recheck of it real quick"): the
+  fountain rooftop also by Bee Fly alone (picked up so), now `(Jump & Freeze) | Bee Fly`. The banker needs Jump, and
+  the user asked for his card as a check: read in the script dump and with `textsearch` (the sign: 50 berries for an
+  account; line 82 gives the Platinum Card, key item 176, and sets flag 630 once the balance reaches 500; line 65 sets
+  253; 630 nowhere else). Named "Banker" by the user (over "Bank of Bugaria"); may hold anything, with a note that
+  berries aren't in the logic yet; the card useful.
+- **Item classes** (the user: "filler = useless; useful = want to guarantee the player can get it at some point;
+  progression = required, unlocks 1 or more checks"; "a key item or medal etc should always be useful"): Hard Mode
+  useful (the user, over filler); Crystal Berry useful while Shades's shop is vanilla. The user's "progression if the
+  shade shop contain any progression, else useful" written as progression whenever her shop is in the seed, since
+  every spot there needs all 50 and Archipelago's fill counts only progression (`World.collect_item`, read at 0.6.8);
+  told to the user.
+- **A read-only review** (two agents) of those edits found: three tests expecting Shop Contents: Filler Only to hold
+  (23 fewer filler; now hidden items on), a wrong comment I wrote in `items.py`, and the card's effect (flag 630, the
+  bank's doubled interest) staying local while the card travels. The user chose that the card carry it: built
+  (`PlatinumCard.cs`, mod guide step 46), installed in the running game (the hook found `DoClock`'s one read); not yet
+  seen paying interest. The card's look stays shared with the Boat Ticket for now (the user).
+- **Berries in the logic** (the user's questions: can a farm always be reached wherever a price is; how OoT and ALttP
+  handle money). Three explorers read Archipelago's docs and the licensed worlds (ALttP and OoT ignore amounts; HK's
+  `Can_Replenish_Geo` and the FAQ's "a place where you can quickly farm money"), the game's berry sources (enemies
+  return only on an area change; grass regrows per room load, the horn only; about 99 rooms with no source), and our
+  prices. The user decided, step by step: berry items never count ("consumable"); the free prices back to vanilla, per
+  NPC ("the boat i think should always stay"); at least one enemy reachable; enemies only, over grass; built after the
+  rooms; ordinary enemies respawning on room re-entry, always on in a seed ("only for enemies, not for boss or mini
+  boss stuffs"), after first asking about a timer. Recorded as Next 63; facts in `MEASURED.md`. The user corrected me
+  once: the shuffled "basic attacks" are the field attacks and Jump, and battle attacks are never items (read in
+  `FieldMoves.cs`), so a fight needs no move item.
+- **Open:** this repo's suite and fuzzer at the next push (the new tests unrun, as asked); the card's interest in game;
+  the PopTracker pack's re-export for the Banker. The running seed predates the Banker.
