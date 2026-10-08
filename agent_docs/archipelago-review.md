@@ -264,6 +264,13 @@ APQuest's were read on 2026-10-08, and each line is handled:
   (`client-requirements.md`, the goal's line).
 - **`network protocol.md`**: Connect's `items_handling: null` is gone; the mod sends `AllItems`. Connect's `version`:
   the mod now names 0.6.8 (item 19).
+- **Core API changes, each checked against our code (2026-10-08):** `validate_text` on `TextChoice` and `FreeText`,
+  `cull_zeroes` on `OptionCounter` (`Options.py`): we have no option of those kinds (ours: `OptionSet`
+  `ExtraRoadblocks`, `PlandoConnections` `DoorPlando`), so they wait for a future option. `PlandoConnection.Direction`
+  is now an `enum.StrEnum` (`Options.py:1215`): our `entrances.py` compares `direction` with strings, which a
+  `StrEnum` still equals, and the door plando tests pass at 0.6.8. `per_slot_randoms` removed, `get_all_state`'s
+  `use_cache` deprecated: unused, our tests call `get_all_state()` bare. An empty `And()` and an empty
+  `has_from_list`/`has_group` now true: none in our rules.
 - **The fill in batches (#3872) and the filler start inventory fix (#6246)**: the known fill error re-measured at 0.6.8
   (`apimplementation.md`, Known issues): re-measured at 0.6.8 on 2026-10-08, 0 of 200 (25 of 200 at 0.6.7 on
   2026-10-05, with fewer rooms mapped).
