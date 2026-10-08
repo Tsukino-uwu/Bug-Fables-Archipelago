@@ -94,6 +94,21 @@ namespace BugFablesAP
             new Scene { Map = "OutsideSnakemouth", Event = 11, Flags = new int[0], Discovery = 0 },
         };
 
+        // A talk trigger that starts by itself on entering (a DialogueTrigger with data[2] 1) opens its line with no
+        // StartEvent, so it is skipped as the room's entities are made: its flags set and the trigger kept away.
+        private sealed class TalkScene
+        {
+            internal string Map;
+            internal string Entity;
+            internal int[] Flags;
+        }
+
+        private static readonly TalkScene[] TalkScenes =
+        {
+            // The swamp's first room: a party remark on entering (line 1: flag 357, a bubble), nothing given.
+            new TalkScene { Map = "SwamplandsEntrance", Entity = "initialmessage", Flags = new[] { 357 } },
+        };
+
         private static readonly MethodInfo endEvent = AccessTools.Method(typeof(EventControl), "EndEvent",
             Type.EmptyTypes);
 
@@ -231,6 +246,7 @@ namespace BugFablesAP
             {
                 return;
             }
+            Hooks.Install(typeof(TalkHook), "qol", "a talk that starts by itself plays with Skip cutscenes on");
             if (exitBattle != null && battleInEvent != null && battleAction != null)
             {
                 Hooks.Install(typeof(SpiderHook), "qol", "the first spider fight runs its three turns");

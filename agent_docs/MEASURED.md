@@ -1288,6 +1288,11 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   clearing branch: a fight with no escape and the mini-boss music against nine Leafbugs (Ninja 65, Archer 66,
   Clubber 67, all on the ground), then `giveitem,1,4` and `giveitem,1,5`, 609 set, quest 55 completed. Two NPCs under
   the ground (`yinmoth`, `Fixedleafbugforce`) for that scene. Nothing else: no enemies, grass, hazard or save crystal.
+  **`SwamplandsEntrance`, the swamp's first room (2026-10-08, the user and the dumps):** its two doors (`loadzoneexit`
+  to `FGOutsideSwamplands`, `loadzonenorth` to `Swamplands2`) free between them. A talk trigger (`initialmessage`,
+  until 357, data `1 0 1`: `data[2]` 1 starts it by itself) plays line 1 on entering by either door (seen both): it
+  sets 357 and shows a bubble, nothing else, and nothing else reads 357. Nine grass tufts hiding nothing; a Madesphy
+  for the enemy pass; no items.
   **`SwamplandsBridge`, the swamp bridge (2026-10-08, code and the dumps only; not yet mapped on screen):** two
   bridges. The upper one (`Base/Bridge`, `Base/BridgeWalls`, `Base/Cube`: `ConditionChecker`s hidden from 336) spans
   the room at the doors' height (y 0), from `loadzoneleft` to `loadzone right`. Its collapse is `Event130`

@@ -1033,6 +1033,15 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    opening walks off, are kept away too (`logic/termite_capitol.py`), so a party reaching the plaza from inside the city
    before the gate never finds them waiting. **Seen (2026-10-07):** 384 cleared, in from `TermiteIndustrial`: "the
    queen is gone".
+   **Talks that start by themselves** (2026-10-08, the swamp's first room: "can we skip the cutscene? it played from
+   both entreances properly, but don't think it does or give anything"). A `DialogueTrigger` with `data[2]` 1 opens
+   its line from its own per-frame check (`NPCControl.Update`) as soon as nothing else runs, with no `StartEvent`, then
+   destroys itself, so the scene list never sees it. `SwamplandsEntrance`'s (`initialmessage`, until 357): line 1
+   sets 357 and shows a bubble, nothing else; nothing else reads 357. The user's pick, over keeping it away in every
+   seed: with *Skip cutscenes*. So a second list, `TalkScenes` (map, entity, flags), is applied as the room's entities
+   are made (a postfix on `MapControl.CreateEntities`): the flags set and the trigger kept away the mod's usual way
+   (`KeptOpen.KeepAway`), before its first frame. The rule the user set with it: a scene that changes the logic goes in
+   the seed (the wizard's tower, the Archipelago guide's build step 59); one that is only story goes here.
 6. **Item animation** (2026-09-25): a discovery showed nothing of what it found, and items from other
    players arrive silently. Your own finds always get the hold-up (pickups already did; a discovery recorded in play
    now does too); the row, *Item animation: All / Progression / Off* decides which items from other players do
@@ -1218,7 +1227,8 @@ cutscenes' Den arrival seen (2026-09-26), the Tattle tutorial and the door room'
 seen (2026-09-27); map travel and Warp to Start through a door built (2026-10-02), map travel's seen at every
 destination (2026-10-03); the Warp button since the hooks moved, Warp to Start through the city gate and through a
 seed start's door seen (2026-10-04); the swamp's water jump not yet seen; the Reset box's letters and Item animation's
-reworded help lines seen (2026-10-04).
+reworded help lines seen (2026-10-04); the swamp entrance's talk skip seen (2026-10-08: 357 cleared, in by the left
+door, "it was skipped, nothing happened").
 
 *Code: `QualityOfLife.cs` (the settings and the per-frame speed-ups), `QualityOfLife.Opening.cs` (the opening),
 `QualityOfLife.Scenes.cs` (the scene skips, the first spider fight, the trapdoor), `ApMenu.cs` (the second page),

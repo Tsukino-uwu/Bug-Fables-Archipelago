@@ -155,6 +155,35 @@ namespace BugFablesAP
             }
         }
 
+        private static class TalkHook
+        {
+            [HarmonyPatch(typeof(MapControl), "CreateEntities")]
+            [HarmonyPostfix]
+            private static void AfterCreateEntities(MapControl __instance)
+            {
+                if (!SkipCutscenes.Value || SettingsOn == null || !SettingsOn())
+                {
+                    return;
+                }
+                MainManager mm = MainManager.instance;
+                string map = __instance.mapid.ToString();
+                foreach (TalkScene talk in TalkScenes.Where(t => t.Map == map && !t.Flags.All(f => mm.flags[f])))
+                {
+                    foreach (NPCControl npc in __instance.GetComponentsInChildren<NPCControl>(true)
+                        .Where(n => n.name == talk.Entity && n.objecttype == NPCControl.ObjectTypes.DialogueTrigger))
+                    {
+                        foreach (int flag in talk.Flags)
+                        {
+                            mm.flags[flag] = true;
+                        }
+                        KeptOpen.KeepAway(npc);
+                        log.LogInfo($"[qol] skipped {talk.Entity}'s talk on {map}: set flags "
+                            + string.Join(", ", talk.Flags.Select(f => f.ToString()).ToArray()));
+                    }
+                }
+            }
+        }
+
         private static Scene SceneFor(int id)
         {
             string map = MainManager.map == null ? null : MainManager.map.mapid.ToString();
