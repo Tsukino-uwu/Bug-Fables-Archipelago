@@ -3705,3 +3705,12 @@ either one wrong).
   `FieldMoves.cs`), so a fight needs no move item.
 - **Open:** this repo's suite and fuzzer at the next push (the new tests unrun, as asked); the card's interest in game;
   the PopTracker pack's re-export for the Banker. The running seed predates the Banker.
+- **Handoff (the user: a new chat):** 121 of 244 ticked, the residential recheck done. Next: `FarGrasslands4` (153),
+  its draft in the previous entry's handoff, entered through the west path's top door. The server left running at the
+  user's word ("leave the server open, i will continue in the next chat"): stopped first by mistake, then restarted as
+  its own process (`Start-Process`, so it outlives the chat) on 38281 with seed `AP_81434407810428720732` (zip in
+  session f7f04659's scratchpad `out/`, player file `players/BugTester.yaml`); the game reconnected with nothing lost
+  (27 items, 13 checks); then the user closed it themselves. The next session hosts it again. The user's game runs the plugin of `2f624c3` (the card's hook). The next session writes a
+  fresh `live-slot-data.py` file for `liveslot`. The command file is still
+  session bed6439d's scratchpad `cmds.txt`; write it with a quoted heredoc. Dev settings unchanged: `InfJump` and
+  `BumpKill` on, `OneHit`, `QuietBursts` and `AdoptSeed` off.
