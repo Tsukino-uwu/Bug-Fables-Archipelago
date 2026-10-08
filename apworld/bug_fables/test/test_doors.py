@@ -5,6 +5,7 @@ from unittest import TestCase
 from BaseClasses import CollectionState, EntranceType
 
 from . import BugFablesTestBase, entrance_graph, generate_like_main
+from .. import entrances
 from ..data_tables import DOORS, ONE_WAYS, REGIONS, door_name, door_region, landing_region, one_way_landing
 from ..data_types import DoorConnection, DoorEnd
 from ..entrances import _partners, door_targets, pairings_from_targets, replay, room_pairs
@@ -279,6 +280,25 @@ class TestRoomSwapLeavesAStart(TestCase):
                     counts.append(sum(1 for location in world.get_locations()
                                       if location.address is not None and location.can_reach(state)))
                 self.assertGreaterEqual(counts[1], min(15, counts[0]))
+
+
+class TestRoomSwapRepairsQuickly(TestCase):
+    # A fuzzer seed (2026-10-08) killed at 15 seconds: 61 regions behind one wrong door, and the repair moved cut-off
+    # rooms at random for 6734 tries. Moving the rooms on the edge of what is cut off repairs it in about 1000.
+    OPTIONS = {"accessibility": "minimal", "artifacts_required": 2, "shuffle_quests": True,
+               "shuffle_crystal_berries": False, "enemy_sanity": True, "shuffle_medal_shops": False,
+               "shuffle_item_shops": False, "shuffle_termacade": True, "minigame_prizes": True,
+               "shop_contents": "no_progression", "shuffle_shop_inventories": True,
+               "entrance_randomizer": "room_swap", "starting_party_member": "vi", "filler_starting_checks": True}
+
+    def test_within_3000_tries(self) -> None:
+        limit, entrances.ROOM_SWAP_TRIES = entrances.ROOM_SWAP_TRIES, 3000
+        try:
+            world = generate_like_main(self.OPTIONS, seed=925783236, steps=(
+                "generate_early", "create_regions", "create_items", "set_rules", "connect_entrances"))
+        finally:
+            entrances.ROOM_SWAP_TRIES = limit
+        self.assertTrue(world.door_pairings)
 
 
 class TestDoorsRoomSwap(CoupledTests, BugFablesTestBase):

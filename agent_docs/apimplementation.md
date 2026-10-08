@@ -3729,7 +3729,13 @@ from the start found two holes:
    failed. **And a start to fill from:** once every layout passed, 4 fuzzer seeds in 10000 hit a FillError: their
    swap left 3 to 7 spots open from the start (with the start's own items) where the game's layout opens 15 to 50.
    The repair now also keeps at least as many as the game's own layout opens, up to 15 (a start with 15 filled);
-   the four then generated. Test `TestRoomSwapLeavesAStart` (two of them; 7 and 3 before).
+   the four then generated. Test `TestRoomSwapLeavesAStart` (two of them; 7 and 3 before). **Then the edge first:**
+   one tracker seed in 10000 was killed at the fuzzer's 15 seconds, the repair taking 6734 tries: 61 regions cut off
+   behind one wrong door, and its moves picked among the cut-off rooms, almost never the one that walls them off. A
+   move now takes, four times in five, a room on the edge of what is cut off (a door pair with one side reached and
+   the other not), else one standing where something is cut off: that seed in 1037 tries; 240 seeds over four setups
+   in about 250 (95% within 1460, the worst 2470, 2.9 seconds). Test `TestRoomSwapRepairsQuickly` (that seed within
+   3000 tries; the earlier moves needed 6734).
 
 **Tests** (`test_doors.py`): what every mode shares (doors rewritten, only the table's doors named, every way back
 leads back, every region reached, the spoiler listing each pair once, and **the mod doing what the logic proved**:

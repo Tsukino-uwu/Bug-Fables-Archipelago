@@ -240,8 +240,8 @@ def _plando(world: BugFablesWorld, names: dict[Door, str], coupled: bool) -> lis
 
 
 # Each try about 1.5 ms. With the rooms' one-way drops and gated parts mapped, about 4 random layouts in 1000 keep every
-# room reachable; the repair below gets there in about 190 tries (2026-10-08, 180 seeds: 95% within 650, the worst
-# 1870).
+# room reachable; the repair below gets there in about 250 tries (2026-10-08, 240 seeds over four setups: 95% within
+# 1460, the worst 2470, 2.9 seconds).
 ROOM_SWAP_TRIES = 10000
 # How often a move takes a room standing where something is cut off, rather than any room.
 _HOT_MOVES = 0.8
@@ -265,13 +265,22 @@ def _swap_rooms(world: BugFablesWorld, names: dict[Door, str]) -> list[tuple[Doo
     wanted = min(_START_SPOTS, _cut_off(world, names, as_the_game)[1])
     cut, start, pairings = _cut_off(world, names, layout.pairs())
     for _ in range(ROOM_SWAP_TRIES):
+        # The slot each door stands in now: a room's doors move with it.
+        slot_of_door = {door: slot for slot, room in layout.room_at.items() for door in layout.by_area[room]}
         if not cut and start >= wanted:
             _connect_all(world, names, pairings)
             return pairings
-        cut_maps = {region.split(" (")[0] for region in cut}
-        hot = [s for s, room in layout.room_at.items()
-               if any(m in cut_maps for m, _ in layout.by_area[room]) and s in group_of]
-        slots = group_of[random.choice(hot)] if hot and random.random() < _HOT_MOVES else random.choice(movable)
+        slots = random.choice(movable)
+        if random.random() < _HOT_MOVES:
+            # The rooms on the edge of what is cut off (a door pair with one side reached) first: moving one of them
+            # is what joins a cut-off block back; else any room standing where something is cut off.
+            edge = {slot_of_door[d] for x, y in pairings if (door_region(*x) in cut) != (door_region(*y) in cut)
+                    for d in (x, y)}
+            cut_maps = {region.split(" (")[0] for region in cut}
+            hot = sorted(edge) or [s for s, room in layout.room_at.items()
+                                   if any(m in cut_maps for m, _ in layout.by_area[room])]
+            if hot:
+                slots = group_of[random.choice(hot)]
         if len(slots) == 1 and len(layout.by_area[slots[0]]) == 1:
             slots = random.choice(movable)
         if len(slots) > 1 and random.random() < _TRADES:
