@@ -82,7 +82,7 @@ either one wrong).
 - [2026-10-07: the cave path](#2026-10-07-the-cave-path)
 - [2026-10-07: the power plant](#2026-10-07-the-power-plant)
 - [2026-10-08: Archipelago 0.6.8](#2026-10-08-archipelago-068)
-- [2026-10-08: the push at `9c1ba1d`, the Far Grasslands drafts](#2026-10-08-the-push-at-9c1ba1d-the-far-grasslands-drafts)
+- [2026-10-08: the push at `9c1ba1d`](#2026-10-08-the-push-at-9c1ba1d)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -3596,7 +3596,7 @@ either one wrong).
   The refused autosave comes only after the Logic Test's own tests (27 pass), which change a setting in memory;
   Archipelago refuses to save during tests, so nothing is written. Our scoped suite ends without it (955 passed).
 
-## 2026-10-08: the push at `9c1ba1d`, the Far Grasslands drafts
+## 2026-10-08: the push at `9c1ba1d`
 
 - **The full run on `9c1ba1d`** (the Room Swap repair, left unrun by the last session): 958 passed, the Logic Test
   check 90 of 90, the fuzzer 0 of 10000 and Universal Tracker's hook 0 of 10000 (0 timeouts, 0 ignored). Pushed
@@ -3605,3 +3605,18 @@ either one wrong).
   Field Moves fill error dropped from Known issues, as its entry said to once CI showed it gone.
 - **The checkout:** the run warned that `worlds/dkc3` had no `__init__.py`: only `__pycache__` folders left from before
   0.6.8, which deleted DKC3 upstream. Removed on the user's yes.
+- **No mapping this session:** the user didn't want the game started ("lets save that for later"). A workflow drafting
+  the six Far Grasslands rooms from the data was stopped unfinished at the user's word, who checks every room on
+  screen anyway: each room gets its draft when it comes up.
+- **Handoff (the user: continue in a new chat):** 121 of 244 ticked. Next: `FarGrasslands4` (153). From the entity
+  dump (2026-09-27) and the drafting scripts: three doors, `loadzone left` (from outside the border cave's right door;
+  its arrival raised, at height 5.5, the rest of the room at 0 to 1), `loadzone south` (from the west path's top door)
+  and `loadzoneclearing` (to `FGClearing`); five `BreakableRock`s, one (regional flag 24) just in front of the clearing
+  door's arrival and one up by the left door; two `WalkableSpike` hazards (the bubble shield's); three field enemies;
+  no pickup, grass, dig spot, save point, auto-start scene, flag-gated door or scene transfer. What each rock blocks
+  is for the screen. Then `WizardTowerBasement`, `WizardTowerStairs`, `WizardTowerAttic`, `BroodmotherLair`,
+  `FGClearing`, then the Wild Swamplands. The game's plugin is the build of `7422451`'s mod source, copied in this
+  session; no game or server running. The seed is the last mapping session's (its zip and `.apsave` in session
+  f7f04659's scratchpad, served on port 38281); `liveslot` wants a fresh `live-slot-data.py` file after the server and
+  game are up. Dev settings unchanged: `InfJump` and `BumpKill` on, `OneHit`, `QuietBursts` and `AdoptSeed` off; the
+  command file still the scratchpad `cmds.txt` of session bed6439d.
