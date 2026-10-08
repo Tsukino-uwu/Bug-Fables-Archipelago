@@ -708,10 +708,6 @@ be wrong.
 - **The Lost Sands gate claimed open** (seen 2026-10-04): on `BOLostSandsEntrance` a guard (`antguardclosed`) keeps
   the desert closed until flag 130 (Event74, the palace scene after chapter 2), but the door data has no gate there,
   so the logic counts the desert as open. To fix the open-world way: the closed guard kept away (build step 9).
-- **Room Swap's random tries** (2026-10-08): it shuffles whole rooms and keeps a layout only if every room stays
-  reachable; as the room mapping adds one-way drops and gated parts, fewer random layouts pass (about 4 in 1000 now,
-  2000 tries). The fix to come: a swap that repairs a failed layout (swapping again only the rooms around what was cut
-  off) rather than starting over. Build step 12.
 - **The swamp bridge is to stay up** (the user, 2026-10-04): its collapse (Event130 on `SwamplandsBridge`, flag
   336) never to happen. What 336 and 337 change is to read first, then the logic of both sides. **Maki** (the user,
   2026-10-08): the Far Grasslands' arrival scene (Event125) makes him a follower who fights alongside in the Far
@@ -967,7 +963,14 @@ logged in. This also proved the game's runtime can run the client library, which
 computer is entered as `ws://127.0.0.1` with port `38281`. (The mod's default address is now
 `archipelago.gg`, for hosted rooms.)
 
-**Status:** works (2026-09-24, local server; hosted rooms on archipelago.gg since build step 5).
+**The version in Connect** (2026-10-08): `network protocol.md` asks for the Archipelago version the client supports;
+the library sends its own default (0.6.0, `archipelago-review.md` item 19) unless given one, so the mod names the one
+the apworld targets, 0.6.8 (`ApConnection.TargetedArchipelago`), changed with CI's `AP_TAG`. The server (0.6.8)
+uses it to refuse a client older than a slot's minimum, or any other version when it runs with strict compatibility,
+and prints it when the client joins.
+
+**Status:** works (2026-09-24, local server; hosted rooms on archipelago.gg since build step 5). The 0.6.8 in
+Connect: built 2026-10-08, not yet seen (the server's line as the game joins names it).
 
 *Code: `mod/BugFablesAP/Core/ApConnection.cs` (`ConnectOnWorker`); the address settings in `Plugin.cs` (`Awake`).*
 
@@ -3086,6 +3089,11 @@ game decides what "die" means.
   party's turn in a normal battle. Never inside a cutscene, a text box, a menu, a door or a scripted fight.
 - **In a battle: the game's own Game Over menu** (Retry, Retry after changing medals, Load, Title). **On the map:** a
   Game Over (music out, black, its sound), then the last save, as the menu's Load does.
+- **Own team only, as it is** (the user, 2026-10-06). At 0.6.8 a `Bounce` may name other teams (`teams`) and say how
+  its targets combine (`operator`: `or`, `and`, `legacy`; `network protocol.md`, "Bounce"), but the DeathLink section
+  is unchanged, Archipelago's own `CommonClient` sends neither field, and MultiClient.Net 6.7.1 has none: the standard
+  DeathLink stays on its own team, which ours already does (0.6.7's server allowed nothing else). Kept until another
+  game or client shows how a cross-team one is done.
 
 **What counts as a death here** (`MEASURED.md`, save crystals, saving, Game Over): only a party wipe in a battle.
 Hazards and falls cost no HP; they put the party back. A scripted loss (`battlelossevent`, the story's own defeats)
@@ -3703,10 +3711,15 @@ from the start found two holes:
    door was the only way on, with the boss behind it. Archipelago's randomizer follows the logic while it places; the
    swap can't, so each try is checked the way the randomizer checks (everything the seed holds, every region reached)
    and undone if it fails, up to 20 tries. Before the check 13 of 200 tries cut regions off; after it, 0 of 200.
-   **Raised to 2000 tries (2026-10-08):** with the room mapping's one-way drops and gated parts, only about 4 in 1000
-   random swaps kept every room reachable (seed 5: 12 of 3000; the parts most often cut off, the Golden Hills
-   dungeon's upper ones, the desert's ledges, the border cave's gated sides), and 20 tries nearly always failed (the
-   Room Swap tests). A try takes about 1.5 ms, so 2000 cost at most 3 seconds and give up about 3 times in 10000.
+   **A repair instead of retries (2026-10-08):** with the room mapping's one-way drops and gated parts, only about 4
+   in 1000 random swaps kept every room reachable (seed 5: 12 of 3000; the parts most often cut off, the Golden Hills
+   dungeon's upper ones, the desert's ledges, the border cave's gated sides), so 20 tries nearly always failed, and
+   2000 still failed 2 fuzzer seeds in 10000. Now one random layout is repaired: two rooms of the same shape trade
+   places, or one room's doors turn, four moves in five around what is cut off (a room with a door in a map that
+   is), each kept unless it cuts off more. On 180 seeds every one was repaired, in about 190 tries (95% within 650,
+   the worst 1870, about 1.5 ms each); it gives up after 10000. A random layout with no repair was tried first and
+   did no better than retries (13 of 15). Test `TestRoomSwapRepairs`: the two fuzzer seeds, which the old retries
+   failed.
 
 **Tests** (`test_doors.py`): what every mode shares (doors rewritten, only the table's doors named, every way back
 leads back, every region reached, the spoiler listing each pair once, and **the mod doing what the logic proved**:

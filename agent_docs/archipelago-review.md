@@ -6,12 +6,14 @@ every standard and recommendation Archipelago mentions (`CLAUDE.md`; `apimplemen
 **What was read, in full:** every file in Archipelago's `docs/` at the tag we target (0.6.7), each also diffed against
 `main`; every generic player guide (`worlds/generic/docs/`); the reference world APQuest, file by file, at 0.6.7 and on
 `main`; and MultiClient.Net's own docs and source (v6.7.1 and `main`). Seven readers, one area each, after the earlier
-audit of what we rebuilt (2026-09-29). Every claim below cites both sides; **checked** means I read both sides myself.
+audit of what we rebuilt (2026-09-29). At 0.6.8 (2026-10-08), each of those files' changes from 0.6.7 was read: the last
+section. Every claim below cites both sides; **checked** means I read both sides myself.
 
 **The order of the work is in `apimplementation.md`, "Where it stands", Next 43.** This page holds the evidence, in the
 same numbering. Kinds: *bug*, *required* (the doc says must), *recommended* (should, recommended, encouraged, and the
-conventions the docs and APQuest show), *main only* (not in 0.6.7 yet). Line numbers in our own files are as of the
-review (2026-09-29); the files have moved since, the claims checked again 2026-09-30.
+conventions the docs and APQuest show), *main only* (not in 0.6.7 yet; shipped in 0.6.8, the last section). Line
+numbers in our own files are as of the review (2026-09-29); the files have moved since, the claims checked again
+2026-09-30.
 
 ## Bugs
 
@@ -140,9 +142,10 @@ review (2026-09-29); the files have moved since, the claims checked again 2026-0
     (`commands_en.md:13-15`); not written yet.
 19. **Connect:** a `uuid` kept in Archipelago's `common.json` (`network protocol.md:298`, `shared_cache.md:12`; the
     library makes a new one each time); the targeted Archipelago version, not the library's default 0.6.0
-    (`network protocol.md:299`); the DeathLink tag in Connect, with `ConnectUpdate` only for changes (the room is told
-    "changed tags" at every login with DeathLink on, `MultiServer.py:1990-1996`); the event hooks attached before
-    connecting (MultiClient.Net's `docfx/index.md:20-21`; ours after, `ApConnection.cs:443-457`).
+    (`network protocol.md:299`; **done 2026-10-08**: 0.6.8, build step 2); the DeathLink tag in Connect, with
+    `ConnectUpdate` only for changes (the room is told "changed tags" at every login with DeathLink on,
+    `MultiServer.py:1990-1996`); the event hooks attached before connecting (MultiClient.Net's `docfx/index.md:20-21`;
+    ours after, `ApConnection.cs:443-457`).
 20. **The rest of the protocol and the library:** a refusal with no error codes is retried forever (`:480-491`;
     `errors` is optional, `network protocol.md:121`); `InvalidPacket` is never logged (`:230-231`); the library's
     `SetGoalAchieved`, `Locations.AllLocations`, `GetRaceModeAsync` and `ColorUtils` (the earlier audit); its optional
@@ -233,14 +236,33 @@ A `CODEOWNERS` line with the exact GitHub user name (`CODEOWNERS:7`); the pull r
 fork (`contributing.md:20-23`); the website's options page and generation would then apply, and the setup guide would
 drop the download and `custom_worlds` steps. The world maintainer's duties are item 22.
 
-## Main only (not in 0.6.7 yet)
+## Shipped in 0.6.8 (the tag we target since 2026-10-08)
 
-- **`quantity`**, a new top-level key in a player's yaml (`advanced_settings_en.md` on main, lines 63 and 81-82):
-  "the amount of times this yaml should be used when generating", default 1; above 1 the name must use the numbering
-  keywords, and the host must allow it (`allow_quantity`, `Generate.py` on main, 43-44 and 140-146). Each copy is an
-  ordinary slot of ours, so nothing in the world or the mod changes.
-- `AP_TEST_WORLDS=bug_fables pytest` runs Archipelago's generic tests on one world (`tests.md`).
-- APQuest moved to the Rule Builder on 2026-04-18 (#5906), after our checkout.
-- `Bounce` gains `teams` and `operator` (`network protocol.md`); our DeathLink sends tags and data only.
-- `apworld specification.md` adds a section on choosing `minimum_ap_version` and `maximum_ap_version` (both fields
-  are in 0.6.7 already): most worlds need only the minimum, as ours sets.
+What this section listed as *main only* came out in 0.6.8; each doc's diff from 0.6.7, the generic guides' and
+APQuest's were read on 2026-10-08, and each line is handled:
+
+- **`quantity`**, a top-level key in a player's yaml (`advanced_settings_en.md:63, 81-82`): "the amount of times this
+  yaml should be used when generating", default 1; above 1 the name must use the numbering keywords. The host must
+  allow it (`allow_quantity`); without that, `Generate.py:143-144` refuses the yaml (its `settings.py` text says the
+  amount is ignored, but the code raises). Each copy is an ordinary slot of ours, so nothing in the world or the mod
+  changes; **the player guide says so** (`setup_en.md`, "Your options").
+- **`AP_TEST_WORLDS=bug_fables pytest`** runs Archipelago's general tests on one world (`tests.md:148-158`): **done**,
+  in CI and `test-apworld.ps1` (`development.md`, "The apworld's tests"). Until then only our own folder ran.
+- **APQuest moved to the Rule Builder** (#5906): read file by file. Its rules use `Has`, `HasAll`, `&`, `|` and an
+  `OptionFilter` composed with `|` (`apquest/rules.py`); ours already do the same, and `JUMP` is `rule builder.md`'s
+  own `filtered_resolution=True` example, so it stays. APQuest's setup guide gained *Optional Software* and
+  *Auto-Tracking* sections for its PopTracker pack: ours gets the same when the pack is released (build step 42).
+- **`Bounce` gains `teams` and `operator`** (`network protocol.md:419-435`): own team stays the default, which our
+  DeathLink keeps (decided, build step 25).
+- **`apworld specification.md`'s section on choosing `minimum_ap_version`**: raise it only when using a newer core
+  feature. Ours stays 0.6.7: nothing we use is new in 0.6.8 (`World.world_version` is in 0.6.7, `World.manifest` is not
+  used). Its new line that every imported subfolder needs an `__init__.py`: ours do (`client-requirements.md`).
+- **`rule builder.md`**: `AtLeast` (N of these rules), the `in` operator, `contains` now spelt out as `filter_value in
+  option_value`. None used by us yet (no rule counts rules; no filter uses an operator); `AtLeast` is the rule to use
+  when one does.
+- **`world api.md`**: a warning that a goal is told to the server with `StatusUpdate`, not with an event. Ours does
+  (`client-requirements.md`, the goal's line).
+- **`network protocol.md`**: Connect's `items_handling: null` is gone; the mod sends `AllItems`. Connect's `version`:
+  the mod now names 0.6.8 (item 19).
+- **The fill in batches (#3872) and the filler start inventory fix (#6246)**: the known fill error re-measured at 0.6.8
+  (`apimplementation.md`, Known issues): to re-measure at 0.6.8.

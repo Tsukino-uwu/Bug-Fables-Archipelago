@@ -49,35 +49,51 @@ def _areas(maps: set[str], links: Sequence[tuple[str, str]]) -> dict[str, str]:
     return {m: find(m) for m in parent}
 
 
+class _RoomLayout:
+    """Whole areas (maps joined by fixed doors both ways) trading places with areas of as many doors in their part of
+    the world: room_at[slot] is the area standing in slot's place, order[area] its doors in the order they take the
+    slot's doors."""
+
+    def __init__(self, connections: Sequence[DoorConnection], fixed: Sequence[tuple[str, str]], random: Random):
+        self.partner = _partners(connections)
+        doors = sorted(self.partner)
+        maps = {m for m, _ in doors}
+        # A one-way fixed door (a drop) joins nothing: an area moved whole could otherwise be entered on its far side.
+        both_ways = [(a, b) for a, b in fixed if (b, a) in set(fixed)]
+        area = _areas(maps, both_ways)
+        # The doors alone split the world into parts that boats and scenes join; a swap across parts would strand rooms.
+        part = _areas(maps, [*both_ways, *((a[0], b[0]) for a, b in self.partner.items())])
+        self.by_area: dict[str, list[Door]] = {}
+        for d in doors:
+            self.by_area.setdefault(area[d[0]], []).append(d)
+        alike: dict[tuple[str, int], list[str]] = {}
+        for a in sorted(self.by_area):
+            alike.setdefault((part[a], len(self.by_area[a])), []).append(a)
+        self.groups = list(alike.values())
+        self.room_at: dict[str, str] = {}
+        self.order: dict[str, list[Door]] = {}
+        for slots in self.groups:
+            rooms = list(slots)
+            random.shuffle(rooms)
+            for slot, room in zip(slots, rooms):
+                self.room_at[slot] = room
+                self.order[room] = list(self.by_area[room])
+                random.shuffle(self.order[room])
+
+    def pairs(self) -> list[tuple[Door, Door]]:
+        """Each of the game's door pairs as the pair of doors now standing where its two doors stood."""
+        # placed[d]: the door that now stands where d stood, a door of the area that took d's area's place.
+        placed: dict[Door, Door] = {}
+        for slot, room in self.room_at.items():
+            placed.update(zip(self.by_area[slot], self.order[room]))
+        return [(placed[a], placed[b]) for a, b in self.partner.items() if a < b]
+
+
 def room_pairs(connections: Sequence[DoorConnection], fixed: Sequence[tuple[str, str]],
                random: Random) -> list[tuple[Door, Door]]:
-    """Whole areas (maps joined by fixed doors both ways) trade places with areas of as many doors in their part of the
-    world; each of the game's door pairs becomes the pair of doors now standing where its two doors stood."""
-    partner = _partners(connections)
-    doors = sorted(partner)
-    maps = {m for m, _ in doors}
-    # A one-way fixed door (a drop) joins nothing: an area moved whole could otherwise be entered on its far side.
-    both_ways = [(a, b) for a, b in fixed if (b, a) in set(fixed)]
-    area = _areas(maps, both_ways)
-    # The doors alone split the world into parts that boats and scenes join; a swap across parts would strand rooms.
-    part = _areas(maps, [*both_ways, *((a[0], b[0]) for a, b in partner.items())])
-    by_area: dict[str, list[Door]] = {}
-    for d in doors:
-        by_area.setdefault(area[d[0]], []).append(d)
-    alike: dict[tuple[str, int], list[str]] = {}
-    for a in sorted(by_area):
-        alike.setdefault((part[a], len(by_area[a])), []).append(a)
-
-    # placed[d]: the door that now stands where d stood, a door of the area that took d's area's place.
-    placed: dict[Door, Door] = {}
-    for slots in alike.values():
-        rooms = list(slots)
-        random.shuffle(rooms)
-        for slot, room in zip(slots, rooms):
-            moved = list(by_area[room])
-            random.shuffle(moved)
-            placed.update(zip(by_area[slot], moved))
-    return [(placed[a], placed[b]) for a, b in partner.items() if a < b]
+    """A random room swap: whole areas trade places with areas of as many doors in their part of the world; each of
+    the game's door pairs becomes the pair of doors now standing where its two doors stood."""
+    return _RoomLayout(connections, fixed, random).pairs()
 
 
 def door_targets(pairings: Sequence[tuple[Door, Door]], connections: Sequence[DoorConnection],
@@ -223,35 +239,75 @@ def _plando(world: BugFablesWorld, names: dict[Door, str], coupled: bool) -> lis
     return pairings
 
 
-# Each try about 1.5 ms. With the rooms' one-way drops and gated parts mapped, about 4 in 1000 random swaps keep every
-# room reachable (2026-10-08, seed 5: 12 of 3000), so 2000 tries give up about 3 times in 10000.
-ROOM_SWAP_TRIES = 2000
+# Each try about 1.5 ms. With the rooms' one-way drops and gated parts mapped, about 4 random layouts in 1000 keep every
+# room reachable; the repair below gets there in about 190 tries (2026-10-08, 180 seeds: 95% within 650, the worst
+# 1870).
+ROOM_SWAP_TRIES = 10000
+# How often a move takes a room standing where something is cut off, rather than any room.
+_HOT_MOVES = 0.8
+# How often a move trades two rooms, rather than turning one room's doors.
+_TRADES = 0.7
 
 
 def _swap_rooms(world: BugFablesWorld, names: dict[Door, str]) -> list[tuple[Door, Door]]:
     """A room swap the logic can finish: unlike Archipelago's randomizer, it doesn't follow the logic while placing (a
-    gated door moves with its room and can close the only way on), so each try is checked and undone if it fails."""
+    gated door moves with its room and can close the only way on), so a random layout is repaired: two like rooms trade
+    places, or a room's doors turn, most often around what is cut off, each move kept unless it cuts off more."""
+    random = world.random
+    layout = _RoomLayout(DOORS.connections, DOORS.fixed, random)
+    group_of = {slot: slots for slots in layout.groups for slot in slots}
+    movable = [g for g in layout.groups if len(g) > 1 or len(layout.by_area[g[0]]) > 1]
+    cut, pairings = _cut_off(world, names, layout.pairs())
     for _ in range(ROOM_SWAP_TRIES):
-        pairs = room_pairs(DOORS.connections, DOORS.fixed, world.random)
-        pairings = [p for x, y in pairs for p in ((x, y), (y, x))]
-        made = [_connect(world, names[x], door_region(*y), names[y]) for x, y in pairings]
-        if _every_region_reached(world):
+        if not cut:
+            _connect_all(world, names, pairings)
             return pairings
-        for source, region, target in made:
-            region.entrances.remove(source)
-            source.connected_region = None
-            region.entrances.append(target)
+        cut_maps = {region.split(" (")[0] for region in cut}
+        hot = [s for s, room in layout.room_at.items()
+               if any(m in cut_maps for m, _ in layout.by_area[room]) and s in group_of]
+        slots = group_of[random.choice(hot)] if hot and random.random() < _HOT_MOVES else random.choice(movable)
+        if len(slots) == 1 and len(layout.by_area[slots[0]]) == 1:
+            slots = random.choice(movable)
+        if len(slots) > 1 and random.random() < _TRADES:
+            a, b = random.sample(slots, 2)
+            layout.room_at[a], layout.room_at[b] = layout.room_at[b], layout.room_at[a]
+            undo = (a, b, None)
+        else:
+            room = layout.room_at[random.choice(slots)]
+            undo = (None, room, list(layout.order[room]))
+            random.shuffle(layout.order[room])
+        now, now_pairings = _cut_off(world, names, layout.pairs())
+        if len(now) <= len(cut):
+            cut, pairings = now, now_pairings
+        elif undo[0] is not None:
+            layout.room_at[undo[0]], layout.room_at[undo[1]] = layout.room_at[undo[1]], layout.room_at[undo[0]]
+        else:
+            layout.order[undo[1]] = undo[2]
     raise RuntimeError(f"Bug Fables: no room swap in {ROOM_SWAP_TRIES} tries kept every room reachable")
 
 
-def _every_region_reached(world: BugFablesWorld) -> bool:
-    """With everything the seed holds, as Archipelago's randomizer checks it: every region reached."""
+def _cut_off(world: BugFablesWorld, names: dict[Door, str],
+             pairs: list[tuple[Door, Door]]) -> tuple[set[str], list[tuple[Door, Door]]]:
+    """The regions a layout cuts off with everything the seed holds, as Archipelago's randomizer checks it, and the
+    layout's pairings both ways; the doors are left as they were."""
+    pairings = [p for x, y in pairs for p in ((x, y), (y, x))]
+    made = _connect_all(world, names, pairings)
     state = CollectionState(world.multiworld)
     for item in world.multiworld.itempool:
         if item.player == world.player:
             world.collect(state, item)
     state.sweep_for_advancements(world.get_locations())
-    return all(state.can_reach_region(region.name, world.player) for region in world.get_regions())
+    cut = {region.name for region in world.get_regions() if not state.can_reach_region(region.name, world.player)}
+    for source, region, target in made:
+        region.entrances.remove(source)
+        source.connected_region = None
+        region.entrances.append(target)
+    return cut, pairings
+
+
+def _connect_all(world: BugFablesWorld, names: dict[Door, str],
+                 pairings: list[tuple[Door, Door]]) -> list[tuple[Entrance, Region, Entrance]]:
+    return [_connect(world, names[x], door_region(*y), names[y]) for x, y in pairings]
 
 
 def write_spoiler(world: BugFablesWorld) -> None:

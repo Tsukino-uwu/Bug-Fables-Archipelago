@@ -1,6 +1,7 @@
 # Archipelago requirements and known failure modes
 
-The hard requirements come from Archipelago's `docs/adding games.md` at tag `0.6.7` (read 2026-09-24); since
+The hard requirements come from Archipelago's `docs/adding games.md` at tag `0.6.7` (read 2026-09-24; re-read at
+`0.6.8` on 2026-10-08: the same list, reworded, now pointing to APQuest as the example world); since
 2026-09-29 the lines below also carry what the full review of every Archipelago doc found
 ([archipelago-review.md](archipelago-review.md), whose numbers they cite). **Tick a box only with its evidence and
 date.** "It should work" doesn't count, and neither does a green build for anything that happens in the game.
@@ -31,14 +32,16 @@ date.** "It should work" doesn't count, and neither does a green build for anyth
 - [x] Items sent while disconnected are received on connect (2026-09-24: two items the server already held arrived
   at the next login, seen on screen; build step 7)
 - [ ] Room messages (`PrintJSON`) are shown to the player, or `NoText` is sent (review 18)
-- [ ] Connect carries the `uuid` kept in Archipelago's `common.json` and the targeted Archipelago version (review 19)
+- [ ] Connect carries the `uuid` kept in Archipelago's `common.json` and the targeted Archipelago version (review 19;
+  the version built 2026-10-08, 0.6.8, not yet seen; the `uuid` still the library's new one each time)
 - [ ] A refusal without error codes stops the retries; `InvalidPacket` is logged (review 20)
 - [ ] A failed or refused attempt closes its connection (review 2)
 
 ## World (the apworld)
 
 - [x] `worlds/bug_fables/` with `__init__.py`, and an `__init__.py` in every subfolder holding `.py` files
-      (2026-09-29: `logic/` and `test/`, each with its `__init__.py`)
+      (2026-09-29: `logic/` and `test/`, each with its `__init__.py`; 2026-10-08, against `apworld specification.md`
+      at 0.6.8, which asks it of every imported subfolder: still those two, and `data/` and `docs/` hold no Python)
 - [x] A game info doc `en_Bug Fables.md`, found through the `WebWorld`'s `game_info_languages`, and a setup doc
       listed in its tutorials (2026-09-29: read in `web_world.py`)
 - [x] A `World` subclass with a unique `game`, and a `WebWorld` instance (2026-09-27: read in `world.py`; 384 tests pass

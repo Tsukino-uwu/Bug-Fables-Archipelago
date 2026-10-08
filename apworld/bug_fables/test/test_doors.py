@@ -223,6 +223,31 @@ class TestDoorsDecoupled(OneWayTests, DoorPairTests, BugFablesTestBase):
         self.assertEqual(len(self.spoiler_entries()), 2 * len(DOORS.connections) + len(ONE_WAYS))
 
 
+class TestRoomSwapRepairs(TestCase):
+    # Two fuzzer seeds (2026-10-08) where 2000 random layouts all cut a room off: the repair finds one that doesn't.
+    CASES = {
+        711135320: {"entrance_randomizer": "room_swap", "starting_party_member": "all_three", "shuffle_jump": True,
+                    "shuffle_quests": True, "shuffle_discoveries": True, "shuffle_hidden_items": True,
+                    "enemy_sanity": True, "enemy_shuffle": "enemies_only", "shuffle_medal_shops": False,
+                    "shuffle_item_shops": False, "shuffle_termacade": False, "shop_contents": "no_progression",
+                    "artifacts_required": 5, "accessibility": "minimal", "progression_balancing": 77},
+        716960009: {"entrance_randomizer": "room_swap", "starting_party_member": "random_member",
+                    "shuffle_field_moves": True, "shuffle_quests": True, "shuffle_crystal_berries": False,
+                    "shuffle_discoveries": True, "shuffle_hidden_items": True, "shuffle_dig_spots": True,
+                    "enemy_sanity": True, "shuffle_medal_shops": True, "shuffle_item_shops": False,
+                    "shop_contents": "anything", "shuffle_shop_inventories": True, "music_shuffle": True},
+    }
+
+    def test_every_room_kept_reachable(self) -> None:
+        for seed, options in self.CASES.items():
+            with self.subTest(seed=seed):
+                world = generate_like_main(options, seed=seed, steps=(
+                    "generate_early", "create_regions", "create_items", "set_rules", "connect_entrances"))
+                state = world.multiworld.get_all_state()
+                for region in world.get_regions():
+                    self.assertTrue(state.can_reach_region(region.name, world.player), region.name)
+
+
 class TestDoorsRoomSwap(CoupledTests, BugFablesTestBase):
     options = {"entrance_randomizer": "room_swap"}
     one_way_lines = 0

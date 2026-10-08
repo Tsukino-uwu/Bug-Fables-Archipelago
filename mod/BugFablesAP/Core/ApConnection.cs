@@ -19,6 +19,8 @@ namespace BugFablesAP
     internal sealed class ApConnection
     {
         internal const string Game = "Bug Fables";
+        // The Archipelago version Connect names: the one the apworld targets, not the library's older default.
+        private static readonly Version TargetedArchipelago = new Version(0, 6, 8);
 
         private readonly ManualLogSource log;
         private readonly object gate = new object();
@@ -441,7 +443,7 @@ namespace BugFablesAP
                     }
                 };
                 LoginResult result = attempt.TryConnectAndLogin(
-                    Game, slot, ItemsHandlingFlags.AllItems,
+                    Game, slot, ItemsHandlingFlags.AllItems, version: TargetedArchipelago,
                     password: string.IsNullOrEmpty(password) ? null : password);
 
                 if (!IsCurrent(number))

@@ -20,6 +20,11 @@
 
 Edit `bug_fables.yaml` (at least `name`, your slot name) and give it to whoever generates the room.
 
+To play several slots with the same options from one yaml (Archipelago 0.6.8 or newer), add `quantity: 3` at its top,
+next to `name`, and give each copy its own name with `{number}`, e.g. `name: Bug{number}`. The host has to allow it
+(`allow_quantity` in their `host.yaml`); otherwise generating stops with an error. The
+[Advanced YAML Guide](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en) has the rest.
+
 ## Connecting
 
 On the game's main menu, choose **Archipelago**. The panel has:
