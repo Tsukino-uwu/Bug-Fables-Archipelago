@@ -3527,6 +3527,16 @@ either one wrong).
   items; `minigame_prizes` neither sent nor listed. Room Swap failed every time: about 4 random layouts in 1000 keep
   every room reachable now; 2000 retries still failed 2 fuzzer seeds, so a layout is repaired instead (moves around
   what is cut off): 180 of 180 seeds, test `TestRoomSwapRepairs`. CI's three two-game generations run locally, fine.
+  Then 4 fuzzer seeds in 10000 failed the fill, their swap opening 3 to 7 spots from the start, and later ones timed
+  out: the repair now keeps 10 spots that can take progression open from the start (fewer if the game's own layout
+  opens fewer), moves rooms on the edge of what is cut off and then of what the start opens, starts a layout stuck for
+  1000 tries over, and rewires only the doors a move changed (build step 30; tests `TestRoomSwapLeavesAStart`,
+  `TestRoomSwapRepairsQuickly`). The last run: 956 passed, the Logic Test check 90 of 90, the fuzzer 0 of 10000 and
+  Universal Tracker's hook 0 of 10000 (0 timeouts, 0 ignored). Pushed `4046308..cb2f4f3` (both sessions' 227
+  commits): CI and Preflight green, CI's first run at 0.6.8, 963 passed on 3.11 to 3.13 (956 here, `test/webhost`
+  skipped without flask). Left as Archipelago 0.6.8's own unit tests have them (the same runner label and install):
+  12 DeprecationWarnings on 3.13 from pony, WebHost's ORM, and GitHub's notice that `ubuntu-latest` moves to Ubuntu 26
+  from 2026-10-19 (the first run after that date gets read).
 
 ## 2026-10-08: Archipelago 0.6.8
 
