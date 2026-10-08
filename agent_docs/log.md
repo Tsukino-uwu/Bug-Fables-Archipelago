@@ -3560,8 +3560,8 @@ either one wrong).
   200 on 2026-10-05; more rooms mapped since, and 0.6.8's batched fill, not told apart), and the other session's
   10000 fuzzed seeds that day had none. My first measuring script claimed 0 of 200 in 4 s with a circular-import
   error above it: `Fill` imported before the worlds. Imported after them, with the options read back from the world
-  and every location checked filled, it held. The checkout's `host.yaml` lacks 0.6.8's settings (each pytest run
-  ends with a refused autosave): `Launcher.py --update_settings` there is the user's call.
+  and every location checked filled, it held. A refused `host.yaml` autosave after the Logic Test's tests, first read
+  as a `host.yaml` missing 0.6.8's settings: wrong, see the README bullet below.
 - **Two sessions, one tree:** the other session's `7c101b8` swept in half this work's uncommitted edits (its commit
   subject is the Room Swap repair); noted in `771629c`, nothing lost. After a message both sides commit by path and
   hunk; mine from a temporary index where a file held both sessions' hunks. Its push carries this work.
@@ -3571,5 +3571,7 @@ either one wrong).
   areas. Asked to reword it, the user removed it instead: "it serves no real purpose anymore", as the project only
   grows more complete. The next release comes once every room's logic is mapped (the game then fully playable), then
   the quests, enemies and discoveries, then logic tweaks and maybe new options (Next 8). CLAUDE.md's README rule
-  changed to match. And `Launcher.py --update_settings` in the checkout, on the user's yes, once the other session's
-  run there ended.
+  changed to match. Then `Launcher.py --update_settings` in the checkout, on the user's yes, once the other session's
+  run there ended (`host.yaml` backed up first): it changed nothing, so `host.yaml` already had every 0.6.8 setting.
+  The refused autosave comes only after the Logic Test's own tests (27 pass), which change a setting in memory;
+  Archipelago refuses to save during tests, so nothing is written. Our scoped suite ends without it (955 passed).
