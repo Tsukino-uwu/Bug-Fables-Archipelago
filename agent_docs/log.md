@@ -3665,3 +3665,6 @@ either one wrong).
   chose the rule: "Archipelago's way" now names its moment (before anything that talks to the server or a tracker)
   and its action (read the source of Archipelago, MultiClient.Net, not just its DLL, or PopTracker), in its same five
   lines. The memory note was deleted.
+- **Pushed** (the user's ask): first the full run on `7aa3870`, 960 passed (31775 subtests), the Logic Test check 90
+  of 90, the fuzzer 0 of 10000 and Universal Tracker's hook 0 of 10000 (the session's new tests among them); then
+  `a31346d..7aa3870`, CI and Preflight green. The pack pushed too (`6feb6c2..9708953`; it has no CI).
