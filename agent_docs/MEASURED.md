@@ -1312,6 +1312,15 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (`CutGrass` calls `ActivateRegion`) and handed to its drop (`tempitem.activationflag`): cutting one on a file
   before the first boss set 41, the mod counted an artifact, and the seed's goal (one artifact) was sent (seen,
   2026-10-08). The fix: `apimplementation.md`, build step 60.
+  **`Swamplands3`, Leafbug Crossing (2026-10-08, the user, the dumps and code):** three parts in a row. The bottom (the
+  door from `Swamplands2`, bottom left) free. The middle, to and from it with Jump or Bee Fly: the tree there knocked
+  down with the horn (a hidden `Switch`, `eventhit`, data `1 129 0 0 1`, until 335, hit only by the horn or the Dash,
+  starts `Event129`: the switch and the three Leafbugs on the right destroyed, then 335; no fight), down for good (the
+  standing tree's `ConditionChecker`s hidden from 335, the fallen trunk's shown; nothing outside the room reads 335).
+  The upper right (the door to `SwamplandsBridge`, height 3): before the tree falls, cut off but for a drop down into
+  the middle, free, a one-way (the bottom then still Jump or Bee Fly away); after, to and from the middle over the trunk
+  with Jump or Bee Fly. One lily pad and one grass tuft (no flag 41 here); a Leafbug Clubber and Ninja for the enemy
+  pass; no items.
   **`SwamplandsBridge`, the swamp bridge (2026-10-08, code and the dumps only; not yet mapped on screen):** two
   bridges. The upper one (`Base/Bridge`, `Base/BridgeWalls`, `Base/Cube`: `ConditionChecker`s hidden from 336) spans
   the room at the doors' height (y 0), from `loadzoneleft` to `loadzone right`. Its collapse is `Event130`

@@ -1,8 +1,13 @@
 """Wild Swamplands (the game's area 9, MapControl.areaid): its spots. Its rooms aren't mapped yet."""
 from __future__ import annotations
 
+from rule_builder.rules import Has
+
 from ..custom_rules import LATER_CHAPTERS, CanUse, Member
-from ..data_types import Area, Location, Pickup, Source
+from ..data_types import Area, Location, Pickup, Source, StoryEvent, Transfer
+
+_UP = CanUse("Jump") | CanUse("Bee Fly")
+_TREE_DOWN = "Swamp Tree Knocked Down"
 
 LOCATIONS = (
     # Where the game teaches the Horn Dash (flag 39); the later chapters' story-order stand-in, every ability taught
@@ -20,14 +25,31 @@ LOCATIONS = (
              Source(regional=6, pickup=Pickup(map="Swamplands2", type=0, item=1)), rule=CanUse("Horn Slash"),
              category="hidden_item", no_jump=True),
 )
+STORY_EVENTS = (
+    # Leafbug Crossing's tree, knocked down by the horn from the middle (Event129: the hidden switch `eventhit`, hit by
+    # the horn or the Dash, sets 335; the Leafbugs on the right leave): a bridge up to the right for good.
+    StoryEvent("Wild Swamplands: Leafbug Crossing, Tree Knocked Down", _TREE_DOWN, "Swamplands3", Source(flag=335),
+               rule=CanUse("Horn Slash")),
+)
 MAP_AREAS = (
-    # The swamp boss's room (the user, 2026-10-08): its bottom (the door, the save crystal, the healing flower) the map's
-    # own region; its top door across lily pads, Jump, past the boss in the middle (Event137, until 359), fought from
-    # either side: Leif, as it burrows, and it summons nothing. Both ways.
+    # The swamp boss's room (the user, 2026-10-08): its bottom (the door, the save crystal, the healing flower) the
+    # map's own region; its top door across lily pads, Jump, past the boss in the middle (Event137, until 359), fought
+    # from either side: Leif, as it burrows, and it summons nothing. Both ways.
     Area("SwamplandsBoss", "Top", ("loadzonenorth",), CanUse("Jump") & Member("Leif")),
     # The swamp's second room (the user, 2026-10-08): its bottom door the map's own region; its top door up across lily
     # pads and grass-blocked ledges, Jump and the horn or Bee Fly; back down the horn or Bee Fly, no Jump. The Leafbug
     # ambush before the top door (Event128) for the enemy pass.
     Area("Swamplands2", "Top", ("loadzonenorth",), CanUse("Jump") & (CanUse("Horn Slash") | CanUse("Bee Fly")),
          out=CanUse("Horn Slash") | CanUse("Bee Fly")),
+    # Leafbug Crossing (the user, 2026-10-08): its middle, where the tree is knocked down for good (the story event
+    # above), the map's own region; the bottom (its left door) to and from it with Jump or Bee Fly; the upper right (its
+    # door to the swamp bridge) to and from it over the fallen tree, Jump or Bee Fly. Before then, only a drop from the
+    # upper right into the middle (below).
+    Area("Swamplands3", "Bottom", ("loadzone back",), _UP),
+    Area("Swamplands3", "Right", ("loadzoneright",), Has(_TREE_DOWN) & _UP),
+)
+TRANSFERS = (
+    # Leafbug Crossing's upper right down into the middle, a drop: back up, the tree knocked down and Jump or Bee Fly.
+    Transfer("drop", "Swamplands3", "Swamplands3", two_way=False, way_back=CanUse("Horn Slash") & _UP,
+             from_area="Right"),
 )
