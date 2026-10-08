@@ -3,6 +3,7 @@ from random import Random
 from unittest import TestCase
 
 from BaseClasses import CollectionState, EntranceType, LocationProgressType
+from worlds.AutoWorld import call_all
 
 from . import BugFablesTestBase, entrance_graph, generate_like_main
 from .. import entrances
@@ -10,6 +11,7 @@ from ..data_tables import DOORS, ONE_WAYS, REGIONS, door_name, door_region, land
 from ..data_types import DoorConnection, DoorEnd
 from ..entrances import _partners, door_targets, pairings_from_targets, replay, room_pairs
 from ..options import DoorPlando
+from ..world import BugFablesWorld
 
 Door = tuple[str, str]
 ONE_WAY_DOORS = {(w.map, w.door) for w in ONE_WAYS}
@@ -273,19 +275,30 @@ class TestRoomSwapLeavesAStart(TestCase):
                 counts = []
                 for mode in ("off", "room_swap"):
                     world = generate_like_main({**options, "entrance_randomizer": mode}, seed=seed, steps=steps)
-                    state = CollectionState(world.multiworld)
-                    for item in world.multiworld.precollected_items[world.player]:
-                        state.collect(item, True)
-                    state.sweep_for_advancements()
-                    counts.append(sum(1 for location in world.get_locations()
-                                      if location.address is not None and location.can_reach(state)
-                                      and location.progress_type != LocationProgressType.EXCLUDED))
+                    counts.append(_start_spots(world))
                 self.assertGreaterEqual(counts[1], min(10, counts[0]))
+
+    def test_the_start_holds_its_items_once(self) -> None:
+        # A new CollectionState already holds the start's items; collected again, a Progressive Dash in the start
+        # counted as Horn Dash, one spot more than the start opens (41 against 40).
+        world = generate_like_main({"shuffle_field_moves": True}, seed=1, steps=("generate_early",))
+        world.multiworld.push_precollected(world.create_item("Progressive Dash"))
+        for step in ("create_regions", "create_items", "set_rules", "connect_entrances"):
+            call_all(world.multiworld, step)
+        self.assertEqual(entrances._Measure(world)()[1], _start_spots(world))
+
+
+def _start_spots(world: BugFablesWorld) -> int:
+    """The spots that can take progression open from the start, with the start's own items."""
+    state = CollectionState(world.multiworld)
+    state.sweep_for_advancements()
+    return sum(1 for location in world.get_locations() if location.address is not None
+               and location.progress_type != LocationProgressType.EXCLUDED and location.can_reach(state))
 
 
 class TestRoomSwapRepairsQuickly(TestCase):
     # A fuzzer seed (2026-10-08) killed at 15 seconds: 61 regions behind one wrong door, and the repair moved cut-off
-    # rooms at random for 6734 tries. Moving the rooms on the edge of what is cut off repairs it in about 1000.
+    # rooms at random for 6734 tries. Moving the rooms on the edge of what is cut off repaired it in 1037; now 124.
     OPTIONS = {"accessibility": "minimal", "artifacts_required": 2, "shuffle_quests": True,
                "shuffle_crystal_berries": False, "enemy_sanity": True, "shuffle_medal_shops": False,
                "shuffle_item_shops": False, "shuffle_termacade": True, "minigame_prizes": True,
@@ -293,7 +306,7 @@ class TestRoomSwapRepairsQuickly(TestCase):
                "entrance_randomizer": "room_swap", "starting_party_member": "vi", "filler_starting_checks": True}
 
     # A random start (2026-10-08) where the repair cut nothing off by try 51 but never opened more than 7 spots from the
-    # start, and gave up at 10000: no one move helped. A layout stuck for 1000 tries now starts over.
+    # start, and gave up at 10000: no one move helped. Now 113 tries.
     STUCK = {"progression_balancing": 25, "artifacts_required": 1, "shuffle_quests": True,
              "shuffle_hidden_items": True, "shuffle_dig_spots": True, "enemy_sanity": False,
              "shuffle_medal_shops": False, "shuffle_item_shops": True, "shuffle_termacade": True,
@@ -302,23 +315,45 @@ class TestRoomSwapRepairsQuickly(TestCase):
              "filler_starting_checks": True, "shuffle_field_moves": True, "shuffle_jump": True,
              "progressive_boat": True, "music_shuffle": True}
 
-    def test_a_stuck_layout_starts_over(self) -> None:
-        limit, entrances.ROOM_SWAP_TRIES = entrances.ROOM_SWAP_TRIES, 3000
-        try:
-            world = generate_like_main(self.STUCK, seed=334640838, steps=(
-                "generate_early", "create_regions", "create_items", "set_rules", "connect_entrances"))
-        finally:
-            entrances.ROOM_SWAP_TRIES = limit
-        self.assertTrue(world.door_pairings)
+    # CI's Universal Tracker run (2026-10-08) killed this seed at 15 seconds: three layouts stuck for 1000 tries each,
+    # every one short of start spots, before one converged, 4532 tries. Now 301.
+    SLOW_START_OVER = {"progression_balancing": 77, "accessibility": "minimal", "artifacts_required": 6,
+                       "shuffle_quests": True, "shuffle_crystal_berries": False, "shuffle_discoveries": True,
+                       "shuffle_hidden_items": True, "shuffle_dig_spots": False, "enemy_sanity": True,
+                       "shuffle_medal_shops": False, "shuffle_item_shops": False, "shuffle_termacade": True,
+                       "minigame_prizes": False, "shop_contents": "anything", "shuffle_shop_inventories": False,
+                       "entrance_randomizer": "room_swap", "enemy_shuffle": "enemies_only",
+                       "starting_location": "off", "starting_party_member": "leif", "filler_starting_checks": False,
+                       "shuffle_field_moves": True, "shuffle_jump": True, "points_of_no_return": False,
+                       "progressive_boat": True, "music_shuffle": False}
+
+    # With the field moves and Jump shuffled, the start's way on is gated inside the rooms it reaches, with no door to
+    # aim at: moving those rooms repairs these in 596 and 177 tries, where moves around what is cut off took 2938 and
+    # 2196 (2026-10-08).
+    SHORT_START = {"entrance_randomizer": "room_swap", "shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_stuck_starts_are_repaired(self) -> None:
+        for options, seed in ((self.STUCK, 334640838), (self.SLOW_START_OVER, 597777627)):
+            with self.subTest(seed=seed):
+                self.assertTrue(_repaired_within(options, seed, 1500).door_pairings)
+
+    def test_a_short_start_moves_its_own_rooms(self) -> None:
+        for seed in (11120, 20931):
+            with self.subTest(seed=seed):
+                self.assertTrue(_repaired_within(self.SHORT_START, seed, 1000).door_pairings)
 
     def test_within_3000_tries(self) -> None:
-        limit, entrances.ROOM_SWAP_TRIES = entrances.ROOM_SWAP_TRIES, 3000
-        try:
-            world = generate_like_main(self.OPTIONS, seed=925783236, steps=(
-                "generate_early", "create_regions", "create_items", "set_rules", "connect_entrances"))
-        finally:
-            entrances.ROOM_SWAP_TRIES = limit
-        self.assertTrue(world.door_pairings)
+        self.assertTrue(_repaired_within(self.OPTIONS, 925783236, 3000).door_pairings)
+
+
+def _repaired_within(options: dict[str, object], seed: int, tries: int) -> BugFablesWorld:
+    """A world whose Room Swap may take only so many tries."""
+    limit, entrances.ROOM_SWAP_TRIES = entrances.ROOM_SWAP_TRIES, tries
+    try:
+        return generate_like_main(options, seed=seed, steps=(
+            "generate_early", "create_regions", "create_items", "set_rules", "connect_entrances"))
+    finally:
+        entrances.ROOM_SWAP_TRIES = limit
 
 
 class TestDoorsRoomSwap(CoupledTests, BugFablesTestBase):

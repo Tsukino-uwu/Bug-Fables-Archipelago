@@ -3537,6 +3537,15 @@ either one wrong).
   skipped without flask). Left as Archipelago 0.6.8's own unit tests have them (the same runner label and install):
   12 DeprecationWarnings on 3.13 from pony, WebHost's ORM, and GitHub's notice that `ubuntu-latest` moves to Ubuntu 26
   from 2026-10-19 (the first run after that date gets read).
+- **CI red on the log commit `05b9e86` (2026-10-08):** Universal Tracker's hook timed out 1 seed in 2000 (0
+  failures), seed 597777627: its swap took 4532 tries here, three layouts each stuck for 1000 tries, none cutting
+  anything off but each opening only 7 to 9 start spots. With the moves shuffled the start's way on is gated inside the
+  rooms it reaches, with no door edge to aim at. Now a short start moves its own rooms and a stuck layout starts over
+  after 200 (both measured over 3000 seeds, build step 30): that seed in 301 tries. Found on the way: counting the
+  start's spots collected its items twice (a new `CollectionState` already holds them), fixed. The other session's
+  chat is closed (the user). **Open:** the change is committed but the full run (`test-apworld.ps1`) was stopped
+  at the user's word before it finished; only the Room Swap tests ran (6 pass). Run it, then push: main is 1 commit
+  ahead of the red CI.
 
 ## 2026-10-08: Archipelago 0.6.8
 

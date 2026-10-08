@@ -239,59 +239,62 @@ def _plando(world: BugFablesWorld, names: dict[Door, str], coupled: bool) -> lis
     return pairings
 
 
-# Each try about 1.5 ms. With the rooms' one-way drops and gated parts mapped, about 4 random layouts in 1000 keep every
-# room reachable; the repair below gets there in about 200 tries (2026-10-08, 300 seeds over five setups: 95% within
-# 1400, the worst 1717, 1.4 seconds).
+# Few random layouts keep every room reachable; the repair below takes about 190 tries (measured in build step 30).
 ROOM_SWAP_TRIES = 10000
-# How often a move takes a room standing where something is cut off, rather than any room.
+# How often a move takes a room where the repair is needed (one the start reaches, or one around what is cut off),
+# rather than any room.
 _HOT_MOVES = 0.8
 # How often a move trades two rooms, rather than turning one room's doors.
 _TRADES = 0.7
 # A layout that hasn't improved in this many tries is stuck (no one move helps): start again from a new random one.
-_STUCK = 1000
+_STUCK = 200
 # The spots open from the start that can take progression (not excluded), which the swap must leave: as many as the
-# game's own layout has, up to this many. Fewer and the fill can't place the early items (2026-10-08: the fuzzer's
-# FillErrors had 3 to 7 counting excluded ones, two of them with Filler Starting Checks keeping the opening's spots to
-# filler; with no target 474 swapped seeds opening 7 to 14 all filled).
+# game's own layout has, up to this many. Fewer and the fill can't place the early items.
 _START_SPOTS = 10
 
 
 def _swap_rooms(world: BugFablesWorld, names: dict[Door, str]) -> list[tuple[Door, Door]]:
     """A room swap the logic can finish: unlike Archipelago's randomizer, it doesn't follow the logic while placing (a
     gated door moves with its room and can close the only way on), so a random layout is repaired: two like rooms trade
-    places, or a room's doors turn, most often around what is cut off, each move kept unless it cuts off more or opens
-    fewer spots from the start than wanted (the fill needs them)."""
+    places, or a room's doors turn, most often among the rooms the start reaches while it opens fewer spots than wanted
+    (the fill needs them), else around what is cut off, each move kept unless it cuts off more or opens fewer."""
     random = world.random
     wiring = _Wiring(world, names)
+    measure = _Measure(world)
     layout = _RoomLayout(DOORS.connections, DOORS.fixed, random)
     group_of = {slot: slots for slots in layout.groups for slot in slots}
     movable = [g for g in layout.groups if len(g) > 1 or len(layout.by_area[g[0]]) > 1]
+    region_of = {door: door_region(*door) for door in layout.partner}
     wiring.wire([(a, b) for a, b in layout.partner.items() if a < b])
-    wanted = min(_START_SPOTS, _measure(world)[1])
+    wanted = min(_START_SPOTS, measure()[1])
     pairings = wiring.wire(layout.pairs())
-    cut, start, opened = _measure(world)
+    cut, start, opened = measure()
     since_better = 0
     for _ in range(ROOM_SWAP_TRIES):
         if since_better >= _STUCK:
             layout = _RoomLayout(DOORS.connections, DOORS.fixed, random)
             pairings = wiring.wire(layout.pairs())
-            cut, start, opened = _measure(world)
+            cut, start, opened = measure()
             since_better = 0
         if not cut and start >= wanted:
             return pairings
-        # The slot each door stands in now: a room's doors move with it.
-        slot_of_door = {door: slot for slot, room in layout.room_at.items() for door in layout.by_area[room]}
         slots = random.choice(movable)
         if random.random() < _HOT_MOVES:
-            # The rooms on the edge of what is cut off (a door pair with one side reached) first: moving one of them
-            # is what joins a cut-off block back; else any room standing where something is cut off. Once nothing is,
-            # the edge of what the start opens: moving one of those opens more from the start.
-            inside = cut or opened
-            edge = {slot_of_door[d] for x, y in pairings
-                    if (door_region(*x) in inside) != (door_region(*y) in inside) for d in (x, y)}
-            cut_maps = {region.split(" (")[0] for region in cut}
-            hot = sorted(edge) or [s for s, room in layout.room_at.items()
-                                   if any(m in cut_maps for m, _ in layout.by_area[room])]
+            if start < wanted:
+                # The start's way on is mostly gated inside the rooms it reaches, with no door to aim at: one of those
+                # rooms trades places or turns its doors.
+                hot = [s for s, room in layout.room_at.items()
+                       if any(region_of[d] in opened for d in layout.by_area[room])]
+            else:
+                # The rooms on the edge of what is cut off (a door pair with one side reached) first: moving one of
+                # them is what joins a cut-off block back; else any room standing where something is cut off.
+                # The slot each door stands in now: a room's doors move with it.
+                slot_of_door = {door: slot for slot, room in layout.room_at.items() for door in layout.by_area[room]}
+                edge = {slot_of_door[d] for x, y in pairings
+                        if (region_of[x] in cut) != (region_of[y] in cut) for d in (x, y)}
+                cut_maps = {region.split(" (")[0] for region in cut}
+                hot = sorted(edge) or [s for s, room in layout.room_at.items()
+                                       if any(m in cut_maps for m, _ in layout.by_area[room])]
             if hot:
                 slots = group_of[random.choice(hot)]
         if len(slots) == 1 and len(layout.by_area[slots[0]]) == 1:
@@ -305,7 +308,7 @@ def _swap_rooms(world: BugFablesWorld, names: dict[Door, str]) -> list[tuple[Doo
             undo = (None, room, list(layout.order[room]))
             random.shuffle(layout.order[room])
         now_pairings = wiring.wire(layout.pairs())
-        now, now_start, now_opened = _measure(world)
+        now, now_start, now_opened = measure()
         score, now_score = (len(cut), max(0, wanted - start)), (len(now), max(0, wanted - now_start))
         since_better = 0 if now_score < score else since_better + 1
         if now_score <= score:
@@ -342,26 +345,35 @@ class _Wiring:
         return pairings
 
 
-def _measure(world: BugFablesWorld) -> tuple[set[str], int, set[str]]:
+class _Measure:
     """For the layout connected now: the regions it cuts off with everything the seed holds, as Archipelago's
     randomizer checks it; how many spots that can take progression (not excluded) it opens from the start, with only
     the start's items; and the regions it opens."""
-    start = CollectionState(world.multiworld)
-    for item in world.multiworld.precollected_items[world.player]:
-        start.collect(item, True)
-    start.sweep_for_advancements(world.get_locations())
-    opened_regions = [region for region in world.get_regions() if start.can_reach_region(region.name, world.player)]
-    opened = {region.name for region in opened_regions}
-    spots = sum(1 for region in opened_regions for location in region.locations
-                if location.address is not None and location.progress_type != LocationProgressType.EXCLUDED
-                and location.access_rule(start))
-    state = CollectionState(world.multiworld)
-    for item in world.multiworld.itempool:
-        if item.player == world.player:
-            world.collect(state, item)
-    state.sweep_for_advancements(world.get_locations())
-    cut = {region.name for region in world.get_regions() if not state.can_reach_region(region.name, world.player)}
-    return cut, spots, opened
+
+    def __init__(self, world: BugFablesWorld):
+        self.world = world
+        self.locations = tuple(world.get_locations())
+        self.regions = tuple(world.get_regions())
+        # Everything the seed holds, collected once: each measure sweeps a copy.
+        self.everything = CollectionState(world.multiworld)
+        for item in world.multiworld.itempool:
+            if item.player == world.player:
+                world.collect(self.everything, item)
+
+    def __call__(self) -> tuple[set[str], int, set[str]]:
+        player = self.world.player
+        # A new state already holds the start's items.
+        start = CollectionState(self.world.multiworld)
+        start.sweep_for_advancements(self.locations)
+        opened_regions = [region for region in self.regions if start.can_reach_region(region.name, player)]
+        opened = {region.name for region in opened_regions}
+        spots = sum(1 for region in opened_regions for location in region.locations
+                    if location.address is not None and location.progress_type != LocationProgressType.EXCLUDED
+                    and location.access_rule(start))
+        state = self.everything.copy()
+        state.sweep_for_advancements(self.locations)
+        cut = {region.name for region in self.regions if not state.can_reach_region(region.name, player)}
+        return cut, spots, opened
 
 
 def write_spoiler(world: BugFablesWorld) -> None:

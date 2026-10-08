@@ -3753,7 +3753,25 @@ from the start found two holes:
    tries; 300 seeds over five setups in about 200, the worst 1717, 1.4 seconds. The tries also got cheaper: the
    layout stays connected between tries and a move rewires only the doors whose target changed (a third of a try's
    time had gone into connecting and undoing all some 270 pairs), and only the start's reached regions are checked
-   for spots.
+   for spots. **The start's own rooms (2026-10-08):** CI's Universal Tracker run killed 1 seed in 2000 at 15 seconds;
+   here it took 4532 tries, 3.8 seconds: three layouts, each stuck for 1000 tries, cut nothing off but opened only 7
+   to 9 spots from the start. With the field moves and Jump shuffled, the start's way on is gated inside the rooms it
+   reaches, with no door on the edge of what it opens, so the moves fell back to rooms around what was cut off, which
+   can't open more. While the start opens fewer spots than wanted, a move now takes one of the rooms it reaches:
+   trading it for a like room, or turning its doors, changes what the start opens. Tried on the same 3000 seeds (three
+   setups with the moves shuffled) against the start first in the score (the worst seeds still about 2200), the two
+   summed, and moves on the edge of what the start opens: the start's rooms with the score unchanged did best, about
+   235 tries on average against about 400, 99% within 950 against 1650 to 1910, the worst 1380 against 2591; the
+   default options unchanged (their start is never short). The restart limit, measured with both: with the earlier
+   moves, 1500 seeds over three setups for each limit from 50 to 1000, 150 and 200 had the shortest tail (the worst
+   2938 tries at 200, 5882 at 1000; 50 and 100 restarted layouts still converging, at 50 the median up from about 280
+   to about 380); with the start's rooms, 200 again (the worst 1930 at 120, 2533 at 300). Now 200. That seed in 301
+   tries, 0.4 seconds. Tests `TestRoomSwapRepairsQuickly`: two seeds with the moves shuffled within 1000 (the earlier
+   moves took 2938 and 2196), and the stuck starts, that seed among them, within 1500. Each try also got about a tenth
+   cheaper (about 0.8 ms): everything the seed holds is collected once and each try sweeps a copy, and each door's
+   region is looked up once. **And the start counted once:** a new `CollectionState` already holds the start's items,
+   and the count collected them again: a Progressive Dash in the start counted as Horn Dash (41 spots where the start
+   opens 40). Test `test_the_start_holds_its_items_once`; the start test's own count had the same slip.
 
 **Tests** (`test_doors.py`): what every mode shares (doors rewritten, only the table's doors named, every way back
 leads back, every region reached, the spoiler listing each pair once, and **the mod doing what the logic proved**:
