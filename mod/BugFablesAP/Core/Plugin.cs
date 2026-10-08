@@ -120,6 +120,7 @@ namespace BugFablesAP
             InGameSettings.Enable(Log, settingsOn);
             CustomItems.Enable(Log, () => randomizerEnabled.Value);
             BoatTicket.Enable(Log, () => randomizerEnabled.Value);
+            PlatinumCard.Enable(Log, () => randomizerEnabled.Value);
             HoldUps.Init(Log, () => randomizerEnabled.Value);
             PartyFit.Enable(Log, () => randomizerEnabled.Value);
             PartySlots.Enable(Log, () => randomizerEnabled.Value);

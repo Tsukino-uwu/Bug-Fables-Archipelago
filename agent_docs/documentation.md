@@ -97,6 +97,7 @@ anyone curious about the process, or thinking of doing the same for another game
 43. [A free seller: the price in their lines made 0](#43-a-free-seller-the-price-in-their-lines-made-0)
 44. [Enemysanity: an enemy's won fight drops its check](#44-enemysanity-an-enemys-won-fight-drops-its-check)
 45. [The Termacade: tokens, the gift and the prize stand](#45-the-termacade-tokens-the-gift-and-the-prize-stand)
+46. [The Platinum Card carries the bank's doubled interest](#46-the-platinum-card-carries-the-banks-doubled-interest)
 
 ## Where it stands
 
@@ -3163,3 +3164,19 @@ check); the "buy it?" question names the stand's own prize.
 *Code: `Items/Termacade.cs`, `Items/ItemSwap.cs` (`FindLocation`, `IsFlaglessPrize`), `Items/ItemReceiver.cs`,
 `Items/ItemSwap.Looks.cs`, `Core/ItemIds.cs` (`TokenKind`), `Core/GameSlots.cs` (`GameVars.Tokens`),
 `Core/SeedData.cs` (`LocationPrizes`, `Give.Npc`), `Dev/QuestDump.cs` (the prize dump).*
+
+## 46. The Platinum Card carries the bank's doubled interest
+
+The game side of the Archipelago guide's Banker location (`apimplementation.md`, the residential district's recheck).
+The card's one effect in the game is flag 630, which doubles the bank's interest (`MainManager.DoClock`: 4% instead of
+2%), and the banker sets that flag as he hands the card over (`MEASURED.md`, the Bank of Bugaria). In a seed the flag
+is his check's, and the card is an item that can arrive from anywhere, so the effect would stay with whoever talked to
+him. **Items are remote only**, so with Archipelago on, `DoClock`'s read of the flag becomes "is the Platinum Card
+(key item 176) in the bag", the way the learned abilities' reads are answered (step 26's `Abilities.cs` pattern: the
+read `ldfld flags; ldc.i4 630; ldelem.u1` becomes a call taking the same array and index). The banker's own reads of
+the flag (his lines 70 and 82) stay the game's, so his check still happens once. With Archipelago off, nothing changes.
+The log says `[card] installed in MainManager.DoClock`, or an error when the read isn't found exactly once.
+
+**Status:** built (2026-10-08); not yet seen in game.
+
+*Code: `Items/PlatinumCard.cs`, `Core/Plugin.cs`.*

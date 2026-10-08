@@ -816,7 +816,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     balance of 500 or more goes to line 82 (`checktrue,630,73`, then flag 630 and `giveitem,1,176`, the Platinum
     Card), once. Interest (`MainManager.DoClock`): every 30 game minutes with flag 254 and a balance, 2% of it, 4% with
     flag 630, at least 1 and at most 75; so in the game the doubling comes from 630, never from holding the card.
-    Used by `logic/bugaria_city.py`.
+    `DoClock` reads flag 630 once (the hook's count, 2026-10-08). Used by `logic/bugaria_city.py`, `PlatinumCard.cs`.
     **`UndergroundBar` (2026-10-06, the user):** everything reachable and in and out free: the bounce pad reaches the
     high door without Jump. Walking in records a discovery, in Shades' scene (Event80, the `shades event` trigger
     until flag 141).
