@@ -3132,7 +3132,11 @@ or Bee Fly), 117 of 244; outside the Fishing Village (its door Jump; Riz's fight
 Kingdom door, there in the game only after the swamp's boss, open from the start and Maki's turn-back kept away), 120 of
 244; the swamp boss's room, out of order while testing its boss (Jump and Leif across, past the boss), 121 of 244; the
 residential district rechecked (2026-10-08: the fountain rooftop by Bee Fly alone too; a new location, the banker's
-Platinum Card, Jump, the card a new useful item), still 121; the rest of `room-checklist.md` to go.
+Platinum Card, Jump, the card a new useful item), still 121; above the west path (three parts: the bottom right ringed
+with thorns, the Shield or Bee Fly; the top right's clearing door behind a boulder, Horn Dash, arriving past it; the
+raised left Jump and Horn Dash from the top right, a drop down by Bee Fly or onto the thorns with the Shield, Jump and
+Bee Fly up), 122 of 244; the rest of `room-checklist.md`
+to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

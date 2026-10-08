@@ -1224,6 +1224,19 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   Vi and Leif knocked out, Kabbu healed and boosted), which burrows (Leif), no summons. Maki, following, steps aside for
   it; the room's own Maki (until 359) is the injured one. `kabbuevent` (555 until 645) and `Base/DigMound` (hidden
   from 645) for the quest pass; no items.
+  **`FarGrasslands4`, above the west path (2026-10-08, the user, a sketch of the room and the dumps):** the bottom
+  right (the door from `FarGrasslands2`'s top door) an island ringed with thorns (`WalkableSpike`), left only with the
+  Shield or Bee Fly. The top right: where the door from `FGClearing` puts the party, past a boulder before the door (a
+  `BreakableRock`, regional flag 24), Horn Dash back to it; nothing else reached from there with nothing; to and from
+  the bottom right across the thorns, the Shield or Bee Fly. The raised left (the door from
+  `FarGrasslandsOutsideCave`'s right door, its arrival at height 5.5, the rest of the room 0 to 1, a boulder on its
+  path): to and from the top right over ledges and platforms, Jump and Horn Dash. Without Horn Dash the boulder blocks
+  that path, and the one way down is a drop into the middle: with the Shield onto the thorns, or by Bee Fly, around the
+  boulder or straight there; from the middle the thorns are crossed the same way. Up from the bottom right with Jump
+  and Bee Fly. The way between the left and the top right runs through the middle of the room: up ledges to the top
+  right, up ledges and platforms to the left's path, Jump at least either way; with Horn Dash alone nothing past the
+  middle. The middle is safe ground and holds nothing, so it's no part of its own. No items; three field enemies for
+  the enemy pass.
   **`SwamplandsBridge`, the swamp bridge (2026-10-08, code and the dumps only; not yet mapped on screen):** two
   bridges. The upper one (`Base/Bridge`, `Base/BridgeWalls`, `Base/Cube`: `ConditionChecker`s hidden from 336) spans
   the room at the doors' height (y 0), from `loadzoneleft` to `loadzone right`. Its collapse is `Event130`

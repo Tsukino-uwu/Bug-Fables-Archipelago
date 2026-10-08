@@ -56,15 +56,22 @@ DOOR_RULES = (
     DoorRule("WaspKingdomOutside", "loadzonesouth", False_()),
 )
 _SWAMP_TOP = CanUse("Jump") & CanUse("Icicle") & CanUse("Horn Dash")
+# Above the west path, back up to its raised left after the drop: from the bottom right by Bee Fly, from the top right
+# by Horn Dash (the user).
+_UP_TO_LEFT = CanUse("Jump") & (CanUse("Bee Fly") | CanUse("Horn Dash"))
 TRANSFERS = (
     # East of the crossroads: from the right door back to the left part, Jump up rocks, then a drop (the user).
     Transfer("drop", "FarGrasslands3", "FarGrasslands3", CanUse("Jump"), two_way=False,
              way_back=CanUse("Horn Slash") & CanUse("Jump"), from_area="Right"),
+    # Above the west path: the thorns round its bottom right, crossed to the top right with the Shield or Bee Fly, both
+    # ways (the user). An Area has one link, so this second one, inside the room, is a transfer.
+    Transfer("thorns", "FarGrasslands4", "FarGrasslands4", CanUse("Shield") | CanUse("Bee Fly"),
+             from_area="Top Right"),
 )
 MAP_AREAS = (
-    # The border cave (the user, 2026-10-07): its bottom door the map's own region; the ant tunnel's miner at the top past
-    # grass, the horn both ways; its left and right doors (to the Broodmother's lair and the Wasp Kingdom) each behind a
-    # gate its own side's lever opens.
+    # The border cave (the user, 2026-10-07): its bottom door the map's own region; the ant tunnel's miner at the top
+    # past grass, the horn both ways; its left and right doors (to the Broodmother's lair and the Wasp Kingdom) each
+    # behind a gate its own side's lever opens.
     Area("FGCave", "Tunnel", (), CanUse("Horn Slash")),
     Area("FGCave", "Left", ("loadzonebroodmother",), Has("Border Cave Left Gate Open")),
     Area("FGCave", "Right", ("loadzone wasp",), Has("Border Cave Right Gate Open")),
@@ -91,6 +98,17 @@ MAP_AREAS = (
     # with Jump, Icicle and Horn Dash; down, a drop to the boulders, then Icicle and Horn Dash.
     Area("FGOutsideSwamplands", "Top", ("loadzoneswamp2", "loadzone wasp"), _SWAMP_TOP,
          out=one_way(CanUse("Icicle") & CanUse("Horn Dash"), _SWAMP_TOP)),
+    # Above the west path (the user, 2026-10-08): its bottom right (the door from the west path) the map's own region,
+    # ringed with thorns (the transfer above). The raised left (the door from outside the border cave): up with Jump
+    # and Bee Fly; down into the middle past its path's boulder, a drop: onto the thorns with the Shield, or by Bee Fly
+    # (the middle's thorns then crossed the same way). The top right, where the clearing door puts the party (past the
+    # boulder before it, Horn Dash back): to and from the left over the middle's ledges and platforms, Jump and Horn
+    # Dash. The middle holds nothing, so it's no part of its own.
+    Area("FarGrasslands4", "Left", ("loadzone left",), CanUse("Jump") & CanUse("Bee Fly"),
+         out=one_way(CanUse("Shield") | CanUse("Bee Fly"), _UP_TO_LEFT)),
+    Area("FarGrasslands4", "Top Right", (), CanUse("Jump") & CanUse("Horn Dash"), to="FarGrasslands4 (Left)"),
+    Area("FarGrasslands4", "Clearing Door", ("loadzoneclearing",), CanUse("Horn Dash"),
+         out=one_way(None, CanUse("Horn Dash")), to="FarGrasslands4 (Top Right)"),
 )
 # Maki's turn-back before the Wasp Kingdom's front gate at the lake (Event12, spoken by the follower), there until the
 # swamp bridge falls (336), which the seed never lets happen: kept away (the user, 2026-10-08). Past it there is only
