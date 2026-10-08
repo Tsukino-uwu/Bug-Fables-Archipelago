@@ -2553,7 +2553,8 @@ Three separate downloads on a GitHub release (2026-09-25/26), made the way MeshG
 
 **Names.** No version in any file name: the release and its tag carry it, and `releases/latest/download/<name>`
 links stay the same. The apworld's name is fixed: Archipelago 0.6.7 imports the module named after the file
-(`worlds/__init__.py`, `world_name = Path(apworld.path).stem`), so it must match the folder inside, `bug_fables`.
+(`worlds/__init__.py`, `world_name = Path(apworld.path).stem`), and 0.6.8 the same way (`add_apworld_spec`,
+`world_name = Path(container.path).stem`, read 2026-10-08), so it must match the folder inside, `bug_fables`.
 The template generator names the yaml `Bug Fables.yaml`; GitHub turns spaces in asset names into dots, so it ships
 as `bug_fables.yaml`.
 
@@ -3602,6 +3603,8 @@ decided (`slot_data`).
    (`custom_rules.py`, each resolving to Archipelago's own `HasAllCounts`): `CanUse("Horn Slash")` (the ability's item
    copies when it's an item, its member when members are items), `Member("Vi")` (only when members are items) and
    `MoveItem("Freeze")` (the item alone, for ground not measured yet). `rules.requires` and the `Needs` fields are gone.
+   **When a need is "any N of these"** (none is yet): the Rule Builder's `AtLeast`, new in 0.6.8 (`rule builder.md`),
+   not an `Or` of every combination; and an option filter on a set of values uses its new `in` operator.
 3. **Menu, the origin, is made in code** (`regions.py`, as APQuest does), with its one exit to where a new game begins.
    Jump's blanket rule stays in `rules.py`: with Shuffle Jump, every spot not marked `no_jump` also needs `Has("Jump")`
    (since build step 42 written as `JUMP`, an `OptionFilter` on Shuffle Jump).
@@ -4525,7 +4528,10 @@ left as a gap.
      BepInEx mod. Tracker addons are installed by the player.
    - The map tab (`tracker_world`, `docs/map-integration.md`) and the mod's data storage keys: once the PopTracker
      pack has its map (the user, 2026-10-03). It will need a host.yaml setting for the pack's path, a `settings`
-     member the preflight refuses today.
+     member the preflight refuses today. With it, the rest of that doc, every part (the user, 2026-10-05: "support
+     them all"; listed 2026-10-08 from v0.3.4): auto tabbing to the player's map (`map_page_index`, from the mod's map
+     key), the player's position icon (`location_icon_coords`), and locations hidden on chosen maps
+     (`ut_map_page_hidden_locations`).
 4. **Tests** (`test_tracker.py`): the list starts with the Outskirts, sorted by name within it, the Outskirts before
    Bugaria City, an entrance last; and the explanations above.
 
