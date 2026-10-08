@@ -515,9 +515,13 @@ namespace BugFablesAP
         {
             [HarmonyPatch(typeof(BattleControl), "CalculateBaseDamage")]
             [HarmonyPrefix]
-            private static void BeforeBaseDamage(MainManager.BattleData? attacker, ref int basevalue)
+            private static void BeforeBaseDamage(MainManager.BattleData? attacker, ref int basevalue,
+                BattleControl.AttackProperty? property)
             {
-                if (basevalue <= 0 || attacker == null || attacker.Value.battleentity == null
+                // NoExceptions from an enemy is only ever a scripted knockout (the swamp boss's, the target's whole HP):
+                // left as the game sets it.
+                if (basevalue <= 0 || property == BattleControl.AttackProperty.NoExceptions
+                    || attacker == null || attacker.Value.battleentity == null
                     || attacker.Value.battleentity.CompareTag("Player") || randomizerOn == null || !randomizerOn())
                 {
                     return;

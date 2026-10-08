@@ -3494,3 +3494,7 @@ either one wrong).
   breaks anything; the code shows nothing in the Wasp Kingdom reads 359 and the border cave already leads there, so
   kept present with Maki's turn-back away. Through it the patrol caught the party once, no loop (vanilla's own stealth
   entry). The user: done, and to walk into the swamp boss's room from behind unwarped. Ticked, 120 of 244.
+- **The swamp boss from behind** (the user walked in, unwarped): the scene started fine; Maki stepped aside on his own
+  (the room's injured Maki), the user: fine. At 0 HP (`killall`) the 10-HP end still fired, but Vi and Leif stood:
+  enemy scaling had cut the scripted knockout (`NoExceptions`, the target's whole HP); now left unscaled, and `killall`
+  takes an HP (the user: useful later). Replayed at 11 HP: Vi and Leif knocked out, Kabbu's comeback, as vanilla.

@@ -1841,10 +1841,16 @@ fight + end with the scripted thing even when scaling is enabled".
   ratio its target gets, as its HP was (`FollowerHits`): a prefix on the `DoDamage` overload every hit ends in, the
   shorter one his call goes through being a one-line wrapper Mono inlines (a patch there never ran). **Seen
   (2026-10-08):** with the dev `onehit` off, against Riz at level 1, Maki hit for 2 (6 x 0.27).
+- **Scripted knockouts left alone** (2026-10-08): at its 10-HP end the swamp boss (the Centipede, `BattleControl`'s
+  scripted turn) hits Vi and Leif for their whole HP (`NoExceptions`) so Kabbu fights alone; scaled, they stood (seen:
+  4/8 and 5/8 after it). An enemy's `NoExceptions` hit, the only one there is, now passes unscaled. **Seen
+  (2026-10-08):** brought to 11 HP (`killall 11`), the boss held at 10 through the party's turns, then its scripted
+  turn knocked out Vi and Leif and Kabbu fell to 1, healed and gained his attack boost; the fight ended as intended.
 
 **Status:** works, seen on screen (2026-09-26): scaled HP, defence and per-hit damage in a fight, and the bestiary;
 the constants still to tune by play. The 10-HP scripted end and the fixed numbers in enemy scripts built (2026-09-30),
 not yet seen; the Wasp General scaled as a mini-boss (2026-09-30), not yet seen. Maki's hits scaled (2026-10-08), seen.
+The swamp boss's 10-HP end and its scripted knockout seen (2026-10-08).
 
 *Code: `EnemyScaling.cs` (`AfterGetEnemyData`, `Damage`, `Bestiary`, `ScriptNumbers`, `FollowerHits`); the row in `ApMenu.cs` and
 `ApMenu.Rows.cs` (`ScalingRow`), its config in `QualityOfLife.cs` (`EnemyScalingMode`).*
