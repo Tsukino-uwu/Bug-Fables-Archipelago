@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**131 of 244 done.**
+**132 of 244 done.**
 
 ## Outskirts
 
@@ -202,7 +202,7 @@ as it is, a frozen record.
 - [x] SwamplandsBridge (152) — kept up in a seed (build step 61); for `ChomperCave1`: its bridge reads 337 too
 - [x] SwamplandsBoss (154) — mapped early (2026-10-08) while testing its boss; for the quest pass: Kabbu's postgame
   grave scene (`kabbuevent`, flags 555-645)
-- [ ] Swamplands4 (158)
+- [x] Swamplands4 (158)
 - [ ] Swamplands5 (159)
 - [ ] Swamplands6 (160)
 - [ ] Swamplands7 (161)

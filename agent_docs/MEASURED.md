@@ -1358,6 +1358,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   only from the top door (or the left end's boulder). The user's sketch (2026-10-09): the left door's platform (its
   boulder and pad), the bridge across to the right side, a path up from there to the top right, the small bridge across
   to the top door's platform (its pad), and the bottom below the bridge.
+  **`Swamplands4`, the long swamp room (2026-10-09, the user):** flat, left to right. Its left door (from the bridge's
+  bottom) in a tiny part of its own, past a boulder (Horn Dash both ways; it stays broken once broken). From there to
+  the middle, Jump and Freeze, or Bee Fly; back the other way everything but Freeze, so without it a one-way. The
+  middle to the right side, grass and a boulder (the horn and Horn Dash), then a jump (Jump), or Bee Fly for both,
+  both ways. The right door (to Swamplands5) in a part of its own, Horn Dash and Beetle Dig both ways. No locations;
+  a flower enemy, a Leafbug Archer and a Leafbug Ninja for the enemy pass.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

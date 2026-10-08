@@ -653,3 +653,30 @@ class TestSwampBridge(BugFablesTestBase):
         boulder = self.multiworld.get_location("Wild Swamplands: Bridge, Boulder", self.player)
         self.assertTrue(boulder.access_rule(self.state_with()))
         self.assertEqual(boulder.parent_region.name, "SwamplandsBridge (Bottom)")
+
+
+class TestLongSwampRoom(BugFablesTestBase):
+    # Swamplands4's crossing: Jump and Freeze toward the middle; back toward the left door Freeze isn't needed, but
+    # without it there's no way back, so the logic counts it only with a way back (Points of No Return off).
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_freeze_toward_the_middle(self) -> None:
+        east = self.multiworld.get_entrance("Swamplands4 (West) to Swamplands4", self.player)
+        self.assertFalse(east.access_rule(self.state_with("Jump")))
+        self.assertTrue(east.access_rule(self.state_with("Jump", "Progressive Freeze")))
+        self.assertTrue(east.access_rule(self.state_with("Bee Fly")))
+
+    def test_back_west_counts_only_with_a_way_back(self) -> None:
+        west = self.multiworld.get_entrance("Swamplands4 to Swamplands4 (West)", self.player)
+        self.assertFalse(west.access_rule(self.state_with("Jump")))
+        self.assertTrue(west.access_rule(self.state_with("Jump", "Progressive Freeze")))
+
+
+class TestLongSwampRoomNoReturn(BugFablesTestBase):
+    # With Points of No Return, the crossing back toward the left door takes Jump alone.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True, "points_of_no_return": True}
+
+    def test_back_west_with_jump_alone(self) -> None:
+        west = self.multiworld.get_entrance("Swamplands4 to Swamplands4 (West)", self.player)
+        self.assertTrue(west.access_rule(self.state_with("Jump")))
+        self.assertFalse(west.access_rule(self.state_with()))

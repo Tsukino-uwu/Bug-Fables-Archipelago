@@ -10,6 +10,8 @@ from ..data_types import ALWAYS_SET, Area, EntityRef, FlagSwap, Location, Pickup
 _UP = CanUse("Jump") | CanUse("Bee Fly")
 _TREE_DOWN = "Swamp Tree Knocked Down"
 _BRIDGE_DOWN = "Swamp Lower Bridge Knocked Down"
+# The long swamp room's crossing from its west part to its middle.
+_CROSS_WEST = (CanUse("Jump") & CanUse("Freeze")) | CanUse("Bee Fly")
 
 LOCATIONS = (
     # Where the game teaches the Horn Dash (Event131, flag 39): the boulder at the bridge's bottom, talked to with
@@ -68,6 +70,18 @@ MAP_AREAS = (
          out=Has(_BRIDGE_DOWN) & CanUse("Jump"), to="SwamplandsBridge (Top Right)"),
     Area("SwamplandsBridge", "Red Bounce Pad", (), CanUse("Horn Dash"), out=True_()),
     Area("SwamplandsBridge", "Bottom", ("loadzonesouth",), True_()),
+    # The long swamp room (the user, 2026-10-09), its middle the map's own region. Its left door in a tiny part of its
+    # own, past a boulder, Horn Dash both ways; from there to the middle, Jump and Freeze, or Bee Fly; back the other
+    # way Freeze isn't needed, but without it there's no way back. The right side past grass and a boulder (the horn
+    # and Horn Dash) and a jump (Jump), or Bee Fly for both, both ways; its door to Swamplands5 in a part of its own,
+    # Horn Dash and Beetle Dig both ways.
+    Area("Swamplands4", "West", (), CanUse("Bee Fly") | one_way(CanUse("Jump"), _CROSS_WEST),
+         out=_CROSS_WEST),
+    Area("Swamplands4", "Left Door", ("loadzone left",), CanUse("Horn Dash"), to="Swamplands4 (West)"),
+    Area("Swamplands4", "Right", (), ((CanUse("Horn Slash") & CanUse("Horn Dash")) | CanUse("Bee Fly"))
+         & (CanUse("Jump") | CanUse("Bee Fly"))),
+    Area("Swamplands4", "Right Door", ("loadzoneright",), CanUse("Horn Dash") & CanUse("Beetle Dig"),
+         to="Swamplands4 (Right)"),
 )
 TRANSFERS = (
     # Leafbug Crossing's upper right down into the middle, a drop: back up, the tree knocked down and Jump or Bee Fly.

@@ -3153,7 +3153,9 @@ mod guide's step 10), 128 of 244; the lily pad pond (its top door Jump and the h
 down; two new locations: a dig spot up top, Beetle Dig, and a Honey Drop in grass by the bottom door, the horn; its
 Leafbug ambush for the enemy pass), 129 of 244; Leafbug Crossing (three parts in a row: the bottom, the middle with
 its tree, the horn, and the upper right, each Jump or Bee Fly; before the tree falls, a drop from the upper right into
-the middle), 130 of 244; the rest of `room-checklist.md` to go.
+the middle), 130 of 244; the swamp bridge, kept up (build step 61), 131 of 244; the long swamp room (a boulder at each
+door, Horn Dash, Beetle Dig too on the right; the middle by Jump and Freeze, or Bee Fly, back without Freeze one-way;
+the right side by the horn, Horn Dash and Jump, or Bee Fly), 132 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
