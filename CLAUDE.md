@@ -11,11 +11,11 @@ rule, remove one in the same edit. The rule lives here and its reasoning in `age
 
 ## What never changes
 
-- **Archipelago's way, always; never reinvent it** (the user, 2026-09-29). The whole project follows every standard AND
-  recommendation ("should", "recommended", "encouraged") in github.com/ArchipelagoMW/Archipelago/tree/main/docs (our
-  version's: the checkout at the targeted tag), and supports every optional feature, plando included (2026-09-30). Read
-  every doc, guide and reference world: never skip one or assume it doesn't apply. What Archipelago or its client
-  library provides, we use as intended; custom only where it has none (`apimplementation.md` §8).
+- **Archipelago's way, always; never reinvent it** (the user, 2026-09-29; again 2026-10-08). The whole project follows
+  every standard AND recommendation ("should", "recommended", "encouraged") in Archipelago's `docs/` at the targeted
+  tag, and supports every optional feature, plando included. Read every doc, guide and reference world, never assuming
+  one doesn't apply. **Before writing anything that talks to the server or a tracker, read the source of what it uses**
+  (Archipelago, MultiClient.Net, not just its DLL, PopTracker); use what it provides; custom only if it has none (§8).
 - **The two process guides NEVER go stale** (the user, 2026-09-24: a step-by-step guide that misses steps is
   worthless). `agent_docs/documentation.md` is how the MOD was made; `agent_docs/apimplementation.md` is the
   Archipelago side (apworld, server, connecting, items, checks), built step by step, plus a stable explainer. Both
