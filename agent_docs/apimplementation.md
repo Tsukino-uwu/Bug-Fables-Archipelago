@@ -19,7 +19,8 @@ this file and that doc disagree, that doc is right.
   [24](#build-step-24-the-logic-second-part-the-rules-for-writing-it-room-by-room); the Python modules,
   [29](#build-step-29-the-logic-third-part-python-modules-per-area-on-the-rule-builder); regions and rules explained,
   [How it works 11](#11-the-logic-explained-regions-exits-rules-and-this-worlds-layout); the open world,
-  [9](#build-step-9-the-open-world-story-blockers-removed-in-the-logic-and-the-mod); Points of No Return, the Warp as
+  [9](#build-step-9-the-open-world-story-blockers-removed-in-the-logic-and-the-mod), the wizard's tower
+  [59](#build-step-59-the-wizards-tower-open-its-fall-scene-kept-away); Points of No Return, the Warp as
   the way back, [37](#build-step-37-points-of-no-return-the-warp-counted-as-the-way-back).
 - **The entrance randomizer:**
   [12](#build-step-12-the-entrance-randomizer-doors-shuffled-by-archipelagos-own-experimental), Room Swap
@@ -128,6 +129,7 @@ this file and that doc disagree, that doc is right.
 56. [Build step 56: the PopTracker pack's export at world 0.3.0](#build-step-56-the-poptracker-packs-export-at-world-030)
 57. [Build step 57: the maps visited and the map the player is on, for the trackers](#build-step-57-the-maps-visited-and-the-map-the-player-is-on-for-the-trackers)
 58. [Build step 58: the PopTracker pack's Archipelago interface](#build-step-58-the-poptracker-packs-archipelago-interface)
+59. [Build step 59: the wizard's tower open, its fall scene kept away](#build-step-59-the-wizards-tower-open-its-fall-scene-kept-away)
 
 **How it works**
 
@@ -3136,8 +3138,10 @@ Platinum Card, Jump, the card a new useful item), still 121; above the west path
 with thorns, the Shield or Bee Fly; the top right's clearing door behind a boulder, Horn Dash, arriving past it; the
 raised left Jump and Horn Dash from the top right, a drop down by Bee Fly or onto the thorns with the Shield, Jump and
 Bee Fly up), 122 of 244; the badlands rechecked (2026-10-08: the center pillar by Jump and the Beemerang too; the rock
-ledge by Jump with Bee Fly, or Freeze and the horn, too), still 122; the rest of `room-checklist.md`
-to go.
+ledge by Jump with Bee Fly, or Freeze and the horn, too), still 122; the tower's basement (the floor free; its door up a
+ledge, Jump; two new locations: a Burly Tea behind the stairs, and crystal berry #37 on the bookshelf, Jump and Bee
+Fly or the Beemerang; its fall scene and wizard kept away, the tower's front door open, build step 59), 123 of 244;
+the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -4347,7 +4351,8 @@ door's map link in `fixed`. The shuffle never touched `fixed`, so every one-way 
      - the 12 fog edges;
      - the pink spider's room, in from `BarrenLandsMushrooms` and out to `BarrenLandsPumpkins`;
      - the underground bar's exit (its way in is the hatch, a transfer);
-     - the wizard's basement drop (flag 449, like the tower's door beside it, which no rule gates either);
+     - the wizard's basement drop (flag 449, like the tower's door beside it, which no rule gates either; both kept
+       present in a seed since build step 59);
      - `GiantLairBeforeBoss2`'s left ladder down, which lands 26 units from any ladder up.
    - **One missed pair:** `GiantLairBeforeBoss: loadzoneup` and `GiantLairBeforeBoss2: loadzoneright`. The way back
      lands 11.3 from the ladder (the ladder's height), past the 10 the pairing allowed. With 12 the export gains exactly
@@ -5360,6 +5365,41 @@ PopTracker: any of it.
 
 *Code: the pack: `scripts/autotracking.lua`, `scripts/logic.lua` (`bf_door_led_to`), `tools/export.py` (the Goal
 item, `region_maps`, `one_way_copies`), `tests/test_autotracking.py`, `manifest.json`.*
+
+## Build step 59: the wizard's tower open, its fall scene kept away
+
+**Asked and decided (the user, 2026-10-08, mapping `WizardTowerBasement`):** "does the spider set any flags here that
+affect other things? or can the cutscene be skipped?" A sweep of the game code, the dumps and the mod, each claim then
+checked (`MEASURED.md`, the tower's flags), found:
+- the fall's scene (`Event166`) sets only 449, and 449 only decides four things: the hole's trigger, the hole's door,
+  the front door outside and the basement's wizard;
+- so a file inside the tower without the fall (a random start, a shuffled door) leaves by the front door once the
+  attic wizard unlocks it, but can't come back that way. The user saw it so;
+- with shuffled doors, the first drop lands in the basement whatever the shuffle says, since the scene loads it itself.
+
+Weighed: the front door made from the wizard's unlock instead of the fall; the scene played from both of the basement's
+ways in, unlocking the door too. The user's pick: "just remove/skip the basement cutscene with the spider and then
+always have the tower door be open both in/out", and "also hide/remove the spider from the basement".
+
+**Built** (the apworld only: the mod's own lists do it, as for the Wasp Kingdom door outside the swamp; vanilla is
+untouched, since the lists apply only in a seed):
+1. **Kept away** (`kept_open`): the hole's trigger (`basementevent`) and the basement's wizard.
+2. **Kept present** (`kept_present`): the hole's door down (`loadzonebasement`) and the front door outside
+   (`loadzonetower`). The hole is then a plain drop with no scene, and goes where a door shuffle sends it.
+3. **Hidden** (`scenery_hidden`): the front door's model outside (`Base/Tower/Door`) and its lock on the stairs
+   (`Base/DoorLock`).
+4. **The logic:** the front door free both ways, its two door rules and the "Wizard Tower Door Unlocked" event gone;
+   the hole still the horn, one way in. A random start may now land outside the front door (`ROOM_STARTS` takes
+   kept-present doors). Test `TestWizardTower`.
+
+The attic wizard keeps his lines: his first talk still sets 450, which now only picks his next line; the next gives
+quest 52, for the quest pass.
+
+**Status:** built (2026-10-08). Not yet seen: in a seed made from this world, the front door open both ways from the
+start, the hole a plain drop into the basement with no scene, no wizard in the basement.
+
+*Code: `logic/far_grasslands.py` (`KEPT_OPEN`, `KEPT_PRESENT`, `SCENERY_HIDDEN`). The mod: `World/KeptOpen.cs`,
+unchanged.*
 
 # How it works
 

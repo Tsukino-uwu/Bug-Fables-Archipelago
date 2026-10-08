@@ -1238,6 +1238,29 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   right, up ledges and platforms to the left's path, Jump at least either way; with Horn Dash alone nothing past the
   middle. The middle is safe ground and holds nothing, so it's no part of its own. No items; three field enemies for
   the enemy pass.
+  **`WizardTowerBasement`, the tower's basement (2026-10-08, the user, the dumps and code):** the floor (height 0)
+  takes the hole's landing from `FarGrasslandsWizard` (`Event166` sets the party down near (-8, 0, -1); after 449 the
+  door's walk-in ends at (-10, 0, -1)), and the Burly Tea behind the stairs (item 81, flag 547), nothing needed. The
+  door to `WizardTowerStairs` (`loadzone`) is up on a ledge at the top right (height 4): a drop down, Jump up; in and
+  out through it freely, the wizard beside it (`wizard`, until 449) blocking nothing. From the ledge, up ledges to the
+  left, crystal berry #37 on the bookshelf (height 7.5), Jump and Bee Fly or the Beemerang. The fall's scene is the
+  hole's trigger outside (`basementevent`), so arriving through the stairs' door starts no scene. A diary to read
+  (`notesDiary`) gives nothing; no enemies. The attic's wizard still unlocked the front door on a file that never saw
+  the fall's scene (the user, the same day), and the door led outside; but outside, the way back in wasn't there (its
+  `loadzonetower` needs 449). The basement's wizard and the scene kept away in a seed (below).
+  **The tower's flags, 449 and 450 (2026-10-08: the code and the dumps swept, every claim checked; the lines read with
+  the dev `line`):** `Event166`'s outside branch checks nothing, loads the basement itself (`LoadMap(186)`, not
+  `TransferMap`), sets the party down, plays the basement's lines 1-4 (only looks and shakes in them, no flag), walks
+  the basement's wizard off and destroys him, then sets 449. No code reads 449 or 450. 449 decides four entities only:
+  outside, `basementevent` (until) and the doors `loadzonebasement` and `loadzonetower` (from); in the basement,
+  `wizard` (until; no interaction, no lines). 450 is set by the attic wizard's line 3 (his first talk,
+  `|flag,450,true|`) and hides `Base/Tower/Door` outside and `Base/DoorLock` on the stairs (`ConditionChecker`s); the
+  stairs' `loadzoneoutside` has no flags. His line 4 (from 450) sets 543 and adds quest 52, "Find The Ingredients!";
+  line 5 from 543; line 11 from 544, which `Event166`'s attic branch sets on the trade (Squash, Aphid Dew and Magic
+  Ice), completing quest 52. So a file inside the tower without the fall leaves by the front door after 450 but can't
+  come back that way (seen, above), and before 449 the first drop lands in the basement whatever a door shuffle says.
+  The game has no cutscene skip, only faster text. In a seed the tower is kept open (`apimplementation.md`, build
+  step 59).
   **`SwamplandsBridge`, the swamp bridge (2026-10-08, code and the dumps only; not yet mapped on screen):** two
   bridges. The upper one (`Base/Bridge`, `Base/BridgeWalls`, `Base/Cube`: `ConditionChecker`s hidden from 336) spans
   the room at the doors' height (y 0), from `loadzoneleft` to `loadzone right`. Its collapse is `Event130`

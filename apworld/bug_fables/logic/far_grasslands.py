@@ -30,6 +30,14 @@ LOCATIONS = (
     Location("Far Grasslands: Lake, Dig Spot", 175, "FarGrasslandsLake",
              Source(flag=632, pickup=Pickup(map="FarGrasslandsLake", type=0, item=121)),
              rule=(CanUse("Icicle") | CanUse("Bee Fly")) & CanUse("Beetle Dig"), category="dig_spot", no_jump=True),
+    # The tower's basement (the user, 2026-10-08): a Burly Tea on the floor behind the stairs, nothing needed; crystal
+    # berry #37 on the bookshelf, from the door's ledge up ledges to the left, Jump and Bee Fly or the Beemerang.
+    Location("Far Grasslands: Wizard's Tower Basement, Behind the Stairs", 177, "WizardTowerBasement",
+             Source(flag=547, pickup=Pickup(map="WizardTowerBasement", type=0, item=81)), no_jump=True),
+    Location("Far Grasslands: Wizard's Tower Basement, On the Bookshelf", 178, "WizardTowerBasement",
+             Source(berry=37, pickup=Pickup(map="WizardTowerBasement", type=3, item=0)),
+             rule=CanUse("Jump") & (CanUse("Bee Fly") | CanUse("Beemerang Toss")), category="crystal_berry",
+             area="Top Right"),
 )
 STORY_EVENTS = (
     # The border cave's two gates, each opened for good by its lever on the far side (Event136 sets the lever's
@@ -38,16 +46,10 @@ STORY_EVENTS = (
                Source(flag=362), rule=ANY_ATTACK, area="Left"),
     StoryEvent("Far Grasslands: Border Cave, Right Gate Opened", "Border Cave Right Gate Open", "FGCave",
                Source(flag=361), rule=ANY_ATTACK, area="Right"),
-    # The wizard in the tower's attic, first talked to (his line from flag 450 on): 450 hides the front door outside
-    # and the lock on the stairs' side (the user, 2026-10-08). The attic's own needs come with its mapping.
-    StoryEvent("Far Grasslands: Wizard's Tower, Door Unlocked", "Wizard Tower Door Unlocked", "WizardTowerAttic",
-               Source(flag=450)),
 )
-# The tower's front door, shut from both sides until the wizard unlocks it; the hole beside it, ringed with grass, the
-# horn (the user, 2026-10-08). Before flag 449 the hole is the fall's trigger (Event166), after it a door: one way in.
+# The hole beside the tower's front door, ringed with grass: the horn, one way in (the user, 2026-10-08). The front
+# door itself is open both ways in a seed (below).
 DOOR_RULES = (
-    DoorRule("FarGrasslandsWizard", "loadzonetower", Has("Wizard Tower Door Unlocked")),
-    DoorRule("WizardTowerStairs", "loadzoneoutside", Has("Wizard Tower Door Unlocked")),
     DoorRule("FarGrasslandsWizard", "loadzonebasement", CanUse("Horn Slash")),
     # The Wasp Kingdom's front gate between the lake and outside the hive: in the game its door (both ends) is there
     # only from peace with the wasps (flag 555, after the story), a grate and a gate shutting it until then. Kept shut
@@ -109,6 +111,9 @@ MAP_AREAS = (
     Area("FarGrasslands4", "Top Right", (), CanUse("Jump") & CanUse("Horn Dash"), to="FarGrasslands4 (Left)"),
     Area("FarGrasslands4", "Clearing Door", ("loadzoneclearing",), CanUse("Horn Dash"),
          out=one_way(None, CanUse("Horn Dash")), to="FarGrasslands4 (Top Right)"),
+    # The tower's basement (the user, 2026-10-08): the floor, where the hole from outside lands, the map's own region;
+    # the door to the stairs at the top right up a ledge, Jump, a drop down.
+    Area("WizardTowerBasement", "Top Right", ("loadzone",), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
 )
 # Maki's turn-back before the Wasp Kingdom's front gate at the lake (Event12, spoken by the follower), there until the
 # swamp bridge falls (336), which the seed never lets happen: kept away (the user, 2026-10-08). Past it there is only
@@ -117,10 +122,25 @@ KEPT_OPEN = (
     EntityRef("FarGrasslandsLake", "blocker"),
     # Outside the swamp, the same turn-back before the Wasp Kingdom door (Event12, until the swamp's boss, 359).
     EntityRef("FGOutsideSwamplands", "blocker"),
+    # The wizard's tower, open in a seed (the user, 2026-10-08: "just remove/skip the basement cutscene with the
+    # spider and then always have the tower door be open both in/out"). The fall's scene (Event166, until 449) only
+    # sets 449, which only swaps the hole's trigger for its door, makes the front door outside and removes the
+    # basement's wizard (no lines of his own): the trigger and that wizard kept away, the two doors kept present.
+    EntityRef("FarGrasslandsWizard", "basementevent"),
+    EntityRef("WizardTowerBasement", "wizard"),
 )
 # Outside the swamp, the Wasp Kingdom door (to the patrols' side entrance), there in the game only from the swamp's boss
 # (359): kept present from the start (the user, 2026-10-08). Nothing in the Wasp Kingdom reads 359, and the border
 # cave's right door already leads there before the boss.
 KEPT_PRESENT = (
     EntityRef("FGOutsideSwamplands", "loadzone wasp"),
+    # The wizard's tower (above): the hole's door down and the front door outside, both made in the game from 449.
+    EntityRef("FarGrasslandsWizard", "loadzonebasement"),
+    EntityRef("FarGrasslandsWizard", "loadzonetower"),
+)
+# The wizard's tower (above): the front door's model outside and its lock on the stairs' side, hidden in the game from
+# the attic wizard's first talk (450), hidden from the start.
+SCENERY_HIDDEN = (
+    EntityRef("FarGrasslandsWizard", "Base/Tower/Door"),
+    EntityRef("WizardTowerStairs", "Base/DoorLock"),
 )

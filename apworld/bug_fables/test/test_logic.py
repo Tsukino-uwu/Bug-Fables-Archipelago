@@ -588,3 +588,24 @@ class TestPrisonCorridor(BugFablesTestBase):
         back = entrance("RubberPrisonCheckpointCorridor", "loadzoneforward")
         self.assertFalse(back.access_rule(self.state_with()))
         self.assertTrue(back.access_rule(self.state_with("Explorer Permit")))
+
+
+class TestWizardTower(BugFablesTestBase):
+    # Open in a seed: the fall's scene and the basement's wizard kept away, the hole's door and the front door kept
+    # present, the front door's model and lock hidden, and the front door free both ways.
+
+    def test_tower_open(self) -> None:
+        data = self.world.fill_slot_data()
+        self.assertIn({"map": "FarGrasslandsWizard", "entity": "basementevent"}, data["kept_open"])
+        self.assertIn({"map": "WizardTowerBasement", "entity": "wizard"}, data["kept_open"])
+        self.assertIn({"map": "FarGrasslandsWizard", "entity": "loadzonebasement"}, data["kept_present"])
+        self.assertIn({"map": "FarGrasslandsWizard", "entity": "loadzonetower"}, data["kept_present"])
+        self.assertIn({"map": "FarGrasslandsWizard", "entity": "Base/Tower/Door"}, data["scenery_hidden"])
+        self.assertIn({"map": "WizardTowerStairs", "entity": "Base/DoorLock"}, data["scenery_hidden"])
+
+    def test_front_door_free(self) -> None:
+        from ..data_tables import door_name
+        for map_name, door in (("FarGrasslandsWizard", "loadzonetower"), ("WizardTowerStairs", "loadzoneoutside")):
+            with self.subTest(door=door):
+                entrance = self.multiworld.get_entrance(door_name(map_name, door), self.player)
+                self.assertTrue(entrance.access_rule(self.state_with()))
