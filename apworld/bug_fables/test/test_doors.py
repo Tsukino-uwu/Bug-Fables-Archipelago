@@ -2,7 +2,7 @@ from collections import Counter
 from random import Random
 from unittest import TestCase
 
-from BaseClasses import CollectionState, EntranceType
+from BaseClasses import CollectionState, EntranceType, LocationProgressType
 
 from . import BugFablesTestBase, entrance_graph, generate_like_main
 from .. import entrances
@@ -251,7 +251,7 @@ class TestRoomSwapRepairs(TestCase):
 
 class TestRoomSwapLeavesAStart(TestCase):
     # Two fuzzer seeds (2026-10-08) whose swap left 7 and 3 spots open from the start, too few for the fill
-    # (FillError): the swap keeps as many as the game's own layout opens, up to 15.
+    # (FillError): the swap keeps as many spots that can take progression as the game's own layout opens, up to 10.
     CASES = {
         344649463: {"progression_balancing": 72, "accessibility": "minimal", "artifacts_required": 4,
                     "shuffle_quests": False, "shuffle_discoveries": True, "shuffle_hidden_items": True,
@@ -278,8 +278,9 @@ class TestRoomSwapLeavesAStart(TestCase):
                         state.collect(item, True)
                     state.sweep_for_advancements()
                     counts.append(sum(1 for location in world.get_locations()
-                                      if location.address is not None and location.can_reach(state)))
-                self.assertGreaterEqual(counts[1], min(15, counts[0]))
+                                      if location.address is not None and location.can_reach(state)
+                                      and location.progress_type != LocationProgressType.EXCLUDED))
+                self.assertGreaterEqual(counts[1], min(10, counts[0]))
 
 
 class TestRoomSwapRepairsQuickly(TestCase):

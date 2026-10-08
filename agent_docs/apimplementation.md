@@ -3743,7 +3743,14 @@ from the start found two holes:
    the start opens (a door pair with one side opened from the start), and a layout that hasn't improved in 1000 tries
    starts over from a new random one: those two seeds in 2404 and 2030 tries; 300 seeds over five setups (a random
    start among them) in about 250, the worst 2322, 2.9 seconds. Test `TestRoomSwapRepairsQuickly`'s stuck start
-   (within 3000; the moves without a fresh start gave up at 10000).
+   (within 3000; the moves without a fresh start gave up at 10000). **The start's target measured:** one more seed
+   timed out climbing slowly to 15 start spots (5395 tries). Measured with no target, 474 swapped seeds opening 7 to
+   14 spots all filled; two of the four FillErrors had Filler Starting Checks keeping the opening's spots to filler.
+   So the count is now of spots that can take progression (not excluded), and the target 10: that seed in 2938
+   tries; 300 seeds over five setups in about 200, the worst 1717, 1.4 seconds. The tries also got cheaper: the
+   layout stays connected between tries and a move rewires only the doors whose target changed (a third of a try's
+   time had gone into connecting and undoing all some 270 pairs), and only the start's reached regions are checked
+   for spots.
 
 **Tests** (`test_doors.py`): what every mode shares (doors rewritten, only the table's doors named, every way back
 leads back, every region reached, the spoiler listing each pair once, and **the mod doing what the logic proved**:
