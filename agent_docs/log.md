@@ -3661,3 +3661,7 @@ either one wrong).
   Found, not changed: if `SetGoalAchieved` throws while the session stays up, the goal waits for the next login
   (`LocationChecks` marks it sent first); the tests' one warning is `pkg_resources` in Archipelago's own
   `pokemon_emerald`, in the checkout.
+- **CLAUDE.md** (`d50c3f1`): asked whether to keep the lesson as agent memory or make the rule stricter, the user
+  chose the rule: "Archipelago's way" now names its moment (before anything that talks to the server or a tracker)
+  and its action (read the source of Archipelago, MultiClient.Net, not just its DLL, or PopTracker), in its same five
+  lines. The memory note was deleted.
