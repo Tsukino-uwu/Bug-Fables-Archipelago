@@ -240,13 +240,15 @@ def _plando(world: BugFablesWorld, names: dict[Door, str], coupled: bool) -> lis
 
 
 # Each try about 1.5 ms. With the rooms' one-way drops and gated parts mapped, about 4 random layouts in 1000 keep every
-# room reachable; the repair below gets there in about 250 tries (2026-10-08, 240 seeds over four setups: 95% within
-# 1460, the worst 2470, 2.9 seconds).
+# room reachable; the repair below gets there in about 250 tries (2026-10-08, 300 seeds over five setups: 95% within
+# 1640, the worst 2322, 2.9 seconds).
 ROOM_SWAP_TRIES = 10000
 # How often a move takes a room standing where something is cut off, rather than any room.
 _HOT_MOVES = 0.8
 # How often a move trades two rooms, rather than turning one room's doors.
 _TRADES = 0.7
+# A layout that hasn't improved in this many tries is stuck (no one move helps): start again from a new random one.
+_STUCK = 1000
 # The spots open from the start the swap must leave (as many as the game's own layout has, up to this many): fewer
 # and the fill can't place the early items (2026-10-08: swaps left 3 to 7, the fuzzer's FillErrors; 15 filled).
 _START_SPOTS = 15
@@ -263,8 +265,13 @@ def _swap_rooms(world: BugFablesWorld, names: dict[Door, str]) -> list[tuple[Doo
     movable = [g for g in layout.groups if len(g) > 1 or len(layout.by_area[g[0]]) > 1]
     as_the_game = [(a, b) for a, b in layout.partner.items() if a < b]
     wanted = min(_START_SPOTS, _cut_off(world, names, as_the_game)[1])
-    cut, start, pairings = _cut_off(world, names, layout.pairs())
+    cut, start, opened, pairings = _cut_off(world, names, layout.pairs())
+    since_better = 0
     for _ in range(ROOM_SWAP_TRIES):
+        if since_better >= _STUCK:
+            layout = _RoomLayout(DOORS.connections, DOORS.fixed, random)
+            cut, start, opened, pairings = _cut_off(world, names, layout.pairs())
+            since_better = 0
         # The slot each door stands in now: a room's doors move with it.
         slot_of_door = {door: slot for slot, room in layout.room_at.items() for door in layout.by_area[room]}
         if not cut and start >= wanted:
@@ -273,9 +280,11 @@ def _swap_rooms(world: BugFablesWorld, names: dict[Door, str]) -> list[tuple[Doo
         slots = random.choice(movable)
         if random.random() < _HOT_MOVES:
             # The rooms on the edge of what is cut off (a door pair with one side reached) first: moving one of them
-            # is what joins a cut-off block back; else any room standing where something is cut off.
-            edge = {slot_of_door[d] for x, y in pairings if (door_region(*x) in cut) != (door_region(*y) in cut)
-                    for d in (x, y)}
+            # is what joins a cut-off block back; else any room standing where something is cut off. Once nothing is,
+            # the edge of what the start opens: moving one of those opens more from the start.
+            inside = cut or opened
+            edge = {slot_of_door[d] for x, y in pairings
+                    if (door_region(*x) in inside) != (door_region(*y) in inside) for d in (x, y)}
             cut_maps = {region.split(" (")[0] for region in cut}
             hot = sorted(edge) or [s for s, room in layout.room_at.items()
                                    if any(m in cut_maps for m, _ in layout.by_area[room])]
@@ -291,9 +300,11 @@ def _swap_rooms(world: BugFablesWorld, names: dict[Door, str]) -> list[tuple[Doo
             room = layout.room_at[random.choice(slots)]
             undo = (None, room, list(layout.order[room]))
             random.shuffle(layout.order[room])
-        now, now_start, now_pairings = _cut_off(world, names, layout.pairs())
-        if (len(now), max(0, wanted - now_start)) <= (len(cut), max(0, wanted - start)):
-            cut, start, pairings = now, now_start, now_pairings
+        now, now_start, now_opened, now_pairings = _cut_off(world, names, layout.pairs())
+        score, now_score = (len(cut), max(0, wanted - start)), (len(now), max(0, wanted - now_start))
+        since_better = 0 if now_score < score else since_better + 1
+        if now_score <= score:
+            cut, start, opened, pairings = now, now_start, now_opened, now_pairings
         elif undo[0] is not None:
             layout.room_at[undo[0]], layout.room_at[undo[1]] = layout.room_at[undo[1]], layout.room_at[undo[0]]
         else:
@@ -302,10 +313,10 @@ def _swap_rooms(world: BugFablesWorld, names: dict[Door, str]) -> list[tuple[Doo
 
 
 def _cut_off(world: BugFablesWorld, names: dict[Door, str],
-             pairs: list[tuple[Door, Door]]) -> tuple[set[str], int, list[tuple[Door, Door]]]:
+             pairs: list[tuple[Door, Door]]) -> tuple[set[str], int, set[str], list[tuple[Door, Door]]]:
     """For a layout: the regions it cuts off with everything the seed holds, as Archipelago's randomizer checks it; how
-    many spots it opens from the start, with only the start's items; and its pairings both ways. The doors are left as
-    they were."""
+    many spots it opens from the start, with only the start's items, and the regions it opens; and its pairings both
+    ways. The doors are left as they were."""
     pairings = [p for x, y in pairs for p in ((x, y), (y, x))]
     made = _connect_all(world, names, pairings)
     start = CollectionState(world.multiworld)
@@ -314,6 +325,7 @@ def _cut_off(world: BugFablesWorld, names: dict[Door, str],
     start.sweep_for_advancements(world.get_locations())
     spots = sum(1 for location in world.get_locations()
                 if location.address is not None and location.can_reach(start))
+    opened = {region.name for region in world.get_regions() if start.can_reach_region(region.name, world.player)}
     state = CollectionState(world.multiworld)
     for item in world.multiworld.itempool:
         if item.player == world.player:
@@ -324,7 +336,7 @@ def _cut_off(world: BugFablesWorld, names: dict[Door, str],
         region.entrances.remove(source)
         source.connected_region = None
         region.entrances.append(target)
-    return cut, spots, pairings
+    return cut, spots, opened, pairings
 
 
 def _connect_all(world: BugFablesWorld, names: dict[Door, str],

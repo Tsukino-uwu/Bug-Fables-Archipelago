@@ -3737,7 +3737,13 @@ from the start found two holes:
    move now takes, four times in five, a room on the edge of what is cut off (a door pair with one side reached and
    the other not), else one standing where something is cut off: that seed in 1037 tries; 240 seeds over four setups
    in about 250 (95% within 1460, the worst 2470, 2.9 seconds). Test `TestRoomSwapRepairsQuickly` (that seed within
-   3000 tries; the earlier moves needed 6734).
+   3000 tries; the earlier moves needed 6734). **And a fresh start when stuck:** the next run had 2 seeds in 20000
+   time out, one of them a random start where nothing was cut off by try 51 but the start never opened more than 7
+   spots (15 wanted), and no one move helped in the other 9950. With nothing cut off, moves now take the edge of what
+   the start opens (a door pair with one side opened from the start), and a layout that hasn't improved in 1000 tries
+   starts over from a new random one: those two seeds in 2404 and 2030 tries; 300 seeds over five setups (a random
+   start among them) in about 250, the worst 2322, 2.9 seconds. Test `TestRoomSwapRepairsQuickly`'s stuck start
+   (within 3000; the moves without a fresh start gave up at 10000).
 
 **Tests** (`test_doors.py`): what every mode shares (doors rewritten, only the table's doors named, every way back
 leads back, every region reached, the spoiler listing each pair once, and **the mod doing what the logic proved**:

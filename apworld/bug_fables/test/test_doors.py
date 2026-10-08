@@ -291,6 +291,25 @@ class TestRoomSwapRepairsQuickly(TestCase):
                "shop_contents": "no_progression", "shuffle_shop_inventories": True,
                "entrance_randomizer": "room_swap", "starting_party_member": "vi", "filler_starting_checks": True}
 
+    # A random start (2026-10-08) where the repair cut nothing off by try 51 but never opened more than 7 spots from the
+    # start, and gave up at 10000: no one move helped. A layout stuck for 1000 tries now starts over.
+    STUCK = {"progression_balancing": 25, "artifacts_required": 1, "shuffle_quests": True,
+             "shuffle_hidden_items": True, "shuffle_dig_spots": True, "enemy_sanity": False,
+             "shuffle_medal_shops": False, "shuffle_item_shops": True, "shuffle_termacade": True,
+             "minigame_prizes": True, "shop_contents": "filler_only", "entrance_randomizer": "room_swap",
+             "enemy_shuffle": "enemies_only", "starting_location": "anywhere", "starting_party_member": "off",
+             "filler_starting_checks": True, "shuffle_field_moves": True, "shuffle_jump": True,
+             "progressive_boat": True, "music_shuffle": True}
+
+    def test_a_stuck_layout_starts_over(self) -> None:
+        limit, entrances.ROOM_SWAP_TRIES = entrances.ROOM_SWAP_TRIES, 3000
+        try:
+            world = generate_like_main(self.STUCK, seed=334640838, steps=(
+                "generate_early", "create_regions", "create_items", "set_rules", "connect_entrances"))
+        finally:
+            entrances.ROOM_SWAP_TRIES = limit
+        self.assertTrue(world.door_pairings)
+
     def test_within_3000_tries(self) -> None:
         limit, entrances.ROOM_SWAP_TRIES = entrances.ROOM_SWAP_TRIES, 3000
         try:
