@@ -2584,10 +2584,13 @@ BepInEx is not bundled; the player installs it first.
    sat under a folder named `dev`; it is case-sensitive now. The release DLL went from 389,632 to 308,224 bytes, and it
    loaded in game (`copy-dev -Layout Release`) with no dev line in the log and every feature installed.
 3. **CI** (`.github/workflows/ci.yml`, every push and pull request, and called by the release): the apworld on a
-   Python matrix (3.11, 3.12, 3.13, what Archipelago's own CI tests at 0.6.7). Each leg checks out Archipelago
-   `0.6.7`, installs it the way Archipelago's own `unittests.yml` does (then sets `SKIP_REQUIREMENTS_UPDATE=1`: on the
+   Python matrix (3.11, 3.12, 3.13, what Archipelago's own CI tests, the same at 0.6.7 and 0.6.8). Each leg checks out
+   Archipelago at `AP_TAG` (`0.6.8` since 2026-10-08, `0.6.7` before), installs it the way Archipelago's own
+   `unittests.yml` does, WebHost's packages included (then sets `SKIP_REQUIREMENTS_UPDATE=1`: on the
    first run, 2026-09-26, two worlds' pins clashed over `typing-extensions` on Python 3.12 and 3.13, and `Launcher.py`
-   stopped at a press-Enter prompt with no one to press it), runs our tests, and generates three presets
+   stopped at a press-Enter prompt with no one to press it), runs our tests together with Archipelago's general tests
+   scoped to this world (`AP_TEST_WORLDS=bug_fables pytest`, `tests.md` at 0.6.8; until then only our own folder ran,
+   so the general tests never saw this world), and generates three presets
    (default, every experimental option on, every location toggle off) with APQuest as a second game. The whole suite
    takes about 3 seconds, so the matrix splits by Python version, not by test file: every job pays the install.
    A `build` job of its own (on 3.13) builds the apworld (`Launcher.py "Build APWorlds" -- "Bug Fables"`, with our

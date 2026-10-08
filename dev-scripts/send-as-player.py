@@ -20,7 +20,7 @@ async def main(slot: str, game: str, names: list[str]) -> None:
         print("<-", json.loads(await socket.recv())[0]["cmd"])
         await socket.send(json.dumps([{
             "cmd": "Connect", "game": game, "name": slot, "password": "", "uuid": str(uuid.uuid4()),
-            "version": {"major": 0, "minor": 6, "build": 7, "class": "Version"}, "items_handling": 0, "tags": [],
+            "version": {"major": 0, "minor": 6, "build": 8, "class": "Version"}, "items_handling": 0, "tags": [],
             "slot_data": False,
         }]))
         while True:

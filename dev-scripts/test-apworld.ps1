@@ -1,5 +1,5 @@
-# The apworld's tests, the Logic Test check, the fuzzer, then Universal Tracker's fuzzer hook: all, every time. Run from
-# anywhere.
+# The apworld's tests with Archipelago's general tests on it, the Logic Test check, the fuzzer, then Universal Tracker's
+# fuzzer hook: all, every time. Run from anywhere.
 # -Archipelago: your Archipelago checkout (the world linked in, fuzz.py at its root, worlds/logic_test copied in, and
 # Universal Tracker in custom_worlds or worlds/tracker with a Players folder for the tracker pass).
 # -TrackerOnly: only the tracker pass (CI's tracker shards).
@@ -18,6 +18,7 @@ param(
 $ErrorActionPreference = 'Continue'
 $env:SKIP_REQUIREMENTS_UPDATE = '1'
 $pythonPath = $env:PYTHONPATH
+$testWorlds = $env:AP_TEST_WORLDS
 
 # One line per error kind: player names differ per run, so they are folded out.
 function Show-FuzzErrors($report) {
@@ -40,8 +41,18 @@ try {
         $logicTest = 'skipped: -FuzzOnly'
         if (-not $FuzzOnly) {
             Write-Host '== Tests'
-            python -m pytest worlds/bug_fables/test -q
+            # Archipelago's general tests too, scoped to this world (tests.md), for this call only: the fuzzer loads every
+            # world. Its website tests need WebHost's packages, which a plain checkout lacks.
+            $skip = @()
+            python -c 'import flask' 2>$null
+            if ($LASTEXITCODE -ne 0) {
+                $skip = @('--ignore=test/webhost')
+                Write-Host "test/webhost skipped: no WebHost packages (ModuleUpdate.py --append WebHostLib/requirements.txt)"
+            }
+            $env:AP_TEST_WORLDS = 'bug_fables'
+            python -m pytest -q @skip
             $testsFailed = $LASTEXITCODE -ne 0
+            $env:AP_TEST_WORLDS = $testWorlds
             $logicTest = 'skipped: no worlds/logic_test (development.md, Play-testing the logic)'
         }
         if (-not $FuzzOnly -and (Test-Path 'worlds/logic_test')) {
@@ -93,5 +104,6 @@ try {
 }
 finally {
     $env:PYTHONPATH = $pythonPath
+    $env:AP_TEST_WORLDS = $testWorlds
     Pop-Location
 }

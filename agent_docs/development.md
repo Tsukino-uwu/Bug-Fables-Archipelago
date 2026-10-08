@@ -155,8 +155,14 @@ needs no one playing it (2026-09-26, both directions seen on screen this way):
 
 ## The apworld's tests
 
-With the world linked as above, run `python -m pytest worlds/bug_fables/test` in the Archipelago checkout. Set
-`SKIP_REQUIREMENTS_UPDATE=1` to stop Archipelago's scripts from prompting to install other games' packages.
+With the world linked as above, in an Archipelago checkout at the tag the world targets (`0.6.8`, CI's `AP_TAG`, since
+2026-10-08), run `AP_TEST_WORLDS=bug_fables python -m pytest` from the checkout's root. That is our tests plus
+Archipelago's general tests, scoped to this world (`tests.md`, "Running Tests for Specific Worlds", new in 0.6.8): only
+this world, the generic one and APQuest load. `python -m pytest worlds/bug_fables/test` runs ours alone. The general
+tests under `test/webhost` render the world's docs and options as the website does and need WebHost's packages
+(`python ModuleUpdate.py --append WebHostLib/requirements.txt`, as Archipelago's own CI installs them); without
+them, add `--ignore=test/webhost`. Set `SKIP_REQUIREMENTS_UPDATE=1` to stop Archipelago's scripts from prompting to
+install other games' packages.
 
 ## Fuzzing the apworld
 
@@ -166,7 +172,8 @@ runs too** (2026-09-28); 10000 seeds take a few minutes.
 
 1. Once: copy its `fuzz.py` (and `hooks/`) to the root of your Archipelago checkout. We use commit `53686ba`
    (`fuzz.py` 0.6.2, 2026-06-09); CI pins the same one.
-2. `dev-scripts/test-apworld.ps1 -Archipelago <your checkout>` runs the tests, the Logic Test check (next section),
+2. `dev-scripts/test-apworld.ps1 -Archipelago <your checkout>` runs the tests (ours and the general ones, as above;
+   it skips `test/webhost` and says so when WebHost's packages are missing), the Logic Test check (next section),
    then the fuzzer (`fuzz.py -r 10000 -j <cores> -n 1 -g bug_fables --skip-output`: one Bug Fables yaml per seed), and
    prints each error with its count. `-With apquest` puts another world in every room; `-Runs` changes the count,
    `-Jobs` the processes (every core by default). With Universal Tracker in the checkout it then runs its fuzzer hook

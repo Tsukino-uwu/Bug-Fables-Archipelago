@@ -1,8 +1,9 @@
 name: CI
 
-# Every push, and every release (release.yml calls this): the apworld's tests on a Python matrix, the apworld and its
-# yaml built and used as a player would, the fuzzer with the Logic Test check, and Universal Tracker's fuzzer hook. The
-# mod DLL's stale gate runs only in release.yml: between releases, a committed DLL older than its sources is expected.
+# Every push, and every release (release.yml calls this): the apworld's tests and Archipelago's general tests on it, on a
+# Python matrix, the apworld and its yaml built and used as a player would, the fuzzer with the Logic Test check, and
+# Universal Tracker's fuzzer hook. The mod DLL's stale gate runs only in release.yml: between releases, a committed DLL
+# older than its sources is expected.
 on:
   push:
   pull_request:
@@ -11,7 +12,7 @@ on:
 permissions: {}
 
 env:
-  AP_TAG: '0.6.7'
+  AP_TAG: '0.6.8'
   # fuzz.py 0.6.2 and the Logic Test world 0.4.0: the commits development.md names.
   FUZZER_COMMIT: '53686ba34f9e8852cbe1970666a5f56fd6abf75a'
   LOGIC_TEST_COMMIT: '795f13ba445bb09ceb0991c417eb2612dbbd9a2c'
@@ -45,9 +46,11 @@ jobs:
           cache-dependency-path: |
             Archipelago/requirements.txt
             Archipelago/ci-requirements.txt
+            Archipelago/WebHostLib/requirements.txt
             Archipelago/worlds/*/requirements.txt
 
-      # The same install as Archipelago's own unittests workflow.
+      # The same install as Archipelago's own unittests workflow, WebHost's packages included: some general tests
+      # render the world's docs and options on the website.
       - name: Install Archipelago with the world
         working-directory: Archipelago
         run: |
@@ -55,14 +58,15 @@ jobs:
           cp ../bug_fables_ap/LICENSE worlds/bug_fables/LICENSE
           python -m pip install --upgrade pip
           pip install -r ci-requirements.txt
-          python ModuleUpdate.py --yes --force
+          python ModuleUpdate.py --yes --force --append "WebHostLib/requirements.txt"
           # Installed once; after this, a clash between other worlds' pins would stop at a press-Enter prompt.
           echo "SKIP_REQUIREMENTS_UPDATE=1" >> "$GITHUB_ENV"
           SKIP_REQUIREMENTS_UPDATE=1 python Launcher.py --update_settings
 
+      # Our tests and Archipelago's general ones, scoped to this world (tests.md, "Running Tests for Specific Worlds").
       - name: Tests
         working-directory: Archipelago
-        run: pytest -n auto worlds/bug_fables/test
+        run: AP_TEST_WORLDS=bug_fables pytest -n auto
 
       # Some failures only show in a room with two different games.
       - name: Generate with a second game
