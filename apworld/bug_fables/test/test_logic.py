@@ -602,6 +602,7 @@ class TestWizardTower(BugFablesTestBase):
         self.assertIn({"map": "FarGrasslandsWizard", "entity": "loadzonetower"}, data["kept_present"])
         self.assertIn({"map": "FarGrasslandsWizard", "entity": "Base/Tower/Door"}, data["scenery_hidden"])
         self.assertIn({"map": "WizardTowerStairs", "entity": "Base/DoorLock"}, data["scenery_hidden"])
+        self.assertIn({"map": "WizardTowerAttic", "entity": "wizard", "flag": 450, "to": 691}, data["dialogue_flags"])
 
     def test_front_door_free(self) -> None:
         from ..data_tables import door_name

@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**122 of 244 done.**
+**125 of 244 done.**
 
 ## Outskirts
 
@@ -184,9 +184,10 @@ as it is, a frozen record.
 - [x] FarGrasslands3 (143)
 - [x] FGOutsideSwamplands (146) — for the quest pass: Madeleine (flags 375-389)
 - [x] FarGrasslands4 (153)
-- [ ] WizardTowerBasement (186)
-- [ ] WizardTowerStairs (187)
-- [ ] WizardTowerAttic (188)
+- [x] WizardTowerBasement (186) — the fall scene and its wizard kept away in a seed (build step 59)
+- [x] WizardTowerStairs (187)
+- [x] WizardTowerAttic (188) — for the quest pass: the wizard's quest 52 (Find The Ingredients!, his line 4, Jump up a
+  ledge); for the sellers' pass: the capsule machine (a Longleg Summoner, 10-19 berries, each time)
 - [ ] BroodmotherLair (198)
 - [ ] FGClearing (201)
 

@@ -3141,7 +3141,9 @@ Bee Fly up), 122 of 244; the badlands rechecked (2026-10-08: the center pillar b
 ledge by Jump with Bee Fly, or Freeze and the horn, too), still 122; the tower's basement (the floor free; its door up a
 ledge, Jump; two new locations: a Burly Tea behind the stairs, and crystal berry #37 on the bookshelf, Jump and Bee
 Fly or the Beemerang; its fall scene and wizard kept away, the tower's front door open, build step 59), 123 of 244;
-the rest of `room-checklist.md` to go.
+the tower's stairs (the bottom free; the attic's door up, Jump, a drop down), 124 of 244; the tower's attic (free; a
+new location: a Bad Book beside the cauldron; the wizard up a ledge, Jump, and the capsule machine for the quest and
+sellers' passes), 125 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -5392,14 +5394,18 @@ untouched, since the lists apply only in a seed):
    the hole still the horn, one way in. A random start may now land outside the front door (`ROOM_STARTS` takes
    kept-present doors). Test `TestWizardTower`.
 
-The attic wizard keeps his lines: his first talk still sets 450, which now only picks his next line; the next gives
-quest 52, for the quest pass.
+5. **The attic wizard's door talk skipped** (`dialogue_flags`): seen still there in the first seed (the user: "the
+   spider has its first dialouge at the top still (about opening the door)"). That talk (his line 3, the door locked,
+   then opened) only sets 450, now of no use, so his line from 450 answers to 691 (set by every new game) and he opens
+   with his ingredients talk, which gives quest 52 (for the quest pass). The user's pick over leaving it; that talk's
+   "You're STILL HERE!?" stays, since the game has no line for a first meeting there.
 
-**Status:** built (2026-10-08). Not yet seen: in a seed made from this world, the front door open both ways from the
-start, the hole a plain drop into the basement with no scene, no wizard in the basement.
+**Status:** built (2026-10-08); seen the same day in seed `AP_72680396662085838756`: no scene and no wizard in the
+basement, the front door both ways; then, through the dev `liveslot` and with 450 cleared, the wizard opening with his
+ingredients talk ("yee it skips the door dialouge now").
 
-*Code: `logic/far_grasslands.py` (`KEPT_OPEN`, `KEPT_PRESENT`, `SCENERY_HIDDEN`). The mod: `World/KeptOpen.cs`,
-unchanged.*
+*Code: `logic/far_grasslands.py` (`KEPT_OPEN`, `KEPT_PRESENT`, `SCENERY_HIDDEN`, `DIALOGUE_FLAGS`). The mod:
+`World/KeptOpen.cs`, unchanged.*
 
 # How it works
 

@@ -1261,6 +1261,15 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   come back that way (seen, above), and before 449 the first drop lands in the basement whatever a door shuffle says.
   The game has no cutscene skip, only faster text. In a seed the tower is kept open (`apimplementation.md`, build
   step 59).
+  **`WizardTowerAttic`, the tower's attic (2026-10-08, the user and the dumps):** one part, its door (`loadzone`, to
+  `WizardTowerStairs`) free both ways. The Bad Book beside the wizard's cauldron (`badbook`, key item 174, flag 620;
+  its `data[1]` 206 starts `Event206` once taken, one remark, line 18) and the capsule machine (`Fixedgachapon`, line
+  14 runs `Event166`'s attic branch: 10-19 berries, `flagvar[50]`, a Longleg Summoner, item 107, each time, no flag)
+  need nothing; the wizard (`wizard`, at height 1) needs Jump to talk to, up a small ledge. His lines: 3 (first talk,
+  the locked door, sets 450), 4 from 450 (the ingredients, sets 543, adds quest 52), 5 from 543, 11 from 544.
+  **`WizardTowerStairs`, the tower's stairs (2026-10-08, the user and the dumps):** the bottom (the doors to
+  `WizardTowerBasement` on the left and outside at the bottom, the save crystal) free between them; the attic's door
+  at the top (height 19) up with Jump, a drop down without it. No items; entering the room records discovery 36.
   **`SwamplandsBridge`, the swamp bridge (2026-10-08, code and the dumps only; not yet mapped on screen):** two
   bridges. The upper one (`Base/Bridge`, `Base/BridgeWalls`, `Base/Cube`: `ConditionChecker`s hidden from 336) spans
   the room at the doors' height (y 0), from `loadzoneleft` to `loadzone right`. Its collapse is `Event130`

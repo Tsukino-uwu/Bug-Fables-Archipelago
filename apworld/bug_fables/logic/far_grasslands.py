@@ -5,7 +5,7 @@ from __future__ import annotations
 from rule_builder.rules import CanReachRegion, False_, Has
 
 from ..custom_rules import ANY_ATTACK, CanUse, one_way
-from ..data_types import Area, DoorRule, EntityRef, Location, Pickup, Source, StoryEvent, Transfer
+from ..data_types import Area, DialogueFlag, DoorRule, EntityRef, Location, Pickup, Source, StoryEvent, Transfer
 
 LOCATIONS = (
     # Crystal berry #31 dug up at the crossroads (the first Far Grasslands room), reached with nothing: Beetle Dig.
@@ -16,7 +16,8 @@ LOCATIONS = (
     # 546, which the journal check on each room load turns into the discovery), or on entering the tower's stairs room
     # (MapControl). One check, either way (the user, 2026-10-08).
     Location("Far Grasslands: Wizard's Tower, Lookout Rock", 171, "FarGrasslandsWizard", Source(discovery=36),
-             rule=CanUse("Jump") | CanReachRegion("WizardTowerStairs"), category="discovery"),
+             rule=CanUse("Jump") | CanReachRegion("WizardTowerStairs") | CanReachRegion("WizardTowerStairs (Top)"),
+             category="discovery"),
     # Crystal berry #26 on top of the big tree root west of the crossroads, walked up to with nothing (the user).
     Location("Far Grasslands: West Path, On the Tree Root", 172, "FarGrasslands2",
              Source(berry=26, pickup=Pickup(map="FarGrasslands2", type=3, item=0)), category="crystal_berry",
@@ -38,6 +39,10 @@ LOCATIONS = (
              Source(berry=37, pickup=Pickup(map="WizardTowerBasement", type=3, item=0)),
              rule=CanUse("Jump") & (CanUse("Bee Fly") | CanUse("Beemerang Toss")), category="crystal_berry",
              area="Top Right"),
+    # The tower's attic (the user, 2026-10-08): a Bad Book beside the wizard's cauldron, nothing needed (taking it
+    # starts Event206, one remark).
+    Location("Far Grasslands: Wizard's Tower Attic, Beside the Cauldron", 179, "WizardTowerAttic",
+             Source(flag=620, pickup=Pickup(map="WizardTowerAttic", type=1, item=174)), no_jump=True),
 )
 STORY_EVENTS = (
     # The border cave's two gates, each opened for good by its lever on the far side (Event136 sets the lever's
@@ -114,6 +119,9 @@ MAP_AREAS = (
     # The tower's basement (the user, 2026-10-08): the floor, where the hole from outside lands, the map's own region;
     # the door to the stairs at the top right up a ledge, Jump, a drop down.
     Area("WizardTowerBasement", "Top Right", ("loadzone",), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
+    # The tower's stairs (the user, 2026-10-08): the bottom (the doors to the basement and outside, the save crystal)
+    # the map's own region; the attic's door at the top, Jump, a drop down.
+    Area("WizardTowerStairs", "Top", ("loadzoneattic",), CanUse("Jump"), out=one_way(None, CanUse("Jump"))),
 )
 # Maki's turn-back before the Wasp Kingdom's front gate at the lake (Event12, spoken by the follower), there until the
 # swamp bridge falls (336), which the seed never lets happen: kept away (the user, 2026-10-08). Past it there is only
@@ -143,4 +151,9 @@ KEPT_PRESENT = (
 SCENERY_HIDDEN = (
     EntityRef("FarGrasslandsWizard", "Base/Tower/Door"),
     EntityRef("WizardTowerStairs", "Base/DoorLock"),
+)
+DIALOGUE_FLAGS = (
+    # The attic wizard opens with his ingredients talk (his line from 450): the first one, about the locked door, only
+    # sets 450 (the user, 2026-10-08: "Skip the door talk"; 691 is set by every new game).
+    DialogueFlag("WizardTowerAttic", "wizard", 450, 691),
 )
