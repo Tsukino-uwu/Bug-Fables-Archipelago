@@ -7,8 +7,7 @@ from typing import TYPE_CHECKING, Any
 from .data_tables import (DAY_NIGHT, DIALOGUE_FLAGS, ENTITIES_MOVED, FREE_SALES, HELD_UNTIL, HELD_UNTIL_ITEM,
                           ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN, KEPT_PRESENT, LOCATION_NAME_TO_ID, PRESENT_FROM,
                           PRESENT_WITH_ITEM, ROADBLOCKS, SCENE_CAMERAS, SCENERY_HIDDEN, SCENERY_MOVED, SCENERY_OFF,
-                          SCENERY_PRESENT,
-                          STORY_ONLY_MAPS, TIME_SWITCHES, WORLD_VERSION)
+                          SCENERY_PRESENT, STORY_ONLY_MAPS, TIME_SWITCHES)
 from .data_types import (DayNight, DialogueFlag, EntityMove, EntityRef, FlagEntity, FreeSale, ItemEntity, SceneCamera,
                          SceneryMove, Source, TimeSwitch)
 from .options import ShopContents
@@ -87,7 +86,8 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
     up = [block for block in ROADBLOCKS if block.name in chosen]
     down = [block for block in ROADBLOCKS if block.name not in chosen]
     return {
-        "world_version": WORLD_VERSION,
+        # Core reads it from archipelago.json, the one place it is written.
+        "world_version": world.world_version.as_simple_string(),
         # The options as this seed applied them (SLOT_OPTIONS): the goal, field moves, Jump, Points of No Return and the
         # rest Universal Tracker regenerates from.
         "options": options_for_slot(world),

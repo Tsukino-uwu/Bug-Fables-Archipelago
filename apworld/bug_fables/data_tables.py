@@ -19,13 +19,6 @@ ITEM_ID_BASE = 7_710_000
 LOCATION_ID_BASE = 7_720_000
 
 
-def _load_manifest() -> dict[str, Any]:
-    raw = pkgutil.get_data(__name__, "archipelago.json")
-    if raw is None:
-        raise FileNotFoundError("bug_fables: archipelago.json is missing from the world package")
-    return json.loads(raw.decode("utf-8"))
-
-
 def _load(name: str) -> dict[str, Any]:
     raw = pkgutil.get_data(__name__, f"data/{name}")
     if raw is None:
@@ -33,7 +26,6 @@ def _load(name: str) -> dict[str, Any]:
     return json.loads(raw.decode("utf-8"))
 
 
-WORLD_VERSION: str = _load_manifest()["world_version"]
 ITEMS: tuple[Item, ...] = tuple(Item.from_json(item) for item in _load("items.json")["items"])
 # Story-only copies of rooms, there for one scene (chapter 3's attack on the city): their doors are never shuffled and
 # they're never a start, so their door pairs join the fixed links (the user, 2026-10-05).

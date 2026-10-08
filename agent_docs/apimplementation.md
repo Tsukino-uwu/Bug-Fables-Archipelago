@@ -533,7 +533,8 @@ be wrong.
      - **The apworld and the website:** 8. option groups (the first, "Aesthetic Options", came with build step 33),
        presets, reST option texts with rich text, a bug report
        page, the WebWorld's `game`; 9. `topology_present`; 10. location and item groups (the first item groups,
-       *Submarine* and *Boat*, came with build step 36); 11. `World.world_version`,
+       *Submarine* and *Boat*, came with build step 36); 11. `World.world_version` (done 2026-10-08: slot_data and
+       Universal Tracker's check read core's copy of the manifest's version, build step 1),
        `Region.add_locations`, `options.as_dict` (done 2026-10-03, build step 39:
        slot_data's `options`); 12. `start_inventory_from_pool`; 13. the Rule Builder's `OptionFilter` for Jump (done
        2026-10-03, build step 42), `__str__` and `@override` on our rules, a caching benchmark; 14. Universal Tracker
@@ -541,7 +542,8 @@ be wrong.
        storage keys wait for the PopTracker pack's map; the pack started 2026-10-03, build step 42); 15. slot_data only
        what's necessary (decided 2026-09-29: the fixed tables built into the mod from the apworld's data, the seed's
        locations from the server, a world-version check on connect).
-     - **Tests:** 16. the base in `test/bases.py` and Archipelago's generic tests in CI; 17. test hygiene (no repeated
+     - **Tests:** 16. the base in `test/bases.py` and Archipelago's generic tests in CI (the generic tests done
+       2026-10-08: `AP_TEST_WORLDS=bug_fables`, new in 0.6.8, build step 17); 17. test hygiene (no repeated
        default runs, plain `TestCase` where no multiworld is used, options written out, `assertAccessDependency`).
      - **The client:** 18. room messages shown in game: the in-game text client (Next 9), the Launcher's Text
        Client named in the player docs until then; 19. the Connect
@@ -5147,8 +5149,9 @@ Nothing else marks a slot as finished.
 The apworld can hand the client a small dictionary, **slot_data**, which arrives inside Connected. It's the
 only way a setting chosen at generation (an option, a version number) reaches the game. This world puts in:
 
-- `world_version`, written in the login line (`[ap] logged in: … world_version …`); the mod doesn't compare it yet (a
-  refusal on a mismatch is planned, Next 43 item 15);
+- `world_version`, the manifest's (`archipelago.json`), as core loads it onto the world class
+  (`World.world_version`), written in the login line (`[ap] logged in: … world_version …`); the mod doesn't compare it
+  yet (a refusal on a mismatch is planned, Next 43 item 15);
 - `options` (build step 39): the options as this seed applied them, from Archipelago's `options.as_dict`, toggles as
   JSON booleans. The mod reads the goal (`artifacts_required`, capped to what the world includes), whether the
   attacks and Jump are items (`shuffle_field_moves`, `shuffle_jump`, build steps 21 and 22) and Points of No Return

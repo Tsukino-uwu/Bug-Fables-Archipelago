@@ -6,7 +6,6 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
 
-from .data_tables import WORLD_VERSION
 from .options import BugFablesOptions
 
 if TYPE_CHECKING:
@@ -22,9 +21,10 @@ def apply_options(world: BugFablesWorld, slot_data: Mapping[str, Any]) -> None:
     """The options as the seed applied them (slot_data's options); every other option at its default, as in Universal
     Tracker's empty yaml. A seed from another version of the world is refused: no support for older versions."""
     version = slot_data.get("world_version")
-    if version != WORLD_VERSION:
+    ours = world.world_version.as_simple_string()
+    if version != ours:
         raise ValueError(f"Bug Fables: this seed was generated with world version {version}, and this apworld is "
-                         f"{WORLD_VERSION}: use the latest release of both")
+                         f"{ours}: use the latest release of both")
     if "options" not in slot_data:
         raise ValueError("Bug Fables: this seed's slot_data has no options, so it comes from an older apworld: use the "
                          "latest release")
