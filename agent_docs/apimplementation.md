@@ -644,7 +644,8 @@ be wrong.
 57. **Ant tunnel tickets** (a possible future plan, 2026-10-04, the user: "log down B as a possible future plan"): a
     yaml option, beside build step 45's free miners, where each tunnel shortcut opens from an item instead (one ticket
     per tunnel, six, or one progressive ticket), like the Boat Ticket. Each ticket gates its tunnel, so each is
-    progression; each needs a name (the user's) and an icon. Not decided.
+    progression; each needs a name (the user's) and an icon. Not decided. Since Next 63 (2026-10-08) the choice it
+    would offer is the miners' vanilla prices (behind the berry rule) or the tickets.
 58. **Enemysanity** (an idea, 2026-10-04, the user: "each enemy, not boss, drops an item/has a location ... would also
     allow people to see what item the enemy has before fighting it"): the game's own held-key drop works for any map
     enemy (`MEASURED.md`, a map enemy's drops), so each could carry a guaranteed, flagged drop the pickup swap shows,
@@ -699,10 +700,48 @@ be wrong.
     worry, a crash between receiving the halves and the merge, wouldn't lose anything either way (received items are
     counted in the save and replayed), but the whole is simpler. The Big Crank (60) is made from two halves, so its
     halves are designed here too.
-63. **Berries in the logic, to decide later** (2026-10-08, the user: "the whole berry plan is a thing to deal with
-    later"). Today no berry price is a rule: ordinary berries are renewable from battles (build step 11). The banker's
-    Platinum Card ("Bugaria City: Residential District, Banker", 550 berries in all) set the user weighing custom
-    items, keeping such spots free, or berries as a need in the logic; undecided.
+63. **Berries in the logic** (decided 2026-10-08, the user; to build after the rooms, with the enemy pass, its own
+    steps then). Today no berry price is a rule: ordinary berries were taken as renewable from battles (build step 11).
+    The banker's Platinum Card ("Bugaria City: Residential District, Banker", 550 berries in all) raised it. The user:
+    any location or NPC that takes berries needs, in the logic, a way to farm them again reachable somewhere, "no
+    matter how slow/tedious", proven for every seed.
+    - **How other worlds do it** (read at 0.6.8, worlds with a `licensing.md` row): ALttP and OoT ignore the amount
+      (ALttP: only the shop's region, `alttp/Shops.py:473-480`; OoT: a price over 99, 200 or 500 rupees needs 1, 2 or 3
+      Progressive Wallets, `oot/Rules.py:181-190`), which holds because rupees refill from grass and pots almost
+      everywhere. Hollow Knight gates its geo fees on `Can_Replenish_Geo`, an event true when any farm room is reachable
+      (`hk/GeneratedRules.py:12`); Archipelago's FAQ suggests it (`docs/apworld_dev_faq.md:165`: expensive purchases
+      "might logically require access to a place where you can quickly farm money"). Small money items are filler
+      everywhere; only rare bundles are ever counted (Messenger, Undertale).
+    - **Why HK's way here:** in Bug Fables about 99 walkable rooms and whole areas (Metal Island, the hive, Termite
+      City, the towns) have no renewable source, and map enemies come back only on an area change (`MEASURED.md`,
+      berries), so a random start or shuffled doors could reach a shop with no farm.
+    - **Berry items never count** (the user: "consumable berries similar to how consumable keys work in other
+      apworlds"): future one-time berry checks (bushes that drop berries) would be filler.
+    - **Enemies only** (the user, over grass, which needs the horn): one event item (name the user's) given by an event
+      location at each ordinary map enemy (never a boss or mini-boss) with no `requires` or `limit` flag, not a timer
+      enemy, whose fights pay money (the enemy table's money column, to dump), in the area of its room the enemy pass
+      confirms. Its rule: the fight won with plain attacks (`WHOLE_PARTY` at first; per fight with question 8 once
+      measured, summons included; a fight needs no move item: battle attacks are never items, and touching the enemy
+      starts it). Not on the start map until the logic starts at the spawn.
+    - **Ordinary enemies respawn on room re-entry, always on in a seed** (the user: "on room re entry only ... instead
+      of on a timer ... just going between 2 different rooms back/forth ... always be on for the seed"; "only for
+      enemies, not for boss or mini boss stuffs"): as a map loads, the mod clears its own ordinary enemies' regional
+      flags before the game builds its entities. Left alone: bosses and mini-bosses (any that is a map enemy marked by
+      hand in the enemy pass, `data/enemies.json` having no such mark), enemies with a `limit` or `requires` flag, the
+      20 timer enemies, any regional index another entity of the area shares. Its own step in the mod guide.
+    - **Where the rule goes:** a `Berries(price)` rule resolving to the event (serialized as its `Has`, as `ItemOnHand`
+      is), on every location with a price (Merab's 22, the 16 item-shop slots, the Moth's Sale 40, the Banker 550, Whack
+      Farms 10, Beette 150), in each way of `ItemOnHand`, and on the ant tunnels once their prices are back. Prices at
+      1x and full price (the panel's settings are client-only), each at most 999 (the wallet).
+    - **Prices back to vanilla, per NPC** (the user: "make everything cost the games vanilla amount, or require an
+      item/s"; "it would have to be a per npc decision"): each paid service is *always an item* (the boat: the Boat
+      Ticket stays), *a yaml choice, item or berries* (the ant tunnels, Next 57's tickets), or *berries*; decided row
+      by row. Beette's Flower Key (`FreeSale`, build step 46) and the ant tunnel miners (`free_ant_tunnels`, build step
+      45) go back to their prices: `free_sales` and `free_ant_tunnels` dropped from slot_data (the mod reads a missing
+      key as "not free", so older seeds keep theirs).
+    - **Tests then:** berry items never in a rule; every priced location needs the event; prices within 1-999; no farm
+      on the start map, a timer enemy or a limit enemy; `Berries(...).to_dict()` equals the event's `Has`; the ant
+      tunnels and Beette depend on the event.
 
 **Known issues:**
 

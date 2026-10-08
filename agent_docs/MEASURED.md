@@ -2198,6 +2198,32 @@ step 14).
   `MoneyBig`, `NPCControl.cs:5741-5753`), then clamps the wallet to 999. Berries an enemy drops after a fight are
   the same pickups (`EntityControl.spitmoney` creates them, `EntityControl.cs:5353-5361`). Items from the server
   and dialogue rewards add money elsewhere (`MainManager.cs:12583-12590`), so they aren't touched by this path.
+- **Where berries can be farmed** (2026-10-08, code read and the dumps, for the berry rule, `apimplementation.md`,
+  Next 63; an explorer's read, not yet seen in play):
+  - **A won map fight** pays each defeated enemy `GetMoney(n)` = `Random.Range(0, n+1)` (`BattleControl.cs:30717`,
+    `:30873-30876`; n the enemy table's column 4, not dumped yet), so 0 is possible, times the medal and flag-613
+    multipliers (`:30991`); dropped as pickups that vanish after 600 frames or when the room is left
+    (`NPCControl.cs:2784-2795`). Scripted fights pay nothing that way (no caller). Timer enemies (`eventid > 0`, 20 in
+    the dump, the pumpkin patch's Plumplings among them, `eventid` 300) respawn on their own but drop no berries
+    (`EntityControl.cs:5351`). Bug Me Not! at level 27 kills map enemies on touch with no fight and no money
+    (`NPCControl.cs:5860-5917`).
+  - **Map enemies come back only on an area change:** a win sets the enemy's regional flag (`EntityControl.cs:5137`),
+    and as a map builds its entities each one exists only if `CheckIfCanExist(requires, limit, regionalflag)` says so
+    (`MapControl.cs:1666`). The regional flags reset only when
+    a map of another MapControl area loads (`MapControl.cs:279-281`, `MainManager.UpdateArea`), and on loading
+    `SnakemouthTreasureRoom` (`MapControl.cs:635-641`); never on save and load, nor between rooms of one area. A beaten
+    map enemy isn't destroyed: it's parked at height 9999 with its collider off (`EntityControl.cs:5442-5450`), and
+    `NPCControl.RespawnEnemy` (`:2896`) is the game's own way back (the timer enemies use it). 293 of 307 non-timer
+    map enemies have a regional flag. A fight starts on touching the enemy (`NPCControl.cs:4999-5002`); a field
+    attack only stuns it first.
+  - **Grass** (cut only by Kabbu's horn, `NPCControl.cs:4763-4768`): 538 patches have no regional flag and regrow on
+    every room load, 64 on an area change; any non-crystal patch drops 1 berry 13 times in 100 (`Range(0,100) <= 12`,
+    `:5994-5997`), and 61 patches always drop berries. Rocks drop nothing; no money lies on the ground.
+  - **Other ways:** selling items (Madame Butterfly, Defiant Root's and the Termite shop's sell lists, the moth at
+    night) at half value; the Pink Spider at full value; fishing; card master wins (10 berries, likely repeatable); the
+    bank's interest. About 99 walkable rooms have no source of their own; Metal Island, the hive, Termite City and the
+    towns have none. The wallet clamps at 999, the bank at 10000; no berries are lost on a game over; fleeing drops
+    some (not with Secure Pouch).
 - **The game's own per-hit bonuses for the party** (for the attack boost, code read 2026-09-28):
   `BattleControl.CalculateBaseDamage(attacker, ref target, basevalue, ...)` runs for each hit. A Raw hit returns
   first, unchanged. Then, when the attacker is a party member (tag `Player`) and not in the demo battle (`demomode`),

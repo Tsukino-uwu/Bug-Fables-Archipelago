@@ -283,7 +283,8 @@ box unchecked: each room is mapped from scratch, vanilla only). **Quests wait un
 multiple rooms sometimes"): a room is done without its quests, which are then gone through one by one as chains.
 **Enemy locations wait too** (the user, 2026-10-05: "similar to how we are waiting with quests, lets do the same for
 enemy locations/reachability"): Enemysanity's spots and what reaching each enemy needs are gone through after the
-rooms, room by room. **A normal field enemy never blocks a way** (the user, 2026-10-06): it can always be walked
+rooms, room by room. The berry rule is built in the same pass (`apimplementation.md`, Next 63): each ordinary enemy's
+area and fight, and which map enemies are bosses or mini-bosses, kept out of the respawn and the rule. **A normal field enemy never blocks a way** (the user, 2026-10-06): it can always be walked
 around; only mini-boss, boss and scene fights stand in the path. What side of the room an enemy is on matters only in
 the enemy pass. **So do discoveries** (the user, 2026-10-05: "similar to the quest and enemy things, we might have
 to do the same with discoveries ( if i miss any while we are mapping out rooms )"): one sweep after the rooms checks
