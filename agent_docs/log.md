@@ -3566,6 +3566,10 @@ either one wrong).
   subject is the Room Swap repair); noted in `771629c`, nothing lost. After a message both sides commit by path and
   hunk; mine from a temporary index where a file held both sessions' hunks. Its push carries this work.
 - **Open:** in game, step 55 (Universal Tracker showing a shuffled door only once walked through; the mod's `[doors]
-  taken` line) and Connect's 0.6.8 (the server's join line); CI's first run at 0.6.8, `test/webhost` above all. The
-  README's Status line says the checks cover chapter 1, while the tables hold 498 locations in every chapter's areas:
-  its new wording is the user's.
+  taken` line) and Connect's 0.6.8 (the server's join line); CI's first run at 0.6.8, `test/webhost` above all.
+- **The README's Status line** said the checks cover chapter 1, while the tables hold 498 locations in every chapter's
+  areas. Asked to reword it, the user removed it instead: "it serves no real purpose anymore", as the project only
+  grows more complete. The next release comes once every room's logic is mapped (the game then fully playable), then
+  the quests, enemies and discoveries, then logic tweaks and maybe new options (Next 8). CLAUDE.md's README rule
+  changed to match. And `Launcher.py --update_settings` in the checkout, on the user's yes, once the other session's
+  run there ended.
