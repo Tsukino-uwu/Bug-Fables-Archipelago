@@ -708,6 +708,10 @@ be wrong.
 - **The Lost Sands gate claimed open** (seen 2026-10-04): on `BOLostSandsEntrance` a guard (`antguardclosed`) keeps
   the desert closed until flag 130 (Event74, the palace scene after chapter 2), but the door data has no gate there,
   so the logic counts the desert as open. To fix the open-world way: the closed guard kept away (build step 9).
+- **Room Swap's random tries** (2026-10-08): it shuffles whole rooms and keeps a layout only if every room stays
+  reachable; as the room mapping adds one-way drops and gated parts, fewer random layouts pass (about 4 in 1000 now,
+  2000 tries). The fix to come: a swap that repairs a failed layout (swapping again only the rooms around what was cut
+  off) rather than starting over. Build step 12.
 - **The swamp bridge is to stay up** (the user, 2026-10-04): its collapse (Event130 on `SwamplandsBridge`, flag
   336) never to happen. What 336 and 337 change is to read first, then the logic of both sides. **Maki** (the user,
   2026-10-08): the Far Grasslands' arrival scene (Event125) makes him a follower who fights alongside in the Far
@@ -3696,6 +3700,10 @@ from the start found two holes:
    door was the only way on, with the boss behind it. Archipelago's randomizer follows the logic while it places; the
    swap can't, so each try is checked the way the randomizer checks (everything the seed holds, every region reached)
    and undone if it fails, up to 20 tries. Before the check 13 of 200 tries cut regions off; after it, 0 of 200.
+   **Raised to 2000 tries (2026-10-08):** with the room mapping's one-way drops and gated parts, only about 4 in 1000
+   random swaps kept every room reachable (seed 5: 12 of 3000; the parts most often cut off, the Golden Hills
+   dungeon's upper ones, the desert's ledges, the border cave's gated sides), and 20 tries nearly always failed (the
+   Room Swap tests). A try takes about 1.5 ms, so 2000 cost at most 3 seconds and give up about 3 times in 10000.
 
 **Tests** (`test_doors.py`): what every mode shares (doors rewritten, only the table's doors named, every way back
 leads back, every region reached, the spoiler listing each pair once, and **the mod doing what the logic proved**:

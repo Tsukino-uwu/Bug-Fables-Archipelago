@@ -107,8 +107,9 @@ class TestShopContentsFillerOnlyAfterStartingChecks(BugFablesTestBase):
 
 
 class TestShopContentsFillerOnlyFallsBack(BugFablesTestBase):
-    # A solo seed without discoveries is short of filler: shops fall back to No Progression and still generate.
-    options = {"shop_contents": "filler_only"}
+    # A solo seed without crystal berries is short of filler (46 filler items for 56 excluded spots, 2026-10-08; the
+    # rooms mapped since 2026-10-05 gave the default seed enough): shops fall back to No Progression and still generate.
+    options = {"shop_contents": "filler_only", "shuffle_crystal_berries": False}
 
     def test_shops_fall_back_to_no_progression(self) -> None:
         shop = self.world.get_location("Bugaria City: Commercial District, Medal Shop 1")
@@ -127,14 +128,15 @@ class TestShopFallbackKeepsThePlayersRules(TestCase):
     # must leave both in place.
     def test_an_excluded_shop_stays_excluded(self) -> None:
         excluded = "Bugaria City: Commercial District, Medal Shop 2"
-        world = generate_like_main({"shop_contents": "filler_only", "exclude_locations": [excluded]}, seed=1)
+        world = generate_like_main({"shop_contents": "filler_only", "shuffle_crystal_berries": False,
+                                    "exclude_locations": [excluded]}, seed=1)
         self.assertTrue(world.shops_fell_back)
         self.assertEqual(world.get_location(excluded).progress_type, LocationProgressType.EXCLUDED)
         other = world.get_location("Bugaria City: Commercial District, Medal Shop 1")
         self.assertEqual(other.progress_type, LocationProgressType.DEFAULT)
 
     def test_an_item_rule_already_there_stays(self) -> None:
-        world = generate_like_main({"shop_contents": "filler_only"}, seed=1, steps=(
+        world = generate_like_main({"shop_contents": "filler_only", "shuffle_crystal_berries": False}, seed=1, steps=(
             "generate_early", "create_regions", "create_items", "set_rules", "connect_entrances", "generate_basic"))
         shop = world.get_location("Bugaria City: Commercial District, Medal Shop 1")
         add_item_rule(shop, lambda item: item.name != "TP Plus")

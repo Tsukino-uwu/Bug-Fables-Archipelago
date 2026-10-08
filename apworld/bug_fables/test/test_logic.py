@@ -1,6 +1,7 @@
 from BaseClasses import CollectionState
 
 from . import BugFablesTestBase
+from ..data_tables import STORY_EVENTS
 
 
 class TestPermitGate(BugFablesTestBase):
@@ -36,7 +37,11 @@ class TestPermitGate(BugFablesTestBase):
                                      "Outskirts: Madeleine's House, Table Left"}
                          | {f"Bugaria City: Commercial District, Medal Shop {n}" for n in range(1, 23)}
                          | {f"Bugaria City: Commercial District, Item Shop {n}" for n in range(1, 6)}
-                         | {f"Outskirts: Caravan, Item Shop {n}" for n in range(1, 4)})
+                         | {f"Outskirts: Caravan, Item Shop {n}" for n in range(1, 4)}
+                         # The Termacade and the theater, mapped 2026-10-06 in the commercial district's reach.
+                         | {"Bugaria City: Termacade, Arcade Gift", "Bugaria City: Theater, Right Side Spinner",
+                            "Bugaria City: Theater, Moth's Sale"}
+                         | {f"Bugaria City: Termacade, Prize {n}" for n in range(1, 14)})
 
     def test_reward_near_snakemouth_needs_the_permit(self) -> None:
         self.assertFalse(self.can_reach_location("Outskirts: Near Snakemouth Den, Horn Tutorial"))
@@ -44,10 +49,10 @@ class TestPermitGate(BugFablesTestBase):
         self.assertTrue(self.can_reach_location("Outskirts: Near Snakemouth Den, Horn Tutorial"))
 
     def test_pool_is_the_locations_items(self) -> None:
-        # An item whose vanilla spot isn't a location yet stays out of the pool.
+        # The pool is the locations' items (test_pool_matches_locations counts them); since the theater's moth sale
+        # (2026-10-06) every key item and medal in the table has a spot, so there is no item left out to name here.
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         self.assertIn("Explorer Permit", pool)
-        self.assertNotIn("G-Bug Ranger Plushie", pool)
 
     def test_pool_matches_locations(self) -> None:
         pool = [item for item in self.multiworld.itempool if item.player == self.player]
@@ -73,17 +78,21 @@ class TestLeif(BugFablesTestBase):
     # Rooms with water droplets need Leif to freeze them.
     def test_droplet_room_needs_leif(self) -> None:
         location = self.world.get_location("Snakemouth Den: Underground Door Room, Behind the Wall")
-        state = self.state_with("Explorer Permit")
+        state = self._every_story_step_but_leif()
         self.assertFalse(location.can_reach(state))
         self.add(state, "Leif")
         self.assertTrue(location.can_reach(state))
 
     def test_first_artifact_needs_leif(self) -> None:
         artifact = self.world.get_location("Artifact 1")
-        state = self.state_with("Explorer Permit")
+        state = self._every_story_step_but_leif()
         self.assertFalse(artifact.can_reach(state))
         self.add(state, "Leif")
         self.assertTrue(artifact.can_reach(state))
+
+    def _every_story_step_but_leif(self) -> CollectionState:
+        # Unswept, so Leif's own story event stays out; the den's other story steps (mapped since) are in.
+        return self.state_with("Explorer Permit", *sorted({event.item for event in STORY_EVENTS} - {"Leif"}))
 
     def test_leif_joins_before_the_droplet_rooms(self) -> None:
         self.collect_by_name("Explorer Permit")
@@ -326,15 +335,16 @@ class TestBookArea(BugFablesTestBase):
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
     def test_either_crosses(self) -> None:
-        spot = "Lost Sands: Book Area, Under the Book"
+        # The crossing itself: the north half is also reached by its own doors from rooms mapped since.
+        crossing = self.multiworld.get_entrance("DesertBookArea to DesertBookArea (North)", self.player)
         self.collect_all_but(["Progressive Dash", "Bee Fly"])
-        self.assertFalse(self.can_reach_location(spot))
+        self.assertFalse(crossing.access_rule(self.multiworld.state))
         self.collect_by_name("Bee Fly")
-        self.assertTrue(self.can_reach_location(spot))
+        self.assertTrue(crossing.access_rule(self.multiworld.state))
         self.remove_by_name("Bee Fly")
-        self.assertFalse(self.can_reach_location(spot))
+        self.assertFalse(crossing.access_rule(self.multiworld.state))
         self.collect(self.get_items_by_name("Progressive Dash"))
-        self.assertTrue(self.can_reach_location(spot))
+        self.assertTrue(crossing.access_rule(self.multiworld.state))
 
 
 class TestTardigradeIdol(BugFablesTestBase):
@@ -366,11 +376,12 @@ class TestSouthTrenchBridge(BugFablesTestBase):
 
 class TestDefiantRootEntrance(BugFablesTestBase):
     # The dig spot behind the rock: Horn Dash and Beetle Dig, each needed.
-    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+    options = {"shuffle_field_moves": True, "shuffle_jump": True, "shuffle_dig_spots": True}
 
     def test_needs_each(self) -> None:
         spot = "Lost Sands: Defiant Root Entrance, Dig Spot"
-        for missing in ("Horn Dash", "Beetle Dig"):
+        # By item: Horn Dash is Progressive Dash's second level.
+        for missing in ("Progressive Dash", "Beetle Dig"):
             with self.subTest(missing=missing):
                 state = CollectionState(self.multiworld)
                 self.collect_all_but([missing], state)
@@ -381,7 +392,7 @@ class TestDefiantRootEntrance(BugFablesTestBase):
 
 class TestBadgeAlcove(BugFablesTestBase):
     # The ledge's medal takes Jump, the grass by the right door the horn.
-    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+    options = {"shuffle_field_moves": True, "shuffle_jump": True, "shuffle_hidden_items": True}
 
     def test_needs(self) -> None:
         for spot, missing in (("Lost Sands: Badge Alcove, Platform on the Upper Left", "Jump"),
@@ -448,14 +459,18 @@ class TestOasis(BugFablesTestBase):
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
     def test_needs(self) -> None:
-        for spot, missing in (("Lost Sands: Oasis, On Top of the Sandpile", ("Jump",)),
-                              ("Lost Sands: Oasis, On Top of the Sandpile",
-                               ("Beemerang Toss", "Horn Slash", "Progressive Freeze"))):
-            with self.subTest(spot=spot, missing=missing):
-                state = CollectionState(self.multiworld)
-                self.collect_all_but(list(missing), state)
-                self.assertFalse(state.can_reach(spot, "Location", self.player))
+        # The top right is reached by a drop or its own cave door; the way up on the platform takes the switch (hit
+        # from up there, any attack) and Jump.
+        up = self.multiworld.get_entrance("DesertOasis to DesertOasis (Top Right)", self.player)
+        state = CollectionState(self.multiworld)
+        self.collect_all_but(["Jump"], state)
+        self.assertFalse(up.access_rule(state))
+        switch = self.multiworld.get_location("Lost Sands: Oasis, Platform Switch Hit", self.player)
+        state = CollectionState(self.multiworld)
+        self.collect_all_but(["Progressive Beemerang", "Horn Slash", "Progressive Freeze"], state)
+        self.assertFalse(switch.access_rule(state))
         self.collect_all_but([])
+        self.assertTrue(up.access_rule(self.multiworld.state))
         self.assertTrue(self.can_reach_location("Lost Sands: Oasis, On Top of the Sandpile"))
         self.assertTrue(self.can_reach_location("Lost Sands: Oasis, Crimson Cave"))
 
@@ -492,7 +507,8 @@ class TestAntTunnels(BugFablesTestBase):
     # A far end's free miner opens the way to the tunnel hub, so reaching the far end reaches the hub.
     def test_far_ends_lead_to_the_hub(self) -> None:
         names = {e.name for e in self.multiworld.get_region("AntTunnels", self.player).entrances}
-        for far in ("GoldenSettlementEntrance", "DefiantRoot2", "BarrenLandsAntTunnel", "FGCave"):
+        # The border cave's miner stands in its top part, past grass (mapped 2026-10-08).
+        for far in ("GoldenSettlementEntrance", "DefiantRoot2", "BarrenLandsAntTunnel", "FGCave (Tunnel)"):
             self.assertIn(f"{far} to AntTunnels (ant tunnel)", names)
 
     def test_miners_free(self) -> None:

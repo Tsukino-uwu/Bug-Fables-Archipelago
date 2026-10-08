@@ -223,7 +223,9 @@ def _plando(world: BugFablesWorld, names: dict[Door, str], coupled: bool) -> lis
     return pairings
 
 
-ROOM_SWAP_TRIES = 20
+# Each try about 1.5 ms. With the rooms' one-way drops and gated parts mapped, about 4 in 1000 random swaps keep every
+# room reachable (2026-10-08, seed 5: 12 of 3000), so 2000 tries give up about 3 times in 10000.
+ROOM_SWAP_TRIES = 2000
 
 
 def _swap_rooms(world: BugFablesWorld, names: dict[Door, str]) -> list[tuple[Door, Door]]:

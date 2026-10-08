@@ -6,6 +6,8 @@ import json
 import pkgutil
 from typing import Any
 
+from rule_builder.rules import False_
+
 from .data_types import Area, Doors, Encounter, Item, Location, OneWayDoor, RoomStart, SavePoint
 from .enemysanity import enemy_locations
 from .logic import (ARTIFACTS, DAY_NIGHT, DIALOGUE_FLAGS, DOOR_RULES, ENTITIES_MOVED, FREE_SALES, HELD_UNTIL,
@@ -46,7 +48,18 @@ def _story_doors_fixed(doors: Doors) -> Doors:
                  fixed=(*doors.fixed, *links), gated=doors.gated)
 
 
-DOORS: Doors = _story_doors_fixed(Doors.from_json(_load("doors.json")))
+# Doors the logic shuts for good (a door rule of False_: the game makes them only after the story, and the user keeps them
+# shut): left out of the door graph, so neither the logic nor the entrance randomizer counts them as a way anywhere.
+SHUT_DOORS: frozenset[tuple[str, str]] = frozenset((r.map, r.door) for r in DOOR_RULES if isinstance(r.rule, False_))
+
+
+def _shut_doors_out(doors: Doors) -> Doors:
+    open_doors = tuple(c for c in doors.connections
+                       if (c.a.map, c.a.door) not in SHUT_DOORS and (c.b.map, c.b.door) not in SHUT_DOORS)
+    return Doors(connections=open_doors, one_way=doors.one_way, fixed=doors.fixed, gated=doors.gated)
+
+
+DOORS: Doors = _shut_doors_out(_story_doors_fixed(Doors.from_json(_load("doors.json"))))
 
 
 def door_name(map_name: str, door: str) -> str:

@@ -1,6 +1,7 @@
 from BaseClasses import ItemClassification, LocationProgressType
 
 from . import BugFablesTestBase
+from ..data_tables import LOCATIONS
 from ..items import BugFablesItem
 
 OPENING = ["Outskirts: Maki and Eetl's Gift", "Outskirts: Outside the City, Opening",
@@ -40,9 +41,7 @@ class TestFillerStartingChecksDefault(BugFablesTestBase):
                 self.assertTrue(_plain_filler(item), f"{name} holds {item.name}")
 
     def test_only_the_opening(self) -> None:
-        excluded = {location.name for location in self.multiworld.get_locations(self.player)
-                    if location.progress_type == LocationProgressType.EXCLUDED}
-        self.assertEqual(excluded, set(OPENING))
+        self.assertEqual(_excluded_by_the_option(self), set(OPENING))
 
 
 class TestFillerStartingChecksOneMember(BugFablesTestBase):
@@ -65,9 +64,7 @@ class TestFillerStartingChecksStoryParty(BugFablesTestBase):
     options = {"starting_party_member": "off"}
 
     def test_two_spots(self) -> None:
-        excluded = {location.name for location in self.multiworld.get_locations(self.player)
-                    if location.progress_type == LocationProgressType.EXCLUDED}
-        self.assertEqual(excluded, {OPENING[0], OPENING[2]})
+        self.assertEqual(_excluded_by_the_option(self), {OPENING[0], OPENING[2]})
 
 
 class TestFillerStartingChecksOff(BugFablesTestBase):
@@ -122,3 +119,10 @@ class TestFillerStartingChecksSmallestPool(BugFablesTestBase):
     def test_enough_plain_filler(self) -> None:
         plain = sum(1 for item in self.multiworld.itempool if item.player == self.player and _plain_filler(item))
         self.assertGreaterEqual(plain, len(OPENING))
+
+
+def _excluded_by_the_option(test: BugFablesTestBase) -> set[str]:
+    # Excluded spots but those always kept to filler on their own (the Termacade, the minigame prizes when off).
+    kept = {loc.name for loc in LOCATIONS if loc.filler or loc.category == "minigame"}
+    return {location.name for location in test.multiworld.get_locations(test.player)
+            if location.progress_type == LocationProgressType.EXCLUDED and location.name not in kept}

@@ -51,8 +51,9 @@ def arrivals(connections, targets) -> dict[Door, Door]:
 
 
 def one_way_lands(one_ways, targets) -> dict[Door, str]:
-    """The map each one-way door, its story copies included, lands in once the mod applies the targets."""
-    to = {(w.map, w.door): w.to for w in one_ways}
+    """The region each one-way door, its story copies included, lands in once the mod applies the targets: the landing's
+    map, or the area of it that takes the landing (landing_region)."""
+    to = {(w.map, w.door): landing_region(w) for w in one_ways}
     like = {(t["map"], t["door"]): (t["like_map"], t["like_door"]) for t in targets}
     return {(w.map, name): to[like.get((w.map, name), (w.map, w.door))] for w in one_ways for name in (w.door, *w.copies)}
 
@@ -140,7 +141,7 @@ class DoorPairTests:
         targets = self.world.door_targets
         arrive = arrivals(DOORS.connections, targets)
         lands = one_way_lands(ONE_WAYS, targets)
-        to = {(w.map, w.door): w.to for w in ONE_WAYS}
+        to = {(w.map, w.door): landing_region(w) for w in ONE_WAYS}
         for x, y in self.world.door_pairings:
             if x in ONE_WAY_DOORS:
                 self.assertEqual(lands[x], to[y])

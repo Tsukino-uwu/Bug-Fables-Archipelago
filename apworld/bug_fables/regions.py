@@ -28,7 +28,10 @@ def create_and_connect_regions(world: BugFablesWorld) -> None:
     world.multiworld.regions += [menu, *regions.values()]
     regions[MENU] = menu
     for entrance in logic_entrances():
-        world.create_entrance(regions[entrance.from_map], regions[entrance.to_map], entrance.rule, name=entrance.name)
+        # A door is always made, even one its rule shuts for good: the entrance randomizer and the door table name
+        # every door (World.create_entrance otherwise skips a rule that is always false).
+        world.create_entrance(regions[entrance.from_map], regions[entrance.to_map], entrance.rule, name=entrance.name,
+                              force_creation=entrance.door)
 
 
 class LogicEntrance(NamedTuple):
@@ -36,6 +39,7 @@ class LogicEntrance(NamedTuple):
     from_map: str  # a region: a map, or a map area
     to_map: str  # as the game has it; the entrance randomizer may send a door elsewhere
     rule: Rule | None
+    door: bool = False  # a door (two-way or one-way), not a fixed link, a transfer or an area's edge
 
 
 def logic_entrances() -> list[LogicEntrance]:
@@ -46,10 +50,10 @@ def logic_entrances() -> list[LogicEntrance]:
     for connection in DOORS.connections:
         for end, other in ((connection.a, connection.b), (connection.b, connection.a)):
             entrances.append(LogicEntrance(door_name(end.map, end.door), door_region(end.map, end.door),
-                                           door_region(other.map, other.door), gates.get((end.map, end.door))))
+                                           door_region(other.map, other.door), gates.get((end.map, end.door)), True))
     for door in ONE_WAYS:
         entrances.append(LogicEntrance(door_name(door.map, door.door), door_region(door.map, door.door),
-                                       landing_region(door), gates.get((door.map, door.door))))
+                                       landing_region(door), gates.get((door.map, door.door)), True))
     for a, b in dict.fromkeys(DOORS.fixed):
         if a != b and a in MAPS and b in MAPS:
             entrances.append(LogicEntrance(f"{a} to {b}", a, b, None))

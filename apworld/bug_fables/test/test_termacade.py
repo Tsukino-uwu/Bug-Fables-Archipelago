@@ -18,9 +18,9 @@ class TestTermacade(BugFablesTestBase):
     def test_gift_and_prizes_are_filler_locations(self) -> None:
         for name in (GIFT, *PRIZES):
             with self.subTest(location=name):
+                # Excluded is how Archipelago keeps a location to filler (the test base runs no fill).
                 location = self.multiworld.get_location(name, self.player)
                 self.assertEqual(location.progress_type, LocationProgressType.EXCLUDED)
-                self.assertTrue(location.item.excludable)
 
     def test_vanilla_items_in_the_pool(self) -> None:
         pool = _pool(self)

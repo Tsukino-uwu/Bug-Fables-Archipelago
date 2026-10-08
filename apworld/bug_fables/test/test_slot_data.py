@@ -42,12 +42,14 @@ class TestSlotData(BugFablesTestBase):
         discoveries = data["location_discoveries"]
         shops = data["location_shops"]
         item_shops = data["location_item_shops"]
+        # The Termacade's first four prizes sell again and again: no flag, their prize slot is the check.
+        prizes = {loc for loc in data["location_prizes"] if loc not in flags}
         respawns = {loc for loc, pickup in data["location_pickups"].items() if "regional" in pickup}
         ids = {str(loc.address) for loc in self.multiworld.get_locations(self.player) if loc.address is not None}
         self.assertEqual(set(flags) | set(variables) | set(berries) | set(discoveries) | set(shops) | set(item_shops)
-                         | respawns, ids)
+                         | respawns | prizes, ids)
         self.assertEqual(len(flags) + len(variables) + len(berries) + len(discoveries) + len(shops) + len(item_shops)
-                         + len(respawns),
+                         + len(respawns) + len(prizes),
                          len(ids))
         self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Maki and Eetl's Gift"])], 15)
         self.assertEqual(flags[str(self.world.location_name_to_id["Outskirts: Artis's Gift"])], 32)
@@ -62,7 +64,8 @@ class TestSlotData(BugFablesTestBase):
         # A wrong giveitem would let the vanilla item through or swallow an unrelated grant.
         gives = self.world.fill_slot_data()["location_gives"]
         medal = gives[str(self.world.location_name_to_id["Outskirts: Artis's Gift"])]
-        self.assertEqual(medal, {"map": "BugariaOutskirtsOutsideCity", "type": 2, "item": 11})
+        # Named by its giver too: Artis's line gives it (the npc keeps another grant there from matching).
+        self.assertEqual(medal, {"map": "BugariaOutskirtsOutsideCity", "type": 2, "item": 11, "npc": "ShwEmArtys"})
         permit = gives[str(self.world.location_name_to_id["Outskirts: Maki and Eetl's Gift"])]
         self.assertEqual(permit, {"map": "BugariaOutskirtsOutsideCity", "type": 1, "item": 27})
 

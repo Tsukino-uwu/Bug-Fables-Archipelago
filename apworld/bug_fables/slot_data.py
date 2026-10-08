@@ -28,6 +28,7 @@ SLOT_OPTIONS: tuple[str, ...] = (
 # Every other option, and why it isn't sent.
 NOT_SENT: dict[str, str] = {
     "enemy_shuffle": "its result is enemy_swaps",
+    "minigame_prizes": "fill only: its locations stay, held to filler when off",
     "starting_location": "its result is start",
     "starting_party_member": "its result is starting_member",
     "music_shuffle": "its result is music_map and jingle_map",
