@@ -3515,3 +3515,12 @@ either one wrong).
   a reload. Dev settings: `onehit` off (turned off this session), `InfJump` and `BumpKill` on, `QuietBursts` and
   `AdoptSeed` off; the command file is the earlier session's scratchpad `cmds.txt`, the player file `players/BugTester.yaml`
   in session f7f04659's scratchpad.
+- **Tests, fuzzer and push (the user, 2026-10-08):** the first run since the last push (2026-10-05, CI red on fill
+  errors) found 96 failing tests across the week's mapping, most of them tests behind the logic (landings in map
+  areas, door rules on one-ways, the Termacade's flagless prizes, Artis's give by npc, the shop fallback no longer
+  short of filler, the den's story steps, crossings reached around by later rooms, ability names used as item names),
+  and real breaks: the shut Wasp gate's `False_` door rule made Archipelago skip its entrance, which the randomizer and
+  every door lookup then missed (fixed: `SHUT_DOORS`, out of the door graph); Charge Up (medal 52) missing from the
+  items; `minigame_prizes` neither sent nor listed. Room Swap failed every time: about 4 random layouts in 1000 keep
+  every room reachable now; 2000 retries still failed 2 fuzzer seeds, so a layout is repaired instead (moves around
+  what is cut off): 180 of 180 seeds, test `TestRoomSwapRepairs`. CI's three two-game generations run locally, fine.

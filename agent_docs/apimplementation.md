@@ -4775,11 +4775,13 @@ area is a region of its own (`"<map> (<name>)"`) holding its doors, joined to it
 room swap) and Universal Tracker's replay all go by it. A new obstacle is then data: the map, the doors behind it, what
 crosses it, and its pieces; reachability, the shuffled doors and the seed's proof follow.
 
-**The rule** is `CanUse("Beetle Dig")` behind Rule Builder's own option filter (`OptionFilter(ExtraRoadblocks, "Snakemouth
-Barrier", "contains")`, `filtered_resolution=True`): free when the roadblock isn't chosen. The option class lives in
-`roadblocks.py`, since `options.py` reads the data tables, which read the logic. **The pieces** (`Roadblock`): the gate
-and its door as scenery, the guard and sign as entities; chosen, `slot_data` lists them in `scenery_present` and
-`kept_present`, otherwise in `scenery_hidden` and `kept_open` as before. The mod needed no change.
+**The rule** is `CanUse("Beetle Dig")` behind Rule Builder's own option filter (`OptionFilter(ExtraRoadblocks,
+"Snakemouth Barrier", "contains")`, `filtered_resolution=True`): free when the roadblock isn't chosen. The option class
+lives in `roadblock_options.py` (first `roadblocks.py`, renamed 2026-10-08: WebHost unpickles an option only from a
+module whose name ends in "options", which Archipelago's `test_pickle_dumps_default` caught), since `options.py` reads
+the data tables, which read the logic. **The pieces** (`Roadblock`): the gate and its door as scenery, the guard and
+sign as entities; chosen, `slot_data` lists them in `scenery_present` and `kept_present`, otherwise in `scenery_hidden`
+and `kept_open` as before. The mod needed no change.
 
 **Checked:** `test_roadblocks.py` (off: pieces away, the crossing free; on: pieces standing, the crossing needing Dig
 both ways, the cave door and its arrival behind the barrier; decoupled: the area reachable with everything), failing
@@ -4803,7 +4805,7 @@ one-way with its landing region.
 
 **Status:** built (2026-10-04); its one roadblock seen in game and taken out (2026-10-05), the option kept empty.
 
-*Code: `roadblocks.py` (`ExtraRoadblocks`), `data_types.py` (`Area`, `Roadblock`), `logic/outskirts.py`
+*Code: `roadblock_options.py` (`ExtraRoadblocks`), `data_types.py` (`Area`, `Roadblock`), `logic/outskirts.py`
 (`ROADBLOCKS`, `MAP_AREAS`), `logic/__init__.py`, `data_tables.py` (`REGIONS`, `door_region`, `landing_region`),
 `regions.py`, `entrances.py`, `slot_data.py`; tests `test_roadblocks.py`, `test_areas.py`, `test_doors.py`.*
 

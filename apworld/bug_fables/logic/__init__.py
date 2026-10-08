@@ -27,7 +27,7 @@ DOOR_RULES: tuple[DoorRule, ...] = tuple(rule for area in AREAS for rule in geta
 TRANSFERS: tuple[Transfer, ...] = tuple(t for area in AREAS for t in getattr(area, "TRANSFERS", ()))
 # Parts of a map cut off from the rest, each its own region (regions.py).
 MAP_AREAS: tuple[Area, ...] = tuple(a for area in AREAS for a in getattr(area, "MAP_AREAS", ()))
-# The Extra Roadblocks choices (roadblocks.py), each by its option key.
+# The Extra Roadblocks choices (roadblock_options.py), each by its option key.
 ROADBLOCKS: tuple[Roadblock, ...] = tuple(r for area in AREAS for r in getattr(area, "ROADBLOCKS", ()))
 # By id, so moving a spot from one module to another never changes a seed.
 LOCATIONS: tuple[Location, ...] = tuple(sorted(

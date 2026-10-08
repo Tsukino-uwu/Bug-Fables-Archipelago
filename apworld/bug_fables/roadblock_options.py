@@ -1,5 +1,6 @@
 """The Extra Roadblocks option, apart from options.py so the logic's rules can filter on it: options.py reads the
-data tables, which read the logic."""
+data tables, which read the logic. The module's name ends in "options": WebHost unpickles an option only from such a
+module (Utils.RestrictedUnpickler), as Archipelago's test_pickle_dumps_default checks."""
 from __future__ import annotations
 
 from Options import OptionSet
