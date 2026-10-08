@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**127 of 244 done.**
+**128 of 244 done.**
 
 ## Outskirts
 
@@ -196,7 +196,7 @@ as it is, a frozen record.
 
 ## Wild Swamplands
 
-- [ ] SwamplandsEntrance (145)
+- [x] SwamplandsEntrance (145) — its opening talk skipped with Skip cutscenes (the mod guide, step 10)
 - [ ] Swamplands2 (148)
 - [ ] Swamplands3 (151)
 - [ ] SwamplandsBridge (152)

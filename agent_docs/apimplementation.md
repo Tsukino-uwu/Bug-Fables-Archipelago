@@ -3147,7 +3147,8 @@ sellers' passes), 125 of 244; the Broodmother's lair (free between its doors; it
 either door, for the enemy pass; its berries, quest and prize medal for the quest pass), 126 of 244; the clearing
 (free; a new location: the Mechanical Claw behind a small bush, a new useful key item, progression once Defiant Root's
 trade for it is a location; Maki and Kina's platform, Jump, for the quest pass), 127 of 244, the Far Grasslands done;
-the rest of `room-checklist.md` to go.
+the Wild Swamplands from 2026-10-08: the swamp's first room (free; its opening talk skipped with Skip cutscenes, the
+mod guide's step 10), 128 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
