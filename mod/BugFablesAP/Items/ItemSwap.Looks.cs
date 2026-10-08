@@ -81,6 +81,31 @@ namespace BugFablesAP
             {
                 renderer.material.color = color.Value;
             }
+            if (renderer.sortingOrder != entity.sprite.sortingOrder - 1)
+            {
+                renderer.sortingOrder = entity.sprite.sortingOrder - 1;
+            }
+        }
+
+        // The game sorts an entity's sprite by its distance every other frame (UpdateGeneralAnim). A mark left at the
+        // default order drew before backdrops its item draws after, so the sky covered the mark but not the item.
+        private static class MarkSort
+        {
+            [HarmonyPatch(typeof(EntityControl), "UpdateGeneralAnim")]
+            [HarmonyPostfix]
+            private static void AfterGeneralAnim(EntityControl __instance)
+            {
+                SpriteRenderer sprite = __instance.sprite;
+                if (sprite == null || sprite.transform.childCount == 0)
+                {
+                    return;
+                }
+                Transform mark = sprite.transform.Find(MarkName);
+                if (mark != null)
+                {
+                    mark.GetComponent<SpriteRenderer>().sortingOrder = sprite.sortingOrder - 1;
+                }
+            }
         }
 
         // The class colour of the item at this location, yours included, else null.

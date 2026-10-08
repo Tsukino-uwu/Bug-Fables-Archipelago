@@ -2058,12 +2058,20 @@ slot's sprite holder depth (which the backdrop rides on), for the shop's own ite
 same day, the row even on the shelf. `ItemShops.ShelvesForward` lists such shelves; dev `shelfforward` tunes a step
 live, and dev `mark` takes the backdrop's depth as well.
 
+**Lost against the sky (found 2026-10-08, the Badlands' rock ledge):** the user's screenshot showed the item over the
+sky but only a sliver of its backdrop, where ground was behind it: "the starburst goes away with some layers". The
+game sorts every entity's sprite by its distance from the camera every other frame (`EntityControl.UpdateGeneralAnim`:
+its viewport depth times 1000), so the item's sort order is in the thousands, while the backdrop kept Unity's default,
+0. In the same queue, scenery sorted between the two (the sky there) draws over the backdrop but under the item. So
+the backdrop now takes its item's sort order less one, right after the game sets it (a postfix on
+`UpdateGeneralAnim`, the `MarkSort` group), and stays just behind its item whatever the camera does.
+
 **Status:** works, seen on the Caravan's shelf and on the ground (2026-09-26); with Item colors Off, the game's own
 colours by kind seen (2026-10-04): medals orange on the Caravan's shelf and Madeleine's table, an item teal beside
 them, and a key item pink (a dev pickup drawn from the pier's checked spot, its Progressive Boat, through `spawn key 27
-@7720026`).
+@7720026`). The sort-order fix built 2026-10-08, not yet seen: the rock ledge's backdrop whole against the sky.
 
-*Code: `ItemSwap.Looks.cs` (`Mark`, `MarkColorOf`), `QualityOfLife.cs` (`ItemBackgrounds`), `ApMenu.cs`
+*Code: `ItemSwap.Looks.cs` (`Mark`, `MarkColorOf`, `MarkSort`), `QualityOfLife.cs` (`ItemBackgrounds`), `ApMenu.cs`
 (`BackgroundsRow`).*
 
 ## 23. The Archipelago logo, drawn in code in the game's style
