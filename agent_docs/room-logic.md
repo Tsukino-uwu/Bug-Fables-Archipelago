@@ -284,18 +284,18 @@ multiple rooms sometimes"): a room is done without its quests, which are then go
 **Enemy locations wait too** (the user, 2026-10-05: "similar to how we are waiting with quests, lets do the same for
 enemy locations/reachability"): Enemysanity's spots and what reaching each enemy needs are gone through after the
 rooms, room by room. The berry rule is built in the same pass (`apimplementation.md`, Next 63): each ordinary enemy's
-area and fight, and which map enemies are bosses or mini-bosses, kept out of the respawn and the rule. **A normal field enemy never blocks a way** (the user, 2026-10-06): it can always be walked
-around; only mini-boss, boss and scene fights stand in the path. What side of the room an enemy is on matters only in
-the enemy pass. **So do discoveries** (the user, 2026-10-05: "similar to the quest and enemy things, we might have
-to do the same with discoveries ( if i miss any while we are mapping out rooms )"): one sweep after the rooms checks
-every discovery's spot and need against the mapped rooms. **And respawning and static items** (the user,
-2026-10-06, after a fixed-drop bush with a regional flag was first missed: "in case we have missed any
-static/respawning items anywhere"): a sweep of the entity dump for every pickup and fixed-drop bush (one-time or
-regional flag) against the locations, hidden items included (the user, 2026-10-07): every `BeetleGrass` whose
-vectordata names an item (what `CutGrass` drops) or whose `data[1]` is a crystal berry, every `DigSpot`, and every
-item a scene drops (`EntityControl.CreateItem` in `EventControl.cs`, as the pink spider's berry). **And the doors**
-(the user, 2026-10-07: "after we are done mapping out logic for all rooms, we need to check all the unused or not
-randomized entrances for entrance rando"): every door the
+area and fight, and which map enemies are bosses or mini-bosses, kept out of the respawn and the rule. **A normal
+field enemy never blocks a way** (the user, 2026-10-06): it can always be walked around; only mini-boss, boss and
+scene fights stand in the path. What side of the room an enemy is on matters only in the enemy pass. **So do
+discoveries** (the user, 2026-10-05: "similar to the quest and enemy things, we might have to do the same with
+discoveries ( if i miss any while we are mapping out rooms )"): one sweep after the rooms checks every discovery's spot
+and need against the mapped rooms. **And respawning and static items** (the user, 2026-10-06, after a fixed-drop bush
+with a regional flag was first missed: "in case we have missed any static/respawning items anywhere"): a sweep of the
+entity dump for every pickup and fixed-drop bush (one-time or regional flag) against the locations, hidden items
+included (the user, 2026-10-07): every `BeetleGrass` whose vectordata names an item (what `CutGrass` drops) or whose
+`data[1]` is a crystal berry, every `DigSpot`, and every item a scene drops (`EntityControl.CreateItem` in
+`EventControl.cs`, as the pink spider's berry). **And the doors** (the user, 2026-10-07: "after we are done mapping out
+logic for all rooms, we need to check all the unused or not randomized entrances for entrance rando"): every door the
 shuffle leaves out (`doors.json`'s `fixed`, parked or unexported doors) gone through with the user, each joining the
 shuffle unless the user agrees a reason (`apimplementation.md`, Where it stands, Next 2).
 
