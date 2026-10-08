@@ -73,6 +73,10 @@ shuffled doors included, and shows every location your items reach.
 3. Its tab lists the locations in logic. `/explain` followed by a location's name says what it needs, and
    `/get_logical_path` with a location's name which way leads there.
 
+With the doors shuffled, it counts a door only once you've been through it, so it never gives the layout away; the
+game tells the room each door you take, and the tracker remembers them. To have it count every door from the start,
+set `enforce_deferred_entrances: off` under `universal_tracker:` in your Archipelago's `host.yaml`.
+
 It uses the `bug_fables.apworld` installed next to it, which must be the release the room was generated with: with
 another, it shows an error instead of a list.
 

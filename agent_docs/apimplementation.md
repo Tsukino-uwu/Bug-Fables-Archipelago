@@ -124,6 +124,7 @@ this file and that doc disagree, that doc is right.
 52. [Build step 52: the festival night at will, a switch NPC](#build-step-52-the-festival-night-at-will-a-switch-npc)
 53. [Build step 53: the festival's offerings as items, the contest always won](#build-step-53-the-festivals-offerings-as-items-the-contest-always-won)
 54. [Build step 54: Riz always offers his fight](#build-step-54-riz-always-offers-his-fight)
+55. [Build step 55: Universal Tracker's deferred entrances, shuffled doors hidden until taken](#build-step-55-universal-trackers-deferred-entrances-shuffled-doors-hidden-until-taken)
 
 **How it works**
 
@@ -5065,6 +5066,55 @@ scaled, x1.6), Maki's hit 2 with the dev `onehit` off; before the seed data was 
 
 *Code: `logic/far_grasslands.py`, `slot_data.py`. The mod: `RizFight.cs`, `SeedData.cs`, `Plugin.cs`,
 `EnemyScaling.cs`.*
+
+## Build step 55: Universal Tracker's deferred entrances, shuffled doors hidden until taken
+
+**Why:** with the doors shuffled, Universal Tracker rebuilds the seed from `door_targets` (build step 40), so it knows
+every door: its list and `/get_logical_path` would show where doors lead before the player has been through them, the
+layout spoiled. Its deferred entrances (`docs/apworld-integration.md`, "Deferred Entrances", and `map-integration.md`,
+v0.3.4) keep each shuffled door unconnected until the client reports it taken.
+
+**Decided (the user, 2026-10-06):** hidden by default, as TUNIC does (`worlds/tunic/__init__.py`, `connect_entrances`,
+0.6.8: deferred on `"on"` or `"default"`). The player's switch is Universal Tracker's own `enforce_deferred_entrances`
+under `universal_tracker:` in its `host.yaml` (its `setup.md`; `"off"` shows every door), so no option of ours. This
+replaced 2026-10-01's "no" (build step 41).
+
+**How it was built:**
+
+1. **One key, shared with the PopTracker pack:** `bug_fables_doors_{team}_{slot}`, a list of entrance names, the
+   contract in the pack's `PLAN.md` (its doors key). Universal Tracker fills in `{team}` and `{player}`
+   (`TrackerClient.py`: `key.format(player=…, team=…)`), asks with `Get` and `SetNotify`, and calls the world's
+   `reconnect_found_entrances(key, value)` at connect and at each change. One key for every door, as its
+   `map-integration.md` example has (`EntrancesToReconnect`), rather than TUNIC's key per door.
+2. **The apworld** (`universal_tracker.py`): once `replay` has connected the seed's doors, `defer_doors` disconnects
+   each shuffled entrance (every door in `door_pairings`, one-ways included) when
+   `multiworld.enforce_deferred_connections` is `on` or `default`, keeps its region, and sets
+   `found_entrances_datastorage_key`. `reconnect_doors` connects each named door again, and with Coupled and Room Swap
+   its way back too (a door walked through comes out of its partner, whose door leads back); never with Decoupled, nor
+   for a one-way. A one-way's story copy counts as its door. Anything in the key but a list of names is ignored.
+   Universal Tracker stops after `generate_basic` and sweeps with `allow_partial_entrances` while it defers
+   (`TrackerCore.py`), and nothing of ours sweeps before that. Its fuzzer hook turns deferral off, so the hook still
+   compares every sphere (development.md, Fuzzing the apworld).
+3. **The mod** (`DoorShuffle.cs`, `ApConnection.cs`): a prefix on `MainManager.TransferMap`, whose `caller` is the door
+   walked through, names it as the apworld does (`Map: door`, or `name#row` where its map has two doors of that name)
+   while the doors are shuffled in a seed. `ApConnection.DoorTaken` adds it with one `Set` (`update`, which adds names
+   not yet in the list; `network protocol.md`, Set), off the game thread. A name goes once; one taken while offline
+   waits and goes after the next login; a login to another room starts from none. MultiClient.Net 6.7.1's
+   `Operation.Update` takes only a dictionary, so the list update is the library's own `SetPacket` with
+   `OperationType.Update` (read in its DLL's metadata, 2026-10-08). A flat list of strings, well inside the server's
+   JSON depth limit of 16 for what clients send (`NetUtils.decode`, 0.6.8).
+4. **Tests** (`test_deferred_doors.py`): a rebuilt Coupled seed with deferral on has every shuffled door unconnected and
+   nothing else changed; Universal Tracker's partial sweep still runs; a door taken comes back with its way back, and
+   every door taken gives back the seed's own graph and locations; Decoupled brings back only the door taken; a
+   one-way's copy counts as its door; `off`, a seed without shuffled doors and a real generation defer nothing; junk in
+   the key is ignored.
+
+**Status:** built (2026-10-08). Not yet seen: Universal Tracker showing a shuffled door only once it is walked through,
+and the mod's `[doors] taken, sent to …` line.
+
+*Code: `universal_tracker.py` (`defer_doors`, `reconnect_doors`, `DOORS_TAKEN_KEY`), `world.py`
+(`reconnect_found_entrances`); test `test_deferred_doors.py`. The mod: `DoorShuffle.cs` (`Taken`, `NameOf`),
+`ApConnection.cs` (`DoorTaken`, `SendDoors`).*
 
 # How it works
 

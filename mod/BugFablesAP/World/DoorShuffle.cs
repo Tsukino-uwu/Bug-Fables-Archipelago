@@ -43,6 +43,50 @@ namespace BugFablesAP
             {
                 log.LogInfo("[doors] installed on MapControl.CreateEntities");
             }
+            if (Hooks.Install(typeof(Taken), "doors", "the trackers never learn which doors were taken"))
+            {
+                log.LogInfo("[doors] installed on MainManager.TransferMap (doors taken)");
+            }
+        }
+
+        // A door walked through with the doors shuffled, for the trackers (ApConnection.DoorTaken).
+        [HarmonyPatch(typeof(MainManager), nameof(MainManager.TransferMap), typeof(int), typeof(Vector3),
+            typeof(Vector3), typeof(Vector3), typeof(NPCControl))]
+        private static class Taken
+        {
+            [HarmonyPrefix]
+            private static void BeforeTransfer(NPCControl caller)
+            {
+                MapControl map = MainManager.map;
+                if (caller == null || map == null || caller.objecttype != NPCControl.ObjectTypes.DoorOtherMap
+                    || randomizerOn == null || !randomizerOn() || connection?.DoorTargets == null
+                    || connection.DoorTargets.Count == 0)
+                {
+                    return;
+                }
+                connection.DoorTaken(map.mapid + ": " + NameOf(map, caller));
+            }
+        }
+
+        // The door's name as door_targets and the apworld write it: "name#row" where its map has two doors of that name.
+        private static string NameOf(MapControl map, NPCControl door)
+        {
+            int alike = map.GetComponentsInChildren<NPCControl>(true)
+                .Count(n => n.name == door.name && n.objecttype == NPCControl.ObjectTypes.DoorOtherMap);
+            if (alike < 2)
+            {
+                return door.name;
+            }
+            TextAsset names = Resources.Load<TextAsset>("Data/EntityData/Names/" + (int)map.mapid + "names");
+            string[] lines = names == null ? new string[0] : names.ToString().Split('\n');
+            for (int row = 0; row < lines.Length; row++)
+            {
+                if (lines[row].Trim() == door.name && Find(map, door.name + "#" + row) == door)
+                {
+                    return door.name + "#" + row;
+                }
+            }
+            return door.name;
         }
 
         private static IEnumerable<Target> Targets()

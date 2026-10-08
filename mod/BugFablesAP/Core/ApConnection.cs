@@ -366,6 +366,79 @@ namespace BugFablesAP
             });
         }
 
+        // The doors the player has gone through with the doors shuffled, by the apworld's entrance name: one list in data
+        // storage, read by Universal Tracker's deferred entrances and the PopTracker pack. Waiting ones go after a login.
+        private readonly HashSet<string> doorsSent = new HashSet<string>();
+        private readonly HashSet<string> doorsWaiting = new HashSet<string>();
+        private string doorsKey;
+        private string doorsRoom;
+
+        internal void DoorTaken(string entrance)
+        {
+            lock (gate)
+            {
+                if (doorsSent.Contains(entrance) || !doorsWaiting.Add(entrance))
+                {
+                    return;
+                }
+            }
+            ArchipelagoSession s = session;
+            if (s != null)
+            {
+                SendDoors(s);
+            }
+        }
+
+        // Set's update adds each name not already in the list (network protocol.md, Set).
+        private void SendDoors(ArchipelagoSession s)
+        {
+            string[] names;
+            string key;
+            lock (gate)
+            {
+                if (doorsWaiting.Count == 0 || doorsKey == null)
+                {
+                    return;
+                }
+                names = doorsWaiting.ToArray();
+                doorsWaiting.Clear();
+                key = doorsKey;
+            }
+            ThreadPool.QueueUserWorkItem(_ =>
+            {
+                try
+                {
+                    s.Socket.SendPacketAsync(new SetPacket
+                    {
+                        Key = key,
+                        DefaultValue = new JArray(),
+                        WantReply = false,
+                        Operations = new[]
+                        {
+                            new OperationSpecification { OperationType = OperationType.Update, Value = new JArray(names) },
+                        },
+                    }).Wait();
+                    lock (gate)
+                    {
+                        doorsSent.UnionWith(names);
+                    }
+                    Post("[doors] taken, sent to " + key + ": " + string.Join(", ", names));
+                }
+                catch (Exception e)
+                {
+                    lock (gate)
+                    {
+                        if (key == doorsKey)
+                        {
+                            doorsWaiting.UnionWith(names);
+                        }
+                    }
+                    Post("[doors] sending " + string.Join(", ", names) + " failed: " + e.GetBaseException().Message
+                        + " (sent again after the next login)");
+                }
+            });
+        }
+
         // StatusUpdate, as Archipelago asks: the server marks the slot finished and releases per the room's settings.
         internal void SendGoal(ArchipelagoSession s, string why)
         {
@@ -496,6 +569,19 @@ namespace BugFablesAP
                     slotName = slot;
                     deathLinkTagged = null;
                     SetDeathLinkTag(DeathLinkWanted != null && DeathLinkWanted());
+                    // Another room starts with no door sent; the same one sends what waited while offline.
+                    lock (gate)
+                    {
+                        string room = ServerText.SeedOf(attempt);
+                        if (room != doorsRoom)
+                        {
+                            doorsRoom = room;
+                            doorsSent.Clear();
+                            doorsWaiting.Clear();
+                        }
+                        doorsKey = $"bug_fables_doors_{ok.Team}_{ok.Slot}";
+                    }
+                    SendDoors(attempt);
                     Post($"[ap] logged in: slot {ok.Slot}, team {ok.Team}, world_version {version}, "
                         + $"{attempt.Items.AllItemsReceived.Count} items received so far, "
                         + $"{attempt.Locations.AllLocationsChecked.Count} of {attempt.Locations.AllLocations.Count} locations checked");

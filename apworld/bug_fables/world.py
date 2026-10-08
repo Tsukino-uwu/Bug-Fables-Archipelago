@@ -46,6 +46,10 @@ class BugFablesWorld(World):
     # Universal Tracker regenerates a seed from its slot_data with no yaml; passthrough is that slot_data while it does.
     ut_can_gen_without_yaml = True
     passthrough: Mapping[str, Any] | None = None
+    # Universal Tracker's deferred entrances: each shuffled door's region until the player goes through it, and with
+    # coupled doors the door each leads back through (universal_tracker.defer_doors).
+    deferred_doors: dict[str, Any]
+    way_back: dict[str, str]
 
     @staticmethod
     def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
@@ -55,6 +59,10 @@ class BugFablesWorld(World):
     def custom_ut_sort(self, region_label: str, location_label: str) -> int:
         # Universal Tracker's list in the story's order (TRACKER_ORDER); anything else, such as an entrance, last.
         return TRACKER_ORDER.get(location_label, len(TRACKER_ORDER))
+
+    def reconnect_found_entrances(self, key: str, value: Any) -> None:
+        # Universal Tracker, at connect and on each change of the key it was given (found_entrances_datastorage_key).
+        universal_tracker.reconnect_doors(self, value)
 
     def generate_early(self) -> None:
         self.passthrough = universal_tracker.passthrough(self)
@@ -119,6 +127,7 @@ class BugFablesWorld(World):
             # Universal Tracker: the seed's own doors, from the door_targets the mod rewrites doors from.
             self.door_targets = list(self.passthrough["door_targets"])
             self.door_pairings = entrances.replay(self, self.door_targets)
+            universal_tracker.defer_doors(self)
             return
         # Doors are decided here, on the region graph, and sent in slot_data; the client never decides a door itself.
         self.door_pairings = entrances.shuffle(self)
