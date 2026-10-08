@@ -3135,8 +3135,8 @@ residential district rechecked (2026-10-08: the fountain rooftop by Bee Fly alon
 Platinum Card, Jump, the card a new useful item), still 121; above the west path (three parts: the bottom right ringed
 with thorns, the Shield or Bee Fly; the top right's clearing door behind a boulder, Horn Dash, arriving past it; the
 raised left Jump and Horn Dash from the top right, a drop down by Bee Fly or onto the thorns with the Shield, Jump and
-Bee Fly up), 122 of 244; the badlands rechecked (2026-10-08: the center pillar by Jump and the Beemerang too), still
-122; the rest of `room-checklist.md`
+Bee Fly up), 122 of 244; the badlands rechecked (2026-10-08: the center pillar by Jump and the Beemerang too; the rock
+ledge by Jump with Bee Fly, or Freeze and the horn, too), still 122; the rest of `room-checklist.md`
 to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received

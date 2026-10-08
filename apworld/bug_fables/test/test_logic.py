@@ -334,7 +334,8 @@ class TestTheater(BugFablesTestBase):
 
 
 class TestBadlands(BugFablesTestBase):
-    # The center pillar's medal takes Jump and Bee Fly or the Beemerang, the rock ledge's yam Jump and the Beemerang.
+    # The center pillar's medal takes Jump and Bee Fly or the Beemerang, the rock ledge's yam Jump and the Beemerang,
+    # Bee Fly, or Freeze and the horn.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
     def test_center_pillar_needs_bee_fly_or_the_beemerang(self) -> None:
@@ -350,12 +351,24 @@ class TestBadlands(BugFablesTestBase):
         self.collect_all_but(["Bee Fly"])
         self.assertTrue(pillar.access_rule(self.multiworld.state))
 
-    def test_rock_ledge_needs_the_beemerang(self) -> None:
-        spot = "Lost Sands: Badlands, Rock Ledge"
-        self.collect_all_but(["Progressive Beemerang"])
-        self.assertFalse(self.can_reach_location(spot))
+    def test_rock_ledge_needs_one_of_three(self) -> None:
+        ledge = self.multiworld.get_location("Lost Sands: Badlands, Rock Ledge", self.player)
+        self.collect_all_but(["Progressive Beemerang", "Bee Fly", "Progressive Freeze"])
+        self.assertFalse(ledge.access_rule(self.multiworld.state))
         self.collect(self.get_items_by_name("Progressive Beemerang"))
-        self.assertTrue(self.can_reach_location(spot))
+        self.assertTrue(ledge.access_rule(self.multiworld.state))
+
+    def test_rock_ledge_by_bee_fly(self) -> None:
+        ledge = self.multiworld.get_location("Lost Sands: Badlands, Rock Ledge", self.player)
+        self.collect_all_but(["Progressive Beemerang", "Progressive Freeze"])
+        self.assertTrue(ledge.access_rule(self.multiworld.state))
+
+    def test_rock_ledge_by_freeze_and_the_horn(self) -> None:
+        ledge = self.multiworld.get_location("Lost Sands: Badlands, Rock Ledge", self.player)
+        self.collect_all_but(["Progressive Beemerang", "Bee Fly", "Horn Slash"])
+        self.assertFalse(ledge.access_rule(self.multiworld.state))
+        self.collect_by_name("Horn Slash")
+        self.assertTrue(ledge.access_rule(self.multiworld.state))
 
 
 class TestBookArea(BugFablesTestBase):

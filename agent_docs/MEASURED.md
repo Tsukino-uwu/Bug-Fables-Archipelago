@@ -848,7 +848,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     a drop down only. No items.
     **`DesertBadlands` (2026-10-06, the user):** the entrance and the rock formation's doors free between them; the HP
     Plus on the center pillar (flag 413) takes Jump and Bee Fly, or Jump and the Beemerang (rechecked 2026-10-08, the
-    user), the Baked Yam on the rock ledge (flag 729) Jump and the Beemerang. The hideout door (made from flag 239) is
+    user), the Baked Yam on the rock ledge (flag 729) Jump and the Beemerang, Bee Fly, or Freeze and the horn (those
+    two rechecked the same day). The hideout door (made from flag 239) is
     up two ledges (Jump) behind a grate the Rusty Key opens (`hideoutlock`, Event59 key list index 5 = item 111, gone
     from flag 258); arriving through it while shut pushes the party past, and the ledges drop down freely. The key and
     flag 239 both come from its purchase at the Defiant Root well (line 3, 30 berries).

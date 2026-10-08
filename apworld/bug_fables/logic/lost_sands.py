@@ -25,7 +25,8 @@ LOCATIONS = (
              rule=CanUse("Jump") & (CanUse("Bee Fly") | CanUse("Beemerang Toss"))),
     Location("Lost Sands: Badlands, Rock Ledge", 115, "DesertBadlands",
              Source(flag=729, pickup=Pickup(map="DesertBadlands", type=0, item=65)),
-             rule=CanUse("Jump") & CanUse("Beemerang Toss")),
+             rule=CanUse("Jump") & (CanUse("Beemerang Toss") | CanUse("Bee Fly")
+                                    | (CanUse("Freeze") & CanUse("Horn Slash")))),
     # Under the giant book, hidden until the boulder breaks; free from the book area's north half.
     Location("Lost Sands: Book Area, Under the Book", 116, "DesertBookArea",
              Source(flag=730, pickup=Pickup(map="DesertBookArea", type=0, item=128)), no_jump=True, area="North"),
