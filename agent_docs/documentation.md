@@ -2981,8 +2981,9 @@ and make sure nothing can lock the game hard again.
 1. **What counts as a loop.** Every respawn is counted: a prefix on `Hazards.HazardAction`, and on
    `PlayerControl.LateUpdate` the frame the party is below the floor.
    - **Play between two respawns starts the count again:** the party touched ground and was free (no respawn or
-     transfer running) for half a second. A loop over water never touches ground; one on spikes is hit again at once.
-     (Built first as half a second *standing*; replaced 2026-10-04, below.)
+     transfer running) for half a second, or walked a quarter unit on the ground from where the respawn left it. A
+     loop over water never touches ground; one on spikes is hit again where it lands. (Built first as half a second
+     *standing*; replaced 2026-10-04, and the walk added 2026-10-08, both below.)
    - A respawn while a room transfer runs isn't counted: the transfer puts the party at its door, and the guard's own
      warp is one.
    - The game's own counter (`respawntries`) isn't used: it resets itself when its fallback fires.
@@ -3042,9 +3043,19 @@ warp warps once more, to the **game's own start** outside the city (`WarpToStart
 over the seed's start); only a loop after that is left to the log. The start itself is fixed at its source too (no
 start lands at a door the game hasn't made yet).
 
+**Walking back into thorns warped, found and fixed (2026-10-08).** While mapping `FarGrasslands4`, the user walked
+into its thorns over and over, and the sixth time warped them to the start: "nothing the guard should catch as its not
+a softlock". The log: each time on ground 0.09 to 0.15 s and free 0.10 to 0.16 s, so under the half second. Free time
+can't tell the two apart here, since the thorns sat right beside where each respawn put the party. How the game
+respawns tells them apart (`Hazards.HazardAction`, read first): it holds `minipause` until the fade back in ends, and
+a party put back onto the hazard is hit again during that fade, where it lands, before it can walk. The user's party
+walked about half a unit each time (the walk is 5 a second). So walking a quarter unit on the ground from where the
+respawn left it now counts as play too, and the log line says how far the party walked.
+
 **Status:** built (2026-10-02); seen (2026-10-04): the guard ends the swamp's original loop and a `hazardloop` loop with
-the warp after the 6th respawn, and normal falls never warp (after the fix above). Still to see: a loop met in a
-shuffled seed, naming its door; the fallback to the game's start (built 2026-10-04).
+the warp after the 6th respawn, and normal falls never warp (after the fix above). The thorns fix built 2026-10-08, not
+yet seen. Still to see: walking into thorns again and again never warps; a loop met in a shuffled seed, naming its door;
+the fallback to the game's start (built 2026-10-04).
 
 *Code: `Guards/RespawnLoop.cs`, `Ui/WarpButton.cs` (`WarpToStart`), `World/DoorShuffle.cs` (`Rewrote`),
 `Core/Plugin.cs`, `Dev/DevConsole.Warp.cs` (`hazardloop`, `oldtravel`).*

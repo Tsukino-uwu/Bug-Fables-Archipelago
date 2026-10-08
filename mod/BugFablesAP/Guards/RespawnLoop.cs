@@ -21,6 +21,9 @@ namespace BugFablesAP
         // Play between two respawns touches ground and is free this long; a loop over water never touches ground, one
         // on spikes is hit again at once. Jumping straight back in stood 0.14 s, free over 1 s.
         private const float Free = 0.5f;
+        // Or it walks this far on ground from where the respawn left it: walking back into thorns stood 0.09 s, free
+        // 0.10 s (half a unit at the walk's 5 a second), while a loop is hit again where it lands, before it can walk.
+        private const float Walked = 0.25f;
         // A loop this soon after the last warp only logs, so a bad landing never warps back and forth.
         private const float Rearm = 15f;
         // A door's walk-in takes a second or two; one still going after this never ends (a target over water).
@@ -32,6 +35,9 @@ namespace BugFablesAP
         // The longest stand on ground since the last respawn, and when that respawn handed the party back.
         private static float longestStand;
         private static float freeSince = -1f;
+        // Where the party was when the last respawn handed it back, and the farthest it has walked on ground from there.
+        private static Vector3 landing;
+        private static float walked;
         private static float walkingSince = -1f;
         private static float warpedAt = -100f;
         private static bool fellBack;
@@ -82,6 +88,7 @@ namespace BugFablesAP
             if (freeSince < 0f)
             {
                 freeSince = now;
+                landing = player.transform.position;
             }
             if (!player.entity.onground)
             {
@@ -94,6 +101,8 @@ namespace BugFablesAP
             }
             touched = true;
             longestStand = Mathf.Max(longestStand, now - groundSince);
+            Vector3 moved = player.transform.position - landing;
+            walked = Mathf.Max(walked, new Vector2(moved.x, moved.z).magnitude);
         }
 
         private static void Respawned(string how)
@@ -111,14 +120,16 @@ namespace BugFablesAP
             }
             float now = Time.realtimeSinceStartup;
             float free = freeSince < 0f ? 0f : now - freeSince;
-            bool play = touched && free >= Free;
-            string between = (touched ? $"on ground {longestStand:0.00} s at most" : "never on ground")
-                + $", free {free:0.00} s" + (play ? ": play" : $": counted (play touches ground and is free {Free} s)");
+            bool play = touched && (free >= Free || walked >= Walked);
+            string between = (touched ? $"on ground {longestStand:0.00} s at most, walked {walked:0.00}" : "never on ground")
+                + $", free {free:0.00} s" + (play ? ": play"
+                    : $": counted (play touches ground and is free {Free} s or walks {Walked} on it)");
             inARow = play ? 1 : inARow + 1;
             touched = false;
             groundSince = -1f;
             longestStand = 0f;
             freeSince = -1f;
+            walked = 0f;
             if (inARow < 2)
             {
                 log.LogInfo($"[respawn] {how}: 1 in a row ({between})");
