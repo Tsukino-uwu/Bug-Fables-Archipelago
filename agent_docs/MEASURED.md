@@ -1213,6 +1213,23 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   Vi and Leif knocked out, Kabbu healed and boosted), which burrows (Leif), no summons. Maki, following, steps aside for
   it; the room's own Maki (until 359) is the injured one. `kabbuevent` (555 until 645) and `Base/DigMound` (hidden
   from 645) for the quest pass; no items.
+  **`SwamplandsBridge`, the swamp bridge (2026-10-08, code and the dumps only; not yet mapped on screen):** two
+  bridges. The upper one (`Base/Bridge`, `Base/BridgeWalls`, `Base/Cube`: `ConditionChecker`s hidden from 336) spans
+  the room at the doors' height (y 0), from `loadzoneleft` to `loadzone right`. Its collapse is `Event130`
+  (`eventtrigger` at x 19.4, until 336; `EventControl.cs:21945-22257`): the three `leafbug`s (until 336) jump, one
+  breaks the bridge (`mainmesh` child 1's pieces dropped, child 2 destroyed; which named objects those are isn't in
+  the dumps), the party falls to the bottom (y -13) and Maki onto the boss door's ledge (y -7), Vi left hanging is shot
+  down by a leafbug's arrow, the leafbugs leave and are destroyed, Maki stops following (`extrafollowers.Remove(46)`),
+  then 336 is set. **What 336 changes, everywhere:** these three models hidden, the leafbugs and the trigger gone, and
+  `FarGrasslandsLake`'s turn-back (`blocker`, `Event12`, until 336; kept away). No code reads it (its one mention sets
+  it). **337 is the lower bridge's switch:** `@Bridge1` (a `Switch` at y -5, data `1 94 0 0 1`, there until 337) is hit
+  only by Kabbu's horn or his Dash (`data[4]` 1: tags `BeetleHorn`, `BeetleDash`; `NPCControl.cs:4667-4670`) and starts
+  `Event94`, which swings `Base/Bridge1`'s `Bridge` down to the pose of `Bridge (1)` and sets the switch's
+  `activationflag`, 337. From 337 `Base/Bridge1/Bridge` is hidden and `Bridge (1)` shown, so it stays down. No code
+  reads 337 either. **`ChomperCave1`'s two `Base/Bridge1` checkers read 337 too**, while that cave's own `@Bridge1`
+  sets 689 and is there until 689: from the dumps, its bridge would load raised again, its switch gone, unless the
+  swamp's switch was hit. To see on screen. Also here: `eventtrigger2` at the bottom (`Event131`, until 39) teaches the
+  Horn Dash and breaks the bottom `rock` (until 39); a save crystal at the bottom (one entity until 359, another from).
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

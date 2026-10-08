@@ -711,7 +711,11 @@ be wrong.
   changes nothing beyond itself; first a sweep for every scene trigger naming an entity absent on a new file. Build
   step 12.
 - **The swamp bridge is to stay up** (the user, 2026-10-04): its collapse (Event130 on `SwamplandsBridge`, flag
-  336) never to happen. What 336 and 337 change is to read first, then the logic of both sides. **Maki** (the user,
+  336) never to happen. What 336 and 337 change: read (2026-10-08, code and the dumps; `MEASURED.md`,
+  `SwamplandsBridge`): 336 only hides the upper bridge's models and removes the scene's leafbugs and trigger here, and
+  the lake's turn-back (already kept away); 337 is the lower bridge's switch (Kabbu's horn or Dash), and also loads
+  `ChomperCave1`'s bridge down, whose own switch sets 689: to see on screen. Next, the room's areas and both sides'
+  logic, when the mapping reaches it (the user maps each room on screen). **Maki** (the user,
   2026-10-08): the Far Grasslands' arrival scene (Event125) makes him a follower who fights alongside in the Far
   Grasslands and the swamp, and the collapse is what removes him in vanilla. With the bridge kept up he may stay
   through the swamp (no harm to the logic, which counts only the party's own attacks), but never at the swamp's boss
