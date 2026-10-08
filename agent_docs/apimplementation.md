@@ -3721,7 +3721,10 @@ from the start found two holes:
    is), each kept unless it cuts off more. On 180 seeds every one was repaired, in about 190 tries (95% within 650,
    the worst 1870, about 1.5 ms each); it gives up after 10000. A random layout with no repair was tried first and
    did no better than retries (13 of 15). Test `TestRoomSwapRepairs`: the two fuzzer seeds, which the old retries
-   failed.
+   failed. **And a start to fill from:** once every layout passed, 4 fuzzer seeds in 10000 hit a FillError: their
+   swap left 3 to 7 spots open from the start (with the start's own items) where the game's layout opens 15 to 50.
+   The repair now also keeps at least as many as the game's own layout opens, up to 15 (a start with 15 filled);
+   the four then generated. Test `TestRoomSwapLeavesAStart` (two of them; 7 and 3 before).
 
 **Tests** (`test_doors.py`): what every mode shares (doors rewritten, only the table's doors named, every way back
 leads back, every region reached, the spoiler listing each pair once, and **the mod doing what the logic proved**:

@@ -2,7 +2,7 @@ from collections import Counter
 from random import Random
 from unittest import TestCase
 
-from BaseClasses import EntranceType
+from BaseClasses import CollectionState, EntranceType
 
 from . import BugFablesTestBase, entrance_graph, generate_like_main
 from ..data_tables import DOORS, ONE_WAYS, REGIONS, door_name, door_region, landing_region, one_way_landing
@@ -246,6 +246,39 @@ class TestRoomSwapRepairs(TestCase):
                 state = world.multiworld.get_all_state()
                 for region in world.get_regions():
                     self.assertTrue(state.can_reach_region(region.name, world.player), region.name)
+
+
+class TestRoomSwapLeavesAStart(TestCase):
+    # Two fuzzer seeds (2026-10-08) whose swap left 7 and 3 spots open from the start, too few for the fill
+    # (FillError): the swap keeps as many as the game's own layout opens, up to 15.
+    CASES = {
+        344649463: {"progression_balancing": 72, "accessibility": "minimal", "artifacts_required": 4,
+                    "shuffle_quests": False, "shuffle_discoveries": True, "shuffle_hidden_items": True,
+                    "enemy_sanity": True, "shuffle_medal_shops": False, "minigame_prizes": True,
+                    "shop_contents": "no_progression", "entrance_randomizer": "room_swap",
+                    "starting_party_member": "kabbu", "shuffle_field_moves": True, "shuffle_jump": True},
+        669935164: {"progression_balancing": 95, "artifacts_required": 3, "shuffle_crystal_berries": False,
+                    "enemy_sanity": True, "shuffle_medal_shops": True, "shuffle_item_shops": False,
+                    "minigame_prizes": True, "shop_contents": "filler_only", "entrance_randomizer": "room_swap",
+                    "enemy_shuffle": "enemies_only", "starting_location": "anywhere", "starting_party_member": "off",
+                    "shuffle_field_moves": True, "shuffle_jump": True, "points_of_no_return": True,
+                    "progressive_boat": True, "music_shuffle": True},
+    }
+
+    def test_enough_spots_from_the_start(self) -> None:
+        steps = ("generate_early", "create_regions", "create_items", "set_rules", "connect_entrances")
+        for seed, options in self.CASES.items():
+            with self.subTest(seed=seed):
+                counts = []
+                for mode in ("off", "room_swap"):
+                    world = generate_like_main({**options, "entrance_randomizer": mode}, seed=seed, steps=steps)
+                    state = CollectionState(world.multiworld)
+                    for item in world.multiworld.precollected_items[world.player]:
+                        state.collect(item, True)
+                    state.sweep_for_advancements()
+                    counts.append(sum(1 for location in world.get_locations()
+                                      if location.address is not None and location.can_reach(state)))
+                self.assertGreaterEqual(counts[1], min(15, counts[0]))
 
 
 class TestDoorsRoomSwap(CoupledTests, BugFablesTestBase):

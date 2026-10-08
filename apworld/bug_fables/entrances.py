@@ -247,19 +247,25 @@ ROOM_SWAP_TRIES = 10000
 _HOT_MOVES = 0.8
 # How often a move trades two rooms, rather than turning one room's doors.
 _TRADES = 0.7
+# The spots open from the start the swap must leave (as many as the game's own layout has, up to this many): fewer
+# and the fill can't place the early items (2026-10-08: swaps left 3 to 7, the fuzzer's FillErrors; 15 filled).
+_START_SPOTS = 15
 
 
 def _swap_rooms(world: BugFablesWorld, names: dict[Door, str]) -> list[tuple[Door, Door]]:
     """A room swap the logic can finish: unlike Archipelago's randomizer, it doesn't follow the logic while placing (a
     gated door moves with its room and can close the only way on), so a random layout is repaired: two like rooms trade
-    places, or a room's doors turn, most often around what is cut off, each move kept unless it cuts off more."""
+    places, or a room's doors turn, most often around what is cut off, each move kept unless it cuts off more or opens
+    fewer spots from the start than wanted (the fill needs them)."""
     random = world.random
     layout = _RoomLayout(DOORS.connections, DOORS.fixed, random)
     group_of = {slot: slots for slots in layout.groups for slot in slots}
     movable = [g for g in layout.groups if len(g) > 1 or len(layout.by_area[g[0]]) > 1]
-    cut, pairings = _cut_off(world, names, layout.pairs())
+    as_the_game = [(a, b) for a, b in layout.partner.items() if a < b]
+    wanted = min(_START_SPOTS, _cut_off(world, names, as_the_game)[1])
+    cut, start, pairings = _cut_off(world, names, layout.pairs())
     for _ in range(ROOM_SWAP_TRIES):
-        if not cut:
+        if not cut and start >= wanted:
             _connect_all(world, names, pairings)
             return pairings
         cut_maps = {region.split(" (")[0] for region in cut}
@@ -276,9 +282,9 @@ def _swap_rooms(world: BugFablesWorld, names: dict[Door, str]) -> list[tuple[Doo
             room = layout.room_at[random.choice(slots)]
             undo = (None, room, list(layout.order[room]))
             random.shuffle(layout.order[room])
-        now, now_pairings = _cut_off(world, names, layout.pairs())
-        if len(now) <= len(cut):
-            cut, pairings = now, now_pairings
+        now, now_start, now_pairings = _cut_off(world, names, layout.pairs())
+        if (len(now), max(0, wanted - now_start)) <= (len(cut), max(0, wanted - start)):
+            cut, start, pairings = now, now_start, now_pairings
         elif undo[0] is not None:
             layout.room_at[undo[0]], layout.room_at[undo[1]] = layout.room_at[undo[1]], layout.room_at[undo[0]]
         else:
@@ -287,11 +293,18 @@ def _swap_rooms(world: BugFablesWorld, names: dict[Door, str]) -> list[tuple[Doo
 
 
 def _cut_off(world: BugFablesWorld, names: dict[Door, str],
-             pairs: list[tuple[Door, Door]]) -> tuple[set[str], list[tuple[Door, Door]]]:
-    """The regions a layout cuts off with everything the seed holds, as Archipelago's randomizer checks it, and the
-    layout's pairings both ways; the doors are left as they were."""
+             pairs: list[tuple[Door, Door]]) -> tuple[set[str], int, list[tuple[Door, Door]]]:
+    """For a layout: the regions it cuts off with everything the seed holds, as Archipelago's randomizer checks it; how
+    many spots it opens from the start, with only the start's items; and its pairings both ways. The doors are left as
+    they were."""
     pairings = [p for x, y in pairs for p in ((x, y), (y, x))]
     made = _connect_all(world, names, pairings)
+    start = CollectionState(world.multiworld)
+    for item in world.multiworld.precollected_items[world.player]:
+        start.collect(item, True)
+    start.sweep_for_advancements(world.get_locations())
+    spots = sum(1 for location in world.get_locations()
+                if location.address is not None and location.can_reach(start))
     state = CollectionState(world.multiworld)
     for item in world.multiworld.itempool:
         if item.player == world.player:
@@ -302,7 +315,7 @@ def _cut_off(world: BugFablesWorld, names: dict[Door, str],
         region.entrances.remove(source)
         source.connected_region = None
         region.entrances.append(target)
-    return cut, pairings
+    return cut, spots, pairings
 
 
 def _connect_all(world: BugFablesWorld, names: dict[Door, str],
