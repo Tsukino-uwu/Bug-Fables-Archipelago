@@ -537,7 +537,7 @@ be wrong.
        presets, reST option texts with rich text, a bug report
        page, the WebWorld's `game`; 9. `topology_present`; 10. location and item groups (the first item groups,
        *Submarine* and *Boat*, came with build step 36); 11. `World.world_version` (done 2026-10-08: slot_data and
-       Universal Tracker's check read core's copy of the manifest's version, build step 1),
+       Universal Tracker's check read core's copy of the manifest's version, How it works 7),
        `Region.add_locations`, `options.as_dict` (done 2026-10-03, build step 39:
        slot_data's `options`); 12. `start_inventory_from_pool`; 13. the Rule Builder's `OptionFilter` for Jump (done
        2026-10-03, build step 42), `__str__` and `@override` on our rules, a caching benchmark; 14. Universal Tracker
@@ -710,9 +710,6 @@ be wrong.
   (`LoadMap(232)`). Options (the user, later): hold the trigger until its actor exists, or a stand-in where a scene
   changes nothing beyond itself; first a sweep for every scene trigger naming an entity absent on a new file. Build
   step 12.
-- **The Lost Sands gate claimed open** (seen 2026-10-04): on `BOLostSandsEntrance` a guard (`antguardclosed`) keeps
-  the desert closed until flag 130 (Event74, the palace scene after chapter 2), but the door data has no gate there,
-  so the logic counts the desert as open. To fix the open-world way: the closed guard kept away (build step 9).
 - **The swamp bridge is to stay up** (the user, 2026-10-04): its collapse (Event130 on `SwamplandsBridge`, flag
   336) never to happen. What 336 and 337 change is to read first, then the logic of both sides. **Maki** (the user,
   2026-10-08): the Far Grasslands' arrival scene (Event125) makes him a follower who fights alongside in the Far
@@ -1678,7 +1675,8 @@ its guard still stands, left to the story); the Golden Path door, the way to the
 seen open from a new file (2026-10-04); the Golden Settlement's desert gate and its wall seen open
 (2026-10-04); the way to Snakemouth Den kept open after the permit and its gatekeeper kept: seen (2026-10-04, past
 the first boss, the gatekeeper took the permit and the gate opened); chapter 2's gate, guard and sign seen gone
-(2026-10-04, flag 67 read back set on the file).
+(2026-10-04, flag 67 read back set on the file); the Lost Sands' guard kept away and its gate open (`BOLostSandsEntrance`,
+until flag 130, `MEASURED.md`), seen (2026-10-05), test `test_lost_sands_gate_is_kept_open`.
 
 *Code: the lists in `logic/*.py` (`KEPT_OPEN`, `KEPT_PRESENT`, `SCENERY_HIDDEN`, `SCENERY_PRESENT`, `HELD_UNTIL`,
 `PRESENT_FROM`, `HELD_UNTIL_ITEM`, `DIALOGUE_FLAGS`, gathered in `logic/__init__.py`), sent by `slot_data.py`; in the
@@ -2647,6 +2645,8 @@ the downloads fetched back: the zip's DLL matches `built-from.txt` and reports 0
 The stale gate moved from push CI into the release workflow (2026-09-28), with `release/` rebuilt, so `main` is green
 between releases; `-Check` passes locally, and the moved job first runs at the next release.
 The dev tools are out of the release build (2026-09-28): the gate checks it, and the Release DLL ran in game with none.
+v0.3.0 published (2026-10-04), the full suite, the Logic Test check and both fuzzers clean first. Not yet seen in game:
+a release zip on a clean install (each DLL so far was the source the user had been playing), for the next release.
 
 *Code: `dev-scripts/build-release.ps1`, `release.ps1` and `verify-release.py`; `.github/workflows/ci.yml` and
 `release.yml`.*
@@ -4532,12 +4532,26 @@ left as a gap.
    - `disable_ut`: not set.
    - Its client integration (`docs/client-integration.md`): for clients built on Archipelago's CommonClient; ours is a
      BepInEx mod. Tracker addons are installed by the player.
-   - The map tab (`tracker_world`, `docs/map-integration.md`) and the mod's data storage keys: once the PopTracker
-     pack has its map (the user, 2026-10-03). It will need a host.yaml setting for the pack's path, a `settings`
-     member the preflight refuses today. With it, the rest of that doc, every part (the user, 2026-10-05: "support
-     them all"; listed 2026-10-08 from v0.3.4): auto tabbing to the player's map (`map_page_index`, from the mod's map
-     key), the player's position icon (`location_icon_coords`), and locations hidden on chosen maps
-     (`ut_map_page_hidden_locations`).
+   - The map tab (`tracker_world`, `docs/map-integration.md`, re-read before it's built: it changes without this repo
+     changing) and the mod's data storage keys: once the PopTracker pack has its map (the user, 2026-10-03). The plan
+     for it (moved here from a local plan file, 2026-10-08):
+     - **The pack as an external pack**, that doc's recommendation (no map images in an apworld): `tracker_world` with
+       `external_pack_key`, `map_page_maps`, `map_page_locations` and `map_page_layouts` pointing into the pack; or
+       its hybrid way (the JSONs in the apworld, the images outside), chosen when it's built.
+     - **A host.yaml setting for the pack's path:** a `settings.Group` with a `FilePath`, `required = False`, as TUNIC
+       has (`worlds/tunic/__init__.py`, 0.6.7). The preflight refuses a `settings` member today
+       (`apworld_denied_members`, `dev-scripts/preflight-patterns.json`): the user's call first, and
+       `archipelago-review.md`'s line that `settings api.md` doesn't apply changes with it.
+     - The pack's section names are our location and entrance names, so no `poptracker_name_mapping`;
+       `poptracker_entrance_mapping` only if a door's pin name differs.
+     - With deferred entrances (build step 55) a door's pin starts unconnected: its colours (that doc's table) are
+       checked on screen against that. No fog of war there: every room shows (fog of war is the pack's alone).
+     - The rest of that doc, every part (the user, 2026-10-05: "support them all"; listed 2026-10-08 from v0.3.4):
+       auto tabbing to the player's map (`map_page_setting_key`, the mod's map key written as
+       `bug_fables_map_{team}_{player}`, which Universal Tracker fills in itself; `map_page_index`), the player's
+       position icon (`location_setting_key`, the same key; `location_icon_coords` from the pack's layout), and
+       `ut_map_page_hidden_locations`, `_entrances` and `_events` only where a map would show the wrong thing, never
+       to hide what's reachable.
 4. **Tests** (`test_tracker.py`): the list starts with the Outskirts, sorted by name within it, the Outskirts before
    Bugaria City, an entrance last; and the explanations above.
 
@@ -5131,7 +5145,7 @@ replaced 2026-10-01's "no" (build step 41).
    for a one-way. A one-way's story copy counts as its door. Anything in the key but a list of names is ignored.
    Universal Tracker stops after `generate_basic` and sweeps with `allow_partial_entrances` while it defers
    (`TrackerCore.py`), and nothing of ours sweeps before that. Its fuzzer hook turns deferral off, so the hook still
-   compares every sphere (development.md, Fuzzing the apworld).
+   compares every sphere (development.md, Fuzzing the apworld, Universal Tracker's fuzzer hook, item 4).
 3. **The mod** (`DoorShuffle.cs`, `ApConnection.cs`): a prefix on `MainManager.TransferMap`, whose `caller` is the door
    walked through, names it as the apworld does (`Map: door`, or `name#row` where its map has two doors of that name)
    while the doors are shuffled in a seed; a failure there only logs (`[doors] … taken but not recorded`), never

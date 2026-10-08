@@ -202,6 +202,9 @@ sphere by sphere that it puts the same locations in logic as the real generation
    Measured (2026-10-03, 1000 runs on 12 workers, 30 s): without it each worker grew from 229 to 290 MB; with it, it
    stays at 238. Its `Hook` takes the same yaml-less branch for this world (`TrackerCore.initalize_tracker_core`), so
    only `YamllessHook` runs.
+4. The hook turns deferred entrances off (`enforce_deferred_connections = DeferredEntranceMode.disabled` in
+   `Hook.before_generate`, which `YamllessHook` calls; `fuzzer_hook.py`, v0.3.4, read 2026-10-08), so every shuffled
+   door is connected and every sphere compared (the Archipelago guide's build step 55).
 
 Seen failing (2026-10-03): with the passthrough ignored, 19 of 20 runs failed, each log naming a location "in server
 logic but not expected in UT".
@@ -330,7 +333,8 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   An `@name` entity counts as there when it's active or when the game's own existence test (`CheckIfCanExist`: its
   flags and regional flag) lets it be, since the game culls entities far from the camera (2026-10-05: Seedling
   Haven's grass, 45 units from the save crystal). When it isn't, the message says why (active state, the test, its
-  regional flag).
+  regional flag). It doesn't start the room's music, so a test that needs it lands next door and walks in; starting
+  it, and a command to play any track by name, are parked (the user, 2026-10-04).
 - `warp <map> from <map> [door]`: arrive as the named map's door into this one does: appear at the door's spot and
   walk in, with no safe-ground move (the appear spot is often off the ground). The door's name picks one where there
   are several. Seen 2026-10-05, each entrance of the room outside the city.

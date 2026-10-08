@@ -115,6 +115,14 @@ class TestKeptOpen(BugFablesTestBase):
         # The same scene's second trigger, standing while Eetl follows the party.
         self.assertIn({"map": "BugariaOutskirtsOutsideCity", "entity": "eetlblocker1"}, kept)
 
+    def test_lost_sands_gate_is_kept_open(self) -> None:
+        # The logic counts the desert open, so its gate stands as flag 130 leaves it: the guard aside, the gate open.
+        slot = self.world.fill_slot_data()
+        self.assertIn({"map": "BOLostSandsEntrance", "entity": "antguardclosed"}, slot["kept_open"])
+        self.assertIn({"map": "BOLostSandsEntrance", "entity": "antguardopen"}, slot["kept_present"])
+        self.assertIn({"map": "BOLostSandsEntrance", "entity": "Base/WoodenGate2"}, slot["scenery_hidden"])
+        self.assertIn({"map": "BOLostSandsEntrance", "entity": "Base/WoodenGate2 (2)"}, slot["scenery_present"])
+
     def test_save_tutorial_trigger_is_kept_away(self) -> None:
         # Its actors leave at the first boss but its trigger stays until the scene's own flag, so it played to no one.
         kept = self.world.fill_slot_data()["kept_open"]

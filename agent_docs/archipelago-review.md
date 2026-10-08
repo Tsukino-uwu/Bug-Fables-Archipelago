@@ -264,6 +264,10 @@ APQuest's were read on 2026-10-08, and each line is handled:
   (`client-requirements.md`, the goal's line).
 - **`network protocol.md`**: Connect's `items_handling: null` is gone; the mod sends `AllItems`. Connect's `version`:
   the mod now names 0.6.8 (item 19).
+- **The server's `RoomUpdate` now carries each slot's `hint_points` when the hint cost or location check points change**
+  (#6219, `MultiServer.py`; the Text Client's label follows, #6149): server and client side only. The mod shows
+  neither hint points nor the cost yet, so nothing changes; it matters to the in-game text client
+  (`apimplementation.md`, Next 9) if that ever shows them.
 - **Core API changes, each checked against our code (2026-10-08):** `validate_text` on `TextChoice` and `FreeText`,
   `cull_zeroes` on `OptionCounter` (`Options.py`): we have no option of those kinds (ours: `OptionSet`
   `ExtraRoadblocks`, `PlandoConnections` `DoorPlando`), so they wait for a future option. `PlandoConnection.Direction`
