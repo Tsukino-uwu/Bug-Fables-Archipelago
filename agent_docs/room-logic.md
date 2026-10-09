@@ -343,7 +343,24 @@ shuffle unless the user agrees a reason (`apimplementation.md`, Where it stands,
    unclear (a way back, a Bee Fly shortcut) is asked as tick boxes, then the graph goes back to the user as a text
    diagram in the chat to check. Not every room may split this neatly (the user wasn't sure it fits every room): a
    room on even ground still takes a sentence, and an area that has no clear row and column can be named by what's in
-   it.
+   it. An example, the user's `Swamplands7` trimmed to three areas and one way across, and what it becomes:
+
+   ```text
+   bottom/right area: the bottom door.
+     to/from the bottom/middle area: Bee Fly, or Freeze + horn + Jump.
+   bottom/middle area: up to the middle/middle area: Horn Dash, Freeze, horn, Jump.
+     Down from the middle/middle: a one-way drop.
+   left area: the left door, and a red bounce pad (needs nothing) up to the middle/middle area,
+     a one-way if you can't get back.
+   Last: from the left door down to the bottom/right area with only Jump, a one-way.
+
+   What it becomes:
+   bottom/right <-> bottom/middle:  Bee Fly | Freeze & horn & Jump
+   bottom/middle -> middle/middle:  Horn Dash & Freeze & horn & Jump
+   middle/middle -> bottom/middle:  a drop, its way back the line above
+   left -> middle/middle:           the pad, its way back Bee Fly | the ice block brought up
+   left -> bottom/right:            Jump, its way back round the room
+   ```
 3. **Written into the logic** (the area's module, `logic/<area>.py`: areas as regions, their edges with their rules,
    each location in its area with its own rule), cautious where anything is unmeasured, replacing the spots' `reach`.
    A Placeholder is promoted to a normal location once its requirements and name are checked, one at a time (build
