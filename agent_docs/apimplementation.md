@@ -139,6 +139,7 @@ this file and that doc disagree, that doc is right.
 65. [Build step 65: the Defiant Root inn's upstairs door open](#build-step-65-the-defiant-root-inns-upstairs-door-open)
 66. [Build step 66: a give the game repeats, its check done, is the game's own (Morty's Bed Bug)](#build-step-66-a-give-the-game-repeats-its-check-done-is-the-games-own-mortys-bed-bug)
 67. [Build step 67: what lies behind the Sand Castle Key and the Rusty Key held out](#build-step-67-what-lies-behind-the-sand-castle-key-and-the-rusty-key-held-out)
+68. [Build step 68: the Ancient Castle boss room's wall open](#build-step-68-the-ancient-castle-boss-rooms-wall-open)
 
 **How it works**
 
@@ -766,7 +767,9 @@ be wrong.
     (the rooms and flags build step 67 lists), never "later chapters" alone. **First, the capture** (Known issues).
     Then 30 berries for the Rusty Key with Next 63, and the castle's own keys (two Ancient Keys, each used up by one of
     the main room's locks, and the boss key): key logic when the main room is mapped. Location 69's reach (build step
-    67) is the stopgap until its trigger is opened.
+    67) is the stopgap until its trigger is opened. The Peculiar Gem (Upper Snakemouth's slot, "later chapters" now)
+    comes from the castle boss room's fight, added outright, not through `Giveitem` (`MEASURED.md`, the boss room): its
+    stand-in becomes that room once the castle's door opens.
 
 **Known issues:**
 
@@ -3231,8 +3234,9 @@ inside until its plates, Freeze and the horn, open it for good; played the other
 Ancient Key, then Jump or Bee Fly, location 205, pending), 148 of 244; the Rock Room (its bottom's two sides joined
 by a platform its switch starts; the top left up with Jump or Bee Fly; the top right past a rolling rock and thorns;
 across the top once its boulder breaks, by Horn Dash or a rolling rock carried on the crystals' platforms; crystal
-berry #24 in an alcove off the top right, Shield, then Jump or Bee Fly, location 206, pending), 149 of 244; the rest
-of `room-checklist.md` to go.
+berry #24 in an alcove off the top right, Shield, then Jump or Bee Fly, location 206, pending), 149 of 244; the boss
+room (one region, both doors free, the Watcher's fight on the way across needing nothing; its wall before the
+treasure room's door kept open, build step 68; no items), 150 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -5749,6 +5753,25 @@ second East Road's crank, there from the throne room's 130). Its reach now needs
 
 *Code: `logic/ancient_castle.py`, `logic/bandit_hideout.py`, `logic/lost_sands.py` (location 69), `enemysanity.py`
 (`KEY_CHAIN_AREAS`).*
+
+## Build step 68: the Ancient Castle boss room's wall open
+
+**Found (2026-10-09, mapping `SandCastleBossRoom`):** a wall stands before the boss room's door to the treasure room
+until the Watcher's fight lowers it (flag 38). From the left the fight always starts before the wall is reached; from
+the right, arriving before the fight, the wall isn't solid and the party walks through it both ways. The way back is
+open but looks shut (`MEASURED.md`, the boss room).
+
+**Asked and decided (the user, 2026-10-09):** "should we keep the right entrance door open? as its not solid anyway,
+to make it more obvious that you can go back"; yes. The fight stays where it is, from either side.
+
+**Built** (the apworld only: the mod's own list does it): `scenery_hidden` gets the boss room's `Base/CastlePlatform`,
+as build step 65 opened the inn's door. Nothing a seed can reach changes: the room is one region either way. Test
+`TestCastleBossRoom`.
+
+**Status:** built (2026-10-09); seen the same day in seed `AP_70580691250444408633` through the dev `liveslot`: the
+wall gone with the coffin still there, then the fight and its scene as before, its lowering played with the way open.
+
+*Code: `logic/ancient_castle.py` (`SCENERY_HIDDEN`). The mod: `World/KeptOpen.cs`, unchanged.*
 
 # How it works
 

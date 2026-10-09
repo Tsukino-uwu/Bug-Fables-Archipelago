@@ -1562,6 +1562,17 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   data index 24) in a hidden alcove off the top right (`respawnerhiddenroom`, a camera change), in and out with Shield,
   Jump or Bee Fly up to it. Two bounce pads parked at y 99; a pit, two spike strips; a Worm, two Cursed Cloths and a
   Psicorp (enemy pass).
+  **`SandCastleBossRoom`, the boss room (2026-10-09, the user):** one floor between its left door (to the Roof,
+  `loadzoneoutside`) and its right door (to the treasure room, `loadzonetreasure`), nothing needed for either. A little
+  way in, from either side at the same spot (seen), its trigger (`eventtrigger`, until flag 38) starts `Event117`: the
+  Watcher (enemy 54, `ZombieRoach`, on the ground), no escape. At the end the scene lowers the wall before the right
+  door (`mainmesh.GetChild(3)`, 7 down), adds the Peculiar Gem (key item 116) straight to the key items
+  (`items[1].Add`, not through `Giveitem`: a second gem if one is held), sets 38 and pays prize medal 8. From the right
+  before the fight that wall isn't solid: walked through both ways, no push, nothing stuck (seen with 38 reset). The
+  wall is `Base/CastlePlatform`, a `ConditionChecker` hiding it from 38: hidden by the mod's scenery list, it was gone
+  and the coffin and its base stayed; the fight and its scene then ran as before, the lowering played with the way
+  already open (seen, build step 68). The coffin swaps (`Base/Coffin/Coffin2` until 38,
+  `Coffin2 (1)` from 38). No pickups, discoveries, hazards, auto-start scenes or map enemies.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

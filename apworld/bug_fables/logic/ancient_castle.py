@@ -5,7 +5,8 @@ from __future__ import annotations
 from rule_builder.rules import CanReachRegion, False_, Has
 
 from ..custom_rules import ANY_ATTACK, CanUse, Member, one_way
-from ..data_types import ALWAYS_SET, Area, DoorRule, FlagSwap, Location, Pickup, Source, StoryEvent, Transfer
+from ..data_types import (ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, Location, Pickup, Source, StoryEvent,
+                          Transfer)
 
 _SLIDE_SOLVED = "Sand Castle Slide Puzzle Solved"
 # The Slide Puzzle's upper gap: filled once the puzzle is solved, or flown over.
@@ -161,6 +162,8 @@ MAP_AREAS = (
     Area("SandCastleRockRoom", "Top Right", (),
          CanUse("Bee Fly") | ((CanUse("Beetle Dig") | CanUse("Dash")) & CanUse("Shield")),
          out=CanUse("Shield") | CanUse("Bee Fly"), to="SandCastleRockRoom (Bottom Right)"),
+    # The boss room (SandCastleBossRoom): one region, both doors free; the Watcher's fight (Event117) starts a little
+    # way in from either side and needs nothing, a ground enemy.
 )
 TRANSFERS = (
     # The Slide Puzzle's upper left and upper right down to the puzzle's floor, drops: no way back up inside the room
@@ -202,6 +205,12 @@ DOOR_RULES = (
     # The Pressure Puzzle (the user, 2026-10-09): its door to the main room shut from inside until its plates are
     # played for it; arriving through it before then, the game pushes the party past it. Its other door is free.
     DoorRule("SandCastlePressurePuzzle", "loadzonemain", Has(_PRESSURE_SOLVED)),
+)
+
+SCENERY_HIDDEN = (
+    # The boss room's wall before its treasure room door, lowered by the Watcher's fight (flag 38); never solid from
+    # the door's side, so it's hidden to show that way back.
+    EntityRef("SandCastleBossRoom", "Base/CastlePlatform"),
 )
 
 # Hidden switches hit while flag 41 (the first boss) is set: the entrance's crystal scene and the basement's platforms

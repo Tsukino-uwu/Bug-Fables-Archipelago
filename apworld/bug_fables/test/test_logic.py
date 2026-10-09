@@ -1123,3 +1123,21 @@ class TestCastleRoof(BugFablesTestBase):
     def test_frost_bomb_waits(self) -> None:
         names = {spot.name for spot in self.multiworld.get_locations(self.player)}
         self.assertNotIn("Ancient Castle: Roof, Behind the Left Statue", names)
+
+
+class TestCastleBossRoom(BugFablesTestBase):
+    # SandCastleBossRoom (the user, 2026-10-09): one region, both doors free, the Watcher's fight needing nothing; the
+    # wall before the treasure room's door, never solid from that side, hidden (build step 68).
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_one_region_both_doors_free(self) -> None:
+        parts = {r.name for r in self.multiworld.get_regions(self.player) if r.name.startswith("SandCastleBossRoom")}
+        self.assertEqual(parts, {"SandCastleBossRoom"})
+        exits = self.multiworld.get_region("SandCastleBossRoom", self.player).exits
+        reached = {e.connected_region.name for e in exits if e.access_rule(self.state_with())}
+        self.assertIn("SandCastleRoof", reached)
+        self.assertIn("SandCastleTreasureRoom", reached)
+
+    def test_treasure_room_wall_hidden(self) -> None:
+        self.assertIn({"map": "SandCastleBossRoom", "entity": "Base/CastlePlatform"},
+                      self.world.fill_slot_data()["scenery_hidden"])
