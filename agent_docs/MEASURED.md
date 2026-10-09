@@ -3060,7 +3060,8 @@ Read for build step 63, with a review over every reader. Used by `FieldMoves.cs`
   15 frames (`flags[699]`, the Dash) keeps that hitbox, hops, sets `dashing` and tags it again: `BeetleHorn`, or
   `BeetleDash` with `flags[39]` (the Horn Dash). Nothing re-tags it during the Dash; `StopDash` destroys it. In the IL
   the coroutine has exactly three `ldstr "BeetleHorn"/"BeetleDash"` before `set_tag`, one `stfld animstate` of 100
-  right before `ldstr "Cut"`, and that sound's `PlaySound(string, int, float, float)` four instructions on.
+  shortly before `ldstr "Cut"`, the sprite's turn toward the swing (`set_localEulerAngles`, by `GetAngle`, up to 45°)
+  between them, and that sound's `PlaySound(string, int, float, float)` four instructions on.
 - **Every reader** (the whole decompiled game): `NPCControl.OnTriggerEnter` by object type: `BreakableRock` breaks on
   `BeetleDash` only (`BreakRock`, which sets `player.boulderbreak` so the Dash goes on), a `BeetleHorn` hit only shakes
   it; `PushRock` and `ScrewSwitch` take `BeetleHorn` only; `SavePoint`, `CoiledObject`, the switches (`Switch`,

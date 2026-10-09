@@ -79,7 +79,8 @@ namespace BugFablesAP
                 Hooks.Safe(instructions, EditTap, "moves");
 
             // Each `ldstr "BeetleHorn"/"BeetleDash"; callvirt set_tag` gets HornTag between; Kabbu's swing (its
-            // animstate 100 just before the "Cut" sound) gets SlashAnim, and the sound's PlaySound becomes SlashSound.
+            // animstate 100 just before the "Cut" sound) gets SlashAnim, the sprite's turn after it becomes SlashTurn and
+            // the sound's PlaySound SlashSound.
             private static IEnumerable<CodeInstruction> EditTap(List<CodeInstruction> code)
             {
                 List<int> tags = Enumerable.Range(0, Math.Max(0, code.Count - 1))
@@ -95,23 +96,29 @@ namespace BugFablesAP
                 int swing = cut < 0 ? -1 : code.FindLastIndex(cut, c => c.StoresField(animstate));
                 bool swingIs100 = swing > 0 && code[swing - 1].opcode == OpCodes.Ldc_I4_S
                     && Convert.ToInt32(code[swing - 1].operand) == 100;
-                if (tags.Count != 3 || sound < 0 || sound - cut > 6 || !swingIs100)
+                MethodInfo setAngles = AccessTools.PropertySetter(typeof(Transform), nameof(Transform.localEulerAngles));
+                int turn = swing < 0 ? -1 : code.FindIndex(swing, c => c.Calls(setAngles));
+                bool turnBeforeSound = turn > swing && turn < cut;
+                if (tags.Count != 3 || sound < 0 || sound - cut > 6 || !swingIs100 || !turnBeforeSound)
                 {
                     log.LogError($"[moves] DoActionTap: {tags.Count} of 3 horn tags, the swing's sound {sound >= 0}, "
-                        + $"its animation {swingIs100}, which differs from what was measured: left as it is, so "
-                        + "once the Dash is learned, Kabbu's tap does all the Horn Slash does without its item");
+                        + $"its animation {swingIs100}, its turn {turnBeforeSound}, which differs from what was "
+                        + "measured: left as it is, so once the Dash is learned, Kabbu's tap does all the Horn Slash "
+                        + "does without its item");
                     return code;
                 }
                 MethodInfo slashSound = AccessTools.Method(typeof(FieldMoves), nameof(SlashSound));
                 MethodInfo slashAnim = AccessTools.Method(typeof(FieldMoves), nameof(SlashAnim));
+                MethodInfo slashTurn = AccessTools.Method(typeof(FieldMoves), nameof(SlashTurn));
                 code[sound] = new CodeInstruction(OpCodes.Call, slashSound).MoveLabelsFrom(code[sound]);
+                code[turn] = new CodeInstruction(OpCodes.Call, slashTurn).MoveLabelsFrom(code[turn]);
                 code.Insert(swing, new CodeInstruction(OpCodes.Call, slashAnim));
                 MethodInfo hornTag = AccessTools.Method(typeof(FieldMoves), nameof(HornTag));
                 foreach (int i in tags.Select(i => i > swing ? i + 1 : i).OrderByDescending(i => i))
                 {
                     code.Insert(i + 1, new CodeInstruction(OpCodes.Call, hornTag));
                 }
-                log.LogInfo("[moves] installed in DoActionTap: 3 of 3 horn tags, Kabbu's swing and its sound");
+                log.LogInfo("[moves] installed in DoActionTap: 3 of 3 horn tags, Kabbu's swing, its turn and its sound");
                 return code;
             }
 
@@ -145,11 +152,19 @@ namespace BugFablesAP
             }
         }
 
-        // Called from DoActionTap's own code (HornLock): a hitbox's tag, Kabbu's swing and its sound, each nothing
-        // while the Horn Slash is locked.
+        // Called from DoActionTap's own code (HornLock): a hitbox's tag, Kabbu's swing, its turn and its sound, each
+        // nothing while the Horn Slash is locked.
         public static string HornTag(string tag) => Locked(1) ? "Untagged" : tag;
 
         public static int SlashAnim(int anim) => Locked(1) ? 0 : anim;
+
+        public static void SlashTurn(Transform sprite, Vector3 angles)
+        {
+            if (!Locked(1))
+            {
+                sprite.localEulerAngles = angles;
+            }
+        }
 
         public static AudioSource SlashSound(string clip, int id, float pitch, float volume) =>
             Locked(1) ? null : MainManager.PlaySound(clip, id, pitch, volume);

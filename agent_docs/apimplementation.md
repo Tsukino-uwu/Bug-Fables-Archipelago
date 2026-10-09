@@ -5554,9 +5554,9 @@ carries the same tag, or `BeetleDash` once the Horn Dash is learned. Everything 
 of those two tags, and a boulder (`BreakableRock`) breaks only on `BeetleDash`.
 
 **Built** (the mod, `FieldMoves.cs`, only with Shuffle Field Moves and the Horn Slash not yet received):
-1. **The Dash starts:** Kabbu's tap is let through once the Dash is learned. Its first press swings nothing and makes
-   no sound but the buzzer locked moves play on the press; the Dash's second press and the press that ends a Dash don't
-   buzz.
+1. **The Dash starts:** Kabbu's tap is let through once the Dash is learned. Its first press swings nothing (no swing
+   pose, no turn of his sprite) and makes no sound but the buzzer locked moves play on the press; the Dash's second
+   press and the press that ends a Dash don't buzz. The turn was found by the review's last critic, after the commit.
 2. **No horn hits:** the tap's three tag writes become "Untagged", so no grass, switch, ruler, push rock or save crystal
    reacts to Kabbu.
 3. **The Horn Dash breaks boulders:** once it's learned, a dashing Kabbu's hitbox is tagged `BeetleDash` only while a
