@@ -102,6 +102,7 @@ anyone curious about the process, or thinking of doing the same for another game
 48. [The pause menu's artifacts: each one's own icon](#48-the-pause-menus-artifacts-each-ones-own-icon)
 49. [Doors a seed adds or sends elsewhere](#49-doors-a-seed-adds-or-sends-elsewhere)
 50. [The Bee Kingdom's scan sets flag 160 too](#50-the-bee-kingdoms-scan-sets-flag-160-too)
+51. [B.O.S.S. with nobody met logs off instead of freezing](#51-boss-with-nobody-met-logs-off-instead-of-freezing)
 
 ## Where it stands
 
@@ -3326,3 +3327,22 @@ the scan from either end of the room, and sped up ("passing it by at speed").
 
 *Code: `World/HiveScan.cs`, `Core/ApConnection.cs` (`FlagWith`), `Core/SeedData.cs`, `Gameplay/QualityOfLife.cs` (the
 scene list), `Core/Plugin.cs`.*
+
+## 51. B.O.S.S. with nobody met logs off instead of freezing
+
+Found 2026-10-10, testing HB's Lab: B.O.S.S. (HB's computer, `Event85`) lists only the mini-bosses or bosses already met
+(`MainManager.GetBosses`), and while its picker is open the scene reads the list's entry under the cursor each frame. An
+empty list throws (`IndexOutOfRangeException`) and the scene dies with the party frozen (seen; the dev `unstick` freed
+it). Vanilla never gets there, since bosses are met long before HB asks; a seed does, as HB asks for the Explorer Permit
+from the start (`apimplementation.md`, build step 75).
+
+With Archipelago on, a transpiler in `Event85` calls a check right after the list is chosen, before the scene's first
+read of flag 163: if the chosen list (mini-bosses or bosses, either mode) has nobody met, it turns flag 162 off and
+steers past both pickers, so the scene ends as its own log off does. A cancelled choice is left alone, and with
+Archipelago off nothing changes. The log says `[boss] installed in Event85`, and for each choice how many are met or
+that it logged off. The dev console's `bossmet clear` empties both lists on a test file to try it.
+
+**Status:** built (2026-10-10); seen the same day: Single Battles, Mini-Bosses with none met, logged off like Cancel.
+The boss list and Rush Mode, emptied with `bossmet clear`, not yet seen.
+
+*Code: `World/BossSimulator.cs`, `Core/Plugin.cs`; `Dev/DevConsole.cs` (`bossmet`).*

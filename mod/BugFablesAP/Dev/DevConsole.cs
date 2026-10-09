@@ -150,6 +150,8 @@ namespace BugFablesAP
         // Debug.DevCommandFile: commands from outside the game, polled twice a second and run one at a time.
         internal static string CommandFile;
         private static readonly Queue<string> queued = new Queue<string>();
+        // bossmet clear: the met counts it cleared, for bossmet restore (lost with a reload; the log has them).
+        private static readonly Dictionary<int, int> savedBossMet = new Dictionary<int, int>();
         private static float lastPoll;
 
         private static string lastWaitsOn;
@@ -400,6 +402,38 @@ namespace BugFablesAP
                         // The game's own full heal (HP and TP, the whole party), as the rematch machine uses.
                         MainManager.Heal();
                         return "party healed";
+                    case "bossmet":
+                    {
+                        // B.O.S.S.'s lists (EventControl's minibosslist and bosslist): each entry's met count
+                        // (enemyencounter[id, 0]) cleared, or put back, to test an empty list. Test files only.
+                        int[] bossIds = new[] { "minibosslist", "bosslist" }
+                            .SelectMany(f => (int[])AccessTools.Field(typeof(EventControl), f).GetValue(null))
+                            .Where(id => id >= 0).Distinct().ToArray();
+                        int[,] met = MainManager.instance.enemyencounter;
+                        string sub = parts.Length > 1 ? parts[1] : "";
+                        if (sub == "clear")
+                        {
+                            savedBossMet.Clear();
+                            foreach (int id in bossIds.Where(id => met[id, 0] > 0))
+                            {
+                                savedBossMet[id] = met[id, 0];
+                                met[id, 0] = 0;
+                            }
+                            return $"bossmet: cleared {savedBossMet.Count}: "
+                                + string.Join(", ", savedBossMet.Select(k => $"{k.Key}={k.Value}").ToArray());
+                        }
+                        if (sub == "restore")
+                        {
+                            foreach (KeyValuePair<int, int> k in savedBossMet)
+                            {
+                                met[k.Key, 0] = k.Value;
+                            }
+                            int restored = savedBossMet.Count;
+                            savedBossMet.Clear();
+                            return $"bossmet: restored {restored}";
+                        }
+                        return $"bossmet clear|restore: {bossIds.Count(id => met[id, 0] > 0)} of {bossIds.Length} met";
+                    }
                     case "tokens":
                         // The Termacade's token count; the game caps it at 9999 each frame.
                         if (parts.Length > 1)

@@ -362,6 +362,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
 - `textsearch <word>`: every text file the game loads from `Resources/Data`, searched case-insensitively; up to 200
   matching lines go to the log with their file and line number (the game's own names for things, 2026-09-27).
 - `discovery <n> [on|off]`: show or set a journal discovery (no pop-up), to replay a scene that records one.
+- `bossmet clear|restore`: B.O.S.S.'s mini-boss and boss lists go by each enemy's met count in the journal
+  (`enemyencounter[id, 0]`); `clear` sets every listed one to 0 and logs the old counts, `restore` puts them back
+  (lost with a reload, the log has them). To test an empty list (2026-10-10). Test files only.
 - `heal`: the game's own full heal (HP and TP, the whole party). Test files only.
 - `tokens [n]`: show or set the Termacade's token count (`flagvar[27]`). Test files only.
 - `killall [hp]`: in a battle, every enemy's HP to 0; the battle's own death check ends them after the next action (a

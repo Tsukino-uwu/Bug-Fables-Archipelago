@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**156 of 244 done.**
+**157 of 244 done.**
 
 ## Outskirts
 
@@ -261,7 +261,8 @@ as it is, a frozen record.
 - [x] BeehiveMainArea (67) — the Main Area; the clothing stall's two sales, locations 209-210, after Mothiva's scene;
   for the quest pass: the edgy bee's trade (`edgebee`, flags 425-436: the Blackest Paint, key 139, for crystal berry
   #35)
-- [ ] HBsLab (68)
+- [x] HBsLab (68) — HB's Lab; HB asks for the Explorer Permit from the start (build step 75); for the quest pass:
+  B.O.S.S.'s Spy Specs (flag 164) and Detector (165), at its 2nd and 5th fights, which list only bosses already met
 - [ ] BeehiveBalcony (69)
 - [ ] HoneycombsLab (70)
 - [x] JaunesGallery (71) — Jaune's Gallery; its door kept open from the main area (build step 71); for the quest

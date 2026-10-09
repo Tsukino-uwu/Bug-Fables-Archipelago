@@ -3274,7 +3274,9 @@ needed, location 207), 154 of 244; the Scanner Room (a corridor, one region, not
 the outside and the inside, its top door made and the main area's bottom exit sent into it, build step 73; its gate
 open, build step 72; its scan location 208 with flag 160, build step 74), 155 of 244; the Main Area (one region,
 every door free; the clothing stall's Bee Hat and then Pretty Ribbon, locations 209-210, after Mothiva's scene, a
-story event that needs nothing, at their prices), 156 of 244; the rest of `room-checklist.md` to go.
+story event that needs nothing, at their prices), 156 of 244; HB's Lab (one region, its door free; HB asks for the
+Explorer Permit from the start and shown it opens B.O.S.S., build step 75), 157 of 244; the rest of
+`room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -5948,7 +5950,8 @@ other things", rather than setting 161 on entering, which would skip the permit.
 **Built** (the apworld only: the mod's own list does it): `dialogue_flags` re-points HB's line 50 from 219 to the
 always-set 691, so she asks from the start and still answers 161 afterwards; a story event, "Explorer Permit Shown"
 (flag 161), needs the Explorer Permit, already progression. B.O.S.S.'s two medals wait for the quest pass: it offers
-only bosses already met. Test `TestHBsLab`.
+only bosses already met. Opened with nobody met, its empty list froze the party; the mod now logs it off instead (the
+mod guide, step 51). Test `TestHBsLab`.
 
 **Status:** built (2026-10-10); seen the same day in seed `AP_70580691250444408633` through the dev `liveslot`: HB asked
 at once, the permit shown, the computer then offering Single Battles and Rush Mode.
