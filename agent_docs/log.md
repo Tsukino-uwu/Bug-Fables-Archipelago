@@ -88,6 +88,7 @@ either one wrong).
 - [2026-10-08: the Far Grasslands finished, the swamp begun; flag 41 sends the goal](#2026-10-08-the-far-grasslands-finished-the-swamp-begun-flag-41-sends-the-goal)
 - [2026-10-09: the goal guard; four swamp rooms; the Dash without the horn begun](#2026-10-09-the-goal-guard-four-swamp-rooms-the-dash-without-the-horn-begun)
 - [2026-10-09: the Dash without the Horn Slash; Ice Block Climb and Fenced Pond; the Defiant Root begun](#2026-10-09-the-dash-without-the-horn-slash-ice-block-climb-and-fenced-pond-the-defiant-root-begun)
+- [2026-10-09: the Defiant Root done, the Ancient Castle mapped to its boss; the key chains held out](#2026-10-09-the-defiant-root-done-the-ancient-castle-mapped-to-its-boss-the-key-chains-held-out)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -3859,3 +3860,50 @@ either one wrong).
   and fuzzer before the next push): `TestDashWithoutTheHorn`, `TestIceBlockClimb`, `TestFencedPond` and the last
   chat's. The PopTracker pack's re-export waits for the next PopTracker work (the ruler, locations 183-188). A stray
   disk-wide `find` I left in the background ran about two hours before the user noticed; stopped.
+
+## 2026-10-09: the Defiant Root done, the Ancient Castle mapped to its boss; the key chains held out
+
+- **Setup:** the server restarted on `AP_70580691250444408633` (copied to session 69b1ade9's scratchpad `out/`, the
+  player file in its `players/`), hosted with Start-Process on 38281. The Square's first-visit talk: with flag 170
+  turned off the user walked in from the well, no talk (seen). A dev `give <item|key> <id>` (`52f3045`), `take`'s other
+  half, the user's pick for the Dash test ("nice to have something for giving/taking the abilities away"); first used to
+  hand over the Desert Key for a look inside the mayor's storage.
+- **Rooms, 136 to 149 of 244:** the Defiant Root done: the Square, the Well, the Market, the Beehive Lift (named by the
+  user); the Ancient Castle but its boss and treasure rooms: the Entrance, the Slide Puzzle, the Statue Room, the
+  Basement, the Roof, the Main Room, the Boss Key Room, the Pressure Puzzle, the Rock Room. Locations 189-206; the user
+  described each room area by area and named every spot (the Square and the Market from "square/plaza", the Well and
+  the castle's rooms from their internal names). Build step 64: crystal berry #15 kept until taken (flag 201, the
+  desert's south entrance or the caravan robbery, took it away; the limit repointed; seen with 201 on). Build step 65:
+  the Defiant Root inn's upstairs door kept open (its lock waited for the innkeeper's daughter in the Termite Capitol;
+  seen). Kali's shop left shut until her board quest (the user).
+- **A review workflow** of the first commits (three lenses, each finding verified): the mayor's storage claimed less
+  than the game (the Desert Key needs quest 46, from chapter 5), made pending; "Pibu's sale" was Morty's re-rental of
+  Pibu, his pillbug, the Bed Bug (read in the English text), so build step 66: a give the game repeats is the game's own
+  once its check is done (the user's yes; the second named exception in `CLAUDE.md`); the caravan robbery's crystal
+  berry gift would have added a berry of its own, now a hand-over (build step 64, mod). Two doc slips fixed.
+- **A key-chain research workflow** (each chain checked by a second agent): the Sand Castle Key's and the Rusty Key's
+  stand-ins ("later chapters") hold none of chapters 2-4; the hideout's capture strips the seed's ability items (a
+  mod bug, Known issues, not seen); location 69's trigger needs flags 88 and 138. The user: hold them out now (build
+  step 67: every castle spot, the hideout's cell, both areas' Enemysanity spots pending; location 69's reach fixed) and,
+  for the chains, "we want to eventually just make most of the game openworld/metroidvania ... you should be able to do
+  any area/any chapter in/out of order" (Next 64: open each chapter-gated piece rather than model it).
+- **Medal prices to the dev cheats** (`a2e8f86`, the user: "that one feels a bit to cheaty"): off the Gameplay page,
+  `[Debug] MedalPrices` and the console's `medalprices`; not seen on screen.
+- **Wrong turns, for the record:** the berry pickup was said to set 201 and end the robbery (a crystal berry never
+  writes its activation flag; corrected before the user's pick stood); "Pibu sells" (above); the castle's way up. Story
+  events count in Archipelago's accessibility check, so from the Main Room's commit (`25296fa`) to `f84f527` no seed
+  generated: its lifts' events were unreachable. I guessed a climb from the Slide Puzzle's floor from an ambiguous
+  answer ("warp me to where you think", then "yes this room ... allows you to go up/left"); the user: "No climb". They
+  found the real way: a ledge outside behind the Main Room's windows joins its middle right and middle left (`60b519b`).
+  The lesson: generate a seed after adding story events, and ask the reachability tick-box before writing a guess.
+- **Not seen in game:** build step 66 (Morty's re-rental), the robbery's hand-over (TO-CHECK), the Medal prices row's
+  removal. Tests written and unrun (the suite and the fuzzer before the next push): `TestDefiantRootSquare`,
+  `TestDefiantRootWell`, `TestBeehiveLift`, `TestCastleEntrance`, `TestSlidePuzzle`, `TestStatueRoom`,
+  `TestCastleBasement`, `TestCastleRoof`, `TestCastleMainRoom`, `TestPressurePuzzle`, `TestRockRoom`, `TestDashScene`,
+  and the last chat's. Seeds generate (`Generate.py`, seed 1, this session). Nothing pushed.
+- **Handoff (the user: "lets stop here for now ... close/stop things", a new chat next):** the server stopped; its seed
+  is in session 69b1ade9's scratchpad `out/`, the live slot_data there as `live.json` (locations to 206; re-lay it with
+  `liveslot` after a reload). The plugin `98EFE3B858B7` loaded. The test file's flags as left: 170 on, 201 off, berry
+  #15 taken, 284 on (the Slide Puzzle solved), 297 and 283 as the user left them in the Rock Room. Next room
+  `SandCastleBossRoom` (128), then `SandCastleTreasureRoom` (129). Still to do: TO-CHECK's Dash test with `take key` /
+  `give key`; Next 64 (the key chains opened, the capture first) when the user says.
