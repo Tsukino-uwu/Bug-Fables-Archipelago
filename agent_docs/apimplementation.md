@@ -143,6 +143,9 @@ this file and that doc disagree, that doc is right.
 69. [Build step 69: the Honey Factory's door from Outside the Beehive open](#build-step-69-the-honey-factorys-door-from-outside-the-beehive-open)
 70. [Build step 70: the Bee Kingdom's Throne Room door open](#build-step-70-the-bee-kingdoms-throne-room-door-open)
 71. [Build step 71: Jaune's Gallery open from the start](#build-step-71-jaunes-gallery-open-from-the-start)
+72. [Build step 72: the Scanner Room's gate open](#build-step-72-the-scanner-rooms-gate-open)
+73. [Build step 73: the Scanner Room kept between the outside and the inside](#build-step-73-the-scanner-room-kept-between-the-outside-and-the-inside)
+74. [Build step 74: the scan a location, flag 160 with it](#build-step-74-the-scan-a-location-flag-160-with-it)
 
 **How it works**
 
@@ -182,8 +185,9 @@ be wrong.
    door is left out only for a reason the user has agreed to: so far chapter 3's story-only attack maps (2026-10-05)
    and the story transfers. Agreed but not built: the Golden Settlement's day and night copies, each pair one room
    (three rooms) whose exits shuffle like any door (build step 52's To do). Not looked at yet, for the door pass
-   (`room-logic.md`): the Beehive's story copies, `TermiteIndustrial`'s in-map pair and the Sand Castle basement's two
-   parked doors.
+   (`room-logic.md`): the Beehive's story copies (the Scanner Room kept between the outside and the inside, build step
+   73: its made and re-pointed doors join the shuffle once `DoorShuffle` and the door data read `door_rows`),
+   `TermiteIndustrial`'s in-map pair and the Sand Castle basement's two parked doors.
    **How each room gets mapped** (2026-09-27): the checklist in `room-logic.md`; the tester says what needs
    what, the agent turns it into areas and rules.
 3. **Field abilities shuffled as items** (every learned ability built, build step 23) (by the game's names: Beemerang
@@ -845,8 +849,8 @@ be wrong.
   The guard is seen ending the swamp's original loop (2026-10-04, the mod guide, step 40); not yet met in a shuffled
   seed.
 - **Some doors are still never shuffled** (build step 38, 2026-10-02). These keep their destination in every mode:
-  - story copies that have pairs: the Golden Settlement by day and night, the Beehive's entrance before and after
-    flag 160;
+  - story copies that have pairs: the Golden Settlement by day and night; the Beehive's entrance, now the Scanner
+    Room's two doors (build step 73), fixed until the door pass;
   - doors whose name another door on the map shares: `GoldenPathTunnel2`, `WaspKingdomOutside`. The mod finds doors
     by name;
   - `TermiteIndustrial`'s pair inside its own map, three doors of one name.
@@ -5856,6 +5860,68 @@ sign and the cube gone, the gallery walked into and out of.
 
 *Code: `logic/bee_kingdom_hive.py` (`KEPT_PRESENT`, `KEPT_OPEN`, `SCENERY_HIDDEN`, location 207). The mod:
 `World/KeptOpen.cs`, unchanged.*
+
+## Build step 72: the Scanner Room's gate open
+
+**Found (2026-10-09, mapping the Bee Kingdom's Scanner Room, `BeehiveScannerRoom`):** a gate at the corridor's top
+(`Base/Door`) stands closed until the scan sets flag 159 (`MEASURED.md`, the Scanner Room).
+
+**Asked and decided (the user, 2026-10-09):** "we should keep the gate open".
+
+**Built** (the apworld only: the mod's own list does it): `scenery_hidden` gets the room's `Base/Door`, as build step 68
+hid the castle boss room's wall. Test `TestScannerRoom`.
+
+**Status:** built (2026-10-09); seen the same day in seed `AP_70580691250444408633` through the dev `liveslot`: the gate
+open before the scan, and the scan then playing as before.
+
+*Code: `logic/bee_kingdom_hive.py` (`SCENERY_HIDDEN`).*
+
+## Build step 73: the Scanner Room kept between the outside and the inside
+
+**Found (2026-10-09):** the Scanner Room's only door is its bottom one. Outside the Beehive's main door is two doors at
+one spot, to the Scanner Room until flag 160 and straight into the main area from 160, so once the story sets 160 the
+room is out of the world. Its way on is `Event84`'s second part, which warps the party to the main area and HB's Lab
+with map loads that ignore the entrance randomizer (`MEASURED.md`, the Scanner Room).
+
+**Asked and decided (the user, 2026-10-09):** keep the room as a feature between the outside and the inside, a door at
+its top where the gate is ("copy the bottom entrance/door how it works, place it where the gate is, and redirect how you
+come in/out of it"), and the main area's bottom exit leading back into it; no scene warps.
+
+**Built:** in `logic/bee_kingdom_hive.py`, `kept_present` gets Outside's main door into the room (`loadzonecorridor`,
+gone in the game from 160) and `kept_open` its door straight into the main area (`loadzoneinside`) and the room's
+warping trigger (`eventtrigger2`); `door_rows` (new records, `DoorRow`; the mod guide, step 49) a copy of the room's
+bottom door at its top, named `loadzoneinside`, into the main area's bottom, and the main area's bottom exit
+(`loadzoneoutside - Duplicate`) sent into the room's top, inside the gate. The logic needs nothing more: doors.json's
+links between the three rooms are free both ways, as the new doors are, so what each reaches is the same. The doors join
+the entrance randomizer at the door pass (Next 2), when `DoorShuffle` and the door data read `door_rows`. Test
+`TestScannerRoom`.
+
+**Status:** built (2026-10-09); seen the same day in seed `AP_70580691250444408633` through the dev `liveslot`: in by
+Outside's main door with 160 set, up through the top door into the main area, back through the main area's bottom exit
+into the room's top, many times, about 2 s each way (the dev load timer).
+
+*Code: `logic/bee_kingdom_hive.py` (`KEPT_PRESENT`, `KEPT_OPEN`, `DOOR_ROWS`), `data_types.py` (`DoorRow`),
+`logic/__init__.py`, `data_tables.py`, `slot_data.py`. The mod: `World/DoorRows.cs`.*
+
+## Build step 74: the scan a location, flag 160 with it
+
+**Found (2026-10-09):** the scan (`Event84`'s first part) sets flag 159; flag 160, which teaches Leif the battle skill
+Bubble Shield Lite, takes HB from beside his lab and switches Outside's main door, came only in its kept-away second
+part.
+
+**Asked and decided (the user, 2026-10-09):** the scan a location, like Pep Talk's farm scene (location 151), the skill
+staying the game's; named "Bee Kingdom Hive: Scanner Room, Scan"; "lets just give 160 alongside the scan in the scanner
+room, so its not missable or over complicating things"; sped up rather than skipped.
+
+**Built:** location 208, `Source(event=84, flag=159)`, nothing needed (the scan plays walking past it from either end);
+`flags_with` (new records, `FlagWith`; the mod guide, step 50) gives 160 with 159. With Skip cutscenes the scan is
+fast-forwarded. Test `TestScannerRoom`.
+
+**Status:** built (2026-10-09); seen the same day in seed `AP_70580691250444408633` through the dev `liveslot`: 159 and
+160 set by the scan, the check for 208 sent, the scan from either end, sped up.
+
+*Code: `logic/bee_kingdom_hive.py` (location 208, `FLAGS_WITH`), `data_types.py` (`FlagWith`), `slot_data.py`. The mod:
+`World/HiveScan.cs`, `Gameplay/QualityOfLife.cs`.*
 
 # How it works
 

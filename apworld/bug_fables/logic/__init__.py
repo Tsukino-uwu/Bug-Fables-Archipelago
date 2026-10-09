@@ -8,9 +8,9 @@ origin, is in regions.py.
 """
 from __future__ import annotations
 
-from ..data_types import (Area, Artifact, DayNight, DialogueFlag, DoorRule, EntityMove, EntityRef, FlagEntity, FlagSwap,
-                          FreeSale, ItemEntity, Location, MapScene, Roadblock, SceneCamera, SceneryMove, StoryEvent,
-                          TimeSwitch, Transfer)
+from ..data_types import (Area, Artifact, DayNight, DialogueFlag, DoorRow, DoorRule, EntityMove, EntityRef, FlagEntity,
+                          FlagSwap, FlagWith, FreeSale, ItemEntity, Location, MapScene, Roadblock, SceneCamera,
+                          SceneryMove, StoryEvent, TimeSwitch, Transfer)
 from . import (ancient_castle, bandit_hideout, bee_kingdom_hive, bugaria_city, chomper_caves, defiant_root,
                far_grasslands, fishing_village, forsaken_lands, giants_lair, golden_hills, golden_path,
                golden_settlement, honey_factory, lost_sands, metal_island, metal_lake, outskirts, rubber_prison,
@@ -61,4 +61,7 @@ SCENERY_MOVED: tuple[SceneryMove, ...] = tuple(e for area in AREAS for e in geta
 # Scenery with no flag of its own, switched off on load (a night map's copy of something its day map hides by flag).
 SCENERY_OFF: tuple[EntityRef, ...] = tuple(e for area in AREAS for e in getattr(area, "SCENERY_OFF", ()))
 ENTITIES_MOVED: tuple[EntityMove, ...] = tuple(e for area in AREAS for e in getattr(area, "ENTITIES_MOVED", ()))
+# Doors the client adds to a map or sends elsewhere, and flags it sets with another (the Bee Kingdom's Scanner Room).
+DOOR_ROWS: tuple[DoorRow, ...] = tuple(e for area in AREAS for e in getattr(area, "DOOR_ROWS", ()))
+FLAGS_WITH: tuple[FlagWith, ...] = tuple(e for area in AREAS for e in getattr(area, "FLAGS_WITH", ()))
 SCENE_CAMERAS: tuple[SceneCamera, ...] = tuple(e for area in AREAS for e in getattr(area, "SCENE_CAMERAS", ()))

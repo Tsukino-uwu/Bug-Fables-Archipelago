@@ -314,6 +314,38 @@ class MapScene:
         return {"map": self.map, "event": self.event, "flag": self.flag}
 
 
+@dataclass(frozen=True, slots=True)
+class DoorRow:
+    """A door the client writes into a map's entity rows before the game builds them (door_rows, in its area's module):
+    with copy (map, entity), that door's row added under `door`, standing at `at`, always there; without, the map's own
+    `door` sent elsewhere. data: data[0] the map it leads to, the rest as a door's; vectors: the walk into it, where the
+    party appears over there and walks to, then four the game reads for the camera when data has more than one entry."""
+
+    map: str
+    door: str
+    data: tuple[int, ...]
+    vectors: tuple[tuple[float, float, float], ...]
+    copy: tuple[str, str] | None = None
+    at: tuple[float, float, float] | None = None
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"map": self.map, "door": self.door, "data": list(self.data), "vectors": [list(v) for v in self.vectors],
+                **({"copy": {"map": self.copy[0], "entity": self.copy[1]}} if self.copy else {}),
+                **({"at": list(self.at)} if self.at else {})}
+
+
+@dataclass(frozen=True, slots=True)
+class FlagWith:
+    """A flag the client sets with another that an event sets, in a seed (flags_with, in its area's module)."""
+
+    event: int
+    flag: int
+    also: int
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"event": self.event, "flag": self.flag, "also": self.also}
+
+
 # A flag every new file sets and nothing clears: what a story flag always set by then in vanilla is repointed to.
 ALWAYS_SET = 691
 

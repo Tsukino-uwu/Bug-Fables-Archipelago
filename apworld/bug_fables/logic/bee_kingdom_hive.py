@@ -5,7 +5,7 @@ from __future__ import annotations
 from rule_builder.rules import False_
 
 from ..custom_rules import LATER_CHAPTERS
-from ..data_types import Area, EntityRef, FreeSale, Give, Location, Pickup, Source, Transfer
+from ..data_types import Area, DoorRow, EntityRef, FlagWith, FreeSale, Give, Location, Pickup, Source, Transfer
 
 LOCATIONS = (
     # Beette sells the Flower Key (the plaza's red house) on the balcony, free in a seed; her next line sets flag 228.
@@ -15,6 +15,10 @@ LOCATIONS = (
     # side, behind paintings lying on the floor, nothing needed.
     Location("Bee Kingdom Hive: Jaune's Gallery, Behind the Paintings", 207, "JaunesGallery",
              Source(flag=622, pickup=Pickup(map="JaunesGallery", type=1, item=174)), no_jump=True),
+    # The Scanner Room (BeehiveScannerRoom; named by the user, 2026-10-09): its scan (Event84's first part, flag 159),
+    # where the mod also sets 160, which teaches Leif Bubble Shield Lite, the game's own (as Pep Talk at the farm).
+    Location("Bee Kingdom Hive: Scanner Room, Scan", 208, "BeehiveScannerRoom", Source(event=84, flag=159),
+             no_jump=True),
 )
 KEPT_PRESENT = (
     # Beette herself, made only after chapter 3 (flag 299) (the user, 2026-10-04: "make it appear always").
@@ -28,10 +32,19 @@ KEPT_PRESENT = (
     # The main area's door to Jaune's Gallery, made in the game only from 299: open from the start (the user,
     # 2026-10-09: "can we remove this sign/block from this entrance"); the gallery's half has no flag.
     EntityRef("BeehiveMainArea", "loadzonejaune"),
+    # Outside the Beehive's main door into the Scanner Room, gone in the game from 160, which the scan now sets
+    # (FLAGS_WITH): the room stays between the outside and the inside (the user, 2026-10-09).
+    EntityRef("BeehiveOutside", "loadzonecorridor"),
 )
 KEPT_OPEN = (
     # Its "Out For Lunch" sign before it, there until 299.
     EntityRef("BeehiveMainArea", "jaune sign"),
+    # Outside the Beehive's door straight into the main area (from 160): its main door always leads into the Scanner
+    # Room instead (the user, 2026-10-09: keep the room between the outside and the inside).
+    EntityRef("BeehiveOutside", "loadzoneinside"),
+    # The Scanner Room's second trigger at its top, whose scene warps the party to the main area and HB's Lab: its
+    # top door is the way on instead.
+    EntityRef("BeehiveScannerRoom", "eventtrigger2"),
 )
 SCENERY_HIDDEN = (
     # Outside the Beehive's factory door's closed model, hidden in the game from 169.
@@ -40,6 +53,9 @@ SCENERY_HIDDEN = (
     EntityRef("BeehiveMainArea", "Base/ThroneDoors"),
     # A cube before Jaune's door, hidden in the game from 299: with the sign gone it still shut the way (seen).
     EntityRef("BeehiveMainArea", "Base/Cube"),
+    # The Scanner Room's gate at its top, hidden in the game from 159 (the scan): open from the start (the user,
+    # 2026-10-09: "we should keep the gate open").
+    EntityRef("BeehiveScannerRoom", "Base/Door"),
 )
 SCENERY_PRESENT = (
     # And its open model, shown in the game from 169.
@@ -49,6 +65,22 @@ FREE_SALES = (
     # Her offer ("150 berries for the house") and the sale's price commands.
     FreeSale("BeehiveBalcony", (20, 21)),
 )
+# The Scanner Room's way on, a door at its top into the main area's bottom, copied from its bottom door, and the main
+# area's bottom exit sent back into it, landing inside the gate (the user, 2026-10-09: "copy the bottom entrance/door
+# how it works, place it where the gate is, and redirect how you come in/out of it"); spots mirrored from the bottom
+# door's but the walk into it. The main area's arrival is Outside the Beehive's door into it.
+_CAMERA = ((0.0, 0.0, 0.0),) * 4
+DOOR_ROWS = (
+    # Its walk in ends on its own spot: past it the corridor is shut, so a walk there only ends when the game gives up.
+    DoorRow("BeehiveScannerRoom", "loadzoneinside", (67, 0, 0, 0, 0),
+            ((0.0, 0.0, 10.3), (0.0, 0.0, -30.02), (0.0, 0.0, -25.1), *_CAMERA),
+            copy=("BeehiveScannerRoom", "loadzoneoutside"), at=(0.0, 0.0, 10.3)),
+    DoorRow("BeehiveMainArea", "loadzoneoutside - Duplicate", (64, 0, 0, 0, 0),
+            ((0.0, 0.0, -30.5), (0.0, 0.0, 13.7), (0.0, 0.0, 7.5), *_CAMERA)),
+)
+# The scan (Event84's first part, 159) also sets 160, which its kept-away second part set: Leif's Bubble Shield Lite,
+# the game's own, and HB gone from beside his lab (the user, 2026-10-09: "lets just give 160 alongside the scan").
+FLAGS_WITH = (FlagWith(84, 159, 160),)
 MAP_AREAS = (
     # Outside the Beehive (BeehiveOutside; named by the user, 2026-10-09), two parts with no way between
     # them inside the room: the bottom (the elevator bee and the hive's main door) the map's own region, nothing needed

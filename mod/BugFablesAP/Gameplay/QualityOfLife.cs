@@ -92,6 +92,9 @@ namespace BugFablesAP
             // Arriving outside Snakemouth Den: walk, one line, discovery 0 (a location); the map's autostart sets its
             // flag 22.
             new Scene { Map = "OutsideSnakemouth", Event = 11, Flags = new int[0], Discovery = 0 },
+            // The Bee Kingdom's scan: it destroys its scanner and its trigger, so fast-forwarded; in a seed its second
+            // part (the warps) is kept away and 160 comes with the scan (HiveScan).
+            new Scene { Map = "BeehiveScannerRoom", Event = 84, Flags = null },
         };
 
         // A talk trigger that starts by itself on entering (a DialogueTrigger with data[2] 1) opens its line with no

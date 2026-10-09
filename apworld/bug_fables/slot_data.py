@@ -4,13 +4,13 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable, Mapping
 from typing import TYPE_CHECKING, Any
 
-from .data_tables import (ACTIVATION_FLAGS, ARTIFACT_WRITERS, ARTIFACTS, DAY_NIGHT, DIALOGUE_FLAGS, ENTITIES_MOVED,
-                          FREE_SALES, HELD_UNTIL, HELD_UNTIL_ITEM, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN, KEPT_PRESENT,
-                          LIMIT_FLAGS, LOCATION_NAME_TO_ID, PRESENT_FROM, PRESENT_WITH_ITEM, ROADBLOCKS, SCENE_CAMERAS,
-                          SCENERY_HIDDEN, SCENERY_MOVED, SCENERY_OFF, SCENERY_PRESENT, SCENES_KEPT_AWAY,
-                          STORY_ONLY_MAPS, TIME_SWITCHES)
-from .data_types import (DayNight, DialogueFlag, EntityMove, EntityRef, FlagEntity, FlagSwap, FreeSale, ItemEntity,
-                         MapScene, SceneCamera, SceneryMove, Source, TimeSwitch)
+from .data_tables import (ACTIVATION_FLAGS, ARTIFACT_WRITERS, ARTIFACTS, DAY_NIGHT, DIALOGUE_FLAGS, DOOR_ROWS,
+                          ENTITIES_MOVED, FLAGS_WITH, FREE_SALES, HELD_UNTIL, HELD_UNTIL_ITEM, ITEM_NAME_TO_ID, ITEMS,
+                          KEPT_OPEN, KEPT_PRESENT, LIMIT_FLAGS, LOCATION_NAME_TO_ID, PRESENT_FROM, PRESENT_WITH_ITEM,
+                          ROADBLOCKS, SCENE_CAMERAS, SCENERY_HIDDEN, SCENERY_MOVED, SCENERY_OFF, SCENERY_PRESENT,
+                          SCENES_KEPT_AWAY, STORY_ONLY_MAPS, TIME_SWITCHES)
+from .data_types import (DayNight, DialogueFlag, DoorRow, EntityMove, EntityRef, FlagEntity, FlagSwap, FlagWith,
+                         FreeSale, ItemEntity, MapScene, SceneCamera, SceneryMove, Source, TimeSwitch)
 from .options import ShopContents
 
 if TYPE_CHECKING:
@@ -77,7 +77,7 @@ def _pickup(source: Source) -> dict[str, Any]:
 
 
 def _entities(entries: Iterable[EntityRef | FlagEntity | ItemEntity | DialogueFlag | FlagSwap | FreeSale | DayNight
-                                  | TimeSwitch | SceneryMove | EntityMove | SceneCamera | MapScene]
+                                  | TimeSwitch | SceneryMove | EntityMove | SceneCamera | MapScene | DoorRow | FlagWith]
               ) -> list[dict[str, Any]]:
     return [entry.to_slot() for entry in entries]
 
@@ -156,6 +156,11 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "entities_moved": _entities(ENTITIES_MOVED),
         # A scene's fixed camera point moved with its characters ([{"map", "event", "from", "to"}]).
         "scene_cameras": _entities(SCENE_CAMERAS),
+        # Doors the client writes into a map's rows ([{"map", "door", "data", "vectors", "copy"?, "at"?}]): a
+        # copy added, or the map's own door sent elsewhere (the Bee Kingdom's Scanner Room).
+        "door_rows": _entities(DOOR_ROWS),
+        # Flags the client sets with another an event sets ([{"event", "flag", "also"}]): the hive's scan, 160.
+        "flags_with": _entities(FLAGS_WITH),
         "door_targets": world.door_targets,
         # {"map:entity": [enemy ids]}: the fight a map enemy starts instead of its own.
         "enemy_swaps": world.enemy_swaps,

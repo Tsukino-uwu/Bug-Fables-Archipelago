@@ -388,6 +388,16 @@ throttled to changes.
   array is replaced, and it didn't. A load replaces `flags`, `regionalflags` and `crystalbflags` with new arrays
   (`MainManager.cs:17274`; below); first seen 2026-09-24 (Artis, above).
 
+- **A room change through a door takes about 2 s, nearly all of it the game's own** (2026-10-09, the dev load timer, the
+  Bee Kingdom's doors, about 230 frames a second). `MainManager.TransferMap(int, Vector3, Vector3, Vector3, NPCControl)`
+  fades out while the party walks to the door's `vectordata[0]` and waits for that walk and the fade before `LoadMap`;
+  then a frame or two, `WaitForSeconds(0.1f)`, `WaitForSeconds(0.3f)`, the fade in, and the walk to `vectordata[2]` with
+  `minipause` on; `roomtransition` ends after it. Measured: the fade out about 0.38 s; black about 0.65-0.95 s, of which
+  `LoadMap` about 70 ms and `CreateEntities` 0.5-6 ms; the walk in 0.6-1 s. The mod's share: 2-7 ms of hooks per change
+  (`DayNight` and `KeptOpen`'s existence checks the most, about 0.002 ms a call) and about 0.06 ms a frame of its own
+  ticks. A walk-in spot out of reach keeps the screen black until the walk gives up (3.8 s, the Scanner Room's first top
+  door). Used by `LoadTimer.cs`.
+
 ## Save files (2026-09-24, decompiled `InputIOManager/InputIO.cs`)
 
 - **Saves are relative paths in the game folder**, the working directory: `save<N>.dat`, where N is the
@@ -1619,6 +1629,23 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   cube (`Base/Cube`, a `ConditionChecker` hiding it from 299) shutting the way: with the door kept present and the sign
   kept away the way stayed shut; with the cube hidden too it opened, walked both ways (seen, build step 71). No hazards,
   auto-start scenes or map enemies.
+  **`BeehiveScannerRoom`, the Scanner Room (2026-10-09, the user; named by the user):** a corridor with one door, the
+  bottom (`loadzoneoutside`, to `BeehiveOutside`, which reaches it only until flag 160: its `loadzonecorridor`), nothing
+  needed to cross it. At the top a gate, a closed model (`Base/Door`) hidden from 159, and no door: the way on is
+  `Event84`. Walking in, `eventtrigger1` (until 159) plays the scan and sets 159, opening the gate; at the top,
+  `eventtrigger2` (no flag) plays its second part, which loads the main area (`LoadMap(67)`), sets 160, then loads HB's
+  Lab (`LoadMap(68)`) and plays meeting HB there (seen, the chain of scenes). `Event84` sets no other flag. From 160 the
+  room is out of the world: nothing leads to it. Flag 160 also gives a battle skill (17) in the game's skill rebuild
+  (`MainManager.cs`, the `flags[160]` read). The guard stands in a booth behind glass beside the corridor (a dev warp
+  `@guard` landed the party in it, stuck). Placed past the scan's trigger with 159 off (the dev `nudge`) and walking
+  down, the scan played the same and opened the gate: it works from both directions (seen). In a seed (build steps
+  72-74): the gate open; Outside's main door kept on the room and its door into the main area kept away; a copy of the
+  bottom door at the top (z 10.3) into the main area, the main area's bottom exit sent into the room's top (appear z
+  13.7, walk to 7.5); the scan a location with 160. Seen 2026-10-09: both doors both ways. The top door's walk in at z
+  13.7, past the corridor's shut end, kept the screen black 3.8 s more (the transfer waits for that walk); at its own
+  spot, 10.3, it takes 1.8 s door to control. Arriving at the top with 159 off, the scan started at once: its trigger
+  reaches well up the corridor. No pickups, hazards, auto-start scenes or map enemies. Used by `DoorRows.cs`,
+  `HiveScan.cs`.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

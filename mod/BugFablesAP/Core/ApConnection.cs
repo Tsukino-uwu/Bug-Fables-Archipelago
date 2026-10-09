@@ -270,6 +270,14 @@ namespace BugFablesAP
             internal int Flag;
         }
 
+        // A flag the client sets with another one an event sets (flags_with).
+        internal sealed class FlagWith
+        {
+            internal int Event;
+            internal int Flag;
+            internal int Also;
+        }
+
         internal sealed class Blocker
         {
             internal string Map;

@@ -91,6 +91,10 @@ namespace BugFablesAP
         internal readonly List<DayNight.Move> SceneryMoved;
         internal readonly List<DayNight.EntityName> SceneryOff;
         internal readonly List<DayNight.Switch> EntitiesMoved;
+        // Doors the seed adds to a map or sends elsewhere; empty for a seed from an older apworld.
+        internal readonly List<DoorRows.Row> DoorRows;
+        // Flags set with another one an event sets (the Bee Kingdom's scan).
+        internal readonly List<ApConnection.FlagWith> FlagsWith;
         internal readonly List<DayNight.Camera> SceneCameras;
         internal readonly bool PointsOfNoReturn;
 
@@ -226,6 +230,23 @@ namespace BugFablesAP
                 Map = e.Value<string>("map"),
                 Entity = e.Value<string>("entity"),
                 At = Vector(e["at"]),
+            });
+            DoorRows = SlotData.List(data, "door_rows", e => new DoorRows.Row
+            {
+                Map = e.Value<string>("map"),
+                Door = e.Value<string>("door"),
+                CopyMap = e["copy"]?.Value<string>("map"),
+                CopyEntity = e["copy"]?.Value<string>("entity"),
+                At = e["at"] != null ? Vector(e["at"]) : (UnityEngine.Vector3?)null,
+                Data = e["data"].Values<int>().ToArray(),
+                Vectors = e["vectors"].Select(Vector).ToArray(),
+                Jump = e["jump"]?.Value<float>(),
+            });
+            FlagsWith = SlotData.List(data, "flags_with", e => new ApConnection.FlagWith
+            {
+                Event = e.Value<int>("event"),
+                Flag = e.Value<int>("flag"),
+                Also = e.Value<int>("also"),
             });
             SceneCameras = SlotData.List(data, "scene_cameras", e => new DayNight.Camera
             {

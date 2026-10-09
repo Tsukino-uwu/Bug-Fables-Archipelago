@@ -100,6 +100,8 @@ anyone curious about the process, or thinking of doing the same for another game
 46. [The Platinum Card carries the bank's doubled interest](#46-the-platinum-card-carries-the-banks-doubled-interest)
 47. [A chapter's main quest filed without freezing its scene](#47-a-chapters-main-quest-filed-without-freezing-its-scene)
 48. [The pause menu's artifacts: each one's own icon](#48-the-pause-menus-artifacts-each-ones-own-icon)
+49. [Doors a seed adds or sends elsewhere](#49-doors-a-seed-adds-or-sends-elsewhere)
+50. [The Bee Kingdom's scan sets flag 160 too](#50-the-bee-kingdoms-scan-sets-flag-160-too)
 
 ## Where it stands
 
@@ -3272,3 +3274,53 @@ PauseMenu.BuildWindow` and `in PauseMenu.UpdateText`, or what it didn't find. Th
 page not yet seen.
 
 *Code: `Ui/ArtifactIcons.cs`, `Gameplay/EnemyScaling.cs` (its `ArtifactFlags`), `Core/Plugin.cs`.*
+
+## 49. Doors a seed adds or sends elsewhere
+
+Found mapping the Bee Kingdom's Scanner Room (2026-10-09): the room has one door, and its way on is a scene that warps
+the party into the hive. The user wanted it kept as a room between the outside and the inside: "copy the bottom
+entrance/door how it works, place it where the gate is, and redirect how you come in/out of it". A door in this game is
+an entity row: its target map (`data[0]`), where the party walks into it (`vectordata[0]`), and where it appears and
+walks to on the other side (`[1]`, `[2]`).
+
+With Archipelago on, the seed's `door_rows` are written into a map's entity rows before `MapControl.CreateEntities`
+parses them: a transpiler after its two `Split` calls (the rows, then the names), as the day/night switches' copies are
+added (`DayNight`). A copy (`copy`: a map and entity) is that door's row with the seed's spot (`at`), its requires and
+limit dropped (always there), and its data and vectors (the walk in, the appear and walk-to spots, then the camera's
+four, which the game reads when the data has more than one entry); it is appended, and its name added to the names in
+the same order. A re-point rewrites the map's own door's row in place, since scenes find entities by their row. The game
+then builds and runs both like its own doors. `DoorInto` (the dev warp, the Warp button, a seed's start) asks the seed's
+rows first and skips a game row the seed sends elsewhere. With Archipelago off, the rows are the game's. The log says
+`[doorrows] installed`, and for each map what it copied or re-pointed, or why not.
+
+Found while testing: the copied top door's walk in, mirrored from the bottom door's, pointed past the corridor's shut
+end; the game's transfer waits for that walk to end, so the screen stayed black 3.8 s more (the dev load timer). It now
+ends on the door's own spot: 1.8 s from the door to control, as any door.
+
+Not yet: the entrance randomizer reading these rows (`DoorShuffle` and the door data), for the door pass
+(`apimplementation.md`, Next 2).
+
+**Status:** built (2026-10-09); seen the same day in seed `AP_70580691250444408633` through the dev `liveslot`: the
+Scanner Room's top door into the main area and the main area's bottom exit back into the room's top, inside the gate,
+walked both ways several times.
+
+*Code: `World/DoorRows.cs`, `Core/SeedData.cs`, `Gameplay/QualityOfLife.Opening.cs` (`DoorInto`), `Core/Plugin.cs`.*
+
+## 50. The Bee Kingdom's scan sets flag 160 too
+
+`Event84`'s first part, the scan, writes flag 159 once; its second part, which warps the party to the main area and HB's
+Lab, wrote 160. In a seed the second part is kept away (`apimplementation.md`, build step 73), and the user decided 160
+comes with the scan ("lets just give 160 alongside the scan in the scanner room, so its not missable"). With Archipelago
+on, a transpiler after the 159 write calls a method that sets every flag the seed's `flags_with` names for event 84 and
+flag 159: 160. That teaches Leif Bubble Shield Lite at the game's next skill refresh (the game's own, as Pep Talk is at
+the farm), takes HB from beside his lab door, and switches Outside the Beehive's main door, which the kept lists hold on
+the Scanner Room. The log says `[scan] installed in Event84`, and at each scan what it set, or why nothing.
+
+With **Skip cutscenes** the scan is fast-forwarded (the game's own fast-forward, in the setting's scene list): it
+destroys its scanner and its trigger, so a skip by flags alone would leave them, and it ends exactly as it would.
+
+**Status:** built (2026-10-09); seen the same day: flags 159 and 160 set by the scan, the check for location 208 sent,
+the scan from either end of the room, and sped up ("passing it by at speed").
+
+*Code: `World/HiveScan.cs`, `Core/ApConnection.cs` (`FlagWith`), `Core/SeedData.cs`, `Gameplay/QualityOfLife.cs` (the
+scene list), `Core/Plugin.cs`.*

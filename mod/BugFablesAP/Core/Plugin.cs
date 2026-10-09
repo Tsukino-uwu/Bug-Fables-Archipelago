@@ -134,6 +134,8 @@ namespace BugFablesAP
             FreeSales.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             DayNight.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             Festival.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
+            DoorRows.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
+            HiveScan.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             RizFight.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             EnemyDrops.Enable(Log, connection, () => randomizerEnabled.Value);
             SaveCrystals.Enable(Log, Config, () => randomizerEnabled.Value, settingsOn);

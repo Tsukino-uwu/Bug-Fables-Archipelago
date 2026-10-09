@@ -1222,3 +1222,32 @@ class TestJaunesGallery(BugFablesTestBase):
         self.assertIn({"map": "BeehiveMainArea", "entity": "loadzonejaune"}, slot["kept_present"])
         self.assertIn({"map": "BeehiveMainArea", "entity": "jaune sign"}, slot["kept_open"])
         self.assertIn({"map": "BeehiveMainArea", "entity": "Base/Cube"}, slot["scenery_hidden"])
+
+
+class TestScannerRoom(BugFablesTestBase):
+    # BeehiveScannerRoom, the Scanner Room (the user, 2026-10-09): one region, nothing needed across; kept between the
+    # outside and the inside (build step 73), its gate open (72), its scan location 208 with flag 160 (74).
+
+    def test_scan_free(self) -> None:
+        spot = self.multiworld.get_location("Bee Kingdom Hive: Scanner Room, Scan", self.player)
+        self.assertEqual(spot.parent_region.name, "BeehiveScannerRoom")
+        self.assertTrue(spot.access_rule(self.state_with()))
+        self.assertEqual(self.world.fill_slot_data()["flags_with"], [{"event": 84, "flag": 159, "also": 160}])
+
+    def test_kept_between(self) -> None:
+        slot = self.world.fill_slot_data()
+        self.assertIn({"map": "BeehiveOutside", "entity": "loadzonecorridor"}, slot["kept_present"])
+        for away in ({"map": "BeehiveOutside", "entity": "loadzoneinside"},
+                     {"map": "BeehiveScannerRoom", "entity": "eventtrigger2"}):
+            self.assertIn(away, slot["kept_open"])
+        self.assertIn({"map": "BeehiveScannerRoom", "entity": "Base/Door"}, slot["scenery_hidden"])
+        rows = {(r["map"], r["door"]): r for r in slot["door_rows"]}
+        top = rows[("BeehiveScannerRoom", "loadzoneinside")]
+        self.assertEqual(top["copy"], {"map": "BeehiveScannerRoom", "entity": "loadzoneoutside"})
+        self.assertEqual(top["data"][0], 67)
+        back = rows[("BeehiveMainArea", "loadzoneoutside - Duplicate")]
+        self.assertEqual(back["data"][0], 64)
+        self.assertNotIn("copy", back)
+        # The game reads seven vectors when a door's data has more than one entry.
+        for row in rows.values():
+            self.assertEqual(len(row["vectors"]), 7)

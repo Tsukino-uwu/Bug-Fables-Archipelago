@@ -62,6 +62,13 @@ namespace BugFablesAP
         // A door name picks one door where the map has several into the target.
         internal static Vector3[] DoorInto(MainManager.Maps target, string fromMap, string door = null)
         {
+            // A door the seed adds or re-points (DoorRows) before the game's own rows.
+            Vector3[] seeded = DoorRows.Into(target, fromMap, door);
+            if (seeded != null && seeded.Length >= 3)
+            {
+                log.LogInfo($"[qol] arriving in {target} through {fromMap}'s seed door{(door != null ? " " + door : "")}: appear at {seeded[1]}, walk to {seeded[2]}");
+                return seeded;
+            }
             foreach (MainManager.Maps map in Enum.GetValues(typeof(MainManager.Maps)))
             {
                 if (fromMap != null && !string.Equals(map.ToString(), fromMap, StringComparison.OrdinalIgnoreCase))
@@ -73,20 +80,21 @@ namespace BugFablesAP
                 {
                     continue;
                 }
-                string[] names = null;
-                if (door != null)
+                TextAsset nameTable = Resources.Load<TextAsset>("Data/EntityData/Names/" + (int)map + "names");
+                if (nameTable == null && door != null)
                 {
-                    TextAsset nameTable = Resources.Load<TextAsset>("Data/EntityData/Names/" + (int)map + "names");
-                    if (nameTable == null)
-                    {
-                        continue;
-                    }
-                    names = nameTable.ToString().Split('\n');
+                    continue;
                 }
+                string[] names = nameTable?.ToString().Split('\n');
                 string[] lines = table.ToString().Split('\n');
                 for (int i = 0; i < lines.Length - 1; i++)
                 {
-                    if (names != null && (i >= names.Length || names[i].Trim() != door))
+                    if (door != null && (i >= names.Length || names[i].Trim() != door))
+                    {
+                        continue;
+                    }
+                    // A door the seed sends elsewhere no longer leads where its row says.
+                    if (names != null && i < names.Length && DoorRows.Repointed(map.ToString(), names[i].Trim()))
                     {
                         continue;
                     }

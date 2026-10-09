@@ -19,6 +19,7 @@ namespace BugFablesAP
         private ConfigEntry<bool> patchDumpEnabled;
         private ConfigEntry<bool> seedDumpEnabled;
         private ConfigEntry<bool> spriteDumpEnabled;
+        private ConfigEntry<bool> loadTimerEnabled;
         private ConfigEntry<string> saveDiff;
         private ConfigEntry<bool> adoptSeed;
         private ConfigEntry<bool> quietBursts;
@@ -112,6 +113,10 @@ namespace BugFablesAP
             varDumpEnabled = Config.Bind("Debug", "VarDump", false,
                 "Dev only. Once per load, writes every flagvar/flagstring slot the game's text uses to "
                 + "BepInEx/bugfablesap-vardump.tsv. Off by default.");
+            loadTimerEnabled = Config.Bind("Debug", "LoadTimer", false,
+                "Dev only. Logs each room change's black screen and the time to control back, the game's LoadMap and "
+                + "CreateEntities, and the mod's own share (its hooks on that path, its per-frame ticks) as [loadtime]. "
+                + "Off by default.");
             patchDumpEnabled = Config.Bind("Debug", "PatchDump", false,
                 "Dev only. Once per load, writes every method the mod patches (target, kind, patch method, priority) "
                 + "to BepInEx/bugfablesap-patches.tsv, Uncap FPS's hooks included, to compare before and after a "
@@ -137,6 +142,10 @@ namespace BugFablesAP
             {
                 TlsProbe.Enable(connection.Post);
             }
+            if (loadTimerEnabled.Value)
+            {
+                LoadTimer.Enable(Log, Guid);
+            }
             Log.LogInfo($"[dev] dev build: GrantProbe={grantProbeEnabled.Value} TextProbe={textProbeEnabled.Value}");
         }
 
@@ -155,6 +164,7 @@ namespace BugFablesAP
         {
             list.Add(("cheats", () => DevCheats.Tick(Log, giveMoney)));
             list.Add(("console", () => DevConsole.Tick(devConsole.Value)));
+            list.Add(("loadtime", LoadTimer.Tick));
         }
 
         partial void DevAfterTick()
