@@ -329,6 +329,21 @@ shuffle unless the user agrees a reason (`apimplementation.md`, Where it stands,
    tick-box question per entrance and missing ability: "Coming in from *the door* without *the ability*: what can
    you reach?", one option per location, switch and door in the room, plus "Nothing past the door". The ticks place
    each spot in its area at once, with no round of follow-ups.
+   **Describing a room area by area** (the user, 2026-10-09, `Swamplands7`: "it made it a bit easier to explain the
+   room, that what is needed to/from everywhere"): the user names each area by its place on the screen, a row and a
+   column ("bottom/right", "middle/middle", "upper/left", or just "left"), then gives each area its own paragraph:
+   - what's in it: its doors, locations, pads, switches;
+   - for each area next to it, what getting there takes and what getting back takes, "to/from" when both are the
+     same;
+   - each one-way said as one ("a oneway drop"), with what getting back would take.
+
+   Ways that skip across the room (a drop from one side to the far corner) come last, each with its one-way. It turns
+   straight into the model: each area an `Area`, the one most ways touch the map's own region, each to/from an edge
+   pair, each one-way `one_way(...)` with its way back, a second link out of an area an in-map `Transfer`. What's left
+   unclear (a way back, a Bee Fly shortcut) is asked as tick boxes, then the graph goes back to the user as a text
+   diagram in the chat to check. Not every room may split this neatly (the user wasn't sure it fits every room): a
+   room on even ground still takes a sentence, and an area that has no clear row and column can be named by what's in
+   it.
 3. **Written into the logic** (the area's module, `logic/<area>.py`: areas as regions, their edges with their rules,
    each location in its area with its own rule), cautious where anything is unmeasured, replacing the spots' `reach`.
    A Placeholder is promoted to a normal location once its requirements and name are checked, one at a time (build
