@@ -1395,9 +1395,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   **`Swamplands7`, Ice Block Climb (2026-10-09, the user; named by the user):** six parts by height and side. An ice
   block is frozen from a droplet (Freeze), knocked into place (the horn) and jumped on (Jump). The bottom right (the
   door to the Junction) to and from the bottom middle by an ice block or Bee Fly. The middle a drop down to the bottom
-  middle; up, an ice block brought up on a platform past a boulder (`rock`, no flag), Horn Dash too, and no Bee Fly
-  way. That block on the plate below and right of the middle lowers a platform; Freeze again melts the block and the
-  platform rises with the party to the upper middle, a drop back down. The upper left from the upper middle by an
+  middle; up, an ice block brought up on a platform, frozen from the droplet behind a boulder (`rock`, no flag: back
+  each visit), so Horn Dash too, and no Bee Fly way. That block on the plate below and right of the middle lowers a
+  platform; Freeze again melts the block and the platform rises with the party to the upper middle, a drop back down. The upper left from the upper middle by an
   ice block or Bee Fly, back by Bee Fly only; a drop from it to the left. On its stump the medal Eternal Venom (medal
   27, flag 355), needing nothing. The left (its door to the swamp bridge) to and from the middle by Bee Fly, or across
   once an ice block brought up opens the way; its red bounce pad (`bounce`) sends the party up to the middle with

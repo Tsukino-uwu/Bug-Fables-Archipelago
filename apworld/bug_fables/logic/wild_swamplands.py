@@ -22,7 +22,8 @@ _CRANK_LIFT = CanUse("Horn Dash") & CanUse("Beemerang Halt") & CanUse("Jump")
 _LEFT_TO_RIGHT = CanUse("Bee Fly") | (CanUse("Jump") & CanUse("Horn Dash") & CanUse("Beemerang Toss") & ANY_ATTACK
                                       & (CanUse("Shield") | CanUse("Bee Fly")))
 # Swamplands7's ice blocks: one frozen from a droplet (Freeze), knocked into place (the horn) and jumped on (Jump); and
-# one brought up from its bottom middle to its middle on a platform, past a boulder (Horn Dash).
+# one brought up from its bottom middle to its middle on a platform, frozen from the droplet behind a boulder (Horn
+# Dash).
 _ICE_BLOCK = CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump")
 _ICE_BLOCK_UP = CanUse("Horn Dash") & _ICE_BLOCK
 

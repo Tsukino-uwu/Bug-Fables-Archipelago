@@ -3169,9 +3169,9 @@ moved by levers between its left and right sides, Bee Fly or the long way round;
 berry #27 and a Clear Bomb on a vine, locations 183 and 184; its centipede scene kept away, build step 62), 133 of 244;
 Crank Pond (the middle's crank, Beemerang Halt and Jump, to the lower right, back by the lily pad, the horn; its right
 door up a lift, Horn Dash, the Halt and Jump; a Burly Berry and a Crunchy Leaf in grass, locations 185 and 186), 134 of
-244; Ice Block Climb (ice blocks frozen, knocked with the horn and jumped on, one brought up past a boulder, Horn Dash,
-opening the middle's ways up and across; Bee Fly for some; the medal Eternal Venom on a stump, location 187), 135 of
-244; the rest of `room-checklist.md` to go.
+244; Ice Block Climb (ice blocks frozen, knocked with the horn and jumped on, one from the droplet behind a boulder,
+Horn Dash, brought up to open the middle's ways up and across; Bee Fly for some; the medal Eternal Venom on a stump,
+location 187), 135 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
