@@ -1280,6 +1280,28 @@ class TestHoneycombsLab(BugFablesTestBase):
         self.assertEqual(parts, {"HoneycombsLab"})
 
 
+class TestLobby(BugFablesTestBase):
+    # HoneyFactoryEntrance, the Lobby (the user, 2026-10-10): the bottom a drop from the upper area, Jump or Bee Fly
+    # back up; the processing door locked until the Factory Pass (a stand-in until it's an item, Next 67); the storage
+    # door open from the start (build step 77).
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_bottom_needs_jump_or_bee_fly_back_up(self) -> None:
+        up = self.multiworld.get_entrance("HoneyFactoryEntrance (Bottom) to HoneyFactoryEntrance", self.player)
+        self.assertFalse(up.access_rule(self.state_with()))
+        self.assertTrue(up.access_rule(self.state_with("Jump")))
+        self.assertTrue(up.access_rule(self.state_with("Bee Fly")))
+
+    def test_processing_door_locked(self) -> None:
+        door = self.multiworld.get_entrance("HoneyFactoryEntrance: loadzone processing", self.player)
+        self.assertFalse(door.access_rule(self.state_with("Jump", "Bee Fly")))
+
+    def test_storage_door_open(self) -> None:
+        slot = self.world.fill_slot_data()
+        self.assertIn({"map": "HoneyFactoryEntrance", "entity": "loadzonestorage"}, slot["kept_present"])
+        self.assertIn({"map": "HoneyFactoryEntrance", "entity": "Base/DoorS"}, slot["scenery_hidden"])
+
+
 class TestScannerRoom(BugFablesTestBase):
     # BeehiveScannerRoom, the Scanner Room (the user, 2026-10-09): one region, nothing needed across; kept between the
     # outside and the inside (build step 73), its gate open (72), its scan location 208 with flag 160 (74).

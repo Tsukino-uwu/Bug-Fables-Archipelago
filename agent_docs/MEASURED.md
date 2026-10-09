@@ -1678,10 +1678,11 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   flag: line 19 from the start, which ends by setting 227 (the game's text, `textsearch`); 20 from 227, her offer; 24
   from 228, which her line 23 sets after the sale (`|flag,228,true|`). The telescope (`telescope`, `Event127`) shows a
   view of Bugaria and records discovery 26 the first time; it sets no flag. NPCs by flag: two ladybugs (until 299), Gen
-  and Eri (until 167, their line 3 runs `Event86`, whose balcony part walks the party over to them in the room, talks and sets 167, no map change), Kenny
-  (`Kenny - Duplicate`, needs 598 and 86, until 599 or 299), a guard, a walking judge bee and the telescope's owner. In
-  a seed Beette is kept present and sells at her price again (seen: "So...? 150 berries for the house", refused with 115
-  in the bag; build step 76). No pickups, flag-switched scenery, hazards, auto-start scenes or map enemies.
+  and Eri (until 167, their line 3 runs `Event86`, whose balcony part walks the party over to them in the room, talks
+  and sets 167, no map change), Kenny (`Kenny - Duplicate`, needs 598 and 86, until 599 or 299), a guard, a walking
+  judge bee and the telescope's owner. In a seed Beette is kept present and sells at her price again (seen: "So...? 150
+  berries for the house", refused with 115 in the bag; build step 76). No pickups, flag-switched scenery, hazards,
+  auto-start scenes or map enemies.
   **`HoneycombsLab`, Honeycomb's Lab (2026-10-10, the user; named by the user):** one floor and one door (`loadzone`, to
   `BeehiveMainArea`), nothing needed anywhere (the user). Its auto-start scene (`autoevent` 175:80) plays on first
   entry: `Event80`'s lab part, Honeycomb's two lines, then flag 175; the party isn't moved. Honeycomb talks by flag:
@@ -1690,6 +1691,21 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   352; line 32 runs `Event135`. The hawk (`hawk`, needs 343 and 302), Chompy (`chompy`, needs 341 and 405, until 402 or
   405) and her scene's trigger (`chompyevent`, `Event134`, needs 341). No pickups, flag-switched scenery, hazards or map
   enemies.
+  **`HoneyFactoryEntrance`, the Lobby (2026-10-10, the user; named by the user):** two floors. The upper area: a save
+  crystal and the doors to the outside (`loadzoneoutside`, from 299, kept open), the core (`looadzonecore`), processing
+  (`loadzone processing`) and the storage (`loadzonestorage`, from 211). The bottom: the doors to the worker rooms
+  (`loadzoneoffice`, `loadzonesleep`) and a shop. From the bottom up, Jump or Bee Fly; down, a drop, a one-way without
+  either (the user). The processing door is locked by `keything` (a `LockedDoor`, `Event59` key index 4, the Factory
+  Pass, key item 95, used up) until flag 179, which `Event89` sets after the pass; its closed model `Base/DoorP` until
+  179. Arriving through it from the first room with the lock there, the game pushes the party past it into the upper
+  area (seen). The storage door's closed model is `Base/DoorS` (until 211, `Event98`); kept present with the model
+  hidden, it was walked through into the Storage Elevator (seen, build step 77). The shop's bee (`shopbee`, until 176)
+  talks at line 5, which runs `Event80`'s factory part: flag 176 and the room loaded again, the shop then open (its
+  seller, a storage ant, a door, `Base/DoorLock` gone), nothing needed (the user). A material pile (`Base/materialpile`,
+  until 218) blocks nothing (the user). NPC lines ask for the overseer: "she", stuck in the storage (a worker until
+  211), the only one who opens the core's door (its guard's line 7). Story NPCs by flag: Gen and Eri (until 179, then
+  211 to 299), Zasp and Mothiva (until 177, then 221 to 299), HB and the crow (until 218), guides, workers. No pickups,
+  auto-start scenes or map enemies.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

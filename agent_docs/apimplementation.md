@@ -148,6 +148,7 @@ this file and that doc disagree, that doc is right.
 74. [Build step 74: the scan a location, flag 160 with it](#build-step-74-the-scan-a-location-flag-160-with-it)
 75. [Build step 75: HB asks for the Explorer Permit from the start](#build-step-75-hb-asks-for-the-explorer-permit-from-the-start)
 76. [Build step 76: Beette's Flower Key at its price again](#build-step-76-beettes-flower-key-at-its-price-again)
+77. [Build step 77: the Honey Factory's storage door open](#build-step-77-the-honey-factorys-storage-door-open)
 
 **How it works**
 
@@ -798,6 +799,14 @@ be wrong.
     short fades ("wouldn't it look weird without at least a tiny blackfade ? i don't want it to feel like loading,
     but i also don't want it to be instant/weird"), start the load as soon as the screen is black, cut the fixed
     waits to the frames the camera and sprites need, keep the visible walk in (maybe quicker): about 1.2 s a change.
+67. **The Factory Pass, never used up** (decided 2026-10-10, the user, mapping the factory's Lobby; its own step).
+    In the game each Factory Pass lock (`Event59`, key index 4) takes a pass (key item 95) away: the Lobby's
+    processing door, the pump room's scanner and the storage maze's card lock; the game has four pickups, in the
+    worker rooms and the three processing puzzle rooms. The Wooden Crank's way (Next 62): in a seed the mod leaves the
+    pass in the bag at each lock, so the pool holds one Factory Pass, progression, and every lock needs only it; the
+    other pass pickups become ordinary locations. Asked by the user: "similar to the cranks where we made it into just
+    1 reusable instead of having 3-4". Built once the rooms holding passes and locks are mapped; until then the
+    Lobby's processing door has a stand-in (`FACTORY_PASS`, the later chapters, `logic/honey_factory.py`).
 
 **Known issues:**
 
@@ -5977,6 +5986,23 @@ refused with 115 berries in the bag.
 
 *Code: `logic/bee_kingdom_hive.py` (location 78), `data_types.py`, `logic/__init__.py`, `data_tables.py`,
 `slot_data.py`. The mod: `World/FreeSales.cs`, unchanged.*
+
+## Build step 77: the Honey Factory's storage door open
+
+**Found (2026-10-10, mapping the Honey Factory's Lobby, `HoneyFactoryEntrance`):** the Lobby's door to the storage
+(`loadzonestorage`, to the Storage Elevator) exists in the game only from flag 211 (`Event98`, a later factory scene),
+with its closed model (`Base/DoorS`) until 211. The elevator's own half has no flag (`MEASURED.md`, the Lobby).
+
+**Asked and decided (the user, 2026-10-10):** "we open the storage door", the NPCs left as they are (the worker who
+says the overseer's stuck in the storage stays, the user's pick).
+
+**Built** (the apworld only: the mod's own lists do it): `kept_present` gets the door and `scenery_hidden` its closed
+model. The door needs nothing in the logic, as before, now true. Test `TestLobby`.
+
+**Status:** built (2026-10-10); seen the same day in seed `AP_70580691250444408633` through the dev `liveslot`: the
+door made present, its model gone, the user through it into the Storage Elevator (the log).
+
+*Code: `logic/honey_factory.py` (`KEPT_PRESENT`, `SCENERY_HIDDEN`). The mod: `World/KeptOpen.cs`, unchanged.*
 
 # How it works
 
