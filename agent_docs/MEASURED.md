@@ -1451,6 +1451,14 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   spots. Kali's shop (`door shop`) exists from flag 265, the taking of board quest 36; until then its sign (`kalisign`,
   "Under renovation") stands in front. Inside (`insideid` 1) Kali, a cook (`Event3`), takes the Stolen Silk (key item
   108, line 166) and `Event173` gives a Lore Book (line 171) and prize medal 13, sets 471 and completes quest 36.
+  **`DefiantRoot2`, the Beehive Lift (2026-10-09, the user; named by the user):** the ground free: both doors (the
+  Square, `DesertDRSouthEntrance`), the inn's ground door (`door low`), Diana's ant tunnel (75) and every NPC. The
+  elevator bee's platform (`Elevator Bee`, y 2.5) up with Jump or Bee Fly, a drop down. Upstairs at the inn (`doorhigh`,
+  y 5.5) up with Jump or Bee Fly, a drop down; its door is shut by `Base/DoorLock` until flag 408, set only by the
+  innkeeper's daughter's line 21 in `TermiteIndustrial` (`drinnkeepergirl`, from 409 until 408), after which she is in
+  the inn (`innkeeper girl`, from 408). Behind it a Lore Book (`LoreBook - Duplicate`, key item 52, flag 604, `insideid`
+  0); from upstairs the medal Fortify (medal 39, flag 149) on the inn's roof, flown around to with Bee Fly (not from the
+  ground). The innkeeper's rest costs 12 berries (line 5), the daughter's line 27 7 berries. No bushes or dig spots.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

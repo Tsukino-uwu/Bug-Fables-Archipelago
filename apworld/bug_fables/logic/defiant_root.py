@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 from ..custom_rules import LATER_CHAPTERS, CanUse, one_way
-from ..data_types import Area, FlagSwap, Give, Location, Pickup, Source, Transfer
+from ..data_types import Area, EntityRef, FlagSwap, Give, Location, Pickup, Source, Transfer
 
 # The Desert Key (92), the mayor's in the Wacka Worm room once his quest 46 is taken (Event55, flags 557-559): not an
 # item yet, so the later chapters' stand-in until the quest pass.
 DESERT_KEY = LATER_CHAPTERS
+_UP = CanUse("Jump") | CanUse("Bee Fly")
 
 LOCATIONS = (
     # The Square (DefiantRoot1; named by the user, 2026-10-09): a Lore Book behind a box at the far left, and Morty's
@@ -34,6 +35,13 @@ LOCATIONS = (
     Location("Defiant Root: Well, By the Boxes", 195, "DefiantRootWell",
              Source(flag=734, pickup=Pickup(map="DefiantRootWell", type=0, item=148)), rule=CanUse("Jump"),
              area="Right"),
+    # The Beehive Lift (DefiantRoot2; named by the user, 2026-10-09), upstairs at the inn: a Lore Book behind its high
+    # door (kept open, build step 65), nothing once up; the medal Fortify on the inn's roof, flown around to, Bee Fly.
+    Location("Defiant Root: Beehive Lift, Above the Inn", 196, "DefiantRoot2",
+             Source(flag=604, pickup=Pickup(map="DefiantRoot2", type=1, item=52)), no_jump=True, area="Upstairs"),
+    Location("Defiant Root: Beehive Lift, Inn Rooftop", 197, "DefiantRoot2",
+             Source(flag=149, pickup=Pickup(map="DefiantRoot2", type=2, item=39)), rule=CanUse("Bee Fly"),
+             no_jump=True, area="Upstairs"),
 )
 MAP_AREAS = (
     # The town (DefiantRoot1; the user, 2026-10-09): its ground the map's own region, with its four doors (the well's
@@ -45,9 +53,21 @@ MAP_AREAS = (
     # back up to its door) the map's own region; its right side (the door to the hideout's garden, a Leaf Croissant)
     # to and from it by burrowing, Beetle Dig.
     Area("DefiantRootWell", "Right", ("loadzonehideout",), CanUse("Beetle Dig")),
+    # The Beehive Lift (DefiantRoot2; the user, 2026-10-09): its ground the map's own region, with both doors, the inn
+    # and the ant tunnel's miner. The elevator bee's platform up with Jump or Bee Fly; a drop down, so arriving by the
+    # elevator without either is a one-way.
+    Area("DefiantRoot2", "Elevator", (), _UP, out=one_way(None, _UP)),
+    # Upstairs at the inn: its high door (the Lore Book behind it) up with Jump or Bee Fly, a drop down; from there the
+    # Fortify medal above the inn is flown around to, Bee Fly.
+    Area("DefiantRoot2", "Upstairs", (), _UP, out=one_way(None, _UP)),
 )
 TRANSFERS = (
-    Transfer("elevator", "DefiantRoot2", "BeehiveOutside", LATER_CHAPTERS),
+    Transfer("elevator", "DefiantRoot2", "BeehiveOutside", LATER_CHAPTERS, from_area="Elevator"),
+)
+# The inn's upstairs door (DefiantRoot2), locked until flag 408, set only when its innkeeper's daughter is talked to in
+# TermiteIndustrial: open in a seed (the user, 2026-10-09; build step 65).
+SCENERY_HIDDEN = (
+    EntityRef("DefiantRoot2", "Base/DoorLock"),
 )
 # Crystal berry #15 on the town's rooftops is there until flag 201, which entering DesertDRSouthEntrance or the caravan
 # robbery (Event93, which gives #15 itself) sets: never in a seed, so only taking #15 hides it (build step 64).

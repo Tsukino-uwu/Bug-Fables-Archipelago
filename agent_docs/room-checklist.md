@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**139 of 244 done.**
+**140 of 244 done.**
 
 ## Outskirts
 
@@ -221,7 +221,10 @@ as it is, a frozen record.
   Morty's gift sets: kept present if it becomes a location) and the Spicy Berry seller on the left rooftop (Jump); for
   the discovery sweep: discovery 29 (the museum's signs)
 - [x] DefiantRootWell (59) — the Well; for the quest pass: Astotheles' Rusty Key (line 3, from 300 until 239)
-- [ ] DefiantRoot2 (60)
+- [x] DefiantRoot2 (60) — the Beehive Lift; the inn's upstairs door kept open (build step 65); for the quest pass: the
+  innkeeper's daughter (`TermiteIndustrial` line 21 sets 408, she comes home), Kenny (599-600), the ant guard's warp
+  to the Lost Sands entrance (line 38, from 300); for the sellers' pass: the inn's rest (12 berries) and the daughter's
+  service (7 berries, from 408)
 - [x] DefiantRoot3 (61) — the Market (named by the user); no locations; for the quest pass: Kali's shop, shut until
   her board quest 36 is taken (flag 265; left so, the user), her Stolen Silk turn-in (a Lore Book, prize medal 13),
   Zasp's doll trade, Butomo's and Geno's trades, the Mechanical Claw's (medal 61); for the sellers' pass: the item

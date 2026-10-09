@@ -843,3 +843,33 @@ class TestDefiantRootWell(BugFablesTestBase):
         self.assertEqual(spot.parent_region.name, "DefiantRootWell (Right)")
         self.assertFalse(spot.access_rule(self.state_with()))
         self.assertTrue(spot.access_rule(self.state_with("Jump")))
+
+
+class TestBeehiveLift(BugFablesTestBase):
+    # DefiantRoot2 (the user, 2026-10-09): the ground free; the elevator's platform and the inn's upstairs each up with
+    # Jump or Bee Fly; the medal on the inn's roof flown around to from upstairs.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_platform_and_upstairs_need_jump_or_bee_fly(self) -> None:
+        for area in ("Elevator", "Upstairs"):
+            up = self.multiworld.get_entrance(f"DefiantRoot2 to DefiantRoot2 ({area})", self.player)
+            self.assertFalse(up.access_rule(self.state_with()), area)
+            self.assertTrue(up.access_rule(self.state_with("Jump")), area)
+            self.assertTrue(up.access_rule(self.state_with("Bee Fly")), area)
+
+    def test_elevator_leaves_from_the_platform(self) -> None:
+        self.multiworld.get_entrance("DefiantRoot2 (Elevator) to BeehiveOutside (elevator)", self.player)
+        self.multiworld.get_entrance("BeehiveOutside to DefiantRoot2 (Elevator) (elevator)", self.player)
+
+    def test_upstairs_spots(self) -> None:
+        book = self.multiworld.get_location("Defiant Root: Beehive Lift, Above the Inn", self.player)
+        medal = self.multiworld.get_location("Defiant Root: Beehive Lift, Inn Rooftop", self.player)
+        for spot in (book, medal):
+            self.assertEqual(spot.parent_region.name, "DefiantRoot2 (Upstairs)")
+        self.assertTrue(book.access_rule(self.state_with()))
+        self.assertFalse(medal.access_rule(self.state_with("Jump")))
+        self.assertTrue(medal.access_rule(self.state_with("Bee Fly")))
+
+    # Its lock stood until the innkeeper's daughter, in the Termite Capitol, was talked to (build step 65).
+    def test_inn_door_kept_open(self) -> None:
+        self.assertIn({"map": "DefiantRoot2", "entity": "Base/DoorLock"}, self.world.fill_slot_data()["scenery_hidden"])

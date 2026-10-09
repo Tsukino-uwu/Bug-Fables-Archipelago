@@ -136,6 +136,7 @@ this file and that doc disagree, that doc is right.
 62. [Build step 62: a map's own start-up scene kept away (the Junction's centipede)](#build-step-62-a-maps-own-start-up-scene-kept-away-the-junctions-centipede)
 63. [Build step 63: the Dash without the Horn Slash](#build-step-63-the-dash-without-the-horn-slash)
 64. [Build step 64: crystal berry #15 kept until taken](#build-step-64-crystal-berry-15-kept-until-taken)
+65. [Build step 65: the Defiant Root inn's upstairs door open](#build-step-65-the-defiant-root-inns-upstairs-door-open)
 
 **How it works**
 
@@ -3180,7 +3181,10 @@ Juice and crystal berry #15 on the rooftops, kept there until taken, build step 
 and Dark Cherries behind its locked door, the Desert Key's stand-in; the Bed Bug a new useful key item), 137 of 244;
 the Well (its landing and bounce pad up to the town; its right side, the hideout's door, by Beetle Dig; a Leaf
 Croissant on boxes there, Jump, location 195), 138 of 244; the Market (one door, all of it free, no locations; Kali's
-shop shut until her board quest is taken, left so), 139 of 244; the rest of `room-checklist.md` to go.
+shop shut until her board quest is taken, left so), 139 of 244; the Beehive Lift (the ground free; the elevator's
+platform and the inn's upstairs each up with Jump or Bee Fly, a drop down; two new locations: a Lore Book behind the
+inn's high door, kept open, build step 65, and the medal Fortify on its roof, Bee Fly, 196 and 197), 140 of 244, the
+Defiant Root done; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -5618,6 +5622,26 @@ berry's own `Start` hides it when #15 is already taken. Test `TestDefiantRootSqu
 berry on its rooftop with flag 201 on.
 
 *Code: `logic/defiant_root.py` (`LIMIT_FLAGS`, the Square's locations), `logic/__init__.py`. The mod:
+`World/KeptOpen.cs`, unchanged.*
+
+## Build step 65: the Defiant Root inn's upstairs door open
+
+**Found (2026-10-09, mapping the Beehive Lift, `DefiantRoot2`):** the inn's high door, up a ledge (Jump or Bee Fly),
+has a Lore Book behind it, and the door is shut by `Base/DoorLock` until flag 408. Only the innkeeper's daughter sets
+408, when she is talked to in the Termite Capitol's industrial district (`TermiteIndustrial` line 21; she is there
+from story flag 409). So in vanilla the room opens chapters later, and the logic would have to tie a Lore Book in
+Defiant Root to a far room's story (`MEASURED.md`, the Beehive Lift).
+
+**Asked and decided (the user, 2026-10-09):** keep it open in every seed. Her story stays the game's: she is still in
+the Termite Capitol until talked to, and the inn shows her only from 408.
+
+**Built** (the apworld only: the mod's own list does it): `scenery_hidden` gets `DefiantRoot2`'s `Base/DoorLock`, as
+build step 59 opened the wizard's tower's. The door's own transfer needs nothing else. The Lore Book (`Defiant Root:
+Beehive Lift, Above the Inn`, 196) needs only reaching upstairs. Test `TestBeehiveLift`.
+
+**Status:** built (2026-10-09); not yet seen in game.
+
+*Code: `logic/defiant_root.py` (`SCENERY_HIDDEN`, the Beehive Lift's areas and locations). The mod:
 `World/KeptOpen.cs`, unchanged.*
 
 # How it works
