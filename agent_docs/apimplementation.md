@@ -140,7 +140,7 @@ this file and that doc disagree, that doc is right.
 66. [Build step 66: a give the game repeats, its check done, is the game's own (Morty's Bed Bug)](#build-step-66-a-give-the-game-repeats-its-check-done-is-the-games-own-mortys-bed-bug)
 67. [Build step 67: what lies behind the Sand Castle Key and the Rusty Key held out](#build-step-67-what-lies-behind-the-sand-castle-key-and-the-rusty-key-held-out)
 68. [Build step 68: the Ancient Castle boss room's wall open](#build-step-68-the-ancient-castle-boss-rooms-wall-open)
-69. [Build step 69: the Honey Factory's door from the Beehive Lift open](#build-step-69-the-honey-factorys-door-from-the-beehive-lift-open)
+69. [Build step 69: the Honey Factory's door from Outside the Beehive open](#build-step-69-the-honey-factorys-door-from-outside-the-beehive-open)
 
 **How it works**
 
@@ -3250,7 +3250,7 @@ berry #24 in an alcove off the top right, Shield, then Jump or Bee Fly, location
 room (one region, both doors free, the Watcher's fight on the way across needing nothing; its wall before the
 treasure room's door kept open, build step 68; no items), 150 of 244; the treasure room (one region, its door free;
 the castle's artifact on a platform, Jump or Bee Fly, held out of `ARTIFACTS` with the castle, build step 67), 151 of
-244, the Ancient Castle done; the Bee Kingdom Hive from 2026-10-09: its Beehive Lift (as Defiant Root's: the bottom,
+244, the Ancient Castle done; the Bee Kingdom Hive from 2026-10-09: Outside the Beehive (the bottom,
 the elevator bee down for nothing and the hive's main door, and the left, a bridge between the hive's side door and
 the factory's, cut off from each other; the factory door kept open, build step 69; no items), 152 of 244; the rest
 of `room-checklist.md` to go.
@@ -5791,13 +5791,13 @@ wall gone with the coffin still there, then the fight and its scene as before, i
 
 *Code: `logic/ancient_castle.py` (`SCENERY_HIDDEN`). The mod: `World/KeptOpen.cs`, unchanged.*
 
-## Build step 69: the Honey Factory's door from the Beehive Lift open
+## Build step 69: the Honey Factory's door from Outside the Beehive open
 
-**Found (2026-10-09, mapping the Bee Kingdom's Beehive Lift, `BeehiveOutside`):** the bridge's door to the Honey
+**Found (2026-10-09, mapping Outside the Beehive, `BeehiveOutside`):** the bridge's door to the Honey
 Factory (`loadzone factory`) and its other half inside (`HoneyFactoryEntrance`'s `loadzoneoutside`) exist in the game
 only from flag 299; before that, from 169, a scene at the door (`Event88`) takes the party in. The logic had no rule on
 the door, so it walked into the factory before the game allows (build step 67's note). Arriving through either half
-while it's shut, the game pushes the party past it (`MEASURED.md`, the Bee Kingdom's Beehive Lift).
+while it's shut, the game pushes the party past it (`MEASURED.md`, Outside the Beehive).
 
 **Asked and decided (the user, 2026-10-09):** "we should just always have this door be open instead"; and "we should
 open the door properly from both sides" once the closed models still stood in the way.
@@ -5806,7 +5806,7 @@ open the door properly from both sides" once the closed models still stood in th
 `scenery_hidden` both closed models, `BeehiveOutside`'s `Base/Door` (hidden in the game from 169) and
 `HoneyFactoryEntrance`'s `Base/DoorE` (from 299), as build step 65 opened the inn's. The door needs nothing, which the
 logic already said, now true. `Event88`'s trigger, at the same spot from 169 until 299, is left as it is. Test
-`TestHiveBeehiveLift`.
+`TestOutsideTheBeehive`.
 
 **Status:** built (2026-10-09); seen the same day in seed `AP_70580691250444408633` through the dev `liveslot`: with
 every flag off, the door open-looking from both sides, the factory entered and left through it.

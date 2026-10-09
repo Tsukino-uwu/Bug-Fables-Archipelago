@@ -252,7 +252,7 @@ as it is, a frozen record.
 
 ## Bee Kingdom Hive
 
-- [x] BeehiveOutside (62) — the Beehive Lift (as Defiant Root's); its factory door kept open (build step 69); for the
+- [x] BeehiveOutside (62) — Outside the Beehive; its factory door kept open (build step 69); for the
   quest pass: Event88 at that door from 169 until 299 (the factory's story scene); for the discovery sweep: discovery
   25 (Event104, the left bridge, from 299 until 224; the user: keep it but faster, skip the warning line before it)
 - [ ] BeehiveThroneRoom (63)

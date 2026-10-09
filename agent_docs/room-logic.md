@@ -299,7 +299,7 @@ logic for all rooms, we need to check all the unused or not randomized entrances
 shuffle leaves out (`doors.json`'s `fixed`, parked or unexported doors) gone through with the user, each joining the
 shuffle unless the user agrees a reason (`apimplementation.md`, Where it stands, Next 2).
 
-**One room at a time** (the user, 2026-10-09, the Bee Kingdom's Beehive Lift, after I traced which scenes in other rooms
+**One room at a time** (the user, 2026-10-09, Outside the Beehive, after I traced which scenes in other rooms
 set its doors' flags and where its factory scene leads: "we should assume and work room per room, not
 different/neightbouring rooms. I want to map out 'THIS' specific room, and then do the other rooms afterwards"; "we
 work on things 1 room at a time"). The room is drafted from its own data (its entities, doors and flag-switched

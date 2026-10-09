@@ -13,7 +13,7 @@ LOCATIONS = (
              rule=CanUse("Beemerang Halt") & CanUse("Dash"), reach=LATER_CHAPTERS),
 )
 
-# The door back out to the Bee Kingdom's Beehive Lift, made in the game only from 299: kept present with its other half
+# The door back out to Outside the Beehive, made in the game only from 299: kept present with its other half
 # (bee_kingdom_hive.py) (the user, 2026-10-09).
 KEPT_PRESENT = (
     EntityRef("HoneyFactoryEntrance", "loadzoneoutside"),

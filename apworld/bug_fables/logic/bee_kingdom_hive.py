@@ -15,7 +15,7 @@ LOCATIONS = (
 KEPT_PRESENT = (
     # Beette herself, made only after chapter 3 (flag 299) (the user, 2026-10-04: "make it appear always").
     EntityRef("BeehiveBalcony", "smug bee"),
-    # The Beehive Lift's factory door, made in the game only from 299, open from the start with its other half inside
+    # Outside the Beehive's factory door, made in the game only from 299, open from the start with its other half inside
     # (honey_factory.py) (the user, 2026-10-09: "always have this door be open").
     EntityRef("BeehiveOutside", "loadzone factory"),
 )
@@ -28,7 +28,7 @@ FREE_SALES = (
     FreeSale("BeehiveBalcony", (20, 21)),
 )
 MAP_AREAS = (
-    # The Beehive Lift (BeehiveOutside; named by the user, 2026-10-09, as Defiant Root's), two parts with no way between
+    # Outside the Beehive (BeehiveOutside; named by the user, 2026-10-09), two parts with no way between
     # them inside the room: the bottom (the elevator bee and the hive's main door) the map's own region, nothing needed
     # across it; the left, a bridge between the hive's side door and the factory's door, cut off.
     Area("BeehiveOutside", "Left", ("loadzone inside factory side", "loadzone factory"), False_()),

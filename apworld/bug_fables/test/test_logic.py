@@ -1159,8 +1159,8 @@ class TestCastleTreasureRoom(BugFablesTestBase):
         self.assertNotIn(345, {artifact.source.flag for artifact in ARTIFACTS})
 
 
-class TestHiveBeehiveLift(BugFablesTestBase):
-    # BeehiveOutside, the Bee Kingdom's Beehive Lift (the user, 2026-10-09): the bottom (the elevator, the main door) and
+class TestOutsideTheBeehive(BugFablesTestBase):
+    # BeehiveOutside, Outside the Beehive (the user, 2026-10-09): the bottom (the elevator, the main door) and
     # the left bridge (the side door, the factory's) with no way between; the elevator bee sends the party down to
     # Defiant Root's for nothing, while the way up keeps its stand-in.
 

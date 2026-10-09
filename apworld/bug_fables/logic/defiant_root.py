@@ -66,7 +66,7 @@ MAP_AREAS = (
     Area("DefiantRoot2", "Upstairs", (), _UP, out=one_way(None, _UP)),
 )
 TRANSFERS = (
-    # Up from the Beehive Lift's elevator bee; the way back down is the Bee Kingdom's (bee_kingdom_hive.py).
+    # Up from the Beehive Lift's elevator bee; the way back down is from Outside the Beehive (bee_kingdom_hive.py).
     Transfer("elevator", "DefiantRoot2", "BeehiveOutside", LATER_CHAPTERS, two_way=False, from_area="Elevator"),
 )
 # The inn's upstairs door (DefiantRoot2), locked until flag 408, set only when its innkeeper's daughter is talked to in

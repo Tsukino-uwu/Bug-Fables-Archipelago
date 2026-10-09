@@ -1589,7 +1589,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   branch after 346 is set; `Event203` already wraps its insert, `try { Insert(6, 17) } catch { Add(17) }`. The game
   reads `boardquests[1]` and `[2]` only by contents (`Contains`, `Count`, `Remove`, the quests page in stored order),
   never by position (a review, 2026-10-09). Used by `ChapterQuests.cs`. No pickups, discoveries, hazards or map enemies.
-  **`BeehiveOutside`, the Bee Kingdom's Beehive Lift (2026-10-09, the user; named by the user, as Defiant Root's):** two
+  **`BeehiveOutside`, Outside the Beehive (2026-10-09, the user; named by the user):** two
   parts with no way between them inside the room (the user). The bottom: the elevator bee's guard (`elevatorguard`,
   talked to) sends the party down to Defiant Root's Beehive Lift, nothing needed; the hive's main door at the same spot
   is two doors, `loadzonecorridor` to `BeehiveScannerRoom` until flag 160 and `loadzoneinside` to `BeehiveMainArea`
