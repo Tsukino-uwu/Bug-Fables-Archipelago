@@ -3179,7 +3179,8 @@ a drop down; six new locations there, 189 to 194: a Lore Book behind a box and M
 Juice and crystal berry #15 on the rooftops, kept there until taken, build step 64, and the mayor's storage's Lore Book
 and Dark Cherries behind its locked door, the Desert Key's stand-in; the Bed Bug a new useful key item), 137 of 244;
 the Well (its landing and bounce pad up to the town; its right side, the hideout's door, by Beetle Dig; a Leaf
-Croissant on boxes there, Jump, location 195), 138 of 244; the rest of `room-checklist.md` to go.
+Croissant on boxes there, Jump, location 195), 138 of 244; the Market (one door, all of it free, no locations; Kali's
+shop shut until her board quest is taken, left so), 139 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

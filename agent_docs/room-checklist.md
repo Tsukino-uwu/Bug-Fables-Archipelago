@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**138 of 244 done.**
+**139 of 244 done.**
 
 ## Outskirts
 
@@ -222,7 +222,10 @@ as it is, a frozen record.
   the discovery sweep: discovery 29 (the museum's signs)
 - [x] DefiantRootWell (59) — the Well; for the quest pass: Astotheles' Rusty Key (line 3, from 300 until 239)
 - [ ] DefiantRoot2 (60)
-- [ ] DefiantRoot3 (61) — to be named the Market (the user, 2026-10-09)
+- [x] DefiantRoot3 (61) — the Market (named by the user); no locations; for the quest pass: Kali's shop, shut until
+  her board quest 36 is taken (flag 265; left so, the user), her Stolen Silk turn-in (a Lore Book, prize medal 13),
+  Zasp's doll trade, Butomo's and Geno's trades, the Mechanical Claw's (medal 61); for the sellers' pass: the item
+  shop, the poison seller, the Magic Ice seller (from 345), the bakery and the smithy
 
 ## Ancient Castle
 

@@ -1446,6 +1446,11 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   from it by burrowing, Beetle Dig. A Leaf Croissant (item 148, flag 734) on boxes on the right side, Jump. `Base/Quad`
   is hidden from flag 18 (the story's Beetle Dig); with 18 off on the test file it was shown and the burrow still went
   across.
+  **`DefiantRoot3`, the Market (2026-10-09, the user; named by the user):** one door (to the Square), everything on the
+  ground and free: every NPC, every shop, the bakery and the smithy (insides of the same map). No pickups, bushes or dig
+  spots. Kali's shop (`door shop`) exists from flag 265, the taking of board quest 36; until then its sign (`kalisign`,
+  "Under renovation") stands in front. Inside (`insideid` 1) Kali, a cook (`Event3`), takes the Stolen Silk (key item
+  108, line 166) and `Event173` gives a Lore Book (line 171) and prize medal 13, sets 471 and completes quest 36.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
