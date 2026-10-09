@@ -3796,7 +3796,8 @@ either one wrong).
   the three horn tags "Untagged" while the Horn Slash is locked, Kabbu's swing and its sound hidden, the tap let through
   once the Dash is learned, a dashing Horn Dash's hitbox tagged `BeetleDash` only for the boulder it touches; `Tick`
   quiet during a tap or a Dash), built and loaded (`installed in DoActionTap: 3 of 3 horn tags, Kabbu's swing and its
-  sound`). Not reviewed, no docs, no test, not seen. A misread summary had the user worried the Horn Dash would need
+  sound`). Not reviewed, no docs, no test, not seen. **Left uncommitted on purpose for the next chat to finish and
+  commit:** no other chat works on it; it is this session's own work, not a peer's. A misread summary had the user worried the Horn Dash would need
   the horn: it doesn't. The first press without the horn: the buzzer, no swing (my pick, as locked moves do today).
 - **Open:** the Dash's own build step (63): docs (Next 23, build steps 21 and 23, `MEASURED.md` on the tag consumers
   and its line ~2697), a review, then TO-CHECK's new "every learned ability, one copy at a time" (a fresh seed with
