@@ -1248,6 +1248,8 @@ class TestScannerRoom(BugFablesTestBase):
         back = rows[("BeehiveMainArea", "loadzoneoutside - Duplicate")]
         self.assertEqual(back["data"][0], 64)
         self.assertNotIn("copy", back)
-        # The game reads seven vectors when a door's data has more than one entry.
+        # When a door's data has more than one entry, TransferMap reads data 1-3 and vectordata 3-6 (DoorRows refuses
+        # a row that doesn't fit).
         for row in rows.values():
-            self.assertEqual(len(row["vectors"]), 7)
+            self.assertTrue(len(row["data"]) == 1 or len(row["data"]) >= 4, row)
+            self.assertTrue(len(row["data"]) == 1 or len(row["vectors"]) >= 7, row)

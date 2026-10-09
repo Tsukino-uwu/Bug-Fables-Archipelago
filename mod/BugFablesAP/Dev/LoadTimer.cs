@@ -48,10 +48,9 @@ namespace BugFablesAP
             {
                 harmony.Patch(m, prefix: Own(nameof(TransferStart)));
             }
-            foreach (MethodBase m in loadMap)
-            {
-                harmony.Patch(m, prefix: Own(nameof(Begin)), postfix: Own(nameof(EndLoadMap)));
-            }
+            // LoadMap(int) only for its time: the other two call it.
+            MethodBase loadById = AccessTools.Method(typeof(MainManager), nameof(MainManager.LoadMap), new[] { typeof(int) });
+            harmony.Patch(loadById, prefix: Own(nameof(Begin)), postfix: Own(nameof(EndLoadMap)));
             harmony.Patch(create, prefix: Own(nameof(Begin)), postfix: Own(nameof(EndCreate)));
             foreach (MethodBase m in loadMap)
             {

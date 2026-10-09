@@ -145,14 +145,15 @@ namespace BugFablesAP
         }
 
         // A door row with this seed's place, target and spots; a copy loses its requires and limit (always there). Null
-        // when the row isn't a door or the seed's values don't fit (TransferMap reads vectordata 3-6 when data has more
-        // than one entry).
+        // when the row isn't a door or the seed's values don't fit: when data has more than one entry, TransferMap reads
+        // data 1-3 and vectordata 3-6.
         private static string Rewrite(string row, Row r)
         {
             string[] f = row.Split('}');
             if (f.Length <= 175 || f[1].Trim() != "DoorOtherMap" || r.Data == null || r.Vectors == null
                 || r.Data.Length < 1 || r.Data.Length > 10 || r.Vectors.Length < 3 || r.Vectors.Length > 10
-                || (r.Data.Length > 1 && r.Vectors.Length < 7) || !Enum.IsDefined(typeof(MainManager.Maps), r.Data[0]))
+                || (r.Data.Length > 1 && (r.Data.Length < 4 || r.Vectors.Length < 7))
+                || !Enum.IsDefined(typeof(MainManager.Maps), r.Data[0]))
             {
                 return null;
             }
@@ -189,7 +190,7 @@ namespace BugFablesAP
         private static string Num(float v) => v.ToString(CultureInfo.InvariantCulture);
 
         // The arrival spots of the seed's door on fromMap leading to target (by name when given), for DoorInto; null
-        // when the seed has none. reroutes: whether the seed re-points that map's door of this name elsewhere.
+        // when the seed has none.
         internal static Vector3[] Into(MainManager.Maps target, string fromMap, string door)
         {
             if (randomizerOn == null || !randomizerOn() || fromMap == null)
@@ -202,6 +203,7 @@ namespace BugFablesAP
             return r?.Vectors;
         }
 
+        // Whether the seed sends that map's door of this name elsewhere.
         internal static bool Repointed(string map, string door) =>
             randomizerOn != null && randomizerOn() && (seed?.Invoke()?.DoorRows ?? new List<Row>()).Any(x =>
                 x.CopyMap == null && string.Equals(x.Map, map, StringComparison.OrdinalIgnoreCase) && x.Door == door);

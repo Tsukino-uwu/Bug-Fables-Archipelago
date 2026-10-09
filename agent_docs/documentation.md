@@ -3289,9 +3289,11 @@ added (`DayNight`). A copy (`copy`: a map and entity) is that door's row with th
 limit dropped (always there), and its data and vectors (the walk in, the appear and walk-to spots, then the camera's
 four, which the game reads when the data has more than one entry); it is appended, and its name added to the names in
 the same order. A re-point rewrites the map's own door's row in place, since scenes find entities by their row. The game
-then builds and runs both like its own doors. `DoorInto` (the dev warp, the Warp button, a seed's start) asks the seed's
-rows first and skips a game row the seed sends elsewhere. With Archipelago off, the rows are the game's. The log says
-`[doorrows] installed`, and for each map what it copied or re-pointed, or why not.
+then builds and runs both like its own doors. A row the game can't run is refused: when a door's data has more than one
+entry, its transfer reads data 1 to 3 and vectordata 3 to 6, so such a row needs at least 4 data and 7 vectors (a
+review's find, 2026-10-09). `DoorInto` (the dev warp, the Warp button, a seed's start) asks the seed's rows first and
+skips a game row the seed sends elsewhere. With Archipelago off, the rows are the game's. The log says `[doorrows]
+installed`, and for each map what it copied or re-pointed, or why not.
 
 Found while testing: the copied top door's walk in, mirrored from the bottom door's, pointed past the corridor's shut
 end; the game's transfer waits for that walk to end, so the screen stayed black 3.8 s more (the dev load timer). It now

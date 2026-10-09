@@ -91,7 +91,7 @@ namespace BugFablesAP
         internal readonly List<DayNight.Move> SceneryMoved;
         internal readonly List<DayNight.EntityName> SceneryOff;
         internal readonly List<DayNight.Switch> EntitiesMoved;
-        // Doors the seed adds to a map or sends elsewhere; empty for a seed from an older apworld.
+        // Doors the seed adds to a map or sends elsewhere; null for a seed from an older apworld.
         internal readonly List<DoorRows.Row> DoorRows;
         // Flags set with another one an event sets (the Bee Kingdom's scan).
         internal readonly List<ApConnection.FlagWith> FlagsWith;
