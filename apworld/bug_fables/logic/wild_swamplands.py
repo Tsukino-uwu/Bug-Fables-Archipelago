@@ -4,14 +4,21 @@ from __future__ import annotations
 
 from rule_builder.rules import Has, True_
 
-from ..custom_rules import CanUse, Member, one_way
-from ..data_types import ALWAYS_SET, Area, EntityRef, FlagSwap, Location, Pickup, Source, StoryEvent, Transfer
+from ..custom_rules import ANY_ATTACK, CanUse, Member, one_way
+from ..data_types import (ALWAYS_SET, Area, EntityRef, FlagSwap, Location, MapScene, Pickup, Source, StoryEvent,
+                          Transfer)
 
 _UP = CanUse("Jump") | CanUse("Bee Fly")
 _TREE_DOWN = "Swamp Tree Knocked Down"
 _BRIDGE_DOWN = "Swamp Lower Bridge Knocked Down"
 # The long swamp room's crossing from its west part to its middle.
 _CROSS_WEST = (CanUse("Jump") & CanUse("Freeze")) | CanUse("Bee Fly")
+_LIFT = "Swamp Lift Running"
+# Swamplands5's left side to its right: Bee Fly, or the center platform moved by the right side's lever, hit from the
+# top left (past a boulder, Horn Dash) with the Beemerang over Jump, once the bottom left's lever (past thorns: the
+# Shield or Bee Fly; any attack) has moved the platform in its way; then Jump across.
+_LEFT_TO_RIGHT = CanUse("Bee Fly") | (CanUse("Jump") & CanUse("Horn Dash") & CanUse("Beemerang Toss") & ANY_ATTACK
+                                      & (CanUse("Shield") | CanUse("Bee Fly")))
 
 LOCATIONS = (
     # Where the game teaches the Horn Dash (Event131, flag 39): the boulder at the bridge's bottom, talked to with
@@ -27,6 +34,18 @@ LOCATIONS = (
     Location("Wild Swamplands: Lily Pad Pond, Grass in the Bottom Right", 182, "Swamplands2",
              Source(regional=6, pickup=Pickup(map="Swamplands2", type=0, item=1)), rule=CanUse("Horn Slash"),
              category="hidden_item", no_jump=True),
+    # Crystal berry #27, dug up under a boulder on the right side (the user, 2026-10-09).
+    Location("Wild Swamplands: Junction, Dig Spot", 183, "Swamplands5",
+             Source(berry=27, pickup=Pickup(map="Swamplands5", type=3, item=0)),
+             rule=CanUse("Horn Dash") & CanUse("Beetle Dig"), category="crystal_berry"),
+    # A Clear Bomb on a vine high above the center platform, coming back each visit (regional flag 34): from the right
+    # side, the platform lowered by its lever, a Beemerang held behind it (Halt), Jump on, the Beemerang let go raises
+    # it, and the Toss hits the vine. It falls on the left side: back on the right, the lever lowers the platform again,
+    # then Jump across and back (dropped to the left with the platform up, the way back is the long one; the user,
+    # 2026-10-09).
+    Location("Wild Swamplands: Junction, Vine above the Platform", 184, "Swamplands5",
+             Source(regional=34, pickup=Pickup(map="Swamplands5", type=0, item=36)),
+             rule=CanUse("Jump") & CanUse("Beemerang Halt")),
 )
 STORY_EVENTS = (
     # Leafbug Crossing's tree, knocked down by the horn from the middle (Event129: the hidden switch `eventhit`, hit by
@@ -38,6 +57,10 @@ STORY_EVENTS = (
     # platform for good.
     StoryEvent("Wild Swamplands: Bridge, Lower Bridge Knocked Down", _BRIDGE_DOWN, "SwamplandsBridge", Source(flag=337),
                rule=CanUse("Horn Slash"), area="Top Right"),
+    # Swamplands5's lift between its right side and its top right, started by the lever up there (any attack; it sets
+    # 354 and runs for good).
+    StoryEvent("Wild Swamplands: Junction, Lift Lever Hit", _LIFT, "Swamplands5", Source(flag=354), rule=ANY_ATTACK,
+               area="Top Right"),
 )
 MAP_AREAS = (
     # The swamp boss's room (the user, 2026-10-08): its bottom (the door, the save crystal, the healing flower) the
@@ -82,6 +105,16 @@ MAP_AREAS = (
          & (CanUse("Jump") | CanUse("Bee Fly"))),
     Area("Swamplands4", "Right Door", ("loadzoneright",), CanUse("Horn Dash") & CanUse("Beetle Dig"),
          to="Swamplands4 (Right)"),
+    # Swamplands5 (the user, 2026-10-09): its right side (the door to Swamplands6, the dig spot, a lever moving the
+    # center platform) the map's own region. Its left door's side, across the center: Bee Fly both ways; to the left,
+    # the lever (any attack) and Jump, the platform then crossed back with Jump, or the Shield down onto the thorns,
+    # one-way; to the right as _LEFT_TO_RIGHT says. Its top right (the doors to Swamplands7 and 8, the save crystal, the
+    # lift's lever) a drop down to the right side; back up the lift once started, Jump to get on.
+    Area("Swamplands5", "Left", ("loadzoneleft",),
+         (CanUse("Jump") & ANY_ATTACK) | CanUse("Bee Fly") | one_way(CanUse("Shield"), _LEFT_TO_RIGHT),
+         out=_LEFT_TO_RIGHT),
+    Area("Swamplands5", "Top Right", ("loadzone north", "loadzoneright"), Has(_LIFT) & CanUse("Jump"),
+         out=one_way(None, Has(_LIFT) & CanUse("Jump"))),
 )
 TRANSFERS = (
     # Leafbug Crossing's upper right down into the middle, a drop: back up, the tree knocked down and Jump or Bee Fly.
@@ -106,6 +139,11 @@ KEPT_OPEN = (
 # the bridge down to the bottom.
 SCENERY_HIDDEN = (
     EntityRef("SwamplandsBridge", "Base/BridgeWalls"),
+)
+# Swamplands5's centipede scene (Event147, on the first entry by any door, until 383) leaves the party at the left
+# door, which would strand a first entry from the top right without its lift: never played (the user, 2026-10-09).
+SCENES_KEPT_AWAY = (
+    MapScene("Swamplands5", 147, 383),
 )
 # Bounce pads are always there (the user, 2026-10-08): the bridge's bottom one, made only after the swamp's boss (359),
 # keeps the bottom from being a dead end.

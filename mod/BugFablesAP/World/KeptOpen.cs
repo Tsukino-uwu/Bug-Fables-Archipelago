@@ -240,6 +240,17 @@ namespace BugFablesAP
                     log.LogInfo($"[open] {map}: {npc.name} now there until flag {swap.To} instead of {swap.From} ({(hidden ? "set: kept away" : "not set: present")})");
                 }
             }
+            // scenes_kept_away: the map's own start-up scene runs from its LateUpdate while its flag is off; set first,
+            // as the game sets it on starting the scene.
+            foreach (ApConnection.MapScene scene in (connection.ScenesKeptAway ?? new List<ApConnection.MapScene>())
+                .Where(s => s.Map == __instance.mapid.ToString()))
+            {
+                if (!MainManager.instance.flags[scene.Flag])
+                {
+                    MainManager.instance.flags[scene.Flag] = true;
+                    log.LogInfo($"[open] {scene.Map}: its scene Event{scene.Event} kept away (flag {scene.Flag} set)");
+                }
+            }
             // held_until: added to the entity's requires (never replacing them), so the game keeps it away until then.
             foreach (ApConnection.Blocker held in (connection.HeldUntil ?? new List<ApConnection.Blocker>())
                 .Where(b => b.Map == map && b.Flag >= 0))

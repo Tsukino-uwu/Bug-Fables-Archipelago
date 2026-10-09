@@ -301,6 +301,19 @@ class DialogueFlag:
         return {"map": self.map, "entity": self.entity, "flag": self.flag, "to": self.to}
 
 
+@dataclass(frozen=True, slots=True)
+class MapScene:
+    """A map's own start-up scene (MapControl.autoevent: event, flag) kept away in a seed (scenes_kept_away, in its
+    area's module): the client sets its flag as the map is built, as the game does when it starts it."""
+
+    map: str
+    event: int
+    flag: int
+
+    def to_slot(self) -> dict[str, Any]:
+        return {"map": self.map, "event": self.event, "flag": self.flag}
+
+
 # A flag every new file sets and nothing clears: what a story flag always set by then in vanilla is repointed to.
 ALWAYS_SET = 691
 

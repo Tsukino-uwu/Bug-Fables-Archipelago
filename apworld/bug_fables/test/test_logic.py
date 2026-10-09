@@ -680,3 +680,32 @@ class TestLongSwampRoomNoReturn(BugFablesTestBase):
         west = self.multiworld.get_entrance("Swamplands4 to Swamplands4 (West)", self.player)
         self.assertTrue(west.access_rule(self.state_with("Jump")))
         self.assertFalse(west.access_rule(self.state_with()))
+
+
+class TestJunction(BugFablesTestBase):
+    # Swamplands5 (the user, 2026-10-09): its centipede scene never plays; up to its top right, the lift and Jump; its
+    # left side to the right by Bee Fly or the long way round to the lever; the vine's Clear Bomb, Jump and the Halt.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_centipede_scene_kept_away(self) -> None:
+        scenes = self.world.fill_slot_data()["scenes_kept_away"]
+        self.assertIn({"map": "Swamplands5", "event": 147, "flag": 383}, scenes)
+
+    def test_lift_up_to_the_top_right(self) -> None:
+        up = self.multiworld.get_entrance("Swamplands5 to Swamplands5 (Top Right)", self.player)
+        self.assertFalse(up.access_rule(self.state_with("Jump")))
+        self.assertFalse(up.access_rule(self.state_with("Swamp Lift Running")))
+        self.assertTrue(up.access_rule(self.state_with("Jump", "Swamp Lift Running")))
+
+    def test_left_to_right(self) -> None:
+        across = self.multiworld.get_entrance("Swamplands5 (Left) to Swamplands5", self.player)
+        self.assertTrue(across.access_rule(self.state_with("Bee Fly")))
+        self.assertFalse(across.access_rule(self.state_with("Jump", "Progressive Dash", "Progressive Dash",
+                                                            "Progressive Beemerang")))
+        self.assertTrue(across.access_rule(self.state_with("Jump", "Progressive Dash", "Progressive Dash",
+                                                           "Progressive Beemerang", "Shield")))
+
+    def test_vine_needs_jump_and_the_halt(self) -> None:
+        vine = self.multiworld.get_location("Wild Swamplands: Junction, Vine above the Platform", self.player)
+        self.assertFalse(vine.access_rule(self.state_with("Jump", "Progressive Beemerang")))
+        self.assertTrue(vine.access_rule(self.state_with("Jump", "Progressive Beemerang", "Progressive Beemerang")))

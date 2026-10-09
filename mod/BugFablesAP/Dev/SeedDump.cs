@@ -75,6 +75,11 @@ namespace BugFablesAP
             {
                 Add("goal_flags", g++, $"{goal.Flag}|{Ints(goal.Events)}");
             }
+            int k = 0;
+            foreach (ApConnection.MapScene scene in c.ScenesKeptAway ?? new List<ApConnection.MapScene>())
+            {
+                Add("scenes_kept_away", k++, $"{scene.Map}|{scene.Event}|{scene.Flag}");
+            }
             int t = 0;
             foreach (DoorShuffle.Target door in c.DoorTargets ?? new List<DoorShuffle.Target>())
             {

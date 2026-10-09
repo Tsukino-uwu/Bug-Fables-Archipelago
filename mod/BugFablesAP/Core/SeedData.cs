@@ -46,6 +46,8 @@ namespace BugFablesAP
         internal readonly List<ApConnection.FlagSwap> LimitFlags;
         // The goal's flags, each with the events that set it; null for a seed without them, whose goal is never sent.
         internal readonly List<ApConnection.GoalFlag> GoalFlags;
+        // Map start-up scenes never played: their flag set as the map is built.
+        internal readonly List<ApConnection.MapScene> ScenesKeptAway;
         internal readonly List<DoorShuffle.Target> DoorTargets;
         // Story-only maps: no Warp or map travel there. Empty for a seed from an older apworld.
         internal readonly HashSet<string> NoTravelMaps;
@@ -124,6 +126,12 @@ namespace BugFablesAP
             {
                 Flag = e.Value<int>("flag"),
                 Events = e["events"]?.Values<int>().ToArray() ?? new int[0],
+            });
+            ScenesKeptAway = SlotData.List(data, "scenes_kept_away", e => new ApConnection.MapScene
+            {
+                Map = e.Value<string>("map"),
+                Event = e.Value<int>("event"),
+                Flag = e.Value<int>("flag"),
             });
             LocationVars = SlotData.ByLocation(data, "location_vars",
                 v => new[] { v.Value<int>("var"), v.Value<int>("at_least") });

@@ -193,6 +193,7 @@ namespace BugFablesAP
         internal List<FlagSwap> ActivationFlags => seedData?.ActivationFlags;
         internal List<FlagSwap> LimitFlags => seedData?.LimitFlags;
         internal List<GoalFlag> GoalFlags => seedData?.GoalFlags;
+        internal List<MapScene> ScenesKeptAway => seedData?.ScenesKeptAway;
         internal List<DoorShuffle.Target> DoorTargets => seedData?.DoorTargets;
         internal Dictionary<string, int[]> EnemySwaps => seedData?.EnemySwaps;
         internal Dictionary<string, string> MusicMap => seedData?.MusicMap;
@@ -258,6 +259,13 @@ namespace BugFablesAP
         {
             internal int Flag;
             internal int[] Events;
+        }
+
+        internal sealed class MapScene
+        {
+            internal string Map;
+            internal int Event;
+            internal int Flag;
         }
 
         internal sealed class Blocker

@@ -1364,6 +1364,22 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   middle to the right side, grass and a boulder (the horn and Horn Dash), then a jump (Jump), or Bee Fly for both,
   both ways. The right door (to Swamplands5) in a part of its own, Horn Dash and Beetle Dig both ways. No locations;
   a flower enemy, a Leafbug Archer and a Leafbug Ninja for the enemy pass.
+  **`Swamplands5`, the Junction (2026-10-09, the user; named by the user):** four doors. The left door's side: past a
+  boulder (Horn Dash) the top left; past thorns (the Shield, or Bee Fly) the bottom left, whose lever (`switch`, any
+  attack, a toggle with no flag: reset each visit) moves the top left's platform out of the way. The right side (the
+  bottom door to Swamplands6, crystal berry #27 dug up under a boulder, Horn Dash and Beetle Dig; a lever, `switch -
+  Duplicate`, a toggle too) whose lever moves the crane's center platform, so the left and right sides cross with Jump;
+  from the left, that lever is hit with the Beemerang from the top left with Jump once the top left's platform is
+  moved. Bee Fly crosses both ways; the Shield (or Bee Fly) drops from the right onto the thorns to the left, one-way.
+  The top right (the doors to Swamplands7 and 8, the save crystal) cut off but for a drop to the right side; its lever
+  (`switch - Duplicate - Duplicate`, any attack, sets 354 for good) starts the lift (`platform`, y 2 to 7.5), and the
+  way back up is the lift with Jump to get on. A Clear Bomb on a vine (`coiledvine`, regional flag 34) above the
+  center platform: from the right side, the platform lowered, a Beemerang held behind it (Halt), Jump on, the
+  Beemerang let go raises the platform, the Toss hits the vine; it falls on the left side (back on the right, the
+  lever lowers the platform again for Jump across and back; dropped to the left with it up, the way back is the long
+  one). The centipede scene (`Event147`, the map's auto-start, until 383) plays on the first entry by any door and
+  leaves the party at the left door (`EventControl.cs:24624-24706`). A Leafbug Clubber, a Madesphy and two Chompers
+  for the enemy pass.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

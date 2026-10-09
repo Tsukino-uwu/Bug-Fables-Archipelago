@@ -133,6 +133,7 @@ this file and that doc disagree, that doc is right.
 59. [Build step 59: the wizard's tower open, its fall scene kept away](#build-step-59-the-wizards-tower-open-its-fall-scene-kept-away)
 60. [Build step 60: the goal guard, a goal flag set only by its own events](#build-step-60-the-goal-guard-a-goal-flag-set-only-by-its-own-events)
 61. [Build step 61: the swamp bridge kept up, its collapse kept away](#build-step-61-the-swamp-bridge-kept-up-its-collapse-kept-away)
+62. [Build step 62: a map's own start-up scene kept away (the Junction's centipede)](#build-step-62-a-maps-own-start-up-scene-kept-away-the-junctions-centipede)
 
 **How it works**
 
@@ -3155,7 +3156,10 @@ Leafbug ambush for the enemy pass), 129 of 244; Leafbug Crossing (three parts in
 its tree, the horn, and the upper right, each Jump or Bee Fly; before the tree falls, a drop from the upper right into
 the middle), 130 of 244; the swamp bridge, kept up (build step 61), 131 of 244; the long swamp room (a boulder at each
 door, Horn Dash, Beetle Dig too on the right; the middle by Jump and Freeze, or Bee Fly, back without Freeze one-way;
-the right side by the horn, Horn Dash and Jump, or Bee Fly), 132 of 244; the rest of `room-checklist.md` to go.
+the right side by the horn, Horn Dash and Jump, or Bee Fly), 132 of 244; the Junction (four doors; a crane's platform
+moved by levers between its left and right sides, Bee Fly or the long way round; a lift up to its top right; crystal
+berry #27 and a Clear Bomb on a vine, locations 183 and 184; its centipede scene kept away, build step 62), 133 of 244;
+the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -5501,6 +5505,25 @@ and no leafbugs, the bottom's pad there and landing at the left end, the drop fr
 bridge's story event), `data_types.py` and `regions.py` (`Transfer.to_area`). The mod: `World/KeptOpen.cs`,
 unchanged.*
 
+## Build step 62: a map's own start-up scene kept away (the Junction's centipede)
+
+**Found (2026-10-09, mapping the Junction, `Swamplands5`):** some maps start a scene of their own on arrival while its
+flag is off (`MapControl.autoevent`, run from the map's `LateUpdate`). The Junction's (`Event147`, a centipede passing,
+until 383) plays on the first entry by any of its four doors and leaves the party at the left door. A first entry from
+its top right (a shuffled door, a random start, or simply from Swamplands7 or 8) would then be on the left side,
+whose way back up needs the lift, whose lever is up in the top right. Asked, the user's pick: never played in a seed.
+It only sets 383 and moves a centipede that the map has standing out of sight anyway.
+
+**Built:** `scenes_kept_away` in `slot_data` (`[{"map", "event", "flag"}]`, `SCENES_KEPT_AWAY` in each area's module):
+as the map is built (`KeptOpen.AfterCreate`, before its `LateUpdate` checks), the mod sets the scene's flag, as the
+game does when it starts the scene, and logs `[open] <map>: its scene EventN kept away`. The dev console's warp did the
+same for every such scene already; a seed now does it for the listed ones. Test `TestJunction`.
+
+**Status:** built (2026-10-09); not yet seen in game (the test file's 383 was already set by a dev warp).
+
+*Code: `data_types.py` (`MapScene`), `logic/wild_swamplands.py` (`SCENES_KEPT_AWAY`), `slot_data.py`. The mod:
+`World/KeptOpen.cs`, `Core/SeedData.cs`.*
+
 # How it works
 
 ## 1. The big picture: generator, seed, server, game
@@ -5611,6 +5634,7 @@ only way a setting chosen at generation (an option, a version number) reaches th
   `present_from` and `dialogue_flags`, the story's blockers and scenery the mod keeps the way the logic assumes;
 - the goal guard (build step 60): `goal_flags`, the goal's flags and the events that set them, and `activation_flags`
   and `limit_flags`, entities that borrow a goal flag repointed;
+- `scenes_kept_away` (build step 62): maps' own start-up scenes never played, their flag set as the map is built;
 - `submarine_item`, `present_with_item` and `held_until_item`: the submarine is an item, and its docks are made, and
   who shows them off kept away, by its key item in the bag (build step 36);
 - `door_targets` (the entrance randomizer), `enemy_swaps` (enemy shuffle) and `start` (the starting location);

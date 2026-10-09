@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**132 of 244 done.**
+**133 of 244 done.**
 
 ## Outskirts
 
@@ -203,7 +203,7 @@ as it is, a frozen record.
 - [x] SwamplandsBoss (154) — mapped early (2026-10-08) while testing its boss; for the quest pass: Kabbu's postgame
   grave scene (`kabbuevent`, flags 555-645)
 - [x] Swamplands4 (158)
-- [ ] Swamplands5 (159)
+- [x] Swamplands5 (159) — the Junction; its centipede scene kept away (build step 62)
 - [ ] Swamplands6 (160)
 - [ ] Swamplands7 (161)
 - [ ] Swamplands8 (162)

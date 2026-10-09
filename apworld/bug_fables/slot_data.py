@@ -7,9 +7,10 @@ from typing import TYPE_CHECKING, Any
 from .data_tables import (ACTIVATION_FLAGS, ARTIFACT_WRITERS, ARTIFACTS, DAY_NIGHT, DIALOGUE_FLAGS, ENTITIES_MOVED,
                           FREE_SALES, HELD_UNTIL, HELD_UNTIL_ITEM, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN, KEPT_PRESENT,
                           LIMIT_FLAGS, LOCATION_NAME_TO_ID, PRESENT_FROM, PRESENT_WITH_ITEM, ROADBLOCKS, SCENE_CAMERAS,
-                          SCENERY_HIDDEN, SCENERY_MOVED, SCENERY_OFF, SCENERY_PRESENT, STORY_ONLY_MAPS, TIME_SWITCHES)
+                          SCENERY_HIDDEN, SCENERY_MOVED, SCENERY_OFF, SCENERY_PRESENT, SCENES_KEPT_AWAY,
+                          STORY_ONLY_MAPS, TIME_SWITCHES)
 from .data_types import (DayNight, DialogueFlag, EntityMove, EntityRef, FlagEntity, FlagSwap, FreeSale, ItemEntity,
-                         SceneCamera, SceneryMove, Source, TimeSwitch)
+                         MapScene, SceneCamera, SceneryMove, Source, TimeSwitch)
 from .options import ShopContents
 
 if TYPE_CHECKING:
@@ -76,7 +77,8 @@ def _pickup(source: Source) -> dict[str, Any]:
 
 
 def _entities(entries: Iterable[EntityRef | FlagEntity | ItemEntity | DialogueFlag | FlagSwap | FreeSale | DayNight
-                                  | TimeSwitch | SceneryMove | EntityMove | SceneCamera]) -> list[dict[str, Any]]:
+                                  | TimeSwitch | SceneryMove | EntityMove | SceneCamera | MapScene]
+              ) -> list[dict[str, Any]]:
     return [entry.to_slot() for entry in entries]
 
 
@@ -133,6 +135,8 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         # switch reads, what a cut grass sets) and their limit flags.
         "activation_flags": _entities(ACTIVATION_FLAGS),
         "limit_flags": _entities(LIMIT_FLAGS),
+        # Map start-up scenes never played ([{"map", "event", "flag"}]): the client sets the flag as the map is built.
+        "scenes_kept_away": _entities(SCENES_KEPT_AWAY),
         # The goal's flags, each with the events that set it ([{"flag", "events"}]): the client counts only these, and
         # turns one set any other way back off.
         "goal_flags": [{"flag": flag, "events": list(ARTIFACT_WRITERS[flag])}
