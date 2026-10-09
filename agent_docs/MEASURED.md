@@ -1460,6 +1460,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   0), up inside with Jump or Bee Fly (seen with the lock hidden by `liveslot`, the door open); from upstairs the medal
   Fortify (medal 39, flag 149) on the inn's roof, flown around to with Bee Fly (not from the ground). The innkeeper's
   rest costs 12 berries (line 5), the daughter's line 27 7 berries. No bushes or dig spots.
+  **`SandCastleEntrance`, the castle's entrance (2026-10-09, the user):** its left door (from `DesertSandCastle`) and
+  its right door (to `SandCastleMainRoom`) on either side of a gap. The bridge across shows only while the crystal is
+  lit: `crystal`, a `StencilSwitch`, toggled by the Beemerang, a horn or Dash tag or ice (`NPCControl.cs`, its trigger),
+  lights a radius (`MapControl.CheckStencilSwitch`) and resets each visit. Seen: the Beemerang Toss lights it from
+  either side; Bee Fly crosses without it. Its first light plays `Event157` (the `eventcaller` AND gate, with the
+  hidden `switch`, until 416). A Krawler (enemy pass), a pit (`Hole`); no items.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

@@ -875,3 +875,17 @@ class TestBeehiveLift(BugFablesTestBase):
     # Its lock stood until the innkeeper's daughter, in the Termite Capitol, was talked to (build step 65).
     def test_inn_door_kept_open(self) -> None:
         self.assertIn({"map": "DefiantRoot2", "entity": "Base/DoorLock"}, self.world.fill_slot_data()["scenery_hidden"])
+
+
+class TestCastleEntrance(BugFablesTestBase):
+    # SandCastleEntrance (the user, 2026-10-09): the middle's bridge shows only while the crystal is lit, which the
+    # Beemerang Toss does from either side; Bee Fly crosses without it.
+    options = {"shuffle_field_moves": True}
+
+    def test_middle_needs_the_toss_or_bee_fly(self) -> None:
+        for entrance in ("SandCastleEntrance to SandCastleEntrance (Right)",
+                         "SandCastleEntrance (Right) to SandCastleEntrance"):
+            way = self.multiworld.get_entrance(entrance, self.player)
+            self.assertFalse(way.access_rule(self.state_with("Horn Slash", "Progressive Freeze")), entrance)
+            self.assertTrue(way.access_rule(self.state_with("Progressive Beemerang")), entrance)
+            self.assertTrue(way.access_rule(self.state_with("Bee Fly")), entrance)

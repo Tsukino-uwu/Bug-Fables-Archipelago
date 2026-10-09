@@ -3184,7 +3184,9 @@ Croissant on boxes there, Jump, location 195), 138 of 244; the Market (one door,
 shop shut until her board quest is taken, left so), 139 of 244; the Beehive Lift (the ground free; the elevator's
 platform and the inn's upstairs each up with Jump or Bee Fly, a drop down; two new locations: a Lore Book behind the
 inn's high door, kept open, build step 65, Jump or Bee Fly inside, and the medal Fortify on its roof, Bee Fly, 196
-and 197), 140 of 244, the Defiant Root done; the rest of `room-checklist.md` to go.
+and 197), 140 of 244, the Defiant Root done; the Ancient Castle from 2026-10-09: its entrance (the middle's bridge
+shows while its crystal is lit, the Beemerang Toss from either side, or Bee Fly; no items), 141 of 244; the rest of
+`room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

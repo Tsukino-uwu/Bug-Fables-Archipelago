@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**140 of 244 done.**
+**141 of 244 done.**
 
 ## Outskirts
 
@@ -232,7 +232,7 @@ as it is, a frozen record.
 
 ## Ancient Castle
 
-- [ ] SandCastleEntrance (116)
+- [x] SandCastleEntrance (116) — no locations; its crystal's first light plays a short scene (`Event157`, flag 416)
 - [ ] SandCastleSlidePuzzle (117)
 - [ ] SandCastleStatueRoom (118)
 - [ ] SandCastleBasement (119)
