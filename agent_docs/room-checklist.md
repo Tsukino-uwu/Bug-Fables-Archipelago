@@ -243,8 +243,8 @@ as it is, a frozen record.
 - [x] SandCastleMainRoom (121) — the Main Room, the castle's hub; its top reached only through rooms still to map (the
   rock room, the pressure plate room, the boss key room), so unreachable in logic until then (Known issues); for the
   discovery sweep: discovery 16 up top (line 2, flag 306)
-- [x] SandCastleBossKeyRoom (122) — the Boss Key Room; its spots pending with the castle; for the enemy pass: the key's
-  Warden fight (Event115, three flying, Vi)
+- [x] SandCastleBossKeyRoom (122) — the Boss Key Room; its spots pending with the castle; for the enemy pass: the
+  key's Warden fight (Event115, three flying, Vi)
 - [ ] SandCastlePressurePuzzle (126)
 - [ ] SandCastleRockRoom (127)
 - [ ] SandCastleBossRoom (128)

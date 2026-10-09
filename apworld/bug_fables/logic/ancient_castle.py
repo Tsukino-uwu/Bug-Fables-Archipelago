@@ -112,8 +112,8 @@ MAP_AREAS = (
          out=one_way(CanUse("Jump"), _TO_TOP_RIGHT)),
     # The Boss Key Room (SandCastleBossKeyRoom; the user, 2026-10-09): its door and the room's edge the map's own
     # region; its right side (the key) across a gap filled by a block pushed with the horn from the puzzle below, then
-    # Jump, or Bee Fly; back, Jump or Bee Fly (the bounce pad alone falls short). The puzzle below is a drop, Jump or Bee
-    # Fly back up, with nothing in it.
+    # Jump, or Bee Fly; back, Jump or Bee Fly (the bounce pad alone falls short). The puzzle below is a drop, Jump or
+    # Bee Fly back up, with nothing in it.
     Area("SandCastleBossKeyRoom", "Right", (), (CanUse("Jump") & CanUse("Horn Slash")) | CanUse("Bee Fly"),
          out=_UP),
 )
