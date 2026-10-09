@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**154 of 244 done.**
+**155 of 244 done.**
 
 ## Outskirts
 
@@ -256,7 +256,8 @@ as it is, a frozen record.
   quest pass: Event88 at that door from 169 until 299 (the factory's story scene); for the discovery sweep: discovery
   25 (Event104, the left bridge, from 299 until 224; the user: keep it but faster, skip the warning line before it)
 - [x] BeehiveThroneRoom (63) — the Throne Room; its door kept open from the main area (build step 70)
-- [ ] BeehiveScannerRoom (64)
+- [x] BeehiveScannerRoom (64) — the Scanner Room; kept between the outside and the inside, its gate open, its scan
+  location 208 with flag 160 (build steps 72-74)
 - [ ] BeehiveMainArea (67)
 - [ ] HBsLab (68)
 - [ ] BeehiveBalcony (69)

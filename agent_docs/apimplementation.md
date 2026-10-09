@@ -788,6 +788,14 @@ be wrong.
     nothing of which ones. Adding them to that line would be a new save format (never). The way left: read each file's
     flags at the file select, read-only, the game's save format parsed by the mod; more work, and a misread only draws
     wrong icons. Its own step in the mod guide.
+66. **Faster room changes** (the user, 2026-10-09: "lets save it until later, lets finish mapping out logic for all
+    rooms first"; a Quality of life row, its own step in the mod guide). A door's room change takes about 2 s, nearly
+    all the game's own (`MEASURED.md`, the dev load timer): the fade out with the walk into the door, about 0.25 s
+    more walking in the black before the load starts, the load itself (about 70 ms), two fixed waits in
+    `TransferMap` (0.1 s and 0.3 s), the fade in, then the walk into the room. The plan, agreed in outline: keep both
+    short fades ("wouldn't it look weird without at least a tiny blackfade ? i don't want it to feel like loading,
+    but i also don't want it to be instant/weird"), start the load as soon as the screen is black, cut the fixed
+    waits to the frames the camera and sprites need, keep the visible walk in (maybe quicker): about 1.2 s a change.
 
 **Known issues:**
 
@@ -3261,7 +3269,10 @@ the elevator bee down for nothing and the hive's main door, and the left, a brid
 the factory's, cut off from each other; the factory door kept open, build step 69; no items), 152 of 244; the Throne
 Room (one region, its door free, kept open from the main area, build step 70; no items), 153 of 244; Jaune's Gallery
 (one region, its door free, kept open from the main area, build step 71; a Bad Book behind the paintings, nothing
-needed, location 207), 154 of 244; the rest of `room-checklist.md` to go.
+needed, location 207), 154 of 244; the Scanner Room (a corridor, one region, nothing needed across; kept between
+the outside and the inside, its top door made and the main area's bottom exit sent into it, build step 73; its gate
+open, build step 72; its scan location 208 with flag 160, build step 74), 155 of 244; the rest of
+`room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
