@@ -2077,7 +2077,9 @@ step 12), Madame Butterfly's item shop and the caravan seen on screen (2026-09-2
 settlement entrance's caravan stall, the Golden Settlement square's shop (2026-10-07), the Honey Factory Lobby's
 (*Honey Factory: Lobby, Shop 1* to *5*, ids 212-216, 2026-10-10) and, back in the mapped Defiant Root Market, its three
 shops (*Defiant Root: Market, Item Shop 1* to *5*, *Poison Shop 1* to *4*, *Bakery Shop 1* to *3*, ids 217-228,
-2026-10-10; its one-item sellers wait for a later sweep, the user); Shades's shop not built (it waits for all 50
+2026-10-10; its one-item sellers wait for a later sweep, the user), both seen the same day through the dev `liveslot`:
+the Lobby's shop opening on talking to the bee outside it, the Market's twelve slots each naming an Archipelago item;
+Shades's shop not built (it waits for all 50
 crystal berries as locations); the other item shops to follow, each with its room.
 
 *Code: `options.py` (`ShuffleMedalShops`, `ShuffleItemShops`, `ShopContents`), `rules.py` (`SHOP_CATEGORIES`,
