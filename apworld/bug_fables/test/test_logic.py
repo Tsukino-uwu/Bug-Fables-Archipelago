@@ -1345,6 +1345,13 @@ class TestWorkerRooms(BugFablesTestBase):
         self.assertTrue(desk.access_rule(self.state_with("Bee Fly")))
 
 
+class TestCore(BugFablesTestBase):
+    # HoneyFactoryCore (the user, 2026-10-10): one region, its door free; the gate to the boss arena the story's.
+    def test_one_region(self) -> None:
+        parts = {r.name for r in self.multiworld.get_regions(self.player) if r.name.startswith("HoneyFactoryCore")}
+        self.assertEqual(parts, {"HoneyFactoryCore"})
+
+
 class TestScannerRoom(BugFablesTestBase):
     # BeehiveScannerRoom, the Scanner Room (the user, 2026-10-09): one region, nothing needed across; kept between the
     # outside and the inside (build step 73), its gate open (72), its scan location 208 with flag 160 (74).

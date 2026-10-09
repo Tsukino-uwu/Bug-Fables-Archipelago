@@ -1722,6 +1722,14 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   330, her line 24 gives the medal Power Exchange, 49) and the overseer's second spot (from 324). The sleeping quarters
   (`loadzonebeds`): three workers, nothing needed in or out (the user); one line (11) sells a Magic Seed (item 11) for
   25 berries. No hazards, auto-start scenes or map enemies.
+  **`HoneyFactoryCore` (2026-10-10, the user):** one door (`loadzone`, to the Lobby), nothing needed in or out; the
+  machine has nothing to interact with. A gate at the top (`Base/FrontWall/Gate`, until 299) shuts off the boss arena,
+  empty but for the boss's and a bee-bot's parked models (seen, warped behind it). From 218 until 299 the overseer, HB
+  and the assistant stand here (218 from the storage's last room, `FactoryStorageOverseer`'s `end event`, `Event102`);
+  the overseer's line 6 runs `Event99`, the chapter 3 finale: a fight with Heavy Drone B-33 (enemy 46, flying) in the
+  arena, then 299, 176 and 75 set, prize medal 6, two medals added to a shop, and a save prompt, the party still in the
+  room. From 299 the three are gone and the gate hidden: the arena open and empty. No pickups, hazards, auto-start
+  scenes or map enemies.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**161 of 244 done.**
+**162 of 244 done.**
 
 ## Outskirts
 
@@ -282,7 +282,8 @@ as it is, a frozen record.
   the desk's Shock Candy, location 229 (Jump or Bee Fly); the Factory Pass (flag 178, Jump and the Beemerang Toss or
   Bee Fly) the game's own until Next 67; for the quest pass: Malbee's Power Exchange (324 to 330); for the discovery
   sweep: the portrait (discovery 15); for the sellers' pass: the quarters' Magic Seed (25 berries, line 11)
-- [ ] HoneyFactoryCore (75)
+- [x] HoneyFactoryCore (75) — one region, its door free; for the quest and enemy passes: the chapter 3 finale
+  (`Event99`, from 218, enemy 46, prize medal 6, sets 299), its gate open only then
 - [ ] FactoryProcessingFirstRoom (83)
 - [ ] FactoryProcessing2 (84)
 - [ ] FactoryProcessingPump (85)

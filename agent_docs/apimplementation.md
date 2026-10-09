@@ -3302,8 +3302,8 @@ Next 63), 158 of 244; Honeycomb's Lab (one region, its door free, no location), 
 the Honey Factory's Lobby (its bottom a drop, Jump or Bee Fly back up; the processing door's Factory Pass lock kept, a
 stand-in until Next 67; the storage door open, build step 77; its shop's five slots, locations 212-216), 160 of 244;
 the Worker Rooms (the office and the sleeping quarters cut off from each other; the desk's Shock Candy, location 229,
-Jump or Bee Fly; the Factory Pass the game's own pickup until Next 67), 161 of 244; the rest of `room-checklist.md` to
-go.
+Jump or Bee Fly; the Factory Pass the game's own pickup until Next 67), 161 of 244; the Core (one region, its door
+free, the gate to the boss arena the story's), 162 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

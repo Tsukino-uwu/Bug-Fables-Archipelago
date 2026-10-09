@@ -59,6 +59,8 @@ MAP_AREAS = (
     # inside the room: the office (its door, the desk, the portrait, the PC) the map's own region, nothing needed to go
     # in, out or to the portrait; the sleeping quarters (the beds door and three workers), cut off.
     Area("HoneyFactoryWorkerRooms", "Sleeping Quarters", ("loadzonebeds",), False_()),
+    # HoneyFactoryCore (2026-10-10): one region, its one door free; the gate at its top shut until the chapter 3 finale
+    # (Event99, which sets 299 and ends in the room), behind it only the empty boss arena (the user).
 )
 DOOR_RULES = (
     # The Lobby's processing door, locked until the Factory Pass is used on it (keything, Event59 key index 4, then
