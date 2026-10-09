@@ -392,7 +392,10 @@ be wrong.
     ones faded is worth a look on screen when it's built, kept only if it looks good. The pool: always 7, *Artifacts
     Required* 1-7, so the game's 7 icons can show it (agreed); a bigger pool breaks nothing in Archipelago but needs a
     filler slot per Artifact and a display past 7 icons, so later if asked. A yaml
-    option, so its own build step.
+    option, so its own build step. **The option (the user, 2026-10-09):** *Artifact Shuffle*, two choices: off, each
+    artifact where vanilla gives it (today's), or on, the seven anywhere in the multiworld; no mode shuffling them only
+    among the chapter ends (Pokémon Crystal's `randomize_badges` has one, read 2026-10-09, `licensing.md`). Until it's
+    built, the pause menu draws each set artifact flag's own icon (the mod guide, step 48).
 29. **A bosses goal, an idea for later** (2026-09-27): a *Goal* option (Artifacts / Bosses) and *Bosses
     Required* (all, or a number): each boss's beaten flag an event the goal counts, as artifacts are today. **Decided
     (2026-09-27): story bosses only**; the bounties maybe a side setting later, once *Shuffle Bounties* gives

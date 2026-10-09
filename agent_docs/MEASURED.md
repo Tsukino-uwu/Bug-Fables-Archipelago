@@ -267,7 +267,9 @@ throttled to changes.
   menu draws that many (`PauseMenu.cs:2398`). The save stores the count as `LoadData.progression`
   (`MainManager.cs:17167`, field 15 of its line), and the file select draws that many icons
   (`StartMenu.cs:792`). **Having an artifact = its flag being set**: usable as checks, or as a "collect N"
-  goal.
+  goal. The quests page also goes by the count: a chapter's main quest (11 + its index) shows its artifact black while
+  `SaveProgressIcons() < index + 1` (`PauseMenu.UpdateText`). Out of story order both are wrong: with only 345 set,
+  the pause menu showed the first chapter's icon (seen 2026-10-09). Used by `ArtifactIcons.cs`.
 - **The save file's layout, as far as seen:** 18 lines, where line 6 is the three item lists joined by `@`,
   line 10 is `librarystuff` (5 rows), line 11 the 750 `flags`, and line 14 the 100 `regionalflags`. Other
   lines changed with ordinary play (position, stats, counters) and aren't identified yet.

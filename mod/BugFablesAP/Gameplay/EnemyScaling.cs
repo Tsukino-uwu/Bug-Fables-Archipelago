@@ -49,7 +49,7 @@ namespace BugFablesAP
         // keys and tablet (parts of his fight).
         private static readonly HashSet<int> Untouched = new HashSet<int> { 2, 11, 12, 18, 110, 101, 102, 103 };
         // The artifact flags, one per chapter end, and the level of the areas vanilla opens after that many.
-        private static readonly int[] ArtifactFlags = { 41, 88, 299, 345, 347, 346, 555 };
+        internal static readonly int[] ArtifactFlags = { 41, 88, 299, 345, 347, 346, 555 };
         private static readonly int[] ArtifactLevel = { 1, 6, 9, 13, 16, 19, 23, 27 };
 
         internal static void Enable(ManualLogSource logger, Func<bool> randomizerEnabled, Func<string> scalingMode)

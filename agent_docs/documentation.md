@@ -98,6 +98,8 @@ anyone curious about the process, or thinking of doing the same for another game
 44. [Enemysanity: an enemy's won fight drops its check](#44-enemysanity-an-enemys-won-fight-drops-its-check)
 45. [The Termacade: tokens, the gift and the prize stand](#45-the-termacade-tokens-the-gift-and-the-prize-stand)
 46. [The Platinum Card carries the bank's doubled interest](#46-the-platinum-card-carries-the-banks-doubled-interest)
+47. [A chapter's main quest filed without freezing its scene](#47-a-chapters-main-quest-filed-without-freezing-its-scene)
+48. [The pause menu's artifacts: each one's own icon](#48-the-pause-menus-artifacts-each-ones-own-icon)
 
 ## Where it stands
 
@@ -3227,3 +3229,40 @@ The log says `[card] installed in MainManager.DoClock`, or an error when the rea
 **Status:** built (2026-10-08); not yet seen in game.
 
 *Code: `Items/PlatinumCard.cs`, `Core/Plugin.cs`.*
+
+## 47. A chapter's main quest filed without freezing its scene
+
+Found mapping the Ancient Castle's treasure room (2026-10-09): taking the artifact froze the party. Each chapter's
+scene files that chapter's main quest (11 to 17) at a fixed place in the quest lists, `boardquests[2].Insert(3, 14)`
+in the castle's, and `List.Insert` throws when the list is shorter than that place. In story order it never is, since
+the chapters before have filed theirs; in a seed, any chapter's scene can come first. Nine such inserts in seven scenes
+(`Event45`, 73, 99, 118, 142, 194, 203; `MEASURED.md`, the treasure room), each throwing after the scene has set its
+artifact flag, so the party stays frozen with the rest of the scene unrun.
+
+With Archipelago on, a transpiler on each of those scenes' coroutines swaps every `List<int>.Insert` for a call that
+takes the same list, place and quest and, when the place is past the end, files the quest at the end instead. The
+list is the game's own field, written by the game's own `Insert`; only the order of the done list can differ from a
+story-order save. With Archipelago off, the call inserts exactly as the game does. The log names each insert it
+guards (`[quests] installed: quest 14 at 3`) and each quest it moves (`[quests] quest 14 filed at 1, not 3`).
+
+**Status:** built (2026-10-09); not yet seen in game.
+
+*Code: `World/ChapterQuests.cs`, `Core/Plugin.cs`.*
+
+## 48. The pause menu's artifacts: each one's own icon
+
+The pause menu counts the artifact flags (`SaveProgressIcons`) and draws that many icons from the first chapter's on
+(`PauseMenu.BuildWindow`), and the quests page blacks out a chapter's artifact until the count reaches that chapter
+(`UpdateText`). Right only in story order: with only the castle's artifact (flag 345), the menu showed the first
+chapter's icon (seen 2026-10-09, `MEASURED.md`). Asked and decided (the user, 2026-10-09): in a seed, the pause menu
+shows each artifact you have; the file select keeps the game's count, since a save stores only the number.
+
+With Archipelago on, `BuildWindow`'s read of `StartMenu.psprite` returns the same seven icons with the set flags'
+first, so the game's loop draws the icons of the artifacts held; and the quests page's count becomes the chapter's own
+flag (all seven if set, none if not). With Archipelago off, both read the game's own values. Next 28's *Artifact
+Shuffle* will draw the Artifacts received instead (`apimplementation.md`). The log says `[artifacts] installed in
+PauseMenu.BuildWindow` and `in PauseMenu.UpdateText`, or what it didn't find.
+
+**Status:** built (2026-10-09); not yet seen in game.
+
+*Code: `Ui/ArtifactIcons.cs`, `Gameplay/EnemyScaling.cs` (its `ArtifactFlags`), `Core/Plugin.cs`.*
