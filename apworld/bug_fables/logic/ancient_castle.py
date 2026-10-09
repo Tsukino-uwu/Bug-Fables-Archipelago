@@ -20,15 +20,16 @@ _UPPER_LIFT = "Sand Castle Upper Lift Running"
 _TO_MIDDLE_RIGHT = (Has(_LOWER_LIFT) | Has(_UPPER_LIFT)) & CanUse("Jump")
 _TO_TOP_RIGHT = Has(_UPPER_LIFT) & CanUse("Jump")
 # The Pressure Puzzle's plates, both ways it's played: the crystal hit, enemies frozen, ice knocked about with the
-# horn, and the raised platforms crossed with Jump or Bee Fly.
-_PRESSURE = CanUse("Freeze") & CanUse("Horn Slash") & _UP
+# horn. Played for the key, its raised platforms are then crossed with Jump or Bee Fly.
+_PRESSURE = CanUse("Freeze") & CanUse("Horn Slash")
+_PRESSURE_KEY = _PRESSURE & _UP
 _PRESSURE_SOLVED = "Sand Castle Pressure Puzzle Door Open"
 # The two Ancient Keys (114), each used up by one of the main room's two locks. While the castle's spots are pending
 # both are the game's own pickups, neither behind a lock, so either lock opens once both are reached: the Basement's
 # behind its barrier, the Pressure Puzzle's past its plates.
 _ANCIENT_KEYS = (CanReachRegion("SandCastleBasement (Middle)")
                  & ((CanUse("Jump") & CanUse("Beemerang Halt")) | CanUse("Bee Fly"))
-                 & CanReachRegion("SandCastlePressurePuzzle") & _PRESSURE)
+                 & CanReachRegion("SandCastlePressurePuzzle") & _PRESSURE_KEY)
 
 LOCATIONS = (
     # Every spot in the castle is pending (the user, 2026-10-09; build step 67): its door needs the Sand Castle Key,
@@ -67,7 +68,7 @@ LOCATIONS = (
     # The Pressure Puzzle (SandCastlePressurePuzzle; named by the user, 2026-10-09): an Ancient Key on a ledge by a
     # statue in its top right, reached only on the platforms its plates raise (too far to fly to without them).
     Location("Ancient Castle: Pressure Puzzle, By the Statue", 205, "SandCastlePressurePuzzle",
-             Source(flag=289, pickup=Pickup(map="SandCastlePressurePuzzle", type=1, item=114)), rule=_PRESSURE,
+             Source(flag=289, pickup=Pickup(map="SandCastlePressurePuzzle", type=1, item=114)), rule=_PRESSURE_KEY,
              pending=True),
 )
 STORY_EVENTS = (

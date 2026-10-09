@@ -1539,10 +1539,10 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (`loadzonemain`, to the main room's top left), shut from inside until its plates are played for it, which then stays
   open; arriving through it before then pushes the party past it (seen). The plates (four `PressurePlate`s, arms and
   legs; the AND gate `eventcheck`, data `113 1 2 -5`, until 296, runs `Event113`, which sets 296; `Base/CastlePlatform`
-  hidden from 296) take Freeze and the horn (the crystal hit, enemies frozen, ice knocked about) and Jump or Bee Fly for
-  the raised platforms (the user's correction, the same day). Played the other way they raise the platforms to the
-  Ancient Key (`item - Duplicate`, key item 114, flag 289), on a ledge by a statue in the top right, then Jump or Bee
-  Fly across; too far to fly to without them. Two hint tablets; two Psicorps and a Warden (enemy pass).
+  hidden from 296) take Freeze and the horn (the crystal hit, enemies frozen, ice knocked about); for the door nothing
+  more (the user's corrections, the same day). Played the other way they raise the platforms to the Ancient Key
+  (`item - Duplicate`, key item 114, flag 289), on a ledge by a statue in the top right, then Jump or Bee Fly across;
+  too far to fly to without them. Two hint tablets; two Psicorps and a Warden (enemy pass).
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
