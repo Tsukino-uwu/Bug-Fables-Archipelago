@@ -3159,7 +3159,9 @@ door, Horn Dash, Beetle Dig too on the right; the middle by Jump and Freeze, or 
 the right side by the horn, Horn Dash and Jump, or Bee Fly), 132 of 244; the Junction (four doors; a crane's platform
 moved by levers between its left and right sides, Bee Fly or the long way round; a lift up to its top right; crystal
 berry #27 and a Clear Bomb on a vine, locations 183 and 184; its centipede scene kept away, build step 62), 133 of 244;
-the rest of `room-checklist.md` to go.
+Crank Pond (the middle's crank, Beemerang Halt and Jump, to the lower right, back by the lily pad, the horn; its right
+door up a lift, Horn Dash, the Halt and Jump; a Burly Berry and a Crunchy Leaf in grass, locations 185 and 186), 134 of
+244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

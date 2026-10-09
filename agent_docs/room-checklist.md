@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**133 of 244 done.**
+**134 of 244 done.**
 
 ## Outskirts
 
@@ -204,7 +204,7 @@ as it is, a frozen record.
   grave scene (`kabbuevent`, flags 555-645)
 - [x] Swamplands4 (158)
 - [x] Swamplands5 (159) — the Junction; its centipede scene kept away (build step 62)
-- [ ] Swamplands6 (160)
+- [x] Swamplands6 (160) — Crank Pond
 - [ ] Swamplands7 (161)
 - [ ] Swamplands8 (162)
 

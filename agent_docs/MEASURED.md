@@ -1380,6 +1380,15 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   one). The centipede scene (`Event147`, the map's auto-start, until 383) plays on the first entry by any door and
   leaves the party at the left door (`EventControl.cs:24624-24706`). A Leafbug Clubber, a Madesphy and two Chompers
   for the enemy pass.
+  **`Swamplands6`, Crank Pond (2026-10-09, the user; named by the user):** its door from the Junction (top left) and
+  the left side walked between with nothing; a Crunchy Leaf in the bottom left's grass (regional flag 19), the horn.
+  The middle (a crank, `screw`) by Jump or Bee Fly, both ways. The lower right from the middle by the crank (Beemerang
+  Halt) and Jump, or Bee Fly; back, the lily pad (`lilypad - Duplicate`, moving while its grass is cut: the horn on
+  the right side) to the middle and the left side, going back and forth, or Bee Fly. The upper right (the door to
+  Swamplands8; a Burly Berry behind a tree, `hidden`, regional flag 22, its limit 281 set by nothing) cut off but for
+  a drop to the lower right; up, the lift: its crank (`screw - Duplicate`) behind a boulder (`ROTrock`, no flag:
+  back each visit), Horn Dash and Beemerang Halt, then Jump on. A Leafbug Archer, a Madesphy and a Chomper for the
+  enemy pass.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

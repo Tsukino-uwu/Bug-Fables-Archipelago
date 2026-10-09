@@ -709,3 +709,23 @@ class TestJunction(BugFablesTestBase):
         vine = self.multiworld.get_location("Wild Swamplands: Junction, Vine above the Platform", self.player)
         self.assertFalse(vine.access_rule(self.state_with("Jump", "Progressive Beemerang")))
         self.assertTrue(vine.access_rule(self.state_with("Jump", "Progressive Beemerang", "Progressive Beemerang")))
+
+
+class TestCrankPond(BugFablesTestBase):
+    # Swamplands6 (the user, 2026-10-09): the lower right by the middle's crank and Jump, back by the lily pad (the
+    # horn); its right door up the lift, Horn Dash, the Halt and Jump.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_lower_right_by_the_crank(self) -> None:
+        there = self.multiworld.get_entrance("Swamplands6 (Middle) to Swamplands6 (Lower Right)", self.player)
+        back = self.multiworld.get_entrance("Swamplands6 (Lower Right) to Swamplands6 (Middle)", self.player)
+        self.assertFalse(there.access_rule(self.state_with("Progressive Beemerang", "Progressive Beemerang")))
+        self.assertTrue(there.access_rule(self.state_with("Progressive Beemerang", "Progressive Beemerang", "Jump")))
+        self.assertTrue(back.access_rule(self.state_with("Horn Slash")))
+        self.assertFalse(back.access_rule(self.state_with("Jump")))
+
+    def test_right_door_up_the_lift(self) -> None:
+        up = self.multiworld.get_entrance("Swamplands6 (Lower Right) to Swamplands6 (Upper Right)", self.player)
+        self.assertFalse(up.access_rule(self.state_with("Progressive Beemerang", "Progressive Beemerang", "Jump")))
+        self.assertTrue(up.access_rule(self.state_with("Progressive Beemerang", "Progressive Beemerang", "Jump",
+                                                       "Progressive Dash", "Progressive Dash")))

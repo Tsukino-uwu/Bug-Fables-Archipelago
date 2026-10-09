@@ -14,6 +14,8 @@ _BRIDGE_DOWN = "Swamp Lower Bridge Knocked Down"
 # The long swamp room's crossing from its west part to its middle.
 _CROSS_WEST = (CanUse("Jump") & CanUse("Freeze")) | CanUse("Bee Fly")
 _LIFT = "Swamp Lift Running"
+# Crank Pond's lift up to its right door: the crank behind a boulder, then Jump on.
+_CRANK_LIFT = CanUse("Horn Dash") & CanUse("Beemerang Halt") & CanUse("Jump")
 # Swamplands5's left side to its right: Bee Fly, or the center platform moved by the right side's lever, hit from the
 # top left (past a boulder, Horn Dash) with the Beemerang over Jump, once the bottom left's lever (past thorns: the
 # Shield or Bee Fly; any attack) has moved the platform in its way; then Jump across.
@@ -46,6 +48,15 @@ LOCATIONS = (
     Location("Wild Swamplands: Junction, Vine above the Platform", 184, "Swamplands5",
              Source(regional=34, pickup=Pickup(map="Swamplands5", type=0, item=36)),
              rule=CanUse("Jump") & CanUse("Beemerang Halt")),
+    # Crank Pond (Swamplands6; named by the user, 2026-10-09): a Burly Berry behind a tree near the right door, coming
+    # back each visit (regional flag 22; its other hiding flag, 281, is set by nothing), and a Crunchy Leaf in the grass
+    # in the bottom left (regional flag 19), the horn.
+    Location("Wild Swamplands: Crank Pond, Behind the Tree", 185, "Swamplands6",
+             Source(regional=22, pickup=Pickup(map="Swamplands6", type=0, item=3)), no_jump=True,
+             area="Upper Right"),
+    Location("Wild Swamplands: Crank Pond, Grass in the Bottom Left", 186, "Swamplands6",
+             Source(regional=19, pickup=Pickup(map="Swamplands6", type=0, item=0)), rule=CanUse("Horn Slash"),
+             category="hidden_item", no_jump=True),
 )
 STORY_EVENTS = (
     # Leafbug Crossing's tree, knocked down by the horn from the middle (Event129: the hidden switch `eventhit`, hit by
@@ -115,6 +126,15 @@ MAP_AREAS = (
          out=_LEFT_TO_RIGHT),
     Area("Swamplands5", "Top Right", ("loadzone north", "loadzoneright"), Has(_LIFT) & CanUse("Jump"),
          out=one_way(None, Has(_LIFT) & CanUse("Jump"))),
+    # Crank Pond (the user, 2026-10-09): its door from the Junction and its left side the map's own region. The middle
+    # (a crank) by Jump or Bee Fly, both ways. The lower right from the middle by the crank (Beemerang Halt) and Jump,
+    # or Bee Fly; back, the lily pad its grass (the horn) starts, or Bee Fly. The upper right (the door to Swamplands8,
+    # the Burly Berry) a drop down; up, the lift: its crank behind a boulder (Horn Dash, Beemerang Halt), Jump on.
+    Area("Swamplands6", "Middle", (), _UP),
+    Area("Swamplands6", "Lower Right", (), (CanUse("Beemerang Halt") & CanUse("Jump")) | CanUse("Bee Fly"),
+         out=CanUse("Horn Slash") | CanUse("Bee Fly"), to="Swamplands6 (Middle)"),
+    Area("Swamplands6", "Upper Right", ("loadzone right",), _CRANK_LIFT, out=one_way(None, _CRANK_LIFT),
+         to="Swamplands6 (Lower Right)"),
 )
 TRANSFERS = (
     # Leafbug Crossing's upper right down into the middle, a drop: back up, the tree knocked down and Jump or Bee Fly.
@@ -126,6 +146,9 @@ TRANSFERS = (
              to_area="Red Bounce Pad"),
     Transfer("ledge", "SwamplandsBridge", "SwamplandsBridge", CanUse("Jump"), two_way=False,
              from_area="Red Bounce Pad", to_area="Top"),
+    # Crank Pond's lily pad, started by cutting its grass on the right (the horn): it goes back and forth, so it also
+    # takes the party from the lower right to the left side and back.
+    Transfer("lily pad", "Swamplands6", "Swamplands6", CanUse("Horn Slash"), two_way=False, from_area="Lower Right"),
 )
 
 # The swamp bridge stays up (the user, 2026-10-04): its collapse's trigger (Event130, which also needs Maki following)
