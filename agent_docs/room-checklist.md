@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**160 of 244 done.**
+**161 of 244 done.**
 
 ## Outskirts
 
@@ -278,7 +278,10 @@ as it is, a frozen record.
 - [x] HoneyFactoryEntrance (72) — the Lobby; the bottom a drop, Jump or Bee Fly back up; the processing door's Factory
   Pass lock kept (a stand-in until Next 67); the storage door open (build step 77); the shop's five slots, locations
   212-216, its berries with Next 63
-- [ ] HoneyFactoryWorkerRooms (74)
+- [x] HoneyFactoryWorkerRooms (74) — the Worker Rooms; the office and the sleeping quarters cut off from each other;
+  the desk's Shock Candy, location 229 (Jump or Bee Fly); the Factory Pass (flag 178, Jump and the Beemerang Toss or
+  Bee Fly) the game's own until Next 67; for the quest pass: Malbee's Power Exchange (324 to 330); for the discovery
+  sweep: the portrait (discovery 15); for the sellers' pass: the quarters' Magic Seed (25 berries, line 11)
 - [ ] HoneyFactoryCore (75)
 - [ ] FactoryProcessingFirstRoom (83)
 - [ ] FactoryProcessing2 (84)

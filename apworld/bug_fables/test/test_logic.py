@@ -1326,6 +1326,25 @@ class TestLobby(BugFablesTestBase):
                              {"map": "HoneyFactoryEntrance", "keeper": "shopbee - Duplicate", "item": item})
 
 
+class TestWorkerRooms(BugFablesTestBase):
+    # HoneyFactoryWorkerRooms, the Worker Rooms (the user, 2026-10-10): the office and the sleeping quarters cut off
+    # from each other; the Shock Candy on the office's desk, Jump or Bee Fly.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_two_parts_cut_off(self) -> None:
+        for way in ("HoneyFactoryWorkerRooms to HoneyFactoryWorkerRooms (Sleeping Quarters)",
+                    "HoneyFactoryWorkerRooms (Sleeping Quarters) to HoneyFactoryWorkerRooms"):
+            self.assertFalse(self.multiworld.get_entrance(way, self.player).access_rule(
+                self.state_with("Jump", "Bee Fly")))
+
+    def test_desk_needs_jump_or_bee_fly(self) -> None:
+        desk = self.multiworld.get_location("Honey Factory: Worker Rooms, On the Desk", self.player)
+        self.assertEqual(desk.parent_region.name, "HoneyFactoryWorkerRooms")
+        self.assertFalse(desk.access_rule(self.state_with()))
+        self.assertTrue(desk.access_rule(self.state_with("Jump")))
+        self.assertTrue(desk.access_rule(self.state_with("Bee Fly")))
+
+
 class TestScannerRoom(BugFablesTestBase):
     # BeehiveScannerRoom, the Scanner Room (the user, 2026-10-09): one region, nothing needed across; kept between the
     # outside and the inside (build step 73), its gate open (72), its scan location 208 with flag 160 (74).

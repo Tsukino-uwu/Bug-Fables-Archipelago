@@ -807,7 +807,9 @@ be wrong.
     pass in the bag at each lock, so the pool holds one Factory Pass, progression, and every lock needs only it; the
     other pass pickups become ordinary locations. Asked by the user: "similar to the cranks where we made it into just
     1 reusable instead of having 3-4". Built once the rooms holding passes and locks are mapped; until then the
-    Lobby's processing door has a stand-in (`FACTORY_PASS`, the later chapters, `logic/honey_factory.py`).
+    Lobby's processing door has a stand-in (`FACTORY_PASS`, the later chapters, `logic/honey_factory.py`), and the
+    Worker Rooms' pass (flag 178: Jump and the Beemerang Toss, or Bee Fly alone, the user) stays the game's own pickup,
+    since a location there could hold another item while the door still needs a pass.
 
 **Known issues:**
 
@@ -3298,7 +3300,9 @@ door free; Beette's sale, location 78, needing nothing in the room, at her price
 Next 63), 158 of 244; Honeycomb's Lab (one region, its door free, no location), 159 of 244, the Bee Kingdom Hive done;
 the Honey Factory's Lobby (its bottom a drop, Jump or Bee Fly back up; the processing door's Factory Pass lock kept, a
 stand-in until Next 67; the storage door open, build step 77; its shop's five slots, locations 212-216), 160 of 244;
-the rest of `room-checklist.md` to go.
+the Worker Rooms (the office and the sleeping quarters cut off from each other; the desk's Shock Candy, location 229,
+Jump or Bee Fly; the Factory Pass the game's own pickup until Next 67), 161 of 244; the rest of `room-checklist.md` to
+go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
