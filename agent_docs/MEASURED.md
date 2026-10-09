@@ -1457,8 +1457,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   y 5.5) up with Jump or Bee Fly, a drop down; its door is shut by `Base/DoorLock` until flag 408, set only by the
   innkeeper's daughter's line 21 in `TermiteIndustrial` (`drinnkeepergirl`, from 409 until 408), after which she is in
   the inn (`innkeeper girl`, from 408). Behind it a Lore Book (`LoreBook - Duplicate`, key item 52, flag 604, `insideid`
-  0); from upstairs the medal Fortify (medal 39, flag 149) on the inn's roof, flown around to with Bee Fly (not from the
-  ground). The innkeeper's rest costs 12 berries (line 5), the daughter's line 27 7 berries. No bushes or dig spots.
+  0), up inside with Jump or Bee Fly (seen with the lock hidden by `liveslot`, the door open); from upstairs the medal
+  Fortify (medal 39, flag 149) on the inn's roof, flown around to with Bee Fly (not from the ground). The innkeeper's
+  rest costs 12 berries (line 5), the daughter's line 27 7 berries. No bushes or dig spots.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

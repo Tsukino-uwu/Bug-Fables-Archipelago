@@ -35,10 +35,11 @@ LOCATIONS = (
     Location("Defiant Root: Well, By the Boxes", 195, "DefiantRootWell",
              Source(flag=734, pickup=Pickup(map="DefiantRootWell", type=0, item=148)), rule=CanUse("Jump"),
              area="Right"),
-    # The Beehive Lift (DefiantRoot2; named by the user, 2026-10-09), upstairs at the inn: a Lore Book behind its high
-    # door (kept open, build step 65), nothing once up; the medal Fortify on the inn's roof, flown around to, Bee Fly.
+    # The Beehive Lift (DefiantRoot2; named by the user, 2026-10-09), upstairs at the inn: a Lore Book up inside its high
+    # door (kept open, build step 65), Jump or Bee Fly; the medal Fortify on the inn's roof, flown around to, Bee Fly.
     Location("Defiant Root: Beehive Lift, Above the Inn", 196, "DefiantRoot2",
-             Source(flag=604, pickup=Pickup(map="DefiantRoot2", type=1, item=52)), no_jump=True, area="Upstairs"),
+             Source(flag=604, pickup=Pickup(map="DefiantRoot2", type=1, item=52)), rule=_UP, no_jump=True,
+             area="Upstairs"),
     Location("Defiant Root: Beehive Lift, Inn Rooftop", 197, "DefiantRoot2",
              Source(flag=149, pickup=Pickup(map="DefiantRoot2", type=2, item=39)), rule=CanUse("Bee Fly"),
              no_jump=True, area="Upstairs"),

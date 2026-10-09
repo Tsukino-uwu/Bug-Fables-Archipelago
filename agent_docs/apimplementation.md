@@ -3183,8 +3183,8 @@ the Well (its landing and bounce pad up to the town; its right side, the hideout
 Croissant on boxes there, Jump, location 195), 138 of 244; the Market (one door, all of it free, no locations; Kali's
 shop shut until her board quest is taken, left so), 139 of 244; the Beehive Lift (the ground free; the elevator's
 platform and the inn's upstairs each up with Jump or Bee Fly, a drop down; two new locations: a Lore Book behind the
-inn's high door, kept open, build step 65, and the medal Fortify on its roof, Bee Fly, 196 and 197), 140 of 244, the
-Defiant Root done; the rest of `room-checklist.md` to go.
+inn's high door, kept open, build step 65, Jump or Bee Fly inside, and the medal Fortify on its roof, Bee Fly, 196
+and 197), 140 of 244, the Defiant Root done; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -5637,9 +5637,10 @@ the Termite Capitol until talked to, and the inn shows her only from 408.
 
 **Built** (the apworld only: the mod's own list does it): `scenery_hidden` gets `DefiantRoot2`'s `Base/DoorLock`, as
 build step 59 opened the wizard's tower's. The door's own transfer needs nothing else. The Lore Book (`Defiant Root:
-Beehive Lift, Above the Inn`, 196) needs only reaching upstairs. Test `TestBeehiveLift`.
+Beehive Lift, Above the Inn`, 196) needs reaching upstairs, then Jump or Bee Fly inside. Test `TestBeehiveLift`.
 
-**Status:** built (2026-10-09); not yet seen in game.
+**Status:** built (2026-10-09); seen the same day in seed `AP_70580691250444408633` through the dev `liveslot`: the lock
+gone, the door open, the Lore Book reached.
 
 *Code: `logic/defiant_root.py` (`SCENERY_HIDDEN`, the Beehive Lift's areas and locations). The mod:
 `World/KeptOpen.cs`, unchanged.*

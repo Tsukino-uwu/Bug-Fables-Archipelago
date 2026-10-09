@@ -866,7 +866,9 @@ class TestBeehiveLift(BugFablesTestBase):
         medal = self.multiworld.get_location("Defiant Root: Beehive Lift, Inn Rooftop", self.player)
         for spot in (book, medal):
             self.assertEqual(spot.parent_region.name, "DefiantRoot2 (Upstairs)")
-        self.assertTrue(book.access_rule(self.state_with()))
+        self.assertFalse(book.access_rule(self.state_with()))
+        self.assertTrue(book.access_rule(self.state_with("Jump")))
+        self.assertTrue(book.access_rule(self.state_with("Bee Fly")))
         self.assertFalse(medal.access_rule(self.state_with("Jump")))
         self.assertTrue(medal.access_rule(self.state_with("Bee Fly")))
 
