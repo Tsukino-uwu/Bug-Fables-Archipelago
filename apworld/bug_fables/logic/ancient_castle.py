@@ -2,7 +2,7 @@
 mapped room by room (room-checklist.md)."""
 from __future__ import annotations
 
-from rule_builder.rules import False_, Has
+from rule_builder.rules import CanReachRegion, False_, Has
 
 from ..custom_rules import CanUse, one_way
 from ..data_types import ALWAYS_SET, Area, DoorRule, FlagSwap, Location, Pickup, Source, StoryEvent, Transfer
@@ -37,6 +37,9 @@ LOCATIONS = (
              Source(flag=288, pickup=Pickup(map="SandCastleBasement", type=1, item=114)),
              rule=(CanUse("Jump") & CanUse("Beemerang Halt")) | CanUse("Bee Fly"), no_jump=True, pending=True,
              area="Middle"),
+    # The Roof (SandCastleRoof; named by the user, 2026-10-09): a Frost Bomb behind the left statue, nothing needed.
+    Location("Ancient Castle: Roof, Behind the Left Statue", 202, "SandCastleRoof",
+             Source(flag=732, pickup=Pickup(map="SandCastleRoof", type=0, item=44)), no_jump=True, pending=True),
 )
 STORY_EVENTS = (
     # The Slide Puzzle's block (`icepillar`), knocked by the horn onto the plate on its bottom (Event113 sets 284 for
@@ -78,6 +81,11 @@ DOOR_RULES = (
     # The Slide Puzzle's door to the pressure plate room, shut from its side until the puzzle is solved; arriving
     # through it before then, the game pushes the party past it.
     DoorRule("SandCastleSlidePuzzle", "loadzonepressure", Has(_SLIDE_SOLVED)),
+    # The Roof's (SandCastleRoof; the user, 2026-10-09) boss door, locked from its side until the Big Ancient Key (115)
+    # is used; arriving from the boss room, the game pushes the party past the lock. While the castle's spots are
+    # pending the key is the game's own pickup in the boss key room, so reaching that room is the rule (refined when
+    # it's mapped; the key's item once the spots come back, build step 67).
+    DoorRule("SandCastleRoof", "loadzoneboss", CanReachRegion("SandCastleBossKeyRoom")),
 )
 
 # Hidden switches hit while flag 41 (the first boss) is set: the entrance's crystal scene and the basement's platforms

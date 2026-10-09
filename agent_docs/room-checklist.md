@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**144 of 244 done.**
+**145 of 244 done.**
 
 ## Outskirts
 
@@ -238,7 +238,8 @@ as it is, a frozen record.
 - [x] SandCastleSlidePuzzle (117) — the Slide Puzzle
 - [x] SandCastleStatueRoom (118) — the Statue Room (named by the user, for the enemy pass: no location carries it yet)
 - [x] SandCastleBasement (119) — the Basement; its spots pending with the castle (build step 67)
-- [ ] SandCastleRoof (120)
+- [x] SandCastleRoof (120) — the Roof; its spot pending with the castle; the boss door's rule refined with the boss
+  key room
 - [ ] SandCastleMainRoom (121)
 - [ ] SandCastleBossKeyRoom (122)
 - [ ] SandCastlePressurePuzzle (126)

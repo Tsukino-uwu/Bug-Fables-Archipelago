@@ -3215,7 +3215,9 @@ fills its upper gap and opens its upper left door, or Bee Fly crosses; the medal
 location 198), 142 of 244; the Statue Room (over the middle's block on platforms: from the left Icicle and Jump, or
 Bee Fly; from the right Jump or Bee Fly; no items), 143 of 244; the Basement (its door on an isolated ledge, the
 middle by Jump or Bee Fly; three spots on its platforms, the Toss and Jump or Bee Fly, the Ancient Key behind a barrier,
-Halt and Jump or Bee Fly, locations 199-201, pending with the castle's 198, build step 67), 144 of 244; the rest of
+Halt and Jump or Bee Fly, locations 199-201, pending with the castle's 198, build step 67), 144 of 244; the Roof (its
+doors and save crystal free; a Frost Bomb behind the left statue, 202, pending; the boss door locked from its side
+until the Big Ancient Key, the boss key room reached while that key is the game's own pickup), 145 of 244; the rest of
 `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received

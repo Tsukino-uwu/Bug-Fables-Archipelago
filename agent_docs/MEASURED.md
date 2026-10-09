@@ -1494,8 +1494,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   isolated ledge; its second door (`loadzoneright`) parked at y 99, as is its other end (`SandCastleMainRoom`'s
   `loadzonebasementright`): arriving through it (the dev warp, the user's ask) falls into a pit and respawns behind the
   sandpile right of the real door, a softlock (seen 2026-10-09). The door export drops both (`door-graph.py`, y 90 and
-  up); no save point, so no random start. The middle (a safe platform by the big crystal,
-  `crystal - Duplicate`, a `StencilSwitch` drawn as a crystal) across with Jump or Bee Fly. Around it the moving
+  up); no save point, so no random start. The middle (a safe platform by the big crystal, `crystal - Duplicate`, a
+  `StencilSwitch` drawn as a crystal) across with Jump or Bee Fly. Around it the moving
   platforms (`platform1` to `platform3`, `PathPlatform`s, running from the hidden `platformenabler`, flag 41, 691 in a
   seed), each with a switch on it (three `StencilSwitch`es named `crystal`, drawn as switches, their `data[1]` the
   platform's entity, parked at y -30 in the dump). With Jump alone the small platforms need the big crystal lit (the
@@ -1506,6 +1506,12 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   a pit. The castle's two Ancient Keys (here and `SandCastlePressurePuzzle`, flag 289) each open one of the main room's
   locks (`key1`, `key2`, until 292 and 293, `Event59` key index 7, used up); the boss key (115, `SandCastleBossKeyRoom`,
   flag 294) the roof's (`bosslock`, until 295).
+  **`SandCastleRoof`, the Roof (2026-10-09, the user; named by the user):** its left and right doors (both to the main
+  room) and the save crystal free between them; a Frost Bomb (`Item Bomb`, item 44, flag 732) behind the left statue,
+  nothing needed. The boss door in the middle (`loadzoneboss`, to `SandCastleBossRoom`) is locked from the roof by
+  `bosslock` (`Event59` key index 8, the Big Ancient Key, 115, used up; gone from 295); arriving from the boss room
+  pushes the party past it (seen, through the dev warp, which reported the door's own arrival spot as over a hole and
+  stepped to safe ground). A Cursed Cloth (left) and a Krawler (right) for the enemy pass.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
