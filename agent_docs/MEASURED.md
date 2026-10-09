@@ -1701,7 +1701,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   area (seen). The storage door's closed model is `Base/DoorS` (until 211, `Event98`); kept present with the model
   hidden, it was walked through into the Storage Elevator (seen, build step 77). The shop's bee (`shopbee`, until 176)
   talks at line 5, which runs `Event80`'s factory part: flag 176 and the room loaded again, the shop then open (its
-  seller, a storage ant, a door, `Base/DoorLock` gone), nothing needed (the user). A material pile (`Base/materialpile`,
+  seller, a storage ant, a door, `Base/DoorLock` gone), nothing needed (the user). Its keeper (`shopbee - Duplicate`,
+  a `Shop`, from 176) stocks items 10, 9, 20, 49 and 43 (Honey'd Leaf, Leaf Omelet, Glazed Honey, Honey Ice Cream,
+  Shock Berry); in a seed its five slots are locations 212-216. A material pile (`Base/materialpile`,
   until 218) blocks nothing (the user). NPC lines ask for the overseer: "she", stuck in the storage (a worker until
   211), the only one who opens the core's door (its guard's line 7). Story NPCs by flag: Gen and Eri (until 179, then
   211 to 299), Zasp and Mothiva (until 177, then 221 to 299), HB and the crow (until 218), guides, workers. No pickups,

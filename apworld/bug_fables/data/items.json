@@ -117,6 +117,11 @@
     {"name": "Leaf Croissant", "game_id": 148, "kind": 0, "classification": "filler"},
     {"name": "Shaved Ice", "game_id": 47, "kind": 0, "classification": "filler"},
     {"name": "Frost Bomb", "game_id": 44, "kind": 0, "classification": "filler"},
-    {"name": "Cold Salad", "game_id": 53, "kind": 0, "classification": "filler"}
+    {"name": "Cold Salad", "game_id": 53, "kind": 0, "classification": "filler"},
+    {"name": "Honey'd Leaf", "game_id": 10, "kind": 0, "classification": "filler"},
+    {"name": "Leaf Omelet", "game_id": 9, "kind": 0, "classification": "filler"},
+    {"name": "Glazed Honey", "game_id": 20, "kind": 0, "classification": "filler"},
+    {"name": "Honey Ice Cream", "game_id": 49, "kind": 0, "classification": "filler"},
+    {"name": "Shock Berry", "game_id": 43, "kind": 0, "classification": "filler"}
   ]
 }

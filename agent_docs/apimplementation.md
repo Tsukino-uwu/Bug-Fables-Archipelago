@@ -758,9 +758,10 @@ be wrong.
       hand in the enemy pass, `data/enemies.json` having no such mark), enemies with a `limit` or `requires` flag, the
       20 timer enemies, any regional index another entity of the area shares. Its own step in the mod guide.
     - **Where the rule goes:** a `Berries(price)` rule resolving to the event (serialized as its `Has`, as `ItemOnHand`
-      is), on every location with a price (Merab's 22, the 16 item-shop slots, the Moth's Sale 40, the Banker 550, Whack
-      Farms 10, Beette 150), in each way of `ItemOnHand`, and on the ant tunnels once their prices are back. Prices at
-      1x and full price (the panel's settings are client-only), each at most 999 (the wallet).
+      is), on every location with a price (Merab's 22, the 21 item-shop slots, the Moth's Sale 40, the Banker 550, Whack
+      Farms 10, Beette 150, the hive's clothing stall 40 and 50), in each way of `ItemOnHand`, and on the ant tunnels
+      once their prices are back. Prices at 1x and full price (the panel's settings are client-only), each at most 999
+      (the wallet).
     - **Prices back to vanilla, per NPC** (the user: "make everything cost the games vanilla amount, or require an
       item/s"; "it would have to be a per npc decision"): each paid service is *always an item* (the boat: the Boat
       Ticket stays), *a yaml choice, item or berries* (the ant tunnels, Next 57's tickets), or *berries*; decided row
@@ -2072,8 +2073,10 @@ shop joins only with *Shuffle Crystal Berries* on, and *Shuffle Crystal Berries*
 shop vanilla.
 
 **Status:** in progress: Merab's medal shop (her full stock of 22 from a new game, seen 2026-09-25; the mod guide,
-step 12), Madame Butterfly's item shop and the caravan seen on screen (2026-09-25); Shades's shop not built (it waits
-for all 50 crystal berries as locations); the other item shops to follow.
+step 12), Madame Butterfly's item shop and the caravan seen on screen (2026-09-25); since then, with their rooms, the
+settlement entrance's caravan stall, the Golden Settlement square's shop (2026-10-07) and the Honey Factory Lobby's
+(*Honey Factory: Lobby, Shop 1* to *5*, ids 212-216, 2026-10-10); Shades's shop not built (it waits for all 50
+crystal berries as locations); the other item shops to follow, each with its room.
 
 *Code: `options.py` (`ShuffleMedalShops`, `ShuffleItemShops`, `ShopContents`), `rules.py` (`SHOP_CATEGORIES`,
 `fall_back_from_filler_only`), `slot_data.py` (`location_shops`, `location_item_shops`); in the mod `ShopSwap.cs`

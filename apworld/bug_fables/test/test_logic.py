@@ -1301,6 +1301,16 @@ class TestLobby(BugFablesTestBase):
         self.assertIn({"map": "HoneyFactoryEntrance", "entity": "loadzonestorage"}, slot["kept_present"])
         self.assertIn({"map": "HoneyFactoryEntrance", "entity": "Base/DoorS"}, slot["scenery_hidden"])
 
+    # The bottom's shop, opened by talking to the bee outside it: five item shop slots, nothing needed there.
+    def test_shop_on_the_bottom(self) -> None:
+        shops = self.world.fill_slot_data()["location_item_shops"]
+        for slot, item in enumerate((10, 9, 20, 49, 43), start=1):
+            spot = self.multiworld.get_location(f"Honey Factory: Lobby, Shop {slot}", self.player)
+            self.assertEqual(spot.parent_region.name, "HoneyFactoryEntrance (Bottom)")
+            self.assertTrue(spot.access_rule(self.state_with()))
+            self.assertEqual(shops[str(spot.address)],
+                             {"map": "HoneyFactoryEntrance", "keeper": "shopbee - Duplicate", "item": item})
+
 
 class TestScannerRoom(BugFablesTestBase):
     # BeehiveScannerRoom, the Scanner Room (the user, 2026-10-09): one region, nothing needed across; kept between the

@@ -3,7 +3,7 @@ room (room-checklist.md)."""
 from __future__ import annotations
 
 from ..custom_rules import LATER_CHAPTERS, CanUse, one_way
-from ..data_types import ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, Location, Source
+from ..data_types import ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, ItemShop, Location, Source
 
 # The Factory Pass (key item 95), found in the factory: not an item yet, so the later chapters' stand-in until its
 # rooms are mapped. In a seed it won't be used up (apimplementation.md, Next 67), so one opens every lock.
@@ -16,6 +16,12 @@ LOCATIONS = (
     Location("Honey Factory: First Room, Switch", 70, "FactoryProcessingFirstRoom",
              Source(event=95, flag=20),
              rule=CanUse("Beemerang Halt") & CanUse("Dash"), reach=LATER_CHAPTERS),
+    # The Lobby's shop on its bottom floor, opened by talking to the bee outside it (Event80, flag 176), nothing needed
+    # (the user, 2026-10-10: "lets add the shop at the bottom as locations"): first purchase a check, then its own item.
+    *(Location(f"Honey Factory: Lobby, Shop {slot}", 212 + slot - 1, "HoneyFactoryEntrance",
+               Source(item_shop=ItemShop(map="HoneyFactoryEntrance", keeper="shopbee - Duplicate", item=item)),
+               category="item_shop", no_jump=True, area="Bottom")
+      for slot, item in enumerate((10, 9, 20, 49, 43), start=1)),
 )
 
 KEPT_PRESENT = (
