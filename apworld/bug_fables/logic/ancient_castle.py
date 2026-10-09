@@ -19,12 +19,16 @@ _LOWER_LIFT = "Sand Castle Lower Lift Running"
 _UPPER_LIFT = "Sand Castle Upper Lift Running"
 _TO_MIDDLE_RIGHT = (Has(_LOWER_LIFT) | Has(_UPPER_LIFT)) & CanUse("Jump")
 _TO_TOP_RIGHT = Has(_UPPER_LIFT) & CanUse("Jump")
+# The Pressure Puzzle's plates, both ways it's played: the crystal hit, enemies frozen, ice knocked about with the
+# horn, raised platforms jumped across.
+_PRESSURE = CanUse("Jump") & CanUse("Freeze") & CanUse("Horn Slash")
+_PRESSURE_SOLVED = "Sand Castle Pressure Puzzle Door Open"
 # The two Ancient Keys (114), each used up by one of the main room's two locks. While the castle's spots are pending
 # both are the game's own pickups, neither behind a lock, so either lock opens once both are reached: the Basement's
-# behind its barrier, the pressure plate room's (refined when that room is mapped).
+# behind its barrier, the Pressure Puzzle's past its plates.
 _ANCIENT_KEYS = (CanReachRegion("SandCastleBasement (Middle)")
                  & ((CanUse("Jump") & CanUse("Beemerang Halt")) | CanUse("Bee Fly"))
-                 & CanReachRegion("SandCastlePressurePuzzle"))
+                 & CanReachRegion("SandCastlePressurePuzzle") & _PRESSURE)
 
 LOCATIONS = (
     # Every spot in the castle is pending (the user, 2026-10-09; build step 67): its door needs the Sand Castle Key,
@@ -60,6 +64,11 @@ LOCATIONS = (
     Location("Ancient Castle: Boss Key Room, By the Three Statues", 204, "SandCastleBossKeyRoom",
              Source(flag=294, pickup=Pickup(map="SandCastleBossKeyRoom", type=1, item=115)), rule=Member("Vi"),
              no_jump=True, pending=True, area="Right"),
+    # The Pressure Puzzle (SandCastlePressurePuzzle; named by the user, 2026-10-09): an Ancient Key on a ledge by a
+    # statue in its top right, reached only on the platforms its plates raise (too far to fly to without them).
+    Location("Ancient Castle: Pressure Puzzle, By the Statue", 205, "SandCastlePressurePuzzle",
+             Source(flag=289, pickup=Pickup(map="SandCastlePressurePuzzle", type=1, item=114)), rule=_PRESSURE,
+             pending=True),
 )
 STORY_EVENTS = (
     # The Slide Puzzle's block (`icepillar`), knocked by the horn onto the plate on its bottom (Event113 sets 284 for
@@ -72,6 +81,10 @@ STORY_EVENTS = (
                rule=ANY_ATTACK, area="Middle Right"),
     StoryEvent("Ancient Castle: Main Room, Upper Lift Switch Hit", _UPPER_LIFT, "SandCastleMainRoom", Source(flag=291),
                rule=ANY_ATTACK, area="Top Right"),
+    # The Pressure Puzzle's plates played for its door (the AND gate `eventcheck` runs Event113, which sets 296): the
+    # door to the main room's top left open for good.
+    StoryEvent("Ancient Castle: Pressure Puzzle, Door Puzzle Solved", _PRESSURE_SOLVED, "SandCastlePressurePuzzle",
+               Source(flag=296), rule=_PRESSURE),
 )
 
 MAP_AREAS = (
@@ -143,6 +156,9 @@ DOOR_RULES = (
     # past the lock.
     DoorRule("SandCastleMainRoom", "loadzone statue", _ANCIENT_KEYS),
     DoorRule("SandCastleMainRoom", "loadzonebosskey", _ANCIENT_KEYS),
+    # The Pressure Puzzle (the user, 2026-10-09): its door to the main room shut from inside until its plates are
+    # played for it; arriving through it before then, the game pushes the party past it. Its other door is free.
+    DoorRule("SandCastlePressurePuzzle", "loadzonemain", Has(_PRESSURE_SOLVED)),
 )
 
 # Hidden switches hit while flag 41 (the first boss) is set: the entrance's crystal scene and the basement's platforms

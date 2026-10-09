@@ -1017,6 +1017,28 @@ class TestCastleMainRoom(BugFablesTestBase):
         self.assertFalse(door.access_rule(self.state_with()))
 
 
+class TestPressurePuzzle(BugFablesTestBase):
+    # SandCastlePressurePuzzle (the user, 2026-10-09): its plates (Jump, Freeze and the horn) open its door to the main
+    # room for good, or raise the platforms to its Ancient Key; that door is shut from inside until then.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_plates_need_jump_freeze_and_the_horn(self) -> None:
+        plates = self.multiworld.get_location("Ancient Castle: Pressure Puzzle, Door Puzzle Solved", self.player)
+        self.assertFalse(plates.access_rule(self.state_with("Jump", "Horn Slash")))
+        self.assertFalse(plates.access_rule(self.state_with("Progressive Freeze", "Horn Slash")))
+        self.assertTrue(plates.access_rule(self.state_with("Jump", "Progressive Freeze", "Horn Slash")))
+
+    def test_door_to_the_main_room_waits_for_the_plates(self) -> None:
+        room = self.multiworld.get_region("SandCastlePressurePuzzle", self.player)
+        door = next(e for e in room.exits if "SandCastleMainRoom" in e.connected_region.name)
+        self.assertFalse(door.access_rule(self.state_with("Jump", "Progressive Freeze", "Horn Slash")))
+        self.assertTrue(door.access_rule(self.state_with("Sand Castle Pressure Puzzle Door Open")))
+
+    def test_key_waits(self) -> None:
+        names = {spot.name for spot in self.multiworld.get_locations(self.player)}
+        self.assertNotIn("Ancient Castle: Pressure Puzzle, By the Statue", names)
+
+
 class TestCastleRoof(BugFablesTestBase):
     # SandCastleRoof (the user, 2026-10-09): both doors and the save crystal free; the boss door locked from the roof
     # until the Big Ancient Key, still the game's own pickup in the Boss Key Room, taken past a fight that needs Vi

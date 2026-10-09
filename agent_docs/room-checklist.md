@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**147 of 244 done.**
+**148 of 244 done.**
 
 ## Outskirts
 
@@ -245,7 +245,7 @@ as it is, a frozen record.
   discovery sweep: discovery 16 up top (line 2, flag 306)
 - [x] SandCastleBossKeyRoom (122) — the Boss Key Room; its spots pending with the castle; for the enemy pass: the
   key's Warden fight (Event115, three flying, Vi)
-- [ ] SandCastlePressurePuzzle (126)
+- [x] SandCastlePressurePuzzle (126) — the Pressure Puzzle; its key pending with the castle
 - [ ] SandCastleRockRoom (127)
 - [ ] SandCastleBossRoom (128)
 - [ ] SandCastleTreasureRoom (129)

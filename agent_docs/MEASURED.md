@@ -1534,6 +1534,15 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   Bee Fly; back, Jump or Bee Fly (its bounce pad, `spring`, falls short). There the Big Ancient Key (`bosskey`, key item
   115, flag 294, its `data[1]` 115 starting `Event115`): three Wardens (enemy 61, flying, 11 HP) come out of the three
   statues and fight the party (`StartBattle`, no escape); `Base/GameObject` gone from 294. Seen: the user.
+  **`SandCastlePressurePuzzle`, the Pressure Puzzle (2026-10-09, the user; named by the user):** one floor between its
+  bottom left door (`loadzoneslide`, to the Slide Puzzle's upper left), free both ways, and its right door
+  (`loadzonemain`, to the main room's top left), shut from inside until its plates are played for it, which then stays
+  open; arriving through it before then pushes the party past it (seen). The plates (four `PressurePlate`s, arms and
+  legs; the AND gate `eventcheck`, data `113 1 2 -5`, until 296, runs `Event113`, which sets 296; `Base/CastlePlatform`
+  hidden from 296) take Jump, Freeze and the horn: the crystal hit, enemies frozen, ice knocked about, raised platforms
+  jumped across. Played the other way they raise the platforms to the Ancient Key (`item - Duplicate`, key item 114,
+  flag 289), on a ledge by a statue in the top right, then Jump or Bee Fly across; too far to fly to without them. Two
+  hint tablets; two Psicorps and a Warden (enemy pass).
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
