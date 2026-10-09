@@ -770,11 +770,6 @@ be wrong.
 
 **Known issues:**
 
-- **The Ancient Castle's upper part is unreachable in the logic for now** (2026-10-09, mapping the Main Room): its top
-  is reached through rooms not yet mapped (the rock room, the pressure plate room, the boss key room), so until they
-  are, `test_every_region_reachable_with_everything` (in `test_areas.py` and `test_doors.py`) fails for those regions.
-  No seed is affected: every castle spot is pending (build step 67). Not to be pushed until those rooms are mapped.
-
 - **The bandit hideout's capture takes the seed's ability items** (found 2026-10-09 by the key-chain research, from the
   code; not seen in game). `Event109`'s capture moves every item and key item into `flagstring[8]` until the storage
   chest gives them back, the mod's own move and ability keys (201-211), the Boat Ticket and the submarine included.
@@ -3216,9 +3211,10 @@ inn's high door, kept open, build step 65, Jump or Bee Fly inside, and the medal
 and 197), 140 of 244, the Defiant Root done; the Ancient Castle from 2026-10-09: its entrance (the middle's bridge
 shows while its crystal is lit, the Beemerang Toss from either side, or Bee Fly; no items), 141 of 244; the Slide
 Puzzle (its floor a drop from every side, Jump or Bee Fly back up to its lower door; a block knocked into place with
-the horn fills its upper gap and opens its upper left door, or Bee Fly crosses; the medal Frostbite burrowed to,
-Beetle Dig, location 198), 142 of 244; the Statue Room (over the middle's block on platforms: from the left Icicle
-and Jump, or Bee Fly; from the right Jump or Bee Fly; no items), 143 of 244; the Basement (its door on an isolated
+the horn fills its upper gap and opens its upper left door, or Bee Fly crosses, and lets the floor up to the upper
+left, the way into the castle's top; the medal Frostbite burrowed to, Beetle Dig, location 198), 142 of 244; the
+Statue Room (over the middle's block on platforms: from the left Icicle and Jump, or Bee Fly; from the right Jump or
+Bee Fly; no items), 143 of 244; the Basement (its door on an isolated
 ledge, the middle by Jump or Bee Fly; three spots on its platforms, the Toss and Jump or Bee Fly, the Ancient Key
 behind a barrier, Halt and Jump or Bee Fly, locations 199-201, pending with the castle's 198, build step 67), 144 of
 244; the Roof (its doors and save crystal free; a Frost Bomb behind the left statue, 202, pending; the boss door
@@ -3230,7 +3226,11 @@ round the edge, nothing needed; its right side by the block pushed with the horn
 or Bee Fly; the Big Ancient Key there, past three flying Wardens, Vi; locations 203-204, pending; the Roof's boss door
 now needs that side and Vi), 147 of 244; the Pressure Puzzle (its two doors on one floor, the main room's shut from
 inside until its plates, Freeze and the horn, open it for good; played the other way they raise platforms to an
-Ancient Key, then Jump or Bee Fly, location 205, pending), 148 of 244; the rest of `room-checklist.md` to go.
+Ancient Key, then Jump or Bee Fly, location 205, pending), 148 of 244; the Rock Room (its bottom's two sides joined
+by a platform its switch starts; the top left up with Jump or Bee Fly; the top right past a rolling rock and thorns;
+across the top once its boulder breaks, by Horn Dash or a rolling rock carried on the crystals' platforms; crystal
+berry #24 in an alcove off the top right, Shield, then Jump or Bee Fly, location 206, pending), 149 of 244; the rest
+of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

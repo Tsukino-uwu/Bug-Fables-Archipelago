@@ -900,6 +900,13 @@ class TestSlidePuzzle(BugFablesTestBase):
     # opens the upper left door; the medal burrowed to, Beetle Dig.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
+    # The way into the castle's top: the floor up to the upper left, once the puzzle is solved.
+    def test_floor_up_to_the_upper_left_once_solved(self) -> None:
+        climb = self.multiworld.get_entrance(
+            "SandCastleSlidePuzzle (Bottom) to SandCastleSlidePuzzle (Upper Left) (climb)", self.player)
+        self.assertFalse(climb.access_rule(self.state_with("Jump", "Bee Fly")))
+        self.assertTrue(climb.access_rule(self.state_with("Jump", "Sand Castle Slide Puzzle Solved")))
+
     def test_floor_needs_jump_or_bee_fly_back_up(self) -> None:
         up = self.multiworld.get_entrance("SandCastleSlidePuzzle (Bottom) to SandCastleSlidePuzzle", self.player)
         self.assertFalse(up.access_rule(self.state_with()))
@@ -1037,6 +1044,59 @@ class TestPressurePuzzle(BugFablesTestBase):
     def test_key_waits(self) -> None:
         names = {spot.name for spot in self.multiworld.get_locations(self.player)}
         self.assertNotIn("Ancient Castle: Pressure Puzzle, By the Statue", names)
+
+
+class TestRockRoom(BugFablesTestBase):
+    # SandCastleRockRoom (the user, 2026-10-09): four parts; the bottom's platform from its switch, the top right past a
+    # rolling rock and thorns, the top left across once the boulder is broken (Horn Dash, or the rolling rock).
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    @staticmethod
+    def _part(area: str) -> str:
+        return "SandCastleRockRoom" + (f" ({area})" if area else "")
+
+    def _way(self, a: str, b: str):
+        return self.multiworld.get_entrance(f"{self._part(a)} to {self._part(b)}", self.player)
+
+    def test_bottom_right_on_the_platform(self) -> None:
+        for way in (self._way("", "Bottom Right"), self._way("Bottom Right", "")):
+            self.assertFalse(way.access_rule(self.state_with("Jump", "Bee Fly")))
+            self.assertTrue(way.access_rule(self.state_with("Sand Castle Rock Room Platform Running")))
+
+    def test_top_right_past_the_rock_and_the_thorns(self) -> None:
+        up = self._way("Bottom Right", "Top Right")
+        self.assertFalse(up.access_rule(self.state_with("Shield")))
+        self.assertFalse(up.access_rule(self.state_with("Beetle Dig")))
+        self.assertTrue(up.access_rule(self.state_with("Beetle Dig", "Shield")))
+        self.assertTrue(up.access_rule(self.state_with("Progressive Dash", "Shield")))
+        self.assertTrue(up.access_rule(self.state_with("Bee Fly")))
+        down = self._way("Top Right", "Bottom Right")
+        self.assertTrue(down.access_rule(self.state_with("Shield")))
+        self.assertFalse(down.access_rule(self.state_with("Beetle Dig")))
+
+    def test_boulder_both_ways(self) -> None:
+        horn = self.multiworld.get_location("Ancient Castle: Rock Room, Boulder Broken with Horn Dash", self.player)
+        rock = self.multiworld.get_location("Ancient Castle: Rock Room, Boulder Crushed by the Rolling Rock",
+                                            self.player)
+        self.assertEqual(horn.parent_region.name, "SandCastleRockRoom (Top Left)")
+        self.assertEqual(rock.parent_region.name, "SandCastleRockRoom (Top Right)")
+        self.assertTrue(horn.access_rule(self.state_with("Progressive Dash", "Progressive Dash")))
+        self.assertFalse(rock.access_rule(self.state_with("Progressive Beemerang")))
+        self.assertTrue(rock.access_rule(self.state_with("Progressive Beemerang", "Jump")))
+
+    def test_top_across_needs_the_boulder_broken(self) -> None:
+        across = self.multiworld.get_entrance(
+            "SandCastleRockRoom (Top Right) to SandCastleRockRoom (Top Left) (ledge)", self.player)
+        self.assertFalse(across.access_rule(self.state_with("Bee Fly")))
+        self.assertTrue(across.access_rule(self.state_with("Bee Fly", "Sand Castle Rock Room Boulder Broken")))
+        back = self.multiworld.get_entrance(
+            "SandCastleRockRoom (Top Left) to SandCastleRockRoom (Top Right) (flight)", self.player)
+        self.assertFalse(back.access_rule(self.state_with("Progressive Beemerang", "Jump",
+                                                          "Sand Castle Rock Room Boulder Broken")))
+
+    def test_berry_waits(self) -> None:
+        names = {spot.name for spot in self.multiworld.get_locations(self.player)}
+        self.assertNotIn("Ancient Castle: Rock Room, Alcove between the Rocks", names)
 
 
 class TestCastleRoof(BugFablesTestBase):

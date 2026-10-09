@@ -11,6 +11,8 @@ _SLIDE_SOLVED = "Sand Castle Slide Puzzle Solved"
 # The Slide Puzzle's upper gap: filled once the puzzle is solved, or flown over.
 _SLIDE_GAP = Has(_SLIDE_SOLVED) | CanUse("Bee Fly")
 _UP = CanUse("Jump") | CanUse("Bee Fly")
+# The Slide Puzzle's floor up to its upper left, once the puzzle is solved.
+_SLIDE_UP = Has(_SLIDE_SOLVED) & _UP
 # The Basement's small platforms: the big crystal lit (the Beemerang Toss) and Jump, or Bee Fly.
 _SMALL_PLATFORMS = (CanUse("Jump") & CanUse("Beemerang Toss")) | CanUse("Bee Fly")
 # The main room's two lifts, each started for good by its switch: the lower one between the bottom and the middle
@@ -24,6 +26,11 @@ _TO_TOP_RIGHT = Has(_UPPER_LIFT) & CanUse("Jump")
 _PRESSURE = CanUse("Freeze") & CanUse("Horn Slash")
 _PRESSURE_KEY = _PRESSURE & _UP
 _PRESSURE_SOLVED = "Sand Castle Pressure Puzzle Door Open"
+# The Rock Room: its bottom's moving platform, started for good by the bottom left's switch (283), and its boulder
+# (297), broken for good by Horn Dash from the top left or by the rolling rock carried on the top right's crystal
+# platforms.
+_ROCK_PLATFORM = "Sand Castle Rock Room Platform Running"
+_ROCK_BOULDER = "Sand Castle Rock Room Boulder Broken"
 # The two Ancient Keys (114), each used up by one of the main room's two locks. While the castle's spots are pending
 # both are the game's own pickups, neither behind a lock, so either lock opens once both are reached: the Basement's
 # behind its barrier, the Pressure Puzzle's past its plates.
@@ -70,6 +77,11 @@ LOCATIONS = (
     Location("Ancient Castle: Pressure Puzzle, By the Statue", 205, "SandCastlePressurePuzzle",
              Source(flag=289, pickup=Pickup(map="SandCastlePressurePuzzle", type=1, item=114)), rule=_PRESSURE_KEY,
              pending=True),
+    # The Rock Room (named by the user, 2026-10-09): crystal berry #24 in a hidden alcove off its top right, in and out
+    # with Shield, then Jump or Bee Fly up to it.
+    Location("Ancient Castle: Rock Room, Alcove between the Rocks", 206, "SandCastleRockRoom",
+             Source(berry=24, pickup=Pickup(map="SandCastleRockRoom", type=3, item=0)),
+             rule=CanUse("Shield") & _UP, category="crystal_berry", no_jump=True, pending=True, area="Top Right"),
 )
 STORY_EVENTS = (
     # The Slide Puzzle's block (`icepillar`), knocked by the horn onto the plate on its bottom (Event113 sets 284 for
@@ -86,6 +98,16 @@ STORY_EVENTS = (
     # door to the main room's top left open for good.
     StoryEvent("Ancient Castle: Pressure Puzzle, Door Puzzle Solved", _PRESSURE_SOLVED, "SandCastlePressurePuzzle",
                Source(flag=296), rule=_PRESSURE),
+    # The Rock Room (named by the user, 2026-10-09): its bottom left's switch (`platformswitch - Duplicate`, any attack,
+    # 283) starts the platform between its bottom's two sides; its boulder (`blocking rock`, 297), broken by Horn Dash
+    # from the top left, or by the rolling rock the top right's crystals (the Toss) carry along on their platforms,
+    # followed with Jump (seen by the user).
+    StoryEvent("Ancient Castle: Rock Room, Platform Switch Hit", _ROCK_PLATFORM, "SandCastleRockRoom",
+               Source(flag=283), rule=ANY_ATTACK),
+    StoryEvent("Ancient Castle: Rock Room, Boulder Broken with Horn Dash", _ROCK_BOULDER, "SandCastleRockRoom",
+               Source(flag=297), rule=CanUse("Horn Dash"), area="Top Left"),
+    StoryEvent("Ancient Castle: Rock Room, Boulder Crushed by the Rolling Rock", _ROCK_BOULDER, "SandCastleRockRoom",
+               Source(flag=297), rule=CanUse("Beemerang Toss") & CanUse("Jump"), area="Top Right"),
 )
 
 MAP_AREAS = (
@@ -130,18 +152,38 @@ MAP_AREAS = (
     # Bee Fly back up, with nothing in it.
     Area("SandCastleBossKeyRoom", "Right", (), (CanUse("Jump") & CanUse("Horn Slash")) | CanUse("Bee Fly"),
          out=_UP),
+    # The Rock Room (SandCastleRockRoom; the user, 2026-10-09), in four parts: its bottom left (the door to the main
+    # room, the platform's switch) the map's own region. Its bottom right (the door to the Statue Room) across on the
+    # platform once it runs, both ways. Its top left (the boulder) up from the bottom left with Jump or Bee Fly, both
+    # ways. Its top right (two big crystals) up from the bottom right past a rolling rock (Bee Fly, Beetle Dig or the
+    # Dash) and thorns (Shield or Bee Fly); down, the thorns only (walked behind the rock).
+    Area("SandCastleRockRoom", "Bottom Right", ("loadzonestatue",), Has(_ROCK_PLATFORM)),
+    Area("SandCastleRockRoom", "Top Left", (), _UP),
+    Area("SandCastleRockRoom", "Top Right", (),
+         CanUse("Bee Fly") | ((CanUse("Beetle Dig") | CanUse("Dash")) & CanUse("Shield")),
+         out=CanUse("Shield") | CanUse("Bee Fly"), to="SandCastleRockRoom (Bottom Right)"),
 )
 TRANSFERS = (
-    # The Slide Puzzle's upper left and upper right down to the puzzle's floor, drops: no way back up inside the
-    # room.
-    *(Transfer("drop", "SandCastleSlidePuzzle", "SandCastleSlidePuzzle", two_way=False, way_back=False_(),
+    # The Slide Puzzle's upper left and upper right down to the puzzle's floor, drops; back up only once the puzzle is
+    # solved, from the floor to the upper left (the user, 2026-10-09: the way into the castle's top), Jump or Bee Fly
+    # until measured, then across the filled gap to the upper right.
+    *(Transfer("drop", "SandCastleSlidePuzzle", "SandCastleSlidePuzzle", two_way=False, way_back=_SLIDE_UP,
                from_area=side, to_area="Bottom") for side in ("Upper Left", "Upper Right")),
+    Transfer("climb", "SandCastleSlidePuzzle", "SandCastleSlidePuzzle", _SLIDE_UP, two_way=False,
+             from_area="Bottom", to_area="Upper Left"),
     # The main room's top right across to its top left, Jump, a drop; back round by the bottom and the upper lift. And
     # off the upper lift, on its way down from the top right, onto the middle right; back by the bottom and the lift.
     Transfer("ledge", "SandCastleMainRoom", "SandCastleMainRoom", CanUse("Jump"), two_way=False,
              way_back=_TO_TOP_RIGHT, from_area="Top Right", to_area="Top Left"),
     Transfer("lift", "SandCastleMainRoom", "SandCastleMainRoom", Has(_UPPER_LIFT), two_way=False,
              way_back=_TO_TOP_RIGHT, from_area="Top Right", to_area="Middle Right"),
+    # The Rock Room's top right across to its top left, the boulder broken: the crystals' platforms (the Toss) and Jump,
+    # or Bee Fly; back the other way, Bee Fly only.
+    Transfer("ledge", "SandCastleRockRoom", "SandCastleRockRoom",
+             Has(_ROCK_BOULDER) & ((CanUse("Beemerang Toss") & CanUse("Jump")) | CanUse("Bee Fly")), two_way=False,
+             from_area="Top Right", to_area="Top Left"),
+    Transfer("flight", "SandCastleRockRoom", "SandCastleRockRoom", Has(_ROCK_BOULDER) & CanUse("Bee Fly"),
+             two_way=False, from_area="Top Left", to_area="Top Right"),
 )
 DOOR_RULES = (
     # The Slide Puzzle's door to the pressure plate room, shut from its side until the puzzle is solved; arriving

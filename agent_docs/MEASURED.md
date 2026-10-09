@@ -1479,7 +1479,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   a `PushRock`, there until 284), knocked by the horn onto the plate (`pressureplate`, data `0 1 113`), runs `Event113`,
   which sets 284 for good: the pillar shown in place (`Base/IcePillarObj` from 284) fills the upper gap, and the upper
   left door (to `SandCastlePressurePuzzle`) opens (`Base/Tablet` hidden from 284). Before that, arriving through that
-  door pushes the party past it (seen, with 284 turned off). The upper right (its door from the main room) and the upper
+  door pushes the party past it (seen, with 284 turned off). Once solved, the floor leads up to the upper left (the
+  user, 2026-10-09): the way into the castle's top, on through the Pressure Puzzle (its plates open its door to the
+  main room's top left). The upper right (its door from the main room) and the upper
   left across the gap, once solved or with Bee Fly; both drop to the floor, with no way back up inside the room. The
   medal Frostbite (`freezebadge`, medal 46, flag 285) is in a small space behind the floor's top left corner, below the
   upper left door, burrowed into and out of with Beetle Dig. A crystal (`freezeswitch - Duplicate`) by the plate from
@@ -1543,6 +1545,18 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   more (the user's corrections, the same day). Played the other way they raise the platforms to the Ancient Key
   (`item - Duplicate`, key item 114, flag 289), on a ledge by a statue in the top right, then Jump or Bee Fly across;
   too far to fly to without them. Two hint tablets; two Psicorps and a Warden (enemy pass).
+  **`SandCastleRockRoom`, the Rock Room (2026-10-09, the user; named by the user):** four parts. The bottom left (the
+  door to the main room, `loadzone main`) and its switch (`platformswitch - Duplicate`, any attack, flag 283, for
+  good), which starts the platform (`platform - Duplicate`) to the bottom right (the door to the Statue Room,
+  `loadzonestatue`); without it, the bottom right reaches the left only round the top. The top left up from the bottom
+  left with Jump or Bee Fly, both ways; its boulder (`blocking rock`, 297, for good) broken by Horn Dash. The top right
+  (two big crystals) up from the bottom right past a rolling rock (`rock1`/`rock2`, `RollingRock`: Bee Fly, Beetle Dig
+  or the Dash) and thorns (Shield or Bee Fly); down, the thorns only, the rock walked behind. From the top right the
+  crystals (the Toss) make platforms that carry a rolling rock into the boulder (seen with 297 reset), then Jump across
+  to the top left, or Bee Fly; from the top left, the boulder broken, Bee Fly back. Crystal berry #24 (`crystalberry`,
+  data index 24) in a hidden alcove off the top right (`respawnerhiddenroom`, a camera change), in and out with Shield,
+  Jump or Bee Fly up to it. Two bounce pads parked at y 99; a pit, two spike strips; a Worm, two Cursed Cloths and a
+  Psicorp (enemy pass).
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**148 of 244 done.**
+**149 of 244 done.**
 
 ## Outskirts
 
@@ -240,13 +240,12 @@ as it is, a frozen record.
 - [x] SandCastleBasement (119) — the Basement; its spots pending with the castle (build step 67)
 - [x] SandCastleRoof (120) — the Roof; its spot pending with the castle; the boss door's rule refined with the boss
   key room
-- [x] SandCastleMainRoom (121) — the Main Room, the castle's hub; its top reached only through rooms still to map (the
-  rock room, the pressure plate room, the boss key room), so unreachable in logic until then (Known issues); for the
-  discovery sweep: discovery 16 up top (line 2, flag 306)
+- [x] SandCastleMainRoom (121) — the Main Room, the castle's hub; its top reached through the Slide Puzzle (solved)
+  and the Pressure Puzzle; for the discovery sweep: discovery 16 up top (line 2, flag 306)
 - [x] SandCastleBossKeyRoom (122) — the Boss Key Room; its spots pending with the castle; for the enemy pass: the
   key's Warden fight (Event115, three flying, Vi)
 - [x] SandCastlePressurePuzzle (126) — the Pressure Puzzle; its key pending with the castle
-- [ ] SandCastleRockRoom (127)
+- [x] SandCastleRockRoom (127) — the Rock Room; its berry pending with the castle
 - [ ] SandCastleBossRoom (128)
 - [ ] SandCastleTreasureRoom (129)
 
