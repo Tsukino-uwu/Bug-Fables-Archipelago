@@ -86,6 +86,7 @@ either one wrong).
 - [2026-10-08: the work that needs no game; the local plan files retired](#2026-10-08-the-work-that-needs-no-game-the-local-plan-files-retired)
 - [2026-10-08: the residential recheck, the item classes, berries in the logic](#2026-10-08-the-residential-recheck-the-item-classes-berries-in-the-logic)
 - [2026-10-08: the Far Grasslands finished, the swamp begun; flag 41 sends the goal](#2026-10-08-the-far-grasslands-finished-the-swamp-begun-flag-41-sends-the-goal)
+- [2026-10-09: the goal guard; four swamp rooms; the Dash without the horn begun](#2026-10-09-the-goal-guard-four-swamp-rooms-the-dash-without-the-horn-begun)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -3763,3 +3764,52 @@ either one wrong).
   `SwamplandsBridge` (152). Server stopped (I started it; checked gone); the game is the user's. The plugin of
   `daac98c` (`6E79E9FADFFB`) runs. Dev settings: `InfJump`, `BumpKill` and `OneHit` on, `QuietBursts` and `AdoptSeed`
   off; the command file still session bed6439d's scratchpad `cmds.txt`.
+
+## 2026-10-09: the goal guard; four swamp rooms; the Dash without the horn begun
+
+- **Build step 60, the goal guard (`3fc1677`):** the saved flag-41 audit re-checked by four checkers and a critic (a
+  workflow), which confirmed it and found more: the 8 hidden switches would also write 41 if struck; location 182's
+  drop carried 41 and could never send; the mod counted all seven artifacts while the logic holds one, so a random start
+  beside a later artifact's scene could send the goal; the secret codes' new game wasn't held back. Built: the 25
+  borrowers repointed (grass to -1, switches and plates to 691), the book room's gate, `goal_flags` and `GoalGuard`
+  (kept only when one of its own events is running, else turned back off; checked before the goal, saves and map
+  builds), key 9 held back. A review workflow (three lenses, each finding verified): three low findings, all fixed.
+  The rule in `CLAUDE.md` (the received-item rule made one line). Seen only as far as its log lines: the guard's
+  baseline on a new file. New seed `AP_70580691250444408633` (the `BugTester` player file, copied to this session's
+  scratchpad `players/`), hosted with Start-Process on port 38281; the user started a new file on it.
+- **Rooms, 130 to 134 of 244:** the swamp bridge (build step 61, `b095a6b`): kept up, its collapse's trigger and three
+  leafbugs kept away (the scene crashed on a file with no follower), its invisible walls hidden (the user's ask) so the
+  bottom is a drop, the bottom's bounce pad kept present ("we should always have the spring/bounce pads present"), its
+  areas from the user's own sketch; `Transfer.to_area` added for the room's loop. The long swamp room (`ecbc17d`). The
+  Junction (`621f20f`, named by the user): crystal berry #27 and a Clear Bomb on a vine (183, 184); its centipede scene
+  (`Event147`) left the party at the left door from any door, so build step 62, `scenes_kept_away`: the user's pick,
+  never played in a seed. Crank Pond (`76f4b6c`, named): a Burly Berry and a Crunchy Leaf (185, 186). The user mapped
+  on a vanilla file first ("can still map out room logic on a vanilla save anyway"), then on the new seed; my wrong
+  descriptions corrected twice (the bridge's middle ledge is the right side's; then the sketch).
+- **The Dash without the Horn Slash, begun (not committed):** the user restated the rule: "horn slash = cuts grass /
+  hit switches or knock bridges down, push small rocks around; dash = only for mobility (it can do the horn slash
+  things as well, once horn slash is aquired); horn dash = break boulders (this does not require horn slash, its just
+  an upgrade to dash itself)". A research workflow found that today, with Shuffle Field Moves, the mod refuses Kabbu's
+  whole tap without the Horn Slash, so there is no Dash at all, while the logic counts the Dash and Horn Dash on the
+  Progressive Dash alone: seeds can be impossible. A player reported (2026-10-09) that in v0.3.0 the Progressive Dash
+  didn't dash at all; they had only the Dash, no Horn Slash: this cause. Written in `World/FieldMoves.cs` (`HornLock`:
+  the three horn tags "Untagged" while the Horn Slash is locked, Kabbu's swing and its sound hidden, the tap let through
+  once the Dash is learned, a dashing Horn Dash's hitbox tagged `BeetleDash` only for the boulder it touches; `Tick`
+  quiet during a tap or a Dash), built and loaded (`installed in DoActionTap: 3 of 3 horn tags, Kabbu's swing and its
+  sound`). Not reviewed, no docs, no test, not seen. A misread summary had the user worried the Horn Dash would need
+  the horn: it doesn't. The first press without the horn: the buzzer, no swing (my pick, as locked moves do today).
+- **Open:** the Dash's own build step (63): docs (Next 23, build steps 21 and 23, `MEASURED.md` on the tag consumers
+  and its line ~2697), a review, then TO-CHECK's new "every learned ability, one copy at a time" (a fresh seed with
+  Shuffle Field Moves, none in the start inventory, items sent one at a time); `logic/forsaken_lands.py:64`, the broken
+  bridge's ruler as "Horn Slash or Horn Dash": a switch, so the Horn Slash only (and a test that fails without it); six
+  mapped rooms with both grass and Horn Dash boulders to recheck for grass on a Horn Dash route (`BarrenLandsCloud`,
+  `BarrenLandsSideGPT`, `DesertDREastEntrance`, `FarGrasslandsOutsideCave`, `GoldenPathTunnel`, `GoldenPathTunnel2`);
+  four other story-tied bounce pads (`GoldenPathTunnel`'s shroom, gone from 39, to ask; `MysteryIslandInside`'s pair
+  and `BugariaEndPlaza`'s when mapped); `ChomperCave1`'s bridge reads 337 too. This repo's suite and fuzzer at the next
+  push (new tests unrun: `TestGoalFlags`, `TestSwampBridge`, `TestLongSwampRoom`, `TestJunction`, `TestCrankPond`, the
+  moved story-order test); the PopTracker pack's re-export (locations 183-186, the removed collapse). Nothing pushed.
+- **Handoff (the user: a new chat for context, "don't stop or close anything"):** 134 of 244; next room `Swamplands7`
+  (161). The server runs on `AP_70580691250444408633` (port 38281); the game runs on the user's seed file, the plugin
+  `F7CEAC5F2B80` (it includes the uncommitted `FieldMoves.cs`), the live slot_data (`BepInEx/bugfablesap-live.json`)
+  last laid over at the bridge's walls, so rebuild it before the next `liveslot`. Kabbu removed then added back. Dev
+  settings: `InfJump`, `BumpKill` and `OneHit` on; the command file still session bed6439d's scratchpad `cmds.txt`.
