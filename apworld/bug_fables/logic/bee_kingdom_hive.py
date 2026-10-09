@@ -115,6 +115,7 @@ MAP_AREAS = (
     # and Jaune's Gallery's kept open, its bottom exit into the Scanner Room's top).
     # HB's Lab (HBsLab): one region, its one door free; the gate at its top only scenery.
     # The Balcony (BeehiveBalcony; named by the user, 2026-10-10): one region, its one door free.
+    # Honeycomb's Lab (HoneycombsLab; named by the user, 2026-10-10): one region, its one door free; no spot yet.
 )
 TRANSFERS = (
     # The bottom's elevator bee sends the party down to Defiant Root's Beehive Lift for nothing, onto its platform.

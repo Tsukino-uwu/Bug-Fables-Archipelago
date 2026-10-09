@@ -1272,6 +1272,14 @@ class TestBalcony(BugFablesTestBase):
         self.assertTrue(spot.access_rule(self.state_with()))
 
 
+class TestHoneycombsLab(BugFablesTestBase):
+    # HoneycombsLab, Honeycomb's Lab (the user, 2026-10-10): one region, its door free; no spot yet.
+
+    def test_one_region(self) -> None:
+        parts = {r.name for r in self.multiworld.get_regions(self.player) if r.name.startswith("HoneycombsLab")}
+        self.assertEqual(parts, {"HoneycombsLab"})
+
+
 class TestScannerRoom(BugFablesTestBase):
     # BeehiveScannerRoom, the Scanner Room (the user, 2026-10-09): one region, nothing needed across; kept between the
     # outside and the inside (build step 73), its gate open (72), its scan location 208 with flag 160 (74).

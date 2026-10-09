@@ -1682,6 +1682,14 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (`Kenny - Duplicate`, needs 598 and 86, until 599 or 299), a guard, a walking judge bee and the telescope's owner. In
   a seed Beette is kept present and sells at her price again (seen: "So...? 150 berries for the house", refused with 115
   in the bag; build step 76). No pickups, flag-switched scenery, hazards, auto-start scenes or map enemies.
+  **`HoneycombsLab`, Honeycomb's Lab (2026-10-10, the user; named by the user):** one floor and one door (`loadzone`, to
+  `BeehiveMainArea`), nothing needed anywhere (the user). Its auto-start scene (`autoevent` 175:80) plays on first
+  entry: `Event80`'s lab part, Honeycomb's two lines, then flag 175; the party isn't moved. Honeycomb talks by flag:
+  line 2 from the start, 13 from 344, 26 from 341. His line 6 ("HAND IT OVER!") has an item picked and line 8 sends
+  the Chomper Seed (item 38) on to line 10; line 5 ("Hawk is back") gives the A.D.B.P. Enhancer (medal 28) and sets
+  352; line 32 runs `Event135`. The hawk (`hawk`, needs 343 and 302), Chompy (`chompy`, needs 341 and 405, until 402 or
+  405) and her scene's trigger (`chompyevent`, `Event134`, needs 341). No pickups, flag-switched scenery, hazards or map
+  enemies.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

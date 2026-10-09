@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**158 of 244 done.**
+**159 of 244 done.**
 
 ## Outskirts
 
@@ -266,7 +266,9 @@ as it is, a frozen record.
 - [x] BeehiveBalcony (69) — the Balcony; Beette's sale (location 78) at her price again (build step 76), its berries
   with Next 63; for the quest pass: Kenny (598 to 599) and Gen and Eri's talk (`Event86`, sets 167); for the discovery
   sweep: the telescope (`Event127`, discovery 26)
-- [ ] HoneycombsLab (70)
+- [x] HoneycombsLab (70) — Honeycomb's Lab; no location; its first-entry scene (`Event80`, flag 175) moves nobody;
+  for the quest pass: the hawk's return (the A.D.B.P. Enhancer, medal 28, flag 352) and the Chomper Seed's chain to
+  Chompy (`Event134`, `Event135`, flags 341, 402, 405)
 - [x] JaunesGallery (71) — Jaune's Gallery; its door kept open from the main area (build step 71); for the quest
   pass: Jaune's quest (Event162, flags 444-446)
 
