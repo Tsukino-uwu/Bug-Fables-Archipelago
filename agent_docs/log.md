@@ -87,6 +87,7 @@ either one wrong).
 - [2026-10-08: the residential recheck, the item classes, berries in the logic](#2026-10-08-the-residential-recheck-the-item-classes-berries-in-the-logic)
 - [2026-10-08: the Far Grasslands finished, the swamp begun; flag 41 sends the goal](#2026-10-08-the-far-grasslands-finished-the-swamp-begun-flag-41-sends-the-goal)
 - [2026-10-09: the goal guard; four swamp rooms; the Dash without the horn begun](#2026-10-09-the-goal-guard-four-swamp-rooms-the-dash-without-the-horn-begun)
+- [2026-10-09: the Dash without the Horn Slash; Ice Block Climb and Fenced Pond; the Defiant Root begun](#2026-10-09-the-dash-without-the-horn-slash-ice-block-climb-and-fenced-pond-the-defiant-root-begun)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -3814,3 +3815,45 @@ either one wrong).
   `F7CEAC5F2B80` (it includes the uncommitted `FieldMoves.cs`), the live slot_data (`BepInEx/bugfablesap-live.json`)
   last laid over at the bridge's walls, so rebuild it before the next `liveslot`. Kabbu removed then added back. Dev
   settings: `InfJump`, `BumpKill` and `OneHit` on; the command file still session bed6439d's scratchpad `cmds.txt`.
+
+## 2026-10-09: the Dash without the Horn Slash; Ice Block Climb and Fenced Pond; the Defiant Root begun
+
+- **Build step 63, the Dash without the Horn Slash (`07d1ee3`, `53d64af`):** the last chat's uncommitted `HornLock`
+  finished as its own step. The tap's real IL dumped with ilspycmd (three horn tags, the swing, its turn, the "Cut"
+  sound, as `EditTap` expects). A review workflow (three reviewers: the mod code, every game reader of the horn tags,
+  every Dash and Horn Dash rule; then each finding verified) and a last critic. Fixed: a dated comment, a failure log
+  line that misstated the outcome, a Horn Slash received mid-Dash stopping that Dash from breaking boulders (the prefix
+  now relies on the untagged hitbox alone), and the sprite's turn on a single tap. The user on the rest: the Horn Dash
+  no longer stunning enemies or hitting fountains, crystals, vines or the prison's computer without the Horn Slash is
+  "fine/intended"; the swamp bridge's teaching boulder can't be broken by a Horn Dash anyway ("it only breaks during
+  the cutscene"). The logic: the broken bridge's ruler was "Horn Slash or Horn Dash" on a switch, now the Horn Slash
+  only (`TestDashWithoutTheHorn`). The user asked whether I had written Horn Dash where they said "horn": checked
+  against their own messages from every mapping session (read from the chat transcripts), none; the two rules needing
+  both are two obstacles each, in their words. Their rule restated: "horn is required in a lot of places, horn dash is
+  only required where there have been boulders / dash itself is never required anywhere". Grass on a Horn Dash route
+  (ten rooms, by position) is rechecked on screen once every room is mapped (their call; TO-CHECK, Known issues). Not
+  yet seen in game: the seed starts with every ability, so TO-CHECK's Dash test needs a fresh seed, or a dev
+  `give key` to pair with `take key` (the user's pick).
+- **Rooms, 134 to 136 of 244, the swamp done:** Ice Block Climb (`Swamplands7`, `202baae`, named by the user): ice blocks
+  frozen, knocked with the horn and jumped on, one from the droplet behind a boulder brought up on a platform; the
+  medal Eternal Venom on a stump, location 187. Fenced Pond (`Swamplands8`, `bc16c7d`, named): a lever on a ledge takes
+  down a double fence between the middle and the right side; a Magic Seed dug up, location 188; Seb's talk (390, and a
+  warp to the Outskirts) for the quest pass, kept out of the logic as an optional way out (the user agreed). Both
+  described by the user area by area ("bottom/right", "middle/middle"...), which they liked; written down with an
+  example in `room-logic.md`, step 2 (`abcb8b2`, `0f5aca1`).
+- **`DefiantRoot1`, begun:** warped in; its first-visit talk (line 52, flag 170) played from two doors, so the user
+  asked for it in *Skip cutscenes* (`a125aad`, the mod guide's step 10); the log then said `skipped ... set flags 170`
+  through the well's door, not yet confirmed on screen. Drafted from the data, not yet described by the user: four
+  doors (outside, the well, the elevator to `DefiantRoot2`, the commercial street) and house doors in the same map; a
+  Lore Book on the ground at the left (flag 142); Burly Tea up high (688); crystal berry #15 on a ledge
+  (`crystalberryskip`, until 201: the game sets 201 on entering `DesertDRSouthEntrance` and in the caravan robbery
+  scene, Event93, which gives #15 itself, so a seed could take this berry away: a question for the user); the mayor's
+  storage upstairs behind a locked door until 560 (a Lore Book 489, a Dark Cherry 490); discovery 29 from a sign;
+  three empty bushes; many NPCs and trades for the later passes.
+- **Handoff (the user: "lets stop here for now"):** the game closed by the user; the plugin `03F62A291293` copied in
+  (it loads at the next start). The server stopped at the user's word ("yes stop it as well"); its seed
+  `AP_70580691250444408633` is in session fed026cd's scratchpad `out/`, the player file in its `players/`. The live
+  slot_data is stale (no locations 187-188): rebuild it before the next `liveslot`. Tests written and unrun (the suite
+  and fuzzer before the next push): `TestDashWithoutTheHorn`, `TestIceBlockClimb`, `TestFencedPond` and the last
+  chat's. The PopTracker pack's re-export waits for the next PopTracker work (the ruler, locations 183-188). A stray
+  disk-wide `find` I left in the background ran about two hours before the user noticed; stopped.
