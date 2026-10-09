@@ -3713,7 +3713,8 @@ either one wrong).
   user's word ("leave the server open, i will continue in the next chat"): stopped first by mistake, then restarted as
   its own process (`Start-Process`, so it outlives the chat) on 38281 with seed `AP_81434407810428720732` (zip in
   session f7f04659's scratchpad `out/`, player file `players/BugTester.yaml`); the game reconnected with nothing lost
-  (27 items, 13 checks); then the user closed it themselves. The next session hosts it again. The user's game runs the plugin of `2f624c3` (the card's hook). The next session writes a
+  (27 items, 13 checks); then the user closed it themselves. The next session hosts it again. The user's game runs
+  the plugin of `2f624c3` (the card's hook). The next session writes a
   fresh `live-slot-data.py` file for `liveslot`. The command file is still
   session bed6439d's scratchpad `cmds.txt`; write it with a quoted heredoc. Dev settings unchanged: `InfJump` and
   `BumpKill` on, `OneHit`, `QuietBursts` and `AdoptSeed` off.
@@ -3798,7 +3799,8 @@ either one wrong).
   once the Dash is learned, a dashing Horn Dash's hitbox tagged `BeetleDash` only for the boulder it touches; `Tick`
   quiet during a tap or a Dash), built and loaded (`installed in DoActionTap: 3 of 3 horn tags, Kabbu's swing and its
   sound`). Not reviewed, no docs, no test, not seen. **Left uncommitted on purpose for the next chat to finish and
-  commit:** no other chat works on it; it is this session's own work, not a peer's. A misread summary had the user worried the Horn Dash would need
+  commit:** no other chat works on it; it is this session's own work, not a peer's. A misread summary had the user
+  worried the Horn Dash would need
   the horn: it doesn't. The first press without the horn: the buzzer, no swing (my pick, as locked moves do today).
 - **Open:** the Dash's own build step (63): docs (Next 23, build steps 21 and 23, `MEASURED.md` on the tag consumers
   and its line ~2697), a review, then TO-CHECK's new "every learned ability, one copy at a time" (a fresh seed with
