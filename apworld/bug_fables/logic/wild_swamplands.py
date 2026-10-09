@@ -21,6 +21,10 @@ _CRANK_LIFT = CanUse("Horn Dash") & CanUse("Beemerang Halt") & CanUse("Jump")
 # Shield or Bee Fly; any attack) has moved the platform in its way; then Jump across.
 _LEFT_TO_RIGHT = CanUse("Bee Fly") | (CanUse("Jump") & CanUse("Horn Dash") & CanUse("Beemerang Toss") & ANY_ATTACK
                                       & (CanUse("Shield") | CanUse("Bee Fly")))
+# Swamplands7's ice blocks: one frozen from a droplet (Freeze), knocked into place (the horn) and jumped on (Jump); and
+# one brought up from its bottom middle to its middle on a platform, past a boulder (Horn Dash).
+_ICE_BLOCK = CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump")
+_ICE_BLOCK_UP = CanUse("Horn Dash") & _ICE_BLOCK
 
 LOCATIONS = (
     # Where the game teaches the Horn Dash (Event131, flag 39): the boulder at the bridge's bottom, talked to with
@@ -57,6 +61,10 @@ LOCATIONS = (
     Location("Wild Swamplands: Crank Pond, Grass in the Bottom Left", 186, "Swamplands6",
              Source(regional=19, pickup=Pickup(map="Swamplands6", type=0, item=0)), rule=CanUse("Horn Slash"),
              category="hidden_item", no_jump=True),
+    # Ice Block Climb's medal (Swamplands7; named by the user, 2026-10-09), Eternal Venom, on a stump in its upper left:
+    # nothing once there.
+    Location("Wild Swamplands: Ice Block Climb, On Top of the Stump", 187, "Swamplands7",
+             Source(flag=355, pickup=Pickup(map="Swamplands7", type=2, item=27)), no_jump=True, area="Upper Left"),
 )
 STORY_EVENTS = (
     # Leafbug Crossing's tree, knocked down by the horn from the middle (Event129: the hidden switch `eventhit`, hit by
@@ -135,6 +143,21 @@ MAP_AREAS = (
          out=CanUse("Horn Slash") | CanUse("Bee Fly"), to="Swamplands6 (Middle)"),
     Area("Swamplands6", "Upper Right", ("loadzone right",), _CRANK_LIFT, out=one_way(None, _CRANK_LIFT),
          to="Swamplands6 (Lower Right)"),
+    # Swamplands7 (the user, 2026-10-09): its middle the map's own region. The bottom middle a drop down from it; back
+    # up, an ice block brought up on the platform (_ICE_BLOCK_UP). The bottom right (the door to the Junction) to and
+    # from the bottom middle by an ice block, or Bee Fly. The upper middle: that ice block pushed onto a plate below
+    # and right of the middle lowers a platform, Freeze again melts the block and it rises with the party; a drop back
+    # down. The upper left (the medal's stump) from the upper middle by an ice block or Bee Fly, back by Bee Fly only
+    # (or its drop to the left, below). The left (its door, a red bounce pad up to the middle): to and from the middle
+    # by Bee Fly, or across once an ice block brought up opens the way; the pad one-way.
+    Area("Swamplands7", "Bottom Middle", (), one_way(None, _ICE_BLOCK_UP), out=_ICE_BLOCK_UP),
+    Area("Swamplands7", "Bottom Right", ("loadzone south",), CanUse("Bee Fly") | _ICE_BLOCK,
+         to="Swamplands7 (Bottom Middle)"),
+    Area("Swamplands7", "Upper Middle", (), _ICE_BLOCK_UP, out=one_way(None, _ICE_BLOCK_UP)),
+    Area("Swamplands7", "Upper Left", (), CanUse("Bee Fly") | one_way(_ICE_BLOCK, CanUse("Bee Fly") | _ICE_BLOCK_UP),
+         out=CanUse("Bee Fly"), to="Swamplands7 (Upper Middle)"),
+    Area("Swamplands7", "Left", ("loadzone left",), CanUse("Bee Fly") | _ICE_BLOCK_UP,
+         out=one_way(None, CanUse("Bee Fly") | _ICE_BLOCK_UP)),
 )
 TRANSFERS = (
     # Leafbug Crossing's upper right down into the middle, a drop: back up, the tree knocked down and Jump or Bee Fly.
@@ -149,6 +172,12 @@ TRANSFERS = (
     # Crank Pond's lily pad, started by cutting its grass on the right (the horn): it goes back and forth, so it also
     # takes the party from the lower right to the left side and back.
     Transfer("lily pad", "Swamplands6", "Swamplands6", CanUse("Horn Slash"), two_way=False, from_area="Lower Right"),
+    # Swamplands7's upper left down to its left, a drop; and the left down to the bottom right with Jump. Back from
+    # either, round the room: the red pad to the middle, then an ice block brought up.
+    Transfer("drop", "Swamplands7", "Swamplands7", two_way=False, way_back=_ICE_BLOCK_UP, from_area="Upper Left",
+             to_area="Left"),
+    Transfer("ledges", "Swamplands7", "Swamplands7", CanUse("Jump"), two_way=False, way_back=_ICE_BLOCK_UP,
+             from_area="Left", to_area="Bottom Right"),
 )
 
 # The swamp bridge stays up (the user, 2026-10-04): its collapse's trigger (Event130, which also needs Maki following)

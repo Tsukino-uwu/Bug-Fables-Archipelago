@@ -1341,6 +1341,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   sets 689 and is there until 689: from the dumps, its bridge would load raised again, its switch gone, unless the
   swamp's switch was hit. To see on screen. Also here: `eventtrigger2` at the bottom (`Event131`, until 39) teaches the
   Horn Dash and breaks the bottom `rock` (until 39); a save crystal at the bottom (one entity until 359, another from).
+  That `rock` is a `BreakableRock` with `eventtrigger2` just in front of it, yet a Horn Dash doesn't break it: seen
+  2026-10-09 (the user, the Horn Dash in hand); only the scene removes it.
   **Seen on screen (2026-10-08, the user, a vanilla file and then a seed):** with the bridge up, its left and right
   doors are free between them. From the right side, a drop down a path to the top right (a green bounce pad, the small
   bridge's switch, knocked down by the horn), Jump back up; from there, across to the top door's platform (to the boss),
@@ -1390,6 +1392,18 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   a drop to the lower right; up, the lift: its crank (`screw - Duplicate`) behind a boulder (`ROTrock`, no flag:
   back each visit), Horn Dash and Beemerang Halt, then Jump on. A Leafbug Archer, a Madesphy and a Chomper for the
   enemy pass.
+  **`Swamplands7`, Ice Block Climb (2026-10-09, the user; named by the user):** six parts by height and side. An ice
+  block is frozen from a droplet (Freeze), knocked into place (the horn) and jumped on (Jump). The bottom right (the
+  door to the Junction) to and from the bottom middle by an ice block or Bee Fly. The middle a drop down to the bottom
+  middle; up, an ice block brought up on a platform past a boulder (`rock`, no flag), Horn Dash too, and no Bee Fly
+  way. That block on the plate below and right of the middle lowers a platform; Freeze again melts the block and the
+  platform rises with the party to the upper middle, a drop back down. The upper left from the upper middle by an
+  ice block or Bee Fly, back by Bee Fly only; a drop from it to the left. On its stump the medal Eternal Venom (medal
+  27, flag 355), needing nothing. The left (its door to the swamp bridge) to and from the middle by Bee Fly, or across
+  once an ice block brought up opens the way; its red bounce pad (`bounce`) sends the party up to the middle with
+  nothing, one-way; down from the left to the bottom right with Jump, one-way. Six plates and an AND gate, two
+  droplets (a third parked at y 999). Its map enemies (`ICEflowering`, `Archer - Duplicate - Duplicate`, `archertop`,
+  `clubber`, a Madesphy) for the enemy pass.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

@@ -729,3 +729,38 @@ class TestCrankPond(BugFablesTestBase):
         self.assertFalse(up.access_rule(self.state_with("Progressive Beemerang", "Progressive Beemerang", "Jump")))
         self.assertTrue(up.access_rule(self.state_with("Progressive Beemerang", "Progressive Beemerang", "Jump",
                                                        "Progressive Dash", "Progressive Dash")))
+
+
+class TestIceBlockClimb(BugFablesTestBase):
+    # Swamplands7 (the user, 2026-10-09): ice blocks frozen from droplets, knocked with the horn and jumped on; one
+    # brought up past a boulder (Horn Dash) opens the middle's ways up and across; Bee Fly for some.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+    ICE = ("Progressive Freeze", "Horn Slash", "Jump")
+    ICE_UP = ICE + ("Progressive Dash", "Progressive Dash")
+
+    def test_bottom_right_to_the_bottom_middle(self) -> None:
+        across = self.multiworld.get_entrance("Swamplands7 (Bottom Right) to Swamplands7 (Bottom Middle)", self.player)
+        self.assertFalse(across.access_rule(self.state_with("Progressive Freeze", "Jump")))
+        self.assertTrue(across.access_rule(self.state_with(*self.ICE)))
+        self.assertTrue(across.access_rule(self.state_with("Bee Fly")))
+
+    def test_up_to_the_middle_needs_the_horn_dash(self) -> None:
+        up = self.multiworld.get_entrance("Swamplands7 (Bottom Middle) to Swamplands7", self.player)
+        self.assertFalse(up.access_rule(self.state_with(*self.ICE)))
+        self.assertFalse(up.access_rule(self.state_with("Bee Fly")))
+        self.assertTrue(up.access_rule(self.state_with(*self.ICE_UP)))
+
+    def test_upper_left_back_only_by_bee_fly(self) -> None:
+        back = self.multiworld.get_entrance("Swamplands7 (Upper Left) to Swamplands7 (Upper Middle)", self.player)
+        self.assertFalse(back.access_rule(self.state_with(*self.ICE_UP)))
+        self.assertTrue(back.access_rule(self.state_with("Bee Fly")))
+
+    def test_left_to_the_bottom_right_counts_with_a_way_back(self) -> None:
+        ledges = self.multiworld.get_entrance("Swamplands7 (Left) to Swamplands7 (Bottom Right) (ledges)", self.player)
+        self.assertFalse(ledges.access_rule(self.state_with("Jump")))
+        self.assertTrue(ledges.access_rule(self.state_with(*self.ICE_UP)))
+
+    def test_medal_needs_nothing_there(self) -> None:
+        medal = self.multiworld.get_location("Wild Swamplands: Ice Block Climb, On Top of the Stump", self.player)
+        self.assertTrue(medal.access_rule(self.state_with()))
+        self.assertEqual(medal.parent_region.name, "Swamplands7 (Upper Left)")
