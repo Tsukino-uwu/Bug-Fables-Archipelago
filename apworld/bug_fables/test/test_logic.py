@@ -764,3 +764,29 @@ class TestIceBlockClimb(BugFablesTestBase):
         medal = self.multiworld.get_location("Wild Swamplands: Ice Block Climb, On Top of the Stump", self.player)
         self.assertTrue(medal.access_rule(self.state_with()))
         self.assertEqual(medal.parent_region.name, "Swamplands7 (Upper Left)")
+
+
+class TestFencedPond(BugFablesTestBase):
+    # Swamplands8 (the user, 2026-10-09): a double fence splits the middle from the right side and the top door until
+    # the lever on the ledge takes it down; Bee Fly goes everywhere.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True, "shuffle_dig_spots": True}
+
+    def test_lever_ledge(self) -> None:
+        up = self.multiworld.get_entrance("Swamplands8 to Swamplands8 (Upper Middle)", self.player)
+        self.assertFalse(up.access_rule(self.state_with("Jump", "Horn Slash")))
+        self.assertTrue(up.access_rule(self.state_with("Jump", "Horn Slash", "Progressive Dash", "Progressive Dash")))
+        self.assertTrue(up.access_rule(self.state_with("Jump", "Bee Fly")))
+
+    def test_fence_splits_the_room(self) -> None:
+        across = self.multiworld.get_entrance("Swamplands8 to Swamplands8 (Right)", self.player)
+        self.assertFalse(across.access_rule(self.state_with("Jump")))
+        self.assertTrue(across.access_rule(self.state_with("Jump", "Swamp Fence Down")))
+        self.assertTrue(across.access_rule(self.state_with("Bee Fly")))
+
+    def test_top_door_side_needs_no_lever(self) -> None:
+        down = self.multiworld.get_entrance("Swamplands8 (Top) to Swamplands8 (Right)", self.player)
+        self.assertFalse(down.access_rule(self.state_with()))
+        self.assertTrue(down.access_rule(self.state_with("Jump")))
+        dig = self.multiworld.get_location("Wild Swamplands: Fenced Pond, Dig Spot", self.player)
+        self.assertEqual(dig.parent_region.name, "Swamplands8 (Right)")
+        self.assertTrue(dig.access_rule(self.state_with("Beetle Dig")))

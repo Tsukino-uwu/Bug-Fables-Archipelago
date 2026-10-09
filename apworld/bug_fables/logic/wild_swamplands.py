@@ -26,6 +26,10 @@ _LEFT_TO_RIGHT = CanUse("Bee Fly") | (CanUse("Jump") & CanUse("Horn Dash") & Can
 # Dash).
 _ICE_BLOCK = CanUse("Freeze") & CanUse("Horn Slash") & CanUse("Jump")
 _ICE_BLOCK_UP = CanUse("Horn Dash") & _ICE_BLOCK
+_FENCE_DOWN = "Swamp Fence Down"
+# Swamplands8's lever ledge from its middle: past a boulder (Horn Dash), a rock pushed (the horn) and jumped on (Jump),
+# or Jump and Bee Fly.
+_LEVER_LEDGE = (CanUse("Horn Dash") & CanUse("Horn Slash") & CanUse("Jump")) | (CanUse("Jump") & CanUse("Bee Fly"))
 
 LOCATIONS = (
     # Where the game teaches the Horn Dash (Event131, flag 39): the boulder at the bridge's bottom, talked to with
@@ -66,6 +70,10 @@ LOCATIONS = (
     # nothing once there.
     Location("Wild Swamplands: Ice Block Climb, On Top of the Stump", 187, "Swamplands7",
              Source(flag=355, pickup=Pickup(map="Swamplands7", type=2, item=27)), no_jump=True, area="Upper Left"),
+    # Fenced Pond's dig spot (Swamplands8), a Magic Seed coming back each visit (regional flag 13), on its right side.
+    Location("Wild Swamplands: Fenced Pond, Dig Spot", 188, "Swamplands8",
+             Source(regional=13, pickup=Pickup(map="Swamplands8", type=0, item=11)), rule=CanUse("Beetle Dig"),
+             category="dig_spot", no_jump=True, area="Right"),
 )
 STORY_EVENTS = (
     # Leafbug Crossing's tree, knocked down by the horn from the middle (Event129: the hidden switch `eventhit`, hit by
@@ -81,6 +89,10 @@ STORY_EVENTS = (
     # 354 and runs for good).
     StoryEvent("Wild Swamplands: Junction, Lift Lever Hit", _LIFT, "Swamplands5", Source(flag=354), rule=ANY_ATTACK,
                area="Top Right"),
+    # Fenced Pond's lever (`gateswitch`, any attack; Event136 sets 356), on its ledge: it takes down the double fence
+    # between the middle and the right side for good.
+    StoryEvent("Wild Swamplands: Fenced Pond, Fence Lever Hit", _FENCE_DOWN, "Swamplands8", Source(flag=356),
+               rule=ANY_ATTACK, area="Upper Middle"),
 )
 MAP_AREAS = (
     # The swamp boss's room (the user, 2026-10-08): its bottom (the door, the save crystal, the healing flower) the
@@ -159,6 +171,15 @@ MAP_AREAS = (
          out=CanUse("Bee Fly"), to="Swamplands7 (Upper Middle)"),
     Area("Swamplands7", "Left", ("loadzone left",), CanUse("Bee Fly") | _ICE_BLOCK_UP,
          out=one_way(None, CanUse("Bee Fly") | _ICE_BLOCK_UP)),
+    # Fenced Pond (Swamplands8; the user, 2026-10-09): its middle the map's own region. The bottom (its door from Crank
+    # Pond, a healing flower) to and from it with Jump or Bee Fly. The upper middle (the lever) up from it
+    # (_LEVER_LEDGE), a drop back down. The right side (the dig spot) across the double fence, once the lever has taken
+    # it down, with Jump, or Bee Fly, both ways. The top (its door to the Junction) to and from the right side with Jump
+    # or Bee Fly.
+    Area("Swamplands8", "Bottom", ("loadzonesouth",), CanUse("Jump") | CanUse("Bee Fly")),
+    Area("Swamplands8", "Upper Middle", (), _LEVER_LEDGE, out=one_way(None, _LEVER_LEDGE)),
+    Area("Swamplands8", "Right", (), (Has(_FENCE_DOWN) & CanUse("Jump")) | CanUse("Bee Fly")),
+    Area("Swamplands8", "Top", ("loadzonenorth",), CanUse("Jump") | CanUse("Bee Fly"), to="Swamplands8 (Right)"),
 )
 TRANSFERS = (
     # Leafbug Crossing's upper right down into the middle, a drop: back up, the tree knocked down and Jump or Bee Fly.

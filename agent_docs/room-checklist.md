@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**135 of 244 done.**
+**136 of 244 done.**
 
 ## Outskirts
 
@@ -109,16 +109,19 @@ as it is, a frozen record.
 
 ## Golden Hills
 
-- [x] GoldenHillsDungeonEntrance (45) — for the enemy pass: the Mothiva and Zasp fight (Event67, on placing the Big Crank)
+- [x] GoldenHillsDungeonEntrance (45) — for the enemy pass: the Mothiva and Zasp fight (Event67, on placing the Big
+  Crank)
 - [x] GoldenHillsDungeonLeftMain (46)
 - [x] GoldenHillsDungeonCrankLeft (47) — its crank spot added with the Wooden Crank step (Next 62)
 - [x] GoldenHillsDungeonRightCrank (48) — for the quest pass: the butler (Butler Missing!, Event103); its crank half
   with Next 62
-- [x] GoldenHillsLowerRightCrank (49) — its crank spot with Next 62; for the enemy pass: the Chomper, Beemerang Halt alone
+- [x] GoldenHillsLowerRightCrank (49) — its crank spot with Next 62; for the enemy pass: the Chomper, Beemerang Halt
+  alone
 - [x] GoldenHillsDungeonLeftCrankHalf (50) — its crank half with Next 62 (Vi for the Venus Buds)
 - [x] GoldenHillsDungeonUpperMain (51) — for the quest pass: the mole cricket (flags 130 to 577), the offerings' chain
 - [x] GoldenHillsDungeonUpperSide (52) — its crank spot with Next 62
-- [x] GoldenHillsDungeonBoss (53) — for the enemy pass: the Venus' Guardian fight (Event73, Jump up to it; its needs untested)
+- [x] GoldenHillsDungeonBoss (53) — for the enemy pass: the Venus' Guardian fight (Event73, Jump up to it; its needs
+  untested)
 - [x] GoldenPitcher1 (203)
 - [x] GoldenPitcher2 (205)
 - [x] PitcherPlantArena (239) — for the quest pass: the pitcher's bounty fight (Event124, flag 494), with the other
@@ -132,13 +135,14 @@ as it is, a frozen record.
 - [x] GoldenSettlementEntrance (39) — for the quest pass: the horn quest and Tanjerin (the minigame door's rock, flags
   274-275); the caravan's other stalls, one at a time (the user)
 - [x] GoldenHillsPath3 (44)
-- [x] GoldenSMinigame (114) — for the quest pass: the mayor's late visit (20 worms, the Desert Key, quest 46, flags 557-559)
+- [x] GoldenSMinigame (114) — for the quest pass: the mayor's late visit (20 worms, the Desert Key, quest 46, flags
+  557-559)
 
 ## Golden Settlement
 
-- [x] GoldenSettlement1 (40) — for the quest pass: Aria's offering (Queen's Dinner, flag 393) and the festival chain, the
-  quest board (from 86), Samira, the night's talkers, the Mothiva Doll's trade (Defiant Root); for the enemy pass: the
-  festival fight (Event58); for the discovery sweep: the balcony (Event53) and The Golden Festival (014); for the
+- [x] GoldenSettlement1 (40) — for the quest pass: Aria's offering (Queen's Dinner, flag 393) and the festival chain,
+  the quest board (from 86), Samira, the night's talkers, the Mothiva Doll's trade (Defiant Root); for the enemy pass:
+  the festival fight (Event58); for the discovery sweep: the balcony (Event53) and The Golden Festival (014); for the
   sellers' pass: the mosquito girl's Berry Juice and the moth merchant's night goods; Kut the chef free day and night
 - [x] GoldenSettlement1Night (41) — the square at night: the same room (build step 52), mapped with it
 - [x] GoldenSettlement2 (42) — for the quest pass: the farmer's board quest (quest 50, three Clear Waters, Heavy
@@ -206,7 +210,8 @@ as it is, a frozen record.
 - [x] Swamplands5 (159) — the Junction; its centipede scene kept away (build step 62)
 - [x] Swamplands6 (160) — Crank Pond
 - [x] Swamplands7 (161) — Ice Block Climb
-- [ ] Swamplands8 (162)
+- [x] Swamplands8 (162) — Fenced Pond; for the quest pass: Seb (from 389 until 390; his line 4 sets 390, which opens
+  the Outskirts house `doormadeleine`, and his talk moves the party to the Outskirts)
 
 ## Defiant Root
 

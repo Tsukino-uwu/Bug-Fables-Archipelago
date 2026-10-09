@@ -774,8 +774,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
     switch (an attack).
     **`SnakemouthUndergroundLeftA` (2026-10-06, the user):** from the right door (to `SnakemouthUndergrondDoor`) up to
     the left door (to `UndergroundLeftB`) takes Jump, Freeze and the horn; down from it a free drop. No items.
-    **`SnakemouthUndergroundLeftB` (2026-10-06, seen):** from the low door (to `UndergroundLeftA`) up to the top (the big
-    switch, flag 33, and the high door) takes Jump, Freeze and the horn; down is a free drop. The high door's gate
+    **`SnakemouthUndergroundLeftB` (2026-10-06, seen):** from the low door (to `UndergroundLeftA`) up to the top (the
+    big switch, flag 33, and the high door) takes Jump, Freeze and the horn; down is a free drop. The high door's gate
     opens on the big switch (an attack): arriving through it with flag 33 cleared, the party was pushed past the gate.
     **`SnakemouthTop` (2026-10-06, the user):** one door, to the door room's high door; in, out and the Sophie Petal
     (key item 127, gone after flag 421, EntityDump) need nothing. The petal is Doctor Isau's request on `DefiantRoot1`
@@ -1405,6 +1405,17 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   nothing, one-way; down from the left to the bottom right with Jump, one-way. Six plates and an AND gate, two
   droplets (a third parked at y 999). Its map enemies (`ICEflowering`, `Archer - Duplicate - Duplicate`, `archertop`,
   `clubber`, a Madesphy) for the enemy pass.
+  **`Swamplands8`, Fenced Pond (2026-10-09, the user; named by the user):** a double fence (`Base/DoubleFence` and its
+  two children, hidden from 356) splits the room. The bottom (its door from Crank Pond, a healing flower `venus`) to
+  and from the middle with Jump or Bee Fly. The lever (`gateswitch`, any attack, data `1 136 0 0 0`) on a ledge above
+  the middle: up past a boulder (`breakrock`, no flag) and a rock pushed with the horn (`rock`, two `PushRock`s), then
+  Jump; or Jump and Bee Fly; a drop back down. Its scene (`Event136`) sets 356 for good and takes the fence down. The
+  right side (a dig spot, `digspot`, a Magic Seed, regional flag 13, back each visit; Seb, `seb`, from 389 until 390)
+  across the fence with Jump once it's down, or Bee Fly; from the top door (its door to the Junction) Jump or Bee Fly
+  both ways, the fence's far side reached but not the middle before the lever. Four lily pads on the water, a bounce
+  pad by the top door, five grass patches with nothing; the dig spot is its only item. Seb's talk (line 4 sets 390,
+  opening the Outskirts house, and loads a map; line 7 warps to `BugariaOutskirtsOutsideCity`, the ScriptDump) is for
+  the quest pass. Its map enemies (a Leafbug Clubber, a Madesphy, a Leafbug Ninja, `enemy`) for the enemy pass.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

@@ -3171,7 +3171,9 @@ Crank Pond (the middle's crank, Beemerang Halt and Jump, to the lower right, bac
 door up a lift, Horn Dash, the Halt and Jump; a Burly Berry and a Crunchy Leaf in grass, locations 185 and 186), 134 of
 244; Ice Block Climb (ice blocks frozen, knocked with the horn and jumped on, one from the droplet behind a boulder,
 Horn Dash, brought up to open the middle's ways up and across; Bee Fly for some; the medal Eternal Venom on a stump,
-location 187), 135 of 244; the rest of `room-checklist.md` to go.
+location 187), 135 of 244; Fenced Pond (a double fence between its middle and its right side, taken down by a lever on
+a ledge, Horn Dash, the horn and Jump, or Jump and Bee Fly; a Magic Seed dug up on the right, location 188), 136 of 244,
+the swamp done; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
