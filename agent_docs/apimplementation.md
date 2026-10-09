@@ -3218,17 +3218,17 @@ shows while its crystal is lit, the Beemerang Toss from either side, or Bee Fly;
 Puzzle (its floor a drop from every side, Jump or Bee Fly back up to its lower door; a block knocked into place with
 the horn fills its upper gap and opens its upper left door, or Bee Fly crosses; the medal Frostbite burrowed to,
 Beetle Dig, location 198), 142 of 244; the Statue Room (over the middle's block on platforms: from the left Icicle
-and Jump, or Bee Fly; from the right Jump or Bee Fly; no items), 143 of 244; the Basement (its door on an isolated ledge, the
-middle by Jump or Bee Fly; three spots on its platforms, the Toss and Jump or Bee Fly, the Ancient Key behind a barrier,
-Halt and Jump or Bee Fly, locations 199-201, pending with the castle's 198, build step 67), 144 of 244; the Roof (its
-doors and save crystal free; a Frost Bomb behind the left statue, 202, pending; the boss door locked from its side
-until the Big Ancient Key, the boss key room reached while that key is the game's own pickup), 145 of 244; the Main
-Room (the hub, five parts: the bottom free; the middle left and the top left cut off, drops; the middle right and the
-top right up their lifts, each started by its own switch, with Jump; both Ancient Key locks needing both keys' spots
-reached while they're the game's own pickups), 146 of 244; the Boss Key Room (a Cold Salad round the edge, nothing
-needed; its right side by the block pushed with the horn and Jump, or Bee Fly, back with Jump or Bee Fly; the Big
-Ancient Key there, past three flying Wardens, Vi; locations 203-204, pending; the Roof's boss door now needs that side
-and Vi), 147 of 244; the rest of `room-checklist.md` to go.
+and Jump, or Bee Fly; from the right Jump or Bee Fly; no items), 143 of 244; the Basement (its door on an isolated
+ledge, the middle by Jump or Bee Fly; three spots on its platforms, the Toss and Jump or Bee Fly, the Ancient Key
+behind a barrier, Halt and Jump or Bee Fly, locations 199-201, pending with the castle's 198, build step 67), 144 of
+244; the Roof (its doors and save crystal free; a Frost Bomb behind the left statue, 202, pending; the boss door
+locked from its side until the Big Ancient Key, the boss key room reached while that key is the game's own pickup),
+145 of 244; the Main Room (the hub, five parts: the bottom free; the middle left and the top left cut off, drops; the
+middle right and the top right up their lifts, each started by its own switch, with Jump; both Ancient Key locks
+needing both keys' spots reached while they're the game's own pickups), 146 of 244; the Boss Key Room (a Cold Salad
+round the edge, nothing needed; its right side by the block pushed with the horn and Jump, or Bee Fly, back with Jump
+or Bee Fly; the Big Ancient Key there, past three flying Wardens, Vi; locations 203-204, pending; the Roof's boss door
+now needs that side and Vi), 147 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
