@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**151 of 244 done.**
+**152 of 244 done.**
 
 ## Outskirts
 
@@ -252,7 +252,9 @@ as it is, a frozen record.
 
 ## Bee Kingdom Hive
 
-- [ ] BeehiveOutside (62)
+- [x] BeehiveOutside (62) — the Beehive Lift (as Defiant Root's); its factory door kept open (build step 69); for the
+  quest pass: Event88 at that door from 169 until 299 (the factory's story scene); for the discovery sweep: discovery
+  25 (Event104, the left bridge, from 299 until 224; the user: keep it but faster, skip the warning line before it)
 - [ ] BeehiveThroneRoom (63)
 - [ ] BeehiveScannerRoom (64)
 - [ ] BeehiveMainArea (67)

@@ -1589,6 +1589,20 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   branch after 346 is set; `Event203` already wraps its insert, `try { Insert(6, 17) } catch { Add(17) }`. The game
   reads `boardquests[1]` and `[2]` only by contents (`Contains`, `Count`, `Remove`, the quests page in stored order),
   never by position (a review, 2026-10-09). Used by `ChapterQuests.cs`. No pickups, discoveries, hazards or map enemies.
+  **`BeehiveOutside`, the Bee Kingdom's Beehive Lift (2026-10-09, the user; named by the user, as Defiant Root's):** two
+  parts with no way between them inside the room (the user). The bottom: the elevator bee's guard (`elevatorguard`,
+  talked to) sends the party down to Defiant Root's Beehive Lift, nothing needed; the hive's main door at the same spot
+  is two doors, `loadzonecorridor` to `BeehiveScannerRoom` until flag 160 and `loadzoneinside` to `BeehiveMainArea`
+  from 160, so one is always there. The left, a bridge: the hive's side door (`loadzone inside factory side`, no flag)
+  and, at its far end by the factory guard, the factory door (`loadzone factory`, pressed, to `HoneyFactoryEntrance`,
+  from 299; entered with 299 on, seen), in its place from 169 until 299 the pressed trigger of `Event88`, which loads the
+  factory (`LoadMap(72)`) and sets 177. In the bridge's middle a warning line (`warning dialogue`, from 169 until 660)
+  and `Event104` (`beeevent`, walked into, from 299 until 224): a short talk that records a journal discovery (25, seen),
+  adds quest 30 to the taken list and sets 224. Seen with every flag off: the bridge free end to end, the factory door
+  shut, no scene; with 169 on, nothing changed on the bottom. The factory door's closed model is `Base/Door` here
+  (hidden from 169) and `Base/DoorE` on the factory side (from 299): with both halves of the door kept present and both
+  models hidden, it looked open from both sides and worked both ways (seen, build step 69). No pickups, hazards or map
+  enemies.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

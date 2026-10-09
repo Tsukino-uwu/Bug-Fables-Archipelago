@@ -1157,3 +1157,32 @@ class TestCastleTreasureRoom(BugFablesTestBase):
 
     def test_artifact_waits(self) -> None:
         self.assertNotIn(345, {artifact.source.flag for artifact in ARTIFACTS})
+
+
+class TestHiveBeehiveLift(BugFablesTestBase):
+    # BeehiveOutside, the Bee Kingdom's Beehive Lift (the user, 2026-10-09): the bottom (the elevator, the main door) and
+    # the left bridge (the side door, the factory's) with no way between; the elevator bee sends the party down to
+    # Defiant Root's for nothing, while the way up keeps its stand-in.
+
+    def test_bridge_cut_off(self) -> None:
+        parts = {r.name for r in self.multiworld.get_regions(self.player) if r.name.startswith("BeehiveOutside")}
+        self.assertEqual(parts, {"BeehiveOutside", "BeehiveOutside (Left)"})
+        everything = self.state_with(*(item.name for item in self.multiworld.itempool if item.player == self.player))
+        for way in ("BeehiveOutside to BeehiveOutside (Left)", "BeehiveOutside (Left) to BeehiveOutside"):
+            self.assertFalse(self.multiworld.get_entrance(way, self.player).access_rule(everything), way)
+
+    def test_elevator_down_free_up_not(self) -> None:
+        down = self.multiworld.get_entrance("BeehiveOutside to DefiantRoot2 (Elevator) (elevator)", self.player)
+        up = self.multiworld.get_entrance("DefiantRoot2 (Elevator) to BeehiveOutside (elevator)", self.player)
+        self.assertTrue(down.access_rule(self.state_with()))
+        self.assertFalse(up.access_rule(self.state_with()))
+
+    def test_factory_door_open(self) -> None:
+        # Build step 69: both halves present and both closed models hidden from the start.
+        slot = self.world.fill_slot_data()
+        for half in ({"map": "BeehiveOutside", "entity": "loadzone factory"},
+                     {"map": "HoneyFactoryEntrance", "entity": "loadzoneoutside"}):
+            self.assertIn(half, slot["kept_present"])
+        for model in ({"map": "BeehiveOutside", "entity": "Base/Door"},
+                      {"map": "HoneyFactoryEntrance", "entity": "Base/DoorE"}):
+            self.assertIn(model, slot["scenery_hidden"])

@@ -299,6 +299,14 @@ logic for all rooms, we need to check all the unused or not randomized entrances
 shuffle leaves out (`doors.json`'s `fixed`, parked or unexported doors) gone through with the user, each joining the
 shuffle unless the user agrees a reason (`apimplementation.md`, Where it stands, Next 2).
 
+**One room at a time** (the user, 2026-10-09, the Bee Kingdom's Beehive Lift, after I traced which scenes in other rooms
+set its doors' flags and where its factory scene leads: "we should assume and work room per room, not
+different/neightbouring rooms. I want to map out 'THIS' specific room, and then do the other rooms afterwards"; "we
+work on things 1 room at a time"). The room is drafted from its own data (its entities, doors and flag-switched
+scenery, the flags as they stand on the test file) and the user's description, nothing else. A gate whose flag
+another room's story sets goes on the room's checklist line, "for the quest pass: ...", and is followed when that
+room, or the quest pass, comes up; it isn't researched now. The warp into the room comes first, before any of it.
+
 1. **A draft from the data.** The entity dump lists every object in the map by type: `BeetleGrass`, `PushRock`,
    `DigWall`, `DigSpot`, `BreakableRock`, `JumpSpring`, `Dropplet`, `Geizer`, `WindPusher`, `Switch`,
    `RotatingPlatform`, `PathPlatform`, `TempPlatform`, plus the doors (`door-graph.py`), the flag-gated doors
