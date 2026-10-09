@@ -3836,8 +3836,8 @@ either one wrong).
   (ten rooms, by position) is rechecked on screen once every room is mapped (their call; TO-CHECK, Known issues). Not
   yet seen in game: the seed starts with every ability, so TO-CHECK's Dash test needs a fresh seed, or a dev
   `give key` to pair with `take key` (the user's pick).
-- **Rooms, 134 to 136 of 244, the swamp done:** Ice Block Climb (`Swamplands7`, `202baae`, named by the user): ice blocks
-  frozen, knocked with the horn and jumped on, one from the droplet behind a boulder brought up on a platform; the
+- **Rooms, 134 to 136 of 244, the swamp done:** Ice Block Climb (`Swamplands7`, `202baae`, named by the user): ice
+  blocks frozen, knocked with the horn and jumped on, one from the droplet behind a boulder brought up on a platform; the
   medal Eternal Venom on a stump, location 187. Fenced Pond (`Swamplands8`, `bc16c7d`, named): a lever on a ledge takes
   down a double fence between the middle and the right side; a Magic Seed dug up, location 188; Seb's talk (390, and a
   warp to the Outskirts) for the quest pass, kept out of the logic as an optional way out (the user agreed). Both
