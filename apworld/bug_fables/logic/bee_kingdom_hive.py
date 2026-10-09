@@ -2,10 +2,14 @@
 room (room-checklist.md)."""
 from __future__ import annotations
 
-from rule_builder.rules import False_
+from rule_builder.rules import False_, Has
 
 from ..custom_rules import LATER_CHAPTERS
-from ..data_types import Area, DoorRow, EntityRef, FlagWith, FreeSale, Give, Location, Pickup, Source, Transfer
+from ..data_types import (Area, DoorRow, EntityRef, FlagWith, FreeSale, Give, Location, Pickup, Source, StoryEvent,
+                          Transfer)
+
+# Mothiva's scene in the Main Area (Event86, flag 173): talking to her, from the start; it brings the clothing stall.
+_MOTHIVA_SEEN = "Mothiva's Show Seen"
 
 LOCATIONS = (
     # Beette sells the Flower Key (the plaza's red house) on the balcony, free in a seed; her next line sets flag 228.
@@ -19,6 +23,19 @@ LOCATIONS = (
     # where the mod also sets 160, which teaches Leif Bubble Shield Lite, the game's own (as Pep Talk at the farm).
     Location("Bee Kingdom Hive: Scanner Room, Scan", 208, "BeehiveScannerRoom", Source(event=84, flag=159),
              no_jump=True),
+    # The Main Area's clothing stall (from 173, Mothiva's scene, until 252) sells the Bee Hat (40 berries, flag 251),
+    # then, the room entered again, the Pretty Ribbon (50 berries, 252): behind her scene and at their prices (the
+    # user, 2026-10-09); the berries in the logic come with Next 63, as for every seller.
+    Location("Bee Kingdom Hive: Main Area, Clothing Stall 1", 209, "BeehiveMainArea",
+             Source(flag=251, give=Give(map="BeehiveMainArea", type=1, item=99)), rule=Has(_MOTHIVA_SEEN),
+             no_jump=True),
+    Location("Bee Kingdom Hive: Main Area, Clothing Stall 2", 210, "BeehiveMainArea",
+             Source(flag=252, give=Give(map="BeehiveMainArea", type=1, item=94)), rule=Has(_MOTHIVA_SEEN),
+             no_jump=True),
+)
+STORY_EVENTS = (
+    StoryEvent("Bee Kingdom Hive: Main Area, Mothiva's Show", _MOTHIVA_SEEN, "BeehiveMainArea",
+               Source(event=86, flag=173)),
 )
 KEPT_PRESENT = (
     # Beette herself, made only after chapter 3 (flag 299) (the user, 2026-10-04: "make it appear always").
@@ -88,6 +105,8 @@ MAP_AREAS = (
     Area("BeehiveOutside", "Left", ("loadzone inside factory side", "loadzone factory"), False_()),
     # The Throne Room (BeehiveThroneRoom; named by the user, 2026-10-09): one region, its one door free, open from
     # both sides (KEPT_PRESENT).
+    # The Main Area (BeehiveMainArea; named by the user, 2026-10-09): one region, every door free (the Throne Room's
+    # and Jaune's Gallery's kept open, its bottom exit into the Scanner Room's top).
 )
 TRANSFERS = (
     # The bottom's elevator bee sends the party down to Defiant Root's Beehive Lift for nothing, onto its platform.

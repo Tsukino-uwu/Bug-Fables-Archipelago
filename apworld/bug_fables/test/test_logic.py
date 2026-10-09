@@ -1224,6 +1224,24 @@ class TestJaunesGallery(BugFablesTestBase):
         self.assertIn({"map": "BeehiveMainArea", "entity": "Base/Cube"}, slot["scenery_hidden"])
 
 
+class TestMainArea(BugFablesTestBase):
+    # BeehiveMainArea, the Main Area (the user, 2026-10-09): one region, every door free; the clothing stall's two
+    # spots, the Bee Hat and then the Pretty Ribbon, behind Mothiva's scene (flag 173), which needs nothing.
+
+    def test_one_region(self) -> None:
+        parts = {r.name for r in self.multiworld.get_regions(self.player) if r.name.startswith("BeehiveMainArea")}
+        self.assertEqual(parts, {"BeehiveMainArea"})
+
+    def test_stall_after_mothiva(self) -> None:
+        show = self.multiworld.get_location("Bee Kingdom Hive: Main Area, Mothiva's Show", self.player)
+        self.assertTrue(show.access_rule(self.state_with()))
+        for n in (1, 2):
+            stall = self.multiworld.get_location(f"Bee Kingdom Hive: Main Area, Clothing Stall {n}", self.player)
+            self.assertEqual(stall.parent_region.name, "BeehiveMainArea")
+            self.assertFalse(stall.access_rule(self.state_with()))
+            self.assertTrue(stall.access_rule(self.state_with("Mothiva's Show Seen")))
+
+
 class TestScannerRoom(BugFablesTestBase):
     # BeehiveScannerRoom, the Scanner Room (the user, 2026-10-09): one region, nothing needed across; kept between the
     # outside and the inside (build step 73), its gate open (72), its scan location 208 with flag 160 (74).

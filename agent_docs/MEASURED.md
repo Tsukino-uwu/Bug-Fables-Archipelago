@@ -1646,6 +1646,21 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   spot, 10.3, it takes 1.8 s door to control. Arriving at the top with 159 off, the scan started at once: its trigger
   reaches well up the corridor. No pickups, hazards, auto-start scenes or map enemies. Used by `DoorRows.cs`,
   `HiveScan.cs`.
+  **`BeehiveMainArea`, the Main Area (2026-10-09, the user; named by the user):** one floor, every door reachable from
+  anywhere with nothing: the Throne Room's (`loadzone throne`, from 169, kept open), Jaune's Gallery's (`loadzonejaune`,
+  from 299, kept open with its sign and cube), HB's Lab (`loadzonehb`), the balcony (`loadzone balcony`), Honeycomb's
+  lab (`loadzonehonyecomb`), the factory-side bridge's (`loadzoneoutside - Duplicate - Duplicate`) and the bottom exit
+  (`loadzoneoutside - Duplicate`, sent into the Scanner Room's top); a save crystal. Mothiva on her stage, a crowd
+  before it (`beeaudience`, until 173) that the party walks through (the user; not checked with a dev tool while it
+  stood); talking to her plays `Event86`, which sets 173 (seen). The clothing stall (`clothingshop`, from 173 until 252)
+  sells the Bee Hat (key 99, line 48: checkmoney 40, money -40, flag 251), then the Pretty Ribbon (key 94, line 54: 50
+  berries, flag 252); its display swaps with them (`Base/BeeHat` until 251, `Base/BeeHat (1)` from 251 until 252,
+  `Base/Scarves (2)` from 252). Seen: one item at a time, the hat then the ribbon, never both offered or either twice;
+  after the hat the ribbon showed only once the room was entered again, and after the ribbon the stall was gone on the
+  next entry. The Throne Room's scene trigger (`eventtrigger`, `Event87`, needs 167, 168, 173, until 169) and HB beside
+  his lab (`hbevent`, until 160). In a seed the stall's two sales are locations 209 and 210, each after Mothiva's scene
+  (a story event that needs nothing, so the trackers, which collect every reachable event, show both as soon as the room
+  is reachable). No pickups, hazards or map enemies.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
