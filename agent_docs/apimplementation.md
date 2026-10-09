@@ -395,7 +395,9 @@ be wrong.
     option, so its own build step. **The option (the user, 2026-10-09):** *Artifact Shuffle*, two choices: off, each
     artifact where vanilla gives it (today's), or on, the seven anywhere in the multiworld; no mode shuffling them only
     among the chapter ends (Pokémon Crystal's `randomize_badges` has one, read 2026-10-09, `licensing.md`). Until it's
-    built, the pause menu draws each set artifact flag's own icon (the mod guide, step 48).
+    built, the pause menu draws each set artifact flag's own icon (the mod guide, step 48). **Names so far** (each the
+    user's yes): chapter 4's, in the castle's treasure room on the central pedestal of a shrine between three statues,
+    "Ancient Castle: Treasure Room, Shrine" (2026-10-09).
 29. **A bosses goal, an idea for later** (2026-09-27): a *Goal* option (Artifacts / Bosses) and *Bosses
     Required* (all, or a number): each boss's beaten flag an event the goal counts, as artifacts are today. **Decided
     (2026-09-27): story bosses only**; the bounties maybe a side setting later, once *Shuffle Bounties* gives
