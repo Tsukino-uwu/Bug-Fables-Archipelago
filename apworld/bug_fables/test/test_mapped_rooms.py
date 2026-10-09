@@ -4,7 +4,8 @@ from ..custom_rules import ItemOnHand
 from ..data_tables import door_name
 
 PINK_SPIDER = "Forsaken Lands: Pink Spider, First Trade"
-ITEM_SHOP_ROOMS = {"GoldenSettlement1", "GoldenSettlementEntrance", "BugariaCommercial", "BugariaOutskirtsOutsideCity"}
+ITEM_SHOP_ROOMS = {"GoldenSettlement1", "GoldenSettlementEntrance", "BugariaCommercial", "BugariaOutskirtsOutsideCity",
+                   "HoneyFactoryEntrance (Bottom)", "DefiantRoot3"}
 
 
 class TestItemOnHand(BugFablesTestBase):

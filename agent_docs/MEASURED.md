@@ -1703,8 +1703,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   either (the user). The processing door is locked by `keything` (a `LockedDoor`, `Event59` key index 4, the Factory
   Pass, key item 95, used up) until flag 179, which `Event89` sets after the pass; its closed model `Base/DoorP` until
   179. Arriving through it from the first room with the lock there, the game pushes the party past it into the upper
-  area (seen). The storage door's closed model is `Base/DoorS` (until 211, `Event98`); kept present with the model
-  hidden, it was walked through into the Storage Elevator (seen, build step 77). The shop's bee (`shopbee`, until 176)
+  area (seen). The storage door's closed model is `Base/DoorS` (until 211, `Event98`); the Storage Elevator's half
+  (`FactoryStorageElevator`'s `loadzonetop`) has no flag (EntityDump). Kept present with the model hidden, the door was
+  walked through into the Storage Elevator (seen, build step 77). The shop's bee (`shopbee`, until 176)
   talks at line 5, which runs `Event80`'s factory part: flag 176 and the room loaded again, the shop then open (its
   seller, a storage ant, a door, `Base/DoorLock` gone), nothing needed (the user). Its keeper (`shopbee - Duplicate`,
   a `Shop`, from 176) stocks items 10, 9, 20, 49 and 43 (Honey'd Leaf, Leaf Omelet, Glazed Honey, Honey Ice Cream,
@@ -1719,8 +1720,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (`Item - Shock`, item 75, flag 728) on the desk, Jump or Bee Fly; the Factory Pass (`card`, key item 95, flag 178) up
   high, Jump and the Beemerang Toss, or Bee Fly alone (the user). The overseer from 299 until 324, then Malbee (324 to
   330, her line 24 gives the medal Power Exchange, 49) and the overseer's second spot (from 324). The sleeping quarters
-  (`loadzonebeds`): three workers; one line (11) sells a Magic Seed (item 11) for 25 berries. No hazards, auto-start
-  scenes or map enemies.
+  (`loadzonebeds`): three workers, nothing needed in or out (the user); one line (11) sells a Magic Seed (item 11) for
+  25 berries. No hazards, auto-start scenes or map enemies.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

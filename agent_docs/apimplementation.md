@@ -800,16 +800,17 @@ be wrong.
     short fades ("wouldn't it look weird without at least a tiny blackfade ? i don't want it to feel like loading,
     but i also don't want it to be instant/weird"), start the load as soon as the screen is black, cut the fixed
     waits to the frames the camera and sprites need, keep the visible walk in (maybe quicker): about 1.2 s a change.
-67. **The Factory Pass, never used up** (decided 2026-10-10, the user, mapping the factory's Lobby; its own step).
-    In the game each Factory Pass lock (`Event59`, key index 4) takes a pass (key item 95) away: the Lobby's
-    processing door, the pump room's scanner and the storage maze's card lock; the game has four pickups, in the
-    worker rooms and the three processing puzzle rooms. The Wooden Crank's way (Next 62): in a seed the mod leaves the
-    pass in the bag at each lock, so the pool holds one Factory Pass, progression, and every lock needs only it; the
-    other pass pickups become ordinary locations. Asked by the user: "similar to the cranks where we made it into just
-    1 reusable instead of having 3-4". Built once the rooms holding passes and locks are mapped; until then the
-    Lobby's processing door has a stand-in (`FACTORY_PASS`, the later chapters, `logic/honey_factory.py`), and the
-    Worker Rooms' pass (flag 178: Jump and the Beemerang Toss, or Bee Fly alone, the user) stays the game's own pickup,
-    since a location there could hold another item while the door still needs a pass.
+67. **The Factory Pass, never used up** (decided 2026-10-10, the user, mapping the factory's Lobby; its own step). In
+    the game each Factory Pass lock (`Event59`, key index 4) takes a pass (key item 95) away: the Lobby's processing
+    door (one), the pump room's scanner (three) and the storage maze's card lock (one); the game has five passes for
+    them: four pickups, in the worker rooms and the three processing puzzle rooms, and one given after the storage
+    mini-boss room's fight (`Event101`, flag 221; found by a review, 2026-10-10). The Wooden Crank's way (Next 62): in a
+    seed the mod leaves the pass in the bag at each lock, so the pool holds one Factory Pass, progression, and every
+    lock needs only it; the other pass pickups become ordinary locations. Asked by the user: "similar to the cranks
+    where we made it into just 1 reusable instead of having 3-4". Built once the rooms holding passes and locks are
+    mapped; until then the Lobby's processing door has a stand-in (`FACTORY_PASS`, the later chapters,
+    `logic/honey_factory.py`), and the Worker Rooms' pass (flag 178: Jump and the Beemerang Toss, or Bee Fly alone, the
+    user) stays the game's own pickup, since a location there could hold another item while the door still needs a pass.
 
 **Known issues:**
 
