@@ -20,8 +20,8 @@ _UPPER_LIFT = "Sand Castle Upper Lift Running"
 _TO_MIDDLE_RIGHT = (Has(_LOWER_LIFT) | Has(_UPPER_LIFT)) & CanUse("Jump")
 _TO_TOP_RIGHT = Has(_UPPER_LIFT) & CanUse("Jump")
 # The Pressure Puzzle's plates, both ways it's played: the crystal hit, enemies frozen, ice knocked about with the
-# horn, raised platforms jumped across.
-_PRESSURE = CanUse("Jump") & CanUse("Freeze") & CanUse("Horn Slash")
+# horn, and the raised platforms crossed with Jump or Bee Fly.
+_PRESSURE = CanUse("Freeze") & CanUse("Horn Slash") & _UP
 _PRESSURE_SOLVED = "Sand Castle Pressure Puzzle Door Open"
 # The two Ancient Keys (114), each used up by one of the main room's two locks. While the castle's spots are pending
 # both are the game's own pickups, neither behind a lock, so either lock opens once both are reached: the Basement's

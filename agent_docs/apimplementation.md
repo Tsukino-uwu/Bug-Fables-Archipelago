@@ -3229,8 +3229,8 @@ needing both keys' spots reached while they're the game's own pickups), 146 of 2
 round the edge, nothing needed; its right side by the block pushed with the horn and Jump, or Bee Fly, back with Jump
 or Bee Fly; the Big Ancient Key there, past three flying Wardens, Vi; locations 203-204, pending; the Roof's boss door
 now needs that side and Vi), 147 of 244; the Pressure Puzzle (its two doors on one floor, the main room's shut from
-inside until its plates, Jump, Freeze and the horn, open it for good; played the other way they lead to an Ancient
-Key, location 205, pending), 148 of 244; the rest of `room-checklist.md` to go.
+inside until its plates, Freeze, the horn and Jump or Bee Fly, open it for good; played the other way they lead to
+an Ancient Key, location 205, pending), 148 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
