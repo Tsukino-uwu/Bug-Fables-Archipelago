@@ -773,6 +773,12 @@ be wrong.
     67) is the stopgap until its trigger is opened. The Peculiar Gem (Upper Snakemouth's slot, "later chapters" now)
     comes from the castle boss room's fight, added outright, not through `Giveitem` (`MEASURED.md`, the boss room): its
     stand-in becomes that room once the castle's door opens.
+65. **The file select's artifact icons, each one's own** (the user, 2026-10-09: "something we could log/maybe attempt
+    later on. not a high prio"): the pause menu shows each set artifact flag's icon (the mod guide, step 48), but the
+    file select draws the first N from the count each save's summary line stores (`LoadData.progression`), which says
+    nothing of which ones. Adding them to that line would be a new save format (never). The way left: read each file's
+    flags at the file select, read-only, the game's save format parsed by the mod; more work, and a misread only draws
+    wrong icons. Its own step in the mod guide.
 
 **Known issues:**
 

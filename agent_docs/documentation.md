@@ -3243,9 +3243,10 @@ With Archipelago on, a transpiler on each of those scenes' coroutines swaps ever
 takes the same list, place and quest and, when the place is past the end, files the quest at the end instead. The
 list is the game's own field, written by the game's own `Insert`; only the order of the done list can differ from a
 story-order save. With Archipelago off, the call inserts exactly as the game does. The log names each insert it
-guards (`[quests] installed: quest 14 at 3`) and each quest it moves (`[quests] quest 14 filed at 1, not 3`).
+guards (`[chapters] installed: quest 14 at 3`) and each quest it moves (`[chapters] quest 14 filed at 1, not 3`).
 
-**Status:** built (2026-10-09); not yet seen in game.
+**Status:** built (2026-10-09); seen the same day in seed `AP_70580691250444408633`: the castle's artifact scene
+ran to its save menu with no freeze, the log saying quest 14 filed at 1, not 3 (the done list held 1).
 
 *Code: `World/ChapterQuests.cs`, `Core/Plugin.cs`.*
 
@@ -3261,8 +3262,9 @@ With Archipelago on, `BuildWindow`'s read of `StartMenu.psprite` returns the sam
 first, so the game's loop draws the icons of the artifacts held; and the quests page's count becomes the chapter's own
 flag (all seven if set, none if not). With Archipelago off, both read the game's own values. Next 28's *Artifact
 Shuffle* will draw the Artifacts received instead (`apimplementation.md`). The log says `[artifacts] installed in
-PauseMenu.BuildWindow` and `in PauseMenu.UpdateText`, or what it didn't find.
+PauseMenu.BuildWindow` and `in PauseMenu.UpdateText`, or what it didn't find. The file select's icons: Next 65.
 
-**Status:** built (2026-10-09); not yet seen in game.
+**Status:** built (2026-10-09); the row seen the same day with only flag 345 set: the castle's own icon. The quests
+page not yet seen.
 
 *Code: `Ui/ArtifactIcons.cs`, `Gameplay/EnemyScaling.cs` (its `ArtifactFlags`), `Core/Plugin.cs`.*

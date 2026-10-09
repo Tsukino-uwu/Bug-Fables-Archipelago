@@ -23,7 +23,7 @@ namespace BugFablesAP
         {
             log = logger;
             randomizerOn = on;
-            Hooks.Install(typeof(Filing), "quests",
+            Hooks.Install(typeof(Filing), "chapters",
                 "a chapter's scene reached out of story order can freeze filing its main quest");
         }
 
@@ -36,7 +36,7 @@ namespace BugFablesAP
 
             [HarmonyTranspiler]
             private static IEnumerable<CodeInstruction> Transpile(IEnumerable<CodeInstruction> instructions) =>
-                Hooks.Safe(instructions, Edit, "quests");
+                Hooks.Safe(instructions, Edit, "chapters");
 
             private static IEnumerable<CodeInstruction> Edit(List<CodeInstruction> code)
             {
@@ -52,8 +52,8 @@ namespace BugFablesAP
                     code[i].operand = safe;
                 }
                 log.LogInfo(at.Length > 0
-                    ? $"[quests] installed: {string.Join(", ", filed)}"
-                    : "[quests] NOT installed in one scene: no quest-list insert found");
+                    ? $"[chapters] installed: {string.Join(", ", filed)}"
+                    : "[chapters] NOT installed in one scene: no quest-list insert found");
                 return code;
             }
 
@@ -79,7 +79,7 @@ namespace BugFablesAP
         {
             if (index > list.Count && randomizerOn != null && randomizerOn())
             {
-                log.LogInfo($"[quests] quest {quest} filed at {list.Count}, not {index}: the list held {list.Count}");
+                log.LogInfo($"[chapters] quest {quest} filed at {list.Count}, not {index}: the list held {list.Count}");
                 index = list.Count;
             }
             list.Insert(index, quest);
