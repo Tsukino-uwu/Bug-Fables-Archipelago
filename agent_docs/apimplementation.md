@@ -3225,7 +3225,10 @@ doors and save crystal free; a Frost Bomb behind the left statue, 202, pending; 
 until the Big Ancient Key, the boss key room reached while that key is the game's own pickup), 145 of 244; the Main
 Room (the hub, five parts: the bottom free; the middle left and the top left cut off, drops; the middle right and the
 top right up their lifts, each started by its own switch, with Jump; both Ancient Key locks needing both keys' spots
-reached while they're the game's own pickups), 146 of 244; the rest of `room-checklist.md` to go.
+reached while they're the game's own pickups), 146 of 244; the Boss Key Room (a Cold Salad round the edge, nothing
+needed; its right side by the block pushed with the horn and Jump, or Bee Fly, back with Jump or Bee Fly; the Big
+Ancient Key there, past three flying Wardens, Vi; locations 203-204, pending; the Roof's boss door now needs that side
+and Vi), 147 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

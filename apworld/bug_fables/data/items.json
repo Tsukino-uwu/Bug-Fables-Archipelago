@@ -79,6 +79,7 @@
     {"name": "Platinum Card", "game_id": 176, "kind": 1, "classification": "useful"},
     {"name": "Mechanical Claw", "game_id": 175, "kind": 1, "classification": "useful", "_comment": "Traded for medal 61 in Defiant Root (DefiantRoot3 lines 189-190): progression once that trade is a location (the quest pass)."},
     {"name": "Ancient Key", "game_id": 114, "kind": 1, "classification": "useful", "_comment": "Two in the Ancient Castle (the basement, the pressure plate room), each used up by one of the main room's two locks (Event59 key list index 7): progression once those locks are in the logic."},
+    {"name": "Big Ancient Key", "game_id": 115, "kind": 1, "classification": "useful", "_comment": "The Ancient Castle's boss key (the Boss Key Room), used up by the Roof's boss door (Event59 key list index 8): progression once that door's rule names it."},
     {"name": "Bed Bug", "game_id": 89, "kind": 1, "classification": "useful", "_comment": "Pibu, Morty's pillbug: one use from the pause menu, a rest, then the game takes it back (Event82); Morty rents it again for 30 berries. Nothing reads it."},
     {"name": "Bug Me Not!", "game_id": 18, "kind": 2, "classification": "useful"},
     {"name": "TP Plus", "game_id": 1, "kind": 2, "classification": "useful"},
@@ -113,6 +114,7 @@
     {"name": "Berry Juice", "game_id": 39, "kind": 0, "classification": "filler"},
     {"name": "Leaf Croissant", "game_id": 148, "kind": 0, "classification": "filler"},
     {"name": "Shaved Ice", "game_id": 47, "kind": 0, "classification": "filler"},
-    {"name": "Frost Bomb", "game_id": 44, "kind": 0, "classification": "filler"}
+    {"name": "Frost Bomb", "game_id": 44, "kind": 0, "classification": "filler"},
+    {"name": "Cold Salad", "game_id": 53, "kind": 0, "classification": "filler"}
   ]
 }

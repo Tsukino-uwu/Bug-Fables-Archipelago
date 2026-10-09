@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from rule_builder.rules import CanReachRegion, False_, Has
 
-from ..custom_rules import ANY_ATTACK, CanUse, one_way
+from ..custom_rules import ANY_ATTACK, CanUse, Member, one_way
 from ..data_types import ALWAYS_SET, Area, DoorRule, FlagSwap, Location, Pickup, Source, StoryEvent, Transfer
 
 _SLIDE_SOLVED = "Sand Castle Slide Puzzle Solved"
@@ -52,6 +52,14 @@ LOCATIONS = (
     # The Roof (SandCastleRoof; named by the user, 2026-10-09): a Frost Bomb behind the left statue, nothing needed.
     Location("Ancient Castle: Roof, Behind the Left Statue", 202, "SandCastleRoof",
              Source(flag=732, pickup=Pickup(map="SandCastleRoof", type=0, item=44)), no_jump=True, pending=True),
+    # The Boss Key Room (SandCastleBossKeyRoom; named by the user, 2026-10-09): a Cold Salad behind a block, round the
+    # room's edge, nothing needed; the Big Ancient Key on its right side, by the three statues whose Wardens (flying)
+    # fight the party as it's taken (Event115).
+    Location("Ancient Castle: Boss Key Room, Behind the Block", 203, "SandCastleBossKeyRoom",
+             Source(flag=641, pickup=Pickup(map="SandCastleBossKeyRoom", type=0, item=53)), no_jump=True, pending=True),
+    Location("Ancient Castle: Boss Key Room, By the Three Statues", 204, "SandCastleBossKeyRoom",
+             Source(flag=294, pickup=Pickup(map="SandCastleBossKeyRoom", type=1, item=115)), rule=Member("Vi"),
+             no_jump=True, pending=True, area="Right"),
 )
 STORY_EVENTS = (
     # The Slide Puzzle's block (`icepillar`), knocked by the horn onto the plate on its bottom (Event113 sets 284 for
@@ -102,6 +110,12 @@ MAP_AREAS = (
          out=one_way(None, _TO_TOP_RIGHT)),
     Area("SandCastleMainRoom", "Top Left", ("loadzone roof left", "loadzonepressure"), False_(),
          out=one_way(CanUse("Jump"), _TO_TOP_RIGHT)),
+    # The Boss Key Room (SandCastleBossKeyRoom; the user, 2026-10-09): its door and the room's edge the map's own
+    # region; its right side (the key) across a gap filled by a block pushed with the horn from the puzzle below, then
+    # Jump, or Bee Fly; back, Jump or Bee Fly (the bounce pad alone falls short). The puzzle below is a drop, Jump or Bee
+    # Fly back up, with nothing in it.
+    Area("SandCastleBossKeyRoom", "Right", (), (CanUse("Jump") & CanUse("Horn Slash")) | CanUse("Bee Fly"),
+         out=_UP),
 )
 TRANSFERS = (
     # The Slide Puzzle's upper left and upper right down to the puzzle's floor, drops: no way back up inside the
@@ -121,9 +135,9 @@ DOOR_RULES = (
     DoorRule("SandCastleSlidePuzzle", "loadzonepressure", Has(_SLIDE_SOLVED)),
     # The Roof's (SandCastleRoof; the user, 2026-10-09) boss door, locked from its side until the Big Ancient Key (115)
     # is used; arriving from the boss room, the game pushes the party past the lock. While the castle's spots are
-    # pending the key is the game's own pickup in the boss key room, so reaching that room is the rule (refined when
-    # it's mapped; the key's item once the spots come back, build step 67).
-    DoorRule("SandCastleRoof", "loadzoneboss", CanReachRegion("SandCastleBossKeyRoom")),
+    # pending the key is the game's own pickup, so its rule is: the Boss Key Room's right side reached and its fight
+    # won, Vi for the flying Wardens (the key's item once the spots come back, build step 67).
+    DoorRule("SandCastleRoof", "loadzoneboss", CanReachRegion("SandCastleBossKeyRoom (Right)") & Member("Vi")),
     # The main room's two locks (`key1`, `key2`, Event59 key index 7, each using up an Ancient Key): the statue room's
     # door on its bottom, the boss key room's on its top right. Arriving through either, the game pushes the party
     # past the lock.

@@ -1526,6 +1526,13 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (seen). The sand-filled door on the bottom's right is the parked `loadzonebasementright`. In vanilla the top is
   reached through the castle's other rooms (the user: "you are not supposed to reach everything from within this
   room"). Discovery 16 up top (`discovery`, line 2, flag 306); a Psicorp and an enemy up top (enemy pass).
+  **`SandCastleBossKeyRoom`, the Boss Key Room (2026-10-09, the user; named by the user):** one door (from the main
+  room's top right). Round the room's edge, nothing needed: a Cold Salad behind a block (`ITEM - Duplicate`, item 53,
+  flag 641). Below, the puzzle area (two crystals and an ice block, `icecube`, a `PushRock` at y 12), a drop, Jump or
+  Bee Fly back up. The right side, across a gap: the block pushed into it with the horn from the puzzle, then Jump, or
+  Bee Fly; back, Jump or Bee Fly (its bounce pad, `spring`, falls short). There the Big Ancient Key (`bosskey`, key item
+  115, flag 294, its `data[1]` 115 starting `Event115`): three Wardens (enemy 61, flying, 11 HP) come out of the three
+  statues and fight the party (`StartBattle`, no escape); `Base/GameObject` gone from 294. Seen: the user.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

@@ -1018,13 +1018,18 @@ class TestCastleMainRoom(BugFablesTestBase):
 
 class TestCastleRoof(BugFablesTestBase):
     # SandCastleRoof (the user, 2026-10-09): both doors and the save crystal free; the boss door locked from the roof
-    # until the Big Ancient Key, still the game's own pickup in the boss key room (build step 67).
-    def test_boss_door_needs_the_key_room(self) -> None:
+    # until the Big Ancient Key, still the game's own pickup in the Boss Key Room, taken past a fight that needs Vi
+    # (build step 67).
+    options = {"starting_party_member": "kabbu"}
+
+    def test_boss_door_needs_the_key_and_its_fight(self) -> None:
         door = self.multiworld.get_entrance(
             next(e.name for e in self.multiworld.get_region("SandCastleRoof", self.player).exits
                  if "SandCastleBossRoom" in e.connected_region.name), self.player)
         self.assertFalse(door.access_rule(self.state_with()))
-        self.assertTrue(door.access_rule(self.multiworld.get_all_state()))
+        state = CollectionState(self.multiworld)
+        self.collect_all_but(["Vi"], state)
+        self.assertFalse(door.access_rule(state))
 
     def test_frost_bomb_waits(self) -> None:
         names = {spot.name for spot in self.multiworld.get_locations(self.player)}
