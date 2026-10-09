@@ -22,6 +22,11 @@ AREA_NAMES: dict[int, str] = {
 }
 
 
+# The Ancient Castle and the Bandit Hideout, behind the Sand Castle Key and the Rusty Key, whose chains the later
+# chapters' stand-in doesn't hold: their enemies pending until those chains are mapped (build step 67).
+KEY_CHAIN_AREAS = frozenset({11, 20})
+
+
 def room_names(spots: tuple[Location, ...]) -> dict[str, str]:
     """Each map's "Area: Room", as most of its named spots begin."""
     prefixes: dict[str, Counter[str]] = {}
@@ -47,5 +52,5 @@ def enemy_locations(encounters: tuple[Encounter, ...], spots: tuple[Location, ..
         counts[(room, encounter.name)] += 1
         found.append(Location(f"{room}, {encounter.name} {counts[(room, encounter.name)]}", encounter.location,
                               encounter.map, Source(enemy=enemy_key(encounter)), category="enemy",
-                              reach=LATER_CHAPTERS))
+                              reach=LATER_CHAPTERS, pending=encounter.area in KEY_CHAIN_AREAS))
     return tuple(found)

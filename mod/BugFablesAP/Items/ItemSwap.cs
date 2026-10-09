@@ -92,6 +92,8 @@ namespace BugFablesAP
             // Two groups, installed in this order: the pickup prefix runs before the berry prefix.
             Hooks.Install(typeof(Pickups), "swap", "a pickup in the world would give its vanilla item");
             Hooks.Install(typeof(Berries), "swap", "berries at a location would be given as berries");
+            Hooks.Install(typeof(CrystalGifts), "swap", "a scene's crystal berry would be added as well as sent");
+            Hooks.Install(typeof(Repeats), "swap", "a give the game repeats would be held back after its check");
             Hooks.Install(typeof(Redraws), "swap",
                 "a pickup the game redraws shows its own item until the ground swap");
             Hooks.Install(typeof(MarkSort), "swap", "a location's starburst can vanish against the sky behind it");
@@ -494,14 +496,28 @@ namespace BugFablesAP
             {
                 long berries = pendingBerries;
                 pendingBerries = -1;
+                if (pendingCrystal >= 0 && pendingCrystal < MainManager.instance.crystalbflags.Length)
+                {
+                    MainManager.instance.crystalbflags[pendingCrystal] = true;
+                }
+                pendingCrystal = -1;
                 return berries;
             }
             foreach (KeyValuePair<long, ApConnection.Give> entry in gives)
             {
                 ApConnection.Give give = entry.Value;
                 bool sameKind = badge ? give.Type == 2 : give.Type == 0 || give.Type == 1;
-                if (sameKind && give.Item == id && give.Map == map && (give.Npc == null || give.Npc == npc)
-                    && !SellsItsOwnAgain(entry.Key))
+                if (!sameKind || give.Item != id || give.Map != map || (give.Npc != null && give.Npc != npc))
+                {
+                    continue;
+                }
+                if (give.Again && doneBeforeTalk.Contains(entry.Key))
+                {
+                    log.LogInfo($"[swap] location {entry.Key}: given again on {map} after its check was done: the "
+                        + $"game's own ({(badge ? "medal" : "item")} {id})");
+                    return -1;
+                }
+                if (!SellsItsOwnAgain(entry.Key))
                 {
                     return connection.LocationShops != null && connection.LocationShops.ContainsKey(entry.Key)
                         ? ShopSwap.Buy(entry.Key) : entry.Key;

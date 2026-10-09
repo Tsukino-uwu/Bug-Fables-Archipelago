@@ -1419,24 +1419,31 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   **`DefiantRoot1`, the Square (2026-10-09, the user; named by the user):** the ground and its four doors (the elevator
   left, the commercial street top, outside right, the well down a hole, out again with nothing) free, with the save
   crystal, every NPC, the houses and the museum (`insideid` 1, discovery 29 from its signs, lines 59-60). On the ground:
-  a Lore Book behind a box at the far left (`lorebook`, key item 52, flag 142); Morty's first line (24) lends the Bed
-  Bug (key item 89) and sets 157 and 150. Pibu sells another for 30 berries (line 28, sets 150), there until 150. The
+  a Lore Book behind a box at the far left (`lorebook`, key item 52, flag 142). The Bed Bug (key item 89) is Pibu,
+  Morty's sleeping pillbug (`pibu`, line 16 "Zzz...", there until 150). Morty's first line (24) lends it: `kill,25`,
+  sets 157 and 150, `giveitem,1,89`. From 157 his line 26 jumps to 27 while 150 is off (Pibu back, the Bed Bug used
+  up) and rents it again for 30 berries (line 28, the same commands); the reading corrected 2026-10-09 by the review
+  from the English text (it had been written as Pibu's sale). The
   rooftops up with Jump, a drop down: a Berry Juice on the right (`BurlyTea - Duplicate`, item 39, flag 688), crystal
   berry #15 on the left (`crystalberryskip`, below), the Spicy Berry seller beside it (`hidden merchant`, line 8, 16
   berries; seen on screen), the mayor's front door (`doormayor`), and the storage's back door (`doormayorback`), locked
   (`DoorLock`, `Event59` with `dialogues[0].y` 3: key list index 3, the Desert Key, 92, taken when used; hidden from
   560). Inside (`insideid` 0, the user with a dev `give key 92`): a Lore Book (flag 489) and Dark Cherries (item 121,
   flag 490). The Desert Key is the mayor's, given in the Wacka Worm room (`Event55`, line 15, once 558 is set and not
-  559; `Event188` sets 558) after his quest 46. Three bushes drop nothing; no dig spots. The first-visit talk (line 52,
+  559, with 20 worms or more, `flagvar[1]`; `Event188` sets 558), completing his quest 46, which joins the boards only
+  at flags 276 and 348 (chapter 5's start). Three bushes drop nothing; no dig spots. The first-visit talk (line 52,
   flag 170) is skipped with Skip cutscenes (its log line seen through the well's door, 2026-10-09).
   **Crystal berry #15 and flag 201 (2026-10-09, code and dumps; seen):** `crystalberryskip` on the Square's left
-  rooftop is there until 201 (`limit`, read by nothing else but the caravan robbery's cast and trigger on
-  `DesertCaravanMap`), and a ground berry also disappears once its index is taken (`NPCControl.SetUp`,
+  rooftop is there until 201 (`limit`; on `DesertCaravanMap` 201 also ends the robbery's cast, trigger and snail
+  scenery, `Base/Snail`, and the Venus healer, `venushealer - Duplicate`, from 130), and a ground berry also
+  disappears once its index is taken (`NPCControl.SetUp`,
   `crystalbflags[data[3]]`). 201 is set on entering `DesertDRSouthEntrance` (`MapControl`, with 170) and at the end of
   the caravan robbery (`Event93`), whose dialogue gives #15 itself (`giveitem,3,15`). A crystal berry pickup never
   writes its `activationflag` (`NPCControl.CheckItem` writes it only for `animid != 3`): taking the rooftop berry left
   201 off (the user took it, then `flag 201` read False). In a seed its limit is repointed to -1 (build step 64): seen
-  on the rooftop with 201 on and `crystalbflags[15]` off (the user, with `liveslot`).
+  on the rooftop with 201 on and `crystalbflags[15]` off (the user, with `liveslot`). The robbery's gift: for item
+  type 3 `Giveitem` raises the count (`flagvar[14]`) and sets `crystalbflags[n]` with no window, sprite or list add
+  (`MainManager.cs`), so none of the mod's give hooks saw it (the review, 2026-10-09).
   **The Bed Bug (2026-10-09, code):** key item 89, used from the pause menu's key items on open ground
   (`PauseMenu.cs`): a rest like an inn (`Event82`), which takes it back (`items[1].Remove(89)`) and clears 150. No
   other code or line reads it.
@@ -1466,6 +1473,36 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   lights a radius (`MapControl.CheckStencilSwitch`) and resets each visit. Seen: the Beemerang Toss lights it from
   either side; Bee Fly crosses without it. Its first light plays `Event157` (the `eventcaller` AND gate, with the
   hidden `switch`, until 416). A Krawler (enemy pass), a pit (`Hole`); no items.
+  **`SandCastleSlidePuzzle`, the Slide Puzzle (2026-10-09, the user; named by the user):** its bottom right door (to
+  the main room) free; the puzzle's floor a drop down a small ledge, Jump back up. The puzzle: the block (`icepillar`,
+  a `PushRock`, there until 284), knocked by the horn onto the plate (`pressureplate`, data `0 1 113`), runs `Event113`,
+  which sets 284 for good: the pillar shown in place (`Base/IcePillarObj` from 284) fills the upper gap, and the upper
+  left door (to `SandCastlePressurePuzzle`) opens (`Base/Tablet` hidden from 284). Before that, arriving through that
+  door pushes the party past it (seen, with 284 turned off). The upper right (its door from the main room) and the upper
+  left across the gap, once solved or with Bee Fly; both drop to the floor, with no way back up inside the room. The
+  medal Frostbite (`freezebadge`, medal 46, flag 285) is in a small space behind the floor's top left corner, below the
+  upper left door, burrowed into and out of with Beetle Dig. A crystal (`freezeswitch - Duplicate`) by the plate from
+  284; a hint tablet; a Krawler (enemy pass). `platform` (a `PathPlatform`) and `platformswitch` (flag 283, read by
+  nothing) sit at depth -52 and -58, outside the camera's limits (-5.9 to 10.3): out of play, not seen.
+  **`SandCastleStatueRoom`, the Statue Room (2026-10-09, the user; named by the user):** its left door (from the main
+  room) and right door (to `SandCastleRockRoom`) on either side of a block in the middle, gone over on platforms. From
+  the left, the crystals' puzzle (two `StencilSwitch`es, one lit at a time) and the way across take Icicle and Jump, the
+  ice also lighting the crystals; or Bee Fly alone. From the right, Jump or Bee Fly. Two enemies in the bottom left
+  (`enemy1`, `enemy2`, at y 3 in the data, their hover) and one in the bottom right (`cape`), seen; for the enemy
+  pass. No items.
+  **`SandCastleBasement`, the Basement (2026-10-09, the user; named by the user):** one door (from the main room) on an
+  isolated ledge; its second door (`loadzoneright`) parked at y 99. The middle (a safe platform by the big crystal,
+  `crystal - Duplicate`, a `StencilSwitch` drawn as a crystal) across with Jump or Bee Fly. Around it the moving
+  platforms (`platform1` to `platform3`, `PathPlatform`s, running from the hidden `platformenabler`, flag 41, 691 in a
+  seed), each with a switch on it (three `StencilSwitch`es named `crystal`, drawn as switches, their `data[1]` the
+  platform's entity, parked at y -30 in the dump). With Jump alone the small platforms need the big crystal lit (the
+  Beemerang Toss) and a switch hit (any attack); Bee Fly alone goes everywhere. On them: crystal berry #23 (`cberry`,
+  on a platform to the right) and a Shaved Ice (`Item - Ice`, item 47, flag 731, on a tiny platform). On the north side
+  the Ancient Key (`key`, key item 114, flag 288) behind a barrier lowered by a crank (`crank - Duplicate`, a
+  `ScrewSwitch`: Beemerang Halt) and Jump, or flown in and out of with Bee Fly. A Worm and a Cursed Cloth (enemy pass),
+  a pit. The castle's two Ancient Keys (here and `SandCastlePressurePuzzle`, flag 289) each open one of the main room's
+  locks (`key1`, `key2`, until 292 and 293, `Event59` key index 7, used up); the boss key (115, `SandCastleBossKeyRoom`,
+  flag 294) the roof's (`bosslock`, until 295).
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

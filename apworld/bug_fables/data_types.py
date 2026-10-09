@@ -360,14 +360,17 @@ class SavePoint:
 @dataclass(frozen=True, slots=True, kw_only=True)
 class Give:
     """The |giveitem,type,item,...| that hands out the vanilla item on that map (type -1 berries, 0 item, 1 key item,
-    2 medal): the client keeps it out of the inventory and shows the seed's item instead."""
+    2 medal): the client keeps it out of the inventory and shows the seed's item instead. again: the game hands it out
+    again later (Morty's re-rental); once its check was done before a talk began, that talk's give is the game's own
+    (build step 66)."""
 
     map: str
     type: int
     item: int
+    again: bool = False
 
     def to_slot(self) -> dict[str, Any]:
-        return {"map": self.map, "type": self.type, "item": self.item}
+        return {"map": self.map, "type": self.type, "item": self.item, **({"again": True} if self.again else {})}
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)

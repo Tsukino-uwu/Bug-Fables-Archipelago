@@ -33,8 +33,8 @@ rule, remove one in the same edit. The rule lives here and its reasoning in `age
   against an older doc. It stays minimal, links only (like MeshGhost's); player docs live in `apworld/bug_fables/docs/`,
   same rule.
 - **Items are remote only.** A pickup grants nothing locally; it sends its check. Every item, the player's
-  own included, arrives from the server. No local-items mode (decided 2026-09-24). One named exception: a
-  respawning pickup whose check is done is the game's own again (`apimplementation.md`, build step 10).
+  own included, arrives from the server. No local-items mode (decided 2026-09-24). Named exceptions: a respawning
+  pickup or a give the game repeats, its check done, is the game's own again (`apimplementation.md`, steps 10, 66).
 - **Randomizer saves are separate files** (decided 2026-09-24). With the randomizer on (a main-menu toggle), the game
   reads and writes its own save files in a separate folder. Normal saves and Steam Cloud's copies are never written.
 - **An item that can unlock even one location, at any point, is progression. No ifs or maybes** (the user,

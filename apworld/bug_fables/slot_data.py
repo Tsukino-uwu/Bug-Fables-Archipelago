@@ -131,8 +131,9 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         "present_with_item": _entities(PRESENT_WITH_ITEM),
         "held_until_item": _entities(HELD_UNTIL_ITEM),
         "dialogue_flags": _entities(DIALOGUE_FLAGS),
-        # Entities that borrow a goal flag, repointed ([{"map", "entity", "flag", "to"}]): their activation flag (what a
-        # switch reads, what a cut grass sets) and their limit flags.
+        # Entities whose flags are repointed ([{"map", "entity", "flag", "to"}]): their activation flag (what a switch
+        # reads, what a cut grass sets) and their limit flags. Those that borrow a goal flag (build step 60), and a
+        # pickup the story would take away, kept until it's taken (build step 64).
         "activation_flags": _entities(ACTIVATION_FLAGS),
         "limit_flags": _entities(LIMIT_FLAGS),
         # Map start-up scenes never played ([{"map", "event", "flag"}]): the client sets the flag as the map is built.

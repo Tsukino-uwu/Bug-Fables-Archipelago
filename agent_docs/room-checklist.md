@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**141 of 244 done.**
+**144 of 244 done.**
 
 ## Outskirts
 
@@ -217,8 +217,9 @@ as it is, a frozen record.
 
 - [x] DefiantRoot1 (58) — the Square; crystal berry #15 kept until taken (build step 64); for the quest pass: the
   mayor (45 berries from 300; his quest 46 and the Desert Key, the storage's stand-in), Isau's Sophie Petal trade (HP
-  Core, flag 396), Eremi's trades (from 300); for the sellers' pass: Pibu's Bed Bug (30 berries, there until 150, which
-  Morty's gift sets: kept present if it becomes a location) and the Spicy Berry seller on the left rooftop (Jump); for
+  Core, flag 396), Eremi's trades (from 300), the storage (193-194, pending: the Desert Key needs quest 46, chapter 5);
+  for the sellers' pass: Morty's re-rental of the Bed Bug (30 berries, line 28; the game's own after his check, build
+  step 66) and the Spicy Berry seller on the left rooftop (Jump); for
   the discovery sweep: discovery 29 (the museum's signs)
 - [x] DefiantRootWell (59) — the Well; for the quest pass: Astotheles' Rusty Key (line 3, from 300 until 239)
 - [x] DefiantRoot2 (60) — the Beehive Lift; the inn's upstairs door kept open (build step 65); for the quest pass: the
@@ -232,10 +233,11 @@ as it is, a frozen record.
 
 ## Ancient Castle
 
-- [x] SandCastleEntrance (116) — no locations; its crystal's first light plays a short scene (`Event157`, flag 416)
-- [ ] SandCastleSlidePuzzle (117)
-- [ ] SandCastleStatueRoom (118)
-- [ ] SandCastleBasement (119)
+- [x] SandCastleEntrance (116) — the Entrance (named by the user, for the enemy pass: no location carries it yet);
+  its crystal's first light plays a short scene (`Event157`, flag 416)
+- [x] SandCastleSlidePuzzle (117) — the Slide Puzzle
+- [x] SandCastleStatueRoom (118) — the Statue Room (named by the user, for the enemy pass: no location carries it yet)
+- [x] SandCastleBasement (119) — the Basement; its spots pending with the castle (build step 67)
 - [ ] SandCastleRoof (120)
 - [ ] SandCastleMainRoom (121)
 - [ ] SandCastleBossKeyRoom (122)

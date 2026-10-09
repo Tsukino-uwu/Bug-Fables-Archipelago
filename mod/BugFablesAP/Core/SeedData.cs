@@ -103,6 +103,7 @@ namespace BugFablesAP
                 Type = v.Value<int>("type"),
                 Item = v.Value<int>("item"),
                 Npc = v.Value<string>("npc"),
+                Again = v.Value<bool?>("again") ?? false,
             });
             LocationPickups = SlotData.ByLocation(data, "location_pickups", v => new ApConnection.Pickup
             {

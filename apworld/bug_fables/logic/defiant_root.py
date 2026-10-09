@@ -5,18 +5,20 @@ from __future__ import annotations
 from ..custom_rules import LATER_CHAPTERS, CanUse, one_way
 from ..data_types import Area, EntityRef, FlagSwap, Give, Location, Pickup, Source, Transfer
 
-# The Desert Key (92), the mayor's in the Wacka Worm room once his quest 46 is taken (Event55, flags 557-559): not an
-# item yet, so the later chapters' stand-in until the quest pass.
+# The Desert Key (92), the mayor's in the Wacka Worm room once his quest 46 is done (Event55, 20 worms, flags
+# 557-559); the quest opens only at chapter 5's start (flags 276 and 348), so the storage's spots wait as pending, as
+# location 10 does, until the quest pass. The stand-in stays their rule.
 DESERT_KEY = LATER_CHAPTERS
 _UP = CanUse("Jump") | CanUse("Bee Fly")
 
 LOCATIONS = (
     # The Square (DefiantRoot1; named by the user, 2026-10-09): a Lore Book behind a box at the far left, and Morty's
-    # Bed Bug (his first line; Pibu's sale of it, line 28, stays the game's), both on the ground, nothing needed.
+    # Bed Bug (his first lend, line 24, rents out Pibu, the sleeping pillbug; once it's used up he rents it again for 30
+    # berries, line 28, the game's own after the check), both on the ground, nothing needed.
     Location("Defiant Root: Square, Behind the Box", 189, "DefiantRoot1",
              Source(flag=142, pickup=Pickup(map="DefiantRoot1", type=1, item=52)), no_jump=True),
     Location("Defiant Root: Square, Morty's Gift", 190, "DefiantRoot1",
-             Source(flag=157, npc="Morty", give=Give(map="DefiantRoot1", type=1, item=89)), no_jump=True),
+             Source(flag=157, npc="Morty", give=Give(map="DefiantRoot1", type=1, item=89, again=True)), no_jump=True),
     # On the rooftops: a Berry Juice on the right, crystal berry #15 on the left; nothing once up.
     Location("Defiant Root: Square, Right Rooftop", 191, "DefiantRoot1",
              Source(flag=688, pickup=Pickup(map="DefiantRoot1", type=0, item=39)), no_jump=True, area="Rooftops"),
@@ -27,10 +29,10 @@ LOCATIONS = (
     # Book and Dark Cherries.
     Location("Defiant Root: Square, Mayor's Storage 1", 193, "DefiantRoot1",
              Source(flag=489, pickup=Pickup(map="DefiantRoot1", type=1, item=52)), rule=DESERT_KEY, no_jump=True,
-             area="Rooftops"),
+             pending=True, area="Rooftops"),
     Location("Defiant Root: Square, Mayor's Storage 2", 194, "DefiantRoot1",
              Source(flag=490, pickup=Pickup(map="DefiantRoot1", type=0, item=121)), rule=DESERT_KEY, no_jump=True,
-             area="Rooftops"),
+             pending=True, area="Rooftops"),
     # The Well (DefiantRootWell; named by the user): a Leaf Croissant on top of boxes on its right side, Jump.
     Location("Defiant Root: Well, By the Boxes", 195, "DefiantRootWell",
              Source(flag=734, pickup=Pickup(map="DefiantRootWell", type=0, item=148)), rule=CanUse("Jump"),

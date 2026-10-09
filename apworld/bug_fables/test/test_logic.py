@@ -807,19 +807,22 @@ class TestDefiantRootSquare(BugFablesTestBase):
         up = self.multiworld.get_entrance("DefiantRoot1 to DefiantRoot1 (Rooftops)", self.player)
         self.assertFalse(up.access_rule(self.state_with()))
         self.assertTrue(up.access_rule(self.state_with("Jump")))
-        for name in ("Right Rooftop", "Left Rooftop", "Mayor's Storage 1", "Mayor's Storage 2"):
+        for name in ("Right Rooftop", "Left Rooftop"):
             spot = self.multiworld.get_location(f"Defiant Root: Square, {name}", self.player)
             self.assertEqual(spot.parent_region.name, "DefiantRoot1 (Rooftops)", name)
 
-    def test_storage_needs_the_key(self) -> None:
+    # The Desert Key exists only once quest 46 is done, from chapter 5's start: the later chapters' stand-in claimed
+    # less than the game, so the storage waits for the quest pass.
+    def test_storage_waits_for_the_quest_pass(self) -> None:
+        names = {spot.name for spot in self.multiworld.get_locations(self.player)}
         for name in ("Mayor's Storage 1", "Mayor's Storage 2"):
-            spot = self.multiworld.get_location(f"Defiant Root: Square, {name}", self.player)
-            self.assertFalse(spot.access_rule(self.state_with("Jump")), name)
+            self.assertNotIn(f"Defiant Root: Square, {name}", names)
 
-    # Pibu sells a Bed Bug on the same map (line 28): only Morty's is the check's.
-    def test_mortys_gift_is_his_alone(self) -> None:
+    # Morty rents the Bed Bug out again for 30 berries (line 28) once it's used up: his first lend alone is the check,
+    # and a re-rental after it is the game's own (build step 66).
+    def test_mortys_gift_is_his_first_lend(self) -> None:
         gives = self.world.fill_slot_data()["location_gives"].values()
-        self.assertIn({"map": "DefiantRoot1", "type": 1, "item": 89, "npc": "Morty"}, gives)
+        self.assertIn({"map": "DefiantRoot1", "type": 1, "item": 89, "npc": "Morty", "again": True}, gives)
 
     # Flag 201 (the desert's south entrance, the caravan robbery) took crystal berry #15 away for good (build step 64).
     def test_berry_kept_until_taken(self) -> None:
@@ -889,3 +892,87 @@ class TestCastleEntrance(BugFablesTestBase):
             self.assertFalse(way.access_rule(self.state_with("Horn Slash", "Progressive Freeze")), entrance)
             self.assertTrue(way.access_rule(self.state_with("Progressive Beemerang")), entrance)
             self.assertTrue(way.access_rule(self.state_with("Bee Fly")), entrance)
+
+
+class TestSlidePuzzle(BugFablesTestBase):
+    # SandCastleSlidePuzzle (the user, 2026-10-09): the puzzle's floor is a drop from either upper side and from the
+    # bottom right door, Jump back up to that door; the block knocked into place (the horn) fills the upper gap and
+    # opens the upper left door; the medal burrowed to, Beetle Dig.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_floor_needs_jump_back_up(self) -> None:
+        up = self.multiworld.get_entrance("SandCastleSlidePuzzle (Bottom) to SandCastleSlidePuzzle", self.player)
+        self.assertFalse(up.access_rule(self.state_with()))
+        self.assertTrue(up.access_rule(self.state_with("Jump")))
+
+    def test_upper_gap_and_door_wait_for_the_puzzle(self) -> None:
+        gap = self.multiworld.get_entrance("SandCastleSlidePuzzle (Upper Right) to SandCastleSlidePuzzle (Upper Left)",
+                                           self.player)
+        self.assertFalse(gap.access_rule(self.state_with()))
+        self.assertTrue(gap.access_rule(self.state_with("Sand Castle Slide Puzzle Solved")))
+        self.assertTrue(gap.access_rule(self.state_with("Bee Fly")))
+        door = self.multiworld.get_entrance(
+            next(e.name for e in self.multiworld.get_region("SandCastleSlidePuzzle (Upper Left)", self.player).exits
+                 if "SandCastlePressurePuzzle" in e.connected_region.name), self.player)
+        self.assertFalse(door.access_rule(self.state_with("Bee Fly")))
+        self.assertTrue(door.access_rule(self.state_with("Sand Castle Slide Puzzle Solved")))
+
+    def test_the_puzzle(self) -> None:
+        puzzle = self.multiworld.get_location("Ancient Castle: Slide Puzzle, Block Knocked into Place", self.player)
+        self.assertEqual(puzzle.parent_region.name, "SandCastleSlidePuzzle (Bottom)")
+        self.assertFalse(puzzle.access_rule(self.state_with()))
+        self.assertTrue(puzzle.access_rule(self.state_with("Horn Slash")))
+
+    # The castle's spots wait until the Sand Castle Key's chain is in the logic (build step 67).
+    def test_the_medal_waits(self) -> None:
+        names = {spot.name for spot in self.multiworld.get_locations(self.player)}
+        self.assertNotIn("Ancient Castle: Slide Puzzle, Behind the Cracked Wall", names)
+
+
+class TestStatueRoom(BugFablesTestBase):
+    # SandCastleStatueRoom (the user, 2026-10-09): left to right over the middle's block, Icicle and Jump or Bee Fly;
+    # back, Jump or Bee Fly.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_left_to_right_needs_icicle_and_jump_or_bee_fly(self) -> None:
+        right = self.multiworld.get_entrance("SandCastleStatueRoom to SandCastleStatueRoom (Right)", self.player)
+        self.assertFalse(right.access_rule(self.state_with("Jump", "Progressive Freeze")))
+        self.assertTrue(right.access_rule(self.state_with("Jump", "Progressive Freeze", "Progressive Freeze")))
+        self.assertTrue(right.access_rule(self.state_with("Bee Fly")))
+
+    def test_right_to_left_needs_jump_or_bee_fly(self) -> None:
+        left = self.multiworld.get_entrance("SandCastleStatueRoom (Right) to SandCastleStatueRoom", self.player)
+        self.assertFalse(left.access_rule(self.state_with()))
+        self.assertTrue(left.access_rule(self.state_with("Jump")))
+        self.assertTrue(left.access_rule(self.state_with("Bee Fly")))
+
+
+class TestDashScene(BugFablesTestBase):
+    # Location 69's trigger needs chapter 2's boss beaten (flag 88, behind both offerings): its stand-in claimed less.
+    def test_needs_both_offerings(self) -> None:
+        for offering in ("Sun Offering", "Moon Offering"):
+            with self.subTest(missing=offering):
+                state = CollectionState(self.multiworld)
+                self.collect_all_but([offering], state)
+                self.assertFalse(self.multiworld.get_location("Lost Sands: Entrance", self.player).can_reach(state))
+        self.collect_all_but([])
+        self.assertTrue(self.can_reach_location("Lost Sands: Entrance"))
+
+
+class TestCastleBasement(BugFablesTestBase):
+    # SandCastleBasement (the user, 2026-10-09): its door on an isolated ledge, the middle across with Jump or Bee Fly;
+    # its three spots wait with the rest of the castle (build step 67).
+    options = {"shuffle_field_moves": True, "shuffle_jump": True, "shuffle_crystal_berries": True}
+
+    def test_middle_needs_jump_or_bee_fly(self) -> None:
+        for entrance in ("SandCastleBasement to SandCastleBasement (Middle)",
+                         "SandCastleBasement (Middle) to SandCastleBasement"):
+            way = self.multiworld.get_entrance(entrance, self.player)
+            self.assertFalse(way.access_rule(self.state_with()), entrance)
+            self.assertTrue(way.access_rule(self.state_with("Jump")), entrance)
+            self.assertTrue(way.access_rule(self.state_with("Bee Fly")), entrance)
+
+    def test_spots_wait(self) -> None:
+        names = {spot.name for spot in self.multiworld.get_locations(self.player)}
+        for spot in ("Switch Puzzle", "Tiny Platform", "Behind the Barrier"):
+            self.assertNotIn(f"Ancient Castle: Basement, {spot}", names)

@@ -374,8 +374,8 @@ namespace BugFablesAP
                     }
                     case "give":
                     {
-                        // take's other half, as ItemReceiver adds a received item: a key item once, an item if the bag
-                        // has room. Test files only.
+                        // take's other half: a key item only if not held (as ItemReceiver adds an ability's), an item
+                        // only if the bag has room. Test files only.
                         int kind = parts.Length > 1 && parts[1] == "key" ? 1 : parts.Length > 1 && parts[1] == "item"
                             ? 0 : -1;
                         if (kind < 0 || parts.Length < 3 || !int.TryParse(parts[2], out int giveId))

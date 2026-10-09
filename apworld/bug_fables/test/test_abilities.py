@@ -33,7 +33,7 @@ class TestLearnedAbilities(BugFablesTestBase):
         silent = self.world.fill_slot_data()["silent_locations"]
         flags = {ability.flag for ability in ABILITIES.values() if ability.flag is not None}
         for loc in LOCATIONS:
-            if loc.source.flag in flags:
+            if loc.source.flag in flags and not loc.pending:
                 self.assertIn(self.world.location_name_to_id[loc.name], silent)
 
     def test_story_order(self) -> None:

@@ -215,6 +215,8 @@ namespace BugFablesAP
             internal int Item;
             // Only this character's giveitem; null for any on the map.
             internal string Npc;
+            // The game hands it out again later: once its check was done before a talk began, that talk's is its own.
+            internal bool Again;
         }
 
         internal sealed class Pickup

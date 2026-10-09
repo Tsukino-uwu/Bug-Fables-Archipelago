@@ -137,6 +137,8 @@ this file and that doc disagree, that doc is right.
 63. [Build step 63: the Dash without the Horn Slash](#build-step-63-the-dash-without-the-horn-slash)
 64. [Build step 64: crystal berry #15 kept until taken](#build-step-64-crystal-berry-15-kept-until-taken)
 65. [Build step 65: the Defiant Root inn's upstairs door open](#build-step-65-the-defiant-root-inns-upstairs-door-open)
+66. [Build step 66: a give the game repeats, its check done, is the game's own (Morty's Bed Bug)](#build-step-66-a-give-the-game-repeats-its-check-done-is-the-games-own-mortys-bed-bug)
+67. [Build step 67: what lies behind the Sand Castle Key and the Rusty Key held out](#build-step-67-what-lies-behind-the-sand-castle-key-and-the-rusty-key-held-out)
 
 **How it works**
 
@@ -752,8 +754,29 @@ be wrong.
     - **Tests then:** berry items never in a rule; every priced location needs the event; prices within 1-999; no farm
       on the start map, a timer enemy or a limit enemy; `Berries(...).to_dict()` equals the event's `Has`; the ant
       tunnels and Beette depend on the event.
+64. **The Sand Castle Key's and the Rusty Key's chains, opened** (decided 2026-10-09, the user; their own steps, after
+    the mapping session or when the user says): what build step 67 holds out comes back once each chain is open.
+    **The direction** (the user, 2026-10-09): "we want to eventually just make most of the game openworld/metroidvania,
+    and not connected/tied to whatever chapters are doing no matter in what order you do them"; "you should be able to
+    do any area/any chapter in/out of order". So, as build step 9
+    does for blockers, each chapter-gated piece of a chain is opened rather than modelled with a chapter stand-in:
+    Astotheles at the well and the roach village's hawk present from the start (both wait for 300), the Dash's trigger
+    (`dashevent`, waiting for 88 and 138), and whatever else a key or an ability's scene waits for in the story; the
+    keys then depend only on items and rooms. Where a piece can't be opened, a stand-in that holds its whole chain
+    (the rooms and flags build step 67 lists), never "later chapters" alone. **First, the capture** (Known issues).
+    Then 30 berries for the Rusty Key with Next 63, and the castle's own keys (two Ancient Keys, each used up by one of
+    the main room's locks, and the boss key): key logic when the main room is mapped. Location 69's reach (build step
+    67) is the stopgap until its trigger is opened.
 
 **Known issues:**
+
+- **The bandit hideout's capture takes the seed's ability items** (found 2026-10-09 by the key-chain research, from the
+  code; not seen in game). `Event109`'s capture moves every item and key item into `flagstring[8]` until the storage
+  chest gives them back, the mod's own move and ability keys (201-211), the Boat Ticket and the submarine included.
+  The mod reads abilities from the bag (`Abilities.cs`), so the cell can't be dug out of unless Beetle Dig arrives
+  after the capture, and the chest (a horn-only switch) can't be hit without the Horn Slash with Shuffle Field Moves;
+  a progressive item received meanwhile gets the wrong level (`KeyFor` on an emptied bag). The Warp still leaves. The
+  hideout's spots are held out meanwhile (build step 67); the fix is Next 64's first part.
 
 - **The Rubber Prison's checkpoint corridor from the yard** (2026-10-04): in the game its gates may be shut from the
   yard's side, so it never leads on; the logic still lets the yard reach the spike room through it (as before
@@ -3178,14 +3201,21 @@ a ledge, Horn Dash, the horn and Jump, or Jump and Bee Fly; a Magic Seed dug up 
 the swamp done; Defiant Root from 2026-10-09: the Square (the ground and its four doors free; the rooftops up with Jump,
 a drop down; six new locations there, 189 to 194: a Lore Book behind a box and Morty's Bed Bug on the ground, a Berry
 Juice and crystal berry #15 on the rooftops, kept there until taken, build step 64, and the mayor's storage's Lore Book
-and Dark Cherries behind its locked door, the Desert Key's stand-in; the Bed Bug a new useful key item), 137 of 244;
+and Dark Cherries behind its locked door, pending until the quest pass since the Desert Key needs quest 46 from chapter
+5, build step 44's way, as the review found; the Bed Bug a new useful key item), 137 of 244;
 the Well (its landing and bounce pad up to the town; its right side, the hideout's door, by Beetle Dig; a Leaf
 Croissant on boxes there, Jump, location 195), 138 of 244; the Market (one door, all of it free, no locations; Kali's
 shop shut until her board quest is taken, left so), 139 of 244; the Beehive Lift (the ground free; the elevator's
 platform and the inn's upstairs each up with Jump or Bee Fly, a drop down; two new locations: a Lore Book behind the
 inn's high door, kept open, build step 65, Jump or Bee Fly inside, and the medal Fortify on its roof, Bee Fly, 196
 and 197), 140 of 244, the Defiant Root done; the Ancient Castle from 2026-10-09: its entrance (the middle's bridge
-shows while its crystal is lit, the Beemerang Toss from either side, or Bee Fly; no items), 141 of 244; the rest of
+shows while its crystal is lit, the Beemerang Toss from either side, or Bee Fly; no items), 141 of 244; the Slide
+Puzzle (its floor a drop from every side, Jump back up to its lower door; a block knocked into place with the horn
+fills its upper gap and opens its upper left door, or Bee Fly crosses; the medal Frostbite burrowed to, Beetle Dig,
+location 198), 142 of 244; the Statue Room (over the middle's block on platforms: from the left Icicle and Jump, or
+Bee Fly; from the right Jump or Bee Fly; no items), 143 of 244; the Basement (its door on an isolated ledge, the
+middle by Jump or Bee Fly; three spots on its platforms, the Toss and Jump or Bee Fly, the Ancient Key behind a barrier,
+Halt and Jump or Bee Fly, locations 199-201, pending with the castle's 198, build step 67), 144 of 244; the rest of
 `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
@@ -5620,11 +5650,20 @@ plays first, so the check is never lost. No activation flag needs repointing: a 
 own (`NPCControl.CheckItem`), so taking it never ends the robbery. The swap runs as the map is built, before the
 berry's own `Start` hides it when #15 is already taken. Test `TestDefiantRootSquare`.
 
+**Found by the review (2026-10-09):** the robbery's gift (`|giveitem,3,15,7|`) reached none of the mod's give hooks: for
+a crystal berry the game's `Giveitem` raises the count and marks the berry with no window, sprite or list add. So once
+berry #15 was a location, the robbery would send 192 and also add a berry of its own, against "items are remote
+only".
+**Built (the mod):** a `SetText` prefix (`ItemSwap.CrystalGifts`) turns a `|giveitem,3,<n>,` whose berry is a seed
+location into a hand-over of item 0 marked as that location, as berry rewards already are (`Berries`); deciding it
+marks #n taken, as the game's give would, which sends the check. So the robbery shows the location's item and adds
+none.
+
 **Status:** built (2026-10-09); seen the same day in seed `AP_70580691250444408633` through the dev `liveslot`: the
-berry on its rooftop with flag 201 on.
+berry on its rooftop with flag 201 on. The robbery's hand-over not yet seen in game.
 
 *Code: `logic/defiant_root.py` (`LIMIT_FLAGS`, the Square's locations), `logic/__init__.py`. The mod:
-`World/KeptOpen.cs`, unchanged.*
+`World/KeptOpen.cs`, unchanged; `Items/ItemSwap.Pickups.cs` (`CrystalGifts`), `Items/ItemSwap.cs` (`FindLocation`).*
 
 ## Build step 65: the Defiant Root inn's upstairs door open
 
@@ -5646,6 +5685,54 @@ gone, the door open, the Lore Book reached.
 
 *Code: `logic/defiant_root.py` (`SCENERY_HIDDEN`, the Beehive Lift's areas and locations). The mod:
 `World/KeptOpen.cs`, unchanged.*
+
+## Build step 66: a give the game repeats, its check done, is the game's own (Morty's Bed Bug)
+
+**Found by the review (2026-10-09):** Morty lends Pibu, his pillbug (the Bed Bug), once for free (line 24, location
+190), and once it's used up he rents it again for 30 berries (line 28, the same `giveitem,1,89`). The mod matches a
+give by map, kind, item and character only, so a re-rental after the check took the berries and kept the Bed Bug back,
+for good (`MEASURED.md`, the Square; first written as a sale by another character, corrected).
+
+**Asked and decided (the user, 2026-10-09):** a give the game repeats is the game's own once its check is done, beside
+build step 10's respawning pickups: the second named exception to "items are remote only" (`CLAUDE.md`).
+
+**Built:** a give can be marked `again` (`Give.again` in the apworld, `"again": true` in its `location_gives` entry).
+When a talk begins (`SetText` with no message running, `ItemSwap.Repeats`), the mod notes which marked gives' checks
+are already done (their flag set, or done on the server); a give of one of those in that talk is left to the game, and
+logged (`given again ... the game's own`). The first lend sets its flag inside its own talk, after that note, so it is
+still the check. Only Morty's give is marked. Test `TestDefiantRootSquare`.
+
+**Status:** built (2026-10-09); not yet seen in game.
+
+*Code: `data_types.py` (`Give.again`), `logic/defiant_root.py`. The mod: `Core/ApConnection.cs` (`Give.Again`),
+`Core/SeedData.cs`, `Items/ItemSwap.Pickups.cs` (`Repeats`), `Items/ItemSwap.cs` (`FindLocation`).*
+
+## Build step 67: what lies behind the Sand Castle Key and the Rusty Key held out
+
+**Found (2026-10-09, mapping the Ancient Castle; a research workflow, each chain checked by a second agent):** the
+castle's door from the desert needs the Sand Castle Key, and the bandit hideout's front door the Rusty Key, both with
+"later chapters" as their stand-in. In the game both come after chapter 4's start (flag 300, the throne room's scene,
+which waits on chapter 3's end in the Honey Factory and on Neolith, there from chapter 2's boss): the Bee Kingdom's
+story and the factory's three keycard locks, the throne room, Astotheles' sale at the well, the hideout (the capture,
+the cell dug out of, the storage chest hit with the horn, the Astotheles fight) and the roach village's hawk. The
+stand-in holds none of it, so a castle spot, the hideout's cell (location 71) or the hideout's Enemysanity spots could
+hold something the chain needs: an impossible seed. A gated door with no `DoorRule` gets no rule, which is how today's
+logic walks into the factory before its story allows.
+
+**Asked and decided (the user, 2026-10-09):** hold them out now, as build step 44 does for quests that open later;
+keep mapping the castle's rooms; the chains get their own steps (Next 64).
+
+**Built:** every castle location (198 to 201 so far) and location 71 are `pending`; Enemysanity's spots in the
+castle and the hideout (areas 11 and 20, `KEY_CHAIN_AREAS`) too. Their rooms' ways are written as each is mapped, so
+nothing waits but the spots. Also from the review: location 69 (the Dash's scene, `Lost Sands: Entrance`) had the same
+kind of gap: its trigger needs flag 88 (chapter 2's boss, behind both offerings) and 138 (Gen and Eri's scene by the
+second East Road's crank, there from the throne room's 130). Its reach now needs those rooms too. Tests
+`TestSlidePuzzle`, `TestCastleBasement`, `TestDashScene`.
+
+**Status:** built (2026-10-09); a logic change only, nothing to see in game.
+
+*Code: `logic/ancient_castle.py`, `logic/bandit_hideout.py`, `logic/lost_sands.py` (location 69), `enemysanity.py`
+(`KEY_CHAIN_AREAS`).*
 
 # How it works
 

@@ -297,6 +297,71 @@ namespace BugFablesAP
             }
         }
 
+        // A crystal berry given in a scene, |giveitem,3,<n>|, whose berry is a location (the caravan robbery's #15, the
+        // Square's rooftop berry): a hand-over of item 0 marked as that location, so no berry is added; FindLocation
+        // marks #n taken, as the game's give would, which sends the check.
+        private static int pendingCrystal = -1;
+
+        private static class CrystalGifts
+        {
+            [HarmonyPatch(typeof(MainManager), "SetText", typeof(string), typeof(int), typeof(float?), typeof(bool),
+                typeof(bool), typeof(Vector3), typeof(Vector3), typeof(Vector2), typeof(Transform), typeof(NPCControl))]
+            [HarmonyPrefix]
+            public static void CrystalPrefix(ref string text)
+            {
+                Dictionary<long, int> berries = connection?.LocationBerries;
+                if (text == null || berries == null || randomizerOn == null || !randomizerOn()
+                    || !text.Contains("|giveitem,3,"))
+                {
+                    return;
+                }
+                foreach (KeyValuePair<long, int> entry in berries)
+                {
+                    string token = "|giveitem,3," + entry.Value + ",";
+                    int at = text.IndexOf(token, StringComparison.Ordinal);
+                    if (at < 0)
+                    {
+                        continue;
+                    }
+                    text = text.Substring(0, at) + "|giveitem,0,0," + text.Substring(at + token.Length);
+                    pendingBerries = entry.Key;
+                    pendingCrystal = entry.Value;
+                    log.LogInfo($"[swap] location {entry.Key}: crystal berry {entry.Value} given on {MapName()} turned "
+                        + "into a hand-over to swap");
+                    return;
+                }
+            }
+        }
+
+        // Gives the game hands out again (Give.Again): whether each one's check was done as this talk began, read once
+        // per talk, before its own lines set anything.
+        private static readonly HashSet<long> doneBeforeTalk = new HashSet<long>();
+
+        private static class Repeats
+        {
+            [HarmonyPatch(typeof(MainManager), "SetText", typeof(string), typeof(int), typeof(float?), typeof(bool),
+                typeof(bool), typeof(Vector3), typeof(Vector3), typeof(Vector2), typeof(Transform), typeof(NPCControl))]
+            [HarmonyPrefix]
+            public static void TalkPrefix()
+            {
+                Dictionary<long, ApConnection.Give> gives = connection?.LocationGives;
+                if (gives == null || MainManager.instance == null || MainManager.instance.message)
+                {
+                    return;
+                }
+                doneBeforeTalk.Clear();
+                Dictionary<long, int> flags = connection.LocationFlags;
+                foreach (KeyValuePair<long, ApConnection.Give> entry in gives)
+                {
+                    if (entry.Value.Again && (connection.IsDone(entry.Key) || (flags != null
+                        && flags.TryGetValue(entry.Key, out int flag) && MainManager.instance.flags[flag])))
+                    {
+                        doneBeforeTalk.Add(entry.Key);
+                    }
+                }
+            }
+        }
+
         private static long FindPickup(NPCControl caller)
         {
             long enemy = EnemyDrops.LocationOf(caller);

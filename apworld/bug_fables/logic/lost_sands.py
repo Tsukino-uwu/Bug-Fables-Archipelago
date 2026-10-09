@@ -2,7 +2,7 @@
 seed changes there, mapped room by room (room-checklist.md)."""
 from __future__ import annotations
 
-from rule_builder.rules import False_, Has
+from rule_builder.rules import CanReachRegion, False_, Has
 
 from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, one_way
 from ..data_types import (ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, Location, Pickup, Source, StoryEvent,
@@ -17,10 +17,14 @@ SAND_CASTLE_KEY = LATER_CHAPTERS
 
 LOCATIONS = (
     # Where the game teaches the Dash (flag 699); the later chapters' story-order stand-in. Its map is the Outskirts'
-    # (BOLostSandsEntrance, area 0) at the desert's border; it stays with the area its name gives.
+    # (BOLostSandsEntrance, area 0) at the desert's border; it stays with the area its name gives. Its trigger
+    # (`dashevent`) needs 88 (chapter 2's boss, behind both offerings) and 138 (Gen and Eri's scene by the second East
+    # Road's crank, there from the throne room's 130): those rooms reached too (the review, 2026-10-09).
     Location("Lost Sands: Entrance", 69, "BOLostSandsEntrance",
              Source(event=221, flag=699),
-             rule=CanUse("Beemerang Halt"), reach=LATER_CHAPTERS),
+             rule=CanUse("Beemerang Halt"),
+             reach=LATER_CHAPTERS & CanReachRegion("GoldenHillsDungeonBoss") & CanReachRegion("AntPalace2")
+             & CanReachRegion("BugariaOutskirtsEast2")),
     Location("Lost Sands: Badlands, Center Pillar", 114, "DesertBadlands",
              Source(flag=413, pickup=Pickup(map="DesertBadlands", type=2, item=0)),
              rule=CanUse("Jump") & (CanUse("Bee Fly") | CanUse("Beemerang Toss"))),

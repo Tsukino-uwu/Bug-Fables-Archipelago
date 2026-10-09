@@ -78,7 +78,8 @@
     {"name": "Bad Book", "game_id": 174, "kind": 1, "classification": "useful"},
     {"name": "Platinum Card", "game_id": 176, "kind": 1, "classification": "useful"},
     {"name": "Mechanical Claw", "game_id": 175, "kind": 1, "classification": "useful", "_comment": "Traded for medal 61 in Defiant Root (DefiantRoot3 lines 189-190): progression once that trade is a location (the quest pass)."},
-    {"name": "Bed Bug", "game_id": 89, "kind": 1, "classification": "useful", "_comment": "One use from the pause menu: a rest, then the game takes it back (Event82); Pibu sells more in Defiant Root. Nothing reads it."},
+    {"name": "Ancient Key", "game_id": 114, "kind": 1, "classification": "useful", "_comment": "Two in the Ancient Castle (the basement, the pressure plate room), each used up by one of the main room's two locks (Event59 key list index 7): progression once those locks are in the logic."},
+    {"name": "Bed Bug", "game_id": 89, "kind": 1, "classification": "useful", "_comment": "Pibu, Morty's pillbug: one use from the pause menu, a rest, then the game takes it back (Event82); Morty rents it again for 30 berries. Nothing reads it."},
     {"name": "Bug Me Not!", "game_id": 18, "kind": 2, "classification": "useful"},
     {"name": "TP Plus", "game_id": 1, "kind": 2, "classification": "useful"},
     {"name": "Sleep Resistance", "game_id": 12, "kind": 2, "classification": "useful"},
@@ -104,11 +105,13 @@
     {"name": "We Owe Ya!", "game_id": 85, "kind": 2, "classification": "useful"},
     {"name": "Charge Up", "game_id": 52, "kind": 2, "classification": "useful"},
     {"name": "Fortify", "game_id": 39, "kind": 2, "classification": "useful"},
+    {"name": "Frostbite", "game_id": 46, "kind": 2, "classification": "useful"},
     {"name": "Aphid Egg", "game_id": 17, "kind": 0, "classification": "filler"},
     {"name": "Danger Shroom", "game_id": 26, "kind": 0, "classification": "filler"},
     {"name": "Burly Berry", "game_id": 3, "kind": 0, "classification": "filler"},
     {"name": "Magic Seed", "game_id": 11, "kind": 0, "classification": "filler"},
     {"name": "Berry Juice", "game_id": 39, "kind": 0, "classification": "filler"},
-    {"name": "Leaf Croissant", "game_id": 148, "kind": 0, "classification": "filler"}
+    {"name": "Leaf Croissant", "game_id": 148, "kind": 0, "classification": "filler"},
+    {"name": "Shaved Ice", "game_id": 47, "kind": 0, "classification": "filler"}
   ]
 }
