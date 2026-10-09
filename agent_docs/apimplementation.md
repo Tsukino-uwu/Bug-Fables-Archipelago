@@ -3276,8 +3276,10 @@ the outside and the inside, its top door made and the main area's bottom exit se
 open, build step 72; its scan location 208 with flag 160, build step 74), 155 of 244; the Main Area (one region,
 every door free; the clothing stall's Bee Hat and then Pretty Ribbon, locations 209-210, after Mothiva's scene, a
 story event that needs nothing, at their prices), 156 of 244; HB's Lab (one region, its door free; HB asks for the
-Explorer Permit from the start and shown it opens B.O.S.S., build step 75), 157 of 244; the rest of
-`room-checklist.md` to go.
+Explorer Permit from the start and shown it opens B.O.S.S., build step 75), 157 of 244; the Balcony (one region, its
+door free; Beette's sale, location 78, needing nothing in the room, at her price again, build step 76, its berries with
+Next 63), 158 of 244; Honeycomb's Lab (one region, its door free, no location), 159 of 244, the Bee Kingdom Hive done;
+the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

@@ -1678,7 +1678,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   flag: line 19 from the start, which ends by setting 227 (the game's text, `textsearch`); 20 from 227, her offer; 24
   from 228, which her line 23 sets after the sale (`|flag,228,true|`). The telescope (`telescope`, `Event127`) shows a
   view of Bugaria and records discovery 26 the first time; it sets no flag. NPCs by flag: two ladybugs (until 299), Gen
-  and Eri (until 167, their line 3 runs `Event86`, whose balcony part talks and sets 167, the party not moved), Kenny
+  and Eri (until 167, their line 3 runs `Event86`, whose balcony part walks the party over to them in the room, talks and sets 167, no map change), Kenny
   (`Kenny - Duplicate`, needs 598 and 86, until 599 or 299), a guard, a walking judge bee and the telescope's owner. In
   a seed Beette is kept present and sells at her price again (seen: "So...? 150 berries for the house", refused with 115
   in the bag; build step 76). No pickups, flag-switched scenery, hazards, auto-start scenes or map enemies.
