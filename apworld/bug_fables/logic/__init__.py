@@ -48,7 +48,8 @@ PRESENT_FROM: tuple[FlagEntity, ...] = tuple(e for area in AREAS for e in getatt
 PRESENT_WITH_ITEM: tuple[ItemEntity, ...] = tuple(e for area in AREAS for e in getattr(area, "PRESENT_WITH_ITEM", ()))
 HELD_UNTIL_ITEM: tuple[ItemEntity, ...] = tuple(e for area in AREAS for e in getattr(area, "HELD_UNTIL_ITEM", ()))
 DIALOGUE_FLAGS: tuple[DialogueFlag, ...] = tuple(e for area in AREAS for e in getattr(area, "DIALOGUE_FLAGS", ()))
-# Entities that borrow a goal flag: repointed so none can set it and each behaves as it would with it set.
+# Entities whose flags are repointed: those that borrow a goal flag, so none can set it and each behaves as it would
+# with it set (build step 60); a pickup the story would take away, kept until it's taken (build step 64).
 ACTIVATION_FLAGS: tuple[FlagSwap, ...] = tuple(e for area in AREAS for e in getattr(area, "ACTIVATION_FLAGS", ()))
 LIMIT_FLAGS: tuple[FlagSwap, ...] = tuple(e for area in AREAS for e in getattr(area, "LIMIT_FLAGS", ()))
 # Map start-up scenes that would move the party where the logic doesn't expect it: never played in a seed.

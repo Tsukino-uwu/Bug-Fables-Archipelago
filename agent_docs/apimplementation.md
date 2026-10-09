@@ -135,6 +135,7 @@ this file and that doc disagree, that doc is right.
 61. [Build step 61: the swamp bridge kept up, its collapse kept away](#build-step-61-the-swamp-bridge-kept-up-its-collapse-kept-away)
 62. [Build step 62: a map's own start-up scene kept away (the Junction's centipede)](#build-step-62-a-maps-own-start-up-scene-kept-away-the-junctions-centipede)
 63. [Build step 63: the Dash without the Horn Slash](#build-step-63-the-dash-without-the-horn-slash)
+64. [Build step 64: crystal berry #15 kept until taken](#build-step-64-crystal-berry-15-kept-until-taken)
 
 **How it works**
 
@@ -3173,7 +3174,12 @@ door up a lift, Horn Dash, the Halt and Jump; a Burly Berry and a Crunchy Leaf i
 Horn Dash, brought up to open the middle's ways up and across; Bee Fly for some; the medal Eternal Venom on a stump,
 location 187), 135 of 244; Fenced Pond (a double fence between its middle and its right side, taken down by a lever on
 a ledge, Horn Dash, the horn and Jump, or Jump and Bee Fly; a Magic Seed dug up on the right, location 188), 136 of 244,
-the swamp done; the rest of `room-checklist.md` to go.
+the swamp done; Defiant Root from 2026-10-09: the Square (the ground and its four doors free; the rooftops up with Jump,
+a drop down; six new locations there, 189 to 194: a Lore Book behind a box and Morty's Bed Bug on the ground, a Berry
+Juice and crystal berry #15 on the rooftops, kept there until taken, build step 64, and the mayor's storage's Lore Book
+and Dark Cherries behind its locked door, the Desert Key's stand-in; the Bed Bug a new useful key item), 137 of 244;
+the Well (its landing and bounce pad up to the town; its right side, the hideout's door, by Beetle Dig; a Leaf
+Croissant on boxes there, Jump, location 195), 138 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -5588,6 +5594,31 @@ position only). The user is "pretty sure" none blocks a way; it is rechecked on 
 *Code: the mod `World/FieldMoves.cs` (`HornLock`, `HornTag`, `SlashAnim`, `SlashSound`); `logic/forsaken_lands.py`,
 `options.py`; tests `test_moves.py` (`TestDashWithoutTheHorn`).*
 
+## Build step 64: crystal berry #15 kept until taken
+
+**Found (2026-10-09, mapping the Square, `DefiantRoot1`):** crystal berry #15 on the Square's left rooftop is there
+only until flag 201. The game sets 201 on entering the desert's `DesertDRSouthEntrance` and at the end of the caravan
+robbery (`Event93`), which gives #15 itself. In vanilla the robbery comes first and the rooftop berry is the fallback
+for a player who skipped it. In a seed the order is free: going through that desert room first took the berry away for
+good, so a location there could never be checked (`MEASURED.md`, "Crystal berry #15 and flag 201").
+
+**Asked and decided (the user, 2026-10-09):** keep it until it's taken. The robbery's own gift is looked at in the
+enemy pass, with its fight.
+
+**Built** (the apworld only: the mod already repoints an entity's limit flag, build step 60): `LIMIT_FLAGS` in
+`logic/defiant_root.py` repoints the berry's limit from 201 to -1, which the game reads as no limit
+(`MainManager.CheckIfCanExist`). The berry then disappears only once #15 is taken, which is also how its location,
+`Defiant Root: Square, Left Rooftop` (192), is checked: by its own pickup, or by the robbery's gift if the robbery
+plays first, so the check is never lost. No activation flag needs repointing: a crystal berry pickup never writes its
+own (`NPCControl.CheckItem`), so taking it never ends the robbery. The swap runs as the map is built, before the
+berry's own `Start` hides it when #15 is already taken. Test `TestDefiantRootSquare`.
+
+**Status:** built (2026-10-09); seen the same day in seed `AP_70580691250444408633` through the dev `liveslot`: the
+berry on its rooftop with flag 201 on.
+
+*Code: `logic/defiant_root.py` (`LIMIT_FLAGS`, the Square's locations), `logic/__init__.py`. The mod:
+`World/KeptOpen.cs`, unchanged.*
+
 # How it works
 
 ## 1. The big picture: generator, seed, server, game
@@ -5697,7 +5728,8 @@ only way a setting chosen at generation (an option, a version number) reaches th
 - the open world (build step 9): `kept_open`, `kept_present`, `scenery_hidden`, `scenery_present`, `held_until`,
   `present_from` and `dialogue_flags`, the story's blockers and scenery the mod keeps the way the logic assumes;
 - the goal guard (build step 60): `goal_flags`, the goal's flags and the events that set them, and `activation_flags`
-  and `limit_flags`, entities that borrow a goal flag repointed;
+  and `limit_flags`, entities that borrow a goal flag repointed (and, build step 64, a pickup the story would take
+  away);
 - `scenes_kept_away` (build step 62): maps' own start-up scenes never played, their flag set as the map is built;
 - `submarine_item`, `present_with_item` and `held_until_item`: the submarine is an item, and its docks are made, and
   who shows them off kept away, by its key item in the bag (build step 36);

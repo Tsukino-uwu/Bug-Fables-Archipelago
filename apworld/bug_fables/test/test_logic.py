@@ -790,3 +790,56 @@ class TestFencedPond(BugFablesTestBase):
         dig = self.multiworld.get_location("Wild Swamplands: Fenced Pond, Dig Spot", self.player)
         self.assertEqual(dig.parent_region.name, "Swamplands8 (Right)")
         self.assertTrue(dig.access_rule(self.state_with("Beetle Dig")))
+
+
+class TestDefiantRootSquare(BugFablesTestBase):
+    # DefiantRoot1 (the user, 2026-10-09): the ground and its doors need nothing; the rooftops are up with Jump, the
+    # mayor's storage behind them locked until the Desert Key.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True, "shuffle_crystal_berries": True}
+
+    def test_ground_spots_need_nothing(self) -> None:
+        for name in ("Behind the Box", "Morty's Gift"):
+            spot = self.multiworld.get_location(f"Defiant Root: Square, {name}", self.player)
+            self.assertEqual(spot.parent_region.name, "DefiantRoot1")
+            self.assertTrue(spot.access_rule(self.state_with()), name)
+
+    def test_rooftops_need_jump(self) -> None:
+        up = self.multiworld.get_entrance("DefiantRoot1 to DefiantRoot1 (Rooftops)", self.player)
+        self.assertFalse(up.access_rule(self.state_with()))
+        self.assertTrue(up.access_rule(self.state_with("Jump")))
+        for name in ("Right Rooftop", "Left Rooftop", "Mayor's Storage 1", "Mayor's Storage 2"):
+            spot = self.multiworld.get_location(f"Defiant Root: Square, {name}", self.player)
+            self.assertEqual(spot.parent_region.name, "DefiantRoot1 (Rooftops)", name)
+
+    def test_storage_needs_the_key(self) -> None:
+        for name in ("Mayor's Storage 1", "Mayor's Storage 2"):
+            spot = self.multiworld.get_location(f"Defiant Root: Square, {name}", self.player)
+            self.assertFalse(spot.access_rule(self.state_with("Jump")), name)
+
+    # Pibu sells a Bed Bug on the same map (line 28): only Morty's is the check's.
+    def test_mortys_gift_is_his_alone(self) -> None:
+        gives = self.world.fill_slot_data()["location_gives"].values()
+        self.assertIn({"map": "DefiantRoot1", "type": 1, "item": 89, "npc": "Morty"}, gives)
+
+    # Flag 201 (the desert's south entrance, the caravan robbery) took crystal berry #15 away for good (build step 64).
+    def test_berry_kept_until_taken(self) -> None:
+        self.assertIn({"map": "DefiantRoot1", "entity": "crystalberryskip", "flag": 201, "to": -1},
+                      self.world.fill_slot_data()["limit_flags"])
+
+
+class TestDefiantRootWell(BugFablesTestBase):
+    # DefiantRootWell (the user, 2026-10-09): the landing and its bounce pad up to the town on the left; the right side
+    # (the hideout's door, a Leaf Croissant on boxes) by burrowing, both ways.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_right_side_needs_dig(self) -> None:
+        for entrance in ("DefiantRootWell to DefiantRootWell (Right)", "DefiantRootWell (Right) to DefiantRootWell"):
+            way = self.multiworld.get_entrance(entrance, self.player)
+            self.assertFalse(way.access_rule(self.state_with()), entrance)
+            self.assertTrue(way.access_rule(self.state_with("Beetle Dig")), entrance)
+
+    def test_croissant_needs_jump(self) -> None:
+        spot = self.multiworld.get_location("Defiant Root: Well, By the Boxes", self.player)
+        self.assertEqual(spot.parent_region.name, "DefiantRootWell (Right)")
+        self.assertFalse(spot.access_rule(self.state_with()))
+        self.assertTrue(spot.access_rule(self.state_with("Jump")))

@@ -1416,6 +1416,36 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   pad by the top door, five grass patches with nothing; the dig spot is its only item. Seb's talk (line 4 sets 390,
   opening the Outskirts house, and loads a map; line 7 warps to `BugariaOutskirtsOutsideCity`, the ScriptDump) is for
   the quest pass. Its map enemies (a Leafbug Clubber, a Madesphy, a Leafbug Ninja, `enemy`) for the enemy pass.
+  **`DefiantRoot1`, the Square (2026-10-09, the user; named by the user):** the ground and its four doors (the elevator
+  left, the commercial street top, outside right, the well down a hole, out again with nothing) free, with the save
+  crystal, every NPC, the houses and the museum (`insideid` 1, discovery 29 from its signs, lines 59-60). On the ground:
+  a Lore Book behind a box at the far left (`lorebook`, key item 52, flag 142); Morty's first line (24) lends the Bed
+  Bug (key item 89) and sets 157 and 150. Pibu sells another for 30 berries (line 28, sets 150), there until 150. The
+  rooftops up with Jump, a drop down: a Berry Juice on the right (`BurlyTea - Duplicate`, item 39, flag 688), crystal
+  berry #15 on the left (`crystalberryskip`, below), the Spicy Berry seller beside it (`hidden merchant`, line 8, 16
+  berries; seen on screen), the mayor's front door (`doormayor`), and the storage's back door (`doormayorback`), locked
+  (`DoorLock`, `Event59` with `dialogues[0].y` 3: key list index 3, the Desert Key, 92, taken when used; hidden from
+  560). Inside (`insideid` 0, the user with a dev `give key 92`): a Lore Book (flag 489) and Dark Cherries (item 121,
+  flag 490). The Desert Key is the mayor's, given in the Wacka Worm room (`Event55`, line 15, once 558 is set and not
+  559; `Event188` sets 558) after his quest 46. Three bushes drop nothing; no dig spots. The first-visit talk (line 52,
+  flag 170) is skipped with Skip cutscenes (its log line seen through the well's door, 2026-10-09).
+  **Crystal berry #15 and flag 201 (2026-10-09, code and dumps; seen):** `crystalberryskip` on the Square's left
+  rooftop is there until 201 (`limit`, read by nothing else but the caravan robbery's cast and trigger on
+  `DesertCaravanMap`), and a ground berry also disappears once its index is taken (`NPCControl.SetUp`,
+  `crystalbflags[data[3]]`). 201 is set on entering `DesertDRSouthEntrance` (`MapControl`, with 170) and at the end of
+  the caravan robbery (`Event93`), whose dialogue gives #15 itself (`giveitem,3,15`). A crystal berry pickup never
+  writes its `activationflag` (`NPCControl.CheckItem` writes it only for `animid != 3`): taking the rooftop berry left
+  201 off (the user took it, then `flag 201` read False). In a seed its limit is repointed to -1 (build step 64): seen
+  on the rooftop with 201 on and `crystalbflags[15]` off (the user, with `liveslot`).
+  **The Bed Bug (2026-10-09, code):** key item 89, used from the pause menu's key items on open ground
+  (`PauseMenu.cs`): a rest like an inn (`Event82`), which takes it back (`items[1].Remove(89)`) and clears 150. No
+  other code or line reads it.
+  **`DefiantRootWell`, the Well (2026-10-09, the user; named by the user):** its bottom left the landing from the town,
+  a green bounce pad (`bounceshroom`) back up to the town's door (`loadzone`, y 12), and Astotheles (from 300 until 239,
+  line 3: the Rusty Key, 111, for 30 berries). Its right side (the door to `HideoutGarden`, `loadzonehideout`) to and
+  from it by burrowing, Beetle Dig. A Leaf Croissant (item 148, flag 734) on boxes on the right side, Jump. `Base/Quad`
+  is hidden from flag 18 (the story's Beetle Dig); with 18 off on the test file it was shown and the burrow still went
+  across.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

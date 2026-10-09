@@ -41,7 +41,8 @@ namespace BugFablesAP
         internal readonly List<ApConnection.Blocker> PresentWithItem;
         internal readonly List<ApConnection.Blocker> HeldUntilItem;
         internal readonly List<ApConnection.FlagSwap> DialogueFlags;
-        // Entities that borrow a goal flag: their activation flag, and their limit flags, repointed.
+        // Entities whose activation flag or limit flags are repointed: those that borrow a goal flag, a pickup the
+        // story would take away.
         internal readonly List<ApConnection.FlagSwap> ActivationFlags;
         internal readonly List<ApConnection.FlagSwap> LimitFlags;
         // The goal's flags, each with the events that set it; null for a seed without them, whose goal is never sent.

@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**136 of 244 done.**
+**138 of 244 done.**
 
 ## Outskirts
 
@@ -215,10 +215,14 @@ as it is, a frozen record.
 
 ## Defiant Root
 
-- [ ] DefiantRoot1 (58)
-- [ ] DefiantRootWell (59)
+- [x] DefiantRoot1 (58) — the Square; crystal berry #15 kept until taken (build step 64); for the quest pass: the
+  mayor (45 berries from 300; his quest 46 and the Desert Key, the storage's stand-in), Isau's Sophie Petal trade (HP
+  Core, flag 396), Eremi's trades (from 300); for the sellers' pass: Pibu's Bed Bug (30 berries, there until 150, which
+  Morty's gift sets: kept present if it becomes a location) and the Spicy Berry seller on the left rooftop (Jump); for
+  the discovery sweep: discovery 29 (the museum's signs)
+- [x] DefiantRootWell (59) — the Well; for the quest pass: Astotheles' Rusty Key (line 3, from 300 until 239)
 - [ ] DefiantRoot2 (60)
-- [ ] DefiantRoot3 (61)
+- [ ] DefiantRoot3 (61) — to be named the Market (the user, 2026-10-09)
 
 ## Ancient Castle
 
