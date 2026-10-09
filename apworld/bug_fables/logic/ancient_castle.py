@@ -11,8 +11,6 @@ _SLIDE_SOLVED = "Sand Castle Slide Puzzle Solved"
 # The Slide Puzzle's upper gap: filled once the puzzle is solved, or flown over.
 _SLIDE_GAP = Has(_SLIDE_SOLVED) | CanUse("Bee Fly")
 _UP = CanUse("Jump") | CanUse("Bee Fly")
-# The Slide Puzzle's floor up to its upper left, once the puzzle is solved.
-_SLIDE_UP = Has(_SLIDE_SOLVED) & _UP
 # The Basement's small platforms: the big crystal lit (the Beemerang Toss) and Jump, or Bee Fly.
 _SMALL_PLATFORMS = (CanUse("Jump") & CanUse("Beemerang Toss")) | CanUse("Bee Fly")
 # The main room's two lifts, each started for good by its switch: the lower one between the bottom and the middle
@@ -31,12 +29,13 @@ _PRESSURE_SOLVED = "Sand Castle Pressure Puzzle Door Open"
 # platforms.
 _ROCK_PLATFORM = "Sand Castle Rock Room Platform Running"
 _ROCK_BOULDER = "Sand Castle Rock Room Boulder Broken"
-# The two Ancient Keys (114), each used up by one of the main room's two locks. While the castle's spots are pending
-# both are the game's own pickups, neither behind a lock, so either lock opens once both are reached: the Basement's
-# behind its barrier, the Pressure Puzzle's past its plates.
-_ANCIENT_KEYS = (CanReachRegion("SandCastleBasement (Middle)")
-                 & ((CanUse("Jump") & CanUse("Beemerang Halt")) | CanUse("Bee Fly"))
-                 & CanReachRegion("SandCastlePressurePuzzle") & _PRESSURE_KEY)
+# The two Ancient Keys (114), each used up by one of the main room's two locks; while the castle's spots are pending
+# both are the game's own pickups. The statue room's lock is always the first a party reaches with a key in hand:
+# nothing above it is reached from the bottom without it, so the Basement's key (behind its barrier) opens it, and
+# the boss key room's lock then takes the other, the Pressure Puzzle's (past its plates).
+_BASEMENT_KEY = (CanReachRegion("SandCastleBasement (Middle)")
+                 & ((CanUse("Jump") & CanUse("Beemerang Halt")) | CanUse("Bee Fly")))
+_ANCIENT_KEYS = _BASEMENT_KEY & CanReachRegion("SandCastlePressurePuzzle") & _PRESSURE_KEY
 
 LOCATIONS = (
     # Every spot in the castle is pending (the user, 2026-10-09; build step 67): its door needs the Sand Castle Key,
@@ -164,13 +163,14 @@ MAP_AREAS = (
          out=CanUse("Shield") | CanUse("Bee Fly"), to="SandCastleRockRoom (Bottom Right)"),
 )
 TRANSFERS = (
-    # The Slide Puzzle's upper left and upper right down to the puzzle's floor, drops; back up only once the puzzle is
-    # solved, from the floor to the upper left (the user, 2026-10-09: the way into the castle's top), Jump or Bee Fly
-    # until measured, then across the filled gap to the upper right.
-    *(Transfer("drop", "SandCastleSlidePuzzle", "SandCastleSlidePuzzle", two_way=False, way_back=_SLIDE_UP,
+    # The Slide Puzzle's upper left and upper right down to the puzzle's floor, drops: no way back up inside the room
+    # (the user, 2026-10-09, solved or not).
+    *(Transfer("drop", "SandCastleSlidePuzzle", "SandCastleSlidePuzzle", two_way=False, way_back=False_(),
                from_area=side, to_area="Bottom") for side in ("Upper Left", "Upper Right")),
-    Transfer("climb", "SandCastleSlidePuzzle", "SandCastleSlidePuzzle", _SLIDE_UP, two_way=False,
-             from_area="Bottom", to_area="Upper Left"),
+    # The main room's middle right and middle left, joined by a ledge outside behind its windows, up onto it with Jump,
+    # or Bee Fly across (the user, 2026-10-09): the way up to the castle's top, through the Slide Puzzle's upper part.
+    Transfer("ledge outside", "SandCastleMainRoom", "SandCastleMainRoom", _UP, from_area="Middle Right",
+             to_area="Middle Left"),
     # The main room's top right across to its top left, Jump, a drop; back round by the bottom and the upper lift. And
     # off the upper lift, on its way down from the top right, onto the middle right; back by the bottom and the lift.
     Transfer("ledge", "SandCastleMainRoom", "SandCastleMainRoom", CanUse("Jump"), two_way=False,
@@ -197,7 +197,7 @@ DOOR_RULES = (
     # The main room's two locks (`key1`, `key2`, Event59 key index 7, each using up an Ancient Key): the statue room's
     # door on its bottom, the boss key room's on its top right. Arriving through either, the game pushes the party
     # past the lock.
-    DoorRule("SandCastleMainRoom", "loadzone statue", _ANCIENT_KEYS),
+    DoorRule("SandCastleMainRoom", "loadzone statue", _BASEMENT_KEY),
     DoorRule("SandCastleMainRoom", "loadzonebosskey", _ANCIENT_KEYS),
     # The Pressure Puzzle (the user, 2026-10-09): its door to the main room shut from inside until its plates are
     # played for it; arriving through it before then, the game pushes the party past it. Its other door is free.

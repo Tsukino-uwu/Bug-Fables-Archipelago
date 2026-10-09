@@ -240,8 +240,9 @@ as it is, a frozen record.
 - [x] SandCastleBasement (119) — the Basement; its spots pending with the castle (build step 67)
 - [x] SandCastleRoof (120) — the Roof; its spot pending with the castle; the boss door's rule refined with the boss
   key room
-- [x] SandCastleMainRoom (121) — the Main Room, the castle's hub; its top reached through the Slide Puzzle (solved)
-  and the Pressure Puzzle; for the discovery sweep: discovery 16 up top (line 2, flag 306)
+- [x] SandCastleMainRoom (121) — the Main Room, the castle's hub; its top reached from the middle right by the ledge
+  outside, then the Slide Puzzle's upper part and the Pressure Puzzle; for the discovery sweep: discovery 16 up top
+  (line 2, flag 306)
 - [x] SandCastleBossKeyRoom (122) — the Boss Key Room; its spots pending with the castle; for the enemy pass: the
   key's Warden fight (Event115, three flying, Vi)
 - [x] SandCastlePressurePuzzle (126) — the Pressure Puzzle; its key pending with the castle

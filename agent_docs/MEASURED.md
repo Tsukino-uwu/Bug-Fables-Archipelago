@@ -1479,9 +1479,9 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   a `PushRock`, there until 284), knocked by the horn onto the plate (`pressureplate`, data `0 1 113`), runs `Event113`,
   which sets 284 for good: the pillar shown in place (`Base/IcePillarObj` from 284) fills the upper gap, and the upper
   left door (to `SandCastlePressurePuzzle`) opens (`Base/Tablet` hidden from 284). Before that, arriving through that
-  door pushes the party past it (seen, with 284 turned off). Once solved, the floor leads up to the upper left (the
-  user, 2026-10-09): the way into the castle's top, on through the Pressure Puzzle (its plates open its door to the
-  main room's top left). The upper right (its door from the main room) and the upper
+  door pushes the party past it (seen, with 284 turned off). Solved or not, the floor has no way up (the user,
+  2026-10-09): the upper part is entered from the main room's middle left. The upper right (its door from the main
+  room) and the upper
   left across the gap, once solved or with Bee Fly; both drop to the floor, with no way back up inside the room. The
   medal Frostbite (`freezebadge`, medal 46, flag 285) is in a small space behind the floor's top left corner, below the
   upper left door, burrowed into and out of with Beetle Dig. A crystal (`freezeswitch - Duplicate`) by the plate from
@@ -1524,9 +1524,14 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   right`, and `loadzonebosskey` behind `key2`): a drop to the bottom by the healing flower; its switch (`switch2`,
   291) starts the upper lift (`platform2`) for good, boarded from the bottom with Jump, which also lets the party off
   at the middle right; a jump across to the top left, one-way. The top left (`loadzone roof left`, `loadzonepressure`)
-  cut off but for that, a drop to the bottom by the save crystal with Jump. Both locks (`Event59` key index 7, each
+  cut off but for that, a drop to the bottom by the save crystal with Jump. The middle right and the middle left are
+  joined by a ledge outside behind the windows, up onto it with Jump, or Bee Fly across (found by the user,
+  2026-10-09): the way to the top, the middle left's door leading into the Slide Puzzle's upper part, on to the Pressure
+  Puzzle and the top left. The lifts are vertical only (`platform1` between y 3 and 8 at x 10, `platform2` between 3 and
+  22.5 at x 15, each cycling once its switch is hit, `NPCControl` PathPlatform). Both locks (`Event59` key index 7, each
   using up an Ancient Key, hidden from 292 and 293): arriving through either door pushes the party past the lock
-  (seen). The sand-filled door on the bottom's right is the parked `loadzonebasementright`. In vanilla the top is
+  (seen). The statue room's is the first one a party reaches with a key. The sand-filled door on the bottom's right is
+  the parked `loadzonebasementright`. In vanilla the top is
   reached through the castle's other rooms (the user: "you are not supposed to reach everything from within this
   room"). Discovery 16 up top (`discovery`, line 2, flag 306); a Psicorp and an enemy up top (enemy pass).
   **`SandCastleBossKeyRoom`, the Boss Key Room (2026-10-09, the user; named by the user):** one door (from the main

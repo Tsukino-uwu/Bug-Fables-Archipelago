@@ -900,13 +900,6 @@ class TestSlidePuzzle(BugFablesTestBase):
     # opens the upper left door; the medal burrowed to, Beetle Dig.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
-    # The way into the castle's top: the floor up to the upper left, once the puzzle is solved.
-    def test_floor_up_to_the_upper_left_once_solved(self) -> None:
-        climb = self.multiworld.get_entrance(
-            "SandCastleSlidePuzzle (Bottom) to SandCastleSlidePuzzle (Upper Left) (climb)", self.player)
-        self.assertFalse(climb.access_rule(self.state_with("Jump", "Bee Fly")))
-        self.assertTrue(climb.access_rule(self.state_with("Jump", "Sand Castle Slide Puzzle Solved")))
-
     def test_floor_needs_jump_or_bee_fly_back_up(self) -> None:
         up = self.multiworld.get_entrance("SandCastleSlidePuzzle (Bottom) to SandCastleSlidePuzzle", self.player)
         self.assertFalse(up.access_rule(self.state_with()))
@@ -1018,10 +1011,23 @@ class TestCastleMainRoom(BugFablesTestBase):
             self.assertFalse(switch.access_rule(self.state_with()))
             self.assertTrue(switch.access_rule(self.state_with("Horn Slash")))
 
-    def test_locks_need_both_keys_reached(self) -> None:
+    # The way up to the castle's top: a ledge outside behind the windows, Jump, or Bee Fly across.
+    def test_middle_ledge_both_ways(self) -> None:
+        for a, b in (("Middle Right", "Middle Left"), ("Middle Left", "Middle Right")):
+            ledge = self.multiworld.get_entrance(
+                f"SandCastleMainRoom ({a}) to SandCastleMainRoom ({b}) (ledge outside)", self.player)
+            self.assertFalse(ledge.access_rule(self.state_with()), a)
+            self.assertTrue(ledge.access_rule(self.state_with("Jump")), a)
+            self.assertTrue(ledge.access_rule(self.state_with("Bee Fly")), a)
+
+    # The statue room's lock is the first one reached with a key: the Basement's opens it, the other key not needed.
+    def test_statue_lock_takes_the_basement_key(self) -> None:
         bottom = self.multiworld.get_region("SandCastleMainRoom", self.player)
         door = next(e for e in bottom.exits if "SandCastleStatueRoom" in e.connected_region.name)
         self.assertFalse(door.access_rule(self.state_with()))
+        state = CollectionState(self.multiworld)
+        self.collect_all_but(["Progressive Freeze"], state)
+        self.assertTrue(door.access_rule(state))
 
 
 class TestPressurePuzzle(BugFablesTestBase):

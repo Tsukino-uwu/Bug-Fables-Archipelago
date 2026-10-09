@@ -3211,8 +3211,8 @@ inn's high door, kept open, build step 65, Jump or Bee Fly inside, and the medal
 and 197), 140 of 244, the Defiant Root done; the Ancient Castle from 2026-10-09: its entrance (the middle's bridge
 shows while its crystal is lit, the Beemerang Toss from either side, or Bee Fly; no items), 141 of 244; the Slide
 Puzzle (its floor a drop from every side, Jump or Bee Fly back up to its lower door; a block knocked into place with
-the horn fills its upper gap and opens its upper left door, or Bee Fly crosses, and lets the floor up to the upper
-left, the way into the castle's top; the medal Frostbite burrowed to, Beetle Dig, location 198), 142 of 244; the
+the horn fills its upper gap and opens its upper left door, or Bee Fly crosses; the medal Frostbite burrowed to,
+Beetle Dig, location 198), 142 of 244; the
 Statue Room (over the middle's block on platforms: from the left Icicle and Jump, or Bee Fly; from the right Jump or
 Bee Fly; no items), 143 of 244; the Basement (its door on an isolated
 ledge, the middle by Jump or Bee Fly; three spots on its platforms, the Toss and Jump or Bee Fly, the Ancient Key
@@ -3220,8 +3220,10 @@ behind a barrier, Halt and Jump or Bee Fly, locations 199-201, pending with the 
 244; the Roof (its doors and save crystal free; a Frost Bomb behind the left statue, 202, pending; the boss door
 locked from its side until the Big Ancient Key, the boss key room reached while that key is the game's own pickup),
 145 of 244; the Main Room (the hub, five parts: the bottom free; the middle left and the top left cut off, drops; the
-middle right and the top right up their lifts, each started by its own switch, with Jump; both Ancient Key locks
-needing both keys' spots reached while they're the game's own pickups), 146 of 244; the Boss Key Room (a Cold Salad
+middle right and the top right up their lifts, each started by its own switch, with Jump; the middle right and the
+middle left joined by a ledge outside, Jump or Bee Fly, the way up to the top through the Slide Puzzle's upper part
+and the Pressure Puzzle; the statue room's lock opened by the Basement's key, the boss key room's needing both keys'
+spots while they're the game's own pickups), 146 of 244; the Boss Key Room (a Cold Salad
 round the edge, nothing needed; its right side by the block pushed with the horn and Jump, or Bee Fly, back with Jump
 or Bee Fly; the Big Ancient Key there, past three flying Wardens, Vi; locations 203-204, pending; the Roof's boss door
 now needs that side and Vi), 147 of 244; the Pressure Puzzle (its two doors on one floor, the main room's shut from
