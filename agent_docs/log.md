@@ -3964,3 +3964,7 @@ either one wrong).
   Explorer Permit given by the console; the Watcher's met count (enemy 54) cleared from 3 by `bossmet clear`, restorable
   with `bossmet restore` only until the plugin reloads. Next room `BeehiveBalcony` (69), then `HoneycombsLab` (70) and
   the rest of the hive. Still to do: the Peculiar Gem; Next 64 when the user says.
+- **After the handoff note:** the user tried B.O.S.S. with both lists empty, five times, and none froze (each
+  logged off); mod 51 seen. The Watcher's met count put back with `bossmet restore`. The Scanner Room's doors
+  and scan the user counts as seen (the room reset, walked both ways); the scan's check went out, but this seed
+  predates location 208, so its item can only be seen in a seed generated with it (TO-CHECK).

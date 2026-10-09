@@ -3342,7 +3342,7 @@ steers past both pickers, so the scene ends as its own log off does. A cancelled
 Archipelago off nothing changes. The log says `[boss] installed in Event85`, and for each choice how many are met or
 that it logged off. The dev console's `bossmet clear` empties both lists on a test file to try it.
 
-**Status:** built (2026-10-10); seen the same day: Single Battles, Mini-Bosses with none met, logged off like Cancel.
-The boss list and Rush Mode, emptied with `bossmet clear`, not yet seen.
+**Status:** built (2026-10-10); seen the same day: both lists empty (the bosses' emptied with `bossmet clear`), five
+tries in all, each logging off like Cancel, never freezing.
 
 *Code: `World/BossSimulator.cs`, `Core/Plugin.cs`; `Dev/DevConsole.cs` (`bossmet`).*
