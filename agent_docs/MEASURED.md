@@ -1512,6 +1512,20 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   `bosslock` (`Event59` key index 8, the Big Ancient Key, 115, used up; gone from 295); arriving from the boss room
   pushes the party past it (seen, through the dev warp, which reported the door's own arrival spot as over a hole and
   stepped to safe ground). A Cursed Cloth (left) and a Krawler (right) for the enemy pass.
+  **`SandCastleMainRoom`, the Main Room (2026-10-09, the user; named by the user):** the castle's hub, at three
+  heights (the doors at y 0, 8 and 22), in five parts. The bottom: the entrance (`loadzoneentrance`), the Slide
+  Puzzle's lower door, the basement's left door, the save crystal and the healing flower, free; the statue room's door
+  (`loadzone statue`) behind `key1`. The middle left (`loadzoneslideup`, the Slide Puzzle's upper door) cut off, a drop
+  to the bottom. The middle right (`loadzone rock`) a drop to the bottom; its switch (`switch1`, any attack, flag 290)
+  starts the lower lift (`platform1`) for good, boarded from the bottom with Jump. The top right (`loadzone roof
+  right`, and `loadzonebosskey` behind `key2`): a drop to the bottom by the healing flower; its switch (`switch2`,
+  291) starts the upper lift (`platform2`) for good, boarded from the bottom with Jump, which also lets the party off
+  at the middle right; a jump across to the top left, one-way. The top left (`loadzone roof left`, `loadzonepressure`)
+  cut off but for that, a drop to the bottom by the save crystal with Jump. Both locks (`Event59` key index 7, each
+  using up an Ancient Key, hidden from 292 and 293): arriving through either door pushes the party past the lock
+  (seen). The sand-filled door on the bottom's right is the parked `loadzonebasementright`. In vanilla the top is
+  reached through the castle's other rooms (the user: "you are not supposed to reach everything from within this
+  room"). Discovery 16 up top (`discovery`, line 2, flag 306); a Psicorp and an enemy up top (enemy pass).
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

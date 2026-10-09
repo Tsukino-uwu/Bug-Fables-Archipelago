@@ -978,6 +978,44 @@ class TestCastleBasement(BugFablesTestBase):
             self.assertNotIn(f"Ancient Castle: Basement, {spot}", names)
 
 
+class TestCastleMainRoom(BugFablesTestBase):
+    # SandCastleMainRoom (the user, 2026-10-09): a hub of five parts; its two lifts each started by a switch at its top
+    # end (any attack), boarded from the bottom with Jump; its two locks each using up an Ancient Key.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def _up(self, area: str):
+        return self.multiworld.get_entrance(f"SandCastleMainRoom to SandCastleMainRoom ({area})", self.player)
+
+    def test_middle_right_on_either_lift(self) -> None:
+        up = self._up("Middle Right")
+        self.assertFalse(up.access_rule(self.state_with("Jump")))
+        self.assertTrue(up.access_rule(self.state_with("Jump", "Sand Castle Lower Lift Running")))
+        self.assertTrue(up.access_rule(self.state_with("Jump", "Sand Castle Upper Lift Running")))
+        self.assertFalse(up.access_rule(self.state_with("Sand Castle Lower Lift Running")))
+
+    def test_top_right_on_the_upper_lift(self) -> None:
+        up = self._up("Top Right")
+        self.assertFalse(up.access_rule(self.state_with("Jump", "Sand Castle Lower Lift Running")))
+        self.assertTrue(up.access_rule(self.state_with("Jump", "Sand Castle Upper Lift Running")))
+
+    def test_the_left_parts_are_cut_off_from_the_bottom(self) -> None:
+        everything = self.multiworld.get_all_state()
+        for area in ("Middle Left", "Top Left"):
+            self.assertFalse(self._up(area).access_rule(everything), area)
+
+    def test_switches_take_any_attack(self) -> None:
+        for name, area in (("Lower", "Middle Right"), ("Upper", "Top Right")):
+            switch = self.multiworld.get_location(f"Ancient Castle: Main Room, {name} Lift Switch Hit", self.player)
+            self.assertEqual(switch.parent_region.name, f"SandCastleMainRoom ({area})")
+            self.assertFalse(switch.access_rule(self.state_with()))
+            self.assertTrue(switch.access_rule(self.state_with("Horn Slash")))
+
+    def test_locks_need_both_keys_reached(self) -> None:
+        bottom = self.multiworld.get_region("SandCastleMainRoom", self.player)
+        door = next(e for e in bottom.exits if "SandCastleStatueRoom" in e.connected_region.name)
+        self.assertFalse(door.access_rule(self.state_with()))
+
+
 class TestCastleRoof(BugFablesTestBase):
     # SandCastleRoof (the user, 2026-10-09): both doors and the save crystal free; the boss door locked from the roof
     # until the Big Ancient Key, still the game's own pickup in the boss key room (build step 67).

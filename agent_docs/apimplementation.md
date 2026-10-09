@@ -770,6 +770,11 @@ be wrong.
 
 **Known issues:**
 
+- **The Ancient Castle's upper part is unreachable in the logic for now** (2026-10-09, mapping the Main Room): its top
+  is reached through rooms not yet mapped (the rock room, the pressure plate room, the boss key room), so until they
+  are, `test_every_region_reachable_with_everything` (in `test_areas.py` and `test_doors.py`) fails for those regions.
+  No seed is affected: every castle spot is pending (build step 67). Not to be pushed until those rooms are mapped.
+
 - **The bandit hideout's capture takes the seed's ability items** (found 2026-10-09 by the key-chain research, from the
   code; not seen in game). `Event109`'s capture moves every item and key item into `flagstring[8]` until the storage
   chest gives them back, the mod's own move and ability keys (201-211), the Boat Ticket and the submarine included.
@@ -3217,8 +3222,10 @@ Bee Fly; from the right Jump or Bee Fly; no items), 143 of 244; the Basement (it
 middle by Jump or Bee Fly; three spots on its platforms, the Toss and Jump or Bee Fly, the Ancient Key behind a barrier,
 Halt and Jump or Bee Fly, locations 199-201, pending with the castle's 198, build step 67), 144 of 244; the Roof (its
 doors and save crystal free; a Frost Bomb behind the left statue, 202, pending; the boss door locked from its side
-until the Big Ancient Key, the boss key room reached while that key is the game's own pickup), 145 of 244; the rest of
-`room-checklist.md` to go.
+until the Big Ancient Key, the boss key room reached while that key is the game's own pickup), 145 of 244; the Main
+Room (the hub, five parts: the bottom free; the middle left and the top left cut off, drops; the middle right and the
+top right up their lifts, each started by its own switch, with Jump; both Ancient Key locks needing both keys' spots
+reached while they're the game's own pickups), 146 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
