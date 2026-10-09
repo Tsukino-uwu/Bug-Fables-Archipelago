@@ -330,7 +330,7 @@ shuffle unless the user agrees a reason (`apimplementation.md`, Where it stands,
    you reach?", one option per location, switch and door in the room, plus "Nothing past the door". The ticks place
    each spot in its area at once, with no round of follow-ups.
    **Describing a room area by area** (the user, 2026-10-09, `Swamplands7`: "it made it a bit easier to explain the
-   room, that what is needed to/from everywhere"): the user names each area by its place on the screen, a row and a
+   room, than what is needed to/from everywhere"): the user names each area by its place on the screen, a row and a
    column ("bottom/right", "middle/middle", "upper/left", or just "left"), then gives each area its own paragraph:
    - what's in it: its doors, locations, pads, switches;
    - for each area next to it, what getting there takes and what getting back takes, "to/from" when both are the
