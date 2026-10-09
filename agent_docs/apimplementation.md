@@ -3236,7 +3236,9 @@ by a platform its switch starts; the top left up with Jump or Bee Fly; the top r
 across the top once its boulder breaks, by Horn Dash or a rolling rock carried on the crystals' platforms; crystal
 berry #24 in an alcove off the top right, Shield, then Jump or Bee Fly, location 206, pending), 149 of 244; the boss
 room (one region, both doors free, the Watcher's fight on the way across needing nothing; its wall before the
-treasure room's door kept open, build step 68; no items), 150 of 244; the rest of `room-checklist.md` to go.
+treasure room's door kept open, build step 68; no items), 150 of 244; the treasure room (one region, its door free;
+the castle's artifact on a platform, Jump or Bee Fly, held out of `ARTIFACTS` with the castle, build step 67), 151 of
+244, the Ancient Castle done; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -5742,7 +5744,8 @@ logic walks into the factory before its story allows.
 **Asked and decided (the user, 2026-10-09):** hold them out now, as build step 44 does for quests that open later;
 keep mapping the castle's rooms; the chains get their own steps (Next 64).
 
-**Built:** every castle location (198 to 201 so far) and location 71 are `pending`; Enemysanity's spots in the
+**Built:** every castle location (198 to 206) and location 71 are `pending`, and the castle's artifact (flag 345,
+the treasure room) stays out of `ARTIFACTS`, so the goal never counts it; Enemysanity's spots in the
 castle and the hideout (areas 11 and 20, `KEY_CHAIN_AREAS`) too. Their rooms' ways are written as each is mapped, so
 nothing waits but the spots. Also from the review: location 69 (the Dash's scene, `Lost Sands: Entrance`) had the same
 kind of gap: its trigger needs flag 88 (chapter 2's boss, behind both offerings) and 138 (Gen and Eri's scene by the

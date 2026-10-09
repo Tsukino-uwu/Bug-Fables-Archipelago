@@ -164,6 +164,8 @@ MAP_AREAS = (
          out=CanUse("Shield") | CanUse("Bee Fly"), to="SandCastleRockRoom (Bottom Right)"),
     # The boss room (SandCastleBossRoom): one region, both doors free; the Watcher's fight (Event117) starts a little
     # way in from either side and needs nothing, a ground enemy.
+    # The treasure room (SandCastleTreasureRoom): one region, its door free. The castle's artifact (flag 345, Event118),
+    # on a platform, Jump or Bee Fly, isn't in ARTIFACTS: held out with the castle's spots (build step 67).
 )
 TRANSFERS = (
     # The Slide Puzzle's upper left and upper right down to the puzzle's floor, drops: no way back up inside the room

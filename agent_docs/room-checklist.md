@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**150 of 244 done.**
+**151 of 244 done.**
 
 ## Outskirts
 
@@ -248,7 +248,7 @@ as it is, a frozen record.
 - [x] SandCastlePressurePuzzle (126) — the Pressure Puzzle; its key pending with the castle
 - [x] SandCastleRockRoom (127) — the Rock Room; its berry pending with the castle
 - [x] SandCastleBossRoom (128) — the boss room; its wall to the treasure room kept open (build step 68)
-- [ ] SandCastleTreasureRoom (129)
+- [x] SandCastleTreasureRoom (129) — the treasure room; its artifact (345, Jump or Bee Fly) held out with the castle
 
 ## Bee Kingdom Hive
 

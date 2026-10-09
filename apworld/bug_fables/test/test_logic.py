@@ -1,7 +1,7 @@
 from BaseClasses import CollectionState
 
 from . import BugFablesTestBase
-from ..data_tables import STORY_EVENTS
+from ..data_tables import ARTIFACTS, STORY_EVENTS
 
 
 class TestPermitGate(BugFablesTestBase):
@@ -1141,3 +1141,19 @@ class TestCastleBossRoom(BugFablesTestBase):
     def test_treasure_room_wall_hidden(self) -> None:
         self.assertIn({"map": "SandCastleBossRoom", "entity": "Base/CastlePlatform"},
                       self.world.fill_slot_data()["scenery_hidden"])
+
+
+class TestCastleTreasureRoom(BugFablesTestBase):
+    # SandCastleTreasureRoom (the user, 2026-10-09): one region, its door free; the artifact on its platform (Jump or
+    # Bee Fly) held out with the castle (build step 67), so it never counts toward the goal.
+
+    def test_one_region_door_free(self) -> None:
+        parts = {r.name for r in self.multiworld.get_regions(self.player)
+                 if r.name.startswith("SandCastleTreasureRoom")}
+        self.assertEqual(parts, {"SandCastleTreasureRoom"})
+        exits = self.multiworld.get_region("SandCastleTreasureRoom", self.player).exits
+        self.assertIn("SandCastleBossRoom",
+                      {e.connected_region.name for e in exits if e.access_rule(self.state_with())})
+
+    def test_artifact_waits(self) -> None:
+        self.assertNotIn(345, {artifact.source.flag for artifact in ARTIFACTS})

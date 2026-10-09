@@ -1573,6 +1573,17 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   and the coffin and its base stayed; the fight and its scene then ran as before, the lowering played with the way
   already open (seen, build step 68). The coffin swaps (`Base/Coffin/Coffin2` until 38,
   `Coffin2 (1)` from 38). No pickups, discoveries, hazards, auto-start scenes or map enemies.
+  **`SandCastleTreasureRoom`, the treasure room (2026-10-09, the user):** one door (to the boss room, `loadzone`),
+  nothing needed in or out. The castle's artifact (map child 2, `artifacts_0` moved away from 345) on a platform, Jump
+  or Bee Fly; examined (`event`, until 345) it starts `Event118`: the artifact to Vi (`ArtifactGet`), the ice
+  (`icecrystal`, a `StencilSwitch` until 345, only scenery: the user) melted, flag 345 set, quest 14 moved from
+  `boardquests[1]` into `boardquests[2]` at index 3, Luckier Day (76) onto Shades's shelf, then the save menu through
+  the hidden save point (`save`, at y 50). **Out of story order it crashes:** with fewer than 3 done quests,
+  `boardquests[2].Insert(3, 14)` threw `ArgumentOutOfRangeException` after 345 was set, and the scene died with the
+  party frozen (seen; the dev `unstick` freed it). Each chapter's main quest (11 to 17) is filed at a fixed index the
+  same way: `boardquests[1].Insert(1, 12)` in `Event45`, `boardquests[2].Insert(n, id)` in `Event73` (1, 12),
+  `Event99` (2, 13), `Event118` (3, 14), `Event142` (4, 15), `Event194` (5, 16), `Event203` (6, 17); index 0 inserts
+  never throw. No pickups, discoveries, hazards or map enemies.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
