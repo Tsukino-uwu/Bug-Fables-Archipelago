@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**155 of 244 done.**
+**156 of 244 done.**
 
 ## Outskirts
 
@@ -258,7 +258,9 @@ as it is, a frozen record.
 - [x] BeehiveThroneRoom (63) — the Throne Room; its door kept open from the main area (build step 70)
 - [x] BeehiveScannerRoom (64) — the Scanner Room; kept between the outside and the inside, its gate open, its scan
   location 208 with flag 160 (build steps 72-74)
-- [ ] BeehiveMainArea (67)
+- [x] BeehiveMainArea (67) — the Main Area; the clothing stall's two sales, locations 209-210, after Mothiva's scene;
+  for the quest pass: the edgy bee's trade (`edgebee`, flags 425-436: the Blackest Paint, key 139, for crystal berry
+  #35)
 - [ ] HBsLab (68)
 - [ ] BeehiveBalcony (69)
 - [ ] HoneycombsLab (70)

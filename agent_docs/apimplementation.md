@@ -3271,8 +3271,9 @@ Room (one region, its door free, kept open from the main area, build step 70; no
 (one region, its door free, kept open from the main area, build step 71; a Bad Book behind the paintings, nothing
 needed, location 207), 154 of 244; the Scanner Room (a corridor, one region, nothing needed across; kept between
 the outside and the inside, its top door made and the main area's bottom exit sent into it, build step 73; its gate
-open, build step 72; its scan location 208 with flag 160, build step 74), 155 of 244; the rest of
-`room-checklist.md` to go.
+open, build step 72; its scan location 208 with flag 160, build step 74), 155 of 244; the Main Area (one region,
+every door free; the clothing stall's Bee Hat and then Pretty Ribbon, locations 209-210, after Mothiva's scene, a
+story event that needs nothing, at their prices), 156 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
