@@ -361,6 +361,7 @@ shuffle unless the user agrees a reason (`apimplementation.md`, Where it stands,
    left -> middle/middle:           the pad, its way back Bee Fly | the ice block brought up
    left -> bottom/right:            Jump, its way back round the room
    ```
+
 3. **Written into the logic** (the area's module, `logic/<area>.py`: areas as regions, their edges with their rules,
    each location in its area with its own rule), cautious where anything is unmeasured, replacing the spots' `reach`.
    A Placeholder is promoted to a normal location once its requirements and name are checked, one at a time (build
