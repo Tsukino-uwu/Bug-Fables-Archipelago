@@ -1491,7 +1491,10 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   (`enemy1`, `enemy2`, at y 3 in the data, their hover) and one in the bottom right (`cape`), seen; for the enemy
   pass. No items.
   **`SandCastleBasement`, the Basement (2026-10-09, the user; named by the user):** one door (from the main room) on an
-  isolated ledge; its second door (`loadzoneright`) parked at y 99. The middle (a safe platform by the big crystal,
+  isolated ledge; its second door (`loadzoneright`) parked at y 99, as is its other end (`SandCastleMainRoom`'s
+  `loadzonebasementright`): arriving through it (the dev warp, the user's ask) falls into a pit and respawns behind the
+  sandpile right of the real door, a softlock (seen 2026-10-09). The door export drops both (`door-graph.py`, y 90 and
+  up); no save point, so no random start. The middle (a safe platform by the big crystal,
   `crystal - Duplicate`, a `StencilSwitch` drawn as a crystal) across with Jump or Bee Fly. Around it the moving
   platforms (`platform1` to `platform3`, `PathPlatform`s, running from the hidden `platformenabler`, flag 41, 691 in a
   seed), each with a switch on it (three `StencilSwitch`es named `crystal`, drawn as switches, their `data[1]` the
