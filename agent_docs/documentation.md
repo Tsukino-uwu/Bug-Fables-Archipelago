@@ -1044,6 +1044,10 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    are made (a postfix on `MapControl.CreateEntities`): the flags set and the trigger kept away the mod's usual way
    (`KeptOpen.KeepAway`), before its first frame. The rule the user set with it: a scene that changes the logic goes in
    the seed (the wizard's tower, the Archipelago guide's build step 59); one that is only story goes here.
+   **The Defiant Root's first visit** (2026-10-09, mapping `DefiantRoot1`: "think we should just add it to the skip
+   cutscene panel"): `first visit auto dialogue trigger` (until 170), seen playing from two of its doors; line 52 is a
+   party talk that sets 170 and gives nothing (read with the console's `line`). The game also sets 170 on entering
+   `DesertDRSouthEntrance` (`MapControl`); nothing else reads it. A second `TalkScenes` row.
 6. **Item animation** (2026-09-25): a discovery showed nothing of what it found, and items from other
    players arrive silently. Your own finds always get the hold-up (pickups already did; a discovery recorded in play
    now does too); the row, *Item animation: All / Progression / Off* decides which items from other players do

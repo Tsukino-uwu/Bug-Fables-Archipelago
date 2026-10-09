@@ -107,6 +107,8 @@ namespace BugFablesAP
         {
             // The swamp's first room: a party remark on entering (line 1: flag 357, a bubble), nothing given.
             new TalkScene { Map = "SwamplandsEntrance", Entity = "initialmessage", Flags = new[] { 357 } },
+            // The Defiant Root's first visit: a party talk on entering by any door (line 52: flag 170), nothing given.
+            new TalkScene { Map = "DefiantRoot1", Entity = "first visit auto dialogue trigger", Flags = new[] { 170 } },
         };
 
         private static readonly MethodInfo endEvent = AccessTools.Method(typeof(EventControl), "EndEvent",
