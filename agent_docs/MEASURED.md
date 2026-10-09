@@ -1611,6 +1611,14 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   and the open one shown, the door looked open and was walked both ways (seen, build step 70). Two guards and the Queen
   (until 299, then her later self), and story NPCs by flag (Gen and Eri, Zasp, Mothiva, HB, a soldier, a bulk bee). No
   pickups, flag-switched scenery, hazards, auto-start scenes or map enemies.
+  **`JaunesGallery`, Jaune's Gallery (2026-10-09, the user; named by the user):** one floor and one door (`loadzone`, to
+  `BeehiveMainArea`, no flag), nothing needed in or out. A Bad Book (`badbook`, key item 174, flag 622) on the left side
+  behind paintings lying on the floor, nothing needed (taken, seen). Jaune herself, and two triggers of `Event162`
+  (`event1` from 444 until 446, `event2` from 446 until 445), her quest. The main area's half of the door
+  (`loadzonejaune`) exists only from flag 299, with the "Out For Lunch" sign (`jaune sign`, until 299) before it and a
+  cube (`Base/Cube`, a `ConditionChecker` hiding it from 299) shutting the way: with the door kept present and the sign
+  kept away the way stayed shut; with the cube hidden too it opened, walked both ways (seen, build step 71). No hazards,
+  auto-start scenes or map enemies.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

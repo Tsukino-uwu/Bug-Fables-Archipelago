@@ -1205,3 +1205,20 @@ class TestThroneRoom(BugFablesTestBase):
         self.assertIn({"map": "BeehiveMainArea", "entity": "loadzone throne"}, slot["kept_present"])
         self.assertIn({"map": "BeehiveMainArea", "entity": "Base/ThroneDoors"}, slot["scenery_hidden"])
         self.assertIn({"map": "BeehiveMainArea", "entity": "Base/ThroneDoors (1)"}, slot["scenery_present"])
+
+
+class TestJaunesGallery(BugFablesTestBase):
+    # JaunesGallery, Jaune's Gallery (the user, 2026-10-09): one region, its door free, the Bad Book behind the
+    # paintings needing nothing; the main area's door to it, made in the game only from 299, open with its sign and
+    # cube gone (build step 71).
+
+    def test_bad_book_free(self) -> None:
+        spot = self.multiworld.get_location("Bee Kingdom Hive: Jaune's Gallery, Behind the Paintings", self.player)
+        self.assertEqual(spot.parent_region.name, "JaunesGallery")
+        self.assertTrue(spot.access_rule(self.state_with()))
+
+    def test_way_in_open(self) -> None:
+        slot = self.world.fill_slot_data()
+        self.assertIn({"map": "BeehiveMainArea", "entity": "loadzonejaune"}, slot["kept_present"])
+        self.assertIn({"map": "BeehiveMainArea", "entity": "jaune sign"}, slot["kept_open"])
+        self.assertIn({"map": "BeehiveMainArea", "entity": "Base/Cube"}, slot["scenery_hidden"])

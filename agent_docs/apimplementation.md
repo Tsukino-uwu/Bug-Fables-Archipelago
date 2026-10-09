@@ -142,6 +142,7 @@ this file and that doc disagree, that doc is right.
 68. [Build step 68: the Ancient Castle boss room's wall open](#build-step-68-the-ancient-castle-boss-rooms-wall-open)
 69. [Build step 69: the Honey Factory's door from Outside the Beehive open](#build-step-69-the-honey-factorys-door-from-outside-the-beehive-open)
 70. [Build step 70: the Bee Kingdom's Throne Room door open](#build-step-70-the-bee-kingdoms-throne-room-door-open)
+71. [Build step 71: Jaune's Gallery open from the start](#build-step-71-jaunes-gallery-open-from-the-start)
 
 **How it works**
 
@@ -3254,8 +3255,9 @@ the castle's artifact on a platform, Jump or Bee Fly, held out of `ARTIFACTS` wi
 244, the Ancient Castle done; the Bee Kingdom Hive from 2026-10-09: Outside the Beehive (the bottom,
 the elevator bee down for nothing and the hive's main door, and the left, a bridge between the hive's side door and
 the factory's, cut off from each other; the factory door kept open, build step 69; no items), 152 of 244; the Throne
-Room (one region, its door free, kept open from the main area, build step 70; no items), 153 of 244; the rest of
-`room-checklist.md` to go.
+Room (one region, its door free, kept open from the main area, build step 70; no items), 153 of 244; Jaune's Gallery
+(one region, its door free, kept open from the main area, build step 71; a Bad Book behind the paintings, nothing
+needed, location 207), 154 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -5835,6 +5837,25 @@ door open-looking from the main area, walked through both ways.
 
 *Code: `logic/bee_kingdom_hive.py` (`KEPT_PRESENT`, `SCENERY_HIDDEN`, `SCENERY_PRESENT`). The mod: `World/KeptOpen.cs`,
 unchanged.*
+
+## Build step 71: Jaune's Gallery open from the start
+
+**Found (2026-10-09, in the Bee Kingdom's main area, on the way to Jaune's Gallery):** the main area's door to the
+gallery (`loadzonejaune`) exists in the game only from flag 299, an "Out For Lunch" sign stands before it until 299,
+and a cube (`Base/Cube`) shuts the way until 299. The gallery's own half has no flag (`MEASURED.md`, Jaune's
+Gallery).
+
+**Asked and decided (the user, 2026-10-09):** "can we remove this sign/block from this entrance".
+
+**Built** (the apworld only: the mod's own lists do it): `kept_present` gets the door, `kept_open` the sign and
+`scenery_hidden` the cube, which still shut the way with only the first two (seen). The door needs nothing in the
+logic, as before, now true; the gallery's Bad Book is location 207. Test `TestJaunesGallery`.
+
+**Status:** built (2026-10-09); seen the same day in seed `AP_70580691250444408633` through the dev `liveslot`: the
+sign and the cube gone, the gallery walked into and out of.
+
+*Code: `logic/bee_kingdom_hive.py` (`KEPT_PRESENT`, `KEPT_OPEN`, `SCENERY_HIDDEN`, location 207). The mod:
+`World/KeptOpen.cs`, unchanged.*
 
 # How it works
 
