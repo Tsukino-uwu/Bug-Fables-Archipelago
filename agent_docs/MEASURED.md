@@ -1470,6 +1470,11 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   spots. Kali's shop (`door shop`) exists from flag 265, the taking of board quest 36; until then its sign (`kalisign`,
   "Under renovation") stands in front. Inside (`insideid` 1) Kali, a cook (`Event3`), takes the Stolen Silk (key item
   108, line 166) and `Event173` gives a Lore Book (line 171) and prize medal 13, sets 471 and completes quest 36.
+  Three keepers with a stock on display (`Shop`, 2026-10-10, EntityDump): `shopkeeper` (Dry Bread, Crunchy Leaf, Clear
+  Water, Agaric Shroom, Hustle Berry: items 72, 0, 12, 96, 162), `poisonguyshop - Duplicate` (Danger Spud, Danger
+  Shroom, Poison Bomb, Poison Dart: 64, 26, 31, 88) and, inside the bakery (`insideid` 0), `sirfy` (Honey Drop, Bag of
+  Flour, Nutty Cake: 1, 68, 73); in a seed their slots are locations 217-228. The ice seller (`iceseller`, from 345)
+  sells Magic Ice (item 42) for 10 berries by dialogue (line 130).
   **`DefiantRoot2`, the Beehive Lift (2026-10-09, the user; named by the user):** the ground free: both doors (the
   Square, `DesertDRSouthEntrance`), the inn's ground door (`door low`), Diana's ant tunnel (75) and every NPC. The
   elevator bee's platform (`Elevator Bee`, y 2.5) up with Jump or Bee Fly, a drop down. Upstairs at the inn (`doorhigh`,

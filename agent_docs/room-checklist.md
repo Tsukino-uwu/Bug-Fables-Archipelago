@@ -226,10 +226,11 @@ as it is, a frozen record.
   innkeeper's daughter (`TermiteIndustrial` line 21 sets 408, she comes home), Kenny (599-600), the ant guard's warp
   to the Lost Sands entrance (line 38, from 300); for the sellers' pass: the inn's rest (12 berries) and the daughter's
   service (7 berries, from 408)
-- [x] DefiantRoot3 (61) — the Market (named by the user); no locations; for the quest pass: Kali's shop, shut until
-  her board quest 36 is taken (flag 265; left so, the user), her Stolen Silk turn-in (a Lore Book, prize medal 13),
-  Zasp's doll trade, Butomo's and Geno's trades, the Mechanical Claw's (medal 61); for the sellers' pass: the item
-  shop, the poison seller, the Magic Ice seller (from 345), the bakery and the smithy
+- [x] DefiantRoot3 (61) — the Market (named by the user); its three shops' slots, locations 217-228 (added
+  2026-10-10); for the quest pass: Kali's shop, shut until her board quest 36 is taken (flag 265; left so, the user),
+  her Stolen Silk turn-in (a Lore Book, prize medal 13), Zasp's doll trade, Butomo's and Geno's trades, the Mechanical
+  Claw's (medal 61); for the sellers' pass: its one-item sellers (the Heart Berry, the Magic Ice seller from 345, the
+  charms) and the smithy
 
 ## Ancient Castle
 

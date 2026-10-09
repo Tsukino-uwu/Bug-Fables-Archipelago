@@ -122,6 +122,10 @@
     {"name": "Leaf Omelet", "game_id": 9, "kind": 0, "classification": "filler"},
     {"name": "Glazed Honey", "game_id": 20, "kind": 0, "classification": "filler"},
     {"name": "Honey Ice Cream", "game_id": 49, "kind": 0, "classification": "filler"},
-    {"name": "Shock Berry", "game_id": 43, "kind": 0, "classification": "filler"}
+    {"name": "Shock Berry", "game_id": 43, "kind": 0, "classification": "filler"},
+    {"name": "Dry Bread", "game_id": 72, "kind": 0, "classification": "filler"},
+    {"name": "Hustle Berry", "game_id": 162, "kind": 0, "classification": "filler"},
+    {"name": "Poison Bomb", "game_id": 31, "kind": 0, "classification": "filler"},
+    {"name": "Nutty Cake", "game_id": 73, "kind": 0, "classification": "filler"}
   ]
 }

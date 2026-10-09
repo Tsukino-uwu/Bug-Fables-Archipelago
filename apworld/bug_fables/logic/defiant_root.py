@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from ..custom_rules import LATER_CHAPTERS, CanUse, one_way
-from ..data_types import Area, EntityRef, FlagSwap, Give, Location, Pickup, Source, Transfer
+from ..data_types import Area, EntityRef, FlagSwap, Give, ItemShop, Location, Pickup, Source, Transfer
 
 # The Desert Key (92), the mayor's in the Wacka Worm room once his quest 46 is done (Event55, 20 worms, flags
 # 557-559); the quest opens only at chapter 5's start (flags 276 and 348), so the storage's spots wait as pending, as
@@ -46,6 +46,15 @@ LOCATIONS = (
     Location("Defiant Root: Beehive Lift, Inn Rooftop", 197, "DefiantRoot2",
              Source(flag=149, pickup=Pickup(map="DefiantRoot2", type=2, item=39)), rule=CanUse("Bee Fly"),
              no_jump=True, area="Upstairs"),
+    # The Market's three shops, on the ground and free (the user, 2026-10-10: "lets do the 3 normal shops"; its
+    # one-item sellers wait for a later sweep): first purchase a check, then its own item.
+    *(Location(f"Defiant Root: Market, {shop} {slot}", first + slot - 1, "DefiantRoot3",
+               Source(item_shop=ItemShop(map="DefiantRoot3", keeper=keeper, item=item)),
+               category="item_shop", no_jump=True)
+      for shop, keeper, first, stock in (("Item Shop", "shopkeeper", 217, (72, 0, 12, 96, 162)),
+                                         ("Poison Shop", "poisonguyshop - Duplicate", 222, (64, 26, 31, 88)),
+                                         ("Bakery Shop", "sirfy", 226, (1, 68, 73)))
+      for slot, item in enumerate(stock, start=1)),
 )
 MAP_AREAS = (
     # The town (DefiantRoot1; the user, 2026-10-09): its ground the map's own region, with its four doors (the well's

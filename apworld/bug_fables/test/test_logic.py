@@ -880,6 +880,20 @@ class TestBeehiveLift(BugFablesTestBase):
         self.assertIn({"map": "DefiantRoot2", "entity": "Base/DoorLock"}, self.world.fill_slot_data()["scenery_hidden"])
 
 
+class TestMarketShops(BugFablesTestBase):
+    # DefiantRoot3, the Market (the user, 2026-10-10): its three shops' slots, on the ground, nothing needed.
+    def test_three_shops(self) -> None:
+        shops = self.world.fill_slot_data()["location_item_shops"]
+        for shop, keeper, stock in (("Item Shop", "shopkeeper", (72, 0, 12, 96, 162)),
+                                    ("Poison Shop", "poisonguyshop - Duplicate", (64, 26, 31, 88)),
+                                    ("Bakery Shop", "sirfy", (1, 68, 73))):
+            for slot, item in enumerate(stock, start=1):
+                spot = self.multiworld.get_location(f"Defiant Root: Market, {shop} {slot}", self.player)
+                self.assertEqual(spot.parent_region.name, "DefiantRoot3")
+                self.assertTrue(spot.access_rule(self.state_with()))
+                self.assertEqual(shops[str(spot.address)], {"map": "DefiantRoot3", "keeper": keeper, "item": item})
+
+
 class TestCastleEntrance(BugFablesTestBase):
     # SandCastleEntrance (the user, 2026-10-09): the middle's bridge shows only while the crystal is lit, which the
     # Beemerang Toss does from either side; Bee Fly crosses without it.
