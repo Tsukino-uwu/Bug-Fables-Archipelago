@@ -1474,7 +1474,8 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   either side; Bee Fly crosses without it. Its first light plays `Event157` (the `eventcaller` AND gate, with the
   hidden `switch`, until 416). A Krawler (enemy pass), a pit (`Hole`); no items.
   **`SandCastleSlidePuzzle`, the Slide Puzzle (2026-10-09, the user; named by the user):** its bottom right door (to
-  the main room) free; the puzzle's floor a drop down a small ledge, Jump back up. The puzzle: the block (`icepillar`,
+  the main room) free; the puzzle's floor a drop down a small ledge, Jump or Bee Fly back up (Bee Fly seen later the
+  same day). The puzzle: the block (`icepillar`,
   a `PushRock`, there until 284), knocked by the horn onto the plate (`pressureplate`, data `0 1 113`), runs `Event113`,
   which sets 284 for good: the pillar shown in place (`Base/IcePillarObj` from 284) fills the upper gap, and the upper
   left door (to `SandCastlePressurePuzzle`) opens (`Base/Tablet` hidden from 284). Before that, arriving through that

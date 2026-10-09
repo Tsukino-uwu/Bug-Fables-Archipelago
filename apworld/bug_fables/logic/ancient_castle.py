@@ -80,10 +80,10 @@ MAP_AREAS = (
     # the Beemerang Toss from either side; or flown over, Bee Fly. Both ways.
     Area("SandCastleEntrance", "Right", ("loadzone right",), CanUse("Beemerang Toss") | CanUse("Bee Fly")),
     # The Slide Puzzle (SandCastleSlidePuzzle; the user, 2026-10-09): its bottom right door the map's own region;
-    # the puzzle's floor below it, a drop down a small ledge, Jump back up. The upper right (its door from the main
-    # room) and the upper left (the door to the pressure plate room) across a gap, filled once the puzzle is solved,
-    # or Bee Fly; neither has a way down to the rest but the drop below, nor any way back up inside the room.
-    Area("SandCastleSlidePuzzle", "Bottom", (), one_way(None, CanUse("Jump")), out=CanUse("Jump")),
+    # the puzzle's floor below it, a drop down a small ledge, Jump or Bee Fly back up. The upper right (its door from
+    # the main room) and the upper left (the door to the pressure plate room) across a gap, filled once the puzzle is
+    # solved, or Bee Fly; neither has a way down to the rest but the drop below, nor any way back up inside the room.
+    Area("SandCastleSlidePuzzle", "Bottom", (), one_way(None, _UP), out=_UP),
     Area("SandCastleSlidePuzzle", "Upper Right", ("loadzoneleftup",), False_()),
     Area("SandCastleSlidePuzzle", "Upper Left", ("loadzonepressure",), _SLIDE_GAP,
          to="SandCastleSlidePuzzle (Upper Right)"),

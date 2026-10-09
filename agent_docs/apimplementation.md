@@ -3215,10 +3215,10 @@ platform and the inn's upstairs each up with Jump or Bee Fly, a drop down; two n
 inn's high door, kept open, build step 65, Jump or Bee Fly inside, and the medal Fortify on its roof, Bee Fly, 196
 and 197), 140 of 244, the Defiant Root done; the Ancient Castle from 2026-10-09: its entrance (the middle's bridge
 shows while its crystal is lit, the Beemerang Toss from either side, or Bee Fly; no items), 141 of 244; the Slide
-Puzzle (its floor a drop from every side, Jump back up to its lower door; a block knocked into place with the horn
-fills its upper gap and opens its upper left door, or Bee Fly crosses; the medal Frostbite burrowed to, Beetle Dig,
-location 198), 142 of 244; the Statue Room (over the middle's block on platforms: from the left Icicle and Jump, or
-Bee Fly; from the right Jump or Bee Fly; no items), 143 of 244; the Basement (its door on an isolated ledge, the
+Puzzle (its floor a drop from every side, Jump or Bee Fly back up to its lower door; a block knocked into place with
+the horn fills its upper gap and opens its upper left door, or Bee Fly crosses; the medal Frostbite burrowed to,
+Beetle Dig, location 198), 142 of 244; the Statue Room (over the middle's block on platforms: from the left Icicle
+and Jump, or Bee Fly; from the right Jump or Bee Fly; no items), 143 of 244; the Basement (its door on an isolated ledge, the
 middle by Jump or Bee Fly; three spots on its platforms, the Toss and Jump or Bee Fly, the Ancient Key behind a barrier,
 Halt and Jump or Bee Fly, locations 199-201, pending with the castle's 198, build step 67), 144 of 244; the Roof (its
 doors and save crystal free; a Frost Bomb behind the left statue, 202, pending; the boss door locked from its side

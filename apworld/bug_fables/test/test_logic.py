@@ -900,10 +900,11 @@ class TestSlidePuzzle(BugFablesTestBase):
     # opens the upper left door; the medal burrowed to, Beetle Dig.
     options = {"shuffle_field_moves": True, "shuffle_jump": True}
 
-    def test_floor_needs_jump_back_up(self) -> None:
+    def test_floor_needs_jump_or_bee_fly_back_up(self) -> None:
         up = self.multiworld.get_entrance("SandCastleSlidePuzzle (Bottom) to SandCastleSlidePuzzle", self.player)
         self.assertFalse(up.access_rule(self.state_with()))
         self.assertTrue(up.access_rule(self.state_with("Jump")))
+        self.assertTrue(up.access_rule(self.state_with("Bee Fly")))
 
     def test_upper_gap_and_door_wait_for_the_puzzle(self) -> None:
         gap = self.multiworld.get_entrance("SandCastleSlidePuzzle (Upper Right) to SandCastleSlidePuzzle (Upper Left)",
