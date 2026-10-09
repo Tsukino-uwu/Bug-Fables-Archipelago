@@ -146,6 +146,7 @@ this file and that doc disagree, that doc is right.
 72. [Build step 72: the Scanner Room's gate open](#build-step-72-the-scanner-rooms-gate-open)
 73. [Build step 73: the Scanner Room kept between the outside and the inside](#build-step-73-the-scanner-room-kept-between-the-outside-and-the-inside)
 74. [Build step 74: the scan a location, flag 160 with it](#build-step-74-the-scan-a-location-flag-160-with-it)
+75. [Build step 75: HB asks for the Explorer Permit from the start](#build-step-75-hb-asks-for-the-explorer-permit-from-the-start)
 
 **How it works**
 
@@ -5934,6 +5935,25 @@ fast-forwarded. Test `TestScannerRoom`.
 
 *Code: `logic/bee_kingdom_hive.py` (location 208, `FLAGS_WITH`), `data_types.py` (`FlagWith`), `slot_data.py`. The mod:
 `World/HiveScan.cs`, `Gameplay/QualityOfLife.cs`.*
+
+## Build step 75: HB asks for the Explorer Permit from the start
+
+**Found (2026-10-10, mapping HB's Lab, `HBsLab`):** B.O.S.S., the battle simulator on HB's computer, runs only from flag
+161, set when HB is shown the Explorer Permit at her line 50. She asks that only from flag 219, after chapter 3's end in
+the game (`MEASURED.md`, HB's Lab).
+
+**Asked and decided (the user, 2026-10-10):** "can ask for the explorer permit from the start, instead of having to do
+other things", rather than setting 161 on entering, which would skip the permit.
+
+**Built** (the apworld only: the mod's own list does it): `dialogue_flags` re-points HB's line 50 from 219 to the
+always-set 691, so she asks from the start and still answers 161 afterwards; a story event, "Explorer Permit Shown"
+(flag 161), needs the Explorer Permit, already progression. B.O.S.S.'s two medals wait for the quest pass: it offers
+only bosses already met. Test `TestHBsLab`.
+
+**Status:** built (2026-10-10); seen the same day in seed `AP_70580691250444408633` through the dev `liveslot`: HB asked
+at once, the permit shown, the computer then offering Single Battles and Rush Mode.
+
+*Code: `logic/bee_kingdom_hive.py` (`DIALOGUE_FLAGS`, the story event). The mod: `World/KeptOpen.cs`, unchanged.*
 
 # How it works
 

@@ -1242,6 +1242,22 @@ class TestMainArea(BugFablesTestBase):
             self.assertTrue(stall.access_rule(self.state_with("Mothiva's Show Seen")))
 
 
+class TestHBsLab(BugFablesTestBase):
+    # HBsLab, HB's Lab (the user, 2026-10-10): one region, its door free; HB asks for a crystal from the start, and
+    # the Explorer Permit shown unlocks B.O.S.S. (build step 75).
+
+    def test_one_region(self) -> None:
+        parts = {r.name for r in self.multiworld.get_regions(self.player) if r.name.startswith("HBsLab")}
+        self.assertEqual(parts, {"HBsLab"})
+
+    def test_boss_needs_the_permit(self) -> None:
+        shown = self.multiworld.get_location("Bee Kingdom Hive: HB's Lab, Explorer Permit Shown", self.player)
+        self.assertFalse(shown.access_rule(self.state_with()))
+        self.assertTrue(shown.access_rule(self.state_with("Explorer Permit")))
+        self.assertIn({"map": "HBsLab", "entity": "HB", "flag": 219, "to": 691},
+                      self.world.fill_slot_data()["dialogue_flags"])
+
+
 class TestScannerRoom(BugFablesTestBase):
     # BeehiveScannerRoom, the Scanner Room (the user, 2026-10-09): one region, nothing needed across; kept between the
     # outside and the inside (build step 73), its gate open (72), its scan location 208 with flag 160 (74).

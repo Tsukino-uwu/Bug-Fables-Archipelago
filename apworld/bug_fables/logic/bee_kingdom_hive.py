@@ -5,8 +5,8 @@ from __future__ import annotations
 from rule_builder.rules import False_, Has
 
 from ..custom_rules import LATER_CHAPTERS
-from ..data_types import (Area, DoorRow, EntityRef, FlagWith, FreeSale, Give, Location, Pickup, Source, StoryEvent,
-                          Transfer)
+from ..data_types import (ALWAYS_SET, Area, DialogueFlag, DoorRow, EntityRef, FlagWith, FreeSale, Give, Location,
+                          Pickup, Source, StoryEvent, Transfer)
 
 # Mothiva's scene in the Main Area (Event86, flag 173): talking to her, from the start; it brings the clothing stall.
 _MOTHIVA_SEEN = "Mothiva's Show Seen"
@@ -36,6 +36,16 @@ LOCATIONS = (
 STORY_EVENTS = (
     StoryEvent("Bee Kingdom Hive: Main Area, Mothiva's Show", _MOTHIVA_SEEN, "BeehiveMainArea",
                Source(event=86, flag=173)),
+    # HB's Lab (HBsLab; named by the user, 2026-10-10): shown the Explorer Permit, HB's line 53 sets 161 and the
+    # computer runs B.O.S.S.; asked from the start in a seed (DIALOGUE_FLAGS).
+    StoryEvent("Bee Kingdom Hive: HB's Lab, Explorer Permit Shown", "B.O.S.S. Unlocked", "HBsLab",
+               Source(flag=161), rule=Has("Explorer Permit")),
+)
+DIALOGUE_FLAGS = (
+    # HB's question for a crystal that recorded fights (line 50, from 219, after chapter 3's end in the game): asked
+    # from the start (the user, 2026-10-10: "can ask for the explorer permit from the start, instead of having to do
+    # other things").
+    DialogueFlag("HBsLab", "HB", 219, ALWAYS_SET),
 )
 KEPT_PRESENT = (
     # Beette herself, made only after chapter 3 (flag 299) (the user, 2026-10-04: "make it appear always").
@@ -107,6 +117,7 @@ MAP_AREAS = (
     # both sides (KEPT_PRESENT).
     # The Main Area (BeehiveMainArea; named by the user, 2026-10-09): one region, every door free (the Throne Room's
     # and Jaune's Gallery's kept open, its bottom exit into the Scanner Room's top).
+    # HB's Lab (HBsLab): one region, its one door free; the gate at its top only scenery.
 )
 TRANSFERS = (
     # The bottom's elevator bee sends the party down to Defiant Root's Beehive Lift for nothing, onto its platform.

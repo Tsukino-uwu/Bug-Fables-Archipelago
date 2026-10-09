@@ -1661,6 +1661,18 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   his lab (`hbevent`, until 160). In a seed the stall's two sales are locations 209 and 210, each after Mothiva's scene
   (a story event that needs nothing, so the trackers, which collect every reachable event, show both as soon as the room
   is reachable). No pickups, hazards or map enemies.
+  **`HBsLab`, HB's Lab (2026-10-10, the user; named by the user):** one floor and one door (`loadzone`, to
+  `BeehiveMainArea`), nothing needed; a gate at its top is only the room's model, no door behind it. HB (`HB`) talks by
+  flag: line 47 from the start, 48 from 169, 49 from 299, 50 from 219, 31 from 161 (the last line whose flag is set).
+  Line 50 asks for something with crystals that recorded the party's fights and has a key item picked: the Explorer
+  Permit (key 27) goes to line 53, which sets 161; the Coal Crystal, the Ant Compass, the Peculiar Gem and other
+  crystals (109, 150, 151, 146) to line 78 (not enough battle data). The computer (`computer`, `Event85`) runs B.O.S.S.
+  only from 161. B.O.S.S. offers only bosses and mini-bosses already met (`MainManager.GetBosses`: `enemyencounter[id,
+  0] > 0`), and gives Spy Specs (medal 17, flag 164) at its 5th boss or 2nd mini-boss fight and the Detector (medal 2,
+  165) at its 2nd boss or 5th mini-boss fight, both shown on a table until then (`medal1`, `medal2`: examined they only
+  say their names, `Event218`). In a seed HB asks line 50 from the start (seen: asked at once, the permit shown, then
+  the computer offered Single Battles and Rush Mode; build step 75). The assistant crow talks by flags 231, 246, 247,
+  234. No pickups, hazards or map enemies.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
