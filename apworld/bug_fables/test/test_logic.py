@@ -1186,3 +1186,22 @@ class TestOutsideTheBeehive(BugFablesTestBase):
         for model in ({"map": "BeehiveOutside", "entity": "Base/Door"},
                       {"map": "HoneyFactoryEntrance", "entity": "Base/DoorE"}):
             self.assertIn(model, slot["scenery_hidden"])
+
+
+class TestThroneRoom(BugFablesTestBase):
+    # BeehiveThroneRoom, the Throne Room (the user, 2026-10-09): one region, its door free; the main area's half of
+    # that door, made in the game only from 169, kept present with its closed model hidden and its open one shown
+    # (build step 70).
+
+    def test_one_region_door_free(self) -> None:
+        parts = {r.name for r in self.multiworld.get_regions(self.player) if r.name.startswith("BeehiveThroneRoom")}
+        self.assertEqual(parts, {"BeehiveThroneRoom"})
+        exits = self.multiworld.get_region("BeehiveThroneRoom", self.player).exits
+        self.assertIn("BeehiveMainArea", {e.connected_region.name.split(" (")[0] for e in exits
+                                          if e.access_rule(self.state_with())})
+
+    def test_door_open(self) -> None:
+        slot = self.world.fill_slot_data()
+        self.assertIn({"map": "BeehiveMainArea", "entity": "loadzone throne"}, slot["kept_present"])
+        self.assertIn({"map": "BeehiveMainArea", "entity": "Base/ThroneDoors"}, slot["scenery_hidden"])
+        self.assertIn({"map": "BeehiveMainArea", "entity": "Base/ThroneDoors (1)"}, slot["scenery_present"])

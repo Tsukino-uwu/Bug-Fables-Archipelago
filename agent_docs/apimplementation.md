@@ -141,6 +141,7 @@ this file and that doc disagree, that doc is right.
 67. [Build step 67: what lies behind the Sand Castle Key and the Rusty Key held out](#build-step-67-what-lies-behind-the-sand-castle-key-and-the-rusty-key-held-out)
 68. [Build step 68: the Ancient Castle boss room's wall open](#build-step-68-the-ancient-castle-boss-rooms-wall-open)
 69. [Build step 69: the Honey Factory's door from Outside the Beehive open](#build-step-69-the-honey-factorys-door-from-outside-the-beehive-open)
+70. [Build step 70: the Bee Kingdom's Throne Room door open](#build-step-70-the-bee-kingdoms-throne-room-door-open)
 
 **How it works**
 
@@ -3252,8 +3253,9 @@ treasure room's door kept open, build step 68; no items), 150 of 244; the treasu
 the castle's artifact on a platform, Jump or Bee Fly, held out of `ARTIFACTS` with the castle, build step 67), 151 of
 244, the Ancient Castle done; the Bee Kingdom Hive from 2026-10-09: Outside the Beehive (the bottom,
 the elevator bee down for nothing and the hive's main door, and the left, a bridge between the hive's side door and
-the factory's, cut off from each other; the factory door kept open, build step 69; no items), 152 of 244; the rest
-of `room-checklist.md` to go.
+the factory's, cut off from each other; the factory door kept open, build step 69; no items), 152 of 244; the Throne
+Room (one region, its door free, kept open from the main area, build step 70; no items), 153 of 244; the rest of
+`room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -5813,6 +5815,26 @@ every flag off, the door open-looking from both sides, the factory entered and l
 
 *Code: `logic/bee_kingdom_hive.py`, `logic/honey_factory.py` (`KEPT_PRESENT`, `SCENERY_HIDDEN`). The mod:
 `World/KeptOpen.cs`, unchanged.*
+
+## Build step 70: the Bee Kingdom's Throne Room door open
+
+**Found (2026-10-09, mapping the Throne Room, `BeehiveThroneRoom`):** the main area's half of the Throne Room's door
+(`BeehiveMainArea`'s `loadzone throne`) exists in the game only from flag 169, its closed model until then; the Throne
+Room's own half has no flag. Arriving from the Throne Room while it's shut, the game pushes the party out past it, so
+the way works but looks closed (`MEASURED.md`, the Throne Room).
+
+**Asked and decided (the user, 2026-10-09):** "i think we should just keep it open", as with the factory door (build
+step 69).
+
+**Built** (the apworld only: the mod's own lists do it): `kept_present` gets the main area's half, `scenery_hidden` its
+closed model (`Base/ThroneDoors`, hidden in the game from 169) and `scenery_present` its open one (`Base/ThroneDoors
+(1)`, shown from 169). The door needs nothing in the logic, as before, now true. Test `TestThroneRoom`.
+
+**Status:** built (2026-10-09); seen the same day in seed `AP_70580691250444408633` through the dev `liveslot`: the
+door open-looking from the main area, walked through both ways.
+
+*Code: `logic/bee_kingdom_hive.py` (`KEPT_PRESENT`, `SCENERY_HIDDEN`, `SCENERY_PRESENT`). The mod: `World/KeptOpen.cs`,
+unchanged.*
 
 # How it works
 
