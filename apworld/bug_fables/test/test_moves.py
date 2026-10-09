@@ -69,6 +69,24 @@ class TestFieldMovesStoryParty(BugFablesTestBase):
         self.assertTrue(self.can_reach_location(spot))
 
 
+class TestDashWithoutTheHorn(BugFablesTestBase):
+    # Without the Horn Slash, Kabbu's Dash only moves and the Horn Dash only breaks boulders: a switch takes the Horn
+    # Slash, a boulder the Horn Dash alone.
+    options = {"shuffle_field_moves": True}
+
+    def test_the_ruler_needs_the_horn(self) -> None:
+        event = "Forsaken Lands: Broken Bridge, Ruler Knocked Down"
+        self.collect_all_but(["Horn Slash"])
+        self.assertFalse(self.can_reach_location(event))
+        self.collect_by_name("Horn Slash")
+        self.assertTrue(self.can_reach_location(event))
+
+    def test_a_boulder_needs_only_the_horn_dash(self) -> None:
+        down = self.multiworld.get_entrance("SwamplandsBridge to SwamplandsBridge (Red Bounce Pad)", self.player)
+        self.assertFalse(down.access_rule(self.state_with("Horn Slash", "Progressive Dash")))
+        self.assertTrue(down.access_rule(self.state_with("Progressive Dash", "Progressive Dash")))
+
+
 class TestJump(BugFablesTestBase):
     options = {"shuffle_jump": True}
 

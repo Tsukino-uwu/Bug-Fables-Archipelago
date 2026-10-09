@@ -71,6 +71,7 @@ read, a log or a probe.
 - [The Settings list's
   arrows](#the-settings-lists-arrows-2026-09-30-code-read-the-games-screen-in-the-users-screenshots)
 - [The goal flags](#the-goal-flags-2026-10-08-code-read-the-dumps-and-the-games-data-file-the-grass-seen-in-play)
+- [Kabbu's horn tags](#kabbus-horn-tags-2026-10-09-code-read-and-the-taps-il-nothing-seen-in-game)
 - [Rooms seen on screen](#rooms-seen-on-screen-2026-10-05-the-user-every-ability-in-hand)
 - [Still to measure](#still-to-measure)
 
@@ -3035,6 +3036,28 @@ An audit for build step 60 (two readers, four checkers, a critic). Used by `Goal
 - **A file's flags arrive as a new array** on a load (`MainManager.cs:17274-17281`) and on a new file or the title
   screen (`SetVariables`, :3607); a battle's Game Over puts its start values back in place (`BattleControl.cs:
   3436-3446`).
+
+## Kabbu's horn tags (2026-10-09, code read and the tap's IL; nothing seen in game)
+
+Read for build step 63, with a review over every reader. Used by `FieldMoves.cs`.
+
+- **The tags** (`PlayerControl.DoActionTap`, Kabbu's case, `PlayerControl.cs:1060-1145`): the slash's swing is
+  `animstate` 100 with the sound "Cut"; its hitbox `tbox` is made tagged `BeetleHorn`. A second press within the swing's
+  15 frames (`flags[699]`, the Dash) keeps that hitbox, hops, sets `dashing` and tags it again: `BeetleHorn`, or
+  `BeetleDash` with `flags[39]` (the Horn Dash). Nothing re-tags it during the Dash; `StopDash` destroys it. In the IL
+  the coroutine has exactly three `ldstr "BeetleHorn"/"BeetleDash"` before `set_tag`, one `stfld animstate` of 100
+  right before `ldstr "Cut"`, and that sound's `PlaySound(string, int, float, float)` four instructions on.
+- **Every reader** (the whole decompiled game): `NPCControl.OnTriggerEnter` by object type: `BreakableRock` breaks on
+  `BeetleDash` only (`BreakRock`, which sets `player.boulderbreak` so the Dash goes on), a `BeetleHorn` hit only shakes
+  it; `PushRock` and `ScrewSwitch` take `BeetleHorn` only; `SavePoint`, `CoiledObject`, the switches (`Switch`,
+  `StencilSwitch`, `WaterSwitch`; `data[4]` 1 is horn only), `BeetleGrass` and a frozen `Geizer` take either; an enemy
+  is dizzied by `BeetleHorn` while not dashing or by `BeetleDash`; an NPC named `ITHD` reacts to `BeetleDash`, `ITAH` to
+  either (the dump: only `RubberPrisonSecurity`'s `ITAHcomputer`, no `ITHD`). `OnTriggerStay`: a bounce pad's bounce
+  look. Other components: `Hornable` (the ice cubes knocked around) and `MusicSpinner` take `BeetleHorn`, `ShakeHorn`
+  either.
+- **So in vanilla** the plain Dash does what the slash does (its tag is the slash's), pushes rocks and knocks ice
+  cubes, but breaks no boulder and dizzies no enemy; the Horn Dash breaks boulders, cuts grass and hits switches, but
+  pushes no rock.
 
 ## Rooms seen on screen (2026-10-05, the user, every ability in hand)
 

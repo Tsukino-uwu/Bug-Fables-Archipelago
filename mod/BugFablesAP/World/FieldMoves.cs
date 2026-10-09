@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using BepInEx.Logging;
 using HarmonyLib;
 using UnityEngine;
@@ -61,7 +62,97 @@ namespace BugFablesAP
             }
             log.LogInfo($"[moves] installed on PlayerControl.DoActionTap's first step (state field {tapState != null}, owner {tapOwner != null}) and DoJump");
             Hooks.Install(typeof(WormGame), "moves", "the Wacka Worm game starts without Vi or her Beemerang");
+            Hooks.Install(typeof(HornLock), "moves",
+                "once the Dash is learned, Kabbu's tap does all the Horn Slash does without its item");
         }
+
+        // Without the Horn Slash the Dash only moves and the Horn Dash only breaks boulders: Kabbu's hitboxes carry no
+        // horn tag and the first press swings nothing; a dashing Horn Dash's hitbox is the game's own only on a boulder.
+        private static class HornLock
+        {
+            private static readonly AccessTools.FieldRef<PlayerControl, BoxCollider> hitbox =
+                AccessTools.FieldRefAccess<PlayerControl, BoxCollider>("tbox");
+
+            [HarmonyPatch(typeof(PlayerControl), "DoActionTap", MethodType.Enumerator)]
+            [HarmonyTranspiler]
+            private static IEnumerable<CodeInstruction> TranspileTap(IEnumerable<CodeInstruction> instructions) =>
+                Hooks.Safe(instructions, EditTap, "moves");
+
+            // Each `ldstr "BeetleHorn"/"BeetleDash"; callvirt set_tag` gets HornTag between; Kabbu's swing (its
+            // animstate 100 just before the "Cut" sound) gets SlashAnim, and the sound's PlaySound becomes SlashSound.
+            private static IEnumerable<CodeInstruction> EditTap(List<CodeInstruction> code)
+            {
+                List<int> tags = Enumerable.Range(0, Math.Max(0, code.Count - 1))
+                    .Where(i => code[i].opcode == OpCodes.Ldstr && (code[i].operand as string == "BeetleHorn"
+                        || code[i].operand as string == "BeetleDash")
+                        && code[i + 1].operand is MethodInfo setter && setter.Name == "set_tag")
+                    .ToList();
+                MethodInfo play = AccessTools.Method(typeof(MainManager), nameof(MainManager.PlaySound),
+                    new[] { typeof(string), typeof(int), typeof(float), typeof(float) });
+                int cut = code.FindIndex(c => c.opcode == OpCodes.Ldstr && c.operand as string == "Cut");
+                int sound = cut < 0 ? -1 : code.FindIndex(cut, c => c.Calls(play));
+                FieldInfo animstate = AccessTools.Field(typeof(EntityControl), nameof(EntityControl.animstate));
+                int swing = cut < 0 ? -1 : code.FindLastIndex(cut, c => c.StoresField(animstate));
+                bool swingIs100 = swing > 0 && code[swing - 1].opcode == OpCodes.Ldc_I4_S
+                    && Convert.ToInt32(code[swing - 1].operand) == 100;
+                if (tags.Count != 3 || sound < 0 || sound - cut > 6 || !swingIs100)
+                {
+                    log.LogError($"[moves] DoActionTap: {tags.Count} of 3 horn tags, the swing's sound {sound >= 0}, "
+                        + $"its animation {swingIs100}, which differs from what was measured: left as it is, so "
+                        + "once the Dash is learned, Kabbu's tap does all the Horn Slash does without its item");
+                    return code;
+                }
+                MethodInfo slashSound = AccessTools.Method(typeof(FieldMoves), nameof(SlashSound));
+                MethodInfo slashAnim = AccessTools.Method(typeof(FieldMoves), nameof(SlashAnim));
+                code[sound] = new CodeInstruction(OpCodes.Call, slashSound).MoveLabelsFrom(code[sound]);
+                code.Insert(swing, new CodeInstruction(OpCodes.Call, slashAnim));
+                MethodInfo hornTag = AccessTools.Method(typeof(FieldMoves), nameof(HornTag));
+                foreach (int i in tags.Select(i => i > swing ? i + 1 : i).OrderByDescending(i => i))
+                {
+                    code.Insert(i + 1, new CodeInstruction(OpCodes.Call, hornTag));
+                }
+                log.LogInfo("[moves] installed in DoActionTap: 3 of 3 horn tags, Kabbu's swing and its sound");
+                return code;
+            }
+
+            // The game's own boulder branch runs as written (BreakRock, which keeps the Dash going), then the tag goes
+            // back. A dashing hitbox is untagged only by HornTag, so a Horn Slash received mid-Dash still breaks it.
+            [HarmonyPatch(typeof(NPCControl), "OnTriggerEnter")]
+            [HarmonyPrefix]
+            private static void BeforeTrigger(NPCControl __instance, Collider other, out bool __state)
+            {
+                __state = false;
+                PlayerControl player = MainManager.player;
+                if (__instance.objecttype != NPCControl.ObjectTypes.BreakableRock || other == null || player == null
+                    || !player.dashing || !ReferenceEquals(other, hitbox(player)) || !other.CompareTag("Untagged")
+                    || !Abilities.Learned(MainManager.instance.flags, 39))
+                {
+                    return;
+                }
+                other.tag = "BeetleDash";
+                __state = true;
+            }
+
+            [HarmonyPatch(typeof(NPCControl), "OnTriggerEnter")]
+            [HarmonyFinalizer]
+            private static Exception AfterTrigger(Exception __exception, Collider other, bool __state)
+            {
+                if (__state && other != null)
+                {
+                    other.tag = "Untagged";
+                }
+                return __exception;
+            }
+        }
+
+        // Called from DoActionTap's own code (HornLock): a hitbox's tag, Kabbu's swing and its sound, each nothing
+        // while the Horn Slash is locked.
+        public static string HornTag(string tag) => Locked(1) ? "Untagged" : tag;
+
+        public static int SlashAnim(int anim) => Locked(1) ? 0 : anim;
+
+        public static AudioSource SlashSound(string clip, int id, float pitch, float volume) =>
+            Locked(1) ? null : MainManager.PlaySound(clip, id, pitch, volume);
 
         // The Wacka Worm game (Event54, the festival's and Whack Farms') is Vi throwing the Beemerang: without her in
         // the party or the move, it doesn't start, and Whack Farms' fee, already paid by its line, is given back.
@@ -132,9 +223,10 @@ namespace BugFablesAP
         internal static void Tick()
         {
             MainManager mm = MainManager.instance;
+            // A press during a tap (the Dash's second press) or a Dash (the one that ends it) isn't a new move.
             if (mm?.playerdata == null || mm.playerdata.Length == 0 || MainManager.player == null
                 || MainManager.battle != null || mm.pause || mm.minipause || mm.inevent || mm.message
-                || MainManager.player.submarine)
+                || MainManager.player.submarine || MainManager.player.action || MainManager.player.dashing)
             {
                 return;
             }
@@ -166,6 +258,11 @@ namespace BugFablesAP
             }
             int move = mm.playerdata[0].animid;
             if (move < 0 || move > 2 || !Locked(move))
+            {
+                return true;
+            }
+            // Without the Horn Slash, Kabbu's double tap still starts the Dash once it's learned (HornLock).
+            if (move == 1 && Abilities.Learned(mm.flags, 699))
             {
                 return true;
             }

@@ -60,11 +60,11 @@ LOCATIONS = (
              category="hidden_item", no_jump=True),
 )
 # The broken bridge room's ruler, knocked down from its upper right (Event146, flag 382): a switch only Kabbu's horn
-# hits (its data[4] 1, NPCControl), the bridge then joining the upper right and the left.
-_HORN = CanUse("Horn Slash") | CanUse("Horn Dash")
+# hits (its data[4] 1, NPCControl), the bridge then joining the upper right and the left. The Horn Slash: without it
+# Kabbu's Dash and Horn Dash hit no switch.
 STORY_EVENTS = (
     StoryEvent("Forsaken Lands: Broken Bridge, Ruler Knocked Down", "Broken Bridge Ruler Down", "BarrenLandsBeefly",
-               Source(flag=382), rule=_HORN, area="Upper Right"),
+               Source(flag=382), rule=CanUse("Horn Slash"), area="Upper Right"),
 )
 # The cloud room, a one-way ring of four parts, each with one door (the user, 2026-10-07): the right door (the map's
 # own region) up to the top door with Jump, Horn Dash and Bee Fly; the top on to the left door, and the left on to the

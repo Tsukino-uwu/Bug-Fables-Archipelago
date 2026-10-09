@@ -107,6 +107,11 @@ then the Horn Dash) and **Progressive Freeze** (the Freeze, then the Icicle). An
 wherever you are in the story, and its battle skill comes with it. The logic for chapters 2 to 7 is cautious for now:
 each teaching scene counts as reachable only once every ability taught before it is yours. New in 0.3.0.
 
+With *Shuffle Field Moves* on, the Dash and the Horn Dash work without the Horn Slash, but only as themselves: the Dash
+moves you faster and the Horn Dash breaks boulders. Cutting grass, hitting switches and knocking things over wait for
+the Horn Slash; once it's yours, the Dash does them too, as in the game. Fixed after 0.3.0, where without the Horn
+Slash the Dash didn't work at all.
+
 ## The boat and the submarine
 
 The Boat Ticket and the submarine, the Termite Kingdom's **Subaquatic Maritime Neotransport**, are items in every

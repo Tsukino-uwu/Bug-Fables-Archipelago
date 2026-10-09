@@ -134,6 +134,7 @@ this file and that doc disagree, that doc is right.
 60. [Build step 60: the goal guard, a goal flag set only by its own events](#build-step-60-the-goal-guard-a-goal-flag-set-only-by-its-own-events)
 61. [Build step 61: the swamp bridge kept up, its collapse kept away](#build-step-61-the-swamp-bridge-kept-up-its-collapse-kept-away)
 62. [Build step 62: a map's own start-up scene kept away (the Junction's centipede)](#build-step-62-a-maps-own-start-up-scene-kept-away-the-junctions-centipede)
+63. [Build step 63: the Dash without the Horn Slash](#build-step-63-the-dash-without-the-horn-slash)
 
 **How it works**
 
@@ -342,7 +343,8 @@ be wrong.
     first tap doing no slash and the dash's hitbox no horn effect, as the Horn Dash adds rock breaking to it; the Horn
     Dash then breaks rocks but leaves grass and the rest to the Horn Slash. The logic: grass and pushing need the Horn
     Slash, speed the Dash, rocks the Horn Dash; no progressive item needs another. **With the Horn Slash received the
-    Dash is the game's own again**: it cuts grass and does everything the slash does, the Horn Dash too.
+    Dash is the game's own again**: it cuts grass and does everything the slash does, the Horn Dash too. **Built
+    (2026-10-09): build step 63.**
     **Why it suits the logic:** grass is always "Horn Slash", never "Horn Slash or Dash"; the grass rules
     (`CanUse("Horn Slash")`) stayed right once the Dash became an item.
     **Every learned ability an item, always (2026-09-27):** Beemerang Halt, Bee Fly, Dash, Horn Dash, Beetle
@@ -855,6 +857,9 @@ be wrong.
   behind it (2026-09-27). Also location 19 (crystal berry #0 outside Snakemouth Den): the horn from the Outskirts' side,
   or the way round through the cave (2026-09-26; `MEASURED.md`): today it takes the Horn, more cautious than the game;
   room-level regions would add the cave.
+- **Grass on a Horn Dash route** (2026-10-09): without the Horn Slash the Horn Dash cuts no grass, so a mapped Horn Dash
+  route that crosses grass would need the Horn Slash too. Ten rooms to recheck on screen once every room is mapped (the
+  user's call); build step 63.
 - **Crystal berry #2 (location 20)** sits behind the Underground's need (its `reach`), which needs Leif, though the
   room's upper-left entrance needs nothing. More cautious than the game, so safe; room-level regions would split it.
 - **Uncap FPS (mod guide, step 24) still speeds some things up.** Each to compare at 60 and above on screen, then
@@ -2922,6 +2927,9 @@ shops see a purchase as berries going down; the cheat is now a one-time top-up.)
 item there was no save or heal; confirm next to a crystal now uses it, as an NPC is talked to (`documentation.md`,
 step 29).
 
+**Kabbu's Dash without the Horn Slash (2026-10-09):** refusing his whole tap also refused the Dash, its second press;
+now the tap starts the Dash once it's learned, with no horn hit: build step 63.
+
 **Status:** works, seen on screen (2026-09-27): each attack locked until its own item, the buzz on the press,
 Beemerang Toss from Madeleine's table; the key items in the bag (Freeze and Horn Slash with Leif's and Kabbu's party
 icons, Jump with the Archipelago icon, "Kabbu can use Horn Slash." as the description; seen in a screenshot).
@@ -2999,8 +3007,8 @@ level without the first "wouldn't work"): Beemerang Toss then Halt, Dash then Ho
 **Status:** built (2026-09-27): the logic and pool tested, the mod built, its patch counts taken from the game's IL and
 confirmed in the running game (its log: 8 of 8, 2 of 2, 15 of 15). Seen (2026-10-04): a received ability working (Bee
 Fly), its battle skill, the key items' text; a scene sending its check (2026-10-04: the Dash's, Event221 at the Lost
-Sands' entrance, location 69, its flags 88 and 138 set by hand on a test file). Decided and still to build:
-without the Horn Slash the Dash only moves (Next 23), for Shuffle Field Moves.
+Sands' entrance, location 69, its flags 88 and 138 set by hand on a test file). Without the Horn Slash the Dash
+only moves and the Horn Dash only breaks boulders, for Shuffle Field Moves: build step 63.
 
 *Code: `abilities.py` (`item_count`, `item_copies`), `slot_data.py` (`ability_items`); in the mod `Abilities.cs` and
 `CustomItems.cs` (ids 205-211); tests `test_abilities.py`.*
@@ -5525,6 +5533,56 @@ same for every such scene already; a seed now does it for the listed ones. Test 
 
 *Code: `data_types.py` (`MapScene`), `logic/wild_swamplands.py` (`SCENES_KEPT_AWAY`), `slot_data.py`. The mod:
 `World/KeptOpen.cs`, `Core/SeedData.cs`.*
+
+## Build step 63: the Dash without the Horn Slash
+
+**Found (2026-10-09):** a player reported that in v0.3.0 the Progressive Dash didn't dash at all; they had the Dash and
+no Horn Slash yet. With Shuffle Field Moves the mod refused Kabbu's whole tap until the Horn Slash arrived (build step
+21), and the Dash is a second press during that tap (`MEASURED.md`, every field ability). The logic counts the Dash and
+the Horn Dash on the Progressive Dash alone (build step 23), so a seed could count on a Horn Dash nobody could use.
+
+**The rule (the user, 2026-10-09)**, as decided on 2026-09-27 (Next 23): "horn slash = cuts grass / hit switches or
+knock bridges down, push small rocks around; dash = only for mobility (it can do the horn slash things as well, once
+horn slash is aquired); horn dash = break boulders (this does not require horn slash, its just an upgrade to dash
+itself)". In the logic: "horn" always means the Horn Slash; "horn dash" is said only where there are boulders; no
+mapped room needs the Dash itself (only the later chapters' story-order stand-ins name it, build step 23).
+
+**Read first** (`MEASURED.md`, "Kabbu's horn tags"): Kabbu's hitbox carries the slash's tag `BeetleHorn`; a Dash's
+carries the same tag, or `BeetleDash` once the Horn Dash is learned. Everything a horn hit does in the game reads one
+of those two tags, and a boulder (`BreakableRock`) breaks only on `BeetleDash`.
+
+**Built** (the mod, `FieldMoves.cs`, only with Shuffle Field Moves and the Horn Slash not yet received):
+1. **The Dash starts:** Kabbu's tap is let through once the Dash is learned. Its first press swings nothing and makes
+   no sound but the buzzer locked moves play on the press; the Dash's second press and the press that ends a Dash don't
+   buzz.
+2. **No horn hits:** the tap's three tag writes become "Untagged", so no grass, switch, ruler, push rock or save crystal
+   reacts to Kabbu.
+3. **The Horn Dash breaks boulders:** once it's learned, a dashing Kabbu's hitbox is tagged `BeetleDash` only while a
+   boulder reads it, then set back, so the game's own boulder code runs as written (the boulder breaks, the Dash goes
+   on).
+4. With the Horn Slash received, all of it is the game's own again.
+
+Without the Horn Slash the Horn Dash also no longer stuns field enemies, and the Dash and Horn Dash no longer break a
+frozen fountain or hit save crystals, coiled vines or the prison's computer; none is needed to reach anything. The
+user: fine, intended (2026-10-09).
+
+**The logic, checked against the rule:** every Horn Dash rule in a mapped room sits in a room with a boulder and matches
+the user's own "horn dash" for it (their messages from the mapping sessions, read again); every "horn" is the Horn
+Slash. The one wrong rule was the broken bridge's ruler (`BarrenLandsBeefly`, a switch), written "Horn Slash or Horn
+Dash": now the Horn Slash only. Two routes need both, for two obstacles, as the user described them: the pumpkin room's
+high right door (a boulder, then a stone knocked over) and the long swamp room's middle to its right (grass and a
+boulder). The user confirmed the check (2026-10-09). Test `TestDashWithoutTheHorn` (not yet run: the suite and the
+fuzzer run before the next push).
+
+**Still open: grass on a Horn Dash route.** In vanilla the Horn Dash cuts grass on its way, so grass on a route mapped
+with every ability may never have come up. The review found grass near the Horn Dash routes of ten mapped rooms (by
+position only). The user is "pretty sure" none blocks a way; it is rechecked on screen once every room is mapped
+(their call, 2026-10-09), the rooms listed in the local TO-CHECK.
+
+**Status:** built (2026-10-09); not yet seen in game.
+
+*Code: the mod `World/FieldMoves.cs` (`HornLock`, `HornTag`, `SlashAnim`, `SlashSound`); `logic/forsaken_lands.py`,
+`options.py`; tests `test_moves.py` (`TestDashWithoutTheHorn`).*
 
 # How it works
 

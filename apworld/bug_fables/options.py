@@ -282,7 +282,7 @@ class ShuffleFieldMoves(Toggle):
     Leif's Freeze (the first Progressive Freeze). Until one arrives, that attack does nothing but a short "can't" sound,
     and each shows in the key items once it does. A move works only with its member in the party too. The abilities the
     story teaches later (the Beemerang Halt, Bee Fly, the Dash and Horn Dash, Beetle Dig, the Icicle, the Shield) are
-    items in every seed.
+    items in every seed. Without the Horn Slash, Kabbu's Dash only moves and the Horn Dash only breaks boulders.
 
     The logic is cautious for now: everything past the Outskirts gate needs all three moves, and a few spots before it
     need the one they were seen to need. Off by default.
