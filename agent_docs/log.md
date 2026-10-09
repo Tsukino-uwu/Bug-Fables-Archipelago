@@ -89,6 +89,7 @@ either one wrong).
 - [2026-10-09: the goal guard; four swamp rooms; the Dash without the horn begun](#2026-10-09-the-goal-guard-four-swamp-rooms-the-dash-without-the-horn-begun)
 - [2026-10-09: the Dash without the Horn Slash; Ice Block Climb and Fenced Pond; the Defiant Root begun](#2026-10-09-the-dash-without-the-horn-slash-ice-block-climb-and-fenced-pond-the-defiant-root-begun)
 - [2026-10-09: the Defiant Root done, the Ancient Castle mapped to its boss; the key chains held out](#2026-10-09-the-defiant-root-done-the-ancient-castle-mapped-to-its-boss-the-key-chains-held-out)
+- [2026-10-10: the castle finished, the Bee Kingdom begun; the Scanner Room kept between; load times measured](#2026-10-10-the-castle-finished-the-bee-kingdom-begun-the-scanner-room-kept-between-load-times-measured)
 
 ## 2026-09-24: the project starts: remote items only, BepInEx, the first connection
 
@@ -3907,3 +3908,59 @@ either one wrong).
   #15 taken, 284 on (the Slide Puzzle solved), 297 and 283 as the user left them in the Rock Room. Next room
   `SandCastleBossRoom` (128), then `SandCastleTreasureRoom` (129). Still to do: TO-CHECK's Dash test with `take key` /
   `give key`; Next 64 (the key chains opened, the capture first) when the user says.
+
+## 2026-10-10: the castle finished, the Bee Kingdom begun; the Scanner Room kept between; load times measured
+
+- **Setup:** the server restarted on `AP_70580691250444408633` (its zip and `.apsave` in session 69b1ade9's scratchpad
+  `out/`, the player file in its `players/`), hosted with Start-Process on 38281 (PID 33408); the user started the game.
+  After every plugin reload the live slot_data was laid again with `liveslot` from this session's scratchpad `live.json`
+  (written by `live-slot-data.py`). The console's command file is still session bed6439d's `cmds.txt`.
+- **Rooms 150 to 157 of 244:** the Ancient Castle finished, the boss room (build step 68: its wall to the treasure room
+  hidden, never solid from that side) and the treasure room (the artifact, flag 345, on a platform, Jump or Bee Fly,
+  held out of `ARTIFACTS` with the castle); then the Bee Kingdom: Outside the Beehive (two cut-off parts, the elevator
+  down for nothing; build step 69, the factory door kept open both ways), the Throne Room (70, its door open from the
+  main area), Jaune's Gallery (71, its sign and an invisible cube kept away; its Bad Book location 207, "Behind the
+  Paintings"), the Scanner Room (72-74, below), the Main Area (the clothing stall's Bee Hat and Pretty Ribbon, locations
+  209-210, after Mothiva's scene, a story event; the edgy bee's trade, the Blackest Paint for crystal berry #35, for the
+  quest pass) and HB's Lab (75: HB asks for the Explorer Permit from the start, shown it opens B.O.S.S.; its Spy Specs
+  and Detector, which need bosses already met, for the quest pass). Every room and location name is the user's.
+- **The Scanner Room** (the user's design): kept between the outside and the inside. Outside's main door always leads
+  into it; a copy of its bottom door at its top leads into the Main Area, whose bottom exit is sent back into it (new
+  `door_rows`, mod guide step 49, `DoorRows.cs`); the warping scene to HB's Lab kept away; its gate open; the scan a
+  location (208, "Scan"), flag 160 set with 159 (`flags_with`, mod 50, `HiveScan.cs`), so Leif's Bubble Shield Lite
+  stays the game's, as Pep Talk; fast-forwarded with Skip cutscenes. Its doors join the shuffle at the door pass (Next
+  2). Two research workflows and a review shaped it.
+- **Found and fixed in game:** the treasure room's artifact scene froze the party (Event118 files quest 14 at a fixed
+  index; nine such inserts in seven chapter scenes guarded, mod 47); the pause menu drew artifact icons by count (each
+  flag's own icon now, mod 48; the file select's, Next 65); B.O.S.S. with nobody met froze on its empty list (it logs
+  off now, mod 51; the console's `bossmet` empties the lists to test). A review found a door-row shape the game's
+  transfer can't run; refused now.
+- **Load times** (the user: "i don't want them to be slow/impacted by our mod"): a dev timer (`[Debug] LoadTimer`,
+  `Dev/LoadTimer.cs`). A door's room change takes about 2 s, nearly all the game's own fades, fixed waits and walk in;
+  the mod's share 2-7 ms of hooks and about 0.06 ms a frame. It caught the Scanner Room's first top door: its walk-in
+  spot past the corridor's shut end kept the screen black 3.8 s more (now 1.8 s). Faster room changes, short fades kept,
+  are Next 66, after the mapping (the user).
+- **Decided, not built:** the Peculiar Gem as a progression item and the Watcher fight a location (the user's name
+  "Ancient Castle: Boss Room, Watcher Fight"), after the treasure room; a research workflow found the shape (the item
+  `always: 1` while the castle's location is pending; the Snakemouth slot's rule `Has("Peculiar Gem")`; the fight adds
+  the gem with `items[1].Add(116)`, so the mod needs a hook there). Ids 207-210 are used now, so its location takes 211.
+  Next 28 gets *Artifact Shuffle* (off: vanilla; on: anywhere) and the castle's artifact spot's name, "Ancient Castle:
+  Treasure Room, Shrine". The Dash test waits until every room is mapped (TO-CHECK).
+- **The user's process calls, now in the docs:** one room at a time, from its own data (`room-logic.md`); the warp into
+  the next room before anything else (memory). **Wrong turns:** a warp `@guard` landed the party in the guard's booth
+  behind glass; I said nothing in HB's Lab sets 161 (HB's line 53 does); Python's `write_text` wrote CRLF into two docs
+  (put back to LF).
+- **Also:** two ShareX GIFs shrunk under 20 MB for the user (`*_19mb.gif` beside each); the second redone with a palette
+  per frame after "the colors look weird", the user preferring colours over resolution; the first, from the
+  shared-palette method, offered to redo.
+- **Not seen in game:** B.O.S.S.'s boss list and Rush Mode with nobody met; the quests page's artifact icon; the Scanner
+  Room from a fresh file (TO-CHECK). Tests written and unrun (the suite and the fuzzer before the next push):
+  `TestCastleBossRoom`, `TestCastleTreasureRoom`, `TestOutsideTheBeehive`, `TestThroneRoom`, `TestJaunesGallery`,
+  `TestScannerRoom`, `TestMainArea`, `TestHBsLab`. Seeds generate (`live-slot-data.py` generates twice each run).
+  Nothing pushed.
+- **Handoff (the user: "lets continue in another chat. don't close anything"):** the server still running (PID 33408,
+  port 38281, the same seed), the game open with plugin `1847CE191D80` and `[Debug] LoadTimer = true` (turn it off with
+  `copy-dev.ps1 -DebugOff LoadTimer` when not measuring). The test file: flags 159, 160, 161, 173, 251 and 252 set; the
+  Explorer Permit given by the console; the Watcher's met count (enemy 54) cleared from 3 by `bossmet clear`, restorable
+  with `bossmet restore` only until the plugin reloads. Next room `BeehiveBalcony` (69), then `HoneycombsLab` (70) and
+  the rest of the hive. Still to do: the Peculiar Gem; Next 64 when the user says.
