@@ -587,6 +587,7 @@ prices and Quality of life is Fast text, Travel, Skip cutscenes, Item animation,
 it was, so a saved choice carries over, and each page's two buttons cover its own rows. **The two links left the main
 page (2026-09-26: "so AP looks clean"):** the pages are reached only from Settings (below), and *Use on normal saves*
 (step 18) took their place under Achievements. A third page, Graphics, came and went on 2026-09-28 (step 28).
+Medal prices left the Gameplay page for the dev cheats on 2026-10-09 (step 10, item 7).
 
 **The two pages in game too (2026-09-26; seen on screen, in game and on the main menu).** While Archipelago is enabled,
 the pause menu's Settings list gets *Quality of life* and *Gameplay* at the top (with it disabled, only under *Use on
@@ -1119,7 +1120,11 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    1, rounded up, so small crystal-berry prices stay 1 on the low settings. A new key (`[Gameplay] MedalPrices`, a
    number), as the old one held a word. **Renamed *Medal prices*** (2026-09-26: more accurate): it scales
    the medal table, so every medal on sale anywhere, never an item shop's consumables. If item shops are ever scaled,
-   they get their own row (*Item prices*), as their prices sit on another scale.
+   they get their own row (*Item prices*), as their prices sit on another scale. **Moved to the dev cheats
+   (2026-10-09, the user: "that one feels a bit to cheaty"):** off the Gameplay page and out of the player guide; the
+   dev build's `[Debug] MedalPrices` (the same 0 to 10, 10 by default) and the console's `medalprices [0-10]`. The
+   release build binds no such key, so its shops charge the full price; a value set under `[Gameplay]` before is
+   left unread.
 8. **Skip battle tutorials: read, and Leif's line skipped (2026-09-27).** A battle's scripted moments are
    `BattleControl.EventDialogue` cases, started by `CheckEvent` or by an enemy's own action. The only real tutorial is
    the fight against Maki in the opening (cases 0, 1 and 2, enemy `MakiTutorial`, while flag 15 is unset), which the
@@ -1224,7 +1229,7 @@ wide at size 0.8 (measured on screen), so the leaf sits 1.15 left of its centre.
 (`MainManager.Create9Box`, the controls type the help box uses), the question on top and the leaf on the answer. No is
 picked first, so a stray press never wipes the settings; cancel closes the box. The question isn't repeated in the help
 line below. **The Gameplay page has the same two buttons** (`ApMenu.GameplayAll`): Disable all there sets Difficulty
-Normal, Enemy scaling, Attack boost, Healing crystals and Auto-save Off, Medal prices full and both multipliers 1; Reset
+Normal, Enemy scaling, Attack boost, Healing crystals and Auto-save Off, and both multipliers 1; Reset
 puts each back to its default. Both pages open on Reset to defaults. On the Quality of life page, Disable all turns
 every row off (a choice row to its off value: Item animation Off, Travel Off, Detector Off) and Reset to defaults puts
 every row back to its default (`QualityOfLife.DisableAll` / `ResetAll`, the defaults from each setting's own config
@@ -1232,10 +1237,10 @@ definition).
 
 **Status:** in progress: Fast text, the opening skip, the Warp button's menu and Item animation seen on screen
 (2026-09-25); the bridge skips seen (2026-10-04: the message skipped, the rope at speed, the bridge still down on
-coming back); Medal prices not yet seen; replays held up and the quiet start seen on screen
-(2026-09-28); Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for the Boat
-Ticket (the Archipelago guide, build step 16), the warp itself, map travel and Skip confirm seen (2026-09-26); Skip
-cutscenes' Den arrival seen (2026-09-26), the Tattle tutorial and the door room's puzzle (Event4) at speed
+coming back); Medal prices not yet seen, a dev cheat since 2026-10-09; replays held up and the quiet start seen on
+screen (2026-09-28); Free boat seen (the fare waived with no berries, the boat left, 2026-09-26) and then removed for
+the Boat Ticket (the Archipelago guide, build step 16), the warp itself, map travel and Skip confirm seen (2026-09-26);
+Skip cutscenes' Den arrival seen (2026-09-26), the Tattle tutorial and the door room's puzzle (Event4) at speed
 (2026-09-26/27), the trapdoor and spider scene (2026-09-27); Skip battle tutorials: Leif's first-battle line skipped,
 seen (2026-09-27); map travel and Warp to Start through a door built (2026-10-02), map travel's seen at every
 destination (2026-10-03); the Warp button since the hooks moved, Warp to Start through the city gate and through a

@@ -116,13 +116,6 @@ namespace BugFablesAP
                         return AutoSave.Enabled != null && AutoSave.Enabled.Value
                             ? "Entering a new room saves at its door once you can move (at most every 15 s)."
                             : "Only save crystals save, as in the game.";
-                    case MedalPricesRow:
-                    {
-                        int tenths = QualityOfLife.MedalPrices?.Value ?? QualityOfLife.FullPrice;
-                        return tenths >= QualityOfLife.FullPrice ? "Medal shops charge their normal price."
-                            : tenths <= 0 ? "Medal shops charge nothing."
-                            : "Medal shops charge " + tenths * 10 + "% of their price.";
-                    }
                     case ExpRow:
                         return Multipliers.Exp == null || Multipliers.Exp.Value <= 1 ? "Enemies give their normal EXP."
                             : "Enemies give " + Multipliers.Exp.Value
@@ -253,10 +246,6 @@ namespace BugFablesAP
                     AutoSave.Enabled.Value = !AutoSave.Enabled.Value;
                     log.LogInfo("[apmenu] AutoSave: " + (AutoSave.Enabled.Value ? "On" : "Off"));
                 }
-                else if (r == MedalPricesRow && QualityOfLife.MedalPrices != null)
-                {
-                    Multipliers.StepBy(QualityOfLife.MedalPrices, by, 0, QualityOfLife.FullPrice);
-                }
                 else if (r == ExpRow && Multipliers.Exp != null)
                 {
                     Multipliers.StepBy(Multipliers.Exp, by);
@@ -303,8 +292,7 @@ namespace BugFablesAP
         private static void GameplayAll(bool reset)
         {
             foreach (ConfigEntryBase setting in new ConfigEntryBase[] { Difficulty, QualityOfLife.EnemyScalingMode,
-                AttackBoost.Boost, SaveCrystals.AllHeal, AutoSave.Enabled, QualityOfLife.MedalPrices, Multipliers.Exp,
-                Multipliers.Berries })
+                AttackBoost.Boost, SaveCrystals.AllHeal, AutoSave.Enabled, Multipliers.Exp, Multipliers.Berries })
             {
                 if (setting != null && reset)
                 {
@@ -334,11 +322,6 @@ namespace BugFablesAP
             if (AutoSave.Enabled != null)
             {
                 AutoSave.Enabled.Value = false;
-            }
-
-            if (QualityOfLife.MedalPrices != null)
-            {
-                QualityOfLife.MedalPrices.Value = QualityOfLife.FullPrice;
             }
             foreach (ConfigEntry<int> multiplier in new[] { Multipliers.Exp, Multipliers.Berries })
             {

@@ -147,8 +147,6 @@ seconds (it tidies its memory on a timer).
   saving, from the next room on.
 - **Auto-save** (default Off): On saves at a new room's door once you can move, at most every 15 seconds, so a
   defeat costs one room.
-- **Medal prices** (default full): medals in any shop, a bar in tenths of the price. Full is normal, half is half
-  price, empty is free.
 - **EXP multiplier** and **Berry multiplier** (default 1x, up to 10x; a bar like the volume rows): EXP from every
   defeated enemy, berries picked up in the world. A battle still gives at most a level's worth, and a check's
   berries are never multiplied.

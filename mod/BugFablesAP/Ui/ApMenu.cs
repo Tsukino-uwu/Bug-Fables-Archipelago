@@ -20,7 +20,7 @@ namespace BugFablesAP
             UncapRow = 11, QolRows = 12;
         // The Gameplay page: how the game plays, under the same two buttons.
         private const int DifficultyRow = 1, ScalingRow = 2, AttackRow = 3, CrystalsRow = 4, AutoSaveRow = 5,
-            MedalPricesRow = 6, ExpRow = 7, BerryRow = 8, GameplayRows = 9;
+            ExpRow = 6, BerryRow = 7, GameplayRows = 8;
         private enum Page { Main, Qol, Gameplay }
         private Page page;
         // On the buttons row: 0 Reset to defaults (where the cursor lands), 1 Disable all; confirming shows Yes / No
@@ -488,12 +488,10 @@ namespace BugFablesAP
                 Choice(AttackRow, "Attack boost", AttackBoost.Boost != null && AttackBoost.Boost.Value ? "+1" : "OFF");
                 Choice(CrystalsRow, "Healing crystals", OnOff(SaveCrystals.AllHeal));
                 Choice(AutoSaveRow, "Auto-save", OnOff(AutoSave.Enabled));
-                Label(MedalPricesRow, "Medal prices");
                 Label(ExpRow, "EXP multiplier");
                 Label(BerryRow, "Berry multiplier");
-                DrawPips(new[] { MedalPricesRow, ExpRow, BerryRow },
-                    new[] { QualityOfLife.MedalPrices?.Value ?? QualityOfLife.FullPrice,
-                    Multipliers.Exp?.Value ?? 1, Multipliers.Berries?.Value ?? 1 });
+                DrawPips(new[] { ExpRow, BerryRow },
+                    new[] { Multipliers.Exp?.Value ?? 1, Multipliers.Berries?.Value ?? 1 });
                 Text("|center||size,0.5|" + Describe(row), 0f, DescribeY);
                 Text("|center||size,0.5|Gameplay. Cancel goes back" + (inGame ? " to Settings." : "."), 0f, StatusY);
                 PlaceCursor();
@@ -525,7 +523,7 @@ namespace BugFablesAP
             foreach (int r in page == Page.Qol ? new[] { FastTextRow, WarpRow, SkipConfirmRow, CutscenesRow,
                     AnimationRow, ColorsRow, IconsRow, BackgroundsRow, DetectorRow, SpyRow, UncapRow }
                 : page == Page.Gameplay ? new[] { DifficultyRow, ScalingRow, AttackRow, CrystalsRow, AutoSaveRow,
-                    MedalPricesRow, ExpRow, BerryRow }
+                    ExpRow, BerryRow }
                 : new[] { ModeRow, DeathLinkRow, AchievementsRow, NormalSavesRow })
             {
                 for (int side = 0; side < 2; side++)

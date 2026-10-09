@@ -48,7 +48,7 @@ namespace BugFablesAP
         internal static ConfigEntry<string> SpySpecs;
         internal static bool SpyHp => SpySpecs != null && (SpySpecs.Value == "HP" || SpySpecs.Value == "Both");
         internal static bool SpyFree => SpySpecs != null && (SpySpecs.Value == "Free" || SpySpecs.Value == "Both");
-        // Tenths of the normal price: 10 normal, 5 half, 0 free.
+        // Tenths of the normal price: 10 normal, 5 half, 0 free. A dev cheat: bound only in the dev build ([Debug]).
         internal const int FullPrice = 10;
         internal static ConfigEntry<int> MedalPrices;
         internal static ConfigEntry<string> EnemyScalingMode;
@@ -125,7 +125,7 @@ namespace BugFablesAP
         private const float IntroSpeed = 8f;
 
         // The panel's two buttons: every Quality of life row off (a choice to its "nothing extra" value), or back to
-        // each setting's own default. Enemy scaling and Medal prices live on the Gameplay page and aren't touched.
+        // each setting's own default. Enemy scaling lives on the Gameplay page and isn't touched.
         internal static void DisableAll()
         {
             foreach (ConfigEntry<bool> setting in new[] { FastText, SkipCutscenes, ItemBackgrounds, ApMenu.Detector })
@@ -215,10 +215,6 @@ namespace BugFablesAP
                 + "always works and doesn't use the turn), Both (as if the medal were equipped), or Off (the default; "
                 + "left to the medal). Switch it on the Quality of life page.",
                 new AcceptableValueList<string>(SpySpecsValues)));
-            MedalPrices = config.Bind("Gameplay", "MedalPrices", FullPrice, new ConfigDescription(
-                "Medal shop prices, in berries and crystal berries, in tenths of the normal price: 10 normal, 5 half, "
-                + "0 free. Any price above free is at least 1. Switch it on the Gameplay page.",
-                new AcceptableValueRange<int>(0, FullPrice)));
             EnemyScalingMode = config.Bind("QualityOfLife", "EnemyScaling", "PartyLevel", new ConfigDescription(
                 "How tough enemies are, wherever you meet them: PartyLevel scales every enemy to the party's level, so "
                 + "every area plays fair in any order; Artifacts scales them to the artifacts found, as vanilla's "

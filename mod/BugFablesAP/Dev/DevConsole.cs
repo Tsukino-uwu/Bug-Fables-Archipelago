@@ -1055,6 +1055,24 @@ namespace BugFablesAP
                         }
                         InfBerriesSetting.Value = !InfBerriesSetting.Value;
                         return "infberries " + (InfBerriesSetting.Value ? "on: berries to 999 once per save" : "off");
+                    case "medalprices":
+                    {
+                        // The [Debug] MedalPrices cheat: medal shop prices in tenths, 10 normal, 0 free.
+                        if (QualityOfLife.MedalPrices == null)
+                        {
+                            return "medalprices: no setting";
+                        }
+                        if (parts.Length > 1 && (!int.TryParse(parts[1], out int tenths) || tenths < 0
+                            || tenths > QualityOfLife.FullPrice))
+                        {
+                            return "medalprices [0-10]";
+                        }
+                        if (parts.Length > 1)
+                        {
+                            QualityOfLife.MedalPrices.Value = int.Parse(parts[1]);
+                        }
+                        return $"medalprices {QualityOfLife.MedalPrices.Value} (tenths of the normal price)";
+                    }
                     case "infjump":
                         if (InfJumpSetting == null)
                         {

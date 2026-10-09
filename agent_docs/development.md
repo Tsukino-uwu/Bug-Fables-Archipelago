@@ -482,6 +482,9 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   setting `InfBerries`, off in the code; `copy-dev.ps1 -DebugOn InfBerries` turns it on for a dev test session). Once,
   not on every drop: a refill hid purchases from the item shops, which see a purchase as berries going down
   (2026-09-27).
+- `medalprices [0-10]`: shows or sets the `[Debug]` cheat `MedalPrices`, medal shop prices in tenths of the normal
+  price (10 normal, the default; 0 free). Moved off the Gameplay page on 2026-10-09 (the user: "that one feels a bit
+  to cheaty"); the release build has no such key, so its shops charge the full price.
 - `infjump`: flips jumping again in mid-air. It's the `[Debug]` setting `InfJump` (off in the code; `copy-dev.ps1
   -DebugOn InfJump` turns it on for a dev test session), so it survives reloads. Only while the field player is active:
   in battles it's off and never on the ground, so each press of jump played its sound on a disabled source (three to
@@ -532,6 +535,7 @@ only in the dev (Debug) build: every one is bound in `Dev/Plugin.Dev.cs`, and th
 | `DevConsole` | F9 opens the dev console (section above). |
 | `DevCommandFile` | With `DevConsole`: a text file whose lines are run as console commands, then emptied, so a test can be driven from outside the game. Blank lines and lines starting with `#` are skipped; a queued `loc` or `warp` waits until the player is free, the opening done and no fade playing (2026-10-07: one fired between the opening's end and its fade-in, whose new fade destroyed the one the transfer waited on), and `unstick` goes first, dropping any waiting warp (2026-10-06: a frozen scene held it behind one for good). |
 | `InfJump`, `OneHit`, `BumpKill`, `InfBerries` | With `DevConsole`: jump again in mid-air; every hit on an enemy does at least 99; field enemies die on touch; 999 berries once per save played. The console's `infjump`, `onehit`, `bumpkill` and `infberries` flip them. |
+| `MedalPrices` | Medal shop prices in tenths of the normal price, 10 (normal) by default, 0 free; the console's `medalprices` sets it. A cheat, moved off the Gameplay page (2026-10-09). |
 | `AdoptSeed` | A save tied to another seed is re-tied to the connected one and replays every item (section "A local server to test against"). |
 | `QuietBursts` | Items arriving several at once (a goal's release, a new seed's replay) get no hold-up; one arriving alone still does. |
 | `TestStart`, `TestStartMember`, `TestDoors` | A new file's start map, its one party member, doors rewritten by hand (Dev console section). |

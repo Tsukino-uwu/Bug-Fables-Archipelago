@@ -1936,7 +1936,7 @@ order can lock one away.
 seed's item, buying runs the shopkeeper's `giveitem` (swapped as for a gift), and the check is the medal leaving the
 stock (`badgeshops[shop]`), which the save keeps. A done location shows as sold, so a reloaded save never charges
 twice. A *Medal prices* bar on the Gameplay page (tenths of the normal price, 10 by default; the mod guide, step 10,
-item 7) scales the price columns. Merab's (berries) first:
+item 7; a dev cheat since 2026-10-09) scales the price columns. Merab's (berries) first:
 berries can always be earned, so no lockout. **Shades's shop takes crystal berries, a consumable** (the
 concern: consumable keys, lockout, savescumming): crystal berries are spent nowhere else (measured), and her stock
 arrives in tiers whose Normal prices add up to 18, 25, 27, 40 and 50, exactly every berry in the game. **A tiered

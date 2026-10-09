@@ -70,6 +70,11 @@ namespace BugFablesAP
             DevConsole.InfBerriesSetting = Config.Bind("Debug", "InfBerries", false,
                 "Dev only, with DevConsole. Berries set to 999, the game's cap, once per save played, for test "
                 + "purchases. The console's infberries flips it. Off by default.");
+            QualityOfLife.MedalPrices = Config.Bind("Debug", "MedalPrices", QualityOfLife.FullPrice,
+                new ConfigDescription("Dev only. Medal shop prices, in berries and crystal berries, in tenths of the "
+                + "normal price: 10 normal (the default), 5 half, 0 free; any price above free is at least 1. The "
+                + "console's medalprices sets it. A cheat, moved off the Gameplay page (2026-10-09).",
+                new AcceptableValueRange<int>(0, QualityOfLife.FullPrice)));
             devCommandFile = Config.Bind("Debug", "DevCommandFile", "",
                 "Dev only, with DevConsole. A text file the console also reads: each line is run as a typed command, "
                 + "then the file is emptied. Lets a developer outside the game drive a test. Empty = off.");
