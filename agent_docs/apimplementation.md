@@ -3291,6 +3291,8 @@ story event that needs nothing, at their prices), 156 of 244; HB's Lab (one regi
 Explorer Permit from the start and shown it opens B.O.S.S., build step 75), 157 of 244; the Balcony (one region, its
 door free; Beette's sale, location 78, needing nothing in the room, at her price again, build step 76, its berries with
 Next 63), 158 of 244; Honeycomb's Lab (one region, its door free, no location), 159 of 244, the Bee Kingdom Hive done;
+the Honey Factory's Lobby (its bottom a drop, Jump or Bee Fly back up; the processing door's Factory Pass lock kept, a
+stand-in until Next 67; the storage door open, build step 77; its shop's five slots, locations 212-216), 160 of 244;
 the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received

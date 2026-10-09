@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**159 of 244 done.**
+**160 of 244 done.**
 
 ## Outskirts
 
@@ -274,7 +274,9 @@ as it is, a frozen record.
 
 ## Honey Factory
 
-- [ ] HoneyFactoryEntrance (72)
+- [x] HoneyFactoryEntrance (72) — the Lobby; the bottom a drop, Jump or Bee Fly back up; the processing door's Factory
+  Pass lock kept (a stand-in until Next 67); the storage door open (build step 77); the shop's five slots, locations
+  212-216, its berries with Next 63
 - [ ] HoneyFactoryWorkerRooms (74)
 - [ ] HoneyFactoryCore (75)
 - [ ] FactoryProcessingFirstRoom (83)
