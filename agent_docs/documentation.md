@@ -3162,7 +3162,9 @@ price (`[sales] BeehiveBalcony: lines 20, 21 free (price 150 to 0)`).
 game has `Death()`, which only starts `Death(true)`, and `Death(bool)`, which does the work and whose state the drop
 reads; both patches now name `Death(bool)`. After the hot reload: "Enemysanity installed".
 
-**Status:** built (2026-10-04), installing since the overload fix (the log, 2026-10-04); not yet seen in game.
+**Status:** built (2026-10-04), installing since the overload fix (the log, 2026-10-04); not yet seen in game. Since
+build step 76 (2026-10-10) new seeds send no `free_sales` (Beette sells at 150 again, seen); the mod still reads it, so
+a seed made before then keeps her free.
 
 *Code: `World/FreeSales.cs`, `Core/SeedData.cs` (`FreeSales`).*
 

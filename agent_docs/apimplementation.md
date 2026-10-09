@@ -147,6 +147,7 @@ this file and that doc disagree, that doc is right.
 73. [Build step 73: the Scanner Room kept between the outside and the inside](#build-step-73-the-scanner-room-kept-between-the-outside-and-the-inside)
 74. [Build step 74: the scan a location, flag 160 with it](#build-step-74-the-scan-a-location-flag-160-with-it)
 75. [Build step 75: HB asks for the Explorer Permit from the start](#build-step-75-hb-asks-for-the-explorer-permit-from-the-start)
+76. [Build step 76: Beette's Flower Key at its price again](#build-step-76-beettes-flower-key-at-its-price-again)
 
 **How it works**
 
@@ -762,9 +763,9 @@ be wrong.
     - **Prices back to vanilla, per NPC** (the user: "make everything cost the games vanilla amount, or require an
       item/s"; "it would have to be a per npc decision"): each paid service is *always an item* (the boat: the Boat
       Ticket stays), *a yaml choice, item or berries* (the ant tunnels, Next 57's tickets), or *berries*; decided row
-      by row. Beette's Flower Key (`FreeSale`, build step 46) and the ant tunnel miners (`free_ant_tunnels`, build step
-      45) go back to their prices: `free_sales` and `free_ant_tunnels` dropped from slot_data (the mod reads a missing
-      key as "not free", so older seeds keep theirs).
+      by row. The ant tunnel miners (`free_ant_tunnels`, build step 45) go back to their prices: `free_ant_tunnels`
+      dropped from slot_data (the mod reads a missing key as "not free", so older seeds keep theirs). Beette's Flower
+      Key is back at 150 already, `free_sales` gone (build step 76, 2026-10-10).
     - **Tests then:** berry items never in a rule; every priced location needs the event; prices within 1-999; no farm
       on the start map, a timer enemy or a limit enemy; `Berries(...).to_dict()` equals the event's `Has`; the ant
       tunnels and Beette depend on the event.
@@ -4992,11 +4993,9 @@ becomes progression (`TestClassifications` holds the two together).
 
 **Tests:** `TestFlowerKeySeller` (Beette present; the sale free and a location with its give).
 
-**Status:** built (2026-10-04), not yet seen in game; its check needs a new seed (the running one's server has no
-location 78); tests not run yet (batched before the push).
+**Status:** built (2026-10-04); the free price undone by build step 76 (2026-10-10), Beette and her location kept.
 
-*Code: `logic/bee_kingdom_hive.py`, `data_types.py` (`FreeSale`), `slot_data.py` (`free_sales`), `data/items.json`
-(Flower Key); tests `test_slot_data.py`.*
+*Code: `logic/bee_kingdom_hive.py`, `data/items.json` (Flower Key); tests `test_slot_data.py`.*
 
 ## Build step 47: Enemysanity, every map enemy a location
 
@@ -5957,6 +5956,25 @@ mod guide, step 51). Test `TestHBsLab`.
 at once, the permit shown, the computer then offering Single Battles and Rush Mode.
 
 *Code: `logic/bee_kingdom_hive.py` (`DIALOGUE_FLAGS`, the story event). The mod: `World/KeptOpen.cs`, unchanged.*
+
+## Build step 76: Beette's Flower Key at its price again
+
+**Asked (the user, 2026-10-10, mapping the Balcony, `BeehiveBalcony`):** "lets change the flower key back to vanilla
+cost/price". Build step 46 made her sale free; Next 63 had planned this return with the berry rule.
+
+**Built** (the apworld only): her `FreeSale` gone, and with it the last free sale, so `free_sales` leaves slot_data and
+`FreeSale` leaves `data_types.py`. The mod keeps reading the key (the mod guide, step 43): a missing one means nothing
+is free, and a seed made before this keeps her free. She stays present from the start (build step 9) and her sale stays
+location 78. Its rule: nothing in the room (the user: everything there needs nothing), the 150 berries with Next 63's
+`Berries(...)`, as for every seller. Tests `TestFlowerKeySeller` (no `free_sales`; the sale still a location with its
+give), `TestBalcony`.
+
+**Status:** built (2026-10-10); seen the same day in seed `AP_70580691250444408633` through the dev `liveslot` (its
+file with `free_sales` emptied, since `liveslot` only lays keys over the seed's): "So...? 150 berries for the house",
+refused with 115 berries in the bag.
+
+*Code: `logic/bee_kingdom_hive.py` (location 78), `data_types.py`, `logic/__init__.py`, `data_tables.py`,
+`slot_data.py`. The mod: `World/FreeSales.cs`, unchanged.*
 
 # How it works
 

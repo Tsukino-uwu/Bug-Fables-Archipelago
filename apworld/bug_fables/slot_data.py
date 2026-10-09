@@ -5,12 +5,12 @@ from collections.abc import Callable, Iterable, Mapping
 from typing import TYPE_CHECKING, Any
 
 from .data_tables import (ACTIVATION_FLAGS, ARTIFACT_WRITERS, ARTIFACTS, DAY_NIGHT, DIALOGUE_FLAGS, DOOR_ROWS,
-                          ENTITIES_MOVED, FLAGS_WITH, FREE_SALES, HELD_UNTIL, HELD_UNTIL_ITEM, ITEM_NAME_TO_ID, ITEMS,
-                          KEPT_OPEN, KEPT_PRESENT, LIMIT_FLAGS, LOCATION_NAME_TO_ID, PRESENT_FROM, PRESENT_WITH_ITEM,
-                          ROADBLOCKS, SCENE_CAMERAS, SCENERY_HIDDEN, SCENERY_MOVED, SCENERY_OFF, SCENERY_PRESENT,
-                          SCENES_KEPT_AWAY, STORY_ONLY_MAPS, TIME_SWITCHES)
+                          ENTITIES_MOVED, FLAGS_WITH, HELD_UNTIL, HELD_UNTIL_ITEM, ITEM_NAME_TO_ID, ITEMS, KEPT_OPEN,
+                          KEPT_PRESENT, LIMIT_FLAGS, LOCATION_NAME_TO_ID, PRESENT_FROM, PRESENT_WITH_ITEM, ROADBLOCKS,
+                          SCENE_CAMERAS, SCENERY_HIDDEN, SCENERY_MOVED, SCENERY_OFF, SCENERY_PRESENT, SCENES_KEPT_AWAY,
+                          STORY_ONLY_MAPS, TIME_SWITCHES)
 from .data_types import (DayNight, DialogueFlag, DoorRow, EntityMove, EntityRef, FlagEntity, FlagSwap, FlagWith,
-                         FreeSale, ItemEntity, MapScene, SceneCamera, SceneryMove, Source, TimeSwitch)
+                         ItemEntity, MapScene, SceneCamera, SceneryMove, Source, TimeSwitch)
 from .options import ShopContents
 
 if TYPE_CHECKING:
@@ -76,8 +76,8 @@ def _pickup(source: Source) -> dict[str, Any]:
     return pickup
 
 
-def _entities(entries: Iterable[EntityRef | FlagEntity | ItemEntity | DialogueFlag | FlagSwap | FreeSale | DayNight
-                                  | TimeSwitch | SceneryMove | EntityMove | SceneCamera | MapScene | DoorRow | FlagWith]
+def _entities(entries: Iterable[EntityRef | FlagEntity | ItemEntity | DialogueFlag | FlagSwap | DayNight | TimeSwitch
+                                  | SceneryMove | EntityMove | SceneCamera | MapScene | DoorRow | FlagWith]
               ) -> list[dict[str, Any]]:
     return [entry.to_slot() for entry in entries]
 
@@ -142,8 +142,6 @@ def build_slot_data(world: BugFablesWorld) -> Mapping[str, Any]:
         # turns one set any other way back off.
         "goal_flags": [{"flag": flag, "events": list(ARTIFACT_WRITERS[flag])}
                        for flag in sorted({artifact.source.flag for artifact in ARTIFACTS})],
-        # Sellers' lines the client makes free ([{"map", "lines"}]): their price commands and written price to 0.
-        "free_sales": _entities(FREE_SALES),
         # Day maps whose night the client switches at will ([{"day", "night", "from", "until", "first_event", "skips",
         # "first_map", "first_discovery"}]), each map's switch NPC ([{"map", "entity", "at", "day", "night"}], each of
         # the last two its line, then its staying and switching choices), and scenery set where a scene would leave it.

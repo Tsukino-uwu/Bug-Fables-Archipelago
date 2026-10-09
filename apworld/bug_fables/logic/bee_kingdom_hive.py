@@ -4,17 +4,17 @@ from __future__ import annotations
 
 from rule_builder.rules import False_, Has
 
-from ..custom_rules import LATER_CHAPTERS
-from ..data_types import (ALWAYS_SET, Area, DialogueFlag, DoorRow, EntityRef, FlagWith, FreeSale, Give, Location,
-                          Pickup, Source, StoryEvent, Transfer)
+from ..data_types import (ALWAYS_SET, Area, DialogueFlag, DoorRow, EntityRef, FlagWith, Give, Location, Pickup, Source,
+                          StoryEvent, Transfer)
 
 # Mothiva's scene in the Main Area (Event86, flag 173): talking to her, from the start; it brings the clothing stall.
 _MOTHIVA_SEEN = "Mothiva's Show Seen"
 
 LOCATIONS = (
-    # Beette sells the Flower Key (the plaza's red house) on the balcony, free in a seed; her next line sets flag 228.
+    # Beette sells the Flower Key (the plaza's red house) on the balcony at her price, 150 berries (the user,
+    # 2026-10-10); her first talk sets 227 for the offer, her next line 228. The berries in the logic come with Next 63.
     Location("Bee Kingdom Hive: Balcony, Beette's Sale", 78, "BeehiveBalcony",
-             Source(flag=228, give=Give(map="BeehiveBalcony", type=1, item=54)), reach=LATER_CHAPTERS),
+             Source(flag=228, give=Give(map="BeehiveBalcony", type=1, item=54)), no_jump=True),
     # Jaune's Gallery (JaunesGallery; named by the user, 2026-10-09): one region, its door free; a Bad Book on the left
     # side, behind paintings lying on the floor, nothing needed.
     Location("Bee Kingdom Hive: Jaune's Gallery, Behind the Paintings", 207, "JaunesGallery",
@@ -88,10 +88,6 @@ SCENERY_PRESENT = (
     # And its open model, shown in the game from 169.
     EntityRef("BeehiveMainArea", "Base/ThroneDoors (1)"),
 )
-FREE_SALES = (
-    # Her offer ("150 berries for the house") and the sale's price commands.
-    FreeSale("BeehiveBalcony", (20, 21)),
-)
 # The Scanner Room's way on, a door at its top into the main area's bottom, copied from its bottom door, and the main
 # area's bottom exit sent back into it, landing inside the gate (the user, 2026-10-09: "copy the bottom entrance/door
 # how it works, place it where the gate is, and redirect how you come in/out of it"); spots mirrored from the bottom
@@ -118,6 +114,7 @@ MAP_AREAS = (
     # The Main Area (BeehiveMainArea; named by the user, 2026-10-09): one region, every door free (the Throne Room's
     # and Jaune's Gallery's kept open, its bottom exit into the Scanner Room's top).
     # HB's Lab (HBsLab): one region, its one door free; the gate at its top only scenery.
+    # The Balcony (BeehiveBalcony; named by the user, 2026-10-10): one region, its one door free.
 )
 TRANSFERS = (
     # The bottom's elevator bee sends the party down to Defiant Root's Beehive Lift for nothing, onto its platform.

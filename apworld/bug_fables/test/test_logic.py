@@ -1258,6 +1258,20 @@ class TestHBsLab(BugFablesTestBase):
                       self.world.fill_slot_data()["dialogue_flags"])
 
 
+class TestBalcony(BugFablesTestBase):
+    # BeehiveBalcony, the Balcony (the user, 2026-10-10): one region, its door free; Beette's sale needs nothing in the
+    # room, at her price (build step 76), its berries with Next 63.
+
+    def test_one_region(self) -> None:
+        parts = {r.name for r in self.multiworld.get_regions(self.player) if r.name.startswith("BeehiveBalcony")}
+        self.assertEqual(parts, {"BeehiveBalcony"})
+
+    def test_sale_free_to_reach(self) -> None:
+        spot = self.multiworld.get_location("Bee Kingdom Hive: Balcony, Beette's Sale", self.player)
+        self.assertEqual(spot.parent_region.name, "BeehiveBalcony")
+        self.assertTrue(spot.access_rule(self.state_with()))
+
+
 class TestScannerRoom(BugFablesTestBase):
     # BeehiveScannerRoom, the Scanner Room (the user, 2026-10-09): one region, nothing needed across; kept between the
     # outside and the inside (build step 73), its gate open (72), its scan location 208 with flag 160 (74).

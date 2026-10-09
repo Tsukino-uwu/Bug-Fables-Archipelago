@@ -316,9 +316,10 @@ class TestFlowerKeySeller(BugFablesTestBase):
     def test_beette_present(self) -> None:
         self.assertIn({"map": "BeehiveBalcony", "entity": "smug bee"}, self.world.fill_slot_data()["kept_present"])
 
-    def test_beette_sale_free_and_a_location(self) -> None:
+    # At her price again (build step 76): no free_sales, which the client reads as nothing free.
+    def test_beette_sale_at_price_and_a_location(self) -> None:
         data = self.world.fill_slot_data()
-        self.assertIn({"map": "BeehiveBalcony", "lines": [20, 21]}, data["free_sales"])
+        self.assertNotIn("free_sales", data)
         sale = str(self.world.location_name_to_id["Bee Kingdom Hive: Balcony, Beette's Sale"])
         self.assertEqual(data["location_gives"][sale], {"map": "BeehiveBalcony", "type": 1, "item": 54})
 

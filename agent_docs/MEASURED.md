@@ -1673,6 +1673,15 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   say their names, `Event218`). In a seed HB asks line 50 from the start (seen: asked at once, the permit shown, then
   the computer offered Single Battles and Rush Mode; build step 75). The assistant crow talks by flags 231, 246, 247,
   234. No pickups, hazards or map enemies.
+  **`BeehiveBalcony`, the Balcony (2026-10-10, the user; named by the user):** one floor and one door (`laodzone`, to
+  `BeehiveMainArea`), everything reachable with nothing (the user). Beette (`smug bee`, made from flag 299) talks by
+  flag: line 19 from the start, which ends by setting 227 (the game's text, `textsearch`); 20 from 227, her offer; 24
+  from 228, which her line 23 sets after the sale (`|flag,228,true|`). The telescope (`telescope`, `Event127`) shows a
+  view of Bugaria and records discovery 26 the first time; it sets no flag. NPCs by flag: two ladybugs (until 299), Gen
+  and Eri (until 167, their line 3 runs `Event86`, whose balcony part talks and sets 167, the party not moved), Kenny
+  (`Kenny - Duplicate`, needs 598 and 86, until 599 or 299), a guard, a walking judge bee and the telescope's owner. In
+  a seed Beette is kept present and sells at her price again (seen: "So...? 150 berries for the house", refused with 115
+  in the bag; build step 76). No pickups, flag-switched scenery, hazards, auto-start scenes or map enemies.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

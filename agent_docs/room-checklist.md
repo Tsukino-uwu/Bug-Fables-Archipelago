@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**157 of 244 done.**
+**158 of 244 done.**
 
 ## Outskirts
 
@@ -263,7 +263,9 @@ as it is, a frozen record.
   #35)
 - [x] HBsLab (68) — HB's Lab; HB asks for the Explorer Permit from the start (build step 75); for the quest pass:
   B.O.S.S.'s Spy Specs (flag 164) and Detector (165), at its 2nd and 5th fights, which list only bosses already met
-- [ ] BeehiveBalcony (69)
+- [x] BeehiveBalcony (69) — the Balcony; Beette's sale (location 78) at her price again (build step 76), its berries
+  with Next 63; for the quest pass: Kenny (598 to 599) and Gen and Eri's talk (`Event86`, sets 167); for the discovery
+  sweep: the telescope (`Event127`, discovery 26)
 - [ ] HoneycombsLab (70)
 - [x] JaunesGallery (71) — Jaune's Gallery; its door kept open from the main area (build step 71); for the quest
   pass: Jaune's quest (Event162, flags 444-446)
