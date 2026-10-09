@@ -368,6 +368,10 @@ line at the bottom of the screen; Enter runs, Escape closes. The player is froze
   boss a test party can't hit, such as the spider in the air). With a number, every enemy above it brought down to it
   (2026-10-08, the user: to test a scripted HP end, such as the swamp boss's at 10). Test files only.
 - `take <item|key> <id>`: removes one from the inventory, as the game's own `removeitem` does. Test files only.
+- `give <item|key> <id>`: `take`'s other half, as a received item is added: a key item once, an item if the bag has
+  room. With `take`, an ability's key item (`Abilities.Keys`: the Dash 206, the Horn Slash 202) goes and comes back
+  one at a time (2026-10-09, the user: "nice to have something for giving/taking the abilities away for testing").
+  Test files only.
 - `warpicon leaf|key|scroll`: the Warp button's icon (the leaf is the default), shown the next time the pause menu
   opens.
 - `warpcolor orange|pink|lime|<hue>`: the drawn backdrop's colour, for `warpicon scroll` (a design test).

@@ -372,6 +372,28 @@ namespace BugFablesAP
                         return MainManager.instance.items[kind].Remove(takeId) ? $"took {parts[1]} {takeId}"
                             : $"no {parts[1]} {takeId} to take";
                     }
+                    case "give":
+                    {
+                        // take's other half, as ItemReceiver adds a received item: a key item once, an item if the bag
+                        // has room. Test files only.
+                        int kind = parts.Length > 1 && parts[1] == "key" ? 1 : parts.Length > 1 && parts[1] == "item"
+                            ? 0 : -1;
+                        if (kind < 0 || parts.Length < 3 || !int.TryParse(parts[2], out int giveId))
+                        {
+                            return "give <item|key> <id>";
+                        }
+                        List<int> list = MainManager.instance.items[kind];
+                        if (kind == 1 && list.Contains(giveId))
+                        {
+                            return $"key {giveId} already held";
+                        }
+                        if (kind == 0 && list.Count >= MainManager.instance.maxitems)
+                        {
+                            return "the bag is full";
+                        }
+                        list.Add(giveId);
+                        return $"gave {parts[1]} {giveId}";
+                    }
                     case "warpicon": return WarpButton.SetIcon(parts.Length > 1 ? parts[1] : "");
                     case "warpcolor": return WarpButton.SetColour(parts.Length > 1 ? parts[1] : "");
                     case "heal":

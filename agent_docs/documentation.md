@@ -396,12 +396,19 @@ the save point or a door, saying `(<name> isn't present yet)`.
 door re-entered the room mid-transfer, and the game's own transfer threw in its fade (`NullReferenceException` in
 `TransferMap`, twice). Queued `loc`, `warp` and `liveslot` now also wait while `MainManager.roomtransition` is set.
 
+**Items one at a time** (2026-10-09): testing what each learned ability does alone needs them to come and go one by
+one, which a seed starting with all of them can't do. `take` already removed one; `give` adds it back as a received
+item is added (a key item once, an item if the bag has room). The user: "probly nice to have something for
+giving/taking the abilities away for testing anyway". First used to hand the Desert Key over for a look inside the
+Defiant Root storage.
+
 **Status:** done: hot reload, the build-and-copy scripts and the dev console are in use; `liveslot` seen working
 (2026-10-04): three apworld changes in a row (the Golden Path door, its blocker, its tunnel) shown in the running game
 with no new seed or file.
 
-*Code: `DevConsole.cs` (the console, the command file, `liveslot`), `LiveSlotData.cs`, `DevConsole.Warp.cs` (`loc`,
-`warp`, `unstick`), `DevConsole.Party.cs` (`spawn`), `DevConsole.Inspect.cs` (`flag`, `tree`).*
+*Code: `DevConsole.cs` (the console, the command file, `liveslot`, `take`, `give`), `LiveSlotData.cs`,
+`DevConsole.Warp.cs` (`loc`, `warp`, `unstick`), `DevConsole.Party.cs` (`spawn`), `DevConsole.Inspect.cs` (`flag`,
+`tree`).*
 
 ## 6. Probes: logging what the game does while you play
 
