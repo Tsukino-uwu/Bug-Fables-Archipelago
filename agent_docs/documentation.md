@@ -3236,13 +3236,17 @@ Found mapping the Ancient Castle's treasure room (2026-10-09): taking the artifa
 scene files that chapter's main quest (11 to 17) at a fixed place in the quest lists, `boardquests[2].Insert(3, 14)`
 in the castle's, and `List.Insert` throws when the list is shorter than that place. In story order it never is, since
 the chapters before have filed theirs; in a seed, any chapter's scene can come first. Nine such inserts in seven scenes
-(`Event45`, 73, 99, 118, 142, 194, 203; `MEASURED.md`, the treasure room), each throwing after the scene has set its
-artifact flag, so the party stays frozen with the rest of the scene unrun.
+(`Event45`, 73, 99, 118, 142, 194, 203; `MEASURED.md`, the treasure room), and a throw leaves the party frozen with
+the rest of its scene unrun: the castle's after its artifact flag, `Event142` before its own (347), so that chapter's
+artifact would never be set. The last chapter's (`Event203`) already wraps its insert and appends the quest when it
+throws, the same fallback as here; patching it too changes nothing.
 
 With Archipelago on, a transpiler on each of those scenes' coroutines swaps every `List<int>.Insert` for a call that
 takes the same list, place and quest and, when the place is past the end, files the quest at the end instead. The
 list is the game's own field, written by the game's own `Insert`; only the order of the done list can differ from a
-story-order save. With Archipelago off, the call inserts exactly as the game does. The log names each insert it
+story-order save, and the game reads those lists only by what they contain, so a quest filed at the end just shows
+lower on the quests page (a review of the game's reads, 2026-10-09). With Archipelago off, the call inserts exactly as
+the game does. The log names each insert it
 guards (`[chapters] installed: quest 14 at 3`) and each quest it moves (`[chapters] quest 14 filed at 1, not 3`).
 
 **Status:** built (2026-10-09); seen the same day in seed `AP_70580691250444408633`: the castle's artifact scene

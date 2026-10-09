@@ -1585,7 +1585,10 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   party frozen (seen; the dev `unstick` freed it). Each chapter's main quest (11 to 17) is filed at a fixed index the
   same way: `boardquests[1].Insert(1, 12)` in `Event45`, `boardquests[2].Insert(n, id)` in `Event73` (1, 12),
   `Event99` (2, 13), `Event118` (3, 14), `Event142` (4, 15), `Event194` (5, 16), `Event203` (6, 17); index 0 inserts
-  never throw. No pickups, discoveries, hazards or map enemies.
+  never throw. `Event142` inserts before it sets 80 and its artifact flag 347; `Event194`'s insert runs only in a
+  branch after 346 is set; `Event203` already wraps its insert, `try { Insert(6, 17) } catch { Add(17) }`. The game
+  reads `boardquests[1]` and `[2]` only by contents (`Contains`, `Count`, `Remove`, the quests page in stored order),
+  never by position (a review, 2026-10-09). Used by `ChapterQuests.cs`. No pickups, discoveries, hazards or map enemies.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
