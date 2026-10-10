@@ -814,6 +814,13 @@ be wrong.
 
 **Known issues:**
 
+- **Chapter 4's opening may freeze after an early chapter 3 finale** (found 2026-10-10 by a research workflow, from the
+  code; not seen in game). With the storage door open (build step 77) a seed can do the overseer's escort (flag 218)
+  and the Core's finale (`Event99`, flag 299) early; entering the Throne Room then starts chapter 4's opening, which
+  walks Neolith, made only after chapter 2's end, and waits for him for good. The fix: hold that scene until chapter
+  2's end, as chapter 2's briefing is held (build step 9). Making the finale available from the start (the user's
+  choice pending, `room-checklist.md`, the Core) needs it too: all seven of its characters present through
+  `present_from` (so it plays once), and Vi for B-33's fight.
 - **The bandit hideout's capture takes the seed's ability items** (found 2026-10-09 by the key-chain research, from the
   code; not seen in game). `Event109`'s capture moves every item and key item into `flagstring[8]` until the storage
   chest gives them back, the mod's own move and ability keys (201-211), the Boat Ticket and the submarine included.

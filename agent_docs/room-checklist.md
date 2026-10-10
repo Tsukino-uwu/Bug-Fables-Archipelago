@@ -284,7 +284,10 @@ as it is, a frozen record.
   sweep: the portrait (discovery 15); for the sellers' pass: the quarters' Magic Seed (25 berries, line 11)
 - [x] HoneyFactoryCore (75) — one region, its door free; for the quest and enemy passes: the chapter 3 finale
   (`Event99`, from 218, enemy 46, prize medal 6, sets 299), its gate open only then; to check again (the user,
-  2026-10-10): whether the finale can be there from the start, a research workflow's answer pending
+  2026-10-10): the finale from the start, researched (Known issues, chapter 4's opening): left to the story, or open
+  from the start played once, the fight a location (the user's pick pending); in game, three things to look at: the
+  cube the finale hides in `DesertTrenchMiddle`, quest 28's Madeleine scenery at the Golden Hills dungeon entrance,
+  and leaving the storage escort midway
 - [x] FactoryProcessingFirstRoom (83) — the First Room; its switch (location 70, the Shield's) a basic attack, the
   platforms it starts the only way across (the Shield); the bottom a drop, up to the right only; for the quest pass:
   the tram to Malbee's room (from 211, `Event68`; left to the story, the user)
