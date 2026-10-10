@@ -1345,6 +1345,37 @@ class TestWorkerRooms(BugFablesTestBase):
         self.assertTrue(desk.access_rule(self.state_with("Bee Fly")))
 
 
+class TestFirstRoom(BugFablesTestBase):
+    # FactoryProcessingFirstRoom (the user, 2026-10-10): the switch on the right hit with a basic attack starts the
+    # platforms for good; across to the left only on them, the Shield (Bee Fly works only before the switch, so never
+    # counts); the bottom a drop from either side, Jump or Bee Fly up to the right only.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+
+    def test_switch_needs_a_basic_attack(self) -> None:
+        switch = self.multiworld.get_location("Honey Factory: First Room, Switch", self.player)
+        self.assertEqual(switch.parent_region.name, "FactoryProcessingFirstRoom")
+        self.assertFalse(switch.access_rule(self.state_with("Jump", "Bee Fly", "Shield")))
+        self.assertTrue(switch.access_rule(self.state_with("Horn Slash")))
+
+    def test_left_only_on_the_platforms(self) -> None:
+        for way in ("FactoryProcessingFirstRoom to FactoryProcessingFirstRoom (Left)",
+                    "FactoryProcessingFirstRoom (Left) to FactoryProcessingFirstRoom"):
+            rule = self.multiworld.get_entrance(way, self.player).access_rule
+            self.assertFalse(rule(self.state_with("Bee Fly", "Jump", "First Room Platforms Running")))
+            self.assertFalse(rule(self.state_with("Shield")))
+            self.assertTrue(rule(self.state_with("Shield", "First Room Platforms Running")))
+
+    def test_bottom_up_to_the_right_only(self) -> None:
+        up = self.multiworld.get_entrance("FactoryProcessingFirstRoom (Bottom) to FactoryProcessingFirstRoom",
+                                          self.player)
+        self.assertTrue(up.access_rule(self.state_with("Jump")))
+        self.assertTrue(up.access_rule(self.state_with("Bee Fly")))
+        drop = self.multiworld.get_entrance(
+            "FactoryProcessingFirstRoom (Left) to FactoryProcessingFirstRoom (Bottom) (drop)", self.player)
+        self.assertFalse(drop.access_rule(self.state_with("Jump")))
+        self.assertTrue(drop.access_rule(self.state_with("Jump", "Shield", "First Room Platforms Running")))
+
+
 class TestCore(BugFablesTestBase):
     # HoneyFactoryCore (the user, 2026-10-10): one region, its door free; the gate to the boss arena the story's.
     def test_one_region(self) -> None:

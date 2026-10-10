@@ -1,5 +1,3 @@
-from BaseClasses import CollectionState
-
 from . import BugFablesTestBase
 from ..abilities import ABILITIES
 
@@ -35,15 +33,6 @@ class TestLearnedAbilities(BugFablesTestBase):
         for loc in LOCATIONS:
             if loc.source.flag in flags and not loc.pending:
                 self.assertIn(self.world.location_name_to_id[loc.name], silent)
-
-    def test_story_order(self) -> None:
-        # Until its room is mapped, an unlock spot needs every ability taught before it: the Shield's, the Dash.
-        spot = self.multiworld.get_location("Honey Factory: First Room, Switch", self.player)
-        state = CollectionState(self.multiworld)
-        self.collect_all_but(["Progressive Dash"], state)
-        self.assertFalse(spot.access_rule(state))
-        state.collect(self.get_item_by_name("Progressive Dash"), prevent_sweep=True)
-        self.assertTrue(spot.access_rule(state))
 
     def test_the_horn_dash_is_the_second_copy(self) -> None:
         # Bee Fly's spot comes after the Horn Dash's: it takes both copies of the Progressive Dash.

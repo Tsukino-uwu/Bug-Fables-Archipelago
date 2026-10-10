@@ -1730,6 +1730,16 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   arena, then 299, 176 and 75 set, prize medal 6, two medals added to a shop, and a save prompt, the party still in the
   room. From 299 the three are gone and the gate hidden: the arena open and empty. No pickups, hazards, auto-start
   scenes or map enemies.
+  **`FactoryProcessingFirstRoom`, the First Room (2026-10-10, the user; the name kept):** three areas. The right: the
+  door to the Lobby (`loadzonemainarea`) and a switch (`switch`, data `1 95`) hit with a basic attack, which plays
+  `Event95` (the Shield taught, flag 20; it moves all three party members) and starts the moving platforms
+  (`PathPlatform` x3) for good. The left: the door on (`loadzoneforward`, to `FactoryProcessing2`). Between them a gap
+  over the bottom: once the switch is hit, crossing either way takes the platforms and the Shield, nothing else; before
+  it, Bee Fly crosses from the right, and the switch, once hit, takes that away (the user). The bottom: a drop from
+  either side, a one-way; Jump or Bee Fly back up to the right only, platforms running or not, never to the left (the
+  user). The tram bot (`trambot`) rides to `FactoryProcessingMalbee` only from flag 211 (line 9, then line 10 runs
+  `Event68`, the elevator scene's factory part); `Base/Tram` stands until 211. Map enemies: a Turret by the left door,
+  a Denmuki and a bee-bot on the bottom. No pickups or auto-start scenes.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left

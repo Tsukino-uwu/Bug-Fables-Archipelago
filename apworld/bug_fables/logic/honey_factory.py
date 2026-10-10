@@ -2,10 +2,11 @@
 room (room-checklist.md)."""
 from __future__ import annotations
 
-from rule_builder.rules import False_
+from rule_builder.rules import False_, Has
 
-from ..custom_rules import LATER_CHAPTERS, CanUse, one_way
-from ..data_types import ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, ItemShop, Location, Pickup, Source
+from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, one_way
+from ..data_types import (ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, ItemShop, Location, Pickup, Source,
+                          StoryEvent, Transfer)
 
 # The Factory Pass (key item 95), found in the factory: not an item yet, so the later chapters' stand-in until its
 # rooms are mapped. In a seed it won't be used up (apimplementation.md, Next 67), so one opens every lock. The Worker
@@ -13,13 +14,15 @@ from ..data_types import ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, ItemSh
 # or Bee Fly alone (the user, 2026-10-10).
 FACTORY_PASS = LATER_CHAPTERS
 _UP = CanUse("Jump") | CanUse("Bee Fly")
+# The First Room's switch hit (Event95, flag 20): its moving platforms run from then on, for good.
+_PLATFORMS_RUNNING = "First Room Platforms Running"
+_ON_THE_PLATFORMS = Has(_PLATFORMS_RUNNING) & CanUse("Shield")
 
 LOCATIONS = (
-    # Where the game teaches the Shield (flag 20); the later chapters' story-order stand-in, every ability taught before
-    # it.
-    Location("Honey Factory: First Room, Switch", 70, "FactoryProcessingFirstRoom",
-             Source(event=95, flag=20),
-             rule=CanUse("Beemerang Halt") & CanUse("Dash"), reach=LATER_CHAPTERS),
+    # The First Room's switch (FactoryProcessingFirstRoom; the user, 2026-10-10), on its right side, hit with a basic
+    # attack: the scene where the game teaches the Shield (Event95, flag 20).
+    Location("Honey Factory: First Room, Switch", 70, "FactoryProcessingFirstRoom", Source(event=95, flag=20),
+             rule=ANY_ATTACK, no_jump=True),
     # The Lobby's shop on its bottom floor, opened by talking to the bee outside it (Event80, flag 176), nothing needed
     # (the user, 2026-10-10: "lets add the shop at the bottom as locations"): first purchase a check, then its own item.
     *(Location(f"Honey Factory: Lobby, Shop {slot}", 212 + slot - 1, "HoneyFactoryEntrance",
@@ -29,6 +32,12 @@ LOCATIONS = (
     # The Worker Rooms' office (named by the user, 2026-10-10): a Shock Candy on the desk, Jump or Bee Fly.
     Location("Honey Factory: Worker Rooms, On the Desk", 229, "HoneyFactoryWorkerRooms",
              Source(flag=728, pickup=Pickup(map="HoneyFactoryWorkerRooms", type=0, item=75)), rule=_UP, no_jump=True),
+)
+
+STORY_EVENTS = (
+    # The same switch hit, which starts the room's platforms for good.
+    StoryEvent("Honey Factory: First Room, Platforms Running", _PLATFORMS_RUNNING, "FactoryProcessingFirstRoom",
+               Source(event=95, flag=20), rule=ANY_ATTACK, no_jump=True),
 )
 
 KEPT_PRESENT = (
@@ -59,8 +68,19 @@ MAP_AREAS = (
     # inside the room: the office (its door, the desk, the portrait, the PC) the map's own region, nothing needed to go
     # in, out or to the portrait; the sleeping quarters (the beds door and three workers), cut off.
     Area("HoneyFactoryWorkerRooms", "Sleeping Quarters", ("loadzonebeds",), False_()),
+    # The First Room (FactoryProcessingFirstRoom; the user, 2026-10-10): the right (the door to the Lobby, the switch)
+    # the map's own region; the left (the door on) across a gap, on the moving platforms once the switch has started
+    # them, the Shield, both ways. Bee Fly across works only before the switch, which stays hit, so it never counts
+    # (room-logic.md, rule 3). The bottom below: a drop from either side, Jump or Bee Fly up to the right only.
+    Area("FactoryProcessingFirstRoom", "Left", ("loadzoneforward",), _ON_THE_PLATFORMS),
+    Area("FactoryProcessingFirstRoom", "Bottom", (), one_way(None, _UP), out=_UP),
     # HoneyFactoryCore (2026-10-10): one region, its one door free; the gate at its top shut until the chapter 3 finale
     # (Event99, which sets 299 and ends in the room), behind it only the empty boss arena (the user).
+)
+TRANSFERS = (
+    # The First Room's drop from the left to the bottom: back round by the right and the platforms.
+    Transfer("drop", "FactoryProcessingFirstRoom", "FactoryProcessingFirstRoom", None, two_way=False,
+             way_back=_UP & _ON_THE_PLATFORMS, from_area="Left", to_area="Bottom"),
 )
 DOOR_RULES = (
     # The Lobby's processing door, locked until the Factory Pass is used on it (keything, Event59 key index 4, then
