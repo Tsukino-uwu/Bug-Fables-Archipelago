@@ -811,6 +811,15 @@ be wrong.
     mapped; until then the Lobby's processing door has a stand-in (`FACTORY_PASS`, the later chapters,
     `logic/honey_factory.py`), and the Worker Rooms' pass (flag 178: Jump and the Beemerang Toss, or Bee Fly alone, the
     user) stays the game's own pickup, since a location there could hold another item while the door still needs a pass.
+68. **Chapter-gated characters and scenes, fixed for good** (decided 2026-10-10, the user: "are there any other
+    npc/flags that only excist at/after certain chapters ? ... that will become a real issue for the goal of having
+    things be openworld/anythign doable in any order"; "a really important thing to take a look at and properly fix
+    instead of just pausing/delaying the npc/scenes"). Found with the Core's finale: chapter 4's opening walks Neolith,
+    made only after chapter 2's end (Known issues). First a census, from the entity dump and the scenes' code: every
+    character, door and object the game makes only from a chapter flag (or removes at one), and every scene that waits
+    on one or moves one; then each fixed so it works in any order (the character there whenever its scene or service
+    needs it, as build step 9 opens blockers), a hold (`held_until`) only where nothing else works and the user agrees.
+    With Next 64 (the key chains opened), the same direction. After the room mapping, or when the user says.
 
 **Known issues:**
 
