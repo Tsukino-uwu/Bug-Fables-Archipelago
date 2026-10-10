@@ -253,7 +253,9 @@ namespace BugFablesAP
                 return lines;
             }
             string here = EntityMap(map.mapid.ToString());
+            // The day/night switches, and any other entity a map gets a copy of (the Rubber Prison's extra gate lever).
             List<Switch> copies = (seed?.Invoke()?.TimeSwitches ?? new List<Switch>())
+                .Concat(seed?.Invoke()?.EntitiesMoved ?? new List<Switch>())
                 .Where(s => s.Map == here && s.CopyMap != null).ToList();
             if (copies.Count == 0)
             {

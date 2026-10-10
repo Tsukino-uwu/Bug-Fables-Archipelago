@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**183 of 244 done.**
+**184 of 244 done.**
 
 ## Outskirts
 
@@ -365,7 +365,12 @@ as it is, a frozen record.
 - [x] RubberPrisonOffice (229) — the Office; one area; its crank slot (the Wooden Crank, Beemerang Halt to turn, 583)
   opens the Pier's second floor right door, written now; with Next 62: "Empty Bookshelf" (the green History Book, 563:
   Freeze, the horn, Jump and Bee Fly); for the enemy pass: a Wasp Driller (gone from 79)
-- [ ] RubberPrisonThirdFloor (230)
+- [x] RubberPrisonThirdFloor (230) — the Third Floor; the bottom right (its doors to Electric Cells and the Pier, its own
+  lever behind a gate, not counted); the pocket across spikes (the Shield), up to the middle left on its copied bounce
+  pad (build step 84), a drop back down; the stairs between the middle left and the bottom left free; in the middle
+  left the kept upper lever (build step 81), the Gym door behind a gate (pushed past on arrival), the upper right's
+  stairs behind another (Jump or Bee Fly); the upper right (the Security Room's door) a drop to the bottom right,
+  nothing back up its stairs; no location; for the enemy pass: a Wasp Bomber, a ruffian and a burglar (gone from 79)
 - [ ] RubberPrisonGiantLairBridge (231) — when mapped: the ant tunnel's way in (`bugaria_city.py`, now later chapters
   and the submarine) needs flag 79, set only by this bridge's scene, reached before it only through the Pier's second
   floor right door, so after the Office's crank (the Wooden Crank and Beemerang Halt)

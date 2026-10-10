@@ -223,14 +223,17 @@ class TimeSwitch:
 
 @dataclass(frozen=True, slots=True)
 class EntityMove:
-    """A map entity (by name) standing at `at` (x, y, z) instead of its own spot."""
+    """A map entity (by name) standing at `at` (x, y, z) instead of its own spot. copy: (map, entity) when the map has
+    no such entity of its own, whose entity data row the client adds to this map's under `entity` (as TimeSwitch's)."""
 
     map: str
     entity: str
     at: tuple[float, float, float]
+    copy: tuple[str, str] | None = None
 
     def to_slot(self) -> dict[str, Any]:
-        return {"map": self.map, "entity": self.entity, "at": list(self.at)}
+        return {"map": self.map, "entity": self.entity, "at": list(self.at),
+                **({"copy": {"map": self.copy[0], "entity": self.copy[1]}} if self.copy else {})}
 
 
 @dataclass(frozen=True, slots=True)

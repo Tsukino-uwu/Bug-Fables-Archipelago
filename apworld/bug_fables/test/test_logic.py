@@ -740,7 +740,7 @@ class TestLibrary(_PrisonRoom):
         self.assertTrue(up(self.state_with("Bee Fly")))
 
     def test_rail_walls_hidden(self) -> None:
-        hidden = self.world.fill_slot_data()["scenery_hidden"]
+        hidden = self.world.fill_slot_data()["scenery_off"]
         for wall in ("Base/fence/fence (2)", "Base/fence/fence (3)"):
             self.assertIn({"map": self.MAP, "entity": wall}, hidden)
         self.assertNotIn({"map": self.MAP, "entity": "Base/fence/fence (1)"}, hidden)
@@ -801,16 +801,59 @@ class TestSecurityRoom(_PrisonRoom):
         self.assertTrue(up(self.state_with("Bee Fly")))
 
 
+class TestThirdFloor(_PrisonRoom):
+    # RubberPrisonThirdFloor, the Third Floor (the user, 2026-10-10): the pocket across spikes (the Shield), up to the
+    # middle left on its copied bounce pad and down a drop, both free; the stairs free; the Gym door and the upper
+    # right's stairs behind gates the middle left's lever drops; the upper right a drop down, nothing back up its
+    # stairs.
+    MAP = "RubberPrisonThirdFloor"
+
+    def test_the_pocket(self) -> None:
+        for name in (f"{self.MAP} to {self.MAP} (Pocket)", f"{self.MAP} (Pocket) to {self.MAP}"):
+            with self.subTest(way=name):
+                self.assertFalse(self.way(name)(self.state_with("Bee Fly", "Horn Slash")))
+                self.assertTrue(self.way(name)(self.state_with("Shield")))
+        for a, b in (("Pocket", "Middle Left"), ("Middle Left", "Pocket"), ("Middle Left", "Bottom Left"),
+                     ("Bottom Left", "Middle Left")):
+            name = f"{self.MAP} ({a}) to {self.MAP} ({b})"
+            with self.subTest(way=name):
+                self.assertTrue(self.way(name)(self.state_with()))
+
+    def test_middle_left(self) -> None:
+        for name in (f"{self.MAP} (Middle Left) to {self.MAP} (Gym Door)",
+                     f"{self.MAP} (Gym Door) to {self.MAP} (Middle Left)"):
+            with self.subTest(way=name):
+                self.assertFalse(self.way(name)(self.state_with("Shield", "Jump")))
+                self.assertTrue(self.way(name)(self.state_with("Horn Slash")))
+
+    def test_upper_right(self) -> None:
+        up = self.way(f"{self.MAP} (Middle Left) to {self.MAP} (Upper Right)")
+        self.assertFalse(up(self.state_with("Horn Slash", "Jump")))
+        self.assertFalse(up(self.state_with("Jump", "Shield")))
+        self.assertTrue(up(self.state_with("Horn Slash", "Jump", "Shield")))
+        self.assertNotIn(f"{self.MAP} (Upper Right) to {self.MAP} (Middle Left)",
+                         {e.name for e in self.multiworld.get_entrances(self.player)})
+        drop = self.way(f"{self.MAP} (Upper Right) to {self.MAP} (drop)")
+        self.assertFalse(drop(self.state_with("Horn Slash", "Jump")))
+        self.assertTrue(drop(self.state_with("Horn Slash", "Jump", "Shield")))
+
+    def test_pocket_pad_copied(self) -> None:
+        self.assertIn({"map": self.MAP, "entity": "jumpspring - Archipelago", "at": [-35.8, 0.0, 7.5],
+                       "copy": {"map": "RubberPrisonGym", "entity": "jumpspring"}},
+                      self.world.fill_slot_data()["entities_moved"])
+
+
 class TestPrisonKey(BugFablesTestBase):
-    # The Prison Key, never used up (build step 82): one in the pool, kept at every lock; its spots locations. The Pier's
-    # comes after the Wasp Driller's fight, which brings a Wasp Bomber only Kabbu flips.
+    # The Prison Key, never used up (build step 82): one in the pool, kept at every lock; its spots locations. The
+    # Pier's comes after the Wasp Driller's fight, which brings a Wasp Bomber only Kabbu flips.
     options = {"starting_party_member": "vi"}
 
     def test_spots_are_locations(self) -> None:
         from ..data_tables import vanilla_item
         names = {loc.name for loc in self.world.included_locations if vanilla_item(loc) == "Prison Key"}
         self.assertEqual(names, {"Rubber Prison: Pier, Second Floor Fight", "Rubber Prison: Spike Room, In the Cage",
-                                 "Rubber Prison: Electric Cells, Middle Right Cell", "Rubber Prison: Gym, Crank Puzzle"})
+                                 "Rubber Prison: Electric Cells, Middle Right Cell",
+                                 "Rubber Prison: Gym, Crank Puzzle"})
 
     def test_the_fight_needs_kabbu(self) -> None:
         fight = self.multiworld.get_location("Rubber Prison: Pier, Second Floor Fight", self.player)

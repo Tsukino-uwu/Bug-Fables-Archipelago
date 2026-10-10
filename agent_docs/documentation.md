@@ -108,7 +108,7 @@ anyone curious about the process, or thinking of doing the same for another game
 53. [Strategy and Relay in battle from the start](#53-strategy-and-relay-in-battle-from-the-start)
 54. [The Factory Pass never used up at its locks](#54-the-factory-pass-never-used-up-at-its-locks)
 55. [The Prison Key never used up, the bridge scene included](#55-the-prison-key-never-used-up-the-bridge-scene-included)
-56. [Plain map objects hidden by the seed](#56-plain-map-objects-hidden-by-the-seed)
+56. [An entity copied into a map: the Third Floor's pocket pad](#56-an-entity-copied-into-a-map-the-third-floors-pocket-pad)
 
 ## Where it stands
 
@@ -3461,20 +3461,25 @@ crank and the bridge).
 
 *Code: `World/KeptKeys.cs` (`BridgeScene`, `StillToSweep`, `SetFlag`).*
 
-## 56. Plain map objects hidden by the seed
+## 56. An entity copied into a map: the Third Floor's pocket pad
 
-Found 2026-10-10, mapping the Rubber Prison's Library: its right staircase rail has two invisible copies of its
-collider stacked above it (`Base/fence/fence (2)` and `(3)`: a mesh and a collider, no renderer), which stop a jump
-over the rail onto the shelves. Once the book puzzle slides its shelf away, that jump is the only way left to the book
-on top of the shelves with Jump and the Beemerang Toss. `scenery_hidden` worked only on scenery the game itself
-switches by flag (a `ConditionChecker`, whose own check the mod answers "hide").
+Found 2026-10-10, mapping the Rubber Prison's Third Floor: a pocket of the room, cut off by a gate on the prison-wide
+flag 535, has no lever of its own, so dropping into it with that gate up and without the Shield left only the Warp
+(`apimplementation.md`, build step 84).
 
-With Archipelago on, a postfix on `MapControl.CreateEntities` switches off every `scenery_hidden` object of that map
-that has no `ConditionChecker` (found by its path in the map), logging `[open] <map>: <path> switched off (the seed
-hides it)`, or a warning when the path isn't there. Flag-switched scenery keeps the old way. The dev console's `hide`
-takes a path too, to try one live (`development.md`).
+The day/night switch's copy already did this for one list (step 52): `DayNight.AddCopies`, in
+`MapControl.CreateEntities`' two splits, adds another entity's data row and name to the map's, and the copy is then
+placed. Now `entities_moved` takes the same optional `copy` (map, entity) as `time_switches`, and `AddCopies` reads both
+lists. The pocket got a copy of its room's ground lever first (`globalswitch - Duplicate`, seen working: the same 535
+toggle, synced with the room's others), then, the user's choice, a copy of the Gym's green bounce pad instead
+(`jumpspring`, a plain bounce) as `jumpspring - Archipelago`, at the spot the user stood on: the game's pad in every way.
+The log says `[night] <map>: <map>'s <entity> added as <name>` and `<name> stands at <spot>`.
 
-**Status:** built (2026-10-10); seen the same day through the console's `hide`: with `fence (2)` and `(3)` off, the
-rail jumped over onto the shelves (the user). The seed's own hiding not seen yet.
+Also found the same day: the Library's two invisible rail walls (build step 83) needed no new hook, since
+`scenery_off` (step 52's, `DayNight.cs`) already switches off a map object by its path. A separate hook built for them
+earlier that day was removed. The dev console's `hide` takes a path too, to try one live (`development.md`).
 
-*Code: `World/KeptOpen.cs` (`PlainScenery`), `Dev/DevConsole.cs` (`hide`).*
+**Status:** built (2026-10-10); seen the same day through the dev `liveslot`: the copied lever there, its hit dropping
+the pocket's gate, then the copied pad there, up to the middle left (the user).
+
+*Code: `World/DayNight.cs` (`AddCopies`), `Core/SeedData.cs` (`EntitiesMoved`), `Dev/DevConsole.cs` (`hide`).*

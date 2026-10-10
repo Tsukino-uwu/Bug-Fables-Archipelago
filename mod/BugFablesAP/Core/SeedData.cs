@@ -234,6 +234,8 @@ namespace BugFablesAP
                 Map = e.Value<string>("map"),
                 Entity = e.Value<string>("entity"),
                 At = Vector(e["at"]),
+                CopyMap = e["copy"]?.Value<string>("map"),
+                CopyEntity = e["copy"]?.Value<string>("entity"),
             });
             DoorRows = SlotData.List(data, "door_rows", e => new DoorRows.Row
             {

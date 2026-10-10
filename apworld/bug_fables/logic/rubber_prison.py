@@ -2,11 +2,11 @@
 room (room-checklist.md)."""
 from __future__ import annotations
 
-from rule_builder.rules import CanReachRegion, False_, Has
+from rule_builder.rules import CanReachRegion, False_, Has, True_
 
 from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, WOODEN_CRANK, CanUse, Member, one_way
-from ..data_types import (ALWAYS_SET, Area, EntityRef, FlagSwap, ItemEntity, Location, Pickup, Source, StoryEvent,
-                          Transfer)
+from ..data_types import (ALWAYS_SET, Area, EntityMove, EntityRef, FlagSwap, ItemEntity, Location, Pickup, Source,
+                          StoryEvent, Transfer)
 
 # The one Prison Key, never used up at the prison's four locks in a seed (build step 82).
 PRISON_KEY = Has("Prison Key")
@@ -103,9 +103,9 @@ MAP_AREAS = (
          out=one_way(None, Has(_OFFICE_CRANK)),
          to="RubberPrisonPier (Second Floor)"),
     Area("RubberPrisonPier", "Shortcut Door", ("bossshortcut",), False_(), out=one_way(None, False_())),
-    # The Checkpoint Corridor (RubberPrisonCheckpointCorridor; named by the user, 2026-10-10): two gates that follow flag
-    # 535 opposite ways, one always up, with a lever on each side of each (the right one kept present), so the left
-    # (the map's own region) and the right (the door to the Pier) are an attack apart, both ways (the user).
+    # The Checkpoint Corridor (RubberPrisonCheckpointCorridor; named by the user, 2026-10-10): two gates that follow
+    # flag 535 opposite ways, one always up, with a lever on each side of each (the right one kept present), so the
+    # left (the map's own region) and the right (the door to the Pier) are an attack apart, both ways (the user).
     Area("RubberPrisonCheckpointCorridor", "Right", ("loadzoneexit",), ANY_ATTACK),
     # The top left door to the spike room, behind a locked door (the Explorer Permit, open for good from 538): arriving
     # from the spike room, the game pushes the party past it (seen), a one-way without the permit.
@@ -128,10 +128,10 @@ MAP_AREAS = (
     Area("RubberPrisonCells1", "Left Door", ("loadzoneleft",), PRISON_KEY, out=one_way(None, PRISON_KEY)),
     Area("RubberPrisonCells1", "Right Door", ("loadzoneright",), Has(_CROSSROADS_RIGHT_GATE),
          out=one_way(None, Has(_CROSSROADS_RIGHT_GATE))),
-    # Electric Cells (RubberPrisonCells2; named by the user, 2026-10-10): three rows of cells. The bottom row (the bottom
-    # lever's cell, the Poison Cake's) the map's own region, each bottom door across the electric floor; the electric
-    # moving platforms up to the middle row and the top, the Shield only; down from either, a drop. The top door
-    # behind a Prison Key lock (until 542), the party pushed past it on arrival (seen).
+    # Electric Cells (RubberPrisonCells2; named by the user, 2026-10-10): three rows of cells. The bottom row (the
+    # bottom lever's cell, the Poison Cake's) the map's own region, each bottom door across the electric floor; the
+    # electric moving platforms up to the middle row and the top, the Shield only; down from either, a drop. The top
+    # door behind a Prison Key lock (until 542), the party pushed past it on arrival (seen).
     Area("RubberPrisonCells2", "Left Door", ("loadzoneleft",), _ACROSS_THE_FLOOR),
     Area("RubberPrisonCells2", "Right Door", ("loadzoneright",), _ACROSS_THE_FLOOR),
     Area("RubberPrisonCells2", "Middle", (), CanUse("Shield"), out=one_way(None, CanUse("Shield"))),
@@ -152,11 +152,27 @@ MAP_AREAS = (
     # Beemerang Halt (no Jump); back down a drop (the user, 2026-10-10). Loading it sets the prison's gate flag 535 off.
     Area("RubberPrisonGym", "Top Left", (), CanUse("Beemerang Halt"), out=one_way(None, CanUse("Beemerang Halt"))),
     # The Security Room (RubberPrisonSecurity; named by the user, 2026-10-10): its right (the door to the Pier, the 535
-    # lever, the PC) the map's own region; the left (the crank, the trapped guards) Beetle Dig away, both ways; the bottom
-    # right (the save crystal, the door to the Third Floor) a drop down a ledge, back up with Jump or Bee Fly. The crank
-    # (Beemerang Halt) powers the PC (552), which hit (553) toggles the Cafeteria's tables (550): never needed.
+    # lever, the PC) the map's own region; the left (the crank, the trapped guards) Beetle Dig away, both ways; the
+    # bottom right (the save crystal, the door to the Third Floor) a drop down a ledge, back up with Jump or Bee Fly.
+    # The crank (Beemerang Halt) powers the PC (552), which hit (553) toggles the Cafeteria's tables (550): never
+    # needed.
     Area("RubberPrisonSecurity", "Left", (), CanUse("Beetle Dig")),
     Area("RubberPrisonSecurity", "Bottom Right", ("loadzone3rdfloor",), one_way(None, _UP), out=_UP),
+    # The Third Floor (RubberPrisonThirdFloor), five gates on 535. Its bottom right (the doors to Electric Cells and the
+    # Pier) the map's own region; its own lever behind a gate, never counted. The pocket left of it across a spiked
+    # floor (the Shield); up from it to the middle left on the mod's own bounce pad (ENTITIES_MOVED), down a drop, both
+    # free. The middle left: the kept upper lever, the stairs down to the bottom left (its door to the Cell Block
+    # Crossroads), free; the Gym door behind a gate (pushed past on arrival, seen); the stairs to the upper right behind
+    # another, then Jump or Bee Fly. The upper right (the door to the Security Room) a drop down to the bottom right,
+    # its way back round by the pocket; nothing back the stairs from it (the user, 2026-10-10).
+    Area("RubberPrisonThirdFloor", "Pocket", (), CanUse("Shield")),
+    Area("RubberPrisonThirdFloor", "Middle Left", (), True_(), to="RubberPrisonThirdFloor (Pocket)"),
+    Area("RubberPrisonThirdFloor", "Bottom Left", ("loadzonecells1",), True_(),
+         to="RubberPrisonThirdFloor (Middle Left)"),
+    Area("RubberPrisonThirdFloor", "Gym Door", ("loadzonegym",), ANY_ATTACK, out=one_way(None, ANY_ATTACK),
+         to="RubberPrisonThirdFloor (Middle Left)"),
+    Area("RubberPrisonThirdFloor", "Upper Right", ("loadzonesecurity",),
+         one_way(ANY_ATTACK & _UP, CanUse("Shield")), out=False_(), to="RubberPrisonThirdFloor (Middle Left)"),
 )
 
 TRANSFERS = (
@@ -172,6 +188,17 @@ TRANSFERS = (
     # Wooden Crank (Next 62) there: "Middle Center Cell" (the red History Book, 582, behind a 535 gate: an attack).
     Transfer("drop", "RubberPrisonCells2", "RubberPrisonCells2", two_way=False, way_back=CanUse("Shield"),
              from_area="Upper", to_area="Middle"),
+    # The Third Floor's upper right down to the bottom right, a drop; its way back the Shield to the pocket, its pad up
+    # to the middle left, then that lever (an attack) and Jump or Bee Fly.
+    Transfer("drop", "RubberPrisonThirdFloor", "RubberPrisonThirdFloor", two_way=False,
+             way_back=CanUse("Shield") & ANY_ATTACK & _UP, from_area="Upper Right"),
+)
+# A green bounce pad of the mod's own in the Third Floor's pocket, a copy of the Gym's (a plain bounce, data[0] 0), up
+# to the middle left, so the pocket is never a trap (the user, 2026-10-10, standing on the spot; tried first as a copied
+# gate lever, which the pad made "a bit useless").
+ENTITIES_MOVED = (
+    EntityMove("RubberPrisonThirdFloor", "jumpspring - Archipelago", (-35.8, 0.0, 7.5),
+               copy=("RubberPrisonGym", "jumpspring")),
 )
 # The submarine's dock exists with its key item in the bag, whatever the story's flags (448).
 PRESENT_WITH_ITEM = (
@@ -197,10 +224,10 @@ SCENERY_PRESENT = (
     # collapse").
     EntityRef("RubberPrisonPier", "Base/BrokenBridge"),
 )
-SCENERY_HIDDEN = (
-    # The Library's right staircase rail: two invisible copies of its collider stacked above it, hidden so the rail is
-    # jumped over onto the shelves (seen). Once the book puzzle slides its shelf away, that's the only landing left for
-    # "On Top of the Bookshelf"'s Jump and Beemerang Toss (the user, 2026-10-10).
+SCENERY_OFF = (
+    # The Library's right staircase rail: two invisible copies of its collider stacked above it, switched off so the
+    # rail is jumped over onto the shelves (seen). Once the book puzzle slides its shelf away, that's the only landing
+    # left for "On Top of the Bookshelf"'s Jump and Beemerang Toss (the user, 2026-10-10).
     EntityRef("RubberPrisonLibrary", "Base/fence/fence (2)"),
     EntityRef("RubberPrisonLibrary", "Base/fence/fence (3)"),
 )

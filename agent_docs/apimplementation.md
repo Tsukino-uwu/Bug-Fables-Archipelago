@@ -156,6 +156,7 @@ this file and that doc disagree, that doc is right.
 81. [Build step 81: the Rubber Prison's late gate levers from the start](#build-step-81-the-rubber-prisons-late-gate-levers-from-the-start)
 82. [Build step 82: the Prison Key, never used up](#build-step-82-the-prison-key-never-used-up)
 83. [Build step 83: the Library rail's invisible walls hidden](#build-step-83-the-library-rails-invisible-walls-hidden)
+84. [Build step 84: the Third Floor pocket's bounce pad](#build-step-84-the-third-floor-pockets-bounce-pad)
 
 **How it works**
 
@@ -3450,7 +3451,10 @@ crank puzzle, Beemerang Halt, a drop back down; "Crank Puzzle", its Prison Key, 
 Security Room (its left Beetle Dig away; the bottom right a drop down a ledge, Jump or Bee Fly back up; its crank and
 PC only toggle the Cafeteria's tables; no location), 182 of 244; the Office (one area; its crank slot, the Wooden Crank
 and Beemerang Halt, opens the Pier's second floor right door, written with it; "Empty Bookshelf" with Next 62), 183 of
-244; the rest of `room-checklist.md` to go.
+244; the Third Floor (five gates on 535: the pocket across spikes, the Shield, up to the middle left on its own copied
+bounce pad, build step 84; the stairs free; the Gym door and the upper right's stairs behind gates the kept upper lever
+drops, the Gym door pushed past, the upper right a drop down with nothing back up; no location), 184 of 244; the rest
+of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -6332,14 +6336,40 @@ puzzle is solved; in a seed the books can come before that spot is checked, and 
 **Asked and decided (the user, 2026-10-10):** "can we remove the invisible wall that is on the stairs?"; "idm the
 fence being visible, but i don't want a invisible wall stretching upwards blocking you from jumping over".
 
-**Built:** `scenery_hidden` gets both, the rail's own collider (`fence (1)`) kept; the mod hides plain objects too (the
-mod guide, step 56). The book's rule stays Jump and the Beemerang Toss, or Bee Fly, now true before and after the
-puzzle. Test `TestLibrary`.
+**Built:** `scenery_off` gets both, the rail's own collider (`fence (1)`) kept: the mod's existing switch-off of a map
+object by its path (build step 52's, `DayNight.cs`). A separate hook first built for it the same day was removed once
+`scenery_off` was found (the mod guide, step 56). The book's rule stays Jump and the Beemerang Toss, or Bee Fly, now
+true before and after the puzzle. Test `TestLibrary`.
 
 **Status:** built (2026-10-10); seen through the console's `hide` the same day (the rail jumped over onto the shelves);
-the seed's own hiding not seen yet.
+the seed's own switching off not seen yet.
 
-*Code: `logic/rubber_prison.py` (`SCENERY_HIDDEN`). The mod: `World/KeptOpen.cs` (`PlainScenery`).*
+*Code: `logic/rubber_prison.py` (`SCENERY_OFF`). The mod: `World/DayNight.cs`, unchanged for it.*
+
+## Build step 84: the Third Floor pocket's bounce pad
+
+**Found (2026-10-10, mapping the Third Floor):** a pocket of the room, between a spiked floor (the Shield) and a gate on
+535 to the bottom left, has no lever of its own. Dropped into from the middle left or the upper right with that gate up
+and without the Shield, the party is stuck, the Warp its only way out (the user).
+
+**Asked and decided (the user, 2026-10-10):** first "i think we should put a custom lever where im currently standing
+(to prevent the softlock pocket)": built and seen (a copy of the room's ground lever, an attack out to the bottom
+left). Then the user asked for a green bounce pad to try: up from the pocket to the middle left with nothing, it "makes
+it so you can't get stuck in the pocket", and from the right door the Shield alone reaches the middle left and the
+bottom left; the lever "a bit useless now". Kept: the pad only. The bottom right's own lever, behind a gate it can't
+reach, stays as it is.
+
+**Built:** `entities_moved` gets a copy of the Gym's green bounce pad (`jumpspring`, animid 35, data[0] 0: a plain
+bounce) as `jumpspring - Archipelago` at the user's spot, (-35.8, 0, 7.5); `EntityMove` takes `TimeSwitch`'s optional
+`copy` (the mod guide, step 56). The pocket and the middle left are joined both ways with nothing (the pad up, a drop
+down). Test `TestThirdFloor`.
+
+**Status:** built (2026-10-10); seen the same day through the dev `liveslot`: the lever, its hit dropping the gate,
+then the pad in its place, up to the middle left (the user). The apworld's own pad not seen yet (the test overlay
+copied it the same way).
+
+*Code: `data_types.py` (`EntityMove.copy`), `logic/rubber_prison.py` (`ENTITIES_MOVED`). The mod: `World/DayNight.cs`
+(`AddCopies`), `Core/SeedData.cs`.*
 
 # How it works
 
