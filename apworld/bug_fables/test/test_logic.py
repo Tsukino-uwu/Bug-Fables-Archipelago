@@ -1515,6 +1515,41 @@ class TestStorageElevator(BugFablesTestBase):
             self.assertTrue(rule(self.state_with("Progressive Freeze")))
 
 
+class TestStorageMaze(BugFablesTestBase):
+    # FactoryStorageMaze, the Storage Maze (the user, 2026-10-10): up onto its box tops, levers and Jump or Bee Fly, off
+    # them free; the bottom left pocket and the medal's hole free from the box tops; the berry by a lever puzzle; the
+    # Overseer's door behind its pass lock.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+    HALT = ("Progressive Beemerang", "Progressive Beemerang")
+
+    def way(self, name: str):
+        return self.multiworld.get_entrance(name, self.player).access_rule
+
+    def test_box_tops(self) -> None:
+        up = self.way("FactoryStorageMaze to FactoryStorageMaze (Upper Middle)")
+        self.assertFalse(up(self.state_with("Jump")))
+        self.assertTrue(up(self.state_with("Jump", "Horn Slash")))
+        self.assertTrue(up(self.state_with("Bee Fly", "Progressive Freeze")))
+        off = self.way("FactoryStorageMaze (Upper Middle) to FactoryStorageMaze")
+        self.assertFalse(off(self.state_with()))
+        self.assertTrue(off(self.state_with("Jump", "Horn Slash")))
+        for name in ("FactoryStorageMaze (Upper Middle) to FactoryStorageMaze (Bottom Left)",
+                     "FactoryStorageMaze (Bottom Left) to FactoryStorageMaze (Upper Middle)"):
+            self.assertTrue(self.way(name)(self.state_with()))
+
+    def test_spots(self) -> None:
+        medal = self.multiworld.get_location("Honey Factory: Storage Maze, Hole in the Boxes", self.player)
+        self.assertEqual(medal.parent_region.name, "FactoryStorageMaze (Upper Middle)")
+        self.assertTrue(medal.access_rule(self.state_with()))
+        berry = self.multiworld.get_location("Honey Factory: Storage Maze, Lever Puzzle", self.player)
+        self.assertEqual(berry.parent_region.name, "FactoryStorageMaze (Upper Middle)")
+        self.assertFalse(berry.access_rule(self.state_with("Jump", "Horn Slash", "Bee Fly")))
+        self.assertTrue(berry.access_rule(self.state_with("Jump", *self.HALT)))
+
+    def test_overseer_door_locked(self) -> None:
+        self.assertFalse(self.way("FactoryStorageMaze: loadzoneos")(self.state_with("Jump", "Horn Slash", "Bee Fly")))
+
+
 class TestCore(BugFablesTestBase):
     # HoneyFactoryCore (the user, 2026-10-10): one region, its door free; the gate to the boss arena the story's.
     def test_one_region(self) -> None:

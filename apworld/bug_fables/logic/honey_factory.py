@@ -2,7 +2,7 @@
 room (room-checklist.md)."""
 from __future__ import annotations
 
-from rule_builder.rules import False_, Has
+from rule_builder.rules import False_, Has, True_
 
 from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, CanUse, one_way
 from ..data_types import (ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, ItemShop, Location, Pickup, Source,
@@ -21,6 +21,8 @@ _UP = CanUse("Jump") | CanUse("Bee Fly")
 _PLATFORMS_RUNNING = "First Room Platforms Running"
 _ON_THE_PLATFORMS = Has(_PLATFORMS_RUNNING) & CanUse("Shield")
 _PROCESSING2_UP = _UP & ANY_ATTACK & CanUse("Shield") & (CanUse("Beemerang Halt") | CanUse("Bee Fly"))
+# Up onto the Storage Maze's box tops from its floor: levers (a basic attack) and Jump or Bee Fly.
+_MAZE_UP = ANY_ATTACK & _UP
 # Malbee's fight in her room (Event98, flag 211), which starts the tram between the first room and hers.
 _MALBEE_FOUGHT = "Malbee's Fight Done"
 # The pump room's moving platforms, a loop round its upper part (always running: ACTIVATION_FLAGS), Jump and the Shield.
@@ -52,6 +54,16 @@ LOCATIONS = (
     Location("Honey Factory: Pressure Plate Room, Behind the Pipe", 231, "FactoryProcessingPuzzle3",
              Source(berry=16, pickup=Pickup(map="FactoryProcessingPuzzle3", type=3, item=0)),
              rule=CanUse("Jump") & CanUse("Freeze") & CanUse("Horn Slash"), category="crystal_berry", no_jump=True),
+    # The Storage Maze's (named by the user, 2026-10-10) box tops: the medal Shock Trooper down a hole among the boxes,
+    # a green pad back up, nothing more; crystal berry #17 on a box, by a lever puzzle: a basic attack, Jump and
+    # Beemerang Halt.
+    Location("Honey Factory: Storage Maze, Hole in the Boxes", 232, "FactoryStorageMaze",
+             Source(flag=220, pickup=Pickup(map="FactoryStorageMaze", type=2, item=34)), no_jump=True,
+             area="Upper Middle"),
+    Location("Honey Factory: Storage Maze, Lever Puzzle", 233, "FactoryStorageMaze",
+             Source(berry=17, pickup=Pickup(map="FactoryStorageMaze", type=3, item=0)),
+             rule=ANY_ATTACK & CanUse("Jump") & CanUse("Beemerang Halt"), category="crystal_berry", no_jump=True,
+             area="Upper Middle"),
 )
 
 STORY_EVENTS = (
@@ -128,6 +140,12 @@ MAP_AREAS = (
     # map's own region; the bottom (the door to the maze) by the elevator (Event100), a switch on each level, a basic
     # attack, both ways.
     Area("FactoryStorageElevator", "Bottom", ("loadzonebottom",), ANY_ATTACK),
+    # The Storage Maze (FactoryStorageMaze; named by the user, 2026-10-10): its right side and floor (the elevator's
+    # door, the Overseer's door behind its pass lock, the save crystal) the map's own region; the box tops in its middle
+    # up with levers and Jump or Bee Fly, off them free (a one-way); the bottom left pocket (the mini-boss room's door)
+    # a drop from the box tops with a green pad back up, free both ways.
+    Area("FactoryStorageMaze", "Upper Middle", (), _MAZE_UP, out=one_way(None, _MAZE_UP)),
+    Area("FactoryStorageMaze", "Bottom Left", ("loadzoneboss",), True_(), to="FactoryStorageMaze (Upper Middle)"),
     # HoneyFactoryCore (2026-10-10): one region, its one door free; the gate at its top shut until the chapter 3 finale
     # (Event99, which sets 299 and ends in the room), behind it only the empty boss arena (the user).
 )
@@ -150,4 +168,7 @@ DOOR_RULES = (
     # The pump room's door to Malbee's room, behind the key scanner (Event59 key index 4; three passes, then Event96,
     # flag 217); its closed model Base/DoorE until 217.
     DoorRule("FactoryProcessingPump", "loadzonemalbee", FACTORY_PASS),
+    # The Storage Maze's door to the Overseer's room, behind its own pass lock (`keycard`, key index 4, then Event96,
+    # flag 222); arriving from her room, the game pushes the party past it (seen).
+    DoorRule("FactoryStorageMaze", "loadzoneos", FACTORY_PASS),
 )

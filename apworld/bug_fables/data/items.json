@@ -128,6 +128,7 @@
     {"name": "Poison Bomb", "game_id": 31, "kind": 0, "classification": "filler"},
     {"name": "Nutty Cake", "game_id": 73, "kind": 0, "classification": "filler"},
     {"name": "Shock Candy", "game_id": 75, "kind": 0, "classification": "filler"},
-    {"name": "Shell Ointment", "game_id": 97, "kind": 0, "classification": "filler"}
+    {"name": "Shell Ointment", "game_id": 97, "kind": 0, "classification": "filler"},
+    {"name": "Shock Trooper", "game_id": 34, "kind": 2, "classification": "useful"}
   ]
 }

@@ -3333,8 +3333,10 @@ same; its pass Beemerang Halt, Jump and the Shield), 167 of 244; the Pressure Pl
 region, its door free; its puzzle, Jump, Freeze and the horn, to crystal berry #16, location 231, and its pass), 168 of
 244; Malbee's Room (her fight, three Abomihoneys, a story event that needs nothing and starts the tram, both ways
 between her platform, Jump or Bee Fly up, and the First Room's right side, counted now), 169 of 244; the Storage
-Elevator (its top and bottom doors joined by the elevator, a basic attack each way), 170 of 244; the rest of
-`room-checklist.md` to go.
+Elevator (its top and bottom doors joined by the elevator, a basic attack each way), 170 of 244; the Storage Maze (its
+box tops up with levers and Jump or Bee Fly; the medal Shock Trooper in the boxes and crystal berry #17 by a lever
+puzzle, locations 232-233; the Overseer's door behind its pass lock), 171 of 244; the rest of `room-checklist.md` to
+go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
