@@ -1395,6 +1395,53 @@ class TestProcessing2(BugFablesTestBase):
         self.assertTrue(down.access_rule(self.state_with("Bee Fly", "Horn Slash", "Shield")))
 
 
+class TestPumpRoom(BugFablesTestBase):
+    # FactoryProcessingPump, the Pump Room (the user, 2026-10-10): the top left corner across the Shield or Bee Fly; up
+    # to either upper side the cranks (Beemerang Halt), then the platform loop (Jump and the Shield), which joins the
+    # two; down a drop, free from the upper left, Bee Fly from the upper right; Malbee's door behind the pass scanner.
+    options = {"shuffle_field_moves": True, "shuffle_jump": True}
+    HALT = ("Progressive Beemerang", "Progressive Beemerang")
+
+    def way(self, name: str):
+        return self.multiworld.get_entrance(name, self.player).access_rule
+
+    def test_top_left_corner(self) -> None:
+        corner = self.way("FactoryProcessingPump to FactoryProcessingPump (Bottom Top Left)")
+        self.assertFalse(corner(self.state_with("Jump")))
+        self.assertTrue(corner(self.state_with("Shield")))
+        self.assertTrue(corner(self.state_with("Bee Fly")))
+
+    def test_up_on_the_cranks_and_the_loop(self) -> None:
+        for side in ("Upper Left", "Upper Right"):
+            up = self.way(f"FactoryProcessingPump to FactoryProcessingPump ({side})")
+            self.assertFalse(up(self.state_with("Jump", "Shield")))
+            self.assertFalse(up(self.state_with(*self.HALT, "Shield")))
+            self.assertTrue(up(self.state_with(*self.HALT, "Jump", "Shield")))
+        loop = self.way("FactoryProcessingPump (Upper Left) to FactoryProcessingPump (Upper Right) (platforms)")
+        self.assertFalse(loop(self.state_with("Shield")))
+        self.assertTrue(loop(self.state_with("Jump", "Shield")))
+
+    def test_drops(self) -> None:
+        left = self.way("FactoryProcessingPump (Upper Left) to FactoryProcessingPump")
+        right = self.way("FactoryProcessingPump (Upper Right) to FactoryProcessingPump")
+        back = (*self.HALT, "Jump", "Shield")
+        self.assertTrue(left(self.state_with(*back)))
+        self.assertFalse(right(self.state_with(*back)))
+        self.assertTrue(right(self.state_with(*back, "Bee Fly")))
+
+    def test_malbee_door_locked(self) -> None:
+        door = self.way("FactoryProcessingPump: loadzonemalbee")
+        self.assertFalse(door(self.state_with("Jump", "Shield", "Bee Fly")))
+
+    # A respawning Shell Ointment behind boxes in the upper right's left part, across from its door: Shield or Bee Fly.
+    def test_behind_the_boxes(self) -> None:
+        spot = self.multiworld.get_location("Honey Factory: Pump Room, Behind the Boxes", self.player)
+        self.assertEqual(spot.parent_region.name, "FactoryProcessingPump (Upper Right)")
+        self.assertFalse(spot.access_rule(self.state_with("Jump")))
+        self.assertTrue(spot.access_rule(self.state_with("Shield")))
+        self.assertTrue(spot.access_rule(self.state_with("Bee Fly")))
+
+
 class TestCore(BugFablesTestBase):
     # HoneyFactoryCore (the user, 2026-10-10): one region, its door free; the gate to the boss arena the story's.
     def test_one_region(self) -> None:

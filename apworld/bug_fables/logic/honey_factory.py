@@ -18,6 +18,10 @@ _UP = CanUse("Jump") | CanUse("Bee Fly")
 _PLATFORMS_RUNNING = "First Room Platforms Running"
 _ON_THE_PLATFORMS = Has(_PLATFORMS_RUNNING) & CanUse("Shield")
 _PROCESSING2_UP = _UP & ANY_ATTACK & CanUse("Shield") & (CanUse("Beemerang Halt") | CanUse("Bee Fly"))
+# The pump room's moving platforms, a loop round its upper part (always running: ACTIVATION_FLAGS), Jump and the Shield.
+_PUMP_LOOP = CanUse("Jump") & CanUse("Shield")
+# Up from its floor: the cranks (Beemerang Halt) to a platform with nothing on it, then the loop.
+_PUMP_UP = CanUse("Beemerang Halt") & _PUMP_LOOP
 
 LOCATIONS = (
     # The First Room's switch (FactoryProcessingFirstRoom; the user, 2026-10-10), on its right side, hit with a basic
@@ -33,6 +37,11 @@ LOCATIONS = (
     # The Worker Rooms' office (named by the user, 2026-10-10): a Shock Candy on the desk, Jump or Bee Fly.
     Location("Honey Factory: Worker Rooms, On the Desk", 229, "HoneyFactoryWorkerRooms",
              Source(flag=728, pickup=Pickup(map="HoneyFactoryWorkerRooms", type=0, item=75)), rule=_UP, no_jump=True),
+    # The Pump Room's respawning Shell Ointment (regional flag 4), behind boxes in the
+    # upper right's left part, across from its door: the Shield or Bee Fly.
+    Location("Honey Factory: Pump Room, Behind the Boxes", 230, "FactoryProcessingPump",
+             Source(regional=4, pickup=Pickup(map="FactoryProcessingPump", type=0, item=97)),
+             rule=CanUse("Shield") | CanUse("Bee Fly"), no_jump=True, area="Upper Right"),
 )
 
 STORY_EVENTS = (
@@ -80,10 +89,21 @@ MAP_AREAS = (
     # switch, the Shield, and Beemerang Halt or Bee Fly; back down a drop, a one-way.
     Area("FactoryProcessing2", "Top Left", ("loadzone pump",), _PROCESSING2_UP,
          out=one_way(None, _PROCESSING2_UP)),
+    # The Pump Room (FactoryProcessingPump; named by the user, 2026-10-10): the floor (the doors to the second room and
+    # to Malbee's room, the save crystal, the cranks) the map's own region; its top left corner (the door to puzzle 1)
+    # across the Shield or Bee Fly, both ways; the upper left (the door to puzzle 3) and the upper right (the door to
+    # puzzle 2), each reached on the loop, left by a drop: free from the upper left, Bee Fly from the upper right.
+    Area("FactoryProcessingPump", "Bottom Top Left", ("loadzonepuzzle1",), CanUse("Shield") | CanUse("Bee Fly")),
+    Area("FactoryProcessingPump", "Upper Left", ("loadzonepuzzle3",), _PUMP_UP, out=one_way(None, _PUMP_UP)),
+    Area("FactoryProcessingPump", "Upper Right", ("loadzonepuzzle2",), _PUMP_UP,
+         out=one_way(CanUse("Bee Fly"), _PUMP_UP)),
     # HoneyFactoryCore (2026-10-10): one region, its one door free; the gate at its top shut until the chapter 3 finale
     # (Event99, which sets 299 and ends in the room), behind it only the empty boss arena (the user).
 )
 TRANSFERS = (
+    # The pump room's platform loop between its upper left and upper right, both ways.
+    Transfer("platforms", "FactoryProcessingPump", "FactoryProcessingPump", _PUMP_LOOP, from_area="Upper Left",
+             to_area="Upper Right"),
     # The First Room's drop from the left to the bottom: back round by the right and the platforms.
     Transfer("drop", "FactoryProcessingFirstRoom", "FactoryProcessingFirstRoom", None, two_way=False,
              way_back=_UP & _ON_THE_PLATFORMS, from_area="Left", to_area="Bottom"),
@@ -93,4 +113,7 @@ DOOR_RULES = (
     # Event89, flag 179); kept locked (the user, 2026-10-10). Arriving from the first room, the game pushes the party
     # past the lock (seen).
     DoorRule("HoneyFactoryEntrance", "loadzone processing", FACTORY_PASS),
+    # The pump room's door to Malbee's room, behind the key scanner (Event59 key index 4; three passes, then Event96,
+    # flag 217); its closed model Base/DoorE until 217.
+    DoorRule("FactoryProcessingPump", "loadzonemalbee", FACTORY_PASS),
 )

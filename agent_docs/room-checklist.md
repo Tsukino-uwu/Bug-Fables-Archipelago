@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**164 of 244 done.**
+**165 of 244 done.**
 
 ## Outskirts
 
@@ -293,7 +293,9 @@ as it is, a frozen record.
   the tram to Malbee's room (from 211, `Event68`; left to the story, the user)
 - [x] FactoryProcessing2 (84) — the Second Room; up to the pump door: Jump or Bee Fly, a basic attack, the Shield, and
   Beemerang Halt or Bee Fly; down a drop; no location
-- [ ] FactoryProcessingPump (85)
+- [x] FactoryProcessingPump (85) — the Pump Room; up on the cranks (Beemerang Halt), then the platform loop (Jump and
+  the Shield); the Shell Ointment behind the boxes, location 230; Malbee's door behind the Factory Pass scanner (a
+  stand-in until Next 67); for the quest pass: the broken Mender (325 to 327)
 - [ ] FactoryProcessingPuzzle1 (86)
 - [ ] FactoryProcessingPuzzle2 (87)
 - [ ] FactoryProcessingPuzzle3 (88)

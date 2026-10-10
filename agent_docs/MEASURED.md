@@ -1746,6 +1746,19 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   and Beemerang Halt or Bee Fly (two cranks, `ScrewSwitch`, and two moving platforms on the way); down from the top
   left a drop, a one-way (the user). Map enemies: a bee-bot below, a Denmuki and a Turret up top; a hole. No pickups,
   flag-switched scenery or auto-start scenes.
+  **`FactoryProcessingPump`, the Pump Room (2026-10-10, the user; named by the user):** the factory's hub. The floor:
+  the doors to the Second Room (`loadzoneright`) and to Malbee's room (`loadzonemalbee`), the save crystal and two
+  cranks (`ScrewSwitch`). Malbee's door sits behind `key scanner` (a `LockedDoor`, `Event59` key index 4, the Factory
+  Pass): each pass put in counts `flagvar[24]` up; at 3, `Event96` sets 217 and the closed model `Base/DoorE` goes. The
+  floor's top left corner (the door to puzzle 1, `loadzonepuzzle1`): the Shield or Bee Fly, both ways. Up: the cranks
+  with Beemerang Halt (nothing else) to a platform with nothing on it, then four moving platforms looping
+  counter-clockwise round the upper part (`PathPlatform`; their control `platformcontrol`, always on: build step 60),
+  Jump and the Shield, to the upper left (the door to puzzle 3, `loadzonepuzzle3`) or the upper right (the door to
+  puzzle 2, `loadzonepuzzle2`). The upper right's two parts: its door's and, across, a Shell Ointment
+  (`Ointment - Duplicate`, item 97, regional flag 4, respawning) behind boxes; between them the Shield or Bee Fly. Down:
+  a drop, free from the upper left, Bee Fly from either part of the upper right (the user). A robot (talks; line 3 from
+  211), a Venus healer (from 130 until 299), the broken Mender (325 to 327); sticky honey; map enemies (a Denmuki on the
+  floor, a bee-bot and a Turret up top). No auto-start scenes.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
   them, the right door on the right with ledges up from the bottom; spikes (`WalkableSpike`) along the bottom. Each
   side's door free from its own side. Left to right Jump and Beemerang Halt (a platform in the middle), right to left
