@@ -872,6 +872,13 @@ be wrong.
 
 **Known issues:**
 
+- **Coupled door shuffle sometimes runs out of spare doors** (found 2026-10-10 by the fuzzer, 1 seed in 10000 in two
+  runs): with Coupled doors every one-door dead end uses up a spare door already reached, and Archipelago's
+  `randomize_entrances` gives up when they run out, with no retry of its own (`entrance_rando.py`). Measured with the
+  failing yaml: 2 in 2000 seeds before the Pier was mapped, 17 after (its cut-off floors and shut right doors add dead
+  ends until the Office, the bridge and the rooms behind are mapped); Decoupled never fails. Decided (the user): after
+  every room is mapped, the doors that cause it are gone through one at a time, each opened, made two-way or whatever
+  it needs, "judged on a per door/entrance case by case" (Next 2's door pass). Until then the fuzzer may show it.
 - **Warping out mid-escort leaves the escort armed** (found 2026-10-10 by a review, from the code; not seen in game).
   The overseer's escort (`Event102`) sets `entitytouchevent` 102 and adds her as an extra follower; leaving her room by
   the Warp (or map travel) keeps both, so an enemy touched in another room runs the escort's "caught" part there. The

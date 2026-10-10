@@ -298,7 +298,8 @@ included (the user, 2026-10-07): every `BeetleGrass` whose vectordata names an i
 `EventControl.cs`, as the pink spider's berry). **And the doors** (the user, 2026-10-07: "after we are done mapping out
 logic for all rooms, we need to check all the unused or not randomized entrances for entrance rando"): every door the
 shuffle leaves out (`doors.json`'s `fixed`, parked or unexported doors) gone through with the user, each joining the
-shuffle unless the user agrees a reason (`apimplementation.md`, Where it stands, Next 2).
+shuffle unless the user agrees a reason (`apimplementation.md`, Where it stands, Next 2). The same pass takes the
+doors that leave Coupled shuffle short of spare doors, one at a time (the user, 2026-10-10; Known issues).
 
 **Nothing in a seed ever goes away** (the user, 2026-10-10, after flag 79 took the Rubber Prison Pier's enemies: "we
 can never intentionally or by accident remove anything, that is a location/check. everything has to permanently stay
