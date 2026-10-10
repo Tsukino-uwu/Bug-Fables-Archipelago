@@ -103,6 +103,8 @@ anyone curious about the process, or thinking of doing the same for another game
 49. [Doors a seed adds or sends elsewhere](#49-doors-a-seed-adds-or-sends-elsewhere)
 50. [The Bee Kingdom's scan sets flag 160 too](#50-the-bee-kingdoms-scan-sets-flag-160-too)
 51. [B.O.S.S. with nobody met logs off instead of freezing](#51-boss-with-nobody-met-logs-off-instead-of-freezing)
+52. [Tattle from the start, with any party](#52-tattle-from-the-start-with-any-party)
+53. [Strategy and Relay in battle from the start](#53-strategy-and-relay-in-battle-from-the-start)
 
 ## Where it stands
 
@@ -3352,3 +3354,42 @@ that it logged off. The dev console's `bossmet clear` empties both lists on a te
 tries in all, each logging off like Cancel, never freezing.
 
 *Code: `World/BossSimulator.cs`, `Core/Plugin.cs`; `Dev/DevConsole.cs` (`bossmet`).*
+
+## 52. Tattle from the start, with any party
+
+Found 2026-10-10 by the user in the Honey Factory's first puzzle room: the game's help key (action 9, Enter on a
+keyboard) is also how you holler to Gen and Eri to press the room's switch, and it did nothing on a test file. The key
+answers only with flag 10 set, which the Tattle tutorial (`Event2`, Snakemouth's bridge room) sets, and with Kabbu in
+the party (`PlayerControl.GetInput`, `HasPlayer(1)`), whose character speaks the line (`GetEntity(-5)`). A seed may
+never play that tutorial (a random start, shuffled doors) or have Kabbu (Starting Party Member), so the factory's
+puzzles could be stuck. The user: "we should probly have it active from the start of a seed", and "can't we make tattle
+work without kabbu, any 1/random party member ? just always available/working no matter what".
+
+With Archipelago on, flag 10 is set as each map loads (before its entities, as the tutorial would have; `CreateEntities`
+prefix), except in the storage's last room, where the overseer's escort (`Event102`) turns it off and on itself; set
+early it only removes the tutorial's trigger and a Wood Boring near Snakemouth (their `limit`), and changes one lilypad
+line in the swamp. A transpiler in `GetInput` asks for anyone in the party instead of Kabbu, and the leader speaks when
+Kabbu is missing; the line's own commands naming a missing member get the scene stand-ins (step 11), as a talk counts
+as a scene there. The log says `[tattle] installed in PlayerControl.GetInput` and `[tattle] flag 10 set on <map>`.
+
+**Status:** built (2026-10-10), installed (the log); not yet seen in game.
+
+*Code: `Gameplay/TattleAndRelay.cs`, `Core/Plugin.cs`.*
+
+## 53. Strategy and Relay in battle from the start
+
+Asked 2026-10-10 by the user, with step 52: the battle menu counts Strategy from flag 15 (the opening's end, the
+Explorer Permit's scene) and Relay from flag 16 (Leif joined) (`BattleControl.SetMaxOptions`); the options come in
+order, Relay only after Strategy. "Just include these from the start, guaranteed not even as locations." The flags
+themselves can't be set early: 15 is the limit of the opening's tutorial battle trigger (location 75) and 16 of the
+lake's trigger for Leif's joining (`MothEvent`, `Event14`).
+
+With Archipelago on, a transpiler in `SetMaxOptions` reads both as set for the menu only; the flags stay the game's.
+The game's own checks still apply: the Relay icon is greyed with one member (or one who passed, is tri-locked or
+taunted), and choosing it acts only with more than one member. With one member Strategy's two order swaps stay lit
+(the game greys them only while someone is down and more than one is alive): what they do alone is to see. The log
+says `[relay] installed in BattleControl.SetMaxOptions`.
+
+**Status:** built (2026-10-10), installed (the log); not yet seen in game.
+
+*Code: `Gameplay/TattleAndRelay.cs`, `Core/Plugin.cs`.*

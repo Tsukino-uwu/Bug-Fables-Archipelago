@@ -126,6 +126,7 @@ namespace BugFablesAP
             ArtifactIcons.Enable(Log, () => randomizerEnabled.Value);
             HoldUps.Init(Log, () => randomizerEnabled.Value);
             PartyFit.Enable(Log, () => randomizerEnabled.Value);
+            TattleAndRelay.Enable(Log, () => randomizerEnabled.Value);
             PartySlots.Enable(Log, () => randomizerEnabled.Value);
             PartyMembers.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
             FieldMoves.Enable(Log, () => connection.Seed, () => randomizerEnabled.Value);
