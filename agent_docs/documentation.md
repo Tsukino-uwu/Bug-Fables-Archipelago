@@ -3365,16 +3365,21 @@ never play that tutorial (a random start, shuffled doors) or have Kabbu (Startin
 puzzles could be stuck. The user: "we should probly have it active from the start of a seed", and "can't we make tattle
 work without kabbu, any 1/random party member ? just always available/working no matter what".
 
-With Archipelago on, flag 10 is set as each map loads (before its entities, as the tutorial would have; `CreateEntities`
-prefix), except in the storage's last room, where the overseer's escort (`Event102`) turns it off and on itself; set
-early it only removes the tutorial's trigger and a Wood Boring near Snakemouth (their `limit`), and changes one lilypad
-line in the swamp. A transpiler in `GetInput` asks for anyone in the party instead of Kabbu, and the leader speaks when
-Kabbu is missing; the line's own commands naming a missing member get the scene stand-ins (step 11), as a talk counts
-as a scene there. The log says `[tattle] installed in PlayerControl.GetInput` and `[tattle] flag 10 set on <map>`.
+With Archipelago on, the places that read flag 10 for Tattle read it as set: a transpiler in `GetInput` turns its
+`flags[10]` into a call that answers yes in a seed, and so does one in `PauseMenu.CanDig`, behind the pause menu's dig
+(key item 37) and the Bed Bug's rest (89), which wait for the same flag. The flag itself stays the game's. **Setting it
+was the first build, and a review found it froze the horn tutorial:** flag 10 is the limit of the Wood Boring near
+Snakemouth, the actor of `Event10` (location 2), so set early it hid him while his trigger (limit 17) still started
+the scene, which then waited for him to walk forever. The overseer's escort (`Event102`) turns Tattle off while it runs
+(`entitytouchevent` 102), and that is kept. The same transpiler in `GetInput` asks for anyone in the party instead of
+Kabbu, and the leader speaks when Kabbu is missing; the line's own commands naming a missing member get the scene
+stand-ins (step 11), as a talk counts as a scene there. The log says `[tattle] installed in PlayerControl.GetInput` and
+`... in PauseMenu.CanDig`, and once per map what each guard decided (Tattle read as taught, kept off for the escort,
+another member tattling, the leader speaking).
 
-**Status:** built (2026-10-10); seen the same day with Vi alone (Kabbu and Leif taken out by the dev console's
-`removemember`): Vi tattled ("How could you tell, Vi?"), and in the first puzzle room the holler had Gen and Eri press
-the switch.
+**Status:** built (2026-10-10); the first build (the flag set) seen the same day with Vi alone (Kabbu and Leif taken
+out by the dev console's `removemember`): Vi tattled ("How could you tell, Vi?"), and in the first puzzle room the
+holler had Gen and Eri press the switch. The rebuild (the flag read as set) installed; not yet seen.
 
 *Code: `Gameplay/TattleAndRelay.cs`, `Core/Plugin.cs`.*
 
