@@ -3277,13 +3277,14 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
 - **The Third Floor** (`RubberPrisonThirdFloor`, 2026-10-10, the user on screen and screenshots; EntityDump): the
   bottom right (the doors to Electric Cells and the Pier) and its ground lever behind a 535 gate it can't reach; a
   pocket left of it across spikes (the Shield), its 535 gate to the bottom left; the bottom left (the door to the Cell
-  Block Crossroads) and stairs up to the middle left, free; the middle left (the Gym door behind a 535 gate, the kept
+  Block Crossroads) and stairs up to the middle left, Jump or Bee Fly (corrected by the user; with the pocket's gate
+  up, the bottom left's only way in); the middle left (the Gym door behind a 535 gate, the kept
   upper lever between it and the stairs to the upper right, those stairs behind another 535 gate, then Jump or Bee Fly);
   the upper right (the door to the Security Room) a drop to the bottom right, nothing back up its stairs. Dropping into
   the pocket from above with its gate up and no Shield: stuck. Both the Gym door (535 on) and its gate push the party
   past on arrival. A copied gate lever in the pocket (at -32.6, 0, 9.2) dropped its gate when hit; a copied green bounce
-  pad (the Gym's `jumpspring`, at -35.8, 0, 7.5) sent the party up to the middle left, and the Shield alone then reached
-  the middle and bottom left from the right door.
+  pad (the Gym's `jumpspring`, at -35.8, 0, 7.5) sent the party up to the middle left, so the Shield alone reached the
+  middle left from the right door.
 - **Bounce pads** (2026-10-10, code read, `NPCControl.cs` JumpSpring): `data[0]` 0 is a plain bounce; 1 an aimed jump
   to `vectordata[1]` (`JumpTo`), the swamp's red pads (animid 398). Animid 35 is the `BounceShroom` model. Used by
   `logic/rubber_prison.py`.

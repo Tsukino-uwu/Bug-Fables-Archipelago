@@ -813,11 +813,16 @@ class TestThirdFloor(_PrisonRoom):
             with self.subTest(way=name):
                 self.assertFalse(self.way(name)(self.state_with("Bee Fly", "Horn Slash")))
                 self.assertTrue(self.way(name)(self.state_with("Shield")))
-        for a, b in (("Pocket", "Middle Left"), ("Middle Left", "Pocket"), ("Middle Left", "Bottom Left"),
-                     ("Bottom Left", "Middle Left")):
+        for a, b in (("Pocket", "Middle Left"), ("Middle Left", "Pocket")):
             name = f"{self.MAP} ({a}) to {self.MAP} ({b})"
             with self.subTest(way=name):
                 self.assertTrue(self.way(name)(self.state_with()))
+        for a, b in (("Middle Left", "Bottom Left"), ("Bottom Left", "Middle Left")):
+            name = f"{self.MAP} ({a}) to {self.MAP} ({b})"
+            with self.subTest(way=name):
+                self.assertFalse(self.way(name)(self.state_with("Shield", "Horn Slash")))
+                self.assertTrue(self.way(name)(self.state_with("Jump")))
+                self.assertTrue(self.way(name)(self.state_with("Bee Fly")))
 
     def test_middle_left(self) -> None:
         for name in (f"{self.MAP} (Middle Left) to {self.MAP} (Gym Door)",

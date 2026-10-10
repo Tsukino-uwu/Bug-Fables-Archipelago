@@ -3452,9 +3452,9 @@ Security Room (its left Beetle Dig away; the bottom right a drop down a ledge, J
 PC only toggle the Cafeteria's tables; no location), 182 of 244; the Office (one area; its crank slot, the Wooden Crank
 and Beemerang Halt, opens the Pier's second floor right door, written with it; "Empty Bookshelf" with Next 62), 183 of
 244; the Third Floor (five gates on 535: the pocket across spikes, the Shield, up to the middle left on its own copied
-bounce pad, build step 84; the stairs free; the Gym door and the upper right's stairs behind gates the kept upper lever
-drops, the Gym door pushed past, the upper right a drop down with nothing back up; no location), 184 of 244; the rest
-of `room-checklist.md` to go.
+bounce pad, build step 84; the bottom left's stairs Jump or Bee Fly; the Gym door and the upper right's stairs behind
+gates the kept upper lever drops, the Gym door pushed past, the upper right a drop down with nothing back up; no
+location), 184 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -6355,8 +6355,9 @@ and without the Shield, the party is stuck, the Warp its only way out (the user)
 **Asked and decided (the user, 2026-10-10):** first "i think we should put a custom lever where im currently standing
 (to prevent the softlock pocket)": built and seen (a copy of the room's ground lever, an attack out to the bottom
 left). Then the user asked for a green bounce pad to try: up from the pocket to the middle left with nothing, it "makes
-it so you can't get stuck in the pocket", and from the right door the Shield alone reaches the middle left and the
-bottom left; the lever "a bit useless now". Kept: the pad only. The bottom right's own lever, behind a gate it can't
+it so you can't get stuck in the pocket", and from the right door the Shield alone reaches the middle left (the
+bottom left too, the user's word, by its stairs, which take Jump or Bee Fly in the logic, or through its gate when
+down); the lever "a bit useless now". Kept: the pad only. The bottom right's own lever, behind a gate it can't
 reach, stays as it is.
 
 **Built:** `entities_moved` gets a copy of the Gym's green bounce pad (`jumpspring`, animid 35, data[0] 0: a plain

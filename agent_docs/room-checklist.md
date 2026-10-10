@@ -367,7 +367,8 @@ as it is, a frozen record.
   Freeze, the horn, Jump and Bee Fly); for the enemy pass: a Wasp Driller (gone from 79)
 - [x] RubberPrisonThirdFloor (230) — the Third Floor; the bottom right (its doors to Electric Cells and the Pier, its own
   lever behind a gate, not counted); the pocket across spikes (the Shield), up to the middle left on its copied bounce
-  pad (build step 84), a drop back down; the stairs between the middle left and the bottom left free; in the middle
+  pad (build step 84), a drop back down; the stairs between the middle left and the bottom left Jump or Bee Fly (the
+  bottom left's only way in when its gate to the pocket is up); in the middle
   left the kept upper lever (build step 81), the Gym door behind a gate (pushed past on arrival), the upper right's
   stairs behind another (Jump or Bee Fly); the upper right (the Security Room's door) a drop to the bottom right,
   nothing back up its stairs; no location; for the enemy pass: a Wasp Bomber, a ruffian and a burglar (gone from 79)

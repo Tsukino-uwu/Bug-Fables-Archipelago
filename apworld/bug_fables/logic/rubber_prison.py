@@ -161,14 +161,13 @@ MAP_AREAS = (
     # The Third Floor (RubberPrisonThirdFloor), five gates on 535. Its bottom right (the doors to Electric Cells and the
     # Pier) the map's own region; its own lever behind a gate, never counted. The pocket left of it across a spiked
     # floor (the Shield); up from it to the middle left on the mod's own bounce pad (ENTITIES_MOVED), down a drop, both
-    # free. The middle left: the kept upper lever, the stairs down to the bottom left (its door to the Cell Block
-    # Crossroads), free; the Gym door behind a gate (pushed past on arrival, seen); the stairs to the upper right behind
-    # another, then Jump or Bee Fly. The upper right (the door to the Security Room) a drop down to the bottom right,
-    # its way back round by the pocket; nothing back the stairs from it (the user, 2026-10-10).
+    # free. The middle left: the kept upper lever; the stairs down to the bottom left (its door to the Cell Block
+    # Crossroads), Jump or Bee Fly; the Gym door behind a gate (pushed past on arrival, seen); the stairs to the upper
+    # right behind another, then Jump or Bee Fly. The upper right (the door to the Security Room) a drop down to the
+    # bottom right, its way back round by the pocket; nothing back the stairs from it (the user, 2026-10-10).
     Area("RubberPrisonThirdFloor", "Pocket", (), CanUse("Shield")),
     Area("RubberPrisonThirdFloor", "Middle Left", (), True_(), to="RubberPrisonThirdFloor (Pocket)"),
-    Area("RubberPrisonThirdFloor", "Bottom Left", ("loadzonecells1",), True_(),
-         to="RubberPrisonThirdFloor (Middle Left)"),
+    Area("RubberPrisonThirdFloor", "Bottom Left", ("loadzonecells1",), _UP, to="RubberPrisonThirdFloor (Middle Left)"),
     Area("RubberPrisonThirdFloor", "Gym Door", ("loadzonegym",), ANY_ATTACK, out=one_way(None, ANY_ATTACK),
          to="RubberPrisonThirdFloor (Middle Left)"),
     Area("RubberPrisonThirdFloor", "Upper Right", ("loadzonesecurity",),
