@@ -886,7 +886,10 @@ be wrong.
   (`worlds/pokemon_crystal/entrance_rando.py`); OoT and Pokémon Red/Blue retry their own shufflers 10 times; TUNIC
   resets in rare layouts ("shouldn't be covering up for an actual solution"); Messenger doesn't retry; ALttP reserves
   doors by counting. A retry would need Archipelago's `EntranceRandomizationError` in the preflight's import allowlist
-  (the user's call) and must retry only the ran-out case, since setup errors raise the same class.
+  (the user's call) and must retry only the ran-out case, since setup errors raise the same class. **Which doors** (the
+  user asked; the failing yaml over seeds 1-2000, 2026-10-10): 17 failures left 52 different dead-end doors waiting,
+  2 to 10 each, none in more than 4 (the most: `UpperSnekRiverPuzzle: loadzone` 4, `RubberPrisonGym: loadzone` and
+  `WaspKingdomQueen: loadzone` 3): no one door causes it, the total of dead ends against spare doors does.
 - **Warping out mid-escort leaves the escort armed** (found 2026-10-10 by a review, from the code; not seen in game).
   The overseer's escort (`Event102`) sets `entitytouchevent` 102 and adds her as an extra follower; leaving her room by
   the Warp (or map travel) keeps both, so an enemy touched in another room runs the escort's "caught" part there. The
