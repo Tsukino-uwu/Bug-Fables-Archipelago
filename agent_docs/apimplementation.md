@@ -825,6 +825,10 @@ be wrong.
 
 **Known issues:**
 
+- **Warping out mid-escort leaves the escort armed** (found 2026-10-10 by a review, from the code; not seen in game).
+  The overseer's escort (`Event102`) sets `entitytouchevent` 102 and adds her as an extra follower; leaving her room by
+  the Warp (or map travel) keeps both, so an enemy touched in another room runs the escort's "caught" part there. The
+  Warp's guard checks only scenes, talk and battles. To look at with the factory's chains (Next 68).
 - **Chapter 4's opening may freeze after an early chapter 3 finale** (found 2026-10-10 by a research workflow, from the
   code; not seen in game). With the storage door open (build step 77) a seed can do the overseer's escort (flag 218)
   and the Core's finale (`Event99`, flag 299) early; entering the Throne Room then starts chapter 4's opening, which
@@ -3337,7 +3341,8 @@ Elevator (its top and bottom doors joined by the elevator, a basic attack each w
 box tops up with Jump or Bee Fly; the medal Shock Trooper in the boxes and crystal berry #17 by a lever
 puzzle, locations 232-233; the Overseer's door behind its pass lock), 171 of 244; the Storage Mini-boss Room (one
 region; the Magic Seed on top of the boxes, location 234, Jump or Bee Fly; its fight's pass the game's own until Next
-67), 172 of 244; the rest of `room-checklist.md` to go.
+67), 172 of 244; the Overseer's room (one region, its door free; the escort, flag 218, Jump and Beemerang Halt or Bee
+Fly, for the quest pass), 173 of 244, the Honey Factory done; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 

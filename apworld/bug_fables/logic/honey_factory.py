@@ -154,6 +154,9 @@ MAP_AREAS = (
     # The Storage Mini-boss Room (FactoryStorageMiniboss; named by the user, 2026-10-10): one region, its door and save
     # crystal free; its left side, the Ahoneynation fight (Event101) and the Factory Pass it gives, Jump and Beemerang
     # Halt, holds nothing the logic counts until Next 67.
+    # FactoryStorageOverseer (the user, 2026-10-10): one region, its one door free, nothing to collect. Its overseer's
+    # escort (Event102, flag 218), back to the door past the bees: Jump and Beemerang Halt, or Bee Fly alone; nothing
+    # in the logic needs 218 yet (the Core's finale, the user's pick pending).
     # HoneyFactoryCore (2026-10-10): one region, its one door free; the gate at its top shut until the chapter 3 finale
     # (Event99, which sets 299 and ends in the room), behind it only the empty boss arena (the user).
 )

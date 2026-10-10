@@ -1565,6 +1565,15 @@ class TestStorageMinibossRoom(BugFablesTestBase):
         self.assertTrue(seed.access_rule(self.state_with("Bee Fly")))
 
 
+class TestOverseerRoom(BugFablesTestBase):
+    # FactoryStorageOverseer (the user, 2026-10-10): one region, its door free, no location.
+    def test_one_region_no_location(self) -> None:
+        parts = {r.name for r in self.multiworld.get_regions(self.player)
+                 if r.name.startswith("FactoryStorageOverseer")}
+        self.assertEqual(parts, {"FactoryStorageOverseer"})
+        self.assertFalse(self.multiworld.get_region("FactoryStorageOverseer", self.player).locations)
+
+
 class TestCore(BugFablesTestBase):
     # HoneyFactoryCore (the user, 2026-10-10): one region, its door free; the gate to the boss arena the story's.
     def test_one_region(self) -> None:
