@@ -3215,6 +3215,14 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   it isn't yet (`MapControl.cs:607-612`, one of 17 such arrival discoveries in `AreaSpecific`), for the discovery sweep.
   The first arrival by submarine plays `Event185`, which speaks a line from `GetEntity(-5)`, Kabbu (`:31151`), null
   without him (`MainManager.cs:18594`): out of logic only, since the logic's submarine needs the whole party.
+- **The Checkpoint Corridor** (`RubberPrisonCheckpointCorridor`, 2026-10-10, the user on screen, flags 79, 535 and 538
+  off; EntityDump): the right (the door to the Pier), the two gates with the middle lever between them, the left (its
+  lever, the Wasp Driller, the locked `PrisonDoor` before the top left door to the spike room). Arriving from the spike
+  room, the game pushes the party past the locked door, and the Wasp Driller comes at it shortly after, not at once.
+  From the right with its gate up and no lever on that side, a dead end; the game's right lever (entity 8, at
+  1.07, 0, 2.1, made from 79) shown through `kept_present` (the dev `liveslot`) was there, and its hit swapped the gates.
+  Only flag 79 makes or removes a gate lever: this one and the Third Floor's (entity 17); no other prison lever has a
+  `requires` or `limit` (the dump). Used by `logic/rubber_prison.py`.
 - **The Flower Key** (2026-10-04, EntityDump, ScriptDump, the game's item text; seen in play): key item 54, "the key to
   the red house in the Ant City main plaza, bought from Beette at a discount!". Beette is the `smug bee` on
   `BeehiveBalcony` (made from flag 299, chapter 3's end); her line 21 is `checkmoney,150` then `giveitem,1,54`

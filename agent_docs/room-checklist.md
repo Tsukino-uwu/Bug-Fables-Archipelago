@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**174 of 244 done.**
+**175 of 244 done.**
 
 ## Outskirts
 
@@ -332,7 +332,11 @@ as it is, a frozen record.
   Office: the second floor's right door (583, the crank: the Wooden Crank and Beemerang Halt); for the Giant's Lair
   Bridge: the ground floor's right door (567); for the enemy pass: its four enemies (gone from 79) and the Wasp Driller;
   for the discovery sweep: discovery 47, recorded on arriving in any prison room
-- [ ] RubberPrisonCheckpointCorridor (219)
+- [x] RubberPrisonCheckpointCorridor (219) — the Checkpoint Corridor; the left and the right an attack apart, both
+  ways (two gates on flag 535, a lever between them and one on each side, the right one kept present, build step 81);
+  the top left door behind the Explorer Permit's lock (until 538), the party pushed past it on arrival; no location;
+  for the enemy pass: the Wasp Driller (gone from 79), coming at the party shortly after the pushed-past arrival; for
+  the Giant's Lair Bridge: the guard on the right (from 79)
 - [ ] RubberPrisonSpikeRoom (220)
 - [ ] RubberPrisonCells1 (221)
 - [ ] RubberPrisonCells2 (222)

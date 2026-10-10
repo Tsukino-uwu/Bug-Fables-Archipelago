@@ -5,7 +5,7 @@ from __future__ import annotations
 from rule_builder.rules import False_, Has
 
 from ..custom_rules import ANY_ATTACK, LATER_CHAPTERS, SUBMARINE, SUBMARINE_KEY, CanUse, one_way
-from ..data_types import ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, ItemEntity, Source, StoryEvent, Transfer
+from ..data_types import ALWAYS_SET, Area, EntityRef, FlagSwap, ItemEntity, Source, StoryEvent, Transfer
 
 _UP = CanUse("Jump") | CanUse("Bee Fly")
 # The Pier's lift lever hit (`switch`, flag 566): its lift runs for good.
@@ -50,16 +50,14 @@ MAP_AREAS = (
     Area("RubberPrisonPier", "Second Floor Right Door", ("loadzoneboss",), False_(), out=one_way(None, False_()),
          to="RubberPrisonPier (Second Floor)"),
     Area("RubberPrisonPier", "Shortcut Door", ("bossshortcut",), False_(), out=one_way(None, False_())),
-)
-
-# The checkpoint corridor's gates open and shut by switches (the user, 2026-10-04: "has to be considered a oneway").
-# From the Pier its gates may be shut (their switch on that side comes only from flag 79), so it never leads on; that
-# needs the corridor split into two areas (room-logic.md), not yet possible: Known issues.
-DOOR_RULES = (
-    # Across to the Pier from the far side: the switches take an attack.
-    DoorRule("RubberPrisonCheckpointCorridor", "loadzoneexit", ANY_ATTACK),
-    # Back to the spike room: its prison door (until flag 538) opens with the Explorer Permit.
-    DoorRule("RubberPrisonCheckpointCorridor", "loadzoneforward", Has("Explorer Permit")),
+    # The Checkpoint Corridor (RubberPrisonCheckpointCorridor; named by the user, 2026-10-10): two gates that follow flag
+    # 535 opposite ways, one always up, with a lever on each side of each (the right one kept present), so the left
+    # (the map's own region) and the right (the door to the Pier) are an attack apart, both ways (the user).
+    Area("RubberPrisonCheckpointCorridor", "Right", ("loadzoneexit",), ANY_ATTACK),
+    # The top left door to the spike room, behind a locked door (the Explorer Permit, open for good from 538): arriving
+    # from the spike room, the game pushes the party past it (seen), a one-way without the permit.
+    Area("RubberPrisonCheckpointCorridor", "Top Left Door", ("loadzoneforward",), Has("Explorer Permit"),
+         out=one_way(None, Has("Explorer Permit"))),
 )
 
 TRANSFERS = (
@@ -84,6 +82,11 @@ KEPT_OPEN = (
 KEPT_PRESENT = (
     # The Pier's third floor save crystal on its right, gone from flag 41 in the game: kept (the user, 2026-10-10).
     EntityRef("RubberPrisonPier", "SavePoint  - Duplicate"),
+    # The two gate levers the game adds only from flag 79 (the Giant's Lair Bridge's scene, Event193), shown from the
+    # start so each area the gates cut off has a lever of its own (the user, 2026-10-10): the Checkpoint Corridor's
+    # right one (its name shared with the middle lever, always there) and the Third Floor's upper one.
+    EntityRef("RubberPrisonCheckpointCorridor", "switch - Duplicate - Duplicate"),
+    EntityRef("RubberPrisonThirdFloor", "globalswitch - Duplicate - Duplicate"),
 )
 SCENERY_PRESENT = (
     # The Pier's third floor bridge, which the Office's crank breaks (Event193, flag 583, opening the second floor's

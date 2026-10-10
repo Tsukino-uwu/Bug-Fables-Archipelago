@@ -576,20 +576,41 @@ class TestAntTunnels(BugFablesTestBase):
         self.assertTrue(self.can_reach_location("Ant Palace: War Room, Table"))
 
 
-class TestPrisonCorridor(BugFablesTestBase):
-    # Switch gates: across to the yard with an attack; back through its prison door with the permit.
+class TestCheckpointCorridor(BugFablesTestBase):
+    # RubberPrisonCheckpointCorridor, the Checkpoint Corridor (the user, 2026-10-10): two alternating gates with a lever
+    # on each side of each (the right one kept present), so the left and the right are an attack apart, both ways; the
+    # top left door behind the locked door, the party pushed past it on arrival.
     options = {"shuffle_field_moves": True}
+    MAP = "RubberPrisonCheckpointCorridor"
 
-    def test_corridor_rules(self) -> None:
+    def way(self, name: str):
+        return self.multiworld.get_entrance(name, self.player).access_rule
+
+    def test_gates_take_an_attack(self) -> None:
+        for name in (f"{self.MAP} to {self.MAP} (Right)", f"{self.MAP} (Right) to {self.MAP}"):
+            with self.subTest(way=name):
+                self.assertFalse(self.way(name)(self.state_with("Explorer Permit", "Jump")))
+                self.assertTrue(self.way(name)(self.state_with("Progressive Beemerang")))
+                self.assertTrue(self.way(name)(self.state_with("Horn Slash")))
+
+    def test_doors_in_their_areas(self) -> None:
         from ..data_tables import door_name
-        def entrance(map_name: str, door: str):
-            return self.multiworld.get_entrance(door_name(map_name, door), self.player)
-        across = entrance("RubberPrisonCheckpointCorridor", "loadzoneexit")
-        self.assertFalse(across.access_rule(self.state_with()))
-        self.assertTrue(across.access_rule(self.state_with("Progressive Beemerang")))
-        back = entrance("RubberPrisonCheckpointCorridor", "loadzoneforward")
-        self.assertFalse(back.access_rule(self.state_with()))
-        self.assertTrue(back.access_rule(self.state_with("Explorer Permit")))
+        for door, area in (("loadzoneexit", "Right"), ("loadzoneforward", "Top Left Door")):
+            with self.subTest(door=door):
+                entrance = self.multiworld.get_entrance(door_name(self.MAP, door), self.player)
+                self.assertEqual(entrance.parent_region.name, f"{self.MAP} ({area})")
+
+    def test_locked_door_pushes_past(self) -> None:
+        # The permit opens it from the left; arrived through it, a one-way out, the permit its way back.
+        for name in (f"{self.MAP} to {self.MAP} (Top Left Door)", f"{self.MAP} (Top Left Door) to {self.MAP}"):
+            with self.subTest(way=name):
+                self.assertFalse(self.way(name)(self.state_with("Progressive Beemerang", "Jump")))
+                self.assertTrue(self.way(name)(self.state_with("Explorer Permit")))
+
+    def test_late_levers_present(self) -> None:
+        present = self.world.fill_slot_data()["kept_present"]
+        self.assertIn({"map": self.MAP, "entity": "switch - Duplicate - Duplicate"}, present)
+        self.assertIn({"map": "RubberPrisonThirdFloor", "entity": "globalswitch - Duplicate - Duplicate"}, present)
 
 
 class TestWizardTower(BugFablesTestBase):

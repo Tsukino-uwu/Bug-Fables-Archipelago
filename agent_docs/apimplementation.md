@@ -153,6 +153,7 @@ this file and that doc disagree, that doc is right.
 78. [Build step 78: the Rubber Prison Pier's third floor bridge kept](#build-step-78-the-rubber-prison-piers-third-floor-bridge-kept)
 79. [Build step 79: the Factory Pass, never used up](#build-step-79-the-factory-pass-never-used-up)
 80. [Build step 80: the Rubber Prison Pier's third floor save crystal kept](#build-step-80-the-rubber-prison-piers-third-floor-save-crystal-kept)
+81. [Build step 81: the Rubber Prison's late gate levers from the start](#build-step-81-the-rubber-prisons-late-gate-levers-from-the-start)
 
 **How it works**
 
@@ -913,11 +914,6 @@ be wrong.
   a progressive item received meanwhile gets the wrong level (`KeyFor` on an emptied bag). The Warp still leaves. The
   hideout's spots are held out meanwhile (build step 67); the fix is Next 64's first part.
 
-- **The Rubber Prison's checkpoint corridor from the Pier** (2026-10-04): in the game its gates may be shut from the
-  Pier's side, so it never leads on; the logic still lets the Pier reach the spike room through it (as before
-  2026-10-04). It needs the corridor split into two areas, the Pier's and the spike room's (`room-logic.md`, the
-  model), which the apworld can do since build step 48 (`MAP_AREAS`); until it's written the prison's spots wait for
-  the later chapters. Build step 9.
 - **Story scenes reached out of order freeze** (seen 2026-10-04, decoupled doors, a new file): the trigger `eventgl`
   on `RubberPrisonGiantLairBridge` (until flag 568) starts Event194, whose first branch talks to `vanessa` (entity 11,
   made only from flag 79): absent, the scene froze (freed with the dev `unstick`; it froze again on the next step there).
@@ -1887,7 +1883,9 @@ should never lead on; across to the yard from the far side it needs any attack f
 to the spike room its prison door needs the Explorer Permit (corrected by the user: "the permit is for opening the door
 for the other entrance"). Test `TestPrisonCorridor`. **The yard side isn't written yet:** a never-passable door
 (`False_`) is skipped by Archipelago's `create_entrance`, and forced into being it broke the decoupled entrance
-randomizer (the batched run, 2026-10-04); it needs the corridor split into two areas (Known issues). Now `kept_present`
+randomizer (the batched run, 2026-10-04); it needs the corridor split into two areas (Known issues). Split into three
+on 2026-10-10, mapping the room, with a lever on every side (build step 81; `TestCheckpointCorridor` replaced
+`TestPrisonCorridor`). Now `kept_present`
 from the start, the rule gone; location 12's beetle grass takes Kabbu's horn, so it needs `Horn Slash` of its own (the
 boss had implied it). Tests `TestGoldenPath`.
 **The arcade, always there** (the user, 2026-10-06: "we should make it so the arcade is always here"): on
@@ -3423,8 +3421,10 @@ Freeze or Bee Fly, for the quest pass), 173 of 244, the Honey Factory done; the 
 Pier (four floors of bridges, each dropped from onto any below, counted with Points of No Return until the rooms behind
 give a way back; the ground floor's gates jumped or flown round, its lower part and lift; the third floor bridge and
 save crystal kept, build steps 78 and 80; the Wasp Driller's Prison Key the game's own until Next 69; both doors to the
-Giant's Lair Bridge pushed-past one-ways for the Office and the bridge), 174 of 244; the rest of `room-checklist.md`
-to go.
+Giant's Lair Bridge pushed-past one-ways for the Office and the bridge), 174 of 244; the Checkpoint Corridor (the
+left and the right, two gates between them that alternate on flag 535 with a lever between them and on each side, the
+right one kept present, build step 81, so an attack apart both ways; the top left door behind the Explorer Permit's
+lock, a pushed-past one-way; no location), 175 of 244; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
@@ -6237,6 +6237,30 @@ set by the prison: players never see it. In a seed 41 can still be off there (`M
 41 on: the crystal there (the user).
 
 *Code: `logic/rubber_prison.py` (`KEPT_PRESENT`). The mod: `World/KeptOpen.cs`, unchanged.*
+
+## Build step 81: the Rubber Prison's late gate levers from the start
+
+**Found (2026-10-10, mapping the Checkpoint Corridor):** the prison's up/down gates all follow one flag, 535, which
+every gate lever in the prison flips, so hitting a lever in one room swaps the gates in every other (`MEASURED.md`, the
+Pier). The corridor's right side had no lever: arriving from the Pier with its gate up was a dead end, and its way on
+hung on a lever in another room, under the entrance randomizer anywhere in the world (the user: "with randomized
+entrances a lever could be on the other side of the world"). The game has a lever there, entity 8, but makes it only
+from flag 79 (`Event193`'s second branch, the Giant's Lair Bridge's scene); flag 79 makes one other lever, on the Third
+Floor (entity 17), and no other flag makes or removes a gate lever (the entity dump).
+
+**Asked and decided (the user, 2026-10-10):** a lever on each side, "so its always possible to make the gates go
+up/down from anywhere within a room", like the Golden Settlement's copied day/night switch; then, of making flag 79
+itself active or only its two levers: the two levers. Flag 79 stays the story's.
+
+**Built** (the apworld only: the mod's own list does it): `kept_present` gets both levers, the corridor's
+`switch - Duplicate - Duplicate` (its name shared with the middle lever, which has no flag) and the Third Floor's
+`globalswitch - Duplicate - Duplicate`. In the logic each gate with a lever on both sides is crossed with any attack,
+both ways (build step 24, the room-by-room list). Test `TestCheckpointCorridor`.
+
+**Status:** built (2026-10-10); the corridor's lever seen the same day in seed `AP_91955646846145333010` through the
+dev `liveslot`: there from the start, its hit swapping the gates (the user). The Third Floor's not seen yet.
+
+*Code: `logic/rubber_prison.py` (`KEPT_PRESENT`, `MAP_AREAS`). The mod: `World/KeptOpen.cs`, unchanged.*
 
 # How it works
 
