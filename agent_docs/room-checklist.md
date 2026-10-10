@@ -342,7 +342,9 @@ as it is, a frozen record.
 - [ ] RubberPrisonSecurity (226)
 - [ ] RubberPrisonOffice (229)
 - [ ] RubberPrisonThirdFloor (230)
-- [ ] RubberPrisonGiantLairBridge (231)
+- [ ] RubberPrisonGiantLairBridge (231) — when mapped: the ant tunnel's way in (`bugaria_city.py`, now later chapters
+  and the submarine) needs flag 79, set only by this bridge's scene, reached before it only through the Pier's second
+  floor right door, so after the Office's crank (the Wooden Crank and Beemerang Halt)
 
 ## Giant's Lair
 

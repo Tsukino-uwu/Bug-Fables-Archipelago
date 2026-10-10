@@ -125,6 +125,7 @@ SUBMARINE_KEY = 212
 # The Ant Palace's rooms and the city districts, once the big Inner City region: chapter 2 (flag 67).
 INNER_CITY = Has("Chapter 2 Started")
 # Chapters 2-7 until they get room-level logic: past chapter 2's start, with everything the story used before (the
-# permit, the Boat Ticket, the first boss, the whole party and its attacks). More cautious than the game.
+# permit, the Boat Ticket, the first boss, the whole party and its attacks). Not fully cautious: it never holds Bee Fly,
+# the Shield or Beemerang Halt (nor Jump when shuffled); each area's rooms replace it before the next release.
 LATER_CHAPTERS = (INNER_CITY & Has("Explorer Permit") & BOAT_TICKET & Has("Snakemouth Den Cleared")
                   & WHOLE_PARTY & ALL_ATTACKS)
