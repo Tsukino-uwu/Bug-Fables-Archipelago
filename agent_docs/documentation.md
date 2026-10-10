@@ -185,7 +185,10 @@ A few decisions made first, because they shape everything after:
     overworld) and in battles; Enter again sends and closes it, and Enter on an empty line just closes it. No
     gamepad button: typing needs a keyboard anyway. In the field this replaces the game's own use of Enter there
     (action 9, the "help": a party member talks about what's in front; `MEASURED.md`, Input); in the pause and start
-    menus Enter keeps the game's uses. A **Chat menu** in the Archipelago panel holds the chat's on/off switch, the
+    menus Enter keeps the game's uses. **Open, to decide when built** (found 2026-10-10 by the user, in the Honey
+    Factory's first puzzle room): action 9 is a mechanic too: in the factory's three puzzle rooms, with nobody in
+    front, it hollers to Gen and Eri to press the room's switch (the map's own help line), the only way through, so the
+    chat can't take Enter there (or must give action 9 another key) without leaving a seed stuck. A **Chat menu** in the Archipelago panel holds the chat's on/off switch, the
     filters and its other options; with the chat off, Enter is the game's everywhere, and with Archipelago off
     nothing changes (vanilla stays vanilla). **While it's open, nothing reaches the game** (2026-09-29, the user): no
     key or gamepad button acts in the game until you leave, by Enter on an empty line, Enter to send, or Esc (which
