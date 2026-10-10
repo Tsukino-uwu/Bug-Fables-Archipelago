@@ -1770,7 +1770,7 @@ visit, so no location): `Swamplands8`, `WaspKingdomDrillRoom`, `GiantLairBeforeB
   honey; no other pickups.
   **`FactoryProcessingPuzzle2` (2026-10-10, the user):** a dead end with one door (`loadzone`, to the Pump Room),
   nothing needed in or out. The Factory Pass (`keycard`, key item 95, flag 212) on the far right: Beemerang Halt (two
-  cranks, `ScrewSwitch`), Jump and the Shield (the user). The drop right of the door is a one-way without Jump; a fall
+  cranks, `ScrewSwitch`), Jump, the Shield, and a basic attack for a switch, reached only with Halt anyway (the user). The drop right of the door is a one-way without Jump; a fall
   below puts the party back at `respawnerleft`. Two bee-bots below, a sign by the door, the broken Mender (325 to 328).
   No other pickups.
   **`GoldenHillsPath3` (2026-10-07):** the left door and the dig spot on the top left, the Chomper Cave door below
