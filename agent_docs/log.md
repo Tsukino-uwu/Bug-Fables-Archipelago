@@ -4066,3 +4066,20 @@ either one wrong).
   Next room `RubberPrisonCheckpointCorridor` (219), its data draft given (name offered: "Checkpoint Corridor"); a new
   seed is needed (this one is finished, and the Factory Pass needs one). Still to ask: the Peculiar Gem, the Core's
   finale A or B, the Next 68 census.
+- **After the handoff note (the user: "test/fuzz, push what we have, fix any github action issues"):** a review of the
+  session's commits, ten findings confirmed and fixed (`8765baf`: tests looking up entrances Archipelago never makes,
+  a rule that can never pass making none; the lever's `no_jump`; the console refusing artifact flags before a login;
+  `liveslot` keeping the login's goal; Points of No Return's text). The first full run in several sessions: 29 test
+  failures, nearly all tests never run before; a fix workflow judged each test or code (`3e5ae81`: the castle's story
+  events missing `no_jump`; two swamp items missing from `items.json`; stale tests and fixtures; Room Swap's slow-seed
+  bar 2000, seed 11120 now 1281 tries). Second run: the suite, the Logic Test (90 of 90) and Universal Tracker (0 of
+  10000) clean; the fuzzer 1 of 10000, Coupled door shuffle running out of spare doors.
+- **The Coupled deadlock** (Known issues): Archipelago never retries; Pokémon Crystal retries on the same shuffler;
+  the failing yaml's 17 failures in 2000 left 52 different dead-end doors waiting, none in more than 4, the most three
+  unmapped one-door rooms. Decided (the user): revisit after every room is mapped, a retry, counting, or door by door
+  ("i don't want to keep trying to fix temporary issues"). Next 70 got the user's late Jump point (a random start or
+  door shuffle gives a best-effort late Jump room).
+- **Pushed** 140 commits (`1084522..1ff330f`), the last few sessions' work, then the deadlock's options. **CI**
+  (run 38063364414): the build, the tests on Python 3.11 to 3.13, the suite and the Logic Test (90 of 90) passed; red
+  only from the known Coupled deadlock, 4 fuzzer seeds in 10000 and 3 tracker seeds that failed to generate. Left red
+  on that until the door pass, the user's call; Preflight green.
