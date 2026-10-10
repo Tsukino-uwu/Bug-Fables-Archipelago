@@ -17,9 +17,17 @@ namespace BugFablesAP
         private static ManualLogSource log;
         private static Func<SeedData> seed;
         private static Func<bool> randomizerOn;
-        // Chapters (1-7) whose artifact item this file has been given (ItemReceiver), for the flags array it counted.
-        private static readonly HashSet<int> received = new HashSet<int>();
-        private static bool[] receivedFor;
+        // The seed's artifact items in the server's received list, (index, chapter) (ItemReceiver): kept after a dropped
+        // connection, so a file of that seed loaded offline still counts what it was given.
+        private static string trackedSeed;
+        private static int trackedCount = -1;
+        private static readonly List<KeyValuePair<int, int>> tracked = new List<KeyValuePair<int, int>>();
+        // Chapters (1-7) given to the file in play: those before its received count; rebuilt when either changes.
+        private static readonly HashSet<int> given = new HashSet<int>();
+        private static string givenSeed;
+        private static int givenCount = -1;
+        private static int trackedVersion;
+        private static int givenVersion = -1;
         private static readonly Sprite[] itemSized = new Sprite[7];
 
         internal static void Enable(ManualLogSource logger, Func<SeedData> seedData, Func<bool> on)
@@ -33,23 +41,41 @@ namespace BugFablesAP
 
         private static bool On => randomizerOn != null && randomizerOn();
 
-        internal static void SetReceived(IEnumerable<int> chapters)
+        internal static bool Tracking(string seedName, int count) => seedName == trackedSeed && count == trackedCount;
+
+        internal static void Track(string seedName, int count, IEnumerable<KeyValuePair<int, int>> artifacts)
         {
-            received.Clear();
-            received.UnionWith(chapters);
-            receivedFor = MainManager.instance?.flags;
+            trackedSeed = seedName;
+            trackedCount = count;
+            tracked.Clear();
+            tracked.AddRange(artifacts);
+            trackedVersion++;
         }
 
-        // Returns how many this file has now.
-        internal static int Receive(int chapter)
+        // The file's seed (ItemReceiver.SeedSlot) must be the tracked one: a file of another seed, an unbound one, or one
+        // just re-tied by AdoptSeed (its count back to 0) counts none.
+        private static HashSet<int> Given()
         {
-            received.Add(chapter);
-            return received.Count;
+            MainManager mm = MainManager.instance;
+            string fileSeed = mm?.flagstring?[ItemReceiver.SeedSlot];
+            int count = mm?.flagvar?[ItemReceiver.CountSlot] ?? 0;
+            if (fileSeed == givenSeed && count == givenCount && trackedVersion == givenVersion)
+            {
+                return given;
+            }
+            given.Clear();
+            givenSeed = fileSeed;
+            givenCount = count;
+            givenVersion = trackedVersion;
+            if (!string.IsNullOrEmpty(fileSeed) && fileSeed == trackedSeed)
+            {
+                given.UnionWith(tracked.Where(entry => entry.Key < count).Select(entry => entry.Value));
+            }
+            return given;
         }
 
-        // The goal's count: the artifact items this file has been given; none for a file not yet counted.
-        internal static int ReceivedCount =>
-            receivedFor != null && ReferenceEquals(receivedFor, MainManager.instance?.flags) ? received.Count : 0;
+        // The goal's count: the artifact items the file in play has been given.
+        internal static int ReceivedCount => Given().Count;
 
         private static bool IsItem(int chapter)
         {
@@ -66,7 +92,7 @@ namespace BugFablesAP
                 return false;
             }
             return IsItem(index + 1)
-                ? ReceivedCount > 0 && received.Contains(index + 1)
+                ? Given().Contains(index + 1)
                 : MainManager.instance.flags[EnemyScaling.ArtifactFlags[index]];
         }
 

@@ -3316,9 +3316,11 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
 - **The Giant's Lair Entrance** (`GiantLairEntrance`, 2026-10-11, the user on screen; EntityDump, code read): the
   left door (to the bridge) on a ledge, back up by the bounce pad (`jumpspring`) and the rock beside it, nothing else
   needed (the user); the Venus bud's scene in the middle (`venusevent`, until 569) needs nothing; the right door (to
-  the Giant's Hand, `loadzonedl`) and a save crystal, nothing needed. `Event194`'s first branch (on this map): entity 3
-  (`Fixedbud`, until 569, parked at y -5) grows, talks (line 1, then 2 or 3 by flag 278), shrinks and is moved 5 up
-  from its start, then 569 and 278 are set; the healing bud (`bud`, from 569) stands on the same spot. A scene
+  the Giant's Hand, `loadzonedl`) and a save crystal, nothing needed. `Event194`'s first branch (on this map), in
+  order: entity 3 (`Fixedbud`, until 569, parked at y -5) shrunk to nothing; line 1 spoken; the camera moved and the
+  bud set at (39, 0, 8), an empty line; it grows; line 2 or 3 (by flag 278); it shrinks; then it is set 5 above its
+  start at its own size, the camera reset, and 569 and 278 set; the healing bud (`bud`, from 569) stands on the
+  same spot. A scene
   trigger to the Roach Village (`loadzoneroachvillage`, from 586, `Event201`); 586 is set by `Event199` and
   `Event203`. The game's name for the next rooms: "the Dead Lands" (`GiantLairRoachVillage` line 45, `textsearch`).
 - **The Giant's Hand** (`GiantLairDeadLands1`, 2026-10-11, the user on screen, named by the user; EntityDump, code
@@ -3328,8 +3330,10 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   (`loadzoneforward`, to `GiantLairDeadLands2`): a bounce pad (`jumpspringbox`) up to a rock (`rock`, a `PushRock`),
   Jump, the rock knocked with the horn into the hand (`handenemy`), then the next bounce pad (`jumpspringbook`). The
   hand lets go whenever the room is left, so the rock is needed every time; the ledge's drop to the lower right is
-  free, a dead end without Bee Fly or Jump and Horn Slash (the user). Three Dead Landers (`DeadLanderA`, `DeadLanderB`,
-  a copy). The game has no name for the hand; the party calls them "those giant eyes" (`GiantLairDeadLands2` line 0).
+  free, a dead end without Bee Fly or Jump and Horn Slash (the user). Four map enemies: three Dead Landers
+  (`DeadLanderA`, `DeadLanderB`, a copy) and the hand itself, a respawning Dead Lander γ (entity 1, enemy 89, parked at
+  y -10; the apworld's encounter table, Enemysanity's "Dead Lander γ 1"). The party calls the giant ones "those giant
+  eyes" (`GiantLairDeadLands2` line 0).
 - **Crane Crossing** (`GiantLairDeadLands2`, 2026-10-11, the user on screen, named by the user; EntityDump, code
   read): the left door (`loadzoneback`, to the Giant's Hand) on a ledge, a drop down and back up by a bounce pad
   (`jumpspring`), free. From the left up to the silver coin stack in the middle: the droplet by the flower
@@ -3344,7 +3348,9 @@ in `badgedata[id, 1]`. Used by `ItemSwap.cs` (fixed 2026-09-26: it showed field 
   right with Bee Fly, no attack needed, never from the right door (the user). The right (the door
   to the fridge outside, `loadzonenext`) also has a red save crystal (`redcrystal`) that heals but doesn't save, up
   with Freeze, the horn and Jump (the second droplet). The game's text names none of the coins, the book, the spear or
-  the crane (`textsearch`). Three Dead Landers (copies of `DeadLanderA` and `DeadLanderB`).
+  the crane (`textsearch`). Four map enemies: three Dead Landers (copies of `DeadLanderA` and `DeadLanderB`) and a
+  hand like the Giant's Hand's, a respawning Dead Lander γ (`handenemy - Duplicate`, entity 5, parked at y -10; the
+  encounter table), not mentioned on screen.
 - **Outside the Fridge** (`GiantLairFridgeOutside`, 2026-10-11, the user on screen, named by the user; EntityDump,
   code read): the left door (to Crane Crossing) and a save crystal; walking towards the middle from either door starts
   `Event198` (`event`, until 593): talk, then a fight with Dead Landers α, β and γ (enemies 87-89, `canescape: false`;

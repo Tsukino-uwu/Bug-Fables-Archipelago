@@ -244,9 +244,11 @@ class TestClassifications(BugFablesTestBase):
         from ..items import own_copies
         used: set[str] = set()
         spots = (*self.multiworld.get_locations(self.player), *self.multiworld.get_entrances(self.player))
-        for spot in spots:
-            if hasattr(spot.access_rule, "item_dependencies"):
-                used.update(spot.access_rule.item_dependencies())
+        # The goal's rule too (the artifact items): set_completion_rule keeps it resolved in completion_condition.
+        rules = (*(spot.access_rule for spot in spots), self.multiworld.completion_condition[self.player])
+        for rule in rules:
+            if hasattr(rule, "item_dependencies"):
+                used.update(rule.item_dependencies())
         # Leif is both: the story's event with Starting Party Member off, an item with it on.
         event_items = {event.item for event in STORY_EVENTS} - {item.name for item in ITEMS}
         real_items_used = used - event_items
@@ -954,7 +956,10 @@ class TestGiantsHand(_PrisonRoom):
         self.assertFalse(up(self.state_with("Bee Fly", "Jump")))
         self.assertFalse(up(self.state_with("Bee Fly", "Horn Slash")))
         self.assertTrue(up(self.state_with("Jump", "Horn Slash")))
-        self.assertTrue(self.way(f"{self.MAP} (Right Door) to {self.MAP} (Right)")(self.state_with()))
+        # The drop down needs its way back (Points of No Return off).
+        down = self.way(f"{self.MAP} (Right Door) to {self.MAP} (Right)")
+        self.assertFalse(down(self.state_with("Bee Fly")))
+        self.assertTrue(down(self.state_with("Jump", "Horn Slash")))
 
     def test_the_dig_spot(self) -> None:
         dig = self.spot("Giant's Lair: Giant's Hand, Dig Spot")
@@ -974,13 +979,17 @@ class TestCraneCrossing(_PrisonRoom):
         self.assertFalse(up(self.state_with("Freeze", "Horn Slash", "Jump")))
         self.assertFalse(up(self.state_with("Freeze", "Bee Fly")))
         self.assertTrue(up(self.state_with("Freeze", "Horn Slash", "Bee Fly")))
-        self.assertTrue(self.way(f"{self.MAP} (Silver Coins) to {self.MAP}")(self.state_with()))
+        # Each drop needs its way back (Points of No Return off).
+        down = self.way(f"{self.MAP} (Silver Coins) to {self.MAP}")
+        self.assertFalse(down(self.state_with("Jump")))
+        self.assertTrue(down(self.state_with("Freeze", "Horn Slash", "Bee Fly")))
 
     def test_the_middle_right(self) -> None:
-        self.assertTrue(self.way(f"{self.MAP} (Silver Coins) to {self.MAP} (Middle Right)")(self.state_with()))
-        back = self.way(f"{self.MAP} (Middle Right) to {self.MAP} (Silver Coins)")
-        self.assertFalse(back(self.state_with("Bee Fly")))
-        self.assertTrue(back(self.state_with("Jump")))
+        for name in (f"{self.MAP} (Silver Coins) to {self.MAP} (Middle Right)",
+                     f"{self.MAP} (Middle Right) to {self.MAP} (Silver Coins)"):
+            with self.subTest(way=name):
+                self.assertFalse(self.way(name)(self.state_with("Bee Fly")))
+                self.assertTrue(self.way(name)(self.state_with("Jump")))
         berry = self.spot("Giant's Lair: Crane Crossing, By the Spear")
         self.assertEqual(berry.parent_region.name, f"{self.MAP} (Middle Right)")
         self.assertFalse(berry.access_rule(self.state_with("Horn Slash")))
@@ -997,7 +1006,10 @@ class TestCraneCrossing(_PrisonRoom):
         self.assertFalse(across(self.state_with("Bee Fly")))
         self.assertFalse(across(self.state_with("Horn Slash", "Jump")))
         self.assertTrue(across(self.state_with("Bee Fly", "Horn Slash")))
-        self.assertTrue(self.way(f"{self.MAP} (Right) to {self.MAP} (Middle Right)")(self.state_with()))
+        # The red bounce pad back needs its way back (Points of No Return off).
+        back = self.way(f"{self.MAP} (Right) to {self.MAP} (Middle Right)")
+        self.assertFalse(back(self.state_with("Bee Fly")))
+        self.assertTrue(back(self.state_with("Bee Fly", "Horn Slash")))
 
 
 class TestOutsideTheFridge(_PrisonRoom):

@@ -28,11 +28,12 @@ class Item:
     game_id is the amount), 4 crystal berries (one item, game_id 0; the count is the currency; useful until the crystal
     berry shop is in the seed, then progression, since they buy locations there), 5 party members (game_id 0 Vi,
     1 Kabbu, 2 Leif), 6 field abilities (game_id 0 Progressive Beemerang, 1 Horn Slash, 2 Progressive Freeze, 3 Jump,
-    4 Progressive Dash, 5 Bee Fly, 6 Beetle Dig, 7 Shield; their names and copies are in abilities.py).
+    4 Progressive Dash, 5 Bee Fly, 6 Beetle Dig, 7 Shield; their names and copies are in abilities.py), 7 Termacade
+    tokens (game_id the amount), 8 the goal's artifacts (game_id the chapter, 1-7).
 
     The Archipelago id is ITEM_ID_BASE + game_id, plus MEDAL_ID_OFFSET for a medal (medal ids overlap item ids),
-    MONEY_ID_OFFSET for berries, CRYSTAL_ID_OFFSET for crystal berries, MEMBER_ID_OFFSET for a party member or
-    MOVE_ID_OFFSET for a field move.
+    MONEY_ID_OFFSET for berries, CRYSTAL_ID_OFFSET for crystal berries, MEMBER_ID_OFFSET for a party member,
+    MOVE_ID_OFFSET for a field move, TOKEN_ID_OFFSET for tokens or ARTIFACT_ID_OFFSET for an artifact.
 
     padding: the filler used to fill leftover locations, in any number. always: enters the pool this many times in
     every seed, each copy taking a filler slot (the mod's own items, which no location holds in vanilla).
@@ -40,7 +41,8 @@ class Item:
     member, in the pool only with Starting Party Member on (the ones not starting; none with All Three). move: a field ability's item, in the
     pool as many times as abilities.py says. kept: a key item the mod leaves in the bag at its locks (slot_data
     kept_keys): in the pool once, however many included spots hold it, padding making up the count. Every other item
-    enters the pool once per included location that holds it in vanilla.
+    enters the pool once per included location that holds it in vanilla, except an artifact with Artifact Shuffle's
+    Vanilla, locked at its own scene instead.
     """
 
     name: str

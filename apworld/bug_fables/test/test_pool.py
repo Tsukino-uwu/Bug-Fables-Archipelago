@@ -36,7 +36,8 @@ class TestPool(BugFablesTestBase):
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         own = sum(own_copies(self.world, item.name) for item in ITEMS)
         short = 0
-        included = self.world.included_locations
+        # The artifacts Artifact Shuffle's Vanilla locked at their scenes are out of the pool.
+        included = [loc for loc in self.world.included_locations if self.world.get_location(loc.name).item is None]
         for name in {vanilla_item(loc) for loc in included} - {None}:
             expected = 1 if ITEMS_BY_NAME[name].kept else sum(1 for loc in included if vanilla_item(loc) == name)
             with self.subTest(item=name):
@@ -87,10 +88,11 @@ class TestSmallPool(BugFablesTestBase):
         for item in ITEMS:
             if item.always:
                 self.assertEqual(pool.count(item.name), own_copies(self.world, item.name))
-        for name in {vanilla_item(loc) for loc in self.world.included_locations} - {None}:
+        # The artifacts Artifact Shuffle's Vanilla locked at their scenes are out of the pool.
+        included = [loc for loc in self.world.included_locations if self.world.get_location(loc.name).item is None]
+        for name in {vanilla_item(loc) for loc in included} - {None}:
             data = ITEMS_BY_NAME[name]
             if data.classification != "filler" or data.kind not in (ITEM_KIND, MONEY_KIND):
-                expected = 1 if data.kept else sum(1 for loc in self.world.included_locations
-                                                   if vanilla_item(loc) == name)
+                expected = 1 if data.kept else sum(1 for loc in included if vanilla_item(loc) == name)
                 with self.subTest(item=name):
                     self.assertEqual(pool.count(name), expected)

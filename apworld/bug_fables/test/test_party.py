@@ -84,8 +84,10 @@ class _StartWith:
             self.assertTrue(self.can_reach_location(spot))
 
     def test_pool_matches_locations(self) -> None:
+        # The artifacts Artifact Shuffle's Vanilla locked at their scenes are out of both.
         pool = [item for item in self.multiworld.itempool if item.player == self.player]
-        locations = [loc for loc in self.multiworld.get_locations(self.player) if loc.address is not None]
+        locations = [loc for loc in self.multiworld.get_locations(self.player)
+                     if loc.address is not None and loc.item is None]
         self.assertEqual(len(pool), len(locations))
 
 
@@ -161,6 +163,8 @@ class TestStartAllThree(BugFablesTestBase):
         self.assertTrue(self.can_reach_location("Outskirts: East Road, Boulder"))
 
     def test_pool_matches_locations(self) -> None:
+        # The artifacts Artifact Shuffle's Vanilla locked at their scenes are out of both.
         pool = [item for item in self.multiworld.itempool if item.player == self.player]
-        locations = [loc for loc in self.multiworld.get_locations(self.player) if loc.address is not None]
+        locations = [loc for loc in self.multiworld.get_locations(self.player)
+                     if loc.address is not None and loc.item is None]
         self.assertEqual(len(pool), len(locations))

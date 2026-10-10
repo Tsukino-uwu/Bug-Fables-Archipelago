@@ -45,7 +45,7 @@ namespace BugFablesAP
         // story would take away.
         internal readonly List<ApConnection.FlagSwap> ActivationFlags;
         internal readonly List<ApConnection.FlagSwap> LimitFlags;
-        // The goal's flags, each with the events that set it; null for a seed without them, whose goal is never sent.
+        // The artifacts' flags (each its location's check), each with the events that set it, for GoalGuard.
         internal readonly List<ApConnection.GoalFlag> GoalFlags;
         // Map start-up scenes never played: their flag set as the map is built.
         internal readonly List<ApConnection.MapScene> ScenesKeptAway;
@@ -65,7 +65,7 @@ namespace BugFablesAP
         internal readonly string StartFrom;
         // slot_data's "options", the options as the seed applied them; none means a seed from an older apworld.
         internal readonly bool OptionsMissing;
-        // The goal: this many artifacts, as the game counts them. 0 when slot_data has none.
+        // The goal: this many artifact items received (ArtifactIcons). 0 when slot_data has none.
         internal readonly int ArtifactsRequired;
         internal readonly int OwnSlot;
         // The one member a new file starts with (0 Vi, 1 Kabbu, 2 Leif; 3 all three), when the seed names one.

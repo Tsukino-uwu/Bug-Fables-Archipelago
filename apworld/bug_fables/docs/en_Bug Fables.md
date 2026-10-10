@@ -8,9 +8,9 @@ place. Every item, your own included, arrives from the server and is given to yo
 
 This is an early version, its logic written room by room. It covers the Bugaria Outskirts, Snakemouth Den, Bugaria
 City, the Golden Path, the Golden Settlement, the Lost Sands, the Golden Hills, the Far Grasslands, the Wild Swamplands,
-the Forsaken Lands, Defiant Root, the Bee Kingdom and its Honey Factory, with their shops, plus the scenes in later
-chapters where the game teaches a field ability (all but Beetle Dig's, held out for now) and the one where the Termite
-King hands over the submarine. More areas come later.
+the Forsaken Lands, Defiant Root, the Bee Kingdom and its Honey Factory, the Rubber Prison and the first rooms of the
+Giant's Lair, with their shops, plus the scenes in later chapters where the game teaches a field ability (all but
+Beetle Dig's, held out for now) and the one where the Termite King hands over the submarine. More areas come later.
 
 ## Options
 

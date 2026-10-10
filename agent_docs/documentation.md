@@ -1073,11 +1073,11 @@ read `[qol] Event<n>: passing it by at speed` and `[qol] scene over: normal spee
    party talk that sets 170 and gives nothing (read with the console's `line`). The game also sets 170 on entering
    `DesertDRSouthEntrance` (`MapControl`); nothing else reads it. A second `TalkScenes` row.
    **The Giant's Lair Entrance's Venus bud** (2026-10-11, mapping the room: "can we add this one to the speedup qol
-   skip/speed cutscene?"): its trigger (`venusevent`, until 569) plays `Event194`'s first branch: a bud parked below
-   ground (`Fixedbud`) grows, talks, shrinks and is moved up, then 569 and 278 are set, and the healing bud (`bud`,
-   from 569) takes its spot. A skip by its flags would leave the room as it stood until the map is built again, so it
-   is fast-forwarded (a `Scenes` row, `Flags = null`). **Seen (2026-10-11):** "the speedup cutscene
-   worked" (the user), the log's `[qol] scene over: normal speed`.
+   skip/speed cutscene?"): its trigger (`venusevent`, until 569) plays `Event194`'s first branch: a line, then a bud
+   parked below ground (`Fixedbud`) is moved into view and grows, talks, shrinks and is moved back up to its spot,
+   then 569 and 278 are set, and the healing bud (`bud`, from 569) stands there. A skip by its flags would leave the
+   room as it stood until the map is built again, so it is fast-forwarded (a `Scenes` row, `Flags = null`). **Seen
+   (2026-10-11):** "the speedup cutscene worked" (the user), the log's `[qol] scene over: normal speed`.
    **Outside the Fridge's fight** (2026-10-11, mapping the room: "can we speedup the cutscene before & after the
    fight?"): `Event198` talks, starts a fight with three Dead Landers, talks again, sets 593 and builds the map again;
    fast-forwarded (a `Scenes` row), the fight at the game's own speed as in every sped-up scene. **Seen (2026-10-11):**
@@ -1800,7 +1800,9 @@ right point in the story. It is a balance setting, not a challenge setting.
     area early is scaled down, an easy one late scaled up, and EXP follows (below).
   - **Artifacts:** scaled to the artifacts found, as vanilla's difficulty follows the story; levelling ahead makes it
     easier, rushing harder. A `chapter` mode was dropped: the chapter ends *are* the artifact flags, so it would be
-    the same number.
+    the same number. It counts those flags, the chapters' artifact scenes played; since step 57 an artifact item can
+    arrive without its scene (Artifact Shuffle), so "found" now means the scenes, not the items (the setup guide says
+    so; the in-game row's text and whether it should follow the items instead are still to ask the user).
 - Both up and down. **Normal / Hard / Hardest** (step 15) stays the challenge setting, on top.
 - The **bestiary** shows the scaled numbers, as the enemy would be if met now. Spy in a fight already shows the live
   ones.
@@ -3504,9 +3506,13 @@ chapter as its game id). Before, the mod counted the artifact flags; now an arti
 check, and the item can arrive from anywhere, so the mod gives it, draws it and counts it itself.
 
 - **Receiving one** puts nothing in the bag and never sets the story's artifact flag (that flag drives the story).
-  The receiver keeps the chapters received for the file in play, rebuilt each frame from the server's list up to the
-  save's received count, as party members are (`ArtifactIcons.SetReceived`). A file not yet matched to the seed counts
-  none.
+  Which ones the file in play has is worked out, not stored: the receiver notes each artifact item in the server's
+  list with its place in it, again whenever the list grows (`ArtifactIcons.Track`), and the file has those before its
+  received count (`flagvar[60]`), for the seed it is tied to (`flagstring[5]`). No new save field: the count and the
+  seed are already there (step 7). The note outlives a dropped connection, so a file of that seed loaded offline (a
+  Game Over, a reload) still shows what it was given; only a game started offline has none until it connects. A file
+  of another seed, an unbound one, or one just re-tied by the dev AdoptSeed (its count back to 0) counts none. A review
+  the same day found the first version, a set rebuilt per file only while connected, wrong in both of those cases.
 - **Its look** (the hold-up, or a pickup that holds one): the world's name for it from Archipelago's data package
   (`GetItemName`), the pause menu's icon for its chapter (`StartMenu.psprite`, copied to an item's size as the party
   icons are), the key item colour, the article "the". It has no description box, as a member or a move.

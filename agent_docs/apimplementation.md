@@ -216,8 +216,9 @@ be wrong.
    Progression* holding up only progression items: seen 2026-10-04.
 6. **A full bag:** never holds up the queue; a bag item that doesn't fit drops at the party's feet (build step 7):
    built, not yet seen.
-7. **Goal:** the mod counts the seed's goal flags (`goal_flags`, guarded since build step 60) and sends "goal reached"
-   at the required number: done, seen (build step 3).
+7. **Goal:** the mod counts the artifact items received (since build step 86; before, the seed's goal flags) and sends
+   "goal reached" at the required number: the flag count done and seen (build step 3); the item count built, not yet
+   seen.
 8. **A release: three separate downloads** (2026-09-25): built, see build step 17; v0.1.0 out
    (2026-09-26), v0.2.0 (2026-09-27), v0.3.0 (2026-10-04). The next one: `dev-scripts/release.ps1 -Version vX.Y.Z`
    after bumping both versions. **When (the user, 2026-10-08):** once every room's logic is mapped, which makes the
@@ -409,10 +410,10 @@ be wrong.
     step 57); all 7 with the missing ones faded is worth a look on screen, kept only if it looks good. No mode shuffling
     them only among the chapter ends (Pokémon Crystal's `randomize_badges` has one, read 2026-10-09, `licensing.md`).
 29. **A bosses goal, an idea for later** (2026-09-27): a *Goal* option (Artifacts / Bosses) and *Bosses
-    Required* (all, or a number): each boss's beaten flag an event the goal counts, as artifacts are today. **Decided
-    (2026-09-27): story bosses only**; the bounties maybe a side setting later, once *Shuffle Bounties* gives
-    them logic (Next 13). Only a real
-    choice once the world reaches past chapter 1 (today: one artifact, one story boss). Its own build step.
+    Required* (all, or a number): each boss's beaten flag an event the goal counts, as the artifacts' flags were before
+    build step 86 made them items. **Decided (2026-09-27): story bosses only**; the bounties maybe a side setting
+    later, once *Shuffle Bounties* gives them logic (Next 13). A real choice once the world holds more than a few
+    story bosses (written 2026-09-27 with one; 2026-10-11: two artifacts, chapters 1 and 6). Its own build step.
     **Several goals at once, asked 2026-09-29, as Super Metroid's objectives** (0.6.7, read the same day): SM's
     `objective` (up to 5 of about 40 goals) or `custom_objective` (N picked at random), every one selected required
     before the last boss (`worlds/sm/Options.py:318-370`); Satisfactory's `GoalSelection` with `GoalRequirement`, any
@@ -802,11 +803,13 @@ be wrong.
     comes from the castle boss room's fight, added outright, not through `Giveitem` (`MEASURED.md`, the boss room): its
     stand-in becomes that room once the castle's door opens.
 65. **The file select's artifact icons, each one's own** (the user, 2026-10-09: "something we could log/maybe attempt
-    later on. not a high prio"): the pause menu shows each set artifact flag's icon (the mod guide, step 48), but the
-    file select draws the first N from the count each save's summary line stores (`LoadData.progression`), which says
-    nothing of which ones. Adding them to that line would be a new save format (never). The way left: read each file's
-    flags at the file select, read-only, the game's save format parsed by the mod; more work, and a misread only draws
-    wrong icons. Its own step in the mod guide.
+    later on. not a high prio"): the pause menu shows each artifact the file has (the mod guide, steps 48 and 57), but
+    the file select draws the first N from the count each save's summary line stores (`LoadData.progression`), which
+    says nothing of which ones. Adding them to that line would be a new save format (never). The way left: read each
+    file's flags at the file select, read-only, the game's save format parsed by the mod; more work, and a misread only
+    draws wrong icons. Since step 57 the artifact items received are no flag at all (the server's list against the
+    file's received count), so only the chapters still held as flags could be read that way. Its own step in the mod
+    guide.
 66. **Faster room changes** (the user, 2026-10-09: "lets save it until later, lets finish mapping out logic for all
     rooms first"; a Quality of life row, its own step in the mod guide). A door's room change takes about 2 s, nearly
     all the game's own (`MEASURED.md`, the dev load timer): the fade out with the walk into the door, about 0.25 s
@@ -1234,11 +1237,12 @@ logged "Team #1 has completed all of their games!".
 at the required count, seen working (2026-09-26), and again read from `slot_data`'s `options` (2026-10-04: the
 first boss, `[goal] sent`, the server's "completed their goal"); more artifacts come with more of the world (Next 1).
 Sent through `SetGoalAchieved()` since 2026-10-08 (the same packet): not yet seen. Only the seed's goal flags count
-since build step 60 (2026-10-08): not yet seen.
+since build step 60 (2026-10-08): not yet seen. Since build step 86 (2026-10-11) the artifacts are items and the goal
+counts the artifact items received, no longer flags: not yet seen.
 
-*Code: `apworld/bug_fables/options.py` (`ArtifactsRequired`), `world.py` (`generate_early` lowers the
-number), `locations.py` (`create_all_locations` adds the artifact events), test `TestArtifactsCapped`; the
-mod: `LocationChecks.CheckGoal`, `ApConnection.SendGoal`.*
+*Code: `apworld/bug_fables/options.py` (`ArtifactsRequired`), `world.py` (`generate_early` lowers the number),
+`rules.py` (the completion rule), test `TestArtifactsCapped`; the mod: `LocationChecks.CheckGoal`,
+`ApConnection.SendGoal`; before build step 86, `locations.py` added the artifact events.*
 
 ## Build step 4: auto-connect, retries and a dropped connection
 
@@ -5740,8 +5744,10 @@ without it). Otherwise each artifact flag is set only by its own events. Two mor
    then. The book room's gate (`DesertBookArea`), fed by one of those switches and there only until 41, is there until
    691: never, as in vanilla.
 2. **The goal counts only the seed's goal flags** (`goal_flags`: each flag with every event that sets it, built from the
-   world's artifacts and the game's own list, `ARTIFACT_WRITERS`). Today that is flag 41, set by Event26. An artifact
-   the logic doesn't hold never counts; a future goal is a new row.
+   world's artifacts and the game's own list, `ARTIFACT_WRITERS`). Then that was flag 41, set by Event26. An artifact
+   the logic doesn't hold never counts; a future goal is a new row. **Since build step 86** (2026-10-11) the goal
+   counts the artifact items received instead; `goal_flags` (41 and 346 today) stays, each flag now its location's
+   check, kept to its own events by the guard below, so no stray write sends it (or, with Vanilla, the artifact).
 3. **A guard on those flags** (`GoalGuard`): a goal flag that turns on is kept only when one of its own events is
    running (the game's `lastevent`, with an event in progress) or the dev console's `flag <n> on goal` set it;
    anything else turns it back off, logged as `[goal-guard] flag N turned on outside its events ... turned back off`.
@@ -6401,23 +6407,26 @@ with the King swinging where the wall was (the user).
 this artifact into a location? eventually i want all 7 artifacts as locations anyway". Each artifact is a goal item and
 its scene a location: "so you get them in their intended location/s, or they can be shuffled to be anywhere in your
 world or another apworld". Built now for the two the world holds (chapters 1 and 6); the other five join as their
-chapters are mapped. The plan was Next 28; what changed from it, each the user's pick: three choices, not two; the
-items named as the game names them, each with an *Artifact N* hint group; *Artifacts Required* stays capped at what the
-world holds (2 today).
+chapters are mapped. The plan was Next 28; what changed from it, each the user's pick: three choices, not two; each
+item named by the user (the game's own name where it has one), with an *Artifact N* hint group; *Artifacts Required*
+stays capped at what the world holds (2 today).
 
 **Built:**
 - **The items:** kind 8 (id offset 7000, game id the chapter), progression, one per chapter: *Snakemouth Treasure*
-  (chapter 1) and *Flame Brooch* (6), the names the user picked. `item_name_groups`: *Artifacts* (all) and *Artifact
-  1* to *7* (each its own), so `!hint Artifact 6` finds the Flame Brooch.
+  (chapter 1) and *Flame Brooch* (6), the names the user picked. `item_name_groups`: *Artifacts* (all) and one
+  *Artifact N* per artifact item the world holds (today *Artifact 1* and *Artifact 6*), so `!hint Artifact 6` finds
+  the Flame Brooch.
 - **The locations:** each artifact's scene is an ordinary location, named after its place (the user's yes):
   *Snakemouth Den: Treasure Room, Treasure Pedestal* (`Event26`, flag 41) and *Rubber Prison: Giant's Lair Bridge,
   Queen's Gift* (`Event194`, flag 346). A location's `Source` names its artifact (`artifact=`); `vanilla_item` gives
   that chapter's item; the old `Artifact` events are gone.
 - **The option, *Artifact Shuffle*:** Vanilla (the default) places each artifact item on its own scene as a locked
-  item, out of the pool (`place_locked_item`). This World adds the artifacts to Archipelago's own `local_items`, so the
-  fill keeps them in this game. Anywhere: any game in the multiworld. All three go through Archipelago's own fill, so a
-  plando can still place them. The option is sent in slot_data's `options` (`SLOT_OPTIONS`): without it, Universal
-  Tracker's rebuild would take the default and lock the artifacts at their scenes in an Anywhere seed.
+  item, out of the pool (`place_locked_item`, as Pokémon Red and Blue lock their vanilla badges), so a plando can't
+  move them. This World adds the artifacts to Archipelago's own `local_items` in `generate_early` (as A Link to the
+  Past does for its Triforce Pieces), so the fill keeps them in this game. Anywhere: any game in the multiworld. With
+  those two the artifacts go through Archipelago's own fill, so a plando can place them. The option is sent in
+  slot_data's `options` (`SLOT_OPTIONS`): without it, Universal Tracker's rebuild would take the default and lock the
+  artifacts at their scenes in an Anywhere seed.
 - **The goal:** `HasFromListUnique` of the artifact items, *Artifacts Required* of them, wherever they were placed.
   The client sends the goal once that many artifact items have arrived (the mod guide, step 57), never from the flags:
   a flag is now its location's check, still guarded to its own events (`goal_flags`, build step 60).
@@ -6425,6 +6434,9 @@ world holds (2 today).
 **Tests:** `TestArtifactShuffleVanilla` (each locked at its scene, none in the pool, the hint groups),
 `TestArtifactShuffleThisWorld` (in the pool and in `local_items`), `TestArtifactShuffleAnywhere` (in the pool, not
 local), `TestArtifactsCapped` (the goal capped at 2 and needing both), `TestGoalFlags` (41 and 346 with their events).
+A review the same day (read only, each finding checked by a second reader) found the tests the change had broken and
+not yet run: the classification test now reads the goal's rule too (`completion_condition`, where the artifact items
+are used), and the pool tests (`test_pool.py`, `test_party.py`) skip the locations Vanilla filled.
 
 **Status:** built (2026-10-11); not yet seen in game, which needs a new seed.
 
@@ -6540,7 +6552,8 @@ only way a setting chosen at generation (an option, a version number) reaches th
 - `quiet_locations`, the opening's checks, whose items arrive with no hold-up (the mod guide, Item animation);
 - the open world (build step 9): `kept_open`, `kept_present`, `scenery_hidden`, `scenery_present`, `held_until`,
   `present_from` and `dialogue_flags`, the story's blockers and scenery the mod keeps the way the logic assumes;
-- the goal guard (build step 60): `goal_flags`, the goal's flags and the events that set them, and `activation_flags`
+- the goal guard (build step 60): `goal_flags`, the artifacts' flags (since build step 86 each its location's check)
+  and the events that set them, and `activation_flags`
   and `limit_flags`, entities that borrow a goal flag repointed (and, build step 64, a pickup the story would take
   away);
 - `scenes_kept_away` (build step 62): maps' own start-up scenes never played, their flag set as the map is built;
@@ -6725,8 +6738,9 @@ one of its ways in will do.
   (rule 3).
 - **Events:** some needs aren't items: a story step, a boss beaten. Each is an event, a location with no id holding a
   logic-only item (*First Boss Beaten* holds "Snakemouth Den Cleared"). It's reached like any location, and from then
-  on its item counts for every rule, so a rule names a story step with `Has`, as it would an item. The goal is one
-  too: "has enough Artifacts".
+  on its item counts for every rule, so a rule names a story step with `Has`, as it would an item. The goal is not an
+  event: it is the completion rule, "has *Artifacts Required* of the artifact items", real items placed by the fill
+  (build step 86).
 - **The rules are Archipelago's Rule Builder** (build step 29): `Has("Explorer Permit")`, `a & b` for "and", `a | b`
   for "or". Needs that depend on the seed's options are Bug Fables' own registered rules: `CanUse("Horn Slash")` (the
   ability's item when it's an item, its member when members are), `Member("Vi")`, `MoveItem("Freeze")`, `Boat(1)` (the

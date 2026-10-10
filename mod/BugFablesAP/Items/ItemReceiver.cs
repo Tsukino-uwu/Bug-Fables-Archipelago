@@ -84,6 +84,7 @@ namespace BugFablesAP
                     ? "the seed's item table isn't loaded" // skipping would count the item as given
                 : Busy(mm);
             ReadOnlyCollection<ItemInfo> received = session?.Items.AllItemsReceived;
+            TrackArtifacts(session, received);
             int given = matches == true ? mm.flagvar[CountSlot] : -1;
             string state = blocked != null ? "waiting: " + blocked
                 : $"giving: {given} of {received.Count} received";
@@ -97,7 +98,6 @@ namespace BugFablesAP
             if (matches == true && given >= 0 && given <= received.Count)
             {
                 PartyMembers.SetReceived(MembersGiven(received, given));
-                ArtifactIcons.SetReceived(KindGiven(received, given, ItemIds.ArtifactKind));
             }
             if (blocked != null || given == received.Count)
             {
@@ -147,6 +147,30 @@ namespace BugFablesAP
         private System.Collections.Generic.IEnumerable<int> MembersGiven(ReadOnlyCollection<ItemInfo> received,
             int given) =>
             KindGiven(received, given, ItemIds.MemberKind);
+
+        // The seed's artifact items, each with its index in the server's list, for the goal and the pause menu; again
+        // only when the list grows.
+        private void TrackArtifacts(ArchipelagoSession session, ReadOnlyCollection<ItemInfo> received)
+        {
+            string seed = ServerText.SeedOf(session);
+            if (received == null || connection.ItemKinds == null || string.IsNullOrEmpty(seed)
+                || ArtifactIcons.Tracking(seed, received.Count))
+            {
+                return;
+            }
+            var artifacts = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<int, int>>();
+            for (int i = 0; i < received.Count; i++)
+            {
+                ItemInfo item = received[i];
+                if (item.ShownGame() == ApConnection.Game
+                    && connection.ItemKinds.TryGetValue(item.ItemId, out int kind) && kind == ItemIds.ArtifactKind)
+                {
+                    artifacts.Add(new System.Collections.Generic.KeyValuePair<int, int>(i, ItemIds.GameId(item.ItemId,
+                        kind)));
+                }
+            }
+            ArtifactIcons.Track(seed, received.Count, artifacts);
+        }
 
         private System.Collections.Generic.IEnumerable<int> KindGiven(ReadOnlyCollection<ItemInfo> received, int given,
             int wanted)
@@ -260,8 +284,9 @@ namespace BugFablesAP
             }
             if (kind == ItemIds.ArtifactKind)
             {
-                // Nothing in the bag and never the story's artifact flag: the goal and the pause menu count it.
-                return $"artifact {gameId} received ({ArtifactIcons.Receive(gameId)} of the goal's now)";
+                // Nothing in the bag and never the story's artifact flag: the goal and the pause menu count it once the
+                // received count passes it (ArtifactIcons).
+                return $"artifact {gameId} received: counted for the goal and the pause menu";
             }
             if (kind != 0)
             {

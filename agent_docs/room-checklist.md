@@ -390,14 +390,15 @@ as it is, a frozen record.
 - [x] GiantLairDeadLands1 (233) — the Giant's Hand (named by the user); its left (the Entrance's door, the dig spot,
   Crystal Berry 49, Beetle Dig: "Giant's Lair: Giant's Hand, Dig Spot") the map's own region; the lower right across
   the platforms with Bee Fly, both ways; the right door's ledge up by the hand's rock only (Jump and Horn Slash, the hand
-  letting go whenever the room is left), a free drop down; for the enemy pass: three Dead Landers
+  letting go whenever the room is left), a free drop down; for the enemy pass: three Dead Landers and the hand, a
+  respawning Dead Lander γ
 - [x] GiantLairDeadLands2 (234) — Crane Crossing (named by the user); its left (the Giant's Hand's door on a ledge,
   a bounce pad back up) the map's own region; up the coin stacks to the silver coins (Freeze, Horn Slash, Bee Fly), a
   drop back; down to the middle right, back up with Jump; the middle right's Mystery Berry by the spear (respawning,
   Jump or Bee Fly: "By the Spear") and the Status Mirror on a ledge by the crossing (Bee Fly: "Ledge by the
   Crossing"); on to the right (the door to the fridge outside) with Bee Fly and the switch's crane platform, back by
   a red bounce pad; Bee Fly alone across, harder, left out (Next 71); a red crystal that only heals; for the enemy
-  pass: three Dead Landers
+  pass: three Dead Landers and a hand, a respawning Dead Lander γ
 - [x] GiantLairFridgeOutside (235) — Outside the Fridge (named by the user); its left (Crane Crossing's door, a save
   crystal) the map's own region; the right (the fridge's door) past the explorers' fight (Event198: Dead Landers α, β
   and γ, β flying for good, so Vi; no fleeing; flag 593), started from either side (seen); nothing else needed; its
