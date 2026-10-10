@@ -13,7 +13,7 @@ as it is, a frozen record.
 - Rooms are the game's own maps (`MainManager.Maps`, its number in brackets), grouped by game area
   (`MapControl.areaid`) in the story order the logic modules use; night and story variants are maps of their own.
 
-**166 of 244 done.**
+**167 of 244 done.**
 
 ## Outskirts
 
@@ -299,7 +299,8 @@ as it is, a frozen record.
 - [x] FactoryProcessingPuzzle1 (86) — one region, its door free; its Factory Pass (213: Jump, Freeze, the Shield, a
   basic attack, Gen and Eri's fight with Vi, the holler) the game's own until Next 67; for Next 68: Gen and Eri's scene
   (`Event97`) needs them, gone from 211
-- [ ] FactoryProcessingPuzzle2 (87)
+- [x] FactoryProcessingPuzzle2 (87) — one region, its door free; its Factory Pass (212: Beemerang Halt, Jump, the
+  Shield) the game's own until Next 67; for the quest pass: the broken Mender (325 to 328)
 - [ ] FactoryProcessingPuzzle3 (88)
 - [ ] FactoryProcessingMalbee (89)
 - [ ] FactoryStorageMaze (90)

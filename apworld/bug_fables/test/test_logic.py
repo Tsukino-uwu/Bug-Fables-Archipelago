@@ -1451,6 +1451,15 @@ class TestPuzzle1(BugFablesTestBase):
         self.assertFalse(self.multiworld.get_region("FactoryProcessingPuzzle1", self.player).locations)
 
 
+class TestPuzzle2(BugFablesTestBase):
+    # FactoryProcessingPuzzle2 (the user, 2026-10-10): one region, its door free; its Factory Pass not a location yet.
+    def test_one_region_no_location(self) -> None:
+        parts = {r.name for r in self.multiworld.get_regions(self.player)
+                 if r.name.startswith("FactoryProcessingPuzzle2")}
+        self.assertEqual(parts, {"FactoryProcessingPuzzle2"})
+        self.assertFalse(self.multiworld.get_region("FactoryProcessingPuzzle2", self.player).locations)
+
+
 class TestCore(BugFablesTestBase):
     # HoneyFactoryCore (the user, 2026-10-10): one region, its door free; the gate to the boss arena the story's.
     def test_one_region(self) -> None:

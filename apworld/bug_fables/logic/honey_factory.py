@@ -12,7 +12,8 @@ from ..data_types import (ALWAYS_SET, Area, DoorRule, EntityRef, FlagSwap, ItemS
 # rooms are mapped. In a seed it won't be used up (apimplementation.md, Next 67), so one opens every lock. The Worker
 # Rooms' pass (flag 178, up high in the office) stays the game's own pickup until then: Jump and the Beemerang Toss,
 # or Bee Fly alone (the user, 2026-10-10); so does the first puzzle room's (213): Jump, Freeze, the Shield and a basic
-# attack, past Gen and Eri's fight (two Bee-Boops, Vi to be safe) and the holler (Tattle, any member: mod step 52).
+# attack, past Gen and Eri's fight (two Bee-Boops, Vi to be safe) and the holler (Tattle, any member: mod step 52); and
+# the second's (212): Beemerang Halt, Jump and the Shield.
 FACTORY_PASS = LATER_CHAPTERS
 _UP = CanUse("Jump") | CanUse("Bee Fly")
 # The First Room's switch hit (Event95, flag 20): its moving platforms run from then on, for good.
@@ -100,6 +101,8 @@ MAP_AREAS = (
          out=one_way(CanUse("Bee Fly"), _PUMP_UP)),
     # FactoryProcessingPuzzle1 (the user, 2026-10-10): one region, its one door free; its only pickup, a Factory Pass,
     # stays the game's own until Next 67 (FACTORY_PASS).
+    # FactoryProcessingPuzzle2 (the user, 2026-10-10): the same; the drop right of its door a one-way without Jump, to
+    # the pass's side only.
     # HoneyFactoryCore (2026-10-10): one region, its one door free; the gate at its top shut until the chapter 3 finale
     # (Event99, which sets 299 and ends in the room), behind it only the empty boss arena (the user).
 )
