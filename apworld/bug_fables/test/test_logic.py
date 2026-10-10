@@ -1566,7 +1566,7 @@ class TestStorageMinibossRoom(BugFablesTestBase):
 
 
 class TestOverseerRoom(BugFablesTestBase):
-    # FactoryStorageOverseer (the user, 2026-10-10): one region, its door free, no location.
+    # FactoryStorageOverseer, the Storage Overseer Room (the user, 2026-10-10): one region, its door free, no location.
     def test_one_region_no_location(self) -> None:
         parts = {r.name for r in self.multiworld.get_regions(self.player)
                  if r.name.startswith("FactoryStorageOverseer")}

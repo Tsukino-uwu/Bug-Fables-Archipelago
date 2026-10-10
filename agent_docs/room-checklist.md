@@ -316,8 +316,8 @@ as it is, a frozen record.
 - [x] FactoryStorageMiniboss (92) — the Storage Mini-boss Room; one region; the Magic Seed on top of the boxes,
   location 234 (Jump or Bee Fly); its fight's Factory Pass (Jump, Beemerang Halt) the game's own until Next 67; for
   the enemy pass: Ahoneynation (`Event101`)
-- [x] FactoryStorageOverseer (93) — one region, its door free, no location; for the quest pass: the overseer's escort
-  (`Event102`, flag 218: Jump, Beemerang Halt and Freeze, or Bee Fly)
+- [x] FactoryStorageOverseer (93) — the Storage Overseer Room; one region, its door free, no location; for the quest
+  pass: the overseer's escort (`Event102`, flag 218: Jump, Beemerang Halt and Freeze, or Bee Fly)
 
 ## Rubber Prison
 

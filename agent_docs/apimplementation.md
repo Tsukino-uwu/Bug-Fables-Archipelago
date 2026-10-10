@@ -3341,8 +3341,8 @@ Elevator (its top and bottom doors joined by the elevator, a basic attack each w
 box tops up with Jump or Bee Fly; the medal Shock Trooper in the boxes and crystal berry #17 by a lever
 puzzle, locations 232-233; the Overseer's door behind its pass lock), 171 of 244; the Storage Mini-boss Room (one
 region; the Magic Seed on top of the boxes, location 234, Jump or Bee Fly; its fight's pass the game's own until Next
-67), 172 of 244; the Overseer's room (one region, its door free; the escort, flag 218, Jump, Beemerang Halt and Freeze
-or Bee Fly, for the quest pass), 173 of 244, the Honey Factory done; the rest of `room-checklist.md` to go.
+67), 172 of 244; the Storage Overseer Room (one region, its door free; the escort, flag 218, Jump, Beemerang Halt and
+Freeze or Bee Fly, for the quest pass), 173 of 244, the Honey Factory done; the rest of `room-checklist.md` to go.
 
 ## Build step 25: DeathLink, a panel row, deaths sent and received
 
